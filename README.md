@@ -1,2 +1,1 @@
-# stardust
-Aplicação web para o aprendizado gamificado de lógica de programação
+<h1 align="center">🚧 Trabalho em progresso 🚧</h1>
