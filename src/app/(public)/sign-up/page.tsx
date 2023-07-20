@@ -24,7 +24,7 @@ export default function SignUp() {
   }
 
   return (
-    <div className="h-screen grid grid-cols-[1fr_1.5fr]">
+    <div className="h-screen lg:grid lg:grid-cols-[1fr_1.5fr]">
       <main className="flex flex-col items-center justify-center h-full">
         <motion.div
           variants={formVariants}
@@ -78,7 +78,7 @@ export default function SignUp() {
         </motion.div>
       </main>
 
-      <div className="bg-gray-800 grid place-content-center">
+      <div className="bg-gray-800 hidden lg:grid lg:place-content-center">
         <Hero />
       </div>
     </div>
