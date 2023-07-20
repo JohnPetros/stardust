@@ -69,7 +69,7 @@ export default function SignIn() {
           <form
             action="/"
             onSubmit={handleSubmit(handleFormData)}
-            className="mt-8"
+            className="mt-4"
           >
             <div className="space-y-4">
               <Input
