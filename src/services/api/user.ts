@@ -1,6 +1,6 @@
 import { supabase } from '../supabase'
 
-export default {
+export const user = {
   get: async (userId: string) => {
     const { data, error } = await supabase
       .from('users')

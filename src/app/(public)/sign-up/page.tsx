@@ -1,4 +1,8 @@
 'use client'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+
 import { Envelope, Lock } from '@phosphor-icons/react'
 import { Title } from '../components/Title'
 import { Hero } from '../components/Hero'
@@ -6,8 +10,30 @@ import { Link } from '../components/Link'
 import { Input } from '@/app/components/Input'
 import { Button } from '@/app/components/Button'
 import { motion, Variants } from 'framer-motion'
+import { PASSWORD_REGEX } from '@/constants/password-regex'
+
+const formSchema = z.object({
+  email: z
+    .string()
+    .nonempty('Seu e-mail não pode estar vazio!')
+    .email('Por favor informe um e-mail válido!'),
+  password: z.string().nonempty('Sua senha não pode estar vazia!').regex(
+    PASSWORD_REGEX,
+    'Senha deve conter pelo menos uma letra minúscula, uma maiúscula, um dígito e um caractere especial.'
+  ),
+})
+
+export type FormFields = z.infer<typeof formSchema>
 
 export default function SignUp() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormFields>({
+    resolver: zodResolver(formSchema),
+  })
+
   const formVariants: Variants = {
     hidden: {
       opacity: 0,
