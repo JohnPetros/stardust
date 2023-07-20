@@ -16,7 +16,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   width: 100%;
   height: 100vh;
 
@@ -44,4 +45,3 @@ button {
 a {
   text-decoration: inherit;
 }
-
