@@ -1,13 +1,14 @@
 'use client'
-import Input from '@/app/components/Input'
 import { Envelope, Lock } from '@phosphor-icons/react'
 import { Title } from '../components/Title'
-import { Button } from '@/app/components/Button'
+import { Hero } from '../components/Hero'
 import { Link } from '../components/Link'
+import { Input } from '@/app/components/Input'
+import { Button } from '@/app/components/Button'
 
 export default function SignIn() {
   return (
-    <div className="h-screen">
+    <div className="h-screen grid grid-cols-[1fr_1.5fr]">
       <main className="flex flex-col items-center justify-center h-full">
         <div className="w-full max-w-[320px]">
           <Title
@@ -39,6 +40,10 @@ export default function SignIn() {
           </div>
         </div>
       </main>
+
+      <div className="bg-gray-800 grid place-content-center">
+        <Hero />
+      </div>
     </div>
   )
 }
