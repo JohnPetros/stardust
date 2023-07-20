@@ -19,6 +19,7 @@
     "autoprefixer": "10.4.14",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.10",
+    "framer-motion": "^10.13.0",
     "next": "13.4.10",
     "phosphor-icons": "^1.4.2",
     "postcss": "8.4.26",
