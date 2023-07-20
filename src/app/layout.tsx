@@ -1,4 +1,4 @@
-import './style/global.css'
+import '../styles/global.css'
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 
