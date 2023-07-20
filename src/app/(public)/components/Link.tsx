@@ -7,5 +7,12 @@ interface LinkProps {
 }
 
 export function Link({ children, href }: LinkProps) {
-  return <NextLink className='text-gray-300 p-2' href={href}>{children}</NextLink>
+  return (
+    <NextLink
+      className="text-gray-300 text-sm p-2 hover:text-gray-100 transition-colors duration-200"
+      href={href}
+    >
+      {children}
+    </NextLink>
+  )
 }

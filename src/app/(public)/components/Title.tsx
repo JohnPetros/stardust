@@ -13,11 +13,10 @@ export function Title({ title, text }: TitleProps) {
           className="text-green-400"
           width={24}
           height={24}
-          weight="bold"
         />
-        <h1 className="text-2xl font-semibold text-green-400">{title}</h1>
+        <h1 className="text-xl font-semibold text-green-400">{title}</h1>
       </div>
-      <p className="text-gray-100 text-base mt-2">{text}</p>
+      <p className="text-gray-100 mt-2">{text}</p>
     </div>
   )
 }
