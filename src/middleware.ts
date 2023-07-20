@@ -23,6 +23,4 @@ export async function middleware(req: NextRequest) {
   return res
 }
 
-export const config = {
-  matcher: [...Object.values(ROUTES.private), ...Object.values(ROUTES.public)],
-}
+export const config = { matcher: '/((?!.*\\.).*)' }
