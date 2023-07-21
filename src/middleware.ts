@@ -1,11 +1,11 @@
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import { NextRequest, NextResponse } from "next/server";
 import { checkIsPublicRoute } from "./functions";
-import { ROUTES } from "./constants/routes";
+import type { Database } from "@/types/supabase";
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
-  const supabase = createMiddlewareClient({ req, res })
+  const supabase = createMiddlewareClient<Database>({ req, res })
   const isPublicRoute = checkIsPublicRoute(req.nextUrl.pathname)
 
   const {
