@@ -5,7 +5,9 @@ import { twMerge } from 'tailwind-merge'
 import { Animation } from './Animation'
 import Loading from '../../../public/animations/loading.json'
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+import { MotionProps, motion } from 'framer-motion'
+
+type ButtonProps = {
   children: ReactNode
   className?: string
   isLoading?: boolean
@@ -16,17 +18,18 @@ export function Button({
   className,
   isLoading = false,
   ...rest
-}: ButtonProps) {
+}: ButtonProps & ButtonHTMLAttributes<HTMLButtonElement> & MotionProps) {
   return (
-    <button
+    <motion.button
+      whileTap={{ scale: 0.99 }}
       className={twMerge(
-        'py-2 px-4 rounded bg-green-400 w-full font-semibold hover:brightness-110 transition-all duration-200',
+        'py-2 px-4 rounded bg-green-400 w-full font-semibold',
         className
       )}
       disabled={isLoading}
       {...rest}
     >
       {isLoading ? <Animation src={Loading} size={24} /> : children}
-    </button>
+    </motion.button>
   )
 }
