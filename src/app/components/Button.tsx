@@ -29,7 +29,7 @@ export function Button({
       disabled={isLoading}
       {...rest}
     >
-      {isLoading ? <Animation src={Loading} size={24} /> : children}
+      {isLoading ? <Animation src={Loading} size={12} /> : children}
     </motion.button>
   )
 }
