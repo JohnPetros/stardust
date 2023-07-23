@@ -5,15 +5,29 @@ import { useRouter } from 'next/navigation'
 import { useSupabase } from '../hooks/useSupabase'
 import useSWR from 'swr'
 
-import { Session } from '@supabase/supabase-js'
+import { AuthError, Session } from '@supabase/supabase-js'
 import { User } from '@/types/collections'
+import { api } from '@/services/api'
 
 interface AuthContextValue {
-  user: User | null
+  user: User | null | undefined
   error: any
   isLoading: boolean
   signIn: (email: string, password: string) => Promise<string | null>
-  signUp: (email: string, password: string) => Promise<string | null>
+  signUp: (
+    email: string,
+    password: string
+  ) => Promise<
+    | {
+        userId: null
+        error: AuthError
+      }
+    | {
+        userId: string
+        error: null
+      }
+    | null
+  >
   signOut: () => Promise<string | null>
 }
 
@@ -28,27 +42,22 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
   const { supabase } = useSupabase()
   const router = useRouter()
 
-  const getUser = async () => {
-    const { data: user, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', serverSession?.user?.id)
-      .single()
-    if (error) {
-      console.log(error)
-      return null
-    } else {
-      return user
+  async function getUser() {
+    const userId = serverSession?.user?.id
+
+    if (userId) {
+      return await api.user.get(userId)
     }
   }
 
   const {
     data: user,
     error,
-    isLoading,
-  } = useSWR(serverSession ? 'profile-context' : null, getUser)
+    isLoading
+  } = useSWR(serverSession ? 'user' : null, getUser)
 
   async function signIn(email: string, password: string) {
+
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -62,17 +71,20 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
   }
 
   async function signUp(email: string, password: string) {
-    const { data, error } = await supabase.auth.signUp({
+
+    const { data: response, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: `${location.origin}/auth/signup`,
+        emailRedirectTo: `${location.origin}/auth/callback`,
       },
     })
 
     if (error) {
-      return error.message
+      return { userId: null, error }
     }
+
+    if (response.user) return { userId: response.user.id, error: null }
 
     return null
   }
@@ -94,6 +106,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.access_token !== serverSession?.access_token) {
+        console.log(true);
         router.refresh()
       }
     })
