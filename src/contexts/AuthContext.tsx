@@ -3,7 +3,7 @@
 import { createContext, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSupabase } from '../hooks/useSupabase'
-import useSWR from "swr";
+import useSWR from 'swr'
 
 import { Session } from '@supabase/supabase-js'
 import { User } from '@/types/collections'
@@ -12,8 +12,9 @@ interface AuthContextValue {
   user: User | null
   error: any
   isLoading: boolean
-  signOut: () => Promise<void>
   signIn: (email: string, password: string) => Promise<string | null>
+  signUp: (email: string, password: string) => Promise<string | null>
+  signOut: () => Promise<string | null>
 }
 
 interface AuthProviderProps {
@@ -47,24 +48,43 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     isLoading,
   } = useSWR(serverSession ? 'profile-context' : null, getUser)
 
-  const signOut = async () => {
-    await supabase.auth.signOut()
-    router.push('/sign-in')
-  }
-
-  const signIn = async (email: string, password: string) => {
-    console.log(email, password);
-    
+  async function signIn(email: string, password: string) {
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     })
 
-    console.log(error);
-    
     if (error) {
       return error.message
     }
+
+    return null
+  }
+
+  async function signUp(email: string, password: string) {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${location.origin}/auth/signup`,
+      },
+    })
+
+    if (error) {
+      return error.message
+    }
+
+    return null
+  }
+
+  async function signOut() {
+    const { error } = await supabase.auth.signOut()
+
+    if (error) {
+      return error.message
+    }
+
+    router.push('/sign-in')
 
     return null
   }
@@ -88,6 +108,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     error,
     isLoading,
     signIn,
+    signUp,
     signOut,
   }
 

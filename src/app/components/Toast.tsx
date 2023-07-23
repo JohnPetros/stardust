@@ -1,18 +1,26 @@
 'use client'
-import { useEffect, useState } from 'react'
-import { Prohibit, X } from '@phosphor-icons/react'
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
+import { AnimatePresence, Variants, motion, useAnimate } from 'framer-motion'
+import { Check, Prohibit, X } from '@phosphor-icons/react'
 import * as Container from '@radix-ui/react-toast'
-import {
-  AnimatePresence,
-  Variants,
-  motion,
-  useAnimate,
-  useDragControls,
-} from 'framer-motion'
+import { twMerge } from 'tailwind-merge'
 const TOAST_DURATION = 2500
 
-export function Toast() {
-  const [isOpen, setIsOpen] = useState(true)
+type Type = 'error' | 'success'
+
+interface openProps {
+  type: Type
+  message: string
+}
+
+export interface ToastRef {
+  open: ({ type, message }: openProps) => void
+}
+
+export const Toast = forwardRef((_, ref) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [type, setType] = useState<Type>('error')
+  const [message, setMessage] = useState('')
   const [scope, animate] = useAnimate()
 
   const toastVariants: Variants = {
@@ -49,29 +57,38 @@ export function Toast() {
     },
   }
 
+  function open({ type, message }: openProps) {
+    setType(type)
+    setMessage(message)
+    setIsOpen(true)
+  }
+
   function close() {
     setIsOpen(false)
   }
 
+  useImperativeHandle(ref, () => {
+    return {
+      open,
+    }
+  })
+
   useEffect(() => {
+    if (!isOpen) return
+
     const timer = setTimeout(() => {
       close()
     }, TOAST_DURATION)
 
     return () => clearTimeout(timer)
-  }, [])
+  }, [isOpen])
 
   return (
     <>
-      <Container.Viewport className="fixed top-4 right-4  rounded  max-w-[90vw] z-50 flex" />
+      <Container.Viewport className="fixed top-4 right-4 rounded  max-w-[90vw] z-50 flex" />
       <AnimatePresence>
         {isOpen && (
-          <Container.Root
-            forceMount
-            open={isOpen}
-            asChild
-            // onOpenChange={setIsOpen}
-          >
+          <Container.Root forceMount open={isOpen} asChild>
             <motion.div
               ref={scope}
               variants={toastVariants}
@@ -88,19 +105,26 @@ export function Toast() {
                 animate(scope.current, { x: 500 }, { duration: 0.1 })
                 close()
               }}
-              className="bg-red-700/50 rounded"
+              className={twMerge(
+                'rounded',
+                type === 'error' ? 'bg-red-700/50' : 'bg-green-600/50'
+              )}
             >
               <div className="flex justify-between gap-6 p-4 ">
                 <Container.Title className="flex items-center gap-2 text-gray-100 font-medium">
-                  <span className="text-gray-100 bg-red-700 rounded p-1">
-                    <Prohibit
-                      className=""
-                      width={20}
-                      height={20}
-                      weight="bold"
-                    />
+                  <span
+                    className={twMerge(
+                      'text-gray-100 rounded p-1',
+                      type === 'error' ? 'bg-red-700' : 'bg-green-500'
+                    )}
+                  >
+                    {type === 'error' ? (
+                      <Prohibit width={20} height={20} weight="bold" />
+                    ) : (
+                      <Check width={20} height={20} weight="bold" />
+                    )}
                   </span>
-                  Usuário não encontrado
+                  {message}
                 </Container.Title>
 
                 <Container.Action
@@ -125,7 +149,12 @@ export function Toast() {
                 animate="empty"
                 className="w-full rounded"
               >
-                <div className="bg-red-700 h-1" />
+                <div
+                  className={twMerge(
+                    'h-1',
+                    type === 'error' ? 'bg-red-700' : 'bg-green-500'
+                  )}
+                />
               </motion.div>
             </motion.div>
           </Container.Root>
@@ -133,4 +162,4 @@ export function Toast() {
       </AnimatePresence>
     </>
   )
-}
+})
