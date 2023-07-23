@@ -16,13 +16,6 @@
   box-sizing: border-box;
 }
 
-html,
-body {
-  width: 100%;
-  height: 100vh;
-
-  font-size: 400;
-}
 
 @media (max-width: 1080px) {
   html,

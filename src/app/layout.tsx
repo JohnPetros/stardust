@@ -16,10 +16,11 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-
   return (
     <html lang="en">
-      <body className={`${poppins.className} bg-gray-900`}>
+      <body
+        className={`${poppins.className} bg-gray-900 h-screen w-screen font-normal`}
+      >
         <Providers>{children}</Providers>
       </body>
     </html>
