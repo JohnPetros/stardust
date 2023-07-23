@@ -1,4 +1,4 @@
-import Lottie from "lottie-react";
+import Lottie from 'lottie-react'
 
 interface AnimationProps {
   src: Object
@@ -8,6 +8,11 @@ interface AnimationProps {
 
 export function Animation({ src, size, hasLoop = true }: AnimationProps) {
   return (
-    <Lottie animationData={src} width={size} height={size} loop={hasLoop} />
+    <Lottie
+      animationData={src}
+      style={{ width: size, height: size, }}
+      loop={hasLoop}
+      color='red'
+    />
   )
 }
