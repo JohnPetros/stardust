@@ -15,34 +15,33 @@ export function Header() {
         <div className="flex items-center gap-3">
           <button>
             <List
-              width={32}
-              height={32}
+              width={24}
+              height={24}
               className="text-green-400"
               weight="bold"
             />
           </button>
-          <Image
-            src="/images/logo.svg"
-            width={120}
-            height={120}
-            alt="StarDust"
-          />
+          <Image src="/images/logo.svg" width={80} height={80} alt="StarDust" />
         </div>
 
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2">
             <Image
-              src="/icons/coin-icon.svg"
-              width={32}
-              height={32}
+              src="/icons/coin.svg"
+              width={24}
+              height={24}
               alt="Star Coins"
             />
-            <span className="text-yellow-400 font-semibold text-lg">{user?.coins}</span>
+            <span className="text-yellow-400 font-semibold text-lg">
+              {user?.coins}
+            </span>
           </div>
 
           <div className="flex items-center">
-            <Animation src={StreakAnimation} size={40} hasLoop={false} />
-            <span className="text-green-500 font-semibold text-lg">{user?.streak}</span>
+            <Animation src={StreakAnimation} size={32} hasLoop={false} />
+            <span className="text-green-500 font-semibold text-lg">
+              {user?.streak}
+            </span>
           </div>
         </div>
       </div>
