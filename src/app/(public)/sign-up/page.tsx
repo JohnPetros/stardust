@@ -83,6 +83,8 @@ export default function SignUp() {
       case 'Email rate limit exceeded':
         message = 'Você execedeu o limite permitido de tentativas de cadastro'
         break
+      default:
+        message = 'Erro ao tentar fazer cadastro'
     }
 
     toastRef.current?.open({
@@ -91,7 +93,7 @@ export default function SignUp() {
     })
   }
 
-  async function handleFormData({ email, password }: FormFields) {
+  async function handleFormData({ name, email, password }: FormFields) {
     // const userEmail = await api.user.getEmail(email)
 
     // if (userEmail) {
@@ -102,17 +104,22 @@ export default function SignUp() {
     //   return
     // }
 
-    const error = await signUp(email, password)
+    const response = await signUp(email, password)
 
-    if (error) {
-      console.error(error)
-      handleError(error)
+    if (response?.error) {
+      console.error(response?.error.message)
+      handleError(response?.error.message)
+      return
     }
 
     toastRef.current?.open({
       type: 'success',
       message: 'Confira seu e-mail para confirmar seu cadastro',
     })
+
+    if (response?.userId) {
+      api.user.add({ id: response.userId, name, email })
+    }
   }
 
   return (
@@ -172,7 +179,9 @@ export default function SignUp() {
                 />
               </div>
               <div className="mt-6">
-                <Button className="">Entrar</Button>
+                <Button className="" isLoading={isLoading}>
+                  Entrar
+                </Button>
               </div>
             </form>
             <div className="flex items-center justify-center w-full mt-4">
