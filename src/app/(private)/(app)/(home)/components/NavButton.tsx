@@ -1,7 +1,8 @@
+'use client'
 import Link from 'next/link'
-import { Icon } from '@phosphor-icons/react'
-import { twMerge } from 'tailwind-merge'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
+import { twMerge } from 'tailwind-merge'
 
 interface NavButtonProps {
   path: string
@@ -9,7 +10,6 @@ interface NavButtonProps {
   icon: string
   isCol?: boolean
   isExpanded?: boolean
-  isActive: boolean
 }
 
 export function NavButton({
@@ -18,8 +18,10 @@ export function NavButton({
   icon,
   isCol = true,
   isExpanded = true,
-  isActive,
 }: NavButtonProps) {
+  const pathname = usePathname()
+  const isActive = pathname === path
+
   return (
     <Link
       href={path}
@@ -31,7 +33,7 @@ export function NavButton({
       <span
         className={twMerge(
           'rounded-lg w-12 h-10 grid place-content-center',
-          isActive ? 'bg-green-400' : 'bg-green-700'
+          isActive ? 'bg-green-400' : 'bg-green-800'
         )}
       >
         <Image
@@ -45,8 +47,8 @@ export function NavButton({
       {isExpanded && (
         <span
           className={twMerge(
-            'font-semibold text-xs',
-            isActive ? 'text-white' : 'text-gray-300'
+            'font-semibold text-sm',
+            isActive ? 'text-gray-100' : 'text-gray-400'
           )}
         >
           {label}
