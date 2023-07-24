@@ -28,8 +28,8 @@ export function Header() {
           <div className="flex items-center gap-2">
             <Image
               src="/icons/coin.svg"
-              width={24}
-              height={24}
+              width={28}
+              height={28}
               alt="Star Coins"
             />
             <span className="text-yellow-400 font-semibold text-lg">
