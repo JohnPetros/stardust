@@ -5,6 +5,7 @@ import useSWR from 'swr'
 import type { Star } from '@/types/star'
 import type { Planet } from '@/types/planet'
 import { api } from '@/services/api'
+import { UserUnlockedStars } from '@/types/relations'
 
 export function usePlanet() {
   const { user } = useAuth()
@@ -16,19 +17,28 @@ export function usePlanet() {
   }
 
   const { data: planets, error } = useSWR('planets', api.getPlanets)
-  const { data: unlockedStars } = useSWR(
+  const { data: userUnlockedStars } = useSWR(
     user?.id ? 'unlocked_stars' : null,
     getUserUnlockedStars
   )
+
   const [lastUnlockedStarId, setLasUnlockedStarId] = useState('')
 
-  function verifyStarUnlocking(planet: Planet, unlockedStars: Star[]) {
+  function verifyStarUnlocking(
+    planet: Planet,
+    userUnlockedStars: UserUnlockedStars[]
+  ) {
     const { stars } = planet
+
     const verifiedStars = stars.map((star) => {
-      const isUnlocked = unlockedStars.some(
-        (unlockedStar) => unlockedStar.id === star.id
+      const isUnlocked = userUnlockedStars.some(
+        (userUnlockedStar) => userUnlockedStar.star_id === star.id
       )
-      if (isUnlocked) setLasUnlockedStarId(star.id)
+
+      if (isUnlocked) {
+        setLasUnlockedStarId(star.id)
+      }
+
       return { ...star, isUnlocked }
     })
 
@@ -37,10 +47,12 @@ export function usePlanet() {
   }
 
   const data = useMemo(() => {
-    if (planets && unlockedStars) {
-      return planets.map((planet) => verifyStarUnlocking(planet, unlockedStars))
+    if (planets?.length && userUnlockedStars?.length) {
+      return planets.map((planet) =>
+        verifyStarUnlocking(planet, userUnlockedStars)
+      )
     }
-  }, [planets, unlockedStars])
+  }, [planets, userUnlockedStars])
 
   return {
     planets: data,
