@@ -6,7 +6,7 @@ import { useSupabase } from '../hooks/useSupabase'
 import useSWR from 'swr'
 
 import { AuthError, Session } from '@supabase/supabase-js'
-import { User } from '@/types/collections'
+import { User } from '@/types/relations'
 import { api } from '@/services/api'
 
 interface AuthContextValue {
