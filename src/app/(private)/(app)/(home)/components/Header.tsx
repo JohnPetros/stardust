@@ -1,4 +1,5 @@
 'use client'
+import { useSiderbar } from '@/hooks/useSiderbar'
 import { Animation } from '@/app/components/Animation'
 import { useAuth } from '@/hooks/useAuth'
 import { List } from '@phosphor-icons/react'
@@ -8,11 +9,12 @@ import StreakAnimation from '../../../../../../public/animations/streak.json'
 
 export function Header() {
   const { user } = useAuth()
+  const { toggle } = useSiderbar()
 
   return (
     <header className="bg-gray-900 border-b border-green-800 px-6 py-3 flex justify-between">
         <div className="flex items-center gap-3">
-          <button>
+          <button onClick={toggle}>
             <List
               width={24}
               height={24}
