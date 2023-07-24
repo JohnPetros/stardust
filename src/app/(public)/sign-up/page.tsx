@@ -118,7 +118,7 @@ export default function SignUp() {
     })
 
     if (response?.userId) {
-      api.user.add({ id: response.userId, name, email })
+      api.addUser({ id: response.userId, name, email })
     }
   }
 
