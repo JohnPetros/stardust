@@ -88,7 +88,7 @@ export const Toast = forwardRef((_, ref) => {
       <Container.Viewport className="fixed top-4 right-4 rounded  max-w-[90vw] z-50 flex" />
       <AnimatePresence>
         {isOpen && (
-          <Container.Root forceMount open={isOpen} asChild>
+          <Container.Root type='foreground' forceMount open={isOpen} asChild>
             <motion.div
               ref={scope}
               variants={toastVariants}
@@ -111,7 +111,7 @@ export const Toast = forwardRef((_, ref) => {
               )}
             >
               <div className="flex justify-between gap-6 p-4 ">
-                <Container.Title className="flex items-center gap-2 text-gray-100 font-medium">
+                <Container.Description className="flex items-center gap-2 text-gray-100 font-medium">
                   <span
                     className={twMerge(
                       'text-gray-100 rounded p-1',
@@ -125,12 +125,12 @@ export const Toast = forwardRef((_, ref) => {
                     )}
                   </span>
                   {message}
-                </Container.Title>
+                </Container.Description>
 
-                <Container.Action
+                <Container.Close
                   className="w-max"
                   asChild
-                  altText="Close toast"
+                  aria-label='Fechar mensagem'
                 >
                   <button onClick={close}>
                     <X
@@ -140,7 +140,7 @@ export const Toast = forwardRef((_, ref) => {
                       weight="bold"
                     />
                   </button>
-                </Container.Action>
+                </Container.Close>
               </div>
 
               <motion.div
