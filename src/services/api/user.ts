@@ -1,3 +1,4 @@
+import { User } from '@/types/user'
 import { createClient } from '../supabase-browser'
 
 const supabase = createClient()
@@ -8,20 +9,21 @@ interface AddMethodParams {
   email: string
 }
 
-export const user = {
-  get: async (userId: string) => {
+export default {
+  getUser: async (userId: string) => {
     const { data, error } = await supabase
       .from('users')
       .select('*')
       .eq('id', userId)
+      .returns<User>()
       .single()
     if (error) {
       throw new Error(error.message)
     }
     return data
   },
-  
-  getEmail: async (email: string) => {
+
+  getUserByEmail: async (email: string) => {
     const { data, error } = await supabase
       .from('users')
       .select('email')
@@ -33,7 +35,7 @@ export const user = {
     return data
   },
 
-  add: async ({ id, name, email }: AddMethodParams) => {
+  addUser: async ({ id, name, email }: AddMethodParams) => {
     const { error } = await supabase.from('users').insert([{ id, name, email }])
     if (error) {
       throw new Error(error.message)
