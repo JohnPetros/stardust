@@ -6,7 +6,7 @@ async function getAvatar(id: string) {
 }
 
 export function useAvatar(avatarId: string) {
-  const { data: userAvatar } = useSWR('avatar', getAvatar)
+  const { data: userAvatar } = useSWR('avatar', () => getAvatar(avatarId))
 
   return { avatar: userAvatar }
 }
