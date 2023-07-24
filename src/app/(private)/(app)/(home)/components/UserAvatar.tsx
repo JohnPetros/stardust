@@ -4,6 +4,7 @@ import { getImage } from '@/utils/functions'
 
 import * as Avatar from '@radix-ui/react-avatar'
 import { Loading } from './Loading'
+import { twMerge } from 'tailwind-merge'
 
 interface UserAvatarProps {
   avatarId: string
@@ -24,7 +25,10 @@ export function UserAvatar({ avatarId, size }: UserAvatarProps) {
           className="rounded-full border border-green-700"
           alt={avatar.name}
         />
-        <Avatar.Fallback className="AvatarFallback" delayMs={600}>
+        <Avatar.Fallback
+          className={twMerge('AvatarFallback', `w-[${size}px] h-[${size}px]`)}
+          delayMs={600}
+        >
           <Loading />
         </Avatar.Fallback>
       </Avatar.Root>
