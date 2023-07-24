@@ -6,4 +6,5 @@ export type Star = {
   planet_id: string 
   questions: JSON 
   texts: JSON 
+  isUnlocked: boolean
 }
