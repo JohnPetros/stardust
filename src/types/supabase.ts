@@ -70,21 +70,21 @@ export interface Database {
       avatars: {
         Row: {
           id: string
-          image: string | null
-          name: string | null
-          price: number | null
+          image: string
+          name: string
+          price: number
         }
         Insert: {
           id?: string
-          image?: string | null
-          name?: string | null
-          price?: number | null
+          image: string
+          name: string
+          price: number
         }
         Update: {
           id?: string
-          image?: string | null
-          name?: string | null
-          price?: number | null
+          image?: string
+          name?: string
+          price?: number
         }
         Relationships: []
       }
@@ -697,18 +697,18 @@ export interface Database {
       users_unlocked_stars: {
         Row: {
           id: string
-          star_id: string | null
-          user_id: string | null
+          star_id: string
+          user_id: string
         }
         Insert: {
           id?: string
-          star_id?: string | null
-          user_id?: string | null
+          star_id: string
+          user_id: string
         }
         Update: {
           id?: string
-          star_id?: string | null
-          user_id?: string | null
+          star_id?: string
+          user_id?: string
         }
         Relationships: [
           {
