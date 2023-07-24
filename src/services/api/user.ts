@@ -15,8 +15,7 @@ export default {
       .from('users')
       .select('*')
       .eq('id', userId)
-      .returns<User>()
-      .single()
+      .single<User>()
     if (error) {
       throw new Error(error.message)
     }
