@@ -1,7 +1,7 @@
-import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
-import { NextRequest, NextResponse } from "next/server";
-import { checkIsPublicRoute } from "./functions";
-import type { Database } from "@/types/supabase";
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
+import { NextRequest, NextResponse } from 'next/server'
+import { checkIsPublicRoute } from './utils/functions'
+import type { Database } from '@/types/supabase'
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
@@ -16,7 +16,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/', req.url))
   }
 
-   if (!user && !isPublicRoute) {
+  if (!user && !isPublicRoute) {
     return NextResponse.redirect(new URL('/sign-in', req.url))
   }
 
