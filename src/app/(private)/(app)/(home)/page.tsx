@@ -8,18 +8,17 @@ export default function Home() {
   const { user } = useAuth()
   const { planets, lastUnlockedStarId } = usePlanet()
 
-  console.log(planets)
-
   return (
-    <div
+    <main
       style={{ backgroundImage: 'url("/images/space-background.png")' }}
-      className="bg-center h-full flex flex-col items-center "
+      className="bg-center bg-repeat-y bg-contain h-full flex flex-col items-center "
     >
-      <main className="w-[480px] max-w-[90vw] mt-8 grid place-content-center gap-3">
+      <ul className="w-[480px] max-w-[90vw] mt-8 grid place-content-center gap-3">
+        
         {planets?.map((planet) => (
-          <Planet data={planet} />
+          <Planet key={planet.id} data={planet} />
         ))}
-      </main>
-    </div>
+      </ul>
+    </main>
   )
 }
