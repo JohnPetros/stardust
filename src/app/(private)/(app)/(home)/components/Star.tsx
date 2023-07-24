@@ -30,16 +30,23 @@ export function Star({
       <div className="flex items-center gap-3 mt-2">
         <div className="relative">
           {isUnlocked ? (
-            <Animation src={UnlockedStar} size={80} hasLoop={false} />
+            <div className="-ml-2">
+              <Animation src={UnlockedStar} size={100} hasLoop={false} />
+            </div>
           ) : (
             <Image
               src={'/images/locked-star.svg'}
-              width={84}
-              height={84}
+              width={85}
+              height={85}
               alt=""
             />
           )}
-          <span className="absolute block font-semibold top-[52%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-yellow-700">
+          <span
+            className={twMerge(
+              'absolute block text-lg font-semibold top-[52%] -translate-x-1/2 -translate-y-1/2 text-yellow-700',
+              isUnlocked ? 'left-[48%]' : ' left-[50%]'
+            )}
+          >
             {number}
           </span>
         </div>

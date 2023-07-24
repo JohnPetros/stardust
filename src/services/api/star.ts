@@ -9,7 +9,6 @@ export default {
       .from('users_unlocked_stars')
       .select('*')
       .eq('user_id', userId)
-      .returns<Star[]>()
     if (error) {
       throw new Error(error.message)
     }
