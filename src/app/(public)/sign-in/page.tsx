@@ -15,7 +15,7 @@ import { Button } from '@/app/components/Button'
 import { Toast, ToastRef } from '@/app/components/Toast'
 
 import { motion, Variants } from 'framer-motion'
-import { PASSWORD_REGEX } from '@/constants/password-regex'
+import { PASSWORD_REGEX } from '@/utils/constants/password-regex'
 
 const formSchema = z.object({
   email: z

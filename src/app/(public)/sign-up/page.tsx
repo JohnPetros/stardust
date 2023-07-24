@@ -13,7 +13,7 @@ import { Link } from '../components/Link'
 import { Input } from '@/app/components/Input'
 import { Button } from '@/app/components/Button'
 import { motion, Variants } from 'framer-motion'
-import { PASSWORD_REGEX } from '@/constants/password-regex'
+import { PASSWORD_REGEX } from '@/utils/constants/password-regex'
 import { Toast, ToastRef } from '@/app/components/Toast'
 import { api } from '@/services/api'
 
