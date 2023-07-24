@@ -10,8 +10,7 @@ export function Header() {
   const { user } = useAuth()
 
   return (
-    <header className="bg-gray-900 border-b border-green-800 px-6 py-3">
-      <div className="container flex justify-between">
+    <header className="bg-gray-900 border-b border-green-800 px-6 py-3 flex justify-between">
         <div className="flex items-center gap-3">
           <button>
             <List
@@ -43,7 +42,6 @@ export function Header() {
               {user?.streak}
             </span>
           </div>
-        </div>
       </div>
     </header>
   )
