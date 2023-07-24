@@ -11,9 +11,9 @@ export default function Home() {
   return (
     <main
       style={{ backgroundImage: 'url("/images/space-background.png")' }}
-      className="bg-center bg-repeat-y bg-contain h-full flex flex-col items-center "
+      className="bg-center flex flex-col items-center "
     >
-      <ul className="w-[480px] max-w-[90vw] mt-8 grid place-content-center gap-3">
+      <ul className="w-[480px] max-w-[90vw] mt-8 flex flex-col items-center justify-center gap-12">
         
         {planets?.map((planet) => (
           <Planet key={planet.id} data={planet} />
