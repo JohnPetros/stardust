@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { Animation } from '@/app/components/Animation'
 import { LottieRef } from 'lottie-react'
 import { twMerge } from 'tailwind-merge'
-import { Variants, motion, useScroll } from 'framer-motion'
+import { Variants, motion } from 'framer-motion'
 
 import UnlockedStar from '../../../../../../public/animations/unlocked-star.json'
 import { useSpace } from '@/hooks/useSpace'
@@ -37,6 +37,7 @@ const rocketVariants: Variants = {
     y: 0,
     transition: {
       duration: 1.5,
+      type: 'spring'
     },
   },
 }
