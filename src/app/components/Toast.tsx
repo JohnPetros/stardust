@@ -17,7 +17,7 @@ export interface ToastRef {
   open: ({ type, message }: openProps) => void
 }
 
-export const Toast = forwardRef((_, ref) => {
+export const Toast = forwardRef<ToastRef>((_, ref) => {
   const [isOpen, setIsOpen] = useState(false)
   const [type, setType] = useState<Type>('error')
   const [message, setMessage] = useState('')
