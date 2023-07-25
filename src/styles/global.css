@@ -52,3 +52,15 @@ button:hover {
 a {
   text-decoration: inherit;
 }
+
+.custom-scrollbar::-webkit-scrollbar {
+  @apply w-1 rounded
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-green-700
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-gray-900
+}
