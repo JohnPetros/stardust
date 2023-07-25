@@ -6,9 +6,10 @@ import Image from 'next/image'
 import { Animation } from '@/app/components/Animation'
 import { LottieRef } from 'lottie-react'
 import { twMerge } from 'tailwind-merge'
-import { Variants, motion } from 'framer-motion'
+import { Variants, motion, useScroll } from 'framer-motion'
 
 import UnlockedStar from '../../../../../../public/animations/unlocked-star.json'
+import { useSpace } from '@/hooks/useSpace'
 
 const starLight = '0 0 12px #ffcf31a1'
 
@@ -26,6 +27,20 @@ const starVariants: Variants = {
   },
 }
 
+const rocketVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: '-100vh',
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 1.5,
+    },
+  },
+}
+
 interface StarProps {
   data: Star
   isLastUnlockedStar: boolean
@@ -35,6 +50,7 @@ export function Star({
   data: { name, number, isChallenge, isUnlocked },
   isLastUnlockedStar,
 }: StarProps) {
+  const { rocketImage, rocketName } = useSpace()
   const starRef = useRef(null) as LottieRef
 
   function handleStarClick() {
@@ -105,6 +121,22 @@ export function Star({
             {name}
           </strong>
         </div>
+
+        {isLastUnlockedStar && (
+          <motion.div
+            variants={rocketVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <Image
+              src={rocketImage}
+              alt={rocketName}
+              width={72}
+              height={72}
+              className="rotate-180"
+            />
+          </motion.div>
+        )}
       </button>
     </li>
   )
