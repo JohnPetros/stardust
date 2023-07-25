@@ -634,19 +634,19 @@ export interface Database {
       }
       users_rescuable_achievements: {
         Row: {
-          achievement_id: string | null
+          achievement_id: string
           id: string
-          user_id: string | null
+          user_id: string
         }
         Insert: {
-          achievement_id?: string | null
+          achievement_id: string
           id?: string
-          user_id?: string | null
+          user_id: string
         }
         Update: {
-          achievement_id?: string | null
+          achievement_id?: string
           id?: string
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -665,19 +665,19 @@ export interface Database {
       }
       users_unlocked_achievements: {
         Row: {
-          achievement_id: string | null
+          achievement_id: string
           id: string
-          user_id: string | null
+          user_id: string
         }
         Insert: {
-          achievement_id?: string | null
+          achievement_id: string
           id?: string
-          user_id?: string | null
+          user_id: string
         }
         Update: {
-          achievement_id?: string | null
+          achievement_id?: string
           id?: string
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {
