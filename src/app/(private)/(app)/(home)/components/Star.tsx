@@ -1,20 +1,46 @@
 'use client'
-import { Animation } from '@/app/components/Animation'
+import { useRef } from 'react'
 import { Star } from '@/types/star'
+
 import Image from 'next/image'
+import { Animation } from '@/app/components/Animation'
+import { LottieRef } from 'lottie-react'
+import { twMerge } from 'tailwind-merge'
+import { Variants, motion } from 'framer-motion'
 
 import UnlockedStar from '../../../../../../public/animations/unlocked-star.json'
-import { twMerge } from 'tailwind-merge'
 
 const starLight = '0 0 12px #ffcf31a1'
 
+const starVariants: Variants = {
+  default: {
+    scale: 1,
+  },
+  pulse: {
+    scale: 1.1,
+    transition: {
+      repeat: Infinity,
+      repeatType: 'mirror',
+      duration: 0.4,
+    },
+  },
+}
+
 interface StarProps {
   data: Star
+  isLastUnlockedStar: boolean
 }
 
 export function Star({
   data: { name, number, isChallenge, isUnlocked },
+  isLastUnlockedStar,
 }: StarProps) {
+  const starRef = useRef(null) as LottieRef
+
+  function handleStarClick() {
+    starRef.current?.goToAndPlay(0)
+  }
+
   return (
     <li>
       <div className="mx-8">
@@ -27,12 +53,25 @@ export function Star({
           alt=""
         />
       </div>
-      <div className="flex items-center gap-3 mt-2">
+      <button
+        className="flex items-center gap-3 mt-2"
+        onClick={handleStarClick}
+      >
         <div className="relative">
           {isUnlocked ? (
-            <div className="-ml-2">
-              <Animation src={UnlockedStar} size={100} hasLoop={false} />
-            </div>
+            <motion.div
+              variants={starVariants}
+              initial="default"
+              animate={isLastUnlockedStar ? 'pulse' : ''}
+              className="-ml-2"
+            >
+              <Animation
+                animationRef={starRef}
+                src={UnlockedStar}
+                size={100}
+                hasLoop={false}
+              />
+            </motion.div>
           ) : (
             <Image
               src={'/images/locked-star.svg'}
@@ -66,7 +105,7 @@ export function Star({
             {name}
           </strong>
         </div>
-      </div>
+      </button>
     </li>
   )
 }
