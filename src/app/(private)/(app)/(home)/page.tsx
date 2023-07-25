@@ -1,6 +1,5 @@
 'use client'
 
-import { useAuth } from '@/hooks/useAuth'
 import { usePlanet } from '@/hooks/usePlanet'
 import { Planet } from './components/Planet'
 import { useSiderbar } from '@/hooks/useSiderbar'
