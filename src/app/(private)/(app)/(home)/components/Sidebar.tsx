@@ -3,6 +3,7 @@ import { UserAvatar } from './UserAvatar'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/app/components/Button'
 import { useSiderbar } from '@/hooks/useSiderbar'
+import { AchievementsList } from './AchievementsList'
 import { AnimatePresence, Variants, motion } from 'framer-motion'
 
 const sidebarVariants: Variants = {
@@ -32,7 +33,7 @@ export function Sidebar() {
           initial="close"
           animate="open"
           exit="close"
-          className="bg-gray-900 p-6 fixed left-0 h-screen w-80 z-20"
+          className="bg-gray-900 fixed h-screen left-0 w-80 z-20 mt-12 "
         >
           <div className="flex flex-col items-center justify-center gap-3 text-gray-100">
             <UserAvatar avatarId={user.avatar_id} size={96} />
@@ -41,6 +42,12 @@ export function Sidebar() {
             <Button className="bg-green-400 text-green-900 px-3 py-2 w-48 mx-aut mt-3">
               Sair
             </Button>
+          </div>
+
+          <div className="mt-3 overflow-y-auto h-full p-6 custom-scrollbar">
+            <div>
+              <AchievementsList />
+            </div>
           </div>
         </motion.div>
       )}
