@@ -1,3 +1,4 @@
+'use client'
 import Lottie, { LottieRef } from 'lottie-react'
 
 interface AnimationProps {
