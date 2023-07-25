@@ -58,7 +58,7 @@ export function Sidenav() {
             )}
           </div>
 
-          <div className="mt-12 flex flex-col px-3 gap-3">
+          <nav className="mt-12 flex flex-col px-3 gap-3">
             {HOME_PAGES.map(({ path, icon, label }) => (
               <NavButton
                 path={path}
@@ -68,7 +68,8 @@ export function Sidenav() {
                 isColumn={false}
               />
             ))}
-          </div>
+          </nav>
+
         </div>
 
         <div className="border-t border-green-700 flex flex-col mx-3 px-3 py-3">
