@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import { Header } from './components/Header'
-import { TabBar } from './components/TabBar'
+import { TabBar } from './components/TabNav'
 import { Sidebar } from './components/Sidebar'
 import { Sidenav } from './components/Sidenav'
 
