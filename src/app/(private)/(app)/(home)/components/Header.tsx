@@ -12,8 +12,8 @@ export function Header() {
   const { toggle } = useSiderbar()
 
   return (
-    <header className="fixed top-0 w-full z-40 bg-gray-900 border-b border-green-800 px-6 py-3 flex justify-between">
-      <div className="flex items-center gap-3">
+    <header className="fixed top-0 w-full z-40 bg-gray-900 h-16 px-6 py-3 flex justify-between md:justify-end">
+      <div className="flex items-center gap-3 md:hidden">
         <button onClick={toggle}>
           <List
             width={24}
@@ -22,7 +22,7 @@ export function Header() {
             weight="bold"
           />
         </button>
-        <Image src="/images/logo.svg" width={80} height={80} alt="StarDust" />
+        <Image src="/images/logo.svg" width={100} height={100} alt="StarDust" />
       </div>
 
       <div className="flex items-center gap-2">
