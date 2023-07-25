@@ -1,6 +1,7 @@
 'use client'
 import { Icon } from '@phosphor-icons/react'
 import { Variants, motion } from 'framer-motion'
+import { twMerge } from 'tailwind-merge'
 
 interface SidenavButtonProps {
   icon: Icon
@@ -14,6 +15,7 @@ const titleVariants: Variants = {
   },
   expand: {
     width: 'auto',
+    paddingLeft: '8px',
     transition: {
       delay: 0.05,
     },
@@ -26,7 +28,11 @@ export default function SidenavButton({
   isExpanded,
 }: SidenavButtonProps) {
   return (
-    <button className="bg-transparent flex items-center gap-2 text-gray-100 text-sm h-auto w-max p-2 hover:bg-green-500/30 transition-colors duration-200">
+    <button
+      className={twMerge(
+        'bg-transparent flex items-center justify-center text-gray-100 text-sm h-auto w-max p-2 hover:bg-green-500/30 transition-colors duration-200 rounded-md'
+      )}
+    >
       <Icon className="text-green-400 text-lg" />
       <motion.span
         variants={titleVariants}

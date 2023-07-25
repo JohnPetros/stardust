@@ -19,6 +19,7 @@ const labelVariants: Variants = {
   },
   expand: {
     width: 'auto',
+    paddingLeft: '8px',
     transition: {
       delay: 0.05,
     },
@@ -39,7 +40,7 @@ export function NavButton({
     <Link
       href={path}
       className={twMerge(
-        'rounded-xl hover:bg-green-700/20 transition-colors duration-200 flex items-center justify-center w-max p-3 gap-2',
+        'rounded-xl hover:bg-green-700/20 transition-colors duration-200 flex items-center justify-center w-max p-3',
         isColumn ? 'flex-col' : 'flex-row'
       )}
     >

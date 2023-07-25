@@ -31,7 +31,7 @@ export function Sidenav() {
       variants={sidenavVariants}
       initial="shrink"
       animate={isExpanded ? 'expand' : ''}
-      className="absolute left-0 bg-gray-900 h-full z-50"
+      className="hidden md:flex md:fixed left-0 bg-gray-900 h-full z-50"
     >
       <div className="reative flex flex-col justify-between h-full">
         <button
