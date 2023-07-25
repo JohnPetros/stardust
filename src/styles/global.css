@@ -16,14 +16,16 @@
   box-sizing: border-box;
 }
 
-html,
 body {
   width: 100%;
   height: 100vh;
 
   font-weight: 400;
+}
 
+body {
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 @media (max-width: 1080px) {
@@ -54,13 +56,13 @@ a {
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  @apply w-1 rounded
+  @apply w-1 rounded;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  @apply bg-green-700
+  @apply bg-green-700;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  @apply bg-gray-900
+  @apply bg-gray-900;
 }
