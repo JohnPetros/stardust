@@ -1,8 +1,13 @@
-import { Animation } from "@/app/components/Animation";
+'use client'
+import Lottie from 'lottie-react'
 import LoadingAnimation from '../../../../../../public/animations/loading.json'
 
 export function Loading() {
   return (
-    <Animation src={LoadingAnimation} size={24} />
+    <Lottie
+      animationData={LoadingAnimation}
+      style={{ width: 40, height: 40 }}
+      loop={true}
+    />
   )
 }
