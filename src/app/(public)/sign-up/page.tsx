@@ -1,21 +1,41 @@
 'use client'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { Envelope, Lock } from '@phosphor-icons/react'
 import { Title } from '../components/Title'
 import { Hero } from '../components/Hero'
 import { Link } from '../components/Link'
+
 import { Input } from '@/app/components/Input'
 import { Button } from '@/app/components/Button'
-import { motion, Variants } from 'framer-motion'
-import { PASSWORD_REGEX } from '@/utils/constants/password-regex'
 import { Toast, ToastRef } from '@/app/components/Toast'
+
+import { Envelope, Lock } from '@phosphor-icons/react'
+import { motion, Variants } from 'framer-motion'
+import { LottieRef } from 'lottie-react'
+
+const formVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    x: -250,
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      type: 'spring',
+      duration: 0.4,
+    },
+  },
+}
+
 import { api } from '@/services/api'
+
+import { PASSWORD_REGEX } from '@/utils/constants/password-regex'
 
 const formSchema = z
   .object({
@@ -52,26 +72,12 @@ export default function SignUp() {
     resolver: zodResolver(formSchema),
   })
 
-  const { signUp, user, isLoading } = useAuth()
+  const { signUp, isLoading } = useAuth()
 
   const router = useRouter()
 
   const toastRef = useRef<ToastRef>(null)
-
-  const formVariants: Variants = {
-    hidden: {
-      opacity: 0,
-      x: -250,
-    },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        type: 'spring',
-        duration: 0.4,
-      },
-    },
-  }
+  const rocketRef = useRef(null) as LottieRef
 
   function handleError(error: string) {
     let message = ''
@@ -94,15 +100,15 @@ export default function SignUp() {
   }
 
   async function handleFormData({ name, email, password }: FormFields) {
-    // const userEmail = await api.user.getEmail(email)
+    const userEmail = await api.getUserByEmail(email)
 
-    // if (userEmail) {
-    //   toastRef.current?.open({
-    //     type: 'success',
-    //     message: 'Usuário já registrado com esse e-mail',
-    //   })
-    //   return
-    // }
+    if (userEmail) {
+      toastRef.current?.open({
+        type: 'success',
+        message: 'Usuário já registrado com esse e-mail',
+      })
+      return
+    }
 
     const response = await signUp(email, password)
 

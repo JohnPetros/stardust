@@ -17,9 +17,9 @@ import { Toast, ToastRef } from '@/app/components/Toast'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { PASSWORD_REGEX } from '@/utils/constants/password-regex'
 
-import RocketLaunching from '../../../../public/animations/rocket-launching.json'
-import Lottie, { LottieRef } from 'lottie-react'
-const ROCKET_DURATION = 1.2 // seconds
+import { RocketAnimation } from '../components/RocketAnimation'
+import { ROCKET_ANIMATION_DURATION } from '@/utils/constants'
+import { LottieRef } from 'lottie-react'
 
 const formVariants: Variants = {
   initial: {
@@ -38,7 +38,7 @@ const formVariants: Variants = {
     opacity: 0,
     x: -750,
     transition: {
-      duration: ROCKET_DURATION,
+      duration: ROCKET_ANIMATION_DURATION,
     },
   },
 }
@@ -48,20 +48,7 @@ const heroVariants: Variants = {
     opacity: 0,
     x: '75vw',
     transition: {
-      duration: ROCKET_DURATION,
-    },
-  },
-}
-
-const rocketLaunchingVariants: Variants = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-    transition: {
-      delay: ROCKET_DURATION,
-      duration: 0.4,
+      duration: ROCKET_ANIMATION_DURATION,
     },
   },
 }
@@ -113,7 +100,7 @@ export default function SignIn() {
       setTimeout(() => {
         rocketRef.current?.goToAndPlay(0)
         resolve(true)
-      }, ROCKET_DURATION + 1000)
+      }, ROCKET_ANIMATION_DURATION * 1000)
     )
   }
 
@@ -137,20 +124,11 @@ export default function SignIn() {
     <>
       <Toast ref={toastRef} />
 
-      <motion.div
-        variants={rocketLaunchingVariants}
-        initial="hidden"
-        animate={isRocketVisible ? 'visible' : ''}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-      >
-        <Lottie
-          lottieRef={rocketRef}
-          animationData={RocketLaunching}
-          style={{ width: 640, height: 640 }}
-          loop={false}
-          onComplete={handleRocketLanchingEnd}
-        />
-      </motion.div>
+      <RocketAnimation
+        animationRef={rocketRef}
+        isVisible={isRocketVisible}
+        onAnimationEnd={handleRocketLanchingEnd}
+      />
 
       <div className="h-screen lg:grid lg:grid-cols-[1fr_1.5fr]">
         <main className="flex flex-col items-center justify-center h-full">
