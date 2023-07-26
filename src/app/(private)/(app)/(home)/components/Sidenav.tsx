@@ -1,14 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { useAuth } from '@/hooks/useAuth'
 import Image from 'next/image'
 
-import { CaretLeft, CaretRight, Flag, Power } from '@phosphor-icons/react'
-import { Button } from '@/app/components/Button'
+import { ToastRef, Toast } from '@/app/components/Toast'
 import { NavButton } from './NavButton'
+import { AchievementsList } from './AchievementsList'
+import { SidenavButton } from './SidenavButton'
+
+import { CaretLeft, CaretRight, Flag, Power } from '@phosphor-icons/react'
+import { AnimatePresence, Variants, motion } from 'framer-motion'
+
 import { HOME_PAGES } from '@/utils/constants/home-pages'
-import { Variants, motion } from 'framer-motion'
-import SidenavButton from './SidenavButton'
 
 const sidenavVariants: Variants = {
   shrink: {
@@ -19,11 +23,46 @@ const sidenavVariants: Variants = {
   },
 }
 
-export function Sidenav() {
-  const [isExpanded, setIsExpanded] = useState(false)
+const achievementsVariants: Variants = {
+  hidden: {
+    width: 0,
+    opacity: 0,
+  },
+  visible: {
+    width: 320,
+    opacity: 1,
+    transition: {
+      delay: 0.2,
+      staggerChildren: 0.2,
+      when: 'beforeChildren',
+    },
+  },
+}
 
-  function handleExpandClick() {
+export function Sidenav() {
+  const { signOut } = useAuth()
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [isAchievementsListVisible, setIsAchievementsListVisible] =
+    useState(false)
+  const toastRef = useRef<ToastRef>(null)
+
+  function handleExpandButtonClick() {
     setIsExpanded(!isExpanded)
+  }
+
+  function handleAchievementsListButtonClick() {
+    setIsAchievementsListVisible(!isAchievementsListVisible)
+  }
+
+  async function handleSignOutButtonClick() {
+    const error = await signOut()
+
+    if (error) {
+      toastRef.current?.open({
+        type: 'error',
+        message: 'Erro ao tentar fazer logout',
+      })
+    }
   }
 
   return (
@@ -33,15 +72,17 @@ export function Sidenav() {
       animate={isExpanded ? 'expand' : ''}
       className="hidden md:flex md:fixed left-0 bg-gray-900 h-full z-50"
     >
+      <Toast ref={toastRef} />
+
       <div className="reative flex flex-col justify-between h-full">
         <button
-          onClick={handleExpandClick}
-          className="absolute top-20 -right-2 rounded-full bg-green-400 p-1 grid place-content-center"
+          onClick={handleExpandButtonClick}
+          className="absolute top-20 -right-2 rounded-full bg-green-400 p-1 grid place-content-center z-40"
         >
           {isExpanded ? (
-            <CaretRight className="text-gray-800 text-sm" weight="bold" />
-          ) : (
             <CaretLeft className="text-gray-800 text-sm" weight="bold" />
+          ) : (
+            <CaretRight className="text-gray-800 text-sm" weight="bold" />
           )}
         </button>
         <div>
@@ -69,17 +110,38 @@ export function Sidenav() {
               />
             ))}
           </nav>
-
         </div>
+
+          <AnimatePresence>
+        {isAchievementsListVisible && (
+            <motion.div
+              variants={achievementsVariants}
+              initial="hidden"
+              animate={isAchievementsListVisible ? 'visible' : ''}
+              exit="hidden"
+              className="bg-gray-900 border-l border-green-400 p-6 mt-16 absolute top-0 right-0 translate-x-[100%] w-80 custom-scrollbar h-full overflow-y-scroll"
+            >
+              <AchievementsList />
+            </motion.div>
+        )}
+        </AnimatePresence>
 
         <div className="border-t border-green-700 flex flex-col mx-3 px-3 py-3">
           <SidenavButton
             icon={Flag}
             title="Conquistas"
             isExpanded={isExpanded}
+            onClick={handleAchievementsListButtonClick}
+            isActive={isAchievementsListVisible}
           />
 
-          <SidenavButton icon={Power} title="Sair" isExpanded={isExpanded} />
+          <SidenavButton
+            icon={Power}
+            title="Sair"
+            isExpanded={isExpanded}
+            onClick={handleSignOutButtonClick}
+            isActive={isAchievementsListVisible}
+          />
         </div>
       </div>
     </motion.div>
