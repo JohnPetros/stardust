@@ -2,12 +2,14 @@
 import { Icon } from '@phosphor-icons/react'
 import { Variants, motion } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
+import { Loading } from './Loading'
 
 interface SidenavButtonProps {
   icon: Icon
   title: string
   isExpanded: boolean
   isActive: boolean
+  isLoading: boolean
   onClick: VoidFunction
 }
 
@@ -29,6 +31,7 @@ export function SidenavButton({
   title,
   isExpanded,
   isActive,
+  isLoading,
   onClick,
 }: SidenavButtonProps) {
   return (
@@ -38,15 +41,20 @@ export function SidenavButton({
         'bg-transparent flex items-center justify-center text-gray-100 text-sm h-auto w-max p-2 hover:bg-green-500/30 transition-colors duration-200 rounded-md',
         isActive ? 'bg-green-500/30' : ''
       )}
+      disabled={isLoading}
     >
-      <Icon className="text-green-400 text-lg" />
+      {isLoading && !isExpanded ? (
+        <Loading />
+      ) : (
+        <Icon className="text-green-400 text-lg" />
+      )}
       <motion.span
         variants={titleVariants}
         initial="shrink"
         animate={isExpanded ? 'expand' : ''}
         className="block overflow-hidden"
       >
-        {title}
+        {isLoading ? <Loading /> : title}
       </motion.span>
     </button>
   )
