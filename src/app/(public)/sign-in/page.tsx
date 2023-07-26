@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
@@ -18,8 +18,7 @@ import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { PASSWORD_REGEX } from '@/utils/constants/password-regex'
 
 import RocketLaunching from '../../../../public/animations/rocket-launching.json'
-import { Animation } from '@/app/components/Animation'
-import { LottieRef } from 'lottie-react'
+import Lottie, { LottieRef } from 'lottie-react'
 const ROCKET_DURATION = 1.2 // seconds
 
 const formVariants: Variants = {
@@ -62,6 +61,7 @@ const rocketLaunchingVariants: Variants = {
     opacity: 1,
     transition: {
       delay: ROCKET_DURATION,
+      duration: 0.4,
     },
   },
 }
@@ -100,6 +100,23 @@ export default function SignIn() {
   const toastRef = useRef<ToastRef>(null)
   const rocketRef = useRef(null) as LottieRef
 
+  function handleRocketLanchingEnd() {
+    rocketRef.current?.pause()
+
+    if (user) {
+      console.log(user.id)
+    }
+  }
+
+  async function launchRocket() {
+    return await new Promise((resolve) =>
+      setTimeout(() => {
+        rocketRef.current?.goToAndPlay(0)
+        resolve(true)
+      }, ROCKET_DURATION + 1000)
+    )
+  }
+
   async function handleFormData({ email, password }: FormFields) {
     const response = await signIn(email, password)
 
@@ -108,24 +125,13 @@ export default function SignIn() {
         type: 'error',
         message: 'Usuário não encontrado',
       })
+      return
     }
 
     setIsRocketVisible(true)
 
-    setTimeout(() => {
-      rocketRef.current?.goToAndPlay(0)
-    }, ROCKET_DURATION * 1000)
-
-    setTimeout(() => {
-      router.push('/')
-    }, ROCKET_DURATION * 1000 + 3000)
+    await launchRocket()
   }
-
-  useEffect(() => {
-    if (user) {
-      router.push('/')
-    }
-  }, [user])
 
   return (
     <>
@@ -137,7 +143,13 @@ export default function SignIn() {
         animate={isRocketVisible ? 'visible' : ''}
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
       >
-        <Animation animationRef={rocketRef} src={RocketLaunching} size={640} />
+        <Lottie
+          lottieRef={rocketRef}
+          animationData={RocketLaunching}
+          style={{ width: 640, height: 640 }}
+          loop={false}
+          onComplete={handleRocketLanchingEnd}
+        />
       </motion.div>
 
       <div className="h-screen lg:grid lg:grid-cols-[1fr_1.5fr]">

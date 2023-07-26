@@ -44,7 +44,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
 
   async function getUser() {
     const userId = serverSession?.user?.id
-    
+
     if (userId) {
       return await api.getUser(userId)
     }
@@ -53,11 +53,10 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
   const {
     data: user,
     error,
-    isLoading
+    isLoading,
   } = useSWR(serverSession ? 'user' : null, getUser)
 
   async function signIn(email: string, password: string) {
-
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -71,7 +70,6 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
   }
 
   async function signUp(email: string, password: string) {
-
     const { data: response, error } = await supabase.auth.signUp({
       email,
       password,
@@ -106,8 +104,9 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.access_token !== serverSession?.access_token) {
-        console.log(true);
-        router.refresh()
+        setTimeout(() => {
+          router.refresh()
+        }, 3000)
       }
     })
 

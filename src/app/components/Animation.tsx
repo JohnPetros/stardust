@@ -1,11 +1,12 @@
 'use client'
-import Lottie, { LottieRef } from 'lottie-react'
+import Lottie, { LottieRef  } from 'lottie-react'
 
 interface AnimationProps {
   animationRef?: LottieRef
   src: Object
   size: number
   hasLoop?: boolean
+  onAnimationEnd?: () => void
 }
 
 export function Animation({
@@ -13,6 +14,7 @@ export function Animation({
   src,
   size,
   hasLoop = true,
+  onAnimationEnd
 }: AnimationProps) {
   return (
     <Lottie
@@ -20,6 +22,7 @@ export function Animation({
       animationData={src}
       style={{ width: size, height: size }}
       loop={hasLoop}
+      onComplete={onAnimationEnd}
     />
   )
 }
