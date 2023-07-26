@@ -7,6 +7,8 @@ interface SidenavButtonProps {
   icon: Icon
   title: string
   isExpanded: boolean
+  isActive: boolean
+  onClick: VoidFunction
 }
 
 const titleVariants: Variants = {
@@ -22,15 +24,19 @@ const titleVariants: Variants = {
   },
 }
 
-export default function SidenavButton({
+export function SidenavButton({
   icon: Icon,
   title,
   isExpanded,
+  isActive,
+  onClick,
 }: SidenavButtonProps) {
   return (
     <button
+      onClick={onClick}
       className={twMerge(
-        'bg-transparent flex items-center justify-center text-gray-100 text-sm h-auto w-max p-2 hover:bg-green-500/30 transition-colors duration-200 rounded-md'
+        'bg-transparent flex items-center justify-center text-gray-100 text-sm h-auto w-max p-2 hover:bg-green-500/30 transition-colors duration-200 rounded-md',
+        isActive ? 'bg-green-500/30' : ''
       )}
     >
       <Icon className="text-green-400 text-lg" />
