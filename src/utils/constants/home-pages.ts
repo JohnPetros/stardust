@@ -1,5 +1,3 @@
-import { Icon } from '@phosphor-icons/react'
-
 type HomePage = {
   path: string
   label: string
