@@ -542,18 +542,18 @@ export interface Database {
       users_acquired_rockets: {
         Row: {
           id: string
-          rocket_id: string | null
-          user_id: string | null
+          rocket_id: string
+          user_id: string
         }
         Insert: {
           id?: string
-          rocket_id?: string | null
-          user_id?: string | null
+          rocket_id: string
+          user_id: string
         }
         Update: {
           id?: string
-          rocket_id?: string | null
-          user_id?: string | null
+          rocket_id?: string
+          user_id?: string
         }
         Relationships: [
           {
