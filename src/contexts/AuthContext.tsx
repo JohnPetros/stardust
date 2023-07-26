@@ -8,6 +8,7 @@ import useSWR from 'swr'
 import { AuthError, Session } from '@supabase/supabase-js'
 import { api } from '@/services/api'
 import { User } from '@/types/user'
+import { ROCKET_ANIMATION_DURATION } from '@/utils/constants'
 
 interface AuthContextValue {
   user: User | null | undefined
@@ -106,7 +107,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
       if (session?.access_token !== serverSession?.access_token) {
         setTimeout(() => {
           router.refresh()
-        }, 3000)
+        }, ROCKET_ANIMATION_DURATION * 1000 * 3)
       }
     })
 
