@@ -44,6 +44,7 @@ export function Sidenav() {
   const [isExpanded, setIsExpanded] = useState(false)
   const [isAchievementsListVisible, setIsAchievementsListVisible] =
     useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const toastRef = useRef<ToastRef>(null)
 
   function handleExpandButtonClick() {
@@ -55,6 +56,8 @@ export function Sidenav() {
   }
 
   async function handleSignOutButtonClick() {
+    setIsLoading(true)
+
     const error = await signOut()
 
     if (error) {
@@ -112,8 +115,8 @@ export function Sidenav() {
           </nav>
         </div>
 
-          <AnimatePresence>
-        {isAchievementsListVisible && (
+        <AnimatePresence>
+          {isAchievementsListVisible && (
             <motion.div
               variants={achievementsVariants}
               initial="hidden"
@@ -123,16 +126,17 @@ export function Sidenav() {
             >
               <AchievementsList />
             </motion.div>
-        )}
+          )}
         </AnimatePresence>
 
-        <div className="border-t border-green-700 flex flex-col mx-3 px-3 py-3">
+        <div className="border-t border-green-700 flex flex-col gap-1 mx-3 px-3 py-3">
           <SidenavButton
             icon={Flag}
             title="Conquistas"
             isExpanded={isExpanded}
             onClick={handleAchievementsListButtonClick}
             isActive={isAchievementsListVisible}
+            isLoading={false}
           />
 
           <SidenavButton
@@ -140,7 +144,8 @@ export function Sidenav() {
             title="Sair"
             isExpanded={isExpanded}
             onClick={handleSignOutButtonClick}
-            isActive={isAchievementsListVisible}
+            isActive={false}
+            isLoading={isLoading}
           />
         </div>
       </div>

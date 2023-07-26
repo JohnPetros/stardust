@@ -44,7 +44,6 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
 
   async function getUser() {
     const userId = serverSession?.user?.id
-    console.log({userId});
     
     if (userId) {
       return await api.getUser(userId)
