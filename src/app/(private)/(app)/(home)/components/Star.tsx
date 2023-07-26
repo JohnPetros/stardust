@@ -37,7 +37,7 @@ const rocketVariants: Variants = {
     y: 0,
     transition: {
       duration: 1.5,
-      type: 'spring'
+      type: 'spring',
     },
   },
 }
@@ -73,6 +73,7 @@ export function Star({
       <button
         className="flex items-center gap-3 mt-2"
         onClick={handleStarClick}
+        disabled={!isUnlocked}
       >
         <div className="relative">
           {isUnlocked ? (
@@ -80,7 +81,7 @@ export function Star({
               variants={starVariants}
               initial="default"
               animate={isLastUnlockedStar ? 'pulse' : ''}
-              className="-ml-2"
+              className=""
             >
               <Animation
                 animationRef={starRef}
@@ -94,13 +95,14 @@ export function Star({
               src={'/images/locked-star.svg'}
               width={85}
               height={85}
+              className="ml-2"
               alt=""
             />
           )}
           <span
             className={twMerge(
               'absolute block text-lg font-semibold top-[52%] -translate-x-1/2 -translate-y-1/2 text-yellow-700',
-              isUnlocked ? 'left-[48%]' : ' left-[50%]'
+              isUnlocked ? 'left-[52%]' : ' left-[54%]'
             )}
           >
             {number}
