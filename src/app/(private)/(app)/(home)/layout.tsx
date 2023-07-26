@@ -1,17 +1,6 @@
 import { ReactNode } from 'react'
-import { Header } from './components/Header'
-import { TabNav } from './components/TabNav'
-import { Sidebar } from './components/Sidebar'
-import { Sidenav } from './components/Sidenav'
+import { Layout } from './components/Layout'
 
 export default function HomeLayout({ children }: { children: ReactNode }) {
-  return (
-    <>
-      <Header />
-      <Sidenav />
-      <Sidebar />
-      {children}
-      <TabNav />
-    </>
-  )
+  return <Layout>{children}</Layout>
 }
