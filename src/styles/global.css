@@ -60,9 +60,9 @@ a {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  @apply bg-green-700;
+  @apply bg-green-700 h-3;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  @apply bg-gray-900;
+  @apply bg-gray-400;
 }
