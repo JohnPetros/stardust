@@ -39,17 +39,17 @@ const achievementsVariants: Variants = {
   },
 }
 
-export function Sidenav() {
+interface SidenavProps {
+  isExpanded: boolean
+  toggleSidenav: VoidFunction
+}
+
+export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
   const { signOut } = useAuth()
-  const [isExpanded, setIsExpanded] = useState(false)
   const [isAchievementsListVisible, setIsAchievementsListVisible] =
     useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const toastRef = useRef<ToastRef>(null)
-
-  function handleExpandButtonClick() {
-    setIsExpanded(!isExpanded)
-  }
 
   function handleAchievementsListButtonClick() {
     setIsAchievementsListVisible(!isAchievementsListVisible)
@@ -79,7 +79,7 @@ export function Sidenav() {
 
       <div className="reative flex flex-col justify-between h-full">
         <button
-          onClick={handleExpandButtonClick}
+          onClick={toggleSidenav}
           className="absolute top-20 -right-2 rounded-full bg-green-400 p-1 grid place-content-center z-40"
         >
           {isExpanded ? (
@@ -105,6 +105,7 @@ export function Sidenav() {
           <nav className="mt-12 flex flex-col px-3 gap-3">
             {HOME_PAGES.map(({ path, icon, label }) => (
               <NavButton
+                key={path}
                 path={path}
                 label={label}
                 icon={icon}
