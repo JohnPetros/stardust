@@ -1,5 +1,11 @@
 'use client'
-import { ReactNode, forwardRef, useImperativeHandle, useState } from 'react'
+import {
+  ReactNode,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import Lottie from 'lottie-react'
 
@@ -7,6 +13,7 @@ import { AnimatePresence, motion, Variants } from 'framer-motion'
 
 import { X } from '@phosphor-icons/react'
 import { MODAL_EFFECTS } from '@/utils/constants'
+import { playSound } from '@/utils/functions'
 
 export type Type = 'earning' | 'crying' | 'denying' | 'asking' | 'generic'
 
@@ -41,7 +48,7 @@ export const Modal = forwardRef<ModalRef, ModalProps>(
     const [isOpen, setIsOpen] = useState(false)
     if (!type) return null
 
-    const { animation } = MODAL_EFFECTS.find(
+    const { animation, sound } = MODAL_EFFECTS.find(
       (animation) => animation.id === type.toLocaleLowerCase()
     )!
 
@@ -63,6 +70,12 @@ export const Modal = forwardRef<ModalRef, ModalProps>(
       },
       []
     )
+
+    useEffect(() => {
+      if (sound && isOpen && type !== 'generic') {
+        playSound(sound)
+      }
+    }, [isOpen])
 
     return (
       <Dialog.Root open={isOpen} onOpenChange={close}>
