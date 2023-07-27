@@ -22,7 +22,7 @@ export function Button({
     <motion.button
       whileTap={{ scale: 0.99 }}
       className={twMerge(
-        'h-8 w-full flex justify-center items-center rounded bg-green-400 font-semibold relative overflow-hidden',
+        'h-10 w-full flex justify-center items-center rounded bg-green-400 font-semibold relative overflow-hidden hover:brightness-110 transition-all duration-200',
         className
       )}
       disabled={isLoading}
