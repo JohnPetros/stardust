@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useAuth } from './useAuth'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 
 import { Rocket } from '@/types/rocket'
 import { api } from '@/services/api'
@@ -40,18 +40,45 @@ export function useRocket(rocketId?: string) {
     getUserAcquiredRocketsIds
   )
 
+  function updateRockets(updatedRocket: Rocket) {
+    return rockets?.map((rocket) =>
+      rocket.id === updatedRocket.id
+        ? { ...updatedRocket, isAcquired: true }
+        : rocket
+    )
+  }
+
+  async function addUserAcquiredRocket(rocketId: string) {
+    try {
+      if (user?.id) {
+        await api.addUserAcquiredRocket(rocketId, user?.id)
+        const updatedRocket = rockets?.find((rocket) => rocket.id === rocketId)
+
+        if (updatedRocket) {
+          mutate({ ...updateRockets(updatedRocket) })
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  console.log(rockets);
+  console.log(userAcquiredRocketsIds);
+
   const verifiedRockets = useMemo(() => {
-    if (!rocketId && userAcquiredRocketsIds?.length) {
+    if (!rocketId && userAcquiredRocketsIds?.length && rockets?.length) {
       return rockets?.map((rocket) =>
         verifyRocketAcquirement(rocket, userAcquiredRocketsIds)
       )
     }
 
     return []
-  }, [rockets, userAcquiredRocketsIds])
+  }, [rockets?.length, userAcquiredRocketsIds?.length])
 
   return {
     rocket,
     rockets: verifiedRockets,
+    addUserAcquiredRocket
   }
 }
