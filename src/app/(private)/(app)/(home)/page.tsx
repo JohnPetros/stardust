@@ -9,14 +9,16 @@ import { TransitionPageAnimation } from '../components/TransitionPageAnimation'
 export default function Home() {
   const { planets, lastUnlockedStarId } = usePlanet()
   const { isOpen, toggle } = useSiderbar()
-  const [isTransitionVisible, setIsTransitionVisible] = useState(!!planets?.length)
+  const [isTransitionVisible, setIsTransitionVisible] = useState(
+    !planets?.length
+  )
 
   function handleClick() {
     if (isOpen) toggle()
   }
 
   useEffect(() => {
-    if (planets?.length && !isTransitionVisible) {
+    if (planets?.length && isTransitionVisible) {
       setTimeout(() => setIsTransitionVisible(false), 3500)
     }
   }, [planets])
