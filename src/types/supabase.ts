@@ -510,19 +510,19 @@ export interface Database {
       }
       users_acquired_avatars: {
         Row: {
-          avatar_id: string | null
+          avatar_id: string
           id: string
-          user_id: string | null
+          user_id: string
         }
         Insert: {
-          avatar_id?: string | null
+          avatar_id: string
           id?: string
-          user_id?: string | null
+          user_id: string
         }
         Update: {
-          avatar_id?: string | null
+          avatar_id?: string
           id?: string
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {
