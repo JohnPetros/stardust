@@ -1,9 +1,11 @@
 import { Button } from '@/app/components/Button'
+import { Modal, ModalRef } from '@/app/components/Modal'
 import { useAuth } from '@/hooks/useAuth'
 import { Avatar } from '@/types/avatar'
 import { getImage } from '@/utils/functions'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { twMerge } from 'tailwind-merge'
 
 interface AvatarProps {
   data: Avatar
@@ -22,13 +24,37 @@ export function Avatar({
   const avatarImage = getImage('avatars', image)
   const isBuyable = user?.coins >= price
 
+  const denyingModalRef = useRef<ModalRef>(null)
+  const earningModalRef = useRef<ModalRef>(null)
+
   async function buyAvatar() {
     setIsRequesting(true)
 
-    if (!isBuyable) {
+    if (!isBuyable || !user) {
       setIsRequesting(false)
+      denyingModalRef.current?.open()
+
       return
     }
+
+    // const updatedCoins = user.coins - price
+    // const updatedAcquiredRockets = user.acquired_rockets + 1
+    // try {
+    //   await Promise.all([
+    //     updateUser({
+    //       coins: updatedCoins,
+    //       acquired_rockets: updatedAcquiredRockets,
+    //     }),
+    //     addUserAcquiredRocket(id),
+    //     selectRocket(),
+    //   ])
+
+    //   earningModalRef.current?.open()
+    // } catch (error) {
+    //   console.error(error)
+    // } finally {
+    //   setIsRequesting(false)
+    // }
   }
 
   async function selectAvatar() {
@@ -57,31 +83,53 @@ export function Avatar({
   }, [user?.avatar_id])
 
   return (
-    <div className="grid grid-cols-[1fr_1.4fr]">
-      <div className="flex flex-col justify-between bg-gray-800 p-6">
-        <strong className="text-gray-100">{name}</strong>
+    <>
+      <div
+        className={twMerge(
+          'grid grid-cols-[1fr_1.4fr] rounded-md border-2',
+          isSelected ? 'border-yellow-300' : 'border-transparent'
+        )}
+      >
+        <div className="flex flex-col justify-between bg-gray-800 p-6">
+          <strong className="text-gray-100">{name}</strong>
 
-        <Button
-          className="bg-yellow-300 w-max py-1 px-3 h-8"
-          onClick={handleButtonPress}
-          isLoading={isRequesting}
-        >
-          {isSelected && isAcquired
-            ? 'Selecionado'
-            : isAcquired
-            ? 'Selecionar'
-            : 'Comprar'}
-        </Button>
-      </div>
-
-      <div className="relative h-40">
-        <div className="absolute top-2 right-2 flex items-center gap-2">
-          <Image src="/icons/coin.svg" width={24} height={24} alt="" />
-          <span className="font-semibold text-gray-100 text-lg">{price}</span>
+          <Button
+            className="bg-yellow-300 w-max py-1 px-3 h-10"
+            onClick={handleButtonPress}
+            isLoading={isRequesting}
+          >
+            {isSelected && isAcquired
+              ? 'Selecionado'
+              : isAcquired
+              ? 'Selecionar'
+              : 'Comprar'}
+          </Button>
         </div>
 
-        <Image src={avatarImage} fill alt={name} />
+        <div className="relative h-48">
+          <div className="absolute top-2 right-2 flex items-center gap-2">
+            <Image src="/icons/coin.svg" width={24} height={24} alt="" />
+            <span className="font-semibold text-gray-100 text-lg">{price}</span>
+          </div>
+
+          <Image src={avatarImage} fill alt={name} />
+        </div>
       </div>
-    </div>
+
+      <Modal
+        ref={denyingModalRef}
+        type="denying"
+        title="Parece que você não tem poeira estelar o suficiente"
+        body={
+          <p className="text-gray-100 font-medium text-sm text-center my-6 px-6">
+            Mas você pode adquirir mais completando estrelas ou resolvendo
+            desafios.
+          </p>
+        }
+        footer={
+          <Button onClick={denyingModalRef.current?.close}>Entendido</Button>
+        }
+      />
+    </>
   )
 }
