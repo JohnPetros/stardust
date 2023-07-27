@@ -1,9 +1,8 @@
-import { useAuth } from '@/hooks/useAuth'
+import { Loading } from '@/app/components/Loading'
 import { useAvatar } from '@/hooks/useAvatar'
 import { getImage } from '@/utils/functions'
 
 import * as Avatar from '@radix-ui/react-avatar'
-import { Loading } from './Loading'
 import { twMerge } from 'tailwind-merge'
 
 interface UserAvatarProps {
