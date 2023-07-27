@@ -33,7 +33,7 @@ export function useRocket(rocketId?: string) {
     }
   }
 
-  const { data: rocket } = useSWR(() => '/rocket?user_id=' + user?.id , getRocket)
+  const { data: rocket } = useSWR(() => '/rocket?id=' + user?.rocket_id , getRocket)
   const { data: rockets } = useSWR(!rocketId ? '/rockets' : null, getRockets)
   const { data: userAcquiredRocketsIds } = useSWR(
     !rocketId ? 'users_acquired_rockets_ids' : null,
