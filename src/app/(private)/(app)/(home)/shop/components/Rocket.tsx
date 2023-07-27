@@ -6,11 +6,16 @@ import Image from 'next/image'
 import { Button } from '@/app/components/Button'
 
 import { Rocket } from '@/types/rocket'
-import { getImage } from '@/utils/functions'
+import { getImage, playSound } from '@/utils/functions'
 import { twMerge } from 'tailwind-merge'
 
 import { Variants, motion } from 'framer-motion'
 import { Modal, ModalRef } from '@/app/components/Modal'
+
+import RewardLight from '../../../../../../../public/animations/reward-shinning-animation.json'
+
+import Lottie from 'lottie-react'
+import { ToastRef } from '@/app/components/Toast'
 
 const rocketImageVariants: Variants = {
   down: {
@@ -45,6 +50,7 @@ export function Rocket({
 
   const denyingModalRef = useRef<ModalRef>(null)
   const earningModalRef = useRef<ModalRef>(null)
+  const toastRef = useRef<ToastRef>(null)
 
   const prestigeLevel = 2
   const rocketImage = getImage('rockets', image)
@@ -55,8 +61,11 @@ export function Rocket({
       setIsRequesting(true)
       await updateUser({ rocket_id: id })
       mutate('/rocket?id=' + id, { id, name, image })
+
+      playSound('switch.wav')
     } catch (error) {
       console.error(error)
+
     } finally {
       setIsRequesting(false)
     }
@@ -81,8 +90,7 @@ export function Rocket({
         selectRocket(),
       ])
 
-      // setModalType('earning');
-      // setIsModalOpen(true);
+      earningModalRef.current?.open()
     } catch (error) {
       console.error(error)
     } finally {
@@ -188,13 +196,37 @@ export function Rocket({
         type="denying"
         title="Parece que você não tem poeira estelar o suficiente"
         body={
-          <p className="text-gray-100 font-medium text-sm text-center my-6">
+          <p className="text-gray-100 font-medium text-sm text-center my-6 px-6">
             Mas você pode adquirir mais completando estrelas ou resolvendo
-            desafios
+            desafios.
           </p>
         }
         footer={
           <Button onClick={denyingModalRef.current?.close}>Entendido</Button>
+        }
+      />
+
+      <Modal
+        ref={earningModalRef}
+        type="earning"
+        title="Parabéns, você acabou de adquiriu um novo foguete!"
+        body={
+          <div className="relative flex flex-col items-center justify-center">
+            <span className="absolute -top-2 left-25">
+              <Lottie
+                animationData={RewardLight}
+                loop={true}
+                style={{ width: 180 }}
+              />
+            </span>
+            <div className="relative w-24 h-24 mt-6">
+              <Image src={rocketImage} fill alt={name} />
+            </div>
+            <strong className="text-gray-100 my-6">{name}</strong>
+          </div>
+        }
+        footer={
+          <Button onClick={earningModalRef.current?.close}>Entendido</Button>
         }
       />
     </>
