@@ -33,7 +33,7 @@ const rocketImageVariants: Variants = {
 
 interface RocketProps {
   data: Rocket
-  addUserAcquiredRocket: (id: string) => void
+  addUserAcquiredRocket: (RocketId: string) => void
 }
 
 export function Rocket({

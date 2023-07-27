@@ -46,7 +46,7 @@ export function useAvatar(avatarId?: string) {
 
   async function addUserAcquiredAvatar(avatarId: string) {
     if (user?.id) {
-      const error = await api.addUserAcquiredAvatar(avatarId, user?.id)
+      const error = await api.addUserAcquiredAvatar(avatarId, user.id)
       const updatedAvatar = avatars?.find((avatar) => avatar.id === avatarId)
 
       if (updatedAvatar) {
@@ -57,9 +57,6 @@ export function useAvatar(avatarId?: string) {
     }
     return null
   }
-
-  console.log(avatars)
-  console.log(userAcquiredAvatarsIds)
 
   function verifyAvatarAcquirement(
     avatar: Avatar,
