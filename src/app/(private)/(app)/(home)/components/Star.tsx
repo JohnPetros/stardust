@@ -1,15 +1,15 @@
 'use client'
 import { useRef } from 'react'
-import { Star } from '@/types/star'
+import { useSpace } from '@/hooks/useSpace'
 
 import Image from 'next/image'
-import { Animation } from '@/app/components/Animation'
-import { LottieRef } from 'lottie-react'
-import { twMerge } from 'tailwind-merge'
+import Lottie, { LottieRef } from 'lottie-react'
 import { Variants, motion } from 'framer-motion'
 
+import { Star } from '@/types/star'
+import { twMerge } from 'tailwind-merge'
+
 import UnlockedStar from '../../../../../../public/animations/unlocked-star.json'
-import { useSpace } from '@/hooks/useSpace'
 
 const starLight = '0 0 12px #ffcf31a1'
 
@@ -81,13 +81,13 @@ export function Star({
               variants={starVariants}
               initial="default"
               animate={isLastUnlockedStar ? 'pulse' : ''}
-              className=""
+              className="-ml-1"
             >
-              <Animation
-                animationRef={starRef}
-                src={UnlockedStar}
-                size={100}
-                hasLoop={false}
+              <Lottie
+                lottieRef={starRef}
+                animationData={UnlockedStar}
+                style={{ width: 100 }}
+                loop={false}
               />
             </motion.div>
           ) : (
@@ -95,14 +95,14 @@ export function Star({
               src={'/images/locked-star.svg'}
               width={85}
               height={85}
-              className="ml-2"
+              className="ml-[5px]"
               alt=""
             />
           )}
           <span
             className={twMerge(
               'absolute block text-lg font-semibold top-[52%] -translate-x-1/2 -translate-y-1/2 text-yellow-700',
-              isUnlocked ? 'left-[52%]' : ' left-[54%]'
+              isUnlocked ? 'left-[50%]' : ' left-[54%]'
             )}
           >
             {number}
@@ -125,19 +125,15 @@ export function Star({
           </strong>
         </div>
 
-        {isLastUnlockedStar && (
+        {isLastUnlockedStar && rocketImage && rocketName && (
           <motion.div
             variants={rocketVariants}
             initial="hidden"
             animate="visible"
           >
-            <Image
-              src={rocketImage}
-              alt={rocketName}
-              width={72}
-              height={72}
-              className="rotate-180"
-            />
+            <div className="relative w-20 h-20 rotate-180">
+              <Image src={rocketImage} alt={rocketName} fill />
+            </div>
           </motion.div>
         )}
       </button>
