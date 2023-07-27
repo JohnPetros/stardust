@@ -1,7 +1,3 @@
-type MetricUser = {
-  [key in string]: number
-}
-
 export type User = {
   acquired_rockets: number
   avatar_id: string
@@ -28,4 +24,4 @@ export type User = {
   week_status: string[]
   weekly_xp: number
   xp: number
-} & MetricUser
+}
