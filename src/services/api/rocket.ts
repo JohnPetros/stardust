@@ -10,6 +10,7 @@ export default {
       .select('*')
       .eq('id', rocketId)
       .single<Rocket>()
+      
     if (error) {
       throw new Error(error.message)
     }
@@ -22,6 +23,7 @@ export default {
       .select('*')
       .order('price', { ascending: true })
       .returns<Rocket[]>()
+
     if (error) {
       throw new Error(error.message)
     }
@@ -33,10 +35,21 @@ export default {
       .from('users_acquired_rockets')
       .select('rocket_id')
       .eq('user_id', userId)
+
     if (error) {
       throw new Error(error.message)
     }
 
     return data.map((data) => data.rocket_id)
+  },
+
+  addUserAcquiredRocket: async (rocketId: string, userId: string) => {
+    const { error } = await supabase
+      .from('users_acquired_rockets')
+      .insert([{ rocket_id: rocketId, user_id: userId }])
+
+    if (error) {
+      throw new Error(error.message)
+    }
   },
 }
