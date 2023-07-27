@@ -112,7 +112,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
 
       console.log(newData);
 
-      mutate('user', { ...user, ...newData })
+      mutate('/user', { ...user, ...newData })
       return null
     }
     return null
