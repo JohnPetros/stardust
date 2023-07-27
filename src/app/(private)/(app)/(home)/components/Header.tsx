@@ -53,7 +53,7 @@ export function Header() {
             <strong>{user?.name}</strong>
             <small>{user?.email}</small>
           </div>
-          <UserAvatar avatarId={user?.avatar_id} size={48} />
+          <UserAvatar avatarId={user?.avatar_id} size={56} />
         </div>
       )}
     </header>
