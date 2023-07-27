@@ -12,7 +12,7 @@ import { twMerge } from 'tailwind-merge'
 
 interface AvatarProps {
   data: Avatar
-  addUserAcquiredAvatar: (id: string) => void
+  addUserAcquiredAvatar: (AvatarId: string) => void
 }
 
 export function Avatar({
@@ -42,24 +42,21 @@ export function Avatar({
       return
     }
 
-    // const updatedCoins = user.coins - price
-    // const updatedAcquiredRockets = user.acquired_rockets + 1
-    // try {
-    //   await Promise.all([
-    //     updateUser({
-    //       coins: updatedCoins,
-    //       acquired_rockets: updatedAcquiredRockets,
-    //     }),
-    //     addUserAcquiredRocket(id),
-    //     selectRocket(),
-    //   ])
+    try {
+      await Promise.all([
+        updateUser({
+          coins: user.coins - price,
+        }),
+        addUserAcquiredAvatar(id),
+        selectAvatar(),
+      ])
 
-    //   earningModalRef.current?.open()
-    // } catch (error) {
-    //   console.error(error)
-    // } finally {
-    //   setIsRequesting(false)
-    // }
+      earningModalRef.current?.open()
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsRequesting(false)
+    }
   }
 
   async function selectAvatar() {
@@ -67,7 +64,6 @@ export function Avatar({
       await updateUser({ avatar_id: id })
       playSound('switch.wav')
       mutate('/avatar?id=' + id, { id, name, image })
-
     } catch (error) {
       console.error(error)
     } finally {
@@ -94,12 +90,21 @@ export function Avatar({
     <>
       <div
         className={twMerge(
-          'grid grid-cols-[1fr_1.4fr] rounded-md border-2',
-          isSelected ? 'border-yellow-300' : 'border-transparent'
+          'grid grid-cols-[1fr_1.4fr] rounded-md overflow-hidden border-2',
+          isSelected ? 'border-yellow-300' : 'border-transparent',
+          !isAcquired && !isBuyable ? 'brightness-75' : 'brightness-90'
         )}
       >
         <div className="flex flex-col justify-between bg-gray-800 p-6">
-          <strong className="text-gray-100">{name}</strong>
+          <div className="flex flex-col gap-2">
+            <div className=" flex items-center gap-2 z-30">
+              <Image src="/icons/coin.svg" width={24} height={24} alt="" />
+              <strong className="font-semibold text-gray-100 text-lg">
+                {price}
+              </strong>
+            </div>
+            <strong className="text-gray-100">{name}</strong>
+          </div>
 
           <Button
             className="bg-yellow-300 w-max py-1 px-3 h-10"
@@ -114,12 +119,7 @@ export function Avatar({
           </Button>
         </div>
 
-        <div className="relative h-48">
-          <div className="absolute top-2 right-2 flex items-center gap-2">
-            <Image src="/icons/coin.svg" width={24} height={24} alt="" />
-            <span className="font-semibold text-gray-100 text-lg">{price}</span>
-          </div>
-
+        <div className="relative h-52">
           <Image src={avatarImage} fill alt={name} />
         </div>
       </div>
