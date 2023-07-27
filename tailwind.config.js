@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       fonts: {
-        code: 'Roboto, sans-serif'
+        code: 'Roboto, sans-serif',
       },
 
       colors: {
@@ -41,15 +41,15 @@ module.exports = {
         },
         purple: {
           700: '#514869',
-        }
+        },
       },
 
       screens: {
-        xsm: "440px",
-        sm: "640px",
-        md: "768px",
-        lg: "1024px",
-        xl: "1280px",
+        xs: '440px',
+        sm: '640px',
+        md: '768px',
+        lg: '1024px',
+        xl: '1280px',
       },
     },
   },
