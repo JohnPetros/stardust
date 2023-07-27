@@ -4,6 +4,7 @@ import { createContext, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSupabase } from '../hooks/useSupabase'
 import useSWR from 'swr'
+import { mutate } from "swr"
 
 import { AuthError, Session } from '@supabase/supabase-js'
 import { api } from '@/services/api'
@@ -30,6 +31,7 @@ interface AuthContextValue {
     | null
   >
   signOut: () => Promise<string | null>
+  updateUser: (newData: Partial<User>) => Promise<string | null>
 }
 
 interface AuthProviderProps {
@@ -100,6 +102,22 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     return null
   }
 
+  async function updateUser(newData: Partial<User>): Promise<string | null> {
+    if (user?.id) {
+      await api.updateUser(newData, user.id)
+
+      if (error) {
+        return error
+      }
+
+      console.log(newData);
+
+      mutate('user', { ...user, ...newData })
+      return null
+    }
+    return null
+  }
+
   useEffect(() => {
     const {
       data: { subscription },
@@ -123,6 +141,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     signIn,
     signUp,
     signOut,
+    updateUser,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

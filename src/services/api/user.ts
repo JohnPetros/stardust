@@ -40,4 +40,15 @@ export default {
       throw new Error(error.message)
     }
   },
+
+  updateUser: async (newData: Partial<User>, userId: string) => {
+    const { error } = await supabase
+      .from('users')
+      .update(newData)
+      .eq('id', userId)
+
+    if (error) {
+      return error.message
+    }
+  },
 }
