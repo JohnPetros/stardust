@@ -2,8 +2,10 @@
 import { ReactNode, forwardRef, useImperativeHandle, useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from '@phosphor-icons/react'
+import { MODAL_EFFECTS } from '@/utils/constants'
+import Lottie from 'lottie-react'
 
-type Type = 'earning' | 'crying' | 'denying' | 'asking' | 'generic'
+export type Type = 'earning' | 'crying' | 'denying' | 'asking' | 'generic'
 
 export interface ModalRef {
   open: VoidFunction
@@ -21,6 +23,11 @@ interface ModalProps {
 export const Modal = forwardRef<ModalRef, ModalProps>(
   ({ type, canPlaySong = true, title, body, footer }, ref) => {
     const [isOpen, setIsOpen] = useState(false)
+    if (!type) return null
+
+    const { animation } = MODAL_EFFECTS.find(
+      (animation) => animation.id === type.toLocaleLowerCase()
+    )!
 
     function open() {
       setIsOpen(true)
@@ -55,6 +62,13 @@ export const Modal = forwardRef<ModalRef, ModalProps>(
               >
                 <X className="text-gray-500" weight="bold" />
               </Dialog.Close>
+            </div>
+            <div className="flex justify-center">
+              <Lottie
+                animationData={animation}
+                style={{ width: 200 }}
+                loop={true}
+              />
             </div>
 
             {body}
