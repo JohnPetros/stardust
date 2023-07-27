@@ -125,17 +125,18 @@ export function Star({
           </strong>
         </div>
 
-        {isLastUnlockedStar && rocketImage && rocketName && (
-          <motion.div
-            variants={rocketVariants}
-            initial="hidden"
-            animate="visible"
-          >
+        <motion.div
+          variants={rocketVariants}
+          initial="hidden"
+          animate="visible"
+          className="w-20 h-20"
+        >
+          {isLastUnlockedStar && (
             <div className="relative w-20 h-20 rotate-180">
               <Image src={rocketImage} alt={rocketName} fill />
             </div>
-          </motion.div>
-        )}
+          )}
+        </motion.div>
       </button>
     </li>
   )
