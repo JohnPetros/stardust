@@ -3,12 +3,9 @@
 import { useRocket } from '@/hooks/useRocket'
 import { Rocket } from './components/Rocket'
 import { Loading } from '@/app/components/Loading'
-import { Suspense } from 'react'
 
 export default function Shop() {
   const { rockets, addUserAcquiredRocket } = useRocket()
-
-  console.log(rockets)
 
   return (
     <div className="px-6 max-w-[1024px] mx-auto">
