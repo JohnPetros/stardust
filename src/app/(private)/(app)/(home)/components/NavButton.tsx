@@ -5,14 +5,6 @@ import { usePathname } from 'next/navigation'
 import { twMerge } from 'tailwind-merge'
 import { Variants, motion } from 'framer-motion'
 
-interface NavButtonProps {
-  path: string
-  label: string
-  icon: string
-  isColumn?: boolean
-  isExpanded?: boolean
-}
-
 const labelVariants: Variants = {
   shrink: {
     width: 0,
@@ -24,6 +16,14 @@ const labelVariants: Variants = {
       delay: 0.05,
     },
   },
+}
+
+interface NavButtonProps {
+  path: string
+  label: string
+  icon: string
+  isColumn?: boolean
+  isExpanded?: boolean
 }
 
 export function NavButton({
@@ -63,7 +63,7 @@ export function NavButton({
         initial="shrink"
         animate={isExpanded ? 'expand' : ''}
         className={twMerge(
-          'block overflow-hidden font-semibold text-sm',
+          'block overflow-hidden font-semibold text-sm mt-2 -ml-2 md:-m-0',
           isActive ? 'text-gray-100' : 'text-gray-400'
         )}
       >
