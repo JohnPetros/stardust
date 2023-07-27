@@ -1,10 +1,9 @@
 'use client'
 import { ButtonHTMLAttributes, ReactNode } from 'react'
+
+import { Loading } from './Loading'
+
 import { twMerge } from 'tailwind-merge'
-
-import { Animation } from './Animation'
-import Loading from '../../../public/animations/loading.json'
-
 import { MotionProps, motion } from 'framer-motion'
 
 type ButtonProps = {
@@ -23,13 +22,13 @@ export function Button({
     <motion.button
       whileTap={{ scale: 0.99 }}
       className={twMerge(
-        'py-2 px-4 rounded bg-green-400 w-full font-semibold',
+        'h-8 w-full flex justify-center items-center rounded bg-green-400 font-semibold relative overflow-hidden',
         className
       )}
       disabled={isLoading}
       {...rest}
     >
-      {isLoading ? <Animation src={Loading} size={24} /> : children}
+      {isLoading ? <Loading /> : children}
     </motion.button>
   )
 }

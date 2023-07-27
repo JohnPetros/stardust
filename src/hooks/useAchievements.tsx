@@ -64,7 +64,5 @@ export function useAchievement(userId?: string) {
     userRescuableAchievementsIds,
   ])
 
-  console.log(verifiedAchievements)
-
   return { achievements: verifiedAchievements }
 }
