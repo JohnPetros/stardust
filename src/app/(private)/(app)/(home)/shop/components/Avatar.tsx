@@ -1,10 +1,13 @@
+import { useEffect, useRef, useState } from 'react'
+import { useAuth } from '@/hooks/useAuth'
+import { useSWRConfig } from 'swr'
+
+import Image from 'next/image'
 import { Button } from '@/app/components/Button'
 import { Modal, ModalRef } from '@/app/components/Modal'
-import { useAuth } from '@/hooks/useAuth'
+
 import { Avatar } from '@/types/avatar'
-import { getImage } from '@/utils/functions'
-import Image from 'next/image'
-import { useEffect, useRef, useState } from 'react'
+import { getImage, playSound } from '@/utils/functions'
 import { twMerge } from 'tailwind-merge'
 
 interface AvatarProps {
@@ -18,6 +21,8 @@ export function Avatar({
 }: AvatarProps) {
   const { user, updateUser } = useAuth()
   if (!user) return null
+
+  const { mutate } = useSWRConfig()
 
   const [isSelected, setIsSelected] = useState(false)
   const [isRequesting, setIsRequesting] = useState(false)
@@ -60,6 +65,9 @@ export function Avatar({
   async function selectAvatar() {
     try {
       await updateUser({ avatar_id: id })
+      playSound('switch.wav')
+      mutate('/avatar?id=' + id, { id, name, image })
+
     } catch (error) {
       console.error(error)
     } finally {
