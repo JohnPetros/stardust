@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
+import { useSWRConfig } from 'swr'
 import Image from 'next/image'
 
 import { Button } from '@/app/components/Button'
@@ -9,6 +10,7 @@ import { getImage } from '@/utils/functions'
 import { twMerge } from 'tailwind-merge'
 
 import { Variants, motion } from 'framer-motion'
+import { Modal, ModalRef } from '@/app/components/Modal'
 
 const rocketImageVariants: Variants = {
   down: {
@@ -36,8 +38,13 @@ export function Rocket({
   const { user, updateUser } = useAuth()
   if (!user) return null
 
+  const { mutate } = useSWRConfig()
+
   const [isSelected, setIsSelected] = useState(false)
   const [isRequesting, setIsRequesting] = useState(false)
+
+  const denyingModalRef = useRef<ModalRef>(null)
+  const earningModalRef = useRef<ModalRef>(null)
 
   const prestigeLevel = 2
   const rocketImage = getImage('rockets', image)
@@ -47,6 +54,7 @@ export function Rocket({
     try {
       setIsRequesting(true)
       await updateUser({ rocket_id: id })
+      mutate('/rocket?id=' + id, { id, name, image })
     } catch (error) {
       console.error(error)
     } finally {
@@ -57,7 +65,7 @@ export function Rocket({
   async function buyRocket() {
     if (!isBuyable || !user) {
       setIsRequesting(false)
-      // setIsModalOpen(true);
+      denyingModalRef.current?.open()
       return
     }
 
@@ -98,78 +106,97 @@ export function Rocket({
   }, [user.rocket_id])
 
   return (
-    <div
-      style={{ backgroundImage: 'url("/images/space-background.png")' }}
-      className={twMerge(
-        'rounded-md p-6 bg-center bg-cover border max-w-lg',
-        !isAcquired && !isBuyable && 'brightness-75',
-        isSelected && 'border-yellow-300'
-      )}
-    >
-      <header className="flex justify-between">
-        <div className="flex flex-col">
-          <strong className=" font-semibold text-gray-100 text-lg gap-1">
-            {name}
-          </strong>
-          <span className="w-full h-1 bg-yellow-300 rounded"></span>
-        </div>
-
-        {!isAcquired && price > 0 && (
-          <div className="flex items-center gap-2">
-            <Image src="/icons/coin.svg" width={24} height={24} alt="" />
-            <span className="font-semibold text-gray-100 text-lg">{price}</span>
-          </div>
+    <>
+      <div
+        style={{ backgroundImage: 'url("/images/space-background.png")' }}
+        className={twMerge(
+          'rounded-md p-6 bg-center bg-cover border max-w-lg',
+          !isAcquired && !isBuyable && 'brightness-75',
+          isSelected && 'border-yellow-300'
         )}
-      </header>
-
-      <motion.div
-        variants={rocketImageVariants}
-        initial="down"
-        animate={isSelected ? 'up' : 'down'}
-        className="relative w-28 h-28 mx-auto my-8"
       >
-        <Image src={rocketImage} fill alt={name} />
-      </motion.div>
+        <header className="flex justify-between">
+          <div className="flex flex-col">
+            <strong className=" font-semibold text-gray-100 text-lg gap-1">
+              {name}
+            </strong>
+            <span className="w-full h-1 bg-yellow-300 rounded"></span>
+          </div>
 
-      <footer className="flex items-center justify-between">
-        <div className="flex gap-1">
-          {Array.from({ length: 5 }).map((_, index) => {
-            const isFilled = index + 1 <= prestigeLevel
+          {!isAcquired && price > 0 && (
+            <div className="flex items-center gap-2">
+              <Image src="/icons/coin.svg" width={24} height={24} alt="" />
+              <span className="font-semibold text-gray-100 text-lg">
+                {price}
+              </span>
+            </div>
+          )}
+        </header>
 
-            return (
-              <>
-                {isFilled ? (
-                  <Image
-                    src="/icons/filled-star.svg"
-                    width={18}
-                    height={18}
-                    alt=""
-                  />
-                ) : (
-                  <Image
-                    src="/icons/empty-star.svg"
-                    width={18}
-                    height={18}
-                    alt=""
-                  />
-                )}
-              </>
-            )
-          })}
-        </div>
-
-        <Button
-          className="bg-yellow-300 w-max py-1 px-3"
-          onClick={handleButtonPress}
-          isLoading={isRequesting}
+        <motion.div
+          variants={rocketImageVariants}
+          initial="down"
+          animate={isSelected ? 'up' : 'down'}
+          className="relative w-28 h-28 mx-auto my-8"
         >
-          {isSelected && isAcquired
-            ? 'Selecionado'
-            : isAcquired
-            ? 'Selecionar'
-            : 'Comprar'}
-        </Button>
-      </footer>
-    </div>
+          <Image src={rocketImage} fill alt={name} />
+        </motion.div>
+
+        <footer className="flex items-center justify-between">
+          <div className="flex gap-1">
+            {Array.from({ length: 5 }).map((_, index) => {
+              const isFilled = index + 1 <= prestigeLevel
+
+              return (
+                <>
+                  {isFilled ? (
+                    <Image
+                      src="/icons/filled-star.svg"
+                      width={18}
+                      height={18}
+                      alt=""
+                    />
+                  ) : (
+                    <Image
+                      src="/icons/empty-star.svg"
+                      width={18}
+                      height={18}
+                      alt=""
+                    />
+                  )}
+                </>
+              )
+            })}
+          </div>
+
+          <Button
+            className="bg-yellow-300 w-max py-1 px-3 h-8"
+            onClick={handleButtonPress}
+            isLoading={isRequesting}
+          >
+            {isSelected && isAcquired
+              ? 'Selecionado'
+              : isAcquired
+              ? 'Selecionar'
+              : 'Comprar'}
+          </Button>
+        </footer>
+      </div>
+
+      <Modal
+        ref={denyingModalRef}
+        type="denying"
+        title="Parece que você não tem poeira estelar o suficiente"
+        body={
+          <p className="text-gray-100 font-medium text-sm text-center my-6">
+            Mas você pode adquirir mais completando estrelas ou resolvendo
+            desafios
+          </p>
+        }
+        footer={
+          <Button onClick={denyingModalRef.current?.close}>Entendido</Button>
+        }
+      />
+    </>
   )
 }
