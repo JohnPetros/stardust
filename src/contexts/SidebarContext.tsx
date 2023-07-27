@@ -16,9 +16,9 @@ export const SidebarContext = createContext({} as SidebarContextValue)
 export function SidebarProvider({ children }: SidebarProviderProps) {
   const [isOpen, setIsOpen] = useState(false)
 
-  const toggle = useCallback(() => {
+  function toggle() {
     setIsOpen(!isOpen)
-  }, [])
+  }
 
   return (
     <SidebarContext.Provider value={{ isOpen, toggle }}>
