@@ -65,7 +65,10 @@ export function Rocket({
       playSound('switch.wav')
     } catch (error) {
       console.error(error)
-
+      toastRef.current?.open({
+        type: 'error',
+        message: 'Erro ao tentar selecionar o foguete ' + name
+      })
     } finally {
       setIsRequesting(false)
     }
