@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useAuth } from './useAuth'
-import useSWR, { mutate } from 'swr'
+import useSWR from 'swr'
 
 import { Rocket } from '@/types/rocket'
 import { api } from '@/services/api'
@@ -33,8 +33,14 @@ export function useRocket(rocketId?: string) {
     }
   }
 
-  const { data: rocket } = useSWR(() => '/rocket?id=' + user?.rocket_id , getRocket)
-  const { data: rockets } = useSWR(!rocketId ? '/rockets' : null, getRockets)
+  const { data: rocket } = useSWR(
+    () => '/rocket?id=' + user?.rocket_id,
+    getRocket
+  )
+  const { data: rockets, mutate } = useSWR(
+    !rocketId ? '/rockets' : null,
+    getRockets
+  )
   const { data: userAcquiredRocketsIds } = useSWR(
     !rocketId ? 'users_acquired_rockets_ids' : null,
     getUserAcquiredRocketsIds
@@ -55,7 +61,7 @@ export function useRocket(rocketId?: string) {
         const updatedRocket = rockets?.find((rocket) => rocket.id === rocketId)
 
         if (updatedRocket) {
-          mutate({ ...updateRockets(updatedRocket) })
+          mutate({ ...rockets, ...updateRockets(updatedRocket)! })
         }
       }
     } catch (error) {
