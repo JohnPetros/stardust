@@ -1,5 +1,5 @@
 'use client'
-import { ReactNode, useCallback, useState } from 'react'
+import { ReactNode, useState, useEffect } from 'react'
 
 import { Header } from './Header'
 import { TabNav } from './TabNav'
@@ -9,8 +9,11 @@ import { Sidenav } from './Sidenav'
 import { Variants, motion } from 'framer-motion'
 
 const layoutVariants: Variants = {
+  mobile: {
+    paddingLeft: 0,
+  },
   shrink: {
-    paddingLeft: 84,
+    paddingLeft: 96,
   },
   expand: {
     paddingLeft: 180,
@@ -23,6 +26,12 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const [isSidenavExpanded, setIsSidenavExpanded] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const isMobile = innerWidth <= 768
+    setIsMobile(isMobile)
+  }, [])
 
   function toggleSidenav() {
     setIsSidenavExpanded(!isSidenavExpanded)
@@ -36,8 +45,8 @@ export function Layout({ children }: LayoutProps) {
       <motion.main
         variants={layoutVariants}
         initial="shrink"
-        animate={isSidenavExpanded ? 'expand' : 'shrink'}
-        className="pt-16"
+        animate={isSidenavExpanded ? 'expand' : isMobile ? 'mobile' : 'shrink'}
+        className="pt-16 h-full "
       >
         {children}
       </motion.main>
