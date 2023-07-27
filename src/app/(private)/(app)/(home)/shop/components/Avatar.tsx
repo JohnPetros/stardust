@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { useSWRConfig } from 'swr'
@@ -5,6 +6,7 @@ import { useSWRConfig } from 'swr'
 import Image from 'next/image'
 import { Button } from '@/app/components/Button'
 import { Modal, ModalRef } from '@/app/components/Modal'
+import { LockSimple } from '@phosphor-icons/react'
 
 import { Avatar } from '@/types/avatar'
 import { getImage, playSound } from '@/utils/functions'
@@ -97,12 +99,14 @@ export function Avatar({
       >
         <div className="flex flex-col justify-between bg-gray-800 p-6">
           <div className="flex flex-col gap-2">
-            <div className=" flex items-center gap-2 z-30">
-              <Image src="/icons/coin.svg" width={24} height={24} alt="" />
-              <strong className="font-semibold text-gray-100 text-lg">
-                {price}
-              </strong>
-            </div>
+            {!isAcquired && price > 0 && (
+              <div className=" flex items-center gap-2 z-30">
+                <Image src="/icons/coin.svg" width={24} height={24} alt="" />
+                <strong className="font-semibold text-gray-100 text-lg">
+                  {price}
+                </strong>
+              </div>
+            )}
             <strong className="text-gray-100">{name}</strong>
           </div>
 
@@ -120,6 +124,12 @@ export function Avatar({
         </div>
 
         <div className="relative h-52">
+          {!isAcquired && (
+            <div className="absolute top-3 right-3 z-30">
+              <LockSimple className="text-gray-800 text-xl" weight='bold' />
+            </div>
+          )}
+
           <Image src={avatarImage} fill alt={name} />
         </div>
       </div>
