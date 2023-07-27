@@ -110,8 +110,6 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
         return error
       }
 
-      console.log(newData);
-
       mutate('/user', { ...user, ...newData })
       return null
     }
