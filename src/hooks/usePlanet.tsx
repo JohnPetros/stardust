@@ -16,9 +16,9 @@ export function usePlanet() {
     }
   }
 
-  const { data: planets, error } = useSWR('planets', api.getPlanets)
+  const { data: planets } = useSWR('/planets', api.getPlanets)
   const { data: userUnlockedStars } = useSWR(
-    user?.id ? 'unlocked_stars' : null,
+    '/unlocked_stars?user_id=' + user?.id,
     getUserUnlockedStars
   )
 

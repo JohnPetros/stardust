@@ -33,8 +33,8 @@ export function useRocket(rocketId?: string) {
     }
   }
 
-  const { data: rocket } = useSWR(rocketId ? 'rocket' : null, getRocket)
-  const { data: rockets } = useSWR(!rocketId ? 'rocket' : null, getRockets)
+  const { data: rocket } = useSWR(() => '/rocket?user_id=' + user?.id , getRocket)
+  const { data: rockets } = useSWR(!rocketId ? '/rockets' : null, getRockets)
   const { data: userAcquiredRocketsIds } = useSWR(
     !rocketId ? 'users_acquired_rockets_ids' : null,
     getUserAcquiredRocketsIds
@@ -63,9 +63,6 @@ export function useRocket(rocketId?: string) {
     }
   }
 
-  console.log(rockets);
-  console.log(userAcquiredRocketsIds);
-
   const verifiedRockets = useMemo(() => {
     if (!rocketId && userAcquiredRocketsIds?.length && rockets?.length) {
       return rockets?.map((rocket) =>
@@ -74,11 +71,11 @@ export function useRocket(rocketId?: string) {
     }
 
     return []
-  }, [rockets?.length, userAcquiredRocketsIds?.length])
+  }, [rockets, userAcquiredRocketsIds])
 
   return {
     rocket,
     rockets: verifiedRockets,
-    addUserAcquiredRocket
+    addUserAcquiredRocket,
   }
 }

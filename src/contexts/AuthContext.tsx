@@ -57,7 +57,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     data: user,
     error,
     isLoading,
-  } = useSWR(serverSession ? 'user' : null, getUser)
+  } = useSWR(serverSession ? '/user' : null, getUser)
 
   async function signIn(email: string, password: string) {
     const { error } = await supabase.auth.signInWithPassword({
