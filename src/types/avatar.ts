@@ -3,4 +3,5 @@ export type Avatar = {
   image: string
   name: string
   price: number
+  isAcquired: boolean
 }
