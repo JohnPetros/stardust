@@ -1,8 +1,8 @@
 'use client'
+import { Loading } from '@/app/components/Loading'
 import { Icon } from '@phosphor-icons/react'
 import { Variants, motion } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
-import { Loading } from './Loading'
 
 interface SidenavButtonProps {
   icon: Icon
