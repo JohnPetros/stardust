@@ -101,8 +101,8 @@ export function Rocket({
     <div
       style={{ backgroundImage: 'url("/images/space-background.png")' }}
       className={twMerge(
-        'rounded-md p-6 bg-center bg-cover border',
-        (!isAcquired && !isBuyable) && 'brightness-75',
+        'rounded-md p-6 bg-center bg-cover border max-w-lg',
+        !isAcquired && !isBuyable && 'brightness-75',
         isSelected && 'border-yellow-300'
       )}
     >
@@ -126,7 +126,7 @@ export function Rocket({
         variants={rocketImageVariants}
         initial="down"
         animate={isSelected ? 'up' : 'down'}
-        className="relative w-28 h-28 mx-auto my-6"
+        className="relative w-28 h-28 mx-auto my-8"
       >
         <Image src={rocketImage} fill alt={name} />
       </motion.div>
