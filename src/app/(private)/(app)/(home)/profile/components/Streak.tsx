@@ -22,7 +22,7 @@ export function Streak({ data: { streak, week_status } }: StreakProps) {
   const [weekStatus, setWeekStatus] = useState(week_status)
 
   return (
-    <div className="border border-gray-300 rounded-md p-6 flex flex-col items-center justify-center gap-3">
+    <div className="border border-gray-300 rounded-md p-6 flex flex-col items-center justify-center gap-4">
       <h4 className="text-gray-300">Sequência de dias estudados</h4>
 
       <div className="grid grid-cols-7 gap-3">
@@ -31,7 +31,7 @@ export function Streak({ data: { streak, week_status } }: StreakProps) {
             key={weekday}
             className="flex flex-col items-center justify-center gap-2"
           >
-            <strong className="uppercase text-sm text-gray-300">
+            <strong className="uppercase text-gray-300">
               {weekday}
             </strong>
             <Image
@@ -44,8 +44,8 @@ export function Streak({ data: { streak, week_status } }: StreakProps) {
         ))}
       </div>
 
-      <div className="flex items-center justify-center mt-2">
-        <Lottie animationData={StreakIcon} loop={false} style={{ width: 24 }} />
+      <div className="flex items-center justify-center gap-2">
+        <Lottie animationData={StreakIcon} loop={false} style={{ width: 32 }} />
         <p className="text-green-500">{streak} estudados seguidos</p>
       </div>
     </div>
