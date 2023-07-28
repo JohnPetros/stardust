@@ -40,7 +40,7 @@ export function NavButton({
     <Link
       href={path}
       className={twMerge(
-        'rounded-xl hover:bg-green-700/20 transition-colors duration-200 flex items-center justify-center w-max p-2',
+        'rounded-xl hover:bg-green-700/20 transition-colors duration-200 flex items-center justify-center md:w-max p-2',
         isColumn ? 'flex-col' : 'flex-row'
       )}
     >
