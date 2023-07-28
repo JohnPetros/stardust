@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { useSWRConfig } from 'swr'
@@ -60,14 +61,14 @@ export function Rocket({
     try {
       setIsRequesting(true)
       await updateUser({ rocket_id: id })
-      mutate('/rocket?id=' + id, { id, name, image })
+      mutate('/rocket?id=' + id, { id, name, image }, false)
 
       playSound('switch.wav')
     } catch (error) {
       console.error(error)
       toastRef.current?.open({
         type: 'error',
-        message: 'Erro ao tentar selecionar o foguete ' + name
+        message: 'Erro ao tentar selecionar o foguete ' + name,
       })
     } finally {
       setIsRequesting(false)
@@ -83,6 +84,8 @@ export function Rocket({
 
     const updatedCoins = user?.coins - price
     const updatedAcquiredRockets = user?.acquired_rockets + 1
+    earningModalRef.current?.open()
+
     try {
       await Promise.all([
         updateUser({
@@ -92,9 +95,11 @@ export function Rocket({
         addUserAcquiredRocket(id),
         selectRocket(),
       ])
-
-      earningModalRef.current?.open()
     } catch (error) {
+      toastRef.current?.open({
+        type: 'error',
+        message: 'Erro ao tentar comprar o foguete ' + name,
+      })
       console.error(error)
     } finally {
       setIsRequesting(false)
