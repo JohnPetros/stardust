@@ -25,7 +25,7 @@ export default function Shop() {
         </div>
 
         <h2 className="text-white font-semibold text-lg mt-8">Avatares</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 justify-center gap-8 mt-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 justify-center gap-8 mt-3 pb-12">
           {avatars.map((avatar) => (
             <Avatar
               key={avatar.id}
