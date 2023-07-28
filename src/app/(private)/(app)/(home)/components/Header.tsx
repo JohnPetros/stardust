@@ -18,8 +18,8 @@ const headerVariants: Variants = {
   visible: {
     y: 0,
     transition: {
-      delay: 2
-    }
+      delay: 2,
+    },
   },
 }
 
@@ -32,7 +32,7 @@ export function Header() {
       variants={headerVariants}
       initial="hidden"
       animate="visible"
-      className="fixed top-0 w-screen z-40 bg-gray-900 h-16 px-6 py-3 flex justify-between md:justify-end"
+      className="fixed top-0 w-screen z-40 bg-gray-900 h-16 px-6 py-3 flex justify-between md:justify-end border-b border-gray-700"
     >
       <div className="flex items-center gap-3 md:hidden">
         <button onClick={toggle}>
