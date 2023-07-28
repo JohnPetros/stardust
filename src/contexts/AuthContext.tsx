@@ -4,7 +4,7 @@ import { createContext, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSupabase } from '../hooks/useSupabase'
 import useSWR from 'swr'
-import { mutate } from "swr"
+import { mutate } from 'swr'
 
 import { AuthError, Session } from '@supabase/supabase-js'
 import { api } from '@/services/api'
@@ -110,7 +110,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
         return error
       }
 
-      mutate('/user', { ...user, ...newData })
+      mutate('/user', { ...user, ...newData }, false)
       return null
     }
     return null
