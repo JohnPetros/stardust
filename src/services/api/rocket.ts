@@ -10,7 +10,7 @@ export default {
       .select('*')
       .eq('id', rocketId)
       .single<Rocket>()
-      
+
     if (error) {
       throw new Error(error.message)
     }
@@ -49,7 +49,7 @@ export default {
       .insert([{ rocket_id: rocketId, user_id: userId }])
 
     if (error) {
-      throw new Error(error.message)
+      return error.message
     }
   },
 }
