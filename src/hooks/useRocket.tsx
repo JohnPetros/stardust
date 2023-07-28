@@ -72,29 +72,25 @@ export function useRocket(rocketId?: string) {
   }
 
   async function addUserAcquiredRocket(rocketId: string) {
-    try {
-      if (user?.id) {
-        await api.addUserAcquiredRocket(rocketId, user?.id)
-        const updatedRocket = rockets?.find((rocket) => rocket.id === rocketId)
+    if (user?.id) {
+      const error = await api.addUserAcquiredRocket(rocketId, user?.id)
+      const updatedRocket = rockets?.find((rocket) => rocket.id === rocketId)
 
-        if (updatedRocket && rockets?.length) {
-          const updatedRockets = updateRockets(updatedRocket)
-
-          console.log(updatedRockets)
-
-          // verifiedRockets = updatedRockets
-
-          mutate('/rockets', updatedRockets, false)
-
-          mutate(
-            '/users_acquired_rockets_ids',
-            [...userAcquiredRocketsIds!, updatedRocket.id],
-            false
-          )
-        }
+      if (error) {
+        throw new Error(error)
       }
-    } catch (error) {
-      console.log(error)
+
+      if (updatedRocket && userAcquiredRocketsIds) {
+        const updatedRockets = updateRockets(updatedRocket)
+
+        mutate('/rockets', updatedRockets, false)
+
+        mutate(
+          '/users_acquired_rockets_ids',
+          [...userAcquiredRocketsIds, updatedRocket.id],
+          false
+        )
+      }
     }
   }
 
