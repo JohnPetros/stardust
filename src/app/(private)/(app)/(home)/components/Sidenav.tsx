@@ -45,7 +45,7 @@ interface SidenavProps {
 }
 
 export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
-  const { signOut } = useAuth()
+  const { user, signOut } = useAuth()
   const [isAchievementsListVisible, setIsAchievementsListVisible] =
     useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -103,16 +103,18 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
           </div>
 
           <nav className="mt-12 flex flex-col px-3 gap-3">
-            {HOME_PAGES.map(({ path, icon, label }) => (
-              <NavButton
-                key={path}
-                path={path}
-                label={label}
-                icon={icon}
-                isExpanded={isExpanded}
-                isColumn={false}
-              />
-            ))}
+            {HOME_PAGES.map(({ path, icon, label }) => {
+              return (
+                <NavButton
+                  key={path}
+                  path={path === '/profile' ? `${path}/${user?.id}` : path}
+                  label={label}
+                  icon={icon}
+                  isExpanded={isExpanded}
+                  isColumn={false}
+                />
+              )
+            })}
           </nav>
         </div>
 
