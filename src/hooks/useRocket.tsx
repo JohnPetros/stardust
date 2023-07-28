@@ -1,12 +1,14 @@
-import { useMemo } from 'react'
+'use client'
+import { useEffect, useMemo, useState } from 'react'
 import { useAuth } from './useAuth'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 
 import { Rocket } from '@/types/rocket'
 import { api } from '@/services/api'
 
 export function useRocket(rocketId?: string) {
   const { user } = useAuth()
+  const [hasMutation, setMutation] = useState(false)
 
   function verifyRocketAcquirement(
     rocket: Rocket,
@@ -37,21 +39,36 @@ export function useRocket(rocketId?: string) {
     () => '/rocket?id=' + user?.rocket_id,
     getRocket
   )
-  const { data: rockets, mutate } = useSWR(
-    !rocketId ? '/rockets' : null,
-    getRockets
-  )
+  const { data: rockets } = useSWR(!rocketId ? '/rockets' : null, getRockets)
   const { data: userAcquiredRocketsIds } = useSWR(
-    !rocketId ? 'users_acquired_rockets_ids' : null,
+    !rocketId && user?.id ? '/users_acquired_rockets_ids' : null,
     getUserAcquiredRocketsIds
   )
 
+  const verifiedRockets = useMemo(() => {
+    if (!rocketId && rockets?.length && userAcquiredRocketsIds?.length) {
+      console.log(rockets)
+      console.log(userAcquiredRocketsIds.length)
+
+      return rockets?.map((rocket) =>
+        verifyRocketAcquirement(rocket, userAcquiredRocketsIds)
+      )
+    }
+
+    setMutation(false)
+    return []
+  }, [rockets, userAcquiredRocketsIds])
+
   function updateRockets(updatedRocket: Rocket) {
-    return rockets?.map((rocket) =>
-      rocket.id === updatedRocket.id
-        ? { ...updatedRocket, isAcquired: true }
-        : rocket
-    )
+    return verifiedRockets?.map((rocket) => {
+      if (rocket.id === updatedRocket.id) {
+        console.log(rocket)
+        console.log(updatedRocket)
+
+        return { ...rocket, isAcquired: true }
+      }
+      return rocket
+    })
   }
 
   async function addUserAcquiredRocket(rocketId: string) {
@@ -60,8 +77,20 @@ export function useRocket(rocketId?: string) {
         await api.addUserAcquiredRocket(rocketId, user?.id)
         const updatedRocket = rockets?.find((rocket) => rocket.id === rocketId)
 
-        if (updatedRocket) {
-          mutate({ ...rockets, ...updateRockets(updatedRocket)! })
+        if (updatedRocket && rockets?.length) {
+          const updatedRockets = updateRockets(updatedRocket)
+
+          console.log(updatedRockets)
+
+          // verifiedRockets = updatedRockets
+
+          mutate('/rockets', updatedRockets, false)
+
+          mutate(
+            '/users_acquired_rockets_ids',
+            [...userAcquiredRocketsIds!, updatedRocket.id],
+            false
+          )
         }
       }
     } catch (error) {
@@ -69,15 +98,17 @@ export function useRocket(rocketId?: string) {
     }
   }
 
-  const verifiedRockets = useMemo(() => {
-    if (!rocketId && userAcquiredRocketsIds?.length && rockets?.length) {
-      return rockets?.map((rocket) =>
-        verifyRocketAcquirement(rocket, userAcquiredRocketsIds)
-      )
-    }
+  // useEffect(() => {
+  //   if (userAcquiredRocketsIds?.length && rockets?.length) {
+  //     console.log(rockets)
 
-    return []
-  }, [rockets, userAcquiredRocketsIds])
+  //     const verifiedRockets = rockets?.map((rocket) =>
+  //       verifyRocketAcquirement(rocket, userAcquiredRocketsIds)
+  //     )
+
+  //     if (verifiedRockets) mutate('/rockets', verifiedRockets, false)
+  //   }
+  // }, [userAcquiredRocketsIds, rockets])
 
   return {
     rocket,
