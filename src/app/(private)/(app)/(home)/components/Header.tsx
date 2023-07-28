@@ -1,19 +1,39 @@
 'use client'
 import { useSiderbar } from '@/hooks/useSiderbar'
-import { Animation } from '@/app/components/Animation'
 import { useAuth } from '@/hooks/useAuth'
+import { UserAvatar } from './UserAvatar'
+
+import { Animation } from '@/app/components/Animation'
 import { List } from '@phosphor-icons/react'
 import Image from 'next/image'
 
 import StreakAnimation from '../../../../../../public/animations/streak.json'
-import { UserAvatar } from './UserAvatar'
+
+import { Variants, motion } from 'framer-motion'
+
+const headerVariants: Variants = {
+  hidden: {
+    y: -64,
+  },
+  visible: {
+    y: 0,
+    transition: {
+      delay: 2
+    }
+  },
+}
 
 export function Header() {
   const { user } = useAuth()
   const { toggle } = useSiderbar()
 
   return (
-    <header className="fixed top-0 w-screen z-40 bg-gray-900 h-16 px-6 py-3 flex justify-between md:justify-end">
+    <motion.header
+      variants={headerVariants}
+      initial="hidden"
+      animate="visible"
+      className="fixed top-0 w-screen z-40 bg-gray-900 h-16 px-6 py-3 flex justify-between md:justify-end"
+    >
       <div className="flex items-center gap-3 md:hidden">
         <button onClick={toggle}>
           <List
@@ -56,6 +76,6 @@ export function Header() {
           <UserAvatar avatarId={user?.avatar_id} size={56} />
         </div>
       )}
-    </header>
+    </motion.header>
   )
 }
