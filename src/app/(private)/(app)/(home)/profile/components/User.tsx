@@ -64,7 +64,7 @@ export function User({
       <dl className="flex md:flex-row md:gap-8 justify-between mt-6">
         <span className="hidden md:block bg-gray-300 w-[1px] rounded-md"></span>
         <Status
-          title="Ranking atual"
+          title="Foguete atual"
           image={rankingImage}
           value={ranking.name}
         />
