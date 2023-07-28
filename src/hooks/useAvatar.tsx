@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useAuth } from './useAuth'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 
 import { Avatar } from '@/types/avatar'
 import { api } from '@/services/api'
@@ -27,10 +27,7 @@ export function useAvatar(avatarId?: string) {
   }
 
   const { data: avatar } = useSWR('/avatar?id=' + user?.avatar_id, getAvatar)
-  const { data: avatars, mutate } = useSWR(
-    !avatarId ? '/avatars' : null,
-    getAvatars
-  )
+  const { data: avatars } = useSWR(!avatarId ? '/avatars' : null, getAvatars)
   const { data: userAcquiredAvatarsIds } = useSWR(
     !avatarId ? '/users_acquired_avatars_ids' : null,
     getUserAcquiredAvatarsIds
@@ -48,14 +45,22 @@ export function useAvatar(avatarId?: string) {
     if (user?.id) {
       const error = await api.addUserAcquiredAvatar(avatarId, user.id)
       const updatedAvatar = avatars?.find((avatar) => avatar.id === avatarId)
+      const updatedAvatars = updatedAvatar ? updateAvatars(updatedAvatar) : null
 
-      if (updatedAvatar) {
-        mutate({ ...avatars, ...updateAvatars(updatedAvatar)! })
+      if (error) {
+        throw Error(error)
       }
 
-      return error
+      if (updatedAvatar && userAcquiredAvatarsIds) {
+        mutate('/avatars', updatedAvatars, false)
+
+        mutate(
+          '/users_acquired_avatars_ids',
+          [...userAcquiredAvatarsIds, updatedAvatar.id],
+          false
+        )
+      }
     }
-    return null
   }
 
   function verifyAvatarAcquirement(
@@ -70,8 +75,6 @@ export function useAvatar(avatarId?: string) {
   }
 
   const verifiedAvatars = useMemo(() => {
-    console.log(!avatarId && userAcquiredAvatarsIds?.length && avatars?.length)
-
     if (!avatarId && userAcquiredAvatarsIds?.length && avatars?.length) {
       return avatars?.map((avatar) =>
         verifyAvatarAcquirement(avatar, userAcquiredAvatarsIds)

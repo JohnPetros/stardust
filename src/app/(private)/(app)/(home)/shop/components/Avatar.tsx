@@ -12,6 +12,10 @@ import { Avatar } from '@/types/avatar'
 import { getImage, playSound } from '@/utils/functions'
 import { twMerge } from 'tailwind-merge'
 
+import RewardLight from '../../../../../../../public/animations/reward-shinning-animation.json'
+
+import Lottie from 'lottie-react'
+
 interface AvatarProps {
   data: Avatar
   addUserAcquiredAvatar: (AvatarId: string) => void
@@ -126,7 +130,7 @@ export function Avatar({
         <div className="relative h-52">
           {!isAcquired && (
             <div className="absolute top-3 right-3 z-30">
-              <LockSimple className="text-gray-800 text-xl" weight='bold' />
+              <LockSimple className="text-gray-800 text-xl" weight="bold" />
             </div>
           )}
 
@@ -146,6 +150,30 @@ export function Avatar({
         }
         footer={
           <Button onClick={denyingModalRef.current?.close}>Entendido</Button>
+        }
+      />
+
+      <Modal
+        ref={earningModalRef}
+        type="earning"
+        title="Parabéns, você acabou de adquiriu um novo avatar!"
+        body={
+          <div className="relative flex flex-col items-center justify-center">
+            <span className="absolute -top-8 left-25">
+              <Lottie
+                animationData={RewardLight}
+                loop={true}
+                style={{ width: 240 }}
+              />
+            </span>
+            <div className="relative w-32 h-32 mt-6">
+              <Image src={avatarImage} fill alt={name} />
+            </div>
+            <strong className="text-gray-100 my-6">{name}</strong>
+          </div>
+        }
+        footer={
+          <Button onClick={earningModalRef.current?.close}>Entendido</Button>
         }
       />
     </>
