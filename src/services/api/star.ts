@@ -1,5 +1,4 @@
 import { createClient } from '../supabase-browser'
-import type { Star } from '@/types/star'
 
 const supabase = createClient()
 

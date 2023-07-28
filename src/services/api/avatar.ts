@@ -1,6 +1,5 @@
-import { Planet } from '@/types/planet'
 import { createClient } from '../supabase-browser'
-import { Avatar } from '@/types/avatar'
+import type { Avatar } from '@/types/avatar'
 
 const supabase = createClient()
 

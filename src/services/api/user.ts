@@ -1,5 +1,5 @@
-import { User } from '@/types/user'
 import { createClient } from '../supabase-browser'
+import type { User } from '@/types/user'
 
 const supabase = createClient()
 
@@ -16,6 +16,7 @@ export default {
       .select('*')
       .eq('id', userId)
       .single<User>()
+
     if (error) {
       throw new Error(error.message)
     }

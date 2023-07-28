@@ -1,5 +1,5 @@
-import { Rocket } from '@/types/rocket'
 import { createClient } from '../supabase-browser'
+import type { Rocket } from '@/types/rocket'
 
 const supabase = createClient()
 

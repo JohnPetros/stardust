@@ -1,5 +1,5 @@
-import { Planet } from '@/types/planet'
 import { createClient } from '../supabase-browser'
+import type { Planet } from '@/types/planet'
 
 const supabase = createClient()
 
