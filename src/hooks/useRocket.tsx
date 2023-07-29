@@ -47,9 +47,6 @@ export function useRocket(rocketId?: string) {
 
   const verifiedRockets = useMemo(() => {
     if (!rocketId && rockets?.length && userAcquiredRocketsIds?.length) {
-      console.log(rockets)
-      console.log(userAcquiredRocketsIds.length)
-
       return rockets?.map((rocket) =>
         verifyRocketAcquirement(rocket, userAcquiredRocketsIds)
       )
@@ -93,18 +90,6 @@ export function useRocket(rocketId?: string) {
       }
     }
   }
-
-  // useEffect(() => {
-  //   if (userAcquiredRocketsIds?.length && rockets?.length) {
-  //     console.log(rockets)
-
-  //     const verifiedRockets = rockets?.map((rocket) =>
-  //       verifyRocketAcquirement(rocket, userAcquiredRocketsIds)
-  //     )
-
-  //     if (verifiedRockets) mutate('/rockets', verifiedRockets, false)
-  //   }
-  // }, [userAcquiredRocketsIds, rockets])
 
   return {
     rocket,
