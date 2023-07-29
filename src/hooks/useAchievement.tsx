@@ -1,3 +1,5 @@
+'use client'
+
 import { api } from '@/services/api'
 import { Achievement } from '@/types/achievement'
 import { useMemo } from 'react'
