@@ -14,13 +14,13 @@ export function TabButton({ title, icon: Icon, value, isActive, onClick }: TabBu
   return (
     <Tabs.Trigger
       className={twMerge(
-        'p-2 rounded-md flex items-center gap-2 text-gray-100 font-medium border',
+        'px-3 py-2 rounded-md flex items-center gap-2 text-gray-100 font-medium border',
         isActive ? 'bg-green-900 border-green-600' : 'bg-transparent border-transparent'
       )}
       value={value}
       onClick={onClick}
     >
-      <Icon className="text-lg text-green-500" />
+      <Icon className="hidden md:block text-lg text-green-500" />
       {title}
     </Tabs.Trigger>
   )
