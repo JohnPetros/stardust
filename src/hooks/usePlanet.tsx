@@ -1,3 +1,5 @@
+'use client'
+
 import { useMemo, useState } from 'react'
 import { useAuth } from './useAuth'
 import useSWR from 'swr'
