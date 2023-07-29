@@ -10,13 +10,24 @@ import {
   Target,
   User,
 } from '@phosphor-icons/react'
-const iconStyle = 'text-green-400'
+import { tv } from 'tailwind-variants'
 
 const difficulties = {
   easy: 'Fácil',
   medium: 'Médio',
   hard: 'Difícil',
 }
+
+const difficultyStyles = tv({
+  base: 'font-medium text-sm border p-2 rounded-lg',
+  variants: {
+    difficulty: {
+      easy: 'border-green-400 text-green-400',
+      medium: 'border-yellow-400 text-yellow-400',
+      hard: 'border-red-700 text-red-700',
+    },
+  },
+})
 
 interface ChallengeProps {
   data: Challenge
@@ -38,14 +49,16 @@ export function Challenge({
 }: ChallengeProps) {
   const totalVotes = upvotes + downvotes
   const acceptanceRate = totalVotes ? upvotes / totalVotes : 0
-  
+
   return (
-    <div className="rounded-md bg-gray-800 p-3 flex flex-col gap-3">
+    <div className="rounded-md bg-gray-800 p-6 flex flex-col gap-5">
       <div className="flex items-center gap-3">
-        <span>{difficulties[difficulty]}</span>
+        <span className={difficultyStyles({ difficulty })}>
+          {difficulties[difficulty]}
+        </span>
         <Link
           href={`/challenges/${id}`}
-          className="text-green-500 font-semibold"
+          className="text-green-500 font-semibold hover:text-green-700 transition-colors duration-200"
         >
           {title}
         </Link>
