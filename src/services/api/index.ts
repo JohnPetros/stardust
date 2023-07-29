@@ -5,6 +5,7 @@ import avatar from './avatar'
 import achievement from './achievement'
 import rocket from './rocket'
 import ranking from './ranking'
+import challenges from './challenges'
 
 export const api = {
   ...user,
@@ -13,5 +14,6 @@ export const api = {
   ...avatar,
   ...achievement,
   ...rocket,
-  ...ranking
+  ...ranking,
+  ...challenges
 }
