@@ -1,6 +1,6 @@
 'use client'
 
-import { useAchievement } from '@/hooks/useAchievements'
+import { useAchievement } from '@/hooks/useAchievement'
 import { Achievement } from './Achievement'
 import { useAuth } from '@/hooks/useAuth'
 
