@@ -11,13 +11,13 @@ export function SorterButton({ title, isActive, icon: Icon }: SorterButtonProps)
   return (
     <button
       className={twMerge(
-        'text-sm p-2 hover:text-gray-100 flex items-center gap-1 group',
+        'text-sm p-2 hover:text-gray-100 hidden md:flex items-center gap-1 group',
         isActive ? 'text-gray-100' : 'text-gray-400'
       )}
     >
       <Icon
         className={twMerge(
-          'text-sm group-hover:text-gray-100',
+          'group-hover:text-gray-100',
           isActive ? 'text-gray-100' : 'text-gray-400'
         )}
       />

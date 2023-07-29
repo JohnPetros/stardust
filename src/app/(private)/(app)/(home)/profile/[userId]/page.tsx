@@ -16,11 +16,11 @@ export default async function Profile({ params }: ProfileProps) {
   return (
     <div className="pt-8 max-w-sm md:max-w-5xl mx-auto px-6">
       <User data={user} />
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr] justify-center items-center md:flex-row gap-12 mt-10">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] justify-center items-center md:flex-row gap-12 mt-10">
         <Statistics data={user} />
         <Streak data={user} />
       </div>
-      <div className="grid grid-cols-[1fr_1.5fr] gap-2 mt-10">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr] gap-2 mt-10">
         <div>
           <h4 className="text-gray-100">Desafios concluídos</h4>
           <ChallengesChart />
@@ -29,10 +29,15 @@ export default async function Profile({ params }: ProfileProps) {
           <h4 className="text-gray-100 text-center mb-3">
             Conquistas adquiridas
           </h4>
-          <Achievements userId={user.id} />
+          <div>
+            <Achievements userId={user.id} />
+          </div>
         </div>
       </div>
-      <Tabs />
+
+      <div className="mt-10">
+        <Tabs />
+      </div>
     </div>
   )
 }
