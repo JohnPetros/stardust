@@ -7,6 +7,7 @@ import * as Progress from '@radix-ui/react-progress'
 import { Variants, motion } from 'framer-motion'
 
 import Lock from '../../../../../../public/icons/lock.svg'
+import { useEffect, useState } from 'react'
 
 const achievementVariants: Variants = {
   hidden: {
@@ -25,9 +26,15 @@ const achievementVariants: Variants = {
   },
 }
 
+type Status = {
+  formatedCurrentProgress: number
+  barWidth: number
+  canRescue: boolean
+}
+
 interface AchievementProps {
   data: AchievementType
-  currentProgress: number
+  currentProgress?: number
 }
 
 export function Achievement({
@@ -35,13 +42,23 @@ export function Achievement({
   currentProgress,
 }: AchievementProps) {
   const iconImage = getImage('achievements', icon)
+  const [status, setStatus] = useState<Status | null>(null)
 
-  const percentage = (currentProgress / required_amount) * 100
-  const barWidth = percentage > 100 ? 100 : percentage
-  const canRescue = isRescuable
+  useEffect(() => {
+    if (currentProgress) {
+      const percentage = (currentProgress / required_amount) * 100
+      const barWidth = percentage > 100 ? 100 : percentage
+      const canRescue = isRescuable
 
-  const formatedCurrentProgress =
-    currentProgress >= required_amount ? required_amount : currentProgress
+      const formatedCurrentProgress =
+      currentProgress && currentProgress >= required_amount
+        ? required_amount
+        : currentProgress
+  
+      setStatus({ barWidth, canRescue, formatedCurrentProgress })
+    }
+  }, [])
+
 
   return (
     <motion.div
@@ -61,14 +78,17 @@ export function Achievement({
         <p className="text-gray-100 text-xs">{description}</p>
         {!isUnlocked && (
           <div className="flex w-full items-center gap-2">
-            <Progress.Root value={barWidth} className="bg-gray-400 h-1 w-full">
+            <Progress.Root
+              value={status?.barWidth}
+              className="bg-gray-400 h-1 w-full"
+            >
               <Progress.Indicator
                 className="bg-green-400"
-                style={{ width: `${barWidth}%` }}
+                style={{ width: `${status?.barWidth}%` }}
               />
             </Progress.Root>
             <span className="text-gray-100 text-sm">
-              {formatedCurrentProgress}/{required_amount}
+              {status?.formatedCurrentProgress}/{required_amount}
             </span>
           </div>
         )}
