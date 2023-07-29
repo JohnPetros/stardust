@@ -572,19 +572,19 @@ export interface Database {
       }
       users_completed_challenges: {
         Row: {
-          challenge_id: string | null
+          challenge_id: string
           id: string
-          user_id: string | null
+          user_id: string
         }
         Insert: {
-          challenge_id?: string | null
+          challenge_id: string
           id?: string
-          user_id?: string | null
+          user_id: string
         }
         Update: {
-          challenge_id?: string | null
+          challenge_id?: string
           id?: string
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {
