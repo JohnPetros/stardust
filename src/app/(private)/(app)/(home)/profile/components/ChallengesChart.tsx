@@ -5,7 +5,6 @@ import { Legend } from './Legend'
 
 const options: ApexOptions = {
   chart: {
-    height: 1000,
     type: 'radialBar',
     offsetX: -50,
   },
@@ -26,7 +25,7 @@ const options: ApexOptions = {
         },
         value: {
           fontWeight: 'bold',
-          fontSize: '24',
+          fontSize: '20',
           color: '#EBEBEB',
           offsetY: 0,
         },
@@ -50,8 +49,14 @@ const series = [50, 50, 50]
 export function ChallengesChart() {
   return (
     <div className="flex">
-      <Chart type="radialBar" height={350} series={series} options={options} />
-      <dl className="flex flex-col gap-3">
+      <Chart
+        type="radialBar"
+        width={280}
+        height={280}
+        series={series}
+        options={options}
+      />
+      <dl className="flex flex-col gap-3 -ml-20">
         <Legend label="Fácil" value={22} total={25} color="bg-green-500" />
         <Legend label="Médio" value={18} total={20} color="bg-yellow-400" />
         <Legend label="Difícil" value={3} total={6} color="bg-red-700" />
