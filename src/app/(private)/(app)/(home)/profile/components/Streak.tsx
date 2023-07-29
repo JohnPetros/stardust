@@ -44,9 +44,9 @@ export function Streak({ data: { streak, week_status } }: StreakProps) {
         ))}
       </div>
 
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex items-center justify-center gap-1">
         <Lottie animationData={StreakIcon} loop={false} style={{ width: 32 }} />
-        <p className="text-green-500">{streak} estudados seguidos</p>
+        <p className="text-green-500">{streak} dias estudados seguidos</p>
       </div>
     </div>
   )
