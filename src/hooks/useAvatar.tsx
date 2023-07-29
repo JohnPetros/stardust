@@ -1,3 +1,5 @@
+'use client'
+
 import { useMemo } from 'react'
 import { useAuth } from './useAuth'
 import useSWR, { mutate } from 'swr'
