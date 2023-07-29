@@ -10,7 +10,6 @@ import {
   CaretUp,
 } from '@phosphor-icons/react'
 import * as Tab from '@radix-ui/react-tabs'
-import { twMerge } from 'tailwind-merge'
 import { SorterButton } from './SorterButton'
 
 type TabValue = 'tab-1' | 'tab-2' | 'tab-3'
@@ -26,19 +25,19 @@ type Tab = {
 
 const tabs: Tab[] = [
   {
-    title: 'Códigos escritos',
+    title: 'Códigos',
     icon: FileCode,
     value: 'tab-1',
     hasSorters: false,
   },
   {
-    title: 'Desafios criados',
+    title: 'Desafios',
     icon: Terminal,
     value: 'tab-2',
     hasSorters: true,
   },
   {
-    title: 'Soluções compartilhadas',
+    title: 'Soluções',
     icon: Barcode,
     value: 'tab-3',
     hasSorters: true,
@@ -73,11 +72,11 @@ export function Tabs() {
 
         {hasSorters && (
           <div className="flex items-center justify-end">
-            <SorterButton title="Mais recentes" icon={Clock} isActive={false} />
+            <SorterButton title="Mais recentes" icon={Clock} isActive={activeSorter === 'created_at'} />
             <SorterButton
               title="Mais votados"
               icon={CaretUp}
-              isActive={false}
+              isActive={activeSorter === 'votes'}
             />
           </div>
         )}
