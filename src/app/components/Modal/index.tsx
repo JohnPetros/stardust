@@ -9,7 +9,7 @@ import {
 import * as Dialog from '@radix-ui/react-dialog'
 import Lottie from 'lottie-react'
 
-import { AnimatePresence, motion, Variants } from 'framer-motion'
+import { motion, Variants } from 'framer-motion'
 
 import { X } from '@phosphor-icons/react'
 import { MODAL_EFFECTS } from '@/utils/constants'
@@ -17,10 +17,10 @@ import { playSound } from '@/utils/functions'
 
 export type Type = 'earning' | 'crying' | 'denying' | 'asking' | 'generic'
 
-const modalVariants = {
+const modalVariants: Variants = {
   close: {
     opacity: 0,
-    scale: 0.9,
+    scale: 0.8,
   },
   open: {
     opacity: 1,
@@ -72,7 +72,7 @@ export const Modal = forwardRef<ModalRef, ModalProps>(
     )
 
     useEffect(() => {
-      if (sound && isOpen && type !== 'generic') {
+      if (sound && isOpen && type !== 'generic' && canPlaySong) {
         playSound(sound)
       }
     }, [isOpen])
@@ -86,10 +86,10 @@ export const Modal = forwardRef<ModalRef, ModalProps>(
                 variants={modalVariants}
                 initial="close"
                 animate="open"
-                className="rounded-lg bg-gray-800 p-6"
+                className="rounded-lg bg-gray-800 p-6 border border-gray-700"
               >
-                <div className="flex items-start">
-                  <Dialog.Title className="font-semibold text-white text-center mx-auto">
+                <div className="flex items-start border-b border-gray-700 pb-2">
+                  <Dialog.Title className="font-semibold text-white text-center flex items-center justify-center">
                     {title}
                   </Dialog.Title>
                   <Dialog.Close
@@ -99,7 +99,7 @@ export const Modal = forwardRef<ModalRef, ModalProps>(
                     <X className="text-gray-500" weight="bold" />
                   </Dialog.Close>
                 </div>
-                <div className="flex justify-center">
+                <div className="flex justify-center mt-3">
                   <Lottie
                     animationData={animation}
                     style={{ width: 200 }}
