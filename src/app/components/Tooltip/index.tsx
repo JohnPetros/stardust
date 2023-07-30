@@ -26,6 +26,7 @@ export const TooltipTrigger = T.Trigger
 
 interface TooltipProps {
   text: string
+  direction?: 'top' | 'left' | 'right' | 'bottom'
 }
 
 export interface TooltipRef {
@@ -34,7 +35,7 @@ export interface TooltipRef {
 }
 
 export const TooltipContent = forwardRef<TooltipRef, TooltipProps>(
-  ({ text }: TooltipProps, ref) => {
+  ({ text, direction = 'bottom' }: TooltipProps, ref) => {
     const [isVisible, setIsVisible] = useState(false)
 
     function show() {
@@ -61,16 +62,16 @@ export const TooltipContent = forwardRef<TooltipRef, TooltipProps>(
         <AnimatePresence>
           {isVisible && (
             <T.Content
-              className="max-w-sm "
+              className="max-w-sm z-50"
               sideOffset={1}
-              side="bottom"
+              side={direction}
               forceMount
             >
               <motion.p
                 variants={contentVariants}
                 initial="hidden"
                 animate="visible"
-                className="bg-green-900 border border-gray-400 rounded-md p-2 shadow-md text-gray-100 text-sm"
+                className="bg-green-900 border border-gray-400 rounded-md p-2 shadow-md text-gray-100 text-sm "
               >
                 {text}
                 <T.TooltipArrow className="fill-gray-400" />
