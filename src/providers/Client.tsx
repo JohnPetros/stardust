@@ -11,12 +11,12 @@ interface ClientProps {
 
 export function Client({ children }: ClientProps) {
   return (
-    <SidebarProvider>
-      <SpaceProvider>
-        <TooltipProvider>
-          <ToastProvider swipeDirection="right">{children}</ToastProvider>
-        </TooltipProvider>
-      </SpaceProvider>
-    </SidebarProvider>
+    <TooltipProvider>
+      <ToastProvider swipeDirection="right">
+        <SidebarProvider>
+          <SpaceProvider>{children}</SpaceProvider>
+        </SidebarProvider>
+      </ToastProvider>
+    </TooltipProvider>
   )
 }
