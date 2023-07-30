@@ -13,6 +13,8 @@ import { CaretLeft, CaretRight, Flag, Power } from '@phosphor-icons/react'
 import { AnimatePresence, Variants, motion } from 'framer-motion'
 
 import { HOME_PAGES } from '@/utils/constants/home-pages'
+import { Modal, ModalRef } from '@/app/components/Modal'
+import { Button } from '@/app/components/Button'
 
 const sidenavVariants: Variants = {
   shrink: {
@@ -50,22 +52,33 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
     useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const toastRef = useRef<ToastRef>(null)
+  const modalRef = useRef<ModalRef>(null)
 
   function handleAchievementsListButtonClick() {
     setIsAchievementsListVisible(!isAchievementsListVisible)
   }
 
   async function handleSignOutButtonClick() {
+    function showErrorMessage() {
+      toastRef.current?.open({
+        type: 'error',
+        message: 'Erro ao tentar sair da conta',
+      })
+      setIsLoading(false)
+      modalRef.current?.close()
+    }
+
     setIsLoading(true)
 
     const error = await signOut()
 
     if (error) {
-      toastRef.current?.open({
-        type: 'error',
-        message: 'Erro ao tentar fazer logout',
-      })
+      showErrorMessage()
     }
+
+    setTimeout(() => {
+      showErrorMessage()
+    }, 10000)
   }
 
   return (
@@ -139,19 +152,42 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
             isExpanded={isExpanded}
             onClick={handleAchievementsListButtonClick}
             isActive={isAchievementsListVisible}
-            isLoading={false}
           />
 
           <SidenavButton
             icon={Power}
             title="Sair"
             isExpanded={isExpanded}
-            onClick={handleSignOutButtonClick}
+            onClick={() => modalRef.current?.open()}
             isActive={false}
-            isLoading={isLoading}
           />
         </div>
       </div>
+
+      <Modal
+        ref={modalRef}
+        type="crying"
+        title={`Calma aí! Deseja mesmo\nSAIR DA SUA CONTA 😢?`}
+        canPlaySong={false}
+        body={null}
+        footer={
+          <div className="flex items-center justify-center mt-3 gap-2">
+            <Button
+              className="bg-red-700 text-gray-100 w-32"
+              onClick={handleSignOutButtonClick}
+              isLoading={isLoading}
+            >
+              Sair
+            </Button>
+            <Button
+              className="bg-green-400 text-green-900 w-32"
+              onClick={() => modalRef.current?.close()}
+            >
+              Cancelar
+            </Button>
+          </div>
+        }
+      />
     </motion.div>
   )
 }
