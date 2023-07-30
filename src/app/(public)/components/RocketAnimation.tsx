@@ -21,13 +21,11 @@ const rocketVariants: Variants = {
 interface RocketProps {
   animationRef: LottieRef
   isVisible: boolean
-  onAnimationEnd: () => void
 }
 
 export function RocketAnimation({
   animationRef,
   isVisible,
-  onAnimationEnd,
 }: RocketProps) {
   return (
     <motion.div
@@ -41,7 +39,6 @@ export function RocketAnimation({
         animationData={RocketLaunching}
         style={{ width: 640, height: 640 }}
         loop={false}
-        onComplete={onAnimationEnd}
       />
     </motion.div>
   )
