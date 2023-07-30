@@ -30,7 +30,7 @@ export default function Home() {
       onClick={handleClick}
     >
       <TransitionPageAnimation isVisible={isTransitionVisible} />
-      <ul className=" max-w-[90vw] mt-24 flex flex-col items-start justify-center gap-12">
+      <ul className=" max-w-[90vw] mt-10 flex flex-col items-start justify-center gap-12">
         {planets?.map((planet) => (
           <Planet
             key={planet.id}
