@@ -2,8 +2,15 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipRef,
+} from '@/app/components/Tooltip'
 import { twMerge } from 'tailwind-merge'
 import { Variants, motion } from 'framer-motion'
+import { useRef } from 'react'
 
 const labelVariants: Variants = {
   shrink: {
@@ -35,40 +42,53 @@ export function NavButton({
 }: NavButtonProps) {
   const pathname = usePathname()
   const isActive = pathname === path
+  const tooltipRef = useRef<TooltipRef>(null)
 
   return (
-    <Link
-      href={path}
-      className={twMerge(
-        'rounded-xl hover:bg-green-700/20 transition-colors duration-200 flex items-center justify-center md:w-max p-2',
-        isColumn ? 'flex-col' : 'flex-row'
+    <Tooltip>
+      <TooltipTrigger
+        onMouseOver={() => tooltipRef.current?.show()}
+        onMouseLeave={() => tooltipRef.current?.hide()}
+      >
+        <Link
+          href={path}
+          className={twMerge(
+            'rounded-xl hover:bg-green-700/20 transition-colors duration-200 flex items-center justify-center md:w-max p-2',
+            isColumn ? 'flex-col' : 'flex-row'
+          )}
+        >
+          <span
+            className={twMerge(
+              'rounded-lg w-10 h-10 grid place-content-center',
+              isActive ? 'bg-green-400' : 'bg-green-800'
+            )}
+          >
+            <Image
+              src={`/icons/${icon}`}
+              width={28}
+              height={28}
+              className="text-gray-800"
+              alt=""
+            />
+          </span>
+
+          <motion.span
+            variants={labelVariants}
+            initial="shrink"
+            animate={isExpanded ? 'expand' : ''}
+            className={twMerge(
+              'block overflow-hidden font-semibold text-sm mt-2 -ml-2 md:-m-0',
+              isActive ? 'text-gray-100' : 'text-gray-400'
+            )}
+          >
+            {label}
+          </motion.span>
+        </Link>
+      </TooltipTrigger>
+
+      {!isExpanded && (
+        <TooltipContent ref={tooltipRef} text={label} direction="right" />
       )}
-    >
-      <span
-        className={twMerge(
-          'rounded-lg w-10 h-10 grid place-content-center',
-          isActive ? 'bg-green-400' : 'bg-green-800'
-        )}
-      >
-        <Image
-          src={`/icons/${icon}`}
-          width={28}
-          height={28}
-          className="text-gray-800"
-          alt=""
-        />
-      </span>
-      <motion.span
-        variants={labelVariants}
-        initial="shrink"
-        animate={isExpanded ? 'expand' : ''}
-        className={twMerge(
-          'block overflow-hidden font-semibold text-sm mt-2 -ml-2 md:-m-0',
-          isActive ? 'text-gray-100' : 'text-gray-400'
-        )}
-      >
-        {label}
-      </motion.span>
-    </Link>
+    </Tooltip>
   )
 }
