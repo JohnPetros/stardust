@@ -80,23 +80,16 @@ export default function SignIn() {
     resolver: zodResolver(formSchema),
   })
 
-  const { signIn, user, isLoading } = useAuth()
+  const { signIn, user, serverSession } = useAuth()
+  const [isLaoding, setIsLoading] = useState(false)
 
   const router = useRouter()
 
   const toastRef = useRef<ToastRef>(null)
   const rocketRef = useRef(null) as LottieRef
 
-  function handleRocketLanchingEnd() {
-    rocketRef.current?.pause()
-
-    if (user) {
-      console.log(user.id)
-    }
-  }
-
   async function launchRocket() {
-    return await new Promise((resolve) =>
+    await new Promise((resolve) =>
       setTimeout(() => {
         rocketRef.current?.goToAndPlay(0)
         resolve(true)
@@ -105,30 +98,37 @@ export default function SignIn() {
   }
 
   async function handleFormData({ email, password }: FormFields) {
-    const response = await signIn(email, password)
+    const error = await signIn(email, password)
 
-    if (response === 'Invalid login credentials') {
-      toastRef.current?.open({
-        type: 'error',
-        message: 'Usuário não encontrado',
-      })
+    if (error) {
+      if (error === 'Invalid login credentials') {
+        toastRef.current?.open({
+          type: 'error',
+          message: 'Usuário não encontrado',
+        })
+        return
+      }
+
+      console.error(error)
       return
     }
+
+    setIsLoading(true)
 
     setIsRocketVisible(true)
 
     await launchRocket()
+
+    setTimeout(() => {
+      router.push('/')
+    }, ROCKET_ANIMATION_DURATION * 2500)
   }
 
   return (
     <>
       <Toast ref={toastRef} />
 
-      <RocketAnimation
-        animationRef={rocketRef}
-        isVisible={isRocketVisible}
-        onAnimationEnd={handleRocketLanchingEnd}
-      />
+      <RocketAnimation animationRef={rocketRef} isVisible={isRocketVisible} />
 
       <div className="h-screen lg:grid lg:grid-cols-[1fr_1.5fr]">
         <main className="flex flex-col items-center justify-center h-full">
@@ -170,7 +170,7 @@ export default function SignIn() {
                     />
                   </div>
                   <div className="mt-6">
-                    <Button type="submit" isLoading={isLoading}>
+                    <Button type="submit" isLoading={isLaoding}>
                       Entrar
                     </Button>
                   </div>
