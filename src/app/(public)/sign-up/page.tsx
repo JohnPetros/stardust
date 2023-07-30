@@ -18,6 +18,9 @@ import { Envelope, Lock } from '@phosphor-icons/react'
 import { motion, Variants } from 'framer-motion'
 import { LottieRef } from 'lottie-react'
 
+import { api } from '@/services/api'
+import { PASSWORD_REGEX } from '@/utils/constants/password-regex'
+
 const formVariants: Variants = {
   hidden: {
     opacity: 0,
@@ -33,9 +36,7 @@ const formVariants: Variants = {
   },
 }
 
-import { api } from '@/services/api'
 
-import { PASSWORD_REGEX } from '@/utils/constants/password-regex'
 
 const formSchema = z
   .object({

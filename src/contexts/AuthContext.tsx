@@ -1,15 +1,15 @@
 'use client'
 
-import { createContext, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { createContext, useEffect, useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 import { useSupabase } from '../hooks/useSupabase'
-import useSWR from 'swr'
-import { mutate } from 'swr'
+import useSWR, { mutate } from 'swr'
 
 import { AuthError, Session } from '@supabase/supabase-js'
 import { api } from '@/services/api'
 import { User } from '@/types/user'
 import { ROCKET_ANIMATION_DURATION } from '@/utils/constants'
+import { checkIsPublicRoute } from '@/utils/functions'
 
 interface AuthContextValue {
   user: User | null | undefined
@@ -32,6 +32,7 @@ interface AuthContextValue {
   >
   signOut: () => Promise<string | null>
   updateUser: (newData: Partial<User>) => Promise<string | null>
+  serverSession: Session | null | undefined
 }
 
 interface AuthProviderProps {
@@ -42,11 +43,17 @@ interface AuthProviderProps {
 export const AuthContext = createContext({} as AuthContextValue)
 
 export function AuthProvider({ serverSession, children }: AuthProviderProps) {
+  const [session, setSession] = useState<Session | null | undefined>(
+    serverSession
+  )
+  const pathname = usePathname()
   const { supabase } = useSupabase()
   const router = useRouter()
 
+  console.log(session?.user.id)
+
   async function getUser() {
-    const userId = serverSession?.user?.id
+    const userId = session?.user?.id
 
     if (userId) {
       return await api.getUser(userId)
@@ -57,10 +64,10 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     data: user,
     error,
     isLoading,
-  } = useSWR(serverSession ? '/user' : null, getUser)
+  } = useSWR(session?.user.id ? '/user' : null, getUser)
 
   async function signIn(email: string, password: string) {
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     })
@@ -68,6 +75,8 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     if (error) {
       return error.message
     }
+
+    setSession(data.session)
 
     return null
   }
@@ -110,27 +119,40 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
         return error
       }
 
-      mutate('/user', { ...user, ...newData }, false)
       return null
     }
     return null
   }
 
   useEffect(() => {
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session?.access_token !== serverSession?.access_token) {
-        setTimeout(() => {
-          router.refresh()
-        }, ROCKET_ANIMATION_DURATION * 1000 * 3)
-      }
-    })
-
-    return () => {
-      subscription.unsubscribe()
+    if (!session?.user.id) {
+      mutate('/user', null, false)
     }
-  }, [router, supabase, serverSession?.access_token])
+  }, [session])
+
+  // useEffect(() => {
+  //   const {
+  //     data: { subscription },
+  //   } = supabase.auth.onAuthStateChange((event, session) => {
+  //     console.log(serverSession?.refresh_token)
+  //     console.log(serverSession?.access_token)
+
+  //     if (session?.access_token !== serverSession?.access_token) {
+  //       // setTimeout(() => {
+  //       const isPublicRoute = checkIsPublicRoute(pathname)
+
+  //       if (!isPublicRoute) {
+  //         router.refresh()
+  //       } else {
+  //       }
+  //       // }, ROCKET_ANIMATION_DURATION * 1000 + 3000)
+  //     }
+  //   })
+
+  //   return () => {
+  //     subscription.unsubscribe()
+  //   }
+  // }, [supabase, serverSession?.access_token])
 
   const value: AuthContextValue = {
     user,
@@ -140,6 +162,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     signUp,
     signOut,
     updateUser,
+    serverSession,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
