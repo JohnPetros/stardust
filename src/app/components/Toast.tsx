@@ -107,11 +107,11 @@ export const Toast = forwardRef<ToastRef>((_, ref) => {
               }}
               className={twMerge(
                 'rounded',
-                type === 'error' ? 'bg-red-700/50' : 'bg-green-600/50'
+                type === 'error' ? 'bg-red-800' : 'bg-green-600'
               )}
             >
               <div className="flex justify-between gap-6 p-4 ">
-                <Container.Description className="flex items-center gap-2 text-gray-100 font-medium">
+                <Container.Description className="flex items-center gap-2 text-gray-100">
                   <span
                     className={twMerge(
                       'text-gray-100 rounded p-1',
