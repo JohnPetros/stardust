@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Challenge } from '@/types/challenge'
 import { Category } from './Category'
 import { Info } from './Info'
+
 import {
   CaretUp,
   ChartLine,
@@ -67,10 +68,27 @@ export function Challenge({
         <Info
           icon={isCompleted ? CheckCircle : Circle}
           label={isCompleted ? 'Resolvido' : 'Não resolvido'}
+          tooltipText={
+            isCompleted
+              ? 'O que você está esperando? resolva esse desafio.'
+              : 'Você ainda pode resolver esse desafio quantas vezes quiser.'
+          }
         />
-        <Info icon={ChartLine} label={acceptanceRate + '%'} />
-        <Info icon={Target} label={totalCompletitions} />
-        <Info icon={User} label={author} />
+        <Info
+          icon={ChartLine}
+          label={acceptanceRate + '%'}
+          tooltipText={`Taxa de aceitação de usuários que que deram upvote para esse desafio de um total de ${totalVotes} votos. Desafios deve ser concluídos primeiro antes de serem votados.`}
+        />
+        <Info
+          icon={Target}
+          label={totalCompletitions}
+          tooltipText={'Número de vezes que esse desafio foi concluído.'}
+        />
+        <Info
+          icon={User}
+          label={author}
+          tooltipText={'Criador desse desafio.'}
+        />
       </ul>
       {categories && (
         <ul className="flex items-start gap-3">
