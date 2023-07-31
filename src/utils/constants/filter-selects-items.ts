@@ -30,10 +30,14 @@ export const FILTER_SELECTS_ITEMS: SelectsItem[] = [
     iconStyles: 'text-red-700 text-lg',
   },
   {
+    value: 'all',
+    text: 'Todos',
+    textStyles: 'text-gray-500',
+  },
+  {
     value: 'easy',
     text: 'Fácil',
     textStyles: 'text-green-400',
-    icon: Circle,
   },
   {
     value: 'medium',
