@@ -1,5 +1,6 @@
 import { ReactNode, useState } from 'react'
 import * as S from '@radix-ui/react-select'
+import { Difficulty, Status } from '@/contexts/ChallengesListContext'
 
 interface SelectProps {
   children: ReactNode

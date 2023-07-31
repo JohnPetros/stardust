@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useReducer } from 'react'
 
-type Status = 'all' | 'completed' | 'not-completed'
-type Difficulty = 'all' | 'easy' | 'medium' | 'hard'
+export type Status = 'all' | 'completed' | 'not-completed'
+export type Difficulty = 'all' | 'easy' | 'medium' | 'hard'
 
 type ChallengesListAction =
   | { type: 'setStatus'; payload: Status }

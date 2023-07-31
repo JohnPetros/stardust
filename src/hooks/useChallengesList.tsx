@@ -34,8 +34,6 @@ export const useChallengesList = () => {
 
   async function getChallenges() {
     if (user) {
-      console.log(state.difficulty)
-
       const challenges = await api.getFilteredChallenges({
         userId: user?.id,
         status: state.status,
@@ -48,9 +46,11 @@ export const useChallengesList = () => {
     }
   }
 
-  const { data: challenges, error } = useSWR('/challenges', getChallenges)
+  console.log(state.status)
 
-  console.log(challenges)
+  const { data: challenges, error } = useSWR(['/challenges', state.status], getChallenges)
+
+  console.log(error)
 
   return {
     state,
