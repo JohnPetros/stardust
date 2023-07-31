@@ -46,9 +46,10 @@ export const useChallengesList = () => {
     }
   }
 
-  console.log(state.status)
-
-  const { data: challenges, error } = useSWR(['/challenges', state.status], getChallenges)
+  const { data: challenges, error } = useSWR(
+    ['/challenges', state.status, state.difficulty],
+    getChallenges
+  )
 
   console.log(error)
 

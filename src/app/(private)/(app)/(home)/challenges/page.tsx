@@ -15,7 +15,7 @@ export default function Challenges() {
       <Filters />
       {challenges ? (
         <>
-          <div className="space-y-6 mt-8">
+          <div className="space-y-6">
             {challenges.map((challenge) => (
               <Challenge
                 key={challenge.id}
@@ -26,7 +26,9 @@ export default function Challenges() {
           </div>
         </>
       ) : (
-        <Loading isSmall={true} />
+        <div className="grid place-content-center mt-10">
+          <Loading isSmall={true} />
+        </div>
       )}
     </div>
   )

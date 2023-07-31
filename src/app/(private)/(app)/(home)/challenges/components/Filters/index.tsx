@@ -4,7 +4,6 @@ import { useChallengesList } from '@/hooks/useChallengesList'
 
 import { Select } from '../Select'
 import { Tag } from './Tag'
-import { CheckCircle, Circle, Icon, Minus } from '@phosphor-icons/react'
 
 import type { Difficulty, Status } from '@/contexts/ChallengesListContext'
 import { FILTER_SELECTS_ITEMS } from '@/utils/constants/filter-selects-items'
@@ -41,13 +40,14 @@ export function Filters() {
     if (['completed', 'not-completed'].includes(tagValue)) {
       removeTag(tagText)
       setStatus('all')
-      statusTag.current = 'all'
+      statusTag.current = null
       return
     }
 
     if (['easy', 'medium', 'hard'].includes(tagValue)) {
       removeTag(tagText)
-      difficultyTag.current = 'all'
+      setDifficulty('all')
+      difficultyTag.current = null
       return
     }
   }
@@ -62,14 +62,26 @@ export function Filters() {
 
     setStatus(newStatus)
 
-    if (tag !== 'todos') {
+    if (tag !== 'Todos') {
       addTag(tag)
       statusTag.current = tag
     }
   }
 
   function handleDifficultyChange(newDifficulty: Difficulty) {
+    const tag = getTag(newDifficulty)
+    if (!tag) return
+
+    if (difficultyTag.current) {
+      removeTag(difficultyTag.current)
+    }
+
     setDifficulty(newDifficulty)
+
+    if (tag !== 'Todos') {
+      addTag(tag)
+      difficultyTag.current = tag
+    }
   }
 
   return (
@@ -106,20 +118,26 @@ export function Filters() {
         >
           <Select.Trigger value="Dificuldade" />
           <Select.Content>
-            <Select.Item value="easy" text="Fácil" textStye="text-green-500" />
-            <Select.Separator />
-            <Select.Item
-              value="medium"
-              text="Médio"
-              textStye="text-yellow-400"
-            />
-            <Select.Separator />
-            <Select.Item value="hard" text="Difícil" textStye="text-red-700" />
+            {FILTER_SELECTS_ITEMS.slice(3).map((item, index, allItems) => {
+              const isLastItem = index === allItems.length - 1
+              return (
+                <>
+                  <Select.Item
+                    value={item.value}
+                    icon={item.icon}
+                    text={item.text}
+                    textStyes={item.textStyles}
+                    iconStyles={item.iconStyles}
+                  />
+                  {!isLastItem && <Select.Separator />}
+                </>
+              )
+            })}
           </Select.Content>
         </Select.Container>
       </div>
 
-      <div className="flex flex-wrap mt-6">
+      <div className="flex flex-wrap gap-2 mt-6 min-h-[48px]">
         <AnimatePresence mode="popLayout">
           {tags.map((tag) => {
             const item = FILTER_SELECTS_ITEMS.find((item) => item.text === tag)

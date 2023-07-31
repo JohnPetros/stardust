@@ -36,7 +36,7 @@ export function Tag({
       animate="visible"
       exit="hidden"
       className={
-        'flex items-center justify-center gap-2 rounded-md bg-gray-800 text-gray-300 text-xs w-max p-2'
+        'flex items-center justify-center gap-2 rounded-md bg-gray-800 text-gray-300 text-xs w-max h-max p-2'
       }
     >
       {Icon && iconStyles && <Icon className={iconStyles} />}
