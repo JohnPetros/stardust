@@ -1,16 +1,16 @@
 'use client'
+import { useChallengesList } from '@/hooks/useChallengesList'
 
-import { useChallenge } from '@/hooks/useChallenge'
 import { Challenge } from './components/Challenge'
 import { Filters } from './components/Filters'
 
 export default function Challenges() {
-  const { challenges } = useChallenge()
+  const { challenges } = useChallengesList()
 
   console.log(challenges)
 
   return (
-    <div className="mx-auto max-w-2xl mt-10">
+    <div className="mx-auto max-w-2xl mt-10 pb-10">
       <Filters />
 
       {challenges && (
