@@ -109,48 +109,48 @@ export interface Database {
           code: string | null
           created_at: string | null
           difficulty: string | null
+          downvotes: number | null
           function_name: string | null
           id: string
-          likes: number | null
           star_id: string | null
           test_cases: Json | null
           texts: Json | null
           title: string | null
           topic_id: string | null
           totalCompletitions: number | null
-          votes: number | null
+          upvotes: number | null
         }
         Insert: {
           author?: string | null
           code?: string | null
           created_at?: string | null
           difficulty?: string | null
+          downvotes?: number | null
           function_name?: string | null
           id?: string
-          likes?: number | null
           star_id?: string | null
           test_cases?: Json | null
           texts?: Json | null
           title?: string | null
           topic_id?: string | null
           totalCompletitions?: number | null
-          votes?: number | null
+          upvotes?: number | null
         }
         Update: {
           author?: string | null
           code?: string | null
           created_at?: string | null
           difficulty?: string | null
+          downvotes?: number | null
           function_name?: string | null
           id?: string
-          likes?: number | null
           star_id?: string | null
           test_cases?: Json | null
           texts?: Json | null
           title?: string | null
           topic_id?: string | null
           totalCompletitions?: number | null
-          votes?: number | null
+          upvotes?: number | null
         }
         Relationships: [
           {
@@ -827,6 +827,47 @@ export interface Database {
           userid: string
         }
         Returns: undefined
+      }
+      filter_challenges:
+        | {
+            Args: {
+              userid: string
+              status: string
+              difficulty: string
+            }
+            Returns: undefined
+          }
+        | {
+            Args: {
+              userid: string
+              status: string
+              difficulty: string
+            }
+            Returns: Record<string, unknown>
+          }
+      get_filtered_challenges: {
+        Args: {
+          userid: string
+          status: string
+          _difficulty: string
+          categories_ids: string[]
+        }
+        Returns: {
+          author: string | null
+          code: string | null
+          created_at: string | null
+          difficulty: string | null
+          downvotes: number | null
+          function_name: string | null
+          id: string
+          star_id: string | null
+          test_cases: Json | null
+          texts: Json | null
+          title: string | null
+          topic_id: string | null
+          totalCompletitions: number | null
+          upvotes: number | null
+        }[]
       }
       install_available_extensions_and_test: {
         Args: Record<PropertyKey, never>
