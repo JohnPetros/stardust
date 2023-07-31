@@ -1,4 +1,4 @@
-import type { Category } from "./category"
+import type { Category } from './category'
 
 type Difficulty = 'easy' | 'medium' | 'hard'
 
@@ -17,5 +17,5 @@ export type Challenge = {
   title: string
   topic_id: string
   totalCompletitions: number
-  categories: Category[]
+  categories: (Category | null)[]
 }
