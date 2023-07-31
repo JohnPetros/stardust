@@ -6,7 +6,7 @@ import { Icon } from '@phosphor-icons/react'
 
 interface SelectItemProps {
   text: ReactNode
-  textStye?: string
+  textStyes?: string
   value: string
   icon?: Icon
   iconStyles?: string
@@ -14,7 +14,7 @@ interface SelectItemProps {
 
 export function Item({
   text,
-  textStye,
+  textStyes,
   icon: Icon,
   iconStyles,
   value,
@@ -24,7 +24,7 @@ export function Item({
       value={value}
       className={twMerge(
         'flex items-center gap-2 px-4 py-2 cursor-pointer text-gray-400 font-medium outline-gray-400 focus:text-gray-100 hover:text-gray-100 text-sm',
-        textStye
+        textStyes
       )}
     >
       {Icon && <Icon className={iconStyles} />}
