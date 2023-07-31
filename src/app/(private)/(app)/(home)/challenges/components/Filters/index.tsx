@@ -8,6 +8,7 @@ import { CheckCircle, Circle, Icon, Minus } from '@phosphor-icons/react'
 
 import type { Difficulty, Status } from '@/contexts/ChallengesListContext'
 import { FILTER_SELECTS_ITEMS } from '@/utils/constants/filter-selects-items'
+import { AnimatePresence } from 'framer-motion'
 
 export function Filters() {
   const { state, dispatch } = useChallengesList()
@@ -37,14 +38,15 @@ export function Filters() {
   }
 
   function handleTagClick(tagText: string, tagValue: string) {
-    removeTag(tagText)
-
     if (['completed', 'not-completed'].includes(tagValue)) {
+      removeTag(tagText)
+      setStatus('all')
       statusTag.current = 'all'
       return
     }
 
     if (['easy', 'medium', 'hard'].includes(tagValue)) {
+      removeTag(tagText)
       difficultyTag.current = 'all'
       return
     }
@@ -118,21 +120,23 @@ export function Filters() {
       </div>
 
       <div className="flex flex-wrap mt-6">
-        {tags.map((tag) => {
-          const item = FILTER_SELECTS_ITEMS.find((item) => item.text === tag)
-          return (
-            <Tag
-              key={tag}
-              name={tag}
-              nameStyles={item?.textStyles ?? null}
-              icon={item?.icon ?? null}
-              iconStyles={item?.iconStyles ?? null}
-              onClick={() =>
-                item?.value ? handleTagClick(tag, item.value) : null
-              }
-            />
-          )
-        })}
+        <AnimatePresence mode="popLayout">
+          {tags.map((tag) => {
+            const item = FILTER_SELECTS_ITEMS.find((item) => item.text === tag)
+            return (
+              <Tag
+                key={tag}
+                name={tag}
+                nameStyles={item?.textStyles ?? null}
+                icon={item?.icon ?? null}
+                iconStyles={item?.iconStyles ?? null}
+                onClick={() =>
+                  item?.value ? handleTagClick(tag, item.value) : null
+                }
+              />
+            )
+          })}
+        </AnimatePresence>
       </div>
     </div>
   )

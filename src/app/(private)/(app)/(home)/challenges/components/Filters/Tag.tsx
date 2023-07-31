@@ -1,14 +1,24 @@
 'use client'
-import { ReactNode } from 'react'
-import { twMerge } from 'tailwind-merge'
 import { Icon, X } from '@phosphor-icons/react'
+import { Variants, motion } from 'framer-motion'
+
+const tagVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: -32,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+  },
+}
 
 interface TagProps {
   name: string
   nameStyles: string | null
   icon: Icon | null
   iconStyles: string | null
-  onClick: () => void 
+  onClick: () => void
 }
 
 export function Tag({
@@ -19,7 +29,12 @@ export function Tag({
   onClick,
 }: TagProps) {
   return (
-    <div
+    <motion.div
+      variants={tagVariants}
+      layout
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
       className={
         'flex items-center justify-center gap-2 rounded-md bg-gray-800 text-gray-300 text-xs w-max p-2'
       }
@@ -32,6 +47,6 @@ export function Tag({
       >
         <X className="text-gray-800" widths={8} weight="bold" />
       </button>
-    </div>
+    </motion.div>
   )
 }
