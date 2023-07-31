@@ -91,15 +91,15 @@ export interface Database {
       categories: {
         Row: {
           id: string
-          name: string | null
+          name: string
         }
         Insert: {
           id?: string
-          name?: string | null
+          name: string
         }
         Update: {
           id?: string
-          name?: string | null
+          name?: string
         }
         Relationships: []
       }
@@ -117,7 +117,7 @@ export interface Database {
           texts: Json | null
           title: string | null
           topic_id: string | null
-          totalCompletitions: number | null
+          total_completitions: number | null
           upvotes: number | null
         }
         Insert: {
@@ -133,7 +133,7 @@ export interface Database {
           texts?: Json | null
           title?: string | null
           topic_id?: string | null
-          totalCompletitions?: number | null
+          total_completitions?: number | null
           upvotes?: number | null
         }
         Update: {
@@ -149,7 +149,7 @@ export interface Database {
           texts?: Json | null
           title?: string | null
           topic_id?: string | null
-          totalCompletitions?: number | null
+          total_completitions?: number | null
           upvotes?: number | null
         }
         Relationships: [
@@ -169,18 +169,18 @@ export interface Database {
       }
       challenges_categories: {
         Row: {
-          category_id: string | null
-          challenge_id: string | null
+          category_id: string
+          challenge_id: string
           id: string
         }
         Insert: {
-          category_id?: string | null
-          challenge_id?: string | null
+          category_id: string
+          challenge_id: string
           id?: string
         }
         Update: {
-          category_id?: string | null
-          challenge_id?: string | null
+          category_id?: string
+          challenge_id?: string
           id?: string
         }
         Relationships: [
@@ -865,7 +865,7 @@ export interface Database {
           texts: Json | null
           title: string | null
           topic_id: string | null
-          totalCompletitions: number | null
+          total_completitions: number | null
           upvotes: number | null
         }[]
       }
