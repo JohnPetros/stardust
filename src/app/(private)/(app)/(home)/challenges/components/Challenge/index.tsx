@@ -92,9 +92,10 @@ export function Challenge({
       </ul>
       {categories && (
         <ul className="flex items-start gap-3">
-          {categories.map(({ name }) => (
-            <Category key={name} name={name} />
-          ))}
+          {categories.map((category) => {
+            if (category)
+              return <Category key={category?.id} name={category?.name} />
+          })}
         </ul>
       )}
     </div>

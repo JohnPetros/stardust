@@ -1,15 +1,19 @@
 'use client'
 
-import { useContext } from 'react'
+import { useContext, useMemo } from 'react'
 import { useAuth } from './useAuth'
+import { useCategory } from './useCategory'
 import useSWR from 'swr'
 
 import { ChallengesListContext } from '@/contexts/ChallengesListContext'
+
 import { api } from '@/services/api'
+
 import type { Challenge } from '@/types/challenge'
 
 export const useChallengesList = () => {
   const { user } = useAuth()
+  const { categories } = useCategory()
   const { state, dispatch } = useContext(ChallengesListContext)
 
   if (!state) {
@@ -32,7 +36,7 @@ export const useChallengesList = () => {
     return easyChallenges.concat(mediumChallenges, hardChallenges)
   }
 
-  async function getChallenges() {
+  async function getFilteredChallenges() {
     if (user) {
       const challenges = await api.getFilteredChallenges({
         userId: user?.id,
@@ -48,14 +52,29 @@ export const useChallengesList = () => {
 
   const { data: challenges, error } = useSWR(
     ['/challenges', state.status, state.difficulty],
-    getChallenges
+    getFilteredChallenges
   )
 
-  console.log(error)
+  function addCategories(challenge: Challenge) {
+    if (categories?.length) {
+      const challengeCategories = categories.filter((category) =>
+        category.challenges_categories.some(
+          ({ challenge_id }) => challenge_id === challenge.id
+        )
+      )
+      return { ...challenge, categories: challengeCategories ?? [] }
+    }
+    return challenge
+  }
+
+  const filteredChallenges = useMemo(() => {
+    return challenges?.map(addCategories)
+  }, [challenges, categories])
 
   return {
     state,
     dispatch,
-    challenges,
+    challenges: filteredChallenges ?? [],
+    categories: categories ?? [],
   }
 }
