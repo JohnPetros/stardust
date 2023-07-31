@@ -8,7 +8,7 @@ interface LoadingProps {
 }
 
 export function Loading({ isSmall = true }: LoadingProps) {
-  const size = isSmall ? 40 : 100
+  const size = isSmall ? 64 : 100
 
   if (isSmall) {
     return (
