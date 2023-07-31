@@ -3,18 +3,29 @@ import type { Challenge } from '@/types/challenge'
 
 const supabase = createClient()
 
+interface getFilteredChallengesProps {
+  userId: string
+  status: string
+  difficulty: string
+  categoriesIds: string[]
+  range: number
+}
+
 export default {
-  getChallenges: async (
-    range: number,
-    userId: string,
-    categoriesIds: string[]
-  ) => {
+  getFilteredChallenges: async ({
+    userId,
+    status,
+    difficulty,
+    categoriesIds,
+    range,
+  }: getFilteredChallengesProps) => {
     const { data, error } = await supabase
-      .from('challenges')
-      .select('*, users_completed_challenges(*)')
-      // .range(range, range + 19)
-      // .or('id.eq.2')
-      // .filter('categories.id', 'in', "(" + categoriesIds.join() + ")")
+      .rpc('get_filtered_challenges', {
+        userid: userId,
+        _difficulty: difficulty,
+        status,
+        categories_ids: categoriesIds,
+      })
       .returns<Challenge[]>()
 
     if (error) {
