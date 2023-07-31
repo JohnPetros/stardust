@@ -6,13 +6,14 @@ import { Filters } from './components/Filters'
 import { Loading } from '@/app/components/Loading'
 
 export default function Challenges() {
-  const { challenges } = useChallengesList()
+  const { challenges, categories } = useChallengesList()
 
   console.log(challenges)
 
   return (
     <div className="mx-auto max-w-2xl mt-10 pb-10">
-      <Filters />
+      <Filters categories={categories} />
+      
       {challenges ? (
         <>
           <div className="space-y-6">

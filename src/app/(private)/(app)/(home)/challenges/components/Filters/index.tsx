@@ -6,10 +6,16 @@ import { Select } from '../Select'
 import { Tag } from './Tag'
 
 import type { Difficulty, Status } from '@/contexts/ChallengesListContext'
+import type { Category } from '@/types/category'
+
 import { FILTER_SELECTS_ITEMS } from '@/utils/constants/filter-selects-items'
 import { AnimatePresence } from 'framer-motion'
 
-export function Filters() {
+interface FiltersProps {
+  categories: Category[]
+}
+
+export function Filters({ categories }: FiltersProps) {
   const { state, dispatch } = useChallengesList()
   const [tags, setTags] = useState<string[]>([])
   const statusTag = useRef<string | null>(null)
