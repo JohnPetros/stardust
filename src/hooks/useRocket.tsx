@@ -1,5 +1,5 @@
 'use client'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useAuth } from './useAuth'
 import useSWR, { mutate } from 'swr'
 
@@ -8,7 +8,6 @@ import { api } from '@/services/api'
 
 export function useRocket(rocketId?: string) {
   const { user } = useAuth()
-  const [hasMutation, setMutation] = useState(false)
 
   function verifyRocketAcquirement(
     rocket: Rocket,
@@ -52,7 +51,6 @@ export function useRocket(rocketId?: string) {
       )
     }
 
-    setMutation(false)
     return []
   }, [rockets, userAcquiredRocketsIds])
 
