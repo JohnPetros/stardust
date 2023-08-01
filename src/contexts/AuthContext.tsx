@@ -8,8 +8,6 @@ import useSWR, { mutate } from 'swr'
 import { AuthError, Session } from '@supabase/supabase-js'
 import { api } from '@/services/api'
 import { User } from '@/types/user'
-import { ROCKET_ANIMATION_DURATION } from '@/utils/constants'
-import { checkIsPublicRoute } from '@/utils/functions'
 
 interface AuthContextValue {
   user: User | null | undefined
@@ -46,11 +44,8 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
   const [session, setSession] = useState<Session | null | undefined>(
     serverSession
   )
-  const pathname = usePathname()
   const { supabase } = useSupabase()
   const router = useRouter()
-
-  console.log(session?.user.id)
 
   async function getUser() {
     const userId = session?.user?.id
@@ -113,11 +108,13 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
 
   async function updateUser(newData: Partial<User>): Promise<string | null> {
     if (user?.id) {
-      await api.updateUser(newData, user.id)
+      const error = await api.updateUser(newData, user.id)
 
       if (error) {
         return error
       }
+
+      mutate('/user', { ...user, ...newData }, false)
 
       return null
     }
