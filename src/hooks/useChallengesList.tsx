@@ -56,7 +56,7 @@ export const useChallengesList = () => {
     }
   }
 
-  const { data: challenges, error } = useSWR(
+  const { data: challenges, error, isLoading } = useSWR(
     ['/challenges', state.status, state.difficulty, state.categoriesIds],
     getFilteredChallenges
   )
@@ -98,5 +98,6 @@ export const useChallengesList = () => {
     dispatch,
     challenges: filteredChallenges ?? [],
     categories: categories ?? [],
+    isLoading
   }
 }
