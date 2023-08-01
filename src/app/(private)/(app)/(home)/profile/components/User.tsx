@@ -12,6 +12,7 @@ import { getImage } from '@/utils/functions'
 import { User as UserType } from '@/types/user'
 import { CalendarBlank, GearSix, Shield } from '@phosphor-icons/react'
 import Link from 'next/link'
+import dayjs from 'dayjs'
 
 interface UserProps {
   data: UserType
@@ -30,6 +31,8 @@ export function User({
 
   const rankingImage = getImage('rankings', ranking.image)
   const rocketImage = getImage('rockets', rocket.image)
+
+  const createdAt = dayjs(created_at).format('DD MMMM [de] YYYY')
 
   return (
     <div className="flex flex-col md:flex-row md:justify-between md:gap-6 pb-6 border-b border-gray-300">
@@ -54,9 +57,7 @@ export function User({
               className="text-green-500 text-lg hidden md:block"
               weight="bold"
             />
-            <p className="text-gray-300 text-sm">
-              Por aqui desde 16 de março de 2023
-            </p>
+            <p className="text-gray-300 text-sm">Por aqui desde {createdAt}</p>
           </div>
         </div>
       </div>
@@ -71,10 +72,12 @@ export function User({
         <Status title="Ranking atual" image={rocketImage} value={rocket.name} />
       </dl>
 
-      <div className="w-6 flex justify-start  h-full">
-        <Link href="/settings">
-          <GearSix className="text-green-500 text-4xl hidden md:block" />
-        </Link>
+      <div className="w-6 flex justify-start h-full">
+        {isAuthUser && (
+          <Link href="/settings">
+            <GearSix className="text-green-500 text-4xl hidden md:block" />
+          </Link>
+        )}
       </div>
     </div>
   )
