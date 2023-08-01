@@ -4,15 +4,18 @@ import { useRocket } from '@/hooks/useRocket'
 import { useRanking } from '@/hooks/useRanking'
 
 import { UserAvatar } from '../../components/UserAvatar'
+import { Loading } from '@/app/components/Loading'
 import { Status } from './Status'
+import { CalendarBlank, GearSix, Shield } from '@phosphor-icons/react'
 
 import { getImage } from '@/utils/functions'
 
 import { User as UserType } from '@/types/user'
-import { CalendarBlank, GearSix, Shield } from '@phosphor-icons/react'
+
 import Link from 'next/link'
 import dayjs from 'dayjs'
-import { Loading } from '@/app/components/Loading'
+
+import { motion } from 'framer-motion'
 
 interface UserProps {
   data: UserType
@@ -75,7 +78,9 @@ export function User({
       <div className="w-6 flex justify-start h-full">
         {isAuthUser && (
           <Link href="/settings">
-            <GearSix className="text-green-500 text-4xl hidden md:block" />
+            <motion.div whileHover={{ rotate: '90deg' }}>
+              <GearSix className="text-green-500 text-4xl hidden md:block" />
+            </motion.div>
           </Link>
         )}
       </div>
