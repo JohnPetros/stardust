@@ -6,6 +6,8 @@ import * as Dropdown from '@radix-ui/react-dropdown-menu'
 
 import type { Category } from '@/types/category'
 
+import { removeAccentuation } from '@/utils/functions'
+
 interface CategoriesProps {
   data: Category[]
 }
@@ -13,10 +15,6 @@ interface CategoriesProps {
 export function CategoriesFilter({ data }: CategoriesProps) {
   const [categories, setCategories] = useState<Category[]>([])
   const [search, setSearch] = useState('')
-
-  function removeAccentuation(word: string) {
-    return word.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-  }
 
   function filterCategories() {
     if (!search) {
