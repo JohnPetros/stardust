@@ -10,6 +10,7 @@ import type { Category } from '@/types/category'
 
 import { FILTER_SELECTS_ITEMS } from '@/utils/constants/filter-selects-items'
 import { AnimatePresence } from 'framer-motion'
+import { CategoriesFilter } from './CategoriesFilter'
 
 interface FiltersProps {
   categories: Category[]
@@ -20,7 +21,7 @@ export function Filters({ categories }: FiltersProps) {
   const [tags, setTags] = useState<string[]>([])
   const statusTag = useRef<string | null>(null)
   const difficultyTag = useRef<string | null>(null)
-  console.log(tags)
+  console.log(categories)
 
   function setStatus(status: Status) {
     dispatch({ type: 'setStatus', payload: status })
@@ -141,6 +142,8 @@ export function Filters({ categories }: FiltersProps) {
             })}
           </Select.Content>
         </Select.Container>
+
+        <CategoriesFilter data={categories} />
       </div>
 
       <div className="flex flex-wrap gap-2 mt-6 min-h-[48px]">
