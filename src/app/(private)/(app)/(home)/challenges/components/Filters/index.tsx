@@ -11,6 +11,7 @@ import type { Category } from '@/types/category'
 import { FILTER_SELECTS_ITEMS } from '@/utils/constants/filter-selects-items'
 import { AnimatePresence } from 'framer-motion'
 import { CategoriesFilter } from './CategoriesFilter'
+import { Search } from '@/app/components/Search'
 
 interface FiltersProps {
   categories: Category[]
@@ -113,6 +114,12 @@ export function Filters({ categories }: FiltersProps) {
     }
   }
 
+  function handleSearchChange(search: string) {
+    setTimeout(() => {
+      dispatch({ type: 'setSearch', payload: search.trim().toLowerCase() })
+    }, 400)
+  }
+
   useEffect(() => {
     state.categoriesIds.forEach((id) => {
       const categoryName = categories.find(
@@ -125,7 +132,13 @@ export function Filters({ categories }: FiltersProps) {
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-center gap-6">
+      <Search
+        placeholder="Pesquisar desafio por título..."
+        onChange={({ target }) => handleSearchChange(target.value)}
+        className="bg-gray-800"
+      />
+
+      <div className="flex items-center gap-6 mt-6">
         <Select.Container
           onValueChange={(newStatus: string) =>
             handleStatusChange(newStatus as Status)

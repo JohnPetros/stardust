@@ -43,6 +43,7 @@ export const useChallengesList = () => {
         status: state.status,
         difficulty: state.difficulty,
         categoriesIds: state.categoriesIds,
+        search: state.search ?? null,
         range: 0,
       })
 
@@ -56,8 +57,18 @@ export const useChallengesList = () => {
     }
   }
 
-  const { data: challenges, error, isLoading } = useSWR(
-    ['/challenges', state.status, state.difficulty, state.categoriesIds],
+  const {
+    data: challenges,
+    error,
+    isLoading,
+  } = useSWR(
+    [
+      '/challenges',
+      state.status,
+      state.difficulty,
+      state.categoriesIds,
+      state.search,
+    ],
     getFilteredChallenges
   )
 
@@ -98,6 +109,6 @@ export const useChallengesList = () => {
     dispatch,
     challenges: filteredChallenges ?? [],
     categories: categories ?? [],
-    isLoading
+    isLoading,
   }
 }

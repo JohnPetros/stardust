@@ -7,6 +7,7 @@ type ChallengesListAction =
   | { type: 'setStatus'; payload: Status }
   | { type: 'setDifficulty'; payload: Difficulty }
   | { type: 'setCategoriesIds'; payload: string[] }
+  | { type: 'setSearch'; payload: string }
 
 type ChallengesListState = {
   status: Status
@@ -42,8 +43,10 @@ function ChallengesListReducer(
       return { ...state, difficulty: action.payload }
     case 'setCategoriesIds':
       return { ...state, categoriesIds: action.payload }
+    case 'setSearch':
+      return { ...state, search: action.payload }
     default:
-      return initialChallengesListState
+      return state
   }
 }
 
