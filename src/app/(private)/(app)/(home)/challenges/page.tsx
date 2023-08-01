@@ -1,10 +1,10 @@
 'use client'
+import { useEffect, useState } from 'react'
 import { useChallengesList } from '@/hooks/useChallengesList'
 
 import { Challenge } from './components/Challenge'
 import { Filters } from './components/Filters'
 import { Loading } from '@/app/components/Loading'
-import { useEffect, useState } from 'react'
 
 export default function Challenges() {
   const { challenges, categories, isLoading } = useChallengesList()
