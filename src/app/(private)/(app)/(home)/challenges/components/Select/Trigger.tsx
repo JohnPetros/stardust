@@ -8,8 +8,8 @@ interface SelectTriggerProps {
 
 export function Trigger({ value }: SelectTriggerProps) {
   return (
-    <S.Trigger className="flex items-center gap-2 rounded-md overflow-hidden text-green-500 p-2 bg-gray-800 border border-gray-400">
-      <S.Value className="text-green-500" aria-value={value}>
+    <S.Trigger className="flex items-center gap-2 rounded-md overflow-hidden text-green-500 text-sm p-2 bg-gray-800 border border-gray-400">
+      <S.Value className="" aria-value={value}>
         {value}
       </S.Value>
       <S.Icon className="SelectIcon">
