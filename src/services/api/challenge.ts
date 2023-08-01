@@ -45,6 +45,6 @@ export default {
       throw new Error(error.message)
     }
 
-    return data
+    return data.map((data) => data.challenge_id)
   },
 }

@@ -18,4 +18,5 @@ export type Challenge = {
   topic_id: string
   total_completitions: number
   categories: (Category | null)[]
+  isCompleted: boolean
 }

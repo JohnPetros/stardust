@@ -32,7 +32,6 @@ const difficultyStyles = tv({
 
 interface ChallengeProps {
   data: Challenge
-  isCompleted: boolean
 }
 
 export function Challenge({
@@ -45,8 +44,8 @@ export function Challenge({
     downvotes,
     total_completitions,
     categories,
+    isCompleted,
   },
-  isCompleted,
 }: ChallengeProps) {
   const totalVotes = upvotes + downvotes
   const acceptanceRate = totalVotes ? upvotes / totalVotes : 0
