@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useChallengesList } from '@/hooks/useChallengesList'
 
 import { Select } from '../Select'
@@ -22,12 +22,29 @@ export function Filters({ categories }: FiltersProps) {
   const statusTag = useRef<string | null>(null)
   const difficultyTag = useRef<string | null>(null)
 
+  function setCategoriesIds(cateogiresIds: string[]) {
+    dispatch({ type: 'setCategoriesIds', payload: cateogiresIds })
+  }
+
   function setStatus(status: Status) {
     dispatch({ type: 'setStatus', payload: status })
   }
 
   function setDifficulty(difficulty: Difficulty) {
     dispatch({ type: 'setDifficulty', payload: difficulty })
+  }
+
+  function removeCategory(categoryName: string) {
+    const category = categories.find(
+      (category) => category.name === categoryName
+    )
+    if (category) {
+      const categoriesIds = state.categoriesIds.filter(
+        (id) => id !== category.id
+      )
+
+      setCategoriesIds(categoriesIds)
+    }
   }
 
   function addTag(newTag: string) {
@@ -42,7 +59,13 @@ export function Filters({ categories }: FiltersProps) {
     return FILTER_SELECTS_ITEMS.find((item) => item.value === value)?.text
   }
 
-  function handleTagClick(tagText: string, tagValue: string) {
+  function handleTagClick(tagText: string, tagValue: string | undefined) {
+    if (!tagValue) {
+      removeTag(tagText)
+      removeCategory(tagText)
+      return
+    }
+
     if (['completed', 'not-completed'].includes(tagValue)) {
       removeTag(tagText)
       setStatus('all')
@@ -89,6 +112,16 @@ export function Filters({ categories }: FiltersProps) {
       difficultyTag.current = tag
     }
   }
+
+  useEffect(() => {
+    state.categoriesIds.forEach((id) => {
+      const categoryName = categories.find(
+        (category) => category.id === id
+      )?.name
+
+      if (categoryName && !tags.includes(categoryName)) addTag(categoryName)
+    })
+  }, [state.categoriesIds])
 
   return (
     <div className="flex flex-col">
@@ -156,9 +189,7 @@ export function Filters({ categories }: FiltersProps) {
                 nameStyles={item?.textStyles ?? null}
                 icon={item?.icon ?? null}
                 iconStyles={item?.iconStyles ?? null}
-                onClick={() =>
-                  item?.value ? handleTagClick(tag, item.value) : null
-                }
+                onClick={() => handleTagClick(tag, item?.value)}
               />
             )
           })}

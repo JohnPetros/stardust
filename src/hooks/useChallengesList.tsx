@@ -42,7 +42,7 @@ export const useChallengesList = () => {
         userId: user?.id,
         status: state.status,
         difficulty: state.difficulty,
-        categoriesIds: [],
+        categoriesIds: state.categoriesIds,
         range: 0,
       })
 
@@ -51,7 +51,7 @@ export const useChallengesList = () => {
   }
 
   const { data: challenges, error } = useSWR(
-    ['/challenges', state.status, state.difficulty],
+    ['/challenges', state.status, state.difficulty, state.categoriesIds],
     getFilteredChallenges
   )
 
