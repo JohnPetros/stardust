@@ -58,7 +58,7 @@ export function CategoriesFilter({ data }: CategoriesProps) {
 
   return (
     <Dropdown.Root>
-      <Dropdown.Trigger className="flex items-center gap-2 rounded-md overflow-hidden text-green-500 p-2 bg-gray-800 border border-gray-400">
+      <Dropdown.Trigger className="flex items-center gap-2 rounded-md overflow-hidden text-green-500 text-sm p-2 bg-gray-800 border border-gray-400">
         Categorias
       </Dropdown.Trigger>
 
