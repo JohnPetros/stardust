@@ -5,6 +5,7 @@ import { Provider as ToastProvider } from '@radix-ui/react-toast'
 import { SidebarProvider } from '@/contexts/SidebarContext'
 import { SpaceProvider } from '@/contexts/SpaceContext'
 import { ChallengesListProvider } from '@/contexts/ChallengesListContext'
+import '../libs/dayjs'
 
 interface ClientProps {
   children: ReactNode
