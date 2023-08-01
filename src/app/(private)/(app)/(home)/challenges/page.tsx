@@ -13,10 +13,12 @@ export default function Challenges() {
   )
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsFirstRendering(false)
-    }, 1500)
-  }, [])
+    if (challenges.length && isFirstRendering) {
+      setTimeout(() => {
+        setIsFirstRendering(false)
+      }, 1500)
+    }
+  }, [challenges])
 
   return (
     <div className="mx-auto max-w-2xl mt-10 pb-10">
