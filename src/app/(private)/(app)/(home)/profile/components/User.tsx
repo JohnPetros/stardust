@@ -1,5 +1,4 @@
 'use client'
-
 import { useAuth } from '@/hooks/useAuth'
 import { useRocket } from '@/hooks/useRocket'
 import { useRanking } from '@/hooks/useRanking'
@@ -13,6 +12,7 @@ import { User as UserType } from '@/types/user'
 import { CalendarBlank, GearSix, Shield } from '@phosphor-icons/react'
 import Link from 'next/link'
 import dayjs from 'dayjs'
+import { Loading } from '@/app/components/Loading'
 
 interface UserProps {
   data: UserType
@@ -27,7 +27,7 @@ export function User({
   const { ranking } = useRanking(ranking_id)
   const { rocket } = useRocket(rocket_id)
 
-  if (!ranking || !rocket) return null
+  if (!ranking || !rocket) return <Loading isSmall={false} />
 
   const rankingImage = getImage('rankings', ranking.image)
   const rocketImage = getImage('rockets', rocket.image)

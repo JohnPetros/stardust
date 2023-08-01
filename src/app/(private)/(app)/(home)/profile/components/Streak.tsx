@@ -31,9 +31,7 @@ export function Streak({ data: { streak, week_status } }: StreakProps) {
             key={weekday}
             className="flex flex-col items-center justify-center gap-2"
           >
-            <strong className="uppercase text-gray-300">
-              {weekday}
-            </strong>
+            <strong className="uppercase text-gray-300">{weekday}</strong>
             <Image
               src={`/icons/${weekStatusIcons[weekStatus[index]]}`}
               width={24}
