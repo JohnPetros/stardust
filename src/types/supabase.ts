@@ -851,6 +851,7 @@ export interface Database {
           status: string
           _difficulty: string
           categories_ids: string[]
+          search: string
         }
         Returns: {
           author: string | null
