@@ -8,6 +8,7 @@ interface getFilteredChallengesProps {
   status: string
   difficulty: string
   categoriesIds: string[]
+  search: string
   range: number
 }
 
@@ -17,6 +18,7 @@ export default {
     status,
     difficulty,
     categoriesIds,
+    search,
     range,
   }: getFilteredChallengesProps) => {
     const { data, error } = await supabase
@@ -25,6 +27,7 @@ export default {
         _difficulty: difficulty,
         status,
         categories_ids: categoriesIds,
+        search,
       })
       .returns<Challenge[]>()
 
