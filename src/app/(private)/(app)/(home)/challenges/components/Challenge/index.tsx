@@ -1,10 +1,12 @@
+'use client'
+
 import Link from 'next/link'
-import { Challenge } from '@/types/challenge'
 import { Category } from './Category'
 import { Info } from './Info'
 
+import type { Challenge } from '@/types/challenge'
+
 import {
-  CaretUp,
   ChartLine,
   CheckCircle,
   Circle,
@@ -12,6 +14,19 @@ import {
   User,
 } from '@phosphor-icons/react'
 import { tv } from 'tailwind-variants'
+
+import { Variants, motion } from 'framer-motion'
+
+const challengeVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.5,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+  },
+}
 
 const difficulties = {
   easy: 'Fácil',
@@ -51,7 +66,12 @@ export function Challenge({
   const acceptanceRate = totalVotes ? upvotes / totalVotes : 0
 
   return (
-    <div className="rounded-md bg-gray-800 p-6 flex flex-col gap-5">
+    <motion.div
+      variants={challengeVariants}
+      initial="hidden"
+      animate="visible"
+      className="rounded-md bg-gray-800 p-6 flex flex-col gap-5"
+    >
       <div className="flex items-center gap-3">
         <span className={difficultyStyles({ difficulty })}>
           {difficulties[difficulty]}
@@ -98,6 +118,6 @@ export function Challenge({
           })}
         </ul>
       )}
-    </div>
+    </motion.div>
   )
 }
