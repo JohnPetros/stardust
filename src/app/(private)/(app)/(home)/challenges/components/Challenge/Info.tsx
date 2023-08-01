@@ -7,14 +7,16 @@ import {
   TooltipRef,
 } from '@/app/components/Tooltip'
 import { useRef } from 'react'
+import { twMerge } from 'tailwind-merge'
 
 interface InfoProps {
   label: string | number
   icon: Icon
+  iconStyle?: string
   tooltipText: string
 }
 
-export function Info({ label, icon: Icon, tooltipText }: InfoProps) {
+export function Info({ label, icon: Icon, iconStyle, tooltipText }: InfoProps) {
   const tooltipRef = useRef<TooltipRef>(null)
 
   return (
@@ -25,7 +27,7 @@ export function Info({ label, icon: Icon, tooltipText }: InfoProps) {
           onMouseOver={() => tooltipRef.current?.show()}
           onMouseLeave={() => tooltipRef.current?.hide()}
         >
-          <Icon className="text-gray-400 text-sm" weight="bold" />
+          <Icon className={twMerge("text-gray-400 text-sm", iconStyle)} weight="bold" />
           {label}
         </TooltipTrigger>
         <TooltipContent ref={tooltipRef} text={tooltipText} />

@@ -67,6 +67,7 @@ export function Challenge({
       <ul className="flex items-center gap-3">
         <Info
           icon={isCompleted ? CheckCircle : Circle}
+          iconStyle={isCompleted ? 'text-green-500' : 'text-red-700'}
           label={isCompleted ? 'Resolvido' : 'Não resolvido'}
           tooltipText={
             isCompleted
