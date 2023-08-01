@@ -6,10 +6,12 @@ export type Difficulty = 'all' | 'easy' | 'medium' | 'hard'
 type ChallengesListAction =
   | { type: 'setStatus'; payload: Status }
   | { type: 'setDifficulty'; payload: Difficulty }
+  | { type: 'setCategoriesIds'; payload: string[] }
 
 type ChallengesListState = {
   status: Status
   difficulty: Difficulty
+  categoriesIds: string[]
   search: string
 }
 
@@ -25,18 +27,21 @@ interface ChallengesListContextValue {
 const initialChallengesListState: ChallengesListState = {
   status: 'all',
   difficulty: 'all',
+  categoriesIds: [],
   search: '',
 }
 
 function ChallengesListReducer(
   state: ChallengesListState,
   action: ChallengesListAction
-) {
+): ChallengesListState {
   switch (action.type) {
     case 'setStatus':
       return { ...state, status: action.payload }
     case 'setDifficulty':
       return { ...state, difficulty: action.payload }
+    case 'setCategoriesIds':
+      return { ...state, categoriesIds: action.payload }
     default:
       return initialChallengesListState
   }

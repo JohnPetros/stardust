@@ -21,7 +21,6 @@ export function Filters({ categories }: FiltersProps) {
   const [tags, setTags] = useState<string[]>([])
   const statusTag = useRef<string | null>(null)
   const difficultyTag = useRef<string | null>(null)
-  console.log(categories)
 
   function setStatus(status: Status) {
     dispatch({ type: 'setStatus', payload: status })
