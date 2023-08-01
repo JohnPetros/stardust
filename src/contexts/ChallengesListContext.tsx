@@ -10,6 +10,7 @@ type ChallengesListAction =
 type ChallengesListState = {
   status: Status
   difficulty: Difficulty
+  search: string
 }
 
 interface ChallengesListProviderProps {
@@ -24,6 +25,7 @@ interface ChallengesListContextValue {
 const initialChallengesListState: ChallengesListState = {
   status: 'all',
   difficulty: 'all',
+  search: '',
 }
 
 function ChallengesListReducer(

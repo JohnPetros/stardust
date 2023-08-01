@@ -43,7 +43,7 @@ export function Challenge({
     author,
     upvotes,
     downvotes,
-    totalCompletitions,
+    total_completitions,
     categories,
   },
   isCompleted,
@@ -81,7 +81,7 @@ export function Challenge({
         />
         <Info
           icon={Target}
-          label={totalCompletitions}
+          label={total_completitions}
           tooltipText={'Número de vezes que esse desafio foi concluído.'}
         />
         <Info
