@@ -14,7 +14,7 @@ interface ProfileProps {
 export default async function Profile({ params }: ProfileProps) {
   const user = await api.getUser(params.userId)
 
-  if (user)
+  if (user.id)
     return (
       <div className="pt-8 max-w-sm md:max-w-5xl mx-auto px-6">
         <User data={user} />
@@ -25,7 +25,7 @@ export default async function Profile({ params }: ProfileProps) {
         <div className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr] gap-2 mt-10">
           <div>
             <h4 className="text-gray-100">Desafios concluídos</h4>
-            <ChallengesChart />
+            <ChallengesChart userId={user.id} />
           </div>
           <div>
             <h4 className="text-gray-100 text-center mb-3">
