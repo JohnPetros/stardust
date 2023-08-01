@@ -16,6 +16,6 @@ export type Challenge = {
   test_cases: JSON
   title: string
   topic_id: string
-  totalCompletitions: number
+  total_completitions: number
   categories: (Category | null)[]
 }
