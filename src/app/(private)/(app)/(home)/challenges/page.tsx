@@ -12,6 +12,8 @@ export default function Challenges() {
     challenges.length === 0
   )
 
+  console.log(challenges)
+
   useEffect(() => {
     if (challenges.length && isFirstRendering) {
       setTimeout(() => {
@@ -21,7 +23,7 @@ export default function Challenges() {
   }, [challenges])
 
   return (
-    <div className="mx-auto max-w-2xl mt-10 pb-10">
+    <div className="mx-auto max-w-2xl mt-10 px-6 md:px-0 pb-10">
       {isFirstRendering && <Loading isSmall={false} />}
       <Filters categories={categories} />
 

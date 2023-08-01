@@ -37,9 +37,9 @@ export const useChallengesList = () => {
   }
 
   async function getFilteredChallenges() {
-    if (user) {
+    if (user?.id) {
       const challenges = await api.getFilteredChallenges({
-        userId: user?.id,
+        userId: user.id,
         status: state.status,
         difficulty: state.difficulty,
         categoriesIds: state.categoriesIds,
@@ -62,15 +62,21 @@ export const useChallengesList = () => {
     error,
     isLoading,
   } = useSWR(
-    [
-      '/challenges',
-      state.status,
-      state.difficulty,
-      state.categoriesIds,
-      state.search,
-    ],
+    state && user?.id
+      ? [
+          '/challenges',
+          state.status,
+          state.difficulty,
+          state.categoriesIds,
+          state.search,
+        ]
+      : null,
     getFilteredChallenges
   )
+
+  if (error) {
+    throw new Error(error)
+  }
 
   const { data: userCompletedChallengesIds } = useSWR(
     '/user_completed_challenges_ids',
@@ -100,9 +106,13 @@ export const useChallengesList = () => {
     return challenge
   }
 
+  console.log(challenges)
+
   const filteredChallenges = useMemo(() => {
     return challenges?.map(addCategories).map(checkCompletition)
   }, [challenges, categories, userCompletedChallengesIds])
+
+  console.log(filteredChallenges)
 
   return {
     state,
