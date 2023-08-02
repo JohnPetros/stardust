@@ -1,6 +1,18 @@
+'use client'
 import { getImage } from '@/utils/functions'
 import Image from 'next/image'
 import { twMerge } from 'tailwind-merge'
+
+import { Variants, motion } from 'framer-motion'
+
+const badgeVariants: Variants = {
+  hover: {
+    rotate: ['0deg', '15deg', '0deg', '-15deg', '0deg'],
+    transition: {
+      duration: 0.5,
+    },
+  },
+}
 
 interface BadgeProps {
   index: number
@@ -21,7 +33,13 @@ export function Badge({ index, name, image, currentRankingIndex }: BadgeProps) {
         isLocked ? 'brightness-75 opacity-75' : 'brightness-100 opacity-100'
       )}
     >
-      <Image src={rankingImage} width={100} height={100} alt="" />
+      <motion.div
+        variants={badgeVariants}
+        whileHover={!isLocked ? 'hover' : ''}
+        className="cursor-pointer"
+      >
+        <Image src={rankingImage} width={100} height={100} alt="" />
+      </motion.div>
 
       {isLocked && (
         <div className="absolute top-9">
