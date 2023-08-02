@@ -7,6 +7,11 @@ import { useRanking } from '@/hooks/useRanking'
 import { Badge } from './components/Badge'
 import { Loading } from '@/app/components/Loading'
 import { clearTimeout } from 'timers'
+import dayjs from 'dayjs'
+
+const today = dayjs().day()
+const sunday = 0
+const restDays = today === sunday ? 7 : 7 - today
 
 export default function Ranking() {
   const { user } = useAuth()
@@ -42,7 +47,7 @@ export default function Ranking() {
       {isFirstRendering && <Loading isSmall={false} />}
       <div
         style={{ backgroundImage: 'url("/images/space-background.png")' }}
-        className="grid grid-cols-6 p-6 rounded-md"
+        className="grid grid-cols-6 p-4 rounded-md"
       >
         {rankings?.map(({ id, name, image }, index) => (
           <Badge
@@ -53,6 +58,16 @@ export default function Ranking() {
             currentRankingIndex={currentRankingIndex}
           />
         ))}
+      </div>
+
+      <div className="flex flex-col items-center justify-center gap-3 mt-6">
+        <p className="font-medium text-gray-100 text-center">
+          Os 5 primeiros avançam para o próximo ranking
+        </p>
+
+        <strong className="text-center text-green-400">
+          {restDays + (restDays === 1 ? ' dia' : ' dias')}
+        </strong>
       </div>
     </div>
   )
