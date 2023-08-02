@@ -1,20 +1,20 @@
 export type User = {
-  acquired_rockets: number
-  avatar_id: string
+  id: string
+  email: string
+  name: string
+  level: number
   coins: number
+  avatar_id: string
+  acquired_rockets: number
   completed_challenges: number
   completed_planets: number
   created_at: string
   did_break_streak: boolean
   did_complete_saturday: boolean
   did_update_ranking: boolean
-  email: string
-  id: string
   is_admin: boolean
   is_loser: boolean | null
   last_position: number | null
-  level: number
-  name: string
   ranking_id: string
   rocket_id: string
   streak: number
