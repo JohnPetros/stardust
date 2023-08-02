@@ -7,11 +7,11 @@ import useSWR, { mutate } from 'swr'
 
 import { AuthError, Session } from '@supabase/supabase-js'
 import { api } from '@/services/api'
-import { User } from '@/types/user'
+import type { User } from '@/types/user'
 
 interface AuthContextValue {
   user: User | null | undefined
-  error: any
+  error: unknown
   isLoading: boolean
   signIn: (email: string, password: string) => Promise<string | null>
   signUp: (
