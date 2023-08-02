@@ -11,9 +11,7 @@ export function useRanking(rankingId?: string, canGetAllRankings?: boolean) {
   }
 
   async function getRankings() {
-    if (rankingId) {
-      return await api.getRankings()
-    }
+    return await api.getRankings()
   }
 
   const { data: ranking, error: rankingError } = useSWR(

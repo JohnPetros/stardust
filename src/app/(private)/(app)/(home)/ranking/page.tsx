@@ -3,10 +3,12 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { useRanking } from '@/hooks/useRanking'
+import { useRankedUsers } from '@/hooks/useRankedUsers'
 
-import { Badge } from './components/Badge'
 import { Loading } from '@/app/components/Loading'
-import { clearTimeout } from 'timers'
+import { Badge } from './components/Badge'
+import { RankedUsersList } from './components/RankedUsersList'
+
 import dayjs from 'dayjs'
 
 const today = dayjs().day()
@@ -20,9 +22,12 @@ export default function Ranking() {
     true
   )
 
+  const { users } = useRankedUsers(user?.ranking_id ?? '')
+
   const [currentRankingIndex, setCurrentRankingIndex] = useState(0)
   const [isFirstRendering, setIsFirstRendering] = useState(true)
 
+  console.log(users)
   console.log(rankings)
 
   useEffect(() => {
@@ -45,30 +50,37 @@ export default function Ranking() {
   return (
     <div className="mt-10 max-w-5xl mx-auto">
       {isFirstRendering && <Loading isSmall={false} />}
-      <div
-        style={{ backgroundImage: 'url("/images/space-background.png")' }}
-        className="grid grid-cols-6 p-4 rounded-md"
-      >
-        {rankings?.map(({ id, name, image }, index) => (
-          <Badge
-            key={id}
-            name={name}
-            image={image}
-            index={index}
-            currentRankingIndex={currentRankingIndex}
-          />
-        ))}
-      </div>
 
-      <div className="flex flex-col items-center justify-center gap-3 mt-6">
-        <p className="font-medium text-gray-100 text-center">
-          Os 5 primeiros avançam para o próximo ranking
-        </p>
+      {user && users && (
+        <>
+          <div
+            style={{ backgroundImage: 'url("/images/space-background.png")' }}
+            className="grid grid-cols-6 p-4 rounded-md"
+          >
+            {rankings?.map(({ id, name, image }, index) => (
+              <Badge
+                key={id}
+                name={name}
+                image={image}
+                index={index}
+                currentRankingIndex={currentRankingIndex}
+              />
+            ))}
+          </div>
 
-        <strong className="text-center text-green-400">
-          {restDays + (restDays === 1 ? ' dia' : ' dias')}
-        </strong>
-      </div>
+          <div className="flex flex-col items-center justify-center gap-3 mt-6">
+            <p className="font-medium text-gray-100 text-center">
+              Os 5 primeiros avançam para o próximo ranking
+            </p>
+
+            <strong className="text-center text-green-400">
+              {restDays + (restDays === 1 ? ' dia' : ' dias')}
+            </strong>
+          </div>
+
+          <RankedUsersList users={users} authUserId={user.id} />
+        </>
+      )}
     </div>
   )
 }
