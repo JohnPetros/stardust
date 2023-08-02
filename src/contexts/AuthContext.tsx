@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useEffect, useState } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useSupabase } from '../hooks/useSupabase'
 import useSWR, { mutate } from 'swr'
 
