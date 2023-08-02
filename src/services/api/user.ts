@@ -52,4 +52,19 @@ export default {
       return error.message
     }
   },
+
+  getUsersByRanking: async (rankingId: string) => {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('ranking_id', rankingId)
+      .order('weekly_xp', { ascending: false })
+      .returns<User[]>()
+
+    if (error) {
+      throw new Error(error.message)
+    }
+
+    return data
+  },
 }
