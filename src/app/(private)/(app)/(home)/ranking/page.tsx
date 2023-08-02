@@ -5,6 +5,8 @@ import { useAuth } from '@/hooks/useAuth'
 import { useRanking } from '@/hooks/useRanking'
 
 import { Badge } from './components/Badge'
+import { Loading } from '@/app/components/Loading'
+import { clearTimeout } from 'timers'
 
 export default function Ranking() {
   const { user } = useAuth()
@@ -14,6 +16,7 @@ export default function Ranking() {
   )
 
   const [currentRankingIndex, setCurrentRankingIndex] = useState(0)
+  const [isFirstRendering, setIsFirstRendering] = useState(true)
 
   console.log(rankings)
 
@@ -24,8 +27,19 @@ export default function Ranking() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!rankings?.length || !isFirstRendering) return
+
+    const timer = setTimeout(() => {
+      setIsFirstRendering(false)
+    }, 1500)
+
+    return () => clearTimeout(timer)
+  }, [rankings])
+
   return (
     <div className="mt-10 max-w-5xl mx-auto">
+      {isFirstRendering && <Loading isSmall={false} />}
       <div
         style={{ backgroundImage: 'url("/images/space-background.png")' }}
         className="grid grid-cols-6 p-6 rounded-md"
