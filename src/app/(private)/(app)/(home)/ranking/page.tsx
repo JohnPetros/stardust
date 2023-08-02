@@ -1,13 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { useRanking } from '@/hooks/useRanking'
 import { useRankedUsers } from '@/hooks/useRankedUsers'
 
 import { Loading } from '@/app/components/Loading'
-import { Badge } from './components/Badge'
 import { RankedUsersList } from './components/RankedUsersList'
+import { BadgesList } from './components/BadgesList'
 
 import dayjs from 'dayjs'
 
@@ -24,49 +24,34 @@ export default function Ranking() {
 
   const { users } = useRankedUsers(user?.ranking_id ?? '')
 
-  const [currentRankingIndex, setCurrentRankingIndex] = useState(0)
   const [isFirstRendering, setIsFirstRendering] = useState(true)
+
+  const badgesListRef = useRef<HTMLDivElement>(null)
 
   console.log(users)
   console.log(rankings)
 
-  useEffect(() => {
-    if (currentRanking) {
-      const currentRankingIndex = currentRanking.position - 1
-      setCurrentRankingIndex(currentRankingIndex)
-    }
-  }, [])
 
   useEffect(() => {
-    if (!rankings?.length || !isFirstRendering) return
+    if (!rankings?.length && badgesListRef.current && !isFirstRendering) return
 
     const timer = setTimeout(() => {
       setIsFirstRendering(false)
     }, 1500)
 
     return () => clearTimeout(timer)
-  }, [rankings])
+  }, [rankings, badgesListRef])
 
   return (
-    <div className="mt-10 max-w-5xl mx-auto">
+    <div className="mt-10 w-screen max-w-5xl md:mx-auto pb-6">
       {isFirstRendering && <Loading isSmall={false} />}
 
-      {user && users && (
+      {user && users && rankings && currentRanking && (
         <>
-          <div
-            style={{ backgroundImage: 'url("/images/space-background.png")' }}
-            className="grid grid-cols-6 p-4 rounded-md"
-          >
-            {rankings?.map(({ id, name, image }, index) => (
-              <Badge
-                key={id}
-                name={name}
-                image={image}
-                index={index}
-                currentRankingIndex={currentRankingIndex}
-              />
-            ))}
-          </div>
+          <BadgesList
+            rankings={rankings}
+            currentRanking={currentRanking}
+          />
 
           <div className="flex flex-col items-center justify-center gap-3 mt-6">
             <p className="font-medium text-gray-100 text-center">

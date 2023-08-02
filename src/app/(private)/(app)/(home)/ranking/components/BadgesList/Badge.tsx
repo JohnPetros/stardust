@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { twMerge } from 'tailwind-merge'
 
 import { Variants, motion } from 'framer-motion'
+import { useEffect, useRef } from 'react'
 
 const badgeVariants: Variants = {
   hover: {
@@ -22,14 +23,29 @@ interface BadgeProps {
 }
 
 export function Badge({ index, name, image, currentRankingIndex }: BadgeProps) {
+  const badgeRef = useRef<HTMLDivElement | null>(null)
+
   const rankingImage = getImage('rankings', image)
   const isCurrentRanking = currentRankingIndex === index
   const isLocked = index > currentRankingIndex
 
+  useEffect(() => {
+    if (badgeRef.current && isCurrentRanking) {
+      setTimeout(() => {
+        badgeRef.current?.scrollIntoView({
+          behavior: 'auto',
+          block: 'nearest',
+          inline: 'center',
+        })
+      }, 100)
+    }
+  }, [badgeRef.current])
+
   return (
     <div
+      ref={badgeRef}
       className={twMerge(
-        'relative  flex flex-col items-center justify-center gap-2',
+        'relative flex flex-col items-center justify-center gap-2',
         isLocked ? 'brightness-75 opacity-75' : 'brightness-100 opacity-100'
       )}
     >
@@ -42,7 +58,7 @@ export function Badge({ index, name, image, currentRankingIndex }: BadgeProps) {
       </motion.div>
 
       {isLocked && (
-        <div className="absolute top-9">
+        <div className="absolute top-4">
           <Image
             src="/icons/lock.svg"
             width={24}
@@ -53,7 +69,9 @@ export function Badge({ index, name, image, currentRankingIndex }: BadgeProps) {
       )}
 
       {isCurrentRanking && (
-        <strong className="text-lg text-gray-100 font-semibold">{name}</strong>
+        <strong className="md:text-lg text-gray-100 text-center font-semibold">
+          {name}
+        </strong>
       )}
     </div>
   )
