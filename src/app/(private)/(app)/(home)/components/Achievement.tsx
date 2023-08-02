@@ -1,13 +1,14 @@
 'use client'
 
-import { Achievement as AchievementType } from '@/types/achievement'
-import { getImage } from '@/utils/functions'
+import { useEffect, useState } from 'react'
+
 import Image from 'next/image'
 import * as Progress from '@radix-ui/react-progress'
-import { Variants, motion } from 'framer-motion'
 
-import Lock from '../../../../../../public/icons/lock.svg'
-import { useEffect, useState } from 'react'
+import { Variants, motion } from 'framer-motion'
+import { getImage } from '@/utils/functions'
+
+import type { Achievement as AchievementType } from '@/types/achievement'
 
 const achievementVariants: Variants = {
   hidden: {
@@ -51,14 +52,13 @@ export function Achievement({
       const canRescue = isRescuable
 
       const formatedCurrentProgress =
-      currentProgress && currentProgress >= required_amount
-        ? required_amount
-        : currentProgress
-  
+        currentProgress && currentProgress >= required_amount
+          ? required_amount
+          : currentProgress
+
       setStatus({ barWidth, canRescue, formatedCurrentProgress })
     }
   }, [])
-
 
   return (
     <motion.div
@@ -69,10 +69,9 @@ export function Achievement({
         {isUnlocked ? (
           <Image src={iconImage} fill alt="" />
         ) : (
-          <Image src={Lock} fill alt="" />
+          <Image src="/icons/lock.svg" fill alt="" />
         )}
       </div>
-
       <div className="flex flex-col gap-1">
         <strong className="text-gray-100 text-sm">{name}</strong>
         <p className="text-gray-100 text-xs">{description}</p>
