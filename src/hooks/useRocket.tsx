@@ -32,12 +32,13 @@ export function useRocket(rocketId?: string) {
     if (!rocketId && user?.id) {
       return await api.getUserAcquiredRocketsIds(user.id)
     }
-  }
+  } 
 
   const { data: rocket } = useSWR(
-    () => '/rocket?id=' + user?.rocket_id,
+    rocketId ? '/rocket?id=' + rocketId : null,
     getRocket
   )
+
   const { data: rockets } = useSWR(!rocketId ? '/rockets' : null, getRockets)
   const { data: userAcquiredRocketsIds } = useSWR(
     !rocketId && user?.id ? '/users_acquired_rockets_ids' : null,
