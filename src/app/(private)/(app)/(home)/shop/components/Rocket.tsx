@@ -18,6 +18,17 @@ import RewardLight from '../../../../../../../public/animations/reward-shinning-
 import Lottie from 'lottie-react'
 import { ToastRef } from '@/app/components/Toast'
 
+const rocketVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.5,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+  },
+}
+
 const rocketImageVariants: Variants = {
   down: {
     y: 0,
@@ -61,7 +72,7 @@ export function Rocket({
     try {
       setIsRequesting(true)
       await updateUser({ rocket_id: id })
-      mutate('/rocket?id=' + id, { id, name, image }, false)
+      mutate('/rocket?id=' + id, { id, name, image })
 
       playSound('switch.wav')
     } catch (error) {
@@ -123,10 +134,13 @@ export function Rocket({
 
   return (
     <>
-      <div
+      <motion.div
+        variants={rocketVariants}
+        initial="hidden"
+        animate="visible"
         style={{ backgroundImage: 'url("/images/space-background.png")' }}
         className={twMerge(
-          'rounded-md p-6 bg-center bg-cover border max-w-lg',
+          'rounded-md p-6 bg-center bg-cover border-2 max-w-lg',
           !isAcquired && !isBuyable && 'brightness-75',
           isSelected && 'border-yellow-300'
         )}
@@ -197,7 +211,7 @@ export function Rocket({
               : 'Comprar'}
           </Button>
         </footer>
-      </div>
+      </motion.div>
 
       <Modal
         ref={denyingModalRef}
