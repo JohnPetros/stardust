@@ -1,11 +1,10 @@
 'use client'
-import { Loading } from '@/app/components/Loading'
 import { useAvatar } from '@/hooks/useAvatar'
-import { getImage } from '@/utils/functions'
 
-import * as Avatar from '@radix-ui/react-avatar'
 import Image from 'next/image'
-import { twMerge } from 'tailwind-merge'
+import { Loading } from '@/app/components/Loading'
+
+import { getImage } from '@/utils/functions'
 
 interface UserAvatarProps {
   avatarId: string
