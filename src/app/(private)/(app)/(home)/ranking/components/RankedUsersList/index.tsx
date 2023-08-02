@@ -18,7 +18,7 @@ export function RankedUsersList({ users, authUserId }: UserListProps) {
   const lastPositionsOffset = users.length - 5
 
   return (
-    <div className="flex flex-col items-center mx-auto mt-6 gap-2 max-w-2xl">
+    <div className="flex flex-col items-center mx-auto mt-6 gap-2 px-6 md:px-0 max-w-2xl">
       {users.map((user, index) => {
         const position = index + 1
         return (
