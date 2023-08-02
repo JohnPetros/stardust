@@ -38,15 +38,15 @@ export function Badge({ index, name, image, currentRankingIndex }: BadgeProps) {
         whileHover={!isLocked ? 'hover' : ''}
         className="cursor-pointer"
       >
-        <Image src={rankingImage} width={100} height={100} alt="" />
+        <Image src={rankingImage} width={80} height={80} alt="" />
       </motion.div>
 
       {isLocked && (
         <div className="absolute top-9">
           <Image
             src="/icons/lock.svg"
-            width={32}
-            height={32}
+            width={24}
+            height={24}
             alt="Ranking bloqueado"
           />
         </div>
