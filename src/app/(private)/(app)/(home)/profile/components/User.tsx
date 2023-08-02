@@ -68,11 +68,11 @@ export function User({
       <dl className="flex md:flex-row md:gap-8 justify-between mt-6">
         <span className="hidden md:block bg-gray-300 w-[1px] rounded-md"></span>
         <Status
-          title="Foguete atual"
+          title="Ranking atual"
           image={rankingImage}
           value={ranking.name}
         />
-        <Status title="Ranking atual" image={rocketImage} value={rocket.name} />
+        <Status title="Foguete atual" image={rocketImage} value={rocket.name} />
       </dl>
 
       <div className="w-6 flex justify-start h-full">
