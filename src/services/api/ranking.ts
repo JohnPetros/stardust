@@ -17,4 +17,18 @@ export default {
 
     return data
   },
+
+  getRankings: async () => {
+    const { data, error } = await supabase
+      .from('rankings')
+      .select('*')
+      .order('position', { ascending: true })
+      .returns<Ranking[]>()
+
+    if (error) {
+      throw new Error(error.message)
+    }
+
+    return data
+  },
 }
