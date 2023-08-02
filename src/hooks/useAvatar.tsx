@@ -28,7 +28,10 @@ export function useAvatar(avatarId?: string) {
     }
   }
 
-  const { data: avatar } = useSWR('/avatar?id=' + user?.avatar_id, getAvatar)
+  const { data: avatar } = useSWR(
+    avatarId ? '/avatar?id=' + avatarId : null,
+    getAvatar
+  )
   const { data: avatars } = useSWR(!avatarId ? '/avatars' : null, getAvatars)
   const { data: userAcquiredAvatarsIds } = useSWR(
     !avatarId ? '/users_acquired_avatars_ids' : null,
