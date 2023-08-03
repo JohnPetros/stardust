@@ -6,13 +6,16 @@ export function useRankedUsers(rankingId: string) {
     return await api.getUsersByRanking(rankingId)
   }
 
-  const { data: users, error } = useSWR(rankingId ? 'ranked_users' : null, getUsersByRanking)
+  const { data: rankedUsers, error } = useSWR(
+    rankingId ? 'ranked_users' : null,
+    getUsersByRanking
+  )
 
   if (error) {
     throw new Error(error)
   }
 
   return {
-    users,
+    rankedUsers,
   }
 }
