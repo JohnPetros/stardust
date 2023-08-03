@@ -119,7 +119,7 @@ export default function Ranking() {
 
       {user && rankedUsers && rankings && currentRanking && (
         <>
-          {user.did_update_ranking && winnerUsers.length > 0 && !isLoading ? (
+          {winnerUsers.length > 0 && !isLoading ? (
             <WinnerUsersList
               winnerUsers={winnerUsers}
               currentRanking={currentRanking}
