@@ -9,7 +9,7 @@ import { twMerge } from 'tailwind-merge'
 import Link from 'next/link'
 
 const positionStyles = tv({
-  base: 'font-semibold p-2 w-12 grid place-content-center',
+  base: 'font-semibold p-2 w-12 grid place-content-center group-hover:text-gray-100/90',
   variants: {
     color: {
       safe: 'text-green-700',
@@ -62,14 +62,14 @@ export function RankedUser({
 
       <strong
         className={twMerge(
-          'text-gray-500 group-hover:text-gray-100 block truncate',
+          'text-gray-500 group-hover:text-gray-100/90 block truncate',
           isAuthUser ? 'text-gray-100' : 'text-gray-500'
         )}
       >
         {name}
       </strong>
 
-      <strong className="text-gray-600 uppercase block w-12">
+      <strong className="text-gray-600 uppercase block w-12 group-hover:text-gray-100/90">
         {weekly_xp} xp
       </strong>
     </Link>
