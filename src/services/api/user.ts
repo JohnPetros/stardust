@@ -1,5 +1,5 @@
 import { createClient } from '../supabase-browser'
-import type { User } from '@/types/user'
+import type { User, WinnerUser } from '@/types/user'
 
 const supabase = createClient()
 
@@ -65,6 +65,19 @@ export default {
       throw new Error(error.message)
     }
 
+    return data
+  },
+
+  getWinnerUsers: async (lastWeekRankingId: string) => {
+    const { data, error } = await supabase
+      .from('winners')
+      .select('*')
+      .eq('ranking_id', lastWeekRankingId).returns<WinnerUser[]>()
+
+    if (error) {
+      throw new Error(error.message)
+    }
+    
     return data
   },
 }
