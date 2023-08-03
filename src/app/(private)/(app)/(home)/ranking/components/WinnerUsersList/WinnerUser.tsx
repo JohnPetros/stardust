@@ -5,11 +5,14 @@ import { UserAvatar } from '../../../components/UserAvatar'
 import { PODIUM } from '@/utils/constants'
 import { twMerge } from 'tailwind-merge'
 
+import { Variants, motion } from 'framer-motion'
+
 import type { WinnerUser } from '@/types/user'
 
 import RewardShinning from '../../../../../../../../public/animations/reward-shinning.json'
 
 const BASE_HEIGHT = 480 // px
+const BASE_DELAY = 0.8 // s
 
 const ICON_ALTS = {
   '1st': 'Primeiro lugar',
@@ -26,17 +29,54 @@ export function WinnerUser({
 }: WinnerUserProps) {
   const place = PODIUM.find((place) => place.position === position)
 
+  const delay = place ? BASE_DELAY * place.position - 1 : BASE_DELAY
+
+  const avatarVariants: Variants = {
+    hidden: {
+      opacity: 0,
+      y: 64,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: 2,
+        duration: 0.4,
+      },
+    },
+  }
+
+  const podiumVariants: Variants = {
+    hidden: {
+      height: place ? BASE_HEIGHT - 40 * place.position - 1 : BASE_HEIGHT,
+    },
+    visible: {
+      height: 0,
+      transition: {
+        delay: place ? BASE_DELAY * place.position - 1 : BASE_DELAY,
+        duration: 0.6,
+      },
+    },
+  }
+
   if (place)
     return (
       <div
         className={twMerge('flex flex-col w-48 ')}
-        style={{ height: BASE_HEIGHT - 40 * place.position - 1 }}
+        style={{
+          height: place ? BASE_HEIGHT - 40 * place.position - 1 : BASE_HEIGHT,
+        }}
       >
-        <div className="relative flex flex-col items-center justify-center gap-1">
+        <motion.div
+          variants={avatarVariants}
+          initial="hidden"
+          animate="visible"
+          className="relative flex flex-col items-center justify-center gap-1 h-64"
+        >
           {position === 1 && (
             <Lottie
               animationData={RewardShinning}
-              style={{ position: 'absolute', top: -40, width: 140 }}
+              style={{ position: 'absolute', top: -24, width: 140 }}
               loop={true}
             />
           )}
@@ -50,20 +90,27 @@ export function WinnerUser({
             height={24}
             alt={ICON_ALTS[place.order]}
           />
-        </div>
+        </motion.div>
 
         <div
           className={twMerge(
-            'w-full flex flex-col items-center justify-center my-auto px-3 mt-3 h-full bg-yellow-800',
+            'relative w-full flex flex-col items-center justify-center my-auto px-3 mt-3 h-full bg-yellow-800',
             place.bgColor
           )}
         >
-          <span className="font-medium text-lg text-gray-100 bg-green-800 w-16 h-12 grid place-content-center rounded-md">
+          <motion.span
+            variants={podiumVariants}
+            initial="hidden"
+            animate="visible"
+            className="bg-gray-900 z-30 top-0 w-full absolute"
+          ></motion.span>
+
+          <span className="font-medium text-lg text-gray-100 bg-green-800 shadow-sm w-16 h-12 grid place-content-center rounded-md">
             {place.order}
           </span>
           <span
             className={twMerge(
-              'uppercase text-gray-100 font-semibold rounded p-1',
+              'uppercase text-gray-100 font-medium rounded p-1',
               place.bgColor
             )}
           >

@@ -17,7 +17,6 @@ export function WinnerUsersList({
   isAuthUserWinner,
   lastRankingPosition,
 }: WinnerUsersListProps) {
-  console.log(winnerUsers.length)
 
   return (
     <div>

@@ -114,13 +114,12 @@ export default function Ranking() {
     }
 
     const timer = setTimeout(() => {
+      console.log('oi')
       setIsLoading(false)
     }, 1500)
 
     return () => clearTimeout(timer)
   }, [user, isLoading, rankings, currentRanking, badgesListRef])
-
-  console.log(winnerUsers)
 
   return (
     <div className="mt-10 w-screen max-w-5xl md:mx-auto pb-6">
@@ -128,7 +127,7 @@ export default function Ranking() {
 
       {user && rankedUsers && rankings && currentRanking && (
         <>
-          {winnerUsers.length > 0 && !isLoading ? (
+          {user.did_update_ranking || winnerUsers.length > 0 || !isLoading ? (
             <WinnerUsersList
               winnerUsers={winnerUsers}
               currentRanking={currentRanking}

@@ -21,7 +21,7 @@ export function Loading({ isSmall = true }: LoadingProps) {
   }
 
   return (
-    <div className="fixed flex items-center justify-center top-0 left-0 right-0 bottom-0 bg-gray-900 z-30">
+    <div className="fixed flex items-center justify-center top-0 left-0 right-0 bottom-0 bg-gray-900 z-50">
       <Lottie
         animationData={Rocket}
         style={{ width: size, height: size }}
