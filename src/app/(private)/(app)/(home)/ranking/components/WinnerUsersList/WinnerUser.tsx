@@ -60,7 +60,7 @@ export function WinnerUser({
   if (place)
     return (
       <div
-        className={twMerge('flex flex-col w-48 ')}
+        className={twMerge('flex flex-col w-48 relative')}
         style={{
           height: place ? BASE_HEIGHT - 40 * place.position - 1 : BASE_HEIGHT,
         }}
@@ -69,10 +69,10 @@ export function WinnerUser({
           variants={avatarVariants}
           initial="hidden"
           animate="visible"
-          className="relative flex flex-col items-center justify-center gap-1 h-72"
+          className="flex flex-col items-center justify-center gap-1 h-72"
         >
           {position === 1 && (
-            <span className="absolute -top-[18%] left-[28px]">
+            <span className="absolute -top-[6%] -left-[4%] md:left-[13.5%]">
               <ShinningAnimation size={140} />
             </span>
           )}

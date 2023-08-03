@@ -114,7 +114,7 @@ export default function Ranking() {
   }, [user, isLoading, rankings, currentRanking, badgesListRef])
 
   return (
-    <div className="mt-6 w-screen max-w-5xl md:mx-auto pb-6">
+    <div className="mt-6 w-screen px-6 md:px-0 max-w-5xl md:mx-auto pb-6">
       {isLoading && <Loading isSmall={false} />}
 
       {user && rankedUsers && rankings && currentRanking && (
@@ -133,7 +133,7 @@ export default function Ranking() {
 
               <div className="flex flex-col items-center justify-center gap-3 mt-6">
                 <p className="font-medium text-gray-100 text-center">
-                  Os 5 primeiros avançam para o próximo ranking
+                  Os 5 primeiros avançam para o próximo ranking.
                 </p>
 
                 <strong className="text-center text-green-400">

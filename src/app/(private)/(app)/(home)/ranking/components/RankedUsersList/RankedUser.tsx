@@ -39,8 +39,9 @@ export function RankedUser({
   const isInSafeArea = position <= 5
   const isInDangerArea = position > lastPositionsOffset
 
-  const icon =
-    isInPodium && PODIUM.find((place) => place.position === position)?.icon
+  const icon = isInPodium
+    ? PODIUM.find((place) => place.position === position)?.icon
+    : ''
 
   const color = isInSafeArea ? 'safe' : isInDangerArea ? 'danger' : 'neutral'
 

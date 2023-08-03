@@ -58,9 +58,6 @@ export function WinnerUsersList({
   const successModal = useRef<ModalRef>(null)
   const failModal = useRef<ModalRef>(null)
 
-  console.log(isAuthUserWinner)
-  console.log(user?.last_position)
-
   const rankingImage = getImage('rankings', currentRanking.image)
 
   async function handleWinnerUserListButtonClick() {
@@ -105,7 +102,7 @@ export function WinnerUsersList({
   }
 
   return (
-    <div>
+    <div className="">
       <h3 className="text-center text-lg text-gray-100 font-semibold">
         Resultado da semana
       </h3>
