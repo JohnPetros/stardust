@@ -2,15 +2,16 @@
 import { useEffect, useRef } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 
+import Image from 'next/image'
 import { Modal, ModalRef } from '@/app/components/Modal'
 import { Button } from '@/app/components/Button'
+import { ShinningAnimation } from '../../../components/ShinningAnimation'
 import { WinnerUser } from './WinnerUser'
 
 import { getImage, playSound } from '@/utils/functions'
 
 import type { Ranking } from '@/types/ranking'
 import type { WinnerUser as WinnerUserType } from '@/types/user'
-import Image from 'next/image'
 
 interface WinnerUsersListProps {
   winnerUsers: WinnerUserType[]
@@ -57,6 +58,7 @@ export function WinnerUsersList({
   const failModal = useRef<ModalRef>(null)
 
   console.log(isAuthUserWinner)
+  console.log(user?.last_position)
 
   const rankingImage = getImage('rankings', currentRanking.image)
 
@@ -82,11 +84,17 @@ export function WinnerUsersList({
   }
 
   function handleModalButtonPress(type: 'reward' | 'success' | 'fail') {
+    console.log(currentRanking.position === lastRankingPosition)
+
     if (type === 'reward') {
       rewardModal.current?.close()
-      currentRanking.position === lastRankingPosition
-        ? handleModalButtonPress('success')
-        : successModal.current?.open()
+      const hasNextRanking = currentRanking.position !== lastRankingPosition
+
+      console.log(hasNextRanking)
+
+      hasNextRanking
+        ? successModal.current?.open()
+        : handleModalButtonPress('success')
       return
     }
 
@@ -120,15 +128,61 @@ export function WinnerUsersList({
         title={'Recompensa resgatada!'}
         body={
           <div className="">
-            <p>
-              Parabéns! Você acabou de ganhar
-              <span>{rewardByLastPosition}</span> de poeira estela por ter
-              ficado em os três primeiros
+            <p className="text-center text-green-100 mt-3">
+              Parabéns! Você acabou de ganhar{' '}
+              <span className="text-lg text-green-500 font-medium">
+                {rewardByLastPosition}
+              </span>{' '}
+              de poeira estela por ter ficado em os três primeiros.
             </p>
           </div>
         }
         footer={
-          <Button onClick={() => handleModalButtonPress('reward')}>
+          <Button
+            onClick={() => handleModalButtonPress('reward')}
+            className="mt-6"
+          >
+            Entendido
+          </Button>
+        }
+        canPlaySong={false}
+      />
+
+      <Modal
+        ref={successModal}
+        type={'earning'}
+        title={'Novo ranking!'}
+        body={
+          <div className="flex flex-col items-center justify-center gap-6">
+            <p className="text-center text-gray-100 mt-3">
+              Parabéns! Você acaba de chegar no ranking:
+              <br />
+              <span className="text-lg text-green-500 font-medium">
+                {currentRanking.name}
+              </span>
+            </p>
+
+            <div className="relative">
+              <span className="absolute -top-10 -left-7 z-0">
+                <ShinningAnimation size={140} />
+              </span>
+
+              <div className="z-[60]">
+                <Image
+                  src={rankingImage}
+                  width={80}
+                  height={80}
+                  alt={currentRanking.name}
+                />
+              </div>
+            </div>
+          </div>
+        }
+        footer={
+          <Button
+            onClick={() => handleModalButtonPress('success')}
+            className="mt-6"
+          >
             Entendido
           </Button>
         }
