@@ -70,7 +70,7 @@ export function RankedUser({
         {name}
       </strong>
 
-      <strong className="text-gray-600 uppercase block w-12 group-hover:text-gray-100/90">
+      <strong className="text-gray-600 uppercase block w-24 text-right group-hover:text-gray-100/90">
         {weekly_xp} xp
       </strong>
     </Link>
