@@ -12,7 +12,7 @@ import { Avatar } from '@/types/avatar'
 import { getImage, playSound } from '@/utils/functions'
 import { twMerge } from 'tailwind-merge'
 
-import RewardLight from '../../../../../../../public/animations/reward-shinning-animation.json'
+import RewardShinning from '../../../../../../../public/animations/reward-shinning.json'
 
 import Lottie from 'lottie-react'
 
@@ -161,7 +161,7 @@ export function Avatar({
           <div className="relative flex flex-col items-center justify-center">
             <span className="absolute -top-8 left-25">
               <Lottie
-                animationData={RewardLight}
+                animationData={RewardShinning}
                 loop={true}
                 style={{ width: 240 }}
               />
