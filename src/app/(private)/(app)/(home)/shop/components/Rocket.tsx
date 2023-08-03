@@ -13,7 +13,7 @@ import { twMerge } from 'tailwind-merge'
 import { Variants, motion } from 'framer-motion'
 import { Modal, ModalRef } from '@/app/components/Modal'
 
-import RewardLight from '../../../../../../../public/animations/reward-shinning-animation.json'
+import RewardLight from '../../../../../../../public/animations/reward-shinning.json'
 
 import Lottie from 'lottie-react'
 import { ToastRef } from '@/app/components/Toast'
