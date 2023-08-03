@@ -25,6 +25,7 @@ interface RankedUserProps {
   position: number
   lastPositionsOffset: number
   isAuthUser: boolean
+  canShowXp?: boolean
 }
 
 export function RankedUser({
@@ -32,6 +33,7 @@ export function RankedUser({
   position,
   lastPositionsOffset,
   isAuthUser,
+  canShowXp = true,
 }: RankedUserProps) {
   const isInPodium = position <= 3
   const isInSafeArea = position <= 5
@@ -71,7 +73,7 @@ export function RankedUser({
       </strong>
 
       <strong className="text-gray-600 uppercase block w-24 text-right group-hover:text-gray-100/90">
-        {weekly_xp} xp
+        {canShowXp && weekly_xp + ' xp'}
       </strong>
     </Link>
   )

@@ -7,6 +7,7 @@ import { Modal, ModalRef } from '@/app/components/Modal'
 import { Button } from '@/app/components/Button'
 import { ShinningAnimation } from '../../../components/ShinningAnimation'
 import { WinnerUser } from './WinnerUser'
+import { RankedUser } from '../RankedUsersList/RankedUser'
 
 import { getImage, playSound } from '@/utils/functions'
 
@@ -76,7 +77,7 @@ export function WinnerUsersList({
 
     if (user?.is_loser) {
       failModal.current?.open()
-      // await updateUser({ is_loser: false })
+      await updateUser({ is_loser: false })
       return
     }
 
@@ -121,6 +122,27 @@ export function WinnerUsersList({
       >
         Continuar
       </Button>
+
+      {user?.last_position && !isAuthUserWinner ? (
+        <div className="mt-6 max-w-lg mx-auto">
+          <p className="text-gray-100 font-medium text-center mb-3">
+            Que pena! Você ficou na {user?.last_position}º no ranking da última
+            semana.
+          </p>
+          <RankedUser
+            data={user}
+            position={user?.last_position}
+            isAuthUser={true}
+            lastPositionsOffset={16}
+            canShowXp={false}
+          />
+        </div>
+      ) : (
+        <p className="text-gray-100 font-medium text-center mt-6">
+          Parabéns! Você ficou na {user?.last_position}º no ranking da última
+          semana 🎉!
+        </p>
+      )}
 
       <Modal
         ref={rewardModal}
