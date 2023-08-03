@@ -15,7 +15,7 @@ import { X } from '@phosphor-icons/react'
 import { MODAL_EFFECTS } from '@/utils/constants'
 import { playSound } from '@/utils/functions'
 
-export type Type = 'earning' | 'crying' | 'denying' | 'asking' | 'generic'
+type ModalType = 'earning' | 'crying' | 'denying' | 'asking' | 'generic'
 
 const modalVariants: Variants = {
   close: {
@@ -34,7 +34,7 @@ export interface ModalRef {
 }
 
 interface ModalProps {
-  type: Type
+  type: ModalType
   canPlaySong?: boolean
   title: string
   body: ReactNode
@@ -88,16 +88,10 @@ export const Modal = forwardRef<ModalRef, ModalProps>(
                 animate="open"
                 className="rounded-lg bg-gray-800 p-6 border border-gray-700"
               >
-                <div className="flex items-start border-b border-gray-700 pb-2">
-                  <Dialog.Title className="font-semibold text-white text-center flex items-center justify-center">
+                <div className="flex items-center border-b border-gray-700 pb-2">
+                  <Dialog.Title className="mx-auto font-semibold text-white text-center flex items-center justify-center">
                     {title}
                   </Dialog.Title>
-                  <Dialog.Close
-                    onClick={close}
-                    className="p-2 hover:bg-gray-700 transition-colors duration-200 rounded-full"
-                  >
-                    <X className="text-gray-500" weight="bold" />
-                  </Dialog.Close>
                 </div>
                 <div className="flex justify-center mt-3">
                   <Lottie
