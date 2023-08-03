@@ -9,7 +9,7 @@ import { Variants, motion } from 'framer-motion'
 
 import type { WinnerUser } from '@/types/user'
 
-import RewardShinning from '../../../../../../../../public/animations/reward-shinning.json'
+import { ShinningAnimation } from '../../../components/ShinningAnimation'
 
 const BASE_HEIGHT = 480 // px
 const BASE_DELAY = 0.8 // s
@@ -72,11 +72,9 @@ export function WinnerUser({
           className="relative flex flex-col items-center justify-center gap-1 h-72"
         >
           {position === 1 && (
-            <Lottie
-              animationData={RewardShinning}
-              style={{ position: 'absolute', top: -24, width: 140 }}
-              loop={true}
-            />
+            <span className="absolute -top-[18%] left-[28px]">
+              <ShinningAnimation size={140} />
+            </span>
           )}
           <UserAvatar avatarId={avatar_id} size={70} />
           <strong className="text-lg font-medium text-gray-100 text-center mx-auto">
@@ -103,7 +101,7 @@ export function WinnerUser({
             className="bg-gray-900 z-30 top-0 bottom-0 w-full h-full absolute"
           />
 
-          <span className="font-medium uppercase text-lg text-gray-100 bg-green-800 shadow-sm w-16 h-12 grid place-content-center rounded-md">
+          <span className="font-medium uppercase text-lg text-gray-100 bg-green-800 shadow-sm w-20 h-12 grid place-content-center rounded-md">
             {xp} xp
           </span>
         </div>
