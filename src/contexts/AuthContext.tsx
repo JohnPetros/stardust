@@ -10,7 +10,7 @@ import { api } from '@/services/api'
 import type { User } from '@/types/user'
 
 interface AuthContextValue {
-  user: User | null | undefined
+  user: User | null
   error: unknown
   isLoading: boolean
   signIn: (email: string, password: string) => Promise<string | null>
@@ -152,7 +152,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
   // }, [supabase, serverSession?.access_token])
 
   const value: AuthContextValue = {
-    user,
+    user: user ?? null,
     error,
     isLoading,
     signIn,
