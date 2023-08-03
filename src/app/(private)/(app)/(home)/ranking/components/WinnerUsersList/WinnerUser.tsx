@@ -29,8 +29,6 @@ export function WinnerUser({
 }: WinnerUserProps) {
   const place = PODIUM.find((place) => place.position === position)
 
-  const delay = place ? BASE_DELAY * place.position - 1 : BASE_DELAY
-
   const avatarVariants: Variants = {
     hidden: {
       opacity: 0,
@@ -41,7 +39,7 @@ export function WinnerUser({
       y: 0,
       transition: {
         delay: 2,
-        duration: 0.4,
+        duration: 0.2,
       },
     },
   }
@@ -54,7 +52,7 @@ export function WinnerUser({
       height: 0,
       transition: {
         delay: place ? BASE_DELAY * place.position - 1 : BASE_DELAY,
-        duration: 0.6,
+        duration: 0.5,
       },
     },
   }
@@ -71,7 +69,7 @@ export function WinnerUser({
           variants={avatarVariants}
           initial="hidden"
           animate="visible"
-          className="relative flex flex-col items-center justify-center gap-1 h-64"
+          className="relative flex flex-col items-center justify-center gap-1 h-72"
         >
           {position === 1 && (
             <Lottie
@@ -86,15 +84,15 @@ export function WinnerUser({
           </strong>
           <Image
             src={`/icons/${place.icon}`}
-            width={24}
-            height={24}
+            width={32}
+            height={32}
             alt={ICON_ALTS[place.order]}
           />
         </motion.div>
 
         <div
           className={twMerge(
-            'relative w-full flex flex-col items-center justify-center my-auto px-3 mt-3 h-full bg-yellow-800',
+            'relative w-full flex flex-col items-center justify-center my-auto px-3 mt-3 h-full bg-yellow-800 overflow-hidden',
             place.bgColor
           )}
         >
@@ -102,18 +100,10 @@ export function WinnerUser({
             variants={podiumVariants}
             initial="hidden"
             animate="visible"
-            className="bg-gray-900 z-30 top-0 w-full absolute"
-          ></motion.span>
+            className="bg-gray-900 z-30 top-0 bottom-0 w-full h-full absolute"
+          />
 
-          <span className="font-medium text-lg text-gray-100 bg-green-800 shadow-sm w-16 h-12 grid place-content-center rounded-md">
-            {place.order}
-          </span>
-          <span
-            className={twMerge(
-              'uppercase text-gray-100 font-medium rounded p-1',
-              place.bgColor
-            )}
-          >
+          <span className="font-medium uppercase text-lg text-gray-100 bg-green-800 shadow-sm w-16 h-12 grid place-content-center rounded-md">
             {xp} xp
           </span>
         </div>
