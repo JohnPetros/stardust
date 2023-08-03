@@ -10,60 +10,149 @@ import { RankedUsersList } from './components/RankedUsersList'
 import { BadgesList } from './components/BadgesList'
 
 import dayjs from 'dayjs'
+import { api } from '@/services/api'
+
+import type { Ranking } from '@/types/ranking'
+import type { WinnerUser } from '@/types/user'
+import { WinnerUsersList } from './components/WinnerUsersList'
 
 const today = dayjs().day()
 const sunday = 0
 const restDays = today === sunday ? 7 : 7 - today
 
 export default function Ranking() {
-  const { user } = useAuth()
+  const { user, updateUser } = useAuth()
   const { ranking: currentRanking, rankings } = useRanking(
     user?.ranking_id,
     true
   )
 
-  const { users } = useRankedUsers(user?.ranking_id ?? '')
+  const { rankedUsers } = useRankedUsers(user?.ranking_id ?? '')
 
-  const [isFirstRendering, setIsFirstRendering] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
+  const [winnerUsers, setWinnerUsers] = useState<WinnerUser[]>([])
 
   const badgesListRef = useRef<HTMLDivElement>(null)
 
-  console.log(users)
-  console.log(rankings)
+  const lastRankingPosition = rankings?.length ?? 0
+  const isAuthUserWinner = !!user?.last_position && user.last_position <= 5
 
+  function getLastRankingPosition() {
+    if (!currentRanking || !rankings || !user) return 0
+
+    if (isAuthUserWinner && currentRanking.position !== lastRankingPosition) {
+      return currentRanking.position - 1
+    } else if (user.is_loser) {
+      return currentRanking.position + 1
+    } else {
+      return currentRanking.position
+    }
+  }
+
+  function sortWinnerUsers(winnersUsers: WinnerUser[]) {
+    return winnersUsers.sort((a: WinnerUser, b: WinnerUser) => {
+      if (a.position === 2) {
+        return -1
+      }
+      if (a.position === 1) {
+        return b.position === 2 ? 1 : -1
+      }
+      if (a.position === 3) {
+        return b.position === 2 || b.position === 1 ? 1 : -1
+      }
+
+      return 1
+    })
+  }
+
+  async function showWinners() {
+    console.log(!currentRanking || !rankings || !user)
+    console.log(!currentRanking)
+
+    if (!currentRanking || !rankings || !user) return
+
+    console.log(!currentRanking || !rankings || !user)
+
+    try {
+      const lastWeekRankingPosition = getLastRankingPosition()
+
+      const lastWeekRanking = rankings.find(
+        (ranking) => ranking.position === lastWeekRankingPosition
+      )!
+
+      console.log(lastWeekRanking)
+
+      const winnersUsers = await api.getWinnerUsers(lastWeekRanking.id)
+
+      const sortedWinnerUsers = sortWinnerUsers(winnersUsers)
+
+      console.log(sortedWinnerUsers.length)
+
+      console.log(sortedWinnerUsers.length)
+
+      setWinnerUsers(sortedWinnerUsers)
+
+      // await updateUser({ did_update_ranking: false })
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setTimeout(() => setIsLoading(false), 2000)
+    }
+  }
 
   useEffect(() => {
-    if (!rankings?.length && badgesListRef.current && !isFirstRendering) return
+    console.log(user?.did_update_ranking)
+
+    if (user?.did_update_ranking) {
+      showWinners()
+      setIsLoading(false)
+      return
+    }
+
+    if (!rankings?.length && badgesListRef.current && !isLoading) {
+      return
+    }
 
     const timer = setTimeout(() => {
-      setIsFirstRendering(false)
+      setIsLoading(false)
     }, 1500)
 
     return () => clearTimeout(timer)
-  }, [rankings, badgesListRef])
+  }, [user, isLoading, rankings, currentRanking, badgesListRef])
+
+  console.log(winnerUsers)
 
   return (
     <div className="mt-10 w-screen max-w-5xl md:mx-auto pb-6">
-      {isFirstRendering && <Loading isSmall={false} />}
+      {isLoading && <Loading isSmall={false} />}
 
-      {user && users && rankings && currentRanking && (
+      {user && rankedUsers && rankings && currentRanking && (
         <>
-          <BadgesList
-            rankings={rankings}
-            currentRanking={currentRanking}
-          />
+          {winnerUsers.length > 0 && !isLoading ? (
+            <WinnerUsersList
+              winnerUsers={winnerUsers}
+              currentRanking={currentRanking}
+              setWinnerUsers={setWinnerUsers}
+              isAuthUserWinner={isAuthUserWinner}
+              lastRankingPosition={lastRankingPosition}
+            />
+          ) : (
+            <>
+              <BadgesList rankings={rankings} currentRanking={currentRanking} />
 
-          <div className="flex flex-col items-center justify-center gap-3 mt-6">
-            <p className="font-medium text-gray-100 text-center">
-              Os 5 primeiros avançam para o próximo ranking
-            </p>
+              <div className="flex flex-col items-center justify-center gap-3 mt-6">
+                <p className="font-medium text-gray-100 text-center">
+                  Os 5 primeiros avançam para o próximo ranking
+                </p>
 
-            <strong className="text-center text-green-400">
-              {restDays + (restDays === 1 ? ' dia' : ' dias')}
-            </strong>
-          </div>
+                <strong className="text-center text-green-400">
+                  {restDays + (restDays === 1 ? ' dia' : ' dias')}
+                </strong>
+              </div>
 
-          <RankedUsersList users={users} authUserId={user.id} />
+              <RankedUsersList rankedUsers={rankedUsers} authUserId={user.id} />
+            </>
+          )}
         </>
       )}
     </div>
