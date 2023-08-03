@@ -1,12 +1,13 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
-import type { User as UserType } from '@/types/user'
-
-import { PODIUM } from '@/utils/constants'
 import { UserAvatar } from '../../../components/UserAvatar'
+
 import { tv } from 'tailwind-variants'
 import { twMerge } from 'tailwind-merge'
-import Link from 'next/link'
+
+import { PODIUM } from '@/utils/constants'
+import type { User as UserType } from '@/types/user'
 
 const positionStyles = tv({
   base: 'font-semibold p-2 w-12 grid place-content-center group-hover:text-gray-100/90',
@@ -19,7 +20,7 @@ const positionStyles = tv({
   },
 })
 
-interface UserProps {
+interface RankedUserProps {
   data: UserType
   position: number
   lastPositionsOffset: number
@@ -31,7 +32,7 @@ export function RankedUser({
   position,
   lastPositionsOffset,
   isAuthUser,
-}: UserProps) {
+}: RankedUserProps) {
   const isInPodium = position <= 3
   const isInSafeArea = position <= 5
   const isInDangerArea = position > lastPositionsOffset
