@@ -37,6 +37,8 @@ export default function Ranking() {
   const lastRankingPosition = rankings?.length ?? 0
   const isAuthUserWinner = !!user?.last_position && user.last_position <= 5
 
+  console.log(isAuthUserWinner)
+
   function getLastRankingPosition() {
     if (!currentRanking || !rankings || !user) return 0
 
@@ -71,8 +73,6 @@ export default function Ranking() {
 
     if (!currentRanking || !rankings || !user) return
 
-    console.log(!currentRanking || !rankings || !user)
-
     try {
       const lastWeekRankingPosition = getLastRankingPosition()
 
@@ -86,26 +86,19 @@ export default function Ranking() {
 
       const sortedWinnerUsers = sortWinnerUsers(winnersUsers)
 
-      console.log(sortedWinnerUsers.length)
-
-      console.log(sortedWinnerUsers.length)
-
       setWinnerUsers(sortedWinnerUsers)
 
       // await updateUser({ did_update_ranking: false })
     } catch (error) {
       console.error(error)
     } finally {
-      setTimeout(() => setIsLoading(false), 2000)
+      setIsLoading(false)
     }
   }
 
   useEffect(() => {
-    console.log(user?.did_update_ranking)
-
     if (user?.did_update_ranking) {
       showWinners()
-      setIsLoading(false)
       return
     }
 
@@ -114,7 +107,6 @@ export default function Ranking() {
     }
 
     const timer = setTimeout(() => {
-      console.log('oi')
       setIsLoading(false)
     }, 1500)
 
@@ -122,12 +114,12 @@ export default function Ranking() {
   }, [user, isLoading, rankings, currentRanking, badgesListRef])
 
   return (
-    <div className="mt-10 w-screen max-w-5xl md:mx-auto pb-6">
+    <div className="mt-6 w-screen max-w-5xl md:mx-auto pb-6">
       {isLoading && <Loading isSmall={false} />}
 
       {user && rankedUsers && rankings && currentRanking && (
         <>
-          {user.did_update_ranking || winnerUsers.length > 0 || !isLoading ? (
+          {user.did_update_ranking && winnerUsers.length > 0 && !isLoading ? (
             <WinnerUsersList
               winnerUsers={winnerUsers}
               currentRanking={currentRanking}
