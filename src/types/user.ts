@@ -25,3 +25,13 @@ export type User = {
   weekly_xp: number
   xp: number
 }
+
+export type WinnerUser = {
+  id: string
+  user_id: string
+  name: string
+  position: number
+  xp: number
+  avatar_id: string
+  ranking_id: string
+}
