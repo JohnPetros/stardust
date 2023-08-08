@@ -37,8 +37,6 @@ export default function Ranking() {
   const lastRankingPosition = rankings?.length ?? 0
   const isAuthUserWinner = !!user?.last_position && user.last_position <= 5
 
-  console.log(isAuthUserWinner)
-
   function getLastRankingPosition() {
     if (!currentRanking || !rankings || !user) return 0
 
@@ -68,9 +66,6 @@ export default function Ranking() {
   }
 
   async function showWinners() {
-    console.log(!currentRanking || !rankings || !user)
-    console.log(!currentRanking)
-
     if (!currentRanking || !rankings || !user) return
 
     try {
@@ -80,15 +75,13 @@ export default function Ranking() {
         (ranking) => ranking.position === lastWeekRankingPosition
       )!
 
-      console.log(lastWeekRanking)
-
       const winnersUsers = await api.getWinnerUsers(lastWeekRanking.id)
 
       const sortedWinnerUsers = sortWinnerUsers(winnersUsers)
 
       setWinnerUsers(sortedWinnerUsers)
 
-      // await updateUser({ did_update_ranking: false })
+      await updateUser({ did_update_ranking: false })
     } catch (error) {
       console.error(error)
     } finally {
