@@ -1,11 +1,14 @@
 'use client'
 
+import { useEffect, useRef, useState } from 'react'
+
 import { Button } from '@/app/components/Button'
 import { Text } from '@/app/components/Text'
-import { Text as TextData } from '@/types/text'
-import { useEffect, useRef, useState } from 'react'
 import { Star } from './Star'
+
 import { theory } from '@/utils/templates/planets/planet1/star1/theory'
+
+import type { Text as TextData } from '@/types/text'
 
 interface TheoryProps {
   title: string
@@ -14,7 +17,6 @@ interface TheoryProps {
 
 export function Theory({ title, number }: TheoryProps) {
   const [texts, setTexts] = useState<TextData[]>([])
-  console.log(texts)
 
   const nextTextIndex = useRef(0)
   nextTextIndex.current
@@ -26,7 +28,6 @@ export function Theory({ title, number }: TheoryProps) {
 
     scrollToEnd()
 
-    // setNextTextIndex((index) => index + 1)
     nextTextIndex.current = nextTextIndex.current + 1
 
     setTexts(() => {
@@ -42,7 +43,7 @@ export function Theory({ title, number }: TheoryProps) {
   }
 
   useEffect(() => {
-    setTexts([{ ...theory[0], hasAnimation: true }])
+    setTexts([{ ...theory[0], hasAnimation: false }])
   }, [])
 
   return (
@@ -52,7 +53,7 @@ export function Theory({ title, number }: TheoryProps) {
           <Star number={number} />
           <h1 className="uppercase text-xl text-gray-100 font-bold">{title}</h1>
         </div>
-        <div className="space-y-10 mt-12">
+        <div className="space-y-10 mt-12 pb-[360px]">
           {texts.map((text) => (
             <Text data={text} hasAnimation={text.hasAnimation} />
           ))}

@@ -1,6 +1,9 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
+
 import Image from 'next/image'
+import { TypeWritter } from './TypeWritter'
 
 import { getImage } from '@/utils/functions'
 
@@ -9,7 +12,6 @@ import { Variants, motion } from 'framer-motion'
 import { tv } from 'tailwind-variants'
 
 import type { Text as TextData } from '@/types/text'
-import { TypeWritter } from './TypeWritter'
 
 const textAnimations: Variants = {
   hidden: {
@@ -53,10 +55,17 @@ export function Text({
   data: { type, content, picture },
   hasAnimation,
 }: TextProps) {
+  const textRef = useRef<HTMLDivElement>(null)
   const textImage = picture ? getImage('texts', picture) : ''
+
+  useEffect(() => {
+    if (hasAnimation && textRef.current)
+      textRef.current.scrollIntoView({ behavior: 'smooth' })
+  }, [])
 
   return (
     <motion.div
+      ref={textRef}
       variants={textAnimations}
       initial={hasAnimation && 'hidden'}
       animate={hasAnimation && 'visible'}
