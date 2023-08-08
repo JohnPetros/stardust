@@ -77,7 +77,9 @@ export function Text({
         </div>
       )}
       <div className={textStyles({ type })}>
-        {!Array.isArray(content) && <TypeWritter>{content}</TypeWritter>}
+        {!Array.isArray(content) && (
+          <TypeWritter canType={!!hasAnimation}>{content}</TypeWritter>
+        )}
       </div>
     </motion.div>
   )
