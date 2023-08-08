@@ -19,7 +19,7 @@ export function ProgressBar({ value, height, indicatorImage }: ProgessProps) {
         style={{ width: `${value}%` }}
       />
 
-      <div className="relative w-6 h-6 rotate-90 -ml-1 -mt-1">
+      <div className="relative w-8 h-8 rotate-90 -ml-1 -mt-2">
         {indicatorImage && <Image src={indicatorImage} fill alt="" />}
       </div>
     </Progress.Root>
