@@ -8,6 +8,7 @@ import { Theory } from '../components/Theory'
 import { TransitionPageAnimation } from '../../components/TransitionPageAnimation'
 
 import type { Star } from '@/types/star'
+import { Header } from '../components/Header'
 
 export default function Lesson() {
   const { starId } = useParams()
@@ -25,7 +26,10 @@ export default function Lesson() {
   return (
     <div>
       <TransitionPageAnimation isVisible={isTransitionVisible} />
-      {star && <Theory title={star.name} number={star?.number} />}
+      <main className="relative">
+        <Header />
+        {star && <Theory title={star.name} number={star?.number} />}
+      </main>
     </div>
   )
 }
