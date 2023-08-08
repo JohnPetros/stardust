@@ -9,15 +9,18 @@ import { Variants, motion } from 'framer-motion'
 import { tv } from 'tailwind-variants'
 
 import type { Text as TextData } from '@/types/text'
+import { TypeWritter } from './TypeWritter'
 
 const textAnimations: Variants = {
   hidden: {
     opacity: 0,
     y: 24,
+    scale: 0.99,
   },
   visible: {
     opacity: 1,
     y: 0,
+    scale: 1,
     transition: {
       delay: 0.1,
       duration: 0.3,
@@ -51,7 +54,6 @@ export function Text({
   hasAnimation,
 }: TextProps) {
   const textImage = picture ? getImage('texts', picture) : ''
-  console.log(hasAnimation)
 
   return (
     <motion.div
@@ -65,7 +67,9 @@ export function Text({
           <Image src={textImage} fill alt="Panda" />
         </div>
       )}
-      <div className={textStyles({ type })}>{content}</div>
+      <div className={textStyles({ type })}>
+        {!Array.isArray(content) && <TypeWritter>{content}</TypeWritter>}
+      </div>
     </motion.div>
   )
 }
