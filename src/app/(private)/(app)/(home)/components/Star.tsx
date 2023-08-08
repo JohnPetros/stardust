@@ -1,15 +1,20 @@
 'use client'
 import { useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import { useSpace } from '@/hooks/useSpace'
 
 import Image from 'next/image'
 import Lottie, { LottieRef } from 'lottie-react'
 import { Variants, motion } from 'framer-motion'
 
-import { Star } from '@/types/star'
 import { twMerge } from 'tailwind-merge'
 
 import UnlockedStar from '../../../../../../public/animations/unlocked-star.json'
+
+import { api } from '@/services/api'
+
+import type { Star } from '@/types/star'
+import { Toast, ToastRef } from '@/app/components/Toast'
 
 const starLight = '0 0 12px #ffcf31a1'
 
@@ -48,18 +53,39 @@ interface StarProps {
 }
 
 export function Star({
-  data: { name, number, isChallenge, isUnlocked },
+  data: { id, name, number, isChallenge, isUnlocked },
   isLastUnlockedStar,
 }: StarProps) {
   const { rocketImage, rocketName } = useSpace()
   const starRef = useRef(null) as LottieRef
+  const toastRef = useRef<ToastRef>(null)
+  const router = useRouter()
+
+  async function handleStarNavigation() {
+    if (isChallenge) {
+      try {
+        const challengeId = await api.getChallengeId(id)
+        router.push('/challenges/' + challengeId)
+      } catch (error) {
+        console.log(error)
+        toastRef.current?.open({ type: 'error', message: 'Falha ao tentar acessar o desafio' })
+      }
+    } else {
+      router.push('/lesson/' + id)
+    }
+  }
 
   function handleStarClick() {
     starRef.current?.goToAndPlay(0)
+
+    setTimeout(() => {
+      handleStarNavigation()
+    }, 50)
   }
 
   return (
     <li>
+      <Toast ref={toastRef} />
       <div className="mx-8">
         <Image
           src={`/images/${
