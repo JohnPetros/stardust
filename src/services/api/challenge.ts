@@ -52,6 +52,19 @@ export default {
     return data
   },
 
+  getChallengeId: async (starId: string) => {
+    const { data, error } = await supabase
+      .from('challenges')
+      .select('id')
+      .eq('star_id', starId)
+
+    if (error) {
+      throw new Error(error.message)
+    }
+
+    return data
+  },
+
   getUserCompletedChallengesIds: async (userId: string) => {
     const { data, error } = await supabase
       .from('users_completed_challenges')
