@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { useStar } from '@/hooks/useStar'
 
@@ -16,11 +16,18 @@ export default function Lesson() {
 
   const { star, getNextStar } = useStar(String(starId))
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (star) {
+      setTimeout(() => setIsTransitionVisible(false), 1000)
+    }
+  }, [star])
 
   return (
     <div>
       <TransitionPageAnimation isVisible={isTransitionVisible} />
-      <main className="relative">
+      <main ref={scrollRef} className="relative">
         <Header />
         {star && <Theory title={star.name} number={star?.number} />}
       </main>

@@ -21,12 +21,8 @@ export function Theory({ title, number }: TheoryProps) {
   const nextTextIndex = useRef(0)
   nextTextIndex.current
 
-  function scrollToEnd() {}
-
-  function handleContinueButton() {
+  function nextText() {
     if (!theory[nextTextIndex.current]) return
-
-    scrollToEnd()
 
     nextTextIndex.current = nextTextIndex.current + 1
 
@@ -42,9 +38,24 @@ export function Theory({ title, number }: TheoryProps) {
     })
   }
 
+  function handleContinueButtonClick() {
+    nextText()
+  }
+
+  function handleKeyDown({ key }: KeyboardEvent) {
+    if (key === 'Enter') {
+      nextText()
+    }
+  }
+
   useEffect(() => {
     setTexts([{ ...theory[0], hasAnimation: false }])
   }, [])
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [handleKeyDown])
 
   return (
     <div className="mt-20">
@@ -61,7 +72,11 @@ export function Theory({ title, number }: TheoryProps) {
       </div>
 
       <footer className="fixed w-full bottom-0 border-t border-gray-800 bg-gray-900 flex items-center justify-center p-4">
-        <Button className="w-32" tabIndex={0} onClick={handleContinueButton}>
+        <Button
+          className="w-32"
+          tabIndex={0}
+          onClick={handleContinueButtonClick}
+        >
           Continuar
         </Button>
       </footer>
