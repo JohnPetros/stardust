@@ -1,9 +1,31 @@
 'use client'
 
-import { Text as TextData } from '@/types/text'
-import { getImage } from '@/utils/functions'
 import Image from 'next/image'
+
+import { getImage } from '@/utils/functions'
+
+import { Variants, motion } from 'framer-motion'
+
 import { tv } from 'tailwind-variants'
+
+import type { Text as TextData } from '@/types/text'
+
+const textAnimations: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 24,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: 0.1,
+      duration: 0.3,
+      type: 'tween',
+      ease: 'linear',
+    },
+  },
+}
 
 const textStyles = tv({
   base: 'font-medium tracking-wider text-gray-100 text-sm w-full p-4 rounded-md',
@@ -21,19 +43,29 @@ const textStyles = tv({
 
 interface TextProps {
   data: TextData
+  hasAnimation?: boolean
 }
 
-export function Text({ data: { type, content, picture } }: TextProps) {
+export function Text({
+  data: { type, content, picture },
+  hasAnimation,
+}: TextProps) {
   const textImage = picture ? getImage('texts', picture) : ''
+  console.log(hasAnimation)
 
   return (
-    <div className="flex items-center gap-6">
+    <motion.div
+      variants={textAnimations}
+      initial={hasAnimation && 'hidden'}
+      animate={hasAnimation && 'visible'}
+      className="flex items-center gap-6"
+    >
       {textImage && (
         <div className="relative w-24 h-16 bg-red-400 rounded-md overflow-hidden">
           <Image src={textImage} fill alt="Panda" />
         </div>
       )}
       <div className={textStyles({ type })}>{content}</div>
-    </div>
+    </motion.div>
   )
 }
