@@ -6,4 +6,5 @@ export type Text = {
   content: string | string[]
   picture?: string
   isUser?: boolean
+  hasAnimation?: boolean
 }
