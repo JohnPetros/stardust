@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { tv } from 'tailwind-variants'
 
 const textStyles = tv({
-  base: 'font-medium tracking-wider text-gray-100 text-sm p-4 rounded-md',
+  base: 'font-medium tracking-wider text-gray-100 text-sm w-full p-4 rounded-md',
   variants: {
     type: {
       default: 'bg-purple-700',
@@ -27,9 +27,9 @@ export function Text({ data: { type, content, picture } }: TextProps) {
   const textImage = picture ? getImage('texts', picture) : ''
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-6">
       {textImage && (
-        <div className="relative w-12 h-12 bg-red-400 rounded-md overflow-hidden">
+        <div className="relative w-24 h-16 bg-red-400 rounded-md overflow-hidden">
           <Image src={textImage} fill alt="Panda" />
         </div>
       )}
