@@ -8,7 +8,7 @@ type Stage = 'theory' | 'quiz' | 'end'
 type LessonState = {
   currentStage: Stage
   texts: Text[]
-  renderedTextsAmount: number,
+  renderedTextsAmount: number
   questions: Question[]
   currentQuestionIndex: number
   wrongsAmount: number
@@ -20,7 +20,12 @@ type LessonState = {
   isAnswered: boolean
 }
 
-type LessonAction = { type: 'showQuiz' } | { type: 'changeQuestion' }
+type LessonAction =
+  | { type: 'showQuiz' }
+  | { type: 'changeQuestion' }
+  | { type: 'setQuestions'; payload: Question[] }
+  | { type: 'setTexts'; payload: Text[] }
+  | { type: 'incrementRenderedTextsAmount'; payload: number }
 
 type LessonValue = {
   state: LessonState
@@ -50,6 +55,16 @@ function LessonReducer(state: LessonState, action: LessonAction): LessonState {
       return {
         ...state,
         currentStage: 'quiz',
+      }
+    case 'setTexts':
+      return {
+        ...state,
+        texts: action.payload,
+      }
+    case 'incrementRenderedTextsAmount':
+      return {
+        ...state,
+        renderedTextsAmount: state.renderedTextsAmount + 1,
       }
     default:
       return state
