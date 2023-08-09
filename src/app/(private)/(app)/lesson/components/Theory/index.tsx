@@ -21,6 +21,7 @@ export function Theory({ title, number }: TheoryProps) {
   const { state, dispatch } = useLesson()
   const [texts, setTexts] = useState<TextData[]>([])
   const modalRef = useRef<ModalRef>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
   const nextTextIndex = useRef(0)
 
   function nextText() {
@@ -39,15 +40,15 @@ export function Theory({ title, number }: TheoryProps) {
         hasAnimation: false,
       }))
 
-      const nextText = { ...allTexts[nextTextIndex.current], hasAnimation: true }
+      const nextText = {
+        ...allTexts[nextTextIndex.current],
+        hasAnimation: true,
+      }
 
       return [...previousTexts, nextText]
     })
 
-    dispatch({
-      type: 'incrementRenderedTextsAmount',
-      payload: nextTextIndex.current,
-    })
+    dispatch({ type: 'incrementRenderedTextsAmount' })
   }
 
   function handleContinueButtonClick() {
@@ -62,6 +63,7 @@ export function Theory({ title, number }: TheoryProps) {
 
   useEffect(() => {
     setTexts([{ ...allTexts[0], hasAnimation: false }])
+    dispatch({ type: 'incrementRenderedTextsAmount' })
   }, [])
 
   useEffect(() => {
@@ -79,7 +81,7 @@ export function Theory({ title, number }: TheoryProps) {
               {title}
             </h1>
           </div>
-          <div className="space-y-10 mt-12 pb-[360px]">
+          <div className="space-y-10 mt-10 pb-[360px]">
             {texts.map((text) => (
               <Text data={text} hasAnimation={text.hasAnimation} />
             ))}
@@ -103,10 +105,7 @@ export function Theory({ title, number }: TheoryProps) {
         title={`Parabéns! \n Agora você pode ir para a próxima etapa 🚀`}
         body={null}
         footer={
-          <Button
-
-          // onPress={() => dispatch({ type: 'showQuiz' })}
-          >
+          <Button tabIndex={-1} onClick={() => dispatch({ type: 'showQuiz' })}>
             Bora!
           </Button>
         }
