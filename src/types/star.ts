@@ -1,3 +1,4 @@
+import { Question } from "./question"
 import type { Text } from "./text"
 
 export type Star = {
@@ -8,4 +9,5 @@ export type Star = {
   planet_id: string 
   texts: Text[] 
   isUnlocked: boolean
+  questions: Question[] 
 }
