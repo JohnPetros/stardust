@@ -60,7 +60,7 @@ export function Text({
 
   useEffect(() => {
     if (hasAnimation && textRef.current)
-      textRef.current.scrollIntoView({ behavior: 'smooth' })
+      textRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }, [])
 
   return (
@@ -71,16 +71,39 @@ export function Text({
       animate={hasAnimation && 'visible'}
       className="flex items-center gap-6"
     >
-      {textImage && (
-        <div className="relative w-24 h-16 bg-red-400 rounded-md overflow-hidden">
-          <Image src={textImage} fill alt="Panda" />
+      {type === 'image' && textImage && (
+        <div className="flex flex-col items-center justify-center w-full gap-2">
+          <Image
+            src={textImage}
+            width={180}
+            height={120}
+            className="rounded-lg"
+            alt=""
+          />
+          <p className="text-gray-100 font-medium text-start text-lg">
+            <TypeWritter canType delay={750} speed={35}>
+              {String(content)}
+            </TypeWritter>
+          </p>
         </div>
       )}
-      <div className={textStyles({ type })}>
-        {!Array.isArray(content) && (
-          <TypeWritter canType={!!hasAnimation}>{content}</TypeWritter>
-        )}
-      </div>
+
+      {['default', 'alert', 'quote'].includes(String(type)) && (
+        <>
+          {textImage && (
+            <div className="relative w-24 h-16 bg-red-400 rounded-md overflow-hidden">
+              <Image src={textImage} fill alt="Panda" />
+            </div>
+          )}
+          <div className={textStyles({ type })}>
+            {!Array.isArray(content) && (
+              <p>
+                <TypeWritter canType={!!hasAnimation}>{content}</TypeWritter>
+              </p>
+            )}
+          </div>
+        </>
+      )}
     </motion.div>
   )
 }
