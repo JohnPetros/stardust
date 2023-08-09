@@ -3,7 +3,7 @@
 import { useContext } from 'react'
 import { SpaceContext } from '@/contexts/SpaceContext'
 
-export const useSpace = () => {
+export function useSpace() {
   const context = useContext(SpaceContext)
 
   if (!context) {
