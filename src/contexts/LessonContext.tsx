@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useReducer } from 'react'
 
-import type { Question } from '@/types/Question'
+import type { Question } from '@/types/question'
 import type { Text } from '@/types/text'
 
 type Stage = 'theory' | 'quiz' | 'end'
@@ -25,7 +25,7 @@ type LessonAction =
   | { type: 'changeQuestion' }
   | { type: 'setQuestions'; payload: Question[] }
   | { type: 'setTexts'; payload: Text[] }
-  | { type: 'incrementRenderedTextsAmount'; payload: number }
+  | { type: 'incrementRenderedTextsAmount' }
 
 type LessonValue = {
   state: LessonState
@@ -60,6 +60,11 @@ function LessonReducer(state: LessonState, action: LessonAction): LessonState {
       return {
         ...state,
         texts: action.payload,
+      }
+    case 'setQuestions':
+      return {
+        ...state,
+        questions: action.payload,
       }
     case 'incrementRenderedTextsAmount':
       return {

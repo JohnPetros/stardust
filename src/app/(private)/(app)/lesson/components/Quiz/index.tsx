@@ -1,6 +1,6 @@
 
 export function Quiz() {
   return (
-    <div>index</div>
+    <h2 className="text-gray-100">index</h2>
   )
 }
