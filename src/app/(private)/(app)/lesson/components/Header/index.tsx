@@ -1,5 +1,6 @@
 'use client'
 
+import { useMemo } from 'react'
 import { useLesson } from '@/hooks/useLesson'
 import { useAuth } from '@/hooks/useAuth'
 import { useRocket } from '@/hooks/useRocket'
@@ -26,9 +27,16 @@ export function Header() {
   const rocketImage = rocket ? getImage('rockets', rocket.image) : ''
 
   const total = texts.length + questions.length
-  const currentProgressValue =
-    (((renderedTextsAmount / texts.length) * total) / 2) * total +
-    (((currentQuestionIndex / questions.length) * total) / 2) * total
+  const halfTotal = total / 2
+
+  const currentProgressValue = useMemo(() => {
+    if (!total) return 0
+
+    return (
+      ((renderedTextsAmount / texts.length) * halfTotal) / total +
+      ((currentQuestionIndex / questions.length) * halfTotal) / total
+    ) * 100
+  }, [renderedTextsAmount, currentQuestionIndex])
 
   return (
     <header className="fixed z-10 top-0 py-3 w-full bg-gray-900">
