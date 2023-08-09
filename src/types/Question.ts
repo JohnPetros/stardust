@@ -1,22 +1,21 @@
-export interface Question {
+export interface SelectionQuestion {
   stem: string
-}
-
-export interface SelectionQuestion extends Question {
   type: 'selection'
   options: string[]
   answer: string
   code?: string
 }
 
-export interface CheckboxQuestion extends Question {
+export interface CheckboxQuestion {
+  stem: string
   type: 'checkbox'
   options: string[]
   correctOptions: string[]
   code?: string
 }
 
-export interface OpenQuestion extends Question {
+export interface OpenQuestion {
+  stem: string
   type: 'open'
   answer: string
   code?: string
@@ -33,7 +32,8 @@ type DropItem = {
   label: string
 }
 
-export interface DragAndDropClick extends Question {
+export interface DragAndDropClick {
+  stem: string
   type: 'drag-and-drop-click'
   lines: Line[]
   correctItemsIdsSequence: number[]
@@ -45,7 +45,15 @@ type Item = {
   label: string
 }
 
-export interface DragAndDropList extends Question {
+export interface DragAndDropList {
+  stem: string
   type: 'drag-and-drop-list'
   items: Item[]
 }
+
+export type Question =
+  | SelectionQuestion
+  | CheckboxQuestion
+  | OpenQuestion
+  | DragAndDropClick
+  | DragAndDropList
