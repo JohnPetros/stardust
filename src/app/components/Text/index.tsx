@@ -24,7 +24,7 @@ const textAnimations: Variants = {
     y: 0,
     scale: 1,
     transition: {
-      delay: 0.1,
+      delay: 0.3,
       duration: 0.3,
       type: 'tween',
       ease: 'linear',
@@ -38,7 +38,7 @@ const textStyles = tv({
     type: {
       default: 'bg-purple-700',
       alert: 'bg-yellow-400 text-yellow-700',
-      quote: 'bg-blue-700 border-l-4 border-blue-300',
+      quote: 'bg-blue-700 border-l-4 border-blue-300 text-blue-300',
       list: 'border-green-400 text-green-400',
       image: '',
       code: '',
@@ -94,6 +94,9 @@ export function Text({
             <div className="relative w-24 h-16 bg-red-400 rounded-md overflow-hidden">
               <Image src={textImage} fill alt="Panda" />
             </div>
+          )}
+          {type === 'alert' && (
+            <Image src="/icons/alert.svg" width={32} height={32} alt="" />
           )}
           <div className={textStyles({ type })}>
             {!Array.isArray(content) && (
