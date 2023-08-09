@@ -14,7 +14,7 @@ type LessonState = {
   wrongsAmount: number
   livesAmount: number
   secondsAmount: number
-  verifyAnswer: () => void
+  answerHandler: () => void
   isAnswerWrong: boolean
   isAnswerVerified: boolean
   isAnswered: boolean
@@ -35,7 +35,7 @@ type LessonValue = {
 export const LessonContext = createContext({} as LessonValue)
 
 const initialState: LessonState = {
-  currentStage: 'theory',
+  currentStage: 'quiz',
   texts: [],
   renderedTextsAmount: 0,
   questions: [],
@@ -43,7 +43,7 @@ const initialState: LessonState = {
   wrongsAmount: 0,
   livesAmount: 5,
   secondsAmount: 0,
-  verifyAnswer: () => {},
+  answerHandler: () => {},
   isAnswerWrong: false,
   isAnswerVerified: false,
   isAnswered: false,
