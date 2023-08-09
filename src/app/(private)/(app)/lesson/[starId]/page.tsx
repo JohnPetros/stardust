@@ -23,7 +23,9 @@ export default function Lesson() {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (star) {
+    if (star) {      
+      dispatch({ type: 'setTexts', payload: star.texts })
+      dispatch({ type: 'setQuestions', payload: star.questions })
       setTimeout(() => setIsTransitionVisible(false), 1000)
     }
   }, [star])
@@ -38,8 +40,8 @@ export default function Lesson() {
             {state.currentStage === 'theory' && (
               <Theory title={star.name} number={star.number} />
             )}
-            {state.currentStage === 'theory' && <Quiz />}
-            {state.currentStage === 'theory' && <End />}
+            {state.currentStage === 'quiz' && <Quiz />}
+            {state.currentStage === 'end' && <End />}
           </>
         )}
       </main>
