@@ -6,10 +6,11 @@ import { Button } from '@/app/components/Button'
 import { Text } from '@/app/components/Text'
 import { Star } from './Star'
 
-import { theory } from '@/utils/templates/planets/planet1/star1/theory'
+import { texts as allTexts } from '@/utils/templates/planets/planet1/star1/texts'
 
 import type { Text as TextData } from '@/types/text'
 import { Modal, ModalRef } from '@/app/components/Modal'
+import { useLesson } from '@/hooks/useLesson'
 
 interface TheoryProps {
   title: string
@@ -17,19 +18,18 @@ interface TheoryProps {
 }
 
 export function Theory({ title, number }: TheoryProps) {
+  const { state, dispatch } = useLesson()
   const [texts, setTexts] = useState<TextData[]>([])
   const modalRef = useRef<ModalRef>(null)
-
   const nextTextIndex = useRef(0)
-  nextTextIndex.current
 
   function nextText() {
-    if (nextTextIndex.current >= theory.length) {
+    if (nextTextIndex.current >= allTexts.length) {
       modalRef.current?.open()
       return
     }
 
-    if (!theory[nextTextIndex.current]) return
+    if (!allTexts[nextTextIndex.current]) return
 
     nextTextIndex.current = nextTextIndex.current + 1
 
@@ -39,9 +39,14 @@ export function Theory({ title, number }: TheoryProps) {
         hasAnimation: false,
       }))
 
-      const nextText = { ...theory[nextTextIndex.current], hasAnimation: true }
+      const nextText = { ...allTexts[nextTextIndex.current], hasAnimation: true }
 
       return [...previousTexts, nextText]
+    })
+
+    dispatch({
+      type: 'incrementRenderedTextsAmount',
+      payload: nextTextIndex.current,
     })
   }
 
@@ -56,7 +61,7 @@ export function Theory({ title, number }: TheoryProps) {
   }
 
   useEffect(() => {
-    setTexts([{ ...theory[0], hasAnimation: false }])
+    setTexts([{ ...allTexts[0], hasAnimation: false }])
   }, [])
 
   useEffect(() => {
@@ -86,7 +91,7 @@ export function Theory({ title, number }: TheoryProps) {
             className="w-32"
             tabIndex={0}
             onClick={handleContinueButtonClick}
-            disabled={nextTextIndex.current > theory.length}
+            disabled={nextTextIndex.current > allTexts.length}
           >
             Continuar
           </Button>
