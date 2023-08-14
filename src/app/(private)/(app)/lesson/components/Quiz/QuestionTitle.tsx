@@ -9,7 +9,7 @@ interface TitleProps {
   picture?: string
 }
 
-export function Title({ children, picture }: TitleProps) {
+export function QuestionTitle({ children, picture }: TitleProps) {
   const image = picture ? getImage('texts', picture) : ''
 
   return (
