@@ -3,6 +3,7 @@
 import { useLesson } from '@/hooks/useLesson'
 import { SelectionQuestion } from './SelectionQuestion'
 import { VerificationButton } from './VerificationButton'
+import { DragAndDropListQuestion } from './DragAndDropListQuestion'
 
 export function Quiz() {
   const {
@@ -17,15 +18,15 @@ export function Quiz() {
     dispatch,
   } = useLesson()
 
-  const currentQuestion = questions[currentQuestionIndex]?.content
+  const currentQuestion = questions[2]?.content
 
   if (currentQuestion)
     return (
       <div className="relative">
         <div className="mx-auto mt-16 w-full max-w-xl">
-          {currentQuestion.type === 'selection' && (
+          {/* {currentQuestion.type === 'selection' && (
             <SelectionQuestion data={currentQuestion} />
-          )}
+          )} */}
 
           {/* {currentQuestion.type === 'checkbox' && (
         <CheckboxQuestion data={currentQuestion} />
@@ -36,9 +37,10 @@ export function Quiz() {
       {currentQuestion.type === 'drag-and-drop-click' && (
         <DragAndDropClickQuestion data={currentQuestion} />
       )}
-      {currentQuestion.type === 'drag-and-drop-list' && (
-        <DragAndDropListQuestion data={currentQuestion} />
-      )} */}
+       */}
+          {currentQuestion.type === 'drag-and-drop-list' && (
+            <DragAndDropListQuestion data={currentQuestion} />
+          )}
         </div>
 
         <VerificationButton
