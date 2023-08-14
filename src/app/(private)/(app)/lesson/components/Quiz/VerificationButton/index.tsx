@@ -4,6 +4,7 @@ import { twMerge } from 'tailwind-merge'
 import { tv } from 'tailwind-variants'
 import { AnimatePresence, Variants, motion } from 'framer-motion'
 import { useEffect, useRef } from 'react'
+import { playSound } from '@/utils/functions'
 
 const buttonStyles = tv({
   base: 'w-64',
@@ -62,6 +63,12 @@ export function VerificationButton({
       answerHandler()
     }
   }
+
+  useEffect(() => {
+    if (isAnswerVerified) {
+      playSound(isAnswerCorrect ? 'success.wav' : 'fail.wav')
+    }
+  }, [isAnswerVerified])
 
   useEffect(() => {
     document.addEventListener('keydown', handleGlobalKeyDown)
