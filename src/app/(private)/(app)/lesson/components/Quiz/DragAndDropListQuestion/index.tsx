@@ -1,5 +1,6 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useLesson } from '@/hooks/useLesson'
 
 import { DragAndDropList, Item as SortableItem } from '@/types/question'
 import { QuestionTitle } from '../QuestionTitle'
@@ -25,6 +26,8 @@ import {
   restrictToWindowEdges,
 } from '@dnd-kit/modifiers'
 
+import { compareArrays } from '@/utils/functions'
+
 interface DragAndDropListQuestionProps {
   data: DragAndDropList
 }
@@ -32,10 +35,58 @@ interface DragAndDropListQuestionProps {
 export function DragAndDropListQuestion({
   data: { title, items, picture },
 }: DragAndDropListQuestionProps) {
+  const {
+    state: { isAnswerVerified },
+    dispatch,
+  } = useLesson()
+
   const [sortableItems, setSortableItems] = useState<SortableItem[]>(items)
   const [activeItemId, setActiveEventId] = useState<number | null>(null)
 
+  const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
+
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
+
+  function isUserAnswerCorrect() {
+    const correctItemsIdsSequence = items.map((item) => item.id)
+
+    const userItemsIdSequence = sortableItems.map((item) => item.id)
+    return compareArrays(userItemsIdSequence, correctItemsIdsSequence)
+  }
+
+  function setIsAnswerVerified(isAnswerVerified: boolean) {
+    dispatch({ type: 'setIsAnswerVerified', payload: isAnswerVerified })
+  }
+
+  function setIsAnswerCorrect(isAnswerCorrect: boolean) {
+    dispatch({ type: 'setIsAnswerCorrect', payload: isAnswerCorrect })
+  }
+
+  function handleAnswer() {
+    setIsAnswerVerified(!isAnswerVerified)
+
+    if (isUserAnswerCorrect()) {
+      setIsAnswerCorrect(true)
+
+      // if (isAnswerVerified) {
+      //   dispatch({ type: 'changeQuestion' })
+      // }
+
+      return
+    }
+
+    setIsAnswerCorrect(false)
+
+    if (
+      isAnswerVerified &&
+      !hasAlreadyIncrementIncorrectAnswersAmount.current
+    ) {
+      dispatch({ type: 'incrementIncorrectAswersAmount' })
+      hasAlreadyIncrementIncorrectAnswersAmount.current = true
+    }
+
+    if (isAnswerVerified) dispatch({ type: 'decrementLivesAmount' })
+  }
 
   function handleDragEnd(event: DragEndEvent) {
     setActiveEventId(null)
@@ -62,6 +113,20 @@ export function DragAndDropListQuestion({
   function handleDragCancel() {
     setActiveEventId(null)
   }
+
+  useEffect(() => {
+    dispatch({
+      type: 'setIsAnswered',
+      payload: true,
+    })
+  }, [])
+
+  useEffect(() => {
+    dispatch({
+      type: 'setAnswerHandler',
+      payload: handleAnswer,
+    })
+  }, [isAnswerVerified, sortableItems])
 
   return (
     <DndContext
