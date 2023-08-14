@@ -55,14 +55,14 @@ a {
   text-decoration: inherit;
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-  @apply w-[1px] rounded;
+::-webkit-scrollbar {
+  @apply w-[8px] rounded;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  @apply bg-green-800 w-1 h-3 rounded-md;
+::-webkit-scrollbar-thumb {
+  @apply bg-green-700 w-1 h-3 rounded-md;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  @apply bg-gray-600;
+::-webkit-scrollbar-track {
+  @apply bg-gray-400;
 }
