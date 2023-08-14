@@ -1,6 +1,7 @@
 export const questions = [
   {
     stem: 'Muito bem, você acaba de embarcar no foguete. Antes de proseguirmos quero que responda primeiro: O que é lógica de programação mesmo?',
+    picture: 'panda.jpg',
     type: 'selection',
     answer: 'sequência lógica de instruções',
     options: [
@@ -12,6 +13,7 @@ export const questions = [
   },
   {
     stem: 'Muito bem, então na hora de escrever uma programa o que você NÃO deve pensar em fazer é:',
+    picture: 'panda.jpg',
     type: 'selection',
     answer: 'desordem',
     options: [
@@ -23,6 +25,7 @@ export const questions = [
   },
   {
     stem: 'Para mostrar para você que tudo pode ser pensado como um programa, ordene a sequência correta de se vestir um traje espacial (Pressione e arraste o item)',
+    picture: 'panda.jpg',
     type: 'drag-and-drop-list',
     items: [
       { id: 1, label: 'Retirar o traje do compartimento' },
@@ -34,6 +37,7 @@ export const questions = [
   {
     stem: 'Agora ordene a sequência correta de se ligar um foguete (Pressione e arraste o item)',
     type: 'drag-and-drop-list',
+    picture: 'panda.jpg',
     items: [
       { id: 1, label: 'Ir para o painel de controle' },
       { id: 2, label: 'Encontrar o botão de ligar' },
@@ -44,6 +48,7 @@ export const questions = [
   {
     stem: 'Por fim, coloque o foguete no modo automático (já que você não sabe pilotar, não é mesmo)',
     type: 'drag-and-drop-list',
+    picture: 'panda.jpg',
     items: [
       { id: 1, label: 'Acessar painel de controle' },
       { id: 2, label: 'Pressionar o botão o piloto automático' },
