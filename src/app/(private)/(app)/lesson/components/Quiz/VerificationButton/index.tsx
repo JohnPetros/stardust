@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { twMerge } from 'tailwind-merge'
 import { tv } from 'tailwind-variants'
 import { AnimatePresence, Variants, motion } from 'framer-motion'
+import { useEffect, useRef } from 'react'
 
 const buttonStyles = tv({
   base: 'w-64',
@@ -40,6 +41,8 @@ export function VerificationButton({
   isAnswerVerified,
   isAnswered,
 }: VerificationButtonProps) {
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
   function getButtonTitle() {
     if (isAnswerVerified && !isAnswerCorrect) {
       return 'Tentar novamente'
@@ -53,6 +56,17 @@ export function VerificationButton({
   function handleButtonClick() {
     answerHandler()
   }
+
+  function handleGlobalKeyDown({ key }: KeyboardEvent) {
+    if (key === 'Enter' && isAnswered) {
+      answerHandler()
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleGlobalKeyDown)
+    return () => document.removeEventListener('keydown', handleGlobalKeyDown)
+  }, [handleGlobalKeyDown])
 
   return (
     <div
@@ -99,6 +113,7 @@ export function VerificationButton({
       </div>
 
       <Button
+        buttonRef={buttonRef}
         onClick={handleButtonClick}
         className={buttonStyles({
           color: isAnswerVerified && !isAnswerCorrect ? 'red' : 'green',
