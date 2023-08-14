@@ -44,7 +44,7 @@ export interface DragAndDropClick {
   dropItems: DropItem[]
 }
 
-type Item = {
+export type Item = {
   id: number
   label: string
 }
