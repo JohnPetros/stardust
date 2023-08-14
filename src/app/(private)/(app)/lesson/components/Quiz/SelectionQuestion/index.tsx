@@ -33,7 +33,7 @@ export function SelectionQuestion({
 
   function resetAnswer() {
     if (isAnswerVerified && !!selectedOption) {
-      setSelectedOption('')
+      // setSelectedOption('')
       setIsAnswerCorrect(false)
     }
   }
