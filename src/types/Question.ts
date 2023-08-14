@@ -1,5 +1,6 @@
 export interface SelectionQuestion {
-  stem: string
+  title: string
+  picture?: string
   type: 'selection'
   options: string[]
   answer: string
@@ -7,7 +8,8 @@ export interface SelectionQuestion {
 }
 
 export interface CheckboxQuestion {
-  stem: string
+  title: string
+  picture?: string
   type: 'checkbox'
   options: string[]
   correctOptions: string[]
@@ -15,7 +17,8 @@ export interface CheckboxQuestion {
 }
 
 export interface OpenQuestion {
-  stem: string
+  title: string
+  picture?: string
   type: 'open'
   answer: string
   code?: string
@@ -33,7 +36,8 @@ type DropItem = {
 }
 
 export interface DragAndDropClick {
-  stem: string
+  title: string
+  picture?: string
   type: 'drag-and-drop-click'
   lines: Line[]
   correctItemsIdsSequence: number[]
@@ -46,14 +50,22 @@ type Item = {
 }
 
 export interface DragAndDropList {
-  stem: string
+  title: string
+  picture?: string
   type: 'drag-and-drop-list'
   items: Item[]
 }
 
-export type Question =
+export type QuestionContent =
   | SelectionQuestion
   | CheckboxQuestion
   | OpenQuestion
   | DragAndDropClick
   | DragAndDropList
+
+export type Question = {
+  id: string
+  content: QuestionContent
+  order: number
+  star_id: string
+}
