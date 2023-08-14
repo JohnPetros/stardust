@@ -1,3 +1,5 @@
+'use client'
+
 import { useLesson } from '@/hooks/useLesson'
 import { SelectionQuestion } from './SelectionQuestion'
 import { VerificationButton } from './VerificationButton'
@@ -8,25 +10,24 @@ export function Quiz() {
       currentQuestionIndex,
       questions,
       answerHandler,
-      isAnswerWrong,
       isAnswerVerified,
+      isAnswerCorrect,
       isAnswered,
     },
     dispatch,
   } = useLesson()
 
-  const currentQuestion = questions[currentQuestionIndex]
-  
-  console.log(currentQuestion)
+  const currentQuestion = questions[currentQuestionIndex]?.content
 
-  return (
-    <div>
-      <div className="flex items-center justify-center mt-20">
-        {currentQuestion.type === 'selection' && (
-          <SelectionQuestion data={currentQuestion} />
-        )}
+  if (currentQuestion)
+    return (
+      <div className="relative">
+        <div className="mx-auto mt-16 w-full max-w-xl">
+          {currentQuestion.type === 'selection' && (
+            <SelectionQuestion data={currentQuestion} />
+          )}
 
-        {/* {currentQuestion.type === 'checkbox' && (
+          {/* {currentQuestion.type === 'checkbox' && (
         <CheckboxQuestion data={currentQuestion} />
       )}
       {currentQuestion.type === 'open' && (
@@ -38,14 +39,14 @@ export function Quiz() {
       {currentQuestion.type === 'drag-and-drop-list' && (
         <DragAndDropListQuestion data={currentQuestion} />
       )} */}
-      </div>
+        </div>
 
-      <VerificationButton
-        answerHandler={answerHandler}
-        isAnswerWrong={isAnswerWrong}
-        isAnswerVerified={isAnswerVerified}
-        isAnswered={isAnswered}
-      />
-    </div>
-  )
+        <VerificationButton
+          answerHandler={answerHandler}
+          isAnswerCorrect={isAnswerCorrect}
+          isAnswerVerified={isAnswerVerified}
+          isAnswered={isAnswered}
+        />
+      </div>
+    )
 }

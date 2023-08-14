@@ -11,11 +11,11 @@ type LessonState = {
   renderedTextsAmount: number
   questions: Question[]
   currentQuestionIndex: number
-  wrongsAmount: number
+  incorrectAnswersAmount: number
   livesAmount: number
   secondsAmount: number
   answerHandler: () => void
-  isAnswerWrong: boolean
+  isAnswerCorrect: boolean
   isAnswerVerified: boolean
   isAnswered: boolean
 }
@@ -25,7 +25,13 @@ type LessonAction =
   | { type: 'changeQuestion' }
   | { type: 'setQuestions'; payload: Question[] }
   | { type: 'setTexts'; payload: Text[] }
+  | { type: 'setIsAnswered'; payload: boolean }
+  | { type: 'setIsAnswerCorrect'; payload: boolean }
+  | { type: 'setIsAnswerVerified'; payload: boolean }
+  | { type: 'setAnswerHandler'; payload: () => void }
+  | { type: 'incrementIncorrectAswersAmount' }
   | { type: 'incrementRenderedTextsAmount' }
+  | { type: 'decrementLivesAmount' }
 
 type LessonValue = {
   state: LessonState
@@ -40,11 +46,11 @@ const initialState: LessonState = {
   renderedTextsAmount: 0,
   questions: [],
   currentQuestionIndex: 0,
-  wrongsAmount: 0,
+  incorrectAnswersAmount: 0,
   livesAmount: 5,
   secondsAmount: 0,
   answerHandler: () => {},
-  isAnswerWrong: false,
+  isAnswerCorrect: false,
   isAnswerVerified: false,
   isAnswered: false,
 }
@@ -66,10 +72,41 @@ function LessonReducer(state: LessonState, action: LessonAction): LessonState {
         ...state,
         questions: action.payload,
       }
+    case 'setIsAnswered':
+      return {
+        ...state,
+        isAnswered: action.payload,
+      }
+    case 'setIsAnswerVerified':
+      return {
+        ...state,
+        isAnswerVerified: action.payload,
+      }
+    case 'setIsAnswerCorrect':
+      return {
+        ...state,
+        isAnswerCorrect: action.payload,
+      }
+    case 'setAnswerHandler':
+      return {
+        ...state,
+        answerHandler: action.payload,
+      }
     case 'incrementRenderedTextsAmount':
       return {
         ...state,
         renderedTextsAmount: state.renderedTextsAmount + 1,
+      }
+    case 'incrementIncorrectAswersAmount':
+      return {
+        ...state,
+        incorrectAnswersAmount: state.incorrectAnswersAmount + 1,
+      }
+    case 'decrementLivesAmount':
+      return {
+        ...state,
+        livesAmount:
+          state.livesAmount === 0 ? state.livesAmount : state.livesAmount - 1,
       }
     default:
       return state
