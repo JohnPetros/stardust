@@ -1,7 +1,6 @@
 'use client'
 
 import Image from 'next/image'
-import { TypeWritter } from '@/app/components/Text/TypeWritter'
 
 import { getImage } from '@/utils/functions'
 
