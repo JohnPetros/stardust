@@ -20,6 +20,7 @@ export function Header() {
       currentQuestionIndex,
       renderedTextsAmount,
       livesAmount,
+      secondsAmount
     },
     dispatch,
   } = useLesson()
