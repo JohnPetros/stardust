@@ -112,7 +112,7 @@ export function VerificationButton({
                     : 'text-green-400'
                 )}
               >
-                {isAnswerCorrect ? 'Oops, tente denovo!' : 'Correto, parabéns!'}
+                {isAnswerCorrect ? 'Correto, parabéns!' : 'Oops, tente denovo!'}
               </strong>
             </motion.div>
           )}
