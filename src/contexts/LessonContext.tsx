@@ -31,6 +31,7 @@ type LessonAction =
   | { type: 'setAnswerHandler'; payload: () => void }
   | { type: 'incrementIncorrectAswersAmount' }
   | { type: 'incrementRenderedTextsAmount' }
+  | { type: 'incrementSecondsAmount' }
   | { type: 'decrementLivesAmount' }
 
 type LessonValue = {
@@ -41,7 +42,7 @@ type LessonValue = {
 export const LessonContext = createContext({} as LessonValue)
 
 const initialState: LessonState = {
-  currentStage: 'end',
+  currentStage: 'theory',
   texts: [],
   renderedTextsAmount: 0,
   questions: [],
@@ -101,6 +102,11 @@ function LessonReducer(state: LessonState, action: LessonAction): LessonState {
       return {
         ...state,
         incorrectAnswersAmount: state.incorrectAnswersAmount + 1,
+      }
+    case 'incrementSecondsAmount':
+      return {
+        ...state,
+        secondsAmount: state.secondsAmount + 1,
       }
     case 'decrementLivesAmount':
       return {
