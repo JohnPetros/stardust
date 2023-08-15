@@ -15,13 +15,9 @@ export function QuestionTitle({ children, picture }: TitleProps) {
   return (
     <>
       {image && (
-        <Image
-          src={image}
-          width={64}
-          height={64}
-          className="rounded-md"
-          alt=""
-        />
+        <div className="relative w-16 h-16">
+          <Image src={image} fill className="rounded-md" alt="" />
+        </div>
       )}
       <p className="text-gray-100 text-center font-medium mt-4">{children}</p>
     </>
