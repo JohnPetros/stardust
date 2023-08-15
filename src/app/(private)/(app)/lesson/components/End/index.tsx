@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLesson } from '@/hooks/useLesson'
 import { useAuth } from '@/hooks/useAuth'
 
@@ -18,17 +18,19 @@ export function End({ isAlreadyCompleted }: EndProps) {
     state: { questions, incorrectAnswersAmount, secondsAmount },
     dispatch,
   } = useLesson()
-
-  const coins = useRef(0)
-  const xp = useRef(0)
-  const time = useRef('')
-  const accurance = useRef('')
+  const [coins, setCoins] = useState(0)
+  const [xp, setXp] = useState(0)
+  const [time, setTime] = useState('')
+  const [accurance, setAccurance] = useState('')
 
   function formatSecondsToTime(seconds: number) {
-    const date = new Date(0);
-    date.setSeconds(seconds);
-    const time = date.toISOString().substring(14, 19);
-    return time;
+    const date = new Date(0)
+    date.setSeconds(seconds)
+    const time = date.toISOString().substring(14, 19)
+
+    console.log(time)
+
+    return time
   }
 
   function getAccurance() {
@@ -50,14 +52,17 @@ export function End({ isAlreadyCompleted }: EndProps) {
     for (let i = 0; i < incorrectAnswersAmount; i++) {
       maxXp -= isAlreadyCompleted ? 2 : 5
     }
+
     return maxXp
   }
 
+
+
   useEffect(() => {
-    xp.current = getXp()
-    coins.current = getCoins()
-    accurance.current = getAccurance()
-    time.current = formatSecondsToTime(secondsAmount)
+    setXp(getXp())
+    setCoins(getCoins())
+    setAccurance(getAccurance())
+    setTime(formatSecondsToTime(secondsAmount))
   }, [])
 
   return (
@@ -74,40 +79,40 @@ export function End({ isAlreadyCompleted }: EndProps) {
         <div className="mx-auto">
           <Metric
             title="Poeira estelar"
-            amount={coins.current}
+            amount={coins}
             color="yellow"
             icon="coin.svg"
             isLarge={true}
-            delay={1.4}
+            delay={1}
           />
         </div>
 
         <div className="grid grid-cols-3 gap-3 mt-6">
           <Metric
             title="Total de xp"
-            amount={xp.current}
+            amount={xp}
             color="green"
             icon="xp.svg"
             isLarge={false}
-            delay={2.4}
+            delay={1.5}
           />
 
           <Metric
             title="Tempo"
-            amount={secondsAmount}
+            amount={time}
             color="blue"
             icon="clock.svg"
             isLarge={false}
-            delay={3.4}
+            delay={2}
           />
 
           <Metric
             title="Acertos"
-            amount={accurance.current}
+            amount={accurance}
             color="red"
             icon="percent.svg"
             isLarge={false}
-            delay={4.4}
+            delay={2.5}
           />
         </div>
       </div>
