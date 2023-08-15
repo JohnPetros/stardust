@@ -21,7 +21,6 @@ export function SelectionQuestion({
   data: { title, picture, options, code, answer },
   isCurrentQuestion,
 }: SelectionQuestionProps) {
-  console.log(isCurrentQuestion)
 
   const {
     state: { isAnswerVerified, isAnswerCorrect, currentQuestionIndex },
@@ -92,7 +91,7 @@ export function SelectionQuestion({
         animate={isCurrentQuestion ? 'middle' : ''}
         exit="left"
         transition={questionTransition}
-        className="mx-auto mt-3 w-full max-w-xl flex flex-col items-center justify-center"
+        className="mx-auto mt-4 w-full max-w-xl flex flex-col items-center justify-center"
       >
         <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
