@@ -26,14 +26,19 @@ import {
   restrictToWindowEdges,
 } from '@dnd-kit/modifiers'
 
+import { questionAnimations, questionTransition } from '..'
+import { AnimatePresence, motion } from 'framer-motion'
+
 import { compareArrays } from '@/utils/functions'
 
 interface DragAndDropListQuestionProps {
   data: DragAndDropList
+  isCurrentQuestion: boolean
 }
 
 export function DragAndDropListQuestion({
   data: { title, items, picture },
+  isCurrentQuestion,
 }: DragAndDropListQuestionProps) {
   const {
     state: { isAnswerVerified, currentQuestionIndex },
@@ -138,38 +143,48 @@ export function DragAndDropListQuestion({
       onDragCancel={handleDragCancel}
       modifiers={[restrictToVerticalAxis, restrictToWindowEdges]}
     >
-      <div className="mx-auto mt-16 w-full max-w-xl flex flex-col items-center justify-center px-6">
-        <QuestionTitle picture={picture}>{title}</QuestionTitle>
-
-        <SortableContext
-          items={sortableItems}
-          strategy={verticalListSortingStrategy}
+      <AnimatePresence>
+        <motion.div
+          key={currentQuestionIndex}
+          variants={questionAnimations}
+          initial="right"
+          animate={isCurrentQuestion ? 'middle' : ''}
+          exit="left"
+          transition={questionTransition}
+          className="mx-auto mt-4 w-full max-w-xl flex flex-col items-center justify-center px-6"
         >
-          <div className="mx-auto w-full space-y-2 mt-8">
-            {sortableItems.map((item) => (
-              <Item
-                key={item.id}
-                id={item.id}
-                label={item.label}
-                isActive={activeItemId === item.id}
-              />
-            ))}
-          </div>
-        </SortableContext>
+          <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
-        <DragOverlay>
-          {activeItemId ? (
-            <Item
-              id={activeItemId}
-              label={
-                sortableItems.find((item) => item.id === activeItemId)?.label ??
-                ''
-              }
-              isActive={true}
-            />
-          ) : null}
-        </DragOverlay>
-      </div>
+          <SortableContext
+            items={sortableItems}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="mx-auto w-full space-y-2 mt-8">
+              {sortableItems.map((item) => (
+                <Item
+                  key={item.id}
+                  id={item.id}
+                  label={item.label}
+                  isActive={activeItemId === item.id}
+                />
+              ))}
+            </div>
+          </SortableContext>
+
+          <DragOverlay>
+            {activeItemId ? (
+              <Item
+                id={activeItemId}
+                label={
+                  sortableItems.find((item) => item.id === activeItemId)
+                    ?.label ?? ''
+                }
+                isActive={true}
+              />
+            ) : null}
+          </DragOverlay>
+        </motion.div>
+      </AnimatePresence>
     </DndContext>
   )
 }

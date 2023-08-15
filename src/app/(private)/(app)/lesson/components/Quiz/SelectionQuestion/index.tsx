@@ -7,17 +7,24 @@ import { QuestionTitle } from '../QuestionTitle'
 import { Option } from './Option'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 
+import { questionAnimations, questionTransition } from '..'
+import { AnimatePresence, motion } from 'framer-motion'
+
 import type { SelectionQuestion as SelectionQuestionType } from '@/types/question'
 
 interface SelectionQuestionProps {
   data: SelectionQuestionType
+  isCurrentQuestion: boolean
 }
 
 export function SelectionQuestion({
   data: { title, picture, options, code, answer },
+  isCurrentQuestion,
 }: SelectionQuestionProps) {
+  console.log(isCurrentQuestion)
+
   const {
-    state: { isAnswerVerified, isAnswerCorrect },
+    state: { isAnswerVerified, isAnswerCorrect, currentQuestionIndex },
     dispatch,
   } = useLesson()
   const [selectedOption, setSelectedOption] = useState('')
@@ -77,23 +84,33 @@ export function SelectionQuestion({
   }, [isAnswerVerified, selectedOption])
 
   return (
-    <div className="mx-auto mt-16 w-full max-w-xl flex flex-col items-center justify-center">
-      <QuestionTitle picture={picture}>{title}</QuestionTitle>
+    <AnimatePresence>
+      <motion.div
+        key={currentQuestionIndex}
+        variants={questionAnimations}
+        initial="right"
+        animate={isCurrentQuestion ? 'middle' : ''}
+        exit="left"
+        transition={questionTransition}
+        className="mx-auto mt-3 w-full max-w-xl flex flex-col items-center justify-center"
+      >
+        <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
-      <RadioGroup.Root className="mt-8 space-y-2">
-        {options.map((option) => (
-          <Option
-            key={option}
-            label={option}
-            isSelected={selectedOption === option}
-            isAnswerIncorrect={isAnswerVerified && !isAnswerCorrect}
-            isAnswerCorrect={
-              isAnswerVerified && isAnswerCorrect && option === answer
-            }
-            onClick={() => setSelectedOption(option)}
-          />
-        ))}
-      </RadioGroup.Root>
-    </div>
+        <RadioGroup.Root className="mt-8 space-y-2">
+          {options.map((option) => (
+            <Option
+              key={option}
+              label={option}
+              isSelected={selectedOption === option}
+              isAnswerIncorrect={isAnswerVerified && !isAnswerCorrect}
+              isAnswerCorrect={
+                isAnswerVerified && isAnswerCorrect && option === answer
+              }
+              onClick={() => setSelectedOption(option)}
+            />
+          ))}
+        </RadioGroup.Root>
+      </motion.div>
+    </AnimatePresence>
   )
 }
