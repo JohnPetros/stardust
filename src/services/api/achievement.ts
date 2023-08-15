@@ -1,9 +1,12 @@
-import { createClient } from '../supabase-browser'
+'use client'
+import { useSupabase } from '@/hooks/useSupabase'
 import { Achievement } from '@/types/achievement'
 
-const supabase = createClient()
 
-export default {
+export default () => {
+  const { supabase } = useSupabase()
+
+ return {
   getAchievements: async () => {
     const { data, error } = await supabase
       .from('achievements')
@@ -37,4 +40,5 @@ export default {
     }
     return data.map((data) => data.achievement_id)
   },
+ }
 }

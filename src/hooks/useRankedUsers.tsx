@@ -1,7 +1,9 @@
-import { api } from '@/services/api'
+import { useApi } from '@/services/api'
 import useSWR from 'swr'
 
 export function useRankedUsers(rankingId: string) {
+  const api = useApi()
+
   async function getUsersByRanking() {
     return await api.getUsersByRanking(rankingId)
   }

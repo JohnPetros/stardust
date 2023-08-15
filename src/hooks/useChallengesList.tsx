@@ -7,11 +7,13 @@ import useSWR from 'swr'
 
 import { ChallengesListContext } from '@/contexts/ChallengesListContext'
 
-import { api } from '@/services/api'
+import { useApi } from '@/services/api'
 
 import type { Challenge } from '@/types/challenge'
 
 export const useChallengesList = () => {
+  const api = useApi()
+
   const { user } = useAuth()
   const { categories } = useCategory()
   const { state, dispatch } = useContext(ChallengesListContext)

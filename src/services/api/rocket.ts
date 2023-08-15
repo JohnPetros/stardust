@@ -1,9 +1,11 @@
-import { createClient } from '../supabase-browser'
+'use client'
+import { useSupabase } from '@/hooks/useSupabase'
 import type { Rocket } from '@/types/rocket'
 
-const supabase = createClient()
+export default () => {
+  const { supabase } = useSupabase()
 
-export default {
+ return {
   getRocket: async (rocketId: string) => {
     const { data, error } = await supabase
       .from('rockets')
@@ -52,4 +54,5 @@ export default {
       return error.message
     }
   },
+ }
 }

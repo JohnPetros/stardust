@@ -6,11 +6,12 @@ import useSWR from 'swr'
 
 import type { Star } from '@/types/star'
 import type { Planet } from '@/types/planet'
-import { api } from '@/services/api'
+import { useApi } from '@/services/api'
 import { UserUnlockedStars } from '@/types/relations'
 
 export function usePlanet() {
   const { user } = useAuth()
+  const api = useApi()
 
   async function getUserUnlockedStars() {
     if (user?.id) {

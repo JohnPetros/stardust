@@ -1,19 +1,22 @@
+'use client'
+import { useSupabase } from '@/hooks/useSupabase'
 import type { Category } from '@/types/category'
-import { createClient } from '../supabase-browser'
 
-const supabase = createClient()
+export default () => {
+  const { supabase } = useSupabase()
 
-export default {
-  getCategories: async () => {
-    const { data, error } = await supabase
-      .from('categories')
-      .select('*, challenges_categories(challenge_id)')
-      .returns<Category[]>()
+  return {
+    getCategories: async () => {
+      const { data, error } = await supabase
+        .from('categories')
+        .select('*, challenges_categories(challenge_id)')
+        .returns<Category[]>()
 
-    if (error) {
-      throw new Error(error.message)
-    }
+      if (error) {
+        throw new Error(error.message)
+      }
 
-    return data
-  },
+      return data
+    },
+  }
 }

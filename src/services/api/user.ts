@@ -1,7 +1,6 @@
-import { createClient } from '../supabase-browser'
+'use client'
+import { useSupabase } from '@/hooks/useSupabase'
 import type { User, WinnerUser } from '@/types/user'
-
-const supabase = createClient()
 
 interface AddMethodParams {
   id: string
@@ -9,75 +8,82 @@ interface AddMethodParams {
   email: string
 }
 
-export default {
-  getUser: async (userId: string) => {
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('id', userId)
-      .single<User>()
+export default () => {
+  const { supabase } = useSupabase()
 
-    if (error) {
-      throw new Error(error.message)
-    }
-    return data
-  },
+  return {
+    getUser: async (userId: string) => {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', userId)
+        .single<User>()
 
-  getUserByEmail: async (email: string) => {
-    const { data, error } = await supabase
-      .from('users')
-      .select('email')
-      .eq('email', email)
-      .single()
-    if (error) {
-      throw new Error(error.message)
-    }
-    return data
-  },
+      if (error) {
+        throw new Error(error.message)
+      }
+      return data
+    },
 
-  addUser: async ({ id, name, email }: AddMethodParams) => {
-    const { error } = await supabase.from('users').insert([{ id, name, email }])
-    if (error) {
-      throw new Error(error.message)
-    }
-  },
+    getUserByEmail: async (email: string) => {
+      const { data, error } = await supabase
+        .from('users')
+        .select('email')
+        .eq('email', email)
+        .single()
+      if (error) {
+        throw new Error(error.message)
+      }
+      return data
+    },
 
-  updateUser: async (newData: Partial<User>, userId: string) => {
-    const { error } = await supabase
-      .from('users')
-      .update(newData)
-      .eq('id', userId)
+    addUser: async ({ id, name, email }: AddMethodParams) => {
+      const { error } = await supabase
+        .from('users')
+        .insert([{ id, name, email }])
+      if (error) {
+        throw new Error(error.message)
+      }
+    },
 
-    if (error) {
-      return error.message
-    }
-  },
+    updateUser: async (newData: Partial<User>, userId: string) => {
+      const { error } = await supabase
+        .from('users')
+        .update(newData)
+        .eq('id', userId)
 
-  getUsersByRanking: async (rankingId: string) => {
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('ranking_id', rankingId)
-      .order('weekly_xp', { ascending: false })
-      .returns<User[]>()
+      if (error) {
+        return error.message
+      }
+    },
 
-    if (error) {
-      throw new Error(error.message)
-    }
+    getUsersByRanking: async (rankingId: string) => {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('ranking_id', rankingId)
+        .order('weekly_xp', { ascending: false })
+        .returns<User[]>()
 
-    return data
-  },
+      if (error) {
+        throw new Error(error.message)
+      }
 
-  getWinnerUsers: async (lastWeekRankingId: string) => {
-    const { data, error } = await supabase
-      .from('winners')
-      .select('*')
-      .eq('ranking_id', lastWeekRankingId).returns<WinnerUser[]>()
+      return data
+    },
 
-    if (error) {
-      throw new Error(error.message)
-    }
-    
-    return data
-  },
+    getWinnerUsers: async (lastWeekRankingId: string) => {
+      const { data, error } = await supabase
+        .from('winners')
+        .select('*')
+        .eq('ranking_id', lastWeekRankingId)
+        .returns<WinnerUser[]>()
+
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      return data
+    },
+  }
 }

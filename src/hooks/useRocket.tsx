@@ -4,9 +4,11 @@ import { useAuth } from './useAuth'
 import useSWR, { mutate } from 'swr'
 
 import { Rocket } from '@/types/rocket'
-import { api } from '@/services/api'
+import { useApi } from '@/services/api'
 
 export function useRocket(rocketId?: string) {
+  const api = useApi()
+
   const { user } = useAuth()
 
   function verifyRocketAcquirement(

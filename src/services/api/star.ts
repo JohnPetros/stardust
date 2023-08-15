@@ -1,49 +1,58 @@
-import { createClient } from '../supabase-browser'
+'use client'
+import { useSupabase } from '@/hooks/useSupabase'
 import type { Star } from '@/types/star'
 
-const supabase = createClient()
+export default () => {
+  const { supabase } = useSupabase()
 
-export default {
-  getStar: async (starId: string) => {
-    const { data, error } = await supabase
-      .from('stars')
-      .select('*, questions(*)')
-      .eq('id', starId)
-      .order('order', { foreignTable: 'questions', ascending: true })
-      .single<Star>()
+  return {
+    getStar: async (starId: string) => {
+      const { data, error } = await supabase
+        .from('stars')
+        .select('*, questions(*)')
+        .eq('id', starId)
+        .order('order', { foreignTable: 'questions', ascending: true })
+        .single<Star>()
 
-    if (error) {
-      throw new Error(error.message)
-    }
+      if (error) {
+        throw new Error(error.message)
+      }
 
-    return data
-  },
+      return data
+    },
 
-  getNextStar: async (currentStar: Star) => {
-    const { data, error } = await supabase
-      .from('stars')
-      .select('*')
-      .match({
-        planet_id: currentStar.planet_id,
-        number: currentStar.number + 1,
-      })
-      .single<Star>()
+    getNextStar: async (currentStar: Star, userId: string) => {
+      const { data, error } = await supabase
+        .from('stars')
+        .select('id, users_unlocked_stars(*)')
+        .match({
+          planet_id: currentStar.planet_id,
+          number: currentStar.number + 1,
+        })
+        .eq('users_unlocked_stars.user_id', userId)
+        .single()
 
-    if (error) {
-      throw new Error(error.message)
-    }
+      if (error) {
+        throw new Error(error.message)
+      }
 
-    return data
-  },
+      const nextStar = {
+        ...data,
+        isUnlocked: data.users_unlocked_stars.length > 0,
+      }
 
-  getUserUnlockedStars: async (userId: string) => {
-    const { data, error } = await supabase
-      .from('users_unlocked_stars')
-      .select('*')
-      .eq('user_id', userId)
-    if (error) {
-      throw new Error(error.message)
-    }
-    return data
-  },
+      return nextStar
+    },
+
+    getUserUnlockedStars: async (userId: string) => {
+      const { data, error } = await supabase
+        .from('users_unlocked_stars')
+        .select('*')
+        .eq('user_id', userId)
+      if (error) {
+        throw new Error(error.message)
+      }
+      return data
+    },
+  }
 }

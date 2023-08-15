@@ -1,13 +1,15 @@
 import { useMemo } from 'react'
 import useSWR from 'swr'
 
-import { api } from '@/services/api'
+import { useApi } from '@/services/api'
 import type { Challenge } from '@/types/challenge'
 
 export function useChallenge(
   challengeId?: string | null,
   userId?: string | null
 ) {
+  const api = useApi()
+
   function getChallenges() {
     if (userId) {
       return api.getChallenges(userId)

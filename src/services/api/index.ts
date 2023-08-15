@@ -8,14 +8,16 @@ import ranking from './ranking'
 import challenge from './challenge'
 import category from './category'
 
-export const api = {
-  ...user,
-  ...planet,
-  ...star,
-  ...avatar,
-  ...achievement,
-  ...rocket,
-  ...ranking,
-  ...challenge,
-  ...category,
+export function useApi() {
+  return {
+    ...star(),
+    ...user(),
+    ...planet(),
+    ...avatar(),
+    ...achievement(),
+    ...rocket(),
+    ...ranking(),
+    ...challenge(),
+    ...category(),
+  }
 }

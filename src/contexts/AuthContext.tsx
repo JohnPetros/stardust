@@ -6,7 +6,7 @@ import { useSupabase } from '../hooks/useSupabase'
 import useSWR, { mutate } from 'swr'
 
 import { AuthError, Session } from '@supabase/supabase-js'
-import { api } from '@/services/api'
+import { useApi } from '@/services/api'
 import type { User } from '@/types/user'
 
 interface AuthContextValue {
@@ -45,6 +45,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     serverSession
   )
   const { supabase } = useSupabase()
+  const api = useApi()
   const router = useRouter()
 
   async function getUser() {

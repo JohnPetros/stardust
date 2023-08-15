@@ -1,9 +1,11 @@
-import { createClient } from '../supabase-browser'
+import { useSupabase } from '@/hooks/useSupabase'
 import type { Planet } from '@/types/planet'
 
-const supabase = createClient()
 
-export default {
+export default () => {
+  const { supabase } = useSupabase()
+
+ return {
   getPlanets: async () => {
     const { data, error } = await supabase
       .from('planets')
@@ -16,4 +18,5 @@ export default {
     }
     return data
   },
+ }
 }

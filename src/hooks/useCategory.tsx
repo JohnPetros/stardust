@@ -1,8 +1,9 @@
 'use client'
-import { api } from '@/services/api'
+import { useApi } from '@/services/api'
 import useSWR from 'swr'
 
 export function useCategory() {
+  const api = useApi()
   const { data: categories, error } = useSWR('/categories', api.getCategories)
 
   if (error) {

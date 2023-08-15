@@ -1,9 +1,11 @@
 'use client'
 
 import useSWR from 'swr'
-import { api } from '@/services/api'
+import { useApi } from '@/services/api'
 
 export function useRanking(rankingId?: string, canGetAllRankings?: boolean) {
+  const api = useApi()
+
   async function getRanking() {
     if (rankingId) {
       return await api.getRanking(rankingId)

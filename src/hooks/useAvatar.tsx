@@ -5,9 +5,10 @@ import { useAuth } from './useAuth'
 import useSWR, { mutate } from 'swr'
 
 import { Avatar } from '@/types/avatar'
-import { api } from '@/services/api'
+import { useApi } from '@/services/api'
 
 export function useAvatar(avatarId?: string) {
+  const api = useApi()
   const { user } = useAuth()
 
   async function getUserAcquiredAvatarsIds() {

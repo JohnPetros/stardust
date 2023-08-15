@@ -1,8 +1,10 @@
 'use client'
-import { api } from '@/services/api'
+import { useApi } from '@/services/api'
 import useSWR from 'swr'
 
 export function useUser(userId: string) {
+  const api = useApi()
+
   async function getUser() {
     if (userId) {
       return await api.getUser(userId)

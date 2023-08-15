@@ -1,53 +1,56 @@
-import { createClient } from '../supabase-browser'
+'use client'
+import { useSupabase } from '@/hooks/useSupabase'
 import type { Avatar } from '@/types/avatar'
 
-const supabase = createClient()
+export default () => {
+  const { supabase } = useSupabase()
 
-export default {
-  getAvatar: async (avatarId: string) => {
-    const { data, error } = await supabase
-      .from('avatars')
-      .select('*')
-      .eq('id', avatarId)
-      .single<Avatar>()
-    if (error) {
-      throw new Error(error.message)
-    }
-    return data
-  },
+  return {
+    getAvatar: async (avatarId: string) => {
+      const { data, error } = await supabase
+        .from('avatars')
+        .select('*')
+        .eq('id', avatarId)
+        .single<Avatar>()
+      if (error) {
+        throw new Error(error.message)
+      }
+      return data
+    },
 
-  getAvatars: async () => {
-    const { data, error } = await supabase
-      .from('avatars')
-      .select('*')
-      .order('price, name', { ascending: true })
-      .returns<Avatar[]>()
-    if (error) {
-      throw new Error(error.message)
-    }
-    return data
-  },
+    getAvatars: async () => {
+      const { data, error } = await supabase
+        .from('avatars')
+        .select('*')
+        .order('price, name', { ascending: true })
+        .returns<Avatar[]>()
+      if (error) {
+        throw new Error(error.message)
+      }
+      return data
+    },
 
-  getUserAcquiredAvatarsIds: async (userId: string) => {
-    const { data, error } = await supabase
-      .from('users_acquired_avatars')
-      .select('avatar_id')
-      .eq('user_id', userId)
+    getUserAcquiredAvatarsIds: async (userId: string) => {
+      const { data, error } = await supabase
+        .from('users_acquired_avatars')
+        .select('avatar_id')
+        .eq('user_id', userId)
 
-    if (error) {
-      throw new Error(error.message)
-    }
+      if (error) {
+        throw new Error(error.message)
+      }
 
-    return data.map((data) => data.avatar_id)
-  },
+      return data.map((data) => data.avatar_id)
+    },
 
-  addUserAcquiredAvatar: async (avatarId: string, userId: string) => {
-    const { error } = await supabase
-      .from('users_acquired_avatars')
-      .insert([{ avatar_id: avatarId, user_id: userId }])
+    addUserAcquiredAvatar: async (avatarId: string, userId: string) => {
+      const { error } = await supabase
+        .from('users_acquired_avatars')
+        .insert([{ avatar_id: avatarId, user_id: userId }])
 
-    if (error) {
-      return error.message
-    }
-  },
+      if (error) {
+        return error.message
+      }
+    },
+  }
 }
