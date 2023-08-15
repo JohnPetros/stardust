@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useLesson } from '@/hooks/useLesson'
 
 import { SelectionQuestion } from './SelectionQuestion'
@@ -48,7 +48,12 @@ export function Quiz() {
   }, [questions, currentQuestionIndex])
 
   
-
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
+  }, [currentQuestionIndex])
 
   if (currentQuestion)
     return (
