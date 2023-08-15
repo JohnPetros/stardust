@@ -1,81 +1,82 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { useLesson } from '@/hooks/useLesson'
 import { useAuth } from '@/hooks/useAuth'
+
+import { motion, Variants } from 'framer-motion'
 
 import { Metric } from './Metric'
 
 import ApolloContratulating from '../../../../../../../public/animations/apollo-congratulating.json'
-import Lottie from 'lottie-react'
+import StarsChain from '../../../../../../../public/animations/stars-chain.json'
+import Lottie, { LottieRef } from 'lottie-react'
 
-interface EndProps {
-  isAlreadyCompleted: boolean
+const apolloAnimations: Variants = {
+  hidden: {
+    opacity: 0,
+    scale: 0,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: .6,
+    },
+  },
 }
 
-export function End({ isAlreadyCompleted }: EndProps) {
+interface EndProps {
+  coins: number
+  xp: number
+  time: string
+  accurance: string
+}
+
+export function End({ accurance, coins, time, xp }: EndProps) {
   const { user, updateUser } = useAuth()
-  const {
-    state: { questions, incorrectAnswersAmount, secondsAmount },
-    dispatch,
-  } = useLesson()
-  const [coins, setCoins] = useState(0)
-  const [xp, setXp] = useState(0)
-  const [time, setTime] = useState('')
-  const [accurance, setAccurance] = useState('')
 
-  function formatSecondsToTime(seconds: number) {
-    const date = new Date(0)
-    date.setSeconds(seconds)
-    const time = date.toISOString().substring(14, 19)
+  const starsChainRef = useRef(null) as LottieRef
 
-    console.log(time)
+  function pauseStarsAnimation() {
+    const totalStars = (parseInt(accurance) * 5) / 100
 
-    return time
+    starsChainRef.current?.goToAndPlay(0)
+
+    const delay = 500 * (!isNaN(totalStars) ? totalStars : 5)
+
+    setTimeout(() => {
+      starsChainRef.current?.pause()
+    }, delay)
   }
-
-  function getAccurance() {
-    const accurance =
-      ((questions.length - incorrectAnswersAmount) / questions.length) * 100
-    return accurance === 0 ? '100%' : accurance.toFixed(1) + '%'
-  }
-
-  function getCoins() {
-    let maxCoins = isAlreadyCompleted ? 5 : 10
-    for (let i = 0; i < incorrectAnswersAmount; i++) {
-      maxCoins -= isAlreadyCompleted ? 1 : 2
-    }
-    return maxCoins
-  }
-
-  function getXp() {
-    let maxXp = isAlreadyCompleted ? 10 : 20
-    for (let i = 0; i < incorrectAnswersAmount; i++) {
-      maxXp -= isAlreadyCompleted ? 2 : 5
-    }
-
-    return maxXp
-  }
-
-
 
   useEffect(() => {
-    setXp(getXp())
-    setCoins(getCoins())
-    setAccurance(getAccurance())
-    setTime(formatSecondsToTime(secondsAmount))
-  }, [])
+    pauseStarsAnimation()
+  }, [accurance])
 
   return (
-    <div className="flex flex-col items-center justify-center mt-24 mx-auto px-6 w-full max-w-lg">
+    <div className="flex flex-col items-center justify-center mt-16 mx-auto px-6 w-full max-w-lg">
       <h3 className="text-gray-100 text-xl font-semibold">Fase completada!</h3>
 
       <Lottie
-        animationData={ApolloContratulating}
-        style={{ width: 320 }}
-        loop={true}
+        lottieRef={starsChainRef}
+        animationData={StarsChain}
+        style={{ width: 180 }}
+        loop={false}
+        autoplay={true}
       />
 
-      <div className="flex flex-col items-center justify-center mt-3">
+      <motion.div
+        variants={apolloAnimations}
+        initial="hidden"
+        animate="visible"
+      >
+        <Lottie
+          animationData={ApolloContratulating}
+          style={{ width: 320 }}
+          loop={true}
+        />
+      </motion.div>
+
+      <dl className="flex flex-col items-center justify-center mt-3">
         <div className="mx-auto">
           <Metric
             title="Poeira estelar"
@@ -115,7 +116,7 @@ export function End({ isAlreadyCompleted }: EndProps) {
             delay={2.5}
           />
         </div>
-      </div>
+      </dl>
     </div>
   )
 }
