@@ -7,7 +7,7 @@ export default {
   getStar: async (starId: string) => {
     const { data, error } = await supabase
       .from('stars')
-      .select('*, questions(content)')
+      .select('*, questions(*)')
       .eq('id', starId)
       .order('order', { foreignTable: 'questions', ascending: true })
       .single<Star>()
