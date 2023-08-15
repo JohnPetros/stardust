@@ -17,31 +17,37 @@ export default function Lesson() {
   const { starId } = useParams()
   if (!starId) return null
 
-  const { star, getNextStar } = useStar(String(starId))
+  const { star, nextStar } = useStar(String(starId))
   const { state, dispatch } = useLesson()
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (star) {      
+    setTimeout(() => dispatch({ type: 'incrementSecondsAmount' }), 1000)
+  }, [state.secondsAmount])
+
+  useEffect(() => {
+    if (star && nextStar) {
       dispatch({ type: 'setTexts', payload: star.texts })
       dispatch({ type: 'setQuestions', payload: star.questions })
       setTimeout(() => setIsTransitionVisible(false), 1000)
     }
-  }, [star])
+  }, [star, nextStar])
 
   return (
     <div>
       <TransitionPageAnimation isVisible={isTransitionVisible} />
       <main ref={scrollRef} className="relative">
         <Header />
-        {star && (
+        {star && nextStar && (
           <>
             {state.currentStage === 'theory' && (
               <Theory title={star.name} number={star.number} />
             )}
             {state.currentStage === 'quiz' && <Quiz />}
-            {state.currentStage === 'end' && <End />}
+            {state.currentStage === 'end' && (
+              <End isAlreadyCompleted={nextStar.isUnlocked} />
+            )}
           </>
         )}
       </main>
