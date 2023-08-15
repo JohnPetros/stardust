@@ -1,9 +1,11 @@
 'use client'
 
-import Image from 'next/image'
-import { twMerge } from 'tailwind-merge'
 
+import Image from 'next/image'
 import { motion, Variants } from 'framer-motion'
+
+
+import { twMerge } from 'tailwind-merge'
 
 const colors = {
   bg: {
@@ -38,7 +40,7 @@ export function Metric({
   isLarge,
   delay,
 }: MetricProps) {
-  
+
   const metricAniamtions: Variants = {
     down: {
       opacity: 0,
@@ -60,19 +62,19 @@ export function Metric({
       initial="down"
       animate="up"
       className={twMerge(
-        'rounded-md overflow-hidden border',
-        isLarge ? 'w-64 h-20' : 'w-32 h-20',
+        'rounded-md overflow-hidden border h-20',
+        isLarge ? 'w-64' : 'w-32',
         colors.border[color]
       )}
     >
       <div
         className={twMerge('grid place-content-center p-1', colors.bg[color])}
       >
-        <strong className="text-gray-900">{title}</strong>
+        <dt className="text-gray-900">{title}</dt>
       </div>
-      <div className="flex items-center justify-center gap-2 p-3">
+      <div className="flex items-center justify-center gap-2 pt-3">
         <Image src={`/icons/${icon}`} width={24} height={24} alt="" />
-        <span className="text-gray-100 text-lg font-medium">{amount}</span>
+        <dd className="block text-gray-100 text-lg font-medium">{amount}</dd>
       </div>
     </motion.div>
   )
