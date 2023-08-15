@@ -1,6 +1,8 @@
 'use client'
 
+import { useMemo } from 'react'
 import { useLesson } from '@/hooks/useLesson'
+
 import { SelectionQuestion } from './SelectionQuestion'
 import { VerificationButton } from './VerificationButton'
 import { DragAndDropListQuestion } from './DragAndDropListQuestion'
@@ -18,15 +20,17 @@ export function Quiz() {
     dispatch,
   } = useLesson()
 
-  const currentQuestion = questions[2]?.content
+  const currentQuestion = useMemo(() => {
+    return questions.length ? questions[currentQuestionIndex].content : null
+  }, [questions, currentQuestionIndex])
 
   if (currentQuestion)
     return (
       <div className="relative">
         <div className="mx-auto mt-16 w-full max-w-xl">
-          {/* {currentQuestion.type === 'selection' && (
+          {currentQuestion.type === 'selection' && (
             <SelectionQuestion data={currentQuestion} />
-          )} */}
+          )}
 
           {/* {currentQuestion.type === 'checkbox' && (
         <CheckboxQuestion data={currentQuestion} />
