@@ -21,7 +21,7 @@ export function Theory({ title, number }: TheoryProps) {
   const { state, dispatch } = useLesson()
   const [texts, setTexts] = useState<TextData[]>([])
   const modalRef = useRef<ModalRef>(null)
-  const buttonRef = useRef<HTMLButtonElement>(null)
+  const buttonHasFocus = useRef(false)
   const nextTextIndex = useRef(0)
 
   function nextText() {
@@ -56,7 +56,7 @@ export function Theory({ title, number }: TheoryProps) {
   }
 
   function handleKeyDown({ key }: KeyboardEvent) {
-    if (key === 'Enter') {
+    if (key === 'Enter' && !buttonHasFocus?.current) {
       nextText()
     }
   }
@@ -83,7 +83,7 @@ export function Theory({ title, number }: TheoryProps) {
           </div>
           <div className="space-y-10 mt-10 pb-[360px]">
             {texts.map((text) => (
-              <Text data={text} hasAnimation={text.hasAnimation} />
+              <Text key={String(text.content)} data={text} hasAnimation={text.hasAnimation} />
             ))}
           </div>
         </div>
@@ -93,6 +93,8 @@ export function Theory({ title, number }: TheoryProps) {
             className="w-32"
             tabIndex={0}
             onClick={handleContinueButtonClick}
+            onFocus={() => buttonHasFocus.current = true}
+            onBlur={() => buttonHasFocus.current = false}
             disabled={nextTextIndex.current > allTexts.length}
           >
             Continuar
