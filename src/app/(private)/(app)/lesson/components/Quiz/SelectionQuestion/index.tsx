@@ -45,9 +45,9 @@ export function SelectionQuestion({
     if (selectedOption.toLowerCase() === answer.toLowerCase()) {
       setIsAnswerCorrect(true)
 
-      // if (isAnswerVerified) {
-      //   dispatch({ type: 'changeQuestion' })
-      // }
+      if (isAnswerVerified) {
+        dispatch({ type: 'changeQuestion' })
+      }
 
       return
     }
@@ -80,7 +80,7 @@ export function SelectionQuestion({
     <div className="mx-auto mt-16 w-full max-w-xl flex flex-col items-center justify-center">
       <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
-      <RadioGroup.Root className="mt-16 space-y-3">
+      <RadioGroup.Root className="mt-8 space-y-2">
         {options.map((option) => (
           <Option
             key={option}

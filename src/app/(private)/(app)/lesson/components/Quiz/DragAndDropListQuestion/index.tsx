@@ -36,11 +36,11 @@ export function DragAndDropListQuestion({
   data: { title, items, picture },
 }: DragAndDropListQuestionProps) {
   const {
-    state: { isAnswerVerified },
+    state: { isAnswerVerified, currentQuestionIndex },
     dispatch,
   } = useLesson()
 
-  const [sortableItems, setSortableItems] = useState<SortableItem[]>(items)
+  const [sortableItems, setSortableItems] = useState<SortableItem[]>([])
   const [activeItemId, setActiveEventId] = useState<number | null>(null)
 
   const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
@@ -68,9 +68,9 @@ export function DragAndDropListQuestion({
     if (isUserAnswerCorrect()) {
       setIsAnswerCorrect(true)
 
-      // if (isAnswerVerified) {
-      //   dispatch({ type: 'changeQuestion' })
-      // }
+      if (isAnswerVerified) {
+        dispatch({ type: 'changeQuestion' })
+      }
 
       return
     }
@@ -119,7 +119,9 @@ export function DragAndDropListQuestion({
       type: 'setIsAnswered',
       payload: true,
     })
-  }, [])
+
+    setSortableItems(items)
+  }, [currentQuestionIndex])
 
   useEffect(() => {
     dispatch({
@@ -136,7 +138,7 @@ export function DragAndDropListQuestion({
       onDragCancel={handleDragCancel}
       modifiers={[restrictToVerticalAxis, restrictToWindowEdges]}
     >
-      <div className="mx-auto mt-16 w-full max-w-xl flex flex-col items-center justify-center cursor-grab">
+      <div className="mx-auto mt-16 w-full max-w-xl flex flex-col items-center justify-center px-6">
         <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
         <SortableContext

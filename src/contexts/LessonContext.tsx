@@ -108,6 +108,20 @@ function LessonReducer(state: LessonState, action: LessonAction): LessonState {
         livesAmount:
           state.livesAmount === 0 ? state.livesAmount : state.livesAmount - 1,
       }
+    case 'changeQuestion':
+      const nextQuestionIndex = state.currentQuestionIndex + 1
+
+      let isEnd = false
+      if (!state.questions[nextQuestionIndex]) {
+        isEnd = true
+      }
+
+      return {
+        ...state,
+        currentQuestionIndex: nextQuestionIndex,
+        currentStage: isEnd ? 'end' : state.currentStage,
+        isAnswered: false,
+      }
     default:
       return state
   }
