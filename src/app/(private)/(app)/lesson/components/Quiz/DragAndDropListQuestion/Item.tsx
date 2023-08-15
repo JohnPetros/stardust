@@ -35,7 +35,7 @@ export function Item({ id, label, isActive }: ItemProps) {
       {...attributes}
       {...listeners}
       className={twMerge(
-        'rounded-md flex items-center justify-between bg-purple-700 border-2 p-3 w-full max-w-sm mx-auto borde text-medium',
+        'rounded-md flex items-center justify-between bg-purple-700 border-2 p-3 w-full mx-auto borde text-medium  cursor-grab',
         isActive
           ? 'border-blue-300 text-blue-300'
           : 'border-gray-100 text-gray-100',
