@@ -95,7 +95,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
       <div className="reative flex flex-col justify-between h-full">
         <button
           onClick={toggleSidenav}
-          className="absolute top-20 -right-3 rounded-full bg-green-400 p-1 grid place-content-center z-40"
+          className="absolute top-20 -right-2 rounded-full bg-green-400 p-1 grid place-content-center z-40"
         >
           {isExpanded ? (
             <CaretLeft className="text-gray-800 text-sm" weight="bold" />
