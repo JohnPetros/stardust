@@ -79,5 +79,15 @@ export default () => {
 
       return data.map((data) => data.challenge_id)
     },
+
+    addCompletedChallenge: async (achievementId: string, userId: string) => {
+      const { error } = await supabase
+        .from('users_completed_challenges')
+        .insert([{ challenge_id: achievementId, user_id: userId }])
+
+      if (error) {
+        throw new Error(error.message)
+      }
+    },
   }
 }
