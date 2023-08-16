@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useLesson } from '@/hooks/useLesson'
 import { useAuth } from '@/hooks/useAuth'
 import { useStar } from '@/hooks/useStar'
@@ -14,14 +14,13 @@ import { End } from '../components/End'
 
 export default function Lesson() {
   const { starId } = useParams()
-
-  const { user } = useAuth()
-
   const { star, nextStar, updateUserData } = useStar(String(starId))
+
   const {
     state: { currentStage, questions, incorrectAnswersAmount, secondsAmount },
     dispatch,
   } = useLesson()
+
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -30,7 +29,13 @@ export default function Lesson() {
   const [time, setTime] = useState('')
   const [accurance, setAccurance] = useState('')
 
- 
+  const router = useRouter()
+
+  function leaveLesson() {
+    dispatch({ type: 'resetState' })
+    router.push('/')
+  }
+
   function formatSecondsToTime(seconds: number) {
     const date = new Date(0)
     date.setSeconds(seconds)
@@ -91,7 +96,8 @@ export default function Lesson() {
     <div>
       <TransitionPageAnimation isVisible={isTransitionVisible} />
       <main ref={scrollRef} className="relative">
-        <Header />
+        {currentStage !== 'end' && <Header />}
+        
         {star && nextStar && (
           <>
             {currentStage === 'theory' && (
@@ -107,7 +113,7 @@ export default function Lesson() {
                 starId={star.id}
                 challengeId={null}
                 userDataUpdater={updateUserData}
-                isAlreadyCompleted={nextStar.isUnlocked}
+                onExit={leaveLesson}
               />
             )}
           </>
