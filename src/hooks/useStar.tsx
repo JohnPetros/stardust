@@ -70,6 +70,7 @@ export function useStar(starId?: string) {
       completedPlanets += _nextStar ? 1 : 0
     }
 
+
     if (_nextStar && !_nextStar.isUnlocked) {
       await addUnlockedStar(_nextStar.id)
       updatedUnlockedStars++

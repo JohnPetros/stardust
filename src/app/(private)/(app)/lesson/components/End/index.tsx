@@ -10,7 +10,10 @@ import { Metric } from './Metric'
 import ApolloContratulating from '../../../../../../../public/animations/apollo-congratulating.json'
 import StarsChain from '../../../../../../../public/animations/stars-chain.json'
 import Lottie, { LottieRef } from 'lottie-react'
-import { User } from '@/types/user'
+
+import { playSound } from '@/utils/functions'
+
+import type { User } from '@/types/user'
 
 const apolloAnimations: Variants = {
   hidden: {
@@ -72,7 +75,7 @@ export function End({
 
   async function getUpdatedUserData() {
     if (!user) return
-    return await userDataUpdater({ newCoins: coins, newXp: xp, user })
+    return await userDataUpdater({ newCoins: 25, newXp: 20, user })
   }
 
   const starsChainRef = useRef(null) as LottieRef
@@ -80,7 +83,9 @@ export function End({
   async function updateUserData() {
     const updatedUserData = await getUpdatedUserData()
 
-    console.log(updatedUserData)
+    if (updatedUserData) {
+      const error = await updateUser(updatedUserData)
+    }
   }
 
   function pauseStarsAnimation() {
@@ -98,9 +103,13 @@ export function End({
   useEffect(() => {
     pauseStarsAnimation()
 
+    console.log('oi');
+    
     setTimeout(async () => {
       await updateUserData()
     }, 250)
+
+    // playSound('earning.wav')
   }, [])
 
   return (
