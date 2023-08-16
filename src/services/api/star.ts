@@ -44,6 +44,40 @@ export default () => {
       return nextStar
     },
 
+    getNextStarFromNextPlanet: async (
+      currentPlanetId: string,
+      userId: string
+    ) => {
+      const { data: nextStarId, error: nextStarIdError } = await supabase.rpc(
+        'get_next_star_id_from_next_planet',
+        {
+          current_planet_id: currentPlanetId,
+        }
+      )
+
+      if (nextStarIdError) {
+        throw new Error(nextStarIdError.message)
+      }
+
+      const { data, error } = await supabase
+        .from('stars')
+        .select('id, users_unlocked_stars(*)')
+        .eq('id', nextStarId)
+        .eq('users_unlocked_stars.user_id', userId)
+        .single()
+
+        if (error) {
+          throw new Error(error.message)
+        }
+
+      const nextStar = {
+        ...data,
+        isUnlocked: data ? data.users_unlocked_stars.length > 0 : false,
+      }
+
+      return nextStar
+    },
+
     getUserUnlockedStars: async (userId: string) => {
       const { data, error } = await supabase
         .from('users_unlocked_stars')
@@ -53,6 +87,16 @@ export default () => {
         throw new Error(error.message)
       }
       return data
+    },
+
+    addUnlockedStar: async (starId: string, userId: string) => {
+      const { error } = await supabase
+        .from('users_unlocked_stars')
+        .insert([{ star_id: starId, user_id: userId }])
+
+      if (error) {
+        throw new Error(error.message)
+      }
     },
   }
 }
