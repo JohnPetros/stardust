@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 5000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "test --watch"
+    "test": "test --watch",
+    "gen-types": "supabase gen types typescript --linked > ./src/types/supabase.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.0.8",
