@@ -9,13 +9,15 @@ export function AchievementsList() {
 
   const { achievements } = useAchievement(user?.id)
 
+  if (user)
   return (
     <div className="flex flex-col gap-6">
       {achievements?.map((achievement) => (
         <Achievement
           key={achievement.id}
           data={achievement}
-          currentProgress={user[achievement.metric]}
+          currentProgress={50}
+          // currentProgress={user[achievement.metric]}
         />
       ))}
     </div>
