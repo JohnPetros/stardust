@@ -1,4 +1,4 @@
-import { Question } from "./question"
+import { Question } from "./quiz"
 import type { Text } from "./text"
 
 export type Star = {
