@@ -13,10 +13,10 @@ const layoutVariants: Variants = {
     paddingLeft: 0,
   },
   shrink: {
-    paddingLeft: 90,
+    paddingLeft: 80,
   },
   expand: {
-    paddingLeft: 180,
+    paddingLeft: 160,
   },
 }
 
