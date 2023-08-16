@@ -44,7 +44,7 @@ export interface DragAndDropClick {
   dropItems: DropItem[]
 }
 
-export type Item = {
+export type SortableItem = {
   id: number
   label: string
 }
@@ -53,7 +53,7 @@ export interface DragAndDropList {
   title: string
   picture?: string
   type: 'drag-and-drop-list'
-  items: Item[]
+  items: SortableItem[]
 }
 
 export type QuestionContent =
