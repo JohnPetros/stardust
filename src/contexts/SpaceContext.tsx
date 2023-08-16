@@ -21,8 +21,6 @@ export function SpaceProvider({ children }: SpaceContextProps) {
 
   useEffect(() => {
     
-    console.log('oi')
-
     if (rocket?.image && rocket?.name) {
       const rocketImage = getImage('rockets', rocket.image)
 
