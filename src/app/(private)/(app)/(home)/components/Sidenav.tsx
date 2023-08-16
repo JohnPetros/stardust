@@ -2,11 +2,14 @@
 
 import { useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
+import { useSiderbar } from '@/hooks/useSiderbar'
 
 import Link from 'next/link'
 import Image from 'next/image'
 
 import { ToastRef, Toast } from '@/app/components/Toast'
+import { Modal, ModalRef } from '@/app/components/Modal'
+import { Button } from '@/app/components/Button'
 import { NavButton } from './NavButton'
 import { AchievementsList } from './AchievementsList'
 import { SidenavButton } from './SidenavButton'
@@ -15,8 +18,6 @@ import { CaretLeft, CaretRight, Flag, Power } from '@phosphor-icons/react'
 import { AnimatePresence, Variants, motion } from 'framer-motion'
 
 import { HOME_PAGES } from '@/utils/constants/home-pages'
-import { Modal, ModalRef } from '@/app/components/Modal'
-import { Button } from '@/app/components/Button'
 
 const sidenavAnimations: Variants = {
   shrink: {
@@ -50,8 +51,7 @@ interface SidenavProps {
 
 export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
   const { user, signOut } = useAuth()
-  const [isAchievementsListVisible, setIsAchievementsListVisible] =
-    useState(false)
+  const { isAchievementsListVisible, setIsAchievementsListVisible } = useSiderbar()
   const [isLoading, setIsLoading] = useState(false)
   const toastRef = useRef<ToastRef>(null)
   const modalRef = useRef<ModalRef>(null)
@@ -85,6 +85,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
 
   return (
     <motion.div
+      id='sidenav'
       variants={sidenavAnimations}
       initial="shrink"
       animate={isExpanded ? 'expand' : ''}
@@ -95,7 +96,8 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
       <div className="reative flex flex-col justify-between h-full">
         <button
           onClick={toggleSidenav}
-          className="absolute top-20 -right-2 rounded-full bg-green-400 p-1 grid place-content-center z-40"
+          tabIndex={0}
+          className="absolute top-20 -right-[10px] rounded-full bg-green-400 p-1 grid place-content-center z-40 outline-green-500"
         >
           {isExpanded ? (
             <CaretLeft className="text-gray-800 text-sm" weight="bold" />
@@ -147,7 +149,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
             >
               <AchievementsList />
             </motion.div>
-           )}
+          )}
         </AnimatePresence>
 
         <div className="border-t border-green-700 flex flex-col gap-1 mx-3 px-3 py-3">

@@ -8,13 +8,15 @@ import { TransitionPageAnimation } from '../components/TransitionPageAnimation'
 
 export default function Home() {
   const { planets, lastUnlockedStarId } = usePlanet()
-  const { isOpen, toggle } = useSiderbar()
+  const { isOpen, toggle, setIsAchievementsListVisible } = useSiderbar()
   const [isTransitionVisible, setIsTransitionVisible] = useState(
     !planets?.length
   )
 
   function handleClick() {
     if (isOpen) toggle()
+
+    setIsAchievementsListVisible(false)
   }
 
   useEffect(() => {
