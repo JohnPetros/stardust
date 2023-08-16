@@ -1,12 +1,9 @@
 'use client'
-import { useState } from 'react'
 
-import { User } from '@/types/user'
-import { WEEK_DAYS } from '@/utils/constants'
-
-import Lottie from 'lottie-react'
-import StreakIcon from '../../../../../../../public/animations/streak.json'
 import Image from 'next/image'
+import { StreakIcon } from '../../components/StreakIcon'
+
+import { WEEK_DAYS } from '@/utils/constants'
 
 const weekStatusIcons: { [key in string]: string } = {
   todo: 'placeholder-day.svg',
@@ -15,15 +12,16 @@ const weekStatusIcons: { [key in string]: string } = {
 }
 
 interface StreakProps {
-  data: User
+  weekStatus: string[]
+  streakAmount: number
 }
 
-export function Streak({ data: { streak, week_status } }: StreakProps) {
-  const [weekStatus, setWeekStatus] = useState(week_status)
-
+export function StreakBoard({ weekStatus, streakAmount }: StreakProps) {
   return (
     <div className="border border-gray-300 rounded-md p-6 flex flex-col items-center justify-center gap-4">
-      <h4 className="text-gray-300">Sequência de dias estudados</h4>
+      <h4 className="text-gray-300">
+        Sequência de dias estudados (Cosmic Run)
+      </h4>
 
       <div className="grid grid-cols-7 gap-3">
         {WEEK_DAYS.map((weekday, index) => (
@@ -43,8 +41,10 @@ export function Streak({ data: { streak, week_status } }: StreakProps) {
       </div>
 
       <div className="flex items-center justify-center gap-1">
-        <Lottie animationData={StreakIcon} loop={false} style={{ width: 32 }} />
-        <p className="text-green-500">{streak} dias estudados seguidos</p>
+        <StreakIcon size={32} />
+        <p className="text-green-500 font-medium">
+          {streakAmount} {streakAmount > 1 ? 'dias' : 'dia'} estudados seguidos
+        </p>
       </div>
     </div>
   )
