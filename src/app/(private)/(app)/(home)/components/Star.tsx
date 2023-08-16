@@ -11,7 +11,7 @@ import { twMerge } from 'tailwind-merge'
 
 import UnlockedStar from '../../../../../../public/animations/unlocked-star.json'
 
-import { api } from '@/services/api'
+import { useApi } from '@/services/api'
 
 import type { Star } from '@/types/star'
 import { Toast, ToastRef } from '@/app/components/Toast'
@@ -60,6 +60,7 @@ export function Star({
   const starRef = useRef(null) as LottieRef
   const toastRef = useRef<ToastRef>(null)
   const router = useRouter()
+  const api = useApi()
 
   async function handleStarNavigation() {
     if (isChallenge) {
