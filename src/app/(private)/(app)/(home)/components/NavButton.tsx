@@ -1,16 +1,18 @@
 'use client'
+import { useRef } from 'react'
+import { usePathname } from 'next/navigation'
+
 import Link from 'next/link'
 import Image from 'next/image'
-import { usePathname } from 'next/navigation'
 import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
   TooltipRef,
 } from '@/app/components/Tooltip'
+
 import { twMerge } from 'tailwind-merge'
 import { Variants, motion } from 'framer-motion'
-import { useRef } from 'react'
 
 const labelVariants: Variants = {
   shrink: {
@@ -47,13 +49,14 @@ export function NavButton({
   return (
     <Tooltip>
       <TooltipTrigger
+        asChild
         onMouseOver={() => tooltipRef.current?.show()}
         onMouseLeave={() => tooltipRef.current?.hide()}
       >
         <Link
           href={path}
           className={twMerge(
-            'rounded-xl hover:bg-green-700/20 transition-colors duration-200 flex items-center justify-center md:w-max p-2',
+            'rounded-xl hover:bg-green-700/20 transition-colors duration-200 flex items-center justify-center md:w-max p-2 outline-green-500',
             isColumn ? 'flex-col' : 'flex-row'
           )}
         >
