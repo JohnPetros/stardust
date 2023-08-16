@@ -9,12 +9,12 @@ interface ServerProps {
 }
 
 export async function Server({ children }: ServerProps) {
-  const supabase = createClient()
-
+  const supabase = createClient()  
+  
   const {
     data: { session },
   } = await supabase.auth.getSession()
-
+  
   return (
     <SupabaseProvider>
       <AuthProvider serverSession={session}>{children}</AuthProvider>
