@@ -6,9 +6,8 @@ import { useAuth } from '@/hooks/useAuth'
 
 export function AchievementsList() {
   const { user } = useAuth()
-  if (!user) return null
 
-  const { achievements } = useAchievement(user.id)
+  const { achievements } = useAchievement(user?.id)
 
   return (
     <div className="flex flex-col gap-6">
