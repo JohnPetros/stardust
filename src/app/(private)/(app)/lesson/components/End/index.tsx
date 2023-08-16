@@ -154,6 +154,8 @@ export function End({
 
     // modalRef.current?.open()
 
+    console.log(todayStatus)
+
     const isStreakVisible = todayStatus === 'todo'
 
     if (isStreakVisible) {
@@ -167,7 +169,7 @@ export function End({
 
   function handleSecondButtonClick() {
     setIsLoading(true)
-    onExit()
+    // onExit()
   }
 
   useEffect(() => {
@@ -252,13 +254,12 @@ export function End({
           </>
         )}
 
-        {/* {isStreakVisible && user && (
+        {isStreakVisible && (
           <>
-            <StreakIcon size={180} />
-
+            <StreakIcon size={220} />
             <Streak />
           </>
-        )} */}
+        )}
 
         {isEndMessageVisible && (
           <motion.p
