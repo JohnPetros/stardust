@@ -10,7 +10,7 @@ import { RankedUsersList } from './components/RankedUsersList'
 import { BadgesList } from './components/BadgesList'
 
 import dayjs from 'dayjs'
-import { api } from '@/services/api'
+import { useApi } from '@/services/api'
 
 import type { Ranking } from '@/types/ranking'
 import type { WinnerUser } from '@/types/user'
@@ -26,6 +26,7 @@ export default function Ranking() {
     user?.ranking_id,
     true
   )
+  const api = useApi()
 
   const { rankedUsers } = useRankedUsers(user?.ranking_id ?? '')
 
