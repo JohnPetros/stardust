@@ -11,13 +11,14 @@ import ApolloContratulating from '../../../../../../../public/animations/apollo-
 import StarsChain from '../../../../../../../public/animations/stars-chain.json'
 import Lottie, { LottieRef } from 'lottie-react'
 
+import { Modal, ModalRef } from '@/app/components/Modal'
 import { Button } from '@/app/components/Button'
+import { StreakIcon } from '../../../(home)/components/StreakIcon'
+import { Streak } from './Streak'
+
+import { playSound } from '@/utils/functions'
 
 import type { User } from '@/types/user'
-
-import { Streak } from './Streak'
-import { StreakIcon } from '../../../(home)/components/StreakIcon'
-import { playSound } from '@/utils/functions'
 
 const apolloAnimations: Variants = {
   hidden: {
@@ -97,11 +98,14 @@ export function End({
   const [isStreakVisible, setIsStreakVisible] = useState(false)
   const [isEndMessageVisible, setIsEndMessageVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const modalRef = useRef<ModalRef>(null)
 
   function getUpdatedLevel(updatedXp: number) {
     if (!user) return
 
-    const hasNewLevel = updatedXp >= 50 * user.level + 25
+    const hasNewLevel = updatedXp >= 50 * (user.level - 1) + 25
+
+    console.log(50 * user.level + 25)
 
     if (hasNewLevel) {
       const newLevel = user.level + 1
@@ -121,6 +125,7 @@ export function End({
   const starsChainRef = useRef(null) as LottieRef
 
   async function updateUserData() {
+
     const updatedUserData = await getUpdatedUserData()
 
     if (updatedUserData) {
@@ -130,7 +135,7 @@ export function End({
 
       const data = { ...updatedUserData, level: updatedLevel }
 
-      // const error = await updateUser(data)
+      const error = await updateUser(data)
     }
   }
 
@@ -152,9 +157,11 @@ export function End({
     const todayIndex = new Date().getDay()
     const todayStatus = user.week_status[todayIndex]
 
-    // modalRef.current?.open()
+    setIsFirstClick(false)
 
-    console.log(todayStatus)
+    if (hasNewLevel) {
+      modalRef.current?.open()
+    }
 
     const isStreakVisible = todayStatus === 'todo'
 
@@ -164,24 +171,21 @@ export function End({
     }
 
     setIsEndMessageVisible(true)
-    setIsFirstClick(false)
   }
 
   function handleSecondButtonClick() {
     setIsLoading(true)
-    // onExit()
+    onExit()
   }
 
   useEffect(() => {
     pauseStarsAnimation()
 
-    //  const time = setTimeout(async () => {
-    //     await updateUserData()
-    //   }, 250)
+    const time = setTimeout(async () => {
+      await updateUserData()
+    }, 250)
 
-    //   playSound('earning.wav')
-
-    //   return () => clearTimeout(time)
+    return () => clearTimeout(time)
   }, [])
 
   return (
@@ -288,6 +292,27 @@ export function End({
           Continuar
         </Button>
       </motion.div>
+
+      <Modal
+        ref={modalRef}
+        type={'earning'}
+        title={'Parabéns! Você alcançou um novo nível!'}
+        body={
+          <div className="text-gray-100 text-center space-y-1 mb-6">
+            <p>
+              Você acaba de chegar no{' '}
+              <span className="text-green-400 text-lg text-medium">
+                Nível {user?.level} 😀
+              </span>
+              .
+            </p>
+            <p>Continue assim!</p>
+          </div>
+        }
+        footer={
+          <Button onClick={() => modalRef.current?.close()}>Show!</Button>
+        }
+      />
     </div>
   )
 }
