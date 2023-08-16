@@ -302,6 +302,34 @@ export interface Database {
         }
         Relationships: []
       }
+      questions: {
+        Row: {
+          content: Json
+          id: string
+          order: number
+          star_id: string
+        }
+        Insert: {
+          content: Json
+          id?: string
+          order: number
+          star_id: string
+        }
+        Update: {
+          content?: Json
+          id?: string
+          order?: number
+          star_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "questions_star_id_fkey"
+            columns: ["star_id"]
+            referencedRelation: "stars"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       rankings: {
         Row: {
           id: string
@@ -869,6 +897,12 @@ export interface Database {
           total_completitions: number | null
           upvotes: number | null
         }[]
+      }
+      get_next_star_id_from_next_planet: {
+        Args: {
+          current_planet_id: string
+        }
+        Returns: string
       }
       install_available_extensions_and_test: {
         Args: Record<PropertyKey, never>
