@@ -12,11 +12,10 @@ import Lottie from 'lottie-react'
 
 import { motion, Variants } from 'framer-motion'
 
-import { X } from '@phosphor-icons/react'
 import { MODAL_EFFECTS } from '@/utils/constants'
 import { playSound } from '@/utils/functions'
 
-type ModalType = 'earning' | 'crying' | 'denying' | 'asking' | 'generic'
+export type ModalType = 'earning' | 'crying' | 'denying' | 'asking' | 'generic'
 
 const modalVariants: Variants = {
   close: {
