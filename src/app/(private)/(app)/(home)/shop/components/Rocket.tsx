@@ -53,7 +53,6 @@ export function Rocket({
   addUserAcquiredRocket,
 }: RocketProps) {
   const { user, updateUser } = useAuth()
-  if (!user) return null
 
   const { mutate } = useSWRConfig()
 
@@ -66,7 +65,7 @@ export function Rocket({
 
   const prestigeLevel = 2
   const rocketImage = getImage('rockets', image)
-  const isBuyable = user?.coins >= price
+  const isBuyable = user ? (user?.coins >= price) : false
 
   async function selectRocket() {
     try {
@@ -129,8 +128,8 @@ export function Rocket({
   }
 
   useEffect(() => {
-    setIsSelected(id === user.rocket_id)
-  }, [user.rocket_id])
+    if (user) setIsSelected(id === user.rocket_id)
+  }, [user?.rocket_id])
 
   return (
     <>
