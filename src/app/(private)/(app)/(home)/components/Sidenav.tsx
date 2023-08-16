@@ -18,7 +18,7 @@ import { HOME_PAGES } from '@/utils/constants/home-pages'
 import { Modal, ModalRef } from '@/app/components/Modal'
 import { Button } from '@/app/components/Button'
 
-const sidenavVariants: Variants = {
+const sidenavAnimations: Variants = {
   shrink: {
     width: 88,
   },
@@ -27,14 +27,14 @@ const sidenavVariants: Variants = {
   },
 }
 
-const achievementsVariants: Variants = {
+const achievementsAnimations: Variants = {
   hidden: {
     width: 0,
-    opacity: 0,
+    // opacity: 0,
   },
   visible: {
     width: 320,
-    opacity: 1,
+    // opacity: 1,
     transition: {
       delay: 0.2,
       staggerChildren: 0.2,
@@ -85,7 +85,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
 
   return (
     <motion.div
-      variants={sidenavVariants}
+      variants={sidenavAnimations}
       initial="shrink"
       animate={isExpanded ? 'expand' : ''}
       className="hidden md:flex md:fixed left-0 bg-gray-900 h-full z-50"
@@ -95,7 +95,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
       <div className="reative flex flex-col justify-between h-full">
         <button
           onClick={toggleSidenav}
-          className="absolute top-20 -right-2 rounded-full bg-green-400 p-1 grid place-content-center z-40"
+          className="absolute top-20 -right-3 rounded-full bg-green-400 p-1 grid place-content-center z-40"
         >
           {isExpanded ? (
             <CaretLeft className="text-gray-800 text-sm" weight="bold" />
@@ -139,15 +139,15 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
         <AnimatePresence>
           {isAchievementsListVisible && (
             <motion.div
-              variants={achievementsVariants}
+              variants={achievementsAnimations}
               initial="hidden"
               animate={isAchievementsListVisible ? 'visible' : ''}
               exit="hidden"
-              className="bg-gray-900 border-l border-green-400 p-6 mt-16 absolute top-0 right-0 translate-x-[100%] w-80 custom-scrollbar h-full overflow-y-scroll"
+              className="bg-gray-900 border-l border-green-400 mt-16 absolute top-0 right-0 translate-x-[100%] w-80 custom-scrollbar h-full overflow-y-scroll overflow-hidden"
             >
               <AchievementsList />
             </motion.div>
-          )}
+           )}
         </AnimatePresence>
 
         <div className="border-t border-green-700 flex flex-col gap-1 mx-3 px-3 py-3">
