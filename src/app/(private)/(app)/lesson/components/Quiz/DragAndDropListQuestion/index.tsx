@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLesson } from '@/hooks/useLesson'
 
-import { DragAndDropList, Item as SortableItem } from '@/types/question'
+
 import { QuestionTitle } from '../QuestionTitle'
 import { Item } from './Item'
 
@@ -30,6 +30,7 @@ import { questionAnimations, questionTransition } from '..'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { compareArrays } from '@/utils/functions'
+import { DragAndDropList, Item as SortableItem } from '@/types/question'
 
 interface DragAndDropListQuestionProps {
   data: DragAndDropList
