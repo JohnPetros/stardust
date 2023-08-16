@@ -3,12 +3,25 @@
 import Image from 'next/image'
 import { StreakIcon } from '../../components/StreakIcon'
 
+import { motion, Variants } from 'framer-motion'
+
 import { WEEK_DAYS } from '@/utils/constants'
 
 const weekStatusIcons: { [key in string]: string } = {
   todo: 'placeholder-day.svg',
   done: 'success-day.svg',
   undone: 'fail-day.svg',
+}
+
+const weekDayAnimations: Variants = {
+  up: {
+    opacity: 0,
+    y: -12,
+  },
+  down: {
+    opacity: 1,
+    y: 0,
+  },
 }
 
 interface StreakProps {
@@ -25,7 +38,11 @@ export function StreakBoard({ weekStatus, streakAmount }: StreakProps) {
 
       <div className="grid grid-cols-7 gap-3">
         {WEEK_DAYS.map((weekday, index) => (
-          <div
+          <motion.div
+            variants={weekDayAnimations}
+            initial="up"
+            animate="down"
+            transition={{ delay: index * 0.2 }}
             key={weekday}
             className="flex flex-col items-center justify-center gap-2"
           >
@@ -36,7 +53,7 @@ export function StreakBoard({ weekStatus, streakAmount }: StreakProps) {
               height={24}
               alt=""
             />
-          </div>
+          </motion.div>
         ))}
       </div>
 

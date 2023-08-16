@@ -50,7 +50,7 @@ export function Streak() {
       setWeekStatus(user.week_status)
       setStreakAmount(user.streak)
 
-      updateStreak(user.week_status)
+      // updateStreak(user.week_status)
     }
   }, [])
 
