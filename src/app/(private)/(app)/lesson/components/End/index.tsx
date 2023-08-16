@@ -47,6 +47,21 @@ const endMessageAnimations: Variants = {
   },
 }
 
+const buttonAnimations: Variants = {
+  down: {
+    opacity: 0,
+    y: 32,
+  },
+  up: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: 3,
+      duration: 0.4,
+    },
+  },
+}
+
 export interface updateUserDataParam {
   newCoins: number
   newXp: number
@@ -257,7 +272,12 @@ export function End({
         )}
       </div>
 
-      <div className="w-80 mb-16">
+      <motion.div
+        variants={buttonAnimations}
+        initial="down"
+        animate="up"
+        className="w-80 mb-16"
+      >
         <Button
           isLoading={isLoading}
           onClick={
@@ -266,7 +286,7 @@ export function End({
         >
           Continuar
         </Button>
-      </div>
+      </motion.div>
     </div>
   )
 }
