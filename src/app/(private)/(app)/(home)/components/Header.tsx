@@ -1,4 +1,5 @@
 'use client'
+
 import { useSiderbar } from '@/hooks/useSiderbar'
 import { useAuth } from '@/hooks/useAuth'
 import { UserAvatar } from './UserAvatar'
@@ -11,7 +12,7 @@ import StreakAnimation from '../../../../../../public/animations/streak.json'
 
 import { Variants, motion } from 'framer-motion'
 
-const headerVariants: Variants = {
+const headerAnimations: Variants = {
   hidden: {
     y: -64,
   },
@@ -30,7 +31,7 @@ export function Header() {
   if (user?.id)
     return (
       <motion.header
-        variants={headerVariants}
+        variants={headerAnimations}
         initial="hidden"
         animate="visible"
         className="fixed top-0 w-screen z-40 bg-gray-900 h-16 px-6 py-3 flex justify-between md:justify-end border-b border-gray-700"
