@@ -125,7 +125,6 @@ export function End({
   const starsChainRef = useRef(null) as LottieRef
 
   async function updateUserData() {
-
     const updatedUserData = await getUpdatedUserData()
 
     if (updatedUserData) {
@@ -180,6 +179,9 @@ export function End({
 
   useEffect(() => {
     pauseStarsAnimation()
+
+
+    playSound('earning.wav')
 
     const time = setTimeout(async () => {
       await updateUserData()
