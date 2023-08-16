@@ -30,7 +30,7 @@ import { questionAnimations, questionTransition } from '..'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { compareArrays } from '@/utils/functions'
-import { DragAndDropList, SortableItem } from '@/types/question'
+import { DragAndDropList, SortableItem } from '@/types/quiz'
 
 interface DragAndDropListQuestionProps {
   data: DragAndDropList
