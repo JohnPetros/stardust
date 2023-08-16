@@ -42,7 +42,7 @@ type LessonValue = {
 export const LessonContext = createContext({} as LessonValue)
 
 const initialState: LessonState = {
-  currentStage: 'theory',
+  currentStage: 'quiz',
   texts: [],
   renderedTextsAmount: 0,
   questions: [],
@@ -106,7 +106,7 @@ function LessonReducer(state: LessonState, action: LessonAction): LessonState {
     case 'incrementSecondsAmount':
       return {
         ...state,
-        secondsAmount: state.secondsAmount + 1,
+        secondsAmount: state.incorrectAnswersAmount + 1,
       }
     case 'decrementLivesAmount':
       return {
