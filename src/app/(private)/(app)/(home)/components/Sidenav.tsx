@@ -2,6 +2,8 @@
 
 import { useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
+
+import Link from 'next/link'
 import Image from 'next/image'
 
 import { ToastRef, Toast } from '@/app/components/Toast'
@@ -102,7 +104,10 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
           )}
         </button>
         <div>
-          <div className="border-b border-green-700 h-16 mx-3 grid place-content-center">
+          <Link
+            href="/"
+            className="border-b border-green-700 h-16 mx-3 grid place-content-center"
+          >
             {isExpanded ? (
               <Image
                 src="/images/logo.svg"
@@ -113,7 +118,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
             ) : (
               <Image src="/icons/rocket.svg" width={30} height={30} alt="" />
             )}
-          </div>
+          </Link>
 
           <nav className="mt-12 flex flex-col px-3 gap-3">
             {HOME_PAGES.map(({ path, icon, label }) => {
