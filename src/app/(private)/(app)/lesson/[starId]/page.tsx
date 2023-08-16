@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { useLesson } from '@/hooks/useLesson'
+import { useAuth } from '@/hooks/useAuth'
 import { useStar } from '@/hooks/useStar'
 
 import { TransitionPageAnimation } from '../../components/TransitionPageAnimation'
@@ -13,9 +14,10 @@ import { End } from '../components/End'
 
 export default function Lesson() {
   const { starId } = useParams()
-  if (!starId) return null
 
-  const { star, nextStar } = useStar(String(starId))
+  const { user } = useAuth()
+
+  const { star, nextStar, updateUserData } = useStar(String(starId))
   const {
     state: { currentStage, questions, incorrectAnswersAmount, secondsAmount },
     dispatch,
@@ -28,6 +30,7 @@ export default function Lesson() {
   const [time, setTime] = useState('')
   const [accurance, setAccurance] = useState('')
 
+ 
   function formatSecondsToTime(seconds: number) {
     const date = new Date(0)
     date.setSeconds(seconds)
@@ -96,7 +99,16 @@ export default function Lesson() {
             )}
             {currentStage === 'quiz' && <Quiz />}
             {currentStage === 'end' && (
-              <End coins={coins} xp={xp} time={time} accurance={accurance} />
+              <End
+                coins={coins}
+                xp={xp}
+                time={time}
+                accurance={accurance}
+                starId={star.id}
+                challengeId={null}
+                userDataUpdater={updateUserData}
+                isAlreadyCompleted={nextStar.isUnlocked}
+              />
             )}
           </>
         )}
