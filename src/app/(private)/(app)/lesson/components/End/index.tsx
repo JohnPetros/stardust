@@ -11,8 +11,9 @@ import ApolloContratulating from '../../../../../../../public/animations/apollo-
 import StarsChain from '../../../../../../../public/animations/stars-chain.json'
 import Lottie, { LottieRef } from 'lottie-react'
 
-import type { User } from '@/types/user'
 import { Button } from '@/app/components/Button'
+
+import type { User } from '@/types/user'
 
 import { Streak } from './Streak'
 import { StreakIcon } from '../../../(home)/components/StreakIcon'
@@ -80,7 +81,7 @@ export function End({
   const [isFirstClick, setIsFirstClick] = useState(true)
   const [isStreakVisible, setIsStreakVisible] = useState(false)
   const [isEndMessageVisible, setIsEndMessageVisible] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   function getUpdatedLevel(updatedXp: number) {
     if (!user) return
@@ -146,7 +147,7 @@ export function End({
     }
 
     setIsEndMessageVisible(true)
-    // setIsFirstClick(false)
+    setIsFirstClick(false)
   }
 
   function handleSecondButtonClick() {
@@ -258,6 +259,7 @@ export function End({
 
       <div className="w-80 mb-16">
         <Button
+          isLoading={isLoading}
           onClick={
             isFirstClick ? handleFirstButtonClick : handleSecondButtonClick
           }

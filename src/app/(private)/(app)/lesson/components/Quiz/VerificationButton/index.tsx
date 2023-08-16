@@ -126,7 +126,7 @@ export function VerificationButton({
         className={buttonStyles({
           color: isAnswerVerified && !isAnswerCorrect ? 'red' : 'green',
         })}
-        disabled={false}
+        disabled={!isAnswered}
       >
         {getButtonTitle()}
       </Button>
