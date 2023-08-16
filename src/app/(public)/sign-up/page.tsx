@@ -18,7 +18,7 @@ import { Envelope, Lock } from '@phosphor-icons/react'
 import { motion, Variants } from 'framer-motion'
 import { LottieRef } from 'lottie-react'
 
-import { api } from '@/services/api'
+import { useApi } from '@/services/api'
 import { PASSWORD_REGEX } from '@/utils/constants/password-regex'
 
 const formVariants: Variants = {
@@ -74,6 +74,8 @@ export default function SignUp() {
   })
 
   const { signUp, isLoading } = useAuth()
+
+  const api = useApi()
 
   const router = useRouter()
 
