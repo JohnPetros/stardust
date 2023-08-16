@@ -15,10 +15,6 @@ export function TypeWritter({
   delay = 0,
   speed = 25,
 }: TypeWritterProps) {
-  if (!children) return null
-
-  if (!canType) return children
-
   const [text, setText] = useState('')
   const index = useRef(0)
   const hasDelay = useRef(!!delay)
@@ -53,6 +49,10 @@ export function TypeWritter({
     initAnimation()
     return () => clearInterval(timer.current)
   }, [index.current])
+
+  if (!children) return null
+
+  if (!canType) return children
 
   return text
 }
