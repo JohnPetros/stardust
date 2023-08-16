@@ -32,6 +32,20 @@ const apolloAnimations: Variants = {
   },
 }
 
+const endMessageAnimations: Variants = {
+  up: {
+    opacity: 0,
+    y: -32,
+  },
+  down: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+    },
+  },
+}
+
 export interface updateUserDataParam {
   newCoins: number
   newXp: number
@@ -231,9 +245,14 @@ export function End({
         )} */}
 
         {isEndMessageVisible && (
-          <p className="font-semibold text-2xl text-center text-white">
+          <motion.p
+            variants={endMessageAnimations}
+            initial="up"
+            animate="down"
+            className="font-semibold text-2xl text-center text-white"
+          >
             Parabéns, continue assim 😉!
-          </p>
+          </motion.p>
         )}
       </div>
 
