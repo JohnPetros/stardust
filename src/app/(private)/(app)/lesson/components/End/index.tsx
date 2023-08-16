@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useReducer, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { useApi } from '@/services/api'
 
@@ -11,12 +11,12 @@ import ApolloContratulating from '../../../../../../../public/animations/apollo-
 import StarsChain from '../../../../../../../public/animations/stars-chain.json'
 import Lottie, { LottieRef } from 'lottie-react'
 
-import { playSound } from '@/utils/functions'
-
 import type { User } from '@/types/user'
 import { Button } from '@/app/components/Button'
+
+import { Streak } from './Streak'
 import { StreakIcon } from '../../../(home)/components/StreakIcon'
-import { Streak } from '../../../(home)/profile/components/Streak'
+import { playSound } from '@/utils/functions'
 
 const apolloAnimations: Variants = {
   hidden: {
@@ -124,7 +124,14 @@ export function End({
 
     // modalRef.current?.open()
 
-    setIsStreakVisible(todayStatus === 'todo')
+    const isStreakVisible = todayStatus === 'todo'
+
+    if (isStreakVisible) {
+      setIsStreakVisible(true)
+      return
+    }
+
+    setIsEndMessageVisible(true)
     // setIsFirstClick(false)
   }
 
@@ -146,82 +153,91 @@ export function End({
   }, [])
 
   return (
-    <div className="flex flex-col items-center justify-center mt-12 mx-auto px-6 w-full max-w-lg">
-      {!isStreakVisible && !isEndMessageVisible && (
-        <>
-          <h3 className="text-gray-100 text-xl font-semibold">
-            Fase completada!
-          </h3>
-          <Lottie
-            lottieRef={starsChainRef}
-            animationData={StarsChain}
-            style={{ width: 180 }}
-            loop={false}
-            autoplay={true}
-          />
-          <motion.div
-            variants={apolloAnimations}
-            initial="hidden"
-            animate="visible"
-          >
+    <div className="flex flex-col items-center justify-center mx-auto px-6 w-full h-screen max-w-lg">
+      <div className="flex flex-col items-center justify-center my-auto">
+        {!isStreakVisible && !isEndMessageVisible && (
+          <>
+            <h3 className="text-gray-100 text-xl font-semibold">
+              Fase completada!
+            </h3>
             <Lottie
-              animationData={ApolloContratulating}
-              style={{ width: 280 }}
-              loop={true}
+              lottieRef={starsChainRef}
+              animationData={StarsChain}
+              style={{ width: 180 }}
+              loop={false}
+              autoplay={true}
             />
-          </motion.div>
-          <dl className="flex flex-col items-center justify-center mt-3">
-            <div className="mx-auto">
-              <Metric
-                title="Poeira estelar"
-                amount={coins}
-                color="yellow"
-                icon="coin.svg"
-                isLarge={true}
-                delay={1}
+            <motion.div
+              variants={apolloAnimations}
+              initial="hidden"
+              animate="visible"
+            >
+              <Lottie
+                animationData={ApolloContratulating}
+                style={{ width: 280 }}
+                loop={true}
               />
-            </div>
+            </motion.div>
+            <dl className="flex flex-col items-center justify-center mt-3">
+              <div className="mx-auto">
+                <Metric
+                  title="Poeira estelar"
+                  amount={coins}
+                  color="yellow"
+                  icon="coin.svg"
+                  isLarge={true}
+                  delay={1}
+                />
+              </div>
 
-            <div className="grid grid-cols-3 gap-3 mt-6">
-              <Metric
-                title="Total de xp"
-                amount={xp}
-                color="green"
-                icon="xp.svg"
-                isLarge={false}
-                delay={1.5}
-              />
+              <div className="grid grid-cols-3 gap-3 mt-6">
+                <Metric
+                  title="Total de xp"
+                  amount={xp}
+                  color="green"
+                  icon="xp.svg"
+                  isLarge={false}
+                  delay={1.5}
+                />
 
-              <Metric
-                title="Tempo"
-                amount={time}
-                color="blue"
-                icon="clock.svg"
-                isLarge={false}
-                delay={2}
-              />
+                <Metric
+                  title="Tempo"
+                  amount={time}
+                  color="blue"
+                  icon="clock.svg"
+                  isLarge={false}
+                  delay={2}
+                />
 
-              <Metric
-                title="Acertos"
-                amount={accurance}
-                color="red"
-                icon="percent.svg"
-                isLarge={false}
-                delay={2.5}
-              />
-            </div>
-          </dl>
-        </>
-      )}
-      {isStreakVisible && user && (
-        <>
-          <StreakIcon size={180} />
+                <Metric
+                  title="Acertos"
+                  amount={accurance}
+                  color="red"
+                  icon="percent.svg"
+                  isLarge={false}
+                  delay={2.5}
+                />
+              </div>
+            </dl>
+          </>
+        )}
 
-          <Streak data={user} />
-        </>
-      )}
+        {/* {isStreakVisible && user && (
+          <>
+            <StreakIcon size={180} />
 
-      <div className="mt-10 w-80">
+            <Streak />
+          </>
+        )} */}
+
+        {isEndMessageVisible && (
+          <p className="font-semibold text-2xl text-center text-white">
+            Parabéns, continue assim 😉!
+          </p>
+        )}
+      </div>
+
+      <div className="w-80 mb-16">
         <Button
           onClick={
             isFirstClick ? handleFirstButtonClick : handleSecondButtonClick
