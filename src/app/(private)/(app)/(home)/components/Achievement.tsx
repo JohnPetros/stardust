@@ -10,7 +10,7 @@ import { getImage } from '@/utils/functions'
 
 import type { Achievement as AchievementType } from '@/types/achievement'
 
-const achievementVariants: Variants = {
+const achievementAnimations: Variants = {
   hidden: {
     x: -120,
     opacity: 0,
@@ -20,9 +20,7 @@ const achievementVariants: Variants = {
     opacity: 1,
     transition: {
       type: 'spring',
-      damping: 20,
-      stiffness: 80,
-      duration: 0.1,
+      duration: 0.2,
     },
   },
 }
@@ -62,7 +60,7 @@ export function Achievement({
 
   return (
     <motion.div
-      variants={achievementVariants}
+      variants={achievementAnimations}
       className="grid grid-cols-[48px_1fr] gap-4 py-4 border-b border-green-500"
     >
       <div className="relative w-12 h-12 grid place-content-center">
