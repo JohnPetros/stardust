@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useReducer } from 'react'
 
-import type { Question } from '@/types/question'
+import type { Question } from '@/types/quiz'
 import type { Text } from '@/types/text'
 
 type Stage = 'theory' | 'quiz' | 'end'
