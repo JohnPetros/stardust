@@ -1,5 +1,11 @@
 'use client'
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
+import {
+  ForwardedRef,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from 'react'
 import { AnimatePresence, Variants, motion, useAnimate } from 'framer-motion'
 import { Check, Prohibit, X } from '@phosphor-icons/react'
 import * as Container from '@radix-ui/react-toast'
@@ -17,7 +23,7 @@ export interface ToastRef {
   open: ({ type, message }: openProps) => void
 }
 
-export const Toast = forwardRef<ToastRef>((_, ref) => {
+export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
   const [isOpen, setIsOpen] = useState(false)
   const [type, setType] = useState<Type>('error')
   const [message, setMessage] = useState('')
@@ -88,7 +94,7 @@ export const Toast = forwardRef<ToastRef>((_, ref) => {
       <Container.Viewport className="fixed top-4 right-4 rounded  max-w-[90vw] z-50 flex" />
       <AnimatePresence>
         {isOpen && (
-          <Container.Root type='foreground' forceMount open={isOpen} asChild>
+          <Container.Root type="foreground" forceMount open={isOpen} asChild>
             <motion.div
               ref={scope}
               variants={toastVariants}
@@ -130,7 +136,7 @@ export const Toast = forwardRef<ToastRef>((_, ref) => {
                 <Container.Close
                   className="w-max"
                   asChild
-                  aria-label='Fechar mensagem'
+                  aria-label="Fechar mensagem"
                 >
                   <button onClick={close}>
                     <X
@@ -162,4 +168,6 @@ export const Toast = forwardRef<ToastRef>((_, ref) => {
       </AnimatePresence>
     </>
   )
-})
+}
+
+export const Toast = forwardRef(ToastComponent)
