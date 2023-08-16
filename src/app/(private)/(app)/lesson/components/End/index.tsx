@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
+import { useApi } from '@/services/api'
 
 import { motion, Variants } from 'framer-motion'
 
@@ -9,6 +10,7 @@ import { Metric } from './Metric'
 import ApolloContratulating from '../../../../../../../public/animations/apollo-congratulating.json'
 import StarsChain from '../../../../../../../public/animations/stars-chain.json'
 import Lottie, { LottieRef } from 'lottie-react'
+import { User } from '@/types/user'
 
 const apolloAnimations: Variants = {
   hidden: {
@@ -19,9 +21,15 @@ const apolloAnimations: Variants = {
     opacity: 1,
     scale: 1,
     transition: {
-      duration: .6,
+      duration: 0.6,
     },
   },
+}
+
+export interface updateUserDataParam {
+  newCoins: number
+  newXp: number
+  user: User
 }
 
 interface EndProps {
@@ -29,12 +37,51 @@ interface EndProps {
   xp: number
   time: string
   accurance: string
+  starId: string | null
+  challengeId: string | null
+  isAlreadyCompleted: boolean
+  userDataUpdater: ({}: updateUserDataParam) => Promise<Partial<User>>
 }
 
-export function End({ accurance, coins, time, xp }: EndProps) {
+export function End({
+  accurance,
+  coins,
+  time,
+  xp,
+  starId,
+  challengeId,
+  isAlreadyCompleted,
+  userDataUpdater,
+}: EndProps) {
   const { user, updateUser } = useAuth()
+  const api = useApi()
+
+  const [hasNewLevel, setHasNewLevel] = useState(false)
+
+  function getUpdatedLevel(updatedXp: number) {
+    if (!user) return
+
+    const hasNewLevel = updatedXp >= 50 * user.level + 25
+    if (hasNewLevel) {
+      const newLevel = user.level + 1
+      setHasNewLevel(hasNewLevel)
+      return newLevel
+    }
+    return user.level
+  }
+
+  async function getUpdatedUserData() {
+    if (!user) return
+    return await userDataUpdater({ newCoins: coins, newXp: xp, user })
+  }
 
   const starsChainRef = useRef(null) as LottieRef
+
+  async function updateUserData() {
+    const updatedUserData = await getUpdatedUserData()
+
+    console.log(updatedUserData)
+  }
 
   function pauseStarsAnimation() {
     const totalStars = (parseInt(accurance) * 5) / 100
@@ -50,7 +97,11 @@ export function End({ accurance, coins, time, xp }: EndProps) {
 
   useEffect(() => {
     pauseStarsAnimation()
-  }, [accurance])
+
+    setTimeout(async () => {
+      await updateUserData()
+    }, 250)
+  }, [])
 
   return (
     <div className="flex flex-col items-center justify-center mt-16 mx-auto px-6 w-full max-w-lg">
