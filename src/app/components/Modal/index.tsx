@@ -46,7 +46,6 @@ export const Container = Dialog.Root
 export const Modal = forwardRef<ModalRef, ModalProps>(
   ({ type, canPlaySong = true, title, body, footer }, ref) => {
     const [isOpen, setIsOpen] = useState(false)
-    if (!type) return null
 
     const { animation, sound } = MODAL_EFFECTS.find(
       (animation) => animation.id === type.toLocaleLowerCase()
