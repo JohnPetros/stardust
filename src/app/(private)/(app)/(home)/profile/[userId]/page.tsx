@@ -1,4 +1,6 @@
 'use client'
+
+import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { useUser } from '@/hooks/useUser'
 
@@ -6,10 +8,9 @@ import { Loading } from '@/app/components/Loading'
 import { User } from '../components/User'
 import { Statistics } from '../components/Statistics'
 import { Tabs } from '../components/Tabs'
-import { Streak } from '../components/Streak'
+import { StreakBoard } from '../components/Streak'
 import { ChallengesChart } from '../components/ChallengesChart'
 import { Achievements } from '../components/Achievements'
-import { useEffect, useState } from 'react'
 
 export default function Profile() {
   const params = useParams()
@@ -33,7 +34,10 @@ export default function Profile() {
             <User data={user} />
             <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] justify-center items-center md:flex-row gap-12 mt-10">
               <Statistics data={user} />
-              <Streak data={user} />
+              <StreakBoard
+                weekStatus={user.week_status}
+                streakAmount={user.streak}
+              />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr] gap-2 mt-10">
               <div>
