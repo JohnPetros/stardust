@@ -14,6 +14,7 @@ import Lottie, { LottieRef } from 'lottie-react'
 import { playSound } from '@/utils/functions'
 
 import type { User } from '@/types/user'
+import { Button } from '@/app/components/Button'
 
 const apolloAnimations: Variants = {
   hidden: {
@@ -64,12 +65,17 @@ export function End({
   function getUpdatedLevel(updatedXp: number) {
     if (!user) return
 
+    console.log(updatedXp)
+
     const hasNewLevel = updatedXp >= 50 * user.level + 25
+
     if (hasNewLevel) {
       const newLevel = user.level + 1
       setHasNewLevel(hasNewLevel)
+
       return newLevel
     }
+
     return user.level
   }
 
@@ -84,7 +90,13 @@ export function End({
     const updatedUserData = await getUpdatedUserData()
 
     if (updatedUserData) {
-      const error = await updateUser(updatedUserData)
+      const updatedLevel = updatedUserData.xp
+        ? getUpdatedLevel(updatedUserData.xp)
+        : user?.level
+
+      const data = { ...updatedUserData, level: updatedLevel }
+
+      // const error = await updateUser(data)
     }
   }
 
@@ -103,13 +115,13 @@ export function End({
   useEffect(() => {
     pauseStarsAnimation()
 
-    console.log('oi');
-    
-    setTimeout(async () => {
+   const time = setTimeout(async () => {
       await updateUserData()
     }, 250)
 
-    // playSound('earning.wav')
+    playSound('earning.wav')
+
+    return () => clearTimeout(time)
   }, [])
 
   return (
@@ -177,6 +189,8 @@ export function End({
           />
         </div>
       </dl>
+
+      {/* <Button onClick={handleButtonClick} >Continua</Button> */}
     </div>
   )
 }
