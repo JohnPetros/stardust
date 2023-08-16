@@ -33,6 +33,7 @@ type LessonAction =
   | { type: 'incrementRenderedTextsAmount' }
   | { type: 'incrementSecondsAmount' }
   | { type: 'decrementLivesAmount' }
+  | { type: 'resetState' }
 
 type LessonValue = {
   state: LessonState
@@ -128,6 +129,8 @@ function LessonReducer(state: LessonState, action: LessonAction): LessonState {
         currentStage: isEnd ? 'end' : state.currentStage,
         isAnswered: false,
       }
+    case 'resetState':
+      return initialState
     default:
       return state
   }
