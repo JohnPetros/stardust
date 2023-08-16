@@ -26,14 +26,13 @@ export function Avatar({
   addUserAcquiredAvatar,
 }: AvatarProps) {
   const { user, updateUser } = useAuth()
-  if (!user) return null
 
   const { mutate } = useSWRConfig()
 
   const [isSelected, setIsSelected] = useState(false)
   const [isRequesting, setIsRequesting] = useState(false)
   const avatarImage = getImage('avatars', image)
-  const isBuyable = user?.coins >= price
+  const isBuyable = user ? (user?.coins >= price) : false
 
   const denyingModalRef = useRef<ModalRef>(null)
   const earningModalRef = useRef<ModalRef>(null)
