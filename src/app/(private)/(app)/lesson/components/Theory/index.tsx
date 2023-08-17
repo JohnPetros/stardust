@@ -82,7 +82,7 @@ export function Theory({ title, number }: TheoryProps) {
               {title}
             </h1>
           </div>
-          <div className="space-y-10 mt-10 pb-[360px]">
+          <div className="space-y-10 mt-10 pb-[360px] px-6 md:px-0">
             {texts.map((text) => (
               <Text key={String(text.content)} data={text} hasAnimation={text.hasAnimation} />
             ))}

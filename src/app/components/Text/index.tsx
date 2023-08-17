@@ -73,10 +73,10 @@ export function Text({
       variants={textAnimations}
       initial={hasAnimation && 'hidden'}
       animate={hasAnimation && 'visible'}
-      className="flex items-center gap-6 w-full"
+      className="flex items-center w-full"
     >
       {type === 'image' && textImage && (
-        <div className="flex flex-col items-center justify-center w-full gap-2">
+        <div className="flex flex-col items-center justify-center w-full">
           <Image
             src={textImage}
             width={180}
@@ -108,12 +108,14 @@ export function Text({
       {['default', 'alert', 'quote'].includes(String(type)) && (
         <>
           {textImage && (
-            <div className="relative w-24 h-16 bg-red-400 rounded-md overflow-hidden">
+            <div className="relative w-24 h-16 bg-red-400 rounded-md overflow-hidden mr-3">
               <Image src={textImage} fill alt="Panda" />
             </div>
           )}
           {type === 'alert' && (
-            <Image src="/icons/alert.svg" width={32} height={32} alt="" />
+            <span className='block mr-3'>
+              <Image src="/icons/alert.svg" width={32} height={32} alt="" />
+            </span>
           )}
           <div className={textStyles({ type })}>
             {!Array.isArray(content) && (
