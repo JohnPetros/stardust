@@ -44,7 +44,7 @@ const textStyles = tv({
       list: 'border-green-400 text-green-400',
       image: '',
       code: '',
-      user: 'bg-green-500 text-green-900 ml-auto w-max',
+      user: 'bg-green-500 text-green-900 ml-auto mr-4 w-max',
     },
   },
 })
