@@ -69,7 +69,12 @@ export function Achievement({
   const { rescueAchivement } = useAchivementsContext()
 
   function handleRescuButtonClick() {
-    rescueAchivement(id, name, reward)
+    rescueAchivement({
+      id,
+      name,
+      reward,
+      image: iconImage,
+    })
   }
 
   useEffect(() => {

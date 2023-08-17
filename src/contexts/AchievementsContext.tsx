@@ -1,6 +1,5 @@
 import { ReactNode, createContext, useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
-import { useSWRConfig } from 'swr'
 import { useAchievement } from '@/hooks/useAchievement'
 import { useApi } from '@/services/api'
 
@@ -10,9 +9,18 @@ import { ShinningAnimation } from '@/app/(private)/(app)/(home)/components/Shinn
 
 import { Achievement as AchievementType } from '@/types/achievement'
 import { Button } from '@/app/components/Button'
+import Image from 'next/image'
+
+type RescuableAchivement = {
+  id: string
+  name: string
+  reward: number
+  image: string
+}
 
 interface AchivementsContextValue {
   achievements: AchievementType[] | undefined
+  rescueAchivement: (rescuableAchiement: RescuableAchivement) => void
 }
 
 interface AchivementsContextProps {
@@ -22,7 +30,7 @@ interface AchivementsContextProps {
 export const AchivementsContext = createContext({} as AchivementsContextValue)
 
 export function AchivementsProvider({ children }: AchivementsContextProps) {
-  const { user } = useAuth()
+  const { user, updateUser } = useAuth()
   const { achievements: data } = useAchievement(user?.id)
   const [achievements, setAchievements] = useState<AchievementType[]>(
     data ?? []
@@ -30,15 +38,61 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
   const [newUnlockedAchievements, setNewUnlockedAchievements] = useState<
     AchievementType[]
   >([])
+  const [rescuedAchievement, setRescuedAchievement] =
+    useState<RescuableAchivement | null>(null)
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const api = useApi()
 
-  const modalRef = useRef<ModalRef>(null)
+  const newUnlockedAchievementsModalRef = useRef<ModalRef>(null)
+  const rescuedAchievementModalRef = useRef<ModalRef>(null)
 
-  const { cache } = useSWRConfig()
+  async function removeRescuedAchievement(achievementId: string) {
+    if (!user) return
 
-  function handleModalClose() {
-    modalRef.current?.close()
+    try {
+      await api.deleteUserRescuebleAchievement(achievementId, user.id)
+      const updatedAchievements = achievements.map((achievement) =>
+        achievement.id === achievementId
+          ? { ...achievement, isRescuable: false }
+          : achievement
+      )
+      setAchievements(updatedAchievements)
+    } catch (error) {
+      console.error(error)
+      // Toast.error('Erro ao resgatar a conquista')
+    }
+  }
+
+  async function rescueAchivement(rescuableAchievement: RescuableAchivement) {
+    if (!user) return
+
+    setRescuedAchievement(rescuableAchievement)
+
+    rescuedAchievementModalRef.current?.open()
+
+    setIsLoading(true)
+    try {
+      await Promise.all([
+        removeRescuedAchievement(rescuableAchievement.id),
+        updateUser({ coins: user.coins + rescuableAchievement.reward }),
+      ])
+    } catch (error) {
+      console.error(error)
+      // Toast.error('Erro ao resgatar a conquista');
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  function handleRescuedAchievementModalClose() {
+    setRescuedAchievement(null)
+    rescuedAchievementModalRef.current?.close()
+  }
+
+  function handleNewUnlockedAchievementsModalClose() {
+    newUnlockedAchievementsModalRef.current?.close()
     setNewUnlockedAchievements([])
   }
 
@@ -85,16 +139,17 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
   async function checkNewUnlockedAchivements(achievements: AchievementType[]) {
     if (!achievements || !user) return
 
-    const newUnlockedAchievements = achievements.filter(isNewAchievementUnlocked)
+    const newUnlockedAchievements = achievements.filter(
+      isNewAchievementUnlocked
+    )
 
     if (newUnlockedAchievements) {
-      
-      for (const { id } of newUnlockedAchievements) {
-        await Promise.all([
-          api.addUserUnlockedAchievement(id, user.id),
-          api.addUserRescuableAchievements(id, user.id),
-        ])
-      }
+      // for (const { id } of newUnlockedAchievements) {
+      //   await Promise.all([
+      //     api.addUserUnlockedAchievement(id, user.id),
+      //     api.addUserRescuableAchievements(id, user.id),
+      //   ])
+      // }
 
       const updatedAchievements = achievements.map((achievement) =>
         updateAchivement(achievement, newUnlockedAchievements)
@@ -119,33 +174,82 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
 
   useEffect(() => {
     if (newUnlockedAchievements.length) {
-      modalRef.current?.open()
+      newUnlockedAchievementsModalRef.current?.open()
     }
   }, [newUnlockedAchievements])
 
   return (
-    <AchivementsContext.Provider value={{ achievements }}>
+    <AchivementsContext.Provider value={{ achievements, rescueAchivement }}>
       <Modal
-        ref={modalRef}
+        ref={newUnlockedAchievementsModalRef}
         type={'earning'}
         title={'Uau! Parece que você ganhou recompensa(s)'}
         body={
           <div className="space-y-24 px-6 max-h-64">
             {newUnlockedAchievements.map((achievement) => (
               <div className="relative z-50">
-                <span className="block absolute" style={{ top: -18, left: -31.5 }}>
+                <span
+                  className="block absolute"
+                  style={{ top: -18, left: -31.5 }}
+                >
                   <ShinningAnimation size={110} />
                 </span>
 
-                <Achievement data={achievement} isUnlocked={true} />
+                <Achievement
+                  data={achievement}
+                  isUnlocked={true}
+                  isRescuable={false}
+                />
               </div>
             ))}
           </div>
         }
         footer={
           <div className="mt-10">
-            <Button onClick={handleModalClose}>Entendido</Button>
+            <Button onClick={handleNewUnlockedAchievementsModalClose}>
+              Entendido
+            </Button>
           </div>
+        }
+      />
+
+      <Modal
+        ref={rescuedAchievementModalRef}
+        type={'earning'}
+        title={'Recompensa resgatada!'}
+        body={
+          <div className="flex flex-col items-center">
+            <p className="text-gray-100 text-center font-medium">
+              Parabéns! Você acabou de ganhar{' '}
+              <span className="text-lg text-yellow-300 font-semibold">
+                {rescuedAchievement?.reward}
+              </span>{' '}
+              de poeira estela pela conquista:
+            </p>
+            {rescuedAchievement && (
+              <div className="flex flex-col items-center justify-center mt-6">
+                <Image
+                  src={rescuedAchievement.image}
+                  width={40}
+                  height={40}
+                  alt=""
+                />
+                <p className="font-semibold text-center text-green-500">
+                  {rescuedAchievement?.name}
+                </p>
+              </div>
+            )}
+          </div>
+        }
+        footer={
+          <Button
+            onClick={handleRescuedAchievementModalClose}
+            isLoading={isLoading}
+            disabled={isLoading}
+            className='mt-6'
+          >
+            Entendido
+          </Button>
         }
       />
       {children}
