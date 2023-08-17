@@ -109,7 +109,7 @@ export function Achievement({
         {isRescuable ? (
           <motion.div variants={rescueButtonAnimations} animate="bounce">
             <Button
-              className="h-8 w-32 ml-4 text-sm"
+              className="h-8 w-32 md:ml-4 mt-1 text-sm"
               onClick={handleRescuButtonClick}
               // isLoading={isLoading}
               // isDisabled={isLoading}
