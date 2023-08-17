@@ -3,9 +3,13 @@ import { useRocket } from '@/hooks/useRocket'
 import { getImage } from '@/utils/functions'
 import { ReactNode, createContext, useEffect, useMemo, useState } from 'react'
 
+type SpaceRocket = {
+  name: string
+  image: string
+}
+
 interface SpaceContextValue {
-  rocketImage: string
-  rocketName: string
+  spaceRocket: SpaceRocket
 }
 
 interface SpaceContextProps {
@@ -17,16 +21,19 @@ export const SpaceContext = createContext({} as SpaceContextValue)
 export function SpaceProvider({ children }: SpaceContextProps) {
   const { user } = useAuth()
   const { rocket } = useRocket(user?.rocket_id)
-  const [value, setValue] = useState({} as SpaceContextValue)
+  const [spaceRocket, setSpaceRocket] = useState<SpaceRocket>({} as SpaceRocket)
 
   useEffect(() => {
-    
     if (rocket?.image && rocket?.name) {
       const rocketImage = getImage('rockets', rocket.image)
 
-      setValue({ rocketImage, rocketName: rocket.name })
+      setSpaceRocket({ image: rocketImage, name: rocket.name })
     }
   }, [rocket, user])
 
-  return <SpaceContext.Provider value={value}>{children}</SpaceContext.Provider>
+  return (
+    <SpaceContext.Provider value={{ spaceRocket }}>
+      {children}
+    </SpaceContext.Provider>
+  )
 }

@@ -56,7 +56,7 @@ export function Star({
   data: { id, name, number, isChallenge, isUnlocked },
   isLastUnlockedStar,
 }: StarProps) {
-  const { rocketImage, rocketName } = useSpace()
+  const { spaceRocket } = useSpace()
   const starRef = useRef(null) as LottieRef
   const toastRef = useRef<ToastRef>(null)
   const router = useRouter()
@@ -138,7 +138,7 @@ export function Star({
         <div
           style={{ boxShadow: starLight }}
           className={twMerge(
-            'border-2 border-dashed rounded-lg px-6 py-3 max-w-[164px] grid place-content-center',
+            'border-2 border-dashed rounded-lg px-6 py-3 max-w-[220px] bg-green-900 grid place-content-center',
             isUnlocked ? 'border-yellow-400' : 'border-gray-500'
           )}
         >
@@ -160,7 +160,7 @@ export function Star({
         >
           {isLastUnlockedStar && (
             <div className="relative w-20 h-20 rotate-180">
-              <Image src={rocketImage} alt={rocketName} fill />
+              <Image src={spaceRocket.image} alt={`Foguete ${spaceRocket.name}`} fill />
             </div>
           )}
         </motion.div>
