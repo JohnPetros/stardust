@@ -27,8 +27,7 @@ export default function Home() {
 
   return (
     <main
-      style={{ backgroundImage: 'url("/images/space-background.png")' }}
-      className="bg-center flex flex-col items-center"
+      className="bg-[url('/images/space.png')]  bg-center flex flex-col items-center"
       onClick={handleClick}
     >
       <TransitionPageAnimation isVisible={isTransitionVisible} />
