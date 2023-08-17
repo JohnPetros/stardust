@@ -11,7 +11,7 @@ export function ShinningAnimation({ size }: ShinningAnimationProps) {
     <Lottie
       animationData={RewardShinning}
       loop={true}
-      style={{ width: size, position: 'absolute', zIndex: 0 }}
+      style={{ width: size, zIndex: 0 }}
     />
   )
 }
