@@ -1,7 +1,23 @@
+'use client'
+
 import Image from 'next/image'
-import type { Planet } from '@/types/planet'
-import { getImage } from '@/utils/functions'
 import { Star } from './Star'
+
+import { motion, Variants } from 'framer-motion'
+
+import { getImage } from '@/utils/functions'
+
+import type { Planet } from '@/types/planet'
+
+const planetSignAnimations: Variants = {
+  float: {
+    y: [6, -6, 6],
+    transition: {
+      repeat: Infinity,
+      duration: 3,
+    },
+  },
+}
 
 interface PlanetProps {
   data: Planet
@@ -18,15 +34,18 @@ export function Planet({
   return (
     <li>
       <div className="flex items-center gap-3 ">
-        <Image src={planetImage} width={90} height={90} alt={name} />
+        <Image src={planetImage} width={100} height={100} alt={name} />
 
-        <div className="bg-green-800 max-w-sm p-3 flex items-center gap-3 rounded-lg">
+        <motion.div
+        variants={planetSignAnimations}
+        animate="float"
+        className="bg-green-800 max-w-sm p-3 flex items-center gap-3 rounded-lg">
           <Image src={planetIcon} width={32} height={32} alt="" />
           <strong className="text-zinc-100 font-semibold">{name}</strong>
-        </div>
+        </motion.div>
       </div>
 
-      <ul>
+      <ul className="pl-8">
         {stars.map((star) => (
           <Star
             key={star.id}
