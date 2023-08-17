@@ -36,6 +36,7 @@ export function AchievementsList() {
                 key={achievement.id}
                 data={achievement}
                 isUnlocked={achievement.isUnlocked}
+                isRescuable={achievement.isRescuable}
               />
             ))}
           </>
