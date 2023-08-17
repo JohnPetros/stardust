@@ -6,7 +6,6 @@ import { Button } from '@/app/components/Button'
 import { Text } from '@/app/components/Text'
 import { Star } from './Star'
 
-import { texts as allTexts } from '@/utils/templates/planets/planet1/star1/texts'
 
 import type { Text as TextData } from '@/types/text'
 import { Modal, ModalRef } from '@/app/components/Modal'
@@ -25,12 +24,12 @@ export function Theory({ title, number }: TheoryProps) {
   const nextTextIndex = useRef(0)
 
   function nextText() {
-    if (nextTextIndex.current >= allTexts.length) {
+    if (nextTextIndex.current >= state.texts.length) {
       modalRef.current?.open()
       return
     }
 
-    if (!allTexts[nextTextIndex.current]) return
+    if (!state.texts[nextTextIndex.current]) return
 
     nextTextIndex.current = nextTextIndex.current + 1
 
@@ -41,7 +40,7 @@ export function Theory({ title, number }: TheoryProps) {
       }))
 
       const nextText = {
-        ...allTexts[nextTextIndex.current],
+        ...state.texts[nextTextIndex.current],
         hasAnimation: true,
       }
 
@@ -62,9 +61,11 @@ export function Theory({ title, number }: TheoryProps) {
   }
 
   useEffect(() => {
-    setTexts([{ ...allTexts[0], hasAnimation: false }])
+    console.log(state.texts);
+    
+    setTexts([{ ...state.texts[0], hasAnimation: false }])
     dispatch({ type: 'incrementRenderedTextsAmount' })
-  }, [])
+  }, [state.texts])
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown)
@@ -95,7 +96,7 @@ export function Theory({ title, number }: TheoryProps) {
             onClick={handleContinueButtonClick}
             onFocus={() => buttonHasFocus.current = true}
             onBlur={() => buttonHasFocus.current = false}
-            disabled={nextTextIndex.current > allTexts.length}
+            disabled={nextTextIndex.current > state.texts.length}
           >
             Continuar
           </Button>
