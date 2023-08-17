@@ -1,16 +1,17 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
 import { useLesson } from '@/hooks/useLesson'
-import { useAuth } from '@/hooks/useAuth'
 import { useStar } from '@/hooks/useStar'
+import { useParams, useRouter } from 'next/navigation'
 
 import { TransitionPageAnimation } from '../../components/TransitionPageAnimation'
 import { Header } from '../components/Header'
 import { Theory } from '../components/Theory'
 import { Quiz } from '../components/Quiz'
 import { End } from '../components/End'
+
+import { texts } from '@/utils/templates/planets/planet1/star2/texts'
 
 export default function Lesson() {
   const { starId } = useParams()
@@ -77,7 +78,10 @@ export default function Lesson() {
 
   useEffect(() => {
     if (star && nextStar) {
-      dispatch({ type: 'setTexts', payload: star.texts })
+      // dispatch({ type: 'setTexts', payload: star.texts })
+      console.log(texts);
+      
+      dispatch({ type: 'setTexts', payload: texts })
       dispatch({ type: 'setQuestions', payload: star.questions })
       setTimeout(() => setIsTransitionVisible(false), 1000)
     }
@@ -95,7 +99,7 @@ export default function Lesson() {
   return (
     <div>
       <TransitionPageAnimation isVisible={isTransitionVisible} />
-      <main ref={scrollRef} className="relative">
+      <main ref={scrollRef} className="relative overflow-x-hidden">
         {currentStage !== 'end' && <Header />}
         
         {star && nextStar && (
