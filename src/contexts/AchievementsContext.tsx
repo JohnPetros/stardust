@@ -58,6 +58,7 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
           ? { ...achievement, isRescuable: false }
           : achievement
       )
+
       setAchievements(updatedAchievements)
     } catch (error) {
       console.error(error)
@@ -144,12 +145,13 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
     )
 
     if (newUnlockedAchievements) {
-      // for (const { id } of newUnlockedAchievements) {
-      //   await Promise.all([
-      //     api.addUserUnlockedAchievement(id, user.id),
-      //     api.addUserRescuableAchievements(id, user.id),
-      //   ])
-      // }
+
+      for (const { id } of newUnlockedAchievements) {
+        await Promise.all([
+          api.addUserUnlockedAchievement(id, user.id),
+          api.addUserRescuableAchievements(id, user.id),
+        ])
+      }
 
       const updatedAchievements = achievements.map((achievement) =>
         updateAchivement(achievement, newUnlockedAchievements)
@@ -221,7 +223,7 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
           <div className="flex flex-col items-center">
             <p className="text-gray-100 text-center font-medium">
               Parabéns! Você acabou de ganhar{' '}
-              <span className="text-lg text-yellow-300 font-semibold">
+              <span className="text-lg text-yellow-400 font-semibold">
                 {rescuedAchievement?.reward}
               </span>{' '}
               de poeira estela pela conquista:
