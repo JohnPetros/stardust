@@ -63,8 +63,8 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
     return { ...achievement, isUnlocked, isRescuable: isUnlocked }
   }
 
-  function isAchievementUnlocked(achievement: AchievementType) {
-    if (!user) return false
+  function isNewAchievementUnlocked(achievement: AchievementType) {
+    if (!user || achievement.isUnlocked) return false
 
     switch (achievement.metric) {
       case 'unlocked_stars':
@@ -85,9 +85,10 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
   async function checkNewUnlockedAchivements(achievements: AchievementType[]) {
     if (!achievements || !user) return
 
-    const newUnlockedAchievements = achievements.filter(isAchievementUnlocked)
+    const newUnlockedAchievements = achievements.filter(isNewAchievementUnlocked)
 
     if (newUnlockedAchievements) {
+      
       // for (const { id } of newUnlockedAchievements) {
       //   await Promise.all([
       //     api.addUserUnlockedAchievement(id, user.id),

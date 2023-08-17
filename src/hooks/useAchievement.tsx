@@ -8,24 +8,22 @@ import { useAuth } from './useAuth'
 
 export function useAchievement(userId?: string) {
   const api = useApi()
-  const { user } = useAuth()
 
-  async function getUserUnlockedAchievementsIds(userId: string) {
+  async function getUserUnlockedAchievementsIds() {
     if (userId) {
+      console.log(userId)
+
       return await api.getUserUnlockedAchievementsIds(userId)
     }
   }
 
-  async function getUserRescuableAchievementsIds(userId: string) {
+  async function getUserRescuableAchievementsIds() {
     if (userId) {
       return await api.getUserRescuableAchievementsIds(userId)
     }
   }
 
-  const { data: achievements } = useSWR(
-    '/achievements',
-    api.getAchievements
-  )
+  const { data: achievements } = useSWR('/achievements', api.getAchievements)
 
   const { data: userUnlockedAchievementsIds } = useSWR(
     '/unlocked_achievements_ids?user_id=' + userId,
@@ -42,6 +40,8 @@ export function useAchievement(userId?: string) {
     userUnlockedAchievementsIds: string[],
     userRescuableAchievementsIds: string[]
   ): Achievement {
+    console.log(userUnlockedAchievementsIds)
+
     const isUnlocked = userUnlockedAchievementsIds.some(
       (unlockedAchievementId) => unlockedAchievementId === achievement.id
     )

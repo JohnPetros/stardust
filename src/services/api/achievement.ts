@@ -23,9 +23,11 @@ export default () => {
         .from('users_unlocked_achievements')
         .select('achievement_id')
         .eq('user_id', userId)
+
       if (error) {
         throw new Error(error.message)
       }
+      
       return data.map((data) => data.achievement_id)
     },
 
