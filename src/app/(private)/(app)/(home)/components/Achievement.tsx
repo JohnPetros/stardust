@@ -33,18 +33,24 @@ type Status = {
 
 interface AchievementProps {
   data: AchievementType
-  currentProgress?: number
 }
 
 export function Achievement({
-  data: { isUnlocked, name, description, icon, required_amount, isRescuable },
-  currentProgress,
+  data: {
+    isUnlocked,
+    name,
+    description,
+    icon,
+    required_amount,
+    isRescuable,
+    currentProgress,
+  },
 }: AchievementProps) {
   const iconImage = getImage('achievements', icon)
   const [status, setStatus] = useState<Status | null>(null)
 
   useEffect(() => {
-    if (currentProgress) {
+    if (currentProgress || currentProgress === 0) {
       const percentage = (currentProgress / required_amount) * 100
       const barWidth = percentage > 100 ? 100 : percentage
       const canRescue = isRescuable
