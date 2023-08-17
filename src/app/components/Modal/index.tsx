@@ -74,15 +74,15 @@ const ModalComponent = (
 
   useEffect(() => {
     if (sound && isOpen && type !== 'generic' && canPlaySong) {
-      playSound(sound)
+      // playSound(sound)
     }
   }, [isOpen])
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={close}>
+    <Dialog.Root open={isOpen}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 overflow-y-auto bg-black bg-opacity-50 z-50">
-          <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-h-screen w-full max-w-lg p-6">
+          <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-screen w-full max-w-lg p-6">
             <motion.div
               variants={modalVariants}
               initial="close"
