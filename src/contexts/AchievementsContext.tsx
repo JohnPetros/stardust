@@ -1,13 +1,18 @@
-import { ReactNode, createContext, useEffect, useState } from 'react'
+import { ReactNode, createContext, useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
+import { useSWRConfig } from 'swr'
 import { useAchievement } from '@/hooks/useAchievement'
-import { Achievement } from '@/types/achievement'
 import { useApi } from '@/services/api'
 
-import { useSWRConfig } from 'swr'
+import { Modal, ModalRef } from '@/app/components/Modal'
+import { Achievement } from '@/app/(private)/(app)/(home)/components/Achievement'
+import { ShinningAnimation } from '@/app/(private)/(app)/(home)/components/ShinningAnimation'
+
+import { Achievement as AchievementType } from '@/types/achievement'
+import { Button } from '@/app/components/Button'
 
 interface AchivementsContextValue {
-  achievements: Achievement[] | undefined
+  achievements: AchievementType[] | undefined
 }
 
 interface AchivementsContextProps {
@@ -19,16 +24,25 @@ export const AchivementsContext = createContext({} as AchivementsContextValue)
 export function AchivementsProvider({ children }: AchivementsContextProps) {
   const { user } = useAuth()
   const { achievements: data } = useAchievement(user?.id)
-  const [achievements, setAchievements] = useState<Achievement[]>(data ?? [])
+  const [achievements, setAchievements] = useState<AchievementType[]>(
+    data ?? []
+  )
   const [newUnlockedAchievements, setNewUnlockedAchievements] = useState<
-    Achievement[]
+    AchievementType[]
   >([])
 
   const api = useApi()
 
+  const modalRef = useRef<ModalRef>(null)
+
   const { cache } = useSWRConfig()
 
-  function addCurrentProgress(achievement: Achievement) {
+  function handleModalClose() {
+    modalRef.current?.close()
+    setNewUnlockedAchievements([])
+  }
+
+  function addCurrentProgress(achievement: AchievementType) {
     if (!user) return achievement
 
     const currentProgress = user[achievement.metric]
@@ -37,8 +51,8 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
   }
 
   function updateAchivement(
-    achievement: Achievement,
-    newUnlockedAchievements: Achievement[]
+    achievement: AchievementType,
+    newUnlockedAchievements: AchievementType[]
   ) {
     if (achievement.isUnlocked) return achievement
 
@@ -49,7 +63,7 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
     return { ...achievement, isUnlocked, isRescuable: isUnlocked }
   }
 
-  function isAchievementUnlocked(achievement: Achievement) {
+  function isAchievementUnlocked(achievement: AchievementType) {
     if (!user) return false
 
     switch (achievement.metric) {
@@ -68,14 +82,12 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
     }
   }
 
-  async function checkNewUnlockedAchivements(achievements: Achievement[]) {
+  async function checkNewUnlockedAchivements(achievements: AchievementType[]) {
     if (!achievements || !user) return
 
     const newUnlockedAchievements = achievements.filter(isAchievementUnlocked)
 
     if (newUnlockedAchievements) {
-      setNewUnlockedAchievements(newUnlockedAchievements)
-
       // for (const { id } of newUnlockedAchievements) {
       //   await Promise.all([
       //     api.addUserUnlockedAchievement(id, user.id),
@@ -88,6 +100,7 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
       )
 
       setAchievements(updatedAchievements)
+      setNewUnlockedAchievements(newUnlockedAchievements)
     }
   }
 
@@ -103,8 +116,37 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
     checkNewUnlockedAchivements(achievements)
   }, [user])
 
+  useEffect(() => {
+    if (newUnlockedAchievements.length) {
+      modalRef.current?.open()
+    }
+  }, [newUnlockedAchievements])
+
   return (
     <AchivementsContext.Provider value={{ achievements }}>
+      <Modal
+        ref={modalRef}
+        type={'earning'}
+        title={'Uau! Parece que você ganhou recompensa(s)'}
+        body={
+          <div className="space-y-24 px-6 max-h-64">
+            {newUnlockedAchievements.map((achievement) => (
+              <div className="relative z-50">
+                <span className="block absolute" style={{ top: -18, left: -31.5 }}>
+                  <ShinningAnimation size={110} />
+                </span>
+
+                <Achievement data={achievement} isUnlocked={true} />
+              </div>
+            ))}
+          </div>
+        }
+        footer={
+          <div className="mt-10">
+            <Button onClick={handleModalClose}>Entendido</Button>
+          </div>
+        }
+      />
       {children}
     </AchivementsContext.Provider>
   )
