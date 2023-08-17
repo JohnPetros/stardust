@@ -1,20 +1,21 @@
 'use client'
+
 import { useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSpace } from '@/hooks/useSpace'
+import { useApi } from '@/services/api'
 
 import Image from 'next/image'
+import { Toast, ToastRef } from '@/app/components/Toast'
+
+import UnlockedStar from '../../../../../../public/animations/unlocked-star.json'
 import Lottie, { LottieRef } from 'lottie-react'
+
 import { Variants, motion } from 'framer-motion'
 
 import { twMerge } from 'tailwind-merge'
 
-import UnlockedStar from '../../../../../../public/animations/unlocked-star.json'
-
-import { useApi } from '@/services/api'
-
 import type { Star } from '@/types/star'
-import { Toast, ToastRef } from '@/app/components/Toast'
 
 const starLight = '0 0 12px #ffcf31a1'
 
@@ -23,7 +24,7 @@ const starVariants: Variants = {
     scale: 1,
   },
   pulse: {
-    scale: 1.1,
+    scale: 1.15,
     transition: {
       repeat: Infinity,
       repeatType: 'mirror',
@@ -69,7 +70,10 @@ export function Star({
         router.push('/challenges/' + challengeId)
       } catch (error) {
         console.log(error)
-        toastRef.current?.open({ type: 'error', message: 'Falha ao tentar acessar o desafio' })
+        toastRef.current?.open({
+          type: 'error',
+          message: 'Falha ao tentar acessar o desafio',
+        })
       }
     } else {
       router.push('/lesson/' + id)
@@ -87,7 +91,7 @@ export function Star({
   return (
     <li>
       <Toast ref={toastRef} />
-      <div className="mx-8">
+      <div>
         <Image
           src={`/images/${
             isUnlocked ? 'unlocked-stardust.svg' : 'locked-stardust.svg'
@@ -108,7 +112,7 @@ export function Star({
               variants={starVariants}
               initial="default"
               animate={isLastUnlockedStar ? 'pulse' : ''}
-              className="-ml-1"
+              className="-ml-[36px]"
             >
               <Lottie
                 lottieRef={starRef}
@@ -120,16 +124,16 @@ export function Star({
           ) : (
             <Image
               src={'/images/locked-star.svg'}
-              width={85}
-              height={85}
-              className="ml-[5px]"
+              width={80}
+              height={80}
+              className="-translate-x-6"
               alt=""
             />
           )}
           <span
             className={twMerge(
-              'absolute block text-lg font-semibold top-[52%] -translate-x-1/2 -translate-y-1/2 text-yellow-700',
-              isUnlocked ? 'left-[50%]' : ' left-[54%]'
+              'absolute block text-lg font-semibold top-[50%] -translate-x-1/2 -translate-y-1/2 text-yellow-700',
+              isUnlocked ? 'left-[27%]' : ' left-[22%]'
             )}
           >
             {number}
@@ -160,7 +164,11 @@ export function Star({
         >
           {isLastUnlockedStar && (
             <div className="relative w-20 h-20 rotate-180">
-              <Image src={spaceRocket.image} alt={`Foguete ${spaceRocket.name}`} fill />
+              <Image
+                src={spaceRocket.image}
+                alt={`Foguete ${spaceRocket.name}`}
+                fill
+              />
             </div>
           )}
         </motion.div>
