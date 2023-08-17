@@ -2,23 +2,22 @@
 
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
-import { useAchievement } from '@/hooks/useAchievement'
 
 import { Loading } from '@/app/components/Loading'
 import { Achievement } from './Achievement'
 import { twMerge } from 'tailwind-merge'
+import { useAchivementsContext } from '@/hooks/useAchievementContext'
 
 export function AchievementsList() {
   const { user } = useAuth()
-
-  const { achievements } = useAchievement(user?.id)
+  const { achievements } = useAchivementsContext()
   const [isLoading, setIsloading] = useState(!!achievements)
 
   useEffect(() => {
     if (achievements?.length && isLoading) {
       setTimeout(() => {
         setIsloading(false)
-      }, 1500)
+      }, 1000)
     }
   }, [achievements])
 
@@ -36,8 +35,6 @@ export function AchievementsList() {
               <Achievement
                 key={achievement.id}
                 data={achievement}
-                currentProgress={50}
-                // currentProgress={user[achievement.metric]}
               />
             ))}
           </>
