@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
-import { useApi } from '@/services/api'
 
 import { motion, Variants } from 'framer-motion'
 
@@ -91,7 +90,6 @@ export function End({
   onExit,
 }: EndProps) {
   const { user, updateUser } = useAuth()
-  const api = useApi()
 
   const [hasNewLevel, setHasNewLevel] = useState(false)
   const [isFirstClick, setIsFirstClick] = useState(true)
@@ -104,8 +102,6 @@ export function End({
     if (!user) return
 
     const hasNewLevel = updatedXp >= 50 * (user.level - 1) + 25
-
-    console.log(50 * user.level + 25)
 
     if (hasNewLevel) {
       const newLevel = user.level + 1
