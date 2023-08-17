@@ -165,6 +165,8 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
   useEffect(() => {
     if (data) {
       const achievements = data.map(addCurrentProgress)
+      console.log(achievements);
+      
       setAchievements(achievements)
       checkNewUnlockedAchivements(achievements)
     }
