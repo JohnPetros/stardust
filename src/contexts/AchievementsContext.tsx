@@ -165,8 +165,6 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
   useEffect(() => {
     if (data) {
       const achievements = data.map(addCurrentProgress)
-      console.log(achievements);
-      
       setAchievements(achievements)
       checkNewUnlockedAchivements(achievements)
     }
@@ -238,7 +236,7 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
                   height={40}
                   alt=""
                 />
-                <p className="font-semibold text-center text-green-500">
+                <p className="font-semibold text-center text-green-500 mt-2">
                   {rescuedAchievement?.name}
                 </p>
               </div>
