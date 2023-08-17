@@ -22,13 +22,18 @@ export function useAchievement(userId?: string) {
     }
   }
 
-  const { data: achievements } = useSWR('/achievements', api.getAchievements)
+  const { data: achievements } = useSWR(
+    '/achievements',
+    api.getAchievements
+  )
+
   const { data: userUnlockedAchievementsIds } = useSWR(
-    '/unlocked_achievements_ids?id=' + user?.id,
+    '/unlocked_achievements_ids?user_id=' + userId,
     getUserUnlockedAchievementsIds
   )
+
   const { data: userRescuableAchievementsIds } = useSWR(
-    '/rescuableachievements_ids?user_id=' + user?.id,
+    '/rescuableachievements_ids?user_id=' + userId,
     getUserRescuableAchievementsIds
   )
 
@@ -36,7 +41,7 @@ export function useAchievement(userId?: string) {
     achievement: Achievement,
     userUnlockedAchievementsIds: string[],
     userRescuableAchievementsIds: string[]
-  ) {
+  ): Achievement {
     const isUnlocked = userUnlockedAchievementsIds.some(
       (unlockedAchievementId) => unlockedAchievementId === achievement.id
     )
