@@ -27,7 +27,7 @@ export default () => {
       if (error) {
         throw new Error(error.message)
       }
-      
+
       return data.map((data) => data.achievement_id)
     },
 
@@ -62,6 +62,20 @@ export default () => {
       const { error } = await supabase
         .from('users_rescuable_achievements')
         .insert([{ achievement_id: achievementId, user_id: userId }])
+
+      if (error) {
+        throw new Error(error.message)
+      }
+    },
+
+    deleteUserRescuebleAchievement: async (achievementId: string, userId: string) => {
+      const { error } = await supabase
+        .from('users_rescuable_achievements')
+        .delete()
+        .match({
+          achievement_id: achievementId,
+          user_id: userId,
+        })
 
       if (error) {
         throw new Error(error.message)
