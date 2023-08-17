@@ -20,7 +20,6 @@ export function Header() {
       currentQuestionIndex,
       renderedTextsAmount,
       livesAmount,
-      secondsAmount
     },
     dispatch,
   } = useLesson()
@@ -34,13 +33,14 @@ export function Header() {
     if (!total) return 0
 
     return (
-      ((renderedTextsAmount / texts.length) * halfTotal) / total +
-      ((currentQuestionIndex / questions.length) * halfTotal) / total
-    ) * 100
+      (((renderedTextsAmount / texts.length) * halfTotal) / total +
+        ((currentQuestionIndex / questions.length) * halfTotal) / total) *
+      100
+    )
   }, [renderedTextsAmount, currentQuestionIndex])
 
   return (
-    <header className="fixed z-10 top-0 py-3 w-full bg-gray-900">
+    <header className="fixed z-10 top-0 px-6 py-3 w-full bg-gray-900">
       <div className="flex items-center justify-between gap-6 max-w-3xl mx-auto">
         <button>
           <X className="text-red-700 text-2xl" weight="bold" />
@@ -53,7 +53,9 @@ export function Header() {
         />
 
         <div className="flex items-center gap-2">
-          <Image src="/icons/life.svg" width={36} height={36} alt="" />
+          <div>
+            <Image src="/icons/life.svg" width={36} height={36} alt="" />
+          </div>
           <span className="text-red-700 text-lg font-bold">{livesAmount}</span>
         </div>
       </div>

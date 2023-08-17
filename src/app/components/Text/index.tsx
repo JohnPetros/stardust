@@ -1,9 +1,11 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { useAuth } from '@/hooks/useAuth'
 
 import Image from 'next/image'
 import { TypeWritter } from './TypeWritter'
+import { UserAvatar } from '@/app/(private)/(app)/(home)/components/UserAvatar'
 
 import { getImage } from '@/utils/functions'
 
@@ -42,6 +44,7 @@ const textStyles = tv({
       list: 'border-green-400 text-green-400',
       image: '',
       code: '',
+      user: 'bg-green-500 text-green-900 ml-auto w-max',
     },
   },
 })
@@ -55,8 +58,9 @@ export function Text({
   data: { type, content, picture },
   hasAnimation,
 }: TextProps) {
+  const { user } = useAuth()
   const textRef = useRef<HTMLDivElement>(null)
-  const textImage = picture ? getImage('texts', picture) : ''
+  const textImage = picture ? getImage('theory', picture) : ''
 
   useEffect(() => {
     if (hasAnimation && textRef.current)
@@ -69,7 +73,7 @@ export function Text({
       variants={textAnimations}
       initial={hasAnimation && 'hidden'}
       animate={hasAnimation && 'visible'}
-      className="flex items-center gap-6"
+      className="flex items-center gap-6 w-full"
     >
       {type === 'image' && textImage && (
         <div className="flex flex-col items-center justify-center w-full gap-2">
@@ -86,6 +90,19 @@ export function Text({
             </TypeWritter>
           </p>
         </div>
+      )}
+
+      {type === 'user' && (
+        <>
+          <div className={textStyles({ type })}>
+            {!Array.isArray(content) && (
+              <p>
+                <TypeWritter canType={!!hasAnimation}>{content}</TypeWritter>
+              </p>
+            )}
+          </div>
+          {user && <UserAvatar avatarId={user?.avatar_id} size={80} />}
+        </>
       )}
 
       {['default', 'alert', 'quote'].includes(String(type)) && (
