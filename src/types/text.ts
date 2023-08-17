@@ -1,4 +1,4 @@
-export type TextType = 'default' | 'quote' | 'alert' | 'list' | 'image' | 'code'
+export type TextType = 'default' | 'quote' | 'alert' | 'list' | 'image' | 'code' | 'user'
 
 export type Text = {
   type: TextType
@@ -7,4 +7,5 @@ export type Text = {
   picture?: string
   isUser?: boolean
   hasAnimation?: boolean
+  isRunnable?: boolean
 }
