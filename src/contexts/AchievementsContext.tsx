@@ -89,12 +89,12 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
 
     if (newUnlockedAchievements) {
       
-      // for (const { id } of newUnlockedAchievements) {
-      //   await Promise.all([
-      //     api.addUserUnlockedAchievement(id, user.id),
-      //     api.addUserRescuableAchievements(id, user.id),
-      //   ])
-      // }
+      for (const { id } of newUnlockedAchievements) {
+        await Promise.all([
+          api.addUserUnlockedAchievement(id, user.id),
+          api.addUserRescuableAchievements(id, user.id),
+        ])
+      }
 
       const updatedAchievements = achievements.map((achievement) =>
         updateAchivement(achievement, newUnlockedAchievements)
