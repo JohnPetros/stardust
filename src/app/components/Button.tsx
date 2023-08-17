@@ -28,7 +28,6 @@ export function Button({
         'h-10 w-full flex justify-center items-center rounded bg-green-400 font-semibold relative overflow-hidden hover:brightness-75 transition-all duration-400 cursor-pointer disabled:opacity-70 disabled:pointer-events-none',
         className
       )}
-      disabled={isLoading}
       {...rest}
     >
       {isLoading ? <Loading /> : children}
