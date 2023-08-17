@@ -35,6 +35,7 @@ export function AchievementsList() {
               <Achievement
                 key={achievement.id}
                 data={achievement}
+                isUnlocked={achievement.isUnlocked}
               />
             ))}
           </>

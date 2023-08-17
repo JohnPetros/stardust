@@ -33,11 +33,11 @@ type Status = {
 
 interface AchievementProps {
   data: AchievementType
+  isUnlocked: boolean
 }
 
 export function Achievement({
   data: {
-    isUnlocked,
     name,
     description,
     icon,
@@ -45,6 +45,7 @@ export function Achievement({
     isRescuable,
     currentProgress,
   },
+  isUnlocked
 }: AchievementProps) {
   const iconImage = getImage('achievements', icon)
   const [status, setStatus] = useState<Status | null>(null)
