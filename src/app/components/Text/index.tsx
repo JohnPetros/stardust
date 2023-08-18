@@ -12,7 +12,7 @@ import { Variants, motion } from 'framer-motion'
 
 import { tv } from 'tailwind-variants'
 
-import { getImage } from '@/utils/functions'
+import { formatText, getImage } from '@/utils/functions'
 
 import type { Text as TextData } from '@/types/text'
 
@@ -87,14 +87,14 @@ export function Text({
             alt=""
           />
           <p className="text-gray-100 font-medium text-start text-lg">
-            <TypeWriter text={String(content)} isEnable={hasAnimation} />
+            <TypeWriter text={formatText(String(content))} isEnable={hasAnimation} />
           </p>
         </div>
       )}
 
       {type === 'code' && (
         <>
-          <CodeSnippet code={String(content)} />
+          <CodeSnippet code={formatText(String(content))} />
         </>
       )}
 
@@ -126,7 +126,7 @@ export function Text({
           <div className={textStyles({ type })}>
             {!Array.isArray(content) && (
               <p>
-                <TypeWriter text={content} isEnable={hasAnimation} />
+                <TypeWriter text={formatText(content)} isEnable={hasAnimation} />
               </p>
             )}
           </div>

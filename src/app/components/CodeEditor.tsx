@@ -8,7 +8,8 @@ import {
   useRef,
 } from 'react'
 import Editor, { useMonaco, Monaco } from '@monaco-editor/react'
-import { getDeleguaLanguageTokens } from '@/utils/functions'
+
+import { getDeleguaLanguageTokens } from '@/utils/functions/getDeleguaLanguageTokens'
 
 import type monaco from 'monaco-editor'
 
