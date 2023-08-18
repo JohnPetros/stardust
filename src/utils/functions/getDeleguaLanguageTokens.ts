@@ -1,4 +1,6 @@
-export function getDeleguaLanguageTokens() {
+import type monaco from 'monaco-editor'
+
+export function getDeleguaLanguageTokens(): monaco.languages.IMonarchLanguage {
   return {
     defaultToken: 'invalid',
     tokenPostfix: '.delegua',
@@ -124,16 +126,9 @@ export function getDeleguaLanguageTokens() {
       '%=',
     ],
 
-    booleans: [
-      'verdadeiro',
-      'falso',
-      'vazio',
-      'nulo'
-    ],
+    booleans: ['verdadeiro', 'falso', 'vazio', 'nulo'],
 
-    typeKeywords: [
-      'var'
-    ],
+    typeKeywords: ['var'],
 
     // we include these common regular expressions
     symbols: /[=><!~?:&|+\-*\/\^%]+/,
