@@ -54,27 +54,16 @@ export function Theory({ title, number }: TheoryProps) {
     nextText()
   }
 
-  function handleKeyDown({ key }: KeyboardEvent) {
-    if (key === 'Enter' && !buttonHasFocus?.current) {
-      nextText()
-    }
-  }
 
   useEffect(() => {
-    console.log(state.texts);
-    
     setTexts([{ ...state.texts[0], hasAnimation: false }])
     dispatch({ type: 'incrementRenderedTextsAmount' })
   }, [state.texts])
 
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [handleKeyDown])
 
   return (
     <>
-      <div className="mt-20">
+      <div id="theory" className="mt-20">
         <div className="max-w-3xl mx-auto">
           <div className="flex items-center justify-center mt-6">
             <Star number={number} />
@@ -94,6 +83,7 @@ export function Theory({ title, number }: TheoryProps) {
             className="w-32"
             tabIndex={0}
             onClick={handleContinueButtonClick}
+            autoFocus
             onFocus={() => buttonHasFocus.current = true}
             onBlur={() => buttonHasFocus.current = false}
             disabled={nextTextIndex.current > state.texts.length}
