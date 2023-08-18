@@ -1,25 +1,44 @@
 'use client'
 
-import { useEffect } from 'react'
-import Editor, { useMonaco } from '@monaco-editor/react'
-import { getDeleguaLanguageTokens } from '@/utils/functions/getDeleguaLanguageTokens'
+import {
+  ForwardedRef,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from 'react'
+import Editor, { useMonaco, Monaco } from '@monaco-editor/react'
+import { getDeleguaLanguageTokens } from '@/utils/functions'
 
+import type monaco from 'monaco-editor'
+
+export interface CodeEditorRef {
+  reloadValue: () => void
+}
 interface CodeSnippetProps {
-  code: string
+  value: string
   width: number | string
   height: number | string
   hasMinimap?: boolean
 }
 
-export function CodeEditor({
-  code,
-  width,
-  height,
-  hasMinimap = false,
-}: CodeSnippetProps) {
+export function CodeEditorComponent(
+  { value, width, height, hasMinimap = false }: CodeSnippetProps,
+  ref: ForwardedRef<CodeEditorRef>
+) {
   const monaco = useMonaco()
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
 
-  function handleEditorDidMount(_: any, monaco: any) {
+  function reloadValue() {
+    editorRef.current?.setValue(value)
+  }
+
+  function handleEditorDidMount(
+    editor: monaco.editor.IStandaloneCodeEditor,
+    monaco: Monaco
+  ) {
+    editorRef.current = editor
+
     monaco.languages.register({ id: 'delegua' })
 
     monaco.languages.setMonarchTokensProvider(
@@ -68,6 +87,16 @@ export function CodeEditor({
     monaco.editor.setTheme('delegua-theme')
   }
 
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        reloadValue,
+      }
+    },
+    []
+  )
+
   useEffect(() => {
     monaco?.editor.defineTheme('delegua-theme', {
       base: 'vs-dark',
@@ -105,6 +134,7 @@ export function CodeEditor({
       width={width}
       height={height}
       language="delegua"
+      theme="delegua-theme"
       options={{
         minimap: {
           enabled: hasMinimap,
@@ -115,8 +145,10 @@ export function CodeEditor({
         wordWrap: 'on',
         autoIndent: 'full',
       }}
-      value={code}
+      value={value}
       onMount={handleEditorDidMount}
     />
   )
 }
+
+export const CodeEditor = forwardRef(CodeEditorComponent)
