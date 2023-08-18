@@ -27,5 +27,5 @@ export function TypeWriter({ text, isEnable = true }: TypeWriterProps) {
       />
     )
 
-  return <div dangerouslySetInnerHTML={{ __html: text }} />
+  return <span dangerouslySetInnerHTML={{ __html: text }} />
 }
