@@ -12,6 +12,7 @@ import Editor, { useMonaco, Monaco } from '@monaco-editor/react'
 import { getDeleguaLanguageTokens } from '@/utils/functions/getDeleguaLanguageTokens'
 
 import type monaco from 'monaco-editor'
+import { Loading } from './Loading'
 
 export interface CodeEditorRef {
   reloadValue: () => void
@@ -36,8 +37,6 @@ export function CodeEditorComponent(
 ) {
   const monaco = useMonaco()
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
-
-  console.log(isReadonly)
 
   const messageContribution = editorRef.current?.getContribution(
     'editor.contrib.messageController'
@@ -168,6 +167,11 @@ export function CodeEditorComponent(
         readOnly: isReadOnly,
         domReadOnly: isReadOnly,
       }}
+      loading={
+        <div className="grid place-content-center">
+          <Loading />
+        </div>
+      }
       value={value}
       onMount={handleEditorDidMount}
     />
