@@ -4,9 +4,9 @@ import { useEffect, useRef } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 
 import Image from 'next/image'
-import { TypeWritter } from './TypeWritter'
 import { UserAvatar } from '@/app/(private)/(app)/(home)/components/UserAvatar'
-import { CodeEditor } from '../CodeEditor'
+import { CodeSnippet } from '@/app/components/Text/CodeSnippet'
+import { TypeWriter } from './TypeWriter'
 
 import { Variants, motion } from 'framer-motion'
 
@@ -15,7 +15,7 @@ import { tv } from 'tailwind-variants'
 import { getImage } from '@/utils/functions'
 
 import type { Text as TextData } from '@/types/text'
-import { CodeSnippet } from '@/app/(private)/(app)/lesson/components/Theory/CodeSnippet'
+
 
 const textAnimations: Variants = {
   hidden: {
@@ -87,9 +87,7 @@ export function Text({
             alt=""
           />
           <p className="text-gray-100 font-medium text-start text-lg">
-            <TypeWritter canType delay={750} speed={35}>
-              {String(content)}
-            </TypeWritter>
+            <TypeWriter text={String(content)} isEnable={hasAnimation} />
           </p>
         </div>
       )}
@@ -105,7 +103,7 @@ export function Text({
           <div className={textStyles({ type })}>
             {!Array.isArray(content) && (
               <p>
-                <TypeWritter canType={!!hasAnimation}>{content}</TypeWritter>
+                <TypeWriter text={content} isEnable={hasAnimation} />
               </p>
             )}
           </div>
@@ -128,7 +126,7 @@ export function Text({
           <div className={textStyles({ type })}>
             {!Array.isArray(content) && (
               <p>
-                <TypeWritter canType={!!hasAnimation}>{content}</TypeWritter>
+                <TypeWriter text={content} isEnable={hasAnimation} />
               </p>
             )}
           </div>
