@@ -12,6 +12,8 @@ import { Quiz } from '../components/Quiz'
 import { End } from '../components/End'
 
 import { texts } from '@/utils/templates/planets/planet1/star2/texts'
+import { Modal, ModalRef } from '@/app/components/Modal'
+import { Button } from '@/app/components/Button'
 
 export default function Lesson() {
   const { starId } = useParams()
@@ -24,6 +26,7 @@ export default function Lesson() {
 
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const modalRef = useRef<ModalRef>(null)
 
   const [coins, setCoins] = useState(0)
   const [xp, setXp] = useState(0)
@@ -33,8 +36,8 @@ export default function Lesson() {
   const router = useRouter()
 
   function leaveLesson() {
-    dispatch({ type: 'resetState' })
     router.push('/')
+    dispatch({ type: 'resetState' })
   }
 
   function formatSecondsToTime(seconds: number) {
@@ -79,8 +82,7 @@ export default function Lesson() {
   useEffect(() => {
     if (star && nextStar) {
       // dispatch({ type: 'setTexts', payload: star.texts })
-      console.log(texts);
-      
+
       dispatch({ type: 'setTexts', payload: texts })
       dispatch({ type: 'setQuestions', payload: star.questions })
       setTimeout(() => setIsTransitionVisible(false), 1000)
@@ -100,8 +102,10 @@ export default function Lesson() {
     <div>
       <TransitionPageAnimation isVisible={isTransitionVisible} />
       <main ref={scrollRef} className="relative overflow-x-hidden">
-        {currentStage !== 'end' && <Header />}
-        
+        {currentStage !== 'end' && (
+          <Header onLeaveLesson={() => modalRef.current?.open()} />
+        )}
+
         {star && nextStar && (
           <>
             {currentStage === 'theory' && (
@@ -123,6 +127,31 @@ export default function Lesson() {
           </>
         )}
       </main>
+
+      <Modal
+        ref={modalRef}
+        type="crying"
+        title="Deseja mesmo sair da sua lição?"
+        canPlaySong={false}
+        body={null}
+        footer={
+          <div className="flex items-center justify-center mt-3 gap-2">
+            <Button
+              className="bg-green-400 text-green-900 w-32"
+              onClick={() => modalRef.current?.close()}
+              autoFocus
+            >
+              Cancelar
+            </Button>
+            <Button
+              className="bg-red-700 text-gray-100 w-32"
+              onClick={leaveLesson}
+            >
+              Sair
+            </Button>
+          </div>
+        }
+      />
     </div>
   )
 }
