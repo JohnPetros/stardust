@@ -39,6 +39,7 @@
     "eslint-config-next": "13.4.10",
     "framer-motion": "^10.13.0",
     "lottie-react": "^2.4.0",
+    "monaco-editor": "^0.41.0",
     "next": "13.4.10",
     "phosphor-icons": "^1.4.2",
     "postcss": "8.4.26",
