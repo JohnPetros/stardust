@@ -6,10 +6,10 @@ import { Button } from '@/app/components/Button'
 import { Text } from '@/app/components/Text'
 import { Star } from './Star'
 
-
-import type { Text as TextData } from '@/types/text'
 import { Modal, ModalRef } from '@/app/components/Modal'
 import { useLesson } from '@/hooks/useLesson'
+
+import type { Text as TextData } from '@/types/text'
 
 interface TheoryProps {
   title: string
