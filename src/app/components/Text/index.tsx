@@ -6,14 +6,16 @@ import { useAuth } from '@/hooks/useAuth'
 import Image from 'next/image'
 import { TypeWritter } from './TypeWritter'
 import { UserAvatar } from '@/app/(private)/(app)/(home)/components/UserAvatar'
-
-import { getImage } from '@/utils/functions'
+import { CodeEditor } from '../CodeEditor'
 
 import { Variants, motion } from 'framer-motion'
 
 import { tv } from 'tailwind-variants'
 
+import { getImage } from '@/utils/functions'
+
 import type { Text as TextData } from '@/types/text'
+import { CodeSnippet } from '@/app/(private)/(app)/lesson/components/Theory/CodeSnippet'
 
 const textAnimations: Variants = {
   hidden: {
@@ -44,7 +46,7 @@ const textStyles = tv({
       list: 'border-green-400 text-green-400',
       image: '',
       code: '',
-      user: 'bg-green-500 text-green-900 ml-auto mr-4 w-max',
+      user: 'bg-green-400 text-green-900 font-semibold ml-auto mr-4 w-max',
     },
   },
 })
@@ -92,6 +94,12 @@ export function Text({
         </div>
       )}
 
+      {type === 'code' && (
+        <>
+          <CodeSnippet code={String(content)} />
+        </>
+      )}
+
       {type === 'user' && (
         <>
           <div className={textStyles({ type })}>
@@ -113,7 +121,7 @@ export function Text({
             </div>
           )}
           {type === 'alert' && (
-            <span className='block mr-3'>
+            <span className="block mr-3">
               <Image src="/icons/alert.svg" width={32} height={32} alt="" />
             </span>
           )}
