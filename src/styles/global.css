@@ -55,9 +55,14 @@ a {
   text-decoration: inherit;
 }
 
-button:focus, a:focus {
+.custom-outline:focus {
   outline: none;
   box-shadow: 0 0 0 4px #514869;
+}
+
+.monaco-alert {
+  display: none !important;
+  visibility: hidden !important;
 }
 
 .inline-code {
