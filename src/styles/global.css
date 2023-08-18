@@ -60,6 +60,10 @@ button:focus, a:focus {
   box-shadow: 0 0 0 4px #514869;
 }
 
+.inline-code {
+  @apply bg-green-900 text-gray-100 rounded-md py-1 px-2;
+}
+
 ::-webkit-scrollbar {
   @apply w-[6px] rounded;
 }
