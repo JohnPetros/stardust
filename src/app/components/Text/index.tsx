@@ -16,7 +16,6 @@ import { formatText, getImage } from '@/utils/functions'
 
 import type { Text as TextData } from '@/types/text'
 
-
 const textAnimations: Variants = {
   hidden: {
     opacity: 0,
@@ -57,7 +56,7 @@ interface TextProps {
 }
 
 export function Text({
-  data: { type, content, picture },
+  data: { type, content, picture, isRunnable },
   hasAnimation,
 }: TextProps) {
   const { user } = useAuth()
@@ -87,14 +86,20 @@ export function Text({
             alt=""
           />
           <p className="text-gray-100 font-medium text-start text-lg">
-            <TypeWriter text={formatText(String(content))} isEnable={hasAnimation} />
+            <TypeWriter
+              text={formatText(String(content))}
+              isEnable={hasAnimation}
+            />
           </p>
         </div>
       )}
 
       {type === 'code' && (
         <>
-          <CodeSnippet code={formatText(String(content))} />
+          <CodeSnippet
+            code={formatText(String(content))}
+            isRunnable={Boolean(isRunnable)}
+          />
         </>
       )}
 
@@ -126,7 +131,10 @@ export function Text({
           <div className={textStyles({ type })}>
             {!Array.isArray(content) && (
               <p>
-                <TypeWriter text={formatText(content)} isEnable={hasAnimation} />
+                <TypeWriter
+                  text={formatText(content)}
+                  isEnable={hasAnimation}
+                />
               </p>
             )}
           </div>
