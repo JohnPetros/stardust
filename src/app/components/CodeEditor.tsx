@@ -21,14 +21,27 @@ interface CodeSnippetProps {
   width: number | string
   height: number | string
   hasMinimap?: boolean
+  isReadOnly: boolean
 }
 
 export function CodeEditorComponent(
-  { value, width, height, hasMinimap = false }: CodeSnippetProps,
+  {
+    value,
+    width,
+    height,
+    hasMinimap = false,
+    isReadOnly = false,
+  }: CodeSnippetProps,
   ref: ForwardedRef<CodeEditorRef>
 ) {
   const monaco = useMonaco()
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+
+  console.log(isReadonly)
+
+  const messageContribution = editorRef.current?.getContribution(
+    'editor.contrib.messageController'
+  )
 
   function reloadValue() {
     editorRef.current?.setValue(value)
@@ -39,6 +52,13 @@ export function CodeEditorComponent(
     monaco: Monaco
   ) {
     editorRef.current = editor
+
+    const messageContribution = editor.getContribution(
+      'editor.contrib.messageController'
+    )
+    editor.onDidAttemptReadOnlyEdit(() => {
+      messageContribution?.dispose()
+    })
 
     monaco.languages.register({ id: 'delegua' })
 
@@ -145,6 +165,8 @@ export function CodeEditorComponent(
         cursorStyle: 'block',
         wordWrap: 'on',
         autoIndent: 'full',
+        readOnly: isReadOnly,
+        domReadOnly: isReadOnly,
       }}
       value={value}
       onMount={handleEditorDidMount}
