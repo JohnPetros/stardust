@@ -7,6 +7,7 @@ import { SelectionQuestion } from './SelectionQuestion'
 import { VerificationButton } from './VerificationButton'
 import { DragAndDropListQuestion } from './DragAndDropListQuestion'
 import { Variants } from 'framer-motion'
+import { OpenQuestion } from './OpenQuestion'
 
 export const questionAnimations: Variants = {
   right: {
@@ -47,7 +48,6 @@ export function Quiz() {
     return questions.length ? questions[currentQuestionIndex] : null
   }, [questions, currentQuestionIndex])
 
-  
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -63,7 +63,16 @@ export function Quiz() {
             <SelectionQuestion
               data={currentQuestion.content}
               isCurrentQuestion={
-                (currentQuestion.order - 1) === currentQuestionIndex
+                currentQuestion.order - 1 === currentQuestionIndex
+              }
+            />
+          )}
+
+          {currentQuestion.content.type === 'open' && (
+            <OpenQuestion
+              data={currentQuestion.content}
+              isCurrentQuestion={
+                currentQuestion.order - 1 === currentQuestionIndex
               }
             />
           )}
@@ -71,9 +80,7 @@ export function Quiz() {
           {/* {currentQuestion.type === 'checkbox' && (
         <CheckboxQuestion data={currentQuestion} />
       )}
-      {currentQuestion.type === 'open' && (
-        <OpenQuestion data={currentQuestion} />
-      )}
+    
       {currentQuestion.type === 'drag-and-drop-click' && (
         <DragAndDropClickQuestion data={currentQuestion} />
       )}
@@ -82,7 +89,7 @@ export function Quiz() {
             <DragAndDropListQuestion
               data={currentQuestion.content}
               isCurrentQuestion={
-                (currentQuestion.order - 1) === currentQuestionIndex
+                currentQuestion.order - 1 === currentQuestionIndex
               }
             />
           )}
