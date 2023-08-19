@@ -124,8 +124,8 @@ export function VerificationButton({
       <Button
         buttonRef={buttonRef}
         onClick={handleButtonClick}
-        onFocus={() => buttonHasFocus.current = true}
-        onBlur={() => buttonHasFocus.current = false}
+        onFocus={() => (buttonHasFocus.current = true)}
+        onBlur={() => (buttonHasFocus.current = false)}
         className={buttonStyles({
           color: isAnswerVerified && !isAnswerCorrect ? 'red' : 'green',
         })}
