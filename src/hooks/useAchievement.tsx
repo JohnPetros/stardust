@@ -38,8 +38,6 @@ export function useAchievement(userId?: string) {
     userUnlockedAchievementsIds: string[],
     userRescuableAchievementsIds: string[]
   ): Achievement {
-    console.log(userUnlockedAchievementsIds)
-
     const isUnlocked = userUnlockedAchievementsIds.some(
       (unlockedAchievementId) => unlockedAchievementId === achievement.id
     )
