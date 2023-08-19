@@ -11,6 +11,7 @@ import { questionAnimations, questionTransition } from '..'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import type { SelectionQuestion as SelectionQuestionData } from '@/types/quiz'
+import { reorderItems } from '@/utils/functions'
 
 interface SelectionQuestionProps {
   data: SelectionQuestionData
@@ -21,12 +22,12 @@ export function SelectionQuestion({
   data: { title, picture, options, code, answer },
   isCurrentQuestion,
 }: SelectionQuestionProps) {
-
   const {
     state: { isAnswerVerified, isAnswerCorrect, currentQuestionIndex },
     dispatch,
   } = useLesson()
   const [selectedOption, setSelectedOption] = useState('')
+  const [reorderedOptions, setReorderedOptions] = useState<string[]>([])
   const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
 
   function setIsAnswerVerified(isAnswerVerified: boolean) {
@@ -75,6 +76,13 @@ export function SelectionQuestion({
   }
 
   useEffect(() => {
+    if (!reorderedOptions.length) {
+     const reorderedItems = reorderItems<string>(options)
+     setReorderedOptions(reorderedItems)
+    }
+  }, [])
+
+  useEffect(() => {
     dispatch({ type: 'setIsAnswered', payload: !!selectedOption })
   }, [selectedOption])
 
@@ -99,7 +107,7 @@ export function SelectionQuestion({
         <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
         <RadioGroup.Root className="mt-8 space-y-2">
-          {options.map((option) => (
+          {reorderedOptions.map((option) => (
             <Option
               key={option}
               label={option}
