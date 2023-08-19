@@ -43,6 +43,7 @@ export function VerificationButton({
   isAnswered,
 }: VerificationButtonProps) {
   const buttonRef = useRef<HTMLButtonElement>(null)
+  const buttonHasFocus = useRef(false)
 
   function getButtonTitle() {
     if (isAnswerVerified && !isAnswerCorrect) {
@@ -59,7 +60,7 @@ export function VerificationButton({
   }
 
   function handleGlobalKeyDown({ key }: KeyboardEvent) {
-    if (key === 'Enter' && isAnswered) {
+    if (key === 'Enter' && isAnswered && !buttonHasFocus.current) {
       answerHandler()
     }
   }
@@ -123,6 +124,8 @@ export function VerificationButton({
       <Button
         buttonRef={buttonRef}
         onClick={handleButtonClick}
+        onFocus={() => buttonHasFocus.current = true}
+        onBlur={() => buttonHasFocus.current = false}
         className={buttonStyles({
           color: isAnswerVerified && !isAnswerCorrect ? 'red' : 'green',
         })}
