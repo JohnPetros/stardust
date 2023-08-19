@@ -1,18 +1,16 @@
 'use client'
 
 import { useApi } from '@/services/api'
-import { Achievement } from '@/types/achievement'
 import { useMemo } from 'react'
 import useSWR from 'swr'
-import { useAuth } from './useAuth'
+
+import type { Achievement } from '@/types/achievement'
 
 export function useAchievement(userId?: string) {
   const api = useApi()
 
   async function getUserUnlockedAchievementsIds() {
     if (userId) {
-      console.log(userId)
-
       return await api.getUserUnlockedAchievementsIds(userId)
     }
   }
