@@ -5,7 +5,7 @@ import { twMerge } from 'tailwind-merge'
 import { tv } from 'tailwind-variants'
 
 const inputStyles = tv({
-  base: ' rounded-md border-2 overflow-hidden',
+  base: ' rounded-md border-2 overflow-hidden custom-outline',
   variants: {
     color: {
       gray: 'border-gray-100 text-gray-100',
