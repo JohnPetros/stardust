@@ -1,12 +1,15 @@
 'use client'
 
+import { useEffect, useRef, useState } from 'react'
 import { useLesson } from '@/hooks/useLesson'
 
 import { QuestionTitle } from '../QuestionTitle'
 import { Input } from './Input'
 
+import { questionAnimations, questionTransition } from '..'
+import { AnimatePresence, motion } from 'framer-motion'
+
 import type { OpenQuestion as OpenQuestionData } from '@/types/quiz'
-import { useEffect, useRef, useState } from 'react'
 
 interface OpenQuestion {
   data: OpenQuestionData
@@ -15,6 +18,7 @@ interface OpenQuestion {
 
 export function OpenQuestion({
   data: { title, picture, code, answer },
+  isCurrentQuestion,
 }: OpenQuestion) {
   const {
     state: { isAnswerVerified, isAnswerCorrect, currentQuestionIndex },
@@ -22,7 +26,6 @@ export function OpenQuestion({
   } = useLesson()
   const [userAnswer, setUserAnswer] = useState('')
   const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
-
 
   function setIsAnswerVerified(isAnswerVerified: boolean) {
     dispatch({ type: 'setIsAnswerVerified', payload: isAnswerVerified })
@@ -39,13 +42,13 @@ export function OpenQuestion({
     const openQuestionAnswer = !Array.isArray(answer) ? [answer] : answer
 
     if (openQuestionAnswer.includes(userAnswer.trim().toLowerCase())) {
-      setIsAnswerCorrect(true);
+      setIsAnswerCorrect(true)
 
       if (isAnswerVerified) {
-        dispatch({ type: 'changeQuestion' });
+        dispatch({ type: 'changeQuestion' })
       }
 
-      return;
+      return
     }
 
     setIsAnswerCorrect(false)
@@ -73,11 +76,19 @@ export function OpenQuestion({
   }, [isAnswerVerified, userAnswer])
 
   return (
-    <>
-      <div className="mx-auto mt-4 w-full max-w-xl flex flex-col items-center justify-center">
+    <AnimatePresence>
+      <motion.div
+        key={currentQuestionIndex}
+        variants={questionAnimations}
+        initial="right"
+        animate={isCurrentQuestion ? 'middle' : ''}
+        exit="left"
+        transition={questionTransition}
+        className="mx-auto mt-4 w-full h-full max-w-xl flex flex-col items-center justify-center"
+      >
         <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
-        <div className="mt-12">
+        <div className="mt-8">
           <Input
             value={userAnswer}
             isAnswerCorrect={isAnswerCorrect}
@@ -87,7 +98,7 @@ export function OpenQuestion({
             autoFocus
           />
         </div>
-      </div>
-    </>
+      </motion.div>
+    </AnimatePresence>
   )
 }
