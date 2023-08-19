@@ -46,7 +46,10 @@ export function SelectionQuestion({
 
   function handleAnswer() {
     setIsAnswerVerified(!isAnswerVerified)
-    resetAnswer()
+
+    if (isAnswerVerified && !!selectedOption) {
+      setIsAnswerCorrect(false)
+    }
 
     if (selectedOption.toLowerCase() === answer.toLowerCase()) {
       setIsAnswerCorrect(true)
@@ -91,7 +94,7 @@ export function SelectionQuestion({
         animate={isCurrentQuestion ? 'middle' : ''}
         exit="left"
         transition={questionTransition}
-        className="mx-auto mt-4 w-full max-w-xl flex flex-col items-center justify-center"
+        className="mx-auto w-full max-w-xl flex flex-col items-center justify-center"
       >
         <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
