@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLesson } from '@/hooks/useLesson'
 
-
 import { QuestionTitle } from '../QuestionTitle'
 import { Item } from './Item'
 
@@ -29,8 +28,9 @@ import {
 import { questionAnimations, questionTransition } from '..'
 import { AnimatePresence, motion } from 'framer-motion'
 
-import { compareArrays } from '@/utils/functions'
-import { DragAndDropList, SortableItem } from '@/types/quiz'
+import { compareArrays, reorderItems } from '@/utils/functions'
+
+import type { DragAndDropList, SortableItem } from '@/types/quiz'
 
 interface DragAndDropListQuestionProps {
   data: DragAndDropList
@@ -126,7 +126,10 @@ export function DragAndDropListQuestion({
       payload: true,
     })
 
-    setSortableItems(items)
+    if (!sortableItems.length) {
+      const reorderedSortableItems = reorderItems<SortableItem>(items)
+      setSortableItems(reorderedSortableItems)
+    }
   }, [currentQuestionIndex])
 
   useEffect(() => {
