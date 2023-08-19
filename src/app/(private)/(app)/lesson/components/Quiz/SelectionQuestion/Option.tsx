@@ -16,7 +16,7 @@ const optionAnimations: Variants = {
 }
 
 const optionStyles = tv({
-  base: 'rounded-md bg-purple-700 border-2 text-medium h-12 w-full p-3 flex items-center justify-center cursor-pointer hover:scale',
+  base: 'rounded-md bg-purple-700 border-2 text-medium h-12 w-full p-3 flex items-center justify-center cursor-pointer custom-outline hover:scale',
   variants: {
     color: {
       gray: 'border-gray-100 text-gray-100',
@@ -64,6 +64,7 @@ export function Option({
         whileTap="tap"
         htmlFor={id}
         onClick={onClick}
+        onFocus={onClick}
         className={optionStyles({ color: getColor() })}
       >
         {label}
