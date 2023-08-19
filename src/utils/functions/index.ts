@@ -5,3 +5,6 @@ export { removeAccentuation } from './removeAccentuation'
 export { getChallengesChatOptions } from './getChallengesChatOptions'
 export { compareArrays } from './compareArrays'
 export { formatText } from './formatText'
+export { reorderItems } from './reorderItems'
+
+
