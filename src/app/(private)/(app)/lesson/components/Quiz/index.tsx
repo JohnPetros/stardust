@@ -58,7 +58,7 @@ export function Quiz() {
   if (currentQuestion)
     return (
       <div className="relative">
-        <div className="mx-auto mt-16 w-full max-w-xl">
+        <div className="mx-auto w-full h-[75vh] max-w-xl flex items-center">
           {currentQuestion.content.type === 'selection' && (
             <SelectionQuestion
               data={currentQuestion.content}
