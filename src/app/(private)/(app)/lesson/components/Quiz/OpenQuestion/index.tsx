@@ -6,7 +6,7 @@ import { QuestionTitle } from '../QuestionTitle'
 import { Input } from './Input'
 
 import type { OpenQuestion as OpenQuestionData } from '@/types/quiz'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 interface OpenQuestion {
   data: OpenQuestionData
@@ -21,6 +21,56 @@ export function OpenQuestion({
     dispatch,
   } = useLesson()
   const [userAnswer, setUserAnswer] = useState('')
+  const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
+
+
+  function setIsAnswerVerified(isAnswerVerified: boolean) {
+    dispatch({ type: 'setIsAnswerVerified', payload: isAnswerVerified })
+  }
+
+  function setIsAnswerCorrect(isAnswerCorrect: boolean) {
+    dispatch({ type: 'setIsAnswerCorrect', payload: isAnswerCorrect })
+  }
+  function handleAnswer() {
+    setIsAnswerVerified(!isAnswerVerified)
+
+    setIsAnswerCorrect(false)
+
+    const openQuestionAnswer = !Array.isArray(answer) ? [answer] : answer
+
+    if (openQuestionAnswer.includes(userAnswer.trim().toLowerCase())) {
+      setIsAnswerCorrect(true);
+
+      if (isAnswerVerified) {
+        dispatch({ type: 'changeQuestion' });
+      }
+
+      return;
+    }
+
+    setIsAnswerCorrect(false)
+
+    if (
+      isAnswerVerified &&
+      !hasAlreadyIncrementIncorrectAnswersAmount.current
+    ) {
+      dispatch({ type: 'incrementIncorrectAswersAmount' })
+      hasAlreadyIncrementIncorrectAnswersAmount.current = true
+    }
+
+    if (isAnswerVerified) dispatch({ type: 'decrementLivesAmount' })
+  }
+
+  useEffect(() => {
+    dispatch({ type: 'setIsAnswered', payload: !!userAnswer })
+  }, [userAnswer])
+
+  useEffect(() => {
+    dispatch({
+      type: 'setAnswerHandler',
+      payload: handleAnswer,
+    })
+  }, [isAnswerVerified, userAnswer])
 
   return (
     <>
@@ -34,6 +84,7 @@ export function OpenQuestion({
             isAnswerVerified={isAnswerVerified}
             autoCapitalize="none"
             onChange={({ currentTarget }) => setUserAnswer(currentTarget.value)}
+            autoFocus
           />
         </div>
       </div>
