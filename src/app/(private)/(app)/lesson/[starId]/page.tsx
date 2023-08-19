@@ -111,7 +111,7 @@ export default function Lesson() {
             {currentStage === 'theory' && (
               <Theory title={star.name} number={star.number} />
             )}
-            {currentStage === 'quiz' && <Quiz />}
+            {currentStage === 'quiz' && <Quiz leaveLesson={leaveLesson} />}
             {currentStage === 'end' && (
               <End
                 coins={coins}
