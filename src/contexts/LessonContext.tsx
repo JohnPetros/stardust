@@ -43,7 +43,7 @@ type LessonValue = {
 export const LessonContext = createContext({} as LessonValue)
 
 const initialState: LessonState = {
-  currentStage: 'theory',
+  currentStage: 'quiz',
   texts: [],
   renderedTextsAmount: 0,
   questions: [],

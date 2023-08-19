@@ -10,10 +10,10 @@ import * as RadioGroup from '@radix-ui/react-radio-group'
 import { questionAnimations, questionTransition } from '..'
 import { AnimatePresence, motion } from 'framer-motion'
 
-import type { SelectionQuestion as SelectionQuestionType } from '@/types/quiz'
+import type { SelectionQuestion as SelectionQuestionData } from '@/types/quiz'
 
 interface SelectionQuestionProps {
-  data: SelectionQuestionType
+  data: SelectionQuestionData
   isCurrentQuestion: boolean
 }
 

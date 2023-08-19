@@ -80,14 +80,14 @@ export default function Lesson() {
   }, [secondsAmount])
 
   useEffect(() => {
-    if (star && nextStar) {
-      // dispatch({ type: 'setTexts', payload: star.texts })
-
-      dispatch({ type: 'setTexts', payload: texts })
+    if (star) {
+      // dispatch({ type: 'setTexts', payload: texts })
+      
+      dispatch({ type: 'setTexts', payload: star.texts })
       dispatch({ type: 'setQuestions', payload: star.questions })
       setTimeout(() => setIsTransitionVisible(false), 1000)
     }
-  }, [star, nextStar])
+  }, [star])
 
   useEffect(() => {
     if (currentStage) {
