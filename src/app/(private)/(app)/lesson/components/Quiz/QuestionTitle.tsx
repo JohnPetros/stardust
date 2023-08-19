@@ -10,7 +10,7 @@ interface TitleProps {
 }
 
 export function QuestionTitle({ children, picture }: TitleProps) {
-  const image = picture ? getImage('texts', picture) : ''
+  const image = picture ? getImage('theory', picture) : ''
 
   return (
     <>
