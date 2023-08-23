@@ -10,6 +10,7 @@ import { Variants } from 'framer-motion'
 import { OpenQuestion } from './OpenQuestion'
 import { Modal, ModalRef } from '@/app/components/Modal'
 import { Button } from '@/app/components/Button'
+import { DragAndDropClickQuestion } from './DragAndDropClickQuestion'
 
 export const questionAnimations: Variants = {
   right: {
@@ -52,7 +53,7 @@ export function Quiz({ leaveLesson }: QuizProps) {
   } = useLesson()
 
   const currentQuestion = useMemo(() => {
-    return questions.length ? questions[currentQuestionIndex] : null
+    return questions.length ? questions[4] : null
   }, [questions, currentQuestionIndex])
 
   const modalRef = useRef<ModalRef>(null)
@@ -68,42 +69,42 @@ export function Quiz({ leaveLesson }: QuizProps) {
     if (livesAmount === 0) modalRef.current?.open()
   }, [livesAmount])
 
-  if (currentQuestion)
+  if (currentQuestion) {
+    const isCurrentQuestion = currentQuestion.order - 1 === currentQuestionIndex
     return (
       <div className="relative">
         <div className="mx-auto w-full h-[75vh] max-w-xl flex items-center">
           {currentQuestion.content.type === 'selection' && (
             <SelectionQuestion
               data={currentQuestion.content}
-              isCurrentQuestion={
-                currentQuestion.order - 1 === currentQuestionIndex
-              }
+              isCurrentQuestion={isCurrentQuestion}
             />
           )}
 
           {currentQuestion.content.type === 'open' && (
             <OpenQuestion
               data={currentQuestion.content}
-              isCurrentQuestion={
-                currentQuestion.order - 1 === currentQuestionIndex
-              }
+              isCurrentQuestion={isCurrentQuestion}
             />
           )}
 
           {/* {currentQuestion.type === 'checkbox' && (
         <CheckboxQuestion data={currentQuestion} />
       )}
-    
-      {currentQuestion.type === 'drag-and-drop-click' && (
-        <DragAndDropClickQuestion data={currentQuestion} />
-      )}
+  
        */}
+
+          {currentQuestion.content.type === 'drag-and-drop-click' && (
+            <DragAndDropClickQuestion
+              data={currentQuestion.content}
+              isCurrentQuestion={isCurrentQuestion}
+            />
+          )}
+
           {currentQuestion.content.type === 'drag-and-drop-list' && (
             <DragAndDropListQuestion
               data={currentQuestion.content}
-              isCurrentQuestion={
-                currentQuestion.order - 1 === currentQuestionIndex
-              }
+              isCurrentQuestion={isCurrentQuestion}
             />
           )}
         </div>
@@ -137,4 +138,5 @@ export function Quiz({ leaveLesson }: QuizProps) {
         />
       </div>
     )
+  }
 }
