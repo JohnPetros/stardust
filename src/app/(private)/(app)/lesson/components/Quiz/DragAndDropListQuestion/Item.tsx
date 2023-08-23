@@ -5,15 +5,38 @@ import { List } from '@phosphor-icons/react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { twMerge } from 'tailwind-merge'
+import { tv } from 'tailwind-variants'
+import { useMemo } from 'react'
+
+const itemStyles = tv({
+  base: 'rounded-md flex items-center justify-between bg-purple-700 border-2 p-3 w-full mx-auto custom-outline text-medium cursor-grab',
+  variants: {
+    color: {
+      gray: 'border-gray-100 text-gray-100',
+      red: 'border-red-700 text-red-700',
+      green: 'border-green-500 text-green-500',
+      blue: 'border-blue-300 text-blue-300',
+      transparent: 'opacity: 0',
+    },
+  },
+})
 
 interface ItemProps {
   id: number
   label: string
   isActive: boolean
   isOverlay?: boolean
+  isAnswerCorrect: boolean
+  isAnswerVerified: boolean
 }
 
-export function Item({ id, label, isActive }: ItemProps) {
+export function Item({
+  id,
+  label,
+  isActive,
+  isAnswerCorrect,
+  isAnswerVerified,
+}: ItemProps) {
   const {
     isDragging,
     attributes,
@@ -28,19 +51,27 @@ export function Item({ id, label, isActive }: ItemProps) {
     transition,
   }
 
+  const color = useMemo(() => {
+    if (isDragging) {
+      return 'transparent'
+    } else if (isActive) {
+      return 'blue'
+    } else if (isAnswerVerified && isAnswerCorrect) {
+      return 'green'
+    } else if (isAnswerVerified && !isAnswerCorrect) {
+      return 'red'
+    } else {
+      return 'gray'
+    }
+  }, [isDragging, isActive, isAnswerVerified, isAnswerCorrect])
+
   return (
     <div
       ref={setNodeRef}
       style={style}
       {...attributes}
       {...listeners}
-      className={twMerge(
-        'rounded-md flex items-center justify-between bg-purple-700 border-2 p-3 w-full mx-auto custom-outline text-medium  cursor-grab',
-        isActive
-          ? 'border-blue-300 text-blue-300'
-          : 'border-gray-100 text-gray-100',
-        isDragging && 'opacity-0'
-      )}
+      className={itemStyles({ color })}
     >
       <strong>{label}</strong>
       <List

@@ -42,12 +42,12 @@ export function DragAndDropListQuestion({
   isCurrentQuestion,
 }: DragAndDropListQuestionProps) {
   const {
-    state: { isAnswerVerified, currentQuestionIndex },
+    state: { isAnswerVerified, isAnswerCorrect, currentQuestionIndex },
     dispatch,
   } = useLesson()
 
   const [sortableItems, setSortableItems] = useState<SortableItem[]>([])
-  const [activeItemId, setActiveEventId] = useState<number | null>(null)
+  const [activeSortableItemId, setActiveSortableItemId] = useState<number | null>(null)
 
   const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
 
@@ -95,16 +95,16 @@ export function DragAndDropListQuestion({
   }
 
   function handleDragEnd(event: DragEndEvent) {
-    setActiveEventId(null)
+    setActiveSortableItemId(null)
 
     const { active, over } = event
 
     if (over && active.id !== over?.id) {
       setSortableItems((sortableItems) => {
-        const overIndex = sortableItems.findIndex(
+        const activeIndex = sortableItems.findIndex(
           (item) => item.id === active.id
         )
-        const activeIndex = sortableItems.findIndex(
+        const overIndex = sortableItems.findIndex(
           (item) => item.id === over.id
         )
         return arrayMove(sortableItems, overIndex, activeIndex)
@@ -113,11 +113,11 @@ export function DragAndDropListQuestion({
   }
 
   function handleDragStart(event: DragStartEvent) {
-    setActiveEventId(Number(event.active.id))
+    setActiveSortableItemId(Number(event.active.id))
   }
 
   function handleDragCancel() {
-    setActiveEventId(null)
+    setActiveSortableItemId(null)
   }
 
   useEffect(() => {
@@ -169,20 +169,24 @@ export function DragAndDropListQuestion({
                   key={item.id}
                   id={item.id}
                   label={item.label}
-                  isActive={activeItemId === item.id}
+                  isAnswerCorrect={isAnswerCorrect}
+                  isAnswerVerified={isAnswerVerified}
+                  isActive={activeSortableItemId === item.id}
                 />
               ))}
             </div>
           </SortableContext>
 
           <DragOverlay>
-            {activeItemId ? (
+            {activeSortableItemId ? (
               <Item
-                id={activeItemId}
+                id={activeSortableItemId}
                 label={
-                  sortableItems.find((item) => item.id === activeItemId)
+                  sortableItems.find((item) => item.id === activeSortableItemId)
                     ?.label ?? ''
                 }
+                isAnswerCorrect={isAnswerCorrect}
+                isAnswerVerified={isAnswerVerified}
                 isActive={true}
               />
             ) : null}
