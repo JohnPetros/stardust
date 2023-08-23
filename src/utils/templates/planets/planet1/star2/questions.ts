@@ -42,16 +42,16 @@ export const questions = [
       'Agora preencha os espaços do código abaixo com os comandos que faltam. (Clique no bloco ou segure e arraste até o espaço vazio correspondente)',
     type: 'drag-and-drop-click',
     lines: [
-      { id: 1, texts: ['var nomeDoFoguete = ', 'dropZone'], indentLevel: 0 },
-      { id: 2, texts: ['dropZone', '(nomeDoFoguete)'], indentLevel: 0 },
+      { id: 1, texts: ['var nomeDoFoguete = ', 'droppable'], indentation: 0 },
+      { id: 2, texts: ['droppable', '(nomeDoFoguete)'], indentation: 0 },
     ],
     picture: 'panda-sorrindo.jpg',
-    dropItems: [
+    dragItems: [
       { id: 1, label: 'receba' },
       { id: 2, label: 'escreva' },
       { id: 3, label: 'leia( )' },
       { id: 4, label: 'leia' },
     ],
-    correctItemsIdsSequence: [3, 2],
+    correctDragItemsIdsSequence: [3, 2],
   },
 ]
