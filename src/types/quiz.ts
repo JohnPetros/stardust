@@ -30,9 +30,10 @@ type Line = {
   indentation: number
 }
 
-type DragItems = {
+export type DraggrableItem = {
   id: number
   label: string
+  dropZoneId: string
 }
 
 export interface DragAndDropClick {
@@ -40,8 +41,8 @@ export interface DragAndDropClick {
   title: string
   picture?: string
   lines: Line[]
-  dragItems: DragItems[]
-  correctDragItemsIdsSequence: Pick<DragItems, 'id'>[]
+  dragItems: DraggrableItem[]
+  correctDragItemsIdsSequence: Pick<DraggrableItem, 'id'>[]
 }
 
 export type SortableItem = {
