@@ -84,7 +84,7 @@ export function OpenQuestion({
         animate={isCurrentQuestion ? 'middle' : ''}
         exit="left"
         transition={questionTransition}
-        className="mx-auto mt-4 w-full h-full max-w-xl flex flex-col items-center justify-center"
+        className="mx-auto mt-4 w-full max-w-xl flex flex-col items-center justify-center"
       >
         <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
