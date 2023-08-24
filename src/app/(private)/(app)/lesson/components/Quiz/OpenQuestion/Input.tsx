@@ -30,7 +30,7 @@ export function Input({ isAnswerCorrect, isAnswerVerified, ...rest }: InputProps
     } else {
       return 'gray'
     }
-  }, [isAnswerCorrect])
+  }, [isAnswerCorrect, isAnswerVerified])
 
   return (
     <div className={inputStyles({ color })}>
