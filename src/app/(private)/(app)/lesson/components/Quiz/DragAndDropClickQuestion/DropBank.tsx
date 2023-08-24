@@ -3,25 +3,28 @@ import { ReactNode } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 interface DropBankProps {
-  id: number
+  id: string
   children: ReactNode
+  dropItemId: string
 }
 
-export function DropBank({ children, id }: DropBankProps) {
+export function DropBank({ children, id, dropItemId }: DropBankProps) {
   const { setNodeRef, isOver } = useDroppable({
-    id: `bank-${id}`,
+    id,
     data: { type: 'bank' },
   })
+
+  const hasDroppedItem = dropItemId === id
 
   return (
     <li
       ref={setNodeRef}
       className={twMerge(
-        'border-2 border-dashed border-gray-100 bg-transparent rounded-md w-24 h-12 text-gray-100',
-        isOver ? 'bg-red-700' : ''
+        !hasDroppedItem &&
+          'border-2 border-dashed border-gray-100 bg-transparent rounded-md w-24 h-12 text-gray-100'
       )}
     >
-      {children}
+      {dropItemId === id ? children : null}
     </li>
   )
 }
