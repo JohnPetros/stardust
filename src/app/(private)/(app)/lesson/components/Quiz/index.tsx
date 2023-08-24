@@ -10,7 +10,7 @@ import { Variants } from 'framer-motion'
 import { OpenQuestion } from './OpenQuestion'
 import { Modal, ModalRef } from '@/app/components/Modal'
 import { Button } from '@/app/components/Button'
-import { DragAndDropClickQuestion } from './DragAndDropClickQuestion'
+import { DragAndDropClickQuestion } from './DragAndDropQuestion'
 
 export const questionAnimations: Variants = {
   right: {

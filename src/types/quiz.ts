@@ -36,8 +36,8 @@ export type DraggrableItem = {
   dropZoneId: string
 }
 
-export interface DragAndDropClick {
-  type: 'drag-and-drop-click'
+export interface DragAndDrop {
+  type: 'drag-and-drop'
   title: string
   picture?: string
   lines: Line[]
@@ -61,7 +61,7 @@ export type QuestionContent =
   | SelectionQuestion
   | CheckboxQuestion
   | OpenQuestion
-  | DragAndDropClick
+  | DragAndDrop
   | DragAndDropList
 
 export type Question = {

@@ -23,10 +23,10 @@ import { DropBank } from './DropBank'
 import { createPortal } from 'react-dom'
 import { compareArrays } from '@/utils/functions'
 
-import type { DragAndDropClick, DraggrableItem } from '@/types/quiz'
+import type { DragAndDrop, DraggrableItem } from '@/types/quiz'
 
 interface DragAndDropClickQuestionProps {
-  data: DragAndDropClick
+  data: DragAndDrop
   isCurrentQuestion: boolean
 }
 
