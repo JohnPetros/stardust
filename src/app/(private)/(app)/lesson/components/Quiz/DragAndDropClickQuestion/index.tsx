@@ -1,14 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLesson } from '@/hooks/useLesson'
 
 import {
   DndContext,
   DragStartEvent,
   DragEndEvent,
-  closestCorners,
-  useDroppable,
   defaultDropAnimation,
   DropAnimation,
   DragOverlay,
@@ -20,11 +18,12 @@ import {
 import { QuestionTitle } from '../QuestionTitle'
 import { DropZone } from './DropZone'
 import { DragItem } from './DragItem'
+import { DropBank } from './DropBank'
+
+import { createPortal } from 'react-dom'
+import { compareArrays } from '@/utils/functions'
 
 import type { DragAndDropClick, DraggrableItem } from '@/types/quiz'
-import { arrayMove } from '@dnd-kit/sortable'
-import { createPortal } from 'react-dom'
-import { DropBank } from './DropBank'
 
 interface DragAndDropClickQuestionProps {
   data: DragAndDropClick
@@ -32,11 +31,11 @@ interface DragAndDropClickQuestionProps {
 }
 
 export function DragAndDropClickQuestion({
-  data: { title, lines, dragItems, picture },
+  data: { title, lines, dragItems, picture, correctDragItemsIdsSequence },
   isCurrentQuestion,
 }: DragAndDropClickQuestionProps) {
   const {
-    state: { isAnswerVerified, isAnswerCorrect, currentQuestionIndex },
+    state: { isAnswerVerified, currentQuestionIndex },
     dispatch,
   } = useLesson()
   const [activeDraggableItemId, setActiveDraggableItemId] = useState<
@@ -44,14 +43,50 @@ export function DragAndDropClickQuestion({
   >(null)
   const [draggableItems, setDraggableItems] =
     useState<DraggrableItem[]>(dragItems)
-
-  const { setNodeRef } = useDroppable({
-    id: 'bank',
-  })
+  const userDragItemsIdsSenquence = useRef<number[]>([])
+  const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
 
   const activeDraggableItem = draggableItems.find(
     (drag) => drag.id === activeDraggableItemId
   )
+
+  function setIsAnswerVerified(isAnswerVerified: boolean) {
+    dispatch({ type: 'setIsAnswerVerified', payload: isAnswerVerified })
+  }
+
+  function setIsAnswerCorrect(isAnswerCorrect: boolean) {
+    dispatch({ type: 'setIsAnswerCorrect', payload: isAnswerCorrect })
+  }
+
+  function handleAnswer() {
+    setIsAnswerVerified(!isAnswerVerified)
+
+    const isUserAnswerCorrect = compareArrays(
+      userDragItemsIdsSenquence.current,
+      correctDragItemsIdsSequence
+    )
+
+    if (isUserAnswerCorrect) {
+      setIsAnswerCorrect(true)
+
+      if (isAnswerVerified) {
+        // dispatch({ type: 'changeQuestion' })
+      }
+      return
+    }
+
+    setIsAnswerCorrect(false)
+
+    if (
+      isAnswerVerified &&
+      !hasAlreadyIncrementIncorrectAnswersAmount.current
+    ) {
+      dispatch({ type: 'incrementIncorrectAswersAmount' })
+      hasAlreadyIncrementIncorrectAnswersAmount.current = true
+    }
+
+    if (isAnswerVerified) dispatch({ type: 'decrementLivesAmount' })
+  }
 
   function handleDragStart(event: DragStartEvent) {
     setActiveDraggableItemId(Number(event.active.id))
@@ -62,17 +97,6 @@ export function DragAndDropClickQuestion({
 
     const { active, over } = event
 
-
-    if (
-      over?.data.current?.type === 'bank' &&
-      active.data.current?.bankId !== over.id
-    ) {
-      return
-    }
-
-    return
-
-
     if (!over) return
 
     setDraggableItems((draggableItems) => {
@@ -80,12 +104,46 @@ export function DragAndDropClickQuestion({
         (item) => item.id === active.id
       )
 
+      const overIndex = draggableItems.findIndex(
+        (item) => item.dropZoneId === over.id
+      )
+
+      const activeDraggableItem = draggableItems[activeIndex]
+      const overDraggableItem = draggableItems[overIndex]
+
+      if (over.data.current?.type === 'bank') {
+        activeDraggableItem.dropZoneId = active.data.current?.bankId
+        return draggableItems
+      }
+
+      if (
+        over.data.current?.type === 'zone' &&
+        over.data.current?.hasDroppedItem
+      ) {
+        const overDropZoneId = overDraggableItem.dropZoneId
+        const activeDropZoneId = activeDraggableItem.dropZoneId
+
+        if (!active.data.current?.isInZone) {
+          overDraggableItem.dropZoneId = `bank-${overDraggableItem.id}`
+          activeDraggableItem.dropZoneId = overDropZoneId
+
+          return draggableItems
+        }
+
+        activeDraggableItem.dropZoneId = overDropZoneId
+        overDraggableItem.dropZoneId = activeDropZoneId
+
+        return draggableItems
+      }
+
       const draggableItem = draggableItems[activeIndex]
 
       draggableItem.dropZoneId = String(over.id)
 
-      return arrayMove(draggableItems, activeIndex, activeIndex)
+      return draggableItems
     })
+
+    userDragItemsIdsSenquence.current = []
   }
 
   function handleDragCancel() {
@@ -104,11 +162,31 @@ export function DragAndDropClickQuestion({
     })
   )
 
-  // useEffect(() => {
-  //   setDraggableItems(
-  //     dragItems.map((item) => ({ ...item, dropZoneId: `bank-${item.id}` }))
-  //   )
-  // }, [])
+  useEffect(() => {
+    const hasUserAnswer =
+      userDragItemsIdsSenquence.current.length ===
+      correctDragItemsIdsSequence.length
+
+    if (hasUserAnswer) {
+      dispatch({
+        type: 'setIsAnswered',
+        payload: true,
+      })
+    }
+  }, [currentQuestionIndex, activeDraggableItemId])
+
+  useEffect(() => {
+    dispatch({
+      type: 'setAnswerHandler',
+      payload: handleAnswer,
+    })
+  }, [isAnswerVerified, activeDraggableItemId])
+
+  useEffect(() => {
+    setDraggableItems(
+      dragItems.map((item) => ({ ...item, dropZoneId: `bank-${item.id}` }))
+    )
+  }, [])
 
   return (
     <DndContext
@@ -138,6 +216,7 @@ export function DragAndDropClickQuestion({
                           ) ?? null
                         }
                         activeDraggableItemId={activeDraggableItemId}
+                        userDragItemsIdsSenquence={userDragItemsIdsSenquence}
                       />
                     )}
                   </div>
@@ -150,15 +229,12 @@ export function DragAndDropClickQuestion({
         <ul className="flex flex-wrap gap-3 mt-24 px-24">
           {draggableItems.map((item) => {
             return (
-              <DropBank id={item.id}>
+              <DropBank id={`bank-${item.id}`} dropItemId={item.dropZoneId}>
                 <DragItem
                   key={item.id}
                   id={item.id}
                   label={item.label}
-                  isAnswerVerified={isAnswerVerified}
-                  isAnswerCorrect={isAnswerVerified && isAnswerCorrect}
                   isActive={activeDraggableItemId === item.id}
-                  isDropped={item.dropZoneId !== 'bank'}
                 />
               </DropBank>
             )
@@ -170,8 +246,6 @@ export function DragAndDropClickQuestion({
                   key={activeDraggableItem.id}
                   id={activeDraggableItem.id}
                   label={activeDraggableItem.label}
-                  isAnswerVerified={isAnswerVerified}
-                  isAnswerCorrect={isAnswerVerified && isAnswerCorrect}
                   isActive={true}
                 />
               ) : null}
