@@ -1,5 +1,6 @@
 'use client'
 
+import { useLesson } from '@/hooks/useLesson'
 import { InputHTMLAttributes, useMemo } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { tv } from 'tailwind-variants'
@@ -16,11 +17,15 @@ const inputStyles = tv({
 })
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  isAnswerCorrect: boolean
-  isAnswerVerified: boolean
+  answer: string
 }
 
-export function Input({ isAnswerCorrect, isAnswerVerified, ...rest }: InputProps) {
+export function Input({ answer, ...rest }: InputProps) {
+  const {
+    state: { isAnswerVerified, isAnswerCorrect },
+  } = useLesson()
+
+  const width = 2 + answer.length + 'ch'
 
   const color = useMemo(() => {
     if (!isAnswerCorrect && isAnswerVerified) {
@@ -33,8 +38,12 @@ export function Input({ isAnswerCorrect, isAnswerVerified, ...rest }: InputProps
   }, [isAnswerCorrect, isAnswerVerified])
 
   return (
-    <div className={inputStyles({ color })}>
-      <input className="bg-green-900 outline-none p-3" {...rest} />
+    <div style={{ width }} className={inputStyles({ color })}>
+      <input
+        className={"bg-green-900 outline-none px-3 py-2 w-full font-code"}
+        maxLength={answer.length}
+        {...rest}
+      />
     </div>
   )
 }
