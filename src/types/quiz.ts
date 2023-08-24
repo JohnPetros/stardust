@@ -16,12 +16,13 @@ export interface CheckboxQuestion {
   code?: string
 }
 
-export interface OpenQuestion {
+export interface Open {
   type: 'open'
   title: string
   picture?: string
   code?: string
-  answer: string[]
+  answers: string[]
+  lines: Line[]
 }
 
 type Line = {
