@@ -10,29 +10,7 @@ import { Variants } from 'framer-motion'
 import { OpenQuestion } from './OpenQuestion'
 import { Modal, ModalRef } from '@/app/components/Modal'
 import { Button } from '@/app/components/Button'
-import { DragAndDropClickQuestion } from './DragAndDropQuestion'
-
-export const questionAnimations: Variants = {
-  right: {
-    position: 'absolute',
-    opacity: 0,
-    x: 64,
-  },
-  middle: {
-    opacity: 1,
-    x: 0,
-  },
-  left: {
-    position: 'absolute',
-    opacity: 0,
-    x: -64,
-  },
-}
-
-export const questionTransition = {
-  duration: 0.5,
-  ease: 'easeInOut',
-}
+import { DragAndDropQuestion } from './DragAndDropQuestion'
 
 interface QuizProps {
   leaveLesson: () => void
@@ -49,11 +27,10 @@ export function Quiz({ leaveLesson }: QuizProps) {
       isAnswered,
       livesAmount,
     },
-    dispatch,
   } = useLesson()
 
   const currentQuestion = useMemo(() => {
-    return questions.length ? questions[4] : null
+    return questions.length ? questions[currentQuestionIndex] : null
   }, [questions, currentQuestionIndex])
 
   const modalRef = useRef<ModalRef>(null)
@@ -72,8 +49,9 @@ export function Quiz({ leaveLesson }: QuizProps) {
   if (currentQuestion) {
     const isCurrentQuestion = currentQuestion.order - 1 === currentQuestionIndex
     return (
-      <div className="relative">
-        <div className="mx-auto w-full h-[75vh] max-w-xl flex items-center">
+      <div className="relative h-[calc(100vh+100px)]">
+        <div className="mx-auto w-full min-h-[calc(100vh-100px)] mt-7 max-w-xl flex items-center bg-red-700">
+
           {currentQuestion.content.type === 'selection' && (
             <SelectionQuestion
               data={currentQuestion.content}
@@ -94,8 +72,8 @@ export function Quiz({ leaveLesson }: QuizProps) {
   
        */}
 
-          {currentQuestion.content.type === 'drag-and-drop-click' && (
-            <DragAndDropClickQuestion
+          {currentQuestion.content.type === 'drag-and-drop' && (
+            <DragAndDropQuestion
               data={currentQuestion.content}
               isCurrentQuestion={isCurrentQuestion}
             />

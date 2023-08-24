@@ -92,6 +92,7 @@ export function Theory({ title, number }: TheoryProps) {
           </Button>
         </footer>
       </div>
+      
       <Modal
         ref={modalRef}
         type={'asking'}

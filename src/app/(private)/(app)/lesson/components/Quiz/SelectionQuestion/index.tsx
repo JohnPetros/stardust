@@ -7,11 +7,9 @@ import { QuestionTitle } from '../QuestionTitle'
 import { Option } from './Option'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 
-import { questionAnimations, questionTransition } from '..'
-import { AnimatePresence, motion } from 'framer-motion'
-
 import type { SelectionQuestion as SelectionQuestionData } from '@/types/quiz'
 import { reorderItems } from '@/utils/functions'
+import { QuestionContainer } from '../QuestionContainer'
 
 interface SelectionQuestionProps {
   data: SelectionQuestionData
@@ -77,8 +75,8 @@ export function SelectionQuestion({
 
   useEffect(() => {
     if (!reorderedOptions.length) {
-     const reorderedItems = reorderItems<string>(options)
-     setReorderedOptions(reorderedItems)
+      const reorderedItems = reorderItems<string>(options)
+      setReorderedOptions(reorderedItems)
     }
   }, [])
 
@@ -94,16 +92,7 @@ export function SelectionQuestion({
   }, [isAnswerVerified, selectedOption])
 
   return (
-    <AnimatePresence>
-      <motion.div
-        key={currentQuestionIndex}
-        variants={questionAnimations}
-        initial="right"
-        animate={isCurrentQuestion ? 'middle' : ''}
-        exit="left"
-        transition={questionTransition}
-        className="mx-auto w-full max-w-xl flex flex-col items-center justify-center"
-      >
+      <QuestionContainer>
         <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
         <RadioGroup.Root className="mt-8 space-y-2">
@@ -120,7 +109,6 @@ export function SelectionQuestion({
             />
           ))}
         </RadioGroup.Root>
-      </motion.div>
-    </AnimatePresence>
+      </QuestionContainer>
   )
 }

@@ -25,12 +25,10 @@ import {
   restrictToWindowEdges,
 } from '@dnd-kit/modifiers'
 
-import { questionAnimations, questionTransition } from '..'
-import { AnimatePresence, motion } from 'framer-motion'
-
 import { compareArrays, reorderItems } from '@/utils/functions'
 
 import type { DragAndDropList, SortableItem } from '@/types/quiz'
+import { QuestionContainer } from '../QuestionContainer'
 
 interface DragAndDropListQuestionProps {
   data: DragAndDropList
@@ -47,7 +45,9 @@ export function DragAndDropListQuestion({
   } = useLesson()
 
   const [sortableItems, setSortableItems] = useState<SortableItem[]>([])
-  const [activeSortableItemId, setActiveSortableItemId] = useState<number | null>(null)
+  const [activeSortableItemId, setActiveSortableItemId] = useState<
+    number | null
+  >(null)
 
   const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
 
@@ -104,10 +104,8 @@ export function DragAndDropListQuestion({
         const activeIndex = sortableItems.findIndex(
           (item) => item.id === active.id
         )
-        const overIndex = sortableItems.findIndex(
-          (item) => item.id === over.id
-        )
-        return arrayMove(sortableItems, overIndex, activeIndex)
+        const overIndex = sortableItems.findIndex((item) => item.id === over.id)
+        return arrayMove(sortableItems, activeIndex, overIndex)
       })
     }
   }
@@ -140,59 +138,49 @@ export function DragAndDropListQuestion({
   }, [isAnswerVerified, sortableItems])
 
   return (
-    <DndContext
-      sensors={sensors}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-      onDragCancel={handleDragCancel}
-      modifiers={[restrictToVerticalAxis, restrictToWindowEdges]}
-    >
-      <AnimatePresence>
-        <motion.div
-          key={currentQuestionIndex}
-          variants={questionAnimations}
-          initial="right"
-          animate={isCurrentQuestion ? 'middle' : ''}
-          exit="left"
-          transition={questionTransition}
-          className="mx-auto mt-4 w-full max-w-xl flex flex-col items-center justify-center px-6"
+    <QuestionContainer>
+      <DndContext
+        sensors={sensors}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        onDragCancel={handleDragCancel}
+        modifiers={[restrictToVerticalAxis, restrictToWindowEdges]}
+      >
+        <QuestionTitle picture={picture}>{title}</QuestionTitle>
+
+        <SortableContext
+          items={sortableItems}
+          strategy={verticalListSortingStrategy}
         >
-          <QuestionTitle picture={picture}>{title}</QuestionTitle>
-
-          <SortableContext
-            items={sortableItems}
-            strategy={verticalListSortingStrategy}
-          >
-            <div className="mx-auto w-full space-y-2 mt-8">
-              {sortableItems.map((item) => (
-                <Item
-                  key={item.id}
-                  id={item.id}
-                  label={item.label}
-                  isAnswerCorrect={isAnswerCorrect}
-                  isAnswerVerified={isAnswerVerified}
-                  isActive={activeSortableItemId === item.id}
-                />
-              ))}
-            </div>
-          </SortableContext>
-
-          <DragOverlay>
-            {activeSortableItemId ? (
+          <div className="mx-auto w-full space-y-2 mt-8">
+            {sortableItems.map((item) => (
               <Item
-                id={activeSortableItemId}
-                label={
-                  sortableItems.find((item) => item.id === activeSortableItemId)
-                    ?.label ?? ''
-                }
+                key={item.id}
+                id={item.id}
+                label={item.label}
                 isAnswerCorrect={isAnswerCorrect}
                 isAnswerVerified={isAnswerVerified}
-                isActive={true}
+                isActive={activeSortableItemId === item.id}
               />
-            ) : null}
-          </DragOverlay>
-        </motion.div>
-      </AnimatePresence>
-    </DndContext>
+            ))}
+          </div>
+        </SortableContext>
+
+        <DragOverlay>
+          {activeSortableItemId ? (
+            <Item
+              id={activeSortableItemId}
+              label={
+                sortableItems.find((item) => item.id === activeSortableItemId)
+                  ?.label ?? ''
+              }
+              isAnswerCorrect={isAnswerCorrect}
+              isAnswerVerified={isAnswerVerified}
+              isActive={true}
+            />
+          ) : null}
+        </DragOverlay>
+      </DndContext>
+    </QuestionContainer>
   )
 }

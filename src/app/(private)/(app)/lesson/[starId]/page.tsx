@@ -99,7 +99,7 @@ export default function Lesson() {
   }, [currentStage])
 
   return (
-    <div>
+    <>
       <TransitionPageAnimation isVisible={isTransitionVisible} />
       <main ref={scrollRef} className="relative overflow-x-hidden">
         {currentStage !== 'end' && (
@@ -152,6 +152,6 @@ export default function Lesson() {
           </div>
         }
       />
-    </div>
+    </>
   )
 }

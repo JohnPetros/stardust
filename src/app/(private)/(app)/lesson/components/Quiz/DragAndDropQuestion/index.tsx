@@ -23,14 +23,17 @@ import { DropBank } from './DropBank'
 import { createPortal } from 'react-dom'
 import { compareArrays } from '@/utils/functions'
 
+import { motion, Variants } from 'framer-motion'
+
 import type { DragAndDrop, DraggrableItem } from '@/types/quiz'
+import { QuestionContainer } from '../QuestionContainer'
 
 interface DragAndDropClickQuestionProps {
   data: DragAndDrop
   isCurrentQuestion: boolean
 }
 
-export function DragAndDropClickQuestion({
+export function DragAndDropQuestion({
   data: { title, lines, dragItems, picture, correctDragItemsIdsSequence },
   isCurrentQuestion,
 }: DragAndDropClickQuestionProps) {
@@ -70,7 +73,7 @@ export function DragAndDropClickQuestion({
       setIsAnswerCorrect(true)
 
       if (isAnswerVerified) {
-        // dispatch({ type: 'changeQuestion' })
+        dispatch({ type: 'changeQuestion' })
       }
       return
     }
@@ -189,13 +192,13 @@ export function DragAndDropClickQuestion({
   }, [])
 
   return (
-    <DndContext
-      sensors={sensors}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-      onDragCancel={handleDragCancel}
-    >
-      <div className="mx-auto mt-4 w-full max-w-xl flex flex-col items-center justify-center px-6">
+    <QuestionContainer>
+      <DndContext
+        sensors={sensors}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        onDragCancel={handleDragCancel}
+      >
         <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
         <ul className="space-y-4 mt-6">
@@ -208,16 +211,18 @@ export function DragAndDropClickQuestion({
                     {text !== 'droppable' ? (
                       <span className="text-gray-100">{text}</span>
                     ) : (
-                      <DropZone
-                        id={id}
-                        droppedItem={
-                          draggableItems.find(
-                            (item) => item.dropZoneId === id
-                          ) ?? null
-                        }
-                        activeDraggableItemId={activeDraggableItemId}
-                        userDragItemsIdsSenquence={userDragItemsIdsSenquence}
-                      />
+                      <>
+                        <DropZone
+                          id={id}
+                          droppedItem={
+                            draggableItems.find(
+                              (item) => item.dropZoneId === id
+                            ) ?? null
+                          }
+                          activeDraggableItemId={activeDraggableItemId}
+                          userDragItemsIdsSenquence={userDragItemsIdsSenquence}
+                        />
+                      </>
                     )}
                   </div>
                 )
@@ -226,7 +231,7 @@ export function DragAndDropClickQuestion({
           ))}
         </ul>
 
-        <ul className="flex flex-wrap gap-3 mt-24 px-24">
+        <ul className="flex flex-wrap gap-3 mt-12 px-24">
           {draggableItems.map((item) => {
             return (
               <DropBank id={`bank-${item.id}`} dropItemId={item.dropZoneId}>
@@ -253,7 +258,7 @@ export function DragAndDropClickQuestion({
             document.body
           )}
         </ul>
-      </div>
-    </DndContext>
+      </DndContext>
+    </QuestionContainer>
   )
 }

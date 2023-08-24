@@ -6,10 +6,8 @@ import { useLesson } from '@/hooks/useLesson'
 import { QuestionTitle } from '../QuestionTitle'
 import { Input } from './Input'
 
-import { questionAnimations, questionTransition } from '..'
-import { AnimatePresence, motion } from 'framer-motion'
-
 import type { OpenQuestion as OpenQuestionData } from '@/types/quiz'
+import { QuestionContainer } from '../QuestionContainer'
 
 interface OpenQuestion {
   data: OpenQuestionData
@@ -76,29 +74,19 @@ export function OpenQuestion({
   }, [isAnswerVerified, userAnswer])
 
   return (
-    <AnimatePresence>
-      <motion.div
-        key={currentQuestionIndex}
-        variants={questionAnimations}
-        initial="right"
-        animate={isCurrentQuestion ? 'middle' : ''}
-        exit="left"
-        transition={questionTransition}
-        className="mx-auto mt-4 w-full max-w-xl flex flex-col items-center justify-center"
-      >
-        <QuestionTitle picture={picture}>{title}</QuestionTitle>
+    <QuestionContainer>
+      <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
-        <div className="mt-8">
-          <Input
-            value={userAnswer}
-            isAnswerCorrect={isAnswerCorrect}
-            isAnswerVerified={isAnswerVerified}
-            autoCapitalize="none"
-            onChange={({ currentTarget }) => setUserAnswer(currentTarget.value)}
-            autoFocus
-          />
-        </div>
-      </motion.div>
-    </AnimatePresence>
+      <div className="mt-8">
+        <Input
+          value={userAnswer}
+          isAnswerCorrect={isAnswerCorrect}
+          isAnswerVerified={isAnswerVerified}
+          autoCapitalize="none"
+          onChange={({ currentTarget }) => setUserAnswer(currentTarget.value)}
+          autoFocus
+        />
+      </div>
+    </QuestionContainer>
   )
 }
