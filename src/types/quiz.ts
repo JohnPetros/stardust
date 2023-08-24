@@ -42,7 +42,7 @@ export interface DragAndDropClick {
   picture?: string
   lines: Line[]
   dragItems: DraggrableItem[]
-  correctDragItemsIdsSequence: Pick<DraggrableItem, 'id'>[]
+  correctDragItemsIdsSequence: number[]
 }
 
 export type SortableItem = {
