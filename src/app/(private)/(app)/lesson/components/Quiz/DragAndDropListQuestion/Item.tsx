@@ -16,7 +16,7 @@ const itemStyles = tv({
       red: 'border-red-700 text-red-700',
       green: 'border-green-500 text-green-500',
       blue: 'border-blue-300 text-blue-300',
-      transparent: 'opacity: 0',
+      transparent: 'opacity-0',
     },
   },
 })
@@ -77,7 +77,12 @@ export function Item({
       <List
         className={twMerge(
           'text-lg',
-          isActive ? 'text-blue-300' : 'text-gray-100'
+          isActive ? 'text-blue-300' : 'text-gray-100',
+          isAnswerVerified && isAnswerCorrect
+            ? 'text-green-500'
+            : isAnswerVerified
+            ? 'text-red-700'
+            : ''
         )}
       />
     </div>
