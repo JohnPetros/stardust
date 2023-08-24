@@ -50,7 +50,7 @@ export function Quiz({ leaveLesson }: QuizProps) {
     const isCurrentQuestion = currentQuestion.order - 1 === currentQuestionIndex
     return (
       <div className="relative h-[calc(100vh+100px)]">
-        <div className="mx-auto w-full min-h-[calc(100vh-100px)] mt-7 max-w-xl flex items-center bg-red-700">
+        <div className="mx-auto w-full min-h-[calc(100vh-100px)] mt-7 max-w-xl flex items-center ">
 
           {currentQuestion.content.type === 'selection' && (
             <SelectionQuestion
