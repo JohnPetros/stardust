@@ -21,7 +21,7 @@ const itemStyles = tv({
   },
 })
 
-interface ItemProps {
+interface SortableItemProps {
   id: number
   label: string
   isActive: boolean
@@ -30,13 +30,13 @@ interface ItemProps {
   isAnswerVerified: boolean
 }
 
-export function Item({
+export function SortableItem({
   id,
   label,
   isActive,
   isAnswerCorrect,
   isAnswerVerified,
-}: ItemProps) {
+}: SortableItemProps) {
   const {
     isDragging,
     attributes,

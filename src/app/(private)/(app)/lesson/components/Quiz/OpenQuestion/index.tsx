@@ -6,19 +6,17 @@ import { useLesson } from '@/hooks/useLesson'
 import { QuestionTitle } from '../QuestionTitle'
 import { Input } from './Input'
 
-import type { Open } from '@/types/quiz'
+import type { OpenQuestion as OpenQuestionData } from '@/types/quiz'
 import { QuestionContainer } from '../QuestionContainer'
 import { CodeText } from '../CodeText'
 import { compareArrays } from '@/utils/functions'
 
 interface OpenQuestion {
-  data: Open
-  isCurrentQuestion: boolean
+  data: OpenQuestionData
 }
 
 export function OpenQuestion({
   data: { title, picture, code, answers, lines },
-  isCurrentQuestion,
 }: OpenQuestion) {
   const {
     state: { isAnswerVerified, isAnswerCorrect, currentQuestionIndex },
@@ -73,11 +71,10 @@ export function OpenQuestion({
   }
 
   useEffect(() => {
-    console.log(userAnswers)
-
     dispatch({
       type: 'setIsAnswered',
-      payload: userAnswers.filter(answer => !!answer).length === answers.length,
+      payload:
+        userAnswers.filter((answer) => !!answer).length === answers.length,
     })
   }, [userAnswers])
 

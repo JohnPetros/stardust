@@ -13,12 +13,10 @@ import { QuestionContainer } from '../QuestionContainer'
 
 interface SelectionQuestionProps {
   data: SelectionQuestionData
-  isCurrentQuestion: boolean
 }
 
 export function SelectionQuestion({
   data: { title, picture, options, code, answer },
-  isCurrentQuestion,
 }: SelectionQuestionProps) {
   const {
     state: { isAnswerVerified, isAnswerCorrect, currentQuestionIndex },

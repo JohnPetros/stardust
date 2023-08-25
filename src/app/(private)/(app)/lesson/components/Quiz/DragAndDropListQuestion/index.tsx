@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLesson } from '@/hooks/useLesson'
 
 import { QuestionTitle } from '../QuestionTitle'
-import { Item } from './Item'
+import { SortableItem } from './SortableItem'
 
 import {
   DndContext,
@@ -27,24 +27,25 @@ import {
 
 import { compareArrays, reorderItems } from '@/utils/functions'
 
-import type { DragAndDropList, SortableItem } from '@/types/quiz'
+import type {
+  DragAndDropListQuestion as DragAndDropListQuestionData,
+  SortableItem as SortableItemData,
+} from '@/types/quiz'
 import { QuestionContainer } from '../QuestionContainer'
 
 interface DragAndDropListQuestionProps {
-  data: DragAndDropList
-  isCurrentQuestion: boolean
+  data: DragAndDropListQuestionData
 }
 
 export function DragAndDropListQuestion({
   data: { title, items, picture },
-  isCurrentQuestion,
 }: DragAndDropListQuestionProps) {
   const {
     state: { isAnswerVerified, isAnswerCorrect, currentQuestionIndex },
     dispatch,
   } = useLesson()
 
-  const [sortableItems, setSortableItems] = useState<SortableItem[]>([])
+  const [sortableItems, setSortableItems] = useState<SortableItemData[]>([])
   const [activeSortableItemId, setActiveSortableItemId] = useState<
     number | null
   >(null)
@@ -125,7 +126,7 @@ export function DragAndDropListQuestion({
     })
 
     if (!sortableItems.length) {
-      const reorderedSortableItems = reorderItems<SortableItem>(items)
+      const reorderedSortableItems = reorderItems<SortableItemData>(items)
       setSortableItems(reorderedSortableItems)
     }
   }, [currentQuestionIndex])
@@ -154,7 +155,7 @@ export function DragAndDropListQuestion({
         >
           <div className="mx-auto w-full space-y-2 mt-8">
             {sortableItems.map((item) => (
-              <Item
+              <SortableItem
                 key={item.id}
                 id={item.id}
                 label={item.label}
@@ -168,7 +169,7 @@ export function DragAndDropListQuestion({
 
         <DragOverlay>
           {activeSortableItemId ? (
-            <Item
+            <SortableItem
               id={activeSortableItemId}
               label={
                 sortableItems.find((item) => item.id === activeSortableItemId)
