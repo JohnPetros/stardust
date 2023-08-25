@@ -13,22 +13,22 @@ export const questions = [
   },
   {
     title:
-      'Quais dos itens abaixo pode ser um nome válido de variável? (Você pode escolher mais de um que seja válido)',
+      'Quais dos itens abaixo pode ser um nome válido de variável? (Você deve selecionar todos que estão corretos)',
     type: 'checkbox',
     options: ['_planeta', '4planeta', 'planeta_alvo', 'planeta alvo'],
-    correctOptions: ['_idade', 'altura_em_cm'],
+    correctOptions: ['_planeta', 'planeta_alvo'],
     picture: 'panda-piscando.jpg',
   },
   {
     title: 'Atribua o nome do planeta à variável planeta',
     type: 'drag-and-drop',
     lines: [{ id: 1, texts: ['var planeta = ', 'dropZone'], indentLevel: 0 }],
-    dropItems: [
+    dragItems: [
       { id: 1, label: 'escreva' },
       { id: 2, label: '"Planeta Datahon"' },
       { id: 3, label: '333' },
     ],
-    correctItemsIdsSequence: [2],
+    correctDragItemsIdsSequence: [2],
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -50,7 +50,7 @@ escreva("planeta encontrado: ", nomePlaneta)`,
   },
   {
     title:
-      'Vamos declarar uma variável contendo o nome de um planeta que vamos explorar. Mas qual palavra eu devo escrever antes do nome de qualquer variável?',
+      'Vamos declarar uma variável contendo o nome de um planeta que vamos explorar. Mas qual palavra eu devo escrever antes do nome de qualquer variável na hora de declará-la?',
     type: 'open',
     lines: [{ id: 1, texts: ['input', 'nomePlaneta'], indentLevel: 0 }],
     answers: ['var'],
