@@ -6,10 +6,11 @@ interface DropBankProps {
   id: string
   children: ReactNode
   dropItemId: string
+  width: string
 }
 
-export function DropBank({ children, id, dropItemId }: DropBankProps) {
-  const { setNodeRef, isOver } = useDroppable({
+export function DropBank({ children, id, dropItemId, width }: DropBankProps) {
+  const { setNodeRef } = useDroppable({
     id,
     data: { type: 'bank' },
   })
@@ -19,12 +20,13 @@ export function DropBank({ children, id, dropItemId }: DropBankProps) {
   return (
     <li
       ref={setNodeRef}
+      style={{ width }}
       className={twMerge(
         !hasDroppedItem &&
-          'border-2 border-dashed border-gray-100 bg-transparent rounded-md w-24 h-12 text-gray-100'
+          'border-2 border-dashed border-gray-100 bg-transparent rounded-md h-10 text-gray-100'
       )}
     >
-      {dropItemId === id ? children : null}
+      {hasDroppedItem? children : null}
     </li>
   )
 }
