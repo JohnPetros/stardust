@@ -11,6 +11,7 @@ interface DragItemProps {
   label: string
   isActive: boolean
   isDroppedInZone?: boolean
+  width: string
 }
 
 export function DragItem({
@@ -18,6 +19,7 @@ export function DragItem({
   label,
   isActive,
   isDroppedInZone = false,
+  width,
 }: DragItemProps) {
   const {
     state: { isAnswerVerified, isAnswerCorrect },
@@ -37,11 +39,15 @@ export function DragItem({
 
   const style = {
     transform: CSS.Transform.toString(transform),
+    width,
   }
 
   if (isDragging && !isDroppedInZone) {
     return (
-      <li className="border-2 border-dashed border-gray-100 bg-transparent rounded-md w-24 h-12 text-gray-100"></li>
+      <div
+        style={{ width: style.width }}
+        className="border-2 border-dashed border-gray-100 bg-transparent rounded-md h-10 text-gray-100"
+      ></div>
     )
   }
 
@@ -52,7 +58,7 @@ export function DragItem({
       {...listeners}
       {...attributes}
       className={twMerge(
-        'grid place-content-center border border-gray-10 text-gray-100 bg-purple-700 rounded-md w-24 h-12 cursor-grab',
+        'grid place-content-center border border-gray-10 text-gray-100 bg-purple-700 rounded-md h-10 cursor-grab',
         !isActive && isDroppedInZone ? 'border-none p-0 bg-transparent' : '',
         isActive ? 'text-blue-300 border-2 border-blue-300 cursor-grab' : '',
         isAnswerVerified && isAnswerCorrect && isDroppedInZone
