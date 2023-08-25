@@ -6,11 +6,11 @@ import { useLesson } from '@/hooks/useLesson'
 import { SelectionQuestion } from './SelectionQuestion'
 import { VerificationButton } from './VerificationButton'
 import { DragAndDropListQuestion } from './DragAndDropListQuestion'
-import { Variants } from 'framer-motion'
 import { OpenQuestion } from './OpenQuestion'
 import { Modal, ModalRef } from '@/app/components/Modal'
 import { Button } from '@/app/components/Button'
 import { DragAndDropQuestion } from './DragAndDropQuestion'
+import { CheckboxQuestion } from './CheckboxQuestion'
 
 interface QuizProps {
   leaveLesson: () => void
@@ -30,10 +30,12 @@ export function Quiz({ leaveLesson }: QuizProps) {
   } = useLesson()
 
   const currentQuestion = useMemo(() => {
-    return questions.length ? questions[currentQuestionIndex] : null
+    return questions.length ? questions[1] : null
   }, [questions, currentQuestionIndex])
 
   const modalRef = useRef<ModalRef>(null)
+
+  console.log(questions.map(question => question.content.type))
 
   useEffect(() => {
     window.scrollTo({
@@ -47,43 +49,27 @@ export function Quiz({ leaveLesson }: QuizProps) {
   }, [livesAmount])
 
   if (currentQuestion) {
-    const isCurrentQuestion = currentQuestion.order - 1 === currentQuestionIndex
     return (
       <div className="relative h-[calc(100vh+100px)]">
         <div className="mx-auto w-full min-h-[calc(100vh-100px)] mt-7 max-w-xl flex items-center ">
-
           {currentQuestion.content.type === 'selection' && (
-            <SelectionQuestion
-              data={currentQuestion.content}
-              isCurrentQuestion={isCurrentQuestion}
-            />
+            <SelectionQuestion data={currentQuestion.content} />
           )}
 
           {currentQuestion.content.type === 'open' && (
-            <OpenQuestion
-              data={currentQuestion.content}
-              isCurrentQuestion={isCurrentQuestion}
-            />
+            <OpenQuestion data={currentQuestion.content} />
           )}
 
-          {/* {currentQuestion.type === 'checkbox' && (
-        <CheckboxQuestion data={currentQuestion} />
-      )}
-  
-       */}
+          {currentQuestion.content.type === 'checkbox' && (
+            <CheckboxQuestion data={currentQuestion.content} />
+          )}
 
           {currentQuestion.content.type === 'drag-and-drop' && (
-            <DragAndDropQuestion
-              data={currentQuestion.content}
-              isCurrentQuestion={isCurrentQuestion}
-            />
+            <DragAndDropQuestion data={currentQuestion.content} />
           )}
 
           {currentQuestion.content.type === 'drag-and-drop-list' && (
-            <DragAndDropListQuestion
-              data={currentQuestion.content}
-              isCurrentQuestion={isCurrentQuestion}
-            />
+            <DragAndDropListQuestion data={currentQuestion.content} />
           )}
         </div>
 
