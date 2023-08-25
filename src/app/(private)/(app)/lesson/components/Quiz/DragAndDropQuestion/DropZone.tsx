@@ -8,6 +8,7 @@ import { DraggrableItem } from '@/types/quiz'
 import { DragItem } from './DragItem'
 
 import { twMerge } from 'tailwind-merge'
+import { getDragItemWidth } from '.'
 
 interface DropZoneProps {
   id: string
@@ -47,11 +48,13 @@ export function DropZone({
     }
   }, [isAnswerVerified, isAnswerCorrect])
 
+  const width = droppedItem ? getDragItemWidth(droppedItem) : ''
+
   return (
     <div
       ref={setNodeRef}
       className={twMerge(
-        'grid place-content-center rounded-md border border-gray-100 h-12 bg-green-900 min-w-4 text-blue-300',
+        'grid place-content-center rounded-md border border-gray-100 h-10 bg-green-900 min-w-4 text-blue-300',
         droppedItem ? 'px-0' : 'px-6',
         borderColor
       )}
@@ -62,6 +65,7 @@ export function DropZone({
           label={droppedItem.label}
           isDroppedInZone={true}
           isActive={false}
+          width={width}
         />
       )}
     </div>
