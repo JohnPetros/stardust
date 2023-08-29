@@ -30,12 +30,10 @@ export function Quiz({ leaveLesson }: QuizProps) {
   } = useLesson()
 
   const currentQuestion = useMemo(() => {
-    return questions.length ? questions[1] : null
+    return questions.length ? questions[currentQuestionIndex] : null
   }, [questions, currentQuestionIndex])
 
   const modalRef = useRef<ModalRef>(null)
-
-  console.log(questions.map(question => question.content.type))
 
   useEffect(() => {
     window.scrollTo({
@@ -50,8 +48,8 @@ export function Quiz({ leaveLesson }: QuizProps) {
 
   if (currentQuestion) {
     return (
-      <div className="relative h-[calc(100vh+100px)]">
-        <div className="mx-auto w-full min-h-[calc(100vh-100px)] mt-7 max-w-xl flex items-center ">
+      <div className=" h-[calc(100vh+120px)] w-full flex justify-center">
+        <div className="absolute min-h-[calc(100vh-120px)] mx-auto w-full max-w-2xl mt-12 flex items-center p-6 md:p-0">
           {currentQuestion.content.type === 'selection' && (
             <SelectionQuestion data={currentQuestion.content} />
           )}
