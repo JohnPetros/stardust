@@ -42,7 +42,7 @@ export function StreakBoard({ weekStatus, streakAmount }: StreakProps) {
             variants={weekDayAnimations}
             initial="up"
             animate="down"
-            transition={{ delay: index * 0.2 }}
+            transition={{ delay: index * 0.4 }}
             key={weekday}
             className="flex flex-col items-center justify-center gap-2"
           >
