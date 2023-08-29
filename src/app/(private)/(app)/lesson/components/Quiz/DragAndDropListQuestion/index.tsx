@@ -153,7 +153,7 @@ export function DragAndDropListQuestion({
           items={sortableItems}
           strategy={verticalListSortingStrategy}
         >
-          <div className="mx-auto w-full space-y-2 mt-8">
+          <div className="mx-auto w-full space-y-2 mt-6">
             {sortableItems.map((item) => (
               <SortableItem
                 key={item.id}
