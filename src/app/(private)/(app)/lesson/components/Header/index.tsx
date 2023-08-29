@@ -25,7 +25,6 @@ export function Header({ onLeaveLesson }: HeaderProps) {
       renderedTextsAmount,
       livesAmount,
     },
-    dispatch,
   } = useLesson()
   const { rocket } = useRocket(user?.rocket_id)
   const rocketImage = rocket ? getImage('rockets', rocket.image) : ''
@@ -44,7 +43,7 @@ export function Header({ onLeaveLesson }: HeaderProps) {
   }, [renderedTextsAmount, currentQuestionIndex])
 
   return (
-    <header className="fixed z-10 top-0 px-6 py-3 w-full bg-gray-900">
+    <header className="fixed z-10 top-0 px-6 py-3 w-full h-12 bg-gray-900">
       <div className="flex items-center justify-between gap-6 max-w-3xl mx-auto">
         <button onClick={onLeaveLesson}>
           <X className="text-red-700 text-2xl" weight="bold" />
