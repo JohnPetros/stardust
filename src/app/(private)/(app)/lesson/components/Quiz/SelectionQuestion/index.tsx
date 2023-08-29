@@ -7,9 +7,11 @@ import { QuestionTitle } from '../QuestionTitle'
 import { Option } from './Option'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 
-import type { SelectionQuestion as SelectionQuestionData } from '@/types/quiz'
 import { reorderItems } from '@/utils/functions'
 import { QuestionContainer } from '../QuestionContainer'
+import { CodeSnippet } from '@/app/components/Text/CodeSnippet'
+
+import type { SelectionQuestion as SelectionQuestionData } from '@/types/quiz'
 
 interface SelectionQuestionProps {
   data: SelectionQuestionData
@@ -83,23 +85,29 @@ export function SelectionQuestion({
   }, [isAnswerVerified, selectedOption])
 
   return (
-      <QuestionContainer>
-        <QuestionTitle picture={picture}>{title}</QuestionTitle>
+    <QuestionContainer>
+      <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
-        <RadioGroup.Root className="mt-8 space-y-2">
-          {reorderedOptions.map((option) => (
-            <Option
-              key={option}
-              label={option}
-              isSelected={selectedOption === option}
-              isAnswerIncorrect={isAnswerVerified && !isAnswerCorrect}
-              isAnswerCorrect={
-                isAnswerVerified && isAnswerCorrect && option === answer
-              }
-              onClick={() => setSelectedOption(option)}
-            />
-          ))}
-        </RadioGroup.Root>
-      </QuestionContainer>
+      {code && (
+        <div className="mt-3 w-full">
+          <CodeSnippet code={code} isRunnable={false} />
+        </div>
+      )}
+
+      <RadioGroup.Root className="mt-6 space-y-2">
+        {reorderedOptions.map((option) => (
+          <Option
+            key={option}
+            label={option}
+            isSelected={selectedOption === option}
+            isAnswerIncorrect={isAnswerVerified && !isAnswerCorrect}
+            isAnswerCorrect={
+              isAnswerVerified && isAnswerCorrect && option === answer
+            }
+            onClick={() => setSelectedOption(option)}
+          />
+        ))}
+      </RadioGroup.Root>
+    </QuestionContainer>
   )
 }
