@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useLesson } from '@/hooks/useLesson'
 
 import { QuestionContainer } from '../QuestionContainer'
 import { QuestionTitle } from '../QuestionTitle'
@@ -11,10 +12,53 @@ interface CheckboxQuestionProps {
 }
 
 export function CheckboxQuestion({
-  data: { title, picture, options },
+  data: { title, picture, options, correctOptions },
 }: CheckboxQuestionProps) {
+  const {
+    state: { isAnswerVerified },
+    dispatch,
+  } = useLesson()
+
   const [userAnswers, setUserAnswers] = useState<string[]>([])
-  console.log(userAnswers);
+  const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
+
+  function setIsAnswerVerified(isAnswerVerified: boolean) {
+    dispatch({ type: 'setIsAnswerVerified', payload: isAnswerVerified })
+  }
+
+  function setIsAnswerCorrect(isAnswerCorrect: boolean) {
+    dispatch({ type: 'setIsAnswerCorrect', payload: isAnswerCorrect })
+  }
+
+  function handleAnswer() {
+    setIsAnswerVerified(!isAnswerVerified)
+
+    const isUserAnswerCorrect =
+      userAnswers.length === correctOptions.length &&
+      userAnswers.every((userOption) => correctOptions.includes(userOption))
+
+    if (isUserAnswerCorrect) {
+      setIsAnswerCorrect(true)
+
+      if (isAnswerVerified) {
+        dispatch({ type: 'changeQuestion' })
+      }
+
+      return
+    }
+
+    setIsAnswerCorrect(false)
+
+    if (
+      isAnswerVerified &&
+      !hasAlreadyIncrementIncorrectAnswersAmount.current
+    ) {
+      dispatch({ type: 'incrementIncorrectAswersAmount' })
+      hasAlreadyIncrementIncorrectAnswersAmount.current = true
+    }
+
+    if (isAnswerVerified) dispatch({ type: 'decrementLivesAmount' })
+  }
 
   function handleCheckboxChange(checkedOption: string) {
     if (userAnswers.includes(checkedOption)) {
@@ -26,6 +70,17 @@ export function CheckboxQuestion({
 
     setUserAnswers((userAnswers) => [...userAnswers, checkedOption])
   }
+
+  useEffect(() => {
+    dispatch({ type: 'setIsAnswered', payload: !!userAnswers.length })
+  }, [userAnswers])
+
+  useEffect(() => {
+    dispatch({
+      type: 'setAnswerHandler',
+      payload: handleAnswer,
+    })
+  }, [isAnswerVerified, userAnswers])
 
   return (
     <QuestionContainer>
