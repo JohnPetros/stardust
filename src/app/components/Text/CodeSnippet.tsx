@@ -7,10 +7,10 @@ import { ArrowClockwise } from '@phosphor-icons/react'
 
 interface CodeSnippetProps {
   code: string
-  isRunnable: boolean
+  isRunnable?: boolean
 }
 
-export function CodeSnippet({ code, isRunnable }: CodeSnippetProps) {
+export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
   const codeEditorRef = useRef<CodeEditorRef>(null)
 
   function handleReloadButtonClick() {
@@ -18,7 +18,8 @@ export function CodeSnippet({ code, isRunnable }: CodeSnippetProps) {
   }
 
   const codeEditorHeight = useMemo(() => {
-    return code.split('\n').length * 10 + 160
+    const lines = code.split('\n').length
+    return lines * (lines >= 10 ? 16 : 32)
   }, [code])
 
   return (
