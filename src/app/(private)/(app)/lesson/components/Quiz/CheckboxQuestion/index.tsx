@@ -88,13 +88,14 @@ export function CheckboxQuestion({
 
       <ul className="space-y-2 mt-6">
         {options.map((option) => (
-          <Checkbox
-            key={option}
-            onCheck={() => handleCheckboxChange(option)}
-            isChecked={userAnswers.includes(option)}
-          >
-            {option}
-          </Checkbox>
+          <li key={option}>
+            <Checkbox
+              onCheck={() => handleCheckboxChange(option)}
+              isChecked={userAnswers.includes(option)}
+            >
+              {option}
+            </Checkbox>
+          </li>
         ))}
       </ul>
     </QuestionContainer>
