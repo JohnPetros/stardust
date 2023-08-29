@@ -1,7 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-
 import { DELEGUA_TOKENS, THEMES } from '@/utils/constants'
 
 interface CodeTextProps {
@@ -9,25 +7,27 @@ interface CodeTextProps {
 }
 
 export function CodeText({ children }: CodeTextProps) {
-  const [color, setColor] = useState('')
-
-  function getToken() {
+  function getColor(word: string) {
     for (const token of Object.keys(DELEGUA_TOKENS)) {
-      if (DELEGUA_TOKENS[token].includes(children)) {
-        return token
+      if (DELEGUA_TOKENS[token].includes(word)) {
+        return THEMES.default[token]
       }
     }
   }
 
-  useEffect(() => {
-    const token = getToken()
-
-    if (token) {
-      const color = THEMES.default[token]
-
-      setColor(color)
-    }
-  }, [])
-
-  return <span style={{ color: color ? color : '#EBEBEB' }}>{children}</span>
+  return (
+    <div className="space-x-2">
+      {children.split(' ').map((word, index) => {
+        const color = getColor(word)
+        return (
+          <span
+            key={`${word}-${index}`}
+            style={{ color: color ? color : '#EBEBEB' }}
+          >
+            {word}
+          </span>
+        )
+      })}
+    </div>
+  )
 }
