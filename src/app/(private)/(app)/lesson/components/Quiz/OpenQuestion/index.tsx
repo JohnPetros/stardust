@@ -3,13 +3,15 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLesson } from '@/hooks/useLesson'
 
+import { QuestionContainer } from '../QuestionContainer'
 import { QuestionTitle } from '../QuestionTitle'
+import { CodeText } from '../CodeText'
+import { CodeSnippet } from '@/app/components/Text/CodeSnippet'
 import { Input } from './Input'
 
-import type { OpenQuestion as OpenQuestionData } from '@/types/quiz'
-import { QuestionContainer } from '../QuestionContainer'
-import { CodeText } from '../CodeText'
 import { compareArrays } from '@/utils/functions'
+
+import type { OpenQuestion as OpenQuestionData } from '@/types/quiz'
 
 interface OpenQuestion {
   data: OpenQuestionData
@@ -19,11 +21,12 @@ export function OpenQuestion({
   data: { title, picture, code, answers, lines },
 }: OpenQuestion) {
   const {
-    state: { isAnswerVerified, isAnswerCorrect, currentQuestionIndex },
+    state: { isAnswerVerified },
     dispatch,
   } = useLesson()
-  const [userAnswers, setUserAnswers] = useState<string[]>([])
-  console.log(userAnswers)
+  const [userAnswers, setUserAnswers] = useState<string[]>(
+    Array.from<string>({ length: answers.length }).fill('')
+  )
 
   const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
 
@@ -89,16 +92,16 @@ export function OpenQuestion({
     <QuestionContainer>
       <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
-      <ul className="mt-8">
+      {code && <CodeSnippet code={code} isRunnable={false} />}
+
+      <ul className="mt-6">
         {lines.map((line) => (
-          <li className="flex flex-row items-center gap-3">
+          <li key={line.id} className="flex flex-row items-center gap-3">
             {line.texts.map((text, index) => (
               <div key={`${index}-${line.id}`}>
                 {text !== 'input' ? (
                   <div className="flex gap-2">
-                    {text.split(' ').map((word) => (
-                      <CodeText>{word}</CodeText>
-                    ))}
+                    <CodeText>{text}</CodeText>
                   </div>
                 ) : (
                   <Input
