@@ -5,22 +5,7 @@ import { Check } from '@phosphor-icons/react'
 import * as C from '@radix-ui/react-checkbox'
 
 import { Variants, motion } from 'framer-motion'
-import { tv } from 'tailwind-variants'
-interface CheckboxProps {
-  children: string
-}
-
-const checkboxStyles = tv({
-  base: 'rounded-md border border-gray-100 bg-purple-700',
-  variants: {
-    color: {
-      gray: 'border-gray-100',
-      red: 'border-red-700',
-      green: 'border-green-500',
-      blue: 'border-blue-300 ',
-    },
-  },
-})
+import { twMerge } from 'tailwind-merge'
 
 const colors = {
   gray: 'border-gray-100 text-gray-100',
@@ -44,10 +29,15 @@ const indicatorAnimations: Variants = {
   },
   rotate: {
     rotate: 0,
+    transition: {
+      ease: 'linear',
+      duration: 0.1,
+    },
   },
 }
 
 interface CheckboxProps {
+  children: string
   onCheck: () => void
   isChecked: boolean
 }
@@ -57,11 +47,10 @@ export function Checkbox({ children, onCheck, isChecked }: CheckboxProps) {
     state: { isAnswerVerified, isAnswerCorrect },
   } = useLesson()
 
-  
   function getColor() {
-    if (isAnswerCorrect && isAnswerVerified) {
+    if (isAnswerCorrect && isAnswerVerified && isChecked) {
       return 'green'
-    } else if (isAnswerVerified) {
+    } else if (isAnswerVerified && isChecked) {
       return 'red'
     } else if (isChecked) {
       return 'blue'
@@ -70,12 +59,17 @@ export function Checkbox({ children, onCheck, isChecked }: CheckboxProps) {
     }
   }
 
+  const color = colors[getColor()]
+
   return (
     <motion.li
       variants={checkboxAnimations}
       whileHover="hover"
       whileTap="tap"
-      className="rounded-md border border-gray-100 bg-purple-700"
+      className={twMerge(
+        'rounded-md border border-gray-100 bg-purple-700',
+        color
+      )}
     >
       <label
         htmlFor={children}
@@ -83,7 +77,10 @@ export function Checkbox({ children, onCheck, isChecked }: CheckboxProps) {
       >
         <C.Root
           id={children}
-          className="rounded-md border border-gray-100 bg-transparent w-6 h-6"
+          className={twMerge(
+            'rounded-md border border-gray-100 bg-transparent w-6 h-6',
+            color
+          )}
           onCheckedChange={onCheck}
         >
           <C.Indicator className="grid place-content-center">
@@ -92,11 +89,14 @@ export function Checkbox({ children, onCheck, isChecked }: CheckboxProps) {
               initial="initial"
               animate="rotate"
             >
-              <Check className="text-blue-300 text-lg" weight="bold" />
+              <Check
+                className={twMerge('text-blue-300 text-lg', color)}
+                weight="bold"
+              />
             </motion.div>
           </C.Indicator>
         </C.Root>
-        <span className="text-gray-100">{children}</span>
+        <span className={twMerge('text-gray-100', color)}>{children}</span>
       </label>
     </motion.li>
   )
