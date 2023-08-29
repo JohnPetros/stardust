@@ -19,7 +19,7 @@ export function SelectionQuestion({
   data: { title, picture, options, code, answer },
 }: SelectionQuestionProps) {
   const {
-    state: { isAnswerVerified, isAnswerCorrect, currentQuestionIndex },
+    state: { isAnswerVerified, isAnswerCorrect },
     dispatch,
   } = useLesson()
   const [selectedOption, setSelectedOption] = useState('')
@@ -32,13 +32,6 @@ export function SelectionQuestion({
 
   function setIsAnswerCorrect(isAnswerCorrect: boolean) {
     dispatch({ type: 'setIsAnswerCorrect', payload: isAnswerCorrect })
-  }
-
-  function resetAnswer() {
-    if (isAnswerVerified && !!selectedOption) {
-      // setSelectedOption('')
-      setIsAnswerCorrect(false)
-    }
   }
 
   function handleAnswer() {
