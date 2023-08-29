@@ -159,7 +159,7 @@ export function CodeEditorComponent(
         minimap: {
           enabled: hasMinimap,
         },
-        fontSize: 18,
+        fontSize: 16,
         fontFamily: 'Menlo',
         cursorStyle: 'block',
         wordWrap: 'on',
