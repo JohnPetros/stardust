@@ -17,6 +17,7 @@ import {
 
 import { QuestionContainer } from '../QuestionContainer'
 import { QuestionTitle } from '../QuestionTitle'
+import { CodeText } from '../CodeText'
 import { DropZone } from './DropZone'
 import { DragItem } from './DragItem'
 import { DropBank } from './DropBank'
@@ -24,7 +25,10 @@ import { DropBank } from './DropBank'
 import { createPortal } from 'react-dom'
 import { compareArrays } from '@/utils/functions'
 
-import type { DragAndDropQuestion as DragAndDropData, DraggrableItem } from '@/types/quiz'
+import type {
+  DragAndDropQuestion as DragAndDropData,
+  DraggrableItem,
+} from '@/types/quiz'
 
 export function getDragItemWidth(item: DraggrableItem) {
   return 1.5 + item.label.length / 2 + 'rem'
@@ -209,7 +213,7 @@ export function DragAndDropQuestion({
                 return (
                   <div key={id}>
                     {text !== 'dropZone' ? (
-                      <span className="text-gray-100">{text}</span>
+                      <CodeText>{text}</CodeText>
                     ) : (
                       <DropZone
                         id={id}
