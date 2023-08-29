@@ -39,7 +39,7 @@ export function QuestionContainer({ children }: QuestionContainerProps) {
         animate={'middle'}
         exit="left"
         transition={questionTransition}
-        className="mx-auto w-ful max-w-xl flex flex-col items-center justify-center"
+        className="mx-auto w-full flex flex-col items-center justify-center"
       >
         {children}
       </motion.div>
