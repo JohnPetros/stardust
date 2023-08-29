@@ -1,7 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
+
+import { Toast, ToastRef } from '@/app/components/Toast'
 
 import { StreakBoard } from '../../../(home)/profile/components/Streak'
 import dayjs from 'dayjs'
@@ -11,6 +13,7 @@ export function Streak() {
 
   const [weekStatus, setWeekStatus] = useState<string[]>([])
   const [streakAmount, setStreakAmount] = useState(0)
+  const toastRef = useRef<ToastRef>(null)
 
   function updateWeekStatus(
     weekStatus: string[],
@@ -43,6 +46,13 @@ export function Streak() {
       week_status: updatedWeekStatus,
       did_complete_saturday: todayIndex === 6,
     })
+
+    if (error) {
+      toastRef.current?.open({
+        type: 'error',
+        message: 'Erro ao tentar atualizar o status da sua semana',
+      })
+    }
   }
 
   useEffect(() => {
@@ -54,5 +64,10 @@ export function Streak() {
     }
   }, [])
 
-  return <StreakBoard weekStatus={weekStatus} streakAmount={streakAmount} />
+  return (
+    <>
+      <Toast ref={toastRef} />
+      <StreakBoard weekStatus={weekStatus} streakAmount={streakAmount} />
+    </>
+  )
 }
