@@ -70,25 +70,36 @@ export function PopoverMenu({ buttons, trigger }: PopoverMenuProps) {
                   exit="up"
                   className="bg-gray-700 rounded-md p-3 w-full h-full"
                 >
-                  <Popover.Arrow className='fill-gray-700' />
+                  <Popover.Arrow className="fill-gray-700" />
 
-                  {buttons.map(({ title, isToggle, value, action }, index) => {
-                    const isFirst = index === 0
-                    return (
-                      <button
-                        key={title}
-                        className={twMerge(
-                          'flex items-center w-full text-left p-3 border-t text-gray-100 mr-auto',
-                          !isFirst ? 'border-green-400' : 'border-transparent'
-                        )}
-                        onClick={() => handlePopoverMenuButtonClick({ action })}
-                      >
-                        {title}
+                  <ul>
+                    {buttons.map(
+                      ({ title, isToggle, value, action }, index) => {
+                        const isFirst = index === 0
+                        return (
+                          <li key={title}>
+                            <button
+                              className={twMerge(
+                                'flex items-center w-full text-left p-3 border-t text-gray-100 mr-auto',
+                                !isFirst
+                                  ? 'border-green-400'
+                                  : 'border-transparent'
+                              )}
+                              onClick={() =>
+                                handlePopoverMenuButtonClick({ action })
+                              }
+                            >
+                              {title}
 
-                        {isToggle && <Checkbox isChecked={Boolean(value)} />}
-                      </button>
-                    )
-                  })}
+                              {isToggle && (
+                                <Checkbox isChecked={Boolean(value)} />
+                              )}
+                            </button>
+                          </li>
+                        )
+                      }
+                    )}
+                  </ul>
                 </motion.div>
               </Popover.Content>
             </div>
