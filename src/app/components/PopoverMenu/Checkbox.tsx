@@ -24,9 +24,9 @@ export function Checkbox({ isChecked }: CheckboxProps) {
     <C.Root
       className={twMerge(
         'rounded-md border-1 border-green-400 w-6 h-6 ml-auto',
-        true ? 'bg-green-400' : ' bg-transparent'
+        isChecked ? 'bg-green-400' : ' bg-transparent'
       )}
-      checked={true}
+      checked={isChecked}
     >
       <C.Indicator className="grid place-content-center">
         <motion.div
