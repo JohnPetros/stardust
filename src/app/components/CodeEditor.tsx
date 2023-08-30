@@ -17,12 +17,12 @@ import { Loading } from './Loading'
 export interface CodeEditorRef {
   reloadValue: () => void
 }
-interface CodeSnippetProps {
+interface CodeEditorProps {
   value: string
   width: number | string
   height: number | string
   hasMinimap?: boolean
-  isReadOnly: boolean
+  isReadOnly?: boolean
 }
 
 export function CodeEditorComponent(
@@ -32,7 +32,7 @@ export function CodeEditorComponent(
     height,
     hasMinimap = false,
     isReadOnly = false,
-  }: CodeSnippetProps,
+  }: CodeEditorProps,
   ref: ForwardedRef<CodeEditorRef>
 ) {
   const monaco = useMonaco()
