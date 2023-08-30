@@ -81,9 +81,9 @@ export default function Lesson() {
 
   useEffect(() => {
     if (star) {
-      dispatch({ type: 'setTexts', payload: texts })
+      // dispatch({ type: 'setTexts', payload: texts })
       
-      // dispatch({ type: 'setTexts', payload: star.texts })
+      dispatch({ type: 'setTexts', payload: star.texts })
       dispatch({ type: 'setQuestions', payload: star.questions })
       setTimeout(() => setIsTransitionVisible(false), 1000)
     }
