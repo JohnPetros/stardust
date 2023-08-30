@@ -3,8 +3,11 @@ import type { Text } from './text'
 
 type Difficulty = 'easy' | 'medium' | 'hard'
 
-type TestCase = {
-  input: (string | number | boolean)[] | (string | number | boolean)[][]
+export type TestCase = {
+  id: number
+  input: (string | number)[] | (string | number)[][]
+  expectedOutput: string | number | (string | number)[]
+  isLocked: boolean
 }
 
 export type Challenge = {
