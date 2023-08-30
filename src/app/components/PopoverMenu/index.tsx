@@ -36,14 +36,23 @@ interface PopoverMenuProps {
 export function PopoverMenu({ buttons, trigger }: PopoverMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
 
+  function close() {
+    setIsOpen(false)
+  }
+
   function handleTriggerClick() {
     setIsOpen(true)
   }
 
   function handleOpenChange() {
-    if (isOpen) {
-      setIsOpen(false)
-    }
+    if (isOpen) close()
+  }
+
+  function handlePopoverMenuButtonClick({
+    action,
+  }: Pick<PopoverMenuButton, 'action'>) {
+    close()
+    action()
   }
 
   return (
@@ -60,7 +69,7 @@ export function PopoverMenu({ buttons, trigger }: PopoverMenuProps) {
                 exit="up"
                 className="bg-gray-700 rounded-md p-3 w-full h-full"
               >
-                {buttons.map(({ title, isToggle, value }, index) => {
+                {buttons.map(({ title, isToggle, value, action }, index) => {
                   const isFirst = index === 0
                   return (
                     <button
@@ -69,6 +78,7 @@ export function PopoverMenu({ buttons, trigger }: PopoverMenuProps) {
                         'flex items-center w-full text-left p-3 border-t text-gray-100 mr-auto',
                         !isFirst ? 'border-green-400' : 'border-transparent'
                       )}
+                      onClick={() => handlePopoverMenuButtonClick({ action })}
                     >
                       {title}
 
