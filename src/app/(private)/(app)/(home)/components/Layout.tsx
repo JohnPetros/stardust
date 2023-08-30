@@ -1,4 +1,5 @@
 'use client'
+
 import { ReactNode, useState, useEffect } from 'react'
 
 import { Header } from './Header'
@@ -7,6 +8,7 @@ import { Sidebar } from './Sidebar'
 import { Sidenav } from './Sidenav'
 
 import { Variants, motion } from 'framer-motion'
+import { usePathname } from 'next/navigation'
 
 const layoutVariants: Variants = {
   mobile: {
@@ -28,6 +30,8 @@ export function Layout({ children }: LayoutProps) {
   const [isSidenavExpanded, setIsSidenavExpanded] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
+  const pathName = usePathname()
+
   useEffect(() => {
     const isMobile = innerWidth <= 768
     setIsMobile(isMobile)
@@ -36,6 +40,10 @@ export function Layout({ children }: LayoutProps) {
   function toggleSidenav() {
     setIsSidenavExpanded(!isSidenavExpanded)
   }
+
+  const isChallengePage = new RegExp('^/challenges/[0-9a-fA-F-]+(\\?.*)?$').test(pathName);
+  
+  if (isChallengePage) return children
 
   return (
     <>
