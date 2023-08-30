@@ -133,7 +133,7 @@ export function Star({
           <span
             className={twMerge(
               'absolute block text-lg font-semibold top-[50%] -translate-x-1/2 -translate-y-1/2 text-yellow-700',
-              isUnlocked ? 'left-[27%]' : ' left-[22%]'
+              isUnlocked ? 'left-[26%]' : ' left-[22%]'
             )}
           >
             {number}
@@ -162,7 +162,7 @@ export function Star({
           animate="visible"
           className="w-20 h-20"
         >
-          {isLastUnlockedStar && (
+          {isLastUnlockedStar && spaceRocket && (
             <div className="relative w-20 h-20 rotate-180">
               <Image
                 src={spaceRocket.image}
