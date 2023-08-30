@@ -1,18 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { useChallenge } from '@/hooks/useChallenge'
 import { useAuth } from '@/hooks/useAuth'
+import { useChallengeContext } from '@/hooks/useChallengeContext'
 
-import { Slider } from '@/app/components/Slider'
-import { Slide } from '@/app/components/Slider/Slide'
 import { Header } from './components/Header'
-import { Problem } from './components/Problem'
-import { Code } from './components/Code'
-import { Result } from './components/Result'
-
-type Tab = 'problem' | 'code' | 'result'
+import { Slider } from './components/Slider'
 
 export default function Challenge() {
   const { challengeId } = useParams()
@@ -23,32 +18,20 @@ export default function Challenge() {
     userId: user?.id,
   })
 
-  const [currentTab, setCurrentTab] = useState<Tab>('result')
+  const { state, dispatch } = useChallengeContext()
 
-  if (challenge)
-    return (
-      <div className="h-full">
-        <Header challengeTitle="Pedido de ajuda" />
-        <main className="h-full">
-          <Slider onChange={null}>
-            {currentTab === 'problem' && (
-              <Slide id={'problem'}>
-                <Problem texts={challenge.texts} />
-              </Slide>
-            )}
-            {currentTab === 'code' && (
-              <Slide id={'code'}>
-                <Code code={challenge.code} />
-              </Slide>
-            )}
+  useEffect(() => {
+    if (challenge) {
+      dispatch({ type: 'setChallenge', payload: challenge })
+    }
+  }, [challenge])
 
-            {currentTab === 'result' && (
-              <Slide id={'result'}>
-                <Result testCases={challenge.test_cases} />
-              </Slide>
-            )}
-          </Slider>
-        </main>
-      </div>
-    )
+  return (
+    <div className="h-full">
+      <Header />
+      <main className="h-full">
+        <Slider /> 
+      </main>
+    </div>
+  )
 }
