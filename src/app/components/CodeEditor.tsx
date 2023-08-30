@@ -23,6 +23,7 @@ interface CodeEditorProps {
   height: number | string
   hasMinimap?: boolean
   isReadOnly?: boolean
+  onChange?: (value: string) => void
 }
 
 export function CodeEditorComponent(
@@ -32,6 +33,7 @@ export function CodeEditorComponent(
     height,
     hasMinimap = false,
     isReadOnly = false,
+    onChange,
   }: CodeEditorProps,
   ref: ForwardedRef<CodeEditorRef>
 ) {
@@ -174,6 +176,7 @@ export function CodeEditorComponent(
       }
       value={value}
       onMount={handleEditorDidMount}
+      onChange={onChange}
     />
   )
 }
