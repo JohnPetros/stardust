@@ -11,6 +11,7 @@ export function TypeWriter({ text, isEnable = true }: TypeWriterProps) {
   if (isEnable)
     return (
       <Typewriter
+        component={'span'}
         options={{
           delay: 20,
           skipAddStyles: true,
