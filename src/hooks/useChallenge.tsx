@@ -1,13 +1,15 @@
 import { useMemo } from 'react'
+import { useApi } from '@/services/api'
 import useSWR from 'swr'
 
-import { useApi } from '@/services/api'
 import type { Challenge } from '@/types/challenge'
 
-export function useChallenge(
-  challengeId?: string | null,
-  userId?: string | null
-) {
+interface ChallengeParams {
+  challengeId?: string
+  userId?: string
+}
+
+export function useChallenge({ challengeId, userId }: ChallengeParams) {
   const api = useApi()
 
   function getChallenges() {
@@ -16,30 +18,61 @@ export function useChallenge(
     }
   }
 
-  const { data: challenges, error } = useSWR(
-    userId ? '/challenges?user_id=' + userId : null,
+  function getChallenge() {
+    if (challengeId && userId) {
+      return api.getChallenge(challengeId, userId)
+    }
+  }
+
+  const { data: challenges, error: challengesError } = useSWR(
+    challengeId ? '/challenges?user_id=' + userId : null,
     getChallenges
   )
 
-  function checkCompletition(challenge: Challenge) {
-    const isCompleted = challenge.users_completed_challenges.length > 0
+  const { data: challenge, error: challengeError } = useSWR(
+    challengeId && userId ? '/challenge?id=' + challengeId : null,
+    getChallenge
+  )
 
-    return { ...challenge, isCompleted }
+  function addComplementaryData(challenge: Challenge) {
+    if (!challenge.users_completed_challenges || !challenge.users)
+      return challenge
+
+    const isCompleted = challenge.users_completed_challenges.length > 0
+    const createdBy = challenge.users[0].name
+
+    delete challenge.users_completed_challenges
+    delete challenge.users
+
+    return { ...challenge, isCompleted, createdBy }
   }
 
-  if (error) {
-    throw new Error(error)
+  if (challengesError) {
+    console.error(challengesError)
+    throw new Error(challengesError)
+  }
+
+  if (challengeError) {
+    console.error(challengeError)
+    throw new Error(challengeError)
   }
 
   const verifiedChallenges: Challenge[] = useMemo(() => {
     if (challenges?.length) {
-      return challenges.map(checkCompletition)
+      return challenges.map(addComplementaryData)
     }
     return []
   }, [challenges])
 
+  // const verifiedChallenge: Challenge | null = useMemo(() => {
+  //   if (challenge) {
+  //     return addComplementaryData(challenge)
+  //   }
+  //   return null
+  // }, [challenge])
 
   return {
     challenges: verifiedChallenges,
+    challenge,
   }
 }
