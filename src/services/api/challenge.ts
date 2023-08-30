@@ -18,7 +18,9 @@ export default () => {
     getChallenge: async (challengeId: string, userId: string) => {
       const { data, error } = await supabase
         .from('challenges')
-        .select('*, users_completed_challenges (user_id)')
+        .select(
+          '*, created_by:user_id(name), users_completed_challenges(count)'
+        )
         .eq('id', challengeId)
         .eq('users_completed_challenges.user_id', userId)
         .single<Challenge>()
@@ -27,13 +29,22 @@ export default () => {
         throw new Error(error.message)
       }
 
-      return data
+      const challenge: Challenge = {
+        ...data,
+        is_completed:
+          !!data.users_completed_challenges &&
+          data.users_completed_challenges[0].count > 0,
+      }
+
+      delete challenge.users_completed_challenges
+      
+      return challenge
     },
 
     getChallenges: async (userId: string) => {
       const { data, error } = await supabase
         .from('challenges')
-        .select('*, users_completed_challenges (user_id)')
+        .select('*, users_completed_challenges(count)')
         .eq('users_completed_challenges.user_id', userId)
         .returns<Challenge[]>()
 
