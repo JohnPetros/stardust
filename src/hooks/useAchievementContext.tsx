@@ -1,7 +1,7 @@
 'use client'
 
-import { AchivementsContext } from '@/contexts/AchievementsContext'
 import { useContext } from 'react'
+import { AchivementsContext } from '@/contexts/AchievementsContext'
 
 export function useAchivementsContext() {
   const context = useContext(AchivementsContext)
