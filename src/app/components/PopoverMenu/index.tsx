@@ -61,33 +61,37 @@ export function PopoverMenu({ buttons, trigger }: PopoverMenuProps) {
       <AnimatePresence>
         {isOpen ? (
           <Popover.Portal forceMount>
-            <Popover.Content className=" w-40">
-              <motion.div
-                variants={popoverAnimation}
-                initial="up"
-                animate="down"
-                exit="up"
-                className="bg-gray-700 rounded-md p-3 w-full h-full"
-              >
-                {buttons.map(({ title, isToggle, value, action }, index) => {
-                  const isFirst = index === 0
-                  return (
-                    <button
-                      key={title}
-                      className={twMerge(
-                        'flex items-center w-full text-left p-3 border-t text-gray-100 mr-auto',
-                        !isFirst ? 'border-green-400' : 'border-transparent'
-                      )}
-                      onClick={() => handlePopoverMenuButtonClick({ action })}
-                    >
-                      {title}
+            <div className="flex flex-col">
+              <Popover.Content className="w-40 mr-1" sideOffset={5}>
+                <motion.div
+                  variants={popoverAnimation}
+                  initial="up"
+                  animate="down"
+                  exit="up"
+                  className="bg-gray-700 rounded-md p-3 w-full h-full"
+                >
+                  <Popover.Arrow className='fill-gray-700' />
 
-                      {isToggle && <Checkbox isChecked={Boolean(value)} />}
-                    </button>
-                  )
-                })}
-              </motion.div>
-            </Popover.Content>
+                  {buttons.map(({ title, isToggle, value, action }, index) => {
+                    const isFirst = index === 0
+                    return (
+                      <button
+                        key={title}
+                        className={twMerge(
+                          'flex items-center w-full text-left p-3 border-t text-gray-100 mr-auto',
+                          !isFirst ? 'border-green-400' : 'border-transparent'
+                        )}
+                        onClick={() => handlePopoverMenuButtonClick({ action })}
+                      >
+                        {title}
+
+                        {isToggle && <Checkbox isChecked={Boolean(value)} />}
+                      </button>
+                    )
+                  })}
+                </motion.div>
+              </Popover.Content>
+            </div>
           </Popover.Portal>
         ) : null}
       </AnimatePresence>
