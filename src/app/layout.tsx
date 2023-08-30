@@ -8,7 +8,7 @@ const poppins = Poppins({ weight: ['400', '500', '600'], subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'StarDust',
-  description: 'Aprenda lógica de programação de maneira gamificada',
+  description: 'Aprenda lógica de programação explorando o espaço.',
 }
 
 export default async function RootLayout({
