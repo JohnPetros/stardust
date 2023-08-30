@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { UserAvatar } from '@/app/(private)/(app)/(home)/components/UserAvatar'
 import { CodeSnippet } from '@/app/components/Text/CodeSnippet'
 import { TypeWriter } from './TypeWriter'
+import { Title } from './Title'
 
 import { Variants, motion } from 'framer-motion'
 
@@ -36,7 +37,7 @@ const textAnimations: Variants = {
 }
 
 const textStyles = tv({
-  base: 'font-medium tracking-wider text-gray-100 text-sm w-full p-4 rounded-md',
+  base: 'font-medium tracking-wider text-gray-100 text-sm w-full p-3 rounded-md',
   variants: {
     type: {
       default: 'bg-purple-700',
@@ -56,7 +57,7 @@ interface TextProps {
 }
 
 export function Text({
-  data: { type, content, picture, isRunnable },
+  data: { type, title, content, picture, isRunnable },
   hasAnimation,
 }: TextProps) {
   const { user } = useAuth()
@@ -95,19 +96,20 @@ export function Text({
       )}
 
       {type === 'code' && (
-        <>
+        <div className="flex flex-col gap-2 w-full">
+          {title && <Title>{title}</Title>}
           <CodeSnippet
             code={formatText(String(content))}
             isRunnable={Boolean(isRunnable)}
           />
-        </>
+        </div>
       )}
 
       {type === 'user' && (
         <>
           <div className={textStyles({ type })}>
             {!Array.isArray(content) && (
-              <p>
+              <p className="leading-6">
                 <TypeWriter text={content} isEnable={hasAnimation} />
               </p>
             )}
@@ -119,7 +121,7 @@ export function Text({
       {['default', 'alert', 'quote'].includes(String(type)) && (
         <>
           {textImage && (
-            <div className="relative w-24 h-16 bg-red-400 rounded-md overflow-hidden mr-3">
+            <div className="relative md:w-24 w-20 h-12 md:h-16 bg-red-400 rounded-md overflow-hidden mr-3">
               <Image src={textImage} fill alt="Panda" />
             </div>
           )}
@@ -130,7 +132,7 @@ export function Text({
           )}
           <div className={textStyles({ type })}>
             {!Array.isArray(content) && (
-              <p>
+              <p className="leading-6">
                 <TypeWriter
                   text={formatText(content)}
                   isEnable={hasAnimation}
