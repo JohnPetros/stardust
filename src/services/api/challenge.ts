@@ -59,12 +59,13 @@ export default () => {
         .from('challenges')
         .select('id')
         .eq('star_id', starId)
+        .single()
 
       if (error) {
         throw new Error(error.message)
       }
 
-      return data
+      return data.id
     },
 
     getUserCompletedChallengesIds: async (userId: string) => {
