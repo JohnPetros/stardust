@@ -3,10 +3,8 @@ import { ReactNode, createContext, useReducer } from 'react'
 import type { Question } from '@/types/quiz'
 import type { Text } from '@/types/text'
 
-type Stage = 'theory' | 'quiz' | 'end'
-
 type LessonState = {
-  currentStage: Stage
+  currentStage: 'theory' | 'quiz' | 'end'
   texts: Text[]
   renderedTextsAmount: number
   questions: Question[]
@@ -42,7 +40,7 @@ type LessonValue = {
 
 export const LessonContext = createContext({} as LessonValue)
 
-const initialState: LessonState = {
+const initialLessonState: LessonState = {
   currentStage: 'quiz',
   texts: [],
   renderedTextsAmount: 0,
@@ -130,7 +128,7 @@ function LessonReducer(state: LessonState, action: LessonAction): LessonState {
         isAnswered: false,
       }
     case 'resetState':
-      return initialState
+      return initialLessonState
     default:
       return state
   }
@@ -141,7 +139,7 @@ interface LessonProviderProps {
 }
 
 export const LessonProvider = ({ children }: LessonProviderProps) => {
-  const [state, dispatch] = useReducer(LessonReducer, initialState)
+  const [state, dispatch] = useReducer(LessonReducer, initialLessonState)
 
   return (
     <LessonContext.Provider value={{ state, dispatch }}>
