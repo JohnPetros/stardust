@@ -1,18 +1,35 @@
 'use client'
+
 import { useRouter } from 'next/navigation'
+
+import { Button } from './components/Button'
+import PageNotFound from '../../public/animations/404.json'
 import Lottie from 'lottie-react'
 
-import PageNotFound from '../../public/animations/404.json'
-import { Button } from './components/Button'
+import { motion, Variants } from 'framer-motion'
+
+const notFoundAnimation: Variants = {
+  down: {
+    opacity: 0,
+    y: 100,
+  },
+  up: {
+    opacity: 1,
+    y: 0,
+  },
+}
 
 export default function NotFound() {
   const router = useRouter()
 
-  function handleButtonClick() {}
-
   return (
     <main className="bg-gray-900 w-screen h-screen grid place-content-center">
-      <div className="w-full max-w-3xl">
+      <motion.div
+        variants={notFoundAnimation}
+        initial="down"
+        animate="up"
+        className="w-full max-w-3xl"
+      >
         <div className="flex flex-col sm:flex-row items-center gap-3 uppercase ">
           <h1 className="font-semibold text-green-400 text-6xl">
             Código <span className="sr-only">404</span>
@@ -30,10 +47,10 @@ export default function NotFound() {
           </p>
         </div>
 
-        <Button className="mt-6" onClick={handleButtonClick}>
+        <Button className="mt-6" onClick={router.back}>
           Retornar
         </Button>
-      </div>
+      </motion.div>
     </main>
   )
 }
