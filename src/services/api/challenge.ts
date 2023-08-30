@@ -15,6 +15,21 @@ interface getFilteredChallengesProps {
 
 export default () => {
   return {
+    getChallenge: async (challengeId: string, userId: string) => {
+      const { data, error } = await supabase
+        .from('challenges')
+        .select('*, users_completed_challenges (user_id)')
+        .eq('id', challengeId)
+        .eq('users_completed_challenges.user_id', userId)
+        .single<Challenge>()
+
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      return data
+    },
+
     getChallenges: async (userId: string) => {
       const { data, error } = await supabase
         .from('challenges')
