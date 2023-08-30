@@ -37,7 +37,7 @@ export default () => {
       }
 
       delete challenge.users_completed_challenges
-      
+
       return challenge
     },
 
