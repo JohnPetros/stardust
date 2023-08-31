@@ -1,8 +1,8 @@
-import { ButtonHTMLAttributes, ReactNode } from 'react'
+import { ButtonHTMLAttributes } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 interface NavButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: ReactNode
+  children: string
   isActive: boolean
 }
 
