@@ -3,13 +3,14 @@ import { useAuth } from '@/hooks/useAuth'
 import { useAchievement } from '@/hooks/useAchievement'
 import { useApi } from '@/services/api'
 
+import Image from 'next/image'
 import { Modal, ModalRef } from '@/app/components/Modal'
 import { Achievement } from '@/app/(private)/(app)/(home)/components/Achievement'
 import { ShinningAnimation } from '@/app/(private)/(app)/(home)/components/ShinningAnimation'
-
-import { Achievement as AchievementType } from '@/types/achievement'
+import { ToastRef, Toast } from '@/app/components/Toast'
 import { Button } from '@/app/components/Button'
-import Image from 'next/image'
+
+import type { Achievement as AchievementData } from '@/types/achievement'
 
 type RescuableAchivement = {
   id: string
@@ -19,7 +20,7 @@ type RescuableAchivement = {
 }
 
 interface AchivementsContextValue {
-  achievements: AchievementType[] | undefined
+  achievements: AchievementData[] | undefined
   rescueAchivement: (rescuableAchiement: RescuableAchivement) => void
 }
 
@@ -32,11 +33,11 @@ export const AchivementsContext = createContext({} as AchivementsContextValue)
 export function AchivementsProvider({ children }: AchivementsContextProps) {
   const { user, updateUser } = useAuth()
   const { achievements: data } = useAchievement(user?.id)
-  const [achievements, setAchievements] = useState<AchievementType[]>(
+  const [achievements, setAchievements] = useState<AchievementData[]>(
     data ?? []
   )
   const [newUnlockedAchievements, setNewUnlockedAchievements] = useState<
-    AchievementType[]
+    AchievementData[]
   >([])
   const [rescuedAchievement, setRescuedAchievement] =
     useState<RescuableAchivement | null>(null)
@@ -44,6 +45,8 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
   const [isLoading, setIsLoading] = useState(false)
 
   const api = useApi()
+
+  const toastRef = useRef<ToastRef>(null)
 
   const newUnlockedAchievementsModalRef = useRef<ModalRef>(null)
   const rescuedAchievementModalRef = useRef<ModalRef>(null)
@@ -62,7 +65,10 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
       setAchievements(updatedAchievements)
     } catch (error) {
       console.error(error)
-      // Toast.error('Erro ao resgatar a conquista')
+      toastRef.current?.open({
+        type: 'error',
+        message: 'Erro ao resgatar a conquista',
+      })
     }
   }
 
@@ -81,7 +87,10 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
       ])
     } catch (error) {
       console.error(error)
-      // Toast.error('Erro ao resgatar a conquista');
+      toastRef.current?.open({
+        type: 'error',
+        message: 'Erro ao resgatar a conquista',
+      })
     } finally {
       setIsLoading(false)
     }
@@ -97,7 +106,7 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
     setNewUnlockedAchievements([])
   }
 
-  function addCurrentProgress(achievement: AchievementType) {
+  function addCurrentProgress(achievement: AchievementData) {
     if (!user) return achievement
 
     const currentProgress = user[achievement.metric]
@@ -106,8 +115,8 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
   }
 
   function updateAchivement(
-    achievement: AchievementType,
-    newUnlockedAchievements: AchievementType[]
+    achievement: AchievementData,
+    newUnlockedAchievements: AchievementData[]
   ) {
     if (achievement.isUnlocked) return achievement
 
@@ -118,7 +127,7 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
     return { ...achievement, isUnlocked, isRescuable: isUnlocked }
   }
 
-  function isNewAchievementUnlocked(achievement: AchievementType) {
+  function isNewAchievementUnlocked(achievement: AchievementData) {
     if (!user || achievement.isUnlocked) return false
 
     switch (achievement.metric) {
@@ -137,7 +146,7 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
     }
   }
 
-  async function checkNewUnlockedAchivements(achievements: AchievementType[]) {
+  async function checkNewUnlockedAchivements(achievements: AchievementData[]) {
     if (!achievements || !user) return
 
     const newUnlockedAchievements = achievements.filter(
@@ -145,7 +154,6 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
     )
 
     if (newUnlockedAchievements) {
-
       for (const { id } of newUnlockedAchievements) {
         await Promise.all([
           api.addUserUnlockedAchievement(id, user.id),
@@ -182,6 +190,8 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
 
   return (
     <AchivementsContext.Provider value={{ achievements, rescueAchivement }}>
+      <Toast ref={toastRef} />
+
       <Modal
         ref={newUnlockedAchievementsModalRef}
         type={'earning'}
@@ -248,7 +258,7 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
             onClick={handleRescuedAchievementModalClose}
             isLoading={isLoading}
             disabled={isLoading}
-            className='mt-6'
+            className="mt-6"
           >
             Entendido
           </Button>
