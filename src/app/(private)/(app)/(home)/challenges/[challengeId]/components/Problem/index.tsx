@@ -1,18 +1,20 @@
 import { Text } from '@/app/components/Text'
-import type { Text as TextData } from '@/types/text'
+import { useChallengeContext } from '@/hooks/useChallengeContext'
 
-interface ProblemProps {
-  texts: TextData[]
-}
 
-export function Problem({ texts }: ProblemProps) {
-  return (
-    <div className="p-6 w-full">
-      <div className='space-y-8'>
-        {texts.map((text, index) => (
-          <Text key={`text-${index}`} data={text} hasAnimation={true} />
-        ))}
+export function Problem() {
+  const {
+    state: { challenge },
+  } = useChallengeContext()
+
+  if (challenge)
+    return (
+      <div className="p-6 w-full h-full">
+        <div className="space-y-8">
+          {challenge.texts.map((text, index) => (
+            <Text key={`text-${index}`} data={text} hasAnimation={false} />
+          ))}
+        </div>
       </div>
-    </div>
-  )
+    )
 }
