@@ -23,8 +23,7 @@ export function Slider() {
     sliderRef.current?.swiper.slideTo(slideIndex)
   }
 
-  function handleSwipe(swiper: SwiperInstance) {
-    console.log(swiper.activeIndex)
+  function handleSlideChange(swiper: SwiperInstance) {
     setActiveSlideIndex(swiper.activeIndex)
   }
 
@@ -59,11 +58,15 @@ export function Slider() {
         </ul>
       </nav>
 
-      <Swiper ref={sliderRef} onSwiper={handleSwipe}>
+      <Swiper
+        ref={sliderRef}
+        onSlideChange={handleSlideChange}
+        onSwiper={handleSlideChange}
+      >
         <SwiperSlide>
           <Problem />
         </SwiperSlide>
-        
+
         <SwiperSlide>
           <Code />
         </SwiperSlide>
