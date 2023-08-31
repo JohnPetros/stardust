@@ -29,8 +29,8 @@ export default function Challenge() {
   return (
     <div className="h-full">
       <Header />
-      <main className="h-full">
-        <Slider /> 
+      <main>
+        <Slider />
       </main>
     </div>
   )
