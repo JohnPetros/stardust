@@ -64,12 +64,6 @@ export function useChallenge({ challengeId, userId }: ChallengeParams) {
     return []
   }, [challenges])
 
-  // const verifiedChallenge: Challenge | null = useMemo(() => {
-  //   if (challenge) {
-  //     return addComplementaryData(challenge)
-  //   }
-  //   return null
-  // }, [challenge])
 
   return {
     challenges: verifiedChallenges,
