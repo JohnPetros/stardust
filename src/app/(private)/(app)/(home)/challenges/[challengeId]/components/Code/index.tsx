@@ -23,7 +23,7 @@ export function Code() {
 
   if (challenge)
     return (
-      <div className="w-full h-full ">
+      <div className="w-full h-screen">
         <div className="flex items-center justify-between bg-gray-700 py-2 px-3">
           <Button className="h-6 px-3 text-xs w-max">Executar</Button>
           <ul className="flex items-center gap-3">
