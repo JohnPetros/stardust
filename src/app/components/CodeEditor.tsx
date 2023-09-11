@@ -33,7 +33,7 @@ export function CodeEditorComponent(
     height,
     hasMinimap = false,
     isReadOnly = false,
-    onChange,
+    onChange = () => {},
   }: CodeEditorProps,
   ref: ForwardedRef<CodeEditorRef>
 ) {
@@ -176,7 +176,7 @@ export function CodeEditorComponent(
       }
       value={value}
       onMount={handleEditorDidMount}
-      onChange={onChange}
+      onChange={(value) => onChange(String(value))}
     />
   )
 }
