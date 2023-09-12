@@ -78,8 +78,7 @@ export function TestCase({
               input
                 ? input
                     .map((value) => {
-                      console.log(value);
-                      return value.toString()
+                      return value.toString().replace(/^(['"])(.*)\1$/, '$2')
                     })
                     .join(',')
                 : 'sem entrada'
