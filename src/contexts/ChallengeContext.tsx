@@ -94,7 +94,6 @@ function ChallengeReducer(
         ...state,
         tabHandler: action.payload,
       }
-
     case 'setIsEnd':
       return {
         ...state,

@@ -16,6 +16,7 @@ import {
 
 import { execute } from '@/libs/delegua'
 import { TestCase } from '@/types/challenge'
+import { ToastRef, Toast } from '@/app/components/Toast'
 
 export function Code() {
   const {
@@ -23,14 +24,29 @@ export function Code() {
     dispatch,
   } = useChallengeContext()
   const code = useRef(challenge?.code ?? '')
+  const errorLine = useRef(0)
+  const toastRef = useRef<ToastRef>(null)
+
+  function handleError(error: Error) {
+    const { message } = error
+
+    const toastMessage = message.includes('null')
+      ? 'Código inválido'
+      : `${message}</br>Linha: ${errorLine.current}`
+
+    toastRef.current?.open({
+      type: 'error',
+      message: toastMessage,
+    })
+  }
 
   function formatCode(code: string, { input }: Pick<TestCase, 'input'>) {
     if (!input.length) return code
 
     const regex = /(leia\(\))/g
     const matches = code.match(regex)
+
     if (!matches) {
-      // Toast.error('Não remova o comando Leia()!');
       throw new Error('Não remova o comando Leia()!')
     }
 
@@ -55,8 +71,17 @@ export function Code() {
         userOutput = output
       })
 
+      if (erros.length) {
+        const error = erros[0]
+        errorLine.current = error.linha ?? 0
+        if (error instanceof Error) throw error
+        throw error.erroInterno
+      }
+
       return userOutput
-    } catch (error) {}
+    } catch (error) {
+      handleError(error as Error)
+    }
   }
 
   async function handleRunCode(code: string) {
@@ -69,8 +94,8 @@ export function Code() {
       if (output) userOutput.push(output)
     }
 
-    dispatch({ type: 'setUserOutput', payload: userOutput })
-    tabHandler.showResultTab()
+    if (userOutput.length)
+      dispatch({ type: 'setUserOutput', payload: userOutput })
   }
 
   function handleCodeChange(value: string) {
@@ -80,6 +105,7 @@ export function Code() {
   if (challenge)
     return (
       <div className="w-full h-screen">
+        <Toast ref={toastRef} />
         <div className="flex items-center justify-between bg-gray-700 py-2 px-3">
           <Button
             className="h-6 px-3 text-xs w-max"
