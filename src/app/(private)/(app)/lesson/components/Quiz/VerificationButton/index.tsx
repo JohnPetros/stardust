@@ -31,9 +31,10 @@ const feedbackAnimations: Variants = {
 
 interface VerificationButtonProps {
   answerHandler: () => void
-  isAnswerCorrect: boolean
-  isAnswerVerified: boolean
   isAnswered: boolean
+  isAnswerVerified: boolean
+  isAnswerCorrect: boolean
+  isChallenge: boolean
 }
 
 export function VerificationButton({
@@ -41,6 +42,7 @@ export function VerificationButton({
   isAnswerCorrect,
   isAnswerVerified,
   isAnswered,
+  isChallenge = false,
 }: VerificationButtonProps) {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const buttonHasFocus = useRef(false)
