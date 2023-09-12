@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Field } from './Field'
 import { ArrowDown, ArrowUp, Check, Lock, X } from '@phosphor-icons/react'
@@ -12,19 +12,25 @@ import type { TestCase as TestCaseData } from '@/types/challenge'
 interface TestCaseProps {
   data: TestCaseData
   isCorrect: boolean
-  userOuput: string
+  userOutput: string
 }
 
 export function TestCase({
   data: { id, isLocked, input, expectedOutput },
   isCorrect,
-  userOuput,
+  userOutput,
 }: TestCaseProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   function handleButtonClick() {
     setIsOpen(!isOpen)
   }
+
+  useEffect(() => {
+    if (userOutput && !isLocked) {
+      setIsOpen(true)
+    }
+  }, [userOutput])
 
   return (
     <div
@@ -78,6 +84,7 @@ export function TestCase({
               input
                 ? input
                     .map((value) => {
+                      console.log(value)
                       return value.toString().replace(/^(['"])(.*)\1$/, '$2')
                     })
                     .join(',')
@@ -86,7 +93,7 @@ export function TestCase({
           />
           <Field
             label="Seu resultado"
-            value={userOuput ?? 'Sem resultado'}
+            value={userOutput ?? 'Sem resultado'}
             isFromUser={true}
           />
           <Field label="Resultado esperado" value={expectedOutput.toString()} />
