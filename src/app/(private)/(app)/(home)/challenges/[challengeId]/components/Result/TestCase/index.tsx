@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 import { Field } from './Field'
-import { ArrowDown, Check, Lock, X } from '@phosphor-icons/react'
+import { ArrowDown, ArrowUp, Check, Lock, X } from '@phosphor-icons/react'
 
 import { twMerge } from 'tailwind-merge'
 
@@ -12,13 +12,19 @@ import type { TestCase as TestCaseData } from '@/types/challenge'
 interface TestCaseProps {
   data: TestCaseData
   isCorrect: boolean
+  userOuput: string
 }
 
 export function TestCase({
   data: { id, isLocked, input, expectedOutput },
   isCorrect,
+  userOuput,
 }: TestCaseProps) {
   const [isOpen, setIsOpen] = useState(false)
+
+  function handleButtonClick() {
+    setIsOpen(!isOpen)
+  }
 
   return (
     <div
@@ -46,11 +52,21 @@ export function TestCase({
           </h4>
         </div>
 
-        <button className="grid place-content-center p-2">
+        <button
+          className="grid place-content-center p-2"
+          onClick={handleButtonClick}
+          disabled={isLocked}
+        >
           {isLocked ? (
             <Lock className="text-gray-500 text-lg" weight="bold" />
           ) : (
-            <ArrowDown className="text-gray-500 text-lg" weight="bold" />
+            <>
+              {isOpen ? (
+                <ArrowUp className="text-gray-500 text-lg" weight="bold" />
+              ) : (
+                <ArrowDown className="text-gray-500 text-lg" weight="bold" />
+              )}
+            </>
           )}
         </button>
       </header>
@@ -62,6 +78,7 @@ export function TestCase({
               input
                 ? input
                     .map((value) => {
+                      console.log(value);
                       return value.toString()
                     })
                     .join(',')
@@ -70,7 +87,7 @@ export function TestCase({
           />
           <Field
             label="Seu resultado"
-            value={'Sem resultado'}
+            value={userOuput ?? 'Sem resultado'}
             isFromUser={true}
           />
           <Field label="Resultado esperado" value={expectedOutput.toString()} />

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { register } from 'swiper/element/bundle'
 import { Swiper, SwiperSlide, SwiperRef } from 'swiper/react'
@@ -14,10 +14,20 @@ import { Result } from '../Result'
 register()
 import 'swiper/css'
 import 'swiper/css/navigation'
+import { useChallengeContext } from '@/hooks/useChallengeContext'
 
 export function Slider() {
+  const { dispatch } = useChallengeContext()
   const [activeSlideIndex, setActiveSlideIndex] = useState(0)
   const sliderRef = useRef<SwiperRef>(null)
+
+  function showResultTab() {
+    sliderRef.current?.swiper.slideTo(2)
+  }
+
+  function showCodeTab() {
+    sliderRef.current?.swiper.slideTo(1)
+  }
 
   function handleNavButtonClick(slideIndex: number) {
     sliderRef.current?.swiper.slideTo(slideIndex)
@@ -26,6 +36,13 @@ export function Slider() {
   function handleSlideChange(swiper: SwiperInstance) {
     setActiveSlideIndex(swiper.activeIndex)
   }
+
+  useEffect(() => {
+    dispatch({ type: 'setTabHandler', payload: {
+      showResultTab,
+      showCodeTab
+    } })
+  }, [])
 
   return (
     <div>

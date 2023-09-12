@@ -19,7 +19,7 @@ import { TestCase } from '@/types/challenge'
 
 export function Code() {
   const {
-    state: { challenge },
+    state: { challenge, tabHandler },
     dispatch,
   } = useChallengeContext()
   const code = useRef(challenge?.code ?? '')
@@ -55,8 +55,6 @@ export function Code() {
         userOutput = output
       })
 
-      console.log(userOutput)
-
       return userOutput
     } catch (error) {}
   }
@@ -72,6 +70,7 @@ export function Code() {
     }
 
     dispatch({ type: 'setUserOutput', payload: userOutput })
+    tabHandler.showResultTab()
   }
 
   function handleCodeChange(value: string) {

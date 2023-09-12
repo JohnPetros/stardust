@@ -1,5 +1,12 @@
+'use client'
+
 import { ReactNode, createContext, useReducer } from 'react'
-import type { Challenge, TestCase } from '@/types/challenge'
+import type { Challenge } from '@/types/challenge'
+
+type TabHandler = {
+  showResultTab: VoidFunction
+  showCodeTab: VoidFunction
+}
 
 interface ChallengeProviderProps {
   children: ReactNode
@@ -9,12 +16,17 @@ type ChallengeState = {
   userCode: string
   challenge: Challenge | null
   isCodeRunning: boolean
+  userOutput: string[]
+  results: boolean[]
+  tabHandler: TabHandler
 }
 
 type ChallengeAction =
   | { type: 'setChallenge'; payload: Challenge }
   | { type: 'setUserCode'; payload: string }
-  | { type: 'handleUserCode'; payload: string }
+  | { type: 'setUserOutput'; payload: string[] }
+  | { type: 'setResults'; payload: boolean[] }
+  | { type: 'setTabHandler'; payload: TabHandler }
 
 type ChallengeValue = {
   state: ChallengeState
@@ -27,25 +39,12 @@ const initialChallengeState: ChallengeState = {
   challenge: null,
   userCode: '',
   isCodeRunning: false,
-}
-
-function formatCode(code: string, { input }: Pick<TestCase, 'input'>) {
-  return code
-}
-
-async function verifyTestCase(testCase: TestCase, code: string) {
-  const { input } = testCase
-
-  const formatedCode = formatCode(code, { input })
-
-  console.log({ formatedCode })
-}
-
-async function handleUserCode(challenge: Challenge, code: string) {
-  
-  for (const testCase of challenge.test_cases) {
-    await verifyTestCase(testCase, code)
-  }
+  userOutput: [],
+  results: [],
+  tabHandler: {
+    showCodeTab: () => {},
+    showResultTab: () => {},
+  },
 }
 
 function ChallengeReducer(
@@ -63,11 +62,20 @@ function ChallengeReducer(
         ...state,
         userCode: action.payload,
       }
-    case 'handleUserCode':
-      if (state.challenge) handleUserCode(state.challenge, action.payload)
+    case 'setUserOutput':
       return {
         ...state,
-        isCodeRunning: true,
+        userOutput: action.payload,
+      }
+    case 'setResults':
+      return {
+        ...state,
+        results: action.payload,
+      }
+    case 'setTabHandler':
+      return {
+        ...state,
+        tabHandler: action.payload,
       }
     default:
       return state
