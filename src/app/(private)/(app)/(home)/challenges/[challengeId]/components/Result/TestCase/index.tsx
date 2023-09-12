@@ -3,11 +3,31 @@
 import { useEffect, useState } from 'react'
 
 import { Field } from './Field'
-import { ArrowDown, ArrowUp, Check, Lock, X } from '@phosphor-icons/react'
+import { ArrowDown, Check, Lock, X } from '@phosphor-icons/react'
 
 import { twMerge } from 'tailwind-merge'
 
+import { AnimatePresence, Variants, motion } from 'framer-motion'
+
 import type { TestCase as TestCaseData } from '@/types/challenge'
+
+const arrowAnimations: Variants = {
+  down: {
+    rotate: '0',
+  },
+  up: {
+    rotate: '180deg',
+  },
+}
+
+const contentAnimations: Variants = {
+  up: {
+    height: 0,
+  },
+  down: {
+    height: 'auto',
+  },
+}
 
 interface TestCaseProps {
   data: TestCaseData
@@ -66,39 +86,50 @@ export function TestCase({
           {isLocked ? (
             <Lock className="text-gray-500 text-lg" weight="bold" />
           ) : (
-            <>
-              {isOpen ? (
-                <ArrowUp className="text-gray-500 text-lg" weight="bold" />
-              ) : (
-                <ArrowDown className="text-gray-500 text-lg" weight="bold" />
-              )}
-            </>
+            <motion.span
+              variants={arrowAnimations}
+              initial="down"
+              animate={isOpen ? 'up' : ''}
+              transition={{ type: 'tween', ease: 'linear' }}
+            >
+              <ArrowDown className="text-gray-500 text-lg" weight="bold" />
+            </motion.span>
           )}
         </button>
       </header>
-      {isOpen && (
-        <dl className="mt-4 space-y-4">
-          <Field
-            label="Entrada"
-            value={
-              input
-                ? input
-                    .map((value) => {
-                      console.log(value)
-                      return value.toString().replace(/^(['"])(.*)\1$/, '$2')
-                    })
-                    .join(',')
-                : 'sem entrada'
-            }
-          />
-          <Field
-            label="Seu resultado"
-            value={userOutput ?? 'Sem resultado'}
-            isFromUser={true}
-          />
-          <Field label="Resultado esperado" value={expectedOutput.toString()} />
-        </dl>
-      )}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.dl
+            variants={contentAnimations}
+            initial="up"
+            animate={isOpen ? 'down' : ''}
+            exit="up"
+            className="mt-4 space-y-4 overflow-hidden"
+          >
+            <Field
+              label="Entrada"
+              value={
+                input
+                  ? input
+                      .map((value) => {
+                        return value.toString().replace(/^(['"])(.*)\1$/, '$2')
+                      })
+                      .join(',')
+                  : 'sem entrada'
+              }
+            />
+            <Field
+              label="Seu resultado"
+              value={userOutput ?? 'Sem resultado'}
+              isFromUser={true}
+            />
+            <Field
+              label="Resultado esperado"
+              value={expectedOutput.toString()}
+            />
+          </motion.dl>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
