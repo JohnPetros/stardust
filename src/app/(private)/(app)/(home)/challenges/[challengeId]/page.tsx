@@ -27,7 +27,7 @@ export default function Challenge() {
   }, [challenge])
 
   return (
-    <div className="h-full">
+    <div className="max-h-screen">
       <Header />
       <main>
         <Slider />
