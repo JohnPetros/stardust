@@ -39,8 +39,6 @@ export function Result() {
     const isAnswerCorrect =
       results.length && results.every((result) => result === true)
 
-    console.log(isAnswerCorrect)
-
     if (isAnswerCorrect) {
       setIsAnswerCorrect(true)
       if (isAnswerVerified) setIsEnd(true)
@@ -73,6 +71,8 @@ export function Result() {
     const { test_cases } = challenge
 
     if (userOutput.length === test_cases.length) {
+      tabHandler.showResultTab()
+
       dispatch({ type: 'setResults', payload: test_cases.map(verifyResult) })
     }
   }, [userOutput])
