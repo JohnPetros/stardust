@@ -14,6 +14,9 @@ import {
   Gear,
 } from '@phosphor-icons/react'
 
+import { execute } from '@/libs/delegua'
+import { TestCase } from '@/types/challenge'
+
 export function Code() {
   const {
     state: { challenge },
@@ -21,8 +24,54 @@ export function Code() {
   } = useChallengeContext()
   const code = useRef(challenge?.code ?? '')
 
-  function handleRunCode() {
-    dispatch({ type: 'handleUserCode', payload: code.current })
+  function formatCode(code: string, { input }: Pick<TestCase, 'input'>) {
+    if (!input.length) return code
+
+    const regex = /(leia\(\))/g
+    const matches = code.match(regex)
+    if (!matches) {
+      // Toast.error('Não remova o comando Leia()!');
+      throw new Error('Não remova o comando Leia()!')
+    }
+
+    input.forEach(
+      (value) =>
+        (code = code.replace(
+          /(leia\(\))/,
+          Array.isArray(value) ? `[${value}]` : value.toString()
+        ))
+    )
+
+    return code
+  }
+
+  async function verifyTestCase(testCase: TestCase, code: string) {
+    let userOutput = ''
+    const { input } = testCase
+
+    try {
+      const formatedCode = formatCode(code, { input })
+      const { erros, resultado } = await execute(formatedCode, (output) => {
+        userOutput = output
+      })
+
+      console.log(userOutput)
+
+      return userOutput
+    } catch (error) {}
+  }
+
+  async function handleRunCode(code: string) {
+    if (!challenge) return
+
+    let userOutput: string[] = []
+
+    for (const testCase of challenge.test_cases) {
+      const output = await verifyTestCase(testCase, code)
+      if (output) userOutput.push(output)
+    }
+
+    dispatch({ type: 'setUserOutput', payload: userOutput })
   }
 
   function handleCodeChange(value: string) {
@@ -33,7 +82,10 @@ export function Code() {
     return (
       <div className="w-full h-screen">
         <div className="flex items-center justify-between bg-gray-700 py-2 px-3">
-          <Button className="h-6 px-3 text-xs w-max" onClick={handleRunCode}>
+          <Button
+            className="h-6 px-3 text-xs w-max"
+            onClick={() => handleRunCode(code.current)}
+          >
             Executar
           </Button>
           <ul className="flex items-center gap-3">
