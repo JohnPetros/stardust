@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useChallengeContext } from '@/hooks/useChallengeContext'
 
+import { VerificationButton } from '@/app/(private)/(app)/lesson/components/Quiz/VerificationButton'
 import { TestCase } from './TestCase'
 
 import { compareArrays } from '@/utils/functions'
@@ -9,9 +10,49 @@ import type { TestCase as TestCaseData } from '@/types/challenge'
 
 export function Result() {
   const {
-    state: { challenge, userOutput, results, tabHandler },
+    state: {
+      challenge,
+      userOutput,
+      results,
+      isAnswerVerified,
+      isAnswerCorrect,
+      tabHandler,
+    },
     dispatch,
   } = useChallengeContext()
+
+  function setIsAnswerVerified(isAnswerVerified: boolean) {
+    dispatch({ type: 'setIsAnswerVerified', payload: isAnswerVerified })
+  }
+
+  function setIsAnswerCorrect(isAnswerCorrect: boolean) {
+    dispatch({ type: 'setIsAnswerCorrect', payload: isAnswerCorrect })
+  }
+
+  function setIsEnd(isEnd: boolean) {
+    dispatch({ type: 'setIsEnd', payload: isEnd })
+  }
+
+  function handleUserAnswer() {
+    setIsAnswerVerified(!isAnswerVerified)
+
+    const isAnswerCorrect =
+      results.length && results.every((result) => result === true)
+
+    console.log(isAnswerCorrect)
+
+    if (isAnswerCorrect) {
+      setIsAnswerCorrect(true)
+      if (isAnswerVerified) setIsEnd(true)
+      return
+    }
+
+    setIsAnswerCorrect(false)
+
+    if (isAnswerVerified) {
+      tabHandler.showCodeTab()
+    }
+  }
 
   function verifyResult({ expectedOutput }: TestCaseData, index: number) {
     const userResult = userOutput[index]
@@ -38,17 +79,24 @@ export function Result() {
 
   if (challenge)
     return (
-      <div className="w-full min-h-screen bg-gray-800 p-6">
-        <div className="space-y-6 ">
+      <div className="w-full h-full bg-gray-800">
+        <div className="space-y-6 p-6">
           {challenge.test_cases.map((testCase, index) => (
             <TestCase
               key={testCase.id}
               data={testCase}
               isCorrect={results[index]}
-              userOuput={userOutput[index]}
+              userOutput={userOutput[index]}
             />
           ))}
         </div>
+        <VerificationButton
+          answerHandler={handleUserAnswer}
+          isAnswered={results.length > 0}
+          isAnswerVerified={isAnswerVerified}
+          isAnswerCorrect={isAnswerCorrect}
+          isChallenge={true}
+        />
       </div>
     )
 }

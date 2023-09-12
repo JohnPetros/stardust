@@ -15,9 +15,11 @@ interface ChallengeProviderProps {
 type ChallengeState = {
   userCode: string
   challenge: Challenge | null
-  isCodeRunning: boolean
   userOutput: string[]
   results: boolean[]
+  isAnswerCorrect: boolean
+  isAnswerVerified: boolean
+  isEnd: boolean
   tabHandler: TabHandler
 }
 
@@ -26,6 +28,9 @@ type ChallengeAction =
   | { type: 'setUserCode'; payload: string }
   | { type: 'setUserOutput'; payload: string[] }
   | { type: 'setResults'; payload: boolean[] }
+  | { type: 'setIsAnswerVerified'; payload: boolean }
+  | { type: 'setIsAnswerCorrect'; payload: boolean }
+  | { type: 'setIsEnd'; payload: boolean }
   | { type: 'setTabHandler'; payload: TabHandler }
 
 type ChallengeValue = {
@@ -38,9 +43,11 @@ export const ChallengeContext = createContext({} as ChallengeValue)
 const initialChallengeState: ChallengeState = {
   challenge: null,
   userCode: '',
-  isCodeRunning: false,
   userOutput: [],
   results: [],
+  isAnswerCorrect: false,
+  isAnswerVerified: false,
+  isEnd: false,
   tabHandler: {
     showCodeTab: () => {},
     showResultTab: () => {},
@@ -72,10 +79,26 @@ function ChallengeReducer(
         ...state,
         results: action.payload,
       }
+    case 'setIsAnswerVerified':
+      return {
+        ...state,
+        isAnswerVerified: action.payload,
+      }
+    case 'setIsAnswerCorrect':
+      return {
+        ...state,
+        isAnswerCorrect: action.payload,
+      }
     case 'setTabHandler':
       return {
         ...state,
         tabHandler: action.payload,
+      }
+
+    case 'setIsEnd':
+      return {
+        ...state,
+        isEnd: action.payload,
       }
     default:
       return state
