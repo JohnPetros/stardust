@@ -20,7 +20,7 @@ import { ToastRef, Toast } from '@/app/components/Toast'
 
 export function Code() {
   const {
-    state: { challenge, tabHandler },
+    state: { challenge },
     dispatch,
   } = useChallengeContext()
   const code = useRef(challenge?.code ?? '')
