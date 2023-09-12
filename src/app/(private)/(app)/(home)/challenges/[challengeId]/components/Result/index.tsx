@@ -16,12 +16,14 @@ export function Result() {
   function verifyResult({ expectedOutput }: TestCaseData, index: number) {
     const userResult = userOutput[index]
 
-    return compareArrays(
+    const isCorrect = compareArrays(
       Array.isArray(userResult) ? userResult : [userResult.toString().trim()],
       Array.isArray(expectedOutput)
         ? expectedOutput
         : [expectedOutput.toString().trim()]
     )
+
+    return isCorrect
   }
 
   useEffect(() => {
@@ -32,7 +34,7 @@ export function Result() {
     if (userOutput.length === test_cases.length) {
       dispatch({ type: 'setResults', payload: test_cases.map(verifyResult) })
     }
-  }, [])
+  }, [userOutput])
 
   if (challenge)
     return (
