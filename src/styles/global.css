@@ -66,7 +66,7 @@ a {
 }
 
 .inline-code {
-  @apply bg-green-900 text-gray-100 rounded-md py-1 px-2;
+  @apply bg-green-900 text-gray-100 rounded-md py-1 px-2 font-code;
 }
 
 ::-webkit-scrollbar {
