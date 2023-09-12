@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import { useChallengeContext } from '@/hooks/useChallengeContext'
 
 import { Button } from '@/app/components/Button'
-import { CodeEditor } from '@/app/components/CodeEditor'
+import { CodeEditor, CodeEditorRef } from '@/app/components/CodeEditor'
 import { IconButton } from './IconButton'
 import {
   ArrowClockwise,
@@ -17,6 +17,7 @@ import {
 import { execute } from '@/libs/delegua'
 import { TestCase } from '@/types/challenge'
 import { ToastRef, Toast } from '@/app/components/Toast'
+import { ModalRef, Modal } from '@/app/components/Modal'
 
 export function Code() {
   const {
@@ -26,6 +27,13 @@ export function Code() {
   const code = useRef(challenge?.code ?? '')
   const errorLine = useRef(0)
   const toastRef = useRef<ToastRef>(null)
+  const resetCodeModalRef = useRef<ModalRef>(null)
+  const codeEditorRef = useRef<CodeEditorRef>(null)
+  const resetCodeButton = useRef<HTMLButtonElement>(null)
+  const dictionaryButton = useRef<HTMLButtonElement>(null)
+  const shortCutsButton = useRef<HTMLButtonElement>(null)
+  const fullScreenButton = useRef<HTMLButtonElement>(null)
+  const settingsButton = useRef<HTMLButtonElement>(null)
 
   function handleError(error: Error) {
     const { message } = error
@@ -38,6 +46,11 @@ export function Code() {
       type: 'error',
       message: toastMessage,
     })
+  }
+
+  function resetCode() {
+    codeEditorRef.current?.reloadValue()
+    resetCodeModalRef.current?.close()
   }
 
   function formatCode(code: string, { input }: Pick<TestCase, 'input'>) {
@@ -98,6 +111,15 @@ export function Code() {
       dispatch({ type: 'setUserOutput', payload: userOutput })
   }
 
+  function handleResetCode() {
+    resetCodeModalRef.current?.open()
+  }
+
+  function handleResetCodeModalClose() {
+    resetCodeModalRef.current?.close()
+    resetCodeButton.current?.focus()
+  }
+
   function handleCodeChange(value: string) {
     code.current = value
   }
@@ -115,28 +137,70 @@ export function Code() {
           </Button>
           <ul className="flex items-center gap-3">
             <li>
-              <IconButton icon={ArrowClockwise} onClick={() => {}} />
+              <IconButton
+                buttonRef={resetCodeButton}
+                icon={ArrowClockwise}
+                onClick={handleResetCode}
+              />
             </li>
             <li>
-              <IconButton icon={ArrowsOutSimple} onClick={() => {}} />
+              <IconButton
+                buttonRef={fullScreenButton}
+                icon={ArrowsOutSimple}
+                onClick={() => {}}
+              />
             </li>
             <li>
-              <IconButton icon={Command} onClick={() => {}} />
+              <IconButton
+                buttonRef={shortCutsButton}
+                icon={CodeIcon}
+                onClick={() => {}}
+              />
             </li>
             <li>
-              <IconButton icon={CodeIcon} onClick={() => {}} />
+              <IconButton
+                buttonRef={dictionaryButton}
+                icon={Command}
+                onClick={() => {}}
+              />
             </li>
             <li>
-              <IconButton icon={Gear} onClick={() => {}} />
+              <IconButton
+                buttonRef={settingsButton}
+                icon={Gear}
+                onClick={() => {}}
+              />
             </li>
           </ul>
         </div>
         <CodeEditor
+          ref={codeEditorRef}
           value={challenge.code}
           width="100%"
           height="100%"
           hasMinimap
           onChange={handleCodeChange}
+        />
+
+        <Modal
+          ref={resetCodeModalRef}
+          type={'asking'}
+          title={'Tem certeza que deseja resetar o seu código?'}
+          body={null}
+          footer={
+            <div className="grid grid-cols-2 items-center justify-center mt-3 gap-2 w-full">
+              <Button tabIndex={0} autoFocus onClick={resetCode}>
+                Resetar código
+              </Button>
+              <Button
+                className="bg-red-700 text-gray-100"
+                onClick={handleResetCodeModalClose}
+              >
+                Cancelar
+              </Button>
+            </div>
+          }
+          canPlaySong={false}
         />
       </div>
     )
