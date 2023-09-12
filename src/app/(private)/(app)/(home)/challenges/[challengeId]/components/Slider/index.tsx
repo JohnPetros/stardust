@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useChallengeContext } from '@/hooks/useChallengeContext'
 
 import { register } from 'swiper/element/bundle'
 import { Swiper, SwiperSlide, SwiperRef } from 'swiper/react'
@@ -14,11 +15,12 @@ import { Result } from '../Result'
 register()
 import 'swiper/css'
 import 'swiper/css/navigation'
-import { useChallengeContext } from '@/hooks/useChallengeContext'
+import { motion, useAnimate } from 'framer-motion'
 
 export function Slider() {
   const { dispatch } = useChallengeContext()
   const [activeSlideIndex, setActiveSlideIndex] = useState(0)
+  const [scope, animate] = useAnimate()
   const sliderRef = useRef<SwiperRef>(null)
 
   function showResultTab() {
@@ -34,6 +36,11 @@ export function Slider() {
   }
 
   function handleSlideChange(swiper: SwiperInstance) {
+    animate(
+      scope.current,
+      { x: Math.abs(swiper.translate / 3) },
+      { ease: 'linear', duration: 0.2 }
+    )
     setActiveSlideIndex(swiper.activeIndex)
   }
 
@@ -50,7 +57,7 @@ export function Slider() {
   return (
     <div>
       <nav className="bg-gray-900">
-        <ul className="grid grid-cols-3">
+        <ul className="grid grid-cols-3 relative">
           <li>
             <NavButton
               isActive={activeSlideIndex === 0}
@@ -75,6 +82,11 @@ export function Slider() {
               Resultado
             </NavButton>
           </li>
+          <motion.span
+            ref={scope}
+            animate="swipe"
+            className="block col-span-1 h-[2px] bg-green-600 rounded-full"
+          />
         </ul>
       </nav>
 
