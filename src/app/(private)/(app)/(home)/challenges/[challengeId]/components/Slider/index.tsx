@@ -38,10 +38,13 @@ export function Slider() {
   }
 
   useEffect(() => {
-    dispatch({ type: 'setTabHandler', payload: {
-      showResultTab,
-      showCodeTab
-    } })
+    dispatch({
+      type: 'setTabHandler',
+      payload: {
+        showResultTab,
+        showCodeTab,
+      },
+    })
   }, [])
 
   return (
@@ -79,8 +82,9 @@ export function Slider() {
         ref={sliderRef}
         onSlideChange={handleSlideChange}
         onSwiper={handleSlideChange}
+        className="w-full h-[calc(100vh-4.8rem)]"
       >
-        <SwiperSlide>
+        <SwiperSlide className="h-full overflow-y-auto">
           <Problem />
         </SwiperSlide>
 
@@ -88,7 +92,7 @@ export function Slider() {
           <Code />
         </SwiperSlide>
 
-        <SwiperSlide>
+        <SwiperSlide className="h-full overflow-y-auto">
           <Result />
         </SwiperSlide>
       </Swiper>

@@ -9,7 +9,7 @@ export function Problem() {
 
   if (challenge)
     return (
-      <div className="p-6 w-full h-full">
+      <div className="p-6 w-full">
         <div className="space-y-8">
           {challenge.texts.map((text, index) => (
             <Text key={`text-${index}`} data={text} hasAnimation={true} />
