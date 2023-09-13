@@ -5,6 +5,7 @@ import { Provider as ToastProvider } from '@radix-ui/react-toast'
 import { SidebarProvider } from '@/contexts/SidebarContext'
 import { SpaceProvider } from '@/contexts/SpaceContext'
 import { ChallengesListProvider } from '@/contexts/ChallengesListContext'
+import { EditorProvider } from '@/contexts/EditorContext'
 import { AchivementsProvider } from '@/contexts/AchievementsContext'
 import { ChallengeProvider } from '@/contexts/ChallengeContext'
 import { LessonProvider } from '@/contexts/LessonContext'
@@ -19,15 +20,17 @@ export function Client({ children }: ClientProps) {
     <TooltipProvider>
       <ToastProvider swipeDirection="right">
         <AchivementsProvider>
-          <LessonProvider>
-            <ChallengeProvider>
-              <SidebarProvider>
-                <SpaceProvider>
-                  <ChallengesListProvider>{children}</ChallengesListProvider>
-                </SpaceProvider>
-              </SidebarProvider>
-            </ChallengeProvider>
-          </LessonProvider>
+          <EditorProvider>
+            <LessonProvider>
+              <ChallengeProvider>
+                <SidebarProvider>
+                  <SpaceProvider>
+                    <ChallengesListProvider>{children}</ChallengesListProvider>
+                  </SpaceProvider>
+                </SidebarProvider>
+              </ChallengeProvider>
+            </LessonProvider>
+          </EditorProvider>
         </AchivementsProvider>
       </ToastProvider>
     </TooltipProvider>
