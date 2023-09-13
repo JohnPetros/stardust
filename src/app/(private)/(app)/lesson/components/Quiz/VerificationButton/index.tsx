@@ -34,7 +34,7 @@ interface VerificationButtonProps {
   isAnswered: boolean
   isAnswerVerified: boolean
   isAnswerCorrect: boolean
-  isChallenge: boolean
+  isChallenge?: boolean
 }
 
 export function VerificationButton({
