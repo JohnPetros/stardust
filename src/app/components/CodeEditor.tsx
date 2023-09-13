@@ -163,7 +163,7 @@ export function CodeEditorComponent(
         },
         fontSize: 16,
         fontFamily: 'Menlo',
-        cursorStyle: 'block',
+        cursorStyle: 'line',
         wordWrap: 'on',
         autoIndent: 'full',
         readOnly: isReadOnly,
