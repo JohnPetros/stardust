@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { KeyboardEvent, useRef, useState } from 'react'
 import { useChallengeContext } from '@/hooks/useChallengeContext'
 
 import { Button } from '@/app/components/Button'
@@ -31,6 +31,7 @@ export function Code() {
   const toastRef = useRef<ToastRef>(null)
   const resetCodeModalRef = useRef<ModalRef>(null)
   const codeEditorRef = useRef<CodeEditorRef>(null)
+  const runCodeButton = useRef<HTMLButtonElement>(null)
   const resetCodeButton = useRef<HTMLButtonElement>(null)
   const dictionaryButton = useRef<HTMLButtonElement>(null)
   const shortcutsButton = useRef<HTMLButtonElement>(null)
@@ -132,12 +133,20 @@ export function Code() {
     code.current = value
   }
 
+  function handleKeyDown({ shiftKey, key }: KeyboardEvent) {
+    if (shiftKey && key.toLowerCase() === 'enter') {
+      console.log(shiftKey && key === 'Enter')
+      runCodeButton.current?.click()
+    }
+  }
+
   if (challenge)
     return (
-      <div className="w-full h-screen">
+      <div className="w-full h-full" onKeyDown={handleKeyDown}>
         <Toast ref={toastRef} />
         <div className="flex items-center justify-between bg-gray-700 py-2 px-3">
           <Button
+            buttonRef={runCodeButton}
             className="h-6 px-3 text-xs w-max"
             onClick={() => handleRunCode(code.current)}
           >
@@ -211,7 +220,10 @@ export function Code() {
           canPlaySong={false}
         />
 
-        <Shortcuts isOpen={isShortcutsOpen} onClose={() => setIsShortcutsOpen(false)} />
+        <Shortcuts
+          isOpen={isShortcutsOpen}
+          onClose={() => setIsShortcutsOpen(false)}
+        />
       </div>
     )
 }
