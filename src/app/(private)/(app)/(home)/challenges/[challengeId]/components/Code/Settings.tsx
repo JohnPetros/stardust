@@ -1,6 +1,6 @@
 import { Dialog, DialogTitle } from '@/app/components/Dialog'
+import { RangeInput } from '@/app/components/RadioInput'
 import { X } from '@phosphor-icons/react'
-import { RangeInput } from './RangeInput'
 
 interface SettingsProps {
   isOpen: boolean
