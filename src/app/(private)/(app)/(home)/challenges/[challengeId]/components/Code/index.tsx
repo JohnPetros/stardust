@@ -20,25 +20,28 @@ import { Shortcuts } from './Shortcuts'
 import { execute } from '@/libs/delegua'
 
 import type { TestCase } from '@/types/challenge'
+import { Settings } from './Settings'
 
 export function Code() {
   const {
     state: { challenge },
     dispatch,
   } = useChallengeContext()
+
   const code = useRef(challenge?.code ?? '')
   const errorLine = useRef(0)
   const toastRef = useRef<ToastRef>(null)
   const resetCodeModalRef = useRef<ModalRef>(null)
   const codeEditorRef = useRef<CodeEditorRef>(null)
-  const runCodeButton = useRef<HTMLButtonElement>(null)
-  const resetCodeButton = useRef<HTMLButtonElement>(null)
-  const dictionaryButton = useRef<HTMLButtonElement>(null)
-  const shortcutsButton = useRef<HTMLButtonElement>(null)
-  const fullScreenButton = useRef<HTMLButtonElement>(null)
-  const settingsButton = useRef<HTMLButtonElement>(null)
+  const runCodeButtonRef = useRef<HTMLButtonElement>(null)
+  const resetCodeButtonRef = useRef<HTMLButtonElement>(null)
+  const dictionaryButtonRef = useRef<HTMLButtonElement>(null)
+  const shortcutsButtonRef = useRef<HTMLButtonElement>(null)
+  const fullScreenButtonRef = useRef<HTMLButtonElement>(null)
+  const settingsButtonRef = useRef<HTMLButtonElement>(null)
 
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false)
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
 
   function handleError(error: Error) {
     const { message } = error
@@ -124,9 +127,13 @@ export function Code() {
     setIsShortcutsOpen(true)
   }
 
+  function handleSettingsOpen() {
+    setIsSettingsOpen(true)
+  }
+
   function handleResetCodeModalClose() {
     resetCodeModalRef.current?.close()
-    resetCodeButton.current?.focus()
+    resetCodeButtonRef.current?.focus()
   }
 
   function handleCodeChange(value: string) {
@@ -136,7 +143,7 @@ export function Code() {
   function handleKeyDown({ shiftKey, key }: KeyboardEvent) {
     if (shiftKey && key.toLowerCase() === 'enter') {
       console.log(shiftKey && key === 'Enter')
-      runCodeButton.current?.click()
+      runCodeButtonRef.current?.click()
     }
   }
 
@@ -146,7 +153,7 @@ export function Code() {
         <Toast ref={toastRef} />
         <div className="flex items-center justify-between bg-gray-700 py-2 px-3">
           <Button
-            buttonRef={runCodeButton}
+            buttonRef={runCodeButtonRef}
             className="h-6 px-3 text-xs w-max"
             onClick={() => handleRunCode(code.current)}
           >
@@ -155,37 +162,37 @@ export function Code() {
           <ul className="flex items-center gap-3">
             <li>
               <IconButton
-                buttonRef={resetCodeButton}
+                buttonRef={resetCodeButtonRef}
                 icon={ArrowClockwise}
                 onClick={handleResetCode}
               />
             </li>
             <li>
               <IconButton
-                buttonRef={fullScreenButton}
+                buttonRef={fullScreenButtonRef}
                 icon={ArrowsOutSimple}
                 onClick={() => {}}
               />
             </li>
             <li>
               <IconButton
-                buttonRef={shortcutsButton}
+                buttonRef={dictionaryButtonRef}
                 icon={CodeIcon}
                 onClick={handleShortcutsOpen}
               />
             </li>
             <li>
               <IconButton
-                buttonRef={dictionaryButton}
+                buttonRef={shortcutsButtonRef}
                 icon={Command}
-                onClick={() => {}}
+                onClick={handleShortcutsOpen}
               />
             </li>
             <li>
               <IconButton
-                buttonRef={settingsButton}
+                buttonRef={settingsButtonRef}
                 icon={Gear}
-                onClick={() => {}}
+                onClick={handleSettingsOpen}
               />
             </li>
           </ul>
@@ -223,6 +230,11 @@ export function Code() {
         <Shortcuts
           isOpen={isShortcutsOpen}
           onClose={() => setIsShortcutsOpen(false)}
+        />
+
+        <Settings
+          isOpen={isSettingsOpen}
+          onClose={() => setIsSettingsOpen(false)}
         />
       </div>
     )

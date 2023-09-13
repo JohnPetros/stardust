@@ -13,6 +13,7 @@ import { getDeleguaLanguageTokens } from '@/utils/functions/getDeleguaLanguageTo
 
 import type monaco from 'monaco-editor'
 import { Loading } from './Loading'
+import { useEditor } from '@/hooks/useEditor'
 
 export interface CodeEditorRef {
   reloadValue: () => void
@@ -38,11 +39,8 @@ export function CodeEditorComponent(
   ref: ForwardedRef<CodeEditorRef>
 ) {
   const monaco = useMonaco()
+  const { state } = useEditor()
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
-
-  const messageContribution = editorRef.current?.getContribution(
-    'editor.contrib.messageController'
-  )
 
   function reloadValue() {
     editorRef.current?.setValue(value)
@@ -161,7 +159,8 @@ export function CodeEditorComponent(
         minimap: {
           enabled: hasMinimap,
         },
-        fontSize: 16,
+        tabSize: state.tabSize,
+        fontSize: state.fontSize,
         fontFamily: 'Menlo',
         cursorStyle: 'line',
         wordWrap: 'on',

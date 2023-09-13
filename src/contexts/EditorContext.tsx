@@ -8,11 +8,13 @@ import type { ThemeName } from '@/types/themeName'
 
 export type EditorState = {
   fontSize: number
+  tabSize: number
   theme: ThemeName
 }
 
 type EditorAction =
   | { type: 'setFontSize'; payload: number }
+  | { type: 'setTabSize'; payload: number }
   | { type: 'setTheme'; payload: ThemeName }
 
 type EditorValue = {
@@ -28,30 +30,41 @@ export const EditorContext = createContext({} as EditorValue)
 
 const initialEditorState: EditorState = {
   fontSize: EDITOR_DEFAULT_DATA.fontSize,
+  tabSize: EDITOR_DEFAULT_DATA.tabSize,
   theme: EDITOR_DEFAULT_DATA.theme,
-}
-
-function storeEditorData(editorData: EditorState) {
-  localStorage.setItem('@stardust:editor', JSON.stringify({ editorData }))
 }
 
 function getEditorData(): EditorState {
   const storedData = localStorage.getItem('@stardust:editor')
 
-  const editorValue = storedData ? JSON.parse(storedData) : EDITOR_DEFAULT_DATA
+  const editorData = storedData ? JSON.parse(storedData) : EDITOR_DEFAULT_DATA
 
-  return editorValue
+  console.log({ editorData })
+
+  return editorData
+}
+
+function storeEditorData(
+  currentEditorData: EditorState,
+  newEditorData: Partial<EditorState>
+) {
+  console.log({ ...currentEditorData, ...newEditorData })
+
+  localStorage.setItem(
+    '@stardust:editor',
+    JSON.stringify({ ...currentEditorData, ...newEditorData })
+  )
+  return getEditorData()
 }
 
 function EditorReducer(state: EditorState, action: EditorAction): EditorState {
   switch (action.type) {
     case 'setFontSize':
-      const newEditorData = {
-        ...state,
-        fontSize: action.payload,
-      }
-      storeEditorData(newEditorData)
-      return newEditorData
+      return storeEditorData(state, { fontSize: action.payload })
+    case 'setTabSize':
+      return storeEditorData(state, { tabSize: action.payload })
+    case 'setTheme':
+      return storeEditorData(state, { theme: action.payload })
     default:
       return state
   }
@@ -64,6 +77,7 @@ export function EditorProvider({ children }: EditorProviderProps) {
     const editorData = getEditorData()
 
     dispatch({ type: 'setFontSize', payload: editorData.fontSize })
+    dispatch({ type: 'setTabSize', payload: editorData.tabSize })
     dispatch({ type: 'setTheme', payload: editorData.theme })
   }, [])
 

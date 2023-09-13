@@ -1,3 +1,5 @@
+import { useEditor } from '@/hooks/useEditor'
+
 import { Dialog, DialogTitle } from '@/app/components/Dialog'
 import { RangeInput } from '@/app/components/RadioInput'
 import { X } from '@phosphor-icons/react'
@@ -8,9 +10,15 @@ interface SettingsProps {
 }
 
 export function Settings({ isOpen, onClose }: SettingsProps) {
-  function handleFontSizeRangeValueChange(value: number[]) {}
+  const { state, dispatch } = useEditor()
 
-  function handleTabSizeRangeValueChange(value: number[]) {}
+  function handleFontSizeRangeValueChange([value]: number[]) {
+    dispatch({ type: 'setFontSize', payload: value })
+  }
+
+  function handleTabSizeRangeValueChange([value]: number[]) {
+    dispatch({ type: 'setTabSize', payload: value })
+  }
 
   return (
     <Dialog isOpen={isOpen} onClose={onClose}>
@@ -24,10 +32,10 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
       </header>
       <dl className="space-y-6 mt-6">
         <div className="flex items-center justify-between">
-          <dt className='text-gray-100'>Tamanho da fonte (px):</dt>
+          <dt className="text-gray-100">Tamanho da fonte (px):</dt>
           <dd>
             <RangeInput
-              value={14}
+              value={state.fontSize}
               min={12}
               max={20}
               step={2}
@@ -36,14 +44,14 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
           </dd>
         </div>
         <div className="flex items-center justify-between">
-          <dt className='text-gray-100'>Tamanho do tab (px):</dt>
+          <dt className="text-gray-100">Tamanho do tab (px):</dt>
           <dd>
             <RangeInput
-              value={2}
+              value={state.tabSize}
               min={2}
               max={4}
               step={1}
-              onValueChange={handleFontSizeRangeValueChange}
+              onValueChange={handleTabSizeRangeValueChange}
             />
           </dd>
         </div>
