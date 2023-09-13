@@ -1,11 +1,19 @@
 export const SHORTCUTS = [
   {
     action: 'Executar código',
-    command: 'Ctrl + Enter',
+    command: 'Shift + Enter',
   },
   {
-    action: 'Deletar linha + copiar código',
+    action: 'Exibir dicionário',
+    command: 'Shift + K',
+  },
+  {
+    action: 'Deletar/copiar linha',
     command: 'Ctrl + X',
+  },
+  {
+    action: 'Selecionar linha',
+    command: 'Ctrl + L',
   },
   {
     action: 'Comentar código',
@@ -18,9 +26,5 @@ export const SHORTCUTS = [
   {
     action: 'Rescrever último código digitado',
     command: 'Ctrl + SHIFT + Z',
-  },
-  {
-    action: 'Exibir dicionário',
-    command: 'Ctrl + K',
   },
 ]
