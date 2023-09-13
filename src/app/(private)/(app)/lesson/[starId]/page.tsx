@@ -11,7 +11,6 @@ import { Theory } from '../components/Theory'
 import { Quiz } from '../components/Quiz'
 import { End } from '../components/End'
 
-import { texts } from '@/utils/templates/planets/planet1/star3/texts'
 import { Modal, ModalRef } from '@/app/components/Modal'
 import { Button } from '@/app/components/Button'
 
