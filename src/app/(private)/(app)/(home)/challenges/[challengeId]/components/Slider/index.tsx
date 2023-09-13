@@ -94,7 +94,7 @@ export function Slider() {
         ref={sliderRef}
         onSlideChange={handleSlideChange}
         onSwiper={handleSlideChange}
-        className="w-full h-[calc(100vh-4.8rem)]"
+        className="w-full h-[calc(100vh-5.2rem)]"
       >
         <SwiperSlide className="h-full overflow-y-auto">
           <Problem />
