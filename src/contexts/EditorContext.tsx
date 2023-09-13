@@ -2,7 +2,7 @@
 
 import { ReactNode, createContext, useEffect, useReducer } from 'react'
 
-import { EDITOR_DEFAULT_DATA } from '@/utils/constants'
+import { EDITOR_DEFAULT_CONFIG } from '@/utils/constants'
 
 import type { ThemeName } from '@/types/themeName'
 
@@ -29,22 +29,22 @@ interface EditorProviderProps {
 export const EditorContext = createContext({} as EditorValue)
 
 const initialEditorState: EditorState = {
-  fontSize: EDITOR_DEFAULT_DATA.fontSize,
-  tabSize: EDITOR_DEFAULT_DATA.tabSize,
-  theme: EDITOR_DEFAULT_DATA.theme,
+  fontSize: EDITOR_DEFAULT_CONFIG.fontSize,
+  tabSize: EDITOR_DEFAULT_CONFIG.tabSize,
+  theme: EDITOR_DEFAULT_CONFIG.theme,
 }
 
-function getEditorData(): EditorState {
+function getEditorConfig(): EditorState {
   const storedData = localStorage.getItem('@stardust:editor')
 
-  const editorData = storedData ? JSON.parse(storedData) : EDITOR_DEFAULT_DATA
+  const editorData = storedData ? JSON.parse(storedData) : EDITOR_DEFAULT_CONFIG
 
   console.log({ editorData })
 
   return editorData
 }
 
-function storeEditorData(
+function storeEditorConfig(
   currentEditorData: EditorState,
   newEditorData: Partial<EditorState>
 ) {
@@ -54,17 +54,17 @@ function storeEditorData(
     '@stardust:editor',
     JSON.stringify({ ...currentEditorData, ...newEditorData })
   )
-  return getEditorData()
+  return getEditorConfig()
 }
 
 function EditorReducer(state: EditorState, action: EditorAction): EditorState {
   switch (action.type) {
     case 'setFontSize':
-      return storeEditorData(state, { fontSize: action.payload })
+      return storeEditorConfig(state, { fontSize: action.payload })
     case 'setTabSize':
-      return storeEditorData(state, { tabSize: action.payload })
+      return storeEditorConfig(state, { tabSize: action.payload })
     case 'setTheme':
-      return storeEditorData(state, { theme: action.payload })
+      return storeEditorConfig(state, { theme: action.payload })
     default:
       return state
   }
@@ -74,7 +74,7 @@ export function EditorProvider({ children }: EditorProviderProps) {
   const [state, dispatch] = useReducer(EditorReducer, initialEditorState)
 
   useEffect(() => {
-    const editorData = getEditorData()
+    const editorData = getEditorConfig()
 
     dispatch({ type: 'setFontSize', payload: editorData.fontSize })
     dispatch({ type: 'setTabSize', payload: editorData.tabSize })
