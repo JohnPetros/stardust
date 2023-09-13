@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useChallengeContext } from '@/hooks/useChallengeContext'
 
 import { Button } from '@/app/components/Button'
@@ -13,11 +13,13 @@ import {
   Code as CodeIcon,
   Gear,
 } from '@phosphor-icons/react'
+import { ModalRef, Modal } from '@/app/components/Modal'
+import { ToastRef, Toast } from '@/app/components/Toast'
+import { Shortcuts } from './Shortcuts'
 
 import { execute } from '@/libs/delegua'
-import { TestCase } from '@/types/challenge'
-import { ToastRef, Toast } from '@/app/components/Toast'
-import { ModalRef, Modal } from '@/app/components/Modal'
+
+import type { TestCase } from '@/types/challenge'
 
 export function Code() {
   const {
@@ -31,9 +33,11 @@ export function Code() {
   const codeEditorRef = useRef<CodeEditorRef>(null)
   const resetCodeButton = useRef<HTMLButtonElement>(null)
   const dictionaryButton = useRef<HTMLButtonElement>(null)
-  const shortCutsButton = useRef<HTMLButtonElement>(null)
+  const shortcutsButton = useRef<HTMLButtonElement>(null)
   const fullScreenButton = useRef<HTMLButtonElement>(null)
   const settingsButton = useRef<HTMLButtonElement>(null)
+
+  const [isShortcutsOpen, setIsShortcutsOpen] = useState(false)
 
   function handleError(error: Error) {
     const { message } = error
@@ -49,8 +53,8 @@ export function Code() {
   }
 
   function resetCode() {
-    codeEditorRef.current?.reloadValue()
     resetCodeModalRef.current?.close()
+    codeEditorRef.current?.reloadValue()
   }
 
   function formatCode(code: string, { input }: Pick<TestCase, 'input'>) {
@@ -115,6 +119,10 @@ export function Code() {
     resetCodeModalRef.current?.open()
   }
 
+  function handleShortcutsOpen() {
+    setIsShortcutsOpen(true)
+  }
+
   function handleResetCodeModalClose() {
     resetCodeModalRef.current?.close()
     resetCodeButton.current?.focus()
@@ -152,9 +160,9 @@ export function Code() {
             </li>
             <li>
               <IconButton
-                buttonRef={shortCutsButton}
+                buttonRef={shortcutsButton}
                 icon={CodeIcon}
-                onClick={() => {}}
+                onClick={handleShortcutsOpen}
               />
             </li>
             <li>
@@ -202,6 +210,8 @@ export function Code() {
           }
           canPlaySong={false}
         />
+
+        <Shortcuts isOpen={isShortcutsOpen} onClose={() => setIsShortcutsOpen(false)} />
       </div>
     )
 }
