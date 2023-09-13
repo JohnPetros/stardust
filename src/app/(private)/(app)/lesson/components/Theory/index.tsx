@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/app/components/Button'
 import { Text } from '@/app/components/Text'
 import { Star } from './Star'
-
 import { Modal, ModalRef } from '@/app/components/Modal'
 import { useLesson } from '@/hooks/useLesson'
 
@@ -59,7 +58,6 @@ export function Theory({ title, number }: TheoryProps) {
     setTexts([{ ...state.texts[0], hasAnimation: false }])
     dispatch({ type: 'incrementRenderedTextsAmount' })
   }, [state.texts])
-
 
   return (
     <>
