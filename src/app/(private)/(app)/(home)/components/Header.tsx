@@ -57,11 +57,11 @@ export function Header() {
           <div className="flex items-center gap-2">
             <Image
               src="/icons/coin.svg"
-              width={28}
-              height={28}
+              width={26}
+              height={26}
               alt="Star Coins"
             />
-            <span className="text-yellow-400 font-semibold text-lg">
+            <span className="block text-yellow-400 font-semibold text-lg pt-1">
               {user?.coins}
             </span>
           </div>
