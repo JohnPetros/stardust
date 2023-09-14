@@ -80,7 +80,7 @@ export function NavButton({
             initial="shrink"
             animate={isExpanded ? 'expand' : ''}
             className={twMerge(
-              'block overflow-hidden font-semibold text-sm mt-2 -ml-2 md:-m-0',
+              'block overflow-hidden font-semibold md:text-sm text-[12px] mt-2 -ml-2 md:-m-0',
               isActive ? 'text-gray-100' : 'text-gray-400'
             )}
           >
