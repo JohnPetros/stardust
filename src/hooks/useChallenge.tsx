@@ -12,6 +12,13 @@ interface ChallengeParams {
 export function useChallenge({ challengeId, userId }: ChallengeParams) {
   const api = useApi()
 
+  async function addUserCompletedChallenge(
+    challengeId: string,
+    userId: string
+  ) {
+    api.addCompletedChallenge(challengeId, userId)
+  }
+
   function getChallenges() {
     if (userId) {
       return api.getChallenges(userId)
@@ -64,9 +71,9 @@ export function useChallenge({ challengeId, userId }: ChallengeParams) {
     return []
   }, [challenges])
 
-
   return {
     challenges: verifiedChallenges,
     challenge,
+    addUserCompletedChallenge,
   }
 }
