@@ -6,5 +6,4 @@ export { getChallengesChatOptions } from './getChallengesChatOptions'
 export { compareArrays } from './compareArrays'
 export { formatText } from './formatText'
 export { reorderItems } from './reorderItems'
-
-
+export { formatSecondsToTime } from './formatSecondsToTime'
