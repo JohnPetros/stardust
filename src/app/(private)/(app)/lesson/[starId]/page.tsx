@@ -5,14 +5,15 @@ import { useLesson } from '@/hooks/useLesson'
 import { useStar } from '@/hooks/useStar'
 import { useParams, useRouter } from 'next/navigation'
 
+import { Button } from '@/app/components/Button'
+import { Modal, ModalRef } from '@/app/components/Modal'
 import { TransitionPageAnimation } from '../../components/TransitionPageAnimation'
 import { Header } from '../components/Header'
 import { Theory } from '../components/Theory'
 import { Quiz } from '../components/Quiz'
 import { End } from '../components/End'
 
-import { Modal, ModalRef } from '@/app/components/Modal'
-import { Button } from '@/app/components/Button'
+import { formatSecondsToTime } from '@/utils/functions'
 
 export default function Lesson() {
   const { starId } = useParams()
@@ -36,15 +37,6 @@ export default function Lesson() {
 
   function leaveLesson() {
     router.push('/')
-    dispatch({ type: 'resetState' })
-  }
-
-  function formatSecondsToTime(seconds: number) {
-    const date = new Date(0)
-    date.setSeconds(seconds)
-    const time = date.toISOString().substring(14, 19)
-
-    return time
   }
 
   function getAccurance() {
@@ -81,11 +73,13 @@ export default function Lesson() {
   useEffect(() => {
     if (star) {
       // dispatch({ type: 'setTexts', payload: texts })
-      
+
       dispatch({ type: 'setTexts', payload: star.texts })
       dispatch({ type: 'setQuestions', payload: star.questions })
       setTimeout(() => setIsTransitionVisible(false), 1000)
     }
+
+    return () => dispatch({ type: 'resetState' })
   }, [star])
 
   useEffect(() => {
@@ -117,8 +111,6 @@ export default function Lesson() {
                 xp={xp}
                 time={time}
                 accurance={accurance}
-                starId={star.id}
-                challengeId={null}
                 userDataUpdater={updateUserData}
                 onExit={leaveLesson}
               />
