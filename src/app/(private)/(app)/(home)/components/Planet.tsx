@@ -33,7 +33,7 @@ export function Planet({
 
   return (
     <li>
-      <div className="flex items-center gap-3 ">
+      <div className="flex items-center gap-3">
         <Image src={planetImage} width={100} height={100} alt={name} />
 
         <motion.div
