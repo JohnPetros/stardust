@@ -20,6 +20,7 @@ type ChallengeState = {
   isAnswerCorrect: boolean
   isAnswerVerified: boolean
   isEnd: boolean
+  incorrectAnswersAmount: number
   tabHandler: TabHandler
 }
 
@@ -31,7 +32,10 @@ type ChallengeAction =
   | { type: 'setIsAnswerVerified'; payload: boolean }
   | { type: 'setIsAnswerCorrect'; payload: boolean }
   | { type: 'setIsEnd'; payload: boolean }
+  | { type: 'incrementSecondsAmount' }
+  | { type: 'incrementIncorrectAswersAmount' }
   | { type: 'setTabHandler'; payload: TabHandler }
+  | { type: 'resetState' }
 
 type ChallengeValue = {
   state: ChallengeState
@@ -48,6 +52,7 @@ const initialChallengeState: ChallengeState = {
   isAnswerCorrect: false,
   isAnswerVerified: false,
   isEnd: false,
+  incorrectAnswersAmount: 0,
   tabHandler: {
     showCodeTab: () => {},
     showResultTab: () => {},
@@ -99,6 +104,16 @@ function ChallengeReducer(
         ...state,
         isEnd: action.payload,
       }
+    case 'incrementIncorrectAswersAmount':
+      return {
+        ...state,
+        incorrectAnswersAmount:
+          state.incorrectAnswersAmount === 4
+            ? state.incorrectAnswersAmount
+            : state.incorrectAnswersAmount + 1,
+      }
+    case 'resetState':
+      return initialChallengeState
     default:
       return state
   }
