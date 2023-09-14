@@ -43,12 +43,16 @@ export function Code() {
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
 
+  function getErrorLine() {
+    return errorLine.current > 0 ? `</br>Linha: ${errorLine.current}` : ''
+  }
+
   function handleError(error: Error) {
     const { message } = error
 
     const toastMessage = message.includes('null')
       ? 'Código inválido'
-      : `${message}</br>Linha: ${errorLine.current}`
+      : `${message}` + getErrorLine()
 
     toastRef.current?.open({
       type: 'error',
