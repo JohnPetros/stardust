@@ -48,6 +48,7 @@ export function Result() {
     setIsAnswerCorrect(false)
 
     if (isAnswerVerified) {
+      dispatch({ type: 'incrementIncorrectAswersAmount' })
       tabHandler.showCodeTab()
     }
   }
