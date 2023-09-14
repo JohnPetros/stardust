@@ -73,8 +73,6 @@ interface EndProps {
   xp: number
   time: string
   accurance: string
-  starId: string | null
-  challengeId: string | null
   userDataUpdater: ({}: updateUserDataParam) => Promise<Partial<User>>
   onExit: () => void
 }
@@ -84,8 +82,6 @@ export function End({
   coins,
   time,
   xp,
-  starId,
-  challengeId,
   userDataUpdater,
   onExit,
 }: EndProps) {
@@ -115,7 +111,7 @@ export function End({
 
   async function getUpdatedUserData() {
     if (!user) return
-    return await userDataUpdater({ newCoins: 25, newXp: 20, user })
+    return await userDataUpdater({ newCoins: coins, newXp: xp, user })
   }
 
   const starsChainRef = useRef(null) as LottieRef
