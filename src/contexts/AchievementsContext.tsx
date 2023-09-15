@@ -88,6 +88,8 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
         removeRescuedAchievement(rescuableAchievement.id),
         updateUser({ coins: user.coins + rescuableAchievement.reward }),
       ])
+
+      setRescueableAchievementsAmount(rescueableAchievementsAmount - 1)
     } catch (error) {
       console.error(error)
       toastRef.current?.open({
