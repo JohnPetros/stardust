@@ -99,22 +99,19 @@ export const useChallengesList = () => {
 
   function checkCompletition(challenge: Challenge) {
     if (userCompletedChallengesIds?.length) {
-      const isCompleted = userCompletedChallengesIds.some(
+      const is_completed = userCompletedChallengesIds.some(
         (completedChallengeId) => completedChallengeId === challenge.id
       )
 
-      return { ...challenge, isCompleted }
+      return { ...challenge, is_completed }
     }
     return challenge
   }
 
-  console.log(challenges)
 
   const filteredChallenges = useMemo(() => {
     return challenges?.map(addCategories).map(checkCompletition)
   }, [challenges, categories, userCompletedChallengesIds])
-
-  console.log(filteredChallenges)
 
   return {
     state,
