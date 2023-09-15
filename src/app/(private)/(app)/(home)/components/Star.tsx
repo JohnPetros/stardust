@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSpace } from '@/hooks/useSpace'
 import { useApi } from '@/services/api'
@@ -58,6 +58,7 @@ export function Star({
   isLastUnlockedStar,
 }: StarProps) {
   const { spaceRocket } = useSpace()
+  const starContainerRef = useRef<HTMLLIElement>(null)
   const starRef = useRef(null) as LottieRef
   const toastRef = useRef<ToastRef>(null)
   const router = useRouter()
@@ -88,8 +89,18 @@ export function Star({
     }, 50)
   }
 
+  useEffect(() => {
+    if (isLastUnlockedStar && starContainerRef.current) {
+      starContainerRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center',
+      })
+    }
+  }, [])
+
   return (
-    <li>
+    <li ref={starContainerRef}>
       <Toast ref={toastRef} />
       <div>
         <Image
