@@ -108,6 +108,7 @@ export const useChallengesList = () => {
     return challenge
   }
 
+ 
 
   const filteredChallenges = useMemo(() => {
     return challenges?.map(addCategories).map(checkCompletition)

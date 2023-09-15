@@ -12,8 +12,6 @@ export default function Challenges() {
     challenges.length === 0
   )
 
-  console.log(challenges)
-
   useEffect(() => {
     if (challenges.length && isFirstRendering) {
       setTimeout(() => {

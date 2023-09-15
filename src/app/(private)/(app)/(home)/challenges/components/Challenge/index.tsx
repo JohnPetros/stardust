@@ -54,12 +54,11 @@ export function Challenge({
     id,
     title,
     difficulty,
-    author,
     upvotes,
     downvotes,
     total_completitions,
     categories,
-    isCompleted,
+    is_completed,
   },
 }: ChallengeProps) {
   const totalVotes = upvotes + downvotes
@@ -85,11 +84,11 @@ export function Challenge({
       </div>
       <ul className="flex items-center gap-3">
         <Info
-          icon={isCompleted ? CheckCircle : Circle}
-          iconStyle={isCompleted ? 'text-green-500' : 'text-red-700'}
-          label={isCompleted ? 'Resolvido' : 'Não resolvido'}
+          icon={is_completed ? CheckCircle : Circle}
+          iconStyle={is_completed ? 'text-green-500' : 'text-red-700'}
+          label={is_completed ? 'Resolvido' : 'Não resolvido'}
           tooltipText={
-            isCompleted
+            is_completed
               ? 'O que você está esperando? resolva esse desafio.'
               : 'Você ainda pode resolver esse desafio quantas vezes quiser.'
           }
@@ -104,11 +103,11 @@ export function Challenge({
           label={total_completitions}
           tooltipText={'Número de vezes que esse desafio foi concluído.'}
         />
-        <Info
+        {/* <Info
           icon={User}
           label={author}
           tooltipText={'Criador desse desafio.'}
-        />
+        /> */}
       </ul>
       {categories && (
         <ul className="flex items-start gap-3">
