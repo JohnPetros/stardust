@@ -26,7 +26,7 @@ export function AchievementsList() {
       <div
         className={twMerge(
           'flex flex-col gap-6 p-6 flex-shrink-0',
-          isLoading && 'items-center justify-center h-full'
+          isLoading ? 'items-center justify-center h-full' : 'pb-32'
         )}
       >
         {!isLoading ? (
