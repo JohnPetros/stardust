@@ -21,6 +21,7 @@ type RescuableAchivement = {
 
 interface AchivementsContextValue {
   achievements: AchievementData[] | undefined
+  rescueableAchievementsAmount: number
   rescueAchivement: (rescuableAchiement: RescuableAchivement) => void
 }
 
@@ -41,6 +42,8 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
   >([])
   const [rescuedAchievement, setRescuedAchievement] =
     useState<RescuableAchivement | null>(null)
+  const [rescueableAchievementsAmount, setRescueableAchievementsAmount] =
+    useState(0)
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -124,6 +127,8 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
       (unlockedAchievement) => unlockedAchievement.id === achievement.id
     )
 
+    setRescueableAchievementsAmount(rescueableAchievementsAmount + 1)
+
     return { ...achievement, isUnlocked, isRescuable: isUnlocked }
   }
 
@@ -189,7 +194,9 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
   }, [newUnlockedAchievements])
 
   return (
-    <AchivementsContext.Provider value={{ achievements, rescueAchivement }}>
+    <AchivementsContext.Provider
+      value={{ achievements, rescueableAchievementsAmount, rescueAchivement }}
+    >
       <Toast ref={toastRef} />
 
       <Modal

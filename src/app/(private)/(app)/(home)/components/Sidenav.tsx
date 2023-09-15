@@ -18,6 +18,8 @@ import { CaretLeft, CaretRight, Flag, Power } from '@phosphor-icons/react'
 import { AnimatePresence, Variants, motion } from 'framer-motion'
 
 import { HOME_PAGES } from '@/utils/constants/home-pages'
+import { useAchivementsContext } from '@/hooks/useAchievementContext'
+import { CounterBadge } from './CounterBadge'
 
 const sidenavAnimations: Variants = {
   shrink: {
@@ -51,7 +53,10 @@ interface SidenavProps {
 
 export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
   const { user, signOut } = useAuth()
-  const { isAchievementsListVisible, setIsAchievementsListVisible } = useSiderbar()
+  const { isAchievementsListVisible, setIsAchievementsListVisible } =
+    useSiderbar()
+  const { rescueableAchievementsAmount } = useAchivementsContext()
+
   const [isLoading, setIsLoading] = useState(false)
   const toastRef = useRef<ToastRef>(null)
   const modalRef = useRef<ModalRef>(null)
@@ -85,7 +90,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
 
   return (
     <motion.div
-      id='sidenav'
+      id="sidenav"
       variants={sidenavAnimations}
       initial="shrink"
       animate={isExpanded ? 'expand' : ''}
@@ -159,6 +164,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
             isExpanded={isExpanded}
             onClick={handleAchievementsListButtonClick}
             isActive={isAchievementsListVisible}
+            counterBadge={<CounterBadge count={rescueableAchievementsAmount} />}
           />
 
           <SidenavButton

@@ -7,9 +7,10 @@ import {
   TooltipRef,
 } from '@/app/components/Tooltip'
 
-import { Icon } from '@phosphor-icons/react'
+import { ReactNode, useRef } from 'react'
+
 import { Variants, motion } from 'framer-motion'
-import { useRef } from 'react'
+import { Icon } from '@phosphor-icons/react'
 import { twMerge } from 'tailwind-merge'
 
 interface SidenavButtonProps {
@@ -17,6 +18,7 @@ interface SidenavButtonProps {
   title: string
   isExpanded: boolean
   isActive: boolean
+  counterBadge?: ReactNode
   onClick: VoidFunction
 }
 
@@ -38,6 +40,7 @@ export function SidenavButton({
   title,
   isExpanded,
   isActive,
+  counterBadge,
   onClick,
 }: SidenavButtonProps) {
   const tooltipRef = useRef<TooltipRef>(null)
@@ -69,6 +72,8 @@ export function SidenavButton({
           {!isExpanded && (
             <TooltipContent ref={tooltipRef} text={title} direction="right" />
           )}
+
+          {counterBadge && counterBadge}
         </button>
       </TooltipTrigger>
     </Tooltip>
