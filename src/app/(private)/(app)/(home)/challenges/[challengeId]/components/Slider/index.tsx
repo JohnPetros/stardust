@@ -45,14 +45,14 @@ export function Slider() {
   }
 
   useEffect(() => {
-    dispatch({
-      type: 'setTabHandler',
-      payload: {
-        showResultTab,
-        showCodeTab,
-      },
-    })
-  }, [])
+      dispatch({
+        type: 'setTabHandler',
+        payload: {
+          showResultTab,
+          showCodeTab,
+        },
+      })
+  }, [showResultTab, showCodeTab])
 
   return (
     <div>
