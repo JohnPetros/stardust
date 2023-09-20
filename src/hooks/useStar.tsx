@@ -6,7 +6,7 @@ import { useApi } from '@/services/api'
 import { User } from '@/types/user'
 import useSWR from 'swr'
 
-export function useStar(starId?: string) {
+export function useStar(starId?: string | null | undefined) {
   const { user } = useAuth()
   const api = useApi()
 
@@ -26,7 +26,7 @@ export function useStar(starId?: string) {
   )
 
   const { data: nextStar, error: nextStarError } = useSWR(
-    star && user?.id ? '/next_star?prev_star_id=' + star.id : null,
+    star?.id && user?.id ? '/next_star?prev_star_id=' + star.id : null,
     getNextStar
   )
 
@@ -49,7 +49,7 @@ export function useStar(starId?: string) {
 
     await api.addUnlockedStar(UnlockedstarId, user.id)
   }
-  
+
   async function updateUserData({
     newCoins,
     newXp,
@@ -68,7 +68,6 @@ export function useStar(starId?: string) {
       _nextStar = await getNextStarFromNextPlanet()
       completedPlanets += _nextStar ? 1 : 0
     }
-
 
     if (_nextStar && !_nextStar.isUnlocked) {
       await addUnlockedStar(_nextStar.id)
