@@ -23,7 +23,7 @@ export default function Challenge() {
     userId: user?.id,
   })
 
-  const { updateUserData: updateUserStarData } = useStar()
+  const { updateUserData: updateUserStarData } = useStar(challenge?.star_id)
 
   const { state, dispatch } = useChallengeContext()
   const router = useRouter()
@@ -56,10 +56,20 @@ export default function Challenge() {
     }
 
     if (challenge?.star_id) {
-      return {
+      const updatedStarData = await updateUserStarData({
+        newCoins,
+        newXp,
+        user,
+      })
+
+      const updatedData = {
         completed_challenges,
-        ...updateUserStarData({ newCoins, newXp, user }),
+        ...updatedStarData,
       }
+
+      console.log({ updatedData })
+
+      return updatedData
     }
 
     const updatedCoins = newCoins + user.coins
