@@ -57,12 +57,14 @@ export function Star({
   data: { id, name, number, isChallenge, isUnlocked },
   isLastUnlockedStar,
 }: StarProps) {
-  const { spaceRocket } = useSpace()
+  const { spaceRocket, lastUnlockedStarRef, scrollIntoLastUnlockedStar } = useSpace()
   const starContainerRef = useRef<HTMLLIElement>(null)
   const starRef = useRef(null) as LottieRef
   const toastRef = useRef<ToastRef>(null)
   const router = useRouter()
   const api = useApi()
+
+ 
 
   async function handleStarNavigation() {
     if (isChallenge) {
@@ -90,17 +92,15 @@ export function Star({
   }
 
   useEffect(() => {
-    if (isLastUnlockedStar && starContainerRef.current) {
-      starContainerRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'center',
-      })
+    if (isLastUnlockedStar && lastUnlockedStarRef.current) {
+      setTimeout(() => {
+        scrollIntoLastUnlockedStar()
+      }, 1500)
     }
   }, [])
 
   return (
-    <li ref={starContainerRef}>
+    <li ref={isLastUnlockedStar ? lastUnlockedStarRef : null}>
       <Toast ref={toastRef} />
       <div>
         <Image
