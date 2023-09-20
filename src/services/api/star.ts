@@ -29,16 +29,16 @@ export default () => {
           planet_id: currentStar.planet_id,
           number: currentStar.number + 1,
         })
-        .eq('users_unlocked_stars.user_id', userId)
-        .single()
 
       if (error) {
         throw new Error(error.message)
       }
 
+      if (!data.length) return null
+
       const nextStar = {
-        ...data,
-        isUnlocked: data.users_unlocked_stars.length > 0,
+        ...data[0],
+        isUnlocked: data[0].users_unlocked_stars.length > 0,
       }
 
       return nextStar
@@ -55,6 +55,8 @@ export default () => {
         }
       )
 
+      console.log({ nextStarId })
+
       if (nextStarIdError) {
         throw new Error(nextStarIdError.message)
       }
@@ -66,9 +68,13 @@ export default () => {
         .eq('users_unlocked_stars.user_id', userId)
         .single()
 
-        if (error) {
-          throw new Error(error.message)
-        }
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      console.log({ data })
+
+      if (!data) return null
 
       const nextStar = {
         ...data,
