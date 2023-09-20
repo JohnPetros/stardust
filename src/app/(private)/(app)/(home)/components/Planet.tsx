@@ -37,15 +37,16 @@ export function Planet({
         <Image src={planetImage} width={100} height={100} alt={name} />
 
         <motion.div
-        variants={planetSignAnimations}
-        animate="float"
-        className="bg-green-800 max-w-sm p-3 flex items-center gap-3 rounded-lg">
+          variants={planetSignAnimations}
+          animate="float"
+          className="bg-green-800 max-w-sm p-3 flex items-center gap-3 rounded-lg"
+        >
           <Image src={planetIcon} width={32} height={32} alt="" />
           <strong className="text-zinc-100 font-semibold">{name}</strong>
         </motion.div>
       </div>
 
-      <ul className="pl-8">
+      <ul className="pl-[2.2rem]">
         {stars.map((star) => (
           <Star
             key={star.id}
