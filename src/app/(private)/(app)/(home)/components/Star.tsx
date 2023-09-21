@@ -11,7 +11,7 @@ import { Toast, ToastRef } from '@/app/components/Toast'
 import UnlockedStar from '../../../../../../public/animations/unlocked-star.json'
 import Lottie, { LottieRef } from 'lottie-react'
 
-import { Variants, motion } from 'framer-motion'
+import { Variants, motion, useInView } from 'framer-motion'
 
 import { twMerge } from 'tailwind-merge'
 
@@ -57,14 +57,17 @@ export function Star({
   data: { id, name, number, isChallenge, isUnlocked },
   isLastUnlockedStar,
 }: StarProps) {
-  const { spaceRocket, lastUnlockedStarRef, scrollIntoLastUnlockedStar } = useSpace()
-  const starContainerRef = useRef<HTMLLIElement>(null)
+  const {
+    spaceRocket,
+    lastUnlockedStarRef,
+    scrollIntoLastUnlockedStar,
+    setLastUnlockedStarPosition,
+  } = useSpace()
   const starRef = useRef(null) as LottieRef
   const toastRef = useRef<ToastRef>(null)
   const router = useRouter()
   const api = useApi()
-
- 
+  const isInView = useInView(lastUnlockedStarRef)
 
   async function handleStarNavigation() {
     if (isChallenge) {
@@ -90,6 +93,12 @@ export function Star({
       handleStarNavigation()
     }, 50)
   }
+
+  useEffect(() => {
+    if (isLastUnlockedStar) {
+      setLastUnlockedStarPosition('in')
+    }
+  }, [isInView])
 
   useEffect(() => {
     if (isLastUnlockedStar && lastUnlockedStarRef.current) {
