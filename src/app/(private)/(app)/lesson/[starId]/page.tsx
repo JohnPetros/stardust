@@ -14,6 +14,7 @@ import { Quiz } from '../components/Quiz'
 import { End } from '../components/End'
 
 import { formatSecondsToTime } from '@/utils/functions'
+import { texts } from '@/utils/mocks/planets/planet2/star1/texts'
 
 export default function Lesson() {
   const { starId } = useParams()
@@ -71,15 +72,20 @@ export default function Lesson() {
   }, [secondsAmount])
 
   useEffect(() => {
-    if (star) {
-      // dispatch({ type: 'setTexts', payload: texts })
+    let timer: NodeJS.Timeout
 
-      dispatch({ type: 'setTexts', payload: star.texts })
+    if (star) {
+      dispatch({ type: 'setTexts', payload: texts })
+
+      // dispatch({ type: 'setTexts', payload: star.texts })
       dispatch({ type: 'setQuestions', payload: star.questions })
-      setTimeout(() => setIsTransitionVisible(false), 1000)
+      timer = setTimeout(() => setIsTransitionVisible(false), 1000)
     }
 
-    return () => dispatch({ type: 'resetState' })
+    return () => {
+      dispatch({ type: 'resetState' })
+      clearTimeout(timer)
+    }
   }, [star])
 
   useEffect(() => {
