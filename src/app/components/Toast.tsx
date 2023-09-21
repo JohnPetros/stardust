@@ -130,7 +130,7 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
                       <Check width={20} height={20} weight="bold" />
                     )}
                   </span>
-                  <span dangerouslySetInnerHTML={{ __html: message }} />
+                  <span className='text-sm' dangerouslySetInnerHTML={{ __html: message }} />
                 </Container.Description>
 
                 <Container.Close
