@@ -1,34 +1,38 @@
 'use client'
 
-import { usePlanet } from '@/hooks/usePlanet'
-import { Planet } from './components/Planet'
-import { useSiderbar } from '@/hooks/useSiderbar'
 import { useEffect, useState } from 'react'
-import { TransitionPageAnimation } from '../components/TransitionPageAnimation'
-import { useMotionValueEvent, useScroll } from 'framer-motion'
 import { useSpace } from '@/hooks/useSpace'
+import { usePlanet } from '@/hooks/usePlanet'
+import { useSiderbar } from '@/hooks/useSiderbar'
+
+import { Planet } from './components/Planet'
+import { TransitionPageAnimation } from '../components/TransitionPageAnimation'
+import { FabButton } from './components/FabButton'
+import { CaretDown, CaretUp, Icon } from '@phosphor-icons/react'
+
+import type { StarViewPortPosition } from '@/contexts/SpaceContext'
+
+const fabButtonIcon: Record<StarViewPortPosition, Icon> = {
+  above: CaretDown,
+  bellow: CaretUp,
+  in: CaretDown,
+}
 
 export default function Home() {
-  const { lastUnlockedStarRef } = useSpace()
+  const { lastUnlockedStarPosition } = useSpace()
   const { planets, lastUnlockedStarId } = usePlanet()
   const { isOpen, toggle, setIsAchievementsListVisible } = useSiderbar()
   const [isTransitionVisible, setIsTransitionVisible] = useState(
     !planets?.length
   )
 
-  const { scrollY } = useScroll()
-
-  useMotionValueEvent(scrollY, 'change', (latest) => {
-    console.log(lastUnlockedStarRef.current?.getBoundingClientRect().top)
-    
-    console.log('Page scroll: ', latest)
-  })
-
   function handleClick() {
     if (isOpen) toggle()
 
     setIsAchievementsListVisible(false)
   }
+
+  function handleFabButtonClick() {}
 
   useEffect(() => {
     if (planets?.length && isTransitionVisible) {
@@ -51,6 +55,13 @@ export default function Home() {
           />
         ))}
       </ul>
+
+      {lastUnlockedStarPosition !== 'in' && (
+        <FabButton
+          icon={fabButtonIcon[lastUnlockedStarPosition]}
+          onCLick={handleFabButtonClick}
+        />
+      )}
     </main>
   )
 }
