@@ -42,7 +42,7 @@ export function SpaceProvider({ children }: SpaceContextProps) {
 
   const { scrollY } = useScroll()
 
-  useMotionValueEvent(scrollY, 'change', (latest) => {
+  useMotionValueEvent(scrollY, 'change', () => {
     const starRect = lastUnlockedStarRef.current?.getBoundingClientRect()
 
     const starHeight = starRect?.height
@@ -54,19 +54,19 @@ export function SpaceProvider({ children }: SpaceContextProps) {
     if (starYPosition > window.innerHeight) setLastUnlockedStarPosition('above')
 
     if (starYPosition + starHeight < 0) setLastUnlockedStarPosition('bellow')
-
-   
-    console.log('Page scroll: ', latest)
   })
 
   function scrollIntoLastUnlockedStar() {
-    const starOffsetHeight = lastUnlockedStarRef.current?.offsetHeight
-    const starTopPosition =
-      lastUnlockedStarRef.current?.getBoundingClientRect().top
+    const starRect = lastUnlockedStarRef.current?.getBoundingClientRect()
 
-    if (starTopPosition && starOffsetHeight) {
+    if (!starRect) return
+
+    const starHeight = starRect?.height
+    const starTopPosition = starRect.top + window.scrollY
+
+    if (starTopPosition && starHeight) {
       const starPosition =
-        starTopPosition - (window.innerHeight - starOffsetHeight) / 2
+        starTopPosition - (window.innerHeight - starHeight) / 2
 
       window.scrollTo({
         top: starPosition,
