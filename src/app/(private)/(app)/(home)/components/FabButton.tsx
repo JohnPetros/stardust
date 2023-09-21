@@ -33,6 +33,8 @@ export function FabButton({ isVisible, icon: Icon, onClick }: FabButtonProps) {
           whileTap="tap"
           onClick={onClick}
           className="fixed right-24 bottom-8 grid place-content-center w-12 h-12 rounded-md border-b-2 border-green-500 bg-gray-900"
+          tabIndex={0}
+          aria-aria-label="Dar scroll até a última estrela desbloqueada"
         >
           <Icon className="text-green-500 text-xl" weight="bold" />
         </motion.button>
