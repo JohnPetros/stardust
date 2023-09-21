@@ -8,6 +8,7 @@ import * as ToolBar from '@radix-ui/react-toolbar'
 
 import { execute } from '@/libs/delegua'
 import { playSound } from '@/utils/functions'
+import { ToastRef, Toast } from '../Toast'
 
 interface CodeSnippetProps {
   code: string
@@ -20,6 +21,8 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
   const userCode = useRef(code)
   const errorLine = useRef(0)
   const consoleRef = useRef<ConsoleRef>(null)
+  const toastRef = useRef<ToastRef>(null)
+
 
   function getPrintType(print: string) {
     return print.replace(/escreva\((.*?)\)/, 'escreva(tipo de $1)')
@@ -34,6 +37,23 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
     })
 
     return newCode
+  }
+
+  function getErrorLine() {
+    return errorLine.current > 0 ? `</br>Linha: ${errorLine.current}` : ''
+  }
+
+  function handleError(error: Error) {
+    const { message } = error
+
+    const toastMessage = message.includes('null')
+      ? 'Código inválido'
+      : `${message}` + getErrorLine()
+
+    toastRef.current?.open({
+      type: 'error',
+      message: toastMessage,
+    })
   }
 
   function handleOutput(output: string) {
@@ -59,7 +79,9 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
 
       consoleRef.current?.open()
       playSound('running-code.wav')
-    } catch (error) {}
+    } catch (error) {
+      handleError(error as Error)
+    }
   }
 
   function handleReloadButtonClick() {
@@ -77,6 +99,7 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
 
   return (
     <div className="overflow-hidden relative h-64 rounded-md bg-gray-800 w-full">
+      <Toast ref={toastRef} />
       <ToolBar.Root className="flex items-center justify-end gap-2 border-b border-gray-700 p-2">
         {isRunnable && (
           <>
