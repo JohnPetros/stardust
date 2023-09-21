@@ -19,7 +19,7 @@ const fabButtonIcon: Record<StarViewPortPosition, Icon> = {
 }
 
 export default function Home() {
-  const { lastUnlockedStarPosition } = useSpace()
+  const { lastUnlockedStarPosition, scrollIntoLastUnlockedStar } = useSpace()
   const { planets, lastUnlockedStarId } = usePlanet()
   const { isOpen, toggle, setIsAchievementsListVisible } = useSiderbar()
   const [isTransitionVisible, setIsTransitionVisible] = useState(
@@ -32,7 +32,9 @@ export default function Home() {
     setIsAchievementsListVisible(false)
   }
 
-  function handleFabButtonClick() {}
+  function handleFabButtonClick() {
+    scrollIntoLastUnlockedStar()
+  }
 
   useEffect(() => {
     if (planets?.length && isTransitionVisible) {
@@ -42,7 +44,7 @@ export default function Home() {
 
   return (
     <main
-      className="bg-[url('/images/space.png')] bg-center flex flex-col items-center"
+      className="bg-[url('/images/space.png')] bg-center bg-green-900 flex flex-col items-center pb-6"
       onClick={handleClick}
     >
       <TransitionPageAnimation isVisible={isTransitionVisible} />
@@ -56,12 +58,11 @@ export default function Home() {
         ))}
       </ul>
 
-      {lastUnlockedStarPosition !== 'in' && (
-        <FabButton
-          icon={fabButtonIcon[lastUnlockedStarPosition]}
-          onCLick={handleFabButtonClick}
-        />
-      )}
+      <FabButton
+        isVisible={lastUnlockedStarPosition !== 'in'}
+        icon={fabButtonIcon[lastUnlockedStarPosition]}
+        onClick={handleFabButtonClick}
+      />
     </main>
   )
 }
