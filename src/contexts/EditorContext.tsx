@@ -39,8 +39,6 @@ function getEditorConfig(): EditorState {
 
   const editorData = storedData ? JSON.parse(storedData) : EDITOR_DEFAULT_CONFIG
 
-  console.log({ editorData })
-
   return editorData
 }
 
@@ -48,8 +46,6 @@ function storeEditorConfig(
   currentEditorData: EditorState,
   newEditorData: Partial<EditorState>
 ) {
-  console.log({ ...currentEditorData, ...newEditorData })
-
   localStorage.setItem(
     '@stardust:editor',
     JSON.stringify({ ...currentEditorData, ...newEditorData })
@@ -73,14 +69,7 @@ function EditorReducer(state: EditorState, action: EditorAction): EditorState {
 export function EditorProvider({ children }: EditorProviderProps) {
   const [state, dispatch] = useReducer(EditorReducer, initialEditorState)
 
-  useEffect(() => {
-    const editorData = getEditorConfig()
-
-    dispatch({ type: 'setFontSize', payload: editorData.fontSize })
-    dispatch({ type: 'setTabSize', payload: editorData.tabSize })
-    dispatch({ type: 'setTheme', payload: editorData.theme })
-  }, [])
-
+ 
   return (
     <EditorContext.Provider value={{ state, dispatch }}>
       {children}
