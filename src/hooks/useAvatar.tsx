@@ -4,8 +4,9 @@ import { useMemo } from 'react'
 import { useAuth } from './useAuth'
 import useSWR, { mutate } from 'swr'
 
-import { Avatar } from '@/types/avatar'
 import { useApi } from '@/services/api'
+
+import type { Avatar } from '@/types/avatar'
 
 export function useAvatar(avatarId?: string) {
   const api = useApi()
