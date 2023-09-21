@@ -27,7 +27,7 @@ export function FabButton({ isVisible, icon: Icon, onClick }: FabButtonProps) {
       {isVisible && (
         <motion.button
           variants={fabButtonAnimations}
-          initial="hiden"
+          initial="hidden"
           animate="visible"
           exit="hidden"
           whileTap="tap"
