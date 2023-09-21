@@ -3,9 +3,9 @@
 import { useMemo, useRef, useState } from 'react'
 import { CodeEditor, CodeEditorRef } from '@/app/components/CodeEditor'
 import { ArrowClockwise } from '@phosphor-icons/react'
-import { Console } from '../Console/Index'
-
+import { Console, ConsoleRef } from '../Console/Index'
 import * as ToolBar from '@radix-ui/react-toolbar'
+
 import { execute } from '@/libs/delegua'
 
 interface CodeSnippetProps {
@@ -15,24 +15,62 @@ interface CodeSnippetProps {
 
 export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
   const codeEditorRef = useRef<CodeEditorRef>(null)
-  const [output, setOutput] = useState<string[]>([])
+  const [outputs, setOutputs] = useState<string[]>([])
+  const userCode = useRef(code)
+  const errorLine = useRef(0)
+  const consoleRef = useRef<ConsoleRef>(null)
 
-  function handleOutput(output: string) {
-    setOutput(currentOutput => [...currentOutput, output]);
-    if (!output) setOutput(['Sem resultado']);
+  function getPrintType(print: string) {
+    return print.replace(/escreva\((.*?)\)/, 'escreva(tipo de $1)')
   }
 
- async function handleRunButtonClick() {
+  function addPrintType(code: string) {
+    const regex = /(escreva\(.+\))/g
+    if (!regex.test(code)) return code
+
+    const newCode = code.replace(regex, (print) => {
+      return getPrintType(print) + print
+    })
+
+    return newCode
+  }
+
+  function handleOutput(output: string) {
+    console.log({ output })
+
+    setOutputs((currentOutputs) => [...currentOutputs, output])
+
+    if (!output) setOutputs(['Sem resultado'])
+  }
+
+  async function handleRunButtonClick() {
+    setOutputs([])
+    const code = addPrintType(userCode.current)
+
+    console.log(userCode.current)
+    console.log(code)
+
     try {
       const { erros } = await execute(code, handleOutput)
-      
-    } catch (error) {
-      
-    }
+
+      if (erros.length) {
+        const error = erros[0]
+        if (error.linha) errorLine.current = error.linha
+        if (error instanceof Error) throw error
+        consoleRef.current?.close()
+        throw error.erroInterno
+      }
+
+      consoleRef.current?.open()
+    } catch (error) {}
   }
 
   function handleReloadButtonClick() {
     codeEditorRef.current?.reloadValue()
+  }
+
+  function handleCodeChange(value: string) {
+    userCode.current = value
   }
 
   const codeEditorHeight = useMemo(() => {
@@ -67,9 +105,10 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
         height={codeEditorHeight}
         value={code}
         isReadOnly={!isRunnable}
+        onChange={handleCodeChange}
       />
 
-      <Console result="Teste de resultado" />
+      <Console ref={consoleRef} results={outputs} />
     </div>
   )
 }
