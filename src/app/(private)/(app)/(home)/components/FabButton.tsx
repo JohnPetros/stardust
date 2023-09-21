@@ -36,7 +36,7 @@ export function FabButton({ isVisible, icon: Icon, onClick }: FabButtonProps) {
           tabIndex={0}
           aria-label="Dar scroll até a última estrela desbloqueada"
         >
-          <Icon className="text-green-500 text-xl" weight="bold" />
+          <Icon className="text-green-500 text-2xl" weight="bold" />
         </motion.button>
       )}
     </AnimatePresence>
