@@ -1,6 +1,7 @@
 import { useAuth } from '@/hooks/useAuth'
 import { useRocket } from '@/hooks/useRocket'
 import { getImage } from '@/utils/functions'
+import { useMotionValueEvent, useScroll } from 'framer-motion'
 import {
   ReactNode,
   RefObject,
@@ -15,10 +16,14 @@ type SpaceRocket = {
   image: string
 }
 
+export type StarViewPortPosition = 'above' | 'in' | 'bellow'
+
 interface SpaceContextValue {
   spaceRocket: SpaceRocket
-  scrollIntoLastUnlockedStar: () => void
   lastUnlockedStarRef: RefObject<HTMLLIElement>
+  lastUnlockedStarPosition: StarViewPortPosition
+  scrollIntoLastUnlockedStar: () => void
+  setLastUnlockedStarPosition: (position: StarViewPortPosition) => void
 }
 
 interface SpaceContextProps {
@@ -31,9 +36,28 @@ export function SpaceProvider({ children }: SpaceContextProps) {
   const { user } = useAuth()
   const { rocket } = useRocket(user?.rocket_id)
   const [spaceRocket, setSpaceRocket] = useState<SpaceRocket>({} as SpaceRocket)
-  const [isLastUnlockedStarAboveLayout, setIsLastUnlockedStarAboveLayout] =
-    useState(false)
+  const [lastUnlockedStarPosition, setLastUnlockedStarPosition] =
+    useState<StarViewPortPosition>('above')
   const lastUnlockedStarRef = useRef<HTMLLIElement>(null)
+
+  const { scrollY } = useScroll()
+
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    const starRect = lastUnlockedStarRef.current?.getBoundingClientRect()
+
+    const starHeight = starRect?.height
+
+    const starYPosition = starRect?.top
+
+    if (!starYPosition || !starHeight) return
+
+    if (starYPosition > window.innerHeight) setLastUnlockedStarPosition('above')
+
+    if (starYPosition + starHeight < 0) setLastUnlockedStarPosition('bellow')
+
+   
+    console.log('Page scroll: ', latest)
+  })
 
   function scrollIntoLastUnlockedStar() {
     const starOffsetHeight = lastUnlockedStarRef.current?.offsetHeight
@@ -61,7 +85,13 @@ export function SpaceProvider({ children }: SpaceContextProps) {
 
   return (
     <SpaceContext.Provider
-      value={{ spaceRocket, lastUnlockedStarRef, scrollIntoLastUnlockedStar }}
+      value={{
+        spaceRocket,
+        lastUnlockedStarRef,
+        lastUnlockedStarPosition,
+        scrollIntoLastUnlockedStar,
+        setLastUnlockedStarPosition,
+      }}
     >
       {children}
     </SpaceContext.Provider>
