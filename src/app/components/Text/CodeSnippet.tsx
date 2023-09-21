@@ -7,6 +7,7 @@ import { Console, ConsoleRef } from '../Console/Index'
 import * as ToolBar from '@radix-ui/react-toolbar'
 
 import { execute } from '@/libs/delegua'
+import { playSound } from '@/utils/functions'
 
 interface CodeSnippetProps {
   code: string
@@ -36,8 +37,6 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
   }
 
   function handleOutput(output: string) {
-    console.log({ output })
-
     setOutputs((currentOutputs) => [...currentOutputs, output])
 
     if (!output) setOutputs(['Sem resultado'])
@@ -46,9 +45,6 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
   async function handleRunButtonClick() {
     setOutputs([])
     const code = addPrintType(userCode.current)
-
-    console.log(userCode.current)
-    console.log(code)
 
     try {
       const { erros } = await execute(code, handleOutput)
@@ -62,6 +58,7 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
       }
 
       consoleRef.current?.open()
+      playSound('running-code.wav')
     } catch (error) {}
   }
 
