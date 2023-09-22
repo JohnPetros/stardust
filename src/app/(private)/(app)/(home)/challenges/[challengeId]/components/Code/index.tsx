@@ -146,7 +146,6 @@ export function Code() {
 
   function handleKeyDown({ shiftKey, key }: KeyboardEvent) {
     if (shiftKey && key.toLowerCase() === 'enter') {
-      console.log(shiftKey && key === 'Enter')
       runCodeButtonRef.current?.click()
     }
   }
