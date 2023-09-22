@@ -1,33 +1,54 @@
 'use client'
 
-import { DELEGUA_TOKENS, THEMES } from '@/utils/constants'
+import {
+  DELEGUA_TOKENS,
+  OPERATOR_REGEX,
+  STRING_REGEX,
+  THEMES,
+} from '@/utils/constants'
+
+import createMarker from 'react-content-marker'
+
+const parsers = [
+  {
+    rule: STRING_REGEX,
+    tag: (token: string) => (
+      <span style={{ color: THEMES.darkSpace.strings }}>{token}</span>
+    ),
+  },
+  {
+    rule: new RegExp(`(${DELEGUA_TOKENS.typeKeywords.join('|')})`),
+    tag: (token: string) => (
+      <span style={{ color: THEMES.darkSpace.typeKeywords }}>{token}</span>
+    ),
+  },
+  {
+    rule: new RegExp(`(${DELEGUA_TOKENS.keywords.join('|')})`),
+    tag: (token: string) => (
+      <span style={{ color: THEMES.darkSpace.keywords }}>{token}</span>
+    ),
+  },
+  {
+    rule: OPERATOR_REGEX,
+    tag: (token: string) => (
+      <span style={{ color: THEMES.darkSpace.operators }}>{token}</span>
+    ),
+  },
+]
+
+const Marker = createMarker(parsers)
 
 interface CodeTextProps {
   children: string
 }
 
 export function CodeText({ children }: CodeTextProps) {
-  function getColor(word: string) {
-    for (const token of Object.keys(DELEGUA_TOKENS)) {
-      if (DELEGUA_TOKENS[token].includes(word)) {
-        return THEMES.default[token]
-      }
-    }
-  }
-
   return (
-    <div className="space-x-2">
-      {children.split(' ').map((word, index) => {
-        const color = getColor(word)
-        return (
-          <span
-            key={`${word}-${index}`}
-            style={{ color: color ? color : '#EBEBEB' }}
-          >
-            {word}
-          </span>
-        )
-      })}
+    <div
+      className="space-x-2 tracking-wider"
+      style={{ color: THEMES.darkSpace.rest }}
+    >
+      <Marker>{children}</Marker>
     </div>
   )
 }
