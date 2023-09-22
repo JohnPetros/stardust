@@ -1,5 +1,7 @@
 export { ROCKET_ANIMATION_DURATION } from './rocket-animation-duration'
 export { PASSWORD_REGEX } from './password-regex'
+export { STRING_REGEX } from './string-regex'
+export { OPERATOR_REGEX } from './operator-regex'
 export { HOME_PAGES } from './home-pages'
 export { ROUTES } from './routes'
 export { MODAL_EFFECTS } from './modal-effects'
