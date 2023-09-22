@@ -57,7 +57,7 @@ export function Header({ onLeaveLesson }: HeaderProps) {
 
         <div className="flex items-center gap-2">
           <div>
-            <Image src="/icons/life.svg" width={36} height={36} alt="" />
+            <Image src="/icons/life.svg" width={36} height={36} alt="" priority />
           </div>
           <span className="text-red-700 text-lg font-bold">{livesAmount}</span>
         </div>
