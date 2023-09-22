@@ -1,4 +1,6 @@
-export const DELEGUA_TOKENS: { [token: string]: string[] } = {
+import type { Token } from '@/types/token'
+
+export const DELEGUA_TOKENS: { [token in Token]: string[] } = {
   keywords: [
     'cada',
     'caso',
@@ -123,4 +125,9 @@ export const DELEGUA_TOKENS: { [token: string]: string[] } = {
   booleans: ['verdadeiro', 'falso', 'vazio', 'nulo'],
 
   typeKeywords: ['var'],
+
+  strings: [],
+  comments: [],
+  numbers: [],
+  rest: [],
 }
