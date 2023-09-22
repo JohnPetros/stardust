@@ -22,7 +22,7 @@ export function ProgressBar({ value, height, indicatorImage }: ProgessProps) {
       />
 
       <div className="relative w-10 h-10 rotate-90 -ml-2  z-10">
-        {indicatorImage && <Image src={indicatorImage} fill alt="" />}
+        {indicatorImage && <Image src={indicatorImage} fill sizes='(min-width: 375px) 2.5rem' alt="" priority />}
       </div>
     </Progress.Root>
   )
