@@ -50,6 +50,7 @@
     "postcss": "8.4.26",
     "react": "18.2.0",
     "react-apexcharts": "^1.4.1",
+    "react-content-marker": "^2.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.2",
     "swiper": "^10.2.0",
