@@ -19,7 +19,7 @@ export function Client({ children }: ClientProps) {
   return (
     <TooltipProvider>
       <ToastProvider swipeDirection="right">
-        <AchivementsProvider>
+        {/* <AchivementsProvider> */}
           <EditorProvider>
             <LessonProvider>
               <ChallengeProvider>
@@ -31,7 +31,7 @@ export function Client({ children }: ClientProps) {
               </ChallengeProvider>
             </LessonProvider>
           </EditorProvider>
-        </AchivementsProvider>
+        {/* </AchivementsProvider> */}
       </ToastProvider>
     </TooltipProvider>
   )
