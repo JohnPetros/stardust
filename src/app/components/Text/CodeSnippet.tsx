@@ -9,6 +9,7 @@ import * as ToolBar from '@radix-ui/react-toolbar'
 import { execute } from '@/libs/delegua'
 import { playSound } from '@/utils/functions'
 import { ToastRef, Toast } from '../Toast'
+import { twMerge } from 'tailwind-merge'
 
 interface CodeSnippetProps {
   code: string
@@ -22,7 +23,6 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
   const errorLine = useRef(0)
   const consoleRef = useRef<ConsoleRef>(null)
   const toastRef = useRef<ToastRef>(null)
-
 
   function getPrintType(print: string) {
     return print.replace(/escreva\((.*?)\)/, 'escreva(tipo de $1)')
@@ -98,7 +98,12 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
   }, [code])
 
   return (
-    <div className="overflow-hidden relative h-64 rounded-md bg-gray-800 w-full">
+    <div
+      className={twMerge(
+        'overflow-hidden relative rounded-md bg-gray-800 w-full',
+        isRunnable ? 'h-64' : 'h-auto'
+      )}
+    >
       <Toast ref={toastRef} />
       <ToolBar.Root className="flex items-center justify-end gap-2 border-b border-gray-700 p-2">
         {isRunnable && (
@@ -128,7 +133,7 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
         onChange={handleCodeChange}
       />
 
-      <Console ref={consoleRef} results={outputs} />
+      {isRunnable && <Console ref={consoleRef} results={outputs} />}
     </div>
   )
 }
