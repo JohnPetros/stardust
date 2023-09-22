@@ -1,4 +1,7 @@
 import '../styles/global.css'
+import 'swiper/css'
+import 'swiper/css/navigation'
+
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 
