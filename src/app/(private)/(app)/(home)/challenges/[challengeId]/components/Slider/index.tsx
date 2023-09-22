@@ -13,8 +13,6 @@ import { Code } from '../Code'
 import { Result } from '../Result'
 
 register()
-import 'swiper/css'
-import 'swiper/css/navigation'
 import { motion, useAnimate } from 'framer-motion'
 
 export function Slider() {
