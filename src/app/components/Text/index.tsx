@@ -13,7 +13,7 @@ import { Variants, motion } from 'framer-motion'
 
 import { tv } from 'tailwind-variants'
 
-import { formatText, getImage } from '@/utils/functions'
+import { formatText, getImage, slugify } from '@/utils/functions'
 
 import type { Text as TextData } from '@/types/text'
 
@@ -75,8 +75,13 @@ export function Text({
       variants={textAnimations}
       initial={hasAnimation && 'hidden'}
       animate={hasAnimation && 'visible'}
-      className="flex items-center w-full"
     >
+      {title && (
+        <section id={slugify(title)} className='mb-6'>
+          <Title>{title}</Title>
+        </section>
+      )}
+
       {type === 'image' && textImage && (
         <div className="flex flex-col items-center justify-center w-full">
           <Image
@@ -94,54 +99,57 @@ export function Text({
           </p>
         </div>
       )}
-
-      {type === 'code' && (
-        <div className="flex flex-col gap-2 w-full">
-          {title && <Title>{title}</Title>}
-          <CodeSnippet
-            code={formatText(String(content))}
-            isRunnable={Boolean(isRunnable)}
-          />
-        </div>
-      )}
-
-      {type === 'user' && (
-        <>
-          <div className={textStyles({ type })}>
-            {!Array.isArray(content) && (
-              <p className="leading-6">
-                <TypeWriter text={content} isEnable={hasAnimation} />
-              </p>
-            )}
+      <div className="flex items-center w-full">
+        {type === 'code' && (
+          <div className="flex flex-col gap-2 w-full">
+            {title && <Title>{title}</Title>}
+            <CodeSnippet
+              code={formatText(String(content))}
+              isRunnable={Boolean(isRunnable)}
+            />
           </div>
-          {user && <UserAvatar avatarId={user?.avatar_id} size={80} />}
-        </>
-      )}
+        )}
 
-      {['default', 'alert', 'quote'].includes(String(type)) && (
-        <>
-          {textImage && (
-            <div className="relative md:w-24 w-20 h-12 md:h-16 bg-red-400 rounded-md overflow-hidden mr-3">
-              <Image src={textImage} fill alt="Panda" />
+        {type === 'user' && (
+          <>
+            <div className={textStyles({ type })}>
+              {!Array.isArray(content) && (
+                <p className="leading-6">
+                  <TypeWriter text={content} isEnable={hasAnimation} />
+                </p>
+              )}
             </div>
-          )}
-          {type === 'alert' && (
-            <span className="block mr-3">
-              <Image src="/icons/alert.svg" width={32} height={32} alt="" />
-            </span>
-          )}
-          <div className={textStyles({ type })}>
-            {!Array.isArray(content) && (
-              <p className="leading-6">
-                <TypeWriter
-                  text={formatText(content)}
-                  isEnable={hasAnimation}
-                />
-              </p>
+            {user && <UserAvatar avatarId={user?.avatar_id} size={80} />}
+          </>
+        )}
+
+        {['default', 'alert', 'quote'].includes(String(type)) && (
+          <>
+            {textImage && (
+              <div className="relative md:w-24 w-20 h-12 md:h-16 bg-red-400 rounded-md overflow-hidden mr-3">
+                <Image src={textImage} fill alt="Panda" />
+              </div>
             )}
-          </div>
-        </>
-      )}
+
+            {type === 'alert' && (
+              <span className="block mr-3">
+                <Image src="/icons/alert.svg" width={32} height={32} alt="" />
+              </span>
+            )}
+
+            <div className={textStyles({ type })}>
+              {!Array.isArray(content) && (
+                <p className="leading-6">
+                  <TypeWriter
+                    text={formatText(content)}
+                    isEnable={hasAnimation}
+                  />
+                </p>
+              )}
+            </div>
+          </>
+        )}
+      </div>
     </motion.div>
   )
 }
