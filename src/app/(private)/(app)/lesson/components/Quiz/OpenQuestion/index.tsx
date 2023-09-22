@@ -104,8 +104,6 @@ export function OpenQuestion({
                 inputIndex = Number(text.slice(-1)) - 1
               }
 
-              console.log({ inputIndex })
-
               return (
                 <div key={`${index}-${line.id}`}>
                   {!text.includes('input') ? (

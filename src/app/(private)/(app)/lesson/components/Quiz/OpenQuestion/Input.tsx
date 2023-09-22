@@ -1,8 +1,7 @@
 'use client'
 
 import { useLesson } from '@/hooks/useLesson'
-import { InputHTMLAttributes, useMemo } from 'react'
-import { twMerge } from 'tailwind-merge'
+import { InputHTMLAttributes, MutableRefObject, RefObject, useMemo } from 'react'
 import { tv } from 'tailwind-variants'
 
 const inputStyles = tv({
@@ -24,7 +23,6 @@ export function Input({ answer, ...rest }: InputProps) {
   const {
     state: { isAnswerVerified, isAnswerCorrect },
   } = useLesson()
-
 
   const width = 2 + answer.length + 'ch'
 
