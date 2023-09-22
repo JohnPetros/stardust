@@ -97,25 +97,35 @@ export function OpenQuestion({
       <ul className="mt-6">
         {lines.map((line) => (
           <li key={line.id} className="flex flex-row items-center gap-3">
-            {line.texts.map((text, index) => (
-              <div key={`${index}-${line.id}`}>
-                {text !== 'input' ? (
-                  <div className="flex gap-2">
-                    <CodeText>{text}</CodeText>
-                  </div>
-                ) : (
-                  <Input
-                    value={userAnswers[index]}
-                    autoCapitalize="none"
-                    onChange={({ currentTarget }) =>
-                      handleInputChange(currentTarget.value, index)
-                    }
-                    answer={answers[index]}
-                    autoFocus
-                  />
-                )}
-              </div>
-            ))}
+            {line.texts.map((text, index) => {
+              let inputIndex = 0
+
+              if (text.includes('input')) {
+                inputIndex = Number(text.slice(-1)) - 1
+              }
+
+              console.log({ inputIndex })
+
+              return (
+                <div key={`${index}-${line.id}`}>
+                  {!text.includes('input') ? (
+                    <div className="flex gap-2">
+                      <CodeText>{text}</CodeText>
+                    </div>
+                  ) : (
+                    <Input
+                      value={userAnswers[inputIndex]}
+                      autoCapitalize="none"
+                      onChange={({ currentTarget }) =>
+                        handleInputChange(currentTarget.value, inputIndex)
+                      }
+                      answer={answers[inputIndex]}
+                      autoFocus
+                    />
+                  )}
+                </div>
+              )
+            })}
           </li>
         ))}
       </ul>
