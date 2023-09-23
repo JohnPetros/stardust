@@ -17,6 +17,12 @@ const parsers = [
     ),
   },
   {
+    rule: OPERATOR_REGEX,
+    tag: (token: string) => (
+      <span style={{ color: THEMES.darkSpace.operators }}>{token}</span>
+    ),
+  },
+  {
     rule: new RegExp(`(${DELEGUA_TOKENS.typeKeywords.join('|')})`),
     tag: (token: string) => (
       <span style={{ color: THEMES.darkSpace.typeKeywords }}>{token}</span>
@@ -26,12 +32,6 @@ const parsers = [
     rule: new RegExp(`(${DELEGUA_TOKENS.keywords.join('|')})`),
     tag: (token: string) => (
       <span style={{ color: THEMES.darkSpace.keywords }}>{token}</span>
-    ),
-  },
-  {
-    rule: OPERATOR_REGEX,
-    tag: (token: string) => (
-      <span style={{ color: THEMES.darkSpace.operators }}>{token}</span>
     ),
   },
 ]
