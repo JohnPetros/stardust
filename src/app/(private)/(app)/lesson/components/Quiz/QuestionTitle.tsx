@@ -15,7 +15,7 @@ export function QuestionTitle({ children, picture }: TitleProps) {
   return (
     <div className="flex items-center justify-center gap-3 w-full">
       {image && (
-        <div className="relative w-20 h-12">
+        <div className="relative w-16 h-16">
           <Image
             src={image}
             fill
@@ -26,7 +26,9 @@ export function QuestionTitle({ children, picture }: TitleProps) {
           />
         </div>
       )}
-      <p className="text-gray-100 text-center font-medium mt-4">{children}</p>
+      <p className="text-gray-100 text-center font-medium max-w-xl">
+        {children}
+      </p>
     </div>
   )
 }
