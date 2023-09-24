@@ -22,7 +22,7 @@ export const questions = [
   {
     title: 'Atribua o nome do planeta à variável planeta',
     type: 'drag-and-drop',
-    lines: [{ id: 1, texts: ['var planeta = ', 'dropZone'], indentLevel: 0 }],
+    lines: [{ id: 1, texts: ['var planeta = ', 'dropZone'], indentation: 0 }],
     dragItems: [
       { id: 1, label: 'escreva' },
       { id: 2, label: '"Planeta Datahon"' },
@@ -52,7 +52,7 @@ escreva("planeta encontrado: ", nomePlaneta)`,
     title:
       'Vamos declarar uma variável contendo o nome de um planeta que vamos explorar. Mas qual palavra eu devo escrever antes do nome de qualquer variável na hora de declará-la?',
     type: 'open',
-    lines: [{ id: 1, texts: ['input', 'nomePlaneta'], indentLevel: 0 }],
+    lines: [{ id: 1, texts: ['input', 'nomePlaneta'], indentation: 0 }],
     answers: ['var'],
     picture: 'panda.jpg',
   },

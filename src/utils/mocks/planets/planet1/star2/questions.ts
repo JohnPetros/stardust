@@ -40,7 +40,7 @@ export const questions = [
   {
     title:
       'Agora preencha os espaços do código abaixo com os comandos que faltam. (Clique no bloco ou segure e arraste até o espaço vazio correspondente)',
-    type: 'drag-and-drop-click',
+    type: 'drag-and-drop',
     lines: [
       { id: 1, texts: ['var nomeDoFoguete = ', 'dropZone'], indentation: 0 },
       { id: 2, texts: ['dropZone', '(nomeDoFoguete)'], indentation: 0 },
