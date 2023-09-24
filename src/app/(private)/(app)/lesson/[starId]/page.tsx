@@ -75,6 +75,9 @@ export default function Lesson() {
     let timer: NodeJS.Timeout
 
     if (star) {
+
+      
+
       dispatch({ type: 'setTexts', payload: texts })
 
       // dispatch({ type: 'setTexts', payload: star.texts })
@@ -89,7 +92,7 @@ export default function Lesson() {
   }, [star])
 
   useEffect(() => {
-    if (currentStage) {
+    if (currentStage === 'end') {
       setXp(getXp())
       setCoins(getCoins())
       setAccurance(getAccurance())

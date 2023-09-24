@@ -94,7 +94,7 @@ export function OpenQuestion({
 
       {code && <CodeSnippet code={code} isRunnable={false} />}
 
-      <ul className="mt-6">
+      <ul className="mt-12">
         {lines.map((line) => (
           <li key={line.id} className="flex flex-row items-center gap-3">
             {line.texts.map((text, index) => {
@@ -107,8 +107,8 @@ export function OpenQuestion({
               return (
                 <div key={`${index}-${line.id}`}>
                   {!text.includes('input') ? (
-                    <div className="flex gap-2">
-                      <CodeText>{text}</CodeText>
+                    <div className="flex gap-2 text-gray-100">
+                      {text}
                     </div>
                   ) : (
                     <Input
@@ -118,7 +118,7 @@ export function OpenQuestion({
                         handleInputChange(currentTarget.value, inputIndex)
                       }
                       answer={answers[inputIndex]}
-                      autoFocus
+                      autoFocus={inputIndex === 0}
                     />
                   )}
                 </div>
