@@ -48,8 +48,8 @@ export function Quiz({ leaveLesson }: QuizProps) {
 
   if (currentQuestion) {
     return (
-      <div className=" h-[calc(100vh+120px)] w-full flex justify-center">
-        <div className="absolute min-h-[calc(100vh-120px)] mx-auto w-full max-w-2xl mt-12 flex items-center p-6 md:p-0">
+      <div className="w-full h-screen flex justify-center items-center">
+        <div className=" ">
           {currentQuestion.content.type === 'selection' && (
             <SelectionQuestion data={currentQuestion.content} />
           )}
