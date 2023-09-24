@@ -31,7 +31,9 @@ import type {
 } from '@/types/quiz'
 
 export function getDragItemWidth(item: DraggrableItem) {
-  return 1.5 + item.label.length / 2 + 'rem'
+  const { length } = item.label
+  const base = length < 10 ? 2.5 : 3
+  return base + length / 2 + 'rem'
 }
 
 interface DragAndDropClickQuestionProps {
@@ -213,7 +215,7 @@ export function DragAndDropQuestion({
                 return (
                   <div key={id}>
                     {text !== 'dropZone' ? (
-                      <CodeText>{text}</CodeText>
+                      <span className="text-gray-100">{text}</span>
                     ) : (
                       <DropZone
                         id={id}
@@ -233,9 +235,11 @@ export function DragAndDropQuestion({
           ))}
         </ul>
 
-        <ul className="flex flex-wrap gap-3 mt-12 px-24">
+        <ul className="flex flex-wrap justify-center gap-3 w-full mt-12">
           {draggableItems.map((item) => {
             const itemWidth = getDragItemWidth(item)
+            console.log({ itemWidth })
+
             return (
               <DropBank
                 key={item.id}
@@ -261,7 +265,7 @@ export function DragAndDropQuestion({
                   id={activeDraggableItem.id}
                   label={activeDraggableItem.label}
                   isActive={true}
-                  width={1.5 + activeDraggableItem.label.length / 2 + 'rem'}
+                  width={getDragItemWidth(activeDraggableItem)}
                 />
               ) : null}
             </DragOverlay>,

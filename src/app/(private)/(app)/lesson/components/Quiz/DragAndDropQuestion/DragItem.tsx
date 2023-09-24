@@ -31,6 +31,7 @@ export function DragItem({
     setNodeRef: setDraggableNodeRef,
     transform,
     isDragging,
+    node,
   } = useDraggable({
     id,
     data: { bankId: `bank-${id}`, isInZone: isDroppedInZone },
@@ -58,7 +59,7 @@ export function DragItem({
       {...listeners}
       {...attributes}
       className={twMerge(
-        'grid place-content-center border border-gray-10 text-gray-100 bg-purple-700 rounded-md h-10 cursor-grab',
+        'flex items-center justify-center border border-gray-10 text-gray-100 bg-purple-700 rounded-md h-10 w-full p-1 cursor-grab',
         !isActive && isDroppedInZone ? 'border-none p-0 bg-transparent' : '',
         isActive ? 'text-blue-300 border-2 border-blue-300 cursor-grab' : '',
         isAnswerVerified && isAnswerCorrect && isDroppedInZone

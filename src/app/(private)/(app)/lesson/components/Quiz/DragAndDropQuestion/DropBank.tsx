@@ -23,10 +23,10 @@ export function DropBank({ children, id, dropItemId, width }: DropBankProps) {
       style={{ width }}
       className={twMerge(
         !hasDroppedItem &&
-          'border-2 border-dashed border-gray-100 bg-transparent rounded-md h-10 text-gray-100'
+          'border-2 border-dashed border-gray-100 bg-transparent rounded-md h-10 w-full text-gray-100'
       )}
     >
-      {hasDroppedItem? children : null}
+      {hasDroppedItem ? children : null}
     </li>
   )
 }
