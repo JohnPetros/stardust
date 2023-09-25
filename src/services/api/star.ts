@@ -29,17 +29,23 @@ export default () => {
           planet_id: currentStar.planet_id,
           number: currentStar.number + 1,
         })
+        .eq('users_unlocked_stars.user_id', userId)
+        .single<Star>()
 
       if (error) {
         throw new Error(error.message)
       }
 
-      if (!data.length) return null
+      if (!data) return null
+
+      const { users_unlocked_stars } = data
 
       const nextStar = {
-        ...data[0],
-        isUnlocked: data[0].users_unlocked_stars.length > 0,
+        ...data,
+        isUnlocked: users_unlocked_stars && users_unlocked_stars.length > 0,
       }
+
+      delete nextStar.users_unlocked_stars
 
       return nextStar
     },
