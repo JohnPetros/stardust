@@ -4,24 +4,25 @@ import { useAuth } from '@/hooks/useAuth'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 
-import { Envelope, Lock } from '@phosphor-icons/react'
-import { Title } from '../components/Title'
-import { Hero } from '../components/Hero'
-import { Link } from '../components/Link'
 import { Input } from '@/app/components/Input'
 import { Button } from '@/app/components/Button'
 import { Toast, ToastRef } from '@/app/components/Toast'
+import { Title } from '../components/Title'
+import { Hero } from '../components/Hero'
+import { Link } from '../components/Link'
+import { RocketAnimation } from '../components/RocketAnimation'
+import { Envelope, Lock } from '@phosphor-icons/react'
 
 import { AnimatePresence, motion, Variants } from 'framer-motion'
-import { PASSWORD_REGEX } from '@/utils/constants/password-regex'
-
-import { RocketAnimation } from '../components/RocketAnimation'
-import { ROCKET_ANIMATION_DURATION } from '@/utils/constants'
 import { LottieRef } from 'lottie-react'
 
-const formVariants: Variants = {
+import { PASSWORD_REGEX } from '@/utils/constants/password-regex'
+
+import { ROCKET_ANIMATION_DURATION } from '@/utils/constants'
+import { SignInFormFields, signInFormSchema } from '@/libs/zod'
+
+const formAnimations: Variants = {
   initial: {
     opacity: 0,
     x: -250,
@@ -43,7 +44,7 @@ const formVariants: Variants = {
   },
 }
 
-const heroVariants: Variants = {
+const heroAnimations: Variants = {
   hidden: {
     opacity: 0,
     x: '75vw',
@@ -53,22 +54,6 @@ const heroVariants: Variants = {
   },
 }
 
-const formSchema = z.object({
-  email: z
-    .string()
-    .nonempty('Seu e-mail não pode estar vazio!')
-    .email('Por favor informe um e-mail válido!'),
-  password: z
-    .string()
-    .nonempty('Sua senha não pode estar vazia!')
-    .regex(
-      PASSWORD_REGEX,
-      'Senha deve conter pelo menos uma letra minúscula, uma maiúscula, um dígito e um caractere especial.'
-    ),
-})
-
-export type FormFields = z.infer<typeof formSchema>
-
 export default function SignIn() {
   const [isRocketVisible, setIsRocketVisible] = useState(false)
 
@@ -76,11 +61,11 @@ export default function SignIn() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormFields>({
-    resolver: zodResolver(formSchema),
+  } = useForm<SignInFormFields>({
+    resolver: zodResolver(signInFormSchema),
   })
 
-  const { signIn, user, serverSession } = useAuth()
+  const { signIn } = useAuth()
   const [isLaoding, setIsLoading] = useState(false)
 
   const router = useRouter()
@@ -97,7 +82,7 @@ export default function SignIn() {
     )
   }
 
-  async function handleFormData({ email, password }: FormFields) {
+  async function handleFormData({ email, password }: SignInFormFields) {
     const error = await signIn(email, password)
 
     if (error) {
@@ -135,7 +120,7 @@ export default function SignIn() {
           <AnimatePresence>
             {!isRocketVisible && (
               <motion.div
-                variants={formVariants}
+                variants={formAnimations}
                 initial="initial"
                 animate="visible"
                 exit="hidden"
@@ -187,7 +172,7 @@ export default function SignIn() {
         <AnimatePresence>
           {!isRocketVisible && (
             <motion.div
-              variants={heroVariants}
+              variants={heroAnimations}
               exit="hidden"
               className="bg-gray-800 hidden lg:grid lg:place-content-center"
             >
