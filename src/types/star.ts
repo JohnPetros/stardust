@@ -9,5 +9,6 @@ export type Star = {
   planet_id: string 
   texts: Text[] 
   isUnlocked: boolean
+  users_unlocked_stars?: []
   questions: Question[]
 }
