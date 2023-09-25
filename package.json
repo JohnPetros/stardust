@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "test --watch",
+    "test": "test",
+    "test:watch": "test --watch",
+    "test:coverage": "test --coverage",
     "gen-types": "supabase gen types typescript --linked > ./src/types/supabase.ts"
   },
   "dependencies": {
