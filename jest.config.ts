@@ -1,12 +1,13 @@
-const nextJest = require('next/jest')
+import nextJest from 'next/jest.js'
 
 const createJestConfig = nextJest({
   dir: './',
 })
 
-const customJestConfig = {
-  setupFilesAfterEnv: ['<rootDir>/src/tests/jest.setup.js', 'jest-canvas-mock'],
+/** @type {import('jest').Config} */
+const config = {
+  setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.ts'],
   testEnvironment: 'jest-environment-jsdom',
 }
 
-module.exports = createJestConfig(customJestConfig)
+export default createJestConfig(config)
