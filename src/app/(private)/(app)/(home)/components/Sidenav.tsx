@@ -80,6 +80,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
     const error = await signOut()
 
     if (error) {
+      console.error(error)
       showErrorMessage()
     }
 
