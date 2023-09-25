@@ -1,10 +1,13 @@
 'use client'
 
-import { updateUserDataParam } from '@/app/(private)/(app)/lesson/components/End'
 import { useAuth } from './useAuth'
 import { useApi } from '@/services/api'
-import { User } from '@/types/user'
 import useSWR from 'swr'
+
+import { updateUserDataParam } from '@/app/(private)/(app)/lesson/components/End'
+
+import type { User } from '@/types/user'
+import type { Star } from '@/types/star'
 
 export function useStar(starId?: string | null | undefined) {
   const { user } = useAuth()
@@ -65,7 +68,7 @@ export function useStar(starId?: string | null | undefined) {
     let _nextStar = nextStar
 
     if (!_nextStar) {
-      _nextStar = await getNextStarFromNextPlanet()
+      _nextStar = (await getNextStarFromNextPlanet()) as Star
       completedPlanets += _nextStar ? 1 : 0
     }
 
