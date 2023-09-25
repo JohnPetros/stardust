@@ -4,24 +4,22 @@ import { useAuth } from '@/hooks/useAuth'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-
-import { Title } from '../components/Title'
-import { Hero } from '../components/Hero'
-import { Link } from '../components/Link'
 
 import { Input } from '@/app/components/Input'
 import { Button } from '@/app/components/Button'
 import { Toast, ToastRef } from '@/app/components/Toast'
+import { Title } from '../components/Title'
+import { Hero } from '../components/Hero'
+import { Link } from '../components/Link'
 
 import { Envelope, Lock } from '@phosphor-icons/react'
 import { motion, Variants } from 'framer-motion'
 import { LottieRef } from 'lottie-react'
 
 import { useApi } from '@/services/api'
-import { PASSWORD_REGEX } from '@/utils/constants/password-regex'
+import { SignUpFormFields, signUpFormSchema } from '@/libs/zod'
 
-const formVariants: Variants = {
+const formAnimations: Variants = {
   hidden: {
     opacity: 0,
     x: -250,
@@ -36,41 +34,13 @@ const formVariants: Variants = {
   },
 }
 
-
-
-const formSchema = z
-  .object({
-    name: z
-      .string()
-      .nonempty('Seu nome não pode estar vazio!')
-      .min(3, 'Por favor, informe um nome válido!'),
-    email: z
-      .string()
-      .nonempty('Seu e-mail não pode estar vazio!')
-      .email('Por favor, informe um e-mail válido!'),
-    password: z
-      .string()
-      .nonempty('Sua senha não pode estar vazia!')
-      .regex(
-        PASSWORD_REGEX,
-        'Senha deve conter pelo menos uma letra minúscula, uma maiúscula, um dígito e um caractere especial.'
-      ),
-    password_confirmation: z.string(),
-  })
-  .refine((fields) => fields.password === fields.password_confirmation, {
-    path: ['password_confirmation'],
-    message: 'As senhas precisam de iguais',
-  })
-
-export type FormFields = z.infer<typeof formSchema>
-
 export default function SignUp() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormFields>({
-    resolver: zodResolver(formSchema),
+  } = useForm<SignUpFormFields>({
+    resolver: zodResolver(signUpFormSchema),
   })
 
   const { signUp, isLoading } = useAuth()
@@ -102,7 +72,7 @@ export default function SignUp() {
     })
   }
 
-  async function handleFormData({ name, email, password }: FormFields) {
+  async function handleFormData({ name, email, password }: SignUpFormFields) {
     const userEmail = await api.getUserByEmail(email)
 
     if (userEmail) {
@@ -138,7 +108,7 @@ export default function SignUp() {
       <div className="h-screen lg:grid lg:grid-cols-[1fr_1.5fr]">
         <main className="flex flex-col items-center justify-center h-full">
           <motion.div
-            variants={formVariants}
+            variants={formAnimations}
             initial="hidden"
             animate="visible"
             className="w-full max-w-[320px]"
