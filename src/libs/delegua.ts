@@ -1,5 +1,3 @@
-'use client'
-
 import { Lexador } from '@designliquido/delegua/fontes/lexador'
 import { AvaliadorSintatico } from '@designliquido/delegua/fontes/avaliador-sintatico/'
 import { InterpretadorBase } from '@designliquido/delegua/fontes/interpretador'
