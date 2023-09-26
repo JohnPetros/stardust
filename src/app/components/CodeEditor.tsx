@@ -14,6 +14,7 @@ import { getDeleguaLanguageTokens } from '@/utils/functions/getDeleguaLanguageTo
 import type monaco from 'monaco-editor'
 import { Loading } from './Loading'
 import { useEditor } from '@/hooks/useEditor'
+import { THEMES } from '@/utils/constants'
 
 export interface CodeEditorRef {
   reloadValue: () => void
@@ -42,6 +43,16 @@ export function CodeEditorComponent(
   const { state } = useEditor()
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
 
+  function getEditorRules() {
+    const tokens = Object.keys(THEMES.darkSpace).slice(0, -2)
+    const colors = Object.values(THEMES.darkSpace).slice(0, -2)
+
+    return colors.map((color, index) => ({
+      token: tokens[index].slice(0, -1),
+      foreground: color,
+    }))
+  }
+
   function reloadValue() {
     editorRef.current?.setValue(value)
   }
@@ -66,39 +77,12 @@ export function CodeEditorComponent(
       getDeleguaLanguageTokens()
     )
 
+    const rules = getEditorRules()
+
     monaco.editor.defineTheme('delegua-theme', {
       base: 'vs-dark',
       inherit: true,
-      rules: [
-        {
-          token: 'keyword',
-          foreground: '#0FE983',
-        },
-        {
-          token: 'comment',
-          foreground: '#999999',
-        },
-        {
-          token: 'string',
-          foreground: '#F1FA8C',
-        },
-        {
-          token: 'operator',
-          foreground: '#022F43',
-        },
-        {
-          token: 'number',
-          foreground: '#00D1FF',
-        },
-        {
-          token: 'boolean',
-          foreground: '#00D1FF',
-        },
-        {
-          token: 'typeKeyword',
-          foreground: '#0ac899',
-        },
-      ],
+      rules,
       colors: {
         'editor.background': '#1E2626',
       },
@@ -118,31 +102,12 @@ export function CodeEditorComponent(
   )
 
   useEffect(() => {
+    const rules = getEditorRules()
+
     monaco?.editor.defineTheme('delegua-theme', {
       base: 'vs-dark',
       inherit: true,
-      rules: [
-        {
-          token: 'keyword',
-          foreground: '#50FA7B',
-        },
-        {
-          token: 'comment',
-          foreground: '#999999',
-        },
-        {
-          token: 'string',
-          foreground: '#F1FA8C',
-        },
-        // {
-        //   token: 'operator',
-        //   foreground: '#022F43',
-        // },
-        // {
-        //   token: 'number',
-        //   foreground: '#00D1FF',
-        // },
-      ],
+      rules,
       colors: {
         'editor.background': '#1E2626',
       },
