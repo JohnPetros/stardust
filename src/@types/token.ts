@@ -7,3 +7,4 @@ export type Token =
   | 'booleans'
   | 'typeKeywords'
   | 'rest'
+  | 'editor'
