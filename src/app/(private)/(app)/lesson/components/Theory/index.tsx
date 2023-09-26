@@ -8,7 +8,7 @@ import { Star } from './Star'
 import { Modal, ModalRef } from '@/app/components/Modal'
 import { useLesson } from '@/hooks/useLesson'
 
-import type { Text as TextData } from '@/types/text'
+import type { Text as TextData } from '@/@types/text'
 
 interface TheoryProps {
   title: string
@@ -53,7 +53,6 @@ export function Theory({ title, number }: TheoryProps) {
     nextText()
   }
 
-
   useEffect(() => {
     setTexts([{ ...state.texts[0], hasAnimation: false }])
     dispatch({ type: 'incrementRenderedTextsAmount' })
@@ -71,7 +70,11 @@ export function Theory({ title, number }: TheoryProps) {
           </div>
           <div className="space-y-10 mt-10 pb-[360px] px-6 md:px-0">
             {texts.map((text, index) => (
-              <Text key={`text-${index}`} data={text} hasAnimation={text.hasAnimation} />
+              <Text
+                key={`text-${index}`}
+                data={text}
+                hasAnimation={text.hasAnimation}
+              />
             ))}
           </div>
         </div>
@@ -82,15 +85,15 @@ export function Theory({ title, number }: TheoryProps) {
             tabIndex={0}
             onClick={handleContinueButtonClick}
             autoFocus
-            onFocus={() => buttonHasFocus.current = true}
-            onBlur={() => buttonHasFocus.current = false}
+            onFocus={() => (buttonHasFocus.current = true)}
+            onBlur={() => (buttonHasFocus.current = false)}
             disabled={nextTextIndex.current > state.texts.length}
           >
             Continuar
           </Button>
         </footer>
       </div>
-      
+
       <Modal
         ref={modalRef}
         type={'asking'}

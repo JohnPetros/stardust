@@ -1,6 +1,6 @@
 'use client'
 import { useSupabase } from '@/hooks/useSupabase'
-import { Achievement } from '@/types/achievement'
+import { Achievement } from '@/@types/achievement'
 
 export default () => {
   const { supabase } = useSupabase()
@@ -68,7 +68,10 @@ export default () => {
       }
     },
 
-    deleteUserRescuebleAchievement: async (achievementId: string, userId: string) => {
+    deleteUserRescuebleAchievement: async (
+      achievementId: string,
+      userId: string
+    ) => {
       const { error } = await supabase
         .from('users_rescuable_achievements')
         .delete()

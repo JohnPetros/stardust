@@ -28,7 +28,7 @@ import { compareArrays } from '@/utils/functions'
 import type {
   DragAndDropQuestion as DragAndDropData,
   DraggrableItem,
-} from '@/types/quiz'
+} from '@/@types/quiz'
 
 export function getDragItemWidth(item: DraggrableItem) {
   const { length } = item.label

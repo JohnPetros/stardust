@@ -19,7 +19,7 @@ import { Shortcuts } from './Shortcuts'
 
 import { execute } from '@/libs/delegua'
 
-import type { TestCase } from '@/types/challenge'
+import type { TestCase } from '@/@types/challenge'
 import { Settings } from './Settings'
 
 export function Code() {

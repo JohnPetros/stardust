@@ -6,8 +6,8 @@ import useSWR from 'swr'
 
 import { updateUserDataParam } from '@/app/(private)/(app)/lesson/components/End'
 
-import type { User } from '@/types/user'
-import type { Star } from '@/types/star'
+import type { User } from '@/@types/user'
+import type { Star } from '@/@types/star'
 
 export function useStar(starId?: string | null | undefined) {
   const { user } = useAuth()

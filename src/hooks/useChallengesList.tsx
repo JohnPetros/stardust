@@ -9,7 +9,7 @@ import { ChallengesListContext } from '@/contexts/ChallengesListContext'
 
 import { useApi } from '@/services/api'
 
-import type { Challenge } from '@/types/challenge'
+import type { Challenge } from '@/@types/challenge'
 
 export const useChallengesList = () => {
   const api = useApi()
@@ -107,8 +107,6 @@ export const useChallengesList = () => {
     }
     return challenge
   }
-
- 
 
   const filteredChallenges = useMemo(() => {
     return challenges?.map(addCategories).map(checkCompletition)

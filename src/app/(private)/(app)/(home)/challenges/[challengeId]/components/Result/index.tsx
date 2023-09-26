@@ -6,7 +6,7 @@ import { TestCase } from './TestCase'
 
 import { compareArrays } from '@/utils/functions'
 
-import type { TestCase as TestCaseData } from '@/types/challenge'
+import type { TestCase as TestCaseData } from '@/@types/challenge'
 
 export function Result() {
   const {

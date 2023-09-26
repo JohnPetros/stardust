@@ -1,6 +1,6 @@
 import { RankedUser } from './RankedUser'
 
-import type { User } from '@/types/user'
+import type { User } from '@/@types/user'
 
 import { ArrowDown, ArrowUp } from '@phosphor-icons/react'
 import { twMerge } from 'tailwind-merge'

@@ -11,7 +11,7 @@ import { reorderItems } from '@/utils/functions'
 import { QuestionContainer } from '../QuestionContainer'
 import { CodeSnippet } from '@/app/components/Text/CodeSnippet'
 
-import type { SelectionQuestion as SelectionQuestionData } from '@/types/quiz'
+import type { SelectionQuestion as SelectionQuestionData } from '@/@types/quiz'
 
 interface SelectionQuestionProps {
   data: SelectionQuestionData

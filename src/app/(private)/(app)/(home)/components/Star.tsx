@@ -15,7 +15,7 @@ import { Variants, motion, useInView } from 'framer-motion'
 
 import { twMerge } from 'tailwind-merge'
 
-import type { Star } from '@/types/star'
+import type { Star } from '@/@types/star'
 
 const starLight = '0 0 12px #ffcf31a1'
 

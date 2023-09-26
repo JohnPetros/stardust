@@ -10,7 +10,7 @@ import { Button } from '@/app/components/Button'
 import { Variants, motion } from 'framer-motion'
 import { getImage } from '@/utils/functions'
 
-import type { Achievement as AchievementType } from '@/types/achievement'
+import type { Achievement as AchievementType } from '@/@types/achievement'
 
 const achievementAnimations: Variants = {
   hidden: {

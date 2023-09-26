@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useReducer } from 'react'
 
-import type { Question } from '@/types/quiz'
-import type { Text } from '@/types/text'
+import type { Question } from '@/@types/quiz'
+import type { Text } from '@/@types/text'
 
 type LessonState = {
   currentStage: 'theory' | 'quiz' | 'end'
@@ -41,7 +41,7 @@ type LessonValue = {
 export const LessonContext = createContext({} as LessonValue)
 
 const initialLessonState: LessonState = {
-  currentStage: 'quiz',
+  currentStage: 'theory',
   texts: [],
   renderedTextsAmount: 0,
   questions: [],

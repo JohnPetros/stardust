@@ -1,6 +1,6 @@
 'use client'
 import { useSupabase } from '@/hooks/useSupabase'
-import type { Category } from '@/types/category'
+import type { Category } from '@/@types/category'
 
 export default () => {
   const { supabase } = useSupabase()

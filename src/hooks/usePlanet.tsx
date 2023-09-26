@@ -4,8 +4,8 @@ import { useMemo, useState } from 'react'
 import { useAuth } from './useAuth'
 import useSWR from 'swr'
 
-import type { Star } from '@/types/star'
-import type { Planet } from '@/types/planet'
+import type { Star } from '@/@types/star'
+import type { Planet } from '@/@types/planet'
 import { useApi } from '@/services/api'
 import { UserUnlockedStars } from '@/types/relations'
 

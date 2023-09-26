@@ -4,7 +4,7 @@ import { useApi } from '@/services/api'
 import { useMemo } from 'react'
 import useSWR from 'swr'
 
-import type { Achievement } from '@/types/achievement'
+import type { Achievement } from '@/@types/achievement'
 
 export function useAchievement(userId?: string) {
   const api = useApi()

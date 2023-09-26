@@ -1,6 +1,6 @@
 'use client'
 import { useApi } from '@/services/api'
-import { User } from '@/types/user'
+import { User } from '@/@types/user'
 import useSWR from 'swr'
 
 export function useUser(userId: string) {
@@ -21,8 +21,7 @@ export function useUser(userId: string) {
     throw new Error(error)
   }
 
-
   return {
-    user
+    user,
   }
 }

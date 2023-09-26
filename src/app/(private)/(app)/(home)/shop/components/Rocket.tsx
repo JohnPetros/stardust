@@ -6,7 +6,7 @@ import Image from 'next/image'
 
 import { Button } from '@/app/components/Button'
 
-import { Rocket } from '@/types/rocket'
+import { Rocket } from '@/@types/rocket'
 import { getImage, playSound } from '@/utils/functions'
 import { twMerge } from 'tailwind-merge'
 
@@ -65,7 +65,7 @@ export function Rocket({
 
   const prestigeLevel = 2
   const rocketImage = getImage('rockets', image)
-  const isBuyable = user ? (user?.coins >= price) : false
+  const isBuyable = user ? user?.coins >= price : false
 
   async function selectRocket() {
     try {

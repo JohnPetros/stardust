@@ -7,7 +7,7 @@ import { motion, Variants } from 'framer-motion'
 
 import { getImage } from '@/utils/functions'
 
-import type { Planet } from '@/types/planet'
+import type { Planet } from '@/@types/planet'
 
 const planetSignAnimations: Variants = {
   float: {

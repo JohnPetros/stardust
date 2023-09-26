@@ -5,7 +5,7 @@ import { QuestionContainer } from '../QuestionContainer'
 import { QuestionTitle } from '../QuestionTitle'
 import { Checkbox } from './Checkbox'
 
-import type { CheckboxQuestion as CheckboxQuestionData } from '@/types/quiz'
+import type { CheckboxQuestion as CheckboxQuestionData } from '@/@types/quiz'
 
 interface CheckboxQuestionProps {
   data: CheckboxQuestionData

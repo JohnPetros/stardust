@@ -15,7 +15,7 @@ import { tv } from 'tailwind-variants'
 
 import { formatText, getImage, slugify } from '@/utils/functions'
 
-import type { Text as TextData } from '@/types/text'
+import type { Text as TextData } from '@/@types/text'
 
 const textAnimations: Variants = {
   hidden: {
@@ -77,7 +77,7 @@ export function Text({
       animate={hasAnimation && 'visible'}
     >
       {title && (
-        <section id={slugify(title)} className='mb-6'>
+        <section id={slugify(title)} className="mb-4">
           <Title>{title}</Title>
         </section>
       )}

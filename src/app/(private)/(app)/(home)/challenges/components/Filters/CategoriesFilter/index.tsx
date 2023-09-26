@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { Search } from '@/app/components/Search'
 import * as Dropdown from '@radix-ui/react-dropdown-menu'
 
-import type { Category } from '@/types/category'
+import type { Category } from '@/@types/category'
 
 import { removeAccentuation } from '@/utils/functions'
 import { useChallengesList } from '@/hooks/useChallengesList'

@@ -17,7 +17,7 @@ import { Streak } from './Streak'
 
 import { playSound } from '@/utils/functions'
 
-import type { User } from '@/types/user'
+import type { User } from '@/@types/user'
 
 const apolloAnimations: Variants = {
   hidden: {
@@ -171,7 +171,6 @@ export function End({
 
   useEffect(() => {
     pauseStarsAnimation()
-
 
     playSound('earning.wav')
 

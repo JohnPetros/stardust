@@ -4,7 +4,7 @@ import { ReactNode, createContext, useEffect, useReducer } from 'react'
 
 import { EDITOR_DEFAULT_CONFIG } from '@/utils/constants'
 
-import type { ThemeName } from '@/types/themeName'
+import type { ThemeName } from '@/@types/themeName'
 
 export type EditorState = {
   fontSize: number
@@ -69,7 +69,6 @@ function EditorReducer(state: EditorState, action: EditorAction): EditorState {
 export function EditorProvider({ children }: EditorProviderProps) {
   const [state, dispatch] = useReducer(EditorReducer, initialEditorState)
 
- 
   return (
     <EditorContext.Provider value={{ state, dispatch }}>
       {children}

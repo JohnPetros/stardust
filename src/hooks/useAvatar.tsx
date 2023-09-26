@@ -6,7 +6,7 @@ import useSWR, { mutate } from 'swr'
 
 import { useApi } from '@/services/api'
 
-import type { Avatar } from '@/types/avatar'
+import type { Avatar } from '@/@types/avatar'
 
 export function useAvatar(avatarId?: string) {
   const api = useApi()

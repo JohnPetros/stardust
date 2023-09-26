@@ -10,7 +10,7 @@ import { ShinningAnimation } from '@/app/(private)/(app)/(home)/components/Shinn
 import { ToastRef, Toast } from '@/app/components/Toast'
 import { Button } from '@/app/components/Button'
 
-import type { Achievement as AchievementData } from '@/types/achievement'
+import type { Achievement as AchievementData } from '@/@types/achievement'
 
 type RescuableAchivement = {
   id: string

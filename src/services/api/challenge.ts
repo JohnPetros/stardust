@@ -1,6 +1,6 @@
 'use client'
 import { createClient } from '../supabase-browser'
-import type { Challenge } from '@/types/challenge'
+import type { Challenge } from '@/@types/challenge'
 
 const supabase = createClient()
 

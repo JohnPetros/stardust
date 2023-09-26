@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useApi } from '@/services/api'
 import useSWR from 'swr'
 
-import type { Challenge } from '@/types/challenge'
+import type { Challenge } from '@/@types/challenge'
 
 interface ChallengeParams {
   challengeId?: string

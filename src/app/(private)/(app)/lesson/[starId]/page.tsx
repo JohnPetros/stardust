@@ -14,11 +14,12 @@ import { Quiz } from '../components/Quiz'
 import { End } from '../components/End'
 
 import { formatSecondsToTime } from '@/utils/functions'
-import { texts } from '@/utils/mocks/planets/planet2/star1/texts'
 
 export default function Lesson() {
   const { starId } = useParams()
   const { star, nextStar, updateUserData } = useStar(String(starId))
+
+  console.log(star)
 
   const {
     state: { currentStage, questions, incorrectAnswersAmount, secondsAmount },
@@ -75,12 +76,7 @@ export default function Lesson() {
     let timer: NodeJS.Timeout
 
     if (star) {
-
-      
-
-      dispatch({ type: 'setTexts', payload: texts })
-
-      // dispatch({ type: 'setTexts', payload: star.texts })
+      dispatch({ type: 'setTexts', payload: star.texts })
       dispatch({ type: 'setQuestions', payload: star.questions })
       timer = setTimeout(() => setIsTransitionVisible(false), 1000)
     }

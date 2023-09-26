@@ -1,6 +1,6 @@
 'use client'
 import { useSupabase } from '@/hooks/useSupabase'
-import type { Avatar } from '@/types/avatar'
+import type { Avatar } from '@/@types/avatar'
 
 export default () => {
   const { supabase } = useSupabase()

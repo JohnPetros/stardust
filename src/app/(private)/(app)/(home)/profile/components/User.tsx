@@ -10,7 +10,7 @@ import { CalendarBlank, GearSix, Shield } from '@phosphor-icons/react'
 
 import { getImage } from '@/utils/functions'
 
-import { User as UserType } from '@/types/user'
+import { User as UserType } from '@/@types/user'
 
 import Link from 'next/link'
 import dayjs from 'dayjs'

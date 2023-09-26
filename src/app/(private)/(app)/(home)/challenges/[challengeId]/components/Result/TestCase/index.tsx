@@ -9,7 +9,7 @@ import { twMerge } from 'tailwind-merge'
 
 import { AnimatePresence, Variants, motion } from 'framer-motion'
 
-import type { TestCase as TestCaseData } from '@/types/challenge'
+import type { TestCase as TestCaseData } from '@/@types/challenge'
 
 const arrowAnimations: Variants = {
   down: {

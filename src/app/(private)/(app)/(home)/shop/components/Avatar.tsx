@@ -8,7 +8,7 @@ import { Button } from '@/app/components/Button'
 import { Modal, ModalRef } from '@/app/components/Modal'
 import { LockSimple } from '@phosphor-icons/react'
 
-import { Avatar } from '@/types/avatar'
+import { Avatar } from '@/@types/avatar'
 import { getImage, playSound } from '@/utils/functions'
 import { twMerge } from 'tailwind-merge'
 
@@ -32,7 +32,7 @@ export function Avatar({
   const [isSelected, setIsSelected] = useState(false)
   const [isRequesting, setIsRequesting] = useState(false)
   const avatarImage = getImage('avatars', image)
-  const isBuyable = user ? (user?.coins >= price) : false
+  const isBuyable = user ? user?.coins >= price : false
 
   const denyingModalRef = useRef<ModalRef>(null)
   const earningModalRef = useRef<ModalRef>(null)

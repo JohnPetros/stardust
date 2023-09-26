@@ -1,6 +1,6 @@
 'use client'
 import { useSupabase } from '@/hooks/useSupabase'
-import type { User, WinnerUser } from '@/types/user'
+import type { User, WinnerUser } from '@/@types/user'
 
 interface AddMethodParams {
   id: string

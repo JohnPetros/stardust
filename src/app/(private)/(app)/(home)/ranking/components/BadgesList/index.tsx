@@ -1,7 +1,7 @@
 'use client'
 import { useRef, useEffect } from 'react'
 import { Badge } from './Badge'
-import type { Ranking } from '@/types/ranking'
+import type { Ranking } from '@/@types/ranking'
 
 interface BadgesListProps {
   rankings: Ranking[]

@@ -4,7 +4,7 @@ import { MutableRefObject, useEffect, useMemo } from 'react'
 import { useLesson } from '@/hooks/useLesson'
 import { useDroppable } from '@dnd-kit/core'
 
-import { DraggrableItem } from '@/types/quiz'
+import { DraggrableItem } from '@/@types/quiz'
 import { DragItem } from './DragItem'
 
 import { twMerge } from 'tailwind-merge'

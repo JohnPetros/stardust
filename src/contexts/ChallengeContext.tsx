@@ -1,7 +1,7 @@
 'use client'
 
 import { ReactNode, createContext, useReducer } from 'react'
-import type { Challenge } from '@/types/challenge'
+import type { Challenge } from '@/@types/challenge'
 
 type TabHandler = {
   showResultTab: VoidFunction

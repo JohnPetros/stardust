@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useAuth } from './useAuth'
 import useSWR, { mutate } from 'swr'
 
-import { Rocket } from '@/types/rocket'
+import { Rocket } from '@/@types/rocket'
 import { useApi } from '@/services/api'
 
 export function useRocket(rocketId?: string) {
@@ -34,7 +34,7 @@ export function useRocket(rocketId?: string) {
     if (!rocketId && user?.id) {
       return await api.getUserAcquiredRocketsIds(user.id)
     }
-  } 
+  }
 
   const { data: rocket } = useSWR(
     rocketId ? '/rocket?id=' + rocketId : null,

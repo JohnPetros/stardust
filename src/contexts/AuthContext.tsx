@@ -7,7 +7,7 @@ import useSWR, { mutate } from 'swr'
 
 import { AuthError, Session } from '@supabase/supabase-js'
 import { useApi } from '@/services/api'
-import type { User } from '@/types/user'
+import type { User } from '@/@types/user'
 
 interface AuthContextValue {
   user: User | null

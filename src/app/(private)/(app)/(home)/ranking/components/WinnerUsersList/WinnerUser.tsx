@@ -7,7 +7,7 @@ import { twMerge } from 'tailwind-merge'
 
 import { Variants, motion } from 'framer-motion'
 
-import type { WinnerUser } from '@/types/user'
+import type { WinnerUser } from '@/@types/user'
 
 import { ShinningAnimation } from '../../../components/ShinningAnimation'
 

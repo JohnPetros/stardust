@@ -11,8 +11,8 @@ import { RankedUser } from '../RankedUsersList/RankedUser'
 
 import { getImage, playSound } from '@/utils/functions'
 
-import type { Ranking } from '@/types/ranking'
-import type { WinnerUser as WinnerUserType } from '@/types/user'
+import type { Ranking } from '@/@types/ranking'
+import type { WinnerUser as WinnerUserType } from '@/@types/user'
 
 interface WinnerUsersListProps {
   winnerUsers: WinnerUserType[]

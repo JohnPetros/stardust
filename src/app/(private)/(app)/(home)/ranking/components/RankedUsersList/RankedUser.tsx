@@ -7,7 +7,7 @@ import { tv } from 'tailwind-variants'
 import { twMerge } from 'tailwind-merge'
 
 import { PODIUM } from '@/utils/constants'
-import type { User as UserType } from '@/types/user'
+import type { User as UserType } from '@/@types/user'
 
 const positionStyles = tv({
   base: 'font-semibold p-2 w-12 grid place-content-center group-hover:text-gray-100/90',

@@ -12,8 +12,8 @@ import { BadgesList } from './components/BadgesList'
 import dayjs from 'dayjs'
 import { useApi } from '@/services/api'
 
-import type { Ranking } from '@/types/ranking'
-import type { WinnerUser } from '@/types/user'
+import type { Ranking } from '@/@types/ranking'
+import type { WinnerUser } from '@/@types/user'
 import { WinnerUsersList } from './components/WinnerUsersList'
 
 const today = dayjs().day()

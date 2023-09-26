@@ -6,7 +6,7 @@ import { Select } from '../Select'
 import { Tag } from './Tag'
 
 import type { Difficulty, Status } from '@/contexts/ChallengesListContext'
-import type { Category } from '@/types/category'
+import type { Category } from '@/@types/category'
 
 import { FILTER_SELECTS_ITEMS } from '@/utils/constants/filter-selects-items'
 import { AnimatePresence } from 'framer-motion'

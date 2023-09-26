@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Category } from './Category'
 import { Info } from './Info'
 
-import type { Challenge } from '@/types/challenge'
+import type { Challenge } from '@/@types/challenge'
 
 import {
   ChartLine,
