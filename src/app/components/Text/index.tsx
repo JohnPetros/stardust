@@ -127,7 +127,7 @@ export function Text({
           <>
             {textImage && (
               <div className="relative md:w-24 w-20 h-12 md:h-16 bg-red-400 rounded-md overflow-hidden mr-3">
-                <Image src={textImage} fill alt="Panda" />
+                <Image src={textImage} fill alt="Panda" priority />
               </div>
             )}
 
