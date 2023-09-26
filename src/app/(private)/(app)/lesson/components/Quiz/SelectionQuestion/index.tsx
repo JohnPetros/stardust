@@ -3,14 +3,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLesson } from '@/hooks/useLesson'
 
+import { CodeSnippet } from '@/app/components/Text/CodeSnippet'
 import { QuestionTitle } from '../QuestionTitle'
 import { Option } from './Option'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 
 import { reorderItems } from '@/utils/functions'
-import { QuestionContainer } from '../QuestionContainer'
-import { CodeSnippet } from '@/app/components/Text/CodeSnippet'
-
 import type { SelectionQuestion as SelectionQuestionData } from '@/@types/quiz'
 
 interface SelectionQuestionProps {
@@ -85,7 +83,7 @@ export function SelectionQuestion({
   }, [isAnswerVerified, selectedOption])
 
   return (
-    <QuestionContainer>
+    <>
       <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
       {code && (
@@ -94,7 +92,7 @@ export function SelectionQuestion({
         </div>
       )}
 
-      <RadioGroup.Root className="mt-6 space-y-2">
+      <RadioGroup.Root className="mt-6 space-y-2 ">
         {reorderedOptions.map((option) => (
           <Option
             key={option}
@@ -108,6 +106,6 @@ export function SelectionQuestion({
           />
         ))}
       </RadioGroup.Root>
-    </QuestionContainer>
+    </>
   )
 }
