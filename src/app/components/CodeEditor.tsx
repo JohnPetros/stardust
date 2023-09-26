@@ -15,6 +15,7 @@ import type monaco from 'monaco-editor'
 import { Loading } from './Loading'
 import { useEditor } from '@/hooks/useEditor'
 import { THEMES } from '@/utils/constants'
+import { useBreakpoint } from '@/hooks/useBreakpoint'
 
 export interface CodeEditorRef {
   reloadValue: () => void
@@ -41,6 +42,7 @@ export function CodeEditorComponent(
 ) {
   const monaco = useMonaco()
   const { state } = useEditor()
+  const { md } = useBreakpoint()
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
 
   function getEditorRules() {
@@ -124,8 +126,8 @@ export function CodeEditorComponent(
         minimap: {
           enabled: hasMinimap,
         },
-        tabSize: state.tabSize,
-        fontSize: state.fontSize,
+        tabSize: state.tabSize - (md ? 2 : 0),
+        fontSize: state.fontSize - (md ? 2 : 0),
         fontFamily: 'Menlo',
         cursorStyle: 'line',
         wordWrap: 'on',
