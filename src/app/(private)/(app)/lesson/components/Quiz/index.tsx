@@ -3,14 +3,16 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useLesson } from '@/hooks/useLesson'
 
+import { Modal, ModalRef } from '@/app/components/Modal'
+import { Button } from '@/app/components/Button'
 import { SelectionQuestion } from './SelectionQuestion'
 import { VerificationButton } from './VerificationButton'
 import { DragAndDropListQuestion } from './DragAndDropListQuestion'
 import { OpenQuestion } from './OpenQuestion'
-import { Modal, ModalRef } from '@/app/components/Modal'
-import { Button } from '@/app/components/Button'
 import { DragAndDropQuestion } from './DragAndDropQuestion'
 import { CheckboxQuestion } from './CheckboxQuestion'
+import { AnimatePresence } from 'framer-motion'
+import { QuestionContainer } from './QuestionContainer'
 
 interface QuizProps {
   leaveLesson: () => void
@@ -48,10 +50,12 @@ export function Quiz({ leaveLesson }: QuizProps) {
 
   if (currentQuestion) {
     return (
-      <div className="w-full h-screen flex justify-center items-center">
-        <div className=" ">
+      <div className="w-full h-[90vh] flex justify-center items-center">
+        <AnimatePresence>
           {currentQuestion.content.type === 'selection' && (
-            <SelectionQuestion data={currentQuestion.content} />
+            <QuestionContainer id={currentQuestion.order}>
+              <SelectionQuestion data={currentQuestion.content} />
+            </QuestionContainer>
           )}
 
           {currentQuestion.content.type === 'open' && (
@@ -59,7 +63,9 @@ export function Quiz({ leaveLesson }: QuizProps) {
           )}
 
           {currentQuestion.content.type === 'checkbox' && (
-            <CheckboxQuestion data={currentQuestion.content} />
+            <QuestionContainer id={currentQuestion.order}>
+              <CheckboxQuestion data={currentQuestion.content} />
+            </QuestionContainer>
           )}
 
           {currentQuestion.content.type === 'drag-and-drop' && (
@@ -69,7 +75,7 @@ export function Quiz({ leaveLesson }: QuizProps) {
           {currentQuestion.content.type === 'drag-and-drop-list' && (
             <DragAndDropListQuestion data={currentQuestion.content} />
           )}
-        </div>
+        </AnimatePresence>
 
         <Modal
           ref={modalRef}

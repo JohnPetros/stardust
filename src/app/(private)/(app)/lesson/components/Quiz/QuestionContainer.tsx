@@ -3,7 +3,7 @@
 import { ReactNode } from 'react'
 import { AnimatePresence, Variants, motion } from 'framer-motion'
 
-export const questionAnimations: Variants = {
+export const questionContainerAnimations: Variants = {
   right: {
     position: 'absolute',
     opacity: 0,
@@ -16,33 +16,33 @@ export const questionAnimations: Variants = {
   },
   left: {
     position: 'absolute',
-    opacity: 1,
+    opacity: 0,
     y: -240,
   },
 }
 
-export const questionTransition = {
-  duration: 0.5,
+export const questionContainerTransition = {
+  duration: 0.4,
   ease: 'easeInOut',
 }
 
 interface QuestionContainerProps {
   children: ReactNode
+  id: number
 }
 
-export function QuestionContainer({ children }: QuestionContainerProps) {
+export function QuestionContainer({ children, id }: QuestionContainerProps) {
   return (
-    <AnimatePresence>
-      <motion.div
-        variants={questionAnimations}
-        initial="right"
-        animate={'middle'}
-        exit="left"
-        transition={questionTransition}
-        className="mx-auto w-full flex flex-col items-center justify-center"
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
+    <motion.div
+      key={id}
+      variants={questionContainerAnimations}
+      initial="right"
+      animate={'middle'}
+      exit="left"
+      transition={questionContainerTransition}
+      className="mx-auto max-w-3xl flex flex-col items-center justify-center px-6 md:px-0"
+    >
+      {children}
+    </motion.div>
   )
 }
