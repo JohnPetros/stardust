@@ -32,7 +32,7 @@ export function CheckboxQuestion({
 
   function handleAnswer() {
     setIsAnswerVerified(!isAnswerVerified)
-
+    
     const isUserAnswerCorrect =
       userAnswers.length === correctOptions.length &&
       userAnswers.every((userOption) => correctOptions.includes(userOption))
@@ -83,7 +83,7 @@ export function CheckboxQuestion({
   }, [isAnswerVerified, userAnswers])
 
   return (
-    <QuestionContainer>
+    <>
       <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
       <ul className="space-y-2 mt-6">
@@ -98,6 +98,6 @@ export function CheckboxQuestion({
           </li>
         ))}
       </ul>
-    </QuestionContainer>
+    </>
   )
 }
