@@ -17,5 +17,6 @@ export const THEMES: Theme = {
     booleans: '#00D1FF',
     typeKeywords: '#0ac899',
     rest: '#EBEBEB',
+    editor: '#1E2626',
   },
 }
