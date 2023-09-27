@@ -3,6 +3,7 @@ import { useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Input } from '@/app/components/Input'
@@ -16,8 +17,6 @@ import { Envelope, Lock } from '@phosphor-icons/react'
 
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { LottieRef } from 'lottie-react'
-
-import { PASSWORD_REGEX } from '@/utils/constants/password-regex'
 
 import { ROCKET_ANIMATION_DURATION } from '@/utils/constants'
 import { SignInFormFields, signInFormSchema } from '@/libs/zod'
