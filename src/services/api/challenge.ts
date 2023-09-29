@@ -19,7 +19,7 @@ export default () => {
       const { data, error } = await supabase
         .from('challenges')
         .select(
-          '*, created_by:user_id(name), users_completed_challenges(count)'
+          '*, users_completed_challenges(count)'
         )
         .eq('id', challengeId)
         .eq('users_completed_challenges.user_id', userId)
