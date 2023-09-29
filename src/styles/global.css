@@ -69,6 +69,10 @@ a {
   @apply bg-green-900 text-gray-100 rounded-md py-1 px-2 font-code font-semibold;
 }
 
+.skeleton {
+  @apply animate-pulse opacity-70 bg-gray-600
+}
+
 ::-webkit-scrollbar {
   @apply w-[6px] rounded;
 }
