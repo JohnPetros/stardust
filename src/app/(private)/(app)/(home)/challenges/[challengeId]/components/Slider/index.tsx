@@ -92,6 +92,9 @@ export function Slider() {
         ref={sliderRef}
         onSlideChange={handleSlideChange}
         onSwiper={handleSlideChange}
+        direction='horizontal'
+        centeredSlides={true}
+        longSwipesRatio={0.9}
         className="w-full h-[calc(100vh-5.2rem)]"
       >
         <SwiperSlide className="h-full overflow-y-auto">
