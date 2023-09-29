@@ -109,13 +109,13 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
         {isRunnable && (
           <>
             <ToolBar.Button
-              className="h-6 w-max px-4 items-center rounded bg-green-400"
+              className="h-6 w-max px-4 items-center rounded bg-green-400 active:scale-95 transition-[scale] duration-200"
               onClick={handleReloadButtonClick}
             >
               <ArrowClockwise className="text-green-900" weight="bold" />
             </ToolBar.Button>
             <ToolBar.Button
-              className="h-6 w-max px-4 text-xs items-center rounded bg-green-400 font-semibold"
+              className="h-6 w-max px-4 text-xs items-center rounded bg-green-400 font-semibold active:scale-95 transition-[scale] duration-200"
               onClick={handleRunButtonClick}
             >
               Executar
