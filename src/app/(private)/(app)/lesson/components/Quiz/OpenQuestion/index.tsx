@@ -89,7 +89,7 @@ export function OpenQuestion({
   }, [isAnswerVerified, userAnswers])
 
   return (
-    <QuestionContainer>
+    <>
       <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
       {code && <CodeSnippet code={code} isRunnable={false} />}
@@ -125,6 +125,6 @@ export function OpenQuestion({
           </li>
         ))}
       </ul>
-    </QuestionContainer>
+    </>
   )
 }
