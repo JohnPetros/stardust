@@ -41,7 +41,7 @@ const textStyles = tv({
   variants: {
     type: {
       default: 'bg-purple-700',
-      alert: 'bg-yellow-400 text-yellow-700',
+      alert: 'bg-yellow-400 text-yellow-900',
       quote: 'bg-blue-700 border-l-4 border-blue-300 text-blue-300',
       list: 'border-green-400 text-green-400',
       image: '',
@@ -89,9 +89,10 @@ export function Text({
             width={180}
             height={120}
             className="rounded-lg"
+            priority
             alt=""
           />
-          <p className="text-gray-100 font-medium text-start text-lg">
+          <p className="text-gray-100 font-medium text-start text-lg mt-1">
             <TypeWriter
               text={formatText(String(content))}
               isEnable={hasAnimation}
@@ -115,7 +116,7 @@ export function Text({
             <div className={textStyles({ type })}>
               {!Array.isArray(content) && (
                 <p className="leading-6">
-                  <TypeWriter text={content} isEnable={hasAnimation} />
+                  <TypeWriter text={formatText(content)} isEnable={hasAnimation} />
                 </p>
               )}
             </div>
@@ -126,14 +127,32 @@ export function Text({
         {['default', 'alert', 'quote'].includes(String(type)) && (
           <>
             {textImage && (
-              <div className="relative md:w-24 w-20 h-12 md:h-16 bg-red-400 rounded-md overflow-hidden mr-3">
-                <Image src={textImage} fill alt="Panda" priority />
+              <div className="relative md:w-24 w-20 h-12 md:h-16 rounded-md overflow-hidden mr-3 ">
+                <Image
+                  src={textImage}
+                  fill
+                  alt="Panda"
+                  className="skeleton"
+                  priority
+                  onLoadingComplete={(image) =>
+                    image.classList.remove('skeleton')
+                  }
+                />
               </div>
             )}
 
             {type === 'alert' && (
               <span className="block mr-3">
-                <Image src="/icons/alert.svg" width={32} height={32} alt="" />
+                <Image
+                  src="/icons/alert.svg"
+                  width={32}
+                  height={32}
+                  alt=""
+                  className="skeleton"
+                  onLoadingComplete={(image) =>
+                    image.classList.remove('skeleton')
+                  }
+                />
               </span>
             )}
 
