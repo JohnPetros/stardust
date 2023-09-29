@@ -59,15 +59,3 @@ Saída: "Olá, mundo!"`,
     },
   ],
 }
-
-type User = {
-  name?: string
-  age: number
-}
-
-const user: User = {
-  name: 'Jonas',
-  age: 25
-}
-
-delete user.name
