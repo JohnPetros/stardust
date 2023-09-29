@@ -23,7 +23,6 @@ export const DELEGUA_TOKENS: { [token in Token]: string[] } = {
     'inteiro[]',
     'isto',
     'leia',
-    'nulo',
     'padrão',
     'padrao',
     'para',
@@ -129,5 +128,6 @@ export const DELEGUA_TOKENS: { [token in Token]: string[] } = {
   strings: [],
   comments: [],
   numbers: [],
+  editor: [],
   rest: [],
 }
