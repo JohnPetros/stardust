@@ -22,7 +22,13 @@ export function UserAvatar({ avatarId, size }: UserAvatarProps) {
         className="relative rounded-[50%] border border-green-700 bg-gray-300 overflow-hidden grid place-content-center"
       >
         {avatarImage ? (
-          <Image src={avatarImage} fill className="" alt={avatar.name} />
+          <Image
+            src={avatarImage}
+            fill
+            alt={avatar.name}
+            className="skeleton"
+            onLoadingComplete={(image) => image.classList.remove('skeleton')}
+          />
         ) : (
           <Loading />
         )}
