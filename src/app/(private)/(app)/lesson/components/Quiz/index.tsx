@@ -59,7 +59,9 @@ export function Quiz({ leaveLesson }: QuizProps) {
           )}
 
           {currentQuestion.content.type === 'open' && (
-            <OpenQuestion data={currentQuestion.content} />
+            <QuestionContainer id={currentQuestion.order}>
+              <OpenQuestion data={currentQuestion.content} />
+            </QuestionContainer>
           )}
 
           {currentQuestion.content.type === 'checkbox' && (
@@ -69,11 +71,15 @@ export function Quiz({ leaveLesson }: QuizProps) {
           )}
 
           {currentQuestion.content.type === 'drag-and-drop' && (
-            <DragAndDropQuestion data={currentQuestion.content} />
+            <QuestionContainer id={currentQuestion.order}>
+              <DragAndDropQuestion data={currentQuestion.content} />
+            </QuestionContainer>
           )}
 
           {currentQuestion.content.type === 'drag-and-drop-list' && (
-            <DragAndDropListQuestion data={currentQuestion.content} />
+            <QuestionContainer id={currentQuestion.order}>
+              <DragAndDropListQuestion data={currentQuestion.content} />
+            </QuestionContainer>
           )}
         </AnimatePresence>
 

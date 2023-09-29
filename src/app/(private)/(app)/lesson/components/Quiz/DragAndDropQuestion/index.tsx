@@ -198,7 +198,7 @@ export function DragAndDropQuestion({
   }, [])
 
   return (
-    <QuestionContainer>
+    <>
       <DndContext
         sensors={sensors}
         onDragStart={handleDragStart}
@@ -273,6 +273,6 @@ export function DragAndDropQuestion({
           )}
         </ul>
       </DndContext>
-    </QuestionContainer>
+    </>
   )
 }
