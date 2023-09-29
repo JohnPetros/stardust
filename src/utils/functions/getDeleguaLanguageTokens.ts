@@ -27,7 +27,6 @@ export function getDeleguaLanguageTokens(): monaco.languages.IMonarchLanguage {
       'inteiro[]',
       'isto',
       'leia',
-      'nulo',
       'padrão',
       'padrao',
       'para',
