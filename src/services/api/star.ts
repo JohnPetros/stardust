@@ -30,7 +30,7 @@ export default () => {
           number: currentStar.number + 1,
         })
         .eq('users_unlocked_stars.user_id', userId)
-        .single<Star>()
+        .returns<Star>()
 
       if (error) {
         throw new Error(error.message)
