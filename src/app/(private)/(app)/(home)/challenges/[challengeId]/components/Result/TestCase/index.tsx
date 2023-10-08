@@ -104,12 +104,12 @@ export function TestCase({
             initial="up"
             animate={isOpen ? 'down' : ''}
             exit="up"
-            className="mt-4 space-y-4 overflow-hidden"
+            className="mt-4 space-y-3 overflow-hidden"
           >
             <Field
               label="Entrada"
               value={
-                input
+                input.length > 0
                   ? input
                       .map((value) => {
                         return value.toString().replace(/^(['"])(.*)\1$/, '$2')
