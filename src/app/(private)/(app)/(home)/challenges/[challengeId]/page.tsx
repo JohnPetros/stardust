@@ -13,6 +13,8 @@ import { End, updateUserDataParam } from '../../../lesson/components/End'
 
 import { CHALLENGE_EARNINGS_BY_DIFFICULTY } from '@/utils/constants'
 import { formatSecondsToTime } from '@/utils/functions'
+import { Problem } from './components/Problem'
+import { Code } from './components/Code'
 
 export default function Challenge() {
   const { challengeId } = useParams()
@@ -114,7 +116,7 @@ export default function Challenge() {
   }, [challenge, state.isEnd])
 
   return (
-    <div className="max-h-screen">
+    <div className="md:overflow-hidden">
       {state.isEnd ? (
         <End
           coins={coins}
@@ -127,8 +129,14 @@ export default function Challenge() {
       ) : (
         <>
           <Header />
-          <main>
-            <Slider />
+          <main className="">
+            <div className="md:hidden">
+              <Slider />
+            </div>
+            <div className="grid grid-cols-2 gap-3 p-3 overflow-hidden">
+              <Problem />
+              <Code />
+            </div>
           </main>
         </>
       )}
