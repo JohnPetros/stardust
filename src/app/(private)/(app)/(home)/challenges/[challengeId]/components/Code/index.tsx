@@ -1,7 +1,6 @@
 'use client'
 
-import { KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react'
-import { useChallengeContext } from '@/hooks/useChallengeContext'
+import { KeyboardEvent, useRef, useState } from 'react'
 
 import { Button } from '@/app/components/Button'
 import { CodeEditor, CodeEditorRef } from '@/app/components/CodeEditor'
@@ -22,12 +21,13 @@ import * as ToolBar from '@radix-ui/react-toolbar'
 import { execute } from '@/libs/delegua'
 
 import type { TestCase } from '@/@types/challenge'
+import { useChallengeStore } from '@/hooks/useChallengeStore'
 
 export function Code() {
   const {
     state: { challenge },
-    dispatch,
-  } = useChallengeContext()
+    action: { setUserOutput },
+  } = useChallengeStore()
 
   const code = useRef(challenge?.code ?? '')
   const codeContainer = useRef<HTMLDivElement>(null)
@@ -121,8 +121,7 @@ export function Code() {
       if (output) userOutput.push(output)
     }
 
-    if (userOutput.length)
-      dispatch({ type: 'setUserOutput', payload: userOutput })
+    if (userOutput.length) setUserOutput(userOutput)
   }
 
   function handleResetCode() {

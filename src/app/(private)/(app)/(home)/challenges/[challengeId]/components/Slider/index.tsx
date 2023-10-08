@@ -15,12 +15,17 @@ import { Result } from '../Result'
 register()
 import { motion, useAnimate } from 'framer-motion'
 import { useBreakpoint } from '@/hooks/useBreakpoint'
+import { useChallengeStore } from '@/hooks/useChallengeStore'
 
 export function Slider() {
+  // const {
+  //   state: { tabHandler },
+  //   dispatch,
+  // } = useChallengeContext()
   const {
     state: { tabHandler },
-    dispatch,
-  } = useChallengeContext()
+    action: { setTabHandler },
+  } = useChallengeStore()
   const { md } = useBreakpoint()
 
   const [activeSlideIndex, setActiveSlideIndex] = useState(0)
@@ -50,14 +55,18 @@ export function Slider() {
 
   useEffect(() => {
     if (!tabHandler && md)
-      dispatch({
-        type: 'setTabHandler',
-        payload: {
-          showResultTab,
-          showCodeTab,
-        },
+      // dispatch({
+      //   type: 'setTabHandler',
+      //   payload: {
+      //     showResultTab,
+      //     showCodeTab,
+      //   },
+      // })
+      setTabHandler({
+        showResultTab,
+        showCodeTab,
       })
-  }, [showResultTab, showCodeTab])
+  }, [showResultTab, showCodeTab, md])
 
   return (
     <div>

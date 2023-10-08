@@ -4,13 +4,17 @@ import { useChallengeContext } from '@/hooks/useChallengeContext'
 import { Description } from './Description'
 import { Result } from '../Result'
 import * as Tabs from '@radix-ui/react-tabs'
+import { useChallengeStore } from '@/hooks/useChallengeStore'
 
 const tabStyle = 'h-[calc(100vh-8rem)] overflow-y-scroll overflow-hidden '
 
 export function Problem() {
+  // const {
+  //   state: { challenge },
+  // } = useChallengeContext()
   const {
     state: { challenge },
-  } = useChallengeContext()
+  } = useChallengeStore()
   const tabsRef = useRef<HTMLDivElement[]>([])
 
   function scrollTabToTop() {

@@ -1,6 +1,5 @@
 import { create } from 'zustand'
 import type { Challenge } from '@/@types/challenge'
-import { useState } from 'react'
 
 type TabHandler = {
   showResultTab: VoidFunction
@@ -20,7 +19,19 @@ type ChallengeState = {
   tabHandler: TabHandler | null
 }
 
-type ChallengeAction = {}
+type ChallengeAction = {
+  setChallenge: (challenge: Challenge) => void
+  setUserCode: (userCode: string) => void
+  setUserOutput: (challenge: string[]) => void
+  setResults: (results: boolean[]) => void
+  setIsAnswerVerified: (isAnswerVerified: boolean) => void
+  setIsAnswerCorrect: (isAnswerCorrect: boolean) => void
+  setIsEnd: (isEnd: boolean) => void
+  setTabHandler: (tabHandler: TabHandler) => void
+  setIsFirstRendering: (isFirstRendering: boolean) => void
+  incrementIncorrectAswersAmount: () => void
+  resetState: () => void
+}
 
 type ChallengeStore = {
   state: ChallengeState
@@ -45,8 +56,9 @@ export const useChallengeStore = create<ChallengeStore>((set) => {
     state: initialState,
     action: {
       setChallenge: (challenge: Challenge) =>
-        set(({ state }: ChallengeStore) => ({
+        set(({ state, action }: ChallengeStore) => ({
           state: { ...state, challenge },
+          action,
         })),
       setUserCode: (userCode: string) =>
         set(({ state }: ChallengeStore) => ({
@@ -64,9 +76,15 @@ export const useChallengeStore = create<ChallengeStore>((set) => {
         set(({ state }: ChallengeStore) => ({
           state: { ...state, tabHandler },
         })),
+      setIsAnswerVerified: (isAnswerVerified: boolean) =>
+        set(({ state, action }: ChallengeStore) => ({
+          state: { ...state, isAnswerVerified },
+          action,
+        })),
       setIsAnswerCorrect: (isAnswerCorrect: boolean) =>
-        set(({ state }: ChallengeStore) => ({
+        set(({ state, action }: ChallengeStore) => ({
           state: { ...state, isAnswerCorrect },
+          action,
         })),
       setIsEnd: (isEnd: boolean) =>
         set(({ state, action }: ChallengeStore) => ({
@@ -78,10 +96,16 @@ export const useChallengeStore = create<ChallengeStore>((set) => {
           state: { ...state, isEnd },
           action,
         })),
-      incrementIncorrectAswersAmount: (incorrectAnswersAmount: number) =>
-        set(({ state }: ChallengeStore) => ({
-          state: { ...state, incorrectAnswersAmount },
-        })),
+      incrementIncorrectAswersAmount: () =>
+        set(({ state }: ChallengeStore) => {
+          const incorrectAnswersAmount =
+            state.incorrectAnswersAmount === 4
+              ? state.incorrectAnswersAmount
+              : state.incorrectAnswersAmount + 1
+          return {
+            state: { ...state, incorrectAnswersAmount },
+          }
+        }),
       resetState: () =>
         set(() => ({
           state: initialState,

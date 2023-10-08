@@ -1,10 +1,10 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useChallengeStore } from '@/hooks/useChallengeStore'
 import { useRouter, useParams } from 'next/navigation'
 import { useChallenge } from '@/hooks/useChallenge'
 import { useAuth } from '@/hooks/useAuth'
-import { useChallengeContext } from '@/hooks/useChallengeContext'
 import { useStar } from '@/hooks/useStar'
 
 import { Header } from './components/Header'
@@ -15,6 +15,7 @@ import { CHALLENGE_EARNINGS_BY_DIFFICULTY } from '@/utils/constants'
 import { formatSecondsToTime } from '@/utils/functions'
 import { Problem } from './components/Problem'
 import { Code } from './components/Code'
+
 
 export default function Challenge() {
   const { challengeId } = useParams()
@@ -27,7 +28,11 @@ export default function Challenge() {
 
   const { updateUserData: updateUserStarData } = useStar(challenge?.star_id)
 
-  const { state, dispatch } = useChallengeContext()
+  // const { state, dispatch } = useChallengeContext()
+  const {
+    state,
+    action: { setChallenge, resetState },
+  } = useChallengeStore()
   const router = useRouter()
 
   const [coins, setCoins] = useState(0)
@@ -88,10 +93,11 @@ export default function Challenge() {
 
   useEffect(() => {
     if (challenge) {
-      dispatch({ type: 'setChallenge', payload: challenge })
+      // dispatch({ type: 'setChallenge', payload: challenge })
+      setChallenge(challenge)
     }
 
-    return () => dispatch({ type: 'resetState' })
+    return resetState
   }, [challenge])
 
   useEffect(() => {

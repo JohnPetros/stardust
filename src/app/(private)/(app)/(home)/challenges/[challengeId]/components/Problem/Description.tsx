@@ -1,10 +1,11 @@
-import { useChallengeContext } from '@/hooks/useChallengeContext'
+import { useChallengeStore } from '@/hooks/useChallengeStore'
+
 import { Text } from '@/app/components/Text'
 
 export function Description() {
   const {
     state: { challenge },
-  } = useChallengeContext()
+  } = useChallengeStore()
 
   if (challenge)
     return (

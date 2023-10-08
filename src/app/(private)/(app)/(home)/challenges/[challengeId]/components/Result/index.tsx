@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useChallengeContext } from '@/hooks/useChallengeContext'
+import { useChallengeStore } from '@/hooks/useChallengeStore'
 
 import { VerificationButton } from '@/app/(private)/(app)/lesson/components/Quiz/VerificationButton'
 import { TestCase } from './TestCase'
@@ -18,20 +18,14 @@ export function Result() {
       isAnswerCorrect,
       tabHandler,
     },
-    dispatch,
-  } = useChallengeContext()
-
-  function setIsAnswerVerified(isAnswerVerified: boolean) {
-    dispatch({ type: 'setIsAnswerVerified', payload: isAnswerVerified })
-  }
-
-  function setIsAnswerCorrect(isAnswerCorrect: boolean) {
-    dispatch({ type: 'setIsAnswerCorrect', payload: isAnswerCorrect })
-  }
-
-  function setIsEnd(isEnd: boolean) {
-    dispatch({ type: 'setIsEnd', payload: isEnd })
-  }
+    action: {
+      incrementIncorrectAswersAmount,
+      setIsAnswerVerified,
+      setIsAnswerCorrect,
+      setResults,
+      setIsEnd,
+    },
+  } = useChallengeStore()
 
   function handleUserAnswer() {
     setIsAnswerVerified(!isAnswerVerified)
@@ -48,7 +42,7 @@ export function Result() {
     setIsAnswerCorrect(false)
 
     if (isAnswerVerified) {
-      dispatch({ type: 'incrementIncorrectAswersAmount' })
+      incrementIncorrectAswersAmount()
       tabHandler?.showCodeTab()
     }
   }
@@ -74,7 +68,8 @@ export function Result() {
     if (userOutput.length === test_cases.length) {
       tabHandler?.showResultTab()
 
-      dispatch({ type: 'setResults', payload: test_cases.map(verifyResult) })
+      // dispatch({ type: 'setResults', payload: test_cases.map(verifyResult) })
+      setResults(test_cases.map(verifyResult))
     }
   }, [userOutput])
 

@@ -3,6 +3,7 @@
 import { useChallengeContext } from '@/hooks/useChallengeContext'
 import { PopoverMenu, PopoverMenuButton } from '@/app/components/PopoverMenu'
 import { ArrowLeft, List } from '@phosphor-icons/react'
+import { useChallengeStore } from '@/hooks/useChallengeStore'
 
 const popoverMenuButtons: PopoverMenuButton[] = [
   {
@@ -14,7 +15,7 @@ const popoverMenuButtons: PopoverMenuButton[] = [
 ]
 
 export function Header() {
-  const { state } = useChallengeContext()
+  const { state } = useChallengeStore()
 
   return (
     <header className="flex flex-col justify-center md:border-b md:border-green-700 h-12">
