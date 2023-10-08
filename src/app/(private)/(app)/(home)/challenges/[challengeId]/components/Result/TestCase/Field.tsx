@@ -12,8 +12,8 @@ export function Field({ label, value, isFromUser }: FieldProps) {
       <dt className='text-gray-300 font-medium'>{label}</dt>
       <dd
         className={twMerge(
-          'py-2 px-3 rounded-md font-semibold mt-1',
-          isFromUser ? 'bg-gray-500 text-gray-900' : 'bg-gray-700 text-gray-100'
+          'py-2 px-3 rounded-md mt-1',
+          isFromUser ? 'bg-gray-500 text-gray-900 font-semibold' : 'bg-gray-700 text-gray-100'
         )}
       >
         {value}
