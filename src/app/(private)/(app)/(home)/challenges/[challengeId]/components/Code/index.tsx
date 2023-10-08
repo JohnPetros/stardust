@@ -1,6 +1,6 @@
 'use client'
 
-import { KeyboardEvent, useRef, useState } from 'react'
+import { KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useChallengeContext } from '@/hooks/useChallengeContext'
 
 import { Button } from '@/app/components/Button'
@@ -16,11 +16,12 @@ import {
 import { ModalRef, Modal } from '@/app/components/Modal'
 import { ToastRef, Toast } from '@/app/components/Toast'
 import { Shortcuts } from './Shortcuts'
+import { Settings } from './Settings'
+import * as ToolBar from '@radix-ui/react-toolbar'
 
 import { execute } from '@/libs/delegua'
 
 import type { TestCase } from '@/@types/challenge'
-import { Settings } from './Settings'
 
 export function Code() {
   const {
@@ -29,6 +30,7 @@ export function Code() {
   } = useChallengeContext()
 
   const code = useRef(challenge?.code ?? '')
+  const codeContainer = useRef<HTMLDivElement>(null)
   const errorLine = useRef(0)
   const toastRef = useRef<ToastRef>(null)
   const resetCodeModalRef = useRef<ModalRef>(null)
@@ -150,11 +152,13 @@ export function Code() {
     }
   }
 
+  const codeContainerHeight = codeContainer.current?.offsetHeight ?? 0
+
   if (challenge)
     return (
-      <div className="w-full h-full" onKeyDown={handleKeyDown}>
+      <div ref={codeContainer} className="w-full" onKeyDown={handleKeyDown}>
         <Toast ref={toastRef} />
-        <div className="flex items-center justify-between bg-gray-700 py-2 px-3">
+        <ToolBar.Root className="flex items-center justify-between bg-gray-700 py-2 px-3 rounded-t-md">
           <Button
             buttonRef={runCodeButtonRef}
             className="h-6 px-3 text-xs w-max"
@@ -199,12 +203,12 @@ export function Code() {
               />
             </li>
           </ul>
-        </div>
+        </ToolBar.Root>
         <CodeEditor
           ref={codeEditorRef}
           value={challenge.code}
           width="100%"
-          height="100%"
+          height={codeContainerHeight - 40}
           hasMinimap
           onChange={handleCodeChange}
         />
