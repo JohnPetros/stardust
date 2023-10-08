@@ -61,7 +61,7 @@ escreva("\${nomeEstrela}: texto, \${temperatura}: numero, \${temCorAmarela}: fal
     {
       type: 'alert',
       content:
-        'Dica: você pode colocar o nome dos tipos em variáveis e concatená-las com os textos usando `interpolação` ou `operador de adição`.',
+        'Dica: você pode colocar o nome dos tipos em variáveis e concatená-las com os textos usando `interpolação` ou operador de adição.',
       picture: 'panda.jpg',
     },
   ],
