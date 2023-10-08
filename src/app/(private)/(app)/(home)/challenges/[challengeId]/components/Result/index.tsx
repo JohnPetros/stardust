@@ -49,7 +49,7 @@ export function Result() {
 
     if (isAnswerVerified) {
       dispatch({ type: 'incrementIncorrectAswersAmount' })
-      tabHandler.showCodeTab()
+      tabHandler?.showCodeTab()
     }
   }
 
@@ -72,7 +72,7 @@ export function Result() {
     const { test_cases } = challenge
 
     if (userOutput.length === test_cases.length) {
-      tabHandler.showResultTab()
+      tabHandler?.showResultTab()
 
       dispatch({ type: 'setResults', payload: test_cases.map(verifyResult) })
     }
@@ -80,7 +80,7 @@ export function Result() {
 
   if (challenge)
     return (
-      <div className="w-full h-full bg-gray-800">
+      <div className="w-full h-full bg-gray-800 relative">
         <div className="space-y-6 p-6">
           {challenge.test_cases.map((testCase, index) => (
             <TestCase

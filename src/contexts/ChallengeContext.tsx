@@ -21,7 +21,7 @@ type ChallengeState = {
   isAnswerVerified: boolean
   isEnd: boolean
   incorrectAnswersAmount: number
-  tabHandler: TabHandler
+  tabHandler: TabHandler | null
 }
 
 type ChallengeAction =
@@ -53,10 +53,7 @@ const initialChallengeState: ChallengeState = {
   isAnswerVerified: false,
   isEnd: false,
   incorrectAnswersAmount: 0,
-  tabHandler: {
-    showCodeTab: () => {},
-    showResultTab: () => {},
-  },
+  tabHandler: null,
 }
 
 function ChallengeReducer(
