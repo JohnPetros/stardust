@@ -20,7 +20,7 @@ module.exports = {
           400: '#00FF88',
           300: '#4affab',
           200: '#adffd9',
-          100: '#dafff0'
+          100: '#dafff0',
         },
         yellow: {
           900: '#1c1400',
