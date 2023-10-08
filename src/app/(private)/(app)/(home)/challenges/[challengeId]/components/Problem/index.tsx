@@ -1,18 +1,26 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useChallengeContext } from '@/hooks/useChallengeContext'
 
 import { Description } from './Description'
 import { Result } from '../Result'
 import * as Tabs from '@radix-ui/react-tabs'
 
+const tabStyle = 'h-[calc(100vh-8rem)] overflow-y-scroll overflow-hidden '
+
 export function Problem() {
   const {
     state: { challenge },
   } = useChallengeContext()
+  const tabsRef = useRef<HTMLDivElement[]>([])
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0)
 
   useEffect(() => {
-
-  }, [])
+    const selectedTabRef = tabsRef.current[selectedTabIndex]
+    if (selectedTabRef)
+      selectedTabRef.scrollTo({
+        top: 0,
+      })
+  }, [challenge, selectedTabIndex, tabsRef])
 
   if (challenge)
     return (
@@ -27,12 +35,25 @@ export function Problem() {
             </Tabs.Trigger>
           </Tabs.List>
           <Tabs.Content
+            ref={(ref) => {
+              if (ref) {
+                tabsRef.current.push(ref)
+              }
+            }}
             value="description"
-            className="h-[calc(100vh-8rem)] overflow-y-scroll overflow-hidden "
+            className={tabStyle}
           >
             <Description />
           </Tabs.Content>
-          <Tabs.Content value="result">
+          <Tabs.Content
+            ref={(ref) => {
+              if (ref) {
+                tabsRef.current.push(ref)
+              }
+            }}
+            value="result"
+            className={tabStyle}
+          >
             <Result />
           </Tabs.Content>
         </Tabs.Root>
