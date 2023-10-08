@@ -17,7 +17,7 @@ export function Header() {
   const { state } = useChallengeContext()
 
   return (
-    <header className="flex flex-col justify-center  md:border-b md:border-green-700">
+    <header className="flex flex-col justify-center md:border-b md:border-green-700 h-12">
       <div className="px-6 flex items-center justify-between">
         <div className="flex items-center py-3 gap-3">
           <button>
