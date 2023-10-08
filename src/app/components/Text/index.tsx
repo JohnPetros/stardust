@@ -116,7 +116,10 @@ export function Text({
             <div className={textStyles({ type })}>
               {!Array.isArray(content) && (
                 <p className="leading-6">
-                  <TypeWriter text={formatText(content)} isEnable={hasAnimation} />
+                  <TypeWriter
+                    text={formatText(content)}
+                    isEnable={hasAnimation}
+                  />
                 </p>
               )}
             </div>
@@ -133,6 +136,7 @@ export function Text({
                   fill
                   alt="Panda"
                   className="skeleton"
+                  sizes="(min-width: 375px) 5rem, (min-width: 769px) 6rem"
                   priority
                   onLoadingComplete={(image) =>
                     image.classList.remove('skeleton')
