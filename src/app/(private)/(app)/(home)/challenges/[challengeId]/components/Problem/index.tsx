@@ -12,20 +12,27 @@ export function Problem() {
     state: { challenge },
   } = useChallengeContext()
   const tabsRef = useRef<HTMLDivElement[]>([])
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0)
 
-  useEffect(() => {
-    const selectedTabRef = tabsRef.current[selectedTabIndex]
-    if (selectedTabRef)
-      selectedTabRef.scrollTo({
+  function scrollTabToTop() {
+    tabsRef.current.map((tab) => {
+      tab.scrollTo({
         top: 0,
       })
-  }, [challenge, selectedTabIndex, tabsRef])
+    })
+  }
+
+  function handleTabChange() {
+    scrollTabToTop()
+  }
+
+  useEffect(() => {
+    if (tabsRef.current.length) scrollTabToTop()
+  }, [challenge, tabsRef.current])
 
   if (challenge)
     return (
       <div className="w-full max-h-screen border-4 border-gray-700 rounded-md">
-        <Tabs.Root defaultValue="description">
+        <Tabs.Root defaultValue="description" onValueChange={handleTabChange}>
           <Tabs.List className="flex items-center gap-3 bg-gray-700 px-2">
             <Tabs.Trigger className="text-green-500 p-2" value="description">
               Descrição
