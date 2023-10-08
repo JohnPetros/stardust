@@ -14,9 +14,15 @@ import { Result } from '../Result'
 
 register()
 import { motion, useAnimate } from 'framer-motion'
+import { useBreakpoint } from '@/hooks/useBreakpoint'
 
 export function Slider() {
-  const { dispatch } = useChallengeContext()
+  const {
+    state: { tabHandler },
+    dispatch,
+  } = useChallengeContext()
+  const { md } = useBreakpoint()
+
   const [activeSlideIndex, setActiveSlideIndex] = useState(0)
   const [scope, animate] = useAnimate()
   const sliderRef = useRef<SwiperRef>(null)
@@ -43,6 +49,7 @@ export function Slider() {
   }
 
   useEffect(() => {
+    if (!tabHandler && md)
       dispatch({
         type: 'setTabHandler',
         payload: {
@@ -92,7 +99,7 @@ export function Slider() {
         ref={sliderRef}
         onSlideChange={handleSlideChange}
         onSwiper={handleSlideChange}
-        direction='horizontal'
+        direction="horizontal"
         centeredSlides={true}
         longSwipesRatio={0.9}
         className="w-full h-[calc(100vh-5.2rem)]"
