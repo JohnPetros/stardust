@@ -18,6 +18,7 @@ escreva()`,
   function_name: null,
   tests_cases: [
     {
+      id: 1,
       input: [],
       isLocked: false,
       expectedOutput: 'Datahon: texto, 53.5: número, falso: lógico',
