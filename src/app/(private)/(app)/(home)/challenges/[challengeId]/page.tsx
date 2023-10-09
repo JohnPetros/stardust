@@ -98,7 +98,7 @@ export default function Challenge() {
     if (challenge) {
       setChallenge(challenge)
       setIsTransitionPageVisible(false)
-      timer = setTimeout(() => setIsTransitionPageVisible(false), 1000)
+      timer = setTimeout(() => setIsTransitionPageVisible(false), 3000)
     }
 
     return () => {

@@ -19,8 +19,6 @@ export default function Lesson() {
   const { starId } = useParams()
   const { star, nextStar, updateUserData } = useStar(String(starId))
 
-  console.log(star)
-
   const {
     state: { currentStage, questions, incorrectAnswersAmount, secondsAmount },
     dispatch,
