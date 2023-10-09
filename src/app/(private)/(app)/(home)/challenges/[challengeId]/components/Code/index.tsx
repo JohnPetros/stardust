@@ -158,50 +158,53 @@ export function Code() {
       <div ref={codeContainer} className="w-full" onKeyDown={handleKeyDown}>
         <Toast ref={toastRef} />
         <ToolBar.Root className="flex items-center justify-between bg-gray-700 py-2 px-3 rounded-t-md">
-          <Button
-            buttonRef={runCodeButtonRef}
-            className="h-6 px-3 text-xs w-max"
-            onClick={() => handleRunCode(code.current)}
-          >
-            Executar
-          </Button>
-          <ul className="flex items-center gap-3">
-            <li>
+          <ToolBar.Button asChild>
+            <Button
+              buttonRef={runCodeButtonRef}
+              className="h-6 px-3 text-xs w-max"
+              onClick={() => handleRunCode(code.current)}
+            >
+              Executar
+            </Button>
+          </ToolBar.Button>
+
+          <div className="flex items-center gap-3">
+            <ToolBar.Button asChild>
               <IconButton
                 buttonRef={resetCodeButtonRef}
                 icon={ArrowClockwise}
                 onClick={handleResetCode}
               />
-            </li>
-            <li>
+            </ToolBar.Button>
+            <ToolBar.Button asChild>
               <IconButton
                 buttonRef={fullScreenButtonRef}
                 icon={ArrowsOutSimple}
                 onClick={() => {}}
               />
-            </li>
-            <li>
+            </ToolBar.Button>
+            <ToolBar.Button asChild>
               <IconButton
                 buttonRef={dictionaryButtonRef}
                 icon={CodeIcon}
                 onClick={handleShortcutsOpen}
               />
-            </li>
-            <li>
+            </ToolBar.Button>
+            <ToolBar.Button asChild>
               <IconButton
                 buttonRef={shortcutsButtonRef}
                 icon={Command}
                 onClick={handleShortcutsOpen}
               />
-            </li>
-            <li>
+            </ToolBar.Button>
+            <ToolBar.Button asChild>
               <IconButton
                 buttonRef={settingsButtonRef}
                 icon={Gear}
                 onClick={handleSettingsOpen}
               />
-            </li>
-          </ul>
+            </ToolBar.Button>
+          </div>
         </ToolBar.Root>
         <CodeEditor
           ref={codeEditorRef}
