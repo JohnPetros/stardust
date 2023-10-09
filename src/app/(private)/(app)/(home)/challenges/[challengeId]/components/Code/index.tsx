@@ -22,6 +22,7 @@ import { execute } from '@/libs/delegua'
 
 import type { TestCase } from '@/@types/challenge'
 import { useChallengeStore } from '@/hooks/useChallengeStore'
+import { playSound } from '@/utils/functions'
 
 export function Code() {
   const {
@@ -120,6 +121,8 @@ export function Code() {
       const output = await verifyTestCase(testCase, code)
       if (output) userOutput.push(output)
     }
+
+    playSound('running-code.wav')
 
     if (userOutput.length) setUserOutput(userOutput)
   }
