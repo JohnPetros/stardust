@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useChallengeStore } from '@/hooks/useChallengeStore'
+import { useBreakpoint } from '@/hooks/useBreakpoint'
 
 import { VerificationButton } from '@/app/(private)/(app)/lesson/components/Quiz/VerificationButton'
 import { TestCase } from './TestCase'
@@ -26,6 +27,7 @@ export function Result() {
       setIsEnd,
     },
   } = useChallengeStore()
+  const { md } = useBreakpoint()
 
   function handleUserAnswer() {
     setIsAnswerVerified(!isAnswerVerified)
@@ -43,7 +45,8 @@ export function Result() {
 
     if (isAnswerVerified) {
       incrementIncorrectAswersAmount()
-      tabHandler?.showCodeTab()
+
+      if (md) tabHandler?.showCodeTab()
     }
   }
 
@@ -68,7 +71,6 @@ export function Result() {
     if (userOutput.length === test_cases.length) {
       tabHandler?.showResultTab()
 
-      // dispatch({ type: 'setResults', payload: test_cases.map(verifyResult) })
       setResults(test_cases.map(verifyResult))
     }
   }, [userOutput])

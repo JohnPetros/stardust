@@ -18,10 +18,6 @@ import { useBreakpoint } from '@/hooks/useBreakpoint'
 import { useChallengeStore } from '@/hooks/useChallengeStore'
 
 export function Slider() {
-  // const {
-  //   state: { tabHandler },
-  //   dispatch,
-  // } = useChallengeContext()
   const {
     state: { tabHandler },
     action: { setTabHandler },
