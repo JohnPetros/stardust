@@ -1,7 +1,7 @@
+import { useEffect } from 'react'
 import { useChallengeStore } from '@/hooks/useChallengeStore'
 
 import { Text } from '@/app/components/Text'
-import { useEffect } from 'react'
 
 export function Description() {
   const {
