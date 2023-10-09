@@ -15,7 +15,7 @@ import { CHALLENGE_EARNINGS_BY_DIFFICULTY } from '@/utils/constants'
 import { formatSecondsToTime } from '@/utils/functions'
 import { Problem } from './components/Problem'
 import { Code } from './components/Code'
-
+import { TransitionPageAnimation } from '../../../components/TransitionPageAnimation'
 
 export default function Challenge() {
   const { challengeId } = useParams()
@@ -28,12 +28,13 @@ export default function Challenge() {
 
   const { updateUserData: updateUserStarData } = useStar(challenge?.star_id)
 
-  // const { state, dispatch } = useChallengeContext()
   const {
     state,
     action: { setChallenge, resetState },
   } = useChallengeStore()
   const router = useRouter()
+
+  const [isTransitionPageVisible, setIsTransitionPageVisible] = useState(true)
 
   const [coins, setCoins] = useState(0)
   const [xp, setXp] = useState(0)
@@ -92,12 +93,18 @@ export default function Challenge() {
   }
 
   useEffect(() => {
+    let timer: NodeJS.Timeout
+
     if (challenge) {
-      // dispatch({ type: 'setChallenge', payload: challenge })
       setChallenge(challenge)
+      setIsTransitionPageVisible(false)
+      timer = setTimeout(() => setIsTransitionPageVisible(false), 1000)
     }
 
-    return resetState
+    return () => {
+      resetState()
+      clearTimeout(timer)
+    }
   }, [challenge])
 
   useEffect(() => {
@@ -123,6 +130,8 @@ export default function Challenge() {
 
   return (
     <div className="md:overflow-hidden">
+      <TransitionPageAnimation isVisible={isTransitionPageVisible} hasTips={true} />
+
       {state.isEnd ? (
         <End
           coins={coins}
