@@ -91,9 +91,9 @@ export const useChallengeStore = create<ChallengeStore>((set) => {
           state: { ...state, isEnd },
           action,
         })),
-      setIsFirstRendering: (isEnd: boolean) =>
+      setIsFirstRendering: (isFirstRendering: boolean) =>
         set(({ state, action }: ChallengeStore) => ({
-          state: { ...state, isEnd },
+          state: { ...state, isFirstRendering },
           action,
         })),
       incrementIncorrectAswersAmount: () =>
