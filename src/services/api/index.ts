@@ -1,3 +1,4 @@
+import auth from './auth'
 import user from './user'
 import planet from './planet'
 import star from './star'
@@ -10,6 +11,7 @@ import category from './category'
 
 export function useApi() {
   return {
+    ...auth(),
     ...star(),
     ...user(),
     ...planet(),
