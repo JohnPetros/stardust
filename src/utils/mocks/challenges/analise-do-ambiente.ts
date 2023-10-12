@@ -1,4 +1,4 @@
-export default {
+export const challenge = {
   title: 'Análise do ambiente',
   difficulty: 'easy',
   downvotes: 0,
@@ -34,19 +34,19 @@ escreva()`,
       type: 'default',
       content:
         'Entretanto, é melhor fazer uma análise do ambiente antes de fazer um pouso seguro.',
-      picture: 'panda.jpg',
+      picture: 'panda-piscando.jpg',
     },
     {
       type: 'default',
       content:
         'Isso o seu foguete já fez de antemão, retornando para você dados do planeta como nome, temperatura e se tem ar respirável.',
-      picture: 'panda.jpg',
+      picture: 'panda-olhando-computador.jpg',
     },
     {
       type: 'quote',
       content:
         'Sua missão é escrever qual o tipo de cada um dos daods na ordem em que são declarados, veja um exemplo:',
-      picture: 'panda.jpg',
+      picture: 'panda-olhando-computador.jpg',
     },
     {
       type: 'code',
@@ -63,7 +63,7 @@ escreva("\${nomeEstrela}: texto, \${temperatura}: numero, \${temCorAmarela}: fal
       type: 'alert',
       content:
         'Dica: você pode colocar o nome dos tipos em variáveis e concatená-las com os textos usando `interpolação` ou operador de adição.',
-      picture: 'panda.jpg',
+      picture: 'panda-sorrindo.jpg',
     },
   ],
 }

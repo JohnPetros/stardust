@@ -1,4 +1,4 @@
-export default {
+export const challenge = {
   title: 'Enviar mensagem',
   difficulty: 'easy',
   downvotes: 0,
@@ -20,7 +20,7 @@ export default {
     {
       type: 'default',
       content: 'Parece que finalmente você encontrou um planeta à vista!',
-      picture: 'panda.jpg',
+      picture: 'panda-comemorando.jpg',
     },
     {
       type: 'default',
@@ -31,13 +31,13 @@ export default {
     {
       type: 'default',
       content:
-        'Para fazer isso você deve fazer um programa na aba de `código` que receba essa mensagem e a escreva, sendo a entrada e saída de dados respectivamente.',
-      picture: 'panda.jpg',
+        'Para fazer isso você deve escrever um programa no `editor de código` ao lado que receba essa mensagem e a escreva, sendo a entrada e saída de dados respectivamente.',
+      picture: 'panda-andando-com-bambu.jpg',
     },
     {
       type: 'default',
       content: 'Veja o exemplo para entender melhor:',
-      picture: 'panda.jpg',
+      picture: 'panda-sorrindo.jpg',
     },
     {
       type: 'code',
@@ -49,13 +49,13 @@ Saída: "Olá, mundo!"`,
       type: 'default',
       content:
         'Se o resultado do seu código passar no teste de caso na aba de `resultado`, você conclui o desafio 🎉.',
-      picture: 'panda.jpg',
+      picture: 'panda-comemorando.jpg',
     },
     {
       type: 'alert',
       content:
         'Lembre-se de manter o comando `leia()` (que já está no código) para capturar os dados de entrada.',
-      picture: 'panda.jpg',
+      picture: 'panda-piscando-sentado.jpg',
     },
   ],
 }
