@@ -1,10 +1,11 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { useChallengesList } from '@/hooks/useChallengesList'
 
 import { Challenge } from './components/Challenge'
 import { Filters } from './components/Filters'
+
 import { Loading } from '@/app/components/Loading'
+import { useChallengesList } from '@/hooks/useChallengesList'
 
 export default function Challenges() {
   const { challenges, categories, isLoading } = useChallengesList()
@@ -18,10 +19,10 @@ export default function Challenges() {
         setIsFirstRendering(false)
       }, 1500)
     }
-  }, [challenges])
+  }, [challenges, isFirstRendering])
 
   return (
-    <div className="mx-auto max-w-2xl mt-10 px-6 md:px-0 pb-10">
+    <div className="mx-auto mt-10 max-w-2xl px-6 pb-10 md:px-0">
       {isFirstRendering && <Loading isSmall={false} />}
       <Filters categories={categories} />
 
@@ -34,7 +35,7 @@ export default function Challenges() {
           </div>
         </>
       ) : (
-        <div className="grid place-content-center mt-10">
+        <div className="mt-10 grid place-content-center">
           <Loading isSmall={true} />
         </div>
       )}

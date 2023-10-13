@@ -98,7 +98,7 @@ export default function Challenge() {
     if (challenge) {
       setChallenge(challenge)
       setIsTransitionPageVisible(false)
-      timer = setTimeout(() => setIsTransitionPageVisible(false), 3000)
+      timer = setTimeout(() => setIsTransitionPageVisible(false), 5000)
     }
 
     return () => {
@@ -129,7 +129,7 @@ export default function Challenge() {
   }, [challenge, state.isEnd])
 
   return (
-    <div className="md:overflow-hidden">
+    <div className="relative md:overflow-hidden">
       <TransitionPageAnimation isVisible={isTransitionPageVisible} hasTips={true} />
 
       {state.isEnd ? (

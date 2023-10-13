@@ -3,10 +3,12 @@
 import {
   ForwardedRef,
   ReactNode,
+  RefObject,
   forwardRef,
   useImperativeHandle,
   useState,
 } from 'react'
+
 import * as T from '@radix-ui/react-tooltip'
 import { Variants, motion, AnimatePresence } from 'framer-motion'
 
@@ -21,27 +23,48 @@ const contentVariants: Variants = {
   },
 }
 
+export interface TooltipRef {
+  show: VoidFunction
+  hide: VoidFunction
+}
+
 interface RootProps {
   children: ReactNode
+}
+
+interface TooltipTriggerProps {
+  children: ReactNode
+  tooltipRef: RefObject<TooltipRef>
+  className?: string
 }
 
 export function Tooltip({ children }: RootProps) {
   return <T.Root>{children}</T.Root>
 }
 
-export const TooltipTrigger = T.Trigger
+export function TooltipTrigger({
+  children,
+  tooltipRef,
+  className,
+}: TooltipTriggerProps) {
+  return (
+    <T.Trigger
+      asChild
+      className={className}
+      onMouseOver={() => tooltipRef.current?.show()}
+      onMouseLeave={() => tooltipRef.current?.hide()}
+    >
+      {children}
+    </T.Trigger>
+  )
+}
 
 interface TooltipProps {
   text: string
   direction?: 'top' | 'left' | 'right' | 'bottom'
 }
 
-export interface TooltipRef {
-  show: VoidFunction
-  hide: VoidFunction
-}
-
-export const TooltipComponent = (
+const TooltipComponent = (
   { text, direction = 'bottom' }: TooltipProps,
   ref: ForwardedRef<TooltipRef>
 ) => {
@@ -80,7 +103,7 @@ export const TooltipComponent = (
               variants={contentVariants}
               initial="hidden"
               animate="visible"
-              className="bg-green-900 border border-gray-400 rounded-md p-2 shadow-md text-gray-100 text-sm "
+              className="bg-green-900 border border-gray-400 rounded-md p-2 shadow-md text-gray-100 text-center text-sm"
             >
               {text}
               <T.TooltipArrow className="fill-gray-400" />

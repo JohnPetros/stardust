@@ -1,37 +1,36 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { useLesson } from '@/hooks/useLesson'
-
-import { QuestionTitle } from '../QuestionTitle'
-import { SortableItem } from './SortableItem'
-
 import {
   DndContext,
-  DragStartEvent,
   DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
   MouseSensor,
   TouchSensor,
   useSensor,
   useSensors,
-  DragOverlay,
 } from '@dnd-kit/core'
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-  arrayMove,
-} from '@dnd-kit/sortable'
 import {
   restrictToVerticalAxis,
   restrictToWindowEdges,
 } from '@dnd-kit/modifiers'
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
 
-import { compareArrays, reorderItems } from '@/utils/functions'
+import { QuestionContainer } from '../QuestionContainer'
+import { QuestionTitle } from '../QuestionTitle'
+
+import { SortableItem } from './SortableItem'
 
 import type {
   DragAndDropListQuestion as DragAndDropListQuestionData,
   SortableItem as SortableItemData,
 } from '@/@types/quiz'
-import { QuestionContainer } from '../QuestionContainer'
+import { useLesson } from '@/hooks/useLesson'
+import { compareArrays, reorderItems } from '@/utils/functions'
 
 interface DragAndDropListQuestionProps {
   data: DragAndDropListQuestionData
@@ -55,10 +54,10 @@ export function DragAndDropListQuestion({
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
 
   function isUserAnswerCorrect() {
-    const correctItemsIdsSequence = items.map((item) => item.id)
+    const correctDragItemsIdsSequence = items.map((item) => item.id)
 
     const userItemsIdSequence = sortableItems.map((item) => item.id)
-    return compareArrays(userItemsIdSequence, correctItemsIdsSequence)
+    return compareArrays(userItemsIdSequence, correctDragItemsIdsSequence)
   }
 
   function setIsAnswerVerified(isAnswerVerified: boolean) {
@@ -153,7 +152,7 @@ export function DragAndDropListQuestion({
           items={sortableItems}
           strategy={verticalListSortingStrategy}
         >
-          <div className="mx-auto w-full space-y-2 mt-6">
+          <div className="mx-auto mt-6 w-full space-y-2">
             {sortableItems.map((item) => (
               <SortableItem
                 key={item.id}

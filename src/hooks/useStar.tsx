@@ -1,13 +1,13 @@
 'use client'
 
-import { useAuth } from './useAuth'
-import { useApi } from '@/services/api'
 import useSWR from 'swr'
 
-import { updateUserDataParam } from '@/app/(private)/(app)/lesson/components/End'
+import { useAuth } from './useAuth'
 
-import type { User } from '@/@types/user'
 import type { Star } from '@/@types/star'
+import type { User } from '@/@types/user'
+import { updateUserDataParam } from '@/app/(private)/(app)/lesson/components/End'
+import { useApi } from '@/services/api'
 
 export function useStar(starId?: string | null | undefined) {
   const { user } = useAuth()

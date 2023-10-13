@@ -1,16 +1,14 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useAchivementsContext } from '@/hooks/useAchievementContext'
-
-import Image from 'next/image'
 import * as Progress from '@radix-ui/react-progress'
-import { Button } from '@/app/components/Button'
-
-import { Variants, motion } from 'framer-motion'
-import { getImage } from '@/utils/functions'
+import { motion, Variants } from 'framer-motion'
+import Image from 'next/image'
 
 import type { Achievement as AchievementType } from '@/@types/achievement'
+import { Button } from '@/app/components/Button'
+import { useAchivementsContext } from '@/hooks/useAchievementContext'
+import { getImage } from '@/utils/functions'
 
 const achievementAnimations: Variants = {
   hidden: {
@@ -64,7 +62,7 @@ export function Achievement({
 }: AchievementProps) {
   const iconImage = getImage('achievements', icon)
   const [status, setStatus] = useState<Status | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  // const [isLoading, setIsLoading] = useState(false)
 
   const { rescueAchivement } = useAchivementsContext()
 
@@ -90,14 +88,14 @@ export function Achievement({
 
       setStatus({ barWidth, canRescue, formatedCurrentProgress })
     }
-  }, [])
+  }, [currentProgress, isRescuable, required_amount])
 
   return (
     <motion.div
       variants={achievementAnimations}
-      className="grid grid-cols-[48px_1fr] gap-4 py-4 border-b border-green-500"
+      className="grid grid-cols-[48px_1fr] gap-4 border-b border-green-500 py-4"
     >
-      <div className="relative w-12 h-12 grid place-content-center">
+      <div className="relative grid h-12 w-12 place-content-center">
         {isUnlocked ? (
           <Image src={iconImage} fill alt="" />
         ) : (
@@ -105,11 +103,11 @@ export function Achievement({
         )}
       </div>
       <div className="flex flex-col gap-1">
-        <strong className="text-gray-100 text-sm">{name}</strong>
+        <strong className="text-sm text-gray-100">{name}</strong>
         {isRescuable ? (
           <motion.div variants={rescueButtonAnimations} animate="bounce">
             <Button
-              className="h-8 w-32 md:ml-4 mt-1 text-sm"
+              className="mt-1 h-8 w-32 text-sm md:ml-4"
               onClick={handleRescuButtonClick}
               // isLoading={isLoading}
               // isDisabled={isLoading}
@@ -119,19 +117,19 @@ export function Achievement({
           </motion.div>
         ) : (
           <>
-            <p className="text-gray-100 text-xs">{description}</p>
+            <p className="text-xs text-gray-100">{description}</p>
             {!isUnlocked && (
               <div className="flex w-full items-center gap-2">
                 <Progress.Root
                   value={status?.barWidth}
-                  className="bg-gray-400 h-1 w-full"
+                  className="h-1 w-full bg-gray-400"
                 >
                   <Progress.Indicator
                     className="bg-green-400"
                     style={{ width: `${status?.barWidth}%` }}
                   />
                 </Progress.Root>
-                <span className="text-gray-100 text-sm">
+                <span className="text-sm text-gray-100">
                   {status?.formatedCurrentProgress}/{required_amount}
                 </span>
               </div>

@@ -24,8 +24,7 @@ export function Info({ label, icon: Icon, iconStyle, tooltipText }: InfoProps) {
       <Tooltip>
         <TooltipTrigger
           className="flex items-center gap-1"
-          onMouseOver={() => tooltipRef.current?.show()}
-          onMouseLeave={() => tooltipRef.current?.hide()}
+          
         >
           <Icon className={twMerge("text-gray-400 text-sm", iconStyle)} weight="bold" />
           {label}

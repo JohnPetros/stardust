@@ -1,8 +1,9 @@
 'use client'
 
-import { useLesson } from '@/hooks/useLesson'
-import { InputHTMLAttributes, MutableRefObject, RefObject, useMemo } from 'react'
+import { InputHTMLAttributes, useMemo } from 'react'
 import { tv } from 'tailwind-variants'
+
+import { useLesson } from '@/hooks/useLesson'
 
 const inputStyles = tv({
   base: ' rounded-md border-2 overflow-hidden custom-outline',
@@ -39,7 +40,7 @@ export function Input({ answer, ...rest }: InputProps) {
   return (
     <div style={{ width }} className={inputStyles({ color })}>
       <input
-        className={'bg-green-900 outline-none px-3 py-2 w-full font-code'}
+        className={'w-full bg-green-900 px-3 py-2 font-code outline-none'}
         maxLength={answer.length}
         {...rest}
       />

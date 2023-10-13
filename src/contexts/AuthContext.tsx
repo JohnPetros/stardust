@@ -2,11 +2,11 @@
 
 import { createContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useSupabase } from '../hooks/useSupabase'
+import { useApi } from '@/services/api'
 import useSWR, { mutate } from 'swr'
 
 import { AuthError, Session } from '@supabase/supabase-js'
-import { useApi } from '@/services/api'
+
 import type { User } from '@/@types/user'
 
 interface AuthContextValue {
@@ -44,7 +44,6 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
   const [session, setSession] = useState<Session | null | undefined>(
     serverSession
   )
-  const { supabase } = useSupabase()
   const api = useApi()
   const router = useRouter()
 
@@ -63,44 +62,25 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
   } = useSWR(session?.user.id ? '/user' : null, getUser)
 
   async function signIn(email: string, password: string) {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+    const { session, error } = await api.signIn(email, password)
 
     if (error) {
-      return error.message
+      return error
     }
 
-    setSession(data.session)
+    setSession(session)
 
     return null
   }
 
   async function signUp(email: string, password: string) {
-    const { data: response, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${location.origin}/auth/callback`,
-      },
-    })
-
-    if (error) {
-      return { userId: null, error }
-    }
-
-    if (response.user) return { userId: response.user.id, error: null }
-
-    return null
+    return await api.signUp(email, password)
   }
 
   async function signOut() {
-    const { error } = await supabase.auth.signOut()
+    const error = await api.signOut()
 
-    if (error) {
-      return error.message
-    }
+    if (error) return error
 
     router.push('/sign-in')
 

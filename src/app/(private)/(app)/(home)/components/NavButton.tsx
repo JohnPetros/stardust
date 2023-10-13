@@ -9,7 +9,7 @@ import {
   TooltipTrigger,
   TooltipContent,
   TooltipRef,
-} from '@/app/components/Tooltip'
+} from '@/app/components/Tooltip';
 
 import { twMerge } from 'tailwind-merge'
 import { Variants, motion } from 'framer-motion'
@@ -48,11 +48,7 @@ export function NavButton({
 
   return (
     <Tooltip>
-      <TooltipTrigger
-        asChild
-        onMouseOver={() => tooltipRef.current?.show()}
-        onMouseLeave={() => tooltipRef.current?.hide()}
-      >
+      <TooltipTrigger tooltipRef={tooltipRef}>
         <Link
           href={path}
           className={twMerge(

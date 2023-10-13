@@ -1,34 +1,31 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useLesson } from '@/hooks/useLesson'
-
+import { createPortal } from 'react-dom'
 import {
-  DndContext,
-  DragStartEvent,
-  DragEndEvent,
   defaultDropAnimation,
-  DropAnimation,
+  DndContext,
+  DragEndEvent,
   DragOverlay,
-  useSensors,
-  useSensor,
+  DragStartEvent,
+  DropAnimation,
   PointerSensor,
+  useSensor,
+  useSensors,
 } from '@dnd-kit/core'
 
-import { QuestionContainer } from '../QuestionContainer'
 import { QuestionTitle } from '../QuestionTitle'
-import { CodeText } from '../CodeText'
-import { DropZone } from './DropZone'
+
 import { DragItem } from './DragItem'
 import { DropBank } from './DropBank'
-
-import { createPortal } from 'react-dom'
-import { compareArrays } from '@/utils/functions'
+import { DropZone } from './DropZone'
 
 import type {
   DragAndDropQuestion as DragAndDropData,
   DraggrableItem,
 } from '@/@types/quiz'
+import { useLesson } from '@/hooks/useLesson'
+import { compareArrays } from '@/utils/functions'
 
 export function getDragItemWidth(item: DraggrableItem) {
   const { length } = item.label
@@ -207,7 +204,7 @@ export function DragAndDropQuestion({
       >
         <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
-        <ul className="space-y-4 mt-6">
+        <ul className="mt-6 space-y-4">
           {lines.map((line) => (
             <li key={line.id} className="flex items-center gap-3">
               {line.texts.map((text, index) => {
@@ -235,7 +232,7 @@ export function DragAndDropQuestion({
           ))}
         </ul>
 
-        <ul className="flex flex-wrap justify-center gap-3 w-full mt-12">
+        <ul className="mt-12 flex w-full flex-wrap justify-center gap-3">
           {draggableItems.map((item) => {
             const itemWidth = getDragItemWidth(item)
             console.log({ itemWidth })

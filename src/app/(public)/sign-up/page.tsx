@@ -77,7 +77,7 @@ export default function SignUp() {
 
     if (userEmail) {
       toastRef.current?.open({
-        type: 'success',
+        type: 'error',
         message: 'Usuário já registrado com esse e-mail',
       })
       return

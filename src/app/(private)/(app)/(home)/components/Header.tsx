@@ -1,16 +1,16 @@
 'use client'
 
-import { useSiderbar } from '@/hooks/useSiderbar'
-import { useAuth } from '@/hooks/useAuth'
-import { UserAvatar } from './UserAvatar'
-
-import { Animation } from '@/app/components/Animation'
 import { List } from '@phosphor-icons/react'
+import { motion, Variants } from 'framer-motion'
 import Image from 'next/image'
 
 import StreakAnimation from '../../../../../../public/animations/streak.json'
 
-import { Variants, motion } from 'framer-motion'
+import { UserAvatar } from './UserAvatar'
+
+import { Animation } from '@/app/components/Animation'
+import { useAuth } from '@/hooks/useAuth'
+import { useSiderbar } from '@/hooks/useSiderbar'
 
 const headerAnimations: Variants = {
   hidden: {
@@ -34,7 +34,7 @@ export function Header() {
         variants={headerAnimations}
         initial="hidden"
         animate="visible"
-        className="fixed top-0 w-screen z-40 bg-gray-900 h-16 px-6 py-3 flex justify-between md:justify-end border-b border-gray-700"
+        className="fixed top-0 z-40 flex h-16 w-screen justify-between border-b border-gray-700 bg-gray-900 px-6 py-3 md:justify-end"
       >
         <div className="flex items-center gap-3 md:hidden">
           <button onClick={toggle}>
@@ -61,21 +61,21 @@ export function Header() {
               height={26}
               alt="Star Coins"
             />
-            <span className="block text-yellow-400 font-semibold text-lg pt-1">
+            <span className="block pt-1 text-lg font-semibold text-yellow-400">
               {user?.coins}
             </span>
           </div>
 
           <div className="flex items-center">
             <Animation src={StreakAnimation} size={32} hasLoop={false} />
-            <span className="text-green-500 font-semibold text-lg">
+            <span className="text-lg font-semibold text-green-500">
               {user?.streak}
             </span>
           </div>
         </div>
 
         {user && (
-          <div className="hidden md:flex items-center gap-6 ml-6">
+          <div className="ml-6 hidden items-center gap-6 md:flex">
             <div className="flex flex-col items-center text-sm text-gray-100">
               <strong>{user?.name}</strong>
               <small>{user?.email}</small>

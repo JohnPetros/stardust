@@ -1,7 +1,7 @@
 'use client'
 
 import { Icon } from '@phosphor-icons/react'
-import { motion, AnimatePresence, Variants } from 'framer-motion'
+import { AnimatePresence, motion, Variants } from 'framer-motion'
 
 const fabButtonAnimations: Variants = {
   hidden: {
@@ -32,11 +32,11 @@ export function FabButton({ isVisible, icon: Icon, onClick }: FabButtonProps) {
           exit="hidden"
           whileTap="tap"
           onClick={onClick}
-          className="fixed right-24 bottom-8 grid place-content-center w-12 h-12 rounded-md border-b-2 border-green-500 bg-gray-900"
+          className="fixed bottom-8 right-24 grid h-12 w-12 place-content-center rounded-md border-b-2 border-green-500 bg-gray-900"
           tabIndex={0}
           aria-label="Dar scroll até a última estrela desbloqueada"
         >
-          <Icon className="text-green-500 text-2xl" weight="bold" />
+          <Icon className="text-2xl text-green-500" weight="bold" />
         </motion.button>
       )}
     </AnimatePresence>

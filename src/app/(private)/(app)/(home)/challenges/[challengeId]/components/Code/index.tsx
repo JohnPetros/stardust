@@ -172,41 +172,31 @@ export function Code() {
           </ToolBar.Button>
 
           <div className="flex items-center gap-3">
-            <ToolBar.Button asChild>
-              <IconButton
-                buttonRef={resetCodeButtonRef}
-                icon={ArrowClockwise}
-                onClick={handleResetCode}
-              />
-            </ToolBar.Button>
-            <ToolBar.Button asChild>
-              <IconButton
-                buttonRef={fullScreenButtonRef}
-                icon={ArrowsOutSimple}
-                onClick={() => {}}
-              />
-            </ToolBar.Button>
-            <ToolBar.Button asChild>
-              <IconButton
-                buttonRef={dictionaryButtonRef}
-                icon={CodeIcon}
-                onClick={handleShortcutsOpen}
-              />
-            </ToolBar.Button>
-            <ToolBar.Button asChild>
-              <IconButton
-                buttonRef={shortcutsButtonRef}
-                icon={Command}
-                onClick={handleShortcutsOpen}
-              />
-            </ToolBar.Button>
-            <ToolBar.Button asChild>
-              <IconButton
-                buttonRef={settingsButtonRef}
-                icon={Gear}
-                onClick={handleSettingsOpen}
-              />
-            </ToolBar.Button>
+            <IconButton
+              buttonRef={resetCodeButtonRef}
+              icon={ArrowClockwise}
+              onClick={handleResetCode}
+            />
+            <IconButton
+              buttonRef={fullScreenButtonRef}
+              icon={ArrowsOutSimple}
+              onClick={() => {}}
+            />
+            <IconButton
+              buttonRef={dictionaryButtonRef}
+              icon={CodeIcon}
+              onClick={handleShortcutsOpen}
+            />
+            <IconButton
+              buttonRef={shortcutsButtonRef}
+              icon={Command}
+              onClick={handleShortcutsOpen}
+            />
+            <IconButton
+              buttonRef={settingsButtonRef}
+              icon={Gear}
+              onClick={handleSettingsOpen}
+            />
           </div>
         </ToolBar.Root>
         <CodeEditor

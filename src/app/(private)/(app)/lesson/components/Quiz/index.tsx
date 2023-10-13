@@ -1,18 +1,19 @@
 'use client'
 
 import { useEffect, useMemo, useRef } from 'react'
-import { useLesson } from '@/hooks/useLesson'
+import { AnimatePresence } from 'framer-motion'
 
-import { Modal, ModalRef } from '@/app/components/Modal'
-import { Button } from '@/app/components/Button'
+import { CheckboxQuestion } from './CheckboxQuestion'
+import { DragAndDropListQuestion } from './DragAndDropListQuestion'
+import { DragAndDropQuestion } from './DragAndDropQuestion'
+import { OpenQuestion } from './OpenQuestion'
+import { QuestionContainer } from './QuestionContainer'
 import { SelectionQuestion } from './SelectionQuestion'
 import { VerificationButton } from './VerificationButton'
-import { DragAndDropListQuestion } from './DragAndDropListQuestion'
-import { OpenQuestion } from './OpenQuestion'
-import { DragAndDropQuestion } from './DragAndDropQuestion'
-import { CheckboxQuestion } from './CheckboxQuestion'
-import { AnimatePresence } from 'framer-motion'
-import { QuestionContainer } from './QuestionContainer'
+
+import { Button } from '@/app/components/Button'
+import { Modal, ModalRef } from '@/app/components/Modal'
+import { useLesson } from '@/hooks/useLesson'
 
 interface QuizProps {
   leaveLesson: () => void
@@ -50,7 +51,7 @@ export function Quiz({ leaveLesson }: QuizProps) {
 
   if (currentQuestion) {
     return (
-      <div className="w-full h-[90vh] flex justify-center items-center">
+      <div className="flex h-[90vh] w-full items-center justify-center">
         <AnimatePresence>
           {currentQuestion.content.type === 'selection' && (
             <QuestionContainer id={currentQuestion.order}>
@@ -88,14 +89,14 @@ export function Quiz({ leaveLesson }: QuizProps) {
           type="crying"
           title="Puxa, parece que você não tem mais vidas!"
           body={
-            <p className="text-center text-green-400 font-medium mt-3">
+            <p className="mt-3 text-center font-medium text-green-400">
               Mais sorte da próxima vez 😢
             </p>
           }
           footer={
-            <div className="flex items-center justify-center mt-3 gap-2">
+            <div className="mt-3 flex items-center justify-center gap-2">
               <Button
-                className="bg-red-700 text-gray-100 w-32"
+                className="w-32 bg-red-700 text-gray-100"
                 onClick={leaveLesson}
               >
                 Sair

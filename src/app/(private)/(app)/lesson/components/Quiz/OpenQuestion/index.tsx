@@ -1,17 +1,15 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useLesson } from '@/hooks/useLesson'
 
-import { QuestionContainer } from '../QuestionContainer'
 import { QuestionTitle } from '../QuestionTitle'
-import { CodeText } from '../CodeText'
-import { CodeSnippet } from '@/app/components/Text/CodeSnippet'
+
 import { Input } from './Input'
 
-import { compareArrays } from '@/utils/functions'
-
 import type { OpenQuestion as OpenQuestionData } from '@/@types/quiz'
+import { CodeSnippet } from '@/app/components/Text/CodeSnippet'
+import { useLesson } from '@/hooks/useLesson'
+import { compareArrays } from '@/utils/functions'
 
 interface OpenQuestion {
   data: OpenQuestionData
@@ -37,6 +35,7 @@ export function OpenQuestion({
   function setIsAnswerCorrect(isAnswerCorrect: boolean) {
     dispatch({ type: 'setIsAnswerCorrect', payload: isAnswerCorrect })
   }
+  
   function handleAnswer() {
     setIsAnswerVerified(!isAnswerVerified)
 
@@ -79,7 +78,7 @@ export function OpenQuestion({
       payload:
         userAnswers.filter((answer) => !!answer).length === answers.length,
     })
-  }, [userAnswers])
+  }, [userAnswers, answers.length])
 
   useEffect(() => {
     dispatch({

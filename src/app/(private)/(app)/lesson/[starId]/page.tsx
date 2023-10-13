@@ -1,18 +1,18 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useLesson } from '@/hooks/useLesson'
-import { useStar } from '@/hooks/useStar'
 import { useParams, useRouter } from 'next/navigation'
+
+import { TransitionPageAnimation } from '../../components/TransitionPageAnimation'
+import { End } from '../components/End'
+import { Header } from '../components/Header'
+import { Quiz } from '../components/Quiz'
+import { Theory } from '../components/Theory'
 
 import { Button } from '@/app/components/Button'
 import { Modal, ModalRef } from '@/app/components/Modal'
-import { TransitionPageAnimation } from '../../components/TransitionPageAnimation'
-import { Header } from '../components/Header'
-import { Theory } from '../components/Theory'
-import { Quiz } from '../components/Quiz'
-import { End } from '../components/End'
-
+import { useLesson } from '@/hooks/useLesson'
+import { useStar } from '@/hooks/useStar'
 import { formatSecondsToTime } from '@/utils/functions'
 
 export default function Lesson() {
@@ -129,16 +129,16 @@ export default function Lesson() {
         canPlaySong={false}
         body={null}
         footer={
-          <div className="flex items-center justify-center mt-3 gap-2">
+          <div className="mt-3 flex items-center justify-center gap-2">
             <Button
-              className="bg-green-400 text-green-900 w-32"
+              className="w-32 bg-green-400 text-green-900"
               onClick={() => modalRef.current?.close()}
               autoFocus
             >
               Cancelar
             </Button>
             <Button
-              className="bg-red-700 text-gray-100 w-32"
+              className="w-32 bg-red-700 text-gray-100"
               onClick={leaveLesson}
             >
               Sair

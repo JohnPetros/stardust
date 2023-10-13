@@ -1,13 +1,12 @@
 'use client'
 
+import { motion, Variants } from 'framer-motion'
 import Image from 'next/image'
+
 import { Star } from './Star'
 
-import { motion, Variants } from 'framer-motion'
-
-import { getImage } from '@/utils/functions'
-
 import type { Planet } from '@/@types/planet'
+import { getImage } from '@/utils/functions'
 
 const planetSignAnimations: Variants = {
   float: {
@@ -39,10 +38,10 @@ export function Planet({
         <motion.div
           variants={planetSignAnimations}
           animate="float"
-          className="bg-green-800 max-w-sm p-3 flex items-center gap-3 rounded-lg"
+          className="flex max-w-sm items-center gap-3 rounded-lg bg-green-800 p-3"
         >
           <Image src={planetIcon} width={32} height={32} alt="" />
-          <strong className="text-zinc-100 font-semibold">{name}</strong>
+          <strong className="font-semibold text-zinc-100">{name}</strong>
         </motion.div>
       </div>
 

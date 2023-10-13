@@ -1,19 +1,19 @@
+'use client'
+
 import { useEffect, useRef, useState } from 'react'
-import { useChallengeContext } from '@/hooks/useChallengeContext'
+import { useChallengeStore } from '@/hooks/useChallengeStore'
 
 import { Description } from './Description'
 import { Result } from '../Result'
+import { TabButton } from './TabButton'
+import TabContent from './TabContent'
 import * as Tabs from '@radix-ui/react-tabs'
-import { useChallengeStore } from '@/hooks/useChallengeStore'
 
-const tabStyle = 'h-[calc(100vh-8rem)] overflow-y-scroll overflow-hidden'
+import { AnimatePresence } from 'framer-motion'
 
-type Tab = 'description' | 'result'
+export type Tab = 'description' | 'result' | 'comments'
 
 export function Problem() {
-  // const {
-  //   state: { challenge },
-  // } = useChallengeContext()
   const {
     state: { challenge, results },
   } = useChallengeStore()
@@ -22,10 +22,14 @@ export function Problem() {
 
   function scrollTabToTop() {
     tabsRef.current.map((tab) => {
-      tab.scrollTo({
-        top: 0,
-      })
+      tab.scrollTop = 0
     })
+  }
+
+  function addTabRef(ref: HTMLDivElement | null) {
+    if (ref) {
+      tabsRef.current.push(ref)
+    }
   }
 
   function handleTabChange() {
@@ -38,7 +42,13 @@ export function Problem() {
 
   useEffect(() => {
     if (tabsRef.current.length) scrollTabToTop()
-  }, [activeTab, tabsRef.current])
+  }, [challenge, activeTab])
+
+  useEffect(() => {
+    if (results.length) {
+      setActiveTab('result')
+    }
+  }, [results])
 
   if (challenge)
     return (
@@ -49,49 +59,39 @@ export function Problem() {
           orientation="horizontal"
         >
           <Tabs.List className="flex items-center gap-3 bg-gray-700 px-2">
-            <Tabs.Trigger
-              onClick={() => handleTabButton('description')}
-              className="text-green-500 p-2"
+            <TabButton
+              title="Descrição"
               value="description"
-            >
-              Descrição
-            </Tabs.Trigger>
-            <Tabs.Trigger
-              onClick={() => handleTabButton('result')}
-              className="text-green-500 p-2"
+              isActive={activeTab === 'description'}
+              onClick={handleTabButton}
+            />
+            <TabButton
+              title="Resultado"
               value="result"
-            >
-              Resultado
-            </Tabs.Trigger>
+              isActive={activeTab === 'result'}
+              onClick={handleTabButton}
+            />
+            <TabButton
+              title="Comentários"
+              value="comments"
+              isActive={activeTab === 'comments'}
+              isBlocked
+              blockMessage="Comentários estão disponíveis apenas após a conclusão do desafio."
+              onClick={handleTabButton}
+            />
           </Tabs.List>
-          {activeTab === 'description' && (
-            <Tabs.Content
-              ref={(ref) => {
-                if (ref) {
-                  tabsRef.current.push(ref)
-                }
-              }}
-              value="description"
-              className={tabStyle}
-              forceMount
-            >
-              <Description />
-            </Tabs.Content>
-          )}
-          {activeTab === 'result' && (
-            <Tabs.Content
-              ref={(ref) => {
-                if (ref) {
-                  tabsRef.current.push(ref)
-                }
-              }}
-              value="result"
-              className={tabStyle}
-              forceMount
-            >
-              <Result />
-            </Tabs.Content>
-          )}
+          <AnimatePresence>
+            {activeTab === 'description' && (
+              <TabContent tabRef={addTabRef} value="description">
+                <Description />
+              </TabContent>
+            )}
+            {activeTab === 'result' && (
+              <TabContent tabRef={addTabRef} value="result">
+                <Result />
+              </TabContent>
+            )}
+          </AnimatePresence>
         </Tabs.Root>
       </div>
     )

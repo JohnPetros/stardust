@@ -1,12 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useAuth } from '@/hooks/useAuth'
+import { twMerge } from 'tailwind-merge'
+
+import { Achievement } from './Achievement'
 
 import { Loading } from '@/app/components/Loading'
-import { Achievement } from './Achievement'
-import { twMerge } from 'tailwind-merge'
 import { useAchivementsContext } from '@/hooks/useAchievementContext'
+import { useAuth } from '@/hooks/useAuth'
 
 export function AchievementsList() {
   const { user } = useAuth()
@@ -19,14 +20,14 @@ export function AchievementsList() {
         setIsloading(false)
       }, 1000)
     }
-  }, [achievements])
+  }, [achievements, isLoading])
 
   if (user)
     return (
       <div
         className={twMerge(
-          'flex flex-col gap-6 p-6 flex-shrink-0',
-          isLoading ? 'items-center justify-center h-full' : 'pb-32'
+          'flex flex-shrink-0 flex-col gap-6 p-6',
+          isLoading ? 'h-full items-center justify-center' : 'pb-32'
         )}
       >
         {!isLoading ? (

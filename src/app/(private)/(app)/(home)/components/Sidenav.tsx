@@ -1,25 +1,23 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { useAuth } from '@/hooks/useAuth'
-import { useSiderbar } from '@/hooks/useSiderbar'
-
-import Link from 'next/link'
+import { CaretLeft, CaretRight, Flag, Power } from '@phosphor-icons/react'
+import { AnimatePresence, motion, Variants } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
 
-import { ToastRef, Toast } from '@/app/components/Toast'
-import { Modal, ModalRef } from '@/app/components/Modal'
-import { Button } from '@/app/components/Button'
-import { NavButton } from './NavButton'
 import { AchievementsList } from './AchievementsList'
+import { CounterBadge } from './CounterBadge'
+import { NavButton } from './NavButton'
 import { SidenavButton } from './SidenavButton'
 
-import { CaretLeft, CaretRight, Flag, Power } from '@phosphor-icons/react'
-import { AnimatePresence, Variants, motion } from 'framer-motion'
-
-import { HOME_PAGES } from '@/utils/constants/home-pages'
+import { Button } from '@/app/components/Button'
+import { Modal, ModalRef } from '@/app/components/Modal'
+import { Toast, ToastRef } from '@/app/components/Toast'
 import { useAchivementsContext } from '@/hooks/useAchievementContext'
-import { CounterBadge } from './CounterBadge'
+import { useAuth } from '@/hooks/useAuth'
+import { useSiderbar } from '@/hooks/useSiderbar'
+import { HOME_PAGES } from '@/utils/constants/home-pages'
 
 const sidenavAnimations: Variants = {
   shrink: {
@@ -95,26 +93,26 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
       variants={sidenavAnimations}
       initial="shrink"
       animate={isExpanded ? 'expand' : ''}
-      className="hidden md:flex md:fixed left-0 bg-gray-900 h-full z-50"
+      className="left-0 z-50 hidden h-full bg-gray-900 md:fixed md:flex"
     >
       <Toast ref={toastRef} />
 
-      <div className="reative flex flex-col justify-between h-full">
+      <div className="reative flex h-full flex-col justify-between">
         <button
           onClick={toggleSidenav}
           tabIndex={0}
-          className="absolute top-20 -right-[10px] rounded-full bg-green-400 p-1 grid place-content-center z-40 outline-green-500"
+          className="absolute -right-[10px] top-20 z-40 grid place-content-center rounded-full bg-green-400 p-1 outline-green-500"
         >
           {isExpanded ? (
-            <CaretLeft className="text-gray-800 text-sm" weight="bold" />
+            <CaretLeft className="text-sm text-gray-800" weight="bold" />
           ) : (
-            <CaretRight className="text-gray-800 text-sm" weight="bold" />
+            <CaretRight className="text-sm text-gray-800" weight="bold" />
           )}
         </button>
         <div>
           <Link
             href="/"
-            className="border-b border-green-700 h-16 mx-3 grid place-content-center"
+            className="mx-3 grid h-16 place-content-center border-b border-green-700"
           >
             {isExpanded ? (
               <Image
@@ -128,7 +126,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
             )}
           </Link>
 
-          <nav className="mt-12 flex flex-col px-3 gap-3">
+          <nav className="mt-12 flex flex-col gap-3 px-3">
             {HOME_PAGES.map(({ path, icon, label }) => {
               return (
                 <NavButton
@@ -151,14 +149,14 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
               initial="hidden"
               animate={isAchievementsListVisible ? 'visible' : ''}
               exit="hidden"
-              className="bg-gray-900 border-l border-green-400 mt-16 absolute top-0 right-0 translate-x-[100%] w-80 custom-scrollbar h-full overflow-y-scroll overflow-hidden"
+              className="custom-scrollbar absolute right-0 top-0 mt-16 h-full w-80 translate-x-[100%] overflow-hidden overflow-y-scroll border-l border-green-400 bg-gray-900"
             >
               <AchievementsList />
             </motion.div>
           )}
         </AnimatePresence>
 
-        <div className="border-t border-green-700 flex flex-col gap-1 mx-3 px-3 py-3">
+        <div className="mx-3 flex flex-col gap-1 border-t border-green-700 px-3 py-3">
           <SidenavButton
             icon={Flag}
             title="Conquistas"
@@ -185,16 +183,16 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
         canPlaySong={false}
         body={null}
         footer={
-          <div className="flex items-center justify-center mt-3 gap-2">
+          <div className="mt-3 flex items-center justify-center gap-2">
             <Button
-              className="bg-red-700 text-gray-100 w-32"
+              className="w-32 bg-red-700 text-gray-100"
               onClick={handleSignOutButtonClick}
               isLoading={isLoading}
             >
               Sair
             </Button>
             <Button
-              className="bg-green-400 text-green-900 w-32"
+              className="w-32 bg-green-400 text-green-900"
               onClick={() => modalRef.current?.close()}
             >
               Cancelar

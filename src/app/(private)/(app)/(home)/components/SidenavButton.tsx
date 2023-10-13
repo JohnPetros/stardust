@@ -48,9 +48,7 @@ export function SidenavButton({
   return (
     <Tooltip>
       <TooltipTrigger
-        asChild
-        onMouseOver={() => tooltipRef.current?.show()}
-        onMouseLeave={() => tooltipRef.current?.hide()}
+        tooltipRef={tooltipRef}
       >
         <button
           onClick={onClick}
