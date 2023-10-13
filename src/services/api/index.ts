@@ -1,25 +1,25 @@
-import auth from './auth'
-import user from './user'
-import planet from './planet'
-import star from './star'
-import avatar from './avatar'
-import achievement from './achievement'
-import rocket from './rocket'
-import ranking from './ranking'
-import challenge from './challenge'
-import category from './category'
+import { AchievementService } from './achievement'
+import { AuthService } from './auth'
+import { AvatarService } from './avatar'
+import { CategoryService } from './category'
+import { ChallengeService } from './challenge'
+import { PlanetService } from './planet'
+import { RankingService } from './ranking'
+import { RocketService } from './rocket'
+import { StarService } from './star'
+import { UserService } from './user'
 
 export function useApi() {
   return {
-    ...auth(),
-    ...star(),
-    ...user(),
-    ...planet(),
-    ...avatar(),
-    ...achievement(),
-    ...rocket(),
-    ...ranking(),
-    ...challenge(),
-    ...category(),
+    ...AuthService(),
+    ...UserService(),
+    ...AchievementService(),
+    ...StarService(),
+    ...PlanetService(),
+    ...AvatarService(),
+    ...RocketService(),
+    ...RankingService(),
+    ...CategoryService(),
+    ...ChallengeService(),
   }
 }

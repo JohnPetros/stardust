@@ -1,8 +1,9 @@
 'use client'
-import { useSupabase } from '@/hooks/useSupabase'
-import type { Star } from '@/@types/star'
 
-export default () => {
+import type { Star } from '@/@types/star'
+import { useSupabase } from '@/hooks/useSupabase'
+
+export const StarService = () => {
   const { supabase } = useSupabase()
 
   return {

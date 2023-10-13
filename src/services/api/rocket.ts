@@ -1,8 +1,9 @@
 'use client'
-import { useSupabase } from '@/hooks/useSupabase'
-import type { Rocket } from '@/@types/rocket'
 
-export default () => {
+import type { Rocket } from '@/@types/rocket'
+import { useSupabase } from '@/hooks/useSupabase'
+
+export const RocketService = () => {
   const { supabase } = useSupabase()
 
   return {

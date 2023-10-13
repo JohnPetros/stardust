@@ -1,8 +1,9 @@
 'use client'
-import { useSupabase } from '@/hooks/useSupabase'
-import { Achievement } from '@/@types/achievement'
 
-export default () => {
+import type { Achievement } from '@/@types/achievement'
+import { useSupabase } from '@/hooks/useSupabase'
+
+export const AchievementService = () => {
   const { supabase } = useSupabase()
 
   return {

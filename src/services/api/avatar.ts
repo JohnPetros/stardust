@@ -1,8 +1,8 @@
 'use client'
-import { useSupabase } from '@/hooks/useSupabase'
 import type { Avatar } from '@/@types/avatar'
+import { useSupabase } from '@/hooks/useSupabase'
 
-export default () => {
+export const AvatarService = () => {
   const { supabase } = useSupabase()
 
   return {

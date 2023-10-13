@@ -1,8 +1,7 @@
 'use client'
-import { createClient } from '../supabase-browser'
-import type { Challenge } from '@/@types/challenge'
 
-const supabase = createClient()
+import type { Challenge } from '@/@types/challenge'
+import { useSupabase } from '@/hooks/useSupabase'
 
 interface getFilteredChallengesProps {
   userId: string
@@ -13,14 +12,14 @@ interface getFilteredChallengesProps {
   range: number
 }
 
-export default () => {
+export const ChallengeService = () => {
+  const { supabase } = useSupabase()
+
   return {
     getChallenge: async (challengeId: string, userId: string) => {
       const { data, error } = await supabase
         .from('challenges')
-        .select(
-          '*, users_completed_challenges(count)'
-        )
+        .select('*, users_completed_challenges(count)')
         .eq('id', challengeId)
         .eq('users_completed_challenges.user_id', userId)
         .single<Challenge>()

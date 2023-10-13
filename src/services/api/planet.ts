@@ -1,7 +1,7 @@
-import { useSupabase } from '@/hooks/useSupabase'
 import type { Planet } from '@/@types/planet'
+import { useSupabase } from '@/hooks/useSupabase'
 
-export default () => {
+export const PlanetService = () => {
   const { supabase } = useSupabase()
 
   return {

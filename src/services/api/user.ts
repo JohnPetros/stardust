@@ -1,14 +1,9 @@
 'use client'
-import { useSupabase } from '@/hooks/useSupabase'
+
 import type { User, WinnerUser } from '@/@types/user'
+import { useSupabase } from '@/hooks/useSupabase'
 
-interface AddMethodParams {
-  id: string
-  name: string
-  email: string
-}
-
-export default () => {
+export const UserService = () => {
   const { supabase } = useSupabase()
 
   return {
@@ -31,19 +26,10 @@ export default () => {
         .select('email')
         .eq('email', email)
         .single()
-      if (error) {
-        throw new Error(error.message)
-      }
-      return data
-    },
 
-    addUser: async ({ id, name, email }: AddMethodParams) => {
-      const { error } = await supabase
-        .from('users')
-        .insert([{ id, name, email }])
-      if (error) {
-        throw new Error(error.message)
-      }
+      if (error) return null
+
+      return data
     },
 
     updateUser: async (newData: Partial<User>, userId: string) => {

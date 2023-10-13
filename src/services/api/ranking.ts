@@ -1,8 +1,8 @@
 'use client'
-import { useSupabase } from '@/hooks/useSupabase'
 import type { Ranking } from '@/@types/ranking'
+import { useSupabase } from '@/hooks/useSupabase'
 
-export default () => {
+export const RankingService = () => {
   const { supabase } = useSupabase()
 
   return {

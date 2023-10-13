@@ -1,7 +1,7 @@
 'use client'
 import { useSupabase } from '@/hooks/useSupabase'
 
-export default () => {
+export const AuthService = () => {
   const { supabase } = useSupabase()
 
   return {
