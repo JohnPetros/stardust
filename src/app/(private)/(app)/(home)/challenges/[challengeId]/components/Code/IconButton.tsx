@@ -1,6 +1,8 @@
 'use client'
 
 import { RefObject } from 'react'
+
+import * as ToolBar from '@radix-ui/react-toolbar'
 import { Icon } from '@phosphor-icons/react'
 
 interface IconButtonProps {
@@ -15,12 +17,12 @@ export function IconButton({
   onClick,
 }: IconButtonProps) {
   return (
-    <button
+    <ToolBar.Button
       ref={buttonRef}
       className="grid place-content-center"
       onClick={onClick}
     >
       <Icon className="text-green-500 text-xl" weight="bold" />
-    </button>
+    </ToolBar.Button>
   )
 }
