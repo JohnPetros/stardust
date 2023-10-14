@@ -4,6 +4,8 @@ export type User = {
   name: string
   level: number
   coins: number
+  xp: number
+  weekly_xp: number
   avatar_id: string
   acquired_rockets: number
   completed_challenges: number
@@ -22,8 +24,6 @@ export type User = {
   unlocked_achievements: number
   unlocked_stars: number
   week_status: string[]
-  weekly_xp: number
-  xp: number
 }
 
 export type WinnerUser = {
