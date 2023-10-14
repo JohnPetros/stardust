@@ -1,7 +1,7 @@
 export interface SelectionQuestion {
   type: 'selection'
   title: string
-  picture?: string
+  picture: string
   options: string[]
   answer: string
   code?: string
@@ -10,7 +10,7 @@ export interface SelectionQuestion {
 export interface CheckboxQuestion {
   type: 'checkbox'
   title: string
-  picture?: string
+  picture: string
   options: string[]
   correctOptions: string[]
   code?: string
@@ -19,7 +19,7 @@ export interface CheckboxQuestion {
 export interface OpenQuestion {
   type: 'open'
   title: string
-  picture?: string
+  picture: string
   code?: string
   answers: string[]
   lines: Line[]
@@ -34,13 +34,13 @@ type Line = {
 export type DraggrableItem = {
   id: number
   label: string
-  dropZoneId: string
+  dropZoneId?: string
 }
 
 export interface DragAndDropQuestion {
   type: 'drag-and-drop'
   title: string
-  picture?: string
+  picture: string
   lines: Line[]
   dragItems: DraggrableItem[]
   correctDragItemsIdsSequence: number[]
@@ -54,7 +54,7 @@ export type SortableItem = {
 export interface DragAndDropListQuestion {
   type: 'drag-and-drop-list'
   title: string
-  picture?: string
+  picture: string
   items: SortableItem[]
 }
 
