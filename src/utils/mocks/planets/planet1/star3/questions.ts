@@ -52,7 +52,7 @@ escreva("planeta encontrado: ", nomePlaneta)`,
     title:
       'Vamos declarar uma variável contendo o nome de um planeta que vamos explorar. Mas qual palavra eu devo escrever antes do nome de qualquer variável na hora de declará-la?',
     type: 'open',
-    lines: [{ id: 1, texts: ['input', 'nomePlaneta'], indentation: 0 }],
+    lines: [{ id: 1, texts: ['input-1', 'nomePlaneta'], indentation: 0 }],
     answers: ['var'],
     picture: 'panda.jpg',
   },

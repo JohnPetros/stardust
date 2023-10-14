@@ -22,7 +22,8 @@ escreva(altitudeSegura < altitudeAtual)`,
   },
 
   {
-    title: 'Temos 9 de energia de escudo e decolagem exigirá 7 de energia. Qual símbolo você usuaria para verificar se 9 é maior ou igual a 7?',
+    title:
+      'Temos 9 de energia de escudo e decolagem exigirá 7 de energia. Qual símbolo você usuaria para verificar se 9 é maior ou igual a 7?',
     type: 'open',
     lines: [
       {
@@ -32,7 +33,7 @@ escreva(altitudeSegura < altitudeAtual)`,
       },
     ],
     answers: ['>='],
-    picture: 'panda-fazendo-coracao.jpg'
+    picture: 'panda-fazendo-coracao.jpg',
   },
 
   {
@@ -58,7 +59,7 @@ escreva(altitudeSegura < altitudeAtual)`,
       { id: 4, label: '<' },
     ],
     correctDragItemsIdsSequence: [1, 2],
-    picture: 'panda-olhando-computador.jpg'
+    picture: 'panda-olhando-computador.jpg',
   },
   {
     title:
@@ -84,6 +85,6 @@ escreva(altitudeSegura < altitudeAtual)`,
       { id: 4, label: '<' },
     ],
     correctDragItemsIdsSequence: [1, 2],
-    picture: 'panda-olhando-computador.jpg'
+    picture: 'panda-olhando-computador.jpg',
   },
 ]

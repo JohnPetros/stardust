@@ -1,4 +1,6 @@
-export const texts = [
+import { Text } from '@/@types/text'
+
+export const texts: Text[] = [
   {
     type: 'default',
     content:

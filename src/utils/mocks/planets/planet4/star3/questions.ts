@@ -1,0 +1,87 @@
+export const questions = [
+  {
+    title:
+      'Vamos aprender mais sobre o povo do planeta "Ifthenia". Para isso, precisaremos usar estruturas condicionais. Qual das seguintes opções são relacionadas a essas estruturas?',
+    type: 'checkbox',
+    options: ['portanto', 'se', 'senao se', 'senao'],
+    correctOptions: ['se', 'senao se', 'senao'],
+    picture: 'panda-piscando.jpg',
+  },
+  {
+    title:
+      'Para fazer as análise utilizaremos a estrutura condional do tipo aninhada Coloque os itens abaixo na ordem de acordo com essa estrutura.',
+    type: 'drag-and-drop-list',
+    items: [
+      { id: 1, label: 'se' },
+      { id: 2, label: 'senao se' },
+      { id: 3, label: 'senao' },
+    ],
+    picture: 'panda-meditando.jpg',
+  },
+  {
+    code: `var numeroDePernas = 1 + 1
+var tipo = nulo
+
+se (numeroDePernas == 4) {
+  tipo = "quadrúpede"
+} senao se (numeroDePernas == 2) {
+  tipo = "bípede"
+} senao {
+  tipo = "miriápode" 
+} 
+escreva(tipo)`,
+    title:
+      'Qual é o tipo do povo de "Ifthenia" com relação ao seu número de pernas?',
+    type: 'selection',
+    answer: 'bípede',
+    options: ['quadrúpede', 'bípede', 'miriápode', 'indefinido'],
+    picture: 'panda-segurando-bambu-de-pe.jpg',
+  },
+  {
+    title:
+      'Reordene o código para verificar adequadamente a altura média do povo de "Ifthenia".',
+    type: 'drag-and-drop-list',
+    items: [
+      { id: 1, label: 'var altura = 40' },
+      { id: 2, label: 'se (altura < 20) {' },
+      { id: 3, label: '   escreva("pequeno")' },
+      { id: 4, label: '} senao se (altura < 200) {' },
+      { id: 5, label: '   escreva("grande")' },
+      { id: 6, label: '}' },
+    ],
+    picture: 'panda-segurando-bambu-de-pe.jpg',
+  },
+  {
+    title:
+      'Complete o código para verificar se o povo de "Ifthenia" é carnívoro ou herbívero',
+    type: 'drag-and-drop',
+    lines: [
+      { id: 1, texts: ['se (consomeCarne) {'], identation: 0 },
+      { id: 2, texts: ['escreva', '("carnívoros")'], identation: 1 },
+      {
+        id: 3,
+        texts: ['dropZone', '(consumoDiarioDeCarne < 30) {'],
+        identation: 1,
+      },
+      { id: 4, texts: ['escreva("pouco carnívoros") {'], identation: 2 },
+      {
+        id: 5,
+        texts: ['}', 'dropZone', '(consumoDiarioDeCarne < 70) {'],
+        identation: 1,
+      },
+      { id: 6, texts: ['} senao {'], identation: 1 },
+      { id: 7, texts: ['escreva("muito carnívoros")'], identation: 2 },
+      { id: 8, texts: ['}', 'dropZone', ' {'], identation: 0 },
+      { id: 9, texts: ['escreva("herbíveros")'], identation: 1 },
+      { id: 10, texts: ['}'], identation: 0 },
+    ],
+    dragItems: [
+      { id: 1, label: 'se' },
+      { id: 2, label: 'senao' },
+      { id: 3, label: 'senao se' },
+      { id: 4, label: 'seguro' },
+    ],
+    correctDragItemsIdsSequence: [1, 3, 2],
+    picture: 'panda-segurando-bambu-de-pe.jpg',
+  },
+]

@@ -1,4 +1,6 @@
-export const texts = [
+import { Text } from '@/@types/text'
+
+export const texts: Text[] = [
   {
     type: 'default',
     title: 'Missão cumprida!',
@@ -195,7 +197,8 @@ escreva("Você consome " + suprimentosPorDia + " suprimentos por dia")
     content: 'Mas se eu quisesse fazer a soma primeiro?',
   },
   {
-    content: 'Para isso, assim como na matemática, você deve colocar entre parênteses as expressões que deseja que sejam calculadas primeiro.',
+    content:
+      'Para isso, assim como na matemática, você deve colocar entre parênteses as expressões que deseja que sejam calculadas primeiro.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
     type: 'default',
   },
@@ -206,7 +209,8 @@ escreva("Você consome " + suprimentosPorDia + " suprimentos por dia")
     isRunnable: true,
   },
   {
-    content: 'Veja o código de cálculo de suprimentos no final do mês, mas usando vários operadores:',
+    content:
+      'Veja o código de cálculo de suprimentos no final do mês, mas usando vários operadores:',
     picture: 'panda-olhando-computador.jpg',
     type: 'default',
   },
@@ -222,22 +226,26 @@ escreva('no final do mês você terá ' + consumoTotal + ' de suprimentos')
     isRunnable: true,
   },
   {
-    content: 'Agora você percebeu a importância das variáveis de organizar o código, não é?',
+    content:
+      'Agora você percebeu a importância das variáveis de organizar o código, não é?',
     picture: 'panda-olhando-computador.jpg',
     type: 'default',
   },
   {
-    content: 'Enfim, Não é preciso ser o mestre da matemática pra perceber que você não terá a quantidade de suprimento para sobreviver nesse planeta.',
+    content:
+      'Enfim, Não é preciso ser o mestre da matemática pra perceber que você não terá a quantidade de suprimento para sobreviver nesse planeta.',
     picture: 'panda-comendo-moeda.jpg',
     type: 'alert',
   },
   {
-    content: 'Nesse caso, suponho que você precise achar vida alienígena para obter outros tipos de suprimentos.',
+    content:
+      'Nesse caso, suponho que você precise achar vida alienígena para obter outros tipos de suprimentos.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
     type: 'default',
   },
   {
-    content: 'Porém, ainda há a questão de quanto de energia existe disponível para os dois motores presentes no foguete, pois por algum motivo a proporção não está igual.',
+    content:
+      'Porém, ainda há a questão de quanto de energia existe disponível para os dois motores presentes no foguete, pois por algum motivo a proporção não está igual.',
     picture: 'panda-olhando-computador.jpg',
     type: 'default',
   },
@@ -246,17 +254,20 @@ escreva('no final do mês você terá ' + consumoTotal + ' de suprimentos')
     type: 'user',
   },
   {
-    content: 'Para o foguete funcionar direito, seus dois motores precisam dividir a energia de forma equivalente, caso contrário as chances dele explodir com você dentro aumentam bastante :)',
+    content:
+      'Para o foguete funcionar direito, seus dois motores precisam dividir a energia de forma equivalente, caso contrário as chances dele explodir com você dentro aumentam bastante :)',
     picture: 'panda-segurando-bambu-de-pe.jpg',
     type: 'default',
   },
   {
-    content: 'No momento atual há disponível `10125` de energia. Para saber se é possível distribuir a energia igualmente para os dois motores, basta verificar se esse número é divisível por 2.',
+    content:
+      'No momento atual há disponível `10125` de energia. Para saber se é possível distribuir a energia igualmente para os dois motores, basta verificar se esse número é divisível por 2.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
     type: 'default',
   },
   {
-    content: 'Para isso, podemos usar um operador especial chamado `módulo`, que serve para calcular o resto da divisão entre 2 números usando o símbolo de porcentagem `%`.',
+    content:
+      'Para isso, podemos usar um operador especial chamado `módulo`, que serve para calcular o resto da divisão entre 2 números usando o símbolo de porcentagem `%`.',
     picture: 'panda-fazendo-coracao.jpg',
     title: 'Módulo (%)',
     type: 'list',
@@ -277,17 +288,20 @@ escreva('O resto da divisão de 10125 por 2 é igual a ' + resto)
     type: 'user',
   },
   {
-    content: '10125 dividido por 2 é igual 5062 e sobra 1, ou seja, a proporção não será igual para os dois motores porque um motor tem um a mais 😢.',
+    content:
+      '10125 dividido por 2 é igual 5062 e sobra 1, ou seja, a proporção não será igual para os dois motores porque um motor tem um a mais 😢.',
     picture: 'panda-triste.jpg',
     type: 'default',
   },
   {
-    content: 'Para resolver esse problema, precisaremos usar os operadores, mas não os aritméticos',
+    content:
+      'Para resolver esse problema, precisaremos usar os operadores, mas não os aritméticos',
     picture: 'panda.jpg',
     type: 'default',
   },
   {
-    content: 'Antes vamos averiguar se não tem nenhuma vida alienígena nas redondezas',
+    content:
+      'Antes vamos averiguar se não tem nenhuma vida alienígena nas redondezas',
     picture: 'panda-olhando-de-lado.jpg',
     type: 'default',
   },

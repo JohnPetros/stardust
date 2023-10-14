@@ -1,4 +1,6 @@
-export const texts = [
+import { Text } from '@/@types/text'
+
+export const texts: Text[] = [
   {
     content:
       'Ok, agora com as verificações já feitas, a prioridade agora é concertar os motores do foguete!',

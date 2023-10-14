@@ -3,7 +3,14 @@ export const questions = [
     title:
       'Vamos montar nosso primeiro programa! Mas para ver se estamos na mesma página, escreva abaixo o nome do comando que serve para exibir dados na tela.',
     type: 'open',
-    answer: ['escreva', 'escreva()'],
+    lines: [
+      {
+        id: 1,
+        texts: ['input-1', '()'],
+        indentation: 0,
+      },
+    ],
+    answers: ['escreva'],
     picture: 'panda.jpg',
   },
   {
@@ -23,7 +30,14 @@ export const questions = [
     title:
       'Isso! Agora insira abaixo o nome do comando que serve para receber dados externos.',
     type: 'open',
-    answer: ['leia()', 'leia'],
+    lines: [
+      {
+        id: 1,
+        texts: ['input-1', '()'],
+        indentation: 0,
+      },
+    ],
+    answers: ['leia'],
     picture: 'panda.jpg',
   },
   {

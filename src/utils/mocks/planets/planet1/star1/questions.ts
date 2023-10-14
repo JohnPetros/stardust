@@ -1,6 +1,7 @@
 export const questions = [
   {
-    stem: 'Muito bem, você acaba de embarcar no foguete. Antes de proseguirmos quero que responda primeiro: O que é lógica de programação mesmo?',
+    title:
+      'Muito bem, você acaba de embarcar no foguete. Antes de proseguirmos quero que responda primeiro: O que é lógica de programação mesmo?',
     picture: 'panda.jpg',
     type: 'selection',
     answer: 'sequência lógica de instruções',
@@ -12,7 +13,8 @@ export const questions = [
     ],
   },
   {
-    stem: 'Muito bem, então na hora de escrever uma programa o que você NÃO deve pensar em fazer é:',
+    title:
+      'Muito bem, então na hora de escrever uma programa o que você NÃO deve pensar em fazer é:',
     picture: 'panda.jpg',
     type: 'selection',
     answer: 'desordem',
@@ -24,7 +26,8 @@ export const questions = [
     ],
   },
   {
-    stem: 'Para mostrar para você que tudo pode ser pensado como um programa, ordene a sequência correta de se vestir um traje espacial (Pressione e arraste o item)',
+    title:
+      'Para mostrar para você que tudo pode ser pensado como um programa, ordene a sequência correta de se vestir um traje espacial (Pressione e arraste o item)',
     picture: 'panda.jpg',
     type: 'drag-and-drop-list',
     items: [
@@ -35,7 +38,8 @@ export const questions = [
     ],
   },
   {
-    stem: 'Agora ordene a sequência correta de se ligar um foguete (Pressione e arraste o item)',
+    title:
+      'Agora ordene a sequência correta de se ligar um foguete (Pressione e arraste o item)',
     type: 'drag-and-drop-list',
     picture: 'panda.jpg',
     items: [
@@ -46,15 +50,15 @@ export const questions = [
     ],
   },
   {
-    stem: 'Por fim, coloque o foguete no modo automático (já que você não sabe pilotar, não é mesmo)',
+    title:
+      'Por fim, coloque o foguete no modo automático (já que você não sabe pilotar, não é mesmo?)',
     type: 'drag-and-drop-list',
     picture: 'panda.jpg',
     items: [
       { id: 1, label: 'Acessar painel de controle' },
       { id: 2, label: 'Pressionar o botão o piloto automático' },
-      { id: 3, label: 'Confirmar que a nave está seguindo a rota desejada' },
-      { id: 4, label: 'Corrigir desvios na trajetória, se necessário' },
-      { id: 5, label: 'Curtir a viagem 🚀' },
+      { id: 3, label: 'Corrigir desvios na trajetória, se necessário' },
+      { id: 4, label: 'Curtir a viagem 🚀' },
     ],
   },
 ]

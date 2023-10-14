@@ -14,7 +14,7 @@ export const texts: Text[] = [
   },
   {
     content:
-      'Antes de partirmos para as estrelas, lembre-se: nossa jornada será recheada de desafios fascinantes. E para enfrentá-los, é crucial dominar a arte de criar programas.',
+      'Antes de partirmos para as estrelas, lembre-se: nossa jornada será recheada de desafios fascinantes. E para enfrentá-los, é crucial dominar a arte de desenvolver programas.',
     type: 'default',
     picture: 'panda-piscando.jpg',
   },
@@ -32,7 +32,7 @@ export const texts: Text[] = [
   },
   {
     content:
-      'Um programa de computador é como uma lista de passos que você escreve para o robô seguir. Imagine que esses passos estão escritos em uma linguagem que só o robô entende. Cada passo é como uma instrução  que diz ao robô o que pegar, o que cortar, como montar o sanduíche e como servi-lo.',
+      'Um programa de computador é como uma lista de etapas que você escreve para o robô seguir. Imagine que esses passos estão escritos em uma linguagem que só o robô entende. Cada passo é como uma instrução  que diz ao robô o que pegar, o que cortar, como montar o sanduíche e como servi-lo.',
     type: 'default',
     picture: 'panda-sorrindo.jpg',
   },

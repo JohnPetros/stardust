@@ -1,19 +1,22 @@
 export const questions = [
   {
-    title: 'Vamos verificar se há alguém por perto para ajudar. Para isso, precisamos dos operadores aritméticos. Quais os operadores abaixo estão escritos da maneira correta em um programa?',
+    title:
+      'Vamos verificar se há alguém por perto para ajudar. Para isso, precisamos dos operadores aritméticos. Quais os operadores abaixo estão escritos da maneira correta em um programa?',
     type: 'checkbox',
     options: ['/', '+', '÷', 'x'],
     correctOptions: ['/', '+'],
     picture: 'panda-olhando-computador.jpg',
   },
-    {
-      title: 'O foguete detectou uma quantidade de seres lá fora, no caso: `5 + 3 * 2`. Qual é esse número?',
-      type: 'selection',
-      options: ['11', '16', '13', '15'],
-      picture: 'panda-olhando-de-lado.jpg',
-    },
   {
-    title: 'Foi recebido uma mensagem em forma de operação usando `módulo`: 50 % 2. Qual é esse resultado?',
+    title:
+      'O foguete detectou uma quantidade de seres lá fora, no caso: `5 + 3 * 2`. Qual é esse número?',
+    type: 'selection',
+    options: ['11', '16', '13', '15'],
+    picture: 'panda-olhando-de-lado.jpg',
+  },
+  {
+    title:
+      'Foi recebido uma mensagem em forma de operação usando `módulo`: 50 % 2. Qual é esse resultado?',
     type: 'selection',
     answer: '0',
     options: ['0', '25', '1', '100'],
@@ -26,7 +29,15 @@ export const questions = [
     lines: [
       {
         id: 1,
-        texts: ['var numero = ', '5 ', 'dropZone', ' 2 ', 'dropZone', ' 4', ' = 13'],
+        texts: [
+          'var numero = ',
+          '5 ',
+          'dropZone',
+          ' 2 ',
+          'dropZone',
+          ' 4',
+          ' = 13',
+        ],
         identation: 0,
       },
     ],
@@ -38,7 +49,7 @@ export const questions = [
       { id: 5, label: '-' },
     ],
     picture: 'panda-olhando-de-lado.jpg',
-    correctItemsIdsSequence: [2, 3],
+    correctDragItemsIdsSequence: [2, 3],
   },
   {
     title:
@@ -47,7 +58,15 @@ export const questions = [
     lines: [
       {
         id: 1,
-        texts: ['var assentos = ', 'dropZone', ' + ', 'dropZone', ' / ', '2', ' = 10'],
+        texts: [
+          'var assentos = ',
+          'dropZone',
+          ' + ',
+          'dropZone',
+          ' / ',
+          '2',
+          ' = 10',
+        ],
         indentLevel: 0,
       },
     ],
@@ -58,7 +77,7 @@ export const questions = [
       { id: 4, label: '-4' },
       { id: 5, label: '10' },
     ],
-    picture: 'panda-olhando-de-lado.jpg',
-    correctItemsIdsSequence: [1, 2],
+    picture: 'panda-piscando.jpg',
+    correctDragItemsIdsSequence: [1, 2],
   },
 ]

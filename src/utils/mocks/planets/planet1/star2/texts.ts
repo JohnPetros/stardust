@@ -1,4 +1,6 @@
-export const texts = [
+import { Text } from "@/@types/text";
+
+export const texts: Text[] = [
   { type: 'image', content: 'Decolando...', picture: 'foguete-decolando.jpg' },
   {
     type: 'default',

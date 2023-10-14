@@ -34,7 +34,7 @@ export const questions = [
       { id: 3, label: 'ou' },
       { id: 4, label: '<' },
     ],
-    correctItemsIdsSequence: [4, 1, 2, 3],
+    correctDragItemsIdsSequence: [4, 1, 2, 3],
     picture: 'panda-olhando-computador.jpg',
   },
   {
@@ -59,7 +59,7 @@ export const questions = [
       { id: 2, label: '!' },
       { id: 3, label: 'ou' },
     ],
-    correctItemsIdsSequence: [3],
+    correctDragItemsIdsSequence: [3],
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -89,7 +89,7 @@ export const questions = [
       { id: 3, label: 'falso' },
       { id: 4, label: '3700' },
     ],
-    correctItemsIdsSequence: [3],
+    correctDragItemsIdsSequence: [3],
     picture: 'panda-abracando-bambu.jpg',
   },
   {
