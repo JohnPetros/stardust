@@ -110,6 +110,12 @@ se (gravidade > 10) {
     isRunnable: true,
   },
   {
+    type: 'alert',
+    content:
+      'Acho que você já percebeu, mas ao escrever código dentro do bloco entre chaves `{}` de qualquer estrutura, é comum inserir um espaço antes de cada linha. Você pode fazer isso apertando `tab` no teclado',
+    picture: 'panda-abracando-bambu.jpg',
+  },
+  {
     type: 'quote',
     content:
       'Como o nome já deixa claro, caso a primeira condição não seja verdadeira, apenas o código contido no bloco do `senao` é executado.',

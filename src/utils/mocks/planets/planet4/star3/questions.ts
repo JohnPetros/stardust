@@ -1,4 +1,19 @@
-export const questions = [
+import {
+  CheckboxQuestion,
+  DragAndDropListQuestion,
+  DragAndDropQuestion,
+  SelectionQuestion,
+} from '@/@types/quiz'
+
+type Questions = [
+  CheckboxQuestion,
+  DragAndDropListQuestion,
+  SelectionQuestion,
+  DragAndDropListQuestion,
+  DragAndDropQuestion,
+]
+
+export const questions: Questions = [
   {
     title:
       'Vamos aprender mais sobre o povo do planeta "Ifthenia". Para isso, precisaremos usar estruturas condicionais. Qual das seguintes opções são relacionadas a essas estruturas?',
@@ -56,24 +71,24 @@ escreva(tipo)`,
       'Complete o código para verificar se o povo de "Ifthenia" é carnívoro ou herbívero',
     type: 'drag-and-drop',
     lines: [
-      { id: 1, texts: ['se (consomeCarne) {'], identation: 0 },
-      { id: 2, texts: ['escreva', '("carnívoros")'], identation: 1 },
+      { id: 1, texts: ['se (consomeCarne) {'], indentation: 0 },
+      { id: 2, texts: ['escreva', '("carnívoros")'], indentation: 1 },
       {
         id: 3,
         texts: ['dropZone', '(consumoDiarioDeCarne < 30) {'],
-        identation: 1,
+        indentation: 1,
       },
-      { id: 4, texts: ['escreva("pouco carnívoros") {'], identation: 2 },
+      { id: 4, texts: ['escreva("pouco carnívoros") {'], indentation: 2 },
       {
         id: 5,
         texts: ['}', 'dropZone', '(consumoDiarioDeCarne < 70) {'],
-        identation: 1,
+        indentation: 1,
       },
-      { id: 6, texts: ['} senao {'], identation: 1 },
-      { id: 7, texts: ['escreva("muito carnívoros")'], identation: 2 },
-      { id: 8, texts: ['}', 'dropZone', ' {'], identation: 0 },
-      { id: 9, texts: ['escreva("herbíveros")'], identation: 1 },
-      { id: 10, texts: ['}'], identation: 0 },
+      { id: 6, texts: ['} senao {'], indentation: 1 },
+      { id: 7, texts: ['escreva("muito carnívoros")'], indentation: 2 },
+      { id: 8, texts: ['}', 'dropZone', ' {'], indentation: 0 },
+      { id: 9, texts: ['escreva("herbíveros")'], indentation: 1 },
+      { id: 10, texts: ['}'], indentation: 0 },
     ],
     dragItems: [
       { id: 1, label: 'se' },

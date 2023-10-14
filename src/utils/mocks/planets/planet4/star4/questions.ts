@@ -1,4 +1,19 @@
-export const questions = [
+import {
+  CheckboxQuestion,
+  DragAndDropQuestion,
+  OpenQuestion,
+  SelectionQuestion,
+} from '@/@types/quiz'
+
+type Questions = [
+  SelectionQuestion,
+  OpenQuestion,
+  CheckboxQuestion,
+  SelectionQuestion,
+  DragAndDropQuestion,
+]
+
+export const questions: Questions = [
   {
     title:
       'Entramos no portal, momento perfeito para treinarmos o `escolha-caso`. Veja que aqui perto há um planeta chamado chamado Tatooine. Que tipo de planeta ele é?',
@@ -78,16 +93,6 @@ escolha (planeta) {
     answers: ['padrao'],
     picture: 'panda-fazendo-coracao.jpg',
   },
-
-  {
-    code: "escolha (planetaEstacao) {\n    caso 'Outono':\n    caso 'Inverno': \n        escreva(\"Clima frio\"); \n    caso 'Verão': \n    caso 'Primavera': \n        escreva(\"Clima agradável\");\n    padrao:\n        escreva(\"Estação desconhecida\");   \n}",
-    stem: 'Quais casos podem resultar em "Clima agradável" ?',
-    type: 'checkbox',
-    starId: 14,
-    options: ['Outono', 'Verão', 'Inverno', 'Primavera'],
-    correctOptions: ['Verão', 'Primavera'],
-    picture: 'panda-segurando-bambu-de-pe.jpg',
-  },
   {
     title:
       'O clima dentro desse portal é agradável. Quais `casos` abaixo podem resultar em "Clima agradável"?',
@@ -131,47 +136,47 @@ escolha (planeta) {
       {
         id: 1,
         texts: ['var comando = "ativarMotorTurbo"'],
-        identation: 0,
+        indentation: 0,
       },
       {
         id: 2,
         texts: ['dropZone', '(comando) {'],
-        identation: 0,
+        indentation: 0,
       },
       {
         id: 3,
         texts: ['caso', 'dropZone', ':'],
-        identation: 1,
+        indentation: 1,
       },
       {
         id: 4,
         texts: ['escreva("Motor turbo ativado")'],
-        identation: 3,
+        indentation: 3,
       },
       {
         id: 5,
         texts: ['dropZone', ' "desativarMotorTurbo": '],
-        identation: 1,
+        indentation: 1,
       },
       {
         id: 6,
         texts: ['escreva("Motor turbo desativado")'],
-        identation: 3,
+        indentation: 3,
       },
       {
         id: 7,
         texts: ['dropZone', ':'],
-        identation: 1,
+        indentation: 1,
       },
       {
         id: 8,
         texts: ['escreva("Comando inválido")'],
-        identation: 3,
+        indentation: 3,
       },
       {
         id: 9,
         texts: ['}'],
-        identation: 0,
+        indentation: 0,
       },
     ],
     dragItems: [
