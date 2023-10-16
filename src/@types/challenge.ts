@@ -1,5 +1,6 @@
 import type { Category } from './category'
 import type { Text } from './text'
+import type { User } from './user'
 
 type Difficulty = 'easy' | 'medium' | 'hard'
 
@@ -16,6 +17,7 @@ export type Challenge = {
   code: string
   user_id: string
   difficulty: Difficulty
+  created_by: User | null
   created_at: string
   function_name: string | null
   upvotes: number
@@ -27,6 +29,5 @@ export type Challenge = {
   total_completitions: number
   categories: (Category | null)[]
   users_completed_challenges?: { count: number }[]
-  users?: { name: string }[]
   is_completed: boolean
 }
