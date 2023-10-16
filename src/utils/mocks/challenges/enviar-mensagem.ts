@@ -1,16 +1,19 @@
-export const challenge = {
+import { Challenge } from '@/@types/challenge'
+
+export const challenge: Partial<Challenge> = {
   title: 'Enviar mensagem',
   difficulty: 'easy',
   downvotes: 0,
   upvotes: 0,
   total_completitions: 0,
-  user_id: '38976417-7c77-44ff-9e26-5dc8b457f768',
+  created_by: null,
   topic_id: 'f60a0e67-c0b9-401a-a652-c9d5f8042ff1',
   code: `var msg = leia()
 // Escreva seu código abaixo`,
   function_name: null,
-  tests_cases: [
+  test_cases: [
     {
+      id: 1,
       input: ["'Olá, mundo!'"],
       expectedOutput: 'Olá, mundo!',
       isLocked: false,
