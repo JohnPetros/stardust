@@ -51,7 +51,7 @@ export const questions: Questions = [
   },
   {
     title:
-      'Talvez precisaremos de algumas armas dessa vez. Complete o código abaixo, de modo que seja escrito nessa ordem: \n"sabre de luz, canhão de plasma"',
+      'Com certeza precisaremos de boas marcas de casaco. Complete o código abaixo, de modo que seja escrito nessa ordem: \n"NebulaShield, PolarProtec"',
     type: 'drag-and-drop',
     lines: [
       { id: 1, texts: ['var armas = ['], indentation: 0 },
@@ -63,9 +63,9 @@ export const questions: Questions = [
       { id: 7, texts: ['escreva(armas)'], indentation: 0 },
     ],
     dragItems: [
-      { id: 1, label: 'blaster' },
-      { id: 2, label: 'sabre de luz' },
-      { id: 3, label: 'canhão de plasma' },
+      { id: 1, label: 'FrostGuard' },
+      { id: 2, label: 'NebulaShield' },
+      { id: 3, label: 'PolarProtec' },
     ],
     correctDragItemsIdsSequence: [1, 2, 3],
     picture: 'panda-piscando.jpg',
