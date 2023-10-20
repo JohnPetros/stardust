@@ -104,7 +104,8 @@ escolha (planeta) {
   caso 'Primavera':
     escreva("Clima agradável")
   padrao:
-    escreva("Estação desconhecida")`,
+    escreva("Estação desconhecida")
+}`,
     type: 'checkbox',
     options: ['Outono', 'Verão', 'Inverno', 'Primavera'],
     correctOptions: ['Verão', 'Primavera'],
