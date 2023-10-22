@@ -11,9 +11,9 @@ export const texts = [
     picture: 'panda-fazendo-coracao.jpg',
   },
   {
-    type: 'default',
+    type: 'image',
     content: 'E, claro, nosso conjunto de equipamentos se trata de vetor.',
-    picture: 'panda-fazendo-coracao.jpg',
+    picture: 'mochila.jpg',
   },
   {
     type: 'default',

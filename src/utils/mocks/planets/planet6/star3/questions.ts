@@ -138,12 +138,12 @@ se (tecnologias.inclui("propulsor")) {
         indentation: 0,
       },
       {
-        id: 2,
+        id: 3,
         texts: ['itens', 'input-1', '()'],
         indentation: 0,
       },
       {
-        id: 3,
+        id: 4,
         texts: ['alimentos', 'input-2', '(itens)'],
         indentation: 0,
       },
