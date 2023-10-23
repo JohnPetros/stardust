@@ -330,6 +330,6 @@ escreva(mensagem)
     type: 'default',
     content:
       'Ok... Então esse planeta deve ser mais perigoso do que eu pensava. Mas agora eu pergunto: quem será que mandou essa mensagem?',
-    picture: 'panda-confuso.jpg',
+    picture: 'panda-pensando.jpg',
   },
 ]
