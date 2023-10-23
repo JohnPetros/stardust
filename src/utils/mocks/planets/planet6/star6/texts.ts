@@ -9,7 +9,7 @@ export const texts: Text[] = [
   {
     type: 'code',
     content: `var mensagem = ["Preciso", "de", "ajuda"]`,
-    isRunnable: true,
+    isRunnable: false,
   },
   {
     type: 'default',
