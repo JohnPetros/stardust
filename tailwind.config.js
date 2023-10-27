@@ -8,7 +8,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        code: ['Roboto', 'sans-serif'],
+        default: 'var(--font-poppins)',
+        cursive: 'var(--font-roboto-mono)',
       },
 
       colors: {
@@ -29,6 +30,7 @@ module.exports = {
           400: '#FFCE31',
         },
         gray: {
+          950: '#0b0e0f',
           900: '#141A1B',
           800: '#1E2626',
           700: '#303030',
