@@ -1,15 +1,18 @@
-import { useAuth } from '@/hooks/useAuth'
-import { useRocket } from '@/hooks/useRocket'
-import { getImage } from '@/utils/functions'
-import { useMotionValueEvent, useScroll } from 'framer-motion'
+'use client'
+
 import {
+  createContext,
   ReactNode,
   RefObject,
-  createContext,
   useEffect,
   useRef,
   useState,
 } from 'react'
+import { useMotionValueEvent, useScroll } from 'framer-motion'
+
+import { useAuth } from '@/hooks/useAuth'
+import { useRocket } from '@/hooks/useRocket'
+import { getImage } from '@/utils/functions'
 
 type SpaceRocket = {
   name: string
@@ -81,7 +84,7 @@ export function SpaceProvider({ children }: SpaceContextProps) {
 
       setSpaceRocket({ image: rocketImage, name: rocket.name })
     }
-  }, [rocket, user])
+  }, [rocket, user?.rocket_id])
 
   return (
     <SpaceContext.Provider

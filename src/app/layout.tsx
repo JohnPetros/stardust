@@ -3,11 +3,21 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 
 import type { Metadata } from 'next'
-import { Poppins } from 'next/font/google'
+import { Poppins, Roboto_Mono } from 'next/font/google'
 
 import { Providers } from '@/providers'
 
-const poppins = Poppins({ weight: ['400', '500', '600'], subsets: ['latin'] })
+const poppins = Poppins({
+  weight: ['400', '500', '600'],
+  subsets: ['latin'],
+  variable: '--font-poppins',
+})
+
+const roboto_mono = Roboto_Mono({
+  weight: ['400', '500', '600'],
+  subsets: ['latin'],
+  variable: '--font-roboto-mono',
+})
 
 export const metadata: Metadata = {
   title: 'StarDust',
@@ -22,7 +32,7 @@ export default async function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`${poppins.className} h-screen w-screen bg-gray-900 font-normal`}
+        className={`${poppins.className} ${roboto_mono.className} h-screen w-screen bg-gray-900 font-normal`}
       >
         <Providers>{children}</Providers>
       </body>

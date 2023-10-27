@@ -1,21 +1,18 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { useAuth } from '@/hooks/useAuth'
-
+import { motion, Variants } from 'framer-motion'
 import Image from 'next/image'
-import { UserAvatar } from '@/app/(private)/(app)/(home)/components/UserAvatar'
-import { CodeSnippet } from '@/app/components/Text/CodeSnippet'
-import { TypeWriter } from './TypeWriter'
-import { Title } from './Title'
-
-import { Variants, motion } from 'framer-motion'
-
 import { tv } from 'tailwind-variants'
 
-import { formatText, getImage, slugify } from '@/utils/functions'
+import { Title } from './Title'
+import { TypeWriter } from './TypeWriter'
 
 import type { Text as TextData } from '@/@types/text'
+import { UserAvatar } from '@/app/(private)/(app)/(home)/components/UserAvatar'
+import { CodeSnippet } from '@/app/components/Text/CodeSnippet'
+import { useAuth } from '@/hooks/useAuth'
+import { formatText, getImage, slugify } from '@/utils/functions'
 
 const textAnimations: Variants = {
   hidden: {
@@ -83,7 +80,7 @@ export function Text({
       )}
 
       {type === 'image' && textImage && (
-        <div className="flex flex-col items-center justify-center w-full">
+        <div className="flex w-full flex-col items-center justify-center">
           <Image
             src={textImage}
             width={180}
@@ -92,7 +89,7 @@ export function Text({
             priority
             alt=""
           />
-          <p className="text-gray-100 font-medium text-start text-lg mt-1">
+          <p className="mt-1 text-start text-lg font-medium text-gray-100">
             <TypeWriter
               text={formatText(String(content))}
               isEnable={hasAnimation}
@@ -100,9 +97,9 @@ export function Text({
           </p>
         </div>
       )}
-      <div className="flex items-center w-full">
+      <div className="flex w-full items-center">
         {type === 'code' && (
-          <div className="flex flex-col gap-2 w-full">
+          <div className="flex w-full flex-col gap-2">
             {title && <Title>{title}</Title>}
             <CodeSnippet
               code={formatText(String(content))}
@@ -130,14 +127,14 @@ export function Text({
         {['default', 'alert', 'quote'].includes(String(type)) && (
           <>
             {textImage && (
-              <div className="relative md:w-24 w-20 h-12 md:h-16 rounded-md overflow-hidden mr-3 ">
+              <div className="relative mr-3  overflow-hidden rounded-md md:h-16 md:w-24 ">
                 <Image
                   src={textImage}
-                  fill
                   alt="Panda"
-                  className="skeleton"
+                  className="skeleton h-auto w-auto"
                   sizes="(min-width: 375px) 5rem, (min-width: 769px) 6rem"
                   priority
+                  style={{ objectFit: 'cover' }}
                   onLoadingComplete={(image) =>
                     image.classList.remove('skeleton')
                   }
@@ -146,7 +143,7 @@ export function Text({
             )}
 
             {type === 'alert' && (
-              <span className="block mr-3">
+              <span className="mr-3 block">
                 <Image
                   src="/icons/alert.svg"
                   width={32}

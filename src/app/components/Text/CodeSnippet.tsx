@@ -1,15 +1,16 @@
 'use client'
 
 import { useMemo, useRef, useState } from 'react'
-import { CodeEditor, CodeEditorRef } from '@/app/components/CodeEditor'
 import { ArrowClockwise } from '@phosphor-icons/react'
-import { Console, ConsoleRef } from '../Console/Index'
 import * as ToolBar from '@radix-ui/react-toolbar'
+import { twMerge } from 'tailwind-merge'
 
+import { Console, ConsoleRef } from '../Console/Index'
+import { Toast, ToastRef } from '../Toast'
+
+import { CodeEditor, CodeEditorRef } from '@/app/components/CodeEditor'
 import { execute } from '@/libs/delegua'
 import { playSound } from '@/utils/functions'
-import { ToastRef, Toast } from '../Toast'
-import { twMerge } from 'tailwind-merge'
 
 interface CodeSnippetProps {
   code: string
@@ -100,7 +101,7 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
   return (
     <div
       className={twMerge(
-        'overflow-hidden relative rounded-md bg-gray-800 w-full',
+        'relative w-full overflow-hidden rounded-md bg-gray-800',
         isRunnable ? 'h-64' : 'h-auto'
       )}
     >
@@ -109,13 +110,13 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
         {isRunnable && (
           <>
             <ToolBar.Button
-              className="h-6 w-max px-4 items-center rounded bg-green-400 active:scale-95 transition-[scale] duration-200"
+              className="h-6 w-max items-center rounded bg-green-400 px-4 transition-[scale] duration-200 active:scale-95"
               onClick={handleReloadButtonClick}
             >
               <ArrowClockwise className="text-green-900" weight="bold" />
             </ToolBar.Button>
             <ToolBar.Button
-              className="h-6 w-max px-4 text-xs items-center rounded bg-green-400 font-semibold active:scale-95 transition-[scale] duration-200"
+              className="h-6 w-max items-center rounded bg-green-400 px-4 text-xs font-semibold transition-[scale] duration-200 active:scale-95"
               onClick={handleRunButtonClick}
             >
               Executar

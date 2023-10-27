@@ -1,23 +1,24 @@
 'use client'
 import { useRef } from 'react'
-import { useAuth } from '@/hooks/useAuth'
 import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-
-import { Input } from '@/app/components/Input'
-import { Button } from '@/app/components/Button'
-import { Toast, ToastRef } from '@/app/components/Toast'
-import { Title } from '../components/Title'
-import { Hero } from '../components/Hero'
-import { Link } from '../components/Link'
-
 import { Envelope, Lock } from '@phosphor-icons/react'
 import { motion, Variants } from 'framer-motion'
 import { LottieRef } from 'lottie-react'
+import { useRouter } from 'next/navigation'
 
-import { useApi } from '@/services/api'
+import { Hero } from '../components/Hero'
+import { Link } from '../components/Link'
+import { Title } from '../components/Title'
+
+import { Button } from '@/app/components/Button'
+import { Input } from '@/app/components/Input'
+import { Toast, ToastRef } from '@/app/components/Toast'
+import { useAuth } from '@/hooks/useAuth'
 import { SignUpFormFields, signUpFormSchema } from '@/libs/zod'
+import { useApi } from '@/services/api'
+import { SIGN_UP_ERRORS } from '@/utils/constants/signup-errors'
+import { SignUpError } from '@/@types/signupError'
 
 const formAnimations: Variants = {
   hidden: {
@@ -52,19 +53,8 @@ export default function SignUp() {
   const toastRef = useRef<ToastRef>(null)
   const rocketRef = useRef(null) as LottieRef
 
-  function handleError(error: string) {
-    let message = ''
-    switch (error) {
-      case 'For security purposes, you can only request this after 50 seconds.':
-        message =
-          'Por questões de segurança, espere 50 segundos para tentar cadastrar novamente'
-        break
-      case 'Email rate limit exceeded':
-        message = 'Você execedeu o limite permitido de tentativas de cadastro'
-        break
-      default:
-        message = 'Erro ao tentar fazer cadastro'
-    }
+  function handleError(error: SignUpError) {
+    const message = SIGN_UP_ERRORS[error] ?? 'Erro ao tentar fazer cadastro'
 
     toastRef.current?.open({
       type: 'error',
@@ -86,19 +76,25 @@ export default function SignUp() {
     const response = await signUp(email, password)
 
     if (response?.error) {
-      console.error(response?.error.message)
-      handleError(response?.error.message)
+      handleError(response?.error.message as SignUpError)
       return
+    }
+
+    if (response?.userId) {
+      try {
+        await api.addUser({ id: response.userId, name, email })
+      } catch (error) {
+        toastRef.current?.open({
+          type: 'error',
+          message: 'Erro ao cadastrar usuário',
+        })
+      }
     }
 
     toastRef.current?.open({
       type: 'success',
       message: 'Confira seu e-mail para confirmar seu cadastro',
     })
-
-    if (response?.userId) {
-      api.addUser({ id: response.userId, name, email })
-    }
   }
 
   return (
@@ -106,7 +102,7 @@ export default function SignUp() {
       <Toast ref={toastRef} />
 
       <div className="h-screen lg:grid lg:grid-cols-[1fr_1.5fr]">
-        <main className="flex flex-col items-center justify-center h-full">
+        <main className="flex h-full flex-col items-center justify-center">
           <motion.div
             variants={formAnimations}
             initial="hidden"
@@ -144,7 +140,7 @@ export default function SignUp() {
                   label="Senha"
                   type="password"
                   icon={Lock}
-                  placeholder="Digite senha"
+                  placeholder="Digite sua senha"
                   {...register('password')}
                   error={errors.password?.message}
                 />
@@ -163,13 +159,13 @@ export default function SignUp() {
                 </Button>
               </div>
             </form>
-            <div className="flex items-center justify-center w-full mt-4">
+            <div className="mt-4 flex w-full items-center justify-center">
               <Link href="/sign-in">Já tenho uma conta</Link>
             </div>
           </motion.div>
         </main>
 
-        <div className="bg-gray-800 hidden lg:grid lg:place-content-center">
+        <div className="hidden bg-gray-800 lg:grid lg:place-content-center">
           <Hero />
         </div>
       </div>
