@@ -1,3 +1,5 @@
+import type { WeekStatus } from './weekStatus'
+
 export type User = {
   id: string
   email: string
@@ -23,7 +25,7 @@ export type User = {
   study_time: string
   unlocked_achievements: number
   unlocked_stars: number
-  week_status: string[]
+  week_status: WeekStatus[]
 }
 
 export type WinnerUser = {
