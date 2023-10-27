@@ -1,5 +1,6 @@
 require('dotenv').config({ path: '.env.local' })
 import 'jest-canvas-mock'
+import '@testing-library/jest-dom'
 const { defineProperty } = Object
 
 Object.defineProperty = function (object, name, meta) {
