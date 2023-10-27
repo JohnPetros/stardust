@@ -71,5 +71,18 @@ export const UserService = () => {
 
       return data
     },
+
+    addUser: async ({
+      id,
+      name,
+      email,
+    }: Pick<User, 'id' | 'name' | 'email'>) => {
+      const { error } = await supabase
+        .from('users')
+        .insert([{ id, name, email }])
+      if (error) {
+        throw new Error(error.message)
+      }
+    },
   }
 }
