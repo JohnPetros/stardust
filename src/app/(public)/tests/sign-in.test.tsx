@@ -1,5 +1,5 @@
 import { ToastProvider } from '@radix-ui/react-toast'
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context'
 import { useRouter } from 'next/navigation'
 
@@ -46,6 +46,9 @@ describe('Sign in page', () => {
 
     await waitFor(() => {
       expect(inputEmail).toBeTruthy()
+    })
+
+    await waitFor(() => {
       expect(inputPassword).toBeTruthy()
     })
   })
@@ -69,9 +72,7 @@ describe('Sign in page', () => {
 
     const button = screen.getByText(/Entrar/i)
 
-    act(() => {
-      fireEvent.click(button)
-    })
+    fireEvent.click(button)
 
     await waitFor(() => {
       expect(signInMock).toHaveBeenCalledWith(emailValue, passwordValue)
@@ -97,13 +98,14 @@ describe('Sign in page', () => {
 
     const button = screen.getByText(/Entrar/i)
 
-    act(() => {
-      fireEvent.click(button)
-    })
+    fireEvent.click(button)
 
     await waitFor(() => {
       expect(signInMock).toHaveReturnedWith('Invalid login credentials')
-      expect(screen.queryByText(/Usuário não encontrado/i)).toBeTruthy()
+    })
+
+    await waitFor(() => {
+      expect(screen.getByText(/Usuário não encontrado/i)).toBeInTheDocument()
     })
   })
 
@@ -126,9 +128,7 @@ describe('Sign in page', () => {
 
     const button = screen.getByText(/Entrar/i)
 
-    act(() => {
-      fireEvent.click(button)
-    })
+    fireEvent.click(button)
 
     await waitFor(
       () => {
