@@ -6,8 +6,21 @@ const createJestConfig = nextJest({
 
 /** @type {import('jest').Config} */
 const config = {
-  setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/src/__tests__/jest.setup.ts'],
   testEnvironment: 'jest-environment-jsdom',
+  testEnvironmentOptions: {
+    customExportConditions: [],
+  },
+  transform: {
+    '^.+\\.js$': 'babel-jest',
+  },
+  globals: {
+    'ts-jest': {
+      tsConfigFile: 'tsconfig.json',
+    },
+    TextEncoder: require('util').TextEncoder,
+    TextDecoder: require('util').TextDecoder,
+  },
 }
 
 export default createJestConfig(config)
