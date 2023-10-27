@@ -1,8 +1,9 @@
 import { ReactNode } from 'react'
 
+import { createClient } from '../../supabase/supabase-server'
+
 import { AuthProvider } from '@/contexts/AuthContext'
 import { SupabaseProvider } from '@/contexts/SupabaseContext'
-import { createClient } from '@/services/supabase-server'
 
 interface ServerProps {
   children: ReactNode
