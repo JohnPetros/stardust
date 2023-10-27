@@ -1,10 +1,9 @@
 'use client'
 import { ButtonHTMLAttributes, ReactNode, RefObject } from 'react'
+import { motion, MotionProps } from 'framer-motion'
+import { twMerge } from 'tailwind-merge'
 
 import { Loading } from './Loading'
-
-import { twMerge } from 'tailwind-merge'
-import { MotionProps, motion } from 'framer-motion'
 
 type ButtonProps = {
   buttonRef?: RefObject<HTMLButtonElement>
@@ -25,7 +24,7 @@ export function Button({
       ref={buttonRef}
       whileTap={{ scale: 0.99 }}
       className={twMerge(
-        'h-10 w-full flex justify-center items-center rounded bg-green-400 font-semibold relative overflow-hidden hover:brightness-75 transition-all duration-400 cursor-pointer disabled:opacity-70 disabled:pointer-events-none custom-outline',
+        'duration-400 custom-outline relative flex h-10 w-full cursor-pointer items-center justify-center overflow-hidden rounded bg-green-400 font-semibold transition-all hover:brightness-75 disabled:pointer-events-none disabled:opacity-70',
         className
       )}
       {...rest}

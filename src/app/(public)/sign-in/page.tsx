@@ -1,25 +1,23 @@
 'use client'
 import { useRef, useState } from 'react'
-import { useAuth } from '@/hooks/useAuth'
 import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Envelope, Lock } from '@phosphor-icons/react'
+import { AnimatePresence, motion, Variants } from 'framer-motion'
+import { LottieRef } from 'lottie-react'
 import { useRouter } from 'next/navigation'
 
-import { zodResolver } from '@hookform/resolvers/zod'
-
-import { Input } from '@/app/components/Input'
-import { Button } from '@/app/components/Button'
-import { Toast, ToastRef } from '@/app/components/Toast'
-import { Title } from '../components/Title'
 import { Hero } from '../components/Hero'
 import { Link } from '../components/Link'
 import { RocketAnimation } from '../components/RocketAnimation'
-import { Envelope, Lock } from '@phosphor-icons/react'
+import { Title } from '../components/Title'
 
-import { AnimatePresence, motion, Variants } from 'framer-motion'
-import { LottieRef } from 'lottie-react'
-
-import { ROCKET_ANIMATION_DURATION } from '@/utils/constants'
+import { Button } from '@/app/components/Button'
+import { Input } from '@/app/components/Input'
+import { Toast, ToastRef } from '@/app/components/Toast'
+import { useAuth } from '@/hooks/useAuth'
 import { SignInFormFields, signInFormSchema } from '@/libs/zod'
+import { ROCKET_ANIMATION_DURATION } from '@/utils/constants'
 
 const formAnimations: Variants = {
   initial: {
@@ -115,7 +113,7 @@ export default function SignIn() {
       <RocketAnimation animationRef={rocketRef} isVisible={isRocketVisible} />
 
       <div className="h-screen lg:grid lg:grid-cols-[1fr_1.5fr]">
-        <main className="flex flex-col items-center justify-center h-full">
+        <main className="flex h-full flex-col items-center justify-center">
           <AnimatePresence>
             {!isRocketVisible && (
               <motion.div
@@ -148,18 +146,18 @@ export default function SignIn() {
                       label="Senha"
                       type="password"
                       icon={Lock}
-                      placeholder="Digite senha"
+                      placeholder="Digite sua senha"
                       {...register('password')}
                       error={errors.password?.message}
                     />
                   </div>
                   <div className="mt-6">
-                    <Button type="submit" isLoading={isLaoding}>
+                    <Button name="submit" type="submit" isLoading={isLaoding}>
                       Entrar
                     </Button>
                   </div>
                 </form>
-                <div className="flex items-center justify-between w-full mt-4">
+                <div className="mt-4 flex w-full items-center justify-between">
                   <Link href="/forgot-password">Esqueci a senha</Link>
                   <Link href="/sign-up">Criar conta</Link>
                 </div>
@@ -173,7 +171,7 @@ export default function SignIn() {
             <motion.div
               variants={heroAnimations}
               exit="hidden"
-              className="bg-gray-800 hidden lg:grid lg:place-content-center"
+              className="hidden bg-gray-800 lg:grid lg:place-content-center"
             >
               <Hero />
             </motion.div>

@@ -23,11 +23,7 @@ export function Client({ children }: ClientProps) {
         {/* <AchivementsProvider> */}
         <EditorProvider>
           <LessonProvider>
-            <SidebarProvider>
-              <SpaceProvider>
-                <ChallengesListProvider>{children}</ChallengesListProvider>
-              </SpaceProvider>
-            </SidebarProvider>
+            <ChallengesListProvider>{children}</ChallengesListProvider>
           </LessonProvider>
         </EditorProvider>
         {/* </AchivementsProvider> */}

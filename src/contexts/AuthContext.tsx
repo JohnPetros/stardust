@@ -1,15 +1,14 @@
 'use client'
 
 import { createContext, useEffect, useState } from 'react'
+import { AuthError, Session } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
-import { useApi } from '@/services/api'
 import useSWR, { mutate } from 'swr'
 
-import { AuthError, Session } from '@supabase/supabase-js'
-
 import type { User } from '@/@types/user'
+import { useApi } from '@/services/api'
 
-interface AuthContextValue {
+export interface AuthContextValue {
   user: User | null
   error: unknown
   isLoading: boolean

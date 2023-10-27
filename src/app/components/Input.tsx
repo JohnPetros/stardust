@@ -1,13 +1,12 @@
 'use client'
 import {
   ForwardedRef,
-  InputHTMLAttributes,
   forwardRef,
+  InputHTMLAttributes,
   useId,
   useState,
 } from 'react'
 import { Eye, EyeClosed, Icon } from '@phosphor-icons/react'
-import { twMerge } from 'tailwind-merge'
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string
@@ -40,16 +39,16 @@ const InputComponent = (
         <span
           className={`${
             error ? 'text-red-700' : 'text-green-400'
-          } text-sm font-medium"} text-sm font-medium`}
+          } font-medium"} text-sm text-sm font-medium`}
         >
           {label}
         </span>
         <div
-          className={`flex items-center gap-2 bg-transparent rounded border ${
+          className={`flex items-center gap-2 rounded border bg-transparent ${
             error
               ? 'border-red-700'
               : 'border-gray-400 focus-within:border-green-400'
-          }  mt-3 p-3 group`}
+          }  group mt-3 p-3`}
         >
           <Icon className={iconColor} width={24} height={24} />
           <input
@@ -57,7 +56,7 @@ const InputComponent = (
             type={innerType}
             id={id}
             {...rest}
-            className="w-full bg-inherit outline-none text-gray-100 text-sm"
+            className="w-full bg-inherit text-sm text-gray-100 outline-none"
           />
 
           {type === 'password' && (
@@ -72,7 +71,7 @@ const InputComponent = (
         </div>
       </label>
       {error && (
-        <span className="text-red-700 text-sm font-medium">{error}</span>
+        <span className="text-sm font-medium text-red-700">{error}</span>
       )}
     </>
   )
