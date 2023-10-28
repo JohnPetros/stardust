@@ -32,7 +32,7 @@ export default async function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`${poppins.className} ${roboto_mono.className} h-screen w-screen bg-gray-900 font-normal`}
+        className={`${roboto_mono.className} ${poppins.className} h-screen w-screen bg-gray-900 font-normal`}
       >
         <Providers>{children}</Providers>
       </body>
