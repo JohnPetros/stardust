@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "test",
-    "test:watch": "test --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "test:coverage": "test --coverage",
     "email": "email dev --dir ./src/utils/emails/templates ",
     "gen-types": "supabase gen types typescript --linked > ./src/types/supabase.ts"
