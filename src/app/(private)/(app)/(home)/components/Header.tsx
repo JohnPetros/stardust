@@ -9,8 +9,8 @@ import StreakAnimation from '../../../../../../public/animations/streak.json'
 import { UserAvatar } from './UserAvatar'
 
 import { Animation } from '@/app/components/Animation'
-import { useAuth } from '@/hooks/useAuth'
-import { useSiderbar } from '@/hooks/useSiderbar'
+import { useAuth } from '@/contexts/AuthContext'
+import { useSiderbar } from '@/contexts/SidebarContext'
 
 const headerAnimations: Variants = {
   hidden: {

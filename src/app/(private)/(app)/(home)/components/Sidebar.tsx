@@ -1,10 +1,10 @@
 'use client'
 import { UserAvatar } from './UserAvatar'
-import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/app/components/Button'
-import { useSiderbar } from '@/hooks/useSiderbar'
+import { useSiderbar } from '@/contexts/SidebarContext'
 import { AchievementsList } from './AchievementsList'
 import { AnimatePresence, Variants, motion } from 'framer-motion'
+import { useAuth } from '@/contexts/AuthContext'
 
 const sidebarVariants: Variants = {
   close: {
