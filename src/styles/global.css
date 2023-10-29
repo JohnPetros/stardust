@@ -15,7 +15,6 @@
   padding: 0;
   box-sizing: border-box;
 
-  @apply font-default
 }
 
 body {
@@ -23,6 +22,7 @@ body {
   height: 100vh;
 
   font-weight: 400;
+  @apply font-default
 }
 
 body {

@@ -9,7 +9,7 @@ module.exports = {
     extend: {
       fontFamily: {
         default: 'var(--font-poppins)',
-        cursive: 'var(--font-roboto-mono)',
+        code: 'var(--font-roboto-mono)',
       },
 
       colors: {
