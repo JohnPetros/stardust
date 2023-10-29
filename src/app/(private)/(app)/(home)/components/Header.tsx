@@ -26,7 +26,7 @@ const headerAnimations: Variants = {
 
 export function Header() {
   const { user } = useAuth()
-  const { toggle } = useSiderbar()
+  const { toggle, isOpen } = useSiderbar()
 
   if (user?.id)
     return (
@@ -37,7 +37,11 @@ export function Header() {
         className="fixed top-0 z-40 flex h-16 w-screen justify-between border-b border-gray-700 bg-gray-900 px-6 py-3 md:justify-end"
       >
         <div className="flex items-center gap-3 md:hidden">
-          <button onClick={toggle}>
+          <button
+            onClick={toggle}
+            aria-expanded={isOpen ? 'true' : 'false'}
+            aria-controls="sidebar"
+          >
             <List
               width={24}
               height={24}

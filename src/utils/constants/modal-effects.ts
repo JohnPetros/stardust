@@ -1,9 +1,9 @@
-import Earning from '../../../public/animations/apollo-earning.json'
+import Asking from '../../../public/animations/apollo-asking.json'
 import Crying from '../../../public/animations/apollo-crying.json'
 import Denying from '../../../public/animations/apollo-denying.json'
-import Asking from '../../../public/animations/apollo-asking.json'
+import Earning from '../../../public/animations/apollo-earning.json'
 
-import { ModalType } from '@/app/components/Modal'
+import { ModalType } from '@/app/components/Alert'
 
 type ModalEffect = {
   id: ModalType

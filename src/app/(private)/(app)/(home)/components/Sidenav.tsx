@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { CaretLeft, CaretRight, Flag, Power } from '@phosphor-icons/react'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import Image from 'next/image'
@@ -10,9 +10,8 @@ import { AchievementsList } from './AchievementsList'
 import { CounterBadge } from './CounterBadge'
 import { NavButton } from './NavButton'
 import { SidenavButton } from './SidenavButton'
+import { SignOutAlert } from './SignOutAlert'
 
-import { Button } from '@/app/components/Button'
-import { Modal, ModalRef } from '@/app/components/Modal'
 import { Toast, ToastRef } from '@/app/components/Toast'
 import { useAuth } from '@/contexts/AuthContext'
 import { useSiderbar } from '@/contexts/SidebarContext'
@@ -50,47 +49,15 @@ interface SidenavProps {
 }
 
 export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
-  const { user, signOut } = useAuth()
+  const { user } = useAuth()
   const { isAchievementsListVisible, setIsAchievementsListVisible } =
     useSiderbar()
   const { rescueableAchievementsAmount } = useAchivementsContext()
 
-  const [isLoading, setIsLoading] = useState(false)
   const toastRef = useRef<ToastRef>(null)
-  const modalRef = useRef<ModalRef>(null)
-  const signOutButton = useRef<HTMLButtonElement>(null)
 
   function handleAchievementsListButtonClick() {
     setIsAchievementsListVisible(!isAchievementsListVisible)
-  }
-
-  function handleSignOutModalClose() {
-    modalRef.current?.close()
-    signOutButton.current?.focus()
-  }
-
-  async function handleSignOutButtonClick() {
-    function showErrorMessage() {
-      toastRef.current?.open({
-        type: 'error',
-        message: 'Erro ao tentar sair da conta',
-      })
-      setIsLoading(false)
-      modalRef.current?.close()
-    }
-
-    setIsLoading(true)
-
-    const error = await signOut()
-
-    if (error) {
-      console.error(error)
-      showErrorMessage()
-    }
-
-    setTimeout(() => {
-      showErrorMessage()
-    }, 10000)
   }
 
   return (
@@ -175,40 +142,17 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
             counterBadge={<CounterBadge count={rescueableAchievementsAmount} />}
           />
 
-          <SidenavButton
-            icon={Power}
-            title="Sair"
-            isExpanded={isExpanded}
-            onClick={() => modalRef.current?.open()}
-            isActive={false}
-          />
+          <SignOutAlert>
+            <SidenavButton
+              icon={Power}
+              title="Sair"
+              isExpanded={isExpanded}
+              onClick={() => null}
+              isActive={false}
+            />
+          </SignOutAlert>
         </div>
       </div>
-
-      <Modal
-        ref={modalRef}
-        type="crying"
-        title={`Calma aí! Deseja mesmo\nSAIR DA SUA CONTA 😢?`}
-        canPlaySong={false}
-        body={null}
-        footer={
-          <div className="mt-3 flex items-center justify-center gap-2">
-            <Button
-              className="w-32 bg-red-700 text-gray-100"
-              onClick={handleSignOutButtonClick}
-              isLoading={isLoading}
-            >
-              Sair
-            </Button>
-            <Button
-              className="w-32 bg-green-400 text-green-900"
-              onClick={handleSignOutModalClose}
-            >
-              Cancelar
-            </Button>
-          </div>
-        }
-      />
     </motion.div>
   )
 }

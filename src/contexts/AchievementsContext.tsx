@@ -1,16 +1,15 @@
-import { ReactNode, createContext, useEffect, useRef, useState } from 'react'
+import { createContext, ReactNode, useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
+
+import type { Achievement as AchievementData } from '@/@types/achievement'
+import { Achievement } from '@/app/(private)/(app)/(home)/components/Achievement'
+import { ShinningAnimation } from '@/app/(private)/(app)/(home)/components/ShinningAnimation'
+import { Modal, ModalRef } from '@/app/components/Alert'
+import { Button } from '@/app/components/Button'
+import { Toast, ToastRef } from '@/app/components/Toast'
 import { useAuth } from '@/contexts/AuthContext'
 import { useAchievement } from '@/hooks/useAchievement'
 import { useApi } from '@/services/api'
-
-import Image from 'next/image'
-import { Modal, ModalRef } from '@/app/components/Modal'
-import { Achievement } from '@/app/(private)/(app)/(home)/components/Achievement'
-import { ShinningAnimation } from '@/app/(private)/(app)/(home)/components/ShinningAnimation'
-import { ToastRef, Toast } from '@/app/components/Toast'
-import { Button } from '@/app/components/Button'
-
-import type { Achievement as AchievementData } from '@/@types/achievement'
 
 type RescuableAchivement = {
   id: string
@@ -206,11 +205,11 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
         type={'earning'}
         title={'Uau! Parece que você ganhou recompensa(s)'}
         body={
-          <div className="space-y-24 px-6 max-h-64">
+          <div className="max-h-64 space-y-24 px-6">
             {newUnlockedAchievements.map((achievement) => (
               <div className="relative z-50">
                 <span
-                  className="block absolute"
+                  className="absolute block"
                   style={{ top: -18, left: -31.5 }}
                 >
                   <ShinningAnimation size={110} />
@@ -240,22 +239,22 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
         title={'Recompensa resgatada!'}
         body={
           <div className="flex flex-col items-center">
-            <p className="text-gray-100 text-center font-medium">
+            <p className="text-center font-medium text-gray-100">
               Parabéns! Você acabou de ganhar{' '}
-              <span className="text-lg text-yellow-400 font-semibold">
+              <span className="text-lg font-semibold text-yellow-400">
                 {rescuedAchievement?.reward}
               </span>{' '}
               de poeira estela pela conquista:
             </p>
             {rescuedAchievement && (
-              <div className="flex flex-col items-center justify-center mt-6">
+              <div className="mt-6 flex flex-col items-center justify-center">
                 <Image
                   src={rescuedAchievement.image}
                   width={40}
                   height={40}
                   alt=""
                 />
-                <p className="font-semibold text-center text-green-500 mt-2">
+                <p className="mt-2 text-center font-semibold text-green-500">
                   {rescuedAchievement?.name}
                 </p>
               </div>
