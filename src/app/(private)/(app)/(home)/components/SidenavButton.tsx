@@ -1,17 +1,16 @@
 'use client'
 
+import { ReactNode, useRef } from 'react'
+import { Icon } from '@phosphor-icons/react'
+import { motion, Variants } from 'framer-motion'
+import { twMerge } from 'tailwind-merge'
+
 import {
   Tooltip,
-  TooltipTrigger,
   TooltipContent,
   TooltipRef,
+  TooltipTrigger,
 } from '@/app/components/Tooltip'
-
-import { ReactNode, useRef } from 'react'
-
-import { Variants, motion } from 'framer-motion'
-import { Icon } from '@phosphor-icons/react'
-import { twMerge } from 'tailwind-merge'
 
 interface SidenavButtonProps {
   icon: Icon
@@ -47,17 +46,15 @@ export function SidenavButton({
 
   return (
     <Tooltip>
-      <TooltipTrigger
-        tooltipRef={tooltipRef}
-      >
+      <TooltipTrigger tooltipRef={tooltipRef}>
         <button
           onClick={onClick}
           className={twMerge(
-            'bg-transparent flex items-center justify-center text-gray-100 text-sm p-3 h-auto w-max hover:bg-green-700/30 transition-colors duration-200 rounded-md relative outline-green-500',
+            'relative flex h-auto w-max items-center justify-center rounded-md bg-transparent p-3 text-sm text-gray-100 outline-green-500 transition-colors duration-200 hover:bg-green-700/30',
             isActive ? 'bg-green-500/30' : ''
           )}
         >
-          <Icon className="text-green-400 text-lg" />
+          <Icon className="text-lg text-green-400" />
           <motion.span
             variants={titleVariants}
             initial="shrink"

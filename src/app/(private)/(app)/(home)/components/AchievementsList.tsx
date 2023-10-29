@@ -6,8 +6,8 @@ import { twMerge } from 'tailwind-merge'
 import { Achievement } from './Achievement'
 
 import { Loading } from '@/app/components/Loading'
+import { useAuth } from '@/contexts/AuthContext'
 import { useAchivementsContext } from '@/hooks/useAchievementContext'
-import { useAuth } from '@/hooks/useAuth'
 
 export function AchievementsList() {
   const { user } = useAuth()

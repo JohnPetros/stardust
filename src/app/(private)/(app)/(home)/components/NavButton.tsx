@@ -1,18 +1,17 @@
 'use client'
 import { useRef } from 'react'
-import { usePathname } from 'next/navigation'
-
-import Link from 'next/link'
+import { motion, Variants } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { twMerge } from 'tailwind-merge'
+
 import {
   Tooltip,
-  TooltipTrigger,
   TooltipContent,
   TooltipRef,
-} from '@/app/components/Tooltip';
-
-import { twMerge } from 'tailwind-merge'
-import { Variants, motion } from 'framer-motion'
+  TooltipTrigger,
+} from '@/app/components/Tooltip'
 
 const labelVariants: Variants = {
   shrink: {
@@ -52,13 +51,13 @@ export function NavButton({
         <Link
           href={path}
           className={twMerge(
-            'rounded-xl hover:bg-green-700/20 transition-colors duration-200 flex items-center justify-center md:w-max p-2 outline-green-500',
+            'flex items-center justify-center rounded-xl p-2 outline-green-500 transition-colors duration-200 hover:bg-green-700/20 md:w-max',
             isColumn ? 'flex-col' : 'flex-row'
           )}
         >
           <span
             className={twMerge(
-              'rounded-lg w-10 h-10 grid place-content-center',
+              'grid h-10 w-10 place-content-center rounded-lg',
               isActive ? 'bg-green-400' : 'bg-green-800'
             )}
           >
@@ -67,7 +66,7 @@ export function NavButton({
               width={28}
               height={28}
               className="text-gray-800"
-              alt=""
+              alt={icon}
             />
           </span>
 
@@ -76,7 +75,7 @@ export function NavButton({
             initial="shrink"
             animate={isExpanded ? 'expand' : ''}
             className={twMerge(
-              'block overflow-hidden font-semibold md:text-sm text-[12px] mt-2 -ml-2 md:-m-0',
+              '-ml-2 mt-2 block overflow-hidden text-[12px] font-semibold md:-m-0 md:text-sm',
               isActive ? 'text-gray-100' : 'text-gray-400'
             )}
           >

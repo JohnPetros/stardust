@@ -14,9 +14,9 @@ import { SidenavButton } from './SidenavButton'
 import { Button } from '@/app/components/Button'
 import { Modal, ModalRef } from '@/app/components/Modal'
 import { Toast, ToastRef } from '@/app/components/Toast'
+import { useAuth } from '@/contexts/AuthContext'
+import { useSiderbar } from '@/contexts/SidebarContext'
 import { useAchivementsContext } from '@/hooks/useAchievementContext'
-import { useAuth } from '@/hooks/useAuth'
-import { useSiderbar } from '@/hooks/useSiderbar'
 import { HOME_PAGES } from '@/utils/constants/home-pages'
 
 const sidenavAnimations: Variants = {
@@ -58,9 +58,15 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
   const [isLoading, setIsLoading] = useState(false)
   const toastRef = useRef<ToastRef>(null)
   const modalRef = useRef<ModalRef>(null)
+  const signOutButton = useRef<HTMLButtonElement>(null)
 
   function handleAchievementsListButtonClick() {
     setIsAchievementsListVisible(!isAchievementsListVisible)
+  }
+
+  function handleSignOutModalClose() {
+    modalRef.current?.close()
+    signOutButton.current?.focus()
   }
 
   async function handleSignOutButtonClick() {
@@ -101,7 +107,10 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
         <button
           onClick={toggleSidenav}
           tabIndex={0}
+          aria-label="Expandir barra de navegação lateral"
           className="absolute -right-[10px] top-20 z-40 grid place-content-center rounded-full bg-green-400 p-1 outline-green-500"
+          aria-expanded={isExpanded ? 'true' : 'false'}
+          aria-controls="sidenav"
         >
           {isExpanded ? (
             <CaretLeft className="text-sm text-gray-800" weight="bold" />
@@ -193,7 +202,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
             </Button>
             <Button
               className="w-32 bg-green-400 text-green-900"
-              onClick={() => modalRef.current?.close()}
+              onClick={handleSignOutModalClose}
             >
               Cancelar
             </Button>

@@ -9,8 +9,6 @@ import { AchivementsProvider } from '@/contexts/AchievementsContext'
 import { ChallengesListProvider } from '@/contexts/ChallengesListContext'
 import { EditorProvider } from '@/contexts/EditorContext'
 import { LessonProvider } from '@/contexts/LessonContext'
-import { SidebarProvider } from '@/contexts/SidebarContext'
-import { SpaceProvider } from '@/contexts/SpaceContext'
 
 interface ClientProps {
   children: ReactNode
