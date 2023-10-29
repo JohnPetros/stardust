@@ -1,9 +1,9 @@
 'use client'
 import { useMemo } from 'react'
-import { useAuth } from './useAuth'
 import useSWR, { mutate } from 'swr'
 
 import { Rocket } from '@/@types/rocket'
+import { useAuth } from '@/contexts/AuthContext'
 import { useApi } from '@/services/api'
 
 export function useRocket(rocketId?: string) {

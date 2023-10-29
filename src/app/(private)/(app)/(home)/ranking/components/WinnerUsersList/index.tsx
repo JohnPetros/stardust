@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useRef } from 'react'
-import { useAuth } from '@/hooks/useAuth'
 
 import Image from 'next/image'
 import { Modal, ModalRef } from '@/app/components/Modal'
@@ -13,6 +12,7 @@ import { getImage, playSound } from '@/utils/functions'
 
 import type { Ranking } from '@/@types/ranking'
 import type { WinnerUser as WinnerUserType } from '@/@types/user'
+import { useAuth } from '@/contexts/AuthContext'
 
 interface WinnerUsersListProps {
   winnerUsers: WinnerUserType[]

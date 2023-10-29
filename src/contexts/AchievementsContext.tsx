@@ -1,5 +1,5 @@
 import { ReactNode, createContext, useEffect, useRef, useState } from 'react'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/contexts/AuthContext'
 import { useAchievement } from '@/hooks/useAchievement'
 import { useApi } from '@/services/api'
 

@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { useAuth } from '@/hooks/useAuth'
 import { useSWRConfig } from 'swr'
 
 import Image from 'next/image'
@@ -15,6 +14,7 @@ import { twMerge } from 'tailwind-merge'
 import RewardShinning from '../../../../../../../public/animations/reward-shinning.json'
 
 import Lottie from 'lottie-react'
+import { useAuth } from '@/contexts/AuthContext'
 
 interface AvatarProps {
   data: Avatar

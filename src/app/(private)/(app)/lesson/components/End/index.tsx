@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { useAuth } from '@/hooks/useAuth'
 
 import { motion, Variants } from 'framer-motion'
 
@@ -18,6 +17,7 @@ import { Streak } from './Streak'
 import { playSound } from '@/utils/functions'
 
 import type { User } from '@/@types/user'
+import { useAuth } from '@/contexts/AuthContext'
 
 const apolloAnimations: Variants = {
   hidden: {

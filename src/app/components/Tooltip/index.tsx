@@ -2,15 +2,14 @@
 
 import {
   ForwardedRef,
+  forwardRef,
   ReactNode,
   RefObject,
-  forwardRef,
   useImperativeHandle,
   useState,
 } from 'react'
-
 import * as T from '@radix-ui/react-tooltip'
-import { Variants, motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion, Variants } from 'framer-motion'
 
 const contentVariants: Variants = {
   hidden: {
@@ -94,7 +93,7 @@ const TooltipComponent = (
       <AnimatePresence>
         {isVisible && (
           <T.Content
-            className="max-w-sm z-50"
+            className="z-50 max-w-sm"
             sideOffset={1}
             side={direction}
             forceMount
@@ -103,7 +102,7 @@ const TooltipComponent = (
               variants={contentVariants}
               initial="hidden"
               animate="visible"
-              className="bg-green-900 border border-gray-400 rounded-md p-2 shadow-md text-gray-100 text-center text-sm"
+              className="rounded-md border border-gray-400 bg-green-900 p-2 text-center text-sm text-gray-100 shadow-md"
             >
               {text}
               <T.TooltipArrow className="fill-gray-400" />

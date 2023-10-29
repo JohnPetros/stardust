@@ -1,21 +1,18 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { useRouter } from 'next/navigation'
-import { useSpace } from '@/hooks/useSpace'
-import { useApi } from '@/services/api'
-
-import Image from 'next/image'
-import { Toast, ToastRef } from '@/app/components/Toast'
-
-import UnlockedStar from '../../../../../../public/animations/unlocked-star.json'
+import { motion, useInView, Variants } from 'framer-motion'
 import Lottie, { LottieRef } from 'lottie-react'
-
-import { Variants, motion, useInView } from 'framer-motion'
-
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { twMerge } from 'tailwind-merge'
 
+import UnlockedStar from '../../../../../../public/animations/unlocked-star.json'
+
 import type { Star } from '@/@types/star'
+import { Toast, ToastRef } from '@/app/components/Toast'
+import { useSpace } from '@/contexts/SpaceContext'
+import { useApi } from '@/services/api'
 
 const starLight = '0 0 12px #ffcf31a1'
 
@@ -122,7 +119,7 @@ export function Star({
         />
       </div>
       <button
-        className="flex items-center gap-3 mt-2"
+        className="mt-2 flex items-center gap-3"
         onClick={handleStarClick}
         disabled={!isUnlocked}
       >
@@ -152,7 +149,7 @@ export function Star({
           )}
           <span
             className={twMerge(
-              'absolute block text-lg font-semibold top-[50%] -translate-x-1/2 -translate-y-1/2 text-yellow-700',
+              'absolute top-[50%] block -translate-x-1/2 -translate-y-1/2 text-lg font-semibold text-yellow-700',
               isUnlocked ? 'left-[26%]' : ' left-[22%]'
             )}
           >
@@ -162,7 +159,7 @@ export function Star({
         <div
           style={{ boxShadow: starLight }}
           className={twMerge(
-            'border-2 border-dashed rounded-lg px-6 py-3 max-w-[220px] bg-green-900 grid place-content-center',
+            'grid max-w-[220px] place-content-center rounded-lg border-2 border-dashed bg-green-900 px-6 py-3',
             isUnlocked ? 'border-yellow-400' : 'border-gray-500'
           )}
         >
@@ -180,10 +177,10 @@ export function Star({
           variants={rocketVariants}
           initial="hidden"
           animate="visible"
-          className="w-20 h-20"
+          className="h-20 w-20"
         >
           {isLastUnlockedStar && spaceRocket && (
-            <div className="relative w-20 h-20 rotate-180">
+            <div className="relative h-20 w-20 rotate-180">
               <Image
                 src={spaceRocket.image}
                 alt={`Foguete ${spaceRocket.name}`}

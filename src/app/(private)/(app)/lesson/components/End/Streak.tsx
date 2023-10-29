@@ -1,12 +1,12 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useAuth } from '@/hooks/useAuth'
 
 import { Toast, ToastRef } from '@/app/components/Toast'
 
 import { StreakBoard } from '../../../(home)/profile/components/Streak'
 import dayjs from 'dayjs'
+import { useAuth } from '@/contexts/AuthContext'
 
 export function Streak() {
   const { user, updateUser } = useAuth()

@@ -2,7 +2,7 @@
 
 import useSWR from 'swr'
 
-import { useAuth } from './useAuth'
+import { useAuth } from '@/contexts/AuthContext'
 
 import type { Star } from '@/@types/star'
 import type { User } from '@/@types/user'

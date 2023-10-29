@@ -2,7 +2,6 @@
 
 import { useMemo } from 'react'
 import { useLesson } from '@/hooks/useLesson'
-import { useAuth } from '@/hooks/useAuth'
 import { useRocket } from '@/hooks/useRocket'
 
 import Image from 'next/image'
@@ -10,6 +9,7 @@ import { X } from '@phosphor-icons/react'
 
 import { getImage } from '@/utils/functions'
 import { ProgressBar } from '@/app/components/ProgressBar'
+import { useAuth } from '@/contexts/AuthContext'
 
 interface HeaderProps {
   onLeaveLesson: () => void

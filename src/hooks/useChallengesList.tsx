@@ -1,7 +1,7 @@
 'use client'
 
 import { useContext, useMemo } from 'react'
-import { useAuth } from './useAuth'
+import { useAuth } from '@/contexts/AuthContext'
 import { useCategory } from './useCategory'
 import useSWR from 'swr'
 

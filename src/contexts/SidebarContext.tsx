@@ -1,8 +1,8 @@
 'use client'
 
-import { ReactNode, createContext, useState } from 'react'
+import { createContext, ReactNode, useContext, useState } from 'react'
 
-interface SidebarContextValue {
+export interface SidebarContextValue {
   isOpen: boolean
   toggle: VoidFunction
   isAchievementsListVisible: boolean
@@ -36,4 +36,14 @@ export function SidebarProvider({ children }: SidebarProviderProps) {
       {children}
     </SidebarContext.Provider>
   )
+}
+
+export function useSiderbar() {
+  const context = useContext(SidebarContext)
+
+  if (!context) {
+    throw new Error('useSiderbar must be used inside SidebarProvider')
+  }
+
+  return context
 }

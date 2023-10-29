@@ -15,9 +15,9 @@ import { Title } from '../components/Title'
 import { Button } from '@/app/components/Button'
 import { Input } from '@/app/components/Input'
 import { Toast, ToastRef } from '@/app/components/Toast'
-import { useAuth } from '@/hooks/useAuth'
 import { SignInFormFields, signInFormSchema } from '@/libs/zod'
 import { ROCKET_ANIMATION_DURATION } from '@/utils/constants'
+import { useAuth } from '@/contexts/AuthContext'
 
 const formAnimations: Variants = {
   initial: {

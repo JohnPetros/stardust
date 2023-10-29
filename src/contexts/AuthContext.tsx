@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { AuthError, Session } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
 import useSWR, { mutate } from 'swr'
@@ -143,4 +143,14 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
+
+export const useAuth = () => {
+  const context = useContext(AuthContext)
+
+  if (!context) {
+    throw new Error('useAuth must be used inside AuthProvider')
+  }
+
+  return context
 }

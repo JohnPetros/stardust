@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useChallengeStore } from '@/hooks/useChallengeStore'
 import { useRouter, useParams } from 'next/navigation'
 import { useChallenge } from '@/hooks/useChallenge'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/contexts/AuthContext'
 import { useStar } from '@/hooks/useStar'
 
 import { Header } from './components/Header'

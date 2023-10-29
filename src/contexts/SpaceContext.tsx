@@ -4,13 +4,14 @@ import {
   createContext,
   ReactNode,
   RefObject,
+  useContext,
   useEffect,
   useRef,
   useState,
 } from 'react'
 import { useMotionValueEvent, useScroll } from 'framer-motion'
 
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/contexts/AuthContext'
 import { useRocket } from '@/hooks/useRocket'
 import { getImage } from '@/utils/functions'
 
@@ -99,4 +100,14 @@ export function SpaceProvider({ children }: SpaceContextProps) {
       {children}
     </SpaceContext.Provider>
   )
+}
+
+export function useSpace() {
+  const context = useContext(SpaceContext)
+
+  if (!context) {
+    throw new Error('useSpace must be used inside SpaceProvider')
+  }
+
+  return context
 }

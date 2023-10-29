@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { useAuth } from './useAuth'
+import { useAuth } from '@/contexts/AuthContext'
 import useSWR from 'swr'
 
 import type { Star } from '@/@types/star'

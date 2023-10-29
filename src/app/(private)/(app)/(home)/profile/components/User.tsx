@@ -1,5 +1,4 @@
 'use client'
-import { useAuth } from '@/hooks/useAuth'
 import { useRocket } from '@/hooks/useRocket'
 import { useRanking } from '@/hooks/useRanking'
 
@@ -16,6 +15,7 @@ import Link from 'next/link'
 import dayjs from 'dayjs'
 
 import { motion } from 'framer-motion'
+import { useAuth } from '@/contexts/AuthContext'
 
 interface UserProps {
   data: UserType

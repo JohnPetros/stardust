@@ -10,8 +10,8 @@ import { Planet } from './Planet'
 
 import { StarViewPortPosition } from '@/contexts/SpaceContext'
 import { usePlanet } from '@/hooks/usePlanet'
-import { useSiderbar } from '@/hooks/useSiderbar'
-import { useSpace } from '@/hooks/useSpace'
+import { useSiderbar } from '@/contexts/SidebarContext'
+import { useSpace } from '@/contexts/SpaceContext'
 
 const fabButtonIcon: Record<StarViewPortPosition, Icon> = {
   above: CaretDown,

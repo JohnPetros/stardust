@@ -14,11 +14,11 @@ import { Title } from '../components/Title'
 import { Button } from '@/app/components/Button'
 import { Input } from '@/app/components/Input'
 import { Toast, ToastRef } from '@/app/components/Toast'
-import { useAuth } from '@/hooks/useAuth'
 import { SignUpFormFields, signUpFormSchema } from '@/libs/zod'
 import { useApi } from '@/services/api'
 import { SIGN_UP_ERRORS } from '@/utils/constants/signup-errors'
 import { SignUpError } from '@/@types/signupError'
+import { useAuth } from '@/contexts/AuthContext'
 
 const formAnimations: Variants = {
   hidden: {

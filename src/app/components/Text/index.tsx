@@ -11,7 +11,7 @@ import { TypeWriter } from './TypeWriter'
 import type { Text as TextData } from '@/@types/text'
 import { UserAvatar } from '@/app/(private)/(app)/(home)/components/UserAvatar'
 import { CodeSnippet } from '@/app/components/Text/CodeSnippet'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/contexts/AuthContext'
 import { formatText, getImage, slugify } from '@/utils/functions'
 
 const textAnimations: Variants = {

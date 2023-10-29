@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
-import { useAuth } from './useAuth'
+import { useAuth } from '@/contexts/AuthContext'
 import useSWR, { mutate } from 'swr'
 
 import { useApi } from '@/services/api'
