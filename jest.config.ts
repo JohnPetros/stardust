@@ -22,6 +22,7 @@ const config = {
     TextEncoder: require('util').TextEncoder,
     TextDecoder: require('util').TextDecoder,
   },
+  modulePathIgnorePatterns: ['<rootDir>/src/__tests__'],
 }
 
 export default createJestConfig(config)
