@@ -1,14 +1,13 @@
-import { Question } from "./quiz"
-import type { Text } from "./text"
+import { Question } from './quiz'
+import type { Text } from './text'
 
 export type Star = {
   id: string
-  isChallenge: boolean 
-  name: string 
-  number: number 
-  planet_id: string 
-  texts: Text[] 
+  isChallenge: boolean
+  name: string
+  number: number
+  planet_id: string
+  texts: Text[]
   isUnlocked: boolean
-  users_unlocked_stars?: []
   questions: Question[]
 }

@@ -2,8 +2,9 @@
 
 import type { Star } from '@/@types/star'
 import { useSupabase } from '@/hooks/useSupabase'
+import { IStarService } from './interfaces/IStarService'
 
-export const StarService = () => {
+export const StarService = (): IStarService => {
   const { supabase } = useSupabase()
 
   return {
@@ -48,7 +49,7 @@ export const StarService = () => {
 
       delete nextStar.users_unlocked_stars
 
-      return nextStar
+      return nextStar as Star
     },
 
     getNextStarFromNextPlanet: async (
@@ -88,18 +89,20 @@ export const StarService = () => {
         isUnlocked: data ? data.users_unlocked_stars.length > 0 : false,
       }
 
-      return nextStar
+      return nextStar as Star
     },
 
-    getUserUnlockedStars: async (userId: string) => {
+    getUserUnlockedStarsIds: async (userId: string) => {
       const { data, error } = await supabase
         .from('users_unlocked_stars')
-        .select('*')
+        .select('star_id')
         .eq('user_id', userId)
+
       if (error) {
         throw new Error(error.message)
       }
-      return data
+
+      return data.map(({ star_id }) => star_id)
     },
 
     addUnlockedStar: async (starId: string, userId: string) => {
