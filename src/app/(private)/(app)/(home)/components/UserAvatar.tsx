@@ -1,15 +1,17 @@
 'use client'
-import { useAvatar } from '@/hooks/useAvatar'
-
 import Image from 'next/image'
-import { Loading } from '@/app/components/Loading'
 
+import { Loading } from '@/app/components/Loading'
+import { useAvatar } from '@/hooks/useAvatar'
 import { getImage } from '@/utils/functions'
 
 interface UserAvatarProps {
   avatarId: string
   size: number
 }
+
+jest.mock('next/navigation')
+
 
 export function UserAvatar({ avatarId, size }: UserAvatarProps) {
   const { avatar } = useAvatar(avatarId)
@@ -19,7 +21,7 @@ export function UserAvatar({ avatarId, size }: UserAvatarProps) {
     return (
       <div
         style={{ width: size, height: size }}
-        className="relative rounded-[50%] border border-green-700 bg-gray-300 overflow-hidden grid place-content-center"
+        className="relative grid place-content-center overflow-hidden rounded-[50%] border border-green-700 bg-gray-300"
       >
         {avatarImage ? (
           <Image

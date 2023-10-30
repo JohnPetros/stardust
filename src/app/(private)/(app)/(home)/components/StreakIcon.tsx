@@ -1,5 +1,6 @@
 'use client'
 import Lottie from 'lottie-react'
+
 import StreakAnimation from '../../../../../../public/animations/streak.json'
 
 interface StreakIconProps {
