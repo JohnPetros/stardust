@@ -1,20 +1,18 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { useSWRConfig } from 'swr'
-
-import Image from 'next/image'
-import { Button } from '@/app/components/Button'
-import { Modal, ModalRef } from '@/app/components/Modal'
 import { LockSimple } from '@phosphor-icons/react'
-
-import { Avatar } from '@/@types/avatar'
-import { getImage, playSound } from '@/utils/functions'
+import Lottie from 'lottie-react'
+import Image from 'next/image'
+import { useSWRConfig } from 'swr'
 import { twMerge } from 'tailwind-merge'
 
 import RewardShinning from '../../../../../../../public/animations/reward-shinning.json'
 
-import Lottie from 'lottie-react'
+import { Avatar } from '@/@types/avatar'
+import { Modal, ModalRef } from '@/app/components/Alert'
+import { Button } from '@/app/components/Button'
 import { useAuth } from '@/contexts/AuthContext'
+import { getImage, playSound } from '@/utils/functions'
 
 interface AvatarProps {
   data: Avatar
@@ -95,7 +93,7 @@ export function Avatar({
     <>
       <div
         className={twMerge(
-          'grid grid-cols-[1fr_1.4fr] rounded-md overflow-hidden border-2',
+          'grid grid-cols-[1fr_1.4fr] overflow-hidden rounded-md border-2',
           isSelected ? 'border-yellow-300' : 'border-transparent',
           !isAcquired && !isBuyable ? 'brightness-75' : 'brightness-90'
         )}
@@ -103,9 +101,9 @@ export function Avatar({
         <div className="flex flex-col justify-between bg-gray-800 p-6">
           <div className="flex flex-col gap-2">
             {!isAcquired && price > 0 && (
-              <div className=" flex items-center gap-2 z-30">
+              <div className=" z-30 flex items-center gap-2">
                 <Image src="/icons/coin.svg" width={24} height={24} alt="" />
-                <strong className="font-semibold text-gray-100 text-lg">
+                <strong className="text-lg font-semibold text-gray-100">
                   {price}
                 </strong>
               </div>
@@ -114,7 +112,7 @@ export function Avatar({
           </div>
 
           <Button
-            className="bg-yellow-300 w-max py-1 px-3 h-10"
+            className="h-10 w-max bg-yellow-300 px-3 py-1"
             onClick={handleButtonPress}
             isLoading={isRequesting}
           >
@@ -128,8 +126,8 @@ export function Avatar({
 
         <div className="relative h-52">
           {!isAcquired && (
-            <div className="absolute top-3 right-3 z-30">
-              <LockSimple className="text-gray-800 text-xl" weight="bold" />
+            <div className="absolute right-3 top-3 z-30">
+              <LockSimple className="text-xl text-gray-800" weight="bold" />
             </div>
           )}
 
@@ -142,7 +140,7 @@ export function Avatar({
         type="denying"
         title="Parece que você não tem poeira estelar o suficiente"
         body={
-          <p className="text-gray-100 font-medium text-sm text-center my-6 px-6">
+          <p className="my-6 px-6 text-center text-sm font-medium text-gray-100">
             Mas você pode adquirir mais completando estrelas ou resolvendo
             desafios.
           </p>
@@ -158,17 +156,17 @@ export function Avatar({
         title="Parabéns, você acabou de adquiriu um novo avatar!"
         body={
           <div className="relative flex flex-col items-center justify-center">
-            <span className="absolute -top-8 left-25">
+            <span className="left-25 absolute -top-8">
               <Lottie
                 animationData={RewardShinning}
                 loop={true}
                 style={{ width: 240 }}
               />
             </span>
-            <div className="relative w-32 h-32 mt-6">
+            <div className="relative mt-6 h-32 w-32">
               <Image src={avatarImage} fill alt={name} />
             </div>
-            <strong className="text-gray-100 my-6">{name}</strong>
+            <strong className="my-6 text-gray-100">{name}</strong>
           </div>
         }
         footer={

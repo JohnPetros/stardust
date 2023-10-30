@@ -11,8 +11,8 @@ import { QuestionContainer } from './QuestionContainer'
 import { SelectionQuestion } from './SelectionQuestion'
 import { VerificationButton } from './VerificationButton'
 
+import { Modal, ModalRef } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
-import { Modal, ModalRef } from '@/app/components/Modal'
 import { useLesson } from '@/hooks/useLesson'
 
 interface QuizProps {

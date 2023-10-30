@@ -2,13 +2,13 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import { Button } from '@/app/components/Button'
-import { Text } from '@/app/components/Text'
 import { Star } from './Star'
-import { Modal, ModalRef } from '@/app/components/Modal'
-import { useLesson } from '@/hooks/useLesson'
 
 import type { Text as TextData } from '@/@types/text'
+import { Modal, ModalRef } from '@/app/components/Alert'
+import { Button } from '@/app/components/Button'
+import { Text } from '@/app/components/Text'
+import { useLesson } from '@/hooks/useLesson'
 
 interface TheoryProps {
   title: string
@@ -61,14 +61,14 @@ export function Theory({ title, number }: TheoryProps) {
   return (
     <>
       <div id="theory" className="mt-20">
-        <div className="max-w-3xl mx-auto">
-          <div className="flex items-center justify-center mt-6">
+        <div className="mx-auto max-w-3xl">
+          <div className="mt-6 flex items-center justify-center">
             <Star number={number} />
-            <h1 className="uppercase text-xl text-gray-100 font-bold">
+            <h1 className="text-xl font-bold uppercase text-gray-100">
               {title}
             </h1>
           </div>
-          <div className="space-y-10 mt-10 pb-[360px] px-6 md:px-0">
+          <div className="mt-10 space-y-10 px-6 pb-[360px] md:px-0">
             {texts.map((text, index) => (
               <Text
                 key={`text-${index}`}
@@ -79,7 +79,7 @@ export function Theory({ title, number }: TheoryProps) {
           </div>
         </div>
 
-        <footer className="fixed w-full bottom-0 border-t border-gray-800 bg-gray-900 flex items-center justify-center p-4">
+        <footer className="fixed bottom-0 flex w-full items-center justify-center border-t border-gray-800 bg-gray-900 p-4">
           <Button
             className="w-32"
             tabIndex={0}

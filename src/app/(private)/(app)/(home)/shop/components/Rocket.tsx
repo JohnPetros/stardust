@@ -1,22 +1,19 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { useAuth } from '@/contexts/AuthContext'
-import { useSWRConfig } from 'swr'
+import { motion, Variants } from 'framer-motion'
+import Lottie from 'lottie-react'
 import Image from 'next/image'
-
-import { Button } from '@/app/components/Button'
-
-import { Rocket } from '@/@types/rocket'
-import { getImage, playSound } from '@/utils/functions'
+import { useSWRConfig } from 'swr'
 import { twMerge } from 'tailwind-merge'
-
-import { Variants, motion } from 'framer-motion'
-import { Modal, ModalRef } from '@/app/components/Modal'
 
 import RewardLight from '../../../../../../../public/animations/reward-shinning.json'
 
-import Lottie from 'lottie-react'
+import { Rocket } from '@/@types/rocket'
+import { Modal, ModalRef } from '@/app/components/Alert'
+import { Button } from '@/app/components/Button'
 import { ToastRef } from '@/app/components/Toast'
+import { useAuth } from '@/contexts/AuthContext'
+import { getImage, playSound } from '@/utils/functions'
 
 const rocketVariants: Variants = {
   hidden: {
@@ -139,23 +136,23 @@ export function Rocket({
         animate="visible"
         style={{ backgroundImage: 'url("/images/space-background.png")' }}
         className={twMerge(
-          'rounded-md p-6 bg-center bg-cover border-2 max-w-lg',
+          'max-w-lg rounded-md border-2 bg-cover bg-center p-6',
           !isAcquired && !isBuyable && 'brightness-75',
           isSelected && 'border-yellow-300'
         )}
       >
         <header className="flex justify-between">
           <div className="flex flex-col">
-            <strong className=" font-semibold text-gray-100 text-lg gap-1">
+            <strong className=" gap-1 text-lg font-semibold text-gray-100">
               {name}
             </strong>
-            <span className="w-full h-1 bg-yellow-300 rounded"></span>
+            <span className="h-1 w-full rounded bg-yellow-300"></span>
           </div>
 
           {!isAcquired && price > 0 && (
             <div className="flex items-center gap-2">
               <Image src="/icons/coin.svg" width={24} height={24} alt="" />
-              <span className="font-semibold text-gray-100 text-lg">
+              <span className="text-lg font-semibold text-gray-100">
                 {price}
               </span>
             </div>
@@ -166,7 +163,7 @@ export function Rocket({
           variants={rocketImageVariants}
           initial="down"
           animate={isSelected ? 'up' : 'down'}
-          className="relative w-28 h-28 mx-auto my-8"
+          className="relative mx-auto my-8 h-28 w-28"
         >
           <Image src={rocketImage} fill alt={name} />
         </motion.div>
@@ -199,7 +196,7 @@ export function Rocket({
           </div>
 
           <Button
-            className="bg-yellow-300 w-max py-1 px-3 h-8"
+            className="h-8 w-max bg-yellow-300 px-3 py-1"
             onClick={handleButtonPress}
             isLoading={isRequesting}
           >
@@ -217,7 +214,7 @@ export function Rocket({
         type="denying"
         title="Parece que você não tem poeira estelar o suficiente"
         body={
-          <p className="text-gray-100 font-medium text-sm text-center my-6 px-6">
+          <p className="my-6 px-6 text-center text-sm font-medium text-gray-100">
             Mas você pode adquirir mais completando estrelas ou resolvendo
             desafios.
           </p>
@@ -233,17 +230,17 @@ export function Rocket({
         title="Parabéns, você acabou de adquiriu um novo foguete!"
         body={
           <div className="relative flex flex-col items-center justify-center">
-            <span className="absolute -top-2 left-25">
+            <span className="left-25 absolute -top-2">
               <Lottie
                 animationData={RewardLight}
                 loop={true}
                 style={{ width: 180 }}
               />
             </span>
-            <div className="relative w-24 h-24 mt-6">
+            <div className="relative mt-6 h-24 w-24">
               <Image src={rocketImage} fill alt={name} />
             </div>
-            <strong className="text-gray-100 my-6">{name}</strong>
+            <strong className="my-6 text-gray-100">{name}</strong>
           </div>
         }
         footer={

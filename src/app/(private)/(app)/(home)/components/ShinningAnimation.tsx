@@ -1,5 +1,6 @@
 'use client'
 import Lottie from 'lottie-react'
+
 import RewardShinning from '../../../../../../public/animations/reward-shinning.json'
 
 interface ShinningAnimationProps {

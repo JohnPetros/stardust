@@ -95,15 +95,17 @@ export function Star({
     if (isLastUnlockedStar) {
       setLastUnlockedStarPosition('in')
     }
-  }, [isInView])
+  }, [isLastUnlockedStar, isInView, setLastUnlockedStarPosition])
 
   useEffect(() => {
     if (isLastUnlockedStar && lastUnlockedStarRef.current) {
       setTimeout(() => {
+      console.log('iiiiiiiiiiiiiiii')
+
         scrollIntoLastUnlockedStar()
       }, 1500)
     }
-  }, [])
+  }, [isLastUnlockedStar, lastUnlockedStarRef, scrollIntoLastUnlockedStar])
 
   return (
     <li ref={isLastUnlockedStar ? lastUnlockedStarRef : null}>

@@ -1,23 +1,20 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-
 import { motion, Variants } from 'framer-motion'
-
-import { Metric } from './Metric'
+import Lottie, { LottieRef } from 'lottie-react'
 
 import ApolloContratulating from '../../../../../../../public/animations/apollo-congratulating.json'
 import StarsChain from '../../../../../../../public/animations/stars-chain.json'
-import Lottie, { LottieRef } from 'lottie-react'
-
-import { Modal, ModalRef } from '@/app/components/Modal'
-import { Button } from '@/app/components/Button'
 import { StreakIcon } from '../../../(home)/components/StreakIcon'
+
+import { Metric } from './Metric'
 import { Streak } from './Streak'
 
-import { playSound } from '@/utils/functions'
-
 import type { User } from '@/@types/user'
+import { Modal, ModalRef } from '@/app/components/Alert'
+import { Button } from '@/app/components/Button'
 import { useAuth } from '@/contexts/AuthContext'
+import { playSound } from '@/utils/functions'
 
 const apolloAnimations: Variants = {
   hidden: {
@@ -182,11 +179,11 @@ export function End({
   }, [])
 
   return (
-    <div className="flex flex-col items-center justify-center mx-auto px-6 w-full h-screen max-w-lg">
-      <div className="flex flex-col items-center justify-center my-auto">
+    <div className="mx-auto flex h-screen w-full max-w-lg flex-col items-center justify-center px-6">
+      <div className="my-auto flex flex-col items-center justify-center">
         {!isStreakVisible && !isEndMessageVisible && (
           <>
-            <h3 className="text-gray-100 text-xl font-semibold">
+            <h3 className="text-xl font-semibold text-gray-100">
               Fase completada!
             </h3>
             <Lottie
@@ -207,7 +204,7 @@ export function End({
                 loop={true}
               />
             </motion.div>
-            <dl className="flex flex-col items-center justify-center mt-3">
+            <dl className="mt-3 flex flex-col items-center justify-center">
               <div className="mx-auto">
                 <Metric
                   title="Poeira estelar"
@@ -219,7 +216,7 @@ export function End({
                 />
               </div>
 
-              <div className="grid grid-cols-3 gap-3 mt-6">
+              <div className="mt-6 grid grid-cols-3 gap-3">
                 <Metric
                   title="Total de xp"
                   amount={xp}
@@ -263,7 +260,7 @@ export function End({
             variants={endMessageAnimations}
             initial="up"
             animate="down"
-            className="font-semibold text-2xl text-center text-white"
+            className="text-center text-2xl font-semibold text-white"
           >
             Parabéns, continue assim 😉!
           </motion.p>
@@ -274,7 +271,7 @@ export function End({
         variants={buttonAnimations}
         initial="down"
         animate="up"
-        className="w-80 mb-16"
+        className="mb-16 w-80"
       >
         <Button
           isLoading={isLoading}
@@ -291,10 +288,10 @@ export function End({
         type={'earning'}
         title={'Parabéns! Você alcançou um novo nível!'}
         body={
-          <div className="text-gray-100 text-center space-y-1 mb-6">
+          <div className="mb-6 space-y-1 text-center text-gray-100">
             <p>
               Você acaba de chegar no{' '}
-              <span className="text-green-400 text-lg text-medium">
+              <span className="text-medium text-lg text-green-400">
                 Nível {user?.level} 😀
               </span>
               .
