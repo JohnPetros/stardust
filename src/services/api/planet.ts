@@ -12,9 +12,11 @@ export const PlanetService = () => {
         .order('position', { ascending: true })
         .order('number', { foreignTable: 'stars', ascending: true })
         .returns<Planet[]>()
+
       if (error) {
         throw new Error(error.message)
       }
+
       return data
     },
   }
