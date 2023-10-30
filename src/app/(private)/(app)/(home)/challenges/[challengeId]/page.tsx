@@ -15,7 +15,7 @@ import { CHALLENGE_EARNINGS_BY_DIFFICULTY } from '@/utils/constants'
 import { formatSecondsToTime } from '@/utils/functions'
 import { Problem } from './components/Problem'
 import { Code } from './components/Code'
-import { TransitionPageAnimation } from '../../../components/TransitionPageAnimation'
+import { TransitionPageAnimation } from '../../../../../components/PageTransitionAnimation'
 
 export default function Challenge() {
   const { challengeId } = useParams()

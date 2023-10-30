@@ -2,11 +2,10 @@
 
 import useSWR from 'swr'
 
-import { useAuth } from '@/contexts/AuthContext'
-
 import type { Star } from '@/@types/star'
 import type { User } from '@/@types/user'
 import { updateUserDataParam } from '@/app/(private)/(app)/lesson/components/End'
+import { useAuth } from '@/contexts/AuthContext'
 import { useApi } from '@/services/api'
 
 export function useStar(starId?: string | null | undefined) {

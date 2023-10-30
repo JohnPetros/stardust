@@ -1,42 +1,35 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { useAuth } from '@/contexts/AuthContext'
 import useSWR from 'swr'
 
-import type { Star } from '@/@types/star'
 import type { Planet } from '@/@types/planet'
+import { useAuth } from '@/contexts/AuthContext'
 import { useApi } from '@/services/api'
-import { UserUnlockedStars } from '@/types/relations'
 
 export function usePlanet() {
   const { user } = useAuth()
   const api = useApi()
 
-  async function getUserUnlockedStars() {
+  async function getUserUnlockedStarsIds() {
     if (user?.id) {
-      return api.getUserUnlockedStars(user?.id)
+      return api.getUserUnlockedStarsIds(user.id)
     }
   }
 
   const { data: planets } = useSWR('/planets', api.getPlanets)
-  const { data: userUnlockedStars } = useSWR(
-    '/unlocked_stars?user_id=' + user?.id,
-    getUserUnlockedStars
+  const { data: userUnlockedStarsIds } = useSWR(
+    '/unlocked_stars_ids?user_id=' + user?.id,
+    getUserUnlockedStarsIds
   )
 
   const [lastUnlockedStarId, setLasUnlockedStarId] = useState('')
 
-  function verifyStarUnlocking(
-    planet: Planet,
-    userUnlockedStars: UserUnlockedStars[]
-  ) {
+  function verifyStarUnlocking(planet: Planet, userUnlockedStarsIds: string[]) {
     const { stars } = planet
 
     const verifiedStars = stars.map((star) => {
-      const isUnlocked = userUnlockedStars.some(
-        (userUnlockedStar) => userUnlockedStar.star_id === star.id
-      )
+      const isUnlocked = userUnlockedStarsIds.some((id) => id === star.id)
 
       if (isUnlocked) {
         setLasUnlockedStarId(star.id)
@@ -50,12 +43,12 @@ export function usePlanet() {
   }
 
   const data = useMemo(() => {
-    if (planets?.length && userUnlockedStars?.length) {
+    if (planets?.length && userUnlockedStarsIds?.length) {
       return planets.map((planet) =>
-        verifyStarUnlocking(planet, userUnlockedStars)
+        verifyStarUnlocking(planet, userUnlockedStarsIds)
       )
     }
-  }, [planets, userUnlockedStars])
+  }, [planets, userUnlockedStarsIds])
 
   return {
     planets: data,
