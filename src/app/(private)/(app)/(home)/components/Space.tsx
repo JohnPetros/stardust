@@ -5,7 +5,7 @@ import { CaretDown, CaretUp, Icon } from '@phosphor-icons/react'
 
 import { PageTransitionAnimation } from '../../../../components/PageTransitionAnimation'
 
-import { FabButton } from './FabButton'
+import { Fab } from './Fab'
 import { Planet } from './Planet'
 
 import { useSiderbar } from '@/contexts/SidebarContext'
@@ -13,7 +13,7 @@ import { StarViewPortPosition } from '@/contexts/SpaceContext'
 import { useSpace } from '@/contexts/SpaceContext'
 import { usePlanet } from '@/hooks/usePlanet'
 
-const fabButtonIcon: Record<StarViewPortPosition, Icon> = {
+const fabIcon: Record<StarViewPortPosition, Icon> = {
   above: CaretDown,
   bellow: CaretUp,
   in: CaretDown,
@@ -33,7 +33,7 @@ export function Space() {
     setIsAchievementsListVisible(false)
   }
 
-  function handleFabButtonClick() {
+  function handleFabClick() {
     scrollIntoLastUnlockedStar()
   }
 
@@ -59,11 +59,11 @@ export function Space() {
         ))}
       </ul>
 
-      <FabButton
+      <Fab
         isVisible={lastUnlockedStarPosition !== 'in'}
-        icon={fabButtonIcon[lastUnlockedStarPosition]}
+        icon={fabIcon[lastUnlockedStarPosition]}
         label="Ir até a última estrela desbloqueada"
-        onClick={handleFabButtonClick}
+        onClick={handleFabClick}
       />
     </main>
   )
