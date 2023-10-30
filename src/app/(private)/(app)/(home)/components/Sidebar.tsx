@@ -26,6 +26,8 @@ export function Sidebar() {
   const { user } = useAuth()
   const { isOpen } = useSiderbar()
 
+  console.log(isOpen)
+
   if (user)
     return (
       <AnimatePresence>
@@ -40,13 +42,13 @@ export function Sidebar() {
           >
             <div className="flex flex-col items-center justify-center gap-3 text-gray-100">
               <UserAvatar avatarId={user.avatar_id} size={96} />
-              <strong>{user?.name}</strong>
-              <small className="text-sm">{user?.email}</small>
+              <strong>{user.name}</strong>
+              <small className="text-sm">{user.email}</small>
               <SignOutAlert>
-            <Button className="mx-aut mt-3 w-48 bg-green-400 px-3 py-2 text-green-900">
-                Sair
-              </Button>
-            </SignOutAlert>
+                <Button className="mx-aut mt-3 w-48 bg-green-400 px-3 py-2 text-green-900">
+                  Sair
+                </Button>
+              </SignOutAlert>
             </div>
 
             <div className="custom-scrollbar mt-3 h-full overflow-y-auto p-6">
