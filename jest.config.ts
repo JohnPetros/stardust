@@ -1,9 +1,5 @@
 import nextJest from 'next/jest.js'
 
-const createJestConfig = nextJest({
-  dir: './',
-})
-
 /** @type {import('jest').Config} */
 const config = {
   setupFilesAfterEnv: ['<rootDir>/src/__tests__/jest.setup.ts'],
@@ -25,4 +21,18 @@ const config = {
   modulePathIgnorePatterns: ['<rootDir>/src/__tests__'],
 }
 
-export default createJestConfig(config)
+const createJestConfig = nextJest({
+  dir: './',
+})(config)
+
+module.exports = async () => {
+  // Create Next.js jest configuration presets
+  const jestConfig = await createJestConfig()
+
+  const moduleNameMapper = {
+    ...jestConfig.moduleNameMapper,
+    '^@/(.*)$': '<rootDir>/src/$1',
+  }
+
+  return { ...jestConfig, moduleNameMapper }
+}
