@@ -22,7 +22,7 @@ type SpaceRocket = {
 
 export type StarViewPortPosition = 'above' | 'in' | 'bellow'
 
-interface SpaceContextValue {
+export interface SpaceContextValue {
   spaceRocket: SpaceRocket
   lastUnlockedStarRef: RefObject<HTMLLIElement>
   lastUnlockedStarPosition: StarViewPortPosition

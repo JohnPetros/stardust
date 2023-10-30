@@ -79,7 +79,7 @@ describe('Side nav component', () => {
     expect(setIsAchievementsListVisibleMock).toHaveBeenCalledWith(true)
   })
 
-  it('should open modal when user try to sign out', async () => {
+  it('should open sign out alert when user try to sign out', async () => {
     renderSidenav()
 
     const button = screen.getByText(/Sair/i)
@@ -87,7 +87,7 @@ describe('Side nav component', () => {
     fireEvent.click(button)
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeVisible()
+      expect(screen.getByRole('alertdialog')).toBeVisible()
     })
   })
 
