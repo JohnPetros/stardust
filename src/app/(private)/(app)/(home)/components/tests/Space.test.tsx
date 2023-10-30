@@ -29,7 +29,7 @@ function mockUsePlanet(hasPlanets: boolean = true) {
 }
 
 function renderSpace() {
-  const { debug } = render(
+  render(
     <ToastProvider>
       <SpaceContext.Provider
         value={
@@ -56,8 +56,6 @@ function renderSpace() {
       </SpaceContext.Provider>
     </ToastProvider>
   )
-
-  debug()
 }
 
 describe('Space component', () => {

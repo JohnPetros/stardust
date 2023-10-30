@@ -1,27 +1,26 @@
 'use client'
 
 import { KeyboardEvent, useRef, useState } from 'react'
-
-import { Button } from '@/app/components/Button'
-import { CodeEditor, CodeEditorRef } from '@/app/components/CodeEditor'
-import { IconButton } from './IconButton'
 import {
   ArrowClockwise,
   ArrowsOutSimple,
-  Command,
   Code as CodeIcon,
+  Command,
   Gear,
 } from '@phosphor-icons/react'
-import { ModalRef, Modal } from '@/app/components/Modal'
-import { ToastRef, Toast } from '@/app/components/Toast'
-import { Shortcuts } from './Shortcuts'
-import { Settings } from './Settings'
 import * as ToolBar from '@radix-ui/react-toolbar'
 
-import { execute } from '@/libs/delegua'
+import { IconButton } from './IconButton'
+import { Settings } from './Settings'
+import { Shortcuts } from './Shortcuts'
 
 import type { TestCase } from '@/@types/challenge'
+import { Modal, ModalRef } from '@/app/components/Alert'
+import { Button } from '@/app/components/Button'
+import { CodeEditor, CodeEditorRef } from '@/app/components/CodeEditor'
+import { Toast, ToastRef } from '@/app/components/Toast'
 import { useChallengeStore } from '@/hooks/useChallengeStore'
+import { execute } from '@/libs/delegua'
 import { playSound } from '@/utils/functions'
 
 export function Code() {
@@ -115,7 +114,7 @@ export function Code() {
   async function handleRunCode(code: string) {
     if (!challenge) return
 
-    let userOutput: string[] = []
+    const userOutput: string[] = []
 
     for (const testCase of challenge.test_cases) {
       const output = await verifyTestCase(testCase, code)
@@ -160,11 +159,11 @@ export function Code() {
     return (
       <div ref={codeContainer} className="w-full" onKeyDown={handleKeyDown}>
         <Toast ref={toastRef} />
-        <ToolBar.Root className="flex items-center justify-between bg-gray-700 py-2 px-3 rounded-t-md">
+        <ToolBar.Root className="flex items-center justify-between rounded-t-md bg-gray-700 px-3 py-2">
           <ToolBar.Button asChild>
             <Button
               buttonRef={runCodeButtonRef}
-              className="h-6 px-3 text-xs w-max"
+              className="h-6 w-max px-3 text-xs"
               onClick={() => handleRunCode(code.current)}
             >
               Executar
@@ -214,7 +213,7 @@ export function Code() {
           title={'Tem certeza que deseja resetar o seu código?'}
           body={null}
           footer={
-            <div className="grid grid-cols-2 items-center justify-center mt-3 gap-2 w-full">
+            <div className="mt-3 grid w-full grid-cols-2 items-center justify-center gap-2">
               <Button tabIndex={0} autoFocus onClick={resetCode}>
                 Resetar código
               </Button>

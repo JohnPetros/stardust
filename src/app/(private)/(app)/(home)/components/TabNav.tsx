@@ -1,11 +1,12 @@
 'use client'
-import { HOME_PAGES } from '@/utils/constants/home-pages'
 import { NavButton } from './NavButton'
+
+import { HOME_PAGES } from '@/utils/constants/home-pages'
 
 export function TabNav() {
   return (
-    <div className="md:hidden fixed bottom-0 w-full border-t border-green-800 bg-gray-900 flex justify-center items-center px-6 py-3">
-      <nav className="grid grid-cols-5 w-full md:max-w-0">
+    <div className="fixed bottom-0 flex w-full items-center justify-center border-t border-green-800 bg-gray-900 px-6 py-3 md:hidden">
+      <nav className="grid w-full grid-cols-5 md:max-w-0">
         {HOME_PAGES.map(({ path, icon, label }) => (
           <NavButton key={path} path={path} label={label} icon={icon} />
         ))}

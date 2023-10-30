@@ -3,14 +3,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 
-import { TransitionPageAnimation } from '../../components/TransitionPageAnimation'
+import { TransitionPageAnimation } from '../../../../components/PageTransitionAnimation'
 import { End } from '../components/End'
 import { Header } from '../components/Header'
 import { Quiz } from '../components/Quiz'
 import { Theory } from '../components/Theory'
 
+import { Modal, ModalRef } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
-import { Modal, ModalRef } from '@/app/components/Modal'
 import { useLesson } from '@/hooks/useLesson'
 import { useStar } from '@/hooks/useStar'
 import { formatSecondsToTime } from '@/utils/functions'
