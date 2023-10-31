@@ -1,8 +1,9 @@
 'use client'
 
+import { IStarService } from './interfaces/IStarService'
+
 import type { Star } from '@/@types/star'
 import { useSupabase } from '@/hooks/useSupabase'
-import { IStarService } from './interfaces/IStarService'
 
 export const StarService = (): IStarService => {
   const { supabase } = useSupabase()
@@ -32,7 +33,7 @@ export const StarService = (): IStarService => {
           number: currentStar.number + 1,
         })
         .eq('users_unlocked_stars.user_id', userId)
-        .returns<Star>()
+        .returns<Star & { users_unlocked_stars?: [] }>()
 
       if (error) {
         throw new Error(error.message)
@@ -74,7 +75,7 @@ export const StarService = (): IStarService => {
         .select('id, users_unlocked_stars(*)')
         .eq('id', nextStarId)
         .eq('users_unlocked_stars.user_id', userId)
-        .single()
+        .single<Star & { users_unlocked_stars?: [] }>()
 
       if (error) {
         throw new Error(error.message)
@@ -86,7 +87,10 @@ export const StarService = (): IStarService => {
 
       const nextStar = {
         ...data,
-        isUnlocked: data ? data.users_unlocked_stars.length > 0 : false,
+        isUnlocked:
+          data && data.users_unlocked_stars
+            ? data.users_unlocked_stars.length > 0
+            : false,
       }
 
       return nextStar as Star

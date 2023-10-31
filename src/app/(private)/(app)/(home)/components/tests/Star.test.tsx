@@ -8,12 +8,14 @@ import { useRouter } from 'next/navigation'
 
 import { Star } from '../Star'
 
+import { rocketsMock } from '@/__tests__/mocks/rocketsMock'
 import { starsMock } from '@/__tests__/mocks/starsMock'
 import { SidebarContext, SidebarContextValue } from '@/contexts/SidebarContext'
 import { SpaceContext, SpaceContextValue } from '@/contexts/SpaceContext'
 import { useApi } from '@/services/api'
 
 const starMock = starsMock[0]
+const rocketMock = rocketsMock[0]
 const challengeIdMock = 'challenge id mock'
 const setLastUnlockedStarPositionMock = jest.fn()
 
@@ -57,6 +59,7 @@ function renderStar(
       <SpaceContext.Provider
         value={
           {
+            spaceRocket: rocketMock,
             scrollIntoLastUnlockedStar: scrollIntoLastUnlockedStarMock,
             setLastUnlockedStarPosition: setLastUnlockedStarPositionMock,
             lastUnlockedStarRef: createRef<HTMLLIElement>(),
@@ -129,6 +132,21 @@ describe('Space component', () => {
 
     await waitFor(() => {
       expect(pushMock).toHaveBeenCalledWith('/challenges/' + challengeIdMock)
+    })
+  })
+
+  it('should render rocket when is the last unlocked star', async () => {
+    mockUseApi()
+    mockUseRouter()
+
+    renderStar(true, true, true)
+
+    await userEvent.click(screen.getByRole('button'))
+
+    await waitFor(() => {
+      expect(
+        screen.getByAltText(`Foguete ${rocketMock.name}`)
+      ).toBeInTheDocument()
     })
   })
 })
