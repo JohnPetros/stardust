@@ -48,7 +48,6 @@ export function TooltipTrigger({
 }: TooltipTriggerProps) {
   return (
     <T.Trigger
-      asChild
       className={className}
       onMouseOver={() => tooltipRef.current?.show()}
       onMouseLeave={() => tooltipRef.current?.hide()}
