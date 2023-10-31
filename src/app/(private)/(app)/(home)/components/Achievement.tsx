@@ -7,7 +7,7 @@ import Image from 'next/image'
 
 import type { Achievement as AchievementType } from '@/@types/achievement'
 import { Button } from '@/app/components/Button'
-import { useAchivementsContext } from '@/hooks/useAchievementContext'
+import { useAchivements } from '@/contexts/AchievementsContext'
 import { getImage } from '@/utils/functions'
 
 const achievementAnimations: Variants = {
@@ -64,7 +64,7 @@ export function Achievement({
   const [status, setStatus] = useState<Status | null>(null)
   // const [isLoading, setIsLoading] = useState(false)
 
-  const { rescueAchivement } = useAchivementsContext()
+  const { rescueAchivement } = useAchivements()
 
   function handleRescuButtonClick() {
     rescueAchivement({
@@ -97,7 +97,13 @@ export function Achievement({
     >
       <div className="relative grid h-12 w-12 place-content-center">
         {isUnlocked ? (
-          <Image src={iconImage} fill alt="" />
+          <Image
+            src={iconImage}
+            className="skeleton"
+            onLoadingComplete={(image) => image.classList.remove('skeleton')}
+            fill
+            alt=""
+          />
         ) : (
           <Image src="/icons/lock.svg" fill alt="" />
         )}
