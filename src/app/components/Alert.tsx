@@ -18,7 +18,7 @@ import { playSound } from '@/utils/functions'
 
 export type AlertType = 'earning' | 'crying' | 'denying' | 'asking' | 'generic'
 
-export interface ModalRef {
+export interface AlertRef {
   open: VoidFunction
   close: VoidFunction
 }
@@ -29,8 +29,8 @@ interface ModalProps {
   title: string
   body: ReactNode
   action: ReactNode
-  cancel: ReactNode
-  children: ReactNode
+  cancel?: ReactNode
+  children?: ReactNode
 }
 
 const AlertComponent = (
@@ -43,7 +43,7 @@ const AlertComponent = (
     cancel,
     children,
   }: ModalProps,
-  ref: ForwardedRef<ModalRef>
+  ref: ForwardedRef<AlertRef>
 ) => {
   const [isOpen, setIsOpen] = useState(false)
 
