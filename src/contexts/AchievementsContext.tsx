@@ -1,10 +1,17 @@
-import { createContext, ReactNode, useEffect, useRef, useState } from 'react'
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import Image from 'next/image'
 
 import type { Achievement as AchievementData } from '@/@types/achievement'
 import { Achievement } from '@/app/(private)/(app)/(home)/components/Achievement'
 import { ShinningAnimation } from '@/app/(private)/(app)/(home)/components/ShinningAnimation'
-import { Modal, ModalRef } from '@/app/components/Alert'
+import { Alert, AlertRef } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { Toast, ToastRef } from '@/app/components/Toast'
 import { useAuth } from '@/contexts/AuthContext'
@@ -50,8 +57,8 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
 
   const toastRef = useRef<ToastRef>(null)
 
-  const newUnlockedAchievementsModalRef = useRef<ModalRef>(null)
-  const rescuedAchievementModalRef = useRef<ModalRef>(null)
+  const newUnlockedAchievementsAlertRef = useRef<AlertRef>(null)
+  const rescuedAchievementAlertRef = useRef<AlertRef>(null)
 
   async function removeRescuedAchievement(achievementId: string) {
     if (!user) return
@@ -79,7 +86,7 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
 
     setRescuedAchievement(rescuableAchievement)
 
-    rescuedAchievementModalRef.current?.open()
+    rescuedAchievementAlertRef.current?.open()
 
     setIsLoading(true)
     try {
@@ -100,13 +107,13 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
     }
   }
 
-  function handleRescuedAchievementModalClose() {
+  function handleRescuedAchievementAlertClose() {
     setRescuedAchievement(null)
-    rescuedAchievementModalRef.current?.close()
+    rescuedAchievementAlertRef.current?.close()
   }
 
-  function handleNewUnlockedAchievementsModalClose() {
-    newUnlockedAchievementsModalRef.current?.close()
+  function handleNewUnlockedAchievementsAlertClose() {
+    newUnlockedAchievementsAlertRef.current?.close()
     setNewUnlockedAchievements([])
   }
 
@@ -190,7 +197,7 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
 
   useEffect(() => {
     if (newUnlockedAchievements.length) {
-      newUnlockedAchievementsModalRef.current?.open()
+      newUnlockedAchievementsAlertRef.current?.open()
     }
   }, [newUnlockedAchievements])
 
@@ -200,14 +207,14 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
     >
       <Toast ref={toastRef} />
 
-      <Modal
-        ref={newUnlockedAchievementsModalRef}
+      <Alert
+        ref={newUnlockedAchievementsAlertRef}
         type={'earning'}
         title={'Uau! Parece que você ganhou recompensa(s)'}
         body={
           <div className="max-h-64 space-y-24 px-6">
             {newUnlockedAchievements.map((achievement) => (
-              <div className="relative z-50">
+              <div key={achievement.id} className="relative z-50">
                 <span
                   className="absolute block"
                   style={{ top: -18, left: -31.5 }}
@@ -224,17 +231,17 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
             ))}
           </div>
         }
-        footer={
+        action={
           <div className="mt-10">
-            <Button onClick={handleNewUnlockedAchievementsModalClose}>
+            <Button onClick={handleNewUnlockedAchievementsAlertClose}>
               Entendido
             </Button>
           </div>
         }
       />
 
-      <Modal
-        ref={rescuedAchievementModalRef}
+      <Alert
+        ref={rescuedAchievementAlertRef}
         type={'earning'}
         title={'Recompensa resgatada!'}
         body={
@@ -261,9 +268,9 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
             )}
           </div>
         }
-        footer={
+        action={
           <Button
-            onClick={handleRescuedAchievementModalClose}
+            onClick={handleRescuedAchievementAlertClose}
             isLoading={isLoading}
             disabled={isLoading}
             className="mt-6"
@@ -275,4 +282,14 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
       {children}
     </AchivementsContext.Provider>
   )
+}
+
+export function useAchivements() {
+  const context = useContext(AchivementsContext)
+
+  if (!context) {
+    throw new Error('useAchivements must be used inside AchivementsContext')
+  }
+
+  return context
 }

@@ -6,12 +6,12 @@ import { twMerge } from 'tailwind-merge'
 import { Achievement } from './Achievement'
 
 import { Loading } from '@/app/components/Loading'
+import { useAchivements } from '@/contexts/AchievementsContext'
 import { useAuth } from '@/contexts/AuthContext'
-import { useAchivementsContext } from '@/hooks/useAchievementContext'
 
 export function AchievementsList() {
   const { user } = useAuth()
-  const { achievements } = useAchivementsContext()
+  const { achievements } = useAchivements()
   const [isLoading, setIsloading] = useState(!!achievements)
 
   useEffect(() => {

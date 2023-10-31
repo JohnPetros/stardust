@@ -18,13 +18,13 @@ export function Client({ children }: ClientProps) {
   return (
     <TooltipProvider>
       <ToastProvider swipeDirection="right">
-        {/* <AchivementsProvider> */}
-        <EditorProvider>
-          <LessonProvider>
-            <ChallengesListProvider>{children}</ChallengesListProvider>
-          </LessonProvider>
-        </EditorProvider>
-        {/* </AchivementsProvider> */}
+        <AchivementsProvider>
+          <EditorProvider>
+            <LessonProvider>
+              <ChallengesListProvider>{children}</ChallengesListProvider>
+            </LessonProvider>
+          </EditorProvider>
+        </AchivementsProvider>
       </ToastProvider>
     </TooltipProvider>
   )

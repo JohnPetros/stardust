@@ -13,9 +13,9 @@ import { SidenavButton } from './SidenavButton'
 import { SignOutAlert } from './SignOutAlert'
 
 import { Toast, ToastRef } from '@/app/components/Toast'
+import { useAchivements } from '@/contexts/AchievementsContext'
 import { useAuth } from '@/contexts/AuthContext'
 import { useSiderbar } from '@/contexts/SidebarContext'
-import { useAchivementsContext } from '@/hooks/useAchievementContext'
 import { HOME_PAGES } from '@/utils/constants/home-pages'
 
 const sidenavAnimations: Variants = {
@@ -52,7 +52,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
   const { user } = useAuth()
   const { isAchievementsListVisible, setIsAchievementsListVisible } =
     useSiderbar()
-  const { rescueableAchievementsAmount } = useAchivementsContext()
+  const { rescueableAchievementsAmount } = useAchivements()
 
   const toastRef = useRef<ToastRef>(null)
 
