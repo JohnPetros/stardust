@@ -10,9 +10,6 @@ interface UserAvatarProps {
   size: number
 }
 
-jest.mock('next/navigation')
-
-
 export function UserAvatar({ avatarId, size }: UserAvatarProps) {
   const { avatar } = useAvatar(avatarId)
   const avatarImage = avatar ? getImage('avatars', avatar.image) : ''
