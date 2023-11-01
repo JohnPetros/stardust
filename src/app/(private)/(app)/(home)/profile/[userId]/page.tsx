@@ -2,15 +2,16 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
-import { useUser } from '@/hooks/useUser'
+
+import { Achievements } from '../components/Achievements'
+import { ChallengesChart } from '../components/ChallengesChart'
+import { Statistics } from '../components/Statistics'
+import { StreakBoard } from '../components/Streak'
+import { Tabs } from '../components/Tabs'
+import { User } from '../components/User'
 
 import { Loading } from '@/app/components/Loading'
-import { User } from '../components/User'
-import { Statistics } from '../components/Statistics'
-import { Tabs } from '../components/Tabs'
-import { StreakBoard } from '../components/Streak'
-import { ChallengesChart } from '../components/ChallengesChart'
-import { Achievements } from '../components/Achievements'
+import { useUser } from '@/hooks/useUser'
 
 export default function Profile() {
   const params = useParams()
@@ -27,25 +28,25 @@ export default function Profile() {
 
   if (user?.id)
     return (
-      <div className="pt-8 max-w-sm md:max-w-5xl mx-auto px-6">
+      <div className="mx-auto max-w-sm px-6 pt-8 md:max-w-5xl">
         {isFistRendering && <Loading isSmall={false} />}
         {user?.id && (
           <div>
             <User data={user} />
-            <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] justify-center items-center md:flex-row gap-12 mt-10">
+            <div className="mt-10 grid grid-cols-1 items-center justify-center gap-12 md:grid-cols-[1fr_2fr] md:flex-row">
               <Statistics data={user} />
               <StreakBoard
                 weekStatus={user.week_status}
                 streakAmount={user.streak}
               />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr] gap-2 mt-10">
+            <div className="mt-10 grid grid-cols-1 gap-2 md:grid-cols-[1fr_1.5fr]">
               <div>
                 <h4 className="text-gray-100">Desafios concluídos</h4>
                 <ChallengesChart userId={user.id} />
               </div>
               <div>
-                <h4 className="text-gray-100 text-center mb-3">
+                <h4 className="mb-3 text-center text-gray-100">
                   Conquistas adquiridas
                 </h4>
                 <div>

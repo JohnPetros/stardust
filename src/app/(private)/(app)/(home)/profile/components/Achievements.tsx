@@ -1,9 +1,11 @@
 'use client'
 
-import { useAchievement } from '@/hooks/useAchievement'
-import { Achievement } from '../../components/Achievement'
 import Lottie from 'lottie-react'
+
 import Missing from '../../../../../../../public/animations/apollo-missing.json'
+import { Achievement } from '../../components/Achievement'
+
+import { useAchievement } from '@/hooks/useAchievement'
 
 interface AchievementsProps {
   userId: string
@@ -19,7 +21,12 @@ export function Achievements({ userId }: AchievementsProps) {
     return (
       <div className="grid grid-cols-3 gap-2">
         {unlockedAchievements.map((achivement) => (
-          <Achievement key={achivement.id} data={achivement}></Achievement>
+          <Achievement
+            key={achivement.id}
+            data={achivement}
+            isUnlocked={true}
+            isRescuable={false}
+          />
         ))}
       </div>
     )
@@ -27,7 +34,9 @@ export function Achievements({ userId }: AchievementsProps) {
     return (
       <div className="flex flex-col items-center justify-center">
         <Lottie animationData={Missing} loop={true} style={{ width: 220 }} />
-        <p className="text-gray-300 text-sm">Nenhuma conquista adquirida ainda 😢.</p>
+        <p className="text-sm text-gray-300">
+          Nenhuma conquista adquirida ainda 😢.
+        </p>
       </div>
     )
   }
