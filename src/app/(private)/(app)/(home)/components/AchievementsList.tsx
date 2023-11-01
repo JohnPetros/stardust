@@ -15,11 +15,15 @@ export function AchievementsList() {
   const [isLoading, setIsloading] = useState(!!achievements)
 
   useEffect(() => {
+    let timer: NodeJS.Timeout
+
     if (achievements?.length && isLoading) {
-      setTimeout(() => {
+      timer = setTimeout(() => {
         setIsloading(false)
       }, 1000)
     }
+
+    return () => clearTimeout(timer)
   }, [achievements, isLoading])
 
   if (user)
