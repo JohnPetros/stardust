@@ -1,7 +1,8 @@
 'use client'
 import Lottie from 'lottie-react'
-import Spinner from './../../../public/animations/spinner.json'
+
 import Rocket from './../../../public/animations/rocket-floating.json'
+import Spinner from './../../../public/animations/spinner.json'
 
 interface LoadingProps {
   isSmall?: boolean
@@ -13,6 +14,7 @@ export function Loading({ isSmall = true }: LoadingProps) {
   if (isSmall) {
     return (
       <Lottie
+        data-testid="loading"
         animationData={Spinner}
         style={{ width: size, height: size }}
         loop={true}
@@ -21,8 +23,9 @@ export function Loading({ isSmall = true }: LoadingProps) {
   }
 
   return (
-    <div className="fixed flex items-center justify-center top-0 left-0 right-0 bottom-0 bg-gray-900 z-50">
+    <div className="fixed bottom-0 left-0 right-0 top-0 z-50 flex items-center justify-center bg-gray-900">
       <Lottie
+        data-testid="loading"
         animationData={Rocket}
         style={{ width: size, height: size }}
         loop={true}
