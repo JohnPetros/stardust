@@ -17,6 +17,7 @@ export function Search({ className, ...rest }: SearchProps) {
     >
       <MagnifyingGlass className="text-gray-400" weight="bold" />
       <input
+        role="textbox"
         type="search"
         id="search"
         className="w-full bg-transparent text-sm text-gray-300 outline-none placeholder:text-gray-400"

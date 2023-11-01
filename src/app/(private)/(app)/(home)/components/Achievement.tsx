@@ -89,6 +89,7 @@ export function Achievement({
     <motion.div
       variants={achievementAnimations}
       className="grid grid-cols-[48px_1fr] gap-4 border-b border-green-500 py-4"
+      data-testid="achievement"
     >
       <div className="relative grid h-12 w-12 place-content-center">
         {isUnlocked ? (

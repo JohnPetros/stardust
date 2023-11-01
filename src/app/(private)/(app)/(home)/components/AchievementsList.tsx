@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ArrowsDownUp, ArrowUpLeft } from '@phosphor-icons/react'
+import { ArrowsDownUp } from '@phosphor-icons/react'
 import { twMerge } from 'tailwind-merge'
 
 import { Achievement } from './Achievement'
@@ -138,10 +138,12 @@ export function AchievementsList() {
           <>
             <Search
               value={search}
+              name="search-achivements"
               onChange={({ target }) => handleSearchChange(target.value)}
             />
             <div className="ml-auto w-max">
               <PopoverMenu
+                label="Abrir menu para ordernar lista de conquistas"
                 buttons={popoverMenuButtons}
                 trigger={<ArrowsDownUp className="text-lg text-gray-500" />}
               />
