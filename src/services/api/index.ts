@@ -1,13 +1,13 @@
-import { AchievementService } from './achievement'
-import { AuthService } from './auth'
-import { AvatarService } from './avatar'
-import { CategoryService } from './category'
-import { ChallengeService } from './challenge'
-import { PlanetService } from './planet'
-import { RankingService } from './ranking'
-import { RocketService } from './rocket'
-import { StarService } from './star'
-import { UserService } from './user'
+import { AchievementService } from './achievementService'
+import { AuthService } from './authService'
+import { AvatarService } from './avatarService'
+import { CategoryService } from './categoryService'
+import { ChallengeService } from './challengeService'
+import { PlanetService } from './planetService'
+import { RankingService } from './rankingService'
+import { RocketService } from './rocketService'
+import { StarService } from './starService'
+import { UserService } from './userService'
 
 export function useApi() {
   return {

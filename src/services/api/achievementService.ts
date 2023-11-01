@@ -1,9 +1,11 @@
 'use client'
 
+import { IAchievementService } from './interfaces/IAchievementService'
+
 import type { Achievement } from '@/@types/achievement'
 import { useSupabase } from '@/hooks/useSupabase'
 
-export const AchievementService = () => {
+export const AchievementService = (): IAchievementService => {
   const { supabase } = useSupabase()
 
   return {
@@ -13,9 +15,11 @@ export const AchievementService = () => {
         .select('*')
         .order('position', { ascending: true })
         .returns<Achievement[]>()
+
       if (error) {
         throw new Error(error.message)
       }
+
       return data
     },
 
