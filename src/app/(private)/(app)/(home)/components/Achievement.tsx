@@ -6,6 +6,7 @@ import { motion, Variants } from 'framer-motion'
 import Image from 'next/image'
 
 import type { Achievement as AchievementType } from '@/@types/achievement'
+import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { useAchivements } from '@/contexts/AchievementsContext'
 import { getImage } from '@/utils/functions'
@@ -62,17 +63,11 @@ export function Achievement({
 }: AchievementProps) {
   const iconImage = getImage('achievements', icon)
   const [status, setStatus] = useState<Status | null>(null)
-  // const [isLoading, setIsLoading] = useState(false)
+  const { rescueAchivement, handleRescuedAchievementsAlertClose } =
+    useAchivements()
 
-  const { rescueAchivement } = useAchivements()
-
-  function handleRescuButtonClick() {
-    rescueAchivement({
-      id,
-      name,
-      reward,
-      image: iconImage,
-    })
+  async function handleRescuButtonClick() {
+    await rescueAchivement(id, reward)
   }
 
   useEffect(() => {
@@ -102,25 +97,59 @@ export function Achievement({
             className="skeleton"
             onLoadingComplete={(image) => image.classList.remove('skeleton')}
             fill
-            alt=""
+            alt="Conquista desbloqueada"
           />
         ) : (
-          <Image src="/icons/lock.svg" fill alt="" />
+          <Image src="/icons/lock.svg" fill alt="Conquista bloqueada" />
         )}
       </div>
       <div className="flex flex-col gap-1">
         <strong className="text-sm text-gray-100">{name}</strong>
         {isRescuable ? (
-          <motion.div variants={rescueButtonAnimations} animate="bounce">
-            <Button
-              className="mt-1 h-8 w-32 text-sm md:ml-4"
-              onClick={handleRescuButtonClick}
-              // isLoading={isLoading}
-              // isDisabled={isLoading}
+          <Alert
+            type={'earning'}
+            title={'Recompensa resgatada!'}
+            body={
+              <div className="flex flex-col items-center">
+                <p className="text-center font-medium text-gray-100">
+                  Parabéns! Você acabou de ganhar{' '}
+                  <span className="text-lg font-semibold text-yellow-400">
+                    {reward}
+                  </span>{' '}
+                  de poeira estela pela conquista:
+                </p>
+                <div className="mt-6 flex flex-col items-center justify-center">
+                  <Image src={iconImage} width={72} height={72} alt="" />
+                  <p className="mt-2 text-center font-semibold text-green-500">
+                    {name}
+                  </p>
+                </div>
+              </div>
+            }
+            action={
+              <Button
+                className="mt-6"
+                onClick={() => handleRescuedAchievementsAlertClose(id)}
+              >
+                Entendido
+              </Button>
+            }
+            onClose={() => handleRescuedAchievementsAlertClose(id)}
+          >
+            <motion.div
+              variants={rescueButtonAnimations}
+              animate="bounce"
+              className="w-max"
             >
-              Resgatar
-            </Button>
-          </motion.div>
+              <Button
+                tabIndex={0}
+                className="mt-1 h-8 w-32 text-sm md:ml-4"
+                onClick={handleRescuButtonClick}
+              >
+                Resgatar
+              </Button>
+            </motion.div>
+          </Alert>
         ) : (
           <>
             <p className="text-xs text-gray-100">{description}</p>

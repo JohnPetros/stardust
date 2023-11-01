@@ -6,7 +6,6 @@ import {
   useRef,
   useState,
 } from 'react'
-import Image from 'next/image'
 
 import type { Achievement as AchievementData } from '@/@types/achievement'
 import { Achievement } from '@/app/(private)/(app)/(home)/components/Achievement'
@@ -18,17 +17,14 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useAchievement } from '@/hooks/useAchievement'
 import { useApi } from '@/services/api'
 
-type RescuableAchivement = {
-  id: string
-  name: string
-  reward: number
-  image: string
-}
-
-interface AchivementsContextValue {
+export interface AchivementsContextValue {
   achievements: AchievementData[] | undefined
   rescueableAchievementsAmount: number
-  rescueAchivement: (rescuableAchiement: RescuableAchivement) => void
+  rescueAchivement: (
+    rescuableAchiementId: string,
+    rescuableAchiementReward: number
+  ) => Promise<void>
+  handleRescuedAchievementsAlertClose: (rescuedAchiementId: string) => void
 }
 
 interface AchivementsContextProps {
@@ -46,32 +42,20 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
   const [newUnlockedAchievements, setNewUnlockedAchievements] = useState<
     AchievementData[]
   >([])
-  const [rescuedAchievement, setRescuedAchievement] =
-    useState<RescuableAchivement | null>(null)
   const [rescueableAchievementsAmount, setRescueableAchievementsAmount] =
     useState(0)
-
-  const [isLoading, setIsLoading] = useState(false)
 
   const api = useApi()
 
   const toastRef = useRef<ToastRef>(null)
 
   const newUnlockedAchievementsAlertRef = useRef<AlertRef>(null)
-  const rescuedAchievementAlertRef = useRef<AlertRef>(null)
 
   async function removeRescuedAchievement(achievementId: string) {
     if (!user) return
 
     try {
       await api.deleteUserRescuebleAchievement(achievementId, user.id)
-      const updatedAchievements = achievements.map((achievement) =>
-        achievement.id === achievementId
-          ? { ...achievement, isRescuable: false }
-          : achievement
-      )
-
-      setAchievements(updatedAchievements)
     } catch (error) {
       console.error(error)
       toastRef.current?.open({
@@ -81,35 +65,35 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
     }
   }
 
-  async function rescueAchivement(rescuableAchievement: RescuableAchivement) {
+  async function rescueAchivement(
+    rescuableAchievementId: string,
+    rescuableAchievementReward: number
+  ) {
     if (!user) return
 
-    setRescuedAchievement(rescuableAchievement)
-
-    rescuedAchievementAlertRef.current?.open()
-
-    setIsLoading(true)
     try {
       await Promise.all([
-        removeRescuedAchievement(rescuableAchievement.id),
-        updateUser({ coins: user.coins + rescuableAchievement.reward }),
+        removeRescuedAchievement(rescuableAchievementId),
+        updateUser({ coins: user.coins + rescuableAchievementReward }),
       ])
-
       setRescueableAchievementsAmount(rescueableAchievementsAmount - 1)
     } catch (error) {
-      console.error(error)
       toastRef.current?.open({
         type: 'error',
-        message: 'Erro ao resgatar a conquista',
+        message: 'Erro ao tentar resgatar recompensa',
       })
-    } finally {
-      setIsLoading(false)
+      console.error(error)
     }
   }
 
-  function handleRescuedAchievementAlertClose() {
-    setRescuedAchievement(null)
-    rescuedAchievementAlertRef.current?.close()
+  function handleRescuedAchievementsAlertClose(achievementId: string) {
+    const updatedAchievements = achievements.map((achievement) =>
+      achievement.id === achievementId
+        ? { ...achievement, isRescuable: false }
+        : achievement
+    )
+
+    setAchievements(updatedAchievements)
   }
 
   function handleNewUnlockedAchievementsAlertClose() {
@@ -135,7 +119,8 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
       (unlockedAchievement) => unlockedAchievement.id === achievement.id
     )
 
-    setRescueableAchievementsAmount(rescueableAchievementsAmount + 1)
+    if (isUnlocked)
+      setRescueableAchievementsAmount(rescueableAchievementsAmount + 1)
 
     return { ...achievement, isUnlocked, isRescuable: isUnlocked }
   }
@@ -146,6 +131,8 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
     switch (achievement.metric) {
       case 'unlocked_stars':
         return user.unlocked_stars >= achievement.required_amount - 1
+      case 'completed_planets':
+        return user.completed_planets >= achievement.required_amount
       case 'acquired_rockets':
         return user.acquired_rockets >= achievement.required_amount
       case 'xp':
@@ -188,6 +175,11 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
       const achievements = data.map(addCurrentProgress)
       setAchievements(achievements)
       checkNewUnlockedAchivements(achievements)
+
+      achievements.forEach((achievement) => {
+        if (achievement.isRescuable)
+          setRescueableAchievementsAmount(rescueableAchievementsAmount + 1)
+      })
     }
   }, [data])
 
@@ -203,7 +195,12 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
 
   return (
     <AchivementsContext.Provider
-      value={{ achievements, rescueableAchievementsAmount, rescueAchivement }}
+      value={{
+        achievements,
+        rescueableAchievementsAmount,
+        rescueAchivement,
+        handleRescuedAchievementsAlertClose,
+      }}
     >
       <Toast ref={toastRef} />
 
@@ -232,52 +229,13 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
           </div>
         }
         action={
-          <div className="mt-10">
+          <div className="mt-8 w-full">
             <Button onClick={handleNewUnlockedAchievementsAlertClose}>
               Entendido
             </Button>
           </div>
         }
-      />
-
-      <Alert
-        ref={rescuedAchievementAlertRef}
-        type={'earning'}
-        title={'Recompensa resgatada!'}
-        body={
-          <div className="flex flex-col items-center">
-            <p className="text-center font-medium text-gray-100">
-              Parabéns! Você acabou de ganhar{' '}
-              <span className="text-lg font-semibold text-yellow-400">
-                {rescuedAchievement?.reward}
-              </span>{' '}
-              de poeira estela pela conquista:
-            </p>
-            {rescuedAchievement && (
-              <div className="mt-6 flex flex-col items-center justify-center">
-                <Image
-                  src={rescuedAchievement.image}
-                  width={40}
-                  height={40}
-                  alt=""
-                />
-                <p className="mt-2 text-center font-semibold text-green-500">
-                  {rescuedAchievement?.name}
-                </p>
-              </div>
-            )}
-          </div>
-        }
-        action={
-          <Button
-            onClick={handleRescuedAchievementAlertClose}
-            isLoading={isLoading}
-            disabled={isLoading}
-            className="mt-6"
-          >
-            Entendido
-          </Button>
-        }
+        onClose={handleNewUnlockedAchievementsAlertClose}
       />
       {children}
     </AchivementsContext.Provider>

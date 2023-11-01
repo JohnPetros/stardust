@@ -1,10 +1,10 @@
 'use client'
 
-import { useApi } from '@/services/api'
 import { useMemo } from 'react'
 import useSWR from 'swr'
 
 import type { Achievement } from '@/@types/achievement'
+import { useApi } from '@/services/api'
 
 export function useAchievement(userId?: string) {
   const api = useApi()
