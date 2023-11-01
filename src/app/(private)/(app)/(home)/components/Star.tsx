@@ -95,17 +95,15 @@ export function Star({
     if (isLastUnlockedStar) {
       setLastUnlockedStarPosition('in')
     }
-  }, [isLastUnlockedStar, isInView, setLastUnlockedStarPosition])
+  }, [isLastUnlockedStar, isInView])
 
   useEffect(() => {
     if (isLastUnlockedStar && lastUnlockedStarRef.current) {
       setTimeout(() => {
-      console.log('iiiiiiiiiiiiiiii')
-
         scrollIntoLastUnlockedStar()
       }, 1500)
     }
-  }, [isLastUnlockedStar, lastUnlockedStarRef, scrollIntoLastUnlockedStar])
+  }, [isLastUnlockedStar, lastUnlockedStarRef])
 
   return (
     <li ref={isLastUnlockedStar ? lastUnlockedStarRef : null}>
@@ -181,7 +179,7 @@ export function Star({
           animate="visible"
           className="h-20 w-20"
         >
-          {isLastUnlockedStar && spaceRocket && (
+          {isLastUnlockedStar && spaceRocket?.image && (
             <div className="relative h-20 w-20 rotate-180">
               <Image
                 src={spaceRocket.image}

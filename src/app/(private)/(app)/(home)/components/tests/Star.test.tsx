@@ -23,6 +23,7 @@ jest.mock('next/navigation')
 jest.mock('../../../../../../services/api', () => ({
   useApi: jest.fn(),
 }))
+jest.useFakeTimers()
 
 const toggleMock = jest.fn()
 
@@ -148,5 +149,17 @@ describe('Space component', () => {
         screen.getByAltText(`Foguete ${rocketMock.name}`)
       ).toBeInTheDocument()
     })
+  })
+
+  it('should scroll page to the last unlocked star position', () => {
+    mockUseApi()
+    mockUseRouter()
+
+    const { scrollIntoLastUnlockedStarMock } = renderStar(true, true, true)
+
+    jest.runAllTimers()
+
+    expect(scrollIntoLastUnlockedStarMock).toHaveBeenCalled()
+    expect(setLastUnlockedStarPositionMock).toBeCalledWith('in')
   })
 })
