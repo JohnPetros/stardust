@@ -1,21 +1,22 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useChallengeStore } from '@/hooks/useChallengeStore'
-import { useRouter, useParams } from 'next/navigation'
-import { useChallenge } from '@/hooks/useChallenge'
-import { useAuth } from '@/contexts/AuthContext'
-import { useStar } from '@/hooks/useStar'
+import { useParams, useRouter } from 'next/navigation'
 
-import { Header } from './components/Header'
-import { Slider } from './components/Slider'
+import { PageTransitionAnimation } from '../../../../../components/PageTransitionAnimation'
 import { End, updateUserDataParam } from '../../../lesson/components/End'
 
+import { Code } from './components/Code'
+import { Header } from './components/Header'
+import { Problem } from './components/Problem'
+import { Slider } from './components/Slider'
+
+import { useAuth } from '@/contexts/AuthContext'
+import { useChallenge } from '@/hooks/useChallenge'
+import { useChallengeStore } from '@/hooks/useChallengeStore'
+import { useStar } from '@/hooks/useStar'
 import { CHALLENGE_EARNINGS_BY_DIFFICULTY } from '@/utils/constants'
 import { formatSecondsToTime } from '@/utils/helpers'
-import { Problem } from './components/Problem'
-import { Code } from './components/Code'
-import { TransitionPageAnimation } from '../../../../../components/PageTransitionAnimation'
 
 export default function Challenge() {
   const { challengeId } = useParams()
@@ -130,7 +131,10 @@ export default function Challenge() {
 
   return (
     <div className="relative md:overflow-hidden">
-      <TransitionPageAnimation isVisible={isTransitionPageVisible} hasTips={true} />
+      <PageTransitionAnimation
+        isVisible={isTransitionPageVisible}
+        hasTips={true}
+      />
 
       {state.isEnd ? (
         <End
@@ -148,7 +152,7 @@ export default function Challenge() {
             <div className="md:hidden">
               <Slider />
             </div>
-            <div className="grid grid-cols-2 gap-3 p-3 overflow-hidden">
+            <div className="grid grid-cols-2 gap-3 overflow-hidden p-3">
               <Problem />
               <Code />
             </div>
