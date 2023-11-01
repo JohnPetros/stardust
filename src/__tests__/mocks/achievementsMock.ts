@@ -38,6 +38,7 @@ export const achievementsMock: Achievement[] = [
     isUnlocked: false,
     isRescuable: true,
     metric: 'unlocked_stars',
+    currentProgress: 20,
   },
   // Adicione mais conquistas conforme necessário
 ]
