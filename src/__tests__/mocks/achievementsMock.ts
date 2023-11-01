@@ -40,5 +40,5 @@ export const achievementsMock: Achievement[] = [
     metric: 'unlocked_stars',
     currentProgress: 20,
   },
-  // Adicione mais conquistas conforme necessário
+  // Add more achievements as needed
 ]

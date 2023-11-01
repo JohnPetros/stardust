@@ -27,5 +27,5 @@ export const starsMock: Star[] = [
     isUnlocked: false,
     questions: [],
   },
-  // Adicione mais estrelas conforme necessário
+  // Add more stars as needed
 ]

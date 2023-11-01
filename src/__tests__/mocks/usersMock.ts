@@ -28,4 +28,5 @@ export const usersMock: User[] = [
     unlocked_stars: 5,
     week_status: ['done', 'done', 'todo'],
   },
+  // Add more users as needed
 ]

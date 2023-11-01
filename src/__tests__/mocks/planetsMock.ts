@@ -27,4 +27,5 @@ export const planetsMock: Planet[] = [
     position: 3,
     stars: [],
   },
+  // Add more planets as needed
 ]

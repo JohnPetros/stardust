@@ -22,5 +22,5 @@ export const rocketsMock: Rocket[] = [
     price: 3000000,
     isAcquired: false,
   },
-  // Adicione mais rockets conforme necessário
+  // Add more rockets as needed
 ]
