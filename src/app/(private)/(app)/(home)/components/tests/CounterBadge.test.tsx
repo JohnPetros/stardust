@@ -9,7 +9,7 @@ describe('CounterBadge component', () => {
     expect(screen.getByText('7')).toBeInTheDocument()
   })
 
-  it('should render a count below one', () => {
+  it('should not render a count below one', () => {
     render(<CounterBadge count={0} />)
 
     expect(screen.queryByText('0')).not.toBeInTheDocument()

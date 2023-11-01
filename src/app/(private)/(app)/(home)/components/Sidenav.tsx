@@ -66,7 +66,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
       variants={sidenavAnimations}
       initial="shrink"
       animate={isExpanded ? 'expand' : ''}
-      className="left-0 z-50 hidden h-full bg-gray-900 md:fixed md:flex"
+      className="left-0 top-0 z-50 hidden h-full bg-gray-900 md:fixed md:flex"
     >
       <Toast ref={toastRef} />
 
@@ -132,14 +132,20 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
           )}
         </AnimatePresence>
 
-        <div className="mx-3 flex flex-col gap-1 border-t border-green-700 px-3 py-3">
+        <div className="mx-3 flex flex-col items-start gap-1 border-t border-green-700 px-3 py-3">
           <SidenavButton
             icon={Flag}
             title="Conquistas"
             isExpanded={isExpanded}
             onClick={handleAchievementsListButtonClick}
             isActive={isAchievementsListVisible}
-            counterBadge={<CounterBadge count={rescueableAchievementsAmount} />}
+            counterBadge={
+              rescueableAchievementsAmount > 0 ? (
+                <CounterBadge count={rescueableAchievementsAmount} />
+              ) : (
+                <></>
+              )
+            }
           />
 
           <SignOutAlert>

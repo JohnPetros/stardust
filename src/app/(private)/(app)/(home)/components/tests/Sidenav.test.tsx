@@ -4,7 +4,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 
 import { Sidenav } from '../Sidenav'
 
-import { userMock } from '@/__tests__/mocks/userMock'
+import { usersMock } from '@/__tests__/mocks/usersMock'
 import { AuthContext, AuthContextValue } from '@/contexts/AuthContext'
 import { SidebarContext, SidebarContextValue } from '@/contexts/SidebarContext'
 import { SupabaseProvider } from '@/contexts/SupabaseContext'
@@ -28,7 +28,7 @@ function renderSidenav(isExpanded: boolean = false) {
           <AuthContext.Provider
             value={
               {
-                user: userMock,
+                user: usersMock[0],
                 signOut: signOutMock,
               } as unknown as AuthContextValue
             }

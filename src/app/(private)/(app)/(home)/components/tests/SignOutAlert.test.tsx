@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event'
 
 import { SignOutAlert } from '../SignOutAlert'
 
-import { userMock } from '@/__tests__/mocks/userMock'
+import { userMock } from '@/__tests__/mocks/usersMock'
 import { AuthContext, AuthContextValue } from '@/contexts/AuthContext'
 import { SupabaseProvider } from '@/contexts/SupabaseContext'
 
@@ -36,7 +36,7 @@ function renderAlert() {
   return { signOutMock }
 }
 
-describe('Side nav component', () => {
+describe('SignOutAlert component', () => {
   it('should render correctly', async () => {
     renderAlert()
 

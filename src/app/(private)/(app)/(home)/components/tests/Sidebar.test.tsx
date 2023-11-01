@@ -2,9 +2,11 @@ import { render, screen } from '@testing-library/react'
 
 import { Sidebar } from '../Sidebar'
 
-import { userMock } from '@/__tests__/mocks/userMock'
+import { usersMock } from '@/__tests__/mocks/usersMock'
 import { AuthContext, AuthContextValue } from '@/contexts/AuthContext'
 import { SidebarContext, SidebarContextValue } from '@/contexts/SidebarContext'
+
+const userMock = usersMock[0]
 
 function renderSidebar(isOpen: boolean) {
   render(

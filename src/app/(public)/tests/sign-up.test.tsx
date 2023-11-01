@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 
 import SignUp from '../sign-up/page'
 
-import { userMock } from '@/__tests__/mocks/userMock'
+import { usersMock } from '@/__tests__/mocks/usersMock'
 import { SignUpError } from '@/@types/signupError'
 import { AuthContext, AuthContextValue } from '@/contexts/AuthContext'
 import { SupabaseProvider } from '@/contexts/SupabaseContext'
@@ -14,6 +14,8 @@ import { SIGN_UP_ERRORS } from '@/utils/constants/signup-errors'
 
 jest.mock('next/navigation')
 jest.mock('../../../services/api')
+
+const userMock = usersMock[0]
 
 function signUpUserMock() {
   const nameValue = 'John Petros'
