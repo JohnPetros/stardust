@@ -1,12 +1,11 @@
 'use client'
 
 import { ReactNode, useState } from 'react'
-
 import * as Popover from '@radix-ui/react-popover'
-import { Checkbox } from './Checkbox'
-
-import { AnimatePresence, Variants, motion } from 'framer-motion'
+import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
+
+import { Checkbox } from './Checkbox'
 
 const popoverAnimation: Variants = {
   up: {
@@ -57,54 +56,64 @@ export function PopoverMenu({ buttons, trigger }: PopoverMenuProps) {
 
   return (
     <Popover.Root open={isOpen} onOpenChange={handleOpenChange}>
-      <Popover.Trigger onClick={handleTriggerClick}>{trigger}</Popover.Trigger>
+      <Popover.Trigger className="w-max" onClick={handleTriggerClick}>
+        {trigger}
+      </Popover.Trigger>
       <AnimatePresence>
-          {isOpen ? (
-            <Popover.Portal forceMount>
-              <div className="flex flex-col">
-                <Popover.Content className="w-40 mr-1" sideOffset={5}>
-                  <motion.div
-                    variants={popoverAnimation}
-                    initial="up"
-                    animate="down"
-                    exit="up"
-                    className="bg-gray-700 rounded-md p-3 w-full h-full"
-                  >
-                    <Popover.Arrow className="fill-gray-700" />
+        {isOpen ? (
+          <Popover.Portal forceMount>
+            <div className="flex flex-col">
+              <Popover.Content
+                className="z-[150] mr-1 min-w-[10rem]"
+                sideOffset={5}
+              >
+                <motion.div
+                  variants={popoverAnimation}
+                  initial="up"
+                  animate="down"
+                  exit="up"
+                  className="h-full w-full rounded-md bg-gray-700 p-3"
+                >
+                  <Popover.Arrow className="fill-gray-700" />
 
-                    <ul>
-                      {buttons.map(
-                        ({ title, isToggle, value, action }, index) => {
-                          const isFirst = index === 0
-                          return (
-                            <li key={title}>
-                              <button
-                                className={twMerge(
-                                  'flex items-center w-full text-left p-3 border-t text-gray-100 mr-auto',
-                                  !isFirst
-                                    ? 'border-green-400'
-                                    : 'border-transparent'
-                                )}
-                                onClick={() =>
-                                  handlePopoverMenuButtonClick({ action })
-                                }
-                              >
+                  <ul>
+                    {buttons.map(
+                      ({ title, isToggle, value, action }, index) => {
+                        const isFirst = index === 0
+                        return (
+                          <li key={title}>
+                            <button
+                              className={twMerge(
+                                'mr-auto flex w-full items-center justify-between border-t p-3 text-left text-gray-100',
+                                !isFirst
+                                  ? 'border-green-400'
+                                  : 'border-transparent'
+                              )}
+                              onClick={() =>
+                                handlePopoverMenuButtonClick({ action })
+                              }
+                            >
+                              <label htmlFor={title} className="cursor-pointer">
                                 {title}
+                              </label>
 
-                                {isToggle && (
-                                  <Checkbox isChecked={Boolean(value)} />
-                                )}
-                              </button>
-                            </li>
-                          )
-                        }
-                      )}
-                    </ul>
-                  </motion.div>
-                </Popover.Content>
-              </div>
-            </Popover.Portal>
-          ) : null}
+                              {isToggle && (
+                                <Checkbox
+                                  id={title}
+                                  isChecked={Boolean(value)}
+                                />
+                              )}
+                            </button>
+                          </li>
+                        )
+                      }
+                    )}
+                  </ul>
+                </motion.div>
+              </Popover.Content>
+            </div>
+          </Popover.Portal>
+        ) : null}
       </AnimatePresence>
     </Popover.Root>
   )
