@@ -30,7 +30,7 @@ import type {
   SortableItem as SortableItemData,
 } from '@/@types/quiz'
 import { useLesson } from '@/hooks/useLesson'
-import { compareArrays, reorderItems } from '@/utils/functions'
+import { compareArrays, reorderItems } from '@/utils/helpers'
 
 interface DragAndDropListQuestionProps {
   data: DragAndDropListQuestionData

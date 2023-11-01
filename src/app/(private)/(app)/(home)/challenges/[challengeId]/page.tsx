@@ -12,7 +12,7 @@ import { Slider } from './components/Slider'
 import { End, updateUserDataParam } from '../../../lesson/components/End'
 
 import { CHALLENGE_EARNINGS_BY_DIFFICULTY } from '@/utils/constants'
-import { formatSecondsToTime } from '@/utils/functions'
+import { formatSecondsToTime } from '@/utils/helpers'
 import { Problem } from './components/Problem'
 import { Code } from './components/Code'
 import { TransitionPageAnimation } from '../../../../../components/PageTransitionAnimation'

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { Legend } from './Legend'
 
-import { getChallengesChatOptions } from '@/utils/functions'
+import { getChallengesChatOptions } from '@/utils/helpers'
 
 const Chart = dynamic(() => import('react-apexcharts'), {
   ssr: false,

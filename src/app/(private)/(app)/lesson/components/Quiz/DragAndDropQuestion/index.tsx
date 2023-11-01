@@ -25,7 +25,7 @@ import type {
   DraggrableItem,
 } from '@/@types/quiz'
 import { useLesson } from '@/hooks/useLesson'
-import { compareArrays } from '@/utils/functions'
+import { compareArrays } from '@/utils/helpers'
 
 export function getDragItemWidth(item: DraggrableItem) {
   const { length } = item.label

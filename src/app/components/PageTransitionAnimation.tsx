@@ -5,7 +5,7 @@ import Transition from '../../../public/animations/transition.json'
 
 import { Animation } from '@/app/components/Animation'
 import { CODE_TIPS } from '@/utils/constants'
-import { formatText } from '@/utils/functions'
+import { formatText } from '@/utils/helpers'
 
 const containerVariants: Variants = {
   hidden: {

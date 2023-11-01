@@ -8,7 +8,7 @@ import { QuestionTitle } from '../QuestionTitle'
 import { Option } from './Option'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 
-import { reorderItems } from '@/utils/functions'
+import { reorderItems } from '@/utils/helpers'
 import type { SelectionQuestion as SelectionQuestionData } from '@/@types/quiz'
 
 interface SelectionQuestionProps {

@@ -1,5 +1,5 @@
 'use client'
-import { getImage } from '@/utils/functions'
+import { getImage } from '@/utils/helpers'
 import Image from 'next/image'
 import { twMerge } from 'tailwind-merge'
 

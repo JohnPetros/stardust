@@ -14,7 +14,7 @@ import type { User } from '@/@types/user'
 import { Modal, ModalRef } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { useAuth } from '@/contexts/AuthContext'
-import { playSound } from '@/utils/functions'
+import { playSound } from '@/utils/helpers'
 
 const apolloAnimations: Variants = {
   hidden: {

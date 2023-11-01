@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { Star } from './Star'
 
 import type { Planet } from '@/@types/planet'
-import { getImage } from '@/utils/functions'
+import { getImage } from '@/utils/helpers'
 
 const planetSignAnimations: Variants = {
   float: {

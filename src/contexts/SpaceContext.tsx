@@ -13,7 +13,7 @@ import { useMotionValueEvent, useScroll } from 'framer-motion'
 
 import { useAuth } from '@/contexts/AuthContext'
 import { useRocket } from '@/hooks/useRocket'
-import { getImage } from '@/utils/functions'
+import { getImage } from '@/utils/helpers'
 
 type SpaceRocket = {
   name: string

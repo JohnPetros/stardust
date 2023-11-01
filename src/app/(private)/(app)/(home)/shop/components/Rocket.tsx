@@ -13,7 +13,7 @@ import { Modal, ModalRef } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { ToastRef } from '@/app/components/Toast'
 import { useAuth } from '@/contexts/AuthContext'
-import { getImage, playSound } from '@/utils/functions'
+import { getImage, playSound } from '@/utils/helpers'
 
 const rocketVariants: Variants = {
   hidden: {

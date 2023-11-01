@@ -12,7 +12,7 @@ import type { Text as TextData } from '@/@types/text'
 import { UserAvatar } from '@/app/(private)/(app)/(home)/components/UserAvatar'
 import { CodeSnippet } from '@/app/components/Text/CodeSnippet'
 import { useAuth } from '@/contexts/AuthContext'
-import { formatText, getImage, slugify } from '@/utils/functions'
+import { formatText, getImage, slugify } from '@/utils/helpers'
 
 const textAnimations: Variants = {
   hidden: {

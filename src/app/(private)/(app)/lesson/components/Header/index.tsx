@@ -7,7 +7,7 @@ import { useRocket } from '@/hooks/useRocket'
 import Image from 'next/image'
 import { X } from '@phosphor-icons/react'
 
-import { getImage } from '@/utils/functions'
+import { getImage } from '@/utils/helpers'
 import { ProgressBar } from '@/app/components/ProgressBar'
 import { useAuth } from '@/contexts/AuthContext'
 

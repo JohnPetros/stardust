@@ -21,7 +21,7 @@ import { CodeEditor, CodeEditorRef } from '@/app/components/CodeEditor'
 import { Toast, ToastRef } from '@/app/components/Toast'
 import { useChallengeStore } from '@/hooks/useChallengeStore'
 import { execute } from '@/libs/delegua'
-import { playSound } from '@/utils/functions'
+import { playSound } from '@/utils/helpers'
 
 export function Code() {
   const {

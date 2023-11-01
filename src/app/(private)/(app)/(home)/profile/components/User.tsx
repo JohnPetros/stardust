@@ -7,7 +7,7 @@ import { Loading } from '@/app/components/Loading'
 import { Status } from './Status'
 import { CalendarBlank, GearSix, Shield } from '@phosphor-icons/react'
 
-import { getImage } from '@/utils/functions'
+import { getImage } from '@/utils/helpers'
 
 import { User as UserType } from '@/@types/user'
 

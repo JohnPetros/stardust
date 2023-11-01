@@ -1,14 +1,12 @@
 'use client'
 import { useEffect, useState } from 'react'
-
-import { Search } from '@/app/components/Search'
 import * as Dropdown from '@radix-ui/react-dropdown-menu'
+import { twMerge } from 'tailwind-merge'
 
 import type { Category } from '@/@types/category'
-
-import { removeAccentuation } from '@/utils/functions'
+import { Search } from '@/app/components/Search'
 import { useChallengesList } from '@/hooks/useChallengesList'
-import { twMerge } from 'tailwind-merge'
+import { removeAccentuation } from '@/utils/helpers'
 
 interface CategoriesProps {
   data: Category[]
@@ -58,12 +56,12 @@ export function CategoriesFilter({ data }: CategoriesProps) {
 
   return (
     <Dropdown.Root>
-      <Dropdown.Trigger className="flex items-center gap-2 rounded-md overflow-hidden text-green-500 text-sm p-2 bg-gray-800 border border-gray-400">
+      <Dropdown.Trigger className="flex items-center gap-2 overflow-hidden rounded-md border border-gray-400 bg-gray-800 p-2 text-sm text-green-500">
         Categorias
       </Dropdown.Trigger>
 
       <Dropdown.Portal>
-        <Dropdown.Content className="flex flex-col items-center gap-2 px-3 py-3 bg-gray-700 rounded-md overflow-hidden w-64">
+        <Dropdown.Content className="flex w-64 flex-col items-center gap-2 overflow-hidden rounded-md bg-gray-700 px-3 py-3">
           <Search onChange={({ target }) => handleSearchChange(target.value)} />
           <Dropdown.Group className="flex flex-wrap justify-start gap-2 px-2 py-3">
             {categories.length > 0 ? (
@@ -73,7 +71,7 @@ export function CategoriesFilter({ data }: CategoriesProps) {
                   <Dropdown.Item
                     key={category.id}
                     className={twMerge(
-                      ' font-semibold p-1 rounded-md text-xs cursor-pointer outline-none hover:brightness-110',
+                      ' cursor-pointer rounded-md p-1 text-xs font-semibold outline-none hover:brightness-110',
                       isActive
                         ? 'bg-green-800 text-gray-100'
                         : 'bg-gray-400 text-gray-900'
@@ -89,7 +87,7 @@ export function CategoriesFilter({ data }: CategoriesProps) {
                 )
               })
             ) : (
-              <p className="text-red-700 text-sm font-medium">
+              <p className="text-sm font-medium text-red-700">
                 Nenhuma categoria encontrada
               </p>
             )}

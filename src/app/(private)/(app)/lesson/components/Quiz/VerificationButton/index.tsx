@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge'
 import { tv } from 'tailwind-variants'
 import { AnimatePresence, Variants, motion } from 'framer-motion'
 import { useEffect, useRef } from 'react'
-import { playSound } from '@/utils/functions'
+import { playSound } from '@/utils/helpers'
 
 const buttonStyles = tv({
   base: 'w-64',

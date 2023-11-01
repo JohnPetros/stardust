@@ -9,7 +9,7 @@ import type { Achievement as AchievementType } from '@/@types/achievement'
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { useAchivements } from '@/contexts/AchievementsContext'
-import { getImage } from '@/utils/functions'
+import { getImage } from '@/utils/helpers'
 
 const achievementAnimations: Variants = {
   hidden: {

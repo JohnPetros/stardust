@@ -14,7 +14,7 @@ import Lottie from 'lottie-react'
 import { DialogAnimation } from './Dialog'
 
 import { MODAL_EFFECTS } from '@/utils/constants'
-import { playSound } from '@/utils/functions'
+import { playSound } from '@/utils/helpers'
 
 export type AlertType = 'earning' | 'crying' | 'denying' | 'asking' | 'generic'
 
@@ -103,7 +103,7 @@ const AlertComponent = (
             {body}
             <div className="mt-3 flex justify-center gap-2">
               <AlertDialog.Action asChild>{action}</AlertDialog.Action>
-              <AlertDialog.Cancel >{cancel}</AlertDialog.Cancel>
+              <AlertDialog.Cancel>{cancel}</AlertDialog.Cancel>
             </div>
           </DialogAnimation>
         </AlertDialog.Content>

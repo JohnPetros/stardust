@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 import { Loading } from '@/app/components/Loading'
 import { useAvatar } from '@/hooks/useAvatar'
-import { getImage } from '@/utils/functions'
+import { getImage } from '@/utils/helpers'
 
 interface UserAvatarProps {
   avatarId: string

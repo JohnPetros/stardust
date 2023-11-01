@@ -12,7 +12,7 @@ import { Avatar } from '@/@types/avatar'
 import { Modal, ModalRef } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { useAuth } from '@/contexts/AuthContext'
-import { getImage, playSound } from '@/utils/functions'
+import { getImage, playSound } from '@/utils/helpers'
 
 interface AvatarProps {
   data: Avatar

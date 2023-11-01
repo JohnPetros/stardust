@@ -10,7 +10,7 @@ import { Toast, ToastRef } from '../Toast'
 
 import { CodeEditor, CodeEditorRef } from '@/app/components/CodeEditor'
 import { execute } from '@/libs/delegua'
-import { playSound } from '@/utils/functions'
+import { playSound } from '@/utils/helpers'
 
 interface CodeSnippetProps {
   code: string

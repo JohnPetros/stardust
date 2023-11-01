@@ -9,7 +9,7 @@ import {
 } from 'react'
 import Editor, { useMonaco, Monaco } from '@monaco-editor/react'
 
-import { getDeleguaLanguageTokens } from '@/utils/functions/getDeleguaLanguageTokens'
+import { getDeleguaLanguageTokens } from '@/utils/helpers/getDeleguaLanguageTokens'
 
 import type monaco from 'monaco-editor'
 import { Loading } from './Loading'

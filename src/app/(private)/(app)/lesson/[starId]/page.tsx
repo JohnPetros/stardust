@@ -13,7 +13,7 @@ import { Modal, ModalRef } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { useLesson } from '@/hooks/useLesson'
 import { useStar } from '@/hooks/useStar'
-import { formatSecondsToTime } from '@/utils/functions'
+import { formatSecondsToTime } from '@/utils/helpers'
 
 export default function Lesson() {
   const { starId } = useParams()

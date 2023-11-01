@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { formatText, getImage } from '@/utils/functions'
+import { formatText, getImage } from '@/utils/helpers'
 
 interface TitleProps {
   children: string

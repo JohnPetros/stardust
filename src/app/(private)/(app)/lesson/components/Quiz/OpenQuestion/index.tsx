@@ -9,7 +9,7 @@ import { Input } from './Input'
 import type { OpenQuestion as OpenQuestionData } from '@/@types/quiz'
 import { CodeSnippet } from '@/app/components/Text/CodeSnippet'
 import { useLesson } from '@/hooks/useLesson'
-import { compareArrays } from '@/utils/functions'
+import { compareArrays } from '@/utils/helpers'
 
 interface OpenQuestion {
   data: OpenQuestionData

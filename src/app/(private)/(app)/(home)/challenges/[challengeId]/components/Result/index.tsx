@@ -5,7 +5,7 @@ import { useBreakpoint } from '@/hooks/useBreakpoint'
 import { VerificationButton } from '@/app/(private)/(app)/lesson/components/Quiz/VerificationButton'
 import { TestCase } from './TestCase'
 
-import { compareArrays } from '@/utils/functions'
+import { compareArrays } from '@/utils/helpers'
 
 import type { TestCase as TestCaseData } from '@/@types/challenge'
 
