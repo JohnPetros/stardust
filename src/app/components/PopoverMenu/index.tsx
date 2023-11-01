@@ -28,11 +28,12 @@ export type PopoverMenuButton = {
 }
 
 interface PopoverMenuProps {
+  label: string
   buttons: PopoverMenuButton[]
   trigger: ReactNode
 }
 
-export function PopoverMenu({ buttons, trigger }: PopoverMenuProps) {
+export function PopoverMenu({ buttons, trigger, label }: PopoverMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   function close() {
@@ -56,7 +57,11 @@ export function PopoverMenu({ buttons, trigger }: PopoverMenuProps) {
 
   return (
     <Popover.Root open={isOpen} onOpenChange={handleOpenChange}>
-      <Popover.Trigger className="w-max" onClick={handleTriggerClick}>
+      <Popover.Trigger
+        aria-label={label}
+        className="w-max"
+        onClick={handleTriggerClick}
+      >
         {trigger}
       </Popover.Trigger>
       <AnimatePresence>
@@ -92,6 +97,7 @@ export function PopoverMenu({ buttons, trigger }: PopoverMenuProps) {
                               onClick={() =>
                                 handlePopoverMenuButtonClick({ action })
                               }
+                              name={title}
                             >
                               <label htmlFor={title} className="cursor-pointer">
                                 {title}

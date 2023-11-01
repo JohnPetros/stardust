@@ -3,13 +3,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 
-import { TransitionPageAnimation } from '../../../../components/PageTransitionAnimation'
+import { PageTransitionAnimation } from '../../../../components/PageTransitionAnimation'
 import { End } from '../components/End'
 import { Header } from '../components/Header'
 import { Quiz } from '../components/Quiz'
 import { Theory } from '../components/Theory'
 
-import { Modal, ModalRef } from '@/app/components/Alert'
+import { Alert, AlertRef } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { useLesson } from '@/hooks/useLesson'
 import { useStar } from '@/hooks/useStar'
@@ -26,7 +26,7 @@ export default function Lesson() {
 
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const modalRef = useRef<ModalRef>(null)
+  const alertRef = useRef<AlertRef>(null)
 
   const [coins, setCoins] = useState(0)
   const [xp, setXp] = useState(0)
@@ -96,10 +96,10 @@ export default function Lesson() {
 
   return (
     <>
-      <TransitionPageAnimation isVisible={isTransitionVisible} />
+      <PageTransitionAnimation isVisible={isTransitionVisible} />
       <main ref={scrollRef} className="relative overflow-x-hidden">
         {currentStage !== 'end' && (
-          <Header onLeaveLesson={() => modalRef.current?.open()} />
+          <Header onLeaveLesson={() => alertRef.current?.open()} />
         )}
 
         {star && nextStar && (
@@ -122,8 +122,8 @@ export default function Lesson() {
         )}
       </main>
 
-      <Modal
-        ref={modalRef}
+      {/* <Alert
+        ref={alertRef}
         type="crying"
         title="Deseja mesmo sair da sua lição?"
         canPlaySong={false}
@@ -132,7 +132,7 @@ export default function Lesson() {
           <div className="mt-3 flex items-center justify-center gap-2">
             <Button
               className="w-32 bg-green-400 text-green-900"
-              onClick={() => modalRef.current?.close()}
+              onClick={() => alertRef.current?.close()}
               autoFocus
             >
               Cancelar
@@ -145,7 +145,7 @@ export default function Lesson() {
             </Button>
           </div>
         }
-      />
+      /> */}
     </>
   )
 }
