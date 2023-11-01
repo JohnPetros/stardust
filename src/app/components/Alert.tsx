@@ -23,7 +23,7 @@ export interface AlertRef {
   close: VoidFunction
 }
 
-interface ModalProps {
+interface AlertProps {
   type: AlertType
   canPlaySong?: boolean
   title: string
@@ -31,6 +31,7 @@ interface ModalProps {
   action: ReactNode
   cancel?: ReactNode
   children?: ReactNode
+  onClose?: VoidFunction
 }
 
 const AlertComponent = (
@@ -42,7 +43,8 @@ const AlertComponent = (
     action,
     cancel,
     children,
-  }: ModalProps,
+    onClose,
+  }: AlertProps,
   ref: ForwardedRef<AlertRef>
 ) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -80,7 +82,10 @@ const AlertComponent = (
     <AlertDialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialog.Portal>
         <AlertDialog.Overlay className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50" />
-        <AlertDialog.Content className="fixed left-1/2 top-1/2 z-50 max-h-screen w-full max-w-lg -translate-x-1/2 -translate-y-1/2 p-6">
+        <AlertDialog.Content
+          onCloseAutoFocus={onClose}
+          className="fixed left-1/2 top-1/2 z-50 max-h-screen w-full max-w-lg -translate-x-1/2 -translate-y-1/2 p-6"
+        >
           <DialogAnimation>
             <div className="flex items-center border-b border-gray-700 pb-2">
               <AlertDialog.Title className="mx-auto flex items-center justify-center text-center font-semibold text-white">
@@ -96,9 +101,9 @@ const AlertComponent = (
             </div>
 
             {body}
-            <div className="mt-3 flex items-center justify-center gap-2">
+            <div className="mt-3 flex justify-center gap-2">
               <AlertDialog.Action asChild>{action}</AlertDialog.Action>
-              <AlertDialog.Cancel asChild>{cancel}</AlertDialog.Cancel>
+              <AlertDialog.Cancel >{cancel}</AlertDialog.Cancel>
             </div>
           </DialogAnimation>
         </AlertDialog.Content>
