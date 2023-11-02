@@ -80,7 +80,7 @@ const AlertComponent = (
 
   return (
     <AlertDialog.Root open={isOpen} onOpenChange={setIsOpen}>
-      <AlertDialog.Portal>
+      <AlertDialog.Portal container={document.body}>
         <AlertDialog.Overlay className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50" />
         <AlertDialog.Content
           onCloseAutoFocus={onClose}
