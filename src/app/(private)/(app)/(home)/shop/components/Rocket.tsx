@@ -1,16 +1,14 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { motion, Variants } from 'framer-motion'
-import Lottie from 'lottie-react'
 import Image from 'next/image'
 import { useSWRConfig } from 'swr'
 import { twMerge } from 'tailwind-merge'
 
-import RewardLight from '../../../../../../../public/animations/reward-shinning.json'
+import { ShopButton } from './ShopButton'
 
 import { Rocket } from '@/@types/rocket'
-import { Modal, ModalRef } from '@/app/components/Alert'
-import { Button } from '@/app/components/Button'
+import { AlertRef } from '@/app/components/Alert'
 import { ToastRef } from '@/app/components/Toast'
 import { useAuth } from '@/contexts/AuthContext'
 import { getImage, playSound } from '@/utils/helpers'
@@ -56,8 +54,8 @@ export function Rocket({
   const [isSelected, setIsSelected] = useState(false)
   const [isRequesting, setIsRequesting] = useState(false)
 
-  const denyingModalRef = useRef<ModalRef>(null)
-  const earningModalRef = useRef<ModalRef>(null)
+  const denyingAlertRef = useRef<AlertRef>(null)
+  const earningAlertRef = useRef<AlertRef>(null)
   const toastRef = useRef<ToastRef>(null)
 
   const prestigeLevel = 2
@@ -72,26 +70,23 @@ export function Rocket({
 
       playSound('switch.wav')
     } catch (error) {
-      console.error(error)
       toastRef.current?.open({
         type: 'error',
         message: 'Erro ao tentar selecionar o foguete ' + name,
       })
-    } finally {
-      setIsRequesting(false)
     }
   }
 
   async function buyRocket() {
     if (!isBuyable || !user) {
       setIsRequesting(false)
-      denyingModalRef.current?.open()
+      denyingAlertRef.current?.open()
       return
     }
 
     const updatedCoins = user?.coins - price
     const updatedAcquiredRockets = user?.acquired_rockets + 1
-    earningModalRef.current?.open()
+    earningAlertRef.current?.open()
 
     try {
       await Promise.all([
@@ -113,7 +108,7 @@ export function Rocket({
     }
   }
 
-  async function handleButtonPress() {
+  async function handleShopButton() {
     setIsRequesting(true)
 
     if (isAcquired) {
@@ -134,9 +129,9 @@ export function Rocket({
         variants={rocketVariants}
         initial="hidden"
         animate="visible"
-        style={{ backgroundImage: 'url("/images/space-background.png")' }}
+        style={{ backgroundImage: 'url("/images/space.png")' }}
         className={twMerge(
-          'max-w-lg rounded-md border-2 bg-cover bg-center p-6',
+          ' rounded-md border-2 bg-cover bg-center p-6',
           !isAcquired && !isBuyable && 'brightness-75',
           isSelected && 'border-yellow-300'
         )}
@@ -195,58 +190,15 @@ export function Rocket({
             })}
           </div>
 
-          <Button
-            className="h-8 w-max bg-yellow-300 px-3 py-1"
-            onClick={handleButtonPress}
-            isLoading={isRequesting}
-          >
-            {isSelected && isAcquired
-              ? 'Selecionado'
-              : isAcquired
-              ? 'Selecionar'
-              : 'Comprar'}
-          </Button>
+          <ShopButton
+            isAcquired={isAcquired}
+            isBuyable={isBuyable}
+            isSelected={isSelected}
+            shopHandler={handleShopButton}
+            product={{ image, name }}
+          />
         </footer>
       </motion.div>
-
-      <Modal
-        ref={denyingModalRef}
-        type="denying"
-        title="Parece que você não tem poeira estelar o suficiente"
-        body={
-          <p className="my-6 px-6 text-center text-sm font-medium text-gray-100">
-            Mas você pode adquirir mais completando estrelas ou resolvendo
-            desafios.
-          </p>
-        }
-        footer={
-          <Button onClick={denyingModalRef.current?.close}>Entendido</Button>
-        }
-      />
-
-      <Modal
-        ref={earningModalRef}
-        type="earning"
-        title="Parabéns, você acabou de adquiriu um novo foguete!"
-        body={
-          <div className="relative flex flex-col items-center justify-center">
-            <span className="left-25 absolute -top-2">
-              <Lottie
-                animationData={RewardLight}
-                loop={true}
-                style={{ width: 180 }}
-              />
-            </span>
-            <div className="relative mt-6 h-24 w-24">
-              <Image src={rocketImage} fill alt={name} />
-            </div>
-            <strong className="my-6 text-gray-100">{name}</strong>
-          </div>
-        }
-        footer={
-          <Button onClick={earningModalRef.current?.close}>Entendido</Button>
-        }
-      />
     </>
   )
 }
