@@ -8,7 +8,6 @@ import { Sorters } from './Sorters'
 import { Order } from '@/@types/order'
 import { Pagination } from '@/app/components/Pagination'
 import { Search } from '@/app/components/Search'
-import { Select } from '@/app/components/Select'
 import { useRocketsList } from '@/hooks/useRocketsList'
 
 const ITEMS_PER_PAGE = 6
