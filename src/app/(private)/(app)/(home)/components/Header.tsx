@@ -2,13 +2,13 @@
 
 import { List } from '@phosphor-icons/react'
 import { motion, Variants } from 'framer-motion'
+import Lottie from 'lottie-react'
 import Image from 'next/image'
 
 import StreakAnimation from '../../../../../../public/animations/streak.json'
 
 import { UserAvatar } from './UserAvatar'
 
-import { Animation } from '@/app/components/Animation'
 import { useAuth } from '@/contexts/AuthContext'
 import { useSiderbar } from '@/contexts/SidebarContext'
 
@@ -71,7 +71,11 @@ export function Header() {
           </div>
 
           <div className="flex items-center">
-            <Animation src={StreakAnimation} size={32} hasLoop={false} />
+            <Lottie
+              animationData={StreakAnimation}
+              style={{ width: 32 }}
+              loop={false}
+            />
             <span className="text-lg font-semibold text-green-500">
               {user?.streak}
             </span>

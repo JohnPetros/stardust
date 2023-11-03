@@ -1,31 +1,21 @@
 'use client'
 
-import { useRocket } from '@/hooks/useRocket'
-import { useAvatar } from '@/hooks/useAvatar'
-import { Rocket } from './components/Rocket'
-import { Loading } from '@/app/components/Loading'
 import { Avatar } from './components/Avatar'
+import { RocketsSection } from './components/RocketsSection'
+
+import { Loading } from '@/app/components/Loading'
+import { useAvatar } from '@/hooks/useAvatar'
 
 export default function Shop() {
-  const { rockets, addUserAcquiredRocket } = useRocket()
   const { avatars, addUserAcquiredAvatar } = useAvatar()
 
   return (
-    <div className="px-6 max-w-5xl mx-auto">
+    <div className="mx-auto max-w-5xl px-6">
       <>
-        <h2 className="text-white font-semibold text-lg">Foguetes</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-center gap-6 mt-3">
-          {rockets.map((rocket) => (
-            <Rocket
-              key={rocket.id}
-              data={rocket}
-              addUserAcquiredRocket={addUserAcquiredRocket}
-            />
-          ))}
-        </div>
+        <RocketsSection />
 
-        <h2 className="text-white font-semibold text-lg mt-8">Avatares</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 justify-center gap-8 mt-3 pb-12">
+        <h2 className="mt-8 text-lg font-semibold text-white">Avatares</h2>
+        <div className="mt-3 grid grid-cols-1 justify-center gap-8 pb-12 sm:grid-cols-2 lg:grid-cols-2">
           {avatars.map((avatar) => (
             <Avatar
               key={avatar.id}
@@ -36,7 +26,7 @@ export default function Shop() {
         </div>
       </>
 
-      {!rockets.length && <Loading isSmall={false} />}
+      {/* {!rockets.length && <Loading isSmall={false} />} */}
     </div>
   )
 }

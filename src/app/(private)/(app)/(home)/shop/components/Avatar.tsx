@@ -9,7 +9,7 @@ import { twMerge } from 'tailwind-merge'
 import RewardShinning from '../../../../../../../public/animations/reward-shinning.json'
 
 import { Avatar } from '@/@types/avatar'
-import { Modal, ModalRef } from '@/app/components/Alert'
+import { Alert, AlertRef } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { useAuth } from '@/contexts/AuthContext'
 import { getImage, playSound } from '@/utils/helpers'
@@ -32,15 +32,15 @@ export function Avatar({
   const avatarImage = getImage('avatars', image)
   const isBuyable = user ? user?.coins >= price : false
 
-  const denyingModalRef = useRef<ModalRef>(null)
-  const earningModalRef = useRef<ModalRef>(null)
+  const denyingAlertRef = useRef<AlertRef>(null)
+  const earningAlertRef = useRef<AlertRef>(null)
 
   async function buyAvatar() {
     setIsRequesting(true)
 
     if (!isBuyable || !user) {
       setIsRequesting(false)
-      denyingModalRef.current?.open()
+      denyingAlertRef.current?.open()
 
       return
     }
@@ -54,7 +54,7 @@ export function Avatar({
         selectAvatar(),
       ])
 
-      earningModalRef.current?.open()
+      earningAlertRef.current?.open()
     } catch (error) {
       console.error(error)
     } finally {
@@ -135,8 +135,8 @@ export function Avatar({
         </div>
       </div>
 
-      <Modal
-        ref={denyingModalRef}
+      <Alert
+        ref={denyingAlertRef}
         type="denying"
         title="Parece que você não tem poeira estelar o suficiente"
         body={
@@ -145,13 +145,11 @@ export function Avatar({
             desafios.
           </p>
         }
-        footer={
-          <Button onClick={denyingModalRef.current?.close}>Entendido</Button>
-        }
+        action={<Button>Entendido</Button>}
       />
 
-      <Modal
-        ref={earningModalRef}
+      <Alert
+        ref={earningAlertRef}
         type="earning"
         title="Parabéns, você acabou de adquiriu um novo avatar!"
         body={
@@ -169,9 +167,7 @@ export function Avatar({
             <strong className="my-6 text-gray-100">{name}</strong>
           </div>
         }
-        footer={
-          <Button onClick={earningModalRef.current?.close}>Entendido</Button>
-        }
+        action={<Button>Entendido</Button>}
       />
     </>
   )

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
+import Lottie from 'lottie-react'
 
-import Transition from '../../../public/animations/transition.json'
+import TransitionAnimation from '../../../public/animations/transition.json'
 
-import { Animation } from '@/app/components/Animation'
 import { CODE_TIPS } from '@/utils/constants'
 import { formatText } from '@/utils/helpers'
 
@@ -60,7 +60,11 @@ export function PageTransitionAnimation({
           data-testid="page transition"
         >
           <motion.div variants={apolloVariants}>
-            <Animation src={Transition} size={540} />
+            <Lottie
+              animationData={TransitionAnimation}
+              style={{ width: 540 }}
+              loop={false}
+            />
             {hasTips && codeTip && (
               <p className="max-w-lg text-center text-gray-100">
                 Dica: {formatText(codeTip)}
