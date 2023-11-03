@@ -21,7 +21,6 @@ export function AchievementsList() {
   const { achievements: data } = useAchivements()
   const [isLoading, setIsloading] = useState(!!data)
   const [achievements, setAchievements] = useState<AchievementItem[]>([])
-  const [search, setSearch] = useState('')
   const [sorter, setSorter] = useState<Sorter>('Ordem padrão')
 
   function sortedAchievementsByLocking(a: AchievementItem, b: AchievementItem) {
@@ -109,7 +108,6 @@ export function AchievementsList() {
   }
 
   function handleSearchChange(search: string) {
-    setSearch(search)
     filterAchievementsBySearch(search.trim())
   }
 
@@ -137,9 +135,8 @@ export function AchievementsList() {
         {!isLoading ? (
           <>
             <Search
-              value={search}
               name="search-achivements"
-              onChange={({ target }) => handleSearchChange(target.value)}
+              onSearchChange={handleSearchChange}
             />
             <div className="ml-auto w-max">
               <PopoverMenu
