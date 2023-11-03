@@ -1,8 +1,8 @@
 'use client'
 import { ReactNode } from 'react'
+import { Icon } from '@phosphor-icons/react'
 import * as S from '@radix-ui/react-select'
 import { twMerge } from 'tailwind-merge'
-import { Icon } from '@phosphor-icons/react'
 
 interface SelectItemProps {
   text: ReactNode
@@ -23,7 +23,7 @@ export function Item({
     <S.SelectItem
       value={value}
       className={twMerge(
-        'flex items-center gap-2 px-4 py-2 cursor-pointer text-gray-400 font-medium outline-gray-400 focus:text-gray-100 hover:text-gray-100 text-sm',
+        'flex cursor-pointer items-center gap-2 px-4 py-2 text-sm font-medium text-gray-400 outline-gray-400 hover:text-gray-100 focus:text-gray-100',
         textStyes
       )}
     >

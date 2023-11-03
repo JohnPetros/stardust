@@ -1,17 +1,17 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { useChallengesList } from '@/hooks/useChallengesList'
+import { AnimatePresence } from 'framer-motion'
 
-import { Select } from '../Select'
+import { Select } from '../../../../../../components/Select'
+
+import { CategoriesFilter } from './CategoriesFilter'
 import { Tag } from './Tag'
 
-import type { Difficulty, Status } from '@/contexts/ChallengesListContext'
 import type { Category } from '@/@types/category'
-
-import { FILTER_SELECTS_ITEMS } from '@/utils/constants/filter-selects-items'
-import { AnimatePresence } from 'framer-motion'
-import { CategoriesFilter } from './CategoriesFilter'
 import { Search } from '@/app/components/Search'
+import type { Difficulty, Status } from '@/contexts/ChallengesListContext'
+import { useChallengesList } from '@/hooks/useChallengesList'
+import { FILTER_SELECTS_ITEMS } from '@/utils/constants/filter-selects-items'
 
 interface FiltersProps {
   categories: Category[]
@@ -122,9 +122,8 @@ export function Filters({ categories }: FiltersProps) {
 
   useEffect(() => {
     state.categoriesIds.forEach((id) => {
-      const categoryName = categories.find(
-        (category) => category.id === id
-      )?.name
+      const categoryName = categories.find((category) => category.id === id)
+        ?.name
 
       if (categoryName && !tags.includes(categoryName)) addTag(categoryName)
     })
@@ -134,11 +133,11 @@ export function Filters({ categories }: FiltersProps) {
     <div className="flex flex-col">
       <Search
         placeholder="Pesquisar desafio por título..."
-        onChange={({ target }) => handleSearchChange(target.value)}
+        onSearchChange={handleSearchChange}
         className="bg-gray-800"
       />
 
-      <div className="flex items-center gap-6 mt-6">
+      <div className="mt-6 flex items-center gap-6">
         <Select.Container
           onValueChange={(newStatus: string) =>
             handleStatusChange(newStatus as Status)
@@ -191,7 +190,7 @@ export function Filters({ categories }: FiltersProps) {
         <CategoriesFilter data={categories} />
       </div>
 
-      <div className="flex flex-wrap gap-2 mt-6 min-h-[48px]">
+      <div className="mt-6 flex min-h-[48px] flex-wrap gap-2">
         <AnimatePresence mode="popLayout">
           {tags.map((tag) => {
             const item = FILTER_SELECTS_ITEMS.find((item) => item.text === tag)

@@ -1,8 +1,8 @@
 import { Container } from './Container'
-import { Trigger } from './Trigger'
 import { Content } from './Content'
 import { Item } from './Item'
 import { Separator } from './Separator'
+import { Trigger } from './Trigger'
 
 export const Select = {
   Container,

@@ -3,6 +3,6 @@ import * as S from '@radix-ui/react-select'
 
 export function Separator() {
   return (
-    <S.Separator className="rounded-md bg-gray-500 h-[2px] w-[90%] mx-auto my-[2px]" />
+    <S.Separator className="mx-auto my-[2px] h-[2px] w-[90%] rounded-md bg-gray-500" />
   )
 }
