@@ -1,9 +1,11 @@
 'use client'
 
+import { IRocketService } from './interfaces/IRocketService'
+
 import type { Rocket } from '@/@types/rocket'
 import { useSupabase } from '@/hooks/useSupabase'
 
-export const RocketService = () => {
+export const RocketService = (): IRocketService => {
   const { supabase } = useSupabase()
 
   return {
@@ -20,11 +22,12 @@ export const RocketService = () => {
       return data
     },
 
-    getRockets: async () => {
+    getRockets: async ({ search, offset, limit, priceOrder }) => {
       const { data, error } = await supabase
         .from('rockets')
         .select('*')
-        .order('price', { ascending: true })
+        .order('price', { ascending: priceOrder === 'ascending' })
+        .range(offset, limit - 1)
         .returns<Rocket[]>()
 
       if (error) {
