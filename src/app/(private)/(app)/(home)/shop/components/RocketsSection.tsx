@@ -8,27 +8,30 @@ import { Pagination } from '@/app/components/Pagination'
 import { Search } from '@/app/components/Search'
 import { useRocketsList } from '@/hooks/useRocketsList'
 
-const LIMIT = 6
+const ITEMS_PER_PAGE = 6
 
 export function RocketsSection() {
   const [offset, setOffset] = useState(0)
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState('s')
 
   const { rockets, addUserAcquiredRocket } = useRocketsList({
     offset,
-    limit: LIMIT,
+    limit: ITEMS_PER_PAGE,
     search,
     priceOrder: 'ascending',
   })
+
+  function handleSearchChange(value: string) {
+    if (value.length) setSearch(value)
+  }
 
   return (
     <section id="rockets">
       <h2 className=" text-lg font-semibold text-white">Foguetes</h2>
       <Search
-        value={search}
-        onChange={({ target }) => setSearch(target.value)}
-        placeholder="Pesquisar foguete"
         className="mt-6"
+        placeholder="Pesquisar foguete"
+        onSearchChange={handleSearchChange}
       />
       <div className="mt-6 grid h-[38rem] grid-cols-1 items-start justify-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {rockets.map((rocket) => (
@@ -42,7 +45,7 @@ export function RocketsSection() {
 
       <div className="mt-3">
         <Pagination
-          itemsPerPage={LIMIT}
+          itemsPerPage={ITEMS_PER_PAGE}
           totalItems={12}
           offset={offset}
           setOffset={setOffset}

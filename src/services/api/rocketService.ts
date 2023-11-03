@@ -23,6 +23,21 @@ export const RocketService = (): IRocketService => {
     },
 
     getRockets: async ({ search, offset, limit, priceOrder }) => {
+      if (search.length > 1) {
+        const { data, error } = await supabase
+          .from('rockets')
+          .select('*')
+          .order('price', { ascending: priceOrder === 'ascending' })
+          .ilike('name', `%${search}%`)
+          .range(offset, limit - 1)
+          .returns<Rocket[]>()
+
+        if (error) {
+          throw new Error(error.message)
+        }
+        return data
+      }
+
       const { data, error } = await supabase
         .from('rockets')
         .select('*')
