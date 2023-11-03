@@ -1,3 +1,4 @@
+export { calculatePage } from './calculatePage'
 export { checkIsPublicRoute } from './checkIsPublicRoute'
 export { compareArrays } from './compareArrays'
 export { filterItemBySearch } from './filterItemBySearch'
