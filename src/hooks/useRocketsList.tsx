@@ -36,8 +36,6 @@ export function useRocketsList({
     return { ...rocket, isAcquired }
   }
 
-  console.log(search)
-
   async function getRockets() {
     return await api.getRockets({
       search,
@@ -54,7 +52,7 @@ export function useRocketsList({
   }
 
   const { data: rockets } = useSWR(
-    () => `/rockets?page=${page}&search=${search}`,
+    () => `/rockets?page=${page}&search=${search}&priceOrder=${priceOrder}`,
     getRockets
   )
 
