@@ -9,6 +9,7 @@ import { Sidebar } from './Sidebar'
 import { Sidenav } from './Sidenav'
 import { TabNav } from './TabNav'
 
+import { useSiderbar } from '@/contexts/SidebarContext'
 import { useBreakpoint } from '@/hooks/useBreakpoint'
 
 const layoutVariants: Variants = {
@@ -29,12 +30,25 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const [isSidenavExpanded, setIsSidenavExpanded] = useState(false)
+  const {
+    isOpen,
+    toggle,
+    isAchievementsListVisible,
+    setIsAchievementsListVisible,
+  } = useSiderbar()
+
   const { md: isMobile } = useBreakpoint()
 
   const pathName = usePathname()
 
   function toggleSidenav() {
     setIsSidenavExpanded(!isSidenavExpanded)
+  }
+
+  function handleMainContainerClick() {
+    if (isOpen) toggle()
+
+    if (isAchievementsListVisible) setIsAchievementsListVisible(false)
   }
 
   const isChallengePage = new RegExp(
@@ -47,12 +61,13 @@ export function Layout({ children }: LayoutProps) {
     <>
       <Header />
       <Sidenav isExpanded={isSidenavExpanded} toggleSidenav={toggleSidenav} />
-      <Sidebar />
+      {isMobile && <Sidebar />}
       <motion.main
         variants={layoutVariants}
         initial="shrink"
         animate={isSidenavExpanded ? 'expand' : isMobile ? 'mobile' : 'shrink'}
-        className="h-full pt-16 "
+        className="h-full pt-16"
+        onClick={handleMainContainerClick}
       >
         {children}
       </motion.main>
