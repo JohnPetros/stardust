@@ -2,7 +2,7 @@ import type { Category } from './category'
 import type { Text } from './text'
 import type { User } from './user'
 
-type Difficulty = 'easy' | 'medium' | 'hard'
+export type Difficulty = 'easy' | 'medium' | 'hard'
 
 export type TestCase = {
   id: number
