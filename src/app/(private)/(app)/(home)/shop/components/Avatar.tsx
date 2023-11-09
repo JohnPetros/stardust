@@ -1,18 +1,14 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { LockSimple } from '@phosphor-icons/react'
-import Lottie from 'lottie-react'
 import Image from 'next/image'
 import { useSWRConfig } from 'swr'
 import { twMerge } from 'tailwind-merge'
 
-import RewardShinning from '../../../../../../../public/animations/reward-shinning.json'
-
 import { ShopButton } from './ShopButton'
 
 import { Avatar } from '@/@types/avatar'
-import { Alert, AlertRef } from '@/app/components/Alert'
-import { Button } from '@/app/components/Button'
+import { AlertRef } from '@/app/components/Alert'
 import { useAuth } from '@/contexts/AuthContext'
 import { getImage, playSound } from '@/utils/helpers'
 
@@ -30,7 +26,6 @@ export function Avatar({
   const { mutate } = useSWRConfig()
 
   const [isSelected, setIsSelected] = useState(false)
-  const [isRequesting, setIsRequesting] = useState(false)
   const avatarImage = getImage('avatars', image)
   const isBuyable = user ? user?.coins >= price : false
 
@@ -38,10 +33,7 @@ export function Avatar({
   const earningAlertRef = useRef<AlertRef>(null)
 
   async function buyAvatar() {
-    setIsRequesting(true)
-
     if (!isBuyable || !user) {
-      setIsRequesting(false)
       denyingAlertRef.current?.open()
 
       return
@@ -59,8 +51,6 @@ export function Avatar({
       earningAlertRef.current?.open()
     } catch (error) {
       console.error(error)
-    } finally {
-      setIsRequesting(false)
     }
   }
 
@@ -71,14 +61,10 @@ export function Avatar({
       mutate('/avatar?id=' + id, { id, name, image })
     } catch (error) {
       console.error(error)
-    } finally {
-      setIsRequesting(false)
     }
   }
 
   async function handleShopButton() {
-    setIsRequesting(true)
-
     if (isAcquired) {
       await selectAvatar()
       return
@@ -121,14 +107,20 @@ export function Avatar({
         />
       </div>
 
-      <div className="relative h-52">
+      <div className="relative h-64">
         {!isAcquired && (
           <div className="absolute right-3 top-3 z-30">
             <LockSimple className="text-xl text-gray-800" weight="bold" />
           </div>
         )}
 
-        <Image src={avatarImage} fill alt={name} />
+        <Image
+          src={avatarImage}
+          fill
+          alt={name}
+          className="skeleton object-cover"
+          onLoadingComplete={(image) => image.classList.remove('skeleton')}
+        />
       </div>
     </div>
   )
