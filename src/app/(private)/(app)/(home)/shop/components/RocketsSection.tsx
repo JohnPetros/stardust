@@ -25,7 +25,10 @@ export function RocketsSection() {
   })
 
   function handleSearchChange(value: string) {
-    if (value.length) setSearch(value)
+    if (value.length) {
+      setSearch(value)
+      setOffset(0)
+    }
   }
 
   function handlePriceOrderChange(value: Order) {
@@ -37,6 +40,7 @@ export function RocketsSection() {
       <h2 className=" text-lg font-semibold text-white">Foguetes</h2>
       <div className="mt-3 flex items-center gap-3">
         <Search
+          id="rocket-search"
           placeholder="Pesquisar foguete"
           onSearchChange={handleSearchChange}
           className="max-w-[20rem]"

@@ -25,7 +25,10 @@ export function AvatarsSection() {
   })
 
   function handleSearchChange(value: string) {
-    if (value.length) setSearch(value)
+    if (value.length) {
+      setSearch(value)
+      setOffset(0)
+    }
   }
 
   function handlePriceOrderChange(value: Order) {
@@ -37,6 +40,7 @@ export function AvatarsSection() {
       <h2 className=" text-lg font-semibold text-white">Avatares</h2>
       <div className=" mt-3 flex items-center gap-3">
         <Search
+          id="avatar-search"
           placeholder="Pesquisar avatar"
           onSearchChange={handleSearchChange}
           className="max-w-[20rem]"
@@ -44,7 +48,7 @@ export function AvatarsSection() {
         <Sorters onPriceOrderChange={handlePriceOrderChange} />
       </div>
 
-      <div className="mt-6 grid h-[72rem] grid-cols-1 items-start justify-center gap-8 pb-12 sm:grid-cols-2 lg:grid-cols-2">
+      <div className="mt-6 grid h-[72rem] grid-cols-1 content-start justify-center gap-8 pb-12 sm:grid-cols-2 lg:grid-cols-2">
         {avatars.map((avatar) => (
           <Avatar
             key={avatar.id}

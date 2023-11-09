@@ -12,7 +12,7 @@ interface PaginationProps {
   setOffset: (offset: number) => void
 }
 
-const MAX_PAGE_BUTTONS = 7
+const MAX_PAGE_BUTTONS = 5
 const SINBLING_PAGE_BUTTONS = (MAX_PAGE_BUTTONS - 1) / 2
 
 export function Pagination({
@@ -25,9 +25,10 @@ export function Pagination({
   const totalPages = Math.ceil(totalItems / itemsPerPage)
   const firstPage = Math.max(currentPage - SINBLING_PAGE_BUTTONS, 1)
 
+  console.log({ currentPage })
+
   function handlePageButtonCLick(page: number) {
     const newOffset = (page - 1) * itemsPerPage
-    console.log(newOffset)
     setOffset(newOffset)
   }
 
@@ -40,7 +41,6 @@ export function Pagination({
       >
         <CaretLeft className="text-gray-300" />
       </PageButton>
-
       {firstPage !== 1 && (
         <PageButton
           isActive={false}
@@ -50,7 +50,6 @@ export function Pagination({
           1 ...
         </PageButton>
       )}
-
       {Array.from({ length: Math.min(MAX_PAGE_BUTTONS, totalPages) }).map(
         (_, index) => {
           const page = index + firstPage
@@ -70,7 +69,6 @@ export function Pagination({
           return ''
         }
       )}
-
       {currentPage + SINBLING_PAGE_BUTTONS < totalPages && (
         <PageButton
           isActive={false}
@@ -80,14 +78,15 @@ export function Pagination({
           ... {totalPages}
         </PageButton>
       )}
-
-      <PageButton
-        isActive={false}
-        isVisible={currentPage !== totalPages}
-        onClick={() => handlePageButtonCLick(currentPage + 1)}
-      >
-        <CaretRight className="text-gray-300" />
-      </PageButton>
+      {totalPages > 0 && (
+        <PageButton
+          isActive={false}
+          isVisible={currentPage !== totalPages}
+          onClick={() => handlePageButtonCLick(currentPage + 1)}
+        >
+          <CaretRight className="text-gray-300" />
+        </PageButton>
+      )}
     </div>
   )
 }
