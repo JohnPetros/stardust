@@ -125,7 +125,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
               initial="hidden"
               animate={isAchievementsListVisible ? 'visible' : ''}
               exit="hidden"
-              className="custom-scrollbar absolute right-0 top-0 mt-16 h-full w-80 translate-x-[100%] overflow-hidden overflow-y-scroll border-l border-green-400 bg-gray-900"
+              className="custom-scrollbar absolute right-0 top-0 mt-16 h-full w-80 translate-x-[100%] overflow-hidden overflow-y-scroll border-l border-green-400 bg-gray-900 p-6"
             >
               <AchievementsList />
             </motion.div>
