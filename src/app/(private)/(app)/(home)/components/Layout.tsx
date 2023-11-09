@@ -47,7 +47,6 @@ export function Layout({ children }: LayoutProps) {
 
   function handleMainContainerClick() {
     if (isOpen) toggle()
-
     if (isAchievementsListVisible) setIsAchievementsListVisible(false)
   }
 
