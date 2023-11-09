@@ -135,6 +135,7 @@ export function AchievementsList() {
         {!isLoading ? (
           <>
             <Search
+              id="search-achivements"
               name="search-achivements"
               onSearchChange={handleSearchChange}
             />
