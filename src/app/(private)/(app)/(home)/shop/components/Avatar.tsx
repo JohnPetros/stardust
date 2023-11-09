@@ -41,26 +41,23 @@ export function Avatar({
   const avatarImage = getImage('avatars', image)
   const isBuyable = user ? user?.coins >= price : false
 
-  const denyingAlertRef = useRef<AlertRef>(null)
-  const earningAlertRef = useRef<AlertRef>(null)
-
-  async function buyAvatar() {
-    if (!isBuyable || !user) {
-      denyingAlertRef.current?.open()
-
-      return
-    }
-
-    try {
+  async function handleShopSuccess() {
+    if (user)
       await Promise.all([
         updateUser({
           coins: user.coins - price,
         }),
         addUserAcquiredAvatar(id),
-        selectAvatar(),
       ])
+  }
 
-      earningAlertRef.current?.open()
+  async function buyAvatar() {
+    if (!isBuyable || !user) {
+      return
+    }
+
+    try {
+      await selectAvatar()
     } catch (error) {
       console.error(error)
     }
@@ -82,7 +79,7 @@ export function Avatar({
       return
     }
 
-    buyAvatar()
+    await buyAvatar()
   }
 
   useEffect(() => {
@@ -118,7 +115,8 @@ export function Avatar({
           isBuyable={isBuyable}
           isSelected={isSelected}
           shopHandler={handleShopButton}
-          product={{ image, name }}
+          onSuccess={handleShopSuccess}
+          product={{ image: avatarImage, name }}
         />
       </div>
 

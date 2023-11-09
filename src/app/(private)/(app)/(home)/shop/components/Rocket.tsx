@@ -8,7 +8,6 @@ import { twMerge } from 'tailwind-merge'
 import { ShopButton } from './ShopButton'
 
 import { Rocket } from '@/@types/rocket'
-import { AlertRef } from '@/app/components/Alert'
 import { ToastRef } from '@/app/components/Toast'
 import { useAuth } from '@/contexts/AuthContext'
 import { getImage, playSound } from '@/utils/helpers'
@@ -52,19 +51,30 @@ export function Rocket({
   const { mutate } = useSWRConfig()
 
   const [isSelected, setIsSelected] = useState(false)
-  const [isRequesting, setIsRequesting] = useState(false)
 
-  const denyingAlertRef = useRef<AlertRef>(null)
-  const earningAlertRef = useRef<AlertRef>(null)
   const toastRef = useRef<ToastRef>(null)
 
   const prestigeLevel = 2
   const rocketImage = getImage('rockets', image)
   const isBuyable = user ? user?.coins >= price : false
 
+  async function handleShopSuccess() {
+    if (user) {
+      const updatedCoins = user?.coins - price
+      const updatedAcquiredRockets = user?.acquired_rockets + 1
+
+      await Promise.all([
+        updateUser({
+          coins: updatedCoins,
+          acquired_rockets: updatedAcquiredRockets,
+        }),
+        addUserAcquiredRocket(id),
+      ])
+    }
+  }
+
   async function selectRocket() {
     try {
-      setIsRequesting(true)
       await updateUser({ rocket_id: id })
       mutate('/rocket?id=' + id, { id, name, image })
 
@@ -79,38 +89,21 @@ export function Rocket({
 
   async function buyRocket() {
     if (!isBuyable || !user) {
-      setIsRequesting(false)
-      denyingAlertRef.current?.open()
       return
     }
 
-    const updatedCoins = user?.coins - price
-    const updatedAcquiredRockets = user?.acquired_rockets + 1
-    earningAlertRef.current?.open()
-
     try {
-      await Promise.all([
-        updateUser({
-          coins: updatedCoins,
-          acquired_rockets: updatedAcquiredRockets,
-        }),
-        addUserAcquiredRocket(id),
-        selectRocket(),
-      ])
+      await selectRocket()
     } catch (error) {
       toastRef.current?.open({
         type: 'error',
         message: 'Erro ao tentar comprar o foguete ' + name,
       })
       console.error(error)
-    } finally {
-      setIsRequesting(false)
     }
   }
 
   async function handleShopButton() {
-    setIsRequesting(true)
-
     if (isAcquired) {
       await selectRocket()
       return
@@ -160,7 +153,12 @@ export function Rocket({
           animate={isSelected ? 'up' : 'down'}
           className="relative mx-auto my-8 h-28 w-28"
         >
-          <Image src={rocketImage} fill alt={name} />
+          <Image
+            src={rocketImage}
+            fill
+            sizes="(min-width: 375px) 100vw"
+            alt={name}
+          />
         </motion.div>
 
         <footer className="flex items-center justify-between">
@@ -194,7 +192,8 @@ export function Rocket({
             isBuyable={isBuyable}
             isSelected={isSelected}
             shopHandler={handleShopButton}
-            product={{ image, name }}
+            product={{ image: rocketImage, name }}
+            onSuccess={handleShopSuccess}
           />
         </footer>
       </motion.div>

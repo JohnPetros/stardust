@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import useSWR, { mutate } from 'swr'
 
 import { FilterOptions } from '@/@types/filterOptions'
@@ -37,14 +37,15 @@ export function useRocketsList({
   }
 
   async function getRockets() {
-    console.log({ search })
-
-    return await api.getRockets({
-      search,
-      offset,
-      limit: offset + limit - 1,
-      priceOrder,
-    })
+    if (user?.id)
+      return await api.getRockets({
+        search,
+        offset,
+        limit: offset + limit - 1,
+        priceOrder,
+        userId: user.id,
+        shouldFetchUnlocked: null,
+      })
   }
 
   async function getUserAcquiredRocketsIds() {
@@ -57,8 +58,6 @@ export function useRocketsList({
     () => `/rockets?page=${page}&search=${search}&priceOrder=${priceOrder}`,
     getRockets
   )
-
-  console.log({ data })
 
   const { data: userAcquiredRocketsIds } = useSWR(
     user?.id ? '/users_acquired_rockets_ids' : null,

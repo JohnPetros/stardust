@@ -19,6 +19,7 @@ interface ShopButtonProps {
   isAcquired: boolean
   isBuyable: boolean
   shopHandler: () => Promise<void>
+  onSuccess: () => void
   product: Product
 }
 
@@ -27,6 +28,7 @@ export function ShopButton({
   isSelected,
   isBuyable,
   shopHandler,
+  onSuccess,
   product,
 }: ShopButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
@@ -57,6 +59,7 @@ export function ShopButton({
     <Alert
       type="earning"
       title="Parabéns, você acabou de adquirir um novo item!"
+      onClose={onSuccess}
       body={
         <div className="relative flex flex-col items-center justify-center">
           <span className="left-25 absolute -top-2">
@@ -74,7 +77,12 @@ export function ShopButton({
       }
       action={<Button>Entendido</Button>}
     >
-      <Button className="h-8 w-max bg-yellow-300 px-3 py-1">Comprar</Button>
+      <Button
+        onClick={handleShopButton}
+        className="h-8 w-max bg-yellow-300 px-3 py-1"
+      >
+        Comprar
+      </Button>
     </Alert>
   ) : (
     <Alert

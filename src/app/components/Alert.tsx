@@ -92,7 +92,9 @@ const AlertComponent = (
   return (
     <Hydration>
       <AlertDialog.Root open={isOpen} onOpenChange={setIsOpen}>
-        <AlertDialog.Portal container={containerRef.current}>
+        <AlertDialog.Portal
+          container={isRendered ? containerRef.current : null}
+        >
           <AlertDialog.Overlay className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50" />
           <AlertDialog.Content
             onCloseAutoFocus={onClose}

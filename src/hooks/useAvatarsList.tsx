@@ -30,6 +30,8 @@ export function useAvatarsList({
     }
   }
 
+  console.log(search)
+
   async function getAvatars() {
     return await api.getAvatars({
       search,

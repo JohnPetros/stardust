@@ -37,7 +37,7 @@ export const RocketService = (): IRocketService => {
         throw new Error(error.message)
       }
 
-      return { rockets: data, count }
+      return { rockets: data as Rocket[], count }
     },
 
     getUserAcquiredRocketsIds: async (userId: string) => {

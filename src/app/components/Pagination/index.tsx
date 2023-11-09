@@ -25,8 +25,6 @@ export function Pagination({
   const totalPages = Math.ceil(totalItems / itemsPerPage)
   const firstPage = Math.max(currentPage - SINBLING_PAGE_BUTTONS, 1)
 
-  console.log({ currentPage })
-
   function handlePageButtonCLick(page: number) {
     const newOffset = (page - 1) * itemsPerPage
     setOffset(newOffset)
