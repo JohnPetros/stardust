@@ -38,7 +38,7 @@ export function AvatarsSection() {
   return (
     <section id="avatars">
       <h2 className=" text-lg font-semibold text-white">Avatares</h2>
-      <div className=" mt-3 flex items-center gap-3">
+      <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
         <Search
           id="avatar-search"
           placeholder="Pesquisar avatar"
@@ -48,7 +48,7 @@ export function AvatarsSection() {
         <Sorters onPriceOrderChange={handlePriceOrderChange} />
       </div>
 
-      <div className="mt-6 grid h-[72rem] grid-cols-1 content-start justify-center gap-8 pb-12 sm:grid-cols-2 lg:grid-cols-2">
+      <div className="mt-6 grid grid-cols-1 content-start justify-center gap-8 pb-12 sm:grid-cols-2 lg:grid-cols-2">
         {avatars.map((avatar) => (
           <Avatar
             key={avatar.id}

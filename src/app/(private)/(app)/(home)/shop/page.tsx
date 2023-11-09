@@ -17,7 +17,7 @@ export default function Shop() {
   }, [])
 
   return (
-    <div className="mx-auto max-w-5xl space-y-12 px-6 pb-6">
+    <div className="mx-auto max-w-5xl space-y-12 px-6 pb-[12rem] sm:pb-6">
       {isLoading && <Loading isSmall={false} />}
       <RocketsSection />
       <AvatarsSection />

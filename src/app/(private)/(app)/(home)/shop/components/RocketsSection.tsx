@@ -38,7 +38,7 @@ export function RocketsSection() {
   return (
     <section id="rockets">
       <h2 className=" text-lg font-semibold text-white">Foguetes</h2>
-      <div className="mt-3 flex items-center gap-3">
+      <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
         <Search
           id="rocket-search"
           placeholder="Pesquisar foguete"
@@ -48,7 +48,7 @@ export function RocketsSection() {
         <Sorters onPriceOrderChange={handlePriceOrderChange} />
       </div>
 
-      <div className="mt-6 grid h-[38rem] grid-cols-1 items-start justify-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-6 grid grid-cols-1 items-start justify-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {rockets.map((rocket) => (
           <Rocket
             key={rocket.id}
