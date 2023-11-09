@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { Rocket } from './Rocket'
 import { Sorters } from './Sorters'
@@ -12,11 +12,7 @@ import { useRocketsList } from '@/hooks/useRocketsList'
 
 const ITEMS_PER_PAGE = 6
 
-interface RocketsSectionProps {
-  onLoad: () => void
-}
-
-export function RocketsSection({ onLoad }: RocketsSectionProps) {
+export function RocketsSection() {
   const [offset, setOffset] = useState(0)
   const [search, setSearch] = useState('s')
   const [priceOrder, setPriceOrder] = useState<Order>('ascending')
@@ -35,12 +31,6 @@ export function RocketsSection({ onLoad }: RocketsSectionProps) {
   function handlePriceOrderChange(value: Order) {
     setPriceOrder(value)
   }
-
-  console.log(rockets.length)
-
-  useEffect(() => {
-    if (rockets.length) onLoad()
-  }, [rockets, count])
 
   return (
     <section id="rockets">

@@ -36,16 +36,6 @@ export function useRocketsList({
     return { ...rocket, isAcquired }
   }
 
-  async function getRocketsCount() {
-    try {
-      // const rocketsCount = await api.getRocketsCount()
-      // console.log(rocketsCount)
-    } catch (error) {
-      console.error(error)
-    }
-    // count.current = rocketsCount
-  }
-
   async function getRockets() {
     console.log({ search })
 
@@ -119,15 +109,9 @@ export function useRocketsList({
     }
   }
 
-  useEffect(() => {
-    if (verifiedRockets.length > 0) {
-      getRocketsCount()
-    }
-  }, [verifiedRockets])
-
   return {
     rockets: verifiedRockets,
-    addUserAcquiredRocket,
     count: data?.count,
+    addUserAcquiredRocket,
   }
 }

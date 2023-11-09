@@ -18,7 +18,7 @@ export function Sorters({ onPriceOrderChange }: SortersProps) {
   }
 
   return (
-    <div>
+    <div className="flex items-center gap-3">
       <Select.Container
         onValueChange={(value) => handlePriceOrderSelectChange(value as Order)}
       >

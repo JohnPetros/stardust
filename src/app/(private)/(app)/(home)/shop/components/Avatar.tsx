@@ -8,6 +8,8 @@ import { twMerge } from 'tailwind-merge'
 
 import RewardShinning from '../../../../../../../public/animations/reward-shinning.json'
 
+import { ShopButton } from './ShopButton'
+
 import { Avatar } from '@/@types/avatar'
 import { Alert, AlertRef } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
@@ -74,7 +76,7 @@ export function Avatar({
     }
   }
 
-  async function handleButtonPress() {
+  async function handleShopButton() {
     setIsRequesting(true)
 
     if (isAcquired) {
@@ -90,85 +92,44 @@ export function Avatar({
   }, [user?.avatar_id])
 
   return (
-    <>
-      <div
-        className={twMerge(
-          'grid grid-cols-[1fr_1.4fr] overflow-hidden rounded-md border-2',
-          isSelected ? 'border-yellow-300' : 'border-transparent',
-          !isAcquired && !isBuyable ? 'brightness-75' : 'brightness-90'
-        )}
-      >
-        <div className="flex flex-col justify-between bg-gray-800 p-6">
-          <div className="flex flex-col gap-2">
-            {!isAcquired && price > 0 && (
-              <div className=" z-30 flex items-center gap-2">
-                <Image src="/icons/coin.svg" width={24} height={24} alt="" />
-                <strong className="text-lg font-semibold text-gray-100">
-                  {price}
-                </strong>
-              </div>
-            )}
-            <strong className="text-gray-100">{name}</strong>
-          </div>
-
-          <Button
-            className="h-10 w-max bg-yellow-300 px-3 py-1"
-            onClick={handleButtonPress}
-            isLoading={isRequesting}
-          >
-            {isSelected && isAcquired
-              ? 'Selecionado'
-              : isAcquired
-              ? 'Selecionar'
-              : 'Comprar'}
-          </Button>
-        </div>
-
-        <div className="relative h-52">
-          {!isAcquired && (
-            <div className="absolute right-3 top-3 z-30">
-              <LockSimple className="text-xl text-gray-800" weight="bold" />
+    <div
+      className={twMerge(
+        'grid grid-cols-[1fr_1.4fr] overflow-hidden rounded-md border-2',
+        isSelected ? 'border-yellow-300' : 'border-transparent',
+        !isAcquired && !isBuyable ? 'brightness-75' : 'brightness-90'
+      )}
+    >
+      <div className="flex flex-col justify-between bg-gray-800 p-6">
+        <div className="flex flex-col gap-2">
+          {!isAcquired && price > 0 && (
+            <div className=" z-30 flex items-center gap-2">
+              <Image src="/icons/coin.svg" width={24} height={24} alt="" />
+              <strong className="text-lg font-semibold text-gray-100">
+                {price}
+              </strong>
             </div>
           )}
-
-          <Image src={avatarImage} fill alt={name} />
+          <strong className="text-gray-100">{name}</strong>
         </div>
+
+        <ShopButton
+          isAcquired={isAcquired}
+          isBuyable={isBuyable}
+          isSelected={isSelected}
+          shopHandler={handleShopButton}
+          product={{ image, name }}
+        />
       </div>
 
-      <Alert
-        ref={denyingAlertRef}
-        type="denying"
-        title="Parece que você não tem poeira estelar o suficiente"
-        body={
-          <p className="my-6 px-6 text-center text-sm font-medium text-gray-100">
-            Mas você pode adquirir mais completando estrelas ou resolvendo
-            desafios.
-          </p>
-        }
-        action={<Button>Entendido</Button>}
-      />
-
-      <Alert
-        ref={earningAlertRef}
-        type="earning"
-        title="Parabéns, você acabou de adquiriu um novo avatar!"
-        body={
-          <div className="relative flex flex-col items-center justify-center">
-            <span className="left-25 absolute -top-8">
-              <Lottie
-                animationData={RewardShinning}
-                loop={true}
-                style={{ width: 240 }}
-              />
-            </span>
-            <div className="relative mt-6 h-32 w-32">
-              <Image src={avatarImage} fill alt={name} />
-            </div>
-            <strong className="my-6 text-gray-100">{name}</strong>
+      <div className="relative h-52">
+        {!isAcquired && (
+          <div className="absolute right-3 top-3 z-30">
+            <LockSimple className="text-xl text-gray-800" weight="bold" />
           </div>
-        }
-        action={<Button>Entendido</Button>}
-      />
-    </>
+        )}
+
+        <Image src={avatarImage} fill alt={name} />
+      </div>
+    </div>
   )
 }
