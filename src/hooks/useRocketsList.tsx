@@ -1,5 +1,5 @@
 'use client'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import useSWR, { mutate } from 'swr'
 
 import { FilterOptions } from '@/@types/filterOptions'
@@ -36,11 +36,23 @@ export function useRocketsList({
     return { ...rocket, isAcquired }
   }
 
+  async function getRocketsCount() {
+    try {
+      // const rocketsCount = await api.getRocketsCount()
+      // console.log(rocketsCount)
+    } catch (error) {
+      console.error(error)
+    }
+    // count.current = rocketsCount
+  }
+
   async function getRockets() {
+    console.log({ search })
+
     return await api.getRockets({
       search,
       offset,
-      limit: offset + limit,
+      limit: offset + limit - 1,
       priceOrder,
     })
   }
@@ -51,10 +63,12 @@ export function useRocketsList({
     }
   }
 
-  const { data: rockets } = useSWR(
+  const { data } = useSWR(
     () => `/rockets?page=${page}&search=${search}&priceOrder=${priceOrder}`,
     getRockets
   )
+
+  console.log({ data })
 
   const { data: userAcquiredRocketsIds } = useSWR(
     user?.id ? '/users_acquired_rockets_ids' : null,
@@ -62,14 +76,14 @@ export function useRocketsList({
   )
 
   const verifiedRockets = useMemo(() => {
-    if (rockets?.length && userAcquiredRocketsIds?.length) {
-      return rockets?.map((rocket) =>
+    if (data?.rockets.length && userAcquiredRocketsIds?.length) {
+      return data?.rockets.map((rocket) =>
         verifyRocketAcquirement(rocket, userAcquiredRocketsIds)
       )
     }
 
     return []
-  }, [rockets, userAcquiredRocketsIds])
+  }, [data, userAcquiredRocketsIds])
 
   function updateRockets(updatedRocket: Rocket) {
     return verifiedRockets?.map((rocket) => {
@@ -83,7 +97,9 @@ export function useRocketsList({
   async function addUserAcquiredRocket(rocketId: string) {
     if (user?.id) {
       const error = await api.addUserAcquiredRocket(rocketId, user?.id)
-      const updatedRocket = rockets?.find((rocket) => rocket.id === rocketId)
+      const updatedRocket = data?.rockets.find(
+        (rocket) => rocket.id === rocketId
+      )
 
       if (error) {
         throw new Error(error)
@@ -103,8 +119,15 @@ export function useRocketsList({
     }
   }
 
+  useEffect(() => {
+    if (verifiedRockets.length > 0) {
+      getRocketsCount()
+    }
+  }, [verifiedRockets])
+
   return {
     rockets: verifiedRockets,
     addUserAcquiredRocket,
+    count: data?.count,
   }
 }

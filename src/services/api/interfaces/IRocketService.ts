@@ -9,7 +9,7 @@ type SortingOptions = {
 export interface IRocketService {
   getRockets(
     filterAndSortingOptions: FilterOptions & SortingOptions
-  ): Promise<Rocket[]>
+  ): Promise<{ rockets: Rocket[]; count: number | null }>
   getRocket(rocketId: string): Promise<Rocket>
   getUserAcquiredRocketsIds(userId: string): Promise<string[]>
   addUserAcquiredRocket(

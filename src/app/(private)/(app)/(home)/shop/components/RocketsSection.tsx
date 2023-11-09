@@ -1,23 +1,27 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Rocket } from './Rocket'
 import { Sorters } from './Sorters'
 
-import { Order } from '@/@types/order'
+import type { Order } from '@/@types/order'
 import { Pagination } from '@/app/components/Pagination'
 import { Search } from '@/app/components/Search'
 import { useRocketsList } from '@/hooks/useRocketsList'
 
 const ITEMS_PER_PAGE = 6
 
-export function RocketsSection() {
+interface RocketsSectionProps {
+  onLoad: () => void
+}
+
+export function RocketsSection({ onLoad }: RocketsSectionProps) {
   const [offset, setOffset] = useState(0)
   const [search, setSearch] = useState('s')
   const [priceOrder, setPriceOrder] = useState<Order>('ascending')
 
-  const { rockets, addUserAcquiredRocket } = useRocketsList({
+  const { rockets, addUserAcquiredRocket, count } = useRocketsList({
     offset,
     limit: ITEMS_PER_PAGE,
     search,
@@ -32,10 +36,16 @@ export function RocketsSection() {
     setPriceOrder(value)
   }
 
+  console.log(rockets.length)
+
+  useEffect(() => {
+    if (rockets.length) onLoad()
+  }, [rockets, count])
+
   return (
     <section id="rockets">
       <h2 className=" text-lg font-semibold text-white">Foguetes</h2>
-      <div className="mt-6 flex items-center gap-3">
+      <div className="mt-3 flex items-center gap-3">
         <Search
           placeholder="Pesquisar foguete"
           onSearchChange={handleSearchChange}
@@ -54,14 +64,16 @@ export function RocketsSection() {
         ))}
       </div>
 
-      <div className="mt-3">
-        <Pagination
-          itemsPerPage={ITEMS_PER_PAGE}
-          totalItems={12}
-          offset={offset}
-          setOffset={setOffset}
-        />
-      </div>
+      {count && (
+        <div className="mt-3">
+          <Pagination
+            itemsPerPage={ITEMS_PER_PAGE}
+            totalItems={count}
+            offset={offset}
+            setOffset={setOffset}
+          />
+        </div>
+      )}
     </section>
   )
 }

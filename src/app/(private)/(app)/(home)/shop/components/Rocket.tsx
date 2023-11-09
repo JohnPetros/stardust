@@ -167,9 +167,8 @@ export function Rocket({
           <div className="flex gap-1">
             {Array.from({ length: 5 }).map((_, index) => {
               const isFilled = index + 1 <= prestigeLevel
-
               return (
-                <>
+                <span key={`star-${index}`}>
                   {isFilled ? (
                     <Image
                       src="/icons/filled-star.svg"
@@ -185,7 +184,7 @@ export function Rocket({
                       alt=""
                     />
                   )}
-                </>
+                </span>
               )
             })}
           </div>

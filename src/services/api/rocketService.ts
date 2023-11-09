@@ -25,19 +25,19 @@ export const RocketService = (): IRocketService => {
     getRockets: async ({ search, offset, limit, priceOrder }) => {
       const canSearch = search.length > 1
 
-      const { data, error } = await supabase
+      const { data, count, error } = await supabase
         .from('rockets')
-        .select('*')
+        .select('*', { count: 'exact', head: false })
         .order('price', { ascending: priceOrder === 'ascending' })
         .ilike(canSearch ? 'name' : '', canSearch ? `%${search}%` : '')
-        .range(offset, limit - 1)
+        .range(offset, limit)
         .returns<Rocket[]>()
 
       if (error) {
         throw new Error(error.message)
       }
 
-      return data
+      return { rockets: data, count }
     },
 
     getUserAcquiredRocketsIds: async (userId: string) => {
@@ -52,6 +52,21 @@ export const RocketService = (): IRocketService => {
 
       return data.map((data) => data.rocket_id)
     },
+
+    // getRocketsCount: async () => {
+    //   const { data, error } = await supabase
+    //     .from('rockets')
+    //     .select('*', { count: 'exact', head: true })
+    //     .single<{ count: number }>()
+
+    //   if (error) {
+    //     throw new Error(error.message)
+    //   }
+
+    //   console.log({ data })
+
+    //   return data.count
+    // },
 
     addUserAcquiredRocket: async (rocketId: string, userId: string) => {
       const { error } = await supabase
