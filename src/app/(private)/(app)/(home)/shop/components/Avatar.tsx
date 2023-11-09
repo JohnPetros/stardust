@@ -134,6 +134,7 @@ export function Avatar({
           fill
           alt={name}
           className="skeleton object-cover"
+          sizes="(min-width: 375px) 100vw"
           onLoadingComplete={(image) => image.classList.remove('skeleton')}
         />
       </div>
