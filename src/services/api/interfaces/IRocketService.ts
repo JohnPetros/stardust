@@ -5,7 +5,7 @@ import { Rocket } from '@/@types/rocket'
 type SortingOptions = {
   priceOrder: Order
   userId: string
-  shouldFetchUnlocked: boolean
+  shouldFetchUnlocked: boolean | null
 }
 
 export interface IRocketService {

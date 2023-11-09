@@ -54,10 +54,14 @@ export function useRocketsList({
     }
   }
 
-  const { data } = useSWR(
-    () => `/rockets?page=${page}&search=${search}&priceOrder=${priceOrder}`,
+  const { data, error } = useSWR(
+    () =>
+      `/rockets?page=${page}&search=${search}&priceOrder=${priceOrder}&user_id=${user?.id}`,
     getRockets
   )
+
+  console.log(error)
+  console.log(data)
 
   const { data: userAcquiredRocketsIds } = useSWR(
     user?.id ? '/users_acquired_rockets_ids' : null,

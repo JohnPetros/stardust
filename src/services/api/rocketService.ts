@@ -22,16 +22,33 @@ export const RocketService = (): IRocketService => {
       return data
     },
 
-    getRockets: async ({ search, offset, limit, priceOrder }) => {
+    getRockets: async ({
+      search,
+      offset,
+      limit,
+      priceOrder,
+      shouldFetchUnlocked = null,
+      userId,
+    }) => {
       const canSearch = search.length > 1
 
-      const { data, count, error } = await supabase
-        .from('rockets')
-        .select('*', { count: 'exact', head: false })
+      let query = supabase.from('rockets').select('*', {
+        count: 'exact',
+        head: false,
+      })
+
+      if (shouldFetchUnlocked !== null && shouldFetchUnlocked) {
+        query = query.eq('users_acquired_rockets.user_id', userId)
+      } else if (shouldFetchUnlocked !== null && !shouldFetchUnlocked) {
+        query = query.neq('users_acquired_rockets.user_id', userId)
+      }
+
+      query = query
         .order('price', { ascending: priceOrder === 'ascending' })
         .ilike(canSearch ? 'name' : '', canSearch ? `%${search}%` : '')
         .range(offset, limit)
-        .returns<Rocket[]>()
+
+      const { data, count, error } = await query
 
       if (error) {
         throw new Error(error.message)
@@ -52,21 +69,6 @@ export const RocketService = (): IRocketService => {
 
       return data.map((data) => data.rocket_id)
     },
-
-    // getRocketsCount: async () => {
-    //   const { data, error } = await supabase
-    //     .from('rockets')
-    //     .select('*', { count: 'exact', head: true })
-    //     .single<{ count: number }>()
-
-    //   if (error) {
-    //     throw new Error(error.message)
-    //   }
-
-    //   console.log({ data })
-
-    //   return data.count
-    // },
 
     addUserAcquiredRocket: async (rocketId: string, userId: string) => {
       const { error } = await supabase
