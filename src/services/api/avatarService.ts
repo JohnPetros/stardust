@@ -1,8 +1,10 @@
 'use client'
+import { IAvatarService } from './interfaces/IAvatarService'
+
 import type { Avatar } from '@/@types/avatar'
 import { useSupabase } from '@/hooks/useSupabase'
 
-export const AvatarService = () => {
+export const AvatarService = (): IAvatarService => {
   const { supabase } = useSupabase()
 
   return {
@@ -18,16 +20,25 @@ export const AvatarService = () => {
       return data
     },
 
-    getAvatars: async () => {
-      const { data, error } = await supabase
+    getAvatars: async ({ search, offset, limit, priceOrder }) => {
+      const canSearch = search.length > 1
+
+      const { data, count, error } = await supabase
         .from('avatars')
-        .select('*')
-        .order('price, name', { ascending: true })
+        .select('*', { count: 'exact', head: false })
+        .order('price', { ascending: priceOrder === 'ascending' })
+        .ilike(canSearch ? 'name' : '', canSearch ? `%${search}%` : '')
+        .range(offset, limit)
         .returns<Avatar[]>()
+
       if (error) {
         throw new Error(error.message)
       }
-      return data
+
+      return {
+        avatars: data,
+        count,
+      }
     },
 
     getUserAcquiredAvatarsIds: async (userId: string) => {
