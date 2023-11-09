@@ -128,7 +128,7 @@ export function AchievementsList() {
     return (
       <div
         className={twMerge(
-          'flex flex-shrink-0 flex-col gap-6 p-6',
+          'flex flex-shrink-0 flex-col gap-6',
           isLoading ? 'h-full items-center justify-center' : 'pb-32'
         )}
       >
@@ -137,6 +137,7 @@ export function AchievementsList() {
             <Search
               id="search-achivements"
               name="search-achivements"
+              placeholder="pesquisar conquista"
               onSearchChange={handleSearchChange}
             />
             <div className="ml-auto w-max">
