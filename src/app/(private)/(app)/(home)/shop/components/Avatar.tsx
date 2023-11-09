@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { LockSimple } from '@phosphor-icons/react'
+import { motion, Variants } from 'framer-motion'
 import Image from 'next/image'
 import { useSWRConfig } from 'swr'
 import { twMerge } from 'tailwind-merge'
@@ -11,6 +12,17 @@ import { Avatar } from '@/@types/avatar'
 import { AlertRef } from '@/app/components/Alert'
 import { useAuth } from '@/contexts/AuthContext'
 import { getImage, playSound } from '@/utils/helpers'
+
+const avatarVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.5,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+  },
+}
 
 interface AvatarProps {
   data: Avatar
@@ -78,7 +90,10 @@ export function Avatar({
   }, [user?.avatar_id])
 
   return (
-    <div
+    <motion.div
+      variants={avatarVariants}
+      initial="hidden"
+      animate="visible"
       className={twMerge(
         'grid grid-cols-[1fr_1.4fr] overflow-hidden rounded-md border-2',
         isSelected ? 'border-yellow-300' : 'border-transparent',
@@ -122,6 +137,6 @@ export function Avatar({
           onLoadingComplete={(image) => image.classList.remove('skeleton')}
         />
       </div>
-    </div>
+    </motion.div>
   )
 }

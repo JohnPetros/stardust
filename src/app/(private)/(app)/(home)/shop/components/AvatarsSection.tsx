@@ -44,7 +44,7 @@ export function AvatarsSection() {
         <Sorters onPriceOrderChange={handlePriceOrderChange} />
       </div>
 
-      <div className="mt-6 grid h-[64rem] grid-cols-1 items-start justify-center gap-8 pb-12 sm:grid-cols-2 lg:grid-cols-2">
+      <div className="mt-6 grid h-[72rem] grid-cols-1 items-start justify-center gap-8 pb-12 sm:grid-cols-2 lg:grid-cols-2">
         {avatars.map((avatar) => (
           <Avatar
             key={avatar.id}
