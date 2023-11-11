@@ -58,18 +58,21 @@ export const useChallengesList = () => {
     error,
     isLoading,
   } = useSWR(
-    user?.id
-      ? ['/challenges', status, difficulty, categoriesIds, search]
-      : null,
+    () =>
+      `/challenges?status=${status}&difficulty=${difficulty}&categoriesIds=${categoriesIds.join(
+        ','
+      )}&search=${search}&user=${user?.id}`,
     getFilteredChallenges
   )
+
+  console.log(challenges)
 
   if (error) {
     throw new Error(error)
   }
 
   const { data: userCompletedChallengesIds } = useSWR(
-    '/user_completed_challenges_ids',
+    () => `/user_completed_challenges_ids?user_id=${user?.id}`,
     getUserCompletedChallengesIds
   )
 
@@ -95,10 +98,12 @@ export const useChallengesList = () => {
   }
 
   const filteredChallenges = useMemo(() => {
-    if (challenges && categories && userCompletedChallengesIds) {
+    if (challenges && categories && userCompletedChallengesIds && !isLoading) {
       return challenges.map(addCategories).map(checkCompletition)
     }
-  }, [challenges, categories, userCompletedChallengesIds])
+  }, [challenges, categories, userCompletedChallengesIds, isLoading])
+
+  console.log(filteredChallenges)
 
   return {
     challenges: filteredChallenges ?? [],
