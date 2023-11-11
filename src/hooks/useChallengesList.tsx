@@ -1,28 +1,23 @@
 'use client'
 
-import { useContext, useMemo } from 'react'
-import { useAuth } from '@/contexts/AuthContext'
-import { useCategory } from './useCategory'
+import { useMemo } from 'react'
 import useSWR from 'swr'
 
-import { ChallengesListContext } from '@/contexts/ChallengesListContext'
-
-import { useApi } from '@/services/api'
+import { useCategory } from './useCategory'
 
 import type { Challenge } from '@/@types/challenge'
+import { useAuth } from '@/contexts/AuthContext'
+import { useApi } from '@/services/api'
+import { useChallengesListStore } from '@/stores/challengesListStore'
 
 export const useChallengesList = () => {
   const api = useApi()
 
   const { user } = useAuth()
   const { categories } = useCategory()
-  const { state, dispatch } = useContext(ChallengesListContext)
-
-  if (!state) {
-    throw new Error(
-      'useChallengesList must be used inside ChallengesListProvider'
-    )
-  }
+  const { categoriesIds, difficulty, status, search } = useChallengesListStore(
+    (store) => store.state
+  )
 
   function sortChallengesByDifficulty(challenges: Challenge[]) {
     const easyChallenges = challenges.filter(
@@ -42,11 +37,10 @@ export const useChallengesList = () => {
     if (user?.id) {
       const challenges = await api.getFilteredChallenges({
         userId: user.id,
-        status: state.status,
-        difficulty: state.difficulty,
-        categoriesIds: state.categoriesIds,
-        search: state.search ?? null,
-        range: 0,
+        status: status,
+        difficulty: difficulty,
+        categoriesIds: categoriesIds,
+        search: search ?? null,
       })
 
       return sortChallengesByDifficulty(challenges)
@@ -64,14 +58,8 @@ export const useChallengesList = () => {
     error,
     isLoading,
   } = useSWR(
-    state && user?.id
-      ? [
-          '/challenges',
-          state.status,
-          state.difficulty,
-          state.categoriesIds,
-          state.search,
-        ]
+    user?.id
+      ? ['/challenges', status, difficulty, categoriesIds, search]
       : null,
     getFilteredChallenges
   )
@@ -98,23 +86,21 @@ export const useChallengesList = () => {
   }
 
   function checkCompletition(challenge: Challenge) {
-    if (userCompletedChallengesIds?.length) {
-      const is_completed = userCompletedChallengesIds.some(
-        (completedChallengeId) => completedChallengeId === challenge.id
-      )
+    if (userCompletedChallengesIds) {
+      const isCompleted = userCompletedChallengesIds.includes(challenge.id)
 
-      return { ...challenge, is_completed }
+      return { ...challenge, isCompleted }
     }
     return challenge
   }
 
   const filteredChallenges = useMemo(() => {
-    return challenges?.map(addCategories).map(checkCompletition)
+    if (challenges && categories && userCompletedChallengesIds) {
+      return challenges.map(addCategories).map(checkCompletition)
+    }
   }, [challenges, categories, userCompletedChallengesIds])
 
   return {
-    state,
-    dispatch,
     challenges: filteredChallenges ?? [],
     categories: categories ?? [],
     isLoading,
