@@ -1,6 +1,6 @@
 'use client'
 
-import { KeyboardEvent, useRef, useState } from 'react'
+import { KeyboardEvent, useRef } from 'react'
 import {
   ArrowClockwise,
   ArrowsOutSimple,
@@ -15,35 +15,26 @@ import { Settings } from './Settings'
 import { Shortcuts } from './Shortcuts'
 
 import type { TestCase } from '@/@types/challenge'
-import { Modal, ModalRef } from '@/app/components/Alert'
+import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { CodeEditor, CodeEditorRef } from '@/app/components/CodeEditor'
 import { Toast, ToastRef } from '@/app/components/Toast'
-import { useChallengeStore } from '@/hooks/useChallengeStore'
 import { execute } from '@/libs/delegua'
+import { useChallengeStore } from '@/stores/challengeStore'
 import { playSound } from '@/utils/helpers'
 
 export function Code() {
   const {
     state: { challenge },
-    action: { setUserOutput },
+    actions: { setUserOutput },
   } = useChallengeStore()
 
   const code = useRef(challenge?.code ?? '')
   const codeContainer = useRef<HTMLDivElement>(null)
   const errorLine = useRef(0)
   const toastRef = useRef<ToastRef>(null)
-  const resetCodeModalRef = useRef<ModalRef>(null)
   const codeEditorRef = useRef<CodeEditorRef>(null)
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
-  const resetCodeButtonRef = useRef<HTMLButtonElement>(null)
-  const dictionaryButtonRef = useRef<HTMLButtonElement>(null)
-  const shortcutsButtonRef = useRef<HTMLButtonElement>(null)
-  const fullScreenButtonRef = useRef<HTMLButtonElement>(null)
-  const settingsButtonRef = useRef<HTMLButtonElement>(null)
-
-  const [isShortcutsOpen, setIsShortcutsOpen] = useState(false)
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
 
   function getErrorLine() {
     return errorLine.current > 0 ? `</br>Linha: ${errorLine.current}` : ''
@@ -63,7 +54,6 @@ export function Code() {
   }
 
   function resetCode() {
-    resetCodeModalRef.current?.close()
     codeEditorRef.current?.reloadValue()
   }
 
@@ -126,23 +116,6 @@ export function Code() {
     if (userOutput.length) setUserOutput(userOutput)
   }
 
-  function handleResetCode() {
-    resetCodeModalRef.current?.open()
-  }
-
-  function handleShortcutsOpen() {
-    setIsShortcutsOpen(true)
-  }
-
-  function handleSettingsOpen() {
-    setIsSettingsOpen(true)
-  }
-
-  function handleResetCodeModalClose() {
-    resetCodeModalRef.current?.close()
-    resetCodeButtonRef.current?.focus()
-  }
-
   function handleCodeChange(value: string) {
     code.current = value
   }
@@ -171,31 +144,31 @@ export function Code() {
           </ToolBar.Button>
 
           <div className="flex items-center gap-3">
-            <IconButton
-              buttonRef={resetCodeButtonRef}
-              icon={ArrowClockwise}
-              onClick={handleResetCode}
-            />
-            <IconButton
-              buttonRef={fullScreenButtonRef}
-              icon={ArrowsOutSimple}
-              onClick={() => {}}
-            />
-            <IconButton
-              buttonRef={dictionaryButtonRef}
-              icon={CodeIcon}
-              onClick={handleShortcutsOpen}
-            />
-            <IconButton
-              buttonRef={shortcutsButtonRef}
-              icon={Command}
-              onClick={handleShortcutsOpen}
-            />
-            <IconButton
-              buttonRef={settingsButtonRef}
-              icon={Gear}
-              onClick={handleSettingsOpen}
-            />
+            <Alert
+              type={'asking'}
+              title={'Tem certeza que deseja resetar o seu código?'}
+              body={null}
+              action={
+                <Button tabIndex={0} autoFocus onClick={resetCode}>
+                  Resetar código
+                </Button>
+              }
+              cancel={
+                <Button className="bg-red-700 text-gray-100">Cancelar</Button>
+              }
+              canPlaySong={false}
+            >
+              <IconButton icon={ArrowClockwise} />
+            </Alert>
+
+            <IconButton icon={ArrowsOutSimple} />
+            <Shortcuts>
+              <IconButton icon={CodeIcon} />
+            </Shortcuts>
+            <IconButton icon={Command} />
+            <Settings>
+              <IconButton icon={Gear} />
+            </Settings>
           </div>
         </ToolBar.Root>
         <CodeEditor
@@ -205,37 +178,6 @@ export function Code() {
           height={codeContainerHeight - 40}
           hasMinimap
           onChange={handleCodeChange}
-        />
-
-        <Modal
-          ref={resetCodeModalRef}
-          type={'asking'}
-          title={'Tem certeza que deseja resetar o seu código?'}
-          body={null}
-          footer={
-            <div className="mt-3 grid w-full grid-cols-2 items-center justify-center gap-2">
-              <Button tabIndex={0} autoFocus onClick={resetCode}>
-                Resetar código
-              </Button>
-              <Button
-                className="bg-red-700 text-gray-100"
-                onClick={handleResetCodeModalClose}
-              >
-                Cancelar
-              </Button>
-            </div>
-          }
-          canPlaySong={false}
-        />
-
-        <Shortcuts
-          isOpen={isShortcutsOpen}
-          onClose={() => setIsShortcutsOpen(false)}
-        />
-
-        <Settings
-          isOpen={isSettingsOpen}
-          onClose={() => setIsSettingsOpen(false)}
         />
       </div>
     )

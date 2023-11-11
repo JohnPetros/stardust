@@ -6,6 +6,7 @@ import { motion, Variants } from 'framer-motion'
 
 export const DialogTitle = Container.Title
 export const DialogTrigger = Container.Trigger
+export const DialogClose = Container.Close
 
 const dialogAnimations: Variants = {
   close: {
@@ -20,13 +21,12 @@ const dialogAnimations: Variants = {
 
 interface DialogProps {
   children: ReactNode
-  isOpen: boolean
-  onClose: VoidFunction
+  onClose?: VoidFunction
 }
 
-export function Dialog({ children, isOpen, onClose }: DialogProps) {
+export function Dialog({ children, onClose }: DialogProps) {
   return (
-    <Container.Root open={isOpen} onOpenChange={onClose}>
+    <Container.Root onOpenChange={onClose}>
       <Container.Overlay className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50" />
       {children}
     </Container.Root>

@@ -1,28 +1,17 @@
 'use client'
 
 import { RefObject } from 'react'
-
-import * as ToolBar from '@radix-ui/react-toolbar'
 import { Icon } from '@phosphor-icons/react'
+import * as ToolBar from '@radix-ui/react-toolbar'
 
 interface IconButtonProps {
-  buttonRef: RefObject<HTMLButtonElement>
   icon: Icon
-  onClick: VoidFunction
 }
 
-export function IconButton({
-  buttonRef,
-  icon: Icon,
-  onClick,
-}: IconButtonProps) {
+export function IconButton({ icon: Icon }: IconButtonProps) {
   return (
-    <ToolBar.Button
-      ref={buttonRef}
-      className="grid place-content-center"
-      onClick={onClick}
-    >
-      <Icon className="text-green-500 text-xl" weight="bold" />
+    <ToolBar.Button className="grid place-content-center">
+      <Icon className="text-xl text-green-500" weight="bold" />
     </ToolBar.Button>
   )
 }
