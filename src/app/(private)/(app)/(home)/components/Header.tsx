@@ -44,6 +44,7 @@ export function Header() {
             onClick={toggle}
             aria-expanded={isOpen ? 'true' : 'false'}
             aria-controls="sidebar"
+            className="relative"
           >
             <CounterBadge count={rescueableAchievementsAmount} />
             <List
