@@ -1,13 +1,12 @@
 import { useEffect } from 'react'
-import { useChallengeStore } from '@/hooks/useChallengeStore'
-import { useBreakpoint } from '@/hooks/useBreakpoint'
 
-import { VerificationButton } from '@/app/(private)/(app)/lesson/components/Quiz/VerificationButton'
 import { TestCase } from './TestCase'
 
-import { compareArrays } from '@/utils/helpers'
-
 import type { TestCase as TestCaseData } from '@/@types/challenge'
+import { VerificationButton } from '@/app/(private)/(app)/lesson/components/Quiz/VerificationButton'
+import { useBreakpoint } from '@/hooks/useBreakpoint'
+import { useChallengeStore } from '@/stores/challengeStore'
+import { compareArrays } from '@/utils/helpers'
 
 export function Result() {
   const {
@@ -19,7 +18,7 @@ export function Result() {
       isAnswerCorrect,
       tabHandler,
     },
-    action: {
+    actions: {
       incrementIncorrectAswersAmount,
       setIsAnswerVerified,
       setIsAnswerCorrect,
@@ -27,7 +26,7 @@ export function Result() {
       setIsEnd,
     },
   } = useChallengeStore()
-  const { md } = useBreakpoint()
+  const { md: isMobile } = useBreakpoint()
 
   function handleUserAnswer() {
     setIsAnswerVerified(!isAnswerVerified)
@@ -46,7 +45,7 @@ export function Result() {
     if (isAnswerVerified) {
       incrementIncorrectAswersAmount()
 
-      if (md) tabHandler?.showCodeTab()
+      if (isMobile) tabHandler?.showCodeTab()
     }
   }
 
@@ -77,7 +76,7 @@ export function Result() {
 
   if (challenge)
     return (
-      <div className="w-full h-full bg-gray-800 relative">
+      <div className="relative h-full w-full bg-gray-800">
         <div className="space-y-6 p-6">
           {challenge.test_cases.map((testCase, index) => (
             <TestCase

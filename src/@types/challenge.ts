@@ -1,6 +1,5 @@
 import type { Category } from './category'
 import type { Text } from './text'
-import type { User } from './user'
 
 export type Difficulty = 'easy' | 'medium' | 'hard'
 

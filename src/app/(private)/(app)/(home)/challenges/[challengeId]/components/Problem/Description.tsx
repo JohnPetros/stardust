@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
-import { useChallengeStore } from '@/hooks/useChallengeStore'
 
 import { Text } from '@/app/components/Text'
+import { useChallengeStore } from '@/stores/challengeStore'
 
 export function Description() {
   const {
     state: { challenge, isFirstRendering },
-    action: { setIsFirstRendering },
+    actions: { setIsFirstRendering },
   } = useChallengeStore()
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export function Description() {
 
   if (challenge)
     return (
-      <div className="p-6 space-y-8">
+      <div className="space-y-8 p-6">
         {challenge.texts.map((text, index) => (
           <Text
             key={`text-${index}`}

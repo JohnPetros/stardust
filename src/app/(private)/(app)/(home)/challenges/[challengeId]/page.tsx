@@ -13,8 +13,8 @@ import { Slider } from './components/Slider'
 
 import { useAuth } from '@/contexts/AuthContext'
 import { useChallenge } from '@/hooks/useChallenge'
-import { useChallengeStore } from '@/hooks/useChallengeStore'
 import { useStar } from '@/hooks/useStar'
+import { useChallengeStore } from '@/stores/challengeStore'
 import { CHALLENGE_EARNINGS_BY_DIFFICULTY } from '@/utils/constants'
 import { formatSecondsToTime } from '@/utils/helpers'
 
@@ -31,7 +31,7 @@ export default function Challenge() {
 
   const {
     state,
-    action: { setChallenge, resetState },
+    actions: { setChallenge, resetState },
   } = useChallengeStore()
   const router = useRouter()
 
@@ -59,7 +59,7 @@ export default function Challenge() {
   }: updateUserDataParam) {
     let completed_challenges = user.completed_challenges
 
-    if (challenge && !challenge.isCompletedted) {
+    if (challenge && !challenge.isCompleted) {
       await addUserCompletedChallenge(challenge.id, user.id)
       completed_challenges++
     }
@@ -117,8 +117,8 @@ export default function Challenge() {
     if (challenge && state.isEnd) {
       const difficulty = CHALLENGE_EARNINGS_BY_DIFFICULTY[challenge?.difficulty]
 
-      const coins = difficulty.coins / (challenge?.isCompletedted ? 2 : 1)
-      const xp = difficulty.xp / (challenge?.isCompletedted ? 2 : 1)
+      const coins = difficulty.coins / (challenge?.isCompleted ? 2 : 1)
+      const xp = difficulty.xp / (challenge?.isCompleted ? 2 : 1)
       const accurance = getAccurance()
       const time = formatSecondsToTime(seconds.current)
 

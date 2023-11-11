@@ -1,22 +1,21 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useChallengeStore } from '@/hooks/useChallengeStore'
+import * as Tabs from '@radix-ui/react-tabs'
+import { AnimatePresence } from 'framer-motion'
+
+import { Result } from '../Result'
 
 import { Description } from './Description'
-import { Result } from '../Result'
 import { TabButton } from './TabButton'
 import TabContent from './TabContent'
-import * as Tabs from '@radix-ui/react-tabs'
 
-import { AnimatePresence } from 'framer-motion'
+import { useChallengeStore } from '@/stores/challengeStore'
 
 export type Tab = 'description' | 'result' | 'comments'
 
 export function Problem() {
-  const {
-    state: { challenge, results },
-  } = useChallengeStore()
+  const { challenge, results } = useChallengeStore((store) => store.state)
   const tabsRef = useRef<HTMLDivElement[]>([])
   const [activeTab, setActiveTab] = useState<Tab>('description')
 
@@ -52,7 +51,7 @@ export function Problem() {
 
   if (challenge)
     return (
-      <div className="w-full max-h-screen border-4 border-gray-700 rounded-md">
+      <div className="max-h-screen w-full rounded-md border-4 border-gray-700">
         <Tabs.Root
           defaultValue="description"
           onValueChange={handleTabChange}
