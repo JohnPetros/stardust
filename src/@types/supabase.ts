@@ -154,17 +154,17 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "challenges_star_id_fkey"
-            columns: ["star_id"]
-            referencedRelation: "stars"
-            referencedColumns: ["id"]
+            foreignKeyName: 'challenges_star_id_fkey'
+            columns: ['star_id']
+            referencedRelation: 'stars'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "challenges_topic_id_fkey"
-            columns: ["topic_id"]
-            referencedRelation: "topics"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'challenges_topic_id_fkey'
+            columns: ['topic_id']
+            referencedRelation: 'topics'
+            referencedColumns: ['id']
+          },
         ]
       }
       challenges_categories: {
@@ -185,17 +185,17 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "challenges_categories_category_id_fkey"
-            columns: ["category_id"]
-            referencedRelation: "categories"
-            referencedColumns: ["id"]
+            foreignKeyName: 'challenges_categories_category_id_fkey'
+            columns: ['category_id']
+            referencedRelation: 'categories'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "challenges_categories_challenge_id_fkey"
-            columns: ["challenge_id"]
-            referencedRelation: "challenges"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'challenges_categories_challenge_id_fkey'
+            columns: ['challenge_id']
+            referencedRelation: 'challenges'
+            referencedColumns: ['id']
+          },
         ]
       }
       codes: {
@@ -222,11 +222,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "codes_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'codes_user_id_fkey'
+            columns: ['user_id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
         ]
       }
       comments: {
@@ -259,23 +259,23 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "comments_author_id_fkey"
-            columns: ["author_id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            foreignKeyName: 'comments_author_id_fkey'
+            columns: ['author_id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "comments_challenge_id_fkey"
-            columns: ["challenge_id"]
-            referencedRelation: "challenges"
-            referencedColumns: ["id"]
+            foreignKeyName: 'comments_challenge_id_fkey'
+            columns: ['challenge_id']
+            referencedRelation: 'challenges'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "comments_parent_id_fkey"
-            columns: ["parent_id"]
-            referencedRelation: "comments"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'comments_parent_id_fkey'
+            columns: ['parent_id']
+            referencedRelation: 'comments'
+            referencedColumns: ['id']
+          },
         ]
       }
       planets: {
@@ -323,11 +323,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "questions_star_id_fkey"
-            columns: ["star_id"]
-            referencedRelation: "stars"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'questions_star_id_fkey'
+            columns: ['star_id']
+            referencedRelation: 'stars'
+            referencedColumns: ['id']
+          },
         ]
       }
       rankings: {
@@ -405,11 +405,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "stars_planet_id_fkey"
-            columns: ["planet_id"]
-            referencedRelation: "planets"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'stars_planet_id_fkey'
+            columns: ['planet_id']
+            referencedRelation: 'planets'
+            referencedColumns: ['id']
+          },
         ]
       }
       topics: {
@@ -517,23 +517,23 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "users_avatar_id_fkey"
-            columns: ["avatar_id"]
-            referencedRelation: "avatars"
-            referencedColumns: ["id"]
+            foreignKeyName: 'users_avatar_id_fkey'
+            columns: ['avatar_id']
+            referencedRelation: 'avatars'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "users_ranking_id_fkey"
-            columns: ["ranking_id"]
-            referencedRelation: "rankings"
-            referencedColumns: ["id"]
+            foreignKeyName: 'users_ranking_id_fkey'
+            columns: ['ranking_id']
+            referencedRelation: 'rankings'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "users_rocket_id_fkey"
-            columns: ["rocket_id"]
-            referencedRelation: "rockets"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'users_rocket_id_fkey'
+            columns: ['rocket_id']
+            referencedRelation: 'rockets'
+            referencedColumns: ['id']
+          },
         ]
       }
       users_acquired_avatars: {
@@ -554,17 +554,17 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "users_acquired_avatars_avatar_id_fkey"
-            columns: ["avatar_id"]
-            referencedRelation: "avatars"
-            referencedColumns: ["id"]
+            foreignKeyName: 'users_acquired_avatars_avatar_id_fkey'
+            columns: ['avatar_id']
+            referencedRelation: 'avatars'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "users_acquired_avatars_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'users_acquired_avatars_user_id_fkey'
+            columns: ['user_id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
         ]
       }
       users_acquired_rockets: {
@@ -585,17 +585,17 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "users_acquired_rockets_rocket_id_fkey"
-            columns: ["rocket_id"]
-            referencedRelation: "rockets"
-            referencedColumns: ["id"]
+            foreignKeyName: 'users_acquired_rockets_rocket_id_fkey'
+            columns: ['rocket_id']
+            referencedRelation: 'rockets'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "users_acquired_rockets_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'users_acquired_rockets_user_id_fkey'
+            columns: ['user_id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
         ]
       }
       users_completed_challenges: {
@@ -616,17 +616,17 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "users_completed_challenges_challenge_id_fkey"
-            columns: ["challenge_id"]
-            referencedRelation: "challenges"
-            referencedColumns: ["id"]
+            foreignKeyName: 'users_completed_challenges_challenge_id_fkey'
+            columns: ['challenge_id']
+            referencedRelation: 'challenges'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "users_completed_challenges_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'users_completed_challenges_user_id_fkey'
+            columns: ['user_id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
         ]
       }
       users_liked_comments: {
@@ -647,17 +647,17 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "users_liked_comments_comment_id_fkey"
-            columns: ["comment_id"]
-            referencedRelation: "comments"
-            referencedColumns: ["id"]
+            foreignKeyName: 'users_liked_comments_comment_id_fkey'
+            columns: ['comment_id']
+            referencedRelation: 'comments'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "users_liked_comments_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'users_liked_comments_user_id_fkey'
+            columns: ['user_id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
         ]
       }
       users_rescuable_achievements: {
@@ -678,17 +678,17 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "users_rescuable_achievements_achievement_id_fkey"
-            columns: ["achievement_id"]
-            referencedRelation: "achievements"
-            referencedColumns: ["id"]
+            foreignKeyName: 'users_rescuable_achievements_achievement_id_fkey'
+            columns: ['achievement_id']
+            referencedRelation: 'achievements'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "users_rescuable_achievements_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'users_rescuable_achievements_user_id_fkey'
+            columns: ['user_id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
         ]
       }
       users_unlocked_achievements: {
@@ -709,17 +709,17 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "users_unlocked_achievements_achievement_id_fkey"
-            columns: ["achievement_id"]
-            referencedRelation: "achievements"
-            referencedColumns: ["id"]
+            foreignKeyName: 'users_unlocked_achievements_achievement_id_fkey'
+            columns: ['achievement_id']
+            referencedRelation: 'achievements'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "users_unlocked_achievements_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'users_unlocked_achievements_user_id_fkey'
+            columns: ['user_id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
         ]
       }
       users_unlocked_stars: {
@@ -740,17 +740,17 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "users_unlocked_stars_star_id_fkey"
-            columns: ["star_id"]
-            referencedRelation: "stars"
-            referencedColumns: ["id"]
+            foreignKeyName: 'users_unlocked_stars_star_id_fkey'
+            columns: ['star_id']
+            referencedRelation: 'stars'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "users_unlocked_stars_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'users_unlocked_stars_user_id_fkey'
+            columns: ['user_id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
         ]
       }
       users_unlocked_topics: {
@@ -771,17 +771,17 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "users_unlocked_topics_topic_id_fkey"
-            columns: ["topic_id"]
-            referencedRelation: "topics"
-            referencedColumns: ["id"]
+            foreignKeyName: 'users_unlocked_topics_topic_id_fkey'
+            columns: ['topic_id']
+            referencedRelation: 'topics'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "users_unlocked_topics_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'users_unlocked_topics_user_id_fkey'
+            columns: ['user_id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
         ]
       }
       winners: {
@@ -814,23 +814,23 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "winners_avatar_id_fkey"
-            columns: ["avatar_id"]
-            referencedRelation: "avatars"
-            referencedColumns: ["id"]
+            foreignKeyName: 'winners_avatar_id_fkey'
+            columns: ['avatar_id']
+            referencedRelation: 'avatars'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "winners_ranking_id_fkey"
-            columns: ["ranking_id"]
-            referencedRelation: "rankings"
-            referencedColumns: ["id"]
+            foreignKeyName: 'winners_ranking_id_fkey'
+            columns: ['ranking_id']
+            referencedRelation: 'rankings'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "winners_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'winners_user_id_fkey'
+            columns: ['user_id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
         ]
       }
     }
@@ -973,11 +973,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "buckets_owner_fkey"
-            columns: ["owner"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'buckets_owner_fkey'
+            columns: ['owner']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
         ]
       }
       migrations: {
@@ -1040,17 +1040,17 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "objects_bucketId_fkey"
-            columns: ["bucket_id"]
-            referencedRelation: "buckets"
-            referencedColumns: ["id"]
+            foreignKeyName: 'objects_bucketId_fkey'
+            columns: ['bucket_id']
+            referencedRelation: 'buckets'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "objects_owner_fkey"
-            columns: ["owner"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'objects_owner_fkey'
+            columns: ['owner']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
         ]
       }
     }
