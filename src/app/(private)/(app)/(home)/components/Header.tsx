@@ -7,8 +7,10 @@ import Image from 'next/image'
 
 import StreakAnimation from '../../../../../../public/animations/streak.json'
 
+import { CounterBadge } from './CounterBadge'
 import { UserAvatar } from './UserAvatar'
 
+import { useAchivements } from '@/contexts/AchievementsContext'
 import { useAuth } from '@/contexts/AuthContext'
 import { useSiderbar } from '@/contexts/SidebarContext'
 
@@ -27,6 +29,7 @@ const headerAnimations: Variants = {
 export function Header() {
   const { user } = useAuth()
   const { toggle, isOpen } = useSiderbar()
+  const { rescueableAchievementsAmount } = useAchivements()
 
   if (user?.id)
     return (
@@ -42,6 +45,7 @@ export function Header() {
             aria-expanded={isOpen ? 'true' : 'false'}
             aria-controls="sidebar"
           >
+            <CounterBadge count={rescueableAchievementsAmount} />
             <List
               width={24}
               height={24}

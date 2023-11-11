@@ -59,7 +59,7 @@ export default function Challenge() {
   }: updateUserDataParam) {
     let completed_challenges = user.completed_challenges
 
-    if (challenge && !challenge.is_completed) {
+    if (challenge && !challenge.isCompletedted) {
       await addUserCompletedChallenge(challenge.id, user.id)
       completed_challenges++
     }
@@ -117,8 +117,8 @@ export default function Challenge() {
     if (challenge && state.isEnd) {
       const difficulty = CHALLENGE_EARNINGS_BY_DIFFICULTY[challenge?.difficulty]
 
-      const coins = difficulty.coins / (challenge?.is_completed ? 2 : 1)
-      const xp = difficulty.xp / (challenge?.is_completed ? 2 : 1)
+      const coins = difficulty.coins / (challenge?.isCompletedted ? 2 : 1)
+      const xp = difficulty.xp / (challenge?.isCompletedted ? 2 : 1)
       const accurance = getAccurance()
       const time = formatSecondsToTime(seconds.current)
 

@@ -1,26 +1,26 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useChallengeContext } from '@/hooks/useChallengeContext'
-
-import { register } from 'swiper/element/bundle'
-import { Swiper, SwiperSlide, SwiperRef } from 'swiper/react'
 import { Swiper as SwiperInstance } from 'swiper'
+import { register } from 'swiper/element/bundle'
+import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react'
+
+import { Code } from '../Code'
+import { Problem } from '../Problem'
+import { Result } from '../Result'
 
 import { NavButton } from './NavButton'
-import { Problem } from '../Problem'
-import { Code } from '../Code'
-import { Result } from '../Result'
 
 register()
 import { motion, useAnimate } from 'framer-motion'
+
 import { useBreakpoint } from '@/hooks/useBreakpoint'
-import { useChallengeStore } from '@/hooks/useChallengeStore'
+import { useChallengeStore } from '@/stores/challengeStore'
 
 export function Slider() {
   const {
     state: { tabHandler },
-    action: { setTabHandler },
+    actions: { setTabHandler },
   } = useChallengeStore()
   const { md } = useBreakpoint()
 
@@ -67,7 +67,7 @@ export function Slider() {
   return (
     <div>
       <nav className="bg-gray-900">
-        <ul className="grid grid-cols-3 relative">
+        <ul className="relative grid grid-cols-3">
           <li>
             <NavButton
               isActive={activeSlideIndex === 0}
@@ -95,7 +95,7 @@ export function Slider() {
           <motion.span
             ref={scope}
             animate="swipe"
-            className="block col-span-1 h-[2px] bg-green-600 rounded-full"
+            className="col-span-1 block h-[2px] rounded-full bg-green-600"
           />
         </ul>
       </nav>
@@ -107,7 +107,7 @@ export function Slider() {
         direction="horizontal"
         centeredSlides={true}
         longSwipesRatio={0.9}
-        className="w-full h-[calc(100vh-5.2rem)]"
+        className="h-[calc(100vh-5.2rem)] w-full"
       >
         <SwiperSlide className="h-full overflow-y-auto">
           <Problem />

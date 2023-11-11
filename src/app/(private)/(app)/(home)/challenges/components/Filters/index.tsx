@@ -9,8 +9,11 @@ import { Tag } from './Tag'
 
 import type { Category } from '@/@types/category'
 import { Search } from '@/app/components/Search'
-import type { Difficulty, Status } from '@/contexts/ChallengesListContext'
-import { useChallengesList } from '@/hooks/useChallengesList'
+import {
+  Difficulty,
+  Status,
+  useChallengesListStore,
+} from '@/stores/challengesListStore'
 import { FILTER_SELECTS_ITEMS } from '@/utils/constants/filter-selects-items'
 
 interface FiltersProps {
@@ -18,21 +21,21 @@ interface FiltersProps {
 }
 
 export function Filters({ categories }: FiltersProps) {
-  const { state, dispatch } = useChallengesList()
+  const { state, actions } = useChallengesListStore()
   const [tags, setTags] = useState<string[]>([])
   const statusTag = useRef<string | null>(null)
   const difficultyTag = useRef<string | null>(null)
 
   function setCategoriesIds(cateogiresIds: string[]) {
-    dispatch({ type: 'setCategoriesIds', payload: cateogiresIds })
+    actions.setCategoriesIds(cateogiresIds)
   }
 
   function setStatus(status: Status) {
-    dispatch({ type: 'setStatus', payload: status })
+    actions.setStatus(status)
   }
 
   function setDifficulty(difficulty: Difficulty) {
-    dispatch({ type: 'setDifficulty', payload: difficulty })
+    actions.setDifficulty(difficulty)
   }
 
   function removeCategory(categoryName: string) {
@@ -116,7 +119,7 @@ export function Filters({ categories }: FiltersProps) {
 
   function handleSearchChange(search: string) {
     setTimeout(() => {
-      dispatch({ type: 'setSearch', payload: search.trim().toLowerCase() })
+      actions.setSearch(search.trim().toLowerCase())
     }, 400)
   }
 

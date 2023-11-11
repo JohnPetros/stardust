@@ -1,11 +1,5 @@
 'use client'
 
-import Link from 'next/link'
-import { Category } from './Category'
-import { Info } from './Info'
-
-import type { Challenge } from '@/@types/challenge'
-
 import {
   ChartLine,
   CheckCircle,
@@ -13,9 +7,15 @@ import {
   Target,
   User,
 } from '@phosphor-icons/react'
-import { tv } from 'tailwind-variants'
+import { motion, Variants } from 'framer-motion'
+import Link from 'next/link'
 
-import { Variants, motion } from 'framer-motion'
+import { DifficultyBadge } from '../DifficultyBadge'
+
+import { Category } from './Category'
+import { Info } from './Info'
+
+import type { Challenge } from '@/@types/challenge'
 
 const challengeVariants: Variants = {
   hidden: {
@@ -27,23 +27,6 @@ const challengeVariants: Variants = {
     scale: 1,
   },
 }
-
-const difficulties = {
-  easy: 'Fácil',
-  medium: 'Médio',
-  hard: 'Difícil',
-}
-
-const difficultyStyles = tv({
-  base: 'font-medium text-sm border p-2 rounded-lg',
-  variants: {
-    difficulty: {
-      easy: 'border-green-400 text-green-400',
-      medium: 'border-yellow-400 text-yellow-400',
-      hard: 'border-red-700 text-red-700',
-    },
-  },
-})
 
 interface ChallengeProps {
   data: Challenge
@@ -58,7 +41,9 @@ export function Challenge({
     downvotes,
     total_completitions,
     categories,
-    is_completed,
+    created_by,
+    user_id,
+    isCompleted,
   },
 }: ChallengeProps) {
   const totalVotes = upvotes + downvotes
@@ -69,26 +54,24 @@ export function Challenge({
       variants={challengeVariants}
       initial="hidden"
       animate="visible"
-      className="rounded-md bg-gray-800 p-6 flex flex-col gap-5"
+      className="flex flex-col gap-5 rounded-md bg-gray-800 p-6"
     >
       <div className="flex items-center gap-3">
-        <span className={difficultyStyles({ difficulty })}>
-          {difficulties[difficulty]}
-        </span>
+        <DifficultyBadge difficulty={difficulty} />
         <Link
           href={`/challenges/${id}`}
-          className="text-green-500 font-semibold hover:text-green-700 transition-colors duration-200"
+          className="font-semibold text-green-500 transition-colors duration-200 hover:text-green-700"
         >
           {title}
         </Link>
       </div>
       <ul className="flex items-center gap-3">
         <Info
-          icon={is_completed ? CheckCircle : Circle}
-          iconStyle={is_completed ? 'text-green-500' : 'text-red-700'}
-          label={is_completed ? 'Resolvido' : 'Não resolvido'}
+          icon={isCompleted ? CheckCircle : Circle}
+          iconStyle={isCompleted ? 'text-green-500' : 'text-red-700'}
+          label={isCompleted ? 'Resolvido' : 'Não resolvido'}
           tooltipText={
-            is_completed
+            isCompleted
               ? 'O que você está esperando? resolva esse desafio.'
               : 'Você ainda pode resolver esse desafio quantas vezes quiser.'
           }
@@ -103,11 +86,13 @@ export function Challenge({
           label={total_completitions}
           tooltipText={'Número de vezes que esse desafio foi concluído.'}
         />
-        {/* <Info
-          icon={User}
-          label={author}
-          tooltipText={'Criador desse desafio.'}
-        /> */}
+        <Link href={`/profile/${user_id}`}>
+          <Info
+            icon={User}
+            label={created_by}
+            tooltipText={'Criador desse desafio.'}
+          />
+        </Link>
       </ul>
       {categories && (
         <ul className="flex items-start gap-3">

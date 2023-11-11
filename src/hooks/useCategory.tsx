@@ -1,6 +1,7 @@
 'use client'
-import { useApi } from '@/services/api'
 import useSWR from 'swr'
+
+import { useApi } from '@/services/api'
 
 export function useCategory() {
   const api = useApi()
@@ -9,8 +10,6 @@ export function useCategory() {
   if (error) {
     throw new Error(error)
   }
-
-  console.log(categories)
 
   return {
     categories,

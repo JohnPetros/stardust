@@ -5,28 +5,22 @@ import { twMerge } from 'tailwind-merge'
 
 import type { Category } from '@/@types/category'
 import { Search } from '@/app/components/Search'
-import { useChallengesList } from '@/hooks/useChallengesList'
-import { removeAccentuation } from '@/utils/helpers'
+import { useChallengesListStore } from '@/stores/challengesListStore'
+import { filterItemBySearch } from '@/utils/helpers'
 
 interface CategoriesProps {
   data: Category[]
 }
 
 export function CategoriesFilter({ data }: CategoriesProps) {
-  const { state, dispatch } = useChallengesList()
+  const { state, actions } = useChallengesListStore()
   const [categories, setCategories] = useState<Category[]>([])
   const [search, setSearch] = useState('')
 
   function filterCategories() {
-    if (!search) {
-      return data
-    }
+    if (!search) return data
 
-    return data.filter((category) =>
-      removeAccentuation(category.name.toLowerCase()).includes(
-        removeAccentuation(search.toLowerCase())
-      )
-    )
+    return data.filter((category) => filterItemBySearch(search, category.name))
   }
 
   function handleCategoryClick(categoryId: string, isActive: boolean) {
@@ -38,7 +32,7 @@ export function CategoriesFilter({ data }: CategoriesProps) {
       categoriesIds = [...categoriesIds, categoryId]
     }
 
-    dispatch({ type: 'setCategoriesIds', payload: categoriesIds })
+    actions.setCategoriesIds(categoriesIds)
   }
 
   function handleSearchChange(search: string) {
@@ -62,7 +56,7 @@ export function CategoriesFilter({ data }: CategoriesProps) {
 
       <Dropdown.Portal>
         <Dropdown.Content className="flex w-64 flex-col items-center gap-2 overflow-hidden rounded-md bg-gray-700 px-3 py-3">
-          <Search onChange={({ target }) => handleSearchChange(target.value)} />
+          <Search id="categories-search" onSearchChange={handleSearchChange} />
           <Dropdown.Group className="flex flex-wrap justify-start gap-2 px-2 py-3">
             {categories.length > 0 ? (
               categories.map((category) => {
