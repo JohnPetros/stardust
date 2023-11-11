@@ -1,5 +1,7 @@
 'use client'
 
+import { IChallengeService } from './interfaces/IChallengeService'
+
 import type { Challenge } from '@/@types/challenge'
 import { useSupabase } from '@/hooks/useSupabase'
 
@@ -12,7 +14,7 @@ interface getFilteredChallengesProps {
   range: number
 }
 
-export const ChallengeService = () => {
+export const ChallengeService = (): IChallengeService => {
   const { supabase } = useSupabase()
 
   return {
@@ -30,7 +32,7 @@ export const ChallengeService = () => {
 
       const challenge: Challenge = {
         ...data,
-        is_completed:
+        isCompleted:
           !!data.users_completed_challenges &&
           data.users_completed_challenges[0].count > 0,
       }
@@ -60,7 +62,6 @@ export const ChallengeService = () => {
       difficulty,
       categoriesIds,
       search,
-      range,
     }: getFilteredChallengesProps) => {
       const { data, error } = await supabase
         .rpc('get_filtered_challenges', {
