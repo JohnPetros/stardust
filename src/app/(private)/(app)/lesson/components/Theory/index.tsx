@@ -5,10 +5,10 @@ import { useEffect, useRef, useState } from 'react'
 import { Star } from './Star'
 
 import type { Text as TextData } from '@/@types/text'
-import { Modal, ModalRef } from '@/app/components/Alert'
+import { Alert, AlertRef } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { Text } from '@/app/components/Text'
-import { useLesson } from '@/hooks/useLesson'
+import { useLessonStore } from '@/stores/lessonStore'
 
 interface TheoryProps {
   title: string
@@ -16,15 +16,15 @@ interface TheoryProps {
 }
 
 export function Theory({ title, number }: TheoryProps) {
-  const { state, dispatch } = useLesson()
+  const { state, actions } = useLessonStore()
   const [texts, setTexts] = useState<TextData[]>([])
-  const modalRef = useRef<ModalRef>(null)
+  const alertRef = useRef<AlertRef>(null)
   const buttonHasFocus = useRef(false)
   const nextTextIndex = useRef(0)
 
   function nextText() {
     if (nextTextIndex.current >= state.texts.length) {
-      modalRef.current?.open()
+      alertRef.current?.open()
       return
     }
 
@@ -46,7 +46,7 @@ export function Theory({ title, number }: TheoryProps) {
       return [...previousTexts, nextText]
     })
 
-    dispatch({ type: 'incrementRenderedTextsAmount' })
+    actions.incrementRenderedTextsAmount()
   }
 
   function handleContinueButtonClick() {
@@ -55,7 +55,7 @@ export function Theory({ title, number }: TheoryProps) {
 
   useEffect(() => {
     setTexts([{ ...state.texts[0], hasAnimation: false }])
-    dispatch({ type: 'incrementRenderedTextsAmount' })
+    actions.incrementRenderedTextsAmount()
   }, [state.texts])
 
   return (
@@ -94,13 +94,13 @@ export function Theory({ title, number }: TheoryProps) {
         </footer>
       </div>
 
-      <Modal
-        ref={modalRef}
+      <Alert
+        ref={alertRef}
         type={'asking'}
         title={`Parabéns! \n Agora você pode ir para a próxima etapa 🚀`}
         body={null}
         footer={
-          <Button tabIndex={-1} onClick={() => dispatch({ type: 'showQuiz' })}>
+          <Button tabIndex={-1} onClick={() => actions.showQuiz()}>
             Bora!
           </Button>
         }

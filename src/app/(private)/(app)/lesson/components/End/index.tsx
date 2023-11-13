@@ -11,7 +11,7 @@ import { Metric } from './Metric'
 import { Streak } from './Streak'
 
 import type { User } from '@/@types/user'
-import { Modal, ModalRef } from '@/app/components/Alert'
+import { Alert, AlertRef } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { useAuth } from '@/contexts/AuthContext'
 import { playSound } from '@/utils/helpers'
@@ -70,7 +70,9 @@ interface EndProps {
   xp: number
   time: string
   accurance: string
-  userDataUpdater: ({}: updateUserDataParam) => Promise<Partial<User>>
+  userDataUpdater: (
+    userDataUpdaterParams: updateUserDataParam
+  ) => Promise<Partial<User>>
   onExit: () => void
 }
 
@@ -89,7 +91,7 @@ export function End({
   const [isStreakVisible, setIsStreakVisible] = useState(false)
   const [isEndMessageVisible, setIsEndMessageVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const modalRef = useRef<ModalRef>(null)
+  const alertRef = useRef<AlertRef>(null)
 
   function getUpdatedLevel(updatedXp: number) {
     if (!user) return
@@ -148,7 +150,7 @@ export function End({
     setIsFirstClick(false)
 
     if (hasNewLevel) {
-      modalRef.current?.open()
+      alertRef.current?.open()
     }
 
     const isStreakVisible = todayStatus === 'todo'
@@ -283,9 +285,9 @@ export function End({
         </Button>
       </motion.div>
 
-      <Modal
-        ref={modalRef}
-        type={'earning'}
+      <Alert
+        ref={alertRef}
+        type="earning"
         title={'Parabéns! Você alcançou um novo nível!'}
         body={
           <div className="mb-6 space-y-1 text-center text-gray-100">
@@ -299,9 +301,7 @@ export function End({
             <p>Continue assim!</p>
           </div>
         }
-        footer={
-          <Button onClick={() => modalRef.current?.close()}>Show!</Button>
-        }
+        action={<Button>Show!</Button>}
       />
     </div>
   )

@@ -11,9 +11,9 @@ import { QuestionContainer } from './QuestionContainer'
 import { SelectionQuestion } from './SelectionQuestion'
 import { VerificationButton } from './VerificationButton'
 
-import { Modal, ModalRef } from '@/app/components/Alert'
+import { Alert, AlertRef } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
-import { useLesson } from '@/hooks/useLesson'
+import { useLessonStore } from '@/stores/lessonStore'
 
 interface QuizProps {
   leaveLesson: () => void
@@ -21,22 +21,20 @@ interface QuizProps {
 
 export function Quiz({ leaveLesson }: QuizProps) {
   const {
-    state: {
-      currentQuestionIndex,
-      questions,
-      answerHandler,
-      isAnswerVerified,
-      isAnswerCorrect,
-      isAnswered,
-      livesAmount,
-    },
-  } = useLesson()
+    currentQuestionIndex,
+    questions,
+    answerHandler,
+    isAnswerVerified,
+    isAnswerCorrect,
+    isAnswered,
+    livesAmount,
+  } = useLessonStore((store) => store.state)
 
   const currentQuestion = useMemo(() => {
     return questions.length ? questions[currentQuestionIndex] : null
   }, [questions, currentQuestionIndex])
 
-  const modalRef = useRef<ModalRef>(null)
+  const alertRef = useRef<AlertRef>(null)
 
   useEffect(() => {
     window.scrollTo({
@@ -46,7 +44,7 @@ export function Quiz({ leaveLesson }: QuizProps) {
   }, [currentQuestionIndex])
 
   useEffect(() => {
-    if (livesAmount === 0) modalRef.current?.open()
+    if (livesAmount === 0) alertRef.current?.open()
   }, [livesAmount])
 
   if (currentQuestion) {
@@ -84,8 +82,8 @@ export function Quiz({ leaveLesson }: QuizProps) {
           )}
         </AnimatePresence>
 
-        <Modal
-          ref={modalRef}
+        <Alert
+          ref={alertRef}
           type="crying"
           title="Puxa, parece que você não tem mais vidas!"
           body={
@@ -93,15 +91,13 @@ export function Quiz({ leaveLesson }: QuizProps) {
               Mais sorte da próxima vez 😢
             </p>
           }
-          footer={
-            <div className="mt-3 flex items-center justify-center gap-2">
-              <Button
-                className="w-32 bg-red-700 text-gray-100"
-                onClick={leaveLesson}
-              >
-                Sair
-              </Button>
-            </div>
+          action={
+            <Button
+              className="w-32 bg-red-700 text-gray-100"
+              onClick={leaveLesson}
+            >
+              Sair
+            </Button>
           }
         />
 
