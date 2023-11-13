@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
-import { useLesson } from '@/hooks/useLesson'
 
-import { QuestionContainer } from '../QuestionContainer'
 import { QuestionTitle } from '../QuestionTitle'
+
 import { Checkbox } from './Checkbox'
 
 import type { CheckboxQuestion as CheckboxQuestionData } from '@/@types/quiz'
+import { useLessonStore } from '@/stores/lessonStore'
 
 interface CheckboxQuestionProps {
   data: CheckboxQuestionData
@@ -16,23 +16,23 @@ export function CheckboxQuestion({
 }: CheckboxQuestionProps) {
   const {
     state: { isAnswerVerified },
-    dispatch,
-  } = useLesson()
+    actions: {
+      setIsAnswered,
+      setIsAnswerVerified,
+      setIsAnswerCorrect,
+      setAnswerHandler,
+      changeQuestion,
+      incrementIncorrectAswersAmount,
+      decrementLivesAmount,
+    },
+  } = useLessonStore()
 
   const [userAnswers, setUserAnswers] = useState<string[]>([])
   const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
 
-  function setIsAnswerVerified(isAnswerVerified: boolean) {
-    dispatch({ type: 'setIsAnswerVerified', payload: isAnswerVerified })
-  }
-
-  function setIsAnswerCorrect(isAnswerCorrect: boolean) {
-    dispatch({ type: 'setIsAnswerCorrect', payload: isAnswerCorrect })
-  }
-
   function handleAnswer() {
     setIsAnswerVerified(!isAnswerVerified)
-    
+
     const isUserAnswerCorrect =
       userAnswers.length === correctOptions.length &&
       userAnswers.every((userOption) => correctOptions.includes(userOption))
@@ -41,7 +41,7 @@ export function CheckboxQuestion({
       setIsAnswerCorrect(true)
 
       if (isAnswerVerified) {
-        dispatch({ type: 'changeQuestion' })
+        changeQuestion()
       }
 
       return
@@ -53,11 +53,11 @@ export function CheckboxQuestion({
       isAnswerVerified &&
       !hasAlreadyIncrementIncorrectAnswersAmount.current
     ) {
-      dispatch({ type: 'incrementIncorrectAswersAmount' })
+      incrementIncorrectAswersAmount()
       hasAlreadyIncrementIncorrectAnswersAmount.current = true
     }
 
-    if (isAnswerVerified) dispatch({ type: 'decrementLivesAmount' })
+    if (isAnswerVerified) decrementLivesAmount()
   }
 
   function handleCheckboxChange(checkedOption: string) {
@@ -72,21 +72,18 @@ export function CheckboxQuestion({
   }
 
   useEffect(() => {
-    dispatch({ type: 'setIsAnswered', payload: !!userAnswers.length })
+    setIsAnswered(!!userAnswers.length)
   }, [userAnswers])
 
   useEffect(() => {
-    dispatch({
-      type: 'setAnswerHandler',
-      payload: handleAnswer,
-    })
+    setAnswerHandler(handleAnswer)
   }, [isAnswerVerified, userAnswers])
 
   return (
     <>
       <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
-      <ul className="space-y-2 mt-6">
+      <ul className="mt-6 space-y-2">
         {options.map((option) => (
           <li key={option}>
             <Checkbox

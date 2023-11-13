@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Star } from './Star'
 
 import type { Text as TextData } from '@/@types/text'
-import { Alert, AlertRef } from '@/app/components/Alert'
+import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { Text } from '@/app/components/Text'
 import { useLessonStore } from '@/stores/lessonStore'
@@ -18,16 +18,10 @@ interface TheoryProps {
 export function Theory({ title, number }: TheoryProps) {
   const { state, actions } = useLessonStore()
   const [texts, setTexts] = useState<TextData[]>([])
-  const alertRef = useRef<AlertRef>(null)
   const buttonHasFocus = useRef(false)
   const nextTextIndex = useRef(0)
 
   function nextText() {
-    if (nextTextIndex.current >= state.texts.length) {
-      alertRef.current?.open()
-      return
-    }
-
     if (!state.texts[nextTextIndex.current]) return
 
     nextTextIndex.current = nextTextIndex.current + 1
@@ -80,31 +74,44 @@ export function Theory({ title, number }: TheoryProps) {
         </div>
 
         <footer className="fixed bottom-0 flex w-full items-center justify-center border-t border-gray-800 bg-gray-900 p-4">
-          <Button
-            className="w-32"
-            tabIndex={0}
-            onClick={handleContinueButtonClick}
-            autoFocus
-            onFocus={() => (buttonHasFocus.current = true)}
-            onBlur={() => (buttonHasFocus.current = false)}
-            disabled={nextTextIndex.current > state.texts.length}
-          >
-            Continuar
-          </Button>
+          {nextTextIndex.current >= state.texts.length ? (
+            <Alert
+              type={'asking'}
+              title={`Parabéns! \n Agora você pode ir para a próxima etapa 🚀`}
+              body={null}
+              action={
+                <Button tabIndex={-1} onClick={() => actions.showQuiz()}>
+                  Bora!
+                </Button>
+              }
+            >
+              <Button
+                className="w-32"
+                tabIndex={0}
+                onClick={handleContinueButtonClick}
+                autoFocus
+                onFocus={() => (buttonHasFocus.current = true)}
+                onBlur={() => (buttonHasFocus.current = false)}
+                disabled={nextTextIndex.current > state.texts.length}
+              >
+                Continuar
+              </Button>
+            </Alert>
+          ) : (
+            <Button
+              className="w-32"
+              tabIndex={0}
+              onClick={handleContinueButtonClick}
+              autoFocus
+              onFocus={() => (buttonHasFocus.current = true)}
+              onBlur={() => (buttonHasFocus.current = false)}
+              disabled={nextTextIndex.current > state.texts.length}
+            >
+              Continuar
+            </Button>
+          )}
         </footer>
       </div>
-
-      <Alert
-        ref={alertRef}
-        type={'asking'}
-        title={`Parabéns! \n Agora você pode ir para a próxima etapa 🚀`}
-        body={null}
-        footer={
-          <Button tabIndex={-1} onClick={() => actions.showQuiz()}>
-            Bora!
-          </Button>
-        }
-      />
     </>
   )
 }

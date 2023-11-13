@@ -3,7 +3,7 @@
 import { InputHTMLAttributes, useMemo } from 'react'
 import { tv } from 'tailwind-variants'
 
-import { useLesson } from '@/hooks/useLesson'
+import { useLessonStore } from '@/stores/lessonStore'
 
 const inputStyles = tv({
   base: ' rounded-md border-2 overflow-hidden custom-outline',
@@ -21,9 +21,9 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export function Input({ answer, ...rest }: InputProps) {
-  const {
-    state: { isAnswerVerified, isAnswerCorrect },
-  } = useLesson()
+  const { isAnswerVerified, isAnswerCorrect } = useLessonStore(
+    (store) => store.state
+  )
 
   const width = 2 + answer.length + 'ch'
 

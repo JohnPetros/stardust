@@ -8,7 +8,7 @@ import { Input } from './Input'
 
 import type { OpenQuestion as OpenQuestionData } from '@/@types/quiz'
 import { CodeSnippet } from '@/app/components/Text/CodeSnippet'
-import { useLesson } from '@/hooks/useLesson'
+import { useLessonStore } from '@/stores/lessonStore'
 import { compareArrays } from '@/utils/helpers'
 
 interface OpenQuestion {
@@ -20,22 +20,22 @@ export function OpenQuestion({
 }: OpenQuestion) {
   const {
     state: { isAnswerVerified },
-    dispatch,
-  } = useLesson()
+    actions: {
+      setIsAnswered,
+      setIsAnswerVerified,
+      setIsAnswerCorrect,
+      setAnswerHandler,
+      changeQuestion,
+      incrementIncorrectAswersAmount,
+      decrementLivesAmount,
+    },
+  } = useLessonStore()
   const [userAnswers, setUserAnswers] = useState<string[]>(
     Array.from<string>({ length: answers.length }).fill('')
   )
 
   const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
 
-  function setIsAnswerVerified(isAnswerVerified: boolean) {
-    dispatch({ type: 'setIsAnswerVerified', payload: isAnswerVerified })
-  }
-
-  function setIsAnswerCorrect(isAnswerCorrect: boolean) {
-    dispatch({ type: 'setIsAnswerCorrect', payload: isAnswerCorrect })
-  }
-  
   function handleAnswer() {
     setIsAnswerVerified(!isAnswerVerified)
 
@@ -47,7 +47,7 @@ export function OpenQuestion({
       setIsAnswerCorrect(true)
 
       if (isAnswerVerified) {
-        dispatch({ type: 'changeQuestion' })
+        changeQuestion()
       }
 
       return
@@ -59,11 +59,11 @@ export function OpenQuestion({
       isAnswerVerified &&
       !hasAlreadyIncrementIncorrectAnswersAmount.current
     ) {
-      dispatch({ type: 'incrementIncorrectAswersAmount' })
+      incrementIncorrectAswersAmount()
       hasAlreadyIncrementIncorrectAnswersAmount.current = true
     }
 
-    if (isAnswerVerified) dispatch({ type: 'decrementLivesAmount' })
+    if (isAnswerVerified) decrementLivesAmount()
   }
 
   function handleInputChange(value: string, index: number) {
@@ -73,18 +73,13 @@ export function OpenQuestion({
   }
 
   useEffect(() => {
-    dispatch({
-      type: 'setIsAnswered',
-      payload:
-        userAnswers.filter((answer) => !!answer).length === answers.length,
-    })
+    setIsAnswered(
+      userAnswers.filter((answer) => !!answer).length === answers.length
+    )
   }, [userAnswers, answers.length])
 
   useEffect(() => {
-    dispatch({
-      type: 'setAnswerHandler',
-      payload: handleAnswer,
-    })
+    setAnswerHandler(handleAnswer)
   }, [isAnswerVerified, userAnswers])
 
   return (
