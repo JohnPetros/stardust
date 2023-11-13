@@ -16,7 +16,7 @@ export type Challenge = {
   code: string
   user_id: string
   difficulty: Difficulty
-  created_by: string
+  created_by?: string
   created_at: string
   function_name: string | null
   upvotes: number
