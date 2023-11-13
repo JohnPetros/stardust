@@ -4,6 +4,7 @@ export const challenge = {
   downvotes: 0,
   upvotes: 0,
   total_completitions: 0,
+  created_by: 'Apollo',
   user_id: '38976417-7c77-44ff-9e26-5dc8b457f768',
   topic_id: 'f60a0e67-c0b9-401a-a652-c9d5f8042ff1',
   code: `var asteroideA = leia()
