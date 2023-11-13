@@ -8,9 +8,17 @@ interface GetFilteredChallengesParams {
   search: string
 }
 
+export type ChallengeSummary = Pick<
+  Challenge,
+  'id' | 'difficulty' | 'isCompleted'
+> & {
+  users_completed_challenges: []
+}
+
 export interface IChallengeService {
   getChallenge(challengeId: string, userId: string): Promise<Challenge>
-  getChallenges(userId: string): Promise<Challenge[]>
+  getChallenges(): Promise<Challenge[]>
+  getChallengesSummary(userId: string): Promise<ChallengeSummary[]>
   getFilteredChallenges(
     params: GetFilteredChallengesParams
   ): Promise<Challenge[]>
