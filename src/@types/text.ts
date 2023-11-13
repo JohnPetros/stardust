@@ -9,8 +9,8 @@ export type TextType =
 
 export type Text = {
   type: TextType
-  title?: string
   content: string
+  title?: string
   items?: string[]
   picture?: string
   isUser?: boolean

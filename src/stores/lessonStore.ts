@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
 import { Question } from '@/@types/quiz'
+import type { Text } from '@/@types/text'
 
 type LessonStoreState = {
   currentStage: 'theory' | 'quiz' | 'end'
@@ -71,7 +72,7 @@ export const useLessonStore = create<LessonStoreProps>()(
         },
         setTexts(texts: Text[]) {
           return set(({ state }) => {
-            state.texts = []
+            state.texts = texts
           })
         },
         setIsAnswered(isAnswered: boolean) {
