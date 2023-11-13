@@ -1,10 +1,10 @@
 'use client'
 
-import { useLesson } from '@/hooks/useLesson'
 import { useDraggable } from '@dnd-kit/core'
-
 import { CSS } from '@dnd-kit/utilities'
 import { twMerge } from 'tailwind-merge'
+
+import { useLessonStore } from '@/stores/lessonStore'
 
 interface DragItemProps {
   id: number
@@ -21,10 +21,9 @@ export function DragItem({
   isDroppedInZone = false,
   width,
 }: DragItemProps) {
-  const {
-    state: { isAnswerVerified, isAnswerCorrect },
-  } = useLesson()
-
+  const { isAnswerVerified, isAnswerCorrect } = useLessonStore(
+    (store) => store.state
+  )
   const {
     attributes,
     listeners,
@@ -47,7 +46,7 @@ export function DragItem({
     return (
       <div
         style={{ width: style.width }}
-        className="border-2 border-dashed border-gray-100 bg-transparent rounded-md h-10 text-gray-100"
+        className="h-10 rounded-md border-2 border-dashed border-gray-100 bg-transparent text-gray-100"
       ></div>
     )
   }
@@ -59,9 +58,9 @@ export function DragItem({
       {...listeners}
       {...attributes}
       className={twMerge(
-        'flex items-center justify-center border border-gray-10 text-gray-100 bg-purple-700 rounded-md h-10 w-full p-1 cursor-grab',
-        !isActive && isDroppedInZone ? 'border-none p-0 bg-transparent' : '',
-        isActive ? 'text-blue-300 border-2 border-blue-300 cursor-grab' : '',
+        'border-gray-10 flex h-10 w-full cursor-grab items-center justify-center rounded-md border bg-purple-700 p-1 text-gray-100',
+        !isActive && isDroppedInZone ? 'border-none bg-transparent p-0' : '',
+        isActive ? 'cursor-grab border-2 border-blue-300 text-blue-300' : '',
         isAnswerVerified && isAnswerCorrect && isDroppedInZone
           ? 'text-green-400'
           : isAnswerVerified && isDroppedInZone && 'text-red-700'
