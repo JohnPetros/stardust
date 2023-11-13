@@ -1,12 +1,12 @@
 'use client'
 
+import { motion, Variants } from 'framer-motion'
+import Lottie from 'lottie-react'
 import { useRouter } from 'next/navigation'
 
-import { Button } from './components/Button'
 import PageNotFound from '../../public/animations/404.json'
-import Lottie from 'lottie-react'
 
-import { motion, Variants } from 'framer-motion'
+import { Button } from './components/Button'
 
 const notFoundAnimation: Variants = {
   down: {
@@ -23,15 +23,15 @@ export default function NotFound() {
   const router = useRouter()
 
   return (
-    <main className="bg-gray-900 w-screen h-screen grid place-content-center">
+    <main className="grid h-screen w-screen place-content-center bg-gray-900">
       <motion.div
         variants={notFoundAnimation}
         initial="down"
         animate="up"
         className="w-full max-w-3xl"
       >
-        <div className="flex flex-col sm:flex-row items-center gap-3 uppercase ">
-          <h1 className="font-semibold text-green-400 text-6xl">
+        <div className="flex flex-col items-center gap-3 uppercase sm:flex-row ">
+          <h1 className="text-6xl font-semibold text-green-400">
             Código <span className="sr-only">404</span>
           </h1>
 
@@ -41,7 +41,7 @@ export default function NotFound() {
         </div>
 
         <div className="-mt-6">
-          <p className="text-gray-300 text-lg leading-8">
+          <p className="text-lg leading-8 text-gray-300">
             Parece que você se perdeu no espaço! <br /> Clique abaixo para
             puxarmos você de volta.
           </p>

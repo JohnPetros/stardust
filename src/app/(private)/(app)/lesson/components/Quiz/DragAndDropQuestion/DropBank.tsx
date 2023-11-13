@@ -1,5 +1,5 @@
-import { useDroppable } from '@dnd-kit/core'
 import { ReactNode } from 'react'
+import { useDroppable } from '@dnd-kit/core'
 import { twMerge } from 'tailwind-merge'
 
 interface DropBankProps {
@@ -23,7 +23,7 @@ export function DropBank({ children, id, dropItemId, width }: DropBankProps) {
       style={{ width }}
       className={twMerge(
         !hasDroppedItem &&
-          'border-2 border-dashed border-gray-100 bg-transparent rounded-md h-10 w-full text-gray-100'
+          'h-10 w-full rounded-md border-2 border-dashed border-gray-100 bg-transparent text-gray-100'
       )}
     >
       {hasDroppedItem ? children : null}

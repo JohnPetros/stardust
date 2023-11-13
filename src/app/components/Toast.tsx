@@ -6,9 +6,9 @@ import {
   useImperativeHandle,
   useState,
 } from 'react'
-import { AnimatePresence, Variants, motion, useAnimate } from 'framer-motion'
 import { Check, Prohibit, X } from '@phosphor-icons/react'
 import * as Container from '@radix-ui/react-toast'
+import { AnimatePresence, motion, useAnimate, Variants } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
 const TOAST_DURATION = 2500
 
@@ -91,7 +91,7 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
 
   return (
     <>
-      <Container.Viewport className="fixed top-4 right-4 rounded  max-w-[90vw] z-50 flex" />
+      <Container.Viewport className="fixed right-4 top-4 z-50  flex max-w-[90vw] rounded" />
       <AnimatePresence>
         {isOpen && (
           <Container.Root type="foreground" forceMount open={isOpen} asChild>
@@ -120,7 +120,7 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
                 <Container.Description className="flex items-center gap-2 text-gray-100">
                   <span
                     className={twMerge(
-                      'text-gray-100 rounded p-1',
+                      'rounded p-1 text-gray-100',
                       type === 'error' ? 'bg-red-700' : 'bg-green-500'
                     )}
                   >
@@ -130,7 +130,10 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
                       <Check width={20} height={20} weight="bold" />
                     )}
                   </span>
-                  <span className='text-sm' dangerouslySetInnerHTML={{ __html: message }} />
+                  <span
+                    className="text-sm"
+                    dangerouslySetInnerHTML={{ __html: message }}
+                  />
                 </Container.Description>
 
                 <Container.Close

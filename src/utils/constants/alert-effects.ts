@@ -3,15 +3,15 @@ import Crying from '../../../public/animations/apollo-crying.json'
 import Denying from '../../../public/animations/apollo-denying.json'
 import Earning from '../../../public/animations/apollo-earning.json'
 
-import { ModalType } from '@/app/components/Alert'
+import { AlertType } from '@/app/components/Alert'
 
-type ModalEffect = {
-  id: ModalType
+type AlertEffect = {
+  id: AlertType
   animation: unknown | null
   sound: string | null
 }
 
-export const MODAL_EFFECTS: ModalEffect[] = [
+export const ALERT_EFFECTS: AlertEffect[] = [
   {
     id: 'earning',
     animation: Earning,

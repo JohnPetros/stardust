@@ -1,15 +1,16 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useLesson } from '@/hooks/useLesson'
-
-import { CodeSnippet } from '@/app/components/Text/CodeSnippet'
-import { QuestionTitle } from '../QuestionTitle'
-import { Option } from './Option'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 
-import { reorderItems } from '@/utils/helpers'
+import { QuestionTitle } from '../QuestionTitle'
+
+import { Option } from './Option'
+
 import type { SelectionQuestion as SelectionQuestionData } from '@/@types/quiz'
+import { CodeSnippet } from '@/app/components/Text/CodeSnippet'
+import { useLessonStore } from '@/stores/lessonStore'
+import { reorderItems } from '@/utils/helpers'
 
 interface SelectionQuestionProps {
   data: SelectionQuestionData
@@ -20,19 +21,19 @@ export function SelectionQuestion({
 }: SelectionQuestionProps) {
   const {
     state: { isAnswerVerified, isAnswerCorrect },
-    dispatch,
-  } = useLesson()
+    actions: {
+      setIsAnswered,
+      setIsAnswerVerified,
+      setIsAnswerCorrect,
+      setAnswerHandler,
+      changeQuestion,
+      incrementIncorrectAswersAmount,
+      decrementLivesAmount,
+    },
+  } = useLessonStore()
   const [selectedOption, setSelectedOption] = useState('')
   const [reorderedOptions, setReorderedOptions] = useState<string[]>([])
   const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
-
-  function setIsAnswerVerified(isAnswerVerified: boolean) {
-    dispatch({ type: 'setIsAnswerVerified', payload: isAnswerVerified })
-  }
-
-  function setIsAnswerCorrect(isAnswerCorrect: boolean) {
-    dispatch({ type: 'setIsAnswerCorrect', payload: isAnswerCorrect })
-  }
 
   function handleAnswer() {
     setIsAnswerVerified(!isAnswerVerified)
@@ -45,7 +46,7 @@ export function SelectionQuestion({
       setIsAnswerCorrect(true)
 
       if (isAnswerVerified) {
-        dispatch({ type: 'changeQuestion' })
+        changeQuestion()
       }
 
       return
@@ -57,11 +58,11 @@ export function SelectionQuestion({
       isAnswerVerified &&
       !hasAlreadyIncrementIncorrectAnswersAmount.current
     ) {
-      dispatch({ type: 'incrementIncorrectAswersAmount' })
+      incrementIncorrectAswersAmount()
       hasAlreadyIncrementIncorrectAnswersAmount.current = true
     }
 
-    if (isAnswerVerified) dispatch({ type: 'decrementLivesAmount' })
+    if (isAnswerVerified) decrementLivesAmount()
   }
 
   useEffect(() => {
@@ -69,17 +70,14 @@ export function SelectionQuestion({
       const reorderedItems = reorderItems<string>(options)
       setReorderedOptions(reorderedItems)
     }
-  }, [])
+  }, [options])
 
   useEffect(() => {
-    dispatch({ type: 'setIsAnswered', payload: !!selectedOption })
+    setIsAnswered(!!selectedOption)
   }, [selectedOption])
 
   useEffect(() => {
-    dispatch({
-      type: 'setAnswerHandler',
-      payload: handleAnswer,
-    })
+    setAnswerHandler(handleAnswer)
   }, [isAnswerVerified, selectedOption])
 
   return (

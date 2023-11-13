@@ -1,13 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-
-import { Field } from './Field'
 import { ArrowDown, Check, Lock, X } from '@phosphor-icons/react'
-
+import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
 
-import { AnimatePresence, Variants, motion } from 'framer-motion'
+import { Field } from './Field'
 
 import type { TestCase as TestCaseData } from '@/@types/challenge'
 
@@ -50,18 +48,18 @@ export function TestCase({
     if (userOutput && !isLocked) {
       setIsOpen(true)
     }
-  }, [userOutput])
+  }, [userOutput, isLocked])
 
   return (
     <div
       className={twMerge(
-        'rounded-md bg-gray-900 p-6 w-full',
+        'w-full rounded-md bg-gray-900 p-6',
         isLocked ? 'opacity-5' : 'opacity-1'
       )}
     >
       <header className="flex items-center justify-between">
         <div className="flex items-center">
-          <span className="w-6 h-6 grid place-content-center rounded-full bg-green-900">
+          <span className="grid h-6 w-6 place-content-center rounded-full bg-green-900">
             {isCorrect ? (
               <Check className="text-green-500" weight="bold" />
             ) : (
@@ -70,7 +68,7 @@ export function TestCase({
           </span>
           <h4
             className={twMerge(
-              'text-lg ml-3',
+              'ml-3 text-lg',
               isCorrect ? 'text-green-500' : 'text-red-700'
             )}
           >
@@ -84,7 +82,7 @@ export function TestCase({
           disabled={isLocked}
         >
           {isLocked ? (
-            <Lock className="text-gray-500 text-lg" weight="bold" />
+            <Lock className="text-lg text-gray-500" weight="bold" />
           ) : (
             <motion.span
               variants={arrowAnimations}
@@ -92,7 +90,7 @@ export function TestCase({
               animate={isOpen ? 'up' : ''}
               transition={{ type: 'tween', ease: 'linear' }}
             >
-              <ArrowDown className="text-gray-500 text-lg" weight="bold" />
+              <ArrowDown className="text-lg text-gray-500" weight="bold" />
             </motion.span>
           )}
         </button>

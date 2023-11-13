@@ -1,12 +1,12 @@
 'use client'
 
-import { useLesson } from '@/hooks/useLesson'
+import { KeyboardEvent, useRef } from 'react'
 import { Check } from '@phosphor-icons/react'
 import * as C from '@radix-ui/react-checkbox'
-
-import { Variants, motion } from 'framer-motion'
-import { KeyboardEvent, useRef } from 'react'
+import { motion, Variants } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
+
+import { useLessonStore } from '@/stores/lessonStore'
 
 const colors = {
   gray: 'border-gray-100 text-gray-100',
@@ -40,9 +40,9 @@ interface CheckboxProps {
 }
 
 export function Checkbox({ children, onCheck, isChecked }: CheckboxProps) {
-  const {
-    state: { isAnswerVerified, isAnswerCorrect },
-  } = useLesson()
+  const { isAnswerVerified, isAnswerCorrect } = useLessonStore(
+    (store) => store.state
+  )
   const checkRef = useRef<HTMLButtonElement>(null)
 
   function getColor() {
@@ -73,7 +73,7 @@ export function Checkbox({ children, onCheck, isChecked }: CheckboxProps) {
       whileHover="hover"
       whileTap="tap"
       className={twMerge(
-        'rounded-md border border-gray-100 bg-purple-700 flex items-center p-3 w-full gap-3 cursor-pointer',
+        'flex w-full cursor-pointer items-center gap-3 rounded-md border border-gray-100 bg-purple-700 p-3',
         color
       )}
     >
@@ -81,10 +81,10 @@ export function Checkbox({ children, onCheck, isChecked }: CheckboxProps) {
         ref={checkRef}
         id={children}
         className={twMerge(
-          'rounded-md border border-gray-100 bg-transparent w-6 h-6',
+          'h-6 w-6 rounded-md border border-gray-100 bg-transparent',
           color
         )}
-      onCheckedChange={onCheck}
+        onCheckedChange={onCheck}
       >
         <C.Indicator className="grid place-content-center">
           <motion.div
@@ -93,7 +93,7 @@ export function Checkbox({ children, onCheck, isChecked }: CheckboxProps) {
             animate="rotate"
           >
             <Check
-              className={twMerge('text-blue-300 text-lg', color)}
+              className={twMerge('text-lg text-blue-300', color)}
               weight="bold"
             />
           </motion.div>

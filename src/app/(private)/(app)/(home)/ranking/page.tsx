@@ -1,20 +1,19 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useAuth } from '@/contexts/AuthContext'
-import { useRanking } from '@/hooks/useRanking'
-import { useRankedUsers } from '@/hooks/useRankedUsers'
-
-import { Loading } from '@/app/components/Loading'
-import { RankedUsersList } from './components/RankedUsersList'
-import { BadgesList } from './components/BadgesList'
-
 import dayjs from 'dayjs'
-import { useApi } from '@/services/api'
+
+import { BadgesList } from './components/BadgesList'
+import { RankedUsersList } from './components/RankedUsersList'
+import { WinnerUsersList } from './components/WinnerUsersList'
 
 import type { Ranking } from '@/@types/ranking'
 import type { WinnerUser } from '@/@types/user'
-import { WinnerUsersList } from './components/WinnerUsersList'
+import { Loading } from '@/app/components/Loading'
+import { useAuth } from '@/contexts/AuthContext'
+import { useRankedUsers } from '@/hooks/useRankedUsers'
+import { useRanking } from '@/hooks/useRanking'
+import { useApi } from '@/services/api'
 
 const today = dayjs().day()
 const sunday = 0
@@ -108,7 +107,7 @@ export default function Ranking() {
   }, [user, isLoading, rankings, currentRanking, badgesListRef])
 
   return (
-    <div className="mt-6 w-screen px-6 md:px-0 max-w-5xl md:mx-auto pb-6">
+    <div className="mt-6 w-screen max-w-5xl px-6 pb-6 md:mx-auto md:px-0">
       {isLoading && <Loading isSmall={false} />}
 
       {user && rankedUsers && rankings && currentRanking && (
@@ -125,8 +124,8 @@ export default function Ranking() {
             <>
               <BadgesList rankings={rankings} currentRanking={currentRanking} />
 
-              <div className="flex flex-col items-center justify-center gap-3 mt-6">
-                <p className="font-medium text-gray-100 text-center">
+              <div className="mt-6 flex flex-col items-center justify-center gap-3">
+                <p className="text-center font-medium text-gray-100">
                   Os 5 primeiros avançam para o próximo ranking.
                 </p>
 

@@ -114,7 +114,7 @@ export function Rocket({
 
   useEffect(() => {
     if (user) setIsSelected(id === user.rocket_id)
-  }, [user?.rocket_id])
+  }, [id, user?.rocket_id])
 
   return (
     <>

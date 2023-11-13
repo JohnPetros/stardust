@@ -130,7 +130,7 @@ export function Filters({ categories }: FiltersProps) {
 
       if (categoryName && !tags.includes(categoryName)) addTag(categoryName)
     })
-  }, [state.categoriesIds])
+  }, [state.categoriesIds, categories])
 
   return (
     <div className="flex flex-col">

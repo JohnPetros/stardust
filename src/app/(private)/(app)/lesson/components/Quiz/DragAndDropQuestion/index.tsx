@@ -24,7 +24,7 @@ import type {
   DragAndDropQuestion as DragAndDropData,
   DraggrableItem,
 } from '@/@types/quiz'
-import { useLesson } from '@/hooks/useLesson'
+import { useLessonStore } from '@/stores/lessonStore'
 import { compareArrays } from '@/utils/helpers'
 
 export function getDragItemWidth(item: DraggrableItem) {
@@ -42,8 +42,16 @@ export function DragAndDropQuestion({
 }: DragAndDropClickQuestionProps) {
   const {
     state: { isAnswerVerified, currentQuestionIndex },
-    dispatch,
-  } = useLesson()
+    actions: {
+      setIsAnswered,
+      setIsAnswerVerified,
+      setIsAnswerCorrect,
+      setAnswerHandler,
+      changeQuestion,
+      incrementIncorrectAswersAmount,
+      decrementLivesAmount,
+    },
+  } = useLessonStore()
   const [activeDraggableItemId, setActiveDraggableItemId] = useState<
     null | number
   >(null)
@@ -55,14 +63,6 @@ export function DragAndDropQuestion({
   const activeDraggableItem = draggableItems.find(
     (drag) => drag.id === activeDraggableItemId
   )
-
-  function setIsAnswerVerified(isAnswerVerified: boolean) {
-    dispatch({ type: 'setIsAnswerVerified', payload: isAnswerVerified })
-  }
-
-  function setIsAnswerCorrect(isAnswerCorrect: boolean) {
-    dispatch({ type: 'setIsAnswerCorrect', payload: isAnswerCorrect })
-  }
 
   function handleAnswer() {
     setIsAnswerVerified(!isAnswerVerified)
@@ -76,7 +76,7 @@ export function DragAndDropQuestion({
       setIsAnswerCorrect(true)
 
       if (isAnswerVerified) {
-        dispatch({ type: 'changeQuestion' })
+        changeQuestion()
       }
       return
     }
@@ -87,11 +87,11 @@ export function DragAndDropQuestion({
       isAnswerVerified &&
       !hasAlreadyIncrementIncorrectAnswersAmount.current
     ) {
-      dispatch({ type: 'incrementIncorrectAswersAmount' })
+      incrementIncorrectAswersAmount()
       hasAlreadyIncrementIncorrectAnswersAmount.current = true
     }
 
-    if (isAnswerVerified) dispatch({ type: 'decrementLivesAmount' })
+    if (isAnswerVerified) decrementLivesAmount()
   }
 
   function handleDragStart(event: DragStartEvent) {
@@ -173,26 +173,22 @@ export function DragAndDropQuestion({
       userDragItemsIdsSenquence.current.length ===
       correctDragItemsIdsSequence.length
 
-    if (hasUserAnswer) {
-      dispatch({
-        type: 'setIsAnswered',
-        payload: true,
-      })
-    }
-  }, [currentQuestionIndex, activeDraggableItemId])
+    setIsAnswered(hasUserAnswer)
+  }, [
+    correctDragItemsIdsSequence.length,
+    currentQuestionIndex,
+    activeDraggableItemId,
+  ])
 
   useEffect(() => {
-    dispatch({
-      type: 'setAnswerHandler',
-      payload: handleAnswer,
-    })
+    setAnswerHandler(handleAnswer)
   }, [isAnswerVerified, activeDraggableItemId])
 
   useEffect(() => {
     setDraggableItems(
       dragItems.map((item) => ({ ...item, dropZoneId: `bank-${item.id}` }))
     )
-  }, [])
+  }, [dragItems])
 
   return (
     <>
@@ -241,7 +237,7 @@ export function DragAndDropQuestion({
               <DropBank
                 key={item.id}
                 id={`bank-${item.id}`}
-                dropItemId={item.dropZoneId}
+                dropItemId={item.dropZoneId ?? ''}
                 width={itemWidth}
               >
                 <DragItem

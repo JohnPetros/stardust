@@ -9,7 +9,7 @@ export const challenge: Partial<Challenge> = {
   total_completitions: 0,
   star_id: null,
   categories: [],
-  created_by: null,
+  created_by: 'Apollo',
   topic_id: 'f60a0e67-c0b9-401a-a652-c9d5f8042ff1',
   function_name: null,
   test_cases: [

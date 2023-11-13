@@ -1,15 +1,12 @@
+import { motion, Variants } from 'framer-motion'
 import Image from 'next/image'
-import Lottie from 'lottie-react'
-import { UserAvatar } from '../../../components/UserAvatar'
-
-import { PODIUM } from '@/utils/constants'
 import { twMerge } from 'tailwind-merge'
 
-import { Variants, motion } from 'framer-motion'
+import { ShinningAnimation } from '../../../components/ShinningAnimation'
+import { UserAvatar } from '../../../components/UserAvatar'
 
 import type { WinnerUser } from '@/@types/user'
-
-import { ShinningAnimation } from '../../../components/ShinningAnimation'
+import { PODIUM } from '@/utils/constants'
 
 const BASE_HEIGHT = 480 // px
 const BASE_DELAY = 0.8 // s
@@ -60,7 +57,7 @@ export function WinnerUser({
   if (place)
     return (
       <div
-        className={twMerge('flex flex-col w-48 relative')}
+        className={twMerge('relative flex w-48 flex-col')}
         style={{
           height: place ? BASE_HEIGHT - 40 * place.position - 1 : BASE_HEIGHT,
         }}
@@ -69,15 +66,15 @@ export function WinnerUser({
           variants={avatarVariants}
           initial="hidden"
           animate="visible"
-          className="flex flex-col items-center justify-center gap-1 h-72"
+          className="flex h-72 flex-col items-center justify-center gap-1"
         >
           {position === 1 && (
-            <span className="absolute -top-[6%] -left-[4%] md:left-[13.5%]">
+            <span className="absolute -left-[4%] -top-[6%] md:left-[13.5%]">
               <ShinningAnimation size={140} />
             </span>
           )}
           <UserAvatar avatarId={avatar_id} size={70} />
-          <strong className="text-lg font-medium text-gray-100 text-center mx-auto">
+          <strong className="mx-auto text-center text-lg font-medium text-gray-100">
             {name}
           </strong>
           <Image
@@ -90,7 +87,7 @@ export function WinnerUser({
 
         <div
           className={twMerge(
-            'relative w-full flex flex-col items-center justify-center my-auto px-3 mt-3 h-full bg-yellow-800 overflow-hidden',
+            'relative my-auto mt-3 flex h-full w-full flex-col items-center justify-center overflow-hidden bg-yellow-800 px-3',
             place.bgColor
           )}
         >
@@ -98,10 +95,10 @@ export function WinnerUser({
             variants={podiumVariants}
             initial="hidden"
             animate="visible"
-            className="bg-gray-900 z-30 top-0 bottom-0 w-full h-full absolute"
+            className="absolute bottom-0 top-0 z-30 h-full w-full bg-gray-900"
           />
 
-          <span className="font-medium uppercase text-lg text-gray-100 bg-green-800 shadow-sm w-20 h-12 grid place-content-center rounded-md">
+          <span className="grid h-12 w-20 place-content-center rounded-md bg-green-800 text-lg font-medium uppercase text-gray-100 shadow-sm">
             {xp} xp
           </span>
         </div>

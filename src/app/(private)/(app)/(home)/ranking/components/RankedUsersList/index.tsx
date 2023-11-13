@@ -1,9 +1,9 @@
+import { ArrowDown, ArrowUp } from '@phosphor-icons/react'
+import { twMerge } from 'tailwind-merge'
+
 import { RankedUser } from './RankedUser'
 
 import type { User } from '@/@types/user'
-
-import { ArrowDown, ArrowUp } from '@phosphor-icons/react'
-import { twMerge } from 'tailwind-merge'
 
 const iconSize = 'text-md'
 
@@ -16,7 +16,7 @@ export function RankedUsersList({ rankedUsers, authUserId }: UserListProps) {
   const lastPositionsOffset = rankedUsers.length - 5
 
   return (
-    <div className="flex flex-col items-center mx-auto mt-6 gap-2 max-w-2xl">
+    <div className="mx-auto mt-6 flex max-w-2xl flex-col items-center gap-2">
       {rankedUsers.map((user, index) => {
         const position = index + 1
         return (
@@ -28,14 +28,14 @@ export function RankedUsersList({ rankedUsers, authUserId }: UserListProps) {
               isAuthUser={user.id === authUserId}
             />
             {position === 5 && (
-              <div className="flex items-center gap-2 mt-2">
+              <div className="mt-2 flex items-center gap-2">
                 <ArrowUp className={twMerge(iconSize, 'text-green-500')} />
                 <p className="text-green-500">Zona de promoção</p>
                 <ArrowUp className={twMerge(iconSize, 'text-green-500')} />
               </div>
             )}
             {position === lastPositionsOffset && (
-              <div className="flex items-center gap-2 mt-2">
+              <div className="mt-2 flex items-center gap-2">
                 <ArrowDown className={twMerge(iconSize, 'text-red-700')} />
                 <p className="text-red-700">Zona de rebaixamento</p>
                 <ArrowDown className={twMerge(iconSize, 'text-red-700')} />

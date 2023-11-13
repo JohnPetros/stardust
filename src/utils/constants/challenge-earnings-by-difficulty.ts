@@ -11,4 +11,4 @@ export const CHALLENGE_EARNINGS_BY_DIFFICULTY = {
     coins: 30,
     xp: 40,
   },
-};
+}

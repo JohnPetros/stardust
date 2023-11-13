@@ -2,7 +2,6 @@
 
 import useSWR from 'swr'
 
-import type { Star } from '@/@types/star'
 import type { User } from '@/@types/user'
 import { updateUserDataParam } from '@/app/(private)/(app)/lesson/components/End'
 import { useAuth } from '@/contexts/AuthContext'
@@ -67,7 +66,7 @@ export function useStar(starId?: string | null | undefined) {
     let _nextStar = nextStar
 
     if (!_nextStar) {
-      _nextStar = (await getNextStarFromNextPlanet()) as Star
+      _nextStar = await getNextStarFromNextPlanet()
       completedPlanets += _nextStar ? 1 : 0
     }
 

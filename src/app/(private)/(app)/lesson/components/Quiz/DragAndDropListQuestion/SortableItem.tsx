@@ -1,12 +1,11 @@
 'use client'
 
-import { List } from '@phosphor-icons/react'
-
+import { useMemo } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { List } from '@phosphor-icons/react'
 import { twMerge } from 'tailwind-merge'
 import { tv } from 'tailwind-variants'
-import { useMemo } from 'react'
 
 const itemStyles = tv({
   base: 'rounded-md flex items-center justify-between bg-purple-700 border-2 p-3 w-full mx-auto custom-outline text-medium cursor-grab',

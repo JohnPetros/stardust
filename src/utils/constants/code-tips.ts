@@ -5,5 +5,5 @@ export const CODE_TIPS = [
   'Use o método `mapear()` para transformar vetores em outros vetores com base em uma função de transformação',
   'Use o método `filtrarPor()` para filtrar elementos de um `vetor`',
   'Use `==` para verificar se dois valores são iguais',
-  'Use funções em vez de repetir o mesmo código várias vezes'
+  'Use funções em vez de repetir o mesmo código várias vezes',
 ]

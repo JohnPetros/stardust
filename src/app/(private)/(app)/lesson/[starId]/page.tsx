@@ -11,8 +11,8 @@ import { Theory } from '../components/Theory'
 
 import { Alert, AlertRef } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
-import { useLesson } from '@/hooks/useLesson'
 import { useStar } from '@/hooks/useStar'
+import { useLessonStore } from '@/stores/lessonStore'
 import { formatSecondsToTime } from '@/utils/helpers'
 
 export default function Lesson() {
@@ -21,8 +21,8 @@ export default function Lesson() {
 
   const {
     state: { currentStage, questions, incorrectAnswersAmount, secondsAmount },
-    dispatch,
-  } = useLesson()
+    actions: { incrementSecondsAmount, setQuestions, resetState },
+  } = useLessonStore()
 
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -67,20 +67,20 @@ export default function Lesson() {
   }
 
   useEffect(() => {
-    setTimeout(() => dispatch({ type: 'incrementSecondsAmount' }), 1000)
+    setTimeout(() => incrementSecondsAmount(), 1000)
   }, [secondsAmount])
 
   useEffect(() => {
     let timer: NodeJS.Timeout
 
     if (star) {
-      dispatch({ type: 'setTexts', payload: star.texts })
-      dispatch({ type: 'setQuestions', payload: star.questions })
+      // dispatch({ type: 'setTexts', payload: star.texts })
+      setQuestions(star.questions)
       timer = setTimeout(() => setIsTransitionVisible(false), 1000)
     }
 
     return () => {
-      dispatch({ type: 'resetState' })
+      resetState()
       clearTimeout(timer)
     }
   }, [star])
@@ -122,30 +122,26 @@ export default function Lesson() {
         )}
       </main>
 
-      {/* <Alert
+      <Alert
         ref={alertRef}
         type="crying"
         title="Deseja mesmo sair da sua lição?"
         canPlaySong={false}
         body={null}
-        footer={
-          <div className="mt-3 flex items-center justify-center gap-2">
-            <Button
-              className="w-32 bg-green-400 text-green-900"
-              onClick={() => alertRef.current?.close()}
-              autoFocus
-            >
-              Cancelar
-            </Button>
-            <Button
-              className="w-32 bg-red-700 text-gray-100"
-              onClick={leaveLesson}
-            >
-              Sair
-            </Button>
-          </div>
+        action={
+          <Button
+            className="w-32 bg-red-700 text-gray-100"
+            onClick={leaveLesson}
+          >
+            Sair
+          </Button>
         }
-      /> */}
+        cancel={
+          <Button className="w-32 bg-green-400 text-green-900" autoFocus>
+            Cancelar
+          </Button>
+        }
+      />
     </>
   )
 }

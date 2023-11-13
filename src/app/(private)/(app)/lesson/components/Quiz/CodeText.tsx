@@ -1,13 +1,13 @@
 'use client'
 
+import createMarker from 'react-content-marker'
+
 import {
   DELEGUA_TOKENS,
   OPERATOR_REGEX,
   STRING_REGEX,
   THEMES,
 } from '@/utils/constants'
-
-import createMarker from 'react-content-marker'
 
 const parsers = [
   {

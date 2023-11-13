@@ -1,14 +1,14 @@
 'use client'
 
 import { MutableRefObject, useEffect, useMemo } from 'react'
-import { useLesson } from '@/hooks/useLesson'
 import { useDroppable } from '@dnd-kit/core'
+import { twMerge } from 'tailwind-merge'
+
+import { DragItem } from './DragItem'
+import { getDragItemWidth } from '.'
 
 import { DraggrableItem } from '@/@types/quiz'
-import { DragItem } from './DragItem'
-
-import { twMerge } from 'tailwind-merge'
-import { getDragItemWidth } from '.'
+import { useLessonStore } from '@/stores/lessonStore'
 
 interface DropZoneProps {
   id: string
@@ -23,9 +23,9 @@ export function DropZone({
   activeDraggableItemId,
   userDragItemsIdsSenquence,
 }: DropZoneProps) {
-  const {
-    state: { isAnswerVerified, isAnswerCorrect },
-  } = useLesson()
+  const { isAnswerVerified, isAnswerCorrect } = useLessonStore(
+    (store) => store.state
+  )
 
   const { setNodeRef } = useDroppable({
     id,
@@ -54,7 +54,7 @@ export function DropZone({
     <div
       ref={setNodeRef}
       className={twMerge(
-        'grid place-content-center rounded-md border border-gray-100 h-10 bg-green-900 min-w-4 text-blue-300',
+        'min-w-4 grid h-10 place-content-center rounded-md border border-gray-100 bg-green-900 text-blue-300',
         droppedItem ? 'px-0' : 'px-6',
         borderColor
       )}

@@ -7,8 +7,8 @@ import {
   useImperativeHandle,
   useState,
 } from 'react'
-import { PanInfo, Variants, motion, useAnimation } from 'framer-motion'
 import { CaretDown } from '@phosphor-icons/react'
+import { motion, PanInfo, useAnimation, Variants } from 'framer-motion'
 
 const consoleAnimations: Variants = {
   closed: {
@@ -43,7 +43,7 @@ export function ConsoleComponent(
     controls.start('closed')
   }
 
-  function handleDragEnd(_: any, info: PanInfo) {
+  function handleDragEnd(_: unknown, info: PanInfo) {
     if (info.velocity.y > 20 && info.offset.y >= 50) {
       close()
     }
@@ -79,10 +79,10 @@ export function ConsoleComponent(
       dragElastic={0.4}
       dragMomentum={false}
       onDragEnd={handleDragEnd}
-      className="absolute -bottom-4 bg-gray-700 rounded-t-lg w-full min-h-[20rem] cursor-pointer"
+      className="absolute -bottom-4 min-h-[20rem] w-full cursor-pointer rounded-t-lg bg-gray-700"
     >
-      <div className="px-6 py-3 border-b border-gray-400">
-        <span className="block rounded-md mx-auto h-[2px] bg-gray-400 w-1/6"></span>
+      <div className="border-b border-gray-400 px-6 py-3">
+        <span className="mx-auto block h-[2px] w-1/6 rounded-md bg-gray-400"></span>
         <div className="mt-1 flex items-center justify-between">
           <strong className="text-gray-200">Resultado</strong>
           <button onClick={close}>
@@ -93,7 +93,7 @@ export function ConsoleComponent(
 
       <ul className="px-6 py-3">
         {outputs.map((output, index) => (
-          <li key={`result-${index}`} className="block text-gray-300 text-sm">
+          <li key={`result-${index}`} className="block text-sm text-gray-300">
             {output}
           </li>
         ))}

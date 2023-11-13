@@ -7,7 +7,6 @@ import { TooltipProvider } from '@radix-ui/react-tooltip'
 
 import { AchivementsProvider } from '@/contexts/AchievementsContext'
 import { EditorProvider } from '@/contexts/EditorContext'
-import { LessonProvider } from '@/contexts/LessonContext'
 
 interface ClientProps {
   children: ReactNode
@@ -18,9 +17,7 @@ export function Client({ children }: ClientProps) {
     <TooltipProvider>
       <ToastProvider swipeDirection="right">
         <AchivementsProvider>
-          <EditorProvider>
-            <LessonProvider>{children}</LessonProvider>
-          </EditorProvider>
+          <EditorProvider>{children}</EditorProvider>
         </AchivementsProvider>
       </ToastProvider>
     </TooltipProvider>

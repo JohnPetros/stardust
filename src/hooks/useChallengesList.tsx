@@ -76,28 +76,28 @@ export const useChallengesList = () => {
     getUserCompletedChallengesIds
   )
 
-  function addCategories(challenge: Challenge) {
-    if (categories?.length) {
-      const challengeCategories = categories.filter((category) =>
-        category.challenges_categories.some(
-          ({ challenge_id }) => challenge_id === challenge.id
-        )
-      )
-      return { ...challenge, categories: challengeCategories ?? [] }
-    }
-    return challenge
-  }
-
-  function checkCompletition(challenge: Challenge) {
-    if (userCompletedChallengesIds) {
-      const isCompleted = userCompletedChallengesIds.includes(challenge.id)
-
-      return { ...challenge, isCompleted }
-    }
-    return challenge
-  }
-
   const filteredChallenges = useMemo(() => {
+    function addCategories(challenge: Challenge) {
+      if (categories?.length) {
+        const challengeCategories = categories.filter((category) =>
+          category.challenges_categories.some(
+            ({ challenge_id }) => challenge_id === challenge.id
+          )
+        )
+        return { ...challenge, categories: challengeCategories ?? [] }
+      }
+      return challenge
+    }
+
+    function checkCompletition(challenge: Challenge) {
+      if (userCompletedChallengesIds) {
+        const isCompleted = userCompletedChallengesIds.includes(challenge.id)
+
+        return { ...challenge, isCompleted }
+      }
+      return challenge
+    }
+
     if (challenges && categories && userCompletedChallengesIds && !isLoading) {
       return challenges.map(addCategories).map(checkCompletition)
     }

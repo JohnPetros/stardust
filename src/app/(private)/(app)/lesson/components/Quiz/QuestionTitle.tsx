@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+
 import { formatText, getImage } from '@/utils/helpers'
 
 interface TitleProps {
@@ -12,9 +13,9 @@ export function QuestionTitle({ children, picture }: TitleProps) {
   const image = picture ? getImage('theory', picture) : ''
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center gap-3 w-full rounded-md">
+    <div className="flex w-full flex-col items-center justify-center gap-3 rounded-md md:flex-row">
       {image && (
-        <div className="relative w-16 h-16">
+        <div className="relative h-16 w-16">
           <Image
             src={image}
             fill
@@ -27,7 +28,7 @@ export function QuestionTitle({ children, picture }: TitleProps) {
         </div>
       )}
       <p
-        className="text-gray-100 text-center md:text-left font-medium max-w-xl"
+        className="max-w-xl text-center font-medium text-gray-100 md:text-left"
         dangerouslySetInnerHTML={{ __html: formatText(children) }}
       ></p>
     </div>

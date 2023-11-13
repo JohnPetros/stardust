@@ -7,11 +7,15 @@ interface SorterButtonProps {
   icon: Icon
 }
 
-export function SorterButton({ title, isActive, icon: Icon }: SorterButtonProps) {
+export function SorterButton({
+  title,
+  isActive,
+  icon: Icon,
+}: SorterButtonProps) {
   return (
     <button
       className={twMerge(
-        'text-sm p-2 hover:text-gray-100 hidden md:flex items-center gap-1 group',
+        'group hidden items-center gap-1 p-2 text-sm hover:text-gray-100 md:flex',
         isActive ? 'text-gray-100' : 'text-gray-400'
       )}
     >

@@ -15,7 +15,7 @@ import Lottie from 'lottie-react'
 import { DialogAnimation } from './Dialog'
 import { Hydration } from './Hydration'
 
-import { MODAL_EFFECTS } from '@/utils/constants'
+import { ALERT_EFFECTS } from '@/utils/constants'
 import { playSound } from '@/utils/helpers'
 
 export type AlertType = 'earning' | 'crying' | 'denying' | 'asking' | 'generic'
@@ -28,7 +28,6 @@ export interface AlertRef {
 interface AlertProps {
   type: AlertType
   canPlaySong?: boolean
-  canForceMount?: boolean
   title: string
   body: ReactNode
   action: ReactNode
@@ -55,7 +54,7 @@ const AlertComponent = (
   const [isRendered, setIsRendered] = useState(false)
   const containerRef = useRef<HTMLElement | null>(null)
 
-  const { animation, sound } = MODAL_EFFECTS.find(
+  const { animation, sound } = ALERT_EFFECTS.find(
     (animation) => animation.id === type.toLocaleLowerCase()
   )!
 

@@ -1,15 +1,14 @@
 'use client'
 
 import { useMemo } from 'react'
-import { useLesson } from '@/hooks/useLesson'
-import { useRocket } from '@/hooks/useRocket'
-
-import Image from 'next/image'
 import { X } from '@phosphor-icons/react'
+import Image from 'next/image'
 
-import { getImage } from '@/utils/helpers'
 import { ProgressBar } from '@/app/components/ProgressBar'
 import { useAuth } from '@/contexts/AuthContext'
+import { useRocket } from '@/hooks/useRocket'
+import { useLessonStore } from '@/stores/lessonStore'
+import { getImage } from '@/utils/helpers'
 
 interface HeaderProps {
   onLeaveLesson: () => void
@@ -18,15 +17,13 @@ interface HeaderProps {
 export function Header({ onLeaveLesson }: HeaderProps) {
   const { user } = useAuth()
   const {
-    state: {
-      texts,
-      questions,
-      currentQuestionIndex,
-      renderedTextsAmount,
-      livesAmount,
-    },
-  } = useLesson()
-  const { rocket } = useRocket(user?.rocket_id)
+    texts,
+    questions,
+    currentQuestionIndex,
+    renderedTextsAmount,
+    livesAmount,
+  } = useLessonStore((store) => store.state)
+  const { rocket } = useRocket(user?.rocket_id ?? '')
   const rocketImage = rocket ? getImage('rockets', rocket.image) : ''
 
   const total = texts.length + questions.length
@@ -43,10 +40,10 @@ export function Header({ onLeaveLesson }: HeaderProps) {
   }, [renderedTextsAmount, currentQuestionIndex])
 
   return (
-    <header className="fixed z-10 top-0 px-6 py-3 w-full h-12 bg-gray-900">
-      <div className="flex items-center justify-between gap-6 max-w-3xl mx-auto">
+    <header className="fixed top-0 z-10 h-12 w-full bg-gray-900 px-6 py-3">
+      <div className="mx-auto flex max-w-3xl items-center justify-between gap-6">
         <button onClick={onLeaveLesson}>
-          <X className="text-red-700 text-2xl" weight="bold" />
+          <X className="text-2xl text-red-700" weight="bold" />
         </button>
 
         <ProgressBar
@@ -57,9 +54,15 @@ export function Header({ onLeaveLesson }: HeaderProps) {
 
         <div className="flex items-center gap-2">
           <div>
-            <Image src="/icons/life.svg" width={36} height={36} alt="" priority />
+            <Image
+              src="/icons/life.svg"
+              width={36}
+              height={36}
+              alt=""
+              priority
+            />
           </div>
-          <span className="text-red-700 text-lg font-bold">{livesAmount}</span>
+          <span className="text-lg font-bold text-red-700">{livesAmount}</span>
         </div>
       </div>
     </header>

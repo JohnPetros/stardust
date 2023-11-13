@@ -84,7 +84,7 @@ export function Code() {
 
     try {
       const formatedCode = formatCode(code, { input })
-      const { erros, resultado } = await execute(formatedCode, (output) => {
+      const { erros } = await execute(formatedCode, (output) => {
         userOutput = output
       })
 

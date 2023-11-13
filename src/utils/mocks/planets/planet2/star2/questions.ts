@@ -1,4 +1,4 @@
-const questions = [
+export const questions = [
   {
     title: 'Quais dos seguintes tipos podem ser usados para armazenar números?',
     type: 'checkbox',
@@ -31,7 +31,8 @@ escreva(mensagem)`,
     picture: 'panda-sorrindo.jpg',
   },
   {
-    title: 'Complete o código abaixo para que o combustível total do foguete seja igual a `75`',
+    title:
+      'Complete o código abaixo para que o combustível total do foguete seja igual a `75`',
     picture: 'panda-deslumbrado.jpg',
     type: 'drag-and-drop',
     lines: [
@@ -43,7 +44,9 @@ escreva(mensagem)`,
       },
       {
         id: 3,
-        texts: ['escreva("o foguete tem ${combustivelTotal} de combustível no total")'],
+        texts: [
+          'escreva("o foguete tem ${combustivelTotal} de combustível no total")',
+        ],
         indentation: 0,
       },
     ],

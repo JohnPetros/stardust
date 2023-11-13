@@ -20,7 +20,6 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 
-import { QuestionContainer } from '../QuestionContainer'
 import { QuestionTitle } from '../QuestionTitle'
 
 import { SortableItem } from './SortableItem'
@@ -29,7 +28,7 @@ import type {
   DragAndDropListQuestion as DragAndDropListQuestionData,
   SortableItem as SortableItemData,
 } from '@/@types/quiz'
-import { useLesson } from '@/hooks/useLesson'
+import { useLessonStore } from '@/stores/lessonStore'
 import { compareArrays, reorderItems } from '@/utils/helpers'
 
 interface DragAndDropListQuestionProps {
@@ -41,8 +40,16 @@ export function DragAndDropListQuestion({
 }: DragAndDropListQuestionProps) {
   const {
     state: { isAnswerVerified, isAnswerCorrect, currentQuestionIndex },
-    dispatch,
-  } = useLesson()
+    actions: {
+      setIsAnswered,
+      setIsAnswerVerified,
+      setIsAnswerCorrect,
+      setAnswerHandler,
+      changeQuestion,
+      incrementIncorrectAswersAmount,
+      decrementLivesAmount,
+    },
+  } = useLessonStore()
 
   const [sortableItems, setSortableItems] = useState<SortableItemData[]>([])
   const [activeSortableItemId, setActiveSortableItemId] = useState<
@@ -60,14 +67,6 @@ export function DragAndDropListQuestion({
     return compareArrays(userItemsIdSequence, correctDragItemsIdsSequence)
   }
 
-  function setIsAnswerVerified(isAnswerVerified: boolean) {
-    dispatch({ type: 'setIsAnswerVerified', payload: isAnswerVerified })
-  }
-
-  function setIsAnswerCorrect(isAnswerCorrect: boolean) {
-    dispatch({ type: 'setIsAnswerCorrect', payload: isAnswerCorrect })
-  }
-
   function handleAnswer() {
     setIsAnswerVerified(!isAnswerVerified)
 
@@ -75,7 +74,7 @@ export function DragAndDropListQuestion({
       setIsAnswerCorrect(true)
 
       if (isAnswerVerified) {
-        dispatch({ type: 'changeQuestion' })
+        changeQuestion()
       }
 
       return
@@ -87,11 +86,11 @@ export function DragAndDropListQuestion({
       isAnswerVerified &&
       !hasAlreadyIncrementIncorrectAnswersAmount.current
     ) {
-      dispatch({ type: 'incrementIncorrectAswersAmount' })
+      incrementIncorrectAswersAmount()
       hasAlreadyIncrementIncorrectAnswersAmount.current = true
     }
 
-    if (isAnswerVerified) dispatch({ type: 'decrementLivesAmount' })
+    if (isAnswerVerified) decrementLivesAmount()
   }
 
   function handleDragEnd(event: DragEndEvent) {
@@ -119,26 +118,20 @@ export function DragAndDropListQuestion({
   }
 
   useEffect(() => {
-    dispatch({
-      type: 'setIsAnswered',
-      payload: true,
-    })
+    setIsAnswered(true)
 
     if (!sortableItems.length) {
       const reorderedSortableItems = reorderItems<SortableItemData>(items)
       setSortableItems(reorderedSortableItems)
     }
-  }, [currentQuestionIndex])
+  }, [items])
 
   useEffect(() => {
-    dispatch({
-      type: 'setAnswerHandler',
-      payload: handleAnswer,
-    })
+    setAnswerHandler(handleAnswer)
   }, [isAnswerVerified, sortableItems])
 
   return (
-    <QuestionContainer>
+    <>
       <DndContext
         sensors={sensors}
         onDragStart={handleDragStart}
@@ -181,6 +174,6 @@ export function DragAndDropListQuestion({
           ) : null}
         </DragOverlay>
       </DndContext>
-    </QuestionContainer>
+    </>
   )
 }

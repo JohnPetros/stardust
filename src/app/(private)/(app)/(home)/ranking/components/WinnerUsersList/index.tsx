@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import Image from 'next/image'
 
 import { ShinningAnimation } from '../../../components/ShinningAnimation'
@@ -9,10 +9,10 @@ import { WinnerUser } from './WinnerUser'
 
 import type { Ranking } from '@/@types/ranking'
 import type { WinnerUser as WinnerUserType } from '@/@types/user'
-import { Modal, ModalRef } from '@/app/components/Alert'
+import { Alert, AlertRef } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { useAuth } from '@/contexts/AuthContext'
-import { getImage, playSound } from '@/utils/helpers'
+import { getImage } from '@/utils/helpers'
 
 interface WinnerUsersListProps {
   winnerUsers: WinnerUserType[]
@@ -54,26 +54,26 @@ export function WinnerUsersList({
     ? currentRanking.reward + 5 * getRewardMultiplicator()
     : 0
 
-  const rewardModal = useRef<ModalRef>(null)
-  const successModal = useRef<ModalRef>(null)
-  const failModal = useRef<ModalRef>(null)
+  const rewardAlert = useRef<AlertRef>(null)
+  const successAlert = useRef<AlertRef>(null)
+  const failAlert = useRef<AlertRef>(null)
 
   const rankingImage = getImage('rankings', currentRanking.image)
 
   async function handleWinnerUserListButtonClick() {
     if (user && isAuthUserTopWinner) {
-      rewardModal.current?.open()
+      rewardAlert.current?.open()
       await updateUser({ coins: user.coins + rewardByLastPosition })
       return
     }
 
     if (isAuthUserWinner) {
-      successModal.current?.open()
+      successAlert.current?.open()
       return
     }
 
     if (user?.is_loser) {
-      failModal.current?.open()
+      failAlert.current?.open()
       await updateUser({ is_loser: false })
       return
     }
@@ -81,23 +81,23 @@ export function WinnerUsersList({
     setWinnerUsers([])
   }
 
-  function handleModalButtonPress(type: 'reward' | 'success' | 'fail') {
+  function handleAlertButtonPress(type: 'reward' | 'success' | 'fail') {
     console.log(currentRanking.position === lastRankingPosition)
 
     if (type === 'reward') {
-      rewardModal.current?.close()
+      rewardAlert.current?.close()
       const hasNextRanking = currentRanking.position !== lastRankingPosition
 
       console.log(hasNextRanking)
 
       hasNextRanking
-        ? successModal.current?.open()
-        : handleModalButtonPress('success')
+        ? successAlert.current?.open()
+        : handleAlertButtonPress('success')
       return
     }
 
-    successModal.current?.close()
-    failModal.current?.close()
+    successAlert.current?.close()
+    failAlert.current?.close()
     setWinnerUsers([])
   }
 
@@ -141,8 +141,8 @@ export function WinnerUsersList({
         </p>
       )}
 
-      <Modal
-        ref={rewardModal}
+      <Alert
+        ref={rewardAlert}
         type={'earning'}
         title={'Recompensa resgatada!'}
         body={
@@ -156,9 +156,9 @@ export function WinnerUsersList({
             </p>
           </div>
         }
-        footer={
+        action={
           <Button
-            onClick={() => handleModalButtonPress('reward')}
+            onClick={() => handleAlertButtonPress('reward')}
             className="mt-6"
           >
             Entendido
@@ -167,8 +167,8 @@ export function WinnerUsersList({
         canPlaySong={false}
       />
 
-      <Modal
-        ref={successModal}
+      <Alert
+        ref={successAlert}
         type={'earning'}
         title={'Novo ranking!'}
         body={
@@ -197,9 +197,9 @@ export function WinnerUsersList({
             </div>
           </div>
         }
-        footer={
+        action={
           <Button
-            onClick={() => handleModalButtonPress('success')}
+            onClick={() => handleAlertButtonPress('success')}
             className="mt-6"
           >
             Entendido
@@ -208,8 +208,8 @@ export function WinnerUsersList({
         canPlaySong={false}
       />
 
-      <Modal
-        ref={failModal}
+      <Alert
+        ref={failAlert}
         type={'crying'}
         title={'Perda de Ranking!'}
         body={
@@ -230,10 +230,10 @@ export function WinnerUsersList({
             />
           </div>
         }
-        footer={
+        action={
           <Button
             title={'Entendido'}
-            onClick={() => handleModalButtonPress('fail')}
+            onClick={() => handleAlertButtonPress('fail')}
             className="mt-6"
           >
             Entendido

@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { LockSimple } from '@phosphor-icons/react'
 import { motion, Variants } from 'framer-motion'
 import Image from 'next/image'
@@ -9,7 +9,6 @@ import { twMerge } from 'tailwind-merge'
 import { ShopButton } from './ShopButton'
 
 import { Avatar } from '@/@types/avatar'
-import { AlertRef } from '@/app/components/Alert'
 import { useAuth } from '@/contexts/AuthContext'
 import { getImage, playSound } from '@/utils/helpers'
 
@@ -84,7 +83,7 @@ export function Avatar({
 
   useEffect(() => {
     setIsSelected(id === user?.avatar_id)
-  }, [user?.avatar_id])
+  }, [id, user?.avatar_id])
 
   return (
     <motion.div

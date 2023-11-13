@@ -1,4 +1,4 @@
-import { SignUpError } from "@/@types/signupError"
+import { SignUpError } from '@/@types/signUpError'
 
 export const SIGN_UP_ERRORS: Record<SignUpError, string> = {
   'For security purposes, you can only request this after 50 seconds.':

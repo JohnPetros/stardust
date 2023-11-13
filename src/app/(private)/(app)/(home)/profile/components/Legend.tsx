@@ -10,11 +10,12 @@ interface LabelProps {
 
 export function Legend({ label, value, total, color }: LabelProps) {
   return (
-    <div className='flex gap-1 items-center justify-between'>
-      <span className={twMerge(color, 'rounded-md w-3 h-2 mr-2')} />
+    <div className="flex items-center justify-between gap-1">
+      <span className={twMerge(color, 'mr-2 h-2 w-3 rounded-md')} />
       <dt className="text-gray-300">{label}</dt>
-      <dd className="text-lg text-gray-100 font-semibold">
-        {value}<span className="text-gray-500 text-base">/{total}</span>
+      <dd className="text-lg font-semibold text-gray-100">
+        {value}
+        <span className="text-base text-gray-500">/{total}</span>
       </dd>
     </div>
   )

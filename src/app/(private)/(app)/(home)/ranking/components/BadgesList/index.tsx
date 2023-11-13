@@ -1,6 +1,8 @@
 'use client'
-import { useRef, useEffect } from 'react'
+import { useRef } from 'react'
+
 import { Badge } from './Badge'
+
 import type { Ranking } from '@/@types/ranking'
 
 interface BadgesListProps {
@@ -16,7 +18,7 @@ export function BadgesList({ rankings, currentRanking }: BadgesListProps) {
     <div
       ref={badgesListRef}
       style={{ backgroundImage: 'url("/images/space-background.png")' }}
-      className="relative grid grid-cols-[repeat(6,140px)] md:gap-2 items-center md:justify-center rounded-md overflow-x-scroll custom-scrollbar p-4 z-30"
+      className="custom-scrollbar relative z-30 grid grid-cols-[repeat(6,140px)] items-center overflow-x-scroll rounded-md p-4 md:justify-center md:gap-2"
     >
       {rankings?.map(({ id, name, image }, index) => (
         <Badge

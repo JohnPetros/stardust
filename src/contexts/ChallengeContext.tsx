@@ -1,6 +1,7 @@
 'use client'
 
-import { ReactNode, createContext, useReducer } from 'react'
+import { createContext, ReactNode, useReducer } from 'react'
+
 import type { Challenge } from '@/@types/challenge'
 
 type TabHandler = {

@@ -24,7 +24,7 @@ export default function Challenge() {
 
   const { challenge, addUserCompletedChallenge } = useChallenge({
     challengeId: String(challengeId),
-    userId: user?.id,
+    userId: user?.id ?? '',
   })
 
   const { updateUserData: updateUserStarData } = useStar(challenge?.star_id)
@@ -106,12 +106,12 @@ export default function Challenge() {
       resetState()
       clearTimeout(timer)
     }
-  }, [challenge])
+  }, [challenge, resetState, setChallenge])
 
   useEffect(() => {
     const timer = setTimeout(() => (seconds.current += 1), 1000)
     return () => clearTimeout(timer)
-  }, [seconds.current])
+  }, [seconds])
 
   useEffect(() => {
     if (challenge && state.isEnd) {

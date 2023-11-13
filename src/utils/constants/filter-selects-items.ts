@@ -1,7 +1,7 @@
 'use client'
 import { CheckCircle, Circle, Icon, Minus } from '@phosphor-icons/react'
 
-import { Difficulty, Status } from '@/contexts/ChallengesListContext'
+import type { Difficulty, Status } from '@/stores/challengesListStore'
 
 type SelectsItem = {
   value: Status | Difficulty
