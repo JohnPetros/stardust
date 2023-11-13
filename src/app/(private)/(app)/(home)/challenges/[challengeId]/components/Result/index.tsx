@@ -72,7 +72,7 @@ export function Result() {
 
       setResults(test_cases.map(verifyResult))
     }
-  }, [userOutput])
+  }, [userOutput, challenge, tabHandler])
 
   if (challenge)
     return (

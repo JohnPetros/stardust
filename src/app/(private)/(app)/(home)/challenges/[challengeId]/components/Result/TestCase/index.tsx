@@ -48,7 +48,7 @@ export function TestCase({
     if (userOutput && !isLocked) {
       setIsOpen(true)
     }
-  }, [userOutput])
+  }, [userOutput, isLocked])
 
   return (
     <div
