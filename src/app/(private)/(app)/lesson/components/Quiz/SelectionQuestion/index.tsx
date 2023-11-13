@@ -70,7 +70,7 @@ export function SelectionQuestion({
       const reorderedItems = reorderItems<string>(options)
       setReorderedOptions(reorderedItems)
     }
-  }, [])
+  }, [options])
 
   useEffect(() => {
     setIsAnswered(!!selectedOption)

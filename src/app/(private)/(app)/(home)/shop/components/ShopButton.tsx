@@ -95,7 +95,6 @@ export function ShopButton({
         </p>
       }
       action={<Button>Entendido</Button>}
-      canForceMount={true}
     >
       <Button className="h-8 w-max bg-yellow-300 px-3 py-1">Comprar</Button>
     </Alert>
