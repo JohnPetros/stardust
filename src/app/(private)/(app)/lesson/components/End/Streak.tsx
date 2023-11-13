@@ -2,23 +2,23 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import { Toast, ToastRef } from '@/app/components/Toast'
-
 import { StreakBoard } from '../../../(home)/profile/components/Streak'
-import dayjs from 'dayjs'
+
+import type { WeekStatus } from '@/@types/weekStatus'
+import { Toast, ToastRef } from '@/app/components/Toast'
 import { useAuth } from '@/contexts/AuthContext'
 
 export function Streak() {
   const { user, updateUser } = useAuth()
 
-  const [weekStatus, setWeekStatus] = useState<string[]>([])
+  const [weekStatus, setWeekStatus] = useState<WeekStatus[]>([])
   const [streakAmount, setStreakAmount] = useState(0)
   const toastRef = useRef<ToastRef>(null)
 
   function updateWeekStatus(
-    weekStatus: string[],
+    weekStatus: WeekStatus[],
     dayIndex: number,
-    newStatus: string
+    newStatus: WeekStatus
   ) {
     const updatedWeekStatus = weekStatus.map((status, index) =>
       index === dayIndex ? newStatus : status
@@ -28,10 +28,10 @@ export function Streak() {
     return updatedWeekStatus
   }
 
-  async function updateStreak(weekStatus: string[]) {
+  async function updateStreak(weekStatus: WeekStatus[]) {
     if (!user) return
 
-    const todayIndex = dayjs().day()
+    const todayIndex = new Date().getDay()
     const todayStatus = weekStatus[todayIndex]
 
     if (todayStatus !== 'todo') return
