@@ -28,7 +28,6 @@ export interface AlertRef {
 interface AlertProps {
   type: AlertType
   canPlaySong?: boolean
-  canForceMount?: boolean
   title: string
   body: ReactNode
   action: ReactNode
