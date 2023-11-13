@@ -17,12 +17,6 @@ export function CategoriesFilter({ data }: CategoriesProps) {
   const [categories, setCategories] = useState<Category[]>([])
   const [search, setSearch] = useState('')
 
-  function filterCategories() {
-    if (!search) return data
-
-    return data.filter((category) => filterItemBySearch(search, category.name))
-  }
-
   function handleCategoryClick(categoryId: string, isActive: boolean) {
     let categoriesIds = state.categoriesIds
 
@@ -44,9 +38,17 @@ export function CategoriesFilter({ data }: CategoriesProps) {
   }, [data])
 
   useEffect(() => {
+    function filterCategories() {
+      if (!search) return data
+
+      return data.filter((category) =>
+        filterItemBySearch(search, category.name)
+      )
+    }
+
     const filteredCategories = filterCategories()
     setCategories(filteredCategories)
-  }, [search])
+  }, [search, data])
 
   return (
     <Dropdown.Root>

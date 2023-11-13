@@ -106,7 +106,7 @@ export default function Challenge() {
       resetState()
       clearTimeout(timer)
     }
-  }, [challenge])
+  }, [challenge, resetState, setChallenge])
 
   useEffect(() => {
     const timer = setTimeout(() => (seconds.current += 1), 1000)

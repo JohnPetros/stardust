@@ -22,19 +22,11 @@ export function Slider() {
     state: { tabHandler },
     actions: { setTabHandler },
   } = useChallengeStore()
-  const { md } = useBreakpoint()
+  const { md: isMobile } = useBreakpoint()
 
   const [activeSlideIndex, setActiveSlideIndex] = useState(0)
   const [scope, animate] = useAnimate()
   const sliderRef = useRef<SwiperRef>(null)
-
-  function showResultTab() {
-    sliderRef.current?.swiper.slideTo(2)
-  }
-
-  function showCodeTab() {
-    sliderRef.current?.swiper.slideTo(1)
-  }
 
   function handleNavButtonClick(slideIndex: number) {
     sliderRef.current?.swiper.slideTo(slideIndex)
@@ -50,19 +42,20 @@ export function Slider() {
   }
 
   useEffect(() => {
-    if (!tabHandler && md)
-      // dispatch({
-      //   type: 'setTabHandler',
-      //   payload: {
-      //     showResultTab,
-      //     showCodeTab,
-      //   },
-      // })
+    function showResultTab() {
+      sliderRef.current?.swiper.slideTo(2)
+    }
+
+    function showCodeTab() {
+      sliderRef.current?.swiper.slideTo(1)
+    }
+
+    if (!tabHandler && isMobile)
       setTabHandler({
         showResultTab,
         showCodeTab,
       })
-  }, [showResultTab, showCodeTab, md])
+  }, [setTabHandler, tabHandler, isMobile])
 
   return (
     <div>

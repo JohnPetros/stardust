@@ -49,30 +49,30 @@ export function Result() {
     }
   }
 
-  function verifyResult({ expectedOutput }: TestCaseData, index: number) {
-    const userResult = userOutput[index]
-
-    const isCorrect = compareArrays(
-      Array.isArray(userResult) ? userResult : [userResult.toString().trim()],
-      Array.isArray(expectedOutput)
-        ? expectedOutput
-        : [expectedOutput.toString().trim()]
-    )
-
-    return isCorrect
-  }
-
   useEffect(() => {
     if (!challenge) return
 
     const { test_cases } = challenge
+
+    function verifyResult({ expectedOutput }: TestCaseData, index: number) {
+      const userResult = userOutput[index]
+
+      const isCorrect = compareArrays(
+        Array.isArray(userResult) ? userResult : [userResult.toString().trim()],
+        Array.isArray(expectedOutput)
+          ? expectedOutput
+          : [expectedOutput.toString().trim()]
+      )
+
+      return isCorrect
+    }
 
     if (userOutput.length === test_cases.length) {
       tabHandler?.showResultTab()
 
       setResults(test_cases.map(verifyResult))
     }
-  }, [userOutput, challenge, tabHandler])
+  }, [userOutput, challenge, tabHandler, setResults])
 
   if (challenge)
     return (
