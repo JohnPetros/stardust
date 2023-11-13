@@ -67,7 +67,7 @@ export function useStar(starId?: string | null | undefined) {
     let _nextStar = nextStar
 
     if (!_nextStar) {
-      _nextStar = (await getNextStarFromNextPlanet()) as Star
+      _nextStar = await getNextStarFromNextPlanet()
       completedPlanets += _nextStar ? 1 : 0
     }
 
