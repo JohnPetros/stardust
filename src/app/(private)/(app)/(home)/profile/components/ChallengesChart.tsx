@@ -1,17 +1,16 @@
 'use client'
-import { useChallenge } from '@/hooks/useChallenge'
 import { useEffect, useState } from 'react'
-
 import dynamic from 'next/dynamic'
+
 import { Legend } from './Legend'
 
+import { Difficulty } from '@/@types/challenge'
+import { useChallengesSummary } from '@/hooks/useChallengesSummary'
 import { getChallengesChatOptions } from '@/utils/helpers'
 
 const Chart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
 })
-
-type Difficulty = 'easy' | 'medium' | 'hard'
 
 type TotalChallengesByDifficulty = {
   easy: number
@@ -27,7 +26,7 @@ export function ChallengesChart({ userId }: ChallengesChartProps) {
   const [totalChallengesByDifficulty, setTotalChallengesByDifficulty] =
     useState<TotalChallengesByDifficulty | null>(null)
 
-  const { challenges } = useChallenge(null, userId)
+  const { challenges } = useChallengesSummary(userId)
 
   function getCompletedChallengesCountByDifficulty(difficulty: Difficulty) {
     if (challenges?.length) {
@@ -100,7 +99,7 @@ export function ChallengesChart({ userId }: ChallengesChartProps) {
         options={options}
       />
       {totalChallengesByDifficulty && (
-        <dl className="flex flex-col gap-3 -ml-20">
+        <dl className="-ml-20 flex flex-col gap-3">
           <Legend
             label="Fácil"
             value={getCompletedChallengesCountByDifficulty('easy')}

@@ -19,14 +19,28 @@ export function Achievements({ userId }: AchievementsProps) {
 
   if (unlockedAchievements?.length) {
     return (
-      <div className="grid grid-cols-3 gap-2">
+      <div className="custom-scroll grid h-72 grid-cols-2 gap-4 overflow-y-auto">
         {unlockedAchievements.map((achivement) => (
-          <Achievement
-            key={achivement.id}
-            data={achivement}
-            isUnlocked={true}
-            isRescuable={false}
-          />
+          <>
+            <Achievement
+              key={achivement.id}
+              data={achivement}
+              isUnlocked={true}
+              isRescuable={false}
+            />
+            <Achievement
+              key={achivement.id}
+              data={achivement}
+              isUnlocked={true}
+              isRescuable={false}
+            />
+            <Achievement
+              key={achivement.id}
+              data={achivement}
+              isUnlocked={true}
+              isRescuable={false}
+            />
+          </>
         ))}
       </div>
     )
