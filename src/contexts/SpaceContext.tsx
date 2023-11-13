@@ -38,7 +38,7 @@ export const SpaceContext = createContext({} as SpaceContextValue)
 
 export function SpaceProvider({ children }: SpaceContextProps) {
   const { user } = useAuth()
-  const { rocket } = useRocket(user?.rocket_id)
+  const { rocket } = useRocket(user?.rocket_id ?? '')
   const [spaceRocket, setSpaceRocket] = useState<SpaceRocket>({} as SpaceRocket)
   const [lastUnlockedStarPosition, setLastUnlockedStarPosition] =
     useState<StarViewPortPosition>('above')

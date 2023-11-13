@@ -174,7 +174,11 @@ export function DragAndDropQuestion({
       correctDragItemsIdsSequence.length
 
     setIsAnswered(hasUserAnswer)
-  }, [currentQuestionIndex, activeDraggableItemId])
+  }, [
+    correctDragItemsIdsSequence.length,
+    currentQuestionIndex,
+    activeDraggableItemId,
+  ])
 
   useEffect(() => {
     setAnswerHandler(handleAnswer)
@@ -184,7 +188,7 @@ export function DragAndDropQuestion({
     setDraggableItems(
       dragItems.map((item) => ({ ...item, dropZoneId: `bank-${item.id}` }))
     )
-  }, [])
+  }, [dragItems])
 
   return (
     <>
