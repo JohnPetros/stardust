@@ -3,6 +3,7 @@
 import {
   ForwardedRef,
   forwardRef,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useState,
@@ -35,13 +36,13 @@ export function ConsoleComponent(
   const [outputs, setOutputs] = useState<string[]>([])
   const controls = useAnimation()
 
-  function open() {
+  const open = useCallback(() => {
     controls.start('open')
-  }
+  }, [controls])
 
-  function close() {
-    controls.start('closed')
-  }
+  const close = useCallback(() => {
+    controls.start('close')
+  }, [controls])
 
   function handleDragEnd(_: unknown, info: PanInfo) {
     if (info.velocity.y > 20 && info.offset.y >= 50) {
@@ -57,7 +58,7 @@ export function ConsoleComponent(
         close,
       }
     },
-    []
+    [open, close]
   )
 
   useEffect(() => {
