@@ -55,8 +55,10 @@ export function Sidebar() {
                 </SignOutAlert>
               </div>
             </div>
-            <div className=" p-6">
-              <AchievementsList />
+            <div className="custom-scrollbar mt-3 h-full overflow-y-auto p-6">
+              <div>
+                <AchievementsList />
+              </div>
             </div>
           </motion.aside>
         )}

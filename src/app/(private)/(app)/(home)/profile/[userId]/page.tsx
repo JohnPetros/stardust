@@ -28,7 +28,7 @@ export default function Profile() {
 
   if (user?.id)
     return (
-      <div className="mx-auto max-w-sm px-6 pt-8 md:max-w-5xl">
+      <div className="mx-auto max-w-sm px-6 pb-12 pt-8 md:max-w-5xl">
         {isFistRendering && <Loading isSmall={false} />}
         {user?.id && (
           <div>
@@ -55,7 +55,7 @@ export default function Profile() {
               </div>
             </div>
 
-            <div className="mt-10">
+            <div className="mt-20">
               <Tabs />
             </div>
           </div>
