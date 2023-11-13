@@ -50,7 +50,7 @@ export function Theory({ title, number }: TheoryProps) {
   useEffect(() => {
     setTexts([{ ...state.texts[0], hasAnimation: false }])
     actions.incrementRenderedTextsAmount()
-  }, [state.texts])
+  }, [state.texts, actions])
 
   return (
     <>

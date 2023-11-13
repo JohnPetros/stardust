@@ -6,7 +6,6 @@ export const challenge: Partial<Challenge> = {
   downvotes: 0,
   upvotes: 0,
   total_completitions: 0,
-  created_by: null,
   topic_id: 'f60a0e67-c0b9-401a-a652-c9d5f8042ff1',
   code: `var msg = leia()
 // Escreva seu código abaixo`,
