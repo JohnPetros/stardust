@@ -71,7 +71,7 @@ export const useLessonStore = create<LessonStoreProps>()(
         },
         setTexts(texts: Text[]) {
           return set(({ state }) => {
-            state.texts = texts
+            state.texts = []
           })
         },
         setIsAnswered(isAnswered: boolean) {
