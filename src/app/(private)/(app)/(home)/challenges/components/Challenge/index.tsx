@@ -86,13 +86,15 @@ export function Challenge({
           label={total_completitions}
           tooltipText={'Número de vezes que esse desafio foi concluído.'}
         />
-        <Link href={`/profile/${user_id}`}>
-          <Info
-            icon={User}
-            label={created_by}
-            tooltipText={'Criador desse desafio.'}
-          />
-        </Link>
+        {created_by && (
+          <Link href={`/profile/${user_id}`}>
+            <Info
+              icon={User}
+              label={created_by}
+              tooltipText={'Criador desse desafio.'}
+            />
+          </Link>
+        )}
       </ul>
       {categories && (
         <ul className="flex items-start gap-3">
