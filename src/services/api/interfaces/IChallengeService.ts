@@ -17,7 +17,7 @@ export type ChallengeSummary = Pick<
 
 export interface IChallengeService {
   getChallenge(challengeId: string, userId: string): Promise<Challenge>
-  getChallenges(): Promise<Challenge[]>
+  getChallenges(userId: string): Promise<Challenge[]>
   getChallengesSummary(userId: string): Promise<ChallengeSummary[]>
   getFilteredChallenges(
     params: GetFilteredChallengesParams
