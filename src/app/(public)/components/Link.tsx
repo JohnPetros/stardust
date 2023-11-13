@@ -1,5 +1,5 @@
-import NextLink from 'next/link'
 import { ReactNode } from 'react'
+import NextLink from 'next/link'
 
 interface LinkProps {
   children: ReactNode
@@ -9,7 +9,7 @@ interface LinkProps {
 export function Link({ children, href }: LinkProps) {
   return (
     <NextLink
-      className="text-gray-300 text-sm p-2 hover:text-gray-100 transition-colors duration-200"
+      className="p-2 text-sm text-gray-300 transition-colors duration-200 hover:text-gray-100"
       href={href}
     >
       {children}

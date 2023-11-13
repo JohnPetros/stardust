@@ -1,5 +1,6 @@
-import { useApi } from '@/services/api'
 import useSWR from 'swr'
+
+import { useApi } from '@/services/api'
 
 export function useRankedUsers(rankingId: string) {
   const api = useApi()

@@ -1,5 +1,6 @@
-import { PASSWORD_REGEX } from '@/utils/constants'
 import { z } from 'zod'
+
+import { PASSWORD_REGEX } from '@/utils/constants'
 
 const nameSchema = z
   .string()

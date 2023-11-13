@@ -1,6 +1,7 @@
 'use client'
 
 import useSWR from 'swr'
+
 import { useApi } from '@/services/api'
 
 export function useRanking(rankingId?: string, canGetAllRankings?: boolean) {

@@ -1,10 +1,9 @@
 'use client'
 
-import { ReactNode, createContext, useEffect, useReducer } from 'react'
-
-import { EDITOR_DEFAULT_CONFIG } from '@/utils/constants'
+import { createContext, ReactNode, useReducer } from 'react'
 
 import type { ThemeName } from '@/@types/themeName'
+import { EDITOR_DEFAULT_CONFIG } from '@/utils/constants'
 
 export type EditorState = {
   fontSize: number

@@ -1,10 +1,9 @@
 'use client'
 
 import { useId } from 'react'
-
-import { tv } from 'tailwind-variants'
 import * as RadioGroup from '@radix-ui/react-radio-group'
-import { Variants, motion } from 'framer-motion'
+import { motion, Variants } from 'framer-motion'
+import { tv } from 'tailwind-variants'
 
 const optionAnimations: Variants = {
   hover: {

@@ -4,21 +4,19 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Envelope, Lock } from '@phosphor-icons/react'
 import { motion, Variants } from 'framer-motion'
-import { LottieRef } from 'lottie-react'
-import { useRouter } from 'next/navigation'
 
 import { Hero } from '../components/Hero'
 import { Link } from '../components/Link'
 import { Title } from '../components/Title'
 
+import { SignUpError } from '@/@types/signUpError'
 import { Button } from '@/app/components/Button'
 import { Input } from '@/app/components/Input'
 import { Toast, ToastRef } from '@/app/components/Toast'
+import { useAuth } from '@/contexts/AuthContext'
 import { SignUpFormFields, signUpFormSchema } from '@/libs/zod'
 import { useApi } from '@/services/api'
 import { SIGN_UP_ERRORS } from '@/utils/constants/signup-errors'
-import { SignUpError } from '@/@types/signupError'
-import { useAuth } from '@/contexts/AuthContext'
 
 const formAnimations: Variants = {
   hidden: {
@@ -48,10 +46,7 @@ export default function SignUp() {
 
   const api = useApi()
 
-  const router = useRouter()
-
   const toastRef = useRef<ToastRef>(null)
-  const rocketRef = useRef(null) as LottieRef
 
   function handleError(error: SignUpError) {
     const message = SIGN_UP_ERRORS[error] ?? 'Erro ao tentar fazer cadastro'

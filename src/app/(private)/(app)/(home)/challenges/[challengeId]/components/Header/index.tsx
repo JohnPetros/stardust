@@ -1,18 +1,8 @@
 'client'
 
-import { ArrowLeft, List } from '@phosphor-icons/react'
+import { ArrowLeft } from '@phosphor-icons/react'
 
-import { PopoverMenu, PopoverMenuButton } from '@/app/components/PopoverMenu'
 import { useChallengeStore } from '@/stores/challengeStore'
-
-const popoverMenuButtons: PopoverMenuButton[] = [
-  {
-    title: 'Soluções de outros usuários',
-    isToggle: false,
-    value: null,
-    action: () => {},
-  },
-]
 
 export function Header() {
   const challenge = useChallengeStore((store) => store.state.challenge)
@@ -29,10 +19,6 @@ export function Header() {
               {challenge.title}
             </h2>
           </div>
-          {/* <PopoverMenu
-            buttons={popoverMenuButtons}
-            trigger={<List className="text-xl text-green-400" weight="bold" />}
-          /> */}
         </div>
       </header>
     )

@@ -1,6 +1,6 @@
 import { act } from 'react-dom/test-utils'
 import { ToastProvider } from '@radix-ui/react-toast'
-import { render, screen, within } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import { AchievementsList } from '../AchievementsList'
@@ -96,42 +96,42 @@ describe('AchievementsList component', () => {
     expect(await screen.findByRole('dialog')).toBeVisible()
   })
 
-  it.todo('should sort achievements list by locking state', async () => {
-    const user = await userEvent.setup({ delay: null })
+  // it.todo('should sort achievements list by locking state', async () => {
+  //   const user = await userEvent.setup({ delay: null })
 
-    const unlockedAchivement = {
-      ...achievementsMock[0],
-      isUnlocked: true,
-      name: 'unlocked achievement',
-    }
+  //   const unlockedAchivement = {
+  //     ...achievementsMock[0],
+  //     isUnlocked: true,
+  //     name: 'unlocked achievement',
+  //   }
 
-    renderAchievementsList([
-      { ...achievementsMock[1], isUnlocked: false },
-      { ...achievementsMock[2], isUnlocked: false },
-      unlockedAchivement,
-    ])
+  //   renderAchievementsList([
+  //     { ...achievementsMock[1], isUnlocked: false },
+  //     { ...achievementsMock[2], isUnlocked: false },
+  //     unlockedAchivement,
+  //   ])
 
-    const popoverMenuTrigger = screen.getByLabelText(
-      /Abrir menu para ordernar lista de conquistas/i
-    )
+  //   const popoverMenuTrigger = screen.getByLabelText(
+  //     /Abrir menu para ordernar lista de conquistas/i
+  //   )
 
-    act(() => {
-      user.click(popoverMenuTrigger)
-    })
+  //   act(() => {
+  //     user.click(popoverMenuTrigger)
+  //   })
 
-    const sorterButton = await screen.findByRole('button', {
-      name: 'Desbloqueadas',
-    })
+  //   const sorterButton = await screen.findByRole('button', {
+  //     name: 'Desbloqueadas',
+  //   })
 
-    // act(() => {
-    //   user.click(sorterButton)
-    // })
+  //   // act(() => {
+  //   //   user.click(sorterButton)
+  //   // })
 
-    const sortedAchievements = await screen.findAllByTestId(/achievement/i)
-    const unlockedAchievement = within(sortedAchievements[0]).getByText(
-      unlockedAchivement.name
-    )
+  //   const sortedAchievements = await screen.findAllByTestId(/achievement/i)
+  //   const unlockedAchievement = within(sortedAchievements[0]).getByText(
+  //     unlockedAchivement.name
+  //   )
 
-    expect(unlockedAchievement).toBeInTheDocument()
-  })
+  //   expect(unlockedAchievement).toBeInTheDocument()
+  // })
 })

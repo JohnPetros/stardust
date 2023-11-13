@@ -1,17 +1,16 @@
 import { useRef } from 'react'
-
+import { Lock } from '@phosphor-icons/react'
+import * as Tabs from '@radix-ui/react-tabs'
 import { twMerge } from 'tailwind-merge'
 
-import * as Tabs from '@radix-ui/react-tabs'
+import type { Tab } from '.'
+
 import {
   Tooltip,
-  TooltipTrigger,
   TooltipContent,
   TooltipRef,
+  TooltipTrigger,
 } from '@/app/components/Tooltip'
-import { Lock } from '@phosphor-icons/react'
-
-import type { Tab } from '.'
 
 interface TabButtonProps {
   value: Tab
@@ -36,11 +35,11 @@ export function TabButton({
     <Tabs.Trigger
       onClick={() => (isBlocked ? null : onClick(value))}
       className={twMerge(
-        'text-sm p-2',
+        'p-2 text-sm',
         isActive
-          ? 'text-green-500 p-2'
+          ? 'p-2 text-green-500'
           : isBlocked
-          ? 'text-gray-500 opacity-50 flex items-center gap-2'
+          ? 'flex items-center gap-2 text-gray-500 opacity-50'
           : 'text-gray-100'
       )}
       value={value}

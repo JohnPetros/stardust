@@ -1,16 +1,17 @@
 'use client'
 import { useState } from 'react'
-import { TabButton } from './TabButton'
 import {
-  Terminal,
-  FileCode,
   Barcode,
-  Icon,
-  Clock,
   CaretUp,
+  Clock,
+  FileCode,
+  Icon,
+  Terminal,
 } from '@phosphor-icons/react'
 import * as Tab from '@radix-ui/react-tabs'
+
 import { SorterButton } from './SorterButton'
+import { TabButton } from './TabButton'
 
 type TabValue = 'tab-1' | 'tab-2' | 'tab-3'
 
@@ -47,7 +48,7 @@ const tabs: Tab[] = [
 export function Tabs() {
   const [activeTab, setActiveTab] = useState<TabValue>('tab-1')
   const [hasSorters, setHasSorters] = useState(false)
-  const [activeSorter, setActiveSorter] = useState<Sorter>('created_at')
+  const [activeSorter] = useState<Sorter>('created_at')
 
   function handleTabClick(tabValue: TabValue, hasSorters: boolean) {
     setActiveTab(tabValue)
@@ -55,9 +56,9 @@ export function Tabs() {
   }
 
   return (
-    <Tab.Root className="bg-gray-800 rounded-md p-6">
+    <Tab.Root className="rounded-md bg-gray-800 p-6">
       <Tab.List className="flex items-center justify-between gap-2">
-        <div className="flex gap-1 items-center">
+        <div className="flex items-center gap-1">
           {tabs.map(({ title, icon, value, hasSorters }) => (
             <TabButton
               key={value}
@@ -72,7 +73,11 @@ export function Tabs() {
 
         {hasSorters && (
           <div className="flex items-center justify-end">
-            <SorterButton title="Mais recentes" icon={Clock} isActive={activeSorter === 'created_at'} />
+            <SorterButton
+              title="Mais recentes"
+              icon={Clock}
+              isActive={activeSorter === 'created_at'}
+            />
             <SorterButton
               title="Mais votados"
               icon={CaretUp}

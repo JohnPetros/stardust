@@ -92,13 +92,13 @@ escreva(carrinho)
       'Da mesma forma, em programação, um objeto (no nosso caso um vetor) também tem métodos que podem ser executados para realizar tarefas específicas.',
     picture: 'panda-de-oculos.jpg',
   },
-{
-  type: 'quote',
-  title: 'Adicionar()',
-  content:
-    'Um desses métodos é o `adicionar()`, que permite, obviamente, adicionar um novo elemento a um vetor.',
-  picture: 'panda-fazendo-coracao.jpg',
-},
+  {
+    type: 'quote',
+    title: 'Adicionar()',
+    content:
+      'Um desses métodos é o `adicionar()`, que permite, obviamente, adicionar um novo elemento a um vetor.',
+    picture: 'panda-fazendo-coracao.jpg',
+  },
   {
     type: 'default',
     content:

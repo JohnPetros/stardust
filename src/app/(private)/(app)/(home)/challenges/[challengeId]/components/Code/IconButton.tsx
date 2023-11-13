@@ -1,6 +1,5 @@
 'use client'
 
-import { RefObject } from 'react'
 import { Icon } from '@phosphor-icons/react'
 import * as ToolBar from '@radix-ui/react-toolbar'
 

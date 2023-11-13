@@ -30,7 +30,6 @@ export function DragItem({
     setNodeRef: setDraggableNodeRef,
     transform,
     isDragging,
-    node,
   } = useDraggable({
     id,
     data: { bankId: `bank-${id}`, isInZone: isDroppedInZone },

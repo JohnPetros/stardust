@@ -1,9 +1,10 @@
-import { Button } from '@/app/components/Button'
+import { useEffect, useRef } from 'react'
+import { AnimatePresence, motion, Variants } from 'framer-motion'
 import Image from 'next/image'
 import { twMerge } from 'tailwind-merge'
 import { tv } from 'tailwind-variants'
-import { AnimatePresence, Variants, motion } from 'framer-motion'
-import { useEffect, useRef } from 'react'
+
+import { Button } from '@/app/components/Button'
 import { playSound } from '@/utils/helpers'
 
 const buttonStyles = tv({
@@ -81,7 +82,7 @@ export function VerificationButton({
   return (
     <div
       className={twMerge(
-        'absolute bottom-0 border-t w-full px-6 py-3 flex flex-col items-center justify-center gap-2 ',
+        'absolute bottom-0 flex w-full flex-col items-center justify-center gap-2 border-t px-6 py-3 ',
         isAnswerVerified && !isAnswerCorrect
           ? 'border-red-700 bg-green-900'
           : 'border-green-500 bg-green-900'
@@ -95,7 +96,7 @@ export function VerificationButton({
               initial="down"
               animate="up"
               exit="down"
-              className="flex flex-col items-center gap-1 overflow-hidden h-20"
+              className="flex h-20 flex-col items-center gap-1 overflow-hidden"
             >
               <Image
                 src={`/icons/${

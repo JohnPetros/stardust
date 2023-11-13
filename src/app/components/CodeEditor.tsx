@@ -7,15 +7,15 @@ import {
   useImperativeHandle,
   useRef,
 } from 'react'
-import Editor, { useMonaco, Monaco } from '@monaco-editor/react'
-
-import { getDeleguaLanguageTokens } from '@/utils/helpers/getDeleguaLanguageTokens'
-
+import Editor, { Monaco, useMonaco } from '@monaco-editor/react'
 import type monaco from 'monaco-editor'
+
 import { Loading } from './Loading'
+
+import { useBreakpoint } from '@/hooks/useBreakpoint'
 import { useEditor } from '@/hooks/useEditor'
 import { THEMES } from '@/utils/constants'
-import { useBreakpoint } from '@/hooks/useBreakpoint'
+import { getDeleguaLanguageTokens } from '@/utils/helpers/getDeleguaLanguageTokens'
 
 export interface CodeEditorRef {
   reloadValue: () => void

@@ -2,7 +2,6 @@
 
 import useSWR from 'swr'
 
-import type { Star } from '@/@types/star'
 import type { User } from '@/@types/user'
 import { updateUserDataParam } from '@/app/(private)/(app)/lesson/components/End'
 import { useAuth } from '@/contexts/AuthContext'

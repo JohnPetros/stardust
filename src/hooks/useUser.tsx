@@ -1,7 +1,7 @@
 'use client'
-import { useApi } from '@/services/api'
-import { User } from '@/@types/user'
 import useSWR from 'swr'
+
+import { useApi } from '@/services/api'
 
 export function useUser(userId: string) {
   const api = useApi()

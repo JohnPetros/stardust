@@ -25,7 +25,7 @@ export function RangeInput({
   }
 
   return (
-    <div className="flex items-center gap-3 z-50 w-36 h-2">
+    <div className="z-50 flex h-2 w-36 items-center gap-3">
       <strong className="text-gray-100">{currentValue}</strong>
       <Slider.Root
         defaultValue={[currentValue]}
@@ -34,13 +34,13 @@ export function RangeInput({
         step={step}
         onValueChange={handleValueChange}
         onValueCommit={onValueChange}
-        className="flex items-center justify-center relative w-full h-3"
+        className="relative flex h-3 w-full items-center justify-center"
       >
-        <Slider.Track className="bg-gray-900 relative h-2 grow rounded-full">
-          <Slider.Range className="bg-gray-400 absolute rounded-full h-full " />
+        <Slider.Track className="relative h-2 grow rounded-full bg-gray-900">
+          <Slider.Range className="absolute h-full rounded-full bg-gray-400 " />
         </Slider.Track>
         <Slider.Thumb
-          className="block bg-gray-400 rounded-full w-4 h-4 cursor-pointer"
+          className="block h-4 w-4 cursor-pointer rounded-full bg-gray-400"
           aria-label="Tamanho"
         />
       </Slider.Root>

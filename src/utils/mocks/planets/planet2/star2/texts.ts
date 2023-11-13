@@ -82,8 +82,7 @@ var numero = 8.5 // Agora sim ✅`,
   },
   {
     type: 'default',
-    content:
-      'Veja um exemplo disso para ficar mais claro:',
+    content: 'Veja um exemplo disso para ficar mais claro:',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {

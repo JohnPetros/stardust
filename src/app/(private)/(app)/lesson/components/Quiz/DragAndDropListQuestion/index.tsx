@@ -124,7 +124,7 @@ export function DragAndDropListQuestion({
       const reorderedSortableItems = reorderItems<SortableItemData>(items)
       setSortableItems(reorderedSortableItems)
     }
-  }, [currentQuestionIndex])
+  }, [items])
 
   useEffect(() => {
     setAnswerHandler(handleAnswer)

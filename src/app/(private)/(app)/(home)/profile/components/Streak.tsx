@@ -1,9 +1,9 @@
 'use client'
 
-import Image from 'next/image'
-import { StreakIcon } from '../../components/StreakIcon'
-
 import { motion, Variants } from 'framer-motion'
+import Image from 'next/image'
+
+import { StreakIcon } from '../../components/StreakIcon'
 
 import { WEEK_DAYS } from '@/utils/constants'
 
@@ -31,7 +31,7 @@ interface StreakProps {
 
 export function StreakBoard({ weekStatus, streakAmount }: StreakProps) {
   return (
-    <div className="border border-gray-300 rounded-md p-6 flex flex-col items-center justify-center gap-4">
+    <div className="flex flex-col items-center justify-center gap-4 rounded-md border border-gray-300 p-6">
       <h4 className="text-gray-300">
         Sequência de dias estudados (Cosmic Run)
       </h4>
@@ -59,7 +59,7 @@ export function StreakBoard({ weekStatus, streakAmount }: StreakProps) {
 
       <div className="flex items-center justify-center gap-1">
         <StreakIcon size={32} />
-        <p className="text-green-500 font-medium">
+        <p className="font-medium text-green-500">
           {streakAmount} {streakAmount > 1 ? 'dias' : 'dia'} estudados seguidos
         </p>
       </div>

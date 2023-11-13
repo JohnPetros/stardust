@@ -1,10 +1,10 @@
 'use client'
-import { getImage } from '@/utils/helpers'
+import { useEffect, useRef } from 'react'
+import { motion, Variants } from 'framer-motion'
 import Image from 'next/image'
 import { twMerge } from 'tailwind-merge'
 
-import { Variants, motion } from 'framer-motion'
-import { useEffect, useRef } from 'react'
+import { getImage } from '@/utils/helpers'
 
 const badgeVariants: Variants = {
   hover: {
@@ -46,7 +46,7 @@ export function Badge({ index, name, image, currentRankingIndex }: BadgeProps) {
       ref={badgeRef}
       className={twMerge(
         'relative flex flex-col items-center justify-center gap-2',
-        isLocked ? 'brightness-75 opacity-75' : 'brightness-100 opacity-100'
+        isLocked ? 'opacity-75 brightness-75' : 'opacity-100 brightness-100'
       )}
     >
       <motion.div
@@ -69,7 +69,7 @@ export function Badge({ index, name, image, currentRankingIndex }: BadgeProps) {
       )}
 
       {isCurrentRanking && (
-        <strong className="md:text-lg text-gray-100 text-center font-semibold">
+        <strong className="text-center font-semibold text-gray-100 md:text-lg">
           {name}
         </strong>
       )}

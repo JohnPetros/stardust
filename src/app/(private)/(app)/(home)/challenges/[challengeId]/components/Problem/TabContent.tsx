@@ -1,7 +1,6 @@
 import { ReactNode } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
-
-import { Variants, motion } from 'framer-motion'
+import { motion, Variants } from 'framer-motion'
 
 const tabAnimations: Variants = {
   exit: {
@@ -29,7 +28,7 @@ export default function TabContent({ children, value, tabRef }: TabContent) {
     <Tabs.Content
       ref={tabRef}
       value={value}
-      className="h-[calc(100vh-8rem)] overflow-y-scroll overflow-hidden"
+      className="h-[calc(100vh-8rem)] overflow-hidden overflow-y-scroll"
       forceMount
     >
       <motion.div

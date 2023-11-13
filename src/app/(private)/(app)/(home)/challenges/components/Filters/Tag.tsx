@@ -1,6 +1,6 @@
 'use client'
 import { Icon, X } from '@phosphor-icons/react'
-import { Variants, motion } from 'framer-motion'
+import { motion, Variants } from 'framer-motion'
 
 const tagVariants: Variants = {
   hidden: {
@@ -36,14 +36,14 @@ export function Tag({
       animate="visible"
       exit="hidden"
       className={
-        'flex items-center justify-center gap-2 rounded-md bg-gray-800 text-gray-300 text-xs w-max h-max p-2'
+        'flex h-max w-max items-center justify-center gap-2 rounded-md bg-gray-800 p-2 text-xs text-gray-300'
       }
     >
       {Icon && iconStyles && <Icon className={iconStyles} />}
       <p className={nameStyles ?? ''}>{name}</p>
       <button
         onClick={onClick}
-        className="grid place-content-center bg-gray-400 rounded-full p-[1px]"
+        className="grid place-content-center rounded-full bg-gray-400 p-[1px]"
       >
         <X className="text-gray-800" widths={8} weight="bold" />
       </button>
