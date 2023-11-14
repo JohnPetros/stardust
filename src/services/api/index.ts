@@ -1,3 +1,5 @@
+'use client'
+
 import { AchievementService } from './achievementService'
 import { AuthService } from './authService'
 import { AvatarService } from './avatarService'
@@ -9,17 +11,21 @@ import { RocketService } from './rocketService'
 import { StarService } from './starService'
 import { UserService } from './userService'
 
+import { useSupabase } from '@/hooks/useSupabase'
+
 export function useApi() {
+  const { supabase } = useSupabase()
+
   return {
-    ...AuthService(),
-    ...UserService(),
-    ...AchievementService(),
-    ...StarService(),
-    ...PlanetService(),
-    ...AvatarService(),
-    ...RocketService(),
-    ...RankingService(),
-    ...CategoryService(),
-    ...ChallengeService(),
+    ...AuthService(supabase),
+    ...UserService(supabase),
+    ...AchievementService(supabase),
+    ...StarService(supabase),
+    ...PlanetService(supabase),
+    ...AvatarService(supabase),
+    ...RocketService(supabase),
+    ...RankingService(supabase),
+    ...CategoryService(supabase),
+    ...ChallengeService(supabase),
   }
 }

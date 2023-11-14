@@ -1,13 +1,9 @@
-'use client'
-
 import { IRocketService } from './interfaces/IRocketService'
 
 import type { Rocket } from '@/@types/rocket'
-import { useSupabase } from '@/hooks/useSupabase'
+import type { Supabase } from '@/@types/supabase'
 
-export const RocketService = (): IRocketService => {
-  const { supabase } = useSupabase()
-
+export const RocketService = (supabase: Supabase): IRocketService => {
   return {
     getRocket: async (rocketId: string) => {
       const { data, error } = await supabase

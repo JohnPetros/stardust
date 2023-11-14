@@ -1,9 +1,7 @@
 import type { Planet } from '@/@types/planet'
-import { useSupabase } from '@/hooks/useSupabase'
+import type { Supabase } from '@/@types/supabase'
 
-export const PlanetService = () => {
-  const { supabase } = useSupabase()
-
+export const PlanetService = (supabase: Supabase) => {
   return {
     getPlanets: async () => {
       const { data, error } = await supabase

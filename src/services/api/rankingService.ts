@@ -1,10 +1,7 @@
-'use client'
 import type { Ranking } from '@/@types/ranking'
-import { useSupabase } from '@/hooks/useSupabase'
+import type { Supabase } from '@/@types/supabase'
 
-export const RankingService = () => {
-  const { supabase } = useSupabase()
-
+export const RankingService = (supabase: Supabase) => {
   return {
     getRanking: async (rankingId: string) => {
       const { data, error } = await supabase

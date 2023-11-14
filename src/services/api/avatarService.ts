@@ -1,12 +1,9 @@
-'use client'
 import { IAvatarService } from './interfaces/IAvatarService'
 
 import type { Avatar } from '@/@types/avatar'
-import { useSupabase } from '@/hooks/useSupabase'
+import type { Supabase } from '@/@types/supabase'
 
-export const AvatarService = (): IAvatarService => {
-  const { supabase } = useSupabase()
-
+export const AvatarService = (supabase: Supabase): IAvatarService => {
   return {
     getAvatar: async (avatarId: string) => {
       const { data, error } = await supabase

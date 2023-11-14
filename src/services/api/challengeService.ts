@@ -1,12 +1,10 @@
-'use client'
-
 import {
   ChallengeSummary,
   IChallengeService,
 } from './interfaces/IChallengeService'
 
 import type { Challenge } from '@/@types/challenge'
-import { useSupabase } from '@/hooks/useSupabase'
+import { Supabase } from '@/@types/supabase'
 
 interface getFilteredChallengesProps {
   userId: string
@@ -17,9 +15,7 @@ interface getFilteredChallengesProps {
   range: number
 }
 
-export const ChallengeService = (): IChallengeService => {
-  const { supabase } = useSupabase()
-
+export const ChallengeService = (supabase: Supabase): IChallengeService => {
   return {
     getChallenge: async (challengeId: string, userId: string) => {
       const { data, error } = await supabase
