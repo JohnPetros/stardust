@@ -5,6 +5,7 @@ import { AuthService } from './authService'
 import { AvatarService } from './avatarService'
 import { CategoryService } from './categoryService'
 import { ChallengeService } from './challengeService'
+import { MdxService } from './mdxService'
 import { PlanetService } from './planetService'
 import { RankingService } from './rankingService'
 import { RocketService } from './rocketService'
@@ -27,5 +28,6 @@ export function useApi() {
     ...RankingService(supabase),
     ...CategoryService(supabase),
     ...ChallengeService(supabase),
+    ...MdxService(),
   }
 }
