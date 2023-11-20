@@ -1,11 +1,7 @@
-'use client'
-
+import type { Supabase } from '@/@types/supabase'
 import type { User, WinnerUser } from '@/@types/user'
-import { useSupabase } from '@/hooks/useSupabase'
 
-export const UserService = () => {
-  const { supabase } = useSupabase()
-
+export const UserService = (supabase: Supabase) => {
   return {
     getUser: async (userId: string) => {
       const { data, error } = await supabase

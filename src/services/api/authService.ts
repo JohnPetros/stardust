@@ -1,9 +1,6 @@
-'use client'
-import { useSupabase } from '@/hooks/useSupabase'
+import type { Supabase } from '@/@types/supabase'
 
-export const AuthService = () => {
-  const { supabase } = useSupabase()
-
+export const AuthService = (supabase: Supabase) => {
   return {
     signIn: async (email: string, password: string) => {
       const { data, error } = await supabase.auth.signInWithPassword({

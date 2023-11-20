@@ -1,10 +1,7 @@
-'use client'
 import type { Category } from '@/@types/category'
-import { useSupabase } from '@/hooks/useSupabase'
+import type { Supabase } from '@/@types/supabase'
 
-export const CategoryService = () => {
-  const { supabase } = useSupabase()
-
+export const CategoryService = (supabase: Supabase) => {
   return {
     getCategories: async () => {
       const { data, error } = await supabase

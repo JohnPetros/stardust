@@ -1,13 +1,9 @@
-'use client'
-
 import { IStarService } from './interfaces/IStarService'
 
 import type { Star } from '@/@types/star'
-import { useSupabase } from '@/hooks/useSupabase'
+import { Supabase } from '@/@types/supabase'
 
-export const StarService = (): IStarService => {
-  const { supabase } = useSupabase()
-
+export const StarService = (supabase: Supabase): IStarService => {
   return {
     getStar: async (starId: string) => {
       const { data, error } = await supabase

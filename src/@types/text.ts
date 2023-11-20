@@ -13,7 +13,6 @@ export type Text = {
   title?: string
   items?: string[]
   picture?: string
-  isUser?: boolean
   hasAnimation?: boolean
   isRunnable?: boolean
 }

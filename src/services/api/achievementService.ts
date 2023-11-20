@@ -1,13 +1,9 @@
-'use client'
-
 import { IAchievementService } from './interfaces/IAchievementService'
 
 import type { Achievement } from '@/@types/achievement'
-import { useSupabase } from '@/hooks/useSupabase'
+import type { Supabase } from '@/@types/supabase'
 
-export const AchievementService = (): IAchievementService => {
-  const { supabase } = useSupabase()
-
+export const AchievementService = (supabase: Supabase): IAchievementService => {
   return {
     getAchievements: async () => {
       const { data, error } = await supabase

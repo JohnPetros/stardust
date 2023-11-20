@@ -3,11 +3,11 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { Star } from './Star'
+import { Text } from './Text'
 
 import type { Text as TextData } from '@/@types/text'
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
-import { Text } from '@/app/components/Text'
 import { useLessonStore } from '@/stores/lessonStore'
 
 interface TheoryProps {
@@ -63,13 +63,10 @@ export function Theory({ title, number }: TheoryProps) {
             </h1>
           </div>
           <div className="mt-10 space-y-10 px-6 pb-[360px] md:px-0">
-            {texts.map((text, index) => (
-              <Text
-                key={`text-${index}`}
-                data={text}
-                hasAnimation={text.hasAnimation}
-              />
-            ))}
+            {texts.map((text, index) => {
+              const id = `text-${index}`
+              return <Text key={id} id={id} data={text} />
+            })}
           </div>
         </div>
 
