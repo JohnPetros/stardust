@@ -13,6 +13,7 @@ import type { Star } from '@/@types/star'
 import { Toast, ToastRef } from '@/app/components/Toast'
 import { useSpace } from '@/contexts/SpaceContext'
 import { useApi } from '@/services/api'
+import { ROUTES } from '@/utils/constants'
 
 const starLight = '0 0 12px #ffcf31a1'
 
@@ -79,7 +80,7 @@ export function Star({
         })
       }
     } else {
-      router.push('/lesson/' + id)
+      router.push(`${ROUTES.private.lesson}/${id}`)
     }
   }
 
