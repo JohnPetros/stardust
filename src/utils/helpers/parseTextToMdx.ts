@@ -2,10 +2,11 @@ import type { Text } from '@/@types/text'
 
 function getProps(text: Text) {
   const props = Object.keys(text)
+  const currentText: { [prop in string]: unknown } = text
 
   return props
     .filter((prop) => ['title', 'picture'].includes(prop))
-    .map((prop) => `${prop}={'${text[prop]}'}`)
+    .map((prop) => `${prop}={'${currentText[prop]}'}`)
     .join(' ')
 }
 
