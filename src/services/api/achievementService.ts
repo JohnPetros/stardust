@@ -1,5 +1,3 @@
-'use client'
-
 import { IAchievementService } from './interfaces/IAchievementService'
 
 import type { Achievement } from '@/@types/achievement'
