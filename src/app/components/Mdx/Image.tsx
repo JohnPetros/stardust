@@ -27,7 +27,7 @@ export function Image({ url, hasAnimation = true, content }: ImageProps) {
           priority
           alt=""
         />
-        <Content hasAnimation={hasAnimation}></Content>{content}</Content>
+        <Content hasAnimation={hasAnimation}>{content}</Content>
       </div>
     </Animation>
   )
