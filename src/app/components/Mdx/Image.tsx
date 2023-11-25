@@ -1,20 +1,18 @@
 import Img from 'next/image'
 
-import { TypeWriter } from '../Text/TypeWriter'
-
 import { Animation } from './Animation'
 import { Content } from './Content'
 
 import { getImage } from '@/utils/helpers'
 
 interface ImageProps {
-  url: string
-  content: string
+  picture: string
+  children: string
   hasAnimation?: boolean
 }
 
-export function Image({ url, hasAnimation = true, content }: ImageProps) {
-  const image = url ? getImage('theory', url) : ''
+export function Image({ picture, hasAnimation = true, children }: ImageProps) {
+  const image = picture ? getImage('theory', picture) : ''
 
   return (
     <Animation hasAnimation={hasAnimation}>
@@ -27,7 +25,9 @@ export function Image({ url, hasAnimation = true, content }: ImageProps) {
           priority
           alt=""
         />
-        <Content hasAnimation={hasAnimation}>{content}</Content>
+        <div>
+          <Content hasAnimation={hasAnimation}>{children}</Content>
+        </div>
       </div>
     </Animation>
   )
