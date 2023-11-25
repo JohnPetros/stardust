@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 
 import type { Text as TextData } from '@/@types/text'
 import { Mdx } from '@/app/components/Mdx'
-import { parseTextToMdx } from '@/utils/helpers'
+import { useText } from '@/hooks/useText'
 
 interface TextProp {
   id: string
@@ -12,10 +12,9 @@ interface TextProp {
 }
 
 export function Text({ id, data }: TextProp) {
+  const { parseTextToMdx } = useText()
   const content = parseTextToMdx(data, Boolean(data.hasAnimation))
   const textRef = useRef<HTMLDivElement>(null)
-
-  console.log(data.hasAnimation)
 
   useEffect(() => {
     if (data.hasAnimation && textRef.current)

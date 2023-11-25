@@ -7,7 +7,7 @@ import { QuestionTitle } from '../QuestionTitle'
 import { Input } from './Input'
 
 import type { OpenQuestion as OpenQuestionData } from '@/@types/quiz'
-import { CodeSnippet } from '@/app/components/Text/CodeSnippet'
+import { CodeSnippet } from '@/app/components/CodeSnippet'
 import { useLessonStore } from '@/stores/lessonStore'
 import { compareArrays } from '@/utils/helpers'
 

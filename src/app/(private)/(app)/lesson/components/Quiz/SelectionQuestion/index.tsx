@@ -8,7 +8,7 @@ import { QuestionTitle } from '../QuestionTitle'
 import { Option } from './Option'
 
 import type { SelectionQuestion as SelectionQuestionData } from '@/@types/quiz'
-import { CodeSnippet } from '@/app/components/Text/CodeSnippet'
+import { CodeSnippet } from '@/app/components/CodeSnippet'
 import { useLessonStore } from '@/stores/lessonStore'
 import { reorderItems } from '@/utils/helpers'
 
