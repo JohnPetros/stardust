@@ -30,11 +30,11 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
   const runCodeButtonRef = useRef<HTMLButtonElement | null>(null)
 
   function getPrintType(print: string) {
-    return print.replace(/escreva\((.*?)\)/, 'escreva(tipo de $1)')
+    return print.replace(REGEX.print, 'escreva(tipo de $1)')
   }
 
   function addPrintType(code: string) {
-    const regex = /(escreva\(.+\))/g
+    const regex = new RegExp(REGEX.print, 'g')
     if (!regex.test(code)) return code
 
     const newCode = code.replace(regex, (print) => {
@@ -156,14 +156,14 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
 
   const editorHeight = useMemo(() => {
     const lines = code.split('\n').length
-    return lines * (lines >= 10 ? 16 : 32)
+    return lines * (lines >= 10 ? 24 : 32)
   }, [code])
 
   return (
     <div
       className={twMerge(
         'relative w-full overflow-hidden rounded-md bg-gray-800',
-        isRunnable ? 'h-64' : 'h-auto'
+        isRunnable ? `h-[${editorHeight}px]` : 'h-auto'
       )}
     >
       <Toast ref={toastRef} />
