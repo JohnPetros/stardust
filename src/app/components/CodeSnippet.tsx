@@ -5,12 +5,14 @@ import { ArrowClockwise } from '@phosphor-icons/react'
 import * as ToolBar from '@radix-ui/react-toolbar'
 import { twMerge } from 'tailwind-merge'
 
-import { Console, ConsoleRef } from './Console/Index'
+import { Console, ConsoleRef } from './Console'
+import { Prompt, PromptRef } from './Prompt'
 import { Toast, ToastRef } from './Toast'
 
 import { Editor, EditorRef } from '@/app/components/Editor'
 import { execute } from '@/libs/delegua'
-import { playSound } from '@/utils/helpers'
+import { REGEX } from '@/utils/constants/regex'
+import { checkIsNumeric, playSound } from '@/utils/helpers'
 
 interface CodeSnippetProps {
   code: string
@@ -18,12 +20,14 @@ interface CodeSnippetProps {
 }
 
 export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
+  const [output, setOutput] = useState<string[]>([])
   const editorRef = useRef<EditorRef>(null)
-  const [outputs, setOutputs] = useState<string[]>([])
   const userCode = useRef(code)
   const errorLine = useRef(0)
   const consoleRef = useRef<ConsoleRef>(null)
   const toastRef = useRef<ToastRef>(null)
+  const promptRef = useRef<PromptRef>(null)
+  const runCodeButtonRef = useRef<HTMLButtonElement | null>(null)
 
   function getPrintType(print: string) {
     return print.replace(/escreva\((.*?)\)/, 'escreva(tipo de $1)')
@@ -44,6 +48,49 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
     return errorLine.current > 0 ? `</br>Linha: ${errorLine.current}` : ''
   }
 
+  async function formatCodeWithInput(code: string, input: string) {
+    const regex = REGEX.input
+    const match = code.match(regex)
+    userCode.current = match
+      ? code.replace(
+          match[0],
+          checkIsNumeric(input) ? input : "'" + input + "'"
+        )
+      : userCode.current
+    promptRef.current?.setValue('')
+    handleUserCode()
+  }
+
+  function onPromptConfirm() {
+    if (promptRef.current)
+      formatCodeWithInput(userCode.current, promptRef.current?.value)
+  }
+
+  function onPromptCancel() {
+    promptRef.current?.close()
+  }
+
+  function getPromptTitle(input: string) {
+    if (!input) return ''
+
+    const regex = REGEX.inputParam
+    const inputParam = input.match(regex)
+
+    if (!inputParam) return ''
+    const promptTitle = inputParam[0].slice(1).slice(0, -1)
+    return promptTitle
+  }
+
+  function hasInput(code: string) {
+    const regex = REGEX.input
+    const input = code.match(regex)
+    if (!input) return false
+
+    const promptTitle = getPromptTitle(input[0])
+    promptRef.current?.setTitle(promptTitle)
+    return input.length > 0
+  }
+
   function handleError(error: Error) {
     const { message } = error
 
@@ -58,13 +105,20 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
   }
 
   function handleOutput(output: string) {
-    setOutputs((currentOutputs) => [...currentOutputs, output])
+    setOutput((currentOutput) => [...currentOutput, output])
 
-    if (!output) setOutputs(['Sem resultado'])
+    if (!output) setOutput(['texto', 'Sem resultado'])
   }
 
-  async function handleRunButtonClick() {
-    setOutputs([])
+  async function handleUserCode() {
+    if (hasInput(userCode.current)) {
+      promptRef.current?.open()
+      promptRef.current?.focus()
+      return
+    }
+
+    setOutput([])
+    promptRef.current?.close()
     const code = addPrintType(userCode.current)
 
     try {
@@ -80,6 +134,8 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
 
       consoleRef.current?.open()
       playSound('running-code.wav')
+
+      if (editorRef.current) userCode.current = editorRef.current?.getValue()
     } catch (error) {
       handleError(error as Error)
     }
@@ -116,8 +172,9 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
               <ArrowClockwise className="text-green-900" weight="bold" />
             </ToolBar.Button>
             <ToolBar.Button
+              ref={runCodeButtonRef}
               className="h-6 w-max items-center rounded bg-green-400 px-4 text-xs font-semibold transition-[scale] duration-200 active:scale-95"
-              onClick={handleRunButtonClick}
+              onClick={handleUserCode}
             >
               Executar
             </ToolBar.Button>
@@ -134,7 +191,15 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
         onChange={handleCodeChange}
       />
 
-      {isRunnable && <Console ref={consoleRef} results={outputs} />}
+      {isRunnable && (
+        <Prompt
+          ref={promptRef}
+          onConfirm={onPromptConfirm}
+          onCancel={onPromptCancel}
+        />
+      )}
+
+      {isRunnable && <Console ref={consoleRef} results={output} />}
     </div>
   )
 }
