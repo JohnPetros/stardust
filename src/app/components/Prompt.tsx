@@ -12,6 +12,7 @@ import { Button } from './Button'
 export type PromptRef = {
   open: () => void
   close: () => void
+  focus: () => void
   setTitle: (title: string) => void
   setValue: (value: string) => void
   value: string
@@ -28,7 +29,8 @@ export function PromptComponent(
 ) {
   const [title, setTitle] = useState('')
   const [value, setValue] = useState('')
-  const alertRef = useRef<AlertRef>(null)
+  const alertRef = useRef<AlertRef | null>(null)
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
   function open() {
     alertRef.current?.open()
@@ -38,12 +40,17 @@ export function PromptComponent(
     alertRef.current?.close()
   }
 
+  function focus() {
+    inputRef.current?.focus()
+  }
+
   useImperativeHandle(
     ref,
     () => {
       return {
         open,
         close,
+        focus,
         setTitle,
         setValue,
         value,
@@ -60,6 +67,7 @@ export function PromptComponent(
       body={
         <div className="mx-auto my-6 w-4/5 items-center justify-center">
           <input
+            ref={inputRef}
             type="text"
             value={value}
             onChange={({ currentTarget }) => setValue(currentTarget.value)}
@@ -86,6 +94,7 @@ export function PromptComponent(
         </Button>
       }
       canPlaySong={false}
+      canForceMount={true}
     />
   )
 }
