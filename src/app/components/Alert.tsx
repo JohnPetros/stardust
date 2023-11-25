@@ -27,24 +27,26 @@ export interface AlertRef {
 
 interface AlertProps {
   type: AlertType
-  canPlaySong?: boolean
   title: string
   body: ReactNode
   action: ReactNode
   cancel?: ReactNode
   children?: ReactNode
+  canPlaySong?: boolean
+  canForceMount?: boolean
   onClose?: VoidFunction
 }
 
 const AlertComponent = (
   {
     type,
-    canPlaySong = true,
     title,
     body,
     action,
     cancel,
     children,
+    canPlaySong = true,
+    canForceMount = false,
     onClose,
   }: AlertProps,
   ref: ForwardedRef<AlertRef>
@@ -96,6 +98,7 @@ const AlertComponent = (
         >
           <AlertDialog.Overlay className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50" />
           <AlertDialog.Content
+            forceMount={canForceMount ? true : undefined}
             onCloseAutoFocus={onClose}
             className="fixed left-1/2 top-1/2 z-50 max-h-screen w-full max-w-lg -translate-x-1/2 -translate-y-1/2 p-6"
           >
@@ -115,8 +118,21 @@ const AlertComponent = (
 
               {body}
               <div className="mt-3 flex justify-center gap-2">
-                <AlertDialog.Action asChild>{action}</AlertDialog.Action>
-                <AlertDialog.Cancel asChild>{cancel}</AlertDialog.Cancel>
+                {canForceMount ? (
+                  <>
+                    {action}
+                    {cancel}
+                  </>
+                ) : (
+                  <>
+                    <AlertDialog.AlertDialogAction asChild>
+                      {action}
+                    </AlertDialog.AlertDialogAction>
+                    <AlertDialog.AlertDialogCancel asChild>
+                      {cancel}
+                    </AlertDialog.AlertDialogCancel>
+                  </>
+                )}
               </div>
             </DialogAnimation>
           </AlertDialog.Content>
