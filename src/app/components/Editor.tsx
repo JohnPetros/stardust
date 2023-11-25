@@ -18,6 +18,7 @@ import { THEMES } from '@/utils/constants'
 import { getDeleguaLanguageTokens } from '@/utils/helpers/getDeleguaLanguageTokens'
 
 export interface EditorRef {
+  getValue: () => string
   reloadValue: () => void
 }
 interface EditorProps {
@@ -53,10 +54,6 @@ export function EditorComponent(
       token: tokens[index].slice(0, -1),
       foreground: color,
     }))
-  }
-
-  function reloadValue() {
-    editorRef.current?.setValue(value)
   }
 
   function handleEditorDidMount(
@@ -96,11 +93,20 @@ export function EditorComponent(
   useImperativeHandle(
     ref,
     () => {
+      function getValue() {
+        return editorRef.current?.getValue() ?? ''
+      }
+
+      function reloadValue() {
+        editorRef.current?.setValue(value)
+      }
+
       return {
+        getValue,
         reloadValue,
       }
     },
-    []
+    [value]
   )
 
   useEffect(() => {
@@ -114,7 +120,7 @@ export function EditorComponent(
         'editor.background': '#1E2626',
       },
     })
-  }, [])
+  }, [monaco?.editor])
 
   return (
     <MonacoEditor
