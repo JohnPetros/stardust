@@ -44,6 +44,10 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
     return newCode
   }
 
+  function resetToOriginalUserCode() {
+    if (editorRef.current) userCode.current = editorRef.current?.getValue()
+  }
+
   function getErrorLine() {
     return errorLine.current > 0 ? `</br>Linha: ${errorLine.current}` : ''
   }
@@ -68,6 +72,7 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
 
   function onPromptCancel() {
     promptRef.current?.close()
+    resetToOriginalUserCode()
   }
 
   function getPromptTitle(input: string) {
@@ -135,7 +140,7 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
       consoleRef.current?.open()
       playSound('running-code.wav')
 
-      if (editorRef.current) userCode.current = editorRef.current?.getValue()
+      resetToOriginalUserCode()
     } catch (error) {
       handleError(error as Error)
     }
