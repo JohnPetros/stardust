@@ -8,9 +8,10 @@ import { PageTransitionAnimation } from '../../../../components/PageTransitionAn
 import { End } from './End'
 import { Header } from './Header'
 import { Quiz } from './Quiz'
+import SecondsIncrementer from './SecondsCounter'
 import { Theory } from './Theory'
 
-import { Star } from '@/@types/star'
+import type { Star } from '@/@types/star'
 import { Alert, AlertRef } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { useStar } from '@/hooks/useStar'
@@ -27,7 +28,7 @@ export function Layout({ star }: LayoutProps) {
 
   const {
     state: { currentStage, questions, incorrectAnswersAmount, secondsAmount },
-    actions: { incrementSecondsAmount, setTexts, setQuestions, resetState },
+    actions: { setTexts, setQuestions, resetState },
   } = useLessonStore()
 
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
@@ -44,10 +45,6 @@ export function Layout({ star }: LayoutProps) {
   function leaveLesson() {
     router.push('/')
   }
-
-  useEffect(() => {
-    setTimeout(() => incrementSecondsAmount(), 1000)
-  }, [secondsAmount, incrementSecondsAmount])
 
   useEffect(() => {
     let timer: NodeJS.Timeout
@@ -109,6 +106,7 @@ export function Layout({ star }: LayoutProps) {
   return (
     <>
       <PageTransitionAnimation isVisible={isTransitionVisible} />
+      <SecondsIncrementer />
       <main ref={scrollRef} className="relative overflow-x-hidden">
         {currentStage !== 'end' && (
           <Header onLeaveLesson={() => alertRef.current?.open()} />
