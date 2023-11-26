@@ -1,4 +1,5 @@
 'use client'
+import { ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 import { MDXRemote } from 'next-mdx-remote'
 
 import { Alert } from './Alert'
@@ -17,13 +18,32 @@ const COMPONENTS = {
   Code,
 }
 
+export interface MdxRef {
+  isLoaded: boolean
+}
+
 interface MdxProps {
   id: string
   children: string
 }
 
-export function Mdx({ children }: MdxProps) {
-  console.log(children)
+export function MdxComponent(
+  { children }: MdxProps,
+  ref: ForwardedRef<MdxRef>
+) {
   const source = useMdx(children)
+
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        isLoaded: !!source,
+      }
+    },
+    [source]
+  )
+
   if (source) return <MDXRemote {...source} components={COMPONENTS} />
 }
+
+export const Mdx = forwardRef(MdxComponent)
