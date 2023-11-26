@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react'
 
 import type { Text as TextData } from '@/@types/text'
-import { Mdx } from '@/app/components/Mdx'
+import { Mdx, MdxRef } from '@/app/components/Mdx'
 import { useText } from '@/hooks/useText'
 
 interface TextProp {
@@ -15,15 +15,23 @@ export function Text({ id, data }: TextProp) {
   const { parseTextToMdx } = useText()
   const content = parseTextToMdx(data, Boolean(data.hasAnimation))
   const textRef = useRef<HTMLDivElement>(null)
+  const mdxRef = useRef<MdxRef>(null)
 
   useEffect(() => {
-    if (data.hasAnimation && textRef.current)
-      textRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }, [data.hasAnimation])
+    if (data.hasAnimation && textRef.current && mdxRef.current?.isLoaded) {
+      textRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'nearest',
+      })
+    }
+  }, [data, mdxRef.current?.isLoaded])
 
   return (
     <div ref={textRef}>
-      <Mdx id={id}>{content}</Mdx>
+      <Mdx ref={mdxRef} id={id}>
+        {content}
+      </Mdx>
     </div>
   )
 }
