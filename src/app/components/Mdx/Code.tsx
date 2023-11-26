@@ -1,4 +1,4 @@
-import { CodeSnippet } from '../CodeSnippet'
+import { CodeSnippet } from '../Code/CodeSnippet'
 
 import { Animation } from './Animation'
 

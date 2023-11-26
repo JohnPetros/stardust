@@ -20,16 +20,18 @@ export function Text({
 }: TextProps) {
   return (
     <Animation hasAnimation={hasAnimation}>
-      <div className="flex w-full items-center">
+      <div className="flex w-full flex-col">
         {title && (
           <section id={slugify(title)} className="mb-4">
             <Title>{title}</Title>
           </section>
         )}
-        {picture && <Picture url={picture} />}
-        <Content type="default" hasAnimation={hasAnimation}>
-          {children}
-        </Content>
+        <div className="flex w-full items-center">
+          {picture && <Picture url={picture} />}
+          <Content type="default" hasAnimation={hasAnimation}>
+            {children}
+          </Content>
+        </div>
       </div>
     </Animation>
   )

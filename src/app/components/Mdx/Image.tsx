@@ -3,7 +3,7 @@ import Img from 'next/image'
 import { Animation } from './Animation'
 import { Content } from './Content'
 
-import { getImage } from '@/utils/helpers'
+import { useImage } from '@/hooks/useImage'
 
 interface ImageProps {
   picture: string
@@ -12,7 +12,7 @@ interface ImageProps {
 }
 
 export function Image({ picture, hasAnimation = true, children }: ImageProps) {
-  const image = picture ? getImage('theory', picture) : ''
+  const image = useImage('theory', picture)
 
   return (
     <Animation hasAnimation={hasAnimation}>

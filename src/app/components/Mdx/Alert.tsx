@@ -22,26 +22,28 @@ export function Alert({
 }: TextProps) {
   return (
     <Animation hasAnimation={hasAnimation}>
-      <div className="flex w-full items-center">
+      <div className="flex w-full flex-col items-center">
         {title && (
           <section id={slugify(title)} className="mb-4">
             <Title>{title}</Title>
           </section>
         )}
-        {picture && <Picture url={picture} />}
-        <span className="mr-3 block">
-          <Image
-            src="/icons/alert.svg"
-            width={32}
-            height={32}
-            alt=""
-            className="skeleton"
-            onLoadingComplete={(image) => image.classList.remove('skeleton')}
-          />
-        </span>
-        <Content type="alert" hasAnimation={hasAnimation}>
-          {children}
-        </Content>
+        <div className="flex w-full items-center">
+          {picture && <Picture url={picture} />}
+          <span className="mr-3 block">
+            <Image
+              src="/icons/alert.svg"
+              width={32}
+              height={32}
+              alt=""
+              className="skeleton"
+              onLoadingComplete={(image) => image.classList.remove('skeleton')}
+            />
+          </span>
+          <Content type="alert" hasAnimation={hasAnimation}>
+            {children}
+          </Content>
+        </div>
       </div>
     </Animation>
   )
