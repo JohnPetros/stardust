@@ -50,14 +50,14 @@ export const texts: Text[] = [
   },
   {
     type: 'code',
-    content: `programa preparar café
+    content: `programa preparar cafe
 
 Inicio
 
-  Colocar café no filtro.
+  Colocar cafe no filtro.
   Adicionar água quente.
   Iniciar processo de preparo.
-  Servir o café pronto.
+  Servir o cafe pronto.
 
 Fim`,
   },
@@ -114,18 +114,19 @@ Fim`,
 
 Inicio
 
-  Localizar um foguete disponível
-  Verificar os níveis de combustível
+  Localizar um foguete disponivel
+  Verificar os niveis de combustivel
   Verificar o suprimento a bordo
-  Verificar os níveis de oxigênio
+  Verificar os niveis de oxigenio
 
-  Se necessário, obter recursos adicionais
-  Caso contrário, preparar a decolagem do foguete
+  Se necessario, obter recursos adicionais
+  Caso contrario, preparar a decolagem do foguete
 
-  Aguardar até que o foguete entre em órbita
+  Aguardar ate que o foguete entre em orbita
   Aproveitar a jornada enquanto o foguete viaja pelo espaço
 
 Fim`,
+    isRunnable: false,
   },
   {
     content:
@@ -147,5 +148,3 @@ Fim`,
     picture: 'panda-fazendo-coracao.jpg',
   },
 ]
-
-const markdownContent = texts.map((text) => {})

@@ -4,7 +4,7 @@ export const challenge = {
   downvotes: 0,
   upvotes: 0,
   total_completitions: 0,
-  created_by: '38976417-7c77-44ff-9e26-5dc8b457f768',
+  created_by: 'Apollo',
   topic_id: 'f60a0e67-c0b9-401a-a652-c9d5f8042ff1',
   code: `// Lembre-se:
 // Trox: se tiver 3 olhos e cor verde
