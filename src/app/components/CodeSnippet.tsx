@@ -5,7 +5,7 @@ import { ArrowClockwise } from '@phosphor-icons/react'
 import * as ToolBar from '@radix-ui/react-toolbar'
 import { twMerge } from 'tailwind-merge'
 
-import { Console, ConsoleRef } from './Console'
+import { Console, ConsoleRef } from './Code/Console'
 import { Prompt, PromptRef } from './Prompt'
 import { Toast, ToastRef } from './Toast'
 
@@ -204,7 +204,9 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
         />
       )}
 
-      {isRunnable && <Console ref={consoleRef} results={output} />}
+      {isRunnable && (
+        <Console ref={consoleRef} results={output} height={editorHeight} />
+      )}
     </div>
   )
 }
