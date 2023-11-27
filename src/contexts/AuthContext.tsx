@@ -50,7 +50,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     const userId = session?.user?.id
 
     if (userId) {
-      return await api.getUser(userId)
+      return await api.getUserById(userId)
     }
   }
 

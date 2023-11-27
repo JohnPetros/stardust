@@ -8,9 +8,10 @@ import { PageTransitionAnimation } from '../../../../components/PageTransitionAn
 import { Fab } from './Fab'
 import { Planet } from './Planet'
 
+import type { Planet as PlanetData } from '@/@types/planet'
 import { StarViewPortPosition } from '@/contexts/SpaceContext'
 import { useSpace } from '@/contexts/SpaceContext'
-import { usePlanet } from '@/hooks/usePlanet'
+import { usePlanets } from '@/hooks/usePlanets'
 
 const fabIcon: Record<StarViewPortPosition, Icon> = {
   above: CaretDown,
@@ -18,11 +19,15 @@ const fabIcon: Record<StarViewPortPosition, Icon> = {
   in: CaretDown,
 }
 
-export function Space() {
+interface SpaceProps {
+  planets: PlanetData[]
+}
+
+export function Space({ planets }: SpaceProps) {
   const { lastUnlockedStarPosition, scrollIntoLastUnlockedStar } = useSpace()
-  const { planets, lastUnlockedStarId } = usePlanet()
+  const { lastUnlockedStarId, data: verifiedPlanets } = usePlanets(planets)
   const [isTransitionVisible, setIsTransitionVisible] = useState(
-    !planets?.length
+    !verifiedPlanets?.length
   )
 
   function handleFabClick() {
@@ -30,16 +35,16 @@ export function Space() {
   }
 
   useEffect(() => {
-    if (planets?.length && isTransitionVisible) {
+    if (verifiedPlanets?.length && isTransitionVisible) {
       setTimeout(() => setIsTransitionVisible(false), 3500)
     }
-  }, [planets, isTransitionVisible])
+  }, [verifiedPlanets, isTransitionVisible])
 
   return (
     <div className="flex flex-col items-center bg-green-900 bg-[url('/images/space.png')] bg-center pb-6">
       <PageTransitionAnimation isVisible={isTransitionVisible} />
       <ul className=" mt-10 flex max-w-[75vw] flex-col items-start justify-center gap-12">
-        {planets?.map((planet) => (
+        {verifiedPlanets?.map((planet) => (
           <Planet
             key={planet.id}
             data={planet}

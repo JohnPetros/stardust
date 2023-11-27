@@ -9,11 +9,11 @@ import { Space } from '../Space'
 import { planetsMock } from '@/__tests__/mocks/planetsMock'
 import { SidebarContext, SidebarContextValue } from '@/contexts/SidebarContext'
 import { SpaceContext, SpaceContextValue } from '@/contexts/SpaceContext'
-import { usePlanet } from '@/hooks/usePlanet'
+import { usePlanets } from '@/hooks/usePlanets'
 
 jest.mock('next/navigation')
-jest.mock('../../../../../../hooks/usePlanet', () => ({
-  usePlanet: jest.fn(),
+jest.mock('../../../../../../hooks/usePlanets', () => ({
+  usePlanets: jest.fn(),
 }))
 
 const scrollIntoLastUnlockedStarMock = jest.fn()
@@ -22,7 +22,7 @@ const lastUnlockedStarPositionMock = 'above'
 const lastUnlockedStarIdMock = '424242'
 
 function mockUsePlanet(hasPlanets: boolean = true) {
-  ;(usePlanet as jest.Mock).mockImplementation(() => ({
+  ;(usePlanets as jest.Mock).mockImplementation(() => ({
     planets: hasPlanets ? planetsMock : [],
     lastUnlockedStarId: lastUnlockedStarIdMock,
   }))
@@ -50,7 +50,7 @@ function renderSpace() {
           }
         >
           <TooltipProvider>
-            <Space />
+            <Space planets={planetsMock} />
           </TooltipProvider>
         </SidebarContext.Provider>
       </SpaceContext.Provider>

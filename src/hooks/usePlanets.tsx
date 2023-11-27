@@ -7,7 +7,7 @@ import type { Planet } from '@/@types/planet'
 import { useAuth } from '@/contexts/AuthContext'
 import { useApi } from '@/services/api'
 
-export function usePlanet() {
+export function usePlanets(planets: Planet[]) {
   const { user } = useAuth()
   const api = useApi()
 
@@ -17,11 +17,14 @@ export function usePlanet() {
     }
   }
 
-  const { data: planets } = useSWR('/planets', api.getPlanets)
-  const { data: userUnlockedStarsIds } = useSWR(
+  const { data: userUnlockedStarsIds, error } = useSWR(
     '/unlocked_stars_ids?user_id=' + user?.id,
     getUserUnlockedStarsIds
   )
+
+  if (error) {
+    throw new Error(error)
+  }
 
   const [lastUnlockedStarId, setLasUnlockedStarId] = useState('')
 
@@ -43,7 +46,7 @@ export function usePlanet() {
   }
 
   const data = useMemo(() => {
-    if (planets?.length && userUnlockedStarsIds?.length) {
+    if (userUnlockedStarsIds?.length) {
       return planets.map((planet) =>
         verifyStarUnlocking(planet, userUnlockedStarsIds)
       )
@@ -51,7 +54,7 @@ export function usePlanet() {
   }, [planets, userUnlockedStarsIds])
 
   return {
-    planets: data,
+    data,
     lastUnlockedStarId,
   }
 }
