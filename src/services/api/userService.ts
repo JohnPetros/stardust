@@ -1,9 +1,11 @@
+import { IUserService } from './interfaces/IUserService'
+
 import type { Supabase } from '@/@types/supabase'
 import type { User, WinnerUser } from '@/@types/user'
 
-export const UserService = (supabase: Supabase) => {
+export const UserService = (supabase: Supabase): IUserService => {
   return {
-    getUser: async (userId: string) => {
+    getUserById: async (userId: string) => {
       const { data, error } = await supabase
         .from('users')
         .select('*')
@@ -16,7 +18,7 @@ export const UserService = (supabase: Supabase) => {
       return data
     },
 
-    getUserByEmail: async (email: string) => {
+    getUserEmail: async (email: string) => {
       const { data, error } = await supabase
         .from('users')
         .select('email')
@@ -28,15 +30,17 @@ export const UserService = (supabase: Supabase) => {
       return data
     },
 
-    updateUser: async (newData: Partial<User>, userId: string) => {
+    updateUser: async (newUserData: Partial<User>, userId: string) => {
       const { error } = await supabase
         .from('users')
-        .update(newData)
+        .update(newUserData)
         .eq('id', userId)
 
       if (error) {
         return error.message
       }
+
+      return null
     },
 
     getUsersByRanking: async (rankingId: string) => {
