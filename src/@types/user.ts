@@ -31,9 +31,5 @@ export type User = {
 export type WinnerUser = {
   id: string
   user_id: string
-  name: string
   position: number
-  xp: number
-  avatar_id: string
-  ranking_id: string
-}
+} & Pick<User, 'name' | 'xp' | 'avatar_id' | 'ranking_id'>
