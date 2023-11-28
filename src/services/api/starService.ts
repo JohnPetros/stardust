@@ -23,13 +23,13 @@ export const StarService = (supabase: Supabase): IStarService => {
     getNextStar: async (currentStar: Star, userId: string) => {
       const { data, error } = await supabase
         .from('stars')
-        .select('id, users_unlocked_stars(*)')
+        .select('*, users_unlocked_stars(*)')
         .match({
           planet_id: currentStar.planet_id,
           number: currentStar.number + 1,
         })
         .eq('users_unlocked_stars.user_id', userId)
-        .returns<Star & { users_unlocked_stars?: [] }>()
+        .single<Star & { users_unlocked_stars?: [] }>()
 
       if (error) {
         throw new Error(error.message)
@@ -60,15 +60,13 @@ export const StarService = (supabase: Supabase): IStarService => {
         }
       )
 
-      console.log({ nextStarId })
-
       if (nextStarIdError) {
         throw new Error(nextStarIdError.message)
       }
 
       const { data, error } = await supabase
         .from('stars')
-        .select('id, users_unlocked_stars(*)')
+        .select('*, users_unlocked_stars(*)')
         .eq('id', nextStarId)
         .eq('users_unlocked_stars.user_id', userId)
         .single<Star & { users_unlocked_stars?: [] }>()
@@ -76,8 +74,6 @@ export const StarService = (supabase: Supabase): IStarService => {
       if (error) {
         throw new Error(error.message)
       }
-
-      console.log({ data })
 
       if (!data) return null
 

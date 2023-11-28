@@ -59,7 +59,7 @@ const buttonAnimations: Variants = {
   },
 }
 
-export interface updateUserDataParam {
+export interface updateUserDataParams {
   newCoins: number
   newXp: number
   user: User
@@ -71,7 +71,7 @@ interface EndProps {
   time: string
   accurance: string
   userDataUpdater: (
-    userDataUpdaterParams: updateUserDataParam
+    userDataUpdaterParams: updateUserDataParams
   ) => Promise<Partial<User>>
   onExit: () => void
 }
@@ -118,6 +118,8 @@ export function End({
   async function updateUserData() {
     const updatedUserData = await getUpdatedUserData()
 
+    console.log({ updatedUserData })
+
     if (updatedUserData) {
       const updatedLevel = updatedUserData.xp
         ? getUpdatedLevel(updatedUserData.xp)
@@ -126,6 +128,10 @@ export function End({
       const data = { ...updatedUserData, level: updatedLevel }
 
       const error = await updateUser(data)
+
+      if (error) {
+        throw new Error(error)
+      }
     }
   }
 

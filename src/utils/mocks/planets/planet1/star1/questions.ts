@@ -56,7 +56,7 @@ export const questions = [
     picture: 'panda.jpg',
     items: [
       { id: 1, label: 'Acessar painel de controle' },
-      { id: 2, label: 'Pressionar o botão o piloto automático' },
+      { id: 2, label: 'Pressionar o botão do piloto automático' },
       { id: 3, label: 'Corrigir desvios na trajetória, se necessário' },
       { id: 4, label: 'Curtir a viagem 🚀' },
     ],

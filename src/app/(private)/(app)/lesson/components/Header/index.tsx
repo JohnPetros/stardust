@@ -4,6 +4,8 @@ import { useMemo } from 'react'
 import { X } from '@phosphor-icons/react'
 import Image from 'next/image'
 
+import { Alert } from '@/app/components/Alert'
+import { Button } from '@/app/components/Button'
 import { ProgressBar } from '@/app/components/ProgressBar'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRocket } from '@/hooks/useRocket'
@@ -37,14 +39,41 @@ export function Header({ onLeaveLesson }: HeaderProps) {
         ((currentQuestionIndex / questions.length) * halfTotal) / total) *
       100
     )
-  }, [renderedTextsAmount, currentQuestionIndex])
+  }, [
+    renderedTextsAmount,
+    currentQuestionIndex,
+    halfTotal,
+    total,
+    texts.length,
+    questions.length,
+  ])
 
   return (
     <header className="fixed top-0 z-10 h-12 w-full bg-gray-900 px-6 py-3">
       <div className="mx-auto flex max-w-3xl items-center justify-between gap-6">
-        <button onClick={onLeaveLesson}>
-          <X className="text-2xl text-red-700" weight="bold" />
-        </button>
+        <Alert
+          type="crying"
+          title="Deseja mesmo sair da sua lição?"
+          canPlaySong={false}
+          body={null}
+          action={
+            <Button
+              className="w-32 bg-red-700 text-gray-100"
+              onClick={onLeaveLesson}
+            >
+              Sair
+            </Button>
+          }
+          cancel={
+            <Button className="w-32 bg-green-400 text-green-900" autoFocus>
+              Cancelar
+            </Button>
+          }
+        >
+          <button onClick={onLeaveLesson}>
+            <X className="text-2xl text-red-700" weight="bold" />
+          </button>
+        </Alert>
 
         <ProgressBar
           value={currentProgressValue}

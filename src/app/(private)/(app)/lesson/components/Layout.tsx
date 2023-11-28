@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import { PageTransitionAnimation } from '../../../../components/PageTransitionAnimation'
 
@@ -23,8 +23,7 @@ interface LayoutProps {
 }
 
 export function Layout({ star }: LayoutProps) {
-  const { starId } = useParams()
-  const { nextStar, updateUserData } = useStar(String(starId))
+  const { nextStar, updateUserData } = useStar(star)
 
   const {
     state: { currentStage, questions, incorrectAnswersAmount, secondsAmount },
@@ -69,21 +68,17 @@ export function Layout({ star }: LayoutProps) {
     }
 
     function getCoins() {
-      if (!nextStar) return 0
-
-      let maxCoins = nextStar.isUnlocked ? 5 : 10
+      let maxCoins = nextStar && nextStar.isUnlocked ? 5 : 10
       for (let i = 0; i < incorrectAnswersAmount; i++) {
-        maxCoins -= nextStar.isUnlocked ? 1 : 2
+        maxCoins -= nextStar && nextStar.isUnlocked ? 1 : 2
       }
       return maxCoins
     }
 
     function getXp() {
-      if (!nextStar) return 0
-
-      let maxXp = nextStar.isUnlocked ? 10 : 20
+      let maxXp = nextStar && nextStar.isUnlocked ? 10 : 20
       for (let i = 0; i < incorrectAnswersAmount; i++) {
-        maxXp -= nextStar.isUnlocked ? 2 : 5
+        maxXp -= nextStar && nextStar.isUnlocked ? 2 : 5
       }
 
       return maxXp
@@ -106,11 +101,9 @@ export function Layout({ star }: LayoutProps) {
   return (
     <>
       <PageTransitionAnimation isVisible={isTransitionVisible} />
-      <SecondsIncrementer />
+      {currentStage !== 'end' && <SecondsIncrementer />}
       <main ref={scrollRef} className="relative overflow-x-hidden">
-        {currentStage !== 'end' && (
-          <Header onLeaveLesson={() => alertRef.current?.open()} />
-        )}
+        {currentStage !== 'end' && <Header onLeaveLesson={leaveLesson} />}
 
         {star && nextStar && (
           <>
@@ -131,27 +124,6 @@ export function Layout({ star }: LayoutProps) {
           </>
         )}
       </main>
-
-      <Alert
-        ref={alertRef}
-        type="crying"
-        title="Deseja mesmo sair da sua lição?"
-        canPlaySong={false}
-        body={null}
-        action={
-          <Button
-            className="w-32 bg-red-700 text-gray-100"
-            onClick={leaveLesson}
-          >
-            Sair
-          </Button>
-        }
-        cancel={
-          <Button className="w-32 bg-green-400 text-green-900" autoFocus>
-            Cancelar
-          </Button>
-        }
-      />
     </>
   )
 }

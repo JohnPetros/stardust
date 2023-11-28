@@ -8,7 +8,7 @@ import { twMerge } from 'tailwind-merge'
 import { tv } from 'tailwind-variants'
 
 const itemStyles = tv({
-  base: 'rounded-md flex items-center justify-between bg-purple-700 border-2 p-3 w-full mx-auto custom-outline text-medium cursor-grab',
+  base: 'rounded-md flex items-center justify-between bg-purple-700 border-2 p-3 w-full mx-auto custom-outline cursor-grab',
   variants: {
     color: {
       gray: 'border-gray-100 text-gray-100',

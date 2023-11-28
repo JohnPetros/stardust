@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 
 import { PageTransitionAnimation } from '../../../../../components/PageTransitionAnimation'
-import { End, updateUserDataParam } from '../../../lesson/components/End'
+import { End, updateUserDataParams } from '../../../lesson/components/End'
 
 import { Code } from './components/Code'
 import { Header } from './components/Header'
@@ -15,7 +15,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useChallenge } from '@/hooks/useChallenge'
 import { useStar } from '@/hooks/useStar'
 import { useChallengeStore } from '@/stores/challengeStore'
-import { CHALLENGE_EARNINGS_BY_DIFFICULTY } from '@/utils/constants'
+import { CHALLENGE_REWARDS_BY_DIFFICULTY } from '@/utils/constants'
 import { formatSecondsToTime } from '@/utils/helpers'
 
 export default function Challenge() {
@@ -56,7 +56,7 @@ export default function Challenge() {
     newCoins,
     newXp,
     user,
-  }: updateUserDataParam) {
+  }: updateUserDataParams) {
     let completed_challenges = user.completed_challenges
 
     if (challenge && !challenge.isCompleted) {
@@ -115,7 +115,7 @@ export default function Challenge() {
 
   useEffect(() => {
     if (challenge && state.isEnd) {
-      const difficulty = CHALLENGE_EARNINGS_BY_DIFFICULTY[challenge?.difficulty]
+      const difficulty = CHALLENGE_REWARDS_BY_DIFFICULTY[challenge?.difficulty]
 
       const coins = difficulty.coins / (challenge?.isCompleted ? 2 : 1)
       const xp = difficulty.xp / (challenge?.isCompleted ? 2 : 1)

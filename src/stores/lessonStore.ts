@@ -41,7 +41,7 @@ type LessonStoreProps = {
 }
 
 const initialState: LessonStoreState = {
-  currentStage: 'theory',
+  currentStage: 'quiz',
   texts: [],
   renderedTextsAmount: 0,
   questions: [],
@@ -62,7 +62,7 @@ export const useLessonStore = create<LessonStoreProps>()(
       actions: {
         showQuiz() {
           return set(({ state }) => {
-            state.currentStage = 'quiz'
+            state.currentStage = 'theory'
           })
         },
         setQuestions(questions: Question[]) {
@@ -112,7 +112,7 @@ export const useLessonStore = create<LessonStoreProps>()(
         },
         decrementLivesAmount() {
           return set(({ state }) => {
-            state.livesAmount = state.livesAmount + 1
+            state.livesAmount = state.livesAmount - 1
           })
         },
         changeQuestion() {

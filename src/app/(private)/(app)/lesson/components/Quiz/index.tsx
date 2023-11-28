@@ -49,7 +49,7 @@ export function Quiz({ leaveLesson }: QuizProps) {
 
   if (currentQuestion) {
     return (
-      <div className="flex h-[90vh] w-full items-center justify-center">
+      <div className="flex h-[100vh] w-full items-center justify-center">
         <AnimatePresence>
           {currentQuestion.content.type === 'selection' && (
             <QuestionContainer id={currentQuestion.order}>
