@@ -1,4 +1,4 @@
-export const questions = [
+export const questionsMock = [
   {
     title:
       'Muito bem, você acaba de embarcar no foguete. Antes de proseguirmos quero que responda primeiro: O que é lógica de programação mesmo?',

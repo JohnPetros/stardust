@@ -1,6 +1,6 @@
 import { Text } from '@/@types/text'
 
-export const texts: Text[] = [
+export const textsMock: Text[] = [
   {
     content:
       'Olá! Parabéns, você acaba de entrar na equipe de exploração espacial para desbravar os confins do espaço.',
