@@ -1,4 +1,5 @@
 'use client'
+
 import { ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 import { MDXRemote } from 'next-mdx-remote'
 

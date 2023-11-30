@@ -20,9 +20,10 @@ export function Theory({ title, number }: TheoryProps) {
   const [texts, setTexts] = useState<TextData[]>([])
   const buttonHasFocus = useRef(false)
   const nextTextIndex = useRef(0)
-  const hasNextText = state.texts[nextTextIndex.current + 1]
+  const hasNextText = !!state.texts[nextTextIndex.current + 1]
 
   function nextText() {
+    console.log(hasNextText)
     if (!hasNextText) return
 
     nextTextIndex.current = nextTextIndex.current + 1
