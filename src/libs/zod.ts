@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { PASSWORD_REGEX } from '@/utils/constants'
+import { REGEX } from '@/utils/constants'
 
 const nameSchema = z
   .string()
@@ -16,7 +16,7 @@ const passwordSchema = z
   .string()
   .nonempty('Sua senha não pode estar vazia!')
   .regex(
-    PASSWORD_REGEX,
+    REGEX.password,
     'Senha deve conter pelo menos uma letra minúscula, uma maiúscula, um dígito e um caractere especial.'
   )
 
