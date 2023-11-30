@@ -1,3 +1,5 @@
+import { ROUTES } from './routes'
+
 type HomePage = {
   path: string
   label: string
@@ -6,27 +8,27 @@ type HomePage = {
 
 export const HOME_PAGES: HomePage[] = [
   {
-    path: '/',
+    path: ROUTES.private.home,
     label: 'Aprender',
     icon: 'learn.svg',
   },
   {
-    path: '/challenges',
+    path: ROUTES.private.challenges,
     label: 'Desafios',
     icon: 'challenges.svg',
   },
   {
-    path: '/shop',
+    path: ROUTES.private.shop,
     label: 'Loja',
     icon: 'shop.svg',
   },
   {
-    path: '/profile',
+    path: ROUTES.private.profile,
     label: 'Perfil',
     icon: 'profile.svg',
   },
   {
-    path: '/ranking',
+    path: ROUTES.private.ranking,
     label: 'Ranking',
     icon: 'ranking.svg',
   },

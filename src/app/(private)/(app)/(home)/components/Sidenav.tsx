@@ -107,7 +107,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
               return (
                 <NavButton
                   key={path}
-                  path={path === '/profile' ? `${path}/${user?.id}` : path}
+                  path={path === '/profile' ? `${path}/${user?.slug}` : path}
                   label={label}
                   icon={icon}
                   isExpanded={isExpanded}
