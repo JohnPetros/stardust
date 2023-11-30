@@ -11,6 +11,7 @@ interface ProgessProps {
 export function ProgressBar({ value, height, indicatorImage }: ProgessProps) {
   return (
     <Progress.Root
+      data-testid={`progress:${value}%`}
       value={value}
       className="flex w-full items-center rounded-lg bg-gray-400 "
       style={{ height: height }}

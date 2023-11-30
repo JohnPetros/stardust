@@ -31,6 +31,9 @@ export function Header({ onLeaveLesson }: HeaderProps) {
   const total = texts.length + questions.length
   const halfTotal = total / 2
 
+  console.log(texts)
+  console.log(questions)
+
   const currentProgressValue = useMemo(() => {
     if (!total) return 0
 
@@ -48,6 +51,8 @@ export function Header({ onLeaveLesson }: HeaderProps) {
     questions.length,
   ])
 
+  console.log(currentProgressValue)
+
   return (
     <header className="fixed top-0 z-10 h-12 w-full bg-gray-900 px-6 py-3">
       <div className="mx-auto flex max-w-3xl items-center justify-between gap-6">
@@ -58,6 +63,7 @@ export function Header({ onLeaveLesson }: HeaderProps) {
           body={null}
           action={
             <Button
+              data-testid="alert-leave-lesson"
               className="w-32 bg-red-700 text-gray-100"
               onClick={onLeaveLesson}
             >
@@ -70,7 +76,7 @@ export function Header({ onLeaveLesson }: HeaderProps) {
             </Button>
           }
         >
-          <button onClick={onLeaveLesson}>
+          <button onClick={onLeaveLesson} aria-label="Sair da lição">
             <X className="text-2xl text-red-700" weight="bold" />
           </button>
         </Alert>
