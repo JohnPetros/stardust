@@ -8,7 +8,7 @@ import { UserAvatar } from '../../../components/UserAvatar'
 import type { WinnerUser } from '@/@types/user'
 import { PODIUM } from '@/utils/constants'
 
-const BASE_HEIGHT = 480 // px
+const BASE_HEIGHT = 300 // px
 const BASE_DELAY = 0.8 // s
 
 const ICON_ALTS = {

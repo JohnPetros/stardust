@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation'
 import { createClient as createServerClient } from 'supabase/supabase-server'
 
 import { Achievements } from '../components/Achievements'
@@ -7,19 +8,26 @@ import { StreakBoard } from '../components/StreakBoard'
 import { Tabs } from '../components/Tabs'
 import { User } from '../components/User'
 
+import { User as UserData } from '@/@types/user'
 import { UserService } from '@/services/api/userService'
 
 interface ProfileProps {
-  params: { userId: string }
+  params: { userSlug: string }
 }
 
 export default async function Profile({ params }: ProfileProps) {
   const supabase = createServerClient()
   const userService = UserService(supabase)
+  let user: UserData
 
-  const user = await userService.getUserById(params.userId)
+  try {
+    user = await userService.getUserBySlug(params.userSlug)
+  } catch (error) {
+    console.error(error)
+    notFound()
+  }
 
-  if (user?.id)
+  if (user)
     return (
       <div className="mx-auto max-w-sm px-6 pb-32 pt-8 md:max-w-5xl md:pb-12">
         {user?.id && (

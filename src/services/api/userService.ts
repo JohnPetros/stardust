@@ -18,6 +18,19 @@ export const UserService = (supabase: Supabase): IUserService => {
       return data
     },
 
+    getUserBySlug: async (userSlug: string) => {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('slug', userSlug)
+        .single<User>()
+
+      if (error) {
+        throw new Error(error.message)
+      }
+      return data
+    },
+
     getUserEmail: async (email: string) => {
       const { data, error } = await supabase
         .from('users')
