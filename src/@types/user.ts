@@ -4,6 +4,7 @@ export type User = {
   id: string
   email: string
   name: string
+  slug: string
   level: number
   coins: number
   xp: number
