@@ -2,7 +2,8 @@
 
 import { createContext, ReactNode, useState } from 'react'
 import { SupabaseClient } from '@supabase/supabase-js'
-import { createClient } from 'supabase/supabase-browser'
+
+import { createClient } from '../../supabase/supabase-browser'
 
 import type { Database } from '@/@types/database'
 
