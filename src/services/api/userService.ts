@@ -2,6 +2,7 @@ import { IUserService } from './interfaces/IUserService'
 
 import type { Supabase } from '@/@types/supabase'
 import type { User, WinnerUser } from '@/@types/user'
+import { slugify } from '@/utils/helpers'
 
 export const UserService = (supabase: Supabase): IUserService => {
   return {
@@ -92,7 +93,7 @@ export const UserService = (supabase: Supabase): IUserService => {
     }: Pick<User, 'id' | 'name' | 'email'>) => {
       const { error } = await supabase
         .from('users')
-        .insert([{ id, name, email }])
+        .insert([{ id, name, email, slug: slugify(name) }])
       if (error) {
         throw new Error(error.message)
       }
