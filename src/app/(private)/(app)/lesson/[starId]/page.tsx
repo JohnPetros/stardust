@@ -4,7 +4,7 @@ import { Layout } from '../components/Layout'
 
 import { StarService } from '@/services/api/starService'
 
-type LessonProps = {
+interface LessonProps {
   params: { starId: string }
 }
 

@@ -1,35 +1,27 @@
-'use client'
-
-import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
+import { createClient as createServerClient } from 'supabase/supabase-server'
 
 import { Achievements } from '../components/Achievements'
 import { ChallengesChart } from '../components/ChallengesChart'
 import { Statistics } from '../components/Statistics'
-import { StreakBoard } from '../components/Streak'
+import { StreakBoard } from '../components/StreakBoard'
 import { Tabs } from '../components/Tabs'
 import { User } from '../components/User'
 
-import { Loading } from '@/app/components/Loading'
-import { useUser } from '@/hooks/useUser'
+import { UserService } from '@/services/api/userService'
 
-export default function Profile() {
-  const params = useParams()
-  const { user } = useUser(String(params.userId))
-  const [isFistRendering, setIsFistRendering] = useState(true)
+interface ProfileProps {
+  params: { userId: string }
+}
 
-  useEffect(() => {
-    if (user && isFistRendering) {
-      setTimeout(() => {
-        setIsFistRendering(false)
-      }, 1500)
-    }
-  }, [user])
+export default async function Profile({ params }: ProfileProps) {
+  const supabase = createServerClient()
+  const userService = UserService(supabase)
+
+  const user = await userService.getUserById(params.userId)
 
   if (user?.id)
     return (
       <div className="mx-auto max-w-sm px-6 pb-32 pt-8 md:max-w-5xl md:pb-12">
-        {isFistRendering && <Loading isSmall={false} />}
         {user?.id && (
           <div>
             <User data={user} />

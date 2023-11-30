@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import { StreakBoard } from '../../../(home)/profile/components/Streak'
+import { StreakBoard } from '../../../(home)/profile/components/StreakBoard'
 
 import type { WeekStatus } from '@/@types/weekStatus'
 import { Toast, ToastRef } from '@/app/components/Toast'

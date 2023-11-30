@@ -76,7 +76,7 @@ interface EndProps {
   onExit: () => void
 }
 
-export function End({
+export function Congratulations({
   accurance,
   coins,
   time,

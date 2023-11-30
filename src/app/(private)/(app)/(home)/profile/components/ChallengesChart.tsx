@@ -1,4 +1,5 @@
 'use client'
+
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 
@@ -56,25 +57,6 @@ export function ChallengesChart({ userId }: ChallengesChartProps) {
     return 0
   }
 
-  function countTotalChallengesByDifficulty() {
-    if (challenges?.length) {
-      const totalChallengesBydifficulties: TotalChallengesByDifficulty = {
-        easy: 0,
-        medium: 0,
-        hard: 0,
-      }
-
-      for (const difficulty in totalChallengesBydifficulties) {
-        totalChallengesBydifficulties[difficulty as Difficulty] =
-          challenges.filter(
-            (challenge) => challenge.difficulty === difficulty
-          ).length
-      }
-
-      setTotalChallengesByDifficulty(totalChallengesBydifficulties)
-    }
-  }
-
   const options = getChallengesChatOptions(
     challenges?.filter((challenge) => challenge.isCompleted).length ?? 0
   )
@@ -86,6 +68,25 @@ export function ChallengesChart({ userId }: ChallengesChartProps) {
   ]
 
   useEffect(() => {
+    function countTotalChallengesByDifficulty() {
+      if (challenges?.length) {
+        const totalChallengesBydifficulties: TotalChallengesByDifficulty = {
+          easy: 0,
+          medium: 0,
+          hard: 0,
+        }
+
+        for (const difficulty in totalChallengesBydifficulties) {
+          totalChallengesBydifficulties[difficulty as Difficulty] =
+            challenges.filter(
+              (challenge) => challenge.difficulty === difficulty
+            ).length
+        }
+
+        setTotalChallengesByDifficulty(totalChallengesBydifficulties)
+      }
+    }
+
     countTotalChallengesByDifficulty()
   }, [challenges])
 

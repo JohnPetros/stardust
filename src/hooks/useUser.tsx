@@ -8,7 +8,7 @@ export function useUser(userId: string) {
 
   async function getUser() {
     if (userId) {
-      return await api.getUser(userId)
+      return await api.getUserById(userId)
     }
   }
 

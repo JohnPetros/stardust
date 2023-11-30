@@ -11,9 +11,9 @@ import { Status } from './Status'
 import { User as UserType } from '@/@types/user'
 import { Loading } from '@/app/components/Loading'
 import { useAuth } from '@/contexts/AuthContext'
+import { useImage } from '@/hooks/useImage'
 import { useRanking } from '@/hooks/useRanking'
 import { useRocket } from '@/hooks/useRocket'
-import { getImage } from '@/utils/helpers'
 
 interface UserProps {
   data: UserType
@@ -28,10 +28,11 @@ export function User({
   const { ranking } = useRanking(ranking_id)
   const { rocket } = useRocket(rocket_id)
 
-  if (!ranking || !rocket) return <Loading isSmall={false} />
+  const rankingImage = useImage('rankings', ranking?.image)
+  const rocketImage = useImage('rockets', rocket?.image)
 
-  const rankingImage = getImage('rankings', ranking.image)
-  const rocketImage = getImage('rockets', rocket.image)
+  if (!ranking || !rocket || !rankingImage || !rocketImage)
+    return <Loading isSmall={false} />
 
   const createdAt = dayjs(created_at).format('DD MMMM [de] YYYY')
 

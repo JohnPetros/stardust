@@ -5,15 +5,13 @@ import { useRouter } from 'next/navigation'
 
 import { PageTransitionAnimation } from '../../../../components/PageTransitionAnimation'
 
-import { End } from './End'
+import { Congratulations } from './Congratulations'
 import { Header } from './Header'
 import { Quiz } from './Quiz'
 import SecondsIncrementer from './SecondsCounter'
 import { Theory } from './Theory'
 
 import type { Star } from '@/@types/star'
-import { Alert, AlertRef } from '@/app/components/Alert'
-import { Button } from '@/app/components/Button'
 import { useStar } from '@/hooks/useStar'
 import { useLessonStore } from '@/stores/lessonStore'
 import { formatSecondsToTime } from '@/utils/helpers'
@@ -32,7 +30,6 @@ export function Layout({ star }: LayoutProps) {
 
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const alertRef = useRef<AlertRef>(null)
 
   const [coins, setCoins] = useState(0)
   const [xp, setXp] = useState(0)
@@ -84,7 +81,7 @@ export function Layout({ star }: LayoutProps) {
       return maxXp
     }
 
-    if (currentStage === 'end') {
+    if (currentStage === 'congratulations') {
       setXp(getXp())
       setCoins(getCoins())
       setAccurance(getAccurance())
@@ -101,9 +98,11 @@ export function Layout({ star }: LayoutProps) {
   return (
     <>
       <PageTransitionAnimation isVisible={isTransitionVisible} />
-      {currentStage !== 'end' && <SecondsIncrementer />}
+      {currentStage !== 'congratulations' && <SecondsIncrementer />}
       <main ref={scrollRef} className="relative overflow-x-hidden">
-        {currentStage !== 'end' && <Header onLeaveLesson={leaveLesson} />}
+        {currentStage !== 'congratulations' && (
+          <Header onLeaveLesson={leaveLesson} />
+        )}
 
         {star && nextStar && (
           <>
@@ -111,8 +110,8 @@ export function Layout({ star }: LayoutProps) {
               <Theory title={star.name} number={star.number} />
             )}
             {currentStage === 'quiz' && <Quiz leaveLesson={leaveLesson} />}
-            {currentStage === 'end' && (
-              <End
+            {currentStage === 'congratulations' && (
+              <Congratulations
                 coins={coins}
                 xp={xp}
                 time={time}

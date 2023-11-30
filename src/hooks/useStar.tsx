@@ -1,10 +1,11 @@
 'use client'
 
+import { useCallback } from 'react'
 import useSWR from 'swr'
 
 import type { Star } from '@/@types/star'
 import type { User } from '@/@types/user'
-import { updateUserDataParams } from '@/app/(private)/(app)/lesson/components/End'
+import { updateUserDataParams } from '@/app/(private)/(app)/lesson/components/Congratulations'
 import { useAuth } from '@/contexts/AuthContext'
 import { useApi } from '@/services/api'
 
@@ -33,41 +34,44 @@ export function useStar(star: Star) {
     throw new Error(nextStarError)
   }
 
-  async function addUnlockedStar(UnlockedstarId: string) {
-    if (!user) return
+  const updateUserData = useCallback(
+    async ({
+      newCoins,
+      newXp,
+      user,
+    }: updateUserDataParams): Promise<Partial<User>> => {
+      async function addUnlockedStar(UnlockedstarId: string) {
+        if (!user) return
 
-    await api.addUnlockedStar(UnlockedstarId, user.id)
-  }
+        await api.addUnlockedStar(UnlockedstarId, user.id)
+      }
 
-  async function updateUserData({
-    newCoins,
-    newXp,
-    user,
-  }: updateUserDataParams): Promise<Partial<User>> {
-    const updatedCoins = newCoins + user.coins
-    const updatedXp = newXp + user.xp
-    const updatedWeeklyXp = newXp + user.weekly_xp
+      const updatedCoins = newCoins + user.coins
+      const updatedXp = newXp + user.xp
+      const updatedWeeklyXp = newXp + user.weekly_xp
 
-    let completedPlanets = user.completed_planets
-    let updatedUnlockedStars = user.unlocked_stars
+      let completedPlanets = user.completed_planets
+      let updatedUnlockedStars = user.unlocked_stars
 
-    if (nextStar && nextStar.planet_id !== star.planet_id) {
-      completedPlanets += nextStar ? 1 : 0
-    }
+      if (nextStar && nextStar.planet_id !== star.planet_id) {
+        completedPlanets += nextStar ? 1 : 0
+      }
 
-    if (nextStar && !nextStar.isUnlocked) {
-      await addUnlockedStar(nextStar.id)
-      updatedUnlockedStars++
-    }
+      if (nextStar && !nextStar.isUnlocked) {
+        await addUnlockedStar(nextStar.id)
+        updatedUnlockedStars++
+      }
 
-    return {
-      coins: updatedCoins,
-      xp: updatedXp,
-      weekly_xp: updatedWeeklyXp,
-      unlocked_stars: updatedUnlockedStars,
-      completed_planets: completedPlanets,
-    }
-  }
+      return {
+        coins: updatedCoins,
+        xp: updatedXp,
+        weekly_xp: updatedWeeklyXp,
+        unlocked_stars: updatedUnlockedStars,
+        completed_planets: completedPlanets,
+      }
+    },
+    [nextStar, star.planet_id, api]
+  )
 
   return {
     star,
