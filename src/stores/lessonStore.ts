@@ -4,7 +4,7 @@ import { immer } from 'zustand/middleware/immer'
 import { Question } from '@/@types/quiz'
 import type { Text } from '@/@types/text'
 
-type LessonStoreState = {
+export type LessonStoreState = {
   currentStage: 'theory' | 'quiz' | 'end'
   texts: Text[]
   renderedTextsAmount: number
@@ -19,7 +19,7 @@ type LessonStoreState = {
   isAnswered: boolean
 }
 
-type LessonStoreActions = {
+export type LessonStoreActions = {
   showQuiz: () => void
   changeQuestion: () => void
   setQuestions: (categoriesIds: Question[]) => void
@@ -35,13 +35,13 @@ type LessonStoreActions = {
   resetState: () => void
 }
 
-type LessonStoreProps = {
+export type LessonStoreProps = {
   state: LessonStoreState
   actions: LessonStoreActions
 }
 
 const initialState: LessonStoreState = {
-  currentStage: 'quiz',
+  currentStage: 'theory',
   texts: [],
   renderedTextsAmount: 0,
   questions: [],
@@ -56,7 +56,7 @@ const initialState: LessonStoreState = {
 }
 
 export const useLessonStore = create<LessonStoreProps>()(
-  immer((set) => {
+  immer((set, get) => {
     return {
       state: initialState,
       actions: {
