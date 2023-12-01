@@ -14,6 +14,7 @@ export type Challenge = {
   id: string
   title: string
   code: string
+  slug: string
   user_id: string
   difficulty: Difficulty
   created_by?: string
