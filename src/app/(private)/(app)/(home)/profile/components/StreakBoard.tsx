@@ -32,9 +32,7 @@ interface StreakProps {
 export function StreakBoard({ weekStatus, streakAmount }: StreakProps) {
   return (
     <div className="flex flex-col items-center justify-center gap-4 rounded-md border border-gray-300 p-6">
-      <h4 className="text-gray-300">
-        Sequência de dias estudados (Cosmic Run)
-      </h4>
+      <h4 className="text-gray-300">Sequência de dias estudados</h4>
 
       <div className="grid grid-cols-7 gap-3">
         {WEEK_DAYS.map((weekday, index) => (
@@ -59,7 +57,7 @@ export function StreakBoard({ weekStatus, streakAmount }: StreakProps) {
 
       <div className="flex items-center justify-center gap-1">
         <StreakIcon size={32} />
-        <p className="font-medium text-green-500">
+        <p className="text-center font-medium text-green-500">
           {streakAmount} {streakAmount > 1 ? 'dias' : 'dia'} estudados seguidos
         </p>
       </div>

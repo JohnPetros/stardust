@@ -3,9 +3,9 @@ import { createClient as createServerClient } from 'supabase/supabase-server'
 
 import { Achievements } from '../components/Achievements'
 import { ChallengesChart } from '../components/ChallengesChart'
+import { Crafts } from '../components/Crafts'
 import { Statistics } from '../components/Statistics'
 import { StreakBoard } from '../components/StreakBoard'
-import { Tabs } from '../components/Tabs'
 import { User } from '../components/User'
 
 import { User as UserData } from '@/@types/user'
@@ -56,7 +56,7 @@ export default async function Profile({ params }: ProfileProps) {
             </div>
 
             <div className="mt-12">
-              <Tabs />
+              <Crafts />
             </div>
           </div>
         )}

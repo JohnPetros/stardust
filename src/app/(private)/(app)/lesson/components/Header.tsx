@@ -31,9 +31,6 @@ export function Header({ onLeaveLesson }: HeaderProps) {
   const total = texts.length + questions.length
   const halfTotal = total / 2
 
-  console.log(texts)
-  console.log(questions)
-
   const currentProgressValue = useMemo(() => {
     if (!total) return 0
 
@@ -50,8 +47,6 @@ export function Header({ onLeaveLesson }: HeaderProps) {
     texts.length,
     questions.length,
   ])
-
-  console.log(currentProgressValue)
 
   return (
     <header className="fixed top-0 z-10 h-12 w-full bg-gray-900 px-6 py-3">
