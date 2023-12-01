@@ -1,5 +1,6 @@
 'use client'
 import { ButtonHTMLAttributes, ReactNode, RefObject } from 'react'
+import { Icon } from '@phosphor-icons/react'
 import { motion, MotionProps } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
 
@@ -8,12 +9,14 @@ import { Loading } from './Loading'
 type ButtonProps = {
   buttonRef?: RefObject<HTMLButtonElement>
   children: ReactNode
+  icon?: Icon
   className?: string
   isLoading?: boolean
 }
 
 export function Button({
   buttonRef,
+  icon: Icon,
   children,
   className,
   isLoading = false,
@@ -29,7 +32,14 @@ export function Button({
       )}
       {...rest}
     >
-      {isLoading ? <Loading /> : children}
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <div className="flex items-center gap-2">
+          {Icon && <Icon className=" text-green-900" size={24} weight="bold" />}
+          {children}
+        </div>
+      )}
     </motion.button>
   )
 }
