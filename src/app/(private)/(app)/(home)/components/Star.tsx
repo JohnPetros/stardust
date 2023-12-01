@@ -52,7 +52,7 @@ interface StarProps {
 }
 
 export function Star({
-  data: { id, name, number, isChallenge, isUnlocked },
+  data: { id, name, number, isChallenge, isUnlocked, slug },
   isLastUnlockedStar,
 }: StarProps) {
   const {
@@ -70,8 +70,8 @@ export function Star({
   async function handleStarNavigation() {
     if (isChallenge) {
       try {
-        const challengeId = await api.getChallengeId(id)
-        router.push('/challenges/' + challengeId)
+        const challengeSlug = await api.getChallengeSlugByStarId(id)
+        router.push('/challenges/' + challengeSlug)
       } catch (error) {
         console.log(error)
         toastRef.current?.open({
@@ -80,7 +80,7 @@ export function Star({
         })
       }
     } else {
-      router.push(`${ROUTES.private.lesson}/${id}`)
+      router.push(`${ROUTES.private.lesson}/${slug}`)
     }
   }
 

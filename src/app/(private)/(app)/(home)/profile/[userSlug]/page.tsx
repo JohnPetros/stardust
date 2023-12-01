@@ -55,7 +55,7 @@ export default async function Profile({ params }: ProfileProps) {
               </div>
             </div>
 
-            <div className="mt-20">
+            <div className="mt-12">
               <Tabs />
             </div>
           </div>
