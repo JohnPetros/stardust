@@ -107,6 +107,7 @@ export interface Database {
         Row: {
           author: string | null
           code: string | null
+          slug: string
           created_at: string | null
           difficulty: string | null
           downvotes: number | null
@@ -379,6 +380,7 @@ export interface Database {
         Row: {
           id: string
           isChallenge: boolean | null
+          slug: string
           name: string | null
           number: number | null
           planet_id: string | null
