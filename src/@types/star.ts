@@ -3,11 +3,12 @@ import type { Text } from './text'
 
 export type Star = {
   id: string
-  isChallenge: boolean
+  slug: string
   name: string
   number: number
   planet_id: string
   texts: Text[]
   isUnlocked: boolean
+  isChallenge: boolean
   questions: Question[]
 }
