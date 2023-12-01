@@ -1,16 +1,22 @@
 export const ROUTES = {
   private: {
-    dashboard: '/dashboard',
+    home: '/',
+    dashboard: {
+      home: '/dashboard',
+    },
     lesson: '/lesson',
     shop: '/shop',
     challenges: '/challenges',
     challenge: '/challenge',
     ranking: '/ranking',
     profile: '/profile',
-    home: '/',
+    playground: '/playground',
+    challengeMaker: '/challenges/maker',
+    solution: '/challenges/solution',
   },
   public: {
     signIn: '/sign-in',
     signUp: '/sign-up',
+    landing: '/landing',
   },
 }
