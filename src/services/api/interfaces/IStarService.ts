@@ -1,7 +1,7 @@
 import { Star } from '@/@types/star'
 
 export interface IStarService {
-  getStar(starId: string): Promise<Star>
+  getStarBySlug(starSlug: string): Promise<Star>
   getNextStar(currentStar: Star, userId: string): Promise<Star | null>
   getNextStarFromNextPlanet(
     currentPlanetId: string,

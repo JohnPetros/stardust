@@ -5,11 +5,11 @@ import { Supabase } from '@/@types/supabase'
 
 export const StarService = (supabase: Supabase): IStarService => {
   return {
-    getStar: async (starId: string) => {
+    getStarBySlug: async (starSlug: string) => {
       const { data, error } = await supabase
         .from('stars')
         .select('*, questions(*)')
-        .eq('id', starId)
+        .eq('id', starSlug)
         .order('order', { foreignTable: 'questions', ascending: true })
         .single<Star>()
 
