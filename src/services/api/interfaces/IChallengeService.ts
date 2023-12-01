@@ -22,7 +22,7 @@ export interface IChallengeService {
   getFilteredChallenges(
     params: GetFilteredChallengesParams
   ): Promise<Challenge[]>
-  getChallengeId(starId: string): Promise<string>
+  getChallengeSlugByStarId(starId: string): Promise<string>
   getUserCompletedChallengesIds(userId: string): Promise<string[]>
   addCompletedChallenge(challengeId: string, userId: string): Promise<void>
 }

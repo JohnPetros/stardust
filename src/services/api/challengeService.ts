@@ -102,10 +102,10 @@ export const ChallengeService = (supabase: Supabase): IChallengeService => {
       return data
     },
 
-    getChallengeId: async (starId: string) => {
+    getChallengeSlugByStarId: async (starId: string) => {
       const { data, error } = await supabase
         .from('challenges')
-        .select('id')
+        .select('slug')
         .eq('star_id', starId)
         .single()
 
@@ -113,7 +113,7 @@ export const ChallengeService = (supabase: Supabase): IChallengeService => {
         throw new Error(error.message)
       }
 
-      return data.id
+      return data.slug
     },
 
     getUserCompletedChallengesIds: async (userId: string) => {
