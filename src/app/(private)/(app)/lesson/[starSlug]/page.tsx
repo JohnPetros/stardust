@@ -4,15 +4,15 @@ import { Layout } from '../components/Layout'
 
 import { StarService } from '@/services/api/starService'
 
-interface LessonProps {
-  params: { starId: string }
+interface LessonPageProps {
+  params: { starSlug: string }
 }
 
-export default async function Lesson({ params }: LessonProps) {
+export default async function LessonPage({ params }: LessonPageProps) {
   const supabase = createClient()
   const starService = StarService(supabase)
 
-  const star = await starService.getStar(params.starId)
+  const star = await starService.getStarBySlug(params.starSlug)
 
   return <Layout star={star} />
 }

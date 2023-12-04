@@ -17,6 +17,7 @@ export const ROUTES = {
   public: {
     signIn: '/sign-in',
     signUp: '/sign-up',
+    emailConfirmation: '/email-confirmation',
     landing: '/landing',
   },
 }

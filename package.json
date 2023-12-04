@@ -10,7 +10,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "test --coverage",
-    "email": "email dev --dir ./src/utils/emails/templates ",
+    "email:dev": "email dev --dir ./src/utils/emails/templates",
+    "email:build": "email export --outDir ./src/utils/emails/build",
     "gen-supabase-types": "supabase gen types typescript --linked > ./src/@types/supabase.ts"
   },
   "dependencies": {

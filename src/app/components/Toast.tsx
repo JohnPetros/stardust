@@ -10,23 +10,25 @@ import { Check, Prohibit, X } from '@phosphor-icons/react'
 import * as Container from '@radix-ui/react-toast'
 import { AnimatePresence, motion, useAnimate, Variants } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
-const TOAST_DURATION = 2500
+const TOAST_DURATION_DEFAULT = 2.5 // seconds
 
 type Type = 'error' | 'success'
 
-interface openProps {
+interface OpenToastProps {
   type: Type
   message: string
+  seconds?: number
 }
 
 export interface ToastRef {
-  open: ({ type, message }: openProps) => void
+  open: ({ type, message, seconds }: OpenToastProps) => void
 }
 
 export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
   const [isOpen, setIsOpen] = useState(false)
   const [type, setType] = useState<Type>('error')
   const [message, setMessage] = useState('')
+  const [seconds, setSeconds] = useState(TOAST_DURATION_DEFAULT)
   const [scope, animate] = useAnimate()
 
   const toastVariants: Variants = {
@@ -58,14 +60,15 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
       width: 0,
       transition: {
         ease: 'linear',
-        duration: TOAST_DURATION / 1000,
+        duration: seconds,
       },
     },
   }
 
-  function open({ type, message }: openProps) {
+  function open({ type, message, seconds = 2500 }: OpenToastProps) {
     setType(type)
     setMessage(message)
+    setSeconds(seconds)
     setIsOpen(true)
   }
 
@@ -84,10 +87,10 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
 
     const timer = setTimeout(() => {
       close()
-    }, TOAST_DURATION)
+    }, seconds)
 
     return () => clearTimeout(timer)
-  }, [isOpen])
+  }, [isOpen, seconds])
 
   return (
     <>
@@ -113,7 +116,7 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
               }}
               className={twMerge(
                 'rounded',
-                type === 'error' ? 'bg-red-800' : 'bg-green-600'
+                type === 'error' ? 'bg-red-800' : 'bg-green-900'
               )}
             >
               <div className="flex justify-between gap-6 p-4 ">
@@ -125,9 +128,9 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
                     )}
                   >
                     {type === 'error' ? (
-                      <Prohibit width={20} height={20} weight="bold" />
+                      <Prohibit width={18} height={18} weight="bold" />
                     ) : (
-                      <Check width={20} height={20} weight="bold" />
+                      <Check width={18} height={18} weight="bold" />
                     )}
                   </span>
                   <span

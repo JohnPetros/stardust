@@ -4,6 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
+.react-email
+.swc
 
 # testing
 /coverage
@@ -13,7 +15,7 @@
 /out/
 
 # production
-/build
+**/build/*
 **/public/sw*
 **/public/workbox-*
 **/public/fallback*

@@ -38,5 +38,31 @@ export const AuthService = (supabase: Supabase) => {
         return error.message
       }
     },
+
+    getAuthUserId: async () => {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser()
+
+      if (error || !user) {
+        throw new Error(error?.message)
+      }
+
+      return user.id
+    },
+
+    confirmEmail: async (code: string) => {
+      const {
+        data: { user },
+      } = await supabase.auth.exchangeCodeForSession(code)
+
+      if (!user) return null
+
+      return {
+        id: user.id,
+        email: user.email,
+      }
+    },
   }
 }

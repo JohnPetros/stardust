@@ -3,13 +3,15 @@ import { type NextRequest, NextResponse } from 'next/server'
 
 import { ROUTES } from './utils/constants'
 import { checkIsPublicRoute } from './utils/helpers'
+import { getSearchParams } from './utils/helpers/getSearchParams'
 
 import type { Database } from '@/@types/database'
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
   const supabase = createMiddlewareClient<Database>({ req, res })
-  const isPublicRoute = checkIsPublicRoute(req.nextUrl.pathname)
+  const currentRoute = '/' + req.nextUrl.pathname.split('/')[1]
+  const isPublicRoute = checkIsPublicRoute(currentRoute)
 
   const {
     data: { user },
@@ -20,6 +22,20 @@ export async function middleware(req: NextRequest) {
   }
 
   if (!user && !isPublicRoute) {
+    console.log(req.url)
+
+    const isConfirmEmailCallback = req.url.includes('/auth/callback?')
+
+    if (isConfirmEmailCallback) {
+      const code = getSearchParams(req.url, 'code')
+
+      if (code)
+        return NextResponse.redirect(
+          new URL(`${ROUTES.public.emailConfirmation}/${code}`, req.url)
+        )
+    }
+
+    console.log({ isPublicRoute })
     return NextResponse.redirect(new URL(ROUTES.public.signIn, req.url))
   }
 

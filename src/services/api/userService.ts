@@ -51,10 +51,8 @@ export const UserService = (supabase: Supabase): IUserService => {
         .eq('id', userId)
 
       if (error) {
-        return error.message
+        throw new Error(error.message)
       }
-
-      return null
     },
 
     getUsersByRanking: async (rankingId: string) => {
@@ -91,9 +89,19 @@ export const UserService = (supabase: Supabase): IUserService => {
       name,
       email,
     }: Pick<User, 'id' | 'name' | 'email'>) => {
-      const { error } = await supabase
-        .from('users')
-        .insert([{ id, name, email, slug: slugify(name) }])
+      console.log({
+        id,
+        name,
+        email,
+      })
+      const { error } = await supabase.from('users').insert({
+        id,
+        name,
+        email,
+        slug: slugify(name),
+        rocket_id: '03f3f359-a0ee-42c1-bd5f-b2ad01810d47',
+        ranking_id: 'f542f61a-4e42-4914-88f6-9aa7c2358473',
+      })
       if (error) {
         throw new Error(error.message)
       }

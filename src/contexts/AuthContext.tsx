@@ -28,7 +28,8 @@ export interface AuthContextValue {
     | null
   >
   signOut: () => Promise<string | null>
-  updateUser: (newData: Partial<User>) => Promise<string | null>
+  fetchUser: () => Promise<void>
+  updateUser: (newUserData: Partial<User>) => Promise<void>
   serverSession: Session | null | undefined
 }
 
@@ -58,7 +59,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     data: user,
     error,
     isLoading,
-  } = useSWR(session?.user.id ? '/user' : null, getUser)
+  } = useSWR(() => (session?.user.id ? '/user' : null), getUser)
 
   async function signIn(email: string, password: string) {
     const { session, error } = await api.signIn(email, password)
@@ -70,6 +71,15 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     setSession(session)
 
     return null
+  }
+
+  async function fetchUser() {
+    const userId = await api.getAuthUserId()
+
+    if (userId) {
+      const user = await api.getUserById(userId)
+      mutate('/user', user, false)
+    }
   }
 
   async function signUp(email: string, password: string) {
@@ -86,19 +96,11 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     return null
   }
 
-  async function updateUser(newData: Partial<User>): Promise<string | null> {
+  async function updateUser(newData: Partial<User>) {
     if (user?.id) {
-      const error = await api.updateUser(newData, user.id)
-
-      if (error) {
-        return error
-      }
-
+      await api.updateUser(newData, user.id)
       mutate('/user', { ...user, ...newData }, false)
-
-      return null
     }
-    return null
   }
 
   useEffect(() => {
@@ -138,6 +140,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     signIn,
     signUp,
     signOut,
+    fetchUser,
     updateUser,
     serverSession,
   }

@@ -48,7 +48,7 @@ export const ConfirmEmail = () => (
             </Text>
             <Button
               style={{ textAlign: 'center' }}
-              className="mt-4 h-8 w-full rounded-md bg-green-400 pt-3 text-lg font-bold text-gray-900 transition-opacity duration-200 hover:opacity-40"
+              className="mt-4 h-8 w-full rounded-md bg-green-400 text-lg font-bold text-gray-900 transition-opacity duration-200 hover:opacity-40"
               href="{{ .ConfirmationURL }}"
             >
               Confirmar cadastro

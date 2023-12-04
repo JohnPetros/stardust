@@ -13,7 +13,7 @@
 /out/
 
 # production
-/build
+**/build/*
 **/public/sw*
 **/public/workbox-*
 **/public/fallback*

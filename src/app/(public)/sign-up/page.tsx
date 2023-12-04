@@ -1,5 +1,5 @@
 'use client'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Envelope, Lock } from '@phosphor-icons/react'
@@ -42,13 +42,16 @@ export default function SignUp() {
     resolver: zodResolver(signUpFormSchema),
   })
 
-  const { signUp, isLoading } = useAuth()
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { signUp } = useAuth()
 
   const api = useApi()
 
   const toastRef = useRef<ToastRef>(null)
 
   function handleError(error: SignUpError) {
+    console.error(error)
     const message = SIGN_UP_ERRORS[error] ?? 'Erro ao tentar fazer cadastro'
 
     toastRef.current?.open({
@@ -58,7 +61,19 @@ export default function SignUp() {
   }
 
   async function handleFormData({ name, email, password }: SignUpFormFields) {
-    const userEmail = await api.getUserByEmail(email)
+    setIsLoading(true)
+    let userEmail
+
+    try {
+      userEmail = await api.getUserEmail(email)
+    } catch (error) {
+      toastRef.current?.open({
+        type: 'error',
+        message: 'Usuário não encontrado',
+      })
+    } finally {
+      setIsLoading(false)
+    }
 
     if (userEmail) {
       toastRef.current?.open({
@@ -68,22 +83,33 @@ export default function SignUp() {
       return
     }
 
-    const response = await signUp(email, password)
+    try {
+      const response = await signUp(email, password)
 
-    if (response?.error) {
-      handleError(response?.error.message as SignUpError)
-      return
-    }
-
-    if (response?.userId) {
-      try {
-        await api.addUser({ id: response.userId, name, email })
-      } catch (error) {
-        toastRef.current?.open({
-          type: 'error',
-          message: 'Erro ao cadastrar usuário',
-        })
+      if (response?.error) {
+        handleError(response?.error.message as SignUpError)
+        return
       }
+
+      toastRef.current?.open({
+        type: 'success',
+        message: 'Verifique seu e-mail para confirmar o seu cadastro',
+        seconds: 5,
+      })
+
+      if (response?.userId) {
+        console.log({ userEmail })
+
+        await api.addUser({ id: response.userId, name, email })
+      }
+    } catch (error) {
+      console.error({ error })
+      toastRef.current?.open({
+        type: 'error',
+        message: 'Erro ao ',
+      })
+    } finally {
+      setIsLoading(false)
     }
 
     toastRef.current?.open({
@@ -150,7 +176,7 @@ export default function SignUp() {
               </div>
               <div className="mt-6">
                 <Button className="" isLoading={isLoading}>
-                  Entrar
+                  Cadastrar
                 </Button>
               </div>
             </form>
