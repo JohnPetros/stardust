@@ -1,5 +1,6 @@
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { createClient } from 'supabase/supabase-server'
 
 import { ProfileCreationMessage } from '../../components/ProfileCreationMessage'
 
@@ -10,18 +11,19 @@ interface EmailConfirmationPageProps {
   params: { token: string | null }
 }
 
-export default function EmailConfirmationPage({
+export default async function EmailConfirmationPage({
   params,
 }: EmailConfirmationPageProps) {
-  // const supabase = createClient()
-  // const authService = AuthService(supabase)
   // const token = params.token
 
   // if (!token) return redirect(ROUTES.public.signIn)
+  // const cookieStore = cookies()
+  // const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
+  // const authService = AuthService(supabase)
+  // const user = await authService.confirmEmail(token)
 
-  // const isAuthenticated = authService.confirmEmail(token)
-
-  // if (!isAuthenticated) return redirect(ROUTES.public.signIn)
+  // if (!user) return redirect(ROUTES.public.signIn)
+  // console.log(user.id)
 
   return <ProfileCreationMessage />
 }

@@ -41,7 +41,6 @@ export default function SignUp() {
   } = useForm<SignUpFormFields>({
     resolver: zodResolver(signUpFormSchema),
   })
-
   const [isLoading, setIsLoading] = useState(false)
 
   const { signUp } = useAuth()
@@ -69,10 +68,8 @@ export default function SignUp() {
     } catch (error) {
       toastRef.current?.open({
         type: 'error',
-        message: 'Usuário não encontrado',
+        message: 'Erro ao tentar fazer cadastro',
       })
-    } finally {
-      setIsLoading(false)
     }
 
     if (userEmail) {
@@ -80,6 +77,7 @@ export default function SignUp() {
         type: 'error',
         message: 'Usuário já registrado com esse e-mail',
       })
+      setIsLoading(false)
       return
     }
 

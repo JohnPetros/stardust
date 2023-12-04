@@ -31,6 +31,7 @@ export function ProfileCreationMessage() {
   const [isRocketVisible, setIsRocketVisible] = useState(false)
   const router = useRouter()
   const rocketRef = useRef(null) as LottieRef
+  console.log(user)
 
   async function launchRocket() {
     await new Promise((resolve) =>
@@ -46,18 +47,18 @@ export function ProfileCreationMessage() {
     await launchRocket()
   }
 
-  useEffect(() => {
-    async function signUserIn() {
-      try {
-        await fetchUser()
-      } catch (error) {
-        console.error(error)
-        router.push(ROUTES.public.signIn)
-      }
-    }
+  // useEffect(() => {
+  //   async function signUserIn() {
+  //     try {
+  //       await fetchUser()
+  //     } catch (error) {
+  //       console.error(error)
+  //       router.push(ROUTES.public.signIn)
+  //     }
+  //   }
 
-    signUserIn()
-  }, [fetchUser, router])
+  //   signUserIn()
+  // }, [fetchUser, router])
 
   useEffect(() => {
     let timer: NodeJS.Timeout

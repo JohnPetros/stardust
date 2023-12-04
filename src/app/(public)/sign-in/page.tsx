@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Envelope, Lock } from '@phosphor-icons/react'
@@ -17,7 +17,8 @@ import { Input } from '@/app/components/Input'
 import { Toast, ToastRef } from '@/app/components/Toast'
 import { useAuth } from '@/contexts/AuthContext'
 import { SignInFormFields, signInFormSchema } from '@/libs/zod'
-import { ROCKET_ANIMATION_DURATION } from '@/utils/constants'
+import { ROCKET_ANIMATION_DURATION, ROUTES } from '@/utils/constants'
+import { getSearchParams } from '@/utils/helpers/getSearchParams'
 
 const formAnimations: Variants = {
   initial: {
@@ -62,7 +63,7 @@ export default function SignIn() {
     resolver: zodResolver(signInFormSchema),
   })
 
-  const { signIn } = useAuth()
+  const { signIn, fetchUser } = useAuth()
   const [isLaoding, setIsLoading] = useState(false)
 
   const router = useRouter()
@@ -102,9 +103,24 @@ export default function SignIn() {
     await launchRocket()
 
     setTimeout(() => {
-      router.push('/')
+      router.push(ROUTES.private.home)
     }, ROCKET_ANIMATION_DURATION * 2500)
   }
+
+  useEffect(() => {
+    const error = getSearchParams(
+      window.location.href.replace('#', '?'),
+      'error'
+    )
+
+    if (error?.includes('unauthorized')) {
+      toastRef.current?.open({
+        type: 'error',
+        message: 'Error ao autenticar perfil, tente novamente mais tarde.',
+        seconds: 5,
+      })
+    }
+  }, [])
 
   return (
     <>

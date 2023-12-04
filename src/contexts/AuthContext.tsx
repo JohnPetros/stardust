@@ -10,7 +10,6 @@ import { useApi } from '@/services/api'
 
 export interface AuthContextValue {
   user: User | null
-  error: unknown
   isLoading: boolean
   signIn: (email: string, password: string) => Promise<string | null>
   signUp: (
@@ -28,7 +27,7 @@ export interface AuthContextValue {
     | null
   >
   signOut: () => Promise<string | null>
-  fetchUser: () => Promise<void>
+  fetchUser: (userId: string) => Promise<void>
   updateUser: (newUserData: Partial<User>) => Promise<void>
   serverSession: Session | null | undefined
 }
@@ -44,6 +43,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
   const [session, setSession] = useState<Session | null | undefined>(
     serverSession
   )
+  console.log({ session })
   const api = useApi()
   const router = useRouter()
 
@@ -57,7 +57,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
 
   const {
     data: user,
-    error,
+    error: fetchUserError,
     isLoading,
   } = useSWR(() => (session?.user.id ? '/user' : null), getUser)
 
@@ -73,13 +73,10 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     return null
   }
 
-  async function fetchUser() {
-    const userId = await api.getAuthUserId()
-
-    if (userId) {
-      const user = await api.getUserById(userId)
-      mutate('/user', user, false)
-    }
+  async function fetchUser(userId: string) {
+    // const user = await api.getUserById('56b1f86c-7e54-44fd-967a-58abc49e68a2')
+    // console.log({ user })
+    // mutate('/user', user, false)
   }
 
   async function signUp(email: string, password: string) {
@@ -102,6 +99,8 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
       mutate('/user', { ...user, ...newData }, false)
     }
   }
+
+  if (fetchUserError) signOut()
 
   useEffect(() => {
     if (!session?.user.id) {
@@ -135,7 +134,6 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
 
   const value: AuthContextValue = {
     user: user ?? null,
-    error,
     isLoading,
     signIn,
     signUp,

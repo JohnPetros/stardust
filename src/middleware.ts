@@ -31,7 +31,7 @@ export async function middleware(req: NextRequest) {
 
       if (code)
         return NextResponse.redirect(
-          new URL(`${ROUTES.public.emailConfirmation}/${code}`, req.url)
+          new URL(`${ROUTES.server.auth}/confirm-email?token=${code}`, req.url)
         )
     }
 
