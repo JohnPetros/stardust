@@ -13,11 +13,15 @@ export const ROUTES = {
     playground: '/playground',
     challengeMaker: '/challenges/maker',
     solution: '/challenges/solution',
+    emailConfirmation: '/email-confirmation',
   },
   public: {
     signIn: '/sign-in',
     signUp: '/sign-up',
-    emailConfirmation: '/email-confirmation',
     landing: '/landing',
+  },
+  server: {
+    auth: '/server/auth',
+    mdx: '/server/mdx',
   },
 }
