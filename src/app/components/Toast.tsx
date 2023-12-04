@@ -83,7 +83,7 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
   })
 
   useEffect(() => {
-    if (!isOpen) return
+    if (!isOpen || !seconds) return
 
     const timer = setTimeout(() => {
       close()
