@@ -4,7 +4,7 @@ import Lottie, { LottieRef } from 'lottie-react'
 
 import RocketLaunching from '../../../../public/animations/rocket-launching.json'
 
-import { ROCKET_ANIMATION_DURATION } from '@/utils/constants'
+import { ROCKET_ANIMATION_DELAY } from '@/utils/constants'
 
 const rocketVariants: Variants = {
   hidden: {
@@ -13,8 +13,8 @@ const rocketVariants: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      delay: ROCKET_ANIMATION_DURATION,
-      duration: 0.4,
+      delay: ROCKET_ANIMATION_DELAY,
+      duration: 0.8,
     },
   },
 }

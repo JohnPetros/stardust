@@ -130,7 +130,7 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
 
     switch (achievement.metric) {
       case 'unlocked_stars':
-        return user.unlocked_stars >= achievement.required_amount - 1
+        return user.unlocked_stars >= achievement.required_amount + 1
       case 'completed_planets':
         return user.completed_planets >= achievement.required_amount
       case 'acquired_rockets':

@@ -26,8 +26,6 @@ export default function EmailConfirmationPage() {
   const { isRocketVisible, rocketRef, user, handleHomeLink } =
     useEmailConfirmationPage()
 
-  console.log({ user })
-
   return (
     <>
       <RocketAnimation animationRef={rocketRef} isVisible={isRocketVisible} />

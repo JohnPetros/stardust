@@ -18,12 +18,19 @@ export async function middleware(req: NextRequest) {
   } = await supabase.auth.getUser()
 
   if (user && isPublicRoute) {
+    const isConfirmEmailPage = currentRoute === ROUTES.private.emailConfirmation
+
+    console.log({ isConfirmEmailPage })
+
+    if (isConfirmEmailPage)
+      return NextResponse.redirect(
+        new URL(ROUTES.private.emailConfirmation, req.url)
+      )
+
     return NextResponse.redirect(new URL(ROUTES.private.home, req.url))
   }
 
   if (!user && !isPublicRoute) {
-    console.log(req.url)
-
     const isConfirmEmailCallback = req.url.includes('/auth/callback?')
 
     if (isConfirmEmailCallback) {
@@ -35,7 +42,6 @@ export async function middleware(req: NextRequest) {
         )
     }
 
-    console.log({ isPublicRoute })
     return NextResponse.redirect(new URL(ROUTES.public.signIn, req.url))
   }
 

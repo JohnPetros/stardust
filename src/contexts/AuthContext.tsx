@@ -27,7 +27,6 @@ export interface AuthContextValue {
     | null
   >
   signOut: () => Promise<string | null>
-  fetchUser: (userId: string) => Promise<void>
   updateUser: (newUserData: Partial<User>) => Promise<void>
   serverSession: Session | null | undefined
 }
@@ -43,7 +42,6 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
   const [session, setSession] = useState<Session | null | undefined>(
     serverSession
   )
-  console.log({ session })
   const api = useApi()
   const router = useRouter()
 
@@ -59,7 +57,16 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     data: user,
     error: fetchUserError,
     isLoading,
-  } = useSWR(() => (session?.user.id ? '/user' : null), getUser)
+  } = useSWR(
+    () => (session?.user.id ? `/user?session_id=${session?.user.id}` : null),
+    getUser
+  )
+
+  async function fetchUserBySessionId(userId: string) {
+    const user = await api.getUserById(userId)
+    console.log({ user })
+    mutate('/user', user, false)
+  }
 
   async function signIn(email: string, password: string) {
     const { session, error } = await api.signIn(email, password)
@@ -73,11 +80,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     return null
   }
 
-  async function fetchUser(userId: string) {
-    // const user = await api.getUserById('56b1f86c-7e54-44fd-967a-58abc49e68a2')
-    // console.log({ user })
-    // mutate('/user', user, false)
-  }
+  if (fetchUserError) console.error(fetchUserError)
 
   async function signUp(email: string, password: string) {
     return await api.signUp(email, password)
@@ -100,11 +103,10 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     }
   }
 
-  if (fetchUserError) signOut()
-
   useEffect(() => {
     if (!session?.user.id) {
       mutate('/user', null, false)
+      return
     }
   }, [session])
 
@@ -112,25 +114,15 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
   //   const {
   //     data: { subscription },
   //   } = supabase.auth.onAuthStateChange((event, session) => {
+  //     console.log({ supabaseSession: session })
   //     console.log(serverSession?.refresh_token)
   //     console.log(serverSession?.access_token)
-
-  //     if (session?.access_token !== serverSession?.access_token) {
-  //       // setTimeout(() => {
-  //       const isPublicRoute = checkIsPublicRoute(pathname)
-
-  //       if (!isPublicRoute) {
-  //         router.refresh()
-  //       } else {
-  //       }
-  //       // }, ROCKET_ANIMATION_DURATION * 1000 + 3000)
-  //     }
   //   })
 
   //   return () => {
   //     subscription.unsubscribe()
   //   }
-  // }, [supabase, serverSession?.access_token])
+  // }, [supabase, serverSession?.refresh_token, serverSession?.access_token])
 
   const value: AuthContextValue = {
     user: user ?? null,
@@ -138,7 +130,6 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     signIn,
     signUp,
     signOut,
-    fetchUser,
     updateUser,
     serverSession,
   }

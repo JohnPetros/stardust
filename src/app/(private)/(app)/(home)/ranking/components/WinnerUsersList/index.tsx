@@ -82,13 +82,9 @@ export function WinnerUsersList({
   }
 
   function handleAlertButtonPress(type: 'reward' | 'success' | 'fail') {
-    console.log(currentRanking.position === lastRankingPosition)
-
     if (type === 'reward') {
       rewardAlert.current?.close()
       const hasNextRanking = currentRanking.position !== lastRankingPosition
-
-      console.log(hasNextRanking)
 
       hasNextRanking
         ? successAlert.current?.open()
@@ -152,7 +148,7 @@ export function WinnerUsersList({
               <span className="text-lg font-medium text-green-500">
                 {rewardByLastPosition}
               </span>{' '}
-              de poeira estela por ter ficado em os três primeiros.
+              de poeira estela por ter ficado entre os três primeiros.
             </p>
           </div>
         }
