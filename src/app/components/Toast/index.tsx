@@ -1,16 +1,11 @@
 'use client'
-import {
-  ForwardedRef,
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from 'react'
+import { ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 import { Check, Prohibit, X } from '@phosphor-icons/react'
 import * as Container from '@radix-ui/react-toast'
-import { AnimatePresence, motion, useAnimate, Variants } from 'framer-motion'
+import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
-const TOAST_DURATION_DEFAULT = 2.5 // seconds
+
+import { useToast } from './useToast'
 
 type Type = 'error' | 'success'
 
@@ -20,39 +15,35 @@ interface OpenToastProps {
   seconds?: number
 }
 
+const toastAnimations: Variants = {
+  initial: {
+    opacity: 0,
+    x: 250,
+  },
+  open: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      type: 'spring',
+      duration: 0.4,
+    },
+  },
+  close: {
+    opacity: 0,
+    transition: {
+      duration: 0.2,
+    },
+  },
+}
+
 export interface ToastRef {
   open: ({ type, message, seconds }: OpenToastProps) => void
 }
 
 export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [type, setType] = useState<Type>('error')
-  const [message, setMessage] = useState('')
-  const [seconds, setSeconds] = useState(TOAST_DURATION_DEFAULT)
-  const [scope, animate] = useAnimate()
+  const { type, message, seconds, isOpen, scope, animate, open } = useToast()
 
-  const toastVariants: Variants = {
-    initial: {
-      opacity: 0,
-      x: 250,
-    },
-    open: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        type: 'spring',
-        duration: 0.4,
-      },
-    },
-    close: {
-      opacity: 0,
-      transition: {
-        duration: 0.2,
-      },
-    },
-  }
-
-  const barVariants: Variants = {
+  const barAnimations: Variants = {
     full: {
       width: '100%',
     },
@@ -65,32 +56,11 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
     },
   }
 
-  function open({ type, message, seconds = 2500 }: OpenToastProps) {
-    setType(type)
-    setMessage(message)
-    setSeconds(seconds)
-    setIsOpen(true)
-  }
-
-  function close() {
-    setIsOpen(false)
-  }
-
   useImperativeHandle(ref, () => {
     return {
       open,
     }
   })
-
-  useEffect(() => {
-    if (!isOpen || !seconds) return
-
-    const timer = setTimeout(() => {
-      close()
-    }, seconds)
-
-    return () => clearTimeout(timer)
-  }, [isOpen, seconds])
 
   return (
     <>
@@ -100,7 +70,7 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
           <Container.Root type="foreground" forceMount open={isOpen} asChild>
             <motion.div
               ref={scope}
-              variants={toastVariants}
+              variants={toastAnimations}
               initial="initial"
               animate="open"
               exit="close"
@@ -156,7 +126,7 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
               </div>
 
               <motion.div
-                variants={barVariants}
+                variants={barAnimations}
                 initial="full"
                 animate="empty"
                 className="w-full rounded"
