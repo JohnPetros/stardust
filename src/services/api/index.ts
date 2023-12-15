@@ -1,5 +1,7 @@
 'use client'
 
+import { useMemo } from 'react'
+
 import { AchievementService } from './achievementService'
 import { AuthService } from './authService'
 import { AvatarService } from './avatarService'
@@ -17,17 +19,21 @@ import { useSupabase } from '@/hooks/useSupabase'
 export function useApi() {
   const { supabase } = useSupabase()
 
-  return {
-    ...AuthService(supabase),
-    ...UserService(supabase),
-    ...AchievementService(supabase),
-    ...StarService(supabase),
-    ...PlanetService(supabase),
-    ...AvatarService(supabase),
-    ...RocketService(supabase),
-    ...RankingService(supabase),
-    ...CategoryService(supabase),
-    ...ChallengeService(supabase),
-    ...MdxService(),
-  }
+  const api = useMemo(() => {
+    return {
+      ...AuthService(supabase),
+      ...UserService(supabase),
+      ...AchievementService(supabase),
+      ...StarService(supabase),
+      ...PlanetService(supabase),
+      ...AvatarService(supabase),
+      ...RocketService(supabase),
+      ...RankingService(supabase),
+      ...CategoryService(supabase),
+      ...ChallengeService(supabase),
+      ...MdxService(),
+    }
+  }, [supabase])
+
+  return api
 }
