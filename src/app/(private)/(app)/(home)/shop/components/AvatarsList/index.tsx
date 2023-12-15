@@ -13,6 +13,7 @@ export function AvatarsList() {
     avatars,
     itemsPerAge,
     offset,
+    totalItems,
     setOffset,
     addUserAcquiredAvatar,
     handlePriceOrderChange,
@@ -46,7 +47,7 @@ export function AvatarsList() {
         <div>
           <Pagination
             itemsPerPage={itemsPerAge}
-            totalItems={itemsPerAge}
+            totalItems={totalItems}
             offset={offset}
             setOffset={setOffset}
           />

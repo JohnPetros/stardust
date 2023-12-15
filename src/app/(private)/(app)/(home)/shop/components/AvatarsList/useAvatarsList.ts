@@ -110,7 +110,7 @@ export function useAvatarsList() {
   return {
     avatars: verifiedAvatars,
     itemsPerAge: ITEMS_PER_PAGE,
-    count: data?.count,
+    totalItems: data?.count ?? 0,
     search,
     offset,
     setOffset,
