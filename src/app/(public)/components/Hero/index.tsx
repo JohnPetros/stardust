@@ -1,25 +1,13 @@
 'use client'
 
-import { useState } from 'react'
 import Image from 'next/image'
 
-import { TypeWriter } from '@/app/components/Text/TypeWriter'
-import { QUOTES } from '@/utils/constants'
-import { getRandomItem } from '@/utils/constants/getRandom'
+import { useHero } from './useHero'
 
-let deletedCharactersAmount = 0
+import { TypeWriter } from '@/app/components/Text/TypeWriter'
 
 export function Hero() {
-  const [quote, setQuote] = useState(getRandomItem<string>(QUOTES))
-
-  function handleDeleteQuoteChar() {
-    deletedCharactersAmount += 1
-
-    if (deletedCharactersAmount === quote.length) {
-      deletedCharactersAmount = 0
-      setQuote(getRandomItem<string>(QUOTES))
-    }
-  }
+  const { handleDeleteQuoteChar, quote } = useHero()
 
   return (
     <div className="w-[20rem] space-y-6">
