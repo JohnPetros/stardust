@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 import { ToastRef } from '@/app/components/Toast'
 import { useAuth } from '@/contexts/AuthContext'
 import { SignInFormFields, signInFormSchema } from '@/libs/zod'
-import { ROUTES } from '@/utils/constants'
+import { ROCKET_ANIMATION_DELAY, ROUTES } from '@/utils/constants'
 import { getSearchParams } from '@/utils/helpers/getSearchParams'
 
 export function useSignInForm() {
@@ -35,7 +35,7 @@ export function useSignInForm() {
       setTimeout(() => {
         rocketRef.current?.goToAndPlay(0)
         resolve(true)
-      }, 1000)
+      }, ROCKET_ANIMATION_DELAY * 1000)
     )
   }
 
@@ -62,9 +62,12 @@ export function useSignInForm() {
 
     await launchRocket()
 
-    setTimeout(() => {
-      router.push(ROUTES.private.home)
-    }, 3000)
+    setTimeout(
+      () => {
+        router.push(ROUTES.private.home)
+      },
+      ROCKET_ANIMATION_DELAY * 1000 + 2500
+    )
   }
 
   useEffect(() => {
