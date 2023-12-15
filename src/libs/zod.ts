@@ -10,7 +10,7 @@ const nameSchema = z
 const emailSchema = z
   .string()
   .nonempty('Seu e-mail não pode estar vazio!')
-  .email('Por favor informe um e-mail válido!')
+  .email('Por favor, informe um e-mail válido!')
 
 const passwordSchema = z
   .string()
