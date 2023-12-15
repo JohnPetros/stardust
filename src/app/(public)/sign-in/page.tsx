@@ -1,24 +1,17 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Envelope, Lock } from '@phosphor-icons/react'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
-import { LottieRef } from 'lottie-react'
-import { useRouter } from 'next/navigation'
 
 import { Hero } from '../components/Hero'
 import { Link } from '../components/Link'
 import { RocketAnimation } from '../components/RocketAnimation'
 import { Title } from '../components/Title'
 
+import { useSignInForm } from './useSignInForm'
+
 import { Button } from '@/app/components/Button'
 import { Input } from '@/app/components/Input'
-import { Toast, ToastRef } from '@/app/components/Toast'
-import { useAuth } from '@/contexts/AuthContext'
-import { SignInFormFields, signInFormSchema } from '@/libs/zod'
-import { ROCKET_ANIMATION_DURATION, ROUTES } from '@/utils/constants'
-import { getSearchParams } from '@/utils/helpers/getSearchParams'
+import { Toast } from '@/app/components/Toast'
 
 const formAnimations: Variants = {
   initial: {
@@ -37,7 +30,7 @@ const formAnimations: Variants = {
     opacity: 0,
     x: -750,
     transition: {
-      duration: ROCKET_ANIMATION_DURATION,
+      duration: 2,
     },
   },
 }
@@ -47,80 +40,21 @@ const heroAnimations: Variants = {
     opacity: 0,
     x: '75vw',
     transition: {
-      duration: ROCKET_ANIMATION_DURATION,
+      duration: 2,
     },
   },
 }
 
 export default function SignIn() {
-  const [isRocketVisible, setIsRocketVisible] = useState(false)
-
   const {
+    errors,
+    isLaoding,
+    isRocketVisible,
+    toastRef,
+    rocketRef,
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<SignInFormFields>({
-    resolver: zodResolver(signInFormSchema),
-  })
-
-  const { signIn, fetchUser } = useAuth()
-  const [isLaoding, setIsLoading] = useState(false)
-
-  const router = useRouter()
-
-  const toastRef = useRef<ToastRef>(null)
-  const rocketRef = useRef(null) as LottieRef
-
-  async function launchRocket() {
-    await new Promise((resolve) =>
-      setTimeout(() => {
-        rocketRef.current?.goToAndPlay(0)
-        resolve(true)
-      }, ROCKET_ANIMATION_DURATION * 1000)
-    )
-  }
-
-  async function handleFormData({ email, password }: SignInFormFields) {
-    const error = await signIn(email, password)
-
-    if (error) {
-      if (error === 'Invalid login credentials') {
-        toastRef.current?.open({
-          type: 'error',
-          message: 'Usuário não encontrado',
-        })
-        return
-      }
-
-      console.error(error)
-      return
-    }
-
-    setIsLoading(true)
-
-    setIsRocketVisible(true)
-
-    await launchRocket()
-
-    setTimeout(() => {
-      router.push(ROUTES.private.home)
-    }, ROCKET_ANIMATION_DURATION * 2500)
-  }
-
-  useEffect(() => {
-    const error = getSearchParams(
-      window.location.href.replace('#', '?'),
-      'error'
-    )
-
-    if (error?.includes('unauthorized')) {
-      toastRef.current?.open({
-        type: 'error',
-        message: 'Error ao autenticar perfil, tente novamente mais tarde.',
-        seconds: 5,
-      })
-    }
-  }, [])
+  } = useSignInForm()
 
   return (
     <>
@@ -143,11 +77,7 @@ export default function SignIn() {
                   title="Entre na sua conta"
                   text="Insira suas informações de cadastro."
                 />
-                <form
-                  action="/"
-                  onSubmit={handleSubmit(handleFormData)}
-                  className="mt-4"
-                >
+                <form action="/" onSubmit={handleSubmit} className="mt-4">
                   <div className="space-y-4">
                     <Input
                       label="E-mail"
