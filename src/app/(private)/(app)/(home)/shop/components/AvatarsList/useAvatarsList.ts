@@ -1,28 +1,22 @@
-'use client'
-
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import useSWR, { mutate } from 'swr'
 
 import type { Avatar } from '@/@types/avatar'
-import { FilterOptions } from '@/@types/filterOptions'
-import { Order } from '@/@types/order'
+import type { Order } from '@/@types/order'
 import { useAuth } from '@/contexts/AuthContext'
 import { useApi } from '@/services/api'
 import { calculatePage } from '@/utils/helpers'
 
-interface useRocketsListParams extends FilterOptions {
-  priceOrder: Order
-}
+const ITEMS_PER_PAGE = 8
 
-export function useAvatarsList({
-  offset,
-  limit,
-  search,
-  priceOrder,
-}: useRocketsListParams) {
+export function useAvatarsList() {
+  const [offset, setOffset] = useState(0)
+  const [search, setSearch] = useState('s')
+  const [priceOrder, setPriceOrder] = useState<Order>('ascending')
+
   const api = useApi()
   const { user } = useAuth()
-  const page = calculatePage(offset, limit)
+  const page = calculatePage(offset, ITEMS_PER_PAGE)
 
   async function getUserAcquiredAvatarsIds() {
     if (user?.id) {
@@ -30,13 +24,11 @@ export function useAvatarsList({
     }
   }
 
-  console.log(search)
-
   async function getAvatars() {
     return await api.getAvatars({
       search,
       offset,
-      limit: offset + limit - 1,
+      limit: offset + ITEMS_PER_PAGE - 1,
       priceOrder,
     })
   }
@@ -104,9 +96,26 @@ export function useAvatarsList({
     return []
   }, [data, userAcquiredAvatarsIds])
 
+  function handleSearchChange(value: string) {
+    if (value.length) {
+      setSearch(value)
+      setOffset(0)
+    }
+  }
+
+  function handlePriceOrderChange(value: Order) {
+    setPriceOrder(value)
+  }
+
   return {
     avatars: verifiedAvatars,
+    itemsPerAge: ITEMS_PER_PAGE,
     count: data?.count,
+    search,
+    offset,
+    setOffset,
     addUserAcquiredAvatar,
+    handleSearchChange,
+    handlePriceOrderChange,
   }
 }

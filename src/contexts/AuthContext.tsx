@@ -62,12 +62,6 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     getUser
   )
 
-  async function fetchUserBySessionId(userId: string) {
-    const user = await api.getUserById(userId)
-    console.log({ user })
-    mutate('/user', user, false)
-  }
-
   async function signIn(email: string, password: string) {
     const { session, error } = await api.signIn(email, password)
 
@@ -99,7 +93,13 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
   async function updateUser(newData: Partial<User>) {
     if (user?.id) {
       await api.updateUser(newData, user.id)
-      mutate('/user', { ...user, ...newData }, false)
+      mutate(
+        `/user?session_id=${session?.user.id}`,
+        { ...user, ...newData },
+        {
+          revalidate: true,
+        }
+      )
     }
   }
 

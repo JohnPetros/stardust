@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-import { AvatarsSection } from './components/AvatarsSection'
+import { AvatarsList } from './components/AvatarsList'
 import { RocketsSection } from './components/RocketsSection'
 
 import { Loading } from '@/app/components/Loading'
@@ -20,7 +20,7 @@ export default function Shop() {
     <div className="mx-auto max-w-5xl space-y-12 px-6 pb-[12rem] sm:pb-6">
       {isLoading && <Loading isSmall={false} />}
       <RocketsSection />
-      <AvatarsSection />
+      <AvatarsList />
     </div>
   )
 }
