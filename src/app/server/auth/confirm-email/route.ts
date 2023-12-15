@@ -19,13 +19,19 @@ export async function GET(request: NextRequest) {
       const authService = AuthService(supabase)
       const user = await authService.confirmEmail(token)
 
-      console.log(user)
+      console.log({ user })
     }
-  } catch (error) {
-    return NextResponse.redirect(new URL(ROUTES.public.signIn, request.url))
-  }
 
-  return NextResponse.redirect(
-    new URL(ROUTES.private.emailConfirmation + '/555', request.url)
-  )
+    return NextResponse.redirect(
+      new URL(ROUTES.private.emailConfirmation, request.url)
+    )
+  } catch (error) {
+    console.log({ error })
+    return NextResponse.redirect(
+      new URL(
+        ROUTES.public.signIn + '?error=email_confirmation_error',
+        request.url
+      )
+    )
+  }
 }
