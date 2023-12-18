@@ -17,22 +17,20 @@ export async function middleware(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (user && isPublicRoute) {
-    const isConfirmEmailPage = currentRoute === ROUTES.private.emailConfirmation
+  if (user && !isPublicRoute) {
+    const isConfirmEmailPageCallback =
+      currentRoute === ROUTES.private.emailConfirmation
 
-    console.log({ isConfirmEmailPage })
-
-    if (isConfirmEmailPage)
-      return NextResponse.redirect(
-        new URL(ROUTES.private.emailConfirmation, req.url)
-      )
-
-    return NextResponse.redirect(new URL(ROUTES.private.home, req.url))
+    if (isConfirmEmailPageCallback) return res
+    return NextResponse.redirect(new URL(ROUTES.public.signIn, req.url))
   }
 
   if (!user && !isPublicRoute) {
-    const isConfirmEmailCallback = req.url.includes('/auth/callback?')
+    return NextResponse.redirect(new URL(ROUTES.public.signIn, req.url))
+  }
 
+  if (!user && isPublicRoute) {
+    const isConfirmEmailCallback = req.url.includes('confirm-email-callback')
     if (isConfirmEmailCallback) {
       const code = getSearchParams(req.url, 'code')
 
@@ -41,8 +39,6 @@ export async function middleware(req: NextRequest) {
           new URL(`${ROUTES.server.auth}/confirm-email?token=${code}`, req.url)
         )
     }
-
-    return NextResponse.redirect(new URL(ROUTES.public.signIn, req.url))
   }
 
   return res
