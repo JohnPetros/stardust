@@ -20,7 +20,7 @@ export const AuthService = (supabase: Supabase) => {
         email,
         password,
         options: {
-          emailRedirectTo: `${location.origin}/auth/callback`,
+          emailRedirectTo: `${location.origin}/server/auth/confirm-email-callback`,
         },
       })
 
@@ -37,6 +37,17 @@ export const AuthService = (supabase: Supabase) => {
       if (error) {
         return error.message
       }
+    },
+
+    githubOAuth: async () => {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+          redirectTo: `http://localhost:3000/server/auth/confirm-email-callback`,
+        },
+      })
+
+      if (error) throw new Error(error?.message)
     },
 
     getAuthUserId: async () => {

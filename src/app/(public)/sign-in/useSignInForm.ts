@@ -6,7 +6,7 @@ import { LottieRef } from 'lottie-react'
 import { useRouter } from 'next/navigation'
 
 import { ToastRef } from '@/app/components/Toast'
-import { useAuth } from '@/contexts/AuthContext'
+import { OAuthProvider, useAuth } from '@/contexts/AuthContext'
 import { SignInFormFields, signInFormSchema } from '@/libs/zod'
 import { ROCKET_ANIMATION_DELAY, ROUTES } from '@/utils/constants'
 import { getSearchParams } from '@/utils/helpers/getSearchParams'
@@ -22,7 +22,7 @@ export function useSignInForm() {
     resolver: zodResolver(signInFormSchema),
   })
 
-  const { signIn } = useAuth()
+  const { signIn, signInWithOAuth } = useAuth()
   const [isLaoding, setIsLoading] = useState(false)
 
   const router = useRouter()
@@ -37,6 +37,10 @@ export function useSignInForm() {
         resolve(true)
       }, ROCKET_ANIMATION_DELAY * 1000)
     )
+  }
+
+  async function handleOAuth(oauthProvider: OAuthProvider) {
+    await signInWithOAuth(oauthProvider)
   }
 
   async function handleFormData({ email, password }: SignInFormFields) {
@@ -76,7 +80,7 @@ export function useSignInForm() {
       'error'
     )
 
-    if (error?.includes('unauthorized')) {
+    if (error?.includes('email_confirmation_error')) {
       toastRef.current?.open({
         type: 'error',
         message: 'Error ao autenticar perfil, tente novamente mais tarde.',
@@ -101,5 +105,6 @@ export function useSignInForm() {
     isRocketVisible,
     register,
     handleSubmit: handleSubmit(handleFormData),
+    handleOAuth,
   }
 }

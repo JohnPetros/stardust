@@ -8,6 +8,8 @@ import useSWR, { mutate } from 'swr'
 import type { User } from '@/@types/user'
 import { useApi } from '@/services/api'
 
+export type OAuthProvider = 'github'
+
 export interface AuthContextValue {
   user: User | null
   isLoading: boolean
@@ -27,6 +29,7 @@ export interface AuthContextValue {
     | null
   >
   signOut: () => Promise<string | null>
+  signInWithOAuth: (provider: OAuthProvider) => Promise<void>
   updateUser: (newUserData: Partial<User>) => Promise<void>
   serverSession: Session | null | undefined
 }
@@ -53,6 +56,8 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     }
   }
 
+  console.log({ serverSession })
+
   const {
     data: user,
     error: fetchUserError,
@@ -78,6 +83,25 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
 
   async function signUp(email: string, password: string) {
     return await api.signUp(email, password)
+  }
+
+  async function signOut() {
+    const error = await api.signOut()
+
+    if (error) return error
+
+    router.push('/sign-in')
+
+    return null
+  }
+
+  async function signInWithOAuth(oauthProvider: OAuthProvider) {
+    switch (oauthProvider) {
+      case 'github':
+        await api.githubOAuth()
+        break
+      default:
+    }
   }
 
   async function signOut() {
@@ -130,6 +154,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     signIn,
     signUp,
     signOut,
+    signInWithOAuth,
     updateUser,
     serverSession,
   }
