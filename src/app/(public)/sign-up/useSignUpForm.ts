@@ -41,7 +41,7 @@ export function useSignUpForm() {
     let userEmail
 
     try {
-      userEmail = await api.getUserEmail(email)
+      // userEmail = await api.getUserEmail(email)
     } catch (error) {
       toastRef.current?.open({
         type: 'error',
@@ -73,9 +73,7 @@ export function useSignUpForm() {
       })
 
       if (response?.userId) {
-        console.log({ userEmail })
-
-        await api.addUser({ id: response.userId, name, email })
+        // await api.addUser({ id: response.userId, name, email })
       }
     } catch (error) {
       console.error({ error })

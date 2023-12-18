@@ -4,10 +4,10 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { AuthService } from '@/services/api/authService'
 import { ROUTES } from '@/utils/constants'
+import { getSearchParams } from '@/utils/helpers/getSearchParams'
 
 export async function GET(request: NextRequest) {
-  const requestUrl = new URL(request.url)
-  const token = requestUrl.searchParams.get('token')
+  const token = getSearchParams(request.url, 'token')
 
   if (!token)
     return NextResponse.redirect(new URL(ROUTES.public.signIn, request.url))
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.redirect(
-      new URL(ROUTES.private.emailConfirmation, request.url)
+      new URL(ROUTES.private.emailConfirmation + '-callback', request.url)
     )
   } catch (error) {
     console.log({ error })
