@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 
 import { AvatarsList } from './components/AvatarsList'
+import { Footer } from './components/Footer'
 import { RocketsSection } from './components/RocketsSection'
 
 import { Loading } from '@/app/components/Loading'
@@ -21,6 +22,7 @@ export default function Shop() {
       {isLoading && <Loading isSmall={false} />}
       <RocketsSection />
       <AvatarsList />
+      <Footer />
     </div>
   )
 }

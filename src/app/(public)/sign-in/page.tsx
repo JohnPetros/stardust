@@ -54,6 +54,7 @@ export default function SignIn() {
     rocketRef,
     register,
     handleSubmit,
+    handleOAuth,
   } = useSignInForm()
 
   return (
@@ -103,6 +104,13 @@ export default function SignIn() {
                     </Button>
                   </div>
                 </form>
+                {/* <Button
+                  name="submit"
+                  type="submit"
+                  onClick={() => handleOAuth('github')}
+                >
+                  Entrar com github
+                </Button> */}
                 <div className="mt-4 flex w-full items-center justify-between">
                   <Link href="/forgot-password">Esqueci a senha</Link>
                   <Link href="/sign-up">Criar conta</Link>

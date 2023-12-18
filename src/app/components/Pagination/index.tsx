@@ -4,7 +4,6 @@ import { CaretLeft, CaretRight } from '@phosphor-icons/react'
 import PageButton from './PageButton'
 import { usePagination } from './usePagination'
 
-
 export interface PaginationProps {
   itemsPerPage: number
   totalItems: number
