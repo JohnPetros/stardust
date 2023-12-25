@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -20,7 +20,7 @@ export function useSignUpForm() {
   })
   const [isLoading, setIsLoading] = useState(false)
 
-  const { signUp } = useAuth()
+  const { signUp, signOut } = useAuth()
 
   const api = useApi()
 
@@ -41,7 +41,7 @@ export function useSignUpForm() {
     let userEmail
 
     try {
-      // userEmail = await api.getUserEmail(email)
+      userEmail = await api.getUserEmail(email)
     } catch (error) {
       toastRef.current?.open({
         type: 'error',
@@ -73,7 +73,7 @@ export function useSignUpForm() {
       })
 
       if (response?.userId) {
-        // await api.addUser({ id: response.userId, name, email })
+        await api.addUser({ id: response.userId, name, email })
       }
     } catch (error) {
       console.error({ error })

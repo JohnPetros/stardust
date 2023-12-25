@@ -1,3 +1,5 @@
+import { EmailOtpType, VerifyOtpParams } from '@supabase/supabase-js'
+
 import type { Supabase } from '@/@types/supabase'
 
 export const AuthService = (supabase: Supabase) => {
@@ -63,10 +65,20 @@ export const AuthService = (supabase: Supabase) => {
       return user.id
     },
 
-    confirmEmail: async (code: string) => {
+    confirmEmail: async (token: string) => {
       const {
-        data: { user },
-      } = await supabase.auth.exchangeCodeForSession(code)
+        data: { user, session },
+        error,
+      } = await supabase.auth.verifyOtp({
+        type: 'email',
+        token_hash: token,
+      })
+
+      if (error) {
+        throw new Error(error?.message)
+      }
+
+      console.log('SESSION', { session })
 
       if (!user) return null
 

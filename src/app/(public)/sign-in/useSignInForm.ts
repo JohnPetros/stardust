@@ -87,14 +87,6 @@ export function useSignInForm() {
         seconds: 5,
       })
     }
-
-    if (error?.includes('email_confirmation_error')) {
-      toastRef.current?.open({
-        type: 'error',
-        message: 'Error ao tentar confirmar e-mail.',
-        seconds: 5,
-      })
-    }
   }, [])
 
   return {

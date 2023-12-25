@@ -56,8 +56,6 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     }
   }
 
-  console.log({ serverSession })
-
   const {
     data: user,
     error: fetchUserError,
@@ -66,6 +64,8 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     () => (session?.user.id ? `/user?session_id=${session?.user.id}` : null),
     getUser
   )
+
+  console.log({ user })
 
   async function signIn(email: string, password: string) {
     const { session, error } = await api.signIn(email, password)
@@ -83,16 +83,6 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
 
   async function signUp(email: string, password: string) {
     return await api.signUp(email, password)
-  }
-
-  async function signOut() {
-    const error = await api.signOut()
-
-    if (error) return error
-
-    router.push('/sign-in')
-
-    return null
   }
 
   async function signInWithOAuth(oauthProvider: OAuthProvider) {

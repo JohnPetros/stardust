@@ -17,12 +17,10 @@ export async function middleware(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (user && !isPublicRoute) {
-    const isConfirmEmailPageCallback =
-      currentRoute === ROUTES.private.emailConfirmation
+  console.log({ user })
 
-    if (isConfirmEmailPageCallback) return res
-    return NextResponse.redirect(new URL(ROUTES.public.signIn, req.url))
+  if (user && isPublicRoute) {
+    return NextResponse.redirect(new URL(ROUTES.private.home, req.url))
   }
 
   if (!user && !isPublicRoute) {

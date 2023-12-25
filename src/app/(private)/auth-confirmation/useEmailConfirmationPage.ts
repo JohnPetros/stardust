@@ -10,7 +10,6 @@ export function useEmailConfirmationPage() {
   const [isRocketVisible, setIsRocketVisible] = useState(false)
   const router = useRouter()
   const rocketRef = useRef(null) as LottieRef
-  console.log({ user })
 
   async function launchRocket() {
     await new Promise((resolve) =>

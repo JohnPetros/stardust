@@ -13,7 +13,7 @@ export const ROUTES = {
     playground: '/playground',
     challengeMaker: '/challenges/maker',
     solution: '/challenges/solution',
-    emailConfirmation: '/email-confirmation',
+    authConfirmation: '/auth-confirmation',
   },
   public: {
     signIn: '/sign-in',

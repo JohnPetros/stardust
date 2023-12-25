@@ -54,7 +54,6 @@ export default function SignIn() {
     rocketRef,
     register,
     handleSubmit,
-    handleOAuth,
   } = useSignInForm()
 
   return (
