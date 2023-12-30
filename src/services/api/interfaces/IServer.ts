@@ -1,4 +1,5 @@
 export interface IServer {
-  get<Data>(url: string): Promise<Data>
-  post<Data>(url: string, body: unknown): Promise<Data>
+  get<Response>(url: string): Promise<Response>
+  post<Response>(url: string, body: unknown): Promise<Response>
+  delete<Response>(url: string): Promise<Response>
 }

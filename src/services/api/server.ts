@@ -7,15 +7,17 @@ const HEADERS = {
 
 export const Server = (): IServer => {
   return {
-    async get<Data>(url: string): Promise<Data> {
+    async get<Response>(url: string): Promise<Response> {
       const response = await fetch(`${BASE_URL}/${url}`)
 
-      const data = response.json()
+      const data = await response.json()
 
-      return data as Data
+      console.log({ response })
+
+      return data as Response
     },
 
-    async post<Data>(url: string, body: string): Promise<Data> {
+    async post<Response>(url: string, body: string): Promise<Response> {
       const response = await fetch(`${BASE_URL}/${url}`, {
         method: 'POST',
         headers: HEADERS,
@@ -24,9 +26,20 @@ export const Server = (): IServer => {
         }),
       })
 
+      const data = await response.json()
+
+      return data as Response
+    },
+
+    async delete<Response>(url: string) {
+      const response = await fetch(`${BASE_URL}/${url}`, {
+        method: 'DELETE',
+        headers: HEADERS,
+      })
+
       const data = response.json()
 
-      return data as Data
+      return data as Response
     },
   }
 }
