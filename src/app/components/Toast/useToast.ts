@@ -51,5 +51,6 @@ export function useToast() {
     scope,
     animate,
     open,
+    close,
   }
 }
