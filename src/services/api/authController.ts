@@ -1,8 +1,11 @@
-import { EmailOtpType, VerifyOtpParams } from '@supabase/supabase-js'
+import { IAuthController } from './interfaces/IAuthController'
 
 import type { Supabase } from '@/@types/supabase'
+import { ROUTES } from '@/utils/constants'
 
-export const AuthService = (supabase: Supabase) => {
+const BASE_URL = process.env.NEXT_PUBLIC_APP_BASE_URL
+
+export const AuthController = (supabase: Supabase): IAuthController => {
   return {
     signIn: async (email: string, password: string) => {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -37,37 +40,38 @@ export const AuthService = (supabase: Supabase) => {
       const { error } = await supabase.auth.signOut()
 
       if (error) {
-        return error.message
+        throw new Error(error.message)
       }
+    },
+
+    resetPassword: async (email: string) => {
+      await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${BASE_URL}/${ROUTES.server.auth.resetPassword}`,
+      })
     },
 
     githubOAuth: async () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
-          redirectTo: `http://localhost:3000/server/auth/confirm-email-callback`,
+          redirectTo: `${BASE_URL}/${ROUTES.server.auth.confirm}`,
         },
       })
 
       if (error) throw new Error(error?.message)
     },
 
-    getAuthUserId: async () => {
+    getUserId: async () => {
       const {
         data: { user },
-        error,
       } = await supabase.auth.getUser()
 
-      if (error || !user) {
-        throw new Error(error?.message)
-      }
-
-      return user.id
+      return user?.id ?? null
     },
 
     confirmEmail: async (token: string) => {
       const {
-        data: { user, session },
+        data: { user },
         error,
       } = await supabase.auth.verifyOtp({
         type: 'email',
@@ -78,14 +82,25 @@ export const AuthService = (supabase: Supabase) => {
         throw new Error(error?.message)
       }
 
-      console.log('SESSION', { session })
+      console.log({ user })
 
-      if (!user) return null
+      return !!user?.email
+    },
 
-      return {
-        id: user.id,
-        email: user.email,
+    confirmPasswordReset: async (token: string) => {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.verifyOtp({
+        type: 'recovery',
+        token_hash: token,
+      })
+
+      if (error) {
+        throw new Error(error?.message)
       }
+
+      return !!user?.email
     },
   }
 }
