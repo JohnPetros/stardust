@@ -9,10 +9,12 @@ import {
 } from 'react'
 import { Eye, EyeClosed, Icon } from '@phosphor-icons/react'
 
+import { useInput } from './useInput'
+
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string
   icon: Icon
-  type: 'text' | 'email' | 'password'
+  type: string
   error: string | undefined
 }
 
@@ -20,22 +22,14 @@ const InputComponent = (
   { label, type, icon: Icon, error, ...rest }: InputProps,
   ref: ForwardedRef<HTMLInputElement>
 ) => {
-  const [innerType, setInnerType] = useState(type)
+  const { handleEyeClick, innerType } = useInput(type)
   const id = useId()
   const iconColor = error
     ? 'text-red-700'
     : 'text-gray-300 group-focus-within:text-green-400'
 
-  function handleEyeClick() {
-    if (innerType === 'password') {
-      setInnerType('text')
-      return
-    }
-    setInnerType('password')
-  }
-
   return (
-    <div>
+    <>
       <label htmlFor={id} className="block">
         <span
           className={`${
@@ -74,7 +68,7 @@ const InputComponent = (
       {error && (
         <span className="text-sm font-medium text-red-700">{error}</span>
       )}
-    </div>
+    </>
   )
 }
 
