@@ -1,9 +1,9 @@
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { type NextRequest, NextResponse } from 'next/server'
 
+import { AuthController } from './services/api/authController'
 import { ROUTES } from './utils/constants'
 import { checkIsPublicRoute } from './utils/helpers'
-import { getSearchParams } from './utils/helpers/getSearchParams'
 
 import type { Database } from '@/@types/database'
 
@@ -13,30 +13,18 @@ export async function middleware(req: NextRequest) {
   const currentRoute = '/' + req.nextUrl.pathname.split('/')[1]
   const isPublicRoute = checkIsPublicRoute(currentRoute)
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const authController = AuthController(supabase)
 
-  console.log({ user })
+  const hasSession = Boolean(await authController.getUserId())
 
-  if (user && isPublicRoute) {
+  console.log({ hasSession })
+
+  if (hasSession && currentRoute === ROUTES.public.signIn) {
     return NextResponse.redirect(new URL(ROUTES.private.home, req.url))
   }
 
-  if (!user && !isPublicRoute) {
+  if (!hasSession && !isPublicRoute) {
     return NextResponse.redirect(new URL(ROUTES.public.signIn, req.url))
-  }
-
-  if (!user && isPublicRoute) {
-    const isConfirmEmailCallback = req.url.includes('confirm-email-callback')
-    if (isConfirmEmailCallback) {
-      const code = getSearchParams(req.url, 'code')
-
-      if (code)
-        return NextResponse.redirect(
-          new URL(`${ROUTES.server.auth}/confirm-email?token=${code}`, req.url)
-        )
-    }
   }
 
   return res
