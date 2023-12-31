@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useState } from 'react'
 
 import { useAuth } from '@/contexts/AuthContext'
@@ -10,9 +12,12 @@ export function useResetPassword() {
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const { resetPassword } = useAuth()
+  const [shouldResetPassword, setShouldResetPassword] = useState(false)
+  // const { resetPassword } = useAuth()
   const api = useApi()
   const toast = useToast()
+
+  function handleResetPasswordDialogClose() {}
 
   function handleEmailChange(value: string) {
     setEmail(value)
@@ -29,7 +34,7 @@ export function useResetPassword() {
 
         if (!hasUser) setError('usuário não encontrado com esse e-mail')
 
-        await resetPassword(email)
+        // await resetPassword(email)
 
         toast.show('você pode resetar seu senha', { seconds: 5 })
       } else {
@@ -50,16 +55,16 @@ export function useResetPassword() {
 
     const shouldResetPassword = fetchCookie()
 
-    if (!shouldResetPassword) {
-      toast.show('você pode resetar seu senha')
-    }
+    setShouldResetPassword(true)
   }, [api, toast])
 
   return {
     isLoading,
     email,
     error,
+    shouldResetPassword,
     handleSubmit,
     handleEmailChange,
+    handleResetPasswordDialogClose,
   }
 }

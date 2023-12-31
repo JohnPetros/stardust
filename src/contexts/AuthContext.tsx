@@ -28,7 +28,8 @@ export interface AuthContextValue {
       }
     | null
   >
-  signOut: () => Promise<string | null>
+  signOut: () => Promise<void>
+  resetPassword: (email: string) => Promise<void>
   signInWithOAuth: (provider: OAuthProvider) => Promise<void>
   updateUser: (newUserData: Partial<User>) => Promise<void>
   serverSession: Session | null | undefined
@@ -65,8 +66,6 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     getUser
   )
 
-  console.log({ user })
-
   async function signIn(email: string, password: string) {
     const { session, error } = await api.signIn(email, password)
 
@@ -95,13 +94,13 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
   }
 
   async function signOut() {
-    const error = await api.signOut()
-
-    if (error) return error
+    await api.signOut()
 
     router.push('/sign-in')
+  }
 
-    return null
+  async function resetPassword(email: string) {
+    await api.resetPassword(email)
   }
 
   async function updateUser(newData: Partial<User>) {
@@ -124,26 +123,13 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     }
   }, [session])
 
-  // useEffect(() => {
-  //   const {
-  //     data: { subscription },
-  //   } = supabase.auth.onAuthStateChange((event, session) => {
-  //     console.log({ supabaseSession: session })
-  //     console.log(serverSession?.refresh_token)
-  //     console.log(serverSession?.access_token)
-  //   })
-
-  //   return () => {
-  //     subscription.unsubscribe()
-  //   }
-  // }, [supabase, serverSession?.refresh_token, serverSession?.access_token])
-
   const value: AuthContextValue = {
     user: user ?? null,
     isLoading,
     signIn,
     signUp,
     signOut,
+    resetPassword,
     signInWithOAuth,
     updateUser,
     serverSession,

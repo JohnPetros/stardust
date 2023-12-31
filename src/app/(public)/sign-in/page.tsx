@@ -12,6 +12,7 @@ import { useSignInForm } from './useSignInForm'
 import { Button } from '@/app/components/Button'
 import { Input } from '@/app/components/Input'
 import { Toast } from '@/app/components/Toast'
+import { ROUTES } from '@/utils/constants'
 
 const formAnimations: Variants = {
   initial: {
@@ -45,7 +46,7 @@ const heroAnimations: Variants = {
   },
 }
 
-export default function SignIn() {
+export default function SignInPage() {
   const {
     errors,
     isLaoding,
@@ -111,8 +112,10 @@ export default function SignIn() {
                   Entrar com github
                 </Button> */}
                 <div className="mt-4 flex w-full items-center justify-between">
-                  <Link href="/forgot-password">Esqueci a senha</Link>
-                  <Link href="/sign-up">Criar conta</Link>
+                  <Link href={ROUTES.public.resetPassword}>
+                    Esqueci a senha
+                  </Link>
+                  <Link href={ROUTES.public.signUp}>Criar conta</Link>
                 </div>
               </motion.div>
             )}
