@@ -1,6 +1,7 @@
 export { ALERT_EFFECTS } from './alert-effects'
 export { CHALLENGE_REWARDS_BY_DIFFICULTY } from './challenge-rewards-by-difficulty'
 export { CODE_TIPS } from './code-tips'
+export { COOKIES } from './cookies'
 export { DELEGUA_TOKENS } from './delegua-tokens'
 export { EDITOR_DEFAULT_CONFIG } from './editor-default-config'
 export { HOME_PAGES } from './home-pages'
