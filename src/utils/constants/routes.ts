@@ -19,9 +19,14 @@ export const ROUTES = {
     signIn: '/sign-in',
     signUp: '/sign-up',
     landing: '/landing',
+    resetPassword: '/reset-password',
   },
   server: {
-    auth: '/server/auth',
+    auth: {
+      confirm: '/server/auth/confirm',
+      resetPassword: '/server/auth/reset-password',
+    },
     mdx: '/server/mdx',
+    cookies: '/server/cookies',
   },
 }
