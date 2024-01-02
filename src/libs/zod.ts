@@ -1,24 +1,21 @@
 import { z } from 'zod'
 
-import { REGEX } from '@/utils/constants'
+import { REGEX, VALIDATION_ERRORS } from '@/utils/constants'
 
 const nameSchema = z
   .string()
-  .nonempty('Seu nome não pode estar vazio!')
-  .min(3, 'Por favor, informe um nome válido!')
+  .nonempty(VALIDATION_ERRORS.nonempty)
+  .min(3, VALIDATION_ERRORS.name.min)
 
-const emailSchema = z
+export const emailSchema = z
   .string()
-  .nonempty('Seu e-mail não pode estar vazio!')
-  .email('Por favor, informe um e-mail válido!')
+  .nonempty(VALIDATION_ERRORS.nonempty)
+  .email(VALIDATION_ERRORS.email.regex)
 
-const passwordSchema = z
+export const passwordSchema = z
   .string()
-  .nonempty('Sua senha não pode estar vazia!')
-  .regex(
-    REGEX.password,
-    'Senha deve conter pelo menos uma letra minúscula, uma maiúscula, um dígito e um caractere especial.'
-  )
+  .nonempty(VALIDATION_ERRORS.nonempty)
+  .regex(REGEX.password, VALIDATION_ERRORS.password.regex)
 
 export const signInFormSchema = z.object({
   email: emailSchema,
@@ -36,7 +33,7 @@ export const signUpFormSchema = z
   })
   .refine((fields) => fields.password === fields.password_confirmation, {
     path: ['password_confirmation'],
-    message: 'As senhas precisam de iguais',
+    message: VALIDATION_ERRORS.password_confirmation.equal,
   })
 
 export type SignUpFormFields = z.infer<typeof signUpFormSchema>
