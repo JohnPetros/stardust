@@ -1,16 +1,15 @@
 import { ICookiesController } from './interfaces/ICookiesControlle'
 import { Server } from './server'
 
-import { Cookie } from '@/@types/cookie'
 import { ROUTES } from '@/utils/constants'
 
 export const CookiesController = (): ICookiesController => {
   const server = Server()
 
   return {
-    setCookie: async (cookie: Cookie) => {
-      await server.post(`${ROUTES.server.cookies}/${cookie.name}/set`, {
-        cookie,
+    setCookie: async (cookieName: string, cookieValue: string) => {
+      await server.post(`${ROUTES.server.cookies}/${cookieName}/set`, {
+        cookieValue,
       })
     },
 
@@ -18,8 +17,6 @@ export const CookiesController = (): ICookiesController => {
       const response = await server.get<string>(
         `${ROUTES.server.cookies}/${cookieName}/get`
       )
-
-      console.log(response)
 
       return response
     },
