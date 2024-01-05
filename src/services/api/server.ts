@@ -12,8 +12,6 @@ export const Server = (): IServer => {
 
       const data = await response.json()
 
-      console.log({ response })
-
       return data as Response
     },
 
@@ -21,9 +19,7 @@ export const Server = (): IServer => {
       const response = await fetch(`${BASE_URL}/${url}`, {
         method: 'POST',
         headers: HEADERS,
-        body: JSON.stringify({
-          body,
-        }),
+        body: JSON.stringify(body),
       })
 
       const data = await response.json()

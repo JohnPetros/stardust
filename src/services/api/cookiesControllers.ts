@@ -5,11 +5,17 @@ import { ROUTES } from '@/utils/constants'
 
 export const CookiesController = (): ICookiesController => {
   const server = Server()
+  const expiresInDefault = 60 * 60 * 24 // 1 day
 
   return {
-    setCookie: async (cookieName: string, cookieValue: string) => {
+    setCookie: async (
+      cookieName: string,
+      cookieValue: string,
+      expiresIn: number = expiresInDefault
+    ) => {
       await server.post(`${ROUTES.server.cookies}/${cookieName}/set`, {
-        cookieValue,
+        value: cookieValue,
+        expiresIn,
       })
     },
 

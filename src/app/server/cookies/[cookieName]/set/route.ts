@@ -1,13 +1,29 @@
 import { cookies } from 'next/headers'
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
-export async function POST(request: NextRequest) {
-  const { cookie } = await request.json()
+type RouteParams = {
+  params: {
+    cookieName: string
+  }
+}
 
-  cookies().set({
-    name: cookie.name,
-    value: cookie.value,
-    httpOnly: true,
-    path: '/',
-  })
+export async function POST(request: NextRequest, { params }: RouteParams) {
+  try {
+    const cookie = await request.json()
+
+    console.log({ cookie })
+    console.log({ params })
+
+    const response = new NextResponse()
+
+    response.cookies.set(params.cookieName, cookie.value, {
+      secure: true,
+      httpOnly: true,
+      maxAge: cookie.expiresIn,
+    })
+
+    return response
+  } catch (error) {
+    console.log({ error })
+  }
 }
