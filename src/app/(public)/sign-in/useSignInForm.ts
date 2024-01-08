@@ -49,7 +49,7 @@ export function useSignInForm() {
     if (error) {
       if (error === 'Invalid login credentials') {
         toastRef.current?.open({
-          type: 'success',
+          type: 'error',
           message: 'Usuário não encontrado',
           seconds: 2.5,
         })
@@ -83,8 +83,8 @@ export function useSignInForm() {
     if (error?.includes('email_confirmation_error')) {
       toastRef.current?.open({
         type: 'error',
-        message: 'Error ao autenticar perfil, tente novamente mais tarde.',
-        seconds: 5,
+        message: 'Error ao autenticar perfil, tente novamente mais tarde',
+        seconds: 7,
       })
     }
   }, [])

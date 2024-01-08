@@ -29,7 +29,6 @@ export interface AuthContextValue {
     | null
   >
   signOut: () => Promise<void>
-  resetPassword: (email: string) => Promise<void>
   signInWithOAuth: (provider: OAuthProvider) => Promise<void>
   updateUser: (newUserData: Partial<User>) => Promise<void>
   serverSession: Session | null | undefined
@@ -99,10 +98,6 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     router.push('/sign-in')
   }
 
-  async function resetPassword(email: string) {
-    await api.resetPassword(email)
-  }
-
   async function updateUser(newData: Partial<User>) {
     if (user?.id) {
       await api.updateUser(newData, user.id)
@@ -129,7 +124,6 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     signIn,
     signUp,
     signOut,
-    resetPassword,
     signInWithOAuth,
     updateUser,
     serverSession,
