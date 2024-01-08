@@ -27,6 +27,9 @@ export const ROUTES = {
       resetPassword: '/server/auth/reset-password',
       generatePasswordToken: '/server/auth/generate-password-token',
     },
+    email: {
+      send: '/server/email/send',
+    },
     mdx: '/server/mdx',
     cookies: '/server/cookies',
   },
