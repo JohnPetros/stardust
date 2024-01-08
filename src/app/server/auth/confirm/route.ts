@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient as createServerClient } from 'supabase/supabase-server'
 
@@ -9,11 +10,11 @@ import { getSearchParams } from '@/utils/helpers/getSearchParams'
 type AuthType = 'email' | 'email-change' | 'password-reset'
 
 export async function GET(request: NextRequest) {
-  const token = getSearchParams(request.url, 'token')
-  const authType = getSearchParams(request.url, 'type') as AuthType
   const baseUrl = request.url
+  const authToken = getSearchParams(baseUrl, 'auth_token')
+  const authType = getSearchParams(baseUrl, 'type') as AuthType
 
-  if (!token)
+  if (!authToken)
     return NextResponse.redirect(new URL(ROUTES.public.signIn, baseUrl))
 
   function redirectToSignIn(error: AuthConfirmationError) {
@@ -28,7 +29,7 @@ export async function GET(request: NextRequest) {
   switch (authType) {
     case 'email': {
       try {
-        const isConfirmed = await authController.confirmEmail(token)
+        const isConfirmed = await authController.confirmEmail(authToken)
         if (isConfirmed)
           return NextResponse.redirect(
             new URL(ROUTES.private.authConfirmation, baseUrl)
@@ -40,10 +41,13 @@ export async function GET(request: NextRequest) {
       break
     }
     case 'password-reset': {
-      const isConfirmed = await authController.confirmPasswordReset(token)
+      const passwordToken = getSearchParams(baseUrl, 'password_token')
+      const passwordTokenSecret = process.env.PASSWORD_TOKEN_SECRET
 
-      if (isConfirmed) {
+      if (passwordToken && passwordTokenSecret) {
         try {
+          jwt.verify(passwordToken, passwordTokenSecret)
+
           const redirect = NextResponse.redirect(
             new URL(ROUTES.public.resetPassword, baseUrl),
             { status: 302 }
@@ -60,6 +64,8 @@ export async function GET(request: NextRequest) {
           console.log({ error })
           redirectToSignIn('password_reset_error')
         }
+      } else {
+        redirectToSignIn('password_reset_error')
       }
 
       break
