@@ -1,6 +1,4 @@
-import { SignUpError } from '@/@types/signUpError'
-
-export const SIGN_UP_ERRORS: Record<SignUpError, string> = {
+export const SIGN_UP_ERRORS: Record<string, string> = {
   'For security purposes, you can only request this after 50 seconds.':
     'Por questões de segurança, espere 50 segundos para tentar cadastrar novamente',
   'Email rate limit exceeded':
