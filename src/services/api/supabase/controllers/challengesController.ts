@@ -4,7 +4,7 @@ import {
 } from '../../interfaces/IChallengesController'
 
 import type { Challenge } from '@/@types/challenge'
-import { Supabase } from '@/@types/supabase'
+import type { Supabase } from '../types/supabase'
 
 interface getFilteredChallengesProps {
   userId: string

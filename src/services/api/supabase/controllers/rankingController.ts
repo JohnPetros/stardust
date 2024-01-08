@@ -1,5 +1,5 @@
 import type { Ranking } from '@/@types/ranking'
-import type { Supabase } from '@/@types/supabase'
+import type { Supabase } from '../types/supabase'
 
 export const RankingsController = (supabase: Supabase) => {
   return {

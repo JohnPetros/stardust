@@ -1,5 +1,6 @@
+import type { Supabase } from '../types/supabase'
+
 import type { Planet } from '@/@types/planet'
-import type { Supabase } from '@/@types/supabase'
 
 export const PlanetsController = (supabase: Supabase) => {
   return {
