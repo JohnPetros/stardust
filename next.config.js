@@ -19,14 +19,11 @@ const nextConfig = {
     '@react-email/html',
     '@react-email/tailwind',
   ],
-  experimental: {
-    serverActions: true,
-    serverComponentsExternalPackages: [
-      '@react-email/components',
-      '@react-email/render',
-      '@react-email/html',
-    ],
-  },
+  serverComponentsExternalPackages: [
+    '@react-email/components',
+    '@react-email/render',
+    '@react-email/html',
+  ],
 }
 
 module.exports = withMDX(nextConfig)
