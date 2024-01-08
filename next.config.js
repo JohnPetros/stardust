@@ -13,8 +13,19 @@ const nextConfig = {
       },
     ],
   },
+  transpilePackages: [
+    '@react-email/components',
+    '@react-email/render',
+    '@react-email/html',
+    '@react-email/tailwind',
+  ],
   experimental: {
     serverActions: true,
+    serverComponentsExternalPackages: [
+      '@react-email/components',
+      '@react-email/render',
+      '@react-email/html',
+    ],
   },
 }
 
