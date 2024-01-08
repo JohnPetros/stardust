@@ -1,6 +1,6 @@
 import { IUsersController } from '../../interfaces/IUsersController'
+import type { Supabase } from '../types/supabase'
 
-import type { Supabase } from '@/@types/supabase'
 import type { User, WinnerUser } from '@/@types/user'
 import { slugify } from '@/utils/helpers'
 
