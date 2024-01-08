@@ -1,11 +1,9 @@
 import { ReactNode } from 'react'
-import { X } from '@phosphor-icons/react'
 
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogTitle,
+  DialogHeader,
   DialogTrigger,
 } from '@/app/components/Dialog'
 import { SHORTCUTS } from '@/utils/constants'
@@ -18,14 +16,7 @@ export function Shortcuts({ children }: ShortCutsProps) {
   return (
     <Dialog>
       <DialogContent>
-        <header className="flex justify-between border-b p-3">
-          <DialogTitle className="mx-auto flex w-full items-center justify-between text-xl font-semibold text-white">
-            Atalhos
-            <DialogClose className="p-2">
-              <X className="text-xl" weight="bold" />
-            </DialogClose>
-          </DialogTitle>
-        </header>
+        <DialogHeader>Atalhos</DialogHeader>
         <dl className="mt-3 space-y-6">
           {SHORTCUTS.map((shortcut) => (
             <div
@@ -38,7 +29,7 @@ export function Shortcuts({ children }: ShortCutsProps) {
           ))}
         </dl>
       </DialogContent>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger>{children}</DialogTrigger>
     </Dialog>
   )
 }
