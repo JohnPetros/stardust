@@ -10,11 +10,13 @@ const resend = new Resend(API_KEY)
 
 export const resendProvider: EmailProvider = {
   async send(email: Email) {
-    resend.emails.send({
+    const { error } = await resend.emails.send({
       from: email.sender,
       to: email.recipient,
       html: email.template,
       subject: email.subject,
     })
+
+    if (error?.message) throw new Error(error.message)
   },
 }

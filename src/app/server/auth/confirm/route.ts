@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient as createServerClient } from 'supabase/supabase-server'
 
 import { AuthConfirmationError } from '@/@types/authConfirmationError'
-import { AuthController } from '@/services/api/authController'
+import { createServerClient } from '@/services/api/supabase/clients/serverClient'
+import { AuthController } from '@/services/api/supabase/controllers/authController'
 import { COOKIES, ROUTES } from '@/utils/constants'
 import { getSearchParams } from '@/utils/helpers/getSearchParams'
 
