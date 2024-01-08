@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 
-import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/contexts/ToastContext'
 import { emailSchema } from '@/libs/zod'
 import { useApi } from '@/services/api'
@@ -15,8 +14,8 @@ export function useResetPassword() {
   const [isLoading, setIsLoading] = useState(false)
   const [shouldResetPassword, setShouldResetPassword] = useState(false)
   const { sendRequestPasswordResetEmail } = useEmail()
-  const api = useApi()
   const toast = useToast()
+  const api = useApi()
 
   function handleResetPasswordDialogClose() {}
 
@@ -31,15 +30,19 @@ export function useResetPassword() {
       const emailValidation = emailSchema.safeParse(email)
 
       if (emailValidation.success) {
-        const hasUser = await api.getUserEmail(email)
+        try {
+          const hasUser = await api.getUserEmail(email)
 
-        if (!hasUser) setError('usuário não encontrado com esse e-mail')
+          if (!hasUser) setError('Usuário não encontrado com esse e-mail')
 
-        await sendRequestPasswordResetEmail('joaopcarvalho.cds@gmail.com')
+          await sendRequestPasswordResetEmail('joaopcarvalho.cds@gmail.com')
 
-        toast.show('Enviamos um e-mail para você redefinir sua senha', {
-          seconds: 5,
-        })
+          toast.show('Enviamos um e-mail para você redefinir sua senha', {
+            seconds: 5,
+          })
+        } catch (error) {
+          console.error(error)
+        }
       } else {
         console.log(emailValidation.error.errors)
         setError('e-mail inválido')

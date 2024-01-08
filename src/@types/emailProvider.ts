@@ -6,5 +6,5 @@ export type Email = {
 }
 
 export type EmailProvider = {
-  send(email: Email): void
+  send(email: Email): Promise<void>
 }
