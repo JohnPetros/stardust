@@ -15,7 +15,7 @@ export type ChallengeSummary = Pick<
   users_completed_challenges: []
 }
 
-export interface IChallengeService {
+export interface IChallengesController {
   getChallenge(challengeId: string, userId: string): Promise<Challenge>
   getChallenges(userId: string): Promise<Challenge[]>
   getChallengesSummary(userId: string): Promise<ChallengeSummary[]>

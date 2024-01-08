@@ -1,12 +1,16 @@
+import type { ICategoriesController } from '../../interfaces/ICategoriesController'
+
 import type { Category } from '@/@types/category'
 import type { Supabase } from '@/@types/supabase'
 
-export const CategoryService = (supabase: Supabase) => {
+export const CategoriesController = (
+  supabase: Supabase
+): ICategoriesController => {
   return {
     getCategories: async () => {
       const { data, error } = await supabase
         .from('categories')
-        .select('*, challenges_categories(challenge_id)')
+        .select('*, challenges_categories(challenge_id):challengesIds')
         .returns<Category[]>()
 
       if (error) {

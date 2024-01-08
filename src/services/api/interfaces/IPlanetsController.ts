@@ -1,5 +1,5 @@
 import { Planet } from '@/@types/planet'
 
-export interface IPlanetService {
+export interface IPlanetsController {
   getPlanets(): Promise<Planet[]>
 }

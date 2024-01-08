@@ -1,9 +1,9 @@
-import { IRocketService } from './interfaces/IRocketService'
+import { IRocketsController } from '../../interfaces/IRocketsController'
 
 import type { Rocket } from '@/@types/rocket'
 import type { Supabase } from '@/@types/supabase'
 
-export const RocketService = (supabase: Supabase): IRocketService => {
+export const RocketsController = (supabase: Supabase): IRocketsController => {
   return {
     getRocket: async (rocketId: string) => {
       const { data, error } = await supabase

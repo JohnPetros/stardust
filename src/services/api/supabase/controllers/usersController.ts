@@ -1,10 +1,10 @@
-import { IUserService } from './interfaces/IUserService'
+import { IUsersController } from '../../interfaces/IUsersController'
 
 import type { Supabase } from '@/@types/supabase'
 import type { User, WinnerUser } from '@/@types/user'
 import { slugify } from '@/utils/helpers'
 
-export const UserService = (supabase: Supabase): IUserService => {
+export const UsersController = (supabase: Supabase): IUsersController => {
   return {
     getUserById: async (userId: string) => {
       const { data, error } = await supabase

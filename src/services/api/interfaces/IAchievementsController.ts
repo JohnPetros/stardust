@@ -1,6 +1,6 @@
 import { Achievement } from '@/@types/achievement'
 
-export interface IAchievementService {
+export interface IAchievementsController {
   getAchievements(): Promise<Achievement[]>
   getUserUnlockedAchievementsIds(userId: string): Promise<string[]>
   getUserRescuableAchievementsIds(userId: string): Promise<string[]>

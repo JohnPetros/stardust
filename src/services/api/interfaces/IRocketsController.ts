@@ -8,7 +8,7 @@ type SortingOptions = {
   shouldFetchUnlocked: boolean | null
 }
 
-export interface IRocketService {
+export interface IRocketsController {
   getRockets(
     filterAndSortingOptions: FilterOptions & SortingOptions
   ): Promise<{ rockets: Rocket[]; count: number | null }>

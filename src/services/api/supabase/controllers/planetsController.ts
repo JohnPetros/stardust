@@ -1,7 +1,7 @@
 import type { Planet } from '@/@types/planet'
 import type { Supabase } from '@/@types/supabase'
 
-export const PlanetService = (supabase: Supabase) => {
+export const PlanetsController = (supabase: Supabase) => {
   return {
     getPlanets: async () => {
       const { data, error } = await supabase

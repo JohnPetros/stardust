@@ -1,9 +1,9 @@
-import { IStarService } from './interfaces/IStarService'
+import { IStarsController } from '../../interfaces/IStarsController'
 
 import type { Star } from '@/@types/star'
 import { Supabase } from '@/@types/supabase'
 
-export const StarService = (supabase: Supabase): IStarService => {
+export const StarsController = (supabase: Supabase): IStarsController => {
   return {
     getStarBySlug: async (starSlug: string) => {
       const { data, error } = await supabase

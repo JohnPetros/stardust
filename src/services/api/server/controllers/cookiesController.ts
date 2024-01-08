@@ -1,10 +1,10 @@
-import { ICookiesController } from './interfaces/ICookiesControlle'
-import { Server } from './server'
+import { ICookiesController } from '../../interfaces/ICookiesController'
+import { useServer } from '../useServer'
 
 import { ROUTES } from '@/utils/constants'
 
 export const CookiesController = (): ICookiesController => {
-  const server = Server()
+  const server = useServer()
   const expiresInDefault = 60 * 60 * 24 // 1 day
 
   return {

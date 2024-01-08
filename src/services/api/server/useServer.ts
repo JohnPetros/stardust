@@ -1,11 +1,9 @@
-import { IServer } from './interfaces/IServer'
-
 const BASE_URL = process.env.NEXT_PUBLIC_APP_BASE_URL
 const HEADERS = {
   'Content-Type': 'application/json',
 }
 
-export const Server = (): IServer => {
+export function useServer() {
   return {
     async get<Response>(url: string): Promise<Response> {
       const response = await fetch(`${BASE_URL}/${url}`)
@@ -15,7 +13,7 @@ export const Server = (): IServer => {
       return data as Response
     },
 
-    async post<Response>(url: string, body: string): Promise<Response> {
+    async post<Response>(url: string, body: unknown): Promise<Response> {
       const response = await fetch(`${BASE_URL}/${url}`, {
         method: 'POST',
         headers: HEADERS,

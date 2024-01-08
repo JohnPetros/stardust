@@ -1,9 +1,9 @@
-import { IAvatarService } from './interfaces/IAvatarService'
+import { IAvatarsController } from '../../interfaces/IAvatarsController'
 
 import type { Avatar } from '@/@types/avatar'
 import type { Supabase } from '@/@types/supabase'
 
-export const AvatarService = (supabase: Supabase): IAvatarService => {
+export const AvatarsController = (supabase: Supabase): IAvatarsController => {
   return {
     getAvatar: async (avatarId: string) => {
       const { data, error } = await supabase

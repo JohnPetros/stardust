@@ -1,7 +1,4 @@
-import jwt from 'jsonwebtoken'
-
-import { IAuthController } from './interfaces/IAuthController'
-import { Server } from './server'
+import { IAuthController } from '../../interfaces/IAuthController'
 
 import type { Supabase } from '@/@types/supabase'
 import { ROUTES } from '@/utils/constants'
@@ -48,19 +45,6 @@ export const AuthController = (supabase: Supabase): IAuthController => {
       if (error) {
         throw new Error(error.message)
       }
-    },
-
-    requestPasswordReset: async (email: string) => {
-      const server = Server()
-      const { passwordToken } = await server.get<{
-        passwordToken: string
-      }>(ROUTES.server.auth.generatePasswordToken)
-
-      await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${getAppBaseUrl()}/${
-          ROUTES.server.auth.confirm
-        }?access_token=${passwordToken}&type=password-reset`,
-      })
     },
 
     resetPassword: async (newPassword: string) => {

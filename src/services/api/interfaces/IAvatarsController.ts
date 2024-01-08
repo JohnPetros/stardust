@@ -6,7 +6,7 @@ type SortingOptions = {
   priceOrder: Order
 }
 
-export interface IAvatarService {
+export interface IAvatarsController {
   getAvatars(
     filterAndSortingOptions: FilterOptions & SortingOptions
   ): Promise<{ avatars: Avatar[]; count: number | null }>

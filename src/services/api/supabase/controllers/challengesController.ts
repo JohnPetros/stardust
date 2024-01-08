@@ -1,7 +1,7 @@
 import {
   ChallengeSummary,
-  IChallengeService,
-} from './interfaces/IChallengeService'
+  IChallengesController,
+} from '../../interfaces/IChallengesController'
 
 import type { Challenge } from '@/@types/challenge'
 import { Supabase } from '@/@types/supabase'
@@ -15,7 +15,9 @@ interface getFilteredChallengesProps {
   range: number
 }
 
-export const ChallengeService = (supabase: Supabase): IChallengeService => {
+export const ChallengesController = (
+  supabase: Supabase
+): IChallengesController => {
   return {
     getChallenge: async (challengeId: string, userId: string) => {
       const { data, error } = await supabase

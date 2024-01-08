@@ -1,7 +1,7 @@
 import type { Ranking } from '@/@types/ranking'
 import type { Supabase } from '@/@types/supabase'
 
-export const RankingService = (supabase: Supabase) => {
+export const RankingsController = (supabase: Supabase) => {
   return {
     getRanking: async (rankingId: string) => {
       const { data, error } = await supabase

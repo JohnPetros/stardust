@@ -1,9 +1,11 @@
-import { IAchievementService } from './interfaces/IAchievementService'
+import { IAchievementsController } from '../../interfaces/IAchievementsController'
 
 import type { Achievement } from '@/@types/achievement'
 import type { Supabase } from '@/@types/supabase'
 
-export const AchievementService = (supabase: Supabase): IAchievementService => {
+export const AchievementsController = (
+  supabase: Supabase
+): IAchievementsController => {
   return {
     getAchievements: async () => {
       const { data, error } = await supabase
