@@ -9,7 +9,7 @@ import { useToast } from './useToast'
 
 type Type = 'error' | 'success'
 
-interface OpenToastProps {
+export interface OpenToastProps {
   type: Type
   message: string
   seconds?: number
@@ -41,7 +41,8 @@ export interface ToastRef {
 }
 
 export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
-  const { type, message, seconds, isOpen, scope, animate, open } = useToast()
+  const { type, message, seconds, isOpen, scope, animate, open, close } =
+    useToast()
 
   const barAnimations: Variants = {
     full: {

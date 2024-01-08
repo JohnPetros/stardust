@@ -1,49 +1,62 @@
 'use client'
 
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 
+import { AlertRef } from '@/app/components/Alert'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/contexts/ToastContext'
-import { passwordSchema } from '@/libs/zod'
+import { ResetPasswordFields, resetPasswordFormSchema } from '@/libs/zod'
+import { ROUTES } from '@/utils/constants'
 
-export function useResetPasswordDialog() {
+export function useResetPasswordDialog(
+  alertRef: AlertRef | null,
+  hasUser: boolean
+) {
   const { resetPassword } = useAuth()
 
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ResetPasswordFields>({
+    resolver: zodResolver(resetPasswordFormSchema),
+  })
   const [isLoading, setIsLoading] = useState(false)
   const toast = useToast()
+  const router = useRouter()
 
-  function handlePasswordChange(value: string) {
-    setPassword(value)
-    setError('')
+  function handleAlert() {
+    if (hasUser) router.back()
+    else router.push(ROUTES.public.signIn)
   }
 
-  async function handleSubmit() {
+  async function handleFormSubmit({ password }: ResetPasswordFields) {
     try {
       setIsLoading(true)
-      const passwordValidation = passwordSchema.safeParse(password)
 
-      if (passwordValidation.success) {
-        await resetPassword(password)
+      await resetPassword(password)
 
-        toast.show('Senha redefinida com sucesso!', { seconds: 5 })
-      } else {
-        console.log(passwordValidation.error.errors)
-        setError('e-mail inválido')
-      }
+      alertRef?.open()
     } catch (error) {
       console.error(error)
+      toast.show('Erro ao redefinir sua senha, tente novamente mais tarde', {
+        type: 'error',
+        seconds: 5,
+      })
     } finally {
       setIsLoading(false)
     }
   }
 
   return {
+    alertRef,
     isLoading,
-    password,
-    error,
-    handleSubmit,
-    handlePasswordChange,
+    errors,
+    register,
+    handleAlert,
+    handleSubmit: handleSubmit(handleFormSubmit),
   }
 }
