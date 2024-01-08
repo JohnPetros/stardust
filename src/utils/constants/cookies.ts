@@ -1,3 +1,3 @@
 export const COOKIES = {
-  shouldReturnPassword: 'should-return-password',
+  shouldReturnPassword: '@stardust:should-return-password',
 }
