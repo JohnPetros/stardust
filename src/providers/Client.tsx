@@ -14,12 +14,12 @@ interface ClientProps {
 
 export function Client({ children }: ClientProps) {
   return (
-    <TooltipProvider>
-      <ToastProvider>
+    <ToastProvider>
+      <TooltipProvider>
         <AchivementsProvider>
           <EditorProvider>{children}</EditorProvider>
         </AchivementsProvider>
-      </ToastProvider>
-    </TooltipProvider>
+      </TooltipProvider>
+    </ToastProvider>
   )
 }

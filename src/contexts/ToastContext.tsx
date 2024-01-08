@@ -27,17 +27,16 @@ export const ToastContext = createContext({} as ToastContextValue)
 export function ToastProvider({ children }: ToastContextProps) {
   const toastRef = useRef<ToastRef | null>(null)
 
-  const show = useCallback(
-    (message: string, options?: Partial<Omit<OpenToastProps, 'message'>>) => {
-      console.log('toast')
-      toastRef.current?.open({
-        message,
-        type: options?.type ?? 'success',
-        seconds: options?.seconds ?? 2.5,
-      })
-    },
-    []
-  )
+  function show(
+    message: string,
+    options?: Partial<Omit<OpenToastProps, 'message'>>
+  ) {
+    toastRef.current?.open({
+      message,
+      type: options?.type ?? 'success',
+      seconds: options?.seconds ?? 2.5,
+    })
+  }
 
   return (
     <ToastContext.Provider value={{ show }}>
