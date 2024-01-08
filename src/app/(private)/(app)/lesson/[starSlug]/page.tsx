@@ -1,18 +1,17 @@
-import { createClient } from 'supabase/supabase-server'
-
 import { Layout } from '../components/Layout'
 
-import { StarService } from '@/services/api/starService'
+import { createServerClient } from '@/services/api/supabase/clients/serverClient'
+import { StarsController } from '@/services/api/supabase/controllers/starsController'
 
 interface LessonPageProps {
   params: { starSlug: string }
 }
 
 export default async function LessonPage({ params }: LessonPageProps) {
-  const supabase = createClient()
-  const starService = StarService(supabase)
+  const supabase = createServerClient()
+  const starController = StarsController(supabase)
 
-  const star = await starService.getStarBySlug(params.starSlug)
+  const star = await starController.getStarBySlug(params.starSlug)
 
   return <Layout star={star} />
 }

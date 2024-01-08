@@ -1,5 +1,4 @@
 import { notFound } from 'next/navigation'
-import { createClient as createServerClient } from 'supabase/supabase-server'
 
 import { Achievements } from '../components/Achievements'
 import { ChallengesChart } from '../components/ChallengesChart'
@@ -9,7 +8,8 @@ import { StreakBoard } from '../components/StreakBoard'
 import { User } from '../components/User'
 
 import { User as UserData } from '@/@types/user'
-import { UserService } from '@/services/api/userService'
+import { createServerClient } from '@/services/api/supabase/clients/serverClient'
+import { UsersController } from '@/services/api/supabase/controllers/usersController'
 
 interface ProfileProps {
   params: { userSlug: string }
@@ -17,11 +17,11 @@ interface ProfileProps {
 
 export default async function Profile({ params }: ProfileProps) {
   const supabase = createServerClient()
-  const userService = UserService(supabase)
+  const usersController = UsersController(supabase)
   let user: UserData
 
   try {
-    user = await userService.getUserBySlug(params.userSlug)
+    user = await usersController.getUserBySlug(params.userSlug)
   } catch (error) {
     console.error(error)
     notFound()

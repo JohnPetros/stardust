@@ -1,7 +1,7 @@
 import { IAvatarsController } from '../../interfaces/IAvatarsController'
+import type { Supabase } from '../types/supabase'
 
 import type { Avatar } from '@/@types/avatar'
-import type { Supabase } from '@/@types/supabase'
 
 export const AvatarsController = (supabase: Supabase): IAvatarsController => {
   return {

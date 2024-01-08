@@ -6,6 +6,7 @@ import { AchievementsController } from './controllers/achievementsController'
 import { AuthController } from './controllers/authController'
 import { AvatarsController } from './controllers/avatarsController'
 import { CategoriesController } from './controllers/categoriesController'
+import { CdnController } from './controllers/cdnController'
 import { ChallengesController } from './controllers/challengesController'
 import { PlanetsController } from './controllers/planetsController'
 import { RankingsController } from './controllers/rankingController'
@@ -20,16 +21,17 @@ export function useSupabaseApi() {
 
   const supabaseApi = useMemo(() => {
     return {
-      ...AuthController(supabase),
-      ...UsersController(supabase),
       ...AchievementsController(supabase),
-      ...StarsController(supabase),
-      ...PlanetsController(supabase),
-      ...AvatarsController(supabase),
       ...RocketsController(supabase),
-      ...RankingsController(supabase),
+      ...AuthController(supabase),
+      ...AvatarsController(supabase),
       ...CategoriesController(supabase),
+      ...CdnController(supabase),
       ...ChallengesController(supabase),
+      ...PlanetsController(supabase),
+      ...RankingsController(supabase),
+      ...StarsController(supabase),
+      ...UsersController(supabase),
     }
   }, [supabase])
 

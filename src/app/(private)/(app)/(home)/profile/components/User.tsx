@@ -1,6 +1,5 @@
 'use client'
 import { CalendarBlank, GearSix, Shield } from '@phosphor-icons/react'
-import dayjs from 'dayjs'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 
@@ -14,6 +13,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useImage } from '@/hooks/useImage'
 import { useRanking } from '@/hooks/useRanking'
 import { useRocket } from '@/hooks/useRocket'
+import { useDate } from '@/services/date'
 
 interface UserProps {
   data: UserType
@@ -23,6 +23,7 @@ export function User({
   data: { id, ranking_id, rocket_id, avatar_id, name, level, xp, created_at },
 }: UserProps) {
   const { user } = useAuth()
+  const { format } = useDate()
   const isAuthUser = id === user?.id
 
   const { ranking } = useRanking(ranking_id)
@@ -34,7 +35,7 @@ export function User({
   if (!ranking || !rocket || !rankingImage || !rocketImage)
     return <Loading isSmall={false} />
 
-  const createdAt = dayjs(created_at).format('DD MMMM [de] YYYY')
+  const createdAt = format(new Date(created_at), 'DD MMMM [de] YYYY')
 
   return (
     <div className="flex flex-col border-b border-gray-300 pb-6 md:flex-row md:justify-between md:gap-6">

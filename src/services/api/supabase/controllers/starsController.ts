@@ -1,7 +1,7 @@
 import { IStarsController } from '../../interfaces/IStarsController'
+import type { Supabase } from '../types/supabase'
 
 import type { Star } from '@/@types/star'
-import { Supabase } from '@/@types/supabase'
 
 export const StarsController = (supabase: Supabase): IStarsController => {
   return {

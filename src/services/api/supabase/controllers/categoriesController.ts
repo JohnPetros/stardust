@@ -1,7 +1,7 @@
 import type { ICategoriesController } from '../../interfaces/ICategoriesController'
+import type { Supabase } from '../types/supabase'
 
 import type { Category } from '@/@types/category'
-import type { Supabase } from '@/@types/supabase'
 
 export const CategoriesController = (
   supabase: Supabase
