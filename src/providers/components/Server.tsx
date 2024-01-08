@@ -1,3 +1,5 @@
+import '../../libs/dayjs'
+
 import { ReactNode } from 'react'
 
 import { AuthProvider } from '@/contexts/AuthContext'

@@ -1,5 +1,4 @@
 'use client'
-import '../libs/dayjs'
 
 import { ReactNode } from 'react'
 import { TooltipProvider } from '@radix-ui/react-tooltip'
