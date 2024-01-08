@@ -25,6 +25,7 @@ export const ROUTES = {
     auth: {
       confirm: '/server/auth/confirm',
       resetPassword: '/server/auth/reset-password',
+      generatePasswordToken: '/server/auth/generate-password-token',
     },
     mdx: '/server/mdx',
     cookies: '/server/cookies',
