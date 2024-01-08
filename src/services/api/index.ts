@@ -3,11 +3,12 @@
 import { useMemo } from 'react'
 
 import { AchievementService } from './achievementService'
-import { AuthService } from './authService'
+import { AuthController } from './authController'
 import { AvatarService } from './avatarService'
 import { CategoryService } from './categoryService'
 import { ChallengeService } from './challengeService'
-import { MdxService } from './mdxService'
+import { CookiesController } from './cookiesControllers'
+import { MdxController } from './mdxService'
 import { PlanetService } from './planetService'
 import { RankingService } from './rankingService'
 import { RocketService } from './rocketService'
@@ -21,7 +22,7 @@ export function useApi() {
 
   const api = useMemo(() => {
     return {
-      ...AuthService(supabase),
+      ...AuthController(supabase),
       ...UserService(supabase),
       ...AchievementService(supabase),
       ...StarService(supabase),
@@ -31,7 +32,8 @@ export function useApi() {
       ...RankingService(supabase),
       ...CategoryService(supabase),
       ...ChallengeService(supabase),
-      ...MdxService(),
+      ...CookiesController(),
+      ...MdxController(),
     }
   }, [supabase])
 

@@ -1,9 +1,11 @@
+import jwt from 'jsonwebtoken'
+
 import { IAuthController } from './interfaces/IAuthController'
+import { Server } from './server'
 
 import type { Supabase } from '@/@types/supabase'
 import { ROUTES } from '@/utils/constants'
-
-const BASE_URL = process.env.NEXT_PUBLIC_APP_BASE_URL
+import { getAppBaseUrl } from '@/utils/helpers'
 
 export const AuthController = (supabase: Supabase): IAuthController => {
   return {
@@ -25,9 +27,13 @@ export const AuthController = (supabase: Supabase): IAuthController => {
         email,
         password,
         options: {
-          emailRedirectTo: `${location.origin}/server/auth/confirm-email-callback`,
+          emailRedirectTo: `${getAppBaseUrl()}/${
+            ROUTES.server.auth.confirm
+          }&type=confirm-email`,
         },
       })
+
+      // {{ .SiteURL }}/server/auth/confirm?token={{ .TokenHash }}&type=email
 
       if (error) return { userId: null, error }
 
@@ -44,17 +50,28 @@ export const AuthController = (supabase: Supabase): IAuthController => {
       }
     },
 
-    resetPassword: async (email: string) => {
+    requestPasswordReset: async (email: string) => {
+      const server = Server()
+      const { passwordToken } = await server.get<{
+        passwordToken: string
+      }>(ROUTES.server.auth.generatePasswordToken)
+
       await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${BASE_URL}/${ROUTES.server.auth.resetPassword}`,
+        redirectTo: `${getAppBaseUrl()}/${
+          ROUTES.server.auth.confirm
+        }?access_token=${passwordToken}&type=password-reset`,
       })
+    },
+
+    resetPassword: async (newPassword: string) => {
+      await supabase.auth.updateUser({ password: newPassword })
     },
 
     githubOAuth: async () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
-          redirectTo: `${BASE_URL}/${ROUTES.server.auth.confirm}`,
+          redirectTo: `${getAppBaseUrl()}/${ROUTES.server.auth.confirm}`,
         },
       })
 
@@ -81,8 +98,6 @@ export const AuthController = (supabase: Supabase): IAuthController => {
       if (error) {
         throw new Error(error?.message)
       }
-
-      console.log({ user })
 
       return !!user?.email
     },
