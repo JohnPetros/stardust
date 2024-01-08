@@ -12,18 +12,20 @@ export const createClient = cache(() => {
     throw new Error('Supabase url and anon key must be provided')
   }
 
-  const cookieStore = cookies()
+  const cookie = cookies()
   return createServerClient<Database>(URL, ANON_KEY, {
     cookies: {
       get(name: string) {
-        return cookieStore.get(name)?.value
+        return cookie.get(name)?.value
       },
       set(name: string, value: string, options: CookieOptions) {
-        cookieStore.set({ name, value, ...options })
+        cookie.set({ name, value, ...options })
       },
       remove(name: string, options: CookieOptions) {
-        cookieStore.delete({ name, ...options })
+        cookie.delete({ name, ...options })
       },
     },
   })
 })
+
+export { createClient as createServerClient }
