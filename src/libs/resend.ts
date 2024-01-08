@@ -1,6 +1,6 @@
 import { Resend } from 'resend'
 
-import { Email, EmailProvider } from '@/@types/emailProvider'
+import { Email, IEmailProvider } from '@/providers/interfaces/IEmailProvider'
 
 const API_KEY = process.env.RESEND_API_KEY
 
@@ -8,7 +8,7 @@ if (!API_KEY) throw new Error('Resend API key must be provided')
 
 const resend = new Resend(API_KEY)
 
-export const resendProvider: EmailProvider = {
+export const resendProvider: IEmailProvider = {
   async send(email: Email) {
     const { error } = await resend.emails.send({
       from: email.sender,

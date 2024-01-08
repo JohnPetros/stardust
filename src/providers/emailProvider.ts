@@ -1,6 +1,7 @@
 import { cache } from 'react'
 
-import { EmailProvider } from '@/@types/emailProvider'
+import { IEmailProvider } from './interfaces/IEmailProvider'
+
 import { resendProvider } from '@/libs/resend'
 
-export const getEmailProvider = cache((): EmailProvider => resendProvider)
+export const EmailProvider = cache((): IEmailProvider => resendProvider)
