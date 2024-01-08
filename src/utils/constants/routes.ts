@@ -24,12 +24,8 @@ export const ROUTES = {
   server: {
     auth: {
       confirm: '/server/auth/confirm',
-      resetPassword: '/server/auth/reset-password',
-      generatePasswordToken: '/server/auth/generate-password-token',
     },
-    email: {
-      send: '/server/email/send',
-    },
+    email: '/server/email',
     mdx: '/server/mdx',
     cookies: '/server/cookies',
   },

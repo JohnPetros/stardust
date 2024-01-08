@@ -1,3 +1,3 @@
 export const META_DATA = {
-  sender: 'stardust@equipe.com',
+  sender: 'stardust@sertton-industrial.com.br',
 }

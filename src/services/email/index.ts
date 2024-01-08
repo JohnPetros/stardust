@@ -1,17 +1,22 @@
-import { authEmails } from './authEmails'
+import { useServer } from '../api/server/useServer'
 
-import { EmailProvider } from '@/@types/emailProvider'
-
-let emailProvider: EmailProvider
-
-export function initializeEmailProvider(emailProviderInstance: EmailProvider) {
-  emailProvider = emailProviderInstance
-}
+import { ROUTES } from '@/utils/constants'
 
 export function useEmail() {
-  if (!emailProvider) throw new Error('Email provider must be provided')
+  const server = useServer()
 
   return {
-    ...authEmails(emailProvider),
+    sendRequestPasswordResetEmail: async (recipient: string) => {
+      const response = await server.post<{ message: string }>(
+        `${ROUTES.server.email}/request-password-reset`,
+        {
+          recipient,
+        }
+      )
+
+      if (response.message !== 'ok') {
+        throw new Error()
+      }
+    },
   }
 }
