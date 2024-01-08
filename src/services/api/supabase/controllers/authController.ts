@@ -1,6 +1,6 @@
 import { IAuthController } from '../../interfaces/IAuthController'
+import type { Supabase } from '../types/supabase'
 
-import type { Supabase } from '@/@types/supabase'
 import { ROUTES } from '@/utils/constants'
 import { getAppBaseUrl } from '@/utils/helpers'
 

@@ -1,7 +1,7 @@
 import { IAchievementsController } from '../../interfaces/IAchievementsController'
+import type { Supabase } from '../types/supabase'
 
 import type { Achievement } from '@/@types/achievement'
-import type { Supabase } from '@/@types/supabase'
 
 export const AchievementsController = (
   supabase: Supabase
