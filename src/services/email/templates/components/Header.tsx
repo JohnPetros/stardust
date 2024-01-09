@@ -1,19 +1,17 @@
-import { Img, Text } from '@react-email/components'
+import { Container, Img, Text } from '@react-email/components'
 
-interface HeaderProps {
+type HeaderProps = {
   children: string
 }
 
 export function Header({ children }: HeaderProps) {
-  return (
-    <>
-      <Img
-        width={100}
-        height={20}
-        src="https://aukqejqsiqsqowafpppb.supabase.co/storage/v1/object/public/images/utils/logo.png"
-      />
+  const logo = `${process.env.NEXT_PUBLIC_CDN_URL}/utils/logo.png`
 
-      <Text className="font-semibold text-green-400">{children}</Text>
-    </>
+  return (
+    <Container>
+      <Img width={120} height={30} src={logo} />
+
+      <Text className="text-lg font-medium text-green-400">{children}</Text>
+    </Container>
   )
 }
