@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { QUOTES } from '@/utils/constants'
-import { getRandomItem } from '@/utils/constants/getRandom'
+import { getRandomItem } from '@/utils/helpers/getRandomItem'
 
 let deletedCharactersAmount = 0
 

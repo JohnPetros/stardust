@@ -3,21 +3,9 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 
 import type { Metadata } from 'next'
-import { Poppins, Roboto_Mono } from 'next/font/google'
 
-import { Providers } from '@/providers'
-
-const poppins = Poppins({
-  weight: ['400', '500', '600'],
-  subsets: ['latin'],
-  variable: '--font-poppins',
-})
-
-const roboto_mono = Roboto_Mono({
-  weight: ['400', '500', '600'],
-  subsets: ['latin'],
-  variable: '--font-roboto-mono',
-})
+import { Providers } from '@/providers/components'
+import { poppins, roboto_mono } from '@/styles/fonts'
 
 export const metadata: Metadata = {
   title: 'StarDust',

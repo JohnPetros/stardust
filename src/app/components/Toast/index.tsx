@@ -65,7 +65,6 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
 
   return (
     <>
-      <Container.Viewport className="fixed right-4 top-4 z-50  flex max-w-[90vw] rounded" />
       <AnimatePresence>
         {isOpen && (
           <Container.Root type="foreground" forceMount open={isOpen} asChild>

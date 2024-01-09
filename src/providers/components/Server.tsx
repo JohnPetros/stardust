@@ -1,4 +1,4 @@
-import '../../libs/dayjs'
+import '@/libs/dayjs'
 
 import { ReactNode } from 'react'
 

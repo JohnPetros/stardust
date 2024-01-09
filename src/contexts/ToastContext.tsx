@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, ReactNode, useCallback, useContext, , useRef } from 'react'
+import { createContext, ReactNode, useCallback, useContext, useRef } from 'react'
 import { Provider, Viewport } from '@radix-ui/react-toast'
 
 import { OpenToastProps, Toast, ToastRef } from '@/app/components/Toast'

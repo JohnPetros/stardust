@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { SignUpError } from '@/@types/signUpError'
 import { ToastRef } from '@/app/components/Toast'
 import { useAuth } from '@/contexts/AuthContext'
 import { SignUpFormFields, signUpFormSchema } from '@/libs/zod'
@@ -26,7 +25,7 @@ export function useSignUpForm() {
 
   const toastRef = useRef<ToastRef>(null)
 
-  function handleError(error: SignUpError) {
+  function handleError(error: string) {
     console.error(error)
     const message = SIGN_UP_ERRORS[error] ?? 'Erro ao tentar fazer cadastro'
 
@@ -62,7 +61,7 @@ export function useSignUpForm() {
       const response = await signUp(email, password)
 
       if (response?.error) {
-        handleError(response?.error.message as SignUpError)
+        handleError(response?.error.message)
         return
       }
 

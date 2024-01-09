@@ -6,38 +6,37 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 
 import { AlertRef } from '@/app/components/Alert'
-import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/contexts/ToastContext'
-import { ResetPasswordFields, resetPasswordFormSchema } from '@/libs/zod'
+import { ResetPasswordFormFields, resetPasswordFormSchema } from '@/libs/zod'
+import { useApi } from '@/services/api'
 import { ROUTES } from '@/utils/constants'
 
 export function useResetPasswordDialog(
   alertRef: AlertRef | null,
   hasUser: boolean
 ) {
-  const { resetPassword } = useAuth()
-
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ResetPasswordFields>({
+  } = useForm<ResetPasswordFormFields>({
     resolver: zodResolver(resetPasswordFormSchema),
   })
   const [isLoading, setIsLoading] = useState(false)
   const toast = useToast()
   const router = useRouter()
+  const api = useApi()
 
   function handleAlert() {
     if (hasUser) router.back()
     else router.push(ROUTES.public.signIn)
   }
 
-  async function handleFormSubmit({ password }: ResetPasswordFields) {
+  async function handleFormSubmit({ password }: ResetPasswordFormFields) {
     try {
       setIsLoading(true)
 
-      await resetPassword(password)
+      await api.resetPassword(password)
 
       alertRef?.open()
     } catch (error) {
