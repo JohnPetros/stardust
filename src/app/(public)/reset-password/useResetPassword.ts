@@ -35,7 +35,7 @@ export function useResetPassword() {
 
           if (!hasUser) setError('Usuário não encontrado com esse e-mail')
 
-          await sendRequestPasswordResetEmail('joaopcarvalho.cds@gmail.com')
+          await sendRequestPasswordResetEmail(email)
 
           toast.show('Enviamos um e-mail para você redefinir sua senha', {
             seconds: 5,
