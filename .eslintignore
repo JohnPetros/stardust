@@ -4,6 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
+.react-email
+.swc
 
 # testing
 /coverage
@@ -17,7 +19,7 @@
 **/public/sw*
 **/public/workbox-*
 **/public/fallback*
-
+**/html/**
 
 # misc
 .DS_Store
@@ -37,5 +39,6 @@ yarn-error.log*
 # vercel
 .vercel
 
-# editor
-.vscode
+# Supabase
+.branches
+.temp
