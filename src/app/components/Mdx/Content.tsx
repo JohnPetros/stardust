@@ -1,6 +1,6 @@
 import { tv, VariantProps } from 'tailwind-variants'
 
-import { TypeWriter } from '../Text/TypeWriter'
+import { TypeWriter } from '../TypeWriter'
 
 import { formatText } from '@/utils/helpers'
 

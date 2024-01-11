@@ -1,58 +1,26 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 
 import { Star } from './Star'
-import { Text } from './Text'
+import { useTheory } from './useTheory'
 
-import type { Text as TextData } from '@/@types/text'
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
+import { Text } from '@/app/components/Text'
 import { useLessonStore } from '@/stores/lessonStore'
 
-interface TheoryProps {
+type TheoryProps = {
   title: string
   number: number
 }
 
 export function Theory({ title, number }: TheoryProps) {
+  const { texts, nextTextIndex, hasNextText, handleContinueButtonClick } =
+    useTheory()
   const { state, actions } = useLessonStore()
-  const [texts, setTexts] = useState<TextData[]>([])
+
   const buttonHasFocus = useRef(false)
-  const nextTextIndex = useRef(0)
-  const hasNextText = !!state.texts[nextTextIndex.current + 1]
-
-  function nextText() {
-    console.log(hasNextText)
-    if (!hasNextText) return
-
-    nextTextIndex.current = nextTextIndex.current + 1
-
-    setTexts(() => {
-      const previousTexts = texts.map((text) => ({
-        ...text,
-        hasAnimation: false,
-      }))
-
-      const nextText = {
-        ...state.texts[nextTextIndex.current],
-        hasAnimation: true,
-      }
-
-      return [...previousTexts, nextText]
-    })
-
-    actions.incrementRenderedTextsAmount()
-  }
-
-  function handleContinueButtonClick() {
-    nextText()
-  }
-
-  useEffect(() => {
-    setTexts([{ ...state.texts[0], hasAnimation: true }])
-    actions.incrementRenderedTextsAmount()
-  }, [state.texts, actions])
 
   return (
     <>

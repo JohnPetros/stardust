@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { Text } from '@/app/components/Text'
+import { Text } from '@/app/components/TypeWriter'
 import { useChallengeStore } from '@/stores/challengeStore'
 
 export function Description() {

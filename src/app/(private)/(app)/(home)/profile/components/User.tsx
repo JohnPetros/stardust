@@ -3,16 +3,16 @@ import { CalendarBlank, GearSix, Shield } from '@phosphor-icons/react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 
-import { UserAvatar } from '../../components/UserAvatar'
+import { UserAvatar } from '../../components/UseAvatar'
 
 import { Status } from './Status'
 
 import { User as UserType } from '@/@types/user'
 import { Loading } from '@/app/components/Loading'
 import { useAuth } from '@/contexts/AuthContext'
-import { useImage } from '@/hooks/useImage'
 import { useRanking } from '@/hooks/useRanking'
 import { useRocket } from '@/hooks/useRocket'
+import { useApi } from '@/services/api'
 import { useDate } from '@/services/date'
 
 interface UserProps {
@@ -28,12 +28,12 @@ export function User({
 
   const { ranking } = useRanking(ranking_id)
   const { rocket } = useRocket(rocket_id)
+  const { getImage } = useApi()
 
-  const rankingImage = useImage('rankings', ranking?.image)
-  const rocketImage = useImage('rockets', rocket?.image)
+  if (!ranking || !rocket) return <Loading isSmall={false} />
 
-  if (!ranking || !rocket || !rankingImage || !rocketImage)
-    return <Loading isSmall={false} />
+  const rankingImage = getImage('rankings', ranking.image)
+  const rocketImage = getImage('rockets', rocket.image)
 
   const createdAt = format(new Date(created_at), 'DD MMMM [de] YYYY')
 

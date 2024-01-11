@@ -10,7 +10,7 @@ import { Planet } from './Planet'
 
 import type { Planet as PlanetData } from '@/@types/planet'
 import { StarViewPortPosition } from '@/contexts/SpaceContext'
-import { useSpace } from '@/contexts/SpaceContext'
+import { useSpaceContext } from '@/contexts/SpaceContext'
 import { usePlanets } from '@/hooks/usePlanets'
 
 const fabIcon: Record<StarViewPortPosition, Icon> = {
@@ -24,7 +24,8 @@ interface SpaceProps {
 }
 
 export function Space({ planets }: SpaceProps) {
-  const { lastUnlockedStarPosition, scrollIntoLastUnlockedStar } = useSpace()
+  const { lastUnlockedStarPosition, scrollIntoLastUnlockedStar } =
+    useSpaceContext()
   const { lastUnlockedStarId, data: verifiedPlanets } = usePlanets(planets)
   const [isTransitionVisible, setIsTransitionVisible] = useState(
     !verifiedPlanets?.length

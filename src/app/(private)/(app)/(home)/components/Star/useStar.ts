@@ -6,7 +6,7 @@ import { LottieRef } from 'lottie-react'
 import { useRouter } from 'next/navigation'
 
 import { Star } from '@/@types/star'
-import { useSpace } from '@/contexts/SpaceContext'
+import { useSpaceContext } from '@/contexts/SpaceContext'
 import { useToast } from '@/contexts/ToastContext'
 import { useApi } from '@/services/api'
 import { ROUTES } from '@/utils/constants'
@@ -20,7 +20,7 @@ export function useStar(
     lastUnlockedStarRef,
     scrollIntoLastUnlockedStar,
     setLastUnlockedStarPosition,
-  } = useSpace()
+  } = useSpaceContext()
   const starRef = useRef(null) as LottieRef
   const router = useRouter()
   const api = useApi()

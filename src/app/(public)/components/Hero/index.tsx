@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 import { useHero } from './useHero'
 
-import { TypeWriter } from '@/app/components/Text/TypeWriter'
+import { TypeWriter } from '@/app/components/TypeWriter'
 
 export function Hero() {
   const { handleDeleteQuoteChar, quote } = useHero()

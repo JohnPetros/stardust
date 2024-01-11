@@ -1,7 +1,7 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+
 import { motion, Variants } from 'framer-motion'
-import Lottie, { LottieRef } from 'lottie-react'
+import Lottie from 'lottie-react'
 
 import ApolloContratulating from '../../../../../../../public/animations/apollo-congratulating.json'
 import StarsChain from '../../../../../../../public/animations/stars-chain.json'
@@ -9,12 +9,12 @@ import { StreakIcon } from '../../../(home)/components/StreakIcon'
 
 import { Metric } from './Metric'
 import { Streak } from './Streak'
+import { useCongratulations } from './useCongratulation'
 
 import type { User } from '@/@types/user'
-import { Alert, AlertRef } from '@/app/components/Alert'
+import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { useAuth } from '@/contexts/AuthContext'
-import { playSound } from '@/utils/helpers'
 
 const apolloAnimations: Variants = {
   hidden: {
@@ -65,7 +65,7 @@ export interface updateUserDataParams {
   user: User
 }
 
-interface EndProps {
+export type CongratulationsProps = {
   coins: number
   xp: number
   time: string
@@ -83,117 +83,34 @@ export function Congratulations({
   xp,
   userDataUpdater,
   onExit,
-}: EndProps) {
-  const { user, updateUser } = useAuth()
+}: CongratulationsProps) {
+  const {
+    handleFirstButtonClick,
+    handleSecondButtonClick,
+    isEndMessageVisible,
+    isFirstClick,
+    isLoading,
+    isStreakVisible,
+    alertRef,
+    starsChainRef,
+  } = useCongratulations({
+    accurance,
+    coins,
+    xp,
+    userDataUpdater,
+    onExit,
+  })
 
-  const [hasNewLevel, setHasNewLevel] = useState(false)
-  const [isFirstClick, setIsFirstClick] = useState(true)
-  const [isStreakVisible, setIsStreakVisible] = useState(false)
-  const [isEndMessageVisible, setIsEndMessageVisible] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const alertRef = useRef<AlertRef>(null)
-
-  function getUpdatedLevel(updatedXp: number) {
-    if (!user) return
-
-    const hasNewLevel = updatedXp >= 50 * (user.level - 1) + 25
-
-    if (hasNewLevel) {
-      const newLevel = user.level + 1
-      setHasNewLevel(hasNewLevel)
-
-      return newLevel
-    }
-
-    return user.level
-  }
-
-  async function getUpdatedUserData() {
-    if (!user) return
-    return await userDataUpdater({ newCoins: coins, newXp: xp, user })
-  }
-
-  const starsChainRef = useRef(null) as LottieRef
-
-  async function updateUserData() {
-    const updatedUserData = await getUpdatedUserData()
-
-    console.log({ updatedUserData })
-
-    if (updatedUserData) {
-      const updatedLevel = updatedUserData.xp
-        ? getUpdatedLevel(updatedUserData.xp)
-        : user?.level
-
-      const data = { ...updatedUserData, level: updatedLevel }
-
-      const error = await updateUser(data)
-
-      if (error) {
-        throw new Error(error)
-      }
-    }
-  }
-
-  function pauseStarsAnimation() {
-    const totalStars = (parseInt(accurance) * 5) / 100
-
-    starsChainRef.current?.goToAndPlay(0)
-
-    const delay = 500 * (!isNaN(totalStars) ? totalStars : 5)
-
-    setTimeout(() => {
-      starsChainRef.current?.pause()
-    }, delay)
-  }
-
-  function handleFirstButtonClick() {
-    if (!user) return
-
-    const todayIndex = new Date().getDay()
-    const todayStatus = user.week_status[todayIndex]
-
-    setIsFirstClick(false)
-
-    if (hasNewLevel) {
-      alertRef.current?.open()
-    }
-
-    const isStreakVisible = todayStatus === 'todo'
-
-    if (isStreakVisible) {
-      setIsStreakVisible(true)
-      return
-    }
-
-    setIsEndMessageVisible(true)
-  }
-
-  function handleSecondButtonClick() {
-    setIsLoading(true)
-    onExit()
-  }
-
-  useEffect(() => {
-    pauseStarsAnimation()
-
-    playSound('earning.wav')
-
-    const time = setTimeout(async () => {
-      await updateUserData()
-    }, 250)
-
-    return () => clearTimeout(time)
-  }, [])
+  const { user } = useAuth()
 
   return (
     <div className="mx-auto flex h-screen w-full max-w-lg flex-col items-center justify-center px-6">
       <div className="my-auto flex flex-col items-center justify-center">
         {!isStreakVisible && !isEndMessageVisible && (
           <>
-            <h3 className="text-xl font-semibold text-gray-100">
+            <h2 className="text-xl font-semibold text-gray-100">
               Fase completada!
-            </h3>
+            </h2>
             <Lottie
               lottieRef={starsChainRef}
               animationData={StarsChain}

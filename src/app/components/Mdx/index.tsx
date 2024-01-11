@@ -8,8 +8,7 @@ import { Code } from './Code'
 import { Image } from './Image'
 import { Quote } from './Quote'
 import { Text } from './Text'
-
-import { useMdx } from '@/hooks/useMdx'
+import { useMdx } from './useMdx'
 
 const COMPONENTS = {
   Text,
