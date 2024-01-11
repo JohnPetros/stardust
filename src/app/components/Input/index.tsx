@@ -1,12 +1,6 @@
 'use client'
 
-import {
-  ForwardedRef,
-  forwardRef,
-  InputHTMLAttributes,
-  useId,
-  useState,
-} from 'react'
+import { ForwardedRef, forwardRef, InputHTMLAttributes, useId } from 'react'
 import { Eye, EyeClosed, Icon } from '@phosphor-icons/react'
 
 import { useInput } from './useInput'

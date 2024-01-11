@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import Lottie from 'lottie-react'
 
-import TransitionAnimation from '../../../public/animations/transition.json'
+import TransitionAnimation from '../../../../public/animations/transition.json'
 
-import { CODE_TIPS } from '@/utils/constants'
+import { usePageTransitionAnimation } from './usePageTransitionAnimation'
+
 import { formatText } from '@/utils/helpers'
 
 const containerVariants: Variants = {
@@ -38,15 +38,7 @@ export function PageTransitionAnimation({
   isVisible,
   hasTips = false,
 }: TransitionPageAnimationProps) {
-  const [codeTip, setCodeTip] = useState('')
-
-  useEffect(() => {
-    if (hasTips) {
-      const randomNumber = Math.floor(Math.random() * CODE_TIPS.length - 1) + 1
-      const codeTip = CODE_TIPS[randomNumber]
-      setCodeTip(codeTip)
-    }
-  }, [hasTips])
+  const { codeTip } = usePageTransitionAnimation(hasTips)
 
   return (
     <AnimatePresence>

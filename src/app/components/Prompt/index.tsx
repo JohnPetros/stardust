@@ -1,13 +1,9 @@
-import {
-  ForwardedRef,
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react'
+import { ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 
-import { Alert, AlertRef } from './Alert'
-import { Button } from './Button'
+import { Alert } from '../Alert'
+import { Button } from '../Button'
+
+import { usePrompt } from './usePromp'
 
 export type PromptRef = {
   open: () => void
@@ -18,7 +14,7 @@ export type PromptRef = {
   value: string
 }
 
-interface PromptProps {
+type PromptProps = {
   onConfirm: () => void
   onCancel?: () => void
 }
@@ -27,22 +23,17 @@ export function PromptComponent(
   { onConfirm, onCancel }: PromptProps,
   ref: ForwardedRef<PromptRef>
 ) {
-  const [title, setTitle] = useState('')
-  const [value, setValue] = useState('')
-  const alertRef = useRef<AlertRef | null>(null)
-  const inputRef = useRef<HTMLInputElement | null>(null)
-
-  function open() {
-    alertRef.current?.open()
-  }
-
-  function close() {
-    alertRef.current?.close()
-  }
-
-  function focus() {
-    inputRef.current?.focus()
-  }
+  const {
+    title,
+    value,
+    alertRef,
+    inputRef,
+    open,
+    focus,
+    close,
+    setTitle,
+    setValue,
+  } = usePrompt()
 
   useImperativeHandle(
     ref,
@@ -56,7 +47,7 @@ export function PromptComponent(
         value,
       }
     },
-    [value]
+    [value, open, close, focus, setTitle, setValue]
   )
 
   return (

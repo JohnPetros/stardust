@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 import { motion, Variants } from 'framer-motion'
 import Lottie from 'lottie-react'
 
-import Animation from '../../../public/animations/apollo-asking.json'
+import Animation from '../../../../public/animations/apollo-asking.json'
 
 const appMessageAnimations: Variants = {
   hidden: {
@@ -16,7 +16,7 @@ const appMessageAnimations: Variants = {
   },
 }
 
-interface AppMessageProps {
+type AppMessageProps = {
   title: string
   subtitle: string
   footer: ReactNode

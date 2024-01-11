@@ -1,10 +1,10 @@
-import { InputHTMLAttributes, useState } from 'react'
+import { InputHTMLAttributes } from 'react'
 import { MagnifyingGlass } from '@phosphor-icons/react'
 import { twMerge } from 'tailwind-merge'
 
-import { useDebounce } from '@/hooks/useDebounce'
+import { useSearch } from './useSearch'
 
-interface SearchProps extends InputHTMLAttributes<HTMLInputElement> {
+type SearchProps = {
   className?: string
   onSearchChange: (...args: any[]) => void  // eslint-disable-line
 }
@@ -14,14 +14,8 @@ export function Search({
   onSearchChange,
   id,
   ...rest
-}: SearchProps) {
-  const [value, setValue] = useState('')
-  const debouceChange = useDebounce(onSearchChange, 450)
-
-  function handleValueChange(value: string) {
-    setValue(value)
-    debouceChange(value)
-  }
+}: SearchProps & InputHTMLAttributes<HTMLInputElement>) {
+  const { value, handleValueChange } = useSearch(onSearchChange)
 
   return (
     <label

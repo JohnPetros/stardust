@@ -1,31 +1,20 @@
 'use client'
 
-import {
-  ForwardedRef,
-  forwardRef,
-  ReactNode,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react'
+import { ForwardedRef, forwardRef, ReactNode, useImperativeHandle } from 'react'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import Lottie from 'lottie-react'
 
-import { DialogAnimation } from './Dialog'
-import { Hydration } from './Hydration'
+import { DialogAnimation } from '../Dialog'
+import { Hydration } from '../Hydration'
 
-import { ALERT_EFFECTS } from '@/utils/constants'
-import { playSound } from '@/utils/helpers'
+import { type AlertType, useAlert } from './useAlert'
 
-export type AlertType = 'earning' | 'crying' | 'denying' | 'asking' | 'generic'
-
-export interface AlertRef {
+export type AlertRef = {
   open: VoidFunction
   close: VoidFunction
 }
 
-interface AlertProps {
+type AlertProps = {
   type: AlertType
   title: string
   body: ReactNode
@@ -51,22 +40,15 @@ const AlertComponent = (
   }: AlertProps,
   ref: ForwardedRef<AlertRef>
 ) => {
-  const [isOpen, setIsOpen] = useState(false)
-
-  const [isRendered, setIsRendered] = useState(false)
-  const containerRef = useRef<HTMLElement | null>(null)
-
-  const { animation, sound } = ALERT_EFFECTS.find(
-    (animation) => animation.id === type.toLocaleLowerCase()
-  )!
-
-  function open() {
-    setIsOpen(true)
-  }
-
-  function close() {
-    setIsOpen(false)
-  }
+  const {
+    animation,
+    isRendered,
+    isOpen,
+    containerRef,
+    setIsOpen,
+    open,
+    close,
+  } = useAlert(type, canPlaySong)
 
   useImperativeHandle(
     ref,
@@ -76,19 +58,8 @@ const AlertComponent = (
         close,
       }
     },
-    []
+    [open, close]
   )
-
-  useEffect(() => {
-    if (sound && isOpen && type !== 'generic' && canPlaySong) {
-      playSound(sound)
-    }
-  }, [isOpen, canPlaySong, type, sound])
-
-  useEffect(() => {
-    containerRef.current = document.body
-    setIsRendered(true)
-  }, [])
 
   return (
     <Hydration>

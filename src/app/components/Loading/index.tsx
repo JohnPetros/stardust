@@ -1,10 +1,10 @@
 'use client'
 import Lottie from 'lottie-react'
 
-import Rocket from './../../../public/animations/rocket-floating.json'
-import Spinner from './../../../public/animations/spinner.json'
+import Rocket from '../../../../public/animations/rocket-floating.json'
+import Spinner from '../../../../public/animations/spinner.json'
 
-interface LoadingProps {
+type LoadingProps = {
   isSmall?: boolean
 }
 

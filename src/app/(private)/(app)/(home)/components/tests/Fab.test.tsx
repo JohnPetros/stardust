@@ -2,7 +2,7 @@ import { ArrowArcLeft } from '@phosphor-icons/react'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { Fab } from '../Fab'
+import { Fab } from '../../../../../components/Fab'
 
 const onClickMock = jest.fn()
 const labelMock = 'label mock'

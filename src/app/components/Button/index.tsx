@@ -1,10 +1,11 @@
 'use client'
+
 import { ButtonHTMLAttributes, ReactNode, RefObject } from 'react'
 import { Icon } from '@phosphor-icons/react'
 import { motion, MotionProps } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
 
-import { Loading } from './Loading'
+import { Loading } from '../Loading'
 
 type ButtonProps = {
   buttonRef?: RefObject<HTMLButtonElement>

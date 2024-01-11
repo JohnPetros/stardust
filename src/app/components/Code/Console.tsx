@@ -40,7 +40,7 @@ export function ConsoleComponent(
   const controls = useAnimation()
 
   function calculateMinHeight() {
-    return ((height + 100) / 10) * 0.4 + 'rem' // 40% of full height
+    return ((height + 100) / 10) * 0.4 + 'rem' // 40% of the full height
   }
 
   const open = useCallback(() => {
