@@ -9,7 +9,7 @@ export function Header({ children }: HeaderProps) {
 
   return (
     <Container>
-      <Img width={120} height={30} src={logo} />
+      <Img width={140} height={30} src={logo} />
 
       <Text className="text-lg font-medium text-green-400">{children}</Text>
     </Container>

@@ -1,33 +1,35 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { LottieRef } from 'lottie-react'
 import { useRouter } from 'next/navigation'
 
-import { ToastRef } from '@/app/components/Toast'
 import { OAuthProvider, useAuth } from '@/contexts/AuthContext'
-import { SignInFormFields, signInFormSchema } from '@/libs/zod'
+import { useToast } from '@/contexts/ToastContext'
+import { useValidation } from '@/services/validation'
+import { SignInForm } from '@/services/validation/types/signInForm'
 import { ROCKET_ANIMATION_DELAY, ROUTES } from '@/utils/constants'
 import { getSearchParams } from '@/utils/helpers/getSearchParams'
 
 export function useSignInForm() {
   const [isRocketVisible, setIsRocketVisible] = useState(false)
 
+  const validation = useValidation()
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignInFormFields>({
-    resolver: zodResolver(signInFormSchema),
+  } = useForm<SignInForm>({
+    resolver: validation.resolveSignInForm(),
   })
 
   const { signIn, signInWithOAuth } = useAuth()
   const [isLaoding, setIsLoading] = useState(false)
 
   const router = useRouter()
+  const toast = useToast()
 
-  const toastRef = useRef<ToastRef>(null)
   const rocketRef = useRef(null) as LottieRef
 
   async function launchRocket() {
@@ -43,20 +45,14 @@ export function useSignInForm() {
     await signInWithOAuth(oauthProvider)
   }
 
-  async function handleFormData({ email, password }: SignInFormFields) {
-    const error = await signIn(email, password)
-
-    if (error) {
-      if (error === 'Invalid login credentials') {
-        toastRef.current?.open({
-          type: 'error',
-          message: 'Usuário não encontrado',
-          seconds: 2.5,
-        })
-        return
-      }
-
-      console.error(error)
+  async function handleFormData({ email, password }: SignInForm) {
+    try {
+      await signIn(email, password)
+    } catch (error) {
+      toast.show('Usuário não encontrado', {
+        type: 'error',
+        seconds: 2.5,
+      })
       return
     }
 
@@ -81,16 +77,14 @@ export function useSignInForm() {
     )
 
     if (error?.includes('email_confirmation_error')) {
-      toastRef.current?.open({
+      toast.show('Error ao autenticar perfil, tente novamente mais tarde', {
         type: 'error',
-        message: 'Error ao autenticar perfil, tente novamente mais tarde',
-        seconds: 7,
+        seconds: 2.5,
       })
     }
-  }, [])
+  }, [toast])
 
   return {
-    toastRef,
     rocketRef,
     errors,
     isLaoding,

@@ -5,26 +5,17 @@ import { Link } from './components/Link'
 import { Paragraph } from './components/Paragraph'
 
 import { ROUTES } from '@/utils/constants'
-import { getAppBaseUrl } from '@/utils/helpers'
 
-type RequestPasswordResetEmailProps = {
-  passwordToken: string
-  userEmail: string
-}
-
-export function RequestPasswordResetTemplate({
-  passwordToken,
-  userEmail,
-}: RequestPasswordResetEmailProps) {
+export function RequestPasswordResetTemplate() {
   return (
     <Body>
       <Header>Pedido de redefinição de senha.</Header>
 
       <Box>
         <Paragraph>
-          Foi feita uma solicitação de recuperação de senha para a sua conta (
-          {userEmail}). Se você não foi o responsável por essa ação, por favor,
-          ignore este e-mail.
+          Foi feita uma solicitação de recuperação de senha para a sua conta ().
+          Se você não foi o responsável por essa ação, por favor, ignore este
+          e-mail.
         </Paragraph>
 
         <Paragraph>
@@ -35,9 +26,7 @@ export function RequestPasswordResetTemplate({
         <Paragraph>- Equipe StarDust! 🚀</Paragraph>
 
         <Link
-          href={`${getAppBaseUrl()}/${
-            ROUTES.server.auth.confirm
-          }?password_token=${passwordToken}`}
+          href={`{{ .SiteURL }}${ROUTES.server.auth.confirm}?token={{ .TokenHash }}&action=password_reset`}
         >
           Redefinir senha
         </Link>
@@ -45,3 +34,10 @@ export function RequestPasswordResetTemplate({
     </Body>
   )
 }
+
+/**
+ * <h2>Redefinição de senha - <span style="color: #00FF88">Star</span><span style="color: #027558">Dust</span></h2>
+
+<p>Clique no link abaixo para mudar sua senha:</p>
+<p><a href="{{ .SiteURL }}/server/auth/confirm?token={{ .TokenHash }}&action=password_reset">Redefinir Senha</a></p>
+ */

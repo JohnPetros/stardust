@@ -28,9 +28,7 @@ export const CookiesController = (): ICookiesController => {
     },
 
     deleteCookie: async (cookieName: string) => {
-      await server.delete<string>(
-        `${ROUTES.server.cookies}/${cookieName}/delete`
-      )
+      await server.delete(`${ROUTES.server.cookies}/${cookieName}/delete`)
     },
   }
 }

@@ -4,7 +4,9 @@ import { Header } from './components/Header'
 import { Link } from './components/Link'
 import { Paragraph } from './components/Paragraph'
 
-export function ConfirmEmailTemplate() {
+import { ROUTES } from '@/utils/constants'
+
+export function ConfirmSignUpTemplate() {
   return (
     <Body>
       <Header>Confirmação de cadastro.</Header>
@@ -28,7 +30,9 @@ export function ConfirmEmailTemplate() {
 
         <Paragraph>- Equipe StarDust! 🚀</Paragraph>
 
-        <Link href={`https://www.waifu.im/search/?included_tags=waifu`}>
+        <Link
+          href={`{{ .SiteURL }}${ROUTES.server.auth.confirm}?token={{ .TokenHash }}&action=signup-confirmation`}
+        >
           Confirmar cadastro
         </Link>
       </Box>

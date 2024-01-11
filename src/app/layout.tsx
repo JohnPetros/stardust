@@ -20,7 +20,7 @@ export default async function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`${roboto_mono.variable} ${poppins.variable} -mt-6 h-screen w-screen bg-gray-900 font-normal`}
+        className={`${roboto_mono.variable} ${poppins.variable} relative h-screen w-screen bg-gray-900 font-normal`}
       >
         <Providers>{children}</Providers>
       </body>

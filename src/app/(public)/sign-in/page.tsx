@@ -11,7 +11,6 @@ import { useSignInForm } from './useSignInForm'
 
 import { Button } from '@/app/components/Button'
 import { Input } from '@/app/components/Input'
-import { Toast } from '@/app/components/Toast'
 import { ROUTES } from '@/utils/constants'
 
 const formAnimations: Variants = {
@@ -51,7 +50,6 @@ export default function SignInPage() {
     errors,
     isLaoding,
     isRocketVisible,
-    toastRef,
     rocketRef,
     register,
     handleSubmit,
@@ -59,8 +57,6 @@ export default function SignInPage() {
 
   return (
     <>
-      <Toast ref={toastRef} />
-
       <RocketAnimation animationRef={rocketRef} isVisible={isRocketVisible} />
 
       <div className="h-screen lg:grid lg:grid-cols-[1fr_1.5fr]">

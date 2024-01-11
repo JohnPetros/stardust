@@ -25,15 +25,11 @@ export function useServer() {
       return data as Response
     },
 
-    async delete<Response>(url: string) {
-      const response = await fetch(`${BASE_URL}/${url}`, {
+    async delete(url: string) {
+      await fetch(`${BASE_URL}/${url}`, {
         method: 'DELETE',
         headers: HEADERS,
       })
-
-      const data = response.json()
-
-      return data as Response
     },
   }
 }

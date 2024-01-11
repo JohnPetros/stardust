@@ -30,8 +30,6 @@ export const AuthController = (supabase: Supabase): IAuthController => {
         },
       })
 
-      // {{ .SiteURL }}/server/auth/confirm?token={{ .TokenHash }}&type=email
-
       if (error) return { userId: null, error }
 
       if (response.user) return { userId: response.user.id, error: null }
@@ -53,7 +51,6 @@ export const AuthController = (supabase: Supabase): IAuthController => {
       })
 
       if (error) {
-        console.log({ error })
         throw new Error(error.message)
       }
     },
@@ -62,8 +59,6 @@ export const AuthController = (supabase: Supabase): IAuthController => {
       const { error } = await supabase.auth.updateUser({
         password: newPassword,
       })
-
-      console.log(error)
 
       if (error) {
         throw new Error(error.message)
