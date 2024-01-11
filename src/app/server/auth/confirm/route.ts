@@ -7,72 +7,64 @@ import { AuthController } from '@/services/api/supabase/controllers/authControll
 import { COOKIES, ROUTES } from '@/utils/constants'
 import { getSearchParams } from '@/utils/helpers/getSearchParams'
 
-type AuthType = 'email' | 'email-change' | 'password-reset'
+type Action = 'signup_confirmation' | 'email_change' | 'password_reset'
 
 export async function GET(request: NextRequest) {
-  const baseUrl = request.url
-  const authToken = getSearchParams(baseUrl, 'auth_token')
-  const authType = getSearchParams(baseUrl, 'type') as AuthType
-
-  if (!authToken)
-    return NextResponse.redirect(new URL(ROUTES.public.signIn, baseUrl))
+  const { url } = request
+  const token = getSearchParams(url, 'token')
+  const action = getSearchParams(url, 'action') as Action
 
   function redirectToSignIn(error: AuthConfirmationError) {
-    NextResponse.redirect(
-      new URL(ROUTES.public.signIn + `?error=${error}`, baseUrl)
+    return NextResponse.redirect(
+      new URL(ROUTES.public.signIn + `?error=${error}`, url)
     )
+  }
+
+  if (!token) {
+    return redirectToSignIn('token_error')
   }
 
   const supabase = createServerClient()
   const authController = AuthController(supabase)
 
-  switch (authType) {
-    case 'email': {
+  switch (action) {
+    case 'signup_confirmation': {
       try {
-        const isConfirmed = await authController.confirmEmail(authToken)
+        const isConfirmed = await authController.confirmEmail(token)
         if (isConfirmed)
           return NextResponse.redirect(
-            new URL(ROUTES.private.authConfirmation, baseUrl)
+            new URL(ROUTES.private.authConfirmation, url)
           )
       } catch (error) {
-        redirectToSignIn('email_confirmation_error')
+        return redirectToSignIn('signup_confirmation_error')
       }
 
       break
     }
-    case 'password-reset': {
-      const passwordToken = getSearchParams(baseUrl, 'password_token')
-      const passwordTokenSecret = process.env.PASSWORD_TOKEN_SECRET
+    case 'password_reset': {
+      try {
+        await authController.confirmPasswordReset(token)
 
-      if (passwordToken && passwordTokenSecret) {
-        try {
-          jwt.verify(passwordToken, passwordTokenSecret)
+        const redirect = NextResponse.redirect(
+          new URL(ROUTES.public.resetPassword, url),
+          { status: 302 }
+        )
 
-          const redirect = NextResponse.redirect(
-            new URL(ROUTES.public.resetPassword, baseUrl),
-            { status: 302 }
-          )
+        redirect.cookies.set(COOKIES.shouldReturnPassword, 'true', {
+          path: '/',
+          httpOnly: true,
+          maxAge: 60 * 15, // 15 minutes
+        })
 
-          redirect.cookies.set(COOKIES.shouldReturnPassword, 'true', {
-            path: '/',
-            httpOnly: true,
-            maxAge: 60 * 15, // 15 minutes
-          })
-
-          return redirect
-        } catch (error) {
-          console.log({ error })
-          redirectToSignIn('password_reset_error')
-        }
-      } else {
-        redirectToSignIn('password_reset_error')
+        return redirect
+      } catch (error) {
+        console.log({ error })
+        return redirectToSignIn('password_reset_error')
       }
-
-      break
     }
     default:
-      return NextResponse.redirect(new URL(ROUTES.public.signIn, baseUrl))
+      return NextResponse.redirect(new URL(ROUTES.public.signIn, url))
   }
 
-  return NextResponse.redirect(new URL(ROUTES.public.signIn, baseUrl))
+  return NextResponse.redirect(new URL(ROUTES.public.signIn, url))
 }

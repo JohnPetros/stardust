@@ -1,8 +1,20 @@
 import { cookies } from 'next/headers'
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
-export async function DELETE(request: NextRequest) {
-  const { cookieName } = await request.json()
+type RouteParams = {
+  params: {
+    cookieName: string
+  }
+}
 
-  cookies().delete(cookieName)
+export async function DELETE(
+  _: NextRequest,
+  { params: { cookieName } }: RouteParams
+) {
+  const hasCookie = cookies().has(cookieName)
+
+  if (hasCookie) cookies().delete(cookieName)
+  else NextResponse.json({ status: 'cookie does not exit' }, { status: 400 })
+
+  return NextResponse.json({ status: 'deleted' })
 }
