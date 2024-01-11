@@ -204,39 +204,41 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
     >
       <Toast ref={toastRef} />
 
-      <Alert
-        ref={newUnlockedAchievementsAlertRef}
-        type={'earning'}
-        title={'Uau! Parece que você ganhou recompensa(s)'}
-        body={
-          <div className="max-h-64 space-y-24 px-6">
-            {newUnlockedAchievements.map((achievement) => (
-              <div key={achievement.id} className="relative z-50">
-                <span
-                  className="absolute block"
-                  style={{ top: -18, left: -31.5 }}
-                >
-                  <ShinningAnimation size={110} />
-                </span>
+      <div className="absolute">
+        <Alert
+          ref={newUnlockedAchievementsAlertRef}
+          type={'earning'}
+          title={'Uau! Parece que você ganhou recompensa(s)'}
+          body={
+            <div className="max-h-64 space-y-24 px-6">
+              {newUnlockedAchievements.map((achievement) => (
+                <div key={achievement.id} className="relative z-50">
+                  <span
+                    className="absolute block"
+                    style={{ top: -18, left: -31.5 }}
+                  >
+                    <ShinningAnimation size={110} />
+                  </span>
 
-                <Achievement
-                  data={achievement}
-                  isUnlocked={true}
-                  isRescuable={false}
-                />
-              </div>
-            ))}
-          </div>
-        }
-        action={
-          <div className="mt-8 w-full">
-            <Button onClick={handleNewUnlockedAchievementsAlertClose}>
-              Entendido
-            </Button>
-          </div>
-        }
-        onClose={handleNewUnlockedAchievementsAlertClose}
-      />
+                  <Achievement
+                    data={achievement}
+                    isUnlocked={true}
+                    isRescuable={false}
+                  />
+                </div>
+              ))}
+            </div>
+          }
+          action={
+            <div className="mt-8 w-full">
+              <Button onClick={handleNewUnlockedAchievementsAlertClose}>
+                Entendido
+              </Button>
+            </div>
+          }
+          onClose={handleNewUnlockedAchievementsAlertClose}
+        />
+      </div>
       {children}
     </AchivementsContext.Provider>
   )
