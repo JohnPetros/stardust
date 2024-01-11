@@ -1,15 +1,5 @@
 import { AuthError, Session } from '@supabase/supabase-js'
 
-type SignInResponse =
-  | {
-      session: null
-      error: string
-    }
-  | {
-      session: Session
-      error: null
-    }
-
 type SignUpResponse =
   | {
       userId: null
@@ -22,9 +12,10 @@ type SignUpResponse =
   | null
 
 export interface IAuthController {
-  signIn(email: string, password: string): Promise<SignInResponse>
+  signIn(email: string, password: string): Promise<Session>
   signUp(email: string, password: string): Promise<SignUpResponse>
   signOut(): Promise<void>
+  requestPasswordReset(email: string): Promise<void>
   resetPassword(newPassword: string): Promise<void>
   githubOAuth(): Promise<void>
   getUserId(): Promise<string | null>

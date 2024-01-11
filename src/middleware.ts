@@ -12,9 +12,6 @@ export async function middleware(req: NextRequest) {
   const supabase = createMiddlewareClient<Database>({ req, res })
   const hasRedirect = getSearchParams(req.url, 'redirect_to')
 
-  console.log(req.url)
-  console.log({ hasRedirect })
-
   if (hasRedirect) {
     return NextResponse.redirect(new URL(hasRedirect, req.url))
   }
@@ -26,10 +23,6 @@ export async function middleware(req: NextRequest) {
   const authController = AuthController(supabase)
 
   const hasSession = Boolean(await authController.getUserId())
-
-  if (hasSession && currentRoute === ROUTES.public.signIn) {
-    return NextResponse.redirect(new URL(ROUTES.private.home, req.url))
-  }
 
   if (!hasSession && !isPublicRoute) {
     return NextResponse.redirect(new URL(ROUTES.public.signIn, req.url))

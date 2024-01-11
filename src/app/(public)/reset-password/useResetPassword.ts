@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react'
 import { useToast } from '@/contexts/ToastContext'
 import { emailSchema } from '@/libs/zod'
 import { useApi } from '@/services/api'
-import { useEmail } from '@/services/email'
 import { COOKIES } from '@/utils/constants'
 
 export function useResetPassword() {
@@ -13,7 +12,6 @@ export function useResetPassword() {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [shouldResetPassword, setShouldResetPassword] = useState(false)
-  const { sendRequestPasswordResetEmail } = useEmail()
   const toast = useToast()
   const api = useApi()
 
@@ -35,7 +33,7 @@ export function useResetPassword() {
 
           if (!hasUser) setError('Usuário não encontrado com esse e-mail')
 
-          await sendRequestPasswordResetEmail(email)
+          await api.requestPasswordReset(email)
 
           toast.show('Enviamos um e-mail para você redefinir sua senha', {
             seconds: 5,

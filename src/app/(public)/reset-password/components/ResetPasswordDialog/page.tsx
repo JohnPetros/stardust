@@ -14,31 +14,26 @@ import {
   DialogTrigger,
 } from '@/app/components/Dialog'
 import { Input } from '@/app/components/Input'
-import { useAuth } from '@/contexts/AuthContext'
 
 interface ResetPasswordDialogProps {
   children: ReactNode
 }
 
 export function ResetPasswordDialog({ children }: ResetPasswordDialogProps) {
-  const { user } = useAuth()
   const alertRef = useRef<AlertRef | null>(null)
-  const hasUser = !!user
 
   const { errors, isLoading, register, handleSubmit, handleAlert } =
-    useResetPasswordDialog(alertRef.current, hasUser)
+    useResetPasswordDialog(alertRef.current)
 
   return (
     <>
       <Alert
         type="asking"
         ref={alertRef}
-        title="Você redefiniu sua senha"
+        title="Você redefiniu sua senha com sucesso!"
         body={
-          <p className="text-center text-lg text-green-500">
-            {hasUser
-              ? 'você pode voltar para o que estava fazendo'
-              : 'vamos redirecionar você para fazer login com sua nova senha'}
+          <p className="mb-3 text-center text-base text-green-500">
+            vamos redirecionar você para fazer login com sua nova senha
           </p>
         }
         canPlaySong={false}
@@ -56,7 +51,7 @@ export function ResetPasswordDialog({ children }: ResetPasswordDialogProps) {
               autoFocus
               {...register('password')}
               error={errors.password?.message}
-              placeholder="seu@password.com"
+              placeholder="********"
             />
             <Input
               label="Confirme sua nova senha"
@@ -64,7 +59,7 @@ export function ResetPasswordDialog({ children }: ResetPasswordDialogProps) {
               icon={LockSimple}
               {...register('password_confirmation')}
               error={errors.password_confirmation?.message}
-              placeholder="seu@password.com"
+              placeholder="********"
             />
             <Button onClick={handleSubmit} isLoading={isLoading}>
               Redefinir senha

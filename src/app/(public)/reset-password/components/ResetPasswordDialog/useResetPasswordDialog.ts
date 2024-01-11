@@ -11,10 +11,7 @@ import { ResetPasswordFormFields, resetPasswordFormSchema } from '@/libs/zod'
 import { useApi } from '@/services/api'
 import { ROUTES } from '@/utils/constants'
 
-export function useResetPasswordDialog(
-  alertRef: AlertRef | null,
-  hasUser: boolean
-) {
+export function useResetPasswordDialog(alertRef: AlertRef | null) {
   const {
     register,
     handleSubmit,
@@ -28,8 +25,7 @@ export function useResetPasswordDialog(
   const api = useApi()
 
   function handleAlert() {
-    if (hasUser) router.back()
-    else router.push(ROUTES.public.signIn)
+    router.push(ROUTES.public.signIn)
   }
 
   async function handleFormSubmit({ password }: ResetPasswordFormFields) {
@@ -41,7 +37,7 @@ export function useResetPasswordDialog(
       alertRef?.open()
     } catch (error) {
       console.error(error)
-      toast.show('Erro ao redefinir sua senha, tente novamente mais tarde', {
+      toast.show('Erro de redefinição, escolha outra senha', {
         type: 'error',
         seconds: 5,
       })

@@ -13,10 +13,10 @@ export const AuthController = (supabase: Supabase): IAuthController => {
       })
 
       if (error) {
-        return { session: null, error: error.message }
+        throw new Error(error.message)
       }
 
-      return { session: data.session, error: null }
+      return data.session
     },
 
     signUp: async (email: string, password: string) => {
@@ -47,15 +47,34 @@ export const AuthController = (supabase: Supabase): IAuthController => {
       }
     },
 
+    requestPasswordReset: async (email: string) => {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${getAppBaseUrl()}${ROUTES.server.auth.confirm}`,
+      })
+
+      if (error) {
+        console.log({ error })
+        throw new Error(error.message)
+      }
+    },
+
     resetPassword: async (newPassword: string) => {
-      await supabase.auth.updateUser({ password: newPassword })
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword,
+      })
+
+      console.log(error)
+
+      if (error) {
+        throw new Error(error.message)
+      }
     },
 
     githubOAuth: async () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
-          redirectTo: `${getAppBaseUrl()}/${ROUTES.server.auth.confirm}`,
+          redirectTo: `${getAppBaseUrl()}${ROUTES.server.auth.confirm}`,
         },
       })
 
