@@ -13,7 +13,7 @@ export type OAuthProvider = 'github'
 export interface AuthContextValue {
   user: User | null
   isLoading: boolean
-  signIn: (email: string, password: string) => Promise<string | null>
+  signIn: (email: string, password: string) => Promise<void>
   signUp: (
     email: string,
     password: string
@@ -66,15 +66,13 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
   )
 
   async function signIn(email: string, password: string) {
-    const { session, error } = await api.signIn(email, password)
-
-    if (error) {
-      return error
+    try {
+      const session = await api.signIn(email, password)
+      setSession(session)
+    } catch (error) {
+      console.error(error)
+      throw new Error()
     }
-
-    setSession(session)
-
-    return null
   }
 
   if (fetchUserError) console.error(fetchUserError)

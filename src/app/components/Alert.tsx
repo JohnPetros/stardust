@@ -117,22 +117,13 @@ const AlertComponent = (
               </div>
 
               {body}
-              <div className="mt-3 flex justify-center gap-2">
-                {canForceMount ? (
-                  <>
-                    {action}
-                    {cancel}
-                  </>
-                ) : (
-                  <>
-                    <AlertDialog.AlertDialogAction asChild>
-                      {action}
-                    </AlertDialog.AlertDialogAction>
-                    <AlertDialog.AlertDialogCancel asChild>
-                      {cancel}
-                    </AlertDialog.AlertDialogCancel>
-                  </>
-                )}
+              <div className="mt-4 flex justify-center gap-2">
+                <AlertDialog.AlertDialogAction asChild>
+                  {action}
+                </AlertDialog.AlertDialogAction>
+                <AlertDialog.AlertDialogCancel asChild>
+                  {cancel}
+                </AlertDialog.AlertDialogCancel>
               </div>
             </DialogAnimation>
           </AlertDialog.Content>

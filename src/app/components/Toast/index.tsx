@@ -85,7 +85,7 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
                 close()
               }}
               className={twMerge(
-                'rounded',
+                'fixed right-4 top-4 z-[500] rounded',
                 type === 'error' ? 'bg-red-800' : 'bg-green-900'
               )}
             >
