@@ -1,4 +1,4 @@
-interface CounterBadgeProps {
+type CounterBadgeProps = {
   count: number
 }
 

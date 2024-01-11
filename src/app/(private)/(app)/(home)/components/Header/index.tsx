@@ -5,12 +5,11 @@ import { motion, Variants } from 'framer-motion'
 import Lottie from 'lottie-react'
 import Image from 'next/image'
 
-import StreakAnimation from '../../../../../../public/animations/streak.json'
+import StreakAnimation from '../../../../../../../public/animations/streak.json'
+import { CounterBadge } from '../CounterBadge'
+import { UserAvatar } from '../UseAvatar'
 
-import { CounterBadge } from './CounterBadge'
-import { UserAvatar } from './UserAvatar'
-
-import { useAchivements } from '@/contexts/AchievementsContext'
+import { useAchivementsContext } from '@/contexts/AchievementsContext'
 import { useAuth } from '@/contexts/AuthContext'
 import { useSiderbar } from '@/contexts/SidebarContext'
 
@@ -29,7 +28,7 @@ const headerAnimations: Variants = {
 export function Header() {
   const { user } = useAuth()
   const { toggle, isOpen } = useSiderbar()
-  const { rescueableAchievementsAmount } = useAchivements()
+  const { rescueableAchievementsAmount } = useAchivementsContext()
 
   if (user?.id)
     return (

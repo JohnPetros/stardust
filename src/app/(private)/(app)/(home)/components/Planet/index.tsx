@@ -3,10 +3,10 @@
 import { motion, Variants } from 'framer-motion'
 import Image from 'next/image'
 
-import { Star } from './Star'
+import { Star } from '../Star'
 
 import type { Planet } from '@/@types/planet'
-import { getImage } from '@/utils/helpers'
+import { useApi } from '@/services/api'
 
 const planetSignAnimations: Variants = {
   float: {
@@ -18,7 +18,7 @@ const planetSignAnimations: Variants = {
   },
 }
 
-interface PlanetProps {
+type PlanetProps = {
   data: Planet
   lastUnlockedStarId: string
 }
@@ -27,8 +27,10 @@ export function Planet({
   data: { name, image, icon, stars },
   lastUnlockedStarId,
 }: PlanetProps) {
-  const planetImage = getImage('planets', image)
-  const planetIcon = getImage('planets', icon)
+  const api = useApi()
+
+  const planetImage = api.getImage('planets', image)
+  const planetIcon = api.getImage('planets', icon)
 
   return (
     <li>

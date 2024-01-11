@@ -2,9 +2,9 @@
 import { X } from '@phosphor-icons/react'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 
-import { AchievementsList } from './AchievementsList'
-import { SignOutAlert } from './SignOutAlert'
-import { UserAvatar } from './UserAvatar'
+import { AchievementsList } from '../AchievementsList'
+import { SignOutAlert } from '../SignOutAlert'
+import { UserAvatar } from '../UseAvatar'
 
 import { Button } from '@/app/components/Button'
 import { useAuth } from '@/contexts/AuthContext'

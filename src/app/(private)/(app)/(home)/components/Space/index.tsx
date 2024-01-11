@@ -3,12 +3,11 @@
 import { useEffect, useState } from 'react'
 import { CaretDown, CaretUp, Icon } from '@phosphor-icons/react'
 
-import { Fab } from '../../../../components/Fab'
-import { PageTransitionAnimation } from '../../../../components/PageTransitionAnimation'
-
-import { Planet } from './Planet'
+import { Fab } from '../../../../../components/Fab'
+import { Planet } from '../Planet'
 
 import type { Planet as PlanetData } from '@/@types/planet'
+import { PageTransitionAnimation } from '@/app/components/PageTransitionAnimation'
 import { StarViewPortPosition } from '@/contexts/SpaceContext'
 import { useSpace } from '@/contexts/SpaceContext'
 import { usePlanets } from '@/hooks/usePlanets'
@@ -19,7 +18,7 @@ const fabIcon: Record<StarViewPortPosition, Icon> = {
   in: CaretDown,
 }
 
-interface SpaceProps {
+type SpaceProps = {
   planets: PlanetData[]
 }
 

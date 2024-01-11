@@ -1,5 +1,5 @@
 'use client'
-import { NavButton } from './NavButton'
+import { NavButton } from '../NavButton'
 
 import { HOME_PAGES } from '@/utils/constants/home-pages'
 

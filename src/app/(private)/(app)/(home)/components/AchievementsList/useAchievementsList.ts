@@ -1,24 +1,18 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ArrowsDownUp } from '@phosphor-icons/react'
-import { twMerge } from 'tailwind-merge'
 
-import { Achievement } from './Achievement'
-
-import type { Achievement as AchievementItem } from '@/@types/achievement'
-import { Loading } from '@/app/components/Loading'
-import { PopoverMenu, PopoverMenuButton } from '@/app/components/PopoverMenu'
-import { Search } from '@/app/components/Search'
-import { useAchivements } from '@/contexts/AchievementsContext'
-import { useAuth } from '@/contexts/AuthContext'
-import { filterItemBySearch } from '@/utils/helpers'
+import { Achievement } from '../Achievement'
 
 type Sorter = 'Ordem padrão' | 'Desbloqueadas' | 'Bloqueadas'
 
-export function AchievementsList() {
-  const { user } = useAuth()
-  const { achievements: data } = useAchivements()
+import type { Achievement as AchievementItem } from '@/@types/achievement'
+import { PopoverMenuButton } from '@/app/components/PopoverMenu'
+import { useAchivementsContext } from '@/contexts/AchievementsContext'
+import { filterItemBySearch } from '@/utils/helpers'
+
+export function useAchievementsList() {
+  const { achievements: data } = useAchivementsContext()
   const [isLoading, setIsloading] = useState(!!data)
   const [achievements, setAchievements] = useState<AchievementItem[]>([])
   const [sorter, setSorter] = useState<Sorter>('Ordem padrão')
@@ -77,27 +71,6 @@ export function AchievementsList() {
     setAchievements(sortedAchievements)
   }
 
-  const popoverMenuButtons: PopoverMenuButton[] = [
-    {
-      title: 'Ordem padrão',
-      isToggle: true,
-      value: sorter === 'Ordem padrão',
-      action: () => sortAchievements('Ordem padrão'),
-    },
-    {
-      title: 'Desbloqueadas',
-      isToggle: true,
-      value: sorter === 'Desbloqueadas',
-      action: () => sortAchievements('Desbloqueadas'),
-    },
-    {
-      title: 'Bloqueadas',
-      isToggle: true,
-      value: sorter === 'Bloqueadas',
-      action: () => sortAchievements('Bloqueadas'),
-    },
-  ]
-
   function filterAchievementsBySearch(search: string) {
     if (data?.length)
       setAchievements(() =>
@@ -124,43 +97,31 @@ export function AchievementsList() {
     return () => clearTimeout(timer)
   }, [data, isLoading])
 
-  if (user)
-    return (
-      <div
-        className={twMerge(
-          'flex flex-shrink-0 flex-col gap-6',
-          isLoading ? 'h-full items-center justify-center' : 'pb-32'
-        )}
-      >
-        {!isLoading ? (
-          <>
-            <Search
-              id="search-achivements"
-              name="search-achivements"
-              placeholder="pesquisar conquista"
-              onSearchChange={handleSearchChange}
-            />
-            <div className="ml-auto w-max">
-              <PopoverMenu
-                label="Abrir menu para ordernar lista de conquistas"
-                buttons={popoverMenuButtons}
-                trigger={<ArrowsDownUp className="text-lg text-gray-500" />}
-              />
-            </div>
-            <div className="-mt-8">
-              {achievements?.map((achievement) => (
-                <Achievement
-                  key={achievement.id}
-                  data={achievement}
-                  isUnlocked={achievement.isUnlocked}
-                  isRescuable={achievement.isRescuable}
-                />
-              ))}
-            </div>
-          </>
-        ) : (
-          <Loading />
-        )}
-      </div>
-    )
+  const popoverMenuButtons: PopoverMenuButton[] = [
+    {
+      title: 'Ordem padrão',
+      isToggle: true,
+      value: sorter === 'Ordem padrão',
+      action: () => sortAchievements('Ordem padrão'),
+    },
+    {
+      title: 'Desbloqueadas',
+      isToggle: true,
+      value: sorter === 'Desbloqueadas',
+      action: () => sortAchievements('Desbloqueadas'),
+    },
+    {
+      title: 'Bloqueadas',
+      isToggle: true,
+      value: sorter === 'Bloqueadas',
+      action: () => sortAchievements('Bloqueadas'),
+    },
+  ]
+
+  return {
+    popoverMenuButtons,
+    isLoading,
+    achievements,
+    handleSearchChange,
+  }
 }

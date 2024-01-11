@@ -1,19 +1,15 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
-import { motion, useInView, Variants } from 'framer-motion'
-import Lottie, { LottieRef } from 'lottie-react'
+import { motion, Variants } from 'framer-motion'
+import Lottie from 'lottie-react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import { twMerge } from 'tailwind-merge'
 
-import UnlockedStar from '../../../../../../public/animations/unlocked-star.json'
+import UnlockedStar from '../../../../../../../public/animations/unlocked-star.json'
+
+import { useStar } from './useStar'
 
 import type { Star } from '@/@types/star'
-import { Toast, ToastRef } from '@/app/components/Toast'
-import { useSpace } from '@/contexts/SpaceContext'
-import { useApi } from '@/services/api'
-import { ROUTES } from '@/utils/constants'
 
 const starLight = '0 0 12px #ffcf31a1'
 
@@ -46,7 +42,7 @@ const rocketVariants: Variants = {
   },
 }
 
-interface StarProps {
+type StarProps = {
   data: Star
   isLastUnlockedStar: boolean
 }
@@ -55,60 +51,11 @@ export function Star({
   data: { id, name, number, isChallenge, isUnlocked, slug },
   isLastUnlockedStar,
 }: StarProps) {
-  const {
-    spaceRocket,
-    lastUnlockedStarRef,
-    scrollIntoLastUnlockedStar,
-    setLastUnlockedStarPosition,
-  } = useSpace()
-  const starRef = useRef(null) as LottieRef
-  const toastRef = useRef<ToastRef>(null)
-  const router = useRouter()
-  const api = useApi()
-  const isInView = useInView(lastUnlockedStarRef)
-
-  async function handleStarNavigation() {
-    if (isChallenge) {
-      try {
-        const challengeSlug = await api.getChallengeSlugByStarId(id)
-        router.push('/challenges/' + challengeSlug)
-      } catch (error) {
-        console.log(error)
-        toastRef.current?.open({
-          type: 'error',
-          message: 'Falha ao tentar acessar o desafio',
-        })
-      }
-    } else {
-      router.push(`${ROUTES.private.lesson}/${slug}`)
-    }
-  }
-
-  function handleStarClick() {
-    starRef.current?.goToAndPlay(0)
-
-    setTimeout(() => {
-      handleStarNavigation()
-    }, 50)
-  }
-
-  useEffect(() => {
-    if (isLastUnlockedStar) {
-      setLastUnlockedStarPosition('in')
-    }
-  }, [isLastUnlockedStar, isInView])
-
-  useEffect(() => {
-    if (isLastUnlockedStar && lastUnlockedStarRef.current) {
-      setTimeout(() => {
-        scrollIntoLastUnlockedStar()
-      }, 1500)
-    }
-  }, [isLastUnlockedStar, lastUnlockedStarRef])
+  const { starRef, lastUnlockedStarRef, spaceRocket, handleStarClick } =
+    useStar({ id, slug, isChallenge }, isLastUnlockedStar)
 
   return (
     <li ref={isLastUnlockedStar ? lastUnlockedStarRef : null}>
-      <Toast ref={toastRef} />
       <div>
         <Image
           src={`/images/${

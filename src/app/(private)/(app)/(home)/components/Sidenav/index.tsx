@@ -1,19 +1,17 @@
 'use client'
 
-import { useRef } from 'react'
 import { CaretLeft, CaretRight, Flag, Power } from '@phosphor-icons/react'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { AchievementsList } from './AchievementsList'
-import { CounterBadge } from './CounterBadge'
-import { NavButton } from './NavButton'
-import { SidenavButton } from './SidenavButton'
-import { SignOutAlert } from './SignOutAlert'
+import { AchievementsList } from '../AchievementsList'
+import { CounterBadge } from '../CounterBadge'
+import { NavButton } from '../NavButton'
+import { SidenavButton } from '../SidenavButton'
+import { SignOutAlert } from '../SignOutAlert'
 
-import { Toast, ToastRef } from '@/app/components/Toast'
-import { useAchivements } from '@/contexts/AchievementsContext'
+import { useAchivementsContext } from '@/contexts/AchievementsContext'
 import { useAuth } from '@/contexts/AuthContext'
 import { useSiderbar } from '@/contexts/SidebarContext'
 import { HOME_PAGES } from '@/utils/constants/home-pages'
@@ -43,7 +41,7 @@ const achievementsAnimations: Variants = {
   },
 }
 
-interface SidenavProps {
+type SidenavProps = {
   isExpanded: boolean
   toggleSidenav: VoidFunction
 }
@@ -52,9 +50,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
   const { user } = useAuth()
   const { isAchievementsListVisible, setIsAchievementsListVisible } =
     useSiderbar()
-  const { rescueableAchievementsAmount } = useAchivements()
-
-  const toastRef = useRef<ToastRef>(null)
+  const { rescueableAchievementsAmount } = useAchivementsContext()
 
   function handleAchievementsListButtonClick() {
     setIsAchievementsListVisible(!isAchievementsListVisible)
@@ -68,8 +64,6 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
       animate={isExpanded ? 'expand' : ''}
       className="left-0 top-0 z-50 hidden h-full bg-gray-900 md:fixed md:flex"
     >
-      <Toast ref={toastRef} />
-
       <div className="reative flex h-full flex-col justify-between">
         <button
           onClick={toggleSidenav}

@@ -1,15 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import * as Progress from '@radix-ui/react-progress'
 import { motion, Variants } from 'framer-motion'
 import Image from 'next/image'
 
+import { useAchievement } from './useAchievement'
+
 import type { Achievement as AchievementType } from '@/@types/achievement'
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
-import { useAchivements } from '@/contexts/AchievementsContext'
-import { getImage } from '@/utils/helpers'
 
 const achievementAnimations: Variants = {
   hidden: {
@@ -36,54 +35,23 @@ const rescueButtonAnimations: Variants = {
   },
 }
 
-type Status = {
-  formatedCurrentProgress: number
-  barWidth: number
-  canRescue: boolean
-}
-
-interface AchievementProps {
+type AchievementProps = {
   data: AchievementType
   isUnlocked: boolean
   isRescuable: boolean
 }
 
 export function Achievement({
-  data: {
-    id,
-    name,
-    description,
-    icon,
-    required_amount,
-    currentProgress,
-    reward,
-  },
+  data,
   isUnlocked,
   isRescuable,
 }: AchievementProps) {
-  const iconImage = getImage('achievements', icon)
-  const [status, setStatus] = useState<Status | null>(null)
-  const { rescueAchivement, handleRescuedAchievementsAlertClose } =
-    useAchivements()
-
-  async function handleRescuButtonClick() {
-    await rescueAchivement(id, reward)
-  }
-
-  useEffect(() => {
-    if (currentProgress || currentProgress === 0) {
-      const percentage = (currentProgress / required_amount) * 100
-      const barWidth = percentage > 100 ? 100 : percentage
-      const canRescue = isRescuable
-
-      const formatedCurrentProgress =
-        currentProgress && currentProgress >= required_amount
-          ? required_amount
-          : currentProgress
-
-      setStatus({ barWidth, canRescue, formatedCurrentProgress })
-    }
-  }, [currentProgress, isRescuable, required_amount])
+  const {
+    status,
+    iconImage,
+    handleRescuButtonClick,
+    handleRescuedAchievementsAlertClose,
+  } = useAchievement(data)
 
   return (
     <motion.div
@@ -105,7 +73,7 @@ export function Achievement({
         )}
       </div>
       <div className="flex flex-col gap-1">
-        <strong className="text-sm text-gray-100">{name}</strong>
+        <strong className="text-sm text-gray-100">{data.name}</strong>
         {isRescuable ? (
           <Alert
             type={'earning'}
@@ -115,14 +83,14 @@ export function Achievement({
                 <p className="text-center font-medium text-gray-100">
                   Parabéns! Você acabou de ganhar{' '}
                   <span className="text-lg font-semibold text-yellow-400">
-                    {reward}
+                    {data.reward}
                   </span>{' '}
                   de poeira estela pela conquista:
                 </p>
                 <div className="mt-6 flex flex-col items-center justify-center">
                   <Image src={iconImage} width={72} height={72} alt="" />
                   <p className="mt-2 text-center font-semibold text-green-500">
-                    {name}
+                    {data.name}
                   </p>
                 </div>
               </div>
@@ -130,12 +98,12 @@ export function Achievement({
             action={
               <Button
                 className="mt-6"
-                onClick={() => handleRescuedAchievementsAlertClose(id)}
+                onClick={() => handleRescuedAchievementsAlertClose(data.id)}
               >
                 Entendido
               </Button>
             }
-            onClose={() => handleRescuedAchievementsAlertClose(id)}
+            onClose={() => handleRescuedAchievementsAlertClose(data.id)}
           >
             <motion.div
               variants={rescueButtonAnimations}
@@ -153,7 +121,7 @@ export function Achievement({
           </Alert>
         ) : (
           <>
-            <p className="text-xs text-gray-100">{description}</p>
+            <p className="text-xs text-gray-100">{data.description}</p>
             {!isUnlocked && (
               <div className="flex w-full items-center gap-2">
                 <Progress.Root
@@ -166,7 +134,7 @@ export function Achievement({
                   />
                 </Progress.Root>
                 <span className="text-sm text-gray-100">
-                  {status?.formatedCurrentProgress}/{required_amount}
+                  {status?.formatedCurrentProgress}/{data.required_amount}
                 </span>
               </div>
             )}

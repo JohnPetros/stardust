@@ -12,7 +12,7 @@ import {
   TooltipTrigger,
 } from '@/app/components/Tooltip'
 
-interface SidenavButtonProps {
+type SidenavButtonProps = {
   icon: Icon
   title: string
   isExpanded: boolean
