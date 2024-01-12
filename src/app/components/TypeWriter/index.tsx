@@ -2,7 +2,9 @@
 
 import Typewriter from 'typewriter-effect'
 
-interface TypeWriterProps {
+import { useTypeWriter } from './useTypeWriter'
+
+export type TypeWriterProps = {
   text: string
   isEnable?: boolean
   delay?: number
@@ -19,23 +21,18 @@ export function TypeWriter({
   hasLoop = false,
   onDeleteChar,
 }: TypeWriterProps) {
-  function handleDeleteChar() {
-    if (onDeleteChar && hasLoop) {
-      onDeleteChar()
-    }
-  }
+  const { options } = useTypeWriter({
+    delay,
+    deleteDelay,
+    hasLoop,
+    onDeleteChar,
+  })
 
   if (isEnable)
     return (
       <Typewriter
         component={'span'}
-        options={{
-          delay,
-          deleteSpeed: deleteDelay,
-          skipAddStyles: true,
-          loop: hasLoop,
-          onRemoveNode: () => handleDeleteChar(),
-        }}
+        options={options}
         onInit={(typewriter) => {
           typewriter
             .callFunction(() => {
