@@ -9,13 +9,19 @@ export function useMdx(content: string) {
   const api = useApi()
   const [source, setSource] = useState<MDXRemoteSerializeResult | null>(null)
 
+  console.log({ content })
+
   useEffect(() => {
     let isMounted = true
 
     async function fetchSource() {
-      const source = await api.compileMdx(content)
+      try {
+        const source = await api.compileMdx(content)
 
-      setSource(source)
+        setSource(source)
+      } catch (error) {
+        console.error(error)
+      }
     }
 
     if (isMounted) fetchSource()
