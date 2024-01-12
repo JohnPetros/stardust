@@ -9,7 +9,7 @@ export const StarsController = (supabase: Supabase): IStarsController => {
       const { data, error } = await supabase
         .from('stars')
         .select('*, questions(*)')
-        .eq('id', starSlug)
+        .eq('slug', starSlug)
         .order('order', { foreignTable: 'questions', ascending: true })
         .single<Star>()
 

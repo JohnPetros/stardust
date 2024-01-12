@@ -2,6 +2,7 @@ import { IAchievementsController } from './IAchievementsController'
 import { IAuthController } from './IAuthController'
 import { IAvatarsController } from './IAvatarsController'
 import { ICategoriesController } from './ICategoriesController'
+import { ICdnController } from './ICdnController'
 import { IChallengesController } from './IChallengesController'
 import { ICookiesController } from './ICookiesController'
 import { IMdxController } from './IMdxController'
@@ -19,6 +20,7 @@ export interface IApi
     IStarsController,
     IAvatarsController,
     IChallengesController,
+    ICdnController,
     ICategoriesController,
     ICookiesController,
     IMdxController {}
