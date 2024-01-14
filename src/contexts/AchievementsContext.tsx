@@ -244,11 +244,13 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
   )
 }
 
-export function useAchivements() {
+export function useAchivementsContext() {
   const context = useContext(AchivementsContext)
 
   if (!context) {
-    throw new Error('useAchivements must be used inside AchivementsContext')
+    throw new Error(
+      'useAchivementsContext must be used inside AchivementsContext'
+    )
   }
 
   return context

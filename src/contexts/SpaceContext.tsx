@@ -6,6 +6,7 @@ import {
   RefObject,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -79,6 +80,17 @@ export function SpaceProvider({ children }: SpaceContextProps) {
     }
   }
 
+  const spaceContextValue = useMemo(
+    () => ({
+      spaceRocket,
+      lastUnlockedStarRef,
+      lastUnlockedStarPosition,
+      scrollIntoLastUnlockedStar,
+      setLastUnlockedStarPosition,
+    }),
+    [lastUnlockedStarRef, lastUnlockedStarPosition, spaceRocket]
+  )
+
   useEffect(() => {
     if (rocket?.image && rocket?.name) {
       const rocketImage = getImage('rockets', rocket.image)
@@ -88,25 +100,17 @@ export function SpaceProvider({ children }: SpaceContextProps) {
   }, [rocket, user?.rocket_id])
 
   return (
-    <SpaceContext.Provider
-      value={{
-        spaceRocket,
-        lastUnlockedStarRef,
-        lastUnlockedStarPosition,
-        scrollIntoLastUnlockedStar,
-        setLastUnlockedStarPosition,
-      }}
-    >
+    <SpaceContext.Provider value={spaceContextValue}>
       {children}
     </SpaceContext.Provider>
   )
 }
 
-export function useSpace() {
+export function useSpaceContext() {
   const context = useContext(SpaceContext)
 
   if (!context) {
-    throw new Error('useSpace must be used inside SpaceProvider')
+    throw new Error('useSpaceContext must be used inside SpaceProvider')
   }
 
   return context
