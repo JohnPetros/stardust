@@ -1,16 +1,10 @@
 'use client'
 
-import {
-  ForwardedRef,
-  forwardRef,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react'
+import { ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 import { CaretDown } from '@phosphor-icons/react'
-import { motion, PanInfo, useAnimation, Variants } from 'framer-motion'
+import { motion, Variants } from 'framer-motion'
+
+import { useConsole } from './useConsole'
 
 const consoleAnimations: Variants = {
   closed: {
@@ -21,12 +15,12 @@ const consoleAnimations: Variants = {
   },
 }
 
-interface ConsoleProps {
+export type ConsoleProps = {
   results: string[]
   height: number
 }
 
-export interface ConsoleRef {
+export type ConsoleRef = {
   open: VoidFunction
   close: VoidFunction
 }
@@ -35,38 +29,14 @@ export function ConsoleComponent(
   { results, height }: ConsoleProps,
   ref: ForwardedRef<ConsoleRef>
 ) {
-  const [output, setOutput] = useState<string[]>([])
-  const types = useRef<string[]>([])
-  const controls = useAnimation()
-
-  function calculateMinHeight() {
-    return ((height + 100) / 10) * 0.5 + 'rem'
-  }
-
-  const open = useCallback(() => {
-    controls.start('open')
-  }, [controls])
-
-  const close = useCallback(() => {
-    controls.start('closed')
-  }, [controls])
-
-  function formatOutput(output: string, index: number) {
-    switch (types.current[index].trim()) {
-      case 'textoo':
-        return "'" + output + "'"
-      case 'vetor':
-        return '[ ' + output.split(',').join(', ') + ' ]'
-      default:
-        return output
-    }
-  }
-
-  function handleDragEnd(_: unknown, info: PanInfo) {
-    if (info.velocity.y > 20 && info.offset.y >= 50) {
-      close()
-    }
-  }
+  const {
+    output,
+    animationControls,
+    open,
+    close,
+    calculateMinHeight,
+    handleDragEnd,
+  } = useConsole({ results, height })
 
   useImperativeHandle(
     ref,
@@ -79,21 +49,11 @@ export function ConsoleComponent(
     [open, close]
   )
 
-  useEffect(() => {
-    setOutput([])
-    if (!results.length) return
-
-    types.current = results.filter((_, index) => index % 2 === 0)
-    const output = results.filter((_, index) => index % 2 !== 0)
-
-    setOutput(output.map((output, index) => formatOutput(output.trim(), index)))
-  }, [results])
-
   return (
     <motion.div
       variants={consoleAnimations}
+      animate={animationControls}
       initial="closed"
-      animate={controls}
       drag="y"
       dragConstraints={{ top: 0 }}
       dragElastic={0}

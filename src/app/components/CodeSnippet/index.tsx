@@ -1,36 +1,25 @@
 'use client'
 
-import { useMemo, useRef } from 'react'
 import { ArrowClockwise } from '@phosphor-icons/react'
 import * as ToolBar from '@radix-ui/react-toolbar'
 import { twMerge } from 'tailwind-merge'
 
-import { PlaygroundCodeEditor, PlaygroundCodeRef } from './CodeEditor'
+import { CodeEditorPlayground } from '../CodeEditorPlayground'
 
-interface CodeSnippetProps {
+import { useCodeSnippet } from './useCodeSnippet'
+
+export type CodeSnippetProps = {
   code: string
   isRunnable?: boolean
 }
 
 export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
-  const codeEditorRef = useRef<PlaygroundCodeRef | null>(null)
-
-  async function handleRunCode() {
-    codeEditorRef.current?.runUserCode()
-  }
-
-  function handleReloadButtonClick() {
-    codeEditorRef.current?.reloadValue()
-  }
-
-  console.log({ code })
-
-  const editorHeight = useMemo(() => {
-    const lines = code.split('\n').length
-
-    if (isRunnable) return 100 + lines * (lines >= 10 ? 20 : 32)
-    else return 100 + lines
-  }, [code, isRunnable])
+  const {
+    codeEditorRef,
+    editorHeight,
+    handleReloadButtonClick,
+    handleRunCode,
+  } = useCodeSnippet({ code, isRunnable })
 
   return (
     <div
@@ -58,7 +47,7 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
         )}
       </ToolBar.Root>
 
-      <PlaygroundCodeEditor
+      <CodeEditorPlayground
         ref={codeEditorRef}
         code={code}
         isRunnable={isRunnable}

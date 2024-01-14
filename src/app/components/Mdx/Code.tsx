@@ -1,10 +1,10 @@
-import { CodeSnippet } from '../Code/CodeSnippet'
+import { CodeSnippet } from '../CodeSnippet'
 
 import { Animation } from './Animation'
 
 import { formatCode } from '@/utils/helpers/formatCode'
 
-interface CodeProps {
+type CodeProps = {
   code: string
   isRunnable: boolean
   children: string
@@ -12,7 +12,6 @@ interface CodeProps {
 }
 
 export function Code({ isRunnable, children, hasAnimation = true }: CodeProps) {
-  console.log({ children })
   return (
     <Animation hasAnimation={hasAnimation}>
       <CodeSnippet

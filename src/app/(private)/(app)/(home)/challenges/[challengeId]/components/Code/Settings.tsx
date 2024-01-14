@@ -3,14 +3,14 @@ import { DialogTrigger } from '@radix-ui/react-dialog'
 
 import { Dialog, DialogContent, DialogHeader } from '@/app/components/Dialog'
 import { RangeInput } from '@/app/components/RadioInput'
-import { useEditor } from '@/hooks/useEditor'
+import { useEditorContext } from '@/contexts/EditorContext'
 
 interface SettingsProps {
   children: ReactNode
 }
 
 export function Settings({ children }: SettingsProps) {
-  const { state, dispatch } = useEditor()
+  const { state, dispatch } = useEditorContext()
 
   function handleFontSizeRangeValueChange([value]: number[]) {
     dispatch({ type: 'setFontSize', payload: value })

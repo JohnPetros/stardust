@@ -26,42 +26,23 @@ export async function POST(request: NextRequest) {
 
   const textsWithinBacktcks = captureTextWithinBackticks(content)
 
-  let contentWithoutBackticks = ''
+  let contentWithoutBackticks = content
 
   for (const text of textsWithinBacktcks) {
-    contentWithoutBackticks = content.replace(`\`${text}\``, text)
+    contentWithoutBackticks = contentWithoutBackticks.replace(
+      `\`${text}\``,
+      text
+    )
   }
 
   const source = await serialize(
     contentWithoutBackticks.length > 0 ? contentWithoutBackticks : content
   )
 
-  const code = {
-    content: `
-  var souBonito = falso
-    
-  se (souBonito) {
-    escreva(souBonito)
-  }
-  
-  escreva(souBonito)
-  `,
-    picture: 'panda-deslumbrado.jpg',
-    isRunnable: true,
-    type: 'code',
-  }
-
-  console.log(JSON.stringify(code))
-  // const source = await serialize(
-  //   '<Code isRunnable={true}>\n  var souBonito = falso\n    \n  se (souBonito) braket\n    escreva(souBonito)\n  braket\n  \n  escreva(souBonito)\n</Code>'
-  // )
-
   if (textsWithinBacktcks.length)
     for (const text of textsWithinBacktcks) {
       source.compiledSource = source.compiledSource.replace(text, `\`${text}\``)
     }
-
-  console.log({ source })
 
   return NextResponse.json({ source })
 }

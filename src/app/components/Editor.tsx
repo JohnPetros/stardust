@@ -12,8 +12,8 @@ import type monaco from 'monaco-editor'
 
 import { Loading } from './Loading'
 
+import { useEditorContext } from '@/contexts/EditorContext'
 import { useBreakpoint } from '@/hooks/useBreakpoint'
-import { useEditor } from '@/hooks/useEditor'
 import { THEMES } from '@/utils/constants'
 import { getDeleguaLanguageTokens } from '@/utils/helpers/getDeleguaLanguageTokens'
 
@@ -30,7 +30,7 @@ interface EditorProps {
   onChange?: (value: string) => void
 }
 
-export function EditorComponent(
+export function CodeEditorComponent(
   {
     value,
     width,
@@ -42,7 +42,7 @@ export function EditorComponent(
   ref: ForwardedRef<EditorRef>
 ) {
   const monaco = useMonaco()
-  const { state } = useEditor()
+  const { state } = useEditorContext()
   const { md: isMobile } = useBreakpoint()
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
 
@@ -153,4 +153,4 @@ export function EditorComponent(
   )
 }
 
-export const Editor = forwardRef(EditorComponent)
+export const CodeEditor = forwardRef(CodeEditorComponent)

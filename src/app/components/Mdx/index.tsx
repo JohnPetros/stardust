@@ -18,9 +18,6 @@ const COMPONENTS = {
   Image,
   User,
   Code,
-  pre: (props: { children: string }) => (
-    <h1 style={{ color: 'red' }}>{props.children}</h1>
-  ),
 }
 
 export type MdxRef = {

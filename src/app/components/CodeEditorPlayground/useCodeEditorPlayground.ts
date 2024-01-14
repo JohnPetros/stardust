@@ -1,70 +1,53 @@
 'use client'
 
-import {
-  ForwardedRef,
-  forwardRef,
-  useCallback,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react'
+import { useCallback, useRef, useState } from 'react'
 
-import { Prompt, PromptRef } from '../Prompt'
-import { Toast, ToastRef } from '../Toast'
+import { ConsoleRef } from '../Console'
+import { PromptRef } from '../Prompt'
 
-import { Console, ConsoleRef } from './Console'
-
-import { Editor, EditorRef } from '@/app/components/Editor'
+import { CodeEditorRef } from '@/app/components/CodeEditor'
+import { useToast } from '@/contexts/ToastContext'
 import { execute } from '@/libs/delegua'
 import { REGEX } from '@/utils/constants/regex'
 import { checkIsNumeric, playSound } from '@/utils/helpers'
 
-export interface PlaygroundCodeRef extends EditorRef {
-  runUserCode: () => void
-}
-
-interface PlaygroundCodeProps {
-  height: number
-  code: string
-  isRunnable?: boolean
-}
-
-export const PlaygroundCodeEditorComponent = (
-  { code, height, isRunnable = false }: PlaygroundCodeProps,
-  ref: ForwardedRef<PlaygroundCodeRef>
-) => {
+export function useCodeEditorPlayground(code: string) {
   const [output, setOutput] = useState<string[]>([])
-  const editorRef = useRef<EditorRef>(null)
   const userCode = useRef(code)
   const errorLine = useRef(0)
+  const codeEditorRef = useRef<CodeEditorRef>(null)
   const consoleRef = useRef<ConsoleRef>(null)
-  const toastRef = useRef<ToastRef>(null)
   const promptRef = useRef<PromptRef>(null)
+  const toast = useToast()
 
   function getPrintType(print: string) {
     return print.replace(REGEX.print, 'escreva(tipo de $1)')
   }
 
   function resetToOriginalUserCode() {
-    if (editorRef.current) userCode.current = editorRef.current?.getValue()
+    if (codeEditorRef.current)
+      userCode.current = codeEditorRef.current?.getValue()
   }
 
   function getErrorLine() {
     return errorLine.current > 0 ? `</br>Linha: ${errorLine.current}` : ''
   }
 
-  const handleError = useCallback((error: Error) => {
-    const { message } = error
+  const handleError = useCallback(
+    (error: Error) => {
+      const { message } = error
 
-    const toastMessage = message.includes('null')
-      ? 'Código inválido'
-      : `${message}` + getErrorLine()
+      const toastMessage = message.includes('null')
+        ? 'Código inválido'
+        : `${message}` + getErrorLine()
 
-    toastRef.current?.open({
-      type: 'error',
-      message: toastMessage,
-    })
-  }, [])
+      toast.show(toastMessage, {
+        type: 'error',
+        seconds: 5,
+      })
+    },
+    [toast]
+  )
 
   async function formatCodeWithInput(code: string, input: string) {
     const regex = REGEX.input
@@ -162,43 +145,14 @@ export const PlaygroundCodeEditorComponent = (
     }
   }, [handleError])
 
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        runUserCode,
-        ...editorRef.current,
-      } as PlaygroundCodeRef
-    },
-    [runUserCode]
-  )
-
-  return (
-    <div className="h-full w-full">
-      <Toast ref={toastRef} />
-
-      <Editor
-        ref={editorRef}
-        width="100%"
-        height={height}
-        value={code}
-        isReadOnly={!isRunnable}
-        onChange={handleCodeChange}
-      />
-
-      {isRunnable && (
-        <Prompt
-          ref={promptRef}
-          onConfirm={onPromptConfirm}
-          onCancel={onPromptCancel}
-        />
-      )}
-
-      {isRunnable && (
-        <Console ref={consoleRef} results={output} height={height} />
-      )}
-    </div>
-  )
+  return {
+    output,
+    codeEditorRef,
+    consoleRef,
+    promptRef,
+    runUserCode,
+    handleCodeChange,
+    onPromptConfirm,
+    onPromptCancel,
+  }
 }
-
-export const PlaygroundCodeEditor = forwardRef(PlaygroundCodeEditorComponent)

@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, ReactNode, useReducer } from 'react'
+import { createContext, ReactNode, useContext, useReducer } from 'react'
 
 import type { ThemeName } from '@/@types/themeName'
 import { EDITOR_DEFAULT_CONFIG } from '@/utils/constants'
@@ -21,7 +21,7 @@ type EditorValue = {
   dispatch: (action: EditorAction) => void
 }
 
-interface EditorProviderProps {
+type EditorProviderProps = {
   children: ReactNode
 }
 
@@ -73,4 +73,14 @@ export function EditorProvider({ children }: EditorProviderProps) {
       {children}
     </EditorContext.Provider>
   )
+}
+
+export function useEditorContext() {
+  const context = useContext(EditorContext)
+
+  if (!context) {
+    throw new Error('useEditorContext must be used inside EditorContext')
+  }
+
+  return context
 }

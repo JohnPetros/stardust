@@ -11,7 +11,7 @@ export const texts: Text[] = [
   {
     type: 'default',
     content:
-      'Para isso você vai ter que instruir seu foguete, escrevendo programas, e para escrever programas é preciso usar uma linguagem de programação.',
+      'Para isso você vai ter que instruir seu foguete escrevendo programas, e para escrever programas é preciso usar uma linguagem de programação.',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
@@ -56,7 +56,7 @@ export const texts: Text[] = [
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   { type: 'code', content: 'leia()', isRunnable: true },
-  { type: 'user', content: 'Oxe! Não aconteceu nada!' },
+  { type: 'user', content: 'Oxe! Nada foi imprimido na tela!' },
   {
     type: 'default',
     content:
@@ -65,14 +65,14 @@ export const texts: Text[] = [
   },
   {
     type: 'code',
-    content: `var seuNome = leia("Insira seu nome: ")`,
-    isRunnable: true,
+    content: `var seuNome = leia("Alguma mensagem")`,
+    isRunnable: false,
   },
   { type: 'user', content: 'Mas, o que diachos é var?' },
   {
     type: 'default',
     content:
-      'Para receber dados, naturalmente você tem que colocar em algum lugar, que no caso de um programa sempre vai ser em algo que chamamos de variável.',
+      'Para receber dados, naturalmente, você tem que colocar em algum lugar, que no caso de um programa sempre vai ser em algo que chamamos de variável.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -107,7 +107,7 @@ export const texts: Text[] = [
   {
     type: 'default',
     content:
-      'Bacana!! Mas na hora de escrever um código consistente em sem erros você precisa tomar alguns cuidados:',
+      'Bacana!! Porém, na hora de escrever um código consistente em sem erros você precisa tomar alguns cuidados:',
     picture: 'panda-comemorando.jpg',
   },
   {
@@ -148,7 +148,7 @@ export const texts: Text[] = [
   {
     type: 'default',
     content:
-      '`leia` e `escreva` são considerados comandos de entrada e saída, respectivamente. Podemos dizer que usando o comando `leia()` você está fanzendo os dados "entrarem" no programa, enquanto com o `escreva()` você está fazendo dados "saírem" para serem exibidos.',
+      '`leia()` e `escreva()` são considerados comandos de entrada e saída, respectivamente. Podemos dizer que usando o comando `leia()` você está fanzendo os dados "entrarem" no programa, enquanto com o `escreva()` você está fazendo dados "saírem" para serem exibidos.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
