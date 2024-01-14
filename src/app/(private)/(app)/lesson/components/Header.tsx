@@ -71,7 +71,10 @@ export function Header({ onLeaveLesson }: HeaderProps) {
             </Button>
           }
         >
-          <button onClick={onLeaveLesson} aria-label="Sair da lição">
+          <button
+            className="flex place-content-center"
+            aria-label="Sair da lição"
+          >
             <X className="text-2xl text-red-700" weight="bold" />
           </button>
         </Alert>
