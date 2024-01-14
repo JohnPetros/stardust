@@ -12,7 +12,7 @@ interface DialogProps {
 export function Dialog({ children, onClose }: DialogProps) {
   return (
     <Container.Root onOpenChange={onClose}>
-      <Container.Overlay className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50" />
+      <Container.Overlay className="fixed inset-0 z-[400] overflow-y-auto bg-black bg-opacity-50" />
       <AnimatePresence>{children}</AnimatePresence>
     </Container.Root>
   )
