@@ -15,8 +15,8 @@
 | Performance                |  perf              | 💫 `:dizzle:`                    |              
 | Configuration files        |  chore             | 🔧 `:wrench:`                    |              
 | Merging branches           |  merge             | 🔀 `:twisted_rightwards_arrows:` |              
-| Reverting changes          |  merge             | ⏪ `:rewind:`                    |              
-| Simple text chage          |  merge             | 📝 `:pencil:`                    |              
+| Reverting changes          |  revert            | ⏪ `:rewind:`                    |              
+| Simple text chage          |  text              | 📝 `:pencil:`                    |              
 | Tests                      |  test              | 🧪 `:test_tube:`                 |              
 | Package.json               |  build             | 📦 `:package:`                   |              
 | Removing file              |  remove            | 🔥 `:fire:`                      |              
