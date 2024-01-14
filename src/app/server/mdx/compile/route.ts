@@ -4,15 +4,10 @@ import { serialize } from 'next-mdx-remote/serialize'
 import { REGEX } from '@/utils/constants'
 const backticksRegex = REGEX.backticks
 
-function captureTextWithinBackticks(text: string) {
-  let capturedText
-  const texts = []
+function captureTextBetweenBackticks(text: string) {
+  const matches = Array.from(text.matchAll(backticksRegex), (match) => match[1])
 
-  while ((capturedText = backticksRegex.exec(text))) {
-    texts.push(capturedText[1])
-  }
-
-  return texts
+  return matches
 }
 
 export async function POST(request: NextRequest) {
@@ -24,24 +19,27 @@ export async function POST(request: NextRequest) {
       { status: 400 }
     )
 
-  const textsWithinBacktcks = captureTextWithinBackticks(content)
+  const textsbetweenBacktcks = captureTextBetweenBackticks(content)
 
-  let contentWithoutBackticks = content
+  let contentbetweenBackticks = content
 
-  for (const text of textsWithinBacktcks) {
-    contentWithoutBackticks = contentWithoutBackticks.replace(
+  for (const text of textsbetweenBacktcks) {
+    contentbetweenBackticks = contentbetweenBackticks.replace(
       `\`${text}\``,
       text
     )
   }
 
   const source = await serialize(
-    contentWithoutBackticks.length > 0 ? contentWithoutBackticks : content
+    contentbetweenBackticks.length > 0 ? contentbetweenBackticks : content
   )
 
-  if (textsWithinBacktcks.length)
-    for (const text of textsWithinBacktcks) {
-      source.compiledSource = source.compiledSource.replace(text, `\`${text}\``)
+  if (textsbetweenBacktcks.length)
+    for (const text of textsbetweenBacktcks) {
+      source.compiledSource = source.compiledSource.replace(
+        ` ${text} `,
+        `\`${text}\``
+      )
     }
 
   return NextResponse.json({ source })

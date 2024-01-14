@@ -148,7 +148,7 @@ export const texts: Text[] = [
   {
     type: 'default',
     content:
-      '`leia()` e `escreva()` são considerados comandos de entrada e saída, respectivamente. Podemos dizer que usando o comando `leia()` você está fanzendo os dados "entrarem" no programa, enquanto com o `escreva()` você está fazendo dados "saírem" para serem exibidos.',
+      'Os `leia()` e `escreva()` são considerados comandos de entrada e saída, respectivamente. Podemos dizer que usando o comando `leia()` você está fanzendo os dados "entrarem" no programa, enquanto com o `escreva()` você está fazendo dados "saírem" para serem exibidos.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
