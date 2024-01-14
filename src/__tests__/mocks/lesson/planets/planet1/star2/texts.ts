@@ -17,14 +17,14 @@ export const texts: Text[] = [
   {
     type: 'alert',
     content:
-      'Toda linguagem de programação possui uma maneira própria de escrever, que é o conjunto de regras e comandos que instruem o que o programa deve fazer. E existem diversas linguagens de programação!',
+      'Toda linguagem de programação possui uma maneira própria de escrever, ou seja, um conjunto de regras e comandos que instruem o que o programa deve fazer. E existem diversas linguagens de programação!',
     picture: 'panda.jpg',
   },
   { type: 'user', content: 'E qual devemos utilizar?' },
   {
     type: 'default',
     content:
-      'Para nossa sorte, o foguete entende uma linguagem especial chamada Delégua. Ela possui uma sintaxe fácil e intuitiva em português, o que facilita bastante.',
+      'Para nossa sorte, o foguete entende uma linguagem especial chamada Delégua. Ela possui uma sintaxe fácil e intuitiva em português, o que facilita bastante, inclusive.',
     picture: 'panda.jpg',
   },
   {
@@ -56,16 +56,16 @@ export const texts: Text[] = [
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   { type: 'code', content: 'leia()', isRunnable: true },
-  { type: 'user', content: 'Mas, não aconteceu nada!' },
+  { type: 'user', content: 'Oxe! Não aconteceu nada!' },
   {
     type: 'default',
     content:
-      'Veja que se algum texto for colocado dentro do parênteses do `leia()`, esse texto servirá como mensagem dentro da janela.',
+      'Exatamente! Primeiro, veja que se algum texto for colocado dentro do parênteses do `leia()`, esse texto servirá como mensagem dentro da janela.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'code',
-    content: 'var seuNome = leia("Insira seu nome: ")',
+    content: `var seuNome = leia("Insira seu nome: ")`,
     isRunnable: true,
   },
   { type: 'user', content: 'Mas, o que diachos é var?' },
@@ -101,19 +101,19 @@ export const texts: Text[] = [
   },
   {
     type: 'code',
-    content: 'var seuNome = leia("Insira seu nome: ")\nescreva(seuNome)',
+    content: `var seuNome = leia("Insira seu nome: ")\nescreva(seuNome)`,
     isRunnable: true,
   },
   {
     type: 'default',
     content:
-      'Bacana!! Mas na hora de escrever um código consistente em sem erros, você precisa tomar alguns cuidados:',
+      'Bacana!! Mas na hora de escrever um código consistente em sem erros você precisa tomar alguns cuidados:',
     picture: 'panda-comemorando.jpg',
   },
   {
     type: 'quote',
     content:
-      '1 - É preciso respeitar sempre o nome dos comandos definida pela linguagem, por exemplo, caso você tivesse colocado `exiba` em vez de `escreva`, deixado de usar os parênteses ou as aspas para escrever as mensagem dentro dos parênteses, o código daria erro.',
+      '1 - É preciso respeitar sempre o nome dos comandos definida pela linguagem. Por exemplo, caso você tivesse colocado `exiba` em vez de `escreva`, deixado de usar os parênteses ou as aspas para escrever as mensagem dentro dos parênteses, o código daria erro.',
     picture: 'panda-exercitando.jpg',
   },
   {
@@ -142,19 +142,19 @@ export const texts: Text[] = [
   {
     type: 'default',
     content:
-      'Ah... Essas duas barras escritas no código servem para indicar ao programa ignorar uma determinada linha na hora de execução. Dessa forma você pode escrever qualquer coisa após as duas barras e nenhum erro acontecerá.',
+      'Ah... Essas duas barras escritas no código servem para indicar ao programa ignorar uma determinada linha no momento de execução. Dessa forma você pode escrever qualquer coisa após as duas barras e nenhum erro acontecerá.',
     picture: 'panda-sorrindo.jpg',
   },
   {
     type: 'default',
     content:
-      '`leia` e `escreva` são considerados comandos de entrada e saída respectivamente. Podemos dizer que usando o comando `leia()` você está entrando com dados, enquanto com o `escreva()` você está fazendo dados saírem para serem exibidos.',
+      '`leia` e `escreva` são considerados comandos de entrada e saída, respectivamente. Podemos dizer que usando o comando `leia()` você está fanzendo os dados "entrarem" no programa, enquanto com o `escreva()` você está fazendo dados "saírem" para serem exibidos.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'quote',
     content:
-      'Agora que você sabe um pouco mais está na hora revisar tudo isso, que tal?',
+      'Agora que você sabe um pouco mais, está na hora revisar tudo isso, que tal?',
     picture: 'panda.jpg',
   },
 ]

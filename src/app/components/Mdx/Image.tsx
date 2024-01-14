@@ -3,7 +3,7 @@ import Img from 'next/image'
 import { Animation } from './Animation'
 import { Content } from './Content'
 
-import { useImage } from '@/hooks/useImage'
+import { useApi } from '@/services/api'
 
 interface ImageProps {
   picture: string
@@ -12,7 +12,8 @@ interface ImageProps {
 }
 
 export function Image({ picture, hasAnimation = true, children }: ImageProps) {
-  const image = useImage('theory', picture)
+  const api = useApi()
+  const image = api.getImage('theory', picture)
 
   return (
     <Animation hasAnimation={hasAnimation}>
@@ -21,8 +22,8 @@ export function Image({ picture, hasAnimation = true, children }: ImageProps) {
           src={image}
           width={180}
           height={120}
-          className="rounded-lg"
-          priority
+          className="skeleton rounded-lg"
+          onLoadingComplete={(image) => image.classList.remove('skeleton')}
           alt=""
         />
         <div>

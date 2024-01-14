@@ -18,6 +18,8 @@ export function Text({
   children,
   hasAnimation = true,
 }: TextProps) {
+  console.log({ children })
+
   return (
     <Animation hasAnimation={hasAnimation}>
       <div className="flex w-full flex-col">

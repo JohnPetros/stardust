@@ -23,10 +23,14 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
     codeEditorRef.current?.reloadValue()
   }
 
+  console.log({ code })
+
   const editorHeight = useMemo(() => {
     const lines = code.split('\n').length
-    return 100 + lines * (lines >= 10 ? 20 : 32)
-  }, [code])
+
+    if (isRunnable) return 100 + lines * (lines >= 10 ? 20 : 32)
+    else return 100 + lines
+  }, [code, isRunnable])
 
   return (
     <div

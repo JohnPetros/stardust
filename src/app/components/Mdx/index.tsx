@@ -9,20 +9,25 @@ import { Image } from './Image'
 import { Quote } from './Quote'
 import { Text } from './Text'
 import { useMdx } from './useMdx'
+import { User } from './User'
 
 const COMPONENTS = {
   Text,
   Alert,
   Quote,
   Image,
+  User,
   Code,
+  pre: (props: { children: string }) => (
+    <h1 style={{ color: 'red' }}>{props.children}</h1>
+  ),
 }
 
-export interface MdxRef {
+export type MdxRef = {
   isLoaded: boolean
 }
 
-interface MdxProps {
+type MdxProps = {
   id: string
   children: string
 }

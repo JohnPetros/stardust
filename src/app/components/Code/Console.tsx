@@ -40,7 +40,7 @@ export function ConsoleComponent(
   const controls = useAnimation()
 
   function calculateMinHeight() {
-    return ((height + 100) / 10) * 0.4 + 'rem' // 40% of the full height
+    return ((height + 100) / 10) * 0.5 + 'rem'
   }
 
   const open = useCallback(() => {
@@ -96,7 +96,7 @@ export function ConsoleComponent(
       animate={controls}
       drag="y"
       dragConstraints={{ top: 0 }}
-      dragElastic={0.4}
+      dragElastic={0}
       dragMomentum={false}
       onDragEnd={handleDragEnd}
       style={{ minHeight: calculateMinHeight() }}

@@ -17,16 +17,25 @@ const contentStyles = tv({
   },
 })
 
-interface ContentProps extends VariantProps<typeof contentStyles> {
+type ContentProps = {
   hasAnimation: boolean
   children: string
 }
 
-export function Content({ type, children, hasAnimation }: ContentProps) {
+export function Content({
+  type,
+  children,
+  hasAnimation,
+}: ContentProps & VariantProps<typeof contentStyles>) {
   return (
     <div className={contentStyles({ type })}>
       <p className="leading-6">
-        <TypeWriter text={formatText(children)} isEnable={hasAnimation} />
+        {hasAnimation && (
+          <TypeWriter text={formatText(children)} isEnable={hasAnimation} />
+        )}
+        {!hasAnimation && (
+          <span dangerouslySetInnerHTML={{ __html: formatText(children) }} />
+        )}
       </p>
     </div>
   )

@@ -12,7 +12,7 @@ export const MdxController = (): IMdxController => {
     compileMdx: async (content: string) => {
       const data = await server.post<{
         source: MDXRemoteSerializeResult
-      }>(`${ROUTES.server.mdx}/compile`, content)
+      }>(`${ROUTES.server.mdx}/compile`, { content })
 
       return data.source
     },

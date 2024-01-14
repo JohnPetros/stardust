@@ -84,7 +84,7 @@ se (souBonito) {
   escreva(souBonito)
 }
 
-//  Resultado: sem resultado`,
+escreva(souBonito)`,
     picture: 'panda-deslumbrado.jpg',
     isRunnable: true,
     type: 'code',
