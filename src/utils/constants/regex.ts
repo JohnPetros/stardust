@@ -7,4 +7,5 @@ export const REGEX = {
   input: /(leia\(.*\))/,
   inputParam: /["'].*["']/,
   print: /escreva\((.*?)\)/,
+  backticks: /`([^`]*)`/g,
 }
