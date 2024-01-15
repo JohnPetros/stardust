@@ -1,84 +1,28 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 
 import { QuestionTitle } from '../QuestionTitle'
 
 import { Option } from './Option'
+import { useSelectionQuestion } from './useSelectionQuestion'
 
 import type { SelectionQuestion as SelectionQuestionData } from '@/@types/quiz'
 import { CodeSnippet } from '@/app/components/CodeSnippet'
 import { useLessonStore } from '@/stores/lessonStore'
-import { reorderItems } from '@/utils/helpers'
 
-interface SelectionQuestionProps {
+type SelectionQuestionProps = {
   data: SelectionQuestionData
 }
 
 export function SelectionQuestion({
   data: { title, picture, options, code, answer },
 }: SelectionQuestionProps) {
-  const {
-    state: { isAnswerVerified, isAnswerCorrect },
-    actions: {
-      setIsAnswered,
-      setIsAnswerVerified,
-      setIsAnswerCorrect,
-      setAnswerHandler,
-      changeQuestion,
-      incrementIncorrectAswersAmount,
-      decrementLivesAmount,
-    },
-  } = useLessonStore()
-  const [selectedOption, setSelectedOption] = useState('')
-  const [reorderedOptions, setReorderedOptions] = useState<string[]>([])
-  const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
-
-  function handleAnswer() {
-    setIsAnswerVerified(!isAnswerVerified)
-
-    if (isAnswerVerified && !!selectedOption) {
-      setIsAnswerCorrect(false)
-    }
-
-    if (selectedOption.toLowerCase() === answer.toLowerCase()) {
-      setIsAnswerCorrect(true)
-
-      if (isAnswerVerified) {
-        changeQuestion()
-      }
-
-      return
-    }
-
-    setIsAnswerCorrect(false)
-
-    if (
-      isAnswerVerified &&
-      !hasAlreadyIncrementIncorrectAnswersAmount.current
-    ) {
-      incrementIncorrectAswersAmount()
-      hasAlreadyIncrementIncorrectAnswersAmount.current = true
-    }
-
-    if (isAnswerVerified) decrementLivesAmount()
-  }
-
-  useEffect(() => {
-    if (!reorderedOptions.length) {
-      const reorderedItems = reorderItems<string>(options)
-      setReorderedOptions(reorderedItems)
-    }
-  }, [options])
-
-  useEffect(() => {
-    setIsAnswered(!!selectedOption)
-  }, [selectedOption])
-
-  useEffect(() => {
-    setAnswerHandler(handleAnswer)
-  }, [isAnswerVerified, selectedOption])
+  const { isAnswerVerified, isAnswerCorrect } = useLessonStore(
+    (store) => store.state
+  )
+  const { selectedOption, reorderedOptions, setSelectedOption } =
+    useSelectionQuestion(options, answer)
 
   return (
     <>

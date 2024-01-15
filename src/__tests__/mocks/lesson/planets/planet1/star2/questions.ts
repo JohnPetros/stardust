@@ -1,7 +1,7 @@
 export const questions = [
   {
     title:
-      'Vamos montar nosso primeiro programa! Mas para ver se estamos na mesma página, escreva abaixo o nome do comando que serve para exibir dados na tela.',
+      'Vamos montar nosso primeiro programa! Mas, para ver se estamos na mesma página, escreva abaixo o nome do comando que serve para exibir dados na tela.',
     type: 'open',
     lines: [
       {
@@ -15,7 +15,7 @@ export const questions = [
   },
   {
     title:
-      'Muito bem! E qual das opções abaixo escreverá adequadamente "que horas são"?',
+      'Muito bem! E qual das opções abaixo escreverá adequadamente `que horas são`?',
     picture: 'panda-piscando.jpg',
     type: 'selection',
     answer: 'escreva("que horas são")',
@@ -28,7 +28,7 @@ export const questions = [
   },
   {
     title:
-      'Isso! Agora insira abaixo o nome do comando que serve para receber dados externos.',
+      'Isso! Agora insira abaixo o nome do comando que serve para receber dados externos a um programa.',
     type: 'open',
     lines: [
       {

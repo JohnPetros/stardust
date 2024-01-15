@@ -26,7 +26,7 @@ export const questionContainerTransition = {
   ease: 'easeInOut',
 }
 
-interface QuestionContainerProps {
+type QuestionContainerProps = {
   children: ReactNode
   id: number
 }

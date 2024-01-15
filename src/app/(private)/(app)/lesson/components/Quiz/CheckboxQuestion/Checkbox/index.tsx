@@ -1,10 +1,11 @@
 'use client'
 
-import { KeyboardEvent, useRef } from 'react'
 import { Check } from '@phosphor-icons/react'
 import * as C from '@radix-ui/react-checkbox'
 import { motion, Variants } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
+
+import { useCheckbox } from './useCheckbox'
 
 import { useLessonStore } from '@/stores/lessonStore'
 
@@ -33,37 +34,14 @@ const indicatorAnimations: Variants = {
   },
 }
 
-interface CheckboxProps {
+type CheckboxProps = {
   children: string
   onCheck: () => void
   isChecked: boolean
 }
 
 export function Checkbox({ children, onCheck, isChecked }: CheckboxProps) {
-  const { isAnswerVerified, isAnswerCorrect } = useLessonStore(
-    (store) => store.state
-  )
-  const checkRef = useRef<HTMLButtonElement>(null)
-
-  function getColor() {
-    if (isAnswerCorrect && isAnswerVerified && isChecked) {
-      return 'green'
-    } else if (isAnswerVerified && isChecked) {
-      return 'red'
-    } else if (isChecked) {
-      return 'blue'
-    } else {
-      return 'gray'
-    }
-  }
-
-  const color = colors[getColor()]
-
-  function handleKeydown({ key }: KeyboardEvent) {
-    if (key === ' ') {
-      checkRef.current?.click()
-    }
-  }
+  const { checkRef, color, handleKeydown } = useCheckbox(isChecked)
 
   return (
     <motion.label

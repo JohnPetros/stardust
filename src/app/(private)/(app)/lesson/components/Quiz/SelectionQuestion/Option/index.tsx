@@ -1,9 +1,10 @@
 'use client'
 
-import { useId } from 'react'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 import { motion, Variants } from 'framer-motion'
 import { tv } from 'tailwind-variants'
+
+import { useOption } from './useOption'
 
 const optionAnimations: Variants = {
   hover: {
@@ -26,7 +27,7 @@ const optionStyles = tv({
   },
 })
 
-interface OptionProps {
+export type OptionProps = {
   label: string
   onClick: () => void
   isSelected: boolean
@@ -41,19 +42,11 @@ export function Option({
   isAnswerCorrect,
   isSelected,
 }: OptionProps) {
-  const id = useId()
-
-  function getColor() {
-    if (isAnswerIncorrect && isSelected) {
-      return 'red'
-    } else if (isAnswerCorrect) {
-      return 'green'
-    } else if (isSelected) {
-      return 'blue'
-    } else {
-      return 'gray'
-    }
-  }
+  const { id, color } = useOption({
+    isAnswerIncorrect,
+    isAnswerCorrect,
+    isSelected,
+  })
 
   return (
     <RadioGroup.Item id={id} value={label} asChild>
@@ -64,7 +57,7 @@ export function Option({
         htmlFor={id}
         onClick={onClick}
         onFocus={onClick}
-        className={optionStyles({ color: getColor() })}
+        className={optionStyles({ color })}
       >
         {label}
       </motion.label>

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import Image from 'next/image'
 import { twMerge } from 'tailwind-merge'
@@ -62,17 +62,20 @@ export function VerificationButton({
     answerHandler()
   }
 
-  function handleGlobalKeyDown({ key }: KeyboardEvent) {
-    if (key === 'Enter' && isAnswered && !buttonHasFocus.current) {
-      answerHandler()
-    }
-  }
+  const handleGlobalKeyDown = useCallback(
+    ({ key }: KeyboardEvent) => {
+      if (key === 'Enter' && isAnswered && !buttonHasFocus.current) {
+        answerHandler()
+      }
+    },
+    [answerHandler, isAnswered]
+  )
 
   useEffect(() => {
     if (isAnswerVerified) {
       playSound(isAnswerCorrect ? 'success.wav' : 'fail.wav')
     }
-  }, [isAnswerVerified])
+  }, [isAnswerCorrect, isAnswerVerified, handleGlobalKeyDown])
 
   useEffect(() => {
     document.addEventListener('keydown', handleGlobalKeyDown)

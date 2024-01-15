@@ -17,7 +17,7 @@ import { Shortcuts } from './Shortcuts'
 import type { TestCase } from '@/@types/challenge'
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
-import { Editor, EditorRef } from '@/app/components/Editor'
+import { CodeEditor, CodeEditorRef } from '@/app/components/CodeEditor'
 import { Toast, ToastRef } from '@/app/components/Toast'
 import { execute } from '@/libs/delegua'
 import { useChallengeStore } from '@/stores/challengeStore'
@@ -33,7 +33,7 @@ export function Code() {
   const codeContainer = useRef<HTMLDivElement>(null)
   const errorLine = useRef(0)
   const toastRef = useRef<ToastRef>(null)
-  const editorRef = useRef<EditorRef>(null)
+  const codeEditorRef = useRef<CodeEditorRef>(null)
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
 
   function getErrorLine() {
@@ -54,7 +54,7 @@ export function Code() {
   }
 
   function resetCode() {
-    editorRef.current?.reloadValue()
+    codeEditorRef.current?.reloadValue()
   }
 
   function formatCode(code: string, { input }: Pick<TestCase, 'input'>) {
@@ -171,8 +171,8 @@ export function Code() {
             </Settings>
           </div>
         </ToolBar.Root>
-        <Editor
-          ref={editorRef}
+        <CodeEditor
+          ref={codeEditorRef}
           value={challenge.code}
           width="100%"
           height={codeContainerHeight - 40}

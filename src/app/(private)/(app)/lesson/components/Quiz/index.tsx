@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useMemo, useRef } from 'react'
 import { AnimatePresence } from 'framer-motion'
 
 import { CheckboxQuestion } from './CheckboxQuestion'
@@ -9,43 +8,21 @@ import { DragAndDropQuestion } from './DragAndDropQuestion'
 import { OpenQuestion } from './OpenQuestion'
 import { QuestionContainer } from './QuestionContainer'
 import { SelectionQuestion } from './SelectionQuestion'
+import { useQuiz } from './useQuiz'
 import { VerificationButton } from './VerificationButton'
 
-import { Alert, AlertRef } from '@/app/components/Alert'
+import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { useLessonStore } from '@/stores/lessonStore'
 
-interface QuizProps {
+type QuizProps = {
   leaveLesson: () => void
 }
 
 export function Quiz({ leaveLesson }: QuizProps) {
-  const {
-    currentQuestionIndex,
-    questions,
-    answerHandler,
-    isAnswerVerified,
-    isAnswerCorrect,
-    isAnswered,
-    livesAmount,
-  } = useLessonStore((store) => store.state)
-
-  const currentQuestion = useMemo(() => {
-    return questions.length ? questions[currentQuestionIndex] : null
-  }, [questions, currentQuestionIndex])
-
-  const alertRef = useRef<AlertRef>(null)
-
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    })
-  }, [currentQuestionIndex])
-
-  useEffect(() => {
-    if (livesAmount === 0) alertRef.current?.open()
-  }, [livesAmount])
+  const { answerHandler, isAnswerVerified, isAnswerCorrect, isAnswered } =
+    useLessonStore((store) => store.state)
+  const { alertRef, currentQuestion } = useQuiz()
 
   if (currentQuestion) {
     return (

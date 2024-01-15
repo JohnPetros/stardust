@@ -41,7 +41,7 @@ export type LessonStoreProps = {
 }
 
 const initialState: LessonStoreState = {
-  currentStage: 'theory',
+  currentStage: 'quiz',
   texts: [],
   renderedTextsAmount: 0,
   questions: [],
@@ -56,7 +56,7 @@ const initialState: LessonStoreState = {
 }
 
 export const useLessonStore = create<LessonStoreProps>()(
-  immer((set, get) => {
+  immer((set) => {
     return {
       state: initialState,
       actions: {

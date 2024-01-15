@@ -1,11 +1,12 @@
 'use client'
 
-import { useMemo } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { List } from '@phosphor-icons/react'
 import { twMerge } from 'tailwind-merge'
 import { tv } from 'tailwind-variants'
+
+import { useSortableItem } from './useSortableItem'
 
 const itemStyles = tv({
   base: 'rounded-md flex items-center justify-between bg-purple-700 border-2 p-3 w-full mx-auto custom-outline cursor-grab',
@@ -20,7 +21,7 @@ const itemStyles = tv({
   },
 })
 
-interface SortableItemProps {
+export type SortableItemProps = {
   id: number
   label: string
   isActive: boolean
@@ -44,25 +45,17 @@ export function SortableItem({
     transform,
     transition,
   } = useSortable({ id })
+  const { color } = useSortableItem({
+    isActive,
+    isAnswerCorrect,
+    isAnswerVerified,
+    isDragging,
+  })
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
   }
-
-  const color = useMemo(() => {
-    if (isDragging) {
-      return 'transparent'
-    } else if (isActive) {
-      return 'blue'
-    } else if (isAnswerVerified && isAnswerCorrect) {
-      return 'green'
-    } else if (isAnswerVerified && !isAnswerCorrect) {
-      return 'red'
-    } else {
-      return 'gray'
-    }
-  }, [isDragging, isActive, isAnswerVerified, isAnswerCorrect])
 
   return (
     <div

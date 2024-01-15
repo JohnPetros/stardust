@@ -1,9 +1,9 @@
 'use client'
 
-import { InputHTMLAttributes, useMemo } from 'react'
+import { InputHTMLAttributes } from 'react'
 import { tv } from 'tailwind-variants'
 
-import { useLessonStore } from '@/stores/lessonStore'
+import { useInput } from './useInput'
 
 const inputStyles = tv({
   base: ' rounded-md border-2 overflow-hidden custom-outline',
@@ -21,21 +21,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export function Input({ answer, ...rest }: InputProps) {
-  const { isAnswerVerified, isAnswerCorrect } = useLessonStore(
-    (store) => store.state
-  )
-
-  const width = 2 + answer.length + 'ch'
-
-  const color = useMemo(() => {
-    if (!isAnswerCorrect && isAnswerVerified) {
-      return 'red'
-    } else if (isAnswerCorrect && isAnswerVerified) {
-      return 'green'
-    } else {
-      return 'gray'
-    }
-  }, [isAnswerCorrect, isAnswerVerified])
+  const { color, width } = useInput(answer)
 
   return (
     <div style={{ width }} className={inputStyles({ color })}>

@@ -1,86 +1,21 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-
 import { QuestionTitle } from '../QuestionTitle'
 
 import { Input } from './Input'
+import { useOpenQuestion } from './useOpenQuestion'
 
 import type { OpenQuestion as OpenQuestionData } from '@/@types/quiz'
 import { CodeSnippet } from '@/app/components/CodeSnippet'
-import { useLessonStore } from '@/stores/lessonStore'
-import { compareArrays } from '@/utils/helpers'
 
-interface OpenQuestion {
+type OpenQuestion = {
   data: OpenQuestionData
 }
 
 export function OpenQuestion({
   data: { title, picture, code, answers, lines },
 }: OpenQuestion) {
-  const {
-    state: { isAnswerVerified },
-    actions: {
-      setIsAnswered,
-      setIsAnswerVerified,
-      setIsAnswerCorrect,
-      setAnswerHandler,
-      changeQuestion,
-      incrementIncorrectAswersAmount,
-      decrementLivesAmount,
-    },
-  } = useLessonStore()
-  const [userAnswers, setUserAnswers] = useState<string[]>(
-    Array.from<string>({ length: answers.length }).fill('')
-  )
-
-  const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
-
-  function handleAnswer() {
-    setIsAnswerVerified(!isAnswerVerified)
-
-    setIsAnswerCorrect(false)
-
-    const isUserAnswerCorrect = compareArrays(userAnswers, answers)
-
-    if (isUserAnswerCorrect) {
-      setIsAnswerCorrect(true)
-
-      if (isAnswerVerified) {
-        changeQuestion()
-      }
-
-      return
-    }
-
-    setIsAnswerCorrect(false)
-
-    if (
-      isAnswerVerified &&
-      !hasAlreadyIncrementIncorrectAnswersAmount.current
-    ) {
-      incrementIncorrectAswersAmount()
-      hasAlreadyIncrementIncorrectAnswersAmount.current = true
-    }
-
-    if (isAnswerVerified) decrementLivesAmount()
-  }
-
-  function handleInputChange(value: string, index: number) {
-    userAnswers[index] = value
-
-    setUserAnswers([...userAnswers])
-  }
-
-  useEffect(() => {
-    setIsAnswered(
-      userAnswers.filter((answer) => !!answer).length === answers.length
-    )
-  }, [userAnswers, answers.length])
-
-  useEffect(() => {
-    setAnswerHandler(handleAnswer)
-  }, [isAnswerVerified, userAnswers])
+  const { userAnswers, handleInputChange } = useOpenQuestion(answers)
 
   return (
     <>
