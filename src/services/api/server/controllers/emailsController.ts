@@ -1,9 +1,9 @@
-import { useServer } from '../useServer'
+import { Server } from '../server'
 
 import { ROUTES } from '@/utils/constants'
 
 export const EmailsController = () => {
-  const server = useServer()
+  const server = Server()
 
   return {
     sendRequestPasswordResetEmail: async (recipient: string) => {
