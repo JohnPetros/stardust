@@ -20,7 +20,7 @@ const colors = {
   },
 }
 
-interface MetricProps {
+type MetricProps = {
   title: string
   amount: number | string
   icon: string
