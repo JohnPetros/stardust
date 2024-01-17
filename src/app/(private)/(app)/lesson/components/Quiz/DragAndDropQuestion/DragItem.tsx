@@ -57,7 +57,7 @@ export function DragItem({
       {...listeners}
       {...attributes}
       className={twMerge(
-        'border-gray-10 flex h-10 w-full cursor-grab items-center justify-center rounded-md border bg-purple-700 p-1 text-gray-100',
+        'border-gray-10 flex h-10 w-full cursor-grab items-center justify-center rounded-md border bg-purple-700 p-1 font-code text-gray-100',
         !isActive && isDroppedInZone ? 'border-none bg-transparent p-0' : '',
         isActive ? 'cursor-grab border-2 border-blue-300 text-blue-300' : '',
         isAnswerVerified && isAnswerCorrect && isDroppedInZone

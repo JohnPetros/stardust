@@ -36,7 +36,9 @@ export function OpenQuestion({
               return (
                 <div key={`${index}-${line.id}`}>
                   {!text.includes('input') ? (
-                    <div className="flex gap-2 text-gray-100">{text}</div>
+                    <div className="flex gap-1 font-code text-gray-100">
+                      {text}
+                    </div>
                   ) : (
                     <Input
                       value={userAnswers[inputIndex]}
