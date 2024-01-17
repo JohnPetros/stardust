@@ -1,4 +1,19 @@
-export const questions = [
+import {
+  DragAndDropListQuestion,
+  DragAndDropQuestion,
+  OpenQuestion,
+  SelectionQuestion,
+} from '@/@types/quiz'
+
+type Questions = [
+  OpenQuestion,
+  SelectionQuestion,
+  OpenQuestion,
+  DragAndDropListQuestion,
+  DragAndDropQuestion,
+]
+
+export const questions: Questions = [
   {
     title:
       'Vamos montar nosso primeiro programa! Mas, para ver se estamos na mesma página, escreva abaixo o nome do comando que serve para exibir dados na tela.',
@@ -42,7 +57,7 @@ export const questions = [
   },
   {
     title:
-      'Agora organize o código abaixo, para que ele fique na ordem correta. Dica: as variáveis devem começar no início.',
+      'Agora organize o código abaixo para que ele fique na ordem correta. Dica: as variáveis devem começar no início.',
     type: 'drag-and-drop-list',
     items: [
       { id: 1, label: 'var mensagem' },

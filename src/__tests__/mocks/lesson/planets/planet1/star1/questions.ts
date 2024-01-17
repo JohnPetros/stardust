@@ -1,4 +1,14 @@
-export const questionsMock = [
+import { DragAndDropListQuestion, SelectionQuestion } from '@/@types/quiz'
+
+type Questions = [
+  SelectionQuestion,
+  SelectionQuestion,
+  DragAndDropListQuestion,
+  DragAndDropListQuestion,
+  DragAndDropListQuestion,
+]
+
+export const questionsMock: Questions = [
   {
     title:
       'Muito bem, você acaba de embarcar no foguete. Antes de proseguirmos quero que responda primeiro: O que é lógica de programação mesmo?',
