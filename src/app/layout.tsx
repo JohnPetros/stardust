@@ -4,6 +4,7 @@ import 'swiper/css/navigation'
 
 import type { Metadata } from 'next'
 
+import { injectProviders } from '@/providers'
 import { Providers } from '@/providers/components'
 import { poppins, roboto_mono } from '@/styles/fonts'
 
@@ -17,6 +18,8 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  injectProviders()
+
   return (
     <html lang="pt-BR">
       <body

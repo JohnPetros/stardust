@@ -10,4 +10,8 @@ export const dayjsProvider: IDateProvider = {
   format(date, dateFormat) {
     return dayjs(date).format(dateFormat)
   },
+
+  getTodayIndex() {
+    return dayjs().day()
+  },
 }
