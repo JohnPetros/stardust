@@ -1,3 +1,6 @@
+const PREFIX = '@stardust'
+
 export const COOKIES = {
-  shouldReturnPassword: '@stardust:should-return-password',
+  shouldReturnPassword: `${PREFIX}:should-return-password`,
+  rewardsPayload: `${PREFIX}:rewards-payload`,
 }
