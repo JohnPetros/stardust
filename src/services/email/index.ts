@@ -1,6 +1,6 @@
 'use client'
 
-import { useServer } from '../api/server/useServer'
+import { useServer } from '../api/server/server'
 
 import { ROUTES } from '@/utils/constants'
 

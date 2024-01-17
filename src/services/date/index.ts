@@ -1,5 +1,3 @@
-'use client'
-
 import { DateProvider } from '@/providers/dateProvider'
 
 const dateProvider = DateProvider()
