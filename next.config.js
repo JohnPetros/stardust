@@ -13,6 +13,9 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    instrumentationHook: true,
+  },
   transpilePackages: [
     '@react-email/components',
     '@react-email/render',
