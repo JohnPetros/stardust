@@ -12,7 +12,6 @@ export function useTheory() {
   const hasNextText = !!state.texts[nextTextIndex.current + 1]
 
   function nextText() {
-    console.log(hasNextText)
     if (!hasNextText) return
 
     nextTextIndex.current = nextTextIndex.current + 1
@@ -47,6 +46,6 @@ export function useTheory() {
     texts,
     nextTextIndex,
     hasNextText,
-    handleContinueButtonClick
+    handleContinueButtonClick,
   }
 }
