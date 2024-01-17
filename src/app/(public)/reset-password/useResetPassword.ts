@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react'
 
+import { deleteCookie } from '@/app/server/actions/deleteCookie'
+import { getCookie } from '@/app/server/actions/getCookie'
 import { useToast } from '@/contexts/ToastContext'
 import { emailSchema } from '@/libs/zod'
 import { useApi } from '@/services/api'
@@ -58,13 +60,11 @@ export function useResetPassword() {
 
   useEffect(() => {
     async function fetchCookie() {
-      const shouldResetPassword = await api.getCookie(
-        COOKIES.shouldReturnPassword
-      )
+      const shouldResetPassword = await getCookie(COOKIES.shouldReturnPassword)
 
       if (shouldResetPassword) {
         setShouldResetPassword(true)
-        await api.deleteCookie(COOKIES.shouldReturnPassword)
+        await deleteCookie(COOKIES.shouldReturnPassword)
       }
     }
 
