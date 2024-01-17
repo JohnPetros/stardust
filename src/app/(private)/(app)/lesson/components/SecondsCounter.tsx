@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import { useLessonStore } from '@/stores/lessonStore'
 
-export default function SecondsIncrementer() {
+export function SecondsIncrementer() {
   const incrementSecondsAmount = useLessonStore(
     (store) => store.actions.incrementSecondsAmount
   )
