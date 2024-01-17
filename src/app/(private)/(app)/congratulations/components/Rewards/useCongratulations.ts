@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { LottieRef } from 'lottie-react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 
 import { CongratulationsProps } from '.'
 
