@@ -1,10 +1,14 @@
 'use client'
 
 import { useMemo } from 'react'
+import { useRouter } from 'next/navigation'
 
 import { useLessonStore } from '@/stores/lessonStore'
+import { ROUTES } from '@/utils/constants'
 
 export function useHeader() {
+  const router = useRouter()
+
   const { texts, questions, currentQuestionIndex, renderedTextsAmount } =
     useLessonStore((store) => store.state)
 
@@ -28,7 +32,12 @@ export function useHeader() {
     questions.length,
   ])
 
+  function leaveLesson() {
+    router.push(ROUTES.private.home)
+  }
+
   return {
+    leaveLesson,
     currentProgressValue,
   }
 }
