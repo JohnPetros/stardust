@@ -14,6 +14,7 @@ export const ROUTES = {
     challengeMaker: '/challenges/maker',
     solution: '/challenges/solution',
     authConfirmation: '/auth-confirmation',
+    rewards: '/rewards'
   },
   public: {
     signIn: '/sign-in',
