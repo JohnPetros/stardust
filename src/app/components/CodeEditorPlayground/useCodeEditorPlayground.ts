@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { ConsoleRef } from '../Console'
 import { PromptRef } from '../Prompt'
@@ -13,12 +13,15 @@ import { checkIsNumeric, playSound } from '@/utils/helpers'
 
 export function useCodeEditorPlayground(code: string) {
   const [output, setOutput] = useState<string[]>([])
+  const [shouldOpenPrompt, setShouldOpenPrompt] = useState(false)
+
+  const toast = useToast()
+
   const userCode = useRef(code)
   const errorLine = useRef(0)
   const codeEditorRef = useRef<CodeEditorRef>(null)
   const consoleRef = useRef<ConsoleRef>(null)
   const promptRef = useRef<PromptRef>(null)
-  const toast = useToast()
 
   function getPrintType(print: string) {
     return print.replace(REGEX.print, 'escreva(tipo de $1)')
@@ -116,8 +119,7 @@ export function useCodeEditorPlayground(code: string) {
     }
 
     if (hasInput(userCode.current)) {
-      promptRef.current?.open()
-      promptRef.current?.focus()
+      setShouldOpenPrompt(true)
       return
     }
 
@@ -144,6 +146,13 @@ export function useCodeEditorPlayground(code: string) {
       handleError(error as Error)
     }
   }, [handleError])
+
+  useEffect(() => {
+    if (shouldOpenPrompt) {
+      promptRef.current?.open()
+      setShouldOpenPrompt(false)
+    }
+  }, [shouldOpenPrompt])
 
   return {
     output,
