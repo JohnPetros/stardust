@@ -2,13 +2,14 @@ import Asking from '../../../public/animations/apollo-asking.json'
 import Crying from '../../../public/animations/apollo-crying.json'
 import Denying from '../../../public/animations/apollo-denying.json'
 import Earning from '../../../public/animations/apollo-earning.json'
+import type { Sound } from '../helpers/playSound'
 
-import { AlertType } from '@/app/components/Alert'
+import type { AlertType } from '@/app/components/Alert'
 
 type AlertEffect = {
   id: AlertType
   animation: unknown | null
-  sound: string | null
+  sound: Sound | null
 }
 
 export const ALERT_EFFECTS: AlertEffect[] = [

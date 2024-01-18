@@ -1,6 +1,6 @@
 'use client'
 
-type Sound =
+export type Sound =
   | 'asking.wav'
   | 'crying.wav'
   | 'denying.wav'
