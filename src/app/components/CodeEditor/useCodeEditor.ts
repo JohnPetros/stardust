@@ -4,10 +4,11 @@ import { useEffect, useRef } from 'react'
 import { Monaco, useMonaco } from '@monaco-editor/react'
 import type monaco from 'monaco-editor'
 
+import { colors } from '@/styles/colors'
 import { THEMES } from '@/utils/constants'
 import { getDeleguaLanguageTokens } from '@/utils/helpers/getDeleguaLanguageTokens'
 
-export function useCodeEditor() {
+export function useCodeEditor(value: string) {
   const monaco = useMonaco()
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
 
@@ -21,6 +22,14 @@ export function useCodeEditor() {
     }))
   }
 
+  function getValue() {
+    return editorRef.current?.getValue() ?? ''
+  }
+
+  function reloadValue() {
+    editorRef.current?.setValue(value)
+  }
+
   function handleEditorDidMount(
     editor: monaco.editor.IStandaloneCodeEditor,
     monaco: Monaco
@@ -30,8 +39,14 @@ export function useCodeEditor() {
     const messageContribution = editor.getContribution(
       'editor.contrib.messageController'
     )
+
+    // Removing Monaco Editor Tooltip
     editor.onDidAttemptReadOnlyEdit(() => {
-      messageContribution?.dispose()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;(messageContribution as any)?.showMessage(
+        'Reason for blocked edit',
+        editor.getPosition()
+      )
     })
 
     monaco.languages.register({ id: 'delegua' })
@@ -48,7 +63,7 @@ export function useCodeEditor() {
       inherit: true,
       rules,
       colors: {
-        'editor.background': '#1E2626',
+        'editor.background': colors.gray[800],
       },
     })
 
@@ -70,6 +85,8 @@ export function useCodeEditor() {
 
   return {
     editorRef,
+    getValue,
+    reloadValue,
     handleEditorDidMount,
   }
 }

@@ -35,26 +35,18 @@ export function CodeEditorComponent(
   ref: ForwardedRef<CodeEditorRef>
 ) {
   const { state } = useEditorContext()
-  const { editorRef, handleEditorDidMount } = useCodeEditor()
+  const { getValue, reloadValue, handleEditorDidMount } = useCodeEditor(value)
   const { md: isMobile } = useBreakpoint()
 
   useImperativeHandle(
     ref,
     () => {
-      function getValue() {
-        return editorRef.current?.getValue() ?? ''
-      }
-
-      function reloadValue() {
-        editorRef.current?.setValue(value)
-      }
-
       return {
         getValue,
         reloadValue,
       }
     },
-    [value, editorRef]
+    [getValue, reloadValue]
   )
 
   return (
