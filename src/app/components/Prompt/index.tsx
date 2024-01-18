@@ -1,4 +1,4 @@
-import { ForwardedRef, forwardRef, useImperativeHandle } from 'react'
+import { ForwardedRef, forwardRef, useImperativeHandle, useRef } from 'react'
 
 import { Alert } from '../Alert'
 import { Button } from '../Button'
@@ -8,7 +8,6 @@ import { usePrompt } from './usePromp'
 export type PromptRef = {
   open: () => void
   close: () => void
-  focus: () => void
   setTitle: (title: string) => void
   setValue: (value: string) => void
   value: string
@@ -23,17 +22,10 @@ export function PromptComponent(
   { onConfirm, onCancel }: PromptProps,
   ref: ForwardedRef<PromptRef>
 ) {
-  const {
-    title,
-    value,
-    alertRef,
-    inputRef,
-    open,
-    focus,
-    close,
-    setTitle,
-    setValue,
-  } = usePrompt()
+  const inputRef = useRef<HTMLInputElement | null>(null)
+
+  const { title, value, alertRef, open, close, setTitle, setValue } =
+    usePrompt()
 
   useImperativeHandle(
     ref,
@@ -47,7 +39,7 @@ export function PromptComponent(
         value,
       }
     },
-    [value, open, close, focus, setTitle, setValue]
+    [value, open, close, setTitle, setValue]
   )
 
   return (
@@ -58,13 +50,17 @@ export function PromptComponent(
       body={
         <div className="mx-auto my-6 w-4/5 items-center justify-center">
           <input
-            ref={inputRef}
+            ref={(ref) => {
+              inputRef.current = ref
+              setTimeout(() => {
+                inputRef.current?.focus()
+              }, 10)
+            }}
             type="text"
             value={value}
             onChange={({ currentTarget }) => setValue(currentTarget.value)}
             autoCapitalize="none"
-            autoFocus
-            className="w-full rounded border border-gray-100 bg-purple-700 p-2 text-sm text-green-400 outline-none focus:border-green-500"
+            className="prompt-input w-full rounded border border-gray-100 bg-purple-700 p-2 text-sm text-green-400 outline-none focus:border-green-500"
           />
         </div>
       }

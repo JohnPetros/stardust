@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { AlertRef } from '../Alert'
 
@@ -6,7 +6,6 @@ export function usePrompt() {
   const [title, setTitle] = useState('')
   const [value, setValue] = useState('')
   const alertRef = useRef<AlertRef | null>(null)
-  const inputRef = useRef<HTMLInputElement | null>(null)
 
   function open() {
     alertRef.current?.open()
@@ -16,22 +15,14 @@ export function usePrompt() {
     alertRef.current?.close()
   }
 
-  function focus() {
-    inputRef.current?.focus()
+  return {
+    title,
+    value,
+    alertRef,
+    setTitle,
+    setValue,
+    open,
+    close,
+    focus,
   }
-
-  return useMemo(
-    () => ({
-      title,
-      value,
-      inputRef,
-      alertRef,
-      setTitle,
-      setValue,
-      open,
-      close,
-      focus,
-    }),
-    [title, value]
-  )
 }
