@@ -2,7 +2,7 @@ import { serialize } from 'next-mdx-remote/serialize'
 
 import { captureTextBetweenBackticks } from './captureTextBetweenBackticks'
 
-import { formatCode, getComponentContent } from '@/utils/helpers'
+import { formatCode } from '@/utils/helpers'
 
 export async function compileMdx(component: string) {
   const textsbetweenBacktcks = captureTextBetweenBackticks(component)
@@ -12,10 +12,11 @@ export async function compileMdx(component: string) {
   let formattedComponent = ''
 
   if (isCodeComponent) {
-    const codeComponentContent = getComponentContent(component)
-    const formattedContent = formatCode(codeComponentContent, 'encode')
+    const closeTagIndex = component.indexOf('>')
 
-    formattedComponent = `<Code>${formattedContent}</Code>`
+    formattedComponent =
+      component.slice(0, closeTagIndex) +
+      formatCode(component.slice(closeTagIndex), 'encode')
   } else {
     formattedComponent = component
   }

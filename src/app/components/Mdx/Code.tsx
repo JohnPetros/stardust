@@ -11,7 +11,11 @@ type CodeProps = {
   hasAnimation: boolean
 }
 
-export function Code({ isRunnable, children, hasAnimation = true }: CodeProps) {
+export function Code({
+  isRunnable,
+  children,
+  hasAnimation = false,
+}: CodeProps) {
   return (
     <Animation hasAnimation={hasAnimation}>
       <CodeSnippet

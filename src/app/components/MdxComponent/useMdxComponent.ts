@@ -10,6 +10,8 @@ export function useMdxComponent(content: string, hasAnimation: boolean) {
     `hasAnimation: ${hasAnimation}`
   )
 
+  console.log({ mdxContent })
+
   useEffect(() => {
     if (hasAnimation && mdxComponentRef.current) {
       mdxComponentRef.current.scrollIntoView({
