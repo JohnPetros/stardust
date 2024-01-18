@@ -4,10 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 
 import { PageTransitionAnimation } from '../../../../../components/PageTransitionAnimation'
-import {
-  Congratulations,
-  updateUserDataParams,
-} from '../../../lesson/components/Congratulations'
+import { Congratulations } from '../../../congratulations/components/Rewards'
 
 import { Code } from './components/Code'
 import { Header } from './components/Header'

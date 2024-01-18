@@ -16,12 +16,8 @@ export async function POST(request: NextRequest) {
   for (const component of components) {
     const mdx = await compileMdx(component)
 
-    console.log({ mdx })
-
     compiledMdxComponents.push(JSON.stringify(mdx))
   }
-
-  console.log({ compiledMdxComponents })
 
   return NextResponse.json({ compiledMdxComponents })
 }
