@@ -7,7 +7,6 @@ import { Code } from './Code'
 import { Image } from './Image'
 import { Quote } from './Quote'
 import { Text } from './Text'
-import { useMdx } from './useMdx'
 import { User } from './User'
 
 const COMPONENTS = {
@@ -19,17 +18,12 @@ const COMPONENTS = {
   Code,
 }
 
-export type MdxRef = {
-  isLoaded: boolean
-}
-
 type MdxProps = {
-  id: string
   children: string
 }
 
 export function Mdx({ children }: MdxProps) {
-  const source = useMdx(children)
+  const source = JSON.parse(children)
 
   if (source) return <MDXRemote {...source} components={COMPONENTS} />
 }
