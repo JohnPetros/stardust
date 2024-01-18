@@ -41,7 +41,7 @@ export type ToastRef = {
 }
 
 export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
-  const { type, message, seconds, isOpen, scope, animate, open, close } =
+  const { type, message, seconds, isOpen, scope, open, close, handleDragEnd } =
     useToast()
 
   const barAnimations: Variants = {
@@ -67,7 +67,7 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
     <>
       <AnimatePresence>
         {isOpen && (
-          <Container.Root type="foreground" forceMount open={isOpen} asChild>
+          <Container.Root type="foreground" forceMount asChild>
             <motion.div
               ref={scope}
               variants={toastAnimations}
@@ -75,17 +75,15 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
               animate="open"
               exit="close"
               drag="x"
+              tabIndex={-1}
               dragConstraints={{
                 left: 0,
                 right: 10,
               }}
               dragElastic={0.8}
-              onDragEnd={() => {
-                animate(scope.current, { x: 500 }, { duration: 0.1 })
-                close()
-              }}
+              onDragEnd={handleDragEnd}
               className={twMerge(
-                'fixed right-8 top-4 z-[1000] rounded',
+                'fixed right-8 top-4 z-[400] rounded',
                 type === 'error' ? 'bg-red-800' : 'bg-green-900'
               )}
             >

@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { useAnimate } from 'framer-motion'
+
 const TOAST_DURATION_DEFAULT = 2.5 // seconds
 
 type Type = 'error' | 'success'
@@ -21,6 +22,7 @@ export function useToast() {
   const [message, setMessage] = useState('')
   const [seconds, setSeconds] = useState(TOAST_DURATION_DEFAULT)
   const [scope, animate] = useAnimate()
+  const [scrollPosition, setScrollPosition] = useState(0)
 
   function open({ type, message, seconds = 2.5 }: OpenToastProps) {
     setType(type)
@@ -33,6 +35,11 @@ export function useToast() {
     setIsOpen(false)
   }
 
+  function handleDragEnd() {
+    animate(scope.current, { x: 500 }, { duration: 0.1 })
+    close()
+  }
+
   useEffect(() => {
     if (!isOpen || !seconds) return
 
@@ -43,14 +50,32 @@ export function useToast() {
     return () => clearTimeout(timer)
   }, [isOpen, seconds])
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(window.scrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+
+    handleScroll()
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!isOpen) window.scrollTo(0, scrollPosition)
+  }, [isOpen])
+
   return {
     isOpen,
     type,
     message,
     seconds,
     scope,
-    animate,
     open,
     close,
+    handleDragEnd,
   }
 }

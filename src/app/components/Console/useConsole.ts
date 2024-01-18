@@ -10,7 +10,6 @@ export function useConsole({ height, results }: ConsoleProps) {
   const controls = useAnimation()
   const types = useRef<string[]>([])
   const [isOpen, setIsOpen] = useState(false)
-  console.log({ isOpen })
 
   function calculateMinHeight() {
     return ((height + 100) / 10) * 0.5 + 'rem'
