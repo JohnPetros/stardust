@@ -1,5 +1,6 @@
-import type { MDXRemoteSerializeResult } from 'next-mdx-remote'
+import type { Text } from '@/@types/text'
 
 export interface IMdxController {
-  compileMdx(content: string): Promise<MDXRemoteSerializeResult>
+  compileMdxComponents(components: string[]): Promise<string[]>
+  parseTexts(texts: Text[]): Promise<string[]>
 }

@@ -1,20 +1,27 @@
-import { MDXRemoteSerializeResult } from 'next-mdx-remote'
-
 import type { IMdxController } from '../../interfaces/IMdxController'
 import { Server } from '../server'
 
+import { Text } from '@/@types/text'
 import { ROUTES } from '@/utils/constants'
 
 export const MdxController = (): IMdxController => {
   const server = Server()
 
   return {
-    compileMdx: async (content: string) => {
+    compileMdxComponents: async (components: string[]) => {
       const data = await server.post<{
-        source: MDXRemoteSerializeResult
-      }>(`${ROUTES.server.mdx}/compile`, { content })
+        compiledMdxComponents: string[]
+      }>(`${ROUTES.server.mdx}/compile-components`, { components })
 
-      return data.source
+      return data.compiledMdxComponents
+    },
+
+    parseTexts: async (texts: Text[]) => {
+      const data = await server.post<{
+        mdxComponents: string[]
+      }>(`${ROUTES.server.mdx}/parse-texts`, { texts })
+
+      return data.mdxComponents
     },
   }
 }
