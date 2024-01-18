@@ -5,7 +5,7 @@ import { Question } from '@/@types/quiz'
 import type { Text } from '@/@types/text'
 
 export type LessonStoreState = {
-  currentStage: 'theory' | 'quiz' | 'congratulations'
+  currentStage: 'theory' | 'quiz' | 'rewards'
   texts: Text[]
   renderedTextsAmount: number
   questions: Question[]
@@ -41,7 +41,7 @@ export type LessonStoreProps = {
 }
 
 const initialState: LessonStoreState = {
-  currentStage: 'quiz',
+  currentStage: 'theory',
   texts: [],
   renderedTextsAmount: 0,
   questions: [],
@@ -125,7 +125,7 @@ export const useLessonStore = create<LessonStoreProps>()(
             }
 
             state.currentQuestionIndex = nextQuestionIndex
-            state.currentStage = isEnd ? 'congratulations' : state.currentStage
+            state.currentStage = isEnd ? 'rewards' : state.currentStage
             state.isAnswered = false
           })
         },

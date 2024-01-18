@@ -7,14 +7,6 @@ import { twMerge } from 'tailwind-merge'
 
 import { useToast } from './useToast'
 
-type Type = 'error' | 'success'
-
-export interface OpenToastProps {
-  type: Type
-  message: string
-  seconds?: number
-}
-
 const toastAnimations: Variants = {
   initial: {
     opacity: 0,
@@ -36,7 +28,15 @@ const toastAnimations: Variants = {
   },
 }
 
-export interface ToastRef {
+type Type = 'error' | 'success'
+
+export type OpenToastProps = {
+  type: Type
+  message: string
+  seconds?: number
+}
+
+export type ToastRef = {
   open: ({ type, message, seconds }: OpenToastProps) => void
 }
 

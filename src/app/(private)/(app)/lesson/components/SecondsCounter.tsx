@@ -1,18 +1,34 @@
-import { useEffect } from 'react'
+import {
+  ForwardedRef,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from 'react'
 
-import { useLessonStore } from '@/stores/lessonStore'
+export type SecondsCounterRef = {
+  getSeconds: () => number
+}
 
-export function SecondsIncrementer() {
-  const incrementSecondsAmount = useLessonStore(
-    (store) => store.actions.incrementSecondsAmount
-  )
-  const secondsAmount = useLessonStore((store) => store.state.secondsAmount)
+const SecondsCounterComponent = (
+  _: unknown,
+  ref: ForwardedRef<SecondsCounterRef>
+) => {
+  const [counter, setCounter] = useState(0)
+
+  useImperativeHandle(ref, () => {
+    return {
+      getSeconds: () => counter,
+    }
+  })
 
   useEffect(() => {
     setTimeout(() => {
-      incrementSecondsAmount()
+      setCounter(counter + 1)
     }, 1000)
-  }, [secondsAmount, incrementSecondsAmount])
+  }, [counter])
 
-  return <></>
+  return null
 }
+
+export const SecondsCounter = forwardRef(SecondsCounterComponent)

@@ -2,35 +2,43 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import type { Text as TextData } from '@/@types/text'
 import { useLessonStore } from '@/stores/lessonStore'
 
-export function useTheory() {
-  const { state, actions } = useLessonStore()
-  const [texts, setTexts] = useState<TextData[]>([])
-  const nextTextIndex = useRef(0)
-  const hasNextText = !!state.texts[nextTextIndex.current + 1]
+type MdxComponent = {
+  content: string
+  hasAnimation: boolean
+}
+
+export function useTheory(compiledMdxComponets: string[]) {
+  const incrementMdxComponentsAmount = useLessonStore(
+    (store) => store.actions.incrementRenderedTextsAmount
+  )
+
+  const [mdxComponents, setMdxComponents] = useState<MdxComponent[]>([])
+  const nextMdxComponentIndex = useRef(0)
+  const hasNextMdxComponent =
+    !!compiledMdxComponets[nextMdxComponentIndex.current + 1]
 
   function nextText() {
-    if (!hasNextText) return
+    if (!hasNextMdxComponent) return
 
-    nextTextIndex.current = nextTextIndex.current + 1
+    nextMdxComponentIndex.current = nextMdxComponentIndex.current + 1
 
-    setTexts(() => {
-      const previousTexts = texts.map((text) => ({
-        ...text,
+    setMdxComponents(() => {
+      const previousMdxComponents = mdxComponents.map((mdxComponent) => ({
+        ...mdxComponent,
         hasAnimation: false,
       }))
 
       const nextText = {
-        ...state.texts[nextTextIndex.current],
+        content: compiledMdxComponets[nextMdxComponentIndex.current],
         hasAnimation: true,
       }
 
-      return [...previousTexts, nextText]
+      return [...previousMdxComponents, nextText]
     })
 
-    actions.incrementRenderedTextsAmount()
+    incrementMdxComponentsAmount()
   }
 
   function handleContinueButtonClick() {
@@ -38,14 +46,14 @@ export function useTheory() {
   }
 
   useEffect(() => {
-    setTexts([{ ...state.texts[0], hasAnimation: true }])
-    actions.incrementRenderedTextsAmount()
-  }, [state.texts, actions])
+    setMdxComponents([{ content: compiledMdxComponets[0], hasAnimation: true }])
+    incrementMdxComponentsAmount()
+  }, [compiledMdxComponets])
 
   return {
-    texts,
-    nextTextIndex,
-    hasNextText,
+    mdxComponents,
+    currentMdxComponentIndex: nextMdxComponentIndex.current - 1,
+    hasNextMdxComponent,
     handleContinueButtonClick,
   }
 }

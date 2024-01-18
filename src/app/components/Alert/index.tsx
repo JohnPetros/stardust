@@ -67,7 +67,7 @@ const AlertComponent = (
         <AlertDialog.Portal
           container={isRendered ? containerRef.current : null}
         >
-          <AlertDialog.Overlay className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50" />
+          <AlertDialog.Overlay className="fixed inset-0 z-[350] overflow-y-auto bg-red-500 bg-opacity-50" />
           <AlertDialog.Content
             forceMount={canForceMount ? true : undefined}
             onCloseAutoFocus={onClose}

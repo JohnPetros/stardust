@@ -2,29 +2,39 @@ import { serialize } from 'next-mdx-remote/serialize'
 
 import { captureTextBetweenBackticks } from './captureTextBetweenBackticks'
 
-export async function compileMdx(content: string) {
-  const textsbetweenBacktcks = captureTextBetweenBackticks(content)
+import { formatCode, getComponentContent } from '@/utils/helpers'
 
-  let contentbetweenBackticks = content
+export async function compileMdx(component: string) {
+  const textsbetweenBacktcks = captureTextBetweenBackticks(component)
 
-  for (const text of textsbetweenBacktcks) {
-    contentbetweenBackticks = contentbetweenBackticks.replace(
-      `\`${text}\``,
-      text
-    )
+  const isCodeComponent = component.slice(-7) === '</Code>'
+
+  let formattedComponent = ''
+
+  if (isCodeComponent) {
+    const codeComponentContent = getComponentContent(component)
+    const formattedContent = formatCode(codeComponentContent, 'encode')
+
+    formattedComponent = `<Code>${formattedContent}</Code>`
+  } else {
+    formattedComponent = component
   }
 
-  const source = await serialize(
-    contentbetweenBackticks.length > 0 ? contentbetweenBackticks : content
+  for (const text of textsbetweenBacktcks) {
+    formattedComponent = formattedComponent.replace(`\`${text}\``, text)
+  }
+
+  const mdx = await serialize(
+    formattedComponent.length > 0 ? formattedComponent : component
   )
 
   if (textsbetweenBacktcks.length)
     for (const text of textsbetweenBacktcks) {
-      source.compiledSource = source.compiledSource.replace(
+      mdx.compiledSource = mdx.compiledSource.replace(
         ` ${text} `,
         `\`${text}\``
       )
     }
 
-  return source
+  return mdx
 }

@@ -55,7 +55,7 @@ export function Theory({ title, number, compiledMdxComponets }: TheoryProps) {
           </div>
         </div>
 
-        <footer className="fixed bottom-0 z-[150] flex w-full items-center justify-center border-t border-gray-800 bg-gray-900 p-4">
+        <footer className="fixed bottom-0 z-50 flex w-full items-center justify-center border-t border-gray-800 bg-gray-900 p-4">
           {!hasNextMdxComponent ? (
             <Alert
               type={'asking'}
