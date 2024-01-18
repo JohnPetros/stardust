@@ -7,7 +7,9 @@ import Lottie from 'lottie-react'
 import { DialogAnimation } from '../Dialog'
 import { Hydration } from '../Hydration'
 
-import { type AlertType, useAlert } from './useAlert'
+import { useAlert } from './useAlert'
+
+export type AlertType = 'earning' | 'crying' | 'denying' | 'asking' | 'generic'
 
 export type AlertRef = {
   open: VoidFunction
@@ -23,7 +25,7 @@ type AlertProps = {
   children?: ReactNode
   canPlaySong?: boolean
   canForceMount?: boolean
-  onClose?: VoidFunction
+  onOpen?: VoidFunction
 }
 
 const AlertComponent = (
@@ -36,7 +38,7 @@ const AlertComponent = (
     children,
     canPlaySong = true,
     canForceMount = false,
-    onClose,
+    onOpen,
   }: AlertProps,
   ref: ForwardedRef<AlertRef>
 ) => {
@@ -48,7 +50,7 @@ const AlertComponent = (
     setIsOpen,
     open,
     close,
-  } = useAlert(type, canPlaySong)
+  } = useAlert(type, canPlaySong, onOpen)
 
   useImperativeHandle(
     ref,
@@ -67,11 +69,10 @@ const AlertComponent = (
         <AlertDialog.Portal
           container={isRendered ? containerRef.current : null}
         >
-          <AlertDialog.Overlay className="fixed inset-0 z-[350] overflow-y-auto bg-red-500 bg-opacity-50" />
+          <AlertDialog.Overlay className="fixed inset-0 z-[300] overflow-y-auto bg-black bg-opacity-50" />
           <AlertDialog.Content
             forceMount={canForceMount ? true : undefined}
-            onCloseAutoFocus={onClose}
-            className="fixed left-1/2 top-1/2 z-50 max-h-screen w-full max-w-lg -translate-x-1/2 -translate-y-1/2 p-6"
+            className="fixed left-1/2 top-1/2 z-[350] max-h-screen w-full max-w-lg -translate-x-1/2 -translate-y-1/2 p-6"
           >
             <DialogAnimation>
               <div className="flex items-center border-b border-gray-700 pb-2">

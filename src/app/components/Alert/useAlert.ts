@@ -1,13 +1,17 @@
 'use client'
 
-import { useEffect, useImperativeHandle, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+
+import { AlertType } from '.'
 
 import { ALERT_EFFECTS } from '@/utils/constants'
 import { playSound } from '@/utils/helpers'
 
-export type AlertType = 'earning' | 'crying' | 'denying' | 'asking' | 'generic'
-
-export function useAlert(type: AlertType, canPlaySong: boolean) {
+export function useAlert(
+  type: AlertType,
+  canPlaySong: boolean,
+  onOpen: VoidFunction | null = null
+) {
   const [isOpen, setIsOpen] = useState(false)
 
   const [isRendered, setIsRendered] = useState(false)
@@ -35,6 +39,10 @@ export function useAlert(type: AlertType, canPlaySong: boolean) {
     containerRef.current = document.body
     setIsRendered(true)
   }, [])
+
+  useEffect(() => {
+    if (onOpen && isOpen) onOpen()
+  }, [isOpen, onOpen])
 
   return {
     animation,
