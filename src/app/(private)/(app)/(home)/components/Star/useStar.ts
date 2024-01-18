@@ -10,6 +10,7 @@ import { useSpaceContext } from '@/contexts/SpaceContext'
 import { useToast } from '@/contexts/ToastContext'
 import { useApi } from '@/services/api'
 import { ROUTES } from '@/utils/constants'
+import { playSound } from '@/utils/helpers'
 
 export function useStar(
   { id, slug, isChallenge }: Pick<Star, 'id' | 'slug' | 'isChallenge'>,
@@ -45,6 +46,7 @@ export function useStar(
   }
 
   function handleStarClick() {
+    playSound('star.wav')
     starRef.current?.goToAndPlay(0)
 
     setTimeout(() => {
@@ -53,10 +55,10 @@ export function useStar(
   }
 
   useEffect(() => {
-    if (isLastUnlockedStar) {
+    if (isLastUnlockedStar && isInView) {
       setLastUnlockedStarPosition('in')
     }
-  }, [isLastUnlockedStar, isInView])
+  }, [isLastUnlockedStar, isInView, setLastUnlockedStarPosition])
 
   useEffect(() => {
     if (isLastUnlockedStar && lastUnlockedStarRef.current) {
