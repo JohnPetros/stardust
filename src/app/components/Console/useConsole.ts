@@ -7,23 +7,29 @@ import { ConsoleProps } from '.'
 
 export function useConsole({ height, results }: ConsoleProps) {
   const [output, setOutput] = useState<string[]>([])
-  const types = useRef<string[]>([])
   const controls = useAnimation()
+  const types = useRef<string[]>([])
+  const [isOpen, setIsOpen] = useState(false)
+  console.log({ isOpen })
 
   function calculateMinHeight() {
     return ((height + 100) / 10) * 0.5 + 'rem'
   }
 
   const open = useCallback(() => {
+    setIsOpen(true)
     controls.start('open')
   }, [controls])
 
   const close = useCallback(() => {
+    setIsOpen(false)
     controls.start('closed')
   }, [controls])
 
   function formatOutput(output: string, index: number) {
-    switch (types.current[index].trim()) {
+    const outputType = types.current[index].trim()
+
+    switch (outputType) {
       case 'textoo':
         return "'" + output + "'"
       case 'vetor':
@@ -46,10 +52,15 @@ export function useConsole({ height, results }: ConsoleProps) {
     types.current = results.filter((_, index) => index % 2 === 0)
     const output = results.filter((_, index) => index % 2 !== 0)
 
-    setOutput(output.map((output, index) => formatOutput(output.trim(), index)))
+    const formattedOutput = output.map((output, index) =>
+      formatOutput(output.trim(), index)
+    )
+
+    setOutput(formattedOutput)
   }, [results])
 
   return {
+    isOpen,
     output,
     animationControls: controls,
     open,

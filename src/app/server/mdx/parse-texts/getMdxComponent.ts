@@ -15,18 +15,18 @@ export function getMdxComponent(text: Text) {
 
   switch (text.type) {
     case 'default':
-      return `<Text ${props} hasAnimation={${text.hasAnimation}}>${text.content}</Text>`
+      return `<Text ${props} hasAnimation={undefined}>${text.content}</Text>`
     case 'alert':
-      return `<Alert ${props} hasAnimation={${text.hasAnimation}}>${text.content}</Alert>`
+      return `<Alert ${props} hasAnimation={undefined}>${text.content}</Alert>`
     case 'quote':
-      return `<Quote ${props} hasAnimation={${text.hasAnimation}}>${text.content}</Quote>`
+      return `<Quote ${props} hasAnimation={undefined}>${text.content}</Quote>`
     case 'image':
-      return `<Image ${props} hasAnimation={${text.hasAnimation}}>${text.content}</Image>`
+      return `<Image ${props} hasAnimation={undefined}>${text.content}</Image>`
     case 'user':
-      return `<User ${props} hasAnimation={${text.hasAnimation}}>${text.content}</User>`
+      return `<User ${props} hasAnimation={undefined}>${text.content}</User>`
     case 'code':
-      return `<Code ${props} isRunnable={${text.isRunnable}} hasAnimation={${text.hasAnimation}}>${text.content}</Code>`
+      return `<Code ${props} hasAnimation={undefined} isRunnable={${text.isRunnable}}>${text.content}</Code>`
     default:
-      return `<Text ${props} hasAnimation={${text.hasAnimation}}>${text.content}</Text>`
+      return `<Text ${props} hasAnimation={undefined}>${text.content}</Text>`
   }
 }
