@@ -1,11 +1,12 @@
 'use client'
 
+import { memo } from 'react'
 import { motion, Variants } from 'framer-motion'
 import Image from 'next/image'
 
 import { Star } from '../Star'
 
-import type { Planet } from '@/@types/planet'
+import type { Planet as PlanetData } from '@/@types/planet'
 import { useApi } from '@/services/api'
 
 const planetSignAnimations: Variants = {
@@ -19,11 +20,11 @@ const planetSignAnimations: Variants = {
 }
 
 type PlanetProps = {
-  data: Planet
+  data: PlanetData
   lastUnlockedStarId: string
 }
 
-export function Planet({
+function PlanetComponent({
   data: { name, image, icon, stars },
   lastUnlockedStarId,
 }: PlanetProps) {
@@ -59,3 +60,7 @@ export function Planet({
     </li>
   )
 }
+
+export const Planet = memo(PlanetComponent, (previousProps, currentProps) => {
+  return previousProps.lastUnlockedStarId === currentProps.lastUnlockedStarId
+})

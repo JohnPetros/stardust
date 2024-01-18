@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { LessonStar } from '../components/LessonStar'
 
 import type { Star } from '@/@types/star'
+import { MdxController } from '@/services/api/server/controllers/mdxController'
 import { createServerClient } from '@/services/api/supabase/clients/serverClient'
 import { StarsController } from '@/services/api/supabase/controllers/starsController'
 
@@ -23,5 +24,10 @@ export default async function LessonPage({ params }: LessonPageProps) {
     notFound()
   }
 
-  return <LessonStar star={star} />
+  const mdxController = MdxController()
+  const mdxComponents = await mdxController.parseTexts(star.texts)
+  const compiledMdxComponents =
+    await mdxController.compileMdxComponents(mdxComponents)
+
+  return <LessonStar star={star} mdxComponets={compiledMdxComponents} />
 }
