@@ -68,7 +68,7 @@ a {
 }
 
 .inline-code {
-  @apply bg-gray-900 text-gray-50 rounded-md p-1
+  @apply bg-gray-900 text-gray-50 rounded-md p-1 mx-1
 }
 
 .skeleton {
