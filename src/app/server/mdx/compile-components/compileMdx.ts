@@ -1,24 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
 import { serialize } from 'next-mdx-remote/serialize'
 
-import { REGEX } from '@/utils/constants'
-const backticksRegex = REGEX.backticks
+import { captureTextBetweenBackticks } from './captureTextBetweenBackticks'
 
-function captureTextBetweenBackticks(text: string) {
-  const matches = Array.from(text.matchAll(backticksRegex), (match) => match[1])
-
-  return matches
-}
-
-export async function POST(request: NextRequest) {
-  const { content } = await request.json()
-
-  if (!content)
-    return NextResponse.json(
-      { message: 'Content not provided' },
-      { status: 400 }
-    )
-
+export async function compileMdx(content: string) {
   const textsbetweenBacktcks = captureTextBetweenBackticks(content)
 
   let contentbetweenBackticks = content
@@ -42,5 +26,5 @@ export async function POST(request: NextRequest) {
       )
     }
 
-  return NextResponse.json({ source })
+  return source
 }
