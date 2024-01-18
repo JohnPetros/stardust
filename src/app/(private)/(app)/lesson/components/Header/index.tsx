@@ -12,6 +12,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useRocket } from '@/hooks/useRocket'
 import { useApi } from '@/services/api'
 import { useLessonStore } from '@/stores/lessonStore'
+
 export function Header() {
   const { user } = useAuth()
 
