@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation'
 import { CongratulationsProps } from '.'
 
 import { AlertRef } from '@/app/components/Alert'
+import { deleteCookie } from '@/app/server/actions/deleteCookie'
+import { COOKIES } from '@/utils/constants'
 import { playSound } from '@/utils/helpers'
 
 export function useCongratulations({
@@ -47,6 +49,10 @@ export function useCongratulations({
   }
 
   useEffect(() => {
+    async function deleteRewardsCookie() {
+      await deleteCookie(COOKIES.rewardsPayload)
+    }
+
     function pauseStarsAnimation() {
       const totalStars = (parseInt(accurance) * 5) / 100
 
@@ -63,9 +69,7 @@ export function useCongratulations({
 
     playSound('earning.wav')
 
-    // const time = setTimeout(async () => {
-    //   await updateUserData()
-    // }, 250)
+    deleteRewardsCookie()
   }, [accurance])
 
   return {

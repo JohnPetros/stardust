@@ -33,14 +33,6 @@ export default async function RewardsPage() {
   const todayIndex = dateProvider.getTodayIndex()
   const todayStatus = user.week_status[todayIndex]
 
-  console.log({
-    xp,
-    coins,
-    accurance,
-    seconds,
-    nextRoute,
-  })
-
   return (
     <Congratulations
       xp={xp}
