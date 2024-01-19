@@ -18,7 +18,7 @@ export function useAudio(audioFile: AudioFile | null) {
   const audio = useMemo(() => {
     if (!audioFile) return null
 
-    return new Audio(audioFile)
+    return new Audio(`/audios/${audioFile}`)
   }, [audioFile])
 
   function play() {
