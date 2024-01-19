@@ -9,7 +9,7 @@ import { CodeEditorRef } from '@/app/components/CodeEditor'
 import { useToast } from '@/contexts/ToastContext'
 import { execute } from '@/libs/delegua'
 import { REGEX } from '@/utils/constants/regex'
-import { checkIsNumeric, playSound } from '@/utils/helpers'
+import { checkNumeric, playSound } from '@/utils/helpers'
 
 export function useCodeEditorPlayground(code: string) {
   const [output, setOutput] = useState<string[]>([])
@@ -56,10 +56,7 @@ export function useCodeEditorPlayground(code: string) {
     const regex = REGEX.input
     const match = code.match(regex)
     userCode.current = match
-      ? code.replace(
-          match[0],
-          checkIsNumeric(input) ? input : "'" + input + "'"
-        )
+      ? code.replace(match[0], checkNumeric(input) ? input : "'" + input + "'")
       : userCode.current
     promptRef.current?.setValue('')
     runUserCode()

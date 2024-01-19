@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { usePathname } from 'next/navigation'
 
 import { useSiderbar } from '@/contexts/SidebarContext'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
@@ -17,6 +16,7 @@ export function useLayout() {
   } = useSiderbar()
 
   const localStorage = useLocalStorage()
+  localStorage.setItem(STORAGE.hasPageAnimationTransition, 'true')
 
   function toggleSidenav() {
     setIsSidenavExpanded(!isSidenavExpanded)
@@ -28,8 +28,6 @@ export function useLayout() {
   }
 
   useEffect(() => {
-    localStorage.setItem(STORAGE.hasPageAnimationTransition, 'true')
-
     return () => {
       localStorage.removeItem(STORAGE.hasPageAnimationTransition)
     }

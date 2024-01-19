@@ -10,10 +10,10 @@ export const texts: Text[] = [
     content:
       'Ok, parace que você não encontrou nada de interessante no espaço ainda.',
     type: 'default',
-    picture: 'panda-andando-com-bambu.jpg',
+    picture: 'panda-triste.jpg',
   },
   {
-    content: 'Mas por que?',
+    content: 'Mas por quê?',
     type: 'user',
   },
   {
@@ -26,13 +26,13 @@ export const texts: Text[] = [
     content:
       'Para resolver esse problema você terá que escrever um programa que exiba suas informações para ele, e para isso você terá que usar os comandos `leia()` e `escreva()` explicados anteriormente.',
     type: 'default',
-    picture: 'panda-andando-com-bambu.jpg',
+    picture: 'panda.jpg',
   },
   {
     content:
-      'Porém, como você já sabe, é necessário armazenar seu nome em uma variável no código para então escrevê-lo.',
+      'Porém, como você já sabe, para escrever seu nome na tela, é necessário, antes, armazená-lo em uma variável.',
     type: 'default',
-    picture: 'panda-andando-com-bambu.jpg',
+    picture: 'panda-sorrindo.jpg',
   },
   {
     content: 'O que são variáveis mesmo?',
@@ -42,13 +42,18 @@ export const texts: Text[] = [
     content:
       'Variáveis são espaços reservados na memória de um programa para algum tipo de dado.',
     type: 'default',
-    picture: 'panda-andando-com-bambu.jpg',
+    picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     content:
-      'Para usá-las de fato é necessário fazer o que chamamos de declarar uma variável, escrevendo `var`  e em seguida você coloca um nome que você deseja que a variável contenha.',
+      'Para usá-las de fato é necessário fazer o que chamamos de declarar uma variável, escrevendo `var` e depois definir um nome que você deseja que a variável tenha.',
     type: 'default',
-    picture: 'panda-andando-com-bambu.jpg',
+    picture: 'panda-segurando-bambu-de-pe.jpg',
+  },
+  {
+    content: 'Como dessa forma:',
+    type: 'default',
+    picture: 'panda-olhando-computador.jpg',
   },
   {
     content: `var nomeCompleto`,
@@ -61,8 +66,8 @@ export const texts: Text[] = [
   },
   {
     content:
-      'Simples, basta colocar o sinal de "=" depois do nome variável e em seguida o dado que você deseja.',
-    picture: 'panda-andando-com-bambu.jpg',
+      'Simples, basta colocar o sinal de igual (=) depois do nome da variável e, em seguida, colocar o valor que você deseja que a variável contenha:',
+    picture: 'panda-fazendo-coracao.jpg',
     type: 'default',
   },
   {
@@ -75,19 +80,19 @@ var idade = 90`,
     type: 'default',
     content:
       'No exemplo acima, estamos criando duas variáveis, uma chamada "nome" que armazenará o valor "Kauê Cabess" e outra chamada "idade" que armazenará o valor 90.',
-    picture: 'panda-andando-com-bambu.jpg',
+    picture: 'panda-oferecendo-bambu.jpg',
   },
   {
     type: 'alert',
     content:
-      'O valor 90 não tem aspas porque ele é um número e não um texto, mas podemos falar sobre isso depois.',
-    picture: 'panda-andando-com-bambu.jpg',
+      'O valor 90 não tem aspas porque ele é não é um texto, mas sim um número, mas podemos falar sobre isso depois.',
+    picture: 'panda-olhando-de-lado.jpg',
   },
   {
     type: 'default',
     content:
       'Além disso, você também pode atribuir o valor de uma variável a uma outra variável.',
-    picture: 'panda-andando-com-bambu.jpg',
+    picture: 'panda-sorrindo-sentado.jpg',
   },
   {
     content: `var nome = "Kauê Cabess"
@@ -101,8 +106,8 @@ escreva(nomeCompleto)
   {
     type: 'default',
     content:
-      'Agora observe um exemplo completo utilizando tudo que vimos até agora.',
-    picture: 'panda-andando-com-bambu.jpg',
+      'Agora, observe um exemplo completo utilizando tudo que vimos até agora.',
+    picture: 'panda-deslumbrado.jpg',
   },
   {
     content: `var nome = leia("Digite seu nome:")
@@ -124,21 +129,21 @@ escreva("e sua idade é ", idade)
   },
   {
     content:
-      'ATENÇÃO: o criar o nome de suas variáveis, é importante seguir 4 regras principais:',
+      'ATENÇÃO: ao criar o nome de suas variáveis, é importante seguir 4 regras principais:',
     type: 'alert',
-    picture: 'panda-andando-com-bambu.jpg',
+    picture: 'panda-fazendo-coracao.jpg',
   },
   {
     content:
       '1 - O nome da variável deve iniciar com uma letra ou sublinhado `(_)`.',
     type: 'quote',
-    picture: 'panda-andando-com-bambu.jpg',
+    picture: 'panda-de-oculos.jpg',
   },
   {
     content: `// Nada de iniciar nome de variaveis com números ❌
 var 15Cavalos
 
-// Mas o nome pode conter números desde que não seja no começo
+// Mas o nome pode conter números desde que não seja no começo do nome
 var numero999`,
     type: 'code',
     isRunnable: true,
@@ -146,7 +151,7 @@ var numero999`,
   {
     content: '2 - Nome de variável não pode conter espaços.',
     type: 'quote',
-    picture: 'panda-andando-com-bambu.jpg',
+    picture: 'panda-de-oculos.jpg',
   },
   {
     content: `// Nada de fazer isso ❌
@@ -164,7 +169,7 @@ var minhaVariavel`,
     content:
       '3 - O nome da variável não pode ser uma palavra já utilizada pela liguagem, por exemplo, um nome de um comando.',
     type: 'quote',
-    picture: 'panda-andando-com-bambu.jpg',
+    picture: 'panda-de-oculos.jpg',
   },
   {
     content: `var leia // ❌
@@ -177,9 +182,9 @@ var var // ❌`,
   },
   {
     content:
-      '4 - O nome da variável deve ser descritivo e fácil de entender, e também, é claro, relacionado ao valor que está sendo armazenado nela.',
+      '4 - O nome da variável deve ser descritivo e fácil de entender, também, ser relacionado ao valor que está sendo armazenado nela.',
     type: 'quote',
-    picture: 'panda-andando-com-bambu.jpg',
+    picture: 'panda-de-oculos.jpg',
   },
   {
     content: `// WHAT⁉
@@ -193,14 +198,14 @@ var cor = "azul" // ✅`,
   },
   {
     content:
-      'A atribuição de variáveis é uma parte fundamental da programação, pois permite armazenar valores e acessá-los ao longo do código. Ao seguir essas regras corretamente, você poderá atribuir valores a suas variáveis sem problemas em programas futuros.',
+      'A atribuição de variáveis é uma parte fundamental da programação, pois permite armazenar valores e acessá-los ao longo do programa. Ao seguir essas regras corretamente, você poderá atribuir valores a suas variáveis sem problemas em programas futuros.',
     type: 'alert',
-    picture: 'panda-andando-com-bambu.jpg',
+    picture: 'panda-sorrindo.jpg',
   },
   {
     content:
       'Agora que você aprendeu mais um pouco, que tal praticar tudo o que já vimos até agora?',
     type: 'quote',
-    picture: 'panda-andando-com-bambu.jpg',
+    picture: 'panda-fazendo-coracao.jpg',
   },
 ]

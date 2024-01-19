@@ -2,7 +2,6 @@ import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
 import { Question } from '@/@types/quiz'
-import type { Text } from '@/@types/text'
 
 export type LessonStoreState = {
   currentStage: 'theory' | 'quiz' | 'rewards'
@@ -39,7 +38,7 @@ export type LessonStoreProps = {
 }
 
 const initialState: LessonStoreState = {
-  currentStage: 'quiz',
+  currentStage: 'theory',
   mdxComponentsAmount: 0,
   renderedMdxComponents: 0,
   questions: [],
@@ -67,9 +66,14 @@ export const useLessonStore = create<LessonStoreProps>()(
             state.questions = questions
           })
         },
-        setMdxComponentsAmount(renderedMdxComponents: number) {
+        setMdxComponentsAmount(mdxComponentsAmount: number) {
           return set(({ state }) => {
-            state.renderedMdxComponents = renderedMdxComponents
+            state.mdxComponentsAmount = mdxComponentsAmount
+          })
+        },
+        setRenderedMdxComponentsAmount(renderedMdxComponentsAmount: number) {
+          return set(({ state }) => {
+            state.renderedMdxComponents = renderedMdxComponentsAmount
           })
         },
         setIsAnswered(isAnswered: boolean) {

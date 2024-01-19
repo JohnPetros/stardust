@@ -8,7 +8,7 @@ import { usersMock } from '@/__tests__/mocks/usersMock'
 import { AuthContext, AuthContextValue } from '@/contexts/AuthContext'
 import { SidebarContext, SidebarContextValue } from '@/contexts/SidebarContext'
 import { SupabaseProvider } from '@/contexts/SupabaseContext'
-import { HOME_PAGES } from '@/utils/constants'
+import { HOME_LINKS } from '@/utils/constants'
 
 function renderSidenav(isExpanded: boolean = false) {
   const isAchievementsListVisibleMock = false
@@ -91,7 +91,7 @@ describe('Side nav component', () => {
     })
   })
 
-  it.each(HOME_PAGES)(
+  it.each(HOME_LINKS)(
     'should render $label page link label when expanded',
     async ({ label }) => {
       renderSidenav(true)

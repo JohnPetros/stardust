@@ -1,7 +1,6 @@
 'use client'
 
 import { useMemo } from 'react'
-
 export type AudioFile =
   | 'asking.wav'
   | 'crying.wav'
@@ -18,10 +17,14 @@ export function useAudio(audioFile: AudioFile | null) {
   const audio = useMemo(() => {
     if (!audioFile) return null
 
-    return new Audio(`/audios/${audioFile}`)
+    const path = `/audios/${audioFile}`
+
+    const audio = new Audio(path)
+    return audio
   }, [audioFile])
 
   function play() {
+    console.log(audio)
     audio?.play()
   }
 

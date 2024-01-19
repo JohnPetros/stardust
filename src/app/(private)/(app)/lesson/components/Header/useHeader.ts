@@ -37,7 +37,7 @@ export function useHeader() {
   ])
 
   function leaveLesson() {
-    router.push(ROUTES.private.home)
+    router.push(ROUTES.private.home.space)
   }
 
   return {

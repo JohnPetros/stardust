@@ -4,9 +4,10 @@ import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import type { Star } from '@/@types/star'
+import { setCookie } from '@/app/server/actions/setCookie'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useLessonStore } from '@/stores/lessonStore'
-import { ROUTES, STORAGE } from '@/utils/constants'
+import { COOKIES, ROUTES, STORAGE } from '@/utils/constants'
 
 export function useLessonStar(star: Star) {
   const {
@@ -40,35 +41,39 @@ export function useLessonStar(star: Star) {
   }, [star, resetState, setMdxComponentsAmount, setQuestions])
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const currentSeconds = Number(localStorage.getItem(STORAGE.secondsCounter)) ?? 0
+    if (currentStage !== 'quiz') return
 
-      console.log({ currentSeconds })
+    const interval = setInterval(() => {
+      const currentSeconds =
+        Number(localStorage.getItem(STORAGE.secondsCounter)) ?? 0
 
       localStorage.setItem(STORAGE.secondsCounter, String(currentSeconds + 1))
     }, 1000)
 
     return () => clearInterval(interval)
-  }, [localStorage])
+  }, [currentStage, localStorage])
 
   useEffect(() => {
     async function showRewards() {
-      console.log('SECONDS', localStorage.getItem(STORAGE.secondsCounter))
+      const currentSeconds = Number(
+        localStorage.getItem(STORAGE.secondsCounter)
+      )
 
-      // const rewardsPayload = JSON.stringify({
-      //   star: {
-      //     seconds: secondsCounterRef.current?.getSeconds(),
-      //     incorrectAnswers: incorrectAnswersAmount,
-      //     questions: questions.length,
-      //     starSlug: star.slug,
-      //   },
-      // })
+      const rewardsPayload = JSON.stringify({
+        star: {
+          seconds: currentSeconds,
+          incorrectAnswers: incorrectAnswersAmount,
+          questions: questions.length,
+          starSlug: star.slug,
+        },
+      })
 
-      // setCookie(COOKIES.rewardsPayload, rewardsPayload)
-      // router.push(ROUTES.private.rewards)
+      await setCookie(COOKIES.rewardsPayload, rewardsPayload)
+      router.push(ROUTES.private.rewards)
     }
 
     if (currentStage === 'rewards') {
+      console.log('oi')
       showRewards()
     }
   }, [

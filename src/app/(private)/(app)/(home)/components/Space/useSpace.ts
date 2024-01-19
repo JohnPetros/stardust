@@ -26,7 +26,7 @@ export function useSpace() {
   useEffect(() => {
     if (!isTransitionVisible) return
 
-    const timeout = setTimeout(() => setIsTransitionVisible(false), 3500)
+    const timeout = setTimeout(() => setIsTransitionVisible(false), 2500)
     localStorage.removeItem(STORAGE.hasPageAnimationTransition)
 
     return () => clearTimeout(timeout)

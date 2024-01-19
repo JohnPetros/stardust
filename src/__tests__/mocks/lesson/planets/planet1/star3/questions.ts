@@ -1,4 +1,35 @@
-export const questions = [
+import {
+  CheckboxQuestion,
+  DragAndDropQuestion,
+  OpenQuestion,
+  SelectionQuestion,
+} from '@/@types/quiz'
+
+type Questions = [
+  OpenQuestion,
+  CheckboxQuestion,
+  SelectionQuestion,
+  DragAndDropQuestion,
+  SelectionQuestion,
+]
+
+export const questions: Questions = [
+  {
+    title:
+      'Vamos declarar uma variável contendo o nome de um planeta que vamos explorar. Mas qual palavra eu devo escrever antes do nome de qualquer variável na hora de declará-la?',
+    type: 'open',
+    lines: [{ id: 1, texts: ['input-1', 'nomePlaneta'], indentation: 0 }],
+    answers: ['var'],
+    picture: 'panda.jpg',
+  },
+  {
+    title:
+      'Quais dos itens abaixo pode ser um nome válido de variável? (Você deve selecionar todos que estão corretos)',
+    type: 'checkbox',
+    options: ['_planeta', '4planeta', 'planeta_alvo', 'planeta alvo'],
+    correctOptions: ['_planeta', 'planeta_alvo'],
+    picture: 'panda-piscando.jpg',
+  },
   {
     title: 'Agora, Como devo atribuir um valor a uma variável corretamente?',
     type: 'selection',
@@ -9,14 +40,6 @@ export const questions = [
       'nomeDavariavel < valor',
       'nomeDavariavel == valor',
     ],
-    picture: 'panda-piscando.jpg',
-  },
-  {
-    title:
-      'Quais dos itens abaixo pode ser um nome válido de variável? (Você deve selecionar todos que estão corretos)',
-    type: 'checkbox',
-    options: ['_planeta', '4planeta', 'planeta_alvo', 'planeta alvo'],
-    correctOptions: ['_planeta', 'planeta_alvo'],
     picture: 'panda-piscando.jpg',
   },
   {
@@ -47,13 +70,5 @@ escreva("planeta encontrado: ", nomePlaneta)`,
       'planeta encontrado: Planeta "Datanhon"',
     ],
     picture: 'panda-sorrindo.jpg',
-  },
-  {
-    title:
-      'Vamos declarar uma variável contendo o nome de um planeta que vamos explorar. Mas qual palavra eu devo escrever antes do nome de qualquer variável na hora de declará-la?',
-    type: 'open',
-    lines: [{ id: 1, texts: ['input-1', 'nomePlaneta'], indentation: 0 }],
-    answers: ['var'],
-    picture: 'panda.jpg',
   },
 ]

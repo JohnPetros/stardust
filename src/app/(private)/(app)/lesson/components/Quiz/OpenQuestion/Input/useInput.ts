@@ -9,7 +9,7 @@ export function useInput(answer: string) {
     (store) => store.state
   )
 
-  const width = 2.5 + answer.length + 'ch'
+  const width = 2.8 + answer.length + 'ch'
 
   const color: 'gray' | 'red' | 'green' = useMemo(() => {
     if (!isAnswerCorrect && isAnswerVerified) {

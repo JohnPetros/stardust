@@ -10,7 +10,7 @@ import { SignUpError } from '@/@types/signupError'
 import { AuthContext, AuthContextValue } from '@/contexts/AuthContext'
 import { SupabaseProvider } from '@/contexts/SupabaseContext'
 import { useApi } from '@/services/api'
-import { SIGN_UP_ERRORS } from '@/utils/constants/signup-errors'
+import { SIGN_UP_ERRORS } from '@/utils/constants/errors'
 
 jest.mock('next/navigation')
 jest.mock('../../../services/api')

@@ -31,20 +31,18 @@ export interface AuthContextValue {
   signOut: () => Promise<void>
   signInWithOAuth: (provider: OAuthProvider) => Promise<void>
   updateUser: (newUserData: Partial<User>) => Promise<void>
-  serverSession: Session | null | undefined
+  serverSession: Session | null
 }
 
 interface AuthProviderProps {
-  serverSession?: Session | null
+  serverSession: Session | null
   children: React.ReactNode
 }
 
 export const AuthContext = createContext({} as AuthContextValue)
 
 export function AuthProvider({ serverSession, children }: AuthProviderProps) {
-  const [session, setSession] = useState<Session | null | undefined>(
-    serverSession
-  )
+  const [session, setSession] = useState<Session | null>(serverSession)
   const api = useApi()
   const router = useRouter()
 

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { VerificationButtonProps } from '.'
 
-import { useAudio } from '@/hooks/useAudio'
+import { playAudio } from '@/utils/helpers'
 
 export function useVerificationButton({
   answerHandler,
@@ -12,9 +12,6 @@ export function useVerificationButton({
 }: VerificationButtonProps) {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const buttonHasFocus = useRef(false)
-
-  const successAudio = useAudio('success.wav')
-  const failAudio = useAudio('fail.wav')
 
   const buttonTitle = useMemo(() => {
     if (isAnswerVerified && !isAnswerCorrect) {
@@ -41,15 +38,9 @@ export function useVerificationButton({
 
   useEffect(() => {
     if (isAnswerVerified) {
-      isAnswerCorrect ? successAudio?.play() : failAudio?.play()
+      playAudio(isAnswerCorrect ? 'success.wav' : 'fail.wav')
     }
-  }, [
-    isAnswerVerified,
-    isAnswerCorrect,
-    successAudio,
-    failAudio,
-    handleGlobalKeyDown,
-  ])
+  }, [isAnswerVerified, isAnswerCorrect, handleGlobalKeyDown])
 
   useEffect(() => {
     document.addEventListener('keydown', handleGlobalKeyDown)
