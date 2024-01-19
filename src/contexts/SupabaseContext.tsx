@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, ReactNode, useState } from 'react'
+import { createContext, ReactNode, useContext, useState } from 'react'
 import { SupabaseClient } from '@supabase/supabase-js'
 
 import { createBrowserClient } from '@/services/api/supabase/clients/browserClient'
@@ -24,4 +24,16 @@ export function SupabaseProvider({ children }: SupabaseProviderProps) {
       {children}
     </SupabaseContext.Provider>
   )
+}
+
+export const useSupabaseContext = () => {
+  const context = useContext(SupabaseContext)
+
+  if (context === undefined) {
+    throw new Error(
+      'useSupabaseContext hook must be used inside SupabaseProvider'
+    )
+  } else {
+    return context
+  }
 }

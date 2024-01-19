@@ -14,10 +14,10 @@ import { RocketsController } from './controllers/rocketController'
 import { StarsController } from './controllers/starsController'
 import { UsersController } from './controllers/usersController'
 
-import { useSupabase } from '@/hooks/useSupabase'
+import { useSupabaseContext } from '@/contexts/SupabaseContext'
 
 export function useSupabaseApi() {
-  const { supabase } = useSupabase()
+  const { supabase } = useSupabaseContext()
 
   const supabaseApi = useMemo(() => {
     return {
