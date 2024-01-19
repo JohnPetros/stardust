@@ -64,7 +64,7 @@ export function useSignInForm() {
 
     setTimeout(
       () => {
-        router.push(ROUTES.private.home)
+        router.push(ROUTES.private.home.space)
       },
       ROCKET_ANIMATION_DELAY * 1000 + 2500
     )

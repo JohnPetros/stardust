@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -7,7 +7,13 @@ import { ToastRef } from '@/app/components/Toast'
 import { useAuth } from '@/contexts/AuthContext'
 import { SignUpFormFields, signUpFormSchema } from '@/libs/zod'
 import { useApi } from '@/services/api'
-import { SIGN_UP_ERRORS } from '@/utils/constants/signup-errors'
+
+export const SIGN_UP_ERRORS: Record<string, string> = {
+  'For security purposes, you can only request this after 50 seconds.':
+    'Por questões de segurança, espere 50 segundos para tentar cadastrar novamente',
+  'Email rate limit exceeded':
+    'Você execedeu o limite permitido de tentativas de cadastro',
+}
 
 export function useSignUpForm() {
   const {
@@ -19,7 +25,7 @@ export function useSignUpForm() {
   })
   const [isLoading, setIsLoading] = useState(false)
 
-  const { signUp, signOut } = useAuth()
+  const { signUp } = useAuth()
 
   const api = useApi()
 

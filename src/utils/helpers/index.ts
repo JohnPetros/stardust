@@ -1,6 +1,6 @@
 export { calculatePage } from './calculatePage'
-export { checkIsNumeric } from './checkIsNumeric'
-export { checkIsPublicRoute } from './checkIsPublicRoute'
+export { checkNumeric } from './checkNumeric'
+export { checkPublicRoute } from './checkPublicRoute'
 export { compareArrays } from './compareArrays'
 export { filterItemBySearch } from './filterItemBySearch'
 export { formatCode } from './formatCode'
