@@ -1,25 +1,22 @@
 export const ROUTES = {
   private: {
-    home: '/',
-    dashboard: {
-      home: '/dashboard',
+    home: {
+      space: '/',
+      shop: '/shop',
+      challenges: '/challenges',
+      ranking: '/ranking',
+      profile: '/profile',
     },
+    challengeMaker: '/challenge-maker',
     lesson: '/lesson',
-    shop: '/shop',
-    challenges: '/challenges',
-    challenge: '/challenge',
-    ranking: '/ranking',
-    profile: '/profile',
     playground: '/playground',
-    challengeMaker: '/challenges/maker',
-    solution: '/challenges/solution',
+    config: '/config',
     authConfirmation: '/auth-confirmation',
-    rewards: '/rewards'
+    rewards: '/rewards',
   },
   public: {
     signIn: '/sign-in',
     signUp: '/sign-up',
-    landing: '/landing',
     resetPassword: '/reset-password',
   },
   server: {
@@ -28,6 +25,5 @@ export const ROUTES = {
     },
     email: '/server/email',
     mdx: '/server/mdx',
-    cookies: '/server/cookies',
   },
 }
