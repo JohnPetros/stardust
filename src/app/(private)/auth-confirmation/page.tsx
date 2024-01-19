@@ -2,16 +2,16 @@
 
 import { AnimatePresence } from 'framer-motion'
 
-import { useEmailConfirmationPage } from './useEmailConfirmationPage'
+import { useAuthConfirmationPage } from './useAuthConfirmationPage'
 
 import { RocketAnimation } from '@/app/(public)/components/RocketAnimation'
 import { AppMessage } from '@/app/components/AppMessage'
 import { Button } from '@/app/components/Button'
 import { Loading } from '@/app/components/Loading'
 
-export default function EmailConfirmationPage() {
+export default function AuthConfirmationPage() {
   const { isRocketVisible, rocketRef, user, handleHomeLink } =
-    useEmailConfirmationPage()
+    useAuthConfirmationPage()
 
   return (
     <>

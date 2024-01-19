@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { ROCKET_ANIMATION_DELAY, ROUTES } from '@/utils/constants'
 
-export function useEmailConfirmationPage() {
+export function useAuthConfirmationPage() {
   const { user } = useAuth()
   const [isRocketVisible, setIsRocketVisible] = useState(false)
   const router = useRouter()
@@ -30,7 +30,7 @@ export function useEmailConfirmationPage() {
     if (isRocketVisible) {
       timer = setTimeout(
         () => {
-          router.push(ROUTES.private.home)
+          router.push(ROUTES.private.home.space)
         },
         ROCKET_ANIMATION_DELAY * 1000 + 1500
       )
