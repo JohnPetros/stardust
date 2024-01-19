@@ -11,7 +11,7 @@
 | Styles                     |  stlye             | 💄 `:lipstick:`                  |              
 | Refactoring                |  refactor          | ♻️ `:recycle:`                   |              
 | Work in progress           |  in progress       | 🚧 `:construction:`              |              
-| Accessibility              |  a11s              | ♿ `:wheelchair:`                |              
+| Accessibility              |  a11y              | ♿ `:wheelchair:`                |              
 | Performance                |  perf              | 💫 `:dizzle:`                    |              
 | Configuration files        |  chore             | 🔧 `:wrench:`                    |              
 | Merging branches           |  merge             | 🔀 `:twisted_rightwards_arrows:` |              
