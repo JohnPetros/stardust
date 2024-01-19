@@ -1,7 +1,11 @@
-import { useState } from 'react'
+'use client'
+
+import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 
 import { useSiderbar } from '@/contexts/SidebarContext'
+import { useLocalStorage } from '@/hooks/useLocalStorage'
+import { STORAGE } from '@/utils/constants'
 
 export function useLayout() {
   const [isSidenavExpanded, setIsSidenavExpanded] = useState(false)
@@ -12,7 +16,7 @@ export function useLayout() {
     setIsAchievementsListVisible,
   } = useSiderbar()
 
-  const pathName = usePathname()
+  const localStorage = useLocalStorage()
 
   function toggleSidenav() {
     setIsSidenavExpanded(!isSidenavExpanded)
@@ -23,13 +27,16 @@ export function useLayout() {
     if (isAchievementsListVisible) setIsAchievementsListVisible(false)
   }
 
-  const isChallengePage = new RegExp(
-    '^/challenges/[0-9a-fA-F-]+(\\?.*)?$'
-  ).test(pathName)
+  useEffect(() => {
+    localStorage.setItem(STORAGE.hasPageAnimationTransition, 'true')
+
+    return () => {
+      localStorage.removeItem(STORAGE.hasPageAnimationTransition)
+    }
+  }, [localStorage])
 
   return {
     isSidenavExpanded,
-    isChallengePage,
     toggleSidenav,
     handleMainContainerClick,
   }

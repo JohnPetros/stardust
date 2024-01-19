@@ -14,7 +14,7 @@ import { SignOutAlert } from '../SignOutAlert'
 import { useAchivementsContext } from '@/contexts/AchievementsContext'
 import { useAuth } from '@/contexts/AuthContext'
 import { useSiderbar } from '@/contexts/SidebarContext'
-import { HOME_PAGES } from '@/utils/constants/home-pages'
+import { HOME_LINKS } from '@/utils/constants/home-links'
 
 const sidenavAnimations: Variants = {
   shrink: {
@@ -97,7 +97,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
           </Link>
 
           <nav className="mt-12 flex flex-col gap-3 px-3">
-            {HOME_PAGES.map(({ path, icon, label }) => {
+            {HOME_LINKS.map(({ path, icon, label }) => {
               return (
                 <NavButton
                   key={path}

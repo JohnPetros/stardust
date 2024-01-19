@@ -1,50 +1,36 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { CaretDown, CaretUp, Icon } from '@phosphor-icons/react'
 
-import { Fab } from '../../../../../components/Fab'
 import { Planet } from '../Planet'
 
+import { useSpace } from './useSpace'
+
 import type { Planet as PlanetData } from '@/@types/planet'
+import { Fab } from '@/app/components/Fab'
 import { PageTransitionAnimation } from '@/app/components/PageTransitionAnimation'
 import { StarViewPortPosition } from '@/contexts/SpaceContext'
-import { useSpaceContext } from '@/contexts/SpaceContext'
-import { usePlanets } from '@/hooks/usePlanets'
 
-const fabIcon: Record<StarViewPortPosition, Icon> = {
+export const FAB_ICON: Record<StarViewPortPosition, Icon> = {
   above: CaretDown,
   bellow: CaretUp,
   in: CaretDown,
 }
 
-type SpaceProps = {
+interface SpaceProps {
   planets: PlanetData[]
+  lastUnlockedStarId: string
 }
 
-export function Space({ planets }: SpaceProps) {
-  const { lastUnlockedStarPosition, scrollIntoLastUnlockedStar } =
-    useSpaceContext()
-  const { lastUnlockedStarId, data: verifiedPlanets } = usePlanets(planets)
-  const [isTransitionVisible, setIsTransitionVisible] = useState(
-    !verifiedPlanets?.length
-  )
-
-  function handleFabClick() {
-    scrollIntoLastUnlockedStar()
-  }
-
-  useEffect(() => {
-    if (verifiedPlanets?.length && isTransitionVisible) {
-      setTimeout(() => setIsTransitionVisible(false), 3500)
-    }
-  }, [verifiedPlanets, isTransitionVisible])
+export function Space({ planets, lastUnlockedStarId }: SpaceProps) {
+  const { isTransitionVisible, lastUnlockedStarPosition, handleFabClick } =
+    useSpace()
 
   return (
     <div className="flex flex-col items-center bg-green-900 bg-[url('/images/space.png')] bg-center pb-6">
       <PageTransitionAnimation isVisible={isTransitionVisible} />
       <ul className=" mt-10 flex max-w-[75vw] flex-col items-start justify-center gap-12">
-        {verifiedPlanets?.map((planet) => (
+        {planets.map((planet) => (
           <Planet
             key={planet.id}
             data={planet}
@@ -55,7 +41,7 @@ export function Space({ planets }: SpaceProps) {
 
       <Fab
         isVisible={lastUnlockedStarPosition !== 'in'}
-        icon={fabIcon[lastUnlockedStarPosition]}
+        icon={FAB_ICON[lastUnlockedStarPosition]}
         label="Ir até a última estrela desbloqueada"
         onClick={handleFabClick}
       />

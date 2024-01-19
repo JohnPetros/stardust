@@ -31,14 +31,11 @@ type LayoutProps = {
 export function Layout({ children }: LayoutProps) {
   const {
     isSidenavExpanded,
-    isChallengePage,
     handleMainContainerClick,
     toggleSidenav,
   } = useLayout()
 
   const { md: isMobile } = useBreakpoint()
-
-  if (isChallengePage) return children
 
   return (
     <>
