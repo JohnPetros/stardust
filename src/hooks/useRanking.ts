@@ -9,12 +9,12 @@ export function useRanking(rankingId?: string, canGetAllRankings?: boolean) {
 
   async function getRanking() {
     if (rankingId) {
-      return await api.getRanking(rankingId)
+      return await api.getRankingById(rankingId)
     }
   }
 
   async function getRankings() {
-    return await api.getRankings()
+    return await api.getRankingsOrderedByPosition()
   }
 
   const { data: ranking, error: rankingError } = useSWR(
