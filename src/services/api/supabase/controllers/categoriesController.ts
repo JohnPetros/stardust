@@ -10,14 +10,19 @@ export const CategoriesController = (
     getCategories: async () => {
       const { data, error } = await supabase
         .from('categories')
-        .select('*, challenges_categories(challenge_id):challengesIds')
-        .returns<Category[]>()
+        .select('*, challenges:challenges_categories(id:challenge_id)')
 
       if (error) {
         throw new Error(error.message)
       }
 
-      return data
+      const categories: Category[] = data.map((category) => ({
+        id: category.id,
+        name: category.name,
+        challengesIds: category.challenges.map(({ id }) => id),
+      }))
+
+      return categories
     },
   }
 }
