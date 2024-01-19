@@ -1,6 +1,6 @@
-const PREFIX = '@stardust'
+import { APP_PREFIX } from './app-prefix'
 
 export const COOKIES = {
-  shouldReturnPassword: `${PREFIX}:should-return-password`,
-  rewardsPayload: `${PREFIX}:rewards-payload`,
+  shouldReturnPassword: `${APP_PREFIX}:should-return-password`,
+  rewardsPayload: `${APP_PREFIX}:rewards-payload`,
 }
