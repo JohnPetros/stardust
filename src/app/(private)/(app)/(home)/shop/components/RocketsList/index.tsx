@@ -34,7 +34,7 @@ export function RocketsList() {
         <Sorters onPriceOrderChange={handlePriceOrderChange} />
       </div>
 
-      <div className="mt-6 grid grid-cols-1 items-start justify-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-6 grid min-h-[36rem] grid-cols-1 items-start justify-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {rockets.map((rocket) => (
           <RocketItem
             key={rocket.id}
