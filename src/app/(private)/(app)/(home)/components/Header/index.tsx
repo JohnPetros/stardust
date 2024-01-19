@@ -11,7 +11,7 @@ import { UserAvatar } from '../UseAvatar'
 
 import { useAchivementsContext } from '@/contexts/AchievementsContext'
 import { useAuth } from '@/contexts/AuthContext'
-import { useSiderbar } from '@/contexts/SidebarContext'
+import { useSiderbarContext } from '@/contexts/SidebarContext'
 
 const headerAnimations: Variants = {
   hidden: {
@@ -27,7 +27,7 @@ const headerAnimations: Variants = {
 
 export function Header() {
   const { user } = useAuth()
-  const { toggle, isOpen } = useSiderbar()
+  const { toggle, isOpen } = useSiderbarContext()
   const { rescueableAchievementsAmount } = useAchivementsContext()
 
   if (user?.id)

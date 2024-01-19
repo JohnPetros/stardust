@@ -1,14 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence } from 'framer-motion'
-
-import { Select } from '../../../../../../components/Select'
-
-import { CategoriesFilter } from './CateogoriesFilter'
-import { Tag } from './Tag'
 
 import type { Category } from '@/@types/category'
-import { Search } from '@/app/components/Search'
 import {
   Difficulty,
   Status,
@@ -16,11 +9,7 @@ import {
 } from '@/stores/challengesListStore'
 import { FILTER_SELECTS_ITEMS } from '@/utils/constants/filter-selects-items'
 
-interface FiltersProps {
-  categories: Category[]
-}
-
-export function Filters({ categories }: FiltersProps) {
+export function useFilters(categories: Category[]) {
   const { state, actions } = useChallengesListStore()
   const [tags, setTags] = useState<string[]>([])
   const statusTag = useRef<string | null>(null)
@@ -132,84 +121,10 @@ export function Filters({ categories }: FiltersProps) {
     })
   }, [state.categoriesIds, categories])
 
-  return (
-    <div className="flex flex-col">
-      <Search
-        placeholder="Pesquisar desafio por título..."
-        onSearchChange={handleSearchChange}
-        className="bg-gray-800"
-      />
-
-      <div className="mt-6 flex items-center gap-6">
-        <Select.Container
-          onValueChange={(newStatus: string) =>
-            handleStatusChange(newStatus as Status)
-          }
-        >
-          <Select.Trigger value="Status" />
-          <Select.Content>
-            {FILTER_SELECTS_ITEMS.slice(0, 3).map((item, index, allItems) => {
-              const isLastItem = index === allItems.length - 1
-              return (
-                <>
-                  <Select.Item
-                    value={item.value}
-                    icon={item.icon}
-                    text={item.text}
-                    iconStyles={item.iconStyles}
-                  />
-                  {!isLastItem && <Select.Separator />}
-                </>
-              )
-            })}
-          </Select.Content>
-        </Select.Container>
-
-        <Select.Container
-          onValueChange={(newDifficulty: string) =>
-            handleDifficultyChange(newDifficulty as Difficulty)
-          }
-        >
-          <Select.Trigger value="Dificuldade" />
-          <Select.Content>
-            {FILTER_SELECTS_ITEMS.slice(3).map((item, index, allItems) => {
-              const isLastItem = index === allItems.length - 1
-              return (
-                <>
-                  <Select.Item
-                    value={item.value}
-                    icon={item.icon}
-                    text={item.text}
-                    textStyes={item.textStyles}
-                    iconStyles={item.iconStyles}
-                  />
-                  {!isLastItem && <Select.Separator />}
-                </>
-              )
-            })}
-          </Select.Content>
-        </Select.Container>
-
-        <CategoriesFilter initialCategories={categories} />
-      </div>
-
-      <div className="mt-6 flex min-h-[48px] flex-wrap gap-2">
-        <AnimatePresence mode="popLayout">
-          {tags.map((tag) => {
-            const item = FILTER_SELECTS_ITEMS.find((item) => item.text === tag)
-            return (
-              <Tag
-                key={tag}
-                name={tag}
-                nameStyles={item?.textStyles ?? null}
-                icon={item?.icon ?? null}
-                iconStyles={item?.iconStyles ?? null}
-                onClick={() => handleTagClick(tag, item?.value)}
-              />
-            )
-          })}
-        </AnimatePresence>
-      </div>
-    </div>
-  )
+  return {
+    handleDifficultyChange,
+    handleSearchChange,
+    handleTagClick,
+    handleStatusChange,
+  }
 }

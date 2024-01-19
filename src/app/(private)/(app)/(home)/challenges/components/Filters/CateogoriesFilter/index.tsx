@@ -1,54 +1,19 @@
 'use client'
-import { useEffect, useState } from 'react'
 import * as Dropdown from '@radix-ui/react-dropdown-menu'
 import { twMerge } from 'tailwind-merge'
 
+import { useCategoriesFilter } from './useCategoriesFilter'
+
 import type { Category } from '@/@types/category'
 import { Search } from '@/app/components/Search'
-import { useChallengesListStore } from '@/stores/challengesListStore'
-import { filterItemBySearch } from '@/utils/helpers'
 
 interface CategoriesProps {
-  data: Category[]
+  initialCategories: Category[]
 }
 
-export function CategoriesFilter({ data }: CategoriesProps) {
-  const { state, actions } = useChallengesListStore()
-  const [categories, setCategories] = useState<Category[]>([])
-  const [search, setSearch] = useState('')
-
-  function handleCategoryClick(categoryId: string, isActive: boolean) {
-    let categoriesIds = state.categoriesIds
-
-    if (isActive) {
-      categoriesIds = categoriesIds.filter((id) => id !== categoryId)
-    } else {
-      categoriesIds = [...categoriesIds, categoryId]
-    }
-
-    actions.setCategoriesIds(categoriesIds)
-  }
-
-  function handleSearchChange(search: string) {
-    setSearch(search)
-  }
-
-  useEffect(() => {
-    setCategories(data)
-  }, [data])
-
-  useEffect(() => {
-    function filterCategories() {
-      if (!search) return data
-
-      return data.filter((category) =>
-        filterItemBySearch(search, category.name)
-      )
-    }
-
-    const filteredCategories = filterCategories()
-    setCategories(filteredCategories)
-  }, [search, data])
+export function CategoriesFilter({ initialCategories }: CategoriesProps) {
+  const { categories, categoriesIds, handleCategoryClick, handleSearchChange } =
+    useCategoriesFilter(initialCategories)
 
   return (
     <Dropdown.Root>
@@ -62,7 +27,7 @@ export function CategoriesFilter({ data }: CategoriesProps) {
           <Dropdown.Group className="flex flex-wrap justify-start gap-2 px-2 py-3">
             {categories.length > 0 ? (
               categories.map((category) => {
-                const isActive = state.categoriesIds.includes(category.id)
+                const isActive = categoriesIds.includes(category.id)
                 return (
                   <Dropdown.Item
                     key={category.id}

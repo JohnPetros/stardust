@@ -10,12 +10,11 @@ import {
 import { motion, Variants } from 'framer-motion'
 import Link from 'next/link'
 
-import { DifficultyBadge } from '../DifficultyBadge'
-
 import { Category } from './Category'
 import { Info } from './Info'
 
 import type { Challenge } from '@/@types/challenge'
+import { DifficultyBadge } from '@/app/components/DifficultyBadge'
 
 const challengeVariants: Variants = {
   hidden: {
