@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useRef } from 'react'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import Image from 'next/image'
 import { twMerge } from 'tailwind-merge'
 import { tv } from 'tailwind-variants'
 
+import { useVerificationButton } from './useVerificationButton'
+
 import { Button } from '@/app/components/Button'
-import { playSound } from '@/utils/helpers'
 
 const buttonStyles = tv({
   base: 'w-64',
@@ -30,12 +30,11 @@ const feedbackAnimations: Variants = {
   },
 }
 
-interface VerificationButtonProps {
+export type VerificationButtonProps = {
   answerHandler: () => void
   isAnswered: boolean
   isAnswerVerified: boolean
   isAnswerCorrect: boolean
-  isChallenge?: boolean
 }
 
 export function VerificationButton({
@@ -43,44 +42,14 @@ export function VerificationButton({
   isAnswerCorrect,
   isAnswerVerified,
   isAnswered,
-  isChallenge = false,
 }: VerificationButtonProps) {
-  const buttonRef = useRef<HTMLButtonElement>(null)
-  const buttonHasFocus = useRef(false)
-
-  function getButtonTitle() {
-    if (isAnswerVerified && !isAnswerCorrect) {
-      return 'Tentar novamente'
-    } else if (isAnswerVerified) {
-      return 'Continuar'
-    } else {
-      return 'Verificar'
-    }
-  }
-
-  function handleButtonClick() {
-    answerHandler()
-  }
-
-  const handleGlobalKeyDown = useCallback(
-    ({ key }: KeyboardEvent) => {
-      if (key === 'Enter' && isAnswered && !buttonHasFocus.current) {
-        answerHandler()
-      }
-    },
-    [answerHandler, isAnswered]
-  )
-
-  useEffect(() => {
-    if (isAnswerVerified) {
-      playSound(isAnswerCorrect ? 'success.wav' : 'fail.wav')
-    }
-  }, [isAnswerCorrect, isAnswerVerified, handleGlobalKeyDown])
-
-  useEffect(() => {
-    document.addEventListener('keydown', handleGlobalKeyDown)
-    return () => document.removeEventListener('keydown', handleGlobalKeyDown)
-  }, [handleGlobalKeyDown])
+  const { buttonRef, buttonTitle, buttonHasFocus, handleButtonClick } =
+    useVerificationButton({
+      answerHandler,
+      isAnswerCorrect,
+      isAnswerVerified,
+      isAnswered,
+    })
 
   return (
     <div
@@ -137,7 +106,7 @@ export function VerificationButton({
         })}
         disabled={!isAnswered}
       >
-        {getButtonTitle()}
+        {buttonTitle}
       </Button>
     </div>
   )
