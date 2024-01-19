@@ -1,35 +1,28 @@
-'use client'
-import { useEffect, useState } from 'react'
+import { Suspense } from 'react'
 
-import { Challenge } from './components/Challenge'
-import { Filters } from './components/Filters'
+import { ChallengesList } from './components/ChallengesList'
 
+import { Category } from '@/@types/category'
 import { Loading } from '@/app/components/Loading'
-import { useChallengesList } from '@/hooks/useChallengesList'
+import { createServerClient } from '@/services/api/supabase/clients/serverClient'
+import { CategoriesController } from '@/services/api/supabase/controllers/categoriesController'
+import { ERRORS } from '@/utils/constants'
 
-export default function Challenges() {
-  const { challenges, categories, isLoading } = useChallengesList()
-  const [isFirstRendering, setIsFirstRendering] = useState(true)
+let categories: Category[]
 
-  useEffect(() => {
-    if (challenges.length && isFirstRendering && !isLoading) {
-      setTimeout(() => {
-        setIsFirstRendering(false)
-      }, 1500)
-    }
-  }, [challenges, isFirstRendering, isLoading])
+export default async function ChallengesPage() {
+  const categoriesController = CategoriesController(createServerClient())
+
+  try {
+    categories = await categoriesController.getCategories()
+  } catch (error) {
+    console.error(error)
+    throw new Error(ERRORS.categoriesFailedFetching)
+  }
 
   return (
-    <div className="mx-auto mt-10 max-w-2xl px-6 pb-40 md:px-0">
-      {isFirstRendering && <Loading isSmall={false} />}
-
-      <Filters categories={categories} />
-
-      <div className="space-y-6">
-        {challenges.map((challenge) => (
-          <Challenge key={challenge.id} data={challenge} />
-        ))}
-      </div>
-    </div>
+    <Suspense fallback={<Loading isSmall={false} />}>
+      <ChallengesList categories={categories} />
+    </Suspense>
   )
 }

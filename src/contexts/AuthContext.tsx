@@ -128,7 +128,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
-export const useAuth = () => {
+export function useAuth() {
   const context = useContext(AuthContext)
 
   if (!context) {

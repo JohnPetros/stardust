@@ -1,20 +1,24 @@
 'use client'
 
+import { useClientContext } from '@/contexts/ClientContext'
+
 export function useLocalStorage() {
+  const isClientSide = useClientContext()
+
   function setItem(key: string, value: string) {
-    window.localStorage.setItem(key, value)
+    if (isClientSide) window.localStorage.setItem(key, value)
   }
 
   function getItem(key: string) {
-    return window.localStorage.getItem(key)
+    return isClientSide ? window.localStorage.getItem(key) : null
   }
 
   function removeItem(key: string) {
-    window.localStorage.removeItem(key)
+    if (isClientSide) window.localStorage.removeItem(key)
   }
 
   function hasItem(key: string) {
-    return Boolean(getItem(key))
+    return isClientSide ? Boolean(getItem(key)) : false
   }
 
   return {

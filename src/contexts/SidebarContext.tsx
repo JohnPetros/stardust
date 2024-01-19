@@ -2,14 +2,14 @@
 
 import { createContext, ReactNode, useContext, useState } from 'react'
 
-export interface SidebarContextValue {
+export type SidebarContextValue = {
   isOpen: boolean
   toggle: VoidFunction
   isAchievementsListVisible: boolean
   setIsAchievementsListVisible: (isAchievementsListVisible: boolean) => void
 }
 
-interface SidebarProviderProps {
+type SidebarProviderProps = {
   children: ReactNode
 }
 
@@ -38,11 +38,11 @@ export function SidebarProvider({ children }: SidebarProviderProps) {
   )
 }
 
-export function useSiderbar() {
+export function useSiderbarContext() {
   const context = useContext(SidebarContext)
 
   if (!context) {
-    throw new Error('useSiderbar must be used inside SidebarProvider')
+    throw new Error('useSiderbarContext must be used inside SidebarProvider')
   }
 
   return context

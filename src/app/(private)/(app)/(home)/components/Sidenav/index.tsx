@@ -13,7 +13,7 @@ import { SignOutAlert } from '../SignOutAlert'
 
 import { useAchivementsContext } from '@/contexts/AchievementsContext'
 import { useAuth } from '@/contexts/AuthContext'
-import { useSiderbar } from '@/contexts/SidebarContext'
+import { useSiderbarContext } from '@/contexts/SidebarContext'
 import { HOME_LINKS } from '@/utils/constants/home-links'
 
 const sidenavAnimations: Variants = {
@@ -49,7 +49,7 @@ type SidenavProps = {
 export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
   const { user } = useAuth()
   const { isAchievementsListVisible, setIsAchievementsListVisible } =
-    useSiderbar()
+    useSiderbarContext()
   const { rescueableAchievementsAmount } = useAchivementsContext()
 
   function handleAchievementsListButtonClick() {

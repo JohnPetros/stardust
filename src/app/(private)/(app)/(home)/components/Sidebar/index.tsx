@@ -8,7 +8,7 @@ import { UserAvatar } from '../UseAvatar'
 
 import { Button } from '@/app/components/Button'
 import { useAuth } from '@/contexts/AuthContext'
-import { useSiderbar } from '@/contexts/SidebarContext'
+import { useSiderbarContext } from '@/contexts/SidebarContext'
 
 const sidebarVariants: Variants = {
   close: {
@@ -25,7 +25,7 @@ const sidebarVariants: Variants = {
 
 export function Sidebar() {
   const { user } = useAuth()
-  const { isOpen, toggle } = useSiderbar()
+  const { isOpen, toggle } = useSiderbarContext()
 
   if (user)
     return (

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-import { useSiderbar } from '@/contexts/SidebarContext'
+import { useSiderbarContext } from '@/contexts/SidebarContext'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { STORAGE } from '@/utils/constants'
 
@@ -13,7 +13,7 @@ export function useLayout() {
     toggle,
     isAchievementsListVisible,
     setIsAchievementsListVisible,
-  } = useSiderbar()
+  } = useSiderbarContext()
 
   const localStorage = useLocalStorage()
   localStorage.setItem(STORAGE.hasPageAnimationTransition, 'true')

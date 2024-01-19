@@ -9,7 +9,7 @@ import { CodeEditorRef } from '@/app/components/CodeEditor'
 import { useToast } from '@/contexts/ToastContext'
 import { execute } from '@/libs/delegua'
 import { REGEX } from '@/utils/constants/regex'
-import { checkNumeric, playSound } from '@/utils/helpers'
+import { checkNumeric, playAudio } from '@/utils/helpers'
 
 export function useCodeEditorPlayground(code: string) {
   const [output, setOutput] = useState<string[]>([])
@@ -136,7 +136,7 @@ export function useCodeEditorPlayground(code: string) {
       }
 
       consoleRef.current?.open()
-      playSound('running-code.wav')
+      playAudio('running-code.wav')
 
       resetToOriginalUserCode()
     } catch (error) {
