@@ -37,7 +37,7 @@ export async function getRewards(payload: string, user: User) {
       coins = lessonRewards.coins
       accurance = lessonRewards.accurance
       seconds = starPaylod.seconds
-      nextRoute = ROUTES.private.home
+      nextRoute = ROUTES.private.home.space
       break
     }
     default:

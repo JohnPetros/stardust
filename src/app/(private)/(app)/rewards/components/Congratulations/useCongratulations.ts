@@ -9,7 +9,7 @@ import { CongratulationsProps } from '.'
 import { AlertRef } from '@/app/components/Alert'
 import { deleteCookie } from '@/app/server/actions/deleteCookie'
 import { COOKIES } from '@/utils/constants'
-import { playSound } from '@/utils/helpers'
+import { playAudio } from '@/utils/helpers/'
 
 export function useCongratulations({
   accurance,
@@ -43,16 +43,13 @@ export function useCongratulations({
     setIsEndMessageVisible(true)
   }
 
-  function handleSecondButtonClick() {
+  async function handleSecondButtonClick() {
     setIsLoading(true)
+    await deleteCookie(COOKIES.rewardsPayload)
     router.push(nextRoute)
   }
 
   useEffect(() => {
-    async function deleteRewardsCookie() {
-      await deleteCookie(COOKIES.rewardsPayload)
-    }
-
     function pauseStarsAnimation() {
       const totalStars = (parseInt(accurance) * 5) / 100
 
@@ -65,11 +62,8 @@ export function useCongratulations({
       }, delay)
     }
 
+    playAudio('earning.wav')
     pauseStarsAnimation()
-
-    playSound('earning.wav')
-
-    deleteRewardsCookie()
   }, [accurance])
 
   return {

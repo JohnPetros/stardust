@@ -7,7 +7,7 @@ import { DateProvider } from '@/providers/dateProvider'
 import { createServerClient } from '@/services/api/supabase/clients/serverClient'
 import { AuthController } from '@/services/api/supabase/controllers/authController'
 import { UsersController } from '@/services/api/supabase/controllers/usersController'
-import { COOKIES } from '@/utils/constants'
+import { COOKIES, ERRORS } from '@/utils/constants'
 import { formatSecondsToTime } from '@/utils/helpers'
 
 const dateProvider = DateProvider()
@@ -19,7 +19,8 @@ export default async function RewardsPage() {
   const authController = AuthController(supabase)
   const userId = await authController.getUserId()
 
-  if (!payload || !userId) throw new Error()
+  if (!userId) throw new Error(ERRORS.userNotFound)
+  if (!payload) throw new Error(ERRORS.rewardsPayloadNotFound)
 
   const user = await UsersController(supabase).getUserById(userId)
 
