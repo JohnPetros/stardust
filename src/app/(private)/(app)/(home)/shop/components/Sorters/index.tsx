@@ -1,21 +1,15 @@
-import { useState } from 'react'
+import { useSorters } from './useSorters'
 
 import { Order } from '@/@types/order'
 import { Select } from '@/app/components/Select'
 
-type PriceOrder = 'Menor preço' | 'Maior preço'
-
-interface SortersProps {
+type SortersProps = {
   onPriceOrderChange: (order: Order) => void
 }
 
 export function Sorters({ onPriceOrderChange }: SortersProps) {
-  const [priceOrder, setPriceOrder] = useState<PriceOrder>('Menor preço')
-
-  function handlePriceOrderSelectChange(order: Order) {
-    setPriceOrder(order === 'ascending' ? 'Menor preço' : 'Maior preço')
-    onPriceOrderChange(order)
-  }
+  const { priceOrder, handlePriceOrderSelectChange } =
+    useSorters(onPriceOrderChange)
 
   return (
     <div className="flex items-center gap-3">

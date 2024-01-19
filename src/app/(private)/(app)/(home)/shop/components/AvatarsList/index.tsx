@@ -1,8 +1,8 @@
 'use client'
 
-import { Avatar } from '../Avatar'
 import { Sorters } from '../Sorters'
 
+import { AvatarItem } from './AvatarItem'
 import { useAvatarsList } from './useAvatarsList'
 
 import { Pagination } from '@/app/components/Pagination'
@@ -35,7 +35,7 @@ export function AvatarsList() {
 
       <div className="mt-6 grid h-[72rem] grid-cols-1 content-start justify-center gap-8 pb-12 sm:grid-cols-2 lg:grid-cols-2">
         {avatars.map((avatar) => (
-          <Avatar
+          <AvatarItem
             key={avatar.id}
             data={avatar}
             addUserAcquiredAvatar={addUserAcquiredAvatar}

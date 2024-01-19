@@ -26,7 +26,7 @@ export interface AvatarItemProps {
   addUserAcquiredAvatar: (AvatarId: string) => void
 }
 
-export function Avatar({
+export function AvatarItem({
   data: { id, name, price, image, isAcquired },
   addUserAcquiredAvatar,
 }: AvatarItemProps) {
