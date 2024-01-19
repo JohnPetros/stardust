@@ -1,6 +1,6 @@
 'use client'
 
-export type Sound =
+export type AudioFile =
   | 'asking.wav'
   | 'crying.wav'
   | 'denying.wav'
@@ -12,6 +12,6 @@ export type Sound =
   | 'fail.wav'
   | 'running-code.wav'
 
-export function playSound(sound: Sound) {
-  new Audio(`/sounds/${sound}`).play()
+export function playAudio(audioFile: AudioFile) {
+  new Audio(`/audios/${audioFile}`).play()
 }
