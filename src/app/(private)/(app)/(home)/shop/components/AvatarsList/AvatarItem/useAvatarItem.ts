@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useSWRConfig } from 'swr'
 
-import { AvatarItemProps } from './AvatarItem'
+import { AvatarItemProps } from '../AvatarItem'
 
 import { useAuth } from '@/contexts/AuthContext'
-import { getImage, playSound } from '@/utils/helpers'
+import { useAudio } from '@/hooks/useAudio'
+import { getImage } from '@/utils/helpers'
 
 export function useAvatarItem({
   data: { id, name, price, image, isAcquired },
@@ -15,6 +16,9 @@ export function useAvatarItem({
   const { mutate } = useSWRConfig()
 
   const [isSelected, setIsSelected] = useState(false)
+
+  const audio = useAudio('switch.wav')
+
   const avatarImage = getImage('avatars', image)
   const isBuyable = user ? user?.coins >= price : false
 
@@ -43,7 +47,7 @@ export function useAvatarItem({
   async function selectAvatar() {
     try {
       await updateUser({ avatar_id: id })
-      playSound('switch.wav')
+      audio?.play()
       mutate('/avatar?id=' + id, { id, name, image })
     } catch (error) {
       console.error(error)
