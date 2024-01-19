@@ -15,9 +15,8 @@ export type Challenge = {
   title: string
   code: string
   slug: string
-  user_id: string
+  user_slug: string
   difficulty: Difficulty
-  created_by?: string
   created_at: string
   function_name: string | null
   upvotes: number
@@ -27,7 +26,7 @@ export type Challenge = {
   test_cases: TestCase[]
   topic_id: string | null
   total_completitions: number
-  categories: (Category | null)[]
+  categories: Category[] | null
   users_completed_challenges?: { count: number }[]
   isCompleted: boolean
 }
