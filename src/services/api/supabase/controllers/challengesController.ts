@@ -2,9 +2,9 @@ import {
   ChallengeSummary,
   IChallengesController,
 } from '../../interfaces/IChallengesController'
+import type { Supabase } from '../types/supabase'
 
 import type { Challenge } from '@/@types/challenge'
-import type { Supabase } from '../types/supabase'
 
 interface getFilteredChallengesProps {
   userId: string

@@ -15,6 +15,7 @@ import { Info } from './Info'
 
 import type { Challenge } from '@/@types/challenge'
 import { DifficultyBadge } from '@/app/components/DifficultyBadge'
+import { deslugify } from '@/utils/helpers'
 
 const challengeVariants: Variants = {
   hidden: {
@@ -40,13 +41,13 @@ export function Challenge({
     downvotes,
     total_completitions,
     categories,
-    created_by,
-    user_id,
+    user_slug,
     isCompleted,
   },
 }: ChallengeProps) {
   const totalVotes = upvotes + downvotes
   const acceptanceRate = totalVotes ? upvotes / totalVotes : 0
+  const userName = deslugify(user_slug)
 
   return (
     <motion.div
@@ -85,15 +86,13 @@ export function Challenge({
           label={total_completitions}
           tooltipText={'Número de vezes que esse desafio foi concluído.'}
         />
-        {created_by && (
-          <Link href={`/profile/${user_id}`}>
-            <Info
-              icon={User}
-              label={created_by}
-              tooltipText={'Criador desse desafio.'}
-            />
-          </Link>
-        )}
+        <Link href={`/profile/${user_slug}`}>
+          <Info
+            icon={User}
+            label={userName}
+            tooltipText={'Criador desse desafio.'}
+          />
+        </Link>
       </ul>
       {categories && (
         <ul className="flex items-start gap-3">
