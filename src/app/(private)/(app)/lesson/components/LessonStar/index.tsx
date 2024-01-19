@@ -17,15 +17,13 @@ interface LayoutProps {
 }
 
 export function LessonStar({ star, mdxComponets }: LayoutProps) {
-  const { isTransitionVisible, secondsCounterRef, scrollRef, leaveLesson } =
-    useLessonStar(star)
+  const { isTransitionVisible, scrollRef, leaveLesson } = useLessonStar(star)
 
   const currentStage = useLessonStore((store) => store.state.currentStage)
 
   return (
     <>
       <PageTransitionAnimation isVisible={isTransitionVisible} />
-      {currentStage !== 'rewards' && <SecondsCounter ref={secondsCounterRef} />}
       <div ref={scrollRef} className="relative overflow-x-hidden">
         {currentStage !== 'rewards' && <Header />}
 

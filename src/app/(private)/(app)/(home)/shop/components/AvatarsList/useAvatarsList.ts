@@ -14,8 +14,8 @@ export function useAvatarsList() {
   const [search, setSearch] = useState('s')
   const [priceOrder, setPriceOrder] = useState<Order>('ascending')
 
-  const api = useApi()
   const { user } = useAuth()
+  const api = useApi()
   const page = calculatePage(offset, ITEMS_PER_PAGE)
 
   async function getUserAcquiredAvatarsIds() {

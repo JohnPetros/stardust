@@ -48,7 +48,7 @@ export function Header() {
           }
         >
           <button aria-label="Sair da lição">
-            <X className="text-2xl text-red-700" weight="bold" />
+            <X className="text-2xl text-red-700" weight="bold" tabIndex={-1} />
           </button>
         </Alert>
 

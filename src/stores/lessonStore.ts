@@ -6,14 +6,13 @@ import type { Text } from '@/@types/text'
 
 export type LessonStoreState = {
   currentStage: 'theory' | 'quiz' | 'rewards'
-  texts: Text[]
-  renderedTextsAmount: number
+  mdxComponentsAmount: number
+  renderedMdxComponents: number
   questions: Question[]
   currentQuestionIndex: number
   incorrectAnswersAmount: number
   livesAmount: number
-  secondsAmount: number
-  answerHandler: () => void
+  answerHandler: VoidFunction
   isAnswerCorrect: boolean
   isAnswerVerified: boolean
   isAnswered: boolean
@@ -23,14 +22,13 @@ export type LessonStoreActions = {
   showQuiz: () => void
   changeQuestion: () => void
   setQuestions: (categoriesIds: Question[]) => void
-  setTexts: (texts: Text[]) => void
+  setMdxComponentsAmount: (mdxComponentsAmount: number) => void
   setIsAnswered: (isAnswered: boolean) => void
   setIsAnswerCorrect: (isAnswered: boolean) => void
   setIsAnswerVerified: (isAnswered: boolean) => void
   setAnswerHandler: (answeredHandler: VoidFunction) => void
   incrementIncorrectAswersAmount: () => void
-  incrementRenderedTextsAmount: () => void
-  incrementSecondsAmount: () => void
+  incrementRenderedMdxComponentsAmount: () => void
   decrementLivesAmount: () => void
   resetState: () => void
 }
@@ -41,14 +39,13 @@ export type LessonStoreProps = {
 }
 
 const initialState: LessonStoreState = {
-  currentStage: 'theory',
-  texts: [],
-  renderedTextsAmount: 0,
+  currentStage: 'quiz',
+  mdxComponentsAmount: 0,
+  renderedMdxComponents: 0,
   questions: [],
   currentQuestionIndex: 0,
   incorrectAnswersAmount: 0,
   livesAmount: 5,
-  secondsAmount: 0,
   answerHandler: () => {},
   isAnswerCorrect: false,
   isAnswerVerified: false,
@@ -62,7 +59,7 @@ export const useLessonStore = create<LessonStoreProps>()(
       actions: {
         showQuiz() {
           return set(({ state }) => {
-            state.currentStage = 'theory'
+            state.currentStage = 'quiz'
           })
         },
         setQuestions(questions: Question[]) {
@@ -70,9 +67,9 @@ export const useLessonStore = create<LessonStoreProps>()(
             state.questions = questions
           })
         },
-        setTexts(texts: Text[]) {
+        setMdxComponentsAmount(renderedMdxComponents: number) {
           return set(({ state }) => {
-            state.texts = texts
+            state.renderedMdxComponents = renderedMdxComponents
           })
         },
         setIsAnswered(isAnswered: boolean) {
@@ -95,14 +92,9 @@ export const useLessonStore = create<LessonStoreProps>()(
             state.answerHandler = answerHandler
           })
         },
-        incrementRenderedTextsAmount() {
+        incrementRenderedMdxComponentsAmount() {
           return set(({ state }) => {
-            state.renderedTextsAmount = state.renderedTextsAmount + 1
-          })
-        },
-        incrementSecondsAmount() {
-          return set(({ state }) => {
-            state.secondsAmount = state.secondsAmount + 1
+            state.renderedMdxComponents = state.renderedMdxComponents + 1
           })
         },
         incrementIncorrectAswersAmount() {

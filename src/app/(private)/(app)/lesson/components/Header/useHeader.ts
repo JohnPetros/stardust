@@ -9,26 +9,30 @@ import { ROUTES } from '@/utils/constants'
 export function useHeader() {
   const router = useRouter()
 
-  const { texts, questions, currentQuestionIndex, renderedTextsAmount } =
-    useLessonStore((store) => store.state)
+  const {
+    mdxComponentsAmount,
+    questions,
+    currentQuestionIndex,
+    renderedMdxComponents,
+  } = useLessonStore((store) => store.state)
 
-  const total = texts.length + questions.length
+  const total = mdxComponentsAmount + questions.length
   const halfTotal = total / 2
 
   const currentProgressValue = useMemo(() => {
     if (!total) return 0
 
     return (
-      (((renderedTextsAmount / texts.length) * halfTotal) / total +
+      (((renderedMdxComponents / mdxComponentsAmount) * halfTotal) / total +
         ((currentQuestionIndex / questions.length) * halfTotal) / total) *
       100
     )
   }, [
-    renderedTextsAmount,
+    renderedMdxComponents,
     currentQuestionIndex,
     halfTotal,
     total,
-    texts.length,
+    mdxComponentsAmount,
     questions.length,
   ])
 

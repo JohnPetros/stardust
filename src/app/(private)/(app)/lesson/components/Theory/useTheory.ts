@@ -11,7 +11,7 @@ type MdxComponent = {
 
 export function useTheory(compiledMdxComponets: string[]) {
   const incrementMdxComponentsAmount = useLessonStore(
-    (store) => store.actions.incrementRenderedTextsAmount
+    (store) => store.actions.incrementRenderedMdxComponentsAmount
   )
 
   const [mdxComponents, setMdxComponents] = useState<MdxComponent[]>([])

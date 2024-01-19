@@ -45,6 +45,8 @@ export function Checkbox({ children, onCheck, isChecked }: CheckboxProps) {
 
   return (
     <motion.label
+      role="checkbox"
+      aria-keyshortcuts="Space"
       htmlFor={children}
       onKeyDown={handleKeydown}
       variants={checkboxAnimations}
@@ -52,7 +54,7 @@ export function Checkbox({ children, onCheck, isChecked }: CheckboxProps) {
       whileTap="tap"
       className={twMerge(
         'flex w-full cursor-pointer items-center gap-3 rounded-md border border-gray-100 bg-purple-700 p-3',
-        color
+        colors[color]
       )}
     >
       <C.Root
@@ -60,9 +62,10 @@ export function Checkbox({ children, onCheck, isChecked }: CheckboxProps) {
         id={children}
         className={twMerge(
           'h-6 w-6 rounded-md border border-gray-100 bg-transparent',
-          color
+          colors[color]
         )}
         onCheckedChange={onCheck}
+        tabIndex={-1}
       >
         <C.Indicator className="grid place-content-center">
           <motion.div
@@ -71,7 +74,7 @@ export function Checkbox({ children, onCheck, isChecked }: CheckboxProps) {
             animate="rotate"
           >
             <Check
-              className={twMerge('text-lg text-blue-300', color)}
+              className={twMerge('text-lg text-blue-300', colors[color])}
               weight="bold"
             />
           </motion.div>

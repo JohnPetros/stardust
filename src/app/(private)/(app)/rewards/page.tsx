@@ -1,6 +1,6 @@
 import { getRewards } from './actions/getRewards'
 import { getUpdatedLevel } from './actions/getUpdatedLevel'
-import { Congratulations } from './components/Rewards'
+import { Congratulations } from './components/Congratulations'
 
 import { getCookie } from '@/app/server/actions/getCookie'
 import { DateProvider } from '@/providers/dateProvider'
@@ -32,6 +32,8 @@ export default async function RewardsPage() {
 
   const todayIndex = dateProvider.getTodayIndex()
   const todayStatus = user.week_status[todayIndex]
+
+  console.log({ seconds })
 
   return (
     <Congratulations

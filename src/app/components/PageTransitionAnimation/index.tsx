@@ -55,7 +55,7 @@ export function PageTransitionAnimation({
             <Lottie
               animationData={TransitionAnimation}
               style={{ width: 540 }}
-              loop={false}
+              loop={true}
             />
             {hasTips && codeTip && (
               <p className="max-w-lg text-center text-gray-100">

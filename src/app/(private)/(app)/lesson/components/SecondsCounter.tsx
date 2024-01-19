@@ -15,12 +15,17 @@ const SecondsCounterComponent = (
   ref: ForwardedRef<SecondsCounterRef>
 ) => {
   const [counter, setCounter] = useState(0)
+  console.log(counter)
 
-  useImperativeHandle(ref, () => {
-    return {
-      getSeconds: () => counter,
-    }
-  })
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        getSeconds: () => counter,
+      }
+    },
+    [counter]
+  )
 
   useEffect(() => {
     setTimeout(() => {

@@ -1,70 +1,86 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { SecondsCounterRef } from '../SecondsCounter'
-
 import type { Star } from '@/@types/star'
-import { setCookie } from '@/app/server/actions/setCookie'
+import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useLessonStore } from '@/stores/lessonStore'
-import { COOKIES, ROUTES } from '@/utils/constants'
+import { ROUTES, STORAGE } from '@/utils/constants'
 
 export function useLessonStar(star: Star) {
   const {
     state: { currentStage, questions, incorrectAnswersAmount },
-    actions: { setTexts, setQuestions, resetState },
+    actions: { setMdxComponentsAmount, setQuestions, resetState },
   } = useLessonStore()
-
-  const secondsCounterRef = useRef<SecondsCounterRef>(null)
 
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const router = useRouter()
-
-  const showRewards = useCallback(async () => {
-    const rewardsPayload = JSON.stringify({
-      star: {
-        seconds: secondsCounterRef.current?.getSeconds(),
-        incorrectAnswers: incorrectAnswersAmount,
-        questions: questions.length,
-        starSlug: star.slug,
-      },
-    })
-
-    await setCookie(COOKIES.rewardsPayload, rewardsPayload)
-
-    router.push(ROUTES.private.rewards)
-  }, [router, incorrectAnswersAmount, questions.length, star.slug])
+  const localStorage = useLocalStorage()
 
   function leaveLesson() {
-    router.push(ROUTES.private.home)
+    router.push(ROUTES.private.home.space)
   }
 
   useEffect(() => {
-    let timer: NodeJS.Timeout
+    let timeout: NodeJS.Timeout
 
     if (star) {
-      setTexts(star.texts)
+      setMdxComponentsAmount(star.texts.length)
       setQuestions(star.questions)
-      timer = setTimeout(() => setIsTransitionVisible(false), 1000)
+      timeout = setTimeout(() => setIsTransitionVisible(false), 1000)
     }
 
     return () => {
       resetState()
-      clearTimeout(timer)
+      clearTimeout(timeout)
     }
-  }, [star, resetState, setTexts, setQuestions])
+  }, [star, resetState, setMdxComponentsAmount, setQuestions])
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      const currentSeconds = Number(localStorage.getItem(STORAGE.secondsCounter)) ?? 0
+
+      console.log({ currentSeconds })
+
+      localStorage.setItem(STORAGE.secondsCounter, String(currentSeconds + 1))
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [localStorage])
+
+  useEffect(() => {
+    async function showRewards() {
+      console.log('SECONDS', localStorage.getItem(STORAGE.secondsCounter))
+
+      // const rewardsPayload = JSON.stringify({
+      //   star: {
+      //     seconds: secondsCounterRef.current?.getSeconds(),
+      //     incorrectAnswers: incorrectAnswersAmount,
+      //     questions: questions.length,
+      //     starSlug: star.slug,
+      //   },
+      // })
+
+      // setCookie(COOKIES.rewardsPayload, rewardsPayload)
+      // router.push(ROUTES.private.rewards)
+    }
+
     if (currentStage === 'rewards') {
       showRewards()
     }
-  }, [currentStage, showRewards])
+  }, [
+    currentStage,
+    questions.length,
+    incorrectAnswersAmount,
+    router,
+    star.slug,
+    localStorage,
+  ])
 
   return {
-    secondsCounterRef,
     isTransitionVisible,
     scrollRef,
     leaveLesson,

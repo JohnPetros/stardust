@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 
 import { AlertType } from '.'
 
+import { useAudio } from '@/hooks/useAudio'
 import { ALERT_EFFECTS } from '@/utils/constants'
-import { playSound } from '@/utils/helpers'
 
 export function useAlert(
   type: AlertType,
@@ -17,9 +17,11 @@ export function useAlert(
   const [isRendered, setIsRendered] = useState(false)
   const containerRef = useRef<HTMLElement | null>(null)
 
-  const { animation, sound } = ALERT_EFFECTS.find(
+  const { animation, audioFile } = ALERT_EFFECTS.find(
     (animation) => animation.id === type.toLocaleLowerCase()
   )!
+
+  const audio = useAudio(audioFile)
 
   function open() {
     setIsOpen(true)
@@ -30,10 +32,10 @@ export function useAlert(
   }
 
   useEffect(() => {
-    if (sound && isOpen && type !== 'generic' && canPlaySong) {
-      playSound(sound)
+    if (audio && isOpen && type !== 'generic' && canPlaySong) {
+      audio.play()
     }
-  }, [isOpen, canPlaySong, type, sound])
+  }, [isOpen, canPlaySong, type, audio])
 
   useEffect(() => {
     containerRef.current = document.body
