@@ -16,6 +16,14 @@ export const MdxController = (): IMdxController => {
       return data.compiledMdxComponents
     },
 
+    compileDescription: async (description: string) => {
+      const data = await server.post<{
+        compiledDescription: string
+      }>(`${ROUTES.server.mdx}/compile-description`, { description })
+
+      return data.compiledDescription
+    },
+
     parseTexts: async (texts: Text[]) => {
       const data = await server.post<{
         mdxComponents: string[]
