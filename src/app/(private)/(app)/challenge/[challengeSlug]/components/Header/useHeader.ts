@@ -8,7 +8,6 @@ import { useChallengeStore } from '@/stores/challengeStore'
 
 export function useHeader(challenge: Challenge) {
   const setChallenge = useChallengeStore((store) => store.actions.setChallenge)
-  const resetState = useChallengeStore((store) => store.actions.resetState)
   const router = useRouter()
 
   function handleBackButton() {
@@ -16,10 +15,8 @@ export function useHeader(challenge: Challenge) {
   }
 
   useEffect(() => {
-    setChallenge(challenge)
-
-    return resetState
-  }, [challenge, setChallenge, resetState])
+    if (challenge) setChallenge(challenge)
+  }, [challenge, setChallenge])
 
   return {
     handleBackButton,

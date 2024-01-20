@@ -58,9 +58,12 @@ export function PageTransitionAnimation({
               loop={true}
             />
             {hasTips && codeTip && (
-              <p className="max-w-lg text-center text-gray-100">
-                Dica: {formatText(codeTip)}
-              </p>
+              <p
+                className="max-w-lg -translate-y-8 rounded-md bg-gray-700 p-2 text-center leading-8 text-gray-100"
+                dangerouslySetInnerHTML={{
+                  __html: `Dica: ${formatText(codeTip)}.`,
+                }}
+              />
             )}
           </motion.div>
         </motion.div>
