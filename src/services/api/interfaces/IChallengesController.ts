@@ -16,7 +16,7 @@ export type ChallengeSummary = Pick<
 }
 
 export interface IChallengesController {
-  getChallenge(challengeId: string, userId: string): Promise<Challenge>
+  getChallengeBySlug(challengeId: string): Promise<Challenge>
   getChallenges(userId: string): Promise<Challenge[]>
   getChallengesSummary(userId: string): Promise<ChallengeSummary[]>
   getFilteredChallenges(
@@ -24,5 +24,6 @@ export interface IChallengesController {
   ): Promise<Challenge[]>
   getChallengeSlugByStarId(starId: string): Promise<string>
   getUserCompletedChallengesIds(userId: string): Promise<string[]>
+  checkChallengeCompletition(challengeId: string, userId: string): Promise<boolean>
   addCompletedChallenge(challengeId: string, userId: string): Promise<void>
 }

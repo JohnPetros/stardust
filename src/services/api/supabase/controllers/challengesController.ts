@@ -19,31 +19,18 @@ export const ChallengesController = (
   supabase: Supabase
 ): IChallengesController => {
   return {
-    getChallenge: async (challengeId: string, userId: string) => {
+    getChallengeBySlug: async (challengeSlug: string) => {
       const { data, error } = await supabase
         .from('challenges')
-        .select(
-          '*, users_completed_challenges(user_id), users(name):created_by'
-        )
-        .eq('id', challengeId)
-        .eq('users_completed_challenges.user_id', userId)
-        .eq('users.id', userId)
-        .single<Challenge & { users_completed_challenges: [] }>()
+        .select('*')
+        .eq('slug', challengeSlug)
+        .single<Challenge>()
 
       if (error) {
         throw new Error(error.message)
       }
 
-      const challenge: Challenge = {
-        ...data,
-        isCompleted:
-          !!data.users_completed_challenges &&
-          data.users_completed_challenges.length > 0,
-      }
-
-      delete challenge.users_completed_challenges
-
-      return challenge
+      return data
     },
 
     getChallenges: async () => {
@@ -116,6 +103,20 @@ export const ChallengesController = (
       }
 
       return data.slug
+    },
+
+    checkChallengeCompletition: async (challengeId: string, userId: string) => {
+      const { data, error } = await supabase
+        .from('users_completed_challenges')
+        .select('challenge_id')
+        .eq('challenge_id', challengeId)
+        .eq('user_id', userId)
+
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      return !data
     },
 
     getUserCompletedChallengesIds: async (userId: string) => {
