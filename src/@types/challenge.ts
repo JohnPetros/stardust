@@ -21,12 +21,12 @@ export type Challenge = {
   function_name: string | null
   upvotes: number
   downvotes: number
-  texts: Text[]
+  texts?: Text[]
+  description: string
   star_id: string | null
   test_cases: TestCase[]
   topic_id: string | null
   total_completitions: number
-  categories: Category[] | null
-  users_completed_challenges?: { count: number }[]
+  categories?: Category[]
   isCompleted: boolean
 }
