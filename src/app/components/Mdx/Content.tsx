@@ -2,7 +2,7 @@ import { tv, VariantProps } from 'tailwind-variants'
 
 import { TypeWriter } from '../TypeWriter'
 
-import { formatText } from '@/utils/helpers'
+import { formatCode, formatText } from '@/utils/helpers'
 
 const contentStyles = tv({
   base: 'font-medium tracking-wider text-gray-100 text-sm w-full p-3 rounded-md',
@@ -31,10 +31,17 @@ export function Content({
     <div className={contentStyles({ type })}>
       <p className="leading-6">
         {hasAnimation && (
-          <TypeWriter text={formatText(children)} isEnable={hasAnimation} />
+          <TypeWriter
+            text={formatText(formatCode(children, 'decode'))}
+            isEnable={hasAnimation}
+          />
         )}
         {!hasAnimation && (
-          <span dangerouslySetInnerHTML={{ __html: formatText(children) }} />
+          <span
+            dangerouslySetInnerHTML={{
+              __html: formatText(formatCode(children, 'decode')),
+            }}
+          />
         )}
       </p>
     </div>

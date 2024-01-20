@@ -11,9 +11,11 @@ export function formatCode(code: string, action: Action) {
       .replace(new RegExp(decodeCharacters[0], 'g'), encodeCharacters[0])
       .replace(new RegExp(decodeCharacters[1], 'g'), encodeCharacters[1])
       .replace(new RegExp(decodeCharacters[2], 'g'), encodeCharacters[2])
+      .replace(new RegExp(decodeCharacters[3], 'g'), encodeCharacters[3])
   else
     return code
       .replace(new RegExp(encodeCharacters[0], 'g'), decodeCharacters[0])
       .replace(new RegExp(encodeCharacters[1], 'g'), decodeCharacters[1])
       .replace(new RegExp(encodeCharacters[2], 'g'), decodeCharacters[2])
+      .replace(new RegExp(encodeCharacters[3], 'g'), decodeCharacters[3])
 }
