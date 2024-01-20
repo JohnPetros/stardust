@@ -5,35 +5,35 @@ import { createContext, ReactNode, useContext, useReducer } from 'react'
 import type { ThemeName } from '@/@types/themeName'
 import { EDITOR_DEFAULT_CONFIG } from '@/utils/constants'
 
-export type EditorState = {
+export type CodeEditorState = {
   fontSize: number
   tabSize: number
   theme: ThemeName
 }
 
-type EditorAction =
+type CodeEditorAction =
   | { type: 'setFontSize'; payload: number }
   | { type: 'setTabSize'; payload: number }
   | { type: 'setTheme'; payload: ThemeName }
 
-type EditorValue = {
-  state: EditorState
-  dispatch: (action: EditorAction) => void
+type CodeEditorValue = {
+  state: CodeEditorState
+  dispatch: (action: CodeEditorAction) => void
 }
 
-type EditorProviderProps = {
+type CodeEditorProviderProps = {
   children: ReactNode
 }
 
-export const EditorContext = createContext({} as EditorValue)
+export const CodeEditorContext = createContext({} as CodeEditorValue)
 
-const initialEditorState: EditorState = {
+const initialCodeEditorState: CodeEditorState = {
   fontSize: EDITOR_DEFAULT_CONFIG.fontSize,
   tabSize: EDITOR_DEFAULT_CONFIG.tabSize,
   theme: EDITOR_DEFAULT_CONFIG.theme,
 }
 
-function getEditorConfig(): EditorState {
+function getEditorConfig(): CodeEditorState {
   const storedData = localStorage.getItem('@stardust:editor')
 
   const editorData = storedData ? JSON.parse(storedData) : EDITOR_DEFAULT_CONFIG
@@ -42,8 +42,8 @@ function getEditorConfig(): EditorState {
 }
 
 function storeEditorConfig(
-  currentEditorData: EditorState,
-  newEditorData: Partial<EditorState>
+  currentEditorData: CodeEditorState,
+  newEditorData: Partial<CodeEditorState>
 ) {
   localStorage.setItem(
     '@stardust:editor',
@@ -52,7 +52,10 @@ function storeEditorConfig(
   return getEditorConfig()
 }
 
-function EditorReducer(state: EditorState, action: EditorAction): EditorState {
+function CodeEditorReducer(
+  state: CodeEditorState,
+  action: CodeEditorAction
+): CodeEditorState {
   switch (action.type) {
     case 'setFontSize':
       return storeEditorConfig(state, { fontSize: action.payload })
@@ -65,21 +68,24 @@ function EditorReducer(state: EditorState, action: EditorAction): EditorState {
   }
 }
 
-export function EditorProvider({ children }: EditorProviderProps) {
-  const [state, dispatch] = useReducer(EditorReducer, initialEditorState)
+export function CodeEditorProvider({ children }: CodeEditorProviderProps) {
+  const [state, dispatch] = useReducer(
+    CodeEditorReducer,
+    initialCodeEditorState
+  )
 
   return (
-    <EditorContext.Provider value={{ state, dispatch }}>
+    <CodeEditorContext.Provider value={{ state, dispatch }}>
       {children}
-    </EditorContext.Provider>
+    </CodeEditorContext.Provider>
   )
 }
 
-export function useEditorContext() {
-  const context = useContext(EditorContext)
+export function useCodeEditorContext() {
+  const context = useContext(CodeEditorContext)
 
   if (!context) {
-    throw new Error('useEditorContext must be used inside EditorContext')
+    throw new Error('useCodeEditorContext must be used inside EditorContext')
   }
 
   return context

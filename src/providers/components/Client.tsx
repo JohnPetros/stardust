@@ -5,7 +5,7 @@ import { TooltipProvider } from '@radix-ui/react-tooltip'
 
 import { AchivementsProvider } from '@/contexts/AchievementsContext'
 import { ClientProvider } from '@/contexts/ClientContext'
-import { EditorProvider } from '@/contexts/EditorContext'
+import { CodeEditorProvider } from '@/contexts/CodeEditorContext'
 import { ToastProvider } from '@/contexts/ToastContext'
 
 interface ClientProps {
@@ -18,7 +18,7 @@ export function Client({ children }: ClientProps) {
       <ToastProvider>
         <TooltipProvider>
           <AchivementsProvider>
-            <EditorProvider>{children}</EditorProvider>
+            <CodeEditorProvider>{children}</CodeEditorProvider>
           </AchivementsProvider>
         </TooltipProvider>
       </ToastProvider>
