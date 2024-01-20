@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-interface TitleProps {
+type TitleProps = {
   children: ReactNode
 }
 

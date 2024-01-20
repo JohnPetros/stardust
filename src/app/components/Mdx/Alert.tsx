@@ -7,7 +7,7 @@ import { Title } from './Title'
 
 import { slugify } from '@/utils/helpers'
 
-interface TextProps {
+type TextProps = {
   title: string
   picture: string
   children: string

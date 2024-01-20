@@ -20,7 +20,7 @@ const textAnimations: Variants = {
   },
 }
 
-interface AnimationProps {
+type AnimationProps = {
   children: ReactNode
   hasAnimation: boolean
 }
