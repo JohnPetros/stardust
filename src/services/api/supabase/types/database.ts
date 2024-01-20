@@ -105,21 +105,21 @@ export interface Database {
       }
       challenges: {
         Row: {
-          author: string | null
-          code: string | null
+          code: string
           slug: string
-          created_at: string | null
-          difficulty: string | null
-          downvotes: number | null
-          function_name: string | null
+          created_at: string
+          difficulty: string
+          downvotes: number
+          function_name: string
           id: string
-          star_id: string | null
-          test_cases: Json | null
-          texts: Json | null
-          title: string | null
-          topic_id: string | null
-          total_completitions: number | null
-          upvotes: number | null
+          user_slug: string
+          star_id: string
+          test_cases: Json
+          texts: Json
+          title: string
+          topic_id: string
+          total_completitions: number
+          upvotes: number
         }
         Insert: {
           author?: string | null

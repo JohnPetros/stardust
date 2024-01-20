@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 
 import { PageTransitionAnimation } from '../../../../../components/PageTransitionAnimation'
-import { Congratulations } from '../../../congratulations/components/Rewards'
 
 import { Code } from './components/Code'
 import { Header } from './components/Header'
@@ -13,7 +12,6 @@ import { Slider } from './components/Slider'
 
 import { useAuth } from '@/contexts/AuthContext'
 import { useChallenge } from '@/hooks/useChallenge'
-import { useStar } from '@/hooks/useStar'
 import { useChallengeStore } from '@/stores/challengeStore'
 import { CHALLENGE_REWARDS_BY_DIFFICULTY } from '@/utils/constants'
 import { formatSecondsToTime } from '@/utils/helpers'
@@ -26,8 +24,6 @@ export default function Challenge() {
     challengeId: String(challengeId),
     userId: user?.id ?? '',
   })
-
-  const { updateUserData: updateUserStarData } = useStar(challenge?.star_id)
 
   const {
     state,
@@ -52,46 +48,46 @@ export default function Challenge() {
     return accurance === 0 ? '100%' : accurance.toFixed(1) + '%'
   }
 
-  async function updateUserData({
-    newCoins,
-    newXp,
-    user,
-  }: updateUserDataParams) {
-    let completed_challenges = user.completed_challenges
+  // async function updateUserData({
+  //   newCoins,
+  //   newXp,
+  //   user,
+  // }: updateUserDataParams) {
+  //   let completed_challenges = user.completed_challenges
 
-    if (challenge && !challenge.isCompleted) {
-      await addUserCompletedChallenge(challenge.id, user.id)
-      completed_challenges++
-    }
+  //   if (challenge && !challenge.isCompleted) {
+  //     await addUserCompletedChallenge(challenge.id, user.id)
+  //     completed_challenges++
+  //   }
 
-    if (challenge?.star_id) {
-      const updatedStarData = await updateUserStarData({
-        newCoins,
-        newXp,
-        user,
-      })
+  //   if (challenge?.star_id) {
+  //     const updatedStarData = await updateUserStarData({
+  //       newCoins,
+  //       newXp,
+  //       user,
+  //     })
 
-      const updatedData = {
-        completed_challenges,
-        ...updatedStarData,
-      }
+  //     const updatedData = {
+  //       completed_challenges,
+  //       ...updatedStarData,
+  //     }
 
-      console.log({ updatedData })
+  //     console.log({ updatedData })
 
-      return updatedData
-    }
+  //     return updatedData
+  //   }
 
-    const updatedCoins = newCoins + user.coins
-    const updatedXp = newXp + user.xp
-    const updatedWeeklyXp = newXp + user.weekly_xp
+  //   const updatedCoins = newCoins + user.coins
+  //   const updatedXp = newXp + user.xp
+  //   const updatedWeeklyXp = newXp + user.weekly_xp
 
-    return {
-      completed_challenges,
-      coins: updatedCoins,
-      xp: updatedXp,
-      weekly_xp: updatedWeeklyXp,
-    }
-  }
+  //   return {
+  //     completed_challenges,
+  //     coins: updatedCoins,
+  //     xp: updatedXp,
+  //     weekly_xp: updatedWeeklyXp,
+  //   }
+  // }
 
   useEffect(() => {
     let timer: NodeJS.Timeout
@@ -136,16 +132,7 @@ export default function Challenge() {
         hasTips={true}
       />
 
-      {state.isEnd ? (
-        <Congratulations
-          coins={coins}
-          xp={xp}
-          time={time}
-          accurance={accurance}
-          userDataUpdater={updateUserData}
-          onExit={leaveChallenge}
-        />
-      ) : (
+      {state.isEnd ? null : (
         <>
           <Header />
           <main className="">

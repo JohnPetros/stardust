@@ -20,13 +20,11 @@ const tabAnimations: Variants = {
 interface TabContent {
   children: ReactNode
   value: string
-  tabRef: (ref: HTMLDivElement | null) => void
 }
 
-export function TabContent({ children, value, tabRef }: TabContent) {
+export function TabContent({ children, value }: TabContent) {
   return (
     <Tabs.Content
-      ref={tabRef}
       value={value}
       className="h-[calc(100vh-8rem)] overflow-hidden overflow-y-scroll"
       forceMount

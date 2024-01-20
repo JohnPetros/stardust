@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 
-import { Text } from '@/app/components/TypeWriter'
 import { useChallengeStore } from '@/stores/challengeStore'
 
 export function Description() {
@@ -17,11 +16,16 @@ export function Description() {
     return (
       <div className="space-y-8 p-6">
         {challenge.texts.map((text, index) => (
-          <Text
-            key={`text-${index}`}
-            data={text}
-            hasAnimation={isFirstRendering}
-          />
+          // <Text
+          //   key={`text-${index}`}
+          //   data={text}
+          //   hasAnimation={isFirstRendering}
+          // />
+          <>
+            <p key={index}>{text.content}</p>
+            <p key={index}>{text.content}</p>
+            <p key={index}>{text.content}</p>
+          </>
         ))}
       </div>
     )

@@ -8,7 +8,7 @@ import { Result } from '../Result'
 
 import { Description } from './Description'
 import { TabButton } from './TabButton'
-import TabContent from './TabContent'
+import { TabContent } from './TabContent'
 
 import { useChallengeStore } from '@/stores/challengeStore'
 
@@ -16,8 +16,8 @@ export type Tab = 'description' | 'result' | 'comments'
 
 export function Problem() {
   const { challenge, results } = useChallengeStore((store) => store.state)
-  const tabsRef = useRef<HTMLDivElement[]>([])
   const [activeTab, setActiveTab] = useState<Tab>('description')
+  const tabsRef = useRef<HTMLDivElement[]>([])
 
   function scrollTabToTop() {
     tabsRef.current.map((tab) => {

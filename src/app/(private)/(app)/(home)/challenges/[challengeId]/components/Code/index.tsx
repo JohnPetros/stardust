@@ -21,7 +21,7 @@ import { CodeEditor, CodeEditorRef } from '@/app/components/CodeEditor'
 import { Toast, ToastRef } from '@/app/components/Toast'
 import { execute } from '@/libs/delegua'
 import { useChallengeStore } from '@/stores/challengeStore'
-import { playSound } from '@/utils/helpers'
+import { playAudio } from '@/utils/helpers'
 
 export function Code() {
   const {
@@ -111,7 +111,7 @@ export function Code() {
       if (output) userOutput.push(output)
     }
 
-    playSound('running-code.wav')
+    playAudio('running-code.wav')
 
     if (userOutput.length) setUserOutput(userOutput)
   }

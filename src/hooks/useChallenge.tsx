@@ -27,7 +27,7 @@ export function useChallenge({ challengeId, userId }: ChallengeParams) {
 
   function getChallenge() {
     if (challengeId && userId) {
-      return api.getChallenge(challengeId, userId)
+      return api.getChallengeBySlug(challengeId)
     }
   }
 

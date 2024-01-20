@@ -1,6 +1,18 @@
-export function getComponentContent(component: string) {
-  const regex = '>(.*?)</'
+import { REGEX } from '../constants'
 
-  const match = component.match(new RegExp(regex, 's'))
-  return match ? match[1] : ''
+const componentNameRegex = REGEX.componentName
+
+export function getComponentContent(component: string) {
+  const nameMatch = componentNameRegex.exec(component)
+  const componentName = nameMatch ? nameMatch[1] : 'Text'
+
+  const componentRegex = new RegExp(
+    `<${componentName}[^>]*>([\\s\\S]*?)</${componentName}>`,
+    'g'
+  )
+
+  const contentMatch = componentRegex.exec(component)
+  if (contentMatch !== null) {
+    return contentMatch[1]
+  }
 }

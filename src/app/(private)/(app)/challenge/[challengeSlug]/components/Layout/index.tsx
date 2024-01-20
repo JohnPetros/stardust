@@ -2,15 +2,15 @@
 
 import React, { ReactNode } from 'react'
 
-import { Tabs } from './Board'
+import { Tabs } from './Tabs'
 
 type LayoutProps = {
   header: ReactNode
-  board: ReactNode
+  tabContent: ReactNode
   codeEditor: ReactNode
 }
 
-export function Layout({ header, board, codeEditor }: LayoutProps) {
+export function Layout({ header, tabContent, codeEditor }: LayoutProps) {
   return (
     <div className="relative md:overflow-hidden">
       {header}
@@ -19,7 +19,7 @@ export function Layout({ header, board, codeEditor }: LayoutProps) {
       <Slider />
     </div> */}
         <div className="grid grid-cols-2 gap-3 overflow-hidden p-3">
-          <Tabs>{board}</Tabs>
+          <Tabs>{tabContent}</Tabs>
           {codeEditor}
         </div>
       </main>

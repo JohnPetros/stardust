@@ -29,13 +29,12 @@ type LayoutProps = {
 }
 
 export function Layout({ children }: LayoutProps) {
-  const {
-    isSidenavExpanded,
-    handleMainContainerClick,
-    toggleSidenav,
-  } = useLayout()
+  const { isSidenavExpanded, handleMainContainerClick, toggleSidenav } =
+    useLayout()
 
   const { md: isMobile } = useBreakpoint()
+
+  return children
 
   return (
     <>

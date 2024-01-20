@@ -23,7 +23,8 @@ type MdxProps = {
 }
 
 export function Mdx({ children }: MdxProps) {
-  const source = JSON.parse(children)
+  const source = children ? JSON.parse(children) : ''
+  console.log(source)
 
   if (source) return <MDXRemote {...source} components={COMPONENTS} />
 }
