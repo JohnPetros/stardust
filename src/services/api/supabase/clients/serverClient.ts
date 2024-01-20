@@ -1,5 +1,5 @@
 import { cache } from 'react'
-import { type CookieOptions, createServerClient } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
 import { Database } from '../types/database'
@@ -17,12 +17,6 @@ const createClient = cache(() => {
     cookies: {
       get(name: string) {
         return cookie.get(name)?.value
-      },
-      set(name: string, value: string, options: CookieOptions) {
-        cookie.set({ name, value, ...options })
-      },
-      remove(name: string, options: CookieOptions) {
-        cookie.delete({ name, ...options })
       },
     },
   })
