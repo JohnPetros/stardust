@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 import { getImage } from '@/utils/helpers'
 
-interface PictureProps {
+type PictureProps = {
   url: string
 }
 

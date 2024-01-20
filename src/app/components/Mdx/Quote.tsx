@@ -5,7 +5,7 @@ import { Title } from './Title'
 
 import { slugify } from '@/utils/helpers'
 
-interface TextProps {
+type QuoteProps = {
   title: string
   picture: string
   children: string
@@ -17,7 +17,7 @@ export function Quote({
   picture,
   children,
   hasAnimation = true,
-}: TextProps) {
+}: QuoteProps) {
   return (
     <Animation hasAnimation={hasAnimation}>
       <div className="flex w-full flex-col items-center">

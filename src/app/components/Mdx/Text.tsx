@@ -5,7 +5,7 @@ import { Title } from './Title'
 
 import { slugify } from '@/utils/helpers'
 
-interface TextProps {
+type TextProps = {
   title: string
   picture: string
   children: string
@@ -16,10 +16,8 @@ export function Text({
   title,
   picture,
   children,
-  hasAnimation = true,
+  hasAnimation = false,
 }: TextProps) {
-  console.log({ children })
-
   return (
     <Animation hasAnimation={hasAnimation}>
       <div className="flex w-full flex-col">
