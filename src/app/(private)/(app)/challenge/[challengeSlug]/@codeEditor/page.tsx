@@ -1,5 +1,7 @@
 'use client'
 
+import { Editor } from './components/Editor'
+
 export default function CodeEditorSlot() {
-  return <h1 className="text-gray-100">BoardSlot</h1>
+  return <Editor />
 }
