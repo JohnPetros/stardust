@@ -7,7 +7,7 @@ import { Loading } from '../Loading'
 
 import { useCodeEditor } from './useCodeEditor'
 
-import { useEditorContext } from '@/contexts/EditorContext'
+import { useCodeEditorContext } from '@/contexts/CodeEditorContext'
 import { useBreakpoint } from '@/hooks/useBreakpoint'
 
 export type CodeEditorRef = {
@@ -34,7 +34,7 @@ export function CodeEditorComponent(
   }: CodeEditorProps,
   ref: ForwardedRef<CodeEditorRef>
 ) {
-  const { state } = useEditorContext()
+  const { state } = useCodeEditorContext()
   const { getValue, reloadValue, handleEditorDidMount } = useCodeEditor(value)
   const { md: isMobile } = useBreakpoint()
 

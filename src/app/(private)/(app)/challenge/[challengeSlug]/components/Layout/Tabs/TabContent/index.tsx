@@ -1,3 +1,5 @@
+'use client'
+
 import { ReactNode } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { motion, Variants } from 'framer-motion'
