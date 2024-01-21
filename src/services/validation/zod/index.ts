@@ -3,12 +3,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { emailSchema } from './schemas/emaiSchema'
+import { resetPasswordFormSchema } from './schemas/resetPasswordFormSchema'
+import { signInFormSchema } from './schemas/signInFormSchema'
+import { signUpFormSchema } from './schemas/signUpFormSchema'
 
-import {
-  resetPasswordFormSchema,
-  signInFormSchema,
-  signUpFormSchema,
-} from '@/libs/zod'
 import { IValidationProvider } from '@/providers/interfaces/IValidationProvider'
 
 export const zodProvider: IValidationProvider = {
