@@ -19,14 +19,14 @@ export type Challenge = {
   difficulty: Difficulty
   created_at: string
   function_name: string | null
-  upvotes: number
-  downvotes: number
-  texts?: Text[]
+  texts: Text[]
   description: string
   star_id: string | null
   test_cases: TestCase[]
   topic_id: string | null
+  upvotes: number
+  downvotes: number
   total_completitions: number
-  categories?: Category[]
-  isCompleted: boolean
+  categories: Category[]
+  isCompleted?: boolean
 }
