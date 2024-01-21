@@ -4,6 +4,7 @@ import { IAvatarsController } from './IAvatarsController'
 import { ICategoriesController } from './ICategoriesController'
 import { ICdnController } from './ICdnController'
 import { IChallengesController } from './IChallengesController'
+import { ICommentsController } from './ICommentsController'
 import { IMdxController } from './IMdxController'
 import { IPlanetsController } from './IPlanetsController'
 import { IRankingController } from './IRankingController'
@@ -23,4 +24,5 @@ export interface IApi
     IChallengesController,
     ICdnController,
     ICategoriesController,
+    ICommentsController,
     IMdxController {}

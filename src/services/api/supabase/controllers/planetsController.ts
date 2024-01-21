@@ -7,7 +7,7 @@ export const PlanetsController = (supabase: Supabase) => {
     getPlanets: async () => {
       const { data, error } = await supabase
         .from('planets')
-        .select('*, stars (*)')
+        .select('*, stars(*)')
         .order('position', { ascending: true })
         .order('number', { foreignTable: 'stars', ascending: true })
         .returns<Planet[]>()
