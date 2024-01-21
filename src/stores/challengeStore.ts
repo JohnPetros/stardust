@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
 import type { Challenge } from '@/@types/challenge'
+import type { Vote } from '@/@types/vote'
 
 type TabHandler = {
   showResultTab: VoidFunction
@@ -14,6 +15,7 @@ type ChallengeState = {
   userOutput: string[]
   results: boolean[]
   mdx: string
+  userVote: Vote
   isAnswerCorrect: boolean
   isAnswerVerified: boolean
   isEnd: boolean
@@ -30,6 +32,7 @@ type ChallengeActionss = {
   setMdx: (mdx: string) => void
   setIsAnswerVerified: (isAnswerVerified: boolean) => void
   setIsAnswerCorrect: (isAnswerCorrect: boolean) => void
+  setUserVote: (useVote: Vote) => void
   setIsEnd: (isEnd: boolean) => void
   setTabHandler: (tabHandler: TabHandler) => void
   setIsFirstRendering: (isFirstRendering: boolean) => void
@@ -46,6 +49,7 @@ const initialState: ChallengeState = {
   challenge: null,
   userCode: '',
   userOutput: [],
+  userVote: null,
   results: [],
   mdx: '',
   isAnswerCorrect: false,
@@ -73,6 +77,10 @@ export const useChallengeStore = create<ChallengeStore>()(
         setUserOutput: (userOutput: string[]) =>
           set(({ state }: ChallengeStore) => ({
             state: { ...state, userOutput },
+          })),
+        setUserVote: (userVote: Vote) =>
+          set(({ state }: ChallengeStore) => ({
+            state: { ...state, userVote },
           })),
         setResults: (results: boolean[]) =>
           set(({ state }: ChallengeStore) => ({

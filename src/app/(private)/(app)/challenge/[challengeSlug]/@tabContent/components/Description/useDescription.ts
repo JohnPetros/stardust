@@ -9,10 +9,9 @@ export function useDescription() {
   const [isLoading, setIsLoading] = useState(true)
   const setMdx = useChallengeStore((store) => store.actions.setMdx)
   const challenge = useChallengeStore((store) => store.state.challenge)
+  const userVote = useChallengeStore((store) => store.state.userVote)
   const mdx = useChallengeStore((store) => store.state.mdx)
   const api = useApi()
-
-  console.log({ mdx })
 
   useEffect(() => {
     async function fetchMdx() {
@@ -47,5 +46,7 @@ export function useDescription() {
   return {
     isLoading,
     mdx,
+    userVote,
+    challenge,
   }
 }
