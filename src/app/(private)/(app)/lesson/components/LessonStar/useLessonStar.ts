@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
+import { StarRewardsPayload } from '@/@types/rewards'
 import type { Star } from '@/@types/star'
 import { setCookie } from '@/app/server/actions/setCookie'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
@@ -46,16 +47,16 @@ export function useLessonStar(star: Star) {
         localStorage.getItem(STORAGE.secondsCounter)
       )
 
-      const rewardsPayload = JSON.stringify({
-        [COOKIES.rewardsOrigin.star]: {
+      const rewardsPayload: StarRewardsPayload = {
+        star: {
           seconds: currentSeconds,
           incorrectAnswers: incorrectAnswersAmount,
           questions: questions.length,
           starId: star.id,
         },
-      })
+      }
 
-      await setCookie(COOKIES.rewardsPayload, rewardsPayload)
+      await setCookie(COOKIES.rewardsPayload, JSON.stringify(rewardsPayload))
       router.push(ROUTES.private.rewards)
     }
 

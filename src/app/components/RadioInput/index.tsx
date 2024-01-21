@@ -18,8 +18,6 @@ export function RangeInput({
 }: RangeInputProps) {
   const [currentValue, setCurrentValue] = useState(value)
 
-  console.log({ value })
-
   function handleValueChange([value]: number[]) {
     setCurrentValue(value)
   }

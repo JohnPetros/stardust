@@ -32,7 +32,7 @@ export function useStar(
     if (isChallenge) {
       try {
         const challengeSlug = await api.getChallengeSlugByStarId(id)
-        router.push('/challenges/' + challengeSlug)
+        router.push(`${ROUTES.private.challenge}/${challengeSlug}`)
       } catch (error) {
         console.log(error)
         toast.show('Falha ao tentar acessar o desafio', {

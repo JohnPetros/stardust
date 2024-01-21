@@ -9,7 +9,6 @@ import Link from 'next/link'
 
 import { Info } from './Info'
 
-import { Vote } from '@/@types/vote'
 import { deslugify } from '@/utils/helpers'
 
 type ChallengeInfo = {
@@ -18,7 +17,6 @@ type ChallengeInfo = {
   upvotes: number
   totalCompletitions: number
   userSlug: string
-  userVote?: Vote
 }
 
 export function ChallengeInfo({
@@ -27,7 +25,6 @@ export function ChallengeInfo({
   downvotes,
   upvotes,
   userSlug,
-  userVote,
 }: ChallengeInfo) {
   const totalVotes = upvotes + downvotes
   const acceptanceRate = totalVotes ? (upvotes / totalVotes) * 100 : 0
@@ -48,7 +45,7 @@ export function ChallengeInfo({
       <Info
         icon={ChartLine}
         label={acceptanceRate + '%'}
-        tooltipText={`Taxa de aceitação de usuários que que deram upvote para esse desafio de um total de ${totalVotes} votos. Desafios deve ser concluídos primeiro antes de serem votados.`}
+        tooltipText={`Taxa de aceitação de usuários que que deram upvote para esse desafio de um total de ${totalVotes} votos.`}
       />
       <Info
         icon={Target}
