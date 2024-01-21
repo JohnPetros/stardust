@@ -20,6 +20,21 @@ export const StarsController = (supabase: Supabase): IStarsController => {
       return data
     },
 
+    getStarById: async (starId: string) => {
+      const { data, error } = await supabase
+        .from('stars')
+        .select('*')
+        .eq('id', starId)
+        .order('order', { foreignTable: 'questions', ascending: true })
+        .single<Star>()
+
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      return data
+    },
+
     getNextStar: async (currentStar: Star, userId: string) => {
       const { data, error } = await supabase
         .from('stars')
