@@ -8,21 +8,27 @@ import { TabButton } from './TabButton'
 import { TabContent } from './TabContent'
 import { useTabs } from './useTabs'
 
+import { Alert } from '@/app/components/Alert'
+import { Button } from '@/app/components/Button'
+import { useChallengeStore } from '@/stores/challengeStore'
+
 type TabsProps = {
   children: ReactNode
 }
 
 export function Tabs({ children }: TabsProps) {
-  const { activeTab, addTabRef, handleTabButton, handleTabChange } = useTabs()
+  const { activeTab, canShowSolutions, handleShowSolutions, handleTabButton } =
+    useTabs()
+  const isAnswerCorrect = useChallengeStore(
+    (store) => store.state.isAnswerCorrect
+  )
+
+  console.log({ activeTab })
 
   return (
     <div className="max-h-screen w-full rounded-md border-4 border-gray-700">
-      <Root
-        defaultValue="description"
-        onValueChange={handleTabChange}
-        orientation="horizontal"
-      >
-        <List className="flex items-center gap-3 bg-gray-700 px-2">
+      <Root defaultValue="description" orientation="horizontal">
+        <List className="flex items-center bg-gray-700 px-2">
           <TabButton
             title="Descrição"
             value="description"
@@ -37,14 +43,75 @@ export function Tabs({ children }: TabsProps) {
             onClick={handleTabButton}
           />
           <span className="text-gray-600">|</span>
-          <TabButton
-            title="Comentários"
-            value="comments"
-            isActive={activeTab === 'comments'}
-            isBlocked
-            blockMessage="Comentários estão disponíveis apenas após a conclusão do desafio."
-            onClick={handleTabButton}
-          />
+          {!isAnswerCorrect ? (
+            <Alert
+              type="denying"
+              title="Negado!"
+              body={
+                <p className="text-center leading-8 text-gray-100">
+                  Você só pode ver os comentários de outros usuários apenas após
+                  a conclusão do desafio.
+                </p>
+              }
+              action={<Button>Entendido</Button>}
+            >
+              <TabButton
+                title="Comentários"
+                value="comments"
+                isActive={activeTab === 'comments'}
+                isBlocked={true}
+                onClick={handleTabButton}
+              />
+            </Alert>
+          ) : (
+            <TabButton
+              title="Comentários"
+              value="comments"
+              isActive={activeTab === 'comments'}
+              isBlocked
+            />
+          )}
+          <span className="text-gray-600">|</span>
+          {!canShowSolutions ? (
+            <Alert
+              type="denying"
+              title="Opa!"
+              body={
+                <div>
+                  <p className="text-center leading-8 text-gray-100">
+                    Para ver as soluções de outros usuários para esse desafio
+                    você deve pagar{' '}
+                    <span className="font-medium text-yellow-400">
+                      10 de poeira estelar
+                    </span>{' '}
+                    em troca. Contudo, você não será mais apto a ganhar
+                    recompensas ao terminar esse desafio.
+                  </p>
+                  <p className="my-4 text-center uppercase text-red-500">
+                    Você tem certeza que deseja continuar?
+                  </p>
+                </div>
+              }
+              action={<Button onClick={handleShowSolutions}>Entendido</Button>}
+              cancel={
+                <Button className="bg-red-500 text-gray-100">Cancelar</Button>
+              }
+            >
+              <TabButton
+                title="Soluções"
+                value="solutions"
+                isActive={activeTab === 'solutions'}
+                isBlocked={true}
+              />
+            </Alert>
+          ) : (
+            <TabButton
+              title="Soluções"
+              value="solutions"
+              isActive={activeTab === 'solutions'}
+              onClick={handleTabButton}
+            />
+          )}
         </List>
         <AnimatePresence>
           <TabContent value="description">{children}</TabContent>

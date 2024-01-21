@@ -1,41 +1,30 @@
 'use client'
 
-import { useRef } from 'react'
 import { Lock } from '@phosphor-icons/react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { twMerge } from 'tailwind-merge'
 
-import { Tab } from '../useBoard'
+import { Tab } from '../useTabs'
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipRef,
-  TooltipTrigger,
-} from '@/app/components/Tooltip'
-
-interface TabButtonProps {
+type TabButtonProps = {
   value: Tab
   isActive: boolean
   title: string
   isBlocked?: boolean
   blockMessage?: string
-  onClick: (value: Tab) => void
+  onClick?: (value: Tab) => void
 }
 
 export function TabButton({
   value,
   isActive,
-  isBlocked,
-  blockMessage,
+  isBlocked = false,
   title,
   onClick,
 }: TabButtonProps) {
-  const tooltipRef = useRef<TooltipRef>(null)
-
   return (
     <Tabs.Trigger
-      onClick={() => (isBlocked ? null : onClick(value))}
+      onClick={() => (isBlocked || !onClick ? null : onClick(value))}
       className={twMerge(
         'p-2 text-sm',
         isActive
@@ -47,26 +36,12 @@ export function TabButton({
       value={value}
     >
       {isBlocked ? (
-        <>
-          {blockMessage ? (
-            <Tooltip>
-              <TooltipTrigger tooltipRef={tooltipRef}>
-                <div className="flex items-center gap-2">
-                  {title}
-                  <Lock className="text-gray-500" />
-                </div>
-              </TooltipTrigger>
-              <TooltipContent ref={tooltipRef} text={blockMessage} />
-            </Tooltip>
-          ) : (
-            <span className="flex items-center gap-2">
-              {title}
-              <Lock className="text-gray-500" />
-            </span>
-          )}
-        </>
+        <span className="flex items-center gap-2">
+          {title}
+          <Lock className="text-gray-500" />
+        </span>
       ) : (
-        <span>{title}</span>
+        title
       )}
     </Tabs.Trigger>
   )
