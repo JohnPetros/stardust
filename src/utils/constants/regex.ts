@@ -8,6 +8,7 @@ export const REGEX = {
   inputParam: /["'].*["']/,
   print: /escreva\((.*?)\)/,
   backticks: /`([^`]*)`/g,
+  quotes: /^(['"])(.*)\1$/,
   mdxComponent: /<(\w+)([^>]*)>([\s\S]*?)<\/\1>/g,
   componentName: /<(\w+)[\s\S]*?>/,
 }
