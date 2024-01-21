@@ -7,6 +7,7 @@ export const ROUTES = {
       ranking: '/ranking',
       profile: '/profile',
     },
+    challenge: '/challenge',
     challengeMaker: '/challenge-maker',
     lesson: '/lesson',
     playground: '/playground',

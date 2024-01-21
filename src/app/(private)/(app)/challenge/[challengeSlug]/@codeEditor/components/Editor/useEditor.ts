@@ -1,26 +1,32 @@
 'use client'
 
 import { KeyboardEvent, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 
 import type { TestCase } from '@/@types/challenge'
 import { CodeEditorRef } from '@/app/components/CodeEditor'
+import { ConsoleRef } from '@/app/components/Console'
 import { useToast } from '@/contexts/ToastContext'
 import { execute } from '@/libs/delegua'
 import { useChallengeStore } from '@/stores/challengeStore'
+import { ROUTES } from '@/utils/constants'
 import { playAudio } from '@/utils/helpers'
 
 export function useEditor() {
   const challenge = useChallengeStore((store) => store.state.challenge)
+  const userOutput = useChallengeStore((store) => store.state.userOutput)
   const setUserOutput = useChallengeStore(
     (store) => store.actions.setUserOutput
   )
 
   const toast = useToast()
+  const router = useRouter()
 
   const userCode = useRef('')
   const editorContainerRef = useRef<HTMLDivElement>(null)
   const codeEditorRef = useRef<CodeEditorRef>(null)
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
+  const consoleRef = useRef<ConsoleRef>(null)
   const errorLine = useRef(0)
   const codeEditorHeight = editorContainerRef.current?.offsetHeight ?? 0
 
@@ -72,8 +78,6 @@ export function useEditor() {
     let userOutput = ''
     const { input } = testCase
 
-    console.log({ code })
-
     try {
       const formatedCode = formatCode(code, { input })
       const { erros } = await execute(formatedCode, (output) => {
@@ -96,9 +100,6 @@ export function useEditor() {
   async function handleRunCode(code: string) {
     if (!challenge) return
 
-    console.log(code)
-    console.log(userCode.current)
-
     const userOutput: string[] = []
 
     for (const testCase of challenge.test_cases) {
@@ -108,7 +109,9 @@ export function useEditor() {
 
     playAudio('running-code.wav')
 
-    if (userOutput.length) setUserOutput(userOutput)
+    if (userOutput.length) {
+      setUserOutput(userOutput)
+    }
   }
 
   function handleCodeChange(value: string) {
@@ -125,13 +128,20 @@ export function useEditor() {
     if (!userCode.current && challenge) userCode.current = challenge.code
   }, [challenge])
 
+  useEffect(() => {
+    if (challenge && userOutput.length)
+      router.push(`${ROUTES.private.challenge}/${challenge.slug}/result`)
+  }, [challenge, userOutput, router])
+
   return {
     userCode,
     editorContainerRef,
+    runCodeButtonRef,
+    consoleRef,
     codeEditorRef,
     codeEditorHeight,
-    runCodeButtonRef,
     initialCode: challenge?.code,
+    userOutput,
     resetCode,
     handleRunCode,
     handleCodeChange,
