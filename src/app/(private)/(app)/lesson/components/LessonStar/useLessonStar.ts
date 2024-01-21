@@ -41,30 +41,17 @@ export function useLessonStar(star: Star) {
   }, [star, resetState, setMdxComponentsAmount, setQuestions])
 
   useEffect(() => {
-    if (currentStage !== 'quiz') return
-
-    const interval = setInterval(() => {
-      const currentSeconds =
-        Number(localStorage.getItem(STORAGE.secondsCounter)) ?? 0
-
-      localStorage.setItem(STORAGE.secondsCounter, String(currentSeconds + 1))
-    }, 1000)
-
-    return () => clearInterval(interval)
-  }, [currentStage, localStorage])
-
-  useEffect(() => {
     async function showRewards() {
       const currentSeconds = Number(
         localStorage.getItem(STORAGE.secondsCounter)
       )
 
       const rewardsPayload = JSON.stringify({
-        star: {
+        [COOKIES.rewardsOrigin.star]: {
           seconds: currentSeconds,
           incorrectAnswers: incorrectAnswersAmount,
           questions: questions.length,
-          starSlug: star.slug,
+          starId: star.id,
         },
       })
 
@@ -81,7 +68,7 @@ export function useLessonStar(star: Star) {
     questions.length,
     incorrectAnswersAmount,
     router,
-    star.slug,
+    star.id,
     localStorage,
   ])
 

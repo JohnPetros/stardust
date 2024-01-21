@@ -1,10 +1,18 @@
 'use client'
 
 import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 import type { TestCase as TestCaseData } from '@/@types/challenge'
+import {
+  ChallengeRewardsPayload,
+  StarChallengeRewardsPayload,
+} from '@/@types/rewards'
+import { setCookie } from '@/app/server/actions/setCookie'
 import { useBreakpoint } from '@/hooks/useBreakpoint'
+import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useChallengeStore } from '@/stores/challengeStore'
+import { COOKIES, ROUTES, STORAGE } from '@/utils/constants'
 import { compareArrays } from '@/utils/helpers'
 
 export function useResult() {
@@ -15,6 +23,7 @@ export function useResult() {
       results,
       isAnswerCorrect,
       isAnswerVerified,
+      incorrectAnswersAmount,
       tabHandler,
     },
     actions: {
@@ -26,6 +35,45 @@ export function useResult() {
     },
   } = useChallengeStore()
   // const { md: isMobile } = useBreakpoint()
+  const localStorage = useLocalStorage()
+  const router = useRouter()
+
+  async function showRewards() {
+    if (!challenge) return
+
+    const currentSeconds = Number(localStorage.getItem(STORAGE.secondsCounter))
+
+    if (challenge?.star_id) {
+      const rewardsPayload: StarChallengeRewardsPayload = {
+        'star-challenge': {
+          seconds: currentSeconds,
+          incorrectAnswers: incorrectAnswersAmount,
+          challengeId: challenge?.id,
+          difficulty: challenge?.difficulty,
+          isCompleted: challenge?.isCompleted,
+          starId: challenge?.star_id,
+        },
+      }
+
+      await setCookie(COOKIES.rewardsPayload, JSON.stringify(rewardsPayload))
+      router.push(ROUTES.private.rewards)
+      return
+    }
+
+    const rewardsPayload: ChallengeRewardsPayload = {
+      challenge: {
+        seconds: currentSeconds,
+        incorrectAnswers: incorrectAnswersAmount,
+        challengeId: challenge?.id,
+        difficulty: challenge?.difficulty,
+        isCompleted: challenge?.isCompleted,
+      },
+    }
+
+    await setCookie(COOKIES.rewardsPayload, JSON.stringify(rewardsPayload))
+    router.push(ROUTES.private.rewards)
+    return
+  }
 
   function handleUserAnswer() {
     setIsAnswerVerified(!isAnswerVerified)
@@ -35,7 +83,10 @@ export function useResult() {
 
     if (isAnswerCorrect) {
       setIsAnswerCorrect(true)
-      if (isAnswerVerified) setIsEnd(true)
+      if (isAnswerVerified) {
+        setIsEnd(true)
+        showRewards()
+      }
       return
     }
 

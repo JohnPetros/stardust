@@ -10,21 +10,21 @@ import { UsersController } from '@/services/api/supabase/controllers/usersContro
 type LessonStarRewardParas = {
   incorrectAnswers: number
   questions: number
-  starSlug: string
+  starId: string
   user: User
 }
 
 export async function calculateLessonRewards({
   incorrectAnswers,
   questions,
-  starSlug,
+  starId,
   user,
 }: LessonStarRewardParas) {
   const supabase = createServerClient()
   const usersController = UsersController(supabase)
   const starsController = StarsController(supabase)
 
-  const currentStar = await starsController.getStarBySlug(starSlug)
+  const currentStar = await starsController.getStarById(starId)
   const nextStar = await starsController.getNextStar(currentStar, user.id)
 
   function getAccurance() {

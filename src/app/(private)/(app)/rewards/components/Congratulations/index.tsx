@@ -85,7 +85,6 @@ export function Congratulations({
     isLoading,
     isStreakVisible,
     alertRef,
-    starsChainRef,
   } = useCongratulations({
     accurance,
     coins,
@@ -103,13 +102,12 @@ export function Congratulations({
             <h2 className="text-xl font-semibold text-gray-100">
               Fase completada!
             </h2>
-            <Lottie
-              lottieRef={starsChainRef}
+            {/* TODO: Fix Stars Chain Lottie Bug */}
+            {/* <Lottie
               animationData={StarsChain}
               style={{ width: 180 }}
               loop={false}
-              autoplay={true}
-            />
+            /> */}
             <motion.div
               variants={apolloAnimations}
               initial="hidden"

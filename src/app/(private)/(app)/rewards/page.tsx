@@ -35,6 +35,7 @@ export default async function RewardsPage() {
   const todayStatus = user.week_status[todayIndex]
 
   console.log({ seconds })
+  console.log(formatSecondsToTime(seconds))
 
   return (
     <Congratulations

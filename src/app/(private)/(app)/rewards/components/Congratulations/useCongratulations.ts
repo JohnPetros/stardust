@@ -22,6 +22,8 @@ export function useCongratulations({
   const [isEndMessageVisible, setIsEndMessageVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
+  console.log({ accurance })
+
   const alertRef = useRef<AlertRef>(null)
   const starsChainRef = useRef(null) as LottieRef
   const router = useRouter()
@@ -50,21 +52,8 @@ export function useCongratulations({
   }
 
   useEffect(() => {
-    function pauseStarsAnimation() {
-      const totalStars = (parseInt(accurance) * 5) / 100
-
-      starsChainRef.current?.goToAndPlay(0)
-
-      const delay = 500 * (!isNaN(totalStars) ? totalStars : 5)
-
-      setTimeout(() => {
-        starsChainRef.current?.pause()
-      }, delay)
-    }
-
     playAudio('earning.wav')
-    pauseStarsAnimation()
-  }, [accurance])
+  }, [])
 
   return {
     isFirstClick,
