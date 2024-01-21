@@ -168,6 +168,53 @@ export const ChallengesController = (
       return !data
     },
 
+    addVotedChallenge: async (
+      challengeId: string,
+      userId: string,
+      vote: Vote
+    ) => {
+      const { error } = await supabase
+        .from('users_voted_challenges')
+        .insert([{ challenge_id: challengeId, user_id: userId, vote }])
+
+      if (error) {
+        throw new Error(error.message)
+      }
+    },
+
+    updateVotedChallenge: async (
+      challengeId: string,
+      userId: string,
+      vote: Vote
+    ) => {
+      const { error } = await supabase
+        .from('users_voted_challenges')
+        .update({ vote })
+        .eq('challenge_id', challengeId)
+        .eq('user_id', userId)
+
+      if (error) {
+        throw new Error(error.message)
+      }
+    },
+
+    removeVotedChallenge: async (
+      challengeId: string,
+      userId: string,
+      vote: Vote
+    ) => {
+      const { error } = await supabase
+        .from('users_voted_challenges')
+        .delete()
+        .eq('challenge_id', challengeId)
+        .eq('user_id', userId)
+        .eq('vote', vote)
+
+      if (error) {
+        throw new Error(error.message)
+      }
+    },
+
     addCompletedChallenge: async (challengeId: string, userId: string) => {
       const { error } = await supabase
         .from('users_completed_challenges')

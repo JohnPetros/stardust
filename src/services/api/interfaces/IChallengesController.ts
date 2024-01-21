@@ -1,7 +1,5 @@
-import { queries } from '@testing-library/react'
-
 import type { Challenge } from '@/@types/challenge'
-import { Vote } from '@/@types/vote'
+import type { Vote } from '@/@types/vote'
 
 export type GetFilteredChallengesParams = {
   userId: string
@@ -33,5 +31,20 @@ export interface IChallengesController {
     challengeId: string,
     userId: string
   ): Promise<boolean>
+  addVotedChallenge(
+    challengeId: string,
+    userId: string,
+    vote: Vote
+  ): Promise<void>
+  updateVotedChallenge(
+    challengeId: string,
+    userId: string,
+    vote: Vote
+  ): Promise<void>
+  removeVotedChallenge(
+    challengeId: string,
+    userId: string,
+    vote: Vote
+  ): Promise<void>
   addCompletedChallenge(challengeId: string, userId: string): Promise<void>
 }
