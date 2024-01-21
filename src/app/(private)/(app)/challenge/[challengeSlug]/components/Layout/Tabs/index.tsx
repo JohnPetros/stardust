@@ -23,8 +23,6 @@ export function Tabs({ children }: TabsProps) {
     (store) => store.state.isAnswerCorrect
   )
 
-  console.log({ activeTab })
-
   return (
     <div className="max-h-screen w-full rounded-md border-4 border-gray-700">
       <Root defaultValue="description" orientation="horizontal">

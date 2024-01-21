@@ -34,8 +34,6 @@ export function Layout({ children }: LayoutProps) {
 
   const { md: isMobile } = useBreakpoint()
 
-  return children
-
   return (
     <>
       <Header />

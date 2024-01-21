@@ -14,6 +14,7 @@ import { Category } from './Category'
 import { Info } from './Info'
 
 import type { Challenge } from '@/@types/challenge'
+import { ChallengeInfo } from '@/app/components/ChallengeInfo'
 import { DifficultyBadge } from '@/app/components/DifficultyBadge'
 import { deslugify } from '@/utils/helpers'
 
@@ -45,10 +46,6 @@ export function Challenge({
     isCompleted,
   },
 }: ChallengeProps) {
-  const totalVotes = upvotes + downvotes
-  const acceptanceRate = totalVotes ? upvotes / totalVotes : 0
-  const userName = deslugify(user_slug)
-
   return (
     <motion.div
       variants={challengeVariants}
@@ -65,35 +62,14 @@ export function Challenge({
           {title}
         </Link>
       </div>
-      <ul className="flex items-center gap-3">
-        <Info
-          icon={isCompleted ? CheckCircle : Circle}
-          iconStyle={isCompleted ? 'text-green-500' : 'text-red-700'}
-          label={isCompleted ? 'Resolvido' : 'Não resolvido'}
-          tooltipText={
-            isCompleted
-              ? 'O que você está esperando? resolva esse desafio.'
-              : 'Você ainda pode resolver esse desafio quantas vezes quiser.'
-          }
-        />
-        <Info
-          icon={ChartLine}
-          label={acceptanceRate + '%'}
-          tooltipText={`Taxa de aceitação de usuários que que deram upvote para esse desafio de um total de ${totalVotes} votos. Desafios deve ser concluídos primeiro antes de serem votados.`}
-        />
-        <Info
-          icon={Target}
-          label={total_completitions}
-          tooltipText={'Número de vezes que esse desafio foi concluído.'}
-        />
-        <Link href={`/profile/${user_slug}`}>
-          <Info
-            icon={User}
-            label={userName}
-            tooltipText={'Criador desse desafio.'}
-          />
-        </Link>
-      </ul>
+      <ChallengeInfo
+        isCompleted={isCompleted}
+        totalCompletitions={total_completitions}
+        userSlug={user_slug}
+        upvotes={upvotes}
+        downvotes={downvotes}
+        shouldShowVoteButtons={false}
+      />
       {categories && (
         <ul className="flex items-start gap-3">
           {categories.map((category) => {

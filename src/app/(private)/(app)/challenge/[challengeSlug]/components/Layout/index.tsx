@@ -5,7 +5,9 @@ import React, { ReactNode } from 'react'
 import { Tabs } from './Tabs'
 import { useLayout } from './useLayout'
 
+import { SecondsCounter } from '@/app/(private)/(app)/lesson/components/SecondsCounter'
 import { PageTransitionAnimation } from '@/app/components/PageTransitionAnimation'
+import { useChallengeStore } from '@/stores/challengeStore'
 
 type LayoutProps = {
   header: ReactNode
@@ -15,6 +17,7 @@ type LayoutProps = {
 
 export function Layout({ header, tabContent, codeEditor }: LayoutProps) {
   const { isTransitionPageVisible } = useLayout()
+  const isEnd = useChallengeStore((store) => store.state.isEnd)
 
   return (
     <>
@@ -22,6 +25,7 @@ export function Layout({ header, tabContent, codeEditor }: LayoutProps) {
         isVisible={isTransitionPageVisible}
         hasTips={true}
       />
+      {!isEnd && <SecondsCounter />}
       <div className="relative md:overflow-hidden">
         {header}
         <main className="">
