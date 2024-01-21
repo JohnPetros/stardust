@@ -1,11 +1,15 @@
-import type { Challenge } from '@/@types/challenge'
+import { queries } from '@testing-library/react'
 
-interface GetFilteredChallengesParams {
+import type { Challenge } from '@/@types/challenge'
+import { Vote } from '@/@types/vote'
+
+export type GetFilteredChallengesParams = {
   userId: string
   status: string
   difficulty: string
   categoriesIds: string[]
   search: string
+  range: number
 }
 
 export type ChallengeSummary = Pick<
@@ -24,6 +28,10 @@ export interface IChallengesController {
   ): Promise<Challenge[]>
   getChallengeSlugByStarId(starId: string): Promise<string>
   getUserCompletedChallengesIds(userId: string): Promise<string[]>
-  checkChallengeCompletition(challengeId: string, userId: string): Promise<boolean>
+  getUserVote(userId: string, challengeId: string): Promise<Vote>
+  checkChallengeCompletition(
+    challengeId: string,
+    userId: string
+  ): Promise<boolean>
   addCompletedChallenge(challengeId: string, userId: string): Promise<void>
 }
