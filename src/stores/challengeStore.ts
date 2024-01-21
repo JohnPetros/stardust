@@ -13,6 +13,7 @@ type ChallengeState = {
   challenge: Challenge | null
   userOutput: string[]
   results: boolean[]
+  mdx: string
   isAnswerCorrect: boolean
   isAnswerVerified: boolean
   isEnd: boolean
@@ -26,6 +27,7 @@ type ChallengeActionss = {
   setUserCode: (userCode: string) => void
   setUserOutput: (challenge: string[]) => void
   setResults: (results: boolean[]) => void
+  setMdx: (mdx: string) => void
   setIsAnswerVerified: (isAnswerVerified: boolean) => void
   setIsAnswerCorrect: (isAnswerCorrect: boolean) => void
   setIsEnd: (isEnd: boolean) => void
@@ -45,6 +47,7 @@ const initialState: ChallengeState = {
   userCode: '',
   userOutput: [],
   results: [],
+  mdx: '',
   isAnswerCorrect: false,
   isAnswerVerified: false,
   isEnd: false,
@@ -63,7 +66,6 @@ export const useChallengeStore = create<ChallengeStore>()(
             state.challenge = challenge
           })
         },
-
         setUserCode: (userCode: string) =>
           set(({ state }: ChallengeStore) => ({
             state: { ...state, userCode },
@@ -75,6 +77,10 @@ export const useChallengeStore = create<ChallengeStore>()(
         setResults: (results: boolean[]) =>
           set(({ state }: ChallengeStore) => ({
             state: { ...state, results },
+          })),
+        setMdx: (mdx: string) =>
+          set(({ state }: ChallengeStore) => ({
+            state: { ...state, mdx },
           })),
         setTabHandler: (tabHandler: TabHandler) =>
           set(({ state }: ChallengeStore) => ({

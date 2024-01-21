@@ -6,14 +6,17 @@ import { useApi } from '@/services/api'
 import { useChallengeStore } from '@/stores/challengeStore'
 
 export function useDescription() {
-  const [mdx, setMdx] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const setMdx = useChallengeStore((store) => store.actions.setMdx)
   const challenge = useChallengeStore((store) => store.state.challenge)
+  const mdx = useChallengeStore((store) => store.state.mdx)
   const api = useApi()
+
+  console.log({ mdx })
 
   useEffect(() => {
     async function fetchMdx() {
-      if (!challenge) return
+      if (!challenge || mdx) return
 
       const { texts, description } = challenge
 
@@ -33,8 +36,13 @@ export function useDescription() {
       setIsLoading(false)
     }
 
+    if (isLoading && mdx) {
+      setIsLoading(false)
+      return
+    }
+
     fetchMdx()
-  }, [challenge, api])
+  }, [isLoading, challenge, api, mdx, setMdx])
 
   return {
     isLoading,
