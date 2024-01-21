@@ -1,5 +1,5 @@
 import { CommentsList } from '../components/CommentsList'
 
-export default function CommentsSlot() {
+export default function DefaultCommentsSlot() {
   return <CommentsList />
 }
