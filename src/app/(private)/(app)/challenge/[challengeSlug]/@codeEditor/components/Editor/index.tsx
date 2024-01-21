@@ -1,3 +1,5 @@
+'use client'
+
 import { ToolBar } from '../ToolBar'
 
 import { useEditor } from './useEditor'

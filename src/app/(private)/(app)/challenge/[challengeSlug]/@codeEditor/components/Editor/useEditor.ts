@@ -9,8 +9,10 @@ import { ConsoleRef } from '@/app/components/Console'
 import { useToast } from '@/contexts/ToastContext'
 import { execute } from '@/libs/delegua'
 import { useChallengeStore } from '@/stores/challengeStore'
-import { ROUTES } from '@/utils/constants'
+import { REGEX, ROUTES } from '@/utils/constants'
 import { playAudio } from '@/utils/helpers'
+
+const inputCommandRegex = REGEX.input
 
 export function useEditor() {
   const challenge = useChallengeStore((store) => store.state.challenge)
@@ -54,9 +56,7 @@ export function useEditor() {
   function formatCode(code: string, { input }: Pick<TestCase, 'input'>) {
     if (!input.length) return code
 
-    console.log(code)
-
-    const regex = /(leia\(\))/g
+    const regex = new RegExp(inputCommandRegex, 'g')
     const matches = code.match(regex)
 
     if (!matches) {
@@ -66,7 +66,7 @@ export function useEditor() {
     input.forEach(
       (value) =>
         (code = code.replace(
-          /(leia\(\))/,
+          inputCommandRegex,
           Array.isArray(value) ? `[${value}]` : value.toString()
         ))
     )
