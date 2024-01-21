@@ -61,7 +61,7 @@ export function ConsoleComponent(
       dragMomentum={false}
       onDragEnd={handleDragEnd}
       style={{ minHeight: calculateMinHeight() }}
-      className={`absolute -bottom-4  w-full cursor-pointer rounded-t-lg bg-gray-700`}
+      className={`absolute -bottom-4 w-full cursor-pointer rounded-t-lg bg-gray-700`}
     >
       <div className="border-b border-gray-400 px-6 py-2">
         <span className="mx-auto block h-[2px] w-1/6 rounded-md bg-gray-400"></span>

@@ -29,12 +29,14 @@ export function Tabs({ children }: TabsProps) {
             isActive={activeTab === 'description'}
             onClick={handleTabButton}
           />
+          <span className="text-gray-600">|</span>
           <TabButton
             title="Resultado"
             value="result"
             isActive={activeTab === 'result'}
             onClick={handleTabButton}
           />
+          <span className="text-gray-600">|</span>
           <TabButton
             title="Comentários"
             value="comments"

@@ -3,7 +3,8 @@
 import { createContext, ReactNode, useContext, useReducer } from 'react'
 
 import type { ThemeName } from '@/@types/themeName'
-import { EDITOR_DEFAULT_CONFIG } from '@/utils/constants'
+import { useLocalStorage } from '@/hooks/useLocalStorage'
+import { EDITOR_DEFAULT_CONFIG, STORAGE } from '@/utils/constants'
 
 export type CodeEditorState = {
   fontSize: number
@@ -33,46 +34,50 @@ const initialCodeEditorState: CodeEditorState = {
   theme: EDITOR_DEFAULT_CONFIG.theme,
 }
 
-function getEditorConfig(): CodeEditorState {
-  const storedData = localStorage.getItem('@stardust:editor')
-
-  const editorData = storedData ? JSON.parse(storedData) : EDITOR_DEFAULT_CONFIG
-
-  return editorData
-}
-
-function storeEditorConfig(
-  currentEditorData: CodeEditorState,
-  newEditorData: Partial<CodeEditorState>
-) {
-  localStorage.setItem(
-    '@stardust:editor',
-    JSON.stringify({ ...currentEditorData, ...newEditorData })
-  )
-  return getEditorConfig()
-}
-
-function CodeEditorReducer(
-  state: CodeEditorState,
-  action: CodeEditorAction
-): CodeEditorState {
-  switch (action.type) {
-    case 'setFontSize':
-      return storeEditorConfig(state, { fontSize: action.payload })
-    case 'setTabSize':
-      return storeEditorConfig(state, { tabSize: action.payload })
-    case 'setTheme':
-      return storeEditorConfig(state, { theme: action.payload })
-    default:
-      return state
-  }
-}
-
 export function CodeEditorProvider({ children }: CodeEditorProviderProps) {
   const [state, dispatch] = useReducer(
     CodeEditorReducer,
     initialCodeEditorState
   )
+
+  const localStorage = useLocalStorage()
+
+  function getEditorConfig(): CodeEditorState {
+    const storedData = localStorage.getItem(STORAGE.codeEditorConfig)
+
+    const editorData = storedData
+      ? JSON.parse(storedData)
+      : EDITOR_DEFAULT_CONFIG
+
+    return editorData
+  }
+
+  function storeEditorConfig(
+    currentEditorData: CodeEditorState,
+    newEditorData: Partial<CodeEditorState>
+  ) {
+    localStorage.setItem(
+      STORAGE.codeEditorConfig,
+      JSON.stringify({ ...currentEditorData, ...newEditorData })
+    )
+    return getEditorConfig()
+  }
+
+  function CodeEditorReducer(
+    state: CodeEditorState,
+    action: CodeEditorAction
+  ): CodeEditorState {
+    switch (action.type) {
+      case 'setFontSize':
+        return storeEditorConfig(state, { fontSize: action.payload })
+      case 'setTabSize':
+        return storeEditorConfig(state, { tabSize: action.payload })
+      case 'setTheme':
+        return storeEditorConfig(state, { theme: action.payload })
+      default:
+        return state
+    }
+  }
 
   return (
     <CodeEditorContext.Provider value={{ state, dispatch }}>

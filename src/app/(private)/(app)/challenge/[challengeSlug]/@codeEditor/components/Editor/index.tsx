@@ -10,9 +10,9 @@ export function Editor() {
     initialCode,
     userCode,
     editorContainerRef,
+    runCodeButtonRef,
     codeEditorRef,
     codeEditorHeight,
-    runCodeButtonRef,
     resetCode,
     handleCodeChange,
     handleKeyDown,
@@ -20,18 +20,25 @@ export function Editor() {
   } = useEditor()
 
   return (
-    <div ref={editorContainerRef} className="w-full" onKeyDown={handleKeyDown}>
+    <div
+      ref={editorContainerRef}
+      className="relative w-full"
+      onKeyDown={handleKeyDown}
+    >
       <div className="flex items-center justify-between rounded-t-md bg-gray-700 px-3 py-2">
-        <Button
-          buttonRef={runCodeButtonRef}
-          className="h-6 w-max px-3 text-xs"
-          onClick={() => handleRunCode(userCode.current)}
-        >
-          Executar
-        </Button>
+        <div className="flex items-center gap-4">
+          <Button
+            buttonRef={runCodeButtonRef}
+            className="h-6 w-max px-3 text-xs"
+            onClick={() => handleRunCode(userCode.current)}
+          >
+            Executar
+          </Button>
+        </div>
 
         <ToolBar resetCode={resetCode} />
       </div>
+
       <CodeEditor
         ref={codeEditorRef}
         value={initialCode ?? ''}

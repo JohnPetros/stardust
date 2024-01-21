@@ -54,7 +54,7 @@ export function VerificationButton({
   return (
     <div
       className={twMerge(
-        'absolute bottom-0 flex w-full flex-col items-center justify-center gap-2 border-t px-6 py-3 ',
+        'sticky bottom-0 top-0 mt-auto flex w-full flex-col items-center justify-center gap-2 border-t px-6 py-3 ',
         isAnswerVerified && !isAnswerCorrect
           ? 'border-red-700 bg-green-900'
           : 'border-green-500 bg-green-900'

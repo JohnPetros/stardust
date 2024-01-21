@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { useCodeEditorSettings } from './useCodeEditorSettings'
+import { useCodeEditorSettingsDialog } from './useCodeEditorSettingsDialog'
 
 import {
   Dialog,
@@ -14,13 +14,15 @@ type CodeEditorSettingsProps = {
   children: ReactNode
 }
 
-export function CodeEditorSettings({ children }: CodeEditorSettingsProps) {
+export function CodeEditorSettingsDialog({
+  children,
+}: CodeEditorSettingsProps) {
   const {
     fontSize,
     tabSize,
     handleFontSizeRangeValueChange,
     handleTabSizeRangeValueChange,
-  } = useCodeEditorSettings()
+  } = useCodeEditorSettingsDialog()
 
   return (
     <Dialog>
