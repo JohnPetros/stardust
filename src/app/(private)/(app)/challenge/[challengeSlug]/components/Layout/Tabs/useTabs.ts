@@ -1,15 +1,22 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 
 import { useChallengeStore } from '@/stores/challengeStore'
+import { ROUTES } from '@/utils/constants'
 
 export type Tab = 'description' | 'result' | 'comments'
 
 export function useTabs() {
-  const { challenge, results } = useChallengeStore((store) => store.state)
+  const challengeSlug = useChallengeStore(
+    (store) => store.state.challenge?.slug
+  )
+
   const [activeTab, setActiveTab] = useState<Tab>('description')
   const tabsRef = useRef<HTMLDivElement[]>([])
+  const router = useRouter()
+  const pathname = usePathname()
 
   function scrollTabToTop() {
     tabsRef.current.map((tab) => {
@@ -19,6 +26,10 @@ export function useTabs() {
 
   function handleTabButton(tab: Tab) {
     setActiveTab(tab)
+
+    const route = tab !== 'description' ? `/${tab}` : ''
+
+    router.push(`${ROUTES.private.challenge}/${challengeSlug}${route}`)
   }
 
   function handleTabChange() {
@@ -30,6 +41,12 @@ export function useTabs() {
       tabsRef.current.push(ref)
     }
   }
+
+  useEffect(() => {
+    const activeTab = pathname.split('/').pop()
+
+    if (activeTab !== challengeSlug) setActiveTab(activeTab as Tab)
+  }, [pathname, challengeSlug])
 
   return {
     activeTab,
