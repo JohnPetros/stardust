@@ -3,17 +3,14 @@
 import {
   ArrowClockwise,
   ArrowsOutSimple,
-  Code,
   Command,
   Gear,
 } from '@phosphor-icons/react'
-import { Root } from '@radix-ui/react-toolbar'
-
-import { Tool } from './Tool'
+import { Button as ToolBarButton, Root } from '@radix-ui/react-toolbar'
 
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
-import { CodeEditorSettings } from '@/app/components/EditorSettingsDialog'
+import { CodeEditorSettingsDialog } from '@/app/components/CodeEditorSettingsDialog'
 import { ShortcutsDialog } from '@/app/components/ShortcutsDialog'
 
 type ToolBarProps = {
@@ -35,23 +32,26 @@ export function ToolBar({ resetCode }: ToolBarProps) {
         cancel={<Button className="bg-red-700 text-gray-100">Cancelar</Button>}
         canPlaySong={false}
       >
-        <Tool icon={ArrowClockwise} label="Resetar código" />
+        <ToolBarButton className="grid place-content-center">
+          <ArrowClockwise className="text-xl text-green-500" weight="bold" />
+        </ToolBarButton>
       </Alert>
 
-      <Tool icon={ArrowsOutSimple} label="" />
+      <ToolBarButton className="grid place-content-center">
+        <ArrowsOutSimple className="text-xl text-green-500" weight="bold" />
+      </ToolBarButton>
 
-      {/* <ShortcutsDialog>
-        <Tool icon={Code} label="Ver atalhos do editor de código" />
-      </ShortcutsDialog> */}
+      <ShortcutsDialog>
+        <ToolBarButton className="grid place-content-center">
+          <Command className="text-xl text-green-500" weight="bold" />
+        </ToolBarButton>
+      </ShortcutsDialog>
 
-      <Tool icon={Command} label="Ver atalhos do editor de código" />
-
-      <CodeEditorSettings>
-        <Tool
-          icon={Gear}
-          label="Abrir menu de configurações do editor de código"
-        />
-      </CodeEditorSettings>
+      <CodeEditorSettingsDialog>
+        <ToolBarButton className="grid place-content-center">
+          <Gear className="text-xl text-green-500" weight="bold" />
+        </ToolBarButton>
+      </CodeEditorSettingsDialog>
     </Root>
   )
 }
