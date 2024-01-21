@@ -1,39 +1,28 @@
-import {
-  ForwardedRef,
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from 'react'
+import { useEffect } from 'react'
+
+import { useLocalStorage } from '@/hooks/useLocalStorage'
+import { STORAGE } from '@/utils/constants'
 
 export type SecondsCounterRef = {
   getSeconds: () => number
 }
 
-const SecondsCounterComponent = (
-  _: unknown,
-  ref: ForwardedRef<SecondsCounterRef>
-) => {
-  const [counter, setCounter] = useState(0)
-  console.log(counter)
-
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        getSeconds: () => counter,
-      }
-    },
-    [counter]
-  )
+export function SecondsCounter() {
+  const localStorage = useLocalStorage()
 
   useEffect(() => {
-    setTimeout(() => {
-      setCounter(counter + 1)
+    const interval = setInterval(() => {
+      const currentSeconds =
+        Number(localStorage.getItem(STORAGE.secondsCounter)) ?? 0
+
+      localStorage.setItem(STORAGE.secondsCounter, String(currentSeconds + 1))
     }, 1000)
-  }, [counter])
+
+    return () => {
+      clearInterval(interval)
+      localStorage.removeItem(STORAGE.secondsCounter)
+    }
+  }, [localStorage])
 
   return null
 }
-
-export const SecondsCounter = forwardRef(SecondsCounterComponent)

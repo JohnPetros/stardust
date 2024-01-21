@@ -6,15 +6,15 @@ export function useLocalStorage() {
   const isClientSide = useClientContext()
 
   function setItem(key: string, value: string) {
-    if (isClientSide) window.localStorage.setItem(key, value)
+    if (isClientSide) localStorage.setItem(key, value)
   }
 
   function getItem(key: string) {
-    return isClientSide ? window.localStorage.getItem(key) : null
+    return isClientSide ? localStorage.getItem(key) : null
   }
 
   function removeItem(key: string) {
-    if (isClientSide) window.localStorage.removeItem(key)
+    if (isClientSide) localStorage.removeItem(key)
   }
 
   function hasItem(key: string) {
