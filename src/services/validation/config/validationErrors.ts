@@ -14,6 +14,6 @@ export const VALIDATION_ERRORS = {
     equal: 'As senhas precisam de iguais',
   },
   comment: {
-    string: 'Seu comentário dever ser um texto simples!',
+    min: 'O seu comentário deve ter pelo menos 3 caracteres',
   },
 }
