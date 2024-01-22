@@ -20,5 +20,5 @@ module.exports = {
       screens: breakpoints,
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/typography')],
 }
