@@ -1,7 +1,7 @@
 import { ICommentsController } from '../../interfaces/ICommentsController'
 import type { Supabase } from '../types/supabase'
 
-import type { Comment } from '@/@types/commnet'
+import type { Comment } from '@/@types/comment'
 import { Order } from '@/@types/order'
 
 export const CommentsController = (supabase: Supabase): ICommentsController => {
@@ -13,7 +13,7 @@ export const CommentsController = (supabase: Supabase): ICommentsController => {
     ) => {
       let query = supabase
         .from('comments')
-        .select('*, user:users(slug, name, avatar_id), replies:comments(*)')
+        .select('*, user:users(slug, avatar_id), replies:comments(*)')
 
       switch (sorter) {
         case 'date':
@@ -40,8 +40,6 @@ export const CommentsController = (supabase: Supabase): ICommentsController => {
         throw new Error(error.message)
       }
 
-      console.log({ data })
-
       const comments: Comment[] = data.map((comment) => ({
         id: comment.id,
         content: comment.content,
@@ -52,6 +50,38 @@ export const CommentsController = (supabase: Supabase): ICommentsController => {
       }))
 
       return comments
+    },
+
+    getUserUpvotedCommentsIds: async (userId: string) => {
+      const { data, error } = await supabase
+        .from('users_upvoted_comments')
+        .select('comment_id')
+        .eq('user_id', userId)
+        .returns<{ comment_id: string }[]>()
+
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      return data.map(({ comment_id }) => comment_id)
+    },
+
+    postComment: async (
+      comment: Omit<Comment, 'id' | 'user'>,
+      userId: string
+    ) => {
+      const { error } = await supabase.from('comments').insert([
+        {
+          content: comment.content,
+          challenge_id: comment.challenge_id,
+          parent_comment_id: comment.parent_comment_id,
+          user_id: userId,
+        },
+      ])
+
+      if (error) {
+        throw new Error(error.message)
+      }
     },
   }
 }
