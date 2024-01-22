@@ -4,10 +4,10 @@ export type Comment = {
   id: string
   content: string
   challenge_id: string
-  parent_comment_id: string | null
   created_at: Date
+  parent_comment_id: string | null
   user: Pick<User, 'slug' | 'avatar_id'>
-  replies?: Comment[]
+  repliesAmount?: number
   upvotes?: number
   isVoted?: boolean
 }
