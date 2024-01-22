@@ -27,25 +27,33 @@ export type PopoverMenuButton = {
   action: VoidFunction
 }
 
-interface PopoverMenuProps {
+type PopoverMenuProps = {
   label: string
   buttons: PopoverMenuButton[]
   trigger: ReactNode
+  onOpenChange?: (isOpen: boolean) => void
 }
 
-export function PopoverMenu({ buttons, trigger, label }: PopoverMenuProps) {
+export function PopoverMenu({
+  buttons,
+  trigger,
+  label,
+  onOpenChange,
+}: PopoverMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   function close() {
     setIsOpen(false)
+    if (onOpenChange) onOpenChange(false)
   }
 
-  function handleTriggerClick() {
+  function handleTrigger() {
     setIsOpen(true)
+    if (onOpenChange) onOpenChange(true)
   }
 
   function handleOpenChange() {
-    if (isOpen) close()
+    if (onOpenChange) if (isOpen) close()
   }
 
   function handlePopoverMenuButtonClick({
@@ -60,7 +68,7 @@ export function PopoverMenu({ buttons, trigger, label }: PopoverMenuProps) {
       <Popover.Trigger
         aria-label={label}
         className="w-max"
-        onClick={handleTriggerClick}
+        onClick={handleTrigger}
       >
         {trigger}
       </Popover.Trigger>
@@ -77,6 +85,7 @@ export function PopoverMenu({ buttons, trigger, label }: PopoverMenuProps) {
                   initial="up"
                   animate="down"
                   exit="up"
+                  transition={{ duration: 0.2 }}
                   className="h-full w-full rounded-md bg-gray-700 p-3"
                 >
                   <Popover.Arrow className="fill-gray-700" />
