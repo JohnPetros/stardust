@@ -13,4 +13,7 @@ export const VALIDATION_ERRORS = {
   password_confirmation: {
     equal: 'As senhas precisam de iguais',
   },
+  comment: {
+    string: 'Seu comentário dever ser um texto simples!',
+  },
 }

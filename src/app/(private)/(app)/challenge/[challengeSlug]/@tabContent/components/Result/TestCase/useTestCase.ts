@@ -12,7 +12,7 @@ export function useTestCase(isLocked: boolean, userOutput: string) {
       return '[' + value.join(',') + ']'
     }
 
-    const regex = REGEX.quotes
+    const regex = REGEX.insideQuotes
     return value.toString().replace(regex, '$2')
   }
 

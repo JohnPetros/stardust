@@ -50,7 +50,7 @@ export function ChallengeInfo({
       <Info
         icon={Target}
         label={totalCompletitions}
-        tooltipText={'Número de vezes que esse desafio foi concluído.'}
+        tooltipText={'Número de usuários que concluiram esse desafio.'}
       />
       <Link href={`/profile/${userSlug}`}>
         <Info

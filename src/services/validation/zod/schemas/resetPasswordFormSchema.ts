@@ -1,9 +1,9 @@
 import { z } from 'zod'
 
+import { VALIDATION_ERRORS } from '../../config/validationErrors'
+
 import { passwordConfirmationSchema } from './passwordConfirmationSchema'
 import { passwordSchema } from './passwordSchema'
-
-import { VALIDATION_ERRORS } from '@/utils/constants'
 
 export const resetPasswordFormSchema = z
   .object({

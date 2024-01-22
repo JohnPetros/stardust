@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { VALIDATION_ERRORS } from '@/utils/constants'
+import { VALIDATION_ERRORS } from '../../config/validationErrors'
 
 export const emailSchema = z
   .string()

@@ -1,11 +1,11 @@
 import { z } from 'zod'
 
+import { VALIDATION_ERRORS } from '../../config/validationErrors'
+
 import { emailSchema } from './emaiSchema'
 import { nameSchema } from './nameSchema'
 import { passwordConfirmationSchema } from './passwordConfirmationSchema'
 import { passwordSchema } from './passwordSchema'
-
-import { VALIDATION_ERRORS } from '@/utils/constants'
 
 export const signUpFormSchema = z
   .object({
