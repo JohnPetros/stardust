@@ -7,6 +7,7 @@ import { Comment } from '@/@types/comment'
 import { Order } from '@/@types/order'
 import { PopoverMenuButton } from '@/app/components/PopoverMenu'
 import { useAuth } from '@/contexts/AuthContext'
+import { useToast } from '@/contexts/ToastContext'
 import { useApi } from '@/services/api'
 import { useChallengeStore } from '@/stores/challengeStore'
 import { ERRORS } from '@/utils/constants'
@@ -21,7 +22,9 @@ export function useCommentsList() {
   const [order, setOrder] = useState<Order>('ascending')
   const [isPopoverMenuOpen, setIsPopoverMenuOpen] = useState(false)
   const [userComment, setUserComment] = useState('')
+
   const api = useApi()
+  const toast = useToast()
 
   async function getUserUpvotedCommentsIds() {
     if (!user) return
@@ -46,7 +49,7 @@ export function useCommentsList() {
     data: initialComments,
     error,
     isLoading,
-    mutate: commentsMutate,
+    mutate: refetchComments,
   } = useSWR(
     () =>
       `/comments?challenge_id=${challenge?.id}&sorter=${sorter}$order=${order}`,
@@ -58,6 +61,28 @@ export function useCommentsList() {
     throw new Error(ERRORS.commentsListFailedFetching)
   }
 
+  function checkUserUpvotedComment(
+    comment: Comment,
+    votedCommentsIds: string[]
+  ) {
+    const isVoted = votedCommentsIds.includes(comment.id)
+
+    return {
+      ...comment,
+      isVoted,
+    }
+  }
+
+  const comments: Comment[] = useMemo(() => {
+    if (initialComments && votedCommentsIds) {
+      return initialComments.map((comment) =>
+        checkUserUpvotedComment(comment, votedCommentsIds)
+      )
+    }
+
+    return []
+  }, [initialComments, votedCommentsIds])
+
   function handleUserCommentChange(userComment: string) {
     setUserComment(userComment)
   }
@@ -65,17 +90,23 @@ export function useCommentsList() {
   async function handlePostComment(userComment: string) {
     if (!challenge || !user) return
 
-    api.postComment(
-      {
-        challenge_id: challenge.id,
-        content: userComment,
-        parent_comment_id: null,
-        created_at: new Date(),
-      },
-      user.id
-    )
-    setUserComment('')
-    commentsMutate()
+    try {
+      await api.postComment(
+        {
+          challenge_id: challenge.id,
+          content: userComment,
+          parent_comment_id: null,
+          created_at: new Date(),
+        },
+        user.id
+      )
+      await refetchComments()
+    } catch (error) {
+      console.error(error)
+      toast.show(ERRORS.commentFailedPost, { type: 'error' })
+    } finally {
+      setUserComment('')
+    }
   }
 
   function handlePopoverMenuOpenChange(isOpen: boolean) {
@@ -107,28 +138,6 @@ export function useCommentsList() {
       action: () => handleSortComments('upvotes', 'descending'),
     },
   ]
-
-  function checkUserUpvotedComment(
-    comment: Comment,
-    votedCommentsIds: string[]
-  ) {
-    const isVoted = votedCommentsIds.includes(comment.id)
-
-    return {
-      ...comment,
-      isVoted,
-    }
-  }
-
-  const comments: Comment[] = useMemo(() => {
-    if (initialComments && votedCommentsIds) {
-      return initialComments.map((comment) =>
-        checkUserUpvotedComment(comment, votedCommentsIds)
-      )
-    }
-
-    return []
-  }, [initialComments, votedCommentsIds])
 
   return {
     isLoading,
