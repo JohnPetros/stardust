@@ -1,7 +1,6 @@
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { type NextRequest, NextResponse } from 'next/server'
 
-import { deleteCookie } from './app/server/actions/deleteCookie'
 import { hasCookie } from './app/server/actions/hasCookie'
 import { AuthController } from './services/api/supabase/controllers/authController'
 import type { Database } from './services/api/supabase/types/database'
