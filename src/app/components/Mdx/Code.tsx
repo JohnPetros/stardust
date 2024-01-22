@@ -2,12 +2,10 @@ import { CodeSnippet } from '../CodeSnippet'
 
 import { Animation } from './Animation'
 
-import { formatCode } from '@/utils/helpers/formatCode'
-
 type CodeProps = {
   code: string
   isRunnable: boolean
-  children: string
+  children: string | string[]
   hasAnimation: boolean
 }
 
@@ -19,7 +17,7 @@ export function Code({
   return (
     <Animation hasAnimation={hasAnimation}>
       <CodeSnippet
-        code={formatCode(children, 'decode')}
+        code={Array.isArray(children) ? children[0] : children}
         isRunnable={isRunnable}
       />
     </Animation>

@@ -29,17 +29,14 @@ export function Content({
 }: ContentProps & VariantProps<typeof contentStyles>) {
   return (
     <div className={contentStyles({ type })}>
-      <p className="leading-6">
+      <p className="not-prose leading-6">
         {hasAnimation && (
-          <TypeWriter
-            text={formatText(formatCode(children, 'decode'))}
-            isEnable={hasAnimation}
-          />
+          <TypeWriter text={formatText(children)} isEnable={hasAnimation} />
         )}
         {!hasAnimation && (
           <span
             dangerouslySetInnerHTML={{
-              __html: formatText(formatCode(children, 'decode')),
+              __html: formatText(children),
             }}
           />
         )}

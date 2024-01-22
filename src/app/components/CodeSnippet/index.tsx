@@ -24,7 +24,7 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
   return (
     <div
       className={twMerge(
-        'relative w-full overflow-hidden rounded-md bg-gray-800',
+        'not-prose relative w-full overflow-hidden rounded-md bg-gray-800',
         isRunnable ? `h-[${editorHeight}px]` : 'h-auto'
       )}
     >

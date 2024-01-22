@@ -10,7 +10,7 @@ import { slugify } from '@/utils/helpers'
 type TextProps = {
   title: string
   picture: string
-  children: string
+  children: string[]
   hasAnimation?: boolean
 }
 
@@ -22,7 +22,7 @@ export function Alert({
 }: TextProps) {
   return (
     <Animation hasAnimation={hasAnimation}>
-      <div className="flex w-full flex-col items-center">
+      <div className="not-prose flex w-full flex-col items-center">
         {title && (
           <section id={slugify(title)} className="mb-4">
             <Title>{title}</Title>
@@ -41,7 +41,7 @@ export function Alert({
             />
           </span>
           <Content type="alert" hasAnimation={hasAnimation}>
-            {children}
+            {children[0]}
           </Content>
         </div>
       </div>

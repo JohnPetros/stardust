@@ -4,22 +4,24 @@ import { Animation } from './Animation'
 import { Content } from './Content'
 
 import { useApi } from '@/services/api'
+import { REGEX } from '@/utils/constants'
 
 interface ImageProps {
   picture: string
-  children: string
+  children: string[]
   hasAnimation?: boolean
 }
 
 export function Image({ picture, hasAnimation = true, children }: ImageProps) {
   const api = useApi()
   const image = api.getImage('theory', picture)
+  const formattedImage = image.replace(REGEX.quotes, '')
 
   return (
     <Animation hasAnimation={hasAnimation}>
-      <div className="flex w-full flex-col items-center justify-center">
+      <div className="not-prose flex w-full flex-col items-center justify-center">
         <Img
-          src={image}
+          src={formattedImage}
           width={180}
           height={120}
           className="skeleton rounded-lg"
@@ -27,7 +29,8 @@ export function Image({ picture, hasAnimation = true, children }: ImageProps) {
           alt=""
         />
         <div>
-          <Content hasAnimation={hasAnimation}>{children}</Content>
+          <span>{image}</span>
+          <Content hasAnimation={hasAnimation}>{children[0]}</Content>
         </div>
       </div>
     </Animation>

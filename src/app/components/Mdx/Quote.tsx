@@ -8,7 +8,7 @@ import { slugify } from '@/utils/helpers'
 type QuoteProps = {
   title: string
   picture: string
-  children: string
+  children: string[]
   hasAnimation?: boolean
 }
 
@@ -20,7 +20,7 @@ export function Quote({
 }: QuoteProps) {
   return (
     <Animation hasAnimation={hasAnimation}>
-      <div className="flex w-full flex-col items-center">
+      <div className="not-prose flex w-full flex-col items-center">
         {title && (
           <section id={slugify(title)} className="mb-4">
             <Title>{title}</Title>
@@ -29,7 +29,7 @@ export function Quote({
         <div className="flex w-full items-center">
           {picture && <Picture url={picture} />}
           <Content type="quote" hasAnimation={hasAnimation}>
-            {children}
+            {children[0]}
           </Content>
         </div>
       </div>
