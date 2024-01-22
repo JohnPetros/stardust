@@ -8,6 +8,7 @@ export interface ICommentsController {
     order: Order
   ): Promise<Comment[]>
   getUserUpvotedCommentsIds(userId: string): Promise<string[]>
+  getCommentReplies(commentId: string): Promise<Comment[]>
   postComment(
     comment: Omit<Comment, 'id' | 'user'>,
     userId: string
