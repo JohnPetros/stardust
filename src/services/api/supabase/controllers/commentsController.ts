@@ -99,6 +99,18 @@ export const CommentsController = (supabase: Supabase): ICommentsController => {
       return replies
     },
 
+    editComment: async (commentId: string, userId: string, content: string) => {
+      const { error } = await supabase
+        .from('comments')
+        .update({ content })
+        .eq('id', commentId)
+        .eq('user_id', userId)
+
+      if (error) {
+        throw new Error(error.message)
+      }
+    },
+
     postComment: async (
       comment: Omit<Comment, 'id' | 'user'>,
       userId: string
