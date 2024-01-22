@@ -1,20 +1,24 @@
 import { useState } from 'react'
 import useSWR from 'swr'
 
+import { PopoverMenuButton } from '@/app/components/PopoverMenu'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/contexts/ToastContext'
 import { useApi } from '@/services/api'
 import { useChallengeStore } from '@/stores/challengeStore'
 import { ERRORS } from '@/utils/constants'
 
-export function useComment(commentId: string) {
+export function useComment(commentId: string, initialContent: string) {
   const challenge = useChallengeStore((store) => store.state.challenge)
   const { user } = useAuth()
 
   const [shouldFetchCommentReplies, setShouldFetchCommentReplies] =
     useState(false)
+  const [canEditComment, setCanEditComment] = useState(false)
+  useState(false)
   const [isUserReplyInputVisible, setIsUserReplyInputVisible] = useState(false)
   const [isRepliesVisible, setIsRepliesVisible] = useState(false)
+  const [commentContent, setCommentContent] = useState(initialContent)
   const [userReply, setUserReply] = useState('')
 
   const api = useApi()
@@ -63,6 +67,15 @@ export function useComment(commentId: string) {
     }
   }
 
+  function handleCancelCommentEdition() {
+    setCommentContent(initialContent)
+    setCanEditComment(false)
+  }
+
+  function handleCommentContentChange(content: string) {
+    setCommentContent(content)
+  }
+
   function handleUserReplyChange(userReply: string) {
     setUserReply(userReply)
   }
@@ -76,15 +89,50 @@ export function useComment(commentId: string) {
     if (!shouldFetchCommentReplies) setShouldFetchCommentReplies(true)
   }
 
+  async function handleEditComment(newContent: string) {
+    if (!user) return
+
+    try {
+      await api.editComment(commentId, user.id, newContent)
+      setCanEditComment(false)
+      setCommentContent(newContent)
+    } catch (error) {
+      console.error(error)
+      toast.show(ERRORS.commentFailedEdition, { type: 'error', seconds: 5 })
+      handleCancelCommentEdition()
+    }
+  }
+
+  function deleteComment() {}
+
+  const popoverMenuButtons: PopoverMenuButton[] = [
+    {
+      title: 'Editar comentário',
+      isToggle: false,
+      action: () => setCanEditComment(true),
+    },
+    {
+      title: 'Deletar comentário',
+      isToggle: false,
+      action: () => deleteComment(),
+    },
+  ]
+
   return {
     replies,
     userReply,
     isUserReplyInputVisible,
     isRepliesVisible,
     isLoadingReplies: isLoading ?? isValidating,
+    popoverMenuButtons,
+    commentContent,
+    canEditComment,
+    handleEditComment,
     handleToggleIsUserReplyInputVisible,
     handleToggleIsRepliesVisible,
     handlePostUserReply,
     handleUserReplyChange,
+    handleCommentContentChange,
+    handleCancelCommentEdition,
   }
 }

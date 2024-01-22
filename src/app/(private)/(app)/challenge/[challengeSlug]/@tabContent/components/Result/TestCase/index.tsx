@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowDown, Check, Lock, X } from '@phosphor-icons/react'
+import { Check, Lock, X } from '@phosphor-icons/react'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
 
@@ -9,15 +9,7 @@ import { Field } from '../Field'
 import { useTestCase } from './useTestCase'
 
 import type { TestCase as TestCaseData } from '@/@types/challenge'
-
-const arrowAnimations: Variants = {
-  down: {
-    rotate: '0',
-  },
-  up: {
-    rotate: '180deg',
-  },
-}
+import { AnimatedArrow } from '@/app/components/AnimatedArrow'
 
 const contentAnimations: Variants = {
   up: {
@@ -78,14 +70,7 @@ export function TestCase({
           {isLocked ? (
             <Lock className="text-base text-gray-500" weight="bold" />
           ) : (
-            <motion.span
-              variants={arrowAnimations}
-              initial="down"
-              animate={isOpen ? 'up' : ''}
-              transition={{ type: 'tween', ease: 'linear' }}
-            >
-              <ArrowDown className="text-base text-gray-500" weight="bold" />
-            </motion.span>
+            <AnimatedArrow isUp={isOpen} />
           )}
         </button>
       </header>

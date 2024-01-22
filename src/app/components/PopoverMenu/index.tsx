@@ -23,20 +23,20 @@ const popoverAnimation: Variants = {
 export type PopoverMenuButton = {
   title: string
   isToggle: boolean
-  value: boolean | null
+  value?: boolean | null
   action: VoidFunction
 }
 
 type PopoverMenuProps = {
   label: string
   buttons: PopoverMenuButton[]
-  trigger: ReactNode
+  children: ReactNode
   onOpenChange?: (isOpen: boolean) => void
 }
 
 export function PopoverMenu({
   buttons,
-  trigger,
+  children: trigger,
   label,
   onOpenChange,
 }: PopoverMenuProps) {
