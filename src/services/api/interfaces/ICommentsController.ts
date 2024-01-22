@@ -10,6 +10,7 @@ export interface ICommentsController {
   getUserUpvotedCommentsIds(userId: string): Promise<string[]>
   getCommentReplies(commentId: string): Promise<Comment[]>
   editComment(commentId: string, userId: string, content: string): Promise<void>
+  deleteComment(commentId: string, userId: string): Promise<void>
   postComment(
     comment: Omit<Comment, 'id' | 'user'>,
     userId: string

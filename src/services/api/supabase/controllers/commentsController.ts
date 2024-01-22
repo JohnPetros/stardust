@@ -111,6 +111,18 @@ export const CommentsController = (supabase: Supabase): ICommentsController => {
       }
     },
 
+    deleteComment: async (commentId: string, userId: string) => {
+      const { error } = await supabase
+        .from('comments')
+        .delete()
+        .eq('id', commentId)
+        .eq('user_id', userId)
+
+      if (error) {
+        throw new Error(error.message)
+      }
+    },
+
     postComment: async (
       comment: Omit<Comment, 'id' | 'user'>,
       userId: string
