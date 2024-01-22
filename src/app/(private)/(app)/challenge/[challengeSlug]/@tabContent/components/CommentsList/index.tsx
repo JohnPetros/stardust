@@ -21,6 +21,7 @@ export function CommentsList() {
     handlePopoverMenuOpenChange,
     handlePostComment,
     handleUserCommentChange,
+    handleDeleteComment,
   } = useCommentsList()
   const { user: authUser } = useAuth()
 
@@ -83,6 +84,7 @@ export function CommentsList() {
                   createdAt={comment.created_at}
                   isAuthUser={comment.user.slug === authUser?.slug}
                   repliesAmount={comment.repliesAmount ?? 0}
+                  onDelete={handleDeleteComment}
                 />
               </li>
               {index < commentsList.length - 1 && (

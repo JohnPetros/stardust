@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import useSWR from 'swr'
 
+import { AlertRef } from '@/app/components/Alert'
 import { PopoverMenuButton } from '@/app/components/PopoverMenu'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/contexts/ToastContext'
@@ -23,6 +24,7 @@ export function useComment(commentId: string, initialContent: string) {
 
   const api = useApi()
   const toast = useToast()
+  const alertRef = useRef<AlertRef>(null)
 
   async function getReplies() {
     return await api.getCommentReplies(commentId)
@@ -103,8 +105,6 @@ export function useComment(commentId: string, initialContent: string) {
     }
   }
 
-  function deleteComment() {}
-
   const popoverMenuButtons: PopoverMenuButton[] = [
     {
       title: 'Editar comentário',
@@ -114,7 +114,7 @@ export function useComment(commentId: string, initialContent: string) {
     {
       title: 'Deletar comentário',
       isToggle: false,
-      action: () => deleteComment(),
+      action: () => alertRef.current?.open(),
     },
   ]
 
@@ -127,6 +127,7 @@ export function useComment(commentId: string, initialContent: string) {
     popoverMenuButtons,
     commentContent,
     canEditComment,
+    alertRef,
     handleEditComment,
     handleToggleIsUserReplyInputVisible,
     handleToggleIsRepliesVisible,

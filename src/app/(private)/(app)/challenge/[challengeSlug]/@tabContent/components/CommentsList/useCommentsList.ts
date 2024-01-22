@@ -19,7 +19,7 @@ export function useCommentsList() {
   const { user } = useAuth()
 
   const [sorter, setSorter] = useState<Sorter>('date')
-  const [order, setOrder] = useState<Order>('ascending')
+  const [order, setOrder] = useState<Order>('descending')
   const [isPopoverMenuOpen, setIsPopoverMenuOpen] = useState(false)
   const [userComment, setUserComment] = useState('')
 
@@ -82,6 +82,18 @@ export function useCommentsList() {
 
     return []
   }, [initialComments, votedCommentsIds])
+
+  async function handleDeleteComment(commentId: string) {
+    if (!user) return
+
+    try {
+      await api.deleteComment(commentId, user.id)
+      refetchComments()
+    } catch (error) {
+      console.error(error)
+      toast.show(ERRORS.commentFailedDeletion, { type: 'error', seconds: 5 })
+    }
+  }
 
   function handleUserCommentChange(userComment: string) {
     setUserComment(userComment)
@@ -150,5 +162,6 @@ export function useCommentsList() {
     handlePopoverMenuOpenChange,
     handleUserCommentChange,
     handlePostComment,
+    handleDeleteComment,
   }
 }
