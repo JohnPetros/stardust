@@ -7,6 +7,21 @@ import { ChallengeInfo } from '@/app/components/ChallengeInfo'
 import { Loading } from '@/app/components/Loading'
 import { Mdx } from '@/app/components/Mdx'
 
+// const md = `
+// # Title 1
+// ### Title 2
+
+// <Image picture={'https://aukqejqsiqsqowafpppb.supabase.co/storage/v1/object/public/images/theory/panda-confuso.jpg'} >Teste</Image>
+
+// <Picture url={'https://aukqejqsiqsqowafpppb.supabase.co/storage/v1/object/public/images/theory/panda-confuso.jpg'} />
+
+// <Code isRunnable={true}>
+//   se (verdadeiro) {
+//     escreva('Olá')
+//   }
+// </Code>
+// `
+
 export function Description() {
   const { mdx, challenge, isLoading } = useDescription()
 
@@ -28,7 +43,7 @@ export function Description() {
           <VoteButtons />
         </div>
       )}
-      <div className="mt-6 space-y-12">
+      <div className="prose prose-invert mt-6 space-y-12">
         <Mdx>{mdx}</Mdx>
       </div>
     </div>

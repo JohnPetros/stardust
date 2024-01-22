@@ -2,16 +2,18 @@
 
 import { useEffect, useState } from 'react'
 
-import { useApi } from '@/services/api'
+import { useMdx } from '@/hooks/useMdx'
 import { useChallengeStore } from '@/stores/challengeStore'
 
 export function useDescription() {
   const [isLoading, setIsLoading] = useState(true)
+
   const setMdx = useChallengeStore((store) => store.actions.setMdx)
   const challenge = useChallengeStore((store) => store.state.challenge)
   const userVote = useChallengeStore((store) => store.state.userVote)
+
   const mdx = useChallengeStore((store) => store.state.mdx)
-  const api = useApi()
+  const { parseTexts } = useMdx()
 
   useEffect(() => {
     async function fetchMdx() {
@@ -20,19 +22,14 @@ export function useDescription() {
       const { texts, description } = challenge
 
       if (texts) {
-        const mdxComponents = await api.parseTexts(texts)
-        const compiledMdxComponents = await api.compileDescription(
-          mdxComponents.join('')
-        )
+        const mdxComponents = parseTexts(texts)
 
-        setMdx(compiledMdxComponents)
+        setMdx(mdxComponents.join('<br />'))
         setIsLoading(false)
         return
       }
 
-      const compiledDescription = await api.compileDescription(description)
-      setMdx(compiledDescription)
-      setIsLoading(false)
+      setMdx(description)
     }
 
     if (isLoading && mdx) {
@@ -41,7 +38,7 @@ export function useDescription() {
     }
 
     fetchMdx()
-  }, [isLoading, challenge, api, mdx, setMdx])
+  }, [isLoading, challenge, mdx, setMdx, parseTexts])
 
   return {
     isLoading,

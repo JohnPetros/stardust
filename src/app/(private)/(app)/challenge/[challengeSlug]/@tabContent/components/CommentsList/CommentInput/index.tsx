@@ -1,22 +1,22 @@
+import * as Toolbar from '@radix-ui/react-toolbar'
+
 import { UserAvatar } from '@/app/(private)/(app)/(home)/components/UseAvatar'
 import { useAuth } from '@/contexts/AuthContext'
-import { useAvatar } from '@/hooks/useAvatar'
-import { useApi } from '@/services/api'
 
-type InputProps = {
-  senderComment: () => void
+type CommentInputProps = {
+  onSend: () => void
 }
 
-export function CommentInput() {
-  const { getImage } = useApi()
+export function CommentInput({ onSend }: CommentInputProps) {
   const { user } = useAuth()
 
   if (!user) return null
 
   return (
-    <div>
+    <div className="flex gap-3">
       <UserAvatar avatarId={user?.avatar_id} size={48} />
-      <input type="text" value={} />
+      <textarea className="rounded-md bg-gray-800 font-medium text-gray-200" />
+      <Toolbar.Root></Toolbar.Root>
     </div>
   )
 }
