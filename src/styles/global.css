@@ -49,12 +49,14 @@ button {
   transition: filter 0.2s;
 }
 
-button:hover {
-  filter: brightness(1.1);
-}
-
 a {
   text-decoration: inherit;
+  transition: filter 0.2s;
+}
+
+a:hover,
+button:hover {
+  filter: brightness(1.1);
 }
 
 .custom-outline:focus {
