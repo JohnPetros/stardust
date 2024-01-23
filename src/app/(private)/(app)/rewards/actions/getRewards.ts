@@ -52,7 +52,7 @@ export async function getRewards(payload: string, user: User) {
       ]
 
       if (!isStarPayload(starPaylod, starPayloadPropeties))
-        throw new Error(ERRORS.rewardsPayloadNotFound)
+        throw new Error(ERRORS.rewards.payloadNotFound)
 
       const lessonRewards = await calculateLessonRewards({
         user,
@@ -86,7 +86,7 @@ export async function getRewards(payload: string, user: User) {
           starChallengePayloadProperties
         )
       )
-        throw new Error(ERRORS.rewardsPayloadNotFound)
+        throw new Error(ERRORS.rewards.payloadNotFound)
 
       const challengeRewards = await calculateChallengeRewards({
         challengeId: starChallengePaylod.challengeId,
@@ -104,7 +104,7 @@ export async function getRewards(payload: string, user: User) {
       break
     }
     default:
-      throw new Error(ERRORS.rewardsPayloadNotFound)
+      throw new Error(ERRORS.rewards.payloadNotFound)
   }
 
   return {

@@ -1,16 +1,27 @@
 export const ERRORS = {
-  userNotFound: 'Usuário não encontrado.',
-  rewardsPayloadNotFound: 'Premiações não processadas.',
-  categoriesFailedFetching: 'Erro ao buscar categorias.',
-  challengeFailedFetching: 'Erro ao carregar desafio.',
-  commentsListFailedFetching: 'Erro ao carregar lista de comentários.',
-  commentFailedEdition: 'Não foi possível atualizar esse comentário',
-  commentFailedPost: 'Não foi possível postar esse comentário',
-  commentFailedReply: 'Não foi possível responder esse comentário',
-  commentFailedDeletion: 'Não foi possível deletar esse comentário',
-  commentFailedUpvoting: 'Não foi possível dar um upvote nesse comentário',
-  commentFailedDesupvoting:
-    'Não foi possível remover o upvote desse comentário',
-  repliesFailedFetching: 'Erro ao carregar as resposta para esse comentário.',
-  mdxFailedCompiling: 'Não foi possível carregar o conteúdo de texto.',
+  auth: {
+    userNotFound: 'Usuário não encontrado.',
+  },
+  rewards: {
+    payloadNotFound: 'Premiações não processadas.',
+  },
+  challenges: {
+    failedFetching: 'Erro ao carregar desafio.',
+  },
+  categories: {
+    failedFetching: 'Erro ao buscar categorias.',
+  },
+  comments: {
+    failedlistFetching: 'Erro ao carregar lista de comentários.',
+    failedEdition: 'Não foi possível atualizar esse comentário',
+    failedPost: 'Não foi possível postar esse comentário',
+    failedReply: 'Não foi possível responder esse comentário',
+    failedDeletion: 'Não foi possível deletar esse comentário',
+    failedUpvoting: 'Não foi possível dar um upvote nesse comentário',
+    failedDesupvoting: 'Não foi possível remover o upvote desse comentário',
+    failedrepliesFetching: 'Erro ao carregar as resposta para esse comentário.',
+  },
+  mdx: {
+    failedCompiling: 'Não foi possível carregar o conteúdo de texto.',
+  },
 }

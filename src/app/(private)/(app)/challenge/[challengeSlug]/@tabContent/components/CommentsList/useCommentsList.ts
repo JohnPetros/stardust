@@ -66,7 +66,7 @@ export function useCommentsList() {
 
   if (error) {
     console.log(error)
-    throw new Error(ERRORS.commentsListFailedFetching)
+    throw new Error(ERRORS.comments.failedlistFetching)
   }
 
   // const comments: Comment[] = useMemo(() => {
@@ -87,7 +87,7 @@ export function useCommentsList() {
       refetchComments()
     } catch (error) {
       console.error(error)
-      toast.show(ERRORS.commentFailedDeletion, { type: 'error', seconds: 5 })
+      toast.show(ERRORS.comments.failedDeletion, { type: 'error', seconds: 5 })
     }
   }
 
@@ -111,7 +111,7 @@ export function useCommentsList() {
       await refetchComments()
     } catch (error) {
       console.error(error)
-      toast.show(ERRORS.commentFailedPost, { type: 'error' })
+      toast.show(ERRORS.comments.failedPost, { type: 'error' })
     } finally {
       setUserComment('')
     }

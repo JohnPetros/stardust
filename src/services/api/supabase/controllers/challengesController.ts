@@ -25,8 +25,6 @@ export const ChallengesController = (
           }
         >()
 
-      //  total_completitions: [ { count: 3 } ]
-
       if (error) {
         throw new Error(error.message)
       }

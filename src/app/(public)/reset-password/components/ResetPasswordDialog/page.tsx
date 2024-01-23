@@ -50,7 +50,7 @@ export function ResetPasswordDialog({ children }: ResetPasswordDialogProps) {
               icon={LockSimple}
               autoFocus
               {...register('password')}
-              error={errors.password?.message}
+              error={errors.password?.message?.toString()}
               placeholder="********"
             />
             <Input
@@ -58,7 +58,7 @@ export function ResetPasswordDialog({ children }: ResetPasswordDialogProps) {
               type="password"
               icon={LockSimple}
               {...register('password_confirmation')}
-              error={errors.password_confirmation?.message}
+              error={String(errors.password_confirmation?.message)}
               placeholder="********"
             />
             <Button onClick={handleSubmit} isLoading={isLoading}>

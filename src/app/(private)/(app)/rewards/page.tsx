@@ -19,8 +19,8 @@ export default async function RewardsPage() {
   const authController = AuthController(supabase)
   const userId = await authController.getUserId()
 
-  if (!userId) throw new Error(ERRORS.userNotFound)
-  if (!payload) throw new Error(ERRORS.rewardsPayloadNotFound)
+  if (!userId) throw new Error(ERRORS.auth.userNotFound)
+  if (!payload) throw new Error(ERRORS.rewards.payloadNotFound)
 
   const user = await UsersController(supabase).getUserById(userId)
 

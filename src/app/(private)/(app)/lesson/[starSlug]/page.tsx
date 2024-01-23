@@ -36,7 +36,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
     if (!compiledMdxComponents.length) throw new Error()
   } catch (error) {
-    console.error(ERRORS.mdxFailedCompiling)
+    console.error(ERRORS.mdx.failedCompiling)
   }
 
   return <LessonStar star={star} mdxComponets={compiledMdxComponents} />

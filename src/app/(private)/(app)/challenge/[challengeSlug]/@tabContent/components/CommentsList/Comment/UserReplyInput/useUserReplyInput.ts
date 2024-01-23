@@ -36,7 +36,7 @@ export function useUserReplyInput(
       )
     } catch (error) {
       console.log(error)
-      toast.show(ERRORS.commentFailedReply, { type: 'error', seconds: 5 })
+      toast.show(ERRORS.comments.failedReply, { type: 'error', seconds: 5 })
     } finally {
       onPostReply()
     }
