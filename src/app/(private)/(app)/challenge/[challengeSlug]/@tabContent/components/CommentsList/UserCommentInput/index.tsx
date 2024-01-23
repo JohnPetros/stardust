@@ -38,6 +38,7 @@ export function UserCommentInput({
     textareaRef,
     errorMessage,
     isPreviewVisible,
+    handleInsertSnippet,
     handleTogglePreview,
     handleCommentChange,
     handlePostComment,
@@ -81,15 +82,26 @@ export function UserCommentInput({
               />
             )}
             <Toolbar.Root className="flex w-full items-center justify-between">
-              <div className="flex items-center gap-3">
-                <ToolButton icon={Article} label="Inserir trecho em destaque" />
-                <ToolButton icon={Code} label="Inserir trecho de código" />
-                <ToolButton
-                  icon={TerminalWindow}
-                  label="Inserir trecho de código executável"
-                />
-              </div>
-              <div className="flex items-center gap-3">
+              {!isPreviewVisible && (
+                <div className="flex items-center gap-3">
+                  <ToolButton
+                    onClick={() => handleInsertSnippet('strong')}
+                    icon={Article}
+                    label="Inserir trecho em destaque"
+                  />
+                  <ToolButton
+                    onClick={() => handleInsertSnippet('code')}
+                    icon={Code}
+                    label="Inserir trecho de código"
+                  />
+                  <ToolButton
+                    onClick={() => handleInsertSnippet('runnableCode')}
+                    icon={TerminalWindow}
+                    label="Inserir trecho de código executável"
+                  />
+                </div>
+              )}
+              <div className="ml-auto flex items-center gap-3">
                 <Toolbar.Button asChild>
                   <Button
                     type="button"

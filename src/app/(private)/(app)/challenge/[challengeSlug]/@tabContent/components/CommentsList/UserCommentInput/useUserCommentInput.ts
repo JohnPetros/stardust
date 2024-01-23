@@ -3,6 +3,8 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
 
 import { useValidation } from '@/services/validation'
+import { SNIPPETS } from '@/utils/constants'
+import { getComponentContent } from '@/utils/helpers'
 
 export function useUserCommentInput(
   comment: string,
@@ -15,6 +17,81 @@ export function useUserCommentInput(
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const validation = useValidation()
+
+  function moveCursorToEnd() {
+    if (!textareaRef.current) return
+
+    textareaRef.current.focus()
+    const currentValue = textareaRef.current.value
+    textareaRef.current.value = ''
+    textareaRef.current.value = currentValue
+  }
+
+  function selectSnippetComponentContent(
+    currentCursorPosition: number,
+    closeTag: string,
+    snippetComponent: string
+  ) {
+    if (!textareaRef.current) return
+
+    const snippetComponentContent = getComponentContent(snippetComponent)
+    console.log(snippetComponentContent.length)
+
+    const start =
+      currentCursorPosition - (snippetComponentContent.length + closeTag.length)
+
+    const end = currentCursorPosition - closeTag.length
+
+    textareaRef.current.setSelectionRange(start, end)
+  }
+
+  function handleInsertSnippet(snippet: keyof typeof SNIPPETS) {
+    if (!textareaRef.current) return
+
+    textareaRef.current.value += ` ${SNIPPETS[snippet]}`
+
+    const currentCursorPosition = textareaRef.current.selectionStart
+
+    switch (snippet) {
+      case 'strong': {
+        const starsAmount = 2
+
+        const strongContent = SNIPPETS.strong.replace(/\*/g, '')
+
+        textareaRef.current.setSelectionRange(
+          currentCursorPosition - starsAmount - strongContent.length,
+          currentCursorPosition - starsAmount
+        )
+        break
+      }
+      case 'code':
+        selectSnippetComponentContent(
+          currentCursorPosition,
+          '</code>',
+          SNIPPETS.code
+        )
+        break
+      case 'runnableCode':
+        selectSnippetComponentContent(
+          currentCursorPosition,
+          '</Code>',
+          SNIPPETS.runnableCode
+        )
+        break
+      case 'link':
+        selectSnippetComponentContent(
+          currentCursorPosition,
+          '</Link>',
+          SNIPPETS.link
+        )
+        break
+
+      default:
+        return
+    }
+
+    textareaRef.current.focus()
+  }
 
   function handleTogglePreview() {
     setIsPreviewVisible(!isPreviewVisible)
@@ -47,13 +124,10 @@ export function useUserCommentInput(
   }, [comment])
 
   useEffect(() => {
-    if (!textareaRef.current) return
-
-    textareaRef.current.focus()
-    const currentValue = textareaRef.current.value
-    textareaRef.current.value = ''
-    textareaRef.current.value = currentValue
-  }, [])
+    if (!isPreviewVisible) {
+      moveCursorToEnd()
+    }
+  }, [isPreviewVisible])
 
   return {
     textareaRef,
@@ -62,5 +136,6 @@ export function useUserCommentInput(
     handleTogglePreview,
     handlePostComment,
     handleCommentChange,
+    handleInsertSnippet,
   }
 }

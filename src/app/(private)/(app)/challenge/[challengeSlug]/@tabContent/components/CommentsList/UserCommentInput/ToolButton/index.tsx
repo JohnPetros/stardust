@@ -6,12 +6,13 @@ import { Tooltip } from '@/app/components/@Tooltip'
 type ToolButtonProps = {
   icon: Icon
   label: string
+  onClick: VoidFunction
 }
 
-export function ToolButton({ icon: Icon, label }: ToolButtonProps) {
+export function ToolButton({ icon: Icon, label, onClick }: ToolButtonProps) {
   return (
     <Tooltip content={label} direction="bottom">
-      <Toolbar.Button type="button">
+      <Toolbar.Button type="button" onClick={onClick}>
         <Icon className="text-green-400" />
       </Toolbar.Button>
     </Tooltip>
