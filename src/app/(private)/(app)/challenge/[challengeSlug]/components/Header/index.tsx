@@ -6,7 +6,6 @@ import { useHeader } from './useHeader'
 
 import type { Challenge } from '@/@types/challenge'
 import type { Vote } from '@/@types/vote'
-import { DifficultyBadge } from '@/app/components/DifficultyBadge'
 
 type HeaderProps = {
   challenge: Challenge
@@ -27,9 +26,7 @@ export function Header({ challenge, userVote }: HeaderProps) {
             {challenge.title}
           </h2>
         </div>
-        <div>
-          <DifficultyBadge difficulty={challenge.difficulty} />
-        </div>
+        <div></div>
       </div>
     </header>
   )
