@@ -15,4 +15,6 @@ export interface ICommentsController {
     comment: Omit<Comment, 'id' | 'user'>,
     userId: string
   ): Promise<void>
+  addUpvotedComment(commentId: string, userId: string): Promise<void>
+  removeUpvotedComment(commentId: string, userId: string): Promise<void>
 }

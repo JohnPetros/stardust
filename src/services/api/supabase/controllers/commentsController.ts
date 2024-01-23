@@ -14,7 +14,7 @@ export const CommentsController = (supabase: Supabase): ICommentsController => {
       let query = supabase
         .from('comments')
         .select(
-          'id, content, challenge_id, created_at, user:users(slug, avatar_id), replies:comments(count)'
+          'id, content, challenge_id, created_at, user:users(slug, avatar_id), replies:comments(count), upvotes:users_upvoted_comments(count)'
         )
 
       switch (sorter) {
@@ -38,7 +38,14 @@ export const CommentsController = (supabase: Supabase): ICommentsController => {
 
       const { data, error } = await query
         .eq('challenge_id', challengeId)
-        .returns<(Comment & { replies: [{ count: number }] })[]>()
+        .returns<
+          (Comment & {
+            replies: [{ count: number }]
+            upvotes: [{ count: number }]
+          })[]
+        >()
+
+      console.log({ data })
 
       if (error) {
         throw new Error(error.message)
@@ -52,6 +59,7 @@ export const CommentsController = (supabase: Supabase): ICommentsController => {
         parent_comment_id: comment.parent_comment_id,
         user: comment.user,
         repliesAmount: comment.replies[0].count,
+        upvotes: comment.upvotes[0].count,
       }))
 
       return comments
@@ -135,6 +143,29 @@ export const CommentsController = (supabase: Supabase): ICommentsController => {
           user_id: userId,
         },
       ])
+
+      if (error) {
+        throw new Error(error.message)
+      }
+    },
+
+    addUpvotedComment: async (commentId: string, userId: string) => {
+      const { error } = await supabase.from('users_upvoted_comments').insert({
+        comment_id: commentId,
+        user_id: userId,
+      })
+
+      if (error) {
+        throw new Error(error.message)
+      }
+    },
+
+    removeUpvotedComment: async (commentId: string, userId: string) => {
+      const { error } = await supabase
+        .from('users_upvoted_comments')
+        .delete()
+        .eq('comment_id', commentId)
+        .eq('user_id', userId)
 
       if (error) {
         throw new Error(error.message)

@@ -218,7 +218,7 @@ export const ChallengesController = (
     addCompletedChallenge: async (challengeId: string, userId: string) => {
       const { error } = await supabase
         .from('users_completed_challenges')
-        .insert([{ challenge_id: challengeId, user_id: userId }])
+        .insert({ challenge_id: challengeId, user_id: userId })
 
       if (error) {
         throw new Error(error.message)
