@@ -45,8 +45,6 @@ export const CommentsController = (supabase: Supabase): ICommentsController => {
           })[]
         >()
 
-      console.log({ data })
-
       if (error) {
         throw new Error(error.message)
       }
@@ -87,8 +85,6 @@ export const CommentsController = (supabase: Supabase): ICommentsController => {
         )
         .eq('parent_comment_id', commentId)
         .returns<(Comment & { replies: [{ count: number }] })[]>()
-
-      console.log({ data })
 
       if (error) {
         throw new Error(error.message)

@@ -15,4 +15,6 @@ export function getComponentContent(component: string) {
   if (contentMatch !== null) {
     return contentMatch[1]
   }
+
+  return ''
 }
