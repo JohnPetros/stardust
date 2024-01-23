@@ -28,17 +28,19 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
         isRunnable ? `h-[${editorHeight}px]` : 'h-auto'
       )}
     >
-      <ToolBar.Root className="flex items-center justify-end gap-2 border-b border-gray-700 p-2">
+      <ToolBar.Root className="not-prose flex items-center justify-end gap-2 border-b border-gray-700 p-2">
         {isRunnable && (
           <>
             <ToolBar.Button
+              type="button"
               className="h-6 w-max items-center rounded bg-green-400 px-4 transition-[scale] duration-200 active:scale-95"
               onClick={handleReloadButtonClick}
             >
               <ArrowClockwise className="text-green-900" weight="bold" />
             </ToolBar.Button>
             <ToolBar.Button
-              className="h-6 w-max items-center rounded bg-green-400 px-4 text-xs font-semibold transition-[scale] duration-200 active:scale-95"
+              type="button"
+              className="h-6 w-max items-center rounded bg-green-400 px-4 text-xs font-semibold text-gray-900 transition-[scale] duration-200 active:scale-95"
               onClick={handleRunCode}
             >
               Executar

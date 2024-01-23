@@ -67,7 +67,11 @@ export function ConsoleComponent(
         <span className="mx-auto block h-[2px] w-1/6 rounded-md bg-gray-400"></span>
         <div className="mt-1 flex items-center justify-between">
           <strong className="text-gray-200">Resultado</strong>
-          <button onClick={close} tabIndex={isOpen ? undefined : -1}>
+          <button
+            type="button"
+            onClick={close}
+            tabIndex={isOpen ? undefined : -1}
+          >
             <CaretDown className="text-lg text-gray-400" weight="bold" />
           </button>
         </div>

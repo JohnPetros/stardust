@@ -10,7 +10,7 @@ type CodeProps = {
 }
 
 export function Code({
-  isRunnable,
+  isRunnable = true,
   children,
   hasAnimation = false,
 }: CodeProps) {
