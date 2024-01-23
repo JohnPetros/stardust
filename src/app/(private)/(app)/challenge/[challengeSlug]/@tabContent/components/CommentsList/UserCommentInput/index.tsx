@@ -8,7 +8,7 @@ import { twMerge } from 'tailwind-merge'
 import { UserAvatar } from '@/app/(private)/(app)/(home)/components/UseAvatar'
 import { Button } from '@/app/components/Button'
 import { useAuth } from '@/contexts/AuthContext'
-import { VALIDATION_ERRORS } from '@/services/validation/config/validationErrors'
+import { useValidation } from '@/services/validation'
 
 type CommentInputProps = {
   id: string
@@ -19,7 +19,7 @@ type CommentInputProps = {
   onCommentChange: (comment: string) => void
 }
 
-export function CommentInput({
+export function UserCommentInput({
   id,
   comment,
   title,
@@ -31,19 +31,19 @@ export function CommentInput({
 
   const { user } = useAuth()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const validation = useValidation()
 
   function handlePostComment(event: FormEvent) {
     event.preventDefault()
 
-    if (!comment) {
-      setErrorMessage(VALIDATION_ERRORS.nonempty)
+    const result = validation.validateComment(comment)
+
+    if (result.isValid) {
+      onPost(comment)
+      return
     }
 
-    if (typeof comment !== 'string') {
-      setErrorMessage(VALIDATION_ERRORS.comment.string)
-    }
-
-    onPost(comment)
+    setErrorMessage(result.errors[0])
   }
 
   function handleCommentChange(comment: string) {
@@ -104,13 +104,16 @@ export function CommentInput({
                 </Toolbar.Button>
               </div>
               <div className="flex items-center gap-3">
-                <Toolbar.Button>
+                <Toolbar.Button asChild>
                   <Button type="button" className="h-6 w-24 text-xs">
                     Preview
                   </Button>
                 </Toolbar.Button>
 
-                <Toolbar.Button>
+                <Toolbar.Button
+                  className="custom-outline rounded-md"
+                  type="submit"
+                >
                   <Button type="submit" className="h-6 w-24 text-xs" form={id}>
                     <PaperPlaneRight
                       weight="bold"

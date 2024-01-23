@@ -1,8 +1,8 @@
 'use client'
 
 import { Comment } from './Comment'
-import { CommentInput } from './CommentInput'
 import { useCommentsList } from './useCommentsList'
+import { UserCommentInput } from './UserCommentInput'
 
 import { AnimatedArrow } from '@/app/components/AnimatedArrow'
 import { PopoverMenu } from '@/app/components/PopoverMenu'
@@ -55,7 +55,7 @@ export function CommentsList() {
         )}
       </header>
       <div className="mt-6 px-6">
-        <CommentInput
+        <UserCommentInput
           id="user-comment"
           title="Comentar"
           placeholder="Deixe um comentário sobre esse desafio..."
