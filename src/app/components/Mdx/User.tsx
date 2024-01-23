@@ -1,7 +1,7 @@
 import { Animation } from './Animation'
 import { Content } from './Content'
 
-import { UserAvatar } from '@/app/(private)/(app)/(home)/components/UseAvatar'
+import { UserAvatar } from '@/app/components/UserAvatar'
 import { useAuth } from '@/contexts/AuthContext'
 
 type UserProps = {

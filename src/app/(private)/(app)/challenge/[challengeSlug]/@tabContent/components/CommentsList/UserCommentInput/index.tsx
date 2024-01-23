@@ -1,14 +1,20 @@
 'use client'
 
-import { Code, PaperPlaneRight } from '@phosphor-icons/react'
+import {
+  Article,
+  Code,
+  PaperPlaneRight,
+  TerminalWindow,
+} from '@phosphor-icons/react'
 import * as Toolbar from '@radix-ui/react-toolbar'
 import { twMerge } from 'tailwind-merge'
 
+import { ToolButton } from './ToolButton'
 import { useUserCommentInput } from './useUserCommentInput'
 
-import { UserAvatar } from '@/app/(private)/(app)/(home)/components/UseAvatar'
 import { Button } from '@/app/components/Button'
 import { Mdx } from '@/app/components/Mdx'
+import { UserAvatar } from '@/app/components/UserAvatar'
 import { useAuth } from '@/contexts/AuthContext'
 
 type UserCommentInputProps = {
@@ -75,10 +81,13 @@ export function UserCommentInput({
               />
             )}
             <Toolbar.Root className="flex w-full items-center justify-between">
-              <div className="flex items-center">
-                <Toolbar.Button>
-                  <Code weight="bold" className="text-green-400" />
-                </Toolbar.Button>
+              <div className="flex items-center gap-3">
+                <ToolButton icon={Article} label="Inserir trecho em destaque" />
+                <ToolButton icon={Code} label="Inserir trecho de código" />
+                <ToolButton
+                  icon={TerminalWindow}
+                  label="Inserir trecho de código executável"
+                />
               </div>
               <div className="flex items-center gap-3">
                 <Toolbar.Button asChild>

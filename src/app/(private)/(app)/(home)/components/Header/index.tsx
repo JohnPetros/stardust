@@ -7,7 +7,7 @@ import Image from 'next/image'
 
 import StreakAnimation from '../../../../../../../public/animations/streak.json'
 import { CounterBadge } from '../CounterBadge'
-import { UserAvatar } from '../UseAvatar'
+import { UserAvatar } from '../../../../../components/UserAvatar'
 
 import { useAchivementsContext } from '@/contexts/AchievementsContext'
 import { useAuth } from '@/contexts/AuthContext'

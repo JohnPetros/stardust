@@ -3,7 +3,7 @@ import { CalendarBlank, GearSix, Shield } from '@phosphor-icons/react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 
-import { UserAvatar } from '../../components/UseAvatar'
+import { UserAvatar } from '../../../../../components/UserAvatar'
 
 import { Status } from './Status'
 

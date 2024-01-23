@@ -37,7 +37,7 @@ export function ButtonComponent({
         <Loading />
       ) : (
         <div className="flex items-center gap-2">
-          {Icon && <Icon className=" text-green-900" size={24} weight="bold" />}
+          {Icon && <Icon className=" text-gray-900" size={24} weight="bold" />}
           {children}
         </div>
       )}

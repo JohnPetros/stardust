@@ -9,11 +9,11 @@ import { UpvotesButton } from './UpvotesButton'
 import { useComment } from './useComment'
 import { UserReplyInput } from './UserReplyInput'
 
-import { UserAvatar } from '@/app/(private)/(app)/(home)/components/UseAvatar'
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { Loading } from '@/app/components/Loading'
 import { Separator } from '@/app/components/Separator'
+import { UserAvatar } from '@/app/components/UserAvatar'
 import { useAuth } from '@/contexts/AuthContext'
 import { ROUTES } from '@/utils/constants'
 

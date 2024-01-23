@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { twMerge } from 'tailwind-merge'
 import { tv } from 'tailwind-variants'
 
-import { UserAvatar } from '../../../components/UserAvatar'
+import { UserAvatar } from '../../../../../../components/UserAvatar'
 
 import type { User as UserType } from '@/@types/user'
 import { PODIUM } from '@/utils/constants'
