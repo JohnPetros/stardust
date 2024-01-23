@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import useSWR from 'swr'
 
 import { Comment } from '@/@types/comment'
@@ -26,41 +26,6 @@ export function useCommentsList() {
   const api = useApi()
   const toast = useToast()
 
-  async function getUserUpvotedCommentsIds() {
-    if (!user) return
-
-    return await api.getUserUpvotedCommentsIds(user.id)
-  }
-
-  const { data: votedCommentsIds, error: votedCommentsIdsError } = useSWR(
-    () => `/user_upvoted_comments_ids?user_id=${user?.id}`,
-    getUserUpvotedCommentsIds
-  )
-
-  if (votedCommentsIdsError) throw new Error(ERRORS.commentsListFailedFetching)
-
-  async function getFilteredComments() {
-    if (!challenge) return
-
-    return await api.getFilteredComments(challenge.id, sorter, order)
-  }
-
-  const {
-    data: initialComments,
-    error,
-    isLoading,
-    mutate: refetchComments,
-  } = useSWR(
-    () =>
-      `/comments?challenge_id=${challenge?.id}&sorter=${sorter}$order=${order}`,
-    getFilteredComments
-  )
-
-  if (error) {
-    console.log(error)
-    throw new Error(ERRORS.commentsListFailedFetching)
-  }
-
   function checkUserUpvotedComment(
     comment: Comment,
     votedCommentsIds: string[]
@@ -73,15 +38,46 @@ export function useCommentsList() {
     }
   }
 
-  const comments: Comment[] = useMemo(() => {
-    if (initialComments && votedCommentsIds) {
-      return initialComments.map((comment) =>
-        checkUserUpvotedComment(comment, votedCommentsIds)
-      )
-    }
+  async function getFilteredComments() {
+    if (!challenge || !user) return
 
-    return []
-  }, [initialComments, votedCommentsIds])
+    const filteredComments = await api.getFilteredComments(
+      challenge.id,
+      sorter,
+      order
+    )
+    const upvotedCommentsIds = await api.getUserUpvotedCommentsIds(user.id)
+
+    return filteredComments.map((comment) =>
+      checkUserUpvotedComment(comment, upvotedCommentsIds)
+    )
+  }
+
+  const {
+    data: comments,
+    error,
+    isLoading,
+    mutate: refetchComments,
+  } = useSWR(
+    () =>
+      `/comments?challenge_id=${challenge?.id}&user_id=${user?.id}&sorter=${sorter}$order=${order}`,
+    getFilteredComments
+  )
+
+  if (error) {
+    console.log(error)
+    throw new Error(ERRORS.commentsListFailedFetching)
+  }
+
+  // const comments: Comment[] = useMemo(() => {
+  //   if (initialComments && votedCommentsIds) {
+  //     return initialComments.map((comment) =>
+  //       checkUserUpvotedComment(comment, votedCommentsIds)
+  //     )
+  //   }
+
+  //   return []
+  // }, [initialComments, votedCommentsIds])
 
   async function handleDeleteComment(commentId: string) {
     if (!user) return
