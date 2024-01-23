@@ -5,8 +5,9 @@ import Markdown from 'markdown-to-jsx'
 import { Alert } from './Alert'
 import { Code } from './Code'
 import { Image } from './Image'
-import { Picture } from './Picture'
+import { Link } from './Link'
 import { Quote } from './Quote'
+import { Strong } from './Strong'
 import { Text } from './Text'
 import { User } from './User'
 
@@ -16,37 +17,51 @@ type MdxProps = {
 
 export function Mdx({ children }: MdxProps) {
   return (
-    <Markdown
-      options={{
-        overrides: {
-          Text: {
-            component: Text,
+    <div className="prose prose-invert">
+      <Markdown
+        options={{
+          overrides: {
+            Text: {
+              component: Text,
+            },
+            Alert: {
+              component: Alert,
+            },
+            Quote: {
+              component: Quote,
+            },
+            Image: {
+              component: Image,
+            },
+            User: {
+              component: User,
+            },
+            Link: {
+              component: Link,
+            },
+            Code: {
+              component: Code,
+            },
+            code: {
+              component: Code,
+              props: {
+                isRunnable: false,
+              },
+            },
+            strong: {
+              component: Strong,
+            },
+            em: {
+              component: Strong,
+            },
+            a: {
+              component: Link,
+            },
           },
-          Alert: {
-            component: Alert,
-          },
-          Quote: {
-            component: Quote,
-          },
-          Image: {
-            component: Image,
-          },
-          User: {
-            component: User,
-          },
-          Code: {
-            component: Code,
-          },
-          Picture: {
-            component: Picture,
-          },
-          code: {
-            component: Code,
-          },
-        },
-      }}
-    >
-      {children}
-    </Markdown>
+        }}
+      >
+        {children}
+      </Markdown>
+    </div>
   )
 }
