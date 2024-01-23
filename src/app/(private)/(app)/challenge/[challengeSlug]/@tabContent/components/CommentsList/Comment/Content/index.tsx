@@ -4,6 +4,8 @@ import { UserCommentInput } from '../../UserCommentInput'
 
 import { useContent } from './useContent'
 
+import { Mdx } from '@/app/components/Mdx'
+
 type CommentEditionInputProps = {
   commentId: string
   initialContent: string
@@ -40,6 +42,8 @@ export function Content({
       </button>
     </>
   ) : (
-    <span className="text-sm text-gray-200">{content}</span>
+    <div className="text-sm">
+      <Mdx>{content}</Mdx>
+    </div>
   )
 }
