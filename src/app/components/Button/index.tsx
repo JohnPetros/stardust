@@ -1,6 +1,6 @@
 'use client'
 
-import { ButtonHTMLAttributes, ReactNode, RefObject } from 'react'
+import { ButtonHTMLAttributes, forwardRef, ReactNode, RefObject } from 'react'
 import { Icon } from '@phosphor-icons/react'
 import { motion, MotionProps } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
@@ -15,7 +15,7 @@ type ButtonProps = {
   isLoading?: boolean
 }
 
-export function Button({
+export function ButtonComponent({
   buttonRef,
   icon: Icon,
   children,
@@ -44,3 +44,5 @@ export function Button({
     </motion.button>
   )
 }
+
+export const Button = forwardRef(ButtonComponent)
