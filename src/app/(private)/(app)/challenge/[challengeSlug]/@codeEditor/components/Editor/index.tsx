@@ -1,6 +1,6 @@
 'use client'
 
-import { ToolBar } from '../ToolBar'
+import { CodeEditorToolbar } from '../CodeEditorToolbar'
 
 import { useEditor } from './useEditor'
 
@@ -38,7 +38,7 @@ export function Editor() {
           </Button>
         </div>
 
-        <ToolBar resetCode={resetCode} />
+        <CodeEditorToolbar onResetCode={resetCode} />
       </div>
 
       <CodeEditor

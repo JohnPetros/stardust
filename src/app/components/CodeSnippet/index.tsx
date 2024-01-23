@@ -4,6 +4,7 @@ import { ArrowClockwise } from '@phosphor-icons/react'
 import * as ToolBar from '@radix-ui/react-toolbar'
 import { twMerge } from 'tailwind-merge'
 
+import { Tooltip } from '../@Tooltip'
 import { CodeEditorPlayground } from '../CodeEditorPlayground'
 
 import { useCodeSnippet } from './useCodeSnippet'
@@ -36,7 +37,12 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
               className="h-6 w-max items-center rounded bg-green-400 px-4 transition-[scale] duration-200 active:scale-95"
               onClick={handleReloadButtonClick}
             >
-              <ArrowClockwise className="text-green-900" weight="bold" />
+              <Tooltip
+                content="Voltar para o código inicial"
+                direction="bottom"
+              >
+                <ArrowClockwise className="text-green-900" weight="bold" />
+              </Tooltip>
             </ToolBar.Button>
             <ToolBar.Button
               type="button"
