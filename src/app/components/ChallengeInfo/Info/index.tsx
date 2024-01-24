@@ -1,15 +1,9 @@
 'use client'
 
-import { useRef } from 'react'
 import { Icon } from '@phosphor-icons/react'
 import { twMerge } from 'tailwind-merge'
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipRef,
-  TooltipTrigger,
-} from '@/app/components/Tooltip'
+import { Tooltip } from '../../@Tooltip'
 
 interface InfoProps {
   label: string | number
@@ -19,22 +13,16 @@ interface InfoProps {
 }
 
 export function Info({ label, icon: Icon, iconStyle, tooltipText }: InfoProps) {
-  const tooltipRef = useRef<TooltipRef>(null)
-
   return (
     <li className="text-sm text-gray-400">
-      <Tooltip>
-        <TooltipTrigger
-          className="flex items-center gap-1"
-          tooltipRef={tooltipRef}
-        >
+      <Tooltip content={tooltipText} direction="bottom">
+        <div className="flex items-center gap-1">
           <Icon
             className={twMerge('text-sm text-gray-400', iconStyle)}
             weight="bold"
           />
           {label}
-        </TooltipTrigger>
-        <TooltipContent ref={tooltipRef} text={tooltipText} />
+        </div>
       </Tooltip>
     </li>
   )

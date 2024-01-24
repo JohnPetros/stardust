@@ -59,7 +59,12 @@ export function Tooltip({
           )}
         </AnimatePresence>
       </Portal>
-      <Trigger className='cursor-pointer' onMouseOver={show} onMouseLeave={hide} asChild>
+      <Trigger
+        className="cursor-pointer"
+        onMouseOver={show}
+        onMouseLeave={hide}
+        asChild
+      >
         {trigger}
       </Trigger>
     </Root>

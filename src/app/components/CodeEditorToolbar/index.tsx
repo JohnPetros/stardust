@@ -13,7 +13,7 @@ import { Tooltip } from '@/app/components/@Tooltip'
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { CodeEditorSettingsDialog } from '@/app/components/CodeEditorSettingsDialog'
-import { DictionaryDialog } from '@/app/components/DictionaryDialog'
+import { DocsDialog } from '@/app/components/DocsDialog'
 import { ShortcutsDialog } from '@/app/components/ShortcutsDialog'
 
 type ToolBarProps = {
@@ -28,7 +28,7 @@ export function CodeEditorToolbar({ onResetCode }: ToolBarProps) {
     <Toolbar.Root className="flex items-center gap-3">
       <Alert
         type="asking"
-        title={'Tem certeza que deseja voltar para o código inicial?'}
+        title="Tem certeza que deseja voltar para o código inicial?"
         body={null}
         action={
           <Button
@@ -56,13 +56,13 @@ export function CodeEditorToolbar({ onResetCode }: ToolBarProps) {
         </Tooltip>
       </Toolbar.Button>
 
-      <DictionaryDialog>
+      <DocsDialog>
         <Toolbar.Button className={toolbarStyles}>
-          <Tooltip content="Dicionário" direction="bottom">
+          <Tooltip content="Documentação" direction="bottom">
             <Code className={iconStyles} weight="bold" />
           </Tooltip>
         </Toolbar.Button>
-      </DictionaryDialog>
+      </DocsDialog>
 
       <ShortcutsDialog>
         <Toolbar.Button className={toolbarStyles}>

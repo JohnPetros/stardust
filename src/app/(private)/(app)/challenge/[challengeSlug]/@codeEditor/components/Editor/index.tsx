@@ -1,11 +1,10 @@
 'use client'
 
-import { CodeEditorToolbar } from '../CodeEditorToolbar'
-
 import { useEditor } from './useEditor'
 
 import { Button } from '@/app/components/Button'
 import { CodeEditor } from '@/app/components/CodeEditor'
+import { CodeEditorToolbar } from '@/app/components/CodeEditorToolbar'
 
 export function Editor() {
   const {

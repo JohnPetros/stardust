@@ -92,7 +92,6 @@ export function Result() {
           isAnswered={results.length > 0}
           isAnswerVerified={isAnswerVerified}
           isAnswerCorrect={isAnswerCorrect}
-          isChallenge={true}
         />
       </div>
     )

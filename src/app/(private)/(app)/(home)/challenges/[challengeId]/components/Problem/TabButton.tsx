@@ -1,16 +1,10 @@
-import { useRef } from 'react'
 import { Lock } from '@phosphor-icons/react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { twMerge } from 'tailwind-merge'
 
 import type { Tab } from '.'
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipRef,
-  TooltipTrigger,
-} from '@/app/components/Tooltip'
+import { Tooltip } from '@/app/components/@Tooltip'
 
 interface TabButtonProps {
   value: Tab
@@ -29,8 +23,6 @@ export function TabButton({
   title,
   onClick,
 }: TabButtonProps) {
-  const tooltipRef = useRef<TooltipRef>(null)
-
   return (
     <Tabs.Trigger
       onClick={() => (isBlocked ? null : onClick(value))}
@@ -47,14 +39,11 @@ export function TabButton({
       {isBlocked ? (
         <>
           {blockMessage ? (
-            <Tooltip>
-              <TooltipTrigger tooltipRef={tooltipRef}>
-                <div className="flex items-center gap-2">
-                  {title}
-                  <Lock className="text-gray-500" />
-                </div>
-              </TooltipTrigger>
-              <TooltipContent ref={tooltipRef} text={blockMessage} />
+            <Tooltip content={blockMessage} direction="bottom">
+              <div className="flex items-center gap-2">
+                {title}
+                <Lock className="text-gray-500" />
+              </div>
             </Tooltip>
           ) : (
             <span className="flex items-center gap-2">

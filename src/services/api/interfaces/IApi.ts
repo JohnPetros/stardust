@@ -5,7 +5,7 @@ import { ICategoriesController } from './ICategoriesController'
 import { ICdnController } from './ICdnController'
 import { IChallengesController } from './IChallengesController'
 import { ICommentsController } from './ICommentsController'
-import { IDictionaryTopicsController } from './IDictionaryTopicsControllert'
+import { IDocsController } from './IDocsController'
 import { IMdxController } from './IMdxController'
 import { IPlanetsController } from './IPlanetsController'
 import { IRankingController } from './IRankingController'
@@ -26,5 +26,5 @@ export interface IApi
     ICdnController,
     ICategoriesController,
     ICommentsController,
-    IDictionaryTopicsController,
+    IDocsController,
     IMdxController {}

@@ -2,22 +2,23 @@
 
 import Image from 'next/image'
 
-import { getImage } from '@/utils/helpers'
+import { useApi } from '@/services/api'
+import { REGEX } from '@/utils/constants'
 
 type PictureProps = {
   url: string
 }
 
 export function Picture({ url }: PictureProps) {
-  console.log({ url })
-  const image = getImage('theory', url)
+  const api = useApi()
+  const image = api.getImage('theory', url)
+  const formattedImage = image.replace(REGEX.quotes, '')
+  console.log({ formattedImage })
 
   return (
     <div className="relative mr-3 overflow-hidden rounded-md md:h-16 md:w-24 ">
       <Image
-        src={
-          'https://aukqejqsiqsqowafpppb.supabase.co/storage/v1/object/public/images/theory/panda-confuso.jpg'
-        }
+        src={formattedImage}
         alt="Panda"
         className="skeleton h-auto w-auto"
         sizes="(min-width: 375px) 5rem, (min-width: 769px) 6rem"

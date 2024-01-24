@@ -8,7 +8,7 @@ import type { Vote } from '@/@types/vote'
 import { createServerClient } from '@/services/api/supabase/clients/serverClient'
 import { AuthController } from '@/services/api/supabase/controllers/authController'
 import { ChallengesController } from '@/services/api/supabase/controllers/challengesController'
-import { DictionaryTopicsController } from '@/services/api/supabase/controllers/dictionaryTopicsController'
+import { DocsController } from '@/services/api/supabase/controllers/docsController'
 import { ERRORS } from '@/utils/constants'
 
 let challenge: Challenge
@@ -46,23 +46,22 @@ export default async function ChallengePage({
     const hasDictionaryTopic = !challenge.isCompleted && challenge.star_id
 
     if (hasDictionaryTopic && challenge.dictionary_topic_id) {
-      const dictionaryTopicsController = DictionaryTopicsController(supabase)
+      const docsController = DocsController(supabase)
 
-      const isDictionaryTopicUnlocked =
-        await dictionaryTopicsController.checkDictionaryTopicUnlocking(
-          challenge.dictionary_topic_id,
-          userId
-        )
+      const isDictionaryTopicUnlocked = await docsController.checkDocUnlocking(
+        challenge.dictionary_topic_id,
+        userId
+      )
 
       if (!isDictionaryTopicUnlocked)
-        await dictionaryTopicsController.addUnlockedDictionaryTopic(
+        await docsController.addUnlockedDoc(
           challenge.dictionary_topic_id,
           userId
         )
     }
   } catch (error) {
     console.error(error)
-    throw new Error(ERRORS.dictionary.failedTopicUnlocking)
+    throw new Error(ERRORS.dictionary.failedDocsFetching)
   }
 
   return <Header challenge={challenge} userVote={userVote} />

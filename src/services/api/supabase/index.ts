@@ -9,7 +9,7 @@ import { CategoriesController } from './controllers/categoriesController'
 import { CdnController } from './controllers/cdnController'
 import { ChallengesController } from './controllers/challengesController'
 import { CommentsController } from './controllers/commentsController'
-import { DictionaryTopicsController } from './controllers/dictionaryTopicsController'
+import { DocsController } from './controllers/docsController'
 import { PlanetsController } from './controllers/planetsController'
 import { RankingsController } from './controllers/rankingController'
 import { RocketsController } from './controllers/rocketController'
@@ -35,7 +35,7 @@ export function useSupabaseApi() {
       ...StarsController(supabase),
       ...UsersController(supabase),
       ...CommentsController(supabase),
-      ...DictionaryTopicsController(supabase),
+      ...DocsController(supabase),
     }
   }, [supabase])
 
