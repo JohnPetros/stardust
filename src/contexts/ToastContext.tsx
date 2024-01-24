@@ -41,7 +41,7 @@ export function ToastProvider({ children }: ToastContextProps) {
   return (
     <ToastContext.Provider value={{ show }}>
       <Provider swipeDirection="right">
-        <Viewport className="right-4 top-4 z-[400] flex max-w-[90vw] rounded" />
+        <Viewport className="right-4 top-4 z-[1000] flex max-w-[90vw] rounded" />
         <Toast ref={toastRef} />
         {children}
       </Provider>
