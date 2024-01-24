@@ -19,7 +19,7 @@ export function User({ children, hasAnimation = true }: UserProps) {
       <div className="not-prose flex w-full flex-col">
         <div className="flex w-full items-center">
           <Content type="user" hasAnimation={hasAnimation}>
-            {children[0]}
+            {children}
           </Content>
           {user && <UserAvatar avatarId={user?.avatar_id} size={80} />}
         </div>

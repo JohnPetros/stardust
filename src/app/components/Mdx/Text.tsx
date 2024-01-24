@@ -29,7 +29,7 @@ export function Text({
         <div className="flex w-full items-center">
           {picture && <Picture url={picture} />}
           <Content type="default" hasAnimation={hasAnimation}>
-            {children[0]}
+            {children}
           </Content>
         </div>
       </div>

@@ -41,7 +41,7 @@ export function Alert({
             />
           </span>
           <Content type="alert" hasAnimation={hasAnimation}>
-            {children[0]}
+            {children}
           </Content>
         </div>
       </div>

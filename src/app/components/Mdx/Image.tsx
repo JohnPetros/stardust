@@ -30,7 +30,7 @@ export function Image({ picture, hasAnimation = true, children }: ImageProps) {
         />
         <div>
           <span>{image}</span>
-          <Content hasAnimation={hasAnimation}>{children[0]}</Content>
+          <Content hasAnimation={hasAnimation}>{children}</Content>
         </div>
       </div>
     </Animation>

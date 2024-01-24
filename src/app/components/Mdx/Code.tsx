@@ -5,7 +5,7 @@ import { Animation } from './Animation'
 type CodeProps = {
   code: string
   isRunnable: boolean
-  children: string | string[]
+  children: string
   hasAnimation: boolean
 }
 
@@ -14,12 +14,19 @@ export function Code({
   children,
   hasAnimation = false,
 }: CodeProps) {
+  const code = Array.isArray(children)
+    ? children
+        .map((component) => {
+          if (typeof component === 'object' && 'props' in component)
+            return component.props.children
+          else return component
+        })
+        .join('\n')
+    : children
+
   return (
     <Animation hasAnimation={hasAnimation}>
-      <CodeSnippet
-        code={Array.isArray(children) ? children[0] : children}
-        isRunnable={isRunnable}
-      />
+      <CodeSnippet code={code} isRunnable={isRunnable} />
     </Animation>
   )
 }

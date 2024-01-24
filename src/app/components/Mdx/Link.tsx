@@ -14,7 +14,7 @@ export function Link({ children, href, url }: LinkProps) {
       target="_blank"
       className="text-sm font-medium text-green-600"
     >
-      {children}
+      {Array.isArray(children) ? children[0] : children}
     </NextLink>
   )
 }

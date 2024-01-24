@@ -29,7 +29,7 @@ export function Quote({
         <div className="flex w-full items-center">
           {picture && <Picture url={picture} />}
           <Content type="quote" hasAnimation={hasAnimation}>
-            {children[0]}
+            {children}
           </Content>
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import { tv, VariantProps } from 'tailwind-variants'
 
 import { TypeWriter } from '../TypeWriter'
@@ -19,7 +20,7 @@ const contentStyles = tv({
 
 type ContentProps = {
   hasAnimation: boolean
-  children: string
+  children: string | ReactNode
 }
 
 export function Content({
@@ -27,18 +28,25 @@ export function Content({
   children,
   hasAnimation,
 }: ContentProps & VariantProps<typeof contentStyles>) {
+  console.log(children)
+
   return (
     <div className={contentStyles({ type })}>
       <p className="not-prose leading-6">
-        {hasAnimation && (
-          <TypeWriter text={formatText(children)} isEnable={hasAnimation} />
-        )}
-        {!hasAnimation && (
-          <span
-            dangerouslySetInnerHTML={{
-              __html: formatText(children),
-            }}
-          />
+        {typeof children === 'string' ? (
+          <>
+            {hasAnimation ? (
+              <TypeWriter text={formatText(children)} isEnable={hasAnimation} />
+            ) : (
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: formatText(children),
+                }}
+              />
+            )}
+          </>
+        ) : (
+          children
         )}
       </p>
     </div>

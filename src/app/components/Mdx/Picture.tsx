@@ -13,7 +13,6 @@ export function Picture({ url }: PictureProps) {
   const api = useApi()
   const image = api.getImage('theory', url)
   const formattedImage = image.replace(REGEX.quotes, '')
-  console.log({ formattedImage })
 
   return (
     <div className="relative mr-3 overflow-hidden rounded-md md:h-16 md:w-24 ">
