@@ -10,7 +10,7 @@ export const REGEX = {
   print: /escreva\((.*?)\)/,
   backticks: /`([^`]*)`/g,
   insideQuotes: /^(['"])(.*)\1$/,
-  quotes: /^["']|["']$/g,
+  quotes: /['"]+/g,
   mdxComponent: /<(\w+)([^>]*)>([\s\S]*?)<\/\1>/g,
   componentName: /<(\w+)[\s\S]*?>/,
 }

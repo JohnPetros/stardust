@@ -25,8 +25,8 @@ export const ERRORS = {
     failedCompiling: 'Não foi possível carregar o conteúdo de texto.',
   },
   dictionary: {
-    failedTopicsFetching: 'Não foi possível carregar o dicionário',
-    failedTopicUnlocking:
+    failedDocsFetching: 'Não foi possível carregar o dicionário',
+    failedDocUnlocking:
       'Não foi possível desbloquear o tópico do dicionário referente a esse desafio',
   },
 }
