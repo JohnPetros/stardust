@@ -4,14 +4,14 @@ import { ReactNode } from 'react'
 import { Overlay, Root } from '@radix-ui/react-dialog'
 import { AnimatePresence } from 'framer-motion'
 
-interface DialogProps {
+type DialogProps = {
   children: ReactNode
-  onClose?: VoidFunction
+  onOpenChange?: (isOpen: boolean) => void
 }
 
-export function Dialog({ children, onClose }: DialogProps) {
+export function Dialog({ children, onOpenChange }: DialogProps) {
   return (
-    <Root onOpenChange={onClose}>
+    <Root onOpenChange={onOpenChange}>
       <Overlay className="fixed inset-0 z-[400] overflow-y-auto bg-black bg-opacity-50" />
       <AnimatePresence>{children}</AnimatePresence>
     </Root>
