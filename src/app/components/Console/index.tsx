@@ -1,8 +1,15 @@
 'use client'
 
 import { ForwardedRef, forwardRef, useImperativeHandle } from 'react'
-import { CaretDown } from '@phosphor-icons/react'
+import {
+  CaretDown,
+  Textbox,
+  ToggleLeft,
+  ToggleRight,
+} from '@phosphor-icons/react'
 import { motion, Variants } from 'framer-motion'
+
+import { Tooltip } from '../@Tooltip'
 
 import { useConsole } from './useConsole'
 
@@ -33,10 +40,12 @@ export function ConsoleComponent(
     isOpen,
     output,
     animationControls,
+    shouldFormatOutput,
     open,
     close,
     calculateMinHeight,
     handleDragEnd,
+    handleToggleFormatOutput,
   } = useConsole({ results, height })
 
   useImperativeHandle(
@@ -66,21 +75,41 @@ export function ConsoleComponent(
       <div className="border-b border-gray-400 px-6 py-2">
         <span className="mx-auto block h-[2px] w-1/6 rounded-md bg-gray-400"></span>
         <div className="mt-1 flex items-center justify-between">
-          <strong className="text-gray-200">Resultado</strong>
-          <button
-            type="button"
-            onClick={close}
-            tabIndex={isOpen ? undefined : -1}
-          >
-            <CaretDown className="text-lg text-gray-400" weight="bold" />
-          </button>
+          <div className="flex items-center gap-3">
+            <strong className="text-gray-200">Resultado</strong>
+            <Tooltip direction="bottom" content="Formatar resultado">
+              <button
+                type="button"
+                onClick={handleToggleFormatOutput}
+                tabIndex={isOpen ? undefined : -1}
+              >
+                {shouldFormatOutput ? (
+                  <ToggleRight
+                    className="text-lg text-gray-400"
+                    weight="bold"
+                  />
+                ) : (
+                  <ToggleLeft className="text-lg text-gray-400" weight="bold" />
+                )}
+              </button>
+            </Tooltip>
+          </div>
+          <Tooltip direction="bottom" content="Fechar console">
+            <button
+              type="button"
+              onClick={close}
+              tabIndex={isOpen ? undefined : -1}
+            >
+              <CaretDown className="text-lg text-gray-400" weight="bold" />
+            </button>
+          </Tooltip>
         </div>
       </div>
 
       <ul className="px-6 py-2">
         {output.map((output, index) => (
           <li key={`result-${index}`} className="block text-sm text-gray-300">
-            {output}
+            <span dangerouslySetInnerHTML={{ __html: output }} />
           </li>
         ))}
       </ul>
