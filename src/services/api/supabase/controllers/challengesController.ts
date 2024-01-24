@@ -42,7 +42,7 @@ export const ChallengesController = (
         categories: data.categories,
         star_id: data.star_id,
         test_cases: data.test_cases,
-        topic_id: data.topic_id,
+        dictionary_topic_id: data.dictionary_topic_id,
         texts: data.texts,
         total_completitions: data.total_completitions[0].count,
         upvotes: data.votes.filter(({ vote }) => vote === 'upvote').length,
