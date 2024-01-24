@@ -23,7 +23,7 @@ export type Challenge = {
   description: string
   star_id: string | null
   test_cases: TestCase[]
-  dictionary_topic_id: string | null
+  doc_id: string | null
   upvotes: number
   downvotes: number
   total_completitions: number
