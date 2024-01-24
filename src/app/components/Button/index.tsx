@@ -10,14 +10,12 @@ import { Loading } from '../Loading'
 type ButtonProps = {
   buttonRef?: RefObject<HTMLButtonElement>
   children: ReactNode
-  icon?: Icon
   className?: string
   isLoading?: boolean
 }
 
 export function ButtonComponent({
   buttonRef,
-  icon: Icon,
   children,
   className,
   isLoading = false,
@@ -33,14 +31,7 @@ export function ButtonComponent({
       )}
       {...rest}
     >
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <div className="flex items-center gap-2">
-          {Icon && <Icon className=" text-gray-900" size={24} weight="bold" />}
-          {children}
-        </div>
-      )}
+      {isLoading ? <Loading /> : children}
     </motion.button>
   )
 }

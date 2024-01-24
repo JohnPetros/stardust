@@ -3,6 +3,7 @@
 import {
   ArrowClockwise,
   ArrowsOutSimple,
+  Code,
   Command,
   Gear,
 } from '@phosphor-icons/react'
@@ -12,6 +13,7 @@ import { Tooltip } from '@/app/components/@Tooltip'
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { CodeEditorSettingsDialog } from '@/app/components/CodeEditorSettingsDialog'
+import { DictionaryDialog } from '@/app/components/DictionaryDialog'
 import { ShortcutsDialog } from '@/app/components/ShortcutsDialog'
 
 type ToolBarProps = {
@@ -19,6 +21,9 @@ type ToolBarProps = {
 }
 
 export function CodeEditorToolbar({ onResetCode }: ToolBarProps) {
+  const toolbarStyles = 'grid place-content-center'
+  const iconStyles = 'text-xl text-green-500'
+
   return (
     <Toolbar.Root className="flex items-center gap-3">
       <Alert
@@ -38,31 +43,39 @@ export function CodeEditorToolbar({ onResetCode }: ToolBarProps) {
         cancel={<Button className="bg-gray-500 text-gray-100">Cancelar</Button>}
         canPlaySong={false}
       >
-        <Toolbar.Button className="grid place-content-center">
+        <Toolbar.Button className={toolbarStyles}>
           <Tooltip content="Voltar para o código inicial" direction="bottom">
-            <ArrowClockwise className="text-xl text-green-500" weight="bold" />
+            <ArrowClockwise className={iconStyles} weight="bold" />
           </Tooltip>
         </Toolbar.Button>
       </Alert>
 
-      <Toolbar.Button className="grid place-content-center">
+      <Toolbar.Button className={toolbarStyles}>
         <Tooltip content="Tela cheia" direction="bottom">
-          <ArrowsOutSimple className="text-xl text-green-500" weight="bold" />
+          <ArrowsOutSimple className={iconStyles} weight="bold" />
         </Tooltip>
       </Toolbar.Button>
 
+      <DictionaryDialog>
+        <Toolbar.Button className={toolbarStyles}>
+          <Tooltip content="Dicionário" direction="bottom">
+            <Code className={iconStyles} weight="bold" />
+          </Tooltip>
+        </Toolbar.Button>
+      </DictionaryDialog>
+
       <ShortcutsDialog>
-        <Toolbar.Button className="grid place-content-center">
+        <Toolbar.Button className={toolbarStyles}>
           <Tooltip content="Comandos" direction="bottom">
-            <Command className="text-xl text-green-500" weight="bold" />
+            <Command className={iconStyles} weight="bold" />
           </Tooltip>
         </Toolbar.Button>
       </ShortcutsDialog>
 
       <CodeEditorSettingsDialog>
-        <Toolbar.Button className="grid place-content-center">
+        <Toolbar.Button className={toolbarStyles}>
           <Tooltip content="Configurações" direction="bottom">
-            <Gear className="text-xl text-green-500" weight="bold" />
+            <Gear className={iconStyles} weight="bold" />
           </Tooltip>
         </Toolbar.Button>
       </CodeEditorSettingsDialog>
