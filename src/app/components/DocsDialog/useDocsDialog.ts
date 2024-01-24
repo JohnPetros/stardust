@@ -10,6 +10,13 @@ export function useDocsDialog() {
   const { user } = useAuth()
   const api = useApi()
   const [content, setContent] = useState('')
+  const [shouldFetchDocs, setShouldFetchDocs] = useState(false)
+
+  function handleDialogOpen(isOpen: boolean) {
+    if (isOpen && !shouldFetchDocs) {
+      setShouldFetchDocs(true)
+    }
+  }
 
   function handleBackButton() {
     setContent('')
@@ -27,14 +34,21 @@ export function useDocsDialog() {
     const docs = await api.getDocsOrderedByPosition()
     const userUnlockedDocsIds = await api.getUserUnlockedDocsIds(user.id)
 
-    return docs.map((doc) => verifyDocUnlocking(doc, userUnlockedDocsIds))
+    const verifiedDocs = docs.map((doc) =>
+      verifyDocUnlocking(doc, userUnlockedDocsIds)
+    )
+
+    return verifiedDocs
   }
 
   const {
     data: docs,
     error,
     isLoading,
-  } = useSWR(() => `/docs?user_id=${user?.id}`, getDocs)
+  } = useSWR(
+    () => (shouldFetchDocs ? `/docs?user_id=${user?.id}` : ''),
+    getDocs
+  )
 
   if (error) {
     console.error(error)
@@ -55,5 +69,6 @@ export function useDocsDialog() {
     content,
     handleDocButton,
     handleBackButton,
+    handleDialogOpen,
   }
 }
