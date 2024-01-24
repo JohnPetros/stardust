@@ -69,7 +69,7 @@ button:hover {
   visibility: hidden !important;
 }
 
-.inline-code {
+.strong {
   @apply bg-gray-900 text-gray-50 rounded-md p-1 mx-1 font-code
 }
 
