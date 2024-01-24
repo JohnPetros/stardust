@@ -24,4 +24,9 @@ export const ERRORS = {
   mdx: {
     failedCompiling: 'Não foi possível carregar o conteúdo de texto.',
   },
+  dictionary: {
+    failedTopicsFetching: 'Não foi possível carregar o dicionário',
+    failedTopicUnlocking:
+      'Não foi possível desbloquear o tópico do dicionário referente a esse desafio',
+  },
 }
