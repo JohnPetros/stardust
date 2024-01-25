@@ -6,8 +6,8 @@ export function useMdxComponent(content: string, hasAnimation: boolean) {
   const mdxComponentRef = useRef<HTMLDivElement>(null)
 
   const mdxContent = content.replace(
-    'hasAnimation: undefined',
-    `hasAnimation: ${hasAnimation}`
+    'hasAnimation={undefined}',
+    `hasAnimation={${hasAnimation}}`
   )
 
   useEffect(() => {
