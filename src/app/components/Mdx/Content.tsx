@@ -28,21 +28,18 @@ export function Content({
   children,
   hasAnimation,
 }: ContentProps & VariantProps<typeof contentStyles>) {
-  console.log(children)
-
   return (
     <div className={contentStyles({ type })}>
       <p className="not-prose leading-6">
         {typeof children === 'string' ? (
           <>
             {hasAnimation ? (
-              <TypeWriter text={formatText(children)} isEnable={hasAnimation} />
-            ) : (
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: formatText(children),
-                }}
+              <TypeWriter
+                text={children.replace(/&ast;/g, '*')}
+                isEnable={hasAnimation}
               />
+            ) : (
+              <span>{children.replace(/&ast;/g, '*')}</span>
             )}
           </>
         ) : (

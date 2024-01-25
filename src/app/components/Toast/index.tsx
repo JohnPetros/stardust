@@ -83,7 +83,7 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
               dragElastic={0.8}
               onDragEnd={handleDragEnd}
               className={twMerge(
-                'fixed right-8 top-4 z-[1000] cursor-grab rounded',
+                'fixed right-8 top-4 z-[1500] cursor-grab rounded',
                 type === 'error' ? 'bg-red-800' : 'bg-green-900'
               )}
             >

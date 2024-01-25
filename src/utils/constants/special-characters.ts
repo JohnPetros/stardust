@@ -1,6 +1,7 @@
 export const SPECIAL_CHARACTERS = {
-  '\n': '@break-line',
+  '**': '@double-asterisks',
   '{': '@open-bracket',
   '}': '@close-bracket',
   '"': '@quote-mark',
+  '\n': '@break-line',
 }

@@ -53,11 +53,13 @@ export function useCodeEditorPlayground(code: string) {
   )
 
   async function formatCodeWithInput(code: string, input: string) {
-    const regex = REGEX.input
+    const regex = REGEX.insideInput
     const match = code.match(regex)
+
     userCode.current = match
       ? code.replace(match[0], checkNumeric(input) ? input : "'" + input + "'")
       : userCode.current
+
     promptRef.current?.setValue('')
     runUserCode()
   }
@@ -106,7 +108,7 @@ export function useCodeEditorPlayground(code: string) {
     }
 
     function hasInput(code: string) {
-      const regex = REGEX.input
+      const regex = REGEX.insideInput
       const input = code.match(regex)
       if (!input) return false
 
@@ -126,6 +128,8 @@ export function useCodeEditorPlayground(code: string) {
 
     try {
       const { erros } = await execute(code, handleOutput)
+
+      console.error(erros)
 
       if (erros.length) {
         const error = erros[0]

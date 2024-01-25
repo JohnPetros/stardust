@@ -16,7 +16,7 @@ export function Quote({
   title,
   picture,
   children,
-  hasAnimation = true,
+  hasAnimation = false,
 }: QuoteProps) {
   return (
     <Animation hasAnimation={hasAnimation}>

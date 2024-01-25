@@ -9,6 +9,7 @@ import { ERRORS } from '@/utils/constants'
 export function useDocsDialog() {
   const { user } = useAuth()
   const api = useApi()
+
   const [content, setContent] = useState('')
   const [shouldFetchDocs, setShouldFetchDocs] = useState(false)
 

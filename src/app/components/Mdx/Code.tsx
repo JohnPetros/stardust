@@ -14,12 +14,23 @@ export function Code({
   children,
   hasAnimation = false,
 }: CodeProps) {
+  console.log(children)
+
   const code = Array.isArray(children)
     ? children
         .map((component) => {
-          if (typeof component === 'object' && 'props' in component)
-            return component.props.children
-          else return component
+          const isComponent =
+            typeof component === 'object' && 'props' in component
+
+          if (isComponent) {
+            const componentContent = component.props.children
+              ? component.props.children[0]
+              : ''
+
+            const isSpan = component.type === 'span'
+
+            return isSpan ? componentContent : componentContent + '\n'
+          } else return component
         })
         .join('\n')
     : children

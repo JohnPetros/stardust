@@ -12,15 +12,9 @@ export function useConsole({ height, results }: ConsoleProps) {
   const storage = useLocalStorage()
   const controls = useAnimation()
 
-  const shouldFormatConsoleOutput = Boolean(
-    storage.getItem(STORAGE.shouldFormatConsoleOutput) === 'true'
-  )
-
   const [output, setOutput] = useState<string[]>([])
   const [isOpen, setIsOpen] = useState(false)
-  const [shouldFormatOutput, setShouldFormatOutput] = useState(
-    shouldFormatConsoleOutput
-  )
+  const [shouldFormatOutput, setShouldFormatOutput] = useState(false)
 
   const outputTypes = useRef<string[]>([])
 
@@ -50,7 +44,7 @@ export function useConsole({ height, results }: ConsoleProps) {
         case 'vetor':
           return '[ ' + output.split(',').join(', ') + ' ]'
         case 'number':
-          return `<span className="number">${output}</span>`
+          return `@number${output}`
         default:
           return output
       }
@@ -77,6 +71,7 @@ export function useConsole({ height, results }: ConsoleProps) {
     if (!results.length) return
 
     outputTypes.current = results.filter((_, index) => index % 2 === 0)
+    console.log(outputTypes.current)
     const output = results.filter((_, index) => index % 2 !== 0)
 
     const formattedOutput = output.map((output, index) =>
@@ -85,6 +80,13 @@ export function useConsole({ height, results }: ConsoleProps) {
 
     setOutput(formattedOutput)
   }, [results, formatOutput])
+
+  useEffect(() => {
+    const shouldFormatConsoleOutput = Boolean(
+      storage.getItem(STORAGE.shouldFormatConsoleOutput) === 'true'
+    )
+    setShouldFormatOutput(shouldFormatConsoleOutput)
+  }, [isOpen])
 
   return {
     isOpen,

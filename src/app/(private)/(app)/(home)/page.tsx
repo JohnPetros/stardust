@@ -15,7 +15,7 @@ export default async function HomePage() {
 
   const userId = await authController.getUserId()
 
-  if (!userId) throw new Error(ERRORS.userNotFound)
+  if (!userId) throw new Error(ERRORS.auth.userNotFound)
 
   const userUnlockedStarsIds =
     await starsController.getUserUnlockedStarsIds(userId)

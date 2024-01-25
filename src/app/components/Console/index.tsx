@@ -1,12 +1,7 @@
 'use client'
 
 import { ForwardedRef, forwardRef, useImperativeHandle } from 'react'
-import {
-  CaretDown,
-  Textbox,
-  ToggleLeft,
-  ToggleRight,
-} from '@phosphor-icons/react'
+import { CaretDown, ToggleLeft, ToggleRight } from '@phosphor-icons/react'
 import { motion, Variants } from 'framer-motion'
 
 import { Tooltip } from '../@Tooltip'
@@ -107,9 +102,11 @@ export function ConsoleComponent(
       </div>
 
       <ul className="px-6 py-2">
-        {output.map((output, index) => (
-          <li key={`result-${index}`} className="block text-sm text-gray-300">
-            <span dangerouslySetInnerHTML={{ __html: output }} />
+        {output.map((output) => (
+          <li key={String(output)} className="block text-sm text-gray-300">
+            {output.includes('@number')
+              ? output.replace('@number', '')
+              : output}
           </li>
         ))}
       </ul>

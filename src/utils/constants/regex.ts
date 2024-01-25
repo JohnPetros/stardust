@@ -9,6 +9,7 @@ export const REGEX = {
   inputParam: /["'].*["']/,
   print: /escreva\((.*?)\)/,
   backticks: /`([^`]*)`/g,
+  asterisksCode: /&ast;/g,
   betweenTwoAsterisks: /\*(.*?)\*/g,
   betweenFourAsterisks: /\*\*(.*?)\*\*/g,
   insideQuotes: /^(['"])(.*)\1$/,

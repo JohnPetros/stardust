@@ -30,7 +30,7 @@ export function Description() {
           <VoteButtons />
         </div>
       )}
-      <div className="mt-6 space-y-12">
+      <div className="mt-6">
         <Mdx>{mdx}</Mdx>
       </div>
     </div>

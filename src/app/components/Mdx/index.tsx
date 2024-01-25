@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import Markdown from 'markdown-to-jsx'
 
 import { Alert } from './Alert'
@@ -21,6 +22,15 @@ export function Mdx({ children }: MdxProps) {
       <Markdown
         options={{
           overrides: {
+            // @ts-ignore
+            createElement(type, props, children) {
+              console.log({ type })
+              return (
+                <div className="bg-red-700">
+                  {React.createElement(type, props, children)}
+                </div>
+              )
+            },
             Text: {
               component: Text,
             },
@@ -57,6 +67,9 @@ export function Mdx({ children }: MdxProps) {
             a: {
               component: Link,
             },
+            // span: {
+            //   component: ({ children }) => 'spangjgjgjg',
+            // },
           },
         }}
       >
