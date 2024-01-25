@@ -16,4 +16,5 @@ export const REGEX = {
   quotes: /['"]+/g,
   mdxComponent: /<(\w+)([^>]*)>([\s\S]*?)<\/\1>/g,
   componentName: /<(\w+)[\s\S]*?>/,
+  mdxCodeComponent: /<Code[^>]*>[\s\S]*?<\/Code>/gi,
 }
