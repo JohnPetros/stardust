@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Challenge } from '@/@types/challenge'
 import type { Vote } from '@/@types/vote'
 import { useChallengeStore } from '@/stores/challengeStore'
+import { ROUTES } from '@/utils/constants'
 
 export function useHeader(challenge: Challenge, userVote: Vote) {
   const setChallenge = useChallengeStore((store) => store.actions.setChallenge)
@@ -13,7 +14,7 @@ export function useHeader(challenge: Challenge, userVote: Vote) {
   const router = useRouter()
 
   function handleBackButton() {
-    router.back()
+    router.push(ROUTES.private.home.space)
   }
 
   useEffect(() => {
