@@ -4,7 +4,7 @@ import { ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 import { CaretDown, ToggleLeft, ToggleRight } from '@phosphor-icons/react'
 import { motion, Variants } from 'framer-motion'
 
-import { Tooltip } from '../@Tooltip'
+import { Tooltip } from '../Tooltip'
 
 import { useConsole } from './useConsole'
 

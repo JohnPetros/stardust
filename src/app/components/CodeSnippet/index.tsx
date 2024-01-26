@@ -4,8 +4,8 @@ import { ArrowClockwise } from '@phosphor-icons/react'
 import * as ToolBar from '@radix-ui/react-toolbar'
 import { twMerge } from 'tailwind-merge'
 
-import { Tooltip } from '../@Tooltip'
 import { CodeEditorPlayground } from '../CodeEditorPlayground'
+import { Tooltip } from '../Tooltip'
 
 import { useCodeSnippet } from './useCodeSnippet'
 
@@ -32,18 +32,15 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
       <ToolBar.Root className="not-prose flex items-center justify-end gap-2 border-b border-gray-700 p-2">
         {isRunnable && (
           <>
-            <ToolBar.Button
-              type="button"
-              className="h-6 w-max items-center rounded bg-green-400 px-4 transition-[scale] duration-200 active:scale-95"
-              onClick={handleReloadButtonClick}
-            >
-              <Tooltip
-                content="Voltar para o código inicial"
-                direction="bottom"
+            <Tooltip content="Voltar para o código inicial" direction="bottom">
+              <ToolBar.Button
+                type="button"
+                className="h-6 w-max items-center rounded bg-green-400 px-4 transition-[scale] duration-200 active:scale-95"
+                onClick={handleReloadButtonClick}
               >
                 <ArrowClockwise className="text-green-900" weight="bold" />
-              </Tooltip>
-            </ToolBar.Button>
+              </ToolBar.Button>
+            </Tooltip>
             <ToolBar.Button
               type="button"
               className="h-6 w-max items-center rounded bg-green-400 px-4 text-xs font-semibold text-gray-900 transition-[scale] duration-200 active:scale-95"

@@ -29,7 +29,7 @@ export function useAchievement(userId?: string) {
   )
 
   const { data: userRescuableAchievementsIds } = useSWR(
-    '/rescuableachievements_ids?user_id=' + userId,
+    '/rescuable_achievements_ids?user_id=' + userId,
     getUserRescuableAchievementsIds
   )
 

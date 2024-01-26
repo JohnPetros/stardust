@@ -53,7 +53,7 @@ export function useDocsDialog() {
 
   if (error) {
     console.error(error)
-    throw new Error(ERRORS.dictionary.failedDocsFetching)
+    throw new Error(ERRORS.documentation.failedDocsFetching)
   }
 
   function handleDocButton(docId: string) {

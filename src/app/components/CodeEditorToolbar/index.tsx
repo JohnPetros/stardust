@@ -9,12 +9,12 @@ import {
 } from '@phosphor-icons/react'
 import * as Toolbar from '@radix-ui/react-toolbar'
 
-import { Tooltip } from '@/app/components/@Tooltip'
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { CodeEditorSettingsDialog } from '@/app/components/CodeEditorSettingsDialog'
 import { DocsDialog } from '@/app/components/DocsDialog'
 import { ShortcutsDialog } from '@/app/components/ShortcutsDialog'
+import { Tooltip } from '@/app/components/Tooltip'
 
 type ToolBarProps = {
   onResetCode: () => void
