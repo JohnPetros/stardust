@@ -3,10 +3,6 @@ import { useEffect } from 'react'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { STORAGE } from '@/utils/constants'
 
-export type SecondsCounterRef = {
-  getSeconds: () => number
-}
-
 export function SecondsCounter() {
   const localStorage = useLocalStorage()
 
@@ -20,7 +16,6 @@ export function SecondsCounter() {
 
     return () => {
       clearInterval(interval)
-      localStorage.removeItem(STORAGE.secondsCounter)
     }
   }, [localStorage])
 

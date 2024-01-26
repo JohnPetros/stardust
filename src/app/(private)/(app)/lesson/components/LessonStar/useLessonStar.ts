@@ -57,6 +57,7 @@ export function useLessonStar(star: Star) {
       }
 
       await setCookie(COOKIES.rewardsPayload, JSON.stringify(rewardsPayload))
+      localStorage.removeItem(STORAGE.secondsCounter)
       router.push(ROUTES.private.rewards)
     }
 

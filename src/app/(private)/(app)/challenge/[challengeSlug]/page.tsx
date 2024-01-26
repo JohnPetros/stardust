@@ -46,7 +46,7 @@ export default async function ChallengePage({
     await unlockDoc(challenge, userId)
   } catch (error) {
     console.error(error)
-    throw new Error(ERRORS.dictionary.failedDocsFetching)
+    throw new Error(ERRORS.documentation.failedDocsFetching)
   }
 
   return <Header challenge={challenge} userVote={userVote} />

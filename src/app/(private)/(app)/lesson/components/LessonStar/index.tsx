@@ -24,7 +24,7 @@ export function LessonStar({ star, mdxComponets }: LayoutProps) {
   return (
     <>
       <PageTransitionAnimation isVisible={isTransitionVisible} />
-      {currentStage !== 'quiz' && <SecondsCounter />}
+      {currentStage === 'quiz' && <SecondsCounter />}
       <div ref={scrollRef} className="relative overflow-x-hidden">
         {currentStage !== 'rewards' && <Header />}
 

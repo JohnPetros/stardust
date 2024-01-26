@@ -50,12 +50,13 @@ export function useResult() {
           incorrectAnswers: incorrectAnswersAmount,
           challengeId: challenge?.id,
           difficulty: challenge?.difficulty,
-          isCompleted: challenge?.isCompleted,
+          isCompleted: challenge?.isCompleted ?? false,
           starId: challenge?.star_id,
         },
       }
 
       await setCookie(COOKIES.rewardsPayload, JSON.stringify(rewardsPayload))
+      localStorage.removeItem(STORAGE.secondsCounter)
       router.push(ROUTES.private.rewards)
       return
     }
@@ -66,7 +67,7 @@ export function useResult() {
         incorrectAnswers: incorrectAnswersAmount,
         challengeId: challenge?.id,
         difficulty: challenge?.difficulty,
-        isCompleted: challenge?.isCompleted,
+        isCompleted: challenge?.isCompleted ?? false,
       },
     }
 

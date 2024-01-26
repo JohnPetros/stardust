@@ -41,13 +41,13 @@ export function Theory({ title, number, compiledMdxComponets }: TheoryProps) {
           )}
 
           <div className="mt-10 space-y-10 px-6 pb-[360px] md:px-0">
-            {mdxComponents.map((text, index) => {
+            {mdxComponents.map((component, index) => {
               const shouldMemoized = index < currentMdxComponentIndex - 1
               return (
                 <MdxComponent
-                  key={text.content}
-                  content={text.content}
-                  hasAnimation={text.hasAnimation}
+                  key={component.content}
+                  content={component.content}
+                  hasAnimation={component.hasAnimation}
                   shouldMemoized={shouldMemoized}
                 />
               )

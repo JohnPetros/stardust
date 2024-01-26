@@ -43,7 +43,9 @@ export function Header({ challenge, userVote }: HeaderProps) {
               </Button>
             }
             cancel={
-              <Button autoFocus className="bg-green-400 text-gray-900">Ficar</Button>
+              <Button autoFocus className="bg-green-400 text-gray-900">
+                Ficar
+              </Button>
             }
             canPlaySong={false}
           >
