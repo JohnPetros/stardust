@@ -1,6 +1,12 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import { AuthError, Session } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
 import useSWR, { mutate } from 'swr'
@@ -13,24 +19,18 @@ export type OAuthProvider = 'github'
 export interface AuthContextValue {
   user: User | null
   isLoading: boolean
-  signIn: (email: string, password: string) => Promise<void>
-  signUp: (
+  signIn(email: string, password: string): Promise<void>
+  signUp(
     email: string,
     password: string
-  ) => Promise<
-    | {
-        userId: null
-        error: AuthError
-      }
-    | {
-        userId: string
-        error: null
-      }
-    | null
-  >
-  signOut: () => Promise<void>
-  signInWithOAuth: (provider: OAuthProvider) => Promise<void>
-  updateUser: (newUserData: Partial<User>) => Promise<void>
+  ): Promise<{
+    userId: string | null
+    error: AuthError | null
+  } | null>
+  signOut(): Promise<void>
+  signInWithOAuth(provider: OAuthProvider): Promise<void>
+  updateUser(newUserData: Partial<User>): Promise<void>
+  mutateUserCache(newUserData: Partial<User>): void
   serverSession: Session | null
 }
 
@@ -94,25 +94,32 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     router.push('/sign-in')
   }
 
-  async function updateUser(newData: Partial<User>) {
-    if (user?.id) {
-      await api.updateUser(newData, user.id)
+  const mutateUserCache = useCallback(
+    (newData: Partial<User> | null, shouldRevalidate: boolean = true) => {
       mutate(
         `/user?session_id=${session?.user.id}`,
         { ...user, ...newData },
         {
-          revalidate: true,
+          revalidate: shouldRevalidate,
         }
       )
+    },
+    [session?.user.id, user]
+  )
+
+  async function updateUser(newData: Partial<User>) {
+    if (user?.id) {
+      await api.updateUser(newData, user.id)
+      mutateUserCache(newData)
     }
   }
 
   useEffect(() => {
     if (!session?.user.id) {
-      mutate('/user', null, false)
+      mutateUserCache(null)
       return
     }
-  }, [session])
+  }, [session?.user.id, mutateUserCache])
 
   const value: AuthContextValue = {
     user: user ?? null,
@@ -122,6 +129,7 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     signOut,
     signInWithOAuth,
     updateUser,
+    mutateUserCache,
     serverSession,
   }
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { LottieRef } from 'lottie-react'
 import { useRouter } from 'next/navigation'
 
@@ -8,11 +8,13 @@ import { CongratulationsProps } from '.'
 
 import { AlertRef } from '@/app/components/Alert'
 import { deleteCookie } from '@/app/server/actions/deleteCookie'
+import { useAuth } from '@/contexts/AuthContext'
 import { COOKIES } from '@/utils/constants'
 import { playAudio } from '@/utils/helpers/'
 
 export function useCongratulations({
-  accurance,
+  coins,
+  xp,
   todayStatus,
   updatedLevel,
   nextRoute,
@@ -22,10 +24,11 @@ export function useCongratulations({
   const [isEndMessageVisible, setIsEndMessageVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  console.log({ accurance })
+  const { mutateUserCache } = useAuth()
 
   const alertRef = useRef<AlertRef>(null)
   const starsChainRef = useRef(null) as LottieRef
+
   const router = useRouter()
 
   function handleFirstButtonClick() {
@@ -45,11 +48,28 @@ export function useCongratulations({
     setIsEndMessageVisible(true)
   }
 
-  async function handleSecondButtonClick() {
+  const exit = useCallback(async () => {
     setIsLoading(true)
     await deleteCookie(COOKIES.rewardsPayload)
+
+    mutateUserCache({ coins, xp, level: updatedLevel.level })
     router.push(nextRoute)
+  }, [router, nextRoute, coins, xp, updatedLevel, mutateUserCache])
+
+  async function handleSecondButtonClick() {
+    await exit()
   }
+
+  useEffect(() => {
+    async function handlePageRefresh(event: BeforeUnloadEvent) {
+      event.preventDefault()
+      await exit()
+    }
+
+    window.addEventListener('beforeunload', handlePageRefresh)
+
+    return () => window.removeEventListener('beforeunload', handlePageRefresh)
+  }, [exit])
 
   useEffect(() => {
     playAudio('earning.wav')
