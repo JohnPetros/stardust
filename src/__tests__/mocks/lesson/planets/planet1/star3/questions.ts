@@ -24,14 +24,14 @@ export const questions: Questions = [
   },
   {
     title:
-      'Quais dos itens abaixo pode ser um nome válido de variável? (Você deve selecionar todos que estão corretos)',
+      'Quais dos itens abaixo pode ser um nome válido de variável? (Você deve selecionar todos os itens que estão corretos)',
     type: 'checkbox',
     options: ['_planeta', '4planeta', 'planeta_alvo', 'planeta alvo'],
     correctOptions: ['_planeta', 'planeta_alvo'],
     picture: 'panda-piscando.jpg',
   },
   {
-    title: 'Agora, Como devo atribuir um valor a uma variável corretamente?',
+    title: 'Agora, como devo atribuir um valor a uma variável corretamente?',
     type: 'selection',
     answer: 'nomeDaVariavel = valor',
     options: [

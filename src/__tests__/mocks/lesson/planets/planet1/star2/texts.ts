@@ -30,7 +30,7 @@ export const texts: Text[] = [
   {
     type: 'default',
     content:
-      'Por exemplo, para fazer com que o foguete imprima no painel: "explorar o espaço é legal", basta usar o comando chamado `escreva()` e colocar a mensagem entre seus parênteses.',
+      'Por exemplo, para fazer com que o foguete imprima no painel: "explorar o espaço é legal", basta usar o comando chamado *escreva()* e colocar a mensagem entre seus parênteses.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -46,13 +46,13 @@ export const texts: Text[] = [
   {
     type: 'default',
     content:
-      'Simples e fácil, mas caso você queria que o foguete receba e leia informações suas (o que chamamos de entrada de dados), você pode usar o comando `leia()`',
+      'Simples e fácil, mas caso você queria que o foguete receba e leia informações suas (o que chamamos de entrada de dados), você pode usar o comando *leia()*.',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
     type: 'default',
     content:
-      'Sempre que o comando `leia()` for executado, uma janela abrirá para inserir algum dado.',
+      'Sempre que o comando *leia()* for executado, uma janela abrirá para inserir algum dado.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   { type: 'code', content: 'leia()', isRunnable: true },
@@ -60,13 +60,14 @@ export const texts: Text[] = [
   {
     type: 'default',
     content:
-      'Exatamente! Primeiro, veja que se algum texto for colocado dentro do parênteses do `leia()`, esse texto servirá como mensagem dentro da janela.',
+      'Exatamente! Primeiro, veja que se algum texto for colocado dentro do parênteses do *leia()*, esse texto servirá como mensagem dentro da janela.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'code',
-    content: `var seuNome = leia("Alguma mensagem")`,
-    isRunnable: false,
+    content: `var mensagem = leia("Alguma mensagem")
+escreva(mensagem)`,
+    isRunnable: true,
   },
   { type: 'user', content: 'Mas, o que diachos é var?' },
   {
@@ -96,7 +97,7 @@ export const texts: Text[] = [
   {
     type: 'default',
     content:
-      'Vamos fazer o seguinte: Colocar seu nome em uma variável usando `leia()` e depois exibí-lo usando `escreva()`.',
+      'Vamos fazer o seguinte: Colocar seu nome em uma variável usando *leia()* e depois exibí-lo usando *escreva()*.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -113,19 +114,19 @@ export const texts: Text[] = [
   {
     type: 'quote',
     content:
-      '1 - É preciso respeitar sempre o nome dos comandos definida pela linguagem. Por exemplo, caso você tivesse colocado `exiba` em vez de `escreva`, deixado de usar os parênteses ou as aspas para escrever as mensagem dentro dos parênteses, o código daria erro.',
+      '1 - É preciso respeitar sempre o nome dos comandos definida pela linguagem. Por exemplo, caso você tivesse colocado *exiba* em vez de *escreva*, deixado de usar os parênteses ou as aspas para escrever as mensagem dentro dos parênteses, o código daria erro.',
     picture: 'panda-exercitando.jpg',
   },
   {
     type: 'quote',
     content:
-      '2 - Você deve entender o objetivo, quando e porquê usar cada comando. Por exemplo, para exibir dados que serão inseridos no programa, eu preciso usar primeiro o comando `leia()` porque ele serve para ler informações que vem de fora do programa. Depois devo usar o comando `escreva()` para exibir esses dados.',
+      '2 - Você deve entender o objetivo, quando e porquê usar cada comando. Por exemplo, para exibir dados que serão inseridos no programa, eu preciso usar primeiro o comando *leia()* porque ele serve para ler informações que vem de fora do programa. Depois devo usar o comando *escreva()* para exibir esses dados.',
     picture: 'panda-exercitando.jpg',
   },
   {
     type: 'quote',
     content:
-      '3 - É crucial compreender que o fluxo de um programa é sempre de cima para baixo, ou seja, não faria sentido eu tentar ler uma informação com `leia()` depois de tentar exibi-la na tela com `escreva()`.',
+      '3 - É crucial compreender que o fluxo de um programa é sempre de cima para baixo, ou seja, não faria sentido eu tentar ler uma informação com *leia()* depois de tentar exibi-la na tela com *escreva()*.',
     picture: 'panda-exercitando.jpg',
   },
   {
@@ -146,9 +147,16 @@ export const texts: Text[] = [
     picture: 'panda-sorrindo.jpg',
   },
   {
+    type: 'code',
+    content: `// Não estou sendo executado
+escreva("Estou sendo executado")
+    `,
+    isRunnable: true,
+  },
+  {
     type: 'default',
     content:
-      'Os comandos `leia()` e `escreva()` são considerados comandos de entrada e saída, respectivamente. Podemos dizer que usando o comando `leia()` você está fanzendo os dados "entrarem" no programa, enquanto com o `escreva()` você está fazendo dados "saírem" para serem exibidos.',
+      'Os comandos *leia()* e *escreva()* são considerados comandos de entrada e saída, respectivamente. Podemos dizer que usando o comando *leia()* você está fanzendo os dados "entrarem" no programa, enquanto com o *escreva()* você está fazendo dados "saírem" para serem exibidos.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {

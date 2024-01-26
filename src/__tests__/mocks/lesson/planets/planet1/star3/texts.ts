@@ -24,7 +24,7 @@ export const texts: Text[] = [
   },
   {
     content:
-      'Para resolver esse problema você terá que escrever um programa que exiba suas informações para ele, e para isso você terá que usar os comandos `leia()` e `escreva()` explicados anteriormente.',
+      'Para resolver esse problema você terá que escrever um programa que exiba suas informações para ele, e para isso você terá que usar os comandos *leia()* e *escreva()*, que foram explicados anteriormente.',
     type: 'default',
     picture: 'panda.jpg',
   },
@@ -40,13 +40,13 @@ export const texts: Text[] = [
   },
   {
     content:
-      'Variáveis são espaços reservados na memória de um programa para algum tipo de dado.',
+      'Variáveis são espaços reservados na memória de um programa para guardar algum tipo de dado.',
     type: 'default',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     content:
-      'Para usá-las de fato é necessário fazer o que chamamos de declarar uma variável, escrevendo `var` e depois definir um nome que você deseja que a variável tenha.',
+      'Para usá-las de fato é necessário fazer o que chamamos de declarar uma variável, escrevendo *var* e depois definindo um nome que você deseja que a variável tenha.',
     type: 'default',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
@@ -66,7 +66,7 @@ export const texts: Text[] = [
   },
   {
     content:
-      'Simples, basta colocar o sinal de igual (=) depois do nome da variável e, em seguida, colocar o valor que você deseja que a variável contenha:',
+      'Simples, basta colocar o sinal de igual *=* depois do nome da variável e, em seguida, colocar o valor que você deseja que a variável contenha:',
     picture: 'panda-fazendo-coracao.jpg',
     type: 'default',
   },
@@ -79,7 +79,7 @@ var idade = 90`,
   {
     type: 'default',
     content:
-      'No exemplo acima, estamos criando duas variáveis, uma chamada "nome" que armazenará o valor "Kauê Cabess" e outra chamada "idade" que armazenará o valor 90.',
+      'No exemplo acima, estamos criando duas variáveis, uma chamada *nome* que armazenará o valor *Kauê Cabess* e outra chamada *idade* que armazenará o valor *90*.',
     picture: 'panda-oferecendo-bambu.jpg',
   },
   {
@@ -135,7 +135,7 @@ escreva("e sua idade é ", idade)
   },
   {
     content:
-      '1 - O nome da variável deve iniciar com uma letra ou sublinhado `(_)`.',
+      '1 - O nome da variável deve iniciar com uma letra ou sublinhado *(_)*.',
     type: 'quote',
     picture: 'panda-de-oculos.jpg',
   },
@@ -182,7 +182,7 @@ var var // ❌`,
   },
   {
     content:
-      '4 - O nome da variável deve ser descritivo e fácil de entender, também, ser relacionado ao valor que está sendo armazenado nela.',
+      '4 - O nome da variável deve ser descritivo e fácil de entender, e ser relacionado ao valor que está sendo armazenado nela.',
     type: 'quote',
     picture: 'panda-de-oculos.jpg',
   },
@@ -194,11 +194,11 @@ var comida = 999 // ❌
 
 var cor = "azul" // ✅`,
     type: 'code',
-    isRunnable: true,
+    isRunnable: false,
   },
   {
     content:
-      'A atribuição de variáveis é uma parte fundamental da programação, pois permite armazenar valores e acessá-los ao longo do programa. Ao seguir essas regras corretamente, você poderá atribuir valores a suas variáveis sem problemas em programas futuros.',
+      'A atribuição de variáveis é uma parte fundamental da programação, pois ela permite armazenar valores e acessá-los ao longo do programa. Ao seguir essas regras corretamente, você poderá atribuir valores a suas variáveis sem problemas em programas futuros.',
     type: 'alert',
     picture: 'panda-sorrindo.jpg',
   },
