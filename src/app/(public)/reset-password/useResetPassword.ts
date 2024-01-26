@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react'
 import { deleteCookie } from '@/app/server/actions/deleteCookie'
 import { getCookie } from '@/app/server/actions/getCookie'
 import { useToast } from '@/contexts/ToastContext'
-import { emailSchema } from '@/libs/zod'
 import { useApi } from '@/services/api'
+import { useValidation } from '@/services/validation'
 import { COOKIES } from '@/utils/constants'
 
 export function useResetPassword() {
@@ -14,8 +14,10 @@ export function useResetPassword() {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [shouldResetPassword, setShouldResetPassword] = useState(false)
+
   const toast = useToast()
   const api = useApi()
+  const validation = useValidation()
 
   function handleResetPasswordDialogClose() {}
 
@@ -27,9 +29,9 @@ export function useResetPassword() {
   async function handleSubmit() {
     try {
       setIsLoading(true)
-      const emailValidation = emailSchema.safeParse(email)
+      const emailValidation = validation.validateEmail(email)
 
-      if (emailValidation.success) {
+      if (emailValidation.isValid) {
         try {
           const hasUser = await api.getUserEmail(email)
 
@@ -44,8 +46,7 @@ export function useResetPassword() {
           console.error(error)
         }
       } else {
-        console.log(emailValidation.error.errors)
-        setError('e-mail inválido')
+        setError(emailValidation.errors[0])
       }
     } catch (error) {
       console.error(error)

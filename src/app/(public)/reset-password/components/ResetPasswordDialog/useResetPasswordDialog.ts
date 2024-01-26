@@ -2,22 +2,24 @@
 
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 
 import { AlertRef } from '@/app/components/Alert'
 import { useToast } from '@/contexts/ToastContext'
-import { ResetPasswordFormFields, resetPasswordFormSchema } from '@/libs/zod'
 import { useApi } from '@/services/api'
+import { useValidation } from '@/services/validation'
+import { ResetPasswordForm } from '@/services/validation/types/ResetPasswordForm'
 import { ROUTES } from '@/utils/constants'
 
 export function useResetPasswordDialog(alertRef: AlertRef | null) {
+  const { resolveResetPasswordForm } = useValidation()
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ResetPasswordFormFields>({
-    resolver: zodResolver(resetPasswordFormSchema),
+  } = useForm<ResetPasswordForm>({
+    resolver: resolveResetPasswordForm(),
   })
   const [isLoading, setIsLoading] = useState(false)
   const toast = useToast()
@@ -28,7 +30,7 @@ export function useResetPasswordDialog(alertRef: AlertRef | null) {
     router.push(ROUTES.public.signIn)
   }
 
-  async function handleFormSubmit({ password }: ResetPasswordFormFields) {
+  async function handleFormSubmit({ password }: ResetPasswordForm) {
     try {
       setIsLoading(true)
 
