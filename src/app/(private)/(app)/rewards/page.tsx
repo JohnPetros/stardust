@@ -15,6 +15,8 @@ const dateProvider = DateProvider()
 export default async function RewardsPage() {
   const payload = await getCookie(COOKIES.rewardsPayload)
 
+  console.log({ payload })
+
   const supabase = createServerClient()
   const authController = AuthController(supabase)
   const userId = await authController.getUserId()

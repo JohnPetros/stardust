@@ -4,10 +4,10 @@ import { Achievements } from '../components/Achievements'
 import { ChallengesChart } from '../components/ChallengesChart'
 import { Crafts } from '../components/Crafts'
 import { Statistics } from '../components/Statistics'
-import { StreakBoard } from '../components/StreakBoard'
 import { User } from '../components/User'
 
 import { User as UserData } from '@/@types/user'
+import { StreakBoard } from '@/app/components/StreakBoard'
 import { createServerClient } from '@/services/api/supabase/clients/serverClient'
 import { UsersController } from '@/services/api/supabase/controllers/usersController'
 

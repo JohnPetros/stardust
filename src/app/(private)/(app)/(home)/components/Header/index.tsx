@@ -6,8 +6,8 @@ import Lottie from 'lottie-react'
 import Image from 'next/image'
 
 import StreakAnimation from '../../../../../../../public/animations/streak.json'
-import { CounterBadge } from '../CounterBadge'
 import { UserAvatar } from '../../../../../components/UserAvatar'
+import { CounterBadge } from '../CounterBadge'
 
 import { useAchivementsContext } from '@/contexts/AchievementsContext'
 import { useAuth } from '@/contexts/AuthContext'

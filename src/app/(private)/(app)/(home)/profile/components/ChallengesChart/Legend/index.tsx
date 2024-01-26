@@ -1,6 +1,8 @@
+'use client'
+
 import { twMerge } from 'tailwind-merge'
 
-interface LabelProps {
+type LabelProps = {
   label: string
   value: number
   total: number

@@ -1,4 +1,6 @@
-import { useMemo, useState } from 'react'
+'use client'
+
+import { useState } from 'react'
 
 export function useTooltip() {
   const [isVisible, setIsVisible] = useState(false)
@@ -11,12 +13,9 @@ export function useTooltip() {
     setIsVisible(false)
   }
 
-  return useMemo(
-    () => ({
-      isVisible,
-      show,
-      hide,
-    }),
-    [isVisible]
-  )
+  return {
+    isVisible,
+    show,
+    hide,
+  }
 }

@@ -1,17 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import dynamic from 'next/dynamic'
-
-import { Legend } from './Legend'
 
 import { Difficulty } from '@/@types/challenge'
 import { useChallengesSummary } from '@/hooks/useChallengesSummary'
 import { getChallengesChatOptions } from '@/utils/helpers'
-
-const Chart = dynamic(() => import('react-apexcharts'), {
-  ssr: false,
-})
 
 type TotalChallengesByDifficulty = {
   easy: number
@@ -19,11 +12,7 @@ type TotalChallengesByDifficulty = {
   hard: number
 } & Record<Difficulty, number>
 
-interface ChallengesChartProps {
-  userId: string
-}
-
-export function ChallengesChart({ userId }: ChallengesChartProps) {
+export function useChallengesChart(userId: string) {
   const [totalChallengesByDifficulty, setTotalChallengesByDifficulty] =
     useState<TotalChallengesByDifficulty | null>(null)
 
@@ -90,37 +79,10 @@ export function ChallengesChart({ userId }: ChallengesChartProps) {
     countTotalChallengesByDifficulty()
   }, [challenges])
 
-  return (
-    <div className="flex">
-      <Chart
-        type="radialBar"
-        width={280}
-        height={280}
-        series={series}
-        options={options}
-      />
-      {totalChallengesByDifficulty && (
-        <dl className="-ml-20 flex flex-col gap-3">
-          <Legend
-            label="Fácil"
-            value={getCompletedChallengesCountByDifficulty('easy')}
-            total={totalChallengesByDifficulty.easy}
-            color="bg-green-500"
-          />
-          <Legend
-            label="Médio"
-            value={getCompletedChallengesCountByDifficulty('medium')}
-            total={totalChallengesByDifficulty.medium}
-            color="bg-yellow-400"
-          />
-          <Legend
-            label="Difícil"
-            value={getCompletedChallengesCountByDifficulty('hard')}
-            total={totalChallengesByDifficulty.hard}
-            color="bg-red-700"
-          />
-        </dl>
-      )}
-    </div>
-  )
+  return {
+    series,
+    options,
+    totalChallengesByDifficulty,
+    getCompletedChallengesCountByDifficulty,
+  }
 }

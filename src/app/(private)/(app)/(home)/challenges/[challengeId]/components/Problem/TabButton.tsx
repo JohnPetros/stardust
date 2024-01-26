@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge'
 
 import type { Tab } from '.'
 
-import { Tooltip } from '@/app/components/@Tooltip'
+import { Tooltip } from '@/app/components/Tooltip'
 
 interface TabButtonProps {
   value: Tab

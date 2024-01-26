@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import Image from 'next/image'
-import { twMerge } from 'tailwind-merge'
+import { ClassNameValue, twMerge } from 'tailwind-merge'
 import { tv } from 'tailwind-variants'
 
 import { useVerificationButton } from './useVerificationButton'
@@ -35,6 +35,7 @@ export type VerificationButtonProps = {
   isAnswered: boolean
   isAnswerVerified: boolean
   isAnswerCorrect: boolean
+  className?: ClassNameValue
 }
 
 export function VerificationButton({
@@ -42,6 +43,7 @@ export function VerificationButton({
   isAnswerCorrect,
   isAnswerVerified,
   isAnswered,
+  className,
 }: VerificationButtonProps) {
   const { buttonRef, buttonTitle, buttonHasFocus, handleButtonClick } =
     useVerificationButton({
@@ -54,10 +56,11 @@ export function VerificationButton({
   return (
     <div
       className={twMerge(
-        'sticky bottom-0 top-0 mt-auto flex w-full flex-col items-center justify-center gap-2 border-t px-6 py-3 ',
+        'fixed bottom-0 mt-auto flex w-full flex-col items-center justify-center gap-2 border-t px-6 py-3 ',
         isAnswerVerified && !isAnswerCorrect
           ? 'border-red-700 bg-green-900'
-          : 'border-green-500 bg-green-900'
+          : 'border-green-500 bg-green-900',
+        className
       )}
     >
       <div>
