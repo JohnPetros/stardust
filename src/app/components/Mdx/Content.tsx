@@ -6,7 +6,7 @@ import { TypeWriter } from '../TypeWriter'
 import { formatCode, formatText } from '@/utils/helpers'
 
 const contentStyles = tv({
-  base: 'font-medium tracking-wider text-gray-100 text-sm w-full p-3 rounded-md',
+  base: 'font-medium tracking-wider text-gray-100 text-sm w-full p-3 rounded-md not-prose leading-6 mx-auto',
   variants: {
     type: {
       default: 'bg-purple-700',
@@ -28,24 +28,29 @@ export function Content({
   children,
   hasAnimation,
 }: ContentProps & VariantProps<typeof contentStyles>) {
+  const content = Array.isArray(children)
+    ? children
+        .map((child) =>
+          typeof child !== 'string'
+            ? `<span class="strong">${child.props.children}</span>`
+            : child
+        )
+        .join(' ')
+    : children
+
   return (
     <div className={contentStyles({ type })}>
-      <p className="not-prose leading-6">
-        {typeof children === 'string' ? (
-          <>
-            {hasAnimation ? (
-              <TypeWriter
-                text={children.replace(/&ast;/g, '*')}
-                isEnable={hasAnimation}
-              />
-            ) : (
-              <span>{children.replace(/&ast;/g, '*')}</span>
-            )}
-          </>
-        ) : (
-          children
-        )}
-      </p>
+      {typeof content === 'string' ? (
+        <>
+          {hasAnimation ? (
+            <TypeWriter text={content} isEnable={hasAnimation} />
+          ) : (
+            <span>{children}</span>
+          )}
+        </>
+      ) : (
+        content
+      )}
     </div>
   )
 }

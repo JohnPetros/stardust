@@ -1,4 +1,6 @@
 import { Text } from '@/@types/text'
+import { REGEX } from '@/utils/constants'
+import { getComponentContent } from '@/utils/helpers'
 
 export function useMdx() {
   function getProps(text: Text) {
@@ -37,7 +39,24 @@ export function useMdx() {
     return texts.map(getMdxComponent)
   }
 
+  function formatCodeComponentsContent(initialMdx: string) {
+    let mdx = initialMdx
+
+    const codeComponents = mdx.match(REGEX.mdxCodeComponent)
+
+    if (!codeComponents) return mdx
+
+    codeComponents.forEach((codeComponent) => {
+      const codeComponentContent = getComponentContent(codeComponent)
+      const newContent = `\`\`\`\n${codeComponentContent}\n\`\`\``
+      mdx = mdx.replace(codeComponentContent, newContent)
+    })
+
+    return mdx
+  }
+
   return {
     parseTexts,
+    formatCodeComponentsContent,
   }
 }

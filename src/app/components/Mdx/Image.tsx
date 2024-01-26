@@ -29,7 +29,6 @@ export function Image({ picture, hasAnimation = true, children }: ImageProps) {
           alt=""
         />
         <div>
-          <span>{image}</span>
           <Content hasAnimation={hasAnimation}>{children}</Content>
         </div>
       </div>

@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import Markdown from 'markdown-to-jsx'
 
 import { Alert } from './Alert'
@@ -12,25 +11,24 @@ import { Strong } from './Strong'
 import { Text } from './Text'
 import { User } from './User'
 
+import { useMdx } from '@/hooks/useMdx'
+
 type MdxProps = {
   children: string
 }
 
 export function Mdx({ children }: MdxProps) {
+  const { formatCodeComponentsContent } = useMdx()
+
+  const mdx = formatCodeComponentsContent(children)
+
+  console.log(mdx)
+
   return (
-    <div className="prose prose-invert">
+    <div className="prose prose-invert mx-auto">
       <Markdown
         options={{
           overrides: {
-            // @ts-ignore
-            createElement(type, props, children) {
-              console.log({ type })
-              return (
-                <div className="bg-red-700">
-                  {React.createElement(type, props, children)}
-                </div>
-              )
-            },
             Text: {
               component: Text,
             },
@@ -67,13 +65,10 @@ export function Mdx({ children }: MdxProps) {
             a: {
               component: Link,
             },
-            // span: {
-            //   component: ({ children }) => 'spangjgjgjg',
-            // },
           },
         }}
       >
-        {children}
+        {mdx}
       </Markdown>
     </div>
   )
