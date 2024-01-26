@@ -25,7 +25,6 @@ export const StarsController = (supabase: Supabase): IStarsController => {
         .from('stars')
         .select('*')
         .eq('id', starId)
-        .order('order', { foreignTable: 'questions', ascending: true })
         .single<Star>()
 
       if (error) {
