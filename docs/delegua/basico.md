@@ -6,31 +6,67 @@
   Variáveis são as primeiras estruturas de dados que todo programador aprende. São caracterizadas por ter um nome e armazenar um valor em memória.
 </Text>
 
-As variáveis são declaradas escrevendo a palavra-chave **var**.
+As variáveis são declaradas escrevendo a palavra-chave **var**, seguida pelo nome e valor.
 
 <code>
-  // Aqui declaro uma variável chamada "variável", um texto, cujo valor é "1".
-  var valor = "1"
+var valor = "1"
 </code>
 
 Além disso, variáveis podem ter seus valores alterados a qualquer momento do código.
 
 <Code>
-  var a = "1"
-  a = "2"
-  escreva(a) // escreverá 2 como resultado.
+var numero = "1"
+numero = "2"
+escreva(numero) // Resultado: "2".
 </Code>
+
+#### Regras de nomenclatura de variáveis
+
+<Text>Ao nomear variáveis é preciso seguir algumas regras:</Text>
+
+<Quote>*Comece com uma letra, sublinhado ou sifrão*: o primeiro caractere do nome deve ser uma letra, sublinhado (_) ou sifrão ($). Outros caracteres especiais não devem ser usados, assim como palavras já utilizadas internamente pela linguagem. Além disso, espaços não são permitidos.</Quote>
+
+<Code>
+var 2valor ❌
+var meu nome ❌
+var escreva ❌
+
+var quantidade ✅
+var $dinheiro ✅
+var _valor ✅
+var maioresQue10 ✅
+</Code>
+
+<Quote>*Prefira o estilo camelo*: É mais comum usar estilo camelo para nomes de variáveis, onde a primeira palavra começa com uma letra minúscula e a primeira letra de cada palavra subsequente é maiúscula (parecido com as costas de um camelo 🐫)</Quote>
+
+<code>
+var meuNome ✅
+var usuariosComIdadeMaiorQue18 ✅
+</code>
+
+<Quote>*Utilize nomes qua fazem sentido*: Nomeie suas variáveis de acordo com o valor que elas armazenam.</Quote>
+
+<code>
+var nome = 'Ítalo Brandão' ✅
+var anoDeNascimento = 2004 ✅
+var temSexoMasculino = verdadeiro
+
+var fruta = 'arroz' ❌
+var cidade = 7895 ❌
+var profissao = falso ❌
+</code>
+
 
 ## Entrada e saída
 
 Existem duas funções nativas para entrada e saída de dados:
 
 <Quote>
-  **escreva()**: usado para escrever uma variável ou um valor na saída.
+  *escreva()*: usado para escrever uma variável ou um valor na saída.
 </Quote>
 
 <Quote>
-  **leia()**: usado para escrever uma variável ou um valor na saída.
+  *leia()*: usado para escrever uma variável ou um valor na saída.
 </Quote>
 
 
@@ -42,10 +78,10 @@ Existem duas funções nativas para entrada e saída de dados:
 <Code>
   escreva(1) // Escreverá 1
   
-  var a = 'Texto'
-  escreva(a) // Escreverá 'Texto'
+  var valor = 'Texto'
+  escreva(valor) // Escreverá 'Texto'
 
-  escreva(a, 1, 2, 3) // Escreverá 'Texto' 1 2 3
+  escreva(valor, 1, 2, 3) // Escreverá 'Texto' 1 2 3
 </Code>
 
 ### leia()

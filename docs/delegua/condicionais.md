@@ -6,7 +6,7 @@
 
 ### Se
 
-<Text>Permite que um bloco de código seja executado se uma determinada condição for verdadeira.</Text>
+<Text>Permite que um bloco de código (delimitado entre chaves *{}*) seja executado se uma determinada condição for verdadeira.</Text>
 
 <Code>
   se (verdadeiro) {
