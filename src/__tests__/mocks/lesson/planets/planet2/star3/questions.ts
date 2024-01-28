@@ -1,4 +1,19 @@
-export const questions = [
+import {
+  CheckboxQuestion,
+  DragAndDropQuestion,
+  OpenQuestion,
+  SelectionQuestion,
+} from '@/@types/quiz'
+
+type Questions = [
+  CheckboxQuestion,
+  SelectionQuestion,
+  SelectionQuestion,
+  DragAndDropQuestion,
+  OpenQuestion,
+]
+
+export const questions: Questions = [
   {
     title: 'Quais os valores possíveis para uma variável do tipo lógico?',
     type: 'checkbox',
@@ -16,7 +31,7 @@ export const questions = [
   {
     title: 'Qual será o resultado do seguinte código?',
     code: `var resposta = verdadeiro
-var resposta = falso
+resposta = falso
 escreva("Vai chover asteroide hoje? " + resposta)   
 `,
     type: 'selection',
@@ -35,13 +50,13 @@ escreva("Vai chover asteroide hoje? " + resposta)
     picture: 'panda-andando-com-bambu.jpg',
     type: 'drag-and-drop',
     lines: [
-      { id: 1, texts: ['var resposta = ', 'dropZone'], identation: 0 },
+      { id: 1, texts: ['var resposta = ', 'dropZone'], indentation: 0 },
       {
         id: 2,
         texts: ['escreva("A terra é plana e não redonda: ")'],
-        identation: 0,
+        indentation: 0,
       },
-      { id: 3, texts: ['escreva(', 'dropZone', ')'], identation: 0 },
+      { id: 3, texts: ['escreva(', 'dropZone', ')'], indentation: 0 },
     ],
     dragItems: [
       { id: 1, label: 'verdadeiro' },

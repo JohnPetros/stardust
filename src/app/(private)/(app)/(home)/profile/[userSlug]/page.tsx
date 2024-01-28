@@ -11,7 +11,7 @@ import { StreakBoard } from '@/app/components/StreakBoard'
 import { createServerClient } from '@/services/api/supabase/clients/serverClient'
 import { UsersController } from '@/services/api/supabase/controllers/usersController'
 
-interface ProfileProps {
+type ProfileProps = {
   params: { userSlug: string }
 }
 

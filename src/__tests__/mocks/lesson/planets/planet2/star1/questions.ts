@@ -1,4 +1,19 @@
-export const questions = [
+import {
+  CheckboxQuestion,
+  DragAndDropQuestion,
+  OpenQuestion,
+  SelectionQuestion,
+} from '@/@types/quiz'
+
+type Questions = [
+  CheckboxQuestion,
+  DragAndDropQuestion,
+  OpenQuestion,
+  SelectionQuestion,
+  DragAndDropQuestion,
+]
+
+export const questions: Questions = [
   {
     title: 'Quais dos valores abaixo pode ser um tipo de texto válido?',
     type: 'checkbox',
@@ -65,9 +80,8 @@ escreva(nome + " tem a cor " + cor)`,
     answer: 'Planeta Datahon tem a cor vermelha',
     picture: 'panda-sorrindo.jpg',
   },
-
   {
-    title: 'Faça a `interpolação` de textos da maneira apropriada.',
+    title: 'Faça a *interpolação* de textos da maneira apropriada.',
     picture: 'panda-sorrindo.jpg',
     type: 'drag-and-drop',
     lines: [

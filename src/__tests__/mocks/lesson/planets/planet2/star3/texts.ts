@@ -4,7 +4,7 @@ export const texts: Text[] = [
   {
     type: 'default',
     content:
-      'Como já aprendemos sobre o tipo `número`, vamos enviar uma mensagem que seja do tipo número.',
+      'Como já aprendemos sobre o tipo *número*, vamos agora enviar uma mensagem para o planeta Datahon que seja do tipo *número*.',
     picture: 'panda-olhando-computador.jpg',
   },
   {
@@ -37,7 +37,7 @@ export const texts: Text[] = [
     type: 'user',
   },
   {
-    content: 'A mensagem de resposta é do `tipo lógico`.',
+    content: 'A mensagem de resposta é do *tipo lógico*.',
     type: 'default',
     picture: 'panda-olhando-de-lado.jpg',
   },
@@ -48,13 +48,13 @@ export const texts: Text[] = [
   {
     title: 'Tipo lógico',
     content:
-      'Dados do tipo lógico nada mais são do que valores que armazenam uma única opção entre apenas duas possibilidades possíveis: `verdadeiro` ou `falso`.',
+      'Dados do tipo *lógico* nada mais são do que valores que correspondem uma única opção entre apenas duas possibilidades possíveis: *verdadeiro* ou *falso*.',
     type: 'default',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
     content:
-      'Para declarar um dado do tipo lógico, basta atribuir valor `verdadeiro` ou valor `falso` a uma variável.',
+      'Para declarar um dado do tipo *lógico*, basta atribuir valor *verdadeiro* ou valor *falso* a uma variável.',
     type: 'quote',
     picture: 'panda-segurando-bambu-de-pe.jpg',
     title: 'Declaração de dado do tipo lógico',
@@ -67,18 +67,18 @@ var inimigo = falso`,
   },
   {
     content:
-      'No exemplo acima, a primeira variável indica se a resposta foi enviada (verdadeiro) ou não foi enviada (falso). A segunda variável indica se quem enviou é amigo (verdadeiro) ou inimigo (falso):',
+      'No exemplo acima, a primeira variável indica se a resposta foi enviada *(verdadeiro)* ou não foi enviada *(falso)*. A segunda variável indica se quem enviou é amigo *(verdadeiro)* ou inimigo *(falso)*.',
     type: 'default',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
     content:
-      'Não confunda. Nesse caso, tanto `verdadeiro`, quanto `falso` não são escritos entre aspas porque eles não são dados do tipo texto, mas sim do tipo lógico.',
+      'Não confunda. Nesse caso, tanto *verdadeiro*, quanto *falso* não são escritos entre aspas porque eles não são dados do tipo *texto*, mas sim do tipo *lógico*.',
     picture: 'panda.jpg',
     type: 'alert',
   },
   {
-    content: 'Mas, então, o que eu faço com essa resposta enviada?',
+    content: 'Mas então, o que eu faço com essa resposta enviada?',
     type: 'user',
   },
   {
@@ -93,18 +93,18 @@ var inimigo = falso`,
     isRunnable: false,
   },
   {
-    content: 'Mas, o que raios é esse nulo?',
+    content: 'Mas o que raios é esse nulo?',
     type: 'user',
   },
   {
     content:
-      'Esqueci de dizer, mas existe um tipo de dado especial chamado `nulo` que basicamente quer dizer que a variável não tem nenhum valor.',
+      'Esqueci de dizer, mas existe um tipo de dado especial chamado *nulo* que basicamente quer dizer que a variável não tem nenhum valor.',
     type: 'default',
     picture: 'panda-rindo-deitado.jpg',
   },
   {
     content:
-      'Isso quer dizer também que `nulo` é atribuído automaticamente a uma variável quando ela é criada sem nunhum valor atribuído a ela.',
+      'Isso quer dizer, também, que *nulo* é atribuído automaticamente a uma variável quando ela é criada sem nunhum valor atribuído a ela.',
     type: 'default',
     picture: 'panda-piscando-sentado.jpg',
   },
@@ -116,12 +116,12 @@ escreva(espaco)
     isRunnable: true,
   },
   {
-    content: 'Há outros, além de `verdadeiro`, `falso`?',
+    content: 'Há outros, além de *verdadeiro*, *falso* e *nulo*?',
     type: 'user',
   },
   {
     content:
-      'Não! Um valor do tipo lógico só pode ser `verdadeiro` ou `falso`. Você verá mais para frente que o valor `nulo` pode ser considerado como valor `falso` também.',
+      'Não! Um valor do tipo lógico só pode ser *verdadeiro* ou *falso*. Você verá mais para frente que o valor *nulo* pode ser considerado como valor *falso* também.',
     type: 'default',
     picture: 'panda-piscando.jpg',
   },

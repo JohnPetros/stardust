@@ -2,12 +2,13 @@ export const texts = [
   {
     type: 'default',
     content:
-      'Muito bem, já que eles não entendem mensagem do `tipo texto`, vamos tentar com o `tipo número`.',
+      'Muito bem, já que eles não entendem mensagem do *tipo texto*, vamos tentar com o *tipo número*.',
     picture: 'panda-olhando-computador.jpg',
   },
   {
     type: 'default',
-    content: 'Dados do tipo número em um programa podem ser inteiros ou reais.',
+    content:
+      'Dados do tipo *número* em um programa podem ser inteiros ou decimais.',
     picture: 'panda.jpg',
   },
   {
@@ -24,19 +25,18 @@ export const texts = [
   },
   {
     type: 'default',
-    content:
-      'Podemos declarar uma variável de um tipo número inteiro dessa forma:',
+    content: 'Podemos declarar uma variável com valor inteiro dessa forma:',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
-    content: `var identificador: 2370`,
+    content: `var numero = 2370`,
     type: 'code',
     isRunnable: false,
   },
   {
     type: 'alert',
     content:
-      'Perceba que diferentemente do `tipo texto`, é necessário que o valor numérico não esteja entre aspas.',
+      'Perceba que diferentemente do *tipo texto*, é necessário que o valor numérico não esteja entre aspas.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
@@ -53,7 +53,7 @@ export const texts = [
     type: 'quote',
     title: 'Reais',
     content:
-      'Além dos inteiros, há os números reais - também conhecidos como números de ponto flutuante - que nada mais são do que números com parte decimal, veja:',
+      'Além dos inteiros, há os números decimais, que nada mais são do que números com parte decimal, veja:',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -64,7 +64,7 @@ export const texts = [
   {
     type: 'alert',
     content:
-      'Cuidado: devemos sempre escrever os números reais sempre com ponto e não com vírgula.',
+      'Cuidado: devemos sempre escrever os números decimais sempre com ponto e não com vírgula.',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
@@ -77,7 +77,7 @@ var numero = 8.5 // Agora sim ✅`,
     type: 'quote',
     title: 'Juntando Números e Textos',
     content:
-      'Algo interessante é que ao tentar somar dois números, sendo um de tipo número e outro de tipo texto, acontece algo peculiar: o tipo número se converte para tipo texto, formando, assim, outro dado do tipo texto.',
+      'Algo interessante é que ao tentar somar dois números, sendo um de tipo *número* e outro de tipo *texto*, acontece algo peculiar: o tipo *número* se converte para tipo *texto*, formando, assim, outro dado do tipo *texto*.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -86,24 +86,24 @@ var numero = 8.5 // Agora sim ✅`,
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
-    content: `var RG = "2370" + 30
-escreva("o RG do meu foguete é " + RG)
+    content: `var rg = "2370" + 30
+escreva("o rg do meu foguete é " + rg)
 
-// Resultado: o RG do meu foguete é 237030`,
+// Resultado: o rg do meu foguete é 237030`,
     type: 'code',
     isRunnable: true,
   },
   {
     type: 'default',
     content:
-      'Perceba que deu `237030` em vez de `2400`, justamente porque o número `30` foi convertido para tipo texto e depois foi concatenado com `"2370"`, formando o `"237030"`.',
+      'Perceba que deu *237030* em vez de *2400*, justamente porque o número *30* foi convertido para tipo *texto* e depois foi concatenado com *"2370"*, formando o *"237030"*.',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
     type: 'quote',
     title: 'Conversão de números',
     content:
-      'Também é possível converter um número inteiro para real, basta que o resultado de uma operação com um inteiro (uma divisão, por exemplo) resulte em um número real.',
+      'Também é possível converter um número inteiro para decimal, basta que o resultado de uma operação com um inteiro (uma divisão, por exemplo) resulte em um número decimal.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -129,13 +129,13 @@ escreva("Novo número inteiro: ", numero)
   },
   {
     type: 'alert',
-    content: 'Ok, porém podemos falar sobre operações aritméticas mais tarde.',
+    content: 'Ok, porém, podemos falar sobre operações aritméticas mais tarde.',
     picture: 'panda-dando-risadinha.jpg',
   },
   {
     type: 'quote',
     content:
-      'Por enquanto, vamos testar o que você aprendeu sobre o tipo número!',
+      'Por enquanto, vamos testar o que você aprendeu sobre o tipo *número*!',
     picture: 'panda-deslumbrado.jpg',
   },
 ]
