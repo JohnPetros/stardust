@@ -9,7 +9,7 @@ import { CodeEditorRef } from '@/app/components/CodeEditor'
 import { useToast } from '@/contexts/ToastContext'
 import { execute } from '@/libs/delegua'
 import { REGEX } from '@/utils/constants/regex'
-import { checkNumeric, playAudio } from '@/utils/helpers'
+import { checkNumeric, countCharacters, playAudio } from '@/utils/helpers'
 
 export function useCodeEditorPlayground(code: string) {
   const [output, setOutput] = useState<string[]>([])
@@ -24,7 +24,7 @@ export function useCodeEditorPlayground(code: string) {
   const promptRef = useRef<PromptRef>(null)
 
   function getPrintType(print: string) {
-    return print.replace(REGEX.print, 'escreva(tipo de $1)')
+    return print.replace(REGEX.insidePrint, 'escreva(tipo de $1)')
   }
 
   function resetToOriginalUserCode() {
@@ -86,7 +86,13 @@ export function useCodeEditorPlayground(code: string) {
   }
 
   function handleOutput(output: string) {
-    setOutput((currentOutput) => [...currentOutput, output])
+    setOutput((currentOutput) => {
+      if (output === 'vetor' && currentOutput.at(-1) === 'texto') {
+        return [...currentOutput, 'lista']
+      }
+
+      return [...currentOutput, output]
+    })
 
     if (!output) setOutput(['texto', 'Sem resultado'])
   }
@@ -95,13 +101,34 @@ export function useCodeEditorPlayground(code: string) {
     userCode.current = value
   }
 
+  function checkParenthesesMatch(print: string) {
+    const openParentheses = '('
+    const closeParentheses = ')'
+
+    const openParenthesesCount = countCharacters(openParentheses, print)
+    const closeParenthesesCount = countCharacters(closeParentheses, print)
+
+    if (openParenthesesCount < closeParenthesesCount) {
+      const difference = closeParenthesesCount - openParenthesesCount
+      return print + closeParentheses.repeat(difference)
+    } else if (openParenthesesCount > closeParenthesesCount) {
+      const difference = openParenthesesCount - closeParenthesesCount
+      return print + closeParentheses.repeat(difference)
+    }
+
+    return print
+  }
+
   const runUserCode = useCallback(async () => {
     function addPrintType(code: string) {
       const regex = new RegExp(REGEX.print, 'g')
+
       if (!regex.test(code)) return code
 
       const newCode = code.replace(regex, (print) => {
-        return getPrintType(print) + print
+        const checkedPrint = checkParenthesesMatch(print)
+        console.log(checkedPrint)
+        return getPrintType(checkedPrint) + print
       })
 
       return newCode
@@ -125,6 +152,8 @@ export function useCodeEditorPlayground(code: string) {
     setOutput([])
     promptRef.current?.close()
     const code = addPrintType(userCode.current)
+
+    console.log({ code })
 
     try {
       const { erros } = await execute(code, handleOutput)
