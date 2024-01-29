@@ -39,9 +39,11 @@ export const AchievementsController = (
         .from('users_rescuable_achievements')
         .select('achievement_id')
         .eq('user_id', userId)
+
       if (error) {
         throw new Error(error.message)
       }
+
       return data.map((data) => data.achievement_id)
     },
 

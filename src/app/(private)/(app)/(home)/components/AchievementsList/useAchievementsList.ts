@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from 'react'
 
-import { Achievement } from '../Achievement'
-
 type Sorter = 'Ordem padrão' | 'Desbloqueadas' | 'Bloqueadas'
 
 import type { Achievement as AchievementItem } from '@/@types/achievement'
@@ -13,7 +11,7 @@ import { filterItemBySearch } from '@/utils/helpers'
 
 export function useAchievementsList() {
   const { achievements: data } = useAchivementsContext()
-  const [isLoading, setIsloading] = useState(!!data)
+  const [isLoading, setIsloading] = useState(false)
   const [achievements, setAchievements] = useState<AchievementItem[]>([])
   const [sorter, setSorter] = useState<Sorter>('Ordem padrão')
 
@@ -89,10 +87,11 @@ export function useAchievementsList() {
 
     if (data?.length && isLoading) {
       timer = setTimeout(() => {
-        setAchievements(data)
         setIsloading(false)
-      }, 1000)
+      }, 5000)
     }
+
+    if (data?.length) setAchievements(data)
 
     return () => clearTimeout(timer)
   }, [data, isLoading])

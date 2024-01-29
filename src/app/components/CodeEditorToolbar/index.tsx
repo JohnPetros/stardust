@@ -50,12 +50,6 @@ export function CodeEditorToolbar({ onResetCode }: ToolBarProps) {
         </Toolbar.Button>
       </Alert>
 
-      <Toolbar.Button className={toolbarStyles}>
-        <Tooltip content="Tela cheia" direction="bottom">
-          <ArrowsOutSimple className={iconStyles} weight="bold" />
-        </Tooltip>
-      </Toolbar.Button>
-
       <DocsDialog>
         <Toolbar.Button className={toolbarStyles}>
           <Tooltip content="Documentação" direction="bottom">
