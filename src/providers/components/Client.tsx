@@ -8,7 +8,7 @@ import { ClientProvider } from '@/contexts/ClientContext'
 import { CodeEditorProvider } from '@/contexts/CodeEditorContext'
 import { ToastProvider } from '@/contexts/ToastContext'
 
-interface ClientProps {
+type ClientProps = {
   children: ReactNode
 }
 

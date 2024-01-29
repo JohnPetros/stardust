@@ -28,11 +28,11 @@ const sidenavAnimations: Variants = {
 const achievementsAnimations: Variants = {
   hidden: {
     width: 0,
-    // opacity: 0,
+    borderLeftWidth: 0,
   },
   visible: {
     width: 320,
-    // opacity: 1,
+    borderLeftWidth: 1,
     transition: {
       delay: 0.2,
       staggerChildren: 0.2,
@@ -50,7 +50,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
   const { user } = useAuth()
   const { isAchievementsListVisible, setIsAchievementsListVisible } =
     useSiderbarContext()
-  const { rescueableAchievementsAmount } = useAchivementsContext()
+  const { rescueableAchievementsCount } = useAchivementsContext()
 
   function handleAchievementsListButtonClick() {
     setIsAchievementsListVisible(!isAchievementsListVisible)
@@ -113,17 +113,15 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
         </div>
 
         <AnimatePresence>
-          {isAchievementsListVisible && (
-            <motion.div
-              variants={achievementsAnimations}
-              initial="hidden"
-              animate={isAchievementsListVisible ? 'visible' : ''}
-              exit="hidden"
-              className="custom-scrollbar absolute right-0 top-0 mt-16 h-full w-80 translate-x-[100%] overflow-hidden overflow-y-scroll border-l border-green-400 bg-gray-900 p-6"
-            >
-              <AchievementsList />
-            </motion.div>
-          )}
+          <motion.div
+            variants={achievementsAnimations}
+            initial="hidden"
+            animate={isAchievementsListVisible ? 'visible' : 'hidden'}
+            exit="hidden"
+            className="custom-scrollbar absolute right-0 top-0 mt-16 h-full translate-x-[100%] overflow-hidden overflow-y-scroll border-green-400 bg-gray-900"
+          >
+            <AchievementsList />
+          </motion.div>
         </AnimatePresence>
 
         <div className="mx-3 flex flex-col items-start gap-1 border-t border-green-700 px-3 py-3">
@@ -134,8 +132,8 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
             onClick={handleAchievementsListButtonClick}
             isActive={isAchievementsListVisible}
             counterBadge={
-              rescueableAchievementsAmount > 0 ? (
-                <CounterBadge count={rescueableAchievementsAmount} />
+              rescueableAchievementsCount > 0 ? (
+                <CounterBadge count={rescueableAchievementsCount} />
               ) : (
                 <></>
               )

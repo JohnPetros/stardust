@@ -5,7 +5,6 @@ import Lottie from 'lottie-react'
 
 import ApolloContratulating from '../../../../../../../public/animations/apollo-congratulating.json'
 import StarsChain from '../../../../../../../public/animations/stars-chain.json'
-import { StreakIcon } from '../../../(home)/components/StreakIcon'
 
 import { Metric } from './Metric'
 import { Streak } from './Streak'
@@ -14,6 +13,7 @@ import { useCongratulations } from './useCongratulations'
 import { WeekStatus } from '@/@types/weekStatus'
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
+import { StreakIcon } from '@/app/components/StreakIcon'
 
 const apolloAnimations: Variants = {
   hidden: {

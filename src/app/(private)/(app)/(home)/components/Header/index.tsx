@@ -28,7 +28,7 @@ const headerAnimations: Variants = {
 export function Header() {
   const { user } = useAuth()
   const { toggle, isOpen } = useSiderbarContext()
-  const { rescueableAchievementsAmount } = useAchivementsContext()
+  const { rescueableAchievementsCount } = useAchivementsContext()
 
   if (user?.id)
     return (
@@ -45,7 +45,7 @@ export function Header() {
             aria-controls="sidebar"
             className="relative"
           >
-            <CounterBadge count={rescueableAchievementsAmount} />
+            <CounterBadge count={rescueableAchievementsCount} />
             <List
               width={24}
               height={24}

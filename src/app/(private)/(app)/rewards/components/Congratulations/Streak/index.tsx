@@ -2,7 +2,7 @@
 
 import { useStreak } from './useStreak'
 
-import { StreakBoard } from '@/app/(private)/(app)/(home)/profile/components/StreakBoard'
+import { StreakBoard } from '@/app/components/StreakBoard'
 
 type StreakProps = {
   isVisible: boolean

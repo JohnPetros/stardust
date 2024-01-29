@@ -25,7 +25,7 @@ type AlertProps = {
   children?: ReactNode
   canPlaySong?: boolean
   canForceMount?: boolean
-  onOpen?: VoidFunction
+  onOpenChange?: (isOpen: boolean) => void
 }
 
 const AlertComponent = (
@@ -38,7 +38,7 @@ const AlertComponent = (
     children,
     canPlaySong = true,
     canForceMount = false,
-    onOpen,
+    onOpenChange,
   }: AlertProps,
   ref: ForwardedRef<AlertRef>
 ) => {
@@ -47,10 +47,10 @@ const AlertComponent = (
     isRendered,
     isOpen,
     containerRef,
-    setIsOpen,
+    handleOpenChange,
     open,
     close,
-  } = useAlert(type, canPlaySong, onOpen)
+  } = useAlert(type, canPlaySong, onOpenChange)
 
   useImperativeHandle(
     ref,
@@ -65,7 +65,7 @@ const AlertComponent = (
 
   return (
     <Hydration>
-      <AlertDialog.Root open={isOpen} onOpenChange={setIsOpen}>
+      <AlertDialog.Root open={isOpen} onOpenChange={handleOpenChange}>
         <AlertDialog.Portal
           container={isRendered ? containerRef.current : null}
         >

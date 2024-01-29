@@ -5,15 +5,15 @@ import Lottie from 'lottie-react'
 import Missing from '../../../../../../../public/animations/apollo-missing.json'
 import { Achievement } from '../../components/Achievement'
 
-import { useAchievement } from '@/hooks/useAchievement'
+import { useUserAchievements } from '@/hooks/useUserAchievements'
 
 interface AchievementsProps {
   userId: string
 }
 
 export function Achievements({ userId }: AchievementsProps) {
-  const { achievements } = useAchievement(userId)
-  const unlockedAchievements = achievements?.filter(
+  const { userAchievements } = useUserAchievements(userId)
+  const unlockedAchievements = userAchievements?.filter(
     (achievement) => achievement.isUnlocked
   )
 
