@@ -8,28 +8,90 @@ export const UsersController = (supabase: Supabase): IUsersController => {
   return {
     getUserById: async (userId: string) => {
       const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', userId)
+        .rpc('get_user_by_id', {
+          _user_id: userId,
+        })
         .single<User>()
 
       if (error) {
         throw new Error(error.message)
       }
-      return data
+
+      const user: User = {
+        id: data.id,
+        email: data.email,
+        name: data.name,
+        slug: data.slug,
+        level: data.level,
+        coins: data.coins,
+        xp: data.xp,
+        weekly_xp: data.weekly_xp,
+        avatar_id: data.avatar_id,
+        ranking_id: data.ranking_id,
+        rocket_id: data.rocket_id,
+        acquired_rockets_count: data.acquired_rockets_count,
+        completed_challenges_count: data.completed_challenges_count,
+        completed_planets_count: data.completed_planets_count,
+        unlocked_stars_count: data.unlocked_stars_count,
+        last_position: data.last_position,
+        study_time: data.study_time,
+        unlocked_achievements_count: data.unlocked_achievements_count,
+        did_update_ranking: data.did_update_ranking,
+        created_at: data.created_at,
+        did_break_streak: data.did_break_streak,
+        is_admin: data.is_admin,
+        did_complete_saturday: data.did_complete_saturday,
+        streak: data.streak,
+        week_status: data.week_status,
+        is_loser: data.is_loser,
+      }
+
+      console.log(user.acquired_rockets_count)
+
+      return user
     },
 
     getUserBySlug: async (userSlug: string) => {
       const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('slug', userSlug)
+        .rpc('get_user_by_slug', {
+          _user_slug: userSlug,
+        })
         .single<User>()
 
       if (error) {
         throw new Error(error.message)
       }
-      return data
+
+      const user: User = {
+        id: data.id,
+        email: data.email,
+        name: data.name,
+        slug: data.slug,
+        level: data.level,
+        coins: data.coins,
+        xp: data.xp,
+        weekly_xp: data.weekly_xp,
+        avatar_id: data.avatar_id,
+        ranking_id: data.ranking_id,
+        rocket_id: data.rocket_id,
+        acquired_rockets_count: data.acquired_rockets_count,
+        completed_challenges_count: data.completed_challenges_count,
+        completed_planets_count: data.completed_planets_count,
+        unlocked_stars_count: data.unlocked_stars_count,
+        last_position: data.last_position,
+        study_time: data.study_time,
+        unlocked_achievements_count: data.unlocked_achievements_count,
+        did_update_ranking: data.did_update_ranking,
+        created_at: data.created_at,
+        did_break_streak: data.did_break_streak,
+        is_admin: data.is_admin,
+        did_complete_saturday: data.did_complete_saturday,
+        streak: data.streak,
+        week_status: data.week_status,
+        is_loser: data.is_loser,
+      }
+
+      return user
     },
 
     getUserEmail: async (email: string) => {

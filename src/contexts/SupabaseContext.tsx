@@ -10,7 +10,7 @@ type SupabaseContextValue = {
   supabase: SupabaseClient<Database>
 }
 
-interface SupabaseProviderProps {
+type SupabaseProviderProps = {
   children: ReactNode
 }
 
