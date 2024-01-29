@@ -17,7 +17,7 @@ export interface Database {
           metric: string
           name: string
           position: number | null
-          required_amount: number | null
+          required_count: number | null
           reward: number
         }
         Insert: {
@@ -27,7 +27,7 @@ export interface Database {
           metric?: string
           name: string
           position?: number | null
-          required_amount?: number | null
+          required_count?: number | null
           reward?: number
         }
         Update: {
@@ -37,7 +37,7 @@ export interface Database {
           metric?: string
           name?: string
           position?: number | null
-          required_amount?: number | null
+          required_count?: number | null
           reward?: number
         }
         Relationships: []
@@ -86,7 +86,7 @@ export interface Database {
           difficulty: string | null
           function_name: string | null
           id: string
-          slug: string | null
+          slug: string
           star_id: string | null
           test_cases: Json | null
           texts: Json | null
@@ -100,7 +100,7 @@ export interface Database {
           difficulty?: string | null
           function_name?: string | null
           id?: string
-          slug?: string | null
+          slug: string
           star_id?: string | null
           test_cases?: Json | null
           texts?: Json | null
@@ -114,7 +114,7 @@ export interface Database {
           difficulty?: string | null
           function_name?: string | null
           id?: string
-          slug?: string | null
+          slug?: string
           star_id?: string | null
           test_cases?: Json | null
           texts?: Json | null
@@ -123,19 +123,19 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'challenges_dictionary_topic_id_fkey'
-            columns: ['dictionary_topic_id']
+            foreignKeyName: "challenges_dictionary_topic_id_fkey"
+            columns: ["dictionary_topic_id"]
             isOneToOne: false
-            referencedRelation: 'docs'
-            referencedColumns: ['id']
+            referencedRelation: "docs"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'challenges_star_id_fkey'
-            columns: ['star_id']
+            foreignKeyName: "challenges_star_id_fkey"
+            columns: ["star_id"]
             isOneToOne: false
-            referencedRelation: 'stars'
-            referencedColumns: ['id']
-          },
+            referencedRelation: "stars"
+            referencedColumns: ["id"]
+          }
         ]
       }
       challenges_categories: {
@@ -156,26 +156,26 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'challenges_categories_category_id_fkey'
-            columns: ['category_id']
+            foreignKeyName: "challenges_categories_category_id_fkey"
+            columns: ["category_id"]
             isOneToOne: false
-            referencedRelation: 'categories'
-            referencedColumns: ['id']
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'challenges_categories_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "challenges_categories_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges'
-            referencedColumns: ['id']
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'challenges_categories_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "challenges_categories_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_list'
-            referencedColumns: ['id']
-          },
+            referencedRelation: "challenges_list"
+            referencedColumns: ["id"]
+          }
         ]
       }
       codes: {
@@ -205,19 +205,19 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'codes_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "codes_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'codes_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "codes_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
-          },
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
+          }
         ]
       }
       comments: {
@@ -248,40 +248,40 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'comments_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "comments_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges'
-            referencedColumns: ['id']
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'comments_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "comments_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_list'
-            referencedColumns: ['id']
+            referencedRelation: "challenges_list"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'comments_parent_comment_id_fkey'
-            columns: ['parent_comment_id']
+            foreignKeyName: "comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
             isOneToOne: false
-            referencedRelation: 'comments'
-            referencedColumns: ['id']
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'comments_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'comments_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
-          },
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
+          }
         ]
       }
       docs: {
@@ -353,12 +353,12 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'questions_star_id_fkey'
-            columns: ['star_id']
+            foreignKeyName: "questions_star_id_fkey"
+            columns: ["star_id"]
             isOneToOne: false
-            referencedRelation: 'stars'
-            referencedColumns: ['id']
-          },
+            referencedRelation: "stars"
+            referencedColumns: ["id"]
+          }
         ]
       }
       rankings: {
@@ -442,12 +442,12 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'stars_planet_id_fkey'
-            columns: ['planet_id']
+            foreignKeyName: "stars_planet_id_fkey"
+            columns: ["planet_id"]
             isOneToOne: false
-            referencedRelation: 'planets'
-            referencedColumns: ['id']
-          },
+            referencedRelation: "planets"
+            referencedColumns: ["id"]
+          }
         ]
       }
       users: {
@@ -460,7 +460,6 @@ export interface Database {
           did_update_ranking: boolean
           email: string
           id: string
-          is_admin: boolean
           is_loser: boolean | null
           last_position: number | null
           level: number
@@ -483,7 +482,6 @@ export interface Database {
           did_update_ranking?: boolean
           email: string
           id: string
-          is_admin?: boolean
           is_loser?: boolean | null
           last_position?: number | null
           level?: number
@@ -506,7 +504,6 @@ export interface Database {
           did_update_ranking?: boolean
           email?: string
           id?: string
-          is_admin?: boolean
           is_loser?: boolean | null
           last_position?: number | null
           level?: number
@@ -522,26 +519,26 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_avatar_id_fkey'
-            columns: ['avatar_id']
+            foreignKeyName: "users_avatar_id_fkey"
+            columns: ["avatar_id"]
             isOneToOne: false
-            referencedRelation: 'avatars'
-            referencedColumns: ['id']
+            referencedRelation: "avatars"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_ranking_id_fkey'
-            columns: ['ranking_id']
+            foreignKeyName: "users_ranking_id_fkey"
+            columns: ["ranking_id"]
             isOneToOne: false
-            referencedRelation: 'rankings'
-            referencedColumns: ['id']
+            referencedRelation: "rankings"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_rocket_id_fkey'
-            columns: ['rocket_id']
+            foreignKeyName: "users_rocket_id_fkey"
+            columns: ["rocket_id"]
             isOneToOne: false
-            referencedRelation: 'rockets'
-            referencedColumns: ['id']
-          },
+            referencedRelation: "rockets"
+            referencedColumns: ["id"]
+          }
         ]
       }
       users_acquired_avatars: {
@@ -562,12 +559,12 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_acquired_avatars_avatar_id_fkey'
-            columns: ['avatar_id']
+            foreignKeyName: "users_acquired_avatars_avatar_id_fkey"
+            columns: ["avatar_id"]
             isOneToOne: false
-            referencedRelation: 'avatars'
-            referencedColumns: ['id']
-          },
+            referencedRelation: "avatars"
+            referencedColumns: ["id"]
+          }
         ]
       }
       users_acquired_rockets: {
@@ -588,12 +585,12 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_acquired_rockets_rocket_id_fkey'
-            columns: ['rocket_id']
+            foreignKeyName: "users_acquired_rockets_rocket_id_fkey"
+            columns: ["rocket_id"]
             isOneToOne: false
-            referencedRelation: 'rockets'
-            referencedColumns: ['id']
-          },
+            referencedRelation: "rockets"
+            referencedColumns: ["id"]
+          }
         ]
       }
       users_completed_challenges: {
@@ -614,33 +611,33 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_completed_challenges_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "users_completed_challenges_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges'
-            referencedColumns: ['id']
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_completed_challenges_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "users_completed_challenges_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_list'
-            referencedColumns: ['id']
+            referencedRelation: "challenges_list"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_completed_challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_completed_challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_completed_challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_completed_challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
-          },
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
+          }
         ]
       }
       users_rescuable_achievements: {
@@ -661,26 +658,26 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_rescuable_achievements_achievement_id_fkey'
-            columns: ['achievement_id']
+            foreignKeyName: "users_rescuable_achievements_achievement_id_fkey"
+            columns: ["achievement_id"]
             isOneToOne: false
-            referencedRelation: 'achievements'
-            referencedColumns: ['id']
+            referencedRelation: "achievements"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_rescuable_achievements_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_rescuable_achievements_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_rescuable_achievements_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_rescuable_achievements_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
-          },
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
+          }
         ]
       }
       users_unlocked_achievements: {
@@ -701,26 +698,26 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_unlocked_achievements_achievement_id_fkey'
-            columns: ['achievement_id']
+            foreignKeyName: "users_unlocked_achievements_achievement_id_fkey"
+            columns: ["achievement_id"]
             isOneToOne: false
-            referencedRelation: 'achievements'
-            referencedColumns: ['id']
+            referencedRelation: "achievements"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_unlocked_achievements_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_unlocked_achievements_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_unlocked_achievements_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_unlocked_achievements_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
-          },
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
+          }
         ]
       }
       users_unlocked_docs: {
@@ -741,26 +738,26 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_unlocked_docs_doc_id_fkey'
-            columns: ['doc_id']
+            foreignKeyName: "users_unlocked_docs_doc_id_fkey"
+            columns: ["doc_id"]
             isOneToOne: false
-            referencedRelation: 'docs'
-            referencedColumns: ['id']
+            referencedRelation: "docs"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_unlocked_docs_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_unlocked_docs_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_unlocked_docs_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_unlocked_docs_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
-          },
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
+          }
         ]
       }
       users_unlocked_stars: {
@@ -781,26 +778,26 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_unlocked_stars_star_id_fkey'
-            columns: ['star_id']
+            foreignKeyName: "users_unlocked_stars_star_id_fkey"
+            columns: ["star_id"]
             isOneToOne: false
-            referencedRelation: 'stars'
-            referencedColumns: ['id']
+            referencedRelation: "stars"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_unlocked_stars_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_unlocked_stars_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_unlocked_stars_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_unlocked_stars_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
-          },
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
+          }
         ]
       }
       users_upvoted_comments: {
@@ -821,26 +818,26 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_upvoted_comments_comment_id_fkey'
-            columns: ['comment_id']
+            foreignKeyName: "users_upvoted_comments_comment_id_fkey"
+            columns: ["comment_id"]
             isOneToOne: false
-            referencedRelation: 'comments'
-            referencedColumns: ['id']
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_upvoted_comments_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_upvoted_comments_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_upvoted_comments_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_upvoted_comments_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
-          },
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
+          }
         ]
       }
       users_voted_challenges: {
@@ -864,33 +861,33 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_voted_challenges_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "users_voted_challenges_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges'
-            referencedColumns: ['id']
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_voted_challenges_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "users_voted_challenges_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_list'
-            referencedColumns: ['id']
+            referencedRelation: "challenges_list"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_voted_challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_voted_challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_voted_challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_voted_challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
-          },
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
+          }
         ]
       }
       winners: {
@@ -923,33 +920,33 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'winners_avatar_id_fkey'
-            columns: ['avatar_id']
+            foreignKeyName: "winners_avatar_id_fkey"
+            columns: ["avatar_id"]
             isOneToOne: false
-            referencedRelation: 'avatars'
-            referencedColumns: ['id']
+            referencedRelation: "avatars"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'winners_ranking_id_fkey'
-            columns: ['ranking_id']
+            foreignKeyName: "winners_ranking_id_fkey"
+            columns: ["ranking_id"]
             isOneToOne: false
-            referencedRelation: 'rankings'
-            referencedColumns: ['id']
+            referencedRelation: "rankings"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'winners_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "winners_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'winners_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "winners_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
-          },
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
+          }
         ]
       }
     }
@@ -974,24 +971,24 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'challenges_dictionary_topic_id_fkey'
-            columns: ['topic_id']
+            foreignKeyName: "challenges_dictionary_topic_id_fkey"
+            columns: ["topic_id"]
             isOneToOne: false
-            referencedRelation: 'docs'
-            referencedColumns: ['id']
+            referencedRelation: "docs"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'challenges_star_id_fkey'
-            columns: ['star_id']
+            foreignKeyName: "challenges_star_id_fkey"
+            columns: ["star_id"]
             isOneToOne: false
-            referencedRelation: 'stars'
-            referencedColumns: ['id']
-          },
+            referencedRelation: "stars"
+            referencedColumns: ["id"]
+          }
         ]
       }
       users_view: {
         Row: {
-          aquired_rockets_count: number | null
+          acquired_rockets_count: number | null
           avatar_id: string | null
           coins: number | null
           completed_challenges_count: number | null
@@ -1002,7 +999,6 @@ export interface Database {
           did_update_ranking: boolean | null
           email: string | null
           id: string | null
-          is_admin: boolean | null
           is_loser: boolean | null
           last_position: number | null
           level: number | null
@@ -1020,33 +1016,33 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_avatar_id_fkey'
-            columns: ['avatar_id']
+            foreignKeyName: "users_avatar_id_fkey"
+            columns: ["avatar_id"]
             isOneToOne: false
-            referencedRelation: 'avatars'
-            referencedColumns: ['id']
+            referencedRelation: "avatars"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_ranking_id_fkey'
-            columns: ['ranking_id']
+            foreignKeyName: "users_ranking_id_fkey"
+            columns: ["ranking_id"]
             isOneToOne: false
-            referencedRelation: 'rankings'
-            referencedColumns: ['id']
+            referencedRelation: "rankings"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_rocket_id_fkey'
-            columns: ['rocket_id']
+            foreignKeyName: "users_rocket_id_fkey"
+            columns: ["rocket_id"]
             isOneToOne: false
-            referencedRelation: 'rockets'
-            referencedColumns: ['id']
-          },
+            referencedRelation: "rockets"
+            referencedColumns: ["id"]
+          }
         ]
       }
     }
     Functions: {
       count_comments_upvotes: {
         Args: {
-          '': unknown
+          "": unknown
         }
         Returns: number
       }
@@ -1122,7 +1118,7 @@ export interface Database {
           _user_id: string
         }
         Returns: {
-          aquired_rockets_count: number | null
+          acquired_rockets_count: number | null
           avatar_id: string | null
           coins: number | null
           completed_challenges_count: number | null
@@ -1133,7 +1129,6 @@ export interface Database {
           did_update_ranking: boolean | null
           email: string | null
           id: string | null
-          is_admin: boolean | null
           is_loser: boolean | null
           last_position: number | null
           level: number | null
@@ -1155,7 +1150,7 @@ export interface Database {
           _user_slug: string
         }
         Returns: {
-          aquired_rockets_count: number | null
+          acquired_rockets_count: number | null
           avatar_id: string | null
           coins: number | null
           completed_challenges_count: number | null
@@ -1166,7 +1161,6 @@ export interface Database {
           did_update_ranking: boolean | null
           email: string | null
           id: string | null
-          is_admin: boolean | null
           is_loser: boolean | null
           last_position: number | null
           level: number | null
@@ -1207,13 +1201,13 @@ export interface Database {
       }
       unaccent: {
         Args: {
-          '': string
+          "": string
         }
         Returns: string
       }
       unaccent_init: {
         Args: {
-          '': unknown
+          "": unknown
         }
         Returns: unknown
       }
@@ -1251,23 +1245,23 @@ export interface Database {
 
 export type Tables<
   PublicTableNameOrOptions extends
-    | keyof (Database['public']['Tables'] & Database['public']['Views'])
+    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions['schema']]['Tables'] &
-        Database[PublicTableNameOrOptions['schema']]['Views'])
-    : never = never,
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        Database[PublicTableNameOrOptions["schema"]]["Views"])
+    : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions['schema']]['Tables'] &
-      Database[PublicTableNameOrOptions['schema']]['Views'])[TableName] extends {
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (Database['public']['Tables'] &
-      Database['public']['Views'])
-  ? (Database['public']['Tables'] &
-      Database['public']['Views'])[PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
+      Database["public"]["Views"])
+  ? (Database["public"]["Tables"] &
+      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
       Row: infer R
     }
     ? R
@@ -1276,19 +1270,19 @@ export type Tables<
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
-    | keyof Database['public']['Tables']
+    | keyof Database["public"]["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
-    : never = never,
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof Database['public']['Tables']
-  ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
       Insert: infer I
     }
     ? I
@@ -1297,19 +1291,19 @@ export type TablesInsert<
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
-    | keyof Database['public']['Tables']
+    | keyof Database["public"]["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
-    : never = never,
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof Database['public']['Tables']
-  ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
       Update: infer U
     }
     ? U
@@ -1318,13 +1312,13 @@ export type TablesUpdate<
 
 export type Enums<
   PublicEnumNameOrOptions extends
-    | keyof Database['public']['Enums']
+    | keyof Database["public"]["Enums"]
     | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions['schema']]['Enums']
-    : never = never,
+    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+    : never = never
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
-  : PublicEnumNameOrOptions extends keyof Database['public']['Enums']
-  ? Database['public']['Enums'][PublicEnumNameOrOptions]
+  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
+  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
   : never

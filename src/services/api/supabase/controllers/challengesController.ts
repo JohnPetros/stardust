@@ -42,7 +42,7 @@ export const ChallengesController = (
         categories: data.categories,
         star_id: data.star_id,
         test_cases: data.test_cases,
-        dictionary_topic_id: data.dictionary_topic_id,
+        doc_id: data.doc_id,
         texts: data.texts,
         total_completitions: data.total_completitions[0].count,
         upvotes: data.votes.filter(({ vote }) => vote === 'upvote').length,
@@ -173,7 +173,9 @@ export const ChallengesController = (
     ) => {
       const { error } = await supabase
         .from('users_voted_challenges')
-        .insert([{ challenge_id: challengeId, user_id: userId, vote }])
+        .insert([
+          { challenge_id: challengeId, user_id: userId, vote: String(vote) },
+        ])
 
       if (error) {
         throw new Error(error.message)
@@ -187,7 +189,7 @@ export const ChallengesController = (
     ) => {
       const { error } = await supabase
         .from('users_voted_challenges')
-        .update({ vote })
+        .update({ vote: String(vote) })
         .eq('challenge_id', challengeId)
         .eq('user_id', userId)
 
@@ -206,7 +208,7 @@ export const ChallengesController = (
         .delete()
         .eq('challenge_id', challengeId)
         .eq('user_id', userId)
-        .eq('vote', vote)
+        .eq('vote', String(vote))
 
       if (error) {
         throw new Error(error.message)
