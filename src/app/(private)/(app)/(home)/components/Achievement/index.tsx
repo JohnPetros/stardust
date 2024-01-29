@@ -1,6 +1,5 @@
 'use client'
 
-import * as Progress from '@radix-ui/react-progress'
 import { motion, Variants } from 'framer-motion'
 import Image from 'next/image'
 
@@ -9,6 +8,7 @@ import { useAchievement } from './useAchievement'
 import type { Achievement as AchievementType } from '@/@types/achievement'
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
+import { ProgressBar } from '@/app/components/ProgressBar'
 
 const achievementAnimations: Variants = {
   hidden: {
@@ -52,6 +52,9 @@ export function Achievement({
     handleRescuButtonClick,
     handleRescuedAchievementsAlertClose,
   } = useAchievement(data)
+
+  console.log(data.name, status?.formatedCurrentProgress)
+  console.log(data.name, status?.barWidth)
 
   return (
     <motion.div
@@ -103,7 +106,9 @@ export function Achievement({
                 Entendido
               </Button>
             }
-            onClose={() => handleRescuedAchievementsAlertClose(data.id)}
+            onOpenChange={(isOpen: boolean) =>
+              !isOpen ? handleRescuedAchievementsAlertClose(data.id) : null
+            }
           >
             <motion.div
               variants={rescueButtonAnimations}
@@ -123,18 +128,10 @@ export function Achievement({
           <>
             <p className="text-xs text-gray-100">{data.description}</p>
             {!isUnlocked && (
-              <div className="flex w-full items-center gap-2">
-                <Progress.Root
-                  value={status?.barWidth}
-                  className="h-1 w-full bg-gray-400"
-                >
-                  <Progress.Indicator
-                    className="bg-green-400"
-                    style={{ width: `${status?.barWidth}%` }}
-                  />
-                </Progress.Root>
-                <span className="text-sm text-gray-100">
-                  {status?.formatedCurrentProgress}/{data.required_amount}
+              <div className="flex w-full items-center gap-2 text-sm text-gray-100">
+                <ProgressBar height={4} value={status?.barWidth ?? 0} />
+                <span>
+                  {status?.formatedCurrentProgress}/{data.required_count}
                 </span>
               </div>
             )}
