@@ -12,7 +12,7 @@
     "test:coverage": "test --coverage",
     "email:dev": "email dev --dir ./src/services/email/templates",
     "email:html": "email export --dir ./src/services/email/templates --outDir ./src/services/email/templates/html",
-    "gen-supabase-types": "supabase gen types typescript --linked > ./src/services/api/types/supabase.ts"
+    "gen-supabase-types": "supabase gen types typescript --project-id %PROJECT_ID% > ./src/services/api/supabase/types/database.ts"
   },
   "dependencies": {
     "@designliquido/delegua": "^0.24.8",
@@ -94,6 +94,7 @@
     "babel-jest": "^29.7.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-jest": "^29.6.3",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.3.1",
     "encoding": "^0.1.13",
     "eslint": "^8.51.0",
@@ -109,7 +110,7 @@
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.5",
     "slice-machine-ui": "^1.19.2",
-    "supabase": "^1.110.1",
+    "supabase": "^1.136.3",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",
     "typescript": "5.1.6"
