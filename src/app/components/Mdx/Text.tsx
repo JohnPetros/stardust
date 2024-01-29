@@ -18,13 +18,15 @@ export function Text({
   children,
   hasAnimation = false,
 }: TextProps) {
+  console.log({ title })
+
   return (
     <Animation hasAnimation={hasAnimation}>
       <div className="not-prose flex w-full flex-col">
         {title && (
-          <section id={slugify(title)} className="mb-4">
+          <div className="mb-4 h-max w-full">
             <Title>{title}</Title>
-          </section>
+          </div>
         )}
         <div className="flex w-full items-center">
           {picture && <Picture url={picture} />}
