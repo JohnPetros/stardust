@@ -7,31 +7,6 @@ export type Json =
   | Json[]
 
 export interface Database {
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          operationName?: string
-          query?: string
-          variables?: Json
-          extensions?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
       achievements: {
@@ -105,65 +80,60 @@ export interface Database {
       }
       challenges: {
         Row: {
-          code: string
-          slug: string
-          created_at: string
-          difficulty: string
-          downvotes: number
-          function_name: string
+          code: string | null
+          created_at: string | null
+          dictionary_topic_id: string | null
+          difficulty: string | null
+          function_name: string | null
           id: string
+          slug: string | null
+          star_id: string | null
+          test_cases: Json | null
+          texts: Json | null
+          title: string | null
           user_slug: string
-          star_id: string
-          test_cases: Json
-          texts: Json
-          title: string
-          topic_id: string
-          total_completitions: number
-          upvotes: number
         }
         Insert: {
-          author?: string | null
           code?: string | null
           created_at?: string | null
+          dictionary_topic_id?: string | null
           difficulty?: string | null
-          downvotes?: number | null
           function_name?: string | null
           id?: string
+          slug?: string | null
           star_id?: string | null
           test_cases?: Json | null
           texts?: Json | null
           title?: string | null
-          topic_id?: string | null
-          total_completitions?: number | null
-          upvotes?: number | null
+          user_slug?: string
         }
         Update: {
-          author?: string | null
           code?: string | null
           created_at?: string | null
+          dictionary_topic_id?: string | null
           difficulty?: string | null
-          downvotes?: number | null
           function_name?: string | null
           id?: string
+          slug?: string | null
           star_id?: string | null
           test_cases?: Json | null
           texts?: Json | null
           title?: string | null
-          topic_id?: string | null
-          total_completitions?: number | null
-          upvotes?: number | null
+          user_slug?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'challenges_star_id_fkey'
-            columns: ['star_id']
-            referencedRelation: 'stars'
+            foreignKeyName: 'challenges_dictionary_topic_id_fkey'
+            columns: ['dictionary_topic_id']
+            isOneToOne: false
+            referencedRelation: 'docs'
             referencedColumns: ['id']
           },
           {
-            foreignKeyName: 'challenges_topic_id_fkey'
-            columns: ['topic_id']
-            referencedRelation: 'topics'
+            foreignKeyName: 'challenges_star_id_fkey'
+            columns: ['star_id']
+            isOneToOne: false
+            referencedRelation: 'stars'
             referencedColumns: ['id']
           },
         ]
@@ -188,13 +158,22 @@ export interface Database {
           {
             foreignKeyName: 'challenges_categories_category_id_fkey'
             columns: ['category_id']
+            isOneToOne: false
             referencedRelation: 'categories'
             referencedColumns: ['id']
           },
           {
             foreignKeyName: 'challenges_categories_challenge_id_fkey'
             columns: ['challenge_id']
+            isOneToOne: false
             referencedRelation: 'challenges'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'challenges_categories_challenge_id_fkey'
+            columns: ['challenge_id']
+            isOneToOne: false
+            referencedRelation: 'challenges_list'
             referencedColumns: ['id']
           },
         ]
@@ -204,6 +183,7 @@ export interface Database {
           code: string | null
           created_at: string | null
           id: string
+          slug: string | null
           title: string | null
           user_id: string | null
         }
@@ -211,6 +191,7 @@ export interface Database {
           code?: string | null
           created_at?: string | null
           id?: string
+          slug?: string | null
           title?: string | null
           user_id?: string | null
         }
@@ -218,6 +199,7 @@ export interface Database {
           code?: string | null
           created_at?: string | null
           id?: string
+          slug?: string | null
           title?: string | null
           user_id?: string | null
         }
@@ -225,59 +207,106 @@ export interface Database {
           {
             foreignKeyName: 'codes_user_id_fkey'
             columns: ['user_id']
+            isOneToOne: false
             referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'codes_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users_view'
             referencedColumns: ['id']
           },
         ]
       }
       comments: {
         Row: {
-          author_id: string | null
           challenge_id: string | null
-          content: Json | null
+          content: string
           created_at: string | null
           id: string
-          likes: number | null
-          parent_id: string | null
+          parent_comment_id: string | null
+          user_id: string | null
+          count_comments_upvotes: number | null
         }
         Insert: {
-          author_id?: string | null
           challenge_id?: string | null
-          content?: Json | null
+          content: string
           created_at?: string | null
           id?: string
-          likes?: number | null
-          parent_id?: string | null
+          parent_comment_id?: string | null
+          user_id?: string | null
         }
         Update: {
-          author_id?: string | null
           challenge_id?: string | null
-          content?: Json | null
+          content?: string
           created_at?: string | null
           id?: string
-          likes?: number | null
-          parent_id?: string | null
+          parent_comment_id?: string | null
+          user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: 'comments_author_id_fkey'
-            columns: ['author_id']
-            referencedRelation: 'users'
+            foreignKeyName: 'comments_challenge_id_fkey'
+            columns: ['challenge_id']
+            isOneToOne: false
+            referencedRelation: 'challenges'
             referencedColumns: ['id']
           },
           {
             foreignKeyName: 'comments_challenge_id_fkey'
             columns: ['challenge_id']
-            referencedRelation: 'challenges'
+            isOneToOne: false
+            referencedRelation: 'challenges_list'
             referencedColumns: ['id']
           },
           {
-            foreignKeyName: 'comments_parent_id_fkey'
-            columns: ['parent_id']
+            foreignKeyName: 'comments_parent_comment_id_fkey'
+            columns: ['parent_comment_id']
+            isOneToOne: false
             referencedRelation: 'comments'
             referencedColumns: ['id']
           },
+          {
+            foreignKeyName: 'comments_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'comments_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users_view'
+            referencedColumns: ['id']
+          },
         ]
+      }
+      docs: {
+        Row: {
+          content: string | null
+          id: string
+          position: number | null
+          texts: Json | null
+          title: string | null
+        }
+        Insert: {
+          content?: string | null
+          id?: string
+          position?: number | null
+          texts?: Json | null
+          title?: string | null
+        }
+        Update: {
+          content?: string | null
+          id?: string
+          position?: number | null
+          texts?: Json | null
+          title?: string | null
+        }
+        Relationships: []
       }
       planets: {
         Row: {
@@ -326,6 +355,7 @@ export interface Database {
           {
             foreignKeyName: 'questions_star_id_fkey'
             columns: ['star_id']
+            isOneToOne: false
             referencedRelation: 'stars'
             referencedColumns: ['id']
           },
@@ -361,18 +391,21 @@ export interface Database {
           image: string | null
           name: string | null
           price: number | null
+          slug: string | null
         }
         Insert: {
           id?: string
           image?: string | null
           name?: string | null
           price?: number | null
+          slug?: string | null
         }
         Update: {
           id?: string
           image?: string | null
           name?: string | null
           price?: number | null
+          slug?: string | null
         }
         Relationships: []
       }
@@ -380,11 +413,11 @@ export interface Database {
         Row: {
           id: string
           isChallenge: boolean | null
-          slug: string
           name: string | null
           number: number | null
           planet_id: string | null
           questions: Json | null
+          slug: string | null
           texts: Json | null
         }
         Insert: {
@@ -394,6 +427,7 @@ export interface Database {
           number?: number | null
           planet_id?: string | null
           questions?: Json | null
+          slug?: string | null
           texts?: Json | null
         }
         Update: {
@@ -403,45 +437,23 @@ export interface Database {
           number?: number | null
           planet_id?: string | null
           questions?: Json | null
+          slug?: string | null
           texts?: Json | null
         }
         Relationships: [
           {
             foreignKeyName: 'stars_planet_id_fkey'
             columns: ['planet_id']
+            isOneToOne: false
             referencedRelation: 'planets'
             referencedColumns: ['id']
           },
         ]
       }
-      topics: {
-        Row: {
-          id: string
-          position: number | null
-          texts: Json | null
-          title: string | null
-        }
-        Insert: {
-          id?: string
-          position?: number | null
-          texts?: Json | null
-          title?: string | null
-        }
-        Update: {
-          id?: string
-          position?: number | null
-          texts?: Json | null
-          title?: string | null
-        }
-        Relationships: []
-      }
       users: {
         Row: {
-          acquired_rockets: number
-          avatar_id: string
+          avatar_id: string | null
           coins: number
-          completed_challenges: number
-          completed_planets: number
           created_at: string
           did_break_streak: boolean
           did_complete_saturday: boolean
@@ -453,22 +465,18 @@ export interface Database {
           last_position: number | null
           level: number
           name: string
-          ranking_id: string
-          rocket_id: string
+          ranking_id: string | null
+          rocket_id: string | null
+          slug: string
           streak: number
           study_time: string
-          unlocked_achievements: number
-          unlocked_stars: number
           week_status: string[]
           weekly_xp: number
           xp: number
         }
         Insert: {
-          acquired_rockets?: number
-          avatar_id?: string
+          avatar_id?: string | null
           coins?: number
-          completed_challenges?: number
-          completed_planets?: number
           created_at?: string
           did_break_streak?: boolean
           did_complete_saturday?: boolean
@@ -480,22 +488,18 @@ export interface Database {
           last_position?: number | null
           level?: number
           name: string
-          ranking_id?: string
-          rocket_id?: string
+          ranking_id?: string | null
+          rocket_id?: string | null
+          slug: string
           streak?: number
           study_time?: string
-          unlocked_achievements?: number
-          unlocked_stars?: number
           week_status?: string[]
           weekly_xp?: number
           xp?: number
         }
         Update: {
-          acquired_rockets?: number
-          avatar_id?: string
+          avatar_id?: string | null
           coins?: number
-          completed_challenges?: number
-          completed_planets?: number
           created_at?: string
           did_break_streak?: boolean
           did_complete_saturday?: boolean
@@ -507,12 +511,11 @@ export interface Database {
           last_position?: number | null
           level?: number
           name?: string
-          ranking_id?: string
-          rocket_id?: string
+          ranking_id?: string | null
+          rocket_id?: string | null
+          slug?: string
           streak?: number
           study_time?: string
-          unlocked_achievements?: number
-          unlocked_stars?: number
           week_status?: string[]
           weekly_xp?: number
           xp?: number
@@ -521,18 +524,21 @@ export interface Database {
           {
             foreignKeyName: 'users_avatar_id_fkey'
             columns: ['avatar_id']
+            isOneToOne: false
             referencedRelation: 'avatars'
             referencedColumns: ['id']
           },
           {
             foreignKeyName: 'users_ranking_id_fkey'
             columns: ['ranking_id']
+            isOneToOne: false
             referencedRelation: 'rankings'
             referencedColumns: ['id']
           },
           {
             foreignKeyName: 'users_rocket_id_fkey'
             columns: ['rocket_id']
+            isOneToOne: false
             referencedRelation: 'rockets'
             referencedColumns: ['id']
           },
@@ -558,13 +564,8 @@ export interface Database {
           {
             foreignKeyName: 'users_acquired_avatars_avatar_id_fkey'
             columns: ['avatar_id']
+            isOneToOne: false
             referencedRelation: 'avatars'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'users_acquired_avatars_user_id_fkey'
-            columns: ['user_id']
-            referencedRelation: 'users'
             referencedColumns: ['id']
           },
         ]
@@ -589,13 +590,8 @@ export interface Database {
           {
             foreignKeyName: 'users_acquired_rockets_rocket_id_fkey'
             columns: ['rocket_id']
+            isOneToOne: false
             referencedRelation: 'rockets'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'users_acquired_rockets_user_id_fkey'
-            columns: ['user_id']
-            referencedRelation: 'users'
             referencedColumns: ['id']
           },
         ]
@@ -620,44 +616,29 @@ export interface Database {
           {
             foreignKeyName: 'users_completed_challenges_challenge_id_fkey'
             columns: ['challenge_id']
+            isOneToOne: false
             referencedRelation: 'challenges'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_completed_challenges_challenge_id_fkey'
+            columns: ['challenge_id']
+            isOneToOne: false
+            referencedRelation: 'challenges_list'
             referencedColumns: ['id']
           },
           {
             foreignKeyName: 'users_completed_challenges_user_id_fkey'
             columns: ['user_id']
+            isOneToOne: false
             referencedRelation: 'users'
             referencedColumns: ['id']
           },
-        ]
-      }
-      users_liked_comments: {
-        Row: {
-          comment_id: string | null
-          id: string
-          user_id: string | null
-        }
-        Insert: {
-          comment_id?: string | null
-          id?: string
-          user_id?: string | null
-        }
-        Update: {
-          comment_id?: string | null
-          id?: string
-          user_id?: string | null
-        }
-        Relationships: [
           {
-            foreignKeyName: 'users_liked_comments_comment_id_fkey'
-            columns: ['comment_id']
-            referencedRelation: 'comments'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'users_liked_comments_user_id_fkey'
+            foreignKeyName: 'users_completed_challenges_user_id_fkey'
             columns: ['user_id']
-            referencedRelation: 'users'
+            isOneToOne: false
+            referencedRelation: 'users_view'
             referencedColumns: ['id']
           },
         ]
@@ -682,13 +663,22 @@ export interface Database {
           {
             foreignKeyName: 'users_rescuable_achievements_achievement_id_fkey'
             columns: ['achievement_id']
+            isOneToOne: false
             referencedRelation: 'achievements'
             referencedColumns: ['id']
           },
           {
             foreignKeyName: 'users_rescuable_achievements_user_id_fkey'
             columns: ['user_id']
+            isOneToOne: false
             referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_rescuable_achievements_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users_view'
             referencedColumns: ['id']
           },
         ]
@@ -713,13 +703,62 @@ export interface Database {
           {
             foreignKeyName: 'users_unlocked_achievements_achievement_id_fkey'
             columns: ['achievement_id']
+            isOneToOne: false
             referencedRelation: 'achievements'
             referencedColumns: ['id']
           },
           {
             foreignKeyName: 'users_unlocked_achievements_user_id_fkey'
             columns: ['user_id']
+            isOneToOne: false
             referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_unlocked_achievements_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users_view'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      users_unlocked_docs: {
+        Row: {
+          doc_id: string | null
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          doc_id?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          doc_id?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'users_unlocked_docs_doc_id_fkey'
+            columns: ['doc_id']
+            isOneToOne: false
+            referencedRelation: 'docs'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_unlocked_docs_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_unlocked_docs_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users_view'
             referencedColumns: ['id']
           },
         ]
@@ -727,61 +766,129 @@ export interface Database {
       users_unlocked_stars: {
         Row: {
           id: string
-          star_id: string
-          user_id: string
+          star_id: string | null
+          user_id: string | null
         }
         Insert: {
           id?: string
-          star_id: string
-          user_id: string
+          star_id?: string | null
+          user_id?: string | null
         }
         Update: {
           id?: string
-          star_id?: string
-          user_id?: string
+          star_id?: string | null
+          user_id?: string | null
         }
         Relationships: [
           {
             foreignKeyName: 'users_unlocked_stars_star_id_fkey'
             columns: ['star_id']
+            isOneToOne: false
             referencedRelation: 'stars'
             referencedColumns: ['id']
           },
           {
             foreignKeyName: 'users_unlocked_stars_user_id_fkey'
             columns: ['user_id']
+            isOneToOne: false
             referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_unlocked_stars_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users_view'
             referencedColumns: ['id']
           },
         ]
       }
-      users_unlocked_topics: {
+      users_upvoted_comments: {
         Row: {
+          comment_id: string | null
           id: string
-          topic_id: string | null
           user_id: string | null
         }
         Insert: {
+          comment_id?: string | null
           id?: string
-          topic_id?: string | null
           user_id?: string | null
         }
         Update: {
+          comment_id?: string | null
           id?: string
-          topic_id?: string | null
           user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: 'users_unlocked_topics_topic_id_fkey'
-            columns: ['topic_id']
-            referencedRelation: 'topics'
+            foreignKeyName: 'users_upvoted_comments_comment_id_fkey'
+            columns: ['comment_id']
+            isOneToOne: false
+            referencedRelation: 'comments'
             referencedColumns: ['id']
           },
           {
-            foreignKeyName: 'users_unlocked_topics_user_id_fkey'
+            foreignKeyName: 'users_upvoted_comments_user_id_fkey'
             columns: ['user_id']
+            isOneToOne: false
             referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_upvoted_comments_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users_view'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      users_voted_challenges: {
+        Row: {
+          challenge_id: string
+          id: string
+          user_id: string | null
+          vote: string
+        }
+        Insert: {
+          challenge_id: string
+          id?: string
+          user_id?: string | null
+          vote: string
+        }
+        Update: {
+          challenge_id?: string
+          id?: string
+          user_id?: string | null
+          vote?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'users_voted_challenges_challenge_id_fkey'
+            columns: ['challenge_id']
+            isOneToOne: false
+            referencedRelation: 'challenges'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_voted_challenges_challenge_id_fkey'
+            columns: ['challenge_id']
+            isOneToOne: false
+            referencedRelation: 'challenges_list'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_voted_challenges_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_voted_challenges_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users_view'
             referencedColumns: ['id']
           },
         ]
@@ -818,28 +925,131 @@ export interface Database {
           {
             foreignKeyName: 'winners_avatar_id_fkey'
             columns: ['avatar_id']
+            isOneToOne: false
             referencedRelation: 'avatars'
             referencedColumns: ['id']
           },
           {
             foreignKeyName: 'winners_ranking_id_fkey'
             columns: ['ranking_id']
+            isOneToOne: false
             referencedRelation: 'rankings'
             referencedColumns: ['id']
           },
           {
             foreignKeyName: 'winners_user_id_fkey'
             columns: ['user_id']
+            isOneToOne: false
             referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'winners_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users_view'
             referencedColumns: ['id']
           },
         ]
       }
     }
     Views: {
-      [_ in never]: never
+      challenges_list: {
+        Row: {
+          code: string | null
+          created_at: string | null
+          difficulty: string | null
+          downvotes: number | null
+          function_name: string | null
+          id: string | null
+          slug: string | null
+          star_id: string | null
+          test_cases: Json | null
+          texts: Json | null
+          title: string | null
+          topic_id: string | null
+          total_completitions: number | null
+          upvotes: number | null
+          user_slug: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'challenges_dictionary_topic_id_fkey'
+            columns: ['topic_id']
+            isOneToOne: false
+            referencedRelation: 'docs'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'challenges_star_id_fkey'
+            columns: ['star_id']
+            isOneToOne: false
+            referencedRelation: 'stars'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      users_view: {
+        Row: {
+          aquired_rockets_count: number | null
+          avatar_id: string | null
+          coins: number | null
+          completed_challenges_count: number | null
+          completed_planets_count: number | null
+          created_at: string | null
+          did_break_streak: boolean | null
+          did_complete_saturday: boolean | null
+          did_update_ranking: boolean | null
+          email: string | null
+          id: string | null
+          is_admin: boolean | null
+          is_loser: boolean | null
+          last_position: number | null
+          level: number | null
+          name: string | null
+          ranking_id: string | null
+          rocket_id: string | null
+          slug: string | null
+          streak: number | null
+          study_time: string | null
+          unlocked_achievements_count: number | null
+          unlocked_stars_count: number | null
+          week_status: string[] | null
+          weekly_xp: number | null
+          xp: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'users_avatar_id_fkey'
+            columns: ['avatar_id']
+            isOneToOne: false
+            referencedRelation: 'avatars'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_ranking_id_fkey'
+            columns: ['ranking_id']
+            isOneToOne: false
+            referencedRelation: 'rankings'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_rocket_id_fkey'
+            columns: ['rocket_id']
+            isOneToOne: false
+            referencedRelation: 'rockets'
+            referencedColumns: ['id']
+          },
+        ]
+      }
     }
     Functions: {
+      count_comments_upvotes: {
+        Args: {
+          '': unknown
+        }
+        Returns: number
+      }
       delete_public_user: {
         Args: {
           userid: string
@@ -865,7 +1075,7 @@ export interface Database {
               status: string
               difficulty: string
             }
-            Returns: undefined
+            Returns: Record<string, unknown>
           }
         | {
             Args: {
@@ -873,7 +1083,7 @@ export interface Database {
               status: string
               difficulty: string
             }
-            Returns: Record<string, unknown>
+            Returns: undefined
           }
       get_filtered_challenges: {
         Args: {
@@ -884,13 +1094,13 @@ export interface Database {
           search: string
         }
         Returns: {
-          author: string | null
           code: string | null
           created_at: string | null
           difficulty: string | null
           downvotes: number | null
           function_name: string | null
-          id: string
+          id: string | null
+          slug: string | null
           star_id: string | null
           test_cases: Json | null
           texts: Json | null
@@ -898,6 +1108,7 @@ export interface Database {
           topic_id: string | null
           total_completitions: number | null
           upvotes: number | null
+          user_slug: string | null
         }[]
       }
       get_next_star_id_from_next_planet: {
@@ -905,6 +1116,72 @@ export interface Database {
           current_planet_id: string
         }
         Returns: string
+      }
+      get_user_by_id: {
+        Args: {
+          _user_id: string
+        }
+        Returns: {
+          aquired_rockets_count: number | null
+          avatar_id: string | null
+          coins: number | null
+          completed_challenges_count: number | null
+          completed_planets_count: number | null
+          created_at: string | null
+          did_break_streak: boolean | null
+          did_complete_saturday: boolean | null
+          did_update_ranking: boolean | null
+          email: string | null
+          id: string | null
+          is_admin: boolean | null
+          is_loser: boolean | null
+          last_position: number | null
+          level: number | null
+          name: string | null
+          ranking_id: string | null
+          rocket_id: string | null
+          slug: string | null
+          streak: number | null
+          study_time: string | null
+          unlocked_achievements_count: number | null
+          unlocked_stars_count: number | null
+          week_status: string[] | null
+          weekly_xp: number | null
+          xp: number | null
+        }[]
+      }
+      get_user_by_slug: {
+        Args: {
+          _user_slug: string
+        }
+        Returns: {
+          aquired_rockets_count: number | null
+          avatar_id: string | null
+          coins: number | null
+          completed_challenges_count: number | null
+          completed_planets_count: number | null
+          created_at: string | null
+          did_break_streak: boolean | null
+          did_complete_saturday: boolean | null
+          did_update_ranking: boolean | null
+          email: string | null
+          id: string | null
+          is_admin: boolean | null
+          is_loser: boolean | null
+          last_position: number | null
+          level: number | null
+          name: string | null
+          ranking_id: string | null
+          rocket_id: string | null
+          slug: string | null
+          streak: number | null
+          study_time: string | null
+          unlocked_achievements_count: number | null
+          unlocked_stars_count: number | null
+          week_status: string[] | null
+          weekly_xp: number | null
+          xp: number | null
+        }[]
       }
       install_available_extensions_and_test: {
         Args: Record<PropertyKey, never>
@@ -918,9 +1195,27 @@ export interface Database {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      slugify: {
+        Args: {
+          name: string
+        }
+        Returns: string
+      }
       teste: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      unaccent: {
+        Args: {
+          '': string
+        }
+        Returns: string
+      }
+      unaccent_init: {
+        Args: {
+          '': unknown
+        }
+        Returns: unknown
       }
       update_user_email: {
         Args: {
@@ -934,192 +1229,102 @@ export interface Database {
       [_ in never]: never
     }
     CompositeTypes: {
-      [_ in never]: never
-    }
-  }
-  storage: {
-    Tables: {
-      buckets: {
-        Row: {
-          allowed_mime_types: string[] | null
-          avif_autodetection: boolean | null
-          created_at: string | null
-          file_size_limit: number | null
-          id: string
-          name: string
-          owner: string | null
-          public: boolean | null
-          updated_at: string | null
-        }
-        Insert: {
-          allowed_mime_types?: string[] | null
-          avif_autodetection?: boolean | null
-          created_at?: string | null
-          file_size_limit?: number | null
-          id: string
-          name: string
-          owner?: string | null
-          public?: boolean | null
-          updated_at?: string | null
-        }
-        Update: {
-          allowed_mime_types?: string[] | null
-          avif_autodetection?: boolean | null
-          created_at?: string | null
-          file_size_limit?: number | null
-          id?: string
-          name?: string
-          owner?: string | null
-          public?: boolean | null
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: 'buckets_owner_fkey'
-            columns: ['owner']
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-        ]
+      challenges_record: {
+        code: string
+        created_at: string
+        difficulty: string
+        downvotes: number
+        function_name: string
+        id: string
+        star_id: number
+        test_cases: Json
+        texts: Json
+        title: string
+        topic_id: string
+        total_completions: number
+        upvotes: number
+        created_by: string
       }
-      migrations: {
-        Row: {
-          executed_at: string | null
-          hash: string
-          id: number
-          name: string
-        }
-        Insert: {
-          executed_at?: string | null
-          hash: string
-          id: number
-          name: string
-        }
-        Update: {
-          executed_at?: string | null
-          hash?: string
-          id?: number
-          name?: string
-        }
-        Relationships: []
-      }
-      objects: {
-        Row: {
-          bucket_id: string | null
-          created_at: string | null
-          id: string
-          last_accessed_at: string | null
-          metadata: Json | null
-          name: string | null
-          owner: string | null
-          path_tokens: string[] | null
-          updated_at: string | null
-          version: string | null
-        }
-        Insert: {
-          bucket_id?: string | null
-          created_at?: string | null
-          id?: string
-          last_accessed_at?: string | null
-          metadata?: Json | null
-          name?: string | null
-          owner?: string | null
-          path_tokens?: string[] | null
-          updated_at?: string | null
-          version?: string | null
-        }
-        Update: {
-          bucket_id?: string | null
-          created_at?: string | null
-          id?: string
-          last_accessed_at?: string | null
-          metadata?: Json | null
-          name?: string | null
-          owner?: string | null
-          path_tokens?: string[] | null
-          updated_at?: string | null
-          version?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: 'objects_bucketId_fkey'
-            columns: ['bucket_id']
-            referencedRelation: 'buckets'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'objects_owner_fkey'
-            columns: ['owner']
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-        ]
-      }
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      can_insert_object: {
-        Args: {
-          bucketid: string
-          name: string
-          owner: string
-          metadata: Json
-        }
-        Returns: undefined
-      }
-      extension: {
-        Args: {
-          name: string
-        }
-        Returns: string
-      }
-      filename: {
-        Args: {
-          name: string
-        }
-        Returns: string
-      }
-      foldername: {
-        Args: {
-          name: string
-        }
-        Returns: unknown
-      }
-      get_size_by_bucket: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          size: number
-          bucket_id: string
-        }[]
-      }
-      search: {
-        Args: {
-          prefix: string
-          bucketname: string
-          limits?: number
-          levels?: number
-          offsets?: number
-          search?: string
-          sortcolumn?: string
-          sortorder?: string
-        }
-        Returns: {
-          name: string
-          id: string
-          updated_at: string
-          created_at: string
-          last_accessed_at: string
-          metadata: Json
-        }[]
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
     }
   }
 }
+
+export type Tables<
+  PublicTableNameOrOptions extends
+    | keyof (Database['public']['Tables'] & Database['public']['Views'])
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof (Database[PublicTableNameOrOptions['schema']]['Tables'] &
+        Database[PublicTableNameOrOptions['schema']]['Views'])
+    : never = never,
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicTableNameOrOptions['schema']]['Tables'] &
+      Database[PublicTableNameOrOptions['schema']]['Views'])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : PublicTableNameOrOptions extends keyof (Database['public']['Tables'] &
+      Database['public']['Views'])
+  ? (Database['public']['Tables'] &
+      Database['public']['Views'])[PublicTableNameOrOptions] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : never
+
+export type TablesInsert<
+  PublicTableNameOrOptions extends
+    | keyof Database['public']['Tables']
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+    : never = never,
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : PublicTableNameOrOptions extends keyof Database['public']['Tables']
+  ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : never
+
+export type TablesUpdate<
+  PublicTableNameOrOptions extends
+    | keyof Database['public']['Tables']
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+    : never = never,
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : PublicTableNameOrOptions extends keyof Database['public']['Tables']
+  ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : never
+
+export type Enums<
+  PublicEnumNameOrOptions extends
+    | keyof Database['public']['Enums']
+    | { schema: keyof Database },
+  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicEnumNameOrOptions['schema']]['Enums']
+    : never = never,
+> = PublicEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
+  : PublicEnumNameOrOptions extends keyof Database['public']['Enums']
+  ? Database['public']['Enums'][PublicEnumNameOrOptions]
+  : never
