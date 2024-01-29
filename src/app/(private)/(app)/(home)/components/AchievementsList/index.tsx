@@ -21,7 +21,7 @@ export function AchievementsList() {
     return (
       <div
         className={twMerge(
-          'flex flex-shrink-0 flex-col gap-6',
+          'flex flex-shrink-0 flex-col gap-6 p-6',
           isLoading ? 'h-full items-center justify-center' : 'pb-32'
         )}
       >
@@ -37,16 +37,19 @@ export function AchievementsList() {
               <PopoverMenu
                 label="Abrir menu para ordernar lista de conquistas"
                 buttons={popoverMenuButtons}
-                trigger={<ArrowsDownUp className="text-lg text-gray-500" />}
-              />
+              >
+                <button>
+                  <ArrowsDownUp className="text-lg text-gray-500" />
+                </button>
+              </PopoverMenu>
             </div>
             <div className="-mt-8">
               {achievements?.map((achievement) => (
                 <Achievement
                   key={achievement.id}
                   data={achievement}
-                  isUnlocked={achievement.isUnlocked}
-                  isRescuable={achievement.isRescuable}
+                  isUnlocked={achievement.isUnlocked ?? false}
+                  isRescuable={achievement.isRescuable ?? false}
                 />
               ))}
             </div>
