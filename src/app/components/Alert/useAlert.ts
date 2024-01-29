@@ -10,7 +10,7 @@ import { playAudio } from '@/utils/helpers'
 export function useAlert(
   type: AlertType,
   canPlaySong: boolean,
-  onOpen: VoidFunction | null = null
+  onOpenChange: ((isOpen: boolean) => void) | undefined
 ) {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -29,6 +29,11 @@ export function useAlert(
     setIsOpen(false)
   }
 
+  function handleOpenChange(isOpen: boolean) {
+    setIsOpen(isOpen)
+    if (onOpenChange) onOpenChange(isOpen)
+  }
+
   useEffect(() => {
     if (audioFile && isOpen && type !== 'generic' && canPlaySong) {
       playAudio(audioFile)
@@ -40,15 +45,12 @@ export function useAlert(
     setIsRendered(true)
   }, [])
 
-  useEffect(() => {
-    if (onOpen && isOpen) onOpen()
-  }, [isOpen, onOpen])
-
   return {
     animation,
     isRendered,
     containerRef,
     isOpen,
+    handleOpenChange,
     setIsOpen,
     open,
     close,
