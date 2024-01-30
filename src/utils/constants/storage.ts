@@ -6,4 +6,5 @@ export const STORAGE = {
   hasPageAnimationTransition: `${APP_PREFIX}:has-page-transition-animation`,
   shouldFormatConsoleOutput: `${APP_PREFIX}:should-format-console-output`,
   challengeLayout: `${APP_PREFIX}:challenge-layout`,
+  challengeCode: `${APP_PREFIX}:challenge-code`,
 }

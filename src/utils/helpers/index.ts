@@ -1,5 +1,6 @@
 export { calculatePage } from './calculatePage'
 export { checkNumeric } from './checkNumeric'
+export { checkObject } from './checkObject'
 export { checkPublicRoute } from './checkPublicRoute'
 export { compareArrays } from './compareArrays'
 export { countCharacters } from './countCharacters'
