@@ -11,13 +11,18 @@ export function useDescription() {
   const setMdx = useChallengeStore((store) => store.actions.setMdx)
   const challenge = useChallengeStore((store) => store.state.challenge)
   const userVote = useChallengeStore((store) => store.state.userVote)
-
   const mdx = useChallengeStore((store) => store.state.mdx)
+
   const { parseTexts } = useMdx()
 
   useEffect(() => {
+    if (mdx) {
+      setIsLoading(false)
+      return
+    }
+
     async function fetchMdx() {
-      if (!challenge || mdx) return
+      if (!challenge) return
 
       const { texts, description } = challenge
 

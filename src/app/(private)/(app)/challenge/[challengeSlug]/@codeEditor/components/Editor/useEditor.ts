@@ -129,6 +129,7 @@ export function useEditor() {
   }, [challenge])
 
   useEffect(() => {
+    console.log('OI')
     if (challenge && userOutput.length)
       router.push(`${ROUTES.private.challenge}/${challenge.slug}/result`)
   }, [challenge, userOutput, router])
