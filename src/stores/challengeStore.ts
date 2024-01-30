@@ -16,34 +16,30 @@ type TabHandler = {
 }
 
 type ChallengeState = {
-  userCode: string
   challenge: Challenge | null
   userOutput: string[]
   results: boolean[]
   mdx: string
   userVote: Vote
-  isAnswerCorrect: boolean
-  isAnswerVerified: boolean
   isEnd: boolean
   incorrectAnswersAmount: number
-  isFirstRendering: boolean
+  canShowComments: boolean
+  canShowSolutions: boolean
   layout: Layout
   tabHandler: TabHandler | null
 }
 
 type ChallengeActionss = {
   setChallenge: (challenge: Challenge) => void
-  setUserCode: (userCode: string) => void
   setUserOutput: (challenge: string[]) => void
   setResults: (results: boolean[]) => void
   setMdx: (mdx: string) => void
-  setIsAnswerVerified: (isAnswerVerified: boolean) => void
-  setIsAnswerCorrect: (isAnswerCorrect: boolean) => void
   setUserVote: (useVote: Vote) => void
   setIsEnd: (isEnd: boolean) => void
   setTabHandler: (tabHandler: TabHandler) => void
   setLayout: (layout: Layout) => void
-  setIsFirstRendering: (isFirstRendering: boolean) => void
+  setCanShowComments: (canShowComments: boolean) => void
+  setCanShowSolutions: (canShowSolutions: boolean) => void
   incrementIncorrectAswersAmount: () => void
   resetState: () => void
 }
@@ -55,18 +51,16 @@ type ChallengeStore = {
 
 const initialState: ChallengeState = {
   challenge: null,
-  userCode: '',
   userOutput: [],
   userVote: null,
   results: [],
   mdx: '',
-  isAnswerCorrect: false,
-  isAnswerVerified: false,
   isEnd: false,
   incorrectAnswersAmount: 0,
   tabHandler: null,
   layout: 'tabs-left;code_editor-right',
-  isFirstRendering: true,
+  canShowComments: false,
+  canShowSolutions: false,
 }
 const challengeStore: StateCreator<
   ChallengeStore,
@@ -109,24 +103,19 @@ const challengeStore: StateCreator<
       set(({ state }: ChallengeStore) => ({
         state: { ...state, tabHandler },
       })),
-    setIsAnswerVerified: (isAnswerVerified: boolean) =>
-      set(({ state, actions }: ChallengeStore) => ({
-        state: { ...state, isAnswerVerified },
-        actions,
-      })),
-    setIsAnswerCorrect: (isAnswerCorrect: boolean) =>
-      set(({ state, actions }: ChallengeStore) => ({
-        state: { ...state, isAnswerCorrect },
-        actions,
-      })),
     setIsEnd: (isEnd: boolean) =>
       set(({ state, actions }: ChallengeStore) => ({
         state: { ...state, isEnd },
         actions,
       })),
-    setIsFirstRendering: (isFirstRendering: boolean) =>
+    setCanShowComments: (cansetCanShowComments: boolean) =>
       set(({ state, actions }: ChallengeStore) => ({
-        state: { ...state, isFirstRendering },
+        state: { ...state, cansetCanShowComments },
+        actions,
+      })),
+    setCanShowSolutions: (cansetCanShowSolutions: boolean) =>
+      set(({ state, actions }: ChallengeStore) => ({
+        state: { ...state, cansetCanShowSolutions },
         actions,
       })),
     incrementIncorrectAswersAmount: () =>

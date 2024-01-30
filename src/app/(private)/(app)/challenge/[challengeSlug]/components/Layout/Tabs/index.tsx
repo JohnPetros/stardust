@@ -17,10 +17,13 @@ type TabsProps = {
 }
 
 export function Tabs({ children }: TabsProps) {
-  const { activeTab, canShowSolutions, handleShowSolutions, handleTabButton } =
-    useTabs()
-  const isAnswerCorrect = useChallengeStore(
-    (store) => store.state.isAnswerCorrect
+  const { activeTab, handleShowSolutions, handleTabButton } = useTabs()
+
+  const canShowComments = useChallengeStore(
+    (store) => store.state.canShowComments
+  )
+  const canShowSolutions = useChallengeStore(
+    (store) => store.state.canShowSolutions
   )
 
   return (
@@ -41,7 +44,7 @@ export function Tabs({ children }: TabsProps) {
             onClick={handleTabButton}
           />
           <span className="text-gray-600">|</span>
-          {!isAnswerCorrect ? (
+          {!canShowComments ? (
             <Alert
               type="denying"
               title="Negado!"
@@ -66,7 +69,8 @@ export function Tabs({ children }: TabsProps) {
               title="Comentários"
               value="comments"
               isActive={activeTab === 'comments'}
-              isBlocked
+              isBlocked={false}
+              onClick={handleTabButton}
             />
           )}
           <span className="text-gray-600">|</span>

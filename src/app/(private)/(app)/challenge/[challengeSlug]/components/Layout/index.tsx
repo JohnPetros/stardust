@@ -9,8 +9,8 @@ import { PanelHandle } from './PanelHandle'
 import { Tabs } from './Tabs'
 import { useLayout } from './useLayout'
 
-import { SecondsCounter } from '@/app/(private)/(app)/lesson/components/SecondsCounter'
 import { PageTransitionAnimation } from '@/app/components/PageTransitionAnimation'
+import { useSecondsCounter } from '@/hooks/useSecondsCounter'
 import { useChallengeStore } from '@/stores/challengeStore'
 
 const DIRECTION = 'horizontal'
@@ -39,13 +39,14 @@ export function Layout({
   const isEnd = useChallengeStore((store) => store.state.isEnd)
   const layout = useChallengeStore((store) => store.state.layout)
 
+  useSecondsCounter(!isEnd)
+
   return (
     <>
       <PageTransitionAnimation
         isVisible={isTransitionPageVisible}
         hasTips={true}
       />
-      {!isEnd && <SecondsCounter />}
       <div className="relative md:overflow-hidden">
         {header}
         <main className="w-full">

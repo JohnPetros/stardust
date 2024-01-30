@@ -115,13 +115,16 @@ export function UserCommentInput({
                 <Toolbar.Button
                   type="submit"
                   className="custom-outline rounded-md"
+                  asChild
                 >
                   <Button type="submit" className="h-6 w-24 text-xs" form={id}>
-                    <PaperPlaneRight
-                      weight="bold"
-                      className="text-sm text-green-900"
-                    />
-                    {title}
+                    <div className="flex items-center gap-1">
+                      <PaperPlaneRight
+                        weight="bold"
+                        className="text-sm text-green-900"
+                      />
+                      {title}
+                    </div>
                   </Button>
                 </Toolbar.Button>
               </div>

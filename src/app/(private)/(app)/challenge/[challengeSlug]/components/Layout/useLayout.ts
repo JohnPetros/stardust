@@ -8,7 +8,15 @@ import { useChallengeStore } from '@/stores/challengeStore'
 import { COOKIES, STORAGE } from '@/utils/constants'
 
 export function useLayout() {
+  const challenge = useChallengeStore((store) => store.state.challenge)
+  const isEnd = useChallengeStore((store) => store.state.isEnd)
   const resetState = useChallengeStore((store) => store.actions.resetState)
+  const setCanShowComments = useChallengeStore(
+    (store) => store.actions.setCanShowComments
+  )
+  const setCanShowSolutions = useChallengeStore(
+    (store) => store.actions.setCanShowSolutions
+  )
 
   const [isTransitionPageVisible, setIsTransitionPageVisible] = useState(true)
 
@@ -32,11 +40,19 @@ export function useLayout() {
     timeout = setTimeout(() => setIsTransitionPageVisible(false), 5000)
 
     return () => {
-      resetState()
       localStorage.removeItem(STORAGE.challengeCode)
       clearTimeout(timeout)
+      resetState()
     }
   }, [resetState])
+
+  useEffect(() => {
+    if (challenge) setCanShowSolutions(challenge.isCompleted ?? false)
+  }, [challenge, setCanShowSolutions])
+
+  useEffect(() => {
+    setCanShowComments(isEnd)
+  }, [isEnd, setCanShowComments])
 
   return {
     tabsPanelRef,

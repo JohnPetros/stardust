@@ -12,7 +12,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useChallengeStore } from '@/stores/challengeStore'
 
 export function CommentsList() {
-  const canShowSolutions = useChallengeStore(
+  const canShowComments = useChallengeStore(
     (store) => store.state.canShowComments
   )
 
@@ -28,10 +28,15 @@ export function CommentsList() {
     handlePostComment,
     handleUserCommentChange,
     handleDeleteComment,
-  } = useCommentsList(canShowSolutions)
+  } = useCommentsList(canShowComments)
   const { user: authUser } = useAuth()
 
-  if (!canShowSolutions || isLoading) return <Loading />
+  if (!canShowComments || isLoading)
+    return (
+      <div className="grid h-full place-content-center">
+        <Loading />
+      </div>
+    )
 
   const sorterButtonTitle =
     sorter === 'date' && order === 'ascending'
