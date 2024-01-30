@@ -1,78 +1,114 @@
 'use client'
 
-import {
-  ArrowClockwise,
-  ArrowsOutSimple,
-  Code,
-  Command,
-  Gear,
-} from '@phosphor-icons/react'
+import { ReactNode, RefObject, useRef } from 'react'
+import { ArrowClockwise, Code, Command, Gear } from '@phosphor-icons/react'
 import * as Toolbar from '@radix-ui/react-toolbar'
+
+import { useCodeEditorToolbar } from './useCodeEditorToolbar'
 
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
-import { CodeEditorSettingsDialog } from '@/app/components/CodeEditorSettingsDialog'
-import { DocsDialog } from '@/app/components/DocsDialog'
-import { ShortcutsDialog } from '@/app/components/ShortcutsDialog'
+import { CodeEditorRef } from '@/app/components/CodeEditor'
+import { CodeEditorSettingsDialog } from '@/app/components/CodeEditorToolbar/CodeEditorSettingsDialog'
+import { DocsDialog } from '@/app/components/CodeEditorToolbar/DocsDialog'
+import { HotkeysDialog } from '@/app/components/CodeEditorToolbar/HotkeysDialog'
 import { Tooltip } from '@/app/components/Tooltip'
 
-type ToolBarProps = {
-  onResetCode: () => void
+type CodeEditorToolbarProps = {
+  children: ReactNode
+  codeEditorRef: RefObject<CodeEditorRef>
+  previousUserCode: RefObject<string>
+  onRunCode: () => void
 }
 
-export function CodeEditorToolbar({ onResetCode }: ToolBarProps) {
+export function CodeEditorToolbar({
+  children,
+  codeEditorRef,
+  previousUserCode,
+  onRunCode,
+}: CodeEditorToolbarProps) {
+  const runCodeButtonRef = useRef<HTMLButtonElement>(null)
+  const docsDialogButtonRef = useRef<HTMLButtonElement>(null)
+
+  const { handleKeyDown } = useCodeEditorToolbar({
+    previousUserCode,
+    codeEditorRef,
+    runCodeButtonRef,
+    docsDialogButtonRef,
+  })
+
   const toolbarStyles = 'grid place-content-center'
   const iconStyles = 'text-xl text-green-500'
 
   return (
-    <Toolbar.Root className="flex items-center gap-3">
-      <Alert
-        type="asking"
-        title="Tem certeza que deseja voltar para o código inicial?"
-        body={null}
-        action={
+    <div onKeyUp={handleKeyDown}>
+      <div className="flex items-center justify-between rounded-t-md bg-gray-700 px-3 py-2">
+        <div className="flex items-center gap-4">
           <Button
-            tabIndex={0}
-            autoFocus
-            onClick={onResetCode}
-            className="bg-red-700 text-gray-100"
+            buttonRef={runCodeButtonRef}
+            className="h-6 w-max px-3 text-xs"
+            onClick={onRunCode}
           >
-            Voltar código
+            Executar
           </Button>
-        }
-        cancel={<Button className="bg-gray-500 text-gray-100">Cancelar</Button>}
-        canPlaySong={false}
-      >
-        <Toolbar.Button className={toolbarStyles}>
-          <Tooltip content="Voltar para o código inicial" direction="bottom">
-            <ArrowClockwise className={iconStyles} weight="bold" />
-          </Tooltip>
-        </Toolbar.Button>
-      </Alert>
+        </div>
 
-      <DocsDialog>
-        <Toolbar.Button className={toolbarStyles}>
-          <Tooltip content="Documentação" direction="bottom">
-            <Code className={iconStyles} weight="bold" />
-          </Tooltip>
-        </Toolbar.Button>
-      </DocsDialog>
+        <Toolbar.Root className="flex items-center gap-3">
+          <Alert
+            type="asking"
+            title="Tem certeza que deseja voltar para o código inicial?"
+            body={null}
+            action={
+              <Button
+                tabIndex={0}
+                autoFocus
+                onClick={() => codeEditorRef.current?.reloadValue()}
+                className="bg-red-700 text-gray-100"
+              >
+                Voltar código
+              </Button>
+            }
+            cancel={
+              <Button className="bg-gray-500 text-gray-100">Cancelar</Button>
+            }
+            canPlaySong={false}
+          >
+            <Toolbar.Button className={toolbarStyles}>
+              <Tooltip
+                content="Voltar para o código inicial"
+                direction="bottom"
+              >
+                <ArrowClockwise className={iconStyles} weight="bold" />
+              </Tooltip>
+            </Toolbar.Button>
+          </Alert>
 
-      <ShortcutsDialog>
-        <Toolbar.Button className={toolbarStyles}>
-          <Tooltip content="Comandos" direction="bottom">
-            <Command className={iconStyles} weight="bold" />
-          </Tooltip>
-        </Toolbar.Button>
-      </ShortcutsDialog>
+          <DocsDialog>
+            <Toolbar.Button ref={docsDialogButtonRef} className={toolbarStyles}>
+              <Tooltip content="Documentação" direction="bottom">
+                <Code className={iconStyles} weight="bold" />
+              </Tooltip>
+            </Toolbar.Button>
+          </DocsDialog>
 
-      <CodeEditorSettingsDialog>
-        <Toolbar.Button className={toolbarStyles}>
-          <Tooltip content="Configurações" direction="bottom">
-            <Gear className={iconStyles} weight="bold" />
-          </Tooltip>
-        </Toolbar.Button>
-      </CodeEditorSettingsDialog>
-    </Toolbar.Root>
+          <HotkeysDialog>
+            <Toolbar.Button className={toolbarStyles}>
+              <Tooltip content="Comandos" direction="bottom">
+                <Command className={iconStyles} weight="bold" />
+              </Tooltip>
+            </Toolbar.Button>
+          </HotkeysDialog>
+
+          <CodeEditorSettingsDialog>
+            <Toolbar.Button className={toolbarStyles}>
+              <Tooltip content="Configurações" direction="bottom">
+                <Gear className={iconStyles} weight="bold" />
+              </Tooltip>
+            </Toolbar.Button>
+          </CodeEditorSettingsDialog>
+        </Toolbar.Root>
+      </div>
+      {children}
+    </div>
   )
 }

@@ -1,4 +1,4 @@
-export const SHORTCUTS = [
+export const HOTKEYS = [
   {
     action: 'Executar código',
     command: 'Alt + Enter',

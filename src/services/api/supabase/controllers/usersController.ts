@@ -46,8 +46,6 @@ export const UsersController = (supabase: Supabase): IUsersController => {
         is_loser: data.is_loser,
       }
 
-      console.log(user.acquired_rockets_count)
-
       return user
     },
 

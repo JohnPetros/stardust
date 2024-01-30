@@ -1,6 +1,6 @@
 import type { Resolver } from 'react-hook-form'
 
-import type { ResetPasswordForm } from '@/services/validation/types/passwordResetForm'
+import type { ResetPasswordForm } from '@/services/validation/types/ResetPasswordForm'
 import type { SignInForm } from '@/services/validation/types/signInForm'
 import type { SignUpForm } from '@/services/validation/types/signUpForm'
 
