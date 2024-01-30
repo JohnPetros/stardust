@@ -5,6 +5,8 @@ import * as Popover from '@radix-ui/react-popover'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
 
+import { Hydration } from '../Hydration'
+
 import { Checkbox } from './Checkbox'
 
 const popoverAnimation: Variants = {
@@ -21,8 +23,10 @@ const popoverAnimation: Variants = {
 }
 
 export type PopoverMenuButton = {
-  title: string
   isToggle: boolean
+  title?: string
+  label?: string
+  icon?: ReactNode
   value?: boolean | null
   action: VoidFunction
 }
@@ -47,13 +51,9 @@ export function PopoverMenu({
     if (onOpenChange) onOpenChange(false)
   }
 
-  function handleTrigger() {
-    setIsOpen(true)
+  function handleOpenChange(isMenuOpen: boolean) {
+    setIsOpen(isMenuOpen)
     if (onOpenChange) onOpenChange(true)
-  }
-
-  function handleOpenChange() {
-    if (onOpenChange) if (isOpen) close()
   }
 
   function handlePopoverMenuButtonClick({
@@ -65,11 +65,7 @@ export function PopoverMenu({
 
   return (
     <Popover.Root open={isOpen} onOpenChange={handleOpenChange}>
-      <Popover.Trigger
-        aria-label={label}
-        className="w-max"
-        onClick={handleTrigger}
-      >
+      <Popover.Trigger aria-label={label} className="w-max">
         {trigger}
       </Popover.Trigger>
       <AnimatePresence>
@@ -77,7 +73,7 @@ export function PopoverMenu({
           <Popover.Portal forceMount>
             <div className="flex flex-col">
               <Popover.Content
-                className="z-[150] mr-1 min-w-[10rem]"
+                className="z-[150] mr-1 min-w-[6rem]"
                 sideOffset={5}
               >
                 <motion.div
@@ -86,39 +82,53 @@ export function PopoverMenu({
                   animate="down"
                   exit="up"
                   transition={{ duration: 0.2 }}
-                  className="h-full w-full rounded-md bg-gray-700 p-3"
+                  className="h-full w-full rounded-md bg-gray-700 p-2"
                 >
                   <Popover.Arrow className="fill-gray-700" />
 
                   <ul>
                     {buttons.map(
-                      ({ title, isToggle, value, action }, index) => {
+                      (
+                        { title, label, icon, isToggle, value, action },
+                        index
+                      ) => {
                         const isFirst = index === 0
                         return (
                           <li key={title}>
-                            <button
-                              className={twMerge(
-                                'mr-auto flex w-full items-center justify-between border-t p-3 text-left text-gray-100',
-                                !isFirst
-                                  ? 'border-green-400'
-                                  : 'border-transparent'
-                              )}
-                              onClick={() =>
-                                handlePopoverMenuButtonClick({ action })
-                              }
-                              name={title}
-                            >
-                              <label htmlFor={title} className="cursor-pointer">
-                                {title}
-                              </label>
+                            <Hydration>
+                              <button
+                                aria-label={label}
+                                className={twMerge(
+                                  'mr-auto flex w-full items-center justify-between border-t p-2 text-left text-gray-100',
+                                  !isFirst
+                                    ? 'border-green-400'
+                                    : 'border-transparent'
+                                )}
+                                onClick={() =>
+                                  handlePopoverMenuButtonClick({ action })
+                                }
+                                name={title}
+                              >
+                                <div className="flex gap-2">
+                                  {icon && icon}
+                                  {title && (
+                                    <label
+                                      htmlFor={`button-${index}`}
+                                      className="cursor-pointer"
+                                    >
+                                      {title}
+                                    </label>
+                                  )}
+                                </div>
 
-                              {isToggle && (
-                                <Checkbox
-                                  id={title}
-                                  isChecked={Boolean(value)}
-                                />
-                              )}
-                            </button>
+                                {isToggle && (
+                                  <Checkbox
+                                    id={`button-${index}`}
+                                    isChecked={Boolean(value)}
+                                  />
+                                )}
+                              </button>
+                            </Hydration>
                           </li>
                         )
                       }

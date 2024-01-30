@@ -23,7 +23,7 @@ export function Checkbox({ id, isChecked }: CheckboxProps) {
   return (
     <C.Root
       className={twMerge(
-        'ml-6 h-6 w-6 rounded-md border-2 border-green-400',
+        'ml-6 h-[18px] w-[18px] rounded-md border-2 border-green-400',
         isChecked ? 'bg-green-400' : ' border-gray-500 bg-transparent'
       )}
       checked={isChecked}
