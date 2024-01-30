@@ -60,17 +60,9 @@ export function useLessonStar(star: Star) {
     }
 
     if (currentStage === 'rewards') {
-      console.log('oi')
       showRewards()
     }
-  }, [
-    currentStage,
-    questions.length,
-    incorrectAnswersAmount,
-    router,
-    star.id,
-    localStorage,
-  ])
+  }, [currentStage, questions.length, incorrectAnswersAmount, router, star.id])
 
   return {
     isTransitionVisible,
