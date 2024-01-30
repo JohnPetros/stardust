@@ -52,10 +52,6 @@ export function useEditor() {
     })
   }
 
-  function resetCode() {
-    codeEditorRef.current?.reloadValue()
-  }
-
   function formatCode(code: string, { input }: Pick<TestCase, 'input'>) {
     if (!input.length) return code
 
@@ -151,7 +147,6 @@ export function useEditor() {
     initialCode:
       localStorage?.getItem(STORAGE.challengeCode) ?? challenge?.code,
     userOutput,
-    resetCode,
     handleRunCode,
     handleCodeChange,
   }

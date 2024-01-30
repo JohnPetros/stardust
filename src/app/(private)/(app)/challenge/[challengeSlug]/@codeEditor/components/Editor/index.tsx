@@ -13,7 +13,6 @@ export function Editor() {
     editorContainerRef,
     codeEditorRef,
     codeEditorHeight,
-    resetCode,
     handleCodeChange,
     handleRunCode,
   } = useEditor()
@@ -24,8 +23,6 @@ export function Editor() {
         previousUserCode={previousUserCode}
         codeEditorRef={codeEditorRef}
         onRunCode={() => handleRunCode(userCode.current)}
-        onChangeCode={handleCodeChange}
-        onResetCode={resetCode}
       >
         <CodeEditor
           ref={codeEditorRef}

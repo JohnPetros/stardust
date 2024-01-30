@@ -17,6 +17,10 @@ export function useCodeEditorToolbar({
 }: UseCodeEditorToolbarParams) {
   const hasCodedEditorReset = useRef(false)
 
+  function resetCode() {
+    codeEditorRef.current?.reloadValue()
+  }
+
   function handleAltEnter() {
     if (!codeEditorRef.current) return
     runCodeButtonRef.current?.click()
@@ -107,6 +111,7 @@ export function useCodeEditorToolbar({
   }
 
   return {
+    resetCode,
     handleKeyDown,
   }
 }
