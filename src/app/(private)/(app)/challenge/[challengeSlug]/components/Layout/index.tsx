@@ -35,7 +35,6 @@ export function Layout({
     tabsPanelRef,
     isTransitionPageVisible,
     handlePanelDragging,
-    handlePanelDragEnd,
   } = useLayout()
   const isEnd = useChallengeStore((store) => store.state.isEnd)
   const layout = useChallengeStore((store) => store.state.layout)
@@ -75,8 +74,6 @@ export function Layout({
                 <PanelHandle
                   direction={DIRECTION}
                   onDragging={handlePanelDragging}
-                  onDragEnd={handlePanelDragEnd}
-                  onDragLeave={handlePanelDragEnd}
                 />
 
                 <Panel
@@ -105,8 +102,6 @@ export function Layout({
                 <PanelHandle
                   direction={DIRECTION}
                   onDragging={handlePanelDragging}
-                  onDragEnd={handlePanelDragEnd}
-                  onDragLeave={handlePanelDragEnd}
                 />
 
                 <Panel

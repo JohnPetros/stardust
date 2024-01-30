@@ -26,6 +26,7 @@ export function useEditor() {
   const router = useRouter()
 
   const userCode = useRef('')
+  const previousUserCode = useRef('')
   const editorContainerRef = useRef<HTMLDivElement>(null)
   const codeEditorRef = useRef<CodeEditorRef>(null)
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
@@ -118,6 +119,9 @@ export function useEditor() {
 
   function handleCodeChange(value: string) {
     localStorage.setItem(STORAGE.challengeCode, value)
+    console.log(userCode.current)
+    console.log(value)
+    previousUserCode.current = userCode.current
     userCode.current = value
   }
 
@@ -138,6 +142,7 @@ export function useEditor() {
 
   return {
     userCode,
+    previousUserCode,
     editorContainerRef,
     runCodeButtonRef,
     consoleRef,
