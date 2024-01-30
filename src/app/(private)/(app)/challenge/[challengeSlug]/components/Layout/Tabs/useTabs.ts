@@ -11,13 +11,17 @@ export type Tab = 'description' | 'result' | 'comments' | 'solutions'
 
 export function useTabs() {
   const challenge = useChallengeStore((store) => store.state.challenge)
+  const setCanShowComments = useChallengeStore(
+    (store) => store.actions.setCanShowComments
+  )
+  const setCanShowSolutions = useChallengeStore(
+    (store) => store.actions.setCanShowSolutions
+  )
+  const isEnd = useChallengeStore((store) => store.state.isEnd)
 
   const [activeTab, setActiveTab] = useState<Tab>('description')
-  const [canShowSolutions, setCanShowSolutions] = useState(
-    challenge?.isCompleted
-  )
-  const pathname = usePathname()
 
+  const pathname = usePathname()
   const router = useRouter()
   const { user, updateUser } = useAuth()
 
@@ -38,20 +42,27 @@ export function useTabs() {
   }
 
   useEffect(() => {
-    if (challenge) setCanShowSolutions(challenge.isCompleted)
-  }, [challenge])
+    if (challenge) setCanShowSolutions(challenge.isCompleted ?? false)
+  }, [challenge, setCanShowSolutions])
 
   useEffect(() => {
+    setCanShowComments(isEnd)
+  }, [isEnd, setCanShowComments])
+
+  useEffect(() => {
+    setActiveTab('description')
+
     if (!challenge) return
 
     const activeTab = pathname.split('/').pop()
+
+    console.log({ activeTab })
 
     if (activeTab !== challenge.slug) setActiveTab(activeTab as Tab)
   }, [pathname, challenge])
 
   return {
     activeTab,
-    canShowSolutions,
     handleTabButton,
     handleShowSolutions,
   }
