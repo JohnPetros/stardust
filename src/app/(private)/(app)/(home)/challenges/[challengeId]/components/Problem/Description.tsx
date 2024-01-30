@@ -1,16 +1,9 @@
-import { useEffect } from 'react'
-
 import { useChallengeStore } from '@/stores/challengeStore'
 
 export function Description() {
   const {
-    state: { challenge, isFirstRendering },
-    actions: { setIsFirstRendering },
+    state: { challenge },
   } = useChallengeStore()
-
-  useEffect(() => {
-    setIsFirstRendering(false)
-  }, [])
 
   if (challenge)
     return (

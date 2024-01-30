@@ -16,9 +16,9 @@ export function Description() {
       <Loading />
     </div>
   ) : (
-    <div className="px-6 py-4">
+    <div className="w-full px-6 py-4">
       {challenge && typeof challenge.isCompleted != 'undefined' && (
-        <div className="flex w-full items-center gap-3">
+        <div className="mx-auto flex w-max items-center gap-3 ">
           <DifficultyBadge difficulty={challenge.difficulty} />
           <ChallengeInfo
             userSlug={challenge.user_slug}
@@ -30,7 +30,7 @@ export function Description() {
           <VoteButtons />
         </div>
       )}
-      <div className="mt-6">
+      <div className="mt-6 ">
         <Mdx>{mdx}</Mdx>
       </div>
     </div>

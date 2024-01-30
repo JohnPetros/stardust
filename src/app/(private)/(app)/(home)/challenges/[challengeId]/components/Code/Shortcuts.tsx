@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTrigger,
 } from '@/app/components/Dialog'
-import { SHORTCUTS } from '@/utils/constants'
+import { HOTKEYS } from '@/utils/constants'
 
 interface ShortCutsProps {
   children: ReactNode
@@ -18,7 +18,7 @@ export function Shortcuts({ children }: ShortCutsProps) {
       <DialogContent>
         <DialogHeader>Atalhos</DialogHeader>
         <dl className="mt-3 space-y-6">
-          {SHORTCUTS.map((shortcut) => (
+          {HOTKEYS.map((shortcut) => (
             <div
               key={shortcut.action}
               className="grid grid-cols-[2fr_1fr] items-center"
