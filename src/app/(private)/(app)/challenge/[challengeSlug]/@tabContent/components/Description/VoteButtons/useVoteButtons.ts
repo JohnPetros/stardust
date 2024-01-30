@@ -29,7 +29,7 @@ export function useVoteButtons() {
 
     if (userVote && vote !== userVote) {
       if (vote === 'upvote') setUpvotes(upvotes + 1)
-      if (vote === 'downvote') setUpvotes(upvotes - 1)
+      if (vote === 'downvote' && upvotes !== 0) setUpvotes(upvotes - 1)
       setUserVote(vote)
       await api.updateVotedChallenge(challenge.id, user.id, vote)
       return
