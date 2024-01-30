@@ -4,6 +4,8 @@ import { useEffect, useRef } from 'react'
 import { Monaco, useMonaco } from '@monaco-editor/react'
 import type monaco from 'monaco-editor'
 
+import { CursorPosition } from '.'
+
 import { colors } from '@/styles/colors'
 import { THEMES } from '@/utils/constants'
 import { getDeleguaLanguageTokens } from '@/utils/helpers/getDeleguaLanguageTokens'
@@ -22,12 +24,49 @@ export function useCodeEditor(value: string) {
     }))
   }
 
+  function getCursorPosition() {
+    const position = editorRef.current?.getPosition()
+
+    if (!position) return null
+
+    return {
+      lineNumber: position.lineNumber,
+      columnNumber: position.column,
+    }
+  }
+
+  function setCursorPosition(cursorPostion: CursorPosition) {
+    return editorRef.current?.setPosition({
+      lineNumber: cursorPostion.lineNumber,
+      column: cursorPostion.columnNumber,
+    })
+  }
+
   function getValue() {
     return editorRef.current?.getValue() ?? ''
   }
 
+  function setValue(value: string) {
+    return editorRef.current?.setValue(value)
+  }
+
   function reloadValue() {
     editorRef.current?.setValue(value)
+  }
+
+  function getSelectedLinesRange() {
+    const selection = editorRef.current?.getSelection()
+
+    console.log({ selection })
+
+    if (selection) {
+      return {
+        start: selection.startLineNumber,
+        end: selection.endLineNumber,
+      }
+    }
+
+    return null
   }
 
   function handleEditorDidMount(
@@ -86,7 +125,11 @@ export function useCodeEditor(value: string) {
   return {
     editorRef,
     getValue,
+    setValue,
     reloadValue,
+    getCursorPosition,
+    setCursorPosition,
+    getSelectedLinesRange,
     handleEditorDidMount,
   }
 }

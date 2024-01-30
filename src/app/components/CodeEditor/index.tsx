@@ -10,10 +10,25 @@ import { useCodeEditor } from './useCodeEditor'
 import { useCodeEditorContext } from '@/contexts/CodeEditorContext'
 import { useBreakpoint } from '@/hooks/useBreakpoint'
 
+export type CursorPosition = {
+  lineNumber: number
+  columnNumber: number
+}
+
+export type SelectedLinesRange = {
+  start: number
+  end: number
+}
+
 export type CodeEditorRef = {
   getValue: () => string
+  setValue: (value: string) => void
   reloadValue: () => void
+  getCursorPosition: () => CursorPosition | null
+  setCursorPosition: (cursorPositon: CursorPosition) => void
+  getSelectedLinesRange: () => SelectedLinesRange | null
 }
+
 type CodeEditorProps = {
   value: string
   width: number | string
@@ -35,7 +50,15 @@ export function CodeEditorComponent(
   ref: ForwardedRef<CodeEditorRef>
 ) {
   const { state } = useCodeEditorContext()
-  const { getValue, reloadValue, handleEditorDidMount } = useCodeEditor(value)
+  const {
+    getValue,
+    setValue,
+    reloadValue,
+    getCursorPosition,
+    setCursorPosition,
+    getSelectedLinesRange,
+    handleEditorDidMount,
+  } = useCodeEditor(value)
   const { md: isMobile } = useBreakpoint()
 
   useImperativeHandle(
@@ -43,10 +66,21 @@ export function CodeEditorComponent(
     () => {
       return {
         getValue,
+        setValue,
         reloadValue,
+        getCursorPosition,
+        setCursorPosition,
+        getSelectedLinesRange,
       }
     },
-    [getValue, reloadValue]
+    [
+      getValue,
+      setValue,
+      reloadValue,
+      getCursorPosition,
+      setCursorPosition,
+      getSelectedLinesRange,
+    ]
   )
 
   return (
