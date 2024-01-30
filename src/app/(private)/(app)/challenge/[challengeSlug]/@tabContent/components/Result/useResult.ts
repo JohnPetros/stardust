@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import type { TestCase as TestCaseData } from '@/@types/challenge'
@@ -10,7 +10,6 @@ import {
 } from '@/@types/rewards'
 import { setCookie } from '@/app/server/actions/setCookie'
 import { useBreakpoint } from '@/hooks/useBreakpoint'
-import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useChallengeStore } from '@/stores/challengeStore'
 import { COOKIES, ROUTES, STORAGE } from '@/utils/constants'
 import { compareArrays } from '@/utils/helpers'
@@ -21,21 +20,16 @@ export function useResult() {
       challenge,
       userOutput,
       results,
-      isAnswerCorrect,
-      isAnswerVerified,
       incorrectAnswersAmount,
       tabHandler,
     },
-    actions: {
-      incrementIncorrectAswersAmount,
-      setIsAnswerVerified,
-      setIsAnswerCorrect,
-      setResults,
-      setIsEnd,
-    },
+    actions: { incrementIncorrectAswersAmount, setResults, setIsEnd },
   } = useChallengeStore()
+
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(false)
+  const [isAnswerVerified, setIsAnswerVerified] = useState(false)
+
   // const { md: isMobile } = useBreakpoint()
-  const localStorage = useLocalStorage()
   const router = useRouter()
 
   async function showRewards() {
@@ -85,7 +79,6 @@ export function useResult() {
     if (isAnswerCorrect) {
       setIsAnswerCorrect(true)
       if (isAnswerVerified) {
-        setIsEnd(true)
         showRewards()
       }
       return
@@ -124,6 +117,17 @@ export function useResult() {
       setResults(test_cases.map(verifyResult))
     }
   }, [userOutput, challenge, tabHandler, setResults])
+
+  useEffect(() => {
+    if (
+      userOutput?.length === challenge?.test_cases.length &&
+      results?.length
+    ) {
+      const isAnswerCorrect = results.every((result) => result === true)
+      setIsAnswerCorrect(isAnswerCorrect)
+      setIsEnd(true)
+    }
+  }, [challenge, userOutput, results, setIsEnd])
 
   return {
     challenge,
