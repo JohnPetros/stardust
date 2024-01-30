@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 
+import { getPanelsOffset } from './actions/getPanelsOffset'
 import { Layout } from './components/Layout'
 
 type ChallengeLayoutProps = {
@@ -8,12 +9,19 @@ type ChallengeLayoutProps = {
   codeEditor: ReactNode
 }
 
-export default function ChallengeLayout({
+export default async function ChallengeLayout({
   children: header,
   tabContent,
   codeEditor,
 }: ChallengeLayoutProps) {
+  const panelsOffset = await getPanelsOffset()
+
   return (
-    <Layout header={header} tabContent={tabContent} codeEditor={codeEditor} />
+    <Layout
+      header={header}
+      tabContent={tabContent}
+      codeEditor={codeEditor}
+      panelsOffset={panelsOffset}
+    />
   )
 }

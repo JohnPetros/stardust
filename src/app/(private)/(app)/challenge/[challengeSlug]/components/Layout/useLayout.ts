@@ -1,11 +1,34 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { ImperativePanelHandle } from 'react-resizable-panels'
 
+import { PanelsOffset } from '../../actions/getPanelsOffset'
+
+import { setCookie } from '@/app/server/actions/setCookie'
 import { useChallengeStore } from '@/stores/challengeStore'
+import { COOKIES } from '@/utils/constants'
 
 export function useLayout() {
   const resetState = useChallengeStore((store) => store.actions.resetState)
 
   const [isTransitionPageVisible, setIsTransitionPageVisible] = useState(true)
+
+  const tabsPanelRef = useRef<ImperativePanelHandle>(null)
+  const codeEditorPanelRef = useRef<ImperativePanelHandle>(null)
+
+  async function handlePanelDragging() {
+    if (!tabsPanelRef.current || !codeEditorPanelRef.current) return
+
+    const newLayout: PanelsOffset = {
+      tabsPanelSize: tabsPanelRef.current?.getSize(),
+      codeEditorPanelSize: codeEditorPanelRef.current?.getSize(),
+    }
+
+    await setCookie(COOKIES.challengePanelsOffset, JSON.stringify(newLayout))
+  }
+
+  function handlePanelDragEnd() {
+    alert('Drag')
+  }
 
   useEffect(() => {
     let timeout: NodeJS.Timeout | number = 0
@@ -19,6 +42,10 @@ export function useLayout() {
   }, [resetState])
 
   return {
+    tabsPanelRef,
+    codeEditorPanelRef,
     isTransitionPageVisible,
+    handlePanelDragging,
+    handlePanelDragEnd,
   }
 }
