@@ -69,6 +69,7 @@
     "react-dom": "^18.2.0",
     "react-email": "1.9.5",
     "react-hook-form": "^7.45.2",
+    "react-resizable-panels": "^1.0.10",
     "react-responsive": "^9.0.2",
     "resend": "^2.1.0",
     "swiper": "^10.2.0",
