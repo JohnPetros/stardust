@@ -4,7 +4,7 @@ export const SHORTCUTS = [
     command: 'Shift + Enter',
   },
   {
-    action: 'Exibir dicionário',
+    action: 'Exibir documentação da linguagem',
     command: 'Shift + K',
   },
   {
