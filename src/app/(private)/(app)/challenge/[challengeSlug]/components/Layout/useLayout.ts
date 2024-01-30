@@ -5,7 +5,7 @@ import { PanelsOffset } from '../../actions/getPanelsOffset'
 
 import { setCookie } from '@/app/server/actions/setCookie'
 import { useChallengeStore } from '@/stores/challengeStore'
-import { COOKIES } from '@/utils/constants'
+import { COOKIES, STORAGE } from '@/utils/constants'
 
 export function useLayout() {
   const resetState = useChallengeStore((store) => store.actions.resetState)
@@ -26,10 +26,6 @@ export function useLayout() {
     await setCookie(COOKIES.challengePanelsOffset, JSON.stringify(newLayout))
   }
 
-  function handlePanelDragEnd() {
-    alert('Drag')
-  }
-
   useEffect(() => {
     let timeout: NodeJS.Timeout | number = 0
 
@@ -37,6 +33,7 @@ export function useLayout() {
 
     return () => {
       resetState()
+      localStorage.removeItem(STORAGE.challengeCode)
       clearTimeout(timeout)
     }
   }, [resetState])
@@ -46,6 +43,5 @@ export function useLayout() {
     codeEditorPanelRef,
     isTransitionPageVisible,
     handlePanelDragging,
-    handlePanelDragEnd,
   }
 }
