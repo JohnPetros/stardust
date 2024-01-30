@@ -25,7 +25,7 @@ type AnimationProps = {
   hasAnimation: boolean
 }
 
-export function Animation({ hasAnimation, children }: AnimationProps) {
+export function Animation({ hasAnimation = false, children }: AnimationProps) {
   return (
     <motion.div
       variants={textAnimations}

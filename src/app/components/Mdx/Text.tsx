@@ -3,8 +3,6 @@ import { Content } from './Content'
 import { Picture } from './Picture'
 import { Title } from './Title'
 
-import { slugify } from '@/utils/helpers'
-
 type TextProps = {
   title: string
   picture: string
@@ -18,8 +16,6 @@ export function Text({
   children,
   hasAnimation = false,
 }: TextProps) {
-  console.log({ title })
-
   return (
     <Animation hasAnimation={hasAnimation}>
       <div className="not-prose flex w-full flex-col">

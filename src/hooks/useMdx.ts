@@ -13,25 +13,25 @@ export function useMdx() {
       .join(' ')
   }
 
-  function getMdxComponent(text: Text) {
+  function getMdxComponent(text: Text, index: number) {
     const props = getProps(text)
 
     const content = text.content
     switch (text.type) {
       case 'default':
-        return `<Text ${props} hasAnimation={undefined}>${content}</Text>`
+        return `<Text key=${index} ${props} hasAnimation={false}>${content}</Text>`
       case 'alert':
-        return `<Alert ${props} hasAnimation={undefined}>${content}</Alert>`
+        return `<Alert key=${index} ${props} hasAnimation={false}>${content}</Alert>`
       case 'quote':
-        return `<Quote ${props} hasAnimation={undefined}>${content}</Quote>`
+        return `<Quote key=${index} ${props} hasAnimation={false}>${content}</Quote>`
       case 'image':
-        return `<Image ${props} hasAnimation={undefined}>${content}</Image>`
+        return `<Image key=${index} ${props} hasAnimation={false}>${content}</Image>`
       case 'user':
-        return `<User ${props} hasAnimation={undefined}>${content}</User>`
+        return `<User key=${index} ${props} hasAnimation={false}>${content}</User>`
       case 'code':
-        return `<Code ${props} hasAnimation={undefined} isRunnable={${text.isRunnable}}>${content}</Code>`
+        return `<Code key=${index} ${props} hasAnimation={false} isRunnable={${text.isRunnable}}>${content}</Code>`
       default:
-        return `<Text ${props} hasAnimation={undefined}>${content}</Text>`
+        return `<Text key=${index} ${props} hasAnimation={false}>${content}</Text>`
     }
   }
 

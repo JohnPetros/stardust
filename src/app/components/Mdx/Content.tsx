@@ -26,7 +26,7 @@ type ContentProps = {
 export function Content({
   type,
   children,
-  hasAnimation,
+  hasAnimation = false,
 }: ContentProps & VariantProps<typeof contentStyles>) {
   const content = Array.isArray(children)
     ? children

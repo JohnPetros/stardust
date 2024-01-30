@@ -18,15 +18,15 @@ export function Alert({
   title,
   picture,
   children,
-  hasAnimation = true,
+  hasAnimation = false,
 }: TextProps) {
   return (
     <Animation hasAnimation={hasAnimation}>
       <div className="not-prose flex w-full flex-col items-center">
         {title && (
-          <section id={slugify(title)} className="mb-4">
+          <div className="mb-4">
             <Title>{title}</Title>
-          </section>
+          </div>
         )}
         <div className="flex w-full items-center">
           {picture && <Picture url={picture} />}

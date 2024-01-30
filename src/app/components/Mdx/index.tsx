@@ -22,8 +22,6 @@ export function Mdx({ children }: MdxProps) {
 
   const mdx = formatCodeComponentsContent(children)
 
-  console.log(mdx)
-
   return (
     <div className="prose prose-invert mx-auto">
       <Markdown

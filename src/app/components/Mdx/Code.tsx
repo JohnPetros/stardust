@@ -14,7 +14,7 @@ type CodeProps = {
 export function Code({
   isRunnable = true,
   children,
-  hasAnimation = false,
+  hasAnimation = true,
 }: CodeProps) {
   return (
     <Animation hasAnimation={hasAnimation}>
