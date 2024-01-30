@@ -70,7 +70,7 @@ button:hover {
 }
 
 .strong {
-  @apply bg-gray-900 text-gray-50 rounded-md p-[2px] m-1 font-code
+  @apply bg-gray-900 text-gray-50 rounded-md p-[2px] m-1 font-code 
 }
 
 .skeleton {

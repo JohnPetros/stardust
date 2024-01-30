@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid'
+
 import { Text } from '@/@types/text'
 import { REGEX } from '@/utils/constants'
 import { getComponentContent } from '@/utils/helpers'
@@ -13,25 +15,27 @@ export function useMdx() {
       .join(' ')
   }
 
-  function getMdxComponent(text: Text, index: number) {
+  function getMdxComponent(text: Text) {
     const props = getProps(text)
 
     const content = text.content
+    const key = uuid()
+
     switch (text.type) {
       case 'default':
-        return `<Text key=${index} ${props} hasAnimation={false}>${content}</Text>`
+        return `<Text key={'${key}'} ${props} hasAnimation={false}>${content}</Text>`
       case 'alert':
-        return `<Alert key=${index} ${props} hasAnimation={false}>${content}</Alert>`
+        return `<Alert key={'${key}'} ${props} hasAnimation={false}>${content}</Alert>`
       case 'quote':
-        return `<Quote key=${index} ${props} hasAnimation={false}>${content}</Quote>`
+        return `<Quote key={'${key}'} ${props} hasAnimation={false}>${content}</Quote>`
       case 'image':
-        return `<Image key=${index} ${props} hasAnimation={false}>${content}</Image>`
+        return `<Image key={'${key}'} ${props} hasAnimation={false}>${content}</Image>`
       case 'user':
-        return `<User key=${index} ${props} hasAnimation={false}>${content}</User>`
+        return `<User key={'${key}'} ${props} hasAnimation={false}>${content}</User>`
       case 'code':
-        return `<Code key=${index} ${props} hasAnimation={false} isRunnable={${text.isRunnable}}>${content}</Code>`
+        return `<Code key={'${key}'} ${props} hasAnimation={false} isRunnable={${text.isRunnable}}>${content}</Code>`
       default:
-        return `<Text key=${index} ${props} hasAnimation={false}>${content}</Text>`
+        return `<Text key={'${key}'} ${props} hasAnimation={false}>${content}</Text>`
     }
   }
 
