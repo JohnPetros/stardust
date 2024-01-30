@@ -1,5 +1,7 @@
 import { tv } from 'tailwind-variants'
 
+import { Tooltip } from '../Tooltip'
+
 import { Difficulty } from '@/@types/challenge'
 
 const DIFFICULTIES = {
@@ -25,8 +27,10 @@ type DifficultyBadgeProps = {
 
 export function DifficultyBadge({ difficulty }: DifficultyBadgeProps) {
   return (
-    <span className={difficultyStyles({ difficulty })}>
-      {DIFFICULTIES[difficulty]}
-    </span>
+    <Tooltip direction="bottom" content="Nível de dificuldade desse desafio">
+      <span className={difficultyStyles({ difficulty })}>
+        {DIFFICULTIES[difficulty]}
+      </span>
+    </Tooltip>
   )
 }
