@@ -20,25 +20,26 @@ export function useVoteButtons() {
   async function handleVoteButton(vote: Vote) {
     if (!user || !challenge) return
 
-    if (vote === userVote) {
-      setUserVote(null)
+    if (userVote && vote === userVote) {
       if (vote === 'upvote') setUpvotes(upvotes - 1)
+      setUserVote(null)
       await api.removeVotedChallenge(challenge.id, user.id, userVote)
       return
     }
 
-    if (userVote) {
-      setUserVote(vote)
+    if (userVote && vote !== userVote) {
       if (vote === 'upvote') setUpvotes(upvotes + 1)
       if (vote === 'downvote') setUpvotes(upvotes - 1)
+      setUserVote(vote)
       await api.updateVotedChallenge(challenge.id, user.id, vote)
       return
     }
 
-    setUserVote(vote)
-    setUpvotes(upvotes + 1)
-    if (vote === 'upvote') setUpvotes(upvotes + 1)
-    await api.addVotedChallenge(challenge.id, user.id, vote)
+    if (!userVote) {
+      setUserVote(vote)
+      if (vote === 'upvote') setUpvotes(upvotes + 1)
+      await api.addVotedChallenge(challenge.id, user.id, vote)
+    }
   }
 
   return {
