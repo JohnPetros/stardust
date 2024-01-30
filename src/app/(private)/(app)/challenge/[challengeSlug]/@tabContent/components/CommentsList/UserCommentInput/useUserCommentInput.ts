@@ -35,7 +35,6 @@ export function useUserCommentInput(
     if (!textareaRef.current) return
 
     const snippetComponentContent = getComponentContent(snippetComponent)
-    console.log(snippetComponentContent.length)
 
     const start =
       currentCursorPosition - (snippetComponentContent.length + closeTag.length)
@@ -54,13 +53,13 @@ export function useUserCommentInput(
 
     switch (snippet) {
       case 'strong': {
-        const starsAmount = 2
+        const starsCountInEachSide = 1
 
         const strongContent = SNIPPETS.strong.replace(/\*/g, '')
 
         textareaRef.current.setSelectionRange(
-          currentCursorPosition - starsAmount - strongContent.length,
-          currentCursorPosition - starsAmount
+          currentCursorPosition - starsCountInEachSide - strongContent.length,
+          currentCursorPosition - starsCountInEachSide
         )
         break
       }
