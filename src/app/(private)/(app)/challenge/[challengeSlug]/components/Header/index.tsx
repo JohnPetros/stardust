@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowLeft } from '@phosphor-icons/react'
+import { AlignLeft, AlignRight, ArrowLeft, Layout } from '@phosphor-icons/react'
 
 import { useHeader } from './useHeader'
 
@@ -8,6 +8,7 @@ import type { Challenge } from '@/@types/challenge'
 import type { Vote } from '@/@types/vote'
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
+import { PopoverMenu, PopoverMenuButton } from '@/app/components/PopoverMenu'
 
 type HeaderProps = {
   challenge: Challenge
@@ -15,7 +16,28 @@ type HeaderProps = {
 }
 
 export function Header({ challenge, userVote }: HeaderProps) {
-  const { handleBackButton } = useHeader(challenge, userVote)
+  const { handleBackButton, handleLayoutButton, layout } = useHeader(
+    challenge,
+    userVote
+  )
+
+  const popoverMenuButtons: PopoverMenuButton[] = [
+    {
+      label:
+        'Tabs do lado esquerdo e editor de código do lado direito (layout padrão)',
+      icon: <AlignLeft className="text-xl text-green-500" />,
+      isToggle: true,
+      value: layout === 'tabs-left;code_editor-right',
+      action: () => handleLayoutButton('tabs-left;code_editor-right'),
+    },
+    {
+      label: 'Tabs do lado direito e editor de código do lado esquerdo',
+      icon: <AlignRight className="text-xl text-green-500" />,
+      isToggle: true,
+      value: layout === 'tabs-right;code_editor-left',
+      action: () => handleLayoutButton('tabs-right;code_editor-left'),
+    },
+  ]
 
   return (
     <header className="flex h-12 flex-col justify-center md:border-b md:border-green-700">
@@ -57,7 +79,11 @@ export function Header({ challenge, userVote }: HeaderProps) {
             {challenge.title}
           </h2>
         </div>
-        <div></div>
+        <PopoverMenu label="escolha de layout" buttons={popoverMenuButtons}>
+          <button className="translate-x-2 p-2">
+            <Layout className="text-lg text-green-400" weight="bold" />
+          </button>
+        </PopoverMenu>
       </div>
     </header>
   )
