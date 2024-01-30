@@ -3,13 +3,11 @@
 import { useEffect, useState } from 'react'
 
 import { useSpaceContext } from '@/contexts/SpaceContext'
-import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { STORAGE } from '@/utils/constants'
 
 export function useSpace() {
-  const localStorage = useLocalStorage()
-  const hasTransitionAnimation = localStorage.hasItem(
-    STORAGE.hasPageAnimationTransition
+  const hasTransitionAnimation = Boolean(
+    localStorage.getItem(STORAGE.hasPageAnimationTransition)
   )
 
   const { lastUnlockedStarPosition, scrollIntoLastUnlockedStar } =
@@ -30,7 +28,7 @@ export function useSpace() {
     localStorage.removeItem(STORAGE.hasPageAnimationTransition)
 
     return () => clearTimeout(timeout)
-  }, [isTransitionVisible, localStorage])
+  }, [isTransitionVisible])
 
   return {
     isTransitionVisible,

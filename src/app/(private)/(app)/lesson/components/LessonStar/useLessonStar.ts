@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation'
 import { StarRewardsPayload } from '@/@types/rewards'
 import type { Star } from '@/@types/star'
 import { setCookie } from '@/app/server/actions/setCookie'
-import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useLessonStore } from '@/stores/lessonStore'
 import { COOKIES, ROUTES, STORAGE } from '@/utils/constants'
 
@@ -20,7 +19,6 @@ export function useLessonStar(star: Star) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const router = useRouter()
-  const localStorage = useLocalStorage()
 
   function leaveLesson() {
     router.push(ROUTES.private.home.space)

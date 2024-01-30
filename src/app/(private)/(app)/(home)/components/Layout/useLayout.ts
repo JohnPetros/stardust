@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 
 import { useSiderbarContext } from '@/contexts/SidebarContext'
-import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { STORAGE } from '@/utils/constants'
 
 export function useLayout() {
@@ -15,7 +14,6 @@ export function useLayout() {
     setIsAchievementsListVisible,
   } = useSiderbarContext()
 
-  const localStorage = useLocalStorage()
   localStorage.setItem(STORAGE.hasPageAnimationTransition, 'true')
 
   function toggleSidenav() {
@@ -31,7 +29,7 @@ export function useLayout() {
     return () => {
       localStorage.removeItem(STORAGE.hasPageAnimationTransition)
     }
-  }, [localStorage])
+  }, [])
 
   return {
     isSidenavExpanded,

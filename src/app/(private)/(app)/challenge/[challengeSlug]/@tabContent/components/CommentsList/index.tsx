@@ -5,11 +5,17 @@ import { useCommentsList } from './useCommentsList'
 import { UserCommentInput } from './UserCommentInput'
 
 import { AnimatedArrow } from '@/app/components/AnimatedArrow'
+import { Loading } from '@/app/components/Loading'
 import { PopoverMenu } from '@/app/components/PopoverMenu'
 import { Separator } from '@/app/components/Separator'
 import { useAuth } from '@/contexts/AuthContext'
+import { useChallengeStore } from '@/stores/challengeStore'
 
 export function CommentsList() {
+  const canShowSolutions = useChallengeStore(
+    (store) => store.state.canShowComments
+  )
+
   const {
     isLoading,
     comments,
@@ -22,8 +28,10 @@ export function CommentsList() {
     handlePostComment,
     handleUserCommentChange,
     handleDeleteComment,
-  } = useCommentsList()
+  } = useCommentsList(canShowSolutions)
   const { user: authUser } = useAuth()
+
+  if (!canShowSolutions || isLoading) return <Loading />
 
   const sorterButtonTitle =
     sorter === 'date' && order === 'ascending'
@@ -32,7 +40,6 @@ export function CommentsList() {
       ? 'recentes'
       : 'votados'
 
-  if (isLoading) return <div>{isLoading}</div>
   return (
     <div className="pb-6 pt-4">
       <header className="flex flex-col gap-3">
