@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import useSWR from 'swr'
 
 import { Comment } from '@/@types/comment'
@@ -10,11 +11,11 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/contexts/ToastContext'
 import { useApi } from '@/services/api'
 import { useChallengeStore } from '@/stores/challengeStore'
-import { ERRORS } from '@/utils/constants'
+import { ERRORS, ROUTES } from '@/utils/constants'
 
 type Sorter = 'date' | 'upvotes'
 
-export function useCommentsList() {
+export function useCommentsList(canShowComments: boolean) {
   const challenge = useChallengeStore((store) => store.state.challenge)
   const { user } = useAuth()
 
@@ -25,6 +26,7 @@ export function useCommentsList() {
 
   const api = useApi()
   const toast = useToast()
+  const router = useRouter()
 
   function checkUserUpvotedComment(
     comment: Comment,
@@ -68,16 +70,6 @@ export function useCommentsList() {
     console.log(error)
     throw new Error(ERRORS.comments.failedlistFetching)
   }
-
-  // const comments: Comment[] = useMemo(() => {
-  //   if (initialComments && votedCommentsIds) {
-  //     return initialComments.map((comment) =>
-  //       checkUserUpvotedComment(comment, votedCommentsIds)
-  //     )
-  //   }
-
-  //   return []
-  // }, [initialComments, votedCommentsIds])
 
   async function handleDeleteComment(commentId: string) {
     if (!user) return
@@ -146,6 +138,11 @@ export function useCommentsList() {
       action: () => handleSortComments('upvotes', 'descending'),
     },
   ]
+
+  useEffect(() => {
+    if (!canShowComments)
+      router.push(`${ROUTES.private.challenge}/${challenge?.slug}`)
+  }, [canShowComments, router, challenge?.slug])
 
   return {
     isLoading,

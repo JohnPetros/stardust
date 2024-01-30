@@ -32,7 +32,7 @@ export function useComment(commentId: string) {
     getReplies
   )
 
-  if (error) throw new Error(ERRORS.repliesFailedFetching)
+  if (error) throw new Error(ERRORS.comments.failedrepliesFetching)
 
   async function handlePostUserReply() {
     await refetchReplies()
