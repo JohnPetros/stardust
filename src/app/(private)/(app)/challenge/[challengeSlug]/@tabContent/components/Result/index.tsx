@@ -27,14 +27,6 @@ export function Result() {
               userOutput={userOutput[index]}
             />
           ))}
-          {challenge.test_cases.map((testCase, index) => (
-            <TestCase
-              key={testCase.id}
-              data={testCase}
-              isCorrect={results[index]}
-              userOutput={userOutput[index]}
-            />
-          ))}
         </div>
         <span className="block h-full w-full bg-gray-800" />
         <VerificationButton
