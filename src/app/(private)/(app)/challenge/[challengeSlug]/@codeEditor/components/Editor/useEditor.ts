@@ -1,6 +1,6 @@
 'use client'
 
-import { KeyboardEvent, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import type { TestCase } from '@/@types/challenge'
@@ -9,13 +9,14 @@ import { ConsoleRef } from '@/app/components/Console'
 import { useToast } from '@/contexts/ToastContext'
 import { execute } from '@/libs/delegua'
 import { useChallengeStore } from '@/stores/challengeStore'
-import { REGEX, ROUTES } from '@/utils/constants'
+import { REGEX, ROUTES, STORAGE } from '@/utils/constants'
 import { playAudio } from '@/utils/helpers'
 
 const inputCommandRegex = REGEX.input
 
 export function useEditor() {
   const challenge = useChallengeStore((store) => store.state.challenge)
+  const layout = useChallengeStore((store) => store.state.layout)
   const userOutput = useChallengeStore((store) => store.state.userOutput)
   const setUserOutput = useChallengeStore(
     (store) => store.actions.setUserOutput
@@ -30,7 +31,8 @@ export function useEditor() {
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
   const consoleRef = useRef<ConsoleRef>(null)
   const errorLine = useRef(0)
-  const codeEditorHeight = editorContainerRef.current?.offsetHeight ?? 0
+
+  const [codeEditorHeight, setCodeEditorHeight] = useState(0)
 
   function getErrorLine() {
     return errorLine.current > 0 ? `</br>Linha: ${errorLine.current}` : ''
@@ -115,13 +117,8 @@ export function useEditor() {
   }
 
   function handleCodeChange(value: string) {
+    localStorage.setItem(STORAGE.challengeCode, value)
     userCode.current = value
-  }
-
-  function handleKeyDown({ shiftKey, key }: KeyboardEvent) {
-    if (shiftKey && key.toLowerCase() === 'enter') {
-      runCodeButtonRef.current?.click()
-    }
   }
 
   useEffect(() => {
@@ -129,10 +126,15 @@ export function useEditor() {
   }, [challenge])
 
   useEffect(() => {
-    console.log('OI')
     if (challenge && userOutput.length)
       router.push(`${ROUTES.private.challenge}/${challenge.slug}/result`)
   }, [challenge, userOutput, router])
+
+  useEffect(() => {
+    if (layout) {
+      setCodeEditorHeight(editorContainerRef.current?.offsetHeight ?? 0)
+    }
+  }, [layout])
 
   return {
     userCode,
@@ -141,11 +143,11 @@ export function useEditor() {
     consoleRef,
     codeEditorRef,
     codeEditorHeight,
-    initialCode: challenge?.code,
+    initialCode:
+      localStorage?.getItem(STORAGE.challengeCode) ?? challenge?.code,
     userOutput,
     resetCode,
     handleRunCode,
     handleCodeChange,
-    handleKeyDown,
   }
 }
