@@ -133,6 +133,13 @@ export interface Database {
             foreignKeyName: "challenges_star_id_fkey"
             columns: ["star_id"]
             isOneToOne: false
+            referencedRelation: "next_star_from_next_planet"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "challenges_star_id_fkey"
+            columns: ["star_id"]
+            isOneToOne: false
             referencedRelation: "stars"
             referencedColumns: ["id"]
           }
@@ -284,6 +291,18 @@ export interface Database {
           }
         ]
       }
+      current_planet_position: {
+        Row: {
+          position: number | null
+        }
+        Insert: {
+          position?: number | null
+        }
+        Update: {
+          position?: number | null
+        }
+        Relationships: []
+      }
       docs: {
         Row: {
           content: string | null
@@ -352,6 +371,13 @@ export interface Database {
           star_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "questions_star_id_fkey"
+            columns: ["star_id"]
+            isOneToOne: false
+            referencedRelation: "next_star_from_next_planet"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "questions_star_id_fkey"
             columns: ["star_id"]
@@ -763,20 +789,27 @@ export interface Database {
       users_unlocked_stars: {
         Row: {
           id: string
-          star_id: string | null
-          user_id: string | null
+          star_id: string
+          user_id: string
         }
         Insert: {
           id?: string
-          star_id?: string | null
-          user_id?: string | null
+          star_id: string
+          user_id: string
         }
         Update: {
           id?: string
-          star_id?: string | null
-          user_id?: string | null
+          star_id?: string
+          user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "users_unlocked_stars_star_id_fkey"
+            columns: ["star_id"]
+            isOneToOne: false
+            referencedRelation: "next_star_from_next_planet"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "users_unlocked_stars_star_id_fkey"
             columns: ["star_id"]
@@ -983,8 +1016,22 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "stars"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "challenges_star_id_fkey"
+            columns: ["star_id"]
+            isOneToOne: false
+            referencedRelation: "next_star_from_next_planet"
+            referencedColumns: ["id"]
           }
         ]
+      }
+      next_star_from_next_planet: {
+        Row: {
+          id: string | null
+          is_unlocked: boolean | null
+        }
+        Relationships: []
       }
       users_view: {
         Row: {
@@ -1107,11 +1154,15 @@ export interface Database {
           user_slug: string | null
         }[]
       }
-      get_next_star_id_from_next_planet: {
+      get_next_star_from_next_planet: {
         Args: {
-          current_planet_id: string
+          _current_planet_id: string
+          _user_id: string
         }
-        Returns: string
+        Returns: {
+          id: string | null
+          is_unlocked: boolean | null
+        }[]
       }
       get_user_by_id: {
         Args: {
