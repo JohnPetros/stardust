@@ -5,12 +5,12 @@ import { Question } from '@/@types/quiz'
 
 export type LessonStoreState = {
   currentStage: 'theory' | 'quiz' | 'rewards'
-  mdxComponentsAmount: number
+  mdxComponentsCount: number
   renderedMdxComponents: number
   questions: Question[]
   currentQuestionIndex: number
-  incorrectAnswersAmount: number
-  livesAmount: number
+  incorrectAnswersCount: number
+  livesCount: number
   answerHandler: VoidFunction
   isAnswerCorrect: boolean
   isAnswerVerified: boolean
@@ -21,14 +21,14 @@ export type LessonStoreActions = {
   showQuiz: () => void
   changeQuestion: () => void
   setQuestions: (categoriesIds: Question[]) => void
-  setMdxComponentsAmount: (mdxComponentsAmount: number) => void
+  setMdxComponentsCount: (mdxComponentsCount: number) => void
   setIsAnswered: (isAnswered: boolean) => void
   setIsAnswerCorrect: (isAnswered: boolean) => void
   setIsAnswerVerified: (isAnswered: boolean) => void
   setAnswerHandler: (answeredHandler: VoidFunction) => void
-  incrementIncorrectAswersAmount: () => void
-  incrementRenderedMdxComponentsAmount: () => void
-  decrementLivesAmount: () => void
+  incrementIncorrectAswersCount: () => void
+  incrementRenderedMdxComponentsCount: () => void
+  decrementLivesCount: () => void
   resetState: () => void
 }
 
@@ -39,12 +39,12 @@ export type LessonStoreProps = {
 
 const initialState: LessonStoreState = {
   currentStage: 'theory',
-  mdxComponentsAmount: 0,
+  mdxComponentsCount: 0,
   renderedMdxComponents: 0,
   questions: [],
   currentQuestionIndex: 0,
-  incorrectAnswersAmount: 0,
-  livesAmount: 5,
+  incorrectAnswersCount: 0,
+  livesCount: 5,
   answerHandler: () => {},
   isAnswerCorrect: false,
   isAnswerVerified: false,
@@ -66,14 +66,14 @@ export const useLessonStore = create<LessonStoreProps>()(
             state.questions = questions
           })
         },
-        setMdxComponentsAmount(mdxComponentsAmount: number) {
+        setMdxComponentsCount(mdxComponentsCount: number) {
           return set(({ state }) => {
-            state.mdxComponentsAmount = mdxComponentsAmount
+            state.mdxComponentsCount = mdxComponentsCount
           })
         },
-        setRenderedMdxComponentsAmount(renderedMdxComponentsAmount: number) {
+        setRenderedMdxComponentsCount(renderedMdxComponentsCount: number) {
           return set(({ state }) => {
-            state.renderedMdxComponents = renderedMdxComponentsAmount
+            state.renderedMdxComponents = renderedMdxComponentsCount
           })
         },
         setIsAnswered(isAnswered: boolean) {
@@ -96,19 +96,19 @@ export const useLessonStore = create<LessonStoreProps>()(
             state.answerHandler = answerHandler
           })
         },
-        incrementRenderedMdxComponentsAmount() {
+        incrementRenderedMdxComponentsCount() {
           return set(({ state }) => {
             state.renderedMdxComponents = state.renderedMdxComponents + 1
           })
         },
-        incrementIncorrectAswersAmount() {
+        incrementIncorrectAswersCount() {
           return set(({ state }) => {
-            state.incorrectAnswersAmount = state.incorrectAnswersAmount + 1
+            state.incorrectAnswersCount = state.incorrectAnswersCount + 1
           })
         },
-        decrementLivesAmount() {
+        decrementLivesCount() {
           return set(({ state }) => {
-            state.livesAmount = state.livesAmount - 1
+            state.livesCount = state.livesCount - 1
           })
         },
         changeQuestion() {

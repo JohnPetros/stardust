@@ -13,16 +13,16 @@ import { useLessonStore } from '@/stores/lessonStore'
 type TheoryProps = {
   title: string
   number: number
-  compiledMdxComponets: string[]
+  mdxComponents: string[]
 }
 
-export function Theory({ title, number, compiledMdxComponets }: TheoryProps) {
+export function Theory({ title, number, mdxComponents }: TheoryProps) {
   const {
     hasNextMdxComponent,
     currentMdxComponentIndex,
-    mdxComponents,
+    parsedMdxComponents,
     handleContinueButtonClick,
-  } = useTheory(compiledMdxComponets)
+  } = useTheory(mdxComponents)
   const showQuiz = useLessonStore((store) => store.actions.showQuiz)
 
   const buttonHasFocus = useRef(false)
@@ -41,7 +41,7 @@ export function Theory({ title, number, compiledMdxComponets }: TheoryProps) {
           )}
 
           <div className="mt-10 space-y-10 px-6 pb-[360px] md:px-0">
-            {mdxComponents.map((component, index) => {
+            {parsedMdxComponents.map((component, index) => {
               const shouldMemoized = index < currentMdxComponentIndex - 1
               return (
                 <MdxComponent

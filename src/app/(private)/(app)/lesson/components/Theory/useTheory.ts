@@ -9,49 +9,55 @@ type MdxComponent = {
   hasAnimation: boolean
 }
 
-export function useTheory(compiledMdxComponets: string[]) {
-  const incrementMdxComponentsAmount = useLessonStore(
-    (store) => store.actions.incrementRenderedMdxComponentsAmount
+export function useTheory(allMdxComponents: string[]) {
+  const incrementMdxComponentsCount = useLessonStore(
+    (store) => store.actions.incrementRenderedMdxComponentsCount
   )
 
-  const [mdxComponents, setMdxComponents] = useState<MdxComponent[]>([])
+  console.log({ allMdxComponents })
+
+  const [parsedMdxComponents, setParsedMdxComponents] = useState<
+    MdxComponent[]
+  >([])
   const nextMdxComponentIndex = useRef(0)
   const hasNextMdxComponent =
-    !!compiledMdxComponets[nextMdxComponentIndex.current + 1]
+    !!allMdxComponents[nextMdxComponentIndex.current + 1]
 
-  function nextText() {
+  function renderNextMdxComponent() {
     if (!hasNextMdxComponent) return
 
     nextMdxComponentIndex.current = nextMdxComponentIndex.current + 1
 
-    setMdxComponents(() => {
-      const previousMdxComponents = mdxComponents.map((mdxComponent) => ({
+    setParsedMdxComponents(() => {
+      const previousMdxComponents = parsedMdxComponents.map((mdxComponent) => ({
         ...mdxComponent,
         hasAnimation: false,
       }))
 
-      const nextText = {
-        content: compiledMdxComponets[nextMdxComponentIndex.current],
+      const nextMdxComponent = {
+        content: allMdxComponents[nextMdxComponentIndex.current],
         hasAnimation: true,
       }
 
-      return [...previousMdxComponents, nextText]
+      return [...previousMdxComponents, nextMdxComponent]
     })
 
-    incrementMdxComponentsAmount()
+    incrementMdxComponentsCount()
   }
 
   function handleContinueButtonClick() {
-    nextText()
+    renderNextMdxComponent()
   }
 
   useEffect(() => {
-    setMdxComponents([{ content: compiledMdxComponets[0], hasAnimation: true }])
-    incrementMdxComponentsAmount()
-  }, [compiledMdxComponets])
+    setParsedMdxComponents([
+      { content: allMdxComponents[0], hasAnimation: true },
+    ])
+    incrementMdxComponentsCount()
+  }, [allMdxComponents, incrementMdxComponentsCount])
 
   return {
-    mdxComponents,
+    parsedMdxComponents,
     currentMdxComponentIndex: nextMdxComponentIndex.current - 1,
     hasNextMdxComponent,
     handleContinueButtonClick,

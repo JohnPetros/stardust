@@ -16,8 +16,8 @@ export function useDragAndDropListQuestion(items: SortableItemData[]) {
       setIsAnswerCorrect,
       setAnswerHandler,
       changeQuestion,
-      incrementIncorrectAswersAmount,
-      decrementLivesAmount,
+      incrementIncorrectAswersCount,
+      decrementLivesCount,
     },
   } = useLessonStore()
 
@@ -26,7 +26,7 @@ export function useDragAndDropListQuestion(items: SortableItemData[]) {
     number | null
   >(null)
 
-  const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
+  const hasAlreadyIncrementIncorrectAnswersCount = useRef(false)
 
   const handleAnswer = useCallback(() => {
     function checkUserAnswerCorrect() {
@@ -52,22 +52,19 @@ export function useDragAndDropListQuestion(items: SortableItemData[]) {
 
     setIsAnswerCorrect(false)
 
-    if (
-      isAnswerVerified &&
-      !hasAlreadyIncrementIncorrectAnswersAmount.current
-    ) {
-      incrementIncorrectAswersAmount()
-      hasAlreadyIncrementIncorrectAnswersAmount.current = true
+    if (isAnswerVerified && !hasAlreadyIncrementIncorrectAnswersCount.current) {
+      incrementIncorrectAswersCount()
+      hasAlreadyIncrementIncorrectAnswersCount.current = true
     }
 
-    if (isAnswerVerified) decrementLivesAmount()
+    if (isAnswerVerified) decrementLivesCount()
   }, [
     items,
     sortableItems,
     isAnswerVerified,
     changeQuestion,
-    decrementLivesAmount,
-    incrementIncorrectAswersAmount,
+    decrementLivesCount,
+    incrementIncorrectAswersCount,
     setIsAnswerCorrect,
     setIsAnswerVerified,
   ])

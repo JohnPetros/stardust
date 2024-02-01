@@ -13,13 +13,13 @@ export function useCheckboxQuestion(correctOptions: string[]) {
       setIsAnswerCorrect,
       setAnswerHandler,
       changeQuestion,
-      incrementIncorrectAswersAmount,
-      decrementLivesAmount,
+      incrementIncorrectAswersCount,
+      decrementLivesCount,
     },
   } = useLessonStore()
 
   const [userAnswers, setUserAnswers] = useState<string[]>([])
-  const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
+  const hasAlreadyIncrementIncorrectAnswersCount = useRef(false)
 
   const handleAnswer = useCallback(() => {
     setIsAnswerVerified(!isAnswerVerified)
@@ -40,22 +40,19 @@ export function useCheckboxQuestion(correctOptions: string[]) {
 
     setIsAnswerCorrect(false)
 
-    if (
-      isAnswerVerified &&
-      !hasAlreadyIncrementIncorrectAnswersAmount.current
-    ) {
-      incrementIncorrectAswersAmount()
-      hasAlreadyIncrementIncorrectAnswersAmount.current = true
+    if (isAnswerVerified && !hasAlreadyIncrementIncorrectAnswersCount.current) {
+      incrementIncorrectAswersCount()
+      hasAlreadyIncrementIncorrectAnswersCount.current = true
     }
 
-    if (isAnswerVerified) decrementLivesAmount()
+    if (isAnswerVerified) decrementLivesCount()
   }, [
     correctOptions,
     userAnswers,
     isAnswerVerified,
     changeQuestion,
-    incrementIncorrectAswersAmount,
-    decrementLivesAmount,
+    incrementIncorrectAswersCount,
+    decrementLivesCount,
     setIsAnswerCorrect,
     setIsAnswerVerified,
   ])

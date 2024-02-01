@@ -14,13 +14,13 @@ export function useSelectionQuestion(options: string[], answer: string) {
       setIsAnswerCorrect,
       setAnswerHandler,
       changeQuestion,
-      incrementIncorrectAswersAmount,
-      decrementLivesAmount,
+      incrementIncorrectAswersCount,
+      decrementLivesCount,
     },
   } = useLessonStore()
   const [selectedOption, setSelectedOption] = useState('')
   const [reorderedOptions, setReorderedOptions] = useState<string[]>([])
-  const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
+  const hasAlreadyIncrementIncorrectAnswersCount = useRef(false)
 
   const handleAnswer = useCallback(() => {
     setIsAnswerVerified(!isAnswerVerified)
@@ -41,24 +41,21 @@ export function useSelectionQuestion(options: string[], answer: string) {
 
     setIsAnswerCorrect(false)
 
-    if (
-      isAnswerVerified &&
-      !hasAlreadyIncrementIncorrectAnswersAmount.current
-    ) {
-      incrementIncorrectAswersAmount()
-      hasAlreadyIncrementIncorrectAnswersAmount.current = true
+    if (isAnswerVerified && !hasAlreadyIncrementIncorrectAnswersCount.current) {
+      incrementIncorrectAswersCount()
+      hasAlreadyIncrementIncorrectAnswersCount.current = true
     }
 
-    if (isAnswerVerified) decrementLivesAmount()
+    if (isAnswerVerified) decrementLivesCount()
   }, [
     answer,
     isAnswerVerified,
     selectedOption,
     setIsAnswerCorrect,
     setIsAnswerVerified,
-    incrementIncorrectAswersAmount,
+    incrementIncorrectAswersCount,
     changeQuestion,
-    decrementLivesAmount,
+    decrementLivesCount,
   ])
 
   useEffect(() => {

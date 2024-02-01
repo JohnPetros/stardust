@@ -14,15 +14,15 @@ export function useOpenQuestion(answers: string[]) {
       setIsAnswerCorrect,
       setAnswerHandler,
       changeQuestion,
-      incrementIncorrectAswersAmount,
-      decrementLivesAmount,
+      incrementIncorrectAswersCount,
+      decrementLivesCount,
     },
   } = useLessonStore()
   const [userAnswers, setUserAnswers] = useState<string[]>(
     Array.from<string>({ length: answers.length }).fill('')
   )
 
-  const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
+  const hasAlreadyIncrementIncorrectAnswersCount = useRef(false)
 
   const handleAnswer = useCallback(() => {
     setIsAnswerVerified(!isAnswerVerified)
@@ -43,22 +43,19 @@ export function useOpenQuestion(answers: string[]) {
 
     setIsAnswerCorrect(false)
 
-    if (
-      isAnswerVerified &&
-      !hasAlreadyIncrementIncorrectAnswersAmount.current
-    ) {
-      incrementIncorrectAswersAmount()
-      hasAlreadyIncrementIncorrectAnswersAmount.current = true
+    if (isAnswerVerified && !hasAlreadyIncrementIncorrectAnswersCount.current) {
+      incrementIncorrectAswersCount()
+      hasAlreadyIncrementIncorrectAnswersCount.current = true
     }
 
-    if (isAnswerVerified) decrementLivesAmount()
+    if (isAnswerVerified) decrementLivesCount()
   }, [
     answers,
     isAnswerVerified,
     userAnswers,
     changeQuestion,
-    decrementLivesAmount,
-    incrementIncorrectAswersAmount,
+    decrementLivesCount,
+    incrementIncorrectAswersCount,
     setIsAnswerCorrect,
     setIsAnswerVerified,
   ])

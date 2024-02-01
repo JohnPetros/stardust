@@ -25,8 +25,8 @@ export function useDragAndDropQuestion(
       setIsAnswerCorrect,
       setAnswerHandler,
       changeQuestion,
-      incrementIncorrectAswersAmount,
-      decrementLivesAmount,
+      incrementIncorrectAswersCount,
+      decrementLivesCount,
     },
   } = useLessonStore()
   const [activeDraggableItemId, setActiveDraggableItemId] = useState<
@@ -35,7 +35,7 @@ export function useDragAndDropQuestion(
   const [draggableItems, setDraggableItems] =
     useState<DraggrableItem[]>(dragItems)
   const userDragItemsIdsSenquence = useRef<number[]>([])
-  const hasAlreadyIncrementIncorrectAnswersAmount = useRef(false)
+  const hasAlreadyIncrementIncorrectAnswersCount = useRef(false)
 
   const activeDraggableItem = draggableItems.find(
     (drag) => drag.id === activeDraggableItemId
@@ -60,21 +60,18 @@ export function useDragAndDropQuestion(
 
     setIsAnswerCorrect(false)
 
-    if (
-      isAnswerVerified &&
-      !hasAlreadyIncrementIncorrectAnswersAmount.current
-    ) {
-      incrementIncorrectAswersAmount()
-      hasAlreadyIncrementIncorrectAnswersAmount.current = true
+    if (isAnswerVerified && !hasAlreadyIncrementIncorrectAnswersCount.current) {
+      incrementIncorrectAswersCount()
+      hasAlreadyIncrementIncorrectAnswersCount.current = true
     }
 
-    if (isAnswerVerified) decrementLivesAmount()
+    if (isAnswerVerified) decrementLivesCount()
   }, [
     correctDragItemsIdsSequence,
     isAnswerVerified,
     changeQuestion,
-    decrementLivesAmount,
-    incrementIncorrectAswersAmount,
+    decrementLivesCount,
+    incrementIncorrectAswersCount,
     setIsAnswerCorrect,
     setIsAnswerVerified,
   ])

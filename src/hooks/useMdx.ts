@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { v4 as uuid } from 'uuid'
 
 import { Text } from '@/@types/text'
@@ -5,43 +6,43 @@ import { REGEX } from '@/utils/constants'
 import { getComponentContent } from '@/utils/helpers'
 
 export function useMdx() {
-  function getProps(text: Text) {
-    const props = Object.keys(text)
-    const currentText: { [prop in string]: unknown } = text
+  const parseTexts = useCallback((texts: Text[]) => {
+    function getProps(text: Text) {
+      const props = Object.keys(text)
+      const currentText: { [prop in string]: unknown } = text
 
-    return props
-      .filter((prop) => ['title', 'picture'].includes(prop))
-      .map((prop) => `${prop}={'${currentText[prop]}'}`)
-      .join(' ')
-  }
-
-  function getMdxComponent(text: Text) {
-    const props = getProps(text)
-
-    const content = text.content
-    const key = uuid()
-
-    switch (text.type) {
-      case 'default':
-        return `<Text key={'${key}'} ${props} hasAnimation={false}>${content}</Text>`
-      case 'alert':
-        return `<Alert key={'${key}'} ${props} hasAnimation={false}>${content}</Alert>`
-      case 'quote':
-        return `<Quote key={'${key}'} ${props} hasAnimation={false}>${content}</Quote>`
-      case 'image':
-        return `<Image key={'${key}'} ${props} hasAnimation={false}>${content}</Image>`
-      case 'user':
-        return `<User key={'${key}'} ${props} hasAnimation={false}>${content}</User>`
-      case 'code':
-        return `<Code key={'${key}'} ${props} hasAnimation={false} isRunnable={${text.isRunnable}}>${content}</Code>`
-      default:
-        return `<Text key={'${key}'} ${props} hasAnimation={false}>${content}</Text>`
+      return props
+        .filter((prop) => ['title', 'picture'].includes(prop))
+        .map((prop) => `${prop}={'${currentText[prop]}'}`)
+        .join(' ')
     }
-  }
 
-  function parseTexts(texts: Text[]) {
+    function getMdxComponent(text: Text) {
+      const props = getProps(text)
+
+      const content = text.content
+      const key = uuid()
+
+      switch (text.type) {
+        case 'default':
+          return `<Text key={'${key}'} ${props} hasAnimation={false}>${content}</Text>`
+        case 'alert':
+          return `<Alert key={'${key}'} ${props} hasAnimation={false}>${content}</Alert>`
+        case 'quote':
+          return `<Quote key={'${key}'} ${props} hasAnimation={false}>${content}</Quote>`
+        case 'image':
+          return `<Image key={'${key}'} ${props} hasAnimation={false}>${content}</Image>`
+        case 'user':
+          return `<User key={'${key}'} ${props} hasAnimation={false}>${content}</User>`
+        case 'code':
+          return `<Code key={'${key}'} ${props} hasAnimation={false} isRunnable={${text.isRunnable}}>${content}</Code>`
+        default:
+          return `<Text key={'${key}'} ${props} hasAnimation={false}>${content}</Text>`
+      }
+    }
+
     return texts.map(getMdxComponent)
-  }
+  }, [])
 
   function formatCodeComponentsContent(initialMdx: string) {
     let mdx = initialMdx

@@ -11,13 +11,13 @@ import type { Star } from '@/@types/star'
 import { useSecondsCounter } from '@/hooks/useSecondsCounter'
 import { useLessonStore } from '@/stores/lessonStore'
 
-interface LayoutProps {
+type LayoutProps = {
   star: Star
-  mdxComponets: string[]
 }
 
-export function LessonStar({ star, mdxComponets }: LayoutProps) {
-  const { isTransitionVisible, scrollRef, leaveLesson } = useLessonStar(star)
+export function LessonStar({ star }: LayoutProps) {
+  const { isTransitionVisible, mdxComponents, scrollRef, leaveLesson } =
+    useLessonStar(star)
 
   const currentStage = useLessonStore((store) => store.state.currentStage)
 
@@ -31,11 +31,11 @@ export function LessonStar({ star, mdxComponets }: LayoutProps) {
 
         {star && (
           <>
-            {currentStage === 'theory' && (
+            {currentStage === 'theory' && mdxComponents.length > 0 && (
               <Theory
                 title={star.name}
                 number={star.number}
-                compiledMdxComponets={mdxComponets}
+                mdxComponents={mdxComponents}
               />
             )}
             {currentStage === 'quiz' && <Quiz leaveLesson={leaveLesson} />}

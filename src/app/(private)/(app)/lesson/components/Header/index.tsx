@@ -16,7 +16,7 @@ import { useLessonStore } from '@/stores/lessonStore'
 export function Header() {
   const { user } = useAuth()
 
-  const livesAmount = useLessonStore((store) => store.state.livesAmount)
+  const livesCount = useLessonStore((store) => store.state.livesCount)
 
   const { rocket } = useRocket(user?.rocket_id ?? '')
   const { getImage } = useApi()
@@ -68,7 +68,7 @@ export function Header() {
               priority
             />
           </div>
-          <span className="text-lg font-bold text-red-700">{livesAmount}</span>
+          <span className="text-lg font-bold text-red-700">{livesCount}</span>
         </div>
       </div>
     </header>

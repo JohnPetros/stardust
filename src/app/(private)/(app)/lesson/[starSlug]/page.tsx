@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 
 import { LessonStar } from '../components/LessonStar'
 
-import { texts } from '@/__tests__/mocks/lesson/planets/planet2/star3/texts'
+import { texts } from '@/__tests__/mocks/lesson/planets/planet3/star1/texts'
 import type { Star } from '@/@types/star'
 import { MdxController } from '@/services/api/server/controllers/mdxController'
 import { createServerClient } from '@/services/api/supabase/clients/serverClient'
@@ -27,15 +27,5 @@ export default async function LessonPage({ params }: LessonPageProps) {
     notFound()
   }
 
-  try {
-    const mdxController = MdxController()
-    // mdxComponents = await mdxController.parseTexts(star.texts)
-    mdxComponents = await mdxController.parseTexts(texts)
-
-    if (!mdxComponents.length) throw new Error()
-  } catch (error) {
-    console.error(ERRORS.mdx.failedCompiling)
-  }
-
-  return <LessonStar star={star} mdxComponets={mdxComponents} />
+  return <LessonStar star={star} />
 }
