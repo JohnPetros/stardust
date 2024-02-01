@@ -8,7 +8,7 @@ import { AuthController } from '@/services/api/supabase/controllers/authControll
 import { StarsController } from '@/services/api/supabase/controllers/starsController'
 import { ERRORS } from '@/utils/constants'
 
-export default async function HomePage() {
+export default async function SpacePage() {
   const supabase = createServerClient()
   const starsController = StarsController(supabase)
   const authController = AuthController(supabase)

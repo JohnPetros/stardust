@@ -10,25 +10,33 @@ import {
 } from '@/@types/rewards'
 import type { User } from '@/@types/user'
 import { ERRORS, ROUTES } from '@/utils/constants'
+import { checkObject } from '@/utils/helpers'
 
-function isStarPayload(
-  payload: object,
-  properties: (keyof StarPayload)[]
-): payload is StarPayload {
-  for (const property of properties) {
-    if (!(property in payload)) return false
-  }
-  return true
+function isStarPayload(payload: StarPayload): payload is StarPayload {
+  const starPayloadPropeties: (keyof StarPayload)[] = [
+    'incorrectAnswers',
+    'questions',
+    'seconds',
+    'starId',
+  ]
+  return checkObject<StarPayload>(payload, starPayloadPropeties)
 }
 
 function isStarChallengePayload(
-  payload: object,
-  properties: (keyof StarChallengePayload)[]
+  payload: StarChallengePayload
 ): payload is StarChallengePayload {
-  for (const property of properties) {
-    if (!(property in payload)) return false
-  }
-  return true
+  const starChallengePayloadProperties: (keyof StarChallengePayload)[] = [
+    'incorrectAnswers',
+    'seconds',
+    'starId',
+    'challengeId',
+    'difficulty',
+    'isCompleted',
+  ]
+  return checkObject<StarChallengePayload>(
+    payload,
+    starChallengePayloadProperties
+  )
 }
 
 let xp = 0
@@ -43,15 +51,9 @@ export async function getRewards(payload: string, user: User) {
 
   switch (origin) {
     case 'star': {
-      const starPaylod = Object.values(payloadObject)[0] as object
-      const starPayloadPropeties: (keyof StarPayload)[] = [
-        'incorrectAnswers',
-        'questions',
-        'seconds',
-        'starId',
-      ]
+      const starPaylod = Object.values(payloadObject)[0] as StarPayload
 
-      if (!isStarPayload(starPaylod, starPayloadPropeties))
+      if (!isStarPayload(starPaylod))
         throw new Error(ERRORS.rewards.payloadNotFound)
 
       const lessonRewards = await calculateLessonRewards({
@@ -66,26 +68,15 @@ export async function getRewards(payload: string, user: User) {
       accurance = lessonRewards.accurance
       seconds = starPaylod.seconds
       nextRoute = ROUTES.private.home.space
+
       break
     }
     case 'star-challenge': {
-      const starChallengePaylod = Object.values(payloadObject)[0] as object
+      const starChallengePaylod = Object.values(
+        payloadObject
+      )[0] as StarChallengePayload
 
-      const starChallengePayloadProperties: (keyof StarChallengePayload)[] = [
-        'incorrectAnswers',
-        'seconds',
-        'starId',
-        'challengeId',
-        'difficulty',
-        'isCompleted',
-      ]
-
-      if (
-        !isStarChallengePayload(
-          starChallengePaylod,
-          starChallengePayloadProperties
-        )
-      )
+      if (!isStarChallengePayload(starChallengePaylod))
         throw new Error(ERRORS.rewards.payloadNotFound)
 
       const challengeRewards = await calculateChallengeRewards({
@@ -93,6 +84,7 @@ export async function getRewards(payload: string, user: User) {
         difficulty: starChallengePaylod.difficulty,
         incorrectAnswers: starChallengePaylod.incorrectAnswers,
         isCompleted: starChallengePaylod.isCompleted,
+        starId: starChallengePaylod.starId,
         user,
       })
 

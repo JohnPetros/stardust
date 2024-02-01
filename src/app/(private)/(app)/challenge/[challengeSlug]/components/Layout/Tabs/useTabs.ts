@@ -42,8 +42,11 @@ export function useTabs() {
   }
 
   useEffect(() => {
-    if (challenge) setCanShowSolutions(challenge.isCompleted ?? false)
-  }, [challenge, setCanShowSolutions])
+    if (!challenge) return
+
+    setCanShowComments(challenge.isCompleted ?? false)
+    setCanShowSolutions(challenge.isCompleted ?? false)
+  }, [challenge, setCanShowComments, setCanShowSolutions])
 
   useEffect(() => {
     setCanShowComments(isEnd)
@@ -55,8 +58,6 @@ export function useTabs() {
     if (!challenge) return
 
     const activeTab = pathname.split('/').pop()
-
-    console.log({ activeTab })
 
     if (activeTab !== challenge.slug) setActiveTab(activeTab as Tab)
   }, [pathname, challenge])

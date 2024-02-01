@@ -5,11 +5,9 @@ import { PanInfo, useAnimation } from 'framer-motion'
 
 import { ConsoleProps } from '.'
 
-import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { STORAGE } from '@/utils/constants'
 
 export function useConsole({ height, results }: ConsoleProps) {
-  const storage = useLocalStorage()
   const controls = useAnimation()
 
   const [output, setOutput] = useState<string[]>([])
@@ -53,7 +51,7 @@ export function useConsole({ height, results }: ConsoleProps) {
   )
 
   function handleToggleFormatOutput() {
-    storage.setItem(
+    localStorage.setItem(
       STORAGE.shouldFormatConsoleOutput,
       String(!shouldFormatOutput)
     )
@@ -83,7 +81,7 @@ export function useConsole({ height, results }: ConsoleProps) {
 
   useEffect(() => {
     const shouldFormatConsoleOutput = Boolean(
-      storage.getItem(STORAGE.shouldFormatConsoleOutput) === 'true'
+      localStorage.getItem(STORAGE.shouldFormatConsoleOutput) === 'true'
     )
     setShouldFormatOutput(shouldFormatConsoleOutput)
   }, [isOpen])

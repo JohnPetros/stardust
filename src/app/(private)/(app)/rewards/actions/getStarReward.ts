@@ -9,7 +9,7 @@ type CalculateStarRewardsParams = {
   newCoins: number
   newXp: number
   user: User
-  nextStar: Star | null
+  nextStar: Pick<Star, 'id' | 'isUnlocked'> | null
   currentPlanetId: string
 }
 
@@ -17,7 +17,6 @@ export async function calculateStarRewards({
   user,
   newCoins,
   newXp,
-  currentPlanetId,
   nextStar,
 }: CalculateStarRewardsParams): Promise<Partial<User>> {
   async function addUnlockedStar(UnlockedstarId: string) {
@@ -29,23 +28,13 @@ export async function calculateStarRewards({
   const updatedXp = newXp + user.xp
   const updatedWeeklyXp = newXp + user.weekly_xp
 
-  let completedPlanets = user.completed_planets
-  let updatedUnlockedStars = user.unlocked_stars
-
-  if (nextStar && nextStar.planet_id !== currentPlanetId) {
-    completedPlanets += nextStar ? 1 : 0
-  }
-
   if (nextStar && !nextStar.isUnlocked) {
     await addUnlockedStar(nextStar.id)
-    updatedUnlockedStars++
   }
 
   return {
     coins: updatedCoins,
     xp: updatedXp,
     weekly_xp: updatedWeeklyXp,
-    unlocked_stars: updatedUnlockedStars,
-    completed_planets: completedPlanets,
   }
 }

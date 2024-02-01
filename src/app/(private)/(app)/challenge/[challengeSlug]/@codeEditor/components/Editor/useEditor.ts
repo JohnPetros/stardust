@@ -22,6 +22,11 @@ export function useEditor() {
     (store) => store.actions.setUserOutput
   )
 
+  const initialCode =
+    typeof window !== 'undefined'
+      ? localStorage?.getItem(STORAGE.challengeCode) ?? challenge?.code ?? ''
+      : ''
+
   const toast = useToast()
   const router = useRouter()
 
@@ -77,6 +82,8 @@ export function useEditor() {
     let userOutput = ''
     const { input } = testCase
 
+    console.log({ code })
+
     try {
       const formatedCode = formatCode(code, { input })
       const { erros } = await execute(formatedCode, (output) => {
@@ -110,25 +117,19 @@ export function useEditor() {
 
     if (userOutput.length) {
       setUserOutput(userOutput)
+      router.push(`${ROUTES.private.challenge}/${challenge.slug}/result`)
     }
   }
 
   function handleCodeChange(value: string) {
     localStorage.setItem(STORAGE.challengeCode, value)
-    console.log(userCode.current)
-    console.log(value)
     previousUserCode.current = userCode.current
     userCode.current = value
   }
 
   useEffect(() => {
-    if (!userCode.current && challenge) userCode.current = challenge.code
-  }, [challenge])
-
-  useEffect(() => {
-    if (challenge && userOutput.length)
-      router.push(`${ROUTES.private.challenge}/${challenge.slug}/result`)
-  }, [challenge, userOutput, router])
+    if (!userCode?.current && challenge) userCode.current = initialCode
+  }, [challenge, initialCode])
 
   useEffect(() => {
     if (layout) {
@@ -144,8 +145,7 @@ export function useEditor() {
     consoleRef,
     codeEditorRef,
     codeEditorHeight,
-    initialCode:
-      localStorage?.getItem(STORAGE.challengeCode) ?? challenge?.code,
+    initialCode,
     userOutput,
     handleRunCode,
     handleCodeChange,

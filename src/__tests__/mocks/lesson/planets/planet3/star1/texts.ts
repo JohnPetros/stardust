@@ -57,7 +57,7 @@ export const texts: Text[] = [
   {
     type: 'list',
     content:
-      'E para isso nós usamos o operador `+` de adição, o mesmo usado para concatenar textos.',
+      'E para isso nós usamos o operador *+* de adição, o mesmo usado para concatenar textos.',
     title: 'Adição (+)',
     picture: 'panda-olhando-de-lado.jpg',
   },
@@ -74,7 +74,7 @@ escreva("A nave agora tem " + totalCombustivel + " galões de combustível")
   {
     type: 'list',
     content:
-      'Além de reabastecer, o próprio foguete consegue calcular o quanto de suprimentos você já consumiu até agora, utilizando simplesmente o operador de subtração `-`.',
+      'Além de reabastecer, o próprio foguete consegue calcular o quanto de suprimentos você já consumiu até agora, utilizando simplesmente o operador de subtração *-*.',
     title: 'Subtração (-)',
     picture: 'panda-sorrindo.jpg',
   },
@@ -108,13 +108,13 @@ escreva("Você possui " + suprimentosRestante + " suprimentos")
   {
     type: 'default',
     content:
-      'Logo, para fazer o cálculo da quantidade de suprimentos que você teria em um mês é necessário fazer uma operação de multiplicação: `*`',
+      'Logo, para fazer o cálculo da quantidade de suprimentos que você teria em um mês é necessário fazer uma operação de multiplicação: ***',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
     type: 'list',
     content:
-      'Você não leu errado. Para fazer um cálculo de multiplicação, usamos o operador `*` em vez de `x`.',
+      'Você não leu errado. Para fazer um cálculo de multiplicação, usamos o operador *** em vez de *x*.',
     title: 'Multiplicação (*)',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
@@ -154,7 +154,7 @@ escreva("Em um mês você terá " + suprimentosNoMes + " suprimentos")
   {
     type: 'list',
     content:
-      'Aí temos mais uma caso diferenciado: em vez de usar o operador `÷` que você provavelmente já se acustumou a utilizar, é necessário usar a barra `/`. Veja o exemplo:',
+      'Aí temos mais uma caso diferenciado: em vez de usar o operador *÷* que você provavelmente já se acustumou a utilizar, é necessário usar a barra */*. Veja o exemplo:',
     picture: 'panda-abracando-bambu.jpg',
     title: 'Divisão (/)',
   },
@@ -261,13 +261,13 @@ escreva('no final do mês você terá ' + consumoTotal + ' de suprimentos')
   },
   {
     content:
-      'No momento atual há disponível `10125` de energia. Para saber se é possível distribuir a energia igualmente para os dois motores, basta verificar se esse número é divisível por 2.',
+      'No momento atual há disponível *10125* de energia. Para saber se é possível distribuir a energia igualmente para os dois motores, basta verificar se esse número é divisível por 2.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
     type: 'default',
   },
   {
     content:
-      'Para isso, podemos usar um operador especial chamado `módulo`, que serve para calcular o resto da divisão entre 2 números usando o símbolo de porcentagem `%`.',
+      'Para isso, podemos usar um operador especial chamado *módulo*, que serve para calcular o resto da divisão entre 2 números usando o símbolo de porcentagem *%*.',
     picture: 'panda-fazendo-coracao.jpg',
     title: 'Módulo (%)',
     type: 'list',

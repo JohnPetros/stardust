@@ -37,6 +37,8 @@ export function useResult() {
 
     const currentSeconds = Number(localStorage.getItem(STORAGE.secondsCounter))
 
+    console.log({ currentSeconds })
+
     if (challenge?.star_id) {
       const rewardsPayload: StarChallengeRewardsPayload = {
         'star-challenge': {
@@ -124,10 +126,16 @@ export function useResult() {
       results?.length
     ) {
       const isAnswerCorrect = results.every((result) => result === true)
-      setIsAnswerCorrect(isAnswerCorrect)
+
+      if (!isAnswerCorrect) {
+        incrementIncorrectAswersAmount()
+        return
+      }
+
+      setIsAnswerCorrect(true)
       setIsEnd(true)
     }
-  }, [challenge, userOutput, results, setIsEnd])
+  }, [challenge, userOutput, results, incrementIncorrectAswersAmount, setIsEnd])
 
   return {
     challenge,

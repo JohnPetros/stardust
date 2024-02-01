@@ -15,7 +15,7 @@ type ChallengeStarRewardParas = {
   difficulty: Difficulty
   isCompleted: boolean
   challengeId: string
-  starId?: string
+  starId: string | null
   user: User
 }
 
@@ -40,20 +40,26 @@ export async function calculateChallengeRewards({
   const newCoins = difficultyRewards.coins / (isCompleted ? 2 : 1)
   const newXp = difficultyRewards.xp / (isCompleted ? 2 : 1)
   const accurance = getAccurance()
-  let userCompletedChallenges = user.completed_challenges
 
-  if (isCompleted) {
+  if (!isCompleted) {
     const challengesController = ChallengesController(supabase)
 
     await challengesController.addCompletedChallenge(challengeId, user.id)
-    userCompletedChallenges++
   }
 
   if (starId) {
     const starsController = StarsController(supabase)
 
     const currentStar = await starsController.getStarById(starId)
-    const nextStar = await starsController.getNextStar(currentStar, user.id)
+
+    let nextStar = await starsController.getNextStar(currentStar, user.id)
+
+    if (!nextStar) {
+      nextStar = await starsController.getNextStarFromNextPlanet(
+        currentStar.planet_id,
+        user.id
+      )
+    }
 
     let updatedUserData = await calculateStarRewards({
       user,
@@ -65,7 +71,6 @@ export async function calculateChallengeRewards({
 
     updatedUserData = {
       ...updatedUserData,
-      completed_challenges: userCompletedChallenges,
     }
 
     await usersController.updateUser(updatedUserData, user.id)
@@ -77,19 +82,11 @@ export async function calculateChallengeRewards({
     }
   }
 
-  console.log({
-    coins: user.coins + newCoins,
-    xp: user.xp + newXp,
-    weekly_xp: user.xp + newXp,
-    completed_challenges: userCompletedChallenges,
-  })
-
   await usersController.updateUser(
     {
       coins: user.coins + newCoins,
       xp: user.xp + newXp,
       weekly_xp: user.xp + newXp,
-      completed_challenges: userCompletedChallenges,
     },
     user.id
   )

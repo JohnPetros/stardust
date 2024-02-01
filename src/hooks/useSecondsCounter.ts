@@ -15,7 +15,6 @@ export function useSecondsCounter(isEnabled: boolean) {
 
     return () => {
       clearInterval(interval)
-      localStorage.removeItem(STORAGE.secondsCounter)
     }
   }, [isEnabled])
 }

@@ -158,12 +158,13 @@ export const ChallengesController = (
         .select('challenge_id')
         .eq('challenge_id', challengeId)
         .eq('user_id', userId)
+        .single()
 
       if (error) {
-        throw new Error(error.message)
+        return false
       }
 
-      return !data
+      return Boolean(data.challenge_id)
     },
 
     addVotedChallenge: async (

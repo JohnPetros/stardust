@@ -108,14 +108,14 @@ const challengeStore: StateCreator<
         state: { ...state, isEnd },
         actions,
       })),
-    setCanShowComments: (cansetCanShowComments: boolean) =>
+    setCanShowComments: (canShowComments: boolean) =>
       set(({ state, actions }: ChallengeStore) => ({
-        state: { ...state, cansetCanShowComments },
+        state: { ...state, canShowComments },
         actions,
       })),
-    setCanShowSolutions: (cansetCanShowSolutions: boolean) =>
+    setCanShowSolutions: (canShowSolutions: boolean) =>
       set(({ state, actions }: ChallengeStore) => ({
-        state: { ...state, cansetCanShowSolutions },
+        state: { ...state, canShowSolutions },
         actions,
       })),
     incrementIncorrectAswersAmount: () =>

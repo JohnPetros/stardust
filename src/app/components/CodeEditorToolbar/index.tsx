@@ -30,7 +30,7 @@ export function CodeEditorToolbar({
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
   const docsDialogButtonRef = useRef<HTMLButtonElement>(null)
 
-  const { handleKeyDown } = useCodeEditorToolbar({
+  const { handleKeyDown, resetCode } = useCodeEditorToolbar({
     previousUserCode,
     codeEditorRef,
     runCodeButtonRef,
@@ -62,7 +62,7 @@ export function CodeEditorToolbar({
               <Button
                 tabIndex={0}
                 autoFocus
-                onClick={() => codeEditorRef.current?.reloadValue()}
+                onClick={resetCode}
                 className="bg-red-700 text-gray-100"
               >
                 Voltar código

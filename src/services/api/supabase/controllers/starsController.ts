@@ -37,69 +37,57 @@ export const StarsController = (supabase: Supabase): IStarsController => {
     getNextStar: async (currentStar: Star, userId: string) => {
       const { data, error } = await supabase
         .from('stars')
-        .select('*, users_unlocked_stars(*)')
+        .select('id, users_unlocked_stars(*)')
         .match({
           planet_id: currentStar.planet_id,
           number: currentStar.number + 1,
         })
         .eq('users_unlocked_stars.user_id', userId)
-        .single<Star & { users_unlocked_stars?: [] }>()
+        .single<{ id: string; users_unlocked_stars?: [] }>()
 
       if (error) {
-        throw new Error(error.message)
+        return null
       }
 
-      if (!data) return null
+      if (data && data.id && data.users_unlocked_stars) {
+        const { users_unlocked_stars } = data
 
-      const { users_unlocked_stars } = data
+        const nextStar = {
+          id: data.id,
+          isUnlocked: users_unlocked_stars && users_unlocked_stars.length > 0,
+        }
 
-      const nextStar = {
-        ...data,
-        isUnlocked: users_unlocked_stars && users_unlocked_stars.length > 0,
+        return nextStar
       }
 
-      delete nextStar.users_unlocked_stars
-
-      return nextStar as Star
+      return null
     },
 
     getNextStarFromNextPlanet: async (
       currentPlanetId: string,
       userId: string
     ) => {
-      const { data: nextStarId, error: nextStarIdError } = await supabase.rpc(
-        'get_next_star_id_from_next_planet',
-        {
-          current_planet_id: currentPlanetId,
-        }
-      )
-
-      if (nextStarIdError) {
-        throw new Error(nextStarIdError.message)
-      }
-
       const { data, error } = await supabase
-        .from('stars')
-        .select('*, users_unlocked_stars(*)')
-        .eq('id', nextStarId)
-        .eq('users_unlocked_stars.user_id', userId)
-        .single<Star & { users_unlocked_stars?: [] }>()
+        .rpc('get_next_star_from_next_planet', {
+          _current_planet_id: currentPlanetId,
+          _user_id: userId,
+        })
+        .single()
 
       if (error) {
-        throw new Error(error.message)
+        return null
       }
 
-      if (!data) return null
+      if (data && data.id && typeof data.is_unlocked !== 'undefined') {
+        const nextStar: Pick<Star, 'id' | 'isUnlocked'> = {
+          id: data.id,
+          isUnlocked: Boolean(data.is_unlocked),
+        }
 
-      const nextStar = {
-        ...data,
-        isUnlocked:
-          data && data.users_unlocked_stars
-            ? data.users_unlocked_stars.length > 0
-            : false,
+        return nextStar
       }
 
-      return nextStar as Star
+      return null
     },
 
     getUserUnlockedStarsIds: async (userId: string) => {

@@ -3,7 +3,6 @@
 import { createContext, ReactNode, useContext, useReducer } from 'react'
 
 import type { ThemeName } from '@/@types/themeName'
-import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { EDITOR_DEFAULT_CONFIG, STORAGE } from '@/utils/constants'
 
 export type CodeEditorState = {
@@ -39,8 +38,6 @@ export function CodeEditorProvider({ children }: CodeEditorProviderProps) {
     CodeEditorReducer,
     initialCodeEditorState
   )
-
-  const localStorage = useLocalStorage()
 
   function getEditorConfig(): CodeEditorState {
     const storedData = localStorage.getItem(STORAGE.codeEditorConfig)
