@@ -66,6 +66,7 @@ export const texts: Text[] = [
     content: `var combustivel = 100 
 var combustivelAtual = 200
 var totalCombustivel = combustivel + combustivelAtual
+
 escreva("A nave agora tem " + totalCombustivel + " galões de combustível")
 
 // Resultado: A nave agora tem 300 galões de combustível`,
@@ -83,6 +84,7 @@ escreva("A nave agora tem " + totalCombustivel + " galões de combustível")
     content: `var suprimentosConsumidos = 250
 var suprimentosAtual = 300
 var suprimentosRestante = suprimentosAtual - suprimentosConsumidos
+
 escreva("Você possui " + suprimentosRestante + " suprimentos")
 
 // Resultado: Você possui 50 suprimentos`,
@@ -123,6 +125,7 @@ escreva("Você possui " + suprimentosRestante + " suprimentos")
     content: `var suprimentoPorDia = 1
 var diasNoMes = 30
 var suprimentosNoMes = suprimentoPorDia * diasNoMes
+
 escreva("Em um mês você terá " + suprimentosNoMes + " suprimentos")
 
 // Resultado: Em um mês você terá 30 suprimentos`,
@@ -163,6 +166,7 @@ escreva("Em um mês você terá " + suprimentosNoMes + " suprimentos")
     content: `var suprimentosNoMes = 90
 var diasNoMes = 30
 var suprimentosPorDia = suprimentosNoMes / diasNoMes
+
 escreva("Você consome " + suprimentosPorDia + " suprimentos por dia")
 
 // Resultado: Você consome 3 suprimentos por dia`,
@@ -205,7 +209,7 @@ escreva("Você consome " + suprimentosPorDia + " suprimentos por dia")
   {
     type: 'code',
     content: `escreva((5 + 5) * 5)
-//  Resultado: 30`,
+//  Resultado: 50`,
     isRunnable: true,
   },
   {
@@ -220,6 +224,7 @@ escreva("Você consome " + suprimentosPorDia + " suprimentos por dia")
 var suprimentosPorDia = 1
 var suprimentosAtual = 300
 var consumoTotal = suprimentosAtual - 250 + suprimentosPorDia * diasMes - 3 * diasMes
+
 escreva('no final do mês você terá ' + consumoTotal + ' de suprimentos')
 
 //  Resultado: no final do mês você terá -10 de suprimentos`,
@@ -278,8 +283,7 @@ var resto = 10125 % 2
 escreva('O resto da divisão de 10125 por 2 é igual a ' + resto)
 
 // Resultado: Portanto, o resto da divisão de 10125 por 2 é igual a 1`,
-    title: 'Módulo (%)',
-    type: 'list',
+    type: 'code',
     isRunnable: true,
   },
   {
@@ -301,7 +305,7 @@ escreva('O resto da divisão de 10125 por 2 é igual a ' + resto)
   },
   {
     content:
-      'Antes vamos averiguar se não tem nenhuma vida alienígena nas redondezas',
+      "Antes vamos averiguar se não tem nenhuma vida alienígena nas redondezas. Let's go!",
     picture: 'panda-olhando-de-lado.jpg',
     type: 'default',
   },

@@ -1,4 +1,18 @@
-export const questions = [
+import {
+  CheckboxQuestion,
+  DragAndDropQuestion,
+  SelectionQuestion,
+} from '@/@types/quiz'
+
+type Questions = [
+  CheckboxQuestion,
+  SelectionQuestion,
+  SelectionQuestion,
+  DragAndDropQuestion,
+  DragAndDropQuestion,
+]
+
+export const questions: Questions = [
   {
     title:
       'Vamos verificar se há alguém por perto para ajudar. Para isso, precisamos dos operadores aritméticos. Quais os operadores abaixo estão escritos da maneira correta em um programa?',
@@ -9,14 +23,15 @@ export const questions = [
   },
   {
     title:
-      'O foguete detectou uma quantidade de seres lá fora, no caso: `5 + 3 * 2`. Qual é esse número?',
+      'O foguete detectou uma quantidade de seres lá fora, no caso: *5 + 3 * 2*. Qual é esse número?',
     type: 'selection',
     options: ['11', '16', '13', '15'],
+    answer: '13',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
     title:
-      'Foi recebido uma mensagem em forma de operação usando `módulo`: 50 % 2. Qual é esse resultado?',
+      'Foi recebido uma mensagem em forma de operação usando *módulo*: 50 % 2. Qual é esse resultado?',
     type: 'selection',
     answer: '0',
     options: ['0', '25', '1', '100'],
@@ -24,7 +39,7 @@ export const questions = [
   },
   {
     title:
-      'Complete a linha abaixo com os operadores corretos, de modo que indique que o número do nosso foguete é o `13`.',
+      'Complete a linha abaixo com os operadores corretos, de modo que indique que o número do nosso foguete é o *13*.',
     type: 'drag-and-drop',
     lines: [
       {
@@ -38,7 +53,7 @@ export const questions = [
           ' 4',
           ' = 13',
         ],
-        identation: 0,
+        indentation: 0,
       },
     ],
     dragItems: [
@@ -53,7 +68,7 @@ export const questions = [
   },
   {
     title:
-      'Agora complete a linha de código com os números certos para que o resultado seja igual a `10`, indicando que temos 10 assentos disponíveis.',
+      'Agora complete a linha de código com os números certos para que o resultado seja igual a *10*, indicando que temos 10 assentos disponíveis.',
     type: 'drag-and-drop',
     lines: [
       {
@@ -67,7 +82,7 @@ export const questions = [
           '2',
           ' = 10',
         ],
-        indentLevel: 0,
+        indentation: 0,
       },
     ],
     dragItems: [
