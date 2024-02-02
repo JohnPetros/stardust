@@ -19,7 +19,7 @@ export const texts: Text[] = [
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
-    content: 'E como fazer isso?',
+    content: 'Como fazer isso?',
     type: 'user',
   },
   {
@@ -46,7 +46,7 @@ export const texts: Text[] = [
   },
   {
     content:
-      'Para testar se dois valores são verdadeiros, você deve usar o operador `e`, que verifica se o primeiro valor é igual a `verdadeiro` E se o segundo também é `verdadeiro`.',
+      'Para testar se dois valores são verdadeiros, você deve usar o operador *e*, que verifica se o primeiro valor é igual a *verdadeiro* E se o segundo também é *verdadeiro*.',
     type: 'quote',
     title: 'Operador (e)',
     picture: 'panda-andando-com-bambu.jpg',
@@ -62,7 +62,7 @@ escreva(girandoTurbina1 e girandoTurbina2)
   },
   {
     content:
-      'O resultado é `falso`, pois apenas a turbina 1 está girando e para que o código resultasse em `verdadeiro`, ambos os valores deveriam ser iguais a `verdadeiro`.',
+      'O resultado é *falso*, pois apenas a turbina 1 está girando e para que o código resultasse em *verdadeiro*, ambos os valores deveriam ser iguais a *verdadeiro*.',
     type: 'default',
     picture: 'panda-piscando.jpg',
   },
@@ -85,7 +85,7 @@ escreva(turbinasGirando)
     isRunnable: true,
   },
   {
-    content: 'Mas, é possível isso?',
+    content: 'Mas é possível isso?',
     type: 'user',
   },
   {
@@ -96,26 +96,25 @@ escreva(turbinasGirando)
   },
   {
     content:
-      'Por exemplo, você pode testar se o nível de combustível atual está acima do nível mínimo para o funcionamento, ou seja ` combAtual > combMin`.',
+      'Por exemplo, você pode testar se o nível de combustível atual está acima do nível mínimo para o funcionamento, ou seja *combustivelAtual > combustivelMinimo*.',
     type: 'default',
     picture: 'panda.jpg',
   },
   {
     type: 'code',
-    content: `var turbinasGirando = verdadeiro
-var combAtual = 90
-var combMin = 10
+    content: `var girandoTurbina1 = verdadeiro
 
-var turbinasGirando = girandoTurbina1 e girandoTurbina2
+var combustivelAtual = 90
+var combustivelMinimo = 10
 
-escreva(turbinasGirando e combAtual > combMin)
+escreva(girandoTurbina1 e combustivelAtual > combustivelMinimo)
 
 //  Resultado: verdadeiro`,
     isRunnable: true,
   },
   {
     content:
-      'Como `turbinasGirando` é `verdadeiro`, assim como `combAtual > combMin` resulta em `verdadeiro`, então o resultado final também é `verdadeiro`.',
+      'Como *girandoTurbina1* é *verdadeiro*, assim como *combustivelAtual > combustivelMinimo* resulta em *verdadeiro*, então o resultado final também é *verdadeiro*.',
     type: 'default',
     picture: 'panda-sorrindo.jpg',
   },
@@ -170,14 +169,14 @@ escreva(turbinasGirando e combAtual > combMin)
   },
   {
     content:
-      'Para fazer tal façanha, é só usar o operador `ou`, que verifica se o primeiro valor é igual a `verdadeiro` OU o segundo é igual a `verdadeiro`.',
+      'Para fazer tal façanha, é só usar o operador *ou*, que verifica se o primeiro valor é igual a *verdadeiro* OU o segundo é igual a *verdadeiro*.',
     type: 'quote',
     title: 'Operador (ou)',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
-    content: `var comb = "Quantum"
-escreva(comb == "Etherium" ou comb == "Plasmatron")
+    content: `var combustivel = "Quantum"
+escreva(combustivel == "Etherium" ou combustivel == "Plasmatron")
 
 //  Resultado: falso`,
     type: 'code',
@@ -195,8 +194,9 @@ escreva(comb == "Etherium" ou comb == "Plasmatron")
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
-    content: `var comb = "Plasmatron"
-escreva(comb == "Etherium" ou comb == "Plasmatron")
+    content: `var combustivel = "Plasmatron"
+
+escreva(combustivel == "Etherium" ou combustivel == "Plasmatron")
 
 //  Resultado: verdadeiro`,
     type: 'code',
@@ -208,7 +208,7 @@ escreva(comb == "Etherium" ou comb == "Plasmatron")
   },
   {
     content:
-      'Como você percebeu, o resultado é `verdadeiro` porque apenas uma das duas comparações precisa resultar em verdadeiro.',
+      'Como você percebeu, o resultado é *verdadeiro* porque apenas uma das duas comparações precisa resultar em verdadeiro.',
     type: 'default',
     picture: 'panda-sorrindo.jpg',
   },
@@ -248,12 +248,14 @@ var motor2Funcionando = verdadeiro
 
 var tudoOk = !motor1Funcionando e motor2Funcionando
 
+escreva(tudoOk)
+
 //  Resultado: falso`,
     type: 'code',
     isRunnable: true,
   },
   {
-    content: 'Falso!? Mas as duas variáveis são `verdadeiro`!',
+    content: 'Falso!? Mas as duas variáveis são *verdadeiro*!',
     type: 'user',
   },
   {
@@ -267,7 +269,7 @@ var tudoOk = !motor1Funcionando e motor2Funcionando
   },
   {
     content:
-      'Perceba que antes da variável `motor1Funcionando` há um ponto de exclamação. E sua similaridade com o operador `!=` não é coincidência.',
+      'Perceba que antes da variável *motor1Funcionando* há um ponto de exclamação. E sua similaridade com o operador *!=* não é coincidência.',
     type: 'default',
     picture: 'panda-sorrindo.jpg',
   },
@@ -284,7 +286,7 @@ var tudoOk = !motor1Funcionando e motor2Funcionando
   },
   {
     content:
-      'Sim! Por exemplo, se o valor inicial for `falso`, ele será invertido para `verdadeiro`, e vice-versa.',
+      'Sim! Por exemplo, se o valor inicial for *falso*, ele será invertido para *verdadeiro*, e vice-versa.',
     type: 'default',
     picture: 'panda-piscando.jpg',
   },

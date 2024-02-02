@@ -1,4 +1,6 @@
-export const texts = [
+import { Text } from '@/@types/text'
+
+export const texts: Text[] = [
   {
     type: 'default',
     content:
@@ -44,14 +46,14 @@ export const texts = [
     type: 'quote',
     title: 'Operador de maior que (>)',
     content:
-      'Por exemplo, caso queira verificar se um número é maior que outro número, você pode utilizar o operador `maior que` representado pelo símbolo `>`.',
+      'Por exemplo, caso queira verificar se um número é maior que outro número, você pode utilizar o operador *maior que* representado pelo símbolo *>*.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
     type: 'code',
-    content: `var combAtual = 100
-var combExigido = 5
-escreva(combAtual > combExigido)
+    content: `var combustivelAtual = 100
+var combustivelExigido = 5
+escreva(combustivelAtual > combustivelExigido)
 
 //  Resultado: verdadeiro`,
     isRunnable: true,
@@ -59,7 +61,7 @@ escreva(combAtual > combExigido)
   {
     type: 'default',
     content:
-      'Perceba que o resultado da comparação entre dois valores é um valor do tipo lógico (`verdadeiro` ou `falso`), e isso vai acontecer toda vez você usar os operadores relacionais.',
+      'Perceba que o resultado da comparação entre dois valores é um valor do tipo lógico (*verdadeiro* ou *falso*), e isso vai acontecer toda vez você usar os operadores relacionais.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
@@ -71,21 +73,21 @@ escreva(combAtual > combExigido)
   {
     type: 'default',
     content:
-      'E é claro, se existe o operador de `maior que`, também existe o de `menor que`.',
+      'E é claro, se existe o operador de *maior que*, também existe o de *menor que*.',
     picture: 'panda-dando-risadinha.jpg',
   },
   {
     type: 'quote',
     title: 'Operador de menor que (<)',
     content:
-      'Por exemplo, se quiséssemos fazer a mesma comparação anterior, só que verificando se a quantidade de combustível necessária é menor que a atual, teríamos que usar o operador `menor que` (<).',
+      'Por exemplo, se quiséssemos fazer a mesma comparação anterior, só que verificando se a quantidade de combustível necessária é menor que a atual, teríamos que usar o operador *menor que* (<).',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
     type: 'code',
-    content: `var combAtual = 100
-var combExigido = 5
-escreva(combAtual < combExigido)
+    content: `var combustivelAtual = 100
+var combustivelExigido = 5
+escreva(combustivelAtual < combustivelExigido)
 
 //  Resultado: falso`,
     isRunnable: true,
@@ -93,7 +95,7 @@ escreva(combAtual < combExigido)
   {
     type: 'default',
     content:
-      'Note que o resultado agora é `falso` justamente porque a quantidade atual é maior que a exigida.',
+      'Note que o resultado agora é *falso* justamente porque a quantidade atual é maior que a exigida.',
     picture: 'panda-piscando.jpg',
   },
   {
@@ -110,7 +112,7 @@ escreva(combAtual < combExigido)
   {
     type: 'default',
     content:
-      'Para fazer isso não dá para usar operador `>` porque ele só verifica se um valor é maior ou não que outro valor.',
+      'Para fazer isso não dá para usar operador *>* porque ele só verifica se um valor é maior ou não que outro valor.',
     picture: 'panda-triste.jpg',
   },
   {
@@ -123,14 +125,14 @@ escreva(combAtual < combExigido)
     type: 'quote',
     title: 'Operador maior ou igual a (>=)',
     content:
-      'É aí que entra em cena o novo operador que verifca se um valor é igual ou maior que outro valor, e por isso o motivo de usarmos o símbolo `>=`.',
+      'É aí que entra em cena o novo operador que verifca se um valor é igual ou maior que outro valor, e por isso o motivo de usarmos o símbolo *>=*.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
     type: 'code',
-    content: `var velocidadeAtual = 300
+    content: `var velocidadeDoAtual = 300
 var velocidadeExigida = 300
-escreva(velAtual >= velExigida)
+escreva(velocidadeDoAtual >= velocidadeExigida)
 
 //  Resultado: verdadeiro`,
     isRunnable: true,
@@ -139,14 +141,14 @@ escreva(velAtual >= velExigida)
     type: 'quote',
     title: 'Operador menor ou igual a (<=)',
     content:
-      'Se o caso fosse checar se um valor é menor ou igual a outro, utilizaríamos o `<=`.',
+      'Se o caso fosse checar se um valor é menor ou igual a outro, utilizaríamos o *<=*.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
     type: 'code',
-    content: `var velAtual = 300
-var velExigida = 300
-escreva(velAtual <= velExigida)
+    content: `var velocidadeDoAtual = 300
+var velocidadeExigida = 300
+escreva(velocidadeDoAtual <= velocidadeExigida)
 
 //  Resultado: verdadeiro`,
     isRunnable: true,
@@ -154,7 +156,7 @@ escreva(velAtual <= velExigida)
   {
     type: 'default',
     content:
-      'Perceba que o resultado é mesmo que usar o `>=`, pois ambos os operadores checam se é `verdadeiro` uma de duas verificações (se é maior/menor ou igual).',
+      'Perceba que o resultado é mesmo que usar o *>=*, pois ambos os operadores checam se é *verdadeiro* uma de duas verificações (se é maior/menor ou igual).',
     picture: 'panda-abracando-bambu.jpg',
   },
   {
@@ -179,21 +181,21 @@ escreva(velAtual <= velExigida)
   {
     type: 'default',
     content:
-      'Então, é possível fazer isso agora usando o operador de igual, porém não o sinal `=`, visto que este serve apenas para atribuir valores a variáveis.',
+      'Então, é possível fazer isso agora usando o operador de igual, porém não o sinal *=*, visto que este serve apenas para atribuir valores a variáveis.',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
     type: 'quote',
     title: 'Operador de igual (==)',
     content:
-      'Para verificar se um valor é igual a outro, a gente utiliza o símbolo de `==`, justamente para diferenciar do operador de `=`.',
+      'Para verificar se um valor é igual a outro, a gente utiliza o símbolo de *==*, justamente para diferenciar do operador de *=*.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
     type: 'code',
-    content: `var energiaMotor1 = 501
-var energiaMotor2 = 500
-escreva(energiaMotor1 == energiaMotor2)
+    content: `var energiaDoMotor1 = 501
+var energiaDoMotor2 = 500
+escreva(energiaDoMotor1 == energiaDoMotor2)
 
 //  Resultado: falso`,
     isRunnable: true,
@@ -201,27 +203,27 @@ escreva(energiaMotor1 == energiaMotor2)
   {
     type: 'default',
     content:
-      'Como esperado, o resultado é `falso`, pois os dois não estão usando a mesma quantidade de energia!',
+      'Como esperado, o resultado é *falso*, pois os dois não estão usando a mesma quantidade de energia!',
     picture: 'panda-triste.jpg',
   },
   {
     type: 'default',
     content:
-      'O resultado seria `verdadeiro` se estivéssemos verificando se as quantidades são diferentes entre si',
+      'O resultado seria *verdadeiro* se estivéssemos verificando se as quantidades são diferentes entre si',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
     type: 'quote',
     title: 'Operador de diferente (!=)',
     content:
-      'Para fazer isso, basta usar o operador de `!=`, que checa se dois valores são diferentes entre si.',
+      'Para fazer isso, basta usar o operador de *!=*, que checa se dois valores são diferentes entre si.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
     type: 'code',
-    content: `var energiaMotor1 = 501
-var energiaMotor2 = 500
-escreva(energiaMotor1 != energiaMotor2)
+    content: `var energiaDoMotor1 = 501
+var energiaDoMotor2 = 500
+escreva(energiaDoMotor1 != energiaDoMotor2)
 
 //  Resultado: verdadeiro`,
     isRunnable: true,
@@ -229,7 +231,7 @@ escreva(energiaMotor1 != energiaMotor2)
   {
     type: 'default',
     content:
-      'Agora o resultado é `verdadeiro` porque os valores não são iguais entre si.',
+      'Agora o resultado é *verdadeiro* porque os valores não são iguais entre si.',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
@@ -239,7 +241,9 @@ escreva(energiaMotor1 != energiaMotor2)
   {
     type: 'default',
     content:
-      'NÃO! Independentemente se é `verdadeiro` ou não, ainda estamos em uma fria porque o foguete tem chances de explodir, já que as quantidades de energia estão diferentes entre si 😢.',
+      'NÃO! Independentemente se é *verdadeiro* ou não, ainda estamos em uma fria porque o foguete tem chances de explodir, já que as quantidades de energia estão diferentes entre si 😢.',
     picture: 'panda-triste.jpg',
   },
 ]
+
+// 8d260fac-f904-42b3-b37b-88832caf0f6e

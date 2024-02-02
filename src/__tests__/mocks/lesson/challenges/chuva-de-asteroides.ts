@@ -39,37 +39,39 @@ var resistencia = 700
     },
     {
       content:
-        'Seu dever é testar se o escudo protetor do foguete está ativo (valor `verdadeiro`) e que a resistência (valor `700`) é maior que a soma das forças dos três asteroides: A, B e C',
+        'Seu dever é testar se o escudo protetor do foguete está ativo (valor *verdadeiro*) e que a resistência (valor *700*) é maior que a soma das forças dos três asteroides: A, B e C',
       type: 'quote',
       picture: 'panda-abracando-bambu.jpg',
-      title: 'Que??',
     },
     {
       type: 'code',
       content: `Entrada: 100, 200, 300, verdadeiro
 Resultado: verdadeiro
-// Explicação: 
-// a soma das forças dá 600 e a resistencia é 700 
-// Como o escudo está ativo (verdadeiro) e essa soma é menor que 700,
-// logo, o resultado é verdadeiro
-
+/* Explicação: 
+ a soma das forças dá 600 e a resistencia é 700 
+ Como o escudo está ativo (verdadeiro) e essa soma é menor que 700,
+ logo, o resultado é verdadeiro
+*/
+// --------------------------------------
 Entrada: 500, 500, 500, verdadeiro
 Resultado: falso
-// Explicação:
-// a soma é 1500 e a resitência é 700
-// logo, o resultado já é de cara falso
-
+/* Explicação:
+ a soma é 1500 e a resitência é 700
+ logo, o resultado já é de cara falso
+*/
+// --------------------------------------
 Entrada: 50, 100, 150, falso
 Resultado: falso
-// Explicação: 
-// a soma é 300 e a resitência é 700,
-// porém o escudo não está ativo,
-// então, o resultado é falso`,
+/* Explicação: 
+ a soma é 300 e a resitência é 700,
+ porém o escudo não está ativo,
+ então, o resultado é falso
+*/`,
       isRunnable: false,
     },
     {
       content:
-        'Dica: coloque a soma das forças em uma variável chamada `soma` e depois compare se ela é maior ou não que a resistência.',
+        'Dica: coloque a soma das forças em uma variável chamada *soma* e depois compare se ela é maior ou não que a resistência.',
       type: 'alert',
       picture: 'panda-olhando-de-lado.jpg',
     },
@@ -81,12 +83,12 @@ Resultado: falso
     },
     {
       content:
-        'O comando `leia()` é super importante para resolver o desafio. Então, por favor, não remova nenhum comando `leia()` no código.',
+        'O comando *leia()* é super importante para resolver o desafio. Então, por favor, não remova nenhum comando *leia()* no código.',
       type: 'alert',
       picture: 'panda-piscando.jpg',
     },
   ],
-  testsCases: [
+  testCases: [
     {
       input: [100, 100, 100, 'verdadeiro'],
       isLocked: false,
