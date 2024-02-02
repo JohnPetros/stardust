@@ -77,6 +77,7 @@ export function useCheckboxQuestion(correctOptions: string[]) {
   }, [isAnswerVerified, userAnswers, setAnswerHandler, handleAnswer])
 
   return {
+    userAnswers,
     handleCheckboxChange,
   }
 }
