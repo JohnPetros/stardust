@@ -24,7 +24,7 @@ export function Text({
             <Title>{title}</Title>
           </div>
         )}
-        <div className="flex w-full items-center">
+        <div className="flex w-full flex-col items-center justify-center md:flex-row">
           {picture && <Picture url={picture} />}
           <Content type="default" hasAnimation={hasAnimation}>
             {children}
