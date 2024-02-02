@@ -88,23 +88,27 @@ Resultado: falso
       picture: 'panda-piscando.jpg',
     },
   ],
-  testCases: [
+  test_cases: [
     {
+      id: 1,
       input: [100, 100, 100, 'verdadeiro'],
       isLocked: false,
       expectedOutput: 'verdadeiro',
     },
     {
+      id: 2,
       input: [300, 400, 800, 'verdadeiro'],
       isLocked: false,
       expectedOutput: 'falso',
     },
     {
+      id: 3,
       input: [50, 200, 200, 'falso'],
       isLocked: false,
       expectedOutput: 'falso',
     },
     {
+      id: 4,
       input: [100, 500, 100, 'falso'],
       isLocked: false,
       expectedOutput: 'falso',
