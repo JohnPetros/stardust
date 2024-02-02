@@ -3,6 +3,8 @@ import { tv, VariantProps } from 'tailwind-variants'
 
 import { TypeWriter } from '../TypeWriter'
 
+import { formatSpecialCharacters } from '@/utils/helpers'
+
 const contentStyles = tv({
   base: 'font-medium tracking-wider text-gray-100 text-sm w-full p-3 rounded-md not-prose leading-6 mx-auto',
   variants: {
@@ -30,11 +32,13 @@ export function Content({
     ? children
         .map((child) =>
           typeof child !== 'string'
-            ? `<span class="strong">${child.props.children}</span>`
+            ? `<strong class="strong">${child.props.children}</strong>`
             : child
         )
         .join(' ')
     : children
+
+  const formattedContent = formatSpecialCharacters(String(content), 'decode')
 
   return (
     <div className={contentStyles({ type })}>
@@ -43,7 +47,7 @@ export function Content({
           {hasAnimation ? (
             <TypeWriter text={content} isEnable={hasAnimation} />
           ) : (
-            <span>{children}</span>
+            <span dangerouslySetInnerHTML={{ __html: formattedContent }}></span>
           )}
         </>
       ) : (

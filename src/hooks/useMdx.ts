@@ -3,24 +3,35 @@ import { v4 as uuid } from 'uuid'
 
 import { Text } from '@/@types/text'
 import { REGEX } from '@/utils/constants'
-import { getComponentContent } from '@/utils/helpers'
+import { formatSpecialCharacters, getComponentContent } from '@/utils/helpers'
 
 export function useMdx() {
-  const parseTexts = useCallback((texts: Text[]) => {
+  const parseTextsToMdxComponents = useCallback((texts: Text[]) => {
     function getProps(text: Text) {
       const props = Object.keys(text)
       const currentText: { [prop in string]: unknown } = text
 
       return props
         .filter((prop) => ['title', 'picture'].includes(prop))
-        .map((prop) => `${prop}={'${currentText[prop]}'}`)
+        .map(
+          (prop) =>
+            `${prop}={'${
+              prop === 'title'
+                ? formatSpecialCharacters(String(currentText[prop]), 'encode')
+                : currentText[prop]
+            }'}`
+        )
         .join(' ')
     }
 
     function getMdxComponent(text: Text) {
       const props = getProps(text)
 
-      const content = text.content
+      const content =
+        text.type !== 'code'
+          ? formatSpecialCharacters(text.content, 'encode')
+          : text.content
+
       const key = uuid()
 
       switch (text.type) {
@@ -61,7 +72,7 @@ export function useMdx() {
   }
 
   return {
-    parseTexts,
+    parseTextsToMdxComponents,
     formatCodeComponentsContent,
   }
 }
