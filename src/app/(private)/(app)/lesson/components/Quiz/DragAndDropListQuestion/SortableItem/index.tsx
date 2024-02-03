@@ -45,7 +45,8 @@ export function SortableItem({
     transform,
     transition,
   } = useSortable({ id })
-  const { color } = useSortableItem({
+  const { color, marginLeft } = useSortableItem({
+    label,
     isActive,
     isAnswerCorrect,
     isAnswerVerified,
@@ -65,7 +66,9 @@ export function SortableItem({
       {...listeners}
       className={itemStyles({ color })}
     >
-      <strong>{label}</strong>
+      <label style={{ marginLeft }} className={twMerge('block')}>
+        {label}
+      </label>
       <List
         className={twMerge(
           'text-lg',

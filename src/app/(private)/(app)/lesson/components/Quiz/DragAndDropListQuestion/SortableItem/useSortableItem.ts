@@ -4,12 +4,21 @@ import { useMemo } from 'react'
 
 import { SortableItemProps } from '.'
 
+import { countCharacters } from '@/utils/helpers'
+
 export function useSortableItem({
+  label,
   isActive,
   isAnswerCorrect,
   isAnswerVerified,
   isDragging,
-}: Omit<SortableItemProps, 'id' | 'label'> & { isDragging: boolean }) {
+}: Omit<SortableItemProps, 'id'> & { isDragging: boolean }) {
+  const marginLeft = useMemo(() => {
+    const tabsCount = countCharacters('\t', label)
+
+    return 24 * tabsCount
+  }, [label])
+
   const color: 'transparent' | 'gray' | 'red' | 'green' | 'blue' =
     useMemo(() => {
       if (isDragging) {
@@ -27,5 +36,6 @@ export function useSortableItem({
 
   return {
     color,
+    marginLeft,
   }
 }
