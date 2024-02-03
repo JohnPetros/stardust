@@ -1,39 +1,45 @@
 'use client'
 
 import { Lock } from '@phosphor-icons/react'
-import * as Tabs from '@radix-ui/react-tabs'
+import Link from 'next/link'
 import { twMerge } from 'tailwind-merge'
 
-import { Tab } from '../useTabs'
+import { ContentType } from '..'
+
+import { useChallengeStore } from '@/stores/challengeStore'
+import { ROUTES } from '@/utils/constants'
 
 type TabButtonProps = {
-  value: Tab
+  contentType: ContentType
   isActive: boolean
   title: string
   isBlocked?: boolean
   blockMessage?: string
-  onClick?: (value: Tab) => void
 }
 
-export function TabButton({
-  value,
+export function ContentLink({
+  contentType,
   isActive,
   isBlocked = false,
   title,
-  onClick,
 }: TabButtonProps) {
+  const challengeSlug = useChallengeStore(
+    (store) => store.state.challenge?.slug
+  )
+
   return (
-    <Tabs.Trigger
-      onClick={() => (isBlocked || !onClick ? null : onClick(value))}
+    <Link
+      href={`${ROUTES.private.challenge}/${challengeSlug}${
+        contentType !== 'description' ? `/${contentType}` : ''
+      }`}
       className={twMerge(
-        'p-2 text-sm',
+        'rounded-md bg-gray-700 p-2 text-sm',
         isActive
           ? 'p-2 text-green-500'
           : isBlocked
-          ? 'flex items-center gap-2 text-gray-500 opacity-50'
+          ? 'pointer-events-none flex items-center gap-2 text-gray-500 opacity-50'
           : 'text-gray-100'
       )}
-      value={value}
     >
       {isBlocked ? (
         <span className="flex items-center gap-2">
@@ -43,6 +49,6 @@ export function TabButton({
       ) : (
         title
       )}
-    </Tabs.Trigger>
+    </Link>
   )
 }

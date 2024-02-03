@@ -87,7 +87,7 @@ export function TestCase({
               label="Entrada"
               value={
                 input.length > 0
-                  ? input.map(formatOutput).join(',')
+                  ? input.map(formatOutput).join(', ')
                   : 'sem entrada'
               }
             />

@@ -4,6 +4,7 @@ import { ReactNode } from 'react'
 import { Panel, PanelGroup } from 'react-resizable-panels'
 
 import type { PanelsOffset } from '../../actions/getPanelsOffset'
+import { Slider } from '../Slider'
 
 import { PanelHandle } from './PanelHandle'
 import { Tabs } from './Tabs'
@@ -16,6 +17,8 @@ import { useChallengeStore } from '@/stores/challengeStore'
 const DIRECTION = 'horizontal'
 const HORIZONTAL_PADDNG = 24
 const VERTICAL_PADDNG = 24
+
+export type ContentType = 'description' | 'result' | 'comments' | 'solutions'
 
 type LayoutProps = {
   header: ReactNode
@@ -50,15 +53,15 @@ export function Layout({
       <div className="relative md:overflow-hidden">
         {header}
         <main className="w-full">
-          {/* <div className="md:hidden">
-      <Slider />
-    </div> */}
+          <div className="md:hidden">
+            <Slider />
+          </div>
           <div
             style={{
               paddingInline: HORIZONTAL_PADDNG,
               paddingTop: VERTICAL_PADDNG / 2,
             }}
-            className={`grid h-full w-screen grid-cols-[1fr,auto]`}
+            className="hidden h-full w-screen grid-cols-[1fr,auto] md:grid"
           >
             {layout === 'tabs-left;code_editor-right' && (
               <PanelGroup direction="horizontal">

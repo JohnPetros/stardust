@@ -47,12 +47,15 @@ export function useLayout() {
   }, [resetState])
 
   useEffect(() => {
-    if (challenge) setCanShowSolutions(challenge.isCompleted ?? false)
-  }, [challenge, setCanShowSolutions])
-
-  useEffect(() => {
     setCanShowComments(isEnd)
   }, [isEnd, setCanShowComments])
+
+  useEffect(() => {
+    if (!challenge) return
+
+    setCanShowComments(challenge.isCompleted ?? false)
+    setCanShowSolutions(challenge.isCompleted ?? false)
+  }, [challenge, setCanShowComments, setCanShowSolutions])
 
   return {
     tabsPanelRef,
