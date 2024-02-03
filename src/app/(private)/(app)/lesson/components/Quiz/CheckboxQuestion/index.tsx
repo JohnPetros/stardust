@@ -6,13 +6,14 @@ import { Checkbox } from './Checkbox'
 import { useCheckboxQuestion } from './useCheckboxQuestion'
 
 import type { CheckboxQuestion as CheckboxQuestionData } from '@/@types/quiz'
+import { CodeSnippet } from '@/app/components/CodeSnippet'
 
 interface CheckboxQuestionProps {
   data: CheckboxQuestionData
 }
 
 export function CheckboxQuestion({
-  data: { title, picture, options, correctOptions },
+  data: { title, picture, options, correctOptions, code },
 }: CheckboxQuestionProps) {
   const { handleCheckboxChange, userAnswers } =
     useCheckboxQuestion(correctOptions)
@@ -20,6 +21,12 @@ export function CheckboxQuestion({
   return (
     <>
       <QuestionTitle picture={picture}>{title}</QuestionTitle>
+
+      {code && (
+        <div className="mt-3 w-full">
+          <CodeSnippet code={code} isRunnable={false} />
+        </div>
+      )}
 
       <ul className="mt-6 space-y-2">
         {options.map((option) => (
