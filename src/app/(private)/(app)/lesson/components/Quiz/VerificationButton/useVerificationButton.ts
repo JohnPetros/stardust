@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { usePathname } from 'next/navigation'
 
 import { VerificationButtonProps } from '.'
 
@@ -12,6 +13,8 @@ export function useVerificationButton({
 }: VerificationButtonProps) {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const buttonHasFocus = useRef(false)
+
+  const pathname = usePathname()
 
   const buttonTitle = useMemo(() => {
     if (isAnswerVerified && !isAnswerCorrect) {
@@ -29,11 +32,16 @@ export function useVerificationButton({
 
   const handleGlobalKeyDown = useCallback(
     ({ key }: KeyboardEvent) => {
-      if (key === 'Enter' && isAnswered && !buttonHasFocus.current) {
+      if (
+        key === 'Enter' &&
+        isAnswered &&
+        !buttonHasFocus.current &&
+        pathname.includes('/lesson')
+      ) {
         answerHandler()
       }
     },
-    [answerHandler, isAnswered]
+    [answerHandler, isAnswered, pathname]
   )
 
   useEffect(() => {
