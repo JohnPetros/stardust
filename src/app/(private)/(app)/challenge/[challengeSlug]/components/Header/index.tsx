@@ -79,11 +79,13 @@ export function Header({ challenge, userVote }: HeaderProps) {
             {challenge.title}
           </h2>
         </div>
-        <PopoverMenu label="escolha de layout" buttons={popoverMenuButtons}>
-          <button className="translate-x-2 p-2">
-            <Layout className="text-lg text-green-400" weight="bold" />
-          </button>
-        </PopoverMenu>
+        <div className="hidden md:block">
+          <PopoverMenu label="escolha de layout" buttons={popoverMenuButtons}>
+            <button className="translate-x-2 p-2">
+              <Layout className="text-lg text-green-400" weight="bold" />
+            </button>
+          </PopoverMenu>
+        </div>
       </div>
     </header>
   )
