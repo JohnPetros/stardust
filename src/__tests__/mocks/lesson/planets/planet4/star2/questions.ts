@@ -1,16 +1,30 @@
-export const questions = [
+import {
+  CheckboxQuestion,
+  DragAndDropListQuestion,
+  DragAndDropQuestion,
+} from '@/@types/quiz'
+
+type Questions = [
+  DragAndDropQuestion,
+  CheckboxQuestion,
+  DragAndDropQuestion,
+  DragAndDropListQuestion,
+  DragAndDropQuestion,
+]
+
+export const questions: Questions = [
   {
     type: 'drag-and-drop',
     title:
-      'Complete o código para que a variavel `qualOSentidoDaVida` seja igual a `42`',
+      'Complete o código para que a variavel *qualOSentidoDaVida* seja igual a *42*.',
     lines: [
-      { id: 1, texts: ['var qualOSentidoDaVida = ', '2'], identation: 0 },
+      { id: 1, texts: ['var qualOSentidoDaVida = ', '2'], indentation: 0 },
       {
         id: 2,
         texts: ['qualOSentidoDaVida ', 'dropZone', ' 21'],
-        identation: 0,
+        indentation: 0,
       },
-      { id: 3, texts: ['escreva(qualOSentidoDaVida)'], identation: 0 },
+      { id: 3, texts: ['escreva(qualOSentidoDaVida)'], indentation: 0 },
     ],
     dragItems: [
       { id: 1, label: '+=' },
@@ -21,43 +35,9 @@ export const questions = [
     correctDragItemsIdsSequence: [3],
     picture: 'panda-amando-bambu.jpg',
   },
-
-  {
-    type: 'drag-and-drop',
-    title: 'Complete o código para que o resultado seja igual a `planeta rico`',
-    lines: [
-      { id: 1, texts: ['var dinheiro = ', '2500 * 4'], identation: 0 },
-      { id: 2, texts: ['se (dinheiro > 10000) {'], identation: 0 },
-      { id: 3, texts: ['escreva(', 'dropZone', ')'], identation: 1 },
-      { id: 4, texts: ['} senao {'], identation: 0 },
-      { id: 5, texts: ['escreva( ', 'dropZone', ' )'], identation: 1 },
-      { id: 6, texts: ['}'], identation: 0 },
-    ],
-    dragItems: [
-      { id: 1, label: 'planeta rico' },
-      { id: 2, label: 'planeta pobre' },
-    ],
-    correctDragItemsIdsSequence: [2, 1],
-    picture: 'panda-com-bola-de-boliche.jpg',
-  },
-
   {
     title:
-      'Reordene o código para que o resultado para que a variavel `energiaNegativa` seja menor que `10`',
-    type: 'drag-and-drop-list',
-    items: [
-      { id: 1, label: 'var energiaNegativa = 10' },
-      { id: 2, label: 'se (verdadeiro) {' },
-      { id: 3, label: '   energiaNegativa -= 5' },
-      { id: 4, label: '} senao {' },
-      { id: 5, label: '   energiaNegativa += 5' },
-      { id: 6, label: '}' },
-    ],
-    picture: 'panda-abracando-bambu.jpg',
-  },
-  {
-    title:
-      'Quais os possíveis valores que a variável `radiacao` tem que ter para que o resultado seja igual a "Seguro"?',
+      'Quais os possíveis valores que a variável *radiacao* tem que ter para que o resultado seja igual a "Seguro"?',
     code: `var radiacao = ?
 
 se (radiacao > 500) {
@@ -70,7 +50,38 @@ se (radiacao > 500) {
     correctOptions: ['100', '200'],
     picture: 'panda-abracando-bambu.jpg',
   },
-
+  {
+    type: 'drag-and-drop',
+    title: 'Complete o código para que o resultado seja igual a *planeta rico*',
+    lines: [
+      { id: 1, texts: ['var dinheiro = ', '2500 * 4'], indentation: 0 },
+      { id: 2, texts: ['se (dinheiro >= 10000) {'], indentation: 0 },
+      { id: 3, texts: ['escreva(', 'dropZone', ')'], indentation: 1 },
+      { id: 4, texts: ['} senao {'], indentation: 0 },
+      { id: 5, texts: ['escreva( ', 'dropZone', ' )'], indentation: 1 },
+      { id: 6, texts: ['}'], indentation: 0 },
+    ],
+    dragItems: [
+      { id: 1, label: 'planeta rico' },
+      { id: 2, label: 'planeta pobre' },
+    ],
+    correctDragItemsIdsSequence: [1, 2],
+    picture: 'panda-com-bola-de-boliche.jpg',
+  },
+  {
+    title:
+      'Reordene o código para que o valor da variavel *energiaNegativa* seja menor que *10*.',
+    type: 'drag-and-drop-list',
+    items: [
+      { id: 1, label: 'var energiaNegativa = 10' },
+      { id: 2, label: 'se (verdadeiro) {' },
+      { id: 3, label: '\tenergiaNegativa -= 5' },
+      { id: 4, label: '} senao {' },
+      { id: 5, label: '\tenergiaNegativa += 5' },
+      { id: 6, label: '}' },
+    ],
+    picture: 'panda-abracando-bambu.jpg',
+  },
   {
     type: 'drag-and-drop',
     title: 'Complete o código para que seja possível formar um sistema solar',
@@ -78,52 +89,52 @@ se (radiacao > 500) {
       {
         id: 0,
         texts: ['var planetas = ', '8'],
-        identation: 0,
+        indentation: 0,
       },
       {
         id: 1,
         texts: ['var temSol = ', 'verdadeiro'],
-        identation: 0,
+        indentation: 0,
       },
       {
         id: 2,
         texts: ['se ('],
-        identation: 0,
+        indentation: 0,
       },
       {
         id: 3,
         texts: ['temSol ', 'dropZone'],
-        identation: 1,
+        indentation: 1,
       },
       {
         id: 4,
         texts: ['planetas >', 'dropZone'],
-        identation: 1,
+        indentation: 1,
       },
       {
         id: 5,
         texts: [')'],
-        identation: 1,
+        indentation: 1,
       },
       {
         id: 6,
         texts: ['escreva("É possível formar um sistema solar")'],
-        identation: 1,
+        indentation: 1,
       },
       {
         id: 7,
         texts: ['} senao {'],
-        identation: 0,
+        indentation: 0,
       },
       {
         id: 8,
         texts: ['escreva("Não é possível formar um sistema solar")'],
-        identation: 1,
+        indentation: 1,
       },
       {
         id: 9,
         texts: ['}'],
-        identation: 0,
+        indentation: 0,
       },
     ],
     dragItems: [
@@ -148,3 +159,6 @@ se (radiacao > 500) {
     picture: 'panda-de-oculos.jpg',
   },
 ]
+
+// 0077876f-6693-4286-8340-be99ca0dba9f
+// c20e0e55-2a21-4512-a080-be80b037117a

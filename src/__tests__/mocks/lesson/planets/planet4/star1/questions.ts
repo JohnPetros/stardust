@@ -1,11 +1,25 @@
-export const questions = [
+import {
+  DragAndDropListQuestion,
+  DragAndDropQuestion,
+  SelectionQuestion,
+} from '@/@types/quiz'
+
+type Questions = [
+  DragAndDropListQuestion,
+  DragAndDropQuestion,
+  SelectionQuestion,
+  SelectionQuestion,
+  DragAndDropQuestion,
+]
+
+export const questions: Questions = [
   {
     title: 'Vamos verificar se o planeta "Ifthenia" é um planeta mesmo:',
     type: 'drag-and-drop-list',
     items: [
       { id: 1, label: 'var planeta = verdadeiro' },
       { id: 2, label: 'se (planeta) {' },
-      { id: 3, label: '  escreva("De fato, se trata de um planeta")' },
+      { id: 3, label: '\t\tescreva("De fato, se trata de um planeta")' },
       { id: 4, label: '}' },
     ],
     picture: 'panda-segurando-bambu-de-pe.jpg',
@@ -13,20 +27,20 @@ export const questions = [
   {
     type: 'drag-and-drop',
     title:
-      'Complete o código para que o resultado seja igual a `planeta grande`',
+      'Complete o código para que o resultado seja igual a *planeta grande*.',
     lines: [
-      { id: 1, texts: ['var planetaDiametro = 1800'], identation: 0 },
+      { id: 1, texts: ['var planetaDiametro = 1800'], indentation: 0 },
       {
         id: 2,
         texts: ['se (planetaDiametro ', 'dropZone', ' 1500) {'],
-        identation: 0,
+        indentation: 0,
       },
       {
         id: 3,
         texts: ['escreva("planeta ', 'dropZone', ' ")'],
-        identation: 1,
+        indentation: 1,
       },
-      { id: 4, texts: ['}'], identation: 0 },
+      { id: 4, texts: ['}'], indentation: 0 },
     ],
     dragItems: [
       { id: 1, label: '>' },
@@ -38,7 +52,7 @@ export const questions = [
     picture: 'panda-de-oculos.jpg',
   },
   {
-    title: 'Qual é a cor do planeta "Ifthenia":',
+    title: 'Qual é a cor do planeta "Ifthenia"?',
     code: `var planetaCor = "bege"
 var temAtmosferaAzul = falso
 
@@ -63,19 +77,19 @@ se (planetaPopulacao > 1000) {
 
 escreva(status)`,
     type: 'selection',
-    answer: 'pouca gente',
+    answer: 'muita gente',
     options: ['pouca gente', 'muita gente', 'gente', 'variável indefinida'],
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
     type: 'drag-and-drop',
     title:
-      'Complete a estrutura `se` para que a variável `planetaAmigavel` seja igual a `verdadeiro`',
+      'Complete a estrutura *se* para que a variável *planetaAmigavel* seja igual a *verdadeiro*.',
     lines: [
-      { id: 1, texts: ['se ( ', 'dropZone', ' ) {'], identation: 0 },
-      { id: 2, texts: ['var planetaAmigavel = verdadeiro'], identation: 1 },
-      { id: 3, texts: ['escreva(planetaAmigavel)'], identation: 1 },
-      { id: 3, texts: ['}'], identation: 0 },
+      { id: 1, texts: ['se ( ', 'dropZone', ' ) {'], indentation: 0 },
+      { id: 2, texts: ['var planetaAmigavel = verdadeiro'], indentation: 1 },
+      { id: 3, texts: ['escreva(planetaAmigavel)'], indentation: 1 },
+      { id: 3, texts: ['}'], indentation: 0 },
     ],
     dragItems: [
       { id: 1, label: 'falso' },

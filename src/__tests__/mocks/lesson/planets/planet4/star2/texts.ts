@@ -4,7 +4,7 @@ export const texts: Text[] = [
   {
     type: 'default',
     content:
-      'Ei! Já que você está indo em direção ao planeta, é bom regular a velocidade do foguete para fazer um pouso seguro.',
+      'Ei! Já que você está indo em direção ao planeta "Ifthenia", é bom regular a velocidade do foguete para fazer um pouso seguro.',
     picture: 'panda-olhando-computador.jpg',
   },
   {
@@ -14,22 +14,22 @@ export const texts: Text[] = [
   {
     type: 'default',
     content:
-      'A velocidade atual do foguete é `50`, caso a força da gravidade seja maior que `10`, a velocidade deverá diminuir em `20`, caso contrário precisará aumentar em `20`.',
+      'A velocidade atual do foguete é *50*, caso a força da gravidade seja maior que *10*, a velocidade deverá diminuir em *20*, caso contrário precisará aumentar em *20*.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'code',
-    content: `var velFoguete = 50
+    content: `var velocidadeFoguete = 50
 var gravidade = 9.8
 
 se (gravidade > 10) {
-  velFoguete -= 20
-  escreva(velFoguete)
+  velocidadeFoguete -= 20
+  escreva(velocidadeFoguete)
 }
 
 se (gravidade < 10) {
-  velFoguete += 20
-  escreva(velFoguete)
+  velocidadeFoguete += 20
+  escreva(velocidadeFoguete)
 }
 
 // Resultado: 70`,
@@ -38,18 +38,18 @@ se (gravidade < 10) {
   {
     type: 'alert',
     content:
-      'Perceba que usei `+=` e `-=` para alterar o valor da variável `velFoguete`. Isso é a mesma coisa que escrever: `velFoguete = velFoguete + 20` e `velFoguete = velFoguete - 20`, só que de um jeito mais curto.',
+      'Perceba que usei *+=* e *-=* para alterar o valor da variável *velocidadeFoguete*. Isso é a mesma coisa que escrever: *velocidadeFoguete = velocidadeFoguete + 20* e *velocidadeFoguete = velocidadeFoguete - 20*, só que de um jeito mais curto.',
     picture: 'panda-sorrindo.jpg',
   },
   {
     type: 'alert',
     content:
-      'Esse operador especial é chamado de operador de atribuição aritmética, ou seja, ele pode ser usado para fazer qualquer uma das quatros operações aritméticas vimos anteriormente: `(+=, -=, *=, /=)`',
+      'Esse operador especial é chamado de operador de atribuição aritmética, ou seja, ele pode ser usado para fazer qualquer uma das quatros operações aritméticas vimos anteriormente: (+=, -=, *=, /=)',
     picture: 'panda-piscando.jpg',
   },
   {
     type: 'default',
-    content: 'Veja exemplos utilizando esses operadores:`',
+    content: 'Veja exemplos utilizando esses operadores:',
     picture: 'panda-deslumbrado.jpg',
   },
   {
@@ -79,31 +79,31 @@ escreva(numero) // 20`,
   },
   {
     type: 'user',
-    content: 'Mas, qual o problema?',
+    content: 'Mas qual o problema?',
   },
   {
     type: 'default',
     content:
-      'Acontece que geralmente após terminar a escrita de um código, haverá sempre a oportunidade de melhorá-lo, tornando-o mais eficiente e claro, processo esse que normalmente chamamos de refatoração',
+      'Acontece que geralmente após terminar a escrita de um código, haverá sempre a oportunidade de melhorá-lo, tornando-o mais eficiente e claro, processo esse que normalmente chamamos de *refatoração*.',
     picture: 'panda-fazendo-coracao.jpg',
   },
   {
     type: 'default',
     content:
-      'Neste caso, em vez de usar dois `se`, é possível usar outra estrutura, chamada `se-senão`, veja só:',
+      'Neste caso, em vez de usar dois *se*, é possível usar outra estrutura, chamada *se-senão*, veja só:',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
     type: 'code',
-    content: `var velFoguete = 50
+    content: `var velocidadeFoguete = 50
 var gravidade = 9.8
 
 se (gravidade > 10) {
-  velFoguete -= 20
-  escreva(velFoguete)
+  velocidadeFoguete -= 20
+  escreva(velocidadeFoguete)
 } senao {
-  velFoguete += 20
-  escreva(velFoguete)
+  velocidadeFoguete += 20
+  escreva(velocidadeFoguete)
 }
 
 // Resultado: 70`,
@@ -112,13 +112,13 @@ se (gravidade > 10) {
   {
     type: 'alert',
     content:
-      'Acho que você já percebeu, mas ao escrever código dentro do bloco entre chaves `{}` de qualquer estrutura, é comum inserir um espaço antes de cada linha. Você pode fazer isso apertando `tab` no teclado',
+      'Acho que você já percebeu, mas ao escrever código dentro do bloco entre chaves *{}* de qualquer estrutura, é comum inserir um espaço antes de cada linha. Você pode fazer isso apertando *tab* no teclado',
     picture: 'panda-abracando-bambu.jpg',
   },
   {
     type: 'quote',
     content:
-      'Como o nome já deixa claro, caso a primeira condição não seja verdadeira, apenas o código contido no bloco do `senao` é executado.',
+      'Como o nome já deixa claro, caso a primeira condição não seja verdadeira, apenas o código contido no bloco do *senao* é executado.',
     picture: 'panda-deslumbrado.jpg',
   },
   {
@@ -175,7 +175,7 @@ se (
   {
     type: 'alert',
     content:
-      'Como também escrever uma condição debaixo da outra, que o programa será executado normalmente também, desde que estejam entre os parênteses do `se`.',
+      'Como também escrever uma condição debaixo da outra, que o programa será executado normalmente também, desde que estejam entre os parênteses do *se*.',
     picture: 'panda-fazendo-coracao.jpg',
   },
   {
@@ -187,7 +187,7 @@ se (
   {
     type: 'default',
     content:
-      'Mas não antes de praticar o tudo o que vimos até agora de estrutura condicional.',
+      'Mas não antes de praticar o tudo o que vimos até agora sobre condicionais.',
     picture: 'panda-sorrindo.jpg',
   },
 ]

@@ -45,7 +45,7 @@ export const texts: Text[] = [
   },
   {
     content:
-      'A forma mais básica é escrever `se` e depois a condição que deve ser verificada entre parênteses. Em seguida você abre e fecha chaves `{ }` e coloca o código que você deseja que seja executado.',
+      'A forma mais básica é escrever *se* e depois a condição que deve ser verificada entre parênteses. Em seguida você abre e fecha chaves *{ }* e coloca o bloco de código que você deseja que seja executado.',
     type: 'quote',
     picture: 'panda-andando-com-bambu.jpg',
     title: 'Estrutura condicional simples (se)',
@@ -63,7 +63,7 @@ se (planetaAmigavel) {
   },
   {
     content:
-      'Perceba que a condição, ou seja tudo aquilo escrito em parênteses após o `se`, deve resultar em `verdadeiro` para que o código entre chaves seja executado.',
+      'Perceba que a condição, ou seja tudo aquilo escrito em parênteses após o *se*, deve resultar em *verdadeiro* para que o código entre chaves seja executado.',
     type: 'default',
     picture: 'panda-deslumbrado.jpg',
   },
@@ -73,7 +73,7 @@ se (planetaAmigavel) {
   },
   {
     content:
-      'Simples: o programa ignora tudo que está entre chaves do `se` e executa todo o resto de código após ele.',
+      'Simples: tudo que está entre chaves do *se* é ignorado, enquanto o resto do programa é executado.',
     type: 'default',
     picture: 'panda-dando-risadinha.jpg',
   },
@@ -95,7 +95,7 @@ escreva(souBonito)`,
   },
   {
     content:
-      'Além disso, nós podemos usar tudo que vimos anteriormente que consegue resultar em valores lógicos dentro da condição do `se`.',
+      'Além disso, nós podemos usar tudo que vimos anteriormente que consegue resultar em valores lógicos dentro do bloco de código do *se*.',
     type: 'default',
     picture: 'panda-de-oculos.jpg',
   },
@@ -137,13 +137,13 @@ se (poder > 8000) {
   },
   {
     content:
-      'Em programação, normalmente existem dois tipos de escopo de variável: `global` e `local`',
+      'Em programação, normalmente existem dois tipos de escopo de variável: *global* e *local*.',
     type: 'default',
     picture: 'panda-sorrindo.jpg',
   },
   {
     content:
-      'As variáveis globais são aquelas que são declaradas fora de qualquer tipo de instrução como `se`, `para`, `função` e por aí vai.',
+      'As variáveis globais são aquelas que são declaradas fora de qualquer tipo de instrução como *se*, *para*, *função* e por aí vai.',
     type: 'default',
     picture: 'panda-andando-com-bambu.jpg',
   },
@@ -154,13 +154,13 @@ se (poder > 8000) {
   },
   {
     content:
-      'No momento se concentre apenas na instrução `se` que estamos aprendendo agora.',
+      'No momento se concentre apenas na instrução *se* que estamos aprendendo agora.',
     type: 'alert',
     picture: 'panda-deslumbrado.jpg',
   },
   {
     content:
-      'Por exemplo, caso tentemos acessar uma variável declarada dentro de `se`, o código resultará em `variável indefinida`',
+      'Por exemplo, caso tentemos acessar uma variável declarada dentro de *se*, o código resultará em *variável não definida*',
     type: 'default',
     picture: 'panda-sorrindo.jpg',
   },
@@ -179,17 +179,17 @@ escreva(planetaNome)
   },
   {
     content:
-      'O erro no código acima ocorre, pois `planetaNome` é uma variável local porque ela foi declarada dentro da instrução `se`.',
+      'O erro no código acima ocorre, pois *planetaNome* é uma variável local porque ela foi declarada dentro do bloco de código do *se*.',
     type: 'default',
     picture: 'panda-fazendo-coracao.jpg',
   },
   {
-    content: 'Então, é só colocar para fora do `se`?',
+    content: 'Então, é só colocar para fora do *se*?',
     type: 'user',
   },
   {
     content:
-      'Sim! Aí você tranformaria ela em uma variável de escopo `global`, assim como a variável `planetaAmigavel`.',
+      'Sim! Aí você tranformaria ela em uma variável de escopo *global*, assim como a variável *planetaAmigavel*.',
     type: 'default',
     picture: 'panda-deslumbrado.jpg',
   },
@@ -213,7 +213,7 @@ escreva(planetaAmigavel)
   },
   {
     content:
-      'É como se os escopos fossem dois universos paralelos: Pode haver uma variável `local` com o mesmo nome de uma `global`, porém elas ainda vão ser diferentes entre si.',
+      'É como se os escopos fossem dois universos paralelos: Pode haver uma variável *local* com o mesmo nome de uma *global*, porém elas ainda vão ser diferentes entre si.',
     type: 'default',
     picture: 'panda-olhando-de-lado.jpg',
   },
@@ -223,7 +223,7 @@ escreva(planetaAmigavel)
   },
   {
     content:
-      'Legal! Então, que tal conhecer mais sobre esse novo planeta chamado `Ifthenia`?',
+      'Legal! Então, que tal conhecer mais sobre esse novo planeta chamado *Ifthenia*?',
     type: 'default',
     picture: 'panda-sorrindo.jpg',
   },

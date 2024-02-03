@@ -16,7 +16,7 @@ type Questions = [
 export const questions: Questions = [
   {
     title:
-      'Entramos no portal, momento perfeito para treinarmos o `escolha-caso`. Veja que aqui perto há um planeta chamado chamado Tatooine. Que tipo de planeta ele é?',
+      'Entramos no portal, momento perfeito para treinarmos o *escolha-caso*. Veja que aqui perto há um planeta chamado chamado Tatooine. Que tipo de planeta ele é?',
     code: `var planeta = "Tatooine"
 
 escolha (planeta) {
@@ -41,7 +41,7 @@ escolha (planeta) {
   },
   {
     title:
-      'Só para lembrar: qual é o nome do bloco do `escolha caso` que sempre será executado quando o valor dentro dos parêteses do `escolha` não corresponder a nenhum `caso`?',
+      'Só para lembrar: qual é o nome do bloco do *escolha caso* que sempre será executado quando o valor dentro dos parêteses do *escolha* não corresponder a nenhum *caso*?',
     type: 'open',
     lines: [
       {
@@ -76,12 +76,12 @@ escolha (planeta) {
       },
       {
         id: 7,
-        texts: ['padrao:'],
+        texts: ['input-1', ':'],
         indentation: 1,
       },
       {
         id: 8,
-        texts: ['input-1', '("Senha inválida")'],
+        texts: ['("Senha inválida")'],
         indentation: 2,
       },
       {
@@ -95,7 +95,7 @@ escolha (planeta) {
   },
   {
     title:
-      'O clima dentro desse portal é agradável. Quais `casos` abaixo podem resultar em "Clima agradável"?',
+      'O clima dentro desse portal é agradável. Quais *casos* abaixo podem resultar em "Clima agradável"?',
     code: `escolha (estacao) {
   caso 'Outono':
   caso 'Inverno':
@@ -123,7 +123,7 @@ escolha (planeta) {
     escreva("Nave desconhecida")
 }`,
     title:
-      'Há uma nave passando perto de nós, porém ela é desconhecida. Quais `casos` resultariam em "Nave desconhecida"',
+      'Há uma nave passando perto de nós, porém ela é desconhecida. Qual opção resultaria em "Nave desconhecida"?',
     type: 'selection',
     answer: 'Star Destroyer',
     options: ['X-wing', 'TIE Fighter', 'Millennium Falcon', 'Star Destroyer'],
@@ -131,7 +131,7 @@ escolha (planeta) {
   },
   {
     title:
-      'Para sairmos dentro desse portal, precisamos ligar o motor turbo. Complete o código abaixo para que resulte em `"Motor turbo ativado desativado"`.',
+      'Para sairmos dentro desse portal, precisamos ligar o motor turbo. Complete o código abaixo para que resulte em "Motor turbo ativado desativado".',
     type: 'drag-and-drop',
     lines: [
       {

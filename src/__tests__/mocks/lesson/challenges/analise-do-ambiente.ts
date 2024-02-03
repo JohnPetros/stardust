@@ -63,6 +63,7 @@ escreva()`,
 var nomeEstrela = "Proxima Centauri"
 var temperatura = 100
 var temCorAmarela = falso
+
 escreva(
   "\${nomeEstrela}: texto, \${temperatura}: numero, \${temCorAmarela}: falso"
 )
@@ -86,6 +87,12 @@ escreva(
       content:
         'Você pode ver como deve ser o resultado esperado clicando na aba de *resultado* acima',
       picture: 'panda-sorrindo.jpg',
+    },
+    {
+      type: 'alert',
+      content:
+        'Por favor, não remova os comando *leia()*, pois será a partir deles que virão os dados para o seu programa.',
+      picture: 'panda-andando-com-bambu.jpg',
     },
   ],
 }

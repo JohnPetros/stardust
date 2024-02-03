@@ -37,7 +37,7 @@ export const texts = [
   },
   {
     content:
-      'Para montar um programa disso, utilizaremos a terceira variação da estrutura condicional: `senao-se`.',
+      'Para montar um programa disso, utilizaremos a terceira variação da estrutura condicional: *senão-se*.',
     type: 'default',
     picture: 'panda-olhando-computador.jpg',
   },
@@ -46,25 +46,18 @@ export const texts = [
     content: 'Mas não já vimos isso antes?',
   },
   {
-    content:
-      'Para montar um programa disso fazer, utilizaremos a terceira variação da estrutura condicional: `senao-se`.',
-    type: 'default',
-    picture: 'panda-olhando-computador.jpg',
-  },
-
-  {
     type: 'default',
     content:
-      'Não confunda com um simples `senao`. Neste caso, o `senão-se` (escrito no código como senao se) sempre virá depois do primeiro `se` e antes de `senao` (caso tenha):',
+      'Não confunda com um simples *senao*. Neste caso, o senão-se (escrito no código como *senao se*) sempre virá depois do primeiro *se* e antes de *senao* (caso tenha):',
     picture: 'panda-piscando.jpg',
   },
   {
     type: 'code',
     content: `var idioma = "Vortaxiano"
 
-se (idioma = 'Xanxiriano') {
+se (idioma == 'Xanxiriano') {
   escreva("Traduzir de Xanxiriano")
-} senao se (idioma = 'Krynnishiano') { 
+} senao se (idioma == 'Krynnishiano') { 
   escreva("Traduzir de Krynnishiano")
 } senao {
   escreva("Traduzir de outro idioma")
@@ -75,15 +68,15 @@ se (idioma = 'Xanxiriano') {
   },
   {
     type: 'quote',
-    title: 'Estrutura condicional aninhado',
+    title: 'Condicional aninhado',
     content:
-      'Perceba que o `senao se` funciona como um `se` normal, exigindo que passemos uma condição, que caso seja verdadeira, seu bloco de código será executado em vez do bloco `senao`.',
+      'Perceba que o *senao se* funciona como um *se* normal, exigindo que passemos uma condição, que caso seja verdadeira, seu bloco de código será executado em vez do bloco do *senao*.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
     type: 'default',
     content:
-      'Além disso, a estrutura `senão-se` é conhecido como `se aninhado`, justamente porque podemos colocar vários `senao se` dentro de uma estrura condicional.',
+      'Além disso, a estrutura *senão-se* é conhecido como *se aninhado*, justamente porque podemos colocar vários *senao se* dentro de uma estrura condicional.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
@@ -94,7 +87,7 @@ se (idioma = 'Xanxiriano') {
   },
   {
     type: 'user',
-    content: 'Como assim uma senha para abrir o foguete',
+    content: 'Como assim uma senha para abrir o foguete?',
   },
   {
     type: 'default',
@@ -115,7 +108,7 @@ se (senha == 2222) {
 } senao se (senha == 9713) {
   escreva("Abrir saída") 
 } senao {
-  escreva("Senha não existe")
+  escreva("Senha inválida")
 }
 
 // Resultado: Abrir saída`,
@@ -130,7 +123,7 @@ se (senha == 2222) {
   {
     type: 'default',
     content:
-      'Por enquanto, quero que você perceba que agora podemos construir estruturas complexas, colocando `se` dentro de `se`.',
+      'Por enquanto, quero que você perceba que agora podemos construir estruturas complexas, colocando *se* dentro de *se*.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -197,7 +190,7 @@ se (povoAmigavel == falso) {
   {
     type: 'default',
     content:
-      'Perceba que o `se` dentro do primeiro `se` foi executado, mas só porque a condição do primeiro `se` resultou em `verdadeiro`',
+      'Perceba que o *se* dentro do primeiro *se* foi executado, mas só porque a condição do primeiro *se* resultou em *verdadeiro*.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
@@ -234,28 +227,8 @@ se (povoAmigavel == falso) {
   {
     type: 'default',
     content:
-      'Agora sim, como a condição do primero `se` resultou em falso, apenas o bloco `senao` do primeiro `se` foi executado.',
+      'Agora sim, como a condição do primero *se* resultou em falso, apenas o bloco *senao* do primeiro *se* foi executado.',
     picture: 'panda-piscando.jpg',
-  },
-  {
-    type: 'code',
-    content: `var povoAmigavel = verdadeiro
-var povoArmado = falso
-
-se (povoAmigavel == falso) {
-
-  se (povoArmado == verdadeiro) {
-    escreva('Fugir para longe') 
-  } senao {
-    escreva('Cair na porrada')
-  }
-
-} senao {
-  escreva('Tentar conversar')
-}
-
-// Resultado: Tentar conversar`,
-    isRunnable: true,
   },
   {
     content: 'Entendi!',

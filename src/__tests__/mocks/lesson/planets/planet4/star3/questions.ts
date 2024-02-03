@@ -24,7 +24,7 @@ export const questions: Questions = [
   },
   {
     title:
-      'Para fazer as análise utilizaremos a estrutura condional do tipo aninhada Coloque os itens abaixo na ordem de acordo com essa estrutura.',
+      'Para fazer as análise utilizaremos a estrutura condicional do tipo aninhada. Coloque os itens abaixo na ordem de acordo com essa estrutura.',
     type: 'drag-and-drop-list',
     items: [
       { id: 1, label: 'se' },
@@ -54,14 +54,14 @@ escreva(tipo)`,
   },
   {
     title:
-      'Reordene o código para verificar adequadamente a altura média do povo de "Ifthenia".',
+      'Reordene o código para escrever adequadamente a altura média do povo de "Ifthenia", que é grande.',
     type: 'drag-and-drop-list',
     items: [
-      { id: 1, label: 'var altura = 40' },
+      { id: 1, label: 'var altura = 180' },
       { id: 2, label: 'se (altura < 20) {' },
-      { id: 3, label: '   escreva("pequeno")' },
+      { id: 3, label: '\tescreva("pequeno")' },
       { id: 4, label: '} senao se (altura < 200) {' },
-      { id: 5, label: '   escreva("grande")' },
+      { id: 5, label: '\tescreva("grande")' },
       { id: 6, label: '}' },
     ],
     picture: 'panda-segurando-bambu-de-pe.jpg',

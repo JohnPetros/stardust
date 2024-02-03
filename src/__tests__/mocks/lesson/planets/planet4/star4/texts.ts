@@ -24,7 +24,7 @@ export const texts: Text[] = [
   },
   {
     type: 'image',
-    content: 'Venham conosco imediatamente',
+    content: 'Venham conosco imediatamente!',
     picture: 'alien-armado-correndo.jpg',
   },
   {
@@ -33,7 +33,7 @@ export const texts: Text[] = [
   },
   {
     type: 'default',
-    content: 'As aparências enganam',
+    content: 'As aparências enganam.',
     picture: 'panda-fazendo-coracao.jpg',
   },
   {
@@ -45,7 +45,7 @@ export const texts: Text[] = [
   {
     type: 'image',
     content: 'Chegando ao palácio...',
-    picture: 'castelo.jpg',
+    picture: 'castelo-alien.jpg',
   },
   {
     type: 'image',
@@ -83,14 +83,16 @@ export const texts: Text[] = [
 
 var morte = ''
 
-se (cor == 'azul') {
+se (cor == 'branco') {
   morte = 'Morrer asfixiado'
+} senao se (cor == 'vermelho') {
+  morte = 'Morrer queimado'
 } senao se (cor == 'amarelo') {
-  morte = 'Morrer de dor de cabeça'
+  morte = 'Morrer de fome'
 } senao se (cor == 'verde') {
   morte = 'Morrer de diarreia'
 } senao {
-  morte = 'Não morrer'
+  morte = 'ão morrer'
 }
 
 escreva(morte)
@@ -106,33 +108,33 @@ escreva(morte)
   },
   {
     type: 'user',
-    content: 'Verdade',
+    content: 'Verdade.',
   },
   {
     type: 'default',
     content:
-      'Tanto nesse caso quanto no outro é melhor usar outro tipo de estrutura condicional, que é chamado de `escolha-caso`',
+      'Tanto nesse caso quanto no outro é melhor usar outro tipo de estrutura condicional, que é chamado de *escolha-caso*.',
     picture: 'panda-piscando.jpg',
   },
   {
     type: 'user',
-    content: 'Queee?',
+    content: 'Queeê?',
   },
   {
     type: 'quote',
     title: 'Estrutura condicional (escolha-caso)',
     content:
-      'Essa é uma estrutura condicional bastante diferenciada. Nela, em vez de usar instruções que já vimos (`se`, `senao se` e `senao`), devemos utilizar apenas 3, que são completamente diferentes: `escolha`, `caso`, `padrao`',
+      'Essa é uma estrutura condicional bastante diferenciada. Nela, em vez de usar instruções que já vimos (*se*, *senao se* e *senao*), devemos utilizar outras 3: *escolha*, *caso*, *padrao*',
     picture: 'panda-comemorando.jpg',
   },
   {
     type: 'user',
-    content: 'Não entendi',
+    content: 'Não entendi.',
   },
   {
     type: 'default',
     content:
-      'Preste atenção, a estrutura `escolha caso` permite que você execute diferentes blocos de código com base no valor de uma variável.',
+      'Preste atenção, a estrutura *escolha caso* permite que você execute diferentes blocos de código com base no valor de uma variável.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -147,14 +149,19 @@ escreva(morte)
 var morte = ''
 
 escolha (cor) {
-  caso 'azul':
+  caso 'branco':
     morte = 'Morrer asfixiado'
+  caso 'vermelho':
+    morte = 'Morrer queimado'
   caso 'amarelo':
-    morte = 'Morrer de ataque asfixiado'
-  caso 'vermelho': 
-    morte = 'Morrer de ataque cardíaco'
+    morte = 'Morrer de fome'
+  caso 'verde': 
+    morte = 'Morrer de diarreia'
   padrao:
     morte = 'Não morrer'
+}
+
+escreva(morte)
 
 // Resultado: Morrer de diarreia`,
     isRunnable: true,
@@ -167,29 +174,29 @@ escolha (cor) {
   {
     type: 'default',
     content:
-      'Só que usando o `escolha-caso`o valor da variável `cor` é comparado com os valores de cada `caso`.',
+      'Só que usando o *escolha-caso* o valor da variável *cor* é comparado com os valores de cada *caso*.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
     type: 'default',
     content:
-      'Se corresponder com um, então será executado tudo que estiver dentro do bloco deste `caso`, não precisando mais comparar com os `casos` restantes, ou seja, o programa para de executar o "escolha caso" a partir do momento em que é encontrado um `caso` conrrespondente.',
+      'Se corresponder com um, então será executado tudo que estiver dentro do bloco deste *caso*, não precisando mais comparar com os *casos* restantes, ou seja, o programa para de executar o "escolha caso" a partir do momento em que é encontrado um *caso* correspondente.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'user',
-    content: 'Interessante',
+    content: 'Interessante.',
   },
   {
     type: 'default',
     content:
-      'Agora se o valor de cor não corresponder a nenhum `caso`, então será executado o que estiver no bloco `padrao`, ou seja, se o valor de cor não for igual a nenhum `caso` específico, execute o que for padrão.',
+      'Agora se o valor de cor não corresponder a nenhum *caso*, então será executado o que estiver no bloco *padrao*, ou seja, se o valor de cor não for igual a nenhum *caso* específico, execute o que for padrão.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'default',
     content:
-      'Ou seja, se o valor da variável cor não for igual a nenhum `caso` específico, execute o que for padrão.',
+      'Ou seja, se o valor da variável cor não for igual a nenhum *caso* específico, execute o que for padrão.',
     picture: 'panda-amando-bambu.jpg',
   },
   {
@@ -224,7 +231,7 @@ escolha (cor) {
     picture: 'apollo-apontando-no-foguete.jpg',
   },
   {
-    content: 'Dentro da caverna é possível ver portais abrindo e fechando.',
+    content: 'Dentro da caverna é possível ver portais se abrindo e fechando.',
     type: 'default',
     picture: 'panda-confuso.jpg',
   },
@@ -236,7 +243,7 @@ escolha (cor) {
   },
   {
     content:
-      'Essa é mais uma situação para usarmos a estrutura de `escolha caso`',
+      'Essa é mais uma situação para usarmos a estrutura de *escolha caso*.',
     type: 'default',
     picture: 'panda-comemorando.jpg',
   },
@@ -250,7 +257,7 @@ escolha (cor) {
     destino = 'Limbo'
   caso 'roxo':
     destino = 'Lugar fantástico'
-  padrao
+  padrao:
     destino = 'nenhum'
 }
 
@@ -281,6 +288,6 @@ escreva(destino)
   {
     type: 'image',
     content: 'Ao infinito e além!',
-    picture: ' fogete-entrando-no-portal.jpg',
+    picture: 'foguete-entrando-no-portal.jpg',
   },
 ]
