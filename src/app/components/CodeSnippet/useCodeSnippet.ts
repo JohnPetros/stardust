@@ -19,7 +19,7 @@ export function useCodeSnippet({ code, isRunnable }: CodeSnippetProps) {
     const lines = code.split('\n').length
 
     if (isRunnable) return 100 + lines * (lines >= 10 ? 20 : 32)
-    else return lines * (lines >= 10 ? 16 : 24)
+    else return lines * (lines >= 10 ? 24 : 32)
   }, [code, isRunnable])
 
   return {

@@ -43,13 +43,13 @@ export function CodeEditorSettingsDialog({
               </dd>
             </div>
             <div className="flex items-center justify-between">
-              <dt className="text-gray-100">Tamanho do tab (px):</dt>
+              <dt className="text-gray-100">Tamanho do tab:</dt>
               <dd>
                 <RangeInput
                   value={tabSize}
                   min={2}
                   max={4}
-                  step={1}
+                  step={2}
                   onValueChange={handleTabSizeRangeValueChange}
                 />
               </dd>
