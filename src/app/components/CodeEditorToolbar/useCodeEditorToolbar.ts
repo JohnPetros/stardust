@@ -1,6 +1,6 @@
 import { KeyboardEvent, RefObject, useRef } from 'react'
 
-import { CodeEditorRef } from '@/app/components/CodeEditor'
+import { CodeEditorRef } from '@/app/components/Editor'
 
 type UseCodeEditorToolbarParams = {
   previousUserCode: RefObject<string>

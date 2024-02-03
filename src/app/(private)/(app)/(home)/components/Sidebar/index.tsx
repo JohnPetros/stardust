@@ -2,13 +2,13 @@
 import { X } from '@phosphor-icons/react'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 
-import { UserAvatar } from '../../../../../components/UserAvatar'
 import { AchievementsList } from '../AchievementsList'
 import { SignOutAlert } from '../SignOutAlert'
 
 import { Button } from '@/app/components/Button'
+import { UserAvatar } from '@/app/components/UserAvatar'
 import { useAuth } from '@/contexts/AuthContext'
-import { useSiderbarContext } from '@/contexts/SidebarContext'
+import { useSiderbarContext } from '@/contexts/SidebarContext/hooks/useSiderbarContext'
 
 const sidebarVariants: Variants = {
   close: {

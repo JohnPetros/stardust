@@ -5,9 +5,9 @@ import MonacoEditor from '@monaco-editor/react'
 
 import { Loading } from '../Loading'
 
-import { useCodeEditor } from './useCodeEditor'
+import { useEditor } from './useEditor'
 
-import { useCodeEditorContext } from '@/contexts/CodeEditorContext'
+import { useEditorContext } from '@/contexts/EditorContext/hooks/useEditorContext'
 import { useBreakpoint } from '@/hooks/useBreakpoint'
 
 export type CursorPosition = {
@@ -20,7 +20,7 @@ export type SelectedLinesRange = {
   end: number
 }
 
-export type CodeEditorRef = {
+export type EditorRef = {
   getValue: () => string
   setValue: (value: string) => void
   reloadValue: () => void
@@ -29,7 +29,7 @@ export type CodeEditorRef = {
   getSelectedLinesRange: () => SelectedLinesRange | null
 }
 
-type CodeEditorProps = {
+type EditorProps = {
   value: string
   width: number | string
   height: number | string
@@ -38,7 +38,7 @@ type CodeEditorProps = {
   onChange?: (value: string) => void
 }
 
-export function CodeEditorComponent(
+export function EditorComponent(
   {
     value,
     width,
@@ -46,10 +46,10 @@ export function CodeEditorComponent(
     hasMinimap = false,
     isReadOnly = false,
     onChange = () => {},
-  }: CodeEditorProps,
-  ref: ForwardedRef<CodeEditorRef>
+  }: EditorProps,
+  ref: ForwardedRef<EditorRef>
 ) {
-  const { state } = useCodeEditorContext()
+  const { state } = useEditorContext()
   const {
     getValue,
     setValue,
@@ -58,7 +58,7 @@ export function CodeEditorComponent(
     setCursorPosition,
     getSelectedLinesRange,
     handleEditorDidMount,
-  } = useCodeEditor(value)
+  } = useEditor(value)
   const { md: isMobile } = useBreakpoint()
 
   useImperativeHandle(
@@ -114,4 +114,4 @@ export function CodeEditorComponent(
   )
 }
 
-export const CodeEditor = forwardRef(CodeEditorComponent)
+export const Editor = forwardRef(EditorComponent)

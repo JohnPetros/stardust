@@ -6,7 +6,7 @@ type Sorter = 'Ordem padrão' | 'Desbloqueadas' | 'Bloqueadas'
 
 import type { Achievement as AchievementItem } from '@/@types/achievement'
 import { PopoverMenuButton } from '@/app/components/PopoverMenu'
-import { useAchivementsContext } from '@/contexts/AchievementsContext'
+import { useAchivementsContext } from '@/contexts/AchievementsContext/hooks/useAchivementsContext'
 import { filterItemBySearch } from '@/utils/helpers'
 
 export function useAchievementsList() {

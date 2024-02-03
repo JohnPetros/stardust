@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-import { useSpaceContext } from '@/contexts/SpaceContext'
+import { useSpaceContext } from '@/contexts/SpaceContext/hooks/useSpaceContext'
 import { STORAGE } from '@/utils/constants'
 
 export function useSpace() {

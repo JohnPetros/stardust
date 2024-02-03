@@ -18,8 +18,6 @@ const DIRECTION = 'horizontal'
 const HORIZONTAL_PADDNG = 24
 const VERTICAL_PADDNG = 24
 
-export type ContentType = 'description' | 'result' | 'comments' | 'solutions'
-
 type LayoutProps = {
   header: ReactNode
   tabContent: ReactNode

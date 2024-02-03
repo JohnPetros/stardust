@@ -53,9 +53,6 @@ export function Achievement({
     handleRescuedAchievementsAlertClose,
   } = useAchievement(data)
 
-  console.log(data.name, status?.formatedCurrentProgress)
-  console.log(data.name, status?.barWidth)
-
   return (
     <motion.div
       variants={achievementAnimations}

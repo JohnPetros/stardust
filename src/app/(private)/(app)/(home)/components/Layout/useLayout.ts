@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-import { useSiderbarContext } from '@/contexts/SidebarContext'
+import { useSiderbarContext } from '@/contexts/SidebarContext/hooks/useSiderbarContext'
 import { STORAGE } from '@/utils/constants'
 
 export function useLayout() {

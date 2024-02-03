@@ -11,9 +11,9 @@ import { NavButton } from '../NavButton'
 import { SidenavButton } from '../SidenavButton'
 import { SignOutAlert } from '../SignOutAlert'
 
-import { useAchivementsContext } from '@/contexts/AchievementsContext'
+import { useAchivementsContext } from '@/contexts/AchievementsContext/hooks/useAchivementsContext'
 import { useAuth } from '@/contexts/AuthContext'
-import { useSiderbarContext } from '@/contexts/SidebarContext'
+import { useSiderbarContext } from '@/contexts/SidebarContext/hooks/useSiderbarContext'
 import { HOME_LINKS } from '@/utils/constants/home-links'
 
 const sidenavAnimations: Variants = {

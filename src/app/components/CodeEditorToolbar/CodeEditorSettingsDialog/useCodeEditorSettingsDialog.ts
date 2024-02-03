@@ -1,7 +1,7 @@
-import { useCodeEditorContext } from '@/contexts/CodeEditorContext'
+import { useEditorContext } from '@/contexts/EditorContext/hooks/useEditorContext'
 
 export function useCodeEditorSettingsDialog() {
-  const { state, dispatch } = useCodeEditorContext()
+  const { state, dispatch } = useEditorContext()
 
   function handleFontSizeRangeValueChange([value]: number[]) {
     dispatch({ type: 'setFontSize', payload: value })

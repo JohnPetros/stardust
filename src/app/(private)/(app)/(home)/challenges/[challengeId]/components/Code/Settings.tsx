@@ -3,7 +3,7 @@ import { DialogTrigger } from '@radix-ui/react-dialog'
 
 import { Dialog, DialogContent, DialogHeader } from '@/app/components/Dialog'
 import { RangeInput } from '@/app/components/RadioInput'
-import { useCodeEditorContext } from '@/contexts/CodeEditorContext'
+import { useCodeEditorContext } from '@/contexts/EditorContext'
 
 interface SettingsProps {
   children: ReactNode

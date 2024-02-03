@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 
 import type { Achievement } from '@/@types/achievement'
-import { useAchivementsContext } from '@/contexts/AchievementsContext'
+import { useAchivementsContext } from '@/contexts/AchievementsContext/hooks/useAchivementsContext'
 import { useApi } from '@/services/api'
 
 type Status = {

@@ -1,42 +1,15 @@
 'use client'
 
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
-
-import { useToast } from './ToastContext'
+import { useEffect, useRef, useState } from 'react'
 
 import type { Achievement as AchievementData } from '@/@types/achievement'
-import { Achievement } from '@/app/(private)/(app)/(home)/components/Achievement'
-import { ShinningAnimation } from '@/app/(private)/(app)/(home)/components/ShinningAnimation'
-import { Alert, AlertRef } from '@/app/components/Alert'
-import { Button } from '@/app/components/Button'
+import { AlertRef } from '@/app/components/Alert'
 import { useAuth } from '@/contexts/AuthContext'
+import { useToast } from '@/contexts/ToastContext'
 import { useUserAchievements } from '@/hooks/useUserAchievements'
 import { useApi } from '@/services/api'
 
-export type AchivementsContextValue = {
-  achievements: AchievementData[] | undefined
-  rescueableAchievementsCount: number
-  rescueAchivement: (
-    rescuableAchiementId: string,
-    rescuableAchiementReward: number
-  ) => Promise<void>
-  handleRescuedAchievementsAlertClose: (rescuedAchiementId: string) => void
-}
-
-type AchivementsContextProps = {
-  children: ReactNode
-}
-
-export const AchivementsContext = createContext({} as AchivementsContextValue)
-
-export function AchivementsProvider({ children }: AchivementsContextProps) {
+export function useAchivementsProvider() {
   const { user, updateUser } = useAuth()
   const { userAchievements } = useUserAchievements(user?.id)
   const [achievements, setAchievements] = useState<AchievementData[]>([])
@@ -199,65 +172,13 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
     }
   }, [newUnlockedAchievements])
 
-  return (
-    <AchivementsContext.Provider
-      value={{
-        achievements,
-        rescueableAchievementsCount,
-        rescueAchivement,
-        handleRescuedAchievementsAlertClose,
-      }}
-    >
-      <div className="absolute">
-        <Alert
-          ref={newUnlockedAchievementsAlertRef}
-          type={'earning'}
-          title={'Uau! Parece que você ganhou recompensa(s)'}
-          body={
-            <div className="max-h-64 overflow-auto px-6">
-              {newUnlockedAchievements.map((achievement) => (
-                <div key={achievement.id} className="relative">
-                  <span
-                    className="absolute block"
-                    style={{ top: -18, left: -31.5 }}
-                  >
-                    <ShinningAnimation size={110} />
-                  </span>
-
-                  <Achievement
-                    data={achievement}
-                    isUnlocked={true}
-                    isRescuable={false}
-                  />
-                </div>
-              ))}
-            </div>
-          }
-          action={
-            <div className="mt-8 w-full">
-              <Button
-                onClick={() => handleNewUnlockedAchievementsAlertClose(false)}
-              >
-                Entendido
-              </Button>
-            </div>
-          }
-          onOpenChange={handleNewUnlockedAchievementsAlertClose}
-        />
-      </div>
-      {children}
-    </AchivementsContext.Provider>
-  )
-}
-
-export function useAchivementsContext() {
-  const context = useContext(AchivementsContext)
-
-  if (!context) {
-    throw new Error(
-      'useAchivementsContext must be used inside AchivementsContext'
-    )
+  return {
+    achievements,
+    newUnlockedAchievements,
+    rescueableAchievementsCount,
+    newUnlockedAchievementsAlertRef,
+    rescueAchivement,
+    handleRescuedAchievementsAlertClose,
+    handleNewUnlockedAchievementsAlertClose,
   }
-
-  return context
 }

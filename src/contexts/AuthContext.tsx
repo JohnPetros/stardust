@@ -16,7 +16,7 @@ import { useApi } from '@/services/api'
 
 export type OAuthProvider = 'github'
 
-export interface AuthContextValue {
+export type AuthContextValue = {
   user: User | null
   isLoading: boolean
   signIn(email: string, password: string): Promise<void>
@@ -34,7 +34,7 @@ export interface AuthContextValue {
   serverSession: Session | null
 }
 
-interface AuthProviderProps {
+type AuthProviderProps = {
   serverSession: Session | null
   children: React.ReactNode
 }

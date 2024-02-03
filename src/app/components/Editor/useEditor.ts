@@ -10,7 +10,7 @@ import { colors } from '@/styles/colors'
 import { THEMES } from '@/utils/constants'
 import { getDeleguaLanguageTokens } from '@/utils/helpers/getDeleguaLanguageTokens'
 
-export function useCodeEditor(value: string) {
+export function useEditor(value: string) {
   const monaco = useMonaco()
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
 

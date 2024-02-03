@@ -7,7 +7,7 @@ import { Prompt } from '../Prompt'
 
 import { useCodeEditorPlayground } from './useCodeEditorPlayground'
 
-import { CodeEditor, CodeEditorRef } from '@/app/components/CodeEditor'
+import { CodeEditor, CodeEditorRef } from '@/app/components/Editor'
 
 export interface CodeEditorPlaygroundRef extends CodeEditorRef {
   runUserCode: () => void

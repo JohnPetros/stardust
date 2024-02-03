@@ -16,7 +16,7 @@ import { RocketsController } from './controllers/rocketController'
 import { StarsController } from './controllers/starsController'
 import { UsersController } from './controllers/usersController'
 
-import { useSupabaseContext } from '@/contexts/SupabaseContext'
+import { useSupabaseContext } from '@/contexts/SupabaseContext/hooks/useSupabaseContext'
 
 export function useSupabaseApi() {
   const { supabase } = useSupabaseContext()

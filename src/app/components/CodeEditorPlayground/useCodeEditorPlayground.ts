@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { ConsoleRef } from '../Console'
 import { PromptRef } from '../Prompt'
 
-import { CodeEditorRef } from '@/app/components/CodeEditor'
+import { CodeEditorRef } from '@/app/components/Editor'
 import { useToast } from '@/contexts/ToastContext'
 import { execute } from '@/libs/delegua'
 import { REGEX } from '@/utils/constants/regex'

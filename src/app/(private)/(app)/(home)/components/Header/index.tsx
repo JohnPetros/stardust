@@ -9,9 +9,9 @@ import StreakAnimation from '../../../../../../../public/animations/streak.json'
 import { UserAvatar } from '../../../../../components/UserAvatar'
 import { CounterBadge } from '../CounterBadge'
 
-import { useAchivementsContext } from '@/contexts/AchievementsContext'
+import { useAchivementsContext } from '@/contexts/AchievementsContext/hooks/useAchivementsContext'
 import { useAuth } from '@/contexts/AuthContext'
-import { useSiderbarContext } from '@/contexts/SidebarContext'
+import { useSiderbarContext } from '@/contexts/SidebarContext/hooks/useSiderbarContext'
 
 const headerAnimations: Variants = {
   hidden: {

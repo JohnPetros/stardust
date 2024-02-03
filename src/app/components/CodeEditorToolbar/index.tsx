@@ -8,10 +8,10 @@ import { useCodeEditorToolbar } from './useCodeEditorToolbar'
 
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
-import { CodeEditorRef } from '@/app/components/CodeEditor'
 import { CodeEditorSettingsDialog } from '@/app/components/CodeEditorToolbar/CodeEditorSettingsDialog'
 import { DocsDialog } from '@/app/components/CodeEditorToolbar/DocsDialog'
 import { HotkeysDialog } from '@/app/components/CodeEditorToolbar/HotkeysDialog'
+import { CodeEditorRef } from '@/app/components/Editor'
 import { Tooltip } from '@/app/components/Tooltip'
 
 type CodeEditorToolbarProps = {

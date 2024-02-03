@@ -1,43 +1,16 @@
 'use client'
 
-import {
-  createContext,
-  ReactNode,
-  RefObject,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useMotionValueEvent, useScroll } from 'framer-motion'
+
+import type { SpaceRocket } from '../types/SpaceRocket'
+import type { StarViewPortPosition } from '../types/StarViewPortPosition'
 
 import { useAuth } from '@/contexts/AuthContext'
 import { useRocket } from '@/hooks/useRocket'
 import { getImage } from '@/utils/helpers'
 
-type SpaceRocket = {
-  name: string
-  image: string
-}
-
-export type StarViewPortPosition = 'above' | 'in' | 'bellow'
-
-export interface SpaceContextValue {
-  spaceRocket: SpaceRocket
-  lastUnlockedStarRef: RefObject<HTMLLIElement>
-  lastUnlockedStarPosition: StarViewPortPosition
-  scrollIntoLastUnlockedStar: () => void
-  setLastUnlockedStarPosition: (position: StarViewPortPosition) => void
-}
-
-interface SpaceContextProps {
-  children: ReactNode
-}
-
-export const SpaceContext = createContext({} as SpaceContextValue)
-
-export function SpaceProvider({ children }: SpaceContextProps) {
+export function useSpaceProvider() {
   const { user } = useAuth()
   const { rocket } = useRocket(user?.rocket_id ?? '')
   const [spaceRocket, setSpaceRocket] = useState<SpaceRocket>({} as SpaceRocket)
@@ -99,19 +72,5 @@ export function SpaceProvider({ children }: SpaceContextProps) {
     }
   }, [rocket, user?.rocket_id])
 
-  return (
-    <SpaceContext.Provider value={spaceContextValue}>
-      {children}
-    </SpaceContext.Provider>
-  )
-}
-
-export function useSpaceContext() {
-  const context = useContext(SpaceContext)
-
-  if (!context) {
-    throw new Error('useSpaceContext must be used inside SpaceProvider')
-  }
-
-  return context
+  return spaceContextValue
 }
