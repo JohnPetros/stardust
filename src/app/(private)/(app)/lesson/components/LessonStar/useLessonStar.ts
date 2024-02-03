@@ -11,7 +11,7 @@ import { useLessonStore } from '@/stores/lessonStore'
 import { COOKIES, ROUTES, STORAGE } from '@/utils/constants'
 
 export function useLessonStar(star: Star) {
-  const { parseTexts } = useMdx()
+  const { parseTextsToMdxComponents } = useMdx()
 
   const {
     state: { currentStage, questions, incorrectAnswersCount },
@@ -33,7 +33,7 @@ export function useLessonStar(star: Star) {
     let timeout: NodeJS.Timeout
 
     if (star) {
-      const mdxComponents = parseTexts(star.texts)
+      const mdxComponents = parseTextsToMdxComponents(star.texts)
       console.log({ mdxComponents })
       setMdxComponents(mdxComponents)
       setMdxComponentsCount(star.texts.length)
@@ -45,7 +45,13 @@ export function useLessonStar(star: Star) {
       resetState()
       clearTimeout(timeout)
     }
-  }, [star, resetState, setMdxComponentsCount, setQuestions, parseTexts])
+  }, [
+    star,
+    resetState,
+    setMdxComponentsCount,
+    setQuestions,
+    parseTextsToMdxComponents,
+  ])
 
   useEffect(() => {
     async function showRewards() {

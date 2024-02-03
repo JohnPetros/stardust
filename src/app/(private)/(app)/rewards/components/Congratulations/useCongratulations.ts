@@ -10,7 +10,7 @@ import { AlertRef } from '@/app/components/Alert'
 import { deleteCookie } from '@/app/server/actions/deleteCookie'
 import { useAuth } from '@/contexts/AuthContext'
 import { COOKIES } from '@/utils/constants'
-import { playAudio } from '@/utils/helpers/'
+import { playAudio } from '@/utils/helpers'
 
 export function useCongratulations({
   coins,
