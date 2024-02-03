@@ -100,7 +100,7 @@ export function EditorComponent(
         wordWrap: 'on',
         autoIndent: 'full',
         readOnly: isReadOnly,
-        domReadOnly: isReadOnly,
+        domReadOnly: true,
       }}
       loading={
         <div className="grid place-content-center">

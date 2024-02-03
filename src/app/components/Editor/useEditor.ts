@@ -57,8 +57,6 @@ export function useEditor(value: string) {
   function getSelectedLinesRange() {
     const selection = editorRef.current?.getSelection()
 
-    console.log({ selection })
-
     if (selection) {
       return {
         start: selection.startLineNumber,
@@ -74,19 +72,6 @@ export function useEditor(value: string) {
     monaco: Monaco
   ) {
     editorRef.current = editor
-
-    const messageContribution = editor.getContribution(
-      'editor.contrib.messageController'
-    )
-
-    // Removing Monaco Editor Tooltip
-    editor.onDidAttemptReadOnlyEdit(() => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ;(messageContribution as any)?.showMessage(
-        'Reason for blocked edit',
-        editor.getPosition()
-      )
-    })
 
     monaco.languages.register({ id: 'delegua' })
 

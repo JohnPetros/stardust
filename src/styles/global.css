@@ -14,7 +14,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  @apply font-default;
 }
 
 body {
@@ -22,6 +21,7 @@ body {
   height: 100vh;
 
   font-weight: 400;
+  @apply font-default;
 }
 
 body {
@@ -63,9 +63,8 @@ button:hover {
   box-shadow: 0 0 0 4px #514869;
 }
 
-.monaco-alert {
+.monaco-editor-overlaymessage {
   display: none !important;
-  visibility: hidden !important;
 }
 
 .strong {
