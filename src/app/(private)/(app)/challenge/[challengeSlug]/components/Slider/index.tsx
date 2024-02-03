@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 register()
 import { motion } from 'framer-motion'
 
-import { Editor } from '../../@codeEditor/components/Editor'
+import { CodeEditor } from '../../@codeEditor/components/CodeEditor'
 import { Description } from '../../@tabContent/components/Description'
 import { Result } from '../../@tabContent/components/Result'
 
@@ -74,7 +74,7 @@ export function Slider() {
         </SwiperSlide>
 
         <SwiperSlide>
-          <Editor />
+          <CodeEditor />
         </SwiperSlide>
 
         <SwiperSlide className="h-full overflow-y-auto">

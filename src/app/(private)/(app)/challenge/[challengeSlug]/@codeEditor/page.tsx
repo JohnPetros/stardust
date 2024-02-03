@@ -1,5 +1,5 @@
-import { Editor } from './components/Editor'
+import { CodeEditor } from './components/CodeEditor'
 
-export default function DefaultCodeEditorSlot() {
-  return <Editor />
+export default function CodeEditorSlot() {
+  return <CodeEditor />
 }

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 
 import type { TestCase } from '@/@types/challenge'
 import { ConsoleRef } from '@/app/components/Console'
-import { CodeEditorRef } from '@/app/components/Editor'
+import { EditorRef } from '@/app/components/Editor'
 import { useToast } from '@/contexts/ToastContext'
 import { execute } from '@/libs/delegua'
 import { useChallengeStore } from '@/stores/challengeStore'
@@ -14,7 +14,7 @@ import { playAudio } from '@/utils/helpers'
 
 const inputCommandRegex = REGEX.input
 
-export function useEditor() {
+export function useCodeEditor() {
   const challenge = useChallengeStore((store) => store.state.challenge)
   const layout = useChallengeStore((store) => store.state.layout)
   const userOutput = useChallengeStore((store) => store.state.userOutput)
@@ -33,7 +33,7 @@ export function useEditor() {
   const userCode = useRef('')
   const previousUserCode = useRef('')
   const editorContainerRef = useRef<HTMLDivElement>(null)
-  const codeEditorRef = useRef<CodeEditorRef>(null)
+  const editorRef = useRef<EditorRef>(null)
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
   const consoleRef = useRef<ConsoleRef>(null)
   const errorLine = useRef(0)
@@ -153,7 +153,7 @@ export function useEditor() {
     editorContainerRef,
     runCodeButtonRef,
     consoleRef,
-    codeEditorRef,
+    editorRef,
     codeEditorHeight,
     initialCode,
     userOutput,

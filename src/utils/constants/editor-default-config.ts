@@ -1,6 +1,6 @@
-import { CodeEditorState } from '@/contexts/CodeEditorContext'
+import type { EditorContextState } from '@/contexts/EditorContext/types/editorContextState'
 
-export const EDITOR_DEFAULT_CONFIG: CodeEditorState = {
+export const EDITOR_DEFAULT_CONFIG: EditorContextState = {
   theme: 'darkSpace',
   fontSize: 16,
   tabSize: 4,

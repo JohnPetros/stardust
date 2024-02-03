@@ -1,31 +1,31 @@
 'use client'
 
-import { useEditor } from './useEditor'
+import { useCodeEditor } from './useCodeEditor'
 
-import { CodeEditor } from '@/app/components/Editor'
 import { CodeEditorToolbar } from '@/app/components/CodeEditorToolbar'
+import { Editor } from '@/app/components/Editor'
 
-export function Editor() {
+export function CodeEditor() {
   const {
     initialCode,
     userCode,
     previousUserCode,
     editorContainerRef,
-    codeEditorRef,
+    editorRef,
     codeEditorHeight,
     handleCodeChange,
     handleRunCode,
-  } = useEditor()
+  } = useCodeEditor()
 
   return (
     <div ref={editorContainerRef} className="relative h-full w-full">
       <CodeEditorToolbar
         previousUserCode={previousUserCode}
-        codeEditorRef={codeEditorRef}
+        codeEditorRef={editorRef}
         onRunCode={() => handleRunCode(userCode.current)}
       >
-        <CodeEditor
-          ref={codeEditorRef}
+        <Editor
+          ref={editorRef}
           value={initialCode ?? ''}
           width="100%"
           height={codeEditorHeight - 40}

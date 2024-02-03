@@ -7,9 +7,9 @@ import { Prompt } from '../Prompt'
 
 import { useCodeEditorPlayground } from './useCodeEditorPlayground'
 
-import { CodeEditor, CodeEditorRef } from '@/app/components/Editor'
+import { Editor, EditorRef } from '@/app/components/Editor'
 
-export interface CodeEditorPlaygroundRef extends CodeEditorRef {
+export interface CodeEditorPlaygroundRef extends EditorRef {
   runUserCode: () => void
 }
 
@@ -25,7 +25,7 @@ export const useCodeEditorPlaygroundComponent = (
 ) => {
   const {
     output,
-    codeEditorRef,
+    editorRef,
     consoleRef,
     promptRef,
     runUserCode,
@@ -39,16 +39,16 @@ export const useCodeEditorPlaygroundComponent = (
     () => {
       return {
         runUserCode,
-        ...codeEditorRef.current,
+        ...editorRef.current,
       } as CodeEditorPlaygroundRef
     },
-    [codeEditorRef, runUserCode]
+    [editorRef, runUserCode]
   )
 
   return (
     <div className="h-full w-full border-2 border-gray-700 pt-2">
-      <CodeEditor
-        ref={codeEditorRef}
+      <Editor
+        ref={editorRef}
         width="100%"
         height={height}
         value={code}

@@ -1,7 +1,5 @@
-'use client'
-
-import { Editor } from './components/Editor'
+import { CodeEditor } from './components/CodeEditor'
 
 export default function DefaultCodeEditorSlot() {
-  return <Editor />
+  return <CodeEditor />
 }

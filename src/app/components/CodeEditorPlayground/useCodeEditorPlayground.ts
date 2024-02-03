@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { ConsoleRef } from '../Console'
 import { PromptRef } from '../Prompt'
 
-import { CodeEditorRef } from '@/app/components/Editor'
+import { EditorRef } from '@/app/components/Editor'
 import { useToast } from '@/contexts/ToastContext'
 import { execute } from '@/libs/delegua'
 import { REGEX } from '@/utils/constants/regex'
@@ -19,7 +19,7 @@ export function useCodeEditorPlayground(code: string) {
 
   const userCode = useRef(code)
   const errorLine = useRef(0)
-  const codeEditorRef = useRef<CodeEditorRef>(null)
+  const editorRef = useRef<EditorRef>(null)
   const consoleRef = useRef<ConsoleRef>(null)
   const promptRef = useRef<PromptRef>(null)
 
@@ -28,8 +28,7 @@ export function useCodeEditorPlayground(code: string) {
   }
 
   function resetToOriginalUserCode() {
-    if (codeEditorRef.current)
-      userCode.current = codeEditorRef.current?.getValue()
+    if (editorRef.current) userCode.current = editorRef.current?.getValue()
   }
 
   function getErrorLine() {
@@ -186,7 +185,7 @@ export function useCodeEditorPlayground(code: string) {
 
   return {
     output,
-    codeEditorRef,
+    editorRef,
     consoleRef,
     promptRef,
     runUserCode,
