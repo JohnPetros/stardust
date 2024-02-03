@@ -59,7 +59,7 @@ export function PageTransitionAnimation({
             />
             {hasTips && codeTip && (
               <p
-                className="max-w-lg -translate-y-8 rounded-md bg-gray-700 p-2 text-center leading-8 text-gray-100"
+                className="mx-auto w-[32rem] max-w-[90%] -translate-y-10 rounded-md bg-gray-700 p-2 text-center leading-8 text-gray-100"
                 dangerouslySetInnerHTML={{
                   __html: `Dica: ${formatText(codeTip)}.`,
                 }}
