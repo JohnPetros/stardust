@@ -6,14 +6,14 @@ import { AlertRef } from '@/app/components/Alert'
 import { useLessonStore } from '@/stores/lessonStore'
 
 export function useQuiz() {
-  const { currentQuestionIndex, questions, livesAmount } = useLessonStore(
+  const { currentQuestionIndex, questions, livesCount } = useLessonStore(
     (store) => store.state
   )
 
   const currentQuestion = useMemo(() => {
     return questions.length ? questions[currentQuestionIndex] : null
   }, [questions, currentQuestionIndex])
-
+  
   const alertRef = useRef<AlertRef>(null)
 
   useEffect(() => {
@@ -24,8 +24,8 @@ export function useQuiz() {
   }, [currentQuestionIndex])
 
   useEffect(() => {
-    if (livesAmount === 0) alertRef.current?.open()
-  }, [livesAmount])
+    if (livesCount === 0) alertRef.current?.open()
+  }, [livesCount])
 
   return {
     alertRef,
