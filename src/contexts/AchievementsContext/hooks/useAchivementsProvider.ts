@@ -4,13 +4,13 @@ import { useEffect, useRef, useState } from 'react'
 
 import type { Achievement as AchievementData } from '@/@types/achievement'
 import { AlertRef } from '@/app/components/Alert'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useToast } from '@/contexts/ToastContext'
 import { useUserAchievements } from '@/hooks/useUserAchievements'
 import { useApi } from '@/services/api'
 
 export function useAchivementsProvider() {
-  const { user, updateUser } = useAuth()
+  const { user, updateUser } = useAuthContext()
   const { userAchievements } = useUserAchievements(user?.id)
   const [achievements, setAchievements] = useState<AchievementData[]>([])
   const [newUnlockedAchievements, setNewUnlockedAchievements] = useState<

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 
 import SignIn from '../sign-in/page'
 
-import { AuthContext, AuthContextValue } from '@/contexts/AuthContext'
+import { AuthContext, AuthContextValue } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { SupabaseProvider } from '@/contexts/SupabaseContext'
 
 jest.mock('next/navigation')

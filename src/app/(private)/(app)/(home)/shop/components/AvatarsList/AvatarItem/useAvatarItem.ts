@@ -3,7 +3,7 @@ import { useSWRConfig } from 'swr'
 
 import { AvatarItemProps } from '../AvatarItem'
 
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useAudio } from '@/hooks/useAudio'
 import { getImage } from '@/utils/helpers'
 
@@ -11,7 +11,7 @@ export function useAvatarItem({
   data: { id, name, price, image, isAcquired },
   addUserAcquiredAvatar,
 }: AvatarItemProps) {
-  const { user, updateUser } = useAuth()
+  const { user, updateUser } = useAuthContext()
 
   const { mutate } = useSWRConfig()
 

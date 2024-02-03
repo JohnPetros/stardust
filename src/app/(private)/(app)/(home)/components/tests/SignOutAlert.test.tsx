@@ -6,7 +6,10 @@ import userEvent from '@testing-library/user-event'
 import { SignOutAlert } from '../SignOutAlert'
 
 import { userMock } from '@/__tests__/mocks/usersMock'
-import { AuthContext, AuthContextValue } from '@/contexts/AuthContext'
+import {
+  AuthContext,
+  AuthContextValue,
+} from '@/contexts/AuthContext/hooks/useAuthContext'
 import { SupabaseProvider } from '@/contexts/SupabaseContext'
 
 function renderAlert() {

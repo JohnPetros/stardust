@@ -7,7 +7,7 @@ import useSWR from 'swr'
 import { Comment } from '@/@types/comment'
 import { Order } from '@/@types/order'
 import { PopoverMenuButton } from '@/app/components/PopoverMenu'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useToast } from '@/contexts/ToastContext'
 import { useApi } from '@/services/api'
 import { useChallengeStore } from '@/stores/challengeStore'
@@ -17,7 +17,7 @@ type Sorter = 'date' | 'upvotes'
 
 export function useCommentsList(canShowComments: boolean) {
   const challenge = useChallengeStore((store) => store.state.challenge)
-  const { user } = useAuth()
+  const { user } = useAuthContext()
 
   const [sorter, setSorter] = useState<Sorter>('date')
   const [order, setOrder] = useState<Order>('descending')

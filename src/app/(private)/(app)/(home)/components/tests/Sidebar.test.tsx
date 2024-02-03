@@ -3,7 +3,10 @@ import { render, screen } from '@testing-library/react'
 import { Sidebar } from '../Sidebar'
 
 import { usersMock } from '@/__tests__/mocks/usersMock'
-import { AuthContext, AuthContextValue } from '@/contexts/AuthContext'
+import {
+  AuthContext,
+  AuthContextValue,
+} from '@/contexts/AuthContext/hooks/useAuthContext'
 import { SidebarContext, SidebarContextValue } from '@/contexts/SidebarContext'
 
 const userMock = usersMock[0]

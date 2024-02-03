@@ -3,16 +3,15 @@
 import { useMemo } from 'react'
 import useSWR from 'swr'
 
-
 import type { Challenge } from '@/@types/challenge'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useApi } from '@/services/api'
 import { useChallengesListStore } from '@/stores/challengesListStore'
 
-export  function useChallengesList() {
+export function useChallengesList() {
   const api = useApi()
 
-  const { user } = useAuth()
+  const { user } = useAuthContext()
   const { categoriesIds, difficulty, status, search } = useChallengesListStore(
     (store) => store.state
   )

@@ -10,7 +10,7 @@ import { WinnerUsersList } from './components/WinnerUsersList'
 import type { Ranking } from '@/@types/ranking'
 import type { WinnerUser } from '@/@types/user'
 import { Loading } from '@/app/components/Loading'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useRankedUsers } from '@/hooks/useRankedUsers'
 import { useRanking } from '@/hooks/useRanking'
 import { useApi } from '@/services/api'
@@ -20,7 +20,7 @@ const sunday = 0
 const restDays = today === sunday ? 7 : 7 - today
 
 export default function Ranking() {
-  const { user, updateUser } = useAuth()
+  const { user, updateUser } = useAuthContext()
   const { ranking: currentRanking, rankings } = useRanking(
     user?.ranking_id,
     true

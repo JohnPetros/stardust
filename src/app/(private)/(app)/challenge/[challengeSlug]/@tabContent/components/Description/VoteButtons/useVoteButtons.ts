@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 import type { Vote } from '@/@types/vote'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useApi } from '@/services/api'
 import { useChallengeStore } from '@/stores/challengeStore'
 
@@ -15,7 +15,7 @@ export function useVoteButtons() {
   const [upvotes, setUpvotes] = useState(challenge?.upvotes ?? 0)
 
   const api = useApi()
-  const { user } = useAuth()
+  const { user } = useAuthContext()
 
   async function handleVoteButton(vote: Vote) {
     if (!user || !challenge) return

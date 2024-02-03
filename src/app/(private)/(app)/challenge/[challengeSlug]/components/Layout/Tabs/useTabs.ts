@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 
 import type { ContentType } from '@/@types/contentType'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useChallengeStore } from '@/stores/challengeStore'
 import { ROUTES } from '@/utils/constants'
 
@@ -22,7 +22,7 @@ export function useTabs() {
 
   const pathname = usePathname()
   const router = useRouter()
-  const { user, updateUser } = useAuth()
+  const { user, updateUser } = useAuthContext()
 
   async function handleShowSolutions() {
     if (!user) return

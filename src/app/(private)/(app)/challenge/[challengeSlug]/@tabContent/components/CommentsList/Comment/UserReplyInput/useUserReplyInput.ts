@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useToast } from '@/contexts/ToastContext'
 import { useApi } from '@/services/api'
 import { useChallengeStore } from '@/stores/challengeStore'
@@ -13,7 +13,7 @@ export function useUserReplyInput(
   onPostReply: VoidFunction
 ) {
   const challenge = useChallengeStore((store) => store.state.challenge)
-  const { user } = useAuth()
+  const { user } = useAuthContext()
 
   const [reply, setReply] = useState('')
 

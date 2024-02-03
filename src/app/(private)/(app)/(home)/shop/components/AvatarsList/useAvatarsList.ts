@@ -3,7 +3,7 @@ import useSWR, { mutate } from 'swr'
 
 import type { Avatar } from '@/@types/avatar'
 import type { Order } from '@/@types/order'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useApi } from '@/services/api'
 import { calculatePage } from '@/utils/helpers'
 
@@ -14,7 +14,7 @@ export function useAvatarsList() {
   const [search, setSearch] = useState('s')
   const [priceOrder, setPriceOrder] = useState<Order>('ascending')
 
-  const { user } = useAuth()
+  const { user } = useAuthContext()
   const api = useApi()
   const page = calculatePage(offset, ITEMS_PER_PAGE)
 

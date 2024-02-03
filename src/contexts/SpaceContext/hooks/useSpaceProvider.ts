@@ -6,12 +6,12 @@ import { useMotionValueEvent, useScroll } from 'framer-motion'
 import type { SpaceRocket } from '../types/SpaceRocket'
 import type { StarViewPortPosition } from '../types/StarViewPortPosition'
 
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useRocket } from '@/hooks/useRocket'
 import { getImage } from '@/utils/helpers'
 
 export function useSpaceProvider() {
-  const { user } = useAuth()
+  const { user } = useAuthContext()
   const { rocket } = useRocket(user?.rocket_id ?? '')
   const [spaceRocket, setSpaceRocket] = useState<SpaceRocket>({} as SpaceRocket)
   const [lastUnlockedStarPosition, setLastUnlockedStarPosition] =

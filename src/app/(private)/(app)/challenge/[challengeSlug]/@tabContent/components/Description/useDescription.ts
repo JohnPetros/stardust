@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useMdx } from '@/hooks/useMdx'
 import { useChallengeStore } from '@/stores/challengeStore'
 import { ROUTES } from '@/utils/constants'
@@ -21,7 +21,7 @@ export function useDescription() {
 
   const router = useRouter()
 
-  const { user, updateUser } = useAuth()
+  const { user, updateUser } = useAuthContext()
 
   const { parseTextsToMdxComponents } = useMdx()
 

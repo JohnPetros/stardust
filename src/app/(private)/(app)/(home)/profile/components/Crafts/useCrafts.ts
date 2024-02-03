@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 
 type TabValue = 'playground-tab' | 'challenges-tab' | 'solutions-tab'
 
@@ -13,7 +13,7 @@ export function useCrafts() {
   const [hasSorters, setHasSorters] = useState(false)
   const [activeSorter] = useState<Sorter>('created_at')
 
-  const { user } = useAuth()
+  const { user } = useAuthContext()
   const pathname = usePathname()
   const isAuthUser = pathname.split('/').slice(-1)[0] === user?.slug
 

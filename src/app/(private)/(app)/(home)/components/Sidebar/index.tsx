@@ -7,7 +7,7 @@ import { SignOutAlert } from '../SignOutAlert'
 
 import { Button } from '@/app/components/Button'
 import { UserAvatar } from '@/app/components/UserAvatar'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useSiderbarContext } from '@/contexts/SidebarContext/hooks/useSiderbarContext'
 
 const sidebarVariants: Variants = {
@@ -24,7 +24,7 @@ const sidebarVariants: Variants = {
 }
 
 export function Sidebar() {
-  const { user } = useAuth()
+  const { user } = useAuthContext()
   const { isOpen, toggle } = useSiderbarContext()
 
   if (user)

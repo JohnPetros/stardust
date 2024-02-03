@@ -10,7 +10,7 @@ import { UserAvatar } from '../../../../../components/UserAvatar'
 import { CounterBadge } from '../CounterBadge'
 
 import { useAchivementsContext } from '@/contexts/AchievementsContext/hooks/useAchivementsContext'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useSiderbarContext } from '@/contexts/SidebarContext/hooks/useSiderbarContext'
 
 const headerAnimations: Variants = {
@@ -26,7 +26,7 @@ const headerAnimations: Variants = {
 }
 
 export function Header() {
-  const { user } = useAuth()
+  const { user } = useAuthContext()
   const { toggle, isOpen } = useSiderbarContext()
   const { rescueableAchievementsCount } = useAchivementsContext()
 

@@ -5,7 +5,7 @@ import { useSWRConfig } from 'swr'
 
 import { RocketProps } from '.'
 
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useToast } from '@/contexts/ToastContext'
 import { useAudio } from '@/hooks/useAudio'
 import { useApi } from '@/services/api'
@@ -14,7 +14,7 @@ export function useRocketItem({
   data: { id, name, price, image, isAcquired },
   addUserAcquiredRocket,
 }: RocketProps) {
-  const { user, updateUser } = useAuth()
+  const { user, updateUser } = useAuthContext()
 
   const { mutate } = useSWRConfig()
 

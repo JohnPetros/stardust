@@ -10,10 +10,10 @@ import { useAchievementsList } from './useAchievementsList'
 import { Loading } from '@/app/components/Loading'
 import { PopoverMenu } from '@/app/components/PopoverMenu'
 import { Search } from '@/app/components/Search'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 
 export function AchievementsList() {
-  const { user } = useAuth()
+  const { user } = useAuthContext()
   const { isLoading, popoverMenuButtons, achievements, handleSearchChange } =
     useAchievementsList()
 

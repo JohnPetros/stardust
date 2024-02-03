@@ -1,47 +1,17 @@
 'use client'
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
-import { AuthError, Session } from '@supabase/supabase-js'
+import { useCallback, useEffect, useState } from 'react'
+import type { Session } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
 import useSWR, { mutate } from 'swr'
+
+import { AuthContextValue } from '../types/authContextValue'
+import { OAuthProvider } from '../types/oAuthProvider'
 
 import type { User } from '@/@types/user'
 import { useApi } from '@/services/api'
 
-export type OAuthProvider = 'github'
-
-export type AuthContextValue = {
-  user: User | null
-  isLoading: boolean
-  signIn(email: string, password: string): Promise<void>
-  signUp(
-    email: string,
-    password: string
-  ): Promise<{
-    userId: string | null
-    error: AuthError | null
-  } | null>
-  signOut(): Promise<void>
-  signInWithOAuth(provider: OAuthProvider): Promise<void>
-  updateUser(newUserData: Partial<User>): Promise<void>
-  mutateUserCache(newUserData: Partial<User>): void
-  serverSession: Session | null
-}
-
-type AuthProviderProps = {
-  serverSession: Session | null
-  children: React.ReactNode
-}
-
-export const AuthContext = createContext({} as AuthContextValue)
-
-export function AuthProvider({ serverSession, children }: AuthProviderProps) {
+export function useAuthProvider(serverSession: Session | null) {
   const [session, setSession] = useState<Session | null>(serverSession)
   const api = useApi()
   const router = useRouter()
@@ -133,15 +103,5 @@ export function AuthProvider({ serverSession, children }: AuthProviderProps) {
     serverSession,
   }
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext)
-
-  if (!context) {
-    throw new Error('useAuth must be used inside AuthProvider')
-  }
-
-  return context
+  return value
 }

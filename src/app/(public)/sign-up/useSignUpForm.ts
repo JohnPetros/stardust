@@ -4,9 +4,10 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { ToastRef } from '@/app/components/Toast'
-import { useAuth } from '@/contexts/AuthContext'
-import { SignUpFormFields, signUpFormSchema } from '@/libs/zod'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useApi } from '@/services/api'
+import { SignUpForm } from '@/services/validation/types/signUpForm'
+import { signUpFormSchema } from '@/services/validation/zod/schemas/signUpFormSchema'
 
 export const SIGN_UP_ERRORS: Record<string, string> = {
   'For security purposes, you can only request this after 50 seconds.':
@@ -20,12 +21,12 @@ export function useSignUpForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignUpFormFields>({
+  } = useForm<SignUpForm>({
     resolver: zodResolver(signUpFormSchema),
   })
   const [isLoading, setIsLoading] = useState(false)
 
-  const { signUp } = useAuth()
+  const { signUp } = useAuthContext()
 
   const api = useApi()
 
@@ -41,7 +42,7 @@ export function useSignUpForm() {
     })
   }
 
-  async function handleFormSubmit({ name, email, password }: SignUpFormFields) {
+  async function handleFormSubmit({ name, email, password }: SignUpForm) {
     setIsLoading(true)
     let userEmail
 

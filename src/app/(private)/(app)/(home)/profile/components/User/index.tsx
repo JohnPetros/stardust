@@ -9,7 +9,7 @@ import { Status } from './Status'
 import { User as UserType } from '@/@types/user'
 import { Loading } from '@/app/components/Loading'
 import { UserAvatar } from '@/app/components/UserAvatar'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useRanking } from '@/hooks/useRanking'
 import { useRocket } from '@/hooks/useRocket'
 import { useApi } from '@/services/api'
@@ -22,7 +22,7 @@ interface UserProps {
 export function User({
   data: { id, ranking_id, rocket_id, avatar_id, name, level, xp, created_at },
 }: UserProps) {
-  const { user } = useAuth()
+  const { user } = useAuthContext()
   const { format } = useDate()
   const isAuthUser = id === user?.id
 

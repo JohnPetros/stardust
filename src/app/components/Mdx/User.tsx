@@ -2,7 +2,7 @@ import { Animation } from './Animation'
 import { Content } from './Content'
 
 import { UserAvatar } from '@/app/components/UserAvatar'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 
 type UserProps = {
   title: string
@@ -12,7 +12,7 @@ type UserProps = {
 }
 
 export function User({ children, hasAnimation = true }: UserProps) {
-  const { user } = useAuth()
+  const { user } = useAuthContext()
 
   return (
     <Animation hasAnimation={hasAnimation}>

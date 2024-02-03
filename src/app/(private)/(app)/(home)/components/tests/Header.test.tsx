@@ -3,7 +3,10 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { Header } from '../Header'
 
 import { userMock } from '@/__tests__/mocks/usersMock'
-import { AuthContext, AuthContextValue } from '@/contexts/AuthContext'
+import {
+  AuthContext,
+  AuthContextValue,
+} from '@/contexts/AuthContext/hooks/useAuthContext'
 import { SidebarContext, SidebarContextValue } from '@/contexts/SidebarContext'
 import { SupabaseProvider } from '@/contexts/SupabaseContext'
 

@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr'
 
 import { Order } from '@/@types/order'
 import { Rocket } from '@/@types/rocket'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useApi } from '@/services/api'
 import { calculatePage } from '@/utils/helpers'
 
@@ -16,7 +16,7 @@ export function useRocketsList() {
   const [priceOrder, setPriceOrder] = useState<Order>('ascending')
 
   const api = useApi()
-  const { user } = useAuth()
+  const { user } = useAuthContext()
 
   const page = calculatePage(offset, ITEMS_PER_PAGE)
 

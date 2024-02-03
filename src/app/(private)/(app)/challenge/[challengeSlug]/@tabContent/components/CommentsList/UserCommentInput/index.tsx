@@ -15,7 +15,7 @@ import { useUserCommentInput } from './useUserCommentInput'
 import { Button } from '@/app/components/Button'
 import { Mdx } from '@/app/components/Mdx'
 import { UserAvatar } from '@/app/components/UserAvatar'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 
 type UserCommentInputProps = {
   id: string
@@ -44,7 +44,7 @@ export function UserCommentInput({
     handlePostComment,
   } = useUserCommentInput(comment, onCommentChange, onPost)
 
-  const { user } = useAuth()
+  const { user } = useAuthContext()
 
   if (user)
     return (

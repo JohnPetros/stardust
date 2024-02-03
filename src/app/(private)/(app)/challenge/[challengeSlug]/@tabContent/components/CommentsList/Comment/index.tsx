@@ -14,7 +14,7 @@ import { Button } from '@/app/components/Button'
 import { Loading } from '@/app/components/Loading'
 import { Separator } from '@/app/components/Separator'
 import { UserAvatar } from '@/app/components/UserAvatar'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { ROUTES } from '@/utils/constants'
 
 type CommentProps = {
@@ -57,7 +57,7 @@ export function Comment({
     handleCancelCommentEdition,
   } = useComment(id)
 
-  const { user } = useAuth()
+  const { user } = useAuthContext()
 
   const hasReplies =
     repliesAmount > 0 || (replies && replies.length > 0) || false

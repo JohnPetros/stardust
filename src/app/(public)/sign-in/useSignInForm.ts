@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form'
 import { LottieRef } from 'lottie-react'
 import { useRouter } from 'next/navigation'
 
-import { OAuthProvider, useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
+import { OAuthProvider } from '@/contexts/AuthContext/types/oAuthProvider'
 import { useToast } from '@/contexts/ToastContext'
 import { useValidation } from '@/services/validation'
 import { SignInForm } from '@/services/validation/types/signInForm'
@@ -25,7 +26,7 @@ export function useSignInForm() {
     resolver: validation.resolveSignInForm(),
   })
 
-  const { signIn, signInWithOAuth } = useAuth()
+  const { signIn, signInWithOAuth } = useAuthContext()
   const [isLaoding, setIsLoading] = useState(false)
 
   const router = useRouter()

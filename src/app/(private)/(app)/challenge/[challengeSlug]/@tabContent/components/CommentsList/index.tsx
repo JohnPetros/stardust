@@ -8,7 +8,7 @@ import { AnimatedArrow } from '@/app/components/AnimatedArrow'
 import { Loading } from '@/app/components/Loading'
 import { PopoverMenu } from '@/app/components/PopoverMenu'
 import { Separator } from '@/app/components/Separator'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useBreakpoint } from '@/hooks/useBreakpoint'
 import { useChallengeStore } from '@/stores/challengeStore'
 
@@ -31,7 +31,7 @@ export function CommentsList() {
     handleDeleteComment,
   } = useCommentsList(canShowComments)
 
-  const { user: authUser } = useAuth()
+  const { user: authUser } = useAuthContext()
 
   const { md: isMobile } = useBreakpoint()
 

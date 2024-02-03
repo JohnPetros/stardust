@@ -5,14 +5,14 @@ import useSWR from 'swr'
 
 import { Category } from '@/@types/category'
 import type { Challenge } from '@/@types/challenge'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useApi } from '@/services/api'
 import { useChallengesListStore } from '@/stores/challengesListStore'
 
 export function useChallengesList(categories: Category[]) {
   const api = useApi()
 
-  const { user } = useAuth()
+  const { user } = useAuthContext()
   const { categoriesIds, difficulty, status, search } = useChallengesListStore(
     (store) => store.state
   )

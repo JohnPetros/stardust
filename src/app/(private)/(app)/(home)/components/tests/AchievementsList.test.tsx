@@ -9,7 +9,10 @@ import { achievementsMock } from '@/__tests__/mocks/achievementsMock'
 import { usersMock } from '@/__tests__/mocks/usersMock'
 import { Achievement } from '@/@types/achievement'
 import { AchivementsContext } from '@/contexts/AchievementsContext'
-import { AuthContext, AuthContextValue } from '@/contexts/AuthContext'
+import {
+  AuthContext,
+  AuthContextValue,
+} from '@/contexts/AuthContext/hooks/useAuthContext'
 import { SupabaseProvider } from '@/contexts/SupabaseContext'
 
 const rescueAchivementMock = jest.fn()

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 
 import type { UpvotesButtonProps } from '.'
 
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useToast } from '@/contexts/ToastContext'
 import { useApi } from '@/services/api'
 import { ERRORS } from '@/utils/constants'
@@ -17,7 +17,7 @@ export function useUpvotesButton({
   const [upvotes, setUpvotes] = useState(initialUpvotes)
   const [isUpvoted, setIsUpvoted] = useState(isCommentUpvoted)
 
-  const { user } = useAuth()
+  const { user } = useAuthContext()
   const api = useApi()
   const toast = useToast()
 

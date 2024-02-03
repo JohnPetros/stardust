@@ -11,7 +11,7 @@ import type { Ranking } from '@/@types/ranking'
 import type { WinnerUser as WinnerUserType } from '@/@types/user'
 import { Alert, AlertRef } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { getImage } from '@/utils/helpers'
 
 interface WinnerUsersListProps {
@@ -29,7 +29,7 @@ export function WinnerUsersList({
   currentRanking,
   lastRankingPosition,
 }: WinnerUsersListProps) {
-  const { user, updateUser } = useAuth()
+  const { user, updateUser } = useAuthContext()
 
   const isAuthUserTopWinner = user?.last_position
     ? [1, 2, 3].includes(user.last_position)

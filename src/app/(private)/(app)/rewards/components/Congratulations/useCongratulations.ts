@@ -8,7 +8,7 @@ import { CongratulationsProps } from '.'
 
 import { AlertRef } from '@/app/components/Alert'
 import { deleteCookie } from '@/app/server/actions/deleteCookie'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { COOKIES } from '@/utils/constants'
 import { playAudio } from '@/utils/helpers'
 
@@ -24,7 +24,7 @@ export function useCongratulations({
   const [isEndMessageVisible, setIsEndMessageVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  const { mutateUserCache } = useAuth()
+  const { mutateUserCache } = useAuthContext()
 
   const alertRef = useRef<AlertRef>(null)
   const starsChainRef = useRef(null) as LottieRef

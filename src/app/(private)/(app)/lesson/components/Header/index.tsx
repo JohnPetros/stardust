@@ -8,13 +8,13 @@ import { useHeader } from './useHeader'
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { ProgressBar } from '@/app/components/ProgressBar'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useRocket } from '@/hooks/useRocket'
 import { useApi } from '@/services/api'
 import { useLessonStore } from '@/stores/lessonStore'
 
 export function Header() {
-  const { user } = useAuth()
+  const { user } = useAuthContext()
 
   const livesCount = useLessonStore((store) => store.state.livesCount)
 

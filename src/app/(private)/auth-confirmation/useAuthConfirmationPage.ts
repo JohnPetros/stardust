@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from 'react'
 import { LottieRef } from 'lottie-react'
 import { useRouter } from 'next/navigation'
 
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { ROCKET_ANIMATION_DELAY, ROUTES } from '@/utils/constants'
 
 export function useAuthConfirmationPage() {
-  const { user } = useAuth()
+  const { user } = useAuthContext()
   const [isRocketVisible, setIsRocketVisible] = useState(false)
   const router = useRouter()
   const rocketRef = useRef(null) as LottieRef

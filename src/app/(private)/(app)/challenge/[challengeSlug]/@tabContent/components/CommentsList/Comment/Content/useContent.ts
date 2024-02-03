@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useToast } from '@/contexts/ToastContext'
 import { useApi } from '@/services/api'
 import { ERRORS } from '@/utils/constants'
@@ -14,7 +14,7 @@ export function useContent(
   onCancel: () => void
 ) {
   const [content, setContent] = useState(initialContent)
-  const { user } = useAuth()
+  const { user } = useAuthContext()
   const api = useApi()
   const toast = useToast()
 

@@ -7,7 +7,7 @@ import SignUp from '../sign-up/page'
 
 import { usersMock } from '@/__tests__/mocks/usersMock'
 import { SignUpError } from '@/@types/signupError'
-import { AuthContext, AuthContextValue } from '@/contexts/AuthContext'
+import { AuthContext, AuthContextValue } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { SupabaseProvider } from '@/contexts/SupabaseContext'
 import { useApi } from '@/services/api'
 import { SIGN_UP_ERRORS } from '@/utils/constants/errors'

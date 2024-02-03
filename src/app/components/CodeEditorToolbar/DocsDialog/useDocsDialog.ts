@@ -2,12 +2,12 @@ import { useState } from 'react'
 import useSWR from 'swr'
 
 import { Doc } from '@/@types/doc'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useApi } from '@/services/api'
 import { ERRORS } from '@/utils/constants'
 
 export function useDocsDialog() {
-  const { user } = useAuth()
+  const { user } = useAuthContext()
   const api = useApi()
 
   const [content, setContent] = useState('')

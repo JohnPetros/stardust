@@ -6,7 +6,7 @@ import { Theory } from '../../Theory'
 import { fetchMock } from '@/__tests__/fetchMock'
 import { textsMock } from '@/__tests__/mocks/lesson/planets/planet1/star1/texts'
 import { usersMock } from '@/__tests__/mocks/usersMock'
-import { AuthContext, AuthContextValue } from '@/contexts/AuthContext'
+import { AuthContext, AuthContextValue } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { SupabaseProvider } from '@/contexts/SupabaseContext'
 import { LessonStoreProps, useLessonStore } from '@/stores/lessonStore'
 
