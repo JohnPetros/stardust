@@ -69,31 +69,38 @@ export function DragAndDropQuestion({
         <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
         <ul className="mt-6 space-y-4">
-          {lines.map((line) => (
-            <li key={line.id} className="flex items-center gap-3">
-              {line.texts.map((text, index) => {
-                const id = `${index}-${line.id}`
-                return (
-                  <div key={id}>
-                    {text !== 'dropZone' ? (
-                      <span className="font-code text-gray-100">{text}</span>
-                    ) : (
-                      <DropZone
-                        id={id}
-                        droppedItem={
-                          draggableItems.find(
-                            (item) => item.dropZoneId === id
-                          ) ?? null
-                        }
-                        activeDraggableItemId={activeDraggableItemId}
-                        userDragItemsIdsSenquence={userDragItemsIdsSenquence}
-                      />
-                    )}
-                  </div>
-                )
-              })}
-            </li>
-          ))}
+          {lines.map((line) => {
+            const marginLeft = 24 * line.indentation
+            return (
+              <li
+                key={line.id}
+                style={{ marginLeft }}
+                className="flex items-center gap-3"
+              >
+                {line.texts.map((text, index) => {
+                  const id = `${index}-${line.id}`
+                  return (
+                    <div key={id}>
+                      {text !== 'dropZone' ? (
+                        <span className="font-code text-gray-100">{text}</span>
+                      ) : (
+                        <DropZone
+                          id={id}
+                          droppedItem={
+                            draggableItems.find(
+                              (item) => item.dropZoneId === id
+                            ) ?? null
+                          }
+                          activeDraggableItemId={activeDraggableItemId}
+                          userDragItemsIdsSenquence={userDragItemsIdsSenquence}
+                        />
+                      )}
+                    </div>
+                  )
+                })}
+              </li>
+            )
+          })}
         </ul>
 
         <ul className="mt-12 flex w-full flex-wrap justify-center gap-3">

@@ -23,38 +23,46 @@ export function OpenQuestion({
 
       {code && <CodeSnippet code={code} isRunnable={false} />}
 
-      <ul className="mt-12">
-        {lines.map((line) => (
-          <li key={line.id} className="flex flex-row items-center gap-3">
-            {line.texts.map((text, index) => {
-              let inputIndex = 0
+      <ul className="mt-12 space-y-6">
+        {lines.map((line) => {
+          const marginLeft = 24 * line.indentation
 
-              if (text.includes('input')) {
-                inputIndex = Number(text.slice(-1)) - 1
-              }
+          return (
+            <li
+              key={line.id}
+              style={{ marginLeft }}
+              className="flex flex-row items-center gap-3"
+            >
+              {line.texts.map((text, index) => {
+                let inputIndex = 0
 
-              return (
-                <div key={`${index}-${line.id}`}>
-                  {!text.includes('input') ? (
-                    <div className="flex gap-1 font-code text-gray-100">
-                      {text}
-                    </div>
-                  ) : (
-                    <Input
-                      value={userAnswers[inputIndex]}
-                      autoCapitalize="none"
-                      onChange={({ currentTarget }) =>
-                        handleInputChange(currentTarget.value, inputIndex)
-                      }
-                      answer={answers[inputIndex]}
-                      autoFocus={inputIndex === 0}
-                    />
-                  )}
-                </div>
-              )
-            })}
-          </li>
-        ))}
+                if (text.includes('input')) {
+                  inputIndex = Number(text.slice(-1)) - 1
+                }
+
+                return (
+                  <div key={`${index}-${line.id}`}>
+                    {!text.includes('input') ? (
+                      <div className="flex gap-1 font-code text-gray-100">
+                        {text}
+                      </div>
+                    ) : (
+                      <Input
+                        value={userAnswers[inputIndex]}
+                        autoCapitalize="none"
+                        onChange={({ currentTarget }) =>
+                          handleInputChange(currentTarget.value, inputIndex)
+                        }
+                        answer={answers[inputIndex]}
+                        autoFocus={inputIndex === 0}
+                      />
+                    )}
+                  </div>
+                )
+              })}
+            </li>
+          )
+        })}
       </ul>
     </>
   )
