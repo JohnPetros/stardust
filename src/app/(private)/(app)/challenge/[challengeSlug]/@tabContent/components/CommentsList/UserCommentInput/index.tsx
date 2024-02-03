@@ -52,7 +52,7 @@ export function UserCommentInput({
         <form
           method="post"
           id={id}
-          className="flex gap-3"
+          className="flex flex-col items-center gap-3 md:flex-row"
           onSubmit={handlePostComment}
         >
           <UserAvatar avatarId={user.avatar_id} size={52} />
@@ -81,9 +81,9 @@ export function UserCommentInput({
                 }
               />
             )}
-            <Toolbar.Root className="flex w-full items-center justify-between">
+            <Toolbar.Root className="flex w-full flex-col gap-4 md:flex-row md:items-center  md:justify-center">
               {!isPreviewVisible && (
-                <div className="flex items-center gap-3">
+                <div className="flex items-center justify-end gap-3 md:justify-start">
                   <ToolButton
                     onClick={() => handleInsertSnippet('strong')}
                     icon={Article}

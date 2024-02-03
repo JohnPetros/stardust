@@ -26,7 +26,10 @@ export function useContent(
       onEdit()
     } catch (error) {
       console.error(error)
-      toast.show(ERRORS.commentFailedEdition, { type: 'error', seconds: 5 })
+      toast.show(ERRORS.comments.failedEdition, {
+        type: 'error',
+        seconds: 5,
+      })
       onCancel()
     }
   }

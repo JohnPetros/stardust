@@ -9,6 +9,7 @@ import { Loading } from '@/app/components/Loading'
 import { PopoverMenu } from '@/app/components/PopoverMenu'
 import { Separator } from '@/app/components/Separator'
 import { useAuth } from '@/contexts/AuthContext'
+import { useBreakpoint } from '@/hooks/useBreakpoint'
 import { useChallengeStore } from '@/stores/challengeStore'
 
 export function CommentsList() {
@@ -31,12 +32,16 @@ export function CommentsList() {
   } = useCommentsList(canShowComments)
   const { user: authUser } = useAuth()
 
+  const { md: isMobile } = useBreakpoint()
+
   if (!canShowComments || isLoading)
     return (
       <div className="grid h-full place-content-center">
         <Loading />
       </div>
     )
+
+  console.log({ isPopoverMenuOpen })
 
   const sorterButtonTitle =
     sorter === 'date' && order === 'ascending'
@@ -52,7 +57,7 @@ export function CommentsList() {
           {comments?.length} Comentário{comments?.length === 1 ? '' : 's'}
         </strong>
         {comments && (
-          <div className="flex justify-end bg-gray-800 px-6 py-2">
+          <div className="flex justify-end rounded-md bg-gray-700 px-6 py-2 md:rounded-none md:bg-gray-800">
             <PopoverMenu
               label="Abrir menu para ordernar lista de conquistas"
               buttons={popoverMenuButtons}
@@ -68,7 +73,7 @@ export function CommentsList() {
       </header>
       <div className="mt-6 px-6">
         <UserCommentInput
-          id="user-comment"
+          id={isMobile ? 'user-comment-mobile' : 'user-comment'}
           title="Comentar"
           placeholder="Deixe um comentário sobre esse desafio..."
           comment={userComment}
