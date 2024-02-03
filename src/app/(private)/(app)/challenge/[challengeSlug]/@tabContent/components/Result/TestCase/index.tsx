@@ -21,13 +21,15 @@ const contentAnimations: Variants = {
 }
 
 type TestCaseProps = {
+  index: number
   data: TestCaseData
   isCorrect: boolean
   userOutput: string
 }
 
 export function TestCase({
-  data: { id, isLocked, input, expectedOutput },
+  index,
+  data: { isLocked, input, expectedOutput },
   isCorrect,
   userOutput,
 }: TestCaseProps) {
@@ -58,7 +60,7 @@ export function TestCase({
               isCorrect ? 'text-green-500' : 'text-red-700'
             )}
           >
-            Teste de caso #{id}
+            Teste de caso #{index}
           </h4>
         </div>
 

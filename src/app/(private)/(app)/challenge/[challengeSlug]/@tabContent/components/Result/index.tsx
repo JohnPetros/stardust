@@ -22,6 +22,7 @@ export function Result() {
           {challenge.test_cases.map((testCase, index) => (
             <TestCase
               key={testCase.id}
+              index={index + 1}
               data={testCase}
               isCorrect={results[index]}
               userOutput={userOutput[index]}
