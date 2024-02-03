@@ -14,7 +14,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-
+  @apply font-default;
 }
 
 body {
@@ -22,7 +22,6 @@ body {
   height: 100vh;
 
   font-weight: 400;
-  @apply font-default
 }
 
 body {
@@ -70,11 +69,11 @@ button:hover {
 }
 
 .strong {
-  @apply bg-gray-900 text-gray-50 rounded-md p-[2px] m-1 font-code 
+  @apply m-1 rounded-md bg-gray-900 p-[2px] font-code text-gray-50;
 }
 
 .skeleton {
-  @apply animate-pulse opacity-70 bg-gray-600
+  @apply animate-pulse bg-gray-600 opacity-70;
 }
 
 ::-webkit-scrollbar {
@@ -82,7 +81,7 @@ button:hover {
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-400 w-[2px] h-3 rounded-md;
+  @apply h-3 w-[2px] rounded-md bg-gray-400;
 }
 
 ::-webkit-scrollbar-track {
