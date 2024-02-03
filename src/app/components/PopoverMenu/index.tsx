@@ -53,7 +53,7 @@ export function PopoverMenu({
 
   function handleOpenChange(isMenuOpen: boolean) {
     setIsOpen(isMenuOpen)
-    if (onOpenChange) onOpenChange(true)
+    if (onOpenChange) onOpenChange(isMenuOpen)
   }
 
   function handlePopoverMenuButtonClick({
@@ -73,7 +73,7 @@ export function PopoverMenu({
           <Popover.Portal forceMount>
             <div className="flex flex-col">
               <Popover.Content
-                className="z-[150] mr-1 min-w-[6rem]"
+                className="z-[2000] mr-1 min-w-[6rem]"
                 sideOffset={5}
               >
                 <motion.div
