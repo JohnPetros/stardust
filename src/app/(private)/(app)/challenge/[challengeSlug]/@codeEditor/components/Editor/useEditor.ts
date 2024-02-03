@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import type { TestCase } from '@/@types/challenge'
@@ -82,8 +82,6 @@ export function useEditor() {
     let userOutput = ''
     const { input } = testCase
 
-    console.log({ code })
-
     try {
       const formatedCode = formatCode(code, { input })
       const { erros } = await execute(formatedCode, (output) => {
@@ -127,15 +125,27 @@ export function useEditor() {
     userCode.current = value
   }
 
+  const handleCodeEditorHeight = useCallback(() => {
+    setCodeEditorHeight(editorContainerRef.current?.offsetHeight ?? 0)
+  }, [])
+
   useEffect(() => {
     if (!userCode?.current && challenge) userCode.current = initialCode
   }, [challenge, initialCode])
 
   useEffect(() => {
     if (layout) {
-      setCodeEditorHeight(editorContainerRef.current?.offsetHeight ?? 0)
+      handleCodeEditorHeight()
     }
-  }, [layout])
+  }, [layout, handleCodeEditorHeight])
+
+  useEffect(() => {
+    window.addEventListener('resize', handleCodeEditorHeight)
+
+    return () => {
+      window.removeEventListener('resize', handleCodeEditorHeight)
+    }
+  }, [layout, handleCodeEditorHeight])
 
   return {
     userCode,

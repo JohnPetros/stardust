@@ -1,3 +1,5 @@
+'use client'
+
 import { useChallengeStore } from '@/stores/challengeStore'
 
 export function Description() {

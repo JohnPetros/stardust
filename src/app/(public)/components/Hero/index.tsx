@@ -6,8 +6,10 @@ import { useHero } from './useHero'
 
 import { TypeWriter } from '@/app/components/TypeWriter'
 
+const CHARACTERS_DELETING_DELAY = 40 // miliseconds
+
 export function Hero() {
-  const { handleDeleteQuoteChar, quote } = useHero()
+  const { handleDeleteQuoteChar, quote } = useHero(CHARACTERS_DELETING_DELAY)
 
   return (
     <div className="w-[20rem] space-y-6">
@@ -25,7 +27,7 @@ export function Hero() {
         <TypeWriter
           text={quote}
           delay={100}
-          deleteDelay={40}
+          deleteDelay={CHARACTERS_DELETING_DELAY}
           hasLoop={true}
           onDeleteChar={handleDeleteQuoteChar}
         />

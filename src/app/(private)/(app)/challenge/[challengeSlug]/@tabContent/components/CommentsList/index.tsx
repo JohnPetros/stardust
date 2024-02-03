@@ -30,6 +30,7 @@ export function CommentsList() {
     handleUserCommentChange,
     handleDeleteComment,
   } = useCommentsList(canShowComments)
+
   const { user: authUser } = useAuth()
 
   const { md: isMobile } = useBreakpoint()

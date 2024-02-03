@@ -1,19 +1,37 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
+import { useAuth } from '@/contexts/AuthContext'
 import { useMdx } from '@/hooks/useMdx'
 import { useChallengeStore } from '@/stores/challengeStore'
+import { ROUTES } from '@/utils/constants'
 
 export function useDescription() {
   const [isLoading, setIsLoading] = useState(true)
 
   const setMdx = useChallengeStore((store) => store.actions.setMdx)
+  const setCanShowSolutions = useChallengeStore(
+    (store) => store.actions.setCanShowSolutions
+  )
   const challenge = useChallengeStore((store) => store.state.challenge)
   const userVote = useChallengeStore((store) => store.state.userVote)
   const mdx = useChallengeStore((store) => store.state.mdx)
 
-  const { parseTexts } = useMdx()
+  const router = useRouter()
+
+  const { user, updateUser } = useAuth()
+
+  const { parseTextsToMdxComponents } = useMdx()
+
+  async function handleShowSolutions() {
+    if (!user) return
+
+    await updateUser({ coins: user.coins - 10 })
+    setCanShowSolutions(true)
+    router.push(`${ROUTES.private.challenge}/${challenge?.slug}/solutions`)
+  }
 
   useEffect(() => {
     if (mdx) {
@@ -27,7 +45,7 @@ export function useDescription() {
       const { texts, description } = challenge
 
       if (texts) {
-        const mdxComponents = parseTexts(texts)
+        const mdxComponents = parseTextsToMdxComponents(texts)
 
         setMdx(mdxComponents.join('<br />'))
         setIsLoading(false)
@@ -43,12 +61,13 @@ export function useDescription() {
     }
 
     fetchMdx()
-  }, [isLoading, challenge, mdx, setMdx, parseTexts])
+  }, [isLoading, challenge, mdx, setMdx, parseTextsToMdxComponents])
 
   return {
     isLoading,
     mdx,
     userVote,
     challenge,
+    handleShowSolutions,
   }
 }

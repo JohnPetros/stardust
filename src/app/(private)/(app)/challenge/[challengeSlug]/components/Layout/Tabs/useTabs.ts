@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 
-import { ContentType } from '..'
-
+import type { ContentType } from '@/@types/contentType'
 import { useAuth } from '@/contexts/AuthContext'
 import { useChallengeStore } from '@/stores/challengeStore'
 import { ROUTES } from '@/utils/constants'

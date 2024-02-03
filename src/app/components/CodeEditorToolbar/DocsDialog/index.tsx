@@ -5,7 +5,12 @@ import { ArrowLeft, Lock } from '@phosphor-icons/react'
 import { twMerge } from 'tailwind-merge'
 
 import { Button } from '../../Button'
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../../Dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+} from '../../Dialog'
 import { Loading } from '../../Loading'
 import { Mdx } from '../../Mdx'
 
