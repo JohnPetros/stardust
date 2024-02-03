@@ -29,7 +29,7 @@ export function useResult() {
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false)
   const [isAnswerVerified, setIsAnswerVerified] = useState(false)
 
-  // const { md: isMobile } = useBreakpoint()
+  const { md: isMobile } = useBreakpoint()
   const router = useRouter()
 
   async function showRewards() {
@@ -91,7 +91,7 @@ export function useResult() {
     if (isAnswerVerified) {
       incrementIncorrectAswersAmount()
 
-      // if (isMobile) tabHandler?.showCodeTab()
+      if (isMobile) tabHandler?.showCodeTab()
     }
   }
 
