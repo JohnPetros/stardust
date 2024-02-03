@@ -34,7 +34,6 @@ export function useLessonStar(star: Star) {
 
     if (star) {
       const mdxComponents = parseTextsToMdxComponents(star.texts)
-      console.log({ mdxComponents })
       setMdxComponents(mdxComponents)
       setMdxComponentsCount(star.texts.length)
       setQuestions(star.questions)
@@ -42,6 +41,7 @@ export function useLessonStar(star: Star) {
     }
 
     return () => {
+      localStorage.removeItem(STORAGE.secondsCounter)
       resetState()
       clearTimeout(timeout)
     }
@@ -69,7 +69,6 @@ export function useLessonStar(star: Star) {
       }
 
       await setCookie(COOKIES.rewardsPayload, JSON.stringify(rewardsPayload))
-      localStorage.removeItem(STORAGE.secondsCounter)
       router.push(ROUTES.private.rewards)
     }
 
