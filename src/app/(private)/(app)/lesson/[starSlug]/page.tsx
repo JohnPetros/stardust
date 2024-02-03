@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 
 import { LessonStar } from '../components/LessonStar'
 
-import { texts } from '@/__tests__/mocks/lesson/planets/planet4/star1/texts'
+import { texts } from '@/__tests__/mocks/lesson/planets/planet4/star4/texts'
 import type { Star } from '@/@types/star'
 import { createServerClient } from '@/services/api/supabase/clients/serverClient'
 import { StarsController } from '@/services/api/supabase/controllers/starsController'

@@ -40,9 +40,11 @@ export function QuestionContainer({ children, id }: QuestionContainerProps) {
       animate={'middle'}
       exit="left"
       transition={questionContainerTransition}
-      className="mx-auto flex w-full max-w-3xl flex-col items-center justify-center px-6 md:px-0"
+      className="mx-auto flex w-full max-w-3xl flex-col items-center px-6 md:px-0"
     >
+      <div className="flex-grow" />
       {children}
+      <div className="flex-grow" />
     </motion.div>
   )
 }

@@ -66,9 +66,9 @@ export function SortableItem({
       {...listeners}
       className={itemStyles({ color })}
     >
-      <label style={{ marginLeft }} className={twMerge('block')}>
+      <span style={{ marginLeft }} className={twMerge('block')}>
         {label}
-      </label>
+      </span>
       <List
         className={twMerge(
           'text-lg',
