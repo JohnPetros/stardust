@@ -21,7 +21,8 @@ export function TypeWriter({
   hasLoop = false,
   onDeleteChar,
 }: TypeWriterProps) {
-  const { options } = useTypeWriter({
+  const { options, formattedText } = useTypeWriter({
+    text,
     delay,
     deleteDelay,
     hasLoop,
@@ -39,7 +40,7 @@ export function TypeWriter({
               const cursors = document.querySelectorAll('.Typewriter__cursor')
               cursors.forEach((cursor) => cursor.remove())
             })
-            .typeString(text)
+            .typeString(formattedText)
             .start()
         }}
       />
