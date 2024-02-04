@@ -8,6 +8,7 @@ import { ICommentsController } from './ICommentsController'
 import { IDocsController } from './IDocsController'
 import { IMdxController } from './IMdxController'
 import { IPlanetsController } from './IPlanetsController'
+import { IPlaygroundsController } from './IPlaygroundsController'
 import { IRankingController } from './IRankingController'
 import { IRocketsController } from './IRocketsController'
 import { IStarsController } from './IStarsController'
@@ -19,6 +20,7 @@ export interface IApi
     IRankingController,
     IRocketsController,
     IPlanetsController,
+    IPlaygroundsController,
     IUsersController,
     IStarsController,
     IAvatarsController,

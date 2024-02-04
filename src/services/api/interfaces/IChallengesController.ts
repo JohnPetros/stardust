@@ -1,4 +1,5 @@
 import type { Challenge } from '@/@types/challenge'
+import type { ChallengeSummary } from '@/@types/challengeSummary'
 import type { Vote } from '@/@types/vote'
 
 export type GetFilteredChallengesParams = {
@@ -7,13 +8,6 @@ export type GetFilteredChallengesParams = {
   difficulty: string
   categoriesIds: string[]
   search: string
-}
-
-export type ChallengeSummary = Pick<
-  Challenge,
-  'id' | 'difficulty' | 'isCompleted'
-> & {
-  users_completed_challenges: []
 }
 
 export interface IChallengesController {
