@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 
-import { Header } from '../Header'
+import { Header } from '../LessonHeader'
 
 import { questionsMock } from '@/__tests__/mocks/lesson/planets/planet1/star1/questions'
 import { textsMock } from '@/__tests__/mocks/lesson/planets/planet1/star1/texts'

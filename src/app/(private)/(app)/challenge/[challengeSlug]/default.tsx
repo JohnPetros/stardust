@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 
 import { getChallenge } from './actions/getChallenge'
-import { Header } from './components/Header'
+import { Header } from './components/ChallengeHeader'
 
 import { Challenge } from '@/@types/challenge'
 import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'

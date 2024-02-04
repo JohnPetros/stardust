@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 
-import { Header } from './components/Header'
+import { PlaygroundLayout } from './components/PlaygroundLayout'
 
 import { Playground } from '@/@types/playground'
 import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
@@ -27,7 +27,12 @@ export default async function UserPlaygroundPage({
 
   return (
     <>
-      <Header playgroundTitle={playground.title} />
+      <PlaygroundLayout
+        id={playground.id}
+        title={playground.title}
+        code={playground.code}
+        userId={playground.user_id}
+      />
     </>
   )
 }

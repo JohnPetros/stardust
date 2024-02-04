@@ -25,7 +25,7 @@ const headerAnimations: Variants = {
   },
 }
 
-export function Header() {
+export function HomeHeader() {
   const { user } = useAuthContext()
   const { toggle, isOpen } = useSiderbarContext()
   const { rescueableAchievementsCount } = useAchivementsContext()

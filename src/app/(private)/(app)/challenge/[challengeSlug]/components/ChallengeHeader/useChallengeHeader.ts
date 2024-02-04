@@ -8,7 +8,7 @@ import type { Vote } from '@/@types/vote'
 import { type Layout, useChallengeStore } from '@/stores/challengeStore'
 import { ROUTES } from '@/utils/constants'
 
-export function useHeader(challenge: Challenge, userVote: Vote) {
+export function useChallengeHeader(challenge: Challenge, userVote: Vote) {
   const { state, actions } = useChallengeStore((store) => store)
 
   const router = useRouter()

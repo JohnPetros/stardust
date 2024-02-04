@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useLessonStore } from '@/stores/lessonStore'
 import { ROUTES } from '@/utils/constants'
 
-export function useHeader() {
+export function useLessonHeader() {
   const router = useRouter()
 
   const {

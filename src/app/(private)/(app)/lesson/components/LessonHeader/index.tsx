@@ -3,7 +3,7 @@
 import { X } from '@phosphor-icons/react'
 import Image from 'next/image'
 
-import { useHeader } from './useHeader'
+import { useLessonHeader } from './useLessonHeader'
 
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
@@ -13,7 +13,7 @@ import { useRocket } from '@/hooks/useRocket'
 import { useApi } from '@/services/api'
 import { useLessonStore } from '@/stores/lessonStore'
 
-export function Header() {
+export function LessonHeader() {
   const { user } = useAuthContext()
 
   const livesCount = useLessonStore((store) => store.state.livesCount)
@@ -22,7 +22,7 @@ export function Header() {
   const { getImage } = useApi()
   const rocketImage = getImage('rockets', rocket?.image ?? '')
 
-  const { currentProgressValue, leaveLesson } = useHeader()
+  const { currentProgressValue, leaveLesson } = useLessonHeader()
 
   return (
     <header className="fixed top-0 z-10 h-12 w-full bg-gray-900 px-6 py-3">

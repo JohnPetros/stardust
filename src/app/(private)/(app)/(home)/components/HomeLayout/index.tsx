@@ -3,12 +3,12 @@
 import { ReactNode } from 'react'
 import { motion, Variants } from 'framer-motion'
 
-import { Header } from '../Header'
+import { HomeHeader } from '../HomeHeader'
 import { Sidebar } from '../Sidebar'
 import { Sidenav } from '../Sidenav'
 import { TabNav } from '../TabNav'
 
-import { useLayout } from './useLayout'
+import { useHomeLayout } from './useHomeLayout'
 
 import { useBreakpoint } from '@/hooks/useBreakpoint'
 
@@ -28,15 +28,15 @@ type LayoutProps = {
   children: ReactNode
 }
 
-export function Layout({ children }: LayoutProps) {
+export function HomeLayout({ children }: LayoutProps) {
   const { isSidenavExpanded, handleMainContainerClick, toggleSidenav } =
-    useLayout()
+    useHomeLayout()
 
   const { md: isMobile } = useBreakpoint()
 
   return (
     <>
-      <Header />
+      <HomeHeader />
       <Sidenav isExpanded={isSidenavExpanded} toggleSidenav={toggleSidenav} />
       {isMobile && <Sidebar />}
       <motion.main

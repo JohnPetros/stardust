@@ -8,7 +8,7 @@ import { Slider } from '../Slider'
 
 import { PanelHandle } from './PanelHandle'
 import { Tabs } from './Tabs'
-import { useLayout } from './useLayout'
+import { useChallengeLayout } from './useChallengeLayout'
 
 import { PageTransitionAnimation } from '@/app/components/PageTransitionAnimation'
 import { useSecondsCounter } from '@/hooks/useSecondsCounter'
@@ -25,7 +25,7 @@ type LayoutProps = {
   panelsOffset: PanelsOffset
 }
 
-export function Layout({
+export function ChallengeLayout({
   header,
   tabContent,
   codeEditor,
@@ -36,7 +36,7 @@ export function Layout({
     tabsPanelRef,
     isTransitionPageVisible,
     handlePanelDragging,
-  } = useLayout()
+  } = useChallengeLayout()
   const isEnd = useChallengeStore((store) => store.state.isEnd)
   const layout = useChallengeStore((store) => store.state.layout)
 

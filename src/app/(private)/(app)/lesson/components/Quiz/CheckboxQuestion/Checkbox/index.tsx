@@ -7,8 +7,6 @@ import { twMerge } from 'tailwind-merge'
 
 import { useCheckbox } from './useCheckbox'
 
-import { useLessonStore } from '@/stores/lessonStore'
-
 const colors = {
   gray: 'border-gray-100 text-gray-100',
   red: 'border-red-700 text-red-700',

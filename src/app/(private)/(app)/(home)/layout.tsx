@@ -1,13 +1,13 @@
 import { ReactNode } from 'react'
 
-import { Layout } from './components/Layout'
+import { HomeLayout } from './components/HomeLayout'
 
 import { SidebarProvider } from '@/contexts/SidebarContext'
 
-export default function HomeLayout({ children }: { children: ReactNode }) {
+export default function Layout({ children }: { children: ReactNode }) {
   return (
     <SidebarProvider>
-      <Layout>{children}</Layout>
+      <HomeLayout>{children}</HomeLayout>
     </SidebarProvider>
   )
 }

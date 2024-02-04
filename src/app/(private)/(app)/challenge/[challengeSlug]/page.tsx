@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 
 import { getChallenge } from './actions/getChallenge'
 import { unlockDoc } from './actions/unlockDoc'
-import { Header } from './components/Header'
+import { Header } from './components/ChallengeHeader'
 
 import type { Challenge } from '@/@types/challenge'
 import type { Vote } from '@/@types/vote'

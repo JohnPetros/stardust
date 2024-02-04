@@ -7,7 +7,7 @@ import { setCookie } from '@/app/server/actions/setCookie'
 import { useChallengeStore } from '@/stores/challengeStore'
 import { COOKIES, STORAGE } from '@/utils/constants'
 
-export function useLayout() {
+export function useChallengeLayout() {
   const challenge = useChallengeStore((store) => store.state.challenge)
   const isEnd = useChallengeStore((store) => store.state.isEnd)
   const resetState = useChallengeStore((store) => store.actions.resetState)
