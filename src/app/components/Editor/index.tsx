@@ -61,6 +61,8 @@ export function EditorComponent(
   } = useEditor(value)
   const { md: isMobile } = useBreakpoint()
 
+  console.log(state.tabSize)
+
   useImperativeHandle(
     ref,
     () => {
@@ -93,7 +95,7 @@ export function EditorComponent(
         minimap: {
           enabled: hasMinimap,
         },
-        tabSize: state.tabSize - (isMobile ? 2 : 0),
+        tabSize: state.tabSize,
         fontSize: state.fontSize - (isMobile ? 2 : 0),
         fontFamily: 'Menlo',
         cursorStyle: 'line',

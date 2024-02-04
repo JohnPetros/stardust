@@ -11,12 +11,12 @@ import { Button } from '@/app/components/Button'
 import { CodeEditorSettingsDialog } from '@/app/components/CodeEditorToolbar/CodeEditorSettingsDialog'
 import { DocsDialog } from '@/app/components/CodeEditorToolbar/DocsDialog'
 import { HotkeysDialog } from '@/app/components/CodeEditorToolbar/HotkeysDialog'
-import { CodeEditorRef } from '@/app/components/Editor'
+import { EditorRef } from '@/app/components/Editor'
 import { Tooltip } from '@/app/components/Tooltip'
 
 type CodeEditorToolbarProps = {
   children: ReactNode
-  codeEditorRef: RefObject<CodeEditorRef>
+  codeEditorRef: RefObject<EditorRef>
   previousUserCode: RefObject<string>
   onRunCode: () => void
 }
