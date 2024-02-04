@@ -26,7 +26,7 @@ export function ButtonComponent({
       ref={buttonRef}
       whileTap={{ scale: 0.99 }}
       className={twMerge(
-        'duration-400 custom-outline text-md relative flex h-10 w-full cursor-pointer items-center justify-center overflow-hidden rounded bg-green-400 font-semibold transition-all hover:brightness-75 disabled:pointer-events-none disabled:opacity-70',
+        'duration-400 custom-outline relative flex h-10 w-full cursor-pointer items-center justify-center overflow-hidden rounded bg-green-400 text-sm font-semibold tracking-wide transition-all hover:brightness-75 disabled:pointer-events-none disabled:opacity-70',
         className
       )}
       {...rest}
