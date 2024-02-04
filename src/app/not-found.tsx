@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import PageNotFound from '../../public/animations/404.json'
 
 import { Button } from './components/Button'
+import { ROUTES } from '@/utils/constants'
 
 const notFoundAnimation: Variants = {
   down: {
@@ -47,7 +48,7 @@ export default function NotFound() {
           </p>
         </div>
 
-        <Button className="mt-6" onClick={router.back}>
+        <Button className="mt-6" onClick={() => router.push(ROUTES.private.home.space)}>
           Retornar
         </Button>
       </motion.div>
