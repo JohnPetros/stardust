@@ -22,4 +22,4 @@ const createClient = cache(() => {
   })
 })
 
-export { createClient as createServerClient }
+export { createClient as createSupabaseServerClient }

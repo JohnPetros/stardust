@@ -3,13 +3,13 @@ import { getPlanets } from './actions/getPlanets'
 import { Space } from './components/Space'
 
 import { SpaceProvider } from '@/contexts/SpaceContext'
-import { createServerClient } from '@/services/api/supabase/clients/serverClient'
+import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
 import { AuthController } from '@/services/api/supabase/controllers/authController'
 import { StarsController } from '@/services/api/supabase/controllers/starsController'
 import { ERRORS } from '@/utils/constants'
 
 export default async function SpacePage() {
-  const supabase = createServerClient()
+  const supabase = createSupabaseServerClient()
   const starsController = StarsController(supabase)
   const authController = AuthController(supabase)
 

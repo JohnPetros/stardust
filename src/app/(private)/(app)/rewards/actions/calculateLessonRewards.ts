@@ -3,7 +3,7 @@
 import { calculateStarRewards } from './getStarReward'
 
 import type { User } from '@/@types/user'
-import { createServerClient } from '@/services/api/supabase/clients/serverClient'
+import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
 import { StarsController } from '@/services/api/supabase/controllers/starsController'
 import { UsersController } from '@/services/api/supabase/controllers/usersController'
 
@@ -20,7 +20,7 @@ export async function calculateLessonRewards({
   starId,
   user,
 }: LessonStarRewardParas) {
-  const supabase = createServerClient()
+  const supabase = createSupabaseServerClient()
   const usersController = UsersController(supabase)
   const starsController = StarsController(supabase)
 

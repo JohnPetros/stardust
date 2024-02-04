@@ -10,4 +10,4 @@ const createClient = () =>
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
 
-export { createClient as createBrowserClient }
+export { createClient as createSupabaseBrowserClient }

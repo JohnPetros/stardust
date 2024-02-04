@@ -1,4 +1,4 @@
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
+import { createMiddlewareClient as createSupabaseMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { type NextRequest, NextResponse } from 'next/server'
 
 import { hasCookie } from './app/server/actions/hasCookie'
@@ -10,7 +10,7 @@ import { getSearchParams } from './utils/helpers/getSearchParams'
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
-  const supabase = createMiddlewareClient<Database>({ req, res })
+  const supabase = createSupabaseMiddlewareClient<Database>({ req, res })
   const hasRedirect = getSearchParams(req.url, 'redirect_to')
 
   if (hasRedirect) return NextResponse.redirect(new URL(hasRedirect, req.url))

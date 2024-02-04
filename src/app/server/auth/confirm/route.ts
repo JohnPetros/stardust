@@ -1,8 +1,7 @@
-import jwt from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
 
 import { AuthConfirmationError } from '@/@types/authConfirmationError'
-import { createServerClient } from '@/services/api/supabase/clients/serverClient'
+import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
 import { AuthController } from '@/services/api/supabase/controllers/authController'
 import { COOKIES, ROUTES } from '@/utils/constants'
 import { getSearchParams } from '@/utils/helpers/getSearchParams'
@@ -24,7 +23,7 @@ export async function GET(request: NextRequest) {
     return redirectToSignIn('token_error')
   }
 
-  const supabase = createServerClient()
+  const supabase = createSupabaseServerClient()
   const authController = AuthController(supabase)
 
   switch (action) {

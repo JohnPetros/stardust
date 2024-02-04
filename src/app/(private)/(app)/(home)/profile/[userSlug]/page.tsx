@@ -8,15 +8,15 @@ import { User } from '../components/User'
 
 import { User as UserData } from '@/@types/user'
 import { StreakBoard } from '@/app/components/StreakBoard'
-import { createServerClient } from '@/services/api/supabase/clients/serverClient'
+import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
 import { UsersController } from '@/services/api/supabase/controllers/usersController'
 
-type ProfileProps = {
+type ProfilePageProps = {
   params: { userSlug: string }
 }
 
-export default async function Profile({ params }: ProfileProps) {
-  const supabase = createServerClient()
+export default async function ProfilePage({ params }: ProfilePageProps) {
+  const supabase = createSupabaseServerClient()
   const usersController = UsersController(supabase)
   let user: UserData
 

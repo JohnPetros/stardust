@@ -6,7 +6,7 @@ import { Header } from './components/Header'
 
 import type { Challenge } from '@/@types/challenge'
 import type { Vote } from '@/@types/vote'
-import { createServerClient } from '@/services/api/supabase/clients/serverClient'
+import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
 import { AuthController } from '@/services/api/supabase/controllers/authController'
 import { ChallengesController } from '@/services/api/supabase/controllers/challengesController'
 import { ERRORS } from '@/utils/constants'
@@ -21,7 +21,7 @@ type ChallengePageProps = {
 export default async function ChallengePage({
   params: { challengeSlug },
 }: ChallengePageProps) {
-  const supabase = createServerClient()
+  const supabase = createSupabaseServerClient()
   const authController = AuthController(supabase)
 
   const userId = await authController.getUserId()

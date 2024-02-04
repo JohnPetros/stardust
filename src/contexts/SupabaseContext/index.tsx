@@ -3,7 +3,7 @@
 import { createContext, ReactNode, useState } from 'react'
 import { SupabaseClient } from '@supabase/supabase-js'
 
-import { createBrowserClient } from '@/services/api/supabase/clients/browserClient'
+import { createSupabaseBrowserClient } from '@/services/api/supabase/clients/browserClient'
 import { Database } from '@/services/api/supabase/types/database'
 
 type SupabaseContextValue = {
@@ -17,7 +17,7 @@ type SupabaseProviderProps = {
 export const SupabaseContext = createContext({} as SupabaseContextValue)
 
 export function SupabaseProvider({ children }: SupabaseProviderProps) {
-  const [supabase] = useState(() => createBrowserClient())
+  const [supabase] = useState(() => createSupabaseBrowserClient())
 
   return (
     <SupabaseContext.Provider value={{ supabase }}>

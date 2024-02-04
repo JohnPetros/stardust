@@ -126,7 +126,6 @@ export function useCodeEditorPlayground(code: string) {
 
       const newCode = code.replace(regex, (print) => {
         const checkedPrint = checkParenthesesMatch(print)
-        console.log(checkedPrint)
         return getPrintType(checkedPrint) + print
       })
 

@@ -4,14 +4,16 @@ import { ChallengesList } from './components/ChallengesList'
 
 import { Category } from '@/@types/category'
 import { Loading } from '@/app/components/Loading'
-import { createServerClient } from '@/services/api/supabase/clients/serverClient'
+import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
 import { CategoriesController } from '@/services/api/supabase/controllers/categoriesController'
 import { ERRORS } from '@/utils/constants'
 
 let categories: Category[]
 
 export default async function ChallengesPage() {
-  const categoriesController = CategoriesController(createServerClient())
+  const categoriesController = CategoriesController(
+    createSupabaseServerClient()
+  )
 
   try {
     categories = await categoriesController.getCategories()

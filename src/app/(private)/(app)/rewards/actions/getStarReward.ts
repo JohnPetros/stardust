@@ -2,7 +2,7 @@
 
 import type { Star } from '@/@types/star'
 import type { User } from '@/@types/user'
-import { createServerClient } from '@/services/api/supabase/clients/serverClient'
+import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
 import { StarsController } from '@/services/api/supabase/controllers/starsController'
 
 type CalculateStarRewardsParams = {
@@ -20,7 +20,7 @@ export async function calculateStarRewards({
   nextStar,
 }: CalculateStarRewardsParams): Promise<Partial<User>> {
   async function addUnlockedStar(UnlockedstarId: string) {
-    const starsController = StarsController(createServerClient())
+    const starsController = StarsController(createSupabaseServerClient())
     await starsController.addUnlockedStar(UnlockedstarId, user.id)
   }
 

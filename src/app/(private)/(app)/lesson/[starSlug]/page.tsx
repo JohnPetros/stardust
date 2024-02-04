@@ -4,7 +4,7 @@ import { LessonStar } from '../components/LessonStar'
 
 import { texts } from '@/__tests__/mocks/lesson/planets/planet4/star4/texts'
 import type { Star } from '@/@types/star'
-import { createServerClient } from '@/services/api/supabase/clients/serverClient'
+import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
 import { StarsController } from '@/services/api/supabase/controllers/starsController'
 
 let star: Star
@@ -14,7 +14,7 @@ type LessonPageProps = {
 }
 
 export default async function LessonPage({ params }: LessonPageProps) {
-  const supabase = createServerClient()
+  const supabase = createSupabaseServerClient()
   const starController = StarsController(supabase)
 
   try {

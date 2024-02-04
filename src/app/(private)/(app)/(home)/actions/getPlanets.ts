@@ -1,7 +1,7 @@
 'use server'
 
 import { Planet } from '@/@types/planet'
-import { createServerClient } from '@/services/api/supabase/clients/serverClient'
+import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
 import { PlanetsController } from '@/services/api/supabase/controllers/planetsController'
 
 function verifyStarUnlocking(planet: Planet, userUnlockedStarsIds: string[]) {
@@ -18,7 +18,7 @@ function verifyStarUnlocking(planet: Planet, userUnlockedStarsIds: string[]) {
 }
 
 export async function getPlanets(userUnlockedStarsIds: string[]) {
-  const supabase = createServerClient()
+  const supabase = createSupabaseServerClient()
 
   const planetsController = PlanetsController(supabase)
 

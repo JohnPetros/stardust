@@ -4,7 +4,7 @@ import { Congratulations } from './components/Congratulations'
 
 import { getCookie } from '@/app/server/actions/getCookie'
 import { DateProvider } from '@/providers/dateProvider'
-import { createServerClient } from '@/services/api/supabase/clients/serverClient'
+import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
 import { AuthController } from '@/services/api/supabase/controllers/authController'
 import { UsersController } from '@/services/api/supabase/controllers/usersController'
 import { COOKIES, ERRORS } from '@/utils/constants'
@@ -15,9 +15,7 @@ const dateProvider = DateProvider()
 export default async function RewardsPage() {
   const payload = await getCookie(COOKIES.rewardsPayload)
 
-  console.log({ payload })
-
-  const supabase = createServerClient()
+  const supabase = createSupabaseServerClient()
   const authController = AuthController(supabase)
   const userId = await authController.getUserId()
 

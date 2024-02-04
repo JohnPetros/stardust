@@ -4,7 +4,7 @@ import { calculateStarRewards } from './getStarReward'
 
 import type { Difficulty } from '@/@types/challenge'
 import type { User } from '@/@types/user'
-import { createServerClient } from '@/services/api/supabase/clients/serverClient'
+import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
 import { ChallengesController } from '@/services/api/supabase/controllers/challengesController'
 import { StarsController } from '@/services/api/supabase/controllers/starsController'
 import { UsersController } from '@/services/api/supabase/controllers/usersController'
@@ -27,7 +27,7 @@ export async function calculateChallengeRewards({
   starId,
   user,
 }: ChallengeStarRewardParas) {
-  const supabase = createServerClient()
+  const supabase = createSupabaseServerClient()
   const usersController = UsersController(supabase)
 
   function getAccurance() {

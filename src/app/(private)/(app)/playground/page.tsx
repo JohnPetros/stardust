@@ -2,13 +2,13 @@ import { AddPlaygroundButton } from './components/AddPlaygroundButton'
 import { Hero } from './components/Hero'
 import { PlaygroundCard } from './components/PlaygroundCard'
 
-import { createServerClient } from '@/services/api/supabase/clients/serverClient'
+import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
 import { AuthController } from '@/services/api/supabase/controllers/authController'
 import { PlaygroundsController } from '@/services/api/supabase/controllers/playgroundsController'
 import { ERRORS } from '@/utils/constants'
 
 export default async function PlaygroundPage() {
-  const supabase = createServerClient()
+  const supabase = createSupabaseServerClient()
   const authController = AuthController(supabase)
   const userId = await authController.getUserId()
 
