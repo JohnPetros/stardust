@@ -26,6 +26,7 @@ export function Image({ picture, hasAnimation = true, children }: ImageProps) {
           height={120}
           className="skeleton rounded-lg"
           onLoadingComplete={(image) => image.classList.remove('skeleton')}
+          style={{ objectFit: 'cover' }}
           alt=""
         />
         <div>
