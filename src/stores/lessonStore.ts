@@ -38,7 +38,7 @@ export type LessonStoreProps = {
 }
 
 const initialState: LessonStoreState = {
-  currentStage: 'theory',
+  currentStage: 'quiz',
   mdxComponentsCount: 0,
   renderedMdxComponents: 0,
   questions: [],
