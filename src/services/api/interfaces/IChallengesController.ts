@@ -7,7 +7,6 @@ export type GetFilteredChallengesParams = {
   difficulty: string
   categoriesIds: string[]
   search: string
-  range: number
 }
 
 export type ChallengeSummary = Pick<
