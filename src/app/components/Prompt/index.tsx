@@ -1,4 +1,10 @@
-import { ForwardedRef, forwardRef, useImperativeHandle, useRef } from 'react'
+import {
+  ForwardedRef,
+  forwardRef,
+  ReactNode,
+  useImperativeHandle,
+  useRef,
+} from 'react'
 
 import { Alert } from '../Alert'
 import { Button } from '../Button'
@@ -14,18 +20,21 @@ export type PromptRef = {
 }
 
 type PromptProps = {
+  children?: ReactNode
+  title?: string
   onConfirm: () => void
   onCancel?: () => void
 }
 
 export function PromptComponent(
-  { onConfirm, onCancel }: PromptProps,
+  { onConfirm, onCancel, children: trigger, title: initialTitle }: PromptProps,
   ref: ForwardedRef<PromptRef>
 ) {
   const inputRef = useRef<HTMLInputElement | null>(null)
 
-  const { title, value, alertRef, open, close, setTitle, setValue } =
-    usePrompt()
+  const { title, value, alertRef, open, close, setTitle, setValue } = usePrompt(
+    initialTitle ?? ''
+  )
 
   useImperativeHandle(
     ref,
@@ -60,7 +69,7 @@ export function PromptComponent(
             value={value}
             onChange={({ currentTarget }) => setValue(currentTarget.value)}
             autoCapitalize="none"
-            className="prompt-input w-full rounded border border-gray-100 bg-purple-700 p-2 text-sm text-green-400 outline-none focus:border-green-500"
+            className="prompt-input w-full rounded border border-gray-100 bg-purple-700 p-2 text-sm text-gray-100 outline-none focus:border-green-500"
           />
         </div>
       }
@@ -82,7 +91,9 @@ export function PromptComponent(
       }
       canPlaySong={false}
       canForceMount={true}
-    />
+    >
+      {trigger}
+    </Alert>
   )
 }
 
