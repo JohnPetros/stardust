@@ -82,8 +82,8 @@ export interface Database {
         Row: {
           code: string | null
           created_at: string | null
-          dictionary_topic_id: string | null
           difficulty: string | null
+          doc_id: string | null
           function_name: string | null
           id: string
           slug: string
@@ -96,8 +96,8 @@ export interface Database {
         Insert: {
           code?: string | null
           created_at?: string | null
-          dictionary_topic_id?: string | null
           difficulty?: string | null
+          doc_id?: string | null
           function_name?: string | null
           id?: string
           slug: string
@@ -110,8 +110,8 @@ export interface Database {
         Update: {
           code?: string | null
           created_at?: string | null
-          dictionary_topic_id?: string | null
           difficulty?: string | null
+          doc_id?: string | null
           function_name?: string | null
           id?: string
           slug?: string
@@ -123,8 +123,8 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "challenges_dictionary_topic_id_fkey"
-            columns: ["dictionary_topic_id"]
+            foreignKeyName: "challenges_doc_id_fkey"
+            columns: ["doc_id"]
             isOneToOne: false
             referencedRelation: "docs"
             referencedColumns: ["id"]
@@ -181,48 +181,6 @@ export interface Database {
             columns: ["challenge_id"]
             isOneToOne: false
             referencedRelation: "challenges_list"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-      codes: {
-        Row: {
-          code: string | null
-          created_at: string | null
-          id: string
-          slug: string | null
-          title: string | null
-          user_id: string | null
-        }
-        Insert: {
-          code?: string | null
-          created_at?: string | null
-          id?: string
-          slug?: string | null
-          title?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          code?: string | null
-          created_at?: string | null
-          id?: string
-          slug?: string | null
-          title?: string | null
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "codes_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "codes_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users_view"
             referencedColumns: ["id"]
           }
         ]
@@ -291,18 +249,6 @@ export interface Database {
           }
         ]
       }
-      current_planet_position: {
-        Row: {
-          position: number | null
-        }
-        Insert: {
-          position?: number | null
-        }
-        Update: {
-          position?: number | null
-        }
-        Relationships: []
-      }
       docs: {
         Row: {
           content: string | null
@@ -350,6 +296,48 @@ export interface Database {
           position?: number
         }
         Relationships: []
+      }
+      playgrounds: {
+        Row: {
+          code: string | null
+          created_at: string | null
+          id: string
+          is_open: boolean | null
+          title: string | null
+          user_id: string | null
+        }
+        Insert: {
+          code?: string | null
+          created_at?: string | null
+          id?: string
+          is_open?: boolean | null
+          title?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          code?: string | null
+          created_at?: string | null
+          id?: string
+          is_open?: boolean | null
+          title?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "playgrounds_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "playgrounds_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       questions: {
         Row: {
@@ -1004,7 +992,7 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "challenges_dictionary_topic_id_fkey"
+            foreignKeyName: "challenges_doc_id_fkey"
             columns: ["topic_id"]
             isOneToOne: false
             referencedRelation: "docs"
