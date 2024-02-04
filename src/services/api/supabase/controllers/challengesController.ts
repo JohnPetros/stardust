@@ -1,11 +1,11 @@
 import {
-  ChallengeSummary,
   GetFilteredChallengesParams,
   IChallengesController,
 } from '../../interfaces/IChallengesController'
 import type { Supabase } from '../types/supabase'
 
 import type { Challenge } from '@/@types/challenge'
+import { ChallengeSummary } from '@/@types/challengeSummary'
 import type { Vote } from '@/@types/vote'
 
 export const ChallengesController = (
@@ -68,7 +68,9 @@ export const ChallengesController = (
     getChallengesSummary: async (userId: string) => {
       const { data, error } = await supabase
         .from('challenges')
-        .select('id, difficulty, users_completed_challenges(user_id)')
+        .select(
+          'id, difficulty, userCompletedChallengesIds:users_completed_challenges(challenge_id)'
+        )
         .eq('users_completed_challenges.user_id', userId)
         .returns<ChallengeSummary[]>()
 
@@ -79,8 +81,8 @@ export const ChallengesController = (
       const challengesSummary = data.map((challenge) => ({
         ...challenge,
         isCompleted:
-          challenge.users_completed_challenges &&
-          challenge.users_completed_challenges.length > 0,
+          challenge.userCompletedChallengesIds &&
+          challenge.userCompletedChallengesIds.length > 0,
       }))
 
       return challengesSummary

@@ -11,6 +11,7 @@ import { ChallengesController } from './controllers/challengesController'
 import { CommentsController } from './controllers/commentsController'
 import { DocsController } from './controllers/docsController'
 import { PlanetsController } from './controllers/planetsController'
+import { PlaygroundsController } from './controllers/playgroundsController'
 import { RankingsController } from './controllers/rankingController'
 import { RocketsController } from './controllers/rocketController'
 import { StarsController } from './controllers/starsController'
@@ -36,6 +37,7 @@ export function useSupabaseApi() {
       ...UsersController(supabase),
       ...CommentsController(supabase),
       ...DocsController(supabase),
+      ...PlaygroundsController(supabase),
     }
   }, [supabase])
 

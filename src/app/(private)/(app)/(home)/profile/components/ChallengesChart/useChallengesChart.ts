@@ -3,7 +3,10 @@
 import { useEffect, useState } from 'react'
 
 import { Difficulty } from '@/@types/challenge'
-import { useChallengesSummary } from '@/hooks/useChallengesSummary'
+import type { ChallengeSummary } from '@/@types/challengeSummary'
+import { useApi } from '@/services/api'
+import { useCache } from '@/services/cache'
+import { CACHE } from '@/utils/constants/cache'
 import { getChallengesChatOptions } from '@/utils/helpers'
 
 type TotalChallengesByDifficulty = {
@@ -16,7 +19,24 @@ export function useChallengesChart(userId: string) {
   const [totalChallengesByDifficulty, setTotalChallengesByDifficulty] =
     useState<TotalChallengesByDifficulty | null>(null)
 
-  const { challenges } = useChallengesSummary(userId)
+  const api = useApi()
+
+  async function getChallengesSummary() {
+    if (userId) {
+      return api.getChallengesSummary(userId)
+    }
+  }
+
+  const { data: challenges, error } = useCache<ChallengeSummary[]>({
+    tag: CACHE.challengesSummary,
+    dependencies: [userId],
+    fetcher: getChallengesSummary,
+  })
+
+  if (error) {
+    console.error(error)
+    throw new Error(error)
+  }
 
   function getCompletedChallengesCountByDifficulty(difficulty: Difficulty) {
     if (challenges?.length) {
