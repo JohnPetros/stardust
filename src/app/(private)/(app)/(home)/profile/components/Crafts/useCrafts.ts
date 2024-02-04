@@ -19,7 +19,7 @@ export function useCrafts() {
 
   const buttonTitle: Record<TabValue, string | null> = {
     'playground-tab': 'Criar código',
-    'challenges-tab': 'Criar desagio',
+    'challenges-tab': 'Criar desafio',
     'solutions-tab': null,
   }
 

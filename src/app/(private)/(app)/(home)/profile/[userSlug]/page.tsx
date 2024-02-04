@@ -34,7 +34,11 @@ export default async function Profile({ params }: ProfileProps) {
           <div>
             <User data={user} />
             <div className="mt-10 grid grid-cols-1 items-center justify-center gap-12 md:grid-cols-[1fr_2fr] md:flex-row">
-              <Statistics data={user} />
+              <Statistics
+                unlockedStarsCount={user.unlocked_stars_count}
+                completedPlanetsCount={user.completed_planets_count}
+                unlockedAchievementsCount={user.unlocked_achievements_count}
+              />
               <StreakBoard
                 weekStatus={user.week_status}
                 streakAmount={user.streak}

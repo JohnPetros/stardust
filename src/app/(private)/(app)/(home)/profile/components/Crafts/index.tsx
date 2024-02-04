@@ -58,7 +58,7 @@ export function Crafts() {
   return (
     <div className="flex flex-col gap-6">
       {isAuthUser && activeTab !== 'solutions-tab' && (
-        <Link href={tabs.find((tab) => tab.value === activeTab)?.title ?? ''}>
+        <Link href={tabs.find((tab) => tab.value === activeTab)?.link ?? ''}>
           <Button className="w-64 gap-2">
             <PlusCircle className="text-gray-900" weight="bold" />
             {buttonTitle[activeTab]}
