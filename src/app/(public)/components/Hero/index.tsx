@@ -37,7 +37,7 @@ export function Hero() {
         width={280}
         height={280}
         priority
-        alt="Rocket"
+        alt="Foguete com tons esverdeados rodeado de estrelas flututando para cima e para baixo repetidamente"
       />
     </div>
   )
