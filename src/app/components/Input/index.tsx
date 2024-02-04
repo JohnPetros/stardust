@@ -9,7 +9,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string
   icon: Icon
   type: string
-  error: string | undefined
+  error?: string
 }
 
 const InputComponent = (
