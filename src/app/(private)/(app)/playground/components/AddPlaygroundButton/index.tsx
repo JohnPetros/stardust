@@ -8,11 +8,14 @@ import { ROUTES } from '@/utils/constants'
 
 export function AddPlaygroundButton() {
   return (
-    <Link href={`${ROUTES.private.playground}/new`}>
-      <Button className="flex items-center gap-2 px-3 text-sm">
+    <Button asChild className="w-max">
+      <Link
+        href={`${ROUTES.private.playground}/new`}
+        className="flex w-max items-center gap-2 px-3 text-sm"
+      >
         <PlusCircle className="text-lg text-gray-900" weight="bold" />
         Criar Novo Código Playground
-      </Button>
-    </Link>
+      </Link>
+    </Button>
   )
 }
