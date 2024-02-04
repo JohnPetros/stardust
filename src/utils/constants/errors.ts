@@ -29,4 +29,10 @@ export const ERRORS = {
     failedDocUnlocking:
       'Não foi possível desbloquear o tópico do dicionário referente a esse desafio',
   },
+  playgrounds: {
+    failedFetching: 'Não foi possível carregar sua lista de códigos',
+    failedTitleEdition: 'Não deu para editar o título desse código',
+    failedDeletion: 'Não deu para deletar esse código',
+    failedCoying: 'Não deu para gerar a url para compartilhar esse playground',
+  },
 }
