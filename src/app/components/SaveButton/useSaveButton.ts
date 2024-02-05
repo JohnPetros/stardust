@@ -3,11 +3,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSaveButtonStore } from '@/stores/saveButtonStore'
 import { waitFor } from '@/utils/helpers'
 
+const STATE_DELAY = 1000
+
 const variants = {
   default: 'bg-green-400 text-gray-900',
-  red: 'border-red-700 bg-transparent text-red-700',
-  yellow: 'border-yellow-400 bg-transparent text-yellow-400',
-  green: 'border-green-400 bg-transparent text-green-400',
+  canSave: 'animate-pulse',
+  saving: 'border-yellow-400 bg-transparent text-yellow-400',
+  saved: 'border-green-400 bg-transparent text-green-400',
+  error: 'border-red-700 bg-transparent text-red-700',
 }
 
 export function useSaveButton(onSave: () => Promise<void>) {
@@ -15,38 +18,47 @@ export function useSaveButton(onSave: () => Promise<void>) {
   const [isSaved, setIsSaved] = useState(false)
   const [hasError, setHasError] = useState(false)
 
-  const saveHandler = useSaveButtonStore((store) => store.state.saveHandler)
-  const shouldSave = useSaveButtonStore((store) => store.state.shouldSave)
+  const {
+    state: { canSave, saveHandler, shouldSave },
+    actions: { setCanSave },
+  } = useSaveButtonStore()
 
   const [variant, title] = useMemo(() => {
-    if (isSaving) {
-      return [variants.yellow, 'salvando...']
+    if (canSave) {
+      return [variants.canSave, 'salvar?']
+    } else if (isSaving) {
+      return [variants.saving, 'salvando...']
     } else if (isSaved) {
-      return [variants.green, 'salvado']
+      return [variants.saved, 'salvado']
     } else if (hasError) {
-      return [variants.red, 'erro']
+      return [variants.error, 'erro']
     } else {
       return [variants.default, 'salvar']
     }
-  }, [isSaving, isSaved, hasError])
+  }, [canSave, isSaving, isSaved, hasError])
 
-  const save = useCallback(async (saveHandler: () => Promise<void>) => {
-    try {
-      setIsSaving(true)
+  const save = useCallback(
+    async (saveHandler: () => Promise<void>) => {
+      try {
+        setCanSave(false)
+        setIsSaving(true)
 
-      await waitFor(1000)
+        await waitFor(STATE_DELAY)
 
-      await saveHandler()
+        await saveHandler()
 
-      setIsSaved(true)
-    } catch (error) {
-      setHasError(true)
-    } finally {
-      setIsSaving(false)
-      await waitFor(1000)
-      setIsSaved(false)
-    }
-  }, [])
+        setIsSaved(true)
+      } catch (error) {
+        setHasError(true)
+        await waitFor(STATE_DELAY)
+      } finally {
+        setIsSaving(false)
+        await waitFor(STATE_DELAY)
+        setIsSaved(false)
+      }
+    },
+    [setCanSave]
+  )
 
   async function handleClick() {
     save(onSave)
@@ -65,6 +77,7 @@ export function useSaveButton(onSave: () => Promise<void>) {
   return {
     variant,
     title,
+    isDisabled: isSaving || isSaved,
     handleClick,
   }
 }

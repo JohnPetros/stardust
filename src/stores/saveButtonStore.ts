@@ -6,12 +6,14 @@ type SaveHandler = (() => Promise<void>) | null
 export type SaveButtonStoreActions = {
   setSaveHandler: (saveHandler: SaveHandler) => void
   setShouldSave: (shouldSave: boolean) => void
+  setCanSave: (shouldSave: boolean) => void
   resetState: () => void
 }
 
 export type SaveButtonContextState = {
   saveHandler: SaveHandler
   shouldSave: boolean
+  canSave: boolean
 }
 
 export type SaveButtonStoreProps = {
@@ -22,6 +24,7 @@ export type SaveButtonStoreProps = {
 const initialState: SaveButtonContextState = {
   saveHandler: null,
   shouldSave: false,
+  canSave: false,
 }
 
 export const useSaveButtonStore = create<SaveButtonStoreProps>()(
@@ -37,6 +40,11 @@ export const useSaveButtonStore = create<SaveButtonStoreProps>()(
         setShouldSave(shouldSave: boolean) {
           return set(({ state }) => {
             state.shouldSave = shouldSave
+          })
+        },
+        setCanSave(canSave: boolean) {
+          return set(({ state }) => {
+            state.canSave = canSave
           })
         },
         resetState() {

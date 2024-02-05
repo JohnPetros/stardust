@@ -3,18 +3,16 @@
 import { useRef, useState } from 'react'
 
 import { PromptRef } from '@/app/components/Prompt'
-import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useToast } from '@/contexts/ToastContext'
 import { useClipboard } from '@/hooks/useClipboard'
 import { useApi } from '@/services/api'
-import { ERRORS } from '@/utils/constants'
+import { ERRORS, ROUTES } from '@/utils/constants'
 import { getAppBaseUrl } from '@/utils/helpers'
 
 export function usePlaygroundCard(id: string, initialTitle: string) {
   const [title, setTitle] = useState(initialTitle)
-  const { user } = useAuthContext()
 
-  const playgroundUrl = `${getAppBaseUrl()}/${user?.slug}/${id}`
+  const playgroundUrl = `${getAppBaseUrl()}${ROUTES.private.playground}/${id}`
 
   const { copy } = useClipboard(playgroundUrl)
 

@@ -20,7 +20,7 @@ type PlaygroundCodeProps = {
   onCodeChange?: (code: string) => void
 }
 
-export const useCodeEditorPlaygroundComponent = (
+export const CodeEditorPlaygroundComponent = (
   { code, height, isRunnable = false, onCodeChange }: PlaygroundCodeProps,
   ref: ForwardedRef<CodeEditorPlaygroundRef>
 ) => {
@@ -72,4 +72,4 @@ export const useCodeEditorPlaygroundComponent = (
   )
 }
 
-export const CodeEditorPlayground = forwardRef(useCodeEditorPlaygroundComponent)
+export const CodeEditorPlayground = forwardRef(CodeEditorPlaygroundComponent)

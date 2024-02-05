@@ -10,10 +10,11 @@ type SaveButtonProps = {
 }
 
 export function SaveButton({ onSave }: SaveButtonProps) {
-  const { variant, title, handleClick } = useSaveButton(onSave)
+  const { variant, title, isDisabled, handleClick } = useSaveButton(onSave)
 
   return (
     <Button
+      disabled={isDisabled}
       className={twMerge(
         'flex h-8 w-32 items-center gap-2 border border-transparent',
         variant

@@ -15,12 +15,7 @@ export function usePlaygroundLayout(playgroundId: string) {
 
   const windowSize = useWindowSize()
 
-  const setSaveHandler = useSaveButtonStore(
-    (store) => store.actions.setSaveHandler
-  )
-  const setShouldSave = useSaveButtonStore(
-    (store) => store.actions.setShouldSave
-  )
+  const saveButtonActions = useSaveButtonStore((store) => store.actions)
 
   async function saveCode() {
     const code = codeEditorPlaygroudRef.current?.getValue()
@@ -31,8 +26,8 @@ export function usePlaygroundLayout(playgroundId: string) {
   }
 
   async function handleSave() {
-    setSaveHandler(saveCode)
-    setShouldSave(true)
+    saveButtonActions.setSaveHandler(saveCode)
+    saveButtonActions.setShouldSave(true)
   }
 
   async function handleRunCode() {
@@ -41,6 +36,7 @@ export function usePlaygroundLayout(playgroundId: string) {
 
   function handleCodeChange(userCode: string) {
     previousUserCode.current = userCode
+    saveButtonActions.setCanSave(true)
   }
 
   return {

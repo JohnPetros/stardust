@@ -18,8 +18,6 @@ import { Prompt } from '@/app/components/Prompt'
 import { Separator } from '@/app/components/Separator'
 import { Toolbar } from '@/app/components/Toolbar'
 import { ToolbarButton } from '@/app/components/Toolbar/ToolbarButton'
-import { ROUTES } from '@/utils/constants'
-import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 
 type PlaygroundCardProps = {
   id: string
@@ -41,12 +39,8 @@ export function PlaygroundCard({
 
   return (
     <>
-      <div
-        className="flex min-w-[16rem] cursor-pointer flex-col gap-3 rounded-md bg-green-900 p-4 shadow-md"
-      >
-        <Link 
-         href={playgroundUrl}
-        className="flex items-center gap-2 w-full">
+      <div className="flex min-w-[16rem] cursor-pointer flex-col gap-3 rounded-md bg-green-900 p-4 shadow-md">
+        <Link href={playgroundUrl} className="flex w-full items-center gap-2">
           <Terminal className="text-lg text-green-500" weight="bold" />
           <strong className="flex items-center gap-3 text-gray-100">
             {title}
@@ -63,18 +57,17 @@ export function PlaygroundCard({
               </p>
             }
             action={
-              <Button onClick={handleDeletePlayground} className="bg-red-700 text-gray-100">
+              <Button
+                onClick={handleDeletePlayground}
+                className="bg-red-700 text-gray-100"
+              >
                 Sim, eu tenho certeza
               </Button>
             }
             cancel={<Button>Não, eu mudei de ideia</Button>}
             canPlaySong={false}
           >
-            <ToolbarButton
-              icon={Trash}
-            >
-              Deletar código
-            </ToolbarButton>
+            <ToolbarButton icon={Trash}>Deletar código</ToolbarButton>
           </Alert>
           <Prompt
             ref={promptRef}
