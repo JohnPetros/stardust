@@ -41,7 +41,11 @@ export function PlaygroundLayout({
 
   return (
     <div className="flex flex-col">
-      <PlaygroundHeader height={HEADER_HEIGHT} playgroundTitle={title} />
+      <PlaygroundHeader
+        height={HEADER_HEIGHT}
+        playgroundId={id}
+        playgroundTitle={title}
+      />
       <div
         style={{ height: SAVE_BUTTON_CONTAINER_HEIGHT }}
         className="flex items-center justify-end px-6"
