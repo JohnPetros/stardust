@@ -29,6 +29,28 @@ export const PlaygroundsController = (
       return playgrounds
     },
 
+    getPlaygroundById: async (id: string) => {
+      const { data, error } = await supabase
+        .from('playgrounds')
+        .select('*')
+        .eq('id', id)
+        .single<Playground>()
+
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      const playground: Playground = {
+        id: data.id,
+        title: data.title,
+        code: data.code,
+        user_id: data.user_id,
+        is_open: data.is_open,
+      }
+
+      return playground
+    },
+
     deletePlaygroundById: async (id: string) => {
       const { error } = await supabase.from('playgrounds').delete().eq('id', id)
 
@@ -41,6 +63,17 @@ export const PlaygroundsController = (
       const { error } = await supabase
         .from('playgrounds')
         .update({ title })
+        .eq('id', id)
+
+      if (error) {
+        throw new Error(error.message)
+      }
+    },
+
+    updatePlaygroundCodeById: async (code: string, id: string) => {
+      const { error } = await supabase
+        .from('playgrounds')
+        .update({ code })
         .eq('id', id)
 
       if (error) {
