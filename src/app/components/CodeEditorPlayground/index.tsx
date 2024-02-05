@@ -17,10 +17,11 @@ type PlaygroundCodeProps = {
   height: number
   code: string
   isRunnable?: boolean
+  onCodeChange?: (code: string) => void
 }
 
 export const useCodeEditorPlaygroundComponent = (
-  { code, height, isRunnable = false }: PlaygroundCodeProps,
+  { code, height, isRunnable = false, onCodeChange }: PlaygroundCodeProps,
   ref: ForwardedRef<CodeEditorPlaygroundRef>
 ) => {
   const {
@@ -32,7 +33,7 @@ export const useCodeEditorPlaygroundComponent = (
     handleCodeChange,
     onPromptCancel,
     onPromptConfirm,
-  } = useCodeEditorPlayground(code)
+  } = useCodeEditorPlayground(code, onCodeChange)
 
   useImperativeHandle(
     ref,

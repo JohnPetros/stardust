@@ -11,7 +11,10 @@ import { execute } from '@/libs/delegua'
 import { REGEX } from '@/utils/constants/regex'
 import { checkNumeric, countCharacters, playAudio } from '@/utils/helpers'
 
-export function useCodeEditorPlayground(code: string) {
+export function useCodeEditorPlayground(
+  code: string,
+  onCodeChange: ((code: string) => void) | null = null
+) {
   const [output, setOutput] = useState<string[]>([])
   const [shouldOpenPrompt, setShouldOpenPrompt] = useState(false)
 
@@ -98,6 +101,7 @@ export function useCodeEditorPlayground(code: string) {
 
   function handleCodeChange(value: string) {
     userCode.current = value
+    if (onCodeChange) onCodeChange(value)
   }
 
   function checkParenthesesMatch(print: string) {
