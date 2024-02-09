@@ -1,7 +1,7 @@
 import { IPlaygroundsController } from '../../interfaces/IPlaygroundsController'
 import type { Supabase } from '../types/supabase'
 
-import { Playground } from '@/@types/playground'
+import type { Playground } from '@/@types/Playground'
 
 export const PlaygroundsController = (
   supabase: Supabase
@@ -10,9 +10,8 @@ export const PlaygroundsController = (
     getPlaygroundsByUserId: async (userId: string) => {
       const { data, error } = await supabase
         .from('playgrounds')
-        .select('*')
+        .select('*, user:users(slug, avatar_id)')
         .eq('user_id', userId)
-        .returns<Playground[]>()
 
       if (error) {
         throw new Error(error.message)
@@ -23,7 +22,7 @@ export const PlaygroundsController = (
         title: playground.title,
         code: playground.code,
         user_id: playground.user_id,
-        is_open: playground.is_open,
+        is_public: playground.is_public,
       }))
 
       return playgrounds
@@ -32,7 +31,7 @@ export const PlaygroundsController = (
     getPlaygroundById: async (id: string) => {
       const { data, error } = await supabase
         .from('playgrounds')
-        .select('*')
+        .select('*, user:users(slug, avatar_id)')
         .eq('id', id)
         .single<Playground>()
 
@@ -45,26 +44,21 @@ export const PlaygroundsController = (
         title: data.title,
         code: data.code,
         user_id: data.user_id,
-        is_open: data.is_open,
+        is_public: data.is_public,
+        user: data.user,
       }
 
       return playground
     },
 
-    deletePlaygroundById: async (id: string) => {
-      const { error } = await supabase.from('playgrounds').delete().eq('id', id)
-
-      if (error) {
-        throw new Error(error.message)
-      }
-    },
-
     updatePlaygroundTitleById: async (title: string, id: string) => {
+      console.log(title)
       const { error } = await supabase
         .from('playgrounds')
         .update({ title })
         .eq('id', id)
 
+      console.log({ error })
       if (error) {
         throw new Error(error.message)
       }
@@ -75,6 +69,25 @@ export const PlaygroundsController = (
         .from('playgrounds')
         .update({ code })
         .eq('id', id)
+
+      if (error) {
+        throw new Error(error.message)
+      }
+    },
+
+    updatePublicPlaygroundById: async (isPublic: boolean, id: string) => {
+      const { error } = await supabase
+        .from('playgrounds')
+        .update({ is_public: isPublic })
+        .eq('id', id)
+
+      if (error) {
+        throw new Error(error.message)
+      }
+    },
+
+    deletePlaygroundById: async (id: string) => {
+      const { error } = await supabase.from('playgrounds').delete().eq('id', id)
 
       if (error) {
         throw new Error(error.message)

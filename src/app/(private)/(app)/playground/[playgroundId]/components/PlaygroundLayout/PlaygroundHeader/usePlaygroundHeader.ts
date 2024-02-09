@@ -1,6 +1,6 @@
 'use client'
 
-import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react'
+import { KeyboardEvent, useCallback, useRef, useState } from 'react'
 
 import { useToast } from '@/contexts/ToastContext'
 import { useOutsideClick } from '@/hooks/useOutsideClick'
@@ -29,18 +29,19 @@ export function usePlaygroundHeader(
 
   const handleEditPlaygroudTitle = useCallback(async () => {
     async function editPlaygroudTitle() {
-      await api.updatePlaygroundTitleById(title, playgroundId)
+      try {
+        await api.updatePlaygroundTitleById(title, playgroundId)
+      } catch (error) {
+        console.error(error)
+        toast.show(ERRORS.playgrounds.failedTitleEdition, {
+          type: 'error',
+          seconds: 8,
+        })
+      }
     }
-    try {
-      setSaveHandler(editPlaygroudTitle)
-
-      setShouldSave(true)
-    } catch (error) {
-      console.error(error)
-      toast.show(ERRORS.playgrounds.failedTitleEdition)
-    } finally {
-      setCanEditTitle(false)
-    }
+    setSaveHandler(editPlaygroudTitle)
+    setShouldSave(true)
+    setCanEditTitle(false)
   }, [api, toast, title, playgroundId, setSaveHandler, setShouldSave])
 
   function handleCanEditTitle() {

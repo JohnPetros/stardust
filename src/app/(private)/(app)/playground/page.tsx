@@ -18,6 +18,8 @@ export default async function PlaygroundPage() {
 
   const playgrounds = await playgroundsController.getPlaygroundsByUserId(userId)
 
+  console.log({ playgrounds })
+
   return (
     <div>
       <div className="flex flex-col items-center justify-center gap-4 bg-gray-800 py-8">

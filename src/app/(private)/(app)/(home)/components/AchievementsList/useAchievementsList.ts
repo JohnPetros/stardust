@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 
 type Sorter = 'Ordem padrão' | 'Desbloqueadas' | 'Bloqueadas'
 
-import type { Achievement as AchievementItem } from '@/@types/achievement'
+import type { Achievement as AchievementItem } from '@/@types/Achievement'
 import { PopoverMenuButton } from '@/app/components/PopoverMenu'
 import { useAchivementsContext } from '@/contexts/AchievementsContext/hooks/useAchivementsContext'
 import { filterItemBySearch } from '@/utils/helpers'

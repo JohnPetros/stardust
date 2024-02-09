@@ -4,7 +4,7 @@ import { createContext, ReactNode } from 'react'
 
 import { useAchivementsProvider } from './hooks/useAchivementsProvider'
 
-import type { Achievement as AchievementData } from '@/@types/achievement'
+import type { Achievement as AchievementData } from '@/@types/Achievement'
 import { Achievement } from '@/app/(private)/(app)/(home)/components/Achievement'
 import { ShinningAnimation } from '@/app/(private)/(app)/(home)/components/ShinningAnimation'
 import { Alert } from '@/app/components/Alert'

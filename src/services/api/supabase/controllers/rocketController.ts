@@ -1,7 +1,7 @@
 import { IRocketsController } from '../../interfaces/IRocketsController'
 import type { Supabase } from '../types/supabase'
 
-import type { Rocket } from '@/@types/rocket'
+import type { Rocket } from '@/@types/Rocket'
 
 export const RocketsController = (supabase: Supabase): IRocketsController => {
   return {

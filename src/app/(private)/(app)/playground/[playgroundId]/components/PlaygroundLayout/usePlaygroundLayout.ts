@@ -1,13 +1,18 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 import { CodeEditorPlaygroundRef } from '@/app/components/CodeEditorPlayground'
 import { useWindowSize } from '@/hooks/useWindowSize'
 import { useApi } from '@/services/api'
 import { useSaveButtonStore } from '@/stores/saveButtonStore'
 
-export function usePlaygroundLayout(playgroundId: string) {
+export function usePlaygroundLayout(
+  playgroundId: string,
+  isPlaygroundPublic: boolean
+) {
+  const [isPublic, setIsPublic] = useState(isPlaygroundPublic)
+
   const api = useApi()
 
   const codeEditorPlaygroudRef = useRef<CodeEditorPlaygroundRef>(null)
@@ -23,6 +28,21 @@ export function usePlaygroundLayout(playgroundId: string) {
     if (!code) return
 
     await api.updatePlaygroundCodeById(code, playgroundId)
+  }
+
+  async function togglePlaygroundOpen() {
+    try {
+      if (isPlaygroundPublic)
+        await api.updatePublicPlaygroundById(!isPublic, playgroundId)
+      setIsPublic(!isPublic)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function handlePlaygroundSwitch() {
+    saveButtonActions.setSaveHandler(togglePlaygroundOpen)
+    saveButtonActions.setShouldSave(true)
   }
 
   async function handleSave() {
@@ -41,10 +61,12 @@ export function usePlaygroundLayout(playgroundId: string) {
 
   return {
     layhoutHeight: windowSize.height,
+    isPublic,
     codeEditorPlaygroudRef,
     previousUserCode,
     handleSave,
     handleRunCode,
     handleCodeChange,
+    handlePlaygroundSwitch,
   }
 }

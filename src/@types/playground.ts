@@ -1,7 +1,11 @@
 export type Playground = {
   id: string
   title: string
-  code: string
+  code: string | null
+  is_public: boolean
   user_id: string
-  is_open: boolean
+  user?: {
+    slug: string
+    avatar_id: string
+  }
 }

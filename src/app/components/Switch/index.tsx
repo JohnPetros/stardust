@@ -8,20 +8,29 @@ import { useSwitch } from './useSwitch'
 type SwitchProps = {
   label: string
   name: string
-  value?: string
+  value: string
+  defaultCheck?: boolean
   onCheck: (isChecked: boolean) => void
 }
 
-export function Switch({ onCheck, label, name, value }: SwitchProps) {
-  const { isChecked, handleCheckChange, handleLabelClick } = useSwitch(onCheck)
+export function Switch({
+  onCheck,
+  label,
+  name,
+  value,
+  defaultCheck = false,
+}: SwitchProps) {
+  const { isChecked, handleCheckChange } = useSwitch(defaultCheck, onCheck)
   const id = useId()
 
   return (
     <div className="flex items-center justify-center gap-2">
       <label
         htmlFor={id}
-        className="cursor-pointer text-sm text-gray-100"
-        onClick={handleLabelClick}
+        className={twMerge(
+          'cursor-pointer text-sm text-gray-100',
+          isChecked ? 'opacity-1' : 'opacity-50'
+        )}
       >
         {label}
       </label>
@@ -30,6 +39,7 @@ export function Switch({ onCheck, label, name, value }: SwitchProps) {
         id={id}
         name={name}
         value={value}
+        checked={isChecked}
         onCheckedChange={handleCheckChange}
         className="h-6 w-10 rounded-lg bg-gray-800 p-1"
       >

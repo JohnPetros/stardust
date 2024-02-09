@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { VALIDATION_ERRORS } from '../../config/validationErrors'
+import { VALIDATION_ERRORS } from '../../constants/validation-errors'
 
 import { emailSchema } from './emaiSchema'
 import { nameSchema } from './nameSchema'

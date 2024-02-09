@@ -6,32 +6,37 @@ import { usePlaygroundLayout } from './usePlaygroundLayout'
 import { CodeEditorPlayground } from '@/app/components/CodeEditorPlayground'
 import { CodeEditorToolbar } from '@/app/components/CodeEditorToolbar'
 import { SaveButton } from '@/app/components/SaveButton'
+import { Switch } from '@/app/components/Switch'
 
 const HEADER_HEIGHT = 48
 const SAVE_BUTTON_CONTAINER_HEIGHT = 64
 const PADDING_BOTTOM = 24
 
 type PlaygroundLayoutProps = {
-  id: string
-  title: string
-  code: string
-  userId: string
+  playgroundId: string
+  playgroundTitle: string
+  playgroundCode: string
+  isPlaygroundPublic: boolean
+  playgroundUserId: string
 }
 
 export function PlaygroundLayout({
-  id,
-  title,
-  code,
-  userId,
+  playgroundId,
+  playgroundTitle,
+  playgroundCode,
+  isPlaygroundPublic,
+  playgroundUserId,
 }: PlaygroundLayoutProps) {
   const {
     layhoutHeight,
     codeEditorPlaygroudRef,
     previousUserCode,
+    isPublic,
     handleSave,
     handleRunCode,
     handleCodeChange,
-  } = usePlaygroundLayout(id)
+    handlePlaygroundSwitch,
+  } = usePlaygroundLayout(playgroundId, isPlaygroundPublic)
 
   const editorHeight =
     layhoutHeight -
@@ -43,13 +48,20 @@ export function PlaygroundLayout({
     <div className="flex flex-col">
       <PlaygroundHeader
         height={HEADER_HEIGHT}
-        playgroundId={id}
-        playgroundTitle={title}
+        playgroundId={playgroundUserId}
+        playgroundTitle={playgroundTitle}
       />
       <div
         style={{ height: SAVE_BUTTON_CONTAINER_HEIGHT }}
-        className="flex items-center justify-end px-6"
+        className="flex items-center justify-end gap-3 px-6"
       >
+        <Switch
+          label="Público"
+          name="is-public"
+          value="public"
+          defaultCheck={isPublic}
+          onCheck={handlePlaygroundSwitch}
+        />
         <SaveButton onSave={handleSave} />
       </div>
       <div style={{ height: editorHeight }} className="overflow-hidden px-6">
@@ -61,7 +73,7 @@ export function PlaygroundLayout({
           <div className="-translate-y-2">
             <CodeEditorPlayground
               ref={codeEditorPlaygroudRef}
-              code={code}
+              code={playgroundCode}
               height={editorHeight}
               onCodeChange={handleCodeChange}
               isRunnable={true}

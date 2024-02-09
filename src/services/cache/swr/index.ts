@@ -8,7 +8,7 @@ export function useSWRCache<Data>({
   tag,
   fetcher,
   dependencies,
-  isEnabled,
+  isEnabled = true,
 }: Cache<Data>) {
   const dependenciesQuery = dependencies
     ? dependencies.map((dependency, index) => `dep_${index + 1}=${dependency}`)
@@ -21,6 +21,7 @@ export function useSWRCache<Data>({
   function mutateCache(newData: Data) {
     mutate(newData)
   }
+
   return {
     data,
     error,

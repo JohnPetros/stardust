@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-import type { Achievement } from '@/@types/achievement'
+import type { Achievement } from '@/@types/Achievement'
 import { useAchivementsContext } from '@/contexts/AchievementsContext/hooks/useAchivementsContext'
 import { useApi } from '@/services/api'
 

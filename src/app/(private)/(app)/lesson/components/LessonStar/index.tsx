@@ -1,13 +1,13 @@
 'use client'
 
 import { PageTransitionAnimation } from '../../../../../components/PageTransitionAnimation'
-import { Header } from '../LessonHeader'
+import { LessonHeader } from '../LessonHeader'
 import { Quiz } from '../Quiz'
 import { Theory } from '../Theory'
 
 import { useLessonStar } from './useLessonStar'
 
-import type { Star } from '@/@types/star'
+import type { Star } from '@/@types/Star'
 import { useSecondsCounter } from '@/hooks/useSecondsCounter'
 import { useLessonStore } from '@/stores/lessonStore'
 
@@ -27,7 +27,7 @@ export function LessonStar({ star }: LayoutProps) {
     <>
       <PageTransitionAnimation isVisible={isTransitionVisible} />
       <div ref={scrollRef} className="relative overflow-x-hidden">
-        {currentStage !== 'rewards' && <Header />}
+        {currentStage !== 'rewards' && <LessonHeader />}
 
         {star && (
           <>

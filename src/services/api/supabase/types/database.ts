@@ -302,25 +302,25 @@ export interface Database {
           code: string | null
           created_at: string | null
           id: string
-          is_open: boolean | null
-          title: string | null
-          user_id: string | null
+          is_public: boolean
+          title: string
+          user_id: string
         }
         Insert: {
           code?: string | null
           created_at?: string | null
           id?: string
-          is_open?: boolean | null
-          title?: string | null
-          user_id?: string | null
+          is_public?: boolean
+          title?: string
+          user_id: string
         }
         Update: {
           code?: string | null
           created_at?: string | null
           id?: string
-          is_open?: boolean | null
-          title?: string | null
-          user_id?: string | null
+          is_public?: boolean
+          title?: string
+          user_id?: string
         }
         Relationships: [
           {

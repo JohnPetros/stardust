@@ -3,8 +3,6 @@ import { useEditorContext } from '@/contexts/EditorContext/hooks/useEditorContex
 export function useCodeEditorSettingsDialog() {
   const { state, dispatch } = useEditorContext()
 
-  console.log({ state })
-
   function handleFontSizeRangeValueChange([value]: number[]) {
     dispatch({ type: 'setFontSize', payload: value })
   }

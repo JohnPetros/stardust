@@ -7,7 +7,7 @@ import { AchievementsList } from '../AchievementsList'
 
 import { achievementsMock } from '@/__tests__/mocks/achievementsMock'
 import { usersMock } from '@/__tests__/mocks/usersMock'
-import { Achievement } from '@/@types/achievement'
+import { Achievement } from '@/@types/Achievement'
 import { AchivementsContext } from '@/contexts/AchievementsContext'
 import {
   AuthContext,

@@ -1,4 +1,4 @@
-import type { Achievement } from '@/@types/achievement'
+import type { Achievement } from '@/@types/Achievement'
 
 export type AchivementsContextValue = {
   achievements: Achievement[] | undefined

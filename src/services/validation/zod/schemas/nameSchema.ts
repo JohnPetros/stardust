@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { VALIDATION_ERRORS } from '../../config/validationErrors'
+import { VALIDATION_ERRORS } from '../../constants/validation-errors'
 
 export const nameSchema = z
   .string()

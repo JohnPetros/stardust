@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 
 import { PlaygroundLayout } from './components/PlaygroundLayout'
 
-import { Playground } from '@/@types/playground'
+import { Playground } from '@/@types/Playground'
 import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
 import { PlaygroundsController } from '@/services/api/supabase/controllers/playgroundsController'
 
@@ -28,10 +28,11 @@ export default async function UserPlaygroundPage({
   return (
     <>
       <PlaygroundLayout
-        id={playground.id}
-        title={playground.title}
-        code={playground.code}
-        userId={playground.user_id}
+        playgroundId={playground.id}
+        playgroundTitle={playground.title}
+        playgroundCode={playground.code ?? ''}
+        playgroundUserId={playground.user_id}
+        isPlaygroundPublic={playground.is_public}
       />
     </>
   )

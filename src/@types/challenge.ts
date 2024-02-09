@@ -1,5 +1,5 @@
-import type { Category } from './category'
-import type { Text } from './text'
+import type { Category } from './Category'
+import type { Text } from './Text'
 
 export type Difficulty = 'easy' | 'medium' | 'hard'
 

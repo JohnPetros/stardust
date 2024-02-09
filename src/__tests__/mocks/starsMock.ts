@@ -1,8 +1,9 @@
-import { Star } from '@/@types/star'
+import { Star } from '@/@types/Star'
 
 export const starsMock: Star[] = [
   {
     id: '1',
+    slug: 'star-slug-1',
     isChallenge: false,
     name: 'Alpha Centauri',
     number: 1,
@@ -16,6 +17,7 @@ export const starsMock: Star[] = [
   },
   {
     id: '2',
+    slug: 'star-slug-1',
     isChallenge: true,
     name: 'Sirius',
     number: 2,

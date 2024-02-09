@@ -1,7 +1,7 @@
 import { IAchievementsController } from '../../interfaces/IAchievementsController'
 import type { Supabase } from '../types/supabase'
 
-import type { Achievement } from '@/@types/achievement'
+import type { Achievement } from '@/@types/Achievement'
 
 export const AchievementsController = (
   supabase: Supabase
@@ -13,6 +13,8 @@ export const AchievementsController = (
         .select('*')
         .order('position', { ascending: true })
         .returns<Achievement[]>()
+
+      console.log({ data })
 
       if (error) {
         throw new Error(error.message)

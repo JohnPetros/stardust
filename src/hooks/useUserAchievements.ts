@@ -1,6 +1,6 @@
 'use client'
 
-import type { Achievement } from '@/@types/achievement'
+import type { Achievement } from '@/@types/Achievement'
 import { useApi } from '@/services/api'
 import { useCache } from '@/services/cache'
 import { CACHE } from '@/utils/constants/cache'
@@ -48,6 +48,8 @@ export function useUserAchievements(userId?: string) {
     fetcher: getUserAchievements,
     dependencies: [userId],
   })
+
+  console.log({ data })
 
   return { userAchievements: data }
 }

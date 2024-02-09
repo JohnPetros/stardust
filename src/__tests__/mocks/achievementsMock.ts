@@ -1,4 +1,4 @@
-import { Achievement } from '@/@types/achievement'
+import { Achievement } from '@/@types/Achievement'
 
 export const achievementsMock: Achievement[] = [
   {

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import type { Achievement as AchievementData } from '@/@types/achievement'
+import type { Achievement as AchievementData } from '@/@types/Achievement'
 import { AlertRef } from '@/app/components/Alert'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useToast } from '@/contexts/ToastContext'

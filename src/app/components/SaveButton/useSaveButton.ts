@@ -51,6 +51,7 @@ export function useSaveButton(onSave: () => Promise<void>) {
       } catch (error) {
         setHasError(true)
         await waitFor(STATE_DELAY)
+        throw new Error(error)
       } finally {
         setIsSaving(false)
         await waitFor(STATE_DELAY)

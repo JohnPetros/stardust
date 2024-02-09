@@ -1,4 +1,4 @@
-export interface SelectionQuestion {
+export type SelectionQuestion = {
   type: 'selection'
   title: string
   picture: string
@@ -7,7 +7,7 @@ export interface SelectionQuestion {
   code?: string
 }
 
-export interface CheckboxQuestion {
+export type CheckboxQuestion = {
   type: 'checkbox'
   title: string
   picture: string
@@ -16,7 +16,7 @@ export interface CheckboxQuestion {
   code?: string
 }
 
-export interface OpenQuestion {
+export type OpenQuestion = {
   type: 'open'
   title: string
   picture: string
@@ -37,7 +37,7 @@ export type DraggrableItem = {
   dropZoneId?: string
 }
 
-export interface DragAndDropQuestion {
+export type DragAndDropQuestion = {
   type: 'drag-and-drop'
   title: string
   picture: string
@@ -51,7 +51,7 @@ export type SortableItem = {
   label: string
 }
 
-export interface DragAndDropListQuestion {
+export type DragAndDropListQuestion = {
   type: 'drag-and-drop-list'
   title: string
   picture: string

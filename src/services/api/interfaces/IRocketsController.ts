@@ -1,6 +1,6 @@
 import { FilterOptions } from '@/@types/filterOptions'
-import { Order } from '@/@types/order'
-import { Rocket } from '@/@types/rocket'
+import { Order } from '@/@types/Order'
+import { Rocket } from '@/@types/Rocket'
 
 type SortingOptions = {
   priceOrder: Order

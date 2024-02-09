@@ -28,8 +28,6 @@ export function ButtonComponent({
     className
   )
 
-  console.log({ asChild })
-
   if (asChild) {
     return (
       <Slot className={mergedClassName} {...rest}>

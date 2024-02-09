@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 import { useAchievement } from './useAchievement'
 
-import type { Achievement as AchievementType } from '@/@types/achievement'
+import type { Achievement as AchievementType } from '@/@types/Achievement'
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { ProgressBar } from '@/app/components/ProgressBar'
