@@ -1,11 +1,15 @@
 'use client'
 
+import { ShareNetwork } from '@phosphor-icons/react'
+
+import { SharePlaygroundDialog } from '../../../components/SharePlaygroundDialog'
+
 import { PlaygroundHeader } from './PlaygroundHeader'
 import { usePlaygroundLayout } from './usePlaygroundLayout'
 
-import { Playground } from '@/@types/Playground'
-import { CodeEditorToolbar } from '@/app/components/CodeEditorToolbar'
+import { Button } from '@/global/components/Button'
 import { CodeEditorPlayground } from '@/global/components/CodeEditorPlayground'
+import { CodeEditorToolbar } from '@/global/components/CodeEditorToolbar'
 import { SaveButton } from '@/global/components/SaveButton'
 import { Switch } from '@/global/components/Switch'
 
@@ -55,6 +59,14 @@ export function PlaygroundLayout({
         style={{ height: SAVE_BUTTON_CONTAINER_HEIGHT }}
         className="flex items-center justify-end gap-3 px-6"
       >
+        {isPublic && (
+          <SharePlaygroundDialog playgroundId={playgroundId}>
+            <Button className="flex h-8 w-max items-center gap-2 px-3 text-xs">
+              <ShareNetwork className="text-gray-900" weight="bold" />
+              Compatilhar playground
+            </Button>
+          </SharePlaygroundDialog>
+        )}
         <Switch
           label="Público"
           name="is-public"

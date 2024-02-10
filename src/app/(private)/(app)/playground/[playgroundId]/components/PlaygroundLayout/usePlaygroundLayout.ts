@@ -32,8 +32,7 @@ export function usePlaygroundLayout(
 
   async function togglePlaygroundOpen() {
     try {
-      if (isPlaygroundPublic)
-        await api.updatePublicPlaygroundById(!isPublic, playgroundId)
+      await api.updatePublicPlaygroundById(!isPublic, playgroundId)
       setIsPublic(!isPublic)
     } catch (error) {
       console.log(error)
