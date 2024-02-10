@@ -3,17 +3,12 @@
 import { Pencil, ShareNetwork, Terminal, Trash } from '@phosphor-icons/react'
 import Link from 'next/link'
 
+import { SharePlaygroundDialog } from '../SharePlaygroundDialog'
+
 import { usePlaygroundCard } from './usePlaygroundCard'
 
 import { Alert } from '@/global/components/Alert'
 import { Button } from '@/global/components/Button'
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogTrigger,
-} from '@/global/components/Dialog'
-import { Input } from '@/global/components/Input'
 import { Prompt } from '@/global/components/Prompt'
 import { Separator } from '@/global/components/Separator'
 import { Toolbar } from '@/global/components/Toolbar'
@@ -76,33 +71,12 @@ export function PlaygroundCard({
           >
             <ToolbarButton icon={Pencil}>Editar código</ToolbarButton>
           </Prompt>
-          <Dialog>
-            <DialogContent>
-              <Input
-                type="text"
-                label="Url desse playground"
-                icon={ShareNetwork}
-                value={playgroundUrl}
-                readOnly
-              />
-              <div className="mt-6 grid grid-cols-2 items-center gap-2">
-                <DialogClose asChild>
-                  <Button
-                    className="text-gray-900"
-                    onClick={handleSharePlayground}
-                  >
-                    Copiar
-                  </Button>
-                </DialogClose>
-                <DialogClose>Cancelar</DialogClose>
-              </div>
-            </DialogContent>
-            <DialogTrigger>
-              <ToolbarButton icon={ShareNetwork}>
-                Compartilhar código
-              </ToolbarButton>
-            </DialogTrigger>
-          </Dialog>
+
+          <SharePlaygroundDialog playgroundId={id}>
+            <ToolbarButton icon={ShareNetwork}>
+              Compartilhar código
+            </ToolbarButton>
+          </SharePlaygroundDialog>
         </Toolbar>
       </div>
     </>

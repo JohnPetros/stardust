@@ -10,6 +10,7 @@ type SwitchProps = {
   name: string
   value: string
   defaultCheck?: boolean
+  isDisabled?: boolean
   onCheck: (isChecked: boolean) => void
 }
 
@@ -19,12 +20,18 @@ export function Switch({
   name,
   value,
   defaultCheck = false,
+  isDisabled = false,
 }: SwitchProps) {
   const { isChecked, handleCheckChange } = useSwitch(defaultCheck, onCheck)
   const id = useId()
 
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div
+      className={twMerge(
+        'flex items-center justify-center gap-2',
+        isDisabled ? 'pointer-events-none' : ''
+      )}
+    >
       <label
         htmlFor={id}
         className={twMerge(
