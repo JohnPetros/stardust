@@ -3,6 +3,7 @@
 import { PlaygroundHeader } from './PlaygroundHeader'
 import { usePlaygroundLayout } from './usePlaygroundLayout'
 
+import { Playground } from '@/@types/Playground'
 import { CodeEditorPlayground } from '@/app/components/CodeEditorPlayground'
 import { CodeEditorToolbar } from '@/app/components/CodeEditorToolbar'
 import { SaveButton } from '@/app/components/SaveButton'
@@ -17,7 +18,7 @@ type PlaygroundLayoutProps = {
   playgroundTitle: string
   playgroundCode: string
   isPlaygroundPublic: boolean
-  playgroundUserId: string
+  playgroundUser: { slug: string; avatarId: string } | null
 }
 
 export function PlaygroundLayout({
@@ -25,7 +26,6 @@ export function PlaygroundLayout({
   playgroundTitle,
   playgroundCode,
   isPlaygroundPublic,
-  playgroundUserId,
 }: PlaygroundLayoutProps) {
   const {
     layhoutHeight,
@@ -48,7 +48,7 @@ export function PlaygroundLayout({
     <div className="flex flex-col">
       <PlaygroundHeader
         height={HEADER_HEIGHT}
-        playgroundId={playgroundUserId}
+        playgroundId={playgroundId}
         playgroundTitle={playgroundTitle}
       />
       <div

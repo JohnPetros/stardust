@@ -1,18 +1,10 @@
-import { notFound } from 'next/navigation'
+import { _handleChallengePage } from './actions/_handleChallengePage'
+import { ChallengeHeader } from './components/ChallengeHeader'
 
-import { getChallenge } from './actions/getChallenge'
-import { unlockDoc } from './actions/unlockDoc'
-import { Header } from './components/ChallengeHeader'
-
-import type { Challenge } from '@/@types/challenge'
-import type { Vote } from '@/@types/vote'
-import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
-import { AuthController } from '@/services/api/supabase/controllers/authController'
-import { ChallengesController } from '@/services/api/supabase/controllers/challengesController'
-import { ERRORS } from '@/utils/constants'
-
-let challenge: Challenge
-let userVote: Vote
+import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseServerClient'
+import { SupabaseAuthController } from '@/services/api/supabase/controllers/SupabaseAuthController'
+import { SupabaseChallengesController } from '@/services/api/supabase/controllers/SupabaseChallengesController'
+import { SupabaseDocsController } from '@/services/api/supabase/controllers/SupabaseDocsController'
 
 type ChallengePageProps = {
   params: { challengeSlug: string }
@@ -21,33 +13,17 @@ type ChallengePageProps = {
 export default async function ChallengePage({
   params: { challengeSlug },
 }: ChallengePageProps) {
-  const supabase = createSupabaseServerClient()
-  const authController = AuthController(supabase)
+  const supabase = SupabaseServerClient()
+  const authController = SupabaseAuthController(supabase)
+  const challengesController = SupabaseChallengesController(supabase)
+  const docsController = SupabaseDocsController(supabase)
 
-  const userId = await authController.getUserId()
+  const { challenge, userVote } = await _handleChallengePage({
+    challengeSlug,
+    authController,
+    challengesController,
+    docsController,
+  })
 
-  if (!userId) throw new Error(ERRORS.auth.userNotFound)
-
-  try {
-    challenge = await getChallenge(challengeSlug, userId)
-  } catch (error) {
-    console.error(error)
-    notFound()
-  }
-
-  try {
-    const challengesController = ChallengesController(supabase)
-    userVote = await challengesController.getUserVote(userId, challenge.id)
-  } catch (error) {
-    userVote = null
-  }
-
-  try {
-    await unlockDoc(challenge, userId)
-  } catch (error) {
-    console.error(error)
-    throw new Error(ERRORS.documentation.failedDocUnlocking)
-  }
-
-  return <Header challenge={challenge} userVote={userVote} />
+  return <ChallengeHeader challenge={challenge} userVote={userVote} />
 }

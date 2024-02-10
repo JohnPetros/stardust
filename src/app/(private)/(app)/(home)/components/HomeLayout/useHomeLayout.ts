@@ -14,7 +14,7 @@ export function useHomeLayout() {
     setIsAchievementsListVisible,
   } = useSiderbarContext()
 
-  localStorage.setItem(STORAGE.hasPageAnimationTransition, 'true')
+  localStorage.setItem(STORAGE.keys.hasPageAnimationTransition, 'true')
 
   function toggleSidenav() {
     setIsSidenavExpanded(!isSidenavExpanded)
@@ -27,7 +27,7 @@ export function useHomeLayout() {
 
   useEffect(() => {
     return () => {
-      localStorage.removeItem(STORAGE.hasPageAnimationTransition)
+      localStorage.removeItem(STORAGE.keys.hasPageAnimationTransition)
     }
   }, [])
 

@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 
-import type { Category } from '@/@types/category'
+import type { Category } from '@/@types/Category'
 import { useChallengesListStore } from '@/stores/challengesListStore'
 import { filterItemBySearch } from '@/utils/helpers'
 

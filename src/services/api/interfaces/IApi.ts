@@ -2,7 +2,6 @@ import { IAchievementsController } from './IAchievementsController'
 import { IAuthController } from './IAuthController'
 import { IAvatarsController } from './IAvatarsController'
 import { ICategoriesController } from './ICategoriesController'
-import { ICdnController } from './ICdnController'
 import { IChallengesController } from './IChallengesController'
 import { ICommentsController } from './ICommentsController'
 import { IDocsController } from './IDocsController'
@@ -12,7 +11,9 @@ import { IPlaygroundsController } from './IPlaygroundsController'
 import { IRankingController } from './IRankingController'
 import { IRocketsController } from './IRocketsController'
 import { IStarsController } from './IStarsController'
+import { IStorageController } from './IStorageController'
 import { IUsersController } from './IUsersController'
+import { IWinnersController } from './IWinnersController'
 
 export interface IApi
   extends IAuthController,
@@ -25,8 +26,9 @@ export interface IApi
     IStarsController,
     IAvatarsController,
     IChallengesController,
-    ICdnController,
+    IStorageController,
     ICategoriesController,
     ICommentsController,
     IDocsController,
-    IMdxController {}
+    IMdxController,
+    IWinnersController {}

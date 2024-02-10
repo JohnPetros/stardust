@@ -1,8 +1,8 @@
-type Metric =
-  | 'unlocked_stars_count'
-  | 'acquired_rockets_count'
-  | 'completed_challenges_count'
-  | 'completed_planets_count'
+export type AchievementMetric =
+  | 'unlockedStarsCount'
+  | 'acquiredRocketsCount'
+  | 'completedChallengesCount'
+  | 'completedPlanetsCount'
   | 'xp'
   | 'streak'
 
@@ -12,10 +12,10 @@ export type Achievement = {
   icon: string
   description: string
   reward: number
-  metric: Metric
-  required_count: number
+  metric: AchievementMetric
+  requiredCount: number
   position: number
+  currentProgress?: number
   isUnlocked?: boolean
   isRescuable?: boolean
-  currentProgress?: number
 }

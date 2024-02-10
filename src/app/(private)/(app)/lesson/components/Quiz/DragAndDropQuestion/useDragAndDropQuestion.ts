@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
 
-import type { DraggrableItem } from '@/@types/quiz'
+import type { DraggrableItem } from '@/@types/Quiz'
 import { useLessonStore } from '@/stores/lessonStore'
 import { compareArrays, reorderItems } from '@/utils/helpers'
 

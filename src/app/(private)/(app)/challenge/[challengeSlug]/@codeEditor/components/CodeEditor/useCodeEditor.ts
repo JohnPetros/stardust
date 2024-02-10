@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import type { TestCase } from '@/@types/challenge'
+import type { ChallengeTestCase } from '@/@types/Challenge'
 import { ConsoleRef } from '@/app/components/Console'
 import { EditorRef } from '@/app/components/Editor'
 import { useToast } from '@/contexts/ToastContext'
@@ -24,7 +24,9 @@ export function useCodeEditor() {
 
   const initialCode =
     typeof window !== 'undefined'
-      ? localStorage?.getItem(STORAGE.challengeCode) ?? challenge?.code ?? ''
+      ? localStorage?.getItem(STORAGE.keys.challengeCode) ??
+        challenge?.code ??
+        ''
       : ''
 
   const toast = useToast()
@@ -57,7 +59,10 @@ export function useCodeEditor() {
     })
   }
 
-  function formatCode(code: string, { input }: Pick<TestCase, 'input'>) {
+  function formatCode(
+    code: string,
+    { input }: Pick<ChallengeTestCase, 'input'>
+  ) {
     if (!input.length) return code
 
     const regex = new RegExp(inputCommandRegex, 'g')
@@ -78,7 +83,7 @@ export function useCodeEditor() {
     return code
   }
 
-  async function verifyTestCase(testCase: TestCase, code: string) {
+  async function verifyTestCase(testCase: ChallengeTestCase, code: string) {
     let userOutput = ''
     const { input } = testCase
 
@@ -106,7 +111,7 @@ export function useCodeEditor() {
 
     const userOutput: string[] = []
 
-    for (const testCase of challenge.test_cases) {
+    for (const testCase of challenge.testCases) {
       const output = await verifyTestCase(testCase, code)
       if (output) userOutput.push(output)
     }
@@ -120,7 +125,7 @@ export function useCodeEditor() {
   }
 
   function handleCodeChange(value: string) {
-    localStorage.setItem(STORAGE.challengeCode, value)
+    localStorage.setItem(STORAGE.keys.challengeCode, value)
     previousUserCode.current = userCode.current
     userCode.current = value
   }

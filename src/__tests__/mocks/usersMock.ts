@@ -1,4 +1,4 @@
-import type { User } from '@/@types/user'
+import type { User } from '@/@types/User'
 
 export const usersMock: User[] = [
   {
@@ -9,25 +9,24 @@ export const usersMock: User[] = [
     level: 10,
     coins: 1000,
     xp: 5000,
-    weekly_xp: 200,
-    avatar_id: 'avatar mock',
-    acquired_rockets_count: 3,
-    completed_challenges_count: 50,
-    completed_planets_count: 8,
-    unlocked_achievements_count: 20,
-    unlocked_stars_count: 5,
-    created_at: '2023-10-27T12:00:00Z',
-    did_break_streak: false,
-    did_complete_saturday: true,
-    did_update_ranking: false,
-    is_admin: false,
-    is_loser: null,
-    last_position: null,
-    ranking_id: 'rank1',
-    rocket_id: 'rocket1',
+    weeklyXp: 200,
+    avatarId: 'avatar mock',
+    acquiredRocketsCount: 3,
+    completedChallengesCount: 50,
+    completedPlanetsCount: 8,
+    unlockedAchievementsCount: 20,
+    unlockedStarsCount: 5,
+    createdAt: '2023-10-27T12:00:00Z',
+    didBreakStreak: false,
+    didCompleteSaturday: true,
+    didUpdateRanking: false,
+    isLoser: null,
+    lastPosition: null,
+    rankingId: 'rank1',
+    rocketId: 'rocket1',
     streak: 15,
-    study_time: '5 hours',
-    week_status: ['done', 'done', 'todo'],
+    studyTime: '5 hours',
+    weekStatus: ['done', 'done', 'todo'],
   },
   // Add more users as needed
 ]

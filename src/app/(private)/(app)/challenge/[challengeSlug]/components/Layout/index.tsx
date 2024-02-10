@@ -3,7 +3,7 @@
 import { ReactNode } from 'react'
 import { Panel, PanelGroup } from 'react-resizable-panels'
 
-import type { PanelsOffset } from '../../actions/getPanelsOffset'
+import type { PanelsOffset } from '../../actions/_getPanelsOffset'
 import { Slider } from '../Slider'
 
 import { PanelHandle } from './PanelHandle'

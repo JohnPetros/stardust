@@ -1,4 +1,4 @@
-import { DragAndDropQuestion, SelectionQuestion } from '@/@types/quiz'
+import { DragAndDropQuestion, SelectionQuestion } from '@/@types/Quiz'
 
 type Questions = [
   SelectionQuestion,

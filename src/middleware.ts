@@ -1,23 +1,22 @@
-import { createMiddlewareClient as createSupabaseMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { type NextRequest, NextResponse } from 'next/server'
 
 import { hasCookie } from './app/server/actions/hasCookie'
-import { AuthController } from './services/api/supabase/controllers/authController'
-import type { Database } from './services/api/supabase/types/database'
+import { SupabaseMiddlewareClient } from './services/api/supabase/clients/SupabaseMiddlewareClient'
+import { SupabaseAuthController } from './services/api/supabase/controllers/SupabaseAuthController'
 import { COOKIES, ROUTES } from './utils/constants'
 import { checkPublicRoute } from './utils/helpers'
 import { getSearchParams } from './utils/helpers/getSearchParams'
 
-export async function middleware(req: NextRequest) {
+export const middleware = async (req: NextRequest) => {
   const res = NextResponse.next()
-  const supabase = createSupabaseMiddlewareClient<Database>({ req, res })
+  const supabase = SupabaseMiddlewareClient({ req, res })
   const hasRedirect = getSearchParams(req.url, 'redirect_to')
 
   if (hasRedirect) return NextResponse.redirect(new URL(hasRedirect, req.url))
 
   const currentRoute = '/' + req.nextUrl.pathname.split('/')[1]
   const isPublicRoute = checkPublicRoute(currentRoute)
-  const authController = AuthController(supabase)
+  const authController = SupabaseAuthController(supabase)
   const hasSession = Boolean(await authController.getUserId())
 
   if (!hasSession && !isPublicRoute) {
@@ -25,7 +24,7 @@ export async function middleware(req: NextRequest) {
   }
 
   if (currentRoute === ROUTES.private.rewards) {
-    const hasRewardsPayloadCookie = await hasCookie(COOKIES.rewardsPayload)
+    const hasRewardsPayloadCookie = await hasCookie(COOKIES.keys.rewardsPayload)
 
     if (!hasRewardsPayloadCookie)
       return NextResponse.redirect(new URL(ROUTES.private.home.space, req.url))

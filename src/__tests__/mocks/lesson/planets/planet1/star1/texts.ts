@@ -1,4 +1,4 @@
-import { Text } from '@/@types/text'
+import { Text } from '@/@types/Text'
 
 export const textsMock: Text[] = [
   {

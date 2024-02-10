@@ -12,7 +12,7 @@ import { getImage } from '@/utils/helpers'
 
 export function useSpaceProvider() {
   const { user } = useAuthContext()
-  const { rocket } = useRocket(user?.rocket_id ?? '')
+  const { rocket } = useRocket(user?.rankingId ?? '')
   const [spaceRocket, setSpaceRocket] = useState<SpaceRocket>({} as SpaceRocket)
   const [lastUnlockedStarPosition, setLastUnlockedStarPosition] =
     useState<StarViewPortPosition>('above')
@@ -70,7 +70,7 @@ export function useSpaceProvider() {
 
       setSpaceRocket({ image: rocketImage, name: rocket.name })
     }
-  }, [rocket, user?.rocket_id])
+  }, [rocket, user?.rocketId])
 
   return spaceContextValue
 }

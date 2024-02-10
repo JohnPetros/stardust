@@ -7,14 +7,14 @@ import type { UpvotesButtonProps } from '.'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useToast } from '@/contexts/ToastContext'
 import { useApi } from '@/services/api'
-import { ERRORS } from '@/utils/constants'
+import { APP_ERRORS } from '@/utils/constants'
 
 export function useUpvotesButton({
   commentId,
-  initialUpvotes,
+  initialUpvotesCount,
   isCommentUpvoted,
 }: UpvotesButtonProps) {
-  const [upvotes, setUpvotes] = useState(initialUpvotes)
+  const [upvotes, setUpvotes] = useState(initialUpvotesCount)
   const [isUpvoted, setIsUpvoted] = useState(isCommentUpvoted)
 
   const { user } = useAuthContext()
@@ -31,7 +31,7 @@ export function useUpvotesButton({
         await api.removeUpvotedComment(commentId, user.id)
       } catch (error) {
         console.log(error)
-        toast.show(ERRORS.commentFailedDesupvoting, {
+        toast.show(APP_ERRORS.comments.failedDesupvoting, {
           type: 'error',
           seconds: 5,
         })
@@ -46,14 +46,17 @@ export function useUpvotesButton({
       await api.addUpvotedComment(commentId, user.id)
     } catch (error) {
       console.log(error)
-      toast.show(ERRORS.commentFailedUpvoting, { type: 'error', seconds: 5 })
+      toast.show(APP_ERRORS.comments.failedUpvoting, {
+        type: 'error',
+        seconds: 5,
+      })
     }
   }
 
   useEffect(() => {
-    setUpvotes(initialUpvotes)
+    setUpvotes(initialUpvotesCount)
     setIsUpvoted(isCommentUpvoted)
-  }, [initialUpvotes, isCommentUpvoted])
+  }, [initialUpvotesCount, isCommentUpvoted])
 
   return {
     upvotes,

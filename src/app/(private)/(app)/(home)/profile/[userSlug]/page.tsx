@@ -6,18 +6,18 @@ import { Crafts } from '../components/Crafts'
 import { Statistics } from '../components/Statistics'
 import { User } from '../components/User'
 
-import { User as UserData } from '@/@types/user'
+import { User as UserData } from '@/@types/User'
 import { StreakBoard } from '@/app/components/StreakBoard'
-import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
-import { UsersController } from '@/services/api/supabase/controllers/usersController'
+import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseServerClient'
+import { SupabaseUsersController } from '@/services/api/supabase/controllers/SupabaseUsersController'
 
 type ProfilePageProps = {
   params: { userSlug: string }
 }
 
 export default async function ProfilePage({ params }: ProfilePageProps) {
-  const supabase = createSupabaseServerClient()
-  const usersController = UsersController(supabase)
+  const usersController = SupabaseUsersController(SupabaseServerClient())
+
   let user: UserData
 
   try {
@@ -32,15 +32,24 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       <div className="mx-auto max-w-sm px-6 pb-32 pt-8 md:max-w-5xl md:pb-12">
         {user?.id && (
           <div>
-            <User data={user} />
+            <User
+              id={user.id}
+              name={user.name}
+              level={user.level}
+              avatarId={user.avatarId}
+              rocketId={user.rocketId}
+              rankingId={user.rankingId}
+              createdAt={user.createdAt}
+              xp={user.xp}
+            />
             <div className="mt-10 grid grid-cols-1 items-center justify-center gap-12 md:grid-cols-[1fr_2fr] md:flex-row">
               <Statistics
-                unlockedStarsCount={user.unlocked_stars_count}
-                completedPlanetsCount={user.completed_planets_count}
-                unlockedAchievementsCount={user.unlocked_achievements_count}
+                unlockedStarsCount={user.unlockedStarsCount}
+                completedPlanetsCount={user.completedPlanetsCount}
+                unlockedAchievementsCount={user.unlockedAchievementsCount}
               />
               <StreakBoard
-                weekStatus={user.week_status}
+                weekStatus={user.weekStatus}
                 streakAmount={user.streak}
               />
             </div>

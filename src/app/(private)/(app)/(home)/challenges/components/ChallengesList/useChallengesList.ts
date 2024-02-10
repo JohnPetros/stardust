@@ -3,8 +3,8 @@
 import { useMemo } from 'react'
 import useSWR from 'swr'
 
-import { Category } from '@/@types/category'
-import type { Challenge } from '@/@types/challenge'
+import { Category } from '@/@types/Category'
+import type { Challenge } from '@/@types/Challenge'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useApi } from '@/services/api'
 import { useChallengesListStore } from '@/stores/challengesListStore'
@@ -41,8 +41,6 @@ export function useChallengesList(categories: Category[]) {
         search: search ?? null,
       })
 
-      console.log({ challenges })
-
       return sortChallengesByDifficulty(challenges)
     }
   }
@@ -77,15 +75,15 @@ export function useChallengesList(categories: Category[]) {
   )
 
   const filteredChallenges = useMemo(() => {
-    function addCategories(challenge: Challenge) {
-      if (categories?.length) {
-        const challengeCategories = categories.filter((category) =>
-          category.challengesIds.includes(challenge.id)
-        )
-        return { ...challenge, categories: challengeCategories ?? [] }
-      }
-      return challenge
-    }
+    // function addCategories(challenge: Challenge) {
+    //   if (categories?.length) {
+    //     const challengeCategories = categories.filter((category) =>
+    //       category.challengesIds.includes(challenge.id)
+    //     )
+    //     return { ...challenge, categories: challengeCategories ?? [] }
+    //   }
+    //   return challenge
+    // }
 
     function checkCompletition(challenge: Challenge) {
       if (userCompletedChallengesIds) {
@@ -97,7 +95,7 @@ export function useChallengesList(categories: Category[]) {
     }
 
     if (challenges && categories && userCompletedChallengesIds && !isLoading) {
-      return challenges.map(addCategories).map(checkCompletition)
+      return challenges.map(checkCompletition)
     }
   }, [challenges, categories, userCompletedChallengesIds, isLoading])
 

@@ -9,6 +9,7 @@ export const ROUTES = {
     },
     challenge: '/challenge',
     challengeMaker: '/challenge-maker',
+    settings: '/settings',
     lesson: '/lesson',
     playground: '/playground',
     config: '/config',

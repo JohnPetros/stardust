@@ -33,11 +33,11 @@ export function Description() {
         <div className="mx-auto flex w-fit flex-wrap items-center gap-3">
           <DifficultyBadge difficulty={challenge.difficulty} />
           <ChallengeInfo
-            userSlug={challenge.user_slug}
-            downvotes={challenge.downvotes}
+            userSlug={challenge.userSlug}
+            downvotes={challenge.downvotesCount}
             isCompleted={challenge.isCompleted}
-            upvotes={challenge.upvotes}
-            totalCompletitions={challenge.total_completitions}
+            upvotes={challenge.upvotesCount}
+            totalCompletitions={challenge.totalCompletitions}
           />
           <VoteButtons />
           <div className="flex items-center gap-2 md:hidden">

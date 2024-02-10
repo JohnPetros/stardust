@@ -1,4 +1,4 @@
-import type { Token } from '@/@types/token'
+import type { Token } from '@/@types/Token'
 
 export const DELEGUA_TOKENS: { [token in Token]: string[] } = {
   keywords: [

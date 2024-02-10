@@ -1,10 +1,10 @@
 'use client'
 
 import { createContext, ReactNode } from 'react'
-import { Session } from '@supabase/supabase-js'
 
 import { useAuthProvider } from './hooks/useAuthProvider'
-import { AuthContextValue } from './types/authContextValue'
+import type { AuthContextValue } from './types/AuthContextValue'
+import type { Session } from './types/Session'
 
 type AuthProviderProps = {
   serverSession: Session | null

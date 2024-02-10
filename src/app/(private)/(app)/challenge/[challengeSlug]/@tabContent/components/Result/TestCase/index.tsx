@@ -8,7 +8,7 @@ import { Field } from '../Field'
 
 import { useTestCase } from './useTestCase'
 
-import type { TestCase as TestCaseData } from '@/@types/challenge'
+import type { ChallengeTestCase } from '@/@types/Challenge'
 import { AnimatedArrow } from '@/app/components/AnimatedArrow'
 
 const contentAnimations: Variants = {
@@ -22,7 +22,7 @@ const contentAnimations: Variants = {
 
 type TestCaseProps = {
   index: number
-  data: TestCaseData
+  data: ChallengeTestCase
   isCorrect: boolean
   userOutput: string
 }

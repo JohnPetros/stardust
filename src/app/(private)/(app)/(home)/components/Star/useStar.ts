@@ -5,7 +5,7 @@ import { useInView } from 'framer-motion'
 import { LottieRef } from 'lottie-react'
 import { useRouter } from 'next/navigation'
 
-import { Star } from '@/@types/star'
+import { Star } from '@/@types/Star'
 import { useSpaceContext } from '@/contexts/SpaceContext/hooks/useSpaceContext'
 import { useToast } from '@/contexts/ToastContext'
 import { useApi } from '@/services/api'

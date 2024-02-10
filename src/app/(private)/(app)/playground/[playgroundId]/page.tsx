@@ -1,29 +1,23 @@
-import { notFound } from 'next/navigation'
-
+import { _handlePlaygroundPage } from './actions/_handlePlaygroundPage'
 import { PlaygroundLayout } from './components/PlaygroundLayout'
 
-import { Playground } from '@/@types/Playground'
-import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
-import { PlaygroundsController } from '@/services/api/supabase/controllers/playgroundsController'
-
-let playground: Playground
+import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseServerClient'
+import { SupabasePlaygroundsController } from '@/services/api/supabase/controllers/SupabasePlaygroundsController'
 
 type UserPlaygroundPageProps = {
   params: { playgroundId: string }
 }
 
-export default async function UserPlaygroundPage({
+export default async function PlaygroundPage({
   params: { playgroundId },
 }: UserPlaygroundPageProps) {
-  const supabase = createSupabaseServerClient()
-  const playgroudsController = PlaygroundsController(supabase)
+  const supabase = SupabaseServerClient()
+  const playgroudsController = SupabasePlaygroundsController(supabase)
 
-  try {
-    playground = await playgroudsController.getPlaygroundById(playgroundId)
-  } catch (error) {
-    console.error(error)
-    notFound()
-  }
+  const playground = await _handlePlaygroundPage(
+    playgroundId,
+    playgroudsController
+  )
 
   return (
     <>
@@ -31,8 +25,8 @@ export default async function UserPlaygroundPage({
         playgroundId={playground.id}
         playgroundTitle={playground.title}
         playgroundCode={playground.code ?? ''}
-        playgroundUserId={playground.user_id}
-        isPlaygroundPublic={playground.is_public}
+        playgroundUser={playground.user ?? null}
+        isPlaygroundPublic={playground.isPublic}
       />
     </>
   )

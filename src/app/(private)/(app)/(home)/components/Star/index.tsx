@@ -9,9 +9,9 @@ import UnlockedStar from '../../../../../../../public/animations/unlocked-star.j
 
 import { useStar } from './useStar'
 
-import type { Star } from '@/@types/star'
+import type { Star } from '@/@types/Star'
 
-const starLight = '0 0 12px #ffcf31a1'
+const STAR_LIGHT = '0 0 12px #ffcf31a1'
 
 const starVariants: Variants = {
   default: {
@@ -43,12 +43,22 @@ const rocketVariants: Variants = {
 }
 
 type StarProps = {
-  data: Star
+  id: string
+  name: string
+  slug: string
+  number: number
+  isUnlocked: boolean
+  isChallenge: boolean
   isLastUnlockedStar: boolean
 }
 
 export function Star({
-  data: { id, name, number, isChallenge, isUnlocked, slug },
+  id,
+  name,
+  number,
+  isChallenge,
+  isUnlocked,
+  slug,
   isLastUnlockedStar,
 }: StarProps) {
   const { starRef, lastUnlockedStarRef, spaceRocket, handleStarClick } =
@@ -105,7 +115,7 @@ export function Star({
           </span>
         </div>
         <div
-          style={{ boxShadow: starLight }}
+          style={{ boxShadow: STAR_LIGHT }}
           className={twMerge(
             'grid max-w-[220px] place-content-center rounded-lg border-2 border-dashed bg-green-900 px-6 py-3',
             isUnlocked ? 'border-yellow-400' : 'border-gray-500'

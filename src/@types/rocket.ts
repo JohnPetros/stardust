@@ -3,5 +3,5 @@ export type Rocket = {
   image: string
   name: string
   price: number
-  isAcquired: boolean
+  isAcquired?: boolean
 }

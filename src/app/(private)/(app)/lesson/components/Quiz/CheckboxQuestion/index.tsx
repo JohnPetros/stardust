@@ -5,7 +5,7 @@ import { QuestionTitle } from '../QuestionTitle'
 import { Checkbox } from './Checkbox'
 import { useCheckboxQuestion } from './useCheckboxQuestion'
 
-import type { CheckboxQuestion as CheckboxQuestionData } from '@/@types/quiz'
+import type { CheckboxQuestion as CheckboxQuestionData } from '@/@types/Quiz'
 import { CodeSnippet } from '@/app/components/CodeSnippet'
 
 interface CheckboxQuestionProps {

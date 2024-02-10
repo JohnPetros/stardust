@@ -21,7 +21,7 @@ import { useDragAndDropQuestion } from './useDragAndDropQuestion'
 import type {
   DragAndDropQuestion as DragAndDropQuestionData,
   DraggrableItem,
-} from '@/@types/quiz'
+} from '@/@types/Quiz'
 
 export function getDragItemWidth(item: DraggrableItem) {
   const { length } = item.label

@@ -18,7 +18,7 @@ import { QuestionTitle } from '../QuestionTitle'
 import { SortableItem } from './SortableItem'
 import { useDragAndDropListQuestion } from './useDragAndDropListQuestion'
 
-import type { DragAndDropListQuestion as DragAndDropListQuestionData } from '@/@types/quiz'
+import type { DragAndDropListQuestion as DragAndDropListQuestionData } from '@/@types/Quiz'
 import { useLessonStore } from '@/stores/lessonStore'
 
 type DragAndDropListQuestionProps = {

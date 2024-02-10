@@ -1,4 +1,4 @@
-import { Star } from '@/@types/star'
+import type { Star } from '@/@types/Star'
 
 type NextStar = Pick<Star, 'id' | 'isUnlocked'>
 

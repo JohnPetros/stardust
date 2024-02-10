@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-import type { WeekStatus } from '@/@types/weekStatus'
+import type { WeekStatus } from '@/@types/WeekStatus'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useToast } from '@/contexts/ToastContext'
 import { useDate } from '@/services/date'
@@ -45,8 +45,8 @@ export function useStreak() {
       try {
         await updateUser({
           streak: updatedStreak,
-          week_status: updatedWeekStatus,
-          did_complete_saturday: todayIndex === 6,
+          weekStatus: updatedWeekStatus,
+          didCompleteSaturday: todayIndex === 6,
         })
       } catch (error) {
         toast.show('Erro ao tentar atualizar o status da sua semana', {
@@ -56,10 +56,10 @@ export function useStreak() {
     }
 
     if (user && !weekStatus.length) {
-      setWeekStatus(user.week_status)
+      setWeekStatus(user.weekStatus)
       setStreakAmount(user.streak)
 
-      updateStreak(user.week_status)
+      updateStreak(user.weekStatus)
     }
   }, [user, weekStatus.length, toast, updateUser])
 

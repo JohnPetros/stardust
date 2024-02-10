@@ -21,8 +21,8 @@ type CommentProps = {
   id: string
   content: string
   createdAt: Date
-  upvotes: number
-  repliesAmount: number
+  upvotesCount: number
+  repliesCount: number
   isUpvoted: boolean
   avatarId: string
   userSlug: string
@@ -35,8 +35,8 @@ export function Comment({
   content,
   createdAt,
   isUpvoted,
-  repliesAmount,
-  upvotes,
+  repliesCount,
+  upvotesCount,
   avatarId,
   userSlug,
   onDelete,
@@ -60,7 +60,7 @@ export function Comment({
   const { user } = useAuthContext()
 
   const hasReplies =
-    repliesAmount > 0 || (replies && replies.length > 0) || false
+    repliesCount > 0 || (replies && replies.length > 0) || false
 
   return (
     <>
@@ -108,14 +108,14 @@ export function Comment({
               <div className="mt-2 flex w-full justify-between">
                 <UpvotesButton
                   commentId={id}
-                  initialUpvotes={upvotes}
+                  initialUpvotesCount={upvotesCount}
                   isCommentUpvoted={isUpvoted}
                 />
                 <div className="flex items-center gap-2">
                   <RepliesButton
                     hasReplies={hasReplies}
                     isRepliesVisible={isRepliesVisible}
-                    repliesAmount={replies?.length ?? repliesAmount}
+                    repliesAmount={replies?.length ?? repliesCount}
                     onToggleRepliesVisible={handleToggleIsRepliesVisible}
                   />
                   <Separator />
@@ -150,13 +150,13 @@ export function Comment({
                         <Comment
                           id={reply.id}
                           content={reply.content}
-                          upvotes={reply.upvotes ?? 0}
+                          upvotesCount={reply.upvotesCount ?? 0}
                           isUpvoted={reply.isVoted ?? false}
                           userSlug={reply.user.slug}
-                          avatarId={reply.user.avatar_id}
-                          createdAt={reply.created_at}
+                          avatarId={reply.user.avatarId}
+                          createdAt={reply.createdAt}
                           isAuthUser={reply.user.slug === user?.slug}
-                          repliesAmount={reply.repliesAmount ?? 0}
+                          repliesCount={reply.repliesCount ?? 0}
                           onDelete={onDelete}
                         />
                       </li>

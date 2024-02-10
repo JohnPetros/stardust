@@ -6,7 +6,7 @@ import { Filters } from '../Filters'
 
 import { useChallengesList } from './useChallengesList'
 
-import { Category } from '@/@types/category'
+import { Category } from '@/@types/Category'
 import { Loading } from '@/app/components/Loading'
 
 type ChallengesList = {

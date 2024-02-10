@@ -1,9 +1,5 @@
-import { AuthError, Session } from '@supabase/supabase-js'
-
-type SignUpResponse = {
-  userId: string | null
-  error: AuthError
-} | null
+import type { Session } from '@/contexts/AuthContext/types/Session'
+import type { SignUpResponse } from '@/contexts/AuthContext/types/SignUpResponse'
 
 export interface IAuthController {
   signIn(email: string, password: string): Promise<Session>

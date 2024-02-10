@@ -1,6 +1,7 @@
-import { FilterOptions } from '@/@types/filterOptions'
-import { Order } from '@/@types/Order'
-import { Rocket } from '@/@types/Rocket'
+import type { FilterOptions } from '../types/FilterOptions'
+import type { Order } from '../types/Order'
+
+import type { Rocket } from '@/@types/Rocket'
 
 type SortingOptions = {
   priceOrder: Order
@@ -9,7 +10,7 @@ type SortingOptions = {
 }
 
 export interface IRocketsController {
-  getRockets(
+  getFilteredRockets(
     filterAndSortingOptions: FilterOptions & SortingOptions
   ): Promise<{ rockets: Rocket[]; count: number | null }>
   getRocket(rocketId: string): Promise<Rocket>

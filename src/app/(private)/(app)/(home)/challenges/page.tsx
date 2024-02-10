@@ -1,26 +1,18 @@
 import { Suspense } from 'react'
 
+import { _handleChalengesPage } from './actions/_handleChallengesPage'
 import { ChallengesList } from './components/ChallengesList'
 
-import { Category } from '@/@types/category'
 import { Loading } from '@/app/components/Loading'
-import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
-import { CategoriesController } from '@/services/api/supabase/controllers/categoriesController'
-import { ERRORS } from '@/utils/constants'
-
-let categories: Category[]
+import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseServerClient'
+import { SupabaseCategoriesController } from '@/services/api/supabase/controllers/SupabaseCategoriesController'
 
 export default async function ChallengesPage() {
-  const categoriesController = CategoriesController(
-    createSupabaseServerClient()
+  const categoriesController = SupabaseCategoriesController(
+    SupabaseServerClient()
   )
 
-  try {
-    categories = await categoriesController.getCategories()
-  } catch (error) {
-    console.error(error)
-    throw new Error(ERRORS.categoriesFailedFetching)
-  }
+  const categories = await _handleChalengesPage(categoriesController)
 
   return (
     <Suspense fallback={<Loading isSmall={false} />}>

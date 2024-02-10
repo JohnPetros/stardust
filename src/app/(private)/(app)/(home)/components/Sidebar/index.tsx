@@ -45,7 +45,7 @@ export function Sidebar() {
               </button>
 
               <div className="flex flex-col items-center justify-center gap-3 text-gray-100">
-                <UserAvatar avatarId={user.avatar_id} size={96} />
+                <UserAvatar avatarId={user.avatarId} size={96} />
                 <strong>{user.name}</strong>
                 <small className="text-sm">{user.email}</small>
                 <SignOutAlert>

@@ -4,7 +4,7 @@ import { Lock } from '@phosphor-icons/react'
 import Link from 'next/link'
 import { twMerge } from 'tailwind-merge'
 
-import type { ContentType } from '@/@types/contentType'
+import type { ContentType } from '@/@types/ContentType'
 import { useChallengeStore } from '@/stores/challengeStore'
 import { ROUTES } from '@/utils/constants'
 

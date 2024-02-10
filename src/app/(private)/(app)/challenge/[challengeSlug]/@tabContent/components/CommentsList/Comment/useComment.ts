@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react'
-import useSWR from 'swr'
 
 import { AlertRef } from '@/app/components/Alert'
 import { PopoverMenuButton } from '@/app/components/PopoverMenu'
 import { useApi } from '@/services/api'
-import { ERRORS } from '@/utils/constants'
+import { useCache } from '@/services/cache'
+import { APP_ERRORS } from '@/utils/constants'
+import { CACHE } from '@/utils/constants/cache'
 
 export function useComment(commentId: string) {
   const [shouldFetchCommentReplies, setShouldFetchCommentReplies] =
@@ -24,15 +25,17 @@ export function useComment(commentId: string) {
   const {
     data: replies,
     error,
-    mutate: refetchReplies,
     isLoading,
-    isValidating,
-  } = useSWR(
-    () => (shouldFetchCommentReplies ? `/replies?comment_id=${commentId}` : ''),
-    getReplies
-  )
+    isRefetching,
+    refetch: refetchReplies,
+  } = useCache({
+    key: CACHE.keys.commentReplies,
+    fetcher: getReplies,
+    dependencies: [commentId],
+    isEnabled: shouldFetchCommentReplies,
+  })
 
-  if (error) throw new Error(ERRORS.comments.failedrepliesFetching)
+  if (error) throw new Error(APP_ERRORS.comments.failedrepliesFetching)
 
   async function handlePostUserReply() {
     await refetchReplies()
@@ -79,7 +82,7 @@ export function useComment(commentId: string) {
     replies,
     isUserReplyInputVisible,
     isRepliesVisible,
-    isLoadingReplies: isLoading ?? isValidating,
+    isLoadingReplies: isLoading ?? isRefetching,
     popoverMenuButtons,
     canEditComment,
     alertRef,

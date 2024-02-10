@@ -4,7 +4,7 @@ import { ReactNode } from 'react'
 
 import { useContentDialog } from './useConentDialog'
 
-import { ContentType } from '@/@types/contentType'
+import { ContentType } from '@/@types/ContentType'
 import { Dialog, DialogContent } from '@/app/components/Dialog'
 
 type ContentDialogProps = {

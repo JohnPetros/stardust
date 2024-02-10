@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
-import { Question } from '@/@types/quiz'
+import { Question } from '@/@types/Quiz'
 
 export type LessonStoreState = {
   currentStage: 'theory' | 'quiz' | 'rewards'

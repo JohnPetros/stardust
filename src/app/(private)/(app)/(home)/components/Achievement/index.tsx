@@ -128,7 +128,7 @@ export function Achievement({
               <div className="flex w-full items-center gap-2 text-sm text-gray-100">
                 <ProgressBar height={4} value={status?.barWidth ?? 0} />
                 <span>
-                  {status?.formatedCurrentProgress}/{data.required_count}
+                  {status?.formatedCurrentProgress}/{data.requiredCount}
                 </span>
               </div>
             )}

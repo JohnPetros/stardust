@@ -1,14 +1,14 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import type { Session } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
 import useSWR, { mutate } from 'swr'
 
-import { AuthContextValue } from '../types/authContextValue'
-import { OAuthProvider } from '../types/oAuthProvider'
+import type { AuthContextValue } from '../types/AuthContextValue'
+import type { OAuthProvider } from '../types/OAuthProvider'
+import type { Session } from '../types/Session'
 
-import type { User } from '@/@types/user'
+import type { User } from '@/@types/User'
 import { useApi } from '@/services/api'
 
 export function useAuthProvider(serverSession: Session | null) {
@@ -33,6 +33,8 @@ export function useAuthProvider(serverSession: Session | null) {
     getUser
   )
 
+  if (fetchUserError) console.error(fetchUserError)
+
   async function signIn(email: string, password: string) {
     try {
       const session = await api.signIn(email, password)
@@ -42,8 +44,6 @@ export function useAuthProvider(serverSession: Session | null) {
       throw new Error()
     }
   }
-
-  if (fetchUserError) console.error(fetchUserError)
 
   async function signUp(email: string, password: string) {
     return await api.signUp(email, password)

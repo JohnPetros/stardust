@@ -2,20 +2,21 @@
 
 import { useMemo } from 'react'
 
-import { AchievementsController } from './controllers/achievementsController'
-import { AuthController } from './controllers/authController'
-import { AvatarsController } from './controllers/avatarsController'
-import { CategoriesController } from './controllers/categoriesController'
-import { CdnController } from './controllers/cdnController'
-import { ChallengesController } from './controllers/challengesController'
-import { CommentsController } from './controllers/commentsController'
-import { DocsController } from './controllers/docsController'
-import { PlanetsController } from './controllers/planetsController'
-import { PlaygroundsController } from './controllers/playgroundsController'
-import { RankingsController } from './controllers/rankingController'
-import { RocketsController } from './controllers/rocketController'
-import { StarsController } from './controllers/starsController'
-import { UsersController } from './controllers/usersController'
+import { SupabaseAchievementsController } from './controllers/SupabaseAchievementsController'
+import { SupabaseAuthController } from './controllers/SupabaseAuthController'
+import { SupabaseAvatarsController } from './controllers/SupabaseAvatarsController'
+import { SupabaseCategoriesController } from './controllers/SupabaseCategoriesController'
+import { SupabaseChallengesController } from './controllers/SupabaseChallengesController'
+import { SupabaseCommentsController } from './controllers/SupabaseCommentsController'
+import { SupabaseDocsController } from './controllers/SupabaseDocsController'
+import { SupabasePlanetsController } from './controllers/SupabasePlanetsController'
+import { SupabasePlaygroundsController } from './controllers/SupabasePlaygroundsController'
+import { SupabaseRankingsController } from './controllers/SupabaseRankingController'
+import { SupabaseRocketsController } from './controllers/SupabaseRocketController'
+import { SupabaseStarsController } from './controllers/SupabaseStarsController'
+import { SupabaseStorageController } from './controllers/SupabaseStorageController'
+import { SupabaseUsersController } from './controllers/SupabaseUsersController'
+import { SupabaseWinnersController } from './controllers/SupabaseWinnersController'
 
 import { useSupabaseContext } from '@/contexts/SupabaseContext/hooks/useSupabaseContext'
 
@@ -24,20 +25,21 @@ export function useSupabaseApi() {
 
   const supabaseApi = useMemo(() => {
     return {
-      ...AchievementsController(supabase),
-      ...RocketsController(supabase),
-      ...AuthController(supabase),
-      ...AvatarsController(supabase),
-      ...CategoriesController(supabase),
-      ...CdnController(supabase),
-      ...ChallengesController(supabase),
-      ...PlanetsController(supabase),
-      ...RankingsController(supabase),
-      ...StarsController(supabase),
-      ...UsersController(supabase),
-      ...CommentsController(supabase),
-      ...DocsController(supabase),
-      ...PlaygroundsController(supabase),
+      ...SupabaseAuthController(supabase),
+      ...SupabaseUsersController(supabase),
+      ...SupabaseDocsController(supabase),
+      ...SupabaseStarsController(supabase),
+      ...SupabaseRocketsController(supabase),
+      ...SupabaseAvatarsController(supabase),
+      ...SupabasePlanetsController(supabase),
+      ...SupabaseStorageController(supabase),
+      ...SupabaseWinnersController(supabase),
+      ...SupabaseRankingsController(supabase),
+      ...SupabaseCommentsController(supabase),
+      ...SupabaseCategoriesController(supabase),
+      ...SupabaseChallengesController(supabase),
+      ...SupabasePlaygroundsController(supabase),
+      ...SupabaseAchievementsController(supabase),
     }
   }, [supabase])
 

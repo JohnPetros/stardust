@@ -2,7 +2,8 @@
 import * as Avatar from '@radix-ui/react-avatar'
 import Image from 'next/image'
 
-import { useAvatar } from '@/hooks/useAvatar'
+import { useUserAvatar } from './useUserAvatar'
+
 import { useApi } from '@/services/api'
 
 type UserAvatarProps = {
@@ -11,8 +12,9 @@ type UserAvatarProps = {
 }
 
 export function UserAvatar({ avatarId, size }: UserAvatarProps) {
-  const { avatar } = useAvatar(avatarId)
+  const avatar = useUserAvatar(avatarId)
   const { getImage } = useApi()
+  console.log('UserAvatar', { avatar })
   const avatarImage = avatar ? getImage('avatars', avatar.image) : ''
 
   return (

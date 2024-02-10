@@ -5,10 +5,10 @@ import dayjs from 'dayjs'
 
 import { BadgesList } from './components/BadgesList'
 import { RankedUsersList } from './components/RankedUsersList'
-import { WinnerUsersList } from './components/WinnerUsersList'
+import { WinnersList } from './components/WinnersList'
 
-import type { Ranking } from '@/@types/ranking'
-import type { WinnerUser } from '@/@types/user'
+import type { Ranking } from '@/@types/Ranking'
+import type { Winner } from '@/@types/Winner'
 import { Loading } from '@/app/components/Loading'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useRankedUsers } from '@/hooks/useRankedUsers'
@@ -19,38 +19,38 @@ const today = dayjs().day()
 const sunday = 0
 const restDays = today === sunday ? 7 : 7 - today
 
-export default function Ranking() {
+export function Ranking() {
   const { user, updateUser } = useAuthContext()
   const { ranking: currentRanking, rankings } = useRanking(
-    user?.ranking_id,
+    user?.rankingId,
     true
   )
   const api = useApi()
 
-  const { rankedUsers } = useRankedUsers(user?.ranking_id ?? '')
+  const { rankedUsers } = useRankedUsers(user?.rankingId ?? '')
 
   const [isLoading, setIsLoading] = useState(true)
-  const [winnerUsers, setWinnerUsers] = useState<WinnerUser[]>([])
+  const [winners, setWinners] = useState<Winner[]>([])
 
   const badgesListRef = useRef<HTMLDivElement>(null)
 
   const lastRankingPosition = rankings?.length ?? 0
-  const isAuthUserWinner = !!user?.last_position && user.last_position <= 5
+  const isAuthUserWinner = !!user?.lastPosition && user.lastPosition <= 5
 
   function getLastRankingPosition() {
     if (!currentRanking || !rankings || !user) return 0
 
     if (isAuthUserWinner && currentRanking.position !== lastRankingPosition) {
       return currentRanking.position - 1
-    } else if (user.is_loser) {
+    } else if (user.isLoser) {
       return currentRanking.position + 1
     } else {
       return currentRanking.position
     }
   }
 
-  function sortWinnerUsers(winnersUsers: WinnerUser[]) {
-    return winnersUsers.sort((a: WinnerUser, b: WinnerUser) => {
+  function sortWinners(winnersUsers: Winner[]) {
+    return winnersUsers.sort((a: Winner, b: Winner) => {
       if (a.position === 2) {
         return -1
       }
@@ -75,13 +75,13 @@ export default function Ranking() {
         (ranking) => ranking.position === lastWeekRankingPosition
       )!
 
-      const winnersUsers = await api.getWinnerUsers(lastWeekRanking.id)
+      const winnersUsers = await api.getWinnersByRankingId(lastWeekRanking.id)
 
-      const sortedWinnerUsers = sortWinnerUsers(winnersUsers)
+      const sortedWinners = sortWinners(winnersUsers)
 
-      setWinnerUsers(sortedWinnerUsers)
+      setWinners(sortedWinners)
 
-      await updateUser({ did_update_ranking: false })
+      await updateUser({ didUpdateRanking: false })
     } catch (error) {
       console.error(error)
     } finally {
@@ -89,8 +89,12 @@ export default function Ranking() {
     }
   }
 
+  function handleHideWinners() {
+    setWinners([])
+  }
+
   useEffect(() => {
-    if (user?.did_update_ranking) {
+    if (user?.didUpdateRanking) {
       showWinners()
       return
     }
@@ -112,13 +116,13 @@ export default function Ranking() {
 
       {user && rankedUsers && rankings && currentRanking && (
         <>
-          {winnerUsers.length > 0 && !isLoading ? (
-            <WinnerUsersList
-              winnerUsers={winnerUsers}
+          {winners.length > 0 && !isLoading ? (
+            <WinnersList
+              winners={winners}
               currentRanking={currentRanking}
-              setWinnerUsers={setWinnerUsers}
               isAuthUserWinner={isAuthUserWinner}
               lastRankingPosition={lastRankingPosition}
+              onHideWinners={handleHideWinners}
             />
           ) : (
             <>

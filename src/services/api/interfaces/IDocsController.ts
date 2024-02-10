@@ -1,4 +1,4 @@
-import type { Doc } from '@/@types/doc'
+import type { Doc } from '@/@types/Doc'
 
 export interface IDocsController {
   getDocsOrderedByPosition(): Promise<Doc[]>

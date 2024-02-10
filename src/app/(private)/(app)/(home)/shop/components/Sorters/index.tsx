@@ -1,7 +1,7 @@
 import { useSorters } from './useSorters'
 
-import { Order } from '@/@types/order'
 import { Select } from '@/app/components/Select'
+import { Order } from '@/services/api/types/Order'
 
 type SortersProps = {
   onPriceOrderChange: (order: Order) => void

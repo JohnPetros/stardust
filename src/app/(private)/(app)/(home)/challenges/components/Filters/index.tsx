@@ -7,7 +7,7 @@ import { Select } from '../../../../../../components/Select'
 import { CategoriesFilter } from './CateogoriesFilter'
 import { Tag } from './Tag'
 
-import type { Category } from '@/@types/category'
+import type { Category } from '@/@types/Category'
 import { Search } from '@/app/components/Search'
 import {
   Difficulty,

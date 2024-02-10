@@ -7,7 +7,7 @@ import { twMerge } from 'tailwind-merge'
 import { DragItem } from './DragItem'
 import { getDragItemWidth } from '.'
 
-import { DraggrableItem } from '@/@types/quiz'
+import { DraggrableItem } from '@/@types/Quiz'
 import { useLessonStore } from '@/stores/lessonStore'
 
 interface DropZoneProps {

@@ -58,7 +58,7 @@ export function ResetPasswordDialog({ children }: ResetPasswordDialogProps) {
               type="password"
               icon={LockSimple}
               {...register('password_confirmation')}
-              error={String(errors.password_confirmation?.message)}
+              error={String(APP_ERRORS.password_confirmation?.message)}
               placeholder="********"
             />
             <Button onClick={handleSubmit} isLoading={isLoading}>

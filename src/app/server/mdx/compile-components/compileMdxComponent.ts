@@ -8,7 +8,7 @@ const CONTENT_PLACEHOLDER = '@component-content'
 export async function compileMdxComponent(component: string) {
   const componentContent = getComponentContent(component)
 
-  if (!componentContent) throw new Error(ERRORS.mdxFailedCompiling)
+  if (!componentContent) throw new Error(APP_ERRORS.mdxFailedCompiling)
 
   const componentToBeCompiled = component.replace(
     componentContent,

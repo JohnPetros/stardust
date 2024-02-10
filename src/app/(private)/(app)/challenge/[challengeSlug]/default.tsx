@@ -1,35 +1,29 @@
-import { notFound } from 'next/navigation'
+import { _handleChallengePage } from './actions/_handleChallengePage'
+import { ChallengeHeader } from './components/ChallengeHeader'
 
-import { getChallenge } from './actions/getChallenge'
-import { Header } from './components/ChallengeHeader'
-
-import { Challenge } from '@/@types/Challenge'
-import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
-import { AuthController } from '@/services/api/supabase/controllers/authController'
-import { ERRORS } from '@/utils/constants'
-
-let challenge: Challenge
+import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseServerClient'
+import { SupabaseAuthController } from '@/services/api/supabase/controllers/SupabaseAuthController'
+import { SupabaseChallengesController } from '@/services/api/supabase/controllers/SupabaseChallengesController'
+import { SupabaseDocsController } from '@/services/api/supabase/controllers/SupabaseDocsController'
 
 type ChallengePageProps = {
   params: { challengeSlug: string }
 }
 
-export default async function DefaultChallengePage({
+export default async function ChallengePage({
   params: { challengeSlug },
 }: ChallengePageProps) {
-  const supabase = createSupabaseServerClient()
-  const authController = AuthController(supabase)
+  const supabase = SupabaseServerClient()
+  const authController = SupabaseAuthController(supabase)
+  const challengesController = SupabaseChallengesController(supabase)
+  const docsController = SupabaseDocsController(supabase)
 
-  const userId = await authController.getUserId()
+  const { challenge, userVote } = await _handleChallengePage({
+    challengeSlug,
+    authController,
+    challengesController,
+    docsController,
+  })
 
-  if (!userId) throw new Error(ERRORS.auth.userNotFound)
-
-  try {
-    challenge = await getChallenge(challengeSlug, userId)
-  } catch (error) {
-    console.error(error)
-    notFound()
-  }
-
-  return <Header challenge={challenge} />
+  return <ChallengeHeader challenge={challenge} userVote={userVote} />
 }

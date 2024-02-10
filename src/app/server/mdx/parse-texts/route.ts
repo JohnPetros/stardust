@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { getMdxComponent } from './getMdxComponent'
 
-import type { Text } from '@/@types/text'
+import type { Text } from '@/@types/Text'
 
 export async function POST(request: NextRequest) {
   const { texts } = (await request.json()) as { texts: Text[] }

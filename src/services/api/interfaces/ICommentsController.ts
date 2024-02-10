@@ -1,5 +1,6 @@
-import type { Comment } from '@/@types/comment'
-import type { Order } from '@/@types/order'
+import { Order } from '../types/Order'
+
+import type { Comment } from '@/@types/Comment'
 
 export interface ICommentsController {
   getFilteredComments(
@@ -12,7 +13,7 @@ export interface ICommentsController {
   editComment(commentId: string, userId: string, content: string): Promise<void>
   deleteComment(commentId: string, userId: string): Promise<void>
   postComment(
-    comment: Omit<Comment, 'id' | 'user'>,
+    comment: Pick<Comment, 'content' | 'challengeId' | 'parentCommentId'>,
     userId: string
   ): Promise<void>
   addUpvotedComment(commentId: string, userId: string): Promise<void>

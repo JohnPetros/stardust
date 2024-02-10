@@ -4,7 +4,7 @@ import {
   DragAndDropQuestion,
   OpenQuestion,
   SelectionQuestion,
-} from '@/@types/quiz'
+} from '@/@types/Quiz'
 
 type Questions = [
   SelectionQuestion,

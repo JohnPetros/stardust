@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { v4 as uuid } from 'uuid'
 
-import { Text } from '@/@types/text'
+import { Text } from '@/@types/Text'
 import { REGEX } from '@/utils/constants'
 import { formatSpecialCharacters, getComponentContent } from '@/utils/helpers'
 

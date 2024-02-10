@@ -7,7 +7,7 @@ import { twMerge } from 'tailwind-merge'
 import { ShopButton } from '../../ShopButton'
 import { useAvatarItem } from '../AvatarItem/useAvatarItem'
 
-import { Avatar } from '@/@types/avatar'
+import { Avatar } from '@/@types/Avatar'
 
 const avatarVariants: Variants = {
   hidden: {
@@ -62,7 +62,7 @@ export function AvatarItem({ data, addUserAcquiredAvatar }: AvatarItemProps) {
         </div>
 
         <ShopButton
-          isAcquired={data.isAcquired}
+          isAcquired={data.isAcquired ?? false}
           isBuyable={isBuyable}
           isSelected={isSelected}
           shopHandler={handleShopButton}

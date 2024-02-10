@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import type { TestCase as TestCaseData } from '@/@types/challenge'
+import type { ChallengeTestCase } from '@/@types/Challenge'
 import {
   ChallengeRewardsPayload,
   StarChallengeRewardsPayload,
-} from '@/@types/rewards'
+} from '@/@types/Rewards'
 import { setCookie } from '@/app/server/actions/setCookie'
 import { useBreakpoint } from '@/hooks/useBreakpoint'
 import { useChallengeStore } from '@/stores/challengeStore'
@@ -35,11 +35,11 @@ export function useResult() {
   async function showRewards() {
     if (!challenge) return
 
-    const currentSeconds = Number(localStorage.getItem(STORAGE.secondsCounter))
+    const currentSeconds = Number(
+      localStorage.getItem(STORAGE.keys.secondsCounter)
+    )
 
-    console.log({ currentSeconds })
-
-    if (challenge?.star_id) {
+    if (challenge?.starId) {
       const rewardsPayload: StarChallengeRewardsPayload = {
         'star-challenge': {
           seconds: currentSeconds,
@@ -47,12 +47,15 @@ export function useResult() {
           challengeId: challenge?.id,
           difficulty: challenge?.difficulty,
           isCompleted: challenge?.isCompleted ?? false,
-          starId: challenge?.star_id,
+          starId: challenge?.starId,
         },
       }
 
-      await setCookie(COOKIES.rewardsPayload, JSON.stringify(rewardsPayload))
-      localStorage.removeItem(STORAGE.secondsCounter)
+      await setCookie(
+        COOKIES.keys.rewardsPayload,
+        JSON.stringify(rewardsPayload)
+      )
+      localStorage.removeItem(STORAGE.keys.secondsCounter)
       router.push(ROUTES.private.rewards)
       return
     }
@@ -67,7 +70,7 @@ export function useResult() {
       },
     }
 
-    await setCookie(COOKIES.rewardsPayload, JSON.stringify(rewardsPayload))
+    await setCookie(COOKIES.keys.rewardsPayload, JSON.stringify(rewardsPayload))
     router.push(ROUTES.private.rewards)
     return
   }
@@ -98,9 +101,12 @@ export function useResult() {
   useEffect(() => {
     if (!challenge) return
 
-    const { test_cases } = challenge
+    const { testCases } = challenge
 
-    function verifyResult({ expectedOutput }: TestCaseData, index: number) {
+    function verifyResult(
+      { expectedOutput }: ChallengeTestCase,
+      index: number
+    ) {
       const userResult = userOutput[index]
 
       const isCorrect = compareArrays(
@@ -113,18 +119,15 @@ export function useResult() {
       return isCorrect
     }
 
-    if (userOutput.length === test_cases.length) {
+    if (userOutput.length === testCases.length) {
       tabHandler?.showResultTab()
 
-      setResults(test_cases.map(verifyResult))
+      setResults(testCases.map(verifyResult))
     }
   }, [userOutput, challenge, tabHandler, setResults])
 
   useEffect(() => {
-    if (
-      userOutput?.length === challenge?.test_cases.length &&
-      results?.length
-    ) {
+    if (userOutput?.length === challenge?.testCases.length && results?.length) {
       const isAnswerCorrect = results.every((result) => result === true)
 
       if (!isAnswerCorrect) {

@@ -3,9 +3,9 @@ import { useRef } from 'react'
 
 import { Badge } from './Badge'
 
-import type { Ranking } from '@/@types/ranking'
+import type { Ranking } from '@/@types/Ranking'
 
-interface BadgesListProps {
+type BadgesListProps = {
   rankings: Ranking[]
   currentRanking: Ranking
 }

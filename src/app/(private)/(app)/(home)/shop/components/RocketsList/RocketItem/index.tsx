@@ -1,4 +1,5 @@
 'use client'
+
 import { motion, Variants } from 'framer-motion'
 import Image from 'next/image'
 import { twMerge } from 'tailwind-merge'
@@ -7,7 +8,7 @@ import { ShopButton } from '../../ShopButton'
 
 import { useRocketItem } from './useRocketItem'
 
-import type { Rocket } from '@/@types/rocket'
+import type { Rocket } from '@/@types/Rocket'
 
 const rocketVariants: Variants = {
   hidden: {
@@ -122,7 +123,7 @@ export function RocketItem({ data, addUserAcquiredRocket }: RocketProps) {
         </div>
 
         <ShopButton
-          isAcquired={data.isAcquired}
+          isAcquired={data.isAcquired ?? false}
           isBuyable={isBuyable}
           isSelected={isSelected}
           shopHandler={handleShopButton}

@@ -92,7 +92,7 @@ export function HomeHeader() {
               <strong>{user?.name}</strong>
               <small>{user?.email}</small>
             </div>
-            <UserAvatar avatarId={user?.avatar_id} size={48} />
+            <UserAvatar avatarId={user?.avatarId} size={48} />
           </div>
         )}
       </motion.header>

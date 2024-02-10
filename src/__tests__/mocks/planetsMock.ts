@@ -1,6 +1,6 @@
 import { starsMock } from './starsMock'
 
-import { Planet } from '@/@types/planet'
+import { Planet } from '@/@types/Planet'
 
 export const planetsMock: Planet[] = [
   {

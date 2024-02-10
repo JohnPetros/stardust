@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { ImperativePanelHandle } from 'react-resizable-panels'
 
-import { PanelsOffset } from '../../actions/getPanelsOffset'
+import { PanelsOffset } from '../../actions/_getPanelsOffset'
 
 import { setCookie } from '@/app/server/actions/setCookie'
 import { useChallengeStore } from '@/stores/challengeStore'
@@ -31,7 +31,10 @@ export function useChallengeLayout() {
       codeEditorPanelSize: codeEditorPanelRef.current?.getSize(),
     }
 
-    await setCookie(COOKIES.challengePanelsOffset, JSON.stringify(newLayout))
+    await setCookie(
+      COOKIES.keys.challengePanelsOffset,
+      JSON.stringify(newLayout)
+    )
   }
 
   useEffect(() => {
@@ -40,7 +43,7 @@ export function useChallengeLayout() {
     timeout = setTimeout(() => setIsTransitionPageVisible(false), 5000)
 
     return () => {
-      localStorage.removeItem(STORAGE.challengeCode)
+      localStorage.removeItem(STORAGE.keys.challengeCode)
       clearTimeout(timeout)
       resetState()
     }

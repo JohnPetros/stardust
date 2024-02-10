@@ -9,13 +9,6 @@ import { useApi } from '@/services/api'
 import { SignUpForm } from '@/services/validation/types/signUpForm'
 import { signUpFormSchema } from '@/services/validation/zod/schemas/signUpFormSchema'
 
-export const SIGN_UP_ERRORS: Record<string, string> = {
-  'For security purposes, you can only request this after 50 seconds.':
-    'Por questões de segurança, espere 50 segundos para tentar cadastrar novamente',
-  'Email rate limit exceeded':
-    'Você execedeu o limite permitido de tentativas de cadastro',
-}
-
 export function useSignUpForm() {
   const {
     register,
@@ -32,13 +25,12 @@ export function useSignUpForm() {
 
   const toastRef = useRef<ToastRef>(null)
 
-  function handleError(error: string) {
-    console.error(error)
-    const message = SIGN_UP_ERRORS[error] ?? 'Erro ao tentar fazer cadastro'
+  function handleError(errorMessage: string) {
+    console.error(errorMessage)
 
     toastRef.current?.open({
       type: 'error',
-      message,
+      message: errorMessage,
     })
   }
 
@@ -68,7 +60,7 @@ export function useSignUpForm() {
       const response = await signUp(email, password)
 
       if (response?.error) {
-        handleError(response?.error.message)
+        handleError(response?.error)
         return
       }
 

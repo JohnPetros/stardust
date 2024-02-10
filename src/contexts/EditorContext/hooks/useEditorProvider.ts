@@ -7,14 +7,8 @@ import { EditorContextState } from '../types/editorContextState'
 
 import { EDITOR_DEFAULT_CONFIG, STORAGE } from '@/utils/constants'
 
-const EditorContextState: EditorContextState = {
-  fontSize: EDITOR_DEFAULT_CONFIG.fontSize,
-  tabSize: EDITOR_DEFAULT_CONFIG.tabSize,
-  theme: EDITOR_DEFAULT_CONFIG.theme,
-}
-
 export function useEditorProvider() {
-  const storedEditorConfig = localStorage.getItem(STORAGE.editorConfig)
+  const storedEditorConfig = localStorage.getItem(STORAGE.keys.editorConfig)
   const initalEditorConfigData = storedEditorConfig
     ? JSON.parse(storedEditorConfig)
     : EDITOR_DEFAULT_CONFIG
@@ -22,7 +16,7 @@ export function useEditorProvider() {
   const [state, dispatch] = useReducer(EditorReducer, initalEditorConfigData)
 
   function getEditorConfig(): EditorContextState {
-    const storedData = localStorage.getItem(STORAGE.editorConfig)
+    const storedData = localStorage.getItem(STORAGE.keys.editorConfig)
 
     const editorData = storedData
       ? JSON.parse(storedData)
@@ -36,7 +30,7 @@ export function useEditorProvider() {
     newEditorData: Partial<EditorContextState>
   ) {
     localStorage.setItem(
-      STORAGE.editorConfig,
+      STORAGE.keys.editorConfig,
       JSON.stringify({ ...currentEditorData, ...newEditorData })
     )
     return getEditorConfig()
@@ -57,8 +51,6 @@ export function useEditorProvider() {
         return state
     }
   }
-
-  useEffect(() => {}, [])
 
   return {
     state,

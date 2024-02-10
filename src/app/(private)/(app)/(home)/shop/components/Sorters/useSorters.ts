@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Order } from '@/@types/order'
+import type { Order } from '@/services/api/types/Order'
 
 type PriceOrder = 'Menor preço' | 'Maior preço'
 

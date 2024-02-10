@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { AuthConfirmationError } from '@/@types/authConfirmationError'
-import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
-import { AuthController } from '@/services/api/supabase/controllers/authController'
+import { AuthConfirmationError } from '@/@types/AuthConfirmationError'
+import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseServerClient'
+import { SupabaseAuthController } from '@/services/api/supabase/controllers/SupabaseAuthController'
 import { COOKIES, ROUTES } from '@/utils/constants'
 import { getSearchParams } from '@/utils/helpers/getSearchParams'
 
@@ -23,8 +23,8 @@ export async function GET(request: NextRequest) {
     return redirectToSignIn('token_error')
   }
 
-  const supabase = createSupabaseServerClient()
-  const authController = AuthController(supabase)
+  const supabase = SupabaseServerClient()
+  const authController = SupabaseAuthController(supabase)
 
   switch (action) {
     case 'signup_confirmation': {
@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
           { status: 302 }
         )
 
-        redirect.cookies.set(COOKIES.shouldReturnPassword, 'true', {
+        redirect.cookies.set(COOKIES.keys.shouldReturnPassword, 'true', {
           path: '/',
           httpOnly: true,
           maxAge: 60 * 15, // 15 minutes

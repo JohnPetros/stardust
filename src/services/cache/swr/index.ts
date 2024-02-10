@@ -5,7 +5,7 @@ import useSWR from 'swr'
 import { Cache } from '../types/cache'
 
 export function useSWRCache<Data>({
-  tag,
+  key,
   fetcher,
   dependencies,
   isEnabled = true,
@@ -14,10 +14,11 @@ export function useSWRCache<Data>({
     ? dependencies.map((dependency, index) => `dep_${index + 1}=${dependency}`)
     : ''
 
-  const { data, error, isLoading, mutate } = useSWR(
-    () => (isEnabled ? `${tag}?${dependenciesQuery}` : null),
+  const { data, error, isLoading, isValidating, mutate } = useSWR(
+    () => (isEnabled ? `${key}?${dependenciesQuery}` : null),
     fetcher
   )
+
   function mutateCache(newData: Data) {
     mutate(newData)
   }
@@ -26,6 +27,7 @@ export function useSWRCache<Data>({
     data,
     error,
     isLoading,
+    isRefetching: isValidating,
     refetch: () => mutate(),
     mutate: mutateCache,
   }

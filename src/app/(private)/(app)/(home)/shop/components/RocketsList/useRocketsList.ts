@@ -2,10 +2,10 @@
 import { useMemo, useState } from 'react'
 import useSWR, { mutate } from 'swr'
 
-import { Order } from '@/@types/order'
-import { Rocket } from '@/@types/rocket'
+import type { Rocket } from '@/@types/Rocket'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useApi } from '@/services/api'
+import type { Order } from '@/services/api/types/Order'
 import { calculatePage } from '@/utils/helpers'
 
 const ITEMS_PER_PAGE = 6
@@ -33,7 +33,7 @@ export function useRocketsList() {
 
   async function getRockets() {
     if (user?.id)
-      return await api.getRockets({
+      return await api.getFilteredRockets({
         search,
         offset,
         limit: offset + ITEMS_PER_PAGE - 1,

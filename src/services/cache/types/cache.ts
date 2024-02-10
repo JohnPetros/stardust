@@ -1,6 +1,7 @@
 export type Cache<Data> = {
-  tag: string
+  key: string
   fetcher: () => Promise<Data | undefined>
   dependencies?: unknown[]
   isEnabled?: boolean
+  refreshInterval?: number
 }

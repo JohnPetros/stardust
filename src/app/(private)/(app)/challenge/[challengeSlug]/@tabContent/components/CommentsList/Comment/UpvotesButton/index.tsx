@@ -8,18 +8,16 @@ import { useUpvotesButton } from './useUpvotesButton'
 export type UpvotesButtonProps = {
   commentId: string
   isCommentUpvoted: boolean
-  initialUpvotes: number
+  initialUpvotesCount: number
 }
 
 export function UpvotesButton({
-  initialUpvotes,
+  initialUpvotesCount,
   commentId,
   isCommentUpvoted,
 }: UpvotesButtonProps) {
-  console.log({ isCommentUpvoted })
-
   const { handleToggleUpvoteComment, isUpvoted, upvotes } = useUpvotesButton({
-    initialUpvotes,
+    initialUpvotesCount,
     commentId,
     isCommentUpvoted,
   })

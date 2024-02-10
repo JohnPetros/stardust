@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge'
 
 import { useCategoriesFilter } from './useCategoriesFilter'
 
-import type { Category } from '@/@types/category'
+import type { Category } from '@/@types/Category'
 import { Search } from '@/app/components/Search'
 
 interface CategoriesProps {

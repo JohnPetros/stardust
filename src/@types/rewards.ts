@@ -1,4 +1,4 @@
-import type { Difficulty } from './challenge'
+import type { ChallengeDifficulty } from './Challenge'
 
 export type RewardsOrigin = 'star' | 'star-challenge' | 'challenge'
 
@@ -11,7 +11,7 @@ export type StarPayload = {
 
 export type StarChallengePayload = {
   incorrectAnswers: number
-  difficulty: Difficulty
+  difficulty: ChallengeDifficulty
   isCompleted: boolean
   challengeId: string
   starId: string

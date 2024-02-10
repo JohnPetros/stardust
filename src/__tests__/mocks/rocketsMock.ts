@@ -1,4 +1,4 @@
-import { Rocket } from '@/@types/rocket'
+import { Rocket } from '@/@types/Rocket'
 
 export const rocketsMock: Rocket[] = [
   {

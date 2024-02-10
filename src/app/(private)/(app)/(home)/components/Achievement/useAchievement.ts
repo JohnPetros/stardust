@@ -16,7 +16,7 @@ export function useAchievement({
   icon,
   id,
   reward,
-  required_count,
+  requiredCount,
   currentProgress,
   isRescuable,
 }: Achievement) {
@@ -34,18 +34,18 @@ export function useAchievement({
 
   useEffect(() => {
     if (currentProgress || currentProgress === 0) {
-      const percentage = (currentProgress / required_count) * 100
+      const percentage = (currentProgress / requiredCount) * 100
       const barWidth = percentage > 100 ? 100 : percentage
       const canRescue = Boolean(isRescuable)
 
       const formatedCurrentProgress =
-        currentProgress && currentProgress >= required_count
-          ? required_count
+        currentProgress && currentProgress >= requiredCount
+          ? requiredCount
           : currentProgress
 
       setStatus({ barWidth, canRescue, formatedCurrentProgress })
     }
-  }, [currentProgress, isRescuable, required_count])
+  }, [currentProgress, isRescuable, requiredCount])
 
   return {
     iconImage,

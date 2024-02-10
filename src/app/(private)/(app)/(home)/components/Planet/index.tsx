@@ -6,7 +6,7 @@ import Image from 'next/image'
 
 import { Star } from '../Star'
 
-import type { Planet as PlanetData } from '@/@types/planet'
+import type { Planet as PlanetData } from '@/@types/Planet'
 import { useApi } from '@/services/api'
 
 const planetSignAnimations: Variants = {
@@ -52,7 +52,12 @@ function PlanetComponent({
         {stars.map((star) => (
           <Star
             key={star.id}
-            data={star}
+            id={star.id}
+            name={star.name}
+            number={star.number}
+            slug={star.slug}
+            isChallenge={star.isChallenge ?? false}
+            isUnlocked={star.isUnlocked ?? false}
             isLastUnlockedStar={lastUnlockedStarId === star.id}
           />
         ))}

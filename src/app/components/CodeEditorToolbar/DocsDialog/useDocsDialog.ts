@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import useSWR from 'swr'
 
-import { Doc } from '@/@types/doc'
+import { Doc } from '@/@types/Doc'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useApi } from '@/services/api'
-import { ERRORS } from '@/utils/constants'
+import { APP_ERRORS } from '@/utils/constants'
 
 export function useDocsDialog() {
   const { user } = useAuthContext()
@@ -53,7 +53,7 @@ export function useDocsDialog() {
 
   if (error) {
     console.error(error)
-    throw new Error(ERRORS.documentation.failedDocsFetching)
+    throw new Error(APP_ERRORS.documentation.failedDocsFetching)
   }
 
   function handleDocButton(docId: string) {

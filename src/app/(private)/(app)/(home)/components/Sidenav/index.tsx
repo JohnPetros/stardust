@@ -8,8 +8,9 @@ import Link from 'next/link'
 import { AchievementsList } from '../AchievementsList'
 import { CounterBadge } from '../CounterBadge'
 import { NavButton } from '../NavButton'
-import { SidenavButton } from '../SidenavButton'
 import { SignOutAlert } from '../SignOutAlert'
+
+import { SidenavButton } from './SidenavButton'
 
 import { useAchivementsContext } from '@/contexts/AchievementsContext/hooks/useAchivementsContext'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'

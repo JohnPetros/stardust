@@ -33,7 +33,7 @@ export function usePlaygroundHeader(
         await api.updatePlaygroundTitleById(title, playgroundId)
       } catch (error) {
         console.error(error)
-        toast.show(ERRORS.playgrounds.failedTitleEdition, {
+        toast.show(APP_ERRORS.playgrounds.failedTitleEdition, {
           type: 'error',
           seconds: 8,
         })

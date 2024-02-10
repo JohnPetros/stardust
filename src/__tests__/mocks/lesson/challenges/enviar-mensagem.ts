@@ -1,4 +1,4 @@
-import { Challenge } from '@/@types/challenge'
+import { Challenge } from '@/@types/Challenge'
 
 export const challenge: Partial<Challenge> = {
   title: 'Enviar mensagem',

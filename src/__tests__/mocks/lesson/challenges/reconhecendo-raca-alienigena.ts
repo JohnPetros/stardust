@@ -1,4 +1,4 @@
-import type { Challenge } from '@/@types/challenge'
+import type { Challenge } from '@/@types/Challenge'
 
 export const challenge: Challenge = {
   id: 'Reconhecendo raça alienígena',

@@ -7,7 +7,7 @@ import { QuestionTitle } from '../QuestionTitle'
 import { Option } from './Option'
 import { useSelectionQuestion } from './useSelectionQuestion'
 
-import type { SelectionQuestion as SelectionQuestionData } from '@/@types/quiz'
+import type { SelectionQuestion as SelectionQuestionData } from '@/@types/Quiz'
 import { CodeSnippet } from '@/app/components/CodeSnippet'
 import { useLessonStore } from '@/stores/lessonStore'
 

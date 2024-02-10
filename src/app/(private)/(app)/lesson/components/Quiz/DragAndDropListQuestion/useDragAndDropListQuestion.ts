@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 
-import type { SortableItem as SortableItemData } from '@/@types/quiz'
+import type { SortableItem as SortableItemData } from '@/@types/Quiz'
 import { useLessonStore } from '@/stores/lessonStore'
 import { compareArrays, reorderItems } from '@/utils/helpers'
 

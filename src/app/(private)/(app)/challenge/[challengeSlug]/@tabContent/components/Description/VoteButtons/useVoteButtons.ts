@@ -12,7 +12,7 @@ export function useVoteButtons() {
   const userVote = useChallengeStore((store) => store.state.userVote)
   const setUserVote = useChallengeStore((store) => store.actions.setUserVote)
 
-  const [upvotes, setUpvotes] = useState(challenge?.upvotes ?? 0)
+  const [upvotes, setUpvotes] = useState(challenge?.upvotesCount ?? 0)
 
   const api = useApi()
   const { user } = useAuthContext()

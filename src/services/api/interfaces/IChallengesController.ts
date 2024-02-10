@@ -1,6 +1,6 @@
-import type { Challenge } from '@/@types/challenge'
-import type { ChallengeSummary } from '@/@types/challengeSummary'
-import type { Vote } from '@/@types/vote'
+import type { Challenge } from '@/@types/Challenge'
+import type { ChallengeSummary } from '@/@types/ChallengeSummary'
+import type { Vote } from '@/@types/Vote'
 
 export type GetFilteredChallengesParams = {
   userId: string
@@ -12,7 +12,6 @@ export type GetFilteredChallengesParams = {
 
 export interface IChallengesController {
   getChallengeBySlug(challengeId: string): Promise<Challenge>
-  getChallenges(userId: string): Promise<Challenge[]>
   getChallengesSummary(userId: string): Promise<ChallengeSummary[]>
   getFilteredChallenges(
     params: GetFilteredChallengesParams

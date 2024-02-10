@@ -1,4 +1,4 @@
-import type { Text } from '@/@types/text'
+import type { Text } from '@/@types/Text'
 
 export interface IMdxController {
   compileMdxComponents(components: string[]): Promise<string[]>

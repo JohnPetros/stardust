@@ -1,10 +1,12 @@
 import { useMemo, useState } from 'react'
-import useSWR, { mutate } from 'swr'
 
-import type { Avatar } from '@/@types/avatar'
-import type { Order } from '@/@types/order'
+import type { Avatar } from '@/@types/Avatar'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useApi } from '@/services/api'
+import { Order } from '@/services/api/types/Order'
+import { useCache } from '@/services/cache'
+import { APP_ERRORS } from '@/utils/constants'
+import { CACHE } from '@/utils/constants/cache'
 import { calculatePage } from '@/utils/helpers'
 
 const ITEMS_PER_PAGE = 8
@@ -25,7 +27,7 @@ export function useAvatarsList() {
   }
 
   async function getAvatars() {
-    return await api.getAvatars({
+    return await api.getFilteredAvatars({
       search,
       offset,
       limit: offset + ITEMS_PER_PAGE - 1,
@@ -33,15 +35,18 @@ export function useAvatarsList() {
     })
   }
 
-  const { data } = useSWR(
-    () => `/avatars?page=${page}&search=${search}&priceOrder=${priceOrder}`,
-    getAvatars
-  )
+  const { data, mutate: mutateAvatars } = useCache({
+    key: CACHE.keys.filteredAvatars,
+    fetcher: getAvatars,
+    dependencies: [page, search, priceOrder],
+  })
 
-  const { data: userAcquiredAvatarsIds } = useSWR(
-    user?.id ? '/users_acquired_avatars_ids' : null,
-    getUserAcquiredAvatarsIds
-  )
+  const { data: userAcquiredAvatarsIds, mutate: mutateAcquiredAvatarsIds } =
+    useCache({
+      key: CACHE.keys.acquiredAvatarsIds,
+      fetcher: getUserAcquiredAvatarsIds,
+      isEnabled: Boolean(user?.id),
+    })
 
   function updateAvatars(updatedAvatar: Avatar) {
     return data?.avatars.map((avatar) =>
@@ -53,24 +58,25 @@ export function useAvatarsList() {
 
   async function addUserAcquiredAvatar(avatarId: string) {
     if (user?.id) {
-      const error = await api.addUserAcquiredAvatar(avatarId, user.id)
+      try {
+        await api.addUserAcquiredAvatar(avatarId, user.id)
+      } catch (error) {
+        console.error(error)
+        throw Error(APP_ERRORS.avatars.failedAcquiring)
+      }
       const updatedAvatar = data?.avatars.find(
         (avatar) => avatar.id === avatarId
       )
       const updatedAvatars = updatedAvatar ? updateAvatars(updatedAvatar) : null
 
-      if (error) {
-        throw Error(error)
-      }
-
       if (updatedAvatar && userAcquiredAvatarsIds) {
-        mutate('/avatars', updatedAvatars, false)
+        if (updatedAvatars)
+          mutateAvatars({
+            avatars: updatedAvatars,
+            count: data?.count ?? ITEMS_PER_PAGE,
+          })
 
-        mutate(
-          '/users_acquired_avatars_ids',
-          [...userAcquiredAvatarsIds, updatedAvatar.id],
-          false
-        )
+        mutateAcquiredAvatarsIds([...userAcquiredAvatarsIds, updatedAvatar.id])
       }
     }
   }

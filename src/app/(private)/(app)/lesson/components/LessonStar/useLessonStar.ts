@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { StarRewardsPayload } from '@/@types/rewards'
-import type { Star } from '@/@types/star'
+import { StarRewardsPayload } from '@/@types/Rewards'
+import type { Star } from '@/@types/Star'
 import { setCookie } from '@/app/server/actions/setCookie'
 import { useMdx } from '@/hooks/useMdx'
 import { useLessonStore } from '@/stores/lessonStore'
@@ -36,12 +36,12 @@ export function useLessonStar(star: Star) {
       const mdxComponents = parseTextsToMdxComponents(star.texts)
       setMdxComponents(mdxComponents)
       setMdxComponentsCount(star.texts.length)
-      setQuestions(star.questions)
+      setQuestions(star.questions ?? [])
       timeout = setTimeout(() => setIsTransitionVisible(false), 1000)
     }
 
     return () => {
-      localStorage.removeItem(STORAGE.secondsCounter)
+      localStorage.removeItem(STORAGE.keys.secondsCounter)
       resetState()
       clearTimeout(timeout)
     }
@@ -56,7 +56,7 @@ export function useLessonStar(star: Star) {
   useEffect(() => {
     async function showRewards() {
       const currentSeconds = Number(
-        localStorage.getItem(STORAGE.secondsCounter)
+        localStorage.getItem(STORAGE.keys.secondsCounter)
       )
 
       const rewardsPayload: StarRewardsPayload = {
@@ -68,7 +68,10 @@ export function useLessonStar(star: Star) {
         },
       }
 
-      await setCookie(COOKIES.rewardsPayload, JSON.stringify(rewardsPayload))
+      await setCookie(
+        COOKIES.keys.rewardsPayload,
+        JSON.stringify(rewardsPayload)
+      )
       router.push(ROUTES.private.rewards)
     }
 

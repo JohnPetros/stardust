@@ -6,7 +6,6 @@ import Link from 'next/link'
 
 import { Status } from './Status'
 
-import { User as UserType } from '@/@types/user'
 import { Loading } from '@/app/components/Loading'
 import { UserAvatar } from '@/app/components/UserAvatar'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
@@ -15,19 +14,33 @@ import { useRocket } from '@/hooks/useRocket'
 import { useApi } from '@/services/api'
 import { useDate } from '@/services/date'
 
-interface UserProps {
-  data: UserType
+type UserProps = {
+  id: string
+  name: string
+  rankingId: string
+  avatarId: string
+  rocketId: string
+  level: number
+  xp: number
+  createdAt: string
 }
 
 export function User({
-  data: { id, ranking_id, rocket_id, avatar_id, name, level, xp, created_at },
+  id,
+  name,
+  level,
+  avatarId,
+  rocketId,
+  rankingId,
+  createdAt,
+  xp,
 }: UserProps) {
   const { user } = useAuthContext()
   const { format } = useDate()
   const isAuthUser = id === user?.id
 
-  const { ranking } = useRanking(ranking_id)
-  const { rocket } = useRocket(rocket_id)
+  const { ranking } = useRanking(avatarId)
+  const { rocket } = useRocket(rocketId)
   const { getImage } = useApi()
 
   if (!ranking || !rocket) return <Loading isSmall={false} />
@@ -35,12 +48,12 @@ export function User({
   const rankingImage = getImage('rankings', ranking.image)
   const rocketImage = getImage('rockets', rocket.image)
 
-  const createdAt = format(new Date(created_at), 'DD MMMM [de] YYYY')
+  const formattedCreatedAt = format(new Date(createdAt), 'DD MMMM [de] YYYY')
 
   return (
     <div className="flex flex-col border-b border-gray-300 pb-6 md:flex-row md:justify-between md:gap-6">
       <div className="flex flex-col items-center justify-center gap-3 md:flex-row md:gap-6">
-        <UserAvatar avatarId={avatar_id} size={148} />
+        <UserAvatar avatarId={avatarId} size={148} />
         <div className="flex flex-col gap-2 md:items-start">
           <strong className="mt-3 truncate text-center text-lg text-green-500">
             {name}
@@ -60,7 +73,9 @@ export function User({
               className="hidden text-lg text-green-500 md:block"
               weight="bold"
             />
-            <p className="text-sm text-gray-300">Por aqui desde {createdAt}</p>
+            <p className="text-sm text-gray-300">
+              Por aqui desde {formattedCreatedAt}
+            </p>
           </div>
         </div>
       </div>

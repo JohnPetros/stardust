@@ -7,7 +7,7 @@ import { STORAGE } from '@/utils/constants'
 
 export function useSpace() {
   const hasTransitionAnimation = Boolean(
-    localStorage.getItem(STORAGE.hasPageAnimationTransition)
+    localStorage.getItem(STORAGE.keys.hasPageAnimationTransition)
   )
 
   const { lastUnlockedStarPosition, scrollIntoLastUnlockedStar } =
@@ -25,7 +25,7 @@ export function useSpace() {
     if (!isTransitionVisible) return
 
     const timeout = setTimeout(() => setIsTransitionVisible(false), 2500)
-    localStorage.removeItem(STORAGE.hasPageAnimationTransition)
+    localStorage.removeItem(STORAGE.keys.hasPageAnimationTransition)
 
     return () => clearTimeout(timeout)
   }, [isTransitionVisible])

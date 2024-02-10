@@ -4,8 +4,8 @@ import { AlignLeft, AlignRight, ArrowLeft, Layout } from '@phosphor-icons/react'
 
 import { useChallengeHeader } from './useChallengeHeader'
 
-import type { Challenge } from '@/@types/challenge'
-import type { Vote } from '@/@types/vote'
+import type { Challenge } from '@/@types/Challenge'
+import type { Vote } from '@/@types/Vote'
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { PopoverMenu, PopoverMenuButton } from '@/app/components/PopoverMenu'
@@ -15,7 +15,7 @@ type HeaderProps = {
   userVote: Vote
 }
 
-export function Header({ challenge, userVote }: HeaderProps) {
+export function ChallengeHeader({ challenge, userVote }: HeaderProps) {
   const { handleBackButton, handleLayoutButton, layout } = useChallengeHeader(
     challenge,
     userVote

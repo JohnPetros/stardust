@@ -5,7 +5,7 @@ import { tv } from 'tailwind-variants'
 
 import { UserAvatar } from '../../../../../../components/UserAvatar'
 
-import type { User as UserType } from '@/@types/user'
+import type { User as UserType } from '@/@types/User'
 import { PODIUM } from '@/utils/constants'
 
 const positionStyles = tv({
@@ -28,7 +28,7 @@ interface RankedUserProps {
 }
 
 export function RankedUser({
-  data: { id, name, avatar_id, weekly_xp },
+  data: { id, name, avatarId, weeklyXp },
   position,
   lastPositionsOffset,
   isAuthUser,
@@ -60,7 +60,7 @@ export function RankedUser({
             position
           )}
         </span>
-        <UserAvatar avatarId={avatar_id} size={48} />
+        <UserAvatar avatarId={avatarId} size={48} />
       </div>
 
       <strong
@@ -73,7 +73,7 @@ export function RankedUser({
       </strong>
 
       <strong className="block w-24 text-right uppercase text-gray-600 group-hover:text-gray-100/90">
-        {canShowXp && weekly_xp + ' xp'}
+        {canShowXp && weeklyXp + ' xp'}
       </strong>
     </Link>
   )

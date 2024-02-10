@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       achievements: {
@@ -16,8 +16,8 @@ export interface Database {
           id: string
           metric: string
           name: string
-          position: number | null
-          required_count: number | null
+          position: number
+          required_count: number
           reward: number
         }
         Insert: {
@@ -26,8 +26,8 @@ export interface Database {
           id?: string
           metric?: string
           name: string
-          position?: number | null
-          required_count?: number | null
+          position: number
+          required_count: number
           reward?: number
         }
         Update: {
@@ -36,8 +36,8 @@ export interface Database {
           id?: string
           metric?: string
           name?: string
-          position?: number | null
-          required_count?: number | null
+          position?: number
+          required_count?: number
           reward?: number
         }
         Relationships: []
@@ -80,45 +80,45 @@ export interface Database {
       }
       challenges: {
         Row: {
-          code: string | null
-          created_at: string | null
-          difficulty: string | null
+          code: string
+          created_at: string
+          difficulty: string
           doc_id: string | null
           function_name: string | null
           id: string
           slug: string
           star_id: string | null
-          test_cases: Json | null
+          test_cases: Json
           texts: Json | null
-          title: string | null
+          title: string
           user_slug: string
         }
         Insert: {
-          code?: string | null
-          created_at?: string | null
-          difficulty?: string | null
+          code: string
+          created_at?: string
+          difficulty?: string
           doc_id?: string | null
           function_name?: string | null
           id?: string
           slug: string
           star_id?: string | null
-          test_cases?: Json | null
+          test_cases: Json
           texts?: Json | null
-          title?: string | null
+          title?: string
           user_slug?: string
         }
         Update: {
-          code?: string | null
-          created_at?: string | null
-          difficulty?: string | null
+          code?: string
+          created_at?: string
+          difficulty?: string
           doc_id?: string | null
           function_name?: string | null
           id?: string
           slug?: string
           star_id?: string | null
-          test_cases?: Json | null
+          test_cases?: Json
           texts?: Json | null
-          title?: string | null
+          title?: string
           user_slug?: string
         }
         Relationships: [
@@ -180,7 +180,7 @@ export interface Database {
             foreignKeyName: "challenges_categories_challenge_id_fkey"
             columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: "challenges_list"
+            referencedRelation: "challenges_view"
             referencedColumns: ["id"]
           }
         ]
@@ -189,27 +189,27 @@ export interface Database {
         Row: {
           challenge_id: string | null
           content: string
-          created_at: string | null
+          created_at: string
           id: string
           parent_comment_id: string | null
-          user_id: string | null
+          user_slug: string
           count_comments_upvotes: number | null
         }
         Insert: {
           challenge_id?: string | null
           content: string
-          created_at?: string | null
+          created_at?: string
           id?: string
           parent_comment_id?: string | null
-          user_id?: string | null
+          user_slug?: string
         }
         Update: {
           challenge_id?: string | null
           content?: string
-          created_at?: string | null
+          created_at?: string
           id?: string
           parent_comment_id?: string | null
-          user_id?: string | null
+          user_slug?: string
         }
         Relationships: [
           {
@@ -223,7 +223,7 @@ export interface Database {
             foreignKeyName: "comments_challenge_id_fkey"
             columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: "challenges_list"
+            referencedRelation: "challenges_view"
             referencedColumns: ["id"]
           },
           {
@@ -231,20 +231,6 @@ export interface Database {
             columns: ["parent_comment_id"]
             isOneToOne: false
             referencedRelation: "comments"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "comments_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "comments_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users_view"
             referencedColumns: ["id"]
           }
         ]
@@ -378,24 +364,24 @@ export interface Database {
       rankings: {
         Row: {
           id: string
-          image: string | null
-          name: string | null
+          image: string
+          name: string
           position: number
-          reward: number | null
+          reward: number
         }
         Insert: {
           id?: string
-          image?: string | null
-          name?: string | null
+          image: string
+          name: string
           position?: number
-          reward?: number | null
+          reward: number
         }
         Update: {
           id?: string
-          image?: string | null
-          name?: string | null
+          image?: string
+          name?: string
           position?: number
-          reward?: number | null
+          reward?: number
         }
         Relationships: []
       }
@@ -427,31 +413,31 @@ export interface Database {
         Row: {
           id: string
           isChallenge: boolean | null
-          name: string | null
-          number: number | null
+          name: string
+          number: number
           planet_id: string | null
           questions: Json | null
-          slug: string | null
+          slug: string
           texts: Json | null
         }
         Insert: {
           id?: string
           isChallenge?: boolean | null
-          name?: string | null
-          number?: number | null
+          name: string
+          number: number
           planet_id?: string | null
           questions?: Json | null
-          slug?: string | null
+          slug: string
           texts?: Json | null
         }
         Update: {
           id?: string
           isChallenge?: boolean | null
-          name?: string | null
-          number?: number | null
+          name?: string
+          number?: number
           planet_id?: string | null
           questions?: Json | null
-          slug?: string | null
+          slug?: string
           texts?: Json | null
         }
         Relationships: [
@@ -635,7 +621,7 @@ export interface Database {
             foreignKeyName: "users_completed_challenges_challenge_id_fkey"
             columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: "challenges_list"
+            referencedRelation: "challenges_view"
             referencedColumns: ["id"]
           },
           {
@@ -892,7 +878,7 @@ export interface Database {
             foreignKeyName: "users_voted_challenges_challenge_id_fkey"
             columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: "challenges_list"
+            referencedRelation: "challenges_view"
             referencedColumns: ["id"]
           },
           {
@@ -913,31 +899,31 @@ export interface Database {
       }
       winners: {
         Row: {
-          avatar_id: string | null
+          avatar_id: string
           id: string
           name: string
-          position: number | null
-          ranking_id: string | null
-          user_id: string | null
-          xp: number | null
+          position: number
+          ranking_id: string
+          user_id: string
+          xp: number
         }
         Insert: {
-          avatar_id?: string | null
+          avatar_id: string
           id?: string
           name: string
-          position?: number | null
-          ranking_id?: string | null
-          user_id?: string | null
-          xp?: number | null
+          position: number
+          ranking_id: string
+          user_id: string
+          xp?: number
         }
         Update: {
-          avatar_id?: string | null
+          avatar_id?: string
           id?: string
           name?: string
-          position?: number | null
-          ranking_id?: string | null
-          user_id?: string | null
-          xp?: number | null
+          position?: number
+          ranking_id?: string
+          user_id?: string
+          xp?: number
         }
         Relationships: [
           {
@@ -972,11 +958,12 @@ export interface Database {
       }
     }
     Views: {
-      challenges_list: {
+      challenges_view: {
         Row: {
           code: string | null
           created_at: string | null
           difficulty: string | null
+          doc_id: string | null
           downvotes: number | null
           function_name: string | null
           id: string | null
@@ -985,7 +972,6 @@ export interface Database {
           test_cases: Json | null
           texts: Json | null
           title: string | null
-          topic_id: string | null
           total_completitions: number | null
           upvotes: number | null
           user_slug: string | null
@@ -993,7 +979,7 @@ export interface Database {
         Relationships: [
           {
             foreignKeyName: "challenges_doc_id_fkey"
-            columns: ["topic_id"]
+            columns: ["doc_id"]
             isOneToOne: false
             referencedRelation: "docs"
             referencedColumns: ["id"]
@@ -1118,16 +1104,17 @@ export interface Database {
           }
       get_filtered_challenges: {
         Args: {
-          userid: string
-          status: string
+          _userid: string
+          _status: string
           _difficulty: string
-          categories_ids: string[]
-          search: string
+          _categories_ids: string[]
+          _search: string
         }
         Returns: {
           code: string | null
           created_at: string | null
           difficulty: string | null
+          doc_id: string | null
           downvotes: number | null
           function_name: string | null
           id: string | null
@@ -1136,7 +1123,6 @@ export interface Database {
           test_cases: Json | null
           texts: Json | null
           title: string | null
-          topic_id: string | null
           total_completitions: number | null
           upvotes: number | null
           user_slug: string | null

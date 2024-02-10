@@ -1,4 +1,4 @@
-import type { Category } from '@/@types/category'
+import type { Category } from '@/@types/Category'
 
 export interface ICategoriesController {
   getCategories(): Promise<Category[]>

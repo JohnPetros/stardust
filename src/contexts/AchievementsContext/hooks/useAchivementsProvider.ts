@@ -106,18 +106,18 @@ export function useAchivementsProvider() {
     if (!user || achievement.isUnlocked) return false
 
     switch (achievement.metric) {
-      case 'unlocked_stars_count':
-        return user.unlocked_stars_count >= achievement.required_count + 1
-      case 'completed_planets_count':
-        return user.completed_planets_count >= achievement.required_count
-      case 'acquired_rockets_count':
-        return user.acquired_rockets_count >= achievement.required_count
-      case 'completed_challenges_count':
-        return user.completed_challenges_count >= achievement.required_count
+      case 'unlockedStarsCount':
+        return user.unlockedStarsCount >= achievement.requiredCount + 1
+      case 'completedPlanetsCount':
+        return user.completedPlanetsCount >= achievement.requiredCount
+      case 'acquiredRocketsCount':
+        return user.acquiredRocketsCount >= achievement.requiredCount
+      case 'completedChallengesCount':
+        return user.completedChallengesCount >= achievement.requiredCount
       case 'xp':
-        return user.xp >= achievement.required_count
+        return user.xp >= achievement.requiredCount
       case 'streak':
-        return user.streak >= achievement.required_count
+        return user.streak >= achievement.requiredCount
       default:
         return false
     }
@@ -147,6 +147,7 @@ export function useAchivementsProvider() {
     }
   }
 
+  // TODO: Fix useEffect dependecies
   useEffect(() => {
     if (userAchievements && !achievements.length) {
       const achievements = userAchievements.map(addCurrentProgress)
@@ -162,6 +163,7 @@ export function useAchivementsProvider() {
     }
   }, [userAchievements])
 
+  // TODO: Fix useEffect dependecies
   useEffect(() => {
     checkNewUnlockedAchivements(achievements)
   }, [user])

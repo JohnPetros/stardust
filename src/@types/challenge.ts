@@ -1,9 +1,8 @@
-import type { Category } from './Category'
 import type { Text } from './Text'
 
-export type Difficulty = 'easy' | 'medium' | 'hard'
+export type ChallengeDifficulty = 'easy' | 'medium' | 'hard'
 
-export type TestCase = {
+export type ChallengeTestCase = {
   id: number
   input: (string | number)[] | (string | number)[][]
   expectedOutput: string | number | (string | number)[]
@@ -15,18 +14,18 @@ export type Challenge = {
   title: string
   code: string
   slug: string
-  user_slug: string
-  difficulty: Difficulty
-  created_at: string
-  function_name: string | null
+  userSlug: string
+  difficulty: ChallengeDifficulty
+  createdAt: string
+  functionName: string | null
   texts: Text[]
   description: string
-  star_id: string | null
-  test_cases: TestCase[]
-  doc_id: string | null
-  upvotes: number
-  downvotes: number
-  total_completitions: number
-  categories: Category[]
+  starId: string | null
+  testCases: ChallengeTestCase[]
+  docId: string | null
+  upvotesCount: number
+  downvotesCount: number
+  totalCompletitions: number
+  categoriesNames?: string[]
   isCompleted?: boolean
 }

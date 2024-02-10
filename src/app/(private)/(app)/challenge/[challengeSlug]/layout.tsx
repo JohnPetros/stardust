@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { getPanelsOffset } from './actions/getPanelsOffset'
+import { getPanelsOffset } from './actions/_getPanelsOffset'
 import { ChallengeLayout } from './components/Layout'
 
 type ChallengeLayoutProps = {

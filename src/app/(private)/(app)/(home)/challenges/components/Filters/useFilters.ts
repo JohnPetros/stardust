@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 
-import type { Category } from '@/@types/category'
+import type { Category } from '@/@types/Category'
 import {
   Difficulty,
   Status,

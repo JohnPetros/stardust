@@ -44,12 +44,10 @@ export function useUserAchievements(userId?: string) {
   }
 
   const { data } = useCache<Achievement[]>({
-    tag: CACHE.userAchievements,
+    key: CACHE.keys.userAchievements,
     fetcher: getUserAchievements,
     dependencies: [userId],
   })
-
-  console.log({ data })
 
   return { userAchievements: data }
 }

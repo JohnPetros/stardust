@@ -6,10 +6,10 @@ import { Planet } from '../Planet'
 
 import { useSpace } from './useSpace'
 
-import type { Planet as PlanetData } from '@/@types/planet'
+import type { Planet as PlanetData } from '@/@types/Planet'
 import { Fab } from '@/app/components/Fab'
 import { PageTransitionAnimation } from '@/app/components/PageTransitionAnimation'
-import { StarViewPortPosition } from '@/contexts/SpaceContext'
+import { StarViewPortPosition } from '@/contexts/SpaceContext/types/StarViewPortPosition'
 
 export const FAB_ICON: Record<StarViewPortPosition, Icon> = {
   above: CaretDown,

@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 
-import { Difficulty } from '@/@types/challenge'
-import type { ChallengeSummary } from '@/@types/challengeSummary'
+import { ChallengeDifficulty } from '@/@types/Challenge'
+import type { ChallengeSummary } from '@/@types/ChallengeSummary'
 import { useApi } from '@/services/api'
 import { useCache } from '@/services/cache'
 import { CACHE } from '@/utils/constants/cache'
@@ -13,7 +13,7 @@ type TotalChallengesByDifficulty = {
   easy: number
   medium: number
   hard: number
-} & Record<Difficulty, number>
+} & Record<ChallengeDifficulty, number>
 
 export function useChallengesChart(userId: string) {
   const [totalChallengesByDifficulty, setTotalChallengesByDifficulty] =
@@ -28,7 +28,7 @@ export function useChallengesChart(userId: string) {
   }
 
   const { data: challenges, error } = useCache<ChallengeSummary[]>({
-    tag: CACHE.challengesSummary,
+    key: CACHE.keys.challengesSummary,
     dependencies: [userId],
     fetcher: getChallengesSummary,
   })
@@ -38,7 +38,9 @@ export function useChallengesChart(userId: string) {
     throw new Error(error)
   }
 
-  function getCompletedChallengesCountByDifficulty(difficulty: Difficulty) {
+  function getCompletedChallengesCountByDifficulty(
+    difficulty: ChallengeDifficulty
+  ) {
     if (challenges?.length) {
       return challenges?.filter(
         (challenge) =>
@@ -49,7 +51,7 @@ export function useChallengesChart(userId: string) {
   }
 
   function getCompletedChallengesPercentageByDifficulty(
-    difficulty: Difficulty
+    difficulty: ChallengeDifficulty
   ) {
     if (totalChallengesByDifficulty && challenges?.length) {
       const totalChallenges = totalChallengesByDifficulty[difficulty]
@@ -86,7 +88,7 @@ export function useChallengesChart(userId: string) {
         }
 
         for (const difficulty in totalChallengesBydifficulties) {
-          totalChallengesBydifficulties[difficulty as Difficulty] =
+          totalChallengesBydifficulties[difficulty as ChallengeDifficulty] =
             challenges.filter(
               (challenge) => challenge.difficulty === difficulty
             ).length

@@ -1,5 +1,5 @@
-import type { ThemeName } from '@/@types/themeName'
-import type { Token } from '@/@types/token'
+import type { ThemeName } from '@/@types/ThemeName'
+import type { Token } from '@/@types/Token'
 
 type Theme = {
   [themeName in ThemeName]: {

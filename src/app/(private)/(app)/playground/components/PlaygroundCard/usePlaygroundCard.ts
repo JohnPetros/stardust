@@ -6,7 +6,7 @@ import { PromptRef } from '@/app/components/Prompt'
 import { useToast } from '@/contexts/ToastContext'
 import { useClipboard } from '@/hooks/useClipboard'
 import { useApi } from '@/services/api'
-import { ERRORS, ROUTES } from '@/utils/constants'
+import { APP_ERRORS, ROUTES } from '@/utils/constants'
 import { getAppBaseUrl } from '@/utils/helpers'
 
 export function usePlaygroundCard(id: string, initialTitle: string) {
@@ -34,7 +34,7 @@ export function usePlaygroundCard(id: string, initialTitle: string) {
       setTitle(newTitle)
     } catch (error) {
       console.error(error)
-      toast.show(ERRORS.playgrounds.failedTitleEdition, {
+      toast.show(APP_ERRORS.playgrounds.failedTitleEdition, {
         seconds: 4,
         type: 'error',
       })
@@ -48,7 +48,10 @@ export function usePlaygroundCard(id: string, initialTitle: string) {
       await copy()
       toast.show('Url copiada!', { type: 'success' })
     } catch (error) {
-      toast.show(ERRORS.playgrounds.failedCoying, { type: 'error', seconds: 8 })
+      toast.show(APP_ERRORS.playgrounds.failedCoying, {
+        type: 'error',
+        seconds: 8,
+      })
     }
   }
 

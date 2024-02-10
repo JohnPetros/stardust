@@ -5,7 +5,7 @@ import { QuestionTitle } from '../QuestionTitle'
 import { Input } from './Input'
 import { useOpenQuestion } from './useOpenQuestion'
 
-import type { OpenQuestion as OpenQuestionData } from '@/@types/quiz'
+import type { OpenQuestion as OpenQuestionData } from '@/@types/Quiz'
 import { CodeSnippet } from '@/app/components/CodeSnippet'
 
 type OpenQuestion = {

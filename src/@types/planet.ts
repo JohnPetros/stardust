@@ -1,4 +1,4 @@
-import type { Star } from './star'
+import type { Star } from './Star'
 
 export type Planet = {
   id: string
@@ -6,5 +6,8 @@ export type Planet = {
   icon: string
   image: string
   position: number
-  stars: Star[]
+  stars: Pick<
+    Star,
+    'id' | 'slug' | 'name' | 'number' | 'isChallenge' | 'isUnlocked'
+  >[]
 }

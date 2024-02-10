@@ -10,7 +10,7 @@ import { Metric } from './Metric'
 import { Streak } from './Streak'
 import { useCongratulations } from './useCongratulations'
 
-import { WeekStatus } from '@/@types/weekStatus'
+import { WeekStatus } from '@/@types/WeekStatus'
 import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { StreakIcon } from '@/app/components/StreakIcon'

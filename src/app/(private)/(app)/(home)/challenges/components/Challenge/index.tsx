@@ -1,22 +1,13 @@
 'use client'
 
-import {
-  ChartLine,
-  CheckCircle,
-  Circle,
-  Target,
-  User,
-} from '@phosphor-icons/react'
 import { motion, Variants } from 'framer-motion'
 import Link from 'next/link'
 
 import { Category } from './Category'
-import { Info } from './Info'
 
-import type { Challenge } from '@/@types/challenge'
+import type { Challenge } from '@/@types/Challenge'
 import { ChallengeInfo } from '@/app/components/ChallengeInfo'
 import { DifficultyBadge } from '@/app/components/DifficultyBadge'
-import { deslugify } from '@/utils/helpers'
 
 const challengeVariants: Variants = {
   hidden: {
@@ -29,7 +20,7 @@ const challengeVariants: Variants = {
   },
 }
 
-interface ChallengeProps {
+type ChallengeProps = {
   data: Challenge
 }
 
@@ -40,9 +31,9 @@ export function Challenge({
     difficulty,
     upvotes,
     downvotes,
-    total_completitions,
-    categories,
-    user_slug,
+    totalCompletitions,
+    categoriesNames,
+    userSlug,
     isCompleted,
   },
 }: ChallengeProps) {
@@ -63,18 +54,17 @@ export function Challenge({
         </Link>
       </div>
       <ChallengeInfo
-        isCompleted={isCompleted}
-        totalCompletitions={total_completitions}
-        userSlug={user_slug}
+        isCompleted={isCompleted ?? false}
+        totalCompletitions={totalCompletitions}
+        userSlug={userSlug}
         upvotes={upvotes}
         downvotes={downvotes}
-        shouldShowVoteButtons={false}
       />
-      {categories && (
+      {categoriesNames && (
         <ul className="flex items-start gap-3">
-          {categories.map((category) => {
-            if (category)
-              return <Category key={category?.id} name={category?.name} />
+          {categoriesNames.map((categoryName) => {
+            if (categoryName)
+              return <Category key={categoryName} name={categoryName} />
           })}
         </ul>
       )}

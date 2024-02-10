@@ -2,7 +2,7 @@ import {
   CheckboxQuestion,
   DragAndDropListQuestion,
   DragAndDropQuestion,
-} from '@/@types/quiz'
+} from '@/@types/Quiz'
 
 type Questions = [
   DragAndDropQuestion,

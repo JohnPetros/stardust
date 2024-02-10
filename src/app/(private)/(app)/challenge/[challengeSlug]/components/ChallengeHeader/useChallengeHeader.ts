@@ -3,8 +3,8 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { Challenge } from '@/@types/challenge'
-import type { Vote } from '@/@types/vote'
+import { Challenge } from '@/@types/Challenge'
+import type { Vote } from '@/@types/Vote'
 import { type Layout, useChallengeStore } from '@/stores/challengeStore'
 import { ROUTES } from '@/utils/constants'
 
@@ -14,7 +14,7 @@ export function useChallengeHeader(challenge: Challenge, userVote: Vote) {
   const router = useRouter()
 
   function handleBackButton() {
-    router.push(ROUTES.private.home[challenge.star_id ? 'space' : 'challenges'])
+    router.push(ROUTES.private.home[challenge.starId ? 'space' : 'challenges'])
   }
 
   function handleLayoutButton(layout: Layout) {

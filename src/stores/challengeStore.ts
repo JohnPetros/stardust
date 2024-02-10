@@ -2,8 +2,8 @@ import { create, StateCreator } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
-import type { Challenge } from '@/@types/challenge'
-import type { Vote } from '@/@types/vote'
+import type { Challenge } from '@/@types/Challenge'
+import type { Vote } from '@/@types/Vote'
 
 export type Layout =
   | 'tabs-right;code_editor-left'

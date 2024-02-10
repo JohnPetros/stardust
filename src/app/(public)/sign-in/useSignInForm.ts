@@ -6,7 +6,7 @@ import { LottieRef } from 'lottie-react'
 import { useRouter } from 'next/navigation'
 
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { OAuthProvider } from '@/contexts/AuthContext/types/oAuthProvider'
+import { OAuthProvider } from '@/contexts/AuthContext/types/OAuthProvider'
 import { useToast } from '@/contexts/ToastContext'
 import { useValidation } from '@/services/validation'
 import { SignInForm } from '@/services/validation/types/signInForm'

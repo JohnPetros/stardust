@@ -3,7 +3,7 @@ import { twMerge } from 'tailwind-merge'
 
 import { RankedUser } from './RankedUser'
 
-import type { User } from '@/@types/user'
+import type { User } from '@/@types/User'
 
 const iconSize = 'text-md'
 

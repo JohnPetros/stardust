@@ -1,24 +1,21 @@
+import { _handleUserPlaygroudsPage } from './actions/_handleUserPlaygroundPage'
 import { AddPlaygroundButton } from './components/AddPlaygroundButton'
 import { Hero } from './components/Hero'
 import { PlaygroundCard } from './components/PlaygroundCard'
 
-import { createSupabaseServerClient } from '@/services/api/supabase/clients/serverClient'
-import { AuthController } from '@/services/api/supabase/controllers/authController'
-import { PlaygroundsController } from '@/services/api/supabase/controllers/playgroundsController'
-import { ERRORS } from '@/utils/constants'
+import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseServerClient'
+import { SupabaseAuthController } from '@/services/api/supabase/controllers/SupabaseAuthController'
+import { SupabasePlaygroundsController } from '@/services/api/supabase/controllers/SupabasePlaygroundsController'
 
-export default async function PlaygroundPage() {
-  const supabase = createSupabaseServerClient()
-  const authController = AuthController(supabase)
-  const userId = await authController.getUserId()
+export default async function UserPlaygroundsPage() {
+  const supabase = SupabaseServerClient()
+  const authController = SupabaseAuthController(supabase)
+  const playgroundsController = SupabasePlaygroundsController(supabase)
 
-  if (!userId) throw new Error(ERRORS.auth.userNotFound)
-
-  const playgroundsController = PlaygroundsController(supabase)
-
-  const playgrounds = await playgroundsController.getPlaygroundsByUserId(userId)
-
-  console.log({ playgrounds })
+  const playgrounds = await _handleUserPlaygroudsPage(
+    authController,
+    playgroundsController
+  )
 
   return (
     <div>
