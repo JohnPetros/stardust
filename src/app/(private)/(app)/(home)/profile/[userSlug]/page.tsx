@@ -7,7 +7,7 @@ import { Statistics } from '../components/Statistics'
 import { User } from '../components/User'
 
 import { User as UserData } from '@/@types/User'
-import { StreakBoard } from '@/app/components/StreakBoard'
+import { StreakBoard } from '@/global/components/StreakBoard'
 import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseServerClient'
 import { SupabaseUsersController } from '@/services/api/supabase/controllers/SupabaseUsersController'
 

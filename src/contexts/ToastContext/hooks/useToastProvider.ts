@@ -8,7 +8,7 @@ import { ToastRef } from '../types/ToastRef'
 export function useToastProvider() {
   const toastRef = useRef<ToastRef | null>(null)
 
-  const show = useCallback(
+  const showToast = useCallback(
     (message: string, options?: Partial<Omit<OpenToastParams, 'message'>>) => {
       toastRef.current?.open({
         message,
@@ -19,5 +19,5 @@ export function useToastProvider() {
     []
   )
 
-  return { show }
+  return { toastRef, showToast }
 }

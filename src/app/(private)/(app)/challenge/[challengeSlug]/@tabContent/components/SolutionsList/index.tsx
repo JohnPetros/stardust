@@ -2,7 +2,7 @@
 
 import { useSolutionsList } from './useSolutionsList'
 
-import { Loading } from '@/app/components/Loading'
+import { Loading } from '@/global/components/Loading'
 import { useChallengeStore } from '@/stores/challengeStore'
 
 export function SolutionsList() {

@@ -5,15 +5,16 @@ import { LockSimple } from '@phosphor-icons/react'
 
 import { useResetPasswordDialog } from './useResetPasswordDialog'
 
-import { Alert, AlertRef } from '@/app/components/Alert'
-import { Button } from '@/app/components/Button'
+import { Alert, AlertRef } from '@/global/components/Alert'
+import { Button } from '@/global/components/Button'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTrigger,
-} from '@/app/components/Dialog'
-import { Input } from '@/app/components/Input'
+} from '@/global/components/Dialog'
+import { Input } from '@/global/components/Input'
+import { APP_ERRORS } from '@/global/constants'
 
 interface ResetPasswordDialogProps {
   children: ReactNode
@@ -58,7 +59,7 @@ export function ResetPasswordDialog({ children }: ResetPasswordDialogProps) {
               type="password"
               icon={LockSimple}
               {...register('password_confirmation')}
-              error={String(APP_ERRORS.password_confirmation?.message)}
+              error={String(errors.password_confirmation?.message)}
               placeholder="********"
             />
             <Button onClick={handleSubmit} isLoading={isLoading}>

@@ -1,6 +1,6 @@
 'use client'
 
-import { PageTransitionAnimation } from '../../../../../components/PageTransitionAnimation'
+import { PageTransitionAnimation } from '../../../../../../global/components/PageTransitionAnimation'
 import { LessonHeader } from '../LessonHeader'
 import { Quiz } from '../Quiz'
 import { Theory } from '../Theory'

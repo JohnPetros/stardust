@@ -8,9 +8,9 @@ import { useDescription } from './useDescription'
 import { VoteButtons } from './VoteButtons'
 
 import { ChallengeInfo } from '@/app/components/ChallengeInfo'
-import { DifficultyBadge } from '@/app/components/DifficultyBadge'
-import { Loading } from '@/app/components/Loading'
-import { Mdx } from '@/app/components/Mdx'
+import { DifficultyBadge } from '@/global/components/DifficultyBadge'
+import { Loading } from '@/global/components/Loading'
+import { Mdx } from '@/global/components/Mdx'
 import { useChallengeStore } from '@/stores/challengeStore'
 
 export function Description() {

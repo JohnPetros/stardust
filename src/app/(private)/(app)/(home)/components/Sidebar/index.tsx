@@ -5,10 +5,10 @@ import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { AchievementsList } from '../AchievementsList'
 import { SignOutAlert } from '../SignOutAlert'
 
-import { Button } from '@/app/components/Button'
-import { UserAvatar } from '@/app/components/UserAvatar'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useSiderbarContext } from '@/contexts/SidebarContext/hooks/useSiderbarContext'
+import { Button } from '@/global/components/Button'
+import { UserAvatar } from '@/global/components/UserAvatar'
 
 const sidebarVariants: Variants = {
   close: {

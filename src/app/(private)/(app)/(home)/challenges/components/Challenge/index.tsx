@@ -7,7 +7,7 @@ import { Category } from './Category'
 
 import type { Challenge } from '@/@types/Challenge'
 import { ChallengeInfo } from '@/app/components/ChallengeInfo'
-import { DifficultyBadge } from '@/app/components/DifficultyBadge'
+import { DifficultyBadge } from '@/global/components/DifficultyBadge'
 
 const challengeVariants: Variants = {
   hidden: {

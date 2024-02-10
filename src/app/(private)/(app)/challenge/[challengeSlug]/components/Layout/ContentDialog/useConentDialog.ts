@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 
 import { ContentType } from '@/@types/ContentType'
-import { DialogRef } from '@/app/components/Dialog/Dialog'
+import { DialogRef } from '@/global/components/Dialog/Dialog'
 import { useChallengeStore } from '@/stores/challengeStore'
 import { ROUTES } from '@/global/constants'
 

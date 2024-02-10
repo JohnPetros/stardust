@@ -1,7 +1,7 @@
-type Type = 'error' | 'success'
+import type { ToastType } from './ToastType'
 
 export type OpenToastParams = {
-  type: Type
+  type: ToastType
   message: string
   seconds?: number
 }

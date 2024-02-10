@@ -2,13 +2,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 
-import { Select } from '../../../../../../components/Select'
+import { Select } from '../../../../../../../global/components/Select'
 
 import { CategoriesFilter } from './CateogoriesFilter'
 import { Tag } from './Tag'
 
 import type { Category } from '@/@types/Category'
-import { Search } from '@/app/components/Search'
+import { Search } from '@/global/components/Search'
 import {
   Difficulty,
   Status,

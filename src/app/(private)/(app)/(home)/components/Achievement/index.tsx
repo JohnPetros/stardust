@@ -6,9 +6,9 @@ import Image from 'next/image'
 import { useAchievement } from './useAchievement'
 
 import type { Achievement as AchievementType } from '@/@types/Achievement'
-import { Alert } from '@/app/components/Alert'
-import { Button } from '@/app/components/Button'
-import { ProgressBar } from '@/app/components/ProgressBar'
+import { Alert } from '@/global/components/Alert'
+import { Button } from '@/global/components/Button'
+import { ProgressBar } from '@/global/components/ProgressBar'
 
 const achievementAnimations: Variants = {
   hidden: {

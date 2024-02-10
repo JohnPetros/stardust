@@ -7,8 +7,8 @@ import RewardLightAnimation from '../../../../../../../../public/animations/rewa
 
 import { useShopButton } from './useShopButton'
 
-import { Alert } from '@/app/components/Alert'
-import { Button } from '@/app/components/Button'
+import { Alert } from '@/global/components/Alert'
+import { Button } from '@/global/components/Button'
 
 type Product = {
   image: string

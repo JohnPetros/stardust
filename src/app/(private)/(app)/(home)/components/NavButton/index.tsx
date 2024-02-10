@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { twMerge } from 'tailwind-merge'
 
-import { Tooltip } from '@/app/components/Tooltip'
+import { Tooltip } from '@/global/components/Tooltip'
 
 const labelVariants: Variants = {
   shrink: {

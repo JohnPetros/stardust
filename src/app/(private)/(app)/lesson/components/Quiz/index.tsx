@@ -11,8 +11,8 @@ import { SelectionQuestion } from './SelectionQuestion'
 import { useQuiz } from './useQuiz'
 import { VerificationButton } from './VerificationButton'
 
-import { Alert } from '@/app/components/Alert'
-import { Button } from '@/app/components/Button'
+import { Alert } from '@/global/components/Alert'
+import { Button } from '@/global/components/Button'
 import { useLessonStore } from '@/stores/lessonStore'
 
 type QuizProps = {

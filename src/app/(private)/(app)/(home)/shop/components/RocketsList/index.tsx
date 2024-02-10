@@ -5,8 +5,8 @@ import { Sorters } from '../Sorters'
 import { RocketItem } from './RocketItem'
 import { useRocketsList } from './useRocketsList'
 
-import { Pagination } from '@/app/components/Pagination'
-import { Search } from '@/app/components/Search'
+import { Pagination } from '@/global/components/Pagination'
+import { Search } from '@/global/components/Search'
 
 const ITEMS_PER_PAGE = 6
 

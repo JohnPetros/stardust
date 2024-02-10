@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 
-import { Alert } from '@/app/components/Alert'
-import { Button } from '@/app/components/Button'
+import { Alert } from '@/global/components/Alert'
+import { Button } from '@/global/components/Button'
 
 type BlockedCommentsAlertProps = {
   children: ReactNode

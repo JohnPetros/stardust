@@ -3,7 +3,7 @@ import { Suspense } from 'react'
 import { _handleChalengesPage } from './actions/_handleChallengesPage'
 import { ChallengesList } from './components/ChallengesList'
 
-import { Loading } from '@/app/components/Loading'
+import { Loading } from '@/global/components/Loading'
 import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseServerClient'
 import { SupabaseCategoriesController } from '@/services/api/supabase/controllers/SupabaseCategoriesController'
 

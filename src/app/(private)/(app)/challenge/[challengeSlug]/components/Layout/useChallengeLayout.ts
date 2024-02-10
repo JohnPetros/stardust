@@ -3,7 +3,7 @@ import { ImperativePanelHandle } from 'react-resizable-panels'
 
 import { PanelsOffset } from '../../actions/_getPanelsOffset'
 
-import { setCookie } from '@/global/actions/setCookie'
+import { _setCookie } from '@/global/actions/_setCookie'
 import { COOKIES, STORAGE } from '@/global/constants'
 import { useChallengeStore } from '@/stores/challengeStore'
 
@@ -31,7 +31,7 @@ export function useChallengeLayout() {
       codeEditorPanelSize: codeEditorPanelRef.current?.getSize(),
     }
 
-    await setCookie(
+    await _setCookie(
       COOKIES.keys.challengePanelsOffset,
       JSON.stringify(newLayout)
     )

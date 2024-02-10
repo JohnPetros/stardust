@@ -9,7 +9,7 @@ import { WinnersList } from './components/WinnersList'
 
 import type { Ranking } from '@/@types/Ranking'
 import type { Winner } from '@/@types/Winner'
-import { Loading } from '@/app/components/Loading'
+import { Loading } from '@/global/components/Loading'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useRankedUsers } from '@/global/hooks/useRankedUsers'
 import { useRanking } from '@/global/hooks/useRanking'

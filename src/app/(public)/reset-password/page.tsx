@@ -6,9 +6,9 @@ import { ResetPasswordDialog } from './components/ResetPasswordDialog/page'
 import { useResetPassword } from './useResetPassword'
 
 import { Link } from '@/app/(public)/components/Link'
-import { AppMessage } from '@/app/components/AppMessage'
-import { Button } from '@/app/components/Button'
-import { Input } from '@/app/components/Input'
+import { AppMessage } from '@/global/components/AppMessage'
+import { Button } from '@/global/components/Button'
+import { Input } from '@/global/components/Input'
 import { ROUTES } from '@/global/constants'
 
 const formAnimations: Variants = {

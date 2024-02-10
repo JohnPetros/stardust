@@ -1,13 +1,12 @@
 import { _getRewardsPageData } from './_getRewardsPageData'
 import { _getUpdatedLevel } from './_getUpdatedLevel'
 
-import { User } from '@/@types/User'
+import { APP_ERRORS } from '@/global/constants'
 import { DateProvider } from '@/providers/dateProvider'
 import { IAuthController } from '@/services/api/interfaces/IAuthController'
 import { IChallengesController } from '@/services/api/interfaces/IChallengesController'
 import { IStarsController } from '@/services/api/interfaces/IStarsController'
 import { IUsersController } from '@/services/api/interfaces/IUsersController'
-import { APP_ERRORS } from '@/global/constants'
 
 const dateProvider = DateProvider()
 

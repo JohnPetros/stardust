@@ -6,9 +6,9 @@ import { useChallengeHeader } from './useChallengeHeader'
 
 import type { Challenge } from '@/@types/Challenge'
 import type { Vote } from '@/@types/Vote'
-import { Alert } from '@/app/components/Alert'
-import { Button } from '@/app/components/Button'
-import { PopoverMenu, PopoverMenuButton } from '@/app/components/PopoverMenu'
+import { Alert } from '@/global/components/Alert'
+import { Button } from '@/global/components/Button'
+import { PopoverMenu, PopoverMenuButton } from '@/global/components/PopoverMenu'
 
 type HeaderProps = {
   challenge: Challenge

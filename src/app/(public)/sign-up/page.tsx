@@ -9,8 +9,8 @@ import { Title } from '../components/Title'
 
 import { useSignUpForm } from './useSignUpForm'
 
-import { Button } from '@/app/components/Button'
-import { Input } from '@/app/components/Input'
+import { Button } from '@/global/components/Button'
+import { Input } from '@/global/components/Input'
 import { Toast } from '@/app/components/Toast'
 
 const formAnimations: Variants = {

@@ -5,8 +5,8 @@ import { Sorters } from '../Sorters'
 import { AvatarItem } from './AvatarItem'
 import { useAvatarsList } from './useAvatarsList'
 
-import { Pagination } from '@/app/components/Pagination'
-import { Search } from '@/app/components/Search'
+import { Pagination } from '@/global/components/Pagination'
+import { Search } from '@/global/components/Search'
 
 export function AvatarsList() {
   const {

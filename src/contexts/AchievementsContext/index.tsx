@@ -7,8 +7,8 @@ import { useAchivementsProvider } from './hooks/useAchivementsProvider'
 import type { Achievement as AchievementData } from '@/@types/Achievement'
 import { Achievement } from '@/app/(private)/(app)/(home)/components/Achievement'
 import { ShinningAnimation } from '@/app/(private)/(app)/(home)/components/ShinningAnimation'
-import { Alert } from '@/app/components/Alert'
-import { Button } from '@/app/components/Button'
+import { Alert } from '@/global/components/Alert'
+import { Button } from '@/global/components/Button'
 
 export type AchivementsContextValue = {
   achievements: AchievementData[] | undefined

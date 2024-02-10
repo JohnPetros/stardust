@@ -2,12 +2,12 @@
 
 import { useRef } from 'react'
 
+import { MdxComponent } from './MdxComponent'
 import { Star } from './Star'
 import { useTheory } from './useTheory'
 
-import { Alert } from '@/app/components/Alert'
-import { Button } from '@/app/components/Button'
-import { MdxComponent } from '@/app/components/MdxComponent'
+import { Alert } from '@/global/components/Alert'
+import { Button } from '@/global/components/Button'
 import { useLessonStore } from '@/stores/lessonStore'
 
 type TheoryProps = {

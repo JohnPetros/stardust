@@ -11,9 +11,9 @@ import { Streak } from './Streak'
 import { useCongratulations } from './useCongratulations'
 
 import { WeekStatus } from '@/@types/WeekStatus'
-import { Alert } from '@/app/components/Alert'
-import { Button } from '@/app/components/Button'
-import { StreakIcon } from '@/app/components/StreakIcon'
+import { Alert } from '@/global/components/Alert'
+import { Button } from '@/global/components/Button'
+import { StreakIcon } from '@/global/components/StreakIcon'
 
 const apolloAnimations: Variants = {
   hidden: {

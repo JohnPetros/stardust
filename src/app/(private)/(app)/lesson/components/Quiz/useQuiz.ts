@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef } from 'react'
 
-import { AlertRef } from '@/app/components/Alert'
+import { AlertRef } from '@/global/components/Alert'
 import { useLessonStore } from '@/stores/lessonStore'
 
 export function useQuiz() {

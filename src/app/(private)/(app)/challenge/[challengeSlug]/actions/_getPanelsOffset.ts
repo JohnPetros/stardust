@@ -1,6 +1,6 @@
 'use server'
 
-import { getCookie } from '@/global/actions/getCookie'
+import { _getCookie } from '@/global/actions/_getCookie'
 import { COOKIES } from '@/global/constants'
 import { checkObject } from '@/global/helpers'
 
@@ -27,7 +27,7 @@ function isPanelsOffset(
 }
 
 export async function getPanelsOffset(): Promise<PanelsOffset> {
-  const storagedPanelsOffset = await getCookie(
+  const storagedPanelsOffset = await _getCookie(
     COOKIES.keys.challengePanelsOffset
   )
 

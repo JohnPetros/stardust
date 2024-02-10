@@ -10,8 +10,8 @@ import { Winner } from './Winner'
 
 import type { Ranking } from '@/@types/Ranking'
 import type { Winner as WinnerUser } from '@/@types/Winner'
-import { Alert, AlertRef } from '@/app/components/Alert'
-import { Button } from '@/app/components/Button'
+import { Alert, AlertRef } from '@/global/components/Alert'
+import { Button } from '@/global/components/Button'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { getImage } from '@/global/helpers'
 

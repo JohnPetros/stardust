@@ -5,7 +5,7 @@ import { tv } from 'tailwind-variants'
 
 import { useVerificationButton } from './useVerificationButton'
 
-import { Button } from '@/app/components/Button'
+import { Button } from '@/global/components/Button'
 
 const buttonStyles = tv({
   base: 'w-64',

@@ -4,7 +4,7 @@ import { UserCommentInput } from '../../UserCommentInput'
 
 import { useContent } from './useContent'
 
-import { Mdx } from '@/app/components/Mdx'
+import { Mdx } from '@/global/components/Mdx'
 
 type CommentEditionInputProps = {
   commentId: string

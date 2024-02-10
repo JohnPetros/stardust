@@ -6,8 +6,8 @@ import Link from 'next/link'
 
 import { Status } from './Status'
 
-import { Loading } from '@/app/components/Loading'
-import { UserAvatar } from '@/app/components/UserAvatar'
+import { Loading } from '@/global/components/Loading'
+import { UserAvatar } from '@/global/components/UserAvatar'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useRanking } from '@/global/hooks/useRanking'
 import { useRocket } from '@/global/hooks/useRocket'

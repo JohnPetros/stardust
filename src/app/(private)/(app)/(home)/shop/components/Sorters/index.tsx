@@ -1,6 +1,6 @@
 import { useSorters } from './useSorters'
 
-import { Select } from '@/app/components/Select'
+import { Select } from '@/global/components/Select'
 import { Order } from '@/services/api/types/Order'
 
 type SortersProps = {

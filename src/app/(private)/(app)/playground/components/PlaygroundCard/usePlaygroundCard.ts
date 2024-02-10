@@ -2,8 +2,8 @@
 
 import { useRef, useState } from 'react'
 
-import { PromptRef } from '@/app/components/Prompt'
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
+import { PromptRef } from '@/global/components/Prompt'
 import { APP_ERRORS, ROUTES } from '@/global/constants'
 import { getAppBaseUrl } from '@/global/helpers'
 import { useClipboard } from '@/global/hooks/useClipboard'

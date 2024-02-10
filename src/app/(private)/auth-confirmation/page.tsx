@@ -5,9 +5,9 @@ import { AnimatePresence } from 'framer-motion'
 import { useAuthConfirmationPage } from './useAuthConfirmationPage'
 
 import { RocketAnimation } from '@/app/(public)/components/RocketAnimation'
-import { AppMessage } from '@/app/components/AppMessage'
-import { Button } from '@/app/components/Button'
-import { Loading } from '@/app/components/Loading'
+import { AppMessage } from '@/global/components/AppMessage'
+import { Button } from '@/global/components/Button'
+import { Loading } from '@/global/components/Loading'
 
 export default function AuthConfirmationPage() {
   const { isRocketVisible, rocketRef, user, handleHomeLink } =

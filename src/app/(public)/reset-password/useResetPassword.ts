@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react'
 
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
-import { deleteCookie } from '@/global/actions/deleteCookie'
-import { getCookie } from '@/global/actions/getCookie'
+import { _deleteCookie } from '@/global/actions/_deleteCookie'
+import { _getCookie } from '@/global/actions/_getCookie'
 import { COOKIES } from '@/global/constants'
 import { useApi } from '@/services/api'
 import { useValidation } from '@/services/validation'
@@ -62,13 +62,13 @@ export function useResetPassword() {
 
   useEffect(() => {
     async function fetchCookie() {
-      const shouldResetPassword = await getCookie(
+      const shouldResetPassword = await _getCookie(
         COOKIES.keys.shouldReturnPassword
       )
 
       if (shouldResetPassword) {
         setShouldResetPassword(true)
-        await deleteCookie(COOKIES.keys.shouldReturnPassword)
+        await _deleteCookie(COOKIES.keys.shouldReturnPassword)
       }
     }
 

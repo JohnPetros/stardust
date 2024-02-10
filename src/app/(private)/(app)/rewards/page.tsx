@@ -1,7 +1,7 @@
 import { _handleRewardsPage } from './actions/_handleRewardsPage'
 import { Congratulations } from './components/Congratulations'
 
-import { getCookie } from '@/global/actions/getCookie'
+import { getCookie } from '@/global/actions/_getCookie'
 import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseServerClient'
 import { SupabaseAuthController } from '@/services/api/supabase/controllers/SupabaseAuthController'
 import { SupabaseChallengesController } from '@/services/api/supabase/controllers/SupabaseChallengesController'

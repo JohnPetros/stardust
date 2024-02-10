@@ -5,10 +5,10 @@ import Image from 'next/image'
 
 import { useLessonHeader } from './useLessonHeader'
 
-import { Alert } from '@/app/components/Alert'
-import { Button } from '@/app/components/Button'
-import { ProgressBar } from '@/app/components/ProgressBar'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
+import { Alert } from '@/global/components/Alert'
+import { Button } from '@/global/components/Button'
+import { ProgressBar } from '@/global/components/ProgressBar'
 import { useRocket } from '@/global/hooks/useRocket'
 import { useApi } from '@/services/api'
 import { useLessonStore } from '@/stores/lessonStore'

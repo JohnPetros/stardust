@@ -15,7 +15,7 @@ import { SorterButton } from './SorterButton'
 import { TabButton } from './TabButton'
 import { useCrafts } from './useCrafts'
 
-import { Button } from '@/app/components/Button'
+import { Button } from '@/global/components/Button'
 import { ROUTES } from '@/global/constants'
 
 type TabValue = 'playground-tab' | 'challenges-tab' | 'solutions-tab'

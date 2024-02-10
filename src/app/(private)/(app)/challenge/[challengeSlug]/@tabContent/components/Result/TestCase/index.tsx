@@ -9,7 +9,7 @@ import { Field } from '../Field'
 import { useTestCase } from './useTestCase'
 
 import type { ChallengeTestCase } from '@/@types/Challenge'
-import { AnimatedArrow } from '@/app/components/AnimatedArrow'
+import { AnimatedArrow } from '@/global/components/AnimatedArrow'
 
 const contentAnimations: Variants = {
   up: {

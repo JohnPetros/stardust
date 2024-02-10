@@ -1,6 +1,6 @@
 'use client'
 
-import { Loading } from '@/app/components/Loading'
+import { Loading } from '@/global/components/Loading'
 
 export default function LoadingPage() {
   return (

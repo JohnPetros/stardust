@@ -5,7 +5,7 @@ import { Icon } from '@phosphor-icons/react'
 import { motion, Variants } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
 
-import { Tooltip } from '@/app/components/Tooltip'
+import { Tooltip } from '@/global/components/Tooltip'
 
 type SidenavButtonProps = {
   icon: Icon

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 
 import { StarRewardsPayload } from '@/@types/Rewards'
 import type { Star } from '@/@types/Star'
-import { setCookie } from '@/global/actions/setCookie'
+import { setCookie } from '@/global/actions/_setCookie'
 import { useMdx } from '@/global/hooks/useMdx'
 import { useLessonStore } from '@/stores/lessonStore'
 import { COOKIES, ROUTES, STORAGE } from '@/global/constants'

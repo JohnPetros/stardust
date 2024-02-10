@@ -7,10 +7,10 @@ import { Achievement } from '../Achievement'
 
 import { useAchievementsList } from './useAchievementsList'
 
-import { Loading } from '@/app/components/Loading'
-import { PopoverMenu } from '@/app/components/PopoverMenu'
-import { Search } from '@/app/components/Search'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
+import { Loading } from '@/global/components/Loading'
+import { PopoverMenu } from '@/global/components/PopoverMenu'
+import { Search } from '@/global/components/Search'
 
 export function AchievementsList() {
   const { user } = useAuthContext()

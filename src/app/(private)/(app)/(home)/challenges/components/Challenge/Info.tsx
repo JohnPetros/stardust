@@ -3,7 +3,7 @@
 import { Icon } from '@phosphor-icons/react'
 import { twMerge } from 'tailwind-merge'
 
-import { Tooltip } from '@/app/components/Tooltip'
+import { Tooltip } from '@/global/components/Tooltip'
 
 interface InfoProps {
   label: string | number

@@ -6,7 +6,7 @@ import { AvatarsList } from './components/AvatarsList'
 import { Footer } from './components/Footer'
 import { RocketsList } from './components/RocketsList'
 
-import { Loading } from '@/app/components/Loading'
+import { Loading } from '@/global/components/Loading'
 
 export default function Shop() {
   return (

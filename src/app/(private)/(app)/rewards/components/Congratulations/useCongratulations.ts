@@ -6,8 +6,8 @@ import { useRouter } from 'next/navigation'
 
 import { CongratulationsProps } from '.'
 
-import { AlertRef } from '@/app/components/Alert'
-import { deleteCookie } from '@/global/actions/deleteCookie'
+import { AlertRef } from '@/global/components/Alert'
+import { deleteCookie } from '@/global/actions/_deleteCookie'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { COOKIES } from '@/global/constants'
 import { playAudio } from '@/global/helpers'

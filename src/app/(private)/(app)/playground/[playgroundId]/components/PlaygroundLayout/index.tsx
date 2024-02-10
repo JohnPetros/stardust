@@ -4,10 +4,10 @@ import { PlaygroundHeader } from './PlaygroundHeader'
 import { usePlaygroundLayout } from './usePlaygroundLayout'
 
 import { Playground } from '@/@types/Playground'
-import { CodeEditorPlayground } from '@/app/components/CodeEditorPlayground'
 import { CodeEditorToolbar } from '@/app/components/CodeEditorToolbar'
-import { SaveButton } from '@/app/components/SaveButton'
-import { Switch } from '@/app/components/Switch'
+import { CodeEditorPlayground } from '@/global/components/CodeEditorPlayground'
+import { SaveButton } from '@/global/components/SaveButton'
+import { Switch } from '@/global/components/Switch'
 
 const HEADER_HEIGHT = 48
 const SAVE_BUTTON_CONTAINER_HEIGHT = 64

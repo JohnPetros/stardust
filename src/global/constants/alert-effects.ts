@@ -3,7 +3,7 @@ import Crying from '../../../public/animations/apollo-crying.json'
 import Denying from '../../../public/animations/apollo-denying.json'
 import Earning from '../../../public/animations/apollo-earning.json'
 
-import type { AlertType } from '@/app/components/Alert'
+import type { AlertType } from '@/global/components/Alert'
 import { AudioFile } from '@/global/hooks/useAudio'
 
 type AlertEffect = {

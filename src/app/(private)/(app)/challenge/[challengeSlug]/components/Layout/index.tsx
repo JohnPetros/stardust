@@ -10,7 +10,7 @@ import { PanelHandle } from './PanelHandle'
 import { Tabs } from './Tabs'
 import { useChallengeLayout } from './useChallengeLayout'
 
-import { PageTransitionAnimation } from '@/app/components/PageTransitionAnimation'
+import { PageTransitionAnimation } from '@/global/components/PageTransitionAnimation'
 import { useSecondsCounter } from '@/global/hooks/useSecondsCounter'
 import { useChallengeStore } from '@/stores/challengeStore'
 

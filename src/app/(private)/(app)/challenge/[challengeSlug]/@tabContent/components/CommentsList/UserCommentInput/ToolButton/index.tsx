@@ -1,7 +1,7 @@
 import { Icon } from '@phosphor-icons/react'
 import * as Toolbar from '@radix-ui/react-toolbar'
 
-import { Tooltip } from '@/app/components/Tooltip'
+import { Tooltip } from '@/global/components/Tooltip'
 
 type ToolButtonProps = {
   icon: Icon

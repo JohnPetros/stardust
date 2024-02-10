@@ -3,9 +3,9 @@
 import { useEffect, useRef, useState } from 'react'
 
 import type { Achievement as AchievementData } from '@/@types/Achievement'
-import { AlertRef } from '@/app/components/Alert'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
+import { AlertRef } from '@/global/components/Alert'
 import { useUserAchievements } from '@/global/hooks/useUserAchievements'
 import { useApi } from '@/services/api'
 

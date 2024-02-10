@@ -5,19 +5,19 @@ import Link from 'next/link'
 
 import { usePlaygroundCard } from './usePlaygroundCard'
 
-import { Alert } from '@/app/components/Alert'
-import { Button } from '@/app/components/Button'
+import { Alert } from '@/global/components/Alert'
+import { Button } from '@/global/components/Button'
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogTrigger,
-} from '@/app/components/Dialog'
-import { Input } from '@/app/components/Input'
-import { Prompt } from '@/app/components/Prompt'
-import { Separator } from '@/app/components/Separator'
-import { Toolbar } from '@/app/components/Toolbar'
-import { ToolbarButton } from '@/app/components/Toolbar/ToolbarButton'
+} from '@/global/components/Dialog'
+import { Input } from '@/global/components/Input'
+import { Prompt } from '@/global/components/Prompt'
+import { Separator } from '@/global/components/Separator'
+import { Toolbar } from '@/global/components/Toolbar'
+import { ToolbarButton } from '@/global/components/Toolbar/ToolbarButton'
 
 type PlaygroundCardProps = {
   id: string

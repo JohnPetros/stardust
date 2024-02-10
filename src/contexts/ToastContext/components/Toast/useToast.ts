@@ -2,29 +2,20 @@
 import { useEffect, useState } from 'react'
 import { useAnimate } from 'framer-motion'
 
+import { OpenToastParams } from '@/contexts/ToastContext/types/OpenToastParams'
+import { ToastType } from '@/contexts/ToastContext/types/ToastType'
+
 const TOAST_DURATION_DEFAULT = 2.5 // seconds
-
-type Type = 'error' | 'success'
-
-interface OpenToastProps {
-  type: Type
-  message: string
-  seconds?: number
-}
-
-export interface ToastRef {
-  open: ({ type, message, seconds }: OpenToastProps) => void
-}
 
 export function useToast() {
   const [isOpen, setIsOpen] = useState(false)
-  const [type, setType] = useState<Type>('error')
+  const [type, setType] = useState<ToastType>('error')
   const [message, setMessage] = useState('')
   const [seconds, setSeconds] = useState(TOAST_DURATION_DEFAULT)
   const [scope, animate] = useAnimate()
   const [scrollPosition, setScrollPosition] = useState(0)
 
-  function open({ type, message, seconds = 2.5 }: OpenToastProps) {
+  function open({ type, message, seconds = 2.5 }: OpenToastParams) {
     setType(type)
     setMessage(message)
     setSeconds(seconds)

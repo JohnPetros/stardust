@@ -3,7 +3,7 @@
 import { DotsThreeOutlineVertical } from '@phosphor-icons/react'
 import Link from 'next/link'
 
-import { PopoverMenu, PopoverMenuButton } from '@/app/components/PopoverMenu'
+import { PopoverMenu, PopoverMenuButton } from '@/global/components/PopoverMenu'
 import { useDate } from '@/services/date'
 import { ROUTES } from '@/global/constants'
 import { deslugify } from '@/global/helpers'

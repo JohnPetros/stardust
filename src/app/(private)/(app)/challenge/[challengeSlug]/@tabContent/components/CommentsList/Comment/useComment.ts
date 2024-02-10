@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react'
 
-import { AlertRef } from '@/app/components/Alert'
-import { PopoverMenuButton } from '@/app/components/PopoverMenu'
-import { useApi } from '@/services/api'
-import { useCache } from '@/services/cache'
+import { AlertRef } from '@/global/components/Alert'
+import { PopoverMenuButton } from '@/global/components/PopoverMenu'
 import { APP_ERRORS } from '@/global/constants'
 import { CACHE } from '@/global/constants/cache'
+import { useApi } from '@/services/api'
+import { useCache } from '@/services/cache'
 
 export function useComment(commentId: string) {
   const [shouldFetchCommentReplies, setShouldFetchCommentReplies] =

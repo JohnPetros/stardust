@@ -12,9 +12,9 @@ import { twMerge } from 'tailwind-merge'
 import { ToolButton } from './ToolButton'
 import { useUserCommentInput } from './useUserCommentInput'
 
-import { Button } from '@/app/components/Button'
-import { Mdx } from '@/app/components/Mdx'
-import { UserAvatar } from '@/app/components/UserAvatar'
+import { Button } from '@/global/components/Button'
+import { Mdx } from '@/global/components/Mdx'
+import { UserAvatar } from '@/global/components/UserAvatar'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 
 type UserCommentInputProps = {
