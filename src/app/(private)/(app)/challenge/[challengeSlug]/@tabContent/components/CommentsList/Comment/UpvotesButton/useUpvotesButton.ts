@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import type { UpvotesButtonProps } from '.'
 
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { useToast } from '@/contexts/ToastContext'
+import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 import { useApi } from '@/services/api'
 import { APP_ERRORS } from '@/utils/constants'
 
@@ -19,7 +19,7 @@ export function useUpvotesButton({
 
   const { user } = useAuthContext()
   const api = useApi()
-  const toast = useToast()
+  const toast = useToastContext()
 
   async function handleToggleUpvoteComment() {
     if (!user) return

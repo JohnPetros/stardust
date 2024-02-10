@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Comment } from '@/@types/Comment'
 import { PopoverMenuButton } from '@/app/components/PopoverMenu'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { useToast } from '@/contexts/ToastContext'
+import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 import { useApi } from '@/services/api'
 import type { Order } from '@/services/api/types/Order'
 import { useCache } from '@/services/cache'
@@ -26,7 +26,7 @@ export function useCommentsList(canShowComments: boolean) {
   const [userComment, setUserComment] = useState('')
 
   const api = useApi()
-  const toast = useToast()
+  const toast = useToastContext()
   const router = useRouter()
 
   function checkUserUpvotedComment(

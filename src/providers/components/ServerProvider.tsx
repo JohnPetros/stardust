@@ -4,11 +4,11 @@ import { AuthProvider } from '@/contexts/AuthContext'
 import { SupabaseProvider } from '@/contexts/SupabaseContext'
 import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseServerClient'
 
-interface ServerProps {
+type ServerProps = {
   children: ReactNode
 }
 
-export async function Server({ children }: ServerProps) {
+export async function ServerProvider({ children }: ServerProps) {
   const supabase = SupabaseServerClient()
 
   const {

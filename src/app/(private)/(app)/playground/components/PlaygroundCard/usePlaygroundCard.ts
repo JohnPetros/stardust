@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react'
 
 import { PromptRef } from '@/app/components/Prompt'
-import { useToast } from '@/contexts/ToastContext'
+import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 import { useClipboard } from '@/hooks/useClipboard'
 import { useApi } from '@/services/api'
 import { APP_ERRORS, ROUTES } from '@/utils/constants'
@@ -17,7 +17,7 @@ export function usePlaygroundCard(id: string, initialTitle: string) {
   const { copy } = useClipboard(playgroundUrl)
 
   const api = useApi()
-  const toast = useToast()
+  const toast = useToastContext()
 
   const promptRef = useRef<PromptRef>(null)
 

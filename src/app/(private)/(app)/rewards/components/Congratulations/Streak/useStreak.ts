@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 
 import type { WeekStatus } from '@/@types/WeekStatus'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { useToast } from '@/contexts/ToastContext'
+import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 import { useDate } from '@/services/date'
 
 export function useStreak() {
@@ -12,7 +12,7 @@ export function useStreak() {
 
   const [weekStatus, setWeekStatus] = useState<WeekStatus[]>([])
   const [streakAmount, setStreakAmount] = useState(0)
-  const toast = useToast()
+  const toast = useToastContext()
   const date = useDate()
 
   function updateWeekStatus(

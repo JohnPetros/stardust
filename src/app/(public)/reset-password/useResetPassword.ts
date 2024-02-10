@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 
 import { deleteCookie } from '@/app/server/actions/deleteCookie'
 import { getCookie } from '@/app/server/actions/getCookie'
-import { useToast } from '@/contexts/ToastContext'
+import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 import { useApi } from '@/services/api'
 import { useValidation } from '@/services/validation'
 import { COOKIES } from '@/utils/constants'
@@ -15,7 +15,7 @@ export function useResetPassword() {
   const [isLoading, setIsLoading] = useState(false)
   const [shouldResetPassword, setShouldResetPassword] = useState(false)
 
-  const toast = useToast()
+  const toast = useToastContext()
   const api = useApi()
   const validation = useValidation()
 

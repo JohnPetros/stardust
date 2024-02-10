@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { Achievement as AchievementData } from '@/@types/Achievement'
 import { AlertRef } from '@/app/components/Alert'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { useToast } from '@/contexts/ToastContext'
+import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 import { useUserAchievements } from '@/hooks/useUserAchievements'
 import { useApi } from '@/services/api'
 
@@ -20,7 +20,7 @@ export function useAchivementsProvider() {
     useState(0)
 
   const api = useApi()
-  const toast = useToast()
+  const toast = useToastContext()
 
   const newUnlockedAchievementsAlertRef = useRef<AlertRef>(null)
 

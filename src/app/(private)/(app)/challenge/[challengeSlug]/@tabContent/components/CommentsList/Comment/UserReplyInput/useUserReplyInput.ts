@@ -3,10 +3,10 @@
 import { useState } from 'react'
 
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { useToast } from '@/contexts/ToastContext'
+import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 import { useApi } from '@/services/api'
 import { useChallengeStore } from '@/stores/challengeStore'
-import { ERRORS } from '@/utils/constants'
+import { APP_ERRORS } from '@/utils/constants'
 
 export function useUserReplyInput(
   commentId: string,
@@ -18,19 +18,17 @@ export function useUserReplyInput(
   const [reply, setReply] = useState('')
 
   const api = useApi()
-  const toast = useToast()
+  const toast = useToastContext()
 
   async function handlePostReply(reply: string) {
     if (!challenge || !user) return
-    console.log('teste')
 
     try {
       await api.postComment(
         {
-          challenge_id: challenge.id,
+          challengeId: challenge.id,
           content: reply,
-          parent_comment_id: commentId,
-          created_at: new Date(),
+          parentCommentId: commentId,
         },
         user.id
       )

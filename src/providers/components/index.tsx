@@ -1,16 +1,16 @@
 import { ReactNode } from 'react'
 
-import { Client } from './Client'
-import { Server } from './Server'
+import { ClientProvider } from './ClientProvider'
+import { ServerProvider } from './ServerProvider'
 
-interface ProvidersProps {
+type ProvidersProps = {
   children: ReactNode
 }
 
 export function Providers({ children }: ProvidersProps) {
   return (
-    <Server>
-      <Client>{children}</Client>
-    </Server>
+    <ServerProvider>
+      <ClientProvider>{children}</ClientProvider>
+    </ServerProvider>
   )
 }

@@ -6,7 +6,7 @@ import { ConsoleRef } from '../Console'
 import { PromptRef } from '../Prompt'
 
 import { EditorRef } from '@/app/components/Editor'
-import { useToast } from '@/contexts/ToastContext'
+import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 import { execute } from '@/libs/delegua'
 import { REGEX } from '@/utils/constants/regex'
 import { checkNumeric, countCharacters, playAudio } from '@/utils/helpers'
@@ -18,7 +18,7 @@ export function useCodeEditorPlayground(
   const [output, setOutput] = useState<string[]>([])
   const [shouldOpenPrompt, setShouldOpenPrompt] = useState(false)
 
-  const toast = useToast()
+  const toast = useToastContext()
 
   const userCode = useRef(code)
   const errorLine = useRef(0)

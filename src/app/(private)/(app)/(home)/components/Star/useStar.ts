@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 
 import { Star } from '@/@types/Star'
 import { useSpaceContext } from '@/contexts/SpaceContext/hooks/useSpaceContext'
-import { useToast } from '@/contexts/ToastContext'
+import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 import { useApi } from '@/services/api'
 import { ROUTES } from '@/utils/constants'
 import { playAudio } from '@/utils/helpers'
@@ -23,10 +23,12 @@ export function useStar(
     setLastUnlockedStarPosition,
   } = useSpaceContext()
   const starRef = useRef(null) as LottieRef
+
   const router = useRouter()
   const api = useApi()
   const isInView = useInView(lastUnlockedStarRef)
-  const toast = useToast()
+
+  const toast = useToastContext()
 
   async function handleStarNavigation() {
     if (isChallenge) {
@@ -54,6 +56,7 @@ export function useStar(
     }, 50)
   }
 
+  // TODO: Fix useEffect dependencies
   useEffect(() => {
     if (isLastUnlockedStar && isInView) {
       setLastUnlockedStarPosition('in')

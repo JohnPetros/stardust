@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { OAuthProvider } from '@/contexts/AuthContext/types/OAuthProvider'
-import { useToast } from '@/contexts/ToastContext'
+import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 import { useValidation } from '@/services/validation'
 import { SignInForm } from '@/services/validation/types/signInForm'
 import { ROCKET_ANIMATION_DELAY, ROUTES } from '@/utils/constants'
@@ -30,7 +30,7 @@ export function useSignInForm() {
   const [isLaoding, setIsLoading] = useState(false)
 
   const router = useRouter()
-  const toast = useToast()
+  const toast = useToastContext()
 
   const rocketRef = useRef(null) as LottieRef
 

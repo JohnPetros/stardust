@@ -1,12 +1,13 @@
 import { useState } from 'react'
 
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { useToast } from '@/contexts/ToastContext'
+import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 
 export function useSignOutAlert() {
-  const { signOut } = useAuthContext()
   const [isLoading, setIsLoading] = useState(false)
-  const toast = useToast()
+
+  const { signOut } = useAuthContext()
+  const toast = useToastContext()
 
   function showErrorMessage() {
     toast.show('Erro ao tentar sair da conta', {

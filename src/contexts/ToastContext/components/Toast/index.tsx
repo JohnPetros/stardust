@@ -1,9 +1,12 @@
 'use client'
+
 import { ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 import { Check, Prohibit, X } from '@phosphor-icons/react'
 import * as Container from '@radix-ui/react-toast'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
+
+import type { ToastRef } from '../../types/ToastRef'
 
 import { useToast } from './useToast'
 
@@ -26,18 +29,6 @@ const toastAnimations: Variants = {
       duration: 0.2,
     },
   },
-}
-
-type Type = 'error' | 'success'
-
-export type OpenToastProps = {
-  type: Type
-  message: string
-  seconds?: number
-}
-
-export type ToastRef = {
-  open: ({ type, message, seconds }: OpenToastProps) => void
 }
 
 export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {

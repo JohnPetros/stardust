@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import type { ChallengeTestCase } from '@/@types/Challenge'
 import { ConsoleRef } from '@/app/components/Console'
 import { EditorRef } from '@/app/components/Editor'
-import { useToast } from '@/contexts/ToastContext'
+import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 import { execute } from '@/libs/delegua'
 import { useChallengeStore } from '@/stores/challengeStore'
 import { REGEX, ROUTES, STORAGE } from '@/utils/constants'
@@ -29,7 +29,7 @@ export function useCodeEditor() {
         ''
       : ''
 
-  const toast = useToast()
+  const toast = useToastContext()
   const router = useRouter()
 
   const userCode = useRef('')

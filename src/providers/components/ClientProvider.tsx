@@ -11,7 +11,7 @@ type ClientProps = {
   children: ReactNode
 }
 
-export function Client({ children }: ClientProps) {
+export function ClientProvider({ children }: ClientProps) {
   return (
     <ToastProvider>
       <TooltipProvider>

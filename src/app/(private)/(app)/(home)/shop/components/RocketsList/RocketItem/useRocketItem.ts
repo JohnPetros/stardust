@@ -1,12 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useSWRConfig } from 'swr'
 
 import { RocketProps } from '.'
 
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { useToast } from '@/contexts/ToastContext'
+import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 import { useAudio } from '@/hooks/useAudio'
 import { useApi } from '@/services/api'
 
@@ -16,11 +15,11 @@ export function useRocketItem({
 }: RocketProps) {
   const { user, updateUser } = useAuthContext()
 
-  const { mutate } = useSWRConfig()
+  // const { mutate } = useSWRConfig()
 
   const [isSelected, setIsSelected] = useState(false)
 
-  const toast = useToast()
+  const toast = useToastContext()
   const api = useApi()
   const audio = useAudio('switch.wav')
 
@@ -30,12 +29,12 @@ export function useRocketItem({
   async function handleShopSuccess() {
     if (user) {
       const updatedCoins = user?.coins - price
-      const updatedAcquiredRockets = user?.acquired_rockets + 1
+      const updatedAcquiredRockets = user?.acquiredRocketsCount + 1
 
       await Promise.all([
         updateUser({
           coins: updatedCoins,
-          acquired_rockets: updatedAcquiredRockets,
+          acquiredRocketsCount: updatedAcquiredRockets,
         }),
         addUserAcquiredRocket(id),
       ])
@@ -44,8 +43,8 @@ export function useRocketItem({
 
   async function selectRocket() {
     try {
-      await updateUser({ rocket_id: id })
-      mutate('/rocket?id=' + id, { id, name, image })
+      await updateUser({ rocketId: id })
+      // mutate('/rocket?id=' + id, { id, name, image })
 
       audio?.play()
     } catch (error) {
@@ -80,7 +79,7 @@ export function useRocketItem({
   }
 
   useEffect(() => {
-    if (user) setIsSelected(id === user.rocket_id)
+    if (user) setIsSelected(id === user.rocketId)
   }, [id, user])
 
   return {

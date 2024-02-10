@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 
 import { AlertRef } from '@/app/components/Alert'
-import { useToast } from '@/contexts/ToastContext'
+import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 import { useApi } from '@/services/api'
 import { useValidation } from '@/services/validation'
 import { ResetPasswordForm } from '@/services/validation/types/ResetPasswordForm'
@@ -22,7 +22,7 @@ export function useResetPasswordDialog(alertRef: AlertRef | null) {
     resolver: resolveResetPasswordForm(),
   })
   const [isLoading, setIsLoading] = useState(false)
-  const toast = useToast()
+  const toast = useToastContext()
   const router = useRouter()
   const api = useApi()
 
