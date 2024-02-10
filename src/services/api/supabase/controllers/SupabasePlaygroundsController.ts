@@ -62,6 +62,7 @@ export const SupabasePlaygroundsController = (
     },
 
     updatePublicPlaygroundById: async (isPublic: boolean, id: string) => {
+      console.log({ isPublic })
       const { error } = await supabase
         .from('playgrounds')
         .update({ is_public: isPublic })
