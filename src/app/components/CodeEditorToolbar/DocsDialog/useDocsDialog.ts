@@ -4,7 +4,7 @@ import useSWR from 'swr'
 import { Doc } from '@/@types/Doc'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useApi } from '@/services/api'
-import { APP_ERRORS } from '@/utils/constants'
+import { APP_ERRORS } from '@/global/constants'
 
 export function useDocsDialog() {
   const { user } = useAuthContext()

@@ -5,8 +5,8 @@ import Link from 'next/link'
 
 import { PopoverMenu, PopoverMenuButton } from '@/app/components/PopoverMenu'
 import { useDate } from '@/services/date'
-import { ROUTES } from '@/utils/constants'
-import { deslugify } from '@/utils/helpers'
+import { ROUTES } from '@/global/constants'
+import { deslugify } from '@/global/helpers'
 
 type HeaderProps = {
   userSlug: string

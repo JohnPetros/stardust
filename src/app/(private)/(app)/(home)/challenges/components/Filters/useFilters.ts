@@ -7,7 +7,7 @@ import {
   Status,
   useChallengesListStore,
 } from '@/stores/challengesListStore'
-import { FILTER_SELECTS_ITEMS } from '@/utils/constants/filter-selects-items'
+import { FILTER_SELECTS_ITEMS } from '@/global/constants/filter-selects-items'
 
 export function useFilters(categories: Category[]) {
   const { state, actions } = useChallengesListStore()

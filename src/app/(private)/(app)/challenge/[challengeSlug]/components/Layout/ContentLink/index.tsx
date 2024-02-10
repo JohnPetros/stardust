@@ -6,7 +6,7 @@ import { twMerge } from 'tailwind-merge'
 
 import type { ContentType } from '@/@types/ContentType'
 import { useChallengeStore } from '@/stores/challengeStore'
-import { ROUTES } from '@/utils/constants'
+import { ROUTES } from '@/global/constants'
 
 type TabButtonProps = {
   contentType: ContentType

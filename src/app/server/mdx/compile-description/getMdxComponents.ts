@@ -1,4 +1,4 @@
-import { REGEX } from '@/utils/constants'
+import { REGEX } from '@/global/constants'
 
 const mdxComponentRegex = REGEX.mdxComponent
 

@@ -3,10 +3,10 @@
 import { KeyboardEvent, useCallback, useRef, useState } from 'react'
 
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
-import { useOutsideClick } from '@/hooks/useOutsideClick'
+import { APP_ERRORS } from '@/global/constants'
+import { useOutsideClick } from '@/global/hooks/useOutsideClick'
 import { useApi } from '@/services/api'
 import { useSaveButtonStore } from '@/stores/saveButtonStore'
-import { APP_ERRORS } from '@/utils/constants'
 
 export function usePlaygroundHeader(
   playgroundId: string,
@@ -33,7 +33,7 @@ export function usePlaygroundHeader(
         await api.updatePlaygroundTitleById(title, playgroundId)
       } catch (error) {
         console.error(error)
-        toast.show(APP_ERRORS.keys.playgrounds.failedTitleEdition, {
+        toast.show(APP_ERRORS.playgrounds.failedTitleEdition, {
           type: 'error',
           seconds: 8,
         })

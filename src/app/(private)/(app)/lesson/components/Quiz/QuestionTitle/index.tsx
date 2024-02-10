@@ -3,7 +3,7 @@
 import Image from 'next/image'
 
 import { useApi } from '@/services/api'
-import { formatText } from '@/utils/helpers'
+import { formatText } from '@/global/helpers'
 
 type TitleProps = {
   children: string

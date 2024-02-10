@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation'
 
 import { Challenge } from '@/@types/Challenge'
 import type { Vote } from '@/@types/Vote'
+import { ROUTES } from '@/global/constants'
 import { type Layout, useChallengeStore } from '@/stores/challengeStore'
-import { ROUTES } from '@/utils/constants'
 
 export function useChallengeHeader(challenge: Challenge, userVote: Vote) {
   const { state, actions } = useChallengeStore((store) => store)

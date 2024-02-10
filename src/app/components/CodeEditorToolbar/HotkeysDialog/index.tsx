@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTrigger,
 } from '@/app/components/Dialog'
-import { HOTKEYS } from '@/utils/constants'
+import { HOTKEYS } from '@/global/constants'
 
 type HotkeysDialogProps = {
   children: ReactNode

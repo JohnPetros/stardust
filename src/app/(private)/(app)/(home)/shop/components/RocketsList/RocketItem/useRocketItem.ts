@@ -6,7 +6,7 @@ import { RocketProps } from '.'
 
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
-import { useAudio } from '@/hooks/useAudio'
+import { useAudio } from '@/global/hooks/useAudio'
 import { useApi } from '@/services/api'
 
 export function useRocketItem({

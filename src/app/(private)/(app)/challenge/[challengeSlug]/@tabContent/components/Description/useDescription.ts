@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { useMdx } from '@/hooks/useMdx'
+import { useMdx } from '@/global/hooks/useMdx'
 import { useChallengeStore } from '@/stores/challengeStore'
-import { ROUTES } from '@/utils/constants'
+import { ROUTES } from '@/global/constants'
 
 export function useDescription() {
   const [isLoading, setIsLoading] = useState(true)

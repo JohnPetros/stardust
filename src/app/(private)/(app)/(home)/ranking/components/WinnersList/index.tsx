@@ -13,7 +13,7 @@ import type { Winner as WinnerUser } from '@/@types/Winner'
 import { Alert, AlertRef } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { getImage } from '@/utils/helpers'
+import { getImage } from '@/global/helpers'
 
 type WinnerUsersListProps = {
   winners: WinnerUser[]

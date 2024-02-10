@@ -15,7 +15,7 @@ import { Loading } from '@/app/components/Loading'
 import { Separator } from '@/app/components/Separator'
 import { UserAvatar } from '@/app/components/UserAvatar'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { ROUTES } from '@/utils/constants'
+import { ROUTES } from '@/global/constants'
 
 type CommentProps = {
   id: string

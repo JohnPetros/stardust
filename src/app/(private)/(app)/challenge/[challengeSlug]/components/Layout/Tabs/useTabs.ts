@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import type { ContentType } from '@/@types/ContentType'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useChallengeStore } from '@/stores/challengeStore'
-import { ROUTES } from '@/utils/constants'
+import { ROUTES } from '@/global/constants'
 
 export function useTabs() {
   const challenge = useChallengeStore((store) => store.state.challenge)

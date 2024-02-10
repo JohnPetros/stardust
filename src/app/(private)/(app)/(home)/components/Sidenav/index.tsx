@@ -15,7 +15,7 @@ import { SidenavButton } from './SidenavButton'
 import { useAchivementsContext } from '@/contexts/AchievementsContext/hooks/useAchivementsContext'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useSiderbarContext } from '@/contexts/SidebarContext/hooks/useSiderbarContext'
-import { HOME_LINKS } from '@/utils/constants/home-links'
+import { HOME_LINKS } from '@/global/constants/home-links'
 
 const sidenavAnimations: Variants = {
   shrink: {

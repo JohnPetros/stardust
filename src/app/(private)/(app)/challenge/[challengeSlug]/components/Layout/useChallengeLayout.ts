@@ -3,9 +3,9 @@ import { ImperativePanelHandle } from 'react-resizable-panels'
 
 import { PanelsOffset } from '../../actions/_getPanelsOffset'
 
-import { setCookie } from '@/app/server/actions/setCookie'
+import { setCookie } from '@/global/actions/setCookie'
+import { COOKIES, STORAGE } from '@/global/constants'
 import { useChallengeStore } from '@/stores/challengeStore'
-import { COOKIES, STORAGE } from '@/utils/constants'
 
 export function useChallengeLayout() {
   const challenge = useChallengeStore((store) => store.state.challenge)

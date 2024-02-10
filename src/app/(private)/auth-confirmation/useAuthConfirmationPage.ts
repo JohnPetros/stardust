@@ -3,7 +3,7 @@ import { LottieRef } from 'lottie-react'
 import { useRouter } from 'next/navigation'
 
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { ROCKET_ANIMATION_DELAY, ROUTES } from '@/utils/constants'
+import { ROCKET_ANIMATION_DELAY, ROUTES } from '@/global/constants'
 
 export function useAuthConfirmationPage() {
   const { user } = useAuthContext()

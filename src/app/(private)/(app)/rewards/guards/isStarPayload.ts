@@ -1,5 +1,5 @@
 import type { StarPayload } from '@/@types/Rewards'
-import { checkObject } from '@/utils/helpers'
+import { checkObject } from '@/global/helpers'
 
 export function isStarPayload(payload: StarPayload): payload is StarPayload {
   const starPayloadPropeties: (keyof StarPayload)[] = [

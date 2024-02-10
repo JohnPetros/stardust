@@ -6,8 +6,8 @@ import type { UpvotesButtonProps } from '.'
 
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
+import { APP_ERRORS } from '@/global/constants'
 import { useApi } from '@/services/api'
-import { APP_ERRORS } from '@/utils/constants'
 
 export function useUpvotesButton({
   commentId,

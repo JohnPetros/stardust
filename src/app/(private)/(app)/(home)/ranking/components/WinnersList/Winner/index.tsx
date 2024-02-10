@@ -8,7 +8,7 @@ import { ShinningAnimation } from '../../../../components/ShinningAnimation'
 
 import { Winner } from '@/@types/Winner'
 import { UserAvatar } from '@/app/components/UserAvatar'
-import { PODIUM } from '@/utils/constants'
+import { PODIUM } from '@/global/constants'
 
 const BASE_HEIGHT = 300 // px
 const BASE_DELAY = 0.8 // s

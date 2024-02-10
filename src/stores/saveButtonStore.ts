@@ -1,36 +1,20 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
-type SaveHandler = (() => Promise<void>) | null
+import { INITIAL_SAVE_BUTTON_STORE_STATE } from './saveButtonStore/constants/initial-save-button-store-state'
+import type { SaveButtonStoreActions } from './saveButtonStore/types/SaveButtonStoreActions'
+import type { SaveButtonStoreState } from './saveButtonStore/types/SaveButtonStoreState'
+import type { SaveHandler } from './saveButtonStore/types/SaveHandler'
 
-export type SaveButtonStoreActions = {
-  setSaveHandler: (saveHandler: SaveHandler) => void
-  setShouldSave: (shouldSave: boolean) => void
-  setCanSave: (shouldSave: boolean) => void
-  resetState: () => void
-}
-
-export type SaveButtonContextState = {
-  saveHandler: SaveHandler
-  shouldSave: boolean
-  canSave: boolean
-}
-
-export type SaveButtonStoreProps = {
-  state: SaveButtonContextState
+type SaveButtonStoreProps = {
+  state: SaveButtonStoreState
   actions: SaveButtonStoreActions
-}
-
-const initialState: SaveButtonContextState = {
-  saveHandler: null,
-  shouldSave: false,
-  canSave: false,
 }
 
 export const useSaveButtonStore = create<SaveButtonStoreProps>()(
   immer((set) => {
     return {
-      state: initialState,
+      state: INITIAL_SAVE_BUTTON_STORE_STATE,
       actions: {
         setSaveHandler(saveHandler: SaveHandler) {
           return set(({ state }) => {
@@ -48,7 +32,10 @@ export const useSaveButtonStore = create<SaveButtonStoreProps>()(
           })
         },
         resetState() {
-          return set(({ actions }) => ({ state: initialState, actions }))
+          return set(({ actions }) => ({
+            state: INITIAL_SAVE_BUTTON_STORE_STATE,
+            actions,
+          }))
         },
       },
     }

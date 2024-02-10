@@ -6,7 +6,7 @@ import { _getPlanets } from './_getPlanets'
 import { IAuthController } from '@/services/api/interfaces/IAuthController'
 import { IPlanetsController } from '@/services/api/interfaces/IPlanetsController'
 import { IStarsController } from '@/services/api/interfaces/IStarsController'
-import { APP_ERRORS } from '@/utils/constants'
+import { APP_ERRORS } from '@/global/constants'
 
 type _HandleSpacePageParams = {
   authController: IAuthController

@@ -8,7 +8,7 @@ import { Theory } from '../Theory'
 import { useLessonStar } from './useLessonStar'
 
 import type { Star } from '@/@types/Star'
-import { useSecondsCounter } from '@/hooks/useSecondsCounter'
+import { useSecondsCounter } from '@/global/hooks/useSecondsCounter'
 import { useLessonStore } from '@/stores/lessonStore'
 
 type LayoutProps = {

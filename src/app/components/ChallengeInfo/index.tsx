@@ -9,7 +9,7 @@ import Link from 'next/link'
 
 import { Info } from './Info'
 
-import { deslugify } from '@/utils/helpers'
+import { deslugify } from '@/global/helpers'
 
 type ChallengeInfo = {
   isCompleted: boolean

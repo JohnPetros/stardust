@@ -4,8 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
 
 import type { DraggrableItem } from '@/@types/Quiz'
+import { compareArrays, reorderItems } from '@/global/helpers'
 import { useLessonStore } from '@/stores/lessonStore'
-import { compareArrays, reorderItems } from '@/utils/helpers'
 
 export function getDragItemWidth(item: DraggrableItem) {
   const { length } = item.label

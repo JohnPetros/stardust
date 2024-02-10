@@ -7,10 +7,10 @@ import type { ChallengeTestCase } from '@/@types/Challenge'
 import { ConsoleRef } from '@/app/components/Console'
 import { EditorRef } from '@/app/components/Editor'
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
+import { REGEX, ROUTES, STORAGE } from '@/global/constants'
+import { playAudio } from '@/global/helpers'
 import { execute } from '@/libs/delegua'
 import { useChallengeStore } from '@/stores/challengeStore'
-import { REGEX, ROUTES, STORAGE } from '@/utils/constants'
-import { playAudio } from '@/utils/helpers'
 
 const inputCommandRegex = REGEX.input
 

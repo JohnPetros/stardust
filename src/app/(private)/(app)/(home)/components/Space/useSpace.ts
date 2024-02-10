@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 
 import { useSpaceContext } from '@/contexts/SpaceContext/hooks/useSpaceContext'
-import { STORAGE } from '@/utils/constants'
+import { STORAGE } from '@/global/constants'
 
 export function useSpace() {
   const hasTransitionAnimation = Boolean(

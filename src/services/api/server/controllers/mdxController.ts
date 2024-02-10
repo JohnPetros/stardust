@@ -2,7 +2,7 @@ import type { IMdxController } from '../../interfaces/IMdxController'
 import { Server } from '../server'
 
 import { Text } from '@/@types/Text'
-import { ROUTES } from '@/utils/constants'
+import { ROUTES } from '@/global/constants'
 
 export const MdxController = (): IMdxController => {
   const server = Server()

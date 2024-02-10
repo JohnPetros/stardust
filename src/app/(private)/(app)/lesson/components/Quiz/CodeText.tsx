@@ -7,7 +7,7 @@ import {
   OPERATOR_REGEX,
   STRING_REGEX,
   THEMES,
-} from '@/utils/constants'
+} from '@/global/constants'
 
 const parsers = [
   {

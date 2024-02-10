@@ -5,7 +5,7 @@ import Lottie from 'lottie-react'
 import Missing from '../../../../../../../public/animations/apollo-missing.json'
 import { Achievement } from '../../components/Achievement'
 
-import { useUserAchievements } from '@/hooks/useUserAchievements'
+import { useUserAchievements } from '@/global/hooks/useUserAchievements'
 
 interface AchievementsProps {
   userId: string

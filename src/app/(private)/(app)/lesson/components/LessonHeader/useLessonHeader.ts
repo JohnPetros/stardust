@@ -3,8 +3,8 @@
 import { useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 
+import { ROUTES } from '@/global/constants'
 import { useLessonStore } from '@/stores/lessonStore'
-import { ROUTES } from '@/utils/constants'
 
 export function useLessonHeader() {
   const router = useRouter()

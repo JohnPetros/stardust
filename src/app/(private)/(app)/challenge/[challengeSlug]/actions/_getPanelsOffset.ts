@@ -1,8 +1,8 @@
 'use server'
 
-import { getCookie } from '@/app/server/actions/getCookie'
-import { COOKIES } from '@/utils/constants'
-import { checkObject } from '@/utils/helpers'
+import { getCookie } from '@/global/actions/getCookie'
+import { COOKIES } from '@/global/constants'
+import { checkObject } from '@/global/helpers'
 
 export type PanelsOffsetType =
   | 'tabs-right;code_editor-left'

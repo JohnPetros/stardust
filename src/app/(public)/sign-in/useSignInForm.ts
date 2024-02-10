@@ -8,10 +8,10 @@ import { useRouter } from 'next/navigation'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { OAuthProvider } from '@/contexts/AuthContext/types/OAuthProvider'
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
+import { ROCKET_ANIMATION_DELAY, ROUTES } from '@/global/constants'
+import { getSearchParams } from '@/global/helpers/getSearchParams'
 import { useValidation } from '@/services/validation'
 import { SignInForm } from '@/services/validation/types/signInForm'
-import { ROCKET_ANIMATION_DELAY, ROUTES } from '@/utils/constants'
-import { getSearchParams } from '@/utils/helpers/getSearchParams'
 
 export function useSignInForm() {
   const [isRocketVisible, setIsRocketVisible] = useState(false)

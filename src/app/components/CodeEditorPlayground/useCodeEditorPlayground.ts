@@ -7,9 +7,9 @@ import { PromptRef } from '../Prompt'
 
 import { EditorRef } from '@/app/components/Editor'
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
+import { REGEX } from '@/global/constants/regex'
+import { checkNumeric, countCharacters, playAudio } from '@/global/helpers'
 import { execute } from '@/libs/delegua'
-import { REGEX } from '@/utils/constants/regex'
-import { checkNumeric, countCharacters, playAudio } from '@/utils/helpers'
 
 export function useCodeEditorPlayground(
   code: string,

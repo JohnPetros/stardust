@@ -1,11 +1,11 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
-import { hasCookie } from './app/server/actions/hasCookie'
+import { hasCookie } from './global/actions/hasCookie'
+import { COOKIES, ROUTES } from './global/constants'
+import { checkPublicRoute } from './global/helpers'
+import { getSearchParams } from './global/helpers/getSearchParams'
 import { SupabaseMiddlewareClient } from './services/api/supabase/clients/SupabaseMiddlewareClient'
 import { SupabaseAuthController } from './services/api/supabase/controllers/SupabaseAuthController'
-import { COOKIES, ROUTES } from './utils/constants'
-import { checkPublicRoute } from './utils/helpers'
-import { getSearchParams } from './utils/helpers/getSearchParams'
 
 export const middleware = async (req: NextRequest) => {
   const res = NextResponse.next()

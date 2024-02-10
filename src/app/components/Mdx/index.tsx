@@ -11,7 +11,7 @@ import { Strong } from './Strong'
 import { Text } from './Text'
 import { User } from './User'
 
-import { useMdx } from '@/hooks/useMdx'
+import { useMdx } from '@/global/hooks/useMdx'
 
 type MdxProps = {
   children: string

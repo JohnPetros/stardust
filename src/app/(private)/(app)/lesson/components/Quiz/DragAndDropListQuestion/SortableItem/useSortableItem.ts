@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 
 import { SortableItemProps } from '.'
 
-import { countCharacters } from '@/utils/helpers'
+import { countCharacters } from '@/global/helpers'
 
 export function useSortableItem({
   label,

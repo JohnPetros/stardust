@@ -2,12 +2,12 @@ import { useMemo, useState } from 'react'
 
 import type { Avatar } from '@/@types/Avatar'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
+import { APP_ERRORS } from '@/global/constants'
+import { CACHE } from '@/global/constants/cache'
+import { calculatePage } from '@/global/helpers'
 import { useApi } from '@/services/api'
 import { Order } from '@/services/api/types/Order'
 import { useCache } from '@/services/cache'
-import { APP_ERRORS } from '@/utils/constants'
-import { CACHE } from '@/utils/constants/cache'
-import { calculatePage } from '@/utils/helpers'
 
 const ITEMS_PER_PAGE = 8
 

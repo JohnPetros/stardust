@@ -1,14 +1,14 @@
 import { _handleRewardsPage } from './actions/_handleRewardsPage'
 import { Congratulations } from './components/Congratulations'
 
-import { getCookie } from '@/app/server/actions/getCookie'
+import { getCookie } from '@/global/actions/getCookie'
 import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseServerClient'
 import { SupabaseAuthController } from '@/services/api/supabase/controllers/SupabaseAuthController'
 import { SupabaseChallengesController } from '@/services/api/supabase/controllers/SupabaseChallengesController'
 import { SupabaseStarsController } from '@/services/api/supabase/controllers/SupabaseStarsController'
 import { SupabaseUsersController } from '@/services/api/supabase/controllers/SupabaseUsersController'
-import { COOKIES } from '@/utils/constants'
-import { formatSecondsToTime } from '@/utils/helpers'
+import { COOKIES } from '@/global/constants'
+import { formatSecondsToTime } from '@/global/helpers'
 
 export default async function RewardsPage() {
   const rewardsPayload = await getCookie(COOKIES.keys.rewardsPayload)

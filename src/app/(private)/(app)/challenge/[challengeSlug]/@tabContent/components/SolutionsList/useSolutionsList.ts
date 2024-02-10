@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { useChallengeStore } from '@/stores/challengeStore'
-import { ROUTES } from '@/utils/constants'
+import { ROUTES } from '@/global/constants'
 
 export function useSolutionsList(canShowSolutions: boolean) {
   const challenge = useChallengeStore((store) => store.state.challenge)

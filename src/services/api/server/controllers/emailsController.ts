@@ -1,6 +1,6 @@
 import { Server } from '../server'
 
-import { ROUTES } from '@/utils/constants'
+import { ROUTES } from '@/global/constants'
 
 export const EmailsController = () => {
   const server = Server()

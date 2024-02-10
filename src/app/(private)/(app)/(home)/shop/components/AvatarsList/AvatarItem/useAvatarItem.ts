@@ -4,8 +4,8 @@ import { useSWRConfig } from 'swr'
 import { AvatarItemProps } from '../AvatarItem'
 
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { useAudio } from '@/hooks/useAudio'
-import { getImage } from '@/utils/helpers'
+import { getImage } from '@/global/helpers'
+import { useAudio } from '@/global/hooks/useAudio'
 
 export function useAvatarItem({
   data: { id, name, price, image, isAcquired },

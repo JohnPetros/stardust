@@ -9,7 +9,7 @@ import { Loading } from '@/app/components/Loading'
 import { PopoverMenu } from '@/app/components/PopoverMenu'
 import { Separator } from '@/app/components/Separator'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { useBreakpoint } from '@/hooks/useBreakpoint'
+import { useBreakpoint } from '@/global/hooks/useBreakpoint'
 import { useChallengeStore } from '@/stores/challengeStore'
 
 export function CommentsList() {

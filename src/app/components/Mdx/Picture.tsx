@@ -3,7 +3,7 @@
 import Image from 'next/image'
 
 import { useApi } from '@/services/api'
-import { REGEX } from '@/utils/constants'
+import { REGEX } from '@/global/constants'
 
 type PictureProps = {
   url: string

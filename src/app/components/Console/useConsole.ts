@@ -5,7 +5,7 @@ import { PanInfo, useAnimation } from 'framer-motion'
 
 import { ConsoleProps } from '.'
 
-import { STORAGE } from '@/utils/constants'
+import { STORAGE } from '@/global/constants'
 
 export function useConsole({ height, results }: ConsoleProps) {
   const controls = useAnimation()

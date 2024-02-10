@@ -4,7 +4,7 @@ import { SupabaseUserAdapter } from '../adapters/SupabaseUserAdapter'
 import type { Supabase } from '../types/Supabase'
 
 import type { User } from '@/@types/User'
-import { slugify } from '@/utils/helpers'
+import { slugify } from '@/global/helpers'
 
 export const SupabaseUsersController = (
   supabase: Supabase

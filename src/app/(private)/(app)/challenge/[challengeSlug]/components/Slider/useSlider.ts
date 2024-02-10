@@ -8,7 +8,7 @@ import { SwiperRef } from 'swiper/react'
 register()
 import { useAnimate } from 'framer-motion'
 
-import { useBreakpoint } from '@/hooks/useBreakpoint'
+import { useBreakpoint } from '@/global/hooks/useBreakpoint'
 import { useChallengeStore } from '@/stores/challengeStore'
 
 export function useSlider() {

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { STORAGE } from '@/utils/constants'
+import { STORAGE } from '@/global/constants'
 
 export function useSecondsCounter(isEnabled: boolean) {
   useEffect(() => {

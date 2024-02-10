@@ -6,7 +6,7 @@ import type { Achievement as AchievementData } from '@/@types/Achievement'
 import { AlertRef } from '@/app/components/Alert'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
-import { useUserAchievements } from '@/hooks/useUserAchievements'
+import { useUserAchievements } from '@/global/hooks/useUserAchievements'
 import { useApi } from '@/services/api'
 
 export function useAchivementsProvider() {

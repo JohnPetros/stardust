@@ -2,7 +2,7 @@
 
 import { IAuthController } from '@/services/api/interfaces/IAuthController'
 import { IPlaygroundsController } from '@/services/api/interfaces/IPlaygroundsController'
-import { APP_ERRORS } from '@/utils/constants'
+import { APP_ERRORS } from '@/global/constants'
 
 export async function _handleUserPlaygroudsPage(
   authController: IAuthController,

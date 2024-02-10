@@ -1,60 +1,21 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
-import { Question } from '@/@types/Quiz'
+import { INITIAL_LESSON_STORE_STATE } from './constants/initial-lesson-store-state'
+import type { LessonStoreActions } from './types/LessonStoreActions'
+import type { LessonStoreState } from './types/LessonStoreState'
 
-export type LessonStoreState = {
-  currentStage: 'theory' | 'quiz' | 'rewards'
-  mdxComponentsCount: number
-  renderedMdxComponents: number
-  questions: Question[]
-  currentQuestionIndex: number
-  incorrectAnswersCount: number
-  livesCount: number
-  answerHandler: VoidFunction
-  isAnswerCorrect: boolean
-  isAnswerVerified: boolean
-  isAnswered: boolean
-}
+import type { Question } from '@/@types/Quiz'
 
-export type LessonStoreActions = {
-  showQuiz: () => void
-  changeQuestion: () => void
-  setQuestions: (categoriesIds: Question[]) => void
-  setMdxComponentsCount: (mdxComponentsCount: number) => void
-  setIsAnswered: (isAnswered: boolean) => void
-  setIsAnswerCorrect: (isAnswered: boolean) => void
-  setIsAnswerVerified: (isAnswered: boolean) => void
-  setAnswerHandler: (answeredHandler: VoidFunction) => void
-  incrementIncorrectAswersCount: () => void
-  incrementRenderedMdxComponentsCount: () => void
-  decrementLivesCount: () => void
-  resetState: () => void
-}
-
-export type LessonStoreProps = {
+type LessonStoreProps = {
   state: LessonStoreState
   actions: LessonStoreActions
-}
-
-const initialState: LessonStoreState = {
-  currentStage: 'theory',
-  mdxComponentsCount: 0,
-  renderedMdxComponents: 0,
-  questions: [],
-  currentQuestionIndex: 0,
-  incorrectAnswersCount: 0,
-  livesCount: 5,
-  answerHandler: () => {},
-  isAnswerCorrect: false,
-  isAnswerVerified: false,
-  isAnswered: false,
 }
 
 export const useLessonStore = create<LessonStoreProps>()(
   immer((set) => {
     return {
-      state: initialState,
+      state: INITIAL_LESSON_STORE_STATE,
       actions: {
         showQuiz() {
           return set(({ state }) => {
@@ -126,7 +87,10 @@ export const useLessonStore = create<LessonStoreProps>()(
           })
         },
         resetState() {
-          return set(({ actions }) => ({ state: initialState, actions }))
+          return set(({ actions }) => ({
+            state: INITIAL_LESSON_STORE_STATE,
+            actions,
+          }))
         },
       },
     }

@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 
 import { AlertType } from '.'
 
-import { ALERT_EFFECTS } from '@/utils/constants'
-import { playAudio } from '@/utils/helpers'
+import { ALERT_EFFECTS } from '@/global/constants'
+import { playAudio } from '@/global/helpers'
 
 export function useAlert(
   type: AlertType,

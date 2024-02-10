@@ -11,7 +11,7 @@ import {
 } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { SidebarContext, SidebarContextValue } from '@/contexts/SidebarContext'
 import { SupabaseProvider } from '@/contexts/SupabaseContext'
-import { HOME_LINKS } from '@/utils/constants'
+import { HOME_LINKS } from '@/global/constants'
 
 function renderSidenav(isExpanded: boolean = false) {
   const isAchievementsListVisibleMock = false

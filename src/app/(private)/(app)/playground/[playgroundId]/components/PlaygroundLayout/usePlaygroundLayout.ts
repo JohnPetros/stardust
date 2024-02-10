@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react'
 
 import { CodeEditorPlaygroundRef } from '@/app/components/CodeEditorPlayground'
-import { useWindowSize } from '@/hooks/useWindowSize'
+import { useWindowSize } from '@/global/hooks/useWindowSize'
 import { useApi } from '@/services/api'
 import { useSaveButtonStore } from '@/stores/saveButtonStore'
 

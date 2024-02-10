@@ -4,7 +4,7 @@ import { Header } from './components/Header'
 import { Link } from './components/Link'
 import { Paragraph } from './components/Paragraph'
 
-import { ROUTES } from '@/utils/constants'
+import { ROUTES } from '@/global/constants'
 
 export function RequestPasswordResetTemplate() {
   return (

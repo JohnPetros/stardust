@@ -7,7 +7,7 @@ import { IAuthController } from '@/services/api/interfaces/IAuthController'
 import { IChallengesController } from '@/services/api/interfaces/IChallengesController'
 import { IStarsController } from '@/services/api/interfaces/IStarsController'
 import { IUsersController } from '@/services/api/interfaces/IUsersController'
-import { APP_ERRORS } from '@/utils/constants'
+import { APP_ERRORS } from '@/global/constants'
 
 const dateProvider = DateProvider()
 

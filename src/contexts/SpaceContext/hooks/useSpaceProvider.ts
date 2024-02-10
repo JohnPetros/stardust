@@ -7,8 +7,8 @@ import type { SpaceRocket } from '../types/SpaceRocket'
 import type { StarViewPortPosition } from '../types/StarViewPortPosition'
 
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { useRocket } from '@/hooks/useRocket'
-import { getImage } from '@/utils/helpers'
+import { getImage } from '@/global/helpers'
+import { useRocket } from '@/global/hooks/useRocket'
 
 export function useSpaceProvider() {
   const { user } = useAuthContext()

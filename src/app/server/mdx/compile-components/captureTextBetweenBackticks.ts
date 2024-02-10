@@ -1,4 +1,4 @@
-import { REGEX } from '@/utils/constants'
+import { REGEX } from '@/global/constants'
 const backticksRegex = REGEX.backticks
 
 export function captureTextBetweenBackticks(text: string) {

@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { ContentType } from '@/@types/ContentType'
 import { DialogRef } from '@/app/components/Dialog/Dialog'
 import { useChallengeStore } from '@/stores/challengeStore'
-import { ROUTES } from '@/utils/constants'
+import { ROUTES } from '@/global/constants'
 
 export function useContentDialog(contentType: ContentType) {
   const challengeSlug = useChallengeStore(

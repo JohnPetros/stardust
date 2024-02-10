@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react'
 
 import { ChallengeDifficulty } from '@/@types/Challenge'
 import type { ChallengeSummary } from '@/@types/ChallengeSummary'
+import { CACHE } from '@/global/constants/cache'
+import { getChallengesChatOptions } from '@/global/helpers'
 import { useApi } from '@/services/api'
 import { useCache } from '@/services/cache'
-import { CACHE } from '@/utils/constants/cache'
-import { getChallengesChatOptions } from '@/utils/helpers'
 
 type TotalChallengesByDifficulty = {
   easy: number

@@ -4,9 +4,9 @@ import useSWR, { mutate } from 'swr'
 
 import type { Rocket } from '@/@types/Rocket'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
+import { calculatePage } from '@/global/helpers'
 import { useApi } from '@/services/api'
 import type { Order } from '@/services/api/types/Order'
-import { calculatePage } from '@/utils/helpers'
 
 const ITEMS_PER_PAGE = 6
 

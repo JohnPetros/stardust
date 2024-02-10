@@ -10,7 +10,7 @@ import { TabNav } from '../TabNav'
 
 import { useHomeLayout } from './useHomeLayout'
 
-import { useBreakpoint } from '@/hooks/useBreakpoint'
+import { useBreakpoint } from '@/global/hooks/useBreakpoint'
 
 const layoutVariants: Variants = {
   mobile: {

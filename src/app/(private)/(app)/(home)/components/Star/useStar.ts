@@ -8,9 +8,9 @@ import { useRouter } from 'next/navigation'
 import { Star } from '@/@types/Star'
 import { useSpaceContext } from '@/contexts/SpaceContext/hooks/useSpaceContext'
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
+import { ROUTES } from '@/global/constants'
+import { playAudio } from '@/global/helpers'
 import { useApi } from '@/services/api'
-import { ROUTES } from '@/utils/constants'
-import { playAudio } from '@/utils/helpers'
 
 export function useStar(
   { id, slug, isChallenge }: Pick<Star, 'id' | 'slug' | 'isChallenge'>,

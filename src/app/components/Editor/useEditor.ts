@@ -6,9 +6,9 @@ import type monaco from 'monaco-editor'
 
 import { CursorPosition } from '.'
 
+import { THEMES } from '@/global/constants'
+import { getDeleguaLanguageTokens } from '@/global/helpers/getDeleguaLanguageTokens'
 import { colors } from '@/styles/colors'
-import { THEMES } from '@/utils/constants'
-import { getDeleguaLanguageTokens } from '@/utils/helpers/getDeleguaLanguageTokens'
 
 export function useEditor(value: string) {
   const monaco = useMonaco()

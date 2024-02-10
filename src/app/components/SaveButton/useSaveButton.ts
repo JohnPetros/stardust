@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useSaveButtonStore } from '@/stores/saveButtonStore'
-import { waitFor } from '@/utils/helpers'
+import { waitFor } from '@/global/helpers'
 
 const STATE_DELAY = 1000
 

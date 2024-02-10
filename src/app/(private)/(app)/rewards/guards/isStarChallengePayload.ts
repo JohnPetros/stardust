@@ -1,5 +1,5 @@
 import type { StarChallengePayload } from '@/@types/Rewards'
-import { checkObject } from '@/utils/helpers'
+import { checkObject } from '@/global/helpers'
 
 export function isStarChallengePayload(
   payload: StarChallengePayload

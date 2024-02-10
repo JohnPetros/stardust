@@ -4,8 +4,8 @@ import { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 
 import type { SortableItem as SortableItemData } from '@/@types/Quiz'
+import { compareArrays, reorderItems } from '@/global/helpers'
 import { useLessonStore } from '@/stores/lessonStore'
-import { compareArrays, reorderItems } from '@/utils/helpers'
 
 export function useDragAndDropListQuestion(items: SortableItemData[]) {
   const {

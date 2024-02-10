@@ -7,10 +7,10 @@ import { useRouter } from 'next/navigation'
 import { CongratulationsProps } from '.'
 
 import { AlertRef } from '@/app/components/Alert'
-import { deleteCookie } from '@/app/server/actions/deleteCookie'
+import { deleteCookie } from '@/global/actions/deleteCookie'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { COOKIES } from '@/utils/constants'
-import { playAudio } from '@/utils/helpers'
+import { COOKIES } from '@/global/constants'
+import { playAudio } from '@/global/helpers'
 
 export function useCongratulations({
   coins,

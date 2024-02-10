@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation'
 
 import { VerificationButtonProps } from '.'
 
-import { playAudio } from '@/utils/helpers'
+import { playAudio } from '@/global/helpers'
 
 export function useVerificationButton({
   answerHandler,

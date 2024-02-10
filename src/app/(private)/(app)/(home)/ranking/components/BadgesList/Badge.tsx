@@ -4,7 +4,7 @@ import { motion, Variants } from 'framer-motion'
 import Image from 'next/image'
 import { twMerge } from 'tailwind-merge'
 
-import { getImage } from '@/utils/helpers'
+import { getImage } from '@/global/helpers'
 
 const badgeVariants: Variants = {
   hover: {

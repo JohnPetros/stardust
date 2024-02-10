@@ -5,10 +5,10 @@ import { useRouter } from 'next/navigation'
 
 import { StarRewardsPayload } from '@/@types/Rewards'
 import type { Star } from '@/@types/Star'
-import { setCookie } from '@/app/server/actions/setCookie'
-import { useMdx } from '@/hooks/useMdx'
+import { setCookie } from '@/global/actions/setCookie'
+import { useMdx } from '@/global/hooks/useMdx'
 import { useLessonStore } from '@/stores/lessonStore'
-import { COOKIES, ROUTES, STORAGE } from '@/utils/constants'
+import { COOKIES, ROUTES, STORAGE } from '@/global/constants'
 
 export function useLessonStar(star: Star) {
   const { parseTextsToMdxComponents } = useMdx()

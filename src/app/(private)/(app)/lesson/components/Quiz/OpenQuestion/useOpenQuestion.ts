@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useLessonStore } from '@/stores/lessonStore'
-import { compareArrays } from '@/utils/helpers'
+import { compareArrays } from '@/global/helpers'
 
 export function useOpenQuestion(answers: string[]) {
   const {

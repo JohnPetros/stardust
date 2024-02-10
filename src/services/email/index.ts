@@ -2,7 +2,7 @@
 
 import { useServer } from '../api/server/server'
 
-import { ROUTES } from '@/utils/constants'
+import { ROUTES } from '@/global/constants'
 
 export function useEmail() {
   const server = useServer()

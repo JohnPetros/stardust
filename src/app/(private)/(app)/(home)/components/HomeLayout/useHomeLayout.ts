@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 
 import { useSiderbarContext } from '@/contexts/SidebarContext/hooks/useSiderbarContext'
-import { STORAGE } from '@/utils/constants'
+import { STORAGE } from '@/global/constants'
 
 export function useHomeLayout() {
   const [isSidenavExpanded, setIsSidenavExpanded] = useState(false)

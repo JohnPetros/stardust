@@ -1,6 +1,6 @@
 import { PaginationProps } from '.'
 
-import { calculatePage } from '@/utils/helpers'
+import { calculatePage } from '@/global/helpers'
 
 const MAX_PAGE_BUTTONS = 5
 const SINBLING_PAGE_BUTTONS = (MAX_PAGE_BUTTONS - 1) / 2

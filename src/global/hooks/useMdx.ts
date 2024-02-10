@@ -2,8 +2,8 @@ import { useCallback } from 'react'
 import { v4 as uuid } from 'uuid'
 
 import { Text } from '@/@types/Text'
-import { REGEX } from '@/utils/constants'
-import { formatSpecialCharacters, getComponentContent } from '@/utils/helpers'
+import { REGEX } from '@/global/constants'
+import { formatSpecialCharacters, getComponentContent } from '@/global/helpers'
 
 export function useMdx() {
   const parseTextsToMdxComponents = useCallback((texts: Text[]) => {

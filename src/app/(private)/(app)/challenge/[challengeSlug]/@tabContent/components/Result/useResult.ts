@@ -8,11 +8,11 @@ import {
   ChallengeRewardsPayload,
   StarChallengeRewardsPayload,
 } from '@/@types/Rewards'
-import { setCookie } from '@/app/server/actions/setCookie'
-import { useBreakpoint } from '@/hooks/useBreakpoint'
+import { setCookie } from '@/global/actions/setCookie'
+import { COOKIES, ROUTES, STORAGE } from '@/global/constants'
+import { compareArrays } from '@/global/helpers'
+import { useBreakpoint } from '@/global/hooks/useBreakpoint'
 import { useChallengeStore } from '@/stores/challengeStore'
-import { COOKIES, ROUTES, STORAGE } from '@/utils/constants'
-import { compareArrays } from '@/utils/helpers'
 
 export function useResult() {
   const {

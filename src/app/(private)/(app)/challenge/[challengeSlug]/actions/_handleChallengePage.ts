@@ -10,7 +10,7 @@ import type { Vote } from '@/@types/Vote'
 import { IAuthController } from '@/services/api/interfaces/IAuthController'
 import { IChallengesController } from '@/services/api/interfaces/IChallengesController'
 import { IDocsController } from '@/services/api/interfaces/IDocsController'
-import { APP_ERRORS } from '@/utils/constants'
+import { APP_ERRORS } from '@/global/constants'
 
 let challenge: Challenge
 let userVote: Vote

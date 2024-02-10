@@ -11,7 +11,7 @@ import { Tabs } from './Tabs'
 import { useChallengeLayout } from './useChallengeLayout'
 
 import { PageTransitionAnimation } from '@/app/components/PageTransitionAnimation'
-import { useSecondsCounter } from '@/hooks/useSecondsCounter'
+import { useSecondsCounter } from '@/global/hooks/useSecondsCounter'
 import { useChallengeStore } from '@/stores/challengeStore'
 
 const DIRECTION = 'horizontal'

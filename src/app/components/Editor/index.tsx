@@ -8,7 +8,7 @@ import { Loading } from '../Loading'
 import { useEditor } from './useEditor'
 
 import { useEditorContext } from '@/contexts/EditorContext/hooks/useEditorContext'
-import { useBreakpoint } from '@/hooks/useBreakpoint'
+import { useBreakpoint } from '@/global/hooks/useBreakpoint'
 
 export type CursorPosition = {
   lineNumber: number

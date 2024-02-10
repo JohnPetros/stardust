@@ -11,7 +11,7 @@ import { useSignInForm } from './useSignInForm'
 
 import { Button } from '@/app/components/Button'
 import { Input } from '@/app/components/Input'
-import { ROUTES } from '@/utils/constants'
+import { ROUTES } from '@/global/constants'
 
 const formAnimations: Variants = {
   initial: {

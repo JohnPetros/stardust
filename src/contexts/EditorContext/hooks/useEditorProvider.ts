@@ -5,7 +5,7 @@ import { useEffect, useReducer } from 'react'
 import { EditorContextAction } from '../types/editorContextAction'
 import { EditorContextState } from '../types/editorContextState'
 
-import { EDITOR_DEFAULT_CONFIG, STORAGE } from '@/utils/constants'
+import { EDITOR_DEFAULT_CONFIG, STORAGE } from '@/global/constants'
 
 export function useEditorProvider() {
   const storedEditorConfig = localStorage.getItem(STORAGE.keys.editorConfig)

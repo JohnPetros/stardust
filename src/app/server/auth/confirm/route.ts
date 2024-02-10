@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { AuthConfirmationError } from '@/@types/AuthConfirmationError'
 import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseServerClient'
 import { SupabaseAuthController } from '@/services/api/supabase/controllers/SupabaseAuthController'
-import { COOKIES, ROUTES } from '@/utils/constants'
-import { getSearchParams } from '@/utils/helpers/getSearchParams'
+import { COOKIES, ROUTES } from '@/global/constants'
+import { getSearchParams } from '@/global/helpers/getSearchParams'
 
 type Action = 'signup_confirmation' | 'email_change' | 'password_reset'
 

@@ -1,14 +1,14 @@
 import { serialize } from 'next-mdx-remote/serialize'
 
-import { ERRORS } from '@/utils/constants'
-import { getComponentContent } from '@/utils/helpers'
+import { APP_ERRORS } from '@/global/constants'
+import { getComponentContent } from '@/global/helpers'
 
 const CONTENT_PLACEHOLDER = '@component-content'
 
 export async function compileMdxComponent(component: string) {
   const componentContent = getComponentContent(component)
 
-  if (!componentContent) throw new Error(APP_ERRORS.mdxFailedCompiling)
+  if (!componentContent) throw new Error(APP_ERRORS.mdx.failedCompiling)
 
   const componentToBeCompiled = component.replace(
     componentContent,

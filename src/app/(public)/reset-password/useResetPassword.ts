@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from 'react'
 
-import { deleteCookie } from '@/app/server/actions/deleteCookie'
-import { getCookie } from '@/app/server/actions/getCookie'
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
+import { deleteCookie } from '@/global/actions/deleteCookie'
+import { getCookie } from '@/global/actions/getCookie'
+import { COOKIES } from '@/global/constants'
 import { useApi } from '@/services/api'
 import { useValidation } from '@/services/validation'
-import { COOKIES } from '@/utils/constants'
 
 export function useResetPassword() {
   const [email, setEmail] = useState('')
@@ -16,6 +16,7 @@ export function useResetPassword() {
   const [shouldResetPassword, setShouldResetPassword] = useState(false)
 
   const toast = useToastContext()
+
   const api = useApi()
   const validation = useValidation()
 
@@ -61,11 +62,13 @@ export function useResetPassword() {
 
   useEffect(() => {
     async function fetchCookie() {
-      const shouldResetPassword = await getCookie(COOKIES.shouldReturnPassword)
+      const shouldResetPassword = await getCookie(
+        COOKIES.keys.shouldReturnPassword
+      )
 
       if (shouldResetPassword) {
         setShouldResetPassword(true)
-        await deleteCookie(COOKIES.shouldReturnPassword)
+        await deleteCookie(COOKIES.keys.shouldReturnPassword)
       }
     }
 

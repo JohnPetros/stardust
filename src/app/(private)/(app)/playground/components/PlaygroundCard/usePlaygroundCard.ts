@@ -4,10 +4,10 @@ import { useRef, useState } from 'react'
 
 import { PromptRef } from '@/app/components/Prompt'
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
-import { useClipboard } from '@/hooks/useClipboard'
+import { APP_ERRORS, ROUTES } from '@/global/constants'
+import { getAppBaseUrl } from '@/global/helpers'
+import { useClipboard } from '@/global/hooks/useClipboard'
 import { useApi } from '@/services/api'
-import { APP_ERRORS, ROUTES } from '@/utils/constants'
-import { getAppBaseUrl } from '@/utils/helpers'
 
 export function usePlaygroundCard(id: string, initialTitle: string) {
   const [title, setTitle] = useState(initialTitle)

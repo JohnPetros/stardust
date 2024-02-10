@@ -1,4 +1,4 @@
-import { formatSpecialCharacters } from '@/utils/helpers'
+import { formatSpecialCharacters } from '@/global/helpers'
 
 type TitleProps = {
   children: string

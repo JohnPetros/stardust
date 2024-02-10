@@ -9,7 +9,7 @@ import { Alert } from '@/app/components/Alert'
 import { Button } from '@/app/components/Button'
 import { ProgressBar } from '@/app/components/ProgressBar'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { useRocket } from '@/hooks/useRocket'
+import { useRocket } from '@/global/hooks/useRocket'
 import { useApi } from '@/services/api'
 import { useLessonStore } from '@/stores/lessonStore'
 
@@ -18,7 +18,7 @@ export function LessonHeader() {
 
   const livesCount = useLessonStore((store) => store.state.livesCount)
 
-  const { rocket } = useRocket(user?.rocket_id ?? '')
+  const { rocket } = useRocket(user?.rocketId ?? '')
   const { getImage } = useApi()
   const rocketImage = getImage('rockets', rocket?.image ?? '')
 

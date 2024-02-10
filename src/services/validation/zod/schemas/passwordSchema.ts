@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { VALIDATION_ERRORS } from '../../constants/validation-errors'
 
-import { REGEX } from '@/utils/constants'
+import { REGEX } from '@/global/constants'
 
 export const passwordSchema = z
   .string()

@@ -4,7 +4,7 @@ import { Animation } from './Animation'
 import { Content } from './Content'
 
 import { useApi } from '@/services/api'
-import { REGEX } from '@/utils/constants'
+import { REGEX } from '@/global/constants'
 
 interface ImageProps {
   picture: string

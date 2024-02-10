@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 import { StreakIcon } from '../../components/StreakIcon'
 
-import { WEEK_DAYS } from '@/utils/constants'
+import { WEEK_DAYS } from '@/global/constants'
 
 const weekStatusIcons: { [key in string]: string } = {
   todo: 'placeholder-day.svg',

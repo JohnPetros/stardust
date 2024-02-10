@@ -7,7 +7,7 @@ import type { User } from '@/@types/User'
 import { IChallengesController } from '@/services/api/interfaces/IChallengesController'
 import { IStarsController } from '@/services/api/interfaces/IStarsController'
 import { IUsersController } from '@/services/api/interfaces/IUsersController'
-import { CHALLENGE_REWARDS_BY_DIFFICULTY } from '@/utils/constants'
+import { CHALLENGE_REWARDS_BY_DIFFICULTY } from '@/global/constants'
 
 type _CalculateChallengeRewardsParams = {
   incorrectAnswers: number

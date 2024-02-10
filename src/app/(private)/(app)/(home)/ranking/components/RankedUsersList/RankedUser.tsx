@@ -6,7 +6,7 @@ import { tv } from 'tailwind-variants'
 import { UserAvatar } from '../../../../../../components/UserAvatar'
 
 import type { User as UserType } from '@/@types/User'
-import { PODIUM } from '@/utils/constants'
+import { PODIUM } from '@/global/constants'
 
 const positionStyles = tv({
   base: 'font-semibold p-2 w-12 grid place-content-center group-hover:text-gray-100/90',

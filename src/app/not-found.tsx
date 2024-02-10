@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import PageNotFound from '../../public/animations/404.json'
 
 import { Button } from './components/Button'
-import { ROUTES } from '@/utils/constants'
+import { ROUTES } from '@/global/constants'
 
 const notFoundAnimation: Variants = {
   down: {

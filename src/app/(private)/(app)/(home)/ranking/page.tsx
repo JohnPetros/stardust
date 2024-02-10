@@ -11,8 +11,8 @@ import type { Ranking } from '@/@types/Ranking'
 import type { Winner } from '@/@types/Winner'
 import { Loading } from '@/app/components/Loading'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { useRankedUsers } from '@/hooks/useRankedUsers'
-import { useRanking } from '@/hooks/useRanking'
+import { useRankedUsers } from '@/global/hooks/useRankedUsers'
+import { useRanking } from '@/global/hooks/useRanking'
 import { useApi } from '@/services/api'
 
 const today = dayjs().day()

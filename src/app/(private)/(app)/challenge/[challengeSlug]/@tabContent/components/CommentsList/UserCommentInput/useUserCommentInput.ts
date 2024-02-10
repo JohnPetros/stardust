@@ -2,9 +2,9 @@
 
 import { FormEvent, useEffect, useRef, useState } from 'react'
 
+import { SNIPPETS } from '@/global/constants'
+import { getComponentContent } from '@/global/helpers'
 import { useValidation } from '@/services/validation'
-import { SNIPPETS } from '@/utils/constants'
-import { getComponentContent } from '@/utils/helpers'
 
 export function useUserCommentInput(
   comment: string,

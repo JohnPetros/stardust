@@ -4,7 +4,7 @@ import { Options } from 'typewriter-effect'
 
 import { TypeWriterProps } from '.'
 
-import { SPECIAL_CHARACTERS } from '@/utils/constants'
+import { SPECIAL_CHARACTERS } from '@/global/constants'
 
 export function useTypeWriter({
   text,

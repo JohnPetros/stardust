@@ -16,7 +16,7 @@ import { TabButton } from './TabButton'
 import { useCrafts } from './useCrafts'
 
 import { Button } from '@/app/components/Button'
-import { ROUTES } from '@/utils/constants'
+import { ROUTES } from '@/global/constants'
 
 type TabValue = 'playground-tab' | 'challenges-tab' | 'solutions-tab'
 

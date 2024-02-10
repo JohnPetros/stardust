@@ -1,7 +1,7 @@
 'use client'
 import { NavButton } from '../NavButton'
 
-import { HOME_LINKS } from '@/utils/constants'
+import { HOME_LINKS } from '@/global/constants'
 
 export function TabNav() {
   return (

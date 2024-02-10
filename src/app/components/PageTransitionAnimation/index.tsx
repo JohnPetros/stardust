@@ -5,7 +5,7 @@ import TransitionAnimation from '../../../../public/animations/transition.json'
 
 import { usePageTransitionAnimation } from './usePageTransitionAnimation'
 
-import { formatText } from '@/utils/helpers'
+import { formatText } from '@/global/helpers'
 
 const containerVariants: Variants = {
   hidden: {

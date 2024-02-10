@@ -2,8 +2,8 @@
 import { useEffect, useState } from 'react'
 
 import type { Category } from '@/@types/Category'
+import { filterItemBySearch } from '@/global/helpers'
 import { useChallengesListStore } from '@/stores/challengesListStore'
-import { filterItemBySearch } from '@/utils/helpers'
 
 export function useCategoriesFilter(initialCategories: Category[]) {
   const { state, actions } = useChallengesListStore()

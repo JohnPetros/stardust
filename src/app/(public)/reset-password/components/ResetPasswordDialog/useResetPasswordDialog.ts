@@ -6,10 +6,10 @@ import { useRouter } from 'next/navigation'
 
 import { AlertRef } from '@/app/components/Alert'
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
+import { ROUTES } from '@/global/constants'
 import { useApi } from '@/services/api'
 import { useValidation } from '@/services/validation'
 import { ResetPasswordForm } from '@/services/validation/types/ResetPasswordForm'
-import { ROUTES } from '@/utils/constants'
 
 export function useResetPasswordDialog(alertRef: AlertRef | null) {
   const { resolveResetPasswordForm } = useValidation()

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-import { REGEX } from '@/utils/constants'
+import { REGEX } from '@/global/constants'
 
 export function useTestCase(isLocked: boolean, userOutput: string) {
   const [isOpen, setIsOpen] = useState(false)

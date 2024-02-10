@@ -4,7 +4,7 @@ import { PlusCircle } from '@phosphor-icons/react'
 import Link from 'next/link'
 
 import { Button } from '@/app/components/Button'
-import { ROUTES } from '@/utils/constants'
+import { ROUTES } from '@/global/constants'
 
 export function AddPlaygroundButton() {
   return (

@@ -1,4 +1,4 @@
-import { ROUTES } from '@/utils/constants/routes'
+import { ROUTES } from '@/global/constants/routes'
 
 export function checkPublicRoute(route: string) {
   const publicRoutes = Object.values(ROUTES.public)

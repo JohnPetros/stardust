@@ -2,8 +2,8 @@ import { IAuthController } from '../../interfaces/IAuthController'
 import { SUBAPASE_SIGN_UP_ERRORS } from '../constants/supabase-sign-up-errors'
 import type { Supabase } from '../types/Supabase'
 
-import { ROUTES } from '@/utils/constants'
-import { getAppBaseUrl } from '@/utils/helpers'
+import { ROUTES } from '@/global/constants'
+import { getAppBaseUrl } from '@/global/helpers'
 
 export const SupabaseAuthController = (supabase: Supabase): IAuthController => {
   return {

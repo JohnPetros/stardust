@@ -3,7 +3,7 @@
 import type { Achievement } from '@/@types/Achievement'
 import { useApi } from '@/services/api'
 import { useCache } from '@/services/cache'
-import { CACHE } from '@/utils/constants/cache'
+import { CACHE } from '@/global/constants/cache'
 
 export function useUserAchievements(userId?: string) {
   const api = useApi()

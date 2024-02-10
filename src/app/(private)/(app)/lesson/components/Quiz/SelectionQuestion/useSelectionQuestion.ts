@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useLessonStore } from '@/stores/lessonStore'
-import { reorderItems } from '@/utils/helpers'
+import { reorderItems } from '@/global/helpers'
 
 export function useSelectionQuestion(options: string[], answer: string) {
   const {

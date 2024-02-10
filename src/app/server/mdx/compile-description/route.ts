@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import compileDescription from './compileDescription'
 import { getMdxComponents } from './getMdxComponents'
 
-import { formatCode, getComponentContent } from '@/utils/helpers'
+import { formatCode, getComponentContent } from '@/global/helpers'
 
 const CONTENT_PLACEHOLDER = '@component-content'
 
