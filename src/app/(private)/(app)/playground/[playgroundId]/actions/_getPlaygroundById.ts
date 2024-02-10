@@ -7,12 +7,13 @@ import { IPlaygroundsController } from '@/services/api/interfaces/IPlaygroundsCo
 
 let playground: Playground
 
-export async function _handlePlaygroundPage(
+export async function _getPlaygroundById(
   playgroundId: string,
   playgroudsController: IPlaygroundsController
 ) {
   try {
     playground = await playgroudsController.getPlaygroundById(playgroundId)
+
     return playground
   } catch (error) {
     console.error(error)
