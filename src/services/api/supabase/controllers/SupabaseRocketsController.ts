@@ -7,7 +7,7 @@ export const SupabaseRocketsController = (
   supabase: Supabase
 ): IRocketsController => {
   return {
-    getRocket: async (rocketId: string) => {
+    async getRocket(rocketId: string) {
       const { data, error } = await supabase
         .from('rockets')
         .select('*')
@@ -28,14 +28,14 @@ export const SupabaseRocketsController = (
       return rocket
     },
 
-    getFilteredRockets: async ({
+    async getFilteredRockets({
       search,
       offset,
       limit,
       priceOrder,
       shouldFetchUnlocked = null,
       userId,
-    }) => {
+    }) {
       const canSearch = search.length > 1
 
       let query = supabase.from('rockets').select('*', {
@@ -63,7 +63,7 @@ export const SupabaseRocketsController = (
       return { rockets: data as Rocket[], count }
     },
 
-    getUserAcquiredRocketsIds: async (userId: string) => {
+    async getUserAcquiredRocketsIds(userId: string) {
       const { data, error } = await supabase
         .from('users_acquired_rockets')
         .select('rocket_id')
@@ -76,7 +76,7 @@ export const SupabaseRocketsController = (
       return data.map((data) => data.rocket_id)
     },
 
-    addUserAcquiredRocket: async (rocketId: string, userId: string) => {
+    async addUserAcquiredRocket(rocketId: string, userId: string) {
       const { error } = await supabase
         .from('users_acquired_rockets')
         .insert([{ rocket_id: rocketId, user_id: userId }])

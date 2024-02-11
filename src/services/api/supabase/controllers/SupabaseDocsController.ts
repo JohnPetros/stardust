@@ -5,7 +5,7 @@ import type { Doc } from '@/@types/Doc'
 
 export const SupabaseDocsController = (supabase: Supabase): IDocsController => {
   return {
-    getDocsOrderedByPosition: async () => {
+    async getDocsOrderedByPosition() {
       const { data, error } = await supabase
         .from('docs')
         .select('*')
@@ -26,7 +26,7 @@ export const SupabaseDocsController = (supabase: Supabase): IDocsController => {
       return docs
     },
 
-    getUserUnlockedDocsIds: async (userId: string) => {
+    async getUserUnlockedDocsIds(userId: string) {
       const { data, error } = await supabase
         .from('users_unlocked_docs')
         .select('doc_id')
@@ -40,7 +40,7 @@ export const SupabaseDocsController = (supabase: Supabase): IDocsController => {
       return data.map((data) => data.doc_id)
     },
 
-    checkDocUnlocking: async (docId: string, userId: string) => {
+    async checkDocUnlocking(docId: string, userId: string) {
       const { data, error } = await supabase
         .from('users_unlocked_docs')
         .select('doc_id')
@@ -54,7 +54,7 @@ export const SupabaseDocsController = (supabase: Supabase): IDocsController => {
       return !data
     },
 
-    addUnlockedDoc: async (docId: string, userId: string) => {
+    async addUnlockedDoc(docId: string, userId: string) {
       const { error } = await supabase
         .from('users_unlocked_docs')
         .insert({ doc_id: docId, user_id: userId })

@@ -3,7 +3,7 @@ import { Supabase } from '../types/Supabase'
 
 export const SupabasePlanetsController = (supabase: Supabase) => {
   return {
-    getPlanets: async () => {
+    async getPlanets() {
       const { data, error } = await supabase
         .from('planets')
         .select('*, stars(id, name, number, slug)')

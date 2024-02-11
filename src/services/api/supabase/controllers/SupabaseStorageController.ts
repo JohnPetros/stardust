@@ -12,7 +12,7 @@ export const SupabaseStorageController = (
   if (!CDN_URL) throw new Error('CDN url must be provided')
 
   return {
-    getImage: (folder: Folder, resource: string) => {
+    getImage(folder: Folder, resource: string) {
       return `${process.env.NEXT_PUBLIC_CDN_URL}/${folder}/${resource}`
     },
   }

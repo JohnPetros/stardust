@@ -10,11 +10,11 @@ export const SupabaseCommentsController = (
   supabase: Supabase
 ): ICommentsController => {
   return {
-    getFilteredComments: async (
+    async getFilteredComments(
       challengeId: string,
       sorter: 'date' | 'upvotes',
       order: Order
-    ) => {
+    ) {
       let query = supabase
         .from('comments')
         .select(
@@ -53,7 +53,7 @@ export const SupabaseCommentsController = (
       return comments
     },
 
-    getUserUpvotedCommentsIds: async (userId: string) => {
+    async getUserUpvotedCommentsIds(userId: string) {
       const { data, error } = await supabase
         .from('users_upvoted_comments')
         .select('comment_id')
@@ -67,7 +67,7 @@ export const SupabaseCommentsController = (
       return data.map(({ comment_id }) => comment_id)
     },
 
-    getCommentReplies: async (commentId: string) => {
+    async getCommentReplies(commentId: string) {
       const { data, error } = await supabase
         .from('comments')
         .select(
@@ -85,7 +85,7 @@ export const SupabaseCommentsController = (
       return replies
     },
 
-    editComment: async (commentId: string, userId: string, content: string) => {
+    async editComment(commentId: string, userId: string, content: string) {
       const { error } = await supabase
         .from('comments')
         .update({ content })
@@ -97,7 +97,7 @@ export const SupabaseCommentsController = (
       }
     },
 
-    deleteComment: async (commentId: string, userId: string) => {
+    async deleteComment(commentId: string, userId: string) {
       const { error } = await supabase
         .from('comments')
         .delete()
@@ -109,10 +109,10 @@ export const SupabaseCommentsController = (
       }
     },
 
-    postComment: async (
+    async postComment(
       comment: Pick<Comment, 'content' | 'challengeId' | 'parentCommentId'>,
       userId: string
-    ) => {
+    ) {
       const { error } = await supabase.from('comments').insert([
         {
           content: comment.content,
@@ -127,7 +127,7 @@ export const SupabaseCommentsController = (
       }
     },
 
-    addUpvotedComment: async (commentId: string, userId: string) => {
+    async addUpvotedComment(commentId: string, userId: string) {
       const { error } = await supabase.from('users_upvoted_comments').insert({
         comment_id: commentId,
         user_id: userId,
@@ -138,7 +138,7 @@ export const SupabaseCommentsController = (
       }
     },
 
-    removeUpvotedComment: async (commentId: string, userId: string) => {
+    async removeUpvotedComment(commentId: string, userId: string) {
       const { error } = await supabase
         .from('users_upvoted_comments')
         .delete()

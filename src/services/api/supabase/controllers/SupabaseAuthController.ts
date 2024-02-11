@@ -7,7 +7,7 @@ import { getAppBaseUrl } from '@/global/helpers'
 
 export const SupabaseAuthController = (supabase: Supabase): IAuthController => {
   return {
-    signIn: async (email: string, password: string) => {
+    async signIn(email: string, password: string) {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -20,7 +20,7 @@ export const SupabaseAuthController = (supabase: Supabase): IAuthController => {
       return data.session
     },
 
-    signUp: async (email: string, password: string) => {
+    async signUp(email: string, password: string) {
       const { data: response, error } = await supabase.auth.signUp({
         email,
         password,
@@ -40,7 +40,7 @@ export const SupabaseAuthController = (supabase: Supabase): IAuthController => {
       return { userId: null, error: null }
     },
 
-    signOut: async () => {
+    async signOut() {
       const { error } = await supabase.auth.signOut()
 
       if (error) {
@@ -48,7 +48,7 @@ export const SupabaseAuthController = (supabase: Supabase): IAuthController => {
       }
     },
 
-    requestPasswordReset: async (email: string) => {
+    async requestPasswordReset(email: string) {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${getAppBaseUrl()}${ROUTES.server.auth.confirm}`,
       })
@@ -58,7 +58,7 @@ export const SupabaseAuthController = (supabase: Supabase): IAuthController => {
       }
     },
 
-    resetPassword: async (newPassword: string) => {
+    async resetPassword(newPassword: string) {
       const { error } = await supabase.auth.updateUser({
         password: newPassword,
       })
@@ -68,26 +68,7 @@ export const SupabaseAuthController = (supabase: Supabase): IAuthController => {
       }
     },
 
-    githubOAuth: async () => {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'github',
-        options: {
-          redirectTo: `${getAppBaseUrl()}${ROUTES.server.auth.confirm}`,
-        },
-      })
-
-      if (error) throw new Error(error?.message)
-    },
-
-    getUserId: async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-
-      return user?.id ?? null
-    },
-
-    confirmEmail: async (token: string) => {
+    async confirmEmail(token: string) {
       const {
         data: { user },
         error,
@@ -103,7 +84,7 @@ export const SupabaseAuthController = (supabase: Supabase): IAuthController => {
       return !!user?.email
     },
 
-    confirmPasswordReset: async (token: string) => {
+    async confirmPasswordReset(token: string) {
       const {
         data: { user },
         error,
@@ -117,6 +98,25 @@ export const SupabaseAuthController = (supabase: Supabase): IAuthController => {
       }
 
       return !!user?.email
+    },
+
+    async githubOAuth() {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+          redirectTo: `${getAppBaseUrl()}${ROUTES.server.auth.confirm}`,
+        },
+      })
+
+      if (error) throw new Error(error?.message)
+    },
+
+    async getUserId() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
+      return user?.id ?? null
     },
   }
 }

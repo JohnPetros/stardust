@@ -10,7 +10,7 @@ export const SupabaseUsersController = (
   supabase: Supabase
 ): IUsersController => {
   return {
-    getUserById: async (userId: string) => {
+    async getUserById(userId: string) {
       const { data, error } = await supabase
         .rpc('get_user_by_id', {
           _user_id: userId,
@@ -26,7 +26,7 @@ export const SupabaseUsersController = (
       return user
     },
 
-    getUserBySlug: async (userSlug: string) => {
+    async getUserBySlug(userSlug: string) {
       const { data, error } = await supabase
         .rpc('get_user_by_slug', {
           _user_slug: userSlug,
@@ -42,7 +42,7 @@ export const SupabaseUsersController = (
       return user
     },
 
-    getUserEmail: async (email: string) => {
+    async getUserEmail(email: string) {
       const { data, error } = await supabase
         .from('users')
         .select('email')
@@ -54,20 +54,19 @@ export const SupabaseUsersController = (
       return data
     },
 
-    updateUser: async (partialUserData: Partial<User>, userId: string) => {
-      const partialSupabaseUser = SupabaseUserReverseAdapter(partialUserData)
-
-      const { error } = await supabase
-        .from('users')
-        .update(partialSupabaseUser as User)
-        .eq('id', userId)
-
+    async addUser({ id, name, email }: Pick<User, 'id' | 'name' | 'email'>) {
+      const { error } = await supabase.from('users').insert({
+        id,
+        name,
+        email,
+        slug: slugify(name),
+      })
       if (error) {
         throw new Error(error.message)
       }
     },
 
-    getUsersByRanking: async (rankingId: string) => {
+    async getUsersByRanking(rankingId: string) {
       const { data, error } = await supabase
         .from('users')
         .select('*')
@@ -82,17 +81,14 @@ export const SupabaseUsersController = (
       return data
     },
 
-    addUser: async ({
-      id,
-      name,
-      email,
-    }: Pick<User, 'id' | 'name' | 'email'>) => {
-      const { error } = await supabase.from('users').insert({
-        id,
-        name,
-        email,
-        slug: slugify(name),
-      })
+    async updateUser(partialUserData: Partial<User>, userId: string) {
+      const partialSupabaseUser = SupabaseUserReverseAdapter(partialUserData)
+
+      const { error } = await supabase
+        .from('users')
+        .update(partialSupabaseUser as User)
+        .eq('id', userId)
+
       if (error) {
         throw new Error(error.message)
       }

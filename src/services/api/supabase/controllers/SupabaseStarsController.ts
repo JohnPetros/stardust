@@ -7,7 +7,7 @@ export const SupabaseStarsController = (
   supabase: Supabase
 ): IStarsController => {
   return {
-    getStarBySlug: async (starSlug: string) => {
+    async getStarBySlug(starSlug: string) {
       const { data, error } = await supabase
         .from('stars')
         .select('*, questions(*)')
@@ -22,7 +22,7 @@ export const SupabaseStarsController = (
       return data
     },
 
-    getStarById: async (starId: string) => {
+    async getStarById(starId: string) {
       const { data, error } = await supabase
         .from('stars')
         .select('*')
@@ -36,7 +36,7 @@ export const SupabaseStarsController = (
       return data
     },
 
-    getNextStar: async (currentStar: Star, userId: string) => {
+    async getNextStar(currentStar: Star, userId: string) {
       const { data, error } = await supabase
         .from('stars')
         .select('id, users_unlocked_stars(*)')
@@ -65,10 +65,7 @@ export const SupabaseStarsController = (
       return null
     },
 
-    getNextStarFromNextPlanet: async (
-      currentPlanetId: string,
-      userId: string
-    ) => {
+    async getNextStarFromNextPlanet(currentPlanetId: string, userId: string) {
       const { data, error } = await supabase
         .rpc('get_next_star_from_next_planet', {
           _current_planet_id: currentPlanetId,
@@ -92,7 +89,7 @@ export const SupabaseStarsController = (
       return null
     },
 
-    getUserUnlockedStarsIds: async (userId: string) => {
+    async getUserUnlockedStarsIds(userId: string) {
       const { data, error } = await supabase
         .from('users_unlocked_stars')
         .select('star_id')
@@ -105,7 +102,7 @@ export const SupabaseStarsController = (
       return data.map(({ star_id }) => star_id)
     },
 
-    addUnlockedStar: async (starId: string, userId: string) => {
+    async addUnlockedStar(starId: string, userId: string) {
       const { error } = await supabase
         .from('users_unlocked_stars')
         .insert([{ star_id: starId, user_id: userId }])

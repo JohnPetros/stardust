@@ -6,7 +6,7 @@ export const SupabaseAchievementsController = (
   supabase: Supabase
 ): IAchievementsController => {
   return {
-    getAchievements: async () => {
+    async getAchievements() {
       const { data, error } = await supabase
         .from('achievements')
         .select('*')
@@ -19,7 +19,7 @@ export const SupabaseAchievementsController = (
       return data.map(SupabaseAchievementAdapter)
     },
 
-    getUserUnlockedAchievementsIds: async (userId: string) => {
+    async getUserUnlockedAchievementsIds(userId: string) {
       const { data, error } = await supabase
         .from('users_unlocked_achievements')
         .select('achievement_id')
@@ -32,7 +32,7 @@ export const SupabaseAchievementsController = (
       return data.map((data) => data.achievement_id)
     },
 
-    getUserRescuableAchievementsIds: async (userId: string) => {
+    async getUserRescuableAchievementsIds(userId: string) {
       const { data, error } = await supabase
         .from('users_rescuable_achievements')
         .select('achievement_id')
@@ -45,10 +45,7 @@ export const SupabaseAchievementsController = (
       return data.map((data) => data.achievement_id)
     },
 
-    addUserUnlockedAchievement: async (
-      achievementId: string,
-      userId: string
-    ) => {
+    async addUserUnlockedAchievement(achievementId: string, userId: string) {
       const { error } = await supabase
         .from('users_unlocked_achievements')
         .insert([{ achievement_id: achievementId, user_id: userId }])
@@ -58,10 +55,7 @@ export const SupabaseAchievementsController = (
       }
     },
 
-    addUserRescuableAchievements: async (
-      achievementId: string,
-      userId: string
-    ) => {
+    async addUserRescuableAchievements(achievementId: string, userId: string) {
       const { error } = await supabase
         .from('users_rescuable_achievements')
         .insert([{ achievement_id: achievementId, user_id: userId }])
@@ -71,10 +65,10 @@ export const SupabaseAchievementsController = (
       }
     },
 
-    deleteUserRescuebleAchievement: async (
+    async deleteUserRescuebleAchievement(
       achievementId: string,
       userId: string
-    ) => {
+    ) {
       const { error } = await supabase
         .from('users_rescuable_achievements')
         .delete()

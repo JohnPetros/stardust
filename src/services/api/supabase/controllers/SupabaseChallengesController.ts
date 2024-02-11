@@ -14,7 +14,7 @@ export const SupabaseChallengesController = (
   supabase: Supabase
 ): IChallengesController => {
   return {
-    getChallengeBySlug: async (challengeSlug: string) => {
+    async getChallengeBySlug(challengeSlug: string) {
       const { data, error } = await supabase
         .from('challenges_view')
         .select('*')
@@ -35,7 +35,7 @@ export const SupabaseChallengesController = (
       return challenge
     },
 
-    getChallengesSummary: async (userId: string) => {
+    async getChallengesSummary(userId: string) {
       const { data, error } = await supabase
         .from('challenges')
         .select(
@@ -61,13 +61,13 @@ export const SupabaseChallengesController = (
       return challengesSummary
     },
 
-    getFilteredChallenges: async ({
+    async getFilteredChallenges({
       userId,
       status,
       difficulty,
       categoriesIds,
       search,
-    }: GetFilteredChallengesParams) => {
+    }: GetFilteredChallengesParams) {
       const { data, error } = await supabase.rpc('get_filtered_challenges', {
         _userid: userId,
         _difficulty: difficulty,
@@ -85,7 +85,7 @@ export const SupabaseChallengesController = (
       return challenges
     },
 
-    getChallengeSlugByStarId: async (starId: string) => {
+    async getChallengeSlugByStarId(starId: string) {
       const { data, error } = await supabase
         .from('challenges')
         .select('slug')
@@ -99,7 +99,7 @@ export const SupabaseChallengesController = (
       return data.slug
     },
 
-    getUserCompletedChallengesIds: async (userId: string) => {
+    async getUserCompletedChallengesIds(userId: string) {
       const { data, error } = await supabase
         .from('users_completed_challenges')
         .select('challenge_id')
@@ -112,7 +112,7 @@ export const SupabaseChallengesController = (
       return data.map((data) => data.challenge_id)
     },
 
-    getUserVote: async (userId: string, challengeId: string) => {
+    async getUserVote(userId: string, challengeId: string) {
       const { data, error } = await supabase
         .from('users_voted_challenges')
         .select('vote')
@@ -127,26 +127,17 @@ export const SupabaseChallengesController = (
       return data.vote
     },
 
-    checkChallengeCompletition: async (challengeId: string, userId: string) => {
-      const { data, error } = await supabase
+    async addCompletedChallenge(challengeId: string, userId: string) {
+      const { error } = await supabase
         .from('users_completed_challenges')
-        .select('challenge_id')
-        .eq('challenge_id', challengeId)
-        .eq('user_id', userId)
-        .single()
+        .insert({ challenge_id: challengeId, user_id: userId })
 
       if (error) {
-        return false
+        throw new Error(error.message)
       }
-
-      return Boolean(data.challenge_id)
     },
 
-    addVotedChallenge: async (
-      challengeId: string,
-      userId: string,
-      vote: Vote
-    ) => {
+    async addVotedChallenge(challengeId: string, userId: string, vote: Vote) {
       const { error } = await supabase
         .from('users_voted_challenges')
         .insert([
@@ -158,11 +149,11 @@ export const SupabaseChallengesController = (
       }
     },
 
-    updateVotedChallenge: async (
+    async updateVotedChallenge(
       challengeId: string,
       userId: string,
       vote: Vote
-    ) => {
+    ) {
       const { error } = await supabase
         .from('users_voted_challenges')
         .update({ vote: String(vote) })
@@ -174,11 +165,11 @@ export const SupabaseChallengesController = (
       }
     },
 
-    removeVotedChallenge: async (
+    async removeVotedChallenge(
       challengeId: string,
       userId: string,
       vote: Vote
-    ) => {
+    ) {
       const { error } = await supabase
         .from('users_voted_challenges')
         .delete()
@@ -191,14 +182,19 @@ export const SupabaseChallengesController = (
       }
     },
 
-    addCompletedChallenge: async (challengeId: string, userId: string) => {
-      const { error } = await supabase
+    async checkChallengeCompletition(challengeId: string, userId: string) {
+      const { data, error } = await supabase
         .from('users_completed_challenges')
-        .insert({ challenge_id: challengeId, user_id: userId })
+        .select('challenge_id')
+        .eq('challenge_id', challengeId)
+        .eq('user_id', userId)
+        .single()
 
       if (error) {
-        throw new Error(error.message)
+        return false
       }
+
+      return Boolean(data.challenge_id)
     },
   }
 }

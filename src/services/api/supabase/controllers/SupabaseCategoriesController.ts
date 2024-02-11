@@ -7,7 +7,7 @@ export const SupabaseCategoriesController = (
   supabase: Supabase
 ): ICategoriesController => {
   return {
-    getCategories: async () => {
+    async getCategories() {
       const { data, error } = await supabase
         .from('categories')
         .select('*, challenges:challenges_categories(id:challenge_id)')

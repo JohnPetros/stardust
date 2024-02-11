@@ -6,7 +6,7 @@ export const SupabaseWinnersController = (
   supabase: Supabase
 ): IWinnersController => {
   return {
-    getWinnersByRankingId: async (rankingId: string) => {
+    async getWinnersByRankingId(rankingId: string) {
       const { data, error } = await supabase
         .from('winners')
         .select('*')

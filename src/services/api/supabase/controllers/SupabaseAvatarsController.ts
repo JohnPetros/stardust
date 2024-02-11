@@ -8,7 +8,7 @@ export const SupabaseAvatarsController = (
   supabase: Supabase
 ): IAvatarsController => {
   return {
-    getAvatar: async (avatarId: string) => {
+    async getAvatar(avatarId: string) {
       const { data, error } = await supabase
         .from('avatars')
         .select('*')
@@ -25,7 +25,7 @@ export const SupabaseAvatarsController = (
       return avatar
     },
 
-    getFilteredAvatars: async ({ search, offset, limit, priceOrder }) => {
+    async getFilteredAvatars({ search, offset, limit, priceOrder }) {
       const canSearch = search.length > 1
 
       const { data, count, error } = await supabase
@@ -47,7 +47,7 @@ export const SupabaseAvatarsController = (
       }
     },
 
-    getUserAcquiredAvatarsIds: async (userId: string) => {
+    async getUserAcquiredAvatarsIds(userId: string) {
       const { data, error } = await supabase
         .from('users_acquired_avatars')
         .select('avatar_id')
@@ -60,7 +60,7 @@ export const SupabaseAvatarsController = (
       return data.map((data) => data.avatar_id)
     },
 
-    addUserAcquiredAvatar: async (avatarId: string, userId: string) => {
+    async addUserAcquiredAvatar(avatarId: string, userId: string) {
       const { error } = await supabase
         .from('users_acquired_avatars')
         .insert([{ avatar_id: avatarId, user_id: userId }])
