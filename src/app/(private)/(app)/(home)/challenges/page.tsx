@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 
 import { _handleChalengesPage } from './actions/_handleChallengesPage'
+import { ChallengesFilters } from './components/ChallengesFilters'
 import { ChallengesList } from './components/ChallengesList'
 
 import { Loading } from '@/global/components/Loading'
@@ -16,7 +17,11 @@ export default async function ChallengesPage() {
 
   return (
     <Suspense fallback={<Loading isSmall={false} />}>
-      <ChallengesList categories={categories} />
+      <div className="mx-auto mt-10 max-w-2xl px-6 pb-40 md:px-0">
+        <ChallengesFilters categories={categories} />
+
+        <ChallengesList categories={categories} />
+      </div>
     </Suspense>
   )
 }

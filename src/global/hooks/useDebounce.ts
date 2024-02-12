@@ -17,7 +17,9 @@ export function useDebounce(
   }, [])
 
   return function debounce(...params: unknown[]) {
-    setTimeout(() => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
+
+    timeoutRef.current = setTimeout(() => {
       callback(...params)
     }, delay)
   }

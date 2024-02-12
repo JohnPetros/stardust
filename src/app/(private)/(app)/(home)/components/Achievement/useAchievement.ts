@@ -25,7 +25,7 @@ export function useAchievement({
   const iconImage = api.getImage('achievements', icon)
 
   const [status, setStatus] = useState<Status | null>(null)
-  const { rescueAchivement, handleRescuedAchievementsAlertClose } =
+  const { rescueAchivement, handleRescuedAchievementsAlertDialogClose } =
     useAchivementsContext()
 
   async function handleRescuButtonClick() {
@@ -51,6 +51,6 @@ export function useAchievement({
     iconImage,
     status,
     handleRescuButtonClick,
-    handleRescuedAchievementsAlertClose,
+    handleRescuedAchievementsAlertDialogClose,
   }
 }

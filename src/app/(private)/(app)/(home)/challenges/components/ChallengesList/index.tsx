@@ -1,9 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 
-import { Challenge } from '../Challenge'
-import { Filters } from '../Filters'
-
+import { ChallengeCard } from './ChallengeCard'
 import { useChallengesList } from './useChallengesList'
 
 import { Category } from '@/@types/Category'
@@ -26,14 +24,12 @@ export function ChallengesList({ categories }: ChallengesList) {
   }, [challenges, isFirstRendering, isLoading])
 
   return (
-    <div className="mx-auto mt-10 max-w-2xl px-6 pb-40 md:px-0">
+    <div className="mx-auto max-w-2xl px-6 pb-40 md:px-0">
       {isFirstRendering && <Loading isSmall={false} />}
-
-      <Filters categories={categories} />
 
       <div className="space-y-6">
         {challenges.map((challenge) => (
-          <Challenge key={challenge.id} data={challenge} />
+          <ChallengeCard key={challenge.id} data={challenge} />
         ))}
       </div>
     </div>

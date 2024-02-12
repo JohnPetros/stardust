@@ -1,14 +1,19 @@
 import { ReactNode } from 'react'
 import * as S from '@radix-ui/react-select'
 
-interface SelectProps {
+type SelectProps = {
   children: ReactNode
-  onValueChange: (value: string) => void
+  defaultValue: string
+  onValueChange?: (value: string) => void
 }
 
-export function Container({ children, onValueChange }: SelectProps) {
+export function Container({
+  children,
+  defaultValue,
+  onValueChange,
+}: SelectProps) {
   return (
-    <S.Root onValueChange={(value: string) => onValueChange(value)}>
+    <S.Root defaultValue={defaultValue} onValueChange={onValueChange}>
       {children}
     </S.Root>
   )

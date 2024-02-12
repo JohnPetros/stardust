@@ -4,11 +4,12 @@ import { useDebounce } from '@/global/hooks/useDebounce'
 
 export function useSearch(onSearchChange: (...args: unknown[]) => void) {
   const [value, setValue] = useState('')
-  const debouceChange = useDebounce(onSearchChange, 450)
+
+  const deboucedChange = useDebounce(onSearchChange, 200)
 
   function handleValueChange(value: string) {
     setValue(value)
-    debouceChange(value)
+    deboucedChange(value)
   }
 
   return {

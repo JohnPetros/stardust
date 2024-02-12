@@ -14,7 +14,6 @@ type UserAvatarProps = {
 export function UserAvatar({ avatarId, size }: UserAvatarProps) {
   const avatar = useUserAvatar(avatarId)
   const { getImage } = useApi()
-  console.log('UserAvatar', { avatar })
   const avatarImage = avatar ? getImage('avatars', avatar.image) : ''
 
   return (

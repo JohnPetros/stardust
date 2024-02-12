@@ -1,6 +1,6 @@
 import type { Category } from '@/@types/Category'
-import { ICategoriesController } from '@/services/api/interfaces/ICategoriesController'
 import { APP_ERRORS } from '@/global/constants'
+import { ICategoriesController } from '@/services/api/interfaces/ICategoriesController'
 
 let categories: Category[]
 

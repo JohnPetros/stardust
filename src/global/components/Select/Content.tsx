@@ -14,7 +14,7 @@ export function Content({ children }: SelectContentProps) {
         position="popper"
         sideOffset={8}
       >
-        <S.Viewport className="z-40"></S.Viewport>
+        <S.Viewport className="z-40" />
         {children}
       </S.Content>
     </S.Portal>

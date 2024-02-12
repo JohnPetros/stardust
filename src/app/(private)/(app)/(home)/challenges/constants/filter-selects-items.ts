@@ -1,12 +1,13 @@
 'use client'
 import { CheckCircle, Circle, Icon, Minus } from '@phosphor-icons/react'
+import type { ClassNameValue } from 'tailwind-merge'
 
-import type { Difficulty, Status } from '@/stores/challengesListStore'
+import { type Difficulty, type Status } from '@/stores/challengesListStore'
 
 type SelectsItem = {
   value: Status | Difficulty
   text: string
-  textStyles?: string
+  textStyles?: ClassNameValue
   icon?: Icon
   iconStyles?: string
 }
