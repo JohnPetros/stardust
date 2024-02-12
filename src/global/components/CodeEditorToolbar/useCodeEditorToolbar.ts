@@ -1,6 +1,4 @@
 import { KeyboardEvent, RefObject, useRef } from 'react'
-import { usePathname } from 'next/navigation'
-
 import { EditorRef } from '@/global/components/Editor'
 
 type UseCodeEditorToolbarParams = {

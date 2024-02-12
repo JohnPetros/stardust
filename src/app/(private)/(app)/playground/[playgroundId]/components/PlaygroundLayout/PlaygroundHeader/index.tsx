@@ -1,7 +1,6 @@
 'use client'
 
-import { ArrowLeft, Pencil } from '@phosphor-icons/react'
-import { useRouter } from 'next/navigation'
+import { Pencil } from '@phosphor-icons/react'
 
 import { usePlaygroundHeader } from './usePlaygroundHeader'
 
@@ -34,17 +33,12 @@ export function PlaygroundHeader({
     onCreatePlayground,
   })
 
-  const router = useRouter()
-
   return (
     <header
       style={{ height }}
       className="flex items-center border-b p-3 md:border-green-700"
     >
       <div className="flex items-center gap-2 px-6">
-        <button onClick={router.back} className="-translate-x-2 p-2">
-          <ArrowLeft className="text-xl text-green-500" weight="bold" />
-        </button>
         {!canEditTitle ? (
           <h1 className="semibold px-1 text-xl text-gray-100">{title}</h1>
         ) : (

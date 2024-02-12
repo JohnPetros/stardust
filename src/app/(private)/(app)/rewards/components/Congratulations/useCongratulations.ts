@@ -11,6 +11,7 @@ import { _deleteCookie } from '@/global/actions/_deleteCookie'
 import { AlertDialogRef } from '@/global/components/AlertDialog/types/AlertDialogRef'
 import { COOKIES } from '@/global/constants'
 import { playAudio } from '@/global/helpers'
+import { useRefreshPage } from '@/global/hooks/useRefreshPage'
 
 export function useCongratulations({
   coins,
@@ -60,16 +61,7 @@ export function useCongratulations({
     await exit()
   }
 
-  useEffect(() => {
-    async function handlePageRefresh(event: BeforeUnloadEvent) {
-      event.preventDefault()
-      await exit()
-    }
-
-    window.addEventListener('beforeunload', handlePageRefresh)
-
-    return () => window.removeEventListener('beforeunload', handlePageRefresh)
-  }, [exit])
+  useRefreshPage(handleSecondButtonClick)
 
   useEffect(() => {
     playAudio('earning.wav')
