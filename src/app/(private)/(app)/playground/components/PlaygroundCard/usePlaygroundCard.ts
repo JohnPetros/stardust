@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 import { PromptRef } from '@/global/components/Prompt'
@@ -9,7 +9,11 @@ import { getAppBaseUrl } from '@/global/helpers'
 import { useClipboard } from '@/global/hooks/useClipboard'
 import { useApi } from '@/services/api'
 
-export function usePlaygroundCard(id: string, initialTitle: string) {
+export function usePlaygroundCard(
+  id: string,
+  initialTitle: string,
+  onDelete: (deletedPlaygroundId: string) => void
+) {
   const [title, setTitle] = useState(initialTitle)
 
   const playgroundUrl = `${getAppBaseUrl()}${ROUTES.private.playground}/${id}`
@@ -22,7 +26,13 @@ export function usePlaygroundCard(id: string, initialTitle: string) {
   const promptRef = useRef<PromptRef>(null)
 
   async function handleDeletePlayground() {
-    await api.deletePlaygroundById(id)
+    try {
+      await api.deletePlaygroundById(id)
+      onDelete(id)
+    } catch (error) {
+      console.error(error)
+      toast.show(APP_ERRORS.playgrounds.failedDeletion)
+    }
   }
 
   async function handleEditPlaygroundTitle() {
@@ -54,6 +64,10 @@ export function usePlaygroundCard(id: string, initialTitle: string) {
       })
     }
   }
+
+  useEffect(() => {
+    setTitle(initialTitle)
+  }, [initialTitle])
 
   return {
     title,
