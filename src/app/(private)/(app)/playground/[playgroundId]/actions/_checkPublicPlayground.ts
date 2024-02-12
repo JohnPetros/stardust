@@ -12,7 +12,7 @@ export async function _checkPublicPlayground(
   try {
     const userId = await authController.getUserId()
 
-    return playground.isPublic && playground.user.id === userId
+    return playground.isPublic || playground.user.id === userId
   } catch (error) {
     console.error(error)
     notFound()
