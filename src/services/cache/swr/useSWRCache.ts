@@ -9,6 +9,9 @@ export function useSWRCache<Data>({
   fetcher,
   dependencies,
   isEnabled = true,
+  shouldRefetchOnFocus = true,
+  refreshInterval = 0,
+  initialData,
 }: Cache<Data>) {
   const dependenciesQuery = dependencies
     ? dependencies.map((dependency, index) => `dep_${index + 1}=${dependency}`)
@@ -16,7 +19,12 @@ export function useSWRCache<Data>({
 
   const { data, error, isLoading, isValidating, mutate } = useSWR(
     () => (isEnabled ? `${key}?${dependenciesQuery}` : null),
-    fetcher
+    fetcher,
+    {
+      fallbackData: initialData,
+      refreshInterval,
+      revalidateOnFocus: shouldRefetchOnFocus,
+    }
   )
 
   function mutateCache(newData: Data) {

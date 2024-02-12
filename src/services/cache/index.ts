@@ -1,8 +1,6 @@
 'use client'
 
-import { Cache } from './types/cache'
-import { useSWRCache } from './swr'
+import { useCache } from './hooks/useCache'
+import { useGlobalCache } from './hooks/useGlobalCache'
 
-export function useCache<Data>(cache: Cache<Data>) {
-  return useSWRCache(cache)
-}
+export { useCache, useGlobalCache }
