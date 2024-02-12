@@ -290,7 +290,7 @@ export type Database = {
           id: string
           is_public: boolean
           title: string
-          user_id: string
+          user_slug: string | null
         }
         Insert: {
           code?: string | null
@@ -298,7 +298,7 @@ export type Database = {
           id?: string
           is_public?: boolean
           title?: string
-          user_id: string
+          user_slug?: string | null
         }
         Update: {
           code?: string | null
@@ -306,24 +306,9 @@ export type Database = {
           id?: string
           is_public?: boolean
           title?: string
-          user_id?: string
+          user_slug?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "playgrounds_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "playgrounds_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users_view"
-            referencedColumns: ["id"]
-          }
-        ]
+        Relationships: []
       }
       questions: {
         Row: {
