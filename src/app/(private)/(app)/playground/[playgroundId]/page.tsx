@@ -7,6 +7,9 @@ import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseSe
 import { SupabaseAuthController } from '@/services/api/supabase/controllers/SupabaseAuthController'
 import { SupabasePlaygroundsController } from '@/services/api/supabase/controllers/SupabasePlaygroundsController'
 
+export const revalidate = 0
+export const dynamic = 'force-dynamic'
+
 type UserPlaygroundPageProps = {
   params: { playgroundId: string }
 }

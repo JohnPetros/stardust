@@ -5,10 +5,10 @@ import { useRouter } from 'next/navigation'
 
 import { StarRewardsPayload } from '@/@types/Rewards'
 import type { Star } from '@/@types/Star'
-import { setCookie } from '@/global/actions/_setCookie'
+import { _setCookie } from '@/global/actions/_setCookie'
+import { COOKIES, ROUTES, STORAGE } from '@/global/constants'
 import { useMdx } from '@/global/hooks/useMdx'
 import { useLessonStore } from '@/stores/lessonStore'
-import { COOKIES, ROUTES, STORAGE } from '@/global/constants'
 
 export function useLessonStar(star: Star) {
   const { parseTextsToMdxComponents } = useMdx()
@@ -68,7 +68,7 @@ export function useLessonStar(star: Star) {
         },
       }
 
-      await setCookie(
+      await _setCookie(
         COOKIES.keys.rewardsPayload,
         JSON.stringify(rewardsPayload)
       )

@@ -6,9 +6,9 @@ import { useRouter } from 'next/navigation'
 
 import { CongratulationsProps } from '.'
 
-import { AlertRef } from '@/global/components/Alert'
-import { deleteCookie } from '@/global/actions/_deleteCookie'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
+import { _deleteCookie } from '@/global/actions/_deleteCookie'
+import { AlertRef } from '@/global/components/Alert'
 import { COOKIES } from '@/global/constants'
 import { playAudio } from '@/global/helpers'
 
@@ -50,7 +50,7 @@ export function useCongratulations({
 
   const exit = useCallback(async () => {
     setIsLoading(true)
-    await deleteCookie(COOKIES.rewardsPayload)
+    await _deleteCookie(COOKIES.keys.rewardsPayload)
 
     mutateUserCache({ coins, xp, level: updatedLevel.level })
     router.push(nextRoute)

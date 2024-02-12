@@ -8,7 +8,7 @@ import {
   ChallengeRewardsPayload,
   StarChallengeRewardsPayload,
 } from '@/@types/Rewards'
-import { setCookie } from '@/global/actions/_setCookie'
+import { _setCookie } from '@/global/actions/_setCookie'
 import { COOKIES, ROUTES, STORAGE } from '@/global/constants'
 import { compareArrays } from '@/global/helpers'
 import { useBreakpoint } from '@/global/hooks/useBreakpoint'
@@ -51,7 +51,7 @@ export function useResult() {
         },
       }
 
-      await setCookie(
+      await _setCookie(
         COOKIES.keys.rewardsPayload,
         JSON.stringify(rewardsPayload)
       )
@@ -70,7 +70,10 @@ export function useResult() {
       },
     }
 
-    await setCookie(COOKIES.keys.rewardsPayload, JSON.stringify(rewardsPayload))
+    await _setCookie(
+      COOKIES.keys.rewardsPayload,
+      JSON.stringify(rewardsPayload)
+    )
     router.push(ROUTES.private.rewards)
     return
   }

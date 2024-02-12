@@ -7,7 +7,7 @@ import { ContentLink } from '../../../components/Layout/ContentLink'
 import { useDescription } from './useDescription'
 import { VoteButtons } from './VoteButtons'
 
-import { ChallengeInfo } from '@/app/components/ChallengeInfo'
+import { ChallengeInfo } from '@/global/components/ChallengeInfo'
 import { DifficultyBadge } from '@/global/components/DifficultyBadge'
 import { Loading } from '@/global/components/Loading'
 import { Mdx } from '@/global/components/Mdx'

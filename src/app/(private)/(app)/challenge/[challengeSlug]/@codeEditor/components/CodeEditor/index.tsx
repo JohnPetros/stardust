@@ -2,7 +2,7 @@
 
 import { useCodeEditor } from './useCodeEditor'
 
-import { CodeEditorToolbar } from '@/app/components/CodeEditorToolbar'
+import { CodeEditorToolbar } from '@/global/components/CodeEditorToolbar'
 import { Editor } from '@/global/components/Editor'
 
 export function CodeEditor() {

@@ -6,7 +6,6 @@ import { twMerge } from 'tailwind-merge'
 
 import { ShinningAnimation } from '../../../../components/ShinningAnimation'
 
-import { Winner } from '@/@types/Winner'
 import { UserAvatar } from '@/global/components/UserAvatar'
 import { PODIUM } from '@/global/constants'
 

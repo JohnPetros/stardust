@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Category } from './Category'
 
 import type { Challenge } from '@/@types/Challenge'
-import { ChallengeInfo } from '@/app/components/ChallengeInfo'
+import { ChallengeInfo } from '@/global/components/ChallengeInfo'
 import { DifficultyBadge } from '@/global/components/DifficultyBadge'
 
 const challengeVariants: Variants = {
@@ -29,8 +29,8 @@ export function Challenge({
     id,
     title,
     difficulty,
-    upvotes,
-    downvotes,
+    upvotesCount,
+    downvotesCount,
     totalCompletitions,
     categoriesNames,
     userSlug,
@@ -57,8 +57,8 @@ export function Challenge({
         isCompleted={isCompleted ?? false}
         totalCompletitions={totalCompletitions}
         userSlug={userSlug}
-        upvotes={upvotes}
-        downvotes={downvotes}
+        upvotes={upvotesCount}
+        downvotes={downvotesCount}
       />
       {categoriesNames && (
         <ul className="flex items-start gap-3">
