@@ -4,7 +4,7 @@ import type { Ranking } from '@/@types/Ranking'
 
 export const SupabaseRankingsController = (supabase: Supabase) => {
   return {
-    getRankingById: async (rankingId: string) => {
+    async getRankingById(rankingId: string) {
       const { data, error } = await supabase
         .from('rankings')
         .select('*')
@@ -18,7 +18,7 @@ export const SupabaseRankingsController = (supabase: Supabase) => {
       return data
     },
 
-    getRankingsOrderedByPosition: async () => {
+    async getRankingsOrderedByPosition() {
       const { data, error } = await supabase
         .from('rankings')
         .select('*')

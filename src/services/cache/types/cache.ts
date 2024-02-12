@@ -3,5 +3,7 @@ export type Cache<Data> = {
   fetcher: () => Promise<Data | undefined>
   dependencies?: unknown[]
   isEnabled?: boolean
+  initialData?: Data
   refreshInterval?: number
+  shouldRefetchOnFocus?: boolean
 }
