@@ -8,5 +8,6 @@ export const CACHE = {
     comments: '/comments',
     acquiredAvatarsIds: '/acquired-avatars-ids',
     avatar: '/avatar',
+    playgroundCards: '/playground-cards',
   },
 }
