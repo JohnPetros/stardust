@@ -9,7 +9,7 @@ export const ROUTES = {
     },
     challenge: '/challenge',
     challengeMaker: '/challenge-maker',
-    settings: '/settings',
+    profileSettings: '/profile/settings',
     lesson: '/lesson',
     playground: '/playground',
     config: '/config',
