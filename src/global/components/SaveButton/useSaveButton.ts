@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { useSaveButtonStore } from '@/stores/saveButtonStore'
 import { waitFor } from '@/global/helpers'
+import { useSaveButtonStore } from '@/stores/saveButtonStore'
 
 const STATE_DELAY = 1000
 
@@ -20,7 +20,7 @@ export function useSaveButton(onSave: () => Promise<void>) {
 
   const {
     state: { canSave, saveHandler, shouldSave },
-    actions: { setCanSave },
+    actions: { setCanSave, setShouldSave },
   } = useSaveButtonStore()
 
   const [variant, title] = useMemo(() => {
@@ -56,9 +56,10 @@ export function useSaveButton(onSave: () => Promise<void>) {
         setIsSaving(false)
         await waitFor(STATE_DELAY)
         setIsSaved(false)
+        setShouldSave(false)
       }
     },
-    [setCanSave]
+    [setCanSave, setShouldSave]
   )
 
   async function handleClick() {
