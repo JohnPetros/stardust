@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
-import { hasCookie } from './global/actions/hasCookie'
+import { _hasCookie } from './global/actions/_hasCookie'
 import { COOKIES, ROUTES } from './global/constants'
 import { checkPublicRoute } from './global/helpers'
 import { getSearchParams } from './global/helpers/getSearchParams'
@@ -24,7 +24,9 @@ export const middleware = async (req: NextRequest) => {
   }
 
   if (currentRoute === ROUTES.private.rewards) {
-    const hasRewardsPayloadCookie = await hasCookie(COOKIES.keys.rewardsPayload)
+    const hasRewardsPayloadCookie = await _hasCookie(
+      COOKIES.keys.rewardsPayload
+    )
 
     if (!hasRewardsPayloadCookie)
       return NextResponse.redirect(new URL(ROUTES.private.home.space, req.url))
