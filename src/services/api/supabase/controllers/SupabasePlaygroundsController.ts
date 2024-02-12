@@ -4,7 +4,6 @@ import type { Supabase } from '../types/Supabase'
 import type { SupabasePlayground } from '../types/SupabasePlayground'
 
 import type { Playground } from '@/@types/Playground'
-import { generateId } from '@/global/helpers/generateId'
 
 export const SupabasePlaygroundsController = (
   supabase: Supabase
@@ -49,7 +48,7 @@ export const SupabasePlaygroundsController = (
       }
 
       const { error } = await supabase.from('playgrounds').insert({
-        id: generateId(),
+        id: newPlayground.id,
         title: newPlayground.title,
         code: newPlayground.code,
         is_public: newPlayground.isPublic,

@@ -9,12 +9,16 @@ type HeaderProps = {
   playgroundId: string
   playgroundTitle: string
   height: number
+  hasPlayground: boolean
+  onCreatePlayground: (title: string) => Promise<void>
 }
 
 export function PlaygroundHeader({
+  height,
   playgroundId,
   playgroundTitle,
-  height,
+  hasPlayground,
+  onCreatePlayground,
 }: HeaderProps) {
   const {
     title,
@@ -23,7 +27,12 @@ export function PlaygroundHeader({
     handleCanEditTitle,
     handleTitleChange,
     handleKeyup,
-  } = usePlaygroundHeader(playgroundId, playgroundTitle)
+  } = usePlaygroundHeader({
+    playgroundId,
+    playgroundTitle,
+    hasPlayground,
+    onCreatePlayground,
+  })
 
   const router = useRouter()
 

@@ -8,10 +8,19 @@ import { useOutsideClick } from '@/global/hooks/useOutsideClick'
 import { useApi } from '@/services/api'
 import { useSaveButtonStore } from '@/stores/saveButtonStore'
 
-export function usePlaygroundHeader(
-  playgroundId: string,
+type UsePlaygroundHeaderParams = {
+  playgroundId: string
   playgroundTitle: string
-) {
+  hasPlayground: boolean
+  onCreatePlayground: (title: string) => Promise<void>
+}
+
+export function usePlaygroundHeader({
+  playgroundId,
+  playgroundTitle,
+  hasPlayground,
+  onCreatePlayground,
+}: UsePlaygroundHeaderParams) {
   const [title, setTitle] = useState(playgroundTitle)
   const [canEditTitle, setCanEditTitle] = useState(false)
 
@@ -25,6 +34,7 @@ export function usePlaygroundHeader(
   )
 
   const api = useApi()
+
   const toast = useToastContext()
 
   const handleEditPlaygroudTitle = useCallback(async () => {
@@ -39,10 +49,22 @@ export function usePlaygroundHeader(
         })
       }
     }
-    setSaveHandler(editPlaygroudTitle)
+
+    setSaveHandler(
+      hasPlayground ? editPlaygroudTitle : () => onCreatePlayground(title)
+    )
     setShouldSave(true)
     setCanEditTitle(false)
-  }, [api, toast, title, playgroundId, setSaveHandler, setShouldSave])
+  }, [
+    api,
+    toast,
+    title,
+    playgroundId,
+    hasPlayground,
+    onCreatePlayground,
+    setSaveHandler,
+    setShouldSave,
+  ])
 
   function handleCanEditTitle() {
     setCanEditTitle(!canEditTitle)
@@ -59,7 +81,7 @@ export function usePlaygroundHeader(
   }
 
   async function handleClickOutside() {
-    handleEditPlaygroudTitle()
+    if (canEditTitle) handleEditPlaygroudTitle()
   }
 
   useOutsideClick(inputRef, handleClickOutside)
