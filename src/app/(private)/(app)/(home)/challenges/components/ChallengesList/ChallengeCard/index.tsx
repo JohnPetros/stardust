@@ -24,7 +24,7 @@ type ChallengeProps = {
   data: Challenge
 }
 
-export function Challenge({
+export function ChallengeCard({
   data: {
     id,
     title,
