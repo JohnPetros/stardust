@@ -4,32 +4,18 @@ import type { Supabase } from '../types/Supabase'
 import type { SupabasePlayground } from '../types/SupabasePlayground'
 
 import type { Playground } from '@/@types/Playground'
+import { generateId } from '@/global/helpers/generateId'
 
 export const SupabasePlaygroundsController = (
   supabase: Supabase
 ): IPlaygroundsController => {
   return {
-    async getPlaygroundsByUserId(userId: string) {
-      const { data, error } = await supabase
-        .from('playgrounds')
-        .select('*, user:users(slug, avatar_id)')
-        .eq('user_id', userId)
-        .returns<SupabasePlayground[]>()
-
-      if (error) {
-        throw new Error(error.message)
-      }
-
-      const playgrounds = data.map(SupabasePlaygroundAdapter)
-
-      return playgrounds
-    },
-
     async getPlaygroundById(id: string) {
       const { data, error } = await supabase
         .from('playgrounds')
-        .select('*, user:users(slug, avatar_id)')
+        .select('*, user:users(id, slug, avatar_id)')
         .eq('id', id)
+        .order('created_at', { ascending: false })
         .single<SupabasePlayground>()
 
       if (error) {
@@ -41,16 +27,33 @@ export const SupabasePlaygroundsController = (
       return playground
     },
 
-    async addPlayground(
-      newPlayground: Omit<Playground, 'id' | 'user'>,
-      userSlug: string
-    ) {
+    async getPlaygroundsByUserSlug(userSlug: string) {
+      const { data, error } = await supabase
+        .from('playgrounds')
+        .select('*, user:users(id, slug, avatar_id)')
+        .eq('user_slug', userSlug)
+        .returns<SupabasePlayground[]>()
+
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      const playgrounds = data.map(SupabasePlaygroundAdapter)
+
+      return playgrounds
+    },
+
+    async addPlayground(newPlayground: Partial<Playground>) {
+      if (!newPlayground.user) {
+        throw new Error('A new Playground must be created with a user')
+      }
+
       const { error } = await supabase.from('playgrounds').insert({
+        id: generateId(),
         title: newPlayground.title,
         code: newPlayground.code,
         is_public: newPlayground.isPublic,
-        user_slug: userSlug,
-        user_id: '',
+        user_slug: newPlayground.user.slug,
       })
       if (error) {
         throw new Error(error.message)
@@ -80,7 +83,6 @@ export const SupabasePlaygroundsController = (
     },
 
     async updatePublicPlaygroundById(isPublic: boolean, id: string) {
-      console.log({ isPublic })
       const { error } = await supabase
         .from('playgrounds')
         .update({ is_public: isPublic })
