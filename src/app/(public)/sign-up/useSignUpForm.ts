@@ -1,10 +1,11 @@
 'use client'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { ToastRef } from '@/app/components/Toast'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
+import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
+import { APP_ERRORS } from '@/global/constants'
 import { useApi } from '@/services/api'
 import { SignUpForm } from '@/services/validation/types/signUpForm'
 import { signUpFormSchema } from '@/services/validation/zod/schemas/signUpFormSchema'
@@ -23,14 +24,14 @@ export function useSignUpForm() {
 
   const api = useApi()
 
-  const toastRef = useRef<ToastRef>(null)
+  const toast = useToastContext()
 
   function handleError(errorMessage: string) {
     console.error(errorMessage)
 
-    toastRef.current?.open({
+    toast.show(errorMessage, {
       type: 'error',
-      message: errorMessage,
+      seconds: 10,
     })
   }
 
@@ -41,16 +42,16 @@ export function useSignUpForm() {
     try {
       userEmail = await api.getUserEmail(email)
     } catch (error) {
-      toastRef.current?.open({
+      toast.show(APP_ERRORS.auth.failedSignUp, {
+        seconds: 10,
         type: 'error',
-        message: 'Erro ao tentar fazer cadastro',
       })
     }
 
     if (userEmail) {
-      toastRef.current?.open({
+      toast.show(APP_ERRORS.auth.duplicatedEmail, {
+        seconds: 10,
         type: 'error',
-        message: 'Usuário já registrado com esse e-mail',
       })
       setIsLoading(false)
       return
@@ -64,9 +65,8 @@ export function useSignUpForm() {
         return
       }
 
-      toastRef.current?.open({
+      toast?.show('Verifique seu e-mail para confirmar o seu cadastro', {
         type: 'success',
-        message: 'Verifique seu e-mail para confirmar o seu cadastro',
         seconds: 5,
       })
 
@@ -75,24 +75,23 @@ export function useSignUpForm() {
       }
     } catch (error) {
       console.error({ error })
-      toastRef.current?.open({
+      toast.show(APP_ERRORS.auth.failedSignUp, {
+        seconds: 10,
         type: 'error',
-        message: 'Erro ao ',
       })
     } finally {
       setIsLoading(false)
     }
 
-    toastRef.current?.open({
+    toast.show('Confira seu e-mail para confirmar seu cadastro', {
       type: 'success',
-      message: 'Confira seu e-mail para confirmar seu cadastro',
+      seconds: 5,
     })
   }
 
   return {
     errors,
     isLoading,
-    toastRef,
     register,
     handleSubmit: handleSubmit(handleFormSubmit),
   }

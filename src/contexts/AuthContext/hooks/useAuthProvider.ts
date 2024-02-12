@@ -52,7 +52,7 @@ export function useAuthProvider(serverSession: Session | null) {
   async function signInWithOAuth(oauthProvider: OAuthProvider) {
     switch (oauthProvider) {
       case 'github':
-        await api.githubOAuth()
+        await api.signInWithGithubOAuth()
         break
       default:
     }

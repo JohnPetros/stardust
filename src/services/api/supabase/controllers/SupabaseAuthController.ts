@@ -100,15 +100,18 @@ export const SupabaseAuthController = (supabase: Supabase): IAuthController => {
       return !!user?.email
     },
 
-    async githubOAuth() {
+    async signInWithGithubOAuth() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
-        options: {
-          redirectTo: `${getAppBaseUrl()}${ROUTES.server.auth.confirm}`,
-        },
+        // options: {
+        //   redirectTo: `${getAppBaseUrl()}/${ROUTES.server.auth.confirm}`,
+        // },
       })
 
-      if (error) throw new Error(error?.message)
+      if (error) {
+        console.log(error)
+        throw new Error(error?.message)
+      }
     },
 
     async getUserId() {
