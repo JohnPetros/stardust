@@ -66,14 +66,14 @@ export const SupabaseChallengesController = (
       status,
       difficulty,
       categoriesIds,
-      search,
+      title,
     }: GetFilteredChallengesParams) {
       const { data, error } = await supabase.rpc('get_filtered_challenges', {
         _userid: userId,
         _difficulty: difficulty,
         _status: status,
         _categories_ids: categoriesIds,
-        _search: search,
+        _search: title,
       })
 
       if (error) {

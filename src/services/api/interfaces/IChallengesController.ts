@@ -6,8 +6,8 @@ export type GetFilteredChallengesParams = {
   userId: string
   status: string
   difficulty: string
+  title: string
   categoriesIds: string[]
-  search: string
 }
 
 export interface IChallengesController {
