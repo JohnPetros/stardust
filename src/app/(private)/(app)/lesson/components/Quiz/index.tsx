@@ -11,7 +11,7 @@ import { SelectionQuestion } from './SelectionQuestion'
 import { useQuiz } from './useQuiz'
 import { VerificationButton } from './VerificationButton'
 
-import { Alert } from '@/global/components/Alert'
+import { AlertDialog } from '@/global/components/AlertDialog'
 import { Button } from '@/global/components/Button'
 import { useLessonStore } from '@/stores/lessonStore'
 
@@ -22,7 +22,7 @@ type QuizProps = {
 export function Quiz({ leaveLesson }: QuizProps) {
   const { answerHandler, isAnswerVerified, isAnswerCorrect, isAnswered } =
     useLessonStore((store) => store.state)
-  const { alertRef, currentQuestion } = useQuiz()
+  const { alertDialogRef, currentQuestion } = useQuiz()
 
   if (currentQuestion) {
     return (
@@ -60,8 +60,8 @@ export function Quiz({ leaveLesson }: QuizProps) {
             )}
           </AnimatePresence>
 
-          <Alert
-            ref={alertRef}
+          <AlertDialog
+            ref={alertDialogRef}
             type="crying"
             title="Puxa, parece que você não tem mais vidas!"
             body={

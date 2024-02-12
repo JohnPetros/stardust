@@ -8,7 +8,7 @@ import { CongratulationsProps } from '.'
 
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { _deleteCookie } from '@/global/actions/_deleteCookie'
-import { AlertRef } from '@/global/components/Alert'
+import { AlertDialogRef } from '@/global/components/AlertDialog/types/AlertDialogRef'
 import { COOKIES } from '@/global/constants'
 import { playAudio } from '@/global/helpers'
 
@@ -26,7 +26,7 @@ export function useCongratulations({
 
   const { mutateUserCache } = useAuthContext()
 
-  const alertRef = useRef<AlertRef>(null)
+  const alertDialogRef = useRef<AlertDialogRef>(null)
   const starsChainRef = useRef(null) as LottieRef
 
   const router = useRouter()
@@ -35,7 +35,7 @@ export function useCongratulations({
     setIsFirstClick(false)
 
     if (updatedLevel.hasNewLevel) {
-      alertRef.current?.open()
+      alertDialogRef.current?.open()
     }
 
     const shouldStreakBeVisible = todayStatus == 'todo'
@@ -80,7 +80,7 @@ export function useCongratulations({
     isStreakVisible,
     isEndMessageVisible,
     isLoading,
-    alertRef,
+    alertDialogRef,
     starsChainRef,
     handleSecondButtonClick,
     handleFirstButtonClick,

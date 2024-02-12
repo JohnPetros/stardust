@@ -7,28 +7,23 @@ import Lottie from 'lottie-react'
 import { DialogAnimation } from '../Dialog'
 import { Hydration } from '../Hydration'
 
-import { useAlert } from './useAlert'
+import { AlertDialogRef } from './types/AlertDialogRef'
+import { AlertDialogType } from './types/AlertDialogType'
+import { useAlertDialog } from './useAlertDialog'
 
-export type AlertType = 'earning' | 'crying' | 'denying' | 'asking' | 'generic'
-
-export type AlertRef = {
-  open: VoidFunction
-  close: VoidFunction
-}
-
-type AlertProps = {
-  type: AlertType
+type AlertDialogProps = {
+  type: AlertDialogType
   title: string
   body: ReactNode
   action: ReactNode
   cancel?: ReactNode
   children?: ReactNode
-  canPlaySong?: boolean
-  canForceMount?: boolean
+  shouldPlayAudio?: boolean
+  shouldForceMount?: boolean
   onOpenChange?: (isOpen: boolean) => void
 }
 
-const AlertComponent = (
+const AlertDialogComponent = (
   {
     type,
     title,
@@ -36,11 +31,11 @@ const AlertComponent = (
     action,
     cancel,
     children,
-    canPlaySong = true,
-    canForceMount = false,
+    shouldPlayAudio = true,
+    shouldForceMount = false,
     onOpenChange,
-  }: AlertProps,
-  ref: ForwardedRef<AlertRef>
+  }: AlertDialogProps,
+  ref: ForwardedRef<AlertDialogRef>
 ) => {
   const {
     animation,
@@ -50,7 +45,7 @@ const AlertComponent = (
     handleOpenChange,
     open,
     close,
-  } = useAlert(type, canPlaySong, onOpenChange)
+  } = useAlertDialog(type, shouldPlayAudio, onOpenChange)
 
   useImperativeHandle(
     ref,
@@ -71,7 +66,7 @@ const AlertComponent = (
         >
           <AlertDialog.Overlay className="fixed inset-0 z-[1000] overflow-y-auto bg-black bg-opacity-50" />
           <AlertDialog.Content
-            forceMount={canForceMount ? true : undefined}
+            forceMount={shouldForceMount ? true : undefined}
             className="fixed left-1/2 top-1/2 z-[1100] max-h-screen w-full max-w-lg -translate-x-1/2 -translate-y-1/2 p-6"
           >
             <DialogAnimation>
@@ -106,4 +101,6 @@ const AlertComponent = (
   )
 }
 
-export const Alert = forwardRef(AlertComponent)
+const Component = forwardRef(AlertDialogComponent)
+
+export { Component as AlertDialog }

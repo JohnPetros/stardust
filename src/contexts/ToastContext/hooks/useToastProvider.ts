@@ -12,7 +12,7 @@ export function useToastProvider() {
     (message: string, options?: Partial<Omit<OpenToastParams, 'message'>>) => {
       toastRef.current?.open({
         message,
-        type: options?.type ?? 'success',
+        type: options?.type ?? 'error',
         seconds: options?.seconds ?? 2.5,
       })
     },

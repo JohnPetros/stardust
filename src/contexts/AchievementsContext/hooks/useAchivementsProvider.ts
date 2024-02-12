@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { Achievement as AchievementData } from '@/@types/Achievement'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
-import { AlertRef } from '@/global/components/Alert'
+import { AlertDialogRef } from '@/global/components/AlertDialog/types/AlertDialogRef'
 import { useUserAchievements } from '@/global/hooks/useUserAchievements'
 import { useApi } from '@/services/api'
 
@@ -22,7 +22,7 @@ export function useAchivementsProvider() {
   const api = useApi()
   const toast = useToastContext()
 
-  const newUnlockedAchievementsAlertRef = useRef<AlertRef>(null)
+  const newUnlockedAchievementsAlertDialogRef = useRef<AlertDialogRef>(null)
 
   async function removeRescuedAchievement(achievementId: string) {
     if (!user) return
@@ -59,7 +59,9 @@ export function useAchivementsProvider() {
     }
   }
 
-  function handleRescuedAchievementsAlertClose(rescuedAchievementId: string) {
+  function handleRescuedAchievementsAlertDialogClose(
+    rescuedAchievementId: string
+  ) {
     const updatedAchievements = achievements.map((achievement) =>
       achievement.id === rescuedAchievementId
         ? { ...achievement, isRescuable: false }
@@ -69,9 +71,9 @@ export function useAchivementsProvider() {
     setAchievements(updatedAchievements)
   }
 
-  function handleNewUnlockedAchievementsAlertClose(isOpen: boolean) {
+  function handleNewUnlockedAchievementsAlertDialogClose(isOpen: boolean) {
     if (!isOpen) {
-      newUnlockedAchievementsAlertRef.current?.close()
+      newUnlockedAchievementsAlertDialogRef.current?.close()
       setNewUnlockedAchievements([])
     }
   }
@@ -170,7 +172,7 @@ export function useAchivementsProvider() {
 
   useEffect(() => {
     if (newUnlockedAchievements.length) {
-      newUnlockedAchievementsAlertRef.current?.open()
+      newUnlockedAchievementsAlertDialogRef.current?.open()
     }
   }, [newUnlockedAchievements])
 
@@ -178,9 +180,9 @@ export function useAchivementsProvider() {
     achievements,
     newUnlockedAchievements,
     rescueableAchievementsCount,
-    newUnlockedAchievementsAlertRef,
+    newUnlockedAchievementsAlertDialogRef,
     rescueAchivement,
-    handleRescuedAchievementsAlertClose,
-    handleNewUnlockedAchievementsAlertClose,
+    handleRescuedAchievementsAlertDialogClose,
+    handleNewUnlockedAchievementsAlertDialogClose,
   }
 }

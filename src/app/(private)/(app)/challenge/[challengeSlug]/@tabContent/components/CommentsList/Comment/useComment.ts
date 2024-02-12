@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 
-import { AlertRef } from '@/global/components/Alert'
+import { AlertRef } from '@/global/components/AlertDialog'
 import { PopoverMenuButton } from '@/global/components/PopoverMenu'
 import { APP_ERRORS } from '@/global/constants'
 import { CACHE } from '@/global/constants/cache'

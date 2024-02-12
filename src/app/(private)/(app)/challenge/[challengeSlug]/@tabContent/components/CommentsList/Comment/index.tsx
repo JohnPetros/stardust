@@ -9,12 +9,12 @@ import { UpvotesButton } from './UpvotesButton'
 import { useComment } from './useComment'
 import { UserReplyInput } from './UserReplyInput'
 
-import { Alert } from '@/global/components/Alert'
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
+import { AlertDialog } from '@/global/components/AlertDialog'
 import { Button } from '@/global/components/Button'
 import { Loading } from '@/global/components/Loading'
 import { Separator } from '@/global/components/Separator'
 import { UserAvatar } from '@/global/components/UserAvatar'
-import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { ROUTES } from '@/global/constants'
 
 type CommentProps = {
@@ -48,7 +48,7 @@ export function Comment({
     isLoadingReplies,
     popoverMenuButtons,
     canEditComment,
-    alertRef,
+    alertDialogRef,
     handleToggleIsUserReplyInputVisible,
     handleToggleIsRepliesVisible,
     handlePostUserReply,
@@ -64,8 +64,8 @@ export function Comment({
 
   return (
     <>
-      <Alert
-        ref={alertRef}
+      <AlertDialog
+        ref={alertDialogRef}
         type="asking"
         title="Você tem certeza?"
         body={
@@ -83,7 +83,7 @@ export function Comment({
           </Button>
         }
         cancel={<Button className="bg-gray-600 text-gray-50">Cancelar</Button>}
-        canPlaySong={false}
+        shouldPlayAudio={false}
       />
       <div className="w-full">
         <div className="flex w-full gap-2">

@@ -7,7 +7,7 @@ import { useAchivementsProvider } from './hooks/useAchivementsProvider'
 import type { Achievement as AchievementData } from '@/@types/Achievement'
 import { Achievement } from '@/app/(private)/(app)/(home)/components/Achievement'
 import { ShinningAnimation } from '@/app/(private)/(app)/(home)/components/ShinningAnimation'
-import { Alert } from '@/global/components/Alert'
+import { AlertDialog } from '@/global/components/AlertDialog'
 import { Button } from '@/global/components/Button'
 
 export type AchivementsContextValue = {
@@ -17,7 +17,9 @@ export type AchivementsContextValue = {
     rescuableAchiementId: string,
     rescuableAchiementReward: number
   ) => Promise<void>
-  handleRescuedAchievementsAlertClose: (rescuedAchiementId: string) => void
+  handleRescuedAchievementsAlertDialogClose: (
+    rescuedAchiementId: string
+  ) => void
 }
 
 type AchivementsContextProps = {
@@ -31,10 +33,10 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
     achievements,
     newUnlockedAchievements,
     rescueableAchievementsCount,
-    newUnlockedAchievementsAlertRef,
+    newUnlockedAchievementsAlertDialogRef,
     rescueAchivement,
-    handleNewUnlockedAchievementsAlertClose,
-    handleRescuedAchievementsAlertClose,
+    handleNewUnlockedAchievementsAlertDialogClose,
+    handleRescuedAchievementsAlertDialogClose,
   } = useAchivementsProvider()
 
   return (
@@ -43,12 +45,12 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
         achievements,
         rescueableAchievementsCount,
         rescueAchivement,
-        handleRescuedAchievementsAlertClose,
+        handleRescuedAchievementsAlertDialogClose,
       }}
     >
       <div className="absolute">
-        <Alert
-          ref={newUnlockedAchievementsAlertRef}
+        <AlertDialog
+          ref={newUnlockedAchievementsAlertDialogRef}
           type={'earning'}
           title={'Uau! Parece que você ganhou recompensa(s)'}
           body={
@@ -74,13 +76,15 @@ export function AchivementsProvider({ children }: AchivementsContextProps) {
           action={
             <div className="mt-8 w-full">
               <Button
-                onClick={() => handleNewUnlockedAchievementsAlertClose(false)}
+                onClick={() =>
+                  handleNewUnlockedAchievementsAlertDialogClose(false)
+                }
               >
                 Entendido
               </Button>
             </div>
           }
-          onOpenChange={handleNewUnlockedAchievementsAlertClose}
+          onOpenChange={handleNewUnlockedAchievementsAlertDialogClose}
         />
       </div>
       {children}

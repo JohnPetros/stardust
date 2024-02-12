@@ -3,16 +3,18 @@
 import { ReactNode, RefObject, useRef } from 'react'
 import { ArrowClockwise, Code, Command, Gear } from '@phosphor-icons/react'
 import * as Toolbar from '@radix-ui/react-toolbar'
+import { usePathname } from 'next/navigation'
 
 import { useCodeEditorToolbar } from './useCodeEditorToolbar'
 
-import { Alert } from '@/global/components/Alert'
+import { AlertDialog } from '@/global/components/AlertDialog'
 import { Button } from '@/global/components/Button'
 import { CodeEditorSettingsDialog } from '@/global/components/CodeEditorToolbar/CodeEditorSettingsDialog'
 import { DocsDialog } from '@/global/components/CodeEditorToolbar/DocsDialog'
 import { HotkeysDialog } from '@/global/components/CodeEditorToolbar/HotkeysDialog'
 import { EditorRef } from '@/global/components/Editor'
 import { Tooltip } from '@/global/components/Tooltip'
+import { ROUTES } from '@/global/constants'
 
 type CodeEditorToolbarProps = {
   children: ReactNode
@@ -29,6 +31,7 @@ export function CodeEditorToolbar({
 }: CodeEditorToolbarProps) {
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
   const docsDialogButtonRef = useRef<HTMLButtonElement>(null)
+  const pathname = usePathname()
 
   const { handleKeyDown, resetCode } = useCodeEditorToolbar({
     previousUserCode,
@@ -45,7 +48,7 @@ export function CodeEditorToolbar({
       <div className="flex items-center justify-between rounded-t-md bg-gray-700 px-3 py-2">
         <div className="flex items-center gap-4">
           <Button
-            buttonRef={runCodeButtonRef}
+            ref={runCodeButtonRef}
             className="h-6 w-max px-3 text-xs"
             onClick={onRunCode}
           >
@@ -54,34 +57,36 @@ export function CodeEditorToolbar({
         </div>
 
         <Toolbar.Root className="flex items-center gap-3">
-          <Alert
-            type="asking"
-            title="Tem certeza que deseja voltar para o código inicial?"
-            body={null}
-            action={
-              <Button
-                tabIndex={0}
-                autoFocus
-                onClick={resetCode}
-                className="bg-red-700 text-gray-100"
-              >
-                Voltar código
-              </Button>
-            }
-            cancel={
-              <Button className="bg-gray-500 text-gray-100">Cancelar</Button>
-            }
-            canPlaySong={false}
-          >
-            <Toolbar.Button className={toolbarStyles}>
-              <Tooltip
-                content="Voltar para o código inicial"
-                direction="bottom"
-              >
-                <ArrowClockwise className={iconStyles} weight="bold" />
-              </Tooltip>
-            </Toolbar.Button>
-          </Alert>
+          {pathname.includes(ROUTES.private.challenge) && (
+            <AlertDialog
+              type="asking"
+              title="Tem certeza que deseja voltar para o código inicial?"
+              body={null}
+              action={
+                <Button
+                  tabIndex={0}
+                  autoFocus
+                  onClick={resetCode}
+                  className="bg-red-700 text-gray-100"
+                >
+                  Voltar código
+                </Button>
+              }
+              cancel={
+                <Button className="bg-gray-500 text-gray-100">Cancelar</Button>
+              }
+              shouldPlayAudio={false}
+            >
+              <Toolbar.Button className={toolbarStyles}>
+                <Tooltip
+                  content="Voltar para o código inicial"
+                  direction="bottom"
+                >
+                  <ArrowClockwise className={iconStyles} weight="bold" />
+                </Tooltip>
+              </Toolbar.Button>
+            </AlertDialog>
+          )}
 
           <DocsDialog>
             <Toolbar.Button ref={docsDialogButtonRef} className={toolbarStyles}>

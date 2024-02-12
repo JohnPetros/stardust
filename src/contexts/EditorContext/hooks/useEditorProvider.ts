@@ -1,17 +1,18 @@
 'use client'
 
-import { useEffect, useReducer } from 'react'
+import { useReducer } from 'react'
 
+import { DEFAULT_EDITOR_CONFIG } from '../constants/default-editor-config'
 import { EditorContextAction } from '../types/editorContextAction'
 import { EditorContextState } from '../types/editorContextState'
 
-import { EDITOR_DEFAULT_CONFIG, STORAGE } from '@/global/constants'
+import { STORAGE } from '@/global/constants'
 
 export function useEditorProvider() {
   const storedEditorConfig = localStorage.getItem(STORAGE.keys.editorConfig)
   const initalEditorConfigData = storedEditorConfig
     ? JSON.parse(storedEditorConfig)
-    : EDITOR_DEFAULT_CONFIG
+    : DEFAULT_EDITOR_CONFIG
 
   const [state, dispatch] = useReducer(EditorReducer, initalEditorConfigData)
 
@@ -20,7 +21,7 @@ export function useEditorProvider() {
 
     const editorData = storedData
       ? JSON.parse(storedData)
-      : EDITOR_DEFAULT_CONFIG
+      : DEFAULT_EDITOR_CONFIG
 
     return editorData
   }
@@ -57,15 +58,3 @@ export function useEditorProvider() {
     dispatch,
   }
 }
-
-/**
- * 
- * funcao retonerFucao() {
- retorna funcao() {
-    retorna 5
- };
-}
-
-
-escreva(retonerFucao()())
- */

@@ -1,24 +1,24 @@
 import { useRef, useState } from 'react'
 
-import { AlertRef } from '../Alert'
+import { AlertDialogRef } from '../AlertDialog/types/AlertDialogRef'
 
 export function usePrompt(initialTitle: string) {
   const [title, setTitle] = useState(initialTitle)
   const [value, setValue] = useState('')
-  const alertRef = useRef<AlertRef | null>(null)
+  const alertDialogRef = useRef<AlertDialogRef | null>(null)
 
   function open() {
-    alertRef.current?.open()
+    alertDialogRef.current?.open()
   }
 
   function close() {
-    alertRef.current?.close()
+    alertDialogRef.current?.close()
   }
 
   return {
     title,
     value,
-    alertRef,
+    alertDialogRef,
     setTitle,
     setValue,
     open,

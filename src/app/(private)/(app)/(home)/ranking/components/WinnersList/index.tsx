@@ -10,9 +10,10 @@ import { Winner } from './Winner'
 
 import type { Ranking } from '@/@types/Ranking'
 import type { Winner as WinnerUser } from '@/@types/Winner'
-import { Alert, AlertRef } from '@/global/components/Alert'
-import { Button } from '@/global/components/Button'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
+import { AlertDialog } from '@/global/components/AlertDialog'
+import { AlertDialogRef } from '@/global/components/AlertDialog/types/AlertDialogRef'
+import { Button } from '@/global/components/Button'
 import { getImage } from '@/global/helpers'
 
 type WinnerUsersListProps = {
@@ -55,26 +56,26 @@ export function WinnersList({
     ? currentRanking.reward + 5 * getRewardMultiplicator()
     : 0
 
-  const rewardAlert = useRef<AlertRef>(null)
-  const successAlert = useRef<AlertRef>(null)
-  const failAlert = useRef<AlertRef>(null)
+  const rewardAlertDialog = useRef<AlertDialogRef>(null)
+  const successAlertDialog = useRef<AlertDialogRef>(null)
+  const failAlertDialog = useRef<AlertDialogRef>(null)
 
   const rankingImage = getImage('rankings', currentRanking.image)
 
   async function handleWinnerUserListButtonClick() {
     if (user && isAuthUserTopWinner) {
-      rewardAlert.current?.open()
+      rewardAlertDialog.current?.open()
       await updateUser({ coins: user.coins + rewardByLastPosition })
       return
     }
 
     if (isAuthUserWinner) {
-      successAlert.current?.open()
+      successAlertDialog.current?.open()
       return
     }
 
     if (user?.isLoser) {
-      failAlert.current?.open()
+      failAlertDialog.current?.open()
       await updateUser({ isLoser: false })
       return
     }
@@ -82,19 +83,19 @@ export function WinnersList({
     onHideWinners()
   }
 
-  function handleAlertButtonPress(type: 'reward' | 'success' | 'fail') {
+  function handleAlertDialogButtonPress(type: 'reward' | 'success' | 'fail') {
     if (type === 'reward') {
-      rewardAlert.current?.close()
+      rewardAlertDialog.current?.close()
       const hasNextRanking = currentRanking.position !== lastRankingPosition
 
       hasNextRanking
-        ? successAlert.current?.open()
-        : handleAlertButtonPress('success')
+        ? successAlertDialog.current?.open()
+        : handleAlertDialogButtonPress('success')
       return
     }
 
-    successAlert.current?.close()
-    failAlert.current?.close()
+    successAlertDialog.current?.close()
+    failAlertDialog.current?.close()
     onHideWinners()
   }
 
@@ -144,8 +145,8 @@ export function WinnersList({
         </p>
       )}
 
-      <Alert
-        ref={rewardAlert}
+      <AlertDialog
+        ref={rewardAlertDialog}
         type={'earning'}
         title={'Recompensa resgatada!'}
         body={
@@ -161,17 +162,17 @@ export function WinnersList({
         }
         action={
           <Button
-            onClick={() => handleAlertButtonPress('reward')}
+            onClick={() => handleAlertDialogButtonPress('reward')}
             className="mt-6"
           >
             Entendido
           </Button>
         }
-        canPlaySong={false}
+        shouldPlayAudio={false}
       />
 
-      <Alert
-        ref={successAlert}
+      <AlertDialog
+        ref={successAlertDialog}
         type={'earning'}
         title={'Novo ranking!'}
         body={
@@ -202,17 +203,17 @@ export function WinnersList({
         }
         action={
           <Button
-            onClick={() => handleAlertButtonPress('success')}
+            onClick={() => handleAlertDialogButtonPress('success')}
             className="mt-6"
           >
             Entendido
           </Button>
         }
-        canPlaySong={false}
+        shouldPlayAudio={false}
       />
 
-      <Alert
-        ref={failAlert}
+      <AlertDialog
+        ref={failAlertDialog}
         type={'crying'}
         title={'Perda de Ranking!'}
         body={
@@ -236,13 +237,13 @@ export function WinnersList({
         action={
           <Button
             title={'Entendido'}
-            onClick={() => handleAlertButtonPress('fail')}
+            onClick={() => handleAlertDialogButtonPress('fail')}
             className="mt-6"
           >
             Entendido
           </Button>
         }
-        canPlaySong={true}
+        shouldPlayAudio={true}
       />
     </div>
   )

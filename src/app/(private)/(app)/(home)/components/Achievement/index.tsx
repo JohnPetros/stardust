@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { useAchievement } from './useAchievement'
 
 import type { Achievement as AchievementType } from '@/@types/Achievement'
-import { Alert } from '@/global/components/Alert'
+import { AlertDialog } from '@/global/components/AlertDialog'
 import { Button } from '@/global/components/Button'
 import { ProgressBar } from '@/global/components/ProgressBar'
 
@@ -50,7 +50,7 @@ export function Achievement({
     status,
     iconImage,
     handleRescuButtonClick,
-    handleRescuedAchievementsAlertClose,
+    handleRescuedAchievementsAlertDialogClose,
   } = useAchievement(data)
 
   return (
@@ -75,7 +75,7 @@ export function Achievement({
       <div className="flex flex-col gap-1">
         <strong className="text-sm text-gray-100">{data.name}</strong>
         {isRescuable ? (
-          <Alert
+          <AlertDialog
             type={'earning'}
             title={'Recompensa resgatada!'}
             body={
@@ -98,13 +98,17 @@ export function Achievement({
             action={
               <Button
                 className="mt-6"
-                onClick={() => handleRescuedAchievementsAlertClose(data.id)}
+                onClick={() =>
+                  handleRescuedAchievementsAlertDialogClose(data.id)
+                }
               >
                 Entendido
               </Button>
             }
             onOpenChange={(isOpen: boolean) =>
-              !isOpen ? handleRescuedAchievementsAlertClose(data.id) : null
+              !isOpen
+                ? handleRescuedAchievementsAlertDialogClose(data.id)
+                : null
             }
           >
             <motion.div
@@ -120,7 +124,7 @@ export function Achievement({
                 Resgatar
               </Button>
             </motion.div>
-          </Alert>
+          </AlertDialog>
         ) : (
           <>
             <p className="text-xs text-gray-100">{data.description}</p>

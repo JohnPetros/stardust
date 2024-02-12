@@ -2,23 +2,23 @@
 
 import { ReactNode } from 'react'
 
-import { useSignOutAlert } from './useSignOutAlert'
+import { useSignOutAlertDialog } from './useSignOutDialogAlert'
 
-import { Alert } from '@/global/components/Alert'
+import { AlertDialog } from '@/global/components/AlertDialog'
 import { Button } from '@/global/components/Button'
 
-type SignOutAlertProps = {
+type SignOutAlertDialogProps = {
   children: ReactNode
 }
 
-export function SignOutAlert({ children }: SignOutAlertProps) {
-  const { isLoading, handleSignOut } = useSignOutAlert()
+export function SignOutAlertDialog({ children }: SignOutAlertDialogProps) {
+  const { isLoading, handleSignOut } = useSignOutAlertDialog()
 
   return (
-    <Alert
+    <AlertDialog
       type="crying"
       title={`Calma aí! Deseja mesmo\nSAIR DA SUA CONTA 😢?`}
-      canPlaySong={false}
+      shouldPlayAudio={false}
       body={null}
       action={
         <Button
@@ -34,6 +34,6 @@ export function SignOutAlert({ children }: SignOutAlertProps) {
       }
     >
       {children}
-    </Alert>
+    </AlertDialog>
   )
 }

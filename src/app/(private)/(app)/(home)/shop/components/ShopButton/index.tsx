@@ -7,7 +7,7 @@ import RewardLightAnimation from '../../../../../../../../public/animations/rewa
 
 import { useShopButton } from './useShopButton'
 
-import { Alert } from '@/global/components/Alert'
+import { AlertDialog } from '@/global/components/AlertDialog'
 import { Button } from '@/global/components/Button'
 
 type Product = {
@@ -45,7 +45,7 @@ export function ShopButton({
       Selecionar
     </Button>
   ) : isBuyable ? (
-    <Alert
+    <AlertDialog
       type="earning"
       title="Parabéns, você acabou de adquirir um novo item!"
       onClose={onSuccess}
@@ -72,9 +72,9 @@ export function ShopButton({
       >
         Comprar
       </Button>
-    </Alert>
+    </AlertDialog>
   ) : (
-    <Alert
+    <AlertDialog
       type="denying"
       title="Parece que você não tem poeira estelar o suficiente"
       body={
@@ -86,6 +86,6 @@ export function ShopButton({
       action={<Button>Entendido</Button>}
     >
       <Button className="h-8 w-max bg-yellow-300 px-3 py-1">Comprar</Button>
-    </Alert>
+    </AlertDialog>
   )
 }

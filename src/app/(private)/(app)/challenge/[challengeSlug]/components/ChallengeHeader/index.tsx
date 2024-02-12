@@ -6,7 +6,7 @@ import { useChallengeHeader } from './useChallengeHeader'
 
 import type { Challenge } from '@/@types/Challenge'
 import type { Vote } from '@/@types/Vote'
-import { Alert } from '@/global/components/Alert'
+import { AlertDialog } from '@/global/components/AlertDialog'
 import { Button } from '@/global/components/Button'
 import { PopoverMenu, PopoverMenuButton } from '@/global/components/PopoverMenu'
 
@@ -43,7 +43,7 @@ export function ChallengeHeader({ challenge, userVote }: HeaderProps) {
     <header className="flex h-12 flex-col justify-center md:border-b md:border-green-700">
       <div className="flex items-center justify-between px-6">
         <div className="flex items-center gap-3 py-3">
-          <Alert
+          <AlertDialog
             type="crying"
             title="Você está saindo do desafio!"
             body={
@@ -69,12 +69,12 @@ export function ChallengeHeader({ challenge, userVote }: HeaderProps) {
                 Ficar
               </Button>
             }
-            canPlaySong={false}
+            shouldPlayAudio={false}
           >
             <button className="translate-y-1">
               <ArrowLeft className="text-xl text-green-400" weight="bold" />
             </button>
-          </Alert>
+          </AlertDialog>
           <h2 className="text-lg font-semibold text-gray-100">
             {challenge.title}
           </h2>

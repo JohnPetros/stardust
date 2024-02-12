@@ -6,7 +6,7 @@ import {
   useRef,
 } from 'react'
 
-import { Alert } from '../Alert'
+import { AlertDialog } from '../AlertDialog'
 import { Button } from '../Button'
 
 import { usePrompt } from './usePromp'
@@ -32,9 +32,8 @@ export function PromptComponent(
 ) {
   const inputRef = useRef<HTMLInputElement | null>(null)
 
-  const { title, value, alertRef, open, close, setTitle, setValue } = usePrompt(
-    initialTitle ?? ''
-  )
+  const { title, value, alertDialogRef, open, close, setTitle, setValue } =
+    usePrompt(initialTitle ?? '')
 
   useImperativeHandle(
     ref,
@@ -52,8 +51,8 @@ export function PromptComponent(
   )
 
   return (
-    <Alert
-      ref={alertRef}
+    <AlertDialog
+      ref={alertDialogRef}
       type="asking"
       title={title ?? 'Digite um valor no campo abaixo'}
       body={
@@ -89,11 +88,11 @@ export function PromptComponent(
           Cancelar
         </Button>
       }
-      canPlaySong={false}
-      canForceMount={true}
+      shouldPlayAudio={false}
+      shouldForceMount={true}
     >
       {trigger}
-    </Alert>
+    </AlertDialog>
   )
 }
 

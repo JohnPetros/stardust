@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { CODE_TIPS } from '@/global/constants'
+import { CODE_TIPS } from './code-tips'
 
 export function usePageTransitionAnimation(hasTips: boolean) {
   const [codeTip, setCodeTip] = useState('')

@@ -4,14 +4,14 @@ import { motion, Variants } from 'framer-motion'
 import Lottie from 'lottie-react'
 
 import ApolloContratulating from '../../../../../../../public/animations/apollo-congratulating.json'
-import StarsChain from '../../../../../../../public/animations/stars-chain.json'
 
+// import StarsChain from '../../../../../../../public/animations/stars-chain.json'
 import { Metric } from './Metric'
 import { Streak } from './Streak'
 import { useCongratulations } from './useCongratulations'
 
 import { WeekStatus } from '@/@types/WeekStatus'
-import { Alert } from '@/global/components/Alert'
+import { AlertDialog } from '@/global/components/AlertDialog'
 import { Button } from '@/global/components/Button'
 import { StreakIcon } from '@/global/components/StreakIcon'
 
@@ -84,7 +84,7 @@ export function Congratulations({
     isFirstClick,
     isLoading,
     isStreakVisible,
-    alertRef,
+    alertDialogRef,
   } = useCongratulations({
     accurance,
     coins,
@@ -199,8 +199,8 @@ export function Congratulations({
         </Button>
       </motion.div>
 
-      <Alert
-        ref={alertRef}
+      <AlertDialog
+        ref={alertDialogRef}
         type="earning"
         title={'Parabéns! Você alcançou um novo nível!'}
         body={

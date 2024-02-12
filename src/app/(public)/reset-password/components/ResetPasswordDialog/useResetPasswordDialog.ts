@@ -5,13 +5,13 @@ import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
-import { AlertRef } from '@/global/components/Alert'
+import { AlertDialogRef } from '@/global/components/AlertDialog/types/AlertDialogRef'
 import { ROUTES } from '@/global/constants'
 import { useApi } from '@/services/api'
 import { useValidation } from '@/services/validation'
 import { ResetPasswordForm } from '@/services/validation/types/ResetPasswordForm'
 
-export function useResetPasswordDialog(alertRef: AlertRef | null) {
+export function useResetPasswordDialog(alertDialogRef: AlertDialogRef | null) {
   const { resolveResetPasswordForm } = useValidation()
 
   const {
@@ -36,7 +36,7 @@ export function useResetPasswordDialog(alertRef: AlertRef | null) {
 
       await api.resetPassword(password)
 
-      alertRef?.open()
+      alertDialogRef?.open()
     } catch (error) {
       console.error(error)
       toast.show('Erro de redefinição, escolha outra senha', {
@@ -49,7 +49,7 @@ export function useResetPasswordDialog(alertRef: AlertRef | null) {
   }
 
   return {
-    alertRef,
+    alertDialogRef,
     isLoading,
     errors,
     register,

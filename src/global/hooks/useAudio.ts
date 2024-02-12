@@ -1,17 +1,8 @@
 'use client'
 
 import { useMemo } from 'react'
-export type AudioFile =
-  | 'asking.wav'
-  | 'crying.wav'
-  | 'denying.wav'
-  | 'end.mp3'
-  | 'star.wav'
-  | 'success.wav'
-  | 'switch.wav'
-  | 'earning.wav'
-  | 'fail.wav'
-  | 'running-code.wav'
+
+import type { AudioFile } from '../helpers/playAudio'
 
 export function useAudio(audioFile: AudioFile | null) {
   const audio = useMemo(() => {

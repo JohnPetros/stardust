@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 
-export function useSignOutAlert() {
+export function useSignOutAlertDialog() {
   const [isLoading, setIsLoading] = useState(false)
 
   const { signOut } = useAuthContext()

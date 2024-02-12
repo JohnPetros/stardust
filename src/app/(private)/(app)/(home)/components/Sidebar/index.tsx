@@ -3,7 +3,7 @@ import { X } from '@phosphor-icons/react'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 
 import { AchievementsList } from '../AchievementsList'
-import { SignOutAlert } from '../SignOutAlert'
+import { SignOutAlert } from '../SignOutAlertDialog'
 
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useSiderbarContext } from '@/contexts/SidebarContext/hooks/useSiderbarContext'

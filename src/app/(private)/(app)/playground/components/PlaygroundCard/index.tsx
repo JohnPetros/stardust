@@ -7,7 +7,7 @@ import { SharePlaygroundDialog } from '../SharePlaygroundDialog'
 
 import { usePlaygroundCard } from './usePlaygroundCard'
 
-import { Alert } from '@/global/components/Alert'
+import { AlertDialog } from '@/global/components/AlertDialog'
 import { Button } from '@/global/components/Button'
 import { Prompt } from '@/global/components/Prompt'
 import { Separator } from '@/global/components/Separator'
@@ -17,11 +17,13 @@ import { ToolbarButton } from '@/global/components/Toolbar/ToolbarButton'
 type PlaygroundCardProps = {
   id: string
   title: string
+  onDelete: (deletedPlaygroundId: string) => void
 }
 
 export function PlaygroundCard({
   id,
   title: initialTitle,
+  onDelete,
 }: PlaygroundCardProps) {
   const {
     title,
@@ -29,8 +31,7 @@ export function PlaygroundCard({
     promptRef,
     handleDeletePlayground,
     handleEditPlaygroundTitle,
-    handleSharePlayground,
-  } = usePlaygroundCard(id, initialTitle)
+  } = usePlaygroundCard(id, initialTitle, onDelete)
 
   return (
     <>
@@ -43,7 +44,7 @@ export function PlaygroundCard({
         </Link>
         <Separator className="bg-green-700" isColumn={false} />
         <Toolbar className="justify-end">
-          <Alert
+          <AlertDialog
             type="crying"
             title="Você está preste a deletar um filho seu 😢!"
             body={
@@ -60,10 +61,10 @@ export function PlaygroundCard({
               </Button>
             }
             cancel={<Button>Não, eu mudei de ideia</Button>}
-            canPlaySong={false}
+            shouldPlayAudio={false}
           >
             <ToolbarButton icon={Trash}>Deletar código</ToolbarButton>
-          </Alert>
+          </AlertDialog>
           <Prompt
             ref={promptRef}
             title="Digite o novo título"

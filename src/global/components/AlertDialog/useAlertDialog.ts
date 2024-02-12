@@ -2,14 +2,14 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import { AlertType } from '.'
+import { AlertDialogType } from './types/AlertDialogType'
+import { ALERT_DIALOG_EFFECTS } from './alert-dialog-effects'
 
-import { ALERT_EFFECTS } from '@/global/constants'
 import { playAudio } from '@/global/helpers'
 
-export function useAlert(
-  type: AlertType,
-  canPlaySong: boolean,
+export function useAlertDialog(
+  type: AlertDialogType,
+  shouldPlayAudio: boolean,
   onOpenChange: ((isOpen: boolean) => void) | undefined
 ) {
   const [isOpen, setIsOpen] = useState(false)
@@ -17,7 +17,7 @@ export function useAlert(
   const [isRendered, setIsRendered] = useState(false)
   const containerRef = useRef<HTMLElement | null>(null)
 
-  const { animation, audioFile } = ALERT_EFFECTS.find(
+  const { animation, audioFile } = ALERT_DIALOG_EFFECTS.find(
     (animation) => animation.id === type.toLocaleLowerCase()
   )!
 
@@ -35,10 +35,10 @@ export function useAlert(
   }
 
   useEffect(() => {
-    if (audioFile && isOpen && type !== 'generic' && canPlaySong) {
+    if (audioFile && isOpen && type !== 'generic' && shouldPlayAudio) {
       playAudio(audioFile)
     }
-  }, [isOpen, canPlaySong, type, audioFile])
+  }, [isOpen, shouldPlayAudio, type, audioFile])
 
   useEffect(() => {
     containerRef.current = document.body

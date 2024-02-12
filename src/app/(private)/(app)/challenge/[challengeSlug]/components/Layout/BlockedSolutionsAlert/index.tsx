@@ -1,19 +1,19 @@
 import { ReactNode } from 'react'
 
-import { Alert } from '@/global/components/Alert'
+import { AlertDialog } from '@/global/components/AlertDialog'
 import { Button } from '@/global/components/Button'
 
-type BlockedCommentsAlertProps = {
+type BlockedCommentsAlertDialogProps = {
   children: ReactNode
   onShowSolutions: () => void
 }
 
-export function BlockedSolutionsAlert({
+export function BlockedSolutionsAlertDialog({
   children: trigger,
   onShowSolutions,
-}: BlockedCommentsAlertProps) {
+}: BlockedCommentsAlertDialogProps) {
   return (
-    <Alert
+    <AlertDialog
       type="denying"
       title="Opa!"
       body={
@@ -36,6 +36,6 @@ export function BlockedSolutionsAlert({
       cancel={<Button className="bg-red-500 text-gray-100">Cancelar</Button>}
     >
       {trigger}
-    </Alert>
+    </AlertDialog>
   )
 }

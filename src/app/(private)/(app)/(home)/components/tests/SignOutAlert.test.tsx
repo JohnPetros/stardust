@@ -3,7 +3,7 @@ import { TooltipProvider } from '@radix-ui/react-tooltip'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { SignOutAlert } from '../SignOutAlert'
+import { SignOutAlert } from '../SignOutAlertDialog'
 
 import { userMock } from '@/__tests__/mocks/usersMock'
 import {

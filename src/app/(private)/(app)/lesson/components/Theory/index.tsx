@@ -6,7 +6,7 @@ import { MdxComponent } from './MdxComponent'
 import { Star } from './Star'
 import { useTheory } from './useTheory'
 
-import { Alert } from '@/global/components/Alert'
+import { AlertDialog } from '@/global/components/AlertDialog'
 import { Button } from '@/global/components/Button'
 import { useLessonStore } from '@/stores/lessonStore'
 
@@ -57,7 +57,7 @@ export function Theory({ title, number, mdxComponents }: TheoryProps) {
 
         <footer className="fixed bottom-0 z-50 flex w-full items-center justify-center border-t border-gray-800 bg-gray-900 p-4">
           {!hasNextMdxComponent ? (
-            <Alert
+            <AlertDialog
               type={'asking'}
               title={`Parabéns! \n Agora você pode ir para a próxima etapa 🚀`}
               body={null}
@@ -78,7 +78,7 @@ export function Theory({ title, number, mdxComponents }: TheoryProps) {
               >
                 Continuar
               </Button>
-            </Alert>
+            </AlertDialog>
           ) : (
             <Button
               className="w-32"

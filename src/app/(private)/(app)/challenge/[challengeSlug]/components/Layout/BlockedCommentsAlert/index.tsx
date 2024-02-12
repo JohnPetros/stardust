@@ -1,17 +1,17 @@
 import { ReactNode } from 'react'
 
-import { Alert } from '@/global/components/Alert'
+import { AlertDialog } from '@/global/components/AlertDialog'
 import { Button } from '@/global/components/Button'
 
-type BlockedCommentsAlertProps = {
+type BlockedCommentsAlertDialogProps = {
   children: ReactNode
 }
 
-export function BlockedCommentsAlert({
+export function BlockedCommentsAlertDialog({
   children: trigger,
-}: BlockedCommentsAlertProps) {
+}: BlockedCommentsAlertDialogProps) {
   return (
-    <Alert
+    <AlertDialog
       type="denying"
       title="Negado!"
       body={
@@ -23,6 +23,6 @@ export function BlockedCommentsAlert({
       action={<Button>Entendido</Button>}
     >
       {trigger}
-    </Alert>
+    </AlertDialog>
   )
 }

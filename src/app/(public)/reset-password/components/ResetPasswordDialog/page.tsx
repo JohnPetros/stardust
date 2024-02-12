@@ -5,7 +5,7 @@ import { LockSimple } from '@phosphor-icons/react'
 
 import { useResetPasswordDialog } from './useResetPasswordDialog'
 
-import { Alert, AlertRef } from '@/global/components/Alert'
+import { Alert, AlertRef } from '@/global/components/AlertDialog'
 import { Button } from '@/global/components/Button'
 import {
   Dialog,
@@ -37,7 +37,7 @@ export function ResetPasswordDialog({ children }: ResetPasswordDialogProps) {
             vamos redirecionar você para fazer login com sua nova senha
           </p>
         }
-        canPlaySong={false}
+        shouldPlayAudio={false}
         action={<Button onClick={handleAlert}>Fazer login</Button>}
       />
       <Dialog>

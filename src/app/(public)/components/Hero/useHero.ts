@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 
-import { QUOTES } from '@/global/constants'
+import { QUOTES } from './quotes'
+
 import { getRandomItem } from '@/global/helpers/getRandomItem'
 
 export function useHero(charactersDeletingDelay: number) {

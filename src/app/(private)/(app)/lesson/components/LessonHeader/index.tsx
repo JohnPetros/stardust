@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { useLessonHeader } from './useLessonHeader'
 
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { Alert } from '@/global/components/Alert'
+import { AlertDialog } from '@/global/components/AlertDialog'
 import { Button } from '@/global/components/Button'
 import { ProgressBar } from '@/global/components/ProgressBar'
 import { useRocket } from '@/global/hooks/useRocket'
@@ -27,14 +27,14 @@ export function LessonHeader() {
   return (
     <header className="fixed top-0 z-10 h-12 w-full bg-gray-900 px-6 py-3">
       <div className="mx-auto flex max-w-3xl items-center justify-between gap-6">
-        <Alert
+        <AlertDialog
           type="crying"
           title="Deseja mesmo sair da sua lição?"
-          canPlaySong={false}
+          shouldPlayAudio={false}
           body={null}
           action={
             <Button
-              data-testid="alert-leave-lesson"
+              data-testid="alertDialog-leave-lesson"
               className="w-32 bg-red-700 text-gray-100"
               onClick={leaveLesson}
             >
@@ -50,7 +50,7 @@ export function LessonHeader() {
           <button aria-label="Sair da lição">
             <X className="text-2xl text-red-700" weight="bold" tabIndex={-1} />
           </button>
-        </Alert>
+        </AlertDialog>
 
         <ProgressBar
           value={currentProgressValue}

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef } from 'react'
 
-import { AlertRef } from '@/global/components/Alert'
+import { AlertDialogRef } from '@/global/components/AlertDialog/types/AlertDialogRef'
 import { useLessonStore } from '@/stores/lessonStore'
 
 export function useQuiz() {
@@ -13,8 +13,8 @@ export function useQuiz() {
   const currentQuestion = useMemo(() => {
     return questions.length ? questions[currentQuestionIndex] : null
   }, [questions, currentQuestionIndex])
-  
-  const alertRef = useRef<AlertRef>(null)
+
+  const alertDialogRef = useRef<AlertDialogRef>(null)
 
   useEffect(() => {
     window.scrollTo({
@@ -24,11 +24,11 @@ export function useQuiz() {
   }, [currentQuestionIndex])
 
   useEffect(() => {
-    if (livesCount === 0) alertRef.current?.open()
+    if (livesCount === 0) alertDialogRef.current?.open()
   }, [livesCount])
 
   return {
-    alertRef,
+    alertDialogRef,
     currentQuestion,
   }
 }

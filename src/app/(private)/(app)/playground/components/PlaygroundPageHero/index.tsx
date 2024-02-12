@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-export function Hero() {
+export function PlaygroundPageHero() {
   return (
     <div className="flex w-max flex-col items-center gap-12">
       <Image

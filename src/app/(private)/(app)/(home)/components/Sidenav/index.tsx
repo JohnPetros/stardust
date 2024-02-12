@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { AchievementsList } from '../AchievementsList'
 import { CounterBadge } from '../CounterBadge'
 import { NavButton } from '../NavButton'
-import { SignOutAlert } from '../SignOutAlert'
+import { SignOutAlertDialog } from '../SignOutAlertDialog'
 
 import { SidenavButton } from './SidenavButton'
 
@@ -141,7 +141,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
             }
           />
 
-          <SignOutAlert>
+          <SignOutAlertDialog>
             <SidenavButton
               icon={Power}
               title="Sair"
@@ -149,7 +149,7 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
               onClick={() => null}
               isActive={false}
             />
-          </SignOutAlert>
+          </SignOutAlertDialog>
         </div>
       </div>
     </motion.div>
