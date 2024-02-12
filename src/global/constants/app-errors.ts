@@ -1,6 +1,9 @@
 export const APP_ERRORS = {
   auth: {
     userNotFound: 'Usuário não encontrado.',
+    duplicatedEmail: 'E-mail já utlizado por outro usuário.',
+    failedSignUp: 'Erro ao tentar fazer cadastro',
+    failedSignInWithOAuth: 'Não foi possível fazer login com sua conta social',
   },
   planets: {
     failedFetching: 'Não foi possível carregar a lista de planetas.',
@@ -36,8 +39,10 @@ export const APP_ERRORS = {
       'Não foi possível desbloquear o tópico do dicionário referente a esse desafio',
   },
   playgrounds: {
+    failedCreation: 'Não foi possível criar um novo playground',
     failedFetching: 'Não foi possível carregar sua lista de códigos',
     failedTitleEdition: 'Não deu para editar o título desse código',
+    failedCodeEdition: 'Não deu para salvar o código desse código',
     failedDeletion: 'Não deu para deletar esse código',
     failedCoying: 'Não deu para gerar a url para compartilhar esse playground',
   },
