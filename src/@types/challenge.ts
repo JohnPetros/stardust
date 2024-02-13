@@ -27,6 +27,6 @@ export type Challenge = {
   upvotesCount: number
   downvotesCount: number
   totalCompletitions: number
-  categories: Pick<Category, 'name'>[]
+  categories?: Pick<Category, 'name'>[]
   isCompleted?: boolean
 }

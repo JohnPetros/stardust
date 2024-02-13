@@ -1,6 +1,4 @@
 import type { Database } from './Database'
 
 export type SupabaseChallenge =
-  Database['public']['Views']['challenges_view']['Row'] & {
-    categories: { name: string }[]
-  }
+  Database['public']['Views']['challenges_view']['Row']

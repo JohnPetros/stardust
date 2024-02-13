@@ -85,17 +85,31 @@ export function useChallengesList(categories: Category[]) {
   })
 
   const filteredChallenges = useMemo(() => {
-    function checkCompletition(challenge: Challenge) {
-      if (userCompletedChallengesIds) {
-        const isCompleted = userCompletedChallengesIds.includes(challenge.id)
-
-        return { ...challenge, isCompleted }
+    function addComplementaryData(challenge: Challenge) {
+      function addCategories(challenge: Challenge) {
+        if (categories?.length) {
+          const challengeCategories = categories.filter((category) =>
+            category.challengesIds.includes(challenge.id)
+          )
+          return { ...challenge, categories: challengeCategories ?? [] }
+        }
+        return challenge
       }
-      return challenge
+
+      function checkCompletition(challenge: Challenge) {
+        if (userCompletedChallengesIds) {
+          const isCompleted = userCompletedChallengesIds.includes(challenge.id)
+
+          return { ...challenge, isCompleted }
+        }
+        return challenge
+      }
+
+      return checkCompletition(addCategories(challenge))
     }
 
     if (challenges && categories && userCompletedChallengesIds && !isLoading) {
-      return challenges.map(checkCompletition)
+      return challenges.map(addComplementaryData)
     }
   }, [challenges, categories, userCompletedChallengesIds, isLoading])
 

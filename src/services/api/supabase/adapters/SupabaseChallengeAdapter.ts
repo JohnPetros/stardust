@@ -24,7 +24,6 @@ export const SupabaseChallengeAdapter = (
     testCases: supabaseChallenge.test_cases as ChallengeTestCase[],
     docId: supabaseChallenge.doc_id,
     totalCompletitions: supabaseChallenge.total_completitions ?? 0,
-    categories: supabaseChallenge.categories,
     upvotesCount: supabaseChallenge.upvotes ?? 0,
     downvotesCount: supabaseChallenge.downvotes ?? 0,
     description: '',
