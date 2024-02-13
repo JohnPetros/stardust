@@ -4,17 +4,17 @@ export const challenge: Challenge = {
   id: 'Reconhecendo raça alienígena',
   slug: 'reconhecendo-raca-alienígena',
   description: '',
-  star_id: '4',
-  created_at: '',
+  starId: '4',
+  createdAt: '',
   categories: [],
-  total_completitions: 0,
+  totalCompletitions: 0,
   isCompleted: true,
   title: 'Reconhecendo raça alienígena',
   difficulty: 'easy',
-  downvotes: 0,
-  upvotes: 0,
-  user_slug: 'apollo',
-  doc_id: 'f60a0e67-c0b9-401a-a652-c9d5f8042ff1',
+  downvotesCount: 0,
+  upvotesCount: 0,
+  userSlug: 'apollo',
+  docId: 'f60a0e67-c0b9-401a-a652-c9d5f8042ff1',
   code: `// Lembre-se:
 // Trox: se tiver 3 olhos e cor verde
 // Blonk: se tiver 2 olhos e cor laranja
@@ -24,8 +24,8 @@ var olhos = leia()
 var cor = leia()
 
 // Escreva sua solução abaixo`,
-  function_name: null,
-  test_cases: [
+  functionName: null,
+  testCases: [
     { id: 1, input: [3, "'verde'"], isLocked: false, expectedOutput: 'Trox' },
     {
       id: 2,

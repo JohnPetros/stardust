@@ -11,7 +11,7 @@ type Questions = [
 export const questions: Questions = [
   {
     title:
-      'Para ver se estamos na mesma página. Qual é a estrutura correta de um laço `para`?',
+      'Para ver se estamos na mesma página. Qual é a estrutura correta de um laço *para*?',
     type: 'selection',
     answer: 'para (var i = 0; i < 100; i++)',
     options: [
@@ -24,7 +24,7 @@ export const questions: Questions = [
   },
   {
     title:
-      'Vamos analisador de amostras. Para isso, é necessário escrever "ligar analisador" 5 vezes. Complete o laço a seguir para que isso ocorra:',
+      'Vamos usar analisador de amostras. Para isso, é necessário escrever "ligar analisador" 5 vezes. Complete o laço a seguir para que isso ocorra:',
     type: 'drag-and-drop',
     lines: [
       {
@@ -44,7 +44,7 @@ export const questions: Questions = [
         ],
         indentation: 0,
       },
-      { id: 3, texts: ['escreva(msg)'], indentation: 2 },
+      { id: 3, texts: ['escreva(msg)'], indentation: 1 },
       { id: 4, texts: ['}'], indentation: 0 },
     ],
     dragItems: [
@@ -84,7 +84,7 @@ export const questions: Questions = [
   },
   {
     title:
-      'Talvez o analisador esteja com problema. Complete o laço a seguir, de modo que a variavel `energia` seja igual a 50.',
+      'Talvez o analisador esteja com problema. Complete o laço a seguir, de modo que a variavel *energia* seja igual a 50.',
     type: 'drag-and-drop',
     lines: [
       { id: 1, texts: ['var energia = 0'], indentation: 0 },
@@ -100,8 +100,8 @@ export const questions: Questions = [
         indentation: 0,
       },
       { id: 3, texts: ['dropZone', '++'], indentation: 2 },
-      { id: 4, texts: ['escreva(energia)'], indentation: 2 },
       { id: 5, texts: ['}'], indentation: 0 },
+      { id: 4, texts: ['escreva(energia)'], indentation: 0 },
     ],
     dragItems: [
       { id: 1, label: '<' },

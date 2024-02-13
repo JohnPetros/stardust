@@ -26,7 +26,7 @@ export const texts: Text[] = [
   {
     type: 'default',
     content:
-      'Toda vez que o foguete coleta uma amostra, podemos fazer um programa que incremente em 1 a variavel `totalAmostras`.',
+      'Toda vez que o foguete coleta uma amostra, podemos fazer um programa que incremente em 1 a variavel *totalAmostras*.',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
@@ -39,25 +39,25 @@ escreva(totalAmostras)
     isRunnable: true,
   },
   {
-    type: 'default',
+    type: 'user',
     content: 'O que são esses dois sinais de mais?',
-    picture: 'alien-confuso.jpg',
   },
   {
     type: 'alert',
     content:
-      'Eu não te contei, mas esse é outro operador especial, chamado "operador de incremento" `++`, que se colocado após uma variável do tipo número ele acrescenta 1 ao seu valor atual.',
+      'Eu não te contei, mas esse é outro operador especial, chamado *operador de incremento*, representado por *++*, que se colocado após uma variável do tipo *número* ele acrescenta 1 ao seu valor atual.',
     picture: 'panda-sorrindo.jpg',
   },
   {
     type: 'default',
     content:
-      'Ok, porém o foguete possui 10 lotes disponíveis para armazenar amostras. Então, devemos incrementar a variável `totalAmostras` 10 vezes seguidas.',
+      'Ok, porém o foguete possui 10 lotes disponíveis para armazenar amostras. Então, devemos incrementar a variável *totalAmostras* 10 vezes seguidas.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'code',
-    content: `var totalLotes = 10
+    content: `var totalAmostras = 0
+totalAmostras++
 totalAmostras++
 totalAmostras++
 totalAmostras++
@@ -101,14 +101,14 @@ escreva(totalAmostras)
   {
     type: 'alert',
     content:
-      'Existem 3 maneiras de usar laços, mas considerando esse nosso caso, iremos utilizar a instrução `para`',
+      'Existem 3 maneiras de usar laços, mas considerando esse nosso caso, iremos utilizar a instrução *para*',
     picture: 'panda-dando-risadinha.jpg',
   },
   {
     type: 'quote',
     title: 'Laço para',
     content:
-      'A instrução `para` é o tipo de laço mais comum, e é usado para executar um bloco de código por um número específico de vezes. Para escrevê-la, a sintaxe é a seguinte:',
+      'A instrução *para* é o tipo de laço mais comum, e é usado para executar um bloco de código por um número específico de vezes. Para escrevê-la, a sintaxe é a seguinte:',
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -118,8 +118,9 @@ var totalAmostras = 0
 
 para (var contador = 0; contador < totalLotes; contador++) {
   totalAmostras++
-  escreva(totalAmostras)
 }
+
+escreva(totalAmostras)
 // Resultado: 10`,
     isRunnable: true,
   },
@@ -130,27 +131,27 @@ para (var contador = 0; contador < totalLotes; contador++) {
   {
     type: 'default',
     content:
-      'Vamos por partes: todo laço `para` tem que ter 3 parâmetros, que são as expressões separadas por ponto e vírgula e que estão entre parênteses após a palavra "para".',
+      'Vamos por partes: todo laço *para* tem que ter 3 parâmetros, que são as expressões separadas por ponto e vírgula e que estão entre parênteses após a palavra "para".',
     picture: 'panda-sorrindo.jpg',
   },
   {
     type: 'quote',
     title: 'Inicialização',
     content:
-      'A primeira é a inicialização, que é a primeira coisa a ser executada antes do `para` fazer o seu trabalho de fato.',
+      'A primeira é a *Inicialização*, que é a primeira coisa a ser executada antes do *para* fazer o seu trabalho de fato.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'alert',
     content:
-      'A inicialização serve para iniciar a variável de controle do laço, que explicarei mais sobre depois.',
+      'A inicialização serve para iniciar a variável de controle do laço, que explicarei mais sobre ela depois.',
     picture: 'panda-sorrindo.jpg',
   },
   {
     type: 'quote',
     title: 'Condição',
     content:
-      'A segunda é a Condição, que é a expressão lógica avaliada no início de cada iteração do laço. Se a condição for verdadeira, o bloco de código dentro do laço é executado; caso contrário, o laço é encerrado.',
+      'A segunda é a *Condição*, que é a expressão lógica avaliada no início de cada iteração do laço. Se a condição for verdadeira, o bloco de código dentro do laço é executado; caso contrário, o laço é encerrado.',
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -163,7 +164,7 @@ para (var contador = 0; contador < totalLotes; contador++) {
     type: 'quote',
     title: 'Passo',
     content:
-      'A última é chamado de Passo, que é a instrução executada no final de cada iteração do laço. Geralmente é usada para atualizar a variável de controle que falei anteriormente.',
+      'A última parte é chamado de *Passo*, que é a instrução executada no final de cada iteração do laço. Geralmente é usada para atualizar a variável de controle que mencionei anteriormente.',
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -184,39 +185,40 @@ var totalAmostras = 0
 
 para (var contador = 0; contador < totalLotes; contador++) {
   totalAmostras++
-  escreva(totalAmostras)
 }
+
+escreva(totalAmostras)
 // Resultado: 10`,
     isRunnable: true,
   },
   {
     type: 'default',
     content:
-      'Nesse caso específico, na inicialização do `para` declaramos uma variável contador iniciando com 0 e ela fará o papel de controlar o laço.',
+      'Nesse caso específico, na inicialização do *para* declaramos uma variável contador iniciando com 0 e ela fará o papel de controlar o laço.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
     type: 'default',
     content:
-      'A condição será verificar se o valor de contador é menor que o valor de `totalLotes`, que é 10.',
+      'A condição será verificar se o valor de contador é menor que o valor de *totalLotes*, que é 10.',
     picture: 'panda-piscando.jpg',
   },
   {
     type: 'default',
     content:
-      'No Passo, a variável `contador` será incrementado em 1 a cada iteração.',
+      'No Passo, a variável *contador* será incrementado em 1 a cada iteração.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'default',
     content:
-      'No bloco de código, definimos que a variável `totalAmostras` também dever ser incrementada em 1 a cada iteração.',
+      'No bloco de código, definimos que a variável *totalAmostras* também dever ser incrementada em 1 a cada iteração.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'default',
     content:
-      'Dessa forma, se a variável `totalAmostras` for igual ou maior que `totalLotes`, o `para` é encerrado, totalizando 10 iterações, ou seja, o valor de `totalAmostras` foi icrementada em 1 por 10 vezes seguidas.',
+      'Dessa forma, se a variável *totalAmostras* for igual ou maior que *totalLotes*, o *para* é encerrado, totalizando 10 iterações, ou seja, o valor de *totalAmostras* foi icrementada em 1 por 10 vezes seguidas.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -226,13 +228,13 @@ para (var contador = 0; contador < totalLotes; contador++) {
   {
     type: 'default',
     content:
-      'É claro que podemos colocar qualquer código válido dentro do bloco do `para`, inclusive outras estruturas.',
+      'É claro também que podemos colocar qualquer código válido dentro do bloco do *para*, inclusive outras estruturas.',
     picture: 'panda-sorrindo.jpg',
   },
   {
     type: 'default',
     content:
-      'Por exemplo, se quisermos que ao coletar 5 amostras seja escrito "Já coletei 5 amostras", podemos colocar uma estrutura condicional dentro do `para`.',
+      'Por exemplo, se quisermos que ao coletar 5 amostras seja escrito "Já coletei 5 amostras", podemos colocar uma estrutura condicional dentro do *para*.',
     picture: 'panda-deslumbrado.jpg',
   },
   {
@@ -247,7 +249,7 @@ para (var contador = 0; contador < totalLotes; contador++) {
 
   totalAmostras++
 }
-escreva(totalAmostras)`,
+escreva(totalAmostras) // 10`,
     isRunnable: true,
   },
   {

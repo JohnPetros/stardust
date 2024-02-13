@@ -1,7 +1,7 @@
 'use client'
 
-import { BlockedCommentsAlert } from '../../../components/Layout/BlockedCommentsAlert'
-import { BlockedSolutionsAlert } from '../../../components/Layout/BlockedSolutionsAlert'
+import { BlockedCommentsAlertDialog } from '../../../components/Layout/BlockedCommentsAlertDialog'
+import { BlockedSolutionsAlertDialog } from '../../../components/Layout/BlockedSolutionsAlertDialog'
 import { ContentLink } from '../../../components/Layout/ContentLink'
 
 import { useDescription } from './useDescription'
@@ -42,14 +42,14 @@ export function Description() {
           <VoteButtons />
           <div className="flex items-center gap-2 md:hidden">
             {!canShowComments ? (
-              <BlockedCommentsAlert>
+              <BlockedCommentsAlertDialog>
                 <ContentLink
                   title="Comentários"
                   contentType="comments"
                   isActive={false}
                   isBlocked={true}
                 />
-              </BlockedCommentsAlert>
+              </BlockedCommentsAlertDialog>
             ) : (
               <ContentLink
                 title="Comentários"
@@ -59,14 +59,16 @@ export function Description() {
               />
             )}
             {!canShowSolutions ? (
-              <BlockedSolutionsAlert onShowSolutions={handleShowSolutions}>
+              <BlockedSolutionsAlertDialog
+                onShowSolutions={handleShowSolutions}
+              >
                 <ContentLink
                   title="Soluções"
                   contentType="solutions"
                   isActive={false}
                   isBlocked={true}
                 />
-              </BlockedSolutionsAlert>
+              </BlockedSolutionsAlertDialog>
             ) : (
               <ContentLink
                 title="Soluções"

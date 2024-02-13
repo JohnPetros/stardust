@@ -3,7 +3,7 @@ import { X } from '@phosphor-icons/react'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 
 import { AchievementsList } from '../AchievementsList'
-import { SignOutAlert } from '../SignOutAlertDialog'
+import { SignOutAlertDialog } from '../SignOutAlertDialog'
 
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useSiderbarContext } from '@/contexts/SidebarContext/hooks/useSiderbarContext'
@@ -48,11 +48,11 @@ export function Sidebar() {
                 <UserAvatar avatarId={user.avatarId} size={96} />
                 <strong>{user.name}</strong>
                 <small className="text-sm">{user.email}</small>
-                <SignOutAlert>
+                <SignOutAlertDialog>
                   <Button className="mx-aut mt-3 w-48 bg-green-400 px-3 py-2 text-green-900">
                     Sair
                   </Button>
-                </SignOutAlert>
+                </SignOutAlertDialog>
               </div>
             </div>
             <div className="custom-scrollbar mt-3 h-full overflow-y-auto p-6">

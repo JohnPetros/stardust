@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation'
 import { Challenge } from '@/@types/Challenge'
 import type { Vote } from '@/@types/Vote'
 import { ROUTES } from '@/global/constants'
-import { type Layout, useChallengeStore } from '@/stores/challengeStore'
+import { useChallengeStore } from '@/stores/challengeStore'
+import { PanelsLayout } from '@/stores/challengeStore/types/PanelsLayout'
 
 export function useChallengeHeader(challenge: Challenge, userVote: Vote) {
   const { state, actions } = useChallengeStore((store) => store)
@@ -17,8 +18,8 @@ export function useChallengeHeader(challenge: Challenge, userVote: Vote) {
     router.push(ROUTES.private.home[challenge.starId ? 'space' : 'challenges'])
   }
 
-  function handleLayoutButton(layout: Layout) {
-    actions.setLayout(layout)
+  function handlePanelsLayoutButton(panelsLayout: PanelsLayout) {
+    actions.setPanelsLayout(panelsLayout)
   }
 
   useEffect(() => {
@@ -27,8 +28,8 @@ export function useChallengeHeader(challenge: Challenge, userVote: Vote) {
   }, [challenge, userVote, state, actions])
 
   return {
-    layout: state.layout,
+    panelsLayout: state.panelsLayout,
     handleBackButton,
-    handleLayoutButton,
+    handlePanelsLayoutButton,
   }
 }

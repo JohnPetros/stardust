@@ -1,22 +1,22 @@
 import { Challenge } from '@/@types/Challenge'
 
-export const challenge: Partial<Challenge> = {
+export const challenge: Challenge = {
   id: '5',
   title: 'Planetas pares encontrados',
-  slug: 'Planetas pares encontrados',
+  slug: 'planetas-pares-encontrados',
   description: '',
-  star_id: '4',
-  created_at: '',
-  categories: [],
-  total_completitions: 0,
+  createdAt: '',
+  totalCompletitions: 0,
   isCompleted: true,
   difficulty: 'easy',
-  downvotes: 0,
-  upvotes: 0,
-  user_slug: 'apollo',
-  doc_id: 'f60a0e67-c0b9-401a-a652-c9d5f8042ff1',
-  function_name: null,
-  test_cases: [
+  userSlug: 'apollo',
+  starId: '5',
+  categories: [],
+  downvotesCount: 0,
+  upvotesCount: 0,
+  docId: 'f60a0e67-c0b9-401a-a652-c9d5f8042ff1',
+  functionName: null,
+  testCases: [
     { id: 1, input: [10], isLocked: false, expectedOutput: 5 },
     { id: 2, input: [7], isLocked: false, expectedOutput: 3 },
     { id: 3, input: [1], isLocked: false, expectedOutput: 0 },
@@ -50,11 +50,11 @@ escreva(totalPlanetasSeguros)`,
     {
       type: 'code',
       content: `Entrada: 8
-// Resultado: 4
+Resultado: 4
 // Explicacao: entre 1 e 8, há 4 números pares
 
 Entrada: 13
-// Resultado: entre 1 e 13 há 6 números pares
+Resultado: entre 1 e 13 há 6 números pares
 
 Entrada: 1
 Resultado: 0
@@ -63,13 +63,13 @@ Resultado: 0
     },
     {
       content:
-        'Para resolver esse desafio, você pode usar qualquer um dos 3 tipos de laço (`para`, `enquanto` ou `fazer enquanto`)',
+        'Para resolver esse desafio, você pode usar qualquer um dos 3 tipos de laço (*para*, *enquanto* ou *fazer enquanto*)',
       type: 'alert',
       picture: 'panda-piscando-sentado.jpg',
     },
     {
       content:
-        'Dica: para saber se um número é par, você pode verificar o módulo do número por 2, usando o operador `%`, ou seja, dividir por dois e verificar se há resto de divisão. Por exemplo: 4 é par, pois 4 módulo 2 (`4 % 2`) é igual a zero; 5 é ímpar, pois 5 módulo 2 é diferente de zero (`5 % 2`).',
+        'Dica: para saber se um número é par, você pode verificar o módulo do número por 2, usando o operador *%*, ou seja, dividir por dois e verificar se há resto de divisão. Por exemplo: 4 é par, pois 4 módulo 2 (*4 % 2*) é igual a zero; 5 é ímpar, pois 5 módulo 2 é diferente de zero (*5 % 2*).',
       type: 'alert',
       picture: 'panda-piscando.jpg',
     },

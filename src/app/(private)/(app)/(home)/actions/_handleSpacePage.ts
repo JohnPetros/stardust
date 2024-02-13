@@ -3,10 +3,10 @@
 import { _getLasUnlockedStarId } from './_getLasUnlockedStarId'
 import { _getPlanets } from './_getPlanets'
 
+import { APP_ERRORS } from '@/global/constants'
 import { IAuthController } from '@/services/api/interfaces/IAuthController'
 import { IPlanetsController } from '@/services/api/interfaces/IPlanetsController'
 import { IStarsController } from '@/services/api/interfaces/IStarsController'
-import { APP_ERRORS } from '@/global/constants'
 
 type _HandleSpacePageParams = {
   authController: IAuthController

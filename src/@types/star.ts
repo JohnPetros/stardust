@@ -5,10 +5,10 @@ export type Star = {
   id: string
   slug: string
   name: string
-  number: number
   planetId: string
+  number: number
   texts: Text[]
   questions: Question[]
-  isChallenge?: boolean
+  isChallenge: boolean
   isUnlocked?: boolean
 }

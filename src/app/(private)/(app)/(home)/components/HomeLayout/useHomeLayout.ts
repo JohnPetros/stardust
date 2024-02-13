@@ -9,8 +9,8 @@ export function useHomeLayout() {
   const [isSidenavExpanded, setIsSidenavExpanded] = useState(false)
   const {
     isOpen,
-    toggle,
     isAchievementsListVisible,
+    toggle,
     setIsAchievementsListVisible,
   } = useSiderbarContext()
 

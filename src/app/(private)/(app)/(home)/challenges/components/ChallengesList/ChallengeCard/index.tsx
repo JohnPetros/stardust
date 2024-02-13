@@ -32,7 +32,7 @@ export function ChallengeCard({
     upvotesCount,
     downvotesCount,
     totalCompletitions,
-    categoriesNames,
+    categories,
     userSlug,
     isCompleted,
   },
@@ -60,11 +60,10 @@ export function ChallengeCard({
         upvotes={upvotesCount}
         downvotes={downvotesCount}
       />
-      {categoriesNames && (
+      {categories && (
         <ul className="flex items-start gap-3">
-          {categoriesNames.map((categoryName) => {
-            if (categoryName)
-              return <Category key={categoryName} name={categoryName} />
+          {categories.map((category) => {
+            return <Category key={category.name} name={category.name} />
           })}
         </ul>
       )}

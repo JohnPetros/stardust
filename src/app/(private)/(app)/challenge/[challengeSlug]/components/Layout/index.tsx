@@ -38,7 +38,7 @@ export function ChallengeLayout({
     handlePanelDragging,
   } = useChallengeLayout()
   const isEnd = useChallengeStore((store) => store.state.isEnd)
-  const layout = useChallengeStore((store) => store.state.layout)
+  const layout = useChallengeStore((store) => store.state.panelsLayout)
 
   useSecondsCounter(!isEnd)
 

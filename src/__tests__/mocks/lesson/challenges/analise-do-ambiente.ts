@@ -4,17 +4,17 @@ export const challenge: Challenge = {
   id: 'Análise do ambiente',
   slug: 'analise-do-ambiente',
   description: '',
-  star_id: '2',
-  created_at: '',
-  categories: [],
-  total_completitions: 0,
+  starId: '2',
+  createdAt: '',
+  totalCompletitions: 0,
   isCompleted: true,
-  title: 'Análise do ambiente',
   difficulty: 'easy',
-  downvotes: 0,
-  upvotes: 0,
-  user_slug: 'apollo',
-  doc_id: 'f60a0e67-c0b9-401a-a652-c9d5f8042ff1',
+  userSlug: 'apollo',
+  categories: [],
+  title: 'Análise do ambiente',
+  upvotesCount: 0,
+  downvotesCount: 0,
+  docId: 'f60a0e67-c0b9-401a-a652-c9d5f8042ff1',
   code: `var nome = "Datahon"
 var temperatura = 53.5
 var temOxigenio = falso
@@ -24,8 +24,8 @@ var tipoTemperatura
 var tipoOxigenio
 
 escreva()`,
-  function_name: null,
-  test_cases: [
+  functionName: null,
+  testCases: [
     {
       id: 1,
       input: [],

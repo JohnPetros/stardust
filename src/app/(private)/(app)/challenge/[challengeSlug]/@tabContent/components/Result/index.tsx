@@ -19,7 +19,7 @@ export function Result() {
     return (
       <div className="relative h-full w-full scale-[1] bg-gray-800 blur-[1]">
         <div className="h-auto space-y-6 p-6">
-          {challenge.test_cases.map((testCase, index) => (
+          {challenge.testCases.map((testCase, index) => (
             <TestCase
               key={testCase.id}
               index={index + 1}

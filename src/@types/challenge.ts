@@ -1,3 +1,4 @@
+import { Category } from './Category'
 import type { Text } from './Text'
 
 export type ChallengeDifficulty = 'easy' | 'medium' | 'hard'
@@ -26,6 +27,6 @@ export type Challenge = {
   upvotesCount: number
   downvotesCount: number
   totalCompletitions: number
-  categoriesNames?: string[]
+  categories: Pick<Category, 'name'>[]
   isCompleted?: boolean
 }

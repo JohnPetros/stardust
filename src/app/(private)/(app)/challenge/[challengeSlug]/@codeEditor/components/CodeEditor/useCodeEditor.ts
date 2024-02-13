@@ -16,7 +16,7 @@ const inputCommandRegex = REGEX.input
 
 export function useCodeEditor() {
   const challenge = useChallengeStore((store) => store.state.challenge)
-  const layout = useChallengeStore((store) => store.state.layout)
+  const layout = useChallengeStore((store) => store.state.panelsLayout)
   const userOutput = useChallengeStore((store) => store.state.userOutput)
   const setUserOutput = useChallengeStore(
     (store) => store.actions.setUserOutput

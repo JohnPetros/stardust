@@ -14,7 +14,7 @@ export const texts: Text[] = [
   {
     type: 'default',
     content:
-      'Acontece que esse planeta não tem mais vida longa, o que quer dizer que é bom sairmos desse lugar imediatamente!',
+      'O que acontece é que esse planeta não tem mais vida longa, o que quer dizer que é bom sairmos desse lugar imediatamente!',
     picture: 'panda-com-mochila.jpg',
   },
   {
@@ -26,7 +26,7 @@ export const texts: Text[] = [
   {
     type: 'default',
     content:
-      'Para fazer isso, podemos criar um programa que, enquanto os motores não chegarem ao seu limte (100), continuaremos a aumentar sua potência em 10.',
+      'Para fazer isso, podemos criar um programa que, enquanto os motores não chegarem ao seu limte (que é *100*), continuaremos a aumentar sua potência em 10.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
@@ -50,21 +50,21 @@ export const texts: Text[] = [
     type: 'code',
     content: `var potencia = 20
 var limite = 100
-var ventoinhaLigada = falso
+var ventoinhaEstaLigada = falso
 
-enquanto (ventoinhaLigada) {
+enquanto (ventoinhaEstaLigada) {
   potencia += 10
 
   se (potencia == limite) {
-    ventoinhaLigada = falso
+    ventoinhaEstaLigada = falso
   } senao {
-    ventoinhaLigada = verdadeiro
+    ventoinhaEstaLigada = verdadeiro
   }
 }
 
 escreva(potencia)
 // Resultado: 20`,
-    isRunnable: false,
+    isRunnable: true,
   },
   {
     type: 'default',
@@ -74,43 +74,43 @@ escreva(potencia)
   {
     type: 'default',
     content:
-      'O processo de aumentar a potência só para quando `ventoinhaLigada` for `verdadeiro`, mas o valor dela, que começa em `falso`, só muda a partir do momento em que eu começo aumentar a potência 🤨.',
+      'O processo de aumentar a potência só para quando *ventoinhaEstaLigada* for *verdadeiro*, mas o valor dela, que começa em *falso*, só muda a partir do momento em que eu começo aumentar a potência 🤨.',
     picture: 'panda-confuso.jpg',
   },
   {
     type: 'default',
     content:
-      'Para resolver esse problema podemos usar o terceiro tipo de laço: o `fazer enquanto`.',
+      'Para resolver esse problema podemos usar o terceiro tipo de laço: o *fazer enquanto*.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'quote',
-    title: 'Laço Fazer enquanto',
+    title: 'Laço Fazer Enquanto',
     content:
-      'O "fazer enquanto" é um laço que permite executar um bloco de código pelo menos uma vez e depois repetir a execução desse bloco enquanto uma condição especificada for verdadeira.',
+      'O *fazer enquanto* é um laço que permite executar um bloco de código pelo menos uma vez e depois repetir a execução desse bloco enquanto uma condição especificada for verdadeira.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'default',
     content:
-      'No nosso caso vai cair com uma luva, pois a condição do laço é verificada apenas após seu bloco de código ser executado pelo menos uma vez, permitindo que a condição (ventoinhaLigada) seja falsa em um primeiro momento, veja:',
+      'No nosso caso vai cair com uma luva, pois a condição do laço é verificada apenas após seu bloco de código ser executado pelo menos uma vez, permitindo que a condição (*ventoinhaEstaLigada*) seja falsa em um primeiro momento, veja:',
     picture: 'panda-deslumbrado.jpg',
   },
   {
     type: 'code',
     content: `var potencia = 20
 var limite = 100
-var ventoinhaLigada = falso
+var ventoinhaEstaLigada = falso
 
 fazer {
   potencia += 10
 
   se (potencia == limite) {
-    ventoinhaLigada = falso
+    ventoinhaEstaLigada = falso
   } senao {
-    ventoinhaLigada = verdadeiro
+    ventoinhaEstaLigada = verdadeiro
   }
-} enquanto (ventoinhaLigada)
+} enquanto (ventoinhaEstaLigada)
 
 escreva(potencia)
 // Resultado: 100`,
@@ -119,13 +119,13 @@ escreva(potencia)
   {
     type: 'alert',
     content:
-      'Então essa é a diferença entre `enquanto` e `fazer enquanto`: o `fazer enquanto` garante que o bloco de código seja executado pelo menos uma vez, mesmo se a condição do laço inicialmente for `falso`, o que pode ser bastante últil em algumas situações como essa foi agora.',
+      'Então essa é a diferença entre *enquanto* e *fazer enquanto*: o *fazer enquanto* garante que o bloco de código seja executado pelo menos uma vez, mesmo se a condição do laço inicialmente for *falso*, o que pode ser bastante últil em algumas situações como essa foi agora.',
     picture: 'panda-sorrindo.jpg',
   },
   {
     type: 'default',
     content:
-      'Em contrapartida, o `enquanto` não executa o bloco de código se a condição especificada for falsa desde o início.',
+      'Em contrapartida, o *enquanto* não executa o bloco de código se a condição especificada for falsa desde o início.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -158,7 +158,7 @@ enquanto (distanciaAteEspaco > 0) {
   {
     type: 'default',
     content:
-      'Porém no momento que conseguirmos sairmos da atmosfera, temos que estabilizar a velocidade em um valor fixo para entrar em órbita com o planeta e então acelerar denovo para pegar mais impulso para ir ainda mais longe.',
+      'Porém no momento que conseguirmos sairmos da atmosfera, temos que estabilizar a velocidade em um valor fixo para entrar em órbita com o planeta e então acelerar de novo para pegar mais impulso para ir ainda mais longe.',
     picture: 'panda-olhando-computador.jpg',
   },
   {
@@ -178,14 +178,14 @@ enquanto (distanciaAteEspaco > 0) {
   },
   {
     type: 'default',
-    content: 'Usando outra instrução especial chamado de `continua`',
+    content: 'Usando outra instrução especial chamado de *continua*',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
     type: 'quote',
     title: 'Continua',
     content:
-      'O `continua` é uma instrução usada dentro de laços, como o `pause`, só que ele permite pular a interação atual e ir para a próxima imediatamente.',
+      'O *continua* é um comando usada dentro de laços, como o *pausa*, só que ele permite pular a interação atual e ir para a próxima imediatamente.',
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -195,7 +195,7 @@ enquanto (distanciaAteEspaco > 0) {
   {
     type: 'quote',
     content:
-      'Quando o `continua` é executado dentro de um laço, o código abaixo da instrução não é executado e a próxima iteração do laço é iniciada.',
+      'Quando o *continua* é executado dentro de um laço, o código abaixo desse comando não é executado e a próxima iteração do laço é iniciada.',
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -207,7 +207,7 @@ enquanto (distanciaAteEspaco > 0) {
   {
     type: 'default',
     content:
-      'Por exemplo, no nosso caso queremos que a variável `velocidade` pare de ser incrementada enquanto estivermos em órbita com o planeta, o que ocorre enquanto `distanciaAteEspaco` for menor ou igual 1000 e `comprimentoDaOrbita` for maior que 0',
+      'Por exemplo, no nosso caso queremos que a variável *velocidade* pare de ser incrementada enquanto estivermos em órbita com o planeta, o que ocorre enquanto *distanciaAteEspaco* for menor ou igual 1000 e *comprimentoDaOrbita* for maior que 0',
     picture: 'panda-sorrindo.jpg',
   },
   {
@@ -226,23 +226,54 @@ enquanto (distanciaAteEspaco > 0) {
   distanciaAteEspaco--
 }
     
-escreva("distanciaAteAtmosfera: " + distanciaAteAtmosfera)
+escreva("distanciaAteEspaco: " + distanciaAteEspaco)
 escreva("comprimentoDaOrbita: " + comprimentoDaOrbita)
 escreva("velocidade: " + velocidade)
 
 /* 
 Resultado: 
-distanciaAteAtmosfera: 0
+distanciaAteEspaco: 0
 comprimentoDaOrbita: 0
-velocidade: 1500
+velocidade: 1550
 */`,
     isRunnable: true,
   },
   {
     type: 'default',
     content:
-      'Dessa forma, sempre que `distanciaAteEspaco` e `comprimentoDaOrbita` for maior que 500, tudo o que estiver após isso, no caso `velocidade++` e `distanciaAteEspaco--` não é executado.',
+      'Dessa forma, sempre que `distanciaAteEspaco` for menor ou igual que 1000 e `comprimentoDaOrbita` for maior que 0, tudo o que estiver após isso, no caso `velocidade++` e `distanciaAteEspaco--` não é executado.',
     picture: 'panda-meditando.jpg',
+  },
+  {
+    type: 'default',
+    content:
+      'Caso contrário, *comprimentoDaOrbita* ficaria com *-1000* no final 😯.',
+    picture: 'panda-espantado.jpg',
+  },
+  {
+    type: 'code',
+    content: `var velocidade = 50 
+var distanciaAteEspaco = 1500
+var comprimentoDaOrbita = 500
+    
+enquanto (distanciaAteEspaco > 0) {
+  comprimentoDaOrbita--
+
+  velocidade++
+  distanciaAteEspaco--
+}
+    
+escreva("distanciaAteEspaco: " + distanciaAteEspaco)
+escreva("comprimentoDaOrbita: " + comprimentoDaOrbita)
+escreva("velocidade: " + velocidade)
+
+/* 
+Resultado: 
+distanciaAteEspaco: 0
+comprimentoDaOrbita: -1000
+velocidade: 1550
+*/`,
+    isRunnable: true,
   },
   {
     type: 'user',
@@ -251,7 +282,7 @@ velocidade: 1500
   {
     type: 'default',
     content:
-      'Vou colocar uma variável `vezes` para ajudar você a entender melhor o que está acontecendo.',
+      'Vou colocar uma variável *vezes* para ajudar você a entender melhor o que está acontecendo.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -273,16 +304,16 @@ enquanto (distanciaAteEspaco > 0) {
   distanciaAteEspaco--
 }
     
-escreva("distanciaAteAtmosfera: " + distanciaAteAtmosfera)
+escreva("distanciaAteEspaco: " + distanciaAteEspaco)
 escreva("comprimentoDaOrbita: " + comprimentoDaOrbita)
 escreva("velocidade: " + velocidade)
 escreva("vezes: " + vezes)
 
 /*
 Resultado: 
-distanciaAteAtmosfera: 0
+distanciaAteEspaco: 0
 comprimentoDaOrbita: 0
-velocidade: 1500
+velocidade: 1550
 vezes: 2000
 */`,
     isRunnable: true,
@@ -290,19 +321,19 @@ vezes: 2000
   {
     type: 'default',
     content:
-      'Veja que a variável `vezes` indica que o laço `enquanto` foi executado 2000 vezes, porém a velocidade só foi aumentada em 1500 vezes.',
+      'Veja que a variável *vezes* indica que o laço *enquanto* foi executado 2000 vezes, porém a velocidade só foi aumentada em 1500 vezes.',
     picture: 'panda-olhando-computador.jpg',
   },
   {
     type: 'default',
     content:
-      'Ou seja, nas vezes em que `continua` foi executado, `velocidade++` não foi, justamente porque essa instrução fez com que o laço começasse outra iteração antes que ela fosse incrementada.',
+      'Ou seja, nas vezes em que *continua* foi executado, *velocidade++* não foi, justamente porque esse comando fez com que o laço começasse outra iteração antes que ela fosse incrementada.',
     picture: 'panda-olhando-computador.jpg',
   },
   {
     type: 'default',
     content:
-      'Então, resumidamente, o `continua` serve para pular uma repetição do laço em um dado ponto do seu bloco de código.',
+      'Então, resumidamente, o *continua* serve para pular uma repetição do laço em um dado ponto do seu bloco de código.',
     picture: 'panda-amando-bambu.jpg',
   },
   {

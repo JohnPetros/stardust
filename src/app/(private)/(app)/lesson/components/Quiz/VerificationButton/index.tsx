@@ -100,7 +100,7 @@ export function VerificationButton({
       </div>
 
       <Button
-        buttonRef={buttonRef}
+        ref={buttonRef}
         onClick={handleButtonClick}
         onFocus={() => (buttonHasFocus.current = true)}
         onBlur={() => (buttonHasFocus.current = false)}

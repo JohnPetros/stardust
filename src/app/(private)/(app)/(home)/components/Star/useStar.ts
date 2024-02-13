@@ -22,13 +22,14 @@ export function useStar(
     scrollIntoLastUnlockedStar,
     setLastUnlockedStarPosition,
   } = useSpaceContext()
+  const toast = useToastContext()
+
   const starRef = useRef(null) as LottieRef
+  const isFirstScroll = useRef(true)
 
   const router = useRouter()
   const api = useApi()
   const isInView = useInView(lastUnlockedStarRef)
-
-  const toast = useToastContext()
 
   async function handleStarNavigation() {
     if (isChallenge) {
@@ -56,7 +57,6 @@ export function useStar(
     }, 50)
   }
 
-  // TODO: Fix useEffect dependencies
   useEffect(() => {
     if (isLastUnlockedStar && isInView) {
       setLastUnlockedStarPosition('in')
@@ -64,12 +64,17 @@ export function useStar(
   }, [isLastUnlockedStar, isInView, setLastUnlockedStarPosition])
 
   useEffect(() => {
-    if (isLastUnlockedStar && lastUnlockedStarRef.current) {
+    if (
+      isLastUnlockedStar &&
+      lastUnlockedStarRef.current &&
+      isFirstScroll.current
+    ) {
       setTimeout(() => {
         scrollIntoLastUnlockedStar()
+        isFirstScroll.current = false
       }, 1500)
     }
-  }, [isLastUnlockedStar, lastUnlockedStarRef])
+  }, [isLastUnlockedStar, lastUnlockedStarRef, scrollIntoLastUnlockedStar])
 
   return {
     starRef,

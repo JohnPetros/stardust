@@ -16,10 +16,8 @@ type HeaderProps = {
 }
 
 export function ChallengeHeader({ challenge, userVote }: HeaderProps) {
-  const { handleBackButton, handleLayoutButton, layout } = useChallengeHeader(
-    challenge,
-    userVote
-  )
+  const { handleBackButton, handlePanelsLayoutButton, panelsLayout } =
+    useChallengeHeader(challenge, userVote)
 
   const popoverMenuButtons: PopoverMenuButton[] = [
     {
@@ -27,15 +25,15 @@ export function ChallengeHeader({ challenge, userVote }: HeaderProps) {
         'Tabs do lado esquerdo e editor de código do lado direito (layout padrão)',
       icon: <AlignLeft className="text-xl text-green-500" />,
       isToggle: true,
-      value: layout === 'tabs-left;code_editor-right',
-      action: () => handleLayoutButton('tabs-left;code_editor-right'),
+      value: panelsLayout === 'tabs-left;code_editor-right',
+      action: () => handlePanelsLayoutButton('tabs-left;code_editor-right'),
     },
     {
       label: 'Tabs do lado direito e editor de código do lado esquerdo',
       icon: <AlignRight className="text-xl text-green-500" />,
       isToggle: true,
-      value: layout === 'tabs-right;code_editor-left',
-      action: () => handleLayoutButton('tabs-right;code_editor-left'),
+      value: panelsLayout === 'tabs-right;code_editor-left',
+      action: () => handlePanelsLayoutButton('tabs-right;code_editor-left'),
     },
   ]
 
