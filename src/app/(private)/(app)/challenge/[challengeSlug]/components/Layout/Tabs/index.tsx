@@ -5,8 +5,8 @@ import { List, Root } from '@radix-ui/react-tabs'
 import { Trigger as TabButton } from '@radix-ui/react-tabs'
 import { AnimatePresence } from 'framer-motion'
 
-import { BlockedCommentsAlert } from '../BlockedCommentsAlert'
-import { BlockedSolutionsAlert } from '../BlockedSolutionsAlert'
+import { BlockedCommentsAlertDialog } from '../BlockedCommentsAlertDialog'
+import { BlockedSolutionsAlertDialog } from '../BlockedSolutionsAlertDialog'
 import { ContentLink } from '../ContentLink'
 
 import { TabContent } from './TabContent'
@@ -50,7 +50,7 @@ export function Tabs({ children }: TabsProps) {
           </TabButton>
           <span className="text-gray-600">|</span>
           {!canShowComments ? (
-            <BlockedCommentsAlert>
+            <BlockedCommentsAlertDialog>
               <TabButton value="comments" asChild>
                 <ContentLink
                   title="Comentários"
@@ -59,7 +59,7 @@ export function Tabs({ children }: TabsProps) {
                   isBlocked={true}
                 />
               </TabButton>
-            </BlockedCommentsAlert>
+            </BlockedCommentsAlertDialog>
           ) : (
             <TabButton value="comments" asChild>
               <ContentLink
@@ -72,7 +72,7 @@ export function Tabs({ children }: TabsProps) {
           )}
           <span className="text-gray-600">|</span>
           {!canShowSolutions ? (
-            <BlockedSolutionsAlert onShowSolutions={handleShowSolutions}>
+            <BlockedSolutionsAlertDialog onShowSolutions={handleShowSolutions}>
               <TabButton value="solutions" asChild>
                 <ContentLink
                   title="Soluções"
@@ -81,7 +81,7 @@ export function Tabs({ children }: TabsProps) {
                   isBlocked={true}
                 />
               </TabButton>
-            </BlockedSolutionsAlert>
+            </BlockedSolutionsAlertDialog>
           ) : (
             <TabButton value="solutions" asChild>
               <ContentLink
