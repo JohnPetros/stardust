@@ -9,6 +9,22 @@ export const SupabaseUserReverseAdapter = (
 
   return userProps.reduce((supabaseUser, userProp) => {
     switch (userProp) {
+      case 'id':
+        return { ...supabaseUser, id: user.id }
+      case 'email':
+        return { ...supabaseUser, email: user.email }
+      case 'slug':
+        return { ...supabaseUser, slug: user.slug }
+      case 'level':
+        return { ...supabaseUser, level: user.level }
+      case 'name':
+        return { ...supabaseUser, name: user.name }
+      case 'xp':
+        return { ...supabaseUser, xp: user.xp }
+      case 'streak':
+        return { ...supabaseUser, streak: user.streak }
+      case 'coins':
+        return { ...supabaseUser, coins: user.coins }
       case 'avatarId':
         return { ...supabaseUser, avatar_id: user.avatarId }
       case 'rankingId':

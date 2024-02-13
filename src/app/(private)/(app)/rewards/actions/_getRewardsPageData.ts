@@ -12,10 +12,10 @@ import {
   type StarPayload,
 } from '@/@types/Rewards'
 import type { User } from '@/@types/User'
+import { APP_ERRORS, ROUTES } from '@/global/constants'
 import { IChallengesController } from '@/services/api/interfaces/IChallengesController'
 import { IStarsController } from '@/services/api/interfaces/IStarsController'
 import { IUsersController } from '@/services/api/interfaces/IUsersController'
-import { APP_ERRORS, ROUTES } from '@/global/constants'
 
 let xp = 0
 let coins = 0

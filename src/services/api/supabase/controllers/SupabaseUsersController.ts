@@ -54,18 +54,6 @@ export const SupabaseUsersController = (
       return data
     },
 
-    async addUser({ id, name, email }: Pick<User, 'id' | 'name' | 'email'>) {
-      const { error } = await supabase.from('users').insert({
-        id,
-        name,
-        email,
-        slug: slugify(name),
-      })
-      if (error) {
-        throw new Error(error.message)
-      }
-    },
-
     async getUsersByRanking(rankingId: string) {
       const { data, error } = await supabase
         .from('users')
@@ -79,6 +67,18 @@ export const SupabaseUsersController = (
       }
 
       return data
+    },
+
+    async addUser({ id, name, email }: Pick<User, 'id' | 'name' | 'email'>) {
+      const { error } = await supabase.from('users').insert({
+        id,
+        name,
+        email,
+        slug: slugify(name),
+      })
+      if (error) {
+        throw new Error(error.message)
+      }
     },
 
     async updateUser(partialUserData: Partial<User>, userId: string) {

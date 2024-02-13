@@ -1,4 +1,5 @@
 import { IStarsController } from '../../interfaces/IStarsController'
+import { SupabaseStarAdapter } from '../adapters/SupabaseStarAdapter'
 import type { Supabase } from '../types/Supabase'
 
 import type { Star } from '@/@types/Star'
@@ -13,13 +14,13 @@ export const SupabaseStarsController = (
         .select('*, questions(*)')
         .eq('slug', starSlug)
         .order('order', { foreignTable: 'questions', ascending: true })
-        .single<Star>()
+        .single()
 
       if (error) {
         throw new Error(error.message)
       }
 
-      return data
+      return SupabaseStarAdapter(data)
     },
 
     async getStarById(starId: string) {
@@ -27,19 +28,19 @@ export const SupabaseStarsController = (
         .from('stars')
         .select('*')
         .eq('id', starId)
-        .single<Star>()
+        .single()
 
       if (error) {
         throw new Error(error.message)
       }
 
-      return data
+      return SupabaseStarAdapter(data)
     },
 
     async getNextStar(currentStar: Star, userId: string) {
       const { data, error } = await supabase
         .from('stars')
-        .select('id, users_unlocked_stars(*)')
+        .select('id, users_unlocked_stars(id)')
         .match({
           planet_id: currentStar.planetId,
           number: currentStar.number + 1,
@@ -48,10 +49,11 @@ export const SupabaseStarsController = (
         .single<{ id: string; users_unlocked_stars?: [] }>()
 
       if (error) {
+        console.error(error)
         return null
       }
 
-      if (data && data.id && data.users_unlocked_stars) {
+      if (data) {
         const { users_unlocked_stars } = data
 
         const nextStar = {

@@ -27,6 +27,10 @@ export async function _calculateLessonRewards({
   const currentStar = await starsController.getStarById(starId)
   const nextStar = await starsController.getNextStar(currentStar, user.id)
 
+  console.log({ starId })
+  console.log({ currentStar })
+  console.log({ nextStar })
+
   function getAccurance() {
     const accurance = ((questions - incorrectAnswers) / questions) * 100
     return accurance === 0 ? '100%' : accurance.toFixed(1) + '%'

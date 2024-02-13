@@ -290,7 +290,7 @@ export type Database = {
           id: string
           is_public: boolean
           title: string
-          user_slug: string | null
+          user_slug: string
         }
         Insert: {
           code?: string | null
@@ -298,7 +298,7 @@ export type Database = {
           id?: string
           is_public?: boolean
           title?: string
-          user_slug?: string | null
+          user_slug: string
         }
         Update: {
           code?: string | null
@@ -306,9 +306,24 @@ export type Database = {
           id?: string
           is_public?: boolean
           title?: string
-          user_slug?: string | null
+          user_slug?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "playgrounds_user_slug_fkey"
+            columns: ["user_slug"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["slug"]
+          },
+          {
+            foreignKeyName: "playgrounds_user_slug_fkey"
+            columns: ["user_slug"]
+            isOneToOne: false
+            referencedRelation: "users_view"
+            referencedColumns: ["slug"]
+          }
+        ]
       }
       questions: {
         Row: {
@@ -400,7 +415,7 @@ export type Database = {
           isChallenge: boolean | null
           name: string
           number: number
-          planet_id: string | null
+          planet_id: string
           questions: Json | null
           slug: string
           texts: Json | null
@@ -410,7 +425,7 @@ export type Database = {
           isChallenge?: boolean | null
           name: string
           number: number
-          planet_id?: string | null
+          planet_id: string
           questions?: Json | null
           slug: string
           texts?: Json | null
@@ -420,7 +435,7 @@ export type Database = {
           isChallenge?: boolean | null
           name?: string
           number?: number
-          planet_id?: string | null
+          planet_id?: string
           questions?: Json | null
           slug?: string
           texts?: Json | null

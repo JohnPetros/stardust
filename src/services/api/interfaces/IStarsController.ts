@@ -1,7 +1,6 @@
 import type { Star } from '@/@types/Star'
 
-type NextStar = Pick<Star, 'id' | 'isUnlocked'>
-
+export type NextStar = Pick<Star, 'id' | 'isUnlocked'>
 export interface IStarsController {
   getStarBySlug(starSlug: string): Promise<Star>
   getStarById(starId: string): Promise<Star>
