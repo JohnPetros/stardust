@@ -8,9 +8,12 @@ export function useSecondsCounter(isEnabled: boolean) {
 
     const interval = setInterval(() => {
       const currentSeconds =
-        Number(localStorage.getItem(STORAGE.secondsCounter)) ?? 0
+        Number(localStorage.getItem(STORAGE.keys.secondsCounter)) ?? 0
 
-      localStorage.setItem(STORAGE.secondsCounter, String(currentSeconds + 1))
+      localStorage.setItem(
+        STORAGE.keys.secondsCounter,
+        String(currentSeconds + 1)
+      )
     }, 1000)
 
     return () => {
