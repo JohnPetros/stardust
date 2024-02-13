@@ -40,30 +40,29 @@ export const SupabaseDocsController = (supabase: Supabase): IDocsController => {
       return data.map((data) => data.doc_id)
     },
 
-    async checkDocUnlocking(docId: string, userId: string) {
-      const { data, error } = await supabase
-        .from('users_unlocked_docs')
-        .select('doc_id')
-        .eq('doc_id', docId)
-        .eq('user_id', userId)
-
-      if (error) {
-        throw new Error(error.message)
-      }
-
-      return !data
-    },
-
     async addUnlockedDoc(docId: string, userId: string) {
       const { error } = await supabase
         .from('users_unlocked_docs')
         .insert({ doc_id: docId, user_id: userId })
 
-      console.log({ error })
-
       if (error) {
         throw new Error(error.message)
       }
+    },
+
+    async checkDocUnlocking(docId: string, userId: string) {
+      const { data, error } = await supabase
+        .from('users_unlocked_docs')
+        .select('user_id')
+        .eq('doc_id', docId)
+        .eq('user_id', userId)
+        .single()
+
+      if (error) {
+        return false
+      }
+
+      return Boolean(data.user_id)
     },
   }
 }

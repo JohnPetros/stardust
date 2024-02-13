@@ -2,6 +2,48 @@ import { Text } from '@/@types/Text'
 
 export const texts: Text[] = [
   {
+    type: 'code',
+    content: `var carrinho = []
+
+carrinho.adicionar('castanhas do planeta Parávion')
+carrinho.adicionar('carregador solar')
+carrinho.adicionar('kit de primeiros socorros')
+carrinho.adicionar('barras de cereais')
+carrinho.adicionar('baterias')
+carrinho.adicionar('lanterna')
+carrinho.adicionar('casacos')
+carrinho.adicionar('cobertores')
+carrinho.adicionar('luvas')
+carrinho.adicionar('botas')
+carrinho.adicionar('cordas')
+carrinho.adicionar('aquecedor')
+
+escreva(carrinho.tamanho())
+// Resultado: 12`,
+    isRunnable: true,
+  },
+  {
+    type: 'code',
+    content: `var carrinho = []
+
+carrinho.adicionar('castanhas do planeta Parávion')
+carrinho.adicionar('carregador solar')
+carrinho.adicionar('kit de primeiros socorros')
+carrinho.adicionar('barras de cereais')
+carrinho.adicionar('baterias')
+carrinho.adicionar('lanterna')
+carrinho.adicionar('casacos')
+carrinho.adicionar('cobertores')
+carrinho.adicionar('luvas')
+carrinho.adicionar('botas')
+carrinho.adicionar('cordas')
+carrinho.adicionar('aquecedor')
+
+escreva(carrinho.tamanho())
+// Resultado: 12`,
+    isRunnable: true,
+  },
+  {
     type: 'default',
     content:
       'Agora que nós conseguimos vizualizar o que temos de alimentos na nave, percebemos que temos poucos alimentos para uma viagem longa.',
@@ -28,7 +70,7 @@ export const texts: Text[] = [
   {
     type: 'default',
     content:
-      'E é claro que nosso carrinho se trata de um vetor, então vejamos o que temos por enquanto:',
+      'E é claro que nosso carrinho se trata de uma lista, então vejamos o que temos por enquanto:',
     picture: 'panda-deslumbrado.jpg',
   },
   {
@@ -37,18 +79,19 @@ export const texts: Text[] = [
 
 escreva(carrinho)
 
-// Resultado: Nada`,
+// Resultado: Sem resultado`,
     isRunnable: true,
   },
   {
     type: 'default',
-    content: 'Absolutamente nada, ou seja, temos um vetor completamente vazio.',
+    content:
+      'Absolutamente nada, ou seja, temos uma lista completamente vazio.',
     picture: 'panda-triste.jpg',
   },
   {
     type: 'default',
     content:
-      'Anteriormente você aprendeu como adicionar um item em um vetor usando os números de índice.',
+      'Anteriormente você aprendeu como adicionar um item em uma lista usando os números de índice.',
     picture: 'panda.jpg',
   },
   {
@@ -58,12 +101,12 @@ escreva(carrinho)
   {
     type: 'default',
     content:
-      'Como prometido vou explicar outro método para adicionar itens, que é bem mais fácil na minha opinião.',
+      'Como prometido vou explicar outra maneira para adicionar itens, que é bem mais fácil na minha opinião.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'default',
-    content: 'Usaremos o método `adicionar()`',
+    content: 'Usaremos o método *adicionar()*.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -73,7 +116,7 @@ escreva(carrinho)
   {
     type: 'default',
     content:
-      'Sim! Métodos são funções que servem para manipular vetores, o que inclui adicionar ou remover elementos, classificar os itens em ordem crescente ou decrescente, pesquisar um elemento específico e muito mais!',
+      'Sim! Métodos são funções que servem para manipular listas, o que inclui adicionar ou remover elementos, classificar os itens em ordem crescente ou decrescente, pesquisar um elemento específico e muito mais!',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -89,20 +132,20 @@ escreva(carrinho)
   {
     type: 'default',
     content:
-      'Da mesma forma, em programação, um objeto (no nosso caso um vetor) também tem métodos que podem ser executados para realizar tarefas específicas.',
+      'Da mesma forma, em programação, um objeto (no nosso caso uma lista) também tem métodos que podem ser executados para realizar tarefas específicas.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'quote',
-    title: 'Adicionar()',
+    title: 'Método adicionar()',
     content:
-      'Um desses métodos é o `adicionar()`, que permite, obviamente, adicionar um novo elemento a um vetor.',
+      'Um desses métodos é o *adicionar()*, que permite, obviamente, adicionar um novo elemento a uma lista.',
     picture: 'panda-fazendo-coracao.jpg',
   },
   {
     type: 'default',
     content:
-      'Para usá-lo, basta colocar o novo item entre os parâmetese do método, e para executá-lo, basta colocá-lo ao lado do vetor separando por um ponto `.`.',
+      'Para usá-lo, basta colocar o novo item entre os parâmetese do método, e para executá-lo, basta colocá-lo ao lado da lista separando por um ponto *.*.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -116,13 +159,15 @@ escreva(carrinho)
 
 carrinho.adicionar('castanhas do planeta Parávion')
 
+escreva(carrinho)
+
 // Resultado: castanhas do planeta Parávion`,
     isRunnable: true,
   },
   {
     type: 'default',
     content:
-      'É sempre através do ponto `.` que você poderá usar os métodos, e alguns podem exigir que você passe alguns valores entre os seus parênteses.',
+      'É sempre por meio do ponto *.* que você poderá usar os métodos, e alguns podem exigir que você passe alguns valores entre os seus parênteses.',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
@@ -134,7 +179,7 @@ carrinho.adicionar('castanhas do planeta Parávion')
   {
     type: 'default',
     content:
-      'Porém, é claro que algumas castanhas não serão sufuciente para uma viagem longa, então vamos adicionar mais alguns itens.',
+      'Porém, é claro que algumas castanhas não serão suficiente para uma viagem longa, então vamos adicionar mais alguns itens.',
     picture: 'panda-sorrindo.jpg',
   },
   {
@@ -170,14 +215,14 @@ escreva(carrinho)`,
   {
     type: 'default',
     content:
-      'Podemos ver quantos itens já temos no carrinho, utilizando outro método de vetor: `tamanho()`',
+      'Podemos ver quantos itens já temos no carrinho, utilizando outro método de vetor: *tamanho()*.',
     picture: 'panda-piscando.jpg',
   },
   {
     type: 'quote',
     title: 'tamanho()',
     content:
-      'O método `tamanho()` literalmente retorna o tamanho de um vetor, isto é, o número de itens que há atualmente nele.',
+      'O método *tamanho()* literalmente retorna o tamanho de uma lista, isto é, o número de itens que há atualmente nele.',
     picture: 'panda.jpg',
   },
   {
@@ -210,13 +255,14 @@ escreva(carrinho.tamanho())
   {
     type: 'default',
     content:
-      'Mas agora, é claro que utilizaremos um método para facilitar esse trabalho, no caso utilizaremos o método `remover()`.',
+      'Para isso, é claro que utilizaremos um método para facilitar esse trabalho, no caso utilizaremos o método *remover()*.',
     picture: 'panda.jpg',
   },
   {
     type: 'default',
+    title: 'Método remover()',
     content:
-      'Para remover um determinado item de um vetor, você terá que colocar o valor desse item entre os parênteses do `remover()`, veja o exemplo.',
+      'Para remover um determinado item de uma lista, você terá que colocar o valor desse item entre os parênteses do *remover()*, veja o exemplo.',
     picture: 'panda-sorrindo.jpg',
   },
   {
@@ -248,7 +294,7 @@ escreva(carrinho.tamanho())
   {
     type: 'alert',
     content:
-      'Dica: existem outros métodos para remover um iten de um vetor, como o `removerPrimeiro()`, que como o nome implica, ele remove sempre o primeiro elemento de um vetor.',
+      'Dica: existem outros métodos para remover um iten de uma lista, como o *removerPrimeiro()*, que como o nome implica, ele remove sempre o primeiro elemento de uma lista.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -293,7 +339,7 @@ escreva(carrinho.tamanho());
   {
     type: 'default',
     content:
-      'Você pode me perguntar: se existe `removerPrimeiro()`, então existe `removerUltimo()`. De fato, você está certo, e esse método sempre remove o último item de qualquer vetor.',
+      'Você pode me perguntar: se existe *removerPrimeiro()*, então existe *removerUltimo()*. De fato, você está certo, e esse método sempre remove o último item de qualquer vetor.',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
@@ -344,19 +390,19 @@ escreva(carrinho.tamanho());
   {
     type: 'default',
     content:
-      'Finalmente você percebeu. Sim, na maioria das vezes usamos laços para trabalhar com vetores.',
+      'Finalmente você percebeu. Sim, na maioria das vezes usamos laços para trabalhar com listas.',
     picture: 'panda-sorrindo.jpg',
   },
   {
     type: 'default',
     content:
-      'Por exemplo, para remover todos os itens de uma vez podemos usar o `removerUltimo()` e o tamanho do vetor dentro de um laço enquanto, veja:',
+      'Por exemplo, para remover todos os itens de uma vez podemos usar o *removerUltimo()* e o tamanho da lista dentro de um laço enquanto, veja:',
     picture: 'panda.jpg',
   },
   {
     type: 'default',
     content:
-      'Por exemplo, para remover todos os itens de uma vez podemos usar o `removerUltimo()` e o tamanho do vetor dentro de um laço enquanto, veja:',
+      'Por exemplo, para remover todos os itens de uma vez podemos usar o *removerUltimo()* e o tamanho da lista dentro de um laço enquanto, veja:',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -387,13 +433,13 @@ escreva(carrinho.tamanho())
   {
     type: 'default',
     content:
-      'Neste exemplo, enquanto o tamanho do vetor for maior que 0, continuaremos removendo o último item dele.',
+      'Neste exemplo, enquanto o tamanho da lista for maior que 0, continuaremos removendo o último item dele.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
     type: 'default',
     content:
-      'Agora que já terminamos as compras, boa sorte tentando levar tudo isso ao foguete.',
+      'Agora que já terminamos as compras, boa sorte tentando levar tudo isso ao foguete 😜.',
     picture: 'panda-rindo-deitado.jpg',
   },
 ]

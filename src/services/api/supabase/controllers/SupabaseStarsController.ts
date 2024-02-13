@@ -113,5 +113,20 @@ export const SupabaseStarsController = (
         throw new Error(error.message)
       }
     },
+
+    async checkStarUnlocking(starId: string, userId: string) {
+      const { data, error } = await supabase
+        .from('users_unlocked_stars')
+        .select('user_id')
+        .eq('star_id', starId)
+        .eq('user_id', userId)
+        .single()
+
+      if (error) {
+        return false
+      }
+
+      return Boolean(data.user_id)
+    },
   }
 }

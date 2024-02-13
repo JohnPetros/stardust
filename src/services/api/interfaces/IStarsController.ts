@@ -11,4 +11,5 @@ export interface IStarsController {
   ): Promise<NextStar | null>
   getUserUnlockedStarsIds(userId: string): Promise<string[]>
   addUnlockedStar(starId: string, userId: string): Promise<void>
+  checkStarUnlocking(starId: string, userId: string): Promise<boolean>
 }

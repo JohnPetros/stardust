@@ -1,13 +1,15 @@
 'use server'
 
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 
 import type { Star } from '@/@types/Star'
+import { ROUTES } from '@/global/constants'
 import { IStarsController } from '@/services/api/interfaces/IStarsController'
 
 let lessonStar: Star
 
 export async function _handleLessonPage(
+  userId: string,
   starSlug: string,
   starsController: IStarsController
 ) {
@@ -15,13 +17,17 @@ export async function _handleLessonPage(
     lessonStar = await starsController.getStarBySlug(starSlug)
   } catch (error) {
     console.error(error)
-    notFound()
+    return notFound()
   }
 
-  // const lessonStar = {
-  //   ...star,
-  //   texts: [],
-  // }
+  const isUnlocked = await starsController.checkStarUnlocking(
+    lessonStar.id,
+    userId
+  )
+
+  if (!isUnlocked) {
+    return redirect(ROUTES.private.home.space)
+  }
 
   return lessonStar
 }

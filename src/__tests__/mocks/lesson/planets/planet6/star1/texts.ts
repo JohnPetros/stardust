@@ -3,19 +3,19 @@ import { Text } from '@/@types/Text'
 export const texts: Text[] = [
   {
     type: 'image',
-    content: 'Novos planetas encontrados',
+    content: 'Novos planetas encontrados.',
     picture: 'apollo-envolto-de-planetas.jpg',
   },
   {
     type: 'default',
     content:
-      'Opa, agora que já encontramos vários planetas para explorar, podemos configurar a rota o mais próximo.',
+      'Opa, agora que já encontramos vários planetas para explorar, podemos configurar a rota para o mais próximo.',
     picture: 'panda-deslumbrado.jpg',
   },
   {
     type: 'default',
     content:
-      'Mas, ainda mais importante que isso é verificar se os suprimentos do foguete estão tudo ok.',
+      'Mas ainda mais importante que isso é verificar se os suprimentos do foguete estão ok.',
     picture: 'panda.jpg',
   },
   {
@@ -41,14 +41,14 @@ escreva(alimentos)
   },
   {
     type: 'default',
-    content: 'Isso nada mais é do que um vetor.',
+    content: 'Isso nada mais é do que uma *lista*.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'quote',
-    title: 'Vetores',
+    title: 'Listas',
     content:
-      'Vetores são uma lista ordenada de valores, onde cada valor é identificado por um índice. Em outras palavras, um vetor é um conjunto de elementos que podem ser acessados ​por sua posição numérica dentro do vetor.',
+      'Listas nada mais são do que um conjunto ordenado de valores, onde cada valor pode ser acessado pela sua posição numérica dentro da lista.',
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -73,13 +73,13 @@ escreva(alimentos[0])
   {
     type: 'quote',
     content:
-      'Como dito, para acessar qualquer elemento dentro de uma variável que é um vetor, temos que colocar entre colchetes `[]` ao lado da variável o número do seu índice, isto é, sua posição na lista de elementos conforme a ordem padrão de direção (esquerda para direita).',
+      'Como dito, para acessar qualquer elemento dentro de uma variável que é uma lista, temos que colocar entre colchetes `[]` ao lado da variável o número do seu índice, isto é, sua posição na lista de elementos na orderm crescente (esquerda para direita).',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
     type: 'alert',
     content:
-      'Veja que foi escrito apenas maçã, em vez de todos os alimentos, visto que estamos acessando apenas o primeiro elemento, o que é possível por meio do número que corresponde a sua posição no vetor, no caso, o zero.',
+      'Veja que foi escrito apenas maçã, em vez de todos os alimentos, visto que estamos acessando apenas o primeiro elemento, o que é possível por meio do número que corresponde a sua posição na lista, no caso, o zero.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -89,7 +89,7 @@ escreva(alimentos[0])
   {
     type: 'default',
     content:
-      'Isso porque a posição dos elementos sempre começa pelo zero, ou seja, se você quisesse pegar o segundo elemento de qualquer vetor, teríamos que colocar 1 entre colchetes.',
+      'Isso porque a posição dos elementos sempre começa pelo zero, ou seja, se você quisesse pegar o segundo elemento de qualquer lista, teríamos que colocar 1 entre colchetes.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -98,13 +98,13 @@ escreva(alimentos[0])
 
 escreva(alimentos[1])
 
-// Resultado: maçã`,
+// Resultado: batata`,
     isRunnable: true,
   },
   {
     type: 'alert',
     content:
-      'Dica: É possível acessar o último elemento de qualquer vetor, independentemente quantos elementos ele tenha. Para isso, basta colocar 1 negativo (-1)',
+      'Dica: É possível acessar o último elemento de qualquer lista, independentemente quantos elementos ela tenha. Para isso, basta colocar 1 negativo (-1)',
     picture: 'panda-sorrindo.jpg',
   },
   {
@@ -125,7 +125,7 @@ escreva(alimentos[-1])
   {
     type: 'default',
     content:
-      'Por exemplo, caso colocássemos -2 como índice, estaríamos pegando o penúltimo elemento de um vetor.',
+      'Por exemplo, caso colocássemos -2 como índice, estaríamos pegando o penúltimo elemento de uma lista.',
     picture: 'panda.jpg',
   },
   {
@@ -134,29 +134,29 @@ escreva(alimentos[-1])
 
 escreva(alimentos[-2])
 
-// Resultado: geleia`,
+// Resultado: bife`,
     isRunnable: true,
   },
   {
     type: 'default',
     content:
-      'Agora você pode perguntar, como eu faço para adicionar um novo elemento ao vetor?',
+      'Agora você pode perguntar, como eu faço para adicionar um novo elemento à lista?',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
     type: 'user',
-    content: 'O que eu posso fazer para adicionar um novo elemento ao vetor?',
+    content: 'Como faço para adicionar um novo elemento à lista?',
   },
   {
     type: 'default',
     content:
-      'Para fazer isso, basta colocar o elemento na posição que queremos que ele tenha dentro do vetor.',
+      'Para fazer isso, basta colocar o elemento na posição que queremos que ele tenha dentro da lista.',
     picture: 'panda.jpg',
   },
   {
     type: 'image',
     content:
-      'Como no momento temos 4 alimentos, podemos colocar um abacaxi na quinta posição desse vetor.',
+      'Como no momento temos 4 alimentos, podemos colocar um abacaxi na quinta posição desse lista.',
     picture: 'abacaxi.jpg',
   },
   {
@@ -171,7 +171,7 @@ escreva(alimentos[-2])
   {
     type: 'default',
     content:
-      'Não! Lembre-se os índices/posições de um vetor sempre começam do 0, logo o quinto índice corresponde ao 4.',
+      'Não! Lembre-se os índices/posições de uma lista sempre começam do 0, logo o quinto índice corresponde ao 4.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -187,7 +187,7 @@ escreva(alimentos)
   {
     type: 'alert',
     content:
-      'Cuidado, dependendo da posição em que você colocar o novo elemento, poderá haver espaços vazios no vetor.',
+      'Cuidado, dependendo da posição em que você colocar o novo elemento, poderá haver espaços vazios na lista.',
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -215,17 +215,17 @@ escreva(alimentos)
   {
     type: 'default',
     content:
-      'Agora você pode me perguntar denovo, como eu faço para substituir um elemento de um vetor?',
+      'Agora você pode me perguntar denovo, como eu faço para substituir um elemento de uma lista?',
     picture: 'panda-piscando.jpg',
   },
   {
     type: 'user',
-    content: 'Como eu faço para substituir um elemento de um vetor?',
+    content: 'Como eu faço para substituir um elemento de uma lista?',
   },
   {
     type: 'default',
     content:
-      'Da mesma forma que colocamos novos elementos em um vetor. Só que caso já exista algum elemento na posição que especificarmos, esse elemento será substituído pelo o que colocamos.',
+      'Da mesma forma que colocamos novos elementos em uma lista. Só que caso já exista algum elemento na posição que especificarmos, esse elemento será substituído pelo o que colocamos.',
     picture: 'panda-sorrindo.jpg',
   },
   {
@@ -234,7 +234,7 @@ escreva(alimentos)
     "maçã", 
     "batata", 
     "bife", 
-    "geleia"
+    "geleia",
     "abacaxi"
 ]
 
@@ -247,20 +247,24 @@ escreva(alimentos)
   {
     type: 'alert',
     content:
-      'Perceba que escrevi o vetor de um jeito diferenciado: Em vez de colocar os elementos um do lado do outro, coloquei um em baixo do outro separados por vírgulas, o que também é totalmente possível.',
+      'Perceba que escrevi a lista de um jeito diferenciado: Em vez de colocar os elementos um do lado do outro, coloquei um em baixo do outro separando-os por vírgulas, o que também é totalmente possível.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
     type: 'default',
     content:
-      'Existem outras formas de acrescentar novos elementos a um vetor, mas por agora já estamos bem em conhecimento novo.',
+      'Existem outras formas de acrescentar novos elementos a uma lista, mas por agora já estamos bem em conhecimento novo.',
     picture: 'panda-sorrindo.jpg',
   },
   {
     type: 'default',
     content:
-      'Agora você pode me pergutar denovo, como eu faço para remover um elemento de um vetor?',
+      'Agora você pode me pergutar denovo, como eu faço para remover um elemento de uma lista?',
     picture: 'panda-rindo-deitado.jpg',
+  },
+  {
+    type: 'user',
+    content: 'Como eu faço para para remover um elemento de uma lista?',
   },
   {
     type: 'default',

@@ -1,8 +1,10 @@
 import { _handleLessonPage } from '../actions/_handleLessonPage'
 import { LessonStar } from '../components/LessonStar'
 
-import { texts } from '@/__tests__/mocks/lesson/planets/planet5/star3/texts'
+import { texts } from '@/__tests__/mocks/lesson/planets/planet6/star2/texts'
+import { APP_ERRORS } from '@/global/constants'
 import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseServerClient'
+import { SupabaseAuthController } from '@/services/api/supabase/controllers/SupabaseAuthController'
 import { SupabaseStarsController } from '@/services/api/supabase/controllers/SupabaseStarsController'
 
 type LessonPageProps = {
@@ -12,15 +14,17 @@ type LessonPageProps = {
 export default async function LessonPage({ params }: LessonPageProps) {
   const supabase = SupabaseServerClient()
   const starController = SupabaseStarsController(supabase)
+  const authController = SupabaseAuthController(supabase)
+  const userId = await authController.getUserId()
 
-  const star = await _handleLessonPage(params.starSlug, starController)
+  if (!userId) throw new Error(APP_ERRORS.auth.userNotFound)
 
-  const _start = {
+  const star = await _handleLessonPage(userId, params.starSlug, starController)
+
+  const _star = {
     ...star,
     texts,
   }
 
-  console.log({ _start })
-
-  return <LessonStar star={_start} />
+  return <LessonStar star={_star} />
 }

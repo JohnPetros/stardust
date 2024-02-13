@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation'
 import { VerificationButtonProps } from '.'
 
 import { playAudio } from '@/global/helpers'
+import { useEventListener } from '@/global/hooks/useEventListener'
 
 export function useVerificationButton({
   answerHandler,
@@ -50,10 +51,7 @@ export function useVerificationButton({
     }
   }, [isAnswerVerified, isAnswerCorrect, handleGlobalKeyDown])
 
-  useEffect(() => {
-    document.addEventListener('keydown', handleGlobalKeyDown)
-    return () => document.removeEventListener('keydown', handleGlobalKeyDown)
-  }, [handleGlobalKeyDown])
+  useEventListener('keydown', handleGlobalKeyDown)
 
   return {
     buttonRef,
