@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 
 import { Header } from '../HomeHeader'
 
-import { userMock } from '@/__tests__/mocks/usersMock'
+import { userMock } from '@/__tests__/mocks/core/usersMock'
 import {
   AuthContext,
   AuthContextValue,

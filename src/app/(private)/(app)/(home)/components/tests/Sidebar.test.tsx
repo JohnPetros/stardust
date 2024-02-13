@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 
 import { Sidebar } from '../Sidebar'
 
-import { usersMock } from '@/__tests__/mocks/usersMock'
+import { usersMock } from '@/__tests__/mocks/core/usersMock'
 import {
   AuthContext,
   AuthContextValue,

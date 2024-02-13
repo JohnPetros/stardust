@@ -8,8 +8,8 @@ import { useRouter } from 'next/navigation'
 
 import { Star } from '../Star'
 
-import { rocketsMock } from '@/__tests__/mocks/rocketsMock'
-import { starsMock } from '@/__tests__/mocks/starsMock'
+import { rocketsMock } from '@/__tests__/mocks/core/rocketsMock'
+import { starsMock } from '@/__tests__/mocks/core/starsMock'
 import { SidebarContext, SidebarContextValue } from '@/contexts/SidebarContext'
 import { SpaceContext, SpaceContextValue } from '@/contexts/SpaceContext'
 import { useApi } from '@/services/api'

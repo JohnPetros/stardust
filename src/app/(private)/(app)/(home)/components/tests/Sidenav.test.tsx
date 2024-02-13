@@ -4,7 +4,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 
 import { Sidenav } from '../Sidenav'
 
-import { usersMock } from '@/__tests__/mocks/usersMock'
+import { usersMock } from '@/__tests__/mocks/core/usersMock'
 import {
   AuthContext,
   AuthContextValue,

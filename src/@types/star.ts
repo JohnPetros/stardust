@@ -9,6 +9,6 @@ export type Star = {
   planetId: string
   texts: Text[]
   questions: Question[]
-  isChallenge: boolean
+  isChallenge?: boolean
   isUnlocked?: boolean
 }

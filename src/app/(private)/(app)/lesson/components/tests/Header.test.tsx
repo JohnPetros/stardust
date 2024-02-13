@@ -4,7 +4,7 @@ import { Header } from '../LessonHeader'
 
 import { questionsMock } from '@/__tests__/mocks/lesson/planets/planet1/star1/questions'
 import { textsMock } from '@/__tests__/mocks/lesson/planets/planet1/star1/texts'
-import { usersMock } from '@/__tests__/mocks/usersMock'
+import { usersMock } from '@/__tests__/mocks/core/usersMock'
 import { AuthContext, AuthContextValue } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { SupabaseProvider } from '@/contexts/SupabaseContext'
 import { LessonStoreProps, useLessonStore } from '@/stores/lessonStore'

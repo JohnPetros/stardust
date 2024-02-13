@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event'
 
 import { Space } from '../Space'
 
-import { planetsMock } from '@/__tests__/mocks/planetsMock'
+import { planetsMock } from '@/__tests__/mocks/core/planetsMock'
 import { SidebarContext, SidebarContextValue } from '@/contexts/SidebarContext'
 import { SpaceContext, SpaceContextValue } from '@/contexts/SpaceContext'
 import { usePlanets } from '@/hooks/usePlanets'

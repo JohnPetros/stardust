@@ -1,6 +1,7 @@
 import { _handleLessonPage } from '../actions/_handleLessonPage'
 import { LessonStar } from '../components/LessonStar'
 
+import { texts } from '@/__tests__/mocks/lesson/planets/planet5/star1/texts'
 import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseServerClient'
 import { SupabaseStarsController } from '@/services/api/supabase/controllers/SupabaseStarsController'
 
@@ -14,5 +15,10 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
   const star = await _handleLessonPage(params.starSlug, starController)
 
-  return <LessonStar star={star} />
+  const _start = {
+    ...star,
+    texts,
+  }
+
+  return <LessonStar star={_start} />
 }

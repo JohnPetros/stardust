@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event'
 
 import { SignOutAlert } from '../SignOutAlertDialog'
 
-import { userMock } from '@/__tests__/mocks/usersMock'
+import { userMock } from '@/__tests__/mocks/core/usersMock'
 import {
   AuthContext,
   AuthContextValue,

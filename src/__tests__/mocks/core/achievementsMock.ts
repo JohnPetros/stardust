@@ -12,7 +12,7 @@ export const achievementsMock: Achievement[] = [
     isUnlocked: true,
     isRescuable: false,
     currentProgress: 10,
-    metric: 'completed_planets',
+    metric: 'completedPlanetsCount',
   },
   {
     id: '2',
@@ -25,7 +25,7 @@ export const achievementsMock: Achievement[] = [
     isUnlocked: false,
     isRescuable: true,
     currentProgress: 3,
-    metric: 'acquired_rockets',
+    metric: 'acquiredRocketsCount',
   },
   {
     id: '3',
@@ -37,7 +37,7 @@ export const achievementsMock: Achievement[] = [
     position: 3,
     isUnlocked: false,
     isRescuable: true,
-    metric: 'unlocked_stars',
+    metric: 'unlockedStarsCount',
     currentProgress: 20,
   },
   // Add more achievements as needed

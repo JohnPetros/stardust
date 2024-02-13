@@ -5,7 +5,7 @@ import { render, screen } from '@testing-library/react'
 
 import { Planet } from '../Planet'
 
-import { planetsMock } from '@/__tests__/mocks/planetsMock'
+import { planetsMock } from '@/__tests__/mocks/core/planetsMock'
 import { SidebarContext, SidebarContextValue } from '@/contexts/SidebarContext'
 import { SpaceContext, SpaceContextValue } from '@/contexts/SpaceContext'
 

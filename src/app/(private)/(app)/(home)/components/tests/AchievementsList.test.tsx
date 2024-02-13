@@ -5,8 +5,8 @@ import userEvent from '@testing-library/user-event'
 
 import { AchievementsList } from '../AchievementsList'
 
-import { achievementsMock } from '@/__tests__/mocks/achievementsMock'
-import { usersMock } from '@/__tests__/mocks/usersMock'
+import { achievementsMock } from '@/__tests__/mocks/core/achievementsMock'
+import { usersMock } from '@/__tests__/mocks/core/usersMock'
 import { Achievement } from '@/@types/Achievement'
 import { AchivementsContext } from '@/contexts/AchievementsContext'
 import {
