@@ -15,7 +15,6 @@
     "gen-supabase-types": "supabase gen types typescript --project-id %PROJECT_ID% > ./src/services/api/supabase/types/Database.ts"
   },
   "dependencies": {
-    "@designliquido/delegua": "^0.24.8",
     "@dnd-kit/core": "^6.0.8",
     "@dnd-kit/modifiers": "^6.0.1",
     "@dnd-kit/sortable": "^7.0.2",
@@ -53,6 +52,7 @@
     "apexcharts": "^3.41.0",
     "autoprefixer": "10.4.14",
     "dayjs": "^1.11.9",
+    "delegua": "^0.33.0",
     "eslint-config-next": "^14.0.4",
     "framer-motion": "^10.13.0",
     "immer": "^10.0.3",
