@@ -2,12 +2,13 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { useLessonStore } from '@/stores/lessonStore'
 import { reorderItems } from '@/global/helpers'
+import { checkIncludedArray } from '@/global/helpers/checkIncludedArray'
+import { useLessonStore } from '@/stores/lessonStore'
 
 export function useSelectionQuestion(options: string[], answer: string) {
   const {
-    state: { isAnswerVerified },
+    state: { isAnswerVerified, currentQuestionIndex },
     actions: {
       setIsAnswered,
       setIsAnswerVerified,
@@ -18,6 +19,7 @@ export function useSelectionQuestion(options: string[], answer: string) {
       decrementLivesCount,
     },
   } = useLessonStore()
+
   const [selectedOption, setSelectedOption] = useState('')
   const [reorderedOptions, setReorderedOptions] = useState<string[]>([])
   const hasAlreadyIncrementIncorrectAnswersCount = useRef(false)
@@ -59,11 +61,13 @@ export function useSelectionQuestion(options: string[], answer: string) {
   ])
 
   useEffect(() => {
-    if (!reorderedOptions.length) {
-      const reorderedItems = reorderItems<string>(options)
+    const hasNewOptions = !checkIncludedArray(options, reorderedOptions)
+
+    if (!reorderedOptions.length || hasNewOptions) {
+      const reorderedItems = reorderItems(options)
       setReorderedOptions(reorderedItems)
     }
-  }, [options, reorderedOptions.length])
+  }, [options, reorderedOptions.length, reorderedOptions])
 
   useEffect(() => {
     setIsAnswered(!!selectedOption)

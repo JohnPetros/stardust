@@ -70,4 +70,5 @@ export type Question = {
   content: QuestionContent
   order: number
   star_id: string
+  index?: number
 }

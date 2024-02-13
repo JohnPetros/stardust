@@ -52,7 +52,7 @@ export function useConsole({ height, results }: ConsoleProps) {
 
   function handleToggleFormatOutput() {
     localStorage.setItem(
-      STORAGE.shouldFormatConsoleOutput,
+      STORAGE.keys.shouldFormatConsoleOutput,
       String(!shouldFormatOutput)
     )
     setShouldFormatOutput(!shouldFormatOutput)
@@ -69,7 +69,6 @@ export function useConsole({ height, results }: ConsoleProps) {
     if (!results.length) return
 
     outputTypes.current = results.filter((_, index) => index % 2 === 0)
-    console.log(outputTypes.current)
     const output = results.filter((_, index) => index % 2 !== 0)
 
     const formattedOutput = output.map((output, index) =>
@@ -81,7 +80,7 @@ export function useConsole({ height, results }: ConsoleProps) {
 
   useEffect(() => {
     const shouldFormatConsoleOutput = Boolean(
-      localStorage.getItem(STORAGE.shouldFormatConsoleOutput) === 'true'
+      localStorage.getItem(STORAGE.keys.shouldFormatConsoleOutput) === 'true'
     )
     setShouldFormatOutput(shouldFormatConsoleOutput)
   }, [isOpen])

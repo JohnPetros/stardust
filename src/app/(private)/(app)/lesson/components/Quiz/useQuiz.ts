@@ -11,7 +11,14 @@ export function useQuiz() {
   )
 
   const currentQuestion = useMemo(() => {
-    return questions.length ? questions[currentQuestionIndex] : null
+    return questions.length
+      ? {
+          ...questions[currentQuestionIndex],
+          index: questions.findIndex(
+            (question) => question.id === questions[currentQuestionIndex].id
+          ),
+        }
+      : null
   }, [questions, currentQuestionIndex])
 
   const alertDialogRef = useRef<AlertDialogRef>(null)

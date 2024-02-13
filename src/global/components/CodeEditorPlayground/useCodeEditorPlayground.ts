@@ -108,8 +108,13 @@ export function useCodeEditorPlayground(
     const openParentheses = '('
     const closeParentheses = ')'
 
+    console.log({ print })
+
     const openParenthesesCount = countCharacters(openParentheses, print)
     const closeParenthesesCount = countCharacters(closeParentheses, print)
+
+    console.log({ openParenthesesCount })
+    console.log({ closeParenthesesCount })
 
     if (openParenthesesCount < closeParenthesesCount) {
       const difference = closeParenthesesCount - openParenthesesCount
@@ -155,12 +160,12 @@ export function useCodeEditorPlayground(
     promptRef.current?.close()
     const code = addPrintType(userCode.current)
 
-    console.log({ code })
+    // console.log({ code })
 
     try {
       const { erros } = await execute(code, handleOutput)
 
-      console.error(erros)
+      // console.error(erros)
 
       if (erros.length) {
         const error = erros[0]
