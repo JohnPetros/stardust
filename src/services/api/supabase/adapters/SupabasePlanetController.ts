@@ -14,8 +14,7 @@ export const SupabasePlanetAdapter = (supabasePlanet: SupabasePlanet) => {
       name: star.name,
       number: star.number,
       slug: star.slug,
-      isChallenge: false,
-      isUnlocked: false,
+      isChallenge: star.is_challenge,
     })),
   }
 

@@ -412,7 +412,7 @@ export type Database = {
       stars: {
         Row: {
           id: string
-          isChallenge: boolean | null
+          is_challenge: boolean
           name: string
           number: number
           planet_id: string
@@ -422,7 +422,7 @@ export type Database = {
         }
         Insert: {
           id?: string
-          isChallenge?: boolean | null
+          is_challenge?: boolean
           name: string
           number: number
           planet_id: string
@@ -432,7 +432,7 @@ export type Database = {
         }
         Update: {
           id?: string
-          isChallenge?: boolean | null
+          is_challenge?: boolean
           name?: string
           number?: number
           planet_id?: string
