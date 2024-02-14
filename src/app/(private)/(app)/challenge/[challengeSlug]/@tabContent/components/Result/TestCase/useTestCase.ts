@@ -9,7 +9,7 @@ export function useTestCase(isLocked: boolean, userOutput: string) {
 
   function formatOutput(value: string | number | (string | number)[]) {
     if (Array.isArray(value)) {
-      return '[' + value.join(',') + ']'
+      return '[ ' + value.join(', ') + ' ]'
     }
 
     const regex = REGEX.insideQuotes

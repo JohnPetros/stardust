@@ -112,6 +112,9 @@ export function useResult() {
     ) {
       const userResult = userOutput[index]
 
+      console.log({ expectedOutput })
+      console.log({ userResult })
+
       const isCorrect = compareArrays(
         Array.isArray(userResult) ? userResult : [userResult.toString().trim()],
         Array.isArray(expectedOutput)

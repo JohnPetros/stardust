@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, Lock, X } from '@phosphor-icons/react'
+import { Check, LockSimple, X } from '@phosphor-icons/react'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
 
@@ -42,7 +42,7 @@ export function TestCase({
     <div
       className={twMerge(
         'w-full rounded-md bg-gray-900 p-6',
-        isLocked ? 'opacity-5' : 'opacity-1'
+        isLocked ? 'opacity-[0.7]' : 'opacity-1'
       )}
     >
       <header className="flex items-center justify-between">
@@ -70,7 +70,7 @@ export function TestCase({
           disabled={isLocked}
         >
           {isLocked ? (
-            <Lock className="text-base text-gray-500" weight="bold" />
+            <LockSimple className="text-base text-gray-100" weight="bold" />
           ) : (
             <AnimatedArrow isUp={isOpen} />
           )}
@@ -95,12 +95,12 @@ export function TestCase({
             />
             <Field
               label="Seu resultado"
-              value={userOutput ?? 'Sem resultado'}
+              value={userOutput ? formatOutput(userOutput) : 'Sem resultado'}
               isFromUser={true}
             />
             <Field
               label="Resultado esperado"
-              value={expectedOutput.toString()}
+              value={formatOutput(expectedOutput)}
             />
           </motion.dl>
         )}
