@@ -13,7 +13,7 @@ export const SupabaseStarsController = (
         .from('stars')
         .select('*, questions(*)')
         .eq('slug', starSlug)
-        .order('order', { foreignTable: 'questions', ascending: true })
+        .order('position', { foreignTable: 'questions', ascending: true })
         .single()
 
       if (error) {
