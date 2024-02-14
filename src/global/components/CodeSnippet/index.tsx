@@ -4,8 +4,8 @@ import { ArrowClockwise } from '@phosphor-icons/react'
 import * as ToolBar from '@radix-ui/react-toolbar'
 import { twMerge } from 'tailwind-merge'
 
-import { Tooltip } from '../Tooltip'
 import { CodeEditorPlayground } from '../CodeEditorPlayground'
+import { Tooltip } from '../Tooltip'
 
 import { useCodeSnippet } from './useCodeSnippet'
 

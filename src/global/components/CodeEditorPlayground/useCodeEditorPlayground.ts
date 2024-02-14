@@ -8,8 +8,8 @@ import { PromptRef } from '../Prompt'
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 import { EditorRef } from '@/global/components/Editor'
 import { REGEX } from '@/global/constants/regex'
-import { checkNumeric, countCharacters, playAudio } from '@/global/helpers'
-import { execute } from '@/libs/delegua'
+import { checkNumeric, playAudio } from '@/global/helpers'
+import { useCode } from '@/services/code'
 
 export function useCodeEditorPlayground(
   code: string,
@@ -18,35 +18,26 @@ export function useCodeEditorPlayground(
   const [output, setOutput] = useState<string[]>([])
   const [shouldOpenPrompt, setShouldOpenPrompt] = useState(false)
 
+  const { execute: executeCode, handleError, getInput } = useCode()
+
   const toast = useToastContext()
 
   const userCode = useRef(code)
-  const errorLine = useRef(0)
   const editorRef = useRef<EditorRef>(null)
   const consoleRef = useRef<ConsoleRef>(null)
   const promptRef = useRef<PromptRef>(null)
-
-  function getPrintType(print: string) {
-    return print.replace(REGEX.insidePrint, 'escreva(tipo de $1)')
-  }
 
   function resetToOriginalUserCode() {
     if (editorRef.current) userCode.current = editorRef.current?.getValue()
   }
 
-  function getErrorLine() {
-    return errorLine.current > 0 ? `</br>Linha: ${errorLine.current}` : ''
+  function formatErrorLine(errorLine: number) {
+    return errorLine > 0 ? `</br>Linha: ${errorLine}` : ''
   }
 
-  const handleError = useCallback(
-    (error: Error) => {
-      const { message } = error
-
-      const toastMessage = message.includes('null')
-        ? 'Código inválido'
-        : `${message}` + getErrorLine()
-
-      toast.show(toastMessage, {
+  const showError = useCallback(
+    (message: string, line: number) => {
+      toast.show(`${message}` + formatErrorLine(line), {
         type: 'error',
         seconds: 5,
       })
@@ -66,12 +57,12 @@ export function useCodeEditorPlayground(
     runUserCode()
   }
 
-  function onPromptConfirm() {
+  function handlePromptConfirm() {
     if (promptRef.current)
       formatCodeWithInput(userCode.current, promptRef.current?.value)
   }
 
-  function onPromptCancel() {
+  function handlePromptCancel() {
     promptRef.current?.close()
     resetToOriginalUserCode()
   }
@@ -87,66 +78,17 @@ export function useCodeEditorPlayground(
     return promptTitle
   }
 
-  function handleOutput(output: string) {
-    setOutput((currentOutput) => {
-      if (output === 'vetor' && currentOutput.at(-1) === 'texto') {
-        return [...currentOutput, 'lista']
-      }
-
-      return [...currentOutput, output]
-    })
-
-    if (!output) setOutput(['texto', 'Sem resultado'])
-  }
-
   function handleCodeChange(value: string) {
     userCode.current = value
     if (onCodeChange) onCodeChange(value)
   }
 
-  function checkParenthesesMatch(print: string) {
-    const openParentheses = '('
-    const closeParentheses = ')'
-
-    console.log({ print })
-
-    const openParenthesesCount = countCharacters(openParentheses, print)
-    const closeParenthesesCount = countCharacters(closeParentheses, print)
-
-    console.log({ openParenthesesCount })
-    console.log({ closeParenthesesCount })
-
-    if (openParenthesesCount < closeParenthesesCount) {
-      const difference = closeParenthesesCount - openParenthesesCount
-      return print + closeParentheses.repeat(difference)
-    } else if (openParenthesesCount > closeParenthesesCount) {
-      const difference = openParenthesesCount - closeParenthesesCount
-      return print + closeParentheses.repeat(difference)
-    }
-
-    return print
-  }
-
   const runUserCode = useCallback(async () => {
-    function addPrintType(code: string) {
-      const regex = new RegExp(REGEX.print, 'g')
-
-      if (!regex.test(code)) return code
-
-      const newCode = code.replace(regex, (print) => {
-        const checkedPrint = checkParenthesesMatch(print)
-        return getPrintType(checkedPrint) + print
-      })
-
-      return newCode
-    }
-
     function hasInput(code: string) {
-      const regex = REGEX.insideInput
-      const input = code.match(regex)
+      const input = getInput(code)
       if (!input) return false
 
-      const promptTitle = getPromptTitle(input[0])
+      const promptTitle = getPromptTitle(input)
       promptRef.current?.setTitle(promptTitle)
       return input.length > 0
     }
@@ -158,29 +100,24 @@ export function useCodeEditorPlayground(
 
     setOutput([])
     promptRef.current?.close()
-    const code = addPrintType(userCode.current)
-
-    // console.log({ code })
 
     try {
-      const { erros } = await execute(code, handleOutput)
+      const { output } = await executeCode(userCode.current)
 
-      // console.error(erros)
-
-      if (erros.length) {
-        const error = erros[0]
-        if (error.linha) errorLine.current = error.linha
-        if (error instanceof Error) throw error
-        consoleRef.current?.close()
-        throw error.erroInterno
-      }
+      console.log('setOutput', { output })
+      setOutput(output)
 
       consoleRef.current?.open()
       playAudio('running-code.wav')
 
       resetToOriginalUserCode()
     } catch (error) {
-      handleError(error as Error)
+      console.log({ error })
+      const codeError = handleError(String(error))
+
+      console.log({ codeError })
+
+      showError(codeError.message, codeError.line)
     }
   }, [handleError])
 
@@ -198,7 +135,7 @@ export function useCodeEditorPlayground(
     promptRef,
     runUserCode,
     handleCodeChange,
-    onPromptConfirm,
-    onPromptCancel,
+    handlePromptConfirm,
+    handlePromptCancel,
   }
 }
