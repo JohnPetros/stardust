@@ -4,17 +4,18 @@ import { useEffect, useState } from 'react'
 
 import { useSpaceContext } from '@/contexts/SpaceContext/hooks/useSpaceContext'
 import { STORAGE } from '@/global/constants'
+import { useLocalStorage } from '@/global/hooks/useLocalStorage'
 
 export function useSpace() {
-  const hasTransitionAnimation = Boolean(
-    localStorage.getItem(STORAGE.keys.hasPageAnimationTransition)
+  const shouldSkipTransition = useLocalStorage(
+    STORAGE.keys.shouldSkipHomeTransitionAnimation
   )
 
   const { lastUnlockedStarPosition, scrollIntoLastUnlockedStar } =
     useSpaceContext()
 
   const [isTransitionVisible, setIsTransitionVisible] = useState(
-    hasTransitionAnimation
+    !shouldSkipTransition.has()
   )
 
   function handleFabClick() {
@@ -25,10 +26,10 @@ export function useSpace() {
     if (!isTransitionVisible) return
 
     const timeout = setTimeout(() => setIsTransitionVisible(false), 2500)
-    localStorage.removeItem(STORAGE.keys.hasPageAnimationTransition)
+    shouldSkipTransition.remove()
 
     return () => clearTimeout(timeout)
-  }, [isTransitionVisible])
+  }, [isTransitionVisible, shouldSkipTransition])
 
   return {
     isTransitionVisible,

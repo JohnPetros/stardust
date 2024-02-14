@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 
 import { useSiderbarContext } from '@/contexts/SidebarContext/hooks/useSiderbarContext'
 import { STORAGE } from '@/global/constants'
+import { useLocalStorage } from '@/global/hooks/useLocalStorage'
 
 export function useHomeLayout() {
   const [isSidenavExpanded, setIsSidenavExpanded] = useState(false)
@@ -14,7 +15,9 @@ export function useHomeLayout() {
     setIsAchievementsListVisible,
   } = useSiderbarContext()
 
-  localStorage.setItem(STORAGE.keys.hasPageAnimationTransition, 'true')
+  const shouldSkipHomeTransitionAnimation = useLocalStorage<string>(
+    STORAGE.keys.shouldSkipHomeTransitionAnimation
+  )
 
   function toggleSidenav() {
     setIsSidenavExpanded(!isSidenavExpanded)
@@ -26,10 +29,11 @@ export function useHomeLayout() {
   }
 
   useEffect(() => {
+    shouldSkipHomeTransitionAnimation.set('true')
     return () => {
-      localStorage.removeItem(STORAGE.keys.hasPageAnimationTransition)
+      shouldSkipHomeTransitionAnimation.remove()
     }
-  }, [])
+  }, [shouldSkipHomeTransitionAnimation])
 
   return {
     isSidenavExpanded,
