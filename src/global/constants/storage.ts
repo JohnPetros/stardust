@@ -4,7 +4,7 @@ export const STORAGE = {
   keys: {
     editorConfig: `${APP_PREFIX}:editor-config`,
     secondsCounter: `${APP_PREFIX}:seconds-counter`,
-    hasPageAnimationTransition: `${APP_PREFIX}:has-page-transition-animation`,
+    shouldSkipHomeTransitionAnimation: `${APP_PREFIX}:should-skip-home-transition-animation`,
     shouldFormatConsoleOutput: `${APP_PREFIX}:should-format-console-output`,
     challengeLayout: `${APP_PREFIX}:challenge-layout`,
     challengeCode: `${APP_PREFIX}:challenge-code`,
