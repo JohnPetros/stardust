@@ -15,12 +15,7 @@ type Questions = [
 
 export const questions: Questions = [
   {
-    code: `var textos = [
-  "Foguete",
-  "você",
-  "é", 
-  "legal",
-]
+    code: `var textos = ["Foguete", "você", "é", "legal"]
     
 var frase = textos.juntar("/");
 escreva(frase)`,
@@ -43,7 +38,7 @@ var vetor = palavra.dividir("a")
 
 escrever(vetor.tamanho())`,
     title:
-      'Só por curiosidade: Quantos itens posso ter no vetor ao dividir a palavra "galáxia" usando a letra "a" como separador?',
+      'Só por curiosidade: Quantos itens posso ter em uma lista ao dividir a palavra "galáxia" usando a letra "a" como separador?',
     type: 'selection',
     answer: '3',
     options: ['1', '2', '3', '4'],
@@ -52,14 +47,14 @@ escrever(vetor.tamanho())`,
   {
     code: `var palavras = "aí, Chega, favorzinho, por, cuidado"
 
-var bancoDePalavras = dividir(", ", 3)
+var bancoDePalavras = palavras.dividir(", ", 3)
 
 escreva(bancoDePalavras)`,
     title:
-      'Tenho um banco de palavras para formar uma nova mensagem. Quais palavras estarão presentes no vetor `bancoDePalavras`?',
+      'Tenho um banco de palavras para formar uma nova mensagem. Quais palavras estarão presentes na lista *bancoDePalavras*?',
     type: 'checkbox',
     options: ['Chega', 'aí', 'por', 'favorzinho', 'cuidado'],
-    correctOptions: ['Chega', 'aí', 'por', 'favorzinho'],
+    correctOptions: ['Chega', 'aí', 'favorzinho'],
     picture: 'panda-fazendo-coracao.jpg',
   },
   {
@@ -68,10 +63,10 @@ escreva(bancoDePalavras)`,
     type: 'drag-and-drop-list',
     items: [
       { id: 1, label: 'var bancoDePalavras = [' },
-      { id: 2, label: "   'Chega'" },
-      { id: 3, label: "    'aí'" },
-      { id: 4, label: "    'por'" },
-      { id: 5, label: "    'favorzinho'" },
+      { id: 2, label: "\t'Chega'," },
+      { id: 3, label: "\t'aí'," },
+      { id: 4, label: "\t'por'," },
+      { id: 5, label: "\t'favorzinho'," },
       { id: 6, label: ']' },
       { id: 7, label: 'escreva(palavras.juntar(" "))' },
     ],
@@ -79,7 +74,7 @@ escreva(bancoDePalavras)`,
   },
   {
     title:
-      'Talvez enviando nossas coordenadas ajude. Use os métodos e os separadores corretos para que `coordenada` seja igual a "kepler-222-XYH"',
+      'Talvez enviando nossas coordenadas ajude. Use os métodos e os separadores corretos para que *coordenada* seja igual a "kepler-222-XYH"',
     type: 'drag-and-drop',
     lines: [
       {
@@ -89,21 +84,14 @@ escreva(bancoDePalavras)`,
       },
       {
         id: 2,
-        texts: [
-          'var dadosVetor = ',
-          'dados.',
-          'dropZone',
-          '(',
-          'dropZone',
-          ')',
-        ],
+        texts: ['var lista = ', 'dados.', 'dropZone', '(', 'dropZone', ')'],
         indentation: 0,
       },
       {
         id: 3,
         texts: [
           'var coordenadas = ',
-          'dadosVetor.',
+          'lista.',
           'dropZone',
           '(',
           'dropZone',
@@ -119,7 +107,9 @@ escreva(bancoDePalavras)`,
       { id: 4, label: '"-"' },
       { id: 6, label: '" "' },
     ],
-    correctDragItemsIdsSequence: [1, 3, 1, 4],
+    correctDragItemsIdsSequence: [1, 3, 2, 4],
     picture: 'panda-oferecendo-bambu.jpg',
   },
 ]
+
+// c81c136a-879a-4548-a019-174b2dfe05d7

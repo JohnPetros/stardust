@@ -19,7 +19,8 @@ export const texts: Text[] = [
   "fóssil de urso anão",
   "meteorito congelado"
 ]
-    var qtdItens = [9, 4, 20, 37, 12, 1, 2, 1]`,
+
+var quantidadeDeItens = [9, 4, 20, 37, 12, 1, 2, 1]`,
     isRunnable: false,
   },
   {
@@ -35,12 +36,12 @@ export const texts: Text[] = [
   },
   {
     type: 'user',
-    content: 'Usando o método `tamanho()`?',
+    content: 'Usando o método *tamanho()*?',
   },
   {
     type: 'default',
     content:
-      'Na verdade, o método `tamanho()` retornaria quantos itens há no vetor, que no nosso caso é 8.',
+      'Na verdade, o método *tamanho()* retornaria quantos itens há na lista, que no nosso caso é 8.',
     picture: 'panda-dando-risadinha.jpg',
   },
   {
@@ -54,24 +55,26 @@ export const texts: Text[] = [
   },
   {
     type: 'code',
-    content: `var qtdItens = [9, 4, 20, 37, 12, 1, 2, 1]
+    content: `var quantidadeDeItens = [9, 4, 20, 37, 12, 1, 2, 1]
 
-var soma = qtdItens.somar()
+var soma = quantidadeDeItens.somar()
+
+escreva(soma)
 
 // Resultado: 86`,
-    isRunnable: false,
+    isRunnable: true,
   },
   {
     type: 'quote',
     title: 'somar()',
     content:
-      'O método `somar()` gera um número sendo a soma de todos os números presente no vetor.',
+      'O método *somar()* gera um número sendo a soma de todos os números presente na lista.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'alert',
     content:
-      'Você percebeu que eu coloquei o resultado de `somar()` em uma variável, o que também seria possível usando o método `inclui()`.',
+      'Você percebeu que eu coloquei o resultado de *somar()* em uma variável, o que também seria possível usando o método *inclui()*.',
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -87,7 +90,7 @@ escreva(temNumero2)
   },
   {
     type: 'user',
-    content: 'Mas, e se o vetor tivesso texto?',
+    content: 'Mas, e se a lista tivesso texto?',
   },
   {
     type: 'default',
@@ -109,13 +112,13 @@ escreva(soma)
   {
     type: 'alert',
     content:
-      'Mas isso não o que a gente quer usando o método `somar()`, não é?',
+      'Mas isso não o que a gente quer usando o método *somar()*, não é? Então, use-o apenas com listas que contém somente números.',
     picture: 'panda-rindo-deitado.jpg',
   },
   {
     type: 'default',
     content:
-      'Ok, contudo, esse vetor `itens` está muito bagunçado! Podemos organizá-lo melhor separando os itens por categoria.',
+      'Ok, contudo, a lista *itens* está muito bagunçada! Podemos organizá-la melhor separando os itens por categoria.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -125,13 +128,13 @@ escreva(soma)
   {
     type: 'default',
     content:
-      'Por exemplo, podemos pegar os itens que são alimentos e colocá-los em um vetor separado.',
+      'Por exemplo, podemos pegar os itens que são alimentos e colocá-los em uma lista separada.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
     type: 'default',
     content:
-      'Só que aí teríamos que criar um novo vetor contendo parte dos itens de um vetor principal.',
+      'Só que aí teríamos que criar uma nova lista contendo parte dos itens de uma lista principal.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -142,8 +145,8 @@ escreva(soma)
   {
     type: 'quote',
     content:
-      'Com o método `fatiar()` literalmente pegaremos uma fatia de um vetor. Para usá-lo é preciso passar dois valores entres os seus parênteses: índice inicial e ínidice final.',
-    title: 'Fatiar()',
+      'Com o método *fatiar()* literalmente pegaremos uma fatia de uma lista. Para usá-lo é preciso passar dois valores entres os seus parênteses: índice inicial e ínidice final.',
+    title: 'Método fatiar()',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -153,13 +156,13 @@ escreva(soma)
   {
     type: 'default',
     content:
-      'O índice quer dizer o índice de vetor mesmo, ou seja, sua posição. Primeiramente definimos a partir de qual índice/posição do vetor, começaremos a fatiá-lo. Após isso, definimos em qual posição a fatia deve parar.',
+      'O índice quer dizer o *índice de lista* mesmo, ou seja, sua posição. Primeiramente, definimos a partir de qual índice/posição da lista começaremos a fatiá-lo. Após isso, definimos em qual posição a fatia deve parar.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'default',
     content:
-      'Dessa forma, os itens desse novo vetor, serão aqueles cujo os índices estão presentes nessa fatia.',
+      'Dessa forma, os itens dessa nova lista, serão aqueles cujo os índices estão presentes nessa fatia.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -169,7 +172,7 @@ escreva(soma)
   {
     type: 'default',
     content:
-      'Por exemplo, os alimentos do vetor itens são os três primeiros, ou seja, índices 0, 1, e 2. Logo para pegar uma fatia contendo esses itens, definimos o índice inicial como 0 e o índice final como 3.',
+      'Por exemplo, os alimentos da lista *itens* são os três primeiros, ou seja, índices 0, 1, e 2. Logo para pegar uma fatia contendo esses itens, definimos o índice inicial como 0 e o índice final como 3.',
     picture: 'panda-olhando-computador.jpg',
   },
   {
@@ -193,13 +196,38 @@ escreva(alimentos)
   },
   {
     type: 'user',
-    content: 'Mas por que 3?',
+    content:
+      'Mas por que 3? O item que tem índice 3 não está incluido na fatia.',
+  },
+  {
+    type: 'default',
+    content:
+      'Isso mesmo! O item que corresponde ao índice final NUNCA SERÁ INCLUÍDO NA FATIA, então lembre-se disso.',
+    picture: 'panda-andando-com-bambu.jpg',
   },
   {
     type: 'alert',
     content:
-      'Como deve ter percebido, o método `fatiar()` gera um novo vetor, mas não altera o vetor original, apenas avisando.',
+      'Além disso, como deve ter percebido, o método *fatiar()* gera uma nova lista, mas não altera a lista original. Veja um exemplo disso.',
     picture: 'panda-andando-com-bambu.jpg',
+  },
+  {
+    type: 'code',
+    content: `var pizza = [
+  'pedaço 1',
+  'pedaço 2',
+  'pedaço 3'
+]
+
+var fatia = pizza.fatiar(0, 1)
+
+escreva(fatia)
+escreva(pizza)
+
+// Resultado: 
+// pedaço 1
+// pedaço 1, pedaço 2, pedaço 3`,
+    isRunnable: true,
   },
   {
     type: 'user',
@@ -233,35 +261,50 @@ escreva(alimentos)
 escreva(minerais)
 escreva(ferramentas)
 escreva(exoticos)
+
 // Excecute para ver o resultado`,
     isRunnable: true,
   },
   {
-    type: 'list',
+    type: 'default',
     content: 'Assim, temos:',
-    items: [
-      '(0, 3) - Primeiro item até o terceiro item',
-      '(3, 5) - Quarto item até o quinto item',
-      '(5, 6) - Sexto item até ele mesmo',
-      '(6) - Sétimo item até o último item',
-    ],
+    picture: 'panda.jpg',
+  },
+  {
+    type: 'quote',
+    content: '(0, 3) - Primeiro item até o terceiro item.',
+    picture: 'panda-de-oculos.jpg',
+  },
+  {
+    type: 'quote',
+    content: '(3, 5) - Quarto item até o quinto item.',
+    picture: 'panda-de-oculos.jpg',
+  },
+  {
+    type: 'quote',
+    content: '(5, 6) - Sexto item até ele mesmo.',
+    picture: 'panda-de-oculos.jpg',
+  },
+  {
+    type: 'quote',
+    content: '(6) - Sétimo item até o último item.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'user',
     content:
-      'Mas espera aí! no último, o `fatiar()` só tem um valor nos parênteses!',
+      'Mas espera aí! no último, o *fatiar()* só tem um valor nos parênteses!',
   },
   {
     type: 'default',
     content:
-      'Bem observado! Não te contei, mas é possível omitir o índice final. Caso você faça isso, o índice final será sempre o útimo índice do vetor.',
+      'Bem observado! Não te contei, mas é possível omitir o índice final. Caso você faça isso, o índice final será sempre o útimo índice da lista.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
     type: 'default',
     content:
-      'O que quer dizer que se apenas o índice inicial for passado, o `fatiar()` retornará o item com esse índice e todos os demais itens do vetor após ele.',
+      'O que quer dizer que se apenas o índice inicial for passado, o *fatiar()* retornará o item com esse índice e todos os demais itens da lista após ele.',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
@@ -271,23 +314,23 @@ var fatia = numeros.fatiar(2)
 escreva(fatia)
 
 // Resultado: 3, 4, 5
-// fatiar(2) = Terceiro item até o último item do vetor`,
+// fatiar(2) = Terceiro item até o último item da lista`,
     isRunnable: true,
   },
   {
     type: 'user',
-    content: 'Tá mas, o que fazemos com vetor itens?',
+    content: 'Tá mas, o que fazemos com a lista *itens*?',
   },
   {
     type: 'default',
     content:
-      'Sim, agora temos itens duplicados em vetores diferentes, justo porque o `fatiar()` não modifica o vetor originial.',
+      'Sim, agora temos itens duplicados em listas diferentes, justo porque o *fatiar()* não modifica a lista originial.',
     picture: 'panda-confuso.jpg',
   },
   {
     type: 'default',
     content:
-      'Entretanto, há um método que faz exatamente o que "fatiar()" faz, porém ele consegue alterar o original.',
+      'Entretanto, há um método que faz exatamente o que *fatiar()* faz, porém ele consegue alterar a lista original.',
     picture: 'panda-sorrindo.jpg',
   },
   {
@@ -312,20 +355,20 @@ escreva(fatia)
   },
   {
     type: 'default',
-    content: 'O método `inverter()`.',
+    content: 'O método *inverter()*.',
     picture: 'panda-piscando.jpg',
   },
   {
     type: 'quote',
     title: 'inverter()',
     content:
-      'O método `inverter()` é usado para inverter a ordem dos elementos de um vetor. Ele não cria um novo vetor, mas sim modifica o vetor original.',
+      'O método *inverter()* é usado para inverter a ordem dos elementos de uma lista. Ele não cria uma nova lista, mas sim modifica a lista original.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'quote',
     content:
-      'E estou falando de inverter mesmo, ou seja, ao aplicar o método `inverter()` em um vetor, o último elemento passa a ser o primeiro, o penúltimo passa a ser o segundo, e assim por diante.',
+      'E estou falando de inverter mesmo, ou seja, ao aplicar o método *inverter()* em uma lista, o último elemento passa a ser o primeiro, o penúltimo passa a ser o segundo, e assim por diante. E sim, ele altera a lista original, mas também retorna a lista invertida',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {

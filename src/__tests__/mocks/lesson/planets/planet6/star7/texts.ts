@@ -14,7 +14,7 @@ export const texts: Text[] = [
   {
     type: 'default',
     content:
-      'Acho que o radar só transforma em vetores mensagens que são recebidas.',
+      'Acho que o radar só transforma em listas mensagens que são recebidas.',
     picture: 'panda-pensando.jpg',
   },
   {
@@ -25,8 +25,7 @@ export const texts: Text[] = [
   },
   {
     type: 'code',
-    content: `var mensagem = "   Venha aqui, por f4vor 
-escreva(mensagem)`,
+    content: `var mensagem = "   Venha aqui, por f4vor   "`,
     isRunnable: false,
   },
   {
@@ -36,17 +35,17 @@ escreva(mensagem)`,
   },
   {
     type: 'default',
-    content: 'Mais um caso onde podemos solucionar usando um método de vetor.',
+    content: 'Mais um caso onde podemos solucionar usando um método de lista.',
     picture: 'panda-confuso.jpg',
   },
   {
     type: 'user',
-    content: 'Vetor? Mas estamos usando texto.',
+    content: 'Lista? Mas estamos usando *texto*.',
   },
   {
     type: 'default',
     content:
-      'Isso pode explodir sua cabeça, mas textos também podem ser vetores.',
+      'Isso pode explodir sua cabeça, mas textos também podem ser *listas*.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -55,8 +54,8 @@ escreva(mensagem)`,
   },
   {
     type: 'code',
-    content: `var texto = "abc"
-escreva(texto[0])
+    content: `var meuTexto = "abc"
+escreva(meuTexto[0])
 
 // Resultado: a`,
     isRunnable: true,
@@ -64,26 +63,26 @@ escreva(texto[0])
   {
     type: 'user',
     content:
-      'Então, quer dizer que podemos usar os métodos de vetor que vimos anteriormente em textos?',
+      'Então, quer dizer que podemos os métodos de lista que vimos anteriormente em textos?',
   },
   {
     type: 'default',
     content:
-      'A resposta é sim! Obviamente nem todos, como o `remover()`, `adicionar()`, `ordenar()`, nem mesmo o `inverter()`',
+      'A resposta é sim! Obviamente nem todos. Os métodos *remover()*, *adicionar()*, *ordenar()*, nem mesmo o *inverter()* são possíveis de serem usados em texto.',
     picture: 'panda-pulando-de-alegria.jpg',
   },
   {
     type: 'default',
     content:
-      'Mas podemos usar alguns, como `tamanho()`, `inclui()` e `concatenar()`',
+      'Mas podemos usar alguns, como *tamanho()*, *inclui()* e *concatenar()*',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'code',
-    content: `var texto = "abc"
-    escreva(texto.tamanho())
-    escreva(texto.inclui("b"))
-    escreva(texto.concatenar("d"))
+    content: `var meuTexto = "abc"
+escreva(meuTexto.tamanho())
+escreva(meuTexto.inclui("b"))
+escreva(meuTexto.concatenar("d"))
     
 /* Resultado: 
   3
@@ -105,14 +104,14 @@ escreva(texto[0])
   {
     type: 'default',
     content:
-      'Por exemplo, nesse caso para retirar os espaços em branco da mensagem, podemos utilizar o método `aparar()`.',
+      'Por exemplo, nesse caso para retirar os espaços em branco da mensagem, podemos utilizar o método *aparar()*.',
     picture: 'panda-olhando-computador.jpg',
   },
   {
     type: 'quote',
-    title: 'aparar()',
+    title: 'Método aparar()',
     content:
-      'O método `aparar()` é usado para remover os espaços em branco do início e do final de um texto, ou seja aparar as pontas do texto.',
+      'O método *aparar()* é usado para remover os espaços em branco do início e do final de um texto, ou seja, aparar as pontas do texto.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
@@ -120,8 +119,9 @@ escreva(texto[0])
     content: `var mensagem = "   Venha aqui, por f4vor   "
         
 var novaMensagem = mensagem.aparar()
-escreva(novaMensagem)
-// Resultado: Venha aqui, por f4vor`,
+
+escreva(novaMensagem.tamanho() == novaMensagem.tamanho())
+// Resultado: vardadeiro`,
     isRunnable: true,
     picture: 'panda-olhando-de-lado.jpg',
   },
@@ -144,7 +144,7 @@ escreva(novaMensagem)
     type: 'quote',
     title: 'substituir()',
     content:
-      'O método de texto `substituir()` procura um subtexto dentro de um texto e o substitui por outro. Assim, um novo texto é gerado.',
+      'O método de texto *substituir()* procura um subtexto dentro de um texto e o substitui por outro. Assim, um novo texto é gerado.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
@@ -171,7 +171,7 @@ escreva(novaMensagem)
   {
     type: 'alert',
     content:
-      'Aviso: o método `substituir()` só substitui o primeiro subtexto que ele encontrar. Isso quer dizer que se a mensagem tivesse mais números 4, apenas o primeiro 4 seria substituido.',
+      'Aviso: o método *substituir()* só substitui o primeiro subtexto que ele encontrar. Isso quer dizer que se a mensagem tivesse mais números 4, apenas o primeiro 4 seria substituido.',
     picture: 'panda-rindo-deitado.jpg',
   },
   {
@@ -187,7 +187,7 @@ escreva(novaMensagem)
   {
     type: 'default',
     content:
-      'Agora a nossa mensagem  está bem melhor, mas podemos melhorá-la ainda mais.',
+      'Agora a nossa mensagem está bem melhor, mas podemos melhorá-la ainda mais.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -203,20 +203,20 @@ escreva(novaMensagem)
   {
     type: 'default',
     content:
-      'Se cada caractere da mensagem fosse um item de um vetor, poderíamos usar o método `fatiar()`.',
+      'Se cada caractere da mensagem fosse um item de uma lista, poderíamos usar o método *fatiar()*.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
     type: 'default',
     content:
-      'Mas, já que estamos usando texto, podemos usar o método `subtexto()` que literalmente consegue fazer o que o `fatiar()` faz, só que para textos.',
+      'Mas, já que estamos usando texto, podemos usar o método *subtexto()* que literalmente consegue fazer o que o *fatiar()* faz, só que para textos.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
     type: 'quote',
-    title: 'subtexto()',
+    title: 'Método subtexto()',
     content:
-      'O método `subtexto()` permite extrair uma parte de um texto a partir de um índice inicial até um índice final.',
+      'O método *subtexto()* permite extrair uma parte de um texto a partir de um índice inicial até um índice final.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
@@ -239,7 +239,7 @@ escreva(novaMensagem)
   {
     type: 'default',
     content:
-      'Essa parte dos índices do `subtexto()` é bem igual ao `fatiar()` mesmo, ou seja, será extraido todos os caracteres nas posições que estão entre o primeiro e segundo indíces definidos entre parênteses, mas não contando o caractere que corresponde ao índice final.',
+      'Essa parte dos índices do *subtexto()* é bem igual ao *fatiar()* mesmo, ou seja, será extraido todos os caracteres nas posições que estão entre o primeiro e segundo indíces definidos entre parênteses, mas não contando o caractere que corresponde ao índice final.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -261,24 +261,38 @@ escreva(aqui)
   {
     type: 'alert',
     content:
-      'Se o índice final não for passado, o subtexto começará do indíce inicial e terminará até o último índice do vetor, assim como acontece no `fatiar()`',
+      'Se o índice final não for passado, o subtexto começará do indíce inicial e terminará até o último índice do lista, assim como acontece no *fatiar()*',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
     type: 'code',
     content: `var mensagem = "Venha aqui, por favor"
 
-// extraindo do décimo segundo caractere (p) até o último caractere
-var subtexto = mensagem.subtexto(12)
-escreva(subtexto)
+// extraindo do décimo segundo caractere (que é "p") até o último caractere
+var meuSubtexto = mensagem.subtexto(12)
+escreva(meuSubtexto)
 
 // Resultado: por favor`,
     isRunnable: true,
   },
   {
     type: 'alert',
-    content: 'E sim, o `subtexto()` não altera o texto original.',
+    content: 'E sim, o *subtexto()* não altera o texto original.',
     picture: 'panda-rindo-deitado.jpg',
+  },
+  {
+    type: 'code',
+    content: `var textoOriginal = "Venha aqui, por favor"
+
+var meuSubtexto = textoOriginal.subtexto(12)
+
+escreva(meuSubtexto)
+escreva(textoOriginal)
+
+// Resultado:
+// por favor
+// Venha aqui, por favor`,
+    isRunnable: true,
   },
   {
     type: 'image',
@@ -314,7 +328,7 @@ escreva(mensagem.juntar(" "))
 escreva(mensagem.juntar(" "))
 
 // Resultado: Já falei que não quero`,
-    isRunnable: false,
+    isRunnable: true,
   },
   {
     type: 'default',
@@ -335,9 +349,9 @@ escreva(mensagem.juntar(" "))
   },
   {
     type: 'quote',
-    title: 'maiusculo()',
+    title: 'Método maiusculo()',
     content:
-      'o método `maiusculo()` é bem simples: gera um texto com carecteres em maiúsculo a partir do texto original.',
+      'o método *maiusculo()* é bem simples: gera um texto com carecteres em maiúsculo a partir do texto original.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
@@ -348,20 +362,20 @@ var novaMensagem = mensagem.maiusculo()
 escreva(novaMensagem)
 
 // Resultado: SE NÃO VIER AGORA, IREI TE MANDAR PARA O FERRO-VELHO!`,
-    isRunnable: false,
+    isRunnable: true,
   },
   {
     type: 'alert',
-    content: 'Antes que pergunte, também existe o método `minusculo()`.',
+    content: 'Antes que pergunte, também existe o método *minusculo()*.',
     picture: 'panda-rindo-deitado.jpg',
   },
   {
     type: 'code',
-    content: `var texto = "TUDO EM MAIÚSCULO"
+    content: `var textoEmMaiusculo = "TUDO EM MAIÚSCULO"
 
-escreva(texto.minusculo())
+escreva(textoEmMaiusculo.minusculo())
 // Resultado: tudo em maiúsculo`,
-    isRunnable: false,
+    isRunnable: true,
   },
   {
     type: 'image',
@@ -384,11 +398,11 @@ escreva(texto.minusculo())
   
 escreva(mensagem.juntar(" "))
 // Resultado: não vou porque não faço ideia onde você está`,
-    isRunnable: false,
+    isRunnable: true,
   },
   {
     type: 'default',
-    content: 'É, agora o foguete tem um ponto.',
+    content: 'É, agora o foguete tem um ponto 🙄.',
     picture: 'panda-triste.jpg',
   },
 ]

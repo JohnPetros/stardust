@@ -16,25 +16,25 @@ type Questions = [
 export const questions: Questions = [
   {
     title:
-      'Podemos tentar concertar o radar removendo as peças defeituosas. Complete o `encaixar()` para que a variável `pecas` tenha somente as seguintes peças: Display e Antena.',
+      'Podemos tentar concertar o radar removendo as peças defeituosas. Complete o *encaixar()* para que a variável *pecas* tenha somente as seguintes peças: Display e Antena.',
     type: 'drag-and-drop',
     lines: [
-      { id: 1, texts: ['var cometas = ['], indentation: 0 },
-      { id: 2, texts: ['"Display"', ','], indentation: 2 },
-      { id: 3, texts: ['"Antena"'], indentation: 2 },
-      { id: 4, texts: ['"Transmissor"', ','], indentation: 2 },
+      { id: 1, texts: ['var partes = ['], indentation: 0 },
+      { id: 2, texts: ['"Display",'], indentation: 2 },
+      { id: 3, texts: ['"Antena",'], indentation: 2 },
+      { id: 4, texts: ['"Transmissor",'], indentation: 2 },
       { id: 5, texts: ['"Receptor"'], indentation: 2 },
       { id: 6, texts: [']'], indentation: 0 },
       {
         id: 7,
         texts: [
           'var pecas = ',
-          'satelites.encaixar',
+          'partes.encaixar',
           '(',
           'dropZone',
           ',',
           'dropZone',
-          ');',
+          ')',
         ],
         indentation: 0,
       },
@@ -51,29 +51,25 @@ export const questions: Questions = [
     picture: 'panda-piscando.jpg',
   },
   {
-    code: `var transmissor = [
-  'Oscilador', 
-  'Circuito',
-  'Modulador',
-  'Refrigerador',
-]
-foguetes.encaixar(1, 1)`,
+    code: `var elementos = ['Oscilador', 'Circuito', 'Modulador', 'Refrigerador']
+
+var elementosRemovidos = elementos.encaixar(1)`,
     title:
-      'Estou removendo alguns elementos que compõem o transmissor do radar usando o método `encaixar()`. Quais itens são estes?',
+      'Estou removendo alguns elementos que compõem o transmissor do radar usando o método *encaixar()*. Quais elementos são estes?',
     type: 'checkbox',
     options: ['Oscilador', 'Modulador', 'Circuito', 'Refrigerador'],
-    correctOptions: ['Oscilador', 'Modulador', 'Refrigerador'],
+    correctOptions: ['Circuito', 'Modulador', 'Refrigerador'],
     picture: 'panda-piscando.jpg',
   },
   {
     title:
-      'Será necessário substituir o recptor do radar por um novo. Adicione o valor "Novo receptor" na posição 1 no vetor `pecas`',
+      'Será necessário substituir o receptor do radar por um novo. Adicione o valor "Novo receptor" na posição 2 na lista *pecas*',
     type: 'drag-and-drop',
     lines: [
       { id: 1, texts: ['var pecas = ['], indentation: 0 },
-      { id: 2, texts: ['"Receptor"', ','], indentation: 2 },
-      { id: 3, texts: ['"Antena"', ','], indentation: 2 },
-      { id: 4, texts: ['"Transmissor"', ','], indentation: 2 },
+      { id: 2, texts: ['"Receptor",'], indentation: 2 },
+      { id: 3, texts: ['"Antena",'], indentation: 2 },
+      { id: 4, texts: ['"Transmissor"'], indentation: 2 },
       { id: 6, texts: [']'], indentation: 0 },
       {
         id: 7,
@@ -85,23 +81,23 @@ foguetes.encaixar(1, 1)`,
           'dropZone',
           ',',
           'dropZone',
-          ');',
+          ')',
         ],
         indentation: 0,
       },
     ],
     dragItems: [
-      { id: 1, label: '0' },
+      { id: 1, label: '2' },
       { id: 2, label: '1' },
-      { id: 3, label: 'Novo receptor' },
+      { id: 3, label: '"Novo receptor"' },
     ],
-    correctDragItemsIdsSequence: [2, 1, 3],
+    correctDragItemsIdsSequence: [1, 2, 3],
     picture: 'panda-piscando.jpg',
   },
   {
-    code: 'var pilhas = ["AAA", "AA", "AA"]\n  escreva(pilhas.encaixar())',
+    code: 'var pilhas = ["AAA", "AA", "AA"]\n escreva(pilhas.encaixar())',
     title:
-      'Devemos também trocar as pilhas. Precisaremos apenas do tipo "AA". Qual o único número seria necessário colocar no `encaixar()` para pegar os dois últimos itens do vetor `pilhas`?',
+      'Devemos também trocar as pilhas. Precisaremos apenas do tipo "AA". Qual o único número que seria necessário colocar no *encaixar()* para pegar os dois últimos itens da lista *pilhas*?',
     type: 'open',
     lines: [
       {
@@ -120,17 +116,12 @@ foguetes.encaixar(1, 1)`,
     picture: 'panda-com-mochila.jpg',
   },
   {
-    code: `var contatos = [
-  "Darth Vader",
-  "Kylo Ren", 
-  "Boba Fett", 
-  "Jabba"
-]
+    code: `var contatos = ["Darth Vader", "Kylo Ren", "Boba Fett", "Jabba"]
 
 contatos.encaixar(0, 3);
 escreva(contatos[0])`,
     title:
-      'Vamos tentar descobrir qual contato envior essa mensagem. Qual contato estará na posição zero do vetor `contatos`?',
+      'Talvez a pessoa que enviou a mensagem esteja entre nossos contatos. Qual contato estará na posição zero da lista *contatos*?',
     type: 'selection',
     answer: 'Jabba',
     options: ['Darth Vader', 'Kylo Ren', 'Boba Fett', 'Jabba'],

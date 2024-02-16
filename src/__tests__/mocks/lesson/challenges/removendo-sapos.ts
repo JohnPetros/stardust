@@ -1,11 +1,20 @@
-export const challenge = {
+import type { Challenge } from '@/@types/Challenge'
+
+export const challenge: Challenge = {
+  id: '68456',
   title: 'Removendo sapos',
+  slug: 'removendo-sapos',
   difficulty: 'easy',
-  downvotes: 0,
-  upvotes: 0,
-  total_completitions: 0,
-  created_by: 'Apollo',
-  topic_id: 'f60a0e67-c0b9-401a-a652-c9d5f8042ff1',
+  userSlug: 'apollo',
+  createdAt: '',
+  starId: '',
+  description: '',
+  categories: [],
+  isCompleted: false,
+  downvotesCount: 0,
+  upvotesCount: 0,
+  totalCompletitions: 0,
+  docId: 'f60a0e67-c0b9-401a-a652-c9d5f8042ff1',
   code: `var alimentos = leia()
 
 var alimentosSaudaveis = []
@@ -15,28 +24,31 @@ para cada alimento em alimentos {
 }
 
 escreva(alimentosSaudaveis)`,
-  function_name: null,
-  tests_cases: [
+  functionName: null,
+  testCases: [
     {
-      input: [["'manga'", "'sapo gasoso'", "'berinjela'"]],
-      expectedOutput: 'manga,berinjela',
+      id: 1,
+      input: [['"manga"', '"sapo gasoso"', '"berinjela"']],
+      expectedOutput: ['"manga"', '"berinjela"'],
       isLocked: false,
     },
     {
+      id: 2,
       input: [
         [
-          "'sapo condensado'",
-          "'cebola doce'",
-          "'camarão de batata'",
-          "'sapo de morango'",
+          '"sapo condensado"',
+          '"cebola doce"',
+          '"camarão de batata"',
+          '"sapo de morango"',
         ],
       ],
-      expectedOutput: 'cebola doce,camarão de batata',
+      expectedOutput: ['"cebola doce"', '"camarão de batata"'],
       isLocked: false,
     },
     {
-      input: [["'sorvete de sapo'", "'requeijão'"]],
-      expectedOutput: 'requeijão',
+      id: 3,
+      input: [['"sorvete de sapo"', '"requeijão"']],
+      expectedOutput: ['"requeijão"'],
       isLocked: true,
     },
   ],
@@ -45,6 +57,10 @@ escreva(alimentosSaudaveis)`,
       type: 'default',
       content: 'Enfim, são e salvos em nosso foguete. Está com fome?',
       picture: 'panda-andando-com-bambu.jpg',
+    },
+    {
+      type: 'user',
+      content: 'Sim!',
     },
     {
       type: 'default',
@@ -65,7 +81,7 @@ escreva(alimentosSaudaveis)`,
     },
     {
       type: 'user',
-      title: 'Sapo?',
+      content: 'Sapo?',
     },
     {
       type: 'default',
@@ -77,33 +93,47 @@ escreva(alimentosSaudaveis)`,
       type: 'quote',
       title: 'Desafio:',
       content:
-        'Seu papel é remover todos os itens do vetor alimentos que incluam a palavra "sapo" no nome.',
+        'Seu papel é remover todos os itens da lista alimentos que incluam a palavra "sapo" no nome.',
       picture: 'panda-sorrindo.jpg',
     },
     {
       type: 'code',
       content: `
-Entrada: [pimentão, sapo de só, melancia]
-Resultado: [pimentão, melancia]
+// Entrada: ["pimentão", "sapo de só", "melancia"]
+// Resultado: ["pimentão", "melancia"]
 
-Entrada: [sapo de caju, sapo kiwi, milho de ricota]
-Resultado: [milho de ricota]
+// Entrada: ["sapo de caju, sapo kiwi", "milho de ricota"]
+// Resultado: ["milho de ricota"]
 
-Entrada: [cevada, tamarindo, sapo coalhado]
-Resultado: [cevada, tamarindo]`,
+// Entrada: ["cevada", "tamarindo", "sapo coalhado"]
+// Resultado: ["cevada", "tamarindo"]`,
       isRunnable: false,
     },
     {
       type: 'alert',
       content:
-        'Para facilitar seu trabalho já coloquei um laço `para-cada` no seu código, mas você pode usar outro laço se preferir.',
+        'Para facilitar seu trabalho já coloquei um laço *para-cada* no seu código, mas você pode usar outro laço se preferir.',
       picture: 'panda-oferecendo-bambu.jpg',
     },
     {
       type: 'alert',
       content:
-        'Lembre-se dos métodos de vetor, caso esqueça algum você pode conferir no dicionário na barra acima do editor de código.',
+        'Lembre-se dos métodos de lista, caso esqueça algum você pode conferir na *documentação* na barra acima do editor de código.',
       picture: 'panda-fazendo-coracao.jpg',
     },
   ],
 }
+
+/**
+ * var alimentos = leia()
+
+var alimentosSaudaveis = []
+
+para cada alimento em alimentos {
+  se (!alimento.inclui("sapo")) {
+    alimentosSaudaveis.adicionar(alimento)
+  }
+}
+
+escreva(alimentosSaudaveis)
+ */

@@ -2,51 +2,9 @@ import { Text } from '@/@types/Text'
 
 export const texts: Text[] = [
   {
-    type: 'code',
-    content: `var carrinho = []
-
-carrinho.adicionar('castanhas do planeta Parávion')
-carrinho.adicionar('carregador solar')
-carrinho.adicionar('kit de primeiros socorros')
-carrinho.adicionar('barras de cereais')
-carrinho.adicionar('baterias')
-carrinho.adicionar('lanterna')
-carrinho.adicionar('casacos')
-carrinho.adicionar('cobertores')
-carrinho.adicionar('luvas')
-carrinho.adicionar('botas')
-carrinho.adicionar('cordas')
-carrinho.adicionar('aquecedor')
-
-escreva(carrinho.tamanho())
-// Resultado: 12`,
-    isRunnable: true,
-  },
-  {
-    type: 'code',
-    content: `var carrinho = []
-
-carrinho.adicionar('castanhas do planeta Parávion')
-carrinho.adicionar('carregador solar')
-carrinho.adicionar('kit de primeiros socorros')
-carrinho.adicionar('barras de cereais')
-carrinho.adicionar('baterias')
-carrinho.adicionar('lanterna')
-carrinho.adicionar('casacos')
-carrinho.adicionar('cobertores')
-carrinho.adicionar('luvas')
-carrinho.adicionar('botas')
-carrinho.adicionar('cordas')
-carrinho.adicionar('aquecedor')
-
-escreva(carrinho.tamanho())
-// Resultado: 12`,
-    isRunnable: true,
-  },
-  {
     type: 'default',
     content:
-      'Agora que nós conseguimos vizualizar o que temos de alimentos na nave, percebemos que temos poucos alimentos para uma viagem longa.',
+      'Agora que nós conseguimos visualizar o que temos de alimentos na nave, percebemos que temos poucos alimentos para uma viagem longa.',
     picture: 'panda-abracando-bambu.jpg',
   },
   {
@@ -188,9 +146,9 @@ escreva(carrinho)
 
 carrinho.adicionar('castanhas do planeta Parávion')
 carrinho.adicionar('carregador solar')
-carrinho.adicionar('kit de primeiros socorros')
+carrinho.adicionar('gorro')
 carrinho.adicionar('barras de cereais')
-carrinho.adicionar('baterias')
+carrinho.adicionar('canivete suíço')
 carrinho.adicionar('lanterna')
 carrinho.adicionar('casacos')
 carrinho.adicionar('cobertores')
@@ -220,7 +178,7 @@ escreva(carrinho)`,
   },
   {
     type: 'quote',
-    title: 'tamanho()',
+    title: 'Método tamanho()',
     content:
       'O método *tamanho()* literalmente retorna o tamanho de uma lista, isto é, o número de itens que há atualmente nele.',
     picture: 'panda.jpg',
@@ -231,9 +189,9 @@ escreva(carrinho)`,
 
 carrinho.adicionar('castanhas do planeta Parávion')
 carrinho.adicionar('carregador solar')
-carrinho.adicionar('kit de primeiros socorros')
+carrinho.adicionar('gorro')
 carrinho.adicionar('barras de cereais')
-carrinho.adicionar('baterias')
+carrinho.adicionar('canivete suíço')
 carrinho.adicionar('lanterna')
 carrinho.adicionar('casacos')
 carrinho.adicionar('cobertores')
@@ -242,7 +200,9 @@ carrinho.adicionar('botas')
 carrinho.adicionar('cordas')
 carrinho.adicionar('aquecedor')
 
-escreva(carrinho.tamanho())
+var quantideDeItens = carrinho.tamanho()
+
+escreva(quantideDeItens)
 // Resultado: 12`,
     isRunnable: true,
   },
@@ -271,9 +231,9 @@ escreva(carrinho.tamanho())
 
 carrinho.adicionar('castanhas do planeta Parávion')
 carrinho.adicionar('carregador solar')
-carrinho.adicionar('kit de primeiros socorros')
+carrinho.adicionar('gorro')
 carrinho.adicionar('barras de cereais')
-carrinho.adicionar('baterias')
+carrinho.adicionar('canivete suíço')
 carrinho.adicionar('lanterna')
 carrinho.adicionar('casacos')
 carrinho.adicionar('cobertores')
@@ -287,7 +247,9 @@ carrinho.remover('casacos')
 carrinho.remover('cobertores')
 carrinho.remover('luvas')
 
-escreva(carrinho.tamanho())
+var quantideDeItens = carrinho.tamanho()
+
+escreva(quantideDeItens)
 // Resultado: 8`,
     isRunnable: true,
   },
@@ -313,9 +275,9 @@ escreva(numeros)
     
 carrinho.adicionar('castanhas do planeta Parávion')
 carrinho.adicionar('carregador solar')
-carrinho.adicionar('kit de primeiros socorros')
+carrinho.adicionar('gorro')
 carrinho.adicionar('barras de cereais')
-carrinho.adicionar('baterias')
+carrinho.adicionar('canivete suíço')
 carrinho.adicionar('lanterna')
 carrinho.adicionar('casacos')
 carrinho.adicionar('cobertores')
@@ -331,7 +293,9 @@ carrinho.remover('luvas')
 
 carrinho.removerPrimeiro()
 
-escreva(carrinho.tamanho());
+var quantideDeItens = carrinho.tamanho()
+
+escreva(quantideDeItens)
 
 // Resultado: 7`,
     isRunnable: true,
@@ -358,9 +322,9 @@ escreva(numeros)
     
 carrinho.adicionar('castanhas do planeta Parávion')
 carrinho.adicionar('carregador solar')
-carrinho.adicionar('kit de primeiros socorros')
+carrinho.adicionar('gorro')
 carrinho.adicionar('barras de cereais')
-carrinho.adicionar('baterias')
+carrinho.adicionar('canivete suíço')
 carrinho.adicionar('lanterna')
 carrinho.adicionar('casacos')
 carrinho.adicionar('cobertores')
@@ -377,7 +341,9 @@ carrinho.remover('luvas')
 carrinho.removerPrimeiro()
 carrinho.removerUltimo()
 
-escreva(carrinho.tamanho());
+var quantideDeItens = carrinho.tamanho()
+
+escreva(quantideDeItens)
 
 // Resultado: 6`,
     isRunnable: true,
@@ -411,9 +377,9 @@ escreva(carrinho.tamanho());
 
 carrinho.adicionar('castanhas do planeta Parávion')
 carrinho.adicionar('carregador solar')
-carrinho.adicionar('kit de primeiros socorros')
+carrinho.adicionar('gorro')
 carrinho.adicionar('barras de cereais')
-carrinho.adicionar('baterias')
+carrinho.adicionar('canivete suíço')
 carrinho.adicionar('lanterna')
 carrinho.adicionar('casacos')
 carrinho.adicionar('cobertores')
@@ -426,7 +392,9 @@ enquanto (carrinho.tamanho() > 0) {
   carrinho.removerUltimo()
 }
   
-escreva(carrinho.tamanho())
+var quantideDeItens = carrinho.tamanho()
+
+escreva(quantideDeItens)
 // Resultado: 0`,
     isRunnable: true,
   },
