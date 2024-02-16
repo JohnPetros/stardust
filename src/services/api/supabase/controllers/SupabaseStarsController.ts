@@ -49,7 +49,6 @@ export const SupabaseStarsController = (
         .single<{ id: string; users_unlocked_stars?: [] }>()
 
       if (error) {
-        console.error(error)
         return null
       }
 
