@@ -44,6 +44,8 @@ export function useDescription() {
 
       const { texts, description } = challenge
 
+      console.log({ texts })
+
       if (texts) {
         const mdxComponents = parseTextsToMdxComponents(texts)
 

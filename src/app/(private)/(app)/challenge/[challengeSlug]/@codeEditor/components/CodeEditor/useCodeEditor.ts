@@ -7,12 +7,11 @@ import type { ChallengeTestCase } from '@/@types/Challenge'
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 import { ConsoleRef } from '@/global/components/Console'
 import { EditorRef } from '@/global/components/Editor'
-import { REGEX, ROUTES, STORAGE } from '@/global/constants'
+import { ROUTES, STORAGE } from '@/global/constants'
 import { playAudio } from '@/global/helpers'
 import { execute } from '@/libs/delegua'
+import { useCode } from '@/services/code'
 import { useChallengeStore } from '@/stores/challengeStore'
-
-const inputCommandRegex = REGEX.input
 
 export function useCodeEditor() {
   const challenge = useChallengeStore((store) => store.state.challenge)
@@ -21,6 +20,8 @@ export function useCodeEditor() {
   const setUserOutput = useChallengeStore(
     (store) => store.actions.setUserOutput
   )
+
+  const { run, getInputCommands, addInput } = useCode()
 
   const initialCode =
     typeof window !== 'undefined'
@@ -59,48 +60,40 @@ export function useCodeEditor() {
     })
   }
 
+  function handleResult(result: string) {}
+
   function formatCode(
     code: string,
     { input }: Pick<ChallengeTestCase, 'input'>
   ) {
     if (!input.length) return code
 
-    const regex = new RegExp(inputCommandRegex, 'g')
-    const matches = code.match(regex)
+    const inputCommands = getInputCommands(code)
 
-    if (!matches) {
-      throw new Error('Não remova o comando Leia()!')
+    if (!inputCommands || inputCommands.length !== input.length) {
+      throw new Error('Não mexa em nenhum comando Leia()!')
     }
 
-    input.forEach(
-      (value) =>
-        (code = code.replace(
-          inputCommandRegex,
-          Array.isArray(value) ? `[${value}]` : value.toString()
-        ))
-    )
+    const codeWithInput = addInput(input, code)
 
-    return code
+    return codeWithInput
   }
 
   async function verifyTestCase(testCase: ChallengeTestCase, code: string) {
-    let userOutput = ''
     const { input } = testCase
 
     try {
       const formatedCode = formatCode(code, { input })
-      const { erros } = await execute(formatedCode, (output) => {
-        userOutput = output
-      })
+      console.log({ formatedCode })
+      const { output, result } = await run(formatedCode)
+      console.log({ output })
 
-      if (erros.length) {
-        const error = erros[0]
-        errorLine.current = error.linha ?? 0
-        if (error instanceof Error) throw error
-        throw error.erroInterno
+      if (challenge?.functionName) {
+        handleResult(result)
+        return
       }
 
-      return userOutput
+      return output
     } catch (error) {
       handleError(error as Error)
     }
@@ -109,7 +102,7 @@ export function useCodeEditor() {
   async function handleRunCode(code: string) {
     if (!challenge) return
 
-    const userOutput: string[] = []
+    const userOutput: string[][] = []
 
     for (const testCase of challenge.testCases) {
       const output = await verifyTestCase(testCase, code)

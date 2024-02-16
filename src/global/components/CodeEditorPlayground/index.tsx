@@ -31,9 +31,11 @@ export const CodeEditorPlaygroundComponent = (
     promptRef,
     runUserCode,
     handleCodeChange,
-    onPromptCancel,
-    onPromptConfirm,
+    handlePromptConfirm,
+    handlePromptCancel,
   } = useCodeEditorPlayground(code, onCodeChange)
+
+  console.log({ output })
 
   useImperativeHandle(
     ref,
@@ -47,28 +49,31 @@ export const CodeEditorPlaygroundComponent = (
   )
 
   return (
-    <div className="h-full w-full border-2 border-gray-700 pt-2">
-      <Editor
-        ref={editorRef}
-        width="100%"
-        height={height}
-        value={code}
-        isReadOnly={!isRunnable}
-        onChange={handleCodeChange}
-      />
-
-      {isRunnable && (
-        <Prompt
-          ref={promptRef}
-          onConfirm={onPromptConfirm}
-          onCancel={onPromptCancel}
+    <>
+      <div className="relative h-full w-full border-2 border-gray-700 pt-2">
+        <Editor
+          ref={editorRef}
+          width="100%"
+          height={height}
+          value={code}
+          isReadOnly={!isRunnable}
+          onChange={handleCodeChange}
         />
-      )}
 
+        {isRunnable && (
+          <Console ref={consoleRef} results={output} height={height} />
+        )}
+      </div>
       {isRunnable && (
-        <Console ref={consoleRef} results={output} height={height} />
+        <div className="hidden">
+          <Prompt
+            ref={promptRef}
+            onConfirm={handlePromptConfirm}
+            onCancel={handlePromptCancel}
+          />
+        </div>
       )}
-    </div>
+    </>
   )
 }
 

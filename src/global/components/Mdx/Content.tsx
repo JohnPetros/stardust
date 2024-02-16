@@ -13,7 +13,7 @@ const contentStyles = tv({
       alert: 'bg-yellow-400 text-yellow-900',
       quote: 'bg-blue-700 border-l-4 border-blue-300 text-blue-300',
       list: 'border-green-400 text-green-400',
-      user: 'bg-green-400 text-green-900 font-semibold ml-auto mr-4 w-max',
+      user: 'bg-green-400 text-green-900 font-semibold ml-auto mr-4',
     },
   },
 })

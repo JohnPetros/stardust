@@ -6,7 +6,7 @@ import type { Vote } from '@/@types/Vote'
 
 export type ChallengeStoreState = {
   challenge: Challenge | null
-  userOutput: string[]
+  userOutput: string[][]
   results: boolean[]
   mdx: string
   isEnd: boolean

@@ -6,6 +6,8 @@ import { PanInfo, useAnimation } from 'framer-motion'
 import { ConsoleProps } from '.'
 
 import { STORAGE } from '@/global/constants'
+import { useLocalStorage } from '@/global/hooks/useLocalStorage'
+import { useCode } from '@/services/code'
 
 export function useConsole({ height, results }: ConsoleProps) {
   const controls = useAnimation()
@@ -13,6 +15,13 @@ export function useConsole({ height, results }: ConsoleProps) {
   const [output, setOutput] = useState<string[]>([])
   const [isOpen, setIsOpen] = useState(false)
   const [shouldFormatOutput, setShouldFormatOutput] = useState(false)
+
+  const code = useCode()
+
+  const shouldFormatConsoleOutput = useLocalStorage<boolean>(
+    STORAGE.keys.shouldFormatConsoleOutput
+  )
+  const shouldPrettify = shouldFormatConsoleOutput.get() ?? false
 
   const outputTypes = useRef<string[]>([])
 
@@ -30,31 +39,12 @@ export function useConsole({ height, results }: ConsoleProps) {
     controls.start('closed')
   }, [controls])
 
-  const formatOutput = useCallback(
-    (output: string, index: number) => {
-      if (!shouldFormatOutput) return output
-
-      const outputType = outputTypes.current[index].trim()
-
-      switch (outputType) {
-        case 'texto':
-          return '"' + output + '"'
-        case 'vetor':
-          return '[ ' + output.split(',').join(', ') + ' ]'
-        case 'number':
-          return `@number${output}`
-        default:
-          return output
-      }
-    },
-    [shouldFormatOutput]
-  )
-
   function handleToggleFormatOutput() {
     localStorage.setItem(
       STORAGE.keys.shouldFormatConsoleOutput,
       String(!shouldFormatOutput)
     )
+
     setShouldFormatOutput(!shouldFormatOutput)
   }
 
@@ -68,15 +58,10 @@ export function useConsole({ height, results }: ConsoleProps) {
     setOutput([])
     if (!results.length) return
 
-    outputTypes.current = results.filter((_, index) => index % 2 === 0)
-    const output = results.filter((_, index) => index % 2 !== 0)
-
-    const formattedOutput = output.map((output, index) =>
-      formatOutput(output.trim(), index)
-    )
+    const formattedOutput = code.formatOutput(results, shouldPrettify)
 
     setOutput(formattedOutput)
-  }, [results, formatOutput])
+  }, [results])
 
   useEffect(() => {
     const shouldFormatConsoleOutput = Boolean(

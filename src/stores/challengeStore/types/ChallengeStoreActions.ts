@@ -6,7 +6,7 @@ import type { Vote } from '@/@types/Vote'
 
 export type ChallengeStoreActions = {
   setChallenge: (challenge: Challenge) => void
-  setUserOutput: (challenge: string[]) => void
+  setUserOutput: (challenge: string[][]) => void
   setResults: (results: boolean[]) => void
   setMdx: (mdx: string) => void
   setUserVote: (useVote: Vote) => void

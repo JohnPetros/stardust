@@ -33,12 +33,7 @@ export function useVerificationButton({
 
   const handleGlobalKeyDown = useCallback(
     ({ key }: KeyboardEvent) => {
-      if (
-        key === 'Enter' &&
-        isAnswered &&
-        !buttonHasFocus.current &&
-        pathname.includes('/lesson')
-      ) {
+      if (key === 'Enter' && isAnswered && pathname.includes('/lesson')) {
         answerHandler()
       }
     },

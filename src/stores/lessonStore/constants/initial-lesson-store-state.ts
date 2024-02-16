@@ -1,7 +1,7 @@
 import type { LessonStoreState } from '../types/LessonStoreState'
 
 export const INITIAL_LESSON_STORE_STATE: LessonStoreState = {
-  currentStage: 'theory',
+  currentStage: 'quiz',
   mdxComponentsCount: 0,
   renderedMdxComponents: 0,
   questions: [],

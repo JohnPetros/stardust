@@ -1,5 +1,9 @@
+import { useMemo } from 'react'
+
 import { useDelegua } from './delegua'
 
 export function useCode() {
-  return useDelegua()
+  const delegua = useDelegua()
+
+  return useMemo(() => delegua, [delegua])
 }

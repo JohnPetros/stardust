@@ -30,7 +30,7 @@ const challengeStore: StateCreator<
       })
     },
 
-    setUserOutput(userOutput: string[]) {
+    setUserOutput(userOutput: string[][]) {
       return set(({ state }) => {
         state.userOutput = userOutput
       })

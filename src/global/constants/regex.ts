@@ -19,3 +19,20 @@ export const REGEX = {
   componentName: /<(\w+)[\s\S]*?>/,
   mdxCodeComponent: /<Code[^>]*>[\s\S]*?<\/Code>/gi,
 }
+
+/**
+ * function formatOutput(output) {
+  if (Array.isArray(output)) {
+    // Map each element in the array to its formatted output
+    const formattedElements = output.map(formatOutput);
+    // Join the formatted elements with commas and wrap in brackets
+    return '[' + formattedElements.join(', ') + ']';
+  }
+
+  // Replace quotes only if the output is a string
+  return output;
+}
+
+const output = [['"text in double quote"',  1,  [2]],  1,  'verdadeiro'];
+console.log(formatOutput(output));
+ */

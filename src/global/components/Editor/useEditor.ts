@@ -7,11 +7,14 @@ import type monaco from 'monaco-editor'
 import { CursorPosition } from '.'
 
 import { THEMES } from '@/global/constants'
-import { getDeleguaLanguageTokens } from '@/global/helpers/getDeleguaLanguageTokens'
+import { useCode } from '@/services/code'
 import { colors } from '@/styles/colors'
 
 export function useEditor(value: string) {
   const monaco = useMonaco()
+
+  const { getMonacoEditorConfig } = useCode()
+
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
 
   function getEditorRules() {
@@ -75,14 +78,13 @@ export function useEditor(value: string) {
 
     monaco.languages.register({ id: 'delegua' })
 
-    monaco.languages.setMonarchTokensProvider(
-      'delegua',
-      getDeleguaLanguageTokens()
-    )
+    const monacoEditorConfig = getMonacoEditorConfig()
+
+    monaco.languages.setMonarchTokensProvider('delegua', monacoEditorConfig)
 
     const rules = getEditorRules()
 
-    monaco.editor.defineTheme('delegua-theme', {
+    monaco.editor.defineTheme('editor-theme', {
       base: 'vs-dark',
       inherit: true,
       rules,
@@ -91,18 +93,18 @@ export function useEditor(value: string) {
       },
     })
 
-    monaco.editor.setTheme('delegua-theme')
+    monaco.editor.setTheme('editor-theme')
   }
 
   useEffect(() => {
     const rules = getEditorRules()
 
-    monaco?.editor.defineTheme('delegua-theme', {
+    monaco?.editor.defineTheme('editor-theme', {
       base: 'vs-dark',
       inherit: true,
       rules,
       colors: {
-        'editor.background': '#1E2626',
+        'editor.background': colors.gray[800],
       },
     })
   }, [monaco?.editor])

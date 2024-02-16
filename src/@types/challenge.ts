@@ -3,10 +3,17 @@ import type { Text } from './Text'
 
 export type ChallengeDifficulty = 'easy' | 'medium' | 'hard'
 
+export type ChallengeTestCaseInput = (string | number)[] | (string | number)[][]
+
+export type ChallengeTestCaseExpectedOutput =
+  | string
+  | number
+  | (string | number)[]
+
 export type ChallengeTestCase = {
   id: number
-  input: (string | number)[] | (string | number)[][]
-  expectedOutput: string | number | (string | number)[]
+  input: ChallengeTestCaseInput
+  expectedOutput: ChallengeTestCaseExpectedOutput
   isLocked: boolean
 }
 
