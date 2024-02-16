@@ -2,6 +2,7 @@ import { AnimatePresence, motion, Variants } from 'framer-motion'
 import Lottie from 'lottie-react'
 
 import TransitionAnimation from '../../../../public/animations/transition.json'
+import { Mdx } from '../Mdx'
 
 import { usePageTransitionAnimation } from './usePageTransitionAnimation'
 
@@ -29,7 +30,7 @@ const apolloVariants: Variants = {
   },
 }
 
-interface TransitionPageAnimationProps {
+type TransitionPageAnimationProps = {
   isVisible: boolean
   hasTips?: boolean
 }
@@ -58,12 +59,9 @@ export function PageTransitionAnimation({
               loop={true}
             />
             {hasTips && codeTip && (
-              <p
-                className="mx-auto w-[32rem] max-w-[90%] -translate-y-10 rounded-md bg-gray-700 p-2 text-center leading-8 text-gray-100"
-                dangerouslySetInnerHTML={{
-                  __html: `Dica: ${formatText(codeTip)}.`,
-                }}
-              />
+              <div className="mx-auto w-[32rem] max-w-[90%] -translate-y-10 rounded-md bg-gray-700 p-2 text-center leading-8 text-gray-100">
+                <Mdx>{codeTip}</Mdx>
+              </div>
             )}
           </motion.div>
         </motion.div>
