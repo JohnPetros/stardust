@@ -10,7 +10,14 @@ import { CodeReturn } from '../types/CodeReturn'
 
 import { DELEGUA_TOKENS } from './constants/delegua-tokens'
 import { DELEGUA_REGEX } from './constants/regex'
-import { getDeleguaMonacoEditorConfig } from './helpers/getDeleguaMonacoEditorConfig'
+import { adicioneTipo } from './helpers/adicioneTipo'
+import { pegueConfiguracaoDeleguaParaEditorMonaco } from './helpers/pegueConfiguracaoDeleguaParaEditorMonaco'
+
+import type {
+  ChallengeTestCaseExpectedOutput,
+  ChallengeTestCaseInput,
+} from '@/@types/Challenge'
+import { checkNumeric } from '@/global/helpers'
 
 const SEPARADOR = '@delegua-separador'
 
@@ -19,11 +26,21 @@ export function useDelegua(): ICode {
   const avaliadorSintatico = new AvaliadorSintatico()
 
   return {
-    async execute(code: string) {
-      let saida: string = ''
+    async run(code: string) {
+      const saida: string[] = []
+
+      const codigo = adicioneTipo(code)
 
       function funcaoDeSaida(novaSaida: string) {
-        saida = novaSaida
+        /**
+         * ???
+         *  if (output === 'vetor' && currentOutput.at(-1) === 'texto') {
+        return [...currentOutput, 'lista']
+      }
+
+      return [...currentOutput, output]
+         */
+        saida.push(novaSaida)
       }
 
       const interpretador = new InterpretadorBase(
@@ -32,7 +49,8 @@ export function useDelegua(): ICode {
         funcaoDeSaida,
         funcaoDeSaida
       )
-      const resultadoLexador = lexador.mapear(code.split('\n'), -1)
+
+      const resultadoLexador = lexador.mapear(codigo.split('\n'), -1)
       const resultadoAvaliacaoSintatica = avaliadorSintatico.analisar(
         resultadoLexador,
         0
@@ -46,10 +64,9 @@ export function useDelegua(): ICode {
       if (erros.length) {
         const erro = erros[0]
         const linhaDoErro = erro.linha ?? 0
-        if (erro instanceof Error)
-          throw `mensagem:${erro}${SEPARADOR}linha${linhaDoErro}`
+        if (erro instanceof Error) throw `${erro}${SEPARADOR}${linhaDoErro}`
 
-        throw `mensagem:${erro.erroInterno}${SEPARADOR}linha${linhaDoErro}`
+        throw `${erro.erroInterno}${SEPARADOR}${linhaDoErro}`
       }
 
       const codeReturn: CodeReturn = {
@@ -60,9 +77,19 @@ export function useDelegua(): ICode {
       return codeReturn
     },
 
-    formatOutput(output: string) {
+    formatOutput(output: string[], shouldPrettify: boolean) {
       let saidasFormatadas: string[] = []
       let tipos: string[] = []
+
+      function formateItemDeVetor(item: string) {
+        const eDoTipoLogico = ['verdadeiro', 'falso'].includes(item)
+        if (eDoTipoLogico) return item
+
+        const eNumerico = checkNumeric(item)
+        if (eNumerico) return item
+
+        return `"${item}"`
+      }
 
       function formateSaida(saida: string, indice: number) {
         const tipo = tipos[indice].trim()
@@ -71,20 +98,37 @@ export function useDelegua(): ICode {
           case 'texto':
             return '"' + saida + '"'
           case 'vetor':
-            return '[ ' + saida.split(',').join(', ') + ' ]'
+            return (
+              '[ ' + saida.split(',').map(formateItemDeVetor).join(', ') + ' ]'
+            )
           default:
             return saida
         }
       }
 
-      const tiposESaidas = output.split(SEPARADOR)
+      tipos = output.filter((_, index) => index % 2 === 0)
+      const saidas = output.filter((_, index) => index % 2 !== 0)
 
-      tipos = tiposESaidas.filter((_, index) => index % 2 === 0)
-      const saidas = tiposESaidas.filter((_, index) => index % 2 === 0)
-
-      saidasFormatadas = saidas.map(formateSaida)
+      saidasFormatadas = shouldPrettify ? saidas.map(formateSaida) : saidas
 
       return saidasFormatadas
+    },
+
+    desformatOutput(formmattedOutput: ChallengeTestCaseExpectedOutput[]) {
+      function desformatarVetor(vetor: ChallengeTestCaseExpectedOutput[]) {
+        return vetor.reduce((itens, itemAtual) => {
+          if (Array.isArray(itemAtual)) {
+            itens.push(...desformatarVetor(itemAtual))
+          } else {
+            itens.push(String(itemAtual).replace(/"/g, ''))
+          }
+          return itens
+        }, [] as ChallengeTestCaseExpectedOutput[])
+      }
+
+      const saidaDesformatada = desformatarVetor(formmattedOutput)
+
+      return saidaDesformatada.join(',')
     },
 
     getInput(code: string) {
@@ -99,11 +143,32 @@ export function useDelegua(): ICode {
     },
 
     getMonacoEditorConfig() {
-      return getDeleguaMonacoEditorConfig()
+      return pegueConfiguracaoDeleguaParaEditorMonaco()
     },
 
-    handleError(error: Error) {
-      const [mensagemDoError, linhaDoErro] = error.message.split(';')
+    getInputCommands(code: string) {
+      const regex = new RegExp(DELEGUA_REGEX.leia, 'g')
+      const comandosLeia = code.match(regex)
+
+      return comandosLeia ? comandosLeia.map(String) : null
+    },
+
+    addInput(input: ChallengeTestCaseInput, code: string) {
+      const regex = new RegExp(DELEGUA_REGEX.leia, 'g')
+
+      input.forEach(
+        (value) =>
+          (code = code.replace(
+            regex,
+            Array.isArray(value) ? `[${value}]` : value.toString()
+          ))
+      )
+
+      return code
+    },
+
+    handleError(error: string) {
+      const [mensagemDoError, linhaDoErro] = error.split(SEPARADOR)
 
       const mensagem = mensagemDoError.includes('null')
         ? 'Código inválido'
