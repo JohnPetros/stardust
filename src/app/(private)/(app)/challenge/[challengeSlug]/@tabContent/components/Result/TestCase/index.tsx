@@ -10,6 +10,7 @@ import { useTestCase } from './useTestCase'
 
 import type { ChallengeTestCase } from '@/@types/Challenge'
 import { AnimatedArrow } from '@/global/components/AnimatedArrow'
+import { useCode } from '@/services/code'
 
 const contentAnimations: Variants = {
   up: {
@@ -24,7 +25,7 @@ type TestCaseProps = {
   index: number
   data: ChallengeTestCase
   isCorrect: boolean
-  userOutput: string
+  userOutput: string[]
 }
 
 export function TestCase({
@@ -35,14 +36,17 @@ export function TestCase({
 }: TestCaseProps) {
   const { isOpen, formatOutput, handleButtonClick } = useTestCase(
     isLocked,
+    isCorrect,
     userOutput
   )
+
+  const code = useCode()
 
   return (
     <div
       className={twMerge(
         'w-full rounded-md bg-gray-900 p-6',
-        isLocked ? 'opacity-[0.7]' : 'opacity-1'
+        isLocked && !isCorrect ? 'opacity-[0.7]' : 'opacity-1'
       )}
     >
       <header className="flex items-center justify-between">
@@ -95,12 +99,16 @@ export function TestCase({
             />
             <Field
               label="Seu resultado"
-              value={userOutput ? formatOutput(userOutput) : 'Sem resultado'}
+              value={
+                userOutput
+                  ? code.formatOutput(userOutput, true)[0]
+                  : 'Sem resultado'
+              }
               isFromUser={true}
             />
             <Field
               label="Resultado esperado"
-              value={formatOutput(expectedOutput)}
+              value={formatOutput(expectedOutput).toString()}
             />
           </motion.dl>
         )}

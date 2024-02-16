@@ -10,8 +10,8 @@ import {
 } from '@/@types/Rewards'
 import { _setCookie } from '@/global/actions/_setCookie'
 import { COOKIES, ROUTES, STORAGE } from '@/global/constants'
-import { compareArrays } from '@/global/helpers'
 import { useBreakpoint } from '@/global/hooks/useBreakpoint'
+import { useCode } from '@/services/code'
 import { useChallengeStore } from '@/stores/challengeStore'
 
 export function useResult() {
@@ -25,6 +25,8 @@ export function useResult() {
     },
     actions: { incrementIncorrectAswersAmount, setResults, setIsEnd },
   } = useChallengeStore()
+
+  const code = useCode()
 
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false)
   const [isAnswerVerified, setIsAnswerVerified] = useState(false)
@@ -106,21 +108,11 @@ export function useResult() {
 
     const { testCases } = challenge
 
-    function verifyResult(
-      { expectedOutput }: ChallengeTestCase,
-      index: number
-    ) {
-      const userResult = userOutput[index]
+    function verifyResult(testCase: ChallengeTestCase, index: number) {
+      const output = code.formatOutput(userOutput[index], false)[0]
+      const expectedOutput = code.desformatOutput([testCase.expectedOutput])
 
-      console.log({ expectedOutput })
-      console.log({ userResult })
-
-      const isCorrect = compareArrays(
-        Array.isArray(userResult) ? userResult : [userResult.toString().trim()],
-        Array.isArray(expectedOutput)
-          ? expectedOutput
-          : [expectedOutput.toString().trim()]
-      )
+      const isCorrect = output === expectedOutput
 
       return isCorrect
     }

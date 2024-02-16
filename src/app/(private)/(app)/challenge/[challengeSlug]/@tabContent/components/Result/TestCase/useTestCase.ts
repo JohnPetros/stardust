@@ -2,18 +2,24 @@
 
 import { useEffect, useState } from 'react'
 
-import { REGEX } from '@/global/constants'
+import { ChallengeTestCaseExpectedOutput } from '@/@types/Challenge'
 
-export function useTestCase(isLocked: boolean, userOutput: string) {
+export function useTestCase(
+  isLocked: boolean,
+  isCorrect: boolean,
+  userOutput: string[]
+) {
   const [isOpen, setIsOpen] = useState(false)
 
-  function formatOutput(value: string | number | (string | number)[]) {
-    if (Array.isArray(value)) {
-      return '[ ' + value.join(', ') + ' ]'
+  function formatOutput(
+    output: ChallengeTestCaseExpectedOutput
+  ): ChallengeTestCaseExpectedOutput {
+    if (Array.isArray(output)) {
+      const formattedElements = output.map(formatOutput)
+      return '[ ' + formattedElements.join(', ') + ' ]'
     }
 
-    const regex = REGEX.insideQuotes
-    return value.toString().replace(regex, '$2')
+    return output
   }
 
   function handleButtonClick() {
@@ -21,10 +27,10 @@ export function useTestCase(isLocked: boolean, userOutput: string) {
   }
 
   useEffect(() => {
-    if (userOutput && !isLocked) {
+    if (userOutput && (!isLocked || isCorrect)) {
       setIsOpen(true)
     }
-  }, [userOutput, isLocked])
+  }, [userOutput, isLocked, isCorrect])
 
   return {
     isOpen,
