@@ -35,7 +35,7 @@ export function SelectionQuestion({
       )}
 
       <RadioGroup.Root className="mt-6 space-y-2 ">
-        {reorderedOptions.map((option) => (
+        {reorderedOptions.map((option, index) => (
           <Option
             key={option}
             label={option}
@@ -45,6 +45,7 @@ export function SelectionQuestion({
               isAnswerVerified && isAnswerCorrect && option === answer
             }
             onClick={() => setSelectedOption(option)}
+            hasAutoFocus={index === 0}
           />
         ))}
       </RadioGroup.Root>

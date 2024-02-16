@@ -21,7 +21,11 @@ export function OpenQuestion({
     <>
       <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
-      {code && <CodeSnippet code={code} isRunnable={false} />}
+      {code && (
+        <div className="mt-3 w-full">
+          <CodeSnippet code={code} isRunnable={false} />
+        </div>
+      )}
 
       <ul className="mt-12 space-y-6">
         {lines.map((line) => {

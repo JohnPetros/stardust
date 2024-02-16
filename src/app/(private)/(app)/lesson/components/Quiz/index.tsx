@@ -20,8 +20,13 @@ type QuizProps = {
 }
 
 export function Quiz({ leaveLesson }: QuizProps) {
-  const { answerHandler, isAnswerVerified, isAnswerCorrect, isAnswered } =
-    useLessonStore((store) => store.state)
+  const {
+    answerHandler,
+    isAnswerVerified,
+    isAnswerCorrect,
+    isAnswered,
+    currentQuestionIndex,
+  } = useLessonStore((store) => store.state)
   const { alertDialogRef, currentQuestion } = useQuiz()
 
   if (currentQuestion) {
@@ -29,35 +34,40 @@ export function Quiz({ leaveLesson }: QuizProps) {
       <div className="flex flex-col">
         <div className="mt-12 flex h-[calc(100vh-8rem)] w-full overflow-auto">
           <AnimatePresence>
-            {currentQuestion.content.type === 'selection' && (
-              <QuestionContainer id={currentQuestion.order}>
-                <SelectionQuestion data={currentQuestion.content} />
-              </QuestionContainer>
-            )}
+            {currentQuestion.content.type === 'selection' &&
+              currentQuestion.index === currentQuestionIndex && (
+                <QuestionContainer id={currentQuestion.order}>
+                  <SelectionQuestion data={currentQuestion.content} />
+                </QuestionContainer>
+              )}
 
-            {currentQuestion.content.type === 'open' && (
-              <QuestionContainer id={currentQuestion.order}>
-                <OpenQuestion data={currentQuestion.content} />
-              </QuestionContainer>
-            )}
+            {currentQuestion.content.type === 'open' &&
+              currentQuestion.index === currentQuestionIndex && (
+                <QuestionContainer id={currentQuestion.order}>
+                  <OpenQuestion data={currentQuestion.content} />
+                </QuestionContainer>
+              )}
 
-            {currentQuestion.content.type === 'checkbox' && (
-              <QuestionContainer id={currentQuestion.order}>
-                <CheckboxQuestion data={currentQuestion.content} />
-              </QuestionContainer>
-            )}
+            {currentQuestion.content.type === 'checkbox' &&
+              currentQuestion.index === currentQuestionIndex && (
+                <QuestionContainer id={currentQuestion.order}>
+                  <CheckboxQuestion data={currentQuestion.content} />
+                </QuestionContainer>
+              )}
 
-            {currentQuestion.content.type === 'drag-and-drop' && (
-              <QuestionContainer id={currentQuestion.order}>
-                <DragAndDropQuestion data={currentQuestion.content} />
-              </QuestionContainer>
-            )}
+            {currentQuestion.content.type === 'drag-and-drop' &&
+              currentQuestion.index === currentQuestionIndex && (
+                <QuestionContainer id={currentQuestion.order}>
+                  <DragAndDropQuestion data={currentQuestion.content} />
+                </QuestionContainer>
+              )}
 
-            {currentQuestion.content.type === 'drag-and-drop-list' && (
-              <QuestionContainer id={currentQuestion.order}>
-                <DragAndDropListQuestion data={currentQuestion.content} />
-              </QuestionContainer>
-            )}
+            {currentQuestion.content.type === 'drag-and-drop-list' &&
+              currentQuestion.index === currentQuestionIndex && (
+                <QuestionContainer id={currentQuestion.order}>
+                  <DragAndDropListQuestion data={currentQuestion.content} />
+                </QuestionContainer>
+              )}
           </AnimatePresence>
 
           <AlertDialog

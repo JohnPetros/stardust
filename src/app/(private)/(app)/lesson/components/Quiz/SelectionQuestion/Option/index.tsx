@@ -33,6 +33,7 @@ export type OptionProps = {
   isSelected: boolean
   isAnswerIncorrect: boolean
   isAnswerCorrect: boolean
+  hasAutoFocus?: boolean
 }
 
 export function Option({
@@ -41,6 +42,7 @@ export function Option({
   isAnswerIncorrect,
   isAnswerCorrect,
   isSelected,
+  hasAutoFocus = false,
 }: OptionProps) {
   const { id, color } = useOption({
     isAnswerIncorrect,
@@ -57,6 +59,7 @@ export function Option({
         htmlFor={id}
         onClick={onClick}
         onFocus={onClick}
+        autoFocus={hasAutoFocus}
         className={optionStyles({ color })}
       >
         {label}
