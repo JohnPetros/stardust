@@ -65,14 +65,23 @@ export function useDelegua(): ICode {
       }
 
       console.log('delegua', { saida })
+      console.log({ shouldReturnResult })
 
       let result: string | boolean = ''
 
       if (resultado.length && shouldReturnResult) {
-        result = (JSON.parse(resultado[0]) as { valor: string | boolean }).valor
-        if (result === true) result = 'verdadeiro'
-        if (result === false) result = 'falso'
+        for (const valor of resultado) {
+          if (valor.includes('valor')) {
+            result = (JSON.parse(resultado[0]) as { valor: string | boolean })
+              .valor
+            if (result === true) result = 'verdadeiro'
+            if (result === false) result = 'falso'
+            break
+          }
+        }
       }
+
+      console.log('result', result)
 
       const codeReturn: CodeReturn = {
         result: result,

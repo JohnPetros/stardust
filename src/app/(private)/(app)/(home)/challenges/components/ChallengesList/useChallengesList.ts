@@ -54,7 +54,11 @@ export function useChallengesList(categories: Category[]) {
         title,
       })
 
-      return sortChallengesByDifficulty(challenges)
+      const filteredChallenges = challenges.filter(
+        (challenge) => challenge.starId === null
+      )
+
+      return sortChallengesByDifficulty(filteredChallenges)
     }
   }
 

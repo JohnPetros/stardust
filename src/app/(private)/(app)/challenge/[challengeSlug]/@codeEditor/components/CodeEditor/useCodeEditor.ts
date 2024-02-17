@@ -61,7 +61,7 @@ export function useCodeEditor() {
     code: string,
     { input }: Pick<ChallengeTestCase, 'input'>
   ) {
-    if (!input.length || !challenge) return code
+    if (!challenge) return code
 
     if (challenge.functionName) {
       return addFunction(challenge.functionName, input, code)
@@ -112,6 +112,8 @@ export function useCodeEditor() {
     playAudio('running-code.wav')
 
     console.log({ userOutput })
+
+    return
 
     if (userOutput.length) {
       setUserOutput(userOutput)
