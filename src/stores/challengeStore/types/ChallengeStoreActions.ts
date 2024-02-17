@@ -1,12 +1,15 @@
 import type { PanelsLayout } from './PanelsLayout'
 import type { TabHandler } from './TabHandler'
 
-import type { Challenge } from '@/@types/Challenge'
+import type {
+  Challenge,
+  ChallengeTestCaseExpectedOutput,
+} from '@/@types/Challenge'
 import type { Vote } from '@/@types/Vote'
 
 export type ChallengeStoreActions = {
   setChallenge: (challenge: Challenge) => void
-  setUserOutput: (challenge: string[][]) => void
+  setUserOutput: (userOutput: ChallengeTestCaseExpectedOutput[]) => void
   setResults: (results: boolean[]) => void
   setMdx: (mdx: string) => void
   setUserVote: (useVote: Vote) => void

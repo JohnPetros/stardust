@@ -1,12 +1,15 @@
 import type { PanelsLayout } from './PanelsLayout'
 import type { TabHandler } from './TabHandler'
 
-import type { Challenge } from '@/@types/Challenge'
+import type {
+  Challenge,
+  ChallengeTestCaseExpectedOutput,
+} from '@/@types/Challenge'
 import type { Vote } from '@/@types/Vote'
 
 export type ChallengeStoreState = {
   challenge: Challenge | null
-  userOutput: string[][]
+  userOutput: ChallengeTestCaseExpectedOutput[]
   results: boolean[]
   mdx: string
   isEnd: boolean
