@@ -1,8 +1,10 @@
 'use client'
 
-import { AvaliadorSintatico } from '@designliquido/delegua/fontes/avaliador-sintatico/'
-import { InterpretadorBase } from '@designliquido/delegua/fontes/interpretador'
-import { Lexador } from '@designliquido/delegua/fontes/lexador'
+import {
+  AvaliadorSintatico,
+  InterpretadorBase,
+  Lexador,
+} from '@designliquido/delegua'
 
 import { ICode } from '../interfaces/ICode'
 import { CodeError } from '../types/CodeError'
@@ -21,7 +23,7 @@ import { checkNumeric } from '@/global/helpers'
 const SEPARADOR = '@delegua-separador'
 
 export function useDelegua(): ICode {
-  const lexador = new Lexador(false)
+  const lexador = new Lexador()
   const avaliadorSintatico = new AvaliadorSintatico()
 
   return {
@@ -64,10 +66,13 @@ export function useDelegua(): ICode {
 
       console.log('delegua', { saida })
 
-      let result = ''
+      let result: string | boolean = ''
 
-      if (resultado.length && shouldReturnResult)
-        result = (JSON.parse(resultado[0]) as { valor: string }).valor
+      if (resultado.length && shouldReturnResult) {
+        result = (JSON.parse(resultado[0]) as { valor: string | boolean }).valor
+        if (result === true) result = 'verdadeiro'
+        if (result === false) result = 'falso'
+      }
 
       const codeReturn: CodeReturn = {
         result: result,
@@ -87,18 +92,22 @@ export function useDelegua(): ICode {
 
     desformatOutput(output: ChallengeTestCaseExpectedOutput) {
       if (Array.isArray(output)) {
-        return output.join(',')
+        return '[' + output.join(',').replace(/"/g, '') + ']'
       }
 
       return String(output)
     },
 
-    formatOutput(output: string, shouldPrettify: boolean = false) {
+    formatOutput(output: string) {
       const eNumerico = checkNumeric(output)
 
       if (eNumerico) return Number(output)
 
-      return shouldPrettify ? `"${output}"` : output
+      const eVetor = output.at(0) === '[' && output.at(-1) === ']'
+
+      if (eVetor) return output
+
+      return `"${output}"`
     },
 
     getInput(code: string) {

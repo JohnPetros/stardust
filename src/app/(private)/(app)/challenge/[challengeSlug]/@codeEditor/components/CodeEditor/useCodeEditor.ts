@@ -84,7 +84,10 @@ export function useCodeEditor() {
     try {
       const formattedCode = formatCode(code, { input })
 
-      const { output, result } = await run(formattedCode)
+      const { output, result } = await run(
+        formattedCode,
+        Boolean(challenge?.functionName)
+      )
 
       if (challenge?.functionName) {
         return result

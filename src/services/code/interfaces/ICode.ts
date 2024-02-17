@@ -12,7 +12,7 @@ import type {
 export interface ICode {
   run(code: string, shouldReturnResult: boolean): Promise<CodeReturn>
   formatResult(result: unknown): string
-  formatOutput(output: string, shouldPrettify: boolean): string | number
+  formatOutput(output: string): string | number
   desformatOutput(result: ChallengeTestCaseExpectedOutput): string
   getInput(code: string): string
   getInputCommands(code: string): string[] | null

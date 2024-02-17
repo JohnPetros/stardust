@@ -132,12 +132,12 @@ export function useResult() {
 
       const expectedOutput = code.desformatOutput(testCase.expectedOutput)
 
-      // console.log({ output })
-      // console.log(testCase.expectedOutput)
+      console.log({ output })
+      console.log({ expectedOutput })
 
-      // const isCorrect = output === expectedOutput
+      const isCorrect = output === expectedOutput
 
-      return false
+      return isCorrect
     }
 
     if (userOutput.length === testCases.length) {
