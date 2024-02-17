@@ -15,6 +15,7 @@
     "gen-supabase-types": "supabase gen types typescript --project-id %PROJECT_ID% > ./src/services/api/supabase/types/Database.ts"
   },
   "dependencies": {
+    "@designliquido/delegua": "^0.33.5",
     "@dnd-kit/core": "^6.0.8",
     "@dnd-kit/modifiers": "^6.0.1",
     "@dnd-kit/sortable": "^7.0.2",
