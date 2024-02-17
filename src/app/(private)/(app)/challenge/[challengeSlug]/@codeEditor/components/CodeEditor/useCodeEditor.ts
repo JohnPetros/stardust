@@ -9,7 +9,6 @@ import { ConsoleRef } from '@/global/components/Console'
 import { EditorRef } from '@/global/components/Editor'
 import { ROUTES, STORAGE } from '@/global/constants'
 import { playAudio } from '@/global/helpers'
-import { execute } from '@/libs/delegua'
 import { useCode } from '@/services/code'
 import { useChallengeStore } from '@/stores/challengeStore'
 
@@ -21,7 +20,8 @@ export function useCodeEditor() {
     (store) => store.actions.setUserOutput
   )
 
-  const { run, getInputCommands, addInput } = useCode()
+  const { run, getInputCommands, addInput, addFunction, handleError } =
+    useCode()
 
   const initialCode =
     typeof window !== 'undefined'
@@ -39,20 +39,17 @@ export function useCodeEditor() {
   const editorRef = useRef<EditorRef>(null)
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
   const consoleRef = useRef<ConsoleRef>(null)
-  const errorLine = useRef(0)
 
   const [codeEditorHeight, setCodeEditorHeight] = useState(0)
 
-  function getErrorLine() {
-    return errorLine.current > 0 ? `</br>Linha: ${errorLine.current}` : ''
+  function getErrorLine(line: number) {
+    return line > 0 ? `</br>Linha: ${line}` : ''
   }
 
-  function handleError(error: Error) {
-    const { message } = error
+  function handleCodeError(error: string) {
+    const { message, line } = handleError(error)
 
-    const toastMessage = message.includes('null')
-      ? 'Código inválido'
-      : `${message}` + getErrorLine()
+    const toastMessage = `${message}` + getErrorLine(line)
 
     toast.show(toastMessage, {
       type: 'error',
@@ -60,13 +57,15 @@ export function useCodeEditor() {
     })
   }
 
-  function handleResult(result: string) {}
-
   function formatCode(
     code: string,
     { input }: Pick<ChallengeTestCase, 'input'>
   ) {
-    if (!input.length) return code
+    if (!input.length || !challenge) return code
+
+    if (challenge.functionName) {
+      return addFunction(challenge.functionName, input, code)
+    }
 
     const inputCommands = getInputCommands(code)
 
@@ -83,26 +82,24 @@ export function useCodeEditor() {
     const { input } = testCase
 
     try {
-      const formatedCode = formatCode(code, { input })
-      console.log({ formatedCode })
-      const { output, result } = await run(formatedCode)
-      console.log({ output })
+      const formattedCode = formatCode(code, { input })
+
+      const { output, result } = await run(formattedCode)
 
       if (challenge?.functionName) {
-        handleResult(result)
-        return
+        return result
       }
 
       return output
     } catch (error) {
-      handleError(error as Error)
+      handleCodeError(String(error))
     }
   }
 
   async function handleRunCode(code: string) {
     if (!challenge) return
 
-    const userOutput: string[][] = []
+    const userOutput: string[] = []
 
     for (const testCase of challenge.testCases) {
       const output = await verifyTestCase(testCase, code)
@@ -111,9 +108,11 @@ export function useCodeEditor() {
 
     playAudio('running-code.wav')
 
+    console.log({ userOutput })
+
     if (userOutput.length) {
       setUserOutput(userOutput)
-      router.push(`${ROUTES.private.challenge}/${challenge.slug}/result`)
+      router.push(`${ROUTES.private.challenge}/${challenge?.slug}/result`)
     }
   }
 

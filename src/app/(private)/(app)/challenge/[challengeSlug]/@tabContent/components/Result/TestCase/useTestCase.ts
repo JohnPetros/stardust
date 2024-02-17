@@ -2,25 +2,14 @@
 
 import { useEffect, useState } from 'react'
 
-import { ChallengeTestCaseExpectedOutput } from '@/@types/Challenge'
+import type { ChallengeTestCaseExpectedOutput } from '@/@types/Challenge'
 
 export function useTestCase(
   isLocked: boolean,
   isCorrect: boolean,
-  userOutput: string[]
+  userOutput: ChallengeTestCaseExpectedOutput | null
 ) {
   const [isOpen, setIsOpen] = useState(false)
-
-  function formatOutput(
-    output: ChallengeTestCaseExpectedOutput
-  ): ChallengeTestCaseExpectedOutput {
-    if (Array.isArray(output)) {
-      const formattedElements = output.map(formatOutput)
-      return '[ ' + formattedElements.join(', ') + ' ]'
-    }
-
-    return output
-  }
 
   function handleButtonClick() {
     setIsOpen(!isOpen)
@@ -34,7 +23,6 @@ export function useTestCase(
 
   return {
     isOpen,
-    formatOutput,
     handleButtonClick,
   }
 }

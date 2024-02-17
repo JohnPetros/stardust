@@ -9,24 +9,24 @@ export const texts: Text[] = [
   },
   {
     type: 'default',
-    content: 'Temos um vetor com várias coordenadas diferentes:',
+    content: 'Temos uma lista com várias coordenadas diferentes:',
     picture: 'panda-olhando-computador.jpg',
   },
   {
     type: 'code',
     content: `var coordenadas = [
-  "x:12;y:6", 
-  "x:70;y:32", 
-  "x:25;y:18", 
-  "x:8;y:40", 
-]
-escreva(coordenadas)`,
+    "x:12;y:6", 
+    "x:70;y:32", 
+    "x:25;y:18", 
+    "x:8;y:40", 
+  ]
+  escreva(coordenadas)`,
     isRunnable: true,
   },
   {
     type: 'default',
     content:
-      'O nosso trabalho é achar a coordenada correta dentro desse vetor, que no caso é "x:25;y:18", e colocá-la na mensagem para enviar ao foguete.',
+      'O nosso trabalho é achar a coordenada correta dentro desse lista, que no caso é "x:25;y:18", e colocá-la na mensagem para enviar ao foguete.',
     picture: 'panda-pensando.jpg',
   },
   {
@@ -37,7 +37,7 @@ escreva(coordenadas)`,
   {
     type: 'default',
     content:
-      'Eu disse antes que a forma mais comum para trabalhar com vetores é usando laços, então vamos aprender mais sobre isso.',
+      'Eu disse antes que a forma mais comum para trabalhar com listas é usando laços, então vamos aprender mais sobre isso.',
     picture: 'panda-piscando.jpg',
   },
   {
@@ -48,114 +48,114 @@ escreva(coordenadas)`,
   {
     type: 'default',
     content:
-      'Primeiramente, montamos um `para`, com a variável de controle (i) iniciando com 0, já que os índices de vetor começam do zero e não do um.',
+      'Primeiramente, montamos um *para*, com a variável de controle (i) iniciando com 0, já que os índices de lista começam do zero e não do um.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'code',
     content: `para (var i = 0;) {
 
-}`,
+  }`,
     isRunnable: false,
   },
   {
     type: 'default',
     content:
-      'Depois colocamos a condição do laço como `i` menor que o tamanho do vetor `coordenadas`, ou seja, indicamos ao `para` que execute algo até que a variável `i` seja igual ou maior que a quantidade de `coordenadas`.',
+      'Depois colocamos a condição do laço como *i* menor que o tamanho da lista *coordenadas*, ou seja, indicamos ao *para* que execute algo até que a variável *i* seja igual ou maior que a quantidade de *coordenadas*.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'code',
     content: `para (var i = 0; i < coordenadas.tamanho();) {
 
-}`,
+  }`,
     isRunnable: false,
   },
   {
     type: 'default',
-    content: 'Por fim, incrementamos a variável `i` a cada nova iteração.',
+    content: 'Por fim, incrementamos a variável *i* a cada nova iteração.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'code',
     content: `para (var i = 0; i < coordenadas.tamanho(); i++) {
 
-}`,
+  }`,
     isRunnable: false,
   },
   {
     type: 'default',
     content:
-      'Agora no bloco do `para` colocamos a variável `i` como índice do vetor `coordenadas`.',
+      'Agora no bloco do `para` colocamos a variável `i` como índice da lista `coordenadas`.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'code',
     content: `var coordenadas = [
-  "x:12;y:6", 
-  "x:70;y:32", 
-  "x:25;y:18", 
-  "x:8;y:40", 
-]
+    "x:12;y:6", 
+    "x:70;y:32", 
+    "x:25;y:18", 
+    "x:8;y:40", 
+  ]
 
-para (var i = 0; i < coordenadas.tamanho(); i++) {
-  coordenadas[i]
-}`,
+  para (var i = 0; i < coordenadas.tamanho(); i++) {
+    coordenadas[i]
+  }`,
     isRunnable: false,
   },
   {
     type: 'default',
-    content: 'Se escrevermos `coordenadas[i]` em cada iteração:',
+    content: 'Se escrevermos *coordenadas[i]* em cada iteração:',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'code',
     content: `var coordenadas = [
-  "x:12;y:6", 
-  "x:70;y:32", 
-  "x:25;y:18", 
-  "x:8;y:40", 
-]
+    "x:12;y:6", 
+    "x:70;y:32", 
+    "x:25;y:18", 
+    "x:8;y:40", 
+  ]
 
-para (var i = 0; i < coordenadas.tamanho(); i++) {
-  escreva(coordenadas[i]);
-}
+  para (var i = 0; i < coordenadas.tamanho(); i++) {
+    escreva(coordenadas[i]);
+  }
 
-/* Resultado:  
-  x:12;y:6, 
-  x:70;y:32, 
-  x:25;y:18, 
-  x:8;y:40,
-*/`,
+  /* Resultado:  
+    x:12;y:6, 
+    x:70;y:32, 
+    x:25;y:18, 
+    x:8;y:40,
+  */`,
     isRunnable: true,
   },
   {
     type: 'default',
     content:
-      'Percebeu a mágica? A cada iteração o `i` é um número diferente. Dessa forma podemos pegar cada valor do vetor usando essa variável como índice.',
+      'Percebeu a mágica? A cada iteração o *i* é um número diferente. Dessa forma podemos pegar cada valor da lista usando essa variável como índice.',
     picture: 'panda-deslumbrado.jpg',
   },
   {
     type: 'default',
     content:
-      'Agora podemos verificar se o valor atual do vetor é igual ao que buscamos.',
+      'Agora podemos verificar se o valor atual da lista é igual ao que buscamos.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'code',
     content: `var coordenadas = [
-  "x:12;y:6", 
-  "x:70;y:32", 
-  "x:25;y:18", 
-  "x:8;y:40", 
-]
+    "x:12;y:6", 
+    "x:70;y:32", 
+    "x:25;y:18", 
+    "x:8;y:40", 
+  ]
 
-para (var i = 0; i < coordenadas.tamanho(); i++) {
-  se (coordenadas[i] == "x:25;y:18") {
-    escreva("Achei a coordenada certa: " + coordenadas[i])
+  para (var i = 0; i < coordenadas.tamanho(); i++) {
+    se (coordenadas[i] == "x:25;y:18") {
+      escreva("Achei a coordenada certa: " + coordenadas[i])
+    }
   }
-}
-// Resultado: Achei a coordenada certa: x:25;y:18`,
+  // Resultado: Achei a coordenada certa: x:25;y:18`,
     isRunnable: true,
   },
   {
@@ -167,34 +167,34 @@ para (var i = 0; i < coordenadas.tamanho(); i++) {
   {
     type: 'code',
     content: `var coordenadas = [
-  "x:12;y:6", 
-  "x:70;y:32", 
-  "x:25;y:18", 
-  "x:8;y:40", 
-]
+    "x:12;y:6", 
+    "x:70;y:32", 
+    "x:25;y:18", 
+    "x:8;y:40", 
+  ]
 
-var coordenadaCerta = ""
-para (var i = 0; i < coordenadas.tamanho(); i++) {
-    se (coordenadas[i] == "x:25;y:18") {
-      coordenadaCerta = coordenadas[i]
+  var coordenadaCerta = ""
+  para (var i = 0; i < coordenadas.tamanho(); i++) {
+      se (coordenadas[i] == "x:25;y:18") {
+        coordenadaCerta = coordenadas[i]
+    }
   }
-}
 
-var mensagem = "Essas são minhas coordenadas: \${coordenadaCerta}"
-escreva(mensagem)
-// Resultado: Essas são minhas coordenadas: x:25;y:18`,
+  var mensagem = "Essas são minhas coordenadas: \${coordenadaCerta}"
+  escreva(mensagem)
+  // Resultado: Essas são minhas coordenadas: x:25;y:18`,
     isRunnable: true,
   },
   {
     type: 'alert',
     content:
-      'A variável `coordenadaCerta` foi colocada para fora do laço porque senão ela seria reiniciada toda vez a cada iteração do laço.',
+      'A variável *coordenadaCerta* foi colocada para fora do laço porque senão ela seria reiniciada toda vez a cada iteração do laço.',
     picture: 'panda-triste.jpg',
   },
   {
     type: 'alert',
     content:
-      'E também porque ela não poderia ser acessada de fora do escopo do `para` ou do `se`, lembra?',
+      'E também porque ela não poderia ser acessada de fora do escopo do *para* ou do *se*, lembra?',
     picture: 'panda-sorrindo-sentado.jpg',
   },
   {
@@ -207,7 +207,7 @@ escreva(mensagem)
     type: 'code',
     content: `var alimentos = ["fruta", "ovo de Icelope", "amêndua"]
 
-var mochila = []`,
+  var mochila = []`,
     isRunnable: false,
   },
   {
@@ -219,90 +219,90 @@ var mochila = []`,
     type: 'code',
     content: `var alimentos = ["fruta", "ovo de Icelope", "amêndua"]
 
-var mochila = []
-para (var i = 0; i < alimentos.tamanho(); i++) {
-  var alimentoAtual = alimentos[i]
-  mochila.adicionar(alimentoAtual)
-}
+  var mochila = []
+  para (var i = 0; i < alimentos.tamanho(); i++) {
+    var alimentoAtual = alimentos[i]
+    mochila.adicionar(alimentoAtual)
+  }
 
-escreva(mochila)
-// Resultado: fruta, ovo de Icelope, amêndua`,
+  escreva(mochila)
+  // Resultado: fruta, ovo de Icelope, amêndua`,
     isRunnable: true,
   },
   {
     type: 'default',
     content:
-      'Além disso, podemos não usar apenas o `para`, mas qualquer outro tipo de laço que já vimos, como o `enquanto`.',
+      'Além disso, podemos não usar apenas o *para*, mas qualquer outro tipo de laço que já vimos, como o *enquanto*.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'code',
     content: `var minerais = ["cristal", "pirita"]
-var i = 0
-var mochila = []
+  var i = 0
+  var mochila = []
 
-enquanto (i < minerais.tamanho()) {
-  var mineralAtual = minerais[i]
-  mochila.adicionar(mineralAtual)
-  i++
-}
-escreva(mochila);
-// Resultado: cristal, pirita`,
+  enquanto (i < minerais.tamanho()) {
+    var mineralAtual = minerais[i]
+    mochila.adicionar(mineralAtual)
+    i++
+  }
+  escreva(mochila);
+  // Resultado: cristal, pirita`,
     isRunnable: true,
   },
   {
     type: 'default',
-    content: 'E o `fazer-enquanto`.',
+    content: 'E o *fazer-enquanto*.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'code',
     content: `var exoticos = ["fóssil de urso anão", "meteorito congelado"]
-var mochila = []
-var i = 0
+  var mochila = []
+  var i = 0
 
-fazer {
-  var exoticoAtual = exoticos[i]
-  mochila.adicionar(exoticoAtual)
-  i++
-} enquanto (i < exoticos.tamanho())
+  fazer {
+    var exoticoAtual = exoticos[i]
+    mochila.adicionar(exoticoAtual)
+    i++
+  } enquanto (i < exoticos.tamanho())
 
-escreva(mochila)
-// Resultado: fóssil de urso anão, meteorito congelado`,
+  escreva(mochila)
+  // Resultado: fóssil de urso anão, meteorito congelado`,
     isRunnable: true,
   },
   {
     type: 'default',
     content:
-      'Agora só resta colocar o vetor que conterá as quantidades de cada item.',
+      'Agora só resta colocar o lista que conterá as quantidades de cada item.',
     picture: 'panda-sorrindo-sentado.jpg',
   },
   {
     type: 'code',
     content: `var mochila = [
-  "fruta",
-  "ovo de Icelope", 
-  "amêndua",
-  "cristal", 
-  "pirita", 
-  "bastão laser quebrado", 
-  "fóssil de urso anão",
-  "meteorito congelado"
-]
+    "fruta",
+    "ovo de Icelope", 
+    "amêndua",
+    "cristal", 
+    "pirita", 
+    "bastão laser quebrado", 
+    "fóssil de urso anão",
+    "meteorito congelado"
+  ]
 
-var qtdItens = [9, 4, 20, 37, 12, 1, 2, 1]
-mochila.adicionar(qtdItens)
-escreva(mochila)`,
+  var quantidadeDeItens = [9, 4, 20, 37, 12, 1, 2, 1]
+  mochila.adicionar(quantidadeDeItens)
+  escreva(mochila)`,
     isRunnable: true,
   },
   {
     type: 'user',
-    content: 'Mas aí não estaríamos colocando um vetor dentro de outro?',
+    content: 'Mas aí não estaríamos colocando uma lista dentro de outro?',
   },
   {
     type: 'default',
     content:
-      'Sim! é possível colocar vetores dentro de um vetor sem problema algum. Na verdade é possível colocar qualquer tipo de dado dentro um vetor, seja do tipo texto, número ou lógico.',
+      'Sim! é possível colocar listas dentro de uma lista sem problema algum. Na verdade é possível colocar qualquer tipo de dado dentro uma lista, seja do tipo texto, número ou lógico.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -343,62 +343,62 @@ escreva(mochila)`,
   {
     type: 'code',
     content: `var mochila = [
-  "fruta",
-  "ovo de Icelope", 
-  "amêndua",
-  "cristal", 
-  "pirita", 
-  "bastão laser quebrado", 
-  "fóssil de urso anão",
-  "meteorito congelado",
-  [9, 4, 20, 37, 12, 1, 2, 1]
-]
+    "fruta",
+    "ovo de Icelope", 
+    "amêndua",
+    "cristal", 
+    "pirita", 
+    "bastão laser quebrado", 
+    "fóssil de urso anão",
+    "meteorito congelado",
+    [9, 4, 20, 37, 12, 1, 2, 1]
+  ]
 
-para cada item em mochila {
-  se (item == "ovo de Icelope") {
-   escreva(item)
+  para cada item em mochila {
+    se (item == "ovo de Icelope") {
+    escreva(item)
+    }
   }
-}
 
-// Resultado: ovo de Icelope`,
+  // Resultado: ovo de Icelope`,
     isRunnable: true,
   },
   {
     type: 'user',
-    content: 'Mas que espécie de `para` é esse?',
+    content: 'Mas que espécie de *para* é esse?',
   },
   {
     type: 'default',
-    content: 'Apresento-lhe o `para-cada`',
+    content: 'Apresento-lhe o *para-cada*',
     picture: 'panda-sorrindo.jpg',
   },
   {
     type: 'quote',
     title: 'Para cada',
     content:
-      'O laço `para-cada` faz a mesma coisa que um simples `para` só que com um código mais bonito.',
+      'O laço *para-cada* faz a mesma coisa que um simples *para* só que com um código mais bonito.',
     picture: 'panda-sorrindo-sentado.jpg',
   },
   {
     type: 'code',
     content: `var numeros = [1, 2, 3, 4]
 
-para cada numero em numeros {
-  escreva(numero)
-}
+  para cada numero em numeros {
+    escreva(numero)
+  }
 
-/* Resultado: 
-  1
-  2
-  3
-  4
-*/`,
+  /* Resultado: 
+    1
+    2
+    3
+    4
+  */`,
     isRunnable: true,
   },
   {
     type: 'default',
     content:
-      'Neste exemplo, `numeros` é o vetor que está sendo usado no laço, e `numero` é a variável que assume um valor do vetor `numeros` a cada iteração do laço.',
+      'Neste exemplo, `numeros` é o lista que está sendo usado no laço, e `numero` é a variável que assume um valor da lista `numeros` a cada iteração do laço.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -415,31 +415,31 @@ para cada numero em numeros {
   {
     type: 'code',
     content: `var valores = [falso, verdadeiro, falso]
- 
-para cada valor em valores {
-  escreva(valor)
-}
+  
+  para cada valor em valores {
+    escreva(valor)
+  }
 
-/* Resultado: 
-  falso
-  verdadeiro
-  falso
-*/`,
+  /* Resultado: 
+    falso
+    verdadeiro
+    falso
+  */`,
     isRunnable: true,
   },
   {
     type: 'code',
     content: `var nomes = ['Petros', 'Kaue', '0Thigs']
 
-para cada nome em nomes {
-  escreva(nome)
-}
+  para cada nome em nomes {
+    escreva(nome)
+  }
 
-/* Resultado: 
-  Petros
-  Kaue
-  0Thigs
-*/`,
+  /* Resultado: 
+    Petros
+    Kaue
+    0Thigs
+  */`,
     isRunnable: true,
   },
   {
@@ -451,39 +451,47 @@ para cada nome em nomes {
   {
     type: 'code',
     content: `var mochila = [
-  "fruta",
-  "ovo de Icelope", 
-  "amêndua",
-  "cristal", 
-  "pirita", 
-  "bastão laser quebrado", 
-  "fóssil de urso anão",
-  "meteorito congelado",
-  [9, 4, 20, 37, 12, 1, 2, 1]
-]
+    "fruta",
+    "ovo de Icelope", 
+    "amêndua",
+    "cristal", 
+    "pirita", 
+    "bastão laser quebrado", 
+    "fóssil de urso anão",
+    "meteorito congelado",
+    [9, 4, 20, 37, 12, 1, 2, 1]
+  ]
 
-var ovos = []
-para cada item em mochila {
-  se (item == "ovo de Icelope") {
-    var qtdOvos = mochila[-1][1]
+  var ovos = []
+  para cada item em mochila {
+    se (item == "ovo de Icelope") {
+      var quantidadeDeOvos = mochila[-1][1]
 
-    escreva('Quantidade de ovos: ' + qtdOvos)
+      escreva('Quantidade de ovos: ' + quantidadeDeOvos)
+    }
   }
-}
-// Resultado: Quantidade de ovos: 4`,
+  // Resultado: Quantidade de ovos: 4`,
     isRunnable: true,
   },
   {
     type: 'user',
-    content: 'Espera, um vetor com dois índices?',
+    content: 'Espera, uma lista com dois índices?',
   },
   {
-    type: 'list',
-    content: 'Sim, escrever `mochila[-1][1]` quer dizer:',
-    items: [
-      '`[-1]` -> Pegar o último item de mochila, que no caso é um vetor.',
-      '`[1]` -> Pegar o segundo valor desse vetor interno, que no caso é quatro.',
-    ],
+    type: 'default',
+    content: 'Sim, escrever *mochila[-1][1]* quer dizer:',
+    picture: 'panda-segurando-bambu-de-pe.jpg',
+  },
+  {
+    type: 'quote',
+    content:
+      '*[-1]* -> Pegar o último item de mochila, que no caso é uma lista.',
+    picture: 'panda-segurando-bambu-de-pe.jpg',
+  },
+  {
+    type: 'quote',
+    content:
+      '*[1]* -> Pegar o segundo valor desse lista interno, que no caso é quatro.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -495,29 +503,29 @@ para cada item em mochila {
   {
     type: 'code',
     content: `var mochila = [
-  "fruta",
-  "ovo de Icelope", 
-  "amêndua",
-  "cristal", 
-  "pirita", 
-  "bastão laser quebrado", 
-  "fóssil de urso anão",
-  "meteorito congelado",
-  [9, 4, 20, 37, 12, 1, 2, 1]
-]
+    "fruta",
+    "ovo de Icelope", 
+    "amêndua",
+    "cristal", 
+    "pirita", 
+    "bastão laser quebrado", 
+    "fóssil de urso anão",
+    "meteorito congelado",
+    [9, 4, 20, 37, 12, 1, 2, 1]
+  ]
 
-var ovos = []
-para cada item em mochila {
-  se (item == "ovo de Icelope") {
-      var qtdOvos = mochila[-1][1];
-      para (var i = 0; i < qtdOvos; i++) {
-          ovos.adicionar(item);
+  var ovos = []
+  para cada item em mochila {
+    se (item == "ovo de Icelope") {
+        var quantidadeDeOvos = mochila[-1][1];
+        para (var i = 0; i < quantidadeDeOvos; i++) {
+            ovos.adicionar(item);
+      }
     }
   }
-}
 
-escreva(ovos)
-// Resultado: ovo de Icelope, ovo de Icelope, ovo de Icelope, ovo de Icelope`,
+  escreva(ovos)
+  // Resultado: ovo de Icelope, ovo de Icelope, ovo de Icelope, ovo de Icelope`,
     isRunnable: true,
   },
   {

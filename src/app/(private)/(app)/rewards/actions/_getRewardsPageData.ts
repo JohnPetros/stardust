@@ -1,5 +1,6 @@
 'use server'
 
+import { isChallengePayload } from '../guards/isChallengePayload'
 import { isStarChallengePayload } from '../guards/isStarChallengePayload'
 import { isStarPayload } from '../guards/isStarPayload'
 
@@ -7,6 +8,7 @@ import { _calculateChallengeRewards } from './_calculateChallengeRewards'
 import { _calculateLessonRewards } from './_calculateLessonRewards'
 
 import {
+  ChallengePayload,
   type RewardsOrigin,
   type StarChallengePayload,
   type StarPayload,
@@ -88,6 +90,33 @@ export async function _getRewardsPageData({
       accurance = challengeRewards.accurance
       seconds = starChallengePaylod.seconds
       nextRoute = ROUTES.private.home.space
+      break
+    }
+    case 'challenge': {
+      const challengePaylod = Object.values(
+        payloadObject
+      )[0] as ChallengePayload
+
+      if (!isChallengePayload(challengePaylod))
+        throw new Error(APP_ERRORS.rewards.payloadNotFound)
+
+      const challengeRewards = await _calculateChallengeRewards({
+        challengesController,
+        starsController,
+        usersController,
+        user,
+        challengeId: challengePaylod.challengeId,
+        difficulty: challengePaylod.difficulty,
+        incorrectAnswers: challengePaylod.incorrectAnswers,
+        isCompleted: challengePaylod.isCompleted,
+        starId: null,
+      })
+
+      xp = challengeRewards.xp
+      coins = challengeRewards.coins
+      accurance = challengeRewards.accurance
+      seconds = challengePaylod.seconds
+      nextRoute = ROUTES.private.home.challenges
       break
     }
     default:

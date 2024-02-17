@@ -10,7 +10,6 @@ import { CodeReturn } from '../types/CodeReturn'
 
 import { DELEGUA_TOKENS } from './constants/delegua-tokens'
 import { DELEGUA_REGEX } from './constants/regex'
-import { adicioneTipo } from './helpers/adicioneTipo'
 import { pegueConfiguracaoDeleguaParaEditorMonaco } from './helpers/pegueConfiguracaoDeleguaParaEditorMonaco'
 
 import type {
@@ -26,21 +25,11 @@ export function useDelegua(): ICode {
   const avaliadorSintatico = new AvaliadorSintatico()
 
   return {
-    async run(code: string) {
-      const saida: string[] = []
-
-      const codigo = adicioneTipo(code)
+    async run(code: string, shouldReturnResult: boolean = false) {
+      let saida = ''
 
       function funcaoDeSaida(novaSaida: string) {
-        /**
-         * ???
-         *  if (output === 'vetor' && currentOutput.at(-1) === 'texto') {
-        return [...currentOutput, 'lista']
-      }
-
-      return [...currentOutput, output]
-         */
-        saida.push(novaSaida)
+        saida = novaSaida
       }
 
       const interpretador = new InterpretadorBase(
@@ -50,7 +39,9 @@ export function useDelegua(): ICode {
         funcaoDeSaida
       )
 
-      const resultadoLexador = lexador.mapear(codigo.split('\n'), -1)
+      console.log({ code })
+
+      const resultadoLexador = lexador.mapear(code.split('\n'), -1)
       const resultadoAvaliacaoSintatica = avaliadorSintatico.analisar(
         resultadoLexador,
         0
@@ -61,6 +52,8 @@ export function useDelegua(): ICode {
         false
       )
 
+      console.log({ resultado })
+
       if (erros.length) {
         const erro = erros[0]
         const linhaDoErro = erro.linha ?? 0
@@ -69,66 +62,43 @@ export function useDelegua(): ICode {
         throw `${erro.erroInterno}${SEPARADOR}${linhaDoErro}`
       }
 
+      console.log('delegua', { saida })
+
+      let result = ''
+
+      if (resultado.length && shouldReturnResult)
+        result = (JSON.parse(resultado[0]) as { valor: string }).valor
+
       const codeReturn: CodeReturn = {
-        result: resultado[0],
+        result: result,
         output: saida,
       }
 
       return codeReturn
     },
 
-    formatOutput(output: string[], shouldPrettify: boolean) {
-      let saidasFormatadas: string[] = []
-      let tipos: string[] = []
-
-      function formateItemDeVetor(item: string) {
-        const eDoTipoLogico = ['verdadeiro', 'falso'].includes(item)
-        if (eDoTipoLogico) return item
-
-        const eNumerico = checkNumeric(item)
-        if (eNumerico) return item
-
-        return `"${item}"`
-      }
-
-      function formateSaida(saida: string, indice: number) {
-        const tipo = tipos[indice].trim()
-
-        switch (tipo) {
-          case 'texto':
-            return '"' + saida + '"'
-          case 'vetor':
-            return (
-              '[ ' + saida.split(',').map(formateItemDeVetor).join(', ') + ' ]'
-            )
-          default:
-            return saida
-        }
-      }
-
-      tipos = output.filter((_, index) => index % 2 === 0)
-      const saidas = output.filter((_, index) => index % 2 !== 0)
-
-      saidasFormatadas = shouldPrettify ? saidas.map(formateSaida) : saidas
-
-      return saidasFormatadas
+    formatResult(result: string) {
+      return result
+        .replace(/'/g, '\\"')
+        .replace(/\\"/g, '')
+        .replace(/"verdadeiro"/g, 'verdadeiro')
+        .replace(/"falso"/g, 'falso')
     },
 
-    desformatOutput(formmattedOutput: ChallengeTestCaseExpectedOutput[]) {
-      function desformatarVetor(vetor: ChallengeTestCaseExpectedOutput[]) {
-        return vetor.reduce((itens, itemAtual) => {
-          if (Array.isArray(itemAtual)) {
-            itens.push(...desformatarVetor(itemAtual))
-          } else {
-            itens.push(String(itemAtual).replace(/"/g, ''))
-          }
-          return itens
-        }, [] as ChallengeTestCaseExpectedOutput[])
+    desformatOutput(output: ChallengeTestCaseExpectedOutput) {
+      if (Array.isArray(output)) {
+        return output.join(',')
       }
 
-      const saidaDesformatada = desformatarVetor(formmattedOutput)
+      return String(output)
+    },
 
-      return saidaDesformatada.join(',')
+    formatOutput(output: string, shouldPrettify: boolean = false) {
+      const eNumerico = checkNumeric(output)
+
+      if (eNumerico) return Number(output)
+
+      return shouldPrettify ? `"${output}"` : output
     },
 
     getInput(code: string) {
@@ -154,17 +124,28 @@ export function useDelegua(): ICode {
     },
 
     addInput(input: ChallengeTestCaseInput, code: string) {
-      const regex = new RegExp(DELEGUA_REGEX.leia, 'g')
-
       input.forEach(
         (value) =>
           (code = code.replace(
-            regex,
+            DELEGUA_REGEX.leia,
             Array.isArray(value) ? `[${value}]` : value.toString()
           ))
       )
 
       return code
+    },
+
+    addFunction(
+      functionName: string,
+      functionParams: ChallengeTestCaseInput,
+      code: string
+    ) {
+      const paramsValues = functionParams.map((value) =>
+        Array.isArray(value) ? `[${value.join(',')}]` : value
+      )
+
+      const params = '(' + paramsValues.join(',') + ')'
+      return code.concat('\n' + functionName + params + ';')
     },
 
     handleError(error: string) {

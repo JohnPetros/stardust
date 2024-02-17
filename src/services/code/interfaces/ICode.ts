@@ -10,13 +10,19 @@ import type {
 } from '@/@types/Challenge'
 
 export interface ICode {
-  run(code: string): Promise<CodeReturn>
-  formatOutput(output: string[], shouldPrettify: boolean): string[]
-  desformatOutput(formmattedOutput: ChallengeTestCaseExpectedOutput[]): string
+  run(code: string, shouldReturnResult: boolean): Promise<CodeReturn>
+  formatResult(result: unknown): string
+  formatOutput(output: string, shouldPrettify: boolean): string | number
+  desformatOutput(result: ChallengeTestCaseExpectedOutput): string
   getInput(code: string): string
   getInputCommands(code: string): string[] | null
   getTokens(): { [key in Token]: string[] }
   addInput(input: ChallengeTestCaseInput, code: string): string
+  addFunction(
+    functionName: string,
+    functionParams: ChallengeTestCaseInput,
+    code: string
+  ): string
   getMonacoEditorConfig(): monaco.languages.IMonarchLanguage
   handleError(error: string): CodeError
 }

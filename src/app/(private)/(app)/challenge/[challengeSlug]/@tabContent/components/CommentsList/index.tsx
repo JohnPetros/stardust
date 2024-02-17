@@ -4,8 +4,8 @@ import { Comment } from './Comment'
 import { useCommentsList } from './useCommentsList'
 import { UserCommentInput } from './UserCommentInput'
 
-import { AnimatedArrow } from '@/global/components/AnimatedArrow'
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
+import { AnimatedArrow } from '@/global/components/AnimatedArrow'
 import { Loading } from '@/global/components/Loading'
 import { PopoverMenu } from '@/global/components/PopoverMenu'
 import { Separator } from '@/global/components/Separator'
@@ -41,8 +41,6 @@ export function CommentsList() {
         <Loading />
       </div>
     )
-
-  console.log({ isPopoverMenuOpen })
 
   const sorterButtonTitle =
     sorter === 'date' && order === 'ascending'
@@ -95,13 +93,13 @@ export function CommentsList() {
                 <Comment
                   id={comment.id}
                   content={comment.content}
-                  upvotes={comment.upvotes ?? 0}
+                  upvotesCount={comment.upvotesCount ?? 0}
                   isUpvoted={comment.isVoted ?? false}
                   userSlug={comment.user.slug}
-                  avatarId={comment.user.avatar_id}
-                  createdAt={comment.created_at}
+                  avatarId={comment.user.avatarId}
+                  createdAt={comment.createdAt}
                   isAuthUser={comment.user.slug === authUser?.slug}
-                  repliesAmount={comment.repliesAmount ?? 0}
+                  repliesCount={comment.repliesCount ?? 0}
                   onDelete={handleDeleteComment}
                 />
               </li>

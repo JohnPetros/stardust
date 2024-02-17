@@ -8,6 +8,7 @@ import { Category } from './Category'
 import type { Challenge } from '@/@types/Challenge'
 import { ChallengeInfo } from '@/global/components/ChallengeInfo'
 import { DifficultyBadge } from '@/global/components/DifficultyBadge'
+import { ROUTES } from '@/global/constants'
 
 const challengeVariants: Variants = {
   hidden: {
@@ -26,7 +27,7 @@ type ChallengeProps = {
 
 export function ChallengeCard({
   data: {
-    id,
+    slug,
     title,
     difficulty,
     upvotesCount,
@@ -47,7 +48,7 @@ export function ChallengeCard({
       <div className="flex items-center gap-3">
         <DifficultyBadge difficulty={difficulty} />
         <Link
-          href={`/challenges/${id}`}
+          href={`${ROUTES.private.challenge}/${slug}`}
           className="font-semibold text-green-500 transition-colors duration-200 hover:text-green-700"
         >
           {title}

@@ -21,7 +21,7 @@ export const challenge: Challenge = {
   testCases: [
     {
       id: 1,
-      input: ["'Olá, mundo!'"],
+      input: ['"Olá, mundo!"'],
       expectedOutput: 'Olá, mundo!',
       isLocked: false,
     },

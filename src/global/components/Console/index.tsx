@@ -102,12 +102,8 @@ export function ConsoleComponent(
       </div>
 
       <ul className="px-6 py-2">
-        {output.map((output) => (
-          <li key={String(output)} className="block text-sm text-gray-300">
-            {output.includes('@number')
-              ? output.replace('@number', '')
-              : output}
-          </li>
+        {results.map((output) => (
+          <li key={String(output)} className="block text-sm text-gray-300"></li>
         ))}
       </ul>
     </motion.div>

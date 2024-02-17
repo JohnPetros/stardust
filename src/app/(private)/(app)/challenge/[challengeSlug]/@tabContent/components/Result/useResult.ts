@@ -3,14 +3,20 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import type { ChallengeTestCase } from '@/@types/Challenge'
+import type {
+  ChallengeTestCase,
+  ChallengeTestCaseExpectedOutput,
+  ChallengeTestCaseInput,
+} from '@/@types/Challenge'
 import {
   ChallengeRewardsPayload,
   StarChallengeRewardsPayload,
 } from '@/@types/Rewards'
 import { _setCookie } from '@/global/actions/_setCookie'
 import { COOKIES, ROUTES, STORAGE } from '@/global/constants'
+import { checkNumeric } from '@/global/helpers'
 import { useBreakpoint } from '@/global/hooks/useBreakpoint'
+import { useLocalStorage } from '@/global/hooks/useLocalStorage'
 import { useCode } from '@/services/code'
 import { useChallengeStore } from '@/stores/challengeStore'
 
@@ -31,15 +37,15 @@ export function useResult() {
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false)
   const [isAnswerVerified, setIsAnswerVerified] = useState(false)
 
+  const secondsCounterStorage = useLocalStorage(STORAGE.keys.secondsCounter)
+
   const { md: isMobile } = useBreakpoint()
   const router = useRouter()
 
   async function showRewards() {
     if (!challenge) return
 
-    const currentSeconds = Number(
-      localStorage.getItem(STORAGE.keys.secondsCounter)
-    )
+    const currentSeconds = Number(secondsCounterStorage.get())
 
     if (challenge?.starId) {
       const rewardsPayload: StarChallengeRewardsPayload = {
@@ -76,6 +82,9 @@ export function useResult() {
       COOKIES.keys.rewardsPayload,
       JSON.stringify(rewardsPayload)
     )
+
+    secondsCounterStorage.remove()
+
     router.push(ROUTES.private.rewards)
     return
   }
@@ -108,13 +117,27 @@ export function useResult() {
 
     const { testCases } = challenge
 
+    console.log({ userOutput })
+
     function verifyResult(testCase: ChallengeTestCase, index: number) {
-      const output = code.formatOutput(userOutput[index], false)[0]
-      const expectedOutput = code.desformatOutput([testCase.expectedOutput])
+      if (challenge?.functionName) {
+        const isCorrect =
+          userOutput[index as keyof ChallengeTestCaseExpectedOutput] ===
+          testCase.expectedOutput
+        return isCorrect
+      }
 
-      const isCorrect = output === expectedOutput
+      const output: number | string =
+        userOutput[index as keyof ChallengeTestCaseExpectedOutput].toString()
 
-      return isCorrect
+      const expectedOutput = code.desformatOutput(testCase.expectedOutput)
+
+      // console.log({ output })
+      // console.log(testCase.expectedOutput)
+
+      // const isCorrect = output === expectedOutput
+
+      return false
     }
 
     if (userOutput.length === testCases.length) {

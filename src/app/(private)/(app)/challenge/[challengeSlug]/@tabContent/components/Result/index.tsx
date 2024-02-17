@@ -25,7 +25,7 @@ export function Result() {
               index={index + 1}
               data={testCase}
               isCorrect={results[index]}
-              userOutput={userOutput[index]}
+              userOutput={userOutput[index] ?? null}
             />
           ))}
         </div>

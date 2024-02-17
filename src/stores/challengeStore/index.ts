@@ -8,7 +8,10 @@ import type { ChallengeStoreState } from './types/ChallengeStoreState'
 import type { PanelsLayout } from './types/PanelsLayout'
 import type { TabHandler } from './types/TabHandler'
 
-import type { Challenge } from '@/@types/Challenge'
+import type {
+  Challenge,
+  ChallengeTestCaseExpectedOutput,
+} from '@/@types/Challenge'
 import type { Vote } from '@/@types/Vote'
 
 type ChallengeStore = {
@@ -25,12 +28,13 @@ const challengeStore: StateCreator<
   state: INITIAL_CHALLENGE_STORE_STATE,
   actions: {
     setChallenge(challenge: Challenge) {
-      return set(({ state }: ChallengeStore) => {
+      return set(({ state }) => {
+        // @ts-ignore
         state.challenge = challenge
       })
     },
 
-    setUserOutput(userOutput: string[][]) {
+    setUserOutput(userOutput: ChallengeTestCaseExpectedOutput[]) {
       return set(({ state }) => {
         state.userOutput = userOutput
       })

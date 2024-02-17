@@ -6,10 +6,11 @@ import { FILTER_SELECTS_ITEMS } from '../../constants/filter-selects-items'
 import { SEARCH_PARAMS } from '../../constants/search-params'
 import { isDifficulty } from '../../guards/isDifficulty'
 import { isStatus } from '../../guards/isStatus'
+import { Difficulty } from '../../types/Difficulty'
+import { Status } from '../../types/Status'
 
 import type { Category } from '@/@types/Category'
 import { useUrlSearchParams } from '@/global/hooks/useUrlSearchParams'
-import { Difficulty, Status } from '@/stores/challengesListStore'
 
 export function useChallengesFilters(categories: Category[]) {
   const [tags, setTags] = useState<string[]>([])
@@ -65,7 +66,6 @@ export function useChallengesFilters(categories: Category[]) {
         (id) => id !== category.id
       )
 
-      console.log({ updatedCategoriesIds })
       includedCategories.current = includedCategories.current.filter(
         (includedCategory) => includedCategory !== category.name
       )

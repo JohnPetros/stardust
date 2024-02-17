@@ -3,7 +3,7 @@ export const REGEX = {
   operator:
     /\s(e|ou|<=|>=|==|!=|=>|\+|-|\*\*|\*|\/|%|\+\+|--|<<|>>|\^|!|~|=|\+=|-=|\*=|\*\*=|\/=|%=)\s/,
   string: /(['"])(.*?)\1/g,
-  numeric: /^[0-9]+$/,
+  numeric: /^-?\d+(\.\d+)?$/,
   insideInput: /(leia\(.*\))/,
   input: /(leia\(\))/,
   inputParam: /["'].*["']/,

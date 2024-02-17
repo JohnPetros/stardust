@@ -2,8 +2,8 @@ import { Challenge } from '@/@types/Challenge'
 
 export const challenge: Challenge = {
   id: '5',
-  title: 'Planetas pares encontrados',
-  slug: 'planetas-pares-encontrados',
+  title: 'Planetas pares',
+  slug: 'planetas-pares',
   description: '',
   createdAt: '',
   totalCompletitions: 0,
@@ -75,3 +75,18 @@ Resultado: 0
     },
   ],
 }
+
+/**
+ * var totalPlanetas = leia();
+var totalPlanetasSeguros = 0;
+  
+// Use o laço antes do escreva
+
+para (var i = 1; i <= totalPlanetas; i++) {
+  se (i % 2 == 0) {
+    totalPlanetasSeguros++
+  }
+}
+
+escreva(totalPlanetasSeguros)
+ */

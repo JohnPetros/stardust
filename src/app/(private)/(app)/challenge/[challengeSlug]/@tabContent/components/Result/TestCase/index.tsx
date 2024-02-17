@@ -8,9 +8,13 @@ import { Field } from '../Field'
 
 import { useTestCase } from './useTestCase'
 
-import type { ChallengeTestCase } from '@/@types/Challenge'
+import type {
+  ChallengeTestCase,
+  ChallengeTestCaseExpectedOutput,
+} from '@/@types/Challenge'
 import { AnimatedArrow } from '@/global/components/AnimatedArrow'
 import { useCode } from '@/services/code'
+import { useChallengeStore } from '@/stores/challengeStore'
 
 const contentAnimations: Variants = {
   up: {
@@ -25,7 +29,7 @@ type TestCaseProps = {
   index: number
   data: ChallengeTestCase
   isCorrect: boolean
-  userOutput: string[]
+  userOutput: ChallengeTestCaseExpectedOutput | null
 }
 
 export function TestCase({
@@ -34,11 +38,17 @@ export function TestCase({
   isCorrect,
   userOutput,
 }: TestCaseProps) {
-  const { isOpen, formatOutput, handleButtonClick } = useTestCase(
+  const { isOpen, handleButtonClick } = useTestCase(
     isLocked,
     isCorrect,
     userOutput
   )
+
+  const shouldFormatResult = useChallengeStore((store) =>
+    Boolean(store.state.challenge?.functionName)
+  )
+
+  console.log('TestCase', { userOutput })
 
   const code = useCode()
 
@@ -93,7 +103,9 @@ export function TestCase({
               label="Entrada"
               value={
                 input.length > 0
-                  ? input.map(formatOutput).join(', ')
+                  ? input
+                      .map((input) => code.formatResult(JSON.stringify(input)))
+                      .join(', ')
                   : 'sem entrada'
               }
             />
@@ -101,14 +113,16 @@ export function TestCase({
               label="Seu resultado"
               value={
                 userOutput
-                  ? code.formatOutput(userOutput, true)[0]
+                  ? shouldFormatResult
+                    ? code.formatResult(JSON.stringify(userOutput))
+                    : code.formatOutput(userOutput.toString(), true).toString()
                   : 'Sem resultado'
               }
               isFromUser={true}
             />
             <Field
               label="Resultado esperado"
-              value={formatOutput(expectedOutput).toString()}
+              value={code.formatResult(JSON.stringify(expectedOutput))}
             />
           </motion.dl>
         )}
