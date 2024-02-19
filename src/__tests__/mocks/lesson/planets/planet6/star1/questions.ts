@@ -17,7 +17,7 @@ type Questions = [
 export const questions: Questions = [
   {
     title:
-      'Vamos fazer algumas verificações utiliando vetores. Mas primeiro, treinaremos o conceito de índice. Qual serão os elementos do vetor numerosDaSorte se eu acresecentar o número 3 na posição 3?',
+      'Vamos fazer algumas verificações utiliando *listas*. Mas primeiro, treinaremos o conceito de índice. Qual serão os elementos da lista numerosDaSorte se eu acresecentar o número 3 na posição 3?',
     type: 'selection',
     answer: '2, 7, 2, 3',
     code: `var numerosDaSorte = [2, 7, 2]
@@ -33,10 +33,10 @@ escreva(numerosDaSorte)`,
   'Cargueiro',
   'Caça',
   'Explorador',
-  'Cruzador',
+  'Cruzador'
 ]`,
     title:
-      'O tipo do nosso foguete é "Cruzador". Quais os possíveis números índice eu posso usar para pegar o elemento "Cruzador" no vetor `tiposDeNave`?',
+      'O tipo do nosso foguete é "Cruzador". Quais os possíveis números eu posso usar como índice para pegar o elemento "Cruzador" no vetor *tiposDeNave*?',
     type: 'checkbox',
     options: ['3', '-1', '-3', '4'],
     correctOptions: ['3', '-1'],
@@ -44,22 +44,21 @@ escreva(numerosDaSorte)`,
   },
   {
     title:
-      'Vamos reorganizar nossa comida. Reordene os elementos do vetor `alimentos`, de modo que a constelação "batata" tenha índice 0, "maçã" tenha índice 1, "geleia" tenha índice 2 e "bife" índice 3.',
+      'Vamos reorganizar nossa comida. Reordene os elementos do vetor *alimentos*, de modo que a constelação "batata" tenha índice 0, "maçã" tenha índice 1, "geleia" tenha índice 2 e "bife" índice 3.',
     type: 'drag-and-drop-list',
     items: [
       { id: 1, label: 'var constelacoes = [' },
-      { id: 2, label: "   'batata'" },
-      { id: 3, label: "   'maçã'" },
-      { id: 4, label: "   'geleia'" },
-      { id: 5, label: "   'bife'" },
+      { id: 2, label: "\t'batata'," },
+      { id: 3, label: "\t'maçã'," },
+      { id: 4, label: "\t'geleia'," },
+      { id: 5, label: "\t'bife'" },
       { id: 6, label: ']' },
     ],
     picture: 'panda-andando-com-bambu.jpg',
   },
-
   {
     title:
-      'Agora vamos organizar nossos combustíveis. Complete os índices de vetor para que seja escrito nessa ordem "Plasmatron", "Etherium", "Fobos"',
+      'Agora vamos organizar nossos combustíveis. Complete os índices para que seja escrito "Plasmatron", "Etherium", "Fobos", nessa ordem',
     type: 'drag-and-drop',
     lines: [
       {
@@ -98,7 +97,7 @@ escreva(numerosDaSorte)`,
   },
   {
     title:
-      'O próximo planeta que iremos explorar se chama "Arrayon". faça o programa escrever o nome desse planeta que está dentro do vetor `planetas`',
+      'O próximo planeta que iremos explorar se chama "Arrayon". faça o programa escrever o nome desse planeta que está dentro da lista *planetas*',
     type: 'open',
     lines: [
       {

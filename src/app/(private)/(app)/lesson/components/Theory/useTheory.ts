@@ -14,8 +14,6 @@ export function useTheory(allMdxComponents: string[]) {
     (store) => store.actions.incrementRenderedMdxComponentsCount
   )
 
-  console.log({ allMdxComponents })
-
   const [parsedMdxComponents, setParsedMdxComponents] = useState<
     MdxComponent[]
   >([])
@@ -54,7 +52,7 @@ export function useTheory(allMdxComponents: string[]) {
       { content: allMdxComponents[0], hasAnimation: true },
     ])
     incrementMdxComponentsCount()
-  }, [allMdxComponents, incrementMdxComponentsCount])
+  }, [allMdxComponents[0]])
 
   return {
     parsedMdxComponents,

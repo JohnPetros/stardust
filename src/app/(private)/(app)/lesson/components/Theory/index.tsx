@@ -29,18 +29,16 @@ export function Theory({ title, number, mdxComponents }: TheoryProps) {
 
   return (
     <>
-      <div id="theory" className="mt-20">
-        <div className="mx-auto max-w-3xl">
+      <div id='theory' className='mt-20'>
+        <div className='mx-auto max-w-3xl'>
           {mdxComponents.length > 0 && (
-            <div className="mt-6 flex items-center justify-center">
+            <div className='mt-6 flex items-center justify-center'>
               <Star number={number} />
-              <h1 className="text-xl font-bold uppercase text-gray-100">
-                {title}
-              </h1>
+              <h1 className='text-xl font-bold uppercase text-gray-100'>{title}</h1>
             </div>
           )}
 
-          <div className="mt-10 space-y-10 px-6 pb-[360px] md:px-0">
+          <div className='mt-10 space-y-10 px-6 pb-[360px] md:px-0'>
             {parsedMdxComponents.map((component, index) => {
               const shouldMemoized = index < currentMdxComponentIndex - 1
               return (
@@ -55,11 +53,11 @@ export function Theory({ title, number, mdxComponents }: TheoryProps) {
           </div>
         </div>
 
-        <footer className="fixed bottom-0 z-50 flex w-full items-center justify-center border-t border-gray-800 bg-gray-900 p-4">
+        <footer className='fixed bottom-0 z-50 flex w-full items-center justify-center border-t border-gray-800 bg-gray-900 p-4'>
           {!hasNextMdxComponent ? (
             <AlertDialog
-              type={'asking'}
-              title={`Parabéns! \n Agora você pode ir para a próxima etapa 🚀`}
+              type='asking'
+              title='Parabéns! Agora você pode ir para a próxima etapa 🚀'
               body={null}
               action={
                 <Button tabIndex={-1} onClick={() => showQuiz()}>
@@ -68,7 +66,7 @@ export function Theory({ title, number, mdxComponents }: TheoryProps) {
               }
             >
               <Button
-                className="w-32"
+                className='w-32'
                 tabIndex={0}
                 onClick={handleContinueButtonClick}
                 autoFocus
@@ -81,7 +79,7 @@ export function Theory({ title, number, mdxComponents }: TheoryProps) {
             </AlertDialog>
           ) : (
             <Button
-              className="w-32"
+              className='w-32'
               tabIndex={0}
               onClick={handleContinueButtonClick}
               autoFocus

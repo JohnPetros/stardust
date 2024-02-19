@@ -1,12 +1,13 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useEffect, useRef, useState } from 'react'
 
 import { StarRewardsPayload } from '@/@types/Rewards'
 import type { Star } from '@/@types/Star'
 import { _setCookie } from '@/global/actions/_setCookie'
 import { COOKIES, ROUTES, STORAGE } from '@/global/constants'
+import { useLocalStorage } from '@/global/hooks/useLocalStorage'
 import { useMdx } from '@/global/hooks/useMdx'
 import { useLessonStore } from '@/stores/lessonStore'
 
@@ -23,6 +24,8 @@ export function useLessonStar(star: Star) {
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
 
+  const secondsCounter = useLocalStorage(STORAGE.keys.secondsCounter)
+
   const router = useRouter()
 
   function leaveLesson() {
@@ -36,7 +39,7 @@ export function useLessonStar(star: Star) {
       const mdxComponents = parseTextsToMdxComponents(star.texts)
       setMdxComponents(mdxComponents)
       setMdxComponentsCount(star.texts.length)
-      setQuestions(star.questions ?? [])
+      setQuestions(star.questions.slice(0, 1) ?? [])
       timeout = setTimeout(() => setIsTransitionVisible(false), 1000)
     }
 
@@ -56,7 +59,7 @@ export function useLessonStar(star: Star) {
   useEffect(() => {
     async function showRewards() {
       const currentSeconds = Number(
-        localStorage.getItem(STORAGE.keys.secondsCounter)
+        secondsCounter.get()
       )
 
       const rewardsPayload: StarRewardsPayload = {

@@ -1,0 +1,90 @@
+import {
+  CheckboxQuestion,
+  DragAndDropListQuestion,
+  DragAndDropQuestion,
+  SelectionQuestion,
+} from "@/@types/Quiz"
+
+type Questions = [
+  DragAndDropListQuestion,
+  CheckboxQuestion,
+  SelectionQuestion,
+  SelectionQuestion,
+  DragAndDropQuestion,
+]
+
+export const question: Questions = [
+  {
+    title: "Vamos treinar funções. Coloque o código na ordem para que a função *escrevaMensagem* seja executada corretamente",
+    type: "drag-and-drop-list",
+    items: [
+      { id: 1, label: "funcao escrevaMensagem() {" },
+      { id: 2, label: "\tescreva('Sonhe com as estrelas.')" },
+      { id: 3, label: "}" },
+      { id: 4, label: "escrevaMensagem()" }
+    ],
+    picture: 'panda-segurando-bambu-de-pe.jpg',
+  },
+  {
+    code: `funcao mostrePeso(massa, gravidade)
+  peso = massa * gravidade
+  escreva("Seu peso é \${peso}.")
+}
+
+mostrePeso(72,  9.8)`,
+    title: "Quais são os parâmetros da função *mostrePeso()*?",
+    type: "checkbox",
+    options: ["massa", "gravidade", "peso", "mostrePeso"],
+    correctOptions: ["massa", "gravidade"],
+    picture: 'panda-sorrindo.jpg',
+  },
+  {
+    code: `funcao mostrePlanetaGrande(diametro)
+  se (diametro > 25000) {
+    escreva(\"Planeta grande\")
+  }
+}
+mostrePlanetaGrande(400000)
+mostrePlanetaGrande(100)
+mostrePlanetaGrande(8000000)`,
+    title: "Quantas vezes será escrito \"Planeta grande\"?",
+    type: "selection",
+    answer: '2',
+    options: ["2", "3", "4", "1"],
+    picture: 'panda-dando-risadinha.jpg',
+  },
+  {
+    code: `funcao mostreDistancia(velocidade, tempo) {
+  var distancia = velocidade * tempo
+  escreva("Foguete percorreu \${distancia}km")
+}
+
+var velocidade =  180
+var tempo =  200
+mostreDistancia(velocidade, tempo)`,
+    title: "Com exceção dos parâmetros de função, qual variável no código abaixo tem escopo local?",
+    type: "selection",
+    answer: "distancia",
+    options: ["velocidade", "tempo", "distancia", "mostreDistancia"],
+    picture: 'panda-sorrindo.jpg',
+  },
+  {
+    title: "Complete a função *mostreLancamento()*",
+    type: "drag-and-drop",
+    lines: [
+      { id: 1, texts: ["dropZone", "mostreLancamento(", "data", ",", "dropZone", ") {"], indentation: 0 },
+      { id: 2, texts: ["escreva(\"O foguete será lançado em ${", "dropZone", "}\")"], indentation: 2 },
+      { id: 3, texts: ["escreva(\"Em direção ao ${destino}\")"], indentation: 2 },
+      { id: 4, texts: ["}"], indentation: 0 },
+      { id: 5, texts: ["dropZone", "(\"21/12/2012\", \"Planeta Kobos\")"], indentation: 0 }
+    ],
+    dragItems: [
+      { id: 1, label: "data" },
+      { id: 2, label: "destino" },
+      { id: 3, label: "funcao" },
+      { id: 4, label: "mostreLancamento" }
+    ],
+    correctDragItemsIdsSequence: [3, 2, 1, 4],
+    picture: 'panda-olhando-de-lado.jpg',
+  },
+]

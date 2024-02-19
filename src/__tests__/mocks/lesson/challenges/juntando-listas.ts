@@ -31,6 +31,7 @@ export const challenge: Challenge = {
   functionName: 'junteListas',
   testCases: [
     {
+      id: 1,
       input: [
         [1, 2, 3],
         [4, 5, 6],
@@ -39,6 +40,7 @@ export const challenge: Challenge = {
       expectedOutput: [1, 2, 3, 4, 5, 6],
     },
     {
+      id: 2,
       input: [
         [0, 7, 8],
         [100, 200],
@@ -46,7 +48,12 @@ export const challenge: Challenge = {
       isLocked: false,
       expectedOutput: [0, 7, 8, 100, 200],
     },
-    { input: [[], [1, 2, 3]], isLocked: false, expectedOutput: [1, 2, 3] },
+    {
+      id: 3,
+      input: [[], [1, 2, 3]],
+      isLocked: false,
+      expectedOutput: [1, 2, 3],
+    },
   ],
   texts: [
     {
