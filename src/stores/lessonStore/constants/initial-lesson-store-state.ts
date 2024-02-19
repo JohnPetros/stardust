@@ -8,7 +8,7 @@ export const INITIAL_LESSON_STORE_STATE: LessonStoreState = {
   currentQuestionIndex: 0,
   incorrectAnswersCount: 0,
   livesCount: 5,
-  answerHandler: () => {},
+  answerHandler: () => { },
   isAnswerCorrect: false,
   isAnswerVerified: false,
   isAnswered: false,

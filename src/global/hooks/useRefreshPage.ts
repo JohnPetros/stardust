@@ -2,7 +2,7 @@ import { useEventListener } from './useEventListener'
 
 export function useRefreshPage(
   onRefreshPage: (() => void | Promise<void>) | null = null,
-  isEnabled: boolean = true
+  isEnabled = true
 ) {
   async function handlePageRefresh(event: BeforeUnloadEvent) {
     if (!isEnabled) return

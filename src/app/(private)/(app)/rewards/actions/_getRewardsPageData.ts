@@ -47,6 +47,8 @@ export async function _getRewardsPageData({
     case 'star': {
       const starPaylod = Object.values(payloadObject)[0] as StarPayload
 
+      console.log({ starPaylod })
+
       if (!isStarPayload(starPaylod))
         throw new Error(APP_ERRORS.rewards.payloadNotFound)
 
@@ -56,6 +58,8 @@ export async function _getRewardsPageData({
         questions: starPaylod.questions,
         starId: starPaylod.starId,
       })
+
+      console.log('seconds', starPaylod.seconds)
 
       xp = lessonRewards.xp
       coins = lessonRewards.coins

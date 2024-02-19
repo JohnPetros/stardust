@@ -1,8 +1,8 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
 import { LottieRef } from 'lottie-react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { CongratulationsProps } from '.'
 
@@ -11,6 +11,7 @@ import { _deleteCookie } from '@/global/actions/_deleteCookie'
 import { AlertDialogRef } from '@/global/components/AlertDialog/types/AlertDialogRef'
 import { COOKIES } from '@/global/constants'
 import { playAudio } from '@/global/helpers'
+import { useEventListener } from '@/global/hooks/useEventListener'
 import { useRefreshPage } from '@/global/hooks/useRefreshPage'
 
 export function useCongratulations({
@@ -27,10 +28,12 @@ export function useCongratulations({
 
   const { mutateUserCache } = useAuthContext()
 
+
   const alertDialogRef = useRef<AlertDialogRef>(null)
   const starsChainRef = useRef(null) as LottieRef
 
   const router = useRouter()
+  const pathname = usePathname()
 
   function handleFirstButtonClick() {
     setIsFirstClick(false)
@@ -39,7 +42,7 @@ export function useCongratulations({
       alertDialogRef.current?.open()
     }
 
-    const shouldStreakBeVisible = todayStatus == 'todo'
+    const shouldStreakBeVisible = todayStatus === 'todo'
 
     if (shouldStreakBeVisible) {
       setIsStreakVisible(true)
@@ -61,11 +64,23 @@ export function useCongratulations({
     await exit()
   }
 
+  async function handleBack() {
+    alert('back')
+  }
+
   useRefreshPage(handleSecondButtonClick)
+
 
   useEffect(() => {
     playAudio('earning.wav')
   }, [])
+
+  useEffect(() => {
+    history.pushState(null, '', location.href)
+    window.onpopstate = () => {
+      history.go(1)
+    };
+  }, []);
 
   return {
     isFirstClick,
