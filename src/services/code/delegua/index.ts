@@ -19,6 +19,7 @@ import type {
   ChallengeTestCaseInput,
 } from '@/@types/Challenge'
 import { checkNumeric } from '@/global/helpers'
+import { obtenhaTipo } from './helpers/obtenhaTipo'
 
 const SEPARADOR = '@delegua-separador'
 
@@ -27,11 +28,11 @@ export function useDelegua(): ICode {
   const avaliadorSintatico = new AvaliadorSintatico()
 
   return {
-    async run(code: string, shouldReturnResult: boolean = false) {
-      let saida = ''
+    async run(code: string, shouldReturnResult = false) {
+      const saida: string[] = []
 
       function funcaoDeSaida(novaSaida: string) {
-        saida = novaSaida
+        saida.push(novaSaida)
       }
 
       const interpretador = new InterpretadorBase(
@@ -64,8 +65,7 @@ export function useDelegua(): ICode {
         throw `${erro.erroInterno}${SEPARADOR}${linhaDoErro}`
       }
 
-      console.log('delegua', { saida })
-      console.log({ shouldReturnResult })
+      console.log('saida', saida)
 
       let result: string | boolean = ''
 
@@ -101,7 +101,7 @@ export function useDelegua(): ICode {
 
     desformatOutput(output: ChallengeTestCaseExpectedOutput) {
       if (Array.isArray(output)) {
-        return '[' + output.join(',').replace(/"/g, '') + ']'
+        return `[${output.join(',').replace(/"/g, '')}]`
       }
 
       return String(output)
@@ -142,15 +142,30 @@ export function useDelegua(): ICode {
     },
 
     addInput(input: ChallengeTestCaseInput, code: string) {
-      input.forEach(
-        (value) =>
-          (code = code.replace(
-            DELEGUA_REGEX.leia,
-            Array.isArray(value) ? `[${value}]` : value.toString()
-          ))
-      )
+      let codigo = code
 
-      return code
+      for (const value of input) {
+        let valor = value
+        const tipo = obtenhaTipo(valor)
+
+        switch (tipo) {
+          case 'vetor':
+            valor = `[${value}]`
+            break
+          case 'numero':
+            valor = value.toString()
+            break
+          case 'texto':
+            valor = `"${input}"`
+        }
+
+        codigo = code.replace(
+          DELEGUA_REGEX.leia,
+          valor
+        )
+      }
+
+      return codigo
     },
 
     addFunction(
@@ -162,8 +177,8 @@ export function useDelegua(): ICode {
         Array.isArray(value) ? `[${value.join(',')}]` : value
       )
 
-      const params = '(' + paramsValues.join(',') + ')'
-      return code.concat('\n' + functionName + params + ';')
+      const params = `(${paramsValues.join(',')})`
+      return code.concat(`\n${functionName}${params};`)
     },
 
     handleError(error: string) {

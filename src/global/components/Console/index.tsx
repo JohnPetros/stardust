@@ -1,8 +1,8 @@
 'use client'
 
-import { ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 import { CaretDown, ToggleLeft, ToggleRight } from '@phosphor-icons/react'
-import { motion, Variants } from 'framer-motion'
+import { Variants, motion } from 'framer-motion'
+import { ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 
 import { Tooltip } from '../Tooltip'
 
@@ -18,7 +18,7 @@ const consoleAnimations: Variants = {
 }
 
 export type ConsoleProps = {
-  results: string[]
+  output: string[]
   height: number
 }
 
@@ -28,12 +28,11 @@ export type ConsoleRef = {
 }
 
 export function ConsoleComponent(
-  { results, height }: ConsoleProps,
+  { output, height }: ConsoleProps,
   ref: ForwardedRef<ConsoleRef>
 ) {
   const {
     isOpen,
-    output,
     animationControls,
     shouldFormatOutput,
     open,
@@ -41,7 +40,7 @@ export function ConsoleComponent(
     calculateMinHeight,
     handleDragEnd,
     handleToggleFormatOutput,
-  } = useConsole({ results, height })
+  } = useConsole(height)
 
   useImperativeHandle(
     ref,
@@ -54,57 +53,43 @@ export function ConsoleComponent(
     [open, close]
   )
 
+  console.log({ output })
+
   return (
     <motion.div
       variants={consoleAnimations}
       animate={animationControls}
-      initial="closed"
-      drag="y"
+      initial='closed'
+      drag='y'
       dragConstraints={{ top: 0 }}
       dragElastic={0}
       dragMomentum={false}
       onDragEnd={handleDragEnd}
       style={{ minHeight: calculateMinHeight() }}
-      className="absolute -bottom-4 w-full cursor-pointer rounded-t-lg bg-gray-700"
+      className='absolute -bottom-4 w-full cursor-pointer rounded-t-lg bg-gray-700'
     >
-      <div className="border-b border-gray-400 px-6 py-2">
-        <span className="mx-auto block h-[2px] w-1/6 rounded-md bg-gray-400"></span>
-        <div className="mt-1 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <strong className="text-gray-200">Resultado</strong>
-            <Tooltip direction="bottom" content="Formatar resultado">
-              <button
-                type="button"
-                onClick={handleToggleFormatOutput}
-                // tabIndex={isOpen ? undefined : -1}
-              >
-                {shouldFormatOutput ? (
-                  <ToggleRight
-                    className="text-lg text-gray-400"
-                    weight="bold"
-                  />
-                ) : (
-                  <ToggleLeft className="text-lg text-gray-400" weight="bold" />
-                )}
-              </button>
-            </Tooltip>
+      <div className='border-b border-gray-400 px-6 py-2'>
+        <span className='mx-auto block h-[2px] w-1/6 rounded-md bg-gray-400' />
+        <div className='mt-1 flex items-center justify-between'>
+          <div className='flex items-center gap-3'>
+            <strong className='text-gray-200'>Resultado</strong>
           </div>
-          <Tooltip direction="bottom" content="Fechar console">
-            <button
-              type="button"
-              onClick={close}
-              tabIndex={isOpen ? undefined : -1}
-            >
-              <CaretDown className="text-lg text-gray-400" weight="bold" />
+          <Tooltip direction='bottom' content='Fechar console'>
+            <button type='button' onClick={close} tabIndex={isOpen ? undefined : -1}>
+              <CaretDown className='text-lg text-gray-400' weight='bold' />
             </button>
           </Tooltip>
         </div>
       </div>
 
-      <ul className="px-6 py-2">
-        {results.map((output) => (
-          <li key={String(output)} className="block text-sm text-gray-300"></li>
-        ))}
+      <ul className='px-6 py-2'>
+        {output.length > 0
+          ? output.map((output) => (
+              <li key={String(output)} className='block text-sm text-gray-300'>
+                {output}
+              </li>
+            ))
+          : 'Sem resultado'}
       </ul>
     </motion.div>
   )

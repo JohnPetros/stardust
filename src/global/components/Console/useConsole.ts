@@ -1,32 +1,18 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
 import { PanInfo, useAnimation } from 'framer-motion'
-
-import { ConsoleProps } from '.'
+import { useCallback, useState } from 'react'
 
 import { STORAGE } from '@/global/constants'
-import { useLocalStorage } from '@/global/hooks/useLocalStorage'
-import { useCode } from '@/services/code'
 
-export function useConsole({ height, results }: ConsoleProps) {
+export function useConsole(height: number) {
   const controls = useAnimation()
 
-  const [output, setOutput] = useState<string[]>([])
   const [isOpen, setIsOpen] = useState(false)
   const [shouldFormatOutput, setShouldFormatOutput] = useState(false)
 
-  const code = useCode()
-
-  const shouldFormatConsoleOutput = useLocalStorage<boolean>(
-    STORAGE.keys.shouldFormatConsoleOutput
-  )
-  const shouldPrettify = shouldFormatConsoleOutput.get() ?? false
-
-  const outputTypes = useRef<string[]>([])
-
   function calculateMinHeight() {
-    return ((height + 100) / 10) * 0.5 + 'rem'
+    return `${((height + 100) / 10) * 0.5}rem`
   }
 
   const open = useCallback(() => {
@@ -54,25 +40,8 @@ export function useConsole({ height, results }: ConsoleProps) {
     }
   }
 
-  useEffect(() => {
-    setOutput([])
-    if (!results.length) return
-
-    const formattedOutput = code.formatOutput(results, shouldPrettify)
-
-    setOutput(formattedOutput)
-  }, [results])
-
-  useEffect(() => {
-    const shouldFormatConsoleOutput = Boolean(
-      localStorage.getItem(STORAGE.keys.shouldFormatConsoleOutput) === 'true'
-    )
-    setShouldFormatOutput(shouldFormatConsoleOutput)
-  }, [isOpen])
-
   return {
     isOpen,
-    output,
     animationControls: controls,
     shouldFormatOutput,
     open,

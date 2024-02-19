@@ -18,7 +18,7 @@ export function useCodeEditorPlayground(
   const [output, setOutput] = useState<string[]>([])
   const [shouldOpenPrompt, setShouldOpenPrompt] = useState(false)
 
-  const { execute: executeCode, handleError, getInput } = useCode()
+  const { run, handleError, getInput, addInput, } = useCode()
 
   const toast = useToastContext()
 
@@ -37,7 +37,7 @@ export function useCodeEditorPlayground(
 
   const showError = useCallback(
     (message: string, line: number) => {
-      toast.show(`${message}` + formatErrorLine(line), {
+      toast.show(`${message} ${formatErrorLine(line)}`, {
         type: 'error',
         seconds: 5,
       })
@@ -46,12 +46,14 @@ export function useCodeEditorPlayground(
   )
 
   async function formatCodeWithInput(code: string, input: string) {
-    const regex = REGEX.insideInput
-    const match = code.match(regex)
+    // const regex = REGEX.insideInput
+    // const match = code.match(regex)
 
-    userCode.current = match
-      ? code.replace(match[0], checkNumeric(input) ? input : "'" + input + "'")
-      : userCode.current
+    // userCode.current = match
+    //   ? code.replace(match[0], checkNumeric(input) ? input : `"${input}"`)
+    //   : userCode.current
+
+    userCode.current = addInput([input], code)
 
     promptRef.current?.setValue('')
     runUserCode()
@@ -102,9 +104,9 @@ export function useCodeEditorPlayground(
     promptRef.current?.close()
 
     try {
-      const { output } = await executeCode(userCode.current)
+      const { output } = await run(userCode.current, false)
 
-      console.log('setOutput', { output })
+      console.warn('setOutput', { output })
       setOutput(output)
 
       consoleRef.current?.open()
@@ -112,10 +114,8 @@ export function useCodeEditorPlayground(
 
       resetToOriginalUserCode()
     } catch (error) {
-      console.log({ error })
+      console.error({ error })
       const codeError = handleError(String(error))
-
-      console.log({ codeError })
 
       showError(codeError.message, codeError.line)
     }

@@ -1,15 +1,17 @@
 import { checkNumeric } from '@/global/helpers'
 
-export function obtenhaTipo(valor: string) {
+type Tipo = 'vetor' | 'texto' | 'numero'
+
+export function obtenhaTipo(valor: unknown): Tipo {
   if (Array.isArray(valor)) {
     return 'vetor'
   }
 
-  const eTexto = valor.at(0) === '"' || valor.at(-1) === '"'
+  const eTexto = typeof valor === 'string' && (valor.at(0) === '"' || valor.at(-1) === '"')
 
   if (eTexto) return 'texto'
 
-  const eNumero = checkNumeric(valor)
+  const eNumero = checkNumeric(String(valor))
 
   if (eNumero) return 'numero'
 
