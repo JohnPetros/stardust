@@ -232,6 +232,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "comments"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_comments_user_slug_fkey"
+            columns: ["user_slug"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["slug"]
+          },
+          {
+            foreignKeyName: "public_comments_user_slug_fkey"
+            columns: ["user_slug"]
+            isOneToOne: false
+            referencedRelation: "users_view"
+            referencedColumns: ["slug"]
           }
         ]
       }
@@ -329,19 +343,19 @@ export type Database = {
         Row: {
           content: Json
           id: string
-          order: number
+          position: number
           star_id: string
         }
         Insert: {
           content: Json
           id?: string
-          order: number
+          position: number
           star_id: string
         }
         Update: {
           content?: Json
           id?: string
-          order?: number
+          position?: number
           star_id?: string
         }
         Relationships: [
