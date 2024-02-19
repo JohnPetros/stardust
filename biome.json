@@ -68,6 +68,7 @@
   },
   "javascript": {
     "formatter": {
+      "enabled": true,
       "trailingComma": "es5",
       "jsxQuoteStyle": "single",
       "semicolons": "asNeeded",
