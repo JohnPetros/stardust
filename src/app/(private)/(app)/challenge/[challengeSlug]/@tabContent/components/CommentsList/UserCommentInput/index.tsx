@@ -55,7 +55,7 @@ export function UserCommentInput({
           className="flex flex-col items-center gap-3 md:flex-row"
           onSubmit={handlePostComment}
         >
-          <UserAvatar avatarId={user.avatar_id} size={52} />
+          <UserAvatar avatarId={user.avatarId} size={52} />
           <div
             className={twMerge(
               'h-auto w-full rounded-md border-[.025rem] border-transparent bg-gray-700 p-4 ',

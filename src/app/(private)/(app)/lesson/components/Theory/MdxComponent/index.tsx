@@ -14,7 +14,7 @@ function MemoizedMdxComponent({ content, hasAnimation }: MdxTextProps) {
   const { mdxComponentRef, mdxContent } = useMdxComponent(content, hasAnimation)
 
   return (
-    <div  ref={mdxComponentRef}>
+    <div ref={mdxComponentRef}>
       <Mdx>{mdxContent}</Mdx>
     </div>
   )

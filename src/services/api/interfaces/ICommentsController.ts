@@ -14,7 +14,7 @@ export interface ICommentsController {
   deleteComment(commentId: string, userId: string): Promise<void>
   postComment(
     comment: Pick<Comment, 'content' | 'challengeId' | 'parentCommentId'>,
-    userId: string
+    userSlug: string
   ): Promise<void>
   addUpvotedComment(commentId: string, userId: string): Promise<void>
   removeUpvotedComment(commentId: string, userId: string): Promise<void>

@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react'
 
-import { AlertRef } from '@/global/components/AlertDialog'
 import { PopoverMenuButton } from '@/global/components/PopoverMenu'
 import { APP_ERRORS } from '@/global/constants'
 import { CACHE } from '@/global/constants/cache'
 import { useApi } from '@/services/api'
 import { useCache } from '@/services/cache'
+import { AlertDialogRef } from '@/global/components/AlertDialog/types/AlertDialogRef'
 
 export function useComment(commentId: string) {
   const [shouldFetchCommentReplies, setShouldFetchCommentReplies] =
@@ -16,7 +16,7 @@ export function useComment(commentId: string) {
   const [isRepliesVisible, setIsRepliesVisible] = useState(false)
 
   const api = useApi()
-  const alertRef = useRef<AlertRef>(null)
+  const alertDialogRef = useRef<AlertDialogRef>(null)
 
   async function getReplies() {
     return await api.getCommentReplies(commentId)
@@ -74,7 +74,7 @@ export function useComment(commentId: string) {
     {
       title: 'Deletar comentário',
       isToggle: false,
-      action: () => alertRef.current?.open(),
+      action: () => alertDialogRef.current?.open(),
     },
   ]
 
@@ -85,7 +85,7 @@ export function useComment(commentId: string) {
     isLoadingReplies: isLoading ?? isRefetching,
     popoverMenuButtons,
     canEditComment,
-    alertRef,
+    alertDialogRef,
     handleEditComment,
     handleToggleIsUserReplyInputVisible,
     handleToggleIsRepliesVisible,

@@ -85,40 +85,41 @@ export const SupabaseCommentsController = (
       return replies
     },
 
-    async editComment(commentId: string, userId: string, content: string) {
+    async editComment(commentId: string, userSlug: string, content: string) {
       const { error } = await supabase
         .from('comments')
         .update({ content })
         .eq('id', commentId)
-        .eq('user_id', userId)
+        .eq('user_slug', userSlug)
 
       if (error) {
         throw new Error(error.message)
       }
     },
 
-    async deleteComment(commentId: string, userId: string) {
+    async deleteComment(commentId: string, userSlug: string) {
       const { error } = await supabase
         .from('comments')
         .delete()
         .eq('id', commentId)
-        .eq('user_id', userId)
+        .eq('user_slug', userSlug)
 
       if (error) {
+        console.log(error)
         throw new Error(error.message)
       }
     },
 
     async postComment(
       comment: Pick<Comment, 'content' | 'challengeId' | 'parentCommentId'>,
-      userId: string
+      userSlug: string
     ) {
       const { error } = await supabase.from('comments').insert([
         {
           content: comment.content,
           challenge_id: comment.challengeId,
           parent_comment_id: comment.parentCommentId,
-          user_id: userId,
+          user_slug: userSlug,
         },
       ])
 
@@ -127,10 +128,10 @@ export const SupabaseCommentsController = (
       }
     },
 
-    async addUpvotedComment(commentId: string, userId: string) {
+    async addUpvotedComment(commentId: string, userSlug: string) {
       const { error } = await supabase.from('users_upvoted_comments').insert({
         comment_id: commentId,
-        user_id: userId,
+        user_slug: userSlug,
       })
 
       if (error) {
@@ -138,12 +139,12 @@ export const SupabaseCommentsController = (
       }
     },
 
-    async removeUpvotedComment(commentId: string, userId: string) {
+    async removeUpvotedComment(commentId: string, userSlug: string) {
       const { error } = await supabase
         .from('users_upvoted_comments')
         .delete()
         .eq('comment_id', commentId)
-        .eq('user_id', userId)
+        .eq('user_slug', userSlug)
 
       if (error) {
         throw new Error(error.message)

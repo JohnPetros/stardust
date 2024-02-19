@@ -61,7 +61,7 @@ export function useCommentsList(canShowComments: boolean) {
     error,
     isLoading,
     refetch,
-  } = useCache({
+  } = useCache<Comment[]>({
     key: CACHE.keys.comments,
     fetcher: getFilteredComments,
     dependencies: [challenge?.id, user?.id, sorter, order],
@@ -100,8 +100,8 @@ export function useCommentsList(canShowComments: boolean) {
           challengeId: challenge.id,
           content: userComment,
           parentCommentId: null,
-        },
-        user.id
+      },
+        user.slug
       )
       refetch()
     } catch (error) {
