@@ -6,6 +6,8 @@ import { SupabaseComment } from '../types/SupabaseComment'
 
 import type { Comment } from '@/@types/Comment'
 
+type BaseComment = Pick<Comment, 'content' | 'challengeId' | 'parentCommentId'>
+
 export const SupabaseCommentsController = (
   supabase: Supabase
 ): ICommentsController => {
@@ -71,67 +73,69 @@ export const SupabaseCommentsController = (
       const { data, error } = await supabase
         .from('comments')
         .select(
-          'id, content, parent_comment_id, challenge_id, created_at, user:users(slug, avatar_id), replies:comments(count)'
+          'id, content, parent_comment_id, challenge_id, created_at, user:users(slug, avatar_id), replies:comments(count), upvotes:users_upvoted_comments(count)'
         )
         .eq('parent_comment_id', commentId)
+        .order('created_at', { ascending: false })
         .returns<SupabaseComment[]>()
 
       if (error) {
         throw new Error(error.message)
       }
 
+
       const replies: Comment[] = data.map(SupabaseCommentAdapter)
 
       return replies
     },
 
-    async editComment(commentId: string, userSlug: string, content: string) {
+    async editComment(id: string, userSlug: string, content: string) {
       const { error } = await supabase
         .from('comments')
         .update({ content })
-        .eq('id', commentId)
-        .eq('user_slug', userSlug)
+        .match({ id, user_slug: userSlug })
 
       if (error) {
         throw new Error(error.message)
       }
     },
 
-    async deleteComment(commentId: string, userSlug: string) {
+    async deleteComment(id: string, userSlug: string) {
       const { error } = await supabase
         .from('comments')
         .delete()
-        .eq('id', commentId)
-        .eq('user_slug', userSlug)
+        .match({ id, user_slug: userSlug })
 
       if (error) {
-        console.log(error)
         throw new Error(error.message)
       }
     },
 
     async postComment(
-      comment: Pick<Comment, 'content' | 'challengeId' | 'parentCommentId'>,
+      comment: BaseComment,
       userSlug: string
     ) {
-      const { error } = await supabase.from('comments').insert([
+      const { error } = await supabase.from('comments').insert(
         {
           content: comment.content,
           challenge_id: comment.challengeId,
           parent_comment_id: comment.parentCommentId,
           user_slug: userSlug,
         },
-      ])
+      )
+
+      console.log(comment)
+      console.log(userSlug)
 
       if (error) {
         throw new Error(error.message)
       }
     },
 
-    async addUpvotedComment(commentId: string, userSlug: string) {
+    async addUpvotedComment(commentId: string, userId: string) {
       const { error } = await supabase.from('users_upvoted_comments').insert({
         comment_id: commentId,
-        user_slug: userSlug,
+        user_id: userId,
       })
 
       if (error) {
@@ -139,12 +143,11 @@ export const SupabaseCommentsController = (
       }
     },
 
-    async removeUpvotedComment(commentId: string, userSlug: string) {
+    async removeUpvotedComment(commentId: string, userId: string) {
       const { error } = await supabase
         .from('users_upvoted_comments')
         .delete()
-        .eq('comment_id', commentId)
-        .eq('user_slug', userSlug)
+        .match({ comment_id: commentId, user_id: userId })
 
       if (error) {
         throw new Error(error.message)

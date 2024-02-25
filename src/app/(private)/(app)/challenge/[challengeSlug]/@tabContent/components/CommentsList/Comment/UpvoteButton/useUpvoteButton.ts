@@ -2,18 +2,18 @@
 
 import { useEffect, useState } from 'react'
 
-import type { UpvotesButtonProps } from '.'
+import { UpvoteButtonProps } from './types/UpvotesButtonProps'
 
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 import { APP_ERRORS } from '@/global/constants'
 import { useApi } from '@/services/api'
 
-export function useUpvotesButton({
+export function useUpvoteButton({
   commentId,
   initialUpvotesCount,
   isCommentUpvoted,
-}: UpvotesButtonProps) {
+}: UpvoteButtonProps) {
   const [upvotes, setUpvotes] = useState(initialUpvotesCount)
   const [isUpvoted, setIsUpvoted] = useState(isCommentUpvoted)
 
@@ -35,6 +35,8 @@ export function useUpvotesButton({
           type: 'error',
           seconds: 5,
         })
+        setIsUpvoted(true)
+        setUpvotes(upvotes)
       }
 
       return
@@ -50,6 +52,8 @@ export function useUpvotesButton({
         type: 'error',
         seconds: 5,
       })
+      setIsUpvoted(false)
+      setUpvotes(upvotes)
     }
   }
 

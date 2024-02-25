@@ -10,12 +10,12 @@ export interface ICommentsController {
   ): Promise<Comment[]>
   getUserUpvotedCommentsIds(userId: string): Promise<string[]>
   getCommentReplies(commentId: string): Promise<Comment[]>
-  editComment(commentId: string, userId: string, content: string): Promise<void>
-  deleteComment(commentId: string, userId: string): Promise<void>
+  editComment(commentId: string, userSlug: string, newContent: string): Promise<void>
+  deleteComment(commentId: string, userSlug: string): Promise<void>
   postComment(
     comment: Pick<Comment, 'content' | 'challengeId' | 'parentCommentId'>,
     userSlug: string
   ): Promise<void>
-  addUpvotedComment(commentId: string, userId: string): Promise<void>
-  removeUpvotedComment(commentId: string, userId: string): Promise<void>
+  addUpvotedComment(commentId: string, userSlug: string): Promise<void>
+  removeUpvotedComment(commentId: string, userSlug: string): Promise<void>
 }

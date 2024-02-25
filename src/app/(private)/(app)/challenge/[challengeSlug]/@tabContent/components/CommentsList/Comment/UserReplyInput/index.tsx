@@ -8,11 +8,7 @@ type UserReplyProps = {
   onCancel: () => void
 }
 
-export function UserReplyInput({
-  commentId,
-  onPostReply,
-  onCancel,
-}: UserReplyProps) {
+export function UserReplyInput({ commentId, onPostReply, onCancel }: UserReplyProps) {
   const { handleReplyChange, handlePostReply, reply } = useUserReplyInput(
     commentId,
     onPostReply
@@ -22,14 +18,15 @@ export function UserReplyInput({
     <>
       <UserCommentInput
         id={`user-reply-${commentId}`}
-        title="Responder"
-        placeholder="responda esse usuário..."
+        title='Responder'
+        placeholder='responda esse usuário...'
         comment={reply}
         onCommentChange={handleReplyChange}
         onPost={handlePostReply}
       />
       <button
-        className="mt-3 translate-x-6 text-sm text-green-700"
+        type='button'
+        className='mt-3 translate-x-6 text-sm text-green-700'
         onClick={onCancel}
       >
         Cancelar resposta

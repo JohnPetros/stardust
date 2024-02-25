@@ -1,11 +1,17 @@
 import { useRef, useState } from 'react'
 
+import type { Comment } from '@/@types/Comment'
+
+import { AlertDialogRef } from '@/global/components/AlertDialog/types/AlertDialogRef'
 import { PopoverMenuButton } from '@/global/components/PopoverMenu'
 import { APP_ERRORS } from '@/global/constants'
 import { CACHE } from '@/global/constants/cache'
+
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
+import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
+
 import { useApi } from '@/services/api'
 import { useCache } from '@/services/cache'
-import { AlertDialogRef } from '@/global/components/AlertDialog/types/AlertDialogRef'
 
 export function useComment(commentId: string) {
   const [shouldFetchCommentReplies, setShouldFetchCommentReplies] =
@@ -18,8 +24,28 @@ export function useComment(commentId: string) {
   const api = useApi()
   const alertDialogRef = useRef<AlertDialogRef>(null)
 
+  function checkUserUpvotedReply(
+    comment: Comment,
+    votedCommentsIds: string[]
+  ) {
+    const isVoted = votedCommentsIds.includes(comment.id)
+
+    return {
+      ...comment,
+      isVoted,
+    }
+  }
+
   async function getReplies() {
-    return await api.getCommentReplies(commentId)
+    if (!user) return
+
+    const upvotedCommentsIds = await api.getUserUpvotedCommentsIds(user.id)
+
+    const replies = await api.getCommentReplies(commentId)
+
+    return replies.map((reply) =>
+      checkUserUpvotedReply(reply, upvotedCommentsIds)
+    )
   }
 
   const {
@@ -35,6 +61,9 @@ export function useComment(commentId: string) {
     isEnabled: shouldFetchCommentReplies,
   })
 
+  const { user } = useAuthContext()
+  const toast = useToastContext()
+
   if (error) throw new Error(APP_ERRORS.comments.failedrepliesFetching)
 
   async function handlePostUserReply() {
@@ -42,6 +71,17 @@ export function useComment(commentId: string) {
     setIsRepliesVisible(true)
     setIsUserReplyInputVisible(false)
     if (!shouldFetchCommentReplies) setShouldFetchCommentReplies(true)
+  }
+
+  async function handleDeleteUserReply(replyId: string) {
+    if (!user) return
+
+    try {
+      await api.deleteComment(replyId, user.slug)
+      await refetchReplies()
+    } catch (error) {
+      toast.show(APP_ERRORS.comments.failedReplyDeletion, { type: 'error', seconds: 5 })
+    }
   }
 
   function handleCancelUserReply() {
@@ -90,6 +130,7 @@ export function useComment(commentId: string) {
     handleToggleIsUserReplyInputVisible,
     handleToggleIsRepliesVisible,
     handlePostUserReply,
+    handleDeleteUserReply,
     handleCancelCommentEdition,
     handleCancelUserReply,
   }

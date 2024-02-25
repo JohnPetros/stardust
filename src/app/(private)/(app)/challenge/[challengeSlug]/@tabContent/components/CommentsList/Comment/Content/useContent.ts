@@ -24,7 +24,7 @@ export function useContent(
     if (!user) return
 
     try {
-      await api.editComment(commentId, user.id, newContent)
+      await api.editComment(commentId, user.slug, newContent)
       onEdit()
     } catch (error) {
       console.error(error)

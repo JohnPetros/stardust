@@ -1,14 +1,17 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 import { Comment } from '@/@types/Comment'
-import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
-import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
+
 import { PopoverMenuButton } from '@/global/components/PopoverMenu'
 import { APP_ERRORS, ROUTES } from '@/global/constants'
 import { CACHE } from '@/global/constants/cache'
+
+import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
+import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
+
 import { useApi } from '@/services/api'
 import type { Order } from '@/services/api/types/Order'
 import { useCache } from '@/services/cache'
@@ -18,15 +21,16 @@ type Sorter = 'date' | 'upvotes'
 
 export function useCommentsList(canShowComments: boolean) {
   const challenge = useChallengeStore((store) => store.state.challenge)
-  const { user } = useAuthContext()
 
   const [sorter, setSorter] = useState<Sorter>('date')
   const [order, setOrder] = useState<Order>('descending')
   const [isPopoverMenuOpen, setIsPopoverMenuOpen] = useState(false)
   const [userComment, setUserComment] = useState('')
 
-  const api = useApi()
   const toast = useToastContext()
+  const { user } = useAuthContext()
+
+  const api = useApi()
   const router = useRouter()
 
   function checkUserUpvotedComment(
@@ -68,7 +72,6 @@ export function useCommentsList(canShowComments: boolean) {
   })
 
   if (error) {
-    console.log(error)
     throw new Error(APP_ERRORS.comments.failedlistFetching)
   }
 
@@ -76,7 +79,7 @@ export function useCommentsList(canShowComments: boolean) {
     if (!user || !comments) return
 
     try {
-      await api.deleteComment(commentId, user.id)
+      await api.deleteComment(commentId, user.slug)
       refetch()
     } catch (error) {
       console.error(error)
@@ -100,7 +103,7 @@ export function useCommentsList(canShowComments: boolean) {
           challengeId: challenge.id,
           content: userComment,
           parentCommentId: null,
-      },
+        },
         user.slug
       )
       refetch()

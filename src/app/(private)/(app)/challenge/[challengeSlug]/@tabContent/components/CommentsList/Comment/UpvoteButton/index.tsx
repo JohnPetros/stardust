@@ -3,20 +3,15 @@
 import { CaretUp } from '@phosphor-icons/react'
 import { twMerge } from 'tailwind-merge'
 
-import { useUpvotesButton } from './useUpvotesButton'
+import { UpvoteButtonProps } from './types/UpvotesButtonProps'
+import { useUpvoteButton } from './useUpvoteButton'
 
-export type UpvotesButtonProps = {
-  commentId: string
-  isCommentUpvoted: boolean
-  initialUpvotesCount: number
-}
-
-export function UpvotesButton({
+export function UpvoteButton({
   initialUpvotesCount,
   commentId,
   isCommentUpvoted,
-}: UpvotesButtonProps) {
-  const { handleToggleUpvoteComment, isUpvoted, upvotes } = useUpvotesButton({
+}: UpvoteButtonProps) {
+  const { handleToggleUpvoteComment, isUpvoted, upvotes } = useUpvoteButton({
     initialUpvotesCount,
     commentId,
     isCommentUpvoted,
@@ -24,14 +19,14 @@ export function UpvotesButton({
 
   return (
     <button
+      type='button'
       onClick={handleToggleUpvoteComment}
       className={twMerge(
         'flex items-center gap-1 text-sm text-gray-300',
         isUpvoted ? 'text-green-700' : 'text-gray-300'
       )}
     >
-      <CaretUp className={isUpvoted ? 'text-green-700' : 'text-gray-300'} />+
-      {upvotes}
+      <CaretUp className={isUpvoted ? 'text-green-700' : 'text-gray-300'} />+{upvotes}
     </button>
   )
 }
