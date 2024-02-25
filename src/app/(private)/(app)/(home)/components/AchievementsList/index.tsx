@@ -28,22 +28,22 @@ export function AchievementsList() {
         {!isLoading ? (
           <>
             <Search
-              id="search-achivements"
-              name="search-achivements"
-              placeholder="pesquisar conquista"
+              id='search-achivements'
+              name='search-achivements'
+              placeholder='pesquisar conquista'
               onSearchChange={handleSearchChange}
             />
-            <div className="ml-auto w-max">
+            <div className='ml-auto w-max'>
               <PopoverMenu
-                label="Abrir menu para ordernar lista de conquistas"
+                label='Abrir menu para ordernar lista de conquistas'
                 buttons={popoverMenuButtons}
               >
-                <button>
-                  <ArrowsDownUp className="text-lg text-gray-500" />
+                <button type='button'>
+                  <ArrowsDownUp className='text-lg text-gray-500' />
                 </button>
               </PopoverMenu>
             </div>
-            <div className="-mt-8">
+            <div className='-mt-8'>
               {achievements?.map((achievement) => (
                 <Achievement
                   key={achievement.id}

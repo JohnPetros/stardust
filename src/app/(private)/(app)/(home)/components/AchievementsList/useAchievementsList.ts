@@ -17,12 +17,14 @@ export function useAchievementsList() {
 
   function sortedAchievementsByLocking(a: AchievementItem, b: AchievementItem) {
     if (!a.isUnlocked && b.isUnlocked) {
-      return -1 // b vem antes de a
-    } else if (a.isUnlocked && !b.isUnlocked) {
-      return 1 // b vem depois de a
-    } else {
-      return 0 // a e b são iguais em relação à isUnlocked
+      return -1
     }
+
+    if (a.isUnlocked && !b.isUnlocked) {
+      return 1
+    }
+
+    return 0
   }
 
   function sortedAchievementsByUnlocking(
@@ -30,13 +32,16 @@ export function useAchievementsList() {
     b: AchievementItem
   ) {
     if (a.isUnlocked && !b.isUnlocked) {
-      return -1 // a vem antes de b
-    } else if (!a.isUnlocked && b.isUnlocked) {
-      return 1 // a vem depois de b
-    } else {
-      return 0 // a e b são iguais em relação à isUnlocked
+      return -1
     }
+
+    if (!a.isUnlocked && b.isUnlocked) {
+      return 1
+    }
+
+    return 0
   }
+
 
   function sortedAchievementsByPosition(
     a: AchievementItem,
