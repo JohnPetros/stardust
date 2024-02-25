@@ -39,7 +39,7 @@ export function useLessonStar(star: Star) {
       const mdxComponents = parseTextsToMdxComponents(star.texts)
       setMdxComponents(mdxComponents)
       setMdxComponentsCount(star.texts.length)
-      setQuestions(star.questions.slice(0, 1) ?? [])
+      setQuestions(star.questions)
       timeout = setTimeout(() => setIsTransitionVisible(false), 1000)
     }
 

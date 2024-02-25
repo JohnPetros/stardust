@@ -8,8 +8,8 @@ import { DragAndDropQuestion } from './DragAndDropQuestion'
 import { OpenQuestion } from './OpenQuestion'
 import { QuestionContainer } from './QuestionContainer'
 import { SelectionQuestion } from './SelectionQuestion'
-import { useQuiz } from './useQuiz'
 import { VerificationButton } from './VerificationButton'
+import { useQuiz } from './useQuiz'
 
 import { AlertDialog } from '@/global/components/AlertDialog'
 import { Button } from '@/global/components/Button'
@@ -31,8 +31,11 @@ export function Quiz({ leaveLesson }: QuizProps) {
 
   if (currentQuestion) {
     return (
-      <div className="flex flex-col">
-        <div className="mt-12 flex h-[calc(100vh-8rem)] w-full overflow-auto">
+      <div className='flex flex-col'>
+        <div
+          key={currentQuestionIndex}
+          className='mt-12 flex h-[calc(100vh-8rem)] w-full overflow-auto'
+        >
           <AnimatePresence>
             {currentQuestion.content.type === 'selection' &&
               currentQuestion.index === currentQuestionIndex && (
@@ -72,18 +75,15 @@ export function Quiz({ leaveLesson }: QuizProps) {
 
           <AlertDialog
             ref={alertDialogRef}
-            type="crying"
-            title="Puxa, parece que você não tem mais vidas!"
+            type='crying'
+            title='Puxa, parece que você não tem mais vidas!'
             body={
-              <p className="mt-3 text-center font-medium text-green-400">
+              <p className='mt-3 text-center font-medium text-green-400'>
                 Mais sorte da próxima vez 😢
               </p>
             }
             action={
-              <Button
-                className="w-32 bg-red-700 text-gray-100"
-                onClick={leaveLesson}
-              >
+              <Button className='w-32 bg-red-700 text-gray-100' onClick={leaveLesson}>
                 Sair
               </Button>
             }

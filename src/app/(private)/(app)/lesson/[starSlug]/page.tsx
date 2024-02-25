@@ -1,7 +1,7 @@
 import { _handleLessonPage } from '../actions/_handleLessonPage'
 import { LessonStar } from '../components/LessonStar'
 
-import { texts } from '@/__tests__/mocks/lesson/planets/planet7/star1/texts'
+import { texts } from '@/__tests__/mocks/lesson/planets/planet7/star4/texts'
 import { APP_ERRORS } from '@/global/constants'
 import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseServerClient'
 import { SupabaseAuthController } from '@/services/api/supabase/controllers/SupabaseAuthController'

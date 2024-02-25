@@ -13,21 +13,22 @@ export function useQuiz() {
   const currentQuestion = useMemo(() => {
     return questions.length
       ? {
-          ...questions[currentQuestionIndex],
-          index: questions.findIndex(
-            (question) => question.id === questions[currentQuestionIndex].id
-          ),
-        }
+        ...questions[currentQuestionIndex],
+        index: questions.findIndex(
+          (question) => question.id === questions[currentQuestionIndex].id
+        ),
+      }
       : null
-  }, [questions, currentQuestionIndex])
+  }, [questions.findIndex, questions.length, questions[currentQuestionIndex], currentQuestionIndex])
 
   const alertDialogRef = useRef<AlertDialogRef>(null)
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    })
+    if (currentQuestionIndex)
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      })
   }, [currentQuestionIndex])
 
   useEffect(() => {

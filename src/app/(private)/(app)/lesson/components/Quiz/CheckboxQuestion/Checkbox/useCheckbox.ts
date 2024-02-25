@@ -14,13 +14,17 @@ export function useCheckbox(isChecked: boolean) {
     {
       if (isAnswerCorrect && isAnswerVerified && isChecked) {
         return 'green'
-      } else if (isAnswerVerified && isChecked) {
-        return 'red'
-      } else if (isChecked) {
-        return 'blue'
-      } else {
-        return 'gray'
       }
+
+      if (isAnswerVerified && isChecked) {
+        return 'red'
+      }
+
+      if (isChecked) {
+        return 'blue'
+      }
+
+      return 'gray'
     }
   }, [isAnswerCorrect, isAnswerVerified, isChecked])
 
