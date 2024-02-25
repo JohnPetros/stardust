@@ -54,7 +54,8 @@
         "useMediaCaption": "warn",
         "noHeaderScope": "warn",
         "useAltText": "warn",
-        "useButtonType": "warn"
+        "useButtonType": "warn",
+        "noAutofocus": "off"
       }
     }
   },
