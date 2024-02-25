@@ -16,6 +16,12 @@ export type CheckboxQuestion = {
   code?: string
 }
 
+type Line = {
+  id: number
+  texts: string[]
+  indentation: number
+}
+
 export type OpenQuestion = {
   type: 'open'
   title: string
@@ -23,12 +29,6 @@ export type OpenQuestion = {
   code?: string
   answers: string[]
   lines: Line[]
-}
-
-type Line = {
-  id: number
-  texts: string[]
-  indentation: number
 }
 
 export type DraggrableItem = {
