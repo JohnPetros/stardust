@@ -13,6 +13,7 @@ import { SupabasePlanetsController } from './controllers/SupabasePlanetsControll
 import { SupabasePlaygroundsController } from './controllers/SupabasePlaygroundsController'
 import { SupabaseRankingsController } from './controllers/SupabaseRankingsController'
 import { SupabaseRocketsController } from './controllers/SupabaseRocketsController'
+import { SupabaseSolutionsController } from './controllers/SupabaseSolutionsController'
 import { SupabaseStarsController } from './controllers/SupabaseStarsController'
 import { SupabaseStorageController } from './controllers/SupabaseStorageController'
 import { SupabaseUsersController } from './controllers/SupabaseUsersController'
@@ -25,21 +26,22 @@ export function useSupabaseApi() {
 
   const supabaseApi = useMemo(() => {
     return {
+      ...SupabaseAchievementsController(supabase),
       ...SupabaseAuthController(supabase),
-      ...SupabaseUsersController(supabase),
       ...SupabaseDocsController(supabase),
       ...SupabaseStarsController(supabase),
       ...SupabaseRocketsController(supabase),
       ...SupabaseAvatarsController(supabase),
       ...SupabasePlanetsController(supabase),
       ...SupabaseStorageController(supabase),
-      ...SupabaseWinnersController(supabase),
       ...SupabaseRankingsController(supabase),
       ...SupabaseCommentsController(supabase),
       ...SupabaseCategoriesController(supabase),
       ...SupabaseChallengesController(supabase),
       ...SupabasePlaygroundsController(supabase),
-      ...SupabaseAchievementsController(supabase),
+      ...SupabaseSolutionsController(supabase),
+      ...SupabaseUsersController(supabase),
+      ...SupabaseWinnersController(supabase),
     }
   }, [supabase])
 
