@@ -19,7 +19,7 @@ export function UserAvatar({ avatarId, size }: UserAvatarProps) {
   return (
     <div
       style={{ width: size, height: size, borderRadius: '50%' }}
-      className="relative grid place-content-center overflow-hidden border border-green-700 bg-gray-300"
+      className='relative grid place-content-center overflow-hidden border border-green-700 bg-gray-300 shrink-0'
     >
       <Avatar.Root>
         <Avatar.Image src={avatarImage} asChild>
@@ -27,7 +27,7 @@ export function UserAvatar({ avatarId, size }: UserAvatarProps) {
             src={avatarImage}
             fill
             alt={avatar?.name ?? ''}
-            className="skeleton"
+            className='skeleton'
             onLoadingComplete={(image) => image.classList.remove('skeleton')}
           />
         </Avatar.Image>

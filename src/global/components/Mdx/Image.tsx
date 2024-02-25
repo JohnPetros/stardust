@@ -3,8 +3,8 @@ import Img from 'next/image'
 import { Animation } from './Animation'
 import { Content } from './Content'
 
-import { useApi } from '@/services/api'
 import { REGEX } from '@/global/constants'
+import { useApi } from '@/services/api'
 
 interface ImageProps {
   picture: string
@@ -19,15 +19,14 @@ export function Image({ picture, hasAnimation = true, children }: ImageProps) {
 
   return (
     <Animation hasAnimation={hasAnimation}>
-      <div className="not-prose flex w-full flex-col items-center justify-center">
+      <div className='not-prose flex w-full flex-col items-center justify-center'>
         <Img
           src={formattedImage}
           width={180}
           height={120}
-          className="skeleton rounded-lg"
+          className='skeleton rounded-lg'
           onLoadingComplete={(image) => image.classList.remove('skeleton')}
-          style={{ objectFit: 'cover' }}
-          alt=""
+          alt=''
         />
         <div>
           <Content hasAnimation={hasAnimation}>{children}</Content>
