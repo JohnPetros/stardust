@@ -8,14 +8,15 @@ export const SupabaseSolutionAdapter = (supabaseSolution: SupabaseSolution) => {
     id: supabaseSolution.id,
     title: supabaseSolution.title,
     content: supabaseSolution.content,
+    slug: supabaseSolution.slug,
     challengeId: supabaseSolution.challenge_id,
-    createdAt: new Date(supabaseSolution.created_at),
     user: {
       slug: supabaseSolution.user.slug,
       avatarId: supabaseSolution.user.avatar_id,
     },
-    commentsCount: supabaseSolution.replies[0].count,
     upvotesCount: supabaseSolution.upvotes[0].count,
+    commentsCount: supabaseSolution.comments ? supabaseSolution.comments[0].count : 0,
+    createdAt: new Date(supabaseSolution.created_at),
   }
 
   return solution

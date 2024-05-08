@@ -6,9 +6,15 @@ export interface IAuthController {
   signUp(email: string, password: string): Promise<SignUpResponse>
   signOut(): Promise<void>
   requestPasswordReset(email: string): Promise<void>
-  resetPassword(newPassword: string): Promise<void>
+  resetPassword(
+    newPassword: string,
+    accessToken: string,
+    refreshToken: string
+  ): Promise<void>
   signInWithGithubOAuth(): Promise<void>
   getUserId(): Promise<string | null>
   confirmEmail(token: string): Promise<boolean>
-  confirmPasswordReset(token: string): Promise<boolean>
+  confirmPasswordReset(
+    token: string
+  ): Promise<{ accessToken: string; refreshToken: string }>
 }

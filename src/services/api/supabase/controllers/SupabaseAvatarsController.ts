@@ -16,7 +16,6 @@ export const SupabaseAvatarsController = (
         .single<Avatar>()
 
       if (error) {
-        console.log(error, 'avatar error')
         throw new Error(error.message)
       }
 

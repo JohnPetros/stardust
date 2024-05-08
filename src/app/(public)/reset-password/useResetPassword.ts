@@ -42,6 +42,7 @@ export function useResetPassword() {
 
           toast.show('Enviamos um e-mail para você redefinir sua senha', {
             seconds: 5,
+            type: 'success',
           })
         } catch (error) {
           console.error(error)
@@ -51,10 +52,9 @@ export function useResetPassword() {
       }
     } catch (error) {
       console.error(error)
-      toast.show(
-        'Error ao tentar redefinir a senha, tente novamente mais tarde',
-        { type: 'error' }
-      )
+      toast.show('Error ao tentar redefinir a senha, tente novamente mais tarde', {
+        type: 'error',
+      })
     } finally {
       setIsLoading(false)
     }
@@ -62,9 +62,7 @@ export function useResetPassword() {
 
   useEffect(() => {
     async function fetchCookie() {
-      const shouldResetPassword = await _getCookie(
-        COOKIES.keys.shouldReturnPassword
-      )
+      const shouldResetPassword = await _getCookie(COOKIES.keys.shouldReturnPassword)
 
       if (shouldResetPassword) {
         setShouldResetPassword(true)
@@ -73,7 +71,7 @@ export function useResetPassword() {
     }
 
     fetchCookie()
-  }, [api])
+  }, [])
 
   return {
     isLoading,

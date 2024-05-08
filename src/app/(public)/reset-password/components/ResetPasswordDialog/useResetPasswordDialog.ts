@@ -1,12 +1,13 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/navigation'
 
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
+import { _getCookie } from '@/global/actions/_getCookie'
 import { AlertDialogRef } from '@/global/components/AlertDialog/types/AlertDialogRef'
-import { ROUTES } from '@/global/constants'
+import { COOKIES, ROUTES } from '@/global/constants'
 import { useApi } from '@/services/api'
 import { useValidation } from '@/services/validation'
 import { ResetPasswordForm } from '@/services/validation/types/ResetPasswordForm'
@@ -34,7 +35,13 @@ export function useResetPasswordDialog(alertDialogRef: AlertDialogRef | null) {
     try {
       setIsLoading(true)
 
-      await api.resetPassword(password)
+      const accessToken = await _getCookie(COOKIES.keys.accessToken)
+      const refreshToken = await _getCookie(COOKIES.keys.refreshToken)
+
+      if (!accessToken || !refreshToken)
+        throw new Error('Access or refresh token not found')
+
+      await api.resetPassword(password, accessToken, refreshToken)
 
       alertDialogRef?.open()
     } catch (error) {

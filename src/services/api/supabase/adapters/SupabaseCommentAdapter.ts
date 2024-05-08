@@ -3,6 +3,7 @@ import type { SupabaseComment } from '../types/SupabaseComment'
 import type { Comment } from '@/@types/Comment'
 
 export const SupabaseCommentAdapter = (supabaseComment: SupabaseComment) => {
+
   const comment: Comment = {
     id: supabaseComment.id,
     content: supabaseComment.content,

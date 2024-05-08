@@ -58,10 +58,21 @@ export const SupabaseAuthController = (supabase: Supabase): IAuthController => {
       }
     },
 
-    async resetPassword(newPassword: string) {
+    async resetPassword(newPassword: string, accessToken: string, refreshToken: string) {
+      const { error: sessionError } = await supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      })
+
+      if (sessionError) {
+        throw new Error(sessionError?.message)
+      }
+
       const { error } = await supabase.auth.updateUser({
         password: newPassword,
       })
+
+      console.log(error)
 
       if (error) {
         throw new Error(error.message)
@@ -86,18 +97,25 @@ export const SupabaseAuthController = (supabase: Supabase): IAuthController => {
 
     async confirmPasswordReset(token: string) {
       const {
-        data: { user },
-        error,
+        data: { session },
+        error: otpError,
       } = await supabase.auth.verifyOtp({
         type: 'recovery',
         token_hash: token,
       })
 
-      if (error) {
-        throw new Error(error?.message)
+      if (otpError) {
+        throw new Error(otpError?.message)
       }
 
-      return !!user?.email
+      if (!session) {
+        throw new Error('Session is not defined')
+      }
+
+      return {
+        accessToken: session.access_token,
+        refreshToken: session.refresh_token,
+      }
     },
 
     async signInWithGithubOAuth() {

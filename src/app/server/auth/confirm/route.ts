@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import { AuthConfirmationError } from '@/@types/AuthConfirmationError'
-import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseServerClient'
-import { SupabaseAuthController } from '@/services/api/supabase/controllers/SupabaseAuthController'
 import { COOKIES, ROUTES } from '@/global/constants'
 import { getSearchParams } from '@/global/helpers/getSearchParams'
+import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseServerClient'
+import { SupabaseAuthController } from '@/services/api/supabase/controllers/SupabaseAuthController'
 
 type Action = 'signup_confirmation' | 'email_change' | 'password_reset'
 
@@ -14,9 +14,7 @@ export async function GET(request: NextRequest) {
   const action = getSearchParams(url, 'action') as Action
 
   function redirectToSignIn(error: AuthConfirmationError) {
-    return NextResponse.redirect(
-      new URL(ROUTES.public.signIn + `?error=${error}`, url)
-    )
+    return NextResponse.redirect(new URL(ROUTES.public.signIn + `?error=${error}`, url))
   }
 
   if (!token) {
@@ -31,9 +29,7 @@ export async function GET(request: NextRequest) {
       try {
         const isConfirmed = await authController.confirmEmail(token)
         if (isConfirmed)
-          return NextResponse.redirect(
-            new URL(ROUTES.private.authConfirmation, url)
-          )
+          return NextResponse.redirect(new URL(ROUTES.private.authConfirmation, url))
       } catch (error) {
         return redirectToSignIn('signup_confirmation_error')
       }
@@ -42,7 +38,10 @@ export async function GET(request: NextRequest) {
     }
     case 'password_reset': {
       try {
-        await authController.confirmPasswordReset(token)
+        const { accessToken, refreshToken } =
+          await authController.confirmPasswordReset(token)
+
+        if (!accessToken || !refreshToken) return redirectToSignIn('password_reset_error')
 
         const redirect = NextResponse.redirect(
           new URL(ROUTES.public.resetPassword, url),
@@ -50,6 +49,18 @@ export async function GET(request: NextRequest) {
         )
 
         redirect.cookies.set(COOKIES.keys.shouldReturnPassword, 'true', {
+          path: '/',
+          httpOnly: true,
+          maxAge: 60 * 15, // 15 minutes
+        })
+
+        redirect.cookies.set(COOKIES.keys.accessToken, accessToken, {
+          path: '/',
+          httpOnly: true,
+          maxAge: 60 * 15, // 15 minutes
+        })
+
+        redirect.cookies.set(COOKIES.keys.refreshToken, refreshToken, {
           path: '/',
           httpOnly: true,
           maxAge: 60 * 15, // 15 minutes

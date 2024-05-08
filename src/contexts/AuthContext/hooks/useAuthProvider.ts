@@ -1,7 +1,7 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
 import useSWR, { mutate } from 'swr'
 
 import type { AuthContextValue } from '../types/AuthContextValue'
@@ -65,7 +65,7 @@ export function useAuthProvider(serverSession: Session | null) {
   }
 
   const mutateUserCache = useCallback(
-    (newData: Partial<User> | null, shouldRevalidate: boolean = true) => {
+    (newData: Partial<User> | null, shouldRevalidate = true) => {
       mutate(
         `/user?session_id=${session?.user.id}`,
         { ...user, ...newData },
