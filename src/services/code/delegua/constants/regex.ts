@@ -5,3 +5,4 @@ export const DELEGUA_REGEX = {
   escreva: /escreva\([^'"]*?(?:(['"])(?:(?!\1)[^\\]|\\.)*\1[^'"]*?)*[^'"]*?\)/,
   dentroDeEscreva: /escreva\((.*?)\)/,
 }
+  

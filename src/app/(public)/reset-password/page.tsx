@@ -3,7 +3,7 @@
 import { EnvelopeSimple } from '@phosphor-icons/react'
 import { Variants, motion } from 'framer-motion'
 
-import { ResetPasswordDialog } from './components/ResetPasswor  dDialog'
+import { ResetPasswordDialog } from './components/ResetPasswordDialog'
 import { useResetPassword } from './useResetPassword'
 
 import { Link } from '@/app/(public)/components/Link'
