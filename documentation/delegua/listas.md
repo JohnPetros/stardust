@@ -1,8 +1,8 @@
 ## Listas
 
-<Text>Vetores são variáveis com capacidade de armazenar 0 ou mais valores. São úteis em ocasiões em que é necessário executar uma lógica com múltiplos valores.</Text>
+<Text>Listas são variáveis com capacidade de armazenar 0 ou mais valores. São úteis em ocasiões em que é necessário executar uma lógica com múltiplos valores.</Text>
 
-Para declarar um vetor é preciso usar colchetes *[]* e separar os elementos por vírgulas.
+Para declarar uma lista é preciso usar colchetes *[]* e separar os elementos por vírgulas.
 
 <code>var lista = [1, 2, 3, 4, 5]</code>
 
@@ -66,7 +66,7 @@ O alinhamento dos itens pode ser arbitrário desde que eles sejam separados por 
 
 escreva(lista[2])
 
-// Resultado: Erro na linha 3: Índice do vetor fora do intervalo.
+// Resultado: Erro na linha 3: Índice da lista fora do intervalo.
 </Code>
 
 ### Substituindo elementos
@@ -261,7 +261,7 @@ O segundo (opcional) é a quantidade de itens que vão ser removidos da lista a 
   // Resultado: [ 'Beto', 'Carla', 'Daniel' ]
 </Code>
 
-Do terceiro argumento adiante (opcional) é definido os elementos que serão adicionados no vetor a partir do ídice inicial.
+Do terceiro argumento adiante (opcional) é definido os elementos que serão adicionados na lista a partir do ídice inicial.
 
 <Code>
   var jogos = [
@@ -322,13 +322,13 @@ Do terceiro argumento adiante (opcional) é definido os elementos que serão adi
 <Code>
   var numeros = [5, 4, 3, 2, 1]
     
-  var vetorOrdenado = numeros.ordenar()
+  var listaOrdenada = numeros.ordenar()
 
-  escreva(vetorOrdenado)
+  escreva(listaOrdenada)
   // Resultado: [ 1, 2, 3, 4, 5 ]
 </Code>
 
-<Alert>Caso o vetor contenha textos, a ordenação será por ordem alfabética.</Alert>
+<Alert>Caso a lista contenha textos, a ordenação será por ordem alfabética.</Alert>
 
 <Code>
   var nomes = ["Erika", "Ana", "Carlos", "Daniel", "Bianca"]
@@ -352,7 +352,7 @@ Do terceiro argumento adiante (opcional) é definido os elementos que serão adi
 
 #### somar()
 
-<Text>Retorna a soma de um vetor de números.</Text>
+<Text>Retorna a soma de uma lista de números.</Text>
 
 <Code>
   var numeros = [1, 2, 3, 4, 5]
@@ -365,7 +365,7 @@ Do terceiro argumento adiante (opcional) é definido os elementos que serão adi
 
 #### Métodos para textos
 
-<Text>Textos também podem ser tratados como vetores.</Text>
+<Text>Textos também podem ser tratados como listas.</Text>
 
 <Code>
   var letras = "abc"
