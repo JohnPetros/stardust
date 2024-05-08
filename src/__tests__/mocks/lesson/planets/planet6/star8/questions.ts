@@ -24,9 +24,9 @@ export const questions: Questions = [
 
 var lixo = []
 para (var i = 0; i < itens.tamanho(); i++) {
-     se (i == 2) {
+     se (i == 2 ou i == 3) {
       continua
-   }
+  }
 
   var itemAtual = itens[i]
   lixo.adicionar(itemAtual)
@@ -50,18 +50,23 @@ para (var i = 0; i < itens.tamanho(); i++) {
     items: [
       { id: 1, label: 'var numeros = [2, 4, 6, 8]' },
       { id: 2, label: 'para cada numero em numeros {' },
-      { id: 3, label: '    se (numero < 6)' },
-      { id: 4, label: '        escreva(numero)' },
-      { id: 5, label: '    }' },
+      { id: 3, label: '\tse (numero < 6)' },
+      { id: 4, label: '\t\tescreva(numero)' },
+      { id: 5, label: '\t}' },
       { id: 6, label: '}' },
     ],
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     title:
-      'Espere o foguete está enviando uma mensagem a nós. Complete o laço `para-cada` para juntar escrever cada parte dela.',
+      'Espere, o foguete está enviando uma mensagem a nós. Complete o laço *para-cada* para juntar escrever cada parte dela.',
     type: 'drag-and-drop',
     lines: [
+      {
+        id: 1,
+        texts: ['var mensagem = ""'],
+        indentation: 0,
+      },
       {
         id: 1,
         texts: ['var partes = ["Já", "estou", "chegando"]'],
@@ -72,8 +77,9 @@ para (var i = 0; i < itens.tamanho(); i++) {
         texts: ['dropZone', 'cada', 'dropZone', 'em', 'dropZone', '{'],
         indentation: 0,
       },
-      { id: 4, texts: ['escreva(animal)'], indentation: 2 },
+      { id: 4, texts: ['mensagem += "${parte} "'], indentation: 2 },
       { id: 5, texts: ['}'], indentation: 0 },
+      { id: 5, texts: ['escreva(mensagem)'], indentation: 0 },
     ],
     dragItems: [
       { id: 1, label: 'para' },
@@ -102,18 +108,18 @@ para (var i = 0; i < itens.tamanho(); i++) {
           'i <',
           ' palavras.',
           'dropZone',
-          '( ); ',
+          '(); ',
           'i++ {',
         ],
         indentation: 0,
       },
       {
         id: 4,
-        texts: ['frase.', 'dropZone', '(palavras[', 'dropZone', '])'],
+        texts: ['frase =', 'dropZone', '("${palavras[', 'dropZone', ']} ")'],
         indentation: 2,
       },
-      { id: 5, texts: ['}'], indentation: 0 },
-      { id: 6, texts: ['escreva(frase);'], indentation: 0 },
+      { id: 5, texts: ['}'], indentation: 2 },
+      { id: 6, texts: ['escreva(frase)'], indentation: 0 },
     ],
     dragItems: [
       { id: 1, label: 'i' },
@@ -134,7 +140,7 @@ para (var i = 0; i < itens.tamanho(); i++) {
 
 escreva(vetores[2][0])`,
     title:
-      'Só para saber que você está manjando de tudo. Qual será o tipo de dado de `vetores[2][0]`',
+      'Só para saber que você está manjando de tudo. Qual será o tipo de dado de *vetores[2][0]*',
     type: 'selection',
     answer: 'texto',
     options: ['lógico', 'texto', 'número', 'vetor'],

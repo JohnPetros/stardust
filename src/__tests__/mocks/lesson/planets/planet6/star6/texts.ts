@@ -14,26 +14,26 @@ export const texts: Text[] = [
   {
     type: 'default',
     content:
-      'Já que todas as mensagens estão sendo recebidas como vetor, podemos juntar os itens para formar um texto.',
+      'Já que todas as mensagens estão sendo recebidas como lista, podemos juntar os itens para formar um texto.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
     type: 'quote',
-    title: 'juntar()',
+    title: 'Método juntar()',
     content:
-      'O método `juntar()` permite unir os elementos de um vetor, transformando em um único texto.',
+      'O método *juntar()* permite unir os elementos de uma lista, transformando em um único texto.',
     picture: 'panda-triste.jpg',
   },
   {
     type: 'default',
     content:
-      'Só que para usar o `juntar()`, é preciso passar um elemento de texto nos parênteses para que ele use esse texto como separador para cada elemento.',
+      'Só que para usar o *juntar()*, é preciso passar um valor do tipo *texto* nos parênteses para que ele use esse texto como separador para cada elemento.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'quote',
     content:
-      'Além disso, o método `juntar()` não altera o vetor original, então será preciso colocar o texto gerado em uma nova variável.',
+      'Além disso, o método *juntar()* não altera o lista original, então será preciso colocar o texto gerado em uma nova variável.',
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -60,7 +60,7 @@ escreva(mensagemCerta)
   },
   {
     type: 'default',
-    content: 'Então, por exemplo, se colocarmos um traço (-) no `juntar()`:',
+    content: 'Então, por exemplo, se colocarmos um traço (-) no *juntar()*:',
     picture: 'panda-pensando.jpg',
   },
   {
@@ -80,7 +80,7 @@ escreva(mensagemCerta)
   {
     type: 'default',
     content:
-      'Logo, para separar cada palavra adequadamente, usando espaço, basta colocar um texto que seja um espaço no `juntar()`.',
+      'Logo, para separar cada palavra adequadamente, usando espaço, basta colocar um texto que seja um espaço no *juntar()*.',
     picture: 'panda-olhando-computador.jpg',
   },
   {
@@ -106,26 +106,26 @@ escreva(mensagemCerta)
   {
     type: 'default',
     content:
-      'Só que, como radar está tranformando as mensagens recebidas em vetores, então é de se presumir que ele também transformará as que serão enviadas quando chegar ao foguete.',
+      'Só que, como radar está tranformando as mensagens recebidas em listas, então é de se presumir que ele também transformará as que serão enviadas quando chegar ao foguete.',
     picture: 'panda-triste.jpg',
   },
   {
     type: 'default',
     content:
-      'Então podemos tentar engenharia reversa. Talvez se mandarmos a mensagem já como vetor, ele se transformará em texto quando chegar ao foguete.',
+      'Então podemos tentar engenharia reversa. Talvez se mandarmos a mensagem já como lista, ele se transformará em texto quando chegar ao foguete.',
     picture: 'panda-pensando.jpg',
   },
   {
     type: 'default',
     content:
-      'Para nossa sorte (de novo), existe um método que faz literalmente isso: o método `dividir()`.',
+      'Para nossa sorte (de novo), existe um método que faz literalmente isso: o método *dividir()*.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'quote',
-    title: 'dividir()',
+    title: 'Método dividir()',
     content:
-      'O método `dividir()` divide um texto em subtextos, transformando-o em um vetor.',
+      'O método *dividir()* divide um texto em subtextos, transformando-o em uma lista.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -144,7 +144,7 @@ escreva(mensagemCerta)
   {
     type: 'default',
     content:
-      'Isso porque é também é preciso passar nos parênteses do `juntar()` um texto que servirá como separador da divisão.',
+      'Isso porque também é preciso passar nos parênteses do *juntar()* um texto que servirá como separador da divisão.',
     picture: 'panda-olhando-computador.jpg',
   },
   {
@@ -158,14 +158,14 @@ escreva(mensagemCerta)
 
 var mensagemCerta = mensagem.dividir("a")       
 escreva(mensagemCerta)
-// Resultado: [ Venh, já, qui ]
+// Resultado: Venh, já, qui
     `,
     isRunnable: true,
   },
   {
     type: 'default',
     content:
-      'Veja que toda letra "a" foi removida do texto, e os textos que estavam envolta de cada letra "a" se tranformaram em um elemento de um vetor.',
+      'Veja que toda letra "a" foi removida do texto, e os textos que estavam envolta de cada letra "a" se tranformaram em um elemento de uma lista.',
     picture: 'panda-triste.jpg',
   },
   {
@@ -185,12 +185,12 @@ escreva(mensagemCerta)
 var mensagemCerta = mensagem.dividir(" ")       
 escreva(mensagemCerta)
 
-// Resultado: [ Venha, já, aqui ]`,
+// Resultado: Venha, já, aqui`,
     isRunnable: true,
   },
   {
     type: 'default',
-    content: 'Agora temos um vetor decente.',
+    content: 'Agora temos uma lista decente.',
     picture: 'panda-comemorando.jpg',
   },
   {
@@ -201,8 +201,9 @@ escreva(mensagemCerta)
   },
   {
     type: 'default',
+    title: 'Método dividir()',
     content:
-      'Para facilitar podemos dizer para o `dividir()` que apenas gere um vetor com apenas 1 elemento.',
+      'Para facilitar podemos dizer para o *dividir()* que apenas gere uma lista com apenas 1 elemento.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -213,18 +214,18 @@ escreva(mensagemCerta)
   {
     type: 'default',
     content:
-      'Através do segundo valor passado nos parênteses do `dividir()`, que difine quantos itens o vetor gerado deve conter.',
+      'Através do segundo valor passado nos parênteses do *dividir()*, que difine quantos itens o lista gerado deve conter.',
     picture: 'panda-olhando-computador.jpg',
   },
   {
     type: 'code',
     content: `var mensagem = "Venha já aqui"
 
-// Nesse caso, vetor gerado por dividir() terá apenas 1 palavra
+// Nesse caso, lista gerado por dividir() terá apenas 1 palavra
 var mensagemCerta = mensagem.dividir(" ", 1)    
 
 escreva(mensagemCerta)
-// Resultado: [ Venha ]
+// Resultado: Venha
 `,
     isRunnable: true,
   },

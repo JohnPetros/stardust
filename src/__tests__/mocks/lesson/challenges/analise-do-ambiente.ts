@@ -96,3 +96,17 @@ escreva(
     },
   ],
 }
+
+/**
+ * 
+var nome = "Datahon"
+var temperatura = 53.5
+var temOxigenio = falso
+
+var tipoNome
+var tipoTemperatura
+var tipoOxigenio
+
+// Escreva o resultado dentro do escreva abaixo
+escreva('Datahon: texto, 53.5: número, falso: lógico')
+ */

@@ -15,7 +15,7 @@ type Questions = [
 export const questions: Questions = [
   {
     title:
-      'Parece que adicionamos um item a mais no carrinho. Quais são os métodos para deletar um item de um vetor?',
+      'Parece que adicionamos um item a mais no carrinho. Quais são os métodos para deletar um item de uma lista?',
     type: 'checkbox',
     options: [
       'deletar()',
@@ -29,7 +29,7 @@ export const questions: Questions = [
   },
   {
     title:
-      'Já estava esquecendo de levar pilhas para lanterna. Complete o código com os métodos adequados, de modo que o resultado estejamos levando apenas `2`.',
+      'Já estava esquecendo de levar pilhas para lanterna. Complete o código com os métodos adequados, de modo que estejamos sempre levando apenas duas, ou seja, o programa deve escrever 2 no final.',
     type: 'drag-and-drop',
     lines: [
       {
@@ -37,8 +37,8 @@ export const questions: Questions = [
         texts: ['var pilhas = ["Pilha AA", "Pilha AA", "Pilha AA"]'],
         indentation: 0,
       },
-      { id: 2, texts: ['aliens.', 'dropZone', '("Pilha AA")'], indentation: 0 },
-      { id: 3, texts: ['escreva(aliens.', 'dropZone', '( ))'], indentation: 0 },
+      { id: 2, texts: ['pilhas.', 'dropZone', '("Pilha AA")'], indentation: 0 },
+      { id: 3, texts: ['escreva(pilhas.', 'dropZone', '())'], indentation: 0 },
     ],
     dragItems: [
       { id: 1, label: 'adicionar' },
@@ -51,7 +51,7 @@ export const questions: Questions = [
   },
   {
     title:
-      'Com certeza precisaremos de boas marcas de casaco. Complete o código abaixo, de modo que seja escrito nessa ordem: \n"NebulaShield, PolarProtec"',
+      'Com certeza precisaremos de boas marcas de casaco. Complete o código abaixo, de modo que seja escrito nessa ordem: "NebulaShield, PolarProtec".',
     type: 'drag-and-drop',
     lines: [
       { id: 1, texts: ['var armas = ['], indentation: 0 },
@@ -84,7 +84,7 @@ peixes.adicionar("Taris")
 escreva(peixes)
     `,
     title:
-      'Lembrei que sou alérgico alguns peixes, então precisaremos removê-los. Qual será o tamanho do vetor peixes?',
+      'Lembrei que sou alérgico a alguns tipos de peixe, então precisaremos removê-los. Qual será o tamanho da lista *peixes*?',
     type: 'selection',
     answer: '2',
     options: ['2', '0', '4', '6'],
@@ -96,7 +96,7 @@ escreva(peixes)
 numeros.remover(100)
 numeros.adicionar(10)`,
     title:
-      'Paguei a conta e recebi troco. Em qual ordem ficará das notas no vetor `carteira`?',
+      'Paguei a conta e recebi troco. Em qual ordem ficará das notas na lista *carteira*?',
     type: 'selection',
     answer: '2, 50, 20, 10',
     options: [

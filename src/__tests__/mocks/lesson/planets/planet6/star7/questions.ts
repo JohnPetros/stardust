@@ -46,7 +46,7 @@ export const questions: Questions = [
       { id: 1, label: 'maiusculo' },
       { id: 2, label: 'minusculo' },
       { id: 3, label: '0' },
-      { id: 4, label: '8' },
+      { id: 4, label: '10' },
       { id: 5, label: '7' },
     ],
     correctDragItemsIdsSequence: [3, 4, 1],
@@ -56,9 +56,9 @@ export const questions: Questions = [
     code: `var galaxia = "Setral"
 var abreviacao = galaxia.subtexto(2, 4)
 
-escreva(abreviacao.maiuscula)`,
+escreva(abreviacao.maiusculo())`,
     title:
-      'Agora peguemos o nome da galáxia em que estamos abreviado. Quais letras da palavra "Setral" estarão contidas na variável `caracteres`?',
+      'Agora peguemos o nome da galáxia em que estamos de forma abreviada. Quais letras da palavra "Setral" estarão contidas na variável *caracteres*?',
     type: 'checkbox',
     options: ['E', 'S', 'T', 'R'],
     correctOptions: ['T', 'R'],
@@ -66,7 +66,7 @@ escreva(abreviacao.maiuscula)`,
   },
   {
     title:
-      'O planeta em que estamos se chama Arrayon e não Matrizion, logo complete o código para o resultado seja igual a falso.',
+      'Como disse antes, o planeta em que estamos se chama Arrayon e não Matrizion, logo complete o código para o resultado seja igual a falso.',
     type: 'drag-and-drop',
     lines: [
       {
@@ -95,7 +95,7 @@ escreva(abreviacao.maiuscula)`,
       },
     ],
     dragItems: [
-      { id: 1, label: '"Marte"' },
+      { id: 1, label: '"Matrizion"' },
       { id: 2, label: 'remover' },
       { id: 3, label: 'substituir' },
       { id: 4, label: '"Arrayon"' },
@@ -106,12 +106,12 @@ escreva(abreviacao.maiuscula)`,
   {
     title:
       'Agora peguemos o hemisfério em que estamos. Qual é de acordo com o código abaixo?',
-    code: `var frase = "Sul é mais frio que o Norte"
+    code: `var frase = "O Sul é mais frio que o Norte"
 
 var novaFrase = frase.maiusculo()
-var hemisferio = novaFrase.subtexto(0, 5)
+var hemisferio = novaFrase.subtexto(2, 5)
 
-escrever(hemisferio)`,
+escreva(hemisferio)`,
     type: 'selection',
     answer: 'SUL',
     options: ['Sul', 'SUL', 'sul', 'norte'],
@@ -119,7 +119,7 @@ escrever(hemisferio)`,
   },
   {
     title:
-      'A mensagem em si não pode ter espaços desnecessários. Complete o código para que o tamanho da variável `mensagem` permaneça igual a `25`, ou seja, que o código resulte em `25`.',
+      'A mensagem em si não pode ter espaços desnecessários. Complete o código para que o tamanho da variável *mensagem* permaneça igual a *25*, ou seja, que o código resulte em *25*.',
     type: 'drag-and-drop',
     lines: [
       {

@@ -49,8 +49,7 @@ export const texts: Text[] = [
     content: "Desafios?",
   },
   {
-    type: "default",
-    title: "Desafios?",
+    type: "image",
     content: "O primeiro deles é trivial: adivinhar um número.",
     picture: "tubarao-malvado.jpg",
   },
@@ -208,12 +207,12 @@ escreva(numero)
     picture: "apollo-caminhando.jpg",
   },
   {
-    type: "default",
+    type: "image",
     content: "Já andamos um tanto, agora vou passar outro desafio.",
     picture: "tubarao-malvado.jpg",
   },
   {
-    type: "default",
+    type: "image",
     content:
       "E o desafio é: criar uma função que transforma um número em um texto!",
     picture: "tubarao-malvado.jpg",

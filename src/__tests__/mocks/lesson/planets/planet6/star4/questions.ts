@@ -15,17 +15,12 @@ type Questions = [
 
 export const questions: Questions = [
   {
-    code: `var bolo = [
-  'Fatia 1', 
-  'Fatia 2',
-  'Fatia 3',
-  'Fatia 4',
-]
+    code: `var bolo = ['Fatia 1', 'Fatia 2', 'Fatia 3', 'Fatia 4']
   
 var fatias = elementos.fatiar(2)
 escreva(fatias)`,
     title:
-      'Vamos ver se você aprendeu os novos métodos que mostrei. Qual serão as fatias extraídas do vetor `bolo`?',
+      'Vamos ver se você aprendeu os novos métodos que mostrei. Qual serão as fatias extraídas da lista *bolo*?',
     type: 'checkbox',
     options: ['Fatia 1', 'Fatia 2', 'Fatia 3', 'Fatia 4'],
     correctOptions: ['Fatia 3', 'Fatia 4'],
@@ -33,15 +28,15 @@ escreva(fatias)`,
   },
   {
     title:
-      'Complete o código a fim de que o vetor radioativos tenha 3 itens, ou seja, que o resultado final seja igual a 3.',
+      'Complete o código a fim de que a lista *radioativos* tenha 3 itens, ou seja, que o resultado final seja igual a 3.',
     type: 'drag-and-drop',
     lines: [
       { id: 1, texts: ['var elementos = ['], indentation: 0 },
-      { id: 2, texts: ['"Hélio"'], indentation: 2 },
-      { id: 3, texts: ['"Estrôncio"', ','], indentation: 2 },
-      { id: 4, texts: ['"Rádio"', ','], indentation: 2 },
-      { id: 5, texts: ['"Césio"', ','], indentation: 2 },
-      { id: 6, texts: ['"Polônio"', ','], indentation: 2 },
+      { id: 2, texts: ['"Hélio",'], indentation: 2 },
+      { id: 3, texts: ['"Estrôncio",'], indentation: 2 },
+      { id: 4, texts: ['"Rádio",'], indentation: 2 },
+      { id: 5, texts: ['"Césio",'], indentation: 2 },
+      { id: 6, texts: ['"Polônio"'], indentation: 2 },
       { id: 7, texts: [']'], indentation: 0 },
       {
         id: 8,
@@ -57,7 +52,7 @@ escreva(fatias)`,
       },
       {
         id: 9,
-        texts: ['escreva(radioativos.', 'dropZone', '( )'],
+        texts: ['escreva(radioativos.', 'dropZone', '()'],
         indentation: 0,
       },
     ],
@@ -90,7 +85,7 @@ escreva(uns.somar())`,
   },
   {
     title:
-      'Complete o método `fatiar()` para que a fatia contenha: Via Láctea e Alfa Centauri.',
+      'Complete o método *fatiar()* para que a fatia contenha: "Via Láctea" e "Alfa Centauri".',
     type: 'drag-and-drop',
     lines: [
       { id: 1, texts: ['var galaxias = ['], indentation: 0 },
@@ -128,9 +123,10 @@ escreva(uns.somar())`,
     code: `var particulas = ["Elétron", "Próton", "Nêutron", "Quarks"]
 
 var particulasInvertidas = particulas.inverter()
+
 escreva(particulasInvertidas[-1])`,
     title:
-      'Só para dizer que não esqueci do `inverter()`. Qual será o valor de `particulasInvertidas[-1]`?',
+      'Só para dizer que não esqueci do *inverter()*. Qual será o valor de *particulasInvertidas[-1]*?',
     type: 'selection',
     answer: 'Elétron',
     options: ['Elétron', 'Nêutron', 'Próton', 'Quarks'],

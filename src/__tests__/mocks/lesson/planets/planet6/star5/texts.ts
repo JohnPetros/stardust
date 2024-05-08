@@ -38,10 +38,6 @@ export const texts: Text[] = [
     type: 'list',
     content:
       'Nos parênteses do *encaixar()* é necessário colocar 2 números obrigatórios:',
-    items: [
-      'O primeiro indica a partir de qual índice/posição da lista devem ser removidos os elementos.',
-      'O segundo indica quantos elementos devem ser removidos.',
-    ],
     picture: 'panda-de-oculos.jpg',
   },
   {

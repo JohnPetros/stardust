@@ -14,12 +14,16 @@ type Questions = [
 
 export const questions: Questions = [
   {
-    code: `var playlist = ["Nebula Collective", "Stellar Beats
-    ", "Celestia Symphony", "Pulse Ensemble"]
+    code: `var playlist = [
+  "Nebula Collective", 
+  "Stellar Beats",
+  "Celestia Symphony", 
+  "Pulse Ensemble"
+]
 
 playlist.ordenar()`,
     title:
-      'Que tal ouvir música durante a exploração. Como ficaria a ordem da playlist usando o método `ordenar()`',
+      'Que tal ouvir música durante a exploração. Como ficaria a ordem da playlist usando o método *ordenar()*',
     type: 'selection',
     answer:
       'Celestia Symphony, Nebula Collective, Pulse Ensemble, Stellar Beats',
@@ -46,7 +50,7 @@ se (tecnologias.inclui("propulsor")) {
   escreva("Não, falta um propulsor")
 }`,
     title:
-      'Opa, encontramos um propulsor no meio do caminho. Mas, nós já temos ou não um propolsor de acordo com o código abaixo?',
+      'Opa, encontramos um propulsor no meio do caminho. Porém, nós já temos ou não um propolsor de acordo com o código abaixo?',
     type: 'selection',
     answer: 'Não, falta um propulsor',
     options: [
@@ -59,7 +63,7 @@ se (tecnologias.inclui("propulsor")) {
   },
   {
     title:
-      'Também achamos alguns droids no meio do caminho. Complete o código para que o vetor `droids` seja igual a `R2-D2, C-3PO, BB-8, K-250`',
+      'Também achamos alguns droids no meio do caminho. Complete o código para que a lista *droids* seja igual a *R2-D2, C-3PO, BB-8, K-250*, nessa ordem.',
     type: 'drag-and-drop',
     lines: [
       {
@@ -124,7 +128,7 @@ se (tecnologias.inclui("propulsor")) {
   },
   {
     title:
-      'Oops, parece que sem querer misturamos nossas pilhas com nossos alimentos. Como você faria para separá-los usando métodos de vetor?',
+      'Oops, parece que sem querer misturamos nossas pilhas com nossos alimentos. Quais métodos você utilizaria criar uma nova lista contendo somente alimentos?',
     type: 'open',
     lines: [
       {
@@ -139,12 +143,12 @@ se (tecnologias.inclui("propulsor")) {
       },
       {
         id: 3,
-        texts: ['itens', 'input-1', '()'],
+        texts: ['itens.', 'input-1', '()'],
         indentation: 0,
       },
       {
         id: 4,
-        texts: ['alimentos', 'input-2', '(itens)'],
+        texts: ['alimentos.', 'input-2', '(itens)'],
         indentation: 0,
       },
     ],
@@ -153,12 +157,12 @@ se (tecnologias.inclui("propulsor")) {
   },
   {
     title:
-      'Vish, parece que encontramos um objeto tóxico. Complete o código para o resultado seja `falso`',
+      'Vish, parece que encontramos um objeto tóxico. Complete o código para o resultado seja *falso*',
     type: 'drag-and-drop',
     lines: [
       {
         id: 1,
-        texts: ['var planetas = ['],
+        texts: ['var itens = ['],
         indentation: 0,
       },
       {
@@ -178,7 +182,7 @@ se (tecnologias.inclui("propulsor")) {
       },
       {
         id: 5,
-        texts: ['escreva(planetas.', 'dropZone', '("Objeto tóxico"))'],
+        texts: ['escreva(itens.', 'dropZone', '("Objeto tóxico"))'],
         indentation: 0,
       },
     ],
@@ -208,3 +212,5 @@ se (tecnologias.inclui("propulsor")) {
     picture: 'panda-com-mochila.jpg',
   },
 ]
+
+

@@ -3,7 +3,7 @@ export const challenge = {
   difficulty: 'easy',
   downvotes: 0,
   upvotes: 0,
-  total_completitions: 0,
+  totalCompletitions: 0,
   created_by: 'Apollo',
   user_id: '38976417-7c77-44ff-9e26-5dc8b457f768',
   topic_id: 'f60a0e67-c0b9-401a-a652-c9d5f8042ff1',
@@ -88,7 +88,7 @@ Resultado: falso
       picture: 'panda-piscando.jpg',
     },
   ],
-  test_cases: [
+  testCases: [
     {
       id: 1,
       input: [100, 100, 100, 'verdadeiro'],
@@ -115,3 +115,17 @@ Resultado: falso
     },
   ],
 }
+
+/**
+ * 
+var asteroideA = leia()
+var asteroideB = leia()
+var asteroideC = leia()
+var escudoAtivo = leia()
+
+var resistencia = 700
+
+var soma = asteroideA + asteroideB + asteroideC
+
+escreva(soma <= 700 e escudoAtivo)
+ */
