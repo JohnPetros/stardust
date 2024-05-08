@@ -192,6 +192,7 @@ export type Database = {
           created_at: string
           id: string
           parent_comment_id: string | null
+          solution_id: string | null
           user_slug: string
           count_comments_upvotes: number | null
         }
@@ -201,6 +202,7 @@ export type Database = {
           created_at?: string
           id?: string
           parent_comment_id?: string | null
+          solution_id?: string | null
           user_slug?: string
         }
         Update: {
@@ -209,6 +211,7 @@ export type Database = {
           created_at?: string
           id?: string
           parent_comment_id?: string | null
+          solution_id?: string | null
           user_slug?: string
         }
         Relationships: [
@@ -231,6 +234,13 @@ export type Database = {
             columns: ["parent_comment_id"]
             isOneToOne: false
             referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_comments_solution_id_fkey"
+            columns: ["solution_id"]
+            isOneToOne: false
+            referencedRelation: "solutions"
             referencedColumns: ["id"]
           },
           {
@@ -422,6 +432,65 @@ export type Database = {
           slug?: string | null
         }
         Relationships: []
+      }
+      solutions: {
+        Row: {
+          challenge_id: string
+          content: string
+          created_at: string
+          id: string
+          slug: string
+          title: string
+          user_slug: string | null
+        }
+        Insert: {
+          challenge_id?: string
+          content: string
+          created_at?: string
+          id?: string
+          slug: string
+          title: string
+          user_slug?: string | null
+        }
+        Update: {
+          challenge_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          slug?: string
+          title?: string
+          user_slug?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_solution_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_solution_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_solutions_user_slug_fkey"
+            columns: ["user_slug"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["slug"]
+          },
+          {
+            foreignKeyName: "public_solutions_user_slug_fkey"
+            columns: ["user_slug"]
+            isOneToOne: false
+            referencedRelation: "users_view"
+            referencedColumns: ["slug"]
+          }
+        ]
       }
       stars: {
         Row: {
@@ -854,6 +923,43 @@ export type Database = {
           },
           {
             foreignKeyName: "users_upvoted_comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      users_upvoted_solutions: {
+        Row: {
+          solution_id: string
+          user_id: string
+        }
+        Insert: {
+          solution_id: string
+          user_id: string
+        }
+        Update: {
+          solution_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_users_upvoted_solutions_solution_id_fkey"
+            columns: ["solution_id"]
+            isOneToOne: false
+            referencedRelation: "solutions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_users_upvoted_solutions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_users_upvoted_solutions_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users_view"
