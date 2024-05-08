@@ -115,7 +115,7 @@ export function TestCase({
                 userOutput
                   ? shouldFormatResult
                     ? code.formatResult(JSON.stringify(userOutput))
-                    : code.formatOutput(userOutput.toString(), true).toString()
+                    : code.formatOutput(userOutput.toString()).toString()
                   : 'Sem resultado'
               }
               isFromUser={true}

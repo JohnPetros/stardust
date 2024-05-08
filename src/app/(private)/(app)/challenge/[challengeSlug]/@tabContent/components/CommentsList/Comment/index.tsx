@@ -62,8 +62,6 @@ export function Comment({
 
   const hasReplies = (replies && replies.length > 0) || repliesCount > 0 || false
 
-  console.log({ replies })
-
   return (
     <>
       <AlertDialog
@@ -174,6 +172,3 @@ export function Comment({
     </>
   )
 }
-
-//  f146.secretaria@fatec.sp.gov.br
-// 1239054699

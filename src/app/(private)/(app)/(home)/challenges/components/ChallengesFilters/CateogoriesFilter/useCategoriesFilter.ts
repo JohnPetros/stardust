@@ -21,8 +21,6 @@ export function useCategoriesFilter(initialCategories: Category[]) {
   function handleCategoryClick(categoryId: string, isActive: boolean) {
     let currentCategoriesIds = categoriesIds
 
-    console.log({ currentCategoriesIds })
-
     if (isActive) {
       currentCategoriesIds = currentCategoriesIds.filter(
         (id) => id !== categoryId

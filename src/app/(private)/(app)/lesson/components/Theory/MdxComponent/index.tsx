@@ -21,5 +21,6 @@ function MemoizedMdxComponent({ content, hasAnimation }: MdxTextProps) {
 }
 
 export const MdxComponent = memo(MemoizedMdxComponent, (_, currentProps) => {
-  return currentProps.shouldMemoized
+  const isCodeComponent = currentProps.content.slice(0, 5) === '<Code'
+  return currentProps.shouldMemoized || isCodeComponent
 })

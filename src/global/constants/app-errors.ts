@@ -29,6 +29,11 @@ export const APP_ERRORS = {
     failedUpvoting: 'Não foi possível dar um upvote nesse comentário',
     failedDesupvoting: 'Não foi possível remover o upvote desse comentário',
     failedrepliesFetching: 'Erro ao carregar as resposta para esse comentário.',
+    failedReplyDeletion: 'Não foi possível deletar sua resposta',
+    failedUserCommentsIdsFetching: 'Erro ao verificar seus comentários votados',
+  },
+  solutions: {
+    failedlistFetching: 'Erro ao carregar lista de soluções.',
   },
   mdx: {
     failedCompiling: 'Não foi possível carregar o conteúdo de texto.',

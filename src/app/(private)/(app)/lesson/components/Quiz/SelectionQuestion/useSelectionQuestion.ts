@@ -8,7 +8,7 @@ import { useLessonStore } from '@/stores/lessonStore'
 
 export function useSelectionQuestion(options: string[], answer: string) {
   const {
-    state: { isAnswerVerified, currentQuestionIndex },
+    state: { isAnswerVerified },
     actions: {
       setIsAnswered,
       setIsAnswerVerified,

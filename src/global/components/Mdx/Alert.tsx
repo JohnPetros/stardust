@@ -14,33 +14,28 @@ type TextProps = {
   hasAnimation?: boolean
 }
 
-export function Alert({
-  title,
-  picture,
-  children,
-  hasAnimation = false,
-}: TextProps) {
+export function Alert({ title, picture, children, hasAnimation = false }: TextProps) {
   return (
     <Animation hasAnimation={hasAnimation}>
-      <div className="not-prose flex w-full flex-col items-center">
+      <div className='not-prose flex w-full flex-col items-center'>
         {title && (
-          <div className="mb-4">
+          <div className='mb-4'>
             <Title>{title}</Title>
           </div>
         )}
-        <div className="flex w-full items-center">
+        <div className='flex w-full items-center'>
           {picture && <Picture url={picture} />}
-          <span className="mr-3 block">
+          <span className='mr-3 block'>
             <Image
-              src="/icons/alert.svg"
+              src='/icons/alert.svg'
               width={32}
               height={32}
-              alt=""
-              className="skeleton"
+              alt=''
+              className='skeleton'
               onLoadingComplete={(image) => image.classList.remove('skeleton')}
             />
           </span>
-          <Content type="alert" hasAnimation={hasAnimation}>
+          <Content type='alert' hasAnimation={hasAnimation}>
             {children}
           </Content>
         </div>

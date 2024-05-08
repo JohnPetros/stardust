@@ -28,9 +28,6 @@ export async function _calculateStarRewards({
   const updatedXp = newXp + user.xp
   const updatedWeeklyXp = newXp + user.weeklyXp
 
-  console.log({ nextStar })
-  console.log(nextStar?.isUnlocked)
-
   if (nextStar && !nextStar.isUnlocked) {
     await addUnlockedStar(nextStar.id)
   }

@@ -53,15 +53,11 @@ export async function _calculateChallengeRewards({
     let nextStar = await starsController.getNextStar(currentStar, user.id)
 
     if (!nextStar) {
-      console.log('OIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII')
       nextStar = await starsController.getNextStarFromNextPlanet(
         currentStar.planetId,
         user.id
       )
     }
-
-    console.log({ currentStar })
-    console.log({ nextStar })
 
     let updatedUserData = await _calculateStarRewards({
       user,

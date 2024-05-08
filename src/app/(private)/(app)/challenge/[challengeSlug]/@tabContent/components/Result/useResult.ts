@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 import type {
   ChallengeTestCase,
@@ -14,7 +14,6 @@ import {
 } from '@/@types/Rewards'
 import { _setCookie } from '@/global/actions/_setCookie'
 import { COOKIES, ROUTES, STORAGE } from '@/global/constants'
-import { checkNumeric } from '@/global/helpers'
 import { useBreakpoint } from '@/global/hooks/useBreakpoint'
 import { useLocalStorage } from '@/global/hooks/useLocalStorage'
 import { useCode } from '@/services/code'
@@ -145,7 +144,7 @@ export function useResult() {
 
       setResults(testCases.map(verifyResult))
     }
-  }, [userOutput, challenge, tabHandler, setResults])
+  }, [userOutput, challenge])
 
   useEffect(() => {
     if (userOutput?.length === challenge?.testCases.length && results?.length) {

@@ -30,7 +30,7 @@ export function useUserReplyInput(
           content: reply,
           parentCommentId: commentId,
         },
-        user.id
+        user.slug
       )
     } catch (error) {
       console.log(error)

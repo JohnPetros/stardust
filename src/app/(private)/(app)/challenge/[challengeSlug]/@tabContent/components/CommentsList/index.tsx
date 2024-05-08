@@ -108,6 +108,3 @@ export function CommentsList() {
     </div>
   )
 }
-
-// 62fef857-42fa-4602-8483-4dc4a446927d
-// 56b1f86c-7e54-44fd-967a-58abc49e68a2

@@ -33,8 +33,6 @@ export function CodeEditorToolbar({
   const docsDialogButtonRef = useRef<HTMLButtonElement>(null)
   const pathname = usePathname()
 
-  console.log('RENDER')
-
   const { handleKeyDown, resetCode } = useCodeEditorToolbar({
     previousUserCode,
     codeEditorRef,

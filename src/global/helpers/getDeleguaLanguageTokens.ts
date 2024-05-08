@@ -129,7 +129,6 @@ export function getDeleguaLanguageTokens(): monaco.languages.IMonarchLanguage {
 
     typeKeywords: ['var'],
 
-    // we include these common regular expressions
     symbols: /[=><!~?:&|+\-*/^%]+/,
     escapes:
       /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
@@ -142,12 +141,10 @@ export function getDeleguaLanguageTokens(): monaco.languages.IMonarchLanguage {
     regexpesc:
       /\\(?:[bBdDfnrstvwWn0\\/]|@regexpctl|c[A-Z]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4})/,
 
-    // The main tokenizer for our languages
     tokenizer: {
       root: [[/[{}]/, 'delimiter.bracket'], { include: 'common' }],
 
       common: [
-        // identifiers and keywords
         [
           /[a-z_$][çã\w$]*/,
           {
@@ -159,19 +156,15 @@ export function getDeleguaLanguageTokens(): monaco.languages.IMonarchLanguage {
             },
           },
         ],
-        [/[A-Z][\w$]*/, 'type.identifier'], // to show class names nicely
-        // [/[A-Z][\w\$]*/, 'identifier'],
+        [/[A-Z][\w$]*/, 'type.identifier'],
 
-        // whitespace
         { include: '@whitespace' },
 
-        // regular expression: ensure it is terminated before beginning (otherwise it is an opeator)
         [
           /\/(?=([^\\/]|\\.)+\/([dgimsuy]*)(\s*)(\.|;|,|\)|\]|\}|$))/,
           { token: 'regexp', bracket: '@open', next: '@regexp' },
         ],
 
-        // delimiters and operators
         [/[()[\]]/, '@brackets'],
         [/[<>](?!@symbols)/, '@brackets'],
         [/!(?=([^=]|$))/, 'delimiter'],
@@ -185,7 +178,6 @@ export function getDeleguaLanguageTokens(): monaco.languages.IMonarchLanguage {
           },
         ],
 
-        // numbers
         [/(@digits)[eE]([-+]?(@digits))?/, 'number.float'],
         [/(@digits)\.(@digits)([eE][-+]?(@digits))?/, 'number.float'],
         [/0[xX](@hexdigits)n?/, 'number.hex'],
@@ -223,7 +215,6 @@ export function getDeleguaLanguageTokens(): monaco.languages.IMonarchLanguage {
         [/[/*]/, 'comment.doc'],
       ],
 
-      // We match regular expression quite precisely
       regexp: [
         [
           /(\{)(\d+(?:,\d*)?)(\})/,

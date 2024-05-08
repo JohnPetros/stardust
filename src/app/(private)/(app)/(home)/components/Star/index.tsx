@@ -64,8 +64,6 @@ export function Star({
   const { starRef, lastUnlockedStarRef, spaceRocket, handleStarClick } =
     useStar({ id, slug, isChallenge }, isLastUnlockedStar)
 
-  console.log({ isChallenge })
-
   return (
     <li ref={isLastUnlockedStar ? lastUnlockedStarRef : null}>
       <div>

@@ -8,8 +8,10 @@ export const CACHE = {
     filteredAvatars: '/filtered-avatars',
     filteredRockets: '/filtered-rockets',
     comments: '/comments',
+    userUpvotedCommentsIds: '/user-upvoted-comments-ids',
     acquiredAvatarsIds: '/acquired-avatars-ids',
     avatar: '/avatar',
     playgroundCards: '/playground-cards',
+    solutions: '/solutions',
   },
 }

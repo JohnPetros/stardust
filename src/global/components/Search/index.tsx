@@ -6,7 +6,7 @@ import { useSearch } from './useSearch'
 
 type SearchProps = {
   className?: string
-  onSearchChange: (...args: any[]) => void  // eslint-disable-line
+  onSearchChange: (...args: any[]) => void
 }
 
 export function Search({

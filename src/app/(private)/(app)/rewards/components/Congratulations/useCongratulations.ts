@@ -28,7 +28,6 @@ export function useCongratulations({
 
   const { mutateUserCache } = useAuthContext()
 
-
   const alertDialogRef = useRef<AlertDialogRef>(null)
   const starsChainRef = useRef(null) as LottieRef
 
@@ -64,12 +63,7 @@ export function useCongratulations({
     await exit()
   }
 
-  async function handleBack() {
-    alert('back')
-  }
-
   useRefreshPage(handleSecondButtonClick)
-
 
   useEffect(() => {
     playAudio('earning.wav')
@@ -79,8 +73,8 @@ export function useCongratulations({
     history.pushState(null, '', location.href)
     window.onpopstate = () => {
       history.go(1)
-    };
-  }, []);
+    }
+  }, [])
 
   return {
     isFirstClick,

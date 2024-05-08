@@ -6,9 +6,9 @@ export type GetFilteredSolutionsParams = {
   challengeId: string,
   title: string
   sorter: 'date' | 'upvotes',
-  order: Order
 }
 
 export interface ISolutionsController {
   getFilteredSolutions(params: GetFilteredSolutionsParams): Promise<Solution[]>
+  getUserUpvotedSolutionsIds(userId: string): Promise<string[]>
 }

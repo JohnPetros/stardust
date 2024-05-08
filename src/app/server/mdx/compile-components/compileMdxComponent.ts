@@ -22,8 +22,6 @@ export async function compileMdxComponent(component: string) {
     componentContent
   )
 
-  console.log({ compiledMdx })
-
   mdx.compiledSource = compiledMdx
 
   return mdx

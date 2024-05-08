@@ -22,7 +22,7 @@ export function OpenQuestion({
       <QuestionTitle picture={picture}>{title}</QuestionTitle>
 
       {code && (
-        <div className="mt-3 w-full">
+        <div className="w-full">
           <CodeSnippet code={code} isRunnable={false} />
         </div>
       )}

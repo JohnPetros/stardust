@@ -7,11 +7,14 @@ import { EditorContextAction } from '../types/editorContextAction'
 import { EditorContextState } from '../types/editorContextState'
 
 import { STORAGE } from '@/global/constants'
+import { useLocalStorage } from '@/global/hooks/useLocalStorage'
 
 export function useEditorProvider() {
-  const storedEditorConfig = localStorage.getItem(STORAGE.keys.editorConfig)
+  const editorStorage = useLocalStorage<EditorContextState>(STORAGE.keys.editorConfig)
+
+  const storedEditorConfig = editorStorage.get()
   const initalEditorConfigData = storedEditorConfig
-    ? JSON.parse(storedEditorConfig)
+    ? storedEditorConfig
     : DEFAULT_EDITOR_CONFIG
 
   const [state, dispatch] = useReducer(EditorReducer, initalEditorConfigData)
@@ -19,9 +22,7 @@ export function useEditorProvider() {
   function getEditorConfig(): EditorContextState {
     const storedData = localStorage.getItem(STORAGE.keys.editorConfig)
 
-    const editorData = storedData
-      ? JSON.parse(storedData)
-      : DEFAULT_EDITOR_CONFIG
+    const editorData = storedData ? JSON.parse(storedData) : DEFAULT_EDITOR_CONFIG
 
     return editorData
   }

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-// const IS_SERVER = typeof window === 'undefined'
+const IS_SERVER = typeof window === 'undefined'
 
 export function useLocalStorage<Value>(key: string) {
   function deserialize(value: string) {
@@ -8,6 +8,8 @@ export function useLocalStorage<Value>(key: string) {
   }
 
   function get() {
+    if (IS_SERVER) return null
+
     const item = window.localStorage.getItem(key)
 
     return item && item !== undefined ? deserialize(item) : null

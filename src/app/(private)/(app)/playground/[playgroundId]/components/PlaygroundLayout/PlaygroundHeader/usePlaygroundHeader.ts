@@ -21,11 +21,6 @@ export function usePlaygroundHeader({
   hasPlayground,
   onCreatePlayground,
 }: UsePlaygroundHeaderParams) {
-  const [title, setTitle] = useState(playgroundTitle)
-  const [canEditTitle, setCanEditTitle] = useState(false)
-
-  const inputRef = useRef<HTMLInputElement>(null)
-
   const setSaveHandler = useSaveButtonStore(
     (store) => store.actions.setSaveHandler
   )
@@ -38,8 +33,8 @@ export function usePlaygroundHeader({
 
   const toast = useToastContext()
 
-  const handleEditPlaygroudTitle = useCallback(async () => {
-    async function editPlaygroudTitle() {
+  const editPlaygroudTitle = useCallback(async () => {
+    async function editPlaygroudTitle(title: string) {
       try {
         await api.updatePlaygroundTitleById(title, playgroundId)
       } catch (error) {
@@ -55,11 +50,9 @@ export function usePlaygroundHeader({
       hasPlayground ? editPlaygroudTitle : () => onCreatePlayground(title)
     )
     setShouldSave(true)
-    setCanEditTitle(false)
   }, [
     api,
     toast,
-    title,
     playgroundId,
     hasPlayground,
     onCreatePlayground,
@@ -67,32 +60,7 @@ export function usePlaygroundHeader({
     setShouldSave,
   ])
 
-  function handleCanEditTitle() {
-    setCanEditTitle(!canEditTitle)
-  }
-
-  function handleTitleChange(newTitle: string) {
-    setTitle(newTitle)
-  }
-
-  async function handleKeyup(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      handleEditPlaygroudTitle()
-    }
-  }
-
-  async function handleClickOutside() {
-    if (canEditTitle) handleEditPlaygroudTitle()
-  }
-
-  useOutsideClick(inputRef, handleClickOutside)
-
   return {
-    title,
-    inputRef,
-    canEditTitle,
-    handleTitleChange,
-    handleCanEditTitle,
-    handleKeyup,
+    editPlaygroudTitle
   }
 }

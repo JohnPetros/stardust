@@ -1,16 +1,21 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { useRouter } from 'next/navigation'
+
 
 import type { ChallengeTestCase } from '@/@types/Challenge'
+
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
+
 import { ConsoleRef } from '@/global/components/Console'
 import { EditorRef } from '@/global/components/Editor'
 import { ROUTES, STORAGE } from '@/global/constants'
 import { playAudio } from '@/global/helpers'
+
 import { useCode } from '@/services/code'
+
 import { useChallengeStore } from '@/stores/challengeStore'
+import { useRouter } from 'next/navigation'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 export function useCodeEditor() {
   const challenge = useChallengeStore((store) => store.state.challenge)
@@ -26,8 +31,8 @@ export function useCodeEditor() {
   const initialCode =
     typeof window !== 'undefined'
       ? localStorage?.getItem(STORAGE.keys.challengeCode) ??
-        challenge?.code ??
-        ''
+      challenge?.code ??
+      ''
       : ''
 
   const toast = useToastContext()
@@ -49,7 +54,7 @@ export function useCodeEditor() {
   function handleCodeError(error: string) {
     const { message, line } = handleError(error)
 
-    const toastMessage = `${message}` + getErrorLine(line)
+    const toastMessage = `${message}${getErrorLine(line)}`
 
     toast.show(toastMessage, {
       type: 'error',
@@ -93,7 +98,7 @@ export function useCodeEditor() {
         return result
       }
 
-      return output
+      return output[0]
     } catch (error) {
       handleCodeError(String(error))
     }
@@ -112,8 +117,6 @@ export function useCodeEditor() {
     playAudio('running-code.wav')
 
     console.log({ userOutput })
-
-    return
 
     if (userOutput.length) {
       setUserOutput(userOutput)
@@ -147,7 +150,7 @@ export function useCodeEditor() {
     return () => {
       window.removeEventListener('resize', handleCodeEditorHeight)
     }
-  }, [layout, handleCodeEditorHeight])
+  }, [handleCodeEditorHeight])
 
   return {
     userCode,

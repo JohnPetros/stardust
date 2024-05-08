@@ -8,7 +8,9 @@ export function useUrlSearchParams() {
   function set(key: string, value: string) {
     const params = new URLSearchParams(searchParams)
 
+
     params.set(key, value)
+    console.log(key, value)
     replace(`${pathname}?${params.toString()}`)
   }
 

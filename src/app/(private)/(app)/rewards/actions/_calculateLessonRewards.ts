@@ -27,27 +27,23 @@ export async function _calculateLessonRewards({
   const currentStar = await starsController.getStarById(starId)
   const nextStar = await starsController.getNextStar(currentStar, user.id)
 
-  console.log({ starId })
-  console.log({ currentStar })
-  console.log({ nextStar })
-
   function getAccurance() {
     const accurance = ((questions - incorrectAnswers) / questions) * 100
-    return accurance === 0 ? '100%' : accurance.toFixed(1) + '%'
+    return accurance === 0 ? '100%' : `${accurance.toFixed(1)}%`
   }
 
   function getCoins() {
-    let maxCoins = nextStar && nextStar.isUnlocked ? 5 : 10
+    let maxCoins = nextStar?.isUnlocked ? 5 : 10
     for (let i = 0; i < incorrectAnswers; i++) {
-      maxCoins -= nextStar && nextStar.isUnlocked ? 1 : 2
+      maxCoins -= nextStar?.isUnlocked ? 1 : 2
     }
     return maxCoins
   }
 
   function getXp() {
-    let maxXp = nextStar && nextStar.isUnlocked ? 10 : 20
+    let maxXp = nextStar?.isUnlocked ? 10 : 20
     for (let i = 0; i < incorrectAnswers; i++) {
-      maxXp -= nextStar && nextStar.isUnlocked ? 2 : 5
+      maxXp -= nextStar?.isUnlocked ? 2 : 5
     }
 
     return maxXp

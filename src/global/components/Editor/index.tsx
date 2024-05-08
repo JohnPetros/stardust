@@ -61,8 +61,6 @@ export function EditorComponent(
   } = useEditor(value)
   const { md: isMobile } = useBreakpoint()
 
-  console.log(state.tabSize)
-
   useImperativeHandle(
     ref,
     () => {
