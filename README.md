@@ -1,6 +1,8 @@
-<h1 align="center">
-  stardust 🎓
-</h1>
+<div align="center">
+  <img src="public/images/logo.svg" width="300" heigth="300" />
+</div>
+
+<br />
 
 <div align="center">
    <a href="https://github.com/JohnPetros">
@@ -21,11 +23,11 @@
 
 ## 🖥️ Sobre o Projeto
 
-**stardust** é um **site web** para um universidade fictícia do mesmo nome.
+**Stardust** é uma **aplicação educativa** focada em ensinar lógica de programação utilizando o conceito de [gamificação](https://www.ludospro.com.br/blog/o-que-e-gamificacao), isto é, utilizar elementos normalmente presentes em jogos para alcançar objetivos que vão além de um contexto de um simples jogo, como, por exemplo, a educação nesse caso específico.
 
-A aplicação possui duas sessões, uma voltada para a apresetação e descrição da universidade e outra para administrar dados pertinentes a uma instiuição de ensino, como cursos, dicisplinas, professores e alunos.
+Por ser uma solução gamificada, é possível encontrar elementos como obtenção de pontos, desbloqueio de fases, desafios, compra de itens, ranking de usuários e narrativa envolvente.
 
-O objetivo ao realizar esse projeto foi aprender de forma avançanda o desensolvimento de aplicações web utilizando [Flask](https://flask.palletsprojects.com/en/3.0.x/), um framework [Python](https://www.python.org/), bem como trabalhar com [Docker containers](https://www.docker.com/resources/what-container/) personalizados utilizando [Docker hub](https://www.docker.com/) durante a disciplina de Sistemas Operacionais e Redes na [FATEC São José dos Santos](https://fatecsjc-prd.azurewebsites.net/).
+O objetivo ao realizar esse projeto foi concluir o **TCC** do curso técnico em **Desenvolvimento de Sistemas** da [ETEC de São José dos Campos](https://www.etecsjcampos.com.br/), a qual eu agradeço por ter me instigado a aprender cada mais e me tornar um desenvolvedor melhor.
 
 
 ### ⏹️ Demonstração
@@ -45,12 +47,23 @@ O objetivo ao realizar esse projeto foi aprender de forma avançanda o desensolv
 
 ### Lição
 
-- [x] O usuário deve seguir uma trilha separado em módulos, em que cada módulo corresponde um tema dentro de lógica de programação
+- [x] O usuário deve seguir uma trilha organizada em módulos, em que cada módulo corresponde um tema dentro de lógica de programação
 - [x] Cada módulo deve ser composto por lições, sendo que cada uma deve corresponder um assunto específico dentro do tema do seu respectivo módulo
 - [x] Cada módulo deve possuir pelo menos 2 lições e um desafio de algoritmo no final
 - [x] Cada lição é bloqueada por padrão, sendo que para desbloquear uma o usuário deve completar a anterior 
 - [x] Cada lição deve possuir Três fases, sendo:
-    - 
+    - Teoria sobre o conceito a ser estudado
+    - Quiz sobre a teoria passada
+    - Resultado que exibe os pontos obtidos a partir do Quiz(XP e Moedas)
+
+### Desafio de código
+
+- [x] O desafio de código deve possuir uma apresentação do problema, contendo contexto, objetivo e exemplos de entrada e saída.
+- [x] O desafio de código deve possuir um editor de código para o usuário digitar sua solução para o problema proposto
+- [x] O desafio de código deve possuir testes de caso, cada uma contendo uma entrada e uma saída para testar a solução do usuário
+- [x] Se o usuário conseguir resolver o desafio ele deve receber a quantidade de XP e Moedas de acordo com o nível de dificuldade do desafio.
+
+
 
 ### Página de contato
 - [x] Deve haver um página contendo um formulário para o usuário entrar em contato com a stardust
