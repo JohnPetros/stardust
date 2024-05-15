@@ -54,7 +54,8 @@ O objetivo ao realizar esse projeto foi concluir o **TCC** do curso técnico em 
 - [x] Cada lição deve possuir Três fases, sendo:
     - Teoria sobre o conceito a ser estudado
     - Quiz sobre a teoria passada
-    - Resultado que exibe os pontos obtidos a partir do Quiz(XP e Moedas)
+    - Resultado que exibe os pontos obtidos a partir do Quiz (XP e Moedas)
+
 
 ### Desafio de código
 
@@ -63,74 +64,50 @@ O objetivo ao realizar esse projeto foi concluir o **TCC** do curso técnico em 
 - [x] O desafio de código deve possuir testes de caso, cada uma contendo uma entrada e uma saída para testar a solução do usuário
 - [x] Se o usuário conseguir resolver o desafio ele deve receber a quantidade de XP e Moedas de acordo com o nível de dificuldade do desafio.
 
+### Seleção de desafio de código a avulso
 
+- [x] O usuário deve poder escolher um desafio de código avulso, ou seja, um desafio que não faz parta da trilha principal, a partir de uma lista de desafios
+- [x] Cada desafio de código deve possuir um nível de dificuldade, sendo `fácil`, `médio` ou `difícil`
+- [x] Cada desafio de código deve se enquadrar em uma ou mais categorias, sendo que cada categoria é relacionado a um módulo da trilha principal
+- [x] O usuário deve poder filtrar, de forma simultaneamente ou não, os desafios de código por nível de dificuldade, nome ou uma ou mais categorias
 
-### Página de contato
-- [x] Deve haver um página contendo um formulário para o usuário entrar em contato com a stardust
-- [X] Essa página deve exibir endereço, número de telefone e e-mail e um formulário de contato da stardust
-- [x] O formulário deve conter
-  - Nome do usuário
-  - E-mail do usuário
-  - Mensagem do usuário
+### Loja de itens
 
-### Página contando a história da stardust
-- [x] Deve haver uma página que fale mais sobre a stardust
-- [x] Essa página conter as sessões:
-  - Um resumo da origem e fundação da stardust
-  - Uma mapa indicando a localização da stardust
-  - Dados a respeito da infraestrutura da stardust
-  - Nome e descrição dos programas de extensão da stardust
-  - Nome, cargo, local de trabalho e depoimento de ex-alunos da stardust
+- [x] Deve haver uma loja contendo itens de foguetes e avatares
+- [x] Cada item da loja deve apresentar:
+  - Nome
+  - Imagem
+  - Preço
+  - Botão de compra
+- [x] O usuário só pode comprar apenas quando houver a quantidade necessária de moedas que o determinado item exige
+- [x] O item recém-comprado deve ser configurado como selecionado automaticamente no perfil do usuário
+- [x] Caso o item já tenha sido adquirido pelo usuário, o botão de compra se transformará em um botão para selecionar o item em questão
 
-### Navegação
-- [x] Deve haver links de acesso para qualquer uma das páginas do site
+### Ranking de usuários
 
-### Login
-- [x] O usuário administrador deve fazer login para poder acessar o dashboard utilizando e-mail e senha
-- [x] O usuário deve poder escolher manter ou não sua sessão mesmo que navegador venha a fechar
-- [x] O sistema deve bloquear o acesso ao dashboard caso não haja uma sessão ativa
-- [x] O sistema guardar a rota da página que o usuário não conseguiu acessar em um primeiro momento para que caso ele faça login ele seja redirecionado imediatamente para a página em questão 
-- [x] O usuário deve poder fazer logout, ou seja, encerrar sua sessão
+- [x] Os usuários devem ser divididos em 6 rankings diferentes
+- [x] Cada ranking deve conter uma lista de usuários ordenados de forma decrescente de acordo com a quantidade de XP de cada um
+- [x] Todo domingo às 23:59, os 5 melhores usuários de cada ranking deverão ir para o próximo ranking, enquanto os 5 piores usuários deverão ir para o ranking anterior
+- [x] No momento de mudança de ranking os melhores usuários de cada ranking deverão ganhar um recompesa de moedas e XP, cuja quantidades deverão ser conforme a posição alcançada pelo usuário e o grau de prestígio do ranking anterior ao recém adquirido
 
-  
-### Gráficos
-- [x] O dashboard deve exibir gráficos de diversos formatos a respeito dos dados cadastrados no sistema
-- [x] Deve gráfico que indique a quantidade matrículas por disciplina
-- [x] Deve haver um gráfico que indique a quantidade posts por categoria de post
-- [x] Deve haver um gráfico que indique a frequência dos alunos em um período de 7, 30 ou 90 dias (escolha do usuário) 
-- [x] Deve haver um gráfico que indique a quantidade de alunos por gênero 
-- [x] Deve haver um gráfico que indique a quantidade de professores por disciplina 
-- [x] Deve haver um gráfico que indique a quantidade de matrículas ativas e desativadas em um período de 7, 30 ou 90 dias (escolha do usuário)
+### Perfil de usuário
 
-### Tabela de professores
-
-- [x] Deve ser exibido uma tabela que contenha todos os professores de forma paginada
-- [x] Cada linha dessa tabela deve exibir:
-  - Avatar
+- [x] Cada usuário deve possuir um perfil que exiba:
   - Nome
   - E-mail
-  - Disciplinas
-  - Idade
-  - Gênero
-- [x] Deve ser possível filtrar professores por nome, email ou disciplina
-- [x] Deve ser possível deletar um ou mais professors de uma vez
-- [x] Deve ser possível adicionar um professor via formulário contendo os campos:
-  - Nome
-  - E-mail
-  - Telefone
-  - Data de nascimento
-  - Gênero
-  - Senha
-  - Confirmação de senha
-  - Avatar
-  - Um ou mais disciplinas
-- [x] Deve ser possível adicionar um professor via arquivo CSV, em cada uma das suas colunas corresponde a um campo do formulário citado no item anterior
+  - Avatar atual
+  - Data de criação de perfil
+  - Ranking atual
+  - Foguete atualmente usado
+- [x] Deve ser exibido um gráfico que indique a quantidade de desafios concluídos pelo usuário de acordo com o nível de dificuldade de cada desafio
+- [x] Deve ser exibido uma tabela que exida os desafios, snippets de código e soluções de código criados por ele juntamente com a respectiva data de criação e link para acessar o recurso em questão
 
-### Página de professor
+### Snippets de código
 
-- [x] Deve haver uma página própria que exiba os dados do professor
-- [x] Deve ser exibido o avatar de outros professores que também lecionam as mesma disciplinas que o professor em questão
-- [x] Deve haver um formulário para editar qualquer dado do professors em questão
+- [x] O usuário deve poder escrever um trecho de código em um editor de forma despretenciosa
+- [x] O usuário deve poder escolher salvar ou não esse código no seu perfil
+- [x] O usuário deve poder deletar e editar os snippets de código salvos por ele
+- [x] O usuário deve poder escolher deixar a visibilidade do seu snippet pública (Qualquer usuário poder acessar por um link) ou privada.
 
 ---
 
@@ -140,21 +117,22 @@ O objetivo ao realizar esse projeto foi concluir o **TCC** do curso técnico em 
 
 Este projeto foi desenvolvido usando as seguintes tecnologias:
 
-✔️ **[Python](https://www.python.org/)** para programar o backend
+- **[NextJs](https://nextjs.org/)** para desevoler o frontend, bem como funcionalidades que dependam ser executados no lado servidor
 
-✔️ **[Flask](https://flask.palletsprojects.com/en/3.0.x/)** Para servir como framework para construir o servidor web, fazer validação dos formulários e gerenciar a autenticação do usuário
+- **[Subabase](https://supabase.com/)** para servir como backend da aplicação, incluido serviço de autenticação, banco de dados [PostgreSQL](https://www.postgresql.org/) e [API Rest](https://www.redhat.com/pt-br/topics/api/what-is-a-rest-api)
 
-✔️ **[MySQL](https://www.mysql.com/)** para ser banco de dados
+- **[Resend](https://resend.com/)** para permitir o envio de e-mails
 
-✔️ **[HTML](https://developer.mozilla.org/pt-BR/docs/Web/HTML)** Para fazer a marcação das páginas do site
+- **[React Email](https://react.email/)** para construir templates de e-mail utilizando [React](https://react.dev/)
 
-✔️ **[CSS](https://developer.mozilla.org/pt-BR/docs/Web/CSS)** - para estilizar os elementos do site
+- **[Framer Motion](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript)** para realizar animações utilizando React 
 
-✔️ **[JavaScript](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript)** - Para adicionar interatividade nos elementos do site
+- **[Radix UI](https://www.radix-ui.com/)** para construir componentes reacts que exijam recursos de acessibilidade
 
-✔️ **[ApexCharts.js](https://apexcharts.com/)** - Para renderizar gráficos
+- **[TailwindCSS](https://tailwindcss.com/)** para estilizar as páginas e componentes HTML
 
-✔️ **[Docker](https://www.docker.com/)** - para criar e gerenciar os containers da aplicação
+- **[DnD Kit](https://dndkit.com/)** para fazer a funcionalidade de [Drag and Drop](https://appmaster.io/pt/blog/o-que-e-realmente-o-drag-and-drop-e-como-e-que-o-ajuda-a-obter-o-software-personalizado-que-deseja)
+
 
 > Para mais detalhes acerca das dependências do projeto, como versões específicas, veja o arquivo [package.json](https://github.com/JohnPetros/stardust/blob/main/package.json)
 
