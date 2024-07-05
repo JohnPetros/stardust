@@ -1,111 +1,93 @@
 <div align="center">
-  <img width="350" height="350" src="public/images/logo.svg" alt="StarDust" />
-<div>
+  <img width="350" height="220" src="public/images/logo.svg" alt="StarDustt" />
+</div>
 
 <div align="center">
    <a href="https://github.com/JohnPetros">
       <img alt="Made by JohnPetros" src="https://img.shields.io/badge/made%20by-JohnPetros-blueviolet">
    </a>
-   <img alt="GitHub Language Count" src="https://img.shields.io/github/languages/count/JohnPetros/stardus">
-   <a href="https://github.com/JohnPetros/stardus/commits/main">
-      <img alt="GitHub Last Commit" src="https://img.shields.io/github/last-commit/JohnPetros/stardus">
+   <img alt="GitHub Language Count" src="https://img.shields.io/github/languages/count/JohnPetros/stardust">
+   <a href="https://github.com/JohnPetros/stardust/commits/main">
+      <img alt="GitHub Last Commit" src="https://img.shields.io/github/last-commit/JohnPetros/stardust">
    </a>
   </a>
    </a>
-   <a href="https://github.com/JohnPetros/stardus/blob/main/LICENSE.md">
-      <img alt="GitHub License" src="https://img.shields.io/github/license/JohnPetros/stardus">
+   <a href="https://github.com/JohnPetros/stardust/blob/main/LICENSE.md">
+      <img alt="GitHub License" src="https://img.shields.io/github/license/JohnPetros/stardust">
    </a>
-    <img alt="Stargazers" src="https://img.shields.io/github/stars/JohnPetros/stardus?style=social">
+    <img alt="Stargazers" src="https://img.shields.io/github/stars/JohnPetros/stardust?style=social">
 </div>
 <br>
 
 ## 🖥️ Sobre o Projeto
 
-**Stardus** é uma **aplicação web** que visa ensinar lógica de programação utilizando a técnica da [gamificação](https://posdigital.pucpr.br/blog/gamificacao-engajamento), que consiste em aplicar determminados elementos comumente encontrado em jogos para atingir objetivos específicos que vão a
+**Stardust** é uma **aplicação educativa** focada em ensinar lógica de programação utilizando o conceito de [gamificação](https://www.ludospro.com.br/blog/o-que-e-gamificacao), isto é, utilizar elementos normalmente presentes em jogos para alcançar objetivos que vão além de um contexto de um simples jogo, como educar pessoas a respeito de assunto, sendo nesse caso específico a lógica de programação em si.
 
-A aplicação possui duas sessões, uma voltada para a apresetação e descrição da universidade e outra para administrar dados pertinentes a uma instiuição de ensino, como cursos, dicisplinas, professores e alunos.
+Por ser uma solução gamificada, é possível encontrar elementos como obtenção de pontos, desbloqueio de fases, desafios, compra de itens, ranking de usuários e narrativa envolvente.
 
-O objetivo ao realizar esse projeto foi aprender de forma avançanda o desensolvimento de aplicações web utilizando [Flask](https://flask.palletsprojects.com/en/3.0.x/), um framework [Python](https://www.python.org/), bem como trabalhar com [Docker containers](https://www.docker.com/resources/what-container/) personalizados utilizando [Docker hub](https://www.docker.com/) durante a disciplina de Sistemas Operacionais e Redes na [FATEC São José dos Santos](https://fatecsjc-prd.azurewebsites.net/).
+O objetivo ao realizar esse projeto foi concluir o **TCC** do curso técnico em **Desenvolvimento de Sistemas** da [ETEC de São José dos Campos](https://www.etecsjcampos.com.br/), a qual eu agradeço por ter me instigado a aprender cada mais e me tornar um desenvolvedor melhor.
 
 ---
 
-## ✨ Funcionalidades
+## ✨ Principais funcionalidades
 
-### Landing Page
+### Lição
 
-- [x] A página inicial deve possuir estilo landing page para captar a atenção do usuário. 
-- [x] Essa página deve possuir as sessões:
-  - Vantagens de estudar na Stardus
-  - Depoimento de um aluno/aluna falando bem da Stardus
-  - Depoimento de um aluno/aluna falando bem da Stardus
-  - Últimos posts do blog fictício da Stardus
+- [x] O usuário deve seguir uma trilha organizada em módulos, em que cada módulo corresponde um tema dentro de lógica de programação
+- [x] Cada módulo deve ser composto por lições, sendo que cada uma deve corresponder um assunto específico dentro do tema do seu respectivo módulo
+- [x] Cada módulo deve possuir pelo menos 2 lições e um desafio de algoritmo no final
+- [x] Cada lição é bloqueada por padrão, sendo que para desbloquear uma o usuário deve completar a anterior 
+- [x] Cada lição deve possuir Três fases, sendo:
+    - Teoria sobre o conceito a ser estudado
+    - Quiz sobre a teoria passada
+    - Resultado que exibe os pontos obtidos a partir do Quiz(XP e Moedas)
+- [x] Cada lição deve possuir Três fases, sendo:
+    - Teoria sobre o conceito a ser estudado
+    - Quiz sobre a teoria passada
+    - Resultado que exibe os pontos obtidos a partir do Quiz (XP e Moedas)
 
-### Página de contato
-- [x] Deve haver um página contendo um formulário para o usuário entrar em contato com a Stardus
-- [X] Essa página deve exibir endereço, número de telefone e e-mail e um formulário de contato da Stardus
-- [x] O formulário deve conter
-  - Nome do usuário
-  - E-mail do usuário
-  - Mensagem do usuário
+### Desafio de código
 
-### Página contando a história da Stardus
-- [x] Deve haver uma página que fale mais sobre a Stardus
-- [x] Essa página conter as sessões:
-  - Um resumo da origem e fundação da Stardus
-  - Uma mapa indicando a localização da Stardus
-  - Dados a respeito da infraestrutura da Stardus
-  - Nome e descrição dos programas de extensão da Stardus
-  - Nome, cargo, local de trabalho e depoimento de ex-alunos da Stardus
+- [x] O desafio de código deve possuir testes de caso, cada uma contendo uma entrada e uma saída para testar a solução do usuário
+- [x] Se o usuário conseguir resolver o desafio ele deve receber a quantidade de XP e Moedas de acordo com o nível de dificuldade do desafio.
 
-### Navegação
-- [x] Deve haver links de acesso para qualquer uma das páginas do site
+### Seleção de desafio de código a avulso
 
-### Login
-- [x] O usuário administrador deve fazer login para poder acessar o dashboard utilizando e-mail e senha
-- [x] O usuário deve poder escolher manter ou não sua sessão mesmo que navegador venha a fechar
-- [x] O sistema deve bloquear o acesso ao dashboard caso não haja uma sessão ativa
-- [x] O sistema guardar a rota da página que o usuário não conseguiu acessar em um primeiro momento para que caso ele faça login ele seja redirecionado imediatamente para a página em questão 
-- [x] O usuário deve poder fazer logout, ou seja, encerrar sua sessão
+- [x] O usuário deve poder escolher um desafio de código avulso, ou seja, um desafio que não faz parta da trilha principal, a partir de uma lista de desafios
+- [x] Cada desafio de código deve possuir um nível de dificuldade, sendo `fácil`, `médio` ou `difícil`
+- [x] Cada desafio de código deve se enquadrar em uma ou mais categorias, sendo que cada categoria é relacionado a um módulo da trilha principal
+- [x] O usuário deve poder filtrar, de forma simultaneamente ou não, os desafios de código por nível de dificuldade, nome ou uma ou mais categorias
 
-  
-### Gráficos
-- [x] O dashboard deve exibir gráficos de diversos formatos a respeito dos dados cadastrados no sistema
-- [x] Deve gráfico que indique a quantidade matrículas por disciplina
-- [x] Deve haver um gráfico que indique a quantidade posts por categoria de post
-- [x] Deve haver um gráfico que indique a frequência dos alunos em um período de 7, 30 ou 90 dias (escolha do usuário) 
-- [x] Deve haver um gráfico que indique a quantidade de alunos por gênero 
-- [x] Deve haver um gráfico que indique a quantidade de professores por disciplina 
-- [x] Deve haver um gráfico que indique a quantidade de matrículas ativas e desativadas em um período de 7, 30 ou 90 dias (escolha do usuário)
+### Loja de itens
 
-### Tabela de professores
+- [x] Deve haver uma loja contendo itens de foguetes e avatares
+- [x] Cada item da loja deve apresentar:
+  - Nome
+  - Imagem
+  - Preço
+  - Botão de compra
+- [x] O usuário só pode comprar apenas quando houver a quantidade necessária de moedas que o determinado item exige
+- [x] O item recém-comprado deve ser configurado como selecionado automaticamente no perfil do usuário
+- [x] Caso o item já tenha sido adquirido pelo usuário, o botão de compra se transformará em um botão para selecionar o item em questão
 
-- [x] Deve ser exibido uma tabela que contenha todos os professores de forma paginada
-- [x] Cada linha dessa tabela deve exibir:
-  - Avatar
+### Ranking de usuários
+
+- [x] Os usuários devem ser divididos em 6 rankings diferentes
+- [x] Cada ranking deve conter uma lista de usuários ordenados de forma decrescente de acordo com a quantidade de XP de cada um
+- [x] Todo domingo às 23:59, os 5 melhores usuários de cada ranking deverão ir para o próximo ranking, enquanto os 5 piores usuários deverão ir para o ranking anterior
+- [x] No momento de mudança de ranking os melhores usuários de cada ranking deverão ganhar um recompesa de moedas e XP, cuja quantidades deverão ser conforme a posição alcançada pelo usuário e o grau de prestígio do ranking anterior ao recém adquirido
+
+### Perfil de usuário
+
+- [x] Cada usuário deve possuir um perfil que exiba:
   - Nome
   - E-mail
-  - Disciplinas
-  - Idade
-  - Gênero
-- [x] Deve ser possível filtrar professores por nome, email ou disciplina
-- [x] Deve ser possível deletar um ou mais professors de uma vez
-- [x] Deve ser possível adicionar um professor via formulário contendo os campos:
-  - Nome
-  - E-mail
-  - Telefone
-  - Data de nascimento
-  - Gênero
-  - Senha
-  - Confirmação de senha
-  - Avatar
-  - Um ou mais disciplinas
-- [x] Deve ser possível adicionar um professor via arquivo CSV, em cada uma das suas colunas corresponde a um campo do formulário citado no item anterior
-
-### Página de professor
-
-- [x] Deve haver uma página própria que exiba os dados do professor
-- [x] Deve ser exibido o avatar de outros professores que também lecionam as mesma disciplinas que o professor em questão
-- [x] Deve haver um formulário para editar qualquer dado do professors em questão
+  - Avatar atual
+  - Data de criação de perfil
+  - Ranking atual
+  - Foguete atualmente usado
+- [x] Deve ser exibido um gráfico que indique a quantidade de desafios concluídos pelo usuário de acordo com o nível de dificuldade de cada desafio
+- [x] Deve ser exibido uma tabela que exida os desafios, snippets de código e soluções de código criados por ele juntamente com a respectiva data de criação e link para acessar o recurso em questão
 
 ---
 
@@ -115,23 +97,31 @@ O objetivo ao realizar esse projeto foi aprender de forma avançanda o desensolv
 
 Este projeto foi desenvolvido usando as seguintes tecnologias:
 
-✔️ **[Python](https://www.python.org/)** para programar o backend
 
-✔️ **[Flask](https://flask.palletsprojects.com/en/3.0.x/)** Para servir como framework para construir o servidor web, fazer validação dos formulários e gerenciar a autenticação do usuário
+- **[Next.js](https://nextjs.org/)** para fornecer um servidor para as funcionalidades que precisam rodar server side e recursos extras que são comuns em aplicações web hoje, como caching, roteamento dinâmico e pré-processamento de dados
 
-✔️ **[MySQL](https://www.mysql.com/)** para ser banco de dados
+- **[React](https://pt-br.legacy.reactjs.org/)** para criar interfaces interativas
 
-✔️ **[HTML](https://developer.mozilla.org/pt-BR/docs/Web/HTML)** Para fazer a marcação das páginas do site
+- **[TailwindCSS](https://tailwindcss.com/)** para estilização das interfaces
 
-✔️ **[CSS](https://developer.mozilla.org/pt-BR/docs/Web/CSS)** - para estilizar os elementos do site
+- **[Framer Motion](https://tailwindcss.com/)** para fazer as animações
 
-✔️ **[JavaScript](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript)** - Para adicionar interatividade nos elementos do site
+- **[Radix UI](https://www.radix-ui.com/)** para construir componentes reacts que exijam recursos de acessibilidade
 
-✔️ **[ApexCharts.js](https://apexcharts.com/)** - Para renderizar gráficos
+- **[Supabase](https://supabase.com/)** para prover funcionalidades comuns em aplicações backend, como serviço de autenticação, banco de dados (PostgreSQL), storage de arquivos, realtime etc. 
 
-✔️ **[Docker](https://www.docker.com/)** - para criar e gerenciar os containers da aplicação
+- **[Delégua](https://github.com/DesignLiquido/delegua)** para servir como a linguagem de programação utilizada como ferramenta de estudo dos usuários
 
-> Para mais detalhes acerca das dependências do projeto, como versões específicas, veja o arquivo [package.json](https://github.com/JohnPetros/stardus/blob/main/package.json)
+- **[Resend](https://resend.com/)** para envio de e-mails
+
+- **[React-email](https://react.email/)** para criação de templates de e-mails
+
+- **[SWR](https://swr.vercel.app/pt-BR)** para caching de dados no lado do cliente
+
+- **[Zod](https://nextjs.org/)** para validação e transformação de dados
+
+
+> Para mais detalhes acerca das dependências do projeto, como versões específicas, veja o arquivo [package.json](https://github.com/JohnPetros/stardust/blob/main/package.json)
 
 ---
 
@@ -142,34 +132,36 @@ Este projeto foi desenvolvido usando as seguintes tecnologias:
 Antes de baixar o projeto você necessecitará ter instalado na sua máquina as seguintes ferramentas:
 
 - [Git](https://git-scm.com/) para manilupar repostitórios Git
-- [Docker](https://docs.docker.com/get-docker/) para manipular Docker containers
+- [npm](https://git-scm.com/), [yarn](https://yarnpkg.com/), [bun](https://bun.sh/) [pnpm](https://pnpm.io/pt/) para ma
 
 > Além disto é bom ter um editor para trabalhar com o código, como o [VSCode](https://code.visualstudio.com/)
 
-> Além disto é crucial configurar as variáveis de ambiente em um arquivo chamado `.env` antes de executar a aplicação. veja o arquivo [.env.example](https://github.com/JohnPetros/stardus/blob/main/.env.example) para ver quais variáveis devem ser configuradas
+> Além disto é crucial configurar as variáveis de ambiente em um arquivo chamado `.env` antes de executar a aplicação. veja o arquivo [.env.example](https://github.com/JohnPetros/stardust/blob/main/.env.example) para ver quais variáveis devem ser configuradas
 
 ### 📟 Rodando a aplicação
 
 ```bash
 
 # Clone este repositório
-$ git clone https://github.com/JohnPetros/stardus.git
+$ git clone https://github.com/JohnPetros/stardust.git
 
 # Acesse a pasta do projeto
-$ cd stardus
+$ cd stardust
 
-# Rode o container da aplicação
+# Rode a aplicação em modo de desenvolvimento
 $ docker compose up
 
 ```
 
+> Provavelmente a aplicação estará rodando em http://localhost:3000
+
 ### 🧪 Rodando os testes
 
 ```bash
+
 # Execute os testes
-$ npm run test
-# ou
-$ yarn test
+$ pnpm run test
+
 ```
 
 ---
@@ -179,7 +171,7 @@ $ yarn test
 ```bash
 
 # Fork este repositório
-$ git clone https://github.com/JohnPetros/stardus.git
+$ git clone https://github.com/JohnPetros/stardust.git
 
 # Cria uma branch com a sua feature
 $ git checkout -b minha-feature
@@ -194,7 +186,7 @@ $ git push origin minha-feature
 
 > Você deve substituir 'minha-feature' pelo nome da feature que você está adicionando
 
-> Você também pode abrir um [nova issue](https://github.com/JohnPetros/stardus/issues) a respeito de algum problema, dúvida ou sugestão para o projeto. Ficarei feliz em poder ajudar, assim como melhorar este projeto
+> Você também pode abrir um [nova issue](https://github.com/JohnPetros/stardust/issues) a respeito de algum problema, dúvida ou sugestão para o projeto. Ficarei feliz em poder ajudar, assim como melhorar este projeto
 
 ---
 
