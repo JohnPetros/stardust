@@ -21,10 +21,5 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
   const star = await _handleLessonPage(userId, params.starSlug, starController)
 
-  const _star = {
-    ...star,
-    texts,
-  }
-
-  return <LessonStar star={_star} />
+  return <LessonStar star={star} />
 }

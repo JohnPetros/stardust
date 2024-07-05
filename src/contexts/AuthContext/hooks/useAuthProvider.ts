@@ -66,6 +66,7 @@ export function useAuthProvider(serverSession: Session | null) {
 
   const mutateUserCache = useCallback(
     (newData: Partial<User> | null, shouldRevalidate = true) => {
+      console.log({ newData })
       mutate(
         `/user?session_id=${session?.user.id}`,
         { ...user, ...newData },

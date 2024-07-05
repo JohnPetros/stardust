@@ -6,8 +6,10 @@ import { RocketProps } from '.'
 
 import { useAuthContext } from '@/contexts/AuthContext/hooks/useAuthContext'
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
+import { CACHE } from '@/global/constants/cache'
 import { useAudio } from '@/global/hooks/useAudio'
 import { useApi } from '@/services/api'
+import { useGlobalCache } from '@/services/cache'
 
 export function useRocketItem({
   data: { id, name, price, image, isAcquired },
@@ -16,6 +18,7 @@ export function useRocketItem({
   const { user, updateUser } = useAuthContext()
 
   // const { mutate } = useSWRConfig()
+  const { mutate } = useGlobalCache()
 
   const [isSelected, setIsSelected] = useState(false)
 
@@ -44,11 +47,11 @@ export function useRocketItem({
   async function selectRocket() {
     try {
       await updateUser({ rocketId: id })
-      // mutate('/rocket?id=' + id, { id, name, image })
+      mutate(CACHE.keys.rocket, { id, name, image })
 
       audio?.play()
     } catch (error) {
-      toast.show('Erro ao tentar selecionar o foguete ' + name, {
+      toast.show(`Erro ao tentar selecionar o foguete ${name}`, {
         type: 'error',
       })
     }
@@ -62,7 +65,7 @@ export function useRocketItem({
     try {
       await selectRocket()
     } catch (error) {
-      toast.show('Erro ao tentar selecionar o foguete ' + name, {
+      toast.show(`Erro ao tentar selecionar o foguete ${name}`, {
         type: 'error',
       })
       console.error(error)

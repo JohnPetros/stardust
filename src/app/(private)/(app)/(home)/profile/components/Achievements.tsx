@@ -19,25 +19,19 @@ export function Achievements({ userId }: AchievementsProps) {
 
   if (unlockedAchievements?.length) {
     return (
-      <div className="custom-scroll grid h-72 grid-cols-1 content-start gap-4 overflow-y-auto  px-1 md:grid-cols-2">
+      <div className='custom-scroll grid h-72 grid-cols-1 content-start gap-4 overflow-y-auto px-1 md:grid-cols-2'>
         {unlockedAchievements.map((achivement) => (
-          <Achievement
-            key={achivement.id}
-            data={achivement}
-            isUnlocked={true}
-            isRescuable={false}
-          />
+          <div key={achivement.id} className='h-24'>
+            <Achievement data={achivement} isUnlocked={true} isRescuable={false} />
+          </div>
         ))}
       </div>
     )
-  } else {
-    return (
-      <div className="flex flex-col items-center justify-center">
-        <Lottie animationData={Missing} loop={true} style={{ width: 220 }} />
-        <p className="text-sm text-gray-300">
-          Nenhuma conquista adquirida ainda 😢.
-        </p>
-      </div>
-    )
   }
+  return (
+    <div className='flex flex-col items-center justify-center'>
+      <Lottie animationData={Missing} loop={true} style={{ width: 220 }} />
+      <p className='text-sm text-gray-300'>Nenhuma conquista adquirida ainda 😢.</p>
+    </div>
+  )
 }

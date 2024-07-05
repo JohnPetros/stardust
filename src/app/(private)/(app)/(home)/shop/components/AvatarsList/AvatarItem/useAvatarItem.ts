@@ -46,9 +46,9 @@ export function useAvatarItem({
 
   async function selectAvatar() {
     try {
-      await updateUser({ avatar_id: id })
+      await updateUser({ avatarId: id })
       audio?.play()
-      mutate('/avatar?id=' + id, { id, name, image })
+      mutate(`/avatar?id=${id}`, { id, name, image })
     } catch (error) {
       console.error(error)
     }
@@ -64,8 +64,8 @@ export function useAvatarItem({
   }
 
   useEffect(() => {
-    setIsSelected(id === user?.avatar_id)
-  }, [id, user?.avatar_id])
+    setIsSelected(id === user?.avatarId)
+  }, [id, user?.avatarId])
 
   return {
     isSelected,
