@@ -3,13 +3,16 @@
 import useSWR from 'swr'
 
 import { useApi } from '@/services/api'
+import { useCache } from '@/services/cache'
+import { CACHE } from '../constants/cache'
 
 export function useRanking(rankingId?: string, canGetAllRankings?: boolean) {
   const api = useApi()
 
   async function getRanking() {
     if (rankingId) {
-      return await api.getRankingById(rankingId)
+      const ranking = await api.getRankingById(rankingId)
+      return ranking
     }
   }
 
@@ -17,17 +20,22 @@ export function useRanking(rankingId?: string, canGetAllRankings?: boolean) {
     return await api.getRankingsOrderedByPosition()
   }
 
-  const { data: ranking, error: rankingError } = useSWR(
-    rankingId ? '/ranking?id=' + rankingId : null,
-    getRanking
-  )
+  const { data: ranking, error: rankingError } = useCache({
+    key: CACHE.keys.ranking,
+    fetcher: getRanking,
+    dependencies: [rankingId],
+    isEnabled: !!rankingId,
+  })
 
-  const { data: rankings, error: rankingsError } = useSWR(
-    canGetAllRankings ? '/rankings' : null,
-    getRankings
-  )
+  const { data: rankings, error: rankingsError } = useCache({
+    key: CACHE.keys.rankingsList,
+    fetcher: getRankings,
+    dependencies: [canGetAllRankings],
+    isEnabled: canGetAllRankings,
+  })
 
   if (rankingError) {
+    console.log({ rankingError })
     throw new Error(rankingError)
   }
 

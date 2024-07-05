@@ -11,7 +11,10 @@ export const CACHE = {
     userUpvotedCommentsIds: '/user-upvoted-comments-ids',
     acquiredAvatarsIds: '/acquired-avatars-ids',
     avatar: '/avatar',
+    rocket: '/rocket',
     playgroundCards: '/playground-cards',
+    ranking: 'ranking',
+    rankingsList: 'rankings-list',
     solutions: '/solutions',
   },
 }
