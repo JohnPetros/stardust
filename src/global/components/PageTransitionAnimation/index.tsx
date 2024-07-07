@@ -6,7 +6,7 @@ import { Mdx } from '../Mdx'
 
 import { usePageTransitionAnimation } from './usePageTransitionAnimation'
 
-import { formatText } from '@/global/helpers'
+import { formatText } from '@/modules/global/utils'
 
 const containerVariants: Variants = {
   hidden: {
@@ -46,11 +46,11 @@ export function PageTransitionAnimation({
       {isVisible && (
         <motion.div
           variants={containerVariants}
-          initial="initial"
-          animate="visible"
-          exit="hidden"
-          className="fixed bottom-0 left-0 right-0 top-0 z-50 flex items-center justify-center bg-gray-900"
-          data-testid="page transition"
+          initial='initial'
+          animate='visible'
+          exit='hidden'
+          className='fixed bottom-0 left-0 right-0 top-0 z-50 flex items-center justify-center bg-gray-900'
+          data-testid='page transition'
         >
           <motion.div variants={apolloVariants}>
             <Lottie
@@ -59,7 +59,7 @@ export function PageTransitionAnimation({
               loop={true}
             />
             {hasTips && codeTip && (
-              <div className="mx-auto w-[32rem] max-w-[90%] -translate-y-10 rounded-md bg-gray-700 p-2 text-center leading-8 text-gray-100">
+              <div className='mx-auto w-[32rem] max-w-[90%] -translate-y-10 rounded-md bg-gray-700 p-2 text-center leading-8 text-gray-100'>
                 <Mdx>{codeTip}</Mdx>
               </div>
             )}

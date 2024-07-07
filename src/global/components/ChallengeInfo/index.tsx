@@ -1,15 +1,9 @@
-import {
-  ChartLine,
-  CheckCircle,
-  Circle,
-  Target,
-  User,
-} from '@phosphor-icons/react'
+import { ChartLine, CheckCircle, Circle, Target, User } from '@phosphor-icons/react'
 import Link from 'next/link'
 
 import { Info } from './Info'
 
-import { deslugify } from '@/global/helpers'
+import { deslugify } from '@/modules/global/utils'
 
 type ChallengeInfo = {
   isCompleted: boolean
@@ -31,7 +25,7 @@ export function ChallengeInfo({
   const userName = deslugify(userSlug)
 
   return (
-    <ul className="flex items-center gap-3">
+    <ul className='flex items-center gap-3'>
       <Info
         icon={isCompleted ? CheckCircle : Circle}
         iconStyle={isCompleted ? 'text-green-500' : 'text-red-700'}
@@ -53,11 +47,7 @@ export function ChallengeInfo({
         tooltipText={'Número de usuários que concluiram esse desafio.'}
       />
       <Link href={`/profile/${userSlug}`}>
-        <Info
-          icon={User}
-          label={userName}
-          tooltipText={'Criador desse desafio.'}
-        />
+        <Info icon={User} label={userName} tooltipText={'Criador desse desafio.'} />
       </Link>
     </ul>
   )

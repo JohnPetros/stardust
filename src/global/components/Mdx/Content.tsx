@@ -3,7 +3,7 @@ import { VariantProps, tv } from 'tailwind-variants'
 
 import { TypeWriter } from '../TypeWriter'
 
-import { formatSpecialCharacters } from '@/global/helpers'
+import { formatSpecialCharacters } from '@/modules/global/utils'
 
 const contentStyles = tv({
   base: 'font-medium tracking-wider text-gray-100 text-sm w-full p-3 rounded-md not-prose leading-6 mx-auto',

@@ -8,7 +8,7 @@ import { CursorPosition } from '.'
 
 import { THEMES } from '@/global/constants'
 import { useCode } from '@/services/code'
-import { colors } from '@/styles/colors'
+import { colors } from '@/modules/global/styles/colors'
 
 export function useEditor(value: string) {
   const monaco = useMonaco()

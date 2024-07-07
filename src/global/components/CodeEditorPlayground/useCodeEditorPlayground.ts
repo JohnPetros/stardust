@@ -7,8 +7,8 @@ import { PromptRef } from '../Prompt'
 
 import { useToastContext } from '@/contexts/ToastContext/hooks/useToastContext'
 import { EditorRef } from '@/global/components/Editor'
-import { REGEX } from '@/global/constants/regex'
-import { checkNumeric, playAudio } from '@/global/helpers'
+import { REGEX } from '@/modules/global/constants/regex'
+import { checkNumeric, playAudio } from '@/modules/global/utils'
 import { useCode } from '@/services/code'
 
 export function useCodeEditorPlayground(
@@ -18,7 +18,7 @@ export function useCodeEditorPlayground(
   const [output, setOutput] = useState<string[]>([])
   const [shouldOpenPrompt, setShouldOpenPrompt] = useState(false)
 
-  const { run, handleError, getInput, addInput, } = useCode()
+  const { run, handleError, getInput, addInput } = useCode()
 
   const toast = useToastContext()
 
@@ -60,8 +60,7 @@ export function useCodeEditorPlayground(
   }
 
   function handlePromptConfirm() {
-    if (promptRef.current)
-      formatCodeWithInput(userCode.current, promptRef.current?.value)
+    if (promptRef.current) formatCodeWithInput(userCode.current, promptRef.current?.value)
   }
 
   function handlePromptCancel() {

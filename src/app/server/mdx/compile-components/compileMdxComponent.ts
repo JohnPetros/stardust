@@ -1,7 +1,7 @@
 import { serialize } from 'next-mdx-remote/serialize'
 
 import { APP_ERRORS } from '@/global/constants'
-import { getComponentContent } from '@/global/helpers'
+import { getComponentContent } from '@/modules/global/utils'
 
 const CONTENT_PLACEHOLDER = '@component-content'
 
@@ -10,17 +10,11 @@ export async function compileMdxComponent(component: string) {
 
   if (!componentContent) throw new Error(APP_ERRORS.mdx.failedCompiling)
 
-  const componentToBeCompiled = component.replace(
-    componentContent,
-    CONTENT_PLACEHOLDER
-  )
+  const componentToBeCompiled = component.replace(componentContent, CONTENT_PLACEHOLDER)
 
   const mdx = await serialize(componentToBeCompiled)
 
-  const compiledMdx = mdx.compiledSource.replace(
-    CONTENT_PLACEHOLDER,
-    componentContent
-  )
+  const compiledMdx = mdx.compiledSource.replace(CONTENT_PLACEHOLDER, componentContent)
 
   mdx.compiledSource = compiledMdx
 

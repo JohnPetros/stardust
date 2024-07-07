@@ -5,7 +5,7 @@ import { Content } from './Content'
 import { Picture } from './Picture'
 import { Title } from './Title'
 
-import { slugify } from '@/global/helpers'
+import { slugify } from '@/modules/global/utils'
 
 type TextProps = {
   title: string

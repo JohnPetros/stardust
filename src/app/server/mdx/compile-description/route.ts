@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import compileDescription from './compileDescription'
 import { getMdxComponents } from './getMdxComponents'
 
-import { formatCode, getComponentContent } from '@/global/helpers'
+import { formatCode, getComponentContent } from '@/modules/global/utils'
 
 const CONTENT_PLACEHOLDER = '@component-content'
 
@@ -33,19 +33,16 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const compiledDescription = await compileDescription(
-    descriptionWithoutMdxComponents
-  )
+  const compiledDescription = await compileDescription(descriptionWithoutMdxComponents)
 
   for (const mdxComponent of mdxComponents) {
     const mdxComponentContent = getComponentContent(mdxComponent)
     if (!mdxComponentContent) continue
 
-    compiledDescription.compiledSource =
-      compiledDescription.compiledSource.replace(
-        CONTENT_PLACEHOLDER,
-        formatCode(mdxComponentContent, 'encode')
-      )
+    compiledDescription.compiledSource = compiledDescription.compiledSource.replace(
+      CONTENT_PLACEHOLDER,
+      formatCode(mdxComponentContent, 'encode')
+    )
   }
 
   return NextResponse.json({

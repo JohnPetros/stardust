@@ -30,7 +30,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "node_modules/monaco-editor/monaco.d.ts",
+    "node_modules/monaco-editor/monaco.d.ts", "src/@core/errors/users/SaveUserFailedError.ts",
   ],
   "exclude": ["node_modules"]
 }

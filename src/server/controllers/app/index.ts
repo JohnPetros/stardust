@@ -1,0 +1,1 @@
+export { HandleRewardsPayloadController } from './HandleRewardsPayloadController'

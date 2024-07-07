@@ -4,7 +4,7 @@ export { CHALLENGE_REWARDS_BY_DIFFICULTY } from './challenge-rewards-by-difficul
 export { COOKIES } from './cookies'
 export { HOME_LINKS } from './home-links'
 export { PODIUM } from './podium'
-export { REGEX } from './regex'
+export { REGEX } from '../../modules/global/constants/regex'
 export { ROCKET_ANIMATION_DELAY } from './rocket-animation-delay'
 export { ROUTES } from './routes'
 export { SNIPPETS } from './snippets'
