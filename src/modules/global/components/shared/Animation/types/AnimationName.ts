@@ -1,0 +1,10 @@
+export type AnimationName =
+  | 'apollo-crying'
+  | 'apollo-asking'
+  | 'apollo-denying'
+  | 'apollo-earning'
+  | 'apollo-riding-rocket'
+  | 'rocket-lauching'
+  | 'rocket-floating'
+  | 'spinner'
+  | '404'
