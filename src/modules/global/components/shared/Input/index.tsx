@@ -43,7 +43,9 @@ const InputComponent = (
           )}
         >
           <Icon name={icon} className={iconColor} size={24} />
+
           <input
+            aria-label={label}
             ref={ref}
             type={innerType}
             id={id}

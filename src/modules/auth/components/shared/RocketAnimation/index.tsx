@@ -1,11 +1,11 @@
 'use client'
 
+import { Ref } from 'react'
 import { Variants, motion } from 'framer-motion'
-import Lottie, { LottieRef } from 'lottie-react'
 
-import RocketLaunching from '../../../../../../public/animations/rocket-launching.json'
-
-import { ROCKET_ANIMATION_DELAY } from '@/global/constants'
+import type { AnimationRef } from '@/modules/global/components/shared/Animation/types'
+import { Animation } from '@/modules/global/components/shared/Animation'
+import { ROCKET_ANIMATION_DELAY } from '@/modules/auth/constants'
 
 const rocketVariants: Variants = {
   hidden: {
@@ -21,7 +21,7 @@ const rocketVariants: Variants = {
 }
 
 type RocketProps = {
-  animationRef: LottieRef
+  animationRef: Ref<AnimationRef>
   isVisible: boolean
 }
 
@@ -34,12 +34,7 @@ export function RocketAnimation({ animationRef, isVisible }: RocketProps) {
       className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'
       aria-live='polite'
     >
-      <Lottie
-        lottieRef={animationRef}
-        animationData={RocketLaunching}
-        style={{ width: 640, height: 640 }}
-        loop={false}
-      />
+      <Animation ref={animationRef} name='rocket-lauching' size={640} hasLoop={false} />
     </motion.div>
   )
 }

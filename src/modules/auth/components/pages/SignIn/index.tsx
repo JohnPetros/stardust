@@ -1,123 +1,50 @@
 'use client'
 
-import { Envelope, Lock } from '@phosphor-icons/react'
-import { AnimatePresence, Variants, motion } from 'framer-motion'
+import { useRef } from 'react'
 
-import { Hero } from '../../shared/Hero'
+import { SignInForm } from '@/infra/forms'
+import { Button } from '@/modules/global/components/shared/Button'
+import { ROUTES } from '@/modules/global/constants'
+import type { AnimationRef } from '@/modules/global/components/shared/Animation/types'
+
 import { Link } from '../../shared/Link'
 import { RocketAnimation } from '../../shared/RocketAnimation'
 import { Title } from '../../shared/Title'
 
+import { AnimatedForm } from '../../shared/AnimatedForm'
+import { AnimatedHero } from './AnimatedHero'
+
 import { useSignInPage } from './useSignInPage'
 
-import { Button } from '@/global/components/Button'
-import { Input } from '@/global/components/Input'
-import { ROUTES } from '@/global/constants'
-
-const formAnimations: Variants = {
-  initial: {
-    opacity: 0,
-    x: -250,
-  },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      type: 'spring',
-      duration: 0.4,
-    },
-  },
-  hidden: {
-    opacity: 0,
-    x: -750,
-    transition: {
-      duration: 2,
-    },
-  },
-}
-
-const heroAnimations: Variants = {
-  hidden: {
-    opacity: 0,
-    x: '75vw',
-    transition: {
-      duration: 2,
-    },
-  },
-}
-
-// joaoJP77$
-
 export function SignInPage() {
-  const { errors, isLaoding, isRocketVisible, rocketRef, register, handleSubmit } =
-    useSignInPage()
+  const url = typeof window !== 'undefined' ? window.location.href : ''
+  const rocketAnimationRef = useRef<AnimationRef>(null)
+
+  const { isRocketVisible, handleFormSubmit } = useSignInPage(url, rocketAnimationRef)
 
   return (
     <>
-      <RocketAnimation animationRef={rocketRef} isVisible={isRocketVisible} />
+      <RocketAnimation animationRef={rocketAnimationRef} isVisible={isRocketVisible} />
 
       <div className='h-screen lg:grid lg:grid-cols-[1fr_1.5fr]'>
         <main className='flex h-full flex-col items-center justify-center'>
-          <AnimatePresence>
-            {!isRocketVisible && (
-              <motion.div
-                variants={formAnimations}
-                initial='initial'
-                animate='visible'
-                exit='hidden'
-                className='w-full max-w-[320px]'
-              >
-                <Title
-                  title='Entre na sua conta'
-                  text='Insira suas informações de cadastro.'
-                />
-                <form onSubmit={handleSubmit} className='mt-4'>
-                  <div className='space-y-4'>
-                    <Input
-                      label='E-mail'
-                      type='email'
-                      icon={Envelope}
-                      placeholder='Digite seu e-mail'
-                      autoFocus
-                      {...register('email')}
-                      error={errors.email?.message}
-                    />
-                    <Input
-                      label='Senha'
-                      type='password'
-                      icon={Lock}
-                      placeholder='Digite sua senha'
-                      {...register('password')}
-                      error={errors.password?.message}
-                    />
-                  </div>
-                  <div className='mt-6'>
-                    <Button name='submit' type='submit' isLoading={isLaoding}>
-                      Entrar
-                    </Button>
-                  </div>
-                </form>
+          <AnimatedForm isVisible={isRocketVisible}>
+            <Title
+              title='Entre na sua conta'
+              text='Insira suas informações de cadastro.'
+            />
+            <div>
+              <SignInForm id='sign-in-form' onSubmit={handleFormSubmit} />
+            </div>
 
-                <div className='mt-4 flex w-full items-center justify-between'>
-                  <Link href={ROUTES.public.resetPassword}>Esqueci a senha</Link>
-                  <Link href={ROUTES.public.signUp}>Criar conta</Link>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+            <div className='mt-4 flex w-full items-center justify-between'>
+              <Link href={ROUTES.public.resetPassword}>Esqueci a senha</Link>
+              <Link href={ROUTES.public.signUp}>Criar conta</Link>
+            </div>
+          </AnimatedForm>
         </main>
 
-        <AnimatePresence>
-          {!isRocketVisible && (
-            <motion.div
-              variants={heroAnimations}
-              exit='hidden'
-              className='hidden bg-gray-800 lg:grid lg:place-content-center'
-            >
-              <Hero />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <AnimatedHero isVisible={isRocketVisible} />
       </div>
     </>
   )

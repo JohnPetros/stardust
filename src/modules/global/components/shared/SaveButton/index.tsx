@@ -2,8 +2,7 @@ import { CloudArrowUp } from '@phosphor-icons/react'
 import { twMerge } from 'tailwind-merge'
 
 import { useSaveButton } from './useSaveButton'
-
-import { Button } from '@/global/components/Button'
+import { Button } from '../Button'
 
 type SaveButtonProps = {
   onSave: () => Promise<void>
@@ -21,7 +20,7 @@ export function SaveButton({ onSave }: SaveButtonProps) {
       )}
       onClick={handleClick}
     >
-      <CloudArrowUp className={twMerge('text-lg', variant)} weight="bold" />
+      <CloudArrowUp className={twMerge('text-lg', variant)} weight='bold' />
       {title}
     </Button>
   )

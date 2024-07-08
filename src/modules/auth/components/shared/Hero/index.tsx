@@ -2,8 +2,8 @@
 
 import Image from 'next/image'
 
-import { TypeWriter } from '@/global/components/TypeWriter'
 import { useHero } from './useHero'
+import { TypeWriter } from '@/modules/global/components/shared/TypeWriter'
 
 const CHARACTERS_DELETING_DELAY = 40 // miliseconds
 

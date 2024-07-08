@@ -7,8 +7,8 @@ import { usePathname } from 'next/navigation'
 
 import { useCodeEditorToolbar } from './useCodeEditorToolbar'
 
-import { AlertDialog } from '@/global/components/AlertDialog'
-import { Button } from '@/global/components/Button'
+import { AlertDialog } from '@/modules/global/components/sharedAlertDialog'
+import { Button } from '@/modules/global/components/sharedButton'
 import { CodeEditorSettingsDialog } from '@/modules/global/components/shared/CodeEditorToolbar/CodeEditorSettingsDialog'
 import { DocsDialog } from '@/modules/global/components/shared/CodeEditorToolbar/DocsDialog'
 import { HotkeysDialog } from '@/modules/global/components/shared/CodeEditorToolbar/HotkeysDialog'

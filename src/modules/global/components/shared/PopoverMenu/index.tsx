@@ -90,6 +90,7 @@ export function PopoverMenu({
                             <Hydration>
                               <button
                                 aria-label={label}
+                                type='button'
                                 className={twMerge(
                                   'mr-auto flex w-full items-center justify-between border-t p-2 text-left text-gray-100',
                                   !isFirst ? 'border-green-400' : 'border-transparent'

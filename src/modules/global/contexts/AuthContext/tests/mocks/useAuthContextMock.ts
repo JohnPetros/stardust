@@ -1,4 +1,4 @@
-import { useAuthContext } from '@/modules/global/contexts/AuthContext'
+import { useAuthContext } from '../..'
 
 export function useAuthContextMock(
   returnMock?: Partial<ReturnType<typeof useAuthContext>>
