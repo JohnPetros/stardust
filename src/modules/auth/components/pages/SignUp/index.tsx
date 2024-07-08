@@ -1,31 +1,14 @@
 'use client'
 
-import { Envelope, Lock } from '@phosphor-icons/react'
-import { Variants, motion } from 'framer-motion'
+import { Button } from '@/modules/global/components/shared/Button'
+import { Input } from '@/modules/global/components/shared/Input'
 
 import { Hero } from '../../shared/Hero'
 import { Link } from '../../shared/Link'
 import { Title } from '../../shared/Title'
+import { AnimatedForm } from '../../shared/AnimatedForm'
 
 import { useSignUpPage } from './useSignUpPage'
-
-import { Button } from '@/global/components/Button'
-import { Input } from '@/global/components/Input'
-
-const formAnimations: Variants = {
-  hidden: {
-    opacity: 0,
-    x: -250,
-  },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      type: 'spring',
-      duration: 0.4,
-    },
-  },
-}
 
 export function SignUpPage() {
   const { errors, isLoading, register, handleSubmit } = useSignUpPage()
@@ -33,12 +16,7 @@ export function SignUpPage() {
   return (
     <div className='h-screen lg:grid lg:grid-cols-[1fr_1.5fr]'>
       <main className='flex h-full flex-col items-center justify-center'>
-        <motion.div
-          variants={formAnimations}
-          initial='hidden'
-          animate='visible'
-          className='w-full max-w-[320px]'
-        >
+        <AnimatedForm isVisible={true}>
           <Title
             title='Faça seu cadastro'
             text='Insira suas informações para cadastrar'
@@ -48,7 +26,7 @@ export function SignUpPage() {
               <Input
                 label='Nome de usuário'
                 type='text'
-                icon={Lock}
+                icon='lock'
                 placeholder='Digite seu nome de usuário'
                 autoFocus
                 {...register('name')}
@@ -57,7 +35,7 @@ export function SignUpPage() {
               <Input
                 label='E-mail'
                 type='email'
-                icon={Envelope}
+                icon='mail'
                 placeholder='Digite seu e-mail'
                 {...register('email')}
                 error={errors.email?.message}
@@ -65,7 +43,7 @@ export function SignUpPage() {
               <Input
                 label='Senha'
                 type='password'
-                icon={Lock}
+                icon='lock'
                 placeholder='Digite sua senha'
                 {...register('password')}
                 error={errors.password?.message}
@@ -73,7 +51,7 @@ export function SignUpPage() {
               <Input
                 label='Confirmação de Senha'
                 type='password'
-                icon={Lock}
+                icon='lock'
                 placeholder='Confirme sua senha'
                 {...register('password_confirmation')}
                 error={errors.password_confirmation?.message}
@@ -88,7 +66,7 @@ export function SignUpPage() {
           <div className='mt-3 flex w-full items-center justify-center'>
             <Link href='/sign-in'>Já tenho uma conta</Link>
           </div>
-        </motion.div>
+        </AnimatedForm>
       </main>
 
       <div className='hidden bg-gray-800 lg:grid lg:place-content-center'>
