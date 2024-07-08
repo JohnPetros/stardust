@@ -20,7 +20,7 @@ import '@testing-library/jest-dom'
 
 const { defineProperty } = Object
 
-Object.defineProperty = function (object, name, meta) {
+Object.defineProperty = (object, name, meta) => {
   if (meta.get && !meta.configurable) {
     return defineProperty(object, name, {
       ...meta,
