@@ -8,7 +8,6 @@ export function useSignInPageMock(
   const handleFormSubmitMock = jest.fn()
 
   jest.mocked(useSignInPage).mockReturnValue({
-    isLoading: false,
     isRocketVisible: false,
     rocketAnimationRef: animationRefMock,
     handleFormSubmit: handleFormSubmitMock,

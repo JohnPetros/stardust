@@ -1,77 +1,52 @@
 'use client'
 
-import { Button } from '@/modules/global/components/shared/Button'
-import { Input } from '@/modules/global/components/shared/Input'
+import { SignUpForm } from '@/infra/forms'
+import { Animation } from '@/modules/global/components/shared/Animation'
 
-import { Hero } from '../../shared/Hero'
 import { Link } from '../../shared/Link'
 import { Title } from '../../shared/Title'
-import { AnimatedForm } from '../../shared/AnimatedForm'
+import { AnimatedContainer } from './AnimatedContainer'
 
 import { useSignUpPage } from './useSignUpPage'
 
 export function SignUpPage() {
-  const { errors, isLoading, register, handleSubmit } = useSignUpPage()
+  const { isSignUpSuccess, handleFormSubmit } = useSignUpPage()
 
   return (
-    <div className='h-screen lg:grid lg:grid-cols-[1fr_1.5fr]'>
-      <main className='flex h-full flex-col items-center justify-center'>
-        <AnimatedForm isVisible={true}>
-          <Title
-            title='Faça seu cadastro'
-            text='Insira suas informações para cadastrar'
-          />
-          <form onSubmit={handleSubmit} className='mt-4'>
-            <div className='space-y-4'>
-              <Input
-                label='Nome de usuário'
-                type='text'
-                icon='lock'
-                placeholder='Digite seu nome de usuário'
-                autoFocus
-                {...register('name')}
-                error={errors.name?.message}
-              />
-              <Input
-                label='E-mail'
-                type='email'
-                icon='mail'
-                placeholder='Digite seu e-mail'
-                {...register('email')}
-                error={errors.email?.message}
-              />
-              <Input
-                label='Senha'
-                type='password'
-                icon='lock'
-                placeholder='Digite sua senha'
-                {...register('password')}
-                error={errors.password?.message}
-              />
-              <Input
-                label='Confirmação de Senha'
-                type='password'
-                icon='lock'
-                placeholder='Confirme sua senha'
-                {...register('password_confirmation')}
-                error={errors.password_confirmation?.message}
-              />
-            </div>
-            <div className='mt-6'>
-              <Button className='' isLoading={isLoading}>
-                Cadastrar
-              </Button>
-            </div>
-          </form>
-          <div className='mt-3 flex w-full items-center justify-center'>
-            <Link href='/sign-in'>Já tenho uma conta</Link>
-          </div>
-        </AnimatedForm>
-      </main>
-
-      <div className='hidden bg-gray-800 lg:grid lg:place-content-center'>
-        <Hero />
+    <div className='h-screen'>
+      <div className='fixed z-[-5] brightness-[0.25]'>
+        <AnimatedContainer delay={0.5}>
+          <Animation name='space' size='full' hasLoop={true} />
+        </AnimatedContainer>
       </div>
+
+      <main className='flex justify-center w-full h-full'>
+        {isSignUpSuccess ? (
+          <AnimatedContainer delay={2}>
+            <div className='flex-1 flex flex-col justify-center h-full'>
+              <p className='text-green-400 font-medium text-lg text-center'>
+                Verique o seu e-mail para confirmar o seu cadastro 😉.
+              </p>
+              <p className='text-green-400 font-medium text-md text-center'>
+                Até logo 👋🏻.
+              </p>
+            </div>
+          </AnimatedContainer>
+        ) : (
+          <AnimatedContainer delay={1.5}>
+            <div className='w-[24rem] pt-12'>
+              <div className='text-center'>
+                <Title title='Bem-vindo ao StarDust' icon='rocket' text='' />
+              </div>
+              <SignUpForm id='sign-up-form' onSubmit={handleFormSubmit} />
+            </div>
+
+            <div className='mt-6 flex w-full items-center justify-center'>
+              <Link href='/sign-in'>Eu já tenho uma conta 😁.</Link>
+            </div>
+          </AnimatedContainer>
+        )}
+      </main>
     </div>
   )
 }
