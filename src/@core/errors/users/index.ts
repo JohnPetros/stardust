@@ -1,3 +1,3 @@
-export { SaveUserFailedError } from './SaveUserFailedError'
-export { UpdateUserFailedError } from './UpdateUserFailedError'
+export { SaveUserUnexpectedError } from './SaveUserUnexpectedError'
+export { UpdateUserUnexpectedError } from './UpdateUserUnexpectedError'
 export { UserNotFoundError } from './UserNotFoundError'

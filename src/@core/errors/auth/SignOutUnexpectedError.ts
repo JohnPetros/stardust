@@ -1,9 +1,9 @@
 import { BaseError } from '../global/BaseError'
 
-export class SignUpFailedError extends BaseError {
+export class SignOutUnexpectedError extends BaseError {
   constructor() {
     super()
-    this.title = 'Sign Up Failed'
+    this.title = 'Sign Up Unexpected Error'
     this.message = 'Não foi possível completar o cadastro.'
   }
 }
