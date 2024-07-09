@@ -8,9 +8,9 @@ import { passwordSchema } from './password-schema'
 export const resetPasswordFormSchema = z
   .object({
     password: passwordSchema,
-    password_confirmation: passwordConfirmationSchema,
+    passwordConfirmation: passwordConfirmationSchema,
   })
-  .refine((fields) => fields.password === fields.password_confirmation, {
-    path: ['password_confirmation'],
-    message: VALIDATION_ERROR_MESSAGES.password_confirmation.equal,
+  .refine((fields) => fields.password === fields.passwordConfirmation, {
+    path: ['passwordConfirmation'],
+    message: VALIDATION_ERROR_MESSAGES.passwordConfirmation.equal,
   })
