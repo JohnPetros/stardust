@@ -7,10 +7,11 @@ export const VALIDATION_ERROR_MESSAGES = {
     regex: 'Informe um e-mail válido!',
   },
   password: {
+    min: 'Sua senha precica conter pelo menos 6 caracteres',
     regex:
-      'Sua senha deve conter pelo menos uma letra minúscula, uma maiúscula, um dígito e um caractere especial.',
+      'Sua senha deve conter pelo menos uma letra minúscula, uma maiúscula, um número e um caractere especial.',
   },
-  password_confirmation: {
+  passwordConfirmation: {
     equal: 'As senhas precisam de iguais',
   },
   comment: {
