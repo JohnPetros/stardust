@@ -1,2 +1,2 @@
 export type { SignInFormFields } from './SignInFormFields'
-export type { SignUpForm } from './SignUpForm'
+export type { SignUpFormFields } from './SignUpFormFields'
