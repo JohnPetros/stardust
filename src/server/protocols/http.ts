@@ -1,8 +1,9 @@
-import { IHttp, CookieConfig } from '@/@core/interfaces/handlers/IHttp'
+import { IHttp, Cookie } from '@/@core/interfaces/handlers/IHttp'
+import { HttpResponse } from '@/@core/responses'
 import { NextRequest, NextResponse } from 'next/server'
 
 export const NextHttp = (request: NextRequest): IHttp => {
-  let redirectResponse: NextResponse<unknown>
+  let nextRedirectResponse: NextResponse<unknown>
 
   return {
     getCurrentRoute() {
@@ -10,26 +11,36 @@ export const NextHttp = (request: NextRequest): IHttp => {
     },
 
     redirect(route: string) {
-      if (redirectResponse) return redirectResponse
-      return NextResponse.redirect(new URL(route, request.url))
+      if (nextRedirectResponse) {
+        return new HttpResponse(nextRedirectResponse, 303)
+      }
+
+      const nextResponse = NextResponse.redirect(new URL(route, request.url))
+      return new HttpResponse(nextResponse, 303)
     },
 
     getSearchParam(key: string) {
       return new URL(request.url).searchParams.get(key)
     },
 
-    setCookie({ key, value, duration }: CookieConfig) {
-      redirectResponse.cookies.set(key, value, {
+    setCookie({ key, value, duration }: Cookie) {
+      nextRedirectResponse.cookies.set(key, value, {
         path: '/',
         httpOnly: true,
         maxAge: duration,
       })
     },
 
-    send(data: unknown) {
-      if (redirectResponse) return redirectResponse
+    getCookie(key: string) {
+      throw new Error('NextHttp getCookie method not implemented')
+    },
 
-      return NextResponse.json(data)
+    send(data: unknown, statusCode: number) {
+      if (nextRedirectResponse) {
+        return new HttpResponse(nextRedirectResponse, statusCode)
+      }
+
+      return new HttpResponse(NextResponse.json(data), statusCode)
     },
   }
 }
