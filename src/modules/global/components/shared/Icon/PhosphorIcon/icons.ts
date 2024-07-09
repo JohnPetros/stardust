@@ -12,6 +12,7 @@ import {
   X,
   Lock,
   Icon,
+  Rocket,
 } from '@phosphor-icons/react'
 
 import type { IconName } from '../types/IconName'
@@ -27,6 +28,7 @@ export const ICONS: Record<IconName, Icon> = {
   enter: SignIn,
   eye: Eye,
   mail: Envelope,
+  rocket: Rocket,
   home: Envelope,
   close: X,
   lock: Lock,
