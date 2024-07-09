@@ -32,6 +32,7 @@ export function SignInPage() {
             <Title
               title='Entre na sua conta'
               text='Insira suas informações de cadastro.'
+              icon='enter'
             />
             <div>
               <SignInForm id='sign-in-form' onSubmit={handleFormSubmit} />
