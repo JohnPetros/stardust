@@ -38,6 +38,30 @@ export const SupabaseUsersService = (supabase: Supabase): IUsersService => {
       return new ServiceResponse(user)
     },
 
+    async getUserName(name: string) {
+      const { data, error } = await supabase
+        .from('users')
+        .select('name')
+        .eq('name', name)
+        .single()
+
+      if (error) return SupabasePostgrestError(error, UserNotFoundError)
+
+      return new ServiceResponse(data.name)
+    },
+
+    async getUserEmail(email: string) {
+      const { data, error } = await supabase
+        .from('users')
+        .select('email')
+        .eq('email', email)
+        .single()
+
+      if (error) return SupabasePostgrestError(error, UserNotFoundError)
+
+      return new ServiceResponse(data.email)
+    },
+
     async updateUser(user: User) {
       const supabaseUser = supabaseUserMapper.toSupabase(user)
 
