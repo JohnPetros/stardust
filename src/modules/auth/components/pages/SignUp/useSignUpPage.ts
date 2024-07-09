@@ -3,29 +3,19 @@
 import { useState } from 'react'
 
 import { useAuthContext } from '@/modules/global/contexts/AuthContext'
-
-import type { SignUpForm } from '@/infra/forms/types'
-import { useSignUpForm } from '@/infra/forms'
+import type { SignUpFormFields } from '@/infra/forms/types'
 
 export function useSignUpPage() {
-  const { handleSubmit, register, errors } = useSignUpForm()
-
-  const [isLoading, setIsLoading] = useState(false)
-
   const { handleSignUp } = useAuthContext()
+  const [isSignUpSuccess, setIsSignUpSuccess] = useState(false)
 
-  async function handleFormSubmit({ email, password, name }: SignUpForm) {
-    setIsLoading(true)
-
-    await handleSignUp(email, password, name)
-
-    setIsLoading(false)
+  async function handleFormSubmit({ email, password, name }: SignUpFormFields) {
+    const isSuccess = await handleSignUp(email, password, name)
+    setIsSignUpSuccess(isSuccess)
   }
 
   return {
-    errors,
-    isLoading,
-    register,
-    handleSubmit: handleSubmit(handleFormSubmit),
+    isSignUpSuccess,
+    handleFormSubmit,
   }
 }
