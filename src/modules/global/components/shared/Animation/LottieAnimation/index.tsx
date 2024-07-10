@@ -1,3 +1,5 @@
+'use client'
+
 import Lottie from 'lottie-react'
 import { ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 import { useLottieAnimation } from './useLottieAnimation'
@@ -8,7 +10,7 @@ function LottieAnimationComponent(
   { name, size, hasLoop = true }: AnimationProps,
   ref: ForwardedRef<AnimationRef>
 ) {
-  const { lottieRef, restart } = useLottieAnimation()
+  const { lottieRef, windowWidth, restart } = useLottieAnimation()
 
   const lottieData = LOTTIES[name]
 
@@ -21,6 +23,16 @@ function LottieAnimationComponent(
     },
     [restart]
   )
+
+  if (size === 'full')
+    return (
+      <Lottie
+        lottieRef={lottieRef}
+        animationData={lottieData}
+        style={{ width: windowWidth }}
+        loop={hasLoop}
+      />
+    )
 
   return (
     <Lottie
