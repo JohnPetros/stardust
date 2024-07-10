@@ -14,7 +14,7 @@ const rocketVariants: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      delay: ROCKET_ANIMATION_DELAY,
+      delay: ROCKET_ANIMATION_DELAY / 1000,
       duration: 1,
     },
   },

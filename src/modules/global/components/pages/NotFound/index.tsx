@@ -19,7 +19,7 @@ export function NotFoundPage() {
           </h1>
 
           <div className='-mt-[2rem]'>
-            <Animation name='404' size={24} />
+            <Animation name='404' size={240} />
           </div>
         </div>
 

@@ -4,22 +4,10 @@ import { AnimatePresence, Variants, motion } from 'framer-motion'
 
 import { Hero } from '../../../shared/Hero'
 
-const heroVariants: Variants = {
-  initial: {
-    opacity: 0,
-    x: -250,
-  },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      type: 'spring',
-      duration: 0.4,
-    },
-  },
+const variants: Variants = {
   hidden: {
     opacity: 0,
-    x: -750,
+    x: '75vw',
     transition: {
       duration: 2,
     },
@@ -35,7 +23,7 @@ export function AnimatedHero({ isVisible }: AnimatedHeroProps) {
     <AnimatePresence>
       {!isVisible && (
         <motion.div
-          variants={heroVariants}
+          variants={variants}
           exit='hidden'
           className='hidden bg-gray-800 lg:grid lg:place-content-center'
         >

@@ -15,8 +15,8 @@ export function SignUpPage() {
   return (
     <div className='h-screen'>
       <div className='fixed z-[-5] brightness-[0.25]'>
-        <AnimatedContainer delay={0.5}>
-          <Animation name='space' size='full' hasLoop={true} />
+        <AnimatedContainer delay={1}>
+          <Animation name='rocket-exploring' size='full' hasLoop={true} />
         </AnimatedContainer>
       </div>
 
@@ -33,7 +33,7 @@ export function SignUpPage() {
             </div>
           </AnimatedContainer>
         ) : (
-          <AnimatedContainer delay={1.5}>
+          <AnimatedContainer delay={2}>
             <div className='w-[24rem] pt-12'>
               <div className='text-center'>
                 <Title title='Bem-vindo ao StarDust' icon='rocket' text='' />
