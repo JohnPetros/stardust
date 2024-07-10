@@ -2,7 +2,6 @@
 
 import { ForwardedRef, forwardRef, ReactNode, useImperativeHandle } from 'react'
 import { Overlay, Root } from '@radix-ui/react-dialog'
-import { AnimatePresence } from 'framer-motion'
 
 import { useDialog } from './useDialog'
 
@@ -35,7 +34,7 @@ export const DialogComponent = (
 
   return (
     <Root open={isOpen} onOpenChange={handleOpenChange}>
-      <Overlay className="fixed inset-0 z-[500] overflow-y-auto bg-gray-900 bg-opacity-50" />
+      <Overlay className='fixed inset-0 z-[500] overflow-y-auto bg-gray-900 bg-opacity-50' />
       {children}
     </Root>
   )
