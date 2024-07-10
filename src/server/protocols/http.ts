@@ -35,7 +35,7 @@ export const NextHttp = (request: NextRequest): IHttp => {
       throw new Error('NextHttp getCookie method not implemented')
     },
 
-    send(data: unknown, statusCode: number) {
+    send(data: unknown, statusCode = 200) {
       if (nextRedirectResponse) {
         return new HttpResponse(nextRedirectResponse, statusCode)
       }

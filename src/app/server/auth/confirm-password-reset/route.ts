@@ -12,5 +12,7 @@ export async function GET(request: NextRequest) {
   const authService = SupabaseAuthService(supabase)
 
   const controller = ConfirmPasswordResetController(authService)
-  return controller.handle(nextHttp)
+  const httpResponse = await controller.handle(nextHttp)
+
+  return httpResponse.body
 }

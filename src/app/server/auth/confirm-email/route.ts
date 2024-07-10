@@ -12,5 +12,7 @@ export async function GET(request: NextRequest) {
   const authService = SupabaseAuthService(supabase)
 
   const controller = ConfirmEmailController(authService)
-  return controller.handle(nextHttp)
+  const httpResponse = await controller.handle(nextHttp)
+
+  return await httpResponse.body
 }

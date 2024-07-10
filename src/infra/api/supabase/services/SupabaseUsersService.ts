@@ -1,6 +1,6 @@
 import { User } from '@/@core/domain/entities'
 import { IUsersService } from '@/@core/interfaces/services'
-import { UpdateUserFailedError, UserNotFoundError } from '@/@core/errors/users'
+import { UpdateUserUnexpectedError, UserNotFoundError } from '@/@core/errors/users'
 import { ServiceResponse } from '@/@core/responses'
 
 import { supabaseUserMapper } from '../mappers'
@@ -72,7 +72,7 @@ export const SupabaseUsersService = (supabase: Supabase): IUsersService => {
         .eq('id', user.id)
 
       if (error) {
-        return SupabasePostgrestError(error, UpdateUserFailedError)
+        return SupabasePostgrestError(error, UpdateUserUnexpectedError)
       }
 
       return new ServiceResponse(true)

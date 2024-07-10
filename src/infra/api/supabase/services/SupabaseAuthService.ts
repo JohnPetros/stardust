@@ -1,13 +1,13 @@
 import { IAuthService } from '@/@core/interfaces/services'
 import {
-  ConfirmEmailFailedError,
-  ConfirmPasswordResetFailedError,
+  ConfirmEmailUnexpectedError,
+  ConfirmPasswordResetUnexpectedError,
   EmailAlreadyExistsError,
-  SignOutFailedError,
-  SignUpFailedError,
+  SignOutUnexpectedError,
+  SignUpUnexpectedError,
   SignUpRateLimitError,
 } from '@/@core/errors/auth'
-import { SaveUserFailedError, UserNotFoundError } from '@/@core/errors/users'
+import { SaveUserUnexpectedError, UserNotFoundError } from '@/@core/errors/users'
 import { Slug } from '@/@core/domain/structs/Slug'
 import { ServiceResponse } from '@/@core/responses'
 
@@ -37,9 +37,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
         email,
         password,
         options: {
-          emailRedirectTo: `${getAppBaseUrl()}/${
-            ROUTES.server.auth.confirmEmail
-          }&type=confirm-email`,
+          emailRedirectTo: `${getAppBaseUrl()}/${ROUTES.server.auth.confirmEmail}`,
         },
       })
 
@@ -50,7 +48,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
           case 'over_request_rate_limit':
             return SupabaseAuthError(error, SignUpRateLimitError)
           default:
-            return SupabaseAuthError(error, SignUpFailedError)
+            return SupabaseAuthError(error, SignUpUnexpectedError)
         }
 
       const userId = data.user?.id
@@ -64,7 +62,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
         })
 
         if (insertUserError)
-          return SupabasePostgrestError(insertUserError, SaveUserFailedError)
+          return SupabasePostgrestError(insertUserError, SaveUserUnexpectedError)
       }
 
       return new ServiceResponse(String(userId))
@@ -73,7 +71,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
     async signOut() {
       const { error } = await supabase.auth.signOut()
 
-      if (error) return SupabaseAuthError(error, SignOutFailedError)
+      if (error) return SupabaseAuthError(error, SignOutUnexpectedError)
 
       return new ServiceResponse(true)
     },
@@ -83,7 +81,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
         redirectTo: `${getAppBaseUrl()}${ROUTES.server.auth.confirmPasswordReset}`,
       })
 
-      if (error) return SupabaseAuthError(error, SignOutFailedError)
+      if (error) return SupabaseAuthError(error, SignOutUnexpectedError)
 
       return new ServiceResponse(true)
     },
@@ -116,7 +114,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
         token_hash: token,
       })
 
-      if (error) return SupabaseAuthError(error, ConfirmEmailFailedError)
+      if (error) return SupabaseAuthError(error, ConfirmEmailUnexpectedError)
 
       return new ServiceResponse(!!user?.email)
     },
@@ -131,13 +129,13 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
       })
 
       if (otpError) {
-        return SupabaseAuthError(otpError, ConfirmPasswordResetFailedError)
+        return SupabaseAuthError(otpError, ConfirmPasswordResetUnexpectedError)
       }
 
       if (!session) {
         return new ServiceResponse<{ accessToken: string; refreshToken: string }>(
           null,
-          ConfirmPasswordResetFailedError
+          ConfirmPasswordResetUnexpectedError
         )
       }
 
@@ -151,6 +149,8 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
       const {
         data: { user },
       } = await supabase.auth.getUser()
+
+      console.log(user?.id)
 
       return new ServiceResponse(user?.id ?? null)
     },

@@ -1,6 +1,7 @@
-import { NextResponse } from 'next/server'
-
-import { ConfirmPasswordResetFailedError, TokenNotFoundError } from '@/@core/errors/auth'
+import {
+  ConfirmPasswordResetUnexpectedError,
+  TokenNotFoundError,
+} from '@/@core/errors/auth'
 import { BaseError } from '@/@core/errors/global/BaseError'
 import { IController, IHttp } from '@/@core/interfaces/handlers'
 import { IAuthService } from '@/@core/interfaces/services'
@@ -9,13 +10,13 @@ import { COOKIES, ROUTES } from '@/modules/global/constants'
 
 export const ConfirmPasswordResetController = (
   authService: IAuthService
-): IController<NextResponse> => {
-  function redirectToSigInPage(http: IHttp<NextResponse>, error: BaseError) {
+): IController => {
+  function redirectToSigInPage(http: IHttp, error: BaseError) {
     return http.redirect(`${ROUTES.public.signIn}?error=${error.message}`)
   }
 
   return {
-    async handle(http: IHttp<NextResponse>) {
+    async handle(http: IHttp) {
       const token = http.getSearchParam('token')
 
       if (!token) return redirectToSigInPage(http, new TokenNotFoundError())
@@ -23,7 +24,7 @@ export const ConfirmPasswordResetController = (
       const response = await authService.confirmPasswordReset(token)
 
       if (response.isFailure)
-        return redirectToSigInPage(http, new ConfirmPasswordResetFailedError())
+        return redirectToSigInPage(http, new ConfirmPasswordResetUnexpectedError())
 
       const accessToken = response.data.accessToken
       const refreshToken = response.data.refreshToken
@@ -47,7 +48,7 @@ export const ConfirmPasswordResetController = (
         duration: cookieDuration,
       })
 
-      return http.send(null)
+      return http.send(null, 200)
     },
   }
 }
