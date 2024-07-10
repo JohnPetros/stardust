@@ -17,7 +17,7 @@ export const ROUTES = {
       playground: '/playground',
       config: '/config',
       rewards: '/rewards',
-      authConfirmation: '/auth-confirmation',
+      accountConfirmation: '/account-confirmation',
     },
   },
   public: {
