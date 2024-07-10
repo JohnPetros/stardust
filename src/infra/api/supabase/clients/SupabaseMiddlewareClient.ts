@@ -1,15 +1,31 @@
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
+import { createServerClient } from '@supabase/ssr'
 import { NextRequest, NextResponse } from 'next/server'
 
 import type { Database } from '../types/Database'
 
-type Context = {
-  req: NextRequest
-  res: NextResponse<unknown>
-}
+import { ENV } from '@/modules/global/constants'
 
-const SupabaseMiddlewareClient = (context: Context) => {
-  return createMiddlewareClient<Database>(context)
+const SupabaseMiddlewareClient = (request: NextRequest) => {
+  let supabaseResponse = NextResponse.next({
+    request,
+  })
+
+  return createServerClient<Database>(ENV.supabaseUrl, ENV.supabaseKey, {
+    cookies: {
+      getAll() {
+        return request.cookies.getAll()
+      },
+      setAll(cookiesToSet) {
+        cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+        supabaseResponse = NextResponse.next({
+          request,
+        })
+        cookiesToSet.forEach(({ name, value, options }) =>
+          supabaseResponse.cookies.set(name, value, options)
+        )
+      },
+    },
+  })
 }
 
 export { SupabaseMiddlewareClient }
