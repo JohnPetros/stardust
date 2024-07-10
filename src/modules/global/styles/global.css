@@ -89,3 +89,7 @@ button:hover {
 ::-webkit-scrollbar-track {
   @apply bg-gray-700;
 }
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(48%) sepia(13%) saturate(3207%) hue-rotate(140deg) brightness(95%) contrast(80%);
+}
