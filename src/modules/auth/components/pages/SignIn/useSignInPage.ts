@@ -10,6 +10,7 @@ import { ROUTES } from '@/modules/global/constants'
 import { waitFor } from '@/modules/global/utils'
 import { useRouter } from '@/modules/global/hooks'
 import { SignInFormFields } from '@/infra/forms/types'
+import { Slug } from '@/@core/domain/structs/Slug'
 
 export function useSignInPage(url: string, rocketAnimationRef: RefObject<AnimationRef>) {
   const [isRocketVisible, setIsRocketVisible] = useState(false)
@@ -31,7 +32,7 @@ export function useSignInPage(url: string, rocketAnimationRef: RefObject<Animati
 
     await waitFor(3000) // 3 seconds
 
-    router.goTo(ROUTES.private.app.home.space)
+    router.goTo(ROUTES.private.app.accountConfirmation)
   }
 
   useEffect(() => {
@@ -39,7 +40,7 @@ export function useSignInPage(url: string, rocketAnimationRef: RefObject<Animati
       const errorMessage = url.split('error=').at(-1)
       if (!errorMessage) return
 
-      toast.show(errorMessage, {
+      toast.show(Slug.deslugify(errorMessage), {
         type: 'error',
         seconds: 2.5,
       })

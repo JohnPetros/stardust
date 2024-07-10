@@ -1,4 +1,4 @@
-import { type NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 import { CheckAuthRoutesController } from './server/controllers/auth'
 import { NextHttp } from './server/protocols/http'
@@ -16,13 +16,13 @@ export const middleware = async (request: NextRequest) => {
 
   const controllers = [
     CheckAuthRoutesController(authService),
-    // HandleRewardsPayloadController(),
-    // HandleRedirectController(),
+    HandleRewardsPayloadController(),
+    HandleRedirectController(),
   ]
 
   for (const controller of controllers) {
     const constrollerResponse = await controller.handle(nextHttp)
-    if (constrollerResponse) return constrollerResponse
+    if (constrollerResponse.body) return constrollerResponse.body
   }
 
   return response

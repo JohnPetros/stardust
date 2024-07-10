@@ -107,12 +107,18 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
 
     async confirmEmail(token: string) {
       const {
-        data: { user },
+        data: { user, session },
         error,
       } = await supabase.auth.verifyOtp({
         type: 'email',
         token_hash: token,
       })
+
+      console.log({ session })
+
+      if (session) {
+        await supabase.auth.refreshSession({ refresh_token: session?.refresh_token })
+      }
 
       if (error) return SupabaseAuthError(error, ConfirmEmailUnexpectedError)
 
@@ -150,7 +156,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
         data: { user },
       } = await supabase.auth.getUser()
 
-      console.log(user?.id)
+      console.log('USER ID', user?.id)
 
       return new ServiceResponse(user?.id ?? null)
     },
