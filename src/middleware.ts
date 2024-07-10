@@ -11,7 +11,7 @@ export const middleware = async (request: NextRequest) => {
   const response = NextResponse.next()
   const nextHttp = NextHttp(request)
 
-  const supabase = SupabaseMiddlewareClient({ req: request, res: response })
+  const supabase = SupabaseMiddlewareClient(request)
   const authService = SupabaseAuthService(supabase)
 
   const controllers = [

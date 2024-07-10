@@ -14,10 +14,10 @@ export async function ServerProvider({ children }: ServerProps) {
   const supabase = SupabaseServerClient()
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession()
+    data: { user },
+  } = await supabase.auth.getUser()
 
-  const serverSession = session ? { user: { id: session.user.id } } : null
+  const serverSession = user ? { user: { id: user.id } } : null
 
   return (
     <SupabaseProvider>
