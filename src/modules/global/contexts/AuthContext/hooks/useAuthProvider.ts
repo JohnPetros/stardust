@@ -61,13 +61,15 @@ export function useAuthProvider(serverSession: Session | null) {
 
     if (response.isFailure) {
       toast.show(response.errorMessage, { type: 'error', seconds: 10 })
-      return
+      return false
     }
 
-    toast.show('Verifique seu e-mail para confirmar o seu cadastro', {
+    toast.show('Enviamos para você um e-mail de confirmação', {
       type: 'success',
       seconds: 10,
     })
+
+    return true
   }
 
   async function handleSignOut() {

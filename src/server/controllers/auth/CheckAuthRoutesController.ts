@@ -16,13 +16,21 @@ export const CheckAuthRoutesController = (authService: IAuthService): IControlle
 
       const response = await authService.getUserId()
       const hasSession = response.isSuccess
+      const isIndexRoute = currentRoute === '/'
 
-      if (!hasSession && !isPublicRoute) return http.redirect(ROUTES.public.landing)
+      console.log({ hasSession })
 
-      if (!hasSession && currentRoute === '/') return http.redirect(ROUTES.public.landing)
+      if (!hasSession && !isPublicRoute) {
+        return http.redirect(ROUTES.public.signIn)
+      }
 
-      if (hasSession && currentRoute === '/')
+      if (!hasSession && isIndexRoute) {
+        return http.redirect(ROUTES.public.landing)
+      }
+
+      if (hasSession && isIndexRoute) {
         return http.redirect(ROUTES.private.app.home.space)
+      }
 
       return new HttpResponse(null)
     },
