@@ -6,5 +6,7 @@ export type AnimationName =
   | 'apollo-riding-rocket'
   | 'rocket-lauching'
   | 'rocket-floating'
+  | 'rocket-exploring'
+  | 'space'
   | 'spinner'
   | '404'

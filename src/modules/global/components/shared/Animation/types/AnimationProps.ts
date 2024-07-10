@@ -1,7 +1,7 @@
 import type { AnimationName } from './AnimationName'
 
 export type AnimationProps = {
-  size: number
+  size: number | 'full'
   name: AnimationName
   hasLoop?: boolean
 }
