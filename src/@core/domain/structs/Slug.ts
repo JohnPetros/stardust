@@ -23,6 +23,19 @@ export class Slug {
     return new Slug(slugValue)
   }
 
+  static deslugify(value: string) {
+    const words = value.split('-')
+
+    const name = words
+      .map((word) => {
+        const firstLetter = word[0].toUpperCase()
+        return firstLetter + word.slice(1)
+      })
+      .join(' ')
+
+    return name
+  }
+
   get value() {
     return this._value
   }
