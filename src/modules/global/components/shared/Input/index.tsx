@@ -11,19 +11,22 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   label: string
   icon: IconName
   type: string
+  isActive?: boolean
   error?: string
 }
 
 const InputComponent = (
-  { label, type, icon, error, ...inputAttributes }: InputProps,
+  { label, type, icon, error, isActive = false, ...inputAttributes }: InputProps,
   ref: ForwardedRef<HTMLInputElement>
 ) => {
   const { handleEyeClick, innerType } = useInput(type)
   const id = useId()
 
-  const iconColor = error
+  let iconClassName = error
     ? 'text-red-700'
     : 'text-gray-300 group-focus-within:text-green-400'
+
+  iconClassName += isActive ? ' text-green-400' : ''
 
   return (
     <>
@@ -39,16 +42,18 @@ const InputComponent = (
         <div
           className={twMerge(
             'flex items-center gap-2 rounded border bg-transparent group mt-3 p-3',
-            error ? 'border-red-700' : 'border-gray-400 focus-within:border-green-400'
+            error ? 'border-red-700' : 'border-gray-400 focus-within:border-green-400',
+            isActive && 'border-green-400'
           )}
         >
-          <Icon name={icon} className={iconColor} size={24} />
+          <Icon name={icon} className={iconClassName} size={24} />
 
           <input
+            id={id}
+            type={innerType}
             aria-label={label}
             ref={ref}
-            type={innerType}
-            id={id}
+            autoFocus={isActive}
             {...inputAttributes}
             className='w-full bg-transparent text-sm text-gray-100 outline-none'
           />
@@ -56,9 +61,9 @@ const InputComponent = (
           {type === 'password' && (
             <button type='button' onClick={handleEyeClick}>
               {innerType === 'password' ? (
-                <Icon name='eye' className={iconColor} size={24} />
+                <Icon name='eye' className={iconClassName} size={24} />
               ) : (
-                <Icon name='eye-closed' className={iconColor} size={24} />
+                <Icon name='eye-closed' className={iconClassName} size={24} />
               )}
             </button>
           )}
