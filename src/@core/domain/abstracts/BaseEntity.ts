@@ -1,4 +1,4 @@
-export class BaseEntity {
+export abstract class BaseEntity {
   private readonly _id: string
 
   constructor(id?: string) {
