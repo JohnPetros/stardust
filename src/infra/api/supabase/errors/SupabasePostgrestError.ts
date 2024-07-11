@@ -1,6 +1,6 @@
 import type { PostgrestError } from '@supabase/supabase-js'
 
-import { BaseError } from '@/@core/errors/global/BaseError'
+import type { BaseError } from '@/@core/errors/global/BaseError'
 import { ServiceResponse } from '@/@core/responses'
 
 export const SupabasePostgrestError = <Data>(
