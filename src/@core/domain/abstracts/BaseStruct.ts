@@ -1,3 +1,3 @@
-class BaseStruct<Props> {
-  constructor(readonly props: Props) {}
+export class BaseStruct<Props> {
+  constructor(protected readonly props: Props) {}
 }
