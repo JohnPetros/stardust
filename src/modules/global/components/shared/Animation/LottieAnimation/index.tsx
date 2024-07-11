@@ -1,9 +1,10 @@
 'use client'
 
 import Lottie from 'lottie-react'
-import { ForwardedRef, forwardRef, useImperativeHandle } from 'react'
+import { type ForwardedRef, forwardRef, useImperativeHandle } from 'react'
+
 import { useLottieAnimation } from './useLottieAnimation'
-import { AnimationRef, AnimationProps } from '../types'
+import type { AnimationRef, AnimationProps } from '../types'
 import { LOTTIES } from './lotties'
 
 function LottieAnimationComponent(
