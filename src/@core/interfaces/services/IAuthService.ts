@@ -1,7 +1,7 @@
-import { ServiceResponse } from '@/@core/responses'
+import type { ServiceResponse } from '@/@core/responses'
 
 export interface IAuthService {
-  getUserId(): Promise<ServiceResponse<string>>
+  fetchUserId(): Promise<ServiceResponse<string>>
   signIn(email: string, password: string): Promise<ServiceResponse<string>>
   signUp(email: string, password: string, name: string): Promise<ServiceResponse<string>>
   signOut(): Promise<ServiceResponse<boolean>>
