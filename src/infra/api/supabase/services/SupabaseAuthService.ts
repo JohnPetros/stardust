@@ -154,9 +154,10 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
     async fetchUserId() {
       const {
         data: { user },
+        error,
       } = await supabase.auth.getUser()
 
-      console.log('USER ID', user?.id)
+      if (error) return SupabaseAuthError(error, UserNotFoundError)
 
       return new ServiceResponse(user?.id ?? null)
     },

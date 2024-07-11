@@ -1,9 +1,6 @@
 import type { IRocketsSerivice } from '@/@core/interfaces/services'
 import type { ShopItemsListingSettings } from '@/@core/types'
-import {
-  GetUserAcquiredRocketsIdsUnexpectedError,
-  RocketNotFoundError,
-} from '@/@core/errors/rockets'
+import { RocketNotFoundError } from '@/@core/errors/rockets'
 import { PaginationResponse, ServiceResponse } from '@/@core/responses'
 
 import type { Supabase } from '../types/Supabase'
@@ -14,7 +11,7 @@ export const SupabaseRocketsService = (supabase: Supabase): IRocketsSerivice => 
   const supabaseRocketMapper = SupabaseRocketMapper()
 
   return {
-    async getRocketById(rocketId: string) {
+    async fetchRocketById(rocketId: string) {
       const { data, error } = await supabase
         .from('rockets')
         .select('*')
@@ -25,12 +22,12 @@ export const SupabaseRocketsService = (supabase: Supabase): IRocketsSerivice => 
         return SupabasePostgrestError(error, RocketNotFoundError)
       }
 
-      const rocket = supabaseRocketMapper.toRocket(data)
+      const rocket = supabaseRocketMapper.toDTO(data)
 
       return new ServiceResponse(rocket)
     },
 
-    async getShopRocketsList({
+    async fetchShopRocketsList({
       search,
       offset,
       limit,
@@ -62,26 +59,11 @@ export const SupabaseRocketsService = (supabase: Supabase): IRocketsSerivice => 
         throw new Error(error.message)
       }
 
-      const rockets = data.map(supabaseRocketMapper.toRocket)
+      const rockets = data.map(supabaseRocketMapper.toDTO)
 
       const pagination = new PaginationResponse(rockets, count)
 
       return new ServiceResponse(pagination)
-    },
-
-    async getUserAcquiredRocketsIds(userId: string) {
-      const { data, error } = await supabase
-        .from('users_acquired_rockets')
-        .select('rocket_id')
-        .eq('user_id', userId)
-
-      if (error) {
-        return SupabasePostgrestError(error, GetUserAcquiredRocketsIdsUnexpectedError)
-      }
-
-      const ids = data.map((data) => data.rocket_id)
-
-      return new ServiceResponse(ids)
     },
   }
 }

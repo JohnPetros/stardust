@@ -1,11 +1,11 @@
-import { Rocket } from '@/@core/domain/entities'
-
+import type { Rocket } from '@/@core/domain/entities'
 import type { RocketDTO } from '@/@core/dtos'
+
 import type { SupabaseRocket } from '../types'
 
 export const SupabaseRocketMapper = () => {
   return {
-    toRocket(supabaseRocket: SupabaseRocket): Rocket {
+    toDTO(supabaseRocket: SupabaseRocket): RocketDTO {
       const rocketDTO: RocketDTO = {
         id: supabaseRocket.id ?? '',
         name: supabaseRocket.name ?? '',
@@ -14,7 +14,7 @@ export const SupabaseRocketMapper = () => {
         slug: supabaseRocket.slug ?? '',
       }
 
-      return Rocket.create(rocketDTO)
+      return rocketDTO
     },
 
     toSupabase(rocket: Rocket): SupabaseRocket {
