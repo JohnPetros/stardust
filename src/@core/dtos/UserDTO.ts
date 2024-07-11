@@ -1,3 +1,7 @@
+import type { AvatarDTO } from './AvatarDTO'
+import type { RankingDTO } from './RankingDTO'
+import type { RocketDTO } from './RocketDTO'
+
 export type UserDTO = {
   id: string
   slug: string
@@ -8,9 +12,15 @@ export type UserDTO = {
   xp: number
   weeklyXp: number
   streak: number
-  avatarId: string
-  rankingId: string
-  rocketId: string
+  ranking: RankingDTO
+  rocket: RocketDTO
+  avatar: AvatarDTO
+  unlockedStarsCount: number
+  acquiredRocketsCount: number
+  unlockedAchievementsCount: number
+  completedChallengesCount: number
+  completedPlanetsCount: number
+
   // createdAt: string
   // didBreakStreak: boolean
   // didCompleteSaturday: boolean
@@ -19,9 +29,4 @@ export type UserDTO = {
   // lastPosition: number | null
   // studyTime: string
   // weekStatus: WeekStatus[]
-  // unlockedStarsCount: number
-  // acquiredRocketsCount: number
-  // unlockedAchievementsCount: number
-  // completedChallengesCount: number
-  // completedPlanetsCount: number
 }

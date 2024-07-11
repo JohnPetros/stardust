@@ -1,22 +1,31 @@
 import type { UserDTO } from '../../dtos/UserDTO'
 import { BaseEntity } from '../abstracts'
+import { Count, Level } from '../structs'
 import { Email } from '../structs/Email'
 import { Name } from '../structs/Name'
 import { Slug } from '../structs/Slug'
+import { Avatar } from './Avatar'
+import { Ranking } from './Ranking'
+import { Rocket } from './Rocket'
 
 type UserProps = {
   id?: string
+  avatar: Avatar
+  ranking: Ranking
+  rocket: Rocket
   slug: Slug
   email: Email
   name: Name
-  level: number
-  coins: number
-  xp: number
-  weeklyXp: number
+  level: Level
+  coins: Count
+  xp: Count
+  weeklyXp: Count
   streak: number
-  avatarId: string
-  rankingId: string
-  rocketId: string
+  unlockedStarsCount: Count
+  acquiredRocketsCount: Count
+  unlockedAchievementsCount: Count
+  completedChallengesCount: Count
+  completedPlanetsCount: Count
 }
 
 export class User extends BaseEntity {
@@ -29,11 +38,37 @@ export class User extends BaseEntity {
 
   static create(dto: UserDTO): User {
     return new User({
-      ...dto,
-      level: dto.level ?? 1,
+      level: Level.create(dto.level),
       email: Email.create(dto.email),
       slug: Slug.create(dto.slug),
       name: Name.create(dto.name),
+      rocket: Rocket.create(dto.rocket),
+      avatar: Avatar.create(dto.avatar),
+      ranking: Ranking.create(dto.ranking),
+      coins: Count.create({ key: 'coins', value: dto.coins }),
+      xp: Count.create({ key: 'xp', value: dto.xp }),
+      weeklyXp: Count.create({ key: 'weeklyXp', value: dto.weeklyXp }),
+      unlockedAchievementsCount: Count.create({
+        key: 'unlockedAchievementsCount',
+        value: dto.unlockedAchievementsCount,
+      }),
+      acquiredRocketsCount: Count.create({
+        key: 'acquiredRocketsCount',
+        value: dto.acquiredRocketsCount,
+      }),
+      unlockedStarsCount: Count.create({
+        key: 'unlockedStarsCount',
+        value: dto.unlockedStarsCount,
+      }),
+      completedChallengesCount: Count.create({
+        key: 'completedChallengesCount',
+        value: dto.completedChallengesCount,
+      }),
+      completedPlanetsCount: Count.create({
+        key: 'completedPlanetsCount',
+        value: dto.completedPlanetsCount,
+      }),
+      streak: dto.streak,
     })
   }
 
@@ -43,31 +78,48 @@ export class User extends BaseEntity {
       slug: this.slug.value,
       email: this.email.value,
       name: this.name.value,
-      level: this.level,
-      coins: this.coins,
-      xp: this.xp,
+      ranking: this.ranking.dto,
+      rocket: this.rocket.dto,
+      avatar: this.avatar.dto,
+      level: this.level.value,
+      coins: this.coins.value,
+      xp: this.xp.value,
+      weeklyXp: this.weeklyXp.value,
       streak: this.streak,
-      avatarId: this.avatarId,
-      rocketId: this.rocketId,
-      rankingId: this.rocketId,
-      weeklyXp: this.weeklyXp,
+      unlockedStarsCount: this.unlockedStarsCount.value,
+      acquiredRocketsCount: this.acquiredRocketsCount.value,
+      unlockedAchievementsCount: this.unlockedAchievementsCount.value,
+      completedChallengesCount: this.completedChallengesCount.value,
+      completedPlanetsCount: this.completedPlanetsCount.value,
     }
-  }
-
-  get name() {
-    return this.props.name
   }
 
   get email() {
     return this.props.email
   }
 
-  get coins() {
-    return this.props.coins
-  }
-
   get slug() {
     return this.props.slug
+  }
+
+  get avatar() {
+    return this.props.avatar
+  }
+
+  get rocket() {
+    return this.props.rocket
+  }
+
+  get ranking() {
+    return this.props.ranking
+  }
+
+  get name() {
+    return this.props.name
+  }
+
+  get coins() {
+    return this.props.coins
   }
 
   get xp() {
@@ -86,15 +138,19 @@ export class User extends BaseEntity {
     return this.props.level
   }
 
-  get avatarId() {
-    return this.props.avatarId
+  get unlockedStarsCount() {
+    return this.props.unlockedStarsCount
   }
-
-  get rocketId() {
-    return this.props.rocketId
+  get acquiredRocketsCount() {
+    return this.props.acquiredRocketsCount
   }
-
-  get rankingId() {
-    return this.props.rankingId
+  get unlockedAchievementsCount() {
+    return this.props.unlockedAchievementsCount
+  }
+  get completedChallengesCount() {
+    return this.props.completedChallengesCount
+  }
+  get completedPlanetsCount() {
+    return this.props.completedPlanetsCount
   }
 }
