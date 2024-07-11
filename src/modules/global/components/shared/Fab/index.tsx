@@ -1,7 +1,8 @@
 'use client'
 
-import { Icon } from '@phosphor-icons/react'
-import { AnimatePresence, motion, Variants } from 'framer-motion'
+import { AnimatePresence, motion, type Variants } from 'framer-motion'
+import { Icon } from '../Icon'
+import type { IconName } from '../Icon/types'
 
 const fabAnimations: Variants = {
   hidden: {
@@ -17,27 +18,27 @@ const fabAnimations: Variants = {
 
 type FabProps = {
   isVisible: boolean
-  icon: Icon
-  onClick: VoidFunction
+  icon: IconName
   label: string
+  onClick: VoidFunction
 }
 
-export function Fab({ isVisible, icon: Icon, onClick, label }: FabProps) {
+export function Fab({ isVisible, icon, onClick, label }: FabProps) {
   return (
     <AnimatePresence>
       {isVisible && (
         <motion.button
           variants={fabAnimations}
-          initial="hidden"
-          animate="visible"
-          exit="hidden"
-          whileTap="tap"
+          initial='hidden'
+          animate='visible'
+          exit='hidden'
+          whileTap='tap'
           onClick={onClick}
-          className="fixed bottom-8 right-24 grid h-12 w-12 place-content-center rounded-md border-b-2 border-green-500 bg-gray-900"
+          className='fixed bottom-8 right-24 grid h-12 w-12 place-content-center rounded-md border-b-2 border-green-500 bg-gray-900'
           tabIndex={0}
           aria-label={label}
         >
-          <Icon className="text-2xl text-green-500" weight="bold" />
+          <Icon name={icon} className='text-2xl text-green-500' weight='bold' />
         </motion.button>
       )}
     </AnimatePresence>
