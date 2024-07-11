@@ -19,11 +19,11 @@ export class Star extends BaseEntity {
   private props: StarsProps
 
   private constructor(props: StarsProps) {
-    super()
+    super(props.id)
     this.props = props
   }
 
-  static create(dto: StarDTO) {
+  static create(dto: StarDTO): Star {
     return new Star({
       id: dto.id,
       slug: Slug.create(dto.slug),
