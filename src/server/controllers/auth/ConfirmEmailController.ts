@@ -1,7 +1,7 @@
 import { Slug } from '@/@core/domain/structs/Slug'
 import { TokenNotFoundError } from '@/@core/errors/auth'
-import { IController, IHttp } from '@/@core/interfaces/handlers'
-import { IAuthService } from '@/@core/interfaces/services'
+import type { IController, IHttp } from '@/@core/interfaces/handlers'
+import type { IAuthService } from '@/@core/interfaces/services'
 
 import { ROUTES } from '@/modules/global/constants'
 

@@ -15,7 +15,7 @@ export class ShopItem extends BaseEntity {
     this.props = props
   }
 
-  static create(props: ShopItemProps) {
+  static create(props: ShopItemProps): ShopItem {
     return new ShopItem(props)
   }
 

@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, Variants } from 'framer-motion'
+import { AnimatePresence, motion, type Variants } from 'framer-motion'
 
 import { usePageTransitionAnimation } from './usePageTransitionAnimation'
 
@@ -36,7 +36,7 @@ export function PageTransitionAnimation({
   isVisible,
   hasTips = false,
 }: TransitionPageAnimationProps) {
-  const { codeTip } = usePageTransitionAnimation(hasTips)
+  // const { codeTip } = usePageTransitionAnimation(hasTips)
 
   return (
     <AnimatePresence>

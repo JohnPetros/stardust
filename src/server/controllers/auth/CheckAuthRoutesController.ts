@@ -1,5 +1,5 @@
-import { IController, IHttp } from '@/@core/interfaces/handlers'
-import { IAuthService } from '@/@core/interfaces/services'
+import type { IController, IHttp } from '@/@core/interfaces/handlers'
+import type { IAuthService } from '@/@core/interfaces/services'
 import { HttpResponse } from '@/@core/responses'
 import { ROUTES } from '@/modules/global/constants'
 
@@ -14,11 +14,9 @@ export const CheckAuthRoutesController = (authService: IAuthService): IControlle
       const currentRoute = http.getCurrentRoute()
       const isPublicRoute = checkPublicRoute(currentRoute)
 
-      const response = await authService.getUserId()
+      const response = await authService.fetchUserId()
       const hasSession = response.isSuccess
       const isIndexRoute = currentRoute === '/'
-
-      console.log({ hasSession })
 
       if (!hasSession && !isPublicRoute) {
         return http.redirect(ROUTES.public.signIn)

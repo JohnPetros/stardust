@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server'
+import type { NextRequest } from 'next/server'
 
 import { NextHttp } from '@/server/protocols/http'
 import { ConfirmEmailController } from '@/server/controllers/auth'

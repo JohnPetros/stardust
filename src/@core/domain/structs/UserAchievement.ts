@@ -1,3 +1,4 @@
+import { BaseStruct } from '../abstracts'
 import type { Achievement } from '../entities'
 
 type UserAchievementProps = {

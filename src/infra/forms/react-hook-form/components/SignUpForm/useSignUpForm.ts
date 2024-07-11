@@ -36,7 +36,7 @@ export function useSignUpForm(onFormSubmit: (fields: SignUpFormFields) => Promis
   }
 
   async function checkUserAlreadyExistsByName() {
-    const response = await api.getUserName(nameFieldWatch)
+    const response = await api.fetchUserName(nameFieldWatch)
 
     if (response.isSuccess) {
       setError('name', { message: 'Nome já utilizado por outro usuário' })
@@ -44,7 +44,7 @@ export function useSignUpForm(onFormSubmit: (fields: SignUpFormFields) => Promis
   }
 
   async function checkUserAlreadyExistsByEmail() {
-    const response = await api.getUserEmail(emailFieldWatch)
+    const response = await api.fetchUserEmail(emailFieldWatch)
 
     if (response.isSuccess) {
       setError('email', { message: 'E-mail já utilizado por outro usuário' })

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 
 import { CheckAuthRoutesController } from './server/controllers/auth'
 import { NextHttp } from './server/protocols/http'
