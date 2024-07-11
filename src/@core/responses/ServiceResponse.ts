@@ -1,4 +1,4 @@
-import { BaseError } from '@/@core/errors/global/BaseError'
+import type { BaseError } from '@/@core/errors/global/BaseError'
 
 export class ServiceResponse<Data> {
   constructor(
