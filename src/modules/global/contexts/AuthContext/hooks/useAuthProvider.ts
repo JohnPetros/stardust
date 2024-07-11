@@ -25,9 +25,9 @@ export function useAuthProvider(serverSession: Session | null) {
     const userId = session?.user?.id
 
     if (userId) {
-      const response = await api.getUserById(userId)
+      const response = await api.fetchUserById(userId)
 
-      return response.data.dto
+      return response.data
     }
   }
 
