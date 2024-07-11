@@ -1,1 +1,5 @@
+export { Achievement } from './Achievement'
 export { User } from './User'
+export { Rocket } from './Rocket'
+export { Planet } from './Planet'
+export { Star } from './Star'

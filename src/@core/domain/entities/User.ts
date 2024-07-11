@@ -1,8 +1,8 @@
-import { UserDTO } from '../../dtos/UserDTO'
+import type { UserDTO } from '../../dtos/UserDTO'
+import { BaseEntity } from '../abstracts'
 import { Email } from '../structs/Email'
 import { Name } from '../structs/Name'
 import { Slug } from '../structs/Slug'
-import { BaseEntity } from './BaseEntity'
 
 type UserProps = {
   id?: string
