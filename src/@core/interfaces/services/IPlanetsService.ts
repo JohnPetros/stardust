@@ -1,6 +1,6 @@
 import type { ServiceResponse } from '@/@core/responses'
-import type { Planet } from '@/@core/domain/entities'
+import type { PlanetDTO } from '@/@core/dtos'
 
 export interface IPlanetsService {
-  fetchPlanets(): Promise<ServiceResponse<Planet[]>>
+  fetchPlanets(): Promise<ServiceResponse<PlanetDTO[]>>
 }

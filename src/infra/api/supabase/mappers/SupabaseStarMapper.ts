@@ -1,11 +1,11 @@
-import { Star } from '@/@core/domain/entities'
+import type { Star } from '@/@core/domain/entities'
 
 import type { StarDTO } from '@/@core/dtos'
 import type { SupabaseStar } from '../types'
 
 export const SupabaseStarMapper = () => {
   return {
-    toStar(supabaseStar: SupabaseStar): Star {
+    toDTO(supabaseStar: SupabaseStar): StarDTO {
       const StarDTO: StarDTO = {
         id: supabaseStar.id ?? '',
         name: supabaseStar.name ?? '',
@@ -13,10 +13,9 @@ export const SupabaseStarMapper = () => {
         isChallenge: supabaseStar.is_challenge,
         planetId: supabaseStar.planet_id,
         slug: supabaseStar.slug,
-        // texts: supabaseStar.texts,
       }
 
-      return Star.create(StarDTO)
+      return StarDTO
     },
 
     toSupabase(star: Star): SupabaseStar {
@@ -28,8 +27,6 @@ export const SupabaseStarMapper = () => {
         number: StarDTO.number,
         slug: StarDTO.slug,
         planet_id: StarDTO.planetId,
-        texts: [],
-        questions: [],
         is_challenge: StarDTO.isChallenge,
       }
 
