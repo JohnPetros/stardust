@@ -1,62 +1,32 @@
 import { UnlockableItem } from '@/@core/domain/structs/UnlockableItem'
 import { Space } from '@/@core/domain/structs/Space'
-import type { Planet } from '@/@core/domain/entities'
+import { Planet } from '@/@core/domain/entities'
 import type { IUseCase } from '@/@core/interfaces/handlers'
-import type {
-  IAuthService,
-  IPlanetsService,
-  IUsersService,
-} from '@/@core/interfaces/services'
+import type { PlanetDTO } from '@/@core/dtos'
 
-export class BuildSpaceUseCase implements IUseCase<void, Space> {
-  constructor(
-    private authService: IAuthService,
-    private usersService: IUsersService,
-    private planetsService: IPlanetsService
-  ) {}
+type Request = {
+  planetsDTO: PlanetDTO[]
+  userUnlockedStarsIds: string[]
+}
 
-  async do(): Promise<Space> {
-    const userId = await this.getUserId()
-
-    const userUnlockedStarsIds = await this.getUserUnlockedStarsIds(userId)
-
-    const planets = await this.getPlanets()
+export class BuildSpaceUseCase implements IUseCase<Request, Space> {
+  do({ planetsDTO, userUnlockedStarsIds }: Request): Space {
+    const planets = planetsDTO.map(Planet.create)
 
     const unlockableStars = this.getUnlockableStars(planets, userUnlockedStarsIds)
     const lastUnlockedStarId = this.getLasUnlockedStarId(planets, userUnlockedStarsIds)
 
-    return Space.create({ planets, unlockableStars, lastUnlockedStarId })
+    return Space.create({
+      planets,
+      unlockableStars,
+      lastUnlockedStarId,
+    })
   }
 
-  private async getUserId() {
-    const userIdresponse = await this.authService.fetchUserId()
-
-    if (userIdresponse.isFailure) userIdresponse.throwError()
-
-    return userIdresponse.data
-  }
-
-  private async getUserUnlockedStarsIds(userId: string) {
-    const userUnlockedStarsIdsResponse =
-      await this.usersService.fetchUserUnlockedStarsIds(userId)
-
-    if (userUnlockedStarsIdsResponse.isFailure) userUnlockedStarsIdsResponse.throwError()
-
-    return userUnlockedStarsIdsResponse.data
-  }
-
-  private async getPlanets() {
-    const planetsResponse = await this.planetsService.fetchPlanets()
-
-    if (planetsResponse.isFailure) planetsResponse.throwError()
-
-    return planetsResponse.data
-  }
-
-  private getUnlockableStars(plants: Planet[], userUnlockedStarsIds: string[]) {
+  private getUnlockableStars(planets: Planet[], userUnlockedStarsIds: string[]) {
     const unlockableStars = []
 
-    for (const planet of plants) {
+    for (const planet of planets) {
       const { stars } = planet
 
       for (const star of stars) {
