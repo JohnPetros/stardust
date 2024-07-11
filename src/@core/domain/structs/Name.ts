@@ -1,8 +1,8 @@
 export class Name {
-  private readonly _value: string
+  readonly value: string
 
   private constructor(value: string) {
-    this._value = value.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    this.value = value
   }
 
   static create(value: string) {
@@ -10,12 +10,8 @@ export class Name {
   }
 
   removeAccentuation() {
-    const newValue = this._value.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    const newValue = this.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 
     return Name.create(newValue)
-  }
-
-  get value() {
-    return this._value
   }
 }

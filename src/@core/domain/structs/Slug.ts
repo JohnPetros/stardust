@@ -1,11 +1,7 @@
 import { Name } from './Name'
 
 export class Slug {
-  private readonly _value: string
-
-  private constructor(value: string) {
-    this._value = value
-  }
+  private constructor(readonly value: string) {}
 
   static create(value: string) {
     return Slug.slugify(value)
@@ -34,9 +30,5 @@ export class Slug {
       .join(' ')
 
     return name
-  }
-
-  get value() {
-    return this._value
   }
 }
