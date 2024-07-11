@@ -1,3 +1,5 @@
+import { BaseStruct } from '../abstracts'
+
 type UnlockableItemProps<Item> = {
   item: Item
   isUnlocked: boolean

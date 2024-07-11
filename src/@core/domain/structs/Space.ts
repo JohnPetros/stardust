@@ -1,5 +1,6 @@
 import type { UnlockableItem } from './UnlockableItem'
 import type { Planet, Star } from '../entities'
+import { BaseStruct } from '../abstracts'
 
 type SpaceProps = {
   planets: Planet[]
@@ -9,13 +10,13 @@ type SpaceProps = {
 
 export class Space extends BaseStruct<SpaceProps> {
   readonly planets: Planet[]
-  readonly stars: UnlockableItem<Star>[]
+  readonly unlockableStars: UnlockableItem<Star>[]
   readonly lastUnlockedStarId: string
 
   private constructor(props: SpaceProps) {
     super(props)
     this.planets = props.planets
-    this.stars = props.unlockableStars
+    this.unlockableStars = props.unlockableStars
     this.lastUnlockedStarId = props.lastUnlockedStarId
   }
 
@@ -25,5 +26,9 @@ export class Space extends BaseStruct<SpaceProps> {
       unlockableStars: props.unlockableStars,
       lastUnlockedStarId: props.lastUnlockedStarId,
     })
+  }
+
+  getUnlockableStarsByPlanet(planetId: string) {
+    return this.unlockableStars.filter(({ item: star }) => star.planetId === planetId)
   }
 }
