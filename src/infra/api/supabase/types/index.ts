@@ -1,2 +1,6 @@
 export type { Database } from './Database'
+export type { SupabaseUser } from './SupabaseUser'
+export type { SupabaseRocket } from './SupabaseRocket'
+export type { SupabasePlanet } from './SupabasePlanet'
+export type { SupabaseStar } from './SupabaseStar'
 export type { Supabase } from './Supabase'

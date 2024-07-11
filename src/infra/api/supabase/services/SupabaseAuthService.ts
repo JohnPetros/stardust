@@ -1,4 +1,4 @@
-import { IAuthService } from '@/@core/interfaces/services'
+import type { IAuthService } from '@/@core/interfaces/services'
 import {
   ConfirmEmailUnexpectedError,
   ConfirmPasswordResetUnexpectedError,
@@ -14,7 +14,7 @@ import { ServiceResponse } from '@/@core/responses'
 import { ROUTES } from '@/modules/global/constants'
 import { getAppBaseUrl } from '@/modules/global/utils'
 
-import { Supabase } from '../types'
+import type { Supabase } from '../types'
 import { SupabaseAuthError } from '../errors/SupabaseAuthError'
 
 import { SupabasePostgrestError } from '../errors'
@@ -151,7 +151,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
       })
     },
 
-    async getUserId() {
+    async fetchUserId() {
       const {
         data: { user },
       } = await supabase.auth.getUser()
