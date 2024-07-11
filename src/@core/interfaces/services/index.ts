@@ -1,2 +1,5 @@
 export type { IAuthService } from './IAuthService'
 export type { IUsersService } from './IUsersService'
+export type { IRocketsSerivice } from './IRocketsService'
+export type { IPlanetsService } from './IPlanetsService'
+export type { IStarsService } from './IStarsService'

@@ -1,10 +1,15 @@
-import { User } from '@/@core/domain/entities'
-import { ServiceResponse } from '@/@core/responses'
+import type { User } from '@/@core/domain/entities'
+import type { ServiceResponse } from '@/@core/responses'
 
 export interface IUsersService {
-  getUserById(userId: string): Promise<ServiceResponse<User>>
-  getUserBySlug(userSlug: string): Promise<ServiceResponse<User>>
-  getUserName(userName: string): Promise<ServiceResponse<string | null>>
-  getUserEmail(userEmail: string): Promise<ServiceResponse<string | null>>
+  fetchUserById(userId: string): Promise<ServiceResponse<User>>
+  fetchUserBySlug(userSlug: string): Promise<ServiceResponse<User>>
+  fetchUserName(userName: string): Promise<ServiceResponse<string | null>>
+  fetchUserEmail(userEmail: string): Promise<ServiceResponse<string | null>>
+  fetchUserUnlockedStarsIds(userId: string): Promise<ServiceResponse<string[]>>
+  saveUserAcquiredRocket(
+    userId: string,
+    rocketId: string
+  ): Promise<ServiceResponse<boolean>>
   updateUser(user: User): Promise<ServiceResponse<boolean>>
 }
