@@ -1,14 +1,13 @@
-import type { Star } from '@/@core/domain/entities/Star'
+import type { StarDTO } from '@/@core/dtos'
 import type { ServiceResponse } from '@/@core/responses'
 
 export interface IStarsService {
-  fetchStarBySlug(starSlug: string): Promise<ServiceResponse<Star>>
-  fetchStarById(starId: string): Promise<ServiceResponse<Star>>
-  fetchNextStar(currentStar: Star, userId: string): Promise<ServiceResponse<Star>>
-  fetchNextStarFromNextPlanet(
-    currentPlanetId: string,
-    userId: string
-  ): Promise<ServiceResponse<Star>>
-  addUnlockedStar(starId: string, userId: string): Promise<ServiceResponse<void>>
-  checkStarUnlocking(starId: string, userId: string): Promise<ServiceResponse<boolean>>
+  fetchStarBySlug(starSlug: string): Promise<ServiceResponse<StarDTO>>
+  fetchStarById(starId: string): Promise<ServiceResponse<StarDTO>>
+  // fetchNextStar(currentStar: Star, userId: string): Promise<ServiceResponse<Star>>
+  // fetchNextStarFromNextPlanet(
+  //   currentPlanetId: string,
+  //   userId: string
+  // ): Promise<ServiceResponse<Star>>
+  // checkStarUnlocking(starId: string, userId: string): Promise<ServiceResponse<boolean>>
 }

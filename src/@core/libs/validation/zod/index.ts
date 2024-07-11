@@ -1,15 +1,14 @@
 import { type SafeParseReturnType, ZodError } from 'zod'
 
-import { Email } from '@/@core/domain/structs/Email'
 import { ValidationResponse } from '@/@core/responses'
-import { IValidation } from '@/@core/interfaces/libs'
 
 import { emailSchema } from './schemas/email-schema'
+import type { Email } from '@/@core/domain/structs'
+import type { IValidation } from '@/@core/interfaces/libs'
 
 export class ZodValidation implements IValidation {
   validateEmail(email: Email) {
     const validationResult = emailSchema.safeParse(email.value)
-
     return this.respond(validationResult)
   }
 

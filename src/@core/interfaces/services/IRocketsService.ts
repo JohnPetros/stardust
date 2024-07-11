@@ -1,11 +1,10 @@
-import type { Rocket } from '@/@core/domain/entities'
+import type { RocketDTO } from '@/@core/dtos'
 import type { PaginationResponse, ServiceResponse } from '@/@core/responses'
 import type { ShopItemsListingSettings } from '@/@core/types'
 
 export interface IRocketsSerivice {
-  getShopRocketsList(
+  fetchRocketById(rocketId: string): Promise<ServiceResponse<RocketDTO>>
+  fetchShopRocketsList(
     ListingSettings: ShopItemsListingSettings
-  ): Promise<ServiceResponse<PaginationResponse<Rocket>>>
-  getRocketById(rocketId: string): Promise<ServiceResponse<Rocket>>
-  getUserAcquiredRocketsIds(userId: string): Promise<ServiceResponse<string[]>>
+  ): Promise<ServiceResponse<PaginationResponse<RocketDTO>>>
 }

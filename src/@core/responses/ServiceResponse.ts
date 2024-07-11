@@ -1,4 +1,5 @@
 import type { BaseError } from '@/@core/errors/global/BaseError'
+import { AppError } from '../errors/global/AppError'
 
 export class ServiceResponse<Data> {
   constructor(
@@ -19,7 +20,7 @@ export class ServiceResponse<Data> {
   }
 
   get errorMessage() {
-    if (!this.error) throw new Error('Error not found')
+    if (!this.error) throw new AppError('Error not found')
 
     const error = new this.error()
     return error.message
