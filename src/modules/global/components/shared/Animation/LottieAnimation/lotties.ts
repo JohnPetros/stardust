@@ -8,12 +8,15 @@ import PageNotFound from '../../../../../../../public/lotties/404.json'
 import RocketFloating from '../../../../../../../public/lotties/rocket-floating.json'
 import RocketExploring from '../../../../../../../public/lotties/rocket-exploring.json'
 import UnlockedStar from '../../../../../../../public/lotties/unlocked-star.json'
+import Streak from '../../../../../../../public/lotties/streak.json'
 import Space from '../../../../../../../public/lotties/space.json'
 import Spinner from '../../../../../../../public/lotties/spinner.json'
+import Shinning from '../../../../../../../public/lotties/reward-shinning.json'
 
 import type { AnimationName } from '../types'
 
 export const LOTTIES: Record<AnimationName, unknown> = {
+  '404': PageNotFound,
   'apollo-crying': ApoloCrying,
   'apollo-asking': ApolloAsking,
   'apollo-denying': ApoloDenying,
@@ -23,7 +26,8 @@ export const LOTTIES: Record<AnimationName, unknown> = {
   'rocket-floating': RocketFloating,
   'rocket-exploring': RocketExploring,
   'unlocked-star': UnlockedStar,
-  '404': PageNotFound,
+  shinning: Shinning,
+  streak: Streak,
   space: Space,
   spinner: Spinner,
 }

@@ -9,5 +9,7 @@ export type AnimationName =
   | 'rocket-exploring'
   | 'unlocked-star'
   | 'space'
+  | 'streak'
   | 'spinner'
+  | 'shinning'
   | '404'

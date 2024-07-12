@@ -11,5 +11,8 @@ export type IconName =
   | 'home'
   | 'mail'
   | 'stop-sign'
+  | 'sign-out'
+  | 'achievement'
   | 'rocket'
+  | 'menu'
   | 'lock'
