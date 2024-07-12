@@ -1,4 +1,5 @@
 export type { IAuthService } from './IAuthService'
+export type { IAchievementsService } from './IAchievementsService'
 export type { IUsersService } from './IUsersService'
 export type { IChallengesService } from './IChallengesService'
 export type { IRocketsSerivice } from './IRocketsService'

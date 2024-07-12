@@ -7,4 +7,5 @@ export interface IAvatarsService {
     ListingSettings: ShopItemsListingSettings
   ): Promise<ServiceResponse<PaginationResponse<AvatarDTO>>>
   fetchAvatarById(avatarId: string): Promise<ServiceResponse<AvatarDTO>>
+  saveAcquiredAvatar(avatarId: string, userId: string): Promise<ServiceResponse<boolean>>
 }

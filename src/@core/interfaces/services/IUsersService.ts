@@ -9,18 +9,7 @@ export interface IUsersService {
   fetchUserUnlockedStarsIds(userId: string): Promise<ServiceResponse<string[]>>
   fetchUserAcquiredRocketsIds(userId: string): Promise<ServiceResponse<string[]>>
   fetchUserAcquiredAvatarsIds(userId: string): Promise<ServiceResponse<string[]>>
-  saveUserAcquiredAvatar(
-    avatarId: string,
-    userId: string
-  ): Promise<ServiceResponse<boolean>>
-  saveUserAcquiredRocket(
-    userId: string,
-    rocketId: string
-  ): Promise<ServiceResponse<boolean>>
-  saveUserAcquiredAvatar(
-    avatarId: string,
-    userId: string
-  ): Promise<ServiceResponse<boolean>>
-  saveUserUnlockedStar(starId: string, userId: string): Promise<ServiceResponse<boolean>>
+  fetchUserUnlockedAchievementsIds(userId: string): Promise<ServiceResponse<string[]>>
+  fetchUserRescuableAchievementsIds(userId: string): Promise<ServiceResponse<string[]>>
   updateUser(user: UserDTO): Promise<ServiceResponse<boolean>>
 }
