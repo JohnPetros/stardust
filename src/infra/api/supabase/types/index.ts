@@ -1,5 +1,6 @@
 export type { Database } from './Database'
 export type { SupabaseAvatar } from './SupabaseAvatar'
+export type { SupabaseAchievement } from './SupabaseAchievement'
 export type { SupabaseUser } from './SupabaseUser'
 export type { SupabaseRocket } from './SupabaseRocket'
 export type { SupabasePlanet } from './SupabasePlanet'

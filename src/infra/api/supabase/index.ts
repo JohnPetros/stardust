@@ -6,6 +6,7 @@ import { useSupabaseContext } from '@/modules/global/contexts/SupabaseContext/ho
 
 import {
   SupabaseAvatarsService,
+  SupabaseAchievementsService,
   SupabaseUsersService,
   SupabaseAuthService,
   SupabaseRocketsService,
@@ -21,6 +22,7 @@ export function useSupabaseApi() {
 
   const supabaseApi = useMemo(() => {
     return {
+      ...SupabaseAchievementsService(supabase),
       ...SupabaseAuthService(supabase),
       ...SupabaseUsersService(supabase),
       ...SupabaseAvatarsService(supabase),

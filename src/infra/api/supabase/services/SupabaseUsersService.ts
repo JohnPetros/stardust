@@ -1,15 +1,7 @@
-import type { Avatar, Ranking, Rocket, User } from '@/@core/domain/entities'
 import type { IUsersService } from '@/@core/interfaces/services'
-import {
-  SaveUserAcquiredAvatarUnexpectedError,
-  SaveUserAcquiredRocketUnexpectedError,
-  SaveUserUnlockedStarUnexpectedError,
-  UpdateUserUnexpectedError,
-  UserNotFoundError,
-} from '@/@core/errors/users'
+import { UpdateUserUnexpectedError, UserNotFoundError } from '@/@core/errors/users'
 import { ServiceResponse } from '@/@core/responses'
-import { FetchUserAcquiredRocketsIdsUnexpectedError } from '@/@core/errors/rockets'
-import { FetchUserAcquiredAvatarsIdsUnexpectedError } from '@/@core/errors/users/FetchUserAcquiredAvatarsIdsUnexpectedError'
+import type { User } from '@/@core/domain/entities'
 import type { AvatarDTO, RankingDTO, RocketDTO } from '@/@core/dtos'
 
 import { SupabaseUserMapper } from '../mappers'
@@ -48,37 +40,39 @@ export const SupabaseUsersService = (supabase: Supabase): IUsersService => {
 
   return {
     async fetchUserById(userId: string) {
-      const userResponse = await supabase
-        .rpc('get_user_by_id', {
-          _user_id: userId,
-        })
+      const { data, error } = await supabase
+        .from('users')
+        .select(
+          '*, users_unlocked_stars(star_id), users_unlocked_achievements(achievement_id), users_acquired_rockets(rocket_id), users_acquired_avatars(avatar_id), users_completed_challenges(challenge_id), users_rescuable_achievements(achievement_id)'
+        )
+        .eq('id', userId)
         .single()
 
-      const userData = userResponse.data
-
-      if (!userData || userResponse.error) {
-        return SupabasePostgrestError(userResponse.error, UserNotFoundError)
+      if (error) {
+        return SupabasePostgrestError(error, UserNotFoundError)
       }
 
-      const { avatar, ranking, rocket } = await fetchUserItems(userData)
+      const { avatar, ranking, rocket } = await fetchUserItems(data)
 
-      const user = supabaseUserMapper.toDTO(userData, avatar, rocket, ranking)
+      const user = supabaseUserMapper.toDTO(data, avatar, ranking, rocket)
 
       return new ServiceResponse(user)
     },
 
     async fetchUserBySlug(userSlug: string) {
-      const { data: userData, error } = await supabase
-        .rpc('get_user_by_slug', {
-          _user_slug: userSlug,
-        })
+      const { data, error } = await supabase
+        .from('users')
+        .select(
+          '*, users_unlocked_stars(star_id), users_unlocked_achievements(achievement_id), users_acquired_rockets(rocket_id), users_acquired_avatars(avatar_id), users_completed_challenges(challenge_id), users_rescuable_achievements(achievement_id)'
+        )
+        .eq('slug', userSlug)
         .single()
 
-      if (!userData || error) return SupabasePostgrestError(error, UserNotFoundError)
+      if (error) return SupabasePostgrestError(error, UserNotFoundError)
 
-      const { avatar, ranking, rocket } = await fetchUserItems(userData)
+      const { avatar, ranking, rocket } = await fetchUserItems(data)
 
-      const user = supabaseUserMapper.toDTO(userData, avatar, rocket, ranking)
+      const user = supabaseUserMapper.toDTO(data, avatar, ranking, rocket)
 
       return new ServiceResponse(user)
     },
@@ -107,96 +101,17 @@ export const SupabaseUsersService = (supabase: Supabase): IUsersService => {
       return new ServiceResponse(data.email)
     },
 
-    async fetchUserUnlockedStarsIds(userId: string) {
-      const { data, error } = await supabase
-        .from('users_unlocked_stars')
-        .select('star_id')
-        .eq('user_id', userId)
-
-      if (error) return SupabasePostgrestError(error, UserNotFoundError)
-
-      const ids = data.map(({ star_id }) => star_id)
-
-      return new ServiceResponse(ids)
-    },
-
-    async fetchUserAcquiredRocketsIds(userId: string) {
-      const { data, error } = await supabase
-        .from('users_acquired_rockets')
-        .select('rocket_id')
-        .eq('user_id', userId)
-
-      if (error) {
-        return SupabasePostgrestError(error, FetchUserAcquiredRocketsIdsUnexpectedError)
-      }
-
-      const ids = data.map((data) => data.rocket_id)
-
-      return new ServiceResponse(ids)
-    },
-
-    async saveUserAcquiredRocket(userId: string, rocketId: string) {
-      const { error } = await supabase
-        .from('users_acquired_rockets')
-        .insert([{ rocket_id: rocketId, user_id: userId }])
-
-      if (error) {
-        return SupabasePostgrestError(error, SaveUserAcquiredRocketUnexpectedError)
-      }
-
-      return new ServiceResponse(true)
-    },
-
-    async fetchUserAcquiredAvatarsIds(userId: string) {
-      const { data, error } = await supabase
-        .from('users_acquired_avatars')
-        .select('avatar_id')
-        .eq('user_id', userId)
-
-      if (error) {
-        return SupabasePostgrestError(error, FetchUserAcquiredAvatarsIdsUnexpectedError)
-      }
-
-      const ids = data.map((data) => data.avatar_id)
-
-      return new ServiceResponse(ids)
-    },
-
-    async saveUserAcquiredAvatar(avatarId: string, userId: string) {
-      const { error } = await supabase
-        .from('users_acquired_avatars')
-        .insert({ avatar_id: avatarId, user_id: userId })
-
-      if (error) {
-        return SupabasePostgrestError(error, SaveUserAcquiredAvatarUnexpectedError)
-      }
-
-      return new ServiceResponse(true)
-    },
-
-    async updateUser(userDTO: UserDTO) {
-      const supabaseUser = supabaseUserMapper.toSupabase(userDTO)
+    async updateUser(user: User) {
+      const supabaseUser = supabaseUserMapper.toSupabase(user)
 
       const { error } = await supabase
         .from('users')
         // @ts-ignore
         .update(supabaseUser)
-        .eq('id', userDTO.id)
+        .eq('id', user.id)
 
       if (error) {
         return SupabasePostgrestError(error, UpdateUserUnexpectedError)
-      }
-
-      return new ServiceResponse(true)
-    },
-
-    async saveUserUnlockedStar(starId: string, userId: string) {
-      const { error } = await supabase
-        .from('users_unlocked_stars')
-        .insert({ star_id: starId, user_id: userId })
-
-      if (error) {
-        return SupabasePostgrestError(error, SaveUserUnlockedStarUnexpectedError)
       }
 
       return new ServiceResponse(true)

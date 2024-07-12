@@ -8,8 +8,8 @@ export const SupabaseUserMapper = () => {
     toDTO(
       supabaseUser: SupabaseUser,
       avatarDTO: AvatarDTO,
-      rocketDTO: RocketDTO,
-      rankingDTO: RankingDTO
+      rankingDTO: RankingDTO,
+      rocketDTO: RocketDTO
     ): UserDTO {
       const userDTO: UserDTO = {
         id: supabaseUser.id ?? '',
@@ -22,13 +22,26 @@ export const SupabaseUserMapper = () => {
         streak: supabaseUser.streak ?? 0,
         weeklyXp: supabaseUser.weekly_xp ?? 0,
         avatar: avatarDTO,
-        rocket: rocketDTO,
         ranking: rankingDTO,
-        unlockedAchievementsCount: supabaseUser.unlocked_achievements_count ?? 0,
-        unlockedStarsCount: supabaseUser.unlocked_stars_count ?? 0,
-        acquiredRocketsCount: supabaseUser.acquired_rockets_count ?? 0,
-        completedChallengesCount: supabaseUser.completed_challenges_count ?? 0,
-        completedPlanetsCount: supabaseUser.completed_planets_count ?? 0,
+        rocket: rocketDTO,
+        unlockedAchievementsIds:
+          supabaseUser.users_unlocked_achievements?.map(
+            ({ achievement_id }) => achievement_id
+          ) ?? [],
+        rescuableAchievementsIds:
+          supabaseUser.users_rescuable_achievements?.map(
+            ({ achievement_id }) => achievement_id
+          ) ?? [],
+        unlockedStarsIds:
+          supabaseUser.users_unlocked_stars?.map(({ star_id }) => star_id) ?? [],
+        acquiredRocketsIds:
+          supabaseUser.users_acquired_rockets?.map(({ rocket_id }) => rocket_id) ?? [],
+        completedChallengesIds:
+          supabaseUser.users_completed_challenges?.map(
+            ({ challenge_id }) => challenge_id
+          ) ?? [],
+        completedPlanetsIds: [],
+
         // lastPosition: supabaseUser.last_position ?? 0,
         // studyTime: supabaseUser.study_time ?? '',
         // didUpdateRanking: supabaseUser.did_update_ranking ?? false,
@@ -42,9 +55,11 @@ export const SupabaseUserMapper = () => {
       return userDTO
     },
 
-    toSupabase(userDTO: UserDTO): SupabaseUser {
+    toSupabase(user: User): SupabaseUser {
+      const userDTO = user.dto
+
       const supabaseUser: SupabaseUser = {
-        id: userDTO.id,
+        id: user.id,
         coins: userDTO.coins,
         email: userDTO.email,
         level: userDTO.level,
@@ -55,10 +70,6 @@ export const SupabaseUserMapper = () => {
         slug: userDTO.slug,
         xp: userDTO.xp,
         weekly_xp: userDTO.weeklyXp,
-        acquired_rockets_count: userDTO.acquiredRocketsCount,
-        completed_challenges_count: userDTO.completedChallengesCount,
-        unlocked_achievements_count: userDTO.unlockedAchievementsCount,
-        completed_planets_count: userDTO.completedPlanetsCount,
         streak: userDTO.streak,
       }
 

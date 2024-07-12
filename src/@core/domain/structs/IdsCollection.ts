@@ -14,7 +14,7 @@ export class IdsCollection extends BaseStruct<IdsCollectionProps> {
   }
 
   static create(key: string, ids: string[]) {
-    new ArrayValidation(ids, key).id().validate()
+    if (ids.length) new ArrayValidation(ids, key).id().validate()
 
     return new IdsCollection({ value: ids })
   }
