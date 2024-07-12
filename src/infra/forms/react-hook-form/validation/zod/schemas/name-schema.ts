@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { VALIDATION_ERROR_MESSAGES } from '@/@core/libs/validation/constants'
+import { VALIDATION_ERROR_MESSAGES } from '@/@core/lib/validation/constants'
 
 export const nameSchema = z
   .string()

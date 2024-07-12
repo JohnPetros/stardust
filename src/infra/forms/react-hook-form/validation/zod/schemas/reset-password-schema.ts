@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { VALIDATION_ERROR_MESSAGES } from '@/@core/libs/validation/constants'
+import { VALIDATION_ERROR_MESSAGES } from '@/@core/lib/validation/constants'
 
 import { passwordConfirmationSchema } from './password-confirmation-schema'
 import { passwordSchema } from './password-schema'
