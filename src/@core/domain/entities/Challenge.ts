@@ -19,10 +19,10 @@ export class Challenge extends BaseEntity {
 
   static create(dto: ChallengeDTO): Challenge {
     return new Challenge({
-      id: dto.id,
-      code: dto.code,
       title: Name.create(dto.title),
       slug: Slug.create(dto.slug),
+      code: dto.code,
+      id: dto?.id,
     })
   }
 

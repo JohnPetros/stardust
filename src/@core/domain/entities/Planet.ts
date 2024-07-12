@@ -23,12 +23,12 @@ export class Planet extends BaseEntity {
 
   static create(dto: PlanetDTO) {
     return new Planet({
-      id: dto.id,
       name: Name.create(dto.name),
       icon: dto.icon,
       image: dto.image,
       position: dto.position,
       stars: dto.stars.map(Star.create),
+      id: dto?.id,
     })
   }
 

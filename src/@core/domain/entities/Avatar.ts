@@ -18,10 +18,10 @@ export class Avatar extends BuyableItem {
 
   static create(dto: AvatarDTO): Avatar {
     return new Avatar({
-      id: dto.id,
       name: dto.name,
       image: dto.image,
       price: dto.price,
+      id: dto?.id,
     })
   }
 

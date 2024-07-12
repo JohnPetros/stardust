@@ -1,13 +1,13 @@
 import type { RocketDTO } from '@/@core/dtos'
 import { BuyableItem } from '../abstracts'
-import { Count, Name, Slug } from '../structs'
+import { Integer, Name, Slug } from '../structs'
 
 type RocketProps = {
   id?: string
   image: string
   name: Name
   slug: Slug
-  price: Count
+  price: Integer
 }
 
 export class Rocket extends BuyableItem {
@@ -20,23 +20,12 @@ export class Rocket extends BuyableItem {
 
   static create(dto: RocketDTO): Rocket {
     return new Rocket({
-      ...dto,
       id: dto.id,
       name: Name.create(dto.name),
       slug: Slug.create(dto.slug),
-      price: Count.create({ key: 'price', value: dto.price }),
+      price: Integer.create('price', dto.price),
       image: dto.image,
     })
-  }
-
-  get dto(): RocketDTO {
-    return {
-      id: this.id,
-      image: this.image,
-      name: this.name.value,
-      slug: this.slug.value,
-      price: this.price,
-    }
   }
 
   get name() {
@@ -49,5 +38,15 @@ export class Rocket extends BuyableItem {
 
   get slug() {
     return this.props.slug
+  }
+
+  get dto(): RocketDTO {
+    return {
+      id: this.id,
+      image: this.image,
+      name: this.name.value,
+      slug: this.slug.value,
+      price: this.price,
+    }
   }
 }
