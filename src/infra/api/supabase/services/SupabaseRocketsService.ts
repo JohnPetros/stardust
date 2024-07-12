@@ -1,6 +1,10 @@
 import type { IRocketsSerivice } from '@/@core/interfaces/services'
 import type { ShopItemsListingSettings } from '@/@core/types'
-import { RocketNotFoundError } from '@/@core/errors/rockets'
+import {
+  FetchShopRocketsListUnexpectedError,
+  RocketNotFoundError,
+  SaveAcquiredRocketUnexpectedError,
+} from '@/@core/errors/rockets'
 import { PaginationResponse, ServiceResponse } from '@/@core/responses'
 
 import type { Supabase } from '../types/Supabase'
@@ -56,7 +60,7 @@ export const SupabaseRocketsService = (supabase: Supabase): IRocketsSerivice => 
       const { data, count, error } = await query
 
       if (error) {
-        throw new Error(error.message)
+        return SupabasePostgrestError(error, FetchShopRocketsListUnexpectedError)
       }
 
       const rockets = data.map(supabaseRocketMapper.toDTO)
@@ -64,6 +68,18 @@ export const SupabaseRocketsService = (supabase: Supabase): IRocketsSerivice => 
       const pagination = new PaginationResponse(rockets, count)
 
       return new ServiceResponse(pagination)
+    },
+
+    async saveAcquiredRocket(userId: string, rocketId: string) {
+      const { error } = await supabase
+        .from('users_acquired_rockets')
+        .insert([{ rocket_id: rocketId, user_id: userId }])
+
+      if (error) {
+        return SupabasePostgrestError(error, SaveAcquiredRocketUnexpectedError)
+      }
+
+      return new ServiceResponse(true)
     },
   }
 }

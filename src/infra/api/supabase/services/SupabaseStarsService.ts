@@ -1,9 +1,10 @@
 import type { IStarsService } from '@/@core/interfaces/services'
+import { ServiceResponse } from '@/@core/responses'
+import { SaveUnlockedStarUnexpectedError, StarNotFoundError } from '@/@core/errors/stars'
+
 import type { Supabase } from '../types/Supabase'
 import { SupabaseStarMapper } from '../mappers'
-import { ServiceResponse } from '@/@core/responses'
 import { SupabasePostgrestError } from '../errors'
-import { StarNotFoundError } from '@/@core/errors/stars'
 
 export const SupabaseStarsService = (supabase: Supabase): IStarsService => {
   const supabaseStarMapper = SupabaseStarMapper()
@@ -12,7 +13,7 @@ export const SupabaseStarsService = (supabase: Supabase): IStarsService => {
     async fetchStarBySlug(starSlug: string) {
       const { data, error } = await supabase
         .from('stars')
-        .select('*, questions(*)')
+        .select('*')
         .eq('slug', starSlug)
         .single()
 
@@ -39,6 +40,18 @@ export const SupabaseStarsService = (supabase: Supabase): IStarsService => {
       const starDTO = supabaseStarMapper.toDTO(data)
 
       return new ServiceResponse(starDTO)
+    },
+
+    async saveUserUnlockedStar(starId: string, userId: string) {
+      const { error } = await supabase
+        .from('users_unlocked_stars')
+        .insert({ star_id: starId, user_id: userId })
+
+      if (error) {
+        return SupabasePostgrestError(error, SaveUnlockedStarUnexpectedError)
+      }
+
+      return new ServiceResponse(true)
     },
 
     //   async fetchNextStar(currentStar: Star, userId: string) {
