@@ -1,9 +1,22 @@
+import { StringValidation } from '@/@core/lib/validation'
+import { BaseStruct } from '../abstracts'
 import { Name } from './Name'
 
-export class Slug {
-  private constructor(readonly value: string) {}
+type SlugProps = {
+  value: string
+}
+
+export class Slug extends BaseStruct<SlugProps> {
+  readonly value: string
+
+  private constructor(value: string) {
+    super({ value })
+    this.value = value
+  }
 
   static create(value: string) {
+    new StringValidation(value, 'Slug').min(2).validate()
+
     return Slug.slugify(value)
   }
 

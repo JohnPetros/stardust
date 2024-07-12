@@ -22,4 +22,6 @@ export class LastUnlockedStar extends BaseStruct<lastUnlockedStarProp> {
   static create(props: lastUnlockedStarProp): LastUnlockedStar {
     return new LastUnlockedStar(props)
   }
+
+  validate() {}
 }

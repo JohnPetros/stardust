@@ -3,7 +3,7 @@ import type { RankingDTO } from './RankingDTO'
 import type { RocketDTO } from './RocketDTO'
 
 export type UserDTO = {
-  id: string
+  id?: string
   slug: string
   email: string
   name: string
@@ -15,11 +15,12 @@ export type UserDTO = {
   ranking: RankingDTO
   rocket: RocketDTO
   avatar: AvatarDTO
-  unlockedStarsCount: number
-  acquiredRocketsCount: number
-  unlockedAchievementsCount: number
-  completedChallengesCount: number
-  completedPlanetsCount: number
+  unlockedStarsIds: string[]
+  acquiredRocketsIds: string[]
+  unlockedAchievementsIds: string[]
+  rescuableAchievementsIds: string[]
+  completedChallengesIds: string[]
+  completedPlanetsIds: string[]
 
   // createdAt: string
   // didBreakStreak: boolean

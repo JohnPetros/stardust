@@ -29,6 +29,6 @@ export class IdsCollection extends BaseStruct<IdsCollectionProps> {
   }
 
   includes(id: string) {
-    this.value.includes(id)
+    return this.value.includes(id)
   }
 }

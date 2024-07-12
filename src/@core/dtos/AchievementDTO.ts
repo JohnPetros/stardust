@@ -1,12 +1,10 @@
-import type { AchievementMetric } from '../domain/types'
-
 export type AchievementDTO = {
-  id: string
+  id?: string
   name: string
   icon: string
   description: string
   reward: number
   requiredCount: number
   position: number
-  metric: AchievementMetric
+  metric: string
 }

@@ -1,16 +1,21 @@
-import { Validation } from '@/@core/libs/validation'
+import { StringValidation } from '@/@core/lib/validation'
+import { BaseStruct } from '../abstracts'
 
-export class Email {
+type EmailProps = {
+  value: string
+}
+
+export class Email extends BaseStruct<EmailProps> {
   readonly value: string
 
   private constructor(value: string) {
+    super({ value })
     this.value = value
-
-    const response = Validation.validateEmail(this)
-    if (!response.isValid) response.throwError()
   }
 
   static create(value: string) {
+    new StringValidation(value).email().validate()
+
     return new Email(value)
   }
 }

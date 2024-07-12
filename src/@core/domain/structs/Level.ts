@@ -1,4 +1,4 @@
-import { LevelInvalidValueError } from '@/@core/errors/validation'
+import { NumberValidation } from '@/@core/lib/validation'
 import { BaseStruct } from '../abstracts'
 
 type LevelProps = {
@@ -14,7 +14,7 @@ export class Level extends BaseStruct<LevelProps> {
   }
 
   static create(value: number) {
-    if (value < 1) throw new LevelInvalidValueError(value)
+    new NumberValidation(value, 'Nível').min(1).validate()
 
     return new Level(value)
   }
