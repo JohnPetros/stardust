@@ -1,51 +1,30 @@
 'use client'
 
-import type { Achievement } from '@/@types/Achievement'
-import { useApi } from '@/services/api'
-import { useCache } from '@/services/cache'
+import type { AchievementDTO } from '@/@core/dtos'
+import { useApi } from '@/infra/api'
+import { useCache } from '@/infra/cache'
 import { CACHE } from '@/global/constants/cache'
+import { useToastContext } from '../contexts/ToastContext'
 
 export function useUserAchievements(userId?: string) {
   const api = useApi()
+  const toast = useToastContext()
 
-  function verifyAchievement(
-    achievement: Achievement,
-    userUnlockedAchievementsIds: string[],
-    userRescuableAchievementsIds: string[]
-  ): Achievement {
-    const isUnlocked = userUnlockedAchievementsIds.some(
-      (unlockedAchievementId) => unlockedAchievementId === achievement.id
-    )
+  async function fetchAchievements() {
+    const response = await api.fetchAchievements()
 
-    const isRescuable = userRescuableAchievementsIds.some(
-      (rescuableachievementId) => rescuableachievementId === achievement.id
-    )
-
-    return { ...achievement, isUnlocked, isRescuable }
-  }
-
-  async function getUserAchievements() {
-    if (userId) {
-      const userUnlockedAchievementsIds =
-        await api.getUserUnlockedAchievementsIds(userId)
-      const userRescuableAchievementsIds =
-        await api.getUserRescuableAchievementsIds(userId)
-
-      const achievements = await api.getAchievements()
-
-      return achievements.map((achievement) =>
-        verifyAchievement(
-          achievement,
-          userUnlockedAchievementsIds,
-          userRescuableAchievementsIds
-        )
-      )
+    if (response.isSuccess) {
+      return response.data
     }
+
+    toast.show(response.errorMessage)
+
+    return []
   }
 
-  const { data } = useCache<Achievement[]>({
+  const { data } = useCache<AchievementDTO[]>({
     key: CACHE.keys.userAchievements,
-    fetcher: getUserAchievements,
+    fetcher: fetchAchievements,
     dependencies: [userId],
   })
 
