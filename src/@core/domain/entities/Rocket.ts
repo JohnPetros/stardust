@@ -1,20 +1,20 @@
 import type { RocketDTO } from '@/@core/dtos'
-import { BuyableItem } from '../abstracts'
+import { BaseEntity } from '../abstracts'
 import { Integer, Name, Slug } from '../structs'
 
 type RocketProps = {
   id?: string
-  image: string
   name: Name
   slug: Slug
   price: Integer
+  image: string
 }
 
-export class Rocket extends BuyableItem {
+export class Rocket extends BaseEntity {
   private props: RocketProps
 
   private constructor(props: RocketProps) {
-    super(props.price.value, props?.id)
+    super(props?.id)
     this.props = props
   }
 
@@ -40,13 +40,17 @@ export class Rocket extends BuyableItem {
     return this.props.slug
   }
 
+  get price() {
+    return this.props.price
+  }
+
   get dto(): RocketDTO {
     return {
       id: this.id,
-      image: this.image,
       name: this.name.value,
       slug: this.slug.value,
-      price: this.price,
+      price: this.price.value,
+      image: this.image,
     }
   }
 }

@@ -1,44 +1,49 @@
 import type { AvatarDTO } from '@/@core/dtos'
-import { BuyableItem } from '../abstracts'
+import { Integer, Name } from '../structs'
+import { BaseEntity } from '../abstracts'
 
 export type AvatarProps = {
   id?: string
+  name: Name
+  price: Integer
   image: string
-  name: string
-  price: number
 }
 
-export class Avatar extends BuyableItem {
+export class Avatar extends BaseEntity {
   private props: AvatarProps
 
   private constructor(props: AvatarProps) {
-    super(props.price, props.id)
+    super(props?.id)
     this.props = props
   }
 
   static create(dto: AvatarDTO): Avatar {
     return new Avatar({
-      name: dto.name,
+      name: Name.create(dto.name),
+      price: Integer.create('price', dto.price),
       image: dto.image,
-      price: dto.price,
       id: dto?.id,
     })
-  }
-
-  get dto(): AvatarDTO {
-    return {
-      id: this.id,
-      name: this.name,
-      image: this.image,
-      price: this.price,
-    }
   }
 
   get name() {
     return this.props.name
   }
 
+  get price() {
+    return this.props.price
+  }
+
   get image() {
     return this.props.image
+  }
+
+  get dto(): AvatarDTO {
+    return {
+      id: this.id,
+      name: this.name.value,
+      price: this.price.value,
+      image: this.image,
+    }
   }
 }

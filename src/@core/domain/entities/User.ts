@@ -79,10 +79,8 @@ export class User extends BaseEntity {
     this.props.coins = this.props.coins.increment(newCoins)
   }
 
-  getAchievementProgress(metric: AchievementMetric) {
-    const currentProgress = this[metric.value]
-
-    return currentProgress
+  getAchievementCount(metric: AchievementMetric) {
+    return this[metric.value]
   }
 
   get unlockedStarsCount() {

@@ -1,15 +1,14 @@
 import { BaseEntity } from '../abstracts'
 import type { StarDTO } from '@/@core/dtos/StarDTO'
-import { Name } from '../structs/Name'
-import { Slug } from '../structs/Slug'
+import { Id, OrdinalNumber, Logical, Slug, Name } from '../structs'
 
 type StarsProps = {
   id?: string
   slug: Slug
   name: Name
-  number: number
-  isChallenge: boolean
-  planetId: string
+  number: OrdinalNumber
+  isChallenge: Logical
+  planetId: Id
 }
 
 export class Star extends BaseEntity {
@@ -24,9 +23,9 @@ export class Star extends BaseEntity {
     return new Star({
       slug: Slug.create(dto.slug),
       name: Name.create(dto.name),
-      number: dto.number,
-      isChallenge: dto.isChallenge,
-      planetId: dto.planetId,
+      number: OrdinalNumber.create('star number', dto.number),
+      isChallenge: Logical.create('is star a challenge?', dto.isChallenge),
+      planetId: Id.create(dto.planetId),
       id: dto?.id,
       // texts: dto.texts.map(Text.create),
     })
@@ -36,10 +35,10 @@ export class Star extends BaseEntity {
     return {
       id: this.id,
       name: this.name.value,
-      number: this.number,
+      number: this.number.value,
       slug: this.slug.value,
-      isChallenge: this.isChallenge,
-      planetId: this.planetId,
+      planetId: this.planetId.value,
+      isChallenge: this.isChallenge.value,
       // texts: this.texts.map((text) => text.dto),
     }
   }

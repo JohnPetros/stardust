@@ -1,45 +1,45 @@
 import type { RankingDTO } from '@/@core/dtos'
 import { BaseEntity } from '../abstracts'
-import { Name } from '../structs'
+import { Integer, Name, OrdinalNumber } from '../structs'
 
 type RankingProps = {
   id?: string
   name: Name
   image: string
-  position: number
-  reward: number
+  position: OrdinalNumber
+  reward: Integer
 }
 
 export class Ranking extends BaseEntity {
   private props: RankingProps
 
   private constructor(props: RankingProps) {
-    super(props.id)
+    super(props?.id)
     this.props = props
   }
 
   static create(dto: RankingDTO): Ranking {
     return new Ranking({
-      id: dto.id,
       name: Name.create(dto.name),
-      position: dto.position,
+      position: OrdinalNumber.create('rocket position', dto.position),
+      reward: Integer.create('rocket reward', dto.reward),
       image: dto.image,
-      reward: dto.reward,
+      id: dto?.id,
     })
   }
 
   get dto(): RankingDTO {
     return {
       id: this.id,
+      name: this.name.value,
+      position: this.position.value,
+      reward: this.reward.value,
       image: this.image,
-      name: this.name,
-      position: this.position,
-      reward: this.reward,
     }
   }
 
   get name() {
-    return this.props.name.value
+    return this.props.name
   }
 
   get image() {

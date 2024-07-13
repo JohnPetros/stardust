@@ -1,15 +1,15 @@
 import type { PlanetDTO } from '@/@core/dtos'
 
 import { BaseEntity } from '../abstracts'
-import { Name } from '../structs'
+import { Image, Name, OrdinalNumber } from '../structs'
 import { Star } from './Star'
 
 type PlanetProps = {
   id?: string
   name: Name
-  icon: string
-  image: string
-  position: number
+  icon: Image
+  image: Image
+  position: OrdinalNumber
   stars: Star[]
 }
 
@@ -24,9 +24,9 @@ export class Planet extends BaseEntity {
   static create(dto: PlanetDTO) {
     return new Planet({
       name: Name.create(dto.name),
-      icon: dto.icon,
-      image: dto.image,
-      position: dto.position,
+      icon: Image.create(dto.icon),
+      image: Image.create(dto.image),
+      position: OrdinalNumber.create('planet position', dto.position),
       stars: dto.stars.map(Star.create),
       id: dto?.id,
     })
@@ -36,9 +36,9 @@ export class Planet extends BaseEntity {
     return {
       id: this.id,
       name: this.name.value,
-      image: this.image,
-      icon: this.icon,
-      position: this.position,
+      image: this.image.value,
+      icon: this.icon.value,
+      position: this.position.value,
       stars: this.stars.map((star) => star.dto),
     }
   }

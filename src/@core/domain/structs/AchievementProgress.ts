@@ -1,18 +1,19 @@
 import { BaseStruct } from '../abstracts'
+import type { Integer } from './Integer'
 
 type AchievementProgressProps = {
-  userCountValue: number
-  RequiredCountValue: number
+  userCount: Integer
+  requiredCount: Integer
 }
 
 export class AchievementProgress extends BaseStruct<AchievementProgressProps> {
-  readonly userCountValue: number
-  readonly RequiredCountValue: number
+  readonly userCount: Integer
+  readonly requiredCount: Integer
 
   private constructor(props: AchievementProgressProps) {
     super(props)
-    this.userCountValue = props.userCountValue
-    this.RequiredCountValue = props.RequiredCountValue
+    this.userCount = props.userCount
+    this.requiredCount = props.requiredCount
   }
 
   static create(props: AchievementProgressProps): AchievementProgress {
@@ -20,19 +21,17 @@ export class AchievementProgress extends BaseStruct<AchievementProgressProps> {
   }
 
   get percentageProgress() {
-    const percentageProgress = (this.userCountValue / this.RequiredCountValue) * 100
+    const percentageProgress = (this.userCount.value / this.requiredCount.value) * 100
 
     return percentageProgress
   }
 
   get absoluteProgress() {
     const absoluteProgress =
-      this.userCountValue && this.userCountValue >= this.RequiredCountValue
-        ? this.RequiredCountValue
-        : this.userCountValue
+      this.userCount.value && this.userCount.value >= this.requiredCount.value
+        ? this.requiredCount.value
+        : this.userCount.value
 
     return absoluteProgress
   }
-
-  validate(): void {}
 }
