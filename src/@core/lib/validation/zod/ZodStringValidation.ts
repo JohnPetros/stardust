@@ -25,7 +25,7 @@ export class ZodStringValidation implements IStringValidation {
 
   id(message?: string) {
     this.zodString = this.zodString.uuid(
-      message ?? `${this.key} value must be a valid id`
+      message ?? `${this.key} value must be a valid uuid`
     )
 
     return this
@@ -53,8 +53,6 @@ export class ZodStringValidation implements IStringValidation {
       if (this.zodEnum) {
         this.zodEnum.parse(this.data)
       }
-
-      console.log(this.data)
 
       this.zodString.parse(this.data)
     } catch (error) {

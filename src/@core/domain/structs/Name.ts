@@ -1,5 +1,5 @@
 import { StringValidation } from '@/@core/lib/validation'
-import { BaseStruct } from '../abstracts'
+import { BaseStruct } from '@/@core/domain/abstracts/BaseStruct'
 
 type NameProps = {
   value: string
@@ -14,7 +14,7 @@ export class Name extends BaseStruct<NameProps> {
   }
 
   static create(value: string) {
-    new StringValidation(value, 'Nome').min(3).validate()
+    new StringValidation(value, 'Name').min(2).validate()
 
     return new Name(value)
   }
@@ -24,6 +24,4 @@ export class Name extends BaseStruct<NameProps> {
 
     return Name.create(newValue)
   }
-
-  validate() {}
 }

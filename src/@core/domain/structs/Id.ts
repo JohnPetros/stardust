@@ -14,7 +14,7 @@ export class Id extends BaseStruct<IdProps> {
   }
 
   static create(value: string) {
-    new StringValidation(value, 'Id').id()
+    new StringValidation(value, 'Id').id().validate()
 
     return new Id({ value })
   }
