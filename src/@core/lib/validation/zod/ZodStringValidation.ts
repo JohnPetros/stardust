@@ -12,7 +12,9 @@ export class ZodStringValidation implements IStringValidation {
   constructor(data: unknown, key?: string, message?: string) {
     this.data = data
     this.key = key ?? ''
-    this.zodString = z.string({ required_error: message })
+    this.zodString = z.string({
+      required_error: message ?? `${this.key} should be a string`,
+    })
   }
 
   min(minValue: number, message?: string) {
@@ -38,6 +40,27 @@ export class ZodStringValidation implements IStringValidation {
     return this
   }
 
+  url(message?: string) {
+    this.zodString = this.zodString.email(
+      message ?? `${this.key} value must be a valid url`
+    )
+    return this
+  }
+
+  image(message?: string) {
+    const extensions = ['.png', '.jpg', '.jpeg', '.gif', '.svg']
+
+    this.zodEnum = z.enum(extensions as [string], {
+      message:
+        message ??
+        `${this.key} value must be have one of the extensions: ${extensions.join(', ')}`,
+    })
+
+    this.data = String(this.data).slice(-4)
+
+    return this
+  }
+
   oneOf(strings: string[], message?: string) {
     this.zodEnum = z.enum(strings as [string], {
       message:
@@ -57,6 +80,7 @@ export class ZodStringValidation implements IStringValidation {
       this.zodString.parse(this.data)
     } catch (error) {
       if (error instanceof ZodError) {
+        console.log('DATA: ', this.data)
         throw new ValidationError(error.flatten().formErrors)
       }
     }

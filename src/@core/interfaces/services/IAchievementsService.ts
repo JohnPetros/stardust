@@ -11,7 +11,7 @@ export interface IAchievementsService {
     achievementId: string,
     userId: string
   ): Promise<ServiceResponse<boolean>>
-  deleteRescuebleAchievement(
+  deleteRescuableAchievement(
     achievementId: string,
     userId: string
   ): Promise<ServiceResponse<boolean>>

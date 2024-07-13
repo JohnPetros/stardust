@@ -1,4 +1,4 @@
-import { ValidationError } from '../errors/libs'
+import { ValidationError } from '../errors/lib'
 
 export class ValidationResponse {
   constructor(
@@ -8,6 +8,10 @@ export class ValidationResponse {
 
   get isValid() {
     return this._isValid
+  }
+
+  get isInvalid() {
+    return !this._isValid
   }
 
   get errorMessages() {
