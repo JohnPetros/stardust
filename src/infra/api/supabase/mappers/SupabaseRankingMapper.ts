@@ -1,10 +1,10 @@
 import type { RankingDTO } from '@/@core/dtos'
 import type { SupabaseRanking } from '../types'
-import { Ranking } from '@/@core/domain/entities'
+import type { Ranking } from '@/@core/domain/entities'
 
 export const SupabaseRankingMapper = () => {
   return {
-    toRanking(supabaseRanking: SupabaseRanking): Ranking {
+    toRanking(supabaseRanking: SupabaseRanking): RankingDTO {
       const rankingDTO: RankingDTO = {
         id: supabaseRanking.id,
         name: supabaseRanking.name,
@@ -13,7 +13,7 @@ export const SupabaseRankingMapper = () => {
         reward: supabaseRanking.reward,
       }
 
-      return Ranking.create(rankingDTO)
+      return rankingDTO
     },
 
     toSupabase(ranking: Ranking): SupabaseRanking {

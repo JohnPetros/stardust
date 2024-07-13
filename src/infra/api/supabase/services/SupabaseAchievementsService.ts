@@ -53,7 +53,7 @@ export const SupabaseAchievementsService = (supabase: Supabase): IAchievementsSe
       return new ServiceResponse(true)
     },
 
-    async deleteRescuebleAchievement(achievementId: string, userId: string) {
+    async deleteRescuableAchievement(achievementId: string, userId: string) {
       const { error } = await supabase
         .from('users_rescuable_achievements')
         .delete()

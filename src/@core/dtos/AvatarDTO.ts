@@ -1,5 +1,5 @@
 export type AvatarDTO = {
-  id: string
+  id?: string
   image: string
   name: string
   price: number

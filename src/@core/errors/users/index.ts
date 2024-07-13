@@ -1,8 +1,3 @@
 export { UserNotFoundError } from './UserNotFoundError'
-export { FetchUserAcquiredRocketsIdsUnexpectedError } from './FetchUserAcquiredRocketsIdsUnexpectedError'
-export { FetchUserUnlockedStarsIdsUnexpectedError } from './FetchUserUnlockedStarsIdsUnexpectedError'
-export { FetchUserAcquiredAvatarsIdsUnexpectedError } from './FetchUserAcquiredAvatarsIdsUnexpectedError'
-export { FetchUserRescuableAchievementsIdsUnexpectedError } from './FetchUserRescuableAchievementsIdsUnexpectedError'
-export { FetchUserUnlockedAchievementsIdsUnexpectedError } from './FetchUserUnlockedAchievementsIdsUnexpectedError'
 export { SaveUserUnexpectedError } from './SaveUserUnexpectedError'
 export { UpdateUserUnexpectedError } from './UpdateUserUnexpectedError'
