@@ -1,1 +1,1 @@
-export { BuildSpaceUseCase } from './BuildSpaceUseCase'
+export { GetLastUnlockedStarIdUseCase } from './GetLastUnlockedStarIdUseCase'
