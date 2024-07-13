@@ -18,7 +18,7 @@ export class ZodStringValidation implements IStringValidation {
   min(minValue: number, message?: string) {
     this.zodString = this.zodString.min(
       minValue,
-      message ?? `${this.key} value must have at least ${minValue} digits`
+      message ?? `${this.key} value must have at least ${minValue} characters`
     )
     return this
   }
@@ -53,6 +53,8 @@ export class ZodStringValidation implements IStringValidation {
       if (this.zodEnum) {
         this.zodEnum.parse(this.data)
       }
+
+      console.log(this.data)
 
       this.zodString.parse(this.data)
     } catch (error) {
