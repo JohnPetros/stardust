@@ -1,4 +1,4 @@
-import { Id } from '../structs'
+import { Id } from '@/@core/domain/structs/Id'
 
 export abstract class BaseEntity {
   private readonly _id: Id
