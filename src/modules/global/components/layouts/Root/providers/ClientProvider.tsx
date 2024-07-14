@@ -1,24 +1,18 @@
 'use client'
 
-import { ToastProvider } from '@/modules/global/contexts/ToastContext'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
+import { TooltipProvider } from '@radix-ui/react-tooltip'
 
 type ClientProps = {
   children: ReactNode
 }
 
 export function ClientProvider({ children }: ClientProps) {
-  return children
-
-  // return (
-  //   <ToastProvider>
-  //     {/* <TooltipProvider> */}
-  //     {/* <AchivementsProvider> */}
-  //     {/* <EditorProvider> */}
-  //     {children}
-  //     {/* </EditorProvider> */}
-  //     {/* </AchivementsProvider> */}
-  //     {/* </TooltipProvider> */}
-  //   </ToastProvider>
-  // )
+  return (
+    <TooltipProvider>
+      {/* <EditorProvider> */}
+      {children}
+      {/* </EditorProvider> */}
+    </TooltipProvider>
+  )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, ReactNode } from 'react'
+import { createContext, type ReactNode } from 'react'
 
 import type { Session, AuthContextValue } from './types'
 import { useAuthProvider, useAuthContext } from './hooks'
