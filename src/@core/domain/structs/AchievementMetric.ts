@@ -2,22 +2,14 @@ import { StringValidation } from '@/@core/lib/validation'
 
 import { BaseStruct } from '../abstracts'
 
-type Metric =
-  | 'unlockedStarsCount'
-  | 'acquiredRocketsCount'
-  | 'completedChallengesCount'
-  | 'completedPlanetsCount'
-  | 'xp'
-  | 'streak'
-
 type AchievementMetricProps = {
   value: string
 }
 
 export class AchievementMetric extends BaseStruct<AchievementMetricProps> {
-  readonly value: Metric
+  readonly value: AchievementMetricValue
 
-  private constructor(value: Metric) {
+  private constructor(value: AchievementMetricValue) {
     super({ value: String(value) })
 
     this.value = value
@@ -31,7 +23,7 @@ export class AchievementMetric extends BaseStruct<AchievementMetricProps> {
     return null as unknown as AchievementMetric
   }
 
-  static isMetric(value: string): value is Metric {
+  static isMetric(value: string): value is AchievementMetricValue {
     new StringValidation(value, 'Achievement Metric')
       .oneOf([
         'unlockedStarsCount',

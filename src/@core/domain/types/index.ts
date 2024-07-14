@@ -1,1 +1,1 @@
-export type { LastUnlockedStarViewPortPosition } from './LastUnlockedStarViewPortPosition'
+export type { AchievementMetricValue } from './AchievementMetricValue'
