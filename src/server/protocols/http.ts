@@ -1,6 +1,7 @@
-import { IHttp, Cookie } from '@/@core/interfaces/handlers/IHttp'
+import { type NextRequest, NextResponse } from 'next/server'
+
+import type { IHttp, Cookie } from '@/@core/interfaces/handlers/IHttp'
 import { HttpResponse } from '@/@core/responses'
-import { NextRequest, NextResponse } from 'next/server'
 
 export const NextHttp = (request: NextRequest): IHttp => {
   let nextRedirectResponse: NextResponse<unknown>
@@ -40,7 +41,7 @@ export const NextHttp = (request: NextRequest): IHttp => {
         return new HttpResponse(nextRedirectResponse, statusCode)
       }
 
-      return new HttpResponse(NextResponse.json(data), statusCode)
+      return new HttpResponse(NextResponse.json(data, { status: statusCode }), statusCode)
     },
   }
 }
