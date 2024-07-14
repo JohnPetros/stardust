@@ -6,5 +6,5 @@ export type Cache<CacheData> = {
   isLoading: boolean
   isRefetching: boolean
   refetch: () => void
-  mutate: (newCacheData: CacheData, consig: MudateConfig) => void
+  mutate: (newCacheData: CacheData | null, consig: MudateConfig) => void
 }

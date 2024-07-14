@@ -2,11 +2,11 @@ import type { IClient } from '@/@core/interfaces/handlers'
 import { ENV } from '@/modules/global/constants'
 
 type CacheConfig = {
-  isCacheEnable: boolean
+  isCacheEnable?: boolean
   refetchInterval?: number
 }
 
-export const NextClient = ({ isCacheEnable }: CacheConfig): IClient => {
+export const NextClient = ({ isCacheEnable = true }: CacheConfig = {}): IClient => {
   const requestInit: RequestInit = {
     cache: isCacheEnable ? 'force-cache' : 'no-store',
   }
