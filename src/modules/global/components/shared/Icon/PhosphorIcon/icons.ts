@@ -16,6 +16,7 @@ import {
   Power,
   Rocket,
   Flag,
+  ArrowsDownUp,
 } from '@phosphor-icons/react'
 
 import type { IconName } from '../types/IconName'
@@ -25,6 +26,7 @@ export const ICONS: Record<IconName, Icon> = {
   'arrow-down': ArrowDown,
   'arrow-left': ArrowLeft,
   'arrow-right': ArrowRight,
+  'arrow-up-down': ArrowsDownUp,
   'eye-closed': EyeClosed,
   'stop-sign': Prohibit,
   'sign-out': Power,

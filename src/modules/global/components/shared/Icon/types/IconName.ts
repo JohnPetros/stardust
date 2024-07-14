@@ -3,6 +3,7 @@ export type IconName =
   | 'arrow-left'
   | 'arrow-right'
   | 'arrow-down'
+  | 'arrow-up-down'
   | 'check'
   | 'close'
   | 'enter'
