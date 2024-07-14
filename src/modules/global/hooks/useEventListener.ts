@@ -1,6 +1,12 @@
 import type { RefObject } from 'react'
 import { useEffect, useLayoutEffect, useRef } from 'react'
 
+declare global {
+  interface DocumentEventMap {
+    userChange: CustomEvent<{ media: any[] }>
+  }
+}
+
 function useEventListener<EventName extends keyof MediaQueryListEventMap>(
   eventName: EventName,
   handler: (event: MediaQueryListEventMap[EventName]) => void,

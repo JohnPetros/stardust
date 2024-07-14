@@ -1,4 +1,5 @@
-import { User } from '@/@core/domain/entities'
+import type { User } from '@/@core/domain/entities'
+import type { UserDTO } from '@/@core/dtos'
 
 import type { Session } from './Session'
 
@@ -9,6 +10,6 @@ export type AuthContextValue = {
   handleSignIn(email: string, password: string): Promise<boolean>
   handleSignUp(email: string, password: string, name: string): Promise<boolean>
   handleSignOut(): Promise<void>
-  updateUser(newUserData: Partial<User>): Promise<void>
-  mutateUserCache(newUserData: User): void
+  updateUser(newUser: User): Promise<void>
+  mutateUserCache(userData: UserDTO | null): void
 }

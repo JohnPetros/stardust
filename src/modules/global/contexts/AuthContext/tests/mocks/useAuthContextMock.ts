@@ -1,3 +1,4 @@
+import { UsersFaker } from '@/@core/domain/entities/tests/fakers'
 import { useAuthContext } from '../..'
 
 export function useAuthContextMock(
@@ -9,8 +10,10 @@ export function useAuthContextMock(
   const updateUserMock = jest.fn()
   const mutateUserCacheMock = jest.fn()
 
+  const fakeUser = UsersFaker.fake()
+
   jest.mocked(useAuthContext).mockReturnValue({
-    user: null,
+    user: fakeUser,
     isLoading: false,
     serverSession: null,
     handleSignIn: handleSignInMock,
@@ -22,6 +25,7 @@ export function useAuthContextMock(
   })
 
   return {
+    fakeUser,
     handleSignInMock,
     handleSignUpMock,
     handleSignOutMock,
