@@ -1,1 +1,2 @@
-export { AuthServiceMock } from './AuthServiceMock'
+export { AchievementsServiceMock } from './AchievementsServiceMock'
+export { UsersServiceMock } from './UsersServiceMock'
