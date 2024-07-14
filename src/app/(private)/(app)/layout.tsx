@@ -11,7 +11,7 @@ type AppProps = {
 }
 
 export default async function App({ children }: AppProps) {
-  const client = NextClient({ isCacheEnable: false })
+  const client = NextClient()
 
   const achievementsDTO = await client.get<AchievementDTO[]>(ROUTES.server.achievements)
 

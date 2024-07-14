@@ -16,7 +16,7 @@ type HomeLayoutProps = {
 }
 
 export function HomeLayout({ children }: HomeLayoutProps) {
-  const { isSidenavExpanded, handleMainContainerClick, toggleSidenav } = useHomeLayout()
+  const { isSidenavExpanded, handleContainerClick, toggleSidenav } = useHomeLayout()
 
   const { md: isMobile } = useBreakpoint()
 
@@ -27,7 +27,13 @@ export function HomeLayout({ children }: HomeLayoutProps) {
 
       {isMobile && <Sidebar />}
 
-      <AnimatedContainer>{children}</AnimatedContainer>
+      <AnimatedContainer
+        isSidenavExpanded={isSidenavExpanded}
+        isMobile={isMobile}
+        onClick={handleContainerClick}
+      >
+        {children}
+      </AnimatedContainer>
       <TabNav />
     </>
   )

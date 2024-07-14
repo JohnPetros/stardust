@@ -27,7 +27,9 @@ export function useHomeLayout() {
   useEffect(() => {
     shouldSkipHomeTransitionAnimation.set('true')
 
-    return shouldSkipHomeTransitionAnimation.remove
+    return () => {
+      shouldSkipHomeTransitionAnimation.remove()
+    }
   }, [shouldSkipHomeTransitionAnimation])
 
   return {
