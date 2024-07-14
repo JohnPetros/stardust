@@ -1,12 +1,12 @@
 import type { UserDTO } from '../../dtos/UserDTO'
 import { UserFactory } from '../../factories'
 import {
-  type AchievementMetric,
   type OrdinalNumber,
   type Email,
   type IdsCollection,
   type Name,
   type Slug,
+  type Observer,
   Integer,
 } from '../structs'
 import type { Avatar } from './Avatar'
@@ -33,6 +33,7 @@ type UserProps = {
   rescuableAchievementsIds: IdsCollection
   completedChallengesIds: IdsCollection
   completedPlanetsIds: IdsCollection
+  _observer?: Observer
 }
 
 export class User extends BaseEntity {
@@ -51,7 +52,7 @@ export class User extends BaseEntity {
     return this.props.unlockedAchievementsIds.includes(achievementId)
   }
 
-  hasRescuabledAchievement(achievementId: string) {
+  hasRescuableAchievement(achievementId: string) {
     return this.props.rescuableAchievementsIds.includes(achievementId)
   }
 
@@ -64,23 +65,34 @@ export class User extends BaseEntity {
   }
 
   unlockAchievement(achievementId: string) {
-    this.props.unlockedStarsIds.add(achievementId)
+    this.props.unlockedAchievementsIds.add(achievementId)
     this.props.rescuableAchievementsIds.add(achievementId)
+
+    this.notifyChanges()
   }
 
   rescueAchievement(achievementId: string, achievementReward: number) {
-    this.earnCoins(achievementReward)
+    this.props.rescuableAchievementsIds =
+      this.props.rescuableAchievementsIds.remove(achievementId)
 
-    return (this.props.rescuableAchievementsIds =
-      this.props.rescuableAchievementsIds.remove(achievementId))
+    this.earnCoins(achievementReward)
   }
 
   earnCoins(newCoins: number) {
     this.props.coins = this.props.coins.increment(newCoins)
+    this.notifyChanges()
   }
 
-  getAchievementCount(metric: AchievementMetric) {
-    return this[metric.value]
+  getAchievementCount(metric: AchievementMetricValue) {
+    return this[metric]
+  }
+
+  private notifyChanges() {
+    if (this.props._observer) this.props._observer.callback()
+  }
+
+  set observer(observer: Observer) {
+    this.props._observer = observer
   }
 
   get unlockedStarsCount() {

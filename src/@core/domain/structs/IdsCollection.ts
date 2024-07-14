@@ -1,4 +1,3 @@
-import { ArrayValidation } from '@/@core/lib/validation'
 import { BaseStruct } from '../abstracts'
 
 type IdsCollectionProps = {
