@@ -1,1 +1,1 @@
-export { GetNewUnlockedAchievementsUseCase } from './GetNewUnlockedAchievementsUseCase'
+export { ObserveNewUnlockedAchievementsUseCase } from './ObserveNewUnlockedAchievementsUseCase'

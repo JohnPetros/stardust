@@ -1,12 +1,16 @@
-import { _getSpacePageData } from '@/modules/app/actions/_getSpacePageData'
+import type { PlanetDTO } from '@/@core/dtos'
 import { SpacePage } from '@/modules/app/components/pages/Space'
 import { SpaceProvider } from '@/modules/app/contexts/SpaceContext'
+import { ROUTES } from '@/modules/global/constants'
+import { NextClient } from '@/server/client'
 
 export default async function Space() {
-  const { planetsDTO, userUnlockedStarsIds } = await _getSpacePageData()
+  const client = NextClient({ isCacheEnable: true })
+
+  const planetsDTO = await client.get<PlanetDTO[]>(ROUTES.server.planets)
 
   return (
-    <SpaceProvider planetsDTO={planetsDTO} userUnlockedStarsIds={userUnlockedStarsIds}>
+    <SpaceProvider planetsDTO={planetsDTO}>
       <SpacePage />
     </SpaceProvider>
   )

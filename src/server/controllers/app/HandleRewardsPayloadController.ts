@@ -1,5 +1,5 @@
 import { _hasCookie } from '@/modules/global/actions'
-import { IController, IHttp } from '@/@core/interfaces/handlers'
+import type { IController, IHttp } from '@/@core/interfaces/handlers'
 import { COOKIES, ROUTES } from '@/modules/global/constants'
 import { HttpResponse } from '@/@core/responses'
 
