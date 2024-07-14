@@ -1,5 +1,5 @@
 import { StringValidation } from '@/@core/lib/validation'
-import { BaseStruct } from '../abstracts'
+import { BaseStruct } from '../abstracts/BaseStruct'
 import { Name } from './Name'
 
 type SlugProps = {
