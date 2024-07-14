@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react'
 
+import { STORAGE } from '@/modules/global/constants'
 import { useLocalStorage } from '@/modules/global/hooks/useLocalStorage'
 import { useSiderbarContext } from '@/modules/app/contexts/SidebarContext'
-import { STORAGE } from '@/global/constants'
 
 export function useHomeLayout() {
   const [isSidenavExpanded, setIsSidenavExpanded] = useState(false)
@@ -19,7 +19,7 @@ export function useHomeLayout() {
     setIsSidenavExpanded(!isSidenavExpanded)
   }
 
-  function handleMainContainerClick() {
+  function handleContainerClick() {
     if (isOpen) toggle()
     if (isAchievementsListVisible) setIsAchievementsListVisible(false)
   }
@@ -33,6 +33,6 @@ export function useHomeLayout() {
   return {
     isSidenavExpanded,
     toggleSidenav,
-    handleMainContainerClick,
+    handleContainerClick,
   }
 }

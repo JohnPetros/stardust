@@ -46,9 +46,9 @@ export function ChallengeInfo({
         label={totalCompletitions}
         tooltipText={'Número de usuários que concluiram esse desafio.'}
       />
-      <Link href={`/profile/${userSlug}`}>
+      {/* <Link href={`/profile/${userSlug}`}>
         <Info icon={User} label={userName} tooltipText={'Criador desse desafio.'} />
-      </Link>
+      </Link> */}
     </ul>
   )
 }

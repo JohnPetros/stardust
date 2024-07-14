@@ -1,20 +1,19 @@
 'use client'
+
 import * as Avatar from '@radix-ui/react-avatar'
 import Image from 'next/image'
 
-import { useUserAvatar } from './useUserAvatar'
-
-import { useApi } from '@/services/api'
+import { useApi } from '@/infra/api'
 
 type UserAvatarProps = {
-  avatarId: string
+  avatarUrl: string
+  avatarName: string
   size: number
 }
 
-export function UserAvatar({ avatarId, size }: UserAvatarProps) {
-  const avatar = useUserAvatar(avatarId)
-  const { getImage } = useApi()
-  const avatarImage = avatar ? getImage('avatars', avatar.image) : ''
+export function UserAvatar({ avatarName, avatarUrl, size }: UserAvatarProps) {
+  const api = useApi()
+  const avatarImage = api.fetchImage('avatars', avatarUrl)
 
   return (
     <div
@@ -26,7 +25,7 @@ export function UserAvatar({ avatarId, size }: UserAvatarProps) {
           <Image
             src={avatarImage}
             fill
-            alt={avatar?.name ?? ''}
+            alt={avatarName}
             className='skeleton'
             onLoadingComplete={(image) => image.classList.remove('skeleton')}
           />

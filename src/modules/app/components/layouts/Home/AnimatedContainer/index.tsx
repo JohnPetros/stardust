@@ -2,6 +2,7 @@
 
 import type { ReactNode } from 'react'
 import { motion, type Variants } from 'framer-motion'
+import { useBreakpoint } from '@/modules/global/hooks'
 
 const variants: Variants = {
   hidden: {
@@ -17,15 +18,24 @@ const variants: Variants = {
 
 type AnimatedContainerProps = {
   children: ReactNode
+  isSidenavExpanded: boolean
+  isMobile: boolean
+  onClick: VoidFunction
 }
 
-export function AnimatedContainer({ children }: AnimatedContainerProps) {
+export function AnimatedContainer({
+  children,
+  isSidenavExpanded,
+  isMobile,
+  onClick,
+}: AnimatedContainerProps) {
   return (
     <motion.main
       variants={variants}
-      initial='hidden'
-      animate='visible'
-      className='fixed top-0 z-40 flex h-16 w-screen justify-between border-b border-gray-700 bg-gray-900 px-6 py-3 md:justify-end'
+      initial='shrink'
+      animate={isSidenavExpanded ? 'expand' : isMobile ? 'mobile' : 'shrink'}
+      className='h-full pt-16'
+      onClick={onClick}
     >
       {children}
     </motion.main>

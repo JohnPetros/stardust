@@ -4,14 +4,15 @@ import { motion, type Variants } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
 
 const variants: Variants = {
-  mobile: {
-    paddingLeft: 0,
-  },
   shrink: {
-    paddingLeft: 80,
+    width: 0,
   },
   expand: {
-    paddingLeft: 160,
+    width: 'auto',
+    paddingLeft: '8px',
+    transition: {
+      delay: 0.05,
+    },
   },
 }
 
