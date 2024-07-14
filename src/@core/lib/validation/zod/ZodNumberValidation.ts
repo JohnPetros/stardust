@@ -12,22 +12,21 @@ export class ZodNumberValidation implements INumberValidation {
     this.data = data
     this.key = key
     this.zodNumber = z.number({
-      required_error: message ?? `valor de ${key} deve ser um número`,
+      required_error: message ?? `${key} value must be a number`,
     })
   }
 
   min(minValue: number, message?: string) {
     this.zodNumber = this.zodNumber.min(minValue, {
       message:
-        message ?? `valor de ${this.key} deve conter pelo menos ${minValue} dígitos`,
+        message ?? `${this.key} value must be greater than or equal to ${minValue}`,
     })
     return this
   }
 
   max(maxValue: number, message?: string) {
     this.zodNumber = this.zodNumber.min(maxValue, {
-      message:
-        message ?? `valor de ${this.key} deve conter no máximo ${maxValue} dígitos`,
+      message: message ?? `${this.key} value must lower than or equal to ${maxValue}`,
     })
     return this
   }
