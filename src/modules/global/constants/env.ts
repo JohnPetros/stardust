@@ -1,18 +1,18 @@
-import { AppError } from '@/@core/errors/global/AppError'
+import { StringValidation } from '@/@core/lib/validation'
 
 const ENV = {
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
   supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
-  siteURl: process?.env?.NEXT_PUBLIC_SITE_URL,
-  cdnURl: process?.env?.NEXT_PUBLIC_CDN_URL,
+  cdnUrl: process.env.NEXT_PUBLIC_CDN_URL,
   url:
     process?.env?.NEXT_PUBLIC_SITE_URL ??
     process?.env?.NEXT_PUBLIC_VERCEL_URL ??
     'http://localhost:3000',
 }
 
-if (!ENV.supabaseUrl || !ENV.supabaseKey) {
-  throw new AppError('Enviroment variables must be provided')
-}
+new StringValidation(ENV.supabaseUrl, 'Supabase Url').validate()
+new StringValidation(ENV.supabaseKey, 'Supabase Key').validate()
+new StringValidation(ENV.cdnUrl, 'CDN Url').url().validate()
+new StringValidation(ENV.cdnUrl, 'App Url').url().validate()
 
 export { ENV }

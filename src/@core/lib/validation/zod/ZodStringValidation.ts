@@ -41,7 +41,7 @@ export class ZodStringValidation implements IStringValidation {
   }
 
   url(message?: string) {
-    this.zodString = this.zodString.email(
+    this.zodString = this.zodString.url(
       message ?? `${this.key} value must be a valid url`
     )
     return this
