@@ -1,15 +1,9 @@
 import { StringValidation } from '@/@core/lib/validation'
-import { BaseStruct } from '../abstracts'
 
-type EmailProps = {
-  value: string
-}
-
-export class Email extends BaseStruct<EmailProps> {
+export class Email {
   readonly value: string
 
   private constructor(value: string) {
-    super({ value })
     this.value = value
   }
 

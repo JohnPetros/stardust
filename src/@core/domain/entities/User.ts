@@ -96,13 +96,13 @@ export class User extends BaseEntity {
   }
 
   get unlockedStarsCount() {
-    return Integer.create('unlocked stars', this.props.unlockedStarsIds.value.length)
+    return Integer.create('unlocked stars', this.props.unlockedStarsIds.value.length - 1)
   }
 
   get acquiredRocketsCount() {
     return Integer.create(
       'acquired rockets count',
-      this.props.acquiredRocketsIds.value.length
+      this.props.acquiredRocketsIds.value.length - 1
     )
   }
 

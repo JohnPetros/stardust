@@ -1,25 +1,19 @@
 import { NumberValidation } from '@/@core/lib/validation'
-import { BaseStruct } from '../abstracts'
 
-type IntegerProps = {
-  value: number
-}
-
-export class Integer extends BaseStruct<IntegerProps> {
+export class Integer {
   readonly value: number
 
-  private constructor(props: IntegerProps) {
-    super(props)
-    this.value = props.value
+  private constructor(value: number) {
+    this.value = value
   }
 
   static create(key: string, value: number) {
     new NumberValidation(value, key)
 
-    return new Integer({ value })
+    return new Integer(value)
   }
 
   increment(value: number) {
-    return new Integer({ ...this.props, value: this.value + value })
+    return new Integer(this.value + value)
   }
 }

@@ -56,7 +56,7 @@ export function AchievementCard({
         )}
       </div>
       <div className='flex flex-col gap-1'>
-        <strong className='text-sm text-gray-100'>{name}</strong>
+        <strong className='text-sm text-gray-100 font-semibold'>{name}</strong>
         {isRescuable ? (
           <RewardAlertDialog
             achivementName={name}

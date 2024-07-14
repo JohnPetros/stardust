@@ -1,16 +1,16 @@
 import type { AchievementDTO } from '@/@core/dtos'
 import { BaseEntity } from '../abstracts/BaseEntity'
-import { AchievementMetric, Integer, Name } from '../structs'
+import { AchievementMetric, Image, Integer, Name, OrdinalNumber } from '../structs'
 
 type AchievementProps = {
   id?: string
   name: Name
-  icon: string
+  icon: Image
   description: string
   reward: Integer
   metric: AchievementMetric
   requiredCount: Integer
-  position: number
+  position: OrdinalNumber
 }
 
 export class Achievement extends BaseEntity {
@@ -27,24 +27,11 @@ export class Achievement extends BaseEntity {
       metric: AchievementMetric.create(dto.metric),
       requiredCount: Integer.create('Achievement Required Count', dto.requiredCount),
       reward: Integer.create('Achievement Reward', dto.reward),
-      icon: dto.icon,
-      position: dto.position,
+      position: OrdinalNumber.create('Achievement Position', dto.position),
+      icon: Image.create(dto.icon),
       description: dto.description,
       id: dto?.id,
     })
-  }
-
-  get dto(): AchievementDTO {
-    return {
-      id: this.id,
-      name: this.name.value,
-      icon: this.icon,
-      reward: this.reward.value,
-      requiredCount: this.requiredCount.value,
-      position: this.position,
-      description: this.description,
-      metric: String(this.metric.value),
-    }
   }
 
   get metric() {
@@ -73,5 +60,18 @@ export class Achievement extends BaseEntity {
 
   get position() {
     return this.props.position
+  }
+
+  get dto(): AchievementDTO {
+    return {
+      id: this.id,
+      name: this.name.value,
+      icon: this.icon.value,
+      reward: this.reward.value,
+      requiredCount: this.requiredCount.value,
+      position: this.position.value,
+      description: this.description,
+      metric: String(this.metric.value),
+    }
   }
 }

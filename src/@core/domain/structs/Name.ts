@@ -24,4 +24,10 @@ export class Name extends BaseStruct<NameProps> {
 
     return Name.create(newValue)
   }
+
+  isLike(value: string) {
+    const currentValue = this.removeAccentuation().value.trim().toLowerCase()
+
+    return currentValue.includes(value.trim().toLowerCase())
+  }
 }

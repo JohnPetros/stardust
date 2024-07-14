@@ -1,23 +1,19 @@
-import { BaseStruct } from '../abstracts'
-import type { Integer } from './Integer'
+import { Integer } from './Integer'
 
-type AchievementProgressProps = {
-  userCount: Integer
-  requiredCount: Integer
-}
-
-export class AchievementProgress extends BaseStruct<AchievementProgressProps> {
+export class AchievementProgress {
   readonly userCount: Integer
   readonly requiredCount: Integer
 
-  private constructor(props: AchievementProgressProps) {
-    super(props)
-    this.userCount = props.userCount
-    this.requiredCount = props.requiredCount
+  private constructor(userCount: Integer, requiredCount: Integer) {
+    this.userCount = userCount
+    this.requiredCount = requiredCount
   }
 
-  static create(props: AchievementProgressProps): AchievementProgress {
-    return new AchievementProgress(props)
+  static create(userCountValue: number, requiredCountValue: number): AchievementProgress {
+    return new AchievementProgress(
+      Integer.create('User count value', userCountValue),
+      Integer.create('Achievement required count value', requiredCountValue)
+    )
   }
 
   get percentageProgress() {

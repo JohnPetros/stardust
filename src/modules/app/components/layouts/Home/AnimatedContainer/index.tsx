@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react'
 import { motion, type Variants } from 'framer-motion'
 import { useBreakpoint } from '@/modules/global/hooks'
+import { useSiderbarContext } from '@/modules/app/contexts/SidebarContext'
 
 const variants: Variants = {
   hidden: {

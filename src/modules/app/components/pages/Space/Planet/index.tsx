@@ -26,8 +26,6 @@ function PlanetComponent({ name, image, icon, stars }: PlanetProps) {
   const planetImage = api.fetchImage('planets', image)
   const planetIconImage = api.fetchImage('planets', icon)
 
-  console.log({ lastUnlockedStarId })
-
   return (
     <li>
       <div className='flex items-center gap-3'>

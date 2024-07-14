@@ -12,8 +12,7 @@ import { Icon } from '@/modules/global/components/shared/Icon'
 
 export function Header() {
   const { user } = useAuthContext()
-  const { toggle, isOpen } = useSiderbarContext()
-  // const { rescueableAchievementsCount } = useAchivementsContext()
+  const { isOpen, toggle } = useSiderbarContext()
 
   if (user)
     return (
@@ -55,7 +54,7 @@ export function Header() {
               <small>{user.email.value}</small>
             </div>
             <UserAvatar
-              avatarUrl={user.avatar.image}
+              avatarUrl={user.avatar.image.value}
               avatarName={user.avatar.name.value}
               size={48}
             />

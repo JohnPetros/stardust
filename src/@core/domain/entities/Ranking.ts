@@ -19,7 +19,6 @@ export class Ranking extends BaseEntity {
   }
 
   static create(dto: RankingDTO): Ranking {
-    console.log('dto.image', dto.image)
     return new Ranking({
       name: Name.create(dto.name),
       position: OrdinalNumber.create('ranking position', dto.position),

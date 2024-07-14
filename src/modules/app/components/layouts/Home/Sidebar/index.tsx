@@ -22,7 +22,11 @@ export function Sidebar() {
 
           {user && (
             <div className='flex flex-col items-center justify-center gap-3 text-gray-100'>
-              <UserAvatar avatarId={user.avatar.id} size={96} />
+              <UserAvatar
+                avatarUrl={user.avatar.image.value}
+                avatarName={user.avatar.name.value}
+                size={96}
+              />
               <strong>{user.name.value}</strong>
               <small className='text-sm'>{user.email.value}</small>
               <SignOutAlertDialog>

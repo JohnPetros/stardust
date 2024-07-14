@@ -1,3 +1,5 @@
+'use server'
+
 import type { AchievementDTO, UserDTO } from '@/@core/dtos'
 import { ObserveNewUnlockedAchievementsUseCase } from '@/@core/use-cases/achievements'
 import { SupabaseServerActionClient } from '@/infra/api/supabase/clients/SupabaseServerActionClient'

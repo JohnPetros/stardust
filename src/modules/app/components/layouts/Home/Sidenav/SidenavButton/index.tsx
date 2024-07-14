@@ -35,7 +35,7 @@ export function SidenavButton({
           isActive ? 'bg-green-500/30' : ''
         )}
       >
-        <Icon name={icon} className='text-lg text-green-400' />
+        <Icon name={icon} size={18} className='text-green-400' />
 
         <AnimatedTitle isExpanded={isExpanded}>{title}</AnimatedTitle>
 

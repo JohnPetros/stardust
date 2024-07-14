@@ -9,10 +9,11 @@ import { NavLink } from '../NavLink'
 import { useAuthContext } from '@/modules/global/contexts/AuthContext'
 import { useSiderbarContext } from '@/modules/app/contexts/SidebarContext'
 import { HOME_LINKS } from '../home-links'
-// import { AnimatedAchievementsList } from './AnimatedAchievementsList'
 import { SidenavButton } from './SidenavButton'
 import { CountBadge } from '@/modules/global/components/shared/CountBadge'
 import { Icon } from '@/modules/global/components/shared/Icon'
+import { AnimatedAchievementsList } from './AnimatedAchievementsList'
+import { AchievementsList } from '../AchievementsList'
 
 type SidenavProps = {
   isExpanded: boolean
@@ -83,11 +84,11 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
           </nav>
         </div>
 
-        {/* <AnimatedAchievementsList isAchievementsListVisible={isAchievementsListVisible}>
+        <AnimatedAchievementsList isAchievementsListVisible={isAchievementsListVisible}>
           <AchievementsList />
-        </AnimatedAchievementsList> */}
+        </AnimatedAchievementsList>
 
-        <div className='mx-3 flex flex-col items-start gap-1 border-t border-green-700 px-3 py-3'>
+        <div className='mx-3 flex flex-col items-start border-t border-green-700 px-3 py-3'>
           {user && (
             <SidenavButton
               icon='achievement'

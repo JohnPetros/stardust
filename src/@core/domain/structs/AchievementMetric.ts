@@ -1,17 +1,9 @@
 import { StringValidation } from '@/@core/lib/validation'
 
-import { BaseStruct } from '../abstracts'
-
-type AchievementMetricProps = {
-  value: string
-}
-
-export class AchievementMetric extends BaseStruct<AchievementMetricProps> {
+export class AchievementMetric {
   readonly value: AchievementMetricValue
 
   private constructor(value: AchievementMetricValue) {
-    super({ value: String(value) })
-
     this.value = value
   }
 

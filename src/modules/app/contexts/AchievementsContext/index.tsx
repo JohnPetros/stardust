@@ -38,7 +38,7 @@ export function AchivementsProvider({
   return (
     <AchivementsContext.Provider
       value={{
-        achievements: achievementsDTO.map(Achievement.create),
+        achievementsDTO,
         newUnlockedAchievements,
         rescueAchivement,
       }}
