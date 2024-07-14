@@ -1,9 +1,10 @@
 import type { RefObject } from 'react'
 import type { LastUnlockedStarViewPortPosition } from './LastUnlockedStarViewPortPosition'
-import type { Space } from '@/@core/domain/structs'
+import type { Planet } from '@/@core/domain/entities'
 
 export type SpaceContextValue = {
-  space: Space
+  planets: Planet[]
+  lastUnlockedStarId: string | null
   lastUnlockedStarRef: RefObject<HTMLLIElement>
   lastUnlockedStarPosition: LastUnlockedStarViewPortPosition
   scrollIntoLastUnlockedStar: () => void

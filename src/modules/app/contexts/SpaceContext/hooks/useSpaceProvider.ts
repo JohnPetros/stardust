@@ -2,11 +2,17 @@
 
 import { useMemo, useRef, useState } from 'react'
 
-import type { LastUnlockedStarViewPortPosition } from '../types'
-import type { Space } from '@/@core/domain/structs'
-import { useScrollEvent } from '@/modules/global/hooks'
+import { Planet } from '@/@core/domain/entities'
+import type { PlanetDTO } from '@/@core/dtos'
 
-export function useSpaceProvider(space: Space) {
+import { useScrollEvent } from '@/modules/global/hooks'
+import type { LastUnlockedStarViewPortPosition } from '../types'
+import { useAuthContext } from '@/modules/global/contexts/AuthContext'
+import { GetLastUnlockedStarIdUseCase } from '@/@core/use-cases/planets'
+
+export function useSpaceProvider(planetsDTO: PlanetDTO[]) {
+  const { user } = useAuthContext()
+
   const [lastUnlockedStarPosition, setLastUnlockedStarPosition] =
     useState<LastUnlockedStarViewPortPosition>('above')
   const lastUnlockedStarRef = useRef<HTMLLIElement>(null)
@@ -45,16 +51,24 @@ export function useSpaceProvider(space: Space) {
 
   useScrollEvent(handleScroll)
 
-  const spaceContextValue = useMemo(
-    () => ({
-      space,
+  const spaceContextValue = useMemo(() => {
+    const getLastUnlockedStarIdUseCase = new GetLastUnlockedStarIdUseCase()
+    const lastUnlockedStarId = user
+      ? getLastUnlockedStarIdUseCase.do({
+          planetsDTO,
+          userDTO: user?.dto,
+        })
+      : null
+
+    return {
+      planets: planetsDTO.map(Planet.create),
+      lastUnlockedStarId,
       lastUnlockedStarRef,
       lastUnlockedStarPosition,
       scrollIntoLastUnlockedStar,
       setLastUnlockedStarPosition,
-    }),
-    [lastUnlockedStarRef, lastUnlockedStarPosition]
-  )
+    }
+  }, [user, planetsDTO, lastUnlockedStarPosition])
 
   return spaceContextValue
 }
