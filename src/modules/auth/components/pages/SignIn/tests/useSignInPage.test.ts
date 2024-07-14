@@ -60,9 +60,7 @@ describe('useSignInPage hook', () => {
 
     expect(result.current.isRocketVisible).toBe(false)
 
-    await act(async () => {
-      await result.current.handleFormSubmit({ email: fakeEmail, password: fakePassword })
-    })
+    await result.current.handleFormSubmit({ email: fakeEmail, password: fakePassword })
 
     await waitFor(() => {
       expect(result.current.isRocketVisible).toBe(true)
@@ -95,7 +93,7 @@ describe('useSignInPage hook', () => {
     expect(result.current.isRocketVisible).toBe(false)
 
     await waitFor(() => {
-      expect(showMock).toHaveBeenCalledWith(fakeErrorMessage, expect.anything())
+      expect(showMock).toHaveBeenCalledWith('Fake Error Message', expect.anything())
     })
   })
 })
