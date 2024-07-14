@@ -31,6 +31,8 @@ export const ROUTES = {
       confirmEmail: '/server/auth/confirm-email',
       confirmPasswordReset: '/server/auth/confirm-password-reset',
     },
+    achievements: '/server/achievements',
+    planets: '/server/planets',
     email: '/server/email',
     mdx: '/server/mdx',
   },
