@@ -3,26 +3,30 @@
 import { memo } from 'react'
 import Image from 'next/image'
 
+import type { Star as StarEntity } from '@/@core/domain/entities'
+
 import { useApi } from '@/infra/api'
-import { AnimatedSign } from './AnimatedSign'
 import { useSpaceContext } from '@/modules/app/contexts/SpaceContext'
+import { useAuthContext } from '@/modules/global/contexts/AuthContext'
+import { AnimatedSign } from './AnimatedSign'
 import { Star } from './Star'
 
 type PlanetProps = {
-  id: string
   name: string
   image: string
   icon: string
+  stars: StarEntity[]
 }
 
-function PlanetComponent({ id, name, image, icon }: PlanetProps) {
-  const { space } = useSpaceContext()
+function PlanetComponent({ name, image, icon, stars }: PlanetProps) {
+  const { lastUnlockedStarId } = useSpaceContext()
+  const { user } = useAuthContext()
   const api = useApi()
 
   const planetImage = api.fetchImage('planets', image)
-  const planetIcon = api.fetchImage('planets', icon)
+  const planetIconImage = api.fetchImage('planets', icon)
 
-  const unLockableStars = space.getUnlockableStarsByPlanet(id)
+  console.log({ lastUnlockedStarId })
 
   return (
     <li>
@@ -30,25 +34,28 @@ function PlanetComponent({ id, name, image, icon }: PlanetProps) {
         <Image src={planetImage} width={100} height={100} alt={name} />
 
         <AnimatedSign>
-          <Image src={planetIcon} width={32} height={32} alt='' />
+          <Image src={planetIconImage} width={32} height={32} alt='' />
           <strong className='font-semibold text-zinc-100'>{name}</strong>
         </AnimatedSign>
       </div>
 
-      <ul className='pl-[2.2rem]'>
-        {unLockableStars.map(({ item: star, isUnlocked }) => (
-          <Star
-            key={star.id}
-            id={star.id}
-            name={star.name.value}
-            number={star.number}
-            slug={star.slug.value}
-            isChallenge={star.isChallenge}
-            isUnlocked={isUnlocked}
-            isLastUnlockedStar={space.lastUnlockedStarId === star.id}
-          />
-        ))}
-      </ul>
+      {user && lastUnlockedStarId && (
+        <ul className='pl-[2.2rem]'>
+          {stars.map((star) => (
+            <li key={star.id}>
+              <Star
+                id={star.id}
+                name={star.name.value}
+                number={star.number.value}
+                slug={star.slug.value}
+                isChallenge={star.isChallenge.true}
+                isLastUnlockedStar={lastUnlockedStarId === star.id}
+                isUnlocked={user.hasUnlockedStar(star.id)}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
     </li>
   )
 }
