@@ -35,26 +35,19 @@ export const SupabaseRocketsService = (supabase: Supabase): IRocketsSerivice => 
       search,
       offset,
       limit,
-      priceOrder,
-      shouldFetchUnlocked = null,
-      userId,
+      order,
     }: ShopItemsListingSettings) {
-      const canSearch = search.length > 1
-
       let query = supabase.from('rockets').select('*', {
         count: 'exact',
         head: false,
       })
 
-      if (shouldFetchUnlocked !== null && shouldFetchUnlocked) {
-        query = query.eq('users_acquired_rockets.user_id', userId)
-      } else if (shouldFetchUnlocked !== null && !shouldFetchUnlocked) {
-        query = query.neq('users_acquired_rockets.user_id', userId)
+      if (search && search.length > 1) {
+        query = query.ilike('name', `%${search}%`)
       }
 
       query = query
-        .order('price', { ascending: priceOrder === 'ascending' })
-        .ilike(canSearch ? 'name' : '', canSearch ? `%${search}%` : '')
+        .order('price', { ascending: order === 'ascending' })
         .range(offset, limit)
 
       const { data, count, error } = await query
@@ -70,7 +63,7 @@ export const SupabaseRocketsService = (supabase: Supabase): IRocketsSerivice => 
       return new ServiceResponse(pagination)
     },
 
-    async saveAcquiredRocket(userId: string, rocketId: string) {
+    async saveAcquiredRocket(rocketId: string, userId: string) {
       const { error } = await supabase
         .from('users_acquired_rockets')
         .insert([{ rocket_id: rocketId, user_id: userId }])

@@ -11,7 +11,6 @@ export const SupabaseRocketMapper = () => {
         name: supabaseRocket.name ?? '',
         price: supabaseRocket.price ?? 0,
         image: supabaseRocket.image ?? '',
-        slug: supabaseRocket.slug ?? '',
       }
 
       return rocketDTO
@@ -23,7 +22,7 @@ export const SupabaseRocketMapper = () => {
       const supabaseRocket: SupabaseRocket = {
         id: rocket.id,
         name: rocketDTO.name,
-        slug: rocketDTO.slug,
+        slug: '',
         price: rocketDTO.price,
         image: rocketDTO.image,
       }

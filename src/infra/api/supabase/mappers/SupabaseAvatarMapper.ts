@@ -4,7 +4,7 @@ import type { Avatar } from '@/@core/domain/entities'
 
 export const SupabaseAvatarMapper = () => {
   return {
-    toAvatar(supabaseAvatar: SupabaseAvatar): AvatarDTO {
+    toDTO(supabaseAvatar: SupabaseAvatar): AvatarDTO {
       const avatarDTO: AvatarDTO = {
         id: supabaseAvatar.id,
         name: supabaseAvatar.name,

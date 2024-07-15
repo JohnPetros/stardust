@@ -26,7 +26,7 @@ export const SupabaseAvatarsService = (supabase: Supabase): IAvatarsService => {
         return SupabasePostgrestError(error, AvatarNotFoundError)
       }
 
-      const avatar = supabaseAvatarMapper.toAvatar(data)
+      const avatar = supabaseAvatarMapper.toDTO(data)
 
       return new ServiceResponse(avatar)
     },
@@ -35,22 +35,28 @@ export const SupabaseAvatarsService = (supabase: Supabase): IAvatarsService => {
       search,
       offset,
       limit,
-      priceOrder,
+      order,
     }: ShopItemsListingSettings) {
-      const canSearch = search.length > 1
+      let query = supabase.from('avatars').select('*', {
+        count: 'exact',
+        head: false,
+      })
 
-      const { data, count, error } = await supabase
-        .from('avatars')
-        .select('*', { count: 'exact', head: false })
-        .order('price', { ascending: priceOrder === 'ascending' })
-        .ilike(canSearch ? 'name' : '', canSearch ? `%${search}%` : '')
+      if (search && search.length > 1) {
+        query = query.ilike('name', `%${search}%`)
+      }
+
+      query = query
+        .order('price', { ascending: order === 'ascending' })
         .range(offset, limit)
+
+      const { data, count, error } = await query
 
       if (error) {
         return SupabasePostgrestError(error, FetchShopAvatarsListUnexpectedError)
       }
 
-      const avatars = data.map(supabaseAvatarMapper.toAvatar)
+      const avatars = data.map(supabaseAvatarMapper.toDTO)
 
       const pagination = new PaginationResponse(avatars, count)
 
