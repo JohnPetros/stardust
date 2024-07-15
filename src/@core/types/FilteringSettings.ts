@@ -1,5 +1,5 @@
 export type FilteringSettings = {
-  search: string
+  search?: string
   offset: number
   limit: number
 }

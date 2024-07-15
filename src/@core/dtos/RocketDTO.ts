@@ -3,5 +3,4 @@ export type RocketDTO = {
   image: string
   name: string
   price: number
-  slug: string
 }

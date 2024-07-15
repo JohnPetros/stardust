@@ -7,5 +7,5 @@ export interface IRocketsSerivice {
   fetchShopRocketsList(
     ListingSettings: ShopItemsListingSettings
   ): Promise<ServiceResponse<PaginationResponse<RocketDTO>>>
-  saveAcquiredRocket(userId: string, rocketId: string): Promise<ServiceResponse<boolean>>
+  saveAcquiredRocket(rocketId: string, userId: string): Promise<ServiceResponse<boolean>>
 }

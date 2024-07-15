@@ -33,6 +33,7 @@ export const ROUTES = {
     },
     achievements: '/server/achievements',
     planets: '/server/planets',
+    shop: '/server/shop',
     email: '/server/email',
     mdx: '/server/mdx',
   },
