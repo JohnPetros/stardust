@@ -1,16 +1,10 @@
 import { StringValidation } from '@/@core/lib/validation'
-import { BaseStruct } from '../abstracts/BaseStruct'
 import { Name } from './Name'
 
-type SlugProps = {
-  value: string
-}
-
-export class Slug extends BaseStruct<SlugProps> {
+export class Slug {
   readonly value: string
 
   private constructor(value: string) {
-    super({ value })
     this.value = value
   }
 

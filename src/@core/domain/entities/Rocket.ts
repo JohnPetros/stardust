@@ -5,7 +5,6 @@ import { Integer, Name, Slug } from '../structs'
 type RocketProps = {
   id?: string
   name: Name
-  slug: Slug
   price: Integer
   image: string
 }
@@ -22,7 +21,6 @@ export class Rocket extends BaseEntity {
     return new Rocket({
       id: dto.id,
       name: Name.create(dto.name),
-      slug: Slug.create(dto.slug),
       price: Integer.create('price', dto.price),
       image: dto.image,
     })
@@ -36,10 +34,6 @@ export class Rocket extends BaseEntity {
     return this.props.image
   }
 
-  get slug() {
-    return this.props.slug
-  }
-
   get price() {
     return this.props.price
   }
@@ -48,7 +42,6 @@ export class Rocket extends BaseEntity {
     return {
       id: this.id,
       name: this.name.value,
-      slug: this.slug.value,
       price: this.price.value,
       image: this.image,
     }

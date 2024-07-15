@@ -8,6 +8,7 @@ import {
   type Slug,
   type Observer,
   Integer,
+  Logical,
 } from '../structs'
 import type { Avatar } from './Avatar'
 import type { Ranking } from './Ranking'
@@ -64,6 +65,14 @@ export class User extends BaseEntity {
     return this.props.completedChallengesIds.includes(challengeId)
   }
 
+  hasAcquiredRocket(rocketId: string) {
+    return this.props.acquiredRocketsIds.includes(rocketId)
+  }
+
+  isSelectRocket(rocketId: string) {
+    return rocketId === this.rocket.id
+  }
+
   unlockAchievement(achievementId: string) {
     this.props.unlockedAchievementsIds.add(achievementId)
     this.props.rescuableAchievementsIds.add(achievementId)
@@ -83,12 +92,39 @@ export class User extends BaseEntity {
     this.notifyChanges()
   }
 
+  loseCoins(coins: number) {
+    this.props.coins = this.props.coins.dencrement(coins)
+  }
+
+  canBuy(coins: number) {
+    return this.props.coins.value >= coins
+  }
+
+  buyRocket(rocket: Rocket) {
+    if (this.hasAcquiredRocket(rocket.id)) {
+      this.selectRocket(rocket)
+      this.notifyChanges()
+      return
+    }
+
+    if (this.canBuy(rocket.price.value)) {
+      this.loseCoins(rocket.price.value)
+      this.selectRocket(rocket)
+      this.props.acquiredRocketsIds.add(rocket.id)
+      this.notifyChanges()
+    }
+  }
+
   getAchievementCount(metric: AchievementMetricValue) {
     return this[metric]
   }
 
   private notifyChanges() {
     if (this.props._observer) this.props._observer.callback()
+  }
+
+  selectRocket(rocket: Rocket) {
+    this.props.rocket = rocket
   }
 
   set observer(observer: Observer) {

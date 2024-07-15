@@ -16,4 +16,8 @@ export class Integer {
   increment(value: number) {
     return new Integer(this.value + value)
   }
+
+  dencrement(value: number) {
+    return new Integer(this.value - value)
+  }
 }

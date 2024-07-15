@@ -1,17 +1,15 @@
 import { NumberValidation } from '@/@core/lib/validation'
-import { BaseStruct } from '../abstracts'
 
 type OrdinalNumberProps = {
   key: string
   value: number
 }
 
-export class OrdinalNumber extends BaseStruct<OrdinalNumberProps> {
+export class OrdinalNumber {
   readonly key: string
   readonly value: number
 
   private constructor(props: OrdinalNumberProps) {
-    super(props)
     this.key = props.key
     this.value = props.value
   }

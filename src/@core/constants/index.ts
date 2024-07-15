@@ -1,1 +1,1 @@
-export { AUTH_ACTIONS } from './auth-actions'
+export { PAGINATION } from './pagination'
