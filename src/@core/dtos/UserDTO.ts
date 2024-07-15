@@ -17,6 +17,7 @@ export type UserDTO = {
   avatar: AvatarDTO
   unlockedStarsIds: string[]
   acquiredRocketsIds: string[]
+  acquiredAvatarsIds: string[]
   unlockedAchievementsIds: string[]
   rescuableAchievementsIds: string[]
   completedChallengesIds: string[]

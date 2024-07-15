@@ -8,7 +8,6 @@ import {
   type Slug,
   type Observer,
   Integer,
-  Logical,
 } from '../structs'
 import type { Avatar } from './Avatar'
 import type { Ranking } from './Ranking'
@@ -30,6 +29,7 @@ type UserProps = {
   streak: Integer
   unlockedStarsIds: IdsCollection
   acquiredRocketsIds: IdsCollection
+  acquiredAvatarsIds: IdsCollection
   unlockedAchievementsIds: IdsCollection
   rescuableAchievementsIds: IdsCollection
   completedChallengesIds: IdsCollection
@@ -49,61 +49,68 @@ export class User extends BaseEntity {
     return new User(UserFactory.produce(dto))
   }
 
-  hasUnlockedAchievement(achievementId: string) {
+  hasUnlockedAchievement(achievementId: string): boolean {
     return this.props.unlockedAchievementsIds.includes(achievementId)
   }
 
-  hasRescuableAchievement(achievementId: string) {
+  hasRescuableAchievement(achievementId: string): boolean {
     return this.props.rescuableAchievementsIds.includes(achievementId)
   }
 
-  hasUnlockedStar(starId: string) {
+  hasUnlockedStar(starId: string): boolean {
     return this.props.unlockedStarsIds.includes(starId)
   }
 
-  hasCompletedChallenge(challengeId: string) {
+  hasCompletedChallenge(challengeId: string): boolean {
     return this.props.completedChallengesIds.includes(challengeId)
   }
 
-  hasAcquiredRocket(rocketId: string) {
+  hasAcquiredRocket(rocketId: string): boolean {
     return this.props.acquiredRocketsIds.includes(rocketId)
   }
 
-  isSelectRocket(rocketId: string) {
+  hasAcquiredAvatar(rocketId: string): boolean {
+    return this.props.acquiredAvatarsIds.includes(rocketId)
+  }
+
+  isSelectRocket(rocketId: string): boolean {
     return rocketId === this.rocket.id
   }
 
-  unlockAchievement(achievementId: string) {
+  isSelectAvatar(avatarId: string): boolean {
+    return avatarId === this.avatar.id
+  }
+
+  unlockAchievement(achievementId: string): void {
     this.props.unlockedAchievementsIds.add(achievementId)
     this.props.rescuableAchievementsIds.add(achievementId)
 
     this.notifyChanges()
   }
 
-  rescueAchievement(achievementId: string, achievementReward: number) {
+  rescueAchievement(achievementId: string, achievementReward: number): void {
     this.props.rescuableAchievementsIds =
       this.props.rescuableAchievementsIds.remove(achievementId)
 
     this.earnCoins(achievementReward)
   }
 
-  earnCoins(newCoins: number) {
+  earnCoins(newCoins: number): void {
     this.props.coins = this.props.coins.increment(newCoins)
     this.notifyChanges()
   }
 
-  loseCoins(coins: number) {
+  loseCoins(coins: number): void {
     this.props.coins = this.props.coins.dencrement(coins)
   }
 
-  canBuy(coins: number) {
+  canBuy(coins: number): boolean {
     return this.props.coins.value >= coins
   }
 
-  buyRocket(rocket: Rocket) {
+  buyRocket(rocket: Rocket): void {
     if (this.hasAcquiredRocket(rocket.id)) {
       this.selectRocket(rocket)
-      this.notifyChanges()
       return
     }
 
@@ -115,16 +122,34 @@ export class User extends BaseEntity {
     }
   }
 
+  buyAvatar(avatar: Avatar): void {
+    if (this.hasAcquiredAvatar(avatar.id)) {
+      this.selectAvatar(avatar)
+      return
+    }
+
+    if (this.canBuy(avatar.price.value)) {
+      this.loseCoins(avatar.price.value)
+      this.selectAvatar(avatar)
+      this.props.acquiredAvatarsIds.add(avatar.id)
+      this.notifyChanges()
+    }
+  }
+
   getAchievementCount(metric: AchievementMetricValue) {
     return this[metric]
   }
 
-  private notifyChanges() {
-    if (this.props._observer) this.props._observer.callback()
+  selectRocket(rocket: Rocket): void {
+    this.props.rocket = rocket
   }
 
-  selectRocket(rocket: Rocket) {
-    this.props.rocket = rocket
+  selectAvatar(Avatar: Avatar): void {
+    this.props.avatar = Avatar
+  }
+
+  private notifyChanges(): void {
+    if (this.props._observer) this.props._observer.callback()
   }
 
   set observer(observer: Observer) {
@@ -139,6 +164,13 @@ export class User extends BaseEntity {
     return Integer.create(
       'acquired rockets count',
       this.props.acquiredRocketsIds.value.length - 1
+    )
+  }
+
+  get acquiredAvatarsCount() {
+    return Integer.create(
+      'acquired avatars count',
+      this.props.acquiredAvatarsIds.value.length - 3
     )
   }
 
@@ -230,6 +262,7 @@ export class User extends BaseEntity {
       streak: this.streak.value,
       unlockedStarsIds: this.props.unlockedStarsIds.value,
       acquiredRocketsIds: this.props.acquiredRocketsIds.value,
+      acquiredAvatarsIds: this.props.acquiredAvatarsIds.value,
       unlockedAchievementsIds: this.props.unlockedAchievementsIds.value,
       rescuableAchievementsIds: this.props.rescuableAchievementsIds.value,
       completedChallengesIds: this.props.completedChallengesIds.value,

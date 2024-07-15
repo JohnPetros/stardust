@@ -36,6 +36,8 @@ export const SupabaseUserMapper = () => {
           supabaseUser.users_unlocked_stars?.map(({ star_id }) => star_id) ?? [],
         acquiredRocketsIds:
           supabaseUser.users_acquired_rockets?.map(({ rocket_id }) => rocket_id) ?? [],
+        acquiredAvatarsIds:
+          supabaseUser.users_acquired_avatars?.map(({ avatar_id }) => avatar_id) ?? [],
         completedChallengesIds:
           supabaseUser.users_completed_challenges?.map(
             ({ challenge_id }) => challenge_id
@@ -60,12 +62,12 @@ export const SupabaseUserMapper = () => {
 
       const supabaseUser: SupabaseUser = {
         id: user.id,
-        coins: userDTO.coins,
-        email: userDTO.email,
-        level: userDTO.level,
         avatar_id: user.avatar.id,
         rocket_id: user.rocket.id,
         ranking_id: user.ranking.id,
+        coins: userDTO.coins,
+        email: userDTO.email,
+        level: userDTO.level,
         name: userDTO.name,
         slug: userDTO.slug,
         xp: userDTO.xp,

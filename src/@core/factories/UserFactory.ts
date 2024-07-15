@@ -29,6 +29,10 @@ export class UserFactory {
         'acquired rockets ids',
         dto.acquiredRocketsIds
       ),
+      acquiredAvatarsIds: IdsCollection.create(
+        'acquired avatars ids',
+        dto.acquiredAvatarsIds
+      ),
       unlockedStarsIds: IdsCollection.create('unlocked stars ids', dto.unlockedStarsIds),
       completedChallengesIds: IdsCollection.create(
         'completed challenges ids',
