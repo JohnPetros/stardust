@@ -20,7 +20,7 @@ export default async function Shop() {
 
   const { rockets, avatars } = await client.get<ShopItems>(ROUTES.server.shop)
 
-  await waitFor(2000)
+  await waitFor(2500)
 
   return <ShopPage rockets={rockets} avatars={avatars} />
 }

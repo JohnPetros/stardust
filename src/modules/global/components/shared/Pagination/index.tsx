@@ -1,81 +1,76 @@
 'use client'
-import { CaretLeft, CaretRight } from '@phosphor-icons/react'
 
-import PageButton from './PageButton'
+import { PageButton } from './PageButton'
 import { usePagination } from './usePagination'
+import { Icon } from '../Icon'
 
-export interface PaginationProps {
-  itemsPerPage: number
+export type PaginationProps = {
   totalItems: number
+  itemsPerPage: number
   offset: number
   setOffset: (offset: number) => void
 }
 
 export function Pagination(paginationProps: PaginationProps) {
-  const {
-    currentPage,
-    firstPage,
-    totalPages,
-    maxPageButtons,
-    siblingPageButtons,
-    handlePageButtonCLick,
-  } = usePagination(paginationProps)
+  const { pagination, maxPageButtons, handlePageButtonCLick } =
+    usePagination(paginationProps)
 
-  return (
-    <div className="flex w-full space-x-3">
-      <PageButton
-        isActive={false}
-        onClick={() => handlePageButtonCLick(currentPage - 1)}
-        isVisible={currentPage > 1}
-      >
-        <CaretLeft className="text-gray-300" />
-      </PageButton>
-      {firstPage !== 1 && (
+  if (pagination)
+    return (
+      <div className='flex w-full space-x-3'>
         <PageButton
           isActive={false}
-          isVisible={true}
-          onClick={() => handlePageButtonCLick(1)}
+          onClick={() => handlePageButtonCLick(pagination.currentPage - 1)}
+          isVisible={pagination.currentPage > 1}
         >
-          1 ...
+          <Icon name='arrow-left' className='text-gray-300' />
         </PageButton>
-      )}
-      {Array.from({ length: Math.min(maxPageButtons, totalPages) }).map(
-        (_, index) => {
-          const page = index + firstPage
+        {pagination.firstPage !== 1 && (
+          <PageButton
+            isActive={false}
+            isVisible={true}
+            onClick={() => handlePageButtonCLick(1)}
+          >
+            1 ...
+          </PageButton>
+        )}
+        {Array.from({ length: Math.min(maxPageButtons, pagination.totalPages) }).map(
+          (_, index) => {
+            const page = index + pagination.firstPage
 
-          if (page <= totalPages) {
-            return (
-              <PageButton
-                key={page}
-                isActive={page === currentPage}
-                isVisible={true}
-                onClick={() => handlePageButtonCLick(page)}
-              >
-                {page}
-              </PageButton>
-            )
+            if (page <= pagination.totalPages) {
+              return (
+                <PageButton
+                  key={page}
+                  isActive={page === pagination.currentPage}
+                  isVisible={true}
+                  onClick={() => handlePageButtonCLick(page)}
+                >
+                  {page}
+                </PageButton>
+              )
+            }
+            return ''
           }
-          return ''
-        }
-      )}
-      {currentPage + siblingPageButtons < totalPages && (
-        <PageButton
-          isActive={false}
-          isVisible={true}
-          onClick={() => handlePageButtonCLick(totalPages)}
-        >
-          ... {totalPages}
-        </PageButton>
-      )}
-      {totalPages > 0 && (
-        <PageButton
-          isActive={false}
-          isVisible={currentPage !== totalPages}
-          onClick={() => handlePageButtonCLick(currentPage + 1)}
-        >
-          <CaretRight className="text-gray-300" />
-        </PageButton>
-      )}
-    </div>
-  )
+        )}
+        {pagination.isFarFromLastPage && (
+          <PageButton
+            isActive={false}
+            isVisible={true}
+            onClick={() => handlePageButtonCLick(pagination.totalPages)}
+          >
+            ... {pagination.totalPages}
+          </PageButton>
+        )}
+        {pagination.hasPages && (
+          <PageButton
+            isActive={false}
+            isVisible={pagination.currentPage !== pagination.totalPages}
+            onClick={() => handlePageButtonCLick(pagination.currentPage + 1)}
+          >
+            <Icon name='arrow-right' className='text-gray-300' />
+          </PageButton>
+        )}
+      </div>
+    )
 }

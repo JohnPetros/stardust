@@ -5,7 +5,7 @@ import { twMerge } from 'tailwind-merge'
 
 import { useApi } from '@/infra/api'
 import { AnimatedImage } from './AnimatedImage'
-import { AnimatedItem } from './AnimatedItem'
+import { AnimatedItem } from '../../AnimatedItem'
 import { ShopButton } from '../../ShopButton'
 import { useRocketItem } from './useRocketItem'
 
@@ -36,7 +36,6 @@ export function RocketItem({
   })
 
   const api = useApi()
-
   const rocketImage = api.fetchImage('rockets', image)
 
   return (

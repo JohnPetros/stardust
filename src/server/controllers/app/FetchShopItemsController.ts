@@ -27,8 +27,6 @@ export const FetchShopItemsController = (
         return http.send(avatarsResponse.errorMessage, 500)
       }
 
-      console.log(rocketsResponse.data)
-
       return http.send(
         {
           rockets: {

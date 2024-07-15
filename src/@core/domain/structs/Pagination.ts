@@ -1,34 +1,32 @@
 import { Integer } from './Integer'
 
 export class Pagination {
-  static readonly ITEMS_PER_PAGE = 6
   static readonly MAX_PAGE_BUTTONS = 5
   static readonly SINBLING_PAGE_BUTTONS = (Pagination.MAX_PAGE_BUTTONS - 1) / 2
   readonly offset: Integer
   readonly totalItems: Integer
+  readonly itemsPerPage: Integer
 
-  private constructor(offset: Integer, totalItems: Integer) {
+  private constructor(offset: Integer, totalItems: Integer, itemsPerPage: Integer) {
     this.offset = offset
     this.totalItems = totalItems
+    this.itemsPerPage = itemsPerPage
   }
 
-  static create(offset: number, totalItems: number) {
+  static create(offset: number, totalItems: number, itemsPerPage: number) {
     return new Pagination(
       Integer.create('pagination offset', offset),
-      Integer.create('pagination total items', totalItems)
+      Integer.create('pagination total items', totalItems),
+      Integer.create('pagination items per page', itemsPerPage)
     )
   }
 
-  static calculateLimit(offset: number) {
-    return offset + Pagination.ITEMS_PER_PAGE - 1
-  }
-
   calculateNewOffset(page: number) {
-    return (page - 1) * Pagination.ITEMS_PER_PAGE
+    return (page - 1) * this.itemsPerPage.value
   }
 
   get currentPage() {
-    return this.offset.value / Pagination.ITEMS_PER_PAGE + 1
+    return this.offset.value / this.itemsPerPage.value + 1
   }
 
   get firstPage() {
@@ -36,7 +34,7 @@ export class Pagination {
   }
 
   get totalPages() {
-    return Math.ceil(this.totalItems.value / Pagination.ITEMS_PER_PAGE)
+    return Math.ceil(this.totalItems.value / this.itemsPerPage.value)
   }
 
   get isFarFromLastPage() {

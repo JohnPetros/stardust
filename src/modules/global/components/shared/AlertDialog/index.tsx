@@ -1,15 +1,14 @@
 'use client'
 
-import { ForwardedRef, forwardRef, ReactNode, useImperativeHandle } from 'react'
+import { type ForwardedRef, forwardRef, type ReactNode, useImperativeHandle } from 'react'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
 
 import { DialogAnimation } from '../Dialog'
 
-import { AlertDialogRef } from './types/AlertDialogRef'
-import { AlertDialogType } from './types/AlertDialogType'
 import { useAlertDialog } from './useAlertDialog'
 import { Hydration } from '../Hydration'
 import { Animation } from '../Animation'
+import type { AlertDialogRef, AlertDialogType } from './types'
 
 type AlertDialogProps = {
   type: AlertDialogType
@@ -83,7 +82,7 @@ const AlertDialogComponent = (
             </DialogAnimation>
           </AlertDialog.Content>
         </AlertDialog.Portal>
-        <AlertDialog.Trigger>{children}</AlertDialog.Trigger>
+        <AlertDialog.Trigger asChild>{children}</AlertDialog.Trigger>
       </AlertDialog.Root>
     </Hydration>
   )

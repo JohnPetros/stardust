@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 import type { ListingOrder } from '@/@core/types'
-import type { RocketDTO } from '@/@core/dtos'
+import type { AvatarDTO } from '@/@core/dtos'
 import type { PaginationResponse } from '@/@core/responses'
 
 import { useCache } from '@/infra/cache'
@@ -12,9 +12,9 @@ import { CACHE } from '@/modules/global/constants'
 import { useToastContext } from '@/modules/global/contexts/ToastContext'
 import { useAuthContext } from '@/modules/global/contexts/AuthContext'
 
-const ROCKETS_PER_PAGE = 6
+const AVATARS_PER_PAGE = 8
 
-export function useRocketsList(initialRocketsPagination: PaginationResponse<RocketDTO>) {
+export function useAvatarsList(initialItems: PaginationResponse<AvatarDTO>) {
   const [offset, setOffset] = useState(0)
   const [search, setSearch] = useState('s')
   const [priceOrder, setPriceOrder] = useState<ListingOrder>('ascending')
@@ -23,15 +23,17 @@ export function useRocketsList(initialRocketsPagination: PaginationResponse<Rock
   const toast = useToastContext()
   const { user } = useAuthContext()
 
-  async function fetchRockets() {
+  async function fetchAvatars() {
     if (!user) return
 
-    const response = await api.fetchShopRocketsList({
+    const response = await api.fetchShopAvatarsList({
       search,
       offset,
-      limit: offset + ROCKETS_PER_PAGE - 1,
+      limit: offset + AVATARS_PER_PAGE - 1,
       order: priceOrder,
     })
+
+    console.log(response.data)
 
     if (response.isSuccess) return response.data
 
@@ -39,11 +41,11 @@ export function useRocketsList(initialRocketsPagination: PaginationResponse<Rock
   }
 
   const { data } = useCache({
-    key: CACHE.keys.shopRockets,
-    fetcher: fetchRockets,
+    key: CACHE.keys.shopAvatars,
+    fetcher: fetchAvatars,
     dependencies: [search, offset, priceOrder],
     isEnabled: !!user,
-    initialData: initialRocketsPagination,
+    initialData: initialItems,
   })
 
   function handleSearchChange(value: string) {
@@ -56,9 +58,9 @@ export function useRocketsList(initialRocketsPagination: PaginationResponse<Rock
   }
 
   return {
-    rocketsDTO: data ? data.items : [],
-    totalRockets: data ? data.count : 0,
-    rocketsPerPage: ROCKETS_PER_PAGE,
+    AvatarsDTO: data ? data.items : [],
+    totalAvatars: data ? data.count : 0,
+    avatarsPerPage: AVATARS_PER_PAGE,
     offset,
     setOffset,
     handleSearchChange,

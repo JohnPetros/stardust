@@ -1,9 +1,7 @@
-import { PaginationProps } from '.'
+import { useEffect, useState } from 'react'
+import type { PaginationProps } from '.'
 
-import { calculatePage } from '@/modules/global/utils'
-
-const MAX_PAGE_BUTTONS = 5
-const SINBLING_PAGE_BUTTONS = (MAX_PAGE_BUTTONS - 1) / 2
+import { Pagination } from '@/@core/domain/structs'
 
 export function usePagination({
   totalItems,
@@ -11,21 +9,22 @@ export function usePagination({
   offset,
   setOffset,
 }: PaginationProps) {
-  const currentPage = calculatePage(offset, itemsPerPage)
-  const totalPages = Math.ceil(totalItems / itemsPerPage)
-  const firstPage = Math.max(currentPage - SINBLING_PAGE_BUTTONS, 1)
+  const [pagination, setPagination] = useState<Pagination | null>(null)
 
   function handlePageButtonCLick(page: number) {
-    const newOffset = (page - 1) * itemsPerPage
+    if (!pagination) return
+
+    const newOffset = pagination.calculateNewOffset(page)
     setOffset(newOffset)
   }
 
+  useEffect(() => {
+    setPagination(Pagination.create(offset, totalItems, itemsPerPage))
+  }, [offset, totalItems, itemsPerPage])
+
   return {
-    currentPage,
-    totalPages,
-    firstPage,
-    maxPageButtons: MAX_PAGE_BUTTONS,
-    siblingPageButtons: SINBLING_PAGE_BUTTONS,
+    pagination,
+    maxPageButtons: Pagination.MAX_PAGE_BUTTONS,
     handlePageButtonCLick,
   }
 }

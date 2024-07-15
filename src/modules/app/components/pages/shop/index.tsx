@@ -1,7 +1,8 @@
 import type { AvatarDTO, RocketDTO } from '@/@core/dtos'
-import { Footer } from './Footer'
-import { RocketsList } from './RocketsList'
 import type { PaginationResponse } from '@/@core/responses'
+import { RocketsList } from './RocketsList'
+import { AvatarsList } from './AvatarsList'
+import { Footer } from './Footer'
 
 type ShopPageProps = {
   rockets: PaginationResponse<RocketDTO>
@@ -11,8 +12,8 @@ type ShopPageProps = {
 export async function ShopPage({ rockets, avatars }: ShopPageProps) {
   return (
     <main className='mx-auto max-w-5xl space-y-12 px-6 py-1 pb-[12rem] sm:pb-6'>
-      <RocketsList initialRocketsPagination={rockets} />
-      {/* <AvatarsList /> */}
+      <RocketsList initialItems={rockets} />
+      <AvatarsList initialItems={avatars} />
       <Footer />
     </main>
   )

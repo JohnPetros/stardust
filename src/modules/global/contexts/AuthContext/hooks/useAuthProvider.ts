@@ -50,7 +50,7 @@ export function useAuthProvider(serverSession: Session | null) {
 
   function notifyUserChanges() {
     const userChangeEvent = new Event('userChange')
-    document.dispatchEvent(userChangeEvent)
+    window.dispatchEvent(userChangeEvent)
   }
 
   function setUser(userDTO: UserDTO | null) {
