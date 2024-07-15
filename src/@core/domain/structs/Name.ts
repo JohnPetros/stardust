@@ -1,15 +1,9 @@
 import { StringValidation } from '@/@core/lib/validation'
-import { BaseStruct } from '@/@core/domain/abstracts/BaseStruct'
 
-type NameProps = {
-  value: string
-}
-
-export class Name extends BaseStruct<NameProps> {
+export class Name {
   readonly value: string
 
   private constructor(value: string) {
-    super({ value })
     this.value = value
   }
 

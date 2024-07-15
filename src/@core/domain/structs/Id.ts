@@ -1,21 +1,15 @@
 import { StringValidation } from '@/@core/lib/validation'
-import { BaseStruct } from '../abstracts'
 
-type IdProps = {
-  value: string
-}
-
-export class Id extends BaseStruct<IdProps> {
+export class Id {
   readonly value: string
 
-  private constructor(props: IdProps) {
-    super(props)
-    this.value = props.value
+  private constructor(value: string) {
+    this.value = value
   }
 
   static create(value: string) {
     new StringValidation(value, 'Id').id().validate()
 
-    return new Id({ value })
+    return new Id(value)
   }
 }

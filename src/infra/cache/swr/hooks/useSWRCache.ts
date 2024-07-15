@@ -27,8 +27,8 @@ export function useSWRCache<CacheData>({
     }
   )
 
-  function mutateCache(newCacheData: CacheData, mutateConfig: MudateConfig) {
-    mutate(newCacheData, { revalidate: mutateConfig.shouldRevalidate })
+  function mutateCache(newCacheData: CacheData | null, mutateConfig: MudateConfig) {
+    if (newCacheData) mutate(newCacheData, { revalidate: mutateConfig.shouldRevalidate })
   }
 
   return {
