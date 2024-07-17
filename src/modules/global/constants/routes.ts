@@ -32,6 +32,7 @@ export const ROUTES = {
       confirmPasswordReset: '/server/auth/confirm-password-reset',
     },
     achievements: '/server/achievements',
+    ranking: '/server/ranking',
     planets: '/server/planets',
     shop: '/server/shop',
     email: '/server/email',
