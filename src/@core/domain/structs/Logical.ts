@@ -13,6 +13,10 @@ export class Logical {
     return new Logical(value)
   }
 
+  invertValue() {
+    return new Logical(!this.value)
+  }
+
   get true() {
     return this.value
   }
