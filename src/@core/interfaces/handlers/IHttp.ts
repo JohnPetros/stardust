@@ -1,4 +1,4 @@
-import { HttpResponse } from '@/@core/responses'
+import type { HttpResponse } from '@/@core/responses'
 
 export type Cookie = {
   key: string
