@@ -1,5 +1,13 @@
 import { Avatar, Ranking, Rocket } from '../domain/entities'
-import { Email, Name, Slug, Integer, OrdinalNumber } from '../domain/structs'
+import {
+  Email,
+  Name,
+  Slug,
+  Integer,
+  OrdinalNumber,
+  Logical,
+  RankingPosition,
+} from '../domain/structs'
 import { IdsCollection } from '../domain/structs/IdsCollection'
 import type { UserDTO } from '../dtos'
 
@@ -17,6 +25,14 @@ export class UserFactory {
       xp: Integer.create('xp', dto.xp),
       weeklyXp: Integer.create('weekly xp', dto.weeklyXp),
       streak: Integer.create('streak', dto.streak),
+      lastRankingPosition: dto.lastRankingPosition
+        ? RankingPosition.create(dto.lastRankingPosition)
+        : null,
+      didSeeRankingResult: Logical.create(
+        'did user see ranking result?',
+        dto.didSeeRankingResult
+      ),
+      isRankingLoser: Logical.create('is user ranking loser?', dto.isRankingLoser),
       unlockedAchievementsIds: IdsCollection.create(
         'unlocked achievements ids',
         dto.unlockedAchievementsIds

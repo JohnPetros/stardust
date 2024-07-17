@@ -22,13 +22,13 @@ export type UserDTO = {
   rescuableAchievementsIds: string[]
   completedChallengesIds: string[]
   completedPlanetsIds: string[]
+  didSeeRankingResult: boolean
+  lastRankingPosition: number | null
+  isRankingLoser: boolean
 
   // createdAt: string
   // didBreakStreak: boolean
   // didCompleteSaturday: boolean
-  // didUpdateRanking: boolean
-  // isLoser: boolean | null
-  // lastPosition: number | null
   // studyTime: string
   // weekStatus: WeekStatus[]
 }
