@@ -1,7 +1,7 @@
 import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { VALIDATION_ERROR_MESSAGES } from '@/@core/libs/validation/constants'
+import { VALIDATION_ERROR_MESSAGES } from '@/@core/lib/validation/constants'
 
 import { SignInForm } from '..'
 

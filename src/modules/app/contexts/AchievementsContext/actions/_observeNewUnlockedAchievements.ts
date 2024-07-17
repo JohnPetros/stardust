@@ -14,5 +14,12 @@ export async function _observeNewUnlockedAchievements(
 
   const useCase = new ObserveNewUnlockedAchievementsUseCase(achievementsService)
 
-  return await useCase.do({ achievementsDTO, userDTO })
+  const { user, newUnlockedAchievements } = await useCase.do({ achievementsDTO, userDTO })
+
+  return {
+    userDTO: user.dto,
+    newUnlockedAchievementsDTO: newUnlockedAchievements.map(
+      (achievement) => achievement.dto
+    ),
+  }
 }

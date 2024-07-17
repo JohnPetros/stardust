@@ -3,7 +3,7 @@
 import { type RefObject, useEffect, useState } from 'react'
 
 import type { AchievementDTO } from '@/@core/dtos'
-import type { Achievement } from '@/@core/domain/entities/Achievement'
+import { Achievement, User } from '@/@core/domain/entities'
 
 import { useApi } from '@/infra/api'
 import { useToastContext } from '@/modules/global/contexts/ToastContext'
@@ -60,8 +60,13 @@ export function useAchivementsProvider(
 
     try {
       const response = await serverAction(achievementsDTO, user.dto)
-      setNewUnlockedAchievements(response.newUnlockedAchievements)
-      updateUser(response.user)
+
+      if (!response.newUnlockedAchievementsDTO.length) return
+
+      setNewUnlockedAchievements(
+        response.newUnlockedAchievementsDTO.map(Achievement.create)
+      )
+      await updateUser(User.create(response.userDTO))
     } catch (error) {
       toast.show(error.message)
     }
