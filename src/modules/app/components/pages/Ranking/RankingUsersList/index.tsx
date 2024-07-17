@@ -23,8 +23,7 @@ export function RankingUsersList({ rankingUsers }: UserListProps) {
             <RankingUser
               id={user.id}
               name={user.name}
-              avatarImage={user.avatar.image}
-              avatarName={user.avatar.name}
+              avatarImage={user.avatarImage}
               losersPositionOffset={losersPositionOffset}
               weeklyXp={user.weeklyXp}
               position={rankingPosition.position.value}

@@ -24,7 +24,6 @@ type RankingUserProps = {
   id: string
   name: string
   avatarImage: string
-  avatarName: string
   weeklyXp: number
   position: number
   losersPositionOffset: number

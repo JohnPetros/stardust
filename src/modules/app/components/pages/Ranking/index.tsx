@@ -2,6 +2,7 @@
 
 import type { RankingDTO, RankingUserDTO, RankingWinnerDTO, UserDTO } from '@/@core/dtos'
 import { Datetime } from '@/@core/lib/datetime'
+import { Icon } from '@/modules/global/components/shared/Icon'
 import { useRankingPage } from './useRankingPage'
 import { TiersList } from './TiersList'
 import { RankingWinnerUsersList } from './RankingWinnersList'
@@ -38,8 +39,10 @@ export function RankingPage({
                 Os 5 primeiros avançam para o próximo ranking.
               </p>
 
-              <strong className='text-center text-green-400'>
-                {DAYS_COUNT_TO_SUNDAY + (DAYS_COUNT_TO_SUNDAY === 1 ? ' dia' : ' dias')}
+              <strong className='flex items-center gap-2 text-center text-green-400'>
+                <Icon name='clock' size={20} />
+                {DAYS_COUNT_TO_SUNDAY +
+                  (DAYS_COUNT_TO_SUNDAY === 1 ? ' dia restante' : ' dias restantes')}
               </strong>
             </div>
 

@@ -76,7 +76,6 @@ export function RankingWinnerUsersList({
               weeklyXp={user.weeklyXp.value}
               position={user.lastRankingPosition.position.value}
               avatarImage={user.avatar.image.value}
-              avatarName={user.avatar.name.value}
               losersPositionOffset={16}
               canShowXp={false}
             />
