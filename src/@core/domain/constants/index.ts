@@ -1,0 +1,1 @@
+export { RANKING } from './ranking'
