@@ -18,9 +18,11 @@ type ShopItems = {
 export default async function Shop() {
   const client = NextClient()
 
-  const { rockets, avatars } = await client.get<ShopItems>(ROUTES.server.shop)
+  const response = await client.get<ShopItems>(ROUTES.server.shop)
+
+  if (response.isError) response.throwError()
 
   await waitFor(2500)
 
-  return <ShopPage rockets={rockets} avatars={avatars} />
+  return <ShopPage rockets={response.body.rockets} avatars={response.body.avatars} />
 }

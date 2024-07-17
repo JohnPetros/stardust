@@ -4,11 +4,10 @@ import { createContext, useRef, type ReactNode } from 'react'
 
 import type { AchievementDTO } from '@/@core/dtos'
 
-import { NewUnlockedAchievementsAlertDialog } from './components/NewUnlockedAchievementsAlertDialog'
 import type { AlertDialogRef } from '@/modules/global/components/shared/AlertDialog/types'
+import { NewUnlockedAchievementsAlertDialog } from './components/NewUnlockedAchievementsAlertDialog'
 import { useAchivementsProvider } from './hooks/useAchievementsProvider'
 import { useAchievementsContext } from './hooks/useAchievementsContext'
-import { Achievement } from '@/@core/domain/entities'
 import type { AchivementsContextValue } from './types/AchivementsContextValue'
 import { _observeNewUnlockedAchievements } from './actions'
 
