@@ -62,7 +62,7 @@ export class ObserveNewUnlockedAchievementsUseCase
 
     switch (achievement.metric.value) {
       case 'unlockedStarsCount':
-        return user.unlockedStarsCount.value >= achievement.requiredCount.value + 1
+        return user.unlockedStarsCount.value >= achievement.requiredCount.value
       case 'completedPlanetsCount':
         return user.completedPlanetsCount.value >= achievement.requiredCount.value
       case 'acquiredRocketsCount':
