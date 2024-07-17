@@ -114,8 +114,6 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
         token_hash: token,
       })
 
-      console.log({ session })
-
       if (session) {
         await supabase.auth.refreshSession({ refresh_token: session?.refresh_token })
       }
