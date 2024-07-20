@@ -17,23 +17,23 @@ export const SupabaseUserMapper = () => {
         streak: supabaseUser.streak ?? 0,
         weeklyXp: supabaseUser.weekly_xp ?? 0,
         avatar: {
-          id: supabaseUser.avatars?.id ?? '',
-          image: supabaseUser.avatars?.image ?? '',
-          name: supabaseUser.avatars?.name ?? '',
-          price: supabaseUser.avatars?.price ?? 0,
+          id: supabaseUser.avatar?.id ?? '',
+          image: supabaseUser.avatar?.image ?? '',
+          name: supabaseUser.avatar?.name ?? '',
+          price: supabaseUser.avatar?.price ?? 0,
         },
-        ranking: {
-          id: supabaseUser.rankings?.id ?? '',
-          image: supabaseUser.rankings?.image ?? '',
-          name: supabaseUser.rankings?.name ?? '',
-          position: supabaseUser.rankings?.position ?? 0,
-          reward: supabaseUser.rankings?.reward ?? 0,
+        tier: {
+          id: supabaseUser.tier?.id ?? '',
+          image: supabaseUser.tier?.image ?? '',
+          name: supabaseUser.tier?.name ?? '',
+          position: supabaseUser.tier?.position ?? 0,
+          reward: supabaseUser.tier?.reward ?? 0,
         },
         rocket: {
-          id: supabaseUser.rockets?.id ?? '',
-          image: supabaseUser.rockets?.image ?? '',
-          name: supabaseUser.rockets?.name ?? '',
-          price: supabaseUser.rockets?.price ?? 0,
+          id: supabaseUser.rocket?.id ?? '',
+          image: supabaseUser.rocket?.image ?? '',
+          name: supabaseUser.rocket?.name ?? '',
+          price: supabaseUser.rocket?.price ?? 0,
         },
         unlockedAchievementsIds:
           supabaseUser.users_unlocked_achievements?.map(
@@ -54,9 +54,8 @@ export const SupabaseUserMapper = () => {
             ({ challenge_id }) => challenge_id
           ) ?? [],
         completedPlanetsIds: [],
-        didSeeRankingResult: supabaseUser.did_update_ranking,
-        lastRankingPosition: supabaseUser.last_position,
-        isRankingLoser: supabaseUser.is_loser ?? false,
+        canSeeRankingResult: supabaseUser.can_see_ranking,
+        lastWeekRankingPosition: supabaseUser.last_week_ranking_position,
 
         // studyTime: supabaseUser.study_time ?? '',
         // createdAt: supabaseUser.created_at ?? '',
@@ -75,7 +74,7 @@ export const SupabaseUserMapper = () => {
         id: user.id,
         avatar_id: user.avatar.id,
         rocket_id: user.rocket.id,
-        ranking_id: user.ranking.id,
+        tier_id: user.tier.id,
         coins: userDTO.coins,
         email: userDTO.email,
         level: userDTO.level,
@@ -84,6 +83,7 @@ export const SupabaseUserMapper = () => {
         xp: userDTO.xp,
         weekly_xp: userDTO.weeklyXp,
         streak: userDTO.streak,
+        can_see_ranking: userDTO.canSeeRankingResult,
       }
 
       return supabaseUser as unknown as SupabaseUser
