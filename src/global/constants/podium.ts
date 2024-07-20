@@ -7,13 +7,13 @@ export type Podium = {
 
 export const PODIUM: Podium[] = [
   {
-    position: 1,
+    position: 2,
     icon: 'first-place.svg',
     bgColor: 'bg-yellow-400',
     order: '1st',
   },
   {
-    position: 2,
+    position: 1,
     icon: 'second-place.svg',
     bgColor: 'bg-gray-400',
     order: '2nd',

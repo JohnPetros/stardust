@@ -4,7 +4,6 @@ import type {
   IUsersService,
   IRankingsService,
 } from '@/@core/interfaces/services'
-import { ObserveRankingWinnersUseCase } from '@/@core/use-cases/rankings'
 
 export const FetchRankingPageDataController = (
   authService: IAuthService,
@@ -24,31 +23,22 @@ export const FetchRankingPageDataController = (
         return http.send(userResponse.errorMessage, 500)
       }
 
-      const rankingsResponse = await rankingsService.fetchRankings()
-      if (rankingsResponse.isFailure) {
-        return http.send(rankingsResponse.errorMessage, 500)
-      }
+      const [tiersResponse, rankingUsersResponse] = await Promise.all([
+        rankingsService.fetchTiers(),
+        rankingsService.fetchRankingUsersByTier(userResponse.data.tier.id),
+      ])
 
-      const rankingUsersResponse = await rankingsService.fetchRankingUsers(
-        userResponse.data.ranking.id
-      )
+      if (tiersResponse.isFailure) {
+        return http.send(tiersResponse.errorMessage, 500)
+      }
       if (rankingUsersResponse.isFailure) {
-        return http.send(rankingUsersResponse.errorMessage, 500)
+        return http.send(tiersResponse.errorMessage, 500)
       }
-
-      const useCase = new ObserveRankingWinnersUseCase(usersService, rankingsService)
-
-      const data = await useCase.do({
-        rankingsDTO: rankingsResponse.data,
-        userDTO: userResponse.data,
-      })
 
       return http.send(
         {
-          user: data.user,
-          rankingsWinners: data.rankingWinners,
+          tiers: tiersResponse.data,
           rankingUsers: rankingUsersResponse.data,
-          rankings: rankingsResponse.data,
         },
         200
       )

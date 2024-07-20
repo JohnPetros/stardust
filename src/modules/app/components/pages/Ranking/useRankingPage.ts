@@ -1,23 +1,28 @@
 import { useEffect, useState } from 'react'
 
-import type { RankingWinnerDTO, UserDTO } from '@/@core/dtos'
+import type { RankingUserDTO, RankingWinnerDTO, TierDTO, UserDTO } from '@/@core/dtos'
 import { useAuthContext } from '@/modules/global/contexts/AuthContext'
+import { Ranking } from '@/@core/domain/structs'
 
-export function useRankingPage(user: UserDTO, rankingWinners: RankingWinnerDTO[]) {
-  const { mutateUserCache } = useAuthContext()
-  const [winners, setWinners] = useState<RankingWinnerDTO[]>(rankingWinners)
+export function useRankingPage(
+  rankingUsers: RankingUserDTO[],
+  lastWeekRankingWinners: RankingUserDTO[]
+) {
+  const [ranking, setRanking] = useState<Ranking | null>(null)
+  const [lastWeekWinners, setLastWeekWinners] =
+    useState<RankingUserDTO[]>(lastWeekRankingWinners)
 
-  function handleHideWinners() {
-    setWinners([])
+  function hadleResultHide() {
+    setLastWeekWinners([])
   }
 
-  // useEffect(() => {
-  //   mutateUserCache(user)
-  // }, [user, mutateUserCache])
+  useEffect(() => {
+    setRanking(Ranking.create(rankingUsers))
+  }, [rankingUsers])
 
   return {
-    rankingWinners,
-    winners,
-    handleHideWinners,
+    ranking,
+    lastWeekWinners,
+    hadleResultHide,
   }
 }

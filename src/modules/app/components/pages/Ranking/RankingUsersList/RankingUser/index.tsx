@@ -24,7 +24,7 @@ type RankingUserProps = {
   id: string
   name: string
   avatarImage: string
-  weeklyXp: number
+  xp: number
   position: number
   losersPositionOffset: number
   canShowXp?: boolean
@@ -34,7 +34,7 @@ export function RankingUser({
   id,
   name,
   avatarImage,
-  weeklyXp,
+  xp,
   position,
   losersPositionOffset,
   canShowXp = true,
@@ -82,7 +82,7 @@ export function RankingUser({
         </strong>
 
         <strong className='block w-24 text-right uppercase text-gray-600 group-hover:text-gray-100/90'>
-          {canShowXp && `${weeklyXp} xp`}
+          {canShowXp && `${xp} xp`}
         </strong>
       </Link>
     )
