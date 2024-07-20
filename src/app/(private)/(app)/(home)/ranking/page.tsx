@@ -1,14 +1,12 @@
-import type { RankingDTO, RankingUserDTO, RankingWinnerDTO, UserDTO } from '@/@core/dtos'
-import { AppError } from '@/@core/errors/global/AppError'
+import type { RankingUserDTO, TierDTO } from '@/@core/dtos'
 import { RankingPage } from '@/modules/app/components/pages/Ranking'
+import { RankingProvider } from '@/modules/app/contexts/RankingContext'
 import { ROUTES } from '@/modules/global/constants'
 import { NextClient } from '@/server/client'
 
 type RankingPageData = {
-  user: UserDTO
-  rankingsWinners: RankingWinnerDTO[]
+  tiers: TierDTO[]
   rankingUsers: RankingUserDTO[]
-  rankings: RankingDTO[]
 }
 
 export default async function Ranking() {
@@ -19,11 +17,11 @@ export default async function Ranking() {
   if (response.isError) response.throwError()
 
   return (
-    <RankingPage
-      user={response.body.user}
-      rankings={response.body.rankings}
-      rankingWinners={response.body.rankingsWinners}
+    <RankingProvider
+      tiers={response.body.tiers}
       rankingUsers={response.body.rankingUsers}
-    />
+    >
+      <RankingPage />
+    </RankingProvider>
   )
 }
