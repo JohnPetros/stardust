@@ -11,8 +11,7 @@
     "test:watch": "jest --watch",
     "test:coverage": "test --coverage",
     "email:dev": "email dev --dir ./src/services/email/templates",
-    "email:html": "email export --dir ./src/services/email/templates --outDir ./src/services/email/templates/html",
-    "gen-supabase-types": "supabase gen types typescript --project-id %PROJECT_ID% > ./src/services/api/supabase/types/Database.ts"
+    "email:html": "email export --dir ./src/services/email/templates --outDir ./src/services/email/templates/html"
   },
   "dependencies": {
     "@designliquido/delegua": "^0.35.3",
