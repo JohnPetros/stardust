@@ -11,7 +11,7 @@ export class AvatarsFaker {
     return {
       id: faker.string.uuid(),
       name: faker.person.firstName(),
-      image: faker.image.avatar(),
+      image: `${faker.image.avatar()}.jpg`,
       price: faker.number.int({ max: 100 }),
       ...baseDTO,
     }

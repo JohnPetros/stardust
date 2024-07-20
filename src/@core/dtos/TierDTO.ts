@@ -1,4 +1,4 @@
-export type RankingDTO = {
+export type TierDTO = {
   id: string
   image: string
   name: string

@@ -2,6 +2,7 @@ export type RankingUserDTO = {
   id: string
   name: string
   slug: string
-  weeklyXp: number
+  xp: number
   avatarImage: string
+  tierId: string
 }

@@ -12,15 +12,14 @@ import {
   Integer,
 } from '../structs'
 import type { Avatar } from './Avatar'
-import type { Ranking } from './Ranking'
 import type { Rocket } from './Rocket'
 import { BaseEntity } from '../abstracts'
-import { RANKING } from '../constants'
+import type { Tier } from './Tier'
 
 type UserProps = {
   id?: string
   avatar: Avatar
-  ranking: Ranking
+  tier: Tier
   rocket: Rocket
   slug: Slug
   email: Email
@@ -37,9 +36,8 @@ type UserProps = {
   rescuableAchievementsIds: IdsCollection
   completedChallengesIds: IdsCollection
   completedPlanetsIds: IdsCollection
-  didSeeRankingResult: Logical
-  lastRankingPosition: RankingPosition | null
-  isRankingLoser: Logical
+  canSeeRankingResult: Logical
+  lastWeekRankingPosition: RankingPosition | null
   _observer?: Observer
 }
 
@@ -110,10 +108,10 @@ export class User extends BaseEntity {
     this.props.coins = this.props.coins.dencrement(coins)
   }
 
-  earnLastRankingPositionReward(): void {
-    if (!this.props.lastRankingPosition) return
+  earnLastWeekRankingPositionReward(): void {
+    if (!this.props.lastWeekRankingPosition) return
 
-    const reward = this.props.lastRankingPosition.getReward(this.ranking.reward.value)
+    const reward = this.props.lastWeekRankingPosition.getReward(this.tier.reward.value)
     this.earnCoins(reward)
   }
 
@@ -162,11 +160,11 @@ export class User extends BaseEntity {
   }
 
   seeRankingResult() {
-    this.props.didSeeRankingResult = this.props.didSeeRankingResult.invertValue()
+    this.props.canSeeRankingResult = this.props.canSeeRankingResult.invertValue()
   }
 
   resetRankingLoserState() {
-    this.props.lastRankingPosition = null
+    this.props.lastWeekRankingPosition = null
   }
 
   private notifyChanges(): void {
@@ -224,22 +222,22 @@ export class User extends BaseEntity {
   }
 
   get isRankingWinner(): boolean {
-    if (!this.props.lastRankingPosition) return false
+    if (!this.props.lastWeekRankingPosition) return false
 
-    return this.props.lastRankingPosition.isInWinningArea
+    return this.props.lastWeekRankingPosition.isInWinningArea
   }
 
   get isTopRankingWinner(): boolean {
-    if (!this.props.lastRankingPosition) return false
+    if (!this.props.lastWeekRankingPosition) return false
 
-    return this.props.lastRankingPosition.isInPodiumArea
+    return this.props.lastWeekRankingPosition.isInPodiumArea
   }
 
-  get hasNextRanking(): boolean {
-    if (!this.props.lastRankingPosition) return false
+  get hasNextTier(): boolean {
+    if (!this.props.lastWeekRankingPosition) return false
 
     return (
-      this.props.ranking.position.value !== this.props.lastRankingPosition.position.value
+      this.props.tier.position.value !== this.props.lastWeekRankingPosition.position.value
     )
   }
 
@@ -259,8 +257,8 @@ export class User extends BaseEntity {
     return this.props.rocket
   }
 
-  get ranking() {
-    return this.props.ranking
+  get tier() {
+    return this.props.tier
   }
 
   get name() {
@@ -287,16 +285,12 @@ export class User extends BaseEntity {
     return this.props.level
   }
 
-  get isRankingLoser() {
-    return this.props.isRankingLoser
+  get canSeeRankingResult() {
+    return this.props.canSeeRankingResult
   }
 
-  get didSeeRankingResult() {
-    return this.props.didSeeRankingResult
-  }
-
-  get lastRankingPosition() {
-    return this.props.lastRankingPosition
+  get lastWeekRankingPosition() {
+    return this.props.lastWeekRankingPosition
   }
 
   get dto(): UserDTO {
@@ -305,7 +299,7 @@ export class User extends BaseEntity {
       slug: this.slug.value,
       email: this.email.value,
       name: this.name.value,
-      ranking: this.ranking.dto,
+      tier: this.tier.dto,
       rocket: this.rocket.dto,
       avatar: this.avatar.dto,
       level: this.level.value,
@@ -313,7 +307,6 @@ export class User extends BaseEntity {
       xp: this.xp.value,
       weeklyXp: this.weeklyXp.value,
       streak: this.streak.value,
-      isRankingLoser: this.props.isRankingLoser.value,
       unlockedStarsIds: this.props.unlockedStarsIds.value,
       acquiredRocketsIds: this.props.acquiredRocketsIds.value,
       acquiredAvatarsIds: this.props.acquiredAvatarsIds.value,
@@ -321,8 +314,8 @@ export class User extends BaseEntity {
       rescuableAchievementsIds: this.props.rescuableAchievementsIds.value,
       completedChallengesIds: this.props.completedChallengesIds.value,
       completedPlanetsIds: this.props.completedPlanetsIds.value,
-      didSeeRankingResult: this.props.didSeeRankingResult.value,
-      lastRankingPosition: this.props.lastRankingPosition?.position.value ?? null,
+      canSeeRankingResult: this.props.canSeeRankingResult.value,
+      lastWeekRankingPosition: this.props.lastWeekRankingPosition?.position.value ?? null,
     }
   }
 }

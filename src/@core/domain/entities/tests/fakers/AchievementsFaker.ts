@@ -11,7 +11,7 @@ export class AchievementsFaker {
     return {
       id: faker.string.uuid(),
       name: faker.person.firstName(),
-      icon: faker.image.avatar(),
+      icon: `${faker.image.avatar()}.jpg`,
       reward: faker.number.int({ max: 100 }),
       requiredCount: faker.number.int({ max: 100 }),
       position: faker.number.int({ max: 20 }),

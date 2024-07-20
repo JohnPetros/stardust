@@ -1,6 +1,6 @@
 import type { AvatarDTO } from './AvatarDTO'
-import type { RankingDTO } from './RankingDTO'
 import type { RocketDTO } from './RocketDTO'
+import type { TierDTO } from './TierDTO'
 
 export type UserDTO = {
   id?: string
@@ -12,7 +12,7 @@ export type UserDTO = {
   xp: number
   weeklyXp: number
   streak: number
-  ranking: RankingDTO
+  tier: TierDTO
   rocket: RocketDTO
   avatar: AvatarDTO
   unlockedStarsIds: string[]
@@ -22,9 +22,8 @@ export type UserDTO = {
   rescuableAchievementsIds: string[]
   completedChallengesIds: string[]
   completedPlanetsIds: string[]
-  didSeeRankingResult: boolean
-  lastRankingPosition: number | null
-  isRankingLoser: boolean
+  canSeeRankingResult: boolean
+  lastWeekRankingPosition: number | null
 
   // createdAt: string
   // didBreakStreak: boolean
