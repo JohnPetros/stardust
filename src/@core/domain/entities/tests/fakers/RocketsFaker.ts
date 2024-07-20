@@ -7,9 +7,8 @@ export class RocketsFaker {
     return Rocket.create({
       id: faker.string.uuid(),
       name: faker.person.firstName(),
-      image: faker.image.avatar(),
+      image: `${faker.image.avatar()}.jpg`,
       price: faker.number.int({ max: 100 }),
-      slug: faker.lorem.slug(),
       ...baseDTO,
     })
   }
