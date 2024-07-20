@@ -7,11 +7,12 @@ import { TIERS_COUNT } from '@/@core/domain/constants'
 
 export class RankingsServiceMock implements IRankingsService {
   tiers: TierDTO[] = TiersFaker.fakeManyDTO(TIERS_COUNT)
-  users: Array<RankingUserDTO> = []
-  losers: Array<RankingUserDTO> = []
-  winners: Array<RankingUserDTO> = []
+  users: RankingUserDTO[] = []
+  losers: RankingUserDTO[] = []
+  winners: RankingUserDTO[] = []
   isReset = false
   canUsersSeeRankingResult = false
+  areLastWeekRankingPositionsUpdated = false
 
   async fetchTierById(tierId: string): Promise<ServiceResponse<TierDTO>> {
     const tier = this.tiers.find((tier) => tier.id === tierId)
@@ -70,7 +71,7 @@ export class RankingsServiceMock implements IRankingsService {
   }
 
   async checkRankingLoserState(rankingUserId: string): Promise<ServiceResponse<boolean>> {
-    throw new Error('Method not implemented.')
+    return new ServiceResponse(!!this.losers.find((loser) => loser.id === rankingUserId))
   }
 
   async resetRankingsState(): Promise<ServiceResponse<true>> {
@@ -79,7 +80,8 @@ export class RankingsServiceMock implements IRankingsService {
   }
 
   async updateLastWeekRankingPositions(): Promise<ServiceResponse<true>> {
-    throw new Error('Method not implemented.')
+    this.areLastWeekRankingPositionsUpdated = true
+    return new ServiceResponse(true)
   }
 
   async allowUsersSeeRankingResult(): Promise<ServiceResponse<true>> {

@@ -1,1 +1,2 @@
-export { ObserveRankingWinnersUseCase } from './ObserveRankingWinnersUseCase'
+export { GetLastWeekRankingWinnersUseCase } from './GetLastWeekRankingWinnersUseCase'
+export { UpdateRankingsUseCase } from './UpdateRankingsUseCase'
