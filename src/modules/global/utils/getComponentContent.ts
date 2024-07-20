@@ -1,4 +1,4 @@
-import { REGEX } from '../../../global/constants'
+import { REGEX } from '../constants'
 
 const componentNameRegex = REGEX.componentName
 
