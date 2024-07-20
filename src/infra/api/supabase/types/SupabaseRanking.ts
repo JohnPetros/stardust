@@ -1,3 +1,7 @@
-import type { Database } from './Database'
-
-export type SupabaseRanking = Database['public']['Tables']['rankings']['Row']
+export type SupabaseRanking = {
+  id: string
+  name: string
+  slug: string
+  weekly_xp: number
+  avatars: { image: string } | null
+}[]

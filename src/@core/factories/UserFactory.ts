@@ -1,4 +1,5 @@
 import { Avatar, Ranking, Rocket } from '../domain/entities'
+import { Tier } from '../domain/entities/Tier'
 import {
   Email,
   Name,
@@ -19,20 +20,19 @@ export class UserFactory {
       name: Name.create(dto.name),
       rocket: Rocket.create(dto.rocket),
       avatar: Avatar.create(dto.avatar),
-      ranking: Ranking.create(dto.ranking),
+      tier: Tier.create(dto.tier),
       level: OrdinalNumber.create('level', dto.level),
       coins: Integer.create('coins', dto.coins),
       xp: Integer.create('xp', dto.xp),
       weeklyXp: Integer.create('weekly xp', dto.weeklyXp),
       streak: Integer.create('streak', dto.streak),
-      lastRankingPosition: dto.lastRankingPosition
-        ? RankingPosition.create(dto.lastRankingPosition)
+      lastWeekRankingPosition: dto.lastWeekRankingPosition
+        ? RankingPosition.create(dto.lastWeekRankingPosition)
         : null,
-      didSeeRankingResult: Logical.create(
-        'did user see ranking result?',
-        dto.didSeeRankingResult
+      canSeeRankingResult: Logical.create(
+        'can user see ranking result?',
+        dto.canSeeRankingResult
       ),
-      isRankingLoser: Logical.create('is user ranking loser?', dto.isRankingLoser),
       unlockedAchievementsIds: IdsCollection.create(
         'unlocked achievements ids',
         dto.unlockedAchievementsIds

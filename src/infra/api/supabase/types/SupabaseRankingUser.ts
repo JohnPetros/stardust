@@ -1,10 +1,12 @@
-import type { SupabaseUser } from './SupabaseUser'
-
-export type SupabaseRankingUser = Pick<
-  SupabaseUser,
-  'id' | 'slug' | 'name' | 'weekly_xp'
-> & {
-  avatars: {
-    image: string
+export type SupabaseRankingUser = {
+  id: string
+  xp: number
+  tier_id: string
+  user: {
+    name: string
+    slug: string
+    avatar: {
+      image: string
+    } | null
   } | null
 }

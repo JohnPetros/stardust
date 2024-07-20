@@ -4,7 +4,7 @@ import { AppError } from '../errors/global/AppError'
 export class ServiceResponse<Data> {
   constructor(
     private _data: Data | null,
-    private error: typeof BaseError | null = null
+    private _error: typeof BaseError | null = null
   ) {}
 
   get isSuccess() {
@@ -24,6 +24,10 @@ export class ServiceResponse<Data> {
 
     const error = new this.error()
     return error.message
+  }
+
+  get error() {
+    return this._error
   }
 
   throwError() {
