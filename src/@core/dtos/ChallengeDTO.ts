@@ -1,5 +1,5 @@
 export type ChallengeDTO = {
-  id: string
+  id?: string
   title: string
   code: string
   slug: string

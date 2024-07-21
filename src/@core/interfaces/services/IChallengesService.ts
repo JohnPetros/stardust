@@ -12,7 +12,9 @@ export type GetFilteredChallengesParams = {
 export interface IChallengesService {
   fetchChallengeBySlug(challengeId: string): Promise<ServiceResponse<ChallengeDTO>>
   fetchChallengeSlugByStarId(starId: string): Promise<ServiceResponse<string>>
-  // getChallengesSummary(userId: string): Promise<ChallengeSummary[]>
+  fetchChallengesWithOnlyDifficulty(): Promise<
+    ServiceResponse<{ id: string; difficulty: string }[]>
+  >
   // getFilteredChallenges(params: GetFilteredChallengesParams): Promise<Challenge[]>
   // getChallengeSlugByStarId(starId: string): Promise<string>
   // getUserCompletedChallengesIds(userId: string): Promise<string[]>

@@ -1,10 +1,10 @@
 import type { IChallengesService } from '@/@core/interfaces/services'
 import { ServiceResponse } from '@/@core/responses'
+import { ChallengeNotFoundError } from '@/@core/errors/challenges'
 
 import type { Supabase } from '../types/Supabase'
 import { SupabasePostgrestError } from '../errors'
 import { SupabaseChallengeMapper } from '../mappers'
-import { ChallengeNotFoundError } from '@/@core/errors/challenges'
 
 export const SupabaseChallengesService = (supabase: Supabase): IChallengesService => {
   const supabaseChallengeMapper = SupabaseChallengeMapper()
@@ -38,6 +38,23 @@ export const SupabaseChallengesService = (supabase: Supabase): IChallengesServic
       }
 
       return new ServiceResponse(data.slug)
+    },
+
+    async fetchChallengesWithOnlyDifficulty() {
+      const { data, error } = await supabase.from('challenges').select('id, difficulty')
+
+      if (error) {
+        return SupabasePostgrestError(error, ChallengeNotFoundError)
+      }
+
+      return new ServiceResponse(
+        data.filter(({ id, difficulty }) => {
+          return {
+            id,
+            difficulty: difficulty,
+          }
+        })
+      )
     },
   }
 }
