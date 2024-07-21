@@ -1,12 +1,12 @@
 import type { RocketDTO } from '@/@core/dtos'
 import { BaseEntity } from '../abstracts'
-import { Integer, Name, Slug } from '../structs'
+import { Image, Integer, Name } from '../structs'
 
 type RocketProps = {
   id?: string
   name: Name
   price: Integer
-  image: string
+  image: Image
 }
 
 export class Rocket extends BaseEntity {
@@ -22,7 +22,7 @@ export class Rocket extends BaseEntity {
       id: dto.id,
       name: Name.create(dto.name),
       price: Integer.create('price', dto.price),
-      image: dto.image,
+      image: Image.create(dto.image),
     })
   }
 
@@ -43,7 +43,7 @@ export class Rocket extends BaseEntity {
       id: this.id,
       name: this.name.value,
       price: this.price.value,
-      image: this.image,
+      image: this.image.value,
     }
   }
 }
