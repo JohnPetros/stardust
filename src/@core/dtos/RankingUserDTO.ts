@@ -3,6 +3,9 @@ export type RankingUserDTO = {
   name: string
   slug: string
   xp: number
-  avatarImage: string
+  avatar: {
+    image: string
+    name: string
+  }
   tierId: string
 }

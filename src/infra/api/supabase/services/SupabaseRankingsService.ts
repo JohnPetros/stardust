@@ -44,7 +44,7 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
     async fetchRankingUsersByTier(tierId: string) {
       const { data, error } = await supabase
         .from('users')
-        .select('id, name, slug, tier_id, xp:weekly_xp, avatar:avatars(image)')
+        .select('id, name, slug, tier_id, xp:weekly_xp, avatar:avatars(name, image)')
         .eq('tier_id', tierId)
         .order('weekly_xp', { ascending: false })
 
@@ -56,7 +56,10 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
         id: user.id,
         name: user.name ?? '',
         slug: user.slug ?? '',
-        avatarImage: user.avatar?.image ?? '',
+        avatar: {
+          image: user.avatar?.image ?? '',
+          name: user.avatar?.name ?? '',
+        },
         tierId: user.tier_id ?? '',
         xp: user.xp,
       }))
@@ -67,7 +70,7 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
     async fetchRankingWinnersByTier(tierId: string) {
       const { data, error } = await supabase
         .from('ranking_users')
-        .select('id, xp, tier_id, user:users(name, slug, avatar:avatars(image))')
+        .select('id, xp, tier_id, user:users(name, slug, avatar:avatars(name, image))')
         .eq('tier_id', tierId)
 
       if (error) {

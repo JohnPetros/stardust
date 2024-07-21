@@ -56,6 +56,8 @@ export const SupabaseUserMapper = () => {
         completedPlanetsIds: [],
         canSeeRankingResult: supabaseUser.can_see_ranking,
         lastWeekRankingPosition: supabaseUser.last_week_ranking_position,
+        weekStatus: supabaseUser.week_status,
+        createdAt: supabaseUser.created_at,
 
         // studyTime: supabaseUser.study_time ?? '',
         // createdAt: supabaseUser.created_at ?? '',
@@ -70,6 +72,7 @@ export const SupabaseUserMapper = () => {
     toSupabase(user: User): SupabaseUser {
       const userDTO = user.dto
 
+      // @ts-ignore
       const supabaseUser: SupabaseUser = {
         id: user.id,
         avatar_id: user.avatar.id,
@@ -84,6 +87,8 @@ export const SupabaseUserMapper = () => {
         weekly_xp: userDTO.weeklyXp,
         streak: userDTO.streak,
         can_see_ranking: userDTO.canSeeRankingResult,
+        created_at: userDTO.createdAt,
+        week_status: userDTO.weekStatus,
       }
 
       return supabaseUser as unknown as SupabaseUser

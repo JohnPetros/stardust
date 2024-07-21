@@ -7,6 +7,7 @@ export type SupabaseRankingUser = {
     slug: string
     avatar: {
       image: string
+      name: string
     } | null
   } | null
 }
