@@ -1,13 +1,13 @@
-import type { NextRequest } from 'next/server'
-
 import { NextHttp } from '@/server/protocols/http'
 import { SupabaseRouteHandlerClient } from '@/infra/api/supabase/clients'
 import { SupabasePlanetsService } from '@/infra/api/supabase/services'
 
 import { FetchPlanetsController } from '@/server/controllers/app'
 
-export async function GET(request: NextRequest) {
-  const nextHttp = NextHttp(request)
+export const dynamic = 'force-static'
+
+export async function GET() {
+  const nextHttp = NextHttp()
 
   const supabase = SupabaseRouteHandlerClient()
   const planetsService = SupabasePlanetsService(supabase)

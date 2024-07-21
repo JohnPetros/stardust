@@ -1,5 +1,3 @@
-import type { NextRequest } from 'next/server'
-
 import { NextHttp } from '@/server/protocols/http'
 import { SupabaseRouteHandlerClient } from '@/infra/api/supabase/clients'
 import {
@@ -10,8 +8,10 @@ import {
 
 import { FetchRankingPageDataController } from '@/server/controllers/app'
 
-export async function GET(request: NextRequest) {
-  const nextHttp = NextHttp(request)
+export const dynamic = 'force-static'
+
+export async function GET() {
+  const nextHttp = NextHttp()
 
   const supabase = SupabaseRouteHandlerClient()
   const authService = SupabaseAuthService(supabase)

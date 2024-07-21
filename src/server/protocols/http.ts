@@ -3,12 +3,12 @@ import { type NextRequest, NextResponse } from 'next/server'
 import type { IHttp, Cookie } from '@/@core/interfaces/handlers/IHttp'
 import { HttpResponse } from '@/@core/responses'
 
-export const NextHttp = (request: NextRequest): IHttp => {
+export const NextHttp = (request?: NextRequest): IHttp => {
   let nextRedirectResponse: NextResponse<unknown>
 
   return {
     getCurrentRoute() {
-      return `/${request.nextUrl.pathname.split('/')[1]}`
+      return request ? `/${request.nextUrl.pathname.split('/')[1]}` : ''
     },
 
     redirect(route: string) {
@@ -16,12 +16,14 @@ export const NextHttp = (request: NextRequest): IHttp => {
         return new HttpResponse(nextRedirectResponse, 303)
       }
 
-      const nextResponse = NextResponse.redirect(new URL(route, request.url))
+      const nextResponse = NextResponse.redirect(
+        new URL(route, request ? request.url : '')
+      )
       return new HttpResponse(nextResponse, 303)
     },
 
     getSearchParam(key: string) {
-      return new URL(request.url).searchParams.get(key)
+      return request ? new URL(request.url).searchParams.get(key) : ''
     },
 
     setCookie({ key, value, duration }: Cookie) {

@@ -6,8 +6,8 @@ import { SupabaseRankingsService } from '@/infra/api/supabase/services'
 
 import { UpdateRakingsController } from '@/server/controllers/app'
 
-export async function POST(request: NextRequest) {
-  const nextHttp = NextHttp(request)
+export async function POST() {
+  const nextHttp = NextHttp()
 
   const supabase = SupabaseRouteHandlerClient()
   const rankingsService = SupabaseRankingsService(supabase)
