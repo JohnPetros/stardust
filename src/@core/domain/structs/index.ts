@@ -1,6 +1,7 @@
 export { AchievementMetric } from './AchievementMetric'
 export { AchievementProgress } from './AchievementProgress'
 export { AchievementsCollection } from './AchievementsCollection'
+export { ChallengeDifficulty } from './ChallengeDifficulty'
 export { Email } from './Email'
 export { Name } from './Name'
 export { Slug } from './Slug'

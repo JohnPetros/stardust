@@ -1,4 +1,6 @@
 import { StringValidation } from '@/@core/lib/validation'
+import type { AchievementMetricValue } from '../types'
+import { ValidationError } from '@/@core/errors/lib'
 
 export class AchievementMetric {
   readonly value: AchievementMetricValue
@@ -8,11 +10,11 @@ export class AchievementMetric {
   }
 
   static create(value: string) {
-    if (AchievementMetric.isMetric(value)) {
-      return new AchievementMetric(value)
+    if (!AchievementMetric.isMetric(value)) {
+      throw new ValidationError(['Achievement Metric is not valid'])
     }
 
-    return null as unknown as AchievementMetric
+    return new AchievementMetric(value)
   }
 
   static isMetric(value: string): value is AchievementMetricValue {

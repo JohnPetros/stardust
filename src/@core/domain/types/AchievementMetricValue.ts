@@ -1,4 +1,4 @@
-type AchievementMetricValue =
+export type AchievementMetricValue =
   | 'unlockedStarsCount'
   | 'acquiredRocketsCount'
   | 'completedChallengesCount'
