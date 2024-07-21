@@ -3,8 +3,8 @@ export type ChallengeDTO = {
   title: string
   code: string
   slug: string
+  difficulty: string
   // userSlug: string
-  // difficulty: ChallengeDifficulty
   // createdAt: string
   // functionName: string | null
   // texts: Text[]
