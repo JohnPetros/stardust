@@ -30,8 +30,9 @@ import {
 } from '@phosphor-icons/react/dist/ssr'
 
 import type { IconName } from '../types/IconName'
+import type { Icon } from '@phosphor-icons/react'
 
-export const ICONS: Record<IconName, unknown> = {
+export const ICONS: Record<IconName, Icon> = {
   'arrow-up': ArrowUp,
   'arrow-down': ArrowDown,
   'arrow-left': ArrowLeft,
