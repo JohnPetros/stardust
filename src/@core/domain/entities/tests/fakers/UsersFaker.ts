@@ -28,12 +28,14 @@ export class UsersFaker {
       rescuableAchievementsIds: [],
       unlockedAchievementsIds: [],
       unlockedStarsIds: [],
+      weekStatus: [],
       acquiredRocketsIds: [],
       acquiredAvatarsIds: [],
       canSeeRankingResult: false,
       avatar: AvatarsFaker.fake().dto,
       tier: TiersFaker.fake().dto,
       rocket: RocketsFaker.fake().dto,
+      createdAt: faker.date.birthdate().toString(),
       ...baseDTO,
     }
   }

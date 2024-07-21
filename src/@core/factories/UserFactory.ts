@@ -10,6 +10,7 @@ import {
   RankingPosition,
 } from '../domain/structs'
 import { IdsCollection } from '../domain/structs/IdsCollection'
+import { WeekStatus } from '../domain/structs/WeekStatus'
 import type { UserDTO } from '../dtos'
 
 export class UserFactory {
@@ -21,11 +22,12 @@ export class UserFactory {
       rocket: Rocket.create(dto.rocket),
       avatar: Avatar.create(dto.avatar),
       tier: Tier.create(dto.tier),
-      level: OrdinalNumber.create('level', dto.level),
-      coins: Integer.create('coins', dto.coins),
-      xp: Integer.create('xp', dto.xp),
-      weeklyXp: Integer.create('weekly xp', dto.weeklyXp),
-      streak: Integer.create('streak', dto.streak),
+      level: OrdinalNumber.create('User Level', dto.level),
+      coins: Integer.create('User coins', dto.coins),
+      xp: Integer.create('User Xp', dto.xp),
+      weeklyXp: Integer.create('User Weekly Xp', dto.weeklyXp),
+      weekStatus: WeekStatus.create(dto.weekStatus),
+      streak: Integer.create('User Streak', dto.streak),
       lastWeekRankingPosition: dto.lastWeekRankingPosition
         ? RankingPosition.create(dto.lastWeekRankingPosition)
         : null,
@@ -58,6 +60,7 @@ export class UserFactory {
         'completed planets ids',
         dto.completedPlanetsIds
       ),
+      createdAt: new Date(dto.createdAt),
       id: dto?.id,
     }
   }

@@ -11,6 +11,7 @@ export type UserDTO = {
   coins: number
   xp: number
   weeklyXp: number
+  weekStatus: string[]
   streak: number
   tier: TierDTO
   rocket: RocketDTO
@@ -24,8 +25,7 @@ export type UserDTO = {
   completedPlanetsIds: string[]
   canSeeRankingResult: boolean
   lastWeekRankingPosition: number | null
-
-  // createdAt: string
+  createdAt: string
   // didBreakStreak: boolean
   // didCompleteSaturday: boolean
   // studyTime: string
