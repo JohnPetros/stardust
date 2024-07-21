@@ -22,7 +22,7 @@ export default async function Shop() {
 
   if (response.isError) response.throwError()
 
-  await waitFor(2500)
+  await waitFor(1000)
 
   return <ShopPage rockets={response.body.rockets} avatars={response.body.avatars} />
 }
