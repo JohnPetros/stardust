@@ -3,6 +3,7 @@ import type { ServiceResponse } from '@/@core/responses'
 
 export interface IAchievementsService {
   fetchAchievements(): Promise<ServiceResponse<AchievementDTO[]>>
+  fetchUnlockedAchievements(userId: string): Promise<ServiceResponse<AchievementDTO[]>>
   saveUnlockedAchievement(
     achievementId: string,
     userId: string

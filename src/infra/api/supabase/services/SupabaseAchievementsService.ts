@@ -29,6 +29,22 @@ export const SupabaseAchievementsService = (supabase: Supabase): IAchievementsSe
       return new ServiceResponse(achievements)
     },
 
+    async fetchUnlockedAchievements(userId: string) {
+      const { data, error } = await supabase
+        .from('achievements')
+        .select('*, users_unlocked_achievements(user_id)')
+        .eq('users_unlocked_achievements.user_id', userId)
+        .order('position', { ascending: true })
+
+      if (error) {
+        return SupabasePostgrestError(error, FetchAchievementsUnexpectedError)
+      }
+
+      const achievements = data.map(supabaseAchievementMapper.toDTO)
+
+      return new ServiceResponse(achievements)
+    },
+
     async saveUnlockedAchievement(achievementId: string, userId: string) {
       const { error } = await supabase
         .from('users_unlocked_achievements')
