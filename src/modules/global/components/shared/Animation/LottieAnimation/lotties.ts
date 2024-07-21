@@ -2,6 +2,7 @@ import ApolloAsking from '../../../../../../../public/lotties/apollo-asking.json
 import ApoloCrying from '../../../../../../../public/lotties/apollo-crying.json'
 import ApoloDenying from '../../../../../../../public/lotties/apollo-denying.json'
 import ApolloEarning from '../../../../../../../public/lotties/apollo-earning.json'
+import ApolloMissing from '../../../../../../../public/lotties/apollo-missing.json'
 import ApolloRidingRocket from '../../../../../../../public/lotties/apollo-riding-rocket.json'
 import RocketLaunching from '../../../../../../../public/lotties/rocket-launching.json'
 import PageNotFound from '../../../../../../../public/lotties/404.json'
@@ -21,6 +22,7 @@ export const LOTTIES: Record<AnimationName, unknown> = {
   'apollo-asking': ApolloAsking,
   'apollo-denying': ApoloDenying,
   'apollo-earning': ApolloEarning,
+  'apollo-missing': ApolloMissing,
   'apollo-riding-rocket': ApolloRidingRocket,
   'rocket-lauching': RocketLaunching,
   'rocket-floating': RocketFloating,

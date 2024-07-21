@@ -3,6 +3,7 @@ export type AnimationName =
   | 'apollo-asking'
   | 'apollo-denying'
   | 'apollo-earning'
+  | 'apollo-missing'
   | 'apollo-riding-rocket'
   | 'rocket-lauching'
   | 'rocket-floating'
