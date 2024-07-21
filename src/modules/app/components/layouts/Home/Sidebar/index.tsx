@@ -23,7 +23,7 @@ export function Sidebar() {
           {user && (
             <div className='flex flex-col items-center justify-center gap-3 text-gray-100'>
               <UserAvatar
-                avatarUrl={user.avatar.image.value}
+                avatarImage={user.avatar.image.value}
                 avatarName={user.avatar.name.value}
                 size={96}
               />

@@ -8,12 +8,12 @@ export function useRouter() {
     router.push(route)
   }
 
-  function getCurrentroute() {
+  function getCurrentRoute() {
     return pathname
   }
 
   return {
     goTo,
-    getCurrentroute,
+    getCurrentRoute,
   }
 }

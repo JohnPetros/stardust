@@ -1,8 +1,7 @@
 import { tv } from 'tailwind-variants'
 
-import { Tooltip } from '../../../modules/global/components/shared/Tooltip'
-
-import { ChallengeDifficulty } from '@/@types/Challenge'
+import type { ChallengeDifficultyLevel } from '@/@core/domain/types'
+import { Tooltip } from '../Tooltip'
 
 const DIFFICULTIES = {
   easy: 'Fácil',
@@ -22,7 +21,7 @@ const difficultyStyles = tv({
 })
 
 type DifficultyBadgeProps = {
-  difficulty: ChallengeDifficulty
+  difficulty: ChallengeDifficultyLevel
 }
 
 export function DifficultyBadge({ difficulty }: DifficultyBadgeProps) {

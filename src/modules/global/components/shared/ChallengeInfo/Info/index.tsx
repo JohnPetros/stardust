@@ -1,23 +1,28 @@
 'use client'
 
-import { Icon } from '@phosphor-icons/react'
 import { twMerge } from 'tailwind-merge'
 
-import { Tooltip } from '../../../../modules/global/components/shared/Tooltip'
+import type { IconName } from '../../Icon/types'
+import { Tooltip } from '../../Tooltip'
+import { Icon } from '../../Icon'
 
-interface InfoProps {
+type InfoProps = {
   label: string | number
-  icon: Icon
+  icon: IconName
   iconStyle?: string
   tooltipText: string
 }
 
-export function Info({ label, icon: Icon, iconStyle, tooltipText }: InfoProps) {
+export function Info({ label, icon, iconStyle, tooltipText }: InfoProps) {
   return (
     <li className='text-sm text-gray-400'>
       <Tooltip content={tooltipText} direction='bottom'>
         <div className='flex items-center gap-1'>
-          <Icon className={twMerge('text-sm text-gray-400', iconStyle)} weight='bold' />
+          <Icon
+            name={icon}
+            weight='bold'
+            className={twMerge('text-sm text-gray-400', iconStyle)}
+          />
           {label}
         </div>
       </Tooltip>

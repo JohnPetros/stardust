@@ -1,9 +1,7 @@
-import { ReactNode } from 'react'
-import { VariantProps, tv } from 'tailwind-variants'
+import type { ReactNode } from 'react'
+import { type VariantProps, tv } from 'tailwind-variants'
 
 import { TypeWriter } from '../TypeWriter'
-
-import { formatSpecialCharacters } from '@/modules/global/utils'
 
 const contentStyles = tv({
   base: 'font-medium tracking-wider text-gray-100 text-sm w-full p-3 rounded-md not-prose leading-6 mx-auto',
@@ -38,21 +36,23 @@ export function Content({
         .join(' ')
     : children
 
-  const formattedContent = formatSpecialCharacters(String(content), 'decode')
+  return children
 
-  return (
-    <div className={contentStyles({ type })}>
-      {typeof content === 'string' ? (
-        <>
-          {hasAnimation ? (
-            <TypeWriter text={content} isEnable={hasAnimation} />
-          ) : (
-            <span dangerouslySetInnerHTML={{ __html: formattedContent }}></span>
-          )}
-        </>
-      ) : (
-        content
-      )}
-    </div>
-  )
+  // const formattedContent = formatSpecialCharacters(String(content), 'decode')
+
+  // return (
+  //   <div className={contentStyles({ type })}>
+  //     {typeof content === 'string' ? (
+  //       <>
+  //         {hasAnimation ? (
+  //           <TypeWriter text={content} isEnable={hasAnimation} />
+  //         ) : (
+  //           <span dangerouslySetInnerHTML={{ __html: formattedContent }}></span>
+  //         )}
+  //       </>
+  //     ) : (
+  //       content
+  //     )}
+  //   </div>
+  // )
 }

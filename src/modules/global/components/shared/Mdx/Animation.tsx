@@ -1,5 +1,5 @@
-import { ReactNode } from 'react'
-import { motion, Variants } from 'framer-motion'
+import type { ReactNode } from 'react'
+import { motion, type Variants } from 'framer-motion'
 
 const textAnimations: Variants = {
   hidden: {
@@ -31,7 +31,7 @@ export function Animation({ hasAnimation = false, children }: AnimationProps) {
       variants={textAnimations}
       initial={hasAnimation && 'hidden'}
       animate={hasAnimation && 'visible'}
-      className="mt-4 w-full"
+      className='mt-4 w-full'
     >
       {children}
     </motion.div>

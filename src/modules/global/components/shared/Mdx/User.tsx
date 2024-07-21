@@ -21,7 +21,13 @@ export function User({ children, hasAnimation = true }: UserProps) {
           <Content type='user' hasAnimation={hasAnimation}>
             {children}
           </Content>
-          {user && <UserAvatar avatarId={user?.avatarId} size={80} />}
+          {user && (
+            <UserAvatar
+              avatarName={user.avatar.name.value}
+              avatarImage={user.avatar.image.value}
+              size={80}
+            />
+          )}
         </div>
       </div>
     </Animation>

@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
-
-import { AlertDialogRef } from '../../../../../global/components/AlertDialog/types/AlertDialogRef'
+import type { AlertDialogRef } from '../AlertDialog/types'
 
 export function usePrompt(initialTitle: string) {
   const [title, setTitle] = useState(initialTitle)

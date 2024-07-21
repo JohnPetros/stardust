@@ -1,10 +1,8 @@
 'use client'
 
-import { Options } from 'typewriter-effect'
-
-import { TypeWriterProps } from '.'
-
-import { SPECIAL_CHARACTERS } from '@/global/constants'
+import type { Options } from 'typewriter-effect'
+import type { TypeWriterProps } from '.'
+import { SPECIAL_CHARACTERS } from '@/modules/global/constants'
 
 export function useTypeWriter({
   text,

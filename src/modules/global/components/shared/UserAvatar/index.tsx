@@ -6,10 +6,11 @@ import { useApi } from '@/infra/api'
 
 type UserAvatarProps = {
   avatarImage: string
+  avatarName: string
   size: number
 }
 
-export function UserAvatar({ avatarImage, size }: UserAvatarProps) {
+export function UserAvatar({ avatarImage, avatarName, size }: UserAvatarProps) {
   const api = useApi()
   const avatarImageSrc = api.fetchImage('avatars', avatarImage)
 
@@ -20,6 +21,7 @@ export function UserAvatar({ avatarImage, size }: UserAvatarProps) {
         className='skeleton relative grid place-content-center overflow-hidden border border-green-700 bg-gray-300 shrink-0 rounded-full'
         style={{ width: size, height: size, borderRadius: '50%' }}
         onLoad={(element) => element.currentTarget.classList.remove('skeleton')}
+        alt={`Avatar ${avatarName}`}
       />
     </Avatar.Root>
   )

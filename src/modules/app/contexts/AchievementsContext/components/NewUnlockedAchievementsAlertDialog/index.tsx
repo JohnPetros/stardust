@@ -35,7 +35,7 @@ export function NewUnlockedAchievementsAlertDialog({
 
                 <AchievementCard
                   id={achievement.id}
-                  icon={achievement.icon}
+                  icon={achievement.icon.value}
                   description={achievement.description}
                   name={achievement.name.value}
                   requiredCount={achievement.requiredCount.value}

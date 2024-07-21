@@ -1,4 +1,10 @@
-import { ForwardedRef, forwardRef, ReactNode, useImperativeHandle, useRef } from 'react'
+import {
+  type ForwardedRef,
+  forwardRef,
+  type ReactNode,
+  useImperativeHandle,
+  useRef,
+} from 'react'
 
 import { usePrompt } from './usePromp'
 import { Button } from '../Button'

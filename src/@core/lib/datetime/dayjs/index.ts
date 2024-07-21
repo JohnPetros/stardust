@@ -1,7 +1,10 @@
 import dayjs from 'dayjs'
+import 'dayjs/locale/pt-br'
 
 import type { IDatetime } from '@/@core/interfaces/lib'
 import type { DateFormat } from '@/@core/interfaces/lib/IDatetime'
+
+dayjs.locale('pt-br')
 
 export class DayJsDatetime implements IDatetime {
   getDaysCountToSunday(): number {

@@ -3,11 +3,11 @@
 import Image from 'next/image'
 import { twMerge } from 'tailwind-merge'
 
-import { PODIUM } from '@/global/constants'
 import { AnimatedPodium } from './AnimatedPodium'
 import { AnimatedAvatar } from './AnimatedAvatar'
 import { Animation } from '@/modules/global/components/shared/Animation'
 import { UserAvatar } from '@/modules/global/components/shared/UserAvatar'
+import { PODIUM } from '../../podium'
 
 const BASE_HEIGHT = 300 // px
 
@@ -22,9 +22,16 @@ type RankingWinnerProps = {
   name: string
   xp: number
   avatarImage: string
+  avatarName: string
 }
 
-export function RankingWinner({ position, avatarImage, name, xp }: RankingWinnerProps) {
+export function RankingWinner({
+  position,
+  avatarName,
+  avatarImage,
+  name,
+  xp,
+}: RankingWinnerProps) {
   const place = PODIUM.find((place) => place.position === position)
 
   if (place)
@@ -42,7 +49,7 @@ export function RankingWinner({ position, avatarImage, name, xp }: RankingWinner
                 <Animation name='shinning' size={140} />
               </span>
             )}
-            <UserAvatar avatarImage={avatarImage} size={70} />
+            <UserAvatar avatarName={avatarName} avatarImage={avatarImage} size={70} />
             <strong className='mx-auto text-center text-lg font-medium text-gray-100'>
               {name}
             </strong>

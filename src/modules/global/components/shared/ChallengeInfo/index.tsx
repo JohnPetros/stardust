@@ -1,9 +1,4 @@
-import { ChartLine, CheckCircle, Circle, Target, User } from '@phosphor-icons/react'
-import Link from 'next/link'
-
 import { Info } from './Info'
-
-import { deslugify } from '@/modules/global/utils'
 
 type ChallengeInfo = {
   isCompleted: boolean
@@ -22,12 +17,13 @@ export function ChallengeInfo({
 }: ChallengeInfo) {
   const totalVotes = upvotes + downvotes
   const acceptanceRate = totalVotes ? (upvotes / totalVotes) * 100 : 0
-  const userName = deslugify(userSlug)
+  // const userName = deslugify(userSlug)
+  const userName = ''
 
   return (
     <ul className='flex items-center gap-3'>
       <Info
-        icon={isCompleted ? CheckCircle : Circle}
+        icon={isCompleted ? 'checked' : 'unchecked'}
         iconStyle={isCompleted ? 'text-green-500' : 'text-red-700'}
         label={isCompleted ? 'Resolvido' : 'Não resolvido'}
         tooltipText={
@@ -37,12 +33,12 @@ export function ChallengeInfo({
         }
       />
       <Info
-        icon={ChartLine}
-        label={acceptanceRate + '%'}
+        icon='rate'
+        label={`${acceptanceRate}%`}
         tooltipText={`Taxa de aceitação de usuários que que deram upvote para esse desafio de um total de ${totalVotes} votos.`}
       />
       <Info
-        icon={Target}
+        icon='target'
         label={totalCompletitions}
         tooltipText={'Número de usuários que concluiram esse desafio.'}
       />

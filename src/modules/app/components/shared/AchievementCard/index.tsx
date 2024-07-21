@@ -34,8 +34,7 @@ export function AchievementCard({
   isRescuable,
   children: progress,
 }: AchievementCardProps) {
-  const { handleRescuButtonClick, handleRescuedAchievementsAlertDialogClose } =
-    useAchievementCard(id, reward)
+  const { handleRescueButtonClick } = useAchievementCard(id, reward)
 
   const api = useApi()
   const iconImage = api.fetchImage('achievements', icon)
@@ -62,13 +61,13 @@ export function AchievementCard({
             achivementName={name}
             achivementImage={icon}
             achivementReward={reward}
-            onClose={() => handleRescuedAchievementsAlertDialogClose(id)}
+            onClose={() => handleRescueButtonClick()}
           >
             <AnimatedButton>
               <Button
                 tabIndex={0}
                 className='mt-1 h-8 w-32 text-sm md:ml-4'
-                onClick={handleRescuButtonClick}
+                onClick={handleRescueButtonClick}
               >
                 Resgatar
               </Button>

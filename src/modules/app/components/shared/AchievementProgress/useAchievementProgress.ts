@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
-import { AchievementProgress, type Integer } from '@/@core/domain/structs'
+import type { AchievementMetricValue } from '@/@core/domain/types'
+import { AchievementProgress } from '@/@core/domain/structs'
 import { useAuthContext } from '@/modules/global/contexts/AuthContext'
 
 export function useAchievementProgress(

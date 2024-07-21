@@ -32,9 +32,7 @@ describe('useSignInPage hook', () => {
 
     const { result } = Hook()
 
-    await act(async () => {
-      await result.current.handleFormSubmit({ email: fakeEmail, password: fakePassword })
-    })
+    await result.current.handleFormSubmit({ email: fakeEmail, password: fakePassword })
 
     expect(handleSignInMock).toHaveBeenCalledWith(fakeEmail, fakePassword)
   })
@@ -46,9 +44,7 @@ describe('useSignInPage hook', () => {
 
     expect(result.current.isRocketVisible).toBe(false)
 
-    await act(async () => {
-      await result.current.handleFormSubmit({ email: fakeEmail, password: fakePassword })
-    })
+    await result.current.handleFormSubmit({ email: fakeEmail, password: fakePassword })
 
     expect(result.current.isRocketVisible).toBe(false)
   })
@@ -76,9 +72,7 @@ describe('useSignInPage hook', () => {
 
     expect(result.current.isRocketVisible).toBe(false)
 
-    await act(async () => {
-      await result.current.handleFormSubmit({ email: fakeEmail, password: fakePassword })
-    })
+    await result.current.handleFormSubmit({ email: fakeEmail, password: fakePassword })
 
     await waitFor(() => {
       expect(goToMock).toHaveBeenCalledWith(ROUTES.private.app.home.space)

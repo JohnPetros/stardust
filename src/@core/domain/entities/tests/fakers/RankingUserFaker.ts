@@ -8,7 +8,10 @@ export class RankingUsersFaker {
       name: faker.person.firstName(),
       slug: faker.lorem.slug(),
       xp: faker.number.int({ max: 100 }),
-      avatarImage: `${faker.image.avatar()}.jpg`,
+      avatar: {
+        image: `${faker.image.avatar()}.jpg`,
+        name: faker.person.firstName(),
+      },
       tierId: faker.string.uuid(),
       ...baseDTO,
     }

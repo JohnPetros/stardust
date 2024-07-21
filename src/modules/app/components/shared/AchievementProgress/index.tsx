@@ -1,3 +1,4 @@
+import type { AchievementMetricValue } from '@/@core/domain/types'
 import { ProgressBar } from '@/modules/global/components/shared/ProgressBar'
 import { useAchievementProgress } from './useAchievementProgress'
 

@@ -1,64 +1,38 @@
-'use client'
-
-import { motion, Variants } from 'framer-motion'
 import Image from 'next/image'
 
+import { WeekStatus } from '@/@core/domain/structs'
 import { StreakIcon } from '../StreakIcon'
-
-import { WEEK_DAYS } from '@/global/constants'
-
-const weekStatusIcons: { [key in string]: string } = {
-  todo: 'placeholder-day.svg',
-  done: 'success-day.svg',
-  undone: 'fail-day.svg',
-}
-
-const weekDayAnimations: Variants = {
-  up: {
-    opacity: 0,
-    y: -12,
-  },
-  down: {
-    opacity: 1,
-    y: 0,
-  },
-}
+import { AnimatedWeekday } from './AnimatedWeekday'
+import { WEEK_DAY_STATUS_ICONS } from './week-day-status-icons'
 
 type StreakProps = {
-  weekStatus: string[]
-  streakAmount: number
+  weekStatus: WeekStatus
+  streakCount: number
 }
 
-export function StreakBoard({ weekStatus, streakAmount }: StreakProps) {
+export function StreakBoard({ weekStatus, streakCount }: StreakProps) {
   return (
     <div className='flex flex-col items-center justify-center gap-4 rounded-md border border-gray-300 p-6'>
       <h4 className='text-gray-300'>Sequência de dias estudados</h4>
 
       <div className='grid grid-cols-7 gap-3'>
-        {WEEK_DAYS.map((weekday, index) => (
-          <motion.div
-            variants={weekDayAnimations}
-            initial='up'
-            animate='down'
-            transition={{ delay: index * 0.4 }}
-            key={weekday}
-            className='flex flex-col items-center justify-center gap-2'
-          >
+        {WeekStatus.DAYS.map((weekday, index) => (
+          <AnimatedWeekday key={weekday} index={index}>
             <strong className='uppercase text-gray-300'>{weekday}</strong>
             <Image
-              src={`/icons/${weekStatusIcons[weekStatus[index]]}`}
+              src={`/icons/${WEEK_DAY_STATUS_ICONS[weekStatus.statuses[index]]}`}
               width={24}
               height={24}
               alt=''
             />
-          </motion.div>
+          </AnimatedWeekday>
         ))}
       </div>
 
       <div className='flex items-center justify-center gap-1'>
         <StreakIcon size={32} />
         <p className='text-center font-medium text-green-500'>
-          {streakAmount} {streakAmount > 1 ? 'dias' : 'dia'} estudados seguidos
+          {streakCount} {streakCount > 1 ? 'dias' : 'dia'} estudados seguidos
         </p>
       </div>
     </div>

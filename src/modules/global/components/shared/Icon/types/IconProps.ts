@@ -1,5 +1,5 @@
-import { ClassNameValue } from 'tailwind-merge'
-import { IconName } from './IconName'
+import type { ClassNameValue } from 'tailwind-merge'
+import type { IconName } from './IconName'
 
 export type IconProps = {
   name: IconName

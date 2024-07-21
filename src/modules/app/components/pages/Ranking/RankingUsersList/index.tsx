@@ -20,7 +20,8 @@ export function RankingUsersList() {
             <RankingUser
               id={user.id}
               name={user.name.value}
-              avatarImage={user.avatarImage.value}
+              avatarImage={user.avatar.image.value}
+              avatarName={user.avatar.name.value}
               xp={user.xp.value}
               losersPositionOffset={losersPositionOffset}
               position={user.rankingPosition.position.value}

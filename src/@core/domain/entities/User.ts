@@ -15,6 +15,8 @@ import type { Avatar } from './Avatar'
 import type { Rocket } from './Rocket'
 import { BaseEntity } from '../abstracts'
 import type { Tier } from './Tier'
+import type { AchievementMetricValue } from '../types'
+import type { WeekStatus } from '../structs/WeekStatus'
 
 type UserProps = {
   id?: string
@@ -29,6 +31,7 @@ type UserProps = {
   xp: Integer
   weeklyXp: Integer
   streak: Integer
+  weekStatus: WeekStatus
   unlockedStarsIds: IdsCollection
   acquiredRocketsIds: IdsCollection
   acquiredAvatarsIds: IdsCollection
@@ -38,6 +41,7 @@ type UserProps = {
   completedPlanetsIds: IdsCollection
   canSeeRankingResult: Logical
   lastWeekRankingPosition: RankingPosition | null
+  createdAt: Date
   _observer?: Observer
 }
 
@@ -277,6 +281,10 @@ export class User extends BaseEntity {
     return this.props.weeklyXp
   }
 
+  get weekStatus() {
+    return this.props.weekStatus
+  }
+
   get streak() {
     return this.props.streak
   }
@@ -293,6 +301,10 @@ export class User extends BaseEntity {
     return this.props.lastWeekRankingPosition
   }
 
+  get createdAt() {
+    return this.props.createdAt
+  }
+
   get dto(): UserDTO {
     return {
       id: this.id,
@@ -307,6 +319,7 @@ export class User extends BaseEntity {
       xp: this.xp.value,
       weeklyXp: this.weeklyXp.value,
       streak: this.streak.value,
+      weekStatus: this.props.weekStatus.statuses,
       unlockedStarsIds: this.props.unlockedStarsIds.value,
       acquiredRocketsIds: this.props.acquiredRocketsIds.value,
       acquiredAvatarsIds: this.props.acquiredAvatarsIds.value,
@@ -316,6 +329,7 @@ export class User extends BaseEntity {
       completedPlanetsIds: this.props.completedPlanetsIds.value,
       canSeeRankingResult: this.props.canSeeRankingResult.value,
       lastWeekRankingPosition: this.props.lastWeekRankingPosition?.position.value ?? null,
+      createdAt: this.createdAt.toString(),
     }
   }
 }

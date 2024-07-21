@@ -5,9 +5,9 @@ import { useAchievementsContext } from '@/modules/app/contexts/AchievementsConte
 export function useAchievementCard(id: string, reward: number) {
   const { rescueAchivement } = useAchievementsContext()
 
-  async function handleRescuButtonClick() {
+  async function handleRescueButtonClick() {
     await rescueAchivement(id, reward)
   }
 
-  return { handleRescuButtonClick }
+  return { handleRescueButtonClick }
 }

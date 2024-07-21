@@ -32,7 +32,7 @@ export const SupabaseAchievementsService = (supabase: Supabase): IAchievementsSe
     async fetchUnlockedAchievements(userId: string) {
       const { data, error } = await supabase
         .from('achievements')
-        .select('*, users_unlocked_achievements(user_id)')
+        .select('*, users_unlocked_achievements!inner(user_id)')
         .eq('users_unlocked_achievements.user_id', userId)
         .order('position', { ascending: true })
 

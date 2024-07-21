@@ -14,5 +14,5 @@ export async function GET(request: NextRequest) {
   const controller = ConfirmEmailController(authService)
   const httpResponse = await controller.handle(nextHttp)
 
-  return await httpResponse.body
+  return httpResponse.body
 }

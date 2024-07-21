@@ -24,6 +24,7 @@ type RankingUserProps = {
   id: string
   name: string
   avatarImage: string
+  avatarName: string
   xp: number
   position: number
   losersPositionOffset: number
@@ -34,6 +35,7 @@ export function RankingUser({
   id,
   name,
   avatarImage,
+  avatarName,
   xp,
   position,
   losersPositionOffset,
@@ -69,7 +71,7 @@ export function RankingUser({
               position
             )}
           </span>
-          <UserAvatar avatarImage={avatarImage} size={48} />
+          <UserAvatar avatarImage={avatarImage} avatarName={avatarName} size={48} />
         </div>
 
         <strong

@@ -1,5 +1,3 @@
-import { CodeSnippet } from '../../../modules/global/components/shared/CodeSnippet'
-
 import { Animation } from './Animation'
 
 type CodeProps = {
@@ -12,7 +10,8 @@ type CodeProps = {
 export function Code({ isRunnable = true, children, hasAnimation = true }: CodeProps) {
   return (
     <Animation hasAnimation={hasAnimation}>
-      <CodeSnippet
+      null
+      {/* <CodeSnippet
         code={
           !Array.isArray(children)
             ? children
@@ -22,7 +21,7 @@ export function Code({ isRunnable = true, children, hasAnimation = true }: CodeP
               : children[0].props.children
         }
         isRunnable={isRunnable}
-      />
+      /> */}
     </Animation>
   )
 }

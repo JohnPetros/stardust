@@ -1,5 +1,4 @@
 import {
-  type Icon,
   ArrowUp,
   ArrowDown,
   ArrowLeft,
@@ -7,22 +6,32 @@ import {
   Envelope,
   EyeClosed,
   Prohibit,
+  CalendarBlank,
   Check,
+  CheckCircle,
+  Circle,
   SignIn,
   Eye,
   X,
+  Terminal,
+  PlusCircle,
   List,
+  FileCode,
+  GearSix,
+  Shield,
   Lock,
   Clock,
+  ChartLine,
+  Target,
   Power,
   Rocket,
   Flag,
   ArrowsDownUp,
-} from '@phosphor-icons/react'
+} from '@phosphor-icons/react/dist/ssr'
 
 import type { IconName } from '../types/IconName'
 
-export const ICONS: Record<IconName, Icon> = {
+export const ICONS: Record<IconName, unknown> = {
   'arrow-up': ArrowUp,
   'arrow-down': ArrowDown,
   'arrow-left': ArrowLeft,
@@ -34,7 +43,17 @@ export const ICONS: Record<IconName, Icon> = {
   achievement: Flag,
   menu: List,
   check: Check,
+  checked: CheckCircle,
+  unchecked: Circle,
+  rate: ChartLine,
+  target: Target,
   clock: Clock,
+  calendar: CalendarBlank,
+  shield: Shield,
+  gear: GearSix,
+  terminal: Terminal,
+  plus: PlusCircle,
+  file: FileCode,
   enter: SignIn,
   eye: Eye,
   mail: Envelope,

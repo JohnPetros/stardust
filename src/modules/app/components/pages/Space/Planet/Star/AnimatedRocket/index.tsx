@@ -26,7 +26,7 @@ type AnimatedImageProps = {
 export function AnimatedRocket({ shouldAnimate }: AnimatedImageProps) {
   const { user } = useAuthContext()
   const api = useApi()
-  const rocketImage = api.fetchImage('rockets', user?.rocket.image ?? '')
+  const rocketImage = user ? api.fetchImage('rockets', user.rocket.image.value) : ''
 
   return (
     <motion.div

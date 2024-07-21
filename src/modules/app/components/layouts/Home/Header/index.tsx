@@ -53,7 +53,11 @@ export function Header() {
               <strong>{user.name.value}</strong>
               <small>{user.email.value}</small>
             </div>
-            <UserAvatar avatarImage={user.avatar.image.value} size={48} />
+            <UserAvatar
+              avatarImage={user.avatar.image.value}
+              avatarName={user.avatar.name.value}
+              size={48}
+            />
           </div>
         )}
       </AnimatedContainer>

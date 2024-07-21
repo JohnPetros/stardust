@@ -51,7 +51,8 @@ export function RankingResult() {
               key={winner.id}
               xp={winner.xp}
               name={winner.name}
-              avatarImage={winner.avatarImage}
+              avatarImage={winner.avatar.image}
+              avatarName={winner.avatar.name}
               position={index + 1}
             />
           ))}
@@ -75,6 +76,7 @@ export function RankingResult() {
                   xp={user.weeklyXp.value}
                   position={user.lastWeekRankingPosition.position.value}
                   avatarImage={user.avatar.image.value}
+                  avatarName={user.avatar.name.value}
                   losersPositionOffset={16}
                   canShowXp={false}
                 />

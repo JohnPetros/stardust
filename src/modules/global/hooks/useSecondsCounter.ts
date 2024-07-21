@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
 
 import { useLocalStorage } from './useLocalStorage'
-
-import { STORAGE } from '@/global/constants'
+import { STORAGE } from '../constants'
 
 export function useSecondsCounter(isEnabled: boolean) {
   const secondsStorage = useLocalStorage(STORAGE.keys.secondsCounter)

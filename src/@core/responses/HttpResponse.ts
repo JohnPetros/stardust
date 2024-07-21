@@ -1,10 +1,11 @@
+import { HTTP_STATUS_CODE } from '../constants'
 import { AppError } from '../errors/global/AppError'
 
-export class HttpResponse<Response = unknown> {
+export class HttpResponse<Response = any> {
   readonly body: Response
   readonly statusCode: number
 
-  constructor(body: Response, statusCode = 200) {
+  constructor(body: Response, statusCode = HTTP_STATUS_CODE.ok) {
     this.body = body
     this.statusCode = statusCode
   }
@@ -14,7 +15,7 @@ export class HttpResponse<Response = unknown> {
   }
 
   get isError() {
-    return this.statusCode >= 500
+    return this.statusCode >= HTTP_STATUS_CODE.serverError
   }
 
   get errorMessage() {

@@ -8,7 +8,7 @@ export function useRouterMock(returnMock?: Partial<ReturnType<typeof useRouter>>
 
   jest.mocked(useRouter).mockReturnValue({
     goTo: goToMock,
-    getCurrentroute: getCurrentrouteMock,
+    getCurrentRoute: getCurrentrouteMock,
     ...returnMock,
   })
 

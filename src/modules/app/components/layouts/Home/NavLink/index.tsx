@@ -25,7 +25,7 @@ export function NavLink({
   isExpanded = true,
 }: NavButtonProps) {
   const router = useRouter()
-  const currentRoute = router.getCurrentroute()
+  const currentRoute = router.getCurrentRoute()
   const isActive = currentRoute === route
 
   return (

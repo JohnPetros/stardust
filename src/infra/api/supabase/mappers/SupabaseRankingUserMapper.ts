@@ -9,7 +9,10 @@ export const SupabaseRankingUserMapper = () => {
         name: supabaseRankingUser.user?.name ?? '',
         slug: supabaseRankingUser.user?.slug ?? '',
         xp: supabaseRankingUser.xp,
-        avatarImage: supabaseRankingUser.user?.avatar?.image ?? '',
+        avatar: {
+          image: supabaseRankingUser.user?.avatar?.image ?? '',
+          name: supabaseRankingUser.user?.avatar?.name ?? '',
+        },
         tierId: supabaseRankingUser.tier_id,
       }
 
