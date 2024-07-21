@@ -1,6 +1,7 @@
-import type { IDatetime } from '@/@core/interfaces/lib'
-
 import dayjs from 'dayjs'
+
+import type { IDatetime } from '@/@core/interfaces/lib'
+import type { DateFormat } from '@/@core/interfaces/lib/IDatetime'
 
 export class DayJsDatetime implements IDatetime {
   getDaysCountToSunday(): number {
@@ -11,7 +12,7 @@ export class DayJsDatetime implements IDatetime {
     return daysCount
   }
 
-  format(): string {
-    throw new Error('Method not implemented.')
+  format(date: Date, dateFormat: DateFormat): string {
+    return dayjs(date).format(dateFormat)
   }
 }
