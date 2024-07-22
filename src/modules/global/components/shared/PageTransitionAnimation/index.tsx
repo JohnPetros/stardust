@@ -46,7 +46,7 @@ export function PageTransitionAnimation({
           initial='initial'
           animate='visible'
           exit='hidden'
-          className='fixed bottom-0 left-0 right-0 top-0 z-50 flex items-center justify-center bg-gray-900'
+          className='fixed bottom-0 left-0 right-0 top-0 z-[100] flex items-center justify-center bg-gray-900'
           data-testid='page transition'
         >
           <motion.div variants={apolloVariants}>

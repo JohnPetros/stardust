@@ -3,6 +3,7 @@
 import { createContext, type ReactNode } from 'react'
 
 import type { RankingUserDTO, TierDTO } from '@/@core/dtos'
+import { Tier } from '@/@core/domain/entities'
 import type { RankingContextValue } from './types/RankingContextValue'
 import { useRankingProvider } from './hooks/useRankingProvider'
 import { useRankingContext } from './hooks/useRankingContext'
@@ -22,7 +23,7 @@ export function RankingProvider({ children, tiers, rankingUsers }: RankingContex
     <RankingContext.Provider
       value={{
         ranking,
-        tiers,
+        tiers: tiers.map(Tier.create),
       }}
     >
       {children}

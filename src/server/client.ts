@@ -11,7 +11,7 @@ type CacheConfig = {
 
 export const NextClient = ({ isCacheEnable = true }: CacheConfig = {}): IClient => {
   const requestInit: RequestInit = {
-    cache: isCacheEnable ? 'force-cache' : 'no-store',
+    cache: !isCacheEnable ? 'force-cache' : 'no-store',
     headers: headers(),
   }
 

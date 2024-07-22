@@ -14,8 +14,8 @@ export function TiersList() {
           key={id}
           index={index}
           rankingId={id}
-          rankingImage={image}
-          rankingName={name}
+          rankingImage={image.value}
+          rankingName={name.value}
         />
       ))}
     </div>

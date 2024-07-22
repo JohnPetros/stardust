@@ -14,6 +14,7 @@ import { RankingUser } from '../RankingUsersList/RankingUser'
 import { RankingWinner } from './RankingWinner'
 import { useRankingResult } from './useRankingResult'
 import { _getLastWeekRankingWinners } from './_getLastWeekRankingWinners'
+import { Loading } from '@/modules/global/components/shared/Loading'
 
 export function RankingResult() {
   const rewardAlertDialog = useRef<AlertDialogRef>(null)
@@ -22,8 +23,9 @@ export function RankingResult() {
 
   const {
     isUserLoser,
+    isLoading,
     lastWeekTier,
-    lastWeekRankingWinners,
+    lastWeekRankingPodium,
     handleAlertDialogButtonClick,
     handleWRankingResultButtonClick,
   } = useRankingResult({
@@ -38,7 +40,11 @@ export function RankingResult() {
 
   const tierImage = user ? api.fetchImage('rankings', user.tier.image.value) : ''
 
-  if (user)
+  if (isLoading) return <Loading isSmall={false} />
+
+  console.log(lastWeekRankingPodium?.winners)
+
+  if (user && lastWeekRankingPodium)
     return (
       <div>
         <h2 className='text-center text-lg font-semibold text-gray-100'>
@@ -46,14 +52,14 @@ export function RankingResult() {
         </h2>
 
         <div className='mt-6 flex items-end justify-center gap-6'>
-          {lastWeekRankingWinners.map((winner, index) => (
+          {lastWeekRankingPodium.winners.map((winner) => (
             <RankingWinner
               key={winner.id}
-              xp={winner.xp}
-              name={winner.name}
-              avatarImage={winner.avatar.image}
-              avatarName={winner.avatar.name}
-              position={index + 1}
+              xp={winner.xp.value}
+              name={winner.name.value}
+              avatarImage={winner.avatar.image.value}
+              avatarName={winner.avatar.name.value}
+              position={winner.rankingPosition.position.value}
             />
           ))}
         </div>
@@ -67,7 +73,7 @@ export function RankingResult() {
             {!user.isRankingWinner ? (
               <div className='mx-auto mt-6 max-w-lg'>
                 <p className='mb-3 text-center font-medium text-gray-100'>
-                  Que pena! Você ficou na {user.lastWeekRankingPosition.position.value}º
+                  Que pena! Você ficou em {user.lastWeekRankingPosition.position.value}º
                   no ranking da última semana.
                 </p>
                 <RankingUser
@@ -83,7 +89,7 @@ export function RankingResult() {
               </div>
             ) : (
               <p className='mt-6 text-center font-medium text-gray-100'>
-                Parabéns! Você ficou na {user.lastWeekRankingPosition.position.value}º no
+                Parabéns! Você ficou em {user.lastWeekRankingPosition.position.value}º no
                 ranking da última semana 🎉!
               </p>
             )}
@@ -91,8 +97,8 @@ export function RankingResult() {
             {user.isTopRankingWinner && (
               <AlertDialog
                 ref={rewardAlertDialog}
-                type={'earning'}
-                title={'Recompensa resgatada!'}
+                type='earning'
+                title='Recompensa resgatada!'
                 body={
                   <div>
                     <p className='mt-3 text-center text-green-100'>
@@ -120,8 +126,8 @@ export function RankingResult() {
 
         <AlertDialog
           ref={successAlertDialog}
-          type={'earning'}
-          title={'Novo tier!'}
+          type='earning'
+          title='Novo tier!'
           body={
             <div className='flex flex-col items-center justify-center gap-6'>
               <p className='mt-3 text-center text-gray-100'>
@@ -132,20 +138,29 @@ export function RankingResult() {
                 </span>
               </p>
 
-              <div className='relative'>
-                <span className='absolute -left-7 -top-10 z-0'>
+              <div className='relative flex justify-center w-full'>
+                <span className='absolute -top-10 z-0'>
                   <Animation name='shinning' size={140} />
                 </span>
 
-                <div className='z-[60]'>
+                <div>
                   <Image
                     src={tierImage}
                     width={80}
                     height={80}
                     alt={user.tier.name.value}
+                    className='z-20'
                   />
                 </div>
               </div>
+
+              <p className='text-gray-100 mt-1'>
+                Você ganhou{' '}
+                <strong className='text-green-400 font-semibold'>
+                  {user.rewardByLastWeekRankingPosition}
+                </strong>{' '}
+                de poeira estelar por esse feito!
+              </p>
             </div>
           }
           action={
@@ -163,17 +178,11 @@ export function RankingResult() {
           <AlertDialog
             ref={failAlertDialog}
             type={'crying'}
-            title={
-              user.tier.id !== lastWeekTier?.id
-                ? 'Perda de Tier!'
-                : 'Permanência de tier baixo'
-            }
+            title={'Perda de Tier!'}
             body={
               <div className='mt-3 flex flex-col items-center justify-center gap-3'>
                 <p className='text-center text-gray-100'>
-                  {user.tier.id !== lastWeekTier?.id
-                    ? 'Puxa vida, parece que você desceu para o tier:'
-                    : 'Você permaneceu no tier:'}
+                  Puxa vida, parece que você desceu para o tier:
                   <br />
                   <span className='text-lg font-semibold text-green-500'>
                     {user.tier.name.value}

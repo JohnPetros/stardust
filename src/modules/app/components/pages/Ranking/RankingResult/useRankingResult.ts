@@ -1,11 +1,12 @@
 import { type RefObject, useEffect, useState } from 'react'
 
-import { _getCookie } from '@/modules/global/actions'
+import { Tier } from '@/@core/domain/entities'
+import { Podium } from '@/@core/domain/structs'
 import type { AlertDialogRef } from '@/modules/global/components/shared/AlertDialog/types'
 import { useAuthContext } from '@/modules/global/contexts/AuthContext'
-import { useRankingContext } from '@/modules/app/contexts/RankingContext'
-import type { RankingUserDTO, TierDTO } from '@/@core/dtos'
+import { useToastContext } from '@/modules/global/contexts/ToastContext'
 import { _getLastWeekRankingWinners } from './_getLastWeekRankingWinners'
+import { playAudio } from '@/modules/global/utils'
 
 type UseRankingResultProps = {
   rewardAlertDialog: RefObject<AlertDialogRef>
@@ -19,13 +20,12 @@ export function useRankingResult({
   successAlertDialog,
   failAlertDialog,
 }: UseRankingResultProps) {
-  const [lastWeekRankingWinners, setLastWeekRankingWinners] = useState<RankingUserDTO[]>(
-    []
-  )
-  const [lastWeekTier, setLastWeekTier] = useState<TierDTO | null>(null)
+  const [lastWeekRankingPodium, setLastWeekRankingPodium] = useState<Podium | null>(null)
+  const [lastWeekTier, setLastWeekTier] = useState<Tier | null>(null)
   const [isUserLoser, setIsUserLoser] = useState<boolean>(false)
+  const [isLoading, setIsloading] = useState<boolean>(true)
+  const toast = useToastContext()
   const { user, updateUser } = useAuthContext()
-  const { tiers } = useRankingContext()
 
   async function handleWRankingResultButtonClick() {
     if (!user) return
@@ -49,10 +49,6 @@ export function useRankingResult({
     await updateUser(user)
   }
 
-  function checkNextTier(currentTierPosition: number) {
-    return tiers.find((tier) => tier.position === currentTierPosition)
-  }
-
   async function handleAlertDialogButtonClick(type: 'reward' | 'success' | 'fail') {
     if (!user) return
 
@@ -62,9 +58,7 @@ export function useRankingResult({
       user.earnLastWeekRankingPositionReward()
       user.seeRankingResult()
 
-      const hasNextRanking = checkNextTier(user.tier.position.value)
-
-      hasNextRanking
+      user.tier.hasNextTier
         ? successAlertDialog.current?.open()
         : handleAlertDialogButtonClick('success')
       return
@@ -77,23 +71,31 @@ export function useRankingResult({
 
   useEffect(() => {
     async function setRankingResult() {
-      if (!user) return
+      if (!user || !isLoading) return
 
-      const { isUserLoser, lastWeekTier, lastWeekRankingWinners } =
-        await _getLastWeekRankingWinners(user.dto)
+      try {
+        const { isUserLoser, lastWeekTier, lastWeekRankingWinners } =
+          await _getLastWeekRankingWinners(user.dto)
 
-      setLastWeekRankingWinners(lastWeekRankingWinners)
-      setLastWeekTier(lastWeekTier)
-      setIsUserLoser(isUserLoser)
+        setLastWeekRankingPodium(Podium.create(lastWeekRankingWinners))
+        setLastWeekTier(Tier.create(lastWeekTier))
+        setIsUserLoser(isUserLoser)
+        playAudio('earning.wav')
+      } catch (error) {
+        toast.show(error.message)
+      } finally {
+        setIsloading(false)
+      }
     }
 
     setRankingResult()
-  }, [user])
+  }, [user, isLoading, toast.show])
 
   return {
-    lastWeekRankingWinners,
+    lastWeekRankingPodium,
     lastWeekTier,
     isUserLoser,
+    isLoading,
     handleWRankingResultButtonClick,
     handleAlertDialogButtonClick,
   }

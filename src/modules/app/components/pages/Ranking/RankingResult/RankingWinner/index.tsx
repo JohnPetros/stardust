@@ -7,9 +7,9 @@ import { AnimatedPodium } from './AnimatedPodium'
 import { AnimatedAvatar } from './AnimatedAvatar'
 import { Animation } from '@/modules/global/components/shared/Animation'
 import { UserAvatar } from '@/modules/global/components/shared/UserAvatar'
-import { PODIUM } from '../../podium'
+import { PODIUM } from '../podium'
 
-const BASE_HEIGHT = 300 // px
+const BASE_HEIGHT = 400 // px
 
 const ICON_ALTS = {
   '1st': 'Primeiro lugar',
@@ -37,15 +37,15 @@ export function RankingWinner({
   if (place)
     return (
       <div
-        className={twMerge('relative flex w-48 flex-col')}
+        className='relative flex w-48 flex-col'
         style={{
           height: place ? BASE_HEIGHT - 40 * place.position - 1 : BASE_HEIGHT,
         }}
       >
         <AnimatedAvatar>
-          <div className='flex h-72 flex-col items-center justify-center gap-1'>
+          <div className='flex flex-col items-center justify-center gap-1'>
             {position === 1 && (
-              <span className='absolute -left-[4%] -top-[6%] md:left-[13.5%]'>
+              <span className='absolute -left-[4%] -top-[8%] md:left-[13.5%]'>
                 <Animation name='shinning' size={140} />
               </span>
             )}
@@ -69,7 +69,6 @@ export function RankingWinner({
           )}
         >
           <AnimatedPodium baseHeight={BASE_HEIGHT} position={position} />
-
           <span className='grid h-12 w-20 place-content-center rounded-md bg-green-800 text-lg font-medium uppercase text-gray-100 shadow-sm'>
             {xp} xp
           </span>

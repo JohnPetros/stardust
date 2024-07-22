@@ -10,13 +10,15 @@ import { useHomeLayout } from './useHomeLayout'
 import { Sidebar } from './Sidebar'
 import { Sidenav } from './Sidenav'
 import { TabNav } from './TabNav'
+import { PageTransitionAnimation } from '@/modules/global/components/shared/PageTransitionAnimation'
 
 type HomeLayoutProps = {
   children: ReactNode
 }
 
 export function HomeLayout({ children }: HomeLayoutProps) {
-  const { isSidenavExpanded, handleContainerClick, toggleSidenav } = useHomeLayout()
+  const { isSidenavExpanded, isTransitionVisible, handleContainerClick, toggleSidenav } =
+    useHomeLayout()
 
   const { md: isMobile } = useBreakpoint()
 
@@ -24,6 +26,8 @@ export function HomeLayout({ children }: HomeLayoutProps) {
     <>
       <Header />
       <Sidenav isExpanded={isSidenavExpanded} toggleSidenav={toggleSidenav} />
+
+      <PageTransitionAnimation isVisible={isTransitionVisible} />
 
       {isMobile && <Sidebar />}
 

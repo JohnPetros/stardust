@@ -1,7 +1,6 @@
-import type { Ranking } from '@/@core/domain/entities'
-import type { TierDTO } from '@/@core/dtos'
+import type { Ranking, Tier } from '@/@core/domain/entities'
 
 export type RankingContextValue = {
   ranking: Ranking | null
-  tiers: TierDTO[]
+  tiers: Tier[]
 }

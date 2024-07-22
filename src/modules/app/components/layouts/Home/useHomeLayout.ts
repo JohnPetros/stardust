@@ -2,18 +2,13 @@
 
 import { useEffect, useState } from 'react'
 
-import { STORAGE } from '@/modules/global/constants'
-import { useLocalStorage } from '@/modules/global/hooks/useLocalStorage'
 import { useSiderbarContext } from '@/modules/app/contexts/SidebarContext'
 
 export function useHomeLayout() {
   const [isSidenavExpanded, setIsSidenavExpanded] = useState(false)
+  const [isTransitionVisible, setIsTransitionVisible] = useState(true)
   const { isOpen, isAchievementsListVisible, toggle, setIsAchievementsListVisible } =
     useSiderbarContext()
-
-  const shouldSkipHomeTransitionAnimation = useLocalStorage<string>(
-    STORAGE.keys.shouldSkipHomeTransitionAnimation
-  )
 
   function toggleSidenav() {
     setIsSidenavExpanded(!isSidenavExpanded)
@@ -25,16 +20,19 @@ export function useHomeLayout() {
   }
 
   useEffect(() => {
-    shouldSkipHomeTransitionAnimation.set('true')
+    if (!isTransitionVisible) return
+
+    const timeout = setTimeout(() => setIsTransitionVisible(false), 2500)
 
     return () => {
-      shouldSkipHomeTransitionAnimation.remove()
+      clearTimeout(timeout)
     }
-  }, [shouldSkipHomeTransitionAnimation])
+  }, [isTransitionVisible])
 
   return {
     isSidenavExpanded,
     toggleSidenav,
     handleContainerClick,
+    isTransitionVisible,
   }
 }

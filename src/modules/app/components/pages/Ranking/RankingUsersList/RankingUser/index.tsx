@@ -6,7 +6,7 @@ import { tv } from 'tailwind-variants'
 
 import { RankingPosition } from '@/@core/domain/structs'
 import { UserAvatar } from '@/modules/global/components/shared/UserAvatar'
-import { PODIUM } from '../../podium'
+import { PODIUM } from '../../RankingResult/podium'
 import { useAuthContext } from '@/modules/global/contexts/AuthContext'
 
 const positionStyles = tv({
