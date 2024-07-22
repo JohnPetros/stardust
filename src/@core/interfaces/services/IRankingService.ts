@@ -12,13 +12,12 @@ export interface IRankingsService {
   ): Promise<ServiceResponse<RankingUserDTO[]>>
   fetchRankingLosersByTier(tierId: string): Promise<ServiceResponse<RankingUserDTO[]>>
   fetchRankingWinnersByTier(tierId: string): Promise<ServiceResponse<RankingUserDTO[]>>
-  fetchLastWeekTier(rankingUserId: string): Promise<ServiceResponse<TierDTO>>
   saveRankingLosers(losers: RankingUser[], tierId: string): Promise<ServiceResponse<true>>
   saveRankingWinners(
     winners: RankingUser[],
     tierId: string
   ): Promise<ServiceResponse<true>>
-  checkRankingLoserState(rankingUserId: string): Promise<ServiceResponse<boolean>>
+  verifyRankingLoserState(rankingUserId: string): Promise<ServiceResponse<boolean>>
   updateLastWeekRankingPositions(): Promise<ServiceResponse<true>>
   updateRankingUsersTier(
     rankingUsers: RankingUser[],

@@ -1,12 +1,23 @@
 import type { IRankingsService } from '@/@core/interfaces/services'
 import type { RankingUser } from '@/@core/domain/entities'
 import type { RankingUserDTO, TierDTO } from '@/@core/dtos'
-import { TierNotFoundError } from '@/@core/errors/rankings'
+import {
+  DeleteLastWeekRankingUsersUnexpectedError,
+  FetchRankingsWinnersUnexpectedError,
+  FetchTiersUnexpectedError,
+  ResetRankingUsersXpUnexpectedError,
+  SaveRankingLosersUnexpectedError,
+  SaveRankingWinnersUnexpectedError,
+  TierNotFoundError,
+} from '@/@core/errors/rankings'
 import { ServiceResponse } from '@/@core/responses'
 
 import type { Supabase } from '../types/Supabase'
 import { SupabasePostgrestError } from '../errors'
 import { SupabaseRankingUserMapper, SupabaseTierMapper } from '../mappers'
+import { VerifyRankingLoserStatusUnexpectedError } from '@/@core/errors/rankings/VerifyRankingLoserStateUnexpectedError'
+import { UpdateLastWeekRankingPositionsUnexpectedError } from '@/@core/errors/rankings/UpdateLastWeekRankingPositionsUnexpetedError'
+import { FetchRankingsUsersUnexpectedError } from '@/@core/errors/rankings/FetchRankingUsersUnexpectedError'
 
 export const SupabaseRankingsService = (supabase: Supabase): IRankingsService => {
   const supabaseTierMapper = SupabaseTierMapper()
@@ -52,7 +63,7 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
         .order('position', { ascending: true })
 
       if (error) {
-        return SupabasePostgrestError(error, TierNotFoundError)
+        return SupabasePostgrestError(error, FetchTiersUnexpectedError)
       }
 
       const ranking = data.map(supabaseTierMapper.toTier)
@@ -68,7 +79,7 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
         .order('weekly_xp', { ascending: false })
 
       if (error) {
-        return SupabasePostgrestError(error, TierNotFoundError)
+        return SupabasePostgrestError(error, FetchRankingsUsersUnexpectedError)
       }
 
       const rankingUsers: RankingUserDTO[] = data.map((user, index) => ({
@@ -98,7 +109,7 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
         .order('last_week_ranking_position', { ascending: false })
 
       if (error) {
-        return SupabasePostgrestError(error, TierNotFoundError)
+        return SupabasePostgrestError(error, FetchRankingsWinnersUnexpectedError)
       }
 
       const rankingUsers: RankingUserDTO[] = data.map((user, index) => ({
@@ -131,7 +142,7 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
       console.log(data)
 
       if (error) {
-        return SupabasePostgrestError(error, TierNotFoundError)
+        return SupabasePostgrestError(error, FetchRankingsWinnersUnexpectedError)
       }
 
       const rankingWinners = data.map(supabaseRankingUserMapper.toRankingUser)
@@ -141,25 +152,6 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
 
     async fetchRankingLosersByTier(tierId: string) {
       throw new Error('Method not implemented')
-    },
-
-    async fetchLastWeekTier(rankingUserId: string) {
-      const { data, error } = await supabase
-        .from('ranking_users')
-        .select('tier:tiers(*)')
-        .eq('id', rankingUserId)
-        .single()
-
-      if (error) {
-        return SupabasePostgrestError(error, TierNotFoundError)
-      }
-
-      if (data.tier) {
-        const tier = supabaseTierMapper.toTier(data.tier)
-        return new ServiceResponse(tier)
-      }
-
-      return new ServiceResponse<TierDTO>(null)
     },
 
     async saveRankingLosers(losers: RankingUser[], tierId: string) {
@@ -175,8 +167,7 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
       )
 
       if (error) {
-        console.log({ losers })
-        return SupabasePostgrestError(error, TierNotFoundError)
+        return SupabasePostgrestError(error, SaveRankingLosersUnexpectedError)
       }
 
       return new ServiceResponse(true)
@@ -196,13 +187,13 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
 
       if (error) {
         console.log({ tierId })
-        return SupabasePostgrestError(error, TierNotFoundError)
+        return SupabasePostgrestError(error, SaveRankingWinnersUnexpectedError)
       }
 
       return new ServiceResponse(true)
     },
 
-    async checkRankingLoserState(rankingUserId: string) {
+    async verifyRankingLoserState(rankingUserId: string) {
       const { error, data } = await supabase
         .from('ranking_users')
         .select('status')
@@ -210,7 +201,7 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
         .single()
 
       if (error) {
-        return new ServiceResponse(false)
+        return SupabasePostgrestError(error, VerifyRankingLoserStatusUnexpectedError)
       }
 
       return new ServiceResponse(data.status === 'loser')
@@ -248,7 +239,10 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
         .neq('id', 0)
 
       if (error) {
-        return SupabasePostgrestError(error, TierNotFoundError)
+        return SupabasePostgrestError(
+          error,
+          UpdateLastWeekRankingPositionsUnexpectedError
+        )
       }
 
       return new ServiceResponse(true)
@@ -258,7 +252,7 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
       const { error } = await supabase.from('ranking_users').delete().neq('id', 0)
 
       if (error) {
-        return SupabasePostgrestError(error, TierNotFoundError)
+        return SupabasePostgrestError(error, DeleteLastWeekRankingUsersUnexpectedError)
       }
 
       return new ServiceResponse(true)
@@ -268,7 +262,7 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
       const { error } = await supabase.from('users').update({ weekly_xp: 0 }).neq('id', 0)
 
       if (error) {
-        return SupabasePostgrestError(error, TierNotFoundError)
+        return SupabasePostgrestError(error, ResetRankingUsersXpUnexpectedError)
       }
 
       return new ServiceResponse(true)
