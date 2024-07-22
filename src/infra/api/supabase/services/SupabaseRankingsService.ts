@@ -29,8 +29,27 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
       return new ServiceResponse(tier)
     },
 
+    async fetchTierByPosition(tierPosition: number) {
+      const { data, error } = await supabase
+        .from('tiers')
+        .select('*')
+        .eq('position', tierPosition)
+        .single()
+
+      if (error) {
+        return SupabasePostgrestError(error, TierNotFoundError)
+      }
+
+      const tier = supabaseTierMapper.toTier(data)
+
+      return new ServiceResponse(tier)
+    },
+
     async fetchTiers() {
-      const { data, error } = await supabase.from('tiers').select('*')
+      const { data, error } = await supabase
+        .from('tiers')
+        .select('*')
+        .order('position', { ascending: true })
 
       if (error) {
         return SupabasePostgrestError(error, TierNotFoundError)
@@ -52,7 +71,7 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
         return SupabasePostgrestError(error, TierNotFoundError)
       }
 
-      const rankingUsers: RankingUserDTO[] = data.map((user) => ({
+      const rankingUsers: RankingUserDTO[] = data.map((user, index) => ({
         id: user.id,
         name: user.name ?? '',
         slug: user.slug ?? '',
@@ -62,6 +81,37 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
         },
         tierId: user.tier_id ?? '',
         xp: user.xp,
+        position: index + 1,
+      }))
+
+      return new ServiceResponse(rankingUsers)
+    },
+
+    async fetchLastWeekRankingUsersByTier(tierId: string) {
+      const { data, error } = await supabase
+        .from('users')
+        .select(
+          'id, name, slug, tier_id, xp:weekly_xp, last_week_ranking_position, avatar:avatars(name, image)'
+        )
+        .eq('tier_id', tierId)
+        .not('last_week_ranking_position', 'is', null)
+        .order('last_week_ranking_position', { ascending: false })
+
+      if (error) {
+        return SupabasePostgrestError(error, TierNotFoundError)
+      }
+
+      const rankingUsers: RankingUserDTO[] = data.map((user, index) => ({
+        id: user.id,
+        name: user.name ?? '',
+        slug: user.slug ?? '',
+        avatar: {
+          image: user.avatar?.image ?? '',
+          name: user.avatar?.name ?? '',
+        },
+        tierId: user.tier_id ?? '',
+        xp: user.xp,
+        position: user.last_week_ranking_position ?? index,
       }))
 
       return new ServiceResponse(rankingUsers)
@@ -70,8 +120,15 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
     async fetchRankingWinnersByTier(tierId: string) {
       const { data, error } = await supabase
         .from('ranking_users')
-        .select('id, xp, tier_id, user:users(name, slug, avatar:avatars(name, image))')
+        .select(
+          'id, xp, tier_id, position, user:users(name, slug, avatar:avatars(name, image))'
+        )
+        .eq('status', 'winner')
         .eq('tier_id', tierId)
+        .order('position', { ascending: true })
+        .limit(3)
+
+      console.log(data)
 
       if (error) {
         return SupabasePostgrestError(error, TierNotFoundError)
@@ -107,15 +164,18 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
 
     async saveRankingLosers(losers: RankingUser[], tierId: string) {
       const { error } = await supabase.from('ranking_users').insert(
+        // @ts-ignore
         losers.map((loser) => ({
           id: loser.id,
           xp: loser.xp.value,
           tier_id: tierId,
-          stauts: 'loser',
+          status: 'loser',
+          position: loser.rankingPosition.position.value,
         }))
       )
 
       if (error) {
+        console.log({ losers })
         return SupabasePostgrestError(error, TierNotFoundError)
       }
 
@@ -123,14 +183,21 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
     },
 
     async saveRankingWinners(winners: RankingUser[], tierId: string) {
-      await supabase.from('ranking_users').insert(
+      const { error } = await supabase.from('ranking_users').insert(
+        // @ts-ignore
         winners.map((winner) => ({
           id: winner.id,
           xp: winner.xp.value,
           tier_id: tierId,
-          stauts: 'winner',
+          status: 'winner',
+          position: winner.rankingPosition.position.value,
         }))
       )
+
+      if (error) {
+        console.log({ tierId })
+        return SupabasePostgrestError(error, TierNotFoundError)
+      }
 
       return new ServiceResponse(true)
     },
@@ -149,6 +216,21 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
       return new ServiceResponse(data.status === 'loser')
     },
 
+    async updateRankingUsersTier(rankingUsers: RankingUser[], tierId: string) {
+      const ids = rankingUsers.map((user) => user.id)
+
+      const { error } = await supabase
+        .from('users')
+        .update({ tier_id: tierId })
+        .in('id', ids)
+
+      if (error) {
+        return SupabasePostgrestError(error, TierNotFoundError)
+      }
+
+      return new ServiceResponse(true)
+    },
+
     async updateLastWeekRankingPositions() {
       const { error } = await supabase.rpc('update_last_week_ranking_positions')
 
@@ -160,16 +242,34 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
     },
 
     async allowUsersSeeRankingResult() {
-      await supabase.from('users').update({ can_see_ranking: true })
+      const { error } = await supabase
+        .from('users')
+        .update({ can_see_ranking: true })
+        .neq('id', 0)
+
+      if (error) {
+        return SupabasePostgrestError(error, TierNotFoundError)
+      }
 
       return new ServiceResponse(true)
     },
 
-    async resetRankingsState() {
-      await Promise.all([
-        supabase.from('ranking_users').delete(),
-        supabase.from('users').update({ weekly_xp: 0 }),
-      ])
+    async deleteLastWeekRankingUsers() {
+      const { error } = await supabase.from('ranking_users').delete().neq('id', 0)
+
+      if (error) {
+        return SupabasePostgrestError(error, TierNotFoundError)
+      }
+
+      return new ServiceResponse(true)
+    },
+
+    async resetRankingUsersXp() {
+      const { error } = await supabase.from('users').update({ weekly_xp: 0 }).neq('id', 0)
+
+      if (error) {
+        return SupabasePostgrestError(error, TierNotFoundError)
+      }
 
       return new ServiceResponse(true)
     },

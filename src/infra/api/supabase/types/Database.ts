@@ -388,18 +388,21 @@ export type Database = {
       ranking_users: {
         Row: {
           id: string
+          position: number
           status: Database["public"]["Enums"]["ranking_status"]
           tier_id: string
           xp: number
         }
         Insert: {
           id: string
+          position?: number
           status?: Database["public"]["Enums"]["ranking_status"]
           tier_id: string
           xp?: number
         }
         Update: {
           id?: string
+          position?: number
           status?: Database["public"]["Enums"]["ranking_status"]
           tier_id?: string
           xp?: number

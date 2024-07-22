@@ -1,6 +1,7 @@
 export type SupabaseRankingUser = {
   id: string
   xp: number
+  position?: number
   tier_id: string
   user: {
     name: string

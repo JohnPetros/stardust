@@ -14,6 +14,7 @@ export const SupabaseRankingUserMapper = () => {
           name: supabaseRankingUser.user?.avatar?.name ?? '',
         },
         tierId: supabaseRankingUser.tier_id,
+        position: Number(supabaseRankingUser.position),
       }
 
       return rankingUserDTO
