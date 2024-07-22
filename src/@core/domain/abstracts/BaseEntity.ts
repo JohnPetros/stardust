@@ -8,6 +8,10 @@ export abstract class BaseEntity {
     this._id = id ? Id.create(id) : Id.create(generateRandomId())
   }
 
+  isEqualTo(entity: BaseEntity) {
+    return this.id === entity.id
+  }
+
   get id() {
     return this._id.value
   }
