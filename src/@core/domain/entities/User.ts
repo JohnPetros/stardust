@@ -115,7 +115,7 @@ export class User extends BaseEntity {
   earnLastWeekRankingPositionReward(): void {
     if (!this.props.lastWeekRankingPosition) return
 
-    const reward = this.props.lastWeekRankingPosition.getReward(this.tier.reward.value)
+    const reward = this.rewardByLastWeekRankingPosition
     this.earnCoins(reward)
   }
 
@@ -245,6 +245,12 @@ export class User extends BaseEntity {
     )
   }
 
+  get rewardByLastWeekRankingPosition() {
+    if (!this.props.lastWeekRankingPosition) return 0
+
+    return this.props.lastWeekRankingPosition.getReward(this.tier.reward.value)
+  }
+
   get email() {
     return this.props.email
   }
@@ -329,7 +335,7 @@ export class User extends BaseEntity {
       completedPlanetsIds: this.props.completedPlanetsIds.value,
       canSeeRankingResult: this.props.canSeeRankingResult.value,
       lastWeekRankingPosition: this.props.lastWeekRankingPosition?.position.value ?? null,
-      createdAt: this.createdAt.toString(),
+      createdAt: this.createdAt.toDateString(),
     }
   }
 }
