@@ -20,7 +20,7 @@ describe('Update Rankings Use Case', () => {
     expect(rankingsServiceMock.isReset).toBeTruthy()
   })
 
-  it('should put each loser in the previous ranking', async () => {
+  it('should put each loser in the previous ranking if any', async () => {
     const rankings: Array<{ data: Ranking; tierId: string }> = []
 
     for (const tier of rankingsServiceMock.tiers) {
@@ -28,13 +28,13 @@ describe('Update Rankings Use Case', () => {
 
       rankings.push({ data: rankingData, tierId: tier.id })
       rankingsServiceMock.users.push(
-        ...rankingData.users.map((user) => ({ ...user.dto, tierId: tier.id }))
+        ...rankingData.users.map((user) => ({ ...user.dto }))
       )
     }
 
     await useCase.do()
 
-    for (let index = 1; index < rankings.length - 1; index++) {
+    for (let index = 0; index < rankings.length; index++) {
       const currentRanking = rankings[index]
       const nextRanking = rankings[index + 1]
 
@@ -58,13 +58,13 @@ describe('Update Rankings Use Case', () => {
 
       rankings.push({ data: rankingData, tierId: tier.id })
       rankingsServiceMock.users.push(
-        ...rankingData.users.map((user) => ({ ...user.dto, tierId: tier.id }))
+        ...rankingData.users.map((user) => ({ ...user.dto }))
       )
     }
 
     await useCase.do()
 
-    for (let index = 1; index < rankings.length - 1; index++) {
+    for (let index = 1; index < rankings.length; index++) {
       const currentRanking = rankings[index]
       const previousRanking = rankings[index - 1]
 

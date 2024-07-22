@@ -88,4 +88,28 @@ export class RankingsServiceMock implements IRankingsService {
     this.canUsersSeeRankingResult = true
     return new ServiceResponse(true)
   }
+
+  fetchTierByPosition(tierPosition: number): Promise<ServiceResponse<TierDTO>> {
+    throw new Error('Method not implemented.')
+  }
+  fetchLastWeekRankingUsersByTier(
+    tierId: string
+  ): Promise<ServiceResponse<RankingUserDTO[]>> {
+    throw new Error('Method not implemented.')
+  }
+  verifyRankingLoserState(rankingUserId: string): Promise<ServiceResponse<boolean>> {
+    throw new Error('Method not implemented.')
+  }
+  updateRankingUsersTier(
+    rankingUsers: RankingUser[],
+    tierId: string
+  ): Promise<ServiceResponse<true>> {
+    throw new Error('Method not implemented.')
+  }
+  deleteLastWeekRankingUsers(): Promise<ServiceResponse<true>> {
+    throw new Error('Method not implemented.')
+  }
+  resetRankingUsersXp(): Promise<ServiceResponse<true>> {
+    throw new Error('Method not implemented.')
+  }
 }
