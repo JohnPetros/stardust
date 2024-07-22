@@ -1,6 +1,7 @@
 import type { TierDTO } from '@/@core/dtos'
 import { BaseEntity } from '../abstracts'
 import { Image, Integer, Name, OrdinalNumber } from '../structs'
+import { TIERS_COUNT } from '../constants'
 
 type TierProps = {
   id?: string
@@ -28,14 +29,20 @@ export class Tier extends BaseEntity {
     })
   }
 
-  get dto(): TierDTO {
-    return {
-      id: this.id,
-      name: this.name.value,
-      position: this.position.value,
-      reward: this.reward.value,
-      image: this.image.value,
-    }
+  get isFirstTier() {
+    return this.position.value === 0
+  }
+
+  get isLastTier() {
+    return this.position.value === TIERS_COUNT
+  }
+
+  get hasNextTier() {
+    return this.position.value <= TIERS_COUNT
+  }
+
+  get position() {
+    return this.props.position
   }
 
   get name() {
@@ -50,7 +57,13 @@ export class Tier extends BaseEntity {
     return this.props.reward
   }
 
-  get position() {
-    return this.props.position
+  get dto(): TierDTO {
+    return {
+      id: this.id,
+      name: this.name.value,
+      position: this.position.value,
+      reward: this.reward.value,
+      image: this.image.value,
+    }
   }
 }
