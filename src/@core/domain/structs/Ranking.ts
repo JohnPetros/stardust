@@ -12,14 +12,12 @@ export class Ranking {
   static create(usersDTO: RankingUserDTO[]): Ranking {
     const rankingUsers = Ranking.orderUsersByXp([...usersDTO])
 
-    return new Ranking(
-      rankingUsers.map((user, index) => RankingUser.create(user, index + 1))
-    )
+    return new Ranking(rankingUsers.map(RankingUser.create))
   }
 
   static orderUsersByXp(users: RankingUserDTO[]) {
     users.sort((previousUser: RankingUserDTO, currentUser: RankingUserDTO) => {
-      return currentUser.xp - previousUser.xp
+      return previousUser.position - currentUser.position
     })
 
     return users

@@ -23,7 +23,7 @@ export class RankingUser extends BaseEntity {
     this.props = props
   }
 
-  static create(dto: RankingUserDTO, position: number) {
+  static create(dto: RankingUserDTO) {
     return new RankingUser({
       id: dto.id,
       slug: Slug.create(dto.slug),
@@ -33,7 +33,7 @@ export class RankingUser extends BaseEntity {
       },
       name: Name.create(dto.name),
       xp: Integer.create('ranking user xp', dto.xp),
-      rankingPosition: RankingPosition.create(position),
+      rankingPosition: RankingPosition.create(dto.position),
       tierId: dto.tierId,
     })
   }
@@ -65,6 +65,7 @@ export class RankingUser extends BaseEntity {
         image: this.avatar.image.value,
       },
       tierId: this.props.tierId,
+      position: this.props.rankingPosition.position.value,
     }
   }
 }

@@ -7,5 +7,6 @@ export type RankingUserDTO = {
     image: string
     name: string
   }
+  position: number
   tierId: string
 }
