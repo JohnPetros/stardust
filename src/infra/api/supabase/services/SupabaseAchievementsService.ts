@@ -4,6 +4,7 @@ import { SupabasePostgrestError } from '../errors'
 import {
   DeleteRescuableAchievementUnexpectedError,
   FetchAchievementsUnexpectedError,
+  FetchUnlockedAchievementsUnexpectedError,
   SaveRescuableAchievementUnexpectedError,
   SaveUnlockedAchievementUnexpectedError,
 } from '@/@core/errors/achievements'
@@ -37,7 +38,7 @@ export const SupabaseAchievementsService = (supabase: Supabase): IAchievementsSe
         .order('position', { ascending: true })
 
       if (error) {
-        return SupabasePostgrestError(error, FetchAchievementsUnexpectedError)
+        return SupabasePostgrestError(error, FetchUnlockedAchievementsUnexpectedError)
       }
 
       const achievements = data.map(supabaseAchievementMapper.toDTO)
