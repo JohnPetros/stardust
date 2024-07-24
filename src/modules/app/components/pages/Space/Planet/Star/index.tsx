@@ -8,6 +8,7 @@ import { AnimatedRocket } from './AnimatedRocket'
 import type { AnimationRef } from '@/modules/global/components/shared/Animation/types'
 import { useRef } from 'react'
 import { useStar } from './useStar'
+import { Animation } from '@/modules/global/components/shared/Animation'
 
 const STAR_LIGHT = '0 0 12px #ffcf31a1'
 
@@ -58,7 +59,14 @@ export function Star({
       >
         <div className='relative'>
           {isUnlocked ? (
-            <AnimatedImage shouldAnimate={isLastUnlockedStar} />
+            <AnimatedImage shouldAnimate={isLastUnlockedStar}>
+              <Animation
+                ref={starAnimationRef}
+                name='unlocked-star'
+                size={100}
+                hasLoop={false}
+              />
+            </AnimatedImage>
           ) : (
             <Image
               src={'/images/locked-star.svg'}

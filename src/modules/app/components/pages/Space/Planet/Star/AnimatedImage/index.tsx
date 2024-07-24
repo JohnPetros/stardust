@@ -1,6 +1,7 @@
 import { motion, type Variants } from 'framer-motion'
 
 import { Animation } from '@/modules/global/components/shared/Animation'
+import { ReactNode } from 'react'
 
 const variants: Variants = {
   default: {
@@ -17,10 +18,11 @@ const variants: Variants = {
 }
 
 type AnimatedImageProps = {
+  children: ReactNode
   shouldAnimate: boolean
 }
 
-export function AnimatedImage({ shouldAnimate }: AnimatedImageProps) {
+export function AnimatedImage({ children, shouldAnimate }: AnimatedImageProps) {
   return (
     <motion.div
       variants={variants}
@@ -28,7 +30,7 @@ export function AnimatedImage({ shouldAnimate }: AnimatedImageProps) {
       animate={shouldAnimate ? 'pulse' : ''}
       className='-ml-[36px]'
     >
-      <Animation name='unlocked-star' size={100} hasLoop={false} />
+      {children}
     </motion.div>
   )
 }
