@@ -2,7 +2,7 @@ import { REGEX } from '../constants'
 
 const componentNameRegex = REGEX.componentName
 
-export function getComponentContent(component: string) {
+export function getTemplateContent(component: string) {
   const nameMatch = componentNameRegex.exec(component)
   const componentName = nameMatch ? nameMatch[1] : 'Text'
 
