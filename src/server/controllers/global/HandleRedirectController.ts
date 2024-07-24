@@ -1,4 +1,4 @@
-import { IController, IHttp } from '@/@core/interfaces/handlers'
+import type { IController, IHttp } from '@/@core/interfaces/handlers'
 import { HttpResponse } from '@/@core/responses'
 
 export const HandleRedirectController = (): IController => {

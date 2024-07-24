@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
-import { CheckAuthRoutesController } from './server/controllers/auth'
+import { VerifyAuthRoutesController } from './server/controllers/auth'
 import { NextHttp } from './server/protocols/http'
 import { HandleRewardsPayloadController } from './server/controllers/app'
 import { SupabaseMiddlewareClient } from './infra/api/supabase/clients'
@@ -15,7 +15,7 @@ export const middleware = async (request: NextRequest) => {
   const authService = SupabaseAuthService(supabase)
 
   const controllers = [
-    CheckAuthRoutesController(authService),
+    VerifyAuthRoutesController(authService),
     HandleRewardsPayloadController(),
     HandleRedirectController(),
   ]
