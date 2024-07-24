@@ -10,23 +10,18 @@ type QuoteProps = {
   hasAnimation?: boolean
 }
 
-export function Quote({
-  title,
-  picture,
-  children,
-  hasAnimation = false,
-}: QuoteProps) {
+export function Quote({ title, picture, children, hasAnimation = false }: QuoteProps) {
   return (
     <Animation hasAnimation={hasAnimation}>
-      <div className="not-prose flex w-full flex-col items-center">
+      <div className='not-prose flex w-full flex-col items-center'>
         {title && (
-          <div className="mb-4">
+          <div className='mb-4'>
             <Title>{title}</Title>
           </div>
         )}
-        <div className="flex w-full items-center">
+        <div className='flex w-full items-center'>
           {picture && <Picture url={picture} />}
-          <Content type="quote" hasAnimation={hasAnimation}>
+          <Content type='quote' hasAnimation={hasAnimation}>
             {children}
           </Content>
         </div>

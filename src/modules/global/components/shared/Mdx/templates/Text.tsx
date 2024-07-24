@@ -10,23 +10,18 @@ type TextProps = {
   hasAnimation?: boolean
 }
 
-export function Text({
-  title,
-  picture,
-  children,
-  hasAnimation = false,
-}: TextProps) {
+export function Text({ title, picture, children, hasAnimation = false }: TextProps) {
   return (
     <Animation hasAnimation={hasAnimation}>
-      <div className="not-prose flex w-full flex-col">
+      <div className='not-prose flex w-full flex-col'>
         {title && (
-          <div className="mb-4 h-max w-full">
+          <div className='mb-4 h-max w-full'>
             <Title>{title}</Title>
           </div>
         )}
-        <div className="flex w-full flex-col items-center justify-center md:flex-row">
+        <div className='flex w-full flex-col items-center justify-center md:flex-row'>
           {picture && <Picture url={picture} />}
-          <Content type="default" hasAnimation={hasAnimation}>
+          <Content type='default' hasAnimation={hasAnimation}>
             {children}
           </Content>
         </div>
