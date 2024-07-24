@@ -37,7 +37,7 @@
         "useNumberNamespace": "off"
       },
       "security": {
-        "noDangerouslySetInnerHtml": "warn",
+        "noDangerouslySetInnerHtml": "off",
         "noDangerouslySetInnerHtmlWithChildren": "warn"
       },
       "performance": {
@@ -76,7 +76,6 @@
   "javascript": {
     "formatter": {
       "enabled": true,
-      "trailingComma": "es5",
       "jsxQuoteStyle": "single",
       "semicolons": "asNeeded",
       "quoteStyle": "single"
