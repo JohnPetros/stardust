@@ -120,19 +120,19 @@ export const SupabaseStarsService = (supabase: Supabase): IStarsService => {
     //     return data.map(({ star_id }) => star_id)
     //   },
 
-    //   async checkStarUnlocking(starId: string, userId: string) {
-    //     const { data, error } = await supabase
-    //       .from('users_unlocked_stars')
-    //       .select('user_id')
-    //       .eq('star_id', starId)
-    //       .eq('user_id', userId)
-    //       .single()
+    async verifyStarIsUnlocked(starId: string, userId: string) {
+      const { data, error } = await supabase
+        .from('users_unlocked_stars')
+        .select('star_id, user_id')
+        .eq('star_id', starId)
+        .eq('user_id', userId)
+        .single()
 
-    //     if (error) {
-    //       return false
-    //     }
+      if (error) {
+        return new ServiceResponse(false)
+      }
 
-    //     return Boolean(data.user_id)
-    //   },
+      return new ServiceResponse(Boolean(data))
+    },
   }
 }

@@ -9,6 +9,6 @@ export interface IStarsService {
   //   currentPlanetId: string,
   //   userId: string
   // ): Promise<ServiceResponse<Star>>
-  // checkStarUnlocking(starId: string, userId: string): Promise<ServiceResponse<boolean>>
+  verifyStarIsUnlocked(starId: string, userId: string): Promise<ServiceResponse<boolean>>
   saveUserUnlockedStar(starId: string, userId: string): Promise<ServiceResponse<boolean>>
 }
