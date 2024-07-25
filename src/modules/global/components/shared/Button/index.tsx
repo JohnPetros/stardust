@@ -1,8 +1,8 @@
 'use client'
 
 import { Slot } from '@radix-ui/react-slot'
-import { MotionProps, motion } from 'framer-motion'
-import { ButtonHTMLAttributes, ForwardedRef, ReactNode, forwardRef } from 'react'
+import { type MotionProps, motion } from 'framer-motion'
+import { type ForwardedRef, type ReactNode, forwardRef, type ComponentProps } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 import { Loading } from '../Loading'
@@ -12,7 +12,7 @@ type ButtonProps = {
   className?: string
   isLoading?: boolean
   asChild?: boolean
-} & ButtonHTMLAttributes<HTMLButtonElement> &
+} & ComponentProps<'button'> &
   MotionProps
 
 export function ButtonComponent(
