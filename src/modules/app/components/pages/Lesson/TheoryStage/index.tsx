@@ -60,7 +60,6 @@ export function TheoryStage({ title, number }: TheoryStageProps) {
                   autoFocus
                   onFocus={() => (buttonHasFocus.current = true)}
                   onBlur={() => (buttonHasFocus.current = false)}
-                  disabled={!theory.hasNextTextBlock}
                 >
                   Continuar
                 </Button>
