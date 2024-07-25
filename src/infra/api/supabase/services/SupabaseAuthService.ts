@@ -139,7 +139,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
       if (!session) {
         return new ServiceResponse<{ accessToken: string; refreshToken: string }>(
           null,
-          ConfirmPasswordResetUnexpectedError
+          ConfirmPasswordResetUnexpectedError,
         )
       }
 
