@@ -48,7 +48,7 @@ export class Theory {
   }
 
   get hasNextTextBlock() {
-    return this.textBlocks[this.currentTextBlockIndex.value]
+    return this.currentTextBlockIndex.value > this.textBlocks.length
   }
 
   get textsBlockCount() {
