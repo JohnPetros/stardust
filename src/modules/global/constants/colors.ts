@@ -1,4 +1,4 @@
-export const colors = {
+export const COLORS = {
   green: {
     900: '#07303B',
     800: '#027558',

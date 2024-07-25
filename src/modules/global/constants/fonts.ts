@@ -1,6 +1,6 @@
 import { Poppins, Roboto_Mono } from 'next/font/google'
 
-export const fonts = {
+export const FONTS = {
   default: 'var(--font-poppins)',
   code: 'var(--font-roboto-mono)',
 }

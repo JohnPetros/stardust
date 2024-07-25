@@ -1,5 +1,5 @@
-import { breakpoints } from './src/modules/global/styles/breakpoints'
-import { colors } from './src/modules/global/styles/colors'
+import { breakpoints } from './src/modules/global/constants/breakpoints'
+import { colors } from './src/modules/global/constants/colors'
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
