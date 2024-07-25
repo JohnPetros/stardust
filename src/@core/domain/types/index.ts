@@ -1,6 +1,7 @@
 export type { AchievementMetricValue } from './AchievementMetricValue'
 export type { ChallengeDifficultyLevel } from './ChallengeDifficultyLevel'
 export type { CompletedChallengesCountByDifficultyLevel } from './CompletedChallengesCountByDifficulty'
+export type { CodeInput } from './CodeInput'
 export type { LessonStage } from './LessonStage'
 export type { WeekdayStatus } from './WeekdayStatus'
 export type { TextBlockType } from './TextBlockType'
