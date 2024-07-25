@@ -1,22 +1,15 @@
 import {
   type ForwardedRef,
-  forwardRef,
   type ReactNode,
+  forwardRef,
   useImperativeHandle,
   useRef,
 } from 'react'
 
-import { usePrompt } from './usePromp'
 import { Button } from '../Button'
 import { AlertDialog } from '../AlertDialog'
-
-export type PromptRef = {
-  open: () => void
-  close: () => void
-  setTitle: (title: string) => void
-  setValue: (value: string) => void
-  value: string
-}
+import type { PromptRef } from './types'
+import { usePrompt } from './usePrompt'
 
 type PromptProps = {
   children?: ReactNode
