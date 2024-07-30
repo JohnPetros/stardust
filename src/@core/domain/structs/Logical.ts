@@ -3,7 +3,7 @@ import { BooleanValidation } from '@/@core/lib/validation'
 export class Logical {
   readonly value: boolean
 
-  constructor(value: boolean) {
+  private constructor(value: boolean) {
     this.value = value
   }
 
@@ -17,11 +17,19 @@ export class Logical {
     return new Logical(!this.value)
   }
 
-  get true() {
+  makeTrue() {
+    return new Logical(true)
+  }
+
+  makeFalse() {
+    return new Logical(false)
+  }
+
+  get isTrue() {
     return this.value
   }
 
-  get false() {
+  get isFalse() {
     return !this.value
   }
 }
