@@ -1,10 +1,11 @@
 import type { SelectionQuestionDTO, QuestionDTO } from '@/@core/dtos'
 import { Question } from '../abstracts'
 import type { QuestionProps } from '../abstracts/Question'
-import { Image, Integer } from '../structs'
+import { Image, Integer, Logical } from '../structs'
+import { ShuffledList } from '../structs'
 
 type SelectionQuestionProps = {
-  options: string[]
+  options: ShuffledList<string>
   answer: string
   code?: string
 }
@@ -34,8 +35,8 @@ export class SelectionQuestion extends Question {
       },
       {
         answer: dto.answer,
-        options: dto.options,
-      }
+        options: ShuffledList.create(dto.options),
+      },
     )
   }
 
@@ -44,5 +45,28 @@ export class SelectionQuestion extends Question {
     const questionProps = Object.keys(question)
 
     return selectionQuestionProps.every((prop) => questionProps.includes(prop))
+  }
+
+  static isSelectionQuestion(question: Question): question is SelectionQuestion {
+    return question instanceof SelectionQuestion
+  }
+
+  verifyUserAnswer(userAnswer: unknown): Logical {
+    return Logical.create(
+      'Is user answer for selection question correct?',
+      userAnswer === this.answer,
+    )
+  }
+
+  get options() {
+    return this.props.options.items
+  }
+
+  get answer() {
+    return this.props.answer
+  }
+
+  get code() {
+    return this.props.code ?? null
   }
 }
