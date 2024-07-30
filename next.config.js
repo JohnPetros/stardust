@@ -13,12 +13,6 @@ const nextConfig = {
     ],
   },
   swcMinify: true,
-  // transpilePackages: [
-  //   '@react-email/components',
-  //   '@react-email/render',
-  //   '@react-email/html',
-  //   '@react-email/tailwind',
-  // ],
 }
 
 module.exports = nextConfig
