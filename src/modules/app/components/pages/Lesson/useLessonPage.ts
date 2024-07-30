@@ -16,7 +16,10 @@ export function useLessonPage(
 ) {
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const { stage, setTheory, setQuiz, resetStore } = useLessonStore()
+  const { getStageSlice, getQuizSlice, getTheorySlice, resetStore } = useLessonStore()
+  const { stage } = getStageSlice()
+  const { setQuiz } = getQuizSlice()
+  const { setTheory } = getTheorySlice()
   const { goTo } = useRouter()
 
   useSecondsCounter(stage === 'quiz')

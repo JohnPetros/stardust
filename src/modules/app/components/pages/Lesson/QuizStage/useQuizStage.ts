@@ -4,7 +4,8 @@ import type { AlertDialogRef } from '@/modules/global/components/shared/AlertDia
 import { useLessonStore } from '@/infra/stores/LessonStore'
 
 export function useQuizStage(alertDialogRef: RefObject<AlertDialogRef>) {
-  const { quiz, setQuiz } = useLessonStore()
+  const { getQuizSlice } = useLessonStore()
+  const { quiz, setQuiz } = getQuizSlice()
 
   function handleVerificationButtonClick() {
     if (!quiz) return

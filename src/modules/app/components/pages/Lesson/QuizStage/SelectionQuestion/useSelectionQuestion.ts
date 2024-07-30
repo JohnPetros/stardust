@@ -5,7 +5,8 @@ import { useLessonStore } from '@/infra/stores/LessonStore'
 
 export function useSelectionQuestion() {
   const [userAnswer, setUserAnswer] = useState<string | null>(null)
-  const { quiz, setQuiz } = useLessonStore()
+  const { getQuizSlice } = useLessonStore()
+  const { quiz, setQuiz } = getQuizSlice()
 
   function handleUserAnswerChange(userAnswer: string) {
     if (!quiz) return

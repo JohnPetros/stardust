@@ -19,9 +19,5 @@ export default async function App({ children }: AppProps) {
 
   if (response.isError) throw new AppError(response.errorMessage)
 
-  return (
-    <AchivementsProvider achievementsDTO={response.body}>
-      <EditorProvider>{children}</EditorProvider>
-    </AchivementsProvider>
-  )
+  return <EditorProvider>{children}</EditorProvider>
 }

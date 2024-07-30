@@ -60,29 +60,26 @@ export class Quiz {
   verifyUserAnswer(): Quiz {
     const isUserAnswerCorrect = this.currentQuestion.verifyUserAnswer(this.userAnswer)
 
-    let userAnswer = this.userAnswer.makeVerified()
-
-    // if (userAnswer.isVerified.isTrue && userAnswer.isAnswered.isFalse) {
-    //   userAnswer = userAnswer.makeIncorrect()
-    // }
+    const oldUserAnswer = this.userAnswer
+    let newUserAnswer = oldUserAnswer.makeVerified()
 
     if (isUserAnswerCorrect.isTrue) {
-      userAnswer = userAnswer.makeCorrect()
+      newUserAnswer = newUserAnswer.makeCorrect()
 
-      if (userAnswer.isVerified.isTrue) {
+      if (oldUserAnswer.isVerified.isTrue) {
         return this.nextQuestion()
       }
 
-      return this.clone({ userAnswer })
+      return this.clone({ userAnswer: newUserAnswer })
     }
 
-    userAnswer = userAnswer.makeIncorrect()
+    newUserAnswer = newUserAnswer.makeIncorrect()
 
-    if (this.userAnswer.isVerified.isTrue) {
-      return this.decrementLivesCount(userAnswer)
+    if (oldUserAnswer.isVerified.isTrue) {
+      return this.decrementLivesCount(newUserAnswer)
     }
 
-    return this.clone({ userAnswer })
+    return this.clone({ userAnswer: newUserAnswer })
   }
 
   nextQuestion(): Quiz {
@@ -92,13 +89,13 @@ export class Quiz {
     })
   }
 
-  incrementIncorrectAnswersCount(): Quiz | undefined {
+  incrementIncorrectAnswersCount() {
     if (this.hasAlreadyIncrementIncorrectAnswersCount.isFalse)
-      return this.clone({
+      return {
         incorrectAnswersCount: this.incorrectAnswersCount.increment(1),
         hasAlreadyIncrementIncorrectAnswersCount:
           this.hasAlreadyIncrementIncorrectAnswersCount.invertValue(),
-      })
+      }
   }
 
   decrementLivesCount(userAnswer: QuestionAnswer): Quiz {

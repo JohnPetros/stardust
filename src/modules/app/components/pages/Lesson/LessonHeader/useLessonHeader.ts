@@ -5,7 +5,9 @@ import { useLessonStore } from '@/infra/stores/LessonStore'
 
 export function useLessonHeader() {
   const [lessonProgress, setLessonProgress] = useState<LessonProgress | null>(null)
-  const { theory, quiz } = useLessonStore()
+  const { getQuizSlice, getTheorySlice } = useLessonStore()
+  const { quiz } = getQuizSlice()
+  const { theory } = getTheorySlice()
 
   useEffect(() => {
     if (theory && quiz) {

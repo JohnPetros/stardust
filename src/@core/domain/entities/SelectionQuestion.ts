@@ -1,8 +1,7 @@
 import type { SelectionQuestionDTO, QuestionDTO } from '@/@core/dtos'
 import { Question } from '../abstracts'
 import type { QuestionProps } from '../abstracts/Question'
-import { Image, Integer, Logical } from '../structs'
-import { ShuffledList } from '../structs'
+import { Image, Integer, Logical, ShuffledList, type QuestionAnswer } from '../structs'
 
 type SelectionQuestionProps = {
   options: ShuffledList<string>
@@ -51,10 +50,10 @@ export class SelectionQuestion extends Question {
     return question instanceof SelectionQuestion
   }
 
-  verifyUserAnswer(userAnswer: unknown): Logical {
+  verifyUserAnswer(userAnswer: QuestionAnswer): Logical {
     return Logical.create(
       'Is user answer for selection question correct?',
-      userAnswer === this.answer,
+      String(userAnswer.value).toLocaleLowerCase() === this.answer.toLocaleLowerCase(),
     )
   }
 
