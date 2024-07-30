@@ -4,34 +4,34 @@ import { INITIAL_LESSON_STATE } from './constants'
 
 export function useLessonStore() {
   return {
-    get theory() {
-      return useZustandLessonStore((store) => store.state.theory)
-    },
-    get setTheory() {
-      return useZustandLessonStore((store) => store.actions.setTheory)
+    getTheorySlice() {
+      const theory = useZustandLessonStore((store) => store.state.theory)
+      const setTheory = useZustandLessonStore((store) => store.actions.setTheory)
+
+      return {
+        theory,
+        setTheory,
+      }
     },
 
-    get stage() {
-      return useZustandLessonStore((store) => store.state.stage)
-    },
-    get setStage() {
-      return useZustandLessonStore((store) => store.actions.setStage)
+    getStageSlice() {
+      const stage = useZustandLessonStore((store) => store.state.stage)
+      const setStage = useZustandLessonStore((store) => store.actions.setStage)
+
+      return {
+        stage,
+        setStage,
+      }
     },
 
-    get quiz() {
-      return useZustandLessonStore((store) => store.state.quiz)
-    },
+    getQuizSlice() {
+      const quiz = useZustandLessonStore((store) => store.state.quiz)
+      const setQuiz = useZustandLessonStore((store) => store.actions.setQuiz)
 
-    get setQuiz() {
-      return useZustandLessonStore((store) => store.actions.setQuiz)
-    },
-
-    get answerHandler() {
-      return useZustandLessonStore((store) => store.state.answerHandler)
-    },
-
-    get setAnswerHandler() {
-      return useZustandLessonStore((store) => store.actions.setAnswerHandler)
+      return {
+        quiz,
+        setQuiz,
+      }
     },
 
     resetStore() {

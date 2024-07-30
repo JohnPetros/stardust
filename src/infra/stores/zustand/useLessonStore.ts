@@ -29,12 +29,6 @@ export const useZustandLessonStore = create<LessonStore>()(
           })
         },
 
-        setAnswerHandler(answerHandler: VoidFunction) {
-          return set(({ state }) => {
-            state.answerHandler = answerHandler
-          })
-        },
-
         resetStore() {
           return set(({ actions }) => ({
             state: INITIAL_LESSON_STATE,
