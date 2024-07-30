@@ -1,6 +1,6 @@
 'use client'
 
-import { ForwardedRef, forwardRef, ReactNode, useImperativeHandle } from 'react'
+import { type ForwardedRef, forwardRef, type ReactNode, useImperativeHandle } from 'react'
 import { Overlay, Root } from '@radix-ui/react-dialog'
 
 import { useDialog } from './useDialog'
@@ -18,19 +18,23 @@ type DialogProps = {
 
 export const DialogComponent = (
   { children, shouldStartOpen = false, onOpenChange }: DialogProps,
-  ref: ForwardedRef<DialogRef>
+  ref: ForwardedRef<DialogRef>,
 ) => {
   const { isOpen, open, close, handleOpenChange } = useDialog(
     shouldStartOpen,
-    onOpenChange
+    onOpenChange,
   )
 
-  useImperativeHandle(ref, () => {
-    return {
-      open,
-      close,
-    }
-  })
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        open,
+        close,
+      }
+    },
+    [open, close],
+  )
 
   return (
     <Root open={isOpen} onOpenChange={handleOpenChange}>

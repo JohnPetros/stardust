@@ -4,12 +4,12 @@ import { immer } from 'zustand/middleware/immer'
 import type { Theory, Quiz } from '@/@core/domain/structs'
 import type { LessonStage } from '@/@core/domain/types'
 import type { LessonStore } from '../LessonStore/types'
-import { INITIAL_LESSON_STORE_STATE } from '../LessonStore/constants'
+import { INITIAL_LESSON_STATE } from '../LessonStore/constants'
 
 export const useZustandLessonStore = create<LessonStore>()(
   immer((set) => {
     return {
-      state: INITIAL_LESSON_STORE_STATE,
+      state: INITIAL_LESSON_STATE,
       actions: {
         setStage(stage: LessonStage) {
           return set(({ state }) => {
@@ -29,13 +29,19 @@ export const useZustandLessonStore = create<LessonStore>()(
           })
         },
 
+        setAnswerHandler(answerHandler: VoidFunction) {
+          return set(({ state }) => {
+            state.answerHandler = answerHandler
+          })
+        },
+
         resetStore() {
           return set(({ actions }) => ({
-            state: INITIAL_LESSON_STORE_STATE,
+            state: INITIAL_LESSON_STATE,
             actions,
           }))
         },
       },
     }
-  })
+  }),
 )

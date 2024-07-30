@@ -7,8 +7,6 @@ import {
 
 import { FetchShopItemsController } from '@/server/controllers/app'
 
-export const dynamic = 'force-static'
-
 export async function GET() {
   const nextHttp = NextHttp()
 

@@ -6,11 +6,5 @@ import type { IApi } from './types'
 export function useApi(): IApi {
   const supabaseApi = useSupabaseApi()
 
-  const api = useMemo(() => {
-    return {
-      ...supabaseApi,
-    }
-  }, [supabaseApi])
-
-  return api
+  return supabaseApi
 }

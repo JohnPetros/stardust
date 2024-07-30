@@ -4,8 +4,6 @@ import { SupabasePlanetsService } from '@/infra/api/supabase/services'
 
 import { FetchPlanetsController } from '@/server/controllers/app'
 
-export const dynamic = 'force-static'
-
 export async function GET() {
   const nextHttp = NextHttp()
 

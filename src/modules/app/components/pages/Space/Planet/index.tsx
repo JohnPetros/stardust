@@ -46,7 +46,7 @@ function PlanetComponent({ name, image, icon, stars }: PlanetProps) {
                 name={star.name.value}
                 number={star.number.value}
                 slug={star.slug.value}
-                isChallenge={star.isChallenge.true}
+                isChallenge={star.isChallenge.isTrue}
                 isLastUnlockedStar={lastUnlockedStarId === star.id}
                 isUnlocked={user.hasUnlockedStar(star.id)}
               />

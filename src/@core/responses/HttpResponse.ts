@@ -2,12 +2,12 @@ import { HTTP_STATUS_CODE } from '../constants'
 import { AppError } from '../errors/global/AppError'
 
 export class HttpResponse<Response = any> {
-  readonly body: Response
-  readonly statusCode: number
+  readonly _body: Response
+  readonly _statusCode: number
 
   constructor(body: Response, statusCode = HTTP_STATUS_CODE.ok) {
-    this.body = body
-    this.statusCode = statusCode
+    this._body = body
+    this._statusCode = statusCode
   }
 
   throwError() {
@@ -16,6 +16,16 @@ export class HttpResponse<Response = any> {
 
   get isError() {
     return this.statusCode >= HTTP_STATUS_CODE.serverError
+  }
+
+  get body() {
+    if (this.isError) this.throwError()
+
+    return this._body
+  }
+
+  get statusCode() {
+    return this._statusCode
   }
 
   get errorMessage() {

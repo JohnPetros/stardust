@@ -8,6 +8,15 @@ import { getTemplateContent } from '@/modules/global/utils'
 import { formatSpecialCharacters } from './formatSpecialCharacters'
 
 export function useMdx() {
+  function parseMdxToText(mdx: string) {
+    const { betweenTwoAsterisks, betweenFourAsterisks } = REGEX
+    const strongTemplate = '<span class="strong">$1</span>'
+
+    return mdx
+      .replace(betweenTwoAsterisks, strongTemplate)
+      .replace(betweenFourAsterisks, strongTemplate)
+  }
+
   const parseTextBlocksToMdx = useCallback((textBlocks: TextBlock[]) => {
     function getPropValue(prop: string, textBlockDTO: TextBlockDTO) {
       return textBlockDTO[prop as keyof TextBlockDTO]
@@ -19,7 +28,7 @@ export function useMdx() {
       const otherProps = props.filter(
         (prop) =>
           ['title', 'picture'].includes(prop) &&
-          getPropValue(prop, textBlockDTO) !== undefined
+          getPropValue(prop, textBlockDTO) !== undefined,
       )
 
       return otherProps
@@ -29,7 +38,7 @@ export function useMdx() {
               prop === 'title'
                 ? formatSpecialCharacters(String(textBlockDTO[prop]), 'encode')
                 : getPropValue(prop, textBlockDTO)
-            }'}`
+            }'}`,
         )
         .join(' ')
     }
@@ -82,6 +91,7 @@ export function useMdx() {
   }
 
   return {
+    parseMdxToText,
     parseTextBlocksToMdx,
     formatCodeContent,
   }

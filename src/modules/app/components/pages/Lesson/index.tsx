@@ -3,9 +3,9 @@
 import type { TextBlockDTO, QuestionDTO } from '@/@core/dtos'
 import { PageTransitionAnimation } from '@/modules/global/components/shared/PageTransitionAnimation'
 import { useLessonPage } from './useLessonPage'
-import { useLessonStore } from '@/infra/stores/LessonStore'
 import { LessonHeader } from './LessonHeader'
 import { TheoryStage } from './TheoryStage'
+import { QuizStage } from './QuizStage'
 // import { LessonHeader } from './LessonHeader'
 // import { TheoryStage } from './TheoryStage'
 
@@ -25,7 +25,7 @@ export function LessonPage({
 }: LessonPageProps) {
   const { scrollRef, stage, isTransitionVisible, handleLeavePage } = useLessonPage(
     questionsDTO,
-    textsBlocksDTO
+    textsBlocksDTO,
   )
 
   return (
@@ -36,7 +36,7 @@ export function LessonPage({
 
         <main>
           {stage === 'theory' && <TheoryStage title={starName} number={starNumber} />}
-          {/* {currentStage === 'quiz' && <Quiz leaveLesson={handleLeavePage} />} */}
+          {stage === 'quiz' && <QuizStage leaveLesson={handleLeavePage} />}
         </main>
       </div>
     </>

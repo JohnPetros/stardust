@@ -16,7 +16,7 @@ export function RankingPage() {
     return (
       <div className='mt-6 w-screen max-w-5xl px-6 pb-6 md:mx-auto md:px-0'>
         <>
-          {user.canSeeRankingResult.true ? (
+          {user.canSeeRankingResult.isTrue ? (
             <RankingResult />
           ) : (
             <>

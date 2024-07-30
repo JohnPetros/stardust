@@ -1,3 +1,5 @@
+import { redirect } from 'next/navigation'
+
 import { SupabaseServerClient } from '@/infra/api/supabase/clients'
 import {
   SupabaseAuthService,
@@ -6,7 +8,6 @@ import {
 } from '@/infra/api/supabase/services'
 import { LessonPage } from '@/modules/app/components/pages/Lesson'
 import { ROUTES } from '@/modules/global/constants'
-import { redirect } from 'next/navigation'
 
 type LessonPageProps = {
   params: { starSlug: string }
@@ -23,7 +24,7 @@ export default async function Lesson({ params }: LessonPageProps) {
   const userId = userIdResponse.data
 
   const starResponse = await starsService.fetchStarBySlug(params.starSlug)
-  if (starResponse.isFailure) userIdResponse.throwError()
+  if (starResponse.isFailure) starResponse.throwError()
   const star = starResponse.data
 
   const starIsUnlockedResponse = await starsService.verifyStarIsUnlocked(star.id, userId)

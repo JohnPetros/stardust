@@ -12,14 +12,11 @@ import { useRouter } from '@/modules/global/hooks'
 
 export function useLessonPage(
   questionsDTO: QuestionDTO[],
-  textsBlocksDTO: TextBlockDTO[]
+  textsBlocksDTO: TextBlockDTO[],
 ) {
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const { useTheory, useStage, useQuiz, resetStore } = useLessonStore()
-  const { setTheory } = useTheory()
-  const { setQuiz } = useQuiz()
-  const { stage } = useStage()
+  const { stage, setTheory, setQuiz, resetStore } = useLessonStore()
   const { goTo } = useRouter()
 
   useSecondsCounter(stage === 'quiz')
@@ -33,7 +30,7 @@ export function useLessonPage(
   useEffect(() => {
     const timeout = setTimeout(() => setIsTransitionVisible(false), 1000)
 
-    setTheory(Theory.create(textsBlocksDTO))
+    setTheory(Theory.create(textsBlocksDTO.slice(0, 2)))
     setQuiz(Quiz.create(questionsDTO))
 
     return () => {

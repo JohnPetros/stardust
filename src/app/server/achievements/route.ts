@@ -1,5 +1,3 @@
-import type { NextRequest } from 'next/server'
-
 import { NextHttp } from '@/server/protocols/http'
 import { SupabaseRouteHandlerClient } from '@/infra/api/supabase/clients'
 import { SupabaseAchievementsService } from '@/infra/api/supabase/services'

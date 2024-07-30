@@ -3,9 +3,7 @@ import { useMdx } from '@/modules/global/components/shared/Mdx/useMdx'
 import { useEffect, useState } from 'react'
 
 export function useTheoryStage() {
-  const { useTheory, useStage } = useLessonStore()
-  const { setStage } = useStage()
-  const { theory, setTheory } = useTheory()
+  const { theory, setTheory, setStage } = useLessonStore()
   const { parseTextBlocksToMdx } = useMdx()
   const [mdxTemplates, setMdxTemplates] = useState<string[]>([])
 
