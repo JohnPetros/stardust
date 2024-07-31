@@ -26,7 +26,7 @@ export function Header() {
             className='relative'
           >
             <CountBadge count={user.rescueableAchievementsCount.value} />
-            <Icon name='menu' className='text-green-400' weight='bold' />
+            <Icon name='three-dots' className='text-green-400' weight='bold' />
           </button>
           <Image src='/images/logo.svg' width={100} height={100} alt='StarDust' />
         </div>

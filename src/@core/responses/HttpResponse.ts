@@ -2,8 +2,8 @@ import { HTTP_STATUS_CODE } from '../constants'
 import { AppError } from '../errors/global/AppError'
 
 export class HttpResponse<Response = any> {
-  readonly _body: Response
-  readonly _statusCode: number
+  private readonly _body: Response
+  private readonly _statusCode: number
 
   constructor(body: Response, statusCode = HTTP_STATUS_CODE.ok) {
     this._body = body

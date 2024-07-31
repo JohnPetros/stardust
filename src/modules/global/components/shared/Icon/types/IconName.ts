@@ -26,5 +26,5 @@ export type IconName =
   | 'achievement'
   | 'rocket'
   | 'shield'
-  | 'menu'
+  | 'three-dots'
   | 'lock'

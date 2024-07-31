@@ -22,9 +22,8 @@ export const SupabaseLessonService = (supabase: Supabase): ILessonService => {
         return SupabasePostgrestError(error, QuestionsByStarNotFoundError)
       }
 
-      const questions = data.map(({ id, content, position }) => ({
+      const questions = data.map(({ id, content }) => ({
         id,
-        position,
         ...Object(content),
       })) as QuestionDTO[]
 
@@ -51,7 +50,7 @@ export const SupabaseLessonService = (supabase: Supabase): ILessonService => {
             picture: textBlock.picture,
             title: textBlock.title,
           }
-        }
+        },
       )
 
       return new ServiceResponse(textsBlocks)
