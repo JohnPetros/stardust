@@ -1,7 +1,7 @@
 import type { SelectionQuestionDTO, QuestionDTO } from '@/@core/dtos'
 import { Question } from '../abstracts'
 import type { QuestionProps } from '../abstracts/Question'
-import { Image, Integer, Logical, ShuffledList, type QuestionAnswer } from '../structs'
+import { Image, Logical, ShuffledList, Text, type QuestionAnswer } from '../structs'
 
 type SelectionQuestionProps = {
   options: ShuffledList<string>
@@ -16,7 +16,6 @@ export class SelectionQuestion extends Question {
     super({
       id: questionProps.id,
       picture: questionProps.picture,
-      position: questionProps.position,
       statement: questionProps.statement,
       type: questionProps.type,
     })
@@ -27,9 +26,8 @@ export class SelectionQuestion extends Question {
     return new SelectionQuestion(
       {
         id: dto.id,
-        position: Integer.create('', dto.position),
         picture: Image.create(dto.picture),
-        statement: dto.statement,
+        statement: Text.create(dto.statement),
         type: dto.type,
       },
       {

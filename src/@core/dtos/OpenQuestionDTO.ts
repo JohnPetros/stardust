@@ -1,12 +1,11 @@
+import type { QuestionCodeLineDTO } from './QuestionCodeLineDTO'
+
 export type OpenQuestionDTO = {
+  id?: string
   type: 'open'
-  title: string
+  statement: string
   picture: string
   code?: string
   answers: string[]
-  lines: {
-    number: number
-    texts: string[]
-    indentation: number
-  }
+  lines: QuestionCodeLineDTO[]
 }
