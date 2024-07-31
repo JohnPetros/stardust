@@ -1,4 +1,4 @@
-import type { Image, Integer, Logical, QuestionAnswer } from '../structs'
+import type { Image, Logical, QuestionAnswer, Text } from '../structs'
 import { BaseEntity } from './BaseEntity'
 
 type QuestionType =
@@ -11,23 +11,20 @@ type QuestionType =
 export type QuestionProps = {
   id?: string
   type: QuestionType
-  statement: string
+  statement: Text
   picture: Image
-  position: Integer
 }
 
 export abstract class Question extends BaseEntity {
   readonly type: QuestionType
-  readonly statement: string
+  readonly statement: Text
   readonly picture: Image
-  readonly position: Integer
 
   constructor(props: QuestionProps) {
     super(props.id)
     this.type = props.type
     this.statement = props.statement
     this.picture = props.picture
-    this.position = props.position
   }
 
   abstract verifyUserAnswer(userAnswer: QuestionAnswer): Logical
