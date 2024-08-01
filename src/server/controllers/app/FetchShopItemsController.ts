@@ -1,9 +1,10 @@
+import { HTTP_STATUS_CODE } from '@/@core/constants'
 import type { IController, IHttp } from '@/@core/interfaces/handlers'
 import type { IAvatarsService, IRocketsSerivice } from '@/@core/interfaces/services'
 
 export const FetchShopItemsController = (
   rocketsService: IRocketsSerivice,
-  avatarsService: IAvatarsService
+  avatarsService: IAvatarsService,
 ): IController => {
   return {
     async handle(http: IHttp) {
@@ -14,7 +15,7 @@ export const FetchShopItemsController = (
       })
 
       if (rocketsResponse.isFailure) {
-        return http.send(rocketsResponse.errorMessage, 500)
+        return http.send(rocketsResponse.errorMessage, HTTP_STATUS_CODE.serverError)
       }
 
       const avatarsResponse = await avatarsService.fetchShopAvatarsList({
@@ -24,7 +25,7 @@ export const FetchShopItemsController = (
       })
 
       if (avatarsResponse.isFailure) {
-        return http.send(avatarsResponse.errorMessage, 500)
+        return http.send(avatarsResponse.errorMessage, HTTP_STATUS_CODE.serverError)
       }
 
       return http.send(
@@ -38,7 +39,7 @@ export const FetchShopItemsController = (
             count: avatarsResponse.data.count,
           },
         },
-        200
+        HTTP_STATUS_CODE.ok,
       )
     },
   }

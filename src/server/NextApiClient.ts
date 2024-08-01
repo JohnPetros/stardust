@@ -1,6 +1,6 @@
 import { headers } from 'next/headers'
 
-import type { IClient } from '@/@core/interfaces/handlers'
+import type { IApiClient } from '@/@core/interfaces/handlers'
 import { HttpResponse } from '@/@core/responses'
 import { ENV } from '@/modules/global/constants'
 
@@ -9,7 +9,7 @@ type CacheConfig = {
   refetchInterval?: number
 }
 
-export const NextClient = ({ isCacheEnable = true }: CacheConfig = {}): IClient => {
+export const NextApiClient = ({ isCacheEnable = true }: CacheConfig = {}): IApiClient => {
   const requestInit: RequestInit = {
     cache: !isCacheEnable ? 'force-cache' : 'no-store',
     headers: headers(),
@@ -18,6 +18,17 @@ export const NextClient = ({ isCacheEnable = true }: CacheConfig = {}): IClient 
   return {
     async get<Response>(route: string): Promise<HttpResponse<Response>> {
       const response = await fetch(`${ENV.url}${route}`, requestInit)
+
+      const data = await response.json()
+
+      return new HttpResponse(data, response.status)
+    },
+
+    async post<Response>(route: string): Promise<HttpResponse<Response>> {
+      const response = await fetch(`${ENV.url}${route}`, {
+        ...requestInit,
+        method: 'POST',
+      })
 
       const data = await response.json()
 
