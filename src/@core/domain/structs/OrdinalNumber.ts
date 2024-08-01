@@ -19,4 +19,8 @@ export class OrdinalNumber {
 
     return new OrdinalNumber({ key, value })
   }
+
+  incrementOne() {
+    return new OrdinalNumber({ key: this.key, value: this.value + 1 })
+  }
 }

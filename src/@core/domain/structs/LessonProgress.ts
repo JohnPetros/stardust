@@ -1,3 +1,4 @@
+import { Logical } from './Logical'
 import type { Quiz } from './Quiz'
 import type { Theory } from './Theory'
 
@@ -29,5 +30,9 @@ export class LessonProgress {
       (this.theory.progress * half) / total + (this.quiz.progress * half) / total
 
     return progress * 100
+  }
+
+  get isFull() {
+    return Logical.create('Is lesson progress full?', this.value === 100)
   }
 }

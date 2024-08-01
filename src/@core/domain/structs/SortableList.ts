@@ -1,6 +1,6 @@
 import { AppError } from '@/@core/errors/global/AppError'
-import { Collection } from './Collection'
-import { Logical } from './Logical'
+import type { Logical } from './Logical'
+import { List } from './List'
 import { ShuffledList } from './ShuffledList'
 import type { OrdinalNumber } from './OrdinalNumber'
 
@@ -38,11 +38,7 @@ export class SortableList {
   }
 
   isEqualTo(otherList: SortableList): Logical {
-    const verification = Collection.create(this.orderedItems).isEqualTo(
-      Collection.create(otherList.items),
-    )
-
-    return Logical.create('Is sortable list equal to?', verification.value)
+    return List.create(this.orderedItems).isEqualTo(List.create(otherList.items))
   }
 
   get orderedItems(): Item[] {

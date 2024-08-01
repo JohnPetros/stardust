@@ -32,15 +32,12 @@ export class Planet extends BaseEntity {
     })
   }
 
-  get dto(): PlanetDTO {
-    return {
-      id: this.id,
-      name: this.name.value,
-      image: this.image.value,
-      icon: this.icon.value,
-      position: this.position.value,
-      stars: this.stars.map((star) => star.dto),
-    }
+  getNextStar(starId: string): Star | null {
+    const currentStar = this.stars.find((star) => star.id === starId)
+    const nextStar = this.stars.find(
+      (star) => star.number.value === currentStar?.number.incrementOne().value,
+    )
+    return nextStar ?? null
   }
 
   get name() {
@@ -61,5 +58,16 @@ export class Planet extends BaseEntity {
 
   get stars() {
     return this.props.stars
+  }
+
+  get dto(): PlanetDTO {
+    return {
+      id: this.id,
+      name: this.name.value,
+      image: this.image.value,
+      icon: this.icon.value,
+      position: this.position.value,
+      stars: this.stars.map((star) => star.dto),
+    }
   }
 }

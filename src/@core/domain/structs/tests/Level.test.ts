@@ -5,16 +5,16 @@ describe('Level struct', () => {
     const level = Level.create(1)
 
     let newLevel = level.up(0, 10)
-    expect(newLevel.number.value).toBe(1)
+    expect(newLevel.value).toBe(1)
 
     newLevel = level.up(0, 50)
-    expect(newLevel.number.value).toBe(2)
+    expect(newLevel.value).toBe(2)
 
     newLevel = newLevel.up(50, 10)
-    expect(newLevel.number.value).toBe(2)
+    expect(newLevel.value).toBe(2)
 
     newLevel = newLevel.up(50, 25)
-    expect(newLevel.number.value).toBe(3)
+    expect(newLevel.value).toBe(3)
   })
 
   it('should indicate that its value was up', () => {

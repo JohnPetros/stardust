@@ -17,13 +17,17 @@ export const NextHttp = (request?: NextRequest): IHttp => {
       }
 
       const nextResponse = NextResponse.redirect(
-        new URL(route, request ? request.url : '')
+        new URL(route, request ? request.url : ''),
       )
       return new HttpResponse(nextResponse, 303)
     },
 
     getSearchParam(key: string) {
       return request ? new URL(request.url).searchParams.get(key) : ''
+    },
+
+    async getBody<Body>() {
+      return (await request?.json()) as Body
     },
 
     setCookie({ key, value, duration }: Cookie) {

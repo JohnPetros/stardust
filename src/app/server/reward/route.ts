@@ -4,9 +4,8 @@ import { NextHttp } from '@/server/protocols/http'
 import { SupabaseRouteHandlerClient } from '@/infra/api/supabase/clients'
 import {
   SupabaseAuthService,
-  SupabasePlanetsService,
-  SupabaseStarsService,
   SupabaseUsersService,
+  SupabaseSpaceService,
 } from '@/infra/api/supabase/services'
 
 import { RewardUserController } from '@/server/controllers/app'
@@ -17,15 +16,9 @@ export async function POST(request: NextRequest) {
   const supabase = SupabaseRouteHandlerClient()
   const authService = SupabaseAuthService(supabase)
   const usersService = SupabaseUsersService(supabase)
-  const starsService = SupabaseStarsService(supabase)
-  const planetsService = SupabasePlanetsService(supabase)
+  const spaceService = SupabaseSpaceService(supabase)
 
-  const controller = RewardUserController(
-    authService,
-    usersService,
-    starsService,
-    planetsService,
-  )
+  const controller = RewardUserController(authService, usersService, spaceService)
 
   const httpResponse = await controller.handle(nextHttp)
 

@@ -18,15 +18,15 @@ export const RewardUserController = (
   function getNextRoute(rewardPayloadOrigin: RewardingPayloadOrigin) {
     switch (rewardPayloadOrigin) {
       case 'star':
-        return ROUTES.private.app.home
+        return ROUTES.private.app.home.space
       default:
-        return ROUTES.private.app.home
+        return ROUTES.private.app.home.space
     }
   }
 
   return {
     async handle(http: IHttp) {
-      const rewardingPayloadDTO = http.getRequest<RewardingPayloadDTO>()
+      const rewardingPayloadDTO = await http.getBody<RewardingPayloadDTO>()
 
       const userIdResponse = await authService.fetchUserId()
       if (userIdResponse.isFailure) {
@@ -50,9 +50,9 @@ export const RewardUserController = (
 
         return http.send(
           {
-            userDTO: response.user.dto,
+            user: response.user.dto,
             accuracyPercentage: response.accuracyPercentage,
-            time: response.user,
+            time: response.time,
             nextRoute,
           },
           HTTP_STATUS_CODE.ok,

@@ -21,13 +21,12 @@ export class Star extends BaseEntity {
 
   static create(dto: StarDTO): Star {
     return new Star({
+      id: dto?.id,
       slug: Slug.create(dto.slug),
       name: Name.create(dto.name),
       number: OrdinalNumber.create('star number', dto.number),
       isChallenge: Logical.create('is star a challenge?', dto.isChallenge),
       planetId: Id.create(dto.planetId),
-      id: dto?.id,
-      // texts: dto.texts.map(Text.create),
     })
   }
 
@@ -37,18 +36,13 @@ export class Star extends BaseEntity {
       name: this.name.value,
       number: this.number.value,
       slug: this.slug.value,
-      planetId: this.planetId.value,
       isChallenge: this.isChallenge.value,
-      // texts: this.texts.map((text) => text.dto),
+      planetId: this.props.planetId.value,
     }
   }
 
   get name() {
     return this.props.name
-  }
-
-  get planetId() {
-    return this.props.planetId
   }
 
   get number() {

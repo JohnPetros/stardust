@@ -10,7 +10,7 @@ export interface IHttp {
   getCurrentRoute(): string
   redirect(route: string): HttpResponse
   getSearchParam(key: string): string | null
-  getRequest<Request>(): Request
+  getBody<Request>(): Promise<Request>
   setCookie(cookie: Cookie): void
   getCookie(key: string): Cookie | null
   send(data: unknown, statusCode: number): HttpResponse

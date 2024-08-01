@@ -145,7 +145,7 @@ describe('Reward User Use Case', () => {
       }),
     })
 
-    expect(user.hasUnlockedStar(nextStar.id)).toBeTruthy()
+    expect(user.hasUnlockedStar(nextStar.id).isTrue).toBeTruthy()
     expect(spaceServiceMock.unlockedStarsIds.includes(nextStar.id)).toBeTruthy()
   })
 
@@ -167,7 +167,7 @@ describe('Reward User Use Case', () => {
       }),
     })
 
-    expect(user.hasUnlockedStar(nextStar.id)).toBeTruthy()
+    expect(user.hasUnlockedStar(nextStar.id).isTrue).toBeTruthy()
     expect(spaceServiceMock.unlockedStarsIds.includes(nextStar.id)).toBeTruthy()
   })
 

@@ -1,4 +1,5 @@
 import type { ISpaceService } from '@/@core/interfaces/services'
+import type { PlanetDTO } from '@/@core/dtos'
 import type { Planet } from '@/@core/domain/entities'
 import { ServiceResponse } from '@/@core/responses'
 import { SaveUnlockedStarUnexpectedError, StarNotFoundError } from '@/@core/errors/stars'
@@ -32,10 +33,17 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
     },
 
     async fetchPlanetByStar(starId: string) {
+      const response = await this.fetchStarById(starId)
+
+      if (response.isFailure) {
+        return new ServiceResponse<PlanetDTO>(null, response.error)
+      }
+
       const { data, error } = await supabase
         .from('planets')
-        .select('*, stars!inner(id, name, number, slug, is_challenge, planet_id)')
-        .eq('stars.planet_id', starId)
+        .select('*, stars(id, name, number, slug, is_challenge, planet_id)')
+        .eq('id', response.data.planetId)
+        .order('number', { foreignTable: 'stars', ascending: true })
         .single<SupabasePlanet>()
 
       if (error) {

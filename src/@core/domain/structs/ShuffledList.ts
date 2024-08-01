@@ -1,4 +1,4 @@
-import { Collection } from './Collection'
+import { List } from './List'
 
 export class ShuffledList<Item> {
   private constructor(readonly items: Item[]) {}
@@ -11,9 +11,7 @@ export class ShuffledList<Item> {
       return Math.random() - 0.5
     })
 
-    while (
-      Collection.create(originalItems).isEqualTo(Collection.create(shuffledItems)).isTrue
-    ) {
+    while (List.create(originalItems).isEqualTo(List.create(shuffledItems)).isTrue) {
       originalItems.sort(() => {
         return Math.random() - 0.5
       })

@@ -83,6 +83,8 @@ export class RewardUserUseCase implements IUseCase<Request, Response> {
     let nextStar = planet.getNextStar(currentStarId)
     let isLastStar = false
 
+    console.log(planet.stars)
+
     if (!nextStar) {
       const response = await this.spaceService.fetchNextStarFromNextPlanet(planet)
       if (response.isSuccess) {
@@ -99,7 +101,7 @@ export class RewardUserUseCase implements IUseCase<Request, Response> {
     if (isLastStar) {
       isNextStarUnlocked = true
     } else if (nextStar) {
-      isNextStarUnlocked = user.hasUnlockedStar(nextStar.id)
+      isNextStarUnlocked = user.hasUnlockedStar(nextStar.id).isTrue
     }
 
     return {
@@ -149,11 +151,13 @@ export class RewardUserUseCase implements IUseCase<Request, Response> {
   ) {
     user.earnCoins(newCoins)
     user.earnXp(newXp)
-    user.level.up(newXp)
 
     if (nextStar) {
+      if (user.hasUnlockedStar(nextStar.id).isTrue) return
+
       const response = await this.spaceService.saveUserUnlockedStar(nextStar.id, user.id)
       if (response.isFailure) response.throwError()
+
       user.unlockStar(nextStar.id)
     }
 

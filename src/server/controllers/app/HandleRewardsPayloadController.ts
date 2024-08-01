@@ -8,8 +8,8 @@ export const HandleRewardsPayloadController = (): IController => {
     async handle(http: IHttp) {
       const currentRoute = http.getCurrentRoute()
 
-      if (currentRoute === ROUTES.private.app.rewards) {
-        const hasRewardsPayloadCookie = await _hasCookie(COOKIES.keys.rewardsPayload)
+      if (currentRoute === ROUTES.private.app.rewarding) {
+        const hasRewardsPayloadCookie = await _hasCookie(COOKIES.keys.rewardingPayload)
 
         if (!hasRewardsPayloadCookie) return http.redirect(ROUTES.private.app.home.space)
       }

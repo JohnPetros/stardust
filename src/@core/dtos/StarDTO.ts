@@ -4,4 +4,5 @@ export type StarDTO = {
   name: string
   number: number
   isChallenge: boolean
+  planetId: string
 }

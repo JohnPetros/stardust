@@ -14,6 +14,7 @@ export class StarsFaker {
       number: faker.number.int({ min: 1, max: 20 }),
       slug: faker.lorem.slug(),
       isChallenge: false,
+      planetId: faker.string.uuid(),
       ...baseDTO,
     }
   }

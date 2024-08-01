@@ -74,3 +74,12 @@ export function useLessonPage(
     handleLeavePage,
   }
 }
+
+
+{
+  'origin': 'star',
+  'questionsCount': 5,
+  'incorrectAnswersCount': 0,
+  'secondsCount': 60,
+  'starId': '',
+}
