@@ -3,12 +3,12 @@ import { AppError } from '@/@core/errors/global/AppError'
 import { SpacePage } from '@/modules/app/components/pages/Space'
 import { SpaceProvider } from '@/modules/app/contexts/SpaceContext'
 import { ROUTES } from '@/modules/global/constants'
-import { NextClient } from '@/server/client'
+import { NextApiClient } from '@/server/NextApiClient'
 
 export default async function Space() {
-  const client = NextClient({ isCacheEnable: true })
+  const apiClient = NextApiClient({ isCacheEnable: true })
 
-  const response = await client.get<PlanetDTO[]>(ROUTES.server.planets)
+  const response = await apiClient.get<PlanetDTO[]>(ROUTES.server.planets)
 
   if (response.isError) throw new AppError(response.errorMessage)
 

@@ -2,7 +2,7 @@ import type { AvatarDTO, RocketDTO } from '@/@core/dtos'
 import { ShopPage } from '@/modules/app/components/pages/shop'
 import { ROUTES } from '@/modules/global/constants'
 import { waitFor } from '@/modules/global/utils'
-import { NextClient } from '@/server/client'
+import { NextClient } from '@/server/NextApiClient'
 
 type ShopItems = {
   rockets: {
