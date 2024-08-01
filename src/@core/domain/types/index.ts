@@ -4,4 +4,5 @@ export type { CompletedChallengesCountByDifficultyLevel } from './CompletedChall
 export type { CodeInput } from './CodeInput'
 export type { LessonStage } from './LessonStage'
 export type { WeekdayStatus } from './WeekdayStatus'
+export type { RewardingPayloadOrigin } from './RewardingPayloadOrigin'
 export type { TextBlockType } from './TextBlockType'
