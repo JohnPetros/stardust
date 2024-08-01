@@ -1,15 +1,14 @@
 import type { UserDTO } from '../../dtos/UserDTO'
 import { UserFactory } from '../../factories'
 import {
-  type OrdinalNumber,
   type Email,
-  type IdsCollection,
   type Name,
   type Slug,
   type Observer,
   type Logical,
   type RankingPosition,
   Integer,
+  type List,
 } from '../structs'
 import type { Avatar } from './Avatar'
 import type { Rocket } from './Rocket'
@@ -17,6 +16,8 @@ import { BaseEntity } from '../abstracts'
 import type { Tier } from './Tier'
 import type { AchievementMetricValue } from '../types'
 import type { WeekStatus } from '../structs/WeekStatus'
+import type { Level } from '../structs/Level'
+import { Datetime } from '@/@core/lib/datetime'
 
 type UserProps = {
   id?: string
@@ -26,20 +27,21 @@ type UserProps = {
   slug: Slug
   email: Email
   name: Name
-  level: OrdinalNumber
+  level: Level
   coins: Integer
   xp: Integer
   weeklyXp: Integer
   streak: Integer
   weekStatus: WeekStatus
-  unlockedStarsIds: IdsCollection
-  acquiredRocketsIds: IdsCollection
-  acquiredAvatarsIds: IdsCollection
-  unlockedAchievementsIds: IdsCollection
-  rescuableAchievementsIds: IdsCollection
-  completedChallengesIds: IdsCollection
-  completedPlanetsIds: IdsCollection
+  unlockedStarsIds: List<string>
+  acquiredRocketsIds: List<string>
+  acquiredAvatarsIds: List<string>
+  unlockedAchievementsIds: List<string>
+  rescuableAchievementsIds: List<string>
+  completedChallengesIds: List<string>
+  completedPlanetsIds: List<string>
   canSeeRankingResult: Logical
+  didIncrementStreakOnSaturday: Logical
   lastWeekRankingPosition: RankingPosition | null
   createdAt: Date
   _observer?: Observer
@@ -58,27 +60,27 @@ export class User extends BaseEntity {
   }
 
   hasUnlockedAchievement(achievementId: string): boolean {
-    return this.props.unlockedAchievementsIds.includes(achievementId)
+    return this.props.unlockedAchievementsIds.includes(achievementId).isTrue
   }
 
   hasRescuableAchievement(achievementId: string): boolean {
-    return this.props.rescuableAchievementsIds.includes(achievementId)
+    return this.props.rescuableAchievementsIds.includes(achievementId).isTrue
   }
 
   hasUnlockedStar(starId: string): boolean {
-    return this.props.unlockedStarsIds.includes(starId)
+    return this.props.unlockedStarsIds.includes(starId).isTrue
   }
 
   hasCompletedChallenge(challengeId: string): boolean {
-    return this.props.completedChallengesIds.includes(challengeId)
+    return this.props.completedChallengesIds.includes(challengeId).isTrue
   }
 
   hasAcquiredRocket(rocketId: string): boolean {
-    return this.props.acquiredRocketsIds.includes(rocketId)
+    return this.props.acquiredRocketsIds.includes(rocketId).isTrue
   }
 
   hasAcquiredAvatar(rocketId: string): boolean {
-    return this.props.acquiredAvatarsIds.includes(rocketId)
+    return this.props.acquiredAvatarsIds.includes(rocketId).isTrue
   }
 
   isSelectRocket(rocketId: string): boolean {
@@ -92,6 +94,12 @@ export class User extends BaseEntity {
   unlockAchievement(achievementId: string): void {
     this.props.unlockedAchievementsIds.add(achievementId)
     this.props.rescuableAchievementsIds.add(achievementId)
+
+    this.notifyChanges()
+  }
+
+  unlockStar(starId: string): void {
+    this.props.unlockedStarsIds.add(starId)
 
     this.notifyChanges()
   }
@@ -110,6 +118,12 @@ export class User extends BaseEntity {
 
   loseCoins(coins: number): void {
     this.props.coins = this.props.coins.dencrement(coins)
+  }
+
+  earnXp(newXp: number): void {
+    this.props.xp = this.props.xp.increment(newXp)
+    this.props.weeklyXp = this.props.weeklyXp.increment(newXp)
+    this.notifyChanges()
   }
 
   earnLastWeekRankingPositionReward(): void {
@@ -151,6 +165,14 @@ export class User extends BaseEntity {
     }
   }
 
+  makeTodayStatusDone() {
+    if (this.weekStatus.todayStatus !== 'todo') return
+
+    this.props.weekStatus = this.weekStatus.updateTodayStatus('done')
+    this.props.streak = this.streak.increment(1)
+    this.notifyChanges()
+  }
+
   getAchievementCount(metric: AchievementMetricValue) {
     return this[metric]
   }
@@ -180,49 +202,46 @@ export class User extends BaseEntity {
   }
 
   get unlockedStarsCount() {
-    return Integer.create('unlocked stars', this.props.unlockedStarsIds.value.length - 1)
+    return Integer.create('unlocked stars', this.props.unlockedStarsIds.length - 1)
   }
 
   get acquiredRocketsCount() {
     return Integer.create(
       'acquired rockets count',
-      this.props.acquiredRocketsIds.value.length - 1
+      this.props.acquiredRocketsIds.length - 1,
     )
   }
 
   get acquiredAvatarsCount() {
     return Integer.create(
       'acquired avatars count',
-      this.props.acquiredAvatarsIds.value.length - 3
+      this.props.acquiredAvatarsIds.length - 3,
     )
   }
 
   get unlockedAchievementsCount() {
     return Integer.create(
       'unlocked achievements',
-      this.props.unlockedAchievementsIds.value.length
+      this.props.unlockedAchievementsIds.length,
     )
   }
 
   get rescueableAchievementsCount() {
     return Integer.create(
       'rescuable achievements',
-      this.props.rescuableAchievementsIds.value.length
+      this.props.rescuableAchievementsIds.length,
     )
   }
 
   get completedChallengesCount() {
     return Integer.create(
       'completed challenges',
-      this.props.completedChallengesIds.value.length
+      this.props.completedChallengesIds.length,
     )
   }
 
   get completedPlanetsCount() {
-    return Integer.create(
-      'completed planets',
-      this.props.completedPlanetsIds.value.length
-    )
+    return Integer.create('completed planets', this.props.completedPlanetsIds.length)
   }
 
   get isRankingWinner(): boolean {
@@ -320,21 +339,22 @@ export class User extends BaseEntity {
       tier: this.tier.dto,
       rocket: this.rocket.dto,
       avatar: this.avatar.dto,
-      level: this.level.value,
+      level: this.level.number.value,
       coins: this.coins.value,
       xp: this.xp.value,
       weeklyXp: this.weeklyXp.value,
       streak: this.streak.value,
       weekStatus: this.props.weekStatus.statuses,
-      unlockedStarsIds: this.props.unlockedStarsIds.value,
-      acquiredRocketsIds: this.props.acquiredRocketsIds.value,
-      acquiredAvatarsIds: this.props.acquiredAvatarsIds.value,
-      unlockedAchievementsIds: this.props.unlockedAchievementsIds.value,
-      rescuableAchievementsIds: this.props.rescuableAchievementsIds.value,
-      completedChallengesIds: this.props.completedChallengesIds.value,
-      completedPlanetsIds: this.props.completedPlanetsIds.value,
+      unlockedStarsIds: this.props.unlockedStarsIds.items,
+      acquiredRocketsIds: this.props.acquiredRocketsIds.items,
+      acquiredAvatarsIds: this.props.acquiredAvatarsIds.items,
+      unlockedAchievementsIds: this.props.unlockedAchievementsIds.items,
+      rescuableAchievementsIds: this.props.rescuableAchievementsIds.items,
+      completedChallengesIds: this.props.completedChallengesIds.items,
+      completedPlanetsIds: this.props.completedPlanetsIds.items,
       canSeeRankingResult: this.props.canSeeRankingResult.value,
       lastWeekRankingPosition: this.props.lastWeekRankingPosition?.position.value ?? null,
+      didIncrementStreakOnSaturday: this.props.didIncrementStreakOnSaturday.value,
       createdAt: this.createdAt.toDateString(),
     }
   }
