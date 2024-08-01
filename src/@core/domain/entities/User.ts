@@ -17,7 +17,6 @@ import type { Tier } from './Tier'
 import type { AchievementMetricValue } from '../types'
 import type { WeekStatus } from '../structs/WeekStatus'
 import type { Level } from '../structs/Level'
-import { Datetime } from '@/@core/lib/datetime'
 
 type UserProps = {
   id?: string

@@ -26,8 +26,7 @@ export type UserDTO = {
   canSeeRankingResult: boolean
   lastWeekRankingPosition: number | null
   createdAt: string
+  didIncrementStreakOnSaturday: boolean
   // didBreakStreak: boolean
-  // didCompleteSaturday: boolean
   // studyTime: string
-  // weekStatus: WeekStatus[]
 }
