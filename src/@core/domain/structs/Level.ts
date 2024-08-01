@@ -24,9 +24,11 @@ export class Level {
     })
   }
 
-  up(newXp: number) {
+  up(currentXp: number, newXp: number) {
+    const xpSum = currentXp + newXp
+
     const hasNewLevel =
-      newXp >= Level.BASE_INCREASE_XP * (this.number.value - 1) + Level.MINIMUM_XP
+      xpSum >= Level.BASE_INCREASE_XP * (this.number.value - 1) + Level.MINIMUM_XP
 
     if (hasNewLevel) {
       return new Level({
@@ -34,5 +36,11 @@ export class Level {
         number: this.number.incrementOne(),
       })
     }
+
+    return this
+  }
+
+  get value() {
+    return this.number.value
   }
 }

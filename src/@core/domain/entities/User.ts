@@ -58,38 +58,6 @@ export class User extends BaseEntity {
     return new User(UserFactory.produce(dto))
   }
 
-  hasUnlockedAchievement(achievementId: string): boolean {
-    return this.props.unlockedAchievementsIds.includes(achievementId).isTrue
-  }
-
-  hasRescuableAchievement(achievementId: string): boolean {
-    return this.props.rescuableAchievementsIds.includes(achievementId).isTrue
-  }
-
-  hasUnlockedStar(starId: string): boolean {
-    return this.props.unlockedStarsIds.includes(starId).isTrue
-  }
-
-  hasCompletedChallenge(challengeId: string): boolean {
-    return this.props.completedChallengesIds.includes(challengeId).isTrue
-  }
-
-  hasAcquiredRocket(rocketId: string): boolean {
-    return this.props.acquiredRocketsIds.includes(rocketId).isTrue
-  }
-
-  hasAcquiredAvatar(rocketId: string): boolean {
-    return this.props.acquiredAvatarsIds.includes(rocketId).isTrue
-  }
-
-  isSelectRocket(rocketId: string): boolean {
-    return rocketId === this.rocket.id
-  }
-
-  isSelectAvatar(avatarId: string): boolean {
-    return avatarId === this.avatar.id
-  }
-
   unlockAchievement(achievementId: string): void {
     this.props.unlockedAchievementsIds.add(achievementId)
     this.props.rescuableAchievementsIds.add(achievementId)
@@ -119,9 +87,9 @@ export class User extends BaseEntity {
     this.props.coins = this.props.coins.dencrement(coins)
   }
 
-  earnXp(newXp: number): void {
+  earnXp(newXp: number) {
+    this.props.level = this.level.up(this.xp.value, newXp)
     this.props.xp = this.props.xp.increment(newXp)
-    this.props.weeklyXp = this.props.weeklyXp.increment(newXp)
     this.notifyChanges()
   }
 
@@ -190,6 +158,38 @@ export class User extends BaseEntity {
 
   resetRankingLoserState() {
     this.props.lastWeekRankingPosition = null
+  }
+
+  hasUnlockedAchievement(achievementId: string): boolean {
+    return this.props.unlockedAchievementsIds.includes(achievementId).isTrue
+  }
+
+  hasRescuableAchievement(achievementId: string): boolean {
+    return this.props.rescuableAchievementsIds.includes(achievementId).isTrue
+  }
+
+  hasUnlockedStar(starId: string): Logical {
+    return this.props.unlockedStarsIds.includes(starId)
+  }
+
+  hasCompletedChallenge(challengeId: string): boolean {
+    return this.props.completedChallengesIds.includes(challengeId).isTrue
+  }
+
+  hasAcquiredRocket(rocketId: string): boolean {
+    return this.props.acquiredRocketsIds.includes(rocketId).isTrue
+  }
+
+  hasAcquiredAvatar(rocketId: string): boolean {
+    return this.props.acquiredAvatarsIds.includes(rocketId).isTrue
+  }
+
+  isSelectRocket(rocketId: string): boolean {
+    return rocketId === this.rocket.id
+  }
+
+  isSelectAvatar(avatarId: string): boolean {
+    return avatarId === this.avatar.id
   }
 
   private notifyChanges(): void {

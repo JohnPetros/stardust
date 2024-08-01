@@ -14,6 +14,13 @@ describe('User Entity', () => {
     expect(user.hasUnlockedAchievement(IdFaker.fake().value)).toBe(false)
   })
 
+  it('should up level if earns enough xp', () => {
+    const user = UsersFaker.fake({ level: 1, xp: 0 })
+
+    user.earnXp(50)
+    expect(user.level.value).toBe(2)
+  })
+
   it('should return whether user has the rescuable achievement or not', () => {
     const fakeRescuableAchivementId = IdFaker.fake()
 
@@ -32,8 +39,8 @@ describe('User Entity', () => {
       unlockedStarsIds: [fakeUnlockedStarId.value],
     })
 
-    expect(user.hasUnlockedStar(fakeUnlockedStarId.value)).toBe(true)
-    expect(user.hasUnlockedStar(IdFaker.fake().value)).toBe(false)
+    expect(user.hasUnlockedStar(fakeUnlockedStarId.value).isTrue).toBe(true)
+    expect(user.hasUnlockedStar(IdFaker.fake().value).isTrue).toBe(false)
   })
 
   it('should return whether user has the completed challenge or not', () => {
