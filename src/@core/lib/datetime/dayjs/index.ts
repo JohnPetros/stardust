@@ -15,6 +15,18 @@ export class DayJsDatetime implements IDatetime {
     return daysCount
   }
 
+  getTodayIndex(): number {
+    return dayjs().day()
+  }
+
+  convertSecondsToTime(seconds: number): string {
+    const date = new Date(0)
+    date.setSeconds(seconds)
+
+    const time = date.toISOString().substring(14, 19)
+    return time
+  }
+
   format(date: Date, dateFormat: DateFormat): string {
     return dayjs(date).format(dateFormat)
   }
