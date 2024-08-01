@@ -1,15 +1,56 @@
-import type { IStarsService } from '@/@core/interfaces/services'
+import type { ISpaceService } from '@/@core/interfaces/services'
+import type { Planet } from '@/@core/domain/entities'
 import { ServiceResponse } from '@/@core/responses'
 import { SaveUnlockedStarUnexpectedError, StarNotFoundError } from '@/@core/errors/stars'
+import { FetchPlanetsUnexpectedError } from '@/@core/errors/planets/FetchPlanetsUnexpectedError'
 
 import type { Supabase } from '../types/Supabase'
-import { SupabaseStarMapper } from '../mappers'
+import { SupabasePlanetMapper, SupabaseStarMapper } from '../mappers'
 import { SupabasePostgrestError } from '../errors'
+import type { SupabasePlanet } from '../types'
 
-export const SupabaseStarsService = (supabase: Supabase): IStarsService => {
+export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
+  const supabasePlanetMapper = SupabasePlanetMapper()
   const supabaseStarMapper = SupabaseStarMapper()
 
   return {
+    async fetchPlanets() {
+      const { data, error } = await supabase
+        .from('planets')
+        .select('*, stars(id, name, number, slug, is_challenge, planet_id)')
+        .order('position', { ascending: true })
+        .order('number', { foreignTable: 'stars', ascending: true })
+        .returns<SupabasePlanet[]>()
+
+      if (error) {
+        return SupabasePostgrestError(error, FetchPlanetsUnexpectedError)
+      }
+
+      const planets = data.map(supabasePlanetMapper.toDTO)
+
+      return new ServiceResponse(planets)
+    },
+
+    async fetchPlanetByStar(starId: string) {
+      const { data, error } = await supabase
+        .from('planets')
+        .select('*, stars!inner(id, name, number, slug, is_challenge, planet_id)')
+        .eq('stars.planet_id', starId)
+        .single<SupabasePlanet>()
+
+      if (error) {
+        return SupabasePostgrestError(error, FetchPlanetsUnexpectedError)
+      }
+
+      const planet = supabasePlanetMapper.toDTO(data)
+
+      return new ServiceResponse(planet)
+    },
+
+    async savePlanet(planet) {
+      throw new Error('Not implemented')
+    },
+
     async fetchStarBySlug(starSlug: string) {
       const { data, error } = await supabase
         .from('stars')
@@ -29,7 +70,7 @@ export const SupabaseStarsService = (supabase: Supabase): IStarsService => {
     async fetchStarById(starId: string) {
       const { data, error } = await supabase
         .from('stars')
-        .select('*')
+        .select('id, name, number, slug, is_challenge, planet_id')
         .eq('id', starId)
         .single()
 
@@ -54,71 +95,24 @@ export const SupabaseStarsService = (supabase: Supabase): IStarsService => {
       return new ServiceResponse(true)
     },
 
-    //   async fetchNextStar(currentStar: Star, userId: string) {
-    //     const { data, error } = await supabase
-    //       .from('stars')
-    //       .select('id, users_unlocked_stars(id)')
-    //       .match({
-    //         planet_id: currentStar.planetId,
-    //         number: currentStar.number + 1,
-    //       })
-    //       .eq('users_unlocked_stars.user_id', userId)
-    //       .single<{ id: string; users_unlocked_stars?: [] }>()
+    async fetchNextStarFromNextPlanet(starPlanet: Planet) {
+      const { data, error } = await supabase
+        .from('stars')
+        .select(
+          'id, name, number, slug, is_challenge, planet_id, planets!inner(position)',
+        )
+        .eq('number', 1)
+        .eq('planets.position', starPlanet.position.incrementOne().value)
+        .single()
 
-    //     if (error) {
-    //       return null
-    //     }
+      if (error) {
+        return SupabasePostgrestError(error, StarNotFoundError)
+      }
 
-    //     if (data) {
-    //       const { users_unlocked_stars } = data
+      const star = supabaseStarMapper.toDTO(data)
 
-    //       const nextStar = {
-    //         id: data.id,
-    //         isUnlocked: users_unlocked_stars && users_unlocked_stars.length > 0,
-    //       }
-
-    //       return nextStar
-    //     }
-
-    //     return null
-    //   },
-
-    //   async fetchNextStarFromNextPlanet(currentPlanetId: string, userId: string) {
-    //     const { data, error } = await supabase
-    //       .rpc('fetch_next_star_from_next_planet', {
-    //         _current_planet_id: currentPlanetId,
-    //         _user_id: userId,
-    //       })
-    //       .single()
-
-    //     if (error) {
-    //       return null
-    //     }
-
-    //     if (data && data.id && typeof data.is_unlocked !== 'undefined') {
-    //       const nextStar: Pick<Star, 'id' | 'isUnlocked'> = {
-    //         id: data.id,
-    //         isUnlocked: Boolean(data.is_unlocked),
-    //       }
-
-    //       return nextStar
-    //     }
-
-    //     return null
-    //   },
-
-    //   async fetchUserUnlockedStarsIds(userId: string) {
-    //     const { data, error } = await supabase
-    //       .from('users_unlocked_stars')
-    //       .select('star_id')
-    //       .eq('user_id', userId)
-
-    //     if (error) {
-    //       throw new Error(error.message)
-    //     }
-
-    //     return data.map(({ star_id }) => star_id)
-    //   },
+      return new ServiceResponse(star)
+    },
 
     async verifyStarIsUnlocked(starId: string, userId: string) {
       const { data, error } = await supabase

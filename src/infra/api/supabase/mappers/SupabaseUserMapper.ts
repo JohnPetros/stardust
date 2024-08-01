@@ -37,11 +37,11 @@ export const SupabaseUserMapper = () => {
         },
         unlockedAchievementsIds:
           supabaseUser.users_unlocked_achievements?.map(
-            ({ achievement_id }) => achievement_id
+            ({ achievement_id }) => achievement_id,
           ) ?? [],
         rescuableAchievementsIds:
           supabaseUser.users_rescuable_achievements?.map(
-            ({ achievement_id }) => achievement_id
+            ({ achievement_id }) => achievement_id,
           ) ?? [],
         unlockedStarsIds:
           supabaseUser.users_unlocked_stars?.map(({ star_id }) => star_id) ?? [],
@@ -51,13 +51,14 @@ export const SupabaseUserMapper = () => {
           supabaseUser.users_acquired_avatars?.map(({ avatar_id }) => avatar_id) ?? [],
         completedChallengesIds:
           supabaseUser.users_completed_challenges?.map(
-            ({ challenge_id }) => challenge_id
+            ({ challenge_id }) => challenge_id,
           ) ?? [],
         completedPlanetsIds: [],
         canSeeRankingResult: supabaseUser.can_see_ranking,
         lastWeekRankingPosition: supabaseUser.last_week_ranking_position,
         weekStatus: supabaseUser.week_status,
         createdAt: supabaseUser.created_at,
+        didIncrementStreakOnSaturday: supabaseUser.did_complete_saturday,
 
         // studyTime: supabaseUser.study_time ?? '',
         // createdAt: supabaseUser.created_at ?? '',
