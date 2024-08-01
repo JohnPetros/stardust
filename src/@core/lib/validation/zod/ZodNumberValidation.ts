@@ -25,9 +25,20 @@ export class ZodNumberValidation implements INumberValidation {
   }
 
   max(maxValue: number, message?: string) {
-    this.zodNumber = this.zodNumber.min(maxValue, {
+    this.zodNumber = this.zodNumber.max(maxValue, {
       message: message ?? `${this.key} value must lower than or equal to ${maxValue}`,
     })
+    return this
+  }
+
+  equal(value: number, message?: string): this {
+    this.zodNumber = this.zodNumber
+      .min(value, {
+        message: message ?? `${this.key} value must be equal to ${value}`,
+      })
+      .max(value, {
+        message: message ?? `${this.key} value must be equal to ${value}`,
+      })
     return this
   }
 
