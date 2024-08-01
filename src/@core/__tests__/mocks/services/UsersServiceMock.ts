@@ -25,7 +25,8 @@ export class UsersServiceMock implements IUsersService {
   fetchUserEmail(userEmail: string): Promise<ServiceResponse<string>> {
     throw new Error('Method not implemented.')
   }
-  updateUser(user: User): Promise<ServiceResponse<boolean>> {
-    throw new Error('Method not implemented.')
+
+  async updateUser(user: User): Promise<ServiceResponse<boolean>> {
+    return new ServiceResponse(true)
   }
 }
