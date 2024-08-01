@@ -3,12 +3,11 @@
 import { type ForwardedRef, forwardRef, type ReactNode, useImperativeHandle } from 'react'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
 
+import type { AlertDialogRef, AlertDialogType } from './types'
 import { DialogAnimation } from '../Dialog'
-
-import { useAlertDialog } from './useAlertDialog'
 import { Hydration } from '../Hydration'
 import { Animation } from '../Animation'
-import type { AlertDialogRef, AlertDialogType } from './types'
+import { useAlertDialog } from './useAlertDialog'
 
 type AlertDialogProps = {
   type: AlertDialogType
@@ -34,7 +33,7 @@ const AlertDialogComponent = (
     shouldForceMount = false,
     onOpenChange,
   }: AlertDialogProps,
-  ref: ForwardedRef<AlertDialogRef>
+  ref: ForwardedRef<AlertDialogRef>,
 ) => {
   const { animation, isRendered, isOpen, containerRef, handleOpenChange, open, close } =
     useAlertDialog(type, shouldPlayAudio, onOpenChange)
@@ -47,7 +46,7 @@ const AlertDialogComponent = (
         close,
       }
     },
-    [open, close]
+    [open, close],
   )
 
   return (

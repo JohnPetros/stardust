@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import { AlertDialogType } from './types/AlertDialogType'
+import type { AlertDialogType } from './types/AlertDialogType'
 import { ALERT_DIALOG_EFFECTS } from './alert-dialog-effects'
 
 import { playAudio } from '@/modules/global/utils'
@@ -10,16 +10,16 @@ import { playAudio } from '@/modules/global/utils'
 export function useAlertDialog(
   type: AlertDialogType,
   shouldPlayAudio: boolean,
-  onOpenChange: ((isOpen: boolean) => void) | undefined
+  onOpenChange: ((isOpen: boolean) => void) | undefined,
 ) {
   const [isOpen, setIsOpen] = useState(false)
 
   const [isRendered, setIsRendered] = useState(false)
   const containerRef = useRef<HTMLElement | null>(null)
 
-  const { animation, audioFile } = ALERT_DIALOG_EFFECTS.find(
-    (animation) => animation.id === type.toLocaleLowerCase()
-  )!
+  const dialogEffects = ALERT_DIALOG_EFFECTS.find(
+    (animation) => animation.id === type.toLocaleLowerCase(),
+  )
 
   function open() {
     setIsOpen(true)
@@ -35,10 +35,10 @@ export function useAlertDialog(
   }
 
   useEffect(() => {
-    if (audioFile && isOpen && type !== 'generic' && shouldPlayAudio) {
-      playAudio(audioFile)
+    if (dialogEffects?.audioFile && isOpen && type !== 'generic' && shouldPlayAudio) {
+      playAudio(dialogEffects.audioFile)
     }
-  }, [isOpen, shouldPlayAudio, type, audioFile])
+  }, [isOpen, shouldPlayAudio, type, dialogEffects])
 
   useEffect(() => {
     containerRef.current = document.body
@@ -46,7 +46,7 @@ export function useAlertDialog(
   }, [])
 
   return {
-    animation,
+    animation: dialogEffects?.animation ?? null,
     isRendered,
     containerRef,
     isOpen,

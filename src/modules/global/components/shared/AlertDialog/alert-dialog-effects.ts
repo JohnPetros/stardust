@@ -1,6 +1,6 @@
+import type { AudioFile } from '@/modules/app/contexts/AudioContext/types'
 import type { AnimationName } from '../Animation/types'
 import type { AlertDialogType } from './types/AlertDialogType'
-import type { AudioFile } from './types/AudioFile'
 
 type AlertDialogEffect = {
   id: AlertDialogType
