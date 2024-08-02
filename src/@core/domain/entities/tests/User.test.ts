@@ -1,3 +1,4 @@
+import { Datetime } from '@/@core/lib/datetime'
 import { Observer } from '../../structs/Observer'
 import { IdFaker } from '../../structs/tests/fakers'
 import { AchievementsFaker, UsersFaker } from './fakers'
@@ -19,6 +20,34 @@ describe('User Entity', () => {
 
     user.earnXp(50)
     expect(user.level.value).toBe(2)
+  })
+
+  it('should make Today status done only when today status is different than "done"', () => {
+    const todayIndex = new Datetime().getTodayIndex()
+    const weekStatus = ['todo', 'todo', 'todo', 'todo', 'todo', 'todo', 'todo']
+
+    let user = UsersFaker.fake({
+      weekStatus,
+    })
+
+    user.makeTodayStatusDone()
+    expect(user.weekStatus.statuses[todayIndex]).toBe('done')
+
+    weekStatus[todayIndex] = 'undone'
+
+    user = UsersFaker.fake({
+      weekStatus,
+    })
+
+    user.makeTodayStatusDone()
+    expect(user.weekStatus.statuses[todayIndex]).toBe('undone')
+  })
+
+  it('should increment streak on make Today status done', () => {
+    const user = UsersFaker.fake({ streak: 0 })
+
+    user.makeTodayStatusDone()
+    expect(user.streak.value).toBe(1)
   })
 
   it('should return whether user has the rescuable achievement or not', () => {

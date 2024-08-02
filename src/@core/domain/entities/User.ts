@@ -5,8 +5,8 @@ import {
   type Name,
   type Slug,
   type Observer,
-  type Logical,
   type RankingPosition,
+  Logical,
   Integer,
   type List,
 } from '../structs'
@@ -80,7 +80,6 @@ export class User extends BaseEntity {
 
   earnCoins(newCoins: number): void {
     this.props.coins = this.props.coins.increment(newCoins)
-    this.notifyChanges()
   }
 
   loseCoins(coins: number): void {
@@ -198,6 +197,13 @@ export class User extends BaseEntity {
 
   set observer(observer: Observer) {
     this.props._observer = observer
+  }
+
+  get canMakeTodayStatusDone(): Logical {
+    return Logical.create(
+      'Can make today status done?',
+      this.weekStatus.todayStatus === 'todo',
+    )
   }
 
   get unlockedStarsCount() {
