@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 
 import { Planet } from '@/@core/domain/entities'
 import type { PlanetDTO } from '@/@core/dtos'
@@ -8,7 +8,7 @@ import type { PlanetDTO } from '@/@core/dtos'
 import { useScrollEvent } from '@/modules/global/hooks'
 import type { LastUnlockedStarViewPortPosition } from '../types'
 import { useAuthContext } from '@/modules/global/contexts/AuthContext'
-import { GetLastUnlockedStarIdUseCase } from '@/@core/use-cases/planets'
+import { GetLastUnlockedStarIdUseCase } from '@/@core/use-cases/space'
 
 export function useSpaceProvider(planetsDTO: PlanetDTO[]) {
   const { user } = useAuthContext()
@@ -31,7 +31,7 @@ export function useSpaceProvider(planetsDTO: PlanetDTO[]) {
     if (starYPosition + starHeight < 0) setLastUnlockedStarPosition('bellow')
   }
 
-  function scrollIntoLastUnlockedStar() {
+  const scrollIntoLastUnlockedStar = useCallback(() => {
     const starRect = lastUnlockedStarRef.current?.getBoundingClientRect()
 
     if (!starRect) return
@@ -47,7 +47,7 @@ export function useSpaceProvider(planetsDTO: PlanetDTO[]) {
         behavior: 'smooth',
       })
     }
-  }
+  }, [])
 
   useScrollEvent(handleScroll)
 
@@ -68,7 +68,7 @@ export function useSpaceProvider(planetsDTO: PlanetDTO[]) {
       scrollIntoLastUnlockedStar,
       setLastUnlockedStarPosition,
     }
-  }, [user, planetsDTO, lastUnlockedStarPosition])
+  }, [user, planetsDTO, lastUnlockedStarPosition, scrollIntoLastUnlockedStar])
 
   return spaceContextValue
 }

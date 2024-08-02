@@ -21,8 +21,8 @@ export function RewardAlertDialog({
 }: RewardAlertDialogProps) {
   return (
     <AlertDialog
-      type={'earning'}
-      title={'Recompensa resgatada!'}
+      type='earning'
+      title='Recompensa resgatada!'
       body={
         <div className='flex flex-col items-center'>
           <p className='text-center font-medium text-gray-100'>

@@ -1,6 +1,6 @@
 import type { PlanetDTO, UserDTO } from '@/@core/dtos'
-import { Planet, User } from '@/@core/domain/entities'
 import type { IUseCase } from '@/@core/interfaces/handlers'
+import { Planet, User } from '@/@core/domain/entities'
 
 type Request = {
   planetsDTO: PlanetDTO[]
@@ -16,12 +16,13 @@ export class GetLastUnlockedStarIdUseCase implements IUseCase<Request, string> {
     reversedPlants.reverse()
 
     for (const planet of reversedPlants) {
-      const stars = planet.stars
+      const reversedStars = [...planet.stars]
+      reversedStars.reverse()
 
-      for (const star of stars) {
+      for (const star of reversedStars) {
         const isUnlocked = user.hasUnlockedStar(star.id)
 
-        if (isUnlocked) {
+        if (isUnlocked.isTrue) {
           return star.id
         }
       }

@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 import Image from 'next/image'
 
 import { AnimatedContainer } from './AnimatedContainer'
-import { AnimatedButton } from './AnimatedButton'
+import { AnimatedSpan } from './AnimatedSpan'
 import { RewardAlertDialog } from './RewardAlertDialog'
 
 import { Button } from '@/modules/global/components/shared/Button'
@@ -59,24 +59,18 @@ export function AchievementCard({
         {isRescuable ? (
           <RewardAlertDialog
             achivementName={name}
-            achivementImage={icon}
             achivementReward={reward}
-            onClose={() => handleRescueButtonClick()}
+            achivementImage={iconImage}
+            onClose={handleRescueButtonClick}
           >
-            <AnimatedButton>
-              <Button
-                tabIndex={0}
-                className='mt-1 h-8 w-32 text-sm md:ml-4'
-                onClick={handleRescueButtonClick}
-              >
-                Resgatar
-              </Button>
-            </AnimatedButton>
+            <Button tabIndex={0} className='mt-1 h-8 w-32 text-sm md:ml-4'>
+              <AnimatedSpan>Resgatar</AnimatedSpan>
+            </Button>
           </RewardAlertDialog>
         ) : (
           <>
             <p className='text-xs text-gray-100'>{description}</p>
-            {progress && progress}
+            {!isUnlocked && progress && progress}
           </>
         )}
       </div>

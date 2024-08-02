@@ -11,14 +11,14 @@ const variants: Variants = {
   },
 }
 
-type AnimatedButton = {
+type AnimatedSpan = {
   children: ReactNode
 }
 
-export function AnimatedButton({ children }: AnimatedButton) {
+export function AnimatedSpan({ children }: AnimatedSpan) {
   return (
-    <motion.main variants={variants} animate='bounce' className='w-max'>
+    <motion.span variants={variants} animate='bounce' className='w-max'>
       {children}
-    </motion.main>
+    </motion.span>
   )
 }
