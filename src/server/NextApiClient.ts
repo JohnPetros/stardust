@@ -24,10 +24,11 @@ export const NextApiClient = ({ isCacheEnable = true }: CacheConfig = {}): IApiC
       return new HttpResponse(data, response.status)
     },
 
-    async post<Response>(route: string): Promise<HttpResponse<Response>> {
+    async post<Response>(route: string, body: unknown): Promise<HttpResponse<Response>> {
       const response = await fetch(`${ENV.url}${route}`, {
         ...requestInit,
         method: 'POST',
+        body: JSON.stringify(body),
       })
 
       const data = await response.json()

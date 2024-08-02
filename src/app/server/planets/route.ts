@@ -1,16 +1,16 @@
 import { NextHttp } from '@/server/protocols/http'
-import { SupabaseRouteHandlerClient } from '@/infra/api/supabase/clients'
-import { SupabasePlanetsService } from '@/infra/api/supabase/services'
-
 import { FetchPlanetsController } from '@/server/controllers/app'
+
+import { SupabaseRouteHandlerClient } from '@/infra/api/supabase/clients'
+import { SupabaseSpaceService } from '@/infra/api/supabase/services'
 
 export async function GET() {
   const nextHttp = NextHttp()
 
   const supabase = SupabaseRouteHandlerClient()
-  const planetsService = SupabasePlanetsService(supabase)
+  const spaceService = SupabaseSpaceService(supabase)
 
-  const controller = FetchPlanetsController(planetsService)
+  const controller = FetchPlanetsController(spaceService)
   const httpResponse = await controller.handle(nextHttp)
 
   return httpResponse.body
