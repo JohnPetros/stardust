@@ -18,12 +18,14 @@ type LessonPageProps = {
 }
 
 export function LessonPage({
+  starId,
   starName,
   starNumber,
   questionsDTO,
   textsBlocksDTO,
 }: LessonPageProps) {
   const { scrollRef, stage, isTransitionVisible, handleLeavePage } = useLessonPage(
+    starId,
     questionsDTO,
     textsBlocksDTO,
   )

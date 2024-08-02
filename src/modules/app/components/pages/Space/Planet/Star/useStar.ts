@@ -28,7 +28,6 @@ export function useStar({
   const { lastUnlockedStarRef, scrollIntoLastUnlockedStar, setLastUnlockedStarPosition } =
     useSpaceContext()
   const toast = useToastContext()
-
   const isFirstScroll = useRef(true)
 
   const router = useRouter()

@@ -50,10 +50,12 @@ export const RewardUserController = (
 
         return http.send(
           {
-            user: response.user.dto,
-            accuracyPercentage: response.accuracyPercentage,
-            time: response.time,
             nextRoute,
+            newLevel: response.newLevel,
+            newCoins: response.newCoins,
+            newXp: response.newXp,
+            time: response.time,
+            accuracyPercentage: response.accuracyPercentage,
           },
           HTTP_STATUS_CODE.ok,
         )

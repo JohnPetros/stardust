@@ -14,19 +14,22 @@ import { User } from '@/@core/domain/entities'
 import { Streak } from './Streak'
 
 export type RewardingPageProps = {
-  userDTO: UserDTO
+  newLevel: number
+  newCoins: number
+  newXp: number
   time: string
   accuracyPercentage: string
   nextRoute: string
 }
 
 export function RewardingPage({
-  userDTO,
+  newCoins,
+  newLevel,
+  newXp,
   time,
   accuracyPercentage,
   nextRoute,
 }: RewardingPageProps) {
-  const user = User.create(userDTO)
   const {
     isEndMessageVisible,
     isFirstClick,
@@ -35,7 +38,7 @@ export function RewardingPage({
     alertDialogRef,
     handleFirstButtonClick,
     handleSecondButtonClick,
-  } = useRewardingPage(user, nextRoute)
+  } = useRewardingPage(newLevel, nextRoute)
 
   return (
     <div className='mx-auto flex h-screen w-full max-w-lg flex-col items-center justify-center px-6'>
@@ -50,7 +53,7 @@ export function RewardingPage({
               <div className='mx-auto'>
                 <Benchmark
                   title='Poeira estelar'
-                  amount={user.coins.value}
+                  amount={newCoins}
                   color='yellow'
                   icon='coin.svg'
                   isLarge={true}
@@ -61,7 +64,7 @@ export function RewardingPage({
               <div className='mt-6 grid grid-cols-3 gap-3'>
                 <Benchmark
                   title='Total de xp'
-                  amount={user.xp.value}
+                  amount={newXp}
                   color='green'
                   icon='xp.svg'
                   isLarge={false}
@@ -90,13 +93,7 @@ export function RewardingPage({
           </>
         )}
 
-        {isStreakVisible && (
-          <>
-            <StreakIcon size={220} />
-          </>
-        )}
-
-        <Streak isVisible={isStreakVisible} />
+        {isStreakVisible && <Streak />}
 
         {isEndMessageVisible && (
           <AnimatedEndMessage>
@@ -126,7 +123,7 @@ export function RewardingPage({
             <p>
               Você acaba de chegar no{' '}
               <span className='text-medium text-lg text-green-400'>
-                Nível {user.level.number.value} 😀
+                Nível {newLevel} 😀
               </span>
               .
             </p>

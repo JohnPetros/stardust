@@ -13,7 +13,9 @@ type Request = {
 
 type Response = Promise<{
   origin: RewardingPayloadOrigin
-  user: User
+  newLevel: number | null
+  newCoins: number
+  newXp: number
   accuracyPercentage: number
   time: string
 }>
@@ -39,7 +41,9 @@ export class RewardUserUseCase implements IUseCase<Request, Response> {
 
       return {
         origin: starRewardingPayload.origin,
-        user: rewardForStarCompletition.user,
+        newLevel: user.level.didUp.isTrue ? user.level.value : null,
+        newCoins: rewardForStarCompletition.newCoins,
+        newXp: rewardForStarCompletition.newXp,
         accuracyPercentage: rewardForStarCompletition.accuracyPercentage,
         time: starRewardingPayload.time,
       }
@@ -73,6 +77,8 @@ export class RewardUserUseCase implements IUseCase<Request, Response> {
 
     return {
       user,
+      newCoins,
+      newXp,
       accuracyPercentage,
       secondsCount: starRewardingPayload.secondsCount.value,
     }
@@ -82,8 +88,6 @@ export class RewardUserUseCase implements IUseCase<Request, Response> {
     const planet = await this.fetchPlanet(currentStarId)
     let nextStar = planet.getNextStar(currentStarId)
     let isLastStar = false
-
-    console.log(planet.stars)
 
     if (!nextStar) {
       const response = await this.spaceService.fetchNextStarFromNextPlanet(planet)
@@ -153,10 +157,13 @@ export class RewardUserUseCase implements IUseCase<Request, Response> {
     user.earnXp(newXp)
 
     if (nextStar) {
-      if (user.hasUnlockedStar(nextStar.id).isTrue) return
-
-      const response = await this.spaceService.saveUserUnlockedStar(nextStar.id, user.id)
-      if (response.isFailure) response.throwError()
+      if (user.hasUnlockedStar(nextStar.id).isFalse) {
+        const response = await this.spaceService.saveUserUnlockedStar(
+          nextStar.id,
+          user.id,
+        )
+        if (response.isFailure) response.throwError()
+      }
 
       user.unlockStar(nextStar.id)
     }

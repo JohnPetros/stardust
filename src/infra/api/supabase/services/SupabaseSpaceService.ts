@@ -55,10 +55,6 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
       return new ServiceResponse(planet)
     },
 
-    async savePlanet(planet) {
-      throw new Error('Not implemented')
-    },
-
     async fetchStarBySlug(starSlug: string) {
       const { data, error } = await supabase
         .from('stars')
@@ -135,6 +131,10 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
       }
 
       return new ServiceResponse(Boolean(data))
+    },
+
+    async savePlanet(planet) {
+      throw new Error('Not implemented')
     },
   }
 }

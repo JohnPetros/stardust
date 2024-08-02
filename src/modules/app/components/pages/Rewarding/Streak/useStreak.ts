@@ -1,24 +1,26 @@
 'use client'
 
-import { useAuthContext } from '@/modules/global/contexts/AuthContext'
 import { useEffect, useState } from 'react'
+
+import { useAuthContext } from '@/modules/global/contexts/AuthContext'
 
 export function useStreak() {
   const { user, updateUser } = useAuthContext()
-  const [didUpdateStreak, setDidUpdateStreak] = useState(false)
+  const [isStreakBoardVisible, setIsStreakBoardVisible] = useState(false)
 
   useEffect(() => {
     async function updateStreak() {
-      if (!user || didUpdateStreak) return
+      if (!user || isStreakBoardVisible) return
       user.makeTodayStatusDone()
       await updateUser(user)
-      setDidUpdateStreak(true)
+      setIsStreakBoardVisible(true)
     }
 
     updateStreak()
-  }, [user, didUpdateStreak, updateUser])
+  }, [user, isStreakBoardVisible, updateUser])
 
   return {
     user,
+    isStreakBoardVisible,
   }
 }

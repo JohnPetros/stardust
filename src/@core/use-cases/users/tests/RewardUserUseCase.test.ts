@@ -68,33 +68,39 @@ describe('Reward User Use Case', () => {
     const questionsCount = 5
     const incorrectAnswersCount = 0
 
-    const { user } = await UseCaseFixture(questionsCount, incorrectAnswersCount)
+    const { newCoins, newXp } = await UseCaseFixture(
+      questionsCount,
+      incorrectAnswersCount,
+    )
 
-    expect(user.coins.value).toBe(10)
-    expect(user.xp.value).toBe(20)
+    expect(newCoins).toBe(10)
+    expect(newXp).toBe(20)
   })
 
   it('should decrease the calculated new coins and xp amount according to the count of incorrect answers that the user made', async () => {
     const questionsCount = 5
     const incorrectAnswersCount = 2
 
-    const { user } = await UseCaseFixture(questionsCount, incorrectAnswersCount)
+    const { newCoins, newXp } = await UseCaseFixture(
+      questionsCount,
+      incorrectAnswersCount,
+    )
 
-    expect(user.coins.value).toBe(6)
-    expect(user.xp.value).toBe(12)
+    expect(newCoins).toBe(6)
+    expect(newXp).toBe(12)
   })
 
   it('should divide the calculated new coins and xp amount by 2 if the next star is already unlocked', async () => {
     const questionsCount = 5
     const incorrectAnswersCount = 0
 
-    const { user } = await UseCaseWithNextStarUnlockedFixture(
+    const { newCoins, newXp } = await UseCaseWithNextStarUnlockedFixture(
       questionsCount,
       incorrectAnswersCount,
     )
 
-    expect(user.coins.value).toBe(5)
-    expect(user.xp.value).toBe(10)
+    expect(newCoins).toBe(5)
+    expect(newXp).toBe(10)
   })
 
   it('should get the accuracy percentage of questions answered correctly', async () => {
@@ -138,14 +144,13 @@ describe('Reward User Use Case', () => {
       PlanetsFaker.fake({ stars: [currentStar, nextStar] }),
     )
 
-    const { user } = await useCase.do({
+    await useCase.do({
       userDTO: UsersFaker.fakeDTO({ unlockedStarsIds: [currentStar.id] }),
       rewardingPayloadDTO: StarRewardingPayloadFaker.fakeDTO({
         starId: currentStar.id,
       }),
     })
 
-    expect(user.hasUnlockedStar(nextStar.id).isTrue).toBeTruthy()
     expect(spaceServiceMock.unlockedStarsIds.includes(nextStar.id)).toBeTruthy()
   })
 
@@ -160,14 +165,13 @@ describe('Reward User Use Case', () => {
       spaceServiceMock.savePlanet(PlanetsFaker.fake({ position: 2, stars: [nextStar] })),
     ])
 
-    const { user } = await useCase.do({
+    await useCase.do({
       userDTO: UsersFaker.fakeDTO(),
       rewardingPayloadDTO: StarRewardingPayloadFaker.fakeDTO({
         starId: currentStar.id,
       }),
     })
 
-    expect(user.hasUnlockedStar(nextStar.id).isTrue).toBeTruthy()
     expect(spaceServiceMock.unlockedStarsIds.includes(nextStar.id)).toBeTruthy()
   })
 
@@ -176,7 +180,7 @@ describe('Reward User Use Case', () => {
 
     await spaceServiceMock.savePlanet(PlanetsFaker.fake({ stars: [currentStar] }))
 
-    const { user } = await useCase.do({
+    const { newCoins, newXp } = await useCase.do({
       userDTO: UsersFaker.fakeDTO({ coins: 0, xp: 0 }),
       rewardingPayloadDTO: StarRewardingPayloadFaker.fakeDTO({
         questionsCount: 5,
@@ -185,7 +189,7 @@ describe('Reward User Use Case', () => {
       }),
     })
 
-    expect(user.coins.value).toBe(10)
-    expect(user.xp.value).toBe(20)
+    expect(newCoins).toBe(10)
+    expect(newXp).toBe(20)
   })
 })

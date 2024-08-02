@@ -2,35 +2,32 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import type { User } from '@/@core/domain/entities'
-
 import type { AlertDialogRef } from '@/modules/global/components/shared/AlertDialog/types'
-import { _deleteCookie } from '@/modules/global/actions'
+import { _deleteCookie, _setCookie } from '@/modules/global/actions'
 import { COOKIES } from '@/modules/global/constants'
 import { useAuthContext } from '@/modules/global/contexts/AuthContext'
 import { useRouter } from '@/modules/global/hooks'
 import { useRefreshPage } from '@/modules/global/hooks/useRefreshPage'
-import { playAudio } from '@/modules/global/utils'
+import { useAudioContext } from '@/modules/app/contexts/AudioContext'
 
-export function useRewardingPage(user: User, nextRoute: string) {
+export function useRewardingPage(newLevel: number | null, nextRoute: string) {
   const [isFirstClick, setIsFirstClick] = useState(true)
   const [isStreakVisible, setIsStreakVisible] = useState(false)
   const [isEndMessageVisible, setIsEndMessageVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const { updateUser } = useAuthContext()
+  const { user, updateUser } = useAuthContext()
+  const { playAudio } = useAudioContext()
   const alertDialogRef = useRef<AlertDialogRef>(null)
   const router = useRouter()
 
   function handleFirstButtonClick() {
     setIsFirstClick(false)
 
-    if (user.level.didUp.isTrue) {
+    if (newLevel) {
       alertDialogRef.current?.open()
     }
 
-    const shouldStreakBeVisible = user.weekStatus.todayStatus === 'todo'
-
-    if (shouldStreakBeVisible) {
+    if (user?.canMakeTodayStatusDone.isTrue) {
       setIsStreakVisible(true)
       return
     }
@@ -39,7 +36,7 @@ export function useRewardingPage(user: User, nextRoute: string) {
   }
 
   const goToNextRoute = useCallback(async () => {
-    await Promise.all([updateUser(user), _deleteCookie(COOKIES.keys.rewardingPayload)])
+    // _deleteCookie(COOKIES.keys.rewardingPayload)
     setIsLoading(true)
 
     router.goTo(nextRoute)
@@ -53,7 +50,7 @@ export function useRewardingPage(user: User, nextRoute: string) {
 
   useEffect(() => {
     playAudio('earning.wav')
-  }, [])
+  }, [playAudio])
 
   useEffect(() => {
     history.pushState(null, '', location.href)

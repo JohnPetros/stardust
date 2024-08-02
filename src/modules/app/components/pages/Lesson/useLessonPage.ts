@@ -35,7 +35,7 @@ export function useLessonPage(
   useEffect(() => {
     const timeout = setTimeout(() => setIsTransitionVisible(false), 1000)
 
-    setTheory(Theory.create(textsBlocksDTO.slice(0, 2)))
+    setTheory(Theory.create(textsBlocksDTO))
     setQuiz(Quiz.create(questionsDTO))
 
     return () => {
@@ -73,13 +73,4 @@ export function useLessonPage(
     isTransitionVisible,
     handleLeavePage,
   }
-}
-
-
-{
-  'origin': 'star',
-  'questionsCount': 5,
-  'incorrectAnswersCount': 0,
-  'secondsCount': 60,
-  'starId': '',
 }

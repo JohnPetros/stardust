@@ -4,7 +4,7 @@ import { SupabaseServerClient } from '@/infra/api/supabase/clients'
 import {
   SupabaseAuthService,
   SupabaseLessonService,
-  SupabaseStarsService,
+  SupabaseSpaceService,
 } from '@/infra/api/supabase/services'
 import { LessonPage } from '@/modules/app/components/pages/Lesson'
 import { ROUTES } from '@/modules/global/constants'
@@ -15,19 +15,19 @@ type LessonPageProps = {
 
 export default async function Lesson({ params }: LessonPageProps) {
   const supabase = SupabaseServerClient()
-  const starsService = SupabaseStarsService(supabase)
   const authService = SupabaseAuthService(supabase)
+  const spaceService = SupabaseSpaceService(supabase)
   const lessonService = SupabaseLessonService(supabase)
 
   const userIdResponse = await authService.fetchUserId()
   if (userIdResponse.isFailure) userIdResponse.throwError()
   const userId = userIdResponse.data
 
-  const starResponse = await starsService.fetchStarBySlug(params.starSlug)
+  const starResponse = await spaceService.fetchStarBySlug(params.starSlug)
   if (starResponse.isFailure) starResponse.throwError()
   const star = starResponse.data
 
-  const starIsUnlockedResponse = await starsService.verifyStarIsUnlocked(star.id, userId)
+  const starIsUnlockedResponse = await spaceService.verifyStarIsUnlocked(star.id, userId)
 
   if (starIsUnlockedResponse.isFailure || !starIsUnlockedResponse.data) {
     return redirect(ROUTES.private.app.home.space)

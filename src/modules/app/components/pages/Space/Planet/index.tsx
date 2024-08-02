@@ -23,6 +23,8 @@ function PlanetComponent({ name, image, icon, stars }: PlanetProps) {
   const { user } = useAuthContext()
   const api = useApi()
 
+  console.log({ lastUnlockedStarId })
+
   const planetImage = api.fetchImage('planets', image)
   const planetIconImage = api.fetchImage('planets', icon)
 
@@ -48,7 +50,7 @@ function PlanetComponent({ name, image, icon, stars }: PlanetProps) {
                 slug={star.slug.value}
                 isChallenge={star.isChallenge.isTrue}
                 isLastUnlockedStar={lastUnlockedStarId === star.id}
-                isUnlocked={user.hasUnlockedStar(star.id)}
+                isUnlocked={user.hasUnlockedStar(star.id).isTrue}
               />
             </li>
           ))}

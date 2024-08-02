@@ -1,16 +1,18 @@
 'use client'
 
 import { StreakBoard } from '@/modules/global/components/shared/StreakBoard'
+import { StreakIcon } from '@/modules/global/components/shared/StreakIcon'
 import { useStreak } from './useStreak'
 
-type StreakProps = {
-  isVisible: boolean
-}
+export function Streak() {
+  const { user, isStreakBoardVisible } = useStreak()
 
-export function Streak({ isVisible }: StreakProps) {
-  const { user } = useStreak()
+  if (!user || !isStreakBoardVisible) return null
 
-  if (!isVisible || !user) return null
-
-  return <StreakBoard weekStatus={user.weekStatus} streakCount={user.streak.value} />
+  return (
+    <>
+      <StreakIcon size={220} />
+      <StreakBoard weekStatus={user.weekStatus} streakCount={user.streak.value} />
+    </>
+  )
 }
