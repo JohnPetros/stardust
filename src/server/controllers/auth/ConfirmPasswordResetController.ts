@@ -6,7 +6,7 @@ import { BaseError } from '@/@core/errors/global/BaseError'
 import { IController, IHttp } from '@/@core/interfaces/handlers'
 import { IAuthService } from '@/@core/interfaces/services'
 
-import { COOKIES, ROUTES } from '@/modules/global/constants'
+import { COOKIES, ROUTES } from '@/ui/global/constants'
 
 export const ConfirmPasswordResetController = (
   authService: IAuthService

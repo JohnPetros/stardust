@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
-import { ENV } from '@/modules/global/constants'
+import { ENV } from '@/ui/global/constants'
 
 export const SupabaseServerClient = () => {
   const cookieStore = cookies()

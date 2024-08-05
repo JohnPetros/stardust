@@ -3,7 +3,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 
 import type { Database } from '../types/Database'
 
-import { ENV } from '@/modules/global/constants'
+import { ENV } from '@/ui/global/constants'
 
 const SupabaseMiddlewareClient = (request: NextRequest) => {
   let supabaseResponse = NextResponse.next({

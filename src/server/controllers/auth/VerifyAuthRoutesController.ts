@@ -1,7 +1,7 @@
 import type { IController, IHttp } from '@/@core/interfaces/handlers'
 import type { IAuthService } from '@/@core/interfaces/services'
 import { HttpResponse } from '@/@core/responses'
-import { ROUTES } from '@/modules/global/constants'
+import { ROUTES } from '@/ui/global/constants'
 
 export const VerifyAuthRoutesController = (authService: IAuthService): IController => {
   function verifyPublicRoute(route: string) {

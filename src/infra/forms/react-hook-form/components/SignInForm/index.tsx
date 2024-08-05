@@ -1,6 +1,6 @@
 import { SignInFormFields } from '@/infra/forms/types'
-import { Input } from '@/modules/global/components/shared/Input'
-import { Button } from '@/modules/global/components/shared/Button'
+import { Input } from '@/ui/global/components/shared/Input'
+import { Button } from '@/ui/global/components/shared/Button'
 
 import { useSignInForm } from './useSignInForm'
 

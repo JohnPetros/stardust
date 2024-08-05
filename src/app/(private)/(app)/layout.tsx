@@ -4,10 +4,10 @@ import type { AchievementDTO } from '@/@core/dtos'
 import { AppError } from '@/@core/errors/global/AppError'
 
 import { NextApiClient } from '@/server/NextApiClient'
-import { ROUTES } from '@/modules/global/constants'
-import { AchivementsProvider } from '@/modules/app/contexts/AchievementsContext'
-import { AudioProvider } from '@/modules/app/contexts/AudioContext'
-import { EditorProvider } from '@/modules/app/contexts/EditorContext'
+import { ROUTES } from '@/ui/global/constants'
+import { AchivementsProvider } from '@/ui/app/contexts/AchievementsContext'
+import { AudioProvider } from '@/ui/app/contexts/AudioContext'
+import { EditorProvider } from '@/ui/app/contexts/EditorContext'
 
 type AppProps = {
   children: ReactNode

@@ -2,7 +2,7 @@ import { headers } from 'next/headers'
 
 import type { IApiClient } from '@/@core/interfaces/handlers'
 import { HttpResponse } from '@/@core/responses'
-import { ENV } from '@/modules/global/constants'
+import { ENV } from '@/ui/global/constants'
 
 type CacheConfig = {
   isCacheEnable?: boolean

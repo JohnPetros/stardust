@@ -1,6 +1,6 @@
-import { RewardingPage } from '@/modules/app/components/pages/Rewarding'
-import { _getCookie } from '@/modules/global/actions'
-import { COOKIES, ROUTES } from '@/modules/global/constants'
+import { RewardingPage } from '@/ui/app/components/pages/Rewarding'
+import { _getCookie } from '@/ui/global/actions'
+import { COOKIES, ROUTES } from '@/ui/global/constants'
 import { NextApiClient } from '@/server/NextApiClient'
 import { redirect } from 'next/navigation'
 

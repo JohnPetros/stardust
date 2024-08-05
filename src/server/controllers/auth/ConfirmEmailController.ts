@@ -3,7 +3,7 @@ import { TokenNotFoundError } from '@/@core/errors/auth'
 import type { IController, IHttp } from '@/@core/interfaces/handlers'
 import type { IAuthService } from '@/@core/interfaces/services'
 
-import { ROUTES } from '@/modules/global/constants'
+import { ROUTES } from '@/ui/global/constants'
 
 export const ConfirmEmailController = (authService: IAuthService): IController => {
   function redirectToSigInPage(http: IHttp, errorMessage: string) {

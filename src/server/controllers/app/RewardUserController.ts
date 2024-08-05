@@ -8,7 +8,7 @@ import type {
   ISpaceService,
 } from '@/@core/interfaces/services'
 import { RewardUserUseCase } from '@/@core/use-cases/users'
-import { ROUTES } from '@/modules/global/constants'
+import { ROUTES } from '@/ui/global/constants'
 
 export const RewardUserController = (
   authService: IAuthService,

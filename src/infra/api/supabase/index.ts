@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 
-import { useSupabaseContext } from '@/modules/global/contexts/SupabaseContext/hooks'
+import { useSupabaseContext } from '@/ui/global/contexts/SupabaseContext/hooks'
 
 import {
   SupabaseAvatarsService,

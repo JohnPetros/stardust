@@ -1,6 +1,6 @@
-import { _hasCookie } from '@/modules/global/actions'
+import { _hasCookie } from '@/ui/global/actions'
 import type { IController, IHttp } from '@/@core/interfaces/handlers'
-import { COOKIES, ROUTES } from '@/modules/global/constants'
+import { COOKIES, ROUTES } from '@/ui/global/constants'
 import { HttpResponse } from '@/@core/responses'
 
 export const HandleRewardsPayloadController = (): IController => {

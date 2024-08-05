@@ -1,7 +1,7 @@
 'use client'
 
-import { Input } from '@/modules/global/components/shared/Input'
-import { Button } from '@/modules/global/components/shared/Button'
+import { Input } from '@/ui/global/components/shared/Input'
+import { Button } from '@/ui/global/components/shared/Button'
 import type { SignUpFormFields } from '@/infra/forms/types'
 
 import { useSignUpForm } from './useSignUpForm'

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { Body as Container, Tailwind } from '@react-email/components'
 import { Html } from '@react-email/html'
-import { poppins } from '@/modules/global/styles/fonts'
+import { poppins } from '@/ui/global/styles/fonts'
 
 type ContainerProps = {
   children: ReactNode

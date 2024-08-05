@@ -1,10 +1,10 @@
-import '../modules/global/styles/global.css'
+import '../ui/global/styles/global.css'
 import 'swiper/css'
 import 'swiper/css/navigation'
 
 import type { Metadata } from 'next'
 
-import { RootLayout } from '@/modules/global/components/layouts/Root'
+import { RootLayout } from '@/ui/global/components/layouts/Root'
 
 export const metadata: Metadata = {
   title: 'StarDust',

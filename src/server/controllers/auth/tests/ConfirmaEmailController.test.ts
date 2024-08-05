@@ -3,7 +3,7 @@ import { AuthServiceMock } from '@/@core/__tests__/mocks/services'
 import { HttpMock } from '@/server/protocols/tests/mocks'
 import { ConfirmEmailController } from '../ConfirmEmailController'
 import { ConfirmEmailUnexpectedError, TokenNotFoundError } from '@/@core/errors/auth'
-import { ROUTES } from '@/modules/global/constants'
+import { ROUTES } from '@/ui/global/constants'
 import { ServiceResponse } from '@/@core/responses'
 import { IHttp } from '@/@core/interfaces/handlers'
 

@@ -1,8 +1,8 @@
 import type { PlanetDTO } from '@/@core/dtos'
 import { AppError } from '@/@core/errors/global/AppError'
-import { SpacePage } from '@/modules/app/components/pages/Space'
-import { SpaceProvider } from '@/modules/app/contexts/SpaceContext'
-import { ROUTES } from '@/modules/global/constants'
+import { SpacePage } from '@/ui/app/components/pages/Space'
+import { SpaceProvider } from '@/ui/app/contexts/SpaceContext'
+import { ROUTES } from '@/ui/global/constants'
 import { NextApiClient } from '@/server/NextApiClient'
 
 export default async function Space() {

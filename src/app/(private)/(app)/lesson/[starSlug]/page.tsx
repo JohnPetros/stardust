@@ -6,8 +6,8 @@ import {
   SupabaseLessonService,
   SupabaseSpaceService,
 } from '@/infra/api/supabase/services'
-import { LessonPage } from '@/modules/app/components/pages/Lesson'
-import { ROUTES } from '@/modules/global/constants'
+import { LessonPage } from '@/ui/app/components/pages/Lesson'
+import { ROUTES } from '@/ui/global/constants'
 
 type LessonPageProps = {
   params: { starSlug: string }

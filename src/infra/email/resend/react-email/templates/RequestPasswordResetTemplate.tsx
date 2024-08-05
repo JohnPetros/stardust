@@ -1,4 +1,4 @@
-import { ROUTES } from '@/modules/global/constants'
+import { ROUTES } from '@/ui/global/constants'
 import { Body } from './shared/Body'
 import { Box } from './shared/Box'
 import { Header } from './shared/Header'

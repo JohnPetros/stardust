@@ -5,7 +5,7 @@ import {
   SupabaseAchievementsService,
   SupabaseUsersService,
 } from '@/infra/api/supabase/services'
-import { ProfilePage } from '@/modules/app/components/pages/Profile'
+import { ProfilePage } from '@/ui/app/components/pages/Profile'
 
 export const dynamic = 'force-dynamic'
 

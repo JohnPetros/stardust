@@ -1,4 +1,4 @@
-import { _setCookie } from '@/modules/global/actions'
+import { _setCookie } from '@/ui/global/actions'
 import type { IController, IHttp } from '@/@core/interfaces/handlers'
 import type { IRankingsService } from '@/@core/interfaces/services'
 import { UpdateRankingsUseCase } from '@/@core/use-cases/rankings/UpdateRankingsUseCase'

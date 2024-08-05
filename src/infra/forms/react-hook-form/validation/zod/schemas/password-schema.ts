@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { VALIDATION_ERROR_MESSAGES } from '@/@core/lib/validation/constants'
 
-import { REGEX } from '@/modules/global/constants'
+import { REGEX } from '@/ui/global/constants'
 
 export const passwordSchema = z
   .string()

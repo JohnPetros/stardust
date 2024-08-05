@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 
-import { HomeLayout } from '@/modules/app/components/layouts/Home'
-import { SidebarProvider } from '@/modules/app/contexts/SidebarContext'
+import { HomeLayout } from '@/ui/app/components/layouts/Home'
+import { SidebarProvider } from '@/ui/app/contexts/SidebarContext'
 
 type HomeProps = {
   children: ReactNode

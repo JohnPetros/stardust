@@ -11,8 +11,8 @@ import { SaveUserUnexpectedError, UserNotFoundError } from '@/@core/errors/users
 import { Slug } from '@/@core/domain/structs/Slug'
 import { ServiceResponse } from '@/@core/responses'
 
-import { ROUTES } from '@/modules/global/constants'
-import { getAppBaseUrl } from '@/modules/global/utils'
+import { ROUTES } from '@/ui/global/constants'
+import { getAppBaseUrl } from '@/ui/global/utils'
 
 import type { Supabase } from '../types'
 import { SupabaseAuthError } from '../errors/SupabaseAuthError'
