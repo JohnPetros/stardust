@@ -1,8 +1,8 @@
 import type { AvatarDTO, RocketDTO } from '@/@core/dtos'
+import { NextApiClient } from '@/infra/api/next/apiClient'
 import { ShopPage } from '@/ui/app/components/pages/shop'
 import { ROUTES } from '@/ui/global/constants'
 import { waitFor } from '@/ui/global/utils'
-import { NextClient } from '@/server/NextApiClient'
 
 type ShopItems = {
   rockets: {
@@ -16,7 +16,7 @@ type ShopItems = {
 }
 
 export default async function Shop() {
-  const client = NextClient()
+  const client = NextApiClient()
 
   const response = await client.get<ShopItems>(ROUTES.server.shop)
 

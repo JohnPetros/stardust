@@ -2,7 +2,7 @@
 
 import { Input } from '@/ui/global/components/shared/Input'
 import { Button } from '@/ui/global/components/shared/Button'
-import type { SignUpFormFields } from '@/infra/forms/types'
+import type { SignUpFormFields } from '@/ui/auth/forms/types'
 
 import { useSignUpForm } from './useSignUpForm'
 import { AnimatedContainer } from './AnimatedContainer'

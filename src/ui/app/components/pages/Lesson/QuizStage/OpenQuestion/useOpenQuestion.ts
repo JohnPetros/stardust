@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { useLessonStore } from '@/infra/stores/LessonStore'
+import { useLessonStore } from '@/ui/app/stores/LessonStore'
 
 export function useOpenQuestion(answers: string[]) {
   const { getQuizSlice } = useLessonStore()

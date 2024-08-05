@@ -9,7 +9,7 @@ import { ROCKET_ANIMATION_DELAY } from '@/ui/auth/constants'
 import { ROUTES } from '@/ui/global/constants'
 import { waitFor } from '@/ui/global/utils'
 import { useRouter } from '@/ui/global/hooks'
-import { SignInFormFields } from '@/infra/forms/types'
+import { SignInFormFields } from '@/ui/auth/forms/types'
 import { Slug } from '@/@core/domain/structs/Slug'
 
 export function useSignInPage(url: string, rocketAnimationRef: RefObject<AnimationRef>) {

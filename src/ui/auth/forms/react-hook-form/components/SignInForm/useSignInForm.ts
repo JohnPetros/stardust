@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form'
 
-import type { SignInFormFields } from '@/infra/forms/types'
+import type { SignInFormFields } from '@/ui/auth/forms/types'
 import { ValidationResolver } from '../../validation'
 import { useState } from 'react'
 

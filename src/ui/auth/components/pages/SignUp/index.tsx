@@ -1,6 +1,6 @@
 'use client'
 
-import { SignUpForm } from '@/infra/forms'
+import { SignUpForm } from '@/ui/auth/forms'
 import { Animation } from '@/ui/global/components/shared/Animation'
 
 import { Link } from '../../shared/Link'

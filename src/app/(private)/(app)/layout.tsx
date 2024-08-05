@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import type { AchievementDTO } from '@/@core/dtos'
 import { AppError } from '@/@core/errors/global/AppError'
 
-import { NextApiClient } from '@/server/NextApiClient'
+import { NextApiClient } from '@/infra/api/next/apiClient'
 import { ROUTES } from '@/ui/global/constants'
 import { AchivementsProvider } from '@/ui/app/contexts/AchievementsContext'
 import { AudioProvider } from '@/ui/app/contexts/AudioContext'

@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server'
 
-import { NextHttp } from '@/server/protocols/http'
+import { NextHttp } from '@/infra/api/next/http'
 import { SupabaseRouteHandlerClient } from '@/infra/api/supabase/clients'
 import {
   SupabaseAuthService,
@@ -8,7 +8,7 @@ import {
   SupabaseSpaceService,
 } from '@/infra/api/supabase/services'
 
-import { RewardUserController } from '@/server/controllers/app'
+import { RewardUserController } from '@/infra/api/next/controllers/app'
 
 export async function POST(request: NextRequest) {
   const nextHttp = NextHttp(request)

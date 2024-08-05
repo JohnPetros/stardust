@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useLessonStore } from '@/infra/stores/LessonStore'
+import { useLessonStore } from '@/ui/app/stores/LessonStore'
 
 export function useSelectionQuestion() {
   const [userAnswer, setUserAnswer] = useState<string | null>(null)

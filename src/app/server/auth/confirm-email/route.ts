@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server'
 
-import { NextHttp } from '@/server/protocols/http'
-import { ConfirmEmailController } from '@/server/controllers/auth'
+import { NextHttp } from '@/infra/api/next/http'
+import { ConfirmEmailController } from '@/infra/api/next/controllers/auth'
 import { SupabaseRouteHandlerClient } from '@/infra/api/supabase/clients'
 import { SupabaseAuthService } from '@/infra/api/supabase/services'
 

@@ -1,7 +1,7 @@
 import { RewardingPage } from '@/ui/app/components/pages/Rewarding'
 import { _getCookie } from '@/ui/global/actions'
 import { COOKIES, ROUTES } from '@/ui/global/constants'
-import { NextApiClient } from '@/server/NextApiClient'
+import { NextApiClient } from '@/infra/api/next/apiClient'
 import { redirect } from 'next/navigation'
 
 type RewardingResponse = {

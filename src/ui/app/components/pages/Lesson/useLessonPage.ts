@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import type { TextBlockDTO, QuestionDTO, StarRewardingPayloadDTO } from '@/@core/dtos'
 import { Quiz, Theory } from '@/@core/domain/structs'
-import { useLessonStore } from '@/infra/stores/LessonStore'
+import { useLessonStore } from '@/ui/app/stores/LessonStore'
 import { COOKIES, ROUTES, STORAGE } from '@/ui/global/constants'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 import { useSecondsCounter } from '@/ui/global/hooks/useSecondsCounter'

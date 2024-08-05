@@ -2,7 +2,7 @@ import type { RankingUserDTO, TierDTO } from '@/@core/dtos'
 import { RankingPage } from '@/ui/app/components/pages/Ranking'
 import { RankingProvider } from '@/ui/app/contexts/RankingContext'
 import { ROUTES } from '@/ui/global/constants'
-import { NextClient } from '@/server/NextApiClient'
+import { NextClient } from '@/infra/api/next/apiClient'
 
 type RankingPageData = {
   tiers: TierDTO[]

@@ -6,7 +6,8 @@ import type {
   IPlanetsService,
   IRankingsService,
   IRocketsSerivice,
-  IStarsService,
+  ISpaceService,
+  ILessonService,
   IStorageService,
   IUsersService,
 } from '@/@core/interfaces/services'
@@ -20,5 +21,6 @@ export interface IApi
     IRankingsService,
     IStorageService,
     IPlanetsService,
-    IStarsService,
+    ISpaceService,
+    ILessonService,
     IUsersService {}

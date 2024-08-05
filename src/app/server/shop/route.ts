@@ -1,11 +1,10 @@
-import { NextHttp } from '@/server/protocols/http'
+import { NextHttp } from '@/infra/api/next/http'
 import { SupabaseRouteHandlerClient } from '@/infra/api/supabase/clients'
 import {
   SupabaseAvatarsService,
   SupabaseRocketsService,
 } from '@/infra/api/supabase/services'
-
-import { FetchShopItemsController } from '@/server/controllers/app'
+import { FetchShopItemsController } from '@/infra/api/next/controllers/app'
 
 export async function GET() {
   const nextHttp = NextHttp()

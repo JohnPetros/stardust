@@ -1,5 +1,5 @@
-import { NextHttp } from '@/server/protocols/http'
-import { FetchPlanetsController } from '@/server/controllers/app'
+import { NextHttp } from '@/infra/api/next/http'
+import { FetchPlanetsController } from '@/infra/api/next/controllers/app'
 
 import { SupabaseRouteHandlerClient } from '@/infra/api/supabase/clients'
 import { SupabaseSpaceService } from '@/infra/api/supabase/services'

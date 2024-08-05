@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import type { SignUpFormFields } from '@/infra/forms/types'
+import type { SignUpFormFields } from '@/ui/auth/forms/types'
 import { useApi } from '@/infra/api'
 
 import { ValidationResolver } from '../../validation'

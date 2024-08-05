@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { LessonProgress } from '@/@core/domain/structs'
-import { useLessonStore } from '@/infra/stores/LessonStore'
+import { useLessonStore } from '@/ui/app/stores/LessonStore'
 
 export function useLessonHeader() {
   const [lessonProgress, setLessonProgress] = useState<LessonProgress | null>(null)

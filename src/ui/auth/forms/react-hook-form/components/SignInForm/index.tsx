@@ -1,4 +1,4 @@
-import { SignInFormFields } from '@/infra/forms/types'
+import { SignInFormFields } from '@/ui/auth/forms/types'
 import { Input } from '@/ui/global/components/shared/Input'
 import { Button } from '@/ui/global/components/shared/Button'
 

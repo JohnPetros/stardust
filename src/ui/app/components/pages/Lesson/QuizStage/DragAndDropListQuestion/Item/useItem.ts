@@ -3,7 +3,7 @@
 import { useMemo } from 'react'
 
 import { Text } from '@/@core/domain/structs'
-import { useLessonStore } from '@/infra/stores/LessonStore'
+import { useLessonStore } from '@/ui/app/stores/LessonStore'
 import type { IconColor } from './IconColor'
 import type { LabelBackground } from './LabelBackground'
 

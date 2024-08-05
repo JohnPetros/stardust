@@ -3,7 +3,7 @@ import { AppError } from '@/@core/errors/global/AppError'
 import { SpacePage } from '@/ui/app/components/pages/Space'
 import { SpaceProvider } from '@/ui/app/contexts/SpaceContext'
 import { ROUTES } from '@/ui/global/constants'
-import { NextApiClient } from '@/server/NextApiClient'
+import { NextApiClient } from '@/infra/api/next/apiClient'
 
 export default async function Space() {
   const apiClient = NextApiClient({ isCacheEnable: true })

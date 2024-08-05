@@ -1,7 +1,7 @@
-import { NextHttp } from '@/server/protocols/http'
+import { NextHttp } from '@/infra/api/next/http'
 import { SupabaseRouteHandlerClient } from '@/infra/api/supabase/clients'
 import { SupabaseAchievementsService } from '@/infra/api/supabase/services'
-import { FetchAchievementsController } from '@/server/controllers/app'
+import { FetchAchievementsController } from '@/infra/api/next/controllers/app'
 
 export async function GET() {
   const nextHttp = NextHttp()

@@ -1,4 +1,4 @@
-import { useLessonStore } from '@/infra/stores/LessonStore'
+import { useLessonStore } from '@/ui/app/stores/LessonStore'
 import { useId, useMemo } from 'react'
 
 export function useOption(isSelected: boolean) {

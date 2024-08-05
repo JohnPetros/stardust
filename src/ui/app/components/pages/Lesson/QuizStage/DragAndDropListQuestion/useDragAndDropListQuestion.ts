@@ -4,7 +4,7 @@ import { useState } from 'react'
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
 
 import type { SortableList } from '@/@core/domain/structs'
-import { useLessonStore } from '@/infra/stores/LessonStore'
+import { useLessonStore } from '@/ui/app/stores/LessonStore'
 
 export function useDragAndDropListQuestion(preSortableList: SortableList) {
   const { getQuizSlice } = useLessonStore()

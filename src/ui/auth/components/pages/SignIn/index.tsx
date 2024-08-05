@@ -2,7 +2,7 @@
 
 import { useRef } from 'react'
 
-import { SignInForm } from '@/infra/forms'
+import { SignInForm } from '@/ui/auth/forms'
 import { Button } from '@/ui/global/components/shared/Button'
 import { ROUTES } from '@/ui/global/constants'
 import type { AnimationRef } from '@/ui/global/components/shared/Animation/types'

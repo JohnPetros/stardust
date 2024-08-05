@@ -37,6 +37,10 @@ export const HttpMock = ({
       return cookie ?? null
     },
 
+    getBody() {
+      throw new Error('Method not implemented')
+    },
+
     send(data: unknown, statusCode: number) {
       return new HttpResponse(data, statusCode)
     },
