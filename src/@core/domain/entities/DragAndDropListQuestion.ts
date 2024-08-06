@@ -1,7 +1,7 @@
 import { AppError } from '@/@core/errors/global/AppError'
 import type { DragAndDropListQuestionDTO, QuestionDTO } from '@/@core/dtos'
+import type { QuestionProps } from '../types'
 import { Question } from '../abstracts'
-import type { QuestionProps } from '../abstracts/Question'
 import {
   Image,
   OrdinalNumber,

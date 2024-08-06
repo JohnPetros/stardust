@@ -1,8 +1,8 @@
 import type { OpenQuestionDTO, QuestionDTO } from '@/@core/dtos'
 import { Question } from '../abstracts'
-import type { QuestionProps } from '../abstracts/Question'
+import type { QuestionProps } from '../types'
 import {
-  Collection,
+  List,
   Image,
   Logical,
   QuestionCodeLine,
@@ -11,9 +11,9 @@ import {
 } from '../structs'
 
 type OpenQuestionProps = {
-  answers: Collection<string>
+  answers: List<string>
   code?: string
-  lines: QuestionCodeLine[]
+  codeLines: QuestionCodeLine[]
 }
 
 export class OpenQuestion extends Question {
@@ -38,8 +38,8 @@ export class OpenQuestion extends Question {
         type: 'open',
       },
       {
-        answers: Collection.create(dto.answers),
-        lines: dto.lines.map(QuestionCodeLine.create),
+        answers: List.create(dto.answers),
+        codeLines: dto.lines.map(QuestionCodeLine.create),
         code: dto.code,
       },
     )
@@ -54,7 +54,7 @@ export class OpenQuestion extends Question {
   }
 
   verifyUserAnswer(userAnswer: QuestionAnswer): Logical {
-    const usersAnswers = Collection.create(userAnswer.value as string[])
+    const usersAnswers = List.create(userAnswer.value as string[])
 
     return Logical.create(
       'Is user answer for open question correct?',
@@ -62,8 +62,12 @@ export class OpenQuestion extends Question {
     )
   }
 
-  get answers(): Collection<string> {
+  get answers(): List<string> {
     return this.props.answers
+  }
+
+  get codeLines(): QuestionCodeLine[] {
+    return this.props.codeLines
   }
 
   get code(): string | null {

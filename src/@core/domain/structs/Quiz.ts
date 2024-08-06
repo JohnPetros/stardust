@@ -4,7 +4,7 @@ import { Integer } from './Integer'
 import { SelectionQuestion } from '../entities/SelectionQuestion'
 import { QuestionAnswer } from './QuestionAnswer'
 import { Logical } from './Logical'
-import { DragAndDropListQuestion } from '../entities'
+import { DragAndDropListQuestion, OpenQuestion } from '../entities'
 
 type QuizProps = {
   livesCount: Integer
@@ -37,11 +37,21 @@ export class Quiz {
     const questions: Question[] = []
 
     for (const questionDTO of questionsDTO) {
-      if (SelectionQuestion.canBeCreatedBy(questionDTO))
+      if (SelectionQuestion.canBeCreatedBy(questionDTO)) {
         questions.push(SelectionQuestion.create(questionDTO))
+        break
+      }
+       
 
-      if (DragAndDropListQuestion.canBeCreatedBy(questionDTO))
+      if (OpenQuestion.canBeCreatedBy(questionDTO)) {
+        questions.push(OpenQuestion.create(questionDTO))
+        break
+      }
+
+      if (DragAndDropListQuestion.canBeCreatedBy(questionDTO)) {
         questions.push(DragAndDropListQuestion.create(questionDTO))
+        break
+      }
     }
 
     return new Quiz({

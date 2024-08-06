@@ -1,19 +1,6 @@
 import type { Image, Logical, QuestionAnswer, Text } from '../structs'
+import type { QuestionProps, QuestionType } from '../types'
 import { BaseEntity } from './BaseEntity'
-
-type QuestionType =
-  | 'selection'
-  | 'checkbox'
-  | 'open'
-  | 'drag-and-drop'
-  | 'drag-and-drop-list'
-
-export type QuestionProps = {
-  id?: string
-  type: QuestionType
-  statement: Text
-  picture: Image
-}
 
 export abstract class Question extends BaseEntity {
   readonly type: QuestionType
