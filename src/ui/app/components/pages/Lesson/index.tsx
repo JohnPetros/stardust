@@ -1,13 +1,12 @@
 'use client'
 
 import type { TextBlockDTO, QuestionDTO } from '@/@core/dtos'
+
 import { PageTransitionAnimation } from '@/ui/global/components/shared/PageTransitionAnimation'
 import { useLessonPage } from './useLessonPage'
 import { LessonHeader } from './LessonHeader'
 import { TheoryStage } from './TheoryStage'
 import { QuizStage } from './QuizStage'
-// import { LessonHeader } from './LessonHeader'
-// import { TheoryStage } from './TheoryStage'
 
 type LessonPageProps = {
   starId: string

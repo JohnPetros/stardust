@@ -19,30 +19,14 @@ export function usePlaygroundCodeEditor(
   const [outputs, setOutputs] = useState<string[]>([])
   const [shouldOpenPrompt, setShouldOpenPrompt] = useState(false)
   const { provider } = useCodeRunner()
-
   const toast = useToastContext()
-
   const codeRef = useRef<Code>(Code.create(provider, preCodeValue))
   const editorRef = useRef<EditorRef>(null)
   const consoleRef = useRef<ConsoleRef>(null)
   const promptRef = useRef<PromptRef>(null)
 
-  function handlePromptConfirm() {
-    if (promptRef.current) runCodeWithInput(promptRef.current.value)
-  }
-
-  function handlePromptCancel() {
-    promptRef.current?.close()
-    resetToOriginalUserCode()
-  }
-
-  function handleCodeChange(value: string) {
-    codeRef.current = codeRef.current.changeValue(value)
-    if (onCodeChange) onCodeChange(value)
-  }
-
-  function resetToOriginalUserCode() {
-    // if (editorRef.current) userCode.current = editorRef.current?.getValue()
+  function resetCode() {
+    if (editorRef.current) handleCodeChange(editorRef.current.getValue())
   }
 
   const showError = useCallback(
@@ -98,8 +82,7 @@ export function usePlaygroundCodeEditor(
     const response = await codeRef.current.run()
 
     if (response.isSuccess) {
-      console.warn('setOutput', { outputs: response.outputs })
-      setOutputs(outputs)
+      setOutputs(response.outputs)
     }
 
     if (response.isFailure) {
@@ -109,8 +92,22 @@ export function usePlaygroundCodeEditor(
     consoleRef.current?.open()
     playAudio('running-code.wav')
 
-    // resetToOriginalUserCode()
+    resetCode()
   }, [openPrompt, showError, outputs])
+
+  function handlePromptConfirm() {
+    if (promptRef.current) runCodeWithInput(promptRef.current.value)
+  }
+
+  function handlePromptCancel() {
+    promptRef.current?.close()
+    resetCode()
+  }
+
+  function handleCodeChange(value: string) {
+    codeRef.current = codeRef.current.changeValue(value)
+    if (onCodeChange) onCodeChange(value)
+  }
 
   useEffect(() => {
     if (shouldOpenPrompt) {

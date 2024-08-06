@@ -6,7 +6,7 @@ export class CodeRunnerError extends BaseError {
   constructor(message: string, line: number) {
     super()
     this.title = 'Code Runner Error'
-    this.message = 'Desafio não encontrado'
+    this.message = message
     this.line = line
   }
 }

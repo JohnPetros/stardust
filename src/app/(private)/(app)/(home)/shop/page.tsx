@@ -1,6 +1,7 @@
 import type { AvatarDTO, RocketDTO } from '@/@core/dtos'
+
 import { NextApiClient } from '@/infra/api/next/apiClient'
-import { ShopPage } from '@/ui/app/components/pages/shop'
+import { ShopPage } from '@/ui/app/components/pages/Shop'
 import { ROUTES } from '@/ui/global/constants'
 import { waitFor } from '@/ui/global/utils'
 

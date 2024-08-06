@@ -45,7 +45,7 @@ export function ConsoleComponent(
           </div>
           <Tooltip direction='bottom' content='Fechar console'>
             <button type='button' onClick={close} tabIndex={isOpen ? undefined : -1}>
-              <Icon name='arrow-down' className='text-lg text-gray-400' weight='bold' />
+              <Icon name='simple-arrow-down' className='text-lg text-gray-400' weight='bold' />
             </button>
           </Tooltip>
         </div>

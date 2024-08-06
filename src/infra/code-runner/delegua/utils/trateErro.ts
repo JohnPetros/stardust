@@ -4,14 +4,12 @@ import { CodeRunnerError } from '@/@core/errors/providers'
 import { CodeRunnerResponse } from '@/@core/responses'
 
 export function trateErro(erro: ErroInterpretador, linhaDoErro: number) {
-  let mensagemDeErro: string
+  let mensagemDeErro = String(erro.mensagem)
 
-  if (erro instanceof Error) {
-    mensagemDeErro = String(erro)
+  if (erro.erroInterno instanceof Error) {
+    mensagemDeErro = erro.erroInterno.message
   }
-
-  mensagemDeErro = erro.erroInterno
-
+  
   mensagemDeErro = mensagemDeErro.includes('null') ? 'Código inválido' : mensagemDeErro
 
   const error = new CodeRunnerError(mensagemDeErro, linhaDoErro)

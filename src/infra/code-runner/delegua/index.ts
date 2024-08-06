@@ -1,8 +1,9 @@
 import { AvaliadorSintatico, InterpretadorBase, Lexador } from '@designliquido/delegua'
 
 import type { ICodeRunnerProvider } from '@/@core/interfaces/providers/ICodeRunnerProvider'
-import { CodeRunnerResponse } from '@/@core/responses'
 import type { CodeInput } from '@/@core/domain/types'
+import { CodeRunnerResponse } from '@/@core/responses'
+
 import { DELEGUA_REGEX } from './constants'
 import { obtenhaTipo, trateErro } from './utils'
 
@@ -19,9 +20,6 @@ export function DeleguaCodeRunnerProvider(): ICodeRunnerProvider {
       }
 
       const interpretador = new InterpretadorBase('', false, funcaoDeSaida, funcaoDeSaida)
-
-      console.log({ code })
-
       const resultadoLexador = lexador.mapear(code.split('\n'), -1)
       const resultadoAvaliacaoSintatica = avaliadorSintatico.analisar(resultadoLexador, 0)
 
@@ -30,15 +28,11 @@ export function DeleguaCodeRunnerProvider(): ICodeRunnerProvider {
         false,
       )
 
-      console.log({ resultado })
-
       if (erros.length) {
         const erro = erros[0]
         const linhaDoErro = erro.linha ?? 0
         return trateErro(erro, linhaDoErro)
       }
-
-      console.log('saida', outputs)
 
       let result: string | boolean = ''
 
@@ -52,8 +46,6 @@ export function DeleguaCodeRunnerProvider(): ICodeRunnerProvider {
           }
         }
       }
-
-      console.log('result', result)
 
       return new CodeRunnerResponse({ result, outputs })
     },
@@ -83,7 +75,8 @@ export function DeleguaCodeRunnerProvider(): ICodeRunnerProvider {
             entrada = `"${input}"`
         }
 
-        codigo = codeValue.replace(DELEGUA_REGEX.funcaoLeia, entrada)
+        codigo = codigo.replace(DELEGUA_REGEX.conteudoDeFuncaoLeia, entrada)
+        console.log({codigo})
       }
 
       return codigo
