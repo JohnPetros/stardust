@@ -42,7 +42,7 @@ export class QuestionAnswer {
   }
 
   get isAnswered() {
-    return Logical.create('Is question answered?', this.value !== null)
+    return Logical.create('Is question answered?', Boolean(this.value))
   }
 
   private clone(props?: Partial<QuestionAnswerProps>) {

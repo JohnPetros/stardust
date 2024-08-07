@@ -1,16 +1,18 @@
+import type { DropZoneDTO } from '@/@core/dtos'
 import { StringValidation } from '@/@core/lib/validation'
 import { Logical } from './Logical'
+import { Integer } from './Integer'
 
 type DropZoneType = 'slot' | 'bank'
 
 type DropZoneProps = {
-  index: number
+  index: Integer
   type: DropZoneType
   hasItem: Logical
 }
 
 export class DropZone {
-  readonly index: number
+  readonly index: Integer
   readonly type: 'slot' | 'bank'
   readonly hasItem: Logical
 
@@ -20,13 +22,13 @@ export class DropZone {
     this.hasItem = props.hasItem
   }
 
-  static create(index: number, type: string, hasItem: boolean) {
-    if (!DropZone.isDropZoneType(type)) throw new Error()
+  static create(dto: DropZoneDTO) {
+    if (!DropZone.isDropZoneType(dto.type)) throw new Error()
 
     return new DropZone({
-      index,
-      type,
-      hasItem: Logical.create('drop zone has item?', hasItem),
+      type: dto.type,
+      index: Integer.create('Drop zone index', dto.index),
+      hasItem: Logical.create('Drop zone has item?', dto.hasItem),
     })
   }
 

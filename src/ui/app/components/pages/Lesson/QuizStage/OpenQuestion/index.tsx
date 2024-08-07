@@ -3,16 +3,16 @@
 import type { QuestionCodeLine } from '@/@core/domain/structs'
 
 import { CodeSnippet } from '@/ui/global/components/shared/CodeSnippet'
-import { QuestionStatement } from '../QuestionStatement'
 
 import { Input } from './Input'
+import { QuestionStatement } from '../QuestionStatement'
 import { useOpenQuestion } from './useOpenQuestion'
 
 type OpenQuestionProps = {
   statement: string
   picture: string
   answers: string[]
-  lines: QuestionCodeLine[]
+  codeLines: QuestionCodeLine[]
   code: string | null
 }
 
@@ -21,7 +21,7 @@ export function OpenQuestion({
   picture,
   code,
   answers,
-  lines,
+  codeLines,
 }: OpenQuestionProps) {
   const { userAnswers, handleInputChange } = useOpenQuestion(answers)
 
@@ -36,16 +36,16 @@ export function OpenQuestion({
       )}
 
       <ul className='mt-12 space-y-6'>
-        {lines.map((line) => {
-          const marginLeft = 24 * line.indentation.value
+        {codeLines.map((codeLine) => {
+          const marginLeft = 24 * codeLine.indentation.value
 
           return (
             <li
-              key={line.number.value}
+              key={codeLine.number.value}
               style={{ marginLeft }}
               className='flex flex-row items-center gap-3'
             >
-              {line.texts.map((text, index) => {
+              {codeLine.texts.map((text, index) => {
                 let inputIndex = 0
 
                 if (text.includes('input')) {
@@ -53,7 +53,7 @@ export function OpenQuestion({
                 }
 
                 return (
-                  <div key={`${index}-${line.number.value}`}>
+                  <div key={`${index}-${codeLine.number.value}`}>
                     {!text.includes('input') ? (
                       <div className='flex gap-1 font-code text-gray-100'>{text}</div>
                     ) : (

@@ -59,4 +59,16 @@ export class DragAndDropQuestion extends Question {
       this.props.correctItemIndexesSequence,
     )
   }
+
+  get dragAndDrop() {
+    return this.props.dragAndDrop
+  }
+
+  get codeLines() {
+    return this.props.codeLines
+  }
+
+  get correctItemIndexesSequence() {
+    return this.props.correctItemIndexesSequence
+  }
 }

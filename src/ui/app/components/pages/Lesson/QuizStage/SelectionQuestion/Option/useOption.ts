@@ -1,11 +1,13 @@
+import { useMemo } from 'react'
+
 import { useLessonStore } from '@/ui/app/stores/LessonStore'
-import { useId, useMemo } from 'react'
+import type { LabelColor } from './LabelColor'
 
 export function useOption(isSelected: boolean) {
-  const id = useId()
-  const { quiz } = useLessonStore()
+  const { getQuizSlice } = useLessonStore()
+  const { quiz } = getQuizSlice()
 
-  const color: 'gray' | 'red' | 'blue' | 'green' = useMemo(() => {
+  const labelColor: LabelColor = useMemo(() => {
     const isAnswerIncorrect =
       quiz?.userAnswer.isVerified.isTrue && quiz?.userAnswer.isCorrect.isFalse
 
@@ -28,7 +30,6 @@ export function useOption(isSelected: boolean) {
   }, [quiz, isSelected])
 
   return {
-    id,
-    color,
+    labelColor,
   }
 }

@@ -5,7 +5,9 @@ import { AnimatePresence } from 'framer-motion'
 
 import {
   SelectionQuestion as SelectionQuestionEntity,
+  OpenQuestion as OpenQuestionEntity,
   DragAndDropListQuestion as DragAndDropListQuestionEntity,
+  DragAndDropQuestion as DragAndDropQuestionEntity,
 } from '@/@core/domain/entities'
 import type { AlertDialogRef } from '@/ui/global/components/shared/AlertDialog/types'
 import { AlertDialog } from '@/ui/global/components/shared/AlertDialog'
@@ -13,8 +15,10 @@ import { Button } from '@/ui/global/components/shared/Button'
 import { VerificationButton } from '../../../shared/VerificationButton'
 import { QuestionContainer } from './AnimatedQuestionContainer'
 import { SelectionQuestion } from './SelectionQuestion'
-import { useQuizStage } from './useQuizStage'
+import { DragAndDropQuestion } from './DragAndDropQuestion'
 import { DragAndDropListQuestion } from './DragAndDropListQuestion'
+import { OpenQuestion } from './OpenQuestion'
+import { useQuizStage } from './useQuizStage'
 
 type QuizProps = {
   leaveLesson: () => void
@@ -35,7 +39,7 @@ export function QuizStage({ leaveLesson }: QuizProps) {
         className='mt-12 flex h-[calc(100vh-8rem)] w-full overflow-auto'
       >
         <AnimatePresence>
-          {SelectionQuestionEntity.isSelectionQuestion(question) && (
+          {question instanceof SelectionQuestionEntity && (
             <QuestionContainer id={question.id}>
               <SelectionQuestion
                 statement={question.statement.value}
@@ -46,7 +50,19 @@ export function QuizStage({ leaveLesson }: QuizProps) {
             </QuestionContainer>
           )}
 
-          {DragAndDropListQuestionEntity.isDragAndDropListQuestion(question) && (
+          {question instanceof OpenQuestionEntity && (
+            <QuestionContainer id={question.id}>
+              <OpenQuestion
+                statement={question.statement.value}
+                answers={question.answers.items}
+                codeLines={question.codeLines}
+                code={question.code}
+                picture={question.picture.value}
+              />
+            </QuestionContainer>
+          )}
+
+          {question instanceof DragAndDropListQuestionEntity && (
             <QuestionContainer id={question.id}>
               <DragAndDropListQuestion
                 preSortableList={question.sortableList}
@@ -55,22 +71,26 @@ export function QuizStage({ leaveLesson }: QuizProps) {
               />
             </QuestionContainer>
           )}
-          {/* {currentQuestion.content.type === 'open' && (
-              <QuestionContainer id={currentQuestion.order}>
-                <OpenQuestion data={currentQuestion.content} />
-              </QuestionContainer>
-            )}
+          {/* 
           {currentQuestion.content.type === 'checkbox' && (
               <QuestionContainer id={currentQuestion.order}>
                 <CheckboxQuestion data={currentQuestion.content} />
               </QuestionContainer>
             )}
         
-          {currentQuestion.content.type === 'drag-and-drop-list' && (
-              <QuestionContainer id={currentQuestion.order}>
-                <DragAndDropListQuestion data={currentQuestion.content} />
-              </QuestionContainer>
-            )} */}
+          */}
+
+          {question instanceof DragAndDropQuestionEntity && (
+            <QuestionContainer id={question.id}>
+              <DragAndDropQuestion
+                statement={question.statement.value}
+                picture={question.picture.value}
+                correctItemIndexesSequence={question.correctItemIndexesSequence.items}
+                codeLines={question.codeLines}
+                initialDragAndDrop={question.dragAndDrop}
+              />
+            </QuestionContainer>
+          )}
         </AnimatePresence>
         <AlertDialog
           ref={alertDialogRef}

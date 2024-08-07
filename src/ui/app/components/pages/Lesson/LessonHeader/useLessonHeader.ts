@@ -14,7 +14,6 @@ export function useLessonHeader() {
     if (theory && quiz) {
       const lessonProgress = LessonProgress.create(theory, quiz)
 
-      console.log('isFull', lessonProgress.isFull.isTrue)
       if (lessonProgress.isFull.isTrue) {
         setStage('rewards')
       }

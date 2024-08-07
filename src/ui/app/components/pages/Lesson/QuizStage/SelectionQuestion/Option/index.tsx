@@ -1,5 +1,6 @@
 'use client'
 
+import { useId } from 'react'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 
 import { AnimatedLabel } from './AnimatedLabel'
@@ -18,11 +19,17 @@ export function Option({
   hasAutoFocus = false,
   onClick,
 }: OptionProps) {
-  const { id, color } = useOption(isSelected)
+  const id = useId()
+  const { labelColor } = useOption(isSelected)
 
   return (
     <RadioGroup.Item id={id} value={label} asChild>
-      <AnimatedLabel id={id} onClick={onClick} hasAutoFocus={hasAutoFocus} color={color}>
+      <AnimatedLabel
+        id={id}
+        color={labelColor}
+        hasAutoFocus={hasAutoFocus}
+        onClick={onClick}
+      >
         {label}
       </AnimatedLabel>
     </RadioGroup.Item>

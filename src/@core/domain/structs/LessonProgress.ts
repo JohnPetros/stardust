@@ -33,7 +33,6 @@ export class LessonProgress {
   }
 
   get isFull() {
-    console.log(this.value)
-    return Logical.create('Is lesson progress full?', this.value > 50)
+    return Logical.create('Is lesson progress full?', this.value >= 100)
   }
 }

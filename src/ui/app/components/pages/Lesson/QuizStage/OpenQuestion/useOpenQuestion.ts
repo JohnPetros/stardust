@@ -18,6 +18,13 @@ export function useOpenQuestion(answers: string[]) {
 
     const currentUserAnswers = [...userAnswers]
 
+    const hasEmptyAnswers = currentUserAnswers.every((answer) => answer === '')
+
+    if (hasEmptyAnswers) {
+      setQuiz(quiz.changeUserAnswer(null))
+      return
+    }
+
     if (currentUserAnswers.length === answers.length) {
       setQuiz(quiz.changeUserAnswer(currentUserAnswers))
     }

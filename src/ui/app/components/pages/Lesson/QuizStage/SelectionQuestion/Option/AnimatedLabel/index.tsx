@@ -3,6 +3,8 @@
 import { motion, type Variants } from 'framer-motion'
 import { tv } from 'tailwind-variants'
 
+import type { LabelColor } from '../LabelColor'
+
 const optionAnimations: Variants = {
   hover: {
     scale: 1.02,
@@ -29,7 +31,7 @@ export type OptionProps = {
   id: string
   onClick: VoidFunction
   hasAutoFocus: boolean
-  color: 'blue' | 'gray' | 'green' | 'red'
+  color: LabelColor
 }
 
 export function AnimatedLabel({
