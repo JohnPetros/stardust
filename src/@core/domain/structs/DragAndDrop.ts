@@ -2,6 +2,7 @@ import type { DragglableItemDTO } from '@/@core/dtos'
 import { DraggableItem } from './DraggableItem'
 import type { DropZone } from './DropZone'
 import { ShuffledList } from './ShuffledList'
+import { AppError } from '@/@core/errors/global/AppError'
 
 type DragAndDropProps = {
   items: DraggableItem[]
@@ -34,7 +35,7 @@ export class DragAndDrop {
 
   dragItem(item: DraggableItem, dropZone: DropZone): DragAndDrop {
     if (dropZone.isBank.isTrue) {
-      const updatedItem = item.setDropZone(item.originalDropZoneIndex)
+      const updatedItem = item.setDropZone(item.originalDropZoneIndex.value)
       return this.updateItem(updatedItem)
     }
 
@@ -43,21 +44,27 @@ export class DragAndDrop {
 
       if (!dropZoneItem) return this.clone()
 
-      if (item.isDropped.isFalse) return this.swapItems(item, dropZoneItem)
+      if (item.isDropped.isFalse) {
+        return this.swapItems(item, dropZoneItem)
+      }
 
       return this.swapItemsDropZone(item, dropZoneItem)
     }
 
-    const updatedItem = item.setDropZone(dropZone.index)
+    const updatedItem = item.setDropZone(dropZone.index.value)
     return this.updateItem(updatedItem)
   }
 
-  getIemByIndex(index: number): DraggableItem | null {
-    return this.items.find((item) => item.index.value === index) ?? null
+  getItemByIndex(index: number): DraggableItem {
+    const item = this.items.find((item) => item.index.value === index) ?? null
+    if (!item) throw new AppError('Drag and Drop item not found')
+    return item
   }
 
-  getItemByDropZone(dropZoneindex: number): DraggableItem | null {
-    return this.items.find((item) => item.dropZoneIndex.value === dropZoneindex) ?? null
+  getItemByDropZone(dropZoneindex: number): DraggableItem {
+    const item = this.items.find((item) => item.dropZoneIndex.value === dropZoneindex)
+    if (!item) throw new AppError('Drag and Drop item not found')
+    return item
   }
 
   getItemDropZoneIndexes(): number[] {
@@ -65,8 +72,10 @@ export class DragAndDrop {
   }
 
   private swapItems(firstItem: DraggableItem, secondItem: DraggableItem): DragAndDrop {
-    const updatedFirstItem = firstItem.setDropZone(secondItem.dropZoneIndex)
-    const updatedSecondItem = secondItem.setDropZone(secondItem.originalDropZoneIndex)
+    const updatedFirstItem = firstItem.setDropZone(secondItem.dropZoneIndex.value)
+    const updatedSecondItem = secondItem.setDropZone(
+      secondItem.originalDropZoneIndex.value,
+    )
 
     return this.updateItem(updatedFirstItem).updateItem(updatedSecondItem)
   }
@@ -75,9 +84,8 @@ export class DragAndDrop {
     firstItem: DraggableItem,
     secondItem: DraggableItem,
   ): DragAndDrop {
-    alert('EITA')
-    const updatedFirstItem = firstItem.setDropZone(secondItem.dropZoneIndex)
-    const updatedSecondItem = secondItem.setDropZone(firstItem.dropZoneIndex)
+    const updatedFirstItem = firstItem.setDropZone(secondItem.dropZoneIndex.value)
+    const updatedSecondItem = secondItem.setDropZone(firstItem.dropZoneIndex.value)
 
     return this.updateItem(updatedFirstItem).updateItem(updatedSecondItem)
   }
