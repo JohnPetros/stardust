@@ -41,8 +41,8 @@ export class DraggableItem {
     })
   }
 
-  setDropZone(dropZoneIndex: Integer): DraggableItem {
-    return this.clone({ dropZoneIndex })
+  setDropZone(dropZoneIndex: number): DraggableItem {
+    return this.clone({ dropZoneIndex: Integer.create('Drop zone index', dropZoneIndex) })
   }
 
   get isDropped(): Logical {
