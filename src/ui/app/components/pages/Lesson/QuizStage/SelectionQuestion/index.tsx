@@ -22,8 +22,6 @@ export function SelectionQuestion({
 }: SelectionQuestionProps) {
   const { userAnswer, handleUserAnswerChange } = useSelectionQuestion()
 
-  console.log({ statement })
-
   return (
     <>
       <QuestionStatement picture={picture}>{statement}</QuestionStatement>

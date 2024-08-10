@@ -4,8 +4,9 @@ import type { AlertDialogRef } from '@/ui/global/components/shared/AlertDialog/t
 import { useLessonStore } from '@/ui/app/stores/LessonStore'
 
 export function useQuizStage(alertDialogRef: RefObject<AlertDialogRef>) {
-  const { getQuizSlice } = useLessonStore()
+  const { getQuizSlice, getStageSlice } = useLessonStore()
   const { quiz, setQuiz } = getQuizSlice()
+  const { setStage } = getStageSlice()
 
   function handleVerificationButtonClick() {
     if (!quiz) return
@@ -15,11 +16,18 @@ export function useQuizStage(alertDialogRef: RefObject<AlertDialogRef>) {
   }
 
   useEffect(() => {
+    if (quiz && !quiz.hasNextQuestion) {
+      alert('REWARDS')
+      setStage('rewards')
+      return
+    }
+
     if (quiz && !quiz.hasLives) alertDialogRef.current?.open()
-  }, [quiz, alertDialogRef])
+  }, [quiz, alertDialogRef, setStage])
 
   return {
     quiz,
     handleVerificationButtonClick,
+    setStage,
   }
 }

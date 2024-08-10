@@ -5,6 +5,7 @@ import { AnimatePresence } from 'framer-motion'
 
 import {
   SelectionQuestion as SelectionQuestionEntity,
+  CheckboxQuestion as CheckboxQuestionEntity,
   OpenQuestion as OpenQuestionEntity,
   DragAndDropListQuestion as DragAndDropListQuestionEntity,
   DragAndDropQuestion as DragAndDropQuestionEntity,
@@ -19,6 +20,7 @@ import { DragAndDropQuestion } from './DragAndDropQuestion'
 import { DragAndDropListQuestion } from './DragAndDropListQuestion'
 import { OpenQuestion } from './OpenQuestion'
 import { useQuizStage } from './useQuizStage'
+import { CheckboxQuestion } from './CheckboxQuestion'
 
 type QuizProps = {
   leaveLesson: () => void
@@ -50,6 +52,17 @@ export function QuizStage({ leaveLesson }: QuizProps) {
             </QuestionContainer>
           )}
 
+          {question instanceof CheckboxQuestionEntity && (
+            <QuestionContainer id={question.id}>
+              <CheckboxQuestion
+                statement={question.statement.value}
+                options={question.options}
+                code={question.code}
+                picture={question.picture.value}
+              />
+            </QuestionContainer>
+          )}
+
           {question instanceof OpenQuestionEntity && (
             <QuestionContainer id={question.id}>
               <OpenQuestion
@@ -71,14 +84,6 @@ export function QuizStage({ leaveLesson }: QuizProps) {
               />
             </QuestionContainer>
           )}
-          {/* 
-          {currentQuestion.content.type === 'checkbox' && (
-              <QuestionContainer id={currentQuestion.order}>
-                <CheckboxQuestion data={currentQuestion.content} />
-              </QuestionContainer>
-            )}
-        
-          */}
 
           {question instanceof DragAndDropQuestionEntity && (
             <QuestionContainer id={question.id}>
