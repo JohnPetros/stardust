@@ -23,16 +23,17 @@ export function DragAndDropQuestion({
   statement,
   codeLines,
   initialDragAndDrop,
+  dropZonesCount,
   picture,
 }: DragAndDropQuestionProps) {
   const {
     dragAndDrop,
     activeItemIndex,
-    dropZonesCount,
+    userItemIndexesSenquence,
     handleDragStart,
     handleDragEnd,
     handleDragCancel,
-  } = useDragAndDropQuestion(initialDragAndDrop)
+  } = useDragAndDropQuestion(initialDragAndDrop, dropZonesCount)
 
   const activeItem = activeItemIndex ? dragAndDrop.getItemByIndex(activeItemIndex) : null
 
@@ -57,14 +58,20 @@ export function DragAndDropQuestion({
               {line.texts.map((text, index) => {
                 const key = `${index}-${line.number.value}`
                 const isDropZone = text === 'dropZone'
+                const item = dragAndDrop.getItemByDropZone(index + 1)
+
+                if (
+                  isDropZone &&
+                  item &&
+                  !userItemIndexesSenquence.includes(item.index.value)
+                ) {
+                  userItemIndexesSenquence.push(item.index.value)
+                }
 
                 return (
                   <div key={key}>
                     {isDropZone ? (
-                      <DropZoneSlot
-                        index={dropZonesCount.current}
-                        item={dragAndDrop.getItemByDropZone(line.number.value)}
-                      />
+                      <DropZoneSlot index={index + 1} item={item} />
                     ) : (
                       <span className='font-code text-gray-100'>{text}</span>
                     )}

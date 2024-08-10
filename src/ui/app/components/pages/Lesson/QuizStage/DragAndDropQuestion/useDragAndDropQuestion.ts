@@ -7,13 +7,13 @@ import { useLessonStore } from '@/ui/app/stores/LessonStore'
 
 export function useDragAndDropQuestion(
   initialdragAndDrop: DragAndDrop,
-  // dropZonesCount: number,
+  dropZonesCount: number,
 ) {
   const [dragAndDrop, setDragAndDrop] = useState<DragAndDrop>(initialdragAndDrop)
   const [activeItemIndex, setActiveItemIndex] = useState<null | number>(null)
   const { getQuizSlice } = useLessonStore()
   const { quiz, setQuiz } = getQuizSlice()
-  const dropZonesCount = useRef(1)
+  const [userItemIndexesSenquence, setUserItemIndexesSenquence] = useState<number[]>([])
 
   function handleDragStart(activeItemIndex: number) {
     setActiveItemIndex(activeItemIndex)
@@ -35,16 +35,7 @@ export function useDragAndDropQuestion(
 
       const newDragAndDrop = dragAndDrop.dragItem(item, dropZone)
 
-      const userItemsIndexesSequence = newDragAndDrop.getDroppedItemDropZoneIndexes()
-
-      console.log(newDragAndDrop)
-      console.log(userItemsIndexesSequence)
-
-      if (userItemsIndexesSequence.length === dropZonesCount.current)
-        setQuiz(quiz.changeUserAnswer(userItemsIndexesSequence))
-      else setQuiz(quiz.changeUserAnswer(null))
-
-      dropZonesCount.current = 1
+      setUserItemIndexesSenquence([])
 
       return newDragAndDrop
     })
@@ -53,7 +44,7 @@ export function useDragAndDropQuestion(
   return {
     dragAndDrop,
     activeItemIndex,
-    dropZonesCount,
+    userItemIndexesSenquence,
     handleDragStart,
     handleDragEnd,
     handleDragCancel,
