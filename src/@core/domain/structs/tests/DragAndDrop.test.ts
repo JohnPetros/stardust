@@ -1,5 +1,3 @@
-import { AppError } from '@/@core/errors/global/AppError'
-
 import { DragAndDrop } from '../DragAndDrop'
 import { DraggableItem } from '../DraggableItem'
 import { DraggableItemsFaker, DropZoneFaker } from './fakers'
@@ -191,31 +189,5 @@ describe('DragAndDrop struct', () => {
 
     expect(item.dropZoneIndex.value).toBe(targeDropZoneIndex)
     expect(targeDropZoneItem.dropZoneIndex.value).toBe(dropZoneIndex)
-  })
-
-  it('should only get the indexes of dropped items', () => {
-    let dragAndDrop = DragAndDrop.create([
-      DraggableItemsFaker.fakeDTO({ index: 1 }),
-      DraggableItemsFaker.fakeDTO({ index: 2 }),
-      DraggableItemsFaker.fakeDTO({ index: 3 }),
-    ])
-
-    let item = dragAndDrop.getItemByIndex(1)
-    if (!item) return
-
-    dragAndDrop = dragAndDrop.dragItem(
-      item,
-      DropZoneFaker.fake({ type: 'slot', index: 1, hasItem: false }),
-    )
-
-    item = dragAndDrop.getItemByIndex(3)
-    if (!item) return
-
-    dragAndDrop = dragAndDrop.dragItem(
-      item,
-      DropZoneFaker.fake({ type: 'slot', index: 3, hasItem: false }),
-    )
-
-    expect(dragAndDrop.getDroppedItemDropZoneIndexes()).toEqual([1, 3])
   })
 })

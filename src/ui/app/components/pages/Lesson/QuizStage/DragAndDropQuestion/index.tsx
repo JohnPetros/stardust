@@ -29,11 +29,10 @@ export function DragAndDropQuestion({
   const {
     dragAndDrop,
     activeItemIndex,
-    userItemIndexesSenquence,
     handleDragStart,
     handleDragEnd,
     handleDragCancel,
-  } = useDragAndDropQuestion(initialDragAndDrop, dropZonesCount)
+  } = useDragAndDropQuestion(initialDragAndDrop, dropZonesCount, codeLines)
 
   const activeItem = activeItemIndex ? dragAndDrop.getItemByIndex(activeItemIndex) : null
 
@@ -59,14 +58,6 @@ export function DragAndDropQuestion({
                 const key = `${index}-${line.number.value}`
                 const isDropZone = text === 'dropZone'
                 const item = dragAndDrop.getItemByDropZone(index + 1)
-
-                if (
-                  isDropZone &&
-                  item &&
-                  !userItemIndexesSenquence.includes(item.index.value)
-                ) {
-                  userItemIndexesSenquence.push(item.index.value)
-                }
 
                 return (
                   <div key={key}>

@@ -1,5 +1,6 @@
 'use client'
 
+import type { RefObject } from 'react'
 import { useDroppable } from '@dnd-kit/core'
 import { twMerge } from 'tailwind-merge'
 
@@ -16,8 +17,6 @@ type DropZoneProps = {
 
 export function DropZoneSlot({ index, item }: DropZoneProps) {
   const { borderColor } = useDropZoneSlot()
-
-  console.log(item?.label, index)
 
   const { setNodeRef } = useDroppable({
     id: index,

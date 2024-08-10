@@ -6,14 +6,17 @@ import { List } from './List'
 
 type DragAndDropProps = {
   items: DraggableItem[]
+  userItemsIndexes: List<number>
 }
 
 export class DragAndDrop {
   static readonly FIRST_ORIGINAL_DROP_ZONE_INDEX = 100
   readonly items: DraggableItem[]
+  readonly userItemsIndexes: List<number>
 
   private constructor(props: DragAndDropProps) {
     this.items = props.items
+    this.userItemsIndexes = props.userItemsIndexes
   }
 
   static create(
@@ -32,7 +35,7 @@ export class DragAndDrop {
       })
     })
 
-    return new DragAndDrop({ items })
+    return new DragAndDrop({ items, userItemsIndexes: List.create([]) })
   }
 
   dragItem(item: DraggableItem, dropZone: DropZone): DragAndDrop {
@@ -65,16 +68,6 @@ export class DragAndDrop {
     return this.items.find((item) => item.dropZoneIndex.value === dropZoneindex) ?? null
   }
 
-  getDroppedItemDropZoneIndexes(): number[] {
-    const indexes = []
-
-    for (const item of this.items) {
-      if (item.isDropped.isTrue) indexes.push(item.index.value)
-    }
-
-    return indexes
-  }
-
   private swapItems(firstItem: DraggableItem, secondItem: DraggableItem): DragAndDrop {
     const updatedFirstItem = firstItem.setDropZone(secondItem.dropZoneIndex.value)
     const updatedSecondItem = secondItem.setDropZone(
@@ -103,6 +96,10 @@ export class DragAndDrop {
   }
 
   private clone(props?: Partial<DragAndDropProps>): DragAndDrop {
-    return new DragAndDrop({ items: this.items, ...props })
+    return new DragAndDrop({
+      items: this.items,
+      userItemsIndexes: this.userItemsIndexes,
+      ...props,
+    })
   }
 }
