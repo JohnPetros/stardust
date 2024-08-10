@@ -15,6 +15,20 @@ describe('List struct', () => {
     expect(list.remove(2).items).toEqual([1, 3])
   })
 
+  it('should swap items', () => {
+    let list = List.create([1, 2, 3, 4])
+    expect(list.swap(2, 3).items).toEqual([1, 3, 2, 4])
+
+    list = List.create([1, 2, 3, 4])
+    expect(list.swap(3, 1).items).toEqual([3, 2, 1, 4])
+
+    list = List.create([1, 2, 3, 4])
+    expect(list.swap(1, 4).items).toEqual([4, 2, 3, 1])
+
+    list = List.create([1, 2, 3, 4])
+    expect(list.swap(4, 1).items).toEqual([4, 2, 3, 1])
+  })
+
   it('should verify if is equal to other list', () => {
     let list = List.create([1, 2, 3, 4])
     let otherList = List.create([1, 2, 3, 4])

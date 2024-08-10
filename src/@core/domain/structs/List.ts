@@ -9,10 +9,24 @@ export class List<Item> {
 
   add(item: Item) {
     this.items.push(item)
+    return new List(this.items)
   }
 
   remove(item: Item) {
     const items = this.items.filter((currentItem) => currentItem !== item)
+    return new List(items)
+  }
+
+  swap(item1: Item, item2: Item) {
+    const item1Index = this.items.indexOf(item1)
+    const item2Index = this.items.indexOf(item2)
+
+    const items = [...this.items]
+
+    const firstItem = items[item1Index]
+    items[item1Index] = items[item2Index]
+    items[item2Index] = firstItem
+
     return new List(items)
   }
 
