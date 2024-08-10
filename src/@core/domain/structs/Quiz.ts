@@ -4,7 +4,12 @@ import { Integer } from './Integer'
 import { SelectionQuestion } from '../entities/SelectionQuestion'
 import { QuestionAnswer } from './QuestionAnswer'
 import { Logical } from './Logical'
-import { DragAndDropListQuestion, DragAndDropQuestion, OpenQuestion } from '../entities'
+import {
+  CheckboxQuestion,
+  DragAndDropListQuestion,
+  DragAndDropQuestion,
+  OpenQuestion,
+} from '../entities'
 
 type QuizProps = {
   livesCount: Integer
@@ -39,6 +44,11 @@ export class Quiz {
     for (const questionDTO of questionsDTO) {
       if (SelectionQuestion.canBeCreatedBy(questionDTO)) {
         questions.push(SelectionQuestion.create(questionDTO))
+        continue
+      }
+
+      if (CheckboxQuestion.canBeCreatedBy(questionDTO)) {
+        questions.push(CheckboxQuestion.create(questionDTO))
         continue
       }
 
@@ -136,6 +146,10 @@ export class Quiz {
 
   get hasLives() {
     return this.livesCount.value > 0
+  }
+
+  get hasNextQuestion() {
+    return this.currentQuestionIndex.value < this.questionsCount
   }
 
   private clone(props?: Partial<QuizProps>) {

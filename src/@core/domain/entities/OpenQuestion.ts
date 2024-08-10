@@ -4,9 +4,9 @@ import type { QuestionProps } from '../types'
 import {
   List,
   Image,
-  Logical,
   QuestionCodeLine,
   Text,
+  type Logical,
   type QuestionAnswer,
 } from '../structs'
 
@@ -49,17 +49,10 @@ export class OpenQuestion extends Question {
     return question.type === 'open'
   }
 
-  static isOpenQuestion(question: Question): question is OpenQuestion {
-    return question instanceof OpenQuestion
-  }
-
   verifyUserAnswer(userAnswer: QuestionAnswer): Logical {
     const usersAnswers = List.create(userAnswer.value as string[])
 
-    return Logical.create(
-      'Is user answer for open question correct?',
-      this.answers.isEqualTo(usersAnswers).value,
-    )
+    return this.answers.isEqualTo(usersAnswers)
   }
 
   get answers(): List<string> {

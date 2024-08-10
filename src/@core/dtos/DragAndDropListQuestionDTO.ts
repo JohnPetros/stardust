@@ -1,5 +1,3 @@
-import type { QuestionCodeLineDTO } from './QuestionCodeLineDTO'
-
 export type DragAndDropListQuestionDTO = {
   id: string
   type: 'drag-and-drop-list'

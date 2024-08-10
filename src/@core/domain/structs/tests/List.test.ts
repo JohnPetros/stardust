@@ -4,9 +4,7 @@ describe('List struct', () => {
   it('should add an item', () => {
     const list = List.create([1, 2, 3])
 
-    list.add(4)
-
-    expect(list.items).toEqual([1, 2, 3, 4])
+    expect(list.add(4).items).toEqual([1, 2, 3, 4])
   })
 
   it('should remove an item', () => {

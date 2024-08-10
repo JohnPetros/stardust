@@ -68,4 +68,9 @@ export class List<Item> {
   get lengthTruthy() {
     return this.items.filter((item) => !!item).length
   }
+
+  get hasItems() {
+    console.log(this.length)
+    return Logical.create(`List ${this.items} has items?`, this.length > 0)
+  }
 }

@@ -41,10 +41,8 @@ export class DragAndDropQuestion extends Question {
       },
       {
         codeLines: dto.lines.map(QuestionCodeLine.create),
-        correctItemIndexesSequence: List.create(dto.correctDragItemsIdsSequence),
-        dragAndDrop: DragAndDrop.create(
-          dto.items.map((item) => ({ index: item.id, label: item.label })),
-        ),
+        correctItemIndexesSequence: List.create(dto.correctItemsIndexesSequence),
+        dragAndDrop: DragAndDrop.create(dto.items),
       },
     )
   }

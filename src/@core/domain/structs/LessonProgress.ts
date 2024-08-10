@@ -20,7 +20,7 @@ export class LessonProgress {
     return new LessonProgress({ quiz, theory })
   }
 
-  get value() {
+  get value(): number {
     const total = this.theory.textsBlockCount + this.quiz.questionsCount
     if (total === 0) return 0
 
@@ -30,9 +30,5 @@ export class LessonProgress {
       (this.theory.progress * half) / total + (this.quiz.progress * half) / total
 
     return progress * 100
-  }
-
-  get isFull() {
-    return Logical.create('Is lesson progress full?', this.value >= 100)
   }
 }

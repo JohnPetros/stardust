@@ -7,8 +7,8 @@ export type DragAndDropQuestionDTO = {
   picture: string
   lines: QuestionCodeLineDTO[]
   items: Array<{
-    id: number
+    index: number
     label: string
   }>
-  correctDragItemsIdsSequence: number[]
+  correctItemsIndexesSequence: number[]
 }
