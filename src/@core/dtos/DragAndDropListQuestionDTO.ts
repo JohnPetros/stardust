@@ -4,7 +4,7 @@ export type DragAndDropListQuestionDTO = {
   statement: string
   picture: string
   items: Array<{
-    id: number
+    position: number
     label: string
   }>
 }

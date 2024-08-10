@@ -38,10 +38,10 @@ export class DragAndDropListQuestion extends Question {
       },
       {
         sortableList: SortableList.create(
-          dto.items.map((item, index) => ({
+          dto.items.map((item) => ({
             originalPosition: OrdinalNumber.create(
-              `${index + 1}º Drag and drop list question item original position`,
-              item.id,
+              `${item.position}º Drag and drop list question item original position`,
+              item.position,
             ),
             label: item.label,
           })),

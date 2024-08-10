@@ -38,6 +38,8 @@ export function useLessonPage(
     setTheory(Theory.create(textsBlocksDTO))
     setQuiz(Quiz.create(questionsDTO))
 
+    localStorage.removeItem(STORAGE.keys.secondsCounter)
+
     return () => {
       clearTimeout(timeout)
     }
