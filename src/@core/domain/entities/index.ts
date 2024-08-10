@@ -1,6 +1,7 @@
 export { Achievement } from './Achievement'
 export { Avatar } from './Avatar'
 export { Challenge } from './Challenge'
+export { Doc } from './Doc'
 export { Rocket } from './Rocket'
 export { Planet } from './Planet'
 export { Tier } from './Tier'
