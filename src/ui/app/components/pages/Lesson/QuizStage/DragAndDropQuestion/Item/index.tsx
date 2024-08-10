@@ -59,7 +59,7 @@ export function Item({
       {...listeners}
       {...attributes}
       className={twMerge(
-        'flex h-10 w-full cursor-grab items-center justify-center rounded-md bg-purple-700 font-code',
+        'flex h-10 w-full cursor-grab items-center justify-center border rounded-md bg-purple-700 font-code',
         border,
         textColor,
       )}

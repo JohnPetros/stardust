@@ -9,6 +9,7 @@ import {
   List,
   type Logical,
   type QuestionAnswer,
+  Integer,
 } from '../structs'
 
 type DragAndDropQuestionProps = {
@@ -53,22 +54,34 @@ export class DragAndDropQuestion extends Question {
   }
 
   verifyUserAnswer(userAnswer: QuestionAnswer): Logical {
-    const usersDragableItemsIndexesSequence = List.create(userAnswer.value as number[])
+    const usersDraggableItemsIndexesSequence = List.create(userAnswer.value as number[])
 
-    return usersDragableItemsIndexesSequence.isEqualTo(
+    return usersDraggableItemsIndexesSequence.isEqualTo(
       this.props.correctItemIndexesSequence,
     )
   }
 
-  get dragAndDrop() {
+  get dropZonesCount(): Integer {
+    let count = 0
+
+    for (const codeLine of this.codeLines) {
+      for (const text of codeLine.texts) {
+        if (text !== 'dropZone') count++
+      }
+    }
+
+    return Integer.create('Drag and drop question drop zones count', count)
+  }
+
+  get dragAndDrop(): DragAndDrop {
     return this.props.dragAndDrop
   }
 
-  get codeLines() {
+  get codeLines(): QuestionCodeLine[] {
     return this.props.codeLines
   }
 
-  get correctItemIndexesSequence() {
+  get correctItemIndexesSequence(): List<number> {
     return this.props.correctItemIndexesSequence
   }
 }

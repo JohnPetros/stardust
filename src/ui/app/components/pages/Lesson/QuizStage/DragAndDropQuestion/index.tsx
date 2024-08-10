@@ -15,6 +15,7 @@ type DragAndDropQuestionProps = {
   picture: string
   correctItemIndexesSequence: number[]
   codeLines: QuestionCodeLine[]
+  dropZonesCount: number
   initialDragAndDrop: DragAndDrop
 }
 
@@ -27,12 +28,13 @@ export function DragAndDropQuestion({
   const {
     dragAndDrop,
     activeItemIndex,
+    dropZonesCount,
     handleDragStart,
     handleDragEnd,
     handleDragCancel,
   } = useDragAndDropQuestion(initialDragAndDrop)
 
-  const activeItem = activeItemIndex ? dragAndDrop.getIemByIndex(activeItemIndex) : null
+  const activeItem = activeItemIndex ? dragAndDrop.getItemByIndex(activeItemIndex) : null
 
   return (
     <Dnd
@@ -54,15 +56,17 @@ export function DragAndDropQuestion({
             >
               {line.texts.map((text, index) => {
                 const key = `${index}-${line.number.value}`
+                const isDropZone = text === 'dropZone'
+
                 return (
                   <div key={key}>
-                    {text !== 'dropZone' ? (
-                      <span className='font-code text-gray-100'>{text}</span>
-                    ) : (
+                    {isDropZone ? (
                       <DropZoneSlot
-                        index={index + 1}
-                        item={dragAndDrop.getItemByDropZone(index + 1)}
+                        index={dropZonesCount.current}
+                        item={dragAndDrop.getItemByDropZone(line.number.value)}
                       />
+                    ) : (
+                      <span className='font-code text-gray-100'>{text}</span>
                     )}
                   </div>
                 )
@@ -75,6 +79,7 @@ export function DragAndDropQuestion({
       <ul className='mt-12 flex w-full flex-wrap justify-center gap-3'>
         {dragAndDrop.items.map((item) => {
           const itemWidth = getItemWidth(item.label.value)
+
           return (
             <li key={item.index.value}>
               <DropZoneBank

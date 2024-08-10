@@ -8,7 +8,7 @@ export class Integer {
   }
 
   static create(key: string, value: number) {
-    new NumberValidation(value, key)
+    new NumberValidation(value, key).min(0).validate()
 
     return new Integer(value)
   }

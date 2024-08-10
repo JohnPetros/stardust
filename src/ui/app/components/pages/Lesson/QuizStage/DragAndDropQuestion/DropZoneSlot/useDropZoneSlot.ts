@@ -9,11 +9,11 @@ export function useDropZoneSlot() {
   const { quiz } = getQuizSlice()
 
   const borderColor = useMemo(() => {
-    if (quiz?.userAnswer.isVerified.isTrue && quiz?.userAnswer.isCorrect.isFalse) {
-      return 'border-green-500'
+    if (quiz?.userAnswer.isVerified.isTrue && quiz?.userAnswer.isCorrect.isTrue) {
+      return 'border-green-400'
     }
 
-    if (quiz?.userAnswer.isVerified.isTrue) {
+    if (quiz?.userAnswer.isVerified.isTrue && quiz?.userAnswer.isCorrect.isFalse) {
       return 'border-red-700'
     }
 

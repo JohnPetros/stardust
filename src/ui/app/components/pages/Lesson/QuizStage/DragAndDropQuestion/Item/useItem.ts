@@ -22,7 +22,11 @@ export function useItem(itemLabel: string, isActive: boolean, isInSlot: boolean)
       return 'text-green-400'
     }
 
-    if (quiz?.userAnswer.isVerified.isTrue && isInSlot) {
+    if (
+      quiz?.userAnswer.isVerified.isTrue &&
+      quiz?.userAnswer.isCorrect.isFalse &&
+      isInSlot
+    ) {
       return 'text-red-700'
     }
 
@@ -30,16 +34,32 @@ export function useItem(itemLabel: string, isActive: boolean, isInSlot: boolean)
   }, [quiz, isInSlot])
 
   const border = useMemo(() => {
+    if (
+      quiz?.userAnswer.isVerified.isTrue &&
+      quiz.userAnswer.isCorrect.isTrue &&
+      isInSlot
+    ) {
+      return 'border-green-400'
+    }
+
+    if (
+      quiz?.userAnswer.isVerified.isTrue &&
+      quiz.userAnswer.isCorrect.isFalse &&
+      isInSlot
+    ) {
+      return 'border-red-700'
+    }
+
     if (isActive && isInSlot) {
       return 'border-none bg-transparent p-0'
     }
 
     if (isActive) {
-      return 'border-2 border-blue-300 text-blue-300 cursor-grab '
+      return 'border-2 border-blue-300 text-blue-300 cursor-grab'
     }
 
-    return 'border border-gray-10 p-1'
-  }, [isActive, isInSlot])
+    return 'border-gray-10 p-1'
+  }, [quiz, isActive, isInSlot])
 
   return {
     width,

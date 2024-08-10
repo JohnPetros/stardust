@@ -87,6 +87,7 @@ export function QuizStage({ leaveLesson }: QuizProps) {
                 picture={question.picture.value}
                 correctItemIndexesSequence={question.correctItemIndexesSequence.items}
                 codeLines={question.codeLines}
+                dropZonesCount={question.dropZonesCount.value}
                 initialDragAndDrop={question.dragAndDrop}
               />
             </QuestionContainer>

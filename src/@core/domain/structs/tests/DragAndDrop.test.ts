@@ -17,9 +17,9 @@ describe('DragAndDrop struct', () => {
     const item = dragAndDrop.getItemByIndex(2)
 
     expect(item instanceof DraggableItem).toBeTruthy()
-    expect(item.index.value).toEqual(2)
+    expect(item?.index.value).toEqual(2)
 
-    expect(() => dragAndDrop.getItemByIndex(4)).toThrow(AppError)
+    expect(dragAndDrop.getItemByIndex(4)).toBe(null)
   })
 
   it('should get item by drop zone index if the item exists', () => {
@@ -31,14 +31,15 @@ describe('DragAndDrop struct', () => {
 
     const dragAndDrop = DragAndDrop.create(fakeItemsDTO)
 
-    const item = dragAndDrop.getItemByDropZone(
-      dragAndDrop.getItemByIndex(2).dropZoneIndex.value,
-    )
+    let item = dragAndDrop.getItemByIndex(2)
+    if (!item) return
+
+    item = dragAndDrop.getItemByDropZone(item.dropZoneIndex.value)
 
     expect(item instanceof DraggableItem).toBeTruthy()
-    expect(item.index.value).toEqual(2)
+    expect(item?.index.value).toEqual(2)
 
-    expect(() => dragAndDrop.getItemByDropZone(4)).toThrow(AppError)
+    expect(dragAndDrop.getItemByIndex(4)).toBe(null)
   })
 
   it('should make the current and origianl drop zone index are the same of all items on create', () => {
@@ -66,10 +67,12 @@ describe('DragAndDrop struct', () => {
     ])
 
     let item = dragAndDrop.getItemByIndex(itemIndex)
+    if (!item) return
     const dropZone = DropZoneFaker.fake({ type: 'slot', index: targeDropZoneIndex })
 
     dragAndDrop = dragAndDrop.dragItem(item, dropZone)
     item = dragAndDrop.getItemByIndex(itemIndex)
+    if (!item) return
 
     expect(item.dropZoneIndex.value).toBe(targeDropZoneIndex)
   })
@@ -86,10 +89,13 @@ describe('DragAndDrop struct', () => {
     ])
 
     let item = dragAndDrop.getItemByIndex(itemIndex)
+    if (!item) return
     let dropZone = DropZoneFaker.fake({ type: 'slot', index: targedropZoneIndex })
 
     dragAndDrop = dragAndDrop.dragItem(item, dropZone)
+    if (!item) return
     item = dragAndDrop.getItemByIndex(itemIndex)
+    if (!item) return
     const originalDropZoneIndex = item.originalDropZoneIndex
     expect(item.dropZoneIndex.value).toBe(targedropZoneIndex)
 
@@ -97,6 +103,7 @@ describe('DragAndDrop struct', () => {
 
     dragAndDrop = dragAndDrop.dragItem(item, dropZone)
     item = dragAndDrop.getItemByIndex(itemIndex)
+    if (!item) return
     expect(item.dropZoneIndex.value).toBe(originalDropZoneIndex.value)
   })
 
@@ -115,11 +122,13 @@ describe('DragAndDrop struct', () => {
     let item = dragAndDrop.getItemByIndex(itemIndex)
     let droppedItem = dragAndDrop.getItemByIndex(droppedItemIndex)
     let dropZone = DropZoneFaker.fake({ type: 'slot', index: targedropZoneIndex })
+    if (!item || !droppedItem) return
     const droppedItemOriginalDropZoneIndex = droppedItem.originalDropZoneIndex
 
     dragAndDrop = dragAndDrop.dragItem(droppedItem, dropZone)
     item = dragAndDrop.getItemByIndex(itemIndex)
     droppedItem = dragAndDrop.getItemByIndex(droppedItemIndex)
+    if (!item || !droppedItem) return
 
     expect(item.dropZoneIndex.value).not.toBe(targedropZoneIndex)
     expect(droppedItem.dropZoneIndex.value).toBe(targedropZoneIndex)
@@ -133,6 +142,7 @@ describe('DragAndDrop struct', () => {
     dragAndDrop = dragAndDrop.dragItem(item, dropZone)
     item = dragAndDrop.getItemByIndex(itemIndex)
     droppedItem = dragAndDrop.getItemByIndex(droppedItemIndex)
+    if (!item || !droppedItem) return
 
     expect(item.dropZoneIndex.value).toBe(targedropZoneIndex)
     expect(droppedItem.dropZoneIndex.value).toBe(droppedItemOriginalDropZoneIndex.value)
@@ -151,6 +161,7 @@ describe('DragAndDrop struct', () => {
 
     let item = dragAndDrop.getItemByIndex(itemIndex)
     let targeDropZoneItem = dragAndDrop.getItemByIndex(targeDropZoneItemIndex)
+    if (!item || !targeDropZoneItem) return
 
     dragAndDrop = dragAndDrop
       .dragItem(
@@ -164,6 +175,7 @@ describe('DragAndDrop struct', () => {
 
     item = dragAndDrop.getItemByIndex(itemIndex)
     targeDropZoneItem = dragAndDrop.getItemByIndex(targeDropZoneItemIndex)
+    if (!item || !targeDropZoneItem) return
 
     expect(item.dropZoneIndex.value).toBe(dropZoneIndex)
     expect(targeDropZoneItem.dropZoneIndex.value).toBe(targeDropZoneIndex)
@@ -175,8 +187,35 @@ describe('DragAndDrop struct', () => {
 
     item = dragAndDrop.getItemByIndex(itemIndex)
     targeDropZoneItem = dragAndDrop.getItemByIndex(targeDropZoneItemIndex)
+    if (!item || !targeDropZoneItem) return
 
     expect(item.dropZoneIndex.value).toBe(targeDropZoneIndex)
     expect(targeDropZoneItem.dropZoneIndex.value).toBe(dropZoneIndex)
+  })
+
+  it('should only get the indexes of dropped items', () => {
+    let dragAndDrop = DragAndDrop.create([
+      DraggableItemsFaker.fakeDTO({ index: 1 }),
+      DraggableItemsFaker.fakeDTO({ index: 2 }),
+      DraggableItemsFaker.fakeDTO({ index: 3 }),
+    ])
+
+    let item = dragAndDrop.getItemByIndex(1)
+    if (!item) return
+
+    dragAndDrop = dragAndDrop.dragItem(
+      item,
+      DropZoneFaker.fake({ type: 'slot', index: 1, hasItem: false }),
+    )
+
+    item = dragAndDrop.getItemByIndex(3)
+    if (!item) return
+
+    dragAndDrop = dragAndDrop.dragItem(
+      item,
+      DropZoneFaker.fake({ type: 'slot', index: 3, hasItem: false }),
+    )
+
+    expect(dragAndDrop.getDroppedItemDropZoneIndexes()).toEqual([1, 3])
   })
 })

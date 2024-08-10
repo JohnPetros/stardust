@@ -1,13 +1,7 @@
+import type { DragglableItemDTO } from '@/@core/dtos'
 import { Integer } from './Integer'
 import { Logical } from './Logical'
 import { Text } from './Text'
-
-type DraggableItemDTO = {
-  index: number
-  label: string
-  dropZoneIndex: number
-  originalDropZoneIndex: number
-}
 
 type DraggableItemProps = {
   index: Integer
@@ -29,7 +23,7 @@ export class DraggableItem {
     this.originalDropZoneIndex = props.originalDropZoneIndex
   }
 
-  static create(dto: DraggableItemDTO): DraggableItem {
+  static create(dto: DragglableItemDTO): DraggableItem {
     return new DraggableItem({
       index: Integer.create('Dragglabe index', dto.index),
       dropZoneIndex: Integer.create('Dragglabe drop zone index', dto.dropZoneIndex),

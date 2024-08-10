@@ -1,8 +1,8 @@
 import type { DragglableItemDTO } from '@/@core/dtos'
-import { DraggableItem } from './DraggableItem'
 import type { DropZone } from './DropZone'
+import { DraggableItem } from './DraggableItem'
 import { ShuffledList } from './ShuffledList'
-import { AppError } from '@/@core/errors/global/AppError'
+import { List } from './List'
 
 type DragAndDropProps = {
   items: DraggableItem[]
@@ -16,7 +16,9 @@ export class DragAndDrop {
     this.items = props.items
   }
 
-  static create(itemsDTO: DragglableItemDTO[]): DragAndDrop {
+  static create(
+    itemsDTO: Omit<DragglableItemDTO, 'dropZoneIndex' | 'originalDropZoneIndex'>[],
+  ): DragAndDrop {
     const shuffledList = ShuffledList.create(itemsDTO)
 
     const items = shuffledList.items.map((item, index) => {
@@ -55,20 +57,22 @@ export class DragAndDrop {
     return this.updateItem(updatedItem)
   }
 
-  getItemByIndex(index: number): DraggableItem {
-    const item = this.items.find((item) => item.index.value === index) ?? null
-    if (!item) throw new AppError('Drag and Drop item not found')
-    return item
+  getItemByIndex(index: number): DraggableItem | null {
+    return this.items.find((item) => item.index.value === index) ?? null
   }
 
-  getItemByDropZone(dropZoneindex: number): DraggableItem {
-    const item = this.items.find((item) => item.dropZoneIndex.value === dropZoneindex)
-    if (!item) throw new AppError('Drag and Drop item not found')
-    return item
+  getItemByDropZone(dropZoneindex: number): DraggableItem | null {
+    return this.items.find((item) => item.dropZoneIndex.value === dropZoneindex) ?? null
   }
 
-  getItemDropZoneIndexes(): number[] {
-    return this.items.map((item) => item.dropZoneIndex.value)
+  getDroppedItemDropZoneIndexes(): number[] {
+    const indexes = []
+
+    for (const item of this.items) {
+      if (item.isDropped.isTrue) indexes.push(item.index.value)
+    }
+
+    return indexes
   }
 
   private swapItems(firstItem: DraggableItem, secondItem: DraggableItem): DragAndDrop {

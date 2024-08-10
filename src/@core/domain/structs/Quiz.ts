@@ -123,7 +123,6 @@ export class Quiz {
   }
 
   get currentQuestion() {
-    console.log('questions', this.questions)
     return this.questions[this.currentQuestionIndex.value]
   }
 

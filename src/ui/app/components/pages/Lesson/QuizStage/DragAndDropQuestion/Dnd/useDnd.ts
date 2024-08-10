@@ -17,11 +17,11 @@ export function useDnd({ onDragStart, onDragEnd, onDragCancel }: UseDndProps) {
 
     if (!over) return
 
-    const dropZone = DropZone.create(
-      Number(over.id),
-      String(over.data.current?.type),
-      Boolean(over.data.current?.hasItem),
-    )
+    const dropZone = DropZone.create({
+      index: Number(over.id),
+      type: String(over.data.current?.type),
+      hasItem: Boolean(over.data.current?.hasItem),
+    })
 
     onDragEnd(Number(active.id), dropZone)
   }
