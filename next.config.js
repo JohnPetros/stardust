@@ -1,4 +1,3 @@
-const withMDX = require('@next/mdx')()
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -13,15 +12,7 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    instrumentationHook: true,
-  },
-  transpilePackages: [
-    '@react-email/components',
-    '@react-email/render',
-    '@react-email/html',
-    '@react-email/tailwind',
-  ],
+  swcMinify: true,
 }
 
-module.exports = withMDX(nextConfig)
+module.exports = nextConfig

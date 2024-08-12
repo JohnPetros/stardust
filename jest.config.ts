@@ -2,12 +2,13 @@ import nextJest from 'next/jest.js'
 
 /** @type {import('jest').Config} */
 const config = {
-  setupFilesAfterEnv: ['<rootDir>/src/__tests__/jest.setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   preset: 'ts-jest',
   testEnvironment: 'jest-environment-jsdom',
   testEnvironmentOptions: {
     customExportConditions: [],
   },
+  transformIgnorePatterns: ['!node_modules/(?!@src/*.)'],
   transform: {
     '^.+\\.js$': 'babel-jest',
   },
@@ -18,7 +19,7 @@ const config = {
     TextEncoder: require('util').TextEncoder,
     TextDecoder: require('util').TextDecoder,
   },
-  modulePathIgnorePatterns: ['<rootDir>/src/__tests__'],
+  modulePathIgnorePatterns: ['node_modules', '<rootDir>/src/__tests__'],
 }
 
 const createJestConfig = nextJest({
@@ -31,6 +32,7 @@ module.exports = async () => {
 
   const moduleNameMapper = {
     ...jestConfig.moduleNameMapper,
+    uuid: require.resolve('uuid'),
     '^@/(.*)$': '<rootDir>/src/$1',
   }
 

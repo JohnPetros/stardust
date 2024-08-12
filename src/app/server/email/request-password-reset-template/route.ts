@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
-
-import { renderTemplate } from '@/services/email/templates/components/renderTemplate'
-import { RequestPasswordResetTemplate } from '@/services/email/templates/RequestPasswordResetTemplate'
+import { RequestPasswordResetTemplate } from '@/infra/email/resend/react-email/templates/RequestPasswordResetTemplate'
+import { renderTemplate } from '@/infra/email/resend/react-email/utils/renderTemplate'
 
 export async function GET() {
   // eslint-disable-next-line

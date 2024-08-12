@@ -25,12 +25,13 @@
       "@/*": ["./src/*"],
     }
   },
+  "allowJs": true,
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "node_modules/monaco-editor/monaco.d.ts",
+    "node_modules/monaco-editor/monaco.d.ts", "src/@core/errors/users/SaveUserUnexpectedError.ts",
   ],
   "exclude": ["node_modules"]
 }

@@ -1,0 +1,19 @@
+import type { AchievementDTO } from '@/@core/dtos'
+import type { ServiceResponse } from '@/@core/responses'
+
+export interface IAchievementsService {
+  fetchAchievements(): Promise<ServiceResponse<AchievementDTO[]>>
+  fetchUnlockedAchievements(userId: string): Promise<ServiceResponse<AchievementDTO[]>>
+  saveUnlockedAchievement(
+    achievementId: string,
+    userId: string
+  ): Promise<ServiceResponse<boolean>>
+  saveRescuableAchievement(
+    achievementId: string,
+    userId: string
+  ): Promise<ServiceResponse<boolean>>
+  deleteRescuableAchievement(
+    achievementId: string,
+    userId: string
+  ): Promise<ServiceResponse<boolean>>
+}

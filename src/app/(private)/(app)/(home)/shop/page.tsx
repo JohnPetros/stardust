@@ -1,21 +1,29 @@
-'use client'
+import type { AvatarDTO, RocketDTO } from '@/@core/dtos'
 
-import { Suspense } from 'react'
+import { NextApiClient } from '@/infra/api/next/apiClient'
+import { ShopPage } from '@/ui/app/components/pages/Shop'
+import { ROUTES } from '@/ui/global/constants'
+import { waitFor } from '@/ui/global/utils'
 
-import { AvatarsList } from './components/AvatarsList'
-import { Footer } from './components/Footer'
-import { RocketsList } from './components/RocketsList'
+type ShopItems = {
+  rockets: {
+    items: RocketDTO[]
+    count: number
+  }
+  avatars: {
+    items: AvatarDTO[]
+    count: number
+  }
+}
 
-import { Loading } from '@/global/components/Loading'
+export default async function Shop() {
+  const client = NextApiClient()
 
-export default function Shop() {
-  return (
-    <main className="mx-auto max-w-5xl space-y-12 px-6 pb-[12rem] sm:pb-6">
-      <Suspense fallback={<Loading isSmall={false} />}>
-        <RocketsList />
-        <AvatarsList />
-        <Footer />
-      </Suspense>
-    </main>
-  )
+  const response = await client.get<ShopItems>(ROUTES.server.shop)
+
+  if (response.isError) response.throwError()
+
+  await waitFor(1000)
+
+  return <ShopPage rockets={response.body.rockets} avatars={response.body.avatars} />
 }

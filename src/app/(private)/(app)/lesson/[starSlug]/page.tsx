@@ -1,25 +1,53 @@
-import { _handleLessonPage } from '../actions/_handleLessonPage'
-import { LessonStar } from '../components/LessonStar'
+import { redirect } from 'next/navigation'
 
-import { texts } from '@/__tests__/mocks/lesson/planets/planet7/star4/texts'
-import { APP_ERRORS } from '@/global/constants'
-import { SupabaseServerClient } from '@/services/api/supabase/clients/SupabaseServerClient'
-import { SupabaseAuthController } from '@/services/api/supabase/controllers/SupabaseAuthController'
-import { SupabaseStarsController } from '@/services/api/supabase/controllers/SupabaseStarsController'
+import { SupabaseServerClient } from '@/infra/api/supabase/clients'
+import {
+  SupabaseAuthService,
+  SupabaseLessonService,
+  SupabaseSpaceService,
+} from '@/infra/api/supabase/services'
+import { LessonPage } from '@/ui/app/components/pages/Lesson'
+import { ROUTES } from '@/ui/global/constants'
 
 type LessonPageProps = {
   params: { starSlug: string }
 }
 
-export default async function LessonPage({ params }: LessonPageProps) {
+export default async function Lesson({ params }: LessonPageProps) {
   const supabase = SupabaseServerClient()
-  const starController = SupabaseStarsController(supabase)
-  const authController = SupabaseAuthController(supabase)
-  const userId = await authController.getUserId()
+  const authService = SupabaseAuthService(supabase)
+  const spaceService = SupabaseSpaceService(supabase)
+  const lessonService = SupabaseLessonService(supabase)
 
-  if (!userId) throw new Error(APP_ERRORS.auth.userNotFound)
+  const userIdResponse = await authService.fetchUserId()
+  if (userIdResponse.isFailure) userIdResponse.throwError()
+  const userId = userIdResponse.data
 
-  const star = await _handleLessonPage(userId, params.starSlug, starController)
+  const starResponse = await spaceService.fetchStarBySlug(params.starSlug)
+  if (starResponse.isFailure) starResponse.throwError()
+  const star = starResponse.data
 
-  return <LessonStar star={star} />
+  const starIsUnlockedResponse = await spaceService.verifyStarIsUnlocked(star.id, userId)
+
+  if (starIsUnlockedResponse.isFailure || !starIsUnlockedResponse.data) {
+    return redirect(ROUTES.private.app.home.space)
+  }
+
+  const questionsResponse = await lessonService.fetchQuestionsByStar(star.id)
+  if (questionsResponse.isFailure) questionsResponse.throwError()
+  const questions = questionsResponse.data
+
+  const textsBlocksResponse = await lessonService.fetchTextsBlocksByStar(star.id)
+  if (textsBlocksResponse.isFailure) textsBlocksResponse.throwError()
+  const textsBlocks = textsBlocksResponse.data
+
+  return (
+    <LessonPage
+      starId={star.id}
+      starName={star.name}
+      starNumber={star.number}
+      questionsDTO={questions}
+      textsBlocksDTO={textsBlocks}
+    />
+  )
 }

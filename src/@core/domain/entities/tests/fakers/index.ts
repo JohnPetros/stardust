@@ -1,0 +1,8 @@
+export { AchievementsFaker } from './AchievementsFaker'
+export { AvatarsFaker } from './AvatarsFaker'
+export { ChallengesFaker } from './ChallengesFaker'
+export { TiersFaker } from './TiersFaker'
+export { RocketsFaker } from './RocketsFaker'
+export { StarsFaker } from './StarsFaker'
+export { PlanetsFaker } from './PlanetsFaker'
+export { UsersFaker } from './UsersFaker'
