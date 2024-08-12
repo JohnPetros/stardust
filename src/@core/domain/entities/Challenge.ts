@@ -1,5 +1,5 @@
 import type { ChallengeDTO } from '@/@core/dtos'
-import { BaseEntity } from '../abstracts'
+import { Entity } from '../abstracts'
 import { ChallengeDifficulty, Name, Slug } from '../structs'
 
 export type ChallengeProps = {
@@ -10,22 +10,14 @@ export type ChallengeProps = {
   difficulty: ChallengeDifficulty
 }
 
-export class Challenge extends BaseEntity {
-  private props: ChallengeProps
-
-  private constructor(props: ChallengeProps) {
-    super(props.id)
-    this.props = props
-  }
-
+export class Challenge extends Entity<ChallengeProps> {
   static create(dto: ChallengeDTO): Challenge {
     return new Challenge({
       title: Name.create(dto.title),
       slug: Slug.create(dto.slug),
       code: dto.code,
       difficulty: ChallengeDifficulty.create(dto.difficulty),
-      id: dto?.id,
-    })
+    }, dto?.id)
   }
 
   get title() {

@@ -1,10 +1,9 @@
 import type { TextDTO } from '@/@core/dtos'
-import { BaseEntity } from '../abstracts'
+import { Entity } from '../abstracts'
 
 export type TextType = 'default' | 'quote' | 'alert' | 'list' | 'image' | 'code' | 'user'
 
 type TextProps = {
-  id?: string
   type: TextType
   content: string
   title?: string
@@ -13,16 +12,9 @@ type TextProps = {
   isRunnable?: boolean
 }
 
-export class Text extends BaseEntity {
-  private props: TextProps
-
-  private constructor(props: TextProps) {
-    super(props.id)
-    this.props = props
-  }
-
+export class Text extends Entity<TextProps> {
   static create(dto: TextDTO) {
-    return new Text(dto)
+    return new Text(dto, dto.id)
   }
 
   get dto(): TextDTO {

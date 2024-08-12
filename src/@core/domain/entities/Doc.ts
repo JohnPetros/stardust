@@ -1,5 +1,5 @@
 import type { DocDTO } from '@/@core/dtos'
-import { BaseEntity } from '../abstracts'
+import { Entity } from '../abstracts'
 import { OrdinalNumber, Text } from '../structs'
 
 type DocProps = {
@@ -8,14 +8,7 @@ type DocProps = {
   position: OrdinalNumber
 }
 
-export class Doc extends BaseEntity {
-  private readonly props: DocProps
-
-  private constructor(props: DocProps, id?: string) {
-    super(id)
-    this.props = props
-  }
-
+export class Doc extends Entity<DocProps> {
   static create(dto: DocDTO): Doc {
     return new Doc(
       {
@@ -23,7 +16,7 @@ export class Doc extends BaseEntity {
         content: Text.create(dto.content),
         position: OrdinalNumber.create('Doc position', dto.position),
       },
-      dto.id,
+      dto.id
     )
   }
 

@@ -1,6 +1,6 @@
 import type { AvatarDTO } from '@/@core/dtos'
 import { Image, Integer, Name } from '../structs'
-import { BaseEntity } from '../abstracts'
+import { Entity } from '../abstracts'
 
 export type AvatarProps = {
   id?: string
@@ -9,21 +9,13 @@ export type AvatarProps = {
   image: Image
 }
 
-export class Avatar extends BaseEntity {
-  private props: AvatarProps
-
-  private constructor(props: AvatarProps) {
-    super(props?.id)
-    this.props = props
-  }
-
+export class Avatar extends Entity<AvatarProps> {
   static create(dto: AvatarDTO): Avatar {
     return new Avatar({
       name: Name.create(dto.name),
       price: Integer.create('price', dto.price),
       image: Image.create(dto.image),
-      id: dto?.id,
-    })
+    }, dto?.id)
   }
 
   get name() {

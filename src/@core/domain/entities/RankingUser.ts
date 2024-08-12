@@ -1,9 +1,8 @@
 import type { RankingUserDTO } from '@/@core/dtos'
-import { BaseEntity } from '../abstracts'
+import { Entity } from '../abstracts'
 import { Image, Integer, Name, RankingPosition, Slug } from '../structs'
 
 type RankingUserProps = {
-  id?: string
   name: Name
   slug: Slug
   xp: Integer
@@ -15,17 +14,9 @@ type RankingUserProps = {
   tierId: string
 }
 
-export class RankingUser extends BaseEntity {
-  private props: RankingUserProps
-
-  private constructor(props: RankingUserProps) {
-    super(props.id)
-    this.props = props
-  }
-
+export class RankingUser extends Entity<RankingUserProps> {
   static create(dto: RankingUserDTO) {
     return new RankingUser({
-      id: dto.id,
       slug: Slug.create(dto.slug),
       avatar: {
         image: Image.create(dto.avatar.image),
@@ -35,7 +26,7 @@ export class RankingUser extends BaseEntity {
       xp: Integer.create('ranking user xp', dto.xp),
       rankingPosition: RankingPosition.create(dto.position),
       tierId: dto.tierId,
-    })
+    }, dto.id)
   }
 
   get rankingPosition() {

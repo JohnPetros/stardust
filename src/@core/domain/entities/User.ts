@@ -12,14 +12,13 @@ import {
 } from '../structs'
 import type { Avatar } from './Avatar'
 import type { Rocket } from './Rocket'
-import { BaseEntity } from '../abstracts'
+import { Entity } from '../abstracts'
 import type { Tier } from './Tier'
 import type { AchievementMetricValue } from '../types'
 import type { WeekStatus } from '../structs/WeekStatus'
 import type { Level } from '../structs/Level'
 
 type UserProps = {
-  id?: string
   avatar: Avatar
   tier: Tier
   rocket: Rocket
@@ -46,16 +45,9 @@ type UserProps = {
   _observer?: Observer
 }
 
-export class User extends BaseEntity {
-  private props: UserProps
-
-  private constructor(props: UserProps) {
-    super(props?.id)
-    this.props = props
-  }
-
+export class User extends Entity<UserProps> {
   static create(dto: UserDTO): User {
-    return new User(UserFactory.produce(dto))
+    return new User(UserFactory.produce(dto), dto.id)
   }
 
   unlockAchievement(achievementId: string): void {

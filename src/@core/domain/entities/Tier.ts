@@ -1,32 +1,23 @@
 import type { TierDTO } from '@/@core/dtos'
-import { BaseEntity } from '../abstracts'
+import { Entity } from '../abstracts'
 import { Image, Integer, Name, OrdinalNumber } from '../structs'
 import { TIERS_COUNT } from '../constants'
 
 type TierProps = {
-  id?: string
   name: Name
   image: Image
   position: OrdinalNumber
   reward: Integer
 }
 
-export class Tier extends BaseEntity {
-  private props: TierProps
-
-  private constructor(props: TierProps) {
-    super(props?.id)
-    this.props = props
-  }
-
+export class Tier extends Entity<TierProps> {
   static create(dto: TierDTO): Tier {
     return new Tier({
       name: Name.create(dto.name),
       position: OrdinalNumber.create('Tier position', dto.position),
       reward: Integer.create('Tier reward', dto.reward),
       image: Image.create(dto.image),
-      id: dto?.id,
-    })
+    }, dto?.id)
   }
 
   get isFirstTier() {
