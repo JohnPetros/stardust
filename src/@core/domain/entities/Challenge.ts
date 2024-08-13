@@ -1,6 +1,6 @@
 import type { ChallengeDTO } from '@/@core/dtos'
-import { BaseEntity } from '../abstracts'
-import { ChallengeDifficulty, Id, Logical, Name, Slug } from '../structs'
+import { Entity } from '../abstracts'
+import { ChallengeDifficulty, Name, Slug } from '../structs'
 
 export type ChallengeProps = {
   code: string
@@ -11,39 +11,22 @@ export type ChallengeProps = {
   starId: Id | null
 }
 
-export class Challenge extends BaseEntity {
+export class Challenge extends Entity<ChallengeProps> {
   private props: ChallengeProps
 
-  private constructor(props: ChallengeProps, id?: string) {
-    super(id)
+  private constructor(props: ChallengeProps) {
+    super(props.id)
     this.props = props
   }
 
   static create(dto: ChallengeDTO): Challenge {
-    return new Challenge(
-      {
-        title: Name.create(dto.title),
-        slug: Slug.create(dto.slug),
-        code: dto.code,
-        difficulty: ChallengeDifficulty.create(dto.difficulty),
-        docId: dto.docId ? Id.create(dto.docId) : null,
-        starId: dto.starId ? Id.create(dto.starId) : null,
-      },
-      dto?.id,
-    )
-  }
-
-  get isFromStar(): Logical {
-    return Logical.create('Is challenge from a star?', this.props.starId !== null)
-  }
-
-  get hasDoc(): Logical {
-    return Logical.create('Challenge has doc?', this.props.docId !== null)
-  }
-
-  get docId(): Id {
-    if (!this.props.docId) throw Error()
-    return this.props.docId
+    return new Challenge({
+      title: Name.create(dto.title),
+      slug: Slug.create(dto.slug),
+      code: dto.code,
+      difficulty: ChallengeDifficulty.create(dto.difficulty),
+      id: dto?.id,
+    })
   }
 
   get title() {

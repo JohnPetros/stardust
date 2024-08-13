@@ -1,9 +1,8 @@
 import type { AchievementDTO } from '@/@core/dtos'
-import { BaseEntity } from '../abstracts/BaseEntity'
+import { Entity } from '../abstracts'
 import { AchievementMetric, Image, Integer, Name, OrdinalNumber } from '../structs'
 
 type AchievementProps = {
-  id?: string
   name: Name
   icon: Image
   description: string
@@ -13,14 +12,7 @@ type AchievementProps = {
   position: OrdinalNumber
 }
 
-export class Achievement extends BaseEntity {
-  private props: AchievementProps
-
-  private constructor(props: AchievementProps) {
-    super(props?.id)
-    this.props = props
-  }
-
+export class Achievement extends Entity<AchievementProps> {
   static create(dto: AchievementDTO) {
     return new Achievement({
       name: Name.create(dto.name),
@@ -30,8 +22,7 @@ export class Achievement extends BaseEntity {
       position: OrdinalNumber.create('Achievement Position', dto.position),
       icon: Image.create(dto.icon),
       description: dto.description,
-      id: dto?.id,
-    })
+    }, dto?.id)
   }
 
   get metric() {

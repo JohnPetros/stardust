@@ -1,8 +1,8 @@
 import type { Image, Logical, QuestionAnswer, Text } from '../structs'
 import type { QuestionProps, QuestionType } from '../types'
-import { BaseEntity } from './BaseEntity'
+import { Entity } from './Entity'
 
-export abstract class Question extends BaseEntity {
+export abstract class Question extends Entity<number> {
   readonly type: QuestionType
   readonly statement: Text
   readonly picture: Image

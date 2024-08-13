@@ -1,29 +1,20 @@
 import type { RocketDTO } from '@/@core/dtos'
-import { BaseEntity } from '../abstracts'
+import { Entity } from '../abstracts'
 import { Image, Integer, Name } from '../structs'
 
 type RocketProps = {
-  id?: string
   name: Name
   price: Integer
   image: Image
 }
 
-export class Rocket extends BaseEntity {
-  private props: RocketProps
-
-  private constructor(props: RocketProps) {
-    super(props?.id)
-    this.props = props
-  }
-
+export class Rocket extends Entity<RocketProps> {
   static create(dto: RocketDTO): Rocket {
     return new Rocket({
-      id: dto.id,
       name: Name.create(dto.name),
       price: Integer.create('price', dto.price),
       image: Image.create(dto.image),
-    })
+    }, dto.id)
   }
 
   get name() {
