@@ -11,6 +11,8 @@ export const SupabaseChallengeMapper = () => {
         code: supabaseChallenge.code ?? '',
         slug: supabaseChallenge.slug ?? '',
         difficulty: supabaseChallenge.difficulty ?? '',
+        docId: supabaseChallenge.doc_id,
+        functionName: supabaseChallenge.function_name,
       }
 
       return challengeDTO
