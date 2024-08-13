@@ -1,13 +1,6 @@
-import type { ChallengeDTO } from '@/@core/dtos'
+import type { ChallengeCategoryDTO, ChallengeDTO } from '@/@core/dtos'
 import type { ServiceResponse } from '@/@core/responses'
-
-export type GetFilteredChallengesParams = {
-  userId: string
-  status: string
-  difficulty: string
-  title: string
-  categoriesIds: string[]
-}
+import type { ChallengesListParams } from '@/@core/types'
 
 export interface IChallengesService {
   fetchChallengeBySlug(challengeId: string): Promise<ServiceResponse<ChallengeDTO>>
@@ -15,6 +8,10 @@ export interface IChallengesService {
   fetchChallengesWithOnlyDifficulty(): Promise<
     ServiceResponse<{ id: string; difficulty: string }[]>
   >
+  fetchChallengesList(
+    params: ChallengesListParams,
+  ): Promise<ServiceResponse<ChallengeDTO[]>>
+  fetchCategories(): Promise<ServiceResponse<ChallengeCategoryDTO[]>>
   // getFilteredChallenges(params: GetFilteredChallengesParams): Promise<Challenge[]>
   // getChallengeSlugByStarId(starId: string): Promise<string>
   // getUserCompletedChallengesIds(userId: string): Promise<string[]>

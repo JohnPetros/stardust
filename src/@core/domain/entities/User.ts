@@ -163,8 +163,8 @@ export class User extends Entity<UserProps> {
     return this.props.unlockedStarsIds.includes(starId)
   }
 
-  hasCompletedChallenge(challengeId: string): boolean {
-    return this.props.completedChallengesIds.includes(challengeId).isTrue
+  hasCompletedChallenge(challengeId: string): Logical {
+    return this.props.completedChallengesIds.includes(challengeId)
   }
 
   hasAcquiredRocket(rocketId: string): boolean {
