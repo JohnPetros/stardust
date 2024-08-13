@@ -16,7 +16,6 @@ type CacheConfig<CacheData> = {
   shouldRefetchOnFocus?: boolean
 }
 
-
 type Cache<CacheData> = {
   data: CacheData | null
   error: string
@@ -26,8 +25,7 @@ type Cache<CacheData> = {
   mutate: (newCacheData: CacheData | null, consig: MudateConfig) => void
 }
 
-
-export function useSWRCache<CacheData>({
+export function useCache<CacheData>({
   key,
   fetcher,
   dependencies,
@@ -47,7 +45,7 @@ export function useSWRCache<CacheData>({
       fallbackData: initialData,
       refreshInterval,
       revalidateOnFocus: shouldRefetchOnFocus,
-    }
+    },
   )
 
   function mutateCache(newCacheData: CacheData | null, mutateConfig: MudateConfig) {

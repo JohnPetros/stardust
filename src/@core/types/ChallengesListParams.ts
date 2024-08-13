@@ -1,8 +1,7 @@
-import type { ChallengeCompletionStatus } from '../domain/types'
+import type { ChallengeDifficultyLevel } from '../domain/types'
 
 export type ChallengesListParams = {
-  completionStatus: ChallengeCompletionStatus
-  difficulty: string
+  difficulty: ChallengeDifficultyLevel | 'all'
   title: string
   categoriesIds: string[]
 }

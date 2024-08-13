@@ -5,7 +5,7 @@ type ChallengeInfo = {
   downvotes: number
   upvotes: number
   totalCompletitions: number
-  userSlug: string
+  authorSlug: string
 }
 
 export function ChallengeInfo({
@@ -13,11 +13,11 @@ export function ChallengeInfo({
   totalCompletitions,
   downvotes,
   upvotes,
-  userSlug,
+  authorSlug,
 }: ChallengeInfo) {
   const totalVotes = upvotes + downvotes
   const acceptanceRate = totalVotes ? (upvotes / totalVotes) * 100 : 0
-  // const userName = deslugify(userSlug)
+  // const userName = deslugify(authorSlug)
   const userName = ''
 
   return (
