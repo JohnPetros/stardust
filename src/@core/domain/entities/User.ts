@@ -36,6 +36,7 @@ type UserProps = {
   acquiredRocketsIds: List<string>
   acquiredAvatarsIds: List<string>
   unlockedAchievementsIds: List<string>
+  unlockedDocsIds: List<string>
   rescuableAchievementsIds: List<string>
   completedChallengesIds: List<string>
   completedPlanetsIds: List<string>
@@ -171,8 +172,12 @@ export class User extends BaseEntity {
     return this.props.unlockedStarsIds.includes(starId)
   }
 
-  hasCompletedChallenge(challengeId: string): boolean {
-    return this.props.completedChallengesIds.includes(challengeId).isTrue
+  hasCompletedChallenge(challengeId: string): Logical {
+    return this.props.completedChallengesIds.includes(challengeId)
+  }
+
+  hasUnlockedDoc(docId: string): Logical {
+    return this.props.unlockedDocsIds.includes(docId)
   }
 
   hasAcquiredRocket(rocketId: string): boolean {

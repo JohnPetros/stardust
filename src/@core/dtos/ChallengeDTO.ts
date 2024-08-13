@@ -4,6 +4,8 @@ export type ChallengeDTO = {
   code: string
   slug: string
   difficulty: string
+  docId?: string
+  starId?: string
   // userSlug: string
   // createdAt: string
   // functionName: string | null
@@ -11,7 +13,6 @@ export type ChallengeDTO = {
   // description: string
   // starId: string | null
   // testCases: ChallengeTestCase[]
-  // docId: string | null
   // upvotesCount: number
   // downvotesCount: number
   // totalCompletitions: number

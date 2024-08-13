@@ -1,25 +1,19 @@
-import { SupabaseServerClient } from '@/infra/api/supabase/clients'
-import {
-  SupabaseAuthService,
-  SupabaseChallengesService,
-} from '@/infra/api/supabase/services'
+import { notFound } from 'next/navigation'
 
-type ChallengeProps = {
+import { SupabaseServerClient } from '@/infra/api/supabase/clients'
+import { SupabaseChallengesService } from '@/infra/api/supabase/services'
+import { ChallengePage } from '@/ui/app/components/pages/Challenge'
+
+type PageProps = {
   params: { challengeSlug: string }
 }
 
-export default async function Challenge({ params: { challengeSlug } }: ChallengeProps) {
+export default async function Page({ params: { challengeSlug } }: PageProps) {
   const supabase = SupabaseServerClient()
-  const authService = SupabaseAuthService(supabase)
   const challengesService = SupabaseChallengesService(supabase)
-  const docsService = SupabaseDocsService(supabase)
 
-  const { challenge, userVote } = await _handleChallengePage({
-    challengeSlug,
-    authService,
-    challengesService,
-    docsService,
-  })
+  const challengeResponse = await challengesService.fetchChallengeBySlug(challengeSlug)
+  if (challengeResponse.isFailure) return notFound()
 
-  return <ChallengeHeader challenge={challenge} userVote={userVote} />
+  return <ChallengePage challengeDTO={challengeResponse.data} />
 }
