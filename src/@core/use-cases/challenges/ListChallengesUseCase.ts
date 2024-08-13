@@ -1,7 +1,7 @@
 import { Challenge, User } from '@/@core/domain/entities'
 import { ChallengeCategory } from '@/@core/domain/entities/ChallengeCategory'
 import type { ChallengeCompletionStatus } from '@/@core/domain/types'
-import type { ChallengeDTO, UserDTO } from '@/@core/dtos'
+import type { ChallengeCategoryDTO, ChallengeDTO, UserDTO } from '@/@core/dtos'
 import type { IUseCase } from '@/@core/interfaces/handlers'
 import type { IChallengesService } from '@/@core/interfaces/services'
 import type { ChallengesListParams } from '@/@core/types'
@@ -11,7 +11,10 @@ type Request = {
   listParams: ChallengesListParams
   completionStatus: ChallengeCompletionStatus | 'all'
 }
-type Response = Promise<ChallengeDTO[]>
+type Response = Promise<{
+  challengesDTO: ChallengeDTO[]
+  categoriesDTO: ChallengeCategoryDTO[]
+}>
 
 export class ListChallengesUseCase implements IUseCase<Request, Response> {
   constructor(private readonly challengesService: IChallengesService) {}
@@ -32,7 +35,26 @@ export class ListChallengesUseCase implements IUseCase<Request, Response> {
       user,
     )
 
-    return challenges.map((challenge) => challenge.dto)
+    challenges = this.orderChallengesByDifficultyLevel(challenges)
+
+    return {
+      challengesDTO: challenges.map((challenge) => challenge.dto),
+      categoriesDTO: categories.map((challenge) => challenge.dto),
+    }
+  }
+
+  private orderChallengesByDifficultyLevel(challenges: Challenge[]) {
+    const easyChallenges = challenges.filter(
+      (challenge) => challenge.difficulty.level === 'easy',
+    )
+    const mediumChallenges = challenges.filter(
+      (challenge) => challenge.difficulty.level === 'medium',
+    )
+    const hardChallenges = challenges.filter(
+      (challenge) => challenge.difficulty.level === 'hard',
+    )
+
+    return easyChallenges.concat(mediumChallenges, hardChallenges)
   }
 
   private filterChallengesByCompletionStatus(
