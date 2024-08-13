@@ -1,14 +1,11 @@
 import { StringValidation } from '@/@core/lib/validation'
-import { ValidationError } from '@/@core/errors/lib'
 import type { ChallengeDifficultyLevel } from '../types'
 
 export class ChallengeDifficulty {
   private constructor(readonly level: ChallengeDifficultyLevel) {}
 
   static create(level: string) {
-    if (!ChallengeDifficulty.isDifficultyLevel(level)) {
-      throw new ValidationError(['Challenge Difficulty Level is not valid'])
-    }
+    if (!ChallengeDifficulty.isDifficultyLevel(level)) throw new Error()
 
     return new ChallengeDifficulty(level)
   }
