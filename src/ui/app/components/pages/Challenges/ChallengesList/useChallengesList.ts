@@ -13,7 +13,6 @@ import { Challenge } from '@/@core/domain/entities'
 import { ChallengeCategory } from '@/@core/domain/entities/ChallengeCategory'
 
 export function useChallengesList(listChallenges: typeof _listChallenges) {
-  const api = useApi()
   const { user } = useAuthContext()
   const urlSearchParams = useUrlSearchParams()
 
@@ -38,16 +37,13 @@ export function useChallengesList(listChallenges: typeof _listChallenges) {
   const { data, error, isLoading } = useCache({
     key: CACHE.keys.challengesList,
     fetcher: fetchChallengesList,
-    dependencies: [status, difficulty, categoriesIds, title, user?.id],
+    dependencies: [completionStatus, difficulty, categoriesIds, title, user?.id],
   })
-
-  if (error) {
-    throw new Error(error)
-  }
 
   return {
     challenges: data ? data.challengesDTO.map(Challenge.create) : [],
     categories: data ? data.categoriesDTO.map(ChallengeCategory.create) : [],
     isLoading,
+    error,
   }
 }

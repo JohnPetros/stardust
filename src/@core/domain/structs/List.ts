@@ -30,6 +30,14 @@ export class List<Item> {
     return new List(items)
   }
 
+  makeEmpty() {
+    return new List([])
+  }
+
+  isEmpty() {
+    return Logical.create('Is list empty?', this.items.length === 0)
+  }
+
   isEqualTo(otherList: List<Item>) {
     let isTrue = true
 

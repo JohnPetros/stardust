@@ -1,6 +1,6 @@
 import type { ChallengeDTO } from '@/@core/dtos'
 import { Entity } from '../abstracts'
-import { ChallengeDifficulty, Id, Name, Slug } from '../structs'
+import { ChallengeDifficulty, Id, Integer, Name, Slug } from '../structs'
 import type { ChallengeCategory } from './ChallengeCategory'
 
 export type ChallengeProps = {
@@ -10,6 +10,11 @@ export type ChallengeProps = {
   slug: Slug
   difficulty: ChallengeDifficulty
   categories: ChallengeCategory[]
+  authorSlug: Slug
+  downvotesCount: Integer
+  upvotesCount: Integer
+  completionsCount: Integer
+  createdAt: Date
   docId: Id | null
 }
 
@@ -19,10 +24,18 @@ export class Challenge extends Entity<ChallengeProps> {
       {
         title: Name.create(dto.title),
         slug: Slug.create(dto.slug),
+        authorSlug: Slug.create(dto.authorSlug),
         code: dto.code,
         difficulty: ChallengeDifficulty.create(dto.difficulty),
-        categories: [],
         docId: dto.docId ? Id.create(dto.docId) : null,
+        completionsCount: Integer.create(
+          'Challenge completions count',
+          dto.completionsCount,
+        ),
+        downvotesCount: Integer.create('Challenge downvotes count', dto.downvotesCount),
+        upvotesCount: Integer.create('Challenge upvotes count', dto.upvotesCount),
+        createdAt: dto.createdAt,
+        categories: [],
       },
       dto?.id,
     )
@@ -52,6 +65,26 @@ export class Challenge extends Entity<ChallengeProps> {
     return this.props.categories
   }
 
+  get authorSlug() {
+    return this.props.authorSlug
+  }
+
+  get upvotesCount() {
+    return this.props.upvotesCount
+  }
+
+  get downvotesCount() {
+    return this.props.downvotesCount
+  }
+
+  get completionsCount() {
+    return this.props.completionsCount
+  }
+
+  get createdAt() {
+    return this.props.createdAt
+  }
+
   get dto(): ChallengeDTO {
     return {
       id: this.id,
@@ -60,6 +93,11 @@ export class Challenge extends Entity<ChallengeProps> {
       slug: this.slug.value,
       difficulty: this.difficulty.level,
       docId: this.props.docId?.value,
+      authorSlug: this.authorSlug.value,
+      downvotesCount: this.downvotesCount.value,
+      upvotesCount: this.upvotesCount.value,
+      completionsCount: this.completionsCount.value,
+      createdAt: this.createdAt,
     }
   }
 }

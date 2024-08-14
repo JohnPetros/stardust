@@ -2,21 +2,22 @@
 
 import Link from 'next/link'
 
-import { AnimatedCard } from './AnimatedCard'
-import { ROUTES } from '@/ui/global/constants'
-import { DifficultyBadge } from '@/ui/global/components/shared/DifficultyBadge'
 import type { ChallengeDifficultyLevel } from '@/@core/domain/types'
 import type { ChallengeCategory } from '@/@core/domain/entities/ChallengeCategory'
+
+import { ROUTES } from '@/ui/global/constants'
+import { DifficultyBadge } from '@/ui/global/components/shared/DifficultyBadge'
 import { ChallengeInfo } from '@/ui/global/components/shared/ChallengeInfo'
+import { AnimatedCard } from './AnimatedCard'
 
 type ChallengeProps = {
   slug: string
   title: string
-  authorSlug: string
-  difficulty: ChallengeDifficultyLevel
+  difficultyLevel: ChallengeDifficultyLevel
   upvotesCount: number
   downvotesCount: number
-  totalCompletitions: number
+  completionsCount: number
+  authorSlug: string
   categories: ChallengeCategory[]
   isCompleted: boolean
 }
@@ -25,17 +26,17 @@ export function ChallengeCard({
   slug,
   title,
   authorSlug,
-  difficulty,
+  difficultyLevel,
   upvotesCount,
   downvotesCount,
-  totalCompletitions,
+  completionsCount,
   categories,
   isCompleted,
 }: ChallengeProps) {
   return (
     <AnimatedCard>
       <div className='flex items-center gap-3'>
-        <DifficultyBadge difficulty={difficulty} />
+        <DifficultyBadge difficultyLevel={difficultyLevel} />
         <Link
           href={`${ROUTES.private.app.challenge}/${slug}`}
           className='font-semibold text-green-500 transition-colors duration-200 hover:text-green-700'
@@ -45,12 +46,12 @@ export function ChallengeCard({
       </div>
       <ChallengeInfo
         isCompleted={isCompleted ?? false}
-        totalCompletitions={totalCompletitions}
+        completionsCount={completionsCount}
         authorSlug={authorSlug}
         upvotes={upvotesCount}
         downvotes={downvotesCount}
       />
-      {categories.length && (
+      {categories.length > 0 && (
         <ul className='flex items-start gap-3'>
           {categories.map((category) => {
             return (
