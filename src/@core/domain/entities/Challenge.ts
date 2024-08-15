@@ -1,6 +1,6 @@
 import type { ChallengeDTO } from '@/@core/dtos'
 import { Entity } from '../abstracts'
-import { ChallengeDifficulty, Id, Integer, Name, Slug } from '../structs'
+import { ChallengeDifficulty, Id, Integer, Logical, Name, Slug } from '../structs'
 import type { ChallengeCategory } from './ChallengeCategory'
 
 export type ChallengeProps = {
@@ -15,6 +15,7 @@ export type ChallengeProps = {
   upvotesCount: Integer
   completionsCount: Integer
   createdAt: Date
+  starId: Id | null
   docId: Id | null
 }
 
@@ -28,6 +29,7 @@ export class Challenge extends Entity<ChallengeProps> {
         code: dto.code,
         difficulty: ChallengeDifficulty.create(dto.difficulty),
         docId: dto.docId ? Id.create(dto.docId) : null,
+        starId: dto.starId ? Id.create(dto.starId) : null,
         completionsCount: Integer.create(
           'Challenge completions count',
           dto.completionsCount,
@@ -43,6 +45,10 @@ export class Challenge extends Entity<ChallengeProps> {
 
   set categories(categories: ChallengeCategory[]) {
     this.props.categories = categories
+  }
+
+  get isFromStar(): Logical {
+    return Logical.create('Is challenge from a star?', Boolean(this.props.starId))
   }
 
   get title() {

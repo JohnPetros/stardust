@@ -8,6 +8,7 @@ export type ChallengeDTO = {
   difficulty: string
   authorSlug: string
   docId?: string | null
+  starId?: string | null
   functionName?: string | null
   downvotesCount: number
   upvotesCount: number
