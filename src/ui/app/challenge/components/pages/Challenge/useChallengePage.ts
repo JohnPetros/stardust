@@ -2,18 +2,18 @@
 
 import { useEffect } from 'react'
 
+import { Challenge } from '@/@core/domain/entities'
 import type { ChallengeDTO } from '@/@core/dtos'
+
 import { useChallengeStore } from '@/ui/app/stores/ChallengeStore'
 import { ROUTES } from '@/ui/global/constants'
 import { useRouter } from '@/ui/global/hooks'
-import { Challenge } from '@/@core/domain/entities'
 import type { PanelsLayout } from '@/ui/app/stores/ChallengeStore/types'
 
 export function useChallengePage(challengeDTO: ChallengeDTO) {
   const { getChallengeSlice, getPanelsLayoutSlice } = useChallengeStore()
   const { challenge, setChallenge } = getChallengeSlice()
   const { panelsLayout, setPanelsLayout } = getPanelsLayoutSlice()
-
   const router = useRouter()
 
   function handleBackButton() {

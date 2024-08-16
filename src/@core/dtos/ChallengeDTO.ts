@@ -1,4 +1,5 @@
 import type { ChallengeCategoryDTO } from './ChallengeCategoryDTO'
+import type { TextBlockDTO } from './TextBlockDTO'
 
 export type ChallengeDTO = {
   id?: string
@@ -14,8 +15,7 @@ export type ChallengeDTO = {
   upvotesCount: number
   completionsCount: number
   createdAt: Date
-  // texts: Text[]
-  // description: string
-  // starId: string | null
+  descriptionTextBlocks: TextBlockDTO[]
+  description: string
   // testCases: ChallengeTestCase[]
 }

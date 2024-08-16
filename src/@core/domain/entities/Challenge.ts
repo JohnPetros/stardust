@@ -1,6 +1,15 @@
 import type { ChallengeDTO } from '@/@core/dtos'
 import { Entity } from '../abstracts'
-import { ChallengeDifficulty, Id, Integer, Logical, Name, Slug } from '../structs'
+import {
+  ChallengeDifficulty,
+  Id,
+  Integer,
+  Logical,
+  Name,
+  Slug,
+  Text,
+  TextBlock,
+} from '../structs'
 import type { ChallengeCategory } from './ChallengeCategory'
 
 export type ChallengeProps = {
@@ -14,6 +23,8 @@ export type ChallengeProps = {
   downvotesCount: Integer
   upvotesCount: Integer
   completionsCount: Integer
+  descriptionTextBlocks: TextBlock[]
+  description: Text
   createdAt: Date
   starId: Id | null
   docId: Id | null
@@ -37,6 +48,10 @@ export class Challenge extends Entity<ChallengeProps> {
         downvotesCount: Integer.create('Challenge downvotes count', dto.downvotesCount),
         upvotesCount: Integer.create('Challenge upvotes count', dto.upvotesCount),
         createdAt: dto.createdAt,
+        descriptionTextBlocks: dto.descriptionTextBlocks.map((textBlock) =>
+          TextBlock.create(textBlock.type, textBlock.content),
+        ),
+        description: Text.create(dto.description),
         categories: [],
       },
       dto?.id,
@@ -49,6 +64,10 @@ export class Challenge extends Entity<ChallengeProps> {
 
   get isFromStar(): Logical {
     return Logical.create('Is challenge from a star?', Boolean(this.props.starId))
+  }
+
+  get canShowComments(): Logical {
+    return Logical.create('Can show challenge comments?', Boolean(this.props.starId))
   }
 
   get title() {
@@ -87,6 +106,14 @@ export class Challenge extends Entity<ChallengeProps> {
     return this.props.completionsCount
   }
 
+  get description() {
+    return this.props.description
+  }
+
+  get descriptionTextBlocks() {
+    return this.props.descriptionTextBlocks
+  }
+
   get createdAt() {
     return this.props.createdAt
   }
@@ -103,6 +130,8 @@ export class Challenge extends Entity<ChallengeProps> {
       downvotesCount: this.downvotesCount.value,
       upvotesCount: this.upvotesCount.value,
       completionsCount: this.completionsCount.value,
+      description: this.props.description.value,
+      descriptionTextBlocks: this.descriptionTextBlocks.map((textBlock) => textBlock.dto),
       createdAt: this.createdAt,
     }
   }

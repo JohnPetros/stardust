@@ -25,6 +25,32 @@ export function useChallengeStore() {
       }
     },
 
+    getCraftsVisibilitySlice() {
+      const craftsVislibility = useZustandChallengeStore(
+        (store) => store.state.craftsVislibility,
+      )
+      const setCraftsVislibility = useZustandChallengeStore(
+        (store) => store.actions.setCraftsVisibility,
+      )
+
+      return {
+        craftsVislibility,
+        setCraftsVislibility,
+      }
+    },
+
+    getTabHandlerSlice() {
+      const tabHandler = useZustandChallengeStore((store) => store.state.tabHandler)
+      const setTabHandler = useZustandChallengeStore(
+        (store) => store.actions.setTabHandler,
+      )
+
+      return {
+        tabHandler,
+        setTabHandler,
+      }
+    },
+
     resetStore() {
       return useZustandChallengeStore.setState({ state: INITIAL_CHALLENGE_STORE_STATE })
     },
