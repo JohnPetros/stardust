@@ -1,6 +1,6 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
+import { type ClassNameValue, twMerge } from 'tailwind-merge'
 import { DialogClose as Close } from '@radix-ui/react-dialog'
-import { ClassNameValue, twMerge } from 'tailwind-merge'
 
 import { Button } from '../Button'
 
@@ -10,16 +10,10 @@ type DialogCloseProps = {
   className?: ClassNameValue
 }
 
-export function DialogClose({
-  children,
-  asChild = false,
-  className,
-}: DialogCloseProps) {
+export function DialogClose({ children, asChild = false, className }: DialogCloseProps) {
   return (
     <Close asChild>
-      <Button
-        className={twMerge('w-full bg-gray-600 text-gray-200', className)}
-      >
+      <Button className={twMerge('w-full bg-gray-600 text-gray-200', className)}>
         {children}
       </Button>
     </Close>

@@ -1,21 +1,21 @@
-export type ChallengeDto = {
+import type { ChallengeCategoryDTO } from './ChallengeCategoryDTO'
+import type { TextBlockDTO } from './TextBlockDTO'
+
+export type ChallengeDTO = {
   id?: string
   title: string
   code: string
   slug: string
   difficulty: string
-  docId?: string
-  starId?: string
-  // userSlug: string
-  // createdAt: string
-  // functionName: string | null
-  // texts: Text[]
-  // description: string
-  // starId: string | null
+  authorSlug: string
+  docId?: string | null
+  starId?: string | null
+  functionName?: string | null
+  downvotesCount: number
+  upvotesCount: number
+  completionsCount: number
+  createdAt: Date
+  descriptionTextBlocks: TextBlockDTO[]
+  description: string
   // testCases: ChallengeTestCase[]
-  // upvotesCount: number
-  // downvotesCount: number
-  // totalCompletitions: number
-  // categories?: Pick<Category, 'name'>[]
-  // isCompleted?: boolean
 }

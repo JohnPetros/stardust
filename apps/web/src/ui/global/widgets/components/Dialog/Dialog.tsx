@@ -3,12 +3,8 @@
 import { type ForwardedRef, forwardRef, type ReactNode, useImperativeHandle } from 'react'
 import { Overlay, Root } from '@radix-ui/react-dialog'
 
+import type { DialogRef } from './types'
 import { useDialog } from './useDialog'
-
-export type DialogRef = {
-  open: VoidFunction
-  close: VoidFunction
-}
 
 type DialogProps = {
   children: ReactNode

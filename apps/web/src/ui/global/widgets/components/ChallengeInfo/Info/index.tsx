@@ -15,7 +15,7 @@ type InfoProps = {
 
 export function Info({ label, icon, iconStyle, tooltipText }: InfoProps) {
   return (
-    <li className='text-sm text-gray-400'>
+    <div className='text-sm text-gray-400'>
       <Tooltip content={tooltipText} direction='bottom'>
         <div className='flex items-center gap-1'>
           <Icon
@@ -26,6 +26,6 @@ export function Info({ label, icon, iconStyle, tooltipText }: InfoProps) {
           {label}
         </div>
       </Tooltip>
-    </li>
+    </div>
   )
 }

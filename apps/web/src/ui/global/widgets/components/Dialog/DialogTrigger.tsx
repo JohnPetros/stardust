@@ -1,13 +1,13 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { DialogTrigger as Trigger } from '@radix-ui/react-dialog'
 
-interface DialogTriggerProps {
+type DialogTriggerProps = {
   children: ReactNode
 }
 
 export function DialogTrigger({ children }: DialogTriggerProps) {
   return (
-    <Trigger asChild className="w-full">
+    <Trigger asChild className='w-full'>
       {children}
     </Trigger>
   )

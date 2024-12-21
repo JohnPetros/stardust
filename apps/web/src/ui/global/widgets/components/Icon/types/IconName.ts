@@ -23,6 +23,8 @@ export type IconName =
   | 'checked'
   | 'unchecked'
   | 'plus'
+  | 'minus'
+  | 'person'
   | 'home'
   | 'mail'
   | 'stop-sign'
