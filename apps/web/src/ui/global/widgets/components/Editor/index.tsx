@@ -7,7 +7,7 @@ import { Loading } from '../Loading'
 
 import type { EditorRef } from './types'
 import { useBreakpoint } from '@/ui/global/hooks'
-import { useEditorContext } from '@/ui/app/contexts/EditorContext/hooks'
+import { useEditorContext } from '@/ui/global/contexts/EditorContext/hooks'
 import { useEditor } from './useEditor'
 
 type EditorProps = {

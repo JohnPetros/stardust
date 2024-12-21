@@ -4,7 +4,7 @@ import { SupabaseServerClient } from '@/infra/api/supabase/clients'
 
 import { SupabaseProvider } from '@/ui/global/contexts/SupabaseContext'
 import { ToastProvider } from '@/ui/global/contexts/ToastContext'
-import { AuthProvider } from '@/ui/global/contexts/AuthContext'
+import { AuthProvider } from '@/ui/auth/contexts/AuthContext'
 
 type ServerProps = {
   children: ReactNode

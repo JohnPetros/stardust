@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-import { ChallengeLayout } from '@/ui/app/components/layouts/Challenge'
+import { ChallengeLayout } from '@/ui/challenging/widgets/layouts/Challenge'
 import { _getPanelsOffset } from '@/ui/app/components/layouts/Challenge/actions'
 
 type ChallengeLayoutProps = {

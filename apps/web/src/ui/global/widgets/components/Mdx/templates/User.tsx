@@ -1,4 +1,4 @@
-import { useAuthContext } from '@/ui/global/contexts/AuthContext'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { UserAvatar } from '@/ui/global/components/shared/UserAvatar'
 
 import { Animation } from './Animation'

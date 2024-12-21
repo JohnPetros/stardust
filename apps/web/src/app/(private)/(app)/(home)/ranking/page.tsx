@@ -1,6 +1,6 @@
 import type { RankingUserDto, TierDto } from '#dtos'
-import { RankingPage } from '@/ui/app/components/pages/Ranking'
-import { RankingProvider } from '@/ui/app/contexts/RankingContext'
+import { RankingPage } from '@/ui/ranking/widgets/pages/Ranking'
+import { RankingProvider } from '@/ui/ranking/contexts/RankingContext'
 import { ROUTES } from '@/ui/global/constants'
 import { NextClient } from '@/infra/api/next/apiClient'
 

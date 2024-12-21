@@ -6,7 +6,7 @@ import {
   SupabaseLessonService,
   SupabaseSpaceService,
 } from '@/infra/api/supabase/services'
-import { LessonPage } from '@/ui/app/components/pages/Lesson'
+import { LessonPage } from '@/ui/lesson/widgets/pages/Lesson'
 import { ROUTES } from '@/ui/global/constants'
 
 type LessonPageProps = {

@@ -3,7 +3,7 @@
 import { type RefObject, useEffect, useState } from 'react'
 
 import type { AnimationRef } from '@/ui/global/components/shared/Animation/types'
-import { useAuthContext } from '@/ui/global/contexts/AuthContext'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { ROCKET_ANIMATION_DELAY } from '@/ui/auth/constants'
 import { ROUTES } from '@/ui/global/constants'

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { useAuthContext } from '@/ui/global/contexts/AuthContext'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
 export function useSignOutAlertDialog() {
   const [isLoading, setIsLoading] = useState(false)

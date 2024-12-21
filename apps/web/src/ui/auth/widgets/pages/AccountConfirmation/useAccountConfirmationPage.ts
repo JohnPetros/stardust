@@ -1,7 +1,7 @@
-import { RefObject, useEffect, useRef, useState } from 'react'
+import { type RefObject, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { useAuthContext } from '@/ui/global/contexts/AuthContext'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import type { AnimationRef } from '@/ui/global/components/shared/Animation/types'
 import { ROCKET_ANIMATION_DELAY } from '@/ui/auth/constants'
 import { ROUTES } from '@/ui/global/constants'

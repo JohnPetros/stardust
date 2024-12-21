@@ -1,8 +1,8 @@
-import { RewardingPage } from '@/ui/app/components/pages/Rewarding'
+import { RewardingPage } from '@/ui/lesson/widgets/pages/Rewarding'
 import { _getCookie } from '@/ui/global/actions'
-import { COOKIES, ROUTES } from '@/ui/global/constants'
-import { NextApiClient } from '@/infra/api/next/apiClient'
+import { COOKIES, ROUTES } from '@/constants'
 import { redirect } from 'next/navigation'
+import { NextApiClient } from '@/api/next/NextApiClient'
 
 type RewardingResponse = {
   newLevel: number

@@ -1,7 +1,7 @@
 import type { PlanetDto } from '#dtos'
 import { AppError } from '@/@core/errors/global/AppError'
-import { SpacePage } from '@/ui/app/components/pages/Space'
-import { SpaceProvider } from '@/ui/app/contexts/SpaceContext'
+import { SpacePage } from '@/ui/space/widgets/pages/Space'
+import { SpaceProvider } from '@/ui/space/contexts/SpaceContext'
 import { ROUTES } from '@/ui/global/constants'
 import { NextApiClient } from '@/infra/api/next/apiClient'
 

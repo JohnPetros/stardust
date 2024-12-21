@@ -1,6 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react'
 
-import { useAuthContextMock } from '@/ui/global/contexts/AuthContext/tests/mocks'
+import { useAuthContextMock } from '@/ui/auth/contexts/AuthContext/tests/mocks'
 import { useToastContextMock } from '@/ui/global/contexts/ToastContext/tests/mocks'
 import { useRouterMock } from '@/ui/global/hooks/tests/mocks'
 import { animationRefMock } from '@/ui/global/components/shared/Animation/tests/mocks'
