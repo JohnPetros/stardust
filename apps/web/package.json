@@ -13,6 +13,7 @@
     "test:coverage": "test --coverage"
   },
   "dependencies": {
+    "@stardust/core": "*",
     "@designliquido/delegua": "^0.35.3",
     "@dnd-kit/core": "^6.1.0",
     "@dnd-kit/modifiers": "^6.0.1",
@@ -70,7 +71,6 @@
     "zustand": "^4.5.4"
   },
   "devDependencies": {
-    "@stardust/core": "*",
     "@stardust/typescript-config": "*",
     "@stardust/validation": "*",
     "@tailwindcss/typography": "^0.5.13",
