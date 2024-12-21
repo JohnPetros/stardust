@@ -1,5 +1,3 @@
 export { ApiResponse } from './ApiResponse'
-export { ServiceResponse } from './ServiceResponse'
-export { ValidationResponse } from './ValidationResponse'
 export { PaginationResponse } from './PaginationResponse'
 export { CodeRunnerResponse } from './CodeRunnerResponse'

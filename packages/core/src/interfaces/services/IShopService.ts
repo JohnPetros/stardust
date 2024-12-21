@@ -1,16 +1,16 @@
-import type { AvatarDto, RocketDto } from '#dtos'
-import type { PaginationResponse, ServiceResponse } from '../../responses'
-import type { ShopItemsListingSettings } from '../../types'
+import type { AvatarDto, RocketDto } from '#shop/dtos'
+import type { ShopItemsListingSettings } from '#shop/types'
+import type { PaginationResponse, ApiResponse } from '#responses'
 
 export interface IShopService {
   fetchShopAvatarsList(
     ListingSettings: ShopItemsListingSettings,
-  ): Promise<ServiceResponse<PaginationResponse<AvatarDto>>>
-  fetchAvatarById(avatarId: string): Promise<ServiceResponse<AvatarDto>>
-  saveAcquiredAvatar(avatarId: string, userId: string): Promise<ServiceResponse<boolean>>
-  fetchRocketById(rocketId: string): Promise<ServiceResponse<RocketDto>>
+  ): Promise<ApiResponse<PaginationResponse<AvatarDto>>>
+  fetchAvatarById(avatarId: string): Promise<ApiResponse<AvatarDto>>
+  saveAcquiredAvatar(avatarId: string, userId: string): Promise<ApiResponse<boolean>>
+  fetchRocketById(rocketId: string): Promise<ApiResponse<RocketDto>>
   fetchShopRocketsList(
     ListingSettings: ShopItemsListingSettings,
-  ): Promise<ServiceResponse<PaginationResponse<RocketDto>>>
-  saveAcquiredRocket(rocketId: string, userId: string): Promise<ServiceResponse<boolean>>
+  ): Promise<ApiResponse<PaginationResponse<RocketDto>>>
+  saveAcquiredRocket(rocketId: string, userId: string): Promise<ApiResponse<boolean>>
 }

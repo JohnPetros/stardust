@@ -156,8 +156,9 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
       } = await supabase.auth.getUser()
 
       if (error) return SupabaseAuthError(error, UserNotFoundError)
+      if (!user) return new ApiResponse({error: })
 
-      return new ServiceResponse(user?.id ?? null)
+      return new ServiceResponse(user?.id)
     },
   }
 }

@@ -1,5 +1,5 @@
 import { HTTP_STATUS_CODE } from '../constants/http-status-code'
-import { AppError } from '../errors/global'
+import { AppError } from '../modules/global/errors'
 
 type ApiResponseProps<Body> = {
   body?: Body
@@ -27,7 +27,7 @@ export class ApiResponse<Body> {
   }
 
   get isFailure() {
-    return this.statusCode >= HTTP_STATUS_CODE.badRequest
+    return this.statusCode >= HTTP_STATUS_CODE.badRequest || this._error
   }
 
   get body(): Body {

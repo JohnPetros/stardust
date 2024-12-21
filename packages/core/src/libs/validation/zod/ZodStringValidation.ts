@@ -1,5 +1,5 @@
 import { type ZodEnum, ZodError, z, type ZodString } from 'zod'
-import { ValidationError } from '../../../errors'
+import { ValidationError } from '../../../../../errors'
 import type { IStringValidation } from '../#interfaces'
 
 export class ZodStringValidation implements IStringValidation {

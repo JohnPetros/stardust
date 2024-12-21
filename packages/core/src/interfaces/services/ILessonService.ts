@@ -1,5 +1,5 @@
-import type { TextBlockDto } from '#dtos'
-import type { QuestionDto } from '#dtos/lesson'
+import type { TextBlockDto } from '#global/dtos'
+import type { QuestionDto } from '../../modules/lesson/dtos'
 import type { ApiResponse } from '../../responses'
 
 export interface ILessonService {

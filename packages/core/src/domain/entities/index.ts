@@ -1,6 +1,0 @@
-export * from './challenging'
-export * from './global'
-export * from './profile'
-export * from './shop'
-export * from './ranking'
-export * from './space'

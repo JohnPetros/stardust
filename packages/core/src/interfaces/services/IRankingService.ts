@@ -1,29 +1,24 @@
-import type { RankingUser } from '@/@core/domain/entities'
-import type { RankingUserDto, TierDto } from '#dtos'
-import type { ServiceResponse } from '@/@core/responses'
+import type { RankingUser } from '#ranking/entities'
+import type { RankingUserDto, TierDto } from '#ranking/dtos'
+import type { ApiResponse } from '#responses'
 
 export interface IRankingsService {
-  fetchTierById(tierId: string): Promise<ServiceResponse<TierDto>>
-  fetchTierByPosition(tierPosition: number): Promise<ServiceResponse<TierDto>>
-  fetchTiers(): Promise<ServiceResponse<TierDto[]>>
-  fetchRankingUsersByTier(tierId: string): Promise<ServiceResponse<RankingUserDto[]>>
-  fetchLastWeekRankingUsersByTier(
-    tierId: string,
-  ): Promise<ServiceResponse<RankingUserDto[]>>
-  fetchRankingLosersByTier(tierId: string): Promise<ServiceResponse<RankingUserDto[]>>
-  fetchRankingWinnersByTier(tierId: string): Promise<ServiceResponse<RankingUserDto[]>>
-  saveRankingLosers(losers: RankingUser[], tierId: string): Promise<ServiceResponse<true>>
-  saveRankingWinners(
-    winners: RankingUser[],
-    tierId: string,
-  ): Promise<ServiceResponse<true>>
-  verifyRankingLoserState(rankingUserId: string): Promise<ServiceResponse<boolean>>
-  updateLastWeekRankingPositions(): Promise<ServiceResponse<true>>
+  fetchTierById(tierId: string): Promise<ApiResponse<TierDto>>
+  fetchTierByPosition(tierPosition: number): Promise<ApiResponse<TierDto>>
+  fetchTiers(): Promise<ApiResponse<TierDto[]>>
+  fetchRankingUsersByTier(tierId: string): Promise<ApiResponse<RankingUserDto[]>>
+  fetchLastWeekRankingUsersByTier(tierId: string): Promise<ApiResponse<RankingUserDto[]>>
+  fetchRankingLosersByTier(tierId: string): Promise<ApiResponse<RankingUserDto[]>>
+  fetchRankingWinnersByTier(tierId: string): Promise<ApiResponse<RankingUserDto[]>>
+  saveRankingLosers(losers: RankingUser[], tierId: string): Promise<ApiResponse<true>>
+  saveRankingWinners(winners: RankingUser[], tierId: string): Promise<ApiResponse<true>>
+  verifyRankingLoserState(rankingUserId: string): Promise<ApiResponse<boolean>>
+  updateLastWeekRankingPositions(): Promise<ApiResponse<true>>
   updateRankingUsersTier(
     rankingUsers: RankingUser[],
     tierId: string,
-  ): Promise<ServiceResponse<true>>
-  allowUsersSeeRankingResult(): Promise<ServiceResponse<true>>
-  deleteLastWeekRankingUsers(): Promise<ServiceResponse<true>>
-  resetRankingUsersXp(): Promise<ServiceResponse<true>>
+  ): Promise<ApiResponse<true>>
+  allowUsersSeeRankingResult(): Promise<ApiResponse<true>>
+  deleteLastWeekRankingUsers(): Promise<ApiResponse<true>>
+  resetRankingUsersXp(): Promise<ApiResponse<true>>
 }

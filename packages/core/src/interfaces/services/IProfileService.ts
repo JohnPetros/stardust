@@ -1,5 +1,6 @@
-import type { User } from '#domain/entities'
-import type { AchievementDto, UserDto } from '#dtos'
+import type { User } from '#global/entities'
+import type { UserDto } from '#global/dtos'
+import type { AchievementDto } from '#profile/dtos'
 import type { ApiResponse } from '../../responses'
 
 export interface IProfileService {

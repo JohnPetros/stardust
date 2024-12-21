@@ -1,4 +1,5 @@
-import type { ChallengeDto, DocDto } from '#dtos'
+import type { ChallengeCategoryDto, ChallengeDto, DocDto } from '#challenging/dtos'
+import type { ChallengesListParams } from '#challenging/types'
 import type { ApiResponse } from '../../responses/ApiResponse'
 
 export type GetFilteredChallengesParams = {
@@ -17,6 +18,8 @@ export interface IChallengingService {
   >
   fetchDocs(): Promise<ApiResponse<DocDto[]>>
   saveUnlockedDoc(docId: string, userId: string): Promise<ApiResponse<true>>
+  fetchChallengesList(params: ChallengesListParams): Promise<ApiResponse<ChallengeDto[]>>
+  fetchCategories(): Promise<ApiResponse<ChallengeCategoryDto[]>>
   // getFilteredChallenges(params: GetFilteredChallengesParams): Promise<Challenge[]>
   // getChallengeSlugByStarId(starId: string): Promise<string>
   // getUserCompletedChallengesIds(userId: string): Promise<string[]>
