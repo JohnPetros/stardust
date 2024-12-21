@@ -1,4 +1,4 @@
-import { Icon } from '@/ui/global/components/shared/Icon'
+import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useRankingContext } from '@/ui/ranking/contexts/RankingContext'
 import { RankingUser } from './RankingUser'
 import { Ranking } from '@/@core/domain/structs'

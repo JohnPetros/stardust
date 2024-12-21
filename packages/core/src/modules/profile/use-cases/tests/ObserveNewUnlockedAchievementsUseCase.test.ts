@@ -3,8 +3,8 @@ import { AchievementsServiceMock } from '@/@core/__tests__/mocks/services'
 import { ObserveNewUnlockedAchievementsUseCase } from '../ObserveNewUnlockedAchievementsUseCase'
 import { IdFaker } from '@/@core/domain/structs/tests/fakers'
 import { Achievement } from '@/@core/domain/entities'
-import { ServiceResponse } from '@/@core/responses'
-import { AppError } from '@/@core/errors/global/AppError'
+import { ServiceResponse } from '@stardust/core/responses'
+import { AppError } from '@stardust/core/global/errors'
 
 let useCase: ObserveNewUnlockedAchievementsUseCase
 let achievementsService: AchievementsServiceMock

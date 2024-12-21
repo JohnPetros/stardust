@@ -2,14 +2,14 @@
 
 import Link from 'next/link'
 
-import { useCraftsTable } from './useCraftsTable'
-import { Button } from '@/ui/global/components/shared/Button'
+import { Icon } from '@/ui/global/widgets/components/Icon'
+import { Button } from '@/ui/global/widgets/components/Button'
 import { TabsGroup } from './Tabs'
-import { Icon } from '@/ui/global/components/shared/Icon'
 import { TAB_BUTTONS } from './tab-buttons'
+import { useCraftsTable } from './useCraftsTable'
 
 export function CraftsTable() {
-  const { activeOrder, activeTab, buttonTitle, handleTabChange, canOrder, isAuthUser } =
+  const { activeOrder, activeTab, buttonTitle, canOrder, isAuthUser, handleTabChange } =
     useCraftsTable()
 
   return (

@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-import { AppError } from '@/@core/errors/global/AppError'
+import { AppError } from '@stardust/core/global/errors'
 
 import { ToastContext } from '..'
 

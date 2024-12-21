@@ -7,7 +7,7 @@ import { useApi } from '@/infra/api'
 import { ShopButton } from '../../ShopButton'
 import { AnimatedItem } from '../../AnimatedItem'
 import { useAvatarItem } from './useAvatarItem'
-import { Icon } from '@/ui/global/components/shared/Icon'
+import { Icon } from '@/ui/global/widgets/components/Icon'
 
 export type AvatarItemProps = {
   id: string
@@ -44,7 +44,7 @@ export function AvatarItem({
         className={twMerge(
           'grid grid-cols-[1fr_1.4fr] overflow-hidden rounded-md border-2',
           isSelected ? 'border-yellow-300' : 'border-transparent',
-          isAcquired || isBuyable ? 'brightness-90' : 'brightness-75'
+          isAcquired || isBuyable ? 'brightness-90' : 'brightness-75',
         )}
       >
         <div className='flex flex-col justify-between bg-gray-800 p-6'>

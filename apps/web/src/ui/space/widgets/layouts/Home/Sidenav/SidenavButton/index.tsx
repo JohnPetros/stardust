@@ -3,10 +3,10 @@
 import type { ReactNode } from 'react'
 import { twMerge } from 'tailwind-merge'
 
-import type { IconName } from '@/ui/global/components/shared/Icon/types'
+import type { IconName } from '@/ui/global/widgets/components/Icon/types'
 import { AnimatedTitle } from './AnimatedTitle'
-import { Icon } from '@/ui/global/components/shared/Icon'
-import { Tooltip } from '@/ui/global/components/shared/Tooltip'
+import { Icon } from '@/ui/global/widgets/components/Icon'
+import { Tooltip } from '@/ui/global/widgets/components/Tooltip'
 
 type SidenavButtonProps = {
   icon: IconName
@@ -32,7 +32,7 @@ export function SidenavButton({
         onClick={onClick}
         className={twMerge(
           'relative flex h-auto w-max items-center justify-center rounded-md bg-transparent p-3 text-sm text-gray-100 outline-green-500 transition-colors duration-200 hover:bg-green-700/30',
-          isActive ? 'bg-green-500/30' : ''
+          isActive ? 'bg-green-500/30' : '',
         )}
       >
         <Icon name={icon} size={18} className='text-green-400' />

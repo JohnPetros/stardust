@@ -5,7 +5,7 @@ import * as RadioGroup from '@radix-ui/react-radio-group'
 import { useSelectionQuestion } from './useSelectionQuestion'
 import { QuestionStatement } from '../QuestionStatement'
 import { Option } from './Option'
-import { CodeSnippet } from '@/ui/global/components/shared/CodeSnippet'
+import { CodeSnippet } from '@/ui/global/widgets/components/CodeSnippet'
 
 type SelectionQuestionProps = {
   statement: string

@@ -4,11 +4,11 @@ import Image from 'next/image'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useSiderbarContext } from '@/ui/space/contexts/SidebarContext'
-import { CountBadge } from '@/ui/global/components/shared/CountBadge'
-import { UserAvatar } from '@/ui/global/components/shared/UserAvatar'
-import { Animation } from '@/ui/global/components/shared/Animation'
+import { CountBadge } from '@/ui/global/widgets/components/CountBadge'
+import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'
+import { Animation } from '@/ui/global/widgets/components/Animation'
 import { AnimatedContainer } from './AnimatedContainer'
-import { Icon } from '@/ui/global/components/shared/Icon'
+import { Icon } from '@/ui/global/widgets/components/Icon'
 
 export function Header() {
   const { user } = useAuthContext()

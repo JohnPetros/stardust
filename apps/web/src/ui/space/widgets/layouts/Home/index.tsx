@@ -10,7 +10,7 @@ import { useHomeLayout } from './useHomeLayout'
 import { Sidebar } from './Sidebar'
 import { Sidenav } from './Sidenav'
 import { TabNav } from './TabNav'
-import { PageTransitionAnimation } from '@/ui/global/components/shared/PageTransitionAnimation'
+import { PageTransitionAnimation } from '@/ui/global/widgets/components/PageTransitionAnimation'
 
 type HomeLayoutProps = {
   children: ReactNode

@@ -1,7 +1,7 @@
 'use client'
 
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import { ROUTES } from '@/ui/global/constants'
+import { ROUTES } from '@/constants'
 import { Lock } from '@phosphor-icons/react'
 import Link from 'next/link'
 import { twMerge } from 'tailwind-merge'

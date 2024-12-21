@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
-import type { ButtonProps } from '@/ui/global/components/shared/Button/types'
-import { Button } from '@/ui/global/components/shared/Button'
+import type { ButtonProps } from '@/ui/global/widgets/components/Button/types'
+import { Button } from '@/ui/global/widgets/components/Button'
 
 const buttonStyles = tv({
   base: 'w-64',

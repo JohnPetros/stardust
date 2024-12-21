@@ -3,12 +3,12 @@
 import Image from 'next/image'
 
 import { useApi } from '@/infra/api'
-import { AlertDialog } from '@/ui/global/components/shared/AlertDialog'
-import { Button } from '@/ui/global/components/shared/Button'
+import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
+import { Button } from '@/ui/global/widgets/components/Button'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useLessonHeader } from './useLessonHeader'
-import { ProgressBar } from '@/ui/global/components/shared/ProgressBar'
-import { Icon } from '@/ui/global/components/shared/Icon'
+import { ProgressBar } from '@/ui/global/widgets/components/ProgressBar'
+import { Icon } from '@/ui/global/widgets/components/Icon'
 
 type LessonHeaderProps = {
   onLeavePage: VoidFunction

@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 
 import { SignInPage } from '..'
 import { useSignInPageMock } from './mocks'
-import { ROUTES } from '@/ui/global/constants'
+import { ROUTES } from '@/constants'
 
 jest.mock('../useSignInPage')
 

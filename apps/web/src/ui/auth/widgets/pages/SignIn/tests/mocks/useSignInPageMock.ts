@@ -1,9 +1,9 @@
-import { animationRefMock } from '@/ui/global/components/shared/Animation/tests/mocks'
+import { animationRefMock } from '@/ui/global/widgets/components/Animation/tests/mocks'
 
 import { useSignInPage } from '../../useSignInPage'
 
 export function useSignInPageMock(
-  returnMock?: Partial<ReturnType<typeof useSignInPage>>
+  returnMock?: Partial<ReturnType<typeof useSignInPage>>,
 ) {
   const handleFormSubmitMock = jest.fn()
 

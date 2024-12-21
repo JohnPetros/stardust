@@ -1,6 +1,6 @@
 'use client'
 
-import { Animation } from '@/ui/global/components/shared/Animation'
+import { Animation } from '@/ui/global/widgets/components/Animation'
 import { Link } from '../../components/Link'
 import { Title } from '../../components/Title'
 import { AnimatedContainer } from './AnimatedContainer'

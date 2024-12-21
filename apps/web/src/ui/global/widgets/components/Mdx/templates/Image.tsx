@@ -3,7 +3,7 @@ import Img from 'next/image'
 import { Animation } from './Animation'
 import { Content } from './Content'
 import { useApi } from '@/infra/api'
-import { REGEX } from '@/ui/global/constants'
+import { REGEX } from '@/constants'
 
 interface ImageProps {
   picture: string

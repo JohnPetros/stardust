@@ -5,8 +5,8 @@ import { twMerge } from 'tailwind-merge'
 
 import { AnimatedPodium } from './AnimatedPodium'
 import { AnimatedAvatar } from './AnimatedAvatar'
-import { Animation } from '@/ui/global/components/shared/Animation'
-import { UserAvatar } from '@/ui/global/components/shared/UserAvatar'
+import { Animation } from '@/ui/global/widgets/components/Animation'
+import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'
 import { PODIUM } from '../podium'
 
 const BASE_HEIGHT = 400 // px
@@ -65,7 +65,7 @@ export function RankingWinner({
         <div
           className={twMerge(
             'relative my-auto mt-3 flex h-full w-full flex-col items-center justify-center overflow-hidden bg-yellow-800 px-3',
-            place.bgColor
+            place.bgColor,
           )}
         >
           <AnimatedPodium baseHeight={BASE_HEIGHT} position={position} />

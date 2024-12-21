@@ -3,7 +3,7 @@
 import { useContext } from 'react'
 
 import { SpaceContext } from '..'
-import { AppError } from '@/@core/errors/global/AppError'
+import { AppError } from '@stardust/core/global/errors'
 
 export function useSpaceContext() {
   const context = useContext(SpaceContext)

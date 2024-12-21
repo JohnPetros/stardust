@@ -3,8 +3,8 @@ import { renderHook, waitFor } from '@testing-library/react'
 import { useAuthContextMock } from '@/ui/auth/contexts/AuthContext/tests/mocks'
 import { useToastContextMock } from '@/ui/global/contexts/ToastContext/tests/mocks'
 import { useRouterMock } from '@/ui/global/hooks/tests/mocks'
-import { animationRefMock } from '@/ui/global/components/shared/Animation/tests/mocks'
-import { ROUTES } from '@/ui/global/constants'
+import { animationRefMock } from '@/ui/global/widgets/components/Animation/tests/mocks'
+import { ROUTES } from '@/constants'
 
 import { useSignInPage } from '../useSignInPage'
 

@@ -2,9 +2,9 @@ import { Planet, Star, User } from '@/@core/domain/entities'
 import { StarRewardingPayload } from '@/@core/domain/structs/StarRewardingPayload'
 import { InvalidRewardingPayloadError } from '@/@core/errors/validation'
 import type { RewardingPayloadOrigin } from '@/@core/domain/types'
-import type { IUseCase } from '@/@core/interfaces/handlers'
+import type { IUseCase } from '@stardust/core/interfaces'
 import type { RewardingPayloadDto, UserDto } from '#dtos'
-import type { ISpaceService, IUsersService } from '@/@core/interfaces/services'
+import type { ISpaceService, IUsersService } from '@stardust/core/interfaces'
 
 type Request = {
   userDto: UserDto
@@ -92,7 +92,7 @@ export class RewardUserUseCase implements IUseCase<Request, Response> {
     if (!nextStar) {
       const response = await this.spaceService.fetchNextStarFromNextPlanet(planet)
       if (response.isSuccess) {
-        nextStar = Star.create(response.data)
+        nextStar = Star.create(response.body)
         console.log(nextStar)
       }
       if (response.isFailure) {
@@ -176,6 +176,6 @@ export class RewardUserUseCase implements IUseCase<Request, Response> {
     const response = await this.spaceService.fetchPlanetByStar(starId)
     if (response.isFailure) response.throwError()
 
-    return Planet.create(response.data)
+    return Planet.create(response.body)
   }
 }

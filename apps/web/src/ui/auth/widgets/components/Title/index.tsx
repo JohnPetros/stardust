@@ -1,5 +1,5 @@
-import { Icon } from '@/ui/global/components/shared/Icon'
-import type { IconName } from '@/ui/global/components/shared/Icon/types'
+import { Icon } from '@/ui/global/widgets/components/Icon'
+import type { IconName } from '@/ui/global/widgets/components/Icon/types'
 
 type TitleProps = {
   title: string

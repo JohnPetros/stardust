@@ -1,5 +1,5 @@
-import type { IconName } from '@/ui/global/components/shared/Icon/types'
-import { ROUTES } from '@/ui/global/constants'
+import { ROUTES } from '@/constants'
+import type { IconName } from '@/ui/global/widgets/components/Icon/types'
 
 type TabValue = 'playground-tab' | 'challenges-tab' | 'solutions-tab'
 

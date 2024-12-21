@@ -5,16 +5,16 @@ import { useRef } from 'react'
 
 import { useApi } from '@/infra/api'
 
-import type { AlertDialogRef } from '@/ui/global/components/shared/AlertDialog/types'
+import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { AlertDialog } from '@/ui/global/components/shared/AlertDialog'
-import { Button } from '@/ui/global/components/shared/Button'
-import { Animation } from '@/ui/global/components/shared/Animation'
+import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
+import { Button } from '@/ui/global/widgets/components/Button'
+import { Animation } from '@/ui/global/widgets/components/Animation'
 import { RankingUser } from '../RankingUsersList/RankingUser'
 import { RankingWinner } from './RankingWinner'
 import { useRankingResult } from './useRankingResult'
 import { _getLastWeekRankingWinners } from './_getLastWeekRankingWinners'
-import { Loading } from '@/ui/global/components/shared/Loading'
+import { Loading } from '@/ui/global/widgets/components/Loading'
 
 export function RankingResult() {
   const rewardAlertDialog = useRef<AlertDialogRef>(null)

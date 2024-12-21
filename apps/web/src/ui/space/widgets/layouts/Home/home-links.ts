@@ -1,4 +1,4 @@
-import { ROUTES } from '@/ui/global/constants'
+import { ROUTES } from '@/constants'
 
 type HomeLink = {
   route: string

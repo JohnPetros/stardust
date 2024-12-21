@@ -5,7 +5,7 @@ import { twMerge } from 'tailwind-merge'
 import { tv } from 'tailwind-variants'
 
 import { RankingPosition } from '@/@core/domain/structs'
-import { UserAvatar } from '@/ui/global/components/shared/UserAvatar'
+import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'
 import { PODIUM } from '../../RankingResult/podium'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 

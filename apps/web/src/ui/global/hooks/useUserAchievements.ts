@@ -14,7 +14,7 @@ export function useUserAchievements(userId?: string) {
     const response = await api.fetchAchievements()
 
     if (response.isSuccess) {
-      return response.data
+      return response.body
     }
 
     toast.show(response.errorMessage)

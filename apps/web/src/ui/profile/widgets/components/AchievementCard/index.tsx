@@ -7,7 +7,7 @@ import { AnimatedContainer } from './AnimatedContainer'
 import { AnimatedSpan } from './AnimatedSpan'
 import { RewardAlertDialog } from './RewardAlertDialog'
 
-import { Button } from '@/ui/global/components/shared/Button'
+import { Button } from '@/ui/global/widgets/components/Button'
 import { useApi } from '@/infra/api'
 
 import { useAchievementCard } from './useAchievementCard'

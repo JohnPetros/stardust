@@ -31,7 +31,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
         email,
         password,
         options: {
-          emailRedirectTo: `${getAppBaseUrl()}/${ROUTES.server.auth.confirmEmail}`,
+          emailRedirectTo: `${getAppBaseUrl()}/${ROUTES.api.auth.confirmEmail}`,
         },
       })
 
@@ -85,7 +85,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
 
     async requestPasswordReset(email: string) {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${getAppBaseUrl()}${ROUTES.server.auth.confirmPasswordReset}`,
+        redirectTo: `${getAppBaseUrl()}${ROUTES.api.auth.confirmPasswordReset}`,
       })
 
       if (error)

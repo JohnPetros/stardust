@@ -1,17 +1,11 @@
-import type { HttpResponse } from '@/@core/responses'
-
-export type Cookie = {
-  key: string
-  value: string
-  duration: number
-}
+import type { ApiResponse } from '@stardust/core/responses'
 
 export interface IHttp {
   getCurrentRoute(): string
-  redirect(route: string): HttpResponse
+  redirect(route: string): ApiResponse
   getSearchParam(key: string): string | null
   getBody<Request>(): Promise<Request>
-  setCookie(cookie: Cookie): void
-  getCookie(key: string): Cookie | null
-  send(data: unknown, statusCode: number): HttpResponse
+  setCookie(key: string, value: string, duration: number): void
+  getCookie(key: string): string | null
+  send(data: unknown, statusCode: number): ApiResponse
 }

@@ -1,13 +1,13 @@
 import { fireEvent, renderHook, waitFor } from '@testing-library/react'
 
-import { alertDialogRefMock } from '@/ui/global/components/shared/AlertDialog/tests/mocks/alertDialogRefMock'
+import { alertDialogRefMock } from '@/ui/global/widgets/components/AlertDialog/tests/mocks/alertDialogRefMock'
 import { useAchivementsProvider } from '../useAchievementsProvider'
 import { AchievementsFaker, UsersFaker } from '@/@core/domain/entities/tests/fakers'
 import { useAuthContextMock } from '@/ui/auth/contexts/AuthContext/tests/mocks'
 import { useApiMock } from '@/infra/api/tests/mocks/useApiMock'
-import { AppError } from '@/@core/errors/global/AppError'
+import { AppError } from '@stardust/core/global/errors'
 import { useToastContextMock } from '@/ui/global/contexts/ToastContext/tests/mocks'
-import { ServiceResponse } from '@/@core/responses'
+import { ServiceResponse } from '@stardust/core/responses'
 
 jest.mock('@/ui/global/contexts/AuthContext')
 jest.mock('@/ui/global/contexts/ToastContext')

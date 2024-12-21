@@ -4,10 +4,10 @@ import { AlignLeft, AlignRight, ArrowLeft, Layout } from '@phosphor-icons/react'
 
 import type { ChallengeDTO } from '@/@core/dtos'
 
-import type { PopoverMenuButton } from '@/ui/global/components/shared/PopoverMenu/types'
-import { PopoverMenu } from '@/ui/global/components/shared/PopoverMenu'
-import { AlertDialog } from '@/ui/global/components/shared/AlertDialog'
-import { Button } from '@/ui/global/components/shared/Button'
+import type { PopoverMenuButton } from '@/ui/global/widgets/components/PopoverMenu/types'
+import { PopoverMenu } from '@/ui/global/widgets/components/PopoverMenu'
+import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
+import { Button } from '@/ui/global/widgets/components/Button'
 import { useChallengePage } from './useChallengePage'
 
 type ChallengePageProps = {

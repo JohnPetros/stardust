@@ -3,7 +3,7 @@
 import '@/ui/global/styles/global.css'
 
 import { Providers } from './providers'
-import { roboto_mono, poppins } from '@/ui/global/constants/fonts'
+import { roboto_mono, poppins } from '@/constants/fonts'
 
 export async function RootLayout({
   children,

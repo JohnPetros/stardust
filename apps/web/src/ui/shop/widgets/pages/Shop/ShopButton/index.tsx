@@ -2,9 +2,9 @@
 
 import Image from 'next/image'
 
-import { Button } from '@/ui/global/components/shared/Button'
-import { AlertDialog } from '@/ui/global/components/shared/AlertDialog'
-import { Animation } from '@/ui/global/components/shared/Animation'
+import { Button } from '@/ui/global/widgets/components/Button'
+import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
+import { Animation } from '@/ui/global/widgets/components/Animation'
 import { useShopButton } from './useShopButton'
 
 type Product = {

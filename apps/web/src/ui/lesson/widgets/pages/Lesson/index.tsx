@@ -2,7 +2,7 @@
 
 import type { TextBlockDto, QuestionDto } from '#dtos'
 
-import { PageTransitionAnimation } from '@/ui/global/components/shared/PageTransitionAnimation'
+import { PageTransitionAnimation } from '@/ui/global/widgets/components/PageTransitionAnimation'
 import { useLessonPage } from './useLessonPage'
 import { LessonHeader } from './LessonHeader'
 import { TheoryStage } from './TheoryStage'

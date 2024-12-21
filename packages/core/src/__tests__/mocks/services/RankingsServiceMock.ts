@@ -1,7 +1,7 @@
-import type { IRankingsService } from '@/@core/interfaces/services'
+import type { IRankingsService } from '@stardust/core/interfaces'
 import type { TierDto, RankingUserDto } from '#dtos'
 import type { RankingUser } from '@/@core/domain/entities'
-import { ServiceResponse } from '@/@core/responses'
+import { ServiceResponse } from '@stardust/core/responses'
 import { TiersFaker } from '@/@core/domain/entities/tests/fakers'
 import { TIERS_COUNT } from '@/@core/domain/constants'
 

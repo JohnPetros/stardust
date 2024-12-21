@@ -8,7 +8,7 @@ import type { UserDto } from '#dtos'
 
 import { useApi } from '@/infra/api'
 import { useCache } from '@/infra/cache'
-import { CACHE, ROUTES } from '@/ui/global/constants'
+import { CACHE, ROUTES } from '@/constants'
 
 import type { AuthContextValue } from '../types/AuthContextValue'
 import type { Session } from '../types/Session'
@@ -34,7 +34,7 @@ export function useAuthProvider(serverSession: Session | null) {
       return
     }
 
-    return response.data
+    return response.body
   }
 
   const {
@@ -65,7 +65,7 @@ export function useAuthProvider(serverSession: Session | null) {
     const response = await api.signIn(email, password)
 
     if (response.isSuccess) {
-      setSession({ user: { id: response.data } })
+      setSession({ user: { id: response.body } })
       return true
     }
 

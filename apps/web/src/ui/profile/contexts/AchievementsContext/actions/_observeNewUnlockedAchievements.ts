@@ -2,8 +2,8 @@
 
 import type { AchievementDto, UserDto } from '#dtos'
 import { ObserveNewUnlockedAchievementsUseCase } from '@/@core/use-cases/achievements'
-import { SupabaseServerActionClient } from '@/infra/api/supabase/clients/SupabaseServerActionClient'
-import { SupabaseAchievementsService } from '@/infra/api/supabase/services'
+import { SupabaseServerActionClient } from 'SupabaseServerClient/SupabaseServerActionClient'
+import { SupabaseAchievementsService } from '@/api/supabase/services'
 
 export async function _observeNewUnlockedAchievements(
   achievementsDto: AchievementDto[],

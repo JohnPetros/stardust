@@ -41,6 +41,7 @@
     "./storage/types": "./src/modules/storage/types/index.ts",
     "./interfaces": "./src/interfaces/index.ts",
     "./responses": "./src/responses/index.ts",
+    "./libs": "./src/libs/index.ts",
     "./constants": "./src/constants/index.ts"
   },
   "imports": {

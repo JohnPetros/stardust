@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 
 import { QUOTES } from './quotes'
 
-import { getRandomItem } from '@/ui/global/utils/getRandomItem'
+import { getRandomItem } from '@/utils/getRandomItem'
 
 export function useHero(charactersDeletingDelay: number) {
   const [quote, setQuote] = useState(getRandomItem<string>(QUOTES))

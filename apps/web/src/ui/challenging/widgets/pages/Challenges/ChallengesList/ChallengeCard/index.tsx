@@ -5,9 +5,9 @@ import Link from 'next/link'
 import type { ChallengeDifficultyLevel } from '@/@core/domain/types'
 import type { ChallengeCategory } from '@/@core/domain/entities/ChallengeCategory'
 
-import { ROUTES } from '@/ui/global/constants'
-import { DifficultyBadge } from '@/ui/global/components/shared/DifficultyBadge'
-import { ChallengeInfo } from '@/ui/global/components/shared/ChallengeInfo'
+import { ROUTES } from '@/constants'
+import { DifficultyBadge } from '@/ui/global/widgets/components/DifficultyBadge'
+import { ChallengeInfo } from '@/ui/global/widgets/components/ChallengeInfo'
 import { AnimatedCard } from './AnimatedCard'
 
 type ChallengeProps = {

@@ -1,11 +1,11 @@
 'use client'
 
 import type { AvatarDto } from '#dtos'
-import type { PaginationResponse } from '@/@core/responses'
+import type { PaginationResponse } from '@stardust/core/responses'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { Search } from '@/ui/global/components/shared/Search'
-import { Pagination } from '@/ui/global/components/shared/Pagination'
+import { Search } from '@/ui/global/widgets/components/Search'
+import { Pagination } from '@/ui/global/widgets/components/Pagination'
 import { AvatarItem } from './AvatarItem'
 import { useAvatarsList } from './useAvatarsList'
 import { PriceOrderSelect } from '../PriceOrderSelect'

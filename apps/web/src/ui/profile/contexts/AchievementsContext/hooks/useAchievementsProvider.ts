@@ -8,7 +8,7 @@ import { Achievement, User } from '@/@core/domain/entities'
 import { useApi } from '@/infra/api'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import type { AlertDialogRef } from '@/ui/global/components/shared/AlertDialog/types/AlertDialogRef'
+import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types/AlertDialogRef'
 import { useEventListener } from '@/ui/global/hooks/useEventListener'
 
 import type { _observeNewUnlockedAchievements } from '../actions/_observeNewUnlockedAchievements'

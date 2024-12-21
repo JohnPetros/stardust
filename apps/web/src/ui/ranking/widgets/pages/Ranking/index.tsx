@@ -1,7 +1,7 @@
 'use client'
 
 import { Datetime } from '@/@core/lib/datetime'
-import { Icon } from '@/ui/global/components/shared/Icon'
+import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { TiersList } from './TiersList'
 import { RankingUsersList } from './RankingUsersList'

@@ -2,15 +2,15 @@
 
 import { type RefObject, useEffect, useState } from 'react'
 
-import type { AnimationRef } from '@/ui/global/components/shared/Animation/types'
+import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { ROCKET_ANIMATION_DELAY } from '@/ui/auth/constants'
-import { ROUTES } from '@/ui/global/constants'
-import { waitFor } from '@/ui/global/utils'
+import { ROUTES } from '@/constants'
+import { waitFor } from '@/utils'
 import { useRouter } from '@/ui/global/hooks'
 import type { SignInFormFields } from '@/ui/auth/forms/types'
-import { Slug } from '@/@core/domain/structs/Slug'
+import { Slug } from '@stardust/core/global/structs'
 
 export function useSignInPage(url: string, rocketAnimationRef: RefObject<AnimationRef>) {
   const [isRocketVisible, setIsRocketVisible] = useState(false)

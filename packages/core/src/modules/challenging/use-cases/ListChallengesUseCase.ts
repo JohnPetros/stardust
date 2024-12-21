@@ -90,12 +90,12 @@ export class ListChallengesUseCase implements IUseCase<Request, Response> {
   private async fetchChallengesList(params: ChallengesListParams) {
     const response = await this.challengingService.fetchChallengesList(params)
     if (response.isFailure) response.throwError()
-    return response.data.map(Challenge.create)
+    return response.body.map(Challenge.create)
   }
 
   private async fetchCategories() {
     const response = await this.challengingService.fetchCategories()
     if (response.isFailure) response.throwError()
-    return response.data.map(ChallengeCategory.create)
+    return response.body.map(ChallengeCategory.create)
   }
 }

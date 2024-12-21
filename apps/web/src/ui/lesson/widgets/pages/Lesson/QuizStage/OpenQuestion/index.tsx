@@ -2,7 +2,7 @@
 
 import type { QuestionCodeLine } from '@/@core/domain/structs'
 
-import { CodeSnippet } from '@/ui/global/components/shared/CodeSnippet'
+import { CodeSnippet } from '@/ui/global/widgets/components/CodeSnippet'
 
 import { Input } from './Input'
 import { QuestionStatement } from '../QuestionStatement'

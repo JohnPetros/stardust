@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-import type { PopoverMenuButton } from '@/ui/global/components/shared/PopoverMenu'
+import type { PopoverMenuButton } from '@/ui/global/widgets/components/PopoverMenu'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useAchievementsContext } from '@/ui/profile/contexts/AchievementsContext'
 import { AchievementsCollection } from '@/@core/domain/structs'

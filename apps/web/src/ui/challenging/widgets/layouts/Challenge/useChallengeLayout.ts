@@ -2,7 +2,7 @@ import { useEffect, useState, type RefObject } from 'react'
 import type { ImperativePanelHandle } from 'react-resizable-panels'
 
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import { COOKIES, STORAGE } from '@/ui/global/constants'
+import { COOKIES, STORAGE } from '@/constants'
 import { _setCookie } from '@/ui/global/actions'
 import type { PanelsOffset } from './PanelsOffset'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'

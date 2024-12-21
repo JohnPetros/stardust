@@ -4,7 +4,7 @@ import { createContext, useRef, type ReactNode } from 'react'
 
 import type { AchievementDto } from '#dtos'
 
-import type { AlertDialogRef } from '@/ui/global/components/shared/AlertDialog/types'
+import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { NewUnlockedAchievementsAlertDialog } from './components/NewUnlockedAchievementsAlertDialog'
 import { useAchivementsProvider } from './hooks/useAchievementsProvider'
 import { useAchievementsContext } from './hooks/useAchievementsContext'

@@ -2,7 +2,7 @@
 
 import { useRef } from 'react'
 
-import type { AnimationRef } from '@/ui/global/components/shared/Animation/types'
+import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 
 import { Link } from '../../components/Link'
 import { RocketAnimation } from '../../components/RocketAnimation'

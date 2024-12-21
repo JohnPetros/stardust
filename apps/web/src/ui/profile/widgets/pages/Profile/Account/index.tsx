@@ -1,8 +1,9 @@
-import { UserAvatar } from '@/ui/global/components/shared/UserAvatar'
+import { Datetime } from '@stardust/core/libs'
+
+import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'
+import { Icon } from '@/ui/global/widgets/components/Icon'
 import { AdornmentGroup } from './AdornmentsGroup'
 import { SettingsLink } from './SettingsLink'
-import { Icon } from '@/ui/global/components/shared/Icon'
-import { Datetime } from '@/@core/lib/datetime'
 
 type UserProps = {
   id: string

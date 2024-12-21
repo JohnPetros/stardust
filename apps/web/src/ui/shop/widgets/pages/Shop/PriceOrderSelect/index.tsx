@@ -1,6 +1,6 @@
 import type { ListingOrder } from '@/@core/types'
 
-import { Select } from '@/ui/global/components/shared/Select'
+import { Select } from '@/ui/global/widgets/components/Select'
 
 import { usePriceOrderSelect } from './usePriceOrderSelect'
 

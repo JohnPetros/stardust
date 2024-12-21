@@ -3,7 +3,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 
 import type { Database } from '../types/Database'
 
-import { ENV } from '@/ui/global/constants'
+import { ENV } from '@/constants'
 
 const SupabaseMiddlewareClient = (request: NextRequest) => {
   let supabaseResponse = NextResponse.next({
@@ -21,7 +21,7 @@ const SupabaseMiddlewareClient = (request: NextRequest) => {
           request,
         })
         cookiesToSet.forEach(({ name, value, options }) =>
-          supabaseResponse.cookies.set(name, value, options)
+          supabaseResponse.cookies.set(name, value, options),
         )
       },
     },

@@ -3,8 +3,8 @@
 import { useEffect, useRef } from 'react'
 
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import { ROUTES } from '@/ui/global/constants'
-import type { DialogRef } from '@/ui/global/components/shared/Dialog/types'
+import { ROUTES } from '@/constants'
+import type { DialogRef } from '@/ui/global/widgets/components/Dialog/types'
 import type { ContentType } from '../ContentType'
 import { useRouter } from '@/ui/global/hooks'
 

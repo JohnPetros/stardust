@@ -5,10 +5,10 @@ import { twMerge } from 'tailwind-merge'
 
 import { AnimatedImage } from './AnimatedImage'
 import { AnimatedRocket } from './AnimatedRocket'
-import type { AnimationRef } from '@/ui/global/components/shared/Animation/types'
+import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 import { useRef } from 'react'
 import { useStar } from './useStar'
-import { Animation } from '@/ui/global/components/shared/Animation'
+import { Animation } from '@/ui/global/widgets/components/Animation'
 
 const STAR_LIGHT = '0 0 12px #ffcf31a1'
 
@@ -79,7 +79,7 @@ export function Star({
           <span
             className={twMerge(
               'absolute top-[50%] block -translate-x-1/2 -translate-y-1/2 text-lg font-semibold text-yellow-700',
-              isUnlocked ? 'left-[26%]' : ' left-[22%]'
+              isUnlocked ? 'left-[26%]' : ' left-[22%]',
             )}
           >
             {number}
@@ -89,13 +89,13 @@ export function Star({
           style={{ boxShadow: STAR_LIGHT }}
           className={twMerge(
             'grid max-w-[220px] place-content-center rounded-lg border-2 border-dashed bg-green-900 px-6 py-3',
-            isUnlocked ? 'border-yellow-400' : 'border-gray-500'
+            isUnlocked ? 'border-yellow-400' : 'border-gray-500',
           )}
         >
           <strong
             className={twMerge(
               'font-semibold',
-              isUnlocked ? 'text-yellow-400' : 'text-gray-400'
+              isUnlocked ? 'text-yellow-400' : 'text-gray-400',
             )}
           >
             {name}

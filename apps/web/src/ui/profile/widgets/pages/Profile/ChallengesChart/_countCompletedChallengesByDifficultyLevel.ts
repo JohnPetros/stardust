@@ -2,8 +2,8 @@
 
 import type { UserDto } from '#dtos'
 import { CountCompletedChallengesByDifficultyLevelUseCase } from '@/@core/use-cases/challenges'
-import { SupabaseServerActionClient } from '@/infra/api/supabase/clients'
-import { SupabaseChallengesService } from '@/infra/api/supabase/services'
+import { SupabaseServerActionClient } from 'SupabaseServerClient'
+import { SupabaseChallengesService } from '@/api/supabase/services'
 
 export async function _countCompletedChallengesByDifficultyLevel(userDto: UserDto) {
   const supabase = SupabaseServerActionClient()

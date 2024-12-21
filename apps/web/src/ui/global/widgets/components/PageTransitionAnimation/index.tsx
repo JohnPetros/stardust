@@ -2,7 +2,7 @@ import { AnimatePresence, motion, type Variants } from 'framer-motion'
 
 import { usePageTransitionAnimation } from './usePageTransitionAnimation'
 
-import { formatText } from '@/ui/global/utils'
+import { formatText } from '@/utils'
 import { Animation } from '../Animation'
 
 const containerVariants: Variants = {

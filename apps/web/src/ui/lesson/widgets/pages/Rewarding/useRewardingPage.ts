@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import type { AlertDialogRef } from '@/ui/global/components/shared/AlertDialog/types'
+import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { _deleteCookie, _setCookie } from '@/ui/global/actions'
-import { COOKIES } from '@/ui/global/constants'
+import { COOKIES } from '@/constants'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useRouter } from '@/ui/global/hooks'
 import { useRefreshPage } from '@/ui/global/hooks/useRefreshPage'

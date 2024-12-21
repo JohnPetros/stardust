@@ -1,6 +1,6 @@
 'use client'
 
-import { Fab } from '@/ui/global/components/shared/Fab'
+import { Fab } from '@/ui/global/widgets/components/Fab'
 import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
 
 import { useSpacePage } from './useSpacePage'

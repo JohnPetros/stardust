@@ -1,24 +1,27 @@
 export const ROUTES = {
   private: {
-    app: {
-      home: {
-        space: '/space',
-        shop: '/shop',
-        challenges: '/challenges',
-        ranking: '/ranking',
-        profile: '/profile',
-      },
-      challenge: '/challenge',
-      challengeMaker: '/challenge-maker',
-      solution: '/solution',
-      newSolution: '/solution/new',
-      profileSettings: '/profile/settings',
-      lesson: '/lesson',
-      playground: '/playground',
-      config: '/config',
-      rewarding: '/rewarding',
-      accountConfirmation: '/account-confirmation',
+    ranking: '/ranking',
+    space: '/space',
+    shop: '/shop',
+    challenging: {
+      prefix: '/challenging',
+      challenge: '/challenging/challenge',
+      challenges: '/challenging/challenges',
+      challengeMaker: '/challenging/challenge-maker',
+      solutions: '/solutions',
+      comments: '/solutions',
+      newSolution: '/challenging/solution/new',
     },
+    profile: {
+      settings: '/profile/settings',
+      prefix: '/profile',
+    },
+    lesson: {
+      prefix: '/lesson',
+      rewarding: '/lesson/rewarding',
+    },
+    playground: '/playground',
+    accountConfirmation: '/account-confirmation',
   },
   public: {
     signIn: '/sign-in',
@@ -26,18 +29,26 @@ export const ROUTES = {
     resetPassword: '/reset-password',
     landing: '/landing',
   },
-  server: {
+  api: {
     auth: {
-      confirmEmail: '/server/auth/confirm-email',
-      confirmPasswordReset: '/server/auth/confirm-password-reset',
+      confirmEmail: '/api/auth/confirm-email',
+      confirmPasswordReset: '/api/auth/confirm-password-reset',
     },
-    achievements: '/server/achievements',
-    ranking: '/server/ranking',
-    updateRankings: '/server/ranking/update',
-    planets: '/server/planets',
-    reward: '/server/reward',
-    shop: '/server/shop',
-    email: '/server/email',
-    mdx: '/server/mdx',
+    space: {
+      planets: '/api/planets',
+    },
+    shop: {
+      items: '/shop/items',
+    },
+    profile: {
+      achievements: '/api/achievements',
+    },
+    ranking: {
+      current: '/api/ranking/current',
+      uptade: '/api/ranking/update',
+    },
+    lesson: {
+      reward: '/api/reward',
+    },
   },
 }

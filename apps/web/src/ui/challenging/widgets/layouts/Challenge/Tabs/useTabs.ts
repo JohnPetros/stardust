@@ -7,7 +7,7 @@ import { ChallengesCraftVisilibity } from '@/@core/domain/structs'
 
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { ROUTES } from '@/ui/global/constants'
+import { ROUTES } from '@/constants'
 import type { ContentType } from '../ContentType'
 
 export function useTabs() {

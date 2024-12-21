@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { SupabaseServerClient } from '@/infra/api/supabase/clients'
+import { SupabaseServerClient } from 'SupabaseServerClient'
 
 import { SupabaseProvider } from '@/ui/global/contexts/SupabaseContext'
 import { ToastProvider } from '@/ui/global/contexts/ToastContext'

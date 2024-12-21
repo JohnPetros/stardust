@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef } from 'react'
 import { type Monaco, useMonaco } from '@monaco-editor/react'
 import type monaco from 'monaco-editor'
 
-import { COLORS, EDITOR_THEMES } from '@/ui/global/constants'
+import { COLORS, EDITOR_THEMES } from '@/constants'
 import { useCodeRunner } from '@/infra/code-runner'
 
 export function useEditor(value: string) {

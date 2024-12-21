@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react'
 import { tv } from 'tailwind-variants'
 
-import { Icon } from '@/ui/global/components/shared/Icon'
+import { Icon } from '@/ui/global/widgets/components/Icon'
 import type { LabelBackground } from '../LabelBackground'
 import type { IconColor } from '../IconColor'
 

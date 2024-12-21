@@ -1,5 +1,5 @@
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { UserAvatar } from '@/ui/global/components/shared/UserAvatar'
+import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'
 
 import { Animation } from './Animation'
 import { Content } from './Content'

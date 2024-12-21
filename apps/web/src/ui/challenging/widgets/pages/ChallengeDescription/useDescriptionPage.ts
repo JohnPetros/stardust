@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useMdx } from '@/ui/global/components/shared/Mdx/useMdx'
-import { ROUTES } from '@/ui/global/constants'
+import { useMdx } from '@/ui/global/widgets/components/Mdx/useMdx'
+import { ROUTES } from '@/constants'
 
 export function useChallengeDescriptionPage() {
   const [isLoading, setIsLoading] = useState(true)

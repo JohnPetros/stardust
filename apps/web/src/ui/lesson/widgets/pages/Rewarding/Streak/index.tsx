@@ -1,7 +1,7 @@
 'use client'
 
-import { StreakBoard } from '@/ui/global/components/shared/StreakBoard'
-import { StreakIcon } from '@/ui/global/components/shared/StreakIcon'
+import { StreakBoard } from '@/ui/global/widgets/components/StreakBoard'
+import { StreakIcon } from '@/ui/global/widgets/components/StreakIcon'
 import { useStreak } from './useStreak'
 
 export function Streak() {

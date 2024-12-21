@@ -2,11 +2,11 @@
 
 import { useSiderbarContext } from '@/ui/space/contexts/SidebarContext'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { Button } from '@/ui/global/components/shared/Button'
-import { UserAvatar } from '@/ui/global/components/shared/UserAvatar'
-import { Icon } from '@/ui/global/components/shared/Icon'
+import { Button } from '@/ui/global/widgets/components/Button'
+import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'
+import { Icon } from '@/ui/global/widgets/components/Icon'
 import { AnimatedBar } from './AnimatedBar'
-import { SignOutAlertDialog } from '@/ui/global/components/shared/SignOutAlertDialog'
+import { SignOutAlertDialog } from '@/ui/global/widgets/components/SignOutAlertDialog'
 
 export function Sidebar() {
   const { user } = useAuthContext()

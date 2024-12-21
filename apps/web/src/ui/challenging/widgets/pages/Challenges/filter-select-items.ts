@@ -6,7 +6,7 @@ import type {
   ChallengeCompletionStatus,
   ChallengeDifficultyLevel,
 } from '@/@core/domain/types'
-import type { IconName } from '@/ui/global/components/shared/Icon/types'
+import type { IconName } from '@/ui/global/widgets/components/Icon/types'
 
 type SelectsItem = {
   value: ChallengeCompletionStatus | ChallengeDifficultyLevel | 'all'

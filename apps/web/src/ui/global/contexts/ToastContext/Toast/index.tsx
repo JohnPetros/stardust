@@ -9,7 +9,7 @@ import { AnimatePresence, motion, Variants } from 'framer-motion'
 import type { ToastRef } from '../types'
 
 import { useToast } from './useToast'
-import { Icon } from '../../../components/shared/Icon'
+import { Icon } from '../../../widgets/components/Icon'
 
 const toastAnimations: Variants = {
   initial: {
@@ -75,7 +75,7 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
               onDragEnd={handleDragEnd}
               className={twMerge(
                 'fixed right-8 top-4 z-[1500] cursor-grab rounded',
-                type === 'error' ? 'bg-red-800' : 'bg-green-900'
+                type === 'error' ? 'bg-red-800' : 'bg-green-900',
               )}
             >
               <div className='flex justify-between gap-6 p-4 '>
@@ -83,7 +83,7 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
                   <span
                     className={twMerge(
                       'rounded p-1 text-gray-100',
-                      type === 'error' ? 'bg-red-700' : 'bg-green-500'
+                      type === 'error' ? 'bg-red-700' : 'bg-green-500',
                     )}
                   >
                     {type === 'error' ? (
@@ -119,7 +119,7 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
                 <div
                   className={twMerge(
                     'h-1',
-                    type === 'error' ? 'bg-red-700' : 'bg-green-500'
+                    type === 'error' ? 'bg-red-700' : 'bg-green-500',
                   )}
                 />
               </motion.div>

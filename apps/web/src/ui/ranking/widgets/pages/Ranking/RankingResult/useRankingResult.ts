@@ -2,11 +2,11 @@ import { type RefObject, useEffect, useState } from 'react'
 
 import { Tier } from '@/@core/domain/entities'
 import { Podium } from '@/@core/domain/structs'
-import type { AlertDialogRef } from '@/ui/global/components/shared/AlertDialog/types'
+import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { _getLastWeekRankingWinners } from './_getLastWeekRankingWinners'
-import { playAudio } from '@/ui/global/utils'
+import { playAudio } from '@/utils'
 
 type UseRankingResultProps = {
   rewardAlertDialog: RefObject<AlertDialogRef>

@@ -2,7 +2,7 @@ import { AvaliadorSintatico, InterpretadorBase, Lexador } from '@designliquido/d
 
 import type { ICodeRunnerProvider } from '@/@core/interfaces/providers/ICodeRunnerProvider'
 import type { CodeInput } from '@/@core/domain/types'
-import { CodeRunnerResponse } from '@/@core/responses'
+import { CodeRunnerResponse } from '@stardust/core/responses'
 
 import { DELEGUA_REGEX } from './constants'
 import { obtenhaTipo, trateErro } from './utils'
@@ -76,7 +76,7 @@ export function DeleguaCodeRunnerProvider(): ICodeRunnerProvider {
         }
 
         codigo = codigo.replace(DELEGUA_REGEX.conteudoDeFuncaoLeia, entrada)
-        console.log({codigo})
+        console.log({ codigo })
       }
 
       return codigo

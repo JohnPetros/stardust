@@ -1,6 +1,6 @@
 'use client'
 
-import { Animation } from '@/ui/global/components/shared/Animation'
+import { Animation } from '@/ui/global/widgets/components/Animation'
 
 export function EmptyListMessage() {
   return (

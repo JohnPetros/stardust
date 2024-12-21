@@ -4,7 +4,7 @@ import { Avatar } from '@/@core/domain/entities'
 import { useApi } from '@/infra/api'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { playAudio } from '@/ui/global/utils'
+import { playAudio } from '@/utils'
 
 type UseAvatarItemProps = {
   id: string

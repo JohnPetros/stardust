@@ -2,7 +2,7 @@
 
 import type { Options } from 'typewriter-effect'
 import type { TypeWriterProps } from '.'
-import { SPECIAL_CHARACTERS } from '@/ui/global/constants'
+import { SPECIAL_CHARACTERS } from '@/constants'
 
 export function useTypeWriter({
   text,

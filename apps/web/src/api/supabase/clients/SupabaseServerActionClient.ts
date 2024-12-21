@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import { createServerClient } from '@supabase/ssr'
 
-import { ENV } from '@/ui/global/constants'
+import { ENV } from '@/constants'
 
 export const SupabaseServerActionClient = () => {
   const cookieStore = cookies()
@@ -13,7 +13,7 @@ export const SupabaseServerActionClient = () => {
       },
       setAll(cookiesToSet) {
         cookiesToSet.forEach(({ name, value, options }) =>
-          cookieStore.set(name, value, options)
+          cookieStore.set(name, value, options),
         )
       },
     },

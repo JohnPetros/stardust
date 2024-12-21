@@ -1,5 +1,5 @@
 import type { AchievementMetricValue } from '@/@core/domain/types'
-import { ProgressBar } from '@/ui/global/components/shared/ProgressBar'
+import { ProgressBar } from '@/ui/global/widgets/components/ProgressBar'
 import { useAchievementProgress } from './useAchievementProgress'
 
 type AchievementProgressProps = {

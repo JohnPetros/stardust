@@ -3,13 +3,13 @@
 import { useRef } from 'react'
 import { AnimatePresence } from 'framer-motion'
 
-import { AppMessage } from '@/ui/auth/components/shared/AppMessage'
-import { Button } from '@/ui/global/components/shared/Button'
-import { Loading } from '@/ui/global/components/shared/Loading'
-import type { AnimationRef } from '@/ui/global/components/shared/Animation/types'
+import { AppMessage } from '@/ui/auth/widgets/components/AppMessage'
+import { Loading } from '@/ui/global/widgets/components/Loading'
 
 import { useAccountConfirmationPage } from './useAccountConfirmationPage'
 import { RocketAnimation } from '../../components/RocketAnimation'
+import { Button } from '@/ui/global/widgets/components/Button'
+import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 
 export function AccountConfirmationPage() {
   const rocketAnimationRef = useRef<AnimationRef>(null)

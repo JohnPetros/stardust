@@ -3,7 +3,7 @@
 import { useReducer } from 'react'
 
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
-import { STORAGE } from '@/ui/global/constants'
+import { STORAGE } from '@/constants'
 import { DEFAULT_EDITOR_STATE } from '../constants'
 import type { EditorContextAction, EditorContextState } from '../types'
 
@@ -21,18 +21,18 @@ export function useEditorProvider() {
 
   function storeEditorState(
     currentEditorData: EditorContextState,
-    newEditorData: Partial<EditorContextState>
+    newEditorData: Partial<EditorContextState>,
   ) {
     localStorage.setItem(
       STORAGE.keys.editorState,
-      JSON.stringify({ ...currentEditorData, ...newEditorData })
+      JSON.stringify({ ...currentEditorData, ...newEditorData }),
     )
     return getEditorConfig()
   }
 
   const EditorReducer = (
     state: EditorContextState,
-    action: EditorContextAction
+    action: EditorContextAction,
   ): EditorContextState => {
     switch (action.type) {
       case 'setFontSize':

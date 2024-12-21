@@ -2,7 +2,7 @@
 
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
-import { STORAGE } from '@/ui/global/constants'
+import { STORAGE } from '@/constants'
 
 export function useSpacePage() {
   const { lastUnlockedStarPosition, scrollIntoLastUnlockedStar } = useSpaceContext()

@@ -2,7 +2,7 @@
 
 import { AnimatePresence } from 'framer-motion'
 
-import { Search } from '@/ui/global/components/shared/Search'
+import { Search } from '@/ui/global/widgets/components/Search'
 import type { ChallengeCategory } from '@/@core/domain/entities'
 
 type FiltersProps = {

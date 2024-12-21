@@ -1,7 +1,7 @@
 'use client'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { AppError } from '@/ui/global/components/shared/AppError'
+import { AppError } from '@/ui/global/widgets/components/AppError'
 import { ChallengeCard } from './ChallengeCard'
 import { useChallengesList } from './useChallengesList'
 import { _listChallenges } from './_listChallenges'

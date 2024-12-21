@@ -3,8 +3,8 @@ import { v4 as uuid } from 'uuid'
 
 import type { TextBlock } from '@/@core/domain/structs'
 import type { TextBlockDto } from '#dtos'
-import { REGEX } from '@/ui/global/constants'
-import { getTemplateContent } from '@/ui/global/utils'
+import { REGEX } from '@/constants'
+import { getTemplateContent } from '@/utils'
 import { formatSpecialCharacters } from './formatSpecialCharacters'
 
 export function useMdx() {

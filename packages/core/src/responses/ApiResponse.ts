@@ -13,7 +13,7 @@ type ApiResponseProps<Body> = {
   errorMessage?: string
 }
 
-export class ApiResponse<Body> {
+export class ApiResponse<Body = unknown> {
   private readonly _body: Body | null
   private readonly _statusCode: number
   private readonly _errorMessage: string | null

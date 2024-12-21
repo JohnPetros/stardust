@@ -1,4 +1,4 @@
-import { Animation } from '@/ui/global/components/shared/Animation'
+import { Animation } from '@/ui/global/widgets/components/Animation'
 
 type TitleProps = {
   number: number

@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { AlertDialogType } from './types/AlertDialogType'
 import { ALERT_DIALOG_EFFECTS } from './alert-dialog-effects'
 
-import { playAudio } from '@/ui/global/utils'
+import { playAudio } from '@/utils'
 
 export function useAlertDialog(
   type: AlertDialogType,

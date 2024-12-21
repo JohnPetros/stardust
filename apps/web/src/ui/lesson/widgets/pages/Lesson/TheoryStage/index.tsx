@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 
-import { AlertDialog } from '@/ui/global/components/shared/AlertDialog'
-import { Button } from '@/ui/global/components/shared/Button'
+import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
+import { Button } from '@/ui/global/widgets/components/Button'
 import { TextBlockMdx } from './TextBlockMdx'
 import { Title } from './Title'
 import { useTheoryStage } from './useTheoryStage'

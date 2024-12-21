@@ -3,7 +3,7 @@
 import React, { memo } from 'react'
 
 import { useTextBlockMdx } from './useTextBlockMdx'
-import { Mdx } from '@/ui/global/components/shared/Mdx'
+import { Mdx } from '@/ui/global/widgets/components/Mdx'
 
 type MdxTextProps = {
   content: string

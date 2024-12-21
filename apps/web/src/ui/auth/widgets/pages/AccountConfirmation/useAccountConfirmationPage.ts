@@ -1,11 +1,11 @@
-import { type RefObject, useEffect, useRef, useState } from 'react'
+import { type RefObject, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
+import { ROUTES } from '@/constants'
+import { waitFor } from '@/utils'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import type { AnimationRef } from '@/ui/global/components/shared/Animation/types'
 import { ROCKET_ANIMATION_DELAY } from '@/ui/auth/constants'
-import { ROUTES } from '@/ui/global/constants'
-import { waitFor } from '@/ui/global/utils'
+import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 
 export function useAccountConfirmationPage(rocketAnimationRef: RefObject<AnimationRef>) {
   const { user } = useAuthContext()

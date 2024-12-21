@@ -1,6 +1,6 @@
 'use client'
 
-import { CodeSnippet } from '@/ui/global/components/shared/CodeSnippet'
+import { CodeSnippet } from '@/ui/global/widgets/components/CodeSnippet'
 import { QuestionStatement } from '../QuestionStatement'
 import { Checkbox } from './Checkbox'
 import { useCheckboxQuestion } from './useCheckboxQuestion'

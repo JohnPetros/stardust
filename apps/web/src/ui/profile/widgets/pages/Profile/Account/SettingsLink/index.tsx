@@ -2,9 +2,9 @@
 
 import { motion } from 'framer-motion'
 
-import { Link } from '@/ui/auth/components/shared/Link'
-import { ROUTES } from '@/ui/global/constants'
-import { Icon } from '@/ui/global/components/shared/Icon'
+import { Link } from '@/ui/auth/widgets/components/Link'
+import { ROUTES } from '@/constants'
+import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
 type SettingsLinkProps = {

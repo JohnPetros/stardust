@@ -10,9 +10,9 @@ import {
   DragAndDropListQuestion as DragAndDropListQuestionEntity,
   DragAndDropQuestion as DragAndDropQuestionEntity,
 } from '@/@core/domain/entities'
-import type { AlertDialogRef } from '@/ui/global/components/shared/AlertDialog/types'
-import { AlertDialog } from '@/ui/global/components/shared/AlertDialog'
-import { Button } from '@/ui/global/components/shared/Button'
+import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
+import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
+import { Button } from '@/ui/global/widgets/components/Button'
 import { VerificationButton } from '../../../../../global/widgets/components/VerificationButton'
 import { QuestionContainer } from './AnimatedQuestionContainer'
 import { SelectionQuestion } from './SelectionQuestion'

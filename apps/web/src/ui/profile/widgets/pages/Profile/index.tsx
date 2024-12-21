@@ -1,6 +1,9 @@
-import { Achievement, User } from '@/@core/domain/entities'
-import type { AchievementDto, UserDto } from '#dtos'
-import { StreakBoard } from '@/ui/global/components/shared/StreakBoard'
+import { User } from '@stardust/core/global/entities'
+import { Achievement } from '@stardust/core/profile/entities'
+import type { UserDto } from '@stardust/core/global/dtos'
+import type { AchievementDto } from '@stardust/core/profile/dtos'
+
+import { StreakBoard } from '@/ui/global/widgets/components/StreakBoard'
 import { Account } from './Account'
 import { Statistics } from './Statistics'
 import { ChallengesChart } from './ChallengesChart'

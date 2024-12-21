@@ -1,4 +1,4 @@
-import { AppError } from '@/@core/errors/global/AppError'
+import { AppError } from '@stardust/core/global/errors'
 import type { Logical } from './Logical'
 import { List } from './List'
 import { ShuffledList } from './ShuffledList'

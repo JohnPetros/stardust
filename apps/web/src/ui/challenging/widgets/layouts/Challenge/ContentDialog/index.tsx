@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react'
 import type { ContentType } from '../ContentType'
-import { Dialog, DialogContent } from '@/ui/global/components/shared/Dialog'
+import { Dialog, DialogContent } from '@/ui/global/widgets/components/Dialog'
 import { useContentDialog } from './useContentDialog'
 
 type ContentDialogProps = {

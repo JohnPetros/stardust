@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
 
-import { AlertDialog } from '@/ui/global/components/shared/AlertDialog'
+import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import Image from 'next/image'
-import { Button } from '@/ui/global/components/shared/Button'
+import { Button } from '@/ui/global/widgets/components/Button'
 
 type RewardAlertDialogProps = {
   children: ReactNode

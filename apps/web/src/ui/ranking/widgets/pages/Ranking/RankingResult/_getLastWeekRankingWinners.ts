@@ -2,8 +2,8 @@
 
 import type { UserDto } from '#dtos'
 import { GetLastWeekRankingWinnersUseCase } from '@/@core/use-cases/rankings'
-import { SupabaseServerActionClient } from '@/infra/api/supabase/clients'
-import { SupabaseRankingsService } from '@/infra/api/supabase/services'
+import { SupabaseServerActionClient } from 'SupabaseServerClient'
+import { SupabaseRankingsService } from '@/api/supabase/services'
 
 export async function _getLastWeekRankingWinners(userDto: UserDto) {
   const supabase = SupabaseServerActionClient()

@@ -1,6 +1,7 @@
 'use client'
 
-import type { UserDto } from '#dtos'
+import type { UserDto } from '@stardust/core/global/dtos'
+
 import { _countCompletedChallengesByDifficultyLevel } from './_countCompletedChallengesByDifficultyLevel'
 import { Legend } from './Legend'
 import { Chart } from './ApexChallengesChart'
@@ -15,8 +16,6 @@ export function ChallengesChart({ userDto }: ChallengesChartProps) {
     userDto,
     _countCompletedChallengesByDifficultyLevel,
   )
-
-  console.log(chartData)
 
   if (chartData)
     return (

@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
-import type { AudioFile } from '../components/shared/AlertDialog/types'
+import type { AudioFile } from '../widgets/components/AlertDialog/types'
 
 export function useAudio(audioFile: AudioFile | null) {
   const audio = useMemo(() => {

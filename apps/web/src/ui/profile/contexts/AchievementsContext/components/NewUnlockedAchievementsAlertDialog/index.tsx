@@ -2,10 +2,10 @@ import type { RefObject } from 'react'
 
 import type { Achievement } from '@/@core/domain/entities'
 
-import type { AlertDialogRef } from '@/ui/global/components/shared/AlertDialog/types'
-import { AlertDialog } from '@/ui/global/components/shared/AlertDialog'
-import { Animation } from '@/ui/global/components/shared/Animation'
-import { Button } from '@/ui/global/components/shared/Button'
+import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
+import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
+import { Animation } from '@/ui/global/widgets/components/Animation'
+import { Button } from '@/ui/global/widgets/components/Button'
 import { AchievementCard } from '@/ui/profile/widgets/components/AchievementCard'
 
 type NewUnlockedAchievementsAlertDialogProps = {

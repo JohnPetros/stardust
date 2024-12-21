@@ -6,7 +6,7 @@ import { Challenge } from '@/@core/domain/entities'
 import type { ChallengeDTO } from '@/@core/dtos'
 
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import { ROUTES } from '@/ui/global/constants'
+import { ROUTES } from '@/constants'
 import { useRouter } from '@/ui/global/hooks'
 import type { PanelsLayout } from '@/ui/challenging/stores/ChallengeStore/types'
 

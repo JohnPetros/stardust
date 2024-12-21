@@ -2,7 +2,7 @@
 
 import { createBrowserClient } from '@supabase/ssr'
 
-import { ENV } from '@/ui/global/constants'
+import { ENV } from '@/constants'
 
 import type { Database } from '../types/Database'
 
