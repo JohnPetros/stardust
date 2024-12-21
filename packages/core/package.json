@@ -1,0 +1,37 @@
+{
+  "name": "@stardust/core",
+  "exports": {
+    "./entities": "./src/domain/entities/index.ts",
+    "./structs": "./src/domain/structs/index.ts",
+    "./constants": "./src/constants/index.ts",
+    "./dtos": "./src/dtos/index.ts",
+    "./interfaces": "./src/interfaces/index.ts",
+    "./responses": "./src/responses/index.ts",
+    "./use-cases": "./src/use-cases/index.ts",
+    "./errors": "./src/use-cases/index.ts"
+  },
+  "imports": {
+    "#domain/entities": "./src/domain/entities/index.ts",
+    "#domain/abstracts": "./src/domain/abstracts/index.ts",
+    "#domain/structs": "./src/domain/structs/index.ts",
+    "#domain/types": "./src/domain/types/index.ts",
+    "#dtos": "./src/dtos/index.ts",
+    "#types": "./src/types/index.ts",
+    "#constants": "./src/constants/index.ts",
+    "#factories": "./src/factories/index.ts",
+    "#libs": "./src/libs/index.ts",
+    "#fakers": "./src/__tests__/fakers/index.ts",
+    "#errors": "./src/errors/index.ts",
+    "#interfaces": "./src/interfaces/index.ts",
+    "#use-cases": "./src/use-cases/index.ts"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.11",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@stardusts/typescript-config": "*",
+    "@faker-js/faker": "^8.4.1",
+    "typescript": "5.5.3"
+  }
+}

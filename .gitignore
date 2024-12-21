@@ -6,6 +6,7 @@
 .pnp.js
 .react-email
 .swc
+.turbo
 
 # testing
 /coverage

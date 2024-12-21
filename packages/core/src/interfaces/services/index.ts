@@ -1,0 +1,8 @@
+export type { IAuthService } from './IAuthService'
+export type { IProfileService } from './IProfileService'
+export type { IChallengingService } from './IChallengingService'
+export type { ISpaceService } from './ISpaceService'
+export type { IStorageService } from './IStorageService'
+export type { IShopService } from './IShopService'
+export type { IRankingsService } from './IRankingService'
+export type { ILessonService } from './ILessonService'
