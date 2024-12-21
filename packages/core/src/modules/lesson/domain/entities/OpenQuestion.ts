@@ -1,14 +1,7 @@
-import type { OpenQuestionDto, QuestionDto } from '#dtos'
-import { Question } from '#domain/abstracts'
-import type { QuestionProps } from '#domain/types'
-import {
-  List,
-  Image,
-  QuestionCodeLine,
-  Text,
-  type Logical,
-  type QuestionAnswer,
-} from '#domain/structs'
+import { List, Image, Text, type Logical } from '#global/structs'
+import { Question } from '#lesson/abstracts'
+import type { OpenQuestionDto, QuestionDto } from '#lesson/dtos'
+import { type QuestionAnswer, QuestionCodeLine } from '#lesson/structs'
 
 type OpenQuestionProps = {
   answers: List<string>
@@ -16,32 +9,18 @@ type OpenQuestionProps = {
   codeLines: QuestionCodeLine[]
 }
 
-export class OpenQuestion extends Question {
-  private questionProps: OpenQuestionProps
-
-  private constructor(questionProps: QuestionProps, props: OpenQuestionProps) {
-    super({
-      id: questionProps.id,
-      picture: questionProps.picture,
-      statement: questionProps.statement,
-      type: questionProps.type,
-    })
-    this.questionProps = props
-  }
-
+export class OpenQuestion extends Question<OpenQuestionProps> {
   static create(dto: OpenQuestionDto): OpenQuestion {
     return new OpenQuestion(
       {
-        id: dto.id,
         picture: Image.create(dto.picture),
         statement: Text.create(dto.statement),
         type: 'open',
-      },
-      {
         answers: List.create(dto.answers),
         codeLines: dto.lines.map(QuestionCodeLine.create),
         code: dto.code,
       },
+      dto.id,
     )
   }
 
@@ -56,14 +35,14 @@ export class OpenQuestion extends Question {
   }
 
   get answers(): List<string> {
-    return this.questionProps.answers
+    return this.props.answers
   }
 
   get codeLines(): QuestionCodeLine[] {
-    return this.questionProps.codeLines
+    return this.props.codeLines
   }
 
   get code(): string | null {
-    return this.questionProps.code ?? null
+    return this.props.code ?? null
   }
 }

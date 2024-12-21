@@ -1,4 +1,4 @@
-import { REGEX } from '../constants'
+import { REGEX } from '../../../constants'
 
 export function formatText(text: string) {
   const { betweenTwoAsterisks, betweenFourAsterisks } = REGEX

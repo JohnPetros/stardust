@@ -1,4 +1,4 @@
-import type { Image, Text } from '../../structs'
+import type { Image, Text } from '#global/structs'
 import type { QuestionType } from './QuestionType'
 
 export type QuestionProps = {

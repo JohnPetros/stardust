@@ -1,16 +1,7 @@
-import type { DragAndDropQuestionDto, QuestionDto } from '#dtos'
-import { Question } from '#domain/abstracts'
-import {
-  DragAndDrop,
-  Image,
-  Text,
-  QuestionCodeLine,
-  List,
-  type Logical,
-  type QuestionAnswer,
-  Integer,
-} from '#domain/structs'
-import type { QuestionProps } from '#domain/types'
+import { Image, Text, List, type Logical, Integer } from '#global/structs'
+import type { DragAndDropQuestionDto, QuestionDto } from '#lesson/dtos'
+import { DragAndDrop, QuestionCodeLine, type QuestionAnswer } from '#lesson/structs'
+import { Question } from '#lesson/abstracts'
 
 type DragAndDropQuestionProps = {
   codeLines: QuestionCodeLine[]
@@ -18,32 +9,18 @@ type DragAndDropQuestionProps = {
   dragAndDrop: DragAndDrop
 }
 
-export class DragAndDropQuestion extends Question {
-  private readonly questionProps: DragAndDropQuestionProps
-
-  private constructor(questionProps: QuestionProps, props: DragAndDropQuestionProps) {
-    super({
-      type: questionProps.type,
-      picture: questionProps.picture,
-      statement: questionProps.statement,
-    })
-
-    this.questionProps = props
-  }
-
+export class DragAndDropQuestion extends Question<DragAndDropQuestionProps> {
   static create(dto: DragAndDropQuestionDto) {
     return new DragAndDropQuestion(
       {
         type: 'drag-and-drop',
         picture: Image.create(dto.picture),
         statement: Text.create(dto.statement),
-        id: dto.id,
-      },
-      {
         codeLines: dto.lines.map(QuestionCodeLine.create),
         correctItemIndexesSequence: List.create(dto.correctItemsIndexesSequence),
         dragAndDrop: DragAndDrop.create(dto.items),
       },
+      dto.id,
     )
   }
 
@@ -55,7 +32,7 @@ export class DragAndDropQuestion extends Question {
     const usersDraggableItemsIndexesSequence = List.create(userAnswer.value as number[])
 
     return usersDraggableItemsIndexesSequence.isEqualTo(
-      this.questionProps.correctItemIndexesSequence,
+      this.props.correctItemIndexesSequence,
     )
   }
 
@@ -72,14 +49,14 @@ export class DragAndDropQuestion extends Question {
   }
 
   get dragAndDrop(): DragAndDrop {
-    return this.questionProps.dragAndDrop
+    return this.props.dragAndDrop
   }
 
   get codeLines(): QuestionCodeLine[] {
-    return this.questionProps.codeLines
+    return this.props.codeLines
   }
 
   get correctItemIndexesSequence(): List<number> {
-    return this.questionProps.correctItemIndexesSequence
+    return this.props.correctItemIndexesSequence
   }
 }

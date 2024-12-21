@@ -1,7 +1,7 @@
-import type { SelectionQuestionDto, QuestionDto } from '#dtos'
-import type { QuestionProps } from '#domain/types'
-import { Question } from '#domain/abstracts'
-import { Image, Logical, ShuffledList, Text, type QuestionAnswer } from '#domain/structs'
+import { Image, Logical, ShuffledList, Text } from '#global/structs'
+import { Question } from '#lesson/abstracts'
+import type { SelectionQuestionDto, QuestionDto } from '#lesson/dtos'
+import type { QuestionAnswer } from '#lesson/structs'
 
 type SelectionQuestionProps = {
   options: ShuffledList<string>
@@ -9,32 +9,18 @@ type SelectionQuestionProps = {
   code?: string
 }
 
-export class SelectionQuestion extends Question {
-  private questionProps: SelectionQuestionProps
-
-  private constructor(questionProps: QuestionProps, props: SelectionQuestionProps) {
-    super({
-      id: questionProps.id,
-      picture: questionProps.picture,
-      statement: questionProps.statement,
-      type: questionProps.type,
-    })
-    this.questionProps = props
-  }
-
+export class SelectionQuestion extends Question<SelectionQuestionProps> {
   static create(dto: SelectionQuestionDto) {
     return new SelectionQuestion(
       {
-        id: dto.id,
+        type: 'selection',
         picture: Image.create(dto.picture),
         statement: Text.create(dto.statement),
-        type: dto.type,
-      },
-      {
         answer: dto.answer,
         code: dto.code,
         options: ShuffledList.create(dto.options),
       },
+      dto.id,
     )
   }
 
@@ -50,14 +36,14 @@ export class SelectionQuestion extends Question {
   }
 
   get options() {
-    return this.questionProps.options.items
+    return this.props.options.items
   }
 
   get answer() {
-    return this.questionProps.answer
+    return this.props.answer
   }
 
   get code() {
-    return this.questionProps.code ?? null
+    return this.props.code ?? null
   }
 }

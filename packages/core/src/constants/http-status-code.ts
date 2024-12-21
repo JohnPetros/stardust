@@ -8,5 +8,6 @@ export const HTTP_STATUS_CODE = {
   notFound: 404,
   conflict: 409,
   preconditionFailed: 412,
+  tooManyRequests: 429,
   serverError: 500,
 }

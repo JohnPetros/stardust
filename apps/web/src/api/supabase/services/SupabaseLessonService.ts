@@ -1,13 +1,10 @@
-import type { ILessonService } from '@/@core/interfaces/services'
-import { ServiceResponse } from '@/@core/responses'
-import {
-  QuestionsByStarNotFoundError,
-  TextsBlocksByStarNotFoundError,
-} from '@/@core/errors/lesson'
-import type { TextBlockDto, QuestionDto } from '#dtos'
+import type { ILessonService } from '@stardust/core/interfaces'
 
 import type { Supabase } from '../types/Supabase'
 import { SupabasePostgrestError } from '../errors'
+import { ApiResponse } from '@stardust/core/responses'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
+import type { QuestionDto } from '@stardust/core/lesson/dtos'
 
 export const SupabaseLessonService = (supabase: Supabase): ILessonService => {
   return {
@@ -19,7 +16,7 @@ export const SupabaseLessonService = (supabase: Supabase): ILessonService => {
         .order('position', { ascending: true })
 
       if (error) {
-        return SupabasePostgrestError(error, QuestionsByStarNotFoundError)
+        return SupabasePostgrestError(error, 'Erro inesperado ao buscar textos')
       }
 
       const questions = data.map(({ id, content }) => ({
@@ -27,7 +24,7 @@ export const SupabaseLessonService = (supabase: Supabase): ILessonService => {
         ...Object(content),
       })) as QuestionDto[]
 
-      return new ServiceResponse(questions)
+      return new ApiResponse({ body: questions })
     },
 
     async fetchTextsBlocksByStar(starId) {
@@ -38,7 +35,7 @@ export const SupabaseLessonService = (supabase: Supabase): ILessonService => {
         .single()
 
       if (error) {
-        return SupabasePostgrestError(error, TextsBlocksByStarNotFoundError)
+        return SupabasePostgrestError(error, 'Erro inesperado ao buscar textos')
       }
 
       const textsBlocks: TextBlockDto[] = (data.texts as TextBlockDto[]).map(
@@ -53,7 +50,7 @@ export const SupabaseLessonService = (supabase: Supabase): ILessonService => {
         },
       )
 
-      return new ServiceResponse(textsBlocks)
+      return new ApiResponse({ body: textsBlocks })
     },
   }
 }

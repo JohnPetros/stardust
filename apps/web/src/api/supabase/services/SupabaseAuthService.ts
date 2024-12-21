@@ -1,23 +1,17 @@
-import type { IAuthService } from '@/@core/interfaces/services'
+import type { IAuthService } from '@stardust/core/interfaces'
 import {
-  ConfirmEmailUnexpectedError,
-  ConfirmPasswordResetUnexpectedError,
   EmailAlreadyExistsError,
-  SignOutUnexpectedError,
-  SignUpUnexpectedError,
-  SignUpRateLimitError,
-} from '@/@core/errors/auth'
-import { SaveUserUnexpectedError, UserNotFoundError } from '@/@core/errors/users'
-import { Slug } from '@/@core/domain/structs/Slug'
-import { ServiceResponse } from '@/@core/responses'
+  InvalidCredentialsError,
+  SignUpExceededRequestsError,
+} from '@stardust/core/auth/errors'
+import { Slug } from '@stardust/core/global/structs'
+import { ApiResponse } from '@stardust/core/responses'
+import { HTTP_STATUS_CODE } from '@stardust/core/constants'
 
-import { ROUTES } from '@/ui/global/constants'
-import { getAppBaseUrl } from '@/ui/global/utils'
-
+import { getAppBaseUrl } from '@/utils'
+import { ROUTES } from '@/constants'
 import type { Supabase } from '../types'
-import { SupabaseAuthError } from '../errors/SupabaseAuthError'
-
-import { SupabasePostgrestError } from '../errors'
+import { SupabaseAuthError, SupabasePostgrestError } from '../errors'
 
 export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
   return {
@@ -27,9 +21,9 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
         password,
       })
 
-      if (error) return SupabaseAuthError(error, UserNotFoundError)
+      if (error) return SupabaseAuthError(error, 'E-mail ou senha incorretos')
 
-      return new ServiceResponse(data.session.user.id)
+      return new ApiResponse({ body: data.session.user.id })
     },
 
     async signUp(email: string, password: string, name: string) {
@@ -44,11 +38,17 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
       if (error)
         switch (error?.name) {
           case 'email_exists':
-            return SupabaseAuthError(error, EmailAlreadyExistsError)
+            return new ApiResponse({
+              errorMessage: 'E-mail já em uso',
+              statusCode: HTTP_STATUS_CODE.conflict,
+            })
           case 'over_request_rate_limit':
-            return SupabaseAuthError(error, SignUpRateLimitError)
+            return new ApiResponse({
+              errorMessage: 'E-mail já em uso',
+              statusCode: HTTP_STATUS_CODE.tooManyRequests,
+            })
           default:
-            return SupabaseAuthError(error, SignUpUnexpectedError)
+            return SupabaseAuthError(error, 'Error inesperado ao fazer cadastrar conta')
         }
 
       const userId = data.user?.id
@@ -62,18 +62,25 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
         })
 
         if (insertUserError)
-          return SupabasePostgrestError(insertUserError, SaveUserUnexpectedError)
+          return SupabasePostgrestError(
+            insertUserError,
+            'Error inesperado ao cadastrar usuário',
+          )
       }
 
-      return new ServiceResponse(String(userId))
+      return new ApiResponse({
+        body: String(userId),
+        statusCode: HTTP_STATUS_CODE.created,
+      })
     },
 
     async signOut() {
       const { error } = await supabase.auth.signOut()
 
-      if (error) return SupabaseAuthError(error, SignOutUnexpectedError)
+      if (error)
+        return SupabaseAuthError(error, 'Erro inesperado ao tentar sair da conta')
 
-      return new ServiceResponse(true)
+      return new ApiResponse({ body: true })
     },
 
     async requestPasswordReset(email: string) {
@@ -81,9 +88,10 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
         redirectTo: `${getAppBaseUrl()}${ROUTES.server.auth.confirmPasswordReset}`,
       })
 
-      if (error) return SupabaseAuthError(error, SignOutUnexpectedError)
+      if (error)
+        return SupabaseAuthError(error, 'Erro inesperado ao tentar sair da conta')
 
-      return new ServiceResponse(true)
+      return new ApiResponse()
     },
 
     async resetPassword(newPassword: string, accessToken: string, refreshToken: string) {
@@ -118,9 +126,9 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
         await supabase.auth.refreshSession({ refresh_token: session?.refresh_token })
       }
 
-      if (error) return SupabaseAuthError(error, ConfirmEmailUnexpectedError)
+      if (error) return SupabaseAuthError(error, 'Error inesperado ao confirmar e-mail')
 
-      return new ServiceResponse(!!user?.email)
+      return new ApiResponse()
     },
 
     async confirmPasswordReset(token: string) {
@@ -133,19 +141,21 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
       })
 
       if (otpError) {
-        return SupabaseAuthError(otpError, ConfirmPasswordResetUnexpectedError)
+        return SupabaseAuthError(otpError, 'Error inesperado ao confirmar e-mail')
       }
 
       if (!session) {
-        return new ServiceResponse<{ accessToken: string; refreshToken: string }>(
-          null,
-          ConfirmPasswordResetUnexpectedError,
-        )
+        return new ApiResponse<{ accessToken: string; refreshToken: string }>({
+          errorMessage: 'Sessão não encontrada',
+          statusCode: HTTP_STATUS_CODE.unauthorized,
+        })
       }
 
-      return new ServiceResponse({
-        accessToken: session.access_token,
-        refreshToken: session.refresh_token,
+      return new ApiResponse({
+        body: {
+          accessToken: session.access_token,
+          refreshToken: session.refresh_token,
+        },
       })
     },
 
@@ -155,10 +165,16 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
         error,
       } = await supabase.auth.getUser()
 
-      if (error) return SupabaseAuthError(error, UserNotFoundError)
-      if (!user) return new ApiResponse({error: })
+      const errorMessage = 'Usuário não encontrado'
 
-      return new ServiceResponse(user?.id)
+      if (error) return SupabaseAuthError(error, errorMessage)
+      if (!user)
+        return new ApiResponse({
+          errorMessage,
+          statusCode: HTTP_STATUS_CODE.unauthorized,
+        })
+
+      return new ApiResponse({ body: user.id })
     },
   }
 }

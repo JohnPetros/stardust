@@ -1,14 +1,18 @@
 import type { PostgrestError } from '@supabase/supabase-js'
 
-import type { BaseError } from '@/@core/errors/global/BaseError'
-import { ServiceResponse } from '@/@core/responses'
+import { ApiResponse } from '@stardust/core/responses'
+import { HTTP_STATUS_CODE } from '@stardust/core/constants'
 
 export const SupabasePostgrestError = <Data>(
   postgrestError: PostgrestError,
-  error: typeof BaseError
+  errorMessage: string,
+  statusCode = HTTP_STATUS_CODE.serverError,
 ) => {
   console.error('Supabase postgrest error message: ', postgrestError.message)
   console.error('Supabase postgrest error details: ', postgrestError.details)
 
-  return new ServiceResponse<Data>(null, error)
+  return new ApiResponse<Data>({
+    errorMessage,
+    statusCode,
+  })
 }

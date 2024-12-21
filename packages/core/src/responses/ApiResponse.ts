@@ -1,25 +1,47 @@
 import { HTTP_STATUS_CODE } from '../constants/http-status-code'
-import { AppError } from '../modules/global/errors'
+import {
+  AppError,
+  AuthError,
+  ConflictError,
+  NotFoundError,
+  ValidationError,
+} from '#global/errors'
 
 type ApiResponseProps<Body> = {
   body?: Body
   statusCode?: number
-  error?: typeof AppError
+  errorMessage?: string
 }
 
 export class ApiResponse<Body> {
   private readonly _body: Body | null
   private readonly _statusCode: number
-  private readonly _error: typeof AppError | null
+  private readonly _errorMessage: string | null
 
-  constructor({ body, statusCode, error }: ApiResponseProps<Body>) {
+  constructor({ body, statusCode, errorMessage }: ApiResponseProps<Body> = {}) {
     this._body = body ?? null
     this._statusCode = statusCode ?? HTTP_STATUS_CODE.ok
-    this._error = error ?? null
+    this._errorMessage = errorMessage ?? null
   }
 
   throwError() {
-    if (this.error) throw new this.error()
+    if (this.statusCode === HTTP_STATUS_CODE.notFound)
+      throw new NotFoundError(this.errorMessage)
+
+    if (this.statusCode === HTTP_STATUS_CODE.conflict)
+      throw new ConflictError(this.errorMessage)
+
+    if (this.statusCode === HTTP_STATUS_CODE.tooManyRequests)
+      throw new ConflictError(this.errorMessage)
+
+    if (
+      this.statusCode === HTTP_STATUS_CODE.unauthorized ||
+      this.statusCode === HTTP_STATUS_CODE.forbidden
+    )
+      throw new AuthError(this.errorMessage)
+
+    if (this.statusCode >= HTTP_STATUS_CODE.serverError)
+      throw new AppError(this.errorMessage)
   }
 
   get isSuccess() {
@@ -27,7 +49,7 @@ export class ApiResponse<Body> {
   }
 
   get isFailure() {
-    return this.statusCode >= HTTP_STATUS_CODE.badRequest || this._error
+    return this.statusCode >= HTTP_STATUS_CODE.badRequest || this._errorMessage
   }
 
   get body(): Body {
@@ -42,16 +64,11 @@ export class ApiResponse<Body> {
     return this._statusCode
   }
 
-  get error() {
-    return this._error
-  }
-
   get errorMessage(): string {
-    if (!this._error) {
-      throw new AppError('Response is not an error')
+    if (!this._errorMessage) {
+      throw new AppError('Response has no error message')
     }
 
-    const error = new this._error()
-    return error.message
+    return this._errorMessage
   }
 }

@@ -1,6 +1,6 @@
-import { Entity } from '#domain/abstracts'
-import type { StarDto } from '#dtos/StarDto'
-import { Id, OrdinalNumber, Logical, Slug, Name } from '#domain/structs'
+import { Entity } from '#global/abstracts'
+import { Id, OrdinalNumber, Logical, Slug, Name } from '#global/structs'
+import type { StarDto } from '#space/dtos'
 
 type StarsProps = {
   slug: Slug

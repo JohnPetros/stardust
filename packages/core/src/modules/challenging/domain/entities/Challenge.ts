@@ -1,16 +1,8 @@
-import { Entity } from '#domain/abstracts/global'
-import {
-  Id,
-  Integer,
-  Logical,
-  Name,
-  Slug,
-  Text,
-  TextBlock,
-} from '../../../modules/global/domain/structs'
-import { ChallengeDifficulty } from '../../../modules/challenging/domain/structs'
-import type { ChallengeDto } from '../../../modules/challenging/dtos'
-import type { ChallengeCategory } from '#domain/entities/challenging'
+import { Entity } from '#global/abstracts'
+import { Id, Integer, Logical, Name, Slug, Text, TextBlock } from '#global/structs'
+import { ChallengeDifficulty } from '#challenging/structs'
+import type { ChallengeDto } from '#challenging/dtos'
+import type { ChallengeCategory } from './ChallengeCategory'
 
 export type ChallengeProps = {
   id?: string

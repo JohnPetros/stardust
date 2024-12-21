@@ -1,6 +1,5 @@
-import type { UserDto } from '#dtos'
-import type { User } from '@/@core/domain/entities'
-
+import type { UserDto } from '@stardust/core/global/dtos'
+import type { User } from '@stardust/core/global/entities'
 import type { SupabaseUser } from '../types/SupabaseUser'
 
 export const SupabaseUserMapper = () => {

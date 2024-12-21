@@ -1,9 +1,8 @@
-import type { ISpaceService } from '@/@core/interfaces/services'
-import type { PlanetDto } from '#dtos'
-import type { Planet } from '@/@core/domain/entities'
-import { ServiceResponse } from '@/@core/responses'
-import { SaveUnlockedStarUnexpectedError, StarNotFoundError } from '@/@core/errors/stars'
-import { FetchPlanetsUnexpectedError } from '@/@core/errors/planets/FetchPlanetsUnexpectedError'
+import type { ISpaceService } from '@stardust/core/interfaces'
+import type { Planet } from '@stardust/core/space/entities'
+import type { PlanetDto } from '@stardust/core/space/dtos'
+import { ApiResponse } from '@stardust/core/responses'
+import { HTTP_STATUS_CODE } from '@stardust/core/constants'
 
 import type { Supabase } from '../types/Supabase'
 import { SupabasePlanetMapper, SupabaseStarMapper } from '../mappers'
@@ -24,35 +23,38 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
         .returns<SupabasePlanet[]>()
 
       if (error) {
-        return SupabasePostgrestError(error, FetchPlanetsUnexpectedError)
+        return SupabasePostgrestError(error, 'Erro inesperado ao buscar planetas')
       }
 
       const planets = data.map(supabasePlanetMapper.toDto)
 
-      return new ServiceResponse(planets)
+      return new ApiResponse({ body: planets })
     },
 
     async fetchPlanetByStar(starId: string) {
       const response = await this.fetchStarById(starId)
 
       if (response.isFailure) {
-        return new ServiceResponse<PlanetDto>(null, response.error)
+        return new ApiResponse<PlanetDto>({ errorMessage: response.errorMessage })
       }
 
       const { data, error } = await supabase
         .from('planets')
         .select('*, stars(id, name, number, slug, is_challenge, planet_id)')
-        .eq('id', response.data.planetId)
+        .eq('id', response.body.planetId)
         .order('number', { foreignTable: 'stars', ascending: true })
         .single<SupabasePlanet>()
 
       if (error) {
-        return SupabasePostgrestError(error, FetchPlanetsUnexpectedError)
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao buscar planeta dessa estrela',
+        )
       }
 
       const planet = supabasePlanetMapper.toDto(data)
 
-      return new ServiceResponse(planet)
+      return new ApiResponse({ body: planet })
     },
 
     async fetchStarBySlug(starSlug: string) {
@@ -63,12 +65,16 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
         .single()
 
       if (error) {
-        return SupabasePostgrestError(error, StarNotFoundError)
+        return SupabasePostgrestError(
+          error,
+          'Estrela não encontrada',
+          HTTP_STATUS_CODE.notFound,
+        )
       }
 
       const star = supabaseStarMapper.toDto(data)
 
-      return new ServiceResponse(star)
+      return new ApiResponse({ body: star })
     },
 
     async fetchStarById(starId: string) {
@@ -79,12 +85,16 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
         .single()
 
       if (error) {
-        return SupabasePostgrestError(error, StarNotFoundError)
+        return SupabasePostgrestError(
+          error,
+          'Estrela não encontrada',
+          HTTP_STATUS_CODE.notFound,
+        )
       }
 
       const starDto = supabaseStarMapper.toDto(data)
 
-      return new ServiceResponse(starDto)
+      return new ApiResponse({ body: starDto })
     },
 
     async saveUserUnlockedStar(starId: string, userId: string) {
@@ -93,10 +103,10 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
         .insert({ star_id: starId, user_id: userId })
 
       if (error) {
-        return SupabasePostgrestError(error, SaveUnlockedStarUnexpectedError)
+        return SupabasePostgrestError(error, 'Erro inesperado ao desbloquear estrela')
       }
 
-      return new ServiceResponse(true)
+      return new ApiResponse()
     },
 
     async fetchNextStarFromNextPlanet(starPlanet: Planet) {
@@ -110,12 +120,16 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
         .single()
 
       if (error) {
-        return SupabasePostgrestError(error, StarNotFoundError)
+        return SupabasePostgrestError(
+          error,
+          'Próxima estrela não encontrada',
+          HTTP_STATUS_CODE.notFound,
+        )
       }
 
       const star = supabaseStarMapper.toDto(data)
 
-      return new ServiceResponse(star)
+      return new ApiResponse({ body: star })
     },
 
     async verifyStarIsUnlocked(starId: string, userId: string) {
@@ -127,14 +141,13 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
         .single()
 
       if (error) {
-        return new ServiceResponse(false)
+        return SupabasePostgrestError(
+          error,
+          'Estrela inseperado ao verificar status de bloqueio dessa estrela',
+        )
       }
 
-      return new ServiceResponse(Boolean(data))
-    },
-
-    async savePlanet(planet) {
-      throw new Error('Not implemented')
+      return new ApiResponse({ body: Boolean(data) })
     },
   }
 }

@@ -1,9 +1,8 @@
 'use client'
 
-import { ReactNode } from 'react'
-import { motion, Variants } from 'framer-motion'
-
-import { Animation } from '@/ui/global/components/shared/Animation'
+import type { ReactNode } from 'react'
+import { motion, type Variants } from 'framer-motion'
+import { Animation } from '@/ui/global/widgets/components/Animation'
 
 const appMessageAnimations: Variants = {
   hidden: {

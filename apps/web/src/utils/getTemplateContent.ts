@@ -1,4 +1,4 @@
-import { REGEX } from '../constants'
+import { REGEX } from '../../../constants'
 
 const componentNameRegex = REGEX.componentName
 
@@ -8,7 +8,7 @@ export function getTemplateContent(component: string) {
 
   const componentRegex = new RegExp(
     `<${componentName}[^>]*>([\\s\\S]*?)</${componentName}>`,
-    'g'
+    'g',
   )
 
   const contentMatch = componentRegex.exec(component)

@@ -1,4 +1,4 @@
-import { AuthError } from '@supabase/supabase-js'
+import { AuthError } from '#global/errors'
 
 export class InvalidCredentialsError extends AuthError {
   constructor() {

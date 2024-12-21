@@ -1,6 +1,6 @@
-import type { AchievementDto } from '#dtos'
+import type { AchievementDto } from '@stardust/core/profile/dtos'
 import type { SupabaseAchievement } from '../types'
-import type { Achievement } from '@/@core/domain/entities'
+import type { Achievement } from '@stardust/core/profile/entities'
 
 export const SupabaseAchievementMapper = () => {
   return {

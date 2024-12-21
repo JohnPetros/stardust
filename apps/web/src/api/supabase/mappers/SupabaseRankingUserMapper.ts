@@ -1,4 +1,4 @@
-import type { RankingUserDto } from '#dtos'
+import type { RankingUserDto } from '@stardust/core/ranking/dtos'
 import type { SupabaseRankingUser } from '../types'
 
 export const SupabaseRankingUserMapper = () => {

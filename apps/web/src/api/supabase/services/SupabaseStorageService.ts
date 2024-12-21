@@ -1,5 +1,5 @@
-import type { IStorageService } from '@/@core/interfaces/services'
-import type { ImagesBucket } from '@/@core/types'
+import type { IStorageService } from '@stardust/core/interfaces'
+import type { ImagesBucket } from '@stardust/core/storage/types'
 
 export const SupabaseStorageService = (): IStorageService => {
   return {

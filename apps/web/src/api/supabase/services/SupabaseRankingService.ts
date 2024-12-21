@@ -1,25 +1,14 @@
-import type { IRankingsService } from '@/@core/interfaces/services'
-import type { RankingUser } from '@/@core/domain/entities'
-import type { RankingUserDto, TierDto } from '#dtos'
-import {
-  DeleteLastWeekRankingUsersUnexpectedError,
-  FetchRankingsWinnersUnexpectedError,
-  FetchTiersUnexpectedError,
-  ResetRankingUsersXpUnexpectedError,
-  SaveRankingLosersUnexpectedError,
-  SaveRankingWinnersUnexpectedError,
-  TierNotFoundError,
-} from '@/@core/errors/rankings'
-import { ServiceResponse } from '@/@core/responses'
+import type { IRankingService } from '@stardust/core/interfaces'
+import type { RankingUser } from '@stardust/core/ranking/entities'
+import type { RankingUserDto } from '@stardust/core/ranking/dtos'
 
 import type { Supabase } from '../types/Supabase'
 import { SupabasePostgrestError } from '../errors'
 import { SupabaseRankingUserMapper, SupabaseTierMapper } from '../mappers'
-import { VerifyRankingLoserStatusUnexpectedError } from '@/@core/errors/rankings/VerifyRankingLoserStateUnexpectedError'
-import { UpdateLastWeekRankingPositionsUnexpectedError } from '@/@core/errors/rankings/UpdateLastWeekRankingPositionsUnexpetedError'
-import { FetchRankingsUsersUnexpectedError } from '@/@core/errors/rankings/FetchRankingUsersUnexpectedError'
+import { ApiResponse } from '@stardust/core/responses'
+import { HTTP_STATUS_CODE } from '@stardust/core/constants'
 
-export const SupabaseRankingsService = (supabase: Supabase): IRankingsService => {
+export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
   const supabaseTierMapper = SupabaseTierMapper()
   const supabaseRankingUserMapper = SupabaseRankingUserMapper()
 
@@ -32,12 +21,16 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
         .single()
 
       if (error) {
-        return SupabasePostgrestError(error, TierNotFoundError)
+        return SupabasePostgrestError(
+          error,
+          'Tier não encontrado',
+          HTTP_STATUS_CODE.notFound,
+        )
       }
 
       const tier = supabaseTierMapper.toTier(data)
 
-      return new ServiceResponse(tier)
+      return new ApiResponse({ body: tier })
     },
 
     async fetchTierByPosition(tierPosition: number) {
@@ -48,12 +41,16 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
         .single()
 
       if (error) {
-        return SupabasePostgrestError(error, TierNotFoundError)
+        return SupabasePostgrestError(
+          error,
+          'Tier não encontrado para essa posição',
+          HTTP_STATUS_CODE.notFound,
+        )
       }
 
       const tier = supabaseTierMapper.toTier(data)
 
-      return new ServiceResponse(tier)
+      return new ApiResponse({ body: tier })
     },
 
     async fetchTiers() {
@@ -63,12 +60,12 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
         .order('position', { ascending: true })
 
       if (error) {
-        return SupabasePostgrestError(error, FetchTiersUnexpectedError)
+        return SupabasePostgrestError(error, 'Erro inesperado ao buscar tiers')
       }
 
       const ranking = data.map(supabaseTierMapper.toTier)
 
-      return new ServiceResponse(ranking)
+      return new ApiResponse({ body: ranking })
     },
 
     async fetchRankingUsersByTier(tierId: string) {
@@ -79,7 +76,10 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
         .order('weekly_xp', { ascending: false })
 
       if (error) {
-        return SupabasePostgrestError(error, FetchRankingsUsersUnexpectedError)
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao buscar usuários desse ranking',
+        )
       }
 
       const rankingUsers: RankingUserDto[] = data.map((user, index) => ({
@@ -95,7 +95,7 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
         position: index + 1,
       }))
 
-      return new ServiceResponse(rankingUsers)
+      return new ApiResponse({ body: rankingUsers })
     },
 
     async fetchLastWeekRankingUsersByTier(tierId: string) {
@@ -109,7 +109,10 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
         .order('last_week_ranking_position', { ascending: false })
 
       if (error) {
-        return SupabasePostgrestError(error, FetchRankingsWinnersUnexpectedError)
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao buscar usuários do ranking da semana passada',
+        )
       }
 
       const rankingUsers: RankingUserDto[] = data.map((user, index) => ({
@@ -125,7 +128,7 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
         position: user.last_week_ranking_position ?? index,
       }))
 
-      return new ServiceResponse(rankingUsers)
+      return new ApiResponse({ body: rankingUsers })
     },
 
     async fetchRankingWinnersByTier(tierId: string) {
@@ -142,12 +145,15 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
       console.log(data)
 
       if (error) {
-        return SupabasePostgrestError(error, FetchRankingsWinnersUnexpectedError)
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao buscar usuários vencedores desse ranking',
+        )
       }
 
       const rankingWinners = data.map(supabaseRankingUserMapper.toRankingUser)
 
-      return new ServiceResponse(rankingWinners)
+      return new ApiResponse({ body: rankingWinners })
     },
 
     async fetchRankingLosersByTier(tierId: string) {
@@ -167,10 +173,13 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
       )
 
       if (error) {
-        return SupabasePostgrestError(error, SaveRankingLosersUnexpectedError)
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao salvar usuários perdedores desse ranking',
+        )
       }
 
-      return new ServiceResponse(true)
+      return new ApiResponse()
     },
 
     async saveRankingWinners(winners: RankingUser[], tierId: string) {
@@ -187,10 +196,13 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
 
       if (error) {
         console.log({ tierId })
-        return SupabasePostgrestError(error, SaveRankingWinnersUnexpectedError)
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao salvar usuários vencedores desse ranking',
+        )
       }
 
-      return new ServiceResponse(true)
+      return new ApiResponse({ body: true })
     },
 
     async verifyRankingLoserState(rankingUserId: string) {
@@ -201,10 +213,13 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
         .single()
 
       if (error) {
-        return SupabasePostgrestError(error, VerifyRankingLoserStatusUnexpectedError)
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao verificar o status de perdedor desse usuário',
+        )
       }
 
-      return new ServiceResponse(data.status === 'loser')
+      return new ApiResponse({ body: data.status === 'loser' })
     },
 
     async updateRankingUsersTier(rankingUsers: RankingUser[], tierId: string) {
@@ -216,20 +231,26 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
         .in('id', ids)
 
       if (error) {
-        return SupabasePostgrestError(error, TierNotFoundError)
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao atualizar o tier desses usuários',
+        )
       }
 
-      return new ServiceResponse(true)
+      return new ApiResponse({ body: true })
     },
 
     async updateLastWeekRankingPositions() {
       const { error } = await supabase.rpc('update_last_week_ranking_positions')
 
       if (error) {
-        return SupabasePostgrestError(error, TierNotFoundError)
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao atualizar o tier desses usuários',
+        )
       }
 
-      return new ServiceResponse(true)
+      return new ApiResponse()
     },
 
     async allowUsersSeeRankingResult() {
@@ -241,31 +262,37 @@ export const SupabaseRankingsService = (supabase: Supabase): IRankingsService =>
       if (error) {
         return SupabasePostgrestError(
           error,
-          UpdateLastWeekRankingPositionsUnexpectedError,
+          'Erro inesperado ao permitir que os usuários vejam o resultado do ranking',
         )
       }
 
-      return new ServiceResponse(true)
+      return new ApiResponse()
     },
 
     async deleteLastWeekRankingUsers() {
       const { error } = await supabase.from('ranking_users').delete().neq('id', 0)
 
       if (error) {
-        return SupabasePostgrestError(error, DeleteLastWeekRankingUsersUnexpectedError)
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao remover que os usuários do ranking da semana passada',
+        )
       }
 
-      return new ServiceResponse(true)
+      return new ApiResponse()
     },
 
     async resetRankingUsersXp() {
       const { error } = await supabase.from('users').update({ weekly_xp: 0 }).neq('id', 0)
 
       if (error) {
-        return SupabasePostgrestError(error, ResetRankingUsersXpUnexpectedError)
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao fazer o reset do ranking',
+        )
       }
 
-      return new ServiceResponse(true)
+      return new ApiResponse()
     },
   }
 }

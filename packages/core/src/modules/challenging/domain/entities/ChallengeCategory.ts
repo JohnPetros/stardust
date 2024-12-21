@@ -1,6 +1,6 @@
-import type { ChallengeCategoryDTO } from '#dtos'
-import { Entity } from '#domain/abstracts'
-import { List, Name } from '#domain/structs'
+import type { ChallengeCategoryDto } from '#challenging/dtos'
+import { Entity } from '#global/abstracts'
+import { List, Name } from '#global/structs'
 
 export type ChallengeCategoryProps = {
   name: Name
@@ -8,7 +8,7 @@ export type ChallengeCategoryProps = {
 }
 
 export class ChallengeCategory extends Entity<ChallengeCategoryProps> {
-  static create(dto: ChallengeCategoryDTO): ChallengeCategory {
+  static create(dto: ChallengeCategoryDto): ChallengeCategory {
     return new ChallengeCategory(
       {
         name: Name.create(dto.name),
@@ -30,7 +30,7 @@ export class ChallengeCategory extends Entity<ChallengeCategoryProps> {
     return this.props.challengesIds
   }
 
-  get dto(): ChallengeCategoryDTO {
+  get dto(): ChallengeCategoryDto {
     return {
       id: this.id,
       name: this.name.value,

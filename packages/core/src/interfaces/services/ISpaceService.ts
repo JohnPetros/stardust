@@ -9,6 +9,5 @@ export interface ISpaceService {
   fetchPlanets(): Promise<ApiResponse<PlanetDto[]>>
   fetchPlanetByStar(starId: string): Promise<ApiResponse<PlanetDto>>
   verifyStarIsUnlocked(starId: string, userId: string): Promise<ApiResponse<boolean>>
-  savePlanet(planet: Planet): Promise<ApiResponse<true>>
   saveUserUnlockedStar(starId: string, userId: string): Promise<ApiResponse<boolean>>
 }

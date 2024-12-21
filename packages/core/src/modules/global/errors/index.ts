@@ -1,5 +1,7 @@
+export { ApiError } from './ApiError'
 export { AppError } from './AppError'
 export { NotFoundError } from './NotFoundError'
 export { AuthError } from './AuthError'
 export { ConflictError } from './ConflictError'
+export { ExceededRequestsError } from './ExceededRequestsError'
 export { ValidationError } from './ValidationError'

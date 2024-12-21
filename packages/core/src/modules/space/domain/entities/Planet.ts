@@ -1,7 +1,6 @@
-import type { PlanetDto } from '#dtos'
-
-import { Entity } from '#domain/abstracts'
-import { Image, Name, OrdinalNumber } from '#domain/structs'
+import { Entity } from '#global/abstracts'
+import { Image, Name, OrdinalNumber } from '#global/structs'
+import type { PlanetDto } from '#space/dtos'
 import { Star } from './Star'
 
 type PlanetProps = {

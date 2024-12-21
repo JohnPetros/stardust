@@ -1,6 +1,6 @@
-import type { AvatarDto } from '#dtos'
+import type { Avatar } from '@stardust/core/shop/entities'
+import type { AvatarDto } from '@stardust/core/shop/dtos'
 import type { SupabaseAvatar } from '../types'
-import type { Avatar } from '@/@core/domain/entities'
 
 export const SupabaseAvatarMapper = () => {
   return {

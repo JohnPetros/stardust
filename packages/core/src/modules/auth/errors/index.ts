@@ -1,6 +1,5 @@
 export { AuthUserNotFoundError } from './AuthUserNotFound'
-export { SignUpRateLimitError } from './SignUpRateLimitError'
+export { SignUpExceededRequestsError } from './SignUpExceedRequestsError'
 export { EmailAlreadyExistsError } from './EmailAlreadyExistsError'
-export { SignOutUnexpectedError } from './SignOutUnexpectedError'
 export { TokenNotFoundError } from './TokenNotFoundError'
 export { InvalidCredentialsError } from './InvalidCredentials'

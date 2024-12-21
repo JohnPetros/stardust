@@ -1,6 +1,6 @@
-import type { ChallengeDto } from '#dtos'
+import type { Challenge } from '@stardust/core/challenging/entities'
+import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 import type { SupabaseChallenge } from '../types'
-import type { Challenge } from '@/@core/domain/entities'
 
 export const SupabaseChallengeMapper = () => {
   return {

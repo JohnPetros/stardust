@@ -1,6 +1,5 @@
-import type { Star } from '@/@core/domain/entities'
-
-import type { StarDto } from '#dtos'
+import type { Star } from '@stardust/core/space/entities'
+import type { StarDto } from '@stardust/core/space/dtos'
 import type { SupabaseStar } from '../types'
 
 export const SupabaseStarMapper = () => {

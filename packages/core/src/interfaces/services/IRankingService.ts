@@ -2,7 +2,7 @@ import type { RankingUser } from '#ranking/entities'
 import type { RankingUserDto, TierDto } from '#ranking/dtos'
 import type { ApiResponse } from '#responses'
 
-export interface IRankingsService {
+export interface IRankingService {
   fetchTierById(tierId: string): Promise<ApiResponse<TierDto>>
   fetchTierByPosition(tierPosition: number): Promise<ApiResponse<TierDto>>
   fetchTiers(): Promise<ApiResponse<TierDto[]>>

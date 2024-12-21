@@ -1,6 +1,5 @@
-import type { Rocket } from '@/@core/domain/entities'
-import type { RocketDto } from '#dtos'
-
+import type { RocketDto } from '@stardust/core/shop/dtos'
+import type { Rocket } from '@stardust/core/shop/entities'
 import type { SupabaseRocket } from '../types'
 
 export const SupabaseRocketMapper = () => {

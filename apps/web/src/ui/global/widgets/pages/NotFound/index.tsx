@@ -3,7 +3,7 @@
 import { Animation } from '../../components/Animation'
 import { Button } from '../../components/Button'
 import { useRouter } from '../../../hooks'
-import { ROUTES } from '../../../constants'
+import { ROUTES } from '../../../../../constants'
 
 import { Animated404 } from './Animated404'
 
