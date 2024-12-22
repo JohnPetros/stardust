@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
-import type { Theory, Quiz } from '@/@core/domain/structs'
-import type { LessonStage } from '@/@core/domain/types'
+import type { LessonStage } from '@stardust/core/lesson/types'
+import type { Theory, Quiz } from '@stardust/core/lesson/structs'
 import type { LessonStore } from '../LessonStore/types'
 import { INITIAL_LESSON_STATE } from '../LessonStore/constants'
 

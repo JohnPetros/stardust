@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
-import { useLessonStore } from '@/ui/app/stores/LessonStore'
+import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 
 export function useItem(itemLabel: string, isActive: boolean, isInSlot: boolean) {
   const { getQuizSlice } = useLessonStore()

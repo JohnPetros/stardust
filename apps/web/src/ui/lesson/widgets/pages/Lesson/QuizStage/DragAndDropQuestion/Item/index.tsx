@@ -1,6 +1,6 @@
 'use client'
 
-import { useLessonStore } from '@/ui/app/stores/LessonStore'
+import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 import { useDraggable } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
 import { twMerge } from 'tailwind-merge'

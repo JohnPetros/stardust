@@ -1,5 +1,6 @@
-import { DropZone } from '@/@core/domain/structs'
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
+
+import { DropZone } from '@stardust/core/lesson/structs'
 
 type UseDndProps = {
   onDragStart: (itemIndex: number) => void

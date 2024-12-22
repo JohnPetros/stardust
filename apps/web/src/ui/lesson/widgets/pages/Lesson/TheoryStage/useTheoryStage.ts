@@ -1,5 +1,5 @@
-import { useLessonStore } from '@/ui/app/stores/LessonStore'
 import { useMdx } from '@/ui/global/widgets/components/Mdx/useMdx'
+import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 import { useEffect, useState } from 'react'
 
 export function useTheoryStage() {

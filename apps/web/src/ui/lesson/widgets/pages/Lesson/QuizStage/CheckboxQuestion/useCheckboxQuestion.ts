@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 
-import { List } from '@/@core/domain/structs'
-import { useLessonStore } from '@/ui/app/stores/LessonStore'
+import { List } from '@stardust/core/global/structs'
+
+import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 
 export function useCheckboxQuestion() {
   const [userAnswers, setUserAnswers] = useState<List<string>>(List.create([]))

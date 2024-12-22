@@ -9,11 +9,12 @@ import {
   OpenQuestion as OpenQuestionEntity,
   DragAndDropListQuestion as DragAndDropListQuestionEntity,
   DragAndDropQuestion as DragAndDropQuestionEntity,
-} from '@/@core/domain/entities'
+} from '@stardust/core/lesson/entities'
+
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { Button } from '@/ui/global/widgets/components/Button'
-import { VerificationButton } from '../../../../../global/widgets/components/VerificationButton'
+import { VerificationButton } from '@/ui/global/widgets/components/VerificationButton'
 import { QuestionContainer } from './AnimatedQuestionContainer'
 import { SelectionQuestion } from './SelectionQuestion'
 import { DragAndDropQuestion } from './DragAndDropQuestion'

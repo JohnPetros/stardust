@@ -1,6 +1,6 @@
 'use client'
 
-import type { ReactNode, RefObject } from 'react'
+import type { ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import {
   defaultDropAnimation,
@@ -12,7 +12,7 @@ import {
   type DropAnimation,
 } from '@dnd-kit/core'
 
-import type { DraggableItem, DropZone } from '@/@core/domain/structs'
+import type { DraggableItem, DropZone } from '@stardust/core/lesson/structs'
 
 import { getItemWidth } from '../getItemWidth'
 import { Item } from '../Item'

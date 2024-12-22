@@ -1,6 +1,7 @@
 'use client'
 
-import type { TextBlockDto, QuestionDto } from '#dtos'
+import type { QuestionDto } from '@stardust/core/lesson/dtos'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
 import { PageTransitionAnimation } from '@/ui/global/widgets/components/PageTransitionAnimation'
 import { useLessonPage } from './useLessonPage'

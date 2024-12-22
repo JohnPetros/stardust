@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 
-import { LessonProgress } from '@/@core/domain/structs'
-import { useLessonStore } from '@/ui/app/stores/LessonStore'
+import { LessonProgress } from '@stardust/core/lesson/structs'
+
+import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 
 export function useLessonHeader() {
   const [lessonProgress, setLessonProgress] = useState<LessonProgress | null>(null)

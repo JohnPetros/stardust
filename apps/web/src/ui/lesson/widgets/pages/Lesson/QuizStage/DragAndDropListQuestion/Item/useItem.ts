@@ -2,10 +2,10 @@
 
 import { useMemo } from 'react'
 
-import { Text } from '@/@core/domain/structs'
-import { useLessonStore } from '@/ui/app/stores/LessonStore'
+import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 import type { IconColor } from './IconColor'
 import type { LabelBackground } from './LabelBackground'
+import { Text } from '@stardust/core/global/structs'
 
 type UseSortableItemProps = {
   label: string

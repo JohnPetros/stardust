@@ -1,17 +1,10 @@
 'use client'
 
-import {
-  DndContext,
-  DragOverlay,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core'
-import { restrictToVerticalAxis, restrictToWindowEdges } from '@dnd-kit/modifiers'
+import { DragOverlay } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 
-import type { SortableList } from '@/@core/domain/structs'
+import type { SortableList } from '@stardust/core/global/structs'
+
 import { useDragAndDropListQuestion } from './useDragAndDropListQuestion'
 import { QuestionStatement } from '../QuestionStatement'
 import { Item } from './Item'

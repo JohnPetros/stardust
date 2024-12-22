@@ -1,6 +1,6 @@
 'use client'
 
-import type { QuestionCodeLine } from '@/@core/domain/structs'
+import type { QuestionCodeLine } from '@stardust/core/lesson/structs'
 
 import { CodeSnippet } from '@/ui/global/widgets/components/CodeSnippet'
 
@@ -51,24 +51,26 @@ export function OpenQuestion({
                 if (text.includes('input')) {
                   inputIndex = Number(text.slice(-1)) - 1
                 }
+                const answer = answers[inputIndex]
 
-                return (
-                  <div key={`${index}-${codeLine.number.value}`}>
-                    {!text.includes('input') ? (
-                      <div className='flex gap-1 font-code text-gray-100'>{text}</div>
-                    ) : (
-                      <Input
-                        value={userAnswers[inputIndex]}
-                        autoCapitalize='none'
-                        onChange={({ currentTarget }) =>
-                          handleInputChange(currentTarget.value, inputIndex)
-                        }
-                        answer={answers[inputIndex]}
-                        autoFocus={inputIndex === 0}
-                      />
-                    )}
-                  </div>
-                )
+                if (answer)
+                  return (
+                    <div key={`${index}-${codeLine.number.value}`}>
+                      {!text.includes('input') ? (
+                        <div className='flex gap-1 font-code text-gray-100'>{text}</div>
+                      ) : (
+                        <Input
+                          value={userAnswers[inputIndex]}
+                          autoCapitalize='none'
+                          onChange={({ currentTarget }) =>
+                            handleInputChange(currentTarget.value, inputIndex)
+                          }
+                          answer={answer}
+                          autoFocus={inputIndex === 0}
+                        />
+                      )}
+                    </div>
+                  )
               })}
             </li>
           )

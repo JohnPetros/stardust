@@ -18,8 +18,8 @@ export const ROUTES = {
     },
     lesson: {
       prefix: '/lesson',
-      rewarding: '/lesson/rewarding',
     },
+    rewarding: '/rewarding',
     playground: '/playground',
     accountConfirmation: '/account-confirmation',
   },

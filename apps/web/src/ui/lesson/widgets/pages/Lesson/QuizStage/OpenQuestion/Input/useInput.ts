@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 
-import { useLessonStore } from '@/ui/app/stores/LessonStore'
+import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 import type { InputBackground } from './InputBackground'
 
 export function useInput(answer: string) {

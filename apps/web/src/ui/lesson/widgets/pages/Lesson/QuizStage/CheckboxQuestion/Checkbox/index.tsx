@@ -5,10 +5,10 @@ import { twMerge } from 'tailwind-merge'
 import { Check } from '@phosphor-icons/react'
 import * as C from '@radix-ui/react-checkbox'
 
-import { useCheckbox } from './useCheckbox'
 import { AnimatedLabel } from './AnimatedLabel'
 import { CHECKBOX_STYLES } from './checkbox-styles'
 import { AnimatedIndicator } from './AnimatedIndicator'
+import { useCheckbox } from './useCheckbox'
 
 type CheckboxProps = {
   children: string

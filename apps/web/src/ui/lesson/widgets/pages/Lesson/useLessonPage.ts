@@ -2,14 +2,15 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import type { TextBlockDto, QuestionDto, StarRewardingPayloadDto } from '#dtos'
-import { Quiz, Theory } from '@/@core/domain/structs'
-import { useLessonStore } from '@/ui/app/stores/LessonStore'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
+import type { QuestionDto, StarRewardingPayloadDto } from '@stardust/core/lesson/dtos'
+
 import { COOKIES, ROUTES, STORAGE } from '@/constants'
-import { useLocalStorage } from ''@/ui/global/hooks'/useLocalStorage'
-import { useSecondsCounter } from ''@/ui/global/hooks'/useSecondsCounter'
+import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
+import { useLocalStorage, useSecondsCounter } from '@/ui/global/hooks'
 import { useRouter } from '@/ui/global/hooks'
 import { _setCookie } from '@/ui/global/actions'
+import { Quiz, Theory } from '@stardust/core/lesson/structs'
 
 export function useLessonPage(
   starId: string,
@@ -17,13 +18,13 @@ export function useLessonPage(
   textsBlocksDto: TextBlockDto[],
 ) {
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
-  const scrollRef = useRef<HTMLDivElement>(null)
   const { getStageSlice, getQuizSlice, getTheorySlice, resetStore } = useLessonStore()
   const { quiz, setQuiz } = getQuizSlice()
   const { stage } = getStageSlice()
   const { setTheory } = getTheorySlice()
   const router = useRouter()
   const secondsCounter = useLocalStorage(STORAGE.keys.secondsCounter)
+  const scrollRef = useRef<HTMLDivElement>(null)
   useSecondsCounter(stage === 'quiz')
 
   function handleLeavePage() {
@@ -62,7 +63,7 @@ export function useLessonPage(
           COOKIES.keys.rewardingPayload,
           JSON.stringify(rewardingPayloadDto),
         )
-        router.goTo(ROUTES.private.app.rewarding)
+        router.goTo(ROUTES.private.rewarding)
       }
 
       goToRewardingPage()

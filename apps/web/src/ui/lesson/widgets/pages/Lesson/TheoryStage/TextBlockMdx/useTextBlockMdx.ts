@@ -7,7 +7,7 @@ export function useTextBlockMdx(template: string, hasAnimation: boolean) {
 
   const mdxTemplate = template.replace(
     'hasAnimation={false}',
-    `hasAnimation={${hasAnimation}}`
+    `hasAnimation={${hasAnimation}}`,
   )
 
   useEffect(() => {

@@ -1,5 +1,5 @@
-import type { Theory, Quiz } from '@/@core/domain/structs'
-import type { LessonStage } from '@/@core/domain/types'
+import type { Quiz, Theory } from '@stardust/core/lesson/structs'
+import type { LessonStage } from '@stardust/core/lesson/types'
 
 export type LessonActions = {
   setStage: (stage: LessonStage) => void

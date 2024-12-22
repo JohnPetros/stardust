@@ -2,7 +2,7 @@
 
 import { type KeyboardEvent, type RefObject, useMemo } from 'react'
 
-import { useLessonStore } from '@/ui/app/stores/LessonStore'
+import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 import type { CheckboxStyle } from './CheckboxStyle'
 
 export function useCheckbox(

@@ -1,10 +1,9 @@
 'use client'
 
-import type { RefObject } from 'react'
 import { useDroppable } from '@dnd-kit/core'
 import { twMerge } from 'tailwind-merge'
 
-import type { DraggableItem } from '@/@core/domain/structs'
+import type { DraggableItem } from '@stardust/core/lesson/structs'
 
 import { Item } from '../Item'
 import { getItemWidth } from '../getItemWidth'

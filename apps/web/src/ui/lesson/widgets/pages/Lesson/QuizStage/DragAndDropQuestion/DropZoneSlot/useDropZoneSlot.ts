@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 
-import { useLessonStore } from '@/ui/app/stores/LessonStore'
+import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 
 export function useDropZoneSlot() {
   const { getQuizSlice } = useLessonStore()

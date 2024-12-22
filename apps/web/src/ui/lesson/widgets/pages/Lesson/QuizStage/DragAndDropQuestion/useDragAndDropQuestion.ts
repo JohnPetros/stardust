@@ -1,9 +1,14 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 
-import type { DragAndDrop, DropZone, QuestionCodeLine } from '@/@core/domain/structs'
-import { useLessonStore } from '@/ui/app/stores/LessonStore'
+import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
+import type {
+  DragAndDrop,
+  DropZone,
+  QuestionCodeLine,
+} from '@stardust/core/lesson/structs'
+import { DropZoneDto } from '@stardust/core/lesson/dtos'
 
 export function useDragAndDropQuestion(
   initialdragAndDrop: DragAndDrop,

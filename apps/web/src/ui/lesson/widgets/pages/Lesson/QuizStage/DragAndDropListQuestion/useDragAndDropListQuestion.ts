@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 
-import type { SortableList } from '@/@core/domain/structs'
-import { useLessonStore } from '@/ui/app/stores/LessonStore'
+import type { SortableList } from '@stardust/core/global/structs'
+
+import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 
 export function useDragAndDropListQuestion(preSortableList: SortableList) {
   const { getQuizSlice } = useLessonStore()

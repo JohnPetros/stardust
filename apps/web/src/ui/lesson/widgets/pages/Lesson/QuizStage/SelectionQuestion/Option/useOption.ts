@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { useLessonStore } from '@/ui/app/stores/LessonStore'
+import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 import type { LabelColor } from './LabelColor'
 
 export function useOption(isSelected: boolean) {
