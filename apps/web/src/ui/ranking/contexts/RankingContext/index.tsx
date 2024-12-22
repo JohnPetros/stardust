@@ -2,8 +2,9 @@
 
 import { createContext, type ReactNode } from 'react'
 
-import type { RankingUserDto, TierDto } from '#dtos'
-import { Tier } from '@/@core/domain/entities'
+import type { RankingUserDto, TierDto } from '@stardust/core/ranking/dtos'
+import { Tier } from '@stardust/core/ranking/entities'
+
 import type { RankingContextValue } from './types/RankingContextValue'
 import { useRankingProvider } from './hooks/useRankingProvider'
 import { useRankingContext } from './hooks/useRankingContext'

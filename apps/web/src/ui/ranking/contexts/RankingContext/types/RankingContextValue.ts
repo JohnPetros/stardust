@@ -1,4 +1,5 @@
-import type { Ranking, Tier } from '@/@core/domain/entities'
+import type { Tier } from '@stardust/core/ranking/entities'
+import type { Ranking } from '@stardust/core/ranking/structs'
 
 export type RankingContextValue = {
   ranking: Ranking | null

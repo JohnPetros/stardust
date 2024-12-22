@@ -1,6 +1,7 @@
-import { Ranking } from '@/@core/domain/structs'
-import type { RankingUserDto } from '#dtos'
 import { useEffect, useState } from 'react'
+
+import type { RankingUserDto } from '@stardust/core/ranking/dtos'
+import { Ranking } from '@stardust/core/ranking/structs'
 
 export function useRankingProvider(rankingUsers: RankingUserDto[]) {
   const [ranking, setRanking] = useState<Ranking | null>(null)

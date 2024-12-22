@@ -42,8 +42,6 @@ export function RankingResult() {
 
   if (isLoading) return <Loading isSmall={false} />
 
-  console.log(lastWeekRankingPodium?.winners)
-
   if (user && lastWeekRankingPodium)
     return (
       <div>

@@ -1,12 +1,12 @@
 import { type RefObject, useEffect, useState } from 'react'
 
-import { Tier } from '@/@core/domain/entities'
-import { Podium } from '@/@core/domain/structs'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { _getLastWeekRankingWinners } from './_getLastWeekRankingWinners'
 import { playAudio } from '@/utils'
+import { Podium } from '@stardust/core/ranking/structs'
+import { Tier } from '@stardust/core/ranking/entities'
 
 type UseRankingResultProps = {
   rewardAlertDialog: RefObject<AlertDialogRef>
@@ -82,14 +82,14 @@ export function useRankingResult({
         setIsUserLoser(isUserLoser)
         playAudio('earning.wav')
       } catch (error) {
-        toast.show(error.message)
+        // toast.show(error.message)
       } finally {
         setIsloading(false)
       }
     }
 
     setRankingResult()
-  }, [user, isLoading, toast.show])
+  }, [user, isLoading])
 
   return {
     lastWeekRankingPodium,
