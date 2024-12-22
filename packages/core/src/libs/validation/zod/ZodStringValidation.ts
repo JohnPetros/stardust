@@ -1,6 +1,8 @@
 import { type ZodEnum, ZodError, z, type ZodString } from 'zod'
+
+import { ZodValidationErrorFactory } from '@stardust/validation/factories'
+
 import type { IStringValidation } from '#interfaces'
-import { ValidationError } from '#global/errors'
 
 export class ZodStringValidation implements IStringValidation {
   private data: unknown
@@ -78,16 +80,7 @@ export class ZodStringValidation implements IStringValidation {
 
       this.zodString.parse(this.data)
     } catch (error) {
-      if (error instanceof ZodError) {
-        const fieldErrors = error.flatten().fieldErrors
-
-        throw new ValidationError(
-          Object.entries(fieldErrors).map(([field, messages]) => ({
-            name: field,
-            messages: messages ?? [],
-          })),
-        )
-      }
+      if (error instanceof ZodError) throw ZodValidationErrorFactory.produce(error)
     }
   }
 }

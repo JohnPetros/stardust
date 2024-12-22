@@ -1,27 +1,15 @@
-import type {
-  IController,
-  IHttp,
-  IProfileService,
-  IRankingService,
-} from '@stardust/core/interfaces'
-import type { IAuthService } from '@stardust/core/interfaces'
+import type { IController, IHttp, IRankingService } from '@stardust/core/interfaces'
 
 export const FetchCurrentRankingController = (
-  authService: IAuthService,
-  profileService: IProfileService,
   rankingService: IRankingService,
 ): IController => {
   return {
     async handle(http: IHttp) {
-      const userIdResponse = await authService.fetchUserId()
-      if (userIdResponse.isFailure) userIdResponse.throwError()
-
-      const userResponse = await profileService.fetchUserById(userIdResponse.body)
-      if (userResponse.isFailure) userResponse.throwError()
+      const userDto = await http.getUser()
 
       const [tiersResponse, rankingUsersResponse] = await Promise.all([
         rankingService.fetchTiers(),
-        rankingService.fetchRankingUsersByTier(userResponse.body.tier.id),
+        rankingService.fetchRankingUsersByTier(userDto.tier.id),
       ])
 
       if (tiersResponse.isFailure) tiersResponse.throwError()

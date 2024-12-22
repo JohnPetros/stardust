@@ -1,18 +1,24 @@
 import type { IAuthService, IController, IHttp } from '@stardust/core/interfaces'
 
 import { COOKIES, ROUTES } from '@/constants'
+import { HTTP_STATUS_CODE } from '@stardust/core/constants'
+
+type Schema = {
+  queryParams: {
+    token: string
+  }
+}
 
 export const ConfirmPasswordResetController = (
   authService: IAuthService,
-): IController => {
+): IController<Schema> => {
   function redirectToSigInPage(http: IHttp, errorMessage: string) {
     return http.redirect(`${ROUTES.public.auth.signIn}?error=${errorMessage}`)
   }
 
   return {
-    async handle(http: IHttp) {
-      const token = http.getSearchParam('token')
-      if (!token) return redirectToSigInPage(http, 'Token não encontrado')
+    async handle(http: IHttp<Schema>) {
+      const { token } = http.getQueryParams()
 
       const response = await authService.confirmPasswordReset(token)
 
@@ -30,7 +36,7 @@ export const ConfirmPasswordResetController = (
       http.setCookie(COOKIES.keys.accessToken, accessToken, cookieDuration)
       http.setCookie(COOKIES.keys.refreshToken, refreshToken, cookieDuration)
 
-      return http.send(null, 200)
+      return http.send(null, HTTP_STATUS_CODE.noContent)
     },
   }
 }

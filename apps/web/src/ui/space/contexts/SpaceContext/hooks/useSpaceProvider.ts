@@ -2,13 +2,13 @@
 
 import { useCallback, useMemo, useRef, useState } from 'react'
 
-import { Planet } from '@/@core/domain/entities'
-import type { PlanetDto } from '#dtos'
+import { Planet } from '@stardust/core/space/entities'
+import type { PlanetDto } from '@stardust/core/space/dtos'
+import { GetLastUnlockedStarIdUseCase } from '@stardust/core/space/use-cases'
 
-import { useScrollEvent } from ''@/ui/global/hooks''
-import type { LastUnlockedStarViewPortPosition } from '../types'
+import { useScrollEvent } from '@/ui/global/hooks'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { GetLastUnlockedStarIdUseCase } from '@/@core/use-cases/space'
+import type { LastUnlockedStarViewPortPosition } from '../types'
 
 export function useSpaceProvider(planetsDto: PlanetDto[]) {
   const { user } = useAuthContext()

@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react'
 import { motion, type Variants } from 'framer-motion'
-import { useBreakpoint } from ''@/ui/global/hooks''
+import { useBreakpoint } from '@/ui/global/hooks'
 import { useSiderbarContext } from '@/ui/profile/contexts/SidebarContext'
 
 const variants: Variants = {

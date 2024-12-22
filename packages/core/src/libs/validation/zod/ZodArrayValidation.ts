@@ -1,7 +1,8 @@
 import { type ZodArray, z, ZodError } from 'zod'
 
+import { ZodValidationErrorFactory } from '@stardust/validation/factories'
+
 import type { IArrayValidation } from '#interfaces'
-import { ValidationError } from '#global/errors'
 
 export class ZodArrayValidation implements IArrayValidation {
   private data: unknown
@@ -34,16 +35,7 @@ export class ZodArrayValidation implements IArrayValidation {
     try {
       this.zodArray.parse(this.data)
     } catch (error) {
-      if (error instanceof ZodError) {
-        const fieldErrors = error.flatten().fieldErrors
-
-        throw new ValidationError(
-          Object.entries(fieldErrors).map(([field, messages]) => ({
-            name: field,
-            messages: messages ?? [],
-          })),
-        )
-      }
+      if (error instanceof ZodError) throw ZodValidationErrorFactory.produce(error)
     }
   }
 }

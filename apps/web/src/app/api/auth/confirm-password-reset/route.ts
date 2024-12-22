@@ -1,18 +1,27 @@
+import { z } from 'zod'
 import type { NextRequest } from 'next/server'
 
 import { NextHttp } from '@/api/next/NextHttp'
-import { ConfirmPasswordResetController } from '@/infra/api/next/controllers/auth'
-import { SupabaseRouteHandlerClient } from 'SupabaseServerClient'
+import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
 import { SupabaseAuthService } from '@/api/supabase/services'
+import { ConfirmPasswordResetController } from '@/api/controllers/auth'
+import { runApiRoute } from '@/api/next/utils'
+
+const schema = z.object({
+  queryParams: z.object({
+    token: z.string(),
+  }),
+})
+
+type Schema = z.infer<typeof schema>
 
 export async function GET(request: NextRequest) {
-  const nextHttp = NextHttp(request)
-
-  const supabase = SupabaseRouteHandlerClient()
-  const authService = SupabaseAuthService(supabase)
-
-  const controller = ConfirmPasswordResetController(authService)
-  const httpResponse = await controller.handle(nextHttp)
-
-  return httpResponse.body
+  return runApiRoute(async () => {
+    const http = await NextHttp<Schema>({ request })
+    const supabase = SupabaseRouteHandlerClient()
+    const authService = SupabaseAuthService(supabase)
+    const controller = ConfirmPasswordResetController(authService)
+    const httpResponse = await controller.handle(http)
+    return httpResponse.body
+  })
 }

@@ -7,7 +7,7 @@ import { z } from 'zod'
 
 import { emailSchema, nameSchema, passwordSchema } from '@stardust/validation/schemas'
 
-import { useApi } from ''@/ui/global/hooks'/useApi'
+import { useApi } from '@/ui/global/hooks'
 import type { SignUpFormFields } from './SignUpFormFields'
 
 const signUpFormSchema = z.object({

@@ -30,7 +30,7 @@ export default async function Lesson({ params }: LessonPageProps) {
   const starIsUnlockedResponse = await spaceService.verifyStarIsUnlocked(star.id, userId)
 
   if (starIsUnlockedResponse.isFailure || !starIsUnlockedResponse.body) {
-    return redirect(ROUTES.private.app.home.space)
+    return redirect(ROUTES.private.space)
   }
 
   const questionsResponse = await lessonService.fetchQuestionsByStar(star.id)

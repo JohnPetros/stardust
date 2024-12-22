@@ -13,8 +13,8 @@ export const ROUTES = {
       newSolution: '/challenging/solution/new',
     },
     profile: {
-      settings: '/profile/settings',
       prefix: '/profile',
+      settings: '/profile/settings',
     },
     lesson: {
       prefix: '/lesson',
@@ -44,13 +44,11 @@ export const ROUTES = {
     },
     profile: {
       achievements: '/api/achievements',
+      reward: '/api/user',
     },
     ranking: {
       current: '/api/ranking/current',
       uptade: '/api/ranking/update',
-    },
-    lesson: {
-      reward: '/api/reward',
     },
   },
 }

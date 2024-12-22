@@ -8,7 +8,7 @@ type HomeLink = {
 
 export const HOME_LINKS: HomeLink[] = [
   {
-    route: ROUTES.private.app.home.space,
+    route: ROUTES.private.space,
     label: 'Aprender',
     icon: 'learn.svg',
   },

@@ -17,7 +17,7 @@ export default async function Rewarding() {
   const rewardsPayloadCookie = await _getCookie(COOKIES.keys.rewardingPayload)
 
   if (!rewardsPayloadCookie) {
-    return redirect(ROUTES.private.app.home.space)
+    return redirect(ROUTES.private.space)
   }
 
   const apiClient = NextApiClient()

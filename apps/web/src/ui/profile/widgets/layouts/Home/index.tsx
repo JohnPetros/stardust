@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react'
 
-import { useBreakpoint } from ''@/ui/global/hooks''
+import { useBreakpoint } from '@/ui/global/hooks'
 
 import { AnimatedContainer } from './AnimatedContainer'
 import { Header } from './Header'

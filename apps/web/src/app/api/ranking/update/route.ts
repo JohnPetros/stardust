@@ -1,18 +1,16 @@
+import { UpdateRakingsController } from '@/api/controllers/ranking'
 import { NextHttp } from '@/api/next/NextHttp'
-import { SupabaseRouteHandlerClient } from 'SupabaseServerClient'
-import { SupabaseRankingsService } from '@/api/supabase/services'
+import { runApiRoute } from '@/api/next/utils'
+import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
+import { SupabaseRankingService } from '@/api/supabase/services'
 
-import { UpdateRakingsController } from '@/infra/api/next/controllers/app'
-
-export async function POST() {
-  const nextHttp = NextHttp()
-
-  const supabase = SupabaseRouteHandlerClient()
-  const rankingsService = SupabaseRankingsService(supabase)
-
-  const controller = UpdateRakingsController(rankingsService)
-
-  const httpResponse = await controller.handle(nextHttp)
-
-  return httpResponse.body
+export async function PUT() {
+  return await runApiRoute(async () => {
+    const http = await NextHttp()
+    const supabase = SupabaseRouteHandlerClient()
+    const rankingsService = SupabaseRankingService(supabase)
+    const controller = UpdateRakingsController(rankingsService)
+    const httpResponse = await controller.handle(http)
+    return httpResponse.body
+  })
 }

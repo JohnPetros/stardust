@@ -1,6 +1,7 @@
 import { z, type ZodNumber, ZodError } from 'zod'
 
-import { ValidationError } from '#global/errors'
+import { ZodValidationErrorFactory } from '@stardust/validation/factories'
+
 import type { INumberValidation } from '#interfaces'
 
 export class ZodNumberValidation implements INumberValidation {
@@ -46,16 +47,7 @@ export class ZodNumberValidation implements INumberValidation {
     try {
       this.zodNumber.parse(this.data)
     } catch (error) {
-      if (error instanceof ZodError) {
-        const fieldErrors = error.flatten().fieldErrors
-
-        throw new ValidationError(
-          Object.entries(fieldErrors).map(([field, messages]) => ({
-            name: field,
-            messages: messages ?? [],
-          })),
-        )
-      }
+      if (error instanceof ZodError) throw ZodValidationErrorFactory.produce(error)
     }
   }
 }

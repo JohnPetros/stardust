@@ -20,6 +20,7 @@
     "./space/types": "./src/modules/space/domain/types/index.ts",
     "./space/dtos": "./src/modules/space/dtos/index.ts",
     "./space/errors": "./src/modules/space/errors/index.ts",
+    "./space/use-cases": "./src/modules/space/use-cases/index.ts",
     "./ranking/entities": "./src/modules/ranking/domain/entities/index.ts",
     "./ranking/structs": "./src/modules/ranking/domain/structs/index.ts",
     "./ranking/constants": "./src/modules/ranking/domain/constants/index.ts",
@@ -72,6 +73,7 @@
     "#ranking/constants": "./src/modules/ranking/domain/constants/index.ts",
     "#ranking/dtos": "./src/modules/ranking/dtos/index.ts",
     "#ranking/errors": "./src/modules/ranking/errors/index.ts",
+    "#ranking/use-cases": "./src/modules/ranking/use-cases/index.ts",
     "#challenging/entities": "./src/modules/challenging/domain/entities/index.ts",
     "#challenging/structs": "./src/modules/challenging/domain/structs/index.ts",
     "#challenging/dtos": "./src/modules/challenging/dtos/index.ts",
@@ -92,9 +94,11 @@
     "#responses": "./src/responses/index.ts",
     "#libs": "./src/libs/index.ts",
     "#fakers": "./src/__tests__/fakers/index.ts",
-    "#interfaces": "./src/interfaces/index.ts"
+    "#interfaces": "./src/interfaces/index.ts",
+    "#zod": "./src/interfaces/index.ts"
   },
   "dependencies": {
+    "@stardust/validation": "*",
     "dayjs": "^1.11.11",
     "zod": "^3.23.8"
   },

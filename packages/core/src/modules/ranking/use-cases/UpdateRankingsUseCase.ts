@@ -1,9 +1,9 @@
-import type { IRankingsService } from '#interfaces'
+import type { IRankingService } from '#interfaces'
 import { Tier, type RankingUser } from '#ranking/entities'
 import { Ranking } from '#ranking/structs'
 
 export class UpdateRankingsUseCase {
-  constructor(private readonly rankingsService: IRankingsService) {}
+  constructor(private readonly rankingService: IRankingService) {}
 
   async do() {
     const [tiers] = await Promise.all([
@@ -14,7 +14,7 @@ export class UpdateRankingsUseCase {
 
     await this.saveLosers(tiers)
     await this.saveWinners(tiers)
-    await this.rankingsService.allowUsersSeeRankingResult()
+    await this.rankingService.allowUsersSeeRankingResult()
 
     await this.resetRankingUsersXp()
   }
@@ -29,10 +29,7 @@ export class UpdateRankingsUseCase {
       const ranking = await this.fetchRankingByTier(currentTier.id)
       const losers = ranking.losers
 
-      const response = await this.rankingsService.saveRankingLosers(
-        losers,
-        currentTier.id,
-      )
+      const response = await this.rankingService.saveRankingLosers(losers, currentTier.id)
 
       if (response.isFailure) {
         await this.deleteLastWeekRankingUsers()
@@ -55,7 +52,7 @@ export class UpdateRankingsUseCase {
       const ranking = await this.fetchRankingByTier(currentTier.id)
       const winners = ranking.winners
 
-      const response = await this.rankingsService.saveRankingWinners(
+      const response = await this.rankingService.saveRankingWinners(
         winners,
         currentTier.id,
       )
@@ -72,34 +69,34 @@ export class UpdateRankingsUseCase {
   }
 
   private async fetchTiers() {
-    const tiersResponse = await this.rankingsService.fetchTiers()
+    const tiersResponse = await this.rankingService.fetchTiers()
     if (tiersResponse.isFailure) tiersResponse.throwError()
     return tiersResponse.body.map(Tier.create)
   }
 
   private async fetchRankingByTier(tierId: string) {
-    const response = await this.rankingsService.fetchLastWeekRankingUsersByTier(tierId)
+    const response = await this.rankingService.fetchLastWeekRankingUsersByTier(tierId)
     if (response.isFailure) response.throwError()
     return Ranking.create(response.body)
   }
 
   private async deleteLastWeekRankingUsers() {
-    const response = await this.rankingsService.deleteLastWeekRankingUsers()
+    const response = await this.rankingService.deleteLastWeekRankingUsers()
     if (response.isFailure) response.throwError()
   }
 
   private async resetRankingUsersXp() {
-    const response = await this.rankingsService.resetRankingUsersXp()
+    const response = await this.rankingService.resetRankingUsersXp()
     if (response.isFailure) response.throwError()
   }
 
   private async updateLastWeekRankingPositions() {
-    const response = await this.rankingsService.updateLastWeekRankingPositions()
+    const response = await this.rankingService.updateLastWeekRankingPositions()
     if (response.isFailure) response.throwError()
   }
 
   private async updateRankingUsersTier(rankingUsers: RankingUser[], tierId: string) {
-    const response = await this.rankingsService.updateRankingUsersTier(
+    const response = await this.rankingService.updateRankingUsersTier(
       rankingUsers,
       tierId,
     )

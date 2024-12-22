@@ -4,7 +4,15 @@ import type { IAuthService } from '@stardust/core/interfaces'
 
 import { ROUTES } from '@/constants'
 
-export const ConfirmEmailController = (authService: IAuthService): IController => {
+type Schema = {
+  queryParams: {
+    token: string
+  }
+}
+
+export const ConfirmEmailController = (
+  authService: IAuthService,
+): IController<Schema> => {
   function redirectToSigInPage(http: IHttp, errorMessage: string) {
     return http.redirect(
       `${ROUTES.public.auth.signIn}?error=${Slug.create(errorMessage).value}`,
@@ -12,14 +20,10 @@ export const ConfirmEmailController = (authService: IAuthService): IController =
   }
 
   return {
-    async handle(http: IHttp) {
-      const token = http.getSearchParam('token')
-
-      if (!token) return redirectToSigInPage(http, 'Token de confirmação não encontrado')
-
+    async handle(http: IHttp<Schema>) {
+      const { token } = http.getQueryParams()
       const response = await authService.confirmEmail(token)
       if (response.isSuccess) return http.redirect(ROUTES.private.accountConfirmation)
-
       return redirectToSigInPage(http, response.errorMessage)
     },
   }

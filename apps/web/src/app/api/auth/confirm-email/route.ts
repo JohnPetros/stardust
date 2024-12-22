@@ -1,18 +1,28 @@
 import type { NextRequest } from 'next/server'
+import { z } from 'zod'
 
+import type { NextParams } from '@/server/next/types'
 import { NextHttp } from '@/api/next/NextHttp'
-import { ConfirmEmailController } from '@/infra/api/next/controllers/auth'
-import { SupabaseRouteHandlerClient } from 'SupabaseServerClient'
+import { runApiRoute } from '@/api/next/utils'
+import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
+import { ConfirmEmailController } from '@/api/controllers/auth'
 import { SupabaseAuthService } from '@/api/supabase/services'
 
-export async function GET(request: NextRequest) {
-  const nextHttp = NextHttp(request)
+const schema = z.object({
+  queryParams: z.object({
+    token: z.string(),
+  }),
+})
 
-  const supabase = SupabaseRouteHandlerClient()
-  const authService = SupabaseAuthService(supabase)
+type Schema = z.infer<typeof schema>
 
-  const controller = ConfirmEmailController(authService)
-  const httpResponse = await controller.handle(nextHttp)
-
-  return httpResponse.body
+export async function GET(request: NextRequest, params: NextParams) {
+  return runApiRoute(async () => {
+    const http = await NextHttp<Schema>({ request, schema, params })
+    const supabase = SupabaseRouteHandlerClient()
+    const authService = SupabaseAuthService(supabase)
+    const controller = ConfirmEmailController(authService)
+    const httpResponse = await controller.handle(http)
+    return httpResponse.body
+  })
 }

@@ -30,7 +30,7 @@ export const VerifyAuthRoutesController = (authService: IAuthService): IControll
         return http.redirect(ROUTES.private.space)
       }
 
-      return new ApiResponse()
+      return http.pass()
     },
   }
 }

@@ -2,9 +2,10 @@
 
 import { createContext, type ReactNode } from 'react'
 
+import type { PlanetDto } from '@stardust/core/space/dtos'
+
 import { useSpaceProvider, useSpaceContext } from './hooks'
 import type { SpaceContextValue } from './types/SpaceContextValue'
-import type { PlanetDto } from '#dtos'
 
 type SpaceContextProps = {
   children: ReactNode

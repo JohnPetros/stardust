@@ -1,5 +1,6 @@
-import { ValidationError } from '#global/errors'
 import { type ZodBoolean, z, ZodError } from 'zod'
+
+import { ZodValidationErrorFactory } from '@stardust/validation/factories'
 
 export class ZodBooleanValidation {
   private data: unknown
@@ -18,16 +19,7 @@ export class ZodBooleanValidation {
     try {
       this.zodBoolean.parse(this.data)
     } catch (error) {
-      if (error instanceof ZodError) {
-        const fieldErrors = error.flatten().fieldErrors
-
-        throw new ValidationError(
-          Object.entries(fieldErrors).map(([field, messages]) => ({
-            name: field,
-            messages: messages ?? [],
-          })),
-        )
-      }
+      if (error instanceof ZodError) throw ZodValidationErrorFactory.produce(error)
     }
   }
 }

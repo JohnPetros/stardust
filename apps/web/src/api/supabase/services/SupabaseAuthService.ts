@@ -1,9 +1,4 @@
 import type { IAuthService } from '@stardust/core/interfaces'
-import {
-  EmailAlreadyExistsError,
-  InvalidCredentialsError,
-  SignUpExceededRequestsError,
-} from '@stardust/core/auth/errors'
 import { Slug } from '@stardust/core/global/structs'
 import { ApiResponse } from '@stardust/core/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/constants'
