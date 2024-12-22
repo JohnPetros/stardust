@@ -2,7 +2,7 @@
 
 import { createContext, useRef, type ReactNode } from 'react'
 
-import type { AchievementDto } from '#dtos'
+import type { AchievementDto } from '@stardust/core/profile/dtos'
 
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { NewUnlockedAchievementsAlertDialog } from './components/NewUnlockedAchievementsAlertDialog'

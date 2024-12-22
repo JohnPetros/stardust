@@ -1,6 +1,6 @@
 'use server'
 
-import type { UserDto } from '#dtos'
+import type { UserDto } from '@stardust/core/global/dtos'
 import { GetLastWeekRankingWinnersUseCase } from '@/@core/use-cases/rankings'
 import { SupabaseServerActionClient } from 'SupabaseServerClient'
 import { SupabaseRankingsService } from '@/api/supabase/services'

@@ -3,17 +3,15 @@
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 
-import { User } from '@/@core/domain/entities'
-import type { UserDto } from '#dtos'
+import type { UserDto } from '@stardust/core/global/dtos'
+import { Observer } from '@stardust/core/global/structs'
+import { User } from '@stardust/core/global/entities'
 
-import { useApi } from '@/infra/api'
-import { useCache } from '@/infra/cache'
 import { CACHE, ROUTES } from '@/constants'
-
+import { useApi, useCache } from '@/ui/global/hooks'
+import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import type { AuthContextValue } from '../types/AuthContextValue'
 import type { Session } from '../types/Session'
-import { useToastContext } from '../../../../global/contexts/ToastContext'
-import { Observer } from '@/@core/domain/structs'
 
 export function useAuthProvider(serverSession: Session | null) {
   const [session, setSession] = useState<Session | null>(serverSession)
@@ -101,7 +99,7 @@ export function useAuthProvider(serverSession: Session | null) {
       return
     }
 
-    router.push(ROUTES.public.signIn)
+    router.push(ROUTES.public.auth.signIn)
   }
 
   const mutateUserCache = useCallback(

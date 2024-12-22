@@ -26,7 +26,7 @@ describe('Confirm Email Controller', () => {
     const error = new TokenNotFoundError()
     const url = String(response.body)
 
-    expect(url.startsWith(ROUTES.public.signIn))
+    expect(url.startsWith(ROUTES.public.auth.signIn))
     expect(url.endsWith(`error=${error.message}`))
   })
 
@@ -42,7 +42,7 @@ describe('Confirm Email Controller', () => {
 
     const url = String(response.body)
 
-    expect(url.startsWith(ROUTES.public.signIn)).toBeTruthy()
+    expect(url.startsWith(ROUTES.public.auth.signIn)).toBeTruthy()
     expect(url.endsWith(`error=${error.message}`))
   })
 
@@ -54,7 +54,7 @@ describe('Confirm Email Controller', () => {
     const response = await controller.handle(httpMock)
 
     expect(
-      String(response.body).startsWith(ROUTES.private.app.accountConfirmation),
+      String(response.body).startsWith(ROUTES.private.accountConfirmation),
     ).toBeTruthy()
   })
 })

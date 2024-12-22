@@ -2,7 +2,7 @@ import { RankingsServiceMock } from '@/@core/__tests__/mocks/services'
 import { GetLastWeekRankingWinnersUseCase } from '../GetLastWeekRankingWinnersUseCase'
 import { TiersFaker, UsersFaker } from '@/@core/domain/entities/tests/fakers'
 import { RankingUsersFaker } from '@/@core/domain/entities/tests/fakers/RankingUserFaker'
-import type { UserDto } from '#dtos'
+import type { UserDto } from '@stardust/core/global/dtos'
 
 let rankingsServiceMock: RankingsServiceMock
 let useCase: GetLastWeekRankingWinnersUseCase

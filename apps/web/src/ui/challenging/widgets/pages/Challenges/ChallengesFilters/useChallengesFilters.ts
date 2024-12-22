@@ -10,7 +10,7 @@ import type {
 } from '@/@core/domain/types'
 import { ChallengeCompletion, ChallengeDifficulty, List } from '@/@core/domain/structs'
 
-import { useUrlSearchParams } from '@/ui/global/hooks/useUrlSearchParams'
+import { useUrlSearchParams } from ''@/ui/global/hooks'/useUrlSearchParams'
 import { FILTER_SELECTS_ITEMS } from '../filter-select-items'
 
 export function useChallengesFilter(categories: ChallengeCategory[]) {

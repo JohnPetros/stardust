@@ -1,4 +1,4 @@
-import { ValidationError } from '@/@core/errors/lib'
+import { ValidationError } from '#global/errors'
 import { type ZodBoolean, z, ZodError } from 'zod'
 
 export class ZodBooleanValidation {
@@ -19,7 +19,14 @@ export class ZodBooleanValidation {
       this.zodBoolean.parse(this.data)
     } catch (error) {
       if (error instanceof ZodError) {
-        throw new ValidationError(error.flatten().formErrors)
+        const fieldErrors = error.flatten().fieldErrors
+
+        throw new ValidationError(
+          Object.entries(fieldErrors).map(([field, messages]) => ({
+            name: field,
+            messages: messages ?? [],
+          })),
+        )
       }
     }
   }

@@ -1,4 +1,4 @@
-import { ValidationError } from '@/@core/errors/lib'
+import { ValidationError } from '#global/errors'
 import { Name } from '../global/Name'
 
 describe('Name Struct', () => {

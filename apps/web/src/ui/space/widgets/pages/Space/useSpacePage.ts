@@ -1,6 +1,6 @@
 'use client'
 
-import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
+import { useLocalStorage } from ''@/ui/global/hooks'/useLocalStorage'
 import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
 import { STORAGE } from '@/constants'
 

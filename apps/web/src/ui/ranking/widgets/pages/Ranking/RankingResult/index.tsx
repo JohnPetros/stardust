@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { useRef } from 'react'
 
-import { useApi } from '@/infra/api'
+import { useApi } from '@/ui/global/hooks'
 
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'

@@ -1,13 +1,14 @@
 'use server'
 
-import type { UserDto } from '#dtos'
-import { CountCompletedChallengesByDifficultyLevelUseCase } from '@/@core/use-cases/challenges'
-import { SupabaseServerActionClient } from 'SupabaseServerClient'
-import { SupabaseChallengesService } from '@/api/supabase/services'
+import type { UserDto } from '@stardust/core/global/dtos'
+import { CountCompletedChallengesByDifficultyLevelUseCase } from '@stardust/core/challenging/use-cases'
+
+import { SupabaseChallengingService } from '@/api/supabase/services'
+import { SupabaseServerActionClient } from '@/api/supabase/clients'
 
 export async function _countCompletedChallengesByDifficultyLevel(userDto: UserDto) {
   const supabase = SupabaseServerActionClient()
-  const challengesService = SupabaseChallengesService(supabase)
+  const challengesService = SupabaseChallengingService(supabase)
 
   const useCase = new CountCompletedChallengesByDifficultyLevelUseCase(challengesService)
 

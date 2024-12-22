@@ -1,7 +1,7 @@
 'use client'
 
 import { Rocket } from '@/@core/domain/entities'
-import { useApi } from '@/infra/api'
+import { useApi } from '@/ui/global/hooks'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { playAudio } from '@/utils'

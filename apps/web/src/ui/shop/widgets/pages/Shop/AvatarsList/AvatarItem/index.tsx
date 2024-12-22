@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { twMerge } from 'tailwind-merge'
 
-import { useApi } from '@/infra/api'
+import { useApi } from '@/ui/global/hooks'
 import { ShopButton } from '../../ShopButton'
 import { AnimatedItem } from '../../AnimatedItem'
 import { useAvatarItem } from './useAvatarItem'

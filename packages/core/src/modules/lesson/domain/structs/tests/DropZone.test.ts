@@ -1,4 +1,4 @@
-import { ValidationError } from '@/@core/errors/lib'
+import { ValidationError } from '#global/errors'
 import { DropZoneFaker } from './fakers'
 
 describe('DropZone struct', () => {

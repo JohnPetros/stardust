@@ -19,7 +19,7 @@ export const VerifyAuthRoutesController = (authService: IAuthService): IControll
       const isIndexRoute = currentRoute === '/'
 
       if (!hasSession && !isPublicRoute) {
-        return http.redirect(ROUTES.public.signIn)
+        return http.redirect(ROUTES.public.auth.signIn)
       }
 
       if (!hasSession && isIndexRoute) {

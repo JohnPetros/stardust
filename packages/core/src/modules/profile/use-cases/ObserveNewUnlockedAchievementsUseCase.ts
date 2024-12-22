@@ -1,5 +1,7 @@
-import { Achievement, User } from '#domain/entities'
-import type { AchievementDto, UserDto } from '#dtos'
+import { User } from '#global/entities'
+import { Achievement } from '#profile/entities'
+import type { UserDto } from '#global/dtos'
+import type { AchievementDto } from '#profile/dtos'
 import type { IProfileService, IUseCase } from '#interfaces'
 
 type Response = {

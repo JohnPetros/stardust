@@ -1,7 +1,5 @@
-import { useMemo } from 'react'
-
-import { useSupabaseApi } from '../../../api/supabase'
-import type { IApi } from '../../../api/interfaces'
+import type { IApi } from '@stardust/core/interfaces'
+import { useSupabaseApi } from './use-supabase-api'
 
 export function useApi(): IApi {
   const supabaseApi = useSupabaseApi()

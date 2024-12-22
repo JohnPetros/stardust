@@ -11,7 +11,7 @@ import { ServiceResponse } from '@stardust/core/responses'
 
 jest.mock('@/ui/global/contexts/AuthContext')
 jest.mock('@/ui/global/contexts/ToastContext')
-jest.mock('@/infra/api')
+jest.mock('@/ui/global/hooks')
 
 const observeNewUnlockedAchievementsMock = jest.fn()
 

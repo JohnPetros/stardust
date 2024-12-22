@@ -1,4 +1,4 @@
-import { ValidationError } from '@/@core/errors/lib'
+import { ValidationError } from '#global/errors'
 import { WeekStatus } from '../profile/WeekStatus'
 import { Datetime } from '@stardust/core/libs'
 

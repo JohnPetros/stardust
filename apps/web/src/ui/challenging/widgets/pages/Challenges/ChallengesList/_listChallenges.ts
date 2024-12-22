@@ -5,7 +5,7 @@ import type { UserDTO } from '@/@core/dtos'
 import type { ChallengesListParams } from '@/@core/types'
 import { ListChallengesUseCase } from '@/@core/use-cases/challenges'
 import { SupabaseServerClient } from 'SupabaseServerClient'
-import { SupabaseChallengesService } from '@/api/supabase/services'
+import { SupabaseChallengingService } from '@/api/supabase/services'
 
 export async function _listChallenges(
   userDTO: UserDTO,
@@ -13,7 +13,7 @@ export async function _listChallenges(
   listParams: ChallengesListParams,
 ) {
   const supabase = SupabaseServerClient()
-  const challengesService = SupabaseChallengesService(supabase)
+  const challengesService = SupabaseChallengingService(supabase)
 
   const useCase = new ListChallengesUseCase(challengesService)
   return await useCase.do({ userDTO, completionStatus, listParams })

@@ -1,10 +1,10 @@
 'use client'
 
-import type { CompletedChallengesCountByDifficultyLevel } from '@/@core/domain/types'
+import type { CompletedChallengesCountByDifficultyLevel } from '@stardust/core/challenging/types'
 import type { ApexOptions } from 'apexcharts'
 
 export function useApexChallengesChart(
-  chartData: CompletedChallengesCountByDifficultyLevel
+  chartData: CompletedChallengesCountByDifficultyLevel,
 ) {
   const total =
     chartData.absolute.easy + chartData.absolute.medium + chartData.absolute.hard

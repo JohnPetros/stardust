@@ -1,16 +1,18 @@
 'use server'
 
-import type { AchievementDto, UserDto } from '#dtos'
-import { ObserveNewUnlockedAchievementsUseCase } from '@/@core/use-cases/achievements'
-import { SupabaseServerActionClient } from 'SupabaseServerClient/SupabaseServerActionClient'
-import { SupabaseAchievementsService } from '@/api/supabase/services'
+import type { UserDto } from '@stardust/core/global/dtos'
+import type { AchievementDto } from '@stardust/core/profile/dtos'
+import { ObserveNewUnlockedAchievementsUseCase } from '@stardust/core/profile/use-cases'
+
+import { SupabaseServerActionClient } from '@/api/supabase/clients'
+import { SupabaseProfileService } from '@/api/supabase/services'
 
 export async function _observeNewUnlockedAchievements(
   achievementsDto: AchievementDto[],
   userDto: UserDto,
 ) {
   const supabase = SupabaseServerActionClient()
-  const achievementsService = SupabaseAchievementsService(supabase)
+  const achievementsService = SupabaseProfileService(supabase)
 
   const useCase = new ObserveNewUnlockedAchievementsUseCase(achievementsService)
 

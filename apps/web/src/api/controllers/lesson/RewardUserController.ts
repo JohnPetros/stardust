@@ -4,7 +4,7 @@ import type { RewardingPayloadDto } from '#dtos'
 import type { IController, IHttp } from '@stardust/core/interfaces'
 import type {
   IAuthService,
-  IUsersService,
+  IProfileService,
   ISpaceService,
 } from '@stardust/core/interfaces'
 import { RewardUserUseCase } from '@/@core/use-cases/users'
@@ -12,7 +12,7 @@ import { ROUTES } from '@/constants'
 
 export const RewardUserController = (
   authService: IAuthService,
-  usersService: IUsersService,
+  usersService: IProfileService,
   spaceService: ISpaceService,
 ): IController => {
   function getNextRoute(rewardPayloadOrigin: RewardingPayloadOrigin) {

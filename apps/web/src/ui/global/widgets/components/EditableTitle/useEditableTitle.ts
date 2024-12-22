@@ -1,6 +1,6 @@
 'use client'
 
-import { useOutsideClick } from '@/ui/global/hooks/useOutsideClick'
+import { useOutsideClick } from ''@/ui/global/hooks'/useOutsideClick'
 import { useRef, useState } from 'react'
 
 export function useEditableTitle(

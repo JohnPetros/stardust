@@ -2,14 +2,14 @@
 
 import { type RefObject, useEffect, useState } from 'react'
 
-import type { AchievementDto } from '#dtos'
-import { Achievement, User } from '@/@core/domain/entities'
+import type { AchievementDto } from '@stardust/core/profile/dtos'
+import { Achievement } from '@stardust/core/profile/entities'
+import { User } from '@stardust/core/global/entities'
 
-import { useApi } from '@/infra/api'
+import { useApi, useEventListener } from '@/ui/global/hooks'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
+import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types/AlertDialogRef'
-import { useEventListener } from '@/ui/global/hooks/useEventListener'
 
 import type { _observeNewUnlockedAchievements } from '../actions/_observeNewUnlockedAchievements'
 
@@ -22,7 +22,6 @@ export function useAchivementsProvider(
   const [newUnlockedAchievements, setNewUnlockedAchievements] = useState<Achievement[]>(
     [],
   )
-
   const api = useApi()
   const toast = useToastContext()
 
@@ -68,7 +67,7 @@ export function useAchivementsProvider(
       )
       await updateUser(User.create(response.userDto))
     } catch (error) {
-      toast.show(error.message)
+      toast.show('Error ao observar conquistas')
     }
   }
 

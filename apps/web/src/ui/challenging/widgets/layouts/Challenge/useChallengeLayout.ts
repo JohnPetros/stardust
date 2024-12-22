@@ -6,7 +6,7 @@ import { COOKIES, STORAGE } from '@/constants'
 import { _setCookie } from '@/ui/global/actions'
 import type { PanelsOffset } from './PanelsOffset'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useSecondsCounter } from '@/ui/global/hooks/useSecondsCounter'
+import { useSecondsCounter } from ''@/ui/global/hooks'/useSecondsCounter'
 import { ChallengesCraftVisilibity } from '@/@core/domain/structs'
 
 export function useChallengeLayout(

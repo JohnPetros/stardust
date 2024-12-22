@@ -1,6 +1,6 @@
 import { type ZodEnum, ZodError, z, type ZodString } from 'zod'
-import { ValidationError } from '../../../../../errors'
-import type { IStringValidation } from '../#interfaces'
+import type { IStringValidation } from '#interfaces'
+import { ValidationError } from '#global/errors'
 
 export class ZodStringValidation implements IStringValidation {
   private data: unknown
@@ -79,13 +79,12 @@ export class ZodStringValidation implements IStringValidation {
       this.zodString.parse(this.data)
     } catch (error) {
       if (error instanceof ZodError) {
-        console.log('DATA: ', this.data)
         const fieldErrors = error.flatten().fieldErrors
 
         throw new ValidationError(
           Object.entries(fieldErrors).map(([field, messages]) => ({
             name: field,
-            messages,
+            messages: messages ?? [],
           })),
         )
       }

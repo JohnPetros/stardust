@@ -1,8 +1,8 @@
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 
-import type { IDatetime } from '@/@core/interfaces/lib'
-import type { DateFormat } from '@/@core/interfaces/lib/IDatetime'
+import type { IDatetime } from '#interfaces'
+import type { DateFormat } from '../../../interfaces/libs/IDatetime'
 
 dayjs.locale('pt-br')
 

@@ -1,4 +1,4 @@
-import { ValidationError } from '@/@core/errors/lib'
+import { ValidationError } from '#global/errors'
 import { Id } from '../global/Id'
 
 describe('Id Struct', () => {

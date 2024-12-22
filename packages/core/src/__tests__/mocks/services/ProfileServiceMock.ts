@@ -1,9 +1,9 @@
-import type { IProfileService } from '../#interfaces'
+import type { IProfileService} from '../#interfaces'
 import type { AchievementDto, UserDto } from '../#dtos'
 import { ApiResponse } from '../../../responses'
 import type { User } from '../#domain/entities'
 
-export class ProfileServiceMock implements IProfileService {
+export class ProfileServiceMock implements #interfaces{
   private fakeAchievementsDto: AchievementDto[] = []
   private fakeUsersDto: UserDto[] = []
 

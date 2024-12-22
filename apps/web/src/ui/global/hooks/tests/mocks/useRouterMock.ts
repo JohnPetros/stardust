@@ -1,6 +1,6 @@
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useRouter } from ''@/ui/global/hooks'/useRouter'
 
-jest.mock('@/ui/global/hooks/useRouter')
+jest.mock(''@/ui/global/hooks'/useRouter')
 
 export function useRouterMock(returnMock?: Partial<ReturnType<typeof useRouter>>) {
   const goToMock = jest.fn()

@@ -1,6 +1,6 @@
 'use client'
 
-import { useApi } from '@/infra/api'
+import { useApi } from '@/ui/global/hooks'
 import { Adornment } from './Adornment'
 
 type ItemsProps = {

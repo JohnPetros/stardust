@@ -2,11 +2,11 @@
 
 import { ChallengeCompletion, ChallengeDifficulty } from '@/@core/domain/structs'
 
-import { useApi } from '@/infra/api'
+import { useApi } from '@/ui/global/hooks'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useUrlSearchParams } from '@/ui/global/hooks/useUrlSearchParams'
+import { useUrlSearchParams } from ''@/ui/global/hooks'/useUrlSearchParams'
 import type { _listChallenges } from './_listChallenges'
-import { useCache } from '@/ui/global/hooks/useCache'
+import { useCache } from '@/ui/global/hooks'
 import { CACHE } from '@/constants'
 import { SEARCH_PARAMS } from './search-params'
 import { Challenge } from '@/@core/domain/entities'

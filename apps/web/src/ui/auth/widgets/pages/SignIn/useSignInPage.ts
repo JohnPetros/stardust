@@ -8,7 +8,7 @@ import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { ROCKET_ANIMATION_DELAY } from '@/ui/auth/constants'
 import { ROUTES } from '@/constants'
 import { waitFor } from '@/utils'
-import { useRouter } from '@/ui/global/hooks'
+import { useRouter } from ''@/ui/global/hooks''
 import { Slug } from '@stardust/core/global/structs'
 import type { SignInFormFields } from './SignInForm/types'
 

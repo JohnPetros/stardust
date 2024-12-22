@@ -1,10 +1,11 @@
-import { Planet, Star, User } from '@/@core/domain/entities'
-import { StarRewardingPayload } from '@/@core/domain/structs/StarRewardingPayload'
-import { InvalidRewardingPayloadError } from '@/@core/errors/validation'
-import type { RewardingPayloadOrigin } from '@/@core/domain/types'
-import type { IUseCase } from '@stardust/core/interfaces'
-import type { RewardingPayloadDto, UserDto } from '#dtos'
-import type { ISpaceService, IUsersService } from '@stardust/core/interfaces'
+import { User } from '#global/entities'
+import type { UserDto } from '#global/dtos'
+import { Planet, Star } from '#space/entities'
+import { StarRewardingPayload } from '#lesson/structs'
+import { InvalidRewardingPayloadError } from '#lesson/errors'
+import type { RewardingPayloadOrigin } from '#lesson/types'
+import type { RewardingPayloadDto } from '#lesson/dtos'
+import type { ISpaceService, IProfileService, IUseCase } from '#interfaces'
 
 type Request = {
   userDto: UserDto
@@ -25,7 +26,7 @@ export class RewardUserUseCase implements IUseCase<Request, Response> {
   static readonly XP_INCREASE_BASE = 4
 
   constructor(
-    private readonly usersService: IUsersService,
+    private readonly usersService: IProfileService,
     private readonly spaceService: ISpaceService,
   ) {}
 
@@ -93,7 +94,6 @@ export class RewardUserUseCase implements IUseCase<Request, Response> {
       const response = await this.spaceService.fetchNextStarFromNextPlanet(planet)
       if (response.isSuccess) {
         nextStar = Star.create(response.body)
-        console.log(nextStar)
       }
       if (response.isFailure) {
         isLastStar = true

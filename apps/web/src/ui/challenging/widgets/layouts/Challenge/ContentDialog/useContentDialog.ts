@@ -6,7 +6,7 @@ import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { ROUTES } from '@/constants'
 import type { DialogRef } from '@/ui/global/widgets/components/Dialog/types'
 import type { ContentType } from '../ContentType'
-import { useRouter } from '@/ui/global/hooks'
+import { useRouter } from ''@/ui/global/hooks''
 
 export function useContentDialog(contentType: ContentType) {
   const { getChallengeSlice } = useChallengeStore()

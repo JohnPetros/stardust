@@ -5,7 +5,7 @@ import { useCallback, useMemo, useRef, useState } from 'react'
 import { Planet } from '@/@core/domain/entities'
 import type { PlanetDto } from '#dtos'
 
-import { useScrollEvent } from '@/ui/global/hooks'
+import { useScrollEvent } from ''@/ui/global/hooks''
 import type { LastUnlockedStarViewPortPosition } from '../types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { GetLastUnlockedStarIdUseCase } from '@/@core/use-cases/space'

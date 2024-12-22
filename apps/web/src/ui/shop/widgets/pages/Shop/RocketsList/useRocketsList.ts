@@ -7,7 +7,7 @@ import type { RocketDto } from '#dtos'
 import type { PaginationResponse } from '@stardust/core/responses'
 
 import { useCache } from '@/infra/cache'
-import { useApi } from '@/infra/api'
+import { useApi } from '@/ui/global/hooks'
 import { CACHE } from '@/constants'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'

@@ -7,7 +7,7 @@ import type { ChallengeDTO } from '@/@core/dtos'
 
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { ROUTES } from '@/constants'
-import { useRouter } from '@/ui/global/hooks'
+import { useRouter } from ''@/ui/global/hooks''
 import type { PanelsLayout } from '@/ui/challenging/stores/ChallengeStore/types'
 
 export function useChallengePage(challengeDTO: ChallengeDTO) {

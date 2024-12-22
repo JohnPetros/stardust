@@ -1,6 +1,6 @@
 'use client'
 
-import type { UserDto } from '#dtos'
+import type { UserDto } from '@stardust/core/global/dtos'
 import { Animation } from '@/ui/global/widgets/components/Animation'
 import { StreakIcon } from '@/ui/global/widgets/components/StreakIcon'
 import { Button } from '@/ui/global/widgets/components/Button'

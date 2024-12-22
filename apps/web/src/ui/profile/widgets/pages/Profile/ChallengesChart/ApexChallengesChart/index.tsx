@@ -1,8 +1,8 @@
 'use client'
 
-import type { CompletedChallengesCountByDifficultyLevel } from '@/@core/domain/types'
 import dynamic from 'next/dynamic'
 import { useApexChallengesChart } from './useApexChallengesChart'
+import type { CompletedChallengesCountByDifficultyLevel } from '@stardust/core/challenging/types'
 
 const ApexChart = dynamic(() => import('react-apexcharts'), {
   ssr: false,

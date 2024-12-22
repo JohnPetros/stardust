@@ -6,9 +6,9 @@ import type { TextBlockDto, QuestionDto, StarRewardingPayloadDto } from '#dtos'
 import { Quiz, Theory } from '@/@core/domain/structs'
 import { useLessonStore } from '@/ui/app/stores/LessonStore'
 import { COOKIES, ROUTES, STORAGE } from '@/constants'
-import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
-import { useSecondsCounter } from '@/ui/global/hooks/useSecondsCounter'
-import { useRouter } from '@/ui/global/hooks'
+import { useLocalStorage } from ''@/ui/global/hooks'/useLocalStorage'
+import { useSecondsCounter } from ''@/ui/global/hooks'/useSecondsCounter'
+import { useRouter } from ''@/ui/global/hooks''
 import { _setCookie } from '@/ui/global/actions'
 
 export function useLessonPage(

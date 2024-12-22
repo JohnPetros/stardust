@@ -2,10 +2,10 @@ import Img from 'next/image'
 
 import { Animation } from './Animation'
 import { Content } from './Content'
-import { useApi } from '@/infra/api'
+import { useApi } from '@/ui/global/hooks'
 import { REGEX } from '@/constants'
 
-interface ImageProps {
+type ImageProps = {
   picture: string
   children: string[]
   hasAnimation?: boolean

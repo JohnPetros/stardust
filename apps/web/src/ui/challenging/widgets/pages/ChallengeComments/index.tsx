@@ -1,6 +1,6 @@
 'use client'
 
-import { useBreakpoint } from '@/ui/global/hooks'
+import { useBreakpoint } from ''@/ui/global/hooks''
 import { ContentDialog } from '../../layouts/Challenge/ContentDialog'
 
 export default function ChallengeCommentsPage() {

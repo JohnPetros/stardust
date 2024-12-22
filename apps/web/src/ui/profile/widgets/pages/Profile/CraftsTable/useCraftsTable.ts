@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useRouter } from '@/ui/global/hooks'
+import { useRouter } from ''@/ui/global/hooks''
 
 type TabValue = 'playground-tab' | 'challenges-tab' | 'solutions-tab'
 

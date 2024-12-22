@@ -24,9 +24,11 @@ export const ROUTES = {
     accountConfirmation: '/account-confirmation',
   },
   public: {
-    signIn: '/sign-in',
-    signUp: '/sign-up',
-    resetPassword: '/reset-password',
+    auth: {
+      signIn: '/sign-in',
+      signUp: '/sign-up',
+      resetPassword: '/reset-password',
+    },
     landing: '/landing',
   },
   api: {

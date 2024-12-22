@@ -1,9 +1,7 @@
-import type { RewardingPayloadDto, StarRewardingPayloadDto } from '#dtos'
-import type { RewardingPayloadOrigin } from '../../types'
-import { RewardingPayload } from '#domain/abstracts'
-import { Id } from '../../../modules/global/domain/structs/Id'
-import { Integer } from '../../../modules/global/domain/structs/Integer'
-import { List } from '../../../modules/global/domain/structs/List'
+import { Id, Integer, List } from '#global/structs'
+import { RewardingPayload } from '#lesson/abstracts'
+import type { RewardingPayloadDto, StarRewardingPayloadDto } from '#lesson/dtos'
+import type { RewardingPayloadOrigin } from '#lesson/types'
 
 type RewardingPayloadProps = {
   origin: RewardingPayloadOrigin
@@ -57,8 +55,6 @@ export class StarRewardingPayload extends RewardingPayload {
       'starId',
     ])
     const rewardingPayloadDtoKeys = List.create(Object.keys(rewardingPayloadDto))
-
-    // console.log(starRewardingPayloadDtoKeys.includesList(rewardingPayloadDtoKeys).value)
 
     return (
       rewardingPayloadDto.origin === 'star' &&

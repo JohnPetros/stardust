@@ -6,14 +6,14 @@ import { useSupabaseContext } from '@/ui/global/contexts/SupabaseContext/hooks'
 
 import {
   SupabaseAvatarsService,
-  SupabaseAchievementsService,
+  SupabaseProfileService,
   SupabaseUsersService,
   SupabaseAuthService,
   SupabaseRocketsService,
   SupabaseSpaceService,
   SupabaseLessonService,
   SupabaseRankingsService,
-  SupabaseChallengesService,
+  SupabaseChallengingService,
   SupabaseStorageService,
   SupabaseDocsService,
 } from './services'
@@ -23,7 +23,7 @@ export function useSupabaseApi() {
 
   const supabaseApi = useMemo(() => {
     return {
-      ...SupabaseAchievementsService(supabase),
+      ...SupabaseProfileService(supabase),
       ...SupabaseAuthService(supabase),
       ...SupabaseUsersService(supabase),
       ...SupabaseAvatarsService(supabase),
@@ -31,7 +31,7 @@ export function useSupabaseApi() {
       ...SupabaseSpaceService(supabase),
       ...SupabaseLessonService(supabase),
       ...SupabaseRankingsService(supabase),
-      ...SupabaseChallengesService(supabase),
+      ...SupabaseChallengingService(supabase),
       ...SupabaseDocsService(supabase),
       ...SupabaseStorageService(),
     }

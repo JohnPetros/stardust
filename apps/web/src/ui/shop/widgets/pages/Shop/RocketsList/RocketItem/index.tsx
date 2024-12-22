@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { twMerge } from 'tailwind-merge'
 
-import { useApi } from '@/infra/api'
+import { useApi } from '@/ui/global/hooks'
 import { AnimatedImage } from './AnimatedImage'
 import { AnimatedItem } from '../../AnimatedItem'
 import { ShopButton } from '../../ShopButton'
@@ -45,7 +45,7 @@ export function RocketItem({
         className={twMerge(
           ' rounded-md border-2 bg-cover bg-center p-6',
           !isAcquired && !isBuyable && 'brightness-75',
-          isSelected && 'border-yellow-300'
+          isSelected && 'border-yellow-300',
         )}
       >
         <header className='flex justify-between'>

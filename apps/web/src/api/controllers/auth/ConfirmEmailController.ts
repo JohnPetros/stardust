@@ -7,7 +7,7 @@ import { ROUTES } from '@/constants'
 export const ConfirmEmailController = (authService: IAuthService): IController => {
   function redirectToSigInPage(http: IHttp, errorMessage: string) {
     return http.redirect(
-      `${ROUTES.public.signIn}?error=${Slug.create(errorMessage).value}`,
+      `${ROUTES.public.auth.signIn}?error=${Slug.create(errorMessage).value}`,
     )
   }
 
@@ -18,7 +18,7 @@ export const ConfirmEmailController = (authService: IAuthService): IController =
       if (!token) return redirectToSigInPage(http, 'Token de confirmação não encontrado')
 
       const response = await authService.confirmEmail(token)
-      if (response.isSuccess) return http.redirect(ROUTES.private.app.accountConfirmation)
+      if (response.isSuccess) return http.redirect(ROUTES.private.accountConfirmation)
 
       return redirectToSigInPage(http, response.errorMessage)
     },

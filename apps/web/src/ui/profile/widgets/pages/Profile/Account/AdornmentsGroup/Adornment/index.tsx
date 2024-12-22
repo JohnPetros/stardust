@@ -2,8 +2,6 @@
 
 import Image from 'next/image'
 
-import { useApi } from '@/infra/api'
-
 type AdornmentProps = {
   title: string
   image: string

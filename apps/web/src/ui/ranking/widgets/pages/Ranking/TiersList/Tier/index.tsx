@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useRef } from 'react'
 import { twMerge } from 'tailwind-merge'
 
-import { useApi } from '@/infra/api'
+import { useApi } from '@/ui/global/hooks'
 import { useTier } from './useTier'
 import { AnimatedImage } from './AnimatedImage'
 
@@ -28,7 +28,7 @@ export function Tier({ index, rankingId, rankingName, rankingImage }: TierProps)
       ref={tierRef}
       className={twMerge(
         'relative flex flex-col items-center justify-center gap-2',
-        isLocked ? 'opacity-75 brightness-75' : 'opacity-100 brightness-100'
+        isLocked ? 'opacity-75 brightness-75' : 'opacity-100 brightness-100',
       )}
     >
       <AnimatedImage isLocked={isLocked}>

@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import type { UserDto } from '#dtos'
-import type { CompletedChallengesCountByDifficultyLevel } from '@/@core/domain/types'
+import type { UserDto } from '@stardust/core/global/dtos'
+import type { CompletedChallengesCountByDifficultyLevel } from '@stardust/core/challenging/types'
 import type { _countCompletedChallengesByDifficultyLevel } from './_countCompletedChallengesByDifficultyLevel'
 
 export function useChallengesChart(

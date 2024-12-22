@@ -1,6 +1,6 @@
 import type { RefObject } from 'react'
 
-import type { Achievement } from '@/@core/domain/entities'
+import type { Achievement } from '@stardust/core/profile/entities'
 
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
@@ -23,8 +23,8 @@ export function NewUnlockedAchievementsAlertDialog({
     <div className='absolute'>
       <AlertDialog
         ref={alertDialogRef}
-        type={'earning'}
-        title={'Uau! Parece que você ganhou recompensa(s)'}
+        type='earning'
+        title='Uau! Parece que você ganhou recompensa(s)'
         body={
           <div className='max-h-64 overflow-auto px-6'>
             {achievements.map((achievement) => (

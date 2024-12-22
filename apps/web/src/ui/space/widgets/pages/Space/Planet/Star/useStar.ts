@@ -2,11 +2,11 @@
 
 import { type RefObject, useEffect, useRef } from 'react'
 
-import { useApi } from @/ui/global/hooks
+import { useApi } from '@/ui/global/hooks'
 import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
-import { useInView, useRouter } from '@/ui/global/hooks'
+import { useInView, useRouter } from ''@/ui/global/hooks''
 import { ROUTES } from '@/constants'
 import { playAudio } from '@/utils'
 
