@@ -1,4 +1,4 @@
-import { Datetime } from '@/@core/lib/datetime'
+import { Datetime } from '@stardust/core/libs'
 import { Observer } from '#domain/structs/global/Observer'
 import { IdFaker } from '#domain/structs/tests/fakers'
 import { AchievementsFaker, UsersFaker } from './fakers'

@@ -1,7 +1,6 @@
 'use client'
 
-import { AnimatePresence, Variants, motion } from 'framer-motion'
-
+import { AnimatePresence, type Variants, motion } from 'framer-motion'
 import { Hero } from '../../../components/Hero'
 
 const variants: Variants = {

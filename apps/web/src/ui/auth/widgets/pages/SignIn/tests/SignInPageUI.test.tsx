@@ -41,8 +41,11 @@ describe('SignIn Page UI', () => {
       const resetPasswordPageLink = screen.getByText('Esqueci a senha')
       const SignUpPageLink = screen.getByText('Criar conta')
 
-      expect(resetPasswordPageLink).toHaveAttribute('href', ROUTES.public.resetPassword)
-      expect(SignUpPageLink).toHaveAttribute('href', ROUTES.public.signUp)
+      expect(resetPasswordPageLink).toHaveAttribute(
+        'href',
+        ROUTES.public.auth.resetPassword,
+      )
+      expect(SignUpPageLink).toHaveAttribute('href', ROUTES.public.auth.signUp)
     })
   })
 

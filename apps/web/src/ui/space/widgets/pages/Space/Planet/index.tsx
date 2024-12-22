@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 import type { Star as StarEntity } from '@/@core/domain/entities'
 
-import { useApi } from '@/infra/api'
+import { useApi } from @/ui/global/hooks
 import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { AnimatedSign } from './AnimatedSign'

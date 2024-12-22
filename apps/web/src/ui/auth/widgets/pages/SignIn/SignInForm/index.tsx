@@ -1,8 +1,7 @@
-import { SignInFormFields } from '@/ui/auth/forms/types'
 import { Input } from '@/ui/global/widgets/components/Input'
 import { Button } from '@/ui/global/widgets/components/Button'
-
 import { useSignInForm } from './useSignInForm'
+import type { SignInFormFields } from './types/SignInFormFields'
 
 type SignInFormProps = {
   id: string

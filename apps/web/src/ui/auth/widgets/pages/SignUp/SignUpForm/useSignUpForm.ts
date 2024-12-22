@@ -5,7 +5,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { useApi } from 'apps/web/src/ui/global/hooks/useApi'
+import { emailSchema, nameSchema, passwordSchema } from '@stardust/validation/schemas'
+
+import { useApi } from '@/ui/global/hooks/useApi'
 import type { SignUpFormFields } from './SignUpFormFields'
 
 const signUpFormSchema = z.object({

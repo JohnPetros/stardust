@@ -1,5 +1,5 @@
-import { ReactNode } from 'react'
-import { Variants, motion } from 'framer-motion'
+import type { ReactNode } from 'react'
+import { type Variants, motion } from 'framer-motion'
 
 const variants: Variants = {
   initial: {

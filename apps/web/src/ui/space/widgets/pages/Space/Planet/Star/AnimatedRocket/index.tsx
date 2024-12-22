@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { motion, type Variants } from 'framer-motion'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useApi } from '@/infra/api'
+import { useApi } from @/ui/global/hooks
 
 const rocketVariants: Variants = {
   hidden: {

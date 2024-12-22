@@ -1,7 +1,6 @@
 import { motion, type Variants } from 'framer-motion'
 
-import { Animation } from '@/ui/global/widgets/components/Animation'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 const variants: Variants = {
   default: {

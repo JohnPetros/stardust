@@ -1,6 +1,6 @@
 import { ValidationError } from '@/@core/errors/lib'
 import { WeekStatus } from '../profile/WeekStatus'
-import { Datetime } from '@/@core/lib/datetime'
+import { Datetime } from '@stardust/core/libs'
 
 describe('WeekStatus struct', () => {
   it('should not be created if any status is invalid', () => {

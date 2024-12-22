@@ -1,4 +1,4 @@
-import { Datetime } from '@/@core/lib/datetime'
+import { Datetime } from '@stardust/core/libs'
 import type { Integer } from '#domain/structs'
 import type { RewardingPayloadOrigin } from '../../types'
 

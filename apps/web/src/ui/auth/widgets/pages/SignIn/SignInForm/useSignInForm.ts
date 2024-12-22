@@ -5,9 +5,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { emailSchema, passwordSchema } from 'packages/validation/src/schemas'
+import { emailSchema, passwordSchema } from '@stardust/validation/schemas'
 
-import type { SignInFormFields } from '../SignInFormFields'
+import type { SignInFormFields } from './types/SignInFormFields'
 
 const signInFormSchema = z.object({
   password: passwordSchema,

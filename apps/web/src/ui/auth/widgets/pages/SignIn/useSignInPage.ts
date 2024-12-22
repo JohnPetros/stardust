@@ -9,8 +9,8 @@ import { ROCKET_ANIMATION_DELAY } from '@/ui/auth/constants'
 import { ROUTES } from '@/constants'
 import { waitFor } from '@/utils'
 import { useRouter } from '@/ui/global/hooks'
-import type { SignInFormFields } from '@/ui/auth/forms/types'
 import { Slug } from '@stardust/core/global/structs'
+import type { SignInFormFields } from './SignInForm/types'
 
 export function useSignInPage(url: string, rocketAnimationRef: RefObject<AnimationRef>) {
   const [isRocketVisible, setIsRocketVisible] = useState(false)
@@ -32,7 +32,7 @@ export function useSignInPage(url: string, rocketAnimationRef: RefObject<Animati
 
     await waitFor(3000) // 3 seconds
 
-    router.goTo(ROUTES.private.app.accountConfirmation)
+    router.goTo(ROUTES.private.accountConfirmation)
   }
 
   useEffect(() => {
