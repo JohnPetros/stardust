@@ -1,13 +1,16 @@
 {
   "name": "@stardust/validation",
   "exports": {
-    "./schemas": "./src/schemas/index.ts"
+    "./schemas": "./src/schemas/index.ts",
+    "./constants": "./src/constants/index.ts",
+    "./factories": "./src/factories/index.ts"
   },
   "imports": {
     "#schemas": "./src/schemas/index.ts",
     "#constants": "./src/dtos/index.ts"
   },
   "dependencies": {
+    "@stardust/core": "*",
     "zod": "^3.23.8"
   },
   "devDependencies": {
