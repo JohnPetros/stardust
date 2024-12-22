@@ -1,5 +1,5 @@
 export { AuthServiceMock } from './AuthServiceMock'
 export { ChallengingServiceMock } from './ChallengingServiceMock'
-export { RankingsServiceMock } from './RankingsServiceMock'
+export { RankingServiceMock } from './RankingsServiceMock'
 export { SpaceServiceMock } from './SpaceServiceMock'
 export { ProfileServiceMock } from './ProfileServiceMock'

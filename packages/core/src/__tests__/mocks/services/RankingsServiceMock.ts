@@ -1,11 +1,12 @@
-import type { IRankingsService } from '@stardust/core/interfaces'
-import type { TierDto, RankingUserDto } from '#dtos'
-import type { RankingUser } from '@/@core/domain/entities'
-import { ServiceResponse } from '@stardust/core/responses'
-import { TiersFaker } from '@/@core/domain/entities/tests/fakers'
-import { TIERS_COUNT } from '@/@core/domain/constants'
+import type { IRankingService } from '#interfaces'
+import type { RankingUserDto, TierDto } from '#ranking/dtos'
+import { TiersFaker } from '#fakers/entities'
+import { TIERS_COUNT } from '#ranking/constants'
+import { ApiResponse } from '#responses'
+import { HTTP_STATUS_CODE } from '#constants'
+import type { RankingUser } from '#ranking/entities'
 
-export class RankingsServiceMock implements IRankingsService {
+export class RankingServiceMock implements IRankingService {
   tiers: TierDto[] = TiersFaker.fakeManyDto(TIERS_COUNT)
   users: RankingUserDto[] = []
   losers: RankingUserDto[] = []
@@ -14,102 +15,99 @@ export class RankingsServiceMock implements IRankingsService {
   canUsersSeeRankingResult = false
   areLastWeekRankingPositionsUpdated = false
 
-  async fetchTierById(tierId: string): Promise<ServiceResponse<TierDto>> {
+  async fetchTierById(tierId: string): Promise<ApiResponse<TierDto>> {
     const tier = this.tiers.find((tier) => tier.id === tierId)
-    if (tier) return new ServiceResponse(tier)
+    if (tier) return new ApiResponse({ body: tier })
 
-    return new ServiceResponse<TierDto>(null)
+    return new ApiResponse<TierDto>()
   }
 
-  async fetchTiers(): Promise<ServiceResponse<TierDto[]>> {
-    return new ServiceResponse(this.tiers)
+  async fetchTiers(): Promise<ApiResponse<TierDto[]>> {
+    return new ApiResponse({ body: this.tiers })
   }
 
-  async fetchRankingUsersByTier(
-    tierId: string,
-  ): Promise<ServiceResponse<RankingUserDto[]>> {
+  async fetchRankingUsersByTier(tierId: string): Promise<ApiResponse<RankingUserDto[]>> {
     const users = this.users.filter((user) => user.tierId === tierId)
-    return new ServiceResponse(users)
+    return new ApiResponse({ body: users })
   }
 
-  async fetchRankingLosersByTier(
-    tierId: string,
-  ): Promise<ServiceResponse<RankingUserDto[]>> {
+  async fetchRankingLosersByTier(tierId: string): Promise<ApiResponse<RankingUserDto[]>> {
     const losers = this.losers.filter((loser) => loser.tierId === tierId)
-    return new ServiceResponse(losers)
+    return new ApiResponse({ body: losers })
   }
 
   async fetchRankingWinnersByTier(
     tierId: string,
-  ): Promise<ServiceResponse<RankingUserDto[]>> {
+  ): Promise<ApiResponse<RankingUserDto[]>> {
     const winners = this.winners.filter((winner) => winner.tierId === tierId)
     winners.sort((a, b) => b.xp - a.xp)
-    return new ServiceResponse(winners)
+    return new ApiResponse({ body: winners })
   }
 
-  async fetchLastWeekTier(rankingUserId: string): Promise<ServiceResponse<TierDto>> {
+  async fetchLastWeekTier(rankingUserId: string): Promise<ApiResponse<TierDto>> {
     const user = this.users.find((user) => user.id === rankingUserId)
     if (user?.tierId) return await this.fetchTierById(user?.tierId)
 
-    return new ServiceResponse<TierDto>(null)
+    return new ApiResponse({ statusCode: HTTP_STATUS_CODE.notFound })
   }
 
   async saveRankingLosers(
     losers: RankingUser[],
     tierId: string,
-  ): Promise<ServiceResponse<true>> {
+  ): Promise<ApiResponse<true>> {
     for (const loser of losers) this.losers.push({ ...loser.dto, tierId })
-    return new ServiceResponse(true)
+    return new ApiResponse({ statusCode: HTTP_STATUS_CODE.created })
   }
 
-  async saveRankingWinners(
-    winners: RankingUser[],
-    tierId: string,
-  ): Promise<ServiceResponse<true>> {
+  async saveRankingWinners(winners: RankingUser[], tierId: string): Promise<ApiResponse> {
     for (const winner of winners) this.winners.push({ ...winner.dto, tierId })
-    return new ServiceResponse(true)
+    return new ApiResponse({ statusCode: HTTP_STATUS_CODE.created })
   }
 
-  async checkRankingLoserState(rankingUserId: string): Promise<ServiceResponse<boolean>> {
-    return new ServiceResponse(!!this.losers.find((loser) => loser.id === rankingUserId))
+  async checkRankingLoserState(rankingUserId: string): Promise<ApiResponse<boolean>> {
+    return new ApiResponse({
+      statusCode: this.losers.find((loser) => loser.id === rankingUserId)
+        ? HTTP_STATUS_CODE.ok
+        : HTTP_STATUS_CODE.notFound,
+    })
   }
 
-  async resetRankingsState(): Promise<ServiceResponse<true>> {
+  async resetRankingsState(): Promise<ApiResponse<true>> {
     this.isReset = true
-    return new ServiceResponse(true)
+    return new ApiResponse()
   }
 
-  async updateLastWeekRankingPositions(): Promise<ServiceResponse<true>> {
+  async updateLastWeekRankingPositions(): Promise<ApiResponse<true>> {
     this.areLastWeekRankingPositionsUpdated = true
-    return new ServiceResponse(true)
+    return new ApiResponse()
   }
 
-  async allowUsersSeeRankingResult(): Promise<ServiceResponse<true>> {
+  async allowUsersSeeRankingResult(): Promise<ApiResponse<true>> {
     this.canUsersSeeRankingResult = true
-    return new ServiceResponse(true)
+    return new ApiResponse()
   }
 
-  fetchTierByPosition(tierPosition: number): Promise<ServiceResponse<TierDto>> {
+  fetchTierByPosition(tierPosition: number): Promise<ApiResponse<TierDto>> {
     throw new Error('Method not implemented.')
   }
   fetchLastWeekRankingUsersByTier(
     tierId: string,
-  ): Promise<ServiceResponse<RankingUserDto[]>> {
+  ): Promise<ApiResponse<RankingUserDto[]>> {
     throw new Error('Method not implemented.')
   }
-  verifyRankingLoserState(rankingUserId: string): Promise<ServiceResponse<boolean>> {
+  verifyRankingLoserState(rankingUserId: string): Promise<ApiResponse<boolean>> {
     throw new Error('Method not implemented.')
   }
   updateRankingUsersTier(
     rankingUsers: RankingUser[],
     tierId: string,
-  ): Promise<ServiceResponse<true>> {
+  ): Promise<ApiResponse<true>> {
     throw new Error('Method not implemented.')
   }
-  deleteLastWeekRankingUsers(): Promise<ServiceResponse<true>> {
+  deleteLastWeekRankingUsers(): Promise<ApiResponse<true>> {
     throw new Error('Method not implemented.')
   }
-  resetRankingUsersXp(): Promise<ServiceResponse<true>> {
+  resetRankingUsersXp(): Promise<ApiResponse<true>> {
     throw new Error('Method not implemented.')
   }
 }

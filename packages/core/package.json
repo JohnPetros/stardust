@@ -93,9 +93,10 @@
     "#types": "./src/types/index.ts",
     "#responses": "./src/responses/index.ts",
     "#libs": "./src/libs/index.ts",
-    "#fakers": "./src/__tests__/fakers/index.ts",
     "#interfaces": "./src/interfaces/index.ts",
-    "#zod": "./src/interfaces/index.ts"
+    "#fakers/entities": "./src/__tests__/fakers/entities.ts",
+    "#fakers/structs": "./src/__tests__/fakers/structs.ts",
+    "#mocks/services": "./src/__tests__/mocks/services/index.ts"
   },
   "dependencies": {
     "@stardust/validation": "*",

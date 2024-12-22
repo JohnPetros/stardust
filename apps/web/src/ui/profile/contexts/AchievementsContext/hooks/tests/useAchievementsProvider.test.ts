@@ -7,7 +7,7 @@ import { useAuthContextMock } from '@/ui/auth/contexts/AuthContext/tests/mocks'
 import { useApiMock } from '@/infra/api/tests/mocks/useApiMock'
 import { AppError } from '@stardust/core/global/errors'
 import { useToastContextMock } from '@/ui/global/contexts/ToastContext/tests/mocks'
-import { ServiceResponse } from '@stardust/core/responses'
+import { ApiResponse } from '@stardust/core/responses'
 
 jest.mock('@/ui/global/contexts/AuthContext')
 jest.mock('@/ui/global/contexts/ToastContext')
@@ -169,7 +169,7 @@ describe('useAchievementsProvider hook', () => {
     const { fakeUser } = useAuthContextMock()
 
     const apiMock = useApiMock({
-      deleteRescuableAchievement: jest.fn().mockResolvedValue(new ServiceResponse(true)),
+      deleteRescuableAchievement: jest.fn().mockResolvedValue(new ApiResponse(true)),
     })
 
     const fakeRescuableAchievement = AchievementsFaker.fake()
@@ -200,7 +200,7 @@ describe('useAchievementsProvider hook', () => {
     useApiMock({
       deleteRescuableAchievement: jest
         .fn()
-        .mockResolvedValue(new ServiceResponse(null, AppError)),
+        .mockResolvedValue(new ApiResponse(null, AppError)),
     })
 
     const fakeRescuableAchievement = AchievementsFaker.fake()
@@ -232,7 +232,7 @@ describe('useAchievementsProvider hook', () => {
     const { updateUserMock } = useAuthContextMock({ user: fakeUser })
 
     useApiMock({
-      deleteRescuableAchievement: jest.fn().mockResolvedValue(new ServiceResponse(true)),
+      deleteRescuableAchievement: jest.fn().mockResolvedValue(new ApiResponse(true)),
     })
 
     const { result } = renderHook(() =>

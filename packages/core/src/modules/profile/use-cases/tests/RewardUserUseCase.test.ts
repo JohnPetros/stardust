@@ -1,9 +1,7 @@
-import { ProfileServiceMock, SpaceServiceMock } from '../../../__tests__/mocks/services'
-import { UsersFaker } from '../#domain/entities/global/tests/fakers/UsersFaker'
-import { PlanetsFaker } from '../#domain/entities/space/tests/fakers'
-import { StarsFaker } from '../#domain/entities/space/tests/fakers/StarsFaker'
-import { StarRewardingPayloadFaker } from '../../../domain/structs/lesson/tests/fakers/StarRewardingPayloadFaker'
-import { RewardUserUseCase } from '../../profile/RewardUserUseCase'
+import { ProfileServiceMock, SpaceServiceMock } from '#mocks/services'
+import { StarsFaker, PlanetsFaker, UsersFaker } from '#fakers/entities'
+import { RewardUserUseCase } from '../RewardUserUseCase'
+import { StarRewardingPayloadFaker } from '#fakers/structs'
 
 let profileServiceMock: ProfileServiceMock
 let spaceServiceMock: SpaceServiceMock

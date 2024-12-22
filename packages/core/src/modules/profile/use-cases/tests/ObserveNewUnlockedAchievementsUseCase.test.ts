@@ -3,7 +3,7 @@ import { AchievementsServiceMock } from '@/@core/__tests__/mocks/services'
 import { ObserveNewUnlockedAchievementsUseCase } from '../ObserveNewUnlockedAchievementsUseCase'
 import { IdFaker } from '@/@core/domain/structs/tests/fakers'
 import { Achievement } from '@/@core/domain/entities'
-import { ServiceResponse } from '@stardust/core/responses'
+import { ApiResponse } from '@stardust/core/responses'
 import { AppError } from '@stardust/core/global/errors'
 
 let useCase: ObserveNewUnlockedAchievementsUseCase
@@ -115,7 +115,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       userId: string,
     ) => {
       fakeSavedRescuedAchivementRequests.push({ unlcokedAchievementId, userId })
-      return new ServiceResponse(true)
+      return new ApiResponse(true)
     }
 
     achievementsService.saveRescuableAchievement = async (
@@ -123,7 +123,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       userId: string,
     ) => {
       fakeSavedRescuedAchivementRequests.push({ rescuableAchievementId, userId })
-      return new ServiceResponse(true)
+      return new ApiResponse(true)
     }
 
     useCase = new ObserveNewUnlockedAchievementsUseCase(achievementsService)
@@ -150,7 +150,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
     ]
 
     achievementsService.saveUnlockedAchievement = async () => {
-      return new ServiceResponse<boolean>(null, AppError)
+      return new ApiResponse<boolean>(null, AppError)
     }
 
     useCase = new ObserveNewUnlockedAchievementsUseCase(achievementsService)
@@ -159,10 +159,10 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       await useCase.do({ achievementsDto, userDto })
     }).rejects.toThrow(AppError)
 
-    achievementsService.saveUnlockedAchievement = async () => new ServiceResponse(true)
+    achievementsService.saveUnlockedAchievement = async () => new ApiResponse(true)
 
     achievementsService.saveRescuableAchievement = async () => {
-      return new ServiceResponse<boolean>(null, AppError)
+      return new ApiResponse<boolean>(null, AppError)
     }
 
     useCase = new ObserveNewUnlockedAchievementsUseCase(achievementsService)

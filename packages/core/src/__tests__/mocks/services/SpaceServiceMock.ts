@@ -1,7 +1,8 @@
-import type { Planet } from '../#domain/entities'
-import type { PlanetDto, StarDto } from '../#dtos'
-import type { ISpaceService } from '../#interfaces'
-import { ApiResponse } from '../../../responses'
+import type { Planet } from '#space/entities'
+import type { PlanetDto, StarDto } from '#space/dtos'
+import type { ISpaceService } from '#interfaces'
+import { ApiResponse } from '#responses'
+import { HTTP_STATUS_CODE } from '#constants'
 
 export class SpaceServiceMock implements ISpaceService {
   planets: PlanetDto[] = []
@@ -17,24 +18,24 @@ export class SpaceServiceMock implements ISpaceService {
       planet.stars.some((star) => star.id === starId),
     )
     if (planet) return new ApiResponse({ body: planet })
-    return new ApiResponse<PlanetDto>(null)
+    return new ApiResponse<PlanetDto>()
   }
 
   async savePlanet(planet: Planet): Promise<ApiResponse<true>> {
     this.planets.push(planet.dto)
-    return new ApiResponse({ body: true })
+    return new ApiResponse()
   }
 
   async fetchStarBySlug(starSlug: string): Promise<ApiResponse<StarDto>> {
     const star = this.stars.find((star) => star.slug === starSlug)
     if (star) return new ApiResponse({ body: star })
-    return new ApiResponse<StarDto>(null)
+    return new ApiResponse({ statusCode: HTTP_STATUS_CODE.notFound })
   }
 
   async fetchStarById(starId: string): Promise<ApiResponse<StarDto>> {
     const star = this.stars.find((star) => star.id === starId)
     if (star) return new ApiResponse({ body: star })
-    return new ApiResponse<StarDto>(null)
+    return new ApiResponse({ statusCode: HTTP_STATUS_CODE.notFound })
   }
 
   async fetchNextStarFromNextPlanet(
@@ -44,7 +45,7 @@ export class SpaceServiceMock implements ISpaceService {
       (planet) => planet.position === currentPlanet.position.incrementOne().value,
     )
     if (planet) return new ApiResponse({ body: planet.stars[0] })
-    return new ApiResponse<StarDto>(null)
+    return new ApiResponse({ statusCode: HTTP_STATUS_CODE.notFound })
   }
 
   async verifyStarIsUnlocked(
@@ -59,6 +60,6 @@ export class SpaceServiceMock implements ISpaceService {
     userId: string,
   ): Promise<ApiResponse<boolean>> {
     this.unlockedStarsIds.push(starId)
-    return new ApiResponse({ body: true })
+    return new ApiResponse({ statusCode: HTTP_STATUS_CODE.created })
   }
 }

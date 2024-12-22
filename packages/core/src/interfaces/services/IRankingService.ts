@@ -10,15 +10,15 @@ export interface IRankingService {
   fetchLastWeekRankingUsersByTier(tierId: string): Promise<ApiResponse<RankingUserDto[]>>
   fetchRankingLosersByTier(tierId: string): Promise<ApiResponse<RankingUserDto[]>>
   fetchRankingWinnersByTier(tierId: string): Promise<ApiResponse<RankingUserDto[]>>
-  saveRankingLosers(losers: RankingUser[], tierId: string): Promise<ApiResponse<true>>
-  saveRankingWinners(winners: RankingUser[], tierId: string): Promise<ApiResponse<true>>
+  saveRankingLosers(losers: RankingUser[], tierId: string): Promise<ApiResponse>
+  saveRankingWinners(winners: RankingUser[], tierId: string): Promise<ApiResponse>
   verifyRankingLoserState(rankingUserId: string): Promise<ApiResponse<boolean>>
-  updateLastWeekRankingPositions(): Promise<ApiResponse<true>>
+  updateLastWeekRankingPositions(): Promise<ApiResponse>
   updateRankingUsersTier(
     rankingUsers: RankingUser[],
     tierId: string,
-  ): Promise<ApiResponse<true>>
-  allowUsersSeeRankingResult(): Promise<ApiResponse<true>>
-  deleteLastWeekRankingUsers(): Promise<ApiResponse<true>>
-  resetRankingUsersXp(): Promise<ApiResponse<true>>
+  ): Promise<ApiResponse>
+  allowUsersSeeRankingResult(): Promise<ApiResponse>
+  deleteLastWeekRankingUsers(): Promise<ApiResponse>
+  resetRankingUsersXp(): Promise<ApiResponse>
 }

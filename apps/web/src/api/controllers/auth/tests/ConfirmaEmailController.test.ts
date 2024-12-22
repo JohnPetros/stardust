@@ -4,7 +4,7 @@ import { HttpMock } from '@/infra/api/next/tests/mocks'
 import { ConfirmEmailController } from '../ConfirmEmailController'
 import { ConfirmEmailUnexpectedError, TokenNotFoundError } from '@/@core/errors/auth'
 import { ROUTES } from '@/constants'
-import { ServiceResponse } from '@stardust/core/responses'
+import { ApiResponse } from '@stardust/core/responses'
 import { IHttp } from '@stardust/core/interfaces'
 
 let httpMock: IHttp
@@ -32,7 +32,7 @@ describe('Confirm Email Controller', () => {
 
   it('should redirect to the sign in page if any error is found on confirm email', async () => {
     authServiceMock.confirmEmail = async () =>
-      new ServiceResponse(false, ConfirmEmailUnexpectedError)
+      new ApiResponse(false, ConfirmEmailUnexpectedError)
 
     const controller = ConfirmEmailController(authServiceMock)
 
@@ -47,7 +47,7 @@ describe('Confirm Email Controller', () => {
   })
 
   it('should redirect to the account confirmation route if the email was successfully confirmed', async () => {
-    authServiceMock.confirmEmail = async () => new ServiceResponse(true)
+    authServiceMock.confirmEmail = async () => new ApiResponse(true)
 
     const controller = ConfirmEmailController(authServiceMock)
 

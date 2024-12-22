@@ -1,9 +1,10 @@
-import type { IProfileService} from '../#interfaces'
-import type { AchievementDto, UserDto } from '../#dtos'
-import { ApiResponse } from '../../../responses'
-import type { User } from '../#domain/entities'
+import type { UserDto } from '#global/dtos'
+import type { User } from '#global/entities'
+import type { AchievementDto } from '#profile/dtos'
+import type { IProfileService } from '#interfaces'
+import { ApiResponse } from '#responses'
 
-export class ProfileServiceMock implements #interfaces{
+export class ProfileServiceMock implements IProfileService {
   private fakeAchievementsDto: AchievementDto[] = []
   private fakeUsersDto: UserDto[] = []
 
@@ -11,7 +12,7 @@ export class ProfileServiceMock implements #interfaces{
     const user = this.fakeUsersDto.find((fekeUser) => fekeUser.id === userId)
 
     if (!user) {
-      return new ApiResponse<UserDto>({})
+      return new ApiResponse<UserDto>()
     }
 
     return new ApiResponse({ body: user })

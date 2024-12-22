@@ -1,16 +1,9 @@
-import { Avatar, Rocket, Tier } from '../../../domain/entities'
-import {
-  Email,
-  Integer,
-  Level,
-  List,
-  Logical,
-  Name,
-  RankingPosition,
-  Slug,
-  WeekStatus,
-} from '../../../domain/structs'
-import type { UserDto } from '../../../dtos'
+import type { UserDto } from '#global/dtos'
+import { Email, Integer, List, Logical, Name, Slug } from '#global/structs'
+import { Level, WeekStatus } from '#profile/structs'
+import { Avatar, Rocket } from '#shop/entities'
+import { RankingPosition } from '#ranking/structs'
+import { Tier } from '#ranking/entities'
 
 export class UserFactory {
   static produce(dto: UserDto) {
