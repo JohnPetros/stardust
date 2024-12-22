@@ -1,6 +1,6 @@
 'use client'
 
-import type { AvatarDto } from '#dtos'
+import type { AvatarDto } from '@stardust/core/shop/dtos'
 import type { PaginationResponse } from '@stardust/core/responses'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
@@ -16,13 +16,13 @@ type AvatarsListProps = {
 
 export function AvatarsList({ initialItems }: AvatarsListProps) {
   const {
-    handlePriceOrderChange,
-    handleSearchChange,
-    setOffset,
     offset,
     AvatarsDto,
     totalAvatars,
     avatarsPerPage,
+    setOffset,
+    handleSearchChange,
+    handlePriceOrderChange,
   } = useAvatarsList(initialItems)
 
   const { user } = useAuthContext()

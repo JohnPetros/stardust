@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { PaginationProps } from '.'
 
-import { Pagination } from '@/@core/domain/structs'
+import { Pagination } from '@stardust/core/global/structs'
 
 export function usePagination({
   totalItems,

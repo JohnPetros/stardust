@@ -1,7 +1,6 @@
-import type { ListingOrder } from '@/@core/types'
+import type { ListingOrder } from '@stardust/core/global/types'
 
 import { Select } from '@/ui/global/widgets/components/Select'
-
 import { usePriceOrderSelect } from './usePriceOrderSelect'
 
 type SortersProps = {

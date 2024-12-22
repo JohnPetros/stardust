@@ -1,5 +1,6 @@
-import type { AvatarDto, RocketDto } from '#dtos'
 import type { PaginationResponse } from '@stardust/core/responses'
+import type { AvatarDto, RocketDto } from '@stardust/core/shop/dtos'
+
 import { RocketsList } from './RocketsList'
 import { AvatarsList } from './AvatarsList'
 import { Footer } from './Footer'

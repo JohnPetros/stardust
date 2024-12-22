@@ -2,13 +2,12 @@
 
 import { useState } from 'react'
 
-import type { ListingOrder } from '@/@core/types'
-import type { AvatarDto } from '#dtos'
+import type { ListingOrder } from '@stardust/core/global/types'
+import type { AvatarDto } from '@stardust/core/shop/dtos'
 import type { PaginationResponse } from '@stardust/core/responses'
 
-import { useCache } from '@/infra/cache'
-import { useApi } from '@/ui/global/hooks'
 import { CACHE } from '@/constants'
+import { useApi, useCache } from '@/ui/global/hooks'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
@@ -32,8 +31,6 @@ export function useAvatarsList(initialItems: PaginationResponse<AvatarDto>) {
       limit: offset + AVATARS_PER_PAGE - 1,
       order: priceOrder,
     })
-
-    console.log(response.body)
 
     if (response.isSuccess) return response.body
 

@@ -1,10 +1,10 @@
 'use client'
 
-import { Avatar } from '@/@core/domain/entities'
 import { useApi } from '@/ui/global/hooks'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { playAudio } from '@/utils'
+import { Avatar } from '@stardust/core/shop/entities'
 
 type UseAvatarItemProps = {
   id: string

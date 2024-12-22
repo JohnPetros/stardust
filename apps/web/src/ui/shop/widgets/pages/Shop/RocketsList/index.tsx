@@ -1,7 +1,7 @@
 'use client'
 
-import type { RocketDto } from '#dtos'
 import type { PaginationResponse } from '@stardust/core/responses'
+import type { RocketDto } from '@stardust/core/shop/dtos'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { Search } from '@/ui/global/widgets/components/Search'
@@ -16,13 +16,13 @@ type RocketsListProps = {
 
 export function RocketsList({ initialItems }: RocketsListProps) {
   const {
-    handlePriceOrderChange,
-    handleSearchChange,
-    setOffset,
     offset,
     totalRockets,
     rocketsPerPage,
     rocketsDto,
+    handlePriceOrderChange,
+    handleSearchChange,
+    setOffset,
   } = useRocketsList(initialItems)
 
   const { user } = useAuthContext()

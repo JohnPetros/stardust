@@ -1,11 +1,10 @@
+import type { ListingOrder } from '@stardust/core/global/types'
 import { useState } from 'react'
-
-import type { ListingOrder } from '@/@core/types'
 
 type PriceOrder = 'Menor preço' | 'Maior preço'
 
 export function usePriceOrderSelect(
-  onPriceOrderChange: (listingOrder: ListingOrder) => void
+  onPriceOrderChange: (listingOrder: ListingOrder) => void,
 ) {
   const [priceOrder, setPriceOrder] = useState<PriceOrder>('Menor preço')
 
