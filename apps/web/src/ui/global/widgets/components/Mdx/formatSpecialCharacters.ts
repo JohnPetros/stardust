@@ -10,10 +10,11 @@ export function formatSpecialCharacters(code: string, action: Action) {
     let dencodedText = code
 
     encodeCharacters.forEach((encodeCharacter, index) => {
-      dencodedText = dencodedText.replace(
-        new RegExp(encodeCharacter, 'g'),
-        decodeCharacters[index]
-      )
+      if (decodeCharacters[index])
+        dencodedText = dencodedText.replace(
+          new RegExp(encodeCharacter, 'g'),
+          decodeCharacters[index],
+        )
     })
 
     return dencodedText
@@ -22,10 +23,11 @@ export function formatSpecialCharacters(code: string, action: Action) {
     let encodedText = code
 
     decodeCharacters.forEach((decodeCharacter, index) => {
-      encodedText = encodedText.replace(
-        new RegExp(decodeCharacter, 'g'),
-        encodeCharacters[index]
-      )
+      if (encodeCharacters[index])
+        encodedText = encodedText.replace(
+          new RegExp(decodeCharacter, 'g'),
+          encodeCharacters[index],
+        )
     })
 
     return encodedText

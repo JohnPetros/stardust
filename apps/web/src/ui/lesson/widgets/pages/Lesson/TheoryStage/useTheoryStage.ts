@@ -1,4 +1,4 @@
-import { useMdx } from '@/ui/global/widgets/components/Mdx/useMdx'
+import { useMdx } from '@/ui/global/widgets/components/Mdx/hooks/useMdx'
 import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 import { useEffect, useState } from 'react'
 

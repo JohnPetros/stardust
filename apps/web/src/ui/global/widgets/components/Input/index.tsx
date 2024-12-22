@@ -1,6 +1,6 @@
 'use client'
 
-import { ForwardedRef, InputHTMLAttributes, forwardRef, useId } from 'react'
+import { type ForwardedRef, type InputHTMLAttributes, forwardRef, useId } from 'react'
 
 import type { IconName } from '../Icon/types/IconName'
 import { Icon } from '../Icon'
@@ -17,7 +17,7 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
 
 const InputComponent = (
   { label, type, icon, error, isActive = false, ...inputAttributes }: InputProps,
-  ref: ForwardedRef<HTMLInputElement>
+  ref: ForwardedRef<HTMLInputElement>,
 ) => {
   const { handleEyeClick, innerType } = useInput(type)
   const id = useId()
@@ -34,7 +34,7 @@ const InputComponent = (
         <span
           className={twMerge(
             'text-sm font-medium',
-            error ? 'text-red-700' : 'text-green-400'
+            error ? 'text-red-700' : 'text-green-400',
           )}
         >
           {label}
@@ -43,7 +43,7 @@ const InputComponent = (
           className={twMerge(
             'flex items-center gap-2 rounded border bg-transparent group mt-3 p-3',
             error ? 'border-red-700' : 'border-gray-400 focus-within:border-green-400',
-            isActive && 'border-green-400'
+            isActive && 'border-green-400',
           )}
         >
           <Icon name={icon} className={iconClassName} size={24} />

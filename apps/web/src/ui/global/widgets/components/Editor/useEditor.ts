@@ -5,7 +5,7 @@ import { type Monaco, useMonaco } from '@monaco-editor/react'
 import type monaco from 'monaco-editor'
 
 import { COLORS, EDITOR_THEMES } from '@/constants'
-import { useCodeRunner } from '@/infra/code-runner'
+import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
 
 export function useEditor(value: string) {
   const monaco = useMonaco()
@@ -17,10 +17,12 @@ export function useEditor(value: string) {
     const tokens = Object.keys(EDITOR_THEMES.code.darkSpace).slice(0, -2)
     const colors = Object.values(EDITOR_THEMES.code.darkSpace).slice(0, -2)
 
-    return colors.map((color, index) => ({
-      token: tokens[index].slice(0, -1),
+    const rules = colors.map((color, index) => ({
+      token: tokens[index] ? tokens[index].slice(0, -1) : '',
       foreground: color,
     }))
+
+    return rules
   }, [])
 
   function getCursorPosition() {

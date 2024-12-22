@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
-import type { ChallengeDifficultyLevel } from '@/@core/domain/types'
 import { Tooltip } from '../Tooltip'
+import type { ChallengeDifficultyLevel } from '@stardust/core/challenging/types'
 
 const DIFFICULTIES = {
   easy: 'Fácil',

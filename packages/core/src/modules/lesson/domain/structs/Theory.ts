@@ -1,4 +1,4 @@
-import type { TextBlockDto } from '#dtos'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 import { Integer } from '../../../modules/global/domain/structs/Integer'
 import { TextBlock } from '../../../modules/global/domain/structs/TextBlock'
 

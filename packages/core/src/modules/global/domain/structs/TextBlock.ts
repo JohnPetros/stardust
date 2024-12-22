@@ -1,4 +1,4 @@
-import type { TextBlockDto } from '#dtos'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 import { Image } from './Image'
 import { Logical } from './Logical'
 import { Name } from './Name'

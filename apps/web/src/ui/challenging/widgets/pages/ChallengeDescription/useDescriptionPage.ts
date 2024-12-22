@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useMdx } from '@/ui/global/widgets/components/Mdx/useMdx'
+import { useMdx } from '@/ui/global/widgets/components/Mdx/hooks/useMdx'
 import { ROUTES } from '@/constants'
 
 export function useChallengeDescriptionPage() {

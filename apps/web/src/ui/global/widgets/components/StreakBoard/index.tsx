@@ -1,6 +1,7 @@
 import Image from 'next/image'
 
-import { WeekStatus } from '@/@core/domain/structs'
+import { WeekStatus } from '@stardust/core/profile/structs'
+
 import { StreakIcon } from '../StreakIcon'
 import { AnimatedWeekday } from './AnimatedWeekday'
 import { WEEK_DAY_STATUS_ICONS } from './week-day-status-icons'
@@ -16,17 +17,21 @@ export function StreakBoard({ weekStatus, streakCount }: StreakProps) {
       <h4 className='text-gray-300'>Sequência de dias estudados</h4>
 
       <div className='grid grid-cols-7 gap-3'>
-        {WeekStatus.DAYS.map((weekday, index) => (
-          <AnimatedWeekday key={weekday} index={index}>
-            <strong className='uppercase text-gray-300'>{weekday}</strong>
-            <Image
-              src={`/icons/${WEEK_DAY_STATUS_ICONS[weekStatus.statuses[index]]}`}
-              width={24}
-              height={24}
-              alt=''
-            />
-          </AnimatedWeekday>
-        ))}
+        {WeekStatus.DAYS.map((weekday, index) => {
+          const status = weekStatus.statuses[index]
+          if (status)
+            return (
+              <AnimatedWeekday key={weekday} index={index}>
+                <strong className='uppercase text-gray-300'>{weekday}</strong>
+                <Image
+                  src={`/icons/${WEEK_DAY_STATUS_ICONS[status]}`}
+                  width={24}
+                  height={24}
+                  alt=''
+                />
+              </AnimatedWeekday>
+            )
+        })}
       </div>
 
       <div className='flex items-center justify-center gap-1'>

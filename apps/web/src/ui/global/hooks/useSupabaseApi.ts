@@ -5,18 +5,15 @@ import { useMemo } from 'react'
 import { useSupabaseContext } from '@/ui/global/contexts/SupabaseContext/hooks'
 
 import {
-  SupabaseAvatarsService,
   SupabaseProfileService,
-  SupabaseUsersService,
   SupabaseAuthService,
-  SupabaseRocketsService,
+  SupabaseShopService,
   SupabaseSpaceService,
   SupabaseLessonService,
-  SupabaseRankingsService,
+  SupabaseRankingService,
   SupabaseChallengingService,
   SupabaseStorageService,
-  SupabaseDocsService,
-} from './services'
+} from '@/api/supabase/services'
 
 export function useSupabaseApi() {
   const { supabase } = useSupabaseContext()
@@ -25,14 +22,11 @@ export function useSupabaseApi() {
     return {
       ...SupabaseProfileService(supabase),
       ...SupabaseAuthService(supabase),
-      ...SupabaseUsersService(supabase),
-      ...SupabaseAvatarsService(supabase),
-      ...SupabaseRocketsService(supabase),
       ...SupabaseSpaceService(supabase),
+      ...SupabaseShopService(supabase),
       ...SupabaseLessonService(supabase),
-      ...SupabaseRankingsService(supabase),
+      ...SupabaseRankingService(supabase),
       ...SupabaseChallengingService(supabase),
-      ...SupabaseDocsService(supabase),
       ...SupabaseStorageService(),
     }
   }, [supabase])

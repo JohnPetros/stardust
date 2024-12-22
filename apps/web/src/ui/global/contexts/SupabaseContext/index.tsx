@@ -1,10 +1,10 @@
 'use client'
 
-import { createContext, ReactNode, useState } from 'react'
-import { SupabaseClient } from '@supabase/supabase-js'
+import { createContext, type ReactNode, useState } from 'react'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
-import { Database } from '@/infra/api/supabase/types/Database'
-import { SupabaseBrowserClient } from 'SupabaseServerClient/SupabaseBrowserClient'
+import { SupabaseBrowserClient } from '@/api/supabase/clients'
+import type { Database } from '@/api/supabase/types'
 
 type SupabaseContextValue = {
   supabase: SupabaseClient<Database>

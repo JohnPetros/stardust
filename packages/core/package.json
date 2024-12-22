@@ -47,7 +47,10 @@
     "./interfaces": "./src/interfaces/index.ts",
     "./responses": "./src/responses/index.ts",
     "./libs": "./src/libs/index.ts",
-    "./constants": "./src/constants/index.ts"
+    "./constants": "./src/constants/index.ts",
+    "./fakers/entities": "./src/__tests__/fakers/entities.ts",
+    "./fakers/structs": "./src/__tests__/fakers/structs.ts",
+    "./mocks/services": "./src/__tests__/mocks/services/index.ts"
   },
   "imports": {
     "#auth/errors": "./src/modules/auth/errors/index.ts",

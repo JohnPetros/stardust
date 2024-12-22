@@ -1,5 +1,5 @@
-import { ReactNode } from 'react'
-import { motion, Variants } from 'framer-motion'
+import type { ReactNode } from 'react'
+import { motion, type Variants } from 'framer-motion'
 
 const dialogAnimations: Variants = {
   close: {
@@ -20,10 +20,10 @@ export function DialogAnimation({ children }: DialogAnimationProps) {
   return (
     <motion.div
       variants={dialogAnimations}
-      initial="close"
-      animate="open"
-      exit="close"
-      className="rounded-lg border border-gray-700 bg-gray-800 p-6"
+      initial='close'
+      animate='open'
+      exit='close'
+      className='rounded-lg border border-gray-700 bg-gray-800 p-6'
     >
       {children}
     </motion.div>

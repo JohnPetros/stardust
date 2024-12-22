@@ -1,5 +1,5 @@
 import { ArrowDown } from '@phosphor-icons/react'
-import { motion, Variants } from 'framer-motion'
+import { motion, type Variants } from 'framer-motion'
 
 const arrowAnimations: Variants = {
   down: {
@@ -18,11 +18,11 @@ export function AnimatedArrow({ isUp }: AnimatedArrowProps) {
   return (
     <motion.span
       variants={arrowAnimations}
-      initial="down"
+      initial='down'
       animate={isUp ? 'up' : ''}
       transition={{ type: 'tween', ease: 'linear' }}
     >
-      <ArrowDown weight="bold" className="text-lg text-gray-200" />
+      <ArrowDown weight='bold' className='text-lg text-gray-200' />
     </motion.span>
   )
 }

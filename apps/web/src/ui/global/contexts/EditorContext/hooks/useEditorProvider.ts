@@ -2,7 +2,7 @@
 
 import { useReducer } from 'react'
 
-import { useLocalStorage } from ''@/ui/global/hooks'/useLocalStorage'
+import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 import { STORAGE } from '@/constants'
 import { DEFAULT_EDITOR_STATE } from '../constants'
 import type { EditorContextAction, EditorContextState } from '../types'

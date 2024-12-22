@@ -1,11 +1,11 @@
 'use client'
 
-import { createContext, ReactNode } from 'react'
+import { createContext, type ReactNode } from 'react'
 import { Provider, Viewport } from '@radix-ui/react-toast'
 
 import { Toast } from './Toast'
 import { useToastProvider, useToastContext } from './hooks'
-import { ToastContextValue } from './types'
+import type { ToastContextValue } from './types'
 
 type ToastContextProps = {
   children: ReactNode

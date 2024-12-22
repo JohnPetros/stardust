@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { useDebounce } from ''@/ui/global/hooks'/useDebounce'
+import { useDebounce } from '@/ui/global/hooks'
 
 export function useSearch(onSearchChange: (...args: unknown[]) => void) {
   const [value, setValue] = useState('')

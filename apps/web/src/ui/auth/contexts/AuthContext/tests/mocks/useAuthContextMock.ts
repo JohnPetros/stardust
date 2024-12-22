@@ -1,8 +1,9 @@
-import { UsersFaker } from '@/@core/domain/entities/tests/fakers'
+import { UsersFaker } from '@stardust/core/fakers/entities'
+
 import { useAuthContext } from '../..'
 
 export function useAuthContextMock(
-  returnMock?: Partial<ReturnType<typeof useAuthContext>>
+  returnMock?: Partial<ReturnType<typeof useAuthContext>>,
 ) {
   const handleSignInMock = jest.fn()
   const handleSignUpMock = jest.fn()

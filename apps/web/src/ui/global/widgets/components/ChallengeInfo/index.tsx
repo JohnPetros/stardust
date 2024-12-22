@@ -1,6 +1,8 @@
-import { Slug } from '@/@core/domain/structs'
-import { Info } from './Info'
 import Link from 'next/link'
+
+import { Slug } from '@stardust/core/global/structs'
+
+import { Info } from './Info'
 
 type ChallengeInfo = {
   isCompleted: boolean

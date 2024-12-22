@@ -1,10 +1,9 @@
 'use client'
 
-import { ForwardedRef, forwardRef, useImperativeHandle } from 'react'
-import { Check, Prohibit } from '@phosphor-icons/react'
+import { type ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 import * as Container from '@radix-ui/react-toast'
 import { twMerge } from 'tailwind-merge'
-import { AnimatePresence, motion, Variants } from 'framer-motion'
+import { AnimatePresence, motion, type Variants } from 'framer-motion'
 
 import type { ToastRef } from '../types'
 
@@ -89,7 +88,7 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
                     {type === 'error' ? (
                       <Icon name='stop-sign' size={18} weight='bold' />
                     ) : (
-                      <Check width={18} size={18} weight='bold' />
+                      <Icon name='check' size={18} weight='bold' />
                     )}
                   </span>
                   <span

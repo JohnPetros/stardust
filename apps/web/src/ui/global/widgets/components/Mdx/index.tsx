@@ -10,7 +10,7 @@ import { Quote } from './templates/Quote'
 import { Strong } from './templates/Strong'
 import { Text } from './templates/Text'
 import { User } from './templates/User'
-import { useMdx } from './useMdx'
+import { useMdx } from './hooks/useMdx'
 
 type MdxProps = {
   children: string

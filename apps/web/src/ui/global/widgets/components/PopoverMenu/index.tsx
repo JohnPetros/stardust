@@ -23,8 +23,7 @@ export function PopoverMenu({
   label,
   onOpenChange,
 }: PopoverMenuProps) {
-  const { isOpen, handleOpenChange, handlePopoverMenuButtonClick } =
-    usePopoverMenu(onOpenChange)
+  const { isOpen, handleOpenChange, handleButtonClick } = usePopoverMenu(onOpenChange)
 
   return (
     <>
@@ -46,7 +45,7 @@ export function PopoverMenu({
                         'mr-auto flex w-full items-center justify-between border-t p-2 text-left text-gray-100',
                         !isFirst ? 'border-green-400' : 'border-transparent',
                       )}
-                      onClick={() => handlePopoverMenuButtonClick({ action })}
+                      onClick={() => handleButtonClick({ action })}
                       name={title}
                     >
                       <div className='flex gap-2'>

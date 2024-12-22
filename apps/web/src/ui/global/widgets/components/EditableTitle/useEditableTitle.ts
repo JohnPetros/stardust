@@ -1,11 +1,12 @@
 'use client'
 
-import { useOutsideClick } from ''@/ui/global/hooks'/useOutsideClick'
 import { useRef, useState } from 'react'
+
+import { useOutsideClick } from '@/ui/global/hooks/useOutsideClick'
 
 export function useEditableTitle(
   initialTitle: string,
-  onEditTitle: (title: string) => Promise<void>
+  onEditTitle: (title: string) => Promise<void>,
 ) {
   const [title, setTitle] = useState(initialTitle)
   const [canEditTitle, setCanEditTitle] = useState(false)

@@ -1,11 +1,12 @@
 import { useCallback } from 'react'
 import { v4 as uuid } from 'uuid'
 
-import type { TextBlock } from '@/@core/domain/structs'
-import type { TextBlockDto } from '#dtos'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
+import type { TextBlock } from '@stardust/core/global/structs'
+
 import { REGEX } from '@/constants'
 import { getTemplateContent } from '@/utils'
-import { formatSpecialCharacters } from './formatSpecialCharacters'
+import { formatSpecialCharacters } from '../formatSpecialCharacters'
 
 export function useMdx() {
   function parseMdxToText(mdx: string) {
@@ -83,8 +84,10 @@ export function useMdx() {
 
     codeComponents.forEach((codeComponent) => {
       const codeComponentContent = getTemplateContent(codeComponent)
-      const newContent = `\`\`\`\n${codeComponentContent}\n\`\`\``
-      mdx = mdx.replace(codeComponentContent, newContent)
+      if (codeComponentContent) {
+        const newContent = `\`\`\`\n${codeComponentContent}\n\`\`\``
+        mdx = mdx.replace(codeComponentContent, newContent)
+      }
     })
 
     return mdx

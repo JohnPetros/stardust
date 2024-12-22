@@ -1,7 +1,7 @@
 'use client'
 
 import { useApi } from '@/ui/global/hooks'
-import { useMdx } from '@/ui/global/widgets/components/Mdx/useMdx'
+import { useMdx } from '@/ui/global/widgets/components/Mdx/hooks/useMdx'
 import Image from 'next/image'
 
 type TitleProps = {

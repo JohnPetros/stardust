@@ -1,13 +1,13 @@
 import { AvaliadorSintatico, InterpretadorBase, Lexador } from '@designliquido/delegua'
 
-import type { ICodeRunnerProvider } from '@/@core/interfaces/providers/ICodeRunnerProvider'
-import type { CodeInput } from '@/@core/domain/types'
 import { CodeRunnerResponse } from '@stardust/core/responses'
+import type { ICodeRunnerProvider } from '@stardust/core/interfaces'
+import type { CodeInput } from '@stardust/core/global/types'
 
 import { DELEGUA_REGEX } from './constants'
 import { obtenhaTipo, trateErro } from './utils'
 
-export function DeleguaCodeRunnerProvider(): ICodeRunnerProvider {
+export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
   const lexador = new Lexador()
   const avaliadorSintatico = new AvaliadorSintatico()
 
@@ -28,7 +28,7 @@ export function DeleguaCodeRunnerProvider(): ICodeRunnerProvider {
         false,
       )
 
-      if (erros.length) {
+      if (erros.length && erros[0]) {
         const erro = erros[0]
         const linhaDoErro = erro.linha ?? 0
         return trateErro(erro, linhaDoErro)
@@ -38,7 +38,7 @@ export function DeleguaCodeRunnerProvider(): ICodeRunnerProvider {
 
       if (resultado.length && shouldReturnResult) {
         for (const valor of resultado) {
-          if (valor.includes('valor')) {
+          if (valor.includes('valor') && resultado[0]) {
             result = (JSON.parse(resultado[0]) as { valor: string | boolean }).valor
             if (result === true) result = 'verdadeiro'
             if (result === false) result = 'falso'

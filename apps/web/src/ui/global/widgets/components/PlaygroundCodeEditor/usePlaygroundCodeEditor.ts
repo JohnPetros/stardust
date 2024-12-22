@@ -2,12 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { Code } from '@/@core/domain/structs'
+import { Code } from '@stardust/core/global/structs'
 
-import { useCodeRunner } from '@/infra/code-runner'
-import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { REGEX } from '@/constants'
 import { playAudio } from '@/utils'
+import { useToastContext } from '@/ui/global/contexts/ToastContext'
+import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
 import type { ConsoleRef } from '../Console/types'
 import type { PromptRef } from '../Prompt/types'
 import type { EditorRef } from '../Editor/types'

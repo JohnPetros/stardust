@@ -9,7 +9,7 @@ export function usePageTransitionAnimation(hasTips: boolean) {
     if (hasTips) {
       const randomNumber = Math.floor(Math.random() * CODE_TIPS.length - 1) + 1
       const codeTip = CODE_TIPS[randomNumber]
-      setCodeTip(codeTip)
+      if (codeTip) setCodeTip(codeTip)
     }
   }, [hasTips])
 
