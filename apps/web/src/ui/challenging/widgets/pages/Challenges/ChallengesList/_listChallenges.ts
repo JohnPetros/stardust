@@ -4,7 +4,7 @@ import type { ChallengeCompletionStatus } from '@/@core/domain/types'
 import type { UserDTO } from '@/@core/dtos'
 import type { ChallengesListParams } from '@/@core/types'
 import { ListChallengesUseCase } from '@/@core/use-cases/challenges'
-import { SupabaseServerClient } from 'SupabaseServerClient'
+import { SupabaseServerClient } from '@/api/supabase/clients'
 import { SupabaseChallengingService } from '@/api/supabase/services'
 
 export async function _listChallenges(

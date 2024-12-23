@@ -4,10 +4,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { _deleteCookie, _setCookie } from '@/ui/global/actions'
-import { COOKIES } from '@/constants'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useRouter } from '@/ui/global/hooks'
-import { useRefreshPage } from ''@/ui/global/hooks'/useRefreshPage'
+import { useRefreshPage } from '@/ui/global/hooks/useRefreshPage'
 import { useAudioContext } from '@/ui/global/contexts/AudioContext'
 
 export function useRewardingPage(newLevel: number | null, nextRoute: string) {
@@ -36,7 +35,6 @@ export function useRewardingPage(newLevel: number | null, nextRoute: string) {
   }
 
   const goToNextRoute = useCallback(async () => {
-    // _deleteCookie(COOKIES.keys.rewardingPayload)
     setIsLoading(true)
 
     router.goTo(nextRoute)

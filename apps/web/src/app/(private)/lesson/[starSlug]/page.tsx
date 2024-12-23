@@ -1,19 +1,16 @@
 import { redirect } from 'next/navigation'
 
-import { SupabaseServerClient } from 'SupabaseServerClient'
+import type { NextParams } from '@/server/next/types'
 import {
   SupabaseAuthService,
   SupabaseLessonService,
   SupabaseSpaceService,
 } from '@/api/supabase/services'
+import { SupabaseServerClient } from '@/api/supabase/clients'
 import { LessonPage } from '@/ui/lesson/widgets/pages/Lesson'
 import { ROUTES } from '@/constants'
 
-type LessonPageProps = {
-  params: { starSlug: string }
-}
-
-export default async function Lesson({ params }: LessonPageProps) {
+export default async function Lesson({ params }: NextParams<{ starSlug: string }>) {
   const supabase = SupabaseServerClient()
   const authService = SupabaseAuthService(supabase)
   const spaceService = SupabaseSpaceService(supabase)

@@ -1,4 +1,3 @@
-import { _setCookie } from '@/ui/global/actions'
 import type { IController, IHttp, IRankingService } from '@stardust/core/interfaces'
 import { UpdateRankingsUseCase } from '@stardust/core/ranking/use-cases'
 import { HTTP_STATUS_CODE } from '@stardust/core/constants'

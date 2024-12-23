@@ -6,15 +6,14 @@ import { COOKIES, STORAGE } from '@/constants'
 import { _setCookie } from '@/ui/global/actions'
 import type { PanelsOffset } from './PanelsOffset'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useSecondsCounter } from ''@/ui/global/hooks'/useSecondsCounter'
-import { ChallengesCraftVisilibity } from '@/@core/domain/structs'
+import { useSecondsCounter } from '@/ui/global/hooks/useSecondsCounter'
 
 export function useChallengeLayout(
   tabsPanelRef: RefObject<ImperativePanelHandle>,
   codeEditorPanelRef: RefObject<ImperativePanelHandle>,
 ) {
   const { getChallengeSlice, getCraftsVisibilitySlice, resetStore } = useChallengeStore()
-  const { setCraftsVislibility } = getCraftsVisibilitySlice()
+  const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
   const { challenge } = getChallengeSlice()
   const { user } = useAuthContext()
   const [isTransitionPageVisible, setIsTransitionPageVisible] = useState(true)
@@ -47,7 +46,7 @@ export function useChallengeLayout(
 
   useEffect(() => {
     setCraftsVislibility(
-      ChallengesCraftVisilibity.create({
+      challengesCraftVisilibity.create({
         canShowComments: isChallengeCompleted,
         canShowSolutions: isChallengeCompleted,
       }),

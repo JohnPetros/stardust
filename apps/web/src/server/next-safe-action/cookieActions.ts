@@ -16,26 +16,14 @@ const setCookie = actionClient
     actionServer.setCookie(clientInput.key, clientInput.value, clientInput.duration)
   })
 
-const getCookie = actionClient
-  .schema(
-    z.object({
-      key: z.string(),
-    }),
-  )
-  .action(async ({ clientInput }) => {
-    const actionServer = NextActionServer()
-    actionServer.getCookie(clientInput.key)
-  })
+const getCookie = actionClient.schema(z.string()).action(async ({ clientInput }) => {
+  const actionServer = NextActionServer()
+  return actionServer.getCookie(clientInput)
+})
 
-const deleteCookie = actionClient
-  .schema(
-    z.object({
-      key: z.string(),
-    }),
-  )
-  .action(async ({ clientInput }) => {
-    const actionServer = NextActionServer()
-    actionServer.getCookie(clientInput.key)
-  })
+const deleteCookie = actionClient.schema(z.string()).action(async ({ clientInput }) => {
+  const actionServer = NextActionServer()
+  actionServer.getCookie(clientInput)
+})
 
 export const cookieActions = { setCookie, getCookie, deleteCookie }

@@ -14,6 +14,20 @@ export function useChallengeStore() {
       }
     },
 
+    getCraftsVisibilitySlice() {
+      const craftsVislibility = useZustandChallengeStore(
+        (store) => store.state.craftsVislibility,
+      )
+      const setCraftsVislibility = useZustandChallengeStore(
+        (store) => store.actions.setCraftsVislibility,
+      )
+
+      return {
+        craftsVislibility,
+        setCraftsVislibility,
+      }
+    },
+
     getPanelsLayoutSlice() {
       const panelsLayout = useZustandChallengeStore((store) => store.state.panelsLayout)
       const setPanelsLayout = useZustandChallengeStore(

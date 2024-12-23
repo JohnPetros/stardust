@@ -7,10 +7,11 @@ import type { QuestionDto, StarRewardingPayloadDto } from '@stardust/core/lesson
 
 import { COOKIES, ROUTES, STORAGE } from '@/constants'
 import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
-import { useLocalStorage, useSecondsCounter } from '@/ui/global/hooks'
-import { useRouter } from '@/ui/global/hooks'
-import { _setCookie } from '@/ui/global/actions'
+import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
+import { useSecondsCounter } from '@/ui/global/hooks/useSecondsCounter'
+import { useRouter } from '@/ui/global/hooks/useRouter'
 import { Quiz, Theory } from '@stardust/core/lesson/structs'
+import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 
 export function useLessonPage(
   starId: string,
@@ -22,6 +23,7 @@ export function useLessonPage(
   const { quiz, setQuiz } = getQuizSlice()
   const { stage } = getStageSlice()
   const { setTheory } = getTheorySlice()
+  const { setCookie } = useCookieActions()
   const router = useRouter()
   const secondsCounter = useLocalStorage(STORAGE.keys.secondsCounter)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -59,16 +61,16 @@ export function useLessonPage(
           starId: starId,
         }
 
-        await _setCookie(
-          COOKIES.keys.rewardingPayload,
-          JSON.stringify(rewardingPayloadDto),
-        )
+        await setCookie({
+          key: COOKIES.keys.rewardingPayload,
+          value: JSON.stringify(rewardingPayloadDto),
+        })
         router.goTo(ROUTES.private.rewarding)
       }
 
       goToRewardingPage()
     }
-  }, [stage, quiz, router.goTo, secondsCounter.get, starId])
+  }, [stage, quiz, router.goTo, secondsCounter.get, setCookie, starId])
 
   return {
     scrollRef,

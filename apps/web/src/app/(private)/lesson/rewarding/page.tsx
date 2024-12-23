@@ -1,8 +1,8 @@
 import { RewardingPage } from '@/ui/lesson/widgets/pages/Rewarding'
-import { _getCookie } from '@/ui/global/actions'
 import { COOKIES, ROUTES } from '@/constants'
 import { redirect } from 'next/navigation'
 import { NextApiClient } from '@/api/next/NextApiClient'
+import { cookieActions } from '@/server/next-safe-action'
 
 type RewardingResponse = {
   newLevel: number
@@ -14,17 +14,19 @@ type RewardingResponse = {
 }
 
 export default async function Rewarding() {
-  const rewardsPayloadCookie = await _getCookie(COOKIES.keys.rewardingPayload)
+  const rewardsPayloadCookie = await cookieActions.getCookie(
+    COOKIES.keys.rewardingPayload,
+  )
 
-  if (!rewardsPayloadCookie) {
+  if (!rewardsPayloadCookie?.data) {
     return redirect(ROUTES.private.space)
   }
 
   const apiClient = NextApiClient()
-  const rewardsPayloadDto = JSON.parse(rewardsPayloadCookie)
+  const rewardsPayloadDto = JSON.parse(rewardsPayloadCookie.data)
 
   const response = await apiClient.post<RewardingResponse>(
-    ROUTES.api.reward,
+    ROUTES.api.profile.reward,
     rewardsPayloadDto,
   )
 
