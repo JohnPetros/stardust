@@ -7,13 +7,14 @@ import { _setCookie } from '@/ui/global/actions'
 import type { PanelsOffset } from './PanelsOffset'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useSecondsCounter } from '@/ui/global/hooks/useSecondsCounter'
+import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
 
 export function useChallengeLayout(
   tabsPanelRef: RefObject<ImperativePanelHandle>,
   codeEditorPanelRef: RefObject<ImperativePanelHandle>,
 ) {
   const { getChallengeSlice, getCraftsVisibilitySlice, resetStore } = useChallengeStore()
-  const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
+  const { setCraftsVislibility } = getCraftsVisibilitySlice()
   const { challenge } = getChallengeSlice()
   const { user } = useAuthContext()
   const [isTransitionPageVisible, setIsTransitionPageVisible] = useState(true)
@@ -46,7 +47,7 @@ export function useChallengeLayout(
 
   useEffect(() => {
     setCraftsVislibility(
-      challengesCraftVisilibity.create({
+      ChallengeCraftsVisibility.create({
         canShowComments: isChallengeCompleted,
         canShowSolutions: isChallengeCompleted,
       }),

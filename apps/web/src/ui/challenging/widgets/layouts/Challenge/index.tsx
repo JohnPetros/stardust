@@ -1,6 +1,9 @@
 'use client'
 
 import { useRef, type ReactNode } from 'react'
+import 'swiper/css'
+import 'swiper/css/navigation'
+
 import type { PanelsOffset } from './PanelsOffset'
 import { type ImperativePanelHandle, Panel, PanelGroup } from 'react-resizable-panels'
 import { useChallengeLayout } from './useChallengeLayout'

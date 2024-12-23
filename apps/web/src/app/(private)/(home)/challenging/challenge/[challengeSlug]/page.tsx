@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 
-import { SupabaseServerClient } from '@/api/supabase/clients'
+import { SupabaseServerClient } from '@/api/supabase/clients/SupabaseServerClient'
 import { SupabaseChallengingService } from '@/api/supabase/services'
 import { ChallengePage } from '@/ui/challenging/widgets/pages/Challenge'
 

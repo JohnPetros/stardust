@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 
-import { ChallengesCraftVisilibity } from '@/@core/domain/structs'
+import { ChallengeCraftsVisilibity } from '@/@core/domain/structs'
 
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
@@ -22,7 +22,7 @@ export function useTabs() {
   async function handleShowSolutions() {
     if (!user) return
 
-    user.loseCoins(ChallengesCraftVisilibity.solutionsVisibilityPrice)
+    user.loseCoins(ChallengeCraftsVisilibity.solutionsVisibilityPrice)
     await updateUser(user)
     setCraftsVislibility(craftsVislibility.showSolutions())
     router.push(`${ROUTES.private.app.challenge}/${challenge?.slug}/solutions`)

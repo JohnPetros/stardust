@@ -1,4 +1,4 @@
-import { SupabaseServerClient } from '@/api/supabase/clients'
+import { SupabaseServerClient } from '@/api/supabase/clients/SupabaseServerClient'
 import { SupabaseAuthService, SupabaseChallengingService } from '@/api/supabase/services'
 
 type ChallengeProps = {

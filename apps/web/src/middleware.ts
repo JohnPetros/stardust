@@ -3,13 +3,13 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { VerifyAuthRoutesController } from './api/controllers/auth'
 import { NextHttp } from './api/next/NextHttp'
 import { HandleRewardsPayloadController } from './api/controllers/lesson'
-import { SupabaseMiddlewareClient } from './api/supabase/clients'
+import { SupabaseMiddlewareClient } from './api/supabase/clients/SupabaseMiddlewareClient'
 import { SupabaseAuthService } from './api/supabase/services'
 import { HandleRedirectController } from './api/controllers/global'
 
 export const middleware = async (request: NextRequest) => {
   const response = NextResponse.next()
-  const nextHttp = NextHttp(request)
+  const nextHttp = await NextHttp({ request })
 
   const supabase = SupabaseMiddlewareClient(request)
   const authService = SupabaseAuthService(supabase)

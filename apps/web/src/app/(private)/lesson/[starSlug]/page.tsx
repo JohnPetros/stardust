@@ -6,7 +6,7 @@ import {
   SupabaseLessonService,
   SupabaseSpaceService,
 } from '@/api/supabase/services'
-import { SupabaseServerClient } from '@/api/supabase/clients'
+import { SupabaseServerClient } from '@/api/supabase/clients/SupabaseServerClient'
 import { LessonPage } from '@/ui/lesson/widgets/pages/Lesson'
 import { ROUTES } from '@/constants'
 

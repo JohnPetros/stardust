@@ -1,4 +1,4 @@
-import { StringValidation } from '@/@core/lib/validation'
+import { StringValidation } from '@stardust/core/libs'
 
 const ENV = {
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',

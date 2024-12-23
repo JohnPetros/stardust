@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
 import type { Challenge } from '@stardust/core/challenging/entities'
-import type { ChallengesCraftVisilibity } from '@stardust/core/challenging/structs'
+import type { ChallengeCraftsVisilibity } from '@stardust/core/challenging/structs'
 
 import { INITIAL_CHALLENGE_STORE_STATE } from '../ChallengeStore/constants'
 import type {
@@ -29,7 +29,7 @@ export const useZustandChallengeStore = create<ChallengeStore>()(
           })
         },
 
-        setCraftsVisibility(craftsVislibility: ChallengesCraftVisilibity) {
+        setCraftsVisibility(craftsVislibility: ChallengeCraftsVisilibity) {
           return set(({ state }) => {
             state.craftsVislibility = craftsVislibility
           })
