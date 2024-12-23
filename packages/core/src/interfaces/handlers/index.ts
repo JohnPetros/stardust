@@ -1,3 +1,5 @@
+export type { IAction } from './IAction'
+export type { IActionServer } from './IActionServer'
 export type { IApi } from './IApi'
 export type { IApiClient } from './IApiClient'
 export type { IUseCase } from './IUseCase'
