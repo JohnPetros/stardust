@@ -1,13 +1,15 @@
 import { fireEvent, renderHook, waitFor } from '@testing-library/react'
 
-import { alertDialogRefMock } from '@/ui/global/widgets/components/AlertDialog/tests/mocks/alertDialogRefMock'
-import { useAchivementsProvider } from '../useAchievementsProvider'
-import { AchievementsFaker, UsersFaker } from '@/@core/domain/entities/tests/fakers'
-import { useAuthContextMock } from '@/ui/auth/contexts/AuthContext/tests/mocks'
-import { useApiMock } from '@/infra/api/tests/mocks/useApiMock'
+import { AchievementsFaker, UsersFaker } from '@stardust/core/fakers/entities'
+import { HTTP_STATUS_CODE } from '@stardust/core/constants'
 import { AppError } from '@stardust/core/global/errors'
-import { useToastContextMock } from '@/ui/global/contexts/ToastContext/tests/mocks'
 import { ApiResponse } from '@stardust/core/responses'
+
+import { alertDialogRefMock } from '@/ui/global/widgets/components/AlertDialog/tests/mocks/alertDialogRefMock'
+import { useAuthContextMock } from '@/ui/auth/contexts/AuthContext/tests/mocks'
+import { useToastContextMock } from '@/ui/global/contexts/ToastContext/tests/mocks'
+import { useApiMock } from '@/ui/global/hooks/tests/mocks/useApiMock'
+import { useAchivementsProvider } from '../useAchievementsProvider'
 
 jest.mock('@/ui/global/contexts/AuthContext')
 jest.mock('@/ui/global/contexts/ToastContext')
@@ -23,9 +25,7 @@ describe('useAchievementsProvider hook', () => {
   })
 
   it('should open the new unlocked achievements alert dialog on set the new unlocked achievements state', async () => {
-    renderHook(() =>
-      useAchivementsProvider([], alertDialogRefMock, observeNewUnlockedAchievementsMock),
-    )
+    renderHook(() => useAchivementsProvider(alertDialogRefMock))
 
     await waitFor(() => {
       expect(alertDialogRefMock.current.open).not.toHaveBeenCalled()
@@ -36,13 +36,7 @@ describe('useAchievementsProvider hook', () => {
       newUnlockedAchievements: AchievementsFaker.fakeMany(),
     })
 
-    renderHook(() =>
-      useAchivementsProvider(
-        AchievementsFaker.fakeManyDto(),
-        alertDialogRefMock,
-        observeNewUnlockedAchievementsMock,
-      ),
-    )
+    renderHook(() => useAchivementsProvider(alertDialogRefMock))
 
     fireEvent(window, new Event('userChange'))
 
@@ -59,13 +53,7 @@ describe('useAchievementsProvider hook', () => {
       newUnlockedAchievements: fakeUnlockedAchievements,
     })
 
-    const { result } = renderHook(() =>
-      useAchivementsProvider(
-        AchievementsFaker.fakeManyDto(),
-        alertDialogRefMock,
-        observeNewUnlockedAchievementsMock,
-      ),
-    )
+    const { result } = renderHook(() => useAchivementsProvider(alertDialogRefMock))
 
     fireEvent(window, new Event('userChange'))
 
@@ -84,13 +72,7 @@ describe('useAchievementsProvider hook', () => {
       newUnlockedAchievements: AchievementsFaker.fakeMany(),
     })
 
-    renderHook(() =>
-      useAchivementsProvider(
-        AchievementsFaker.fakeManyDto(),
-        alertDialogRefMock,
-        observeNewUnlockedAchievementsMock,
-      ),
-    )
+    renderHook(() => useAchivementsProvider(alertDialogRefMock))
 
     fireEvent(window, new Event('userChange'))
 
@@ -106,13 +88,7 @@ describe('useAchievementsProvider hook', () => {
       new AppError('fake error message'),
     )
 
-    renderHook(() =>
-      useAchivementsProvider(
-        AchievementsFaker.fakeManyDto(),
-        alertDialogRefMock,
-        observeNewUnlockedAchievementsMock,
-      ),
-    )
+    renderHook(() => useAchivementsProvider(alertDialogRefMock))
 
     fireEvent(window, new Event('userChange'))
 
@@ -127,13 +103,7 @@ describe('useAchievementsProvider hook', () => {
       newUnlockedAchievements: AchievementsFaker.fakeMany(),
     })
 
-    const { result } = renderHook(() =>
-      useAchivementsProvider(
-        AchievementsFaker.fakeManyDto(),
-        alertDialogRefMock,
-        observeNewUnlockedAchievementsMock,
-      ),
-    )
+    const { result } = renderHook(() => useAchivementsProvider(alertDialogRefMock))
 
     fireEvent(window, new Event('userChange'))
 
@@ -149,13 +119,7 @@ describe('useAchievementsProvider hook', () => {
       newUnlockedAchievements: AchievementsFaker.fakeMany(),
     })
 
-    const { result } = renderHook(() =>
-      useAchivementsProvider(
-        AchievementsFaker.fakeManyDto(),
-        alertDialogRefMock,
-        observeNewUnlockedAchievementsMock,
-      ),
-    )
+    const { result } = renderHook(() => useAchivementsProvider(alertDialogRefMock))
 
     fireEvent(window, new Event('userChange'))
 
@@ -169,18 +133,12 @@ describe('useAchievementsProvider hook', () => {
     const { fakeUser } = useAuthContextMock()
 
     const apiMock = useApiMock({
-      deleteRescuableAchievement: jest.fn().mockResolvedValue(new ApiResponse(true)),
+      deleteRescuableAchievement: jest.fn().mockResolvedValue(new ApiResponse()),
     })
 
     const fakeRescuableAchievement = AchievementsFaker.fake()
 
-    const { result } = renderHook(() =>
-      useAchivementsProvider(
-        AchievementsFaker.fakeManyDto(),
-        alertDialogRefMock,
-        observeNewUnlockedAchievementsMock,
-      ),
-    )
+    const { result } = renderHook(() => useAchivementsProvider(alertDialogRefMock))
 
     await result.current.rescueAchivement(
       fakeRescuableAchievement.id,
@@ -200,18 +158,12 @@ describe('useAchievementsProvider hook', () => {
     useApiMock({
       deleteRescuableAchievement: jest
         .fn()
-        .mockResolvedValue(new ApiResponse(null, AppError)),
+        .mockResolvedValue(new ApiResponse({ statusCode: HTTP_STATUS_CODE.serverError })),
     })
 
     const fakeRescuableAchievement = AchievementsFaker.fake()
 
-    const { result } = renderHook(() =>
-      useAchivementsProvider(
-        AchievementsFaker.fakeManyDto(),
-        alertDialogRefMock,
-        observeNewUnlockedAchievementsMock,
-      ),
-    )
+    const { result } = renderHook(() => useAchivementsProvider(alertDialogRefMock))
 
     await result.current.rescueAchivement(
       fakeRescuableAchievement.id,
@@ -232,16 +184,10 @@ describe('useAchievementsProvider hook', () => {
     const { updateUserMock } = useAuthContextMock({ user: fakeUser })
 
     useApiMock({
-      deleteRescuableAchievement: jest.fn().mockResolvedValue(new ApiResponse(true)),
+      deleteRescuableAchievement: jest.fn().mockResolvedValue(new ApiResponse()),
     })
 
-    const { result } = renderHook(() =>
-      useAchivementsProvider(
-        AchievementsFaker.fakeManyDto(),
-        alertDialogRefMock,
-        observeNewUnlockedAchievementsMock,
-      ),
-    )
+    const { result } = renderHook(() => useAchivementsProvider(alertDialogRefMock))
 
     await result.current.rescueAchivement(
       fakeRescuableAchievement.id,

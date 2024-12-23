@@ -1,8 +1,7 @@
 'use client'
 
-import { type RefObject, useEffect, useState } from 'react'
+import { type RefObject, useState } from 'react'
 
-import type { AchievementDto } from '@stardust/core/profile/dtos'
 import { Achievement } from '@stardust/core/profile/entities'
 import { User } from '@stardust/core/global/entities'
 
@@ -11,19 +10,20 @@ import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
-import type { _observeNewUnlockedAchievements } from '../actions/_observeNewUnlockedAchievements'
+import { useObserveNewUnlockedAchievementsAction } from './useObserveNewUnlockedAchievementsAction'
 
 export function useAchivementsProvider(
-  achievementsDto: AchievementDto[],
   newUnlockedAchievementsAlertDialogRef: RefObject<AlertDialogRef>,
-  serverAction: typeof _observeNewUnlockedAchievements,
 ) {
+  const api = useApi()
+  const toast = useToastContext()
   const { user, updateUser } = useAuthContext()
+  const { observe } = useObserveNewUnlockedAchievementsAction(() =>
+    toast.show('Error ao observar novas conquistas desbloqueadas'),
+  )
   const [newUnlockedAchievements, setNewUnlockedAchievements] = useState<Achievement[]>(
     [],
   )
-  const api = useApi()
-  const toast = useToastContext()
 
   async function rescueAchivement(
     rescuableAchievementId: string,
@@ -57,25 +57,15 @@ export function useAchivementsProvider(
   async function observeNewUnlockedAchievements() {
     if (!user) return
 
-    try {
-      const response = await serverAction(achievementsDto, user.dto)
+    const { updatedUserDto, newUnlockedAchievementsDto } = await observe()
 
-      if (!response.newUnlockedAchievementsDto.length) return
+    if (!updatedUserDto || !newUnlockedAchievementsDto) return
 
-      setNewUnlockedAchievements(
-        response.newUnlockedAchievementsDto.map(Achievement.create),
-      )
-      await updateUser(User.create(response.userDto))
-    } catch (error) {
-      toast.show('Error ao observar conquistas')
-    }
+    setNewUnlockedAchievements(newUnlockedAchievementsDto.map(Achievement.create))
+    newUnlockedAchievementsAlertDialogRef.current?.open()
+    await updateUser(User.create(updatedUserDto))
+    toast.show('Error ao observar conquistas')
   }
-
-  useEffect(() => {
-    if (newUnlockedAchievements.length) {
-      newUnlockedAchievementsAlertDialogRef.current?.open()
-    }
-  }, [newUnlockedAchievements, newUnlockedAchievementsAlertDialogRef])
 
   // @ts-ignore
   useEventListener('userChange', observeNewUnlockedAchievements)

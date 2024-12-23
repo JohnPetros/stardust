@@ -5,8 +5,8 @@ import type { IProfileService } from '#interfaces'
 import { ApiResponse } from '#responses'
 
 export class ProfileServiceMock implements IProfileService {
-  private fakeAchievementsDto: AchievementDto[] = []
-  private fakeUsersDto: UserDto[] = []
+  fakeAchievementsDto: AchievementDto[] = []
+  fakeUsersDto: UserDto[] = []
 
   async fetchUserById(userId: string): Promise<ApiResponse<UserDto>> {
     const user = this.fakeUsersDto.find((fekeUser) => fekeUser.id === userId)

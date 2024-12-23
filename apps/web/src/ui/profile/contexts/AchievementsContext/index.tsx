@@ -9,7 +9,6 @@ import { NewUnlockedAchievementsAlertDialog } from './components/NewUnlockedAchi
 import { useAchivementsProvider } from './hooks/useAchievementsProvider'
 import { useAchievementsContext } from './hooks/useAchievementsContext'
 import type { AchivementsContextValue } from './types/AchivementsContextValue'
-import { _observeNewUnlockedAchievements } from './actions'
 
 type AchivementsContextProps = {
   children: ReactNode
@@ -28,11 +27,7 @@ export function AchivementsProvider({
     newUnlockedAchievements,
     rescueAchivement,
     handleNewUnlockedAchievementsAlertDialogClose,
-  } = useAchivementsProvider(
-    achievementsDto,
-    newUnlockedAchievementsAlertDialogRef,
-    _observeNewUnlockedAchievements,
-  )
+  } = useAchivementsProvider(newUnlockedAchievementsAlertDialogRef)
 
   return (
     <AchivementsContext.Provider

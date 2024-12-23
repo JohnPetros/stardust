@@ -1,25 +1,28 @@
-import { AchievementsFaker, UsersFaker } from '@/@core/domain/entities/tests/fakers'
-import { AchievementsServiceMock } from '@/@core/__tests__/mocks/services'
+import { ApiResponse } from '#responses'
+import { AppError } from '#global/errors'
+import { HTTP_STATUS_CODE } from '#constants'
+import { UsersFaker, AchievementsFaker } from '#fakers/entities'
+import { IdFaker } from '#fakers/structs'
+import { ProfileServiceMock } from '#mocks/services'
+import { Achievement } from '#profile/entities'
 import { ObserveNewUnlockedAchievementsUseCase } from '../ObserveNewUnlockedAchievementsUseCase'
-import { IdFaker } from '@/@core/domain/structs/tests/fakers'
-import { Achievement } from '@/@core/domain/entities'
-import { ApiResponse } from '@stardust/core/responses'
-import { AppError } from '@stardust/core/global/errors'
 
 let useCase: ObserveNewUnlockedAchievementsUseCase
-let achievementsService: AchievementsServiceMock
+let profileService: ProfileServiceMock
 
 describe('Observe New Unlocked Achievements Use Case', () => {
   beforeAll(() => {
-    achievementsService = new AchievementsServiceMock()
-    useCase = new ObserveNewUnlockedAchievementsUseCase(achievementsService)
+    profileService = new ProfileServiceMock()
+    useCase = new ObserveNewUnlockedAchievementsUseCase(profileService)
   })
 
   it('should not return any new unlocked achievements if user has no unlocked achivement', async () => {
     const userDto = UsersFaker.fakeDto()
-    const achievementsDto = [AchievementsFaker.fakeDto({ requiredCount: 1000 })]
+    profileService.fakeAchievementsDto = [
+      AchievementsFaker.fakeDto({ requiredCount: 1000 }),
+    ]
 
-    const { newUnlockedAchievements } = await useCase.do({ userDto, achievementsDto })
+    const { newUnlockedAchievements } = await useCase.do({ userDto })
 
     expect(newUnlockedAchievements).toHaveLength(0)
   })
@@ -37,7 +40,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       acquiredRocketsIds: [IdFaker.fake().value],
       unlockedStarsIds: [IdFaker.fake().value],
     })
-    const achievementsDto = [
+    profileService.fakeAchievementsDto = [
       AchievementsFaker.fakeDto({ metric: 'xp', requiredCount: 99 }), // Unlocked
       AchievementsFaker.fakeDto({ metric: 'streak', requiredCount: 5 }), // Unlocked
       AchievementsFaker.fakeDto({ metric: 'completedChallengesCount', requiredCount: 1 }), // Unlocked
@@ -46,7 +49,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       AchievementsFaker.fakeDto({ metric: 'unlockedStarsCount', requiredCount: 1 }), // Locked
     ]
 
-    const { newUnlockedAchievements } = await useCase.do({ achievementsDto, userDto })
+    const { newUnlockedAchievements } = await useCase.do({ userDto })
 
     expect(newUnlockedAchievements).toHaveLength(4)
 
@@ -63,7 +66,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
 
     const unlockedAchievementReward = 50
 
-    const achievementsDto = [
+    profileService.fakeAchievementsDto = [
       AchievementsFaker.fakeDto({
         metric: 'xp',
         requiredCount: 99,
@@ -72,7 +75,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       AchievementsFaker.fakeDto({ metric: 'streak', requiredCount: 99 }), // locked
     ]
 
-    const { user } = await useCase.do({ achievementsDto, userDto })
+    const { user } = await useCase.do({ userDto })
 
     expect(user.coins.value).toBe(unlockedAchievementReward)
   })
@@ -85,7 +88,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       rescuableAchievementsIds: [],
     })
 
-    const achievementsDto = [
+    profileService.fakeAchievementsDto = [
       AchievementsFaker.fakeDto({
         metric: 'xp',
         requiredCount: 99,
@@ -93,7 +96,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       AchievementsFaker.fakeDto({ metric: 'streak', requiredCount: 99 }), // locked
     ]
 
-    const { user } = await useCase.do({ achievementsDto, userDto })
+    const { user } = await useCase.do({ userDto })
 
     expect(user.unlockedAchievementsCount.value).toBe(2)
     expect(user.rescueableAchievementsCount.value).toBe(1)
@@ -106,38 +109,38 @@ describe('Observe New Unlocked Achievements Use Case', () => {
 
     const fakeAchievement = AchievementsFaker.fakeDto({ metric: 'xp', requiredCount: 99 })
 
-    const achievementsDto = [fakeAchievement]
+    profileService.fakeAchievementsDto = [fakeAchievement]
 
     const fakeSavedRescuedAchivementRequests: Record<string, string>[] = []
 
-    achievementsService.saveUnlockedAchievement = async (
+    profileService.saveUnlockedAchievement = async (
       unlcokedAchievementId: string,
       userId: string,
     ) => {
       fakeSavedRescuedAchivementRequests.push({ unlcokedAchievementId, userId })
-      return new ApiResponse(true)
+      return new ApiResponse()
     }
 
-    achievementsService.saveRescuableAchievement = async (
+    profileService.saveRescuableAchievement = async (
       rescuableAchievementId: string,
       userId: string,
     ) => {
       fakeSavedRescuedAchivementRequests.push({ rescuableAchievementId, userId })
-      return new ApiResponse(true)
+      return new ApiResponse()
     }
 
-    useCase = new ObserveNewUnlockedAchievementsUseCase(achievementsService)
+    useCase = new ObserveNewUnlockedAchievementsUseCase(profileService)
 
-    await useCase.do({ achievementsDto, userDto })
+    await useCase.do({ userDto })
 
-    expect(fakeSavedRescuedAchivementRequests[0].unlcokedAchievementId).toBe(
+    expect(fakeSavedRescuedAchivementRequests[0]?.unlcokedAchievementId).toBe(
       fakeAchievement.id,
     )
-    expect(fakeSavedRescuedAchivementRequests[0].userId).toBe(userDto.id)
-    expect(fakeSavedRescuedAchivementRequests[1].rescuableAchievementId).toBe(
+    expect(fakeSavedRescuedAchivementRequests[0]?.userId).toBe(userDto.id)
+    expect(fakeSavedRescuedAchivementRequests[1]?.rescuableAchievementId).toBe(
       fakeAchievement.id,
     )
-    expect(fakeSavedRescuedAchivementRequests[1].userId).toBe(userDto.id)
+    expect(fakeSavedRescuedAchivementRequests[1]?.userId).toBe(userDto.id)
   })
 
   it('should throw error on save the new unlocked and rescuable achievements if any', async () => {
@@ -145,30 +148,30 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       xp: 5,
     })
 
-    const achievementsDto = [
+    profileService.fakeAchievementsDto = [
       AchievementsFaker.fakeDto({ metric: 'xp', requiredCount: 1 }),
     ]
 
-    achievementsService.saveUnlockedAchievement = async () => {
-      return new ApiResponse<boolean>(null, AppError)
+    profileService.saveUnlockedAchievement = async () => {
+      return new ApiResponse({ statusCode: HTTP_STATUS_CODE.serverError })
     }
 
-    useCase = new ObserveNewUnlockedAchievementsUseCase(achievementsService)
+    useCase = new ObserveNewUnlockedAchievementsUseCase(profileService)
 
     expect(async () => {
-      await useCase.do({ achievementsDto, userDto })
+      await useCase.do({ userDto })
     }).rejects.toThrow(AppError)
 
-    achievementsService.saveUnlockedAchievement = async () => new ApiResponse(true)
+    profileService.saveUnlockedAchievement = async () => new ApiResponse()
 
-    achievementsService.saveRescuableAchievement = async () => {
-      return new ApiResponse<boolean>(null, AppError)
+    profileService.saveRescuableAchievement = async () => {
+      return new ApiResponse({ statusCode: HTTP_STATUS_CODE.serverError })
     }
 
-    useCase = new ObserveNewUnlockedAchievementsUseCase(achievementsService)
+    useCase = new ObserveNewUnlockedAchievementsUseCase(profileService)
 
     expect(async () => {
-      await useCase.do({ achievementsDto, userDto })
+      await useCase.do({ userDto })
     }).rejects.toThrow(AppError)
   })
 })

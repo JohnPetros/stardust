@@ -1,7 +1,6 @@
 import { User } from '#global/entities'
 import { Achievement } from '#profile/entities'
 import type { UserDto } from '#global/dtos'
-import type { AchievementDto } from '#profile/dtos'
 import type { IProfileService, IUseCase } from '#interfaces'
 
 type Response = {
@@ -10,7 +9,6 @@ type Response = {
 }
 
 type Request = {
-  achievementsDto: AchievementDto[]
   userDto: UserDto
 }
 
@@ -23,9 +21,12 @@ export class ObserveNewUnlockedAchievementsUseCase
     this.profileService = profileService
   }
 
-  async do({ userDto, achievementsDto }: Request): Promise<Response> {
+  async do({ userDto }: Request): Promise<Response> {
+    const response = await this.profileService.fetchAchievements()
+    if (response.isFailure) response.throwError()
+
     const user = User.create(userDto)
-    const achievements = achievementsDto.map(Achievement.create)
+    const achievements = response.body.map(Achievement.create)
 
     const newUnlockedAchievements = achievements.filter((achievement) =>
       this.isNewUnlockedAchievement(achievement, user),
