@@ -13,7 +13,6 @@ import { Animation } from '@/ui/global/widgets/components/Animation'
 import { RankingUser } from '../RankingUsersList/RankingUser'
 import { RankingWinner } from './RankingWinner'
 import { useRankingResult } from './useRankingResult'
-import { _getLastWeekRankingWinners } from './_getLastWeekRankingWinners'
 import { Loading } from '@/ui/global/widgets/components/Loading'
 
 export function RankingResult() {
@@ -24,7 +23,6 @@ export function RankingResult() {
   const {
     isUserLoser,
     isLoading,
-    lastWeekTier,
     lastWeekRankingPodium,
     handleAlertDialogButtonClick,
     handleWRankingResultButtonClick,
@@ -32,7 +30,6 @@ export function RankingResult() {
     rewardAlertDialog,
     successAlertDialog,
     failAlertDialog,
-    _getLastWeekRankingWinners,
   })
 
   const { user } = useAuthContext()

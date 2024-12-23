@@ -1,26 +1,24 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import type { UserDto } from '@stardust/core/global/dtos'
 import type { CompletedChallengesCountByDifficultyLevel } from '@stardust/core/challenging/types'
-import type { _countCompletedChallengesByDifficultyLevel } from './_countCompletedChallengesByDifficultyLevel'
+import { useCountCompletedChallengesByDifficultyLevelAction } from './useCountCompletedChallengesByDifficultyLevelAction'
 
-export function useChallengesChart(
-  userDto: UserDto,
-  countCompletedChallengesByDifficultyLevel: typeof _countCompletedChallengesByDifficultyLevel,
-) {
+export function useChallengesChart() {
   const [chartData, setChartData] =
     useState<CompletedChallengesCountByDifficultyLevel | null>(null)
+  const { countCompletedChallengesByDifficultyLevel } =
+    useCountCompletedChallengesByDifficultyLevelAction()
 
   useEffect(() => {
     async function loadData() {
-      const data = await countCompletedChallengesByDifficultyLevel(userDto)
+      const data = await countCompletedChallengesByDifficultyLevel()
 
       setChartData(data)
     }
 
     loadData()
-  }, [userDto, countCompletedChallengesByDifficultyLevel])
+  }, [countCompletedChallengesByDifficultyLevel])
 
   return {
     chartData,

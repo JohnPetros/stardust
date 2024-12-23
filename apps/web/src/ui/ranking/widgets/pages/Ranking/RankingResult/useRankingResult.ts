@@ -2,17 +2,15 @@ import { type RefObject, useEffect, useState } from 'react'
 
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { _getLastWeekRankingWinners } from './_getLastWeekRankingWinners'
 import { playAudio } from '@/utils'
 import { Podium } from '@stardust/core/ranking/structs'
 import { Tier } from '@stardust/core/ranking/entities'
+import { useGetLastWeekRankingWinnersAction } from './useGetLastWeekRankingWinnersAction'
 
 type UseRankingResultProps = {
   rewardAlertDialog: RefObject<AlertDialogRef>
   successAlertDialog: RefObject<AlertDialogRef>
   failAlertDialog: RefObject<AlertDialogRef>
-  _getLastWeekRankingWinners: typeof _getLastWeekRankingWinners
 }
 
 export function useRankingResult({
@@ -24,8 +22,8 @@ export function useRankingResult({
   const [lastWeekTier, setLastWeekTier] = useState<Tier | null>(null)
   const [isUserLoser, setIsUserLoser] = useState<boolean>(false)
   const [isLoading, setIsloading] = useState<boolean>(true)
-  const toast = useToastContext()
   const { user, updateUser } = useAuthContext()
+  const { getLastWeekRankingWinners } = useGetLastWeekRankingWinnersAction()
 
   async function handleWRankingResultButtonClick() {
     if (!user) return
@@ -73,23 +71,18 @@ export function useRankingResult({
     async function setRankingResult() {
       if (!user || !isLoading) return
 
-      try {
-        const { isUserLoser, lastWeekTier, lastWeekRankingWinners } =
-          await _getLastWeekRankingWinners(user.dto)
+      const { isUserLoser, lastWeekTier, lastWeekRankingWinners } =
+        await getLastWeekRankingWinners()
 
-        setLastWeekRankingPodium(Podium.create(lastWeekRankingWinners))
-        setLastWeekTier(Tier.create(lastWeekTier))
-        setIsUserLoser(isUserLoser)
-        playAudio('earning.wav')
-      } catch (error) {
-        // toast.show(error.message)
-      } finally {
-        setIsloading(false)
-      }
+      setLastWeekRankingPodium(Podium.create(lastWeekRankingWinners))
+      setLastWeekTier(Tier.create(lastWeekTier))
+      setIsUserLoser(isUserLoser)
+      playAudio('earning.wav')
+      setIsloading(false)
     }
 
     setRankingResult()
-  }, [user, isLoading])
+  }, [user, isLoading, getLastWeekRankingWinners])
 
   return {
     lastWeekRankingPodium,

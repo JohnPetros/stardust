@@ -9,7 +9,7 @@ import type { IChallengingService, IUseCase } from '#interfaces'
 
 type Challenge = { id: string; difficulty: ChallengeDifficulty }
 
-type Response = Promise<CompletedChallengesCountByDifficultyLevel>
+type Response = CompletedChallengesCountByDifficultyLevel
 
 export class CountCompletedChallengesByDifficultyLevelUseCase
   implements IUseCase<UserDto, Response>

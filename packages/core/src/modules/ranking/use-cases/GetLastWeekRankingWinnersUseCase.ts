@@ -1,16 +1,16 @@
 import { User } from '#global/entities'
 import type { UserDto } from '#global/dtos'
 import type { RankingUserDto, TierDto } from '#ranking/dtos'
-import type { IRankingsService, IUseCase } from '#interfaces'
+import type { IRankingService, IUseCase } from '#interfaces'
 
-type Response = Promise<{
+type Response = {
   isUserLoser: boolean
   lastWeekTier: TierDto
   lastWeekRankingWinners: RankingUserDto[]
-}>
+}
 
 export class GetLastWeekRankingWinnersUseCase implements IUseCase<UserDto, Response> {
-  constructor(private rankingsService: IRankingsService) {}
+  constructor(private rankingsService: IRankingService) {}
 
   async do(userDto: UserDto) {
     const user = User.create(userDto)

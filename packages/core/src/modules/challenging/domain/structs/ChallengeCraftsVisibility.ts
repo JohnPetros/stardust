@@ -1,27 +1,27 @@
-import { Logical } from '../../../global/domain/structs/Logical'
+import { Logical } from '#global/structs'
 
-type ChallengesCraftVisilibityDTO = {
+type ChallengeCraftsVisibilityDTO = {
   canShowSolutions: boolean
   canShowComments: boolean
 }
 
-type ChallengesCraftVisilibityProps = {
+type ChallengeCraftsVisibilityProps = {
   canShowSolutions: Logical
   canShowComments: Logical
 }
 
-export class ChallengesCraftVisilibity {
+export class ChallengeCraftsVisibility {
   static readonly solutionsVisibilityPrice = 10
   readonly canShowSolutions: Logical
   readonly canShowComments: Logical
 
-  private constructor(props: ChallengesCraftVisilibityProps) {
+  private constructor(props: ChallengeCraftsVisibilityProps) {
     this.canShowComments = props.canShowComments
     this.canShowSolutions = props.canShowSolutions
   }
 
-  static create(dto: ChallengesCraftVisilibityDTO) {
-    return new ChallengesCraftVisilibity({
+  static create(dto: ChallengeCraftsVisibilityDTO) {
+    return new ChallengeCraftsVisibility({
       canShowComments: Logical.create('Can show comments', dto.canShowComments),
       canShowSolutions: Logical.create('Can show solutions', dto.canShowSolutions),
     })
@@ -31,8 +31,8 @@ export class ChallengesCraftVisilibity {
     return this.clone({ canShowSolutions: this.canShowSolutions.makeTrue() })
   }
 
-  private clone(props?: Partial<ChallengesCraftVisilibityProps>) {
-    return new ChallengesCraftVisilibity({
+  private clone(props?: Partial<ChallengeCraftsVisibilityProps>) {
+    return new ChallengeCraftsVisibility({
       canShowComments: this.canShowComments,
       canShowSolutions: this.canShowSolutions,
       ...props,
