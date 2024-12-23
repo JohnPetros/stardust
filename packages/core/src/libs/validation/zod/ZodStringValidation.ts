@@ -1,8 +1,7 @@
 import { type ZodEnum, ZodError, z, type ZodString } from 'zod'
 
-import { ZodValidationErrorFactory } from '@stardust/validation/factories'
-
 import type { IStringValidation } from '#interfaces'
+import { ZodValidationErrorFactory } from './ZodValidationErrorFactory'
 
 export class ZodStringValidation implements IStringValidation {
   private data: unknown

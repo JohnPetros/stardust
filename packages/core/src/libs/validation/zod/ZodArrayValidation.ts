@@ -1,8 +1,7 @@
 import { type ZodArray, z, ZodError } from 'zod'
 
-import { ZodValidationErrorFactory } from '@stardust/validation/factories'
-
 import type { IArrayValidation } from '#interfaces'
+import { ZodValidationErrorFactory } from './ZodValidationErrorFactory'
 
 export class ZodArrayValidation implements IArrayValidation {
   private data: unknown

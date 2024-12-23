@@ -1,8 +1,7 @@
 import { z, type ZodNumber, ZodError } from 'zod'
 
-import { ZodValidationErrorFactory } from '@stardust/validation/factories'
-
 import type { INumberValidation } from '#interfaces'
+import { ZodValidationErrorFactory } from './ZodValidationErrorFactory'
 
 export class ZodNumberValidation implements INumberValidation {
   private data: unknown

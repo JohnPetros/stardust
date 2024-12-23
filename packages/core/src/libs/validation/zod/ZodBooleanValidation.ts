@@ -1,6 +1,6 @@
 import { type ZodBoolean, z, ZodError } from 'zod'
 
-import { ZodValidationErrorFactory } from '@stardust/validation/factories'
+import { ZodValidationErrorFactory } from './ZodValidationErrorFactory'
 
 export class ZodBooleanValidation {
   private data: unknown
