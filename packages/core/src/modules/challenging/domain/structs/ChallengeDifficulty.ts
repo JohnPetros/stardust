@@ -1,6 +1,6 @@
-import { ValidationError } from '#errors'
-import { StringValidation } from '../../../../libs'
-import type { ChallengeDifficultyLevel } from '#domain/types/challenging'
+import { StringValidation } from '#libs'
+import { ValidationError } from '#global/errors'
+import type { ChallengeDifficultyLevel } from '#challenging/types'
 
 export class ChallengeDifficulty {
   private constructor(readonly level: ChallengeDifficultyLevel) {}

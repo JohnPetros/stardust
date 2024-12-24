@@ -1,15 +1,17 @@
-import { _hasCookie } from '@/ui/global/actions'
 import type { IController, IHttp } from '@stardust/core/interfaces'
+
+import { cookieActions } from '@/server/next-safe-action'
 import { COOKIES, ROUTES } from '@/constants'
-import { ApiResponse } from '@stardust/core/responses'
 
 export const HandleRewardsPayloadController = (): IController => {
   return {
     async handle(http: IHttp) {
       const currentRoute = http.getCurrentRoute()
 
-      if (currentRoute === ROUTES.profile.rewarding) {
-        const hasRewardsPayloadCookie = await _hasCookie(COOKIES.keys.rewardingPayload)
+      if (currentRoute === ROUTES.rewarding) {
+        const hasRewardsPayloadCookie = (
+          await cookieActions.hasCookie(COOKIES.keys.rewardingPayload)
+        )?.data
 
         if (!hasRewardsPayloadCookie) return http.redirect(ROUTES.space)
       }
