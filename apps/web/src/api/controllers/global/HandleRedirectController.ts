@@ -1,13 +1,18 @@
 import type { IController, IHttp } from '@stardust/core/interfaces'
-import { ApiResponse } from '@stardust/core/responses'
 
-export const HandleRedirectController = (): IController => {
+type Schema = {
+  queryParams: {
+    redirect_to?: string
+  }
+}
+
+export const HandleRedirectController = (): IController<Schema> => {
   return {
-    async handle(http: IHttp) {
-      const redirectRoute = http.getSearchParam('redirect_to')
-      if (redirectRoute) return http.redirect(redirectRoute)
+    async handle(http: IHttp<Schema>) {
+      const { redirect_to } = http.getQueryParams()
+      if (redirect_to) return http.redirect(redirect_to)
 
-      return new ApiResponse()
+      return http.pass()
     },
   }
 }

@@ -1,4 +1,4 @@
-import { StringValidation } from '@/@core/lib/validation'
+import { StringValidation } from '#libs'
 
 export class Name {
   readonly value: string

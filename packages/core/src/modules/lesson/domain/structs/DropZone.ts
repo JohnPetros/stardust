@@ -1,5 +1,5 @@
 import type { DropZoneDto } from '#dtos'
-import { StringValidation } from '@/@core/lib/validation'
+import { StringValidation } from '#libs'
 import { Logical } from '../../../modules/global/domain/structs/Logical'
 import { Integer } from '../../../modules/global/domain/structs/Integer'
 

@@ -1,4 +1,4 @@
-import { StringValidation } from '@/@core/lib/validation'
+import { StringValidation } from '#libs'
 import type { ChallengeCompletionStatus } from '../types'
 
 export class ChallengeCompletion {

@@ -1,4 +1,4 @@
-import { NotFoundPage } from '@/ui/global/components/pages/NotFound'
+import { NotFoundPage } from '@/ui/global/widgets/pages/NotFound'
 
 export default function NotFound() {
   return <NotFoundPage />

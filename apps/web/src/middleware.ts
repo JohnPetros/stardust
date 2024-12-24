@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 
 import { VerifyAuthRoutesController } from './api/controllers/auth'
 import { NextHttp } from './api/next/NextHttp'
@@ -7,9 +8,14 @@ import { SupabaseMiddlewareClient } from './api/supabase/clients/SupabaseMiddlew
 import { SupabaseAuthService } from './api/supabase/services'
 import { HandleRedirectController } from './api/controllers/global'
 
+const schema = z.object({
+  queryParams: z.object({
+    redirect_to: z.string(),
+  }),
+})
+
 export const middleware = async (request: NextRequest) => {
-  const response = NextResponse.next()
-  const nextHttp = await NextHttp({ request })
+  const nextHttp = await NextHttp<z.infer<typeof schema>>({ request })
 
   const supabase = SupabaseMiddlewareClient(request)
   const authService = SupabaseAuthService(supabase)
@@ -20,12 +26,16 @@ export const middleware = async (request: NextRequest) => {
     HandleRedirectController(),
   ]
 
-  for (const controller of controllers) {
-    const constrollerResponse = await controller.handle(nextHttp)
-    if (constrollerResponse.body) return constrollerResponse.body
+  try {
+    for (const controller of controllers) {
+      const constrollerResponse = await controller.handle(nextHttp)
+      if (!constrollerResponse.getHeader('X-Pass')) return constrollerResponse.body
+    }
+  } catch (error) {
+    return NextResponse.next()
   }
 
-  return response
+  return NextResponse.next()
 }
 
 export const config = { matcher: '/((?!.*\\.).*)' }

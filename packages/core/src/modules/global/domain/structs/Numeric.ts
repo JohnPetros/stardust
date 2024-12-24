@@ -1,4 +1,4 @@
-import { NumberValidation } from '@/@core/lib/validation'
+import { NumberValidation } from '#libs'
 
 export class Numeric {
   readonly value: number

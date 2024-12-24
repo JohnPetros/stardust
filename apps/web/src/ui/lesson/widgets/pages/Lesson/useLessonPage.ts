@@ -32,7 +32,7 @@ export function useLessonPage(
   function handleLeavePage() {
     localStorage.removeItem(STORAGE.keys.secondsCounter)
     resetStore()
-    router.goTo(ROUTES.private.space)
+    router.goTo(ROUTES.space)
   }
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export function useLessonPage(
           key: COOKIES.keys.rewardingPayload,
           value: JSON.stringify(rewardingPayloadDto),
         })
-        router.goTo(ROUTES.private.rewarding)
+        router.goTo(ROUTES.rewarding)
       }
 
       goToRewardingPage()

@@ -34,8 +34,8 @@ export function SignInPage() {
             </div>
 
             <div className='mt-4 flex w-full items-center justify-between'>
-              <Link href={ROUTES.public.auth.resetPassword}>Esqueci a senha</Link>
-              <Link href={ROUTES.public.auth.signUp}>Criar conta</Link>
+              <Link href={ROUTES.auth.resetPassword}>Esqueci a senha</Link>
+              <Link href={ROUTES.auth.signUp}>Criar conta</Link>
             </div>
           </AnimatedForm>
         </main>

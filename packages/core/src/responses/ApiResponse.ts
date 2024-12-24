@@ -1,27 +1,24 @@
 import { HTTP_STATUS_CODE } from '../constants/http-status-code'
-import {
-  AppError,
-  AuthError,
-  ConflictError,
-  NotFoundError,
-  ValidationError,
-} from '#global/errors'
+import { AppError, AuthError, ConflictError, NotFoundError } from '#global/errors'
 
 type ApiResponseProps<Body> = {
   body?: Body
   statusCode?: number
   errorMessage?: string
+  headers?: Record<string, string>
 }
 
 export class ApiResponse<Body = unknown> {
   private readonly _body: Body | null
-  private readonly _statusCode: number
   private readonly _errorMessage: string | null
+  private readonly statusCode: number = HTTP_STATUS_CODE.ok
+  private readonly headers: Record<string, string> = {}
 
-  constructor({ body, statusCode, errorMessage }: ApiResponseProps<Body> = {}) {
+  constructor({ body, statusCode, errorMessage, headers }: ApiResponseProps<Body> = {}) {
     this._body = body ?? null
-    this._statusCode = statusCode ?? HTTP_STATUS_CODE.ok
     this._errorMessage = errorMessage ?? null
+    if (statusCode) this.statusCode = statusCode
+    if (headers) this.headers = headers
   }
 
   throwError() {
@@ -60,8 +57,8 @@ export class ApiResponse<Body = unknown> {
     return this._body
   }
 
-  get statusCode(): number {
-    return this._statusCode
+  getHeader(key: string) {
+    return this.headers[key] ?? null
   }
 
   get errorMessage(): string {

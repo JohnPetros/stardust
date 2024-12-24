@@ -9,10 +9,10 @@ export const metadata: Metadata = {
   description: 'Aprenda lógica de programação explorando o espaço.',
 }
 
-export default async function Root({
-  children,
-}: {
+type RootProps = {
   children: React.ReactNode
-}) {
-  return <RootLayout>OII</RootLayout>
+}
+
+export default async function Root({ children }: RootProps) {
+  return <RootLayout>{children}</RootLayout>
 }

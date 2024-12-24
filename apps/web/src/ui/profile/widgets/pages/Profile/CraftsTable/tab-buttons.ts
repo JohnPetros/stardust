@@ -14,14 +14,14 @@ type TabButtonType = {
 export const TAB_BUTTONS: TabButtonType[] = [
   {
     title: 'Códigos',
-    link: ROUTES.private.playground,
+    link: ROUTES.playground,
     icon: 'file',
     value: 'playground-tab',
     canOrder: false,
   },
   {
     title: 'Desafios',
-    link: ROUTES.private.challenging.challenges,
+    link: ROUTES.challenging.challenges,
     icon: 'terminal',
     value: 'challenges-tab',
     canOrder: true,

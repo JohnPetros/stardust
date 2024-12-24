@@ -30,7 +30,7 @@ export function NotFoundPage() {
           </p>
         </div>
 
-        <Button className='mt-6' onClick={() => router.goTo(ROUTES.private.space)}>
+        <Button className='mt-6' onClick={() => router.goTo(ROUTES.space)}>
           Retornar
         </Button>
       </Animated404>

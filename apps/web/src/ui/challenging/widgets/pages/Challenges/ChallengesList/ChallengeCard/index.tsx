@@ -38,7 +38,7 @@ export function ChallengeCard({
       <div className='flex items-center gap-3'>
         <DifficultyBadge difficultyLevel={difficultyLevel} />
         <Link
-          href={`${ROUTES.private.app.challenge}/${slug}`}
+          href={`${ROUTES.app.challenge}/${slug}`}
           className='font-semibold text-green-500 transition-colors duration-200 hover:text-green-700'
         >
           {title}

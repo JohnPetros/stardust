@@ -1,4 +1,4 @@
-import { NumberValidation } from '@/@core/lib/validation'
+import { NumberValidation } from '#libs'
 
 type OrdinalNumberProps = {
   key: string

@@ -20,7 +20,7 @@ export function useContentDialog(contentType: ContentType) {
 
   function handleDialogOpenChange(isOpen: boolean) {
     if (!isOpen && routeLastParam !== challenge?.slug.value) {
-      router.goTo(`${ROUTES.private.app.challenge}/${challenge?.slug.value}`)
+      router.goTo(`${ROUTES.app.challenge}/${challenge?.slug.value}`)
     }
   }
 

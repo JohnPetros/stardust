@@ -1,4 +1,4 @@
-import { BooleanValidation } from '@/@core/lib/validation'
+import { BooleanValidation } from '#libs'
 
 export class Logical {
   readonly value: boolean

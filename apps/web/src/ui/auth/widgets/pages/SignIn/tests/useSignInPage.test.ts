@@ -74,7 +74,7 @@ describe('useSignInPage hook', () => {
     await result.current.handleFormSubmit({ email: fakeEmail, password: fakePassword })
 
     await waitFor(() => {
-      expect(goToMock).toHaveBeenCalledWith(ROUTES.private.space)
+      expect(goToMock).toHaveBeenCalledWith(ROUTES.space)
     })
   })
 

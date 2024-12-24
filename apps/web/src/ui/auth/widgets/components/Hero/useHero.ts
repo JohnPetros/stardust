@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react'
 
+import { List } from '@stardust/core/global/structs'
+
 import { QUOTES } from './quotes'
 
-import { getRandomItem } from '@/utils/getRandomItem'
-
 export function useHero(charactersDeletingDelay: number) {
-  const [quote, setQuote] = useState(getRandomItem<string>(QUOTES))
+  const [quote, setQuote] = useState(List.create(QUOTES).random)
   const deletedCharactersCount = useRef(0)
   const canDelete = useRef(true)
 
@@ -18,7 +18,7 @@ export function useHero(charactersDeletingDelay: number) {
 
       await new Promise((resolve) => {
         setTimeout(() => {
-          setQuote(getRandomItem<string>(QUOTES))
+          setQuote(List.create(QUOTES).random)
           deletedCharactersCount.current = 0
           canDelete.current = true
           resolve(true)

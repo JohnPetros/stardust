@@ -1,8 +1,4 @@
-import { z } from 'zod'
+import { stringSchema } from './stringSchema'
+import { ERROR_MESSAGES } from '../constants'
 
-import { VALIDATION_ERROR_MESSAGES } from '@/@core/lib/validation/constants'
-
-export const nameSchema = z
-  .string()
-  .nonempty(VALIDATION_ERROR_MESSAGES.nonempty)
-  .min(3, VALIDATION_ERROR_MESSAGES.name.min)
+export const nameSchema = stringSchema.min(3, ERROR_MESSAGES.name.min)

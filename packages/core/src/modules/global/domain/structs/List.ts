@@ -1,3 +1,4 @@
+import { AppError } from '#global/errors'
 import { Logical } from './Logical'
 
 export class List<Item> {
@@ -23,8 +24,11 @@ export class List<Item> {
 
     const items = [...this.items]
 
-    const firstItem = items[item1Index]
+    if (!items[item2Index]) return new List(items)
     items[item1Index] = items[item2Index]
+
+    const firstItem = items[item1Index]
+    if (!firstItem) return new List(items)
     items[item2Index] = firstItem
 
     return new List(items)
@@ -67,6 +71,16 @@ export class List<Item> {
 
   includes(item: Item): Logical {
     return Logical.create(`Is ${this.items} includes ${item}?`, this.items.includes(item))
+  }
+
+  get random() {
+    const randomItem = this.items[Math.floor(Math.random() * this.items.length)]
+    if (!randomItem)
+      throw new AppError(
+        `Erro ao pegar um item aleatória da lista: ${this.items.join(', ')}`,
+      )
+
+    return randomItem
   }
 
   get length() {

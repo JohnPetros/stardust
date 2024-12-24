@@ -27,7 +27,7 @@ export default async function Lesson({ params }: NextParams<{ starSlug: string }
   const starIsUnlockedResponse = await spaceService.verifyStarIsUnlocked(star.id, userId)
 
   if (starIsUnlockedResponse.isFailure || !starIsUnlockedResponse.body) {
-    return redirect(ROUTES.private.space)
+    return redirect(ROUTES.space)
   }
 
   const questionsResponse = await lessonService.fetchQuestionsByStar(star.id)

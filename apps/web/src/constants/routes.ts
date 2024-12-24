@@ -1,36 +1,32 @@
 export const ROUTES = {
-  private: {
-    ranking: '/ranking',
-    space: '/space',
-    shop: '/shop',
-    challenging: {
-      prefix: '/challenging',
-      challenge: '/challenging/challenge',
-      challenges: '/challenging/challenges',
-      challengeMaker: '/challenging/challenge-maker',
-      solutions: '/solutions',
-      comments: '/solutions',
-      newSolution: '/challenging/solution/new',
-    },
-    profile: {
-      prefix: '/profile',
-      settings: '/profile/settings',
-    },
-    lesson: {
-      prefix: '/lesson',
-    },
-    rewarding: '/rewarding',
-    playground: '/playground',
-    accountConfirmation: '/account-confirmation',
+  ranking: '/ranking',
+  space: '/space',
+  shop: '/shop',
+  challenging: {
+    prefix: '/challenging',
+    challenge: '/challenging/challenge',
+    challenges: '/challenging/challenges',
+    challengeMaker: '/challenging/challenge-maker',
+    solutions: '/solutions',
+    comments: '/solutions',
+    newSolution: '/challenging/solution/new',
   },
-  public: {
-    auth: {
-      signIn: '/sign-in',
-      signUp: '/sign-up',
-      resetPassword: '/reset-password',
-    },
-    landing: '/landing',
+  profile: {
+    prefix: '/profile',
+    settings: '/profile/settings',
   },
+  lesson: {
+    prefix: '/lesson',
+  },
+  rewarding: '/rewarding',
+  playground: '/playground',
+  accountConfirmation: '/account-confirmation',
+  auth: {
+    signIn: '/auth/sign-in',
+    signUp: '/auth/sign-up',
+    resetPassword: '/auth/reset-password',
+  },
+  landing: '/landing',
   api: {
     auth: {
       confirmEmail: '/api/auth/confirm-email',

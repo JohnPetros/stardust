@@ -1,5 +1,5 @@
+import { Entity } from '#global/abstracts'
 import type { TextDto } from '../../dtos'
-import { Entity } from '#domain/abstracts/global'
 
 export type TextType = 'default' | 'quote' | 'alert' | 'list' | 'image' | 'code' | 'user'
 

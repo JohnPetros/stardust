@@ -36,7 +36,7 @@ export function useStar({
 
   async function handleStarNavigation() {
     if (!isChallenge) {
-      router.goTo(`${ROUTES.private.app.lesson}/${slug}`)
+      router.goTo(`${ROUTES.app.lesson}/${slug}`)
       return
     }
 
@@ -51,7 +51,7 @@ export function useStar({
     }
 
     const challengeSlug = reponse.data
-    router.goTo(`${ROUTES.private.app.challenge}/${challengeSlug}`)
+    router.goTo(`${ROUTES.app.challenge}/${challengeSlug}`)
   }
 
   function handleStarClick() {

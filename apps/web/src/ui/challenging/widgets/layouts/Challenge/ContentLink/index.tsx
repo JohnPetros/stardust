@@ -32,7 +32,7 @@ export function ContentLink({
 
   return (
     <Link
-      href={`${ROUTES.private.app.challenge}/${challenge?.slug}${
+      href={`${ROUTES.app.challenge}/${challenge?.slug}${
         contentType !== 'description' ? `/${contentType}` : ''
       }`}
       className={twMerge('rounded-md bg-gray-700 p-2 text-sm', className)}

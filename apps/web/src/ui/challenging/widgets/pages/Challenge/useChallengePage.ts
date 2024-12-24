@@ -20,7 +20,7 @@ export function useChallengePage(challengeDTO: ChallengeDTO) {
     if (!challenge) return
 
     const homeRoute = challenge.isFromStar.isTrue ? 'space' : 'challenges'
-    router.goTo(ROUTES.private.app.home[homeRoute])
+    router.goTo(ROUTES.app.home[homeRoute])
   }
 
   function handlePanelsLayoutButton(panelsLayout: PanelsLayout) {

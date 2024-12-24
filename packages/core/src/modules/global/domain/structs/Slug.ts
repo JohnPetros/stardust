@@ -1,4 +1,4 @@
-import { StringValidation } from '@/@core/lib/validation'
+import { StringValidation } from '#libs'
 import { Name } from './Name'
 
 export class Slug {

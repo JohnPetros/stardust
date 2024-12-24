@@ -1,4 +1,4 @@
-import { CodeRunnerError } from '../errors/providers'
+import { AppError, CodeRunnerError } from '#global/errors'
 
 type CodeRunnerResponseProps = {
   result?: string
@@ -26,10 +26,12 @@ export class CodeRunnerResponse {
   }
 
   get errorMessage(): string {
-    return String(this._error?.message)
+    if (!this._error) throw new AppError('Code Runner Error is not a failure')
+    return this._error.message
   }
 
   get errorLine(): number {
-    return Number(this._error?.line)
+    if (!this._error) throw new AppError('Code Runner Error is not a failure')
+    return this._error.line
   }
 }

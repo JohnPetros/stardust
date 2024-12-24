@@ -1,12 +1,10 @@
-import { BaseError } from '../global/BaseError'
+import { AppError } from './AppError'
 
-export class CodeRunnerError extends BaseError {
+export class CodeRunnerError extends AppError {
   readonly line: number
 
   constructor(message: string, line: number) {
-    super()
-    this.title = 'Code Runner Error'
-    this.message = message
+    super(message, 'Code Runner Error')
     this.line = line
   }
 }

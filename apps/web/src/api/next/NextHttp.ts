@@ -24,9 +24,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
   let nextRedirectResponse: NextResponse<unknown>
   let httpSchema: NextSchema
 
-  if (request) {
-    if (!schema) throw new AppError('Zod schema not provided')
-
+  if (request && schema) {
     let body: HttpSchema['body']
     let queryParams: HttpSchema['queryParams']
     let routeParams: HttpSchema['routeParams']
@@ -111,7 +109,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     },
 
     pass() {
-      return new ApiResponse()
+      return new ApiResponse({ headers: { 'X-Pass': 'true' } })
     },
 
     send(data: unknown, statusCode = 200) {

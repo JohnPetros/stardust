@@ -19,7 +19,7 @@ export default async function Rewarding() {
   )
 
   if (!rewardsPayloadCookie?.data) {
-    return redirect(ROUTES.private.space)
+    return redirect(ROUTES.space)
   }
 
   const apiClient = NextApiClient()

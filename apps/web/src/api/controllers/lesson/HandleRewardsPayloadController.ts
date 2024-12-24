@@ -8,13 +8,13 @@ export const HandleRewardsPayloadController = (): IController => {
     async handle(http: IHttp) {
       const currentRoute = http.getCurrentRoute()
 
-      if (currentRoute === ROUTES.private.lesson.rewarding) {
+      if (currentRoute === ROUTES.profile.rewarding) {
         const hasRewardsPayloadCookie = await _hasCookie(COOKIES.keys.rewardingPayload)
 
-        if (!hasRewardsPayloadCookie) return http.redirect(ROUTES.private.space)
+        if (!hasRewardsPayloadCookie) return http.redirect(ROUTES.space)
       }
 
-      return new ApiResponse()
+      return http.pass()
     },
   }
 }

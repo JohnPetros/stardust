@@ -21,7 +21,7 @@ export function useAccountConfirmationPage(rocketAnimationRef: RefObject<Animati
 
     await waitFor(3000)
 
-    router.push(ROUTES.private.space)
+    router.push(ROUTES.space)
   }
 
   return {

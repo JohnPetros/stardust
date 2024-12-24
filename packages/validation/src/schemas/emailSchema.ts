@@ -1,8 +1,4 @@
-import { z } from 'zod'
+import { ERROR_MESSAGES } from '../constants'
+import { stringSchema } from './stringSchema'
 
-import { VALIDATION_ERROR_MESSAGES } from '@/@core/lib/validation/constants'
-
-export const emailSchema = z
-  .string()
-  .nonempty(VALIDATION_ERROR_MESSAGES.nonempty)
-  .email(VALIDATION_ERROR_MESSAGES.email.regex)
+export const emailSchema = stringSchema.email(ERROR_MESSAGES.email.regex)

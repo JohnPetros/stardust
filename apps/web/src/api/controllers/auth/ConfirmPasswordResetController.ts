@@ -13,7 +13,7 @@ export const ConfirmPasswordResetController = (
   authService: IAuthService,
 ): IController<Schema> => {
   function redirectToSigInPage(http: IHttp, errorMessage: string) {
-    return http.redirect(`${ROUTES.public.auth.signIn}?error=${errorMessage}`)
+    return http.redirect(`${ROUTES.auth.signIn}?error=${errorMessage}`)
   }
 
   return {

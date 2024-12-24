@@ -100,7 +100,7 @@ export function useAuthProvider(serverSession: Session | null) {
       return
     }
 
-    router.goTo(ROUTES.public.auth.signIn)
+    router.goTo(ROUTES.auth.signIn)
   }
 
   const mutateUserCache = useCallback(

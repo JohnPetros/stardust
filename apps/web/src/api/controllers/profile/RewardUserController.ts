@@ -17,9 +17,9 @@ export const RewardUserController = (
   function getNextRoute(rewardPayloadOrigin: RewardingPayloadOrigin) {
     switch (rewardPayloadOrigin) {
       case 'star':
-        return ROUTES.private.space
+        return ROUTES.space
       default:
-        return ROUTES.private.space
+        return ROUTES.space
     }
   }
 
