@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
 
-import type { AchievementDto } from '#dtos'
-import { AppError } from '@stardust/core/global/errors'
+import type { AchievementDto } from '@stardust/core/profile/dtos'
 
 import { NextApiClient } from '@/api/next/NextApiClient'
 import { ROUTES } from '@/constants'
@@ -14,11 +13,9 @@ type AppProps = {
 }
 
 export default async function App({ children }: AppProps) {
-  const apiClient = NextApiClient()
-
-  const response = await apiClient.get<AchievementDto[]>(ROUTES.api.achievements)
-
-  if (response.isFailure) throw new AppError(response.errorMessage)
+  const apiClient = NextApiClient({ isCacheEnable: true })
+  const response = await apiClient.get<AchievementDto[]>(ROUTES.api.profile.achievements)
+  if (response.isFailure) response.throwError()
 
   return (
     <AudioProvider>

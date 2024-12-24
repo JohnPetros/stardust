@@ -26,4 +26,9 @@ const deleteCookie = actionClient.schema(z.string()).action(async ({ clientInput
   actionServer.getCookie(clientInput)
 })
 
-export const cookieActions = { setCookie, getCookie, deleteCookie }
+const hasCookie = actionClient.schema(z.string()).action(async ({ clientInput }) => {
+  const cookie = cookies().get(name)
+  return Boolean(cookie)
+})
+
+export const cookieActions = { setCookie, getCookie, deleteCookie, hasCookie }
