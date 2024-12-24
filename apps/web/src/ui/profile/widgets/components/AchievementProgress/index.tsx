@@ -1,4 +1,5 @@
-import type { AchievementMetricValue } from '@/@core/domain/types'
+import { AchievementMetricValue } from '@stardust/core/profile/types'
+
 import { ProgressBar } from '@/ui/global/widgets/components/ProgressBar'
 import { useAchievementProgress } from './useAchievementProgress'
 

@@ -1,6 +1,9 @@
-import { Planet, User } from '#domain/entities'
-import type { PlanetDto, UserDto } from '#dtos'
-import type { IUseCase } from '#interfaces/handlers'
+import type { IUseCase } from "#interfaces"
+import { UserDto } from "#global/dtos"
+import { User } from "#global/entities"
+import { PlanetDto } from "#space/dtos"
+import { Planet } from "#space/entities"
+import { NotFoundError } from "#global/errors"
 
 type Request = {
   planetsDto: PlanetDto[]
@@ -8,7 +11,7 @@ type Request = {
 }
 
 export class GetLastUnlockedStarIdUseCase implements IUseCase<Request, string> {
-  do({ planetsDto, userDto }: Request): string {
+  async do({ planetsDto, userDto }: Request): Promise<string> {
     const planets = planetsDto.map(Planet.create)
     const user = User.create(userDto)
 
@@ -28,6 +31,10 @@ export class GetLastUnlockedStarIdUseCase implements IUseCase<Request, string> {
       }
     }
 
-    return planets[0].stars[0].id
+    const lastUnlockedStarId = planets[0]?.stars[0]?.id
+
+    if (!lastUnlockedStarId) throw new NotFoundError('Estrela desbloqueada não encontrada')
+
+    return lastUnlockedStarId
   }
 }

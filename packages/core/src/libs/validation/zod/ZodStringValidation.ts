@@ -79,7 +79,7 @@ export class ZodStringValidation implements IStringValidation {
 
       this.zodString.parse(this.data)
     } catch (error) {
-      if (error instanceof ZodError) throw ZodValidationErrorFactory.produce(error)
+      // if (error instanceof ZodError) throw ZodValidationErrorFactory.produce(error)
     }
   }
 }

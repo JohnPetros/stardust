@@ -1,3 +1,5 @@
+'use server'
+
 import { authActionClient } from './clients/authActionClient'
 import { NextActionServer } from '../next/NextActionServer'
 import { ObsverNewUnlockedAchievementsAction } from '../actions/profile'

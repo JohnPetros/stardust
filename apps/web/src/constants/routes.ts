@@ -20,11 +20,11 @@ export const ROUTES = {
   },
   rewarding: '/rewarding',
   playground: '/playground',
-  accountConfirmation: '/account-confirmation',
   auth: {
     signIn: '/auth/sign-in',
     signUp: '/auth/sign-up',
     resetPassword: '/auth/reset-password',
+    accountConfirmation: '/auth/account-confirmation',
   },
   landing: '/landing',
   api: {
@@ -39,8 +39,8 @@ export const ROUTES = {
       items: '/shop/items',
     },
     profile: {
-      achievements: '/api/achievements',
-      reward: '/api/user',
+      achievements: '/api/profile/achievements',
+      reward: '/api/profile/reward',
     },
     ranking: {
       current: '/api/ranking/current',

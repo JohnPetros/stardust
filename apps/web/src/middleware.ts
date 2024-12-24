@@ -9,13 +9,15 @@ import { SupabaseAuthService } from './api/supabase/services'
 import { HandleRedirectController } from './api/controllers/global'
 
 const schema = z.object({
-  queryParams: z.object({
-    redirect_to: z.string(),
-  }),
+  queryParams: z
+    .object({
+      redirect_to: z.string().optional(),
+    })
+    .optional(),
 })
 
 export const middleware = async (request: NextRequest) => {
-  const nextHttp = await NextHttp<z.infer<typeof schema>>({ request })
+  const nextHttp = await NextHttp<z.infer<typeof schema>>({ request, schema })
 
   const supabase = SupabaseMiddlewareClient(request)
   const authService = SupabaseAuthService(supabase)
@@ -38,4 +40,8 @@ export const middleware = async (request: NextRequest) => {
   return NextResponse.next()
 }
 
-export const config = { matcher: '/((?!.*\\.).*)' }
+export const config = {
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+  ],
+}

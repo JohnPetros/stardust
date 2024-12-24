@@ -1,3 +1,5 @@
+'use server'
+
 import { SupabaseServerActionClient } from '@/api/supabase/clients'
 import { SupabaseRankingService } from '@/api/supabase/services'
 import { authActionClient } from './clients/authActionClient'

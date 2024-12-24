@@ -1,3 +1,5 @@
+'use server'
+
 import { type NextRequest, NextResponse } from 'next/server'
 import type { ZodSchema } from 'zod'
 
@@ -47,7 +49,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
 
   return {
     getCurrentRoute() {
-      return request ? `/${request.nextUrl.pathname.split('/')[1]}` : ''
+      return request ? request.nextUrl.pathname : ''
     },
 
     redirect(route: string) {

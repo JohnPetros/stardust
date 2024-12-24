@@ -1,6 +1,9 @@
+'use client'
+
 import { useAction } from 'next-safe-action/hooks'
-import { cookieActions } from '@/server/next-safe-action'
 import { useCallback } from 'react'
+
+import { cookieActions } from '@/server/next-safe-action'
 
 export function useCookieActions() {
   const { executeAsync: executeGetCookie } = useAction(cookieActions.getCookie)
@@ -9,6 +12,7 @@ export function useCookieActions() {
 
   const getCookie = useCallback(
     async (key: string) => {
+      console.log(executeGetCookie)
       const result = await executeGetCookie(key)
       return result?.data ?? null
     },

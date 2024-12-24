@@ -11,8 +11,8 @@ type ApiResponseProps<Body> = {
 export class ApiResponse<Body = unknown> {
   private readonly _body: Body | null
   private readonly _errorMessage: string | null
-  private readonly statusCode: number = HTTP_STATUS_CODE.ok
-  private readonly headers: Record<string, string> = {}
+  readonly statusCode: number = HTTP_STATUS_CODE.ok
+  readonly headers: Record<string, string> = {}
 
   constructor({ body, statusCode, errorMessage, headers }: ApiResponseProps<Body> = {}) {
     this._body = body ?? null
@@ -42,7 +42,7 @@ export class ApiResponse<Body = unknown> {
   }
 
   get isSuccess() {
-    return this.statusCode <= HTTP_STATUS_CODE.badRequest
+    return this.statusCode <= HTTP_STATUS_CODE.redirect
   }
 
   get isFailure() {

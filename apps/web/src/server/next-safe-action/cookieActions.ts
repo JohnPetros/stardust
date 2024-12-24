@@ -1,9 +1,11 @@
+'use server'
+
 import { z } from 'zod'
 
 import { NextActionServer } from '../next/NextActionServer'
-import { actionClient } from './clients/actionClient'
+import { authActionClient } from './clients/authActionClient'
 
-const setCookie = actionClient
+const setCookie = authActionClient
   .schema(
     z.object({
       key: z.string(),
@@ -16,19 +18,21 @@ const setCookie = actionClient
     actionServer.setCookie(clientInput.key, clientInput.value, clientInput.duration)
   })
 
-const getCookie = actionClient.schema(z.string()).action(async ({ clientInput }) => {
+const getCookie = authActionClient.schema(z.string()).action(async ({ clientInput }) => {
   const actionServer = NextActionServer()
   return actionServer.getCookie(clientInput)
 })
 
-const deleteCookie = actionClient.schema(z.string()).action(async ({ clientInput }) => {
+const deleteCookie = authActionClient
+  .schema(z.string())
+  .action(async ({ clientInput }) => {
+    const actionServer = NextActionServer()
+    actionServer.getCookie(clientInput)
+  })
+
+const hasCookie = authActionClient.schema(z.string()).action(async ({ clientInput }) => {
   const actionServer = NextActionServer()
-  actionServer.getCookie(clientInput)
+  actionServer.deleteCookie(clientInput)
 })
 
-const hasCookie = actionClient.schema(z.string()).action(async ({ clientInput }) => {
-  const cookie = cookies().get(name)
-  return Boolean(cookie)
-})
-
-export const cookieActions = { setCookie, getCookie, deleteCookie, hasCookie }
+export { setCookie, getCookie, deleteCookie, hasCookie }

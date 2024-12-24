@@ -1,4 +1,6 @@
-import { SupabaseServerActionClient } from '@/api/supabase/clients'
+'use server'
+
+import { SupabaseServerActionClient } from '@/api/supabase/clients/SupabaseServerActionClient'
 import { SupabaseChallengingService } from '@/api/supabase/services'
 import { authActionClient } from './clients/authActionClient'
 import { NextActionServer } from '../next/NextActionServer'
