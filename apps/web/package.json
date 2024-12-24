@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "db:generate": "supabase gen types lang=typescript --project-id aukqejqsiqsqowafpppb > src/api/supabase/types/Database.ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "test --coverage"
