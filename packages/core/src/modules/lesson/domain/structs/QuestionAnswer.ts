@@ -1,4 +1,4 @@
-import { Logical } from '../../../modules/global/domain/structs/Logical'
+import { Logical } from '#global/structs'
 
 type QuestionAnswerProps = {
   isCorrect: Logical

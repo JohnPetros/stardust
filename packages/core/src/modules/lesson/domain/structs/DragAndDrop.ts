@@ -1,7 +1,7 @@
-import type { DragglableItemDto } from '../../../modules/lesson/dtos'
-import { DraggableItem } from '#domain/structs/lesson'
-import { ShuffledList } from '../../../modules/global/domain/structs'
-import { List } from '../../../modules/global/domain/structs/List'
+import { List, ShuffledList } from '#global/structs'
+import type { DragglableItemDto } from '#lesson/dtos'
+import type { DropZone } from './DropZone'
+import { DraggableItem } from './DraggableItem'
 
 type DragAndDropProps = {
   items: DraggableItem[]

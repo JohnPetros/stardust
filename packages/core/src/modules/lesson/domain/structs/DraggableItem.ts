@@ -1,7 +1,5 @@
-import type { DragglableItemDto } from '#dtos'
-import { Integer } from '../../../modules/global/domain/structs/Integer'
-import { Logical } from '../../../modules/global/domain/structs/Logical'
-import { Text } from '../../../modules/global/domain/structs/Text'
+import { Integer, Logical, Text } from '#global/structs'
+import type { DragglableItemDto } from '#lesson/dtos'
 
 type DraggableItemProps = {
   index: Integer

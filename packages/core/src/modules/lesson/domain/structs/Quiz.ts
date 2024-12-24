@@ -1,15 +1,15 @@
-import type { QuestionDto } from '#dtos'
-import type { Question } from '#domain/abstracts'
-import { Integer } from '../../../modules/global/domain/structs/Integer'
-import { SelectionQuestion } from '../../entities/SelectionQuestion'
-import { QuestionAnswer } from './QuestionAnswer'
-import { Logical } from '../../../modules/global/domain/structs/Logical'
+import { NotFoundError } from '#global/errors'
+import { Integer, Logical } from '#global/structs'
+import type { Question } from '#lesson/abstracts'
+import type { QuestionDto } from '#lesson/dtos'
 import {
   CheckboxQuestion,
   DragAndDropListQuestion,
   DragAndDropQuestion,
   OpenQuestion,
-} from '../../entities'
+  SelectionQuestion,
+} from '#lesson/entities'
+import { QuestionAnswer } from './QuestionAnswer'
 
 type QuizProps = {
   livesCount: Integer
@@ -59,6 +59,7 @@ export class Quiz {
 
       if (DragAndDropListQuestion.canBeCreatedBy(questionDto)) {
         questions.push(DragAndDropListQuestion.create(questionDto))
+        continue
       }
 
       if (DragAndDropQuestion.canBeCreatedBy(questionDto)) {
@@ -133,7 +134,9 @@ export class Quiz {
   }
 
   get currentQuestion() {
-    return this.questions[this.currentQuestionIndex.value]
+    const currentQuestion = this.questions[this.currentQuestionIndex.value]
+    if (!currentQuestion) throw new NotFoundError('Current question not found')
+    return currentQuestion
   }
 
   get progress() {

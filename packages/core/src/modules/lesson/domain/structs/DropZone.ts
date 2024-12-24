@@ -1,7 +1,6 @@
-import type { DropZoneDto } from '#dtos'
+import { Integer, Logical } from '#global/structs'
+import type { DropZoneDto } from '#lesson/dtos'
 import { StringValidation } from '#libs'
-import { Logical } from '../../../modules/global/domain/structs/Logical'
-import { Integer } from '../../../modules/global/domain/structs/Integer'
 
 type DropZoneType = 'slot' | 'bank'
 

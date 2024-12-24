@@ -1,4 +1,3 @@
-import { Logical } from '../../../modules/global/domain/structs/Logical'
 import type { Quiz } from './Quiz'
 import type { Theory } from './Theory'
 

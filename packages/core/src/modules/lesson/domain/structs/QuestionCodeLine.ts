@@ -1,5 +1,5 @@
-import type { QuestionCodeLineDto } from '#dtos'
-import { Integer } from '..'
+import { Integer } from '#global/structs'
+import type { QuestionCodeLineDto } from '#lesson/dtos'
 
 type QuestionCodeLineProps = {
   number: Integer

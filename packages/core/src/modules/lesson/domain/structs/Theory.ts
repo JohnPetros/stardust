@@ -1,6 +1,5 @@
-import type { TextBlockDto } from '@stardust/core/global/dtos'
-import { Integer } from '../../../modules/global/domain/structs/Integer'
-import { TextBlock } from '../../../modules/global/domain/structs/TextBlock'
+import type { TextBlockDto } from '#global/dtos'
+import { Integer, TextBlock } from '#global/structs'
 
 type TheoryProps = {
   currentTextBlockIndex: Integer
