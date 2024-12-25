@@ -1,28 +1,56 @@
-import {} from 'core'
+import { IHttp, HttpSchema, AppError, HTTP_STATUS_CODE } from '@stardust/core'
 
-export const DenoHttp = (): IHttp => {
+type DenoHttpParams<DenoSchema extends HttpSchema> = {
+  body: DenoSchema['body']
+}
+
+export const DenoHttp = <DenoSchema extends HttpSchema>({
+  body,
+}: DenoHttpParams<DenoSchema>): IHttp<DenoSchema> => {
   return {
-    getQueryParams: () => ({
-      // Implement logic to extract query parameters from Deno request
-    }),
-
-    redirect: (url: string) => {
-      // Implement logic to redirect using Deno's response
+    getCookie() {
+      throw new Error('Method not implemented')
     },
 
-    getBody: () => {
-      // Implement logic to extract request body from Deno request
+    redirect() {
+      throw new Error('Method not implemented')
     },
 
-    setHeader: (key: string, value: string) => {
-      // Implement logic to set headers using Deno's response
+    getCurrentRoute() {
+      throw new Error('Method not implemented')
     },
 
+    getRouteParams() {
+      throw new Error('Method not implemented')
+    },
+
+    getQueryParams() {
+      throw new Error('Method not implemented')
+    },
+
+    getBody() {
+      if (!body) throw new AppError('Body is not defined')
+      return body
+    },
+
+    getUser() {
+      throw new Error('Method not implemented')
+    },
+
+    setCookie() {
+      throw new Error('Method not implemented')
+    },
+
+    pass() {
+      throw new Error('Method not implemented')
+    },
+
+    // @ts-ignore:
     send(data?: unknown, statusCode?: number) {
       return new Response(JSON.stringify(data), {
         headers: { 'Content-Type': 'application/json' },
         status: statusCode ?? HTTP_STATUS_CODE.ok,
-      }) as unknown as ApiResponse
+      })
     },
   }
 }

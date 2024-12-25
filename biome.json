@@ -80,5 +80,19 @@
       "semicolons": "asNeeded",
       "quoteStyle": "single"
     }
-  }
+  },
+  "overrides": [
+    {
+      "include": [
+        "apps/serverless"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "useImportType": "off"
+          }
+        }
+      }
+    }
+  ]
 }

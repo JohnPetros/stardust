@@ -1,5 +1,6 @@
 {
   "name": "@stardust/validation",
+  "version": "0.1.0",
   "exports": {
     "./schemas": "./src/schemas/index.ts",
     "./constants": "./src/constants/index.ts",

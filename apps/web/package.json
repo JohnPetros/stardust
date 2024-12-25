@@ -76,7 +76,6 @@
   },
   "devDependencies": {
     "@stardust/typescript-config": "*",
-    "@stardust/validation": "*",
     "@tailwindcss/typography": "^0.5.13",
     "@testing-library/dom": "^9.3.4",
     "@testing-library/jest-dom": "^5.17.0",

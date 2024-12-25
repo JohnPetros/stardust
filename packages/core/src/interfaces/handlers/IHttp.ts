@@ -1,5 +1,5 @@
 import type { UserDto } from '#global/dtos'
-import type { ApiResponse } from '@stardust/core/responses'
+import type { ApiResponse } from '#responses'
 
 export type HttpSchema = {
   body?: unknown

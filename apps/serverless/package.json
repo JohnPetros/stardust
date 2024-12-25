@@ -1,0 +1,10 @@
+{
+  "name": "@stardust/serverless",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "supabase start --workdir src",
+    "deploy": "supabase functions deploy handle-sign-up --workdir src --no-verify-jwt",
+    "db:generate": "supabase gen types typescript --project-id aukqejqsiqsqowafpppb > src/supabase/types/SupabaseDatabase.ts",
+    "check-types": "tsc --noEmit"
+  }
+}

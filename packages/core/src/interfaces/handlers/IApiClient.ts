@@ -1,4 +1,4 @@
-import type { ApiResponse } from '@stardust/core/responses'
+import type { ApiResponse } from '#responses'
 
 export interface IApiClient {
   get<Response>(route: string): Promise<ApiResponse<Response>>

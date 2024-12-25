@@ -1,8 +1,8 @@
-import { AppError } from '@stardust/core/global/errors'
 import type { Logical } from './Logical'
 import { List } from './List'
 import { ShuffledList } from './ShuffledList'
 import type { OrdinalNumber } from './OrdinalNumber'
+import { AppError } from '#global/errors'
 
 type Item = {
   originalPosition: OrdinalNumber

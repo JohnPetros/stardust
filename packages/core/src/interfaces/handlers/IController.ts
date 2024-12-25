@@ -1,4 +1,4 @@
-import type { ApiResponse } from '@stardust/core/responses'
+import type { ApiResponse } from '#responses'
 import type { HttpSchema, IHttp } from './IHttp'
 
 export interface IController<ControllerHttpSchema extends HttpSchema = HttpSchema> {

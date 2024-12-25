@@ -1,11 +1,23 @@
 {
-  "name": "@stardust/core",
-  "version": "0.3.0",
+  "name": "@stardust-org/core",
+  "license": "MIT",
+  "version": "0.1.12",
+  "private": false,
+  "author": {
+    "name": "John Petros"
+  },
+  "files": [
+    "build"
+  ],
   "main": "build/main.js",
   "module": "build/main.mjs",
   "types": "build/main.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "build": "tsup src --dts"
+    "build": "tsup",
+    "deploy": "tsup && npm version patch && npm publish"
   },
   "exports": {
     "./auth/errors": "./src/modules/auth/errors/index.ts",
@@ -112,12 +124,14 @@
   },
   "dependencies": {
     "dayjs": "^1.11.11",
+    "express": "5.0.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
     "@stardust/typescript-config": "*",
     "jest": "^29.7.0",
+    "tiny-glob": "^0.2.9",
     "tsup": "^8.3.5",
     "typescript": "5.5.3"
   }

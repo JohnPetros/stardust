@@ -1,0 +1,8 @@
+{
+  "imports": {
+    "@stardust/core": "npm:@stardust-org/core@0.1.9",
+    "controllers/auth/HandleSignUpController": "../../controllers/auth/HandleSignUpController.ts",
+    "constants/Env": "../../constants/env.ts",
+    "deno/DenoHttp": "../../deno/DenoHttp.ts"
+  }
+}

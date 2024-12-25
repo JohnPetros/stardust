@@ -1,6 +1,5 @@
+import { ValidationError } from '#global/errors'
 import type { ZodError } from 'zod'
-
-import { ValidationError } from '@stardust/core/global/errors'
 
 export class ZodValidationErrorFactory {
   static produce(zodError: ZodError) {
