@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
-import type { DragglableItemDto } from '#dtos'
 import { DraggableItem } from '../../DraggableItem'
+import type { DragglableItemDto } from '#lesson/dtos'
 
 export class DraggableItemsFaker {
   static fake(baseDto?: Partial<DragglableItemDto>): DraggableItem {

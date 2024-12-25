@@ -1,5 +1,5 @@
 import { ValidationError } from '#global/errors'
-import { Datetime } from '@stardust/core/libs'
+import { Datetime } from '#libs'
 import { WeekStatus } from '../WeekStatus'
 
 describe('WeekStatus struct', () => {

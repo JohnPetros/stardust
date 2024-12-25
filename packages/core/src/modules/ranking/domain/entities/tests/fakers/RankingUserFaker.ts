@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import type { RankingUserDto } from '#dtos'
+import type { RankingUserDto } from '#ranking/dtos'
 
 export class RankingUsersFaker {
   static fakeDto(baseDto?: Partial<RankingUserDto>): RankingUserDto {
@@ -13,6 +13,7 @@ export class RankingUsersFaker {
         name: faker.person.firstName(),
       },
       tierId: faker.string.uuid(),
+      position: 1,
       ...baseDto,
     }
   }

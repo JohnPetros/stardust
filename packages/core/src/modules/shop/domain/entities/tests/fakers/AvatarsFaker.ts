@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { Avatar } from '../../Avatar'
-import type { AvatarDto } from '../../../#dtos'
+import type { AvatarDto } from '#shop/dtos'
 
 export class AvatarsFaker {
   static fake(baseDto?: Partial<AvatarDto>): Avatar {
@@ -13,6 +13,8 @@ export class AvatarsFaker {
       name: faker.person.firstName(),
       image: `${faker.image.avatar()}.jpg`,
       price: faker.number.int({ max: 100 }),
+      isAcquiredByDefault: false,
+      isSelectedByDefault: false,
       ...baseDto,
     }
   }

@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { Tier } from '../../Tier'
-import type { TierDto } from '../../../#dtos'
+import type { TierDto } from '#ranking/dtos'
 
 export class TiersFaker {
   static fake(baseDto?: Partial<TierDto>): Tier {

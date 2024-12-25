@@ -1,8 +1,8 @@
-import { Datetime } from '@stardust/core/libs'
 import { UsersFaker } from './fakers'
 import { IdFaker } from '#fakers/structs'
 import { AchievementsFaker } from '#fakers/entities'
 import { Observer } from '#global/structs'
+import { Datetime } from '#libs'
 
 describe('User Entity', () => {
   it('should return whether user has the unlocked achievement or not', () => {

@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { Planet } from '../../Planet'
-import type { PlanetDto } from '#dtos'
 import { StarsFaker } from './StarsFaker'
+import type { PlanetDto } from '#space/dtos'
 
 export class PlanetsFaker {
   static fake(baseDto?: Partial<PlanetDto>): Planet {

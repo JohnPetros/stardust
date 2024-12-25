@@ -5,7 +5,7 @@
   "module": "build/main.mjs",
   "types": "build/main.d.ts",
   "scripts": {
-    "build": "tsup src --format cjs,esm --dts"
+    "build": "tsup src --dts"
   },
   "exports": {
     "./auth/errors": "./src/modules/auth/errors/index.ts",
@@ -117,6 +117,7 @@
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
     "@stardust/typescript-config": "*",
+    "jest": "^29.7.0",
     "tsup": "^8.3.5",
     "typescript": "5.5.3"
   }

@@ -1,8 +1,8 @@
 import { RankingUsersFaker, TiersFaker, UsersFaker } from '#fakers/entities'
 import { RankingServiceMock } from '#mocks/services'
 import { GetLastWeekRankingWinnersUseCase } from '../GetLastWeekRankingWinnersUseCase'
-import type { RankingUser } from '#ranking/entities'
-import type { UserDto } from '@stardust/core/global/dtos'
+import type { RankingUserDto } from '#ranking/dtos'
+import type { UserDto } from '#global/dtos'
 
 let rankingServiceMock: RankingServiceMock
 let useCase: GetLastWeekRankingWinnersUseCase
@@ -51,7 +51,7 @@ describe('Get Last Week Ranking Winners Use Case', () => {
 
   it('should return the last week ranking winners ordered as podium', async () => {
     const fakeLastWeekTier = rankingServiceMock.tiers[0]
-    let fakeRankingWinners: RankingUser[] = []
+    let fakeRankingWinners: RankingUserDto[] = []
 
     if (fakeLastWeekTier)
       fakeRankingWinners = fakeRankingUsersFixture(fakeLastWeekTier?.id)

@@ -1,8 +1,8 @@
-import type { TextBlockDto } from '@stardust/core/global/dtos'
 import { Image } from './Image'
 import { Logical } from './Logical'
 import { Name } from './Name'
 import { StringValidation } from '#libs'
+import type { TextBlockDto } from '#global/dtos'
 
 type TextBlockType = 'default' | 'quote' | 'alert' | 'list' | 'image' | 'code' | 'user'
 

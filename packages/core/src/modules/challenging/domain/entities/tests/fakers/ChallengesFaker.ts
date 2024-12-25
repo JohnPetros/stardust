@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 
-import { Challenge } from '../../Challenge'
-import type { ChallengeDto } from '../../../#dtos'
+import type { ChallengeDto } from '#challenging/dtos'
+import { Challenge } from '#challenging/entities'
 
 export class ChallengesFaker {
   static fake(baseDto?: Partial<ChallengeDto>): Challenge {
@@ -15,6 +15,16 @@ export class ChallengesFaker {
       difficulty: faker.helpers.arrayElement(['easy', 'medium', 'hard']),
       slug: faker.lorem.slug(),
       code: '',
+      authorSlug: '',
+      description: '',
+      completionsCount: 0,
+      downvotesCount: 0,
+      upvotesCount: 0,
+      functionName: '',
+      descriptionTextBlocks: [],
+      docId: '',
+      starId: '',
+      createdAt: new Date(),
       ...baseDto,
     }
   }
