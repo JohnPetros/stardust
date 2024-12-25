@@ -1,5 +1,5 @@
-import { Ranking } from '../../../../../modules/ranking/domain/structs/Ranking'
-import { RankingUsersFaker } from '@/@core/domain/entities/tests/fakers/RankingUserFaker'
+import { RankingUsersFaker } from '#fakers/entities'
+import { Ranking } from '#ranking/structs'
 
 export class RankingFaker {
   static fake(usersCount?: number): Ranking {

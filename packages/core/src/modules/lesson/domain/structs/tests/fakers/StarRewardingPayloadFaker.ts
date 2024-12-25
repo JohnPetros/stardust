@@ -1,6 +1,6 @@
+import { IdFaker } from '#fakers/structs'
+import type { StarRewardingPayloadDto } from '#lesson/dtos'
 import { faker } from '@faker-js/faker'
-import { IdFaker } from '../../../../../modules/global/domain/structs/tests/fakers/IdsFaker'
-import type { StarRewardingPayloadDto } from '../../../#dtos/lesson/StarRewardingPayloadDto'
 
 export class StarRewardingPayloadFaker {
   static fakeDto(baseDto?: Partial<StarRewardingPayloadDto>): StarRewardingPayloadDto {

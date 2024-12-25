@@ -1,5 +1,5 @@
-import type { ICodeRunnerProvider } from '@/@core/interfaces/providers'
-import type { CodeInput } from '../../types'
+import type { CodeInput } from '#global/types'
+import type { ICodeRunnerProvider } from '#interfaces'
 
 type CodeProps = {
   codeRunner: ICodeRunnerProvider

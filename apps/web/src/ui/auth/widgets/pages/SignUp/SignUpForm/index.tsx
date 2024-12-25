@@ -2,10 +2,10 @@
 
 import { Input } from '@/ui/global/widgets/components/Input'
 import { Button } from '@/ui/global/widgets/components/Button'
-import type { SignUpFormFields } from '@/ui/auth/forms/types'
 
 import { useSignUpForm } from './useSignUpForm'
 import { AnimatedContainer } from './AnimatedContainer'
+import type { SignUpFormFields } from './types'
 
 type SignUpFormProps = {
   id: string
@@ -35,8 +35,11 @@ export function SignUpForm({ id, onSubmit }: SignUpFormProps) {
             isActive={isNameValid}
             autoFocus
             {...register('name')}
-            error={errors.name?.message}
+            // error={errors.name?.message}
           />
+          {!isNameValid && (
+            <p className='text-gray-100 text-sm mt-3'>Pelo meno 3 caracteres</p>
+          )}
         </AnimatedContainer>
         {isNameValid && (
           <AnimatedContainer>
@@ -47,8 +50,10 @@ export function SignUpForm({ id, onSubmit }: SignUpFormProps) {
               placeholder='Digite seu e-mail'
               isActive={isEmailValid}
               {...register('email')}
-              error={errors.email?.message}
             />
+            {!isEmailValid && (
+              <p className='text-gray-100 text-sm mt-3'>E-mail válido, por favor</p>
+            )}
           </AnimatedContainer>
         )}
 
@@ -62,10 +67,9 @@ export function SignUpForm({ id, onSubmit }: SignUpFormProps) {
                 placeholder='Digite sua senha'
                 isActive={isPasswordValid}
                 {...register('password')}
-                error={errors.password?.message}
               />
               {!isPasswordValid && (
-                <p className='text-gray-100 text-sm tracking-wider leading-4'>
+                <p className='text-gray-100 text-sm tracking-wider leading-6'>
                   Sua senha deve conter pelo menos 6 caracteres, uma letra minúscula, uma
                   maiúscula, um número e um caractere especial 😙.
                 </p>

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import type { SignUpFormFields } from '@/ui/auth/forms/types'
+import type { SignUpFormFields } from './SignUpForm/types/SignUpFormFields'
 
 export function useSignUpPage() {
   const { handleSignUp } = useAuthContext()

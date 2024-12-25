@@ -1,8 +1,9 @@
-import { ChallengeCategory, Challenge, User } from '#domain/entities'
-import type { ChallengeCompletionStatus } from '#domain/types'
-import type { ChallengeCategoryDto, ChallengeDto, UserDto } from '#dtos'
-import type { IUseCase, IChallengingService } from '#interfaces'
-import type { ChallengesListParams } from '#types'
+import type { ChallengeCompletionStatus, ChallengesListParams } from '#challenging/types'
+import type { ChallengeCategoryDto, ChallengeDto } from '#challenging/dtos'
+import type { UserDto } from '#global/dtos'
+import type { IChallengingService, IUseCase } from '#interfaces'
+import { User } from '#global/entities'
+import { Challenge } from '#challenging/entities'
 
 type Request = {
   userDto: UserDto

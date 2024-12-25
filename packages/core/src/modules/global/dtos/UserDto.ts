@@ -1,6 +1,5 @@
-import type { AvatarDto } from './AvatarDto'
-import type { RocketDto } from './RocketDto'
-import type { TierDto } from './TierDto'
+import type { TierDto } from '#ranking/dtos'
+import type { AvatarDto, RocketDto } from '#shop/dtos'
 
 export type UserDto = {
   id?: string

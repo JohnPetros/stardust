@@ -1,10 +1,10 @@
-import { RankingsServiceMock } from '@/@core/__tests__/mocks/services'
+import { RankingUsersFaker, TiersFaker, UsersFaker } from '#fakers/entities'
+import { RankingServiceMock } from '#mocks/services'
 import { GetLastWeekRankingWinnersUseCase } from '../GetLastWeekRankingWinnersUseCase'
-import { TiersFaker, UsersFaker } from '@/@core/domain/entities/tests/fakers'
-import { RankingUsersFaker } from '@/@core/domain/entities/tests/fakers/RankingUserFaker'
+import type { RankingUser } from '#ranking/entities'
 import type { UserDto } from '@stardust/core/global/dtos'
 
-let rankingsServiceMock: RankingsServiceMock
+let rankingServiceMock: RankingServiceMock
 let useCase: GetLastWeekRankingWinnersUseCase
 let fakeUserDto: UserDto
 
@@ -14,20 +14,20 @@ function fakeRankingUsersFixture(tierId: string, count?: number) {
 
 describe('Get Last Week Ranking Winners Use Case', () => {
   beforeEach(() => {
-    rankingsServiceMock = new RankingsServiceMock()
+    rankingServiceMock = new RankingServiceMock()
     fakeUserDto = UsersFaker.fakeDto()
-    useCase = new GetLastWeekRankingWinnersUseCase(rankingsServiceMock)
+    useCase = new GetLastWeekRankingWinnersUseCase(rankingServiceMock)
   })
 
   it('should return the last week tier of user if any', async () => {
-    const fakeLastWeekTier = rankingsServiceMock.tiers[0]
+    const fakeLastWeekTier = rankingServiceMock.tiers[0]
     const fakeRankingUser = RankingUsersFaker.fakeDto({
-      tierId: fakeLastWeekTier.id,
+      tierId: fakeLastWeekTier?.id,
     })
 
     fakeUserDto = UsersFaker.fakeDto({ id: fakeRankingUser.id, tier: fakeLastWeekTier })
 
-    rankingsServiceMock.users.push(fakeRankingUser)
+    rankingServiceMock.users.push(fakeRankingUser)
 
     const { lastWeekTier } = await useCase.do(fakeUserDto)
 
@@ -42,7 +42,7 @@ describe('Get Last Week Ranking Winners Use Case', () => {
     const fakeRankingUsers = RankingUsersFaker.fakeManyDto(10, {
       tierId: fakeCurrentTier.id,
     })
-    rankingsServiceMock.users = fakeRankingUsers
+    rankingServiceMock.users = fakeRankingUsers
 
     const { lastWeekTier } = await useCase.do(fakeUserDto)
 
@@ -50,27 +50,30 @@ describe('Get Last Week Ranking Winners Use Case', () => {
   })
 
   it('should return the last week ranking winners ordered as podium', async () => {
-    const fakeLastWeekTier = rankingsServiceMock.tiers[0]
-    const fakeRankingWinners = fakeRankingUsersFixture(fakeLastWeekTier.id)
+    const fakeLastWeekTier = rankingServiceMock.tiers[0]
+    let fakeRankingWinners: RankingUser[] = []
+
+    if (fakeLastWeekTier)
+      fakeRankingWinners = fakeRankingUsersFixture(fakeLastWeekTier?.id)
 
     const firstFakeWinner = RankingUsersFaker.fakeDto({
       xp: 3000,
-      tierId: fakeLastWeekTier.id,
+      tierId: fakeLastWeekTier?.id,
     })
     const secondFakeWinner = RankingUsersFaker.fakeDto({
       xp: 2000,
-      tierId: fakeLastWeekTier.id,
+      tierId: fakeLastWeekTier?.id,
     })
     const thirdFakeWinner = RankingUsersFaker.fakeDto({
       xp: 1000,
-      tierId: fakeLastWeekTier.id,
+      tierId: fakeLastWeekTier?.id,
     })
 
     fakeUserDto = UsersFaker.fakeDto({
       tier: fakeLastWeekTier,
     })
 
-    rankingsServiceMock.winners = [
+    rankingServiceMock.winners = [
       ...fakeRankingWinners,
       firstFakeWinner,
       secondFakeWinner,
@@ -85,13 +88,13 @@ describe('Get Last Week Ranking Winners Use Case', () => {
   })
 
   it("should return user's loser state", async () => {
-    rankingsServiceMock.losers = [RankingUsersFaker.fakeDto({ id: fakeUserDto.id })]
+    rankingServiceMock.losers = [RankingUsersFaker.fakeDto({ id: fakeUserDto.id })]
 
     const response1 = await useCase.do(fakeUserDto)
 
     expect(response1.isUserLoser).toBe(true)
 
-    rankingsServiceMock.losers = []
+    rankingServiceMock.losers = []
 
     const response2 = await useCase.do(fakeUserDto)
 

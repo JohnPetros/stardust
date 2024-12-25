@@ -18,11 +18,17 @@ const variants: Variants = {
 
 type AnimatedInputProps = {
   children: ReactNode
+  className?: string
 }
 
-export function AnimatedContainer({ children }: AnimatedInputProps) {
+export function AnimatedContainer({ children, className }: AnimatedInputProps) {
   return (
-    <motion.div variants={variants} initial='initial' animate='visible'>
+    <motion.div
+      variants={variants}
+      initial='initial'
+      animate='visible'
+      className={className}
+    >
       {children}
     </motion.div>
   )

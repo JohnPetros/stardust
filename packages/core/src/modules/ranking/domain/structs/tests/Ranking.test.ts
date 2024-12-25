@@ -1,4 +1,4 @@
-import { RankingUsersFaker } from '../../../../../domain/entities/ranking/tests/fakers/RankingUserFaker'
+import { RankingUsersFaker } from '#fakers/entities'
 import { Ranking } from '../Ranking'
 
 describe('Ranking Struct', () => {
@@ -14,11 +14,11 @@ describe('Ranking Struct', () => {
     const ranking = Ranking.create(fakeUsersDto)
     const rankingUsers = ranking.users
 
-    expect(rankingUsers[0].dto).toEqual(fakeUsersDto[2])
-    expect(rankingUsers[1].dto).toEqual(fakeUsersDto[3])
-    expect(rankingUsers[2].dto).toEqual(fakeUsersDto[1])
-    expect(rankingUsers[3].dto).toEqual(fakeUsersDto[4])
-    expect(rankingUsers[4].dto).toEqual(fakeUsersDto[0])
+    expect(rankingUsers[0]?.dto).toEqual(fakeUsersDto[2])
+    expect(rankingUsers[1]?.dto).toEqual(fakeUsersDto[3])
+    expect(rankingUsers[2]?.dto).toEqual(fakeUsersDto[1])
+    expect(rankingUsers[3]?.dto).toEqual(fakeUsersDto[4])
+    expect(rankingUsers[4]?.dto).toEqual(fakeUsersDto[0])
   })
 
   it('should get the winners, that is, the users with the most xp', () => {

@@ -1,5 +1,5 @@
 import { ValidationError } from '#global/errors'
-import { Name } from '../global/Name'
+import { Name } from '../Name'
 
 describe('Name Struct', () => {
   it('should not be created if its value is lower than 2 characters', () => {

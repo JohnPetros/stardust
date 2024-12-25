@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -8,7 +8,7 @@ import { z } from 'zod'
 import { emailSchema, nameSchema, passwordSchema } from '@stardust/validation/schemas'
 
 import { useApi } from '@/ui/global/hooks'
-import type { SignUpFormFields } from './SignUpFormFields'
+import type { SignUpFormFields } from './types/SignUpFormFields'
 
 const signUpFormSchema = z.object({
   name: nameSchema,
@@ -40,22 +40,22 @@ export function useSignUpForm(onFormSubmit: (fields: SignUpFormFields) => Promis
     setIsloading(false)
   }
 
-  async function checkUserAlreadyExistsByName() {
+  const checkUserAlreadyExistsByName = useCallback(async () => {
     const response = await api.fetchUserName(nameFieldWatch)
 
     if (response.isSuccess) {
       setError('name', { message: 'Nome já utilizado por outro usuário' })
     }
-  }
+  }, [nameFieldWatch, api.fetchUserName, setError])
 
-  async function checkUserAlreadyExistsByEmail() {
+  const checkUserAlreadyExistsByEmail = useCallback(async () => {
     const response = await api.fetchUserEmail(emailFieldWatch)
 
     if (response.isSuccess) {
       setError('email', { message: 'E-mail já utilizado por outro usuário' })
       return false
     }
-  }
+  }, [emailFieldWatch, api.fetchUserEmail, setError])
 
   function checkFieldIsValid(fieldName: keyof SignUpFormFields) {
     const nameFieldState = getFieldState(fieldName)
@@ -71,7 +71,12 @@ export function useSignUpForm(onFormSubmit: (fields: SignUpFormFields) => Promis
   useEffect(() => {
     if (isNameValid) checkUserAlreadyExistsByName()
     if (isEmailValid) checkUserAlreadyExistsByEmail()
-  }, [isNameValid, isEmailValid])
+  }, [
+    isNameValid,
+    isEmailValid,
+    checkUserAlreadyExistsByName,
+    checkUserAlreadyExistsByEmail,
+  ])
 
   return {
     isLoading,

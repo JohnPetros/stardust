@@ -1,6 +1,3 @@
-export type RocketDto = {
-  id: string
-  image: string
-  name: string
-  price: number
-}
+import type { ShopItemDto } from './ShopItemDto'
+
+export type RocketDto = ShopItemDto

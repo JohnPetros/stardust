@@ -25,6 +25,7 @@ export class SortableList {
     const fromIndex = this.getItemIndex(fromPosition)
     const toIndex = this.getItemIndex(toPosition)
     const item = currentItems.splice(fromIndex, 1)[0]
+    if (!item) throw new Error()
     currentItems.splice(toIndex, 0, item)
     return new SortableList(currentItems)
   }

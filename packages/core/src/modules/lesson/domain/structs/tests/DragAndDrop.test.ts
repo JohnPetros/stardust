@@ -1,6 +1,6 @@
 import { DragAndDrop } from '../DragAndDrop'
 import { DraggableItem } from '../DraggableItem'
-import { DraggableItemsFaker, DropZoneFaker } from '../../tests/fakers'
+import { DraggableItemsFaker, DropZoneFaker } from './fakers'
 
 describe('DragAndDrop struct', () => {
   it('should get item by index if the item exists', () => {

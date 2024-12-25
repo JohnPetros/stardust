@@ -1,4 +1,4 @@
-import { List } from '../global/List'
+import { List } from '../List'
 
 describe('List struct', () => {
   it('should add an item', () => {

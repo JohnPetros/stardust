@@ -1,5 +1,1 @@
-export { FetchAchievementsUnexpectedError } from './FetchAchievementsUnexpectedError'
-export { FetchUnlockedAchievementsUnexpectedError } from './FetchUnlockedAchievementsUnexpectedError'
-export { SaveUnlockedAchievementUnexpectedError } from './SaveUnlockedAchievementUnexpectedError'
-export { SaveRescuableAchievementUnexpectedError } from './SaveRescuableAchievementUnexpectedError'
-export { DeleteRescuableAchievementUnexpectedError } from './DeleteRescuableAchievementUnexpectedError'
+export { UserNotFoundError } from './UserNotFoundError'

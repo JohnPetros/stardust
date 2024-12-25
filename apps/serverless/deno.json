@@ -1,0 +1,18 @@
+{
+  "name": "@stardust/serverless",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "supabase start --workdir src",
+    "build": "supabase functions deploy build --workdir src",
+    "db:generate": "supabase gen types typescript --project-id aukqejqsiqsqowafpppb > src/supabase/types/Database.ts",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "check-types": "tsc --noEmit"
+  },
+  "imports": {
+    "core": "npm:@stardust/core@0.3.0"
+  },
+  "dependencies": {
+    "@stardust/core": "*"
+  }
+}

@@ -2,8 +2,12 @@ import type { ApiResponse } from '../../responses/ApiResponse'
 
 export interface IAuthService {
   fetchUserId(): Promise<ApiResponse<string>>
-  signIn(email: string, password: string): Promise<ApiResponse<string>>
-  signUp(email: string, password: string, name: string): Promise<ApiResponse<string>>
+  signIn(email: string, password: string): Promise<ApiResponse<{ userId: string }>>
+  signUp(
+    email: string,
+    password: string,
+    name: string,
+  ): Promise<ApiResponse<{ userId: string }>>
   signOut(): Promise<ApiResponse>
   requestPasswordReset(email: string): Promise<ApiResponse>
   resetPassword(

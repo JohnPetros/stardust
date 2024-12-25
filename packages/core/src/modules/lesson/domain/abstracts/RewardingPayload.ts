@@ -1,6 +1,6 @@
+import type { Integer } from '#global/structs'
+import type { RewardingPayloadOrigin } from '#lesson/types'
 import { Datetime } from '@stardust/core/libs'
-import type { Integer } from '#domain/structs'
-import type { RewardingPayloadOrigin } from '../../types'
 
 export abstract class RewardingPayload {
   constructor(

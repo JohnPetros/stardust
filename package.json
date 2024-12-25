@@ -19,6 +19,7 @@
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.8.3"
+    "@biomejs/biome": "1.8.3",
+    "supabase": "^2.1.1"
   }
 }

@@ -1,4 +1,4 @@
-import { NotFoundError } from '../../modules/global/errors'
+import { NotFoundError } from '#global/errors'
 
 export class RocketNotFoundError extends NotFoundError {
   constructor() {

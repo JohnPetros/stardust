@@ -31,8 +31,8 @@ export class Slug {
 
     const name = words
       .map((word) => {
-        const firstLetter = word[0].toUpperCase()
-        return firstLetter + word.slice(1)
+        const firstLetter = word[0]
+        return firstLetter?.toUpperCase() + word.slice(1)
       })
       .join(' ')
 

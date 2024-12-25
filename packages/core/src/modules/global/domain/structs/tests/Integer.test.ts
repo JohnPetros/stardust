@@ -1,5 +1,5 @@
 import { ValidationError } from '#global/errors'
-import { Integer } from '../global/Integer'
+import { Integer } from '../Integer'
 
 describe('Integer struct', () => {
   it('should not be created if value is not a number', () => {

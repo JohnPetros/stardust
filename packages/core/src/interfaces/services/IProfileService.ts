@@ -6,6 +6,7 @@ import type { ApiResponse } from '../../responses'
 export interface IProfileService {
   fetchAchievements(): Promise<ApiResponse<AchievementDto[]>>
   fetchUnlockedAchievements(userId: string): Promise<ApiResponse<AchievementDto[]>>
+  saveUser(user: User): Promise<ApiResponse>
   saveUnlockedAchievement(
     achievementId: string,
     userId: string,

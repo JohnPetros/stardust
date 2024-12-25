@@ -1,4 +1,4 @@
-import { Level } from '../profile/Level'
+import { Level } from '../Level'
 
 describe('Level struct', () => {
   it('should up number only when the new xp is greater than or equal to the minimum required', () => {

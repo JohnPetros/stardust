@@ -68,6 +68,22 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
       return new ApiResponse({ body: ranking })
     },
 
+    async fetchFirstTier() {
+      const { data, error } = await supabase
+        .from('tiers')
+        .select('*')
+        .eq('position', 1)
+        .single()
+
+      if (error) {
+        return SupabasePostgrestError(error, 'Erro inesperado ao buscar primeiro tier')
+      }
+
+      const ranking = supabaseTierMapper.toTier(data)
+
+      return new ApiResponse({ body: ranking })
+    },
+
     async fetchRankingUsersByTier(tierId: string) {
       const { data, error } = await supabase
         .from('users')

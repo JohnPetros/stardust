@@ -1,4 +1,5 @@
 import { StringValidation } from '#libs'
+import { Slug } from './Slug'
 
 export class Name {
   readonly value: string
@@ -23,5 +24,10 @@ export class Name {
     const currentValue = this.removeAccentuation().value.trim().toLowerCase()
 
     return currentValue.includes(value.trim().toLowerCase())
+  }
+
+  get slug() {
+    const nameWithoutAccentuation = this.removeAccentuation()
+    return Slug.create(nameWithoutAccentuation.value).value
   }
 }

@@ -1,43 +1,24 @@
-import { Entity } from '#global/abstracts'
-import { Image, Integer, Name } from '#global/structs'
+import { Image, Integer, Logical, Name } from '#global/structs'
 import type { RocketDto } from '#shop/dtos'
+import { ShopItem } from '../abstracts'
 
-type RocketProps = {
-  name: Name
-  price: Integer
-  image: Image
-}
-
-export class Rocket extends Entity<RocketProps> {
+export class Rocket extends ShopItem {
   static create(dto: RocketDto): Rocket {
     return new Rocket(
       {
         name: Name.create(dto.name),
         price: Integer.create('price', dto.price),
         image: Image.create(dto.image),
+        isAcquiredByDefault: Logical.create(
+          'O foguete é adquirido por padrão?',
+          dto.isAcquiredByDefault,
+        ),
+        isSelectedByDefault: Logical.create(
+          'O avatar é selecionado por padrão?',
+          dto.isAcquiredByDefault,
+        ),
       },
       dto.id,
     )
-  }
-
-  get name() {
-    return this.props.name
-  }
-
-  get image() {
-    return this.props.image
-  }
-
-  get price() {
-    return this.props.price
-  }
-
-  get dto(): RocketDto {
-    return {
-      id: this.id,
-      name: this.name.value,
-      price: this.price.value,
-      image: this.image.value,
-    }
   }
 }

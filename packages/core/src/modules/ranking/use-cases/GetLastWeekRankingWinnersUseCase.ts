@@ -58,11 +58,6 @@ export class GetLastWeekRankingWinnersUseCase implements IUseCase<UserDto, Respo
 
   private async verifyRankingLoserState(userId: string) {
     const response = await this.rankingsService.verifyRankingLoserState(userId)
-
-    if (response.isFailure) {
-      return false
-    }
-
-    return response.body
+    return response.isSuccess
   }
 }

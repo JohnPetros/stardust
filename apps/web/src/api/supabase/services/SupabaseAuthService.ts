@@ -18,7 +18,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
 
       if (error) return SupabaseAuthError(error, 'E-mail ou senha incorretos')
 
-      return new ApiResponse({ body: data.session.user.id })
+      return new ApiResponse({ body: { userId: data.session.user.id } })
     },
 
     async signUp(email: string, password: string, name: string) {
@@ -48,23 +48,8 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
 
       const userId = data.user?.id
 
-      if (userId) {
-        const { error: insertUserError } = await supabase.from('users').insert({
-          id: userId,
-          name,
-          email,
-          slug: Slug.create(name).value,
-        })
-
-        if (insertUserError)
-          return SupabasePostgrestError(
-            insertUserError,
-            'Error inesperado ao cadastrar usuário',
-          )
-      }
-
       return new ApiResponse({
-        body: String(userId),
+        body: { userId: String(userId) },
         statusCode: HTTP_STATUS_CODE.created,
       })
     },
@@ -96,16 +81,16 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
       })
 
       if (sessionError) {
-        throw new Error(sessionError?.message)
+        return SupabaseAuthError(sessionError, 'Erro inesperado ao redefinir a senha')
       }
 
       const { error } = await supabase.auth.updateUser({
         password: newPassword,
       })
 
-      if (error) {
-        throw new Error(error.message)
-      }
+      if (error) return SupabaseAuthError(error, 'Erro inesperado ao redefinir a senha')
+
+      return new ApiResponse()
     },
 
     async confirmEmail(token: string) {

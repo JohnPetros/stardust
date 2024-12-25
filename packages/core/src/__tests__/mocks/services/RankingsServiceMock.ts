@@ -22,6 +22,10 @@ export class RankingServiceMock implements IRankingService {
     return new ApiResponse<TierDto>()
   }
 
+  fetchFirstTier(): Promise<ApiResponse<TierDto>> {
+    throw new Error('Method not implemented.')
+  }
+
   async fetchTiers(): Promise<ApiResponse<TierDto[]>> {
     return new ApiResponse({ body: this.tiers })
   }

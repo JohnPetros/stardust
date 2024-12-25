@@ -1,12 +1,8 @@
 import { faker } from '@faker-js/faker'
 
-import type { UserDto } from '../../../#dtos'
 import { User } from '../../User'
-import {
-  AvatarsFaker,
-  RocketsFaker,
-} from '../../../../../../domain/entities/shop/tests/fakers'
-import { TiersFaker } from '../../../../../../domain/entities/ranking/tests/fakers'
+import type { UserDto } from '#global/dtos'
+import { AvatarsFaker, RocketsFaker, TiersFaker } from '#fakers/entities'
 
 export class UsersFaker {
   static fake(baseDto?: Partial<UserDto>): User {

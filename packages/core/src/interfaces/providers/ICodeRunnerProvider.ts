@@ -1,5 +1,5 @@
-import type { CodeInput } from '@/@core/domain/types'
-import type { CodeRunnerResponse } from '@stardust/core/responses'
+import type { CodeInput } from '#global/types'
+import type { CodeRunnerResponse } from '#responses'
 
 export interface ICodeRunnerProvider {
   run(codeValue: string, shouldReturnLog: boolean): Promise<CodeRunnerResponse>

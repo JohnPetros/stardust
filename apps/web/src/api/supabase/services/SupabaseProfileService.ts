@@ -6,6 +6,7 @@ import { HTTP_STATUS_CODE } from '@stardust/core/constants'
 import type { Supabase } from '../types'
 import { SupabasePostgrestError } from '../errors'
 import { SupabaseAchievementMapper, SupabaseUserMapper } from '../mappers'
+import { Slug } from '@stardust/core/global/structs'
 
 export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
   const supabaseUserMapper = SupabaseUserMapper()
@@ -87,6 +88,21 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
         )
 
       return new ApiResponse({ body: data.email })
+    },
+
+    async saveUser(user: User) {
+      const { error: insertUserError } = await supabase.from('users').insert({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        slug: Slug.create(user.name).value,
+      })
+
+      if (insertUserError)
+        return SupabasePostgrestError(
+          insertUserError,
+          'Error inesperado ao cadastrar usuário',
+        )
     },
 
     async updateUser(user: User) {

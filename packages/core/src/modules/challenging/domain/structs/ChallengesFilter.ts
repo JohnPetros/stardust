@@ -1,7 +1,7 @@
 import { ChallengeDifficulty } from './ChallengeDifficulty'
 import { ChallengeCompletion } from './ChallengeCompletion'
-import { List } from '../../../global/domain/structs/List'
 import type { ChallengeCategory } from '../entities'
+import { List } from '#global/structs'
 
 type ChallengesFilterDTO = {
   difficultyLevel: string
@@ -21,9 +21,10 @@ export class ChallengesFilter {
   tags: List<string>
 
   private constructor({ categories, completion, difficulty }: ChallengesFilterProps) {
-    this.categories = categories
+    // this.categories = categories
     this.completion = completion
     this.difficulty = difficulty
+    this.tags = List.create([])
   }
 
   static create(dto: ChallengesFilterDTO) {

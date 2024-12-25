@@ -1,4 +1,4 @@
-import type { TextBlockType } from '../../domain/types'
+import type { TextBlockType } from '#global/types'
 
 export type TextBlockDto = {
   type: TextBlockType

@@ -1,5 +1,5 @@
 import { ValidationError } from '#global/errors'
-import { Id } from '../global/Id'
+import { Id } from '../Id'
 
 describe('Id Struct', () => {
   it('should not be created if its value is not a valid uuid', () => {

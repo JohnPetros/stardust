@@ -1,5 +1,12 @@
 {
   "name": "@stardust/core",
+  "version": "0.3.0",
+  "main": "build/main.js",
+  "module": "build/main.mjs",
+  "types": "build/main.d.ts",
+  "scripts": {
+    "build": "tsup src --format cjs,esm --dts"
+  },
   "exports": {
     "./auth/errors": "./src/modules/auth/errors/index.ts",
     "./global/abstracts": "./src/modules/global/domain/abstracts/index.ts",
@@ -33,10 +40,12 @@
     "./challenging/types": "./src/modules/challenging/domain/types/index.ts",
     "./challenging/errors": "./src/modules/challenging/errors/index.ts",
     "./challenging/use-cases": "./src/modules/challenging/use-cases/index.ts",
+    "./shop/abstracts": "./src/modules/shop/domain/abstracts/index.ts",
     "./shop/entities": "./src/modules/shop/domain/entities/index.ts",
     "./shop/types": "./src/modules/shop/domain/types/index.ts",
     "./shop/dtos": "./src/modules/shop/dtos/index.ts",
     "./shop/errors": "./src/modules/shop/errors/index.ts",
+    "./shop/use-cases": "./src/modules/shop/use-cases/index.ts",
     "./profile/entities": "./src/modules/profile/domain/entities/index.ts",
     "./profile/structs": "./src/modules/profile/domain/structs/index.ts",
     "./profile/types": "./src/modules/profile/domain/types/index.ts",
@@ -106,8 +115,9 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@stardust/typescript-config": "*",
     "@faker-js/faker": "^8.4.1",
+    "@stardust/typescript-config": "*",
+    "tsup": "^8.3.5",
     "typescript": "5.5.3"
   }
 }

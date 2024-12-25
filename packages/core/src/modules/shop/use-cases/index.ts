@@ -1,0 +1,1 @@
+export { AcquireShopItemsByDefaultUseCase } from './AcquireShopItemsByDefaultUseCase'

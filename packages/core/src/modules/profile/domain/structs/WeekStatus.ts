@@ -1,3 +1,5 @@
+import { AppError, ValidationError } from '#global/errors'
+import { Datetime, NumberValidation, StringValidation } from '#libs'
 import type { WeekdayStatus } from '../types'
 
 export class WeekStatus {
@@ -7,7 +9,9 @@ export class WeekStatus {
 
   static create(values: string[]) {
     if (!WeekStatus.isStatus(values)) {
-      throw new ValidationError(['Weekday Statuses are not valid'])
+      throw new ValidationError([
+        { name: 'week-status', messages: ['Weekday Statuses are not valid'] },
+      ])
     }
 
     new NumberValidation(values.length, 'Weekday Statuses count')
@@ -37,6 +41,8 @@ export class WeekStatus {
 
   get todayStatus(): WeekdayStatus {
     const todayIndex = new Datetime().getTodayIndex()
-    return this.statuses[todayIndex]
+    const todayStatus = this.statuses[todayIndex]
+    if (!todayStatus) throw new AppError('No today status')
+    return todayStatus
   }
 }

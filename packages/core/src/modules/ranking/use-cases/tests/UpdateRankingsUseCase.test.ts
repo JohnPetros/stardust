@@ -1,35 +1,33 @@
-import { RankingsServiceMock } from '@/@core/__tests__/mocks/services'
+import { RankingFaker } from '#fakers/structs'
+import { RankingServiceMock } from '#mocks/services'
+import type { Ranking } from '#ranking/structs'
 import { UpdateRankingsUseCase } from '../UpdateRankingsUseCase'
-import { RankingFaker } from '@/@core/domain/structs/tests/fakers'
-import type { Ranking } from '@/@core/domain/structs'
 
-let rankingsServiceMock: RankingsServiceMock
+let rankingServiceMock: RankingServiceMock
 let useCase: UpdateRankingsUseCase
 
 describe('Update Rankings Use Case', () => {
   beforeEach(() => {
-    rankingsServiceMock = new RankingsServiceMock()
-    useCase = new UpdateRankingsUseCase(rankingsServiceMock)
+    rankingServiceMock = new RankingServiceMock()
+    useCase = new UpdateRankingsUseCase(rankingServiceMock)
   })
 
   it('should reset all rankings state', async () => {
-    expect(rankingsServiceMock.isReset).toBeFalsy()
+    expect(rankingServiceMock.isReset).toBeFalsy()
 
     await useCase.do()
 
-    expect(rankingsServiceMock.isReset).toBeTruthy()
+    expect(rankingServiceMock.isReset).toBeTruthy()
   })
 
   it('should put each loser in the previous ranking if any', async () => {
     const rankings: Array<{ data: Ranking; tierId: string }> = []
 
-    for (const tier of rankingsServiceMock.tiers) {
+    for (const tier of rankingServiceMock.tiers) {
       const rankingData = RankingFaker.fake()
 
       rankings.push({ data: rankingData, tierId: tier.id })
-      rankingsServiceMock.users.push(
-        ...rankingData.users.map((user) => ({ ...user.dto }))
-      )
+      rankingServiceMock.users.push(...rankingData.users.map((user) => ({ ...user.dto })))
     }
 
     await useCase.do()
@@ -38,14 +36,16 @@ describe('Update Rankings Use Case', () => {
       const currentRanking = rankings[index]
       const nextRanking = rankings[index + 1]
 
-      const losers = await rankingsServiceMock.fetchRankingLosersByTier(
-        currentRanking.tierId
+      if (!currentRanking || !nextRanking) continue
+
+      const losers = await rankingServiceMock.fetchRankingLosersByTier(
+        currentRanking.tierId,
       )
-      expect(losers.data).toEqual(
+      expect(losers.body).toEqual(
         nextRanking.data.losers.map((loser) => ({
           ...loser.dto,
           tierId: currentRanking.tierId,
-        }))
+        })),
       )
     }
   })
@@ -53,13 +53,11 @@ describe('Update Rankings Use Case', () => {
   it('should put each winner in the next ranking', async () => {
     const rankings: Array<{ data: Ranking; tierId: string }> = []
 
-    for (const tier of rankingsServiceMock.tiers) {
+    for (const tier of rankingServiceMock.tiers) {
       const rankingData = RankingFaker.fake()
 
       rankings.push({ data: rankingData, tierId: tier.id })
-      rankingsServiceMock.users.push(
-        ...rankingData.users.map((user) => ({ ...user.dto }))
-      )
+      rankingServiceMock.users.push(...rankingData.users.map((user) => ({ ...user.dto })))
     }
 
     await useCase.do()
@@ -68,31 +66,33 @@ describe('Update Rankings Use Case', () => {
       const currentRanking = rankings[index]
       const previousRanking = rankings[index - 1]
 
-      const winners = await rankingsServiceMock.fetchRankingWinnersByTier(
-        currentRanking.tierId
+      if (!currentRanking || !previousRanking) continue
+
+      const winners = await rankingServiceMock.fetchRankingWinnersByTier(
+        currentRanking.tierId,
       )
-      expect(winners.data).toEqual(
+      expect(winners.body).toEqual(
         previousRanking.data.winners.map((winner) => ({
           ...winner.dto,
           tierId: currentRanking.tierId,
-        }))
+        })),
       )
     }
   })
 
   it('should allow users to see their ranking result', async () => {
-    expect(rankingsServiceMock.canUsersSeeRankingResult).toBeFalsy()
+    expect(rankingServiceMock.canUsersSeeRankingResult).toBeFalsy()
 
     await useCase.do()
 
-    expect(rankingsServiceMock.canUsersSeeRankingResult).toBeTruthy()
+    expect(rankingServiceMock.canUsersSeeRankingResult).toBeTruthy()
   })
 
   it('should update last week ranking positions', async () => {
-    expect(rankingsServiceMock.areLastWeekRankingPositionsUpdated).toBeFalsy()
+    expect(rankingServiceMock.areLastWeekRankingPositionsUpdated).toBeFalsy()
 
     await useCase.do()
 
-    expect(rankingsServiceMock.areLastWeekRankingPositionsUpdated).toBeTruthy()
+    expect(rankingServiceMock.areLastWeekRankingPositionsUpdated).toBeTruthy()
   })
 })
