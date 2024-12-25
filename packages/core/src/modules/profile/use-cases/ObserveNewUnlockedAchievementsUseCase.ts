@@ -13,7 +13,7 @@ type Request = {
 }
 
 export class ObserveNewUnlockedAchievementsUseCase
-  implements IUseCase<Request, Promise<Response>>
+  implements IUseCase<Request, Response>
 {
   private profileService: IProfileService
 
@@ -21,7 +21,7 @@ export class ObserveNewUnlockedAchievementsUseCase
     this.profileService = profileService
   }
 
-  async do({ userDto }: Request): Promise<Response> {
+  async do({ userDto }: Request) {
     const response = await this.profileService.fetchAchievements()
     if (response.isFailure) response.throwError()
 

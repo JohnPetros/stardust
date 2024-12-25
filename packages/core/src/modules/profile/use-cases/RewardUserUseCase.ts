@@ -12,14 +12,14 @@ type Request = {
   rewardingPayloadDto: RewardingPayloadDto
 }
 
-type Response = Promise<{
+type Response = {
   origin: RewardingPayloadOrigin
   newLevel: number | null
   newCoins: number
   newXp: number
   accuracyPercentage: number
   time: string
-}>
+}
 
 export class RewardUserUseCase implements IUseCase<Request, Response> {
   static readonly COINS_INCREASE_BASE = 2
@@ -30,7 +30,7 @@ export class RewardUserUseCase implements IUseCase<Request, Response> {
     private readonly spaceService: ISpaceService,
   ) {}
 
-  async do({ userDto, rewardingPayloadDto }: Request): Response {
+  async do({ userDto, rewardingPayloadDto }: Request) {
     const user = User.create(userDto)
 
     if (StarRewardingPayload.canBeCreatedBy(rewardingPayloadDto)) {
