@@ -16,7 +16,14 @@ export class Level {
     this.didUp = didUp
   }
 
-  static create(value: number): Level {
+  static create(value?: number): Level {
+    if (!value) {
+      return new Level({
+        number: OrdinalNumber.create('Level', 1),
+        didUp: Logical.create('Did level up?', false),
+      })
+    }
+
     return new Level({
       number: OrdinalNumber.create('Level', value),
       didUp: Logical.create('Did level up?', false),

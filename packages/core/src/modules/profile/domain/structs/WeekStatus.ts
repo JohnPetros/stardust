@@ -7,7 +7,11 @@ export class WeekStatus {
 
   private constructor(readonly statuses: WeekdayStatus[] = []) {}
 
-  static create(values: string[]) {
+  static create(values?: string[]) {
+    if (!values) {
+      return new WeekStatus(['todo', 'todo', 'todo', 'todo', 'todo', 'todo', 'todo'])
+    }
+
     if (!WeekStatus.isStatus(values)) {
       throw new ValidationError([
         { name: 'week-status', messages: ['Weekday Statuses are not valid'] },
