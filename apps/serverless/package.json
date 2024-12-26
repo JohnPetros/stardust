@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "supabase start --workdir src",
-    "deploy": "supabase functions deploy handle-sign-up --workdir src --no-verify-jwt",
+    "deploy": "supabase functions deploy handle-sign-up --workdir src --no-verify-jwt  --legacy-bundle",
     "db:generate": "supabase gen types typescript --project-id aukqejqsiqsqowafpppb > src/supabase/types/SupabaseDatabase.ts",
     "check-types": "tsc --noEmit"
   }
