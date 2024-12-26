@@ -1,12 +1,12 @@
 import type { IRankingService } from '@stardust/core/interfaces'
 import type { RankingUser } from '@stardust/core/ranking/entities'
 import type { RankingUserDto } from '@stardust/core/ranking/dtos'
+import { ApiResponse } from '@stardust/core/responses'
+import { HTTP_STATUS_CODE } from '@stardust/core/constants'
 
 import type { Supabase } from '../types/Supabase'
 import { SupabasePostgrestError } from '../errors'
 import { SupabaseRankingUserMapper, SupabaseTierMapper } from '../mappers'
-import { ApiResponse } from '@stardust/core/responses'
-import { HTTP_STATUS_CODE } from '@stardust/core/constants'
 
 export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
   const supabaseTierMapper = SupabaseTierMapper()

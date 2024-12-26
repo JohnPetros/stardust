@@ -1,10 +1,11 @@
 import { ApiResponse, PaginationResponse } from '@stardust/core/responses'
 import type { ShopItemsListingSettings } from '@stardust/core/shop/types'
 import type { IShopService } from '@stardust/core/interfaces'
+import { HTTP_STATUS_CODE } from '@stardust/core/constants'
+
 import type { Supabase } from '../types/Supabase'
 import { SupabasePostgrestError } from '../errors'
 import { SupabaseAvatarMapper, SupabaseRocketMapper } from '../mappers'
-import { HTTP_STATUS_CODE } from '@stardust/core/constants'
 
 export const SupabaseShopService = (supabase: Supabase): IShopService => {
   const supabaseAvatarMapper = SupabaseAvatarMapper()
@@ -63,16 +64,19 @@ export const SupabaseShopService = (supabase: Supabase): IShopService => {
       return new ApiResponse({ body: pagination })
     },
 
-    async saveAcquiredAvatar(avatarId: string, userId: string) {
-      const { error } = await supabase
-        .from('users_acquired_avatars')
-        .insert({ avatar_id: avatarId, user_id: userId })
+    async fetchAcquirableRocketsByDefault() {
+      const { data, error } = await supabase
+        .from('rockets')
+        .select('*')
+        .eq('is_acquired_by_default', true)
 
       if (error) {
-        return SupabasePostgrestError(error, 'Erro inesperado ao salvar avatar adquirido')
+        return SupabasePostgrestError(error, 'Erro inesperado ao buscar avatares grátis')
       }
 
-      return new ApiResponse()
+      const rockets = data.map(supabaseRocketMapper.toDto)
+
+      return new ApiResponse({ body: rockets })
     },
 
     async fetchRocketById(rocketId: string) {
@@ -128,6 +132,33 @@ export const SupabaseShopService = (supabase: Supabase): IShopService => {
       const pagination = new PaginationResponse(rockets, Number(count))
 
       return new ApiResponse({ body: pagination })
+    },
+
+    async saveAcquiredAvatar(avatarId: string, userId: string) {
+      const { error } = await supabase
+        .from('users_acquired_avatars')
+        .insert({ avatar_id: avatarId, user_id: userId })
+
+      if (error) {
+        return SupabasePostgrestError(error, 'Erro inesperado ao salvar avatar adquirido')
+      }
+
+      return new ApiResponse()
+    },
+
+    async fetchAcquirableAvatarsByDefault() {
+      const { data, error } = await supabase
+        .from('avatars')
+        .select('*')
+        .eq('is_acquired_by_default', true)
+
+      if (error) {
+        return SupabasePostgrestError(error, 'Erro inesperado ao buscar avatares grátis')
+      }
+
+      const avatars = data.map(supabaseAvatarMapper.toDto)
+
+      return new ApiResponse({ body: avatars })
     },
 
     async saveAcquiredRocket(rocketId: string, userId: string) {

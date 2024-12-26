@@ -21,7 +21,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
       return new ApiResponse({ body: { userId: data.session.user.id } })
     },
 
-    async signUp(email: string, password: string, name: string) {
+    async signUp(email: string, password: string) {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -31,7 +31,12 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
       })
 
       if (error)
-        switch (error?.name) {
+        switch (error?.code) {
+          case 'weak_password':
+            return new ApiResponse({
+              errorMessage: 'Senha de conter pelo menos 6 caracteres',
+              statusCode: HTTP_STATUS_CODE.conflict,
+            })
           case 'email_exists':
             return new ApiResponse({
               errorMessage: 'E-mail já em uso',

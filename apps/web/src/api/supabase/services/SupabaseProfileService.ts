@@ -91,18 +91,26 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
     },
 
     async saveUser(user: User) {
-      const { error: insertUserError } = await supabase.from('users').insert({
+      const { error } = await supabase.from('users').insert({
         id: user.id,
-        name: user.name,
-        email: user.email,
-        slug: Slug.create(user.name).value,
+        name: user.name.value,
+        email: user.email.value,
+        slug: user.name.slug,
+        avatar_id: user.avatar.id,
+        rocket_id: user.rocket.id,
+        tier_id: user.tier.id,
+        coins: user.coins.value,
+        xp: user.xp.value,
+        weekly_xp: user.weeklyXp.value,
+        streak: user.streak.value,
+        level: user.level.value,
+        week_status: user.weekStatus.statuses,
       })
 
-      if (insertUserError)
-        return SupabasePostgrestError(
-          insertUserError,
-          'Error inesperado ao cadastrar usuário',
-        )
+      if (error)
+        return SupabasePostgrestError(error, 'Error inesperado ao cadastrar usuário')
+
+      return new ApiResponse()
     },
 
     async updateUser(user: User) {

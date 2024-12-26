@@ -10,6 +10,8 @@ export const SupabaseAvatarMapper = () => {
         name: supabaseAvatar.name,
         image: supabaseAvatar.image,
         price: supabaseAvatar.price,
+        isAcquiredByDefault: supabaseAvatar.is_acquired_by_default,
+        isSelectedByDefault: supabaseAvatar.is_selected_by_default,
       }
 
       return avatarDto
@@ -23,6 +25,8 @@ export const SupabaseAvatarMapper = () => {
         name: avatarDto.name,
         image: avatarDto.image,
         price: avatarDto.price,
+        is_acquired_by_default: avatarDto.isAcquiredByDefault,
+        is_selected_by_default: avatarDto.isSelectedByDefault,
       }
 
       return supabaseAvatar
