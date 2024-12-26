@@ -8,6 +8,7 @@ export const actionClient = createSafeActionClient({
       console.error('Action error message:', error.message)
       return error.message
     }
+    console.error('Action error:', error)
 
     return DEFAULT_SERVER_ERROR_MESSAGE
   },

@@ -11,10 +11,8 @@ export function useSignUpAction(onSuccess: VoidFunction) {
     onSuccess,
   })
 
-  async function signUp(email: string, name: string, password: string) {
+  async function signUp(email: string, password: string, name: string) {
     await executeAsync({ email, name, password })
-
-    return true
   }
 
   return {
