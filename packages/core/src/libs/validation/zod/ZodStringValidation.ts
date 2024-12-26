@@ -73,13 +73,14 @@ export class ZodStringValidation implements IStringValidation {
 
   validate() {
     try {
+      const key = this.key ?? 'erro'
       if (this.zodEnum) {
-        this.zodEnum.parse(this.data)
+        z.object({ [key]: this.zodEnum }).parse({ [key]: this.data })
       }
 
-      this.zodString.parse(this.data)
+      z.object({ [key]: this.zodString }).parse({ [key]: this.data })
     } catch (error) {
-      // if (error instanceof ZodError) throw ZodValidationErrorFactory.produce(error)
+      if (error instanceof ZodError) throw ZodValidationErrorFactory.produce(error)
     }
   }
 }
