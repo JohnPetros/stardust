@@ -12,6 +12,12 @@ import type { NextParams } from '@/server/next/types'
 import { SupabaseRouteHandlerClient } from '../supabase/clients'
 import { SupabaseAuthService, SupabaseProfileService } from '../supabase/services'
 
+type Cookie = {
+  key: string
+  value: string
+  duration: number
+}
+
 type NextHttpParams<HttpSchema> = {
   request?: NextRequest
   schema?: ZodSchema<HttpSchema>
@@ -25,6 +31,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
 }: NextHttpParams<NextSchema> = {}): Promise<IHttp<NextSchema>> => {
   let nextRedirectResponse: NextResponse<unknown>
   let httpSchema: NextSchema
+  const cookies: Cookie[] = []
 
   if (request && schema) {
     let body: HttpSchema['body']
@@ -56,16 +63,19 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     },
 
     redirect(route: string) {
-      if (nextRedirectResponse) {
-        return new ApiResponse({
-          body: nextRedirectResponse,
-          statusCode: HTTP_STATUS_CODE.redirect,
-        })
-      }
-
       const nextResponse = NextResponse.redirect(
         new URL(route, request ? request.url : ''),
       )
+
+      if (cookies.length)
+        for (const cookie of cookies) {
+          nextResponse.cookies.set(cookie.key, cookie.value, {
+            path: '/',
+            httpOnly: true,
+            maxAge: cookie.duration,
+          })
+        }
+
       return new ApiResponse({
         body: nextResponse,
         statusCode: HTTP_STATUS_CODE.redirect,
@@ -102,11 +112,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     },
 
     setCookie(key: string, value: string, duration: number) {
-      nextRedirectResponse.cookies.set(key, value, {
-        path: '/',
-        httpOnly: true,
-        maxAge: duration,
-      })
+      cookies.push({ key, value, duration })
     },
 
     getCookie(key: string) {
@@ -118,7 +124,18 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     },
 
     send(data: unknown, statusCode = 200) {
-      if (nextRedirectResponse) {
+      if (cookies.length) {
+        const nextResponse = NextResponse.redirect(
+          new URL(request ? request.nextUrl.pathname : '', request ? request.url : ''),
+        )
+
+        for (const cookie of cookies) {
+          nextResponse.cookies.set(cookie.key, cookie.value, {
+            path: '/',
+            httpOnly: true,
+            maxAge: cookie.duration,
+          })
+        }
         return new ApiResponse({
           body: nextRedirectResponse,
           statusCode: HTTP_STATUS_CODE.redirect,

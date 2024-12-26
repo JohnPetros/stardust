@@ -42,25 +42,29 @@ export function ResetPasswordDialog({ children }: ResetPasswordDialogProps) {
         <DialogContent>
           <DialogHeader>Insira sua nova senha</DialogHeader>
 
-          <form className='mt-3 flex flex-col gap-6'>
-            <Input
-              label='Nova senha'
-              type='password'
-              icon='lock'
-              autoFocus
-              {...register('password')}
-              error={errors.password?.message?.toString()}
-              placeholder='********'
-            />
-            <Input
-              label='Confirme sua nova senha'
-              type='password'
-              icon='lock'
-              {...register('passwordConfirmation')}
-              error={String(errors.passwordConfirmation?.message)}
-              placeholder='********'
-            />
-            <Button onClick={handleSubmit} isLoading={isLoading}>
+          <form className='mt-3'>
+            <div>
+              <Input
+                label='Nova senha'
+                type='password'
+                icon='lock'
+                autoFocus
+                {...register('password')}
+                error={errors.password?.message}
+                placeholder='********'
+              />
+            </div>
+            <div className='mt-6'>
+              <Input
+                label='Confirme sua nova senha'
+                type='password'
+                icon='lock'
+                {...register('passwordConfirmation')}
+                error={errors.passwordConfirmation?.message}
+                placeholder='********'
+              />
+            </div>
+            <Button onClick={handleSubmit} isLoading={isLoading} className='mt-8'>
               Redefinir senha
             </Button>
           </form>

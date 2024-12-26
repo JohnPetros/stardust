@@ -35,7 +35,7 @@ export function useResetPasswordDialog(alertDialogRef: AlertDialogRef | null) {
   } = useForm<ResetPasswordFormFields>({
     resolver: zodResolver(resetPasswordFormSchema),
   })
-  const { getCookie } = useCookieActions()
+  const { getCookie, deleteCookie } = useCookieActions()
   const [isLoading, setIsLoading] = useState(false)
   const toast = useToastContext()
   const router = useRouter()
@@ -48,8 +48,10 @@ export function useResetPasswordDialog(alertDialogRef: AlertDialogRef | null) {
   async function handleFormSubmit({ password }: ResetPasswordFormFields) {
     setIsLoading(true)
 
-    const accessToken = await getCookie(COOKIES.keys.accessToken)
-    const refreshToken = await getCookie(COOKIES.keys.refreshToken)
+    const [accessToken, refreshToken] = await Promise.all([
+      getCookie(COOKIES.keys.accessToken),
+      getCookie(COOKIES.keys.refreshToken),
+    ])
 
     if (!accessToken || !refreshToken)
       throw new Error('Access or refresh token not found')
@@ -65,6 +67,11 @@ export function useResetPasswordDialog(alertDialogRef: AlertDialogRef | null) {
 
     if (response.isSuccess) {
       alertDialogRef?.open()
+      await Promise.all([
+        deleteCookie(COOKIES.keys.accessToken),
+        deleteCookie(COOKIES.keys.refreshToken),
+        deleteCookie(COOKIES.keys.shouldReturnPassword),
+      ])
     }
 
     setIsLoading(false)

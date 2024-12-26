@@ -55,11 +55,14 @@ export async function runApiRoute(
 
       return http.send(response, HTTP_STATUS_CODE.serverError).body
     }
+
+    console.log(error)
+
     return http.send(
       {
         title: 'Unknown Api Error',
         message:
-          'Contate esse e-mail joaopcarvalho.cds@gmail.com imediatamente, pois se você está vendo essa mensagem algo muito deu errado',
+          'Contate esse e-mail joaopcarvalho.cds@gmail.com imediatamente, pois se você está vendo essa mensagem algo deu muito errado',
       },
       HTTP_STATUS_CODE.serverError,
     ).body

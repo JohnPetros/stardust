@@ -31,7 +31,7 @@ export function useResetPassword() {
     setIsLoading(true)
 
     try {
-      new StringValidation(email).email().validate()
+      new StringValidation(email, 'seu e-mail').email().validate()
 
       const hasUser = await api.fetchUserEmail(email)
       if (!hasUser) setError('Usuário não encontrado com esse e-mail')
@@ -51,15 +51,15 @@ export function useResetPassword() {
   useEffect(() => {
     async function fetchCookie() {
       const shouldResetPassword = await getCookie(COOKIES.keys.shouldReturnPassword)
+      console.log({ shouldResetPassword })
 
       if (shouldResetPassword) {
         setShouldResetPassword(true)
-        await deleteCookie(COOKIES.keys.shouldReturnPassword)
       }
     }
 
     fetchCookie()
-  }, [getCookie, deleteCookie])
+  }, [getCookie])
 
   return {
     isLoading,
