@@ -1,2 +1,1 @@
-export { RocketNotFoundError } from './RocketNotFoundError'
-export { StarNotFoundError } from './StarNotFoundError'
+export { EmptyPlanetError } from './EmptyPlanetError'
