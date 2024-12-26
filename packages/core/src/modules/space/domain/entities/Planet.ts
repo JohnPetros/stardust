@@ -1,6 +1,7 @@
 import { Entity } from '#global/abstracts'
 import { Image, Name, OrdinalNumber } from '#global/structs'
 import type { PlanetDto } from '#space/dtos'
+import { EmptyPlanetError } from '#space/errors'
 import { Star } from './Star'
 
 type PlanetProps = {
@@ -31,6 +32,12 @@ export class Planet extends Entity<PlanetProps> {
       (star) => star.number.value === currentStar?.number.incrementOne().value,
     )
     return nextStar ?? null
+  }
+
+  get firstStar() {
+    const firstStar = this.stars[0]
+    if (!firstStar) throw new EmptyPlanetError(this.name.value)
+    return firstStar
   }
 
   get name() {
