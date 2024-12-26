@@ -64,10 +64,11 @@ export function useAuthProvider(serverSession: Session | null) {
 
     if (response.isSuccess) {
       setSession({ user: { id: response.body.userId } })
-      return
+      return true
     }
 
     toast.show(response.errorMessage, { type: 'error', seconds: 10 })
+    return false
   }
 
   async function handleSignOut() {

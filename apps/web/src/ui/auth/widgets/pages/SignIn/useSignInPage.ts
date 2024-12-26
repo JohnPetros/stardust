@@ -32,7 +32,7 @@ export function useSignInPage(url: string, rocketAnimationRef: RefObject<Animati
 
     await waitFor(3000) // 3 seconds
 
-    router.goTo(ROUTES.accountConfirmation)
+    router.goTo(ROUTES.space)
   }
 
   useEffect(() => {

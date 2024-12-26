@@ -1,7 +1,7 @@
 'use client'
 
-import { Ref } from 'react'
-import { Variants, motion } from 'framer-motion'
+import type { Ref } from 'react'
+import { type Variants, motion } from 'framer-motion'
 
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 import { Animation } from '@/ui/global/widgets/components/Animation'

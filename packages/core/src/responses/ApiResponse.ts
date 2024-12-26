@@ -51,7 +51,7 @@ export class ApiResponse<Body = unknown> {
 
   get body(): Body {
     if (this._body === null) {
-      throw new AppError('Response is an error')
+      throw new AppError('Response has no body')
     }
 
     return this._body
