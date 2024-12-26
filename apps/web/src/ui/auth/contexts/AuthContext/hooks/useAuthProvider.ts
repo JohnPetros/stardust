@@ -16,7 +16,6 @@ import type { Session } from '../types/Session'
 
 export function useAuthProvider(serverSession: Session | null) {
   const [session, setSession] = useState<Session | null>(serverSession)
-
   const api = useApi()
   const router = useRouter()
   const toast = useToastContext()
@@ -64,28 +63,11 @@ export function useAuthProvider(serverSession: Session | null) {
     const response = await api.signIn(email, password)
 
     if (response.isSuccess) {
-      setSession({ user: { id: response.body } })
-      return true
+      setSession({ user: { id: response.body.userId } })
+      return
     }
 
     toast.show(response.errorMessage, { type: 'error', seconds: 10 })
-    return false
-  }
-
-  async function handleSignUp(email: string, password: string, name: string) {
-    const response = await api.signUp(email, password, name)
-
-    if (response.isFailure) {
-      toast.show(response.errorMessage, { type: 'error', seconds: 10 })
-      return false
-    }
-
-    toast.show('Enviamos para você um e-mail de confirmação', {
-      type: 'success',
-      seconds: 10,
-    })
-
-    return true
   }
 
   async function handleSignOut() {
@@ -131,7 +113,6 @@ export function useAuthProvider(serverSession: Session | null) {
     isLoading,
     serverSession,
     handleSignIn,
-    handleSignUp,
     handleSignOut,
     updateUser,
     mutateUserCache,

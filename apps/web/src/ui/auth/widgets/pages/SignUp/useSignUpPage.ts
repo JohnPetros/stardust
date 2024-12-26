@@ -2,16 +2,23 @@
 
 import { useState } from 'react'
 
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import type { SignUpFormFields } from './SignUpForm/types/SignUpFormFields'
+import { useSignUpAction } from './useSignUpAction'
 
 export function useSignUpPage() {
-  const { handleSignUp } = useAuthContext()
   const [isSignUpSuccess, setIsSignUpSuccess] = useState(false)
+  const toast = useToastContext()
+  const { signUp } = useSignUpAction(() => {
+    toast.show('Enviamos para você um e-mail de confirmação', {
+      type: 'success',
+      seconds: 10,
+    })
+    setIsSignUpSuccess(true)
+  })
 
   async function handleFormSubmit({ email, password, name }: SignUpFormFields) {
-    const isSuccess = await handleSignUp(email, password, name)
-    setIsSignUpSuccess(isSuccess)
+    await signUp(email, password, name)
   }
 
   return {
