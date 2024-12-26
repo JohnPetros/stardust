@@ -19,4 +19,4 @@ const countCompletedChallengesByDifficultyLevel = authActionClient.action(
   },
 )
 
-export const challengingActions = { countCompletedChallengesByDifficultyLevel }
+export { countCompletedChallengesByDifficultyLevel }

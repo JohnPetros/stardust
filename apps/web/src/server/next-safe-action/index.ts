@@ -1,6 +1,11 @@
-// export { challengingActions } from './challengingActions'
+import { signUp } from './authActionts'
+import { countCompletedChallengesByDifficultyLevel } from './challengingActions'
 import { setCookie, getCookie, deleteCookie, hasCookie } from './cookieActions'
-// export { profileActions } from './profileActions'
-// export { rankingActions } from './rankingActions'
+import { obsverNewUnlockedAchievements } from './profileActions'
+import { getLastWeekRankingWinners } from './rankingActions'
 
+export const authActions = { signUp }
 export const cookieActions = { setCookie, getCookie, deleteCookie, hasCookie }
+export const challengingActions = { countCompletedChallengesByDifficultyLevel }
+export const profileActions = { obsverNewUnlockedAchievements }
+export const rankingActions = { getLastWeekRankingWinners }

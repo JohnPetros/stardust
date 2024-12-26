@@ -19,4 +19,4 @@ const obsverNewUnlockedAchievements = authActionClient.action(
   },
 )
 
-export const profileActions = { obsverNewUnlockedAchievements }
+export { obsverNewUnlockedAchievements }

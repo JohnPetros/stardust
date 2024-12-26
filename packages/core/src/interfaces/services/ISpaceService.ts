@@ -6,6 +6,7 @@ export interface ISpaceService {
   fetchStarBySlug(starSlug: string): Promise<ApiResponse<StarDto>>
   fetchStarById(starId: string): Promise<ApiResponse<StarDto>>
   fetchNextStarFromNextPlanet(starPlanet: Planet): Promise<ApiResponse<StarDto>>
+  fetchFirstPlanet(): Promise<ApiResponse<PlanetDto>>
   fetchPlanets(): Promise<ApiResponse<PlanetDto[]>>
   fetchPlanetByStar(starId: string): Promise<ApiResponse<PlanetDto>>
   verifyStarIsUnlocked(starId: string, userId: string): Promise<ApiResponse<boolean>>

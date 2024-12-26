@@ -3,15 +3,15 @@
 // import { HandleSignUpController } from 'controllers/auth/HandleSignUpController'
 // import { DenoHttp } from 'deno/DenoHttp'
 import { SupabaseAuthUser, SupabasePayload } from '../types/index.ts'
-import { AchievementsFaker } from 'npm:@stardust-org/core@0.1.12'
+import { RocketsFaker } from 'npm:@stardust-org/core@0.1.15'
 
 Deno.serve(async (request) => {
-  const payload: SupabasePayload<SupabaseAuthUser> = await request.json()
-  const schema = {
-    body: { userId: payload.record.id },
-  }
+  // const payload: SupabasePayload<SupabaseAuthUser> = await request.json()
+  // const schema = {
+  //   body: { userId: payload.record.id },
+  // }
 
-  const achievement = AchievementsFaker.fakeDto()
+  const achievement = RocketsFaker.fake()
 
   // const http = DenoHttp<typeof schema>({ body: schema.body })
   // const controller = HandleSignUpController()

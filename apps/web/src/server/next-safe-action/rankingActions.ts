@@ -19,4 +19,4 @@ const getLastWeekRankingWinners = authActionClient.action(
   },
 )
 
-export const rankingActions = { getLastWeekRankingWinners }
+export { getLastWeekRankingWinners }

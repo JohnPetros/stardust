@@ -57,6 +57,26 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
       return new ApiResponse({ body: planet })
     },
 
+    async fetchFirstPlanet() {
+      const { data, error } = await supabase
+        .from('planets')
+        .select('*, stars(id, name, number, slug, is_challenge, planet_id)')
+        .eq('position', 1)
+        .single()
+
+      if (error) {
+        return SupabasePostgrestError(
+          error,
+          'Planeta não encontrado',
+          HTTP_STATUS_CODE.notFound,
+        )
+      }
+
+      const planet = supabasePlanetMapper.toDto(data)
+
+      return new ApiResponse({ body: planet })
+    },
+
     async fetchStarBySlug(starSlug: string) {
       const { data, error } = await supabase
         .from('stars')

@@ -1,7 +1,7 @@
 {
-  "name": "@stardust-org/core",
+  "name": "@stardust/core",
   "license": "MIT",
-  "version": "0.1.12",
+  "version": "0.1.15",
   "private": false,
   "author": {
     "name": "John Petros"
@@ -9,9 +9,9 @@
   "files": [
     "build"
   ],
-  "main": "build/main.js",
-  "module": "build/main.mjs",
-  "types": "build/main.d.ts",
+  "main": "./build/main.js",
+  "module": "./build/main.mjs",
+  "types": "./build/main.d.ts",
   "publishConfig": {
     "access": "public"
   },
@@ -27,7 +27,7 @@
     "./global/types": "./src/modules/global/domain/types/index.ts",
     "./global/dtos": "./src/modules/global/dtos/index.ts",
     "./global/errors": "./src/modules/global/errors/index.ts",
-    "./global/factories": "./src/modules/global/factories/index.ts",
+    "./global/use-cases": "./src/modules/global/use-cases/index.ts",
     "./lesson/abstracts": "./src/modules/lesson/domain/abstracts/index.ts",
     "./lesson/entities": "./src/modules/lesson/domain/entities/index.ts",
     "./lesson/structs": "./src/modules/lesson/domain/structs/index.ts",

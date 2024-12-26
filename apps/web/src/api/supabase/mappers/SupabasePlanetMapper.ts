@@ -1,6 +1,5 @@
-import type { Planet } from '@/@core/domain/entities'
-
-import type { PlanetDto } from '#dtos'
+import type { PlanetDto } from '@stardust/core/space/dtos'
+import type { Planet } from '@stardust/core/space/entities'
 import type { SupabasePlanet } from '../types'
 import { SupabaseStarMapper } from './SupabaseStarMapper'
 
@@ -21,11 +20,13 @@ export const SupabasePlanetMapper = () => {
       return planetDto
     },
 
-    toSupabase(Planet: Planet): SupabasePlanet {
-      const planetDto = Planet.dto
+    toSupabase(planet: Planet): SupabasePlanet {
+      const planetDto = planet.dto
+
+      planet.id
 
       const supabasePlanet: SupabasePlanet = {
-        id: Planet.id,
+        id: planet.id,
         name: planetDto.name,
         icon: planetDto.icon,
         image: planetDto.image,

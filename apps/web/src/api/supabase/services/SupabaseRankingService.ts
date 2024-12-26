@@ -76,7 +76,11 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
         .single()
 
       if (error) {
-        return SupabasePostgrestError(error, 'Erro inesperado ao buscar primeiro tier')
+        return SupabasePostgrestError(
+          error,
+          'Primeiro tier não encontrado',
+          HTTP_STATUS_CODE.notFound,
+        )
       }
 
       const ranking = supabaseTierMapper.toTier(data)
