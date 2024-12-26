@@ -7,7 +7,6 @@ export interface IShopService {
     ListingSettings: ShopItemsListingSettings,
   ): Promise<ApiResponse<PaginationResponse<AvatarDto>>>
   fetchAvatarById(avatarId: string): Promise<ApiResponse<AvatarDto>>
-  fetchFreeAvatars(): Promise<ApiResponse<AvatarDto[]>>
   fetchAcquirableRocketsByDefault(): Promise<ApiResponse<RocketDto[]>>
   fetchAcquirableAvatarsByDefault(): Promise<ApiResponse<AvatarDto[]>>
   saveAcquiredAvatar(avatarId: string, userId: string): Promise<ApiResponse<boolean>>
