@@ -33,10 +33,10 @@ export const ROUTES = {
       confirmPasswordReset: '/api/auth/confirm-password-reset',
     },
     space: {
-      planets: '/api/planets',
+      planets: '/api/space/planets',
     },
     shop: {
-      items: '/shop/items',
+      items: '/api/shop/items',
     },
     profile: {
       achievements: '/api/profile/achievements',

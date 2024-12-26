@@ -10,7 +10,6 @@ export async function GET() {
     const supabase = SupabaseRouteHandlerClient()
     const spaceService = SupabaseSpaceService(supabase)
     const controller = FetchPlanetsController(spaceService)
-    const httpResponse = await controller.handle(http)
-    return httpResponse.body
+    return await controller.handle(http)
   })
 }

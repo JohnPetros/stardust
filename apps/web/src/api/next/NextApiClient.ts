@@ -19,10 +19,12 @@ export const NextApiClient = ({
   const requestInit: RequestInit = {
     cache: !isCacheEnable ? 'force-cache' : 'no-store',
     headers: headers(),
-    next: {
-      revalidate: refetchInterval,
-      tags: cacheKeys,
-    },
+    next: isCacheEnable
+      ? {
+          revalidate: refetchInterval,
+          tags: cacheKeys,
+        }
+      : undefined,
   }
 
   return {

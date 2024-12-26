@@ -13,22 +13,22 @@ export const HOME_LINKS: HomeLink[] = [
     icon: 'learn.svg',
   },
   {
-    route: ROUTES.app.home.challenges,
+    route: ROUTES.challenging.challenges,
     label: 'Desafios',
     icon: 'challenges.svg',
   },
   {
-    route: ROUTES.app.home.shop,
+    route: ROUTES.shop,
     label: 'Loja',
     icon: 'shop.svg',
   },
   {
-    route: ROUTES.app.home.profile,
+    route: ROUTES.profile.prefix,
     label: 'Perfil',
     icon: 'profile.svg',
   },
   {
-    route: ROUTES.app.home.ranking,
+    route: ROUTES.ranking,
     label: 'Ranking',
     icon: 'ranking.svg',
   },

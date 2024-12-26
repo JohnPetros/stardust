@@ -10,7 +10,7 @@ import { SupabaseAuthService } from '@/api/supabase/services'
 
 const schema = z.object({
   queryParams: z.object({
-    token: z.string(),
+    token: z.string({ required_error: 'token é obrigatório' }),
   }),
 })
 
@@ -22,7 +22,6 @@ export async function GET(request: NextRequest, params: NextParams) {
     const supabase = SupabaseRouteHandlerClient()
     const authService = SupabaseAuthService(supabase)
     const controller = ConfirmEmailController(authService)
-    const httpResponse = await controller.handle(http)
-    return httpResponse.body
+    return controller.handle(http)
   })
 }

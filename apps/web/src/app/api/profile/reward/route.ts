@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 import { NextHttp } from '@/api/next/NextHttp'
 import { SupabaseProfileService, SupabaseSpaceService } from '@/api/supabase/services'
 import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
-import { RewardUserController } from '@/api/controllers/lesson'
+import { RewardUserController } from '@/api/controllers/profile'
 import { runApiRoute } from '@/api/next/utils'
 
 export async function POST(request: NextRequest) {
@@ -13,7 +13,6 @@ export async function POST(request: NextRequest) {
     const profileService = SupabaseProfileService(supabase)
     const spaceService = SupabaseSpaceService(supabase)
     const controller = RewardUserController(profileService, spaceService)
-    const httpResponse = await controller.handle(http)
-    return httpResponse.body
+    return await controller.handle(http)
   })
 }

@@ -12,7 +12,6 @@ export async function GET(request: NextRequest) {
     const supabase = SupabaseRouteHandlerClient()
     const rankingService = SupabaseRankingService(supabase)
     const controller = FetchCurrentRankingController(rankingService)
-    const response = await controller.handle(http)
-    return response.body
+    return await controller.handle(http)
   })
 }

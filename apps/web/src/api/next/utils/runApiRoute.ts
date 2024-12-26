@@ -1,4 +1,3 @@
-import type { NextResponse } from 'next/server'
 import { ZodError } from 'zod'
 
 import { HTTP_STATUS_CODE } from '@stardust/core/constants'
@@ -12,12 +11,16 @@ import {
 import { ZodValidationErrorFactory } from '@stardust/validation/factories'
 
 import { NextHttp } from '../NextHttp'
+import type { ApiResponse } from '@stardust/core/responses'
 
-export async function runApiRoute(apiRoute: () => Promise<unknown>): Promise<unknown> {
+export async function runApiRoute(
+  apiRoute: () => Promise<ApiResponse>,
+): Promise<unknown> {
   const http = await NextHttp()
 
   try {
-    return await apiRoute()
+    const response = await apiRoute()
+    return response.body
   } catch (error) {
     if (error instanceof ZodError) {
       const validationError = ZodValidationErrorFactory.produce(error)
@@ -28,29 +31,37 @@ export async function runApiRoute(apiRoute: () => Promise<unknown>): Promise<unk
           fieldErrors: validationError.fieldErrors,
         },
         HTTP_STATUS_CODE.badRequest,
-      )
+      ).body
     }
 
     if (error instanceof AppError) {
       const response = { title: error.title, message: error.message }
 
       if (error instanceof AuthError) {
-        return http.send(response, HTTP_STATUS_CODE.unauthorized)
+        return http.send(response, HTTP_STATUS_CODE.unauthorized).body
       }
 
       if (error instanceof NotFoundError) {
-        return http.send(response, HTTP_STATUS_CODE.notFound)
+        return http.send(response, HTTP_STATUS_CODE.notFound).body
       }
 
       if (error instanceof ConflictError) {
-        return http.send(response, HTTP_STATUS_CODE.conflict)
+        return http.send(response, HTTP_STATUS_CODE.conflict).body
       }
 
       if (error instanceof ValidationError) {
-        return http.send(response, HTTP_STATUS_CODE.badRequest)
+        return http.send(response, HTTP_STATUS_CODE.badRequest).body
       }
 
-      return http.send(response, HTTP_STATUS_CODE.serverError)
+      return http.send(response, HTTP_STATUS_CODE.serverError).body
     }
+    return http.send(
+      {
+        title: 'Unknown Api Error',
+        message:
+          'Contate esse e-mail joaopcarvalho.cds@gmail.com imediatamente, pois se você está vendo essa mensagem algo muito deu errado',
+      },
+      HTTP_STATUS_CODE.serverError,
+    ).body
   }
 }

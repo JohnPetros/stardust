@@ -20,6 +20,8 @@ export const SupabaseUserMapper = () => {
           image: supabaseUser.avatar?.image ?? '',
           name: supabaseUser.avatar?.name ?? '',
           price: supabaseUser.avatar?.price ?? 0,
+          isAcquiredByDefault: supabaseUser.avatar?.is_acquired_by_default ?? false,
+          isSelectedByDefault: supabaseUser.avatar?.is_selected_by_default ?? false,
         },
         tier: {
           id: supabaseUser.tier?.id ?? '',
@@ -33,6 +35,8 @@ export const SupabaseUserMapper = () => {
           image: supabaseUser.rocket?.image ?? '',
           name: supabaseUser.rocket?.name ?? '',
           price: supabaseUser.rocket?.price ?? 0,
+          isAcquiredByDefault: supabaseUser.rocket?.is_acquired_by_default ?? false,
+          isSelectedByDefault: supabaseUser.rocket?.is_selected_by_default ?? false,
         },
         unlockedAchievementsIds:
           supabaseUser.users_unlocked_achievements?.map(
@@ -60,10 +64,8 @@ export const SupabaseUserMapper = () => {
         didIncrementStreakOnSaturday: supabaseUser.did_complete_saturday,
 
         // studyTime: supabaseUser.study_time ?? '',
-        // createdAt: supabaseUser.created_at ?? '',
         // didBreakStreak: supabaseUser.did_break_streak ?? false,
         // didCompleteSaturday: supabaseUser.did_complete_saturday ?? false,
-        // weekStatus: supabaseUser.week_status as WeekStatus[],
       }
 
       return userDto
@@ -78,17 +80,17 @@ export const SupabaseUserMapper = () => {
         avatar_id: user.avatar.id,
         rocket_id: user.rocket.id,
         tier_id: user.tier.id,
-        coins: userDto.coins,
-        email: userDto.email,
-        level: userDto.level,
-        name: userDto.name,
-        slug: userDto.slug,
-        xp: userDto.xp,
-        weekly_xp: userDto.weeklyXp,
-        streak: userDto.streak,
-        can_see_ranking: userDto.canSeeRankingResult,
-        created_at: userDto.createdAt,
-        week_status: userDto.weekStatus,
+        coins: user.coins.value,
+        email: user.email.value,
+        level: user.level.value,
+        name: user.name.value,
+        slug: user.slug.value,
+        xp: user.xp.value,
+        weekly_xp: user.weeklyXp.value,
+        streak: user.streak.value,
+        can_see_ranking: user.canSeeRankingResult.value,
+        created_at: user.createdAt.toString(),
+        week_status: user.weekStatus.statuses,
       }
 
       return supabaseUser as unknown as SupabaseUser

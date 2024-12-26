@@ -10,7 +10,6 @@ export async function PUT() {
     const supabase = SupabaseRouteHandlerClient()
     const rankingsService = SupabaseRankingService(supabase)
     const controller = UpdateRakingsController(rankingsService)
-    const httpResponse = await controller.handle(http)
-    return httpResponse.body
+    return await controller.handle(http)
   })
 }

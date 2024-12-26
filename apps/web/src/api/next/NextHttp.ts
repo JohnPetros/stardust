@@ -1,7 +1,7 @@
 'use server'
 
 import { type NextRequest, NextResponse } from 'next/server'
-import type { ZodSchema } from 'zod'
+import type { ZodObject, ZodSchema } from 'zod'
 
 import type { HttpSchema, IHttp } from '@stardust/core/interfaces'
 import { ApiResponse } from '@stardust/core/responses'
@@ -31,15 +31,18 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     let queryParams: HttpSchema['queryParams']
     let routeParams: HttpSchema['routeParams']
 
-    if ('queryParams' in schema) {
+    // @ts-ignore
+    const keys = schema.keyof().options
+
+    if (keys.includes('queryParams')) {
       queryParams = Object.fromEntries(request.nextUrl.searchParams.entries())
     }
 
-    if ('body' in schema) {
+    if (keys.includes('body')) {
       body = await request?.json()
     }
 
-    if ('routeParams' in schema) {
+    if (keys.includes('routeParams')) {
       if (!params) throw new AppError('Next params not provided')
       routeParams = params.params
     }
