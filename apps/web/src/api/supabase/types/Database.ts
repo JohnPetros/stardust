@@ -46,18 +46,24 @@ export type Database = {
         Row: {
           id: string
           image: string
+          is_acquired_by_default: boolean
+          is_selected_by_default: boolean
           name: string
           price: number
         }
         Insert: {
           id?: string
           image: string
+          is_acquired_by_default?: boolean
+          is_selected_by_default?: boolean
           name: string
           price: number
         }
         Update: {
           id?: string
           image?: string
+          is_acquired_by_default?: boolean
+          is_selected_by_default?: boolean
           name?: string
           price?: number
         }
@@ -263,23 +269,23 @@ export type Database = {
         Row: {
           content: string | null
           id: string
-          position: number | null
+          position: number
           texts: Json | null
-          title: string | null
+          title: string
         }
         Insert: {
           content?: string | null
           id?: string
-          position?: number | null
+          position: number
           texts?: Json | null
-          title?: string | null
+          title: string
         }
         Update: {
           content?: string | null
           id?: string
-          position?: number | null
+          position?: number
           texts?: Json | null
-          title?: string | null
+          title?: string
         }
         Relationships: []
       }
@@ -395,7 +401,7 @@ export type Database = {
         }
         Insert: {
           id: string
-          position?: number
+          position: number
           status?: Database["public"]["Enums"]["ranking_status"]
           tier_id: string
           xp?: number
@@ -434,24 +440,30 @@ export type Database = {
       rockets: {
         Row: {
           id: string
-          image: string | null
-          name: string | null
-          price: number | null
-          slug: string | null
+          image: string
+          is_acquired_by_default: boolean
+          is_selected_by_default: boolean
+          name: string
+          price: number
+          slug: string
         }
         Insert: {
           id?: string
-          image?: string | null
-          name?: string | null
-          price?: number | null
-          slug?: string | null
+          image: string
+          is_acquired_by_default?: boolean
+          is_selected_by_default?: boolean
+          name: string
+          price: number
+          slug: string
         }
         Update: {
           id?: string
-          image?: string | null
-          name?: string | null
-          price?: number | null
-          slug?: string | null
+          image?: string
+          is_acquired_by_default?: boolean
+          is_selected_by_default?: boolean
+          name?: string
+          price?: number
+          slug?: string
         }
         Relationships: []
       }
@@ -1123,14 +1135,14 @@ export type Database = {
             foreignKeyName: "challenges_star_id_fkey"
             columns: ["star_id"]
             isOneToOne: false
-            referencedRelation: "stars"
+            referencedRelation: "next_star_from_next_planet"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "challenges_star_id_fkey"
             columns: ["star_id"]
             isOneToOne: false
-            referencedRelation: "next_star_from_next_planet"
+            referencedRelation: "stars"
             referencedColumns: ["id"]
           },
         ]
@@ -1487,4 +1499,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
