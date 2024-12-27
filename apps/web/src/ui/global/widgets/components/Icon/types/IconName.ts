@@ -11,6 +11,8 @@ export type IconName =
   | 'check'
   | 'clock'
   | 'close'
+  | 'upvote'
+  | 'downvote'
   | 'calendar'
   | 'gear'
   | 'enter'
