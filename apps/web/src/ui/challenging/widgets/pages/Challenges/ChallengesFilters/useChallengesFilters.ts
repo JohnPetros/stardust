@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import { QUERY_PARAMS } from '../ChallengesList/query-params'
+import { QUERY_PARAMS } from '../Challenges/query-params'
 
 import { FILTER_SELECTS_ITEMS } from '../filter-select-items'
 import { useQueryParams } from '@/ui/global/hooks/useQueryParams'

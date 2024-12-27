@@ -7,7 +7,7 @@ import type { ChallengeCategory } from '@stardust/core/challenging/entities'
 
 import { ROUTES } from '@/constants'
 import { DifficultyBadge } from '@/ui/global/widgets/components/DifficultyBadge'
-import { ChallengeInfo } from '@/ui/global/widgets/components/ChallengeInfo'
+import { ChallengeInfo } from '@/ui/challenging/widgets/components/ChallengeInfo'
 import { AnimatedCard } from './AnimatedCard'
 
 type ChallengeProps = {

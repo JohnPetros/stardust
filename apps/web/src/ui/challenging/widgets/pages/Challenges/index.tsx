@@ -1,6 +1,6 @@
 'use client'
 
-import { ChallengesList } from './ChallengesList'
+import { ChallengesList } from './Challenges'
 import { ChallengesFilters } from './ChallengesFilters'
 import type { ChallengeCategoryDto } from '@stardust/core/challenging/dtos'
 import { ChallengeCategory } from '@stardust/core/challenging/entities'

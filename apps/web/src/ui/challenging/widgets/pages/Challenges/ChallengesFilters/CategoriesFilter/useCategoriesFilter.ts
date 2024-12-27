@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-import { QUERY_PARAMS } from '../../ChallengesList/query-params'
+import { QUERY_PARAMS } from '../../Challenges/query-params'
 import type { ChallengeCategory } from '@stardust/core/challenging/entities'
 import { useQueryParams } from '@/ui/global/hooks/useQueryParams'
 
