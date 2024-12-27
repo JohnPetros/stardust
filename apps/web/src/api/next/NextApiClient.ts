@@ -1,5 +1,4 @@
-import { headers } from 'next/headers'
-
+import type { ReadonlyHeaders } from 'next/dist/server/web/spec-extension/adapters/headers'
 import { ENV } from '@/constants'
 import type { IApiClient } from '@stardust/core/interfaces'
 import { ApiResponse, PaginationResponse } from '@stardust/core/responses'
@@ -10,16 +9,18 @@ type CacheConfig = {
   isCacheEnable?: boolean
   refetchInterval?: number
   cacheKeys?: string[]
+  headers?: () => ReadonlyHeaders
 }
 
 export const NextApiClient = ({
   isCacheEnable = true,
   refetchInterval = 3600 * 24, // 1 day
   cacheKeys,
+  headers,
 }: CacheConfig = {}): IApiClient => {
   const requestInit: RequestInit = {
-    cache: !isCacheEnable ? 'force-cache' : 'no-store',
-    headers: headers(),
+    cache: isCacheEnable ? 'force-cache' : 'no-store',
+    headers: headers ? headers() : undefined,
     next: isCacheEnable
       ? {
           revalidate: refetchInterval,
