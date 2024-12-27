@@ -1,7 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import type { ContentType } from '../ContentType'
+import type { ContentType } from '../types/ContentType'
 import { Dialog, DialogContent } from '@/ui/global/widgets/components/Dialog'
 import { useContentDialog } from './useContentDialog'
 

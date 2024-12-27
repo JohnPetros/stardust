@@ -19,7 +19,7 @@ export function useChallengeStore() {
         (store) => store.state.craftsVislibility,
       )
       const setCraftsVislibility = useZustandChallengeStore(
-        (store) => store.actions.setCraftsVislibility,
+        (store) => store.actions.setCraftsVisibility,
       )
 
       return {
@@ -37,6 +37,26 @@ export function useChallengeStore() {
       return {
         panelsLayout,
         setPanelsLayout,
+      }
+    },
+
+    getVoteSlice() {
+      const vote = useZustandChallengeStore((store) => store.state.vote)
+      const setVote = useZustandChallengeStore((store) => store.actions.setVote)
+
+      return {
+        vote,
+        setVote,
+      }
+    },
+
+    getMdxSlice() {
+      const mdx = useZustandChallengeStore((store) => store.state.mdx)
+      const setMdx = useZustandChallengeStore((store) => store.actions.setMdx)
+
+      return {
+        mdx,
+        setMdx,
       }
     },
 

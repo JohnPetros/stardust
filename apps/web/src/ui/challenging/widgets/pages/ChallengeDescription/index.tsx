@@ -1,32 +1,40 @@
 'use client'
 
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
+import { ChallengeInfo } from '@/ui/challenging/widgets/components/ChallengeInfo'
+import { DifficultyBadge } from '@/ui/global/widgets/components/DifficultyBadge'
+import { Loading } from '@/ui/global/widgets/components/Loading'
+import { ContentLink } from '@/ui/challenging/widgets/components/ContentLink'
+import { BlockedCommentsAlertDialog } from '@/ui/challenging/widgets/components/BlockedCommentsAlertDialog'
+import { BlockedSolutionsAlertDialog } from '@/ui/challenging/widgets/components/BlockedSolutionsAlertDialog'
+import { Mdx } from '@/ui/global/widgets/components/Mdx'
+import { useChallengeDescriptionPage } from './useChallengeDescriptionPage'
 
 export function ChallengeDescriptionPage() {
   const { getCraftsVisibilitySlice } = useChallengeStore()
   const { craftsVislibility } = getCraftsVisibilitySlice()
+  const { mdx, user, challenge, isLoading, handleShowSolutions } =
+    useChallengeDescriptionPage()
 
-  const { mdx, challenge, isLoading, handleShowSolutions } = useDescription()
-
-  return isLoading ? (
+  return isLoading || !challenge || !user ? (
     <div className='grid h-full place-content-center'>
       <Loading />
     </div>
   ) : (
     <div className='w-full px-6 py-4'>
-      {challenge && typeof challenge.isCompleted != 'undefined' && (
+      {
         <div className='mx-auto flex w-fit flex-wrap items-center gap-3'>
-          <DifficultyBadge difficulty={challenge.difficulty} />
+          <DifficultyBadge difficultyLevel={challenge.difficulty.level} />
           <ChallengeInfo
-            userSlug={challenge.userSlug}
-            downvotes={challenge.downvotesCount}
-            isCompleted={challenge.isCompleted}
-            upvotes={challenge.upvotesCount}
-            totalCompletitions={challenge.totalCompletitions}
+            authorSlug={challenge.authorSlug.value}
+            downvotes={challenge.downvotesCount.value}
+            isCompleted={user?.hasCompletedChallenge(challenge.id).value}
+            upvotes={challenge.upvotesCount.value}
+            completionsCount={challenge.completionsCount.value}
           />
           <VoteButtons />
           <div className='flex items-center gap-2 md:hidden'>
-            {!canShowComments ? (
+            {craftsVislibility.canShowSolutions.isFalse ? (
               <BlockedCommentsAlertDialog>
                 <ContentLink
                   title='Comentários'
@@ -43,7 +51,7 @@ export function ChallengeDescriptionPage() {
                 isBlocked={false}
               />
             )}
-            {!canShowSolutions ? (
+            {craftsVislibility.canShowSolutions.isFalse ? (
               <BlockedSolutionsAlertDialog onShowSolutions={handleShowSolutions}>
                 <ContentLink
                   title='Soluções'
@@ -57,7 +65,7 @@ export function ChallengeDescriptionPage() {
             )}
           </div>
         </div>
-      )}
+      }
       <div className='mt-6'>
         <Mdx>{mdx}</Mdx>
       </div>

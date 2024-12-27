@@ -1,11 +1,12 @@
 'use client'
 
-import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import { ROUTES } from '@/constants'
-import { Lock } from '@phosphor-icons/react'
 import Link from 'next/link'
 import { twMerge } from 'tailwind-merge'
-import type { ContentType } from '../types/ContentType'
+
+import { ROUTES } from '@/constants'
+import { Icon } from '@/ui/global/widgets/components/Icon'
+import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
+import type { ContentType } from '../../layouts/Challenge/types'
 
 type TabButtonProps = {
   contentType: ContentType
@@ -24,23 +25,24 @@ export function ContentLink({
   const { getChallengeSlice } = useChallengeStore()
   const { challenge } = getChallengeSlice()
 
-  const className = isActive
-    ? 'p-2 text-green-500'
-    : isBlocked
-      ? 'pointer-events-none flex items-center gap-2 text-gray-500 opacity-50'
-      : 'text-gray-100'
-
   return (
     <Link
-      href={`${ROUTES.app.challenge}/${challenge?.slug}${
+      href={`${ROUTES.challenging.challenge}/${challenge?.slug.value}${
         contentType !== 'description' ? `/${contentType}` : ''
       }`}
-      className={twMerge('rounded-md bg-gray-700 p-2 text-sm', className)}
+      className={twMerge(
+        'rounded-md bg-gray-700 p-2 text-sm',
+        isActive
+          ? 'p-2 text-green-500'
+          : isBlocked
+            ? 'pointer-events-none flex items-center gap-2 text-gray-500 opacity-50'
+            : 'text-gray-100',
+      )}
     >
       {isBlocked ? (
         <span className='flex items-center gap-2'>
           {title}
-          <Lock className='text-gray-500' />
+          <Icon name='lock' className='text-gray-500' />
         </span>
       ) : (
         title

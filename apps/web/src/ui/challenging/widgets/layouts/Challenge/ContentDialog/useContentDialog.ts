@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { ROUTES } from '@/constants'
 import type { DialogRef } from '@/ui/global/widgets/components/Dialog/types'
-import type { ContentType } from '../ContentType'
+import type { ContentType } from '../types/ContentType'
 import { useRouter } from '@/ui/global/hooks'
 
 export function useContentDialog(contentType: ContentType) {

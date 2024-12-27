@@ -2,21 +2,28 @@
 
 import { AlignLeft, AlignRight, ArrowLeft, Layout } from '@phosphor-icons/react'
 
-import type { ChallengeDTO } from '@/@core/dtos'
+import type { ChallengeVote } from '@stardust/core/challenging/types'
+import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 
 import type { PopoverMenuButton } from '@/ui/global/widgets/components/PopoverMenu/types'
-import { PopoverMenu } from '@/ui/global/widgets/components/PopoverMenu'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { Button } from '@/ui/global/widgets/components/Button'
+import { PopoverMenu } from '@/ui/global/widgets/components/PopoverMenu'
 import { useChallengePage } from './useChallengePage'
 
-type ChallengePageProps = {
+type ChallengePagePageProps = {
   challengeDto: ChallengeDto
+  userChallengeVote: ChallengeVote
 }
 
-export function ChallengePage({ challengeDTO }: ChallengePageProps) {
-  const { challenge, panelsLayout, handleBackButton, handlePanelsLayoutButton } =
-    useChallengePage(challengeDTO)
+export function ChallengePage({
+  challengeDto,
+  userChallengeVote,
+}: ChallengePagePageProps) {
+  const { handleBackButton, handlePanelsLayoutButton, panelsLayout } = useChallengePage(
+    challengeDto,
+    userChallengeVote,
+  )
 
   const popoverMenuButtons: PopoverMenuButton[] = [
     {
@@ -66,9 +73,7 @@ export function ChallengePage({ challengeDTO }: ChallengePageProps) {
               <ArrowLeft className='text-xl text-green-400' weight='bold' />
             </button>
           </AlertDialog>
-          <h2 className='text-lg font-semibold text-gray-100'>
-            {challenge?.title.value}
-          </h2>
+          <h2 className='text-lg font-semibold text-gray-100'>{challengeDto.title}</h2>
         </div>
         <div className='hidden md:block'>
           <PopoverMenu label='escolha de layout' buttons={popoverMenuButtons}>

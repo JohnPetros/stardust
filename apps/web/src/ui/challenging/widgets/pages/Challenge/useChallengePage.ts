@@ -2,25 +2,27 @@
 
 import { useEffect } from 'react'
 
-import { Challenge } from '@/@core/domain/entities'
-import type { ChallengeDTO } from '@/@core/dtos'
+import type { ChallengeVote } from '@stardust/core/challenging/types'
+import { Challenge } from '@stardust/core/challenging/entities'
 
-import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { ROUTES } from '@/constants'
-import { useRouter } from '@/ui/global/hooks'
+import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import type { PanelsLayout } from '@/ui/challenging/stores/ChallengeStore/types'
+import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 
-export function useChallengePage(challengeDTO: ChallengeDTO) {
-  const { getChallengeSlice, getPanelsLayoutSlice } = useChallengeStore()
+export function useChallengePage(challengeDto: ChallengeDto, userVote: ChallengeVote) {
+  const { getChallengeSlice, getPanelsLayoutSlice, getVoteSlice } = useChallengeStore()
   const { challenge, setChallenge } = getChallengeSlice()
   const { panelsLayout, setPanelsLayout } = getPanelsLayoutSlice()
+  const { vote, setVote } = getVoteSlice()
   const router = useRouter()
 
   function handleBackButton() {
-    if (!challenge) return
-
-    const homeRoute = challenge.isFromStar.isTrue ? 'space' : 'challenges'
-    router.goTo(ROUTES.app.home[homeRoute])
+    if (challenge)
+      router.goTo(
+        challenge.isFromStar.isTrue ? ROUTES.space : ROUTES.challenging.challenges,
+      )
   }
 
   function handlePanelsLayoutButton(panelsLayout: PanelsLayout) {
@@ -28,11 +30,11 @@ export function useChallengePage(challengeDTO: ChallengeDTO) {
   }
 
   useEffect(() => {
-    if (!challenge && challenge) setChallenge(Challenge.create(challengeDTO))
-  }, [challenge, challengeDTO, setChallenge])
+    if (!challenge) setChallenge(Challenge.create(challengeDto))
+    if (!vote && userVote) setVote(userVote)
+  }, [challenge, vote, challengeDto, userVote, setChallenge, setVote])
 
   return {
-    challenge,
     panelsLayout,
     handleBackButton,
     handlePanelsLayoutButton,

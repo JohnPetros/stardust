@@ -1,7 +1,14 @@
 import type { ReactNode } from 'react'
 
 import { ChallengeLayout } from '@/ui/challenging/widgets/layouts/Challenge'
-import { _getPanelsOffset } from '@/ui/app/components/layouts/Challenge/actions'
+import type { PanelsOffset } from '@/ui/challenging/widgets/layouts/Challenge/types'
+import { cookieActions } from '@/server/next-safe-action'
+import { COOKIES } from '@/constants'
+
+const DEFAULT_PANELS_OFFSET: PanelsOffset = {
+  codeEditorPanelSize: 50,
+  tabsPanelSize: 50,
+}
 
 type ChallengeLayoutProps = {
   children: ReactNode
@@ -14,7 +21,16 @@ export async function Layout({
   tabContent,
   codeEditor,
 }: ChallengeLayoutProps) {
-  const panelsOffset = await _getPanelsOffset()
+  const storagedPanelsOffset = await cookieActions.getCookie(
+    COOKIES.keys.challengePanelsOffset,
+  )
+  let panelsOffset: PanelsOffset
+
+  if (storagedPanelsOffset?.data) {
+    panelsOffset = JSON.parse(storagedPanelsOffset.data) as PanelsOffset
+  } else {
+    panelsOffset = DEFAULT_PANELS_OFFSET
+  }
 
   return (
     <ChallengeLayout

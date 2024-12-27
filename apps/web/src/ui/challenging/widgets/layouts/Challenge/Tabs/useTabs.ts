@@ -8,7 +8,7 @@ import { ChallengeCraftsVisilibity } from '@/@core/domain/structs'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { ROUTES } from '@/constants'
-import type { ContentType } from '../ContentType'
+import type { ContentType } from '../types/ContentType'
 
 export function useTabs() {
   const { getChallengeSlice, getCraftsVisibilitySlice } = useChallengeStore()
