@@ -1,0 +1,91 @@
+import type { IChallengingService, IUseCase } from '#interfaces'
+import { Challenge } from '#challenging/entities'
+import type { ChallengeVote } from '#challenging/types'
+
+type Request = {
+  challengeId: string
+  userId: string
+  userChallengeVote: ChallengeVote
+}
+
+type Response = Promise<{
+  upvotesCount: number
+  downvotesCount: number
+  userChallengeVote: ChallengeVote
+}>
+
+export class VoteChallengeUseCase implements IUseCase<Request, Response> {
+  constructor(private readonly challengingService: IChallengingService) {}
+
+  async do({ challengeId, userId, userChallengeVote }: Request) {
+    const challenge = await this.fetchChallenge(challengeId)
+    const currentChallengeVote = await this.fetchCurrentChallengeVote(challengeId, userId)
+
+    if (currentChallengeVote && userChallengeVote === currentChallengeVote) {
+      if (userChallengeVote === 'upvote') challenge.removeUpvote()
+      if (userChallengeVote === 'downvote') challenge.removeDownvote()
+      await this.deleteChallengeVote(challenge.id, userId)
+    }
+
+    if (userChallengeVote !== currentChallengeVote) {
+      if (userChallengeVote === 'upvote') challenge.upvote()
+      if (userChallengeVote === 'downvote') challenge.downvote()
+      if (currentChallengeVote)
+        await this.updateChallengeVote(challengeId, userId, userChallengeVote)
+      else await this.saveChallengeVote(challengeId, userId, userChallengeVote)
+    }
+
+    return {
+      upvotesCount: challenge.upvotesCount.value,
+      downvotesCount: challenge.downvotesCount.value,
+      userChallengeVote:
+        userChallengeVote === currentChallengeVote ? null : userChallengeVote,
+    }
+  }
+
+  private async fetchChallenge(challengeId: string) {
+    const response = await this.challengingService.fetchChallengeById(challengeId)
+    if (!response.isFailure) response.throwError()
+    return Challenge.create(response.body)
+  }
+
+  private async saveChallengeVote(
+    challengeId: string,
+    userId: string,
+    challengeVote: ChallengeVote,
+  ) {
+    const response = await this.challengingService.saveChallengeVote(
+      challengeId,
+      userId,
+      challengeVote,
+    )
+    if (!response.isFailure) response.throwError()
+  }
+
+  private async updateChallengeVote(
+    challengeId: string,
+    userId: string,
+    challengeVote: ChallengeVote,
+  ) {
+    const response = await this.challengingService.updateChallengeVote(
+      challengeId,
+      userId,
+      challengeVote,
+    )
+    if (!response.isFailure) response.throwError()
+  }
+
+  private async deleteChallengeVote(challengeId: string, userId: string) {
+    const response = await this.challengingService.deleteChallengeVote(
+      challengeId,
+      userId,
+    )
+    if (!response.isFailure) response.throwError()
+  }
+
+  private async fetchCurrentChallengeVote(challengeId: string, userId: string) {
+    const response = await this.challengingService.fetchChallengeVote(challengeId, userId)
+    if (!response.isFailure) response.throwError()
+    return response.body.challengeVote
+  }
+}

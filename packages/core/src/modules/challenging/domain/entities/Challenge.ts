@@ -1,5 +1,5 @@
 import { Entity } from '#global/abstracts'
-import { Id, Integer, Logical, Name, Slug, Text, TextBlock } from '#global/structs'
+import { Id, Integer, Logical, Name, Slug, TextBlock } from '#global/structs'
 import { ChallengeDifficulty } from '#challenging/structs'
 import type { ChallengeDto } from '#challenging/dtos'
 import type { ChallengeCategory } from './ChallengeCategory'
@@ -18,6 +18,8 @@ export type ChallengeProps = {
   createdAt: Date
   starId: Id | null
   docId: Id | null
+  textBlocks: TextBlock[]
+  description: string
 }
 
 export class Challenge extends Entity<ChallengeProps> {
@@ -37,11 +39,40 @@ export class Challenge extends Entity<ChallengeProps> {
         ),
         downvotesCount: Integer.create('Contagem de dowvotes', dto.downvotesCount),
         upvotesCount: Integer.create('Contagem de upvotes', dto.upvotesCount),
-        createdAt: dto.createdAt,
+        description: dto.description,
+        textBlocks: dto.textBlocks.map((dto) => {
+          let textBlock = TextBlock.create(dto.type, dto.content)
+          if (dto.picture) textBlock = textBlock.setPicture(dto.picture)
+          if (dto.title) textBlock = textBlock.setTitle(dto.title)
+          if (dto.isRunnable) textBlock = textBlock.setIsRunnable(dto.isRunnable)
+          return textBlock
+        }),
         categories: [],
+        createdAt: dto.createdAt,
       },
       dto?.id,
     )
+  }
+
+  removeUpvote() {
+    this.upvotesCount = this.upvotesCount.dencrement(1)
+  }
+
+  removeDownvote() {
+    this.downvotesCount = this.downvotesCount.dencrement(1)
+  }
+
+  upvote() {
+    this.upvotesCount = this.upvotesCount.increment(1)
+    this.removeDownvote()
+  }
+
+  downvote() {
+    const hasUpvotes = this.upvotesCount.value > 0
+    if (hasUpvotes) {
+      this.removeUpvote()
+      this.downvotesCount = this.downvotesCount.increment(1)
+    }
   }
 
   set categories(categories: ChallengeCategory[]) {
@@ -49,11 +80,10 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   get isFromStar(): Logical {
-    return Logical.create('Is challenge from a star?', Boolean(this.props.starId))
-  }
-
-  get canShowComments(): Logical {
-    return Logical.create('Can show challenge comments?', Boolean(this.props.starId))
+    return Logical.create(
+      'Esse desafio pertence a uma estrela?',
+      Boolean(this.props.starId),
+    )
   }
 
   get title() {
@@ -72,6 +102,14 @@ export class Challenge extends Entity<ChallengeProps> {
     return this.props.difficulty
   }
 
+  get description() {
+    return this.props.description
+  }
+
+  get textBlocks() {
+    return this.props.textBlocks
+  }
+
   get categories() {
     return this.props.categories
   }
@@ -84,12 +122,24 @@ export class Challenge extends Entity<ChallengeProps> {
     return this.props.upvotesCount
   }
 
+  set upvotesCount(upvotesCount: Integer) {
+    this.props.upvotesCount = upvotesCount
+  }
+
   get downvotesCount() {
     return this.props.downvotesCount
   }
 
+  set downvotesCount(downvotesCount: Integer) {
+    this.props.downvotesCount = downvotesCount
+  }
+
   get completionsCount() {
     return this.props.completionsCount
+  }
+
+  get docId() {
+    return this.props.docId
   }
 
   get createdAt() {
@@ -108,7 +158,9 @@ export class Challenge extends Entity<ChallengeProps> {
       downvotesCount: this.downvotesCount.value,
       upvotesCount: this.upvotesCount.value,
       completionsCount: this.completionsCount.value,
+      description: this.description,
       createdAt: this.createdAt,
+      textBlocks: [],
     }
   }
 }
