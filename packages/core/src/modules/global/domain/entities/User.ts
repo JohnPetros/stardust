@@ -122,6 +122,12 @@ export class User extends Entity<UserProps> {
     }
   }
 
+  unlockChallengeSolutions(challengeId: string) {
+    if (this.hasCompletedChallenge(challengeId).isFalse) {
+      this.loseCoins(10)
+    }
+  }
+
   makeTodayStatusDone() {
     if (this.weekStatus.todayStatus !== 'todo') return
 
