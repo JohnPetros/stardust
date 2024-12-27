@@ -42,6 +42,8 @@
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/ssr": "^0.4.1",
     "@supabase/supabase-js": "^2.44.3",
+    "@tsparticles/react": "^3.0.0",
+    "@tsparticles/slim": "^3.7.1",
     "@types/node": "20.14.10",
     "@types/react-dom": "18.3.0",
     "apexcharts": "^3.50.0",
