@@ -4,6 +4,7 @@ import { ENV } from '@/constants'
 import type { IApiClient } from '@stardust/core/interfaces'
 import { ApiResponse, PaginationResponse } from '@stardust/core/responses'
 import { handleApiError } from './utils'
+import { addQueryParams } from './utils/addQueryParams'
 
 type CacheConfig = {
   isCacheEnable?: boolean
@@ -26,10 +27,14 @@ export const NextApiClient = ({
         }
       : undefined,
   }
+  const queryParams: Record<string, string> = {}
 
   return {
     async get<Body>(route: string): Promise<ApiResponse<Body>> {
-      const response = await fetch(`${ENV.url}${route}`, requestInit)
+      const response = await fetch(
+        `${ENV.url}${addQueryParams(route, queryParams)}`,
+        requestInit,
+      )
 
       if (!response.ok) {
         return await handleApiError<Body>(response)
@@ -47,7 +52,7 @@ export const NextApiClient = ({
     },
 
     async post<Body>(route: string, body: unknown): Promise<ApiResponse<Body>> {
-      const response = await fetch(`${ENV.url}${route}`, {
+      const response = await fetch(`${ENV.url}${addQueryParams(route, queryParams)}`, {
         ...requestInit,
         method: 'POST',
         body: JSON.stringify(body),
@@ -59,6 +64,10 @@ export const NextApiClient = ({
 
       const data = await response.json()
       return new ApiResponse({ body: data, statusCode: response.status })
+    },
+
+    setQueryParam(key: string, value: string) {
+      queryParams[key] = value
     },
   }
 }
