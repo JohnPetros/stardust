@@ -12,6 +12,22 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
   const supabaseDocMapper = SupabaseDocMapper()
 
   return {
+    async fetchChallengeById(challengeId: string) {
+      const { data, error } = await supabase
+        .from('challenges_view')
+        .select('*')
+        .eq('id', challengeId)
+        .single()
+
+      if (error) {
+        return SupabasePostgrestError(error, 'Desafio não encontrado com esse id')
+      }
+
+      const challengeDto = supabaseChallengeMapper.toDto(data)
+
+      return new ApiResponse({ body: challengeDto })
+    },
+
     async fetchChallengeBySlug(challengeSlug: string) {
       const { data, error } = await supabase
         .from('challenges_view')
@@ -113,6 +129,20 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       return new ApiResponse({ body: categories })
     },
 
+    async fetchChallengeVote(userId: string, challengeId: string) {
+      const { data, error } = await supabase
+        .from('users_challenge_votes')
+        .select('vote')
+        .match({ user_id: userId, challenge_id: challengeId })
+        .single()
+
+      if (error) {
+        return new ApiResponse({ body: { challengeVote: null } })
+      }
+
+      return new ApiResponse({ body: { challengeVote: data.vote } })
+    },
+
     async fetchDocs() {
       const { data, error } = await supabase
         .from('docs')
@@ -141,6 +171,47 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
           error,
           'Erro inesperado ao desbloquear dados do dicionário',
         )
+      }
+
+      return new ApiResponse()
+    },
+
+    async saveChallengeVote(challengeId, userId, challengeVote) {
+      const { error } = await supabase.from('users_challenge_votes').insert({
+        challenge_id: challengeId,
+        user_id: userId,
+        vote: challengeVote === 'upvote' ? 'upvote' : 'downvote',
+      })
+
+      if (error) {
+        return SupabasePostgrestError(error, 'Error inesperado ao buscar desafios')
+      }
+
+      return new ApiResponse()
+    },
+
+    async updateChallengeVote(challengeId, userId, challengeVote) {
+      const { error } = await supabase.from('users_challenge_votes').insert({
+        challenge_id: challengeId,
+        user_id: userId,
+        vote: challengeVote === 'upvote' ? 'upvote' : 'downvote',
+      })
+
+      if (error) {
+        return SupabasePostgrestError(error, 'Error inesperado ao buscar desafios')
+      }
+
+      return new ApiResponse()
+    },
+
+    async deleteChallengeVote(challengeId, userId) {
+      const { error } = await supabase.from('users_challenge_votes').delete().match({
+        challenge_id: challengeId,
+        user_id: userId,
+      })
+
+      if (error) {
+        return SupabasePostgrestError(error, 'Error inesperado ao buscar desafios')
       }
 
       return new ApiResponse()

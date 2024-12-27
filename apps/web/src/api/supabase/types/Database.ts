@@ -88,6 +88,7 @@ export type Database = {
         Row: {
           code: string
           created_at: string
+          description: string | null
           difficulty: string
           doc_id: string | null
           function_name: string | null
@@ -97,11 +98,12 @@ export type Database = {
           test_cases: Json
           texts: Json | null
           title: string
-          user_slug: string
+          user_id: string | null
         }
         Insert: {
           code: string
           created_at?: string
+          description?: string | null
           difficulty?: string
           doc_id?: string | null
           function_name?: string | null
@@ -111,11 +113,12 @@ export type Database = {
           test_cases: Json
           texts?: Json | null
           title?: string
-          user_slug?: string
+          user_id?: string | null
         }
         Update: {
           code?: string
           created_at?: string
+          description?: string | null
           difficulty?: string
           doc_id?: string | null
           function_name?: string | null
@@ -125,7 +128,7 @@ export type Database = {
           test_cases?: Json
           texts?: Json | null
           title?: string
-          user_slug?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -147,6 +150,20 @@ export type Database = {
             columns: ["star_id"]
             isOneToOne: false
             referencedRelation: "stars"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_view"
             referencedColumns: ["id"]
           },
         ]
@@ -253,6 +270,13 @@ export type Database = {
             foreignKeyName: "public_comments_user_slug_fkey"
             columns: ["user_slug"]
             isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["user_slug"]
+          },
+          {
+            foreignKeyName: "public_comments_user_slug_fkey"
+            columns: ["user_slug"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["slug"]
           },
@@ -339,6 +363,13 @@ export type Database = {
           user_slug?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "playgrounds_user_slug_fkey"
+            columns: ["user_slug"]
+            isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["user_slug"]
+          },
           {
             foreignKeyName: "playgrounds_user_slug_fkey"
             columns: ["user_slug"]
@@ -509,6 +540,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "challenges_view"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_solutions_user_slug_fkey"
+            columns: ["user_slug"]
+            isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["user_slug"]
           },
           {
             foreignKeyName: "public_solutions_user_slug_fkey"
@@ -755,6 +793,56 @@ export type Database = {
           },
           {
             foreignKeyName: "users_acquired_rockets_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users_challenge_votes: {
+        Row: {
+          challenge_id: string
+          id: string
+          user_id: string | null
+          vote: Database["public"]["Enums"]["challenge_vote"]
+        }
+        Insert: {
+          challenge_id: string
+          id?: string
+          user_id?: string | null
+          vote: Database["public"]["Enums"]["challenge_vote"]
+        }
+        Update: {
+          challenge_id?: string
+          id?: string
+          user_id?: string | null
+          vote?: Database["public"]["Enums"]["challenge_vote"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_voted_challenges_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_voted_challenges_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_voted_challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_voted_challenges_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users_view"
@@ -1053,62 +1141,13 @@ export type Database = {
           },
         ]
       }
-      users_voted_challenges: {
-        Row: {
-          challenge_id: string
-          id: string
-          user_id: string | null
-          vote: string
-        }
-        Insert: {
-          challenge_id: string
-          id?: string
-          user_id?: string | null
-          vote: string
-        }
-        Update: {
-          challenge_id?: string
-          id?: string
-          user_id?: string | null
-          vote?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "users_voted_challenges_challenge_id_fkey"
-            columns: ["challenge_id"]
-            isOneToOne: false
-            referencedRelation: "challenges"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "users_voted_challenges_challenge_id_fkey"
-            columns: ["challenge_id"]
-            isOneToOne: false
-            referencedRelation: "challenges_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "users_voted_challenges_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "users_voted_challenges_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users_view"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
     }
     Views: {
       challenges_view: {
         Row: {
           code: string | null
           created_at: string | null
+          description: string | null
           difficulty: string | null
           doc_id: string | null
           downvotes: number | null
@@ -1121,6 +1160,7 @@ export type Database = {
           title: string | null
           total_completitions: number | null
           upvotes: number | null
+          user_id: string | null
           user_slug: string | null
         }
         Relationships: [
@@ -1143,6 +1183,20 @@ export type Database = {
             columns: ["star_id"]
             isOneToOne: false
             referencedRelation: "stars"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_view"
             referencedColumns: ["id"]
           },
         ]
@@ -1249,32 +1303,6 @@ export type Database = {
             }
             Returns: undefined
           }
-      get_filtered_challenges: {
-        Args: {
-          _userid: string
-          _status: string
-          _difficulty: string
-          _categories_ids: string[]
-          _search: string
-        }
-        Returns: {
-          code: string | null
-          created_at: string | null
-          difficulty: string | null
-          doc_id: string | null
-          downvotes: number | null
-          function_name: string | null
-          id: string | null
-          slug: string | null
-          star_id: string | null
-          test_cases: Json | null
-          texts: Json | null
-          title: string | null
-          total_completitions: number | null
-          upvotes: number | null
-          user_slug: string | null
-        }[]
-      }
       get_next_star_from_next_planet: {
         Args: {
           _current_planet_id: string
@@ -1396,6 +1424,7 @@ export type Database = {
       }
     }
     Enums: {
+      challenge_vote: "upvote" | "downvote"
       ranking_status: "winner" | "loser"
     }
     CompositeTypes: {

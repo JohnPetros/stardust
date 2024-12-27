@@ -1,3 +1,5 @@
+import type { TextBlockDto } from '#global/dtos'
+
 export type ChallengeDto = {
   id?: string
   title: string
@@ -12,5 +14,7 @@ export type ChallengeDto = {
   upvotesCount: number
   completionsCount: number
   createdAt: Date
+  textBlocks: TextBlockDto[]
+  description: string
   // testCases: ChallengeTestCase[]
 }
