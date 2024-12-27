@@ -25,7 +25,7 @@ export function AnimatedContainer({ children }: AnimatedContainerProps) {
       variants={variants}
       initial='hidden'
       animate='visible'
-      className='fixed top-0 z-40 flex h-16 w-screen justify-between border-b border-gray-700 bg-gray-900 px-6 py-3 md:justify-end'
+      className='fixed top-0 z-50 flex h-16 w-screen justify-between border-b border-gray-700 bg-gray-900 px-6 py-3 md:justify-end'
     >
       {children}
     </motion.main>
