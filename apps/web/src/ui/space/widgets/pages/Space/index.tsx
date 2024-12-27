@@ -34,12 +34,12 @@ export function SpacePage() {
           </ul>
         )}
 
-        <Fab
-          isVisible={lastUnlockedStarPosition !== 'in'}
-          icon={FAB_ICON[lastUnlockedStarPosition]}
-          label='Ir até a última estrela desbloqueada'
-          onClick={handleFabClick}
-        />
+          <Fab
+            isVisible={lastUnlockedStarPosition !== 'in'}
+            icon={FAB_ICON[lastUnlockedStarPosition]}
+            label='Ir até a última estrela desbloqueada'
+            onClick={handleFabClick}
+          />
       </div>
     </>
   )
