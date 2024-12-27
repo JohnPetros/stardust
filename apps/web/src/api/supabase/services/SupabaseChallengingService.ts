@@ -65,7 +65,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
 
     async fetchChallengesList({
       categoriesIds,
-      difficulty,
+      difficultyLevel,
       title,
     }: ChallengesListParams) {
       let query = supabase
@@ -76,8 +76,8 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         query = query.ilike('title', `%${title}%`)
       }
 
-      if (difficulty !== 'all') {
-        query = query.eq('difficulty', difficulty)
+      if (difficultyLevel !== 'all') {
+        query = query.eq('difficulty', difficultyLevel)
       }
 
       if (categoriesIds.length) {

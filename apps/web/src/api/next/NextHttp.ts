@@ -18,9 +18,9 @@ type Cookie = {
   duration: number
 }
 
-type NextHttpParams<HttpSchema> = {
+type NextHttpParams = {
   request?: NextRequest
-  schema?: ZodSchema<HttpSchema>
+  schema?: ZodSchema
   params?: NextParams
 }
 
@@ -28,7 +28,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
   request,
   schema,
   params,
-}: NextHttpParams<NextSchema> = {}): Promise<IHttp<NextSchema>> => {
+}: NextHttpParams = {}): Promise<IHttp<NextSchema>> => {
   let nextRedirectResponse: NextResponse<unknown>
   let httpSchema: NextSchema
   const cookies: Cookie[] = []

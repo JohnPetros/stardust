@@ -13,6 +13,13 @@ export const SupabaseChallengeMapper = () => {
         difficulty: supabaseChallenge.difficulty ?? '',
         docId: supabaseChallenge.doc_id,
         functionName: supabaseChallenge.function_name,
+        authorSlug: supabaseChallenge.user_slug ?? '',
+        upvotesCount: supabaseChallenge.upvotes ?? 0,
+        downvotesCount: supabaseChallenge.downvotes ?? 0,
+        completionsCount: supabaseChallenge.total_completitions ?? 0,
+        createdAt: supabaseChallenge.created_at
+          ? new Date(supabaseChallenge.created_at)
+          : new Date(),
       }
 
       return challengeDto
