@@ -1,16 +1,12 @@
 'use client'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { AppError } from '@/ui/global/widgets/components/AppError'
 import { ChallengeCard } from './ChallengeCard'
 import { useChallengesList } from './useChallengesList'
-import { _listChallenges } from './_listChallenges'
 
 export function ChallengesList() {
   const { user } = useAuthContext()
-  const { challenges, error } = useChallengesList(_listChallenges)
-
-  if (error) return <AppError error={error} />
+  const { challenges } = useChallengesList()
 
   if (user)
     return (

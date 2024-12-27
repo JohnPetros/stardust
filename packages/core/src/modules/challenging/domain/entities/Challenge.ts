@@ -15,8 +15,6 @@ export type ChallengeProps = {
   downvotesCount: Integer
   upvotesCount: Integer
   completionsCount: Integer
-  descriptionTextBlocks: TextBlock[]
-  description: Text
   createdAt: Date
   starId: Id | null
   docId: Id | null
@@ -34,16 +32,12 @@ export class Challenge extends Entity<ChallengeProps> {
         docId: dto.docId ? Id.create(dto.docId) : null,
         starId: dto.starId ? Id.create(dto.starId) : null,
         completionsCount: Integer.create(
-          'Challenge completions count',
+          'Quantidade de vezes que esse desafio foi completado',
           dto.completionsCount,
         ),
-        downvotesCount: Integer.create('Challenge downvotes count', dto.downvotesCount),
-        upvotesCount: Integer.create('Challenge upvotes count', dto.upvotesCount),
+        downvotesCount: Integer.create('Contagem de dowvotes', dto.downvotesCount),
+        upvotesCount: Integer.create('Contagem de upvotes', dto.upvotesCount),
         createdAt: dto.createdAt,
-        descriptionTextBlocks: dto.descriptionTextBlocks.map((textBlock) =>
-          TextBlock.create(textBlock.type, textBlock.content),
-        ),
-        description: Text.create(dto.description),
         categories: [],
       },
       dto?.id,
@@ -98,14 +92,6 @@ export class Challenge extends Entity<ChallengeProps> {
     return this.props.completionsCount
   }
 
-  get description() {
-    return this.props.description
-  }
-
-  get descriptionTextBlocks() {
-    return this.props.descriptionTextBlocks
-  }
-
   get createdAt() {
     return this.props.createdAt
   }
@@ -122,8 +108,6 @@ export class Challenge extends Entity<ChallengeProps> {
       downvotesCount: this.downvotesCount.value,
       upvotesCount: this.upvotesCount.value,
       completionsCount: this.completionsCount.value,
-      description: this.props.description.value,
-      descriptionTextBlocks: this.descriptionTextBlocks.map((textBlock) => textBlock.dto),
       createdAt: this.createdAt,
     }
   }

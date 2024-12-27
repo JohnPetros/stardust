@@ -2,16 +2,20 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import type { ChallengeCategory } from '@/@core/domain/entities'
-import { SEARCH_PARAMS } from '../ChallengesList/search-params'
+import { QUERY_PARAMS } from '../ChallengesList/query-params'
+
+import { FILTER_SELECTS_ITEMS } from '../filter-select-items'
+import { useQueryParams } from '@/ui/global/hooks/useQueryParams'
+import type { ChallengeCategory } from '@stardust/core/challenging/entities'
 import type {
   ChallengeCompletionStatus,
   ChallengeDifficultyLevel,
-} from '@/@core/domain/types'
-import { ChallengeCompletion, ChallengeDifficulty, List } from '@/@core/domain/structs'
-
-import { useUrlSearchParams } from ''@/ui/global/hooks'/useUrlSearchParams'
-import { FILTER_SELECTS_ITEMS } from '../filter-select-items'
+} from '@stardust/core/challenging/types'
+import { List } from '@stardust/core/global/structs'
+import {
+  ChallengeCompletion,
+  ChallengeDifficulty,
+} from '@stardust/core/challenging/structs'
 
 export function useChallengesFilter(categories: ChallengeCategory[]) {
   const [tags, setTags] = useState<List<string>>(List.create([]))
@@ -19,14 +23,14 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
   const difficultyTag = useRef<string | null>(null)
   const includedCategoriesNames = useRef<List<string>>(List.create([]))
   const removedCategoriesNames = useRef<List<string>>(List.create([]))
-  const urlSearchParams = useUrlSearchParams()
+  const queryParams = useQueryParams()
 
-  const difficultyLevel = urlSearchParams.get(SEARCH_PARAMS.difficultyLevel) ?? 'all'
-  const status = urlSearchParams.get(SEARCH_PARAMS.status) ?? 'all'
-  const title = urlSearchParams.get(SEARCH_PARAMS.title) ?? ''
+  const difficultyLevel = queryParams.get(QUERY_PARAMS.difficultyLevel) ?? 'all'
+  const completitionStatus = queryParams.get(QUERY_PARAMS.completitionStatus) ?? 'all'
+  const title = queryParams.get(QUERY_PARAMS.title) ?? ''
 
   function getCategoriesIds() {
-    const ceategoriesSearchParam = urlSearchParams.get(SEARCH_PARAMS.categoriesIds)
+    const ceategoriesSearchParam = queryParams.get(QUERY_PARAMS.categoriesIds)
 
     if (ceategoriesSearchParam) {
       const categoriesIds = ceategoriesSearchParam.split(',').filter(Boolean)
@@ -37,15 +41,15 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
   }
 
   function setCategoriesIds(categoriesIds: string[]) {
-    urlSearchParams.set(SEARCH_PARAMS.categoriesIds, categoriesIds.join(','))
+    queryParams.set(QUERY_PARAMS.categoriesIds, categoriesIds.join(','))
   }
 
   function setStatus(status: ChallengeCompletionStatus | 'all') {
-    urlSearchParams.set(SEARCH_PARAMS.status, status)
+    queryParams.set(QUERY_PARAMS.completitionStatus, status)
   }
 
   function setDifficultyLevel(difficultyLevel: ChallengeDifficultyLevel | 'all') {
-    urlSearchParams.set(SEARCH_PARAMS.difficultyLevel, difficultyLevel)
+    queryParams.set(QUERY_PARAMS.difficultyLevel, difficultyLevel)
   }
 
   function removeCategory(categoryName: string) {
@@ -142,18 +146,19 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
     // setTimeout(() => {
     //   actions.setSearch(search.trim().toLowerCase())
     // }, 400)
-    urlSearchParams.set(SEARCH_PARAMS.title, title.trim().toLowerCase())
+    queryParams.set(QUERY_PARAMS.title, title.trim().toLowerCase())
   }
 
   useEffect(() => {
-    if (difficulty) handleDifficultyChange(difficulty as ChallengeDifficultyLevel)
-    if (status) handleStatusChange(status as Status)
+    if (difficultyLevel)
+      handleDifficultyChange(difficultyLevel as ChallengeDifficultyLevel)
+    if (completitionStatus)
+      handleStatusChange(completitionStatus as ChallengeCompletionStatus)
     if (title) handleTitleChange(title)
   }, [])
 
   useEffect(() => {
-    const categoriesIds =
-      urlSearchParams.get(SEARCH_PARAMS.categoriesIds)?.split(',') ?? []
+    const categoriesIds = queryParams.get(QUERY_PARAMS.categoriesIds)?.split(',') ?? []
 
     categoriesIds.filter(Boolean).forEach((id) => {
       const categoryName = categories.find((category) => category.id === id)?.name
@@ -166,13 +171,12 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
         includedCategoriesNames.current = includedCategoriesNames.current.add(
           categoryName.value,
         )
-        console.log('added category name', categoryName)
         addTag(categoryName.value)
       }
     })
 
     removedCategoriesNames.current = removedCategoriesNames.current.makeEmpty()
-  }, [urlSearchParams])
+  }, [queryParams])
 
   return {
     tags,

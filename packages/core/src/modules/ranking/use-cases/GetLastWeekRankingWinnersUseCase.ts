@@ -3,11 +3,11 @@ import type { UserDto } from '#global/dtos'
 import type { RankingUserDto, TierDto } from '#ranking/dtos'
 import type { IRankingService, IUseCase } from '#interfaces'
 
-type Response = {
+type Response = Promise<{
   isUserLoser: boolean
   lastWeekTier: TierDto
   lastWeekRankingWinners: RankingUserDto[]
-}
+}>
 
 export class GetLastWeekRankingWinnersUseCase implements IUseCase<UserDto, Response> {
   constructor(private rankingsService: IRankingService) {}

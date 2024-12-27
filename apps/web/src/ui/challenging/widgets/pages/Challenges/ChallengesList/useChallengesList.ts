@@ -1,48 +1,56 @@
 'use client'
 
-import { ChallengeCompletion, ChallengeDifficulty } from '@/@core/domain/structs'
-
-import { useApi } from '@/ui/global/hooks'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useUrlSearchParams } from ''@/ui/global/hooks'/useUrlSearchParams'
-import type { _listChallenges } from './_listChallenges'
-import { useCache } from '@/ui/global/hooks'
-import { CACHE } from '@/constants'
-import { SEARCH_PARAMS } from './search-params'
-import { Challenge } from '@/@core/domain/entities'
-import { ChallengeCategory } from '@/@core/domain/entities/ChallengeCategory'
+import { useQueryParams } from '@/ui/global/hooks/useQueryParams'
+import { useCache } from '@/ui/global/hooks/useCache'
+import { CACHE, ROUTES } from '@/constants'
+import { QUERY_PARAMS } from './query-params'
+import {
+  ChallengeCompletion,
+  ChallengeDifficulty,
+} from '@stardust/core/challenging/structs'
+import { Challenge, ChallengeCategory } from '@stardust/core/challenging/entities'
+import { NextApiClient } from '@/api/next/NextApiClient'
+import type { ChallengeCategoryDto, ChallengeDto } from '@stardust/core/challenging/dtos'
 
-export function useChallengesList(listChallenges: typeof _listChallenges) {
+type ApiResponse = {
+  challenges: ChallengeDto[]
+  categories: ChallengeCategoryDto[]
+}
+
+export function useChallengesList() {
   const { user } = useAuthContext()
-  const urlSearchParams = useUrlSearchParams()
+  const querySearchParams = useQueryParams()
 
-  const difficulty = urlSearchParams.get(SEARCH_PARAMS.difficulty) ?? 'all'
-  const completionStatus = urlSearchParams.get(SEARCH_PARAMS.status) ?? 'all'
-  const title = urlSearchParams.get(SEARCH_PARAMS.title) ?? ''
-  const categoriesIds = urlSearchParams.get(SEARCH_PARAMS.categoriesIds)
+  const difficultyLevel = querySearchParams.get(QUERY_PARAMS.difficultyLevel) ?? 'all'
+  const completionStatus = querySearchParams.get(QUERY_PARAMS.completitionStatus) ?? 'all'
+  const title = querySearchParams.get(QUERY_PARAMS.title) ?? ''
+  const categoriesIds = querySearchParams.get(QUERY_PARAMS.categoriesIds) ?? ''
 
   async function fetchChallengesList() {
     if (!user) return
 
     const completion = ChallengeCompletion.create(completionStatus)
-    const difficulty = ChallengeDifficulty.create(completionStatus)
+    const difficulty = ChallengeDifficulty.create(difficultyLevel)
 
-    return await listChallenges(user.dto, completion.status, {
-      categoriesIds: categoriesIds ? categoriesIds.split(',') : [],
-      difficulty: difficulty.level,
-      title,
-    })
+    const apiClient = NextApiClient()
+    apiClient.setQueryParam('completionStatus', completion.status)
+    apiClient.setQueryParam('difficultyLevel', difficulty.level)
+    apiClient.setQueryParam('categoriesIds', categoriesIds)
+
+    const response = await apiClient.get<ApiResponse>(ROUTES.api.challenging.list)
+    return response.body
   }
 
   const { data, error, isLoading } = useCache({
     key: CACHE.keys.challengesList,
     fetcher: fetchChallengesList,
-    dependencies: [completionStatus, difficulty, categoriesIds, title, user?.id],
+    dependencies: [completionStatus, difficultyLevel, categoriesIds, title, user?.id],
   })
 
   return {
-    challenges: data ? data.challengesDTO.map(Challenge.create) : [],
-    categories: data ? data.categoriesDTO.map(ChallengeCategory.create) : [],
+    challenges: data ? data.challenges.map(Challenge.create) : [],
+    categories: data ? data.categories.map(ChallengeCategory.create) : [],
     isLoading,
     error,
   }

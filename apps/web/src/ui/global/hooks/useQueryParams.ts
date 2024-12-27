@@ -1,6 +1,6 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
-export function useUrlSearchParams() {
+export function useQueryParams() {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
