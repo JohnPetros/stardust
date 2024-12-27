@@ -2,15 +2,11 @@ import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
 import type { Challenge } from '@stardust/core/challenging/entities'
-import type { ChallengeCraftsVisilibity } from '@stardust/core/challenging/structs'
+import type { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
+import type { ChallengeVote } from '@stardust/core/challenging/types'
 
 import { INITIAL_CHALLENGE_STORE_STATE } from '../ChallengeStore/constants'
-import type {
-  ChallengeStoreActions,
-  ChallengeStoreState,
-  PanelsLayout,
-} from '../ChallengeStore/types'
-import type { ChallengeStore } from '../ChallengeStore/types/ChallengeStore'
+import type { ChallengeStore, PanelsLayout, TabHandler } from '../ChallengeStore/types'
 
 export const useZustandChallengeStore = create<ChallengeStore>()(
   immer((set) => {
@@ -29,7 +25,7 @@ export const useZustandChallengeStore = create<ChallengeStore>()(
           })
         },
 
-        setCraftsVisibility(craftsVislibility: ChallengeCraftsVisilibity) {
+        setCraftsVisibility(craftsVislibility: ChallengeCraftsVisibility) {
           return set(({ state }) => {
             state.craftsVislibility = craftsVislibility
           })
@@ -38,6 +34,24 @@ export const useZustandChallengeStore = create<ChallengeStore>()(
         setTabHandler(tabHandler: TabHandler) {
           return set(({ state }) => {
             state.tabHandler = tabHandler
+          })
+        },
+
+        setVote(vote: ChallengeVote) {
+          return set(({ state }) => {
+            state.vote = vote
+          })
+        },
+
+        setIncorrectAnswersAmount(incorrectAnswersAmount: number) {
+          return set(({ state }) => {
+            state.incorrectAnswersAmount = incorrectAnswersAmount
+          })
+        },
+
+        setMdx(mdx: string) {
+          return set(({ state }) => {
+            state.mdx = mdx
           })
         },
 
