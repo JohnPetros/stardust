@@ -38,6 +38,11 @@ export class List<Item> {
     return new List([])
   }
 
+  getByIndex<Fallback>(index: number, fallback: Fallback): Item | Fallback {
+    const item = this.items[index]
+    return item ?? fallback
+  }
+
   isEmpty() {
     return Logical.create('Is list empty?', this.items.length === 0)
   }
@@ -73,6 +78,13 @@ export class List<Item> {
     return Logical.create(`Is ${this.items} includes ${item}?`, this.items.includes(item))
   }
 
+  hasAllEqualTo(value: unknown) {
+    return Logical.create(
+      `Todos os itens da lista são igual a ${value}?`,
+      this.items.every((item) => item === value),
+    )
+  }
+
   get random() {
     const randomItem = this.items[Math.floor(Math.random() * this.items.length)]
     if (!randomItem)
@@ -92,7 +104,6 @@ export class List<Item> {
   }
 
   get hasItems() {
-    console.log(this.length)
     return Logical.create(`List ${this.items} has items?`, this.length > 0)
   }
 }

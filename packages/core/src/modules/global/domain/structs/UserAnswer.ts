@@ -6,7 +6,7 @@ type QuestionAnswerProps = {
   value: unknown
 }
 
-export class QuestionAnswer {
+export class UserAnswer {
   readonly isCorrect: Logical
   readonly isVerified: Logical
   readonly value: unknown
@@ -18,9 +18,9 @@ export class QuestionAnswer {
   }
 
   static create(value: unknown = null) {
-    return new QuestionAnswer({
-      isCorrect: Logical.create('Is question answer correct?', false),
-      isVerified: Logical.create('Is question answer verified?', false),
+    return new UserAnswer({
+      isCorrect: Logical.create('A resposta do usuário está correta?', false),
+      isVerified: Logical.create('A resposta do usuário está verificada?', false),
       value,
     })
   }
@@ -42,11 +42,11 @@ export class QuestionAnswer {
   }
 
   get isAnswered() {
-    return Logical.create('Is question answered?', Boolean(this.value))
+    return Logical.create('A resposta do usuário foi respondida?', Boolean(this.value))
   }
 
   private clone(props?: Partial<QuestionAnswerProps>) {
-    return new QuestionAnswer({
+    return new UserAnswer({
       isCorrect: this.isCorrect,
       isVerified: this.isVerified,
       value: this.value,
