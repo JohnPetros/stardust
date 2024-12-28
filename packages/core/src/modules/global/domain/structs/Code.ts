@@ -27,8 +27,18 @@ export class Code {
     return this.changeValue(this.codeRunner.addInputs(inputs, this.value))
   }
 
+  addFunction(functionName: string, functionParams: unknown[]) {
+    return this.changeValue(
+      this.codeRunner.addFunction(functionName, functionParams, this.value),
+    )
+  }
+
   changeValue(value: string) {
     return this.clone({ value: value })
+  }
+
+  get inputsCount() {
+    return this.codeRunner.getInputsCount(this.value)
   }
 
   get hasInput(): boolean {
