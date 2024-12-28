@@ -1,5 +1,5 @@
 import { NotFoundError } from '#global/errors'
-import { Integer, Logical } from '#global/structs'
+import { Integer, Logical, UserAnswer } from '#global/structs'
 import type { Question } from '#lesson/abstracts'
 import type { QuestionDto } from '#lesson/dtos'
 import {
@@ -9,14 +9,13 @@ import {
   OpenQuestion,
   SelectionQuestion,
 } from '#lesson/entities'
-import { QuestionAnswer } from './QuestionAnswer'
 
 type QuizProps = {
   livesCount: Integer
   currentQuestionIndex: Integer
   incorrectAnswersCount: Integer
   questions: Question[]
-  userAnswer: QuestionAnswer
+  userAnswer: UserAnswer
   hasAlreadyIncrementIncorrectAnswersCount: Logical
 }
 
@@ -25,7 +24,7 @@ export class Quiz {
   readonly currentQuestionIndex: Integer
   readonly incorrectAnswersCount: Integer
   readonly questions: Question[]
-  readonly userAnswer: QuestionAnswer
+  readonly userAnswer: UserAnswer
   readonly hasAlreadyIncrementIncorrectAnswersCount: Logical
 
   private constructor(props: QuizProps) {
@@ -71,7 +70,7 @@ export class Quiz {
       livesCount: Integer.create('Quiz lives count', 5),
       currentQuestionIndex: Integer.create('Quiz current question index', 0),
       incorrectAnswersCount: Integer.create('Quiz incorrect answers count', 0),
-      userAnswer: QuestionAnswer.create(),
+      userAnswer: UserAnswer.create(),
       hasAlreadyIncrementIncorrectAnswersCount: Logical.create(
         'Is quiz has already increment incorrect answers count?',
         false,
@@ -112,7 +111,7 @@ export class Quiz {
   nextQuestion(): Quiz {
     return this.clone({
       currentQuestionIndex: this.currentQuestionIndex.increment(1),
-      userAnswer: QuestionAnswer.create(null),
+      userAnswer: UserAnswer.create(null),
     })
   }
 
@@ -125,7 +124,7 @@ export class Quiz {
       }
   }
 
-  decrementLivesCount(userAnswer: QuestionAnswer): Quiz {
+  decrementLivesCount(userAnswer: UserAnswer): Quiz {
     return this.clone({
       userAnswer,
       livesCount: this.livesCount.dencrement(1),

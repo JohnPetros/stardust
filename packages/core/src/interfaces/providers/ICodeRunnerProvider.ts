@@ -6,5 +6,7 @@ export interface ICodeRunnerProvider {
   addInputs(codeInput: CodeInput, codeValue: string): string
   addFunction(functionName: string, functionParams: unknown[], codeValue: string): string
   getInput(codeValue: string): string | null
+  translateToCodeRunner(jsCode: unknown): string
+  translateToJs(codeRunnerCode: string): string
   getInputsCount(codeValue: string): number
 }

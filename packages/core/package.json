@@ -104,6 +104,7 @@
     "#challenging/types": "./src/modules/challenging/domain/types/index.ts",
     "#challenging/errors": "./src/modules/challenging/errors/index.ts",
     "#shop/entities": "./src/modules/shop/domain/entities/index.ts",
+    "#challenging/factories": "./src/modules/challenging/factories/index.ts",
     "#shop/types": "./src/modules/shop/domain/types/index.ts",
     "#shop/dtos": "./src/modules/shop/dtos/index.ts",
     "#shop/errors": "./src/modules/shop/errors/index.ts",

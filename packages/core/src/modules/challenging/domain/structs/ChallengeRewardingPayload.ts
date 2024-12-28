@@ -1,8 +1,8 @@
-import { ChallengeDifficulty } from '#challenging/structs'
+import type { RewardingPayloadOrigin } from '#global/types'
+import type { RewardingPayloadDto } from '#global/dtos'
 import { Id, Integer, List } from '#global/structs'
 import { RewardingPayload } from '#lesson/abstracts'
-import type { RewardingPayloadDto } from '#lesson/dtos'
-import type { RewardingPayloadOrigin } from '#lesson/types'
+import { ChallengeDifficulty } from '#challenging/structs'
 import type { ChallengeRewardingPayloadDto } from '#challenging/dtos'
 
 type ChallengeRewardingPayloadProps = {
