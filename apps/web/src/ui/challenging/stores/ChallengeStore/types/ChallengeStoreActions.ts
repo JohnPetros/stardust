@@ -10,7 +10,6 @@ export type ChallengeStoreActions = {
   setCraftsVisibility: (craftsVislibility: ChallengeCraftsVisibility) => void
   setVote: (vote: ChallengeVote) => void
   setTabHandler: (tabHandler: TabHandler) => void
-  setUserOutputs: (UserOutputs: unknown[]) => void
   setMdx: (mdx: string) => void
   resetStore: () => void
 }

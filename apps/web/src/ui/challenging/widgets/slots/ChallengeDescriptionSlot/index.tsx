@@ -8,14 +8,14 @@ import { ContentLink } from '@/ui/challenging/widgets/components/ContentLink'
 import { BlockedCommentsAlertDialog } from '@/ui/challenging/widgets/components/BlockedCommentsAlertDialog'
 import { BlockedSolutionsAlertDialog } from '@/ui/challenging/widgets/components/BlockedSolutionsAlertDialog'
 import { Mdx } from '@/ui/global/widgets/components/Mdx'
-import { useChallengeDescriptionPage } from './useChallengeDescriptionPage'
-import { VoteControle } from '../../components/VoteControl'
+import { VoteControl } from './VoteControl'
+import { useChallengeDescriptionSlot } from './useChallengeDescriptionSlot'
 
-export function ChallengeDescriptionPage() {
+export function ChallengeDescriptionSlot() {
   const { getCraftsVisibilitySlice } = useChallengeStore()
   const { craftsVislibility } = getCraftsVisibilitySlice()
   const { mdx, user, challenge, isLoading, handleShowSolutions } =
-    useChallengeDescriptionPage()
+    useChallengeDescriptionSlot()
 
   return isLoading || !challenge || !user ? (
     <div className='grid h-full place-content-center'>
@@ -33,7 +33,7 @@ export function ChallengeDescriptionPage() {
             upvotes={challenge.upvotesCount.value}
             completionsCount={challenge.completionsCount.value}
           />
-          <VoteControle />
+          <VoteControl />
           <div className='flex items-center gap-2 md:hidden'>
             {craftsVislibility.canShowSolutions.isFalse ? (
               <BlockedCommentsAlertDialog>

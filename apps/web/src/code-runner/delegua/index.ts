@@ -81,5 +81,27 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
 
       return codigo
     },
+
+    addFunction(functionName: string, functionParams: unknown[], code: string) {
+      const paramsValues = functionParams.map((param) =>
+        Array.isArray(param) ? `[${param.join(',')}]` : param,
+      )
+      const params = `(${paramsValues.join(',')})`
+      return code.concat(`\n${functionName}${params};`)
+    },
+
+    getInputsCount(codeValue) {
+      const regex = new RegExp(DELEGUA_REGEX.funcaoLeia, 'g')
+      const comandosLeia = codeValue.match(regex)
+      return comandosLeia?.length ?? 0
+    },
+
+    translateToCodeRunner(jsCode: unknown) {
+      return ''
+    },
+
+    translateToJs(codeRunnerCode: string) {
+      return ''
+    },
   }
 }

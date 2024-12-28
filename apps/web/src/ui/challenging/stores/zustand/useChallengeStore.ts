@@ -37,21 +37,9 @@ export const useZustandChallengeStore = create<ChallengeStore>()(
           })
         },
 
-        setUserOutputs(userOutputs: unknown[]) {
-          return set(({ state }) => {
-            state.userOutputs = userOutputs
-          })
-        },
-
         setVote(vote: ChallengeVote) {
           return set(({ state }) => {
             state.vote = vote
-          })
-        },
-
-        setIncorrectAnswersAmount(incorrectAnswersAmount: number) {
-          return set(({ state }) => {
-            state.incorrectAnswersAmount = incorrectAnswersAmount
           })
         },
 

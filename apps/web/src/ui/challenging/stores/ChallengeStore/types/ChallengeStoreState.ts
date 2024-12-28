@@ -6,10 +6,8 @@ import type { TabHandler } from './TabHandler'
 
 export type ChallengeStoreState = {
   challenge: Challenge | null
-  userOutputs: unknown[]
   vote: ChallengeVote | null
   craftsVislibility: ChallengeCraftsVisibility
-  incorrectAnswersAmount: number
   mdx: string
   panelsLayout: PanelsLayout
   tabHandler: TabHandler | null

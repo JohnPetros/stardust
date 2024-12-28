@@ -5,7 +5,7 @@ import { twMerge } from 'tailwind-merge'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useVoteControl } from './useVoteControl'
 
-export function VoteControle() {
+export function VoteControl() {
   const { vote, upvotesCount, handleVoteButton } = useVoteControl()
 
   const upvoteColor = 'text-green-500'

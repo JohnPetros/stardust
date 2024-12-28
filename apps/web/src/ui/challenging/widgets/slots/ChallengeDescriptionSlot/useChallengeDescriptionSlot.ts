@@ -7,7 +7,7 @@ import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useRouter } from '@/ui/global/hooks'
 import { ROUTES } from '@/constants'
 
-export function useChallengeDescriptionPage() {
+export function useChallengeDescriptionSlot() {
   const [isLoading, setIsLoading] = useState(true)
   const { getChallengeSlice, getCraftsVisibilitySlice, getMdxSlice } = useChallengeStore()
   const { mdx, setMdx } = getMdxSlice()

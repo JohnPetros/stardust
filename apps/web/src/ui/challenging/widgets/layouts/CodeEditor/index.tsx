@@ -2,11 +2,11 @@
 
 import { Editor } from '@/ui/global/widgets/components/Editor'
 import { useCodeEditor } from './useCodeEditor'
+import { CodeEditorToolbar } from '@/ui/global/widgets/components/CodeEditorToolbar'
 
 export function CodeEditor() {
   const {
     initialCode,
-    userCode,
     previousUserCode,
     editorContainerRef,
     editorRef,

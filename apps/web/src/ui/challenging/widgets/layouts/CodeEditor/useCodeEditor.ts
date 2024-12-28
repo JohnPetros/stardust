@@ -1,24 +1,24 @@
 'use client'
 
+import { useCallback, useEffect, useRef, useState } from 'react'
+
+import { Code } from '@stardust/core/global/structs'
+import { InsufficientInputsError } from '@stardust/core/challenging/errors'
+import { CodeRunnerError } from '@stardust/core/global/errors'
+
 import { ROUTES, STORAGE } from '@/constants'
+import { playAudio } from '@/utils'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { useRouter } from '@/ui/global/hooks'
+import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
 import type { ConsoleRef } from '@/ui/global/widgets/components/Console/types'
 import type { EditorRef } from '@/ui/global/widgets/components/Editor/types'
-import { playAudio } from '@/utils'
-import { InsufficientInputsError } from '@stardust/core/challenging/errors'
-import { CodeRunnerError } from '@stardust/core/global/errors'
-import { Code } from '@stardust/core/global/structs'
-import { useCallback, useEffect, useRef, useState } from 'react'
 
 export function useCodeEditor() {
-  const { getChallengeSlice, getPanelsLayoutSlice, getUserOutputsSlice } =
-    useChallengeStore()
+  const { getChallengeSlice, getPanelsLayoutSlice } = useChallengeStore()
   const { challenge } = getChallengeSlice()
   const { panelsLayout } = getPanelsLayoutSlice()
-  const { userOutputs, setUserOutputs } = getUserOutputsSlice()
   const { provider } = useCodeRunner()
   const toast = useToastContext()
   const router = useRouter()
@@ -52,11 +52,8 @@ export function useCodeEditor() {
     if (!challenge) return
 
     try {
-      const userOutputs = await challenge.runCode(userCode.current)
-      if (userOutputs.length) {
-        setUserOutputs(userOutputs)
-        router.goTo(`${ROUTES.challenging.challenge}/${challenge?.slug}/result`)
-      }
+      await challenge.runCode(userCode.current)
+      router.goTo(`${ROUTES.challenging.challenge}/${challenge?.slug}/result`)
     } catch (error) {
       if (error instanceof CodeRunnerError) {
         handleCodeRunnerError(error.message, error.line)
@@ -110,7 +107,6 @@ export function useCodeEditor() {
     editorRef,
     codeEditorHeight,
     initialCode,
-    userOutputs,
     handleRunCode,
     handleCodeChange,
   }
