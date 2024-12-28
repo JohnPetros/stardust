@@ -50,6 +50,18 @@ export function useChallengeStore() {
       }
     },
 
+    getUserOutputsSlice() {
+      const userOutputs = useZustandChallengeStore((store) => store.state.userOutputs)
+      const setUserOutputs = useZustandChallengeStore(
+        (store) => store.actions.setUserOutputs,
+      )
+
+      return {
+        userOutputs,
+        setUserOutputs,
+      }
+    },
+
     getMdxSlice() {
       const mdx = useZustandChallengeStore((store) => store.state.mdx)
       const setMdx = useZustandChallengeStore((store) => store.actions.setMdx)

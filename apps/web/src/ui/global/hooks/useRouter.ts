@@ -14,6 +14,6 @@ export function useRouter() {
 
   return {
     goTo,
-    getCurrentRoute,
+    currentRoute: pathname,
   }
 }

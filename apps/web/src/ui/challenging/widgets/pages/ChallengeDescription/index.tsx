@@ -9,6 +9,7 @@ import { BlockedCommentsAlertDialog } from '@/ui/challenging/widgets/components/
 import { BlockedSolutionsAlertDialog } from '@/ui/challenging/widgets/components/BlockedSolutionsAlertDialog'
 import { Mdx } from '@/ui/global/widgets/components/Mdx'
 import { useChallengeDescriptionPage } from './useChallengeDescriptionPage'
+import { VoteControle } from '../../components/VoteControl'
 
 export function ChallengeDescriptionPage() {
   const { getCraftsVisibilitySlice } = useChallengeStore()
@@ -32,7 +33,7 @@ export function ChallengeDescriptionPage() {
             upvotes={challenge.upvotesCount.value}
             completionsCount={challenge.completionsCount.value}
           />
-          <VoteButtons />
+          <VoteControle />
           <div className='flex items-center gap-2 md:hidden'>
             {craftsVislibility.canShowSolutions.isFalse ? (
               <BlockedCommentsAlertDialog>

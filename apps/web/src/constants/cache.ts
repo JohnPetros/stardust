@@ -16,5 +16,6 @@ export const CACHE = {
     playgroundCards: '/playground-cards',
     rankingsList: '/rankings-list',
     solutions: '/solutions',
+    docs: '/docs',
   },
 }
