@@ -1,17 +1,18 @@
 import { Entity } from '#global/abstracts'
-import { Id, Integer, Logical, Name, Slug, TextBlock } from '#global/structs'
-import { ChallengeDifficulty } from '#challenging/structs'
+import { type Code, Id, Integer, Logical, Name, Slug, TextBlock } from '#global/structs'
+import { ChallengeDifficulty, TestCase } from '#challenging/structs'
 import type { ChallengeDto } from '#challenging/dtos'
 import type { ChallengeCategory } from './ChallengeCategory'
+import { InsufficientInputsError } from '#challenging/errors'
 
 export type ChallengeProps = {
-  id?: string
   code: string
   title: Name
   slug: Slug
   difficulty: ChallengeDifficulty
   categories: ChallengeCategory[]
   authorSlug: Slug
+  functionName: Name | null
   downvotesCount: Integer
   upvotesCount: Integer
   completionsCount: Integer
@@ -20,6 +21,7 @@ export type ChallengeProps = {
   docId: Id | null
   textBlocks: TextBlock[]
   description: string
+  testCases: TestCase[]
 }
 
 export class Challenge extends Entity<ChallengeProps> {
@@ -33,10 +35,12 @@ export class Challenge extends Entity<ChallengeProps> {
         difficulty: ChallengeDifficulty.create(dto.difficulty),
         docId: dto.docId ? Id.create(dto.docId) : null,
         starId: dto.starId ? Id.create(dto.starId) : null,
+        testCases: dto.testCases.map(TestCase.create),
         completionsCount: Integer.create(
           'Quantidade de vezes que esse desafio foi completado',
           dto.completionsCount,
         ),
+        functionName: dto.functionName ? Name.create(dto.functionName) : null,
         downvotesCount: Integer.create('Contagem de dowvotes', dto.downvotesCount),
         upvotesCount: Integer.create('Contagem de upvotes', dto.upvotesCount),
         description: dto.description,
@@ -52,6 +56,32 @@ export class Challenge extends Entity<ChallengeProps> {
       },
       dto?.id,
     )
+  }
+
+  private formatCode(code: Code, testCase: TestCase) {
+    if (code.inputsCount !== testCase.inputs.length) {
+      throw new InsufficientInputsError()
+    }
+
+    if (this.props.functionName) {
+      return code.addFunction(this.props.functionName.value, testCase.inputs)
+    }
+
+    return code.addInputs(testCase.inputs)
+  }
+
+  async runCode(code: Code) {
+    const outputs = []
+    for (const testCase of this.testCases) {
+      const formattedCode = this.formatCode(code, testCase)
+      const response = await formattedCode.run()
+
+      if (response.isFailure) response.throwError()
+      if (this.hasFunction.isTrue) outputs.push(response.result)
+      else if (response.outputs[0]) outputs.push(response.outputs[0])
+    }
+
+    return outputs
   }
 
   removeUpvote() {
@@ -73,6 +103,10 @@ export class Challenge extends Entity<ChallengeProps> {
       this.removeUpvote()
       this.downvotesCount = this.downvotesCount.increment(1)
     }
+  }
+
+  private get hasFunction() {
+    return Logical.create('Esse desafio tem função?', Boolean(this.props.functionName))
   }
 
   set categories(categories: ChallengeCategory[]) {
@@ -138,6 +172,10 @@ export class Challenge extends Entity<ChallengeProps> {
     return this.props.completionsCount
   }
 
+  get testCases() {
+    return this.props.testCases
+  }
+
   get docId() {
     return this.props.docId
   }
@@ -158,6 +196,7 @@ export class Challenge extends Entity<ChallengeProps> {
       downvotesCount: this.downvotesCount.value,
       upvotesCount: this.upvotesCount.value,
       completionsCount: this.completionsCount.value,
+      testCases: this.testCases.map((testCase) => testCase.dto),
       description: this.description,
       createdAt: this.createdAt,
       textBlocks: [],

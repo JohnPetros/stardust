@@ -1,4 +1,5 @@
 import type { TextBlockDto } from '#global/dtos'
+import type { TestCaseDto } from './TestCaseDto'
 
 export type ChallengeDto = {
   id?: string
@@ -16,5 +17,5 @@ export type ChallengeDto = {
   createdAt: Date
   textBlocks: TextBlockDto[]
   description: string
-  // testCases: ChallengeTestCase[]
+  testCases: TestCaseDto[]
 }
