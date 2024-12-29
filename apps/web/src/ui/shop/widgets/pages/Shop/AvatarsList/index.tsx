@@ -16,11 +16,11 @@ type AvatarsListProps = {
 
 export function AvatarsList({ initialItems }: AvatarsListProps) {
   const {
-    offset,
+    page,
     AvatarsDto,
-    totalAvatars,
+    totalAvatarsCount,
     avatarsPerPage,
-    setOffset,
+    handlePageChange,
     handleSearchChange,
     handlePriceOrderChange,
   } = useAvatarsList(initialItems)
@@ -61,13 +61,13 @@ export function AvatarsList({ initialItems }: AvatarsListProps) {
         </ul>
       )}
 
-      {totalAvatars && (
+      {totalAvatarsCount && (
         <div className='mt-3'>
           <Pagination
-            totalItems={totalAvatars}
+            totalItemsCount={totalAvatarsCount}
+            page={page}
             itemsPerPage={avatarsPerPage}
-            offset={offset}
-            setOffset={setOffset}
+            onPageChange={handlePageChange}
           />
         </div>
       )}

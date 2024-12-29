@@ -1,11 +1,12 @@
 import { ApiResponse, PaginationResponse } from '@stardust/core/responses'
-import type { ShopItemsListingSettings } from '@stardust/core/shop/types'
+import type { ShopItemsListingParams } from '@stardust/core/shop/types'
 import type { IShopService } from '@stardust/core/interfaces'
 import { HTTP_STATUS_CODE } from '@stardust/core/constants'
 
 import type { Supabase } from '../types/Supabase'
 import { SupabasePostgrestError } from '../errors'
 import { SupabaseAvatarMapper, SupabaseRocketMapper } from '../mappers'
+import { calculateSupabaseRange } from '../utils'
 
 export const SupabaseShopService = (supabase: Supabase): IShopService => {
   const supabaseAvatarMapper = SupabaseAvatarMapper()
@@ -34,10 +35,10 @@ export const SupabaseShopService = (supabase: Supabase): IShopService => {
 
     async fetchShopAvatarsList({
       search,
-      offset,
-      limit,
+      page,
+      itemsPerPage,
       order,
-    }: ShopItemsListingSettings) {
+    }: ShopItemsListingParams) {
       let query = supabase.from('avatars').select('*', {
         count: 'exact',
         head: false,
@@ -47,9 +48,11 @@ export const SupabaseShopService = (supabase: Supabase): IShopService => {
         query = query.ilike('name', `%${search}%`)
       }
 
+      const range = calculateSupabaseRange(page, itemsPerPage)
+
       query = query
         .order('price', { ascending: order === 'ascending' })
-        .range(offset, limit)
+        .range(range.from, range.to)
 
       const { data, count, error } = await query
 
@@ -101,10 +104,10 @@ export const SupabaseShopService = (supabase: Supabase): IShopService => {
 
     async fetchShopRocketsList({
       search,
-      offset,
-      limit,
+      page,
+      itemsPerPage,
       order,
-    }: ShopItemsListingSettings) {
+    }: ShopItemsListingParams) {
       let query = supabase.from('rockets').select('*', {
         count: 'exact',
         head: false,
@@ -114,9 +117,11 @@ export const SupabaseShopService = (supabase: Supabase): IShopService => {
         query = query.ilike('name', `%${search}%`)
       }
 
+      const range = calculateSupabaseRange(page, itemsPerPage)
+
       query = query
         .order('price', { ascending: order === 'ascending' })
-        .range(offset, limit)
+        .range(range.from, range.to)
 
       const { data, count, error } = await query
 

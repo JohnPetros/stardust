@@ -4,18 +4,15 @@ import type { PaginationProps } from '.'
 import { Pagination } from '@stardust/core/global/structs'
 
 export function usePagination({
-  totalItems,
+  totalItemsCount,
   itemsPerPage,
-  offset,
-  setOffset,
+  page,
+  onPageChange,
 }: PaginationProps) {
   const [pagination, setPagination] = useState<Pagination | null>(null)
 
   function handlePageButtonCLick(page: number) {
-    if (!pagination) return
-
-    const newOffset = pagination.calculateNewOffset(page)
-    setOffset(newOffset)
+    onPageChange(page)
   }
 
   useEffect(() => {

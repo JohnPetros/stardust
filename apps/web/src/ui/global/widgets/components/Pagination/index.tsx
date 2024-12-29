@@ -20,8 +20,10 @@ export function Pagination(paginationProps: PaginationProps) {
       <div className='flex w-full space-x-3'>
         <PageButton
           isActive={false}
-          onClick={() => handlePageButtonCLick(pagination.currentPage - 1)}
-          isVisible={pagination.currentPage > 1}
+          onClick={() =>
+            handlePageButtonCLick(pagination.currentPage.dencrement(1).value)
+          }
+          isVisible={pagination.currentPage.value > 1}
         >
           <Icon name='arrow-left' className='text-gray-300' />
         </PageButton>
@@ -34,15 +36,15 @@ export function Pagination(paginationProps: PaginationProps) {
             1 ...
           </PageButton>
         )}
-        {Array.from({ length: Math.min(maxPageButtons, pagination.totalPages) }).map(
+        {Array.from({ length: Math.min(maxPageButtons, pagination.pagesCount) }).map(
           (_, index) => {
             const page = index + pagination.firstPage
 
-            if (page <= pagination.totalPages) {
+            if (page <= pagination.pagesCount) {
               return (
                 <PageButton
                   key={page}
-                  isActive={page === pagination.currentPage}
+                  isActive={page === pagination.currentPage.value}
                   isVisible={true}
                   onClick={() => handlePageButtonCLick(page)}
                 >
@@ -57,16 +59,18 @@ export function Pagination(paginationProps: PaginationProps) {
           <PageButton
             isActive={false}
             isVisible={true}
-            onClick={() => handlePageButtonCLick(pagination.totalPages)}
+            onClick={() => handlePageButtonCLick(pagination.pagesCount)}
           >
-            ... {pagination.totalPages}
+            ... {pagination.pagesCount}
           </PageButton>
         )}
         {pagination.hasPages && (
           <PageButton
             isActive={false}
-            isVisible={pagination.currentPage !== pagination.totalPages}
-            onClick={() => handlePageButtonCLick(pagination.currentPage + 1)}
+            isVisible={pagination.currentPage.value !== pagination.pagesCount}
+            onClick={() =>
+              handlePageButtonCLick(pagination.currentPage.increment(1).value)
+            }
           >
             <Icon name='arrow-right' className='text-gray-300' />
           </PageButton>

@@ -14,10 +14,9 @@ import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 const AVATARS_PER_PAGE = 8
 
 export function useAvatarsList(initialItems: PaginationResponse<AvatarDto>) {
-  const [offset, setOffset] = useState(0)
+  const [page, setPage] = useState(1)
   const [search, setSearch] = useState('s')
   const [priceOrder, setPriceOrder] = useState<ListingOrder>('ascending')
-
   const api = useApi()
   const toast = useToastContext()
   const { user } = useAuthContext()
@@ -27,8 +26,8 @@ export function useAvatarsList(initialItems: PaginationResponse<AvatarDto>) {
 
     const response = await api.fetchShopAvatarsList({
       search,
-      offset,
-      limit: offset + AVATARS_PER_PAGE - 1,
+      page,
+      itemsPerPage: AVATARS_PER_PAGE,
       order: priceOrder,
     })
 
@@ -40,26 +39,30 @@ export function useAvatarsList(initialItems: PaginationResponse<AvatarDto>) {
   const { data } = useCache({
     key: CACHE.keys.shopAvatars,
     fetcher: fetchAvatars,
-    dependencies: [search, offset, priceOrder],
+    dependencies: [search, page, priceOrder],
     isEnabled: !!user,
     initialData: initialItems,
   })
 
   function handleSearchChange(value: string) {
     setSearch(value)
-    setOffset(0)
+    setPage(1)
   }
 
   function handlePriceOrderChange(value: ListingOrder) {
     setPriceOrder(value)
   }
 
+  function handlePageChange(page: number) {
+    setPage(page)
+  }
+
   return {
     AvatarsDto: data ? data.items : [],
-    totalAvatars: data ? data.count : 0,
+    totalAvatarsCount: data ? data.count : 0,
     avatarsPerPage: AVATARS_PER_PAGE,
-    offset,
-    setOffset,
+    page,
+    handlePageChange,
     handleSearchChange,
     handlePriceOrderChange,
   }

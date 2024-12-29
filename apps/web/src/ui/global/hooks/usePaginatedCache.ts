@@ -10,7 +10,7 @@ type PaginatedCacheConfig<CacheItem> = {
   itemsPerPage: number
   dependencies?: unknown[]
   isEnabled?: boolean
-  initialData?: CacheItem
+  initialData?: CacheItem[]
   refreshInterval?: number
   shouldRefetchOnFocus?: boolean
 }
@@ -30,6 +30,7 @@ export function usePaginatedCache<CacheItem>({
   fetcher,
   itemsPerPage,
   isEnabled = true,
+  initialData,
   shouldRefetchOnFocus = true,
   refreshInterval = 0,
   dependencies,
@@ -57,6 +58,7 @@ export function usePaginatedCache<CacheItem>({
     {
       refreshInterval,
       revalidateOnFocus: shouldRefetchOnFocus,
+      fallbackData: initialData ? [initialData] : [],
       onError: (error) => {
         toast.show(error)
       },
