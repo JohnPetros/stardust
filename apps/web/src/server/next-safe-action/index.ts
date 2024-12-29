@@ -5,6 +5,7 @@ import {
   voteChallenge,
 } from './challengingActions'
 import { setCookie, getCookie, deleteCookie, hasCookie } from './cookieActions'
+import { upvoteComment } from './forumActions'
 import { obsverNewUnlockedAchievements } from './profileActions'
 import { getLastWeekRankingWinners } from './rankingActions'
 
@@ -17,3 +18,4 @@ export const challengingActions = {
 }
 export const profileActions = { obsverNewUnlockedAchievements }
 export const rankingActions = { getLastWeekRankingWinners }
+export const forumActions = { upvoteComment }

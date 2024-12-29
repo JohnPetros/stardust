@@ -1,0 +1,1 @@
+export { UpvoteCommentAction } from './UpvoteCommentAction'
