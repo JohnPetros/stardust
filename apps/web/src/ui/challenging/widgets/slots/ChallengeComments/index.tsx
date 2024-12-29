@@ -1,10 +1,10 @@
 'use client'
 
-import { useBreakpoint } from '@/ui/global/hooks'
 import { ContentDialog } from '../../layouts/Challenge/ContentDialog'
+import { useChallengeCommentsSlot } from './useChallengeCommentsSlot'
 
-export default function ChallengeCommentsPage() {
-  const { md: isMobile } = useBreakpoint()
+export default function ChallengeCommentsSlot() {
+  const { isMobile } = useChallengeCommentsSlot()
 
   if (isMobile)
     return (

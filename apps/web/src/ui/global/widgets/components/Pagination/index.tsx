@@ -5,10 +5,10 @@ import { usePagination } from './usePagination'
 import { Icon } from '../Icon'
 
 export type PaginationProps = {
-  totalItems: number
+  totalItemsCount: number
   itemsPerPage: number
-  offset: number
-  setOffset: (offset: number) => void
+  page: number
+  onPageChange: (offset: number) => void
 }
 
 export function Pagination(paginationProps: PaginationProps) {
@@ -51,7 +51,7 @@ export function Pagination(paginationProps: PaginationProps) {
               )
             }
             return ''
-          }
+          },
         )}
         {pagination.isFarFromLastPage && (
           <PageButton

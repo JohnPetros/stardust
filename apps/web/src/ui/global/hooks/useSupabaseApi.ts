@@ -12,6 +12,7 @@ import {
   SupabaseLessonService,
   SupabaseRankingService,
   SupabaseChallengingService,
+  SupabaseForumService,
   SupabaseStorageService,
 } from '@/api/supabase/services'
 
@@ -27,6 +28,7 @@ export function useSupabaseApi() {
       ...SupabaseLessonService(supabase),
       ...SupabaseRankingService(supabase),
       ...SupabaseChallengingService(supabase),
+      ...SupabaseForumService(supabase),
       ...SupabaseStorageService(),
     }
   }, [supabase])

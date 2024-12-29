@@ -1,16 +1,16 @@
 import { useRouter as useNextRouter, usePathname } from 'next/navigation'
+import { useCallback } from 'react'
 
 export function useRouter() {
   const router = useNextRouter()
   const pathname = usePathname()
 
-  function goTo(route: string) {
-    router.push(route)
-  }
-
-  function getCurrentRoute() {
-    return pathname
-  }
+  const goTo = useCallback(
+    (route: string) => {
+      router.push(route)
+    },
+    [router.push],
+  )
 
   return {
     goTo,

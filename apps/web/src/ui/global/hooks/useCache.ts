@@ -35,7 +35,7 @@ export function useCache<CacheData>({
   initialData,
 }: CacheConfig<CacheData>): Cache<CacheData> {
   const dependenciesQuery = dependencies
-    ? dependencies.map((dependency, index) => `dep_${index + 1}=${dependency}`)
+    ? dependencies.map((dependency, index) => `dep_${index + 1}=${dependency}`).join(',')
     : ''
 
   const { data, error, isLoading, isValidating, mutate } = useSWR(

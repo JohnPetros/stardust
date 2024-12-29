@@ -11,16 +11,13 @@ import { useRouter } from '@/ui/global/hooks'
 export function useContentDialog(contentType: ContentType) {
   const { getChallengeSlice } = useChallengeStore()
   const { challenge } = getChallengeSlice()
-
   const dialogRef = useRef<DialogRef>(null)
-
   const router = useRouter()
-  const route = router.getCurrentRoute()
-  const routeLastParam = route.split('/').pop()
+  const routeLastParam = router.currentRoute.split('/').pop()
 
   function handleDialogOpenChange(isOpen: boolean) {
     if (!isOpen && routeLastParam !== challenge?.slug.value) {
-      router.goTo(`${ROUTES.app.challenge}/${challenge?.slug.value}`)
+      router.goTo(`${ROUTES.challenging.challenge}/${challenge?.slug.value}`)
     }
   }
 
