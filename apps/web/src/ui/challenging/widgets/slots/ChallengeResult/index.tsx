@@ -1,6 +1,6 @@
 'use client'
 
-import { VerificationButton } from '../../components/VerificationButton'
+import { VerificationButton } from '@/ui/global/widgets/components/VerificationButton'
 import { TestCase } from './TestCase'
 import { useChallengeResultSlot } from './useChallengeResultSlot'
 

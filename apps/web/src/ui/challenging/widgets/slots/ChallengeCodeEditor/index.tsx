@@ -1,10 +1,10 @@
 'use client'
 
 import { Editor } from '@/ui/global/widgets/components/Editor'
-import { useCodeEditor } from './useCodeEditor'
+import { useChallengeCodeEditorSlot } from './useChallengeCodeEditorSlot'
 import { CodeEditorToolbar } from '@/ui/global/widgets/components/CodeEditorToolbar'
 
-export function CodeEditor() {
+export function ChallengeCodeEditorSlot() {
   const {
     initialCode,
     previousUserCode,
@@ -13,7 +13,7 @@ export function CodeEditor() {
     codeEditorHeight,
     handleCodeChange,
     handleRunCode,
-  } = useCodeEditor()
+  } = useChallengeCodeEditorSlot()
 
   return (
     <div ref={editorContainerRef} className='relative h-full w-full'>

@@ -5,7 +5,7 @@ import type { ApiResponse, PaginationResponse } from '#responses'
 
 export interface IForumService {
   fetchChallengeTopic(
-    challengeId: string,
+    challengeSlug: string,
     topicCategory: TopicCategory,
   ): Promise<ApiResponse<TopicDto>>
   fetchCommentById(commentId: string): Promise<ApiResponse<CommentDto>>

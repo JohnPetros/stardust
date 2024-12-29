@@ -15,7 +15,7 @@ import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
 import type { ConsoleRef } from '@/ui/global/widgets/components/Console/types'
 import type { EditorRef } from '@/ui/global/widgets/components/Editor/types'
 
-export function useCodeEditor() {
+export function useChallengeCodeEditorSlot() {
   const { getChallengeSlice, getPanelsLayoutSlice } = useChallengeStore()
   const { challenge } = getChallengeSlice()
   const { panelsLayout } = getPanelsLayoutSlice()
