@@ -1,3 +1,3 @@
-import type { FilteringSettings, SortingSettings } from '#global/types'
+import type { FilteringSettings, SortingParams } from '#global/types'
 
-export type ShopItemsListingSettings = FilteringSettings & SortingSettings
+export type ShopItemsListingParams = FilteringSettings & SortingParams
