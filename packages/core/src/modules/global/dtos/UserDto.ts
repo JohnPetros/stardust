@@ -23,6 +23,7 @@ export type UserDto = {
   rescuableAchievementsIds?: string[]
   completedChallengesIds?: string[]
   completedPlanetsIds?: string[]
+  upvotedCommentsIds?: string[]
   canSeeRankingResult?: boolean
   lastWeekRankingPosition?: number | null
   createdAt?: string

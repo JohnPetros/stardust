@@ -37,6 +37,7 @@ type UserProps = {
   rescuableAchievementsIds: List<string>
   completedChallengesIds: List<string>
   completedPlanetsIds: List<string>
+  upvotedCommentsIds: List<string>
   canSeeRankingResult: Logical
   didIncrementStreakOnSaturday: Logical
   lastWeekRankingPosition: RankingPosition | null
@@ -174,6 +175,10 @@ export class User extends Entity<UserProps> {
 
   hasUnlockedDoc(docId: string): Logical {
     return this.props.unlockedDocsIds.includes(docId)
+  }
+
+  hasUpvotedComment(commentId: string): Logical {
+    return this.props.upvotedCommentsIds.includes(commentId)
   }
 
   hasAcquiredRocket(rocketId: string): boolean {

@@ -15,20 +15,20 @@ export class UserFactory {
       avatar: Avatar.create(dto.avatar),
       tier: Tier.create(dto.tier),
       level: Level.create(dto.level),
-      coins: Integer.create('User coins', dto.coins ?? 0),
-      xp: Integer.create('User Xp', dto.xp ?? 0),
-      weeklyXp: Integer.create('User Weekly Xp', dto.weeklyXp ?? 0),
+      coins: Integer.create('Moedas do usuário', dto.coins ?? 0),
+      xp: Integer.create('Xp do usuário', dto.xp ?? 0),
+      weeklyXp: Integer.create('Xp semanal do usuário', dto.weeklyXp ?? 0),
       weekStatus: WeekStatus.create(dto?.weekStatus),
-      streak: Integer.create('User Streak', dto?.streak ?? 0),
+      streak: Integer.create('Streak do usuário', dto?.streak ?? 0),
       lastWeekRankingPosition: dto.lastWeekRankingPosition
         ? RankingPosition.create(dto.lastWeekRankingPosition)
         : null,
       didIncrementStreakOnSaturday: Logical.create(
-        'Did user increment streak on saturday?',
+        'Esse usuário aumentou de streak no sábado?',
         dto?.didIncrementStreakOnSaturday ?? false,
       ),
       canSeeRankingResult: Logical.create(
-        'Can user see ranking result?',
+        'Esse usuário pode ver o resultado do ranking?',
         dto?.canSeeRankingResult ?? false,
       ),
       unlockedAchievementsIds: List.create(dto?.unlockedAchievementsIds ?? []),
@@ -39,6 +39,7 @@ export class UserFactory {
       unlockedDocsIds: List.create(dto?.unlockedDocsIds ?? []),
       completedChallengesIds: List.create(dto?.completedChallengesIds ?? []),
       completedPlanetsIds: List.create(dto?.completedPlanetsIds ?? []),
+      upvotedCommentsIds: List.create(dto?.upvotedCommentsIds ?? []),
       createdAt: dto?.createdAt ? new Date(dto?.createdAt) : new Date(),
       id: dto?.id,
     }
