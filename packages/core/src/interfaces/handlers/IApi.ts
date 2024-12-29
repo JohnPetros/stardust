@@ -7,6 +7,7 @@ import type {
   IShopService,
   ISpaceService,
   IStorageService,
+  IForumService,
 } from '../services'
 
 export interface IApi
@@ -17,4 +18,5 @@ export interface IApi
     IStorageService,
     ISpaceService,
     ILessonService,
+    IForumService,
     IProfileService {}
