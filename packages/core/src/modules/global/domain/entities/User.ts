@@ -145,8 +145,8 @@ export class User extends Entity<UserProps> {
     this.props.rocket = rocket
   }
 
-  selectAvatar(Avatar: Avatar): void {
-    this.props.avatar = Avatar
+  selectAvatar(avatar: Avatar): void {
+    this.props.avatar = avatar
   }
 
   seeRankingResult() {
@@ -331,6 +331,10 @@ export class User extends Entity<UserProps> {
 
   get canSeeRankingResult() {
     return this.props.canSeeRankingResult
+  }
+
+  get didIncrementStreakOnSaturday() {
+    return this.props.didIncrementStreakOnSaturday
   }
 
   get lastWeekRankingPosition() {

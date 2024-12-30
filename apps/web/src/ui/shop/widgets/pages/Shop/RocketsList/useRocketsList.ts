@@ -46,7 +46,7 @@ export function useRocketsList(initialRocketsPagination: PaginationResponse<Rock
 
   function handleSearchChange(value: string) {
     setSearch(value)
-    setPage(0)
+    setPage(1)
   }
 
   function handlePriceOrderChange(value: ListingOrder) {

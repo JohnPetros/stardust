@@ -89,8 +89,8 @@ export const SupabaseUserMapper = () => {
         weekly_xp: user.weeklyXp.value,
         streak: user.streak.value,
         can_see_ranking: user.canSeeRankingResult.value,
-        created_at: user.createdAt.toString(),
         week_status: user.weekStatus.statuses,
+        did_complete_saturday: user.didIncrementStreakOnSaturday.value,
       }
 
       return supabaseUser as unknown as SupabaseUser

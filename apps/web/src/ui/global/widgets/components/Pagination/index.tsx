@@ -25,7 +25,7 @@ export function Pagination(paginationProps: PaginationProps) {
           }
           isVisible={pagination.currentPage.value > 1}
         >
-          <Icon name='arrow-left' className='text-gray-300' />
+          <Icon name='simple-arrow-left' className='text-gray-300' />
         </PageButton>
         {pagination.firstPage !== 1 && (
           <PageButton
@@ -72,7 +72,7 @@ export function Pagination(paginationProps: PaginationProps) {
               handlePageButtonCLick(pagination.currentPage.increment(1).value)
             }
           >
-            <Icon name='arrow-right' className='text-gray-300' />
+            <Icon name='simple-arrow-right' className='text-gray-300' />
           </PageButton>
         )}
       </div>
