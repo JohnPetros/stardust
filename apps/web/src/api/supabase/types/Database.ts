@@ -84,23 +84,31 @@ export type Database = {
         }
         Relationships: []
       }
-      challenge_forum_topics: {
+      challenge_topics: {
         Row: {
           challenge_id: string
-          forum_topic_id: string
           id: number
+          topic_id: string
         }
         Insert: {
           challenge_id: string
-          forum_topic_id: string
           id?: number
+          topic_id: string
         }
         Update: {
           challenge_id?: string
-          forum_topic_id?: string
           id?: number
+          topic_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "challenge_topics_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "topics"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       challenges: {
         Row: {
@@ -1185,6 +1193,7 @@ export type Database = {
     Views: {
       challenges_view: {
         Row: {
+          categories: Json[] | null
           code: string | null
           created_at: string | null
           description: string | null
