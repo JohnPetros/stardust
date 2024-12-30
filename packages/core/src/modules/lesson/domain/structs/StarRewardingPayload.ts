@@ -1,6 +1,7 @@
+import { RewardingPayload } from '#global/abstracts'
+import type { RewardingPayloadDto } from '#global/dtos'
 import { Id, Integer, List } from '#global/structs'
-import { RewardingPayload } from '#lesson/abstracts'
-import type { RewardingPayloadDto, StarRewardingPayloadDto } from '#lesson/dtos'
+import type { StarRewardingPayloadDto } from '#lesson/dtos'
 import type { RewardingPayloadOrigin } from '#lesson/types'
 
 type RewardingPayloadProps = {
