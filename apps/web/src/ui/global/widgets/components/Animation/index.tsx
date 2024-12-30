@@ -1,3 +1,7 @@
 'use client'
 
-export { LottieAnimation as Animation } from './LottieAnimation'
+import dynamic from 'next/dynamic'
+
+export const Animation = dynamic(() => import('./LottieAnimation'), {
+  ssr: false,
+})
