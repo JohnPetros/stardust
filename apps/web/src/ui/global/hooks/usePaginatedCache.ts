@@ -1,17 +1,20 @@
 'use client'
 
 import useSWRInfinite from 'swr/infinite'
+import { useMemo, useState } from 'react'
 
 import { useToastContext } from '../contexts/ToastContext'
+import type { PaginationResponse } from '@stardust/core/responses'
 
 type PaginatedCacheConfig<CacheItem> = {
   key: string
-  fetcher: (page: number) => Promise<CacheItem[]>
+  fetcher: (page: number) => Promise<PaginationResponse<CacheItem>>
   itemsPerPage: number
   dependencies?: unknown[]
   isEnabled?: boolean
-  initialData?: CacheItem[]
+  initialData?: PaginationResponse<CacheItem>
   refreshInterval?: number
+  isInfinity?: boolean
   shouldRefetchOnFocus?: boolean
 }
 
@@ -20,6 +23,8 @@ type PaginatedCache<CacheItem> = {
   isLoading: boolean
   isRefetching: boolean
   isRecheadedEnd: boolean
+  totalItemsCount: number
+  page: number
   refetch: () => void
   nextPage: () => void
   setPage: (page: number) => void
@@ -31,10 +36,12 @@ export function usePaginatedCache<CacheItem>({
   itemsPerPage,
   isEnabled = true,
   initialData,
+  isInfinity = false,
   shouldRefetchOnFocus = true,
   refreshInterval = 0,
   dependencies,
 }: PaginatedCacheConfig<CacheItem>): PaginatedCache<CacheItem> {
+  const [totalItemsCount, setTotalItemsCount] = useState(0)
   const toast = useToastContext()
   const dependenciesQuery = dependencies
     ? dependencies.map((dependency, index) => `dep_${index + 1}=${dependency}`).join(',')
@@ -44,12 +51,15 @@ export function usePaginatedCache<CacheItem>({
     if (isEnabled && previousPageData && !previousPageData.length) {
       return null
     }
-    return `${key}?${dependenciesQuery}&itemsPerPage=${itemsPerPage}&page=${pageIndex}`
+    return `${key}?${dependenciesQuery}&itemsPerPage=${itemsPerPage}&page=${pageIndex + 1}`
   }
 
   async function infiniteFetcher(key: string) {
     const page = Number(key.split('&page=').at(-1))
-    return await fetcher(page)
+    console.log('infiniteFetcher', { page })
+    const response = await fetcher(page)
+    setTotalItemsCount(response.count)
+    return response.items
   }
 
   const { data, isLoading, isValidating, size, setSize, mutate } = useSWRInfinite(
@@ -58,7 +68,7 @@ export function usePaginatedCache<CacheItem>({
     {
       refreshInterval,
       revalidateOnFocus: shouldRefetchOnFocus,
-      fallbackData: initialData ? [initialData] : [],
+      fallbackData: initialData ? [initialData.items] : [],
       onError: (error) => {
         toast.show(error)
       },
@@ -73,11 +83,18 @@ export function usePaginatedCache<CacheItem>({
     setSize(size + 1)
   }
 
+  const items = useMemo(() => {
+    if (data) return isInfinity ? data.flat() : data.at(-1) ?? []
+    return []
+  }, [data, isInfinity])
+
   return {
-    data: data?.length ? (data.flat() as CacheItem[]) : [],
+    data: items,
     isRecheadedEnd: data ? Number(data[size - 1]?.length) < itemsPerPage : false,
     isLoading,
     isRefetching: isValidating,
+    totalItemsCount,
+    page: size,
     refetch: () => mutate(),
     nextPage,
     setPage,

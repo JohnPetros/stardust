@@ -7,23 +7,19 @@ import type { AvatarDto } from '@stardust/core/shop/dtos'
 import type { PaginationResponse } from '@stardust/core/responses'
 
 import { CACHE } from '@/constants'
-import { useApi, useCache } from '@/ui/global/hooks'
-import { useToastContext } from '@/ui/global/contexts/ToastContext'
+import { useApi } from '@/ui/global/hooks/useApi'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 
 const AVATARS_PER_PAGE = 8
 
-export function useAvatarsList(initialItems: PaginationResponse<AvatarDto>) {
-  const [page, setPage] = useState(1)
+export function useAvatarsList(initialAvatarsPagination: PaginationResponse<AvatarDto>) {
   const [search, setSearch] = useState('s')
   const [priceOrder, setPriceOrder] = useState<ListingOrder>('ascending')
   const api = useApi()
-  const toast = useToastContext()
   const { user } = useAuthContext()
 
-  async function fetchAvatars() {
-    if (!user) return
-
+  async function fetchAvatars(page: number) {
     const response = await api.fetchShopAvatarsList({
       search,
       page,
@@ -31,17 +27,18 @@ export function useAvatarsList(initialItems: PaginationResponse<AvatarDto>) {
       order: priceOrder,
     })
 
-    if (response.isSuccess) return response.body
+    if (response.isFailure) response.throwError()
 
-    toast.show(response.errorMessage)
+    return response.body
   }
 
-  const { data } = useCache({
-    key: CACHE.keys.shopAvatars,
+  const { data, page, totalItemsCount, setPage } = usePaginatedCache({
+    key: CACHE.keys.shopRockets,
     fetcher: fetchAvatars,
-    dependencies: [search, page, priceOrder],
-    isEnabled: !!user,
-    initialData: initialItems,
+    dependencies: [search, priceOrder],
+    itemsPerPage: AVATARS_PER_PAGE,
+    isEnabled: Boolean(user),
+    initialData: initialAvatarsPagination,
   })
 
   function handleSearchChange(value: string) {
@@ -58,8 +55,8 @@ export function useAvatarsList(initialItems: PaginationResponse<AvatarDto>) {
   }
 
   return {
-    AvatarsDto: data ? data.items : [],
-    totalAvatarsCount: data ? data.count : 0,
+    AvatarsDto: data,
+    totalAvatarsCount: totalItemsCount,
     avatarsPerPage: AVATARS_PER_PAGE,
     page,
     handlePageChange,
