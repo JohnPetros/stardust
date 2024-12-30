@@ -41,10 +41,6 @@ export class AchievementsList {
   }
 
   filterAchievementsByName(name: string) {
-    console.log(
-      'FILTER: ',
-      this.achievements.filter((achievement) => achievement.name.isLike(name))[0]?.name,
-    )
     return new AchievementsList(
       this.achievements.filter((achievement) => achievement.name.isLike(name)),
       this.user,

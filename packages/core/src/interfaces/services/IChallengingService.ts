@@ -1,5 +1,6 @@
 import type { ChallengeCategoryDto, ChallengeDto, DocDto } from '#challenging/dtos'
 import type { ChallengesListParams, ChallengeVote } from '#challenging/types'
+import type { PaginationResponse } from '#responses'
 import type { ApiResponse } from '../../responses/ApiResponse'
 
 export type GetFilteredChallengesParams = {
@@ -18,7 +19,9 @@ export interface IChallengingService {
     ApiResponse<{ id: string; difficulty: string }[]>
   >
   fetchDocs(): Promise<ApiResponse<DocDto[]>>
-  fetchChallengesList(params: ChallengesListParams): Promise<ApiResponse<ChallengeDto[]>>
+  fetchChallengesList(
+    params: ChallengesListParams,
+  ): Promise<ApiResponse<PaginationResponse<ChallengeDto>>>
   fetchCategories(): Promise<ApiResponse<ChallengeCategoryDto[]>>
   fetchChallengeVote(
     challengeId: string,

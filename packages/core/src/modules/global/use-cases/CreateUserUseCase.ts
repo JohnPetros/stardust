@@ -46,7 +46,6 @@ export class CreateUserUseCase implements IUseCase<Request> {
   }
 
   async do({ userId, userEmail, userName }: Request) {
-    console.log(userId, userEmail, userName)
     const [
       acquirableRocketsByDefault,
       acquirableAvatarsByDefault,

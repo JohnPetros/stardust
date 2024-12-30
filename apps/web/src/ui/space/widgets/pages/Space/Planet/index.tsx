@@ -22,9 +22,6 @@ function PlanetComponent({ name, image, icon, stars }: PlanetProps) {
   const { lastUnlockedStarId } = useSpaceContext()
   const { user } = useAuthContext()
   const api = useApi()
-
-  console.log({ lastUnlockedStarId })
-
   const planetImage = api.fetchImage('planets', image)
   const planetIconImage = api.fetchImage('planets', icon)
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
-import type { AudioFile } from '../widgets/components/AlertDialog/types'
+import type { AudioFile } from '../contexts/AudioContext/types'
 
 export function useAudio(audioFile: AudioFile | null) {
   const audio = useMemo(() => {
@@ -14,7 +14,6 @@ export function useAudio(audioFile: AudioFile | null) {
   }, [audioFile])
 
   function play() {
-    console.log(audio)
     audio?.play()
   }
 

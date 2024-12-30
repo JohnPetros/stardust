@@ -19,7 +19,7 @@ export const NextApiClient = ({
   headers,
 }: CacheConfig = {}): IApiClient => {
   const requestInit: RequestInit = {
-    cache: isCacheEnable ? 'force-cache' : 'no-store',
+    cache: !isCacheEnable ? 'no-store' : undefined,
     headers: headers ? headers() : undefined,
     next: isCacheEnable
       ? {
@@ -32,7 +32,6 @@ export const NextApiClient = ({
 
   return {
     async get<Body>(route: string): Promise<ApiResponse<Body>> {
-      console.log(`${ENV.url}${addQueryParams(route, queryParams)}`)
       const response = await fetch(
         `${ENV.url}${addQueryParams(route, queryParams)}`,
         requestInit,

@@ -1,11 +1,12 @@
 import type { Supabase } from '../types/Supabase'
 import { SupabasePostgrestError } from '../errors'
 import { SupabaseChallengeMapper, SupabaseDocMapper } from '../mappers'
-import { ApiResponse } from '@stardust/core/responses'
+import { ApiResponse, PaginationResponse } from '@stardust/core/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/constants'
 import type { ChallengesListParams } from '@stardust/core/challenging/types'
 import type { ChallengeCategoryDto } from '@stardust/core/challenging/dtos'
 import type { IChallengingService } from '@stardust/core/interfaces'
+import { calculateSupabaseRange } from '../utils'
 
 export const SupabaseChallengingService = (supabase: Supabase): IChallengingService => {
   const supabaseChallengeMapper = SupabaseChallengeMapper()
@@ -80,13 +81,16 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
     },
 
     async fetchChallengesList({
+      page,
+      itemsPerPage,
       categoriesIds,
       difficultyLevel,
       title,
     }: ChallengesListParams) {
       let query = supabase
         .from('challenges_view')
-        .select('*, challenges_categories!inner(category_id)')
+        .select('*, challenges_categories!inner(category_id)', { count: 'exact' })
+        .is('star_id', null)
 
       if (title && title.length > 1) {
         query = query.ilike('title', `%${title}%`)
@@ -100,15 +104,21 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         query = query.in('challenges_categories.category_id', categoriesIds)
       }
 
-      const { data, error } = await query
+      const range = calculateSupabaseRange(page, itemsPerPage)
+
+      const { data, count, status, error } = await query.range(range.from, range.to)
 
       if (error) {
-        return SupabasePostgrestError(error, 'Error inesperado ao filtrar desafios')
+        return SupabasePostgrestError(
+          error,
+          'Error inesperado ao filtrar desafios',
+          status,
+        )
       }
 
       const challenges = data.map(supabaseChallengeMapper.toDto)
 
-      return new ApiResponse({ body: challenges })
+      return new ApiResponse({ body: new PaginationResponse(challenges, Number(count)) })
     },
 
     async fetchCategories() {

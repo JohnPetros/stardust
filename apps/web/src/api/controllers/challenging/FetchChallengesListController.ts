@@ -4,9 +4,12 @@ import type {
   ChallengeCompletionStatus,
   ChallengeDifficultyLevel,
 } from '@stardust/core/challenging/types'
+import { PaginationResponse } from '@stardust/core/responses'
 
 type Schema = {
   queryParams: {
+    page: number
+    itemsPerPage: number
     title: string
     difficultyLevel: ChallengeDifficultyLevel | 'all'
     completionStatus: ChallengeCompletionStatus | 'all'
@@ -20,21 +23,29 @@ export const FetchChallengesListController = (
   return {
     async handle(http: IHttp<Schema>) {
       const userDto = await http.getUser()
-      const { title, categoriesIds, completionStatus, difficultyLevel } =
-        http.getQueryParams()
+      const {
+        page,
+        itemsPerPage,
+        title,
+        categoriesIds,
+        completionStatus,
+        difficultyLevel,
+      } = http.getQueryParams()
 
       const useCase = new ListChallengesUseCase(challengingService)
       const challengesDto = await useCase.do({
         userDto,
         completionStatus,
         listParams: {
+          page,
+          itemsPerPage,
           title,
           difficultyLevel,
           categoriesIds: categoriesIds ? categoriesIds.split(',') : [],
         },
       })
 
-      return http.send(challengesDto)
+      return http.send(new PaginationResponse(challengesDto))
     },
   }
 }

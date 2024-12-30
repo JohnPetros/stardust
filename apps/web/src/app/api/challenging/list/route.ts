@@ -6,16 +6,21 @@ import { runApiRoute } from '@/api/next/utils'
 import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
 import { SupabaseChallengingService } from '@/api/supabase/services'
 import { FetchChallengesListController } from '@/api/controllers/challenging'
+import {
+  itemsPerPageSchema,
+  pageSchema,
+  challengeDifficultyLevelSchema,
+  challengeCompletitionStatusSchema,
+} from '@stardust/validation/schemas'
 
 const schema = z.object({
   queryParams: z.object({
+    page: pageSchema,
+    itemsPerPage: itemsPerPageSchema,
+    difficultyLevel: challengeDifficultyLevelSchema.optional().default('all'),
+    completionStatus: challengeCompletitionStatusSchema.optional().default('all'),
     title: z.string().optional().default(''),
-    difficultyLevel: z.enum(['all', 'easy', 'medium', 'hard']).optional().default('all'),
     categoriesIds: z.string().optional().default(''),
-    completionStatus: z
-      .enum(['completed', 'not-completed', 'all'])
-      .optional()
-      .default('all'),
   }),
 })
 

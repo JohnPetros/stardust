@@ -162,8 +162,6 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
         .order('position', { ascending: true })
         .limit(3)
 
-      console.log(data)
-
       if (error) {
         return SupabasePostgrestError(
           error,
@@ -215,7 +213,6 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
       )
 
       if (error) {
-        console.log({ tierId })
         return SupabasePostgrestError(
           error,
           'Erro inesperado ao salvar usuários vencedores desse ranking',

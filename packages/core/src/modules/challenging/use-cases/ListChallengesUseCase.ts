@@ -4,13 +4,14 @@ import type { UserDto } from '#global/dtos'
 import type { IChallengingService, IUseCase } from '#interfaces'
 import { User } from '#global/entities'
 import { Challenge, ChallengeCategory } from '#challenging/entities'
+import { PaginationResponse } from '#responses'
 
 type Request = {
   userDto: UserDto
   listParams: ChallengesListParams
   completionStatus: ChallengeCompletionStatus | 'all'
 }
-type Response = Promise<ChallengeDto[]>
+type Response = Promise<PaginationResponse<ChallengeDto>>
 
 export class ListChallengesUseCase implements IUseCase<Request, Response> {
   constructor(private readonly challengingService: IChallengingService) {}
@@ -18,10 +19,11 @@ export class ListChallengesUseCase implements IUseCase<Request, Response> {
   async do({ userDto, completionStatus, listParams }: Request): Response {
     const user = User.create(userDto)
 
-    let [challenges, categories] = await Promise.all([
+    const [challengesPagination, categories] = await Promise.all([
       this.fetchChallengesList(listParams),
       this.fetchCategories(),
     ])
+    let challenges = challengesPagination.items.map(Challenge.create)
 
     challenges = this.addCategoriesToEachChallenge(challenges, categories)
 
@@ -33,7 +35,10 @@ export class ListChallengesUseCase implements IUseCase<Request, Response> {
 
     challenges = this.orderChallengesByDifficultyLevel(challenges)
 
-    return challenges.map((challenge) => challenge.dto)
+    return new PaginationResponse(
+      challenges.map((challenge) => challenge.dto),
+      challengesPagination.count,
+    )
   }
 
   private orderChallengesByDifficultyLevel(challenges: Challenge[]) {
@@ -83,10 +88,9 @@ export class ListChallengesUseCase implements IUseCase<Request, Response> {
   }
 
   private async fetchChallengesList(params: ChallengesListParams) {
-    console.log('use case', params)
     const response = await this.challengingService.fetchChallengesList(params)
     if (response.isFailure) response.throwError()
-    return response.body.map(Challenge.create)
+    return response.body
   }
 
   private async fetchCategories() {

@@ -56,7 +56,6 @@ export function usePaginatedCache<CacheItem>({
 
   async function infiniteFetcher(key: string) {
     const page = Number(key.split('&page=').at(-1))
-    console.log('infiniteFetcher', { page })
     const response = await fetcher(page)
     setTotalItemsCount(response.count)
     return response.items

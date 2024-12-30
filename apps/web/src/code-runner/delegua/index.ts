@@ -76,7 +76,6 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
         }
 
         codigo = codigo.replace(DELEGUA_REGEX.conteudoDeFuncaoLeia, entrada)
-        console.log({ codigo })
       }
 
       return codigo

@@ -1,22 +1,21 @@
 'use client'
 
+import { Challenge } from '@stardust/core/challenging/entities'
+import type { ChallengeDto } from '@stardust/core/challenging/dtos'
+import type { PaginationResponse } from '@stardust/core/responses'
+
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useQueryParams } from '@/ui/global/hooks/useQueryParams'
-import { useCache } from '@/ui/global/hooks/useCache'
 import { CACHE, ROUTES } from '@/constants'
 import { QUERY_PARAMS } from './query-params'
 import {
   ChallengeCompletion,
   ChallengeDifficulty,
 } from '@stardust/core/challenging/structs'
-import { Challenge, ChallengeCategory } from '@stardust/core/challenging/entities'
 import { NextApiClient } from '@/api/next/NextApiClient'
-import type { ChallengeCategoryDto, ChallengeDto } from '@stardust/core/challenging/dtos'
+import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 
-type ApiResponse = {
-  challenges: ChallengeDto[]
-  categories: ChallengeCategoryDto[]
-}
+const CHALLENGES_PER_PAGE = 10
 
 export function useChallengesList() {
   const { user } = useAuthContext()
@@ -27,31 +26,35 @@ export function useChallengesList() {
   const title = querySearchParams.get(QUERY_PARAMS.title) ?? ''
   const categoriesIds = querySearchParams.get(QUERY_PARAMS.categoriesIds) ?? ''
 
-  async function fetchChallengesList() {
-    if (!user) return
-
+  async function fetchChallengesList(page: number) {
     const completion = ChallengeCompletion.create(completionStatus)
     const difficulty = ChallengeDifficulty.create(difficultyLevel)
 
     const apiClient = NextApiClient()
+    apiClient.setQueryParam('page', page.toString())
+    apiClient.setQueryParam('itemsPerPage', CHALLENGES_PER_PAGE.toString())
     apiClient.setQueryParam('completionStatus', completion.status)
     apiClient.setQueryParam('difficultyLevel', difficulty.level)
-    apiClient.setQueryParam('categoriesIds', categoriesIds)
+    if (title) apiClient.setQueryParam('title', title)
+    if (categoriesIds) apiClient.setQueryParam('categoriesIds', categoriesIds)
 
-    const response = await apiClient.get<ApiResponse>(ROUTES.api.challenging.list)
+    const response = await apiClient.get<PaginationResponse<ChallengeDto>>(
+      ROUTES.api.challenging.list,
+    )
+    if (response.isFailure) response.throwError()
     return response.body
   }
 
-  const { data, error, isLoading } = useCache({
+  const { data, isLoading } = usePaginatedCache({
     key: CACHE.keys.challengesList,
     fetcher: fetchChallengesList,
+    itemsPerPage: CHALLENGES_PER_PAGE,
+    isInfinity: true,
     dependencies: [completionStatus, difficultyLevel, categoriesIds, title, user?.id],
   })
 
   return {
-    challenges: data ? data.challenges.map(Challenge.create) : [],
-    categories: data ? data.categories.map(ChallengeCategory.create) : [],
+    challenges: data.map(Challenge.create),
     isLoading,
-    error,
   }
 }

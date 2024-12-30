@@ -51,8 +51,6 @@ export function useResetPassword() {
   useEffect(() => {
     async function fetchCookie() {
       const shouldResetPassword = await getCookie(COOKIES.keys.shouldReturnPassword)
-      console.log({ shouldResetPassword })
-
       if (shouldResetPassword) {
         setShouldResetPassword(true)
       }
