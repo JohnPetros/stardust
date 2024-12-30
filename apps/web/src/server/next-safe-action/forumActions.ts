@@ -24,6 +24,3 @@ export const upvoteComment = authActionClient
     const action = UpvoteCommentAction(challengingService)
     return action.handle(actionServer)
   })
-
-const  = await upvoteComment({ commentId: '' })
-data?.data?.upvotesCount

@@ -1,12 +1,12 @@
 'use server'
 
 import { type NextRequest, NextResponse } from 'next/server'
-import type { ZodObject, ZodSchema } from 'zod'
+import type { ZodSchema } from 'zod'
 
 import type { HttpSchema, IHttp } from '@stardust/core/interfaces'
 import { ApiResponse } from '@stardust/core/responses'
 import { AppError } from '@stardust/core/global/errors'
-import { HTTP_STATUS_CODE } from '@stardust/core/constants'
+import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/constants'
 
 import type { NextParams } from '@/server/next/types'
 import { SupabaseRouteHandlerClient } from '../supabase/clients'
@@ -79,6 +79,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       return new ApiResponse({
         body: nextResponse,
         statusCode: HTTP_STATUS_CODE.redirect,
+        headers: { [HTTP_HEADERS.xRedirect]: 'true' },
       })
     },
 
@@ -120,10 +121,10 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     },
 
     pass() {
-      return new ApiResponse({ headers: { 'X-Pass': 'true' } })
+      return new ApiResponse({ headers: { [HTTP_HEADERS.xPass]: 'true' } })
     },
 
-    send(data: unknown, statusCode = 200) {
+    send(data: unknown, statusCode = HTTP_STATUS_CODE.ok) {
       if (cookies.length) {
         const nextResponse = NextResponse.redirect(
           new URL(request ? request.nextUrl.pathname : '', request ? request.url : ''),

@@ -14,8 +14,8 @@ type CacheConfig = {
 
 export const NextApiClient = ({
   isCacheEnable = true,
-  refetchInterval = 3600 * 24, // 1 day
-  cacheKeys,
+  refetchInterval = 60 * 60 * 24, // 1 day
+  cacheKeys = [],
   headers,
 }: CacheConfig = {}): IApiClient => {
   const requestInit: RequestInit = {
@@ -32,6 +32,7 @@ export const NextApiClient = ({
 
   return {
     async get<Body>(route: string): Promise<ApiResponse<Body>> {
+      console.log(`${ENV.url}${addQueryParams(route, queryParams)}`)
       const response = await fetch(
         `${ENV.url}${addQueryParams(route, queryParams)}`,
         requestInit,
