@@ -90,7 +90,7 @@ export function usePaginatedCache<CacheItem>({
   return {
     data: items,
     isRecheadedEnd: data ? Number(data[size - 1]?.length) < itemsPerPage : false,
-    isLoading,
+    isLoading: isLoading || isValidating,
     isRefetching: isValidating,
     totalItemsCount,
     page: size,

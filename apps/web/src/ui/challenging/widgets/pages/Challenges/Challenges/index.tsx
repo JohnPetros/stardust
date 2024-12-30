@@ -3,10 +3,11 @@
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { ChallengeCard } from './ChallengeCard'
 import { useChallengesList } from './useChallengesList'
+import { ShowMoreButton } from '@/ui/global/widgets/components/ShowMoreButton'
 
 export function ChallengesList() {
   const { user } = useAuthContext()
-  const { challenges } = useChallengesList()
+  const { challenges, isLoading, isRecheadedEnd, handleShowMore } = useChallengesList()
 
   if (user)
     return (
@@ -26,6 +27,9 @@ export function ChallengesList() {
               isCompleted={user.hasCompletedChallenge(challenge.id).isTrue}
             />
           ))}
+          {!isRecheadedEnd && (
+            <ShowMoreButton isLoading={isLoading} onClick={handleShowMore} />
+          )}
         </div>
       </div>
     )
