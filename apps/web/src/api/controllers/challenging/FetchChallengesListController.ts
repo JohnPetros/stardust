@@ -33,7 +33,7 @@ export const FetchChallengesListController = (
       } = http.getQueryParams()
 
       const useCase = new ListChallengesUseCase(challengingService)
-      const challengesDto = await useCase.do({
+      const data = await useCase.do({
         userDto,
         completionStatus,
         listParams: {
@@ -45,7 +45,7 @@ export const FetchChallengesListController = (
         },
       })
 
-      return http.send(new PaginationResponse(challengesDto))
+      return http.send(data)
     },
   }
 }

@@ -233,10 +233,11 @@ export class Challenge extends Entity<ChallengeProps> {
       downvotesCount: this.downvotesCount.value,
       upvotesCount: this.upvotesCount.value,
       completionsCount: this.completionsCount.value,
+      categories: this.categories.map((category) => category.dto),
       testCases: this.testCases.map((testCase) => testCase.dto),
       description: this.description,
       createdAt: this.createdAt,
-      textBlocks: [],
+      textBlocks: this.textBlocks.map((textBlock) => textBlock.dto),
     }
   }
 }

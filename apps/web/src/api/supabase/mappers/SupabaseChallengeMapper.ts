@@ -1,5 +1,9 @@
 import type { Challenge } from '@stardust/core/challenging/entities'
-import type { ChallengeDto, TestCaseDto } from '@stardust/core/challenging/dtos'
+import type {
+  ChallengeCategoryDto,
+  ChallengeDto,
+  TestCaseDto,
+} from '@stardust/core/challenging/dtos'
 import type { SupabaseChallenge } from '../types'
 import type { TextBlockDto } from '@stardust/core/global/dtos'
 
@@ -33,14 +37,25 @@ export const SupabaseChallengeMapper = () => {
         completionsCount: supabaseChallenge.total_completitions ?? 0,
         description: supabaseChallenge.description ?? '',
         textBlocks: textsBlocks,
-        testCases: (supabaseChallenge.test_cases as TestCaseDto[]).map((testCase) => {
-          return {
-            position: testCase.position ?? '',
-            inputs: testCase.inputs ?? [],
-            expectedOutput: testCase.expectedOutput,
-            isLocked: testCase.isLocked,
-          }
-        }),
+        testCases: (supabaseChallenge.test_cases as TestCaseDto[]).map(
+          (supabaseTestCase) => {
+            return {
+              position: supabaseTestCase.position ?? '',
+              inputs: supabaseTestCase.inputs ?? [],
+              expectedOutput: supabaseTestCase.expectedOutput,
+              isLocked: supabaseTestCase.isLocked,
+            }
+          },
+        ),
+        categories: (supabaseChallenge.categories as ChallengeCategoryDto[]).map(
+          (supabaseCategory) => {
+            return {
+              id: supabaseCategory.id,
+              name: supabaseCategory.name,
+            }
+          },
+        ),
+        starId: supabaseChallenge.star_id,
         createdAt: supabaseChallenge.created_at
           ? new Date(supabaseChallenge.created_at)
           : new Date(),

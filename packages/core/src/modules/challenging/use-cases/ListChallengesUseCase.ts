@@ -19,13 +19,8 @@ export class ListChallengesUseCase implements IUseCase<Request, Response> {
   async do({ userDto, completionStatus, listParams }: Request): Response {
     const user = User.create(userDto)
 
-    const [challengesPagination, categories] = await Promise.all([
-      this.fetchChallengesList(listParams),
-      this.fetchCategories(),
-    ])
+    const challengesPagination = await this.fetchChallengesList(listParams)
     let challenges = challengesPagination.items.map(Challenge.create)
-
-    challenges = this.addCategoriesToEachChallenge(challenges, categories)
 
     challenges = this.filterChallengesByCompletionStatus(
       completionStatus,
@@ -74,28 +69,9 @@ export class ListChallengesUseCase implements IUseCase<Request, Response> {
     }
   }
 
-  private addCategoriesToEachChallenge(
-    challenges: Challenge[],
-    categories: ChallengeCategory[],
-  ) {
-    for (const challenge of challenges) {
-      const challengeCategories = categories.filter(
-        (category) => category.includesChallenge(challenge.id).isTrue,
-      )
-      challenge.categories = challengeCategories
-    }
-    return challenges
-  }
-
   private async fetchChallengesList(params: ChallengesListParams) {
     const response = await this.challengingService.fetchChallengesList(params)
     if (response.isFailure) response.throwError()
     return response.body
-  }
-
-  private async fetchCategories() {
-    const response = await this.challengingService.fetchCategories()
-    if (response.isFailure) response.throwError()
-    return response.body.map(ChallengeCategory.create)
   }
 }
