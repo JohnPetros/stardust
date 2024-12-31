@@ -57,6 +57,7 @@
     "monaco-editor": "^0.50.0",
     "next": "^14.2.4",
     "next-safe-action": "^7.10.2",
+    "nuqs": "^2.2.3",
     "phosphor-icons": "^1.4.2",
     "postcss": "8.4.39",
     "react": "^18.3.1",
