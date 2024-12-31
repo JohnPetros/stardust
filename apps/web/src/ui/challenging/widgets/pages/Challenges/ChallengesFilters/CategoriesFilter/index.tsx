@@ -12,7 +12,7 @@ type CategoriesProps = {
 }
 
 export function CategoriesFilter({ initialCategories }: CategoriesProps) {
-  const { categories, categoriesIds, handleCategoryClick, handleSearchChange } =
+  const { searchRef, categories, categoriesIds, handleCategoryClick, handleSearchChange } =
     useCategoriesFilter(initialCategories)
 
   return (
@@ -23,7 +23,7 @@ export function CategoriesFilter({ initialCategories }: CategoriesProps) {
 
       <Dropdown.Portal>
         <Dropdown.Content className='flex w-64 flex-col items-center gap-2 overflow-hidden rounded-md bg-gray-700 px-3 py-3'>
-          <Search id='categories-search' onSearchChange={handleSearchChange} />
+          <Search ref={searchRef} id='categories-search' onSearchChange={handleSearchChange} />
           <Dropdown.Group className='flex flex-wrap justify-start gap-2 px-2 py-3'>
             {categories.length > 0 ? (
               categories.map((category) => {

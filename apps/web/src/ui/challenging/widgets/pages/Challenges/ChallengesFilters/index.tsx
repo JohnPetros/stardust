@@ -55,7 +55,9 @@ export function ChallengesFilters({ categories }: FiltersProps) {
                     value={item.value}
                     className={item.textStyles}
                   >
-                    {item.icon && <Icon name={item.icon} className={item.iconStyles} />}
+                    {item.icon && (
+                      <Icon name={item.icon} size={16} className={item.iconStyles} />
+                    )}
 
                     <Select.Text>{item.text}</Select.Text>
                   </Select.Item>
@@ -83,7 +85,9 @@ export function ChallengesFilters({ categories }: FiltersProps) {
                     value={item.value}
                     className={item.textStyles}
                   >
-                    {item.icon && <Icon name={item.icon} className={item.iconStyles} />}
+                    {item.icon && (
+                      <Icon name={item.icon} size={16} className={item.iconStyles} />
+                    )}
                     <Select.Text>{item.text}</Select.Text>
                   </Select.Item>
                   {!isLastItem && <Select.Separator />}
@@ -104,10 +108,19 @@ export function ChallengesFilters({ categories }: FiltersProps) {
               return (
                 <Tag.AnimatedContainer key={tag}>
                   <Tag.X onRemove={() => handleTagClick(tag, item.value)} />
-                  {item.icon && <Icon name={item.icon} className={item.iconStyles} />}
+                  {item.icon && (
+                    <Icon name={item.icon} size={14} className={item.iconStyles} />
+                  )}
                   <Tag.Name className={item.textStyles}>{tag}</Tag.Name>
                 </Tag.AnimatedContainer>
               )
+
+            return (
+              <Tag.AnimatedContainer key={tag}>
+                <Tag.X onRemove={() => handleTagClick(tag, 'category')} />
+                <Tag.Name className='text-gray-300'>{tag}</Tag.Name>
+              </Tag.AnimatedContainer>
+            )
           })}
         </AnimatePresence>
       </div>

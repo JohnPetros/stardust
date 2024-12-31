@@ -5,6 +5,16 @@ import { ChallengeCategory } from '#challenging/entities'
 
 export class ChallengeFactory {
   static produce(dto: ChallengeDto) {
+    const includedCategoriesIds: string[] = []
+    const categories: ChallengeCategory[] = []
+    for (const category of dto.categories) {
+      const challengeCategory = ChallengeCategory.create(category)
+      if (!includedCategoriesIds.includes(challengeCategory.id)) {
+        categories.push(challengeCategory)
+        includedCategoriesIds.push(challengeCategory.id)
+      }
+    }
+
     return {
       title: Name.create(dto.title),
       slug: Slug.create(dto.slug),
@@ -29,7 +39,7 @@ export class ChallengeFactory {
         if (dto.isRunnable) textBlock = textBlock.setIsRunnable(dto.isRunnable)
         return textBlock
       }),
-      categories: dto.categories.map(ChallengeCategory.create),
+      categories,
       incorrectAnswersCount: Integer.create('Contagem de respostas incorretas', 0),
       isCompleted: Logical.create('A resposta do desafio está completada?', false),
       results: List.create([]),

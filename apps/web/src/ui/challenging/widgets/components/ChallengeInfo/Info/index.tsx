@@ -20,8 +20,9 @@ export function Info({ label, icon, iconStyle, tooltipText }: InfoProps) {
         <div className='flex items-center gap-1'>
           <Icon
             name={icon}
+            size={14}
             weight='bold'
-            className={twMerge('text-sm text-gray-400', iconStyle)}
+            className={twMerge('text-gray-400', iconStyle)}
           />
           {label}
         </div>

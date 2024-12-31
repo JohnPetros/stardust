@@ -1,18 +1,15 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { QUERY_PARAMS } from '../../Challenges/query-params'
 import type { ChallengeCategory } from '@stardust/core/challenging/entities'
-import { useQueryParams } from '@/ui/global/hooks/useQueryParams'
+import { useQueryArrayParam } from '@/ui/global/hooks/useQueryArrayParam'
 
 export function useCategoriesFilter(initialCategories: ChallengeCategory[]) {
-  const [categories, setCategories] = useState<ChallengeCategory[]>([])
-  const [search, setSearch] = useState('')
-
-  const queryParams = useQueryParams()
-  const categoriesIds =
-    queryParams.get(QUERY_PARAMS.categoriesIds)?.split(',').filter(Boolean) ?? []
+  const [categories, setCategories] = useState<ChallengeCategory[]>(initialCategories)
+  const [categoriesIds, setCategoriesIds] = useQueryArrayParam(QUERY_PARAMS.categoriesIds)
+  const searchRef = useRef<HTMLInputElement>(null)
 
   function handleCategoryClick(categoryId: string, isActive: boolean) {
     let currentCategoriesIds = categoriesIds
@@ -23,28 +20,19 @@ export function useCategoriesFilter(initialCategories: ChallengeCategory[]) {
       currentCategoriesIds = [...currentCategoriesIds, categoryId]
     }
 
-    queryParams.set(QUERY_PARAMS.categoriesIds, currentCategoriesIds.join(','))
+    setCategoriesIds(currentCategoriesIds)
   }
 
   function handleSearchChange(search: string) {
-    setSearch(search)
+    const filteredCategories = !search
+      ? initialCategories
+      : initialCategories.filter((category) => category.name.isLike(search))
+    setCategories(filteredCategories)
+    searchRef.current?.focus()
   }
 
-  useEffect(() => {
-    setCategories(initialCategories)
-  }, [initialCategories])
-
-  useEffect(() => {
-    function filterCategories() {
-      if (!search) return initialCategories
-      return initialCategories.filter((category) => category.name.isLike(search))
-    }
-
-    const filteredCategories = filterCategories()
-    setCategories(filteredCategories)
-  }, [search, initialCategories])
-
   return {
+    searchRef,
     categories,
     categoriesIds: categoriesIds,
     handleCategoryClick,

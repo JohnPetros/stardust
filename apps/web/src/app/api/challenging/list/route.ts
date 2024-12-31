@@ -10,7 +10,7 @@ import {
   itemsPerPageSchema,
   pageSchema,
   challengeDifficultyLevelSchema,
-  challengeCompletitionStatusSchema,
+  challengeCompletionStatusSchema,
 } from '@stardust/validation/schemas'
 
 const schema = z.object({
@@ -18,7 +18,7 @@ const schema = z.object({
     page: pageSchema,
     itemsPerPage: itemsPerPageSchema,
     difficultyLevel: challengeDifficultyLevelSchema.optional().default('all'),
-    completionStatus: challengeCompletitionStatusSchema.optional().default('all'),
+    completionStatus: challengeCompletionStatusSchema.optional().default('all'),
     title: z.string().optional().default(''),
     categoriesIds: z.string().optional().default(''),
   }),

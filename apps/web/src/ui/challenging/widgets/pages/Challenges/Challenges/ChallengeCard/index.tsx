@@ -57,7 +57,7 @@ export function ChallengeCard({
             return (
               <li
                 key={category.id}
-                className='rounded-md bg-gray-400 p-1 text-xs font-semibold text-gray-900'
+                className='rounded-md bg-gray-400 px-2 py-1 text-xs font-semibold text-gray-900'
               >
                 {category.name.value}
               </li>

@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes } from 'react'
+import { type ForwardedRef, forwardRef, type InputHTMLAttributes } from 'react'
 import { MagnifyingGlass } from '@phosphor-icons/react'
 import { twMerge } from 'tailwind-merge'
 
@@ -9,12 +9,15 @@ type SearchProps = {
   onSearchChange: (...args: any[]) => void
 }
 
-export function Search({
-  id,
-  className,
-  onSearchChange,
-  ...rest
-}: SearchProps & InputHTMLAttributes<HTMLInputElement>) {
+const SearchComponent = (
+  {
+    id,
+    className,
+    onSearchChange,
+    ...rest
+  }: SearchProps & InputHTMLAttributes<HTMLInputElement>,
+  ref: ForwardedRef<HTMLInputElement>,
+) => {
   const { value, handleValueChange } = useSearch(onSearchChange)
 
   return (
@@ -27,6 +30,7 @@ export function Search({
     >
       <MagnifyingGlass className='text-gray-400' weight='bold' />
       <input
+        ref={ref}
         id={id}
         role='textbox'
         type='search'
@@ -38,3 +42,5 @@ export function Search({
     </label>
   )
 }
+
+export const Search = forwardRef(SearchComponent)

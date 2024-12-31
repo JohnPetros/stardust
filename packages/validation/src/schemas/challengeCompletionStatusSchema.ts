@@ -1,6 +1,6 @@
 import z from 'zod'
 
-export const challengeCompletitionStatusSchema = z.enum([
+export const challengeCompletionStatusSchema = z.enum([
   'completed',
   'not-completed',
   'all',

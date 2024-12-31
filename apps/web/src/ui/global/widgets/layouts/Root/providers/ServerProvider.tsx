@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 import { SupabaseServerClient } from '@/api/supabase/clients/SupabaseServerClient'
-
 import { SupabaseProvider } from '@/ui/global/contexts/SupabaseContext'
 import { ToastProvider } from '@/ui/global/contexts/ToastContext'
 import { AuthProvider } from '@/ui/auth/contexts/AuthContext'
@@ -21,9 +21,11 @@ export async function ServerProvider({ children }: ServerProps) {
 
   return (
     <SupabaseProvider>
-      <ToastProvider>
-        <AuthProvider serverSession={serverSession}>{children}</AuthProvider>
-      </ToastProvider>
+      <NuqsAdapter>
+        <ToastProvider>
+          <AuthProvider serverSession={serverSession}>{children}</AuthProvider>
+        </ToastProvider>
+      </NuqsAdapter>
     </SupabaseProvider>
   )
 }
