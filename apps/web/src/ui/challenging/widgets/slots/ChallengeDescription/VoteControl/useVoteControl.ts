@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import type { ChallengeVote } from '@stardust/core/challenging/types'
-import { Integer } from '@stardust/core/global/structs'
+import { Integer, Queue } from '@stardust/core/global/structs'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
@@ -17,14 +17,15 @@ type State = {
 export function useVoteControl() {
   const { getChallengeSlice } = useChallengeStore()
   const { challenge, setChallenge } = getChallengeSlice()
-  const { user } = useAuthContext()
   const [initialState, setInitialState] = useState<State>({
     userChallengeVote: challenge?.userVote ?? null,
     upvotesCount: challenge?.upvotesCount.value ?? 0,
     downvotesCount: challenge?.downvotesCount.value ?? 0,
   })
-  const { voteChallenge } = useVoteChallengeAction(() => {
-    updateChallenge(initialState)
+  const { voteChallenge } = useVoteChallengeAction({
+    onError: () => {
+      updateChallenge(initialState)
+    },
   })
 
   function updateChallenge(state: State) {
@@ -43,18 +44,21 @@ export function useVoteControl() {
     setInitialState(state)
   }
 
-  async function handleVoteButton(userVote: ChallengeVote) {
-    if (!user || !challenge) return
-    challenge.vote(userVote)
-    console.log('upvotesCount', challenge.upvotesCount)
-    setChallenge(challenge)
-
+  async function executeVoteChallengeAction(userVote: ChallengeVote) {
+    if (!challenge) return
     const { upvotesCount, downvotesCount, userChallengeVote } = await voteChallenge(
       challenge.id,
       userVote,
     )
 
     updateChallenge({ upvotesCount, downvotesCount, userChallengeVote })
+  }
+
+  async function handleVoteButton(userVote: ChallengeVote) {
+    if (!challenge) return
+    challenge.vote(userVote)
+    setChallenge(challenge)
+    await executeVoteChallengeAction(userVote)
   }
 
   return {

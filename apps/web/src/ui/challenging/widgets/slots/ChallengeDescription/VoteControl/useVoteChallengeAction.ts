@@ -7,9 +7,13 @@ import { AppError } from '@stardust/core/global/errors'
 import { challengingActions } from '@/server/next-safe-action'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
-export function useVoteChallengeAction(onError: () => void) {
+type UseVoteChallengeActionProps = {
+  onError: VoidFunction
+}
+
+export function useVoteChallengeAction({ onError }: UseVoteChallengeActionProps) {
   const toast = useToastContext()
-  const { executeAsync } = useAction(challengingActions.voteChallenge, {
+  const { executeAsync, isPending } = useAction(challengingActions.voteChallenge, {
     onError: ({ error }) => {
       toast.show(String(error.serverError))
       onError()
@@ -30,5 +34,6 @@ export function useVoteChallengeAction(onError: () => void) {
 
   return {
     voteChallenge,
+    isExecuting: isPending,
   }
 }
