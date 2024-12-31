@@ -1,6 +1,6 @@
 import type { ErroInterpretador } from '@designliquido/delegua/interfaces/erros/erro-interpretador'
 
-import { CodeRunnerError } from '@/@core/errors/providers'
+import { CodeRunnerError } from '@stardust/core/global/errors'
 import { CodeRunnerResponse } from '@stardust/core/responses'
 
 export function trateErro(erro: ErroInterpretador, linhaDoErro: number) {

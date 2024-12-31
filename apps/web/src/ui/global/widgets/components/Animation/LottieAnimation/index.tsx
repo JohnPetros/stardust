@@ -4,7 +4,12 @@ import { type ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 import { LOTTIES } from './lotties'
 import type { AnimationRef, AnimationProps } from '../types'
 import { useLottieAnimation } from './useLottieAnimation'
-import Lottie from 'lottie-react'
+// import Lottie from 'lottie-react'
+import dynamic from 'next/dynamic'
+
+const Lottie = dynamic(() => import('lottie-react'), {
+  ssr: false,
+})
 
 function LottieAnimationComponent(
   { name, size, hasLoop = true }: AnimationProps,
@@ -43,4 +48,4 @@ function LottieAnimationComponent(
   )
 }
 
-export default forwardRef(LottieAnimationComponent)
+export const LottieAnimation = forwardRef(LottieAnimationComponent)

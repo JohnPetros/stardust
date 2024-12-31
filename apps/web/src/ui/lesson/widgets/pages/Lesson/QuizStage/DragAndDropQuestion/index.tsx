@@ -1,7 +1,6 @@
 'use client'
 
-import type { DragAndDrop, QuestionCodeLine } from '@/@core/domain/structs'
-
+import type { DragAndDrop, QuestionCodeLine } from '@stardust/core/lesson/structs'
 import { QuestionStatement } from '../QuestionStatement'
 import { Dnd } from './Dnd'
 import { DropZoneBank } from './DropZoneBank'

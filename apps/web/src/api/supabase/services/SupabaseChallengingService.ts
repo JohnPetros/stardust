@@ -45,10 +45,10 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       return new ApiResponse({ body: challengeDto })
     },
 
-    async fetchChallengeSlugByStarId(starId: string) {
-      const { data, error } = await supabase
-        .from('challenges')
-        .select('slug')
+    async fetchChallengeByStarId(starId: string) {
+      const { data, error, status } = await supabase
+        .from('challenges_view')
+        .select('*')
         .eq('star_id', starId)
         .single()
 
@@ -56,11 +56,11 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         return SupabasePostgrestError(
           error,
           'Slug de desafio não encontrado para essa estrela',
-          HTTP_STATUS_CODE.notFound,
+          status,
         )
       }
 
-      return new ApiResponse({ body: data.slug })
+      return new ApiResponse({ body: supabaseChallengeMapper.toDto(data) })
     },
 
     async fetchChallengesWithOnlyDifficulty() {

@@ -6,15 +6,15 @@ import type {
   ChallengeCompletionStatus,
   ChallengeDifficultyLevel,
 } from '@stardust/core/challenging/types'
+import type { ChallengeCategory } from '@stardust/core/challenging/entities'
 
 import { Search } from '@/ui/global/widgets/components/Search'
-import type { ChallengeCategory } from '@stardust/core/challenging/entities'
 import { Select } from '@/ui/global/widgets/components/Select'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { CategoriesFilter } from './CategoriesFilter'
-import * as Tag from './Tag'
 import { FILTER_SELECTS_ITEMS } from '../filter-select-items'
 import { useChallengesFilter } from './useChallengesFilters'
+import * as Tag from './Tag'
 
 type FiltersProps = {
   categories: ChallengeCategory[]

@@ -3,7 +3,7 @@
 import type { TopicDto } from '@stardust/core/forum/dtos'
 
 import { CommentsList } from '@/ui/global/widgets/components/CommentsList'
-import { ContentDialog } from '../../layouts/Challenge/ContentDialog'
+import { ContentDialog } from '../../components/ContentDialog'
 import { useChallengeCommentsSlot } from './useChallengeCommentsSlot'
 
 type ChallengeCommentsSlotProps = {

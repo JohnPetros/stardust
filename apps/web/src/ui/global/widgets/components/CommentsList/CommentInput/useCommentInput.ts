@@ -96,6 +96,7 @@ export function useCommentInput(
 
   function handlePostComment(event: FormEvent) {
     event.preventDefault()
+    return
 
     try {
       const commentContent = Text.create(content)

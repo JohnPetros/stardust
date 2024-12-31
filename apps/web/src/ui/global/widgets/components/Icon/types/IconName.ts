@@ -31,6 +31,7 @@ export type IconName =
   | 'runnable-code'
   | 'strong'
   | 'person'
+  | 'layout'
   | 'home'
   | 'mail'
   | 'stop-sign'

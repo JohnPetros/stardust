@@ -2,9 +2,9 @@
 
 import { twMerge } from 'tailwind-merge'
 
+import { Icon } from '@/ui/global/widgets/components/Icon'
+import { AnimatedArrow } from '@/ui/global/widgets/components/AnimatedArrow'
 import { AnimatedFieldsContainer } from './AnimatedFieldsContainer'
-import { AnimatedArrow } from '../../../components/AnimatedArrow'
-import { Icon } from '../../../components/Icon'
 import { Field } from './Field'
 import { useTestCase } from './useTestCase'
 

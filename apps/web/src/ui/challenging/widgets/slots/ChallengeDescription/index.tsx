@@ -23,50 +23,48 @@ export function ChallengeDescriptionSlot() {
     </div>
   ) : (
     <div className='w-full px-6 py-4'>
-      {
-        <div className='mx-auto flex w-fit flex-wrap items-center gap-3'>
-          <DifficultyBadge difficultyLevel={challenge.difficulty.level} />
-          <ChallengeInfo
-            authorSlug={challenge.authorSlug.value}
-            downvotes={challenge.downvotesCount.value}
-            isCompleted={user?.hasCompletedChallenge(challenge.id).value}
-            upvotes={challenge.upvotesCount.value}
-            completionsCount={challenge.completionsCount.value}
-          />
-          <VoteControl />
-          <div className='flex items-center gap-2 md:hidden'>
-            {craftsVislibility.canShowSolutions.isFalse ? (
-              <BlockedCommentsAlertDialog>
-                <ContentLink
-                  title='Comentários'
-                  contentType='comments'
-                  isActive={false}
-                  isBlocked={true}
-                />
-              </BlockedCommentsAlertDialog>
-            ) : (
+      <div className='mx-auto w-fit flex flex-wrap gap-3 '>
+        <DifficultyBadge difficultyLevel={challenge.difficulty.level} />
+        <ChallengeInfo
+          authorSlug={challenge.authorSlug.value}
+          downvotes={challenge.downvotesCount.value}
+          isCompleted={user?.hasCompletedChallenge(challenge.id).value}
+          upvotes={challenge.upvotesCount.value}
+          completionsCount={challenge.completionsCount.value}
+        />
+        <VoteControl />
+        <div className='flex items-center gap-2 md:hidden'>
+          {craftsVislibility.canShowSolutions.isFalse ? (
+            <BlockedCommentsAlertDialog>
               <ContentLink
                 title='Comentários'
                 contentType='comments'
                 isActive={false}
-                isBlocked={false}
+                isBlocked={true}
               />
-            )}
-            {craftsVislibility.canShowSolutions.isFalse ? (
-              <BlockedSolutionsAlertDialog onShowSolutions={handleShowSolutions}>
-                <ContentLink
-                  title='Soluções'
-                  contentType='solutions'
-                  isActive={false}
-                  isBlocked={true}
-                />
-              </BlockedSolutionsAlertDialog>
-            ) : (
-              <ContentLink title='Soluções' contentType='solutions' isActive={false} />
-            )}
-          </div>
+            </BlockedCommentsAlertDialog>
+          ) : (
+            <ContentLink
+              title='Comentários'
+              contentType='comments'
+              isActive={false}
+              isBlocked={false}
+            />
+          )}
+          {craftsVislibility.canShowSolutions.isFalse ? (
+            <BlockedSolutionsAlertDialog onShowSolutions={handleShowSolutions}>
+              <ContentLink
+                title='Soluções'
+                contentType='solutions'
+                isActive={false}
+                isBlocked={true}
+              />
+            </BlockedSolutionsAlertDialog>
+          ) : (
+            <ContentLink title='Soluções' contentType='solutions' isActive={false} />
+          )}
         </div>
-      }
+      </div>
       <div className='mt-6'>
         <Mdx>{mdx}</Mdx>
       </div>

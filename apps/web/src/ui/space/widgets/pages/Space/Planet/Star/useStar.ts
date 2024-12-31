@@ -20,7 +20,6 @@ type UseStarProps = {
 
 export function useStar({
   id,
-  isChallenge,
   slug,
   isLastUnlockedStar,
   starAnimationRef,
@@ -35,23 +34,15 @@ export function useStar({
   const isInView = useInView(lastUnlockedStarRef)
 
   async function handleStarNavigation() {
-    if (!isChallenge) {
-      router.goTo(`${ROUTES.app.lesson}/${slug}`)
-      return
-    }
-
-    const reponse = await api.fetchChallengeSlugByStarId(id)
+    const reponse = await api.fetchChallengeByStarId(id)
 
     if (reponse.isFailure) {
-      toast.show(reponse.errorMessage, {
-        type: 'error',
-        seconds: 4,
-      })
+      router.goTo(`${ROUTES.lesson.prefix}/${slug}`)
       return
     }
 
-    const challengeSlug = reponse.data
-    router.goTo(`${ROUTES.app.challenge}/${challengeSlug}`)
+    const challenge = reponse.body
+    router.goTo(`${ROUTES.challenging.challenge}/${challenge.slug}`)
   }
 
   function handleStarClick() {

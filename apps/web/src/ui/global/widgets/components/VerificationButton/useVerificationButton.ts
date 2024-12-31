@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 
-import { useEventListener } from ''@/ui/global/hooks'/useEventListener'
 import { playAudio } from '@/utils'
+import { useEventListener } from '@/ui/global/hooks/useEventListener'
 import type { VerificationButtonProps } from './VerificationButtonProps'
 
 export function useVerificationButton({

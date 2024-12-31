@@ -3,7 +3,6 @@ import { CACHE } from '@/constants'
 import { useApi, useCache } from '@/ui/global/hooks'
 import { Doc } from '@stardust/core/challenging/entities'
 
-
 export function useDocsDialog() {
   const api = useApi()
   const [content, setContent] = useState('')
@@ -22,20 +21,13 @@ export function useDocsDialog() {
   async function fetchDocs() {
     const response = await api.fetchDocs()
     if (response.isFailure) response.throwError()
-      return response.body
+    return response.body
   }
 
-  const {
-    data: docs,
-    error,
-    isLoading,
-  } = useCache(
-   {
-    key:  CACHE.keys.docs,
-    fetcher: fetchDocs
-   }
-  )
-
+  const { data: docs, isLoading } = useCache({
+    key: CACHE.keys.docs,
+    fetcher: fetchDocs,
+  })
 
   function handleDocButton(docId: string) {
     if (!docs) return

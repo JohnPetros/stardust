@@ -14,7 +14,7 @@ export type GetFilteredChallengesParams = {
 export interface IChallengingService {
   fetchChallengeById(challengeId: string): Promise<ApiResponse<ChallengeDto>>
   fetchChallengeBySlug(challengeSlug: string): Promise<ApiResponse<ChallengeDto>>
-  fetchChallengeSlugByStarId(starId: string): Promise<ApiResponse<string>>
+  fetchChallengeByStarId(starId: string): Promise<ApiResponse<ChallengeDto>>
   fetchChallengesWithOnlyDifficulty(): Promise<
     ApiResponse<{ id: string; difficulty: string }[]>
   >

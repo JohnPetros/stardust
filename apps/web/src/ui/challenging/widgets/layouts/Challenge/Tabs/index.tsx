@@ -1,15 +1,16 @@
 'use client'
 
 import type { ReactNode } from 'react'
+import { AnimatePresence } from 'framer-motion'
 import { List, Root } from '@radix-ui/react-tabs'
 import { Trigger as TabButton } from '@radix-ui/react-tabs'
-import { AnimatePresence } from 'framer-motion'
+
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import { ContentLink } from '../ContentLink'
+import { BlockedCommentsAlertDialog } from '../../../components/BlockedCommentsAlertDialog'
+import { BlockedSolutionsAlertDialog } from '../../../components/BlockedSolutionsAlertDialog'
+import { ContentLink } from '../../../components/ContentLink'
 import { useTabs } from './useTabs'
 import { TabContent } from './TabContent'
-import { BlockedCommentsAlertDialog } from '../BlockedCommentsAlertDialog'
-import { BlockedSolutionsAlertDialog } from '../BlockedSolutionsAlertDialog'
 
 type TabsProps = {
   children: ReactNode

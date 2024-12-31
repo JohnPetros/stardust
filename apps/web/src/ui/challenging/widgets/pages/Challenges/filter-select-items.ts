@@ -10,7 +10,7 @@ import type {
 
 type SelectsItem = {
   value: ChallengeCompletionStatus | ChallengeDifficultyLevel | 'all'
-  text?: string
+  text: string
   textStyles?: ClassNameValue
   icon?: IconName
   iconStyles?: string

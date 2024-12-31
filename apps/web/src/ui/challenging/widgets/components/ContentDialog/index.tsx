@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react'
 
 import { Dialog, DialogContent } from '@/ui/global/widgets/components/Dialog'
-import type { ContentType } from '../types/ContentType'
+import type { ContentType } from '../../layouts/Challenge/types/ContentType'
 import { useContentDialog } from './useContentDialog'
 
 type ContentDialogProps = {

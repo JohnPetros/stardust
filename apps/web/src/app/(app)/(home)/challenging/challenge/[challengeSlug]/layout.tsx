@@ -16,7 +16,7 @@ type ChallengeLayoutProps = {
   codeEditor: ReactNode
 }
 
-export async function Layout({
+export default async function Layout({
   children: header,
   tabContent,
   codeEditor,

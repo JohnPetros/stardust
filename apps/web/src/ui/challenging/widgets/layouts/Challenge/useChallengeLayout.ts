@@ -35,15 +35,13 @@ export function useChallengeLayout(
 
   useEffect(() => {
     let timeout: NodeJS.Timeout | number = 0
-
     timeout = setTimeout(() => setIsTransitionPageVisible(false), 5000)
 
     return () => {
       localStorage.removeItem(STORAGE.keys.challengeCode)
       clearTimeout(timeout)
-      resetStore()
     }
-  }, [resetStore])
+  }, [])
 
   useEffect(() => {
     setCraftsVislibility(

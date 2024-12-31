@@ -3,12 +3,11 @@
 import { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 
-import { ChallengeCraftsVisilibity } from '@/@core/domain/structs'
-
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { ROUTES } from '@/constants'
 import type { ContentType } from '../types/ContentType'
+import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
 
 export function useTabs() {
   const { getChallengeSlice, getCraftsVisibilitySlice } = useChallengeStore()
@@ -22,10 +21,10 @@ export function useTabs() {
   async function handleShowSolutions() {
     if (!user) return
 
-    user.loseCoins(ChallengeCraftsVisilibity.solutionsVisibilityPrice)
+    user.loseCoins(ChallengeCraftsVisibility.solutionsVisibilityPrice)
     await updateUser(user)
     setCraftsVislibility(craftsVislibility.showSolutions())
-    router.push(`${ROUTES.app.challenge}/${challenge?.slug}/solutions`)
+    router.push(`${ROUTES.challenging.challenge}/${challenge?.slug}/solutions`)
   }
 
   useEffect(() => {

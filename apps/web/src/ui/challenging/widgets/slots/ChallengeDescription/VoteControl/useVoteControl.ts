@@ -29,7 +29,7 @@ export function useVoteControl() {
       'Contagem de downvotes desse desafio',
       downvotesCount,
     )
-    setChallenge(challenge)
+    // setChallenge(challenge)
     setVote(userChallengeVote)
   }
 
