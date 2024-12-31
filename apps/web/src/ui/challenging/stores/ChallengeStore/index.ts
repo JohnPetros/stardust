@@ -40,16 +40,6 @@ export function useChallengeStore() {
       }
     },
 
-    getVoteSlice() {
-      const vote = useZustandChallengeStore((store) => store.state.vote)
-      const setVote = useZustandChallengeStore((store) => store.actions.setVote)
-
-      return {
-        vote,
-        setVote,
-      }
-    },
-
     getMdxSlice() {
       const mdx = useZustandChallengeStore((store) => store.state.mdx)
       const setMdx = useZustandChallengeStore((store) => store.actions.setMdx)

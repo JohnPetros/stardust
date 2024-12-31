@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { useAction } from 'next-safe-action/hooks'
 
 import type { ChallengeVote } from '@stardust/core/challenging/types'
@@ -7,10 +7,13 @@ import { AppError } from '@stardust/core/global/errors'
 import { challengingActions } from '@/server/next-safe-action'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
-export function useVoteChallengeAction() {
+export function useVoteChallengeAction(onError: () => void) {
   const toast = useToastContext()
   const { executeAsync } = useAction(challengingActions.voteChallenge, {
-    onError: ({ error }) => toast.show(String(error.serverError)),
+    onError: ({ error }) => {
+      toast.show(String(error.serverError))
+      onError()
+    },
   })
 
   const voteChallenge = useCallback(

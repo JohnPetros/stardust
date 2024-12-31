@@ -26,11 +26,13 @@ export const VoteChallengeAction = (
       const user = User.create(await actionServer.getUser())
       const { challengeId, userChallengeVote } = actionServer.getRequest()
       const useCase = new VoteChallengeUseCase(challengingService)
-      return await useCase.do({
+      const data = await useCase.do({
         challengeId: challengeId,
         userId: user.id,
         userChallengeVote,
       })
+      console.log(data)
+      return data
     },
   }
 }

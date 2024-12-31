@@ -16,7 +16,7 @@ export function TabContent({ children, value }: TabContent) {
       className='h-[calc(100vh-8rem)] overflow-hidden overflow-y-scroll'
       forceMount
     >
-      <AnimatedContent key={value}>{children}</AnimatedContent>
+      <AnimatedContent>{children}</AnimatedContent>
     </Tabs.Content>
   )
 }

@@ -6,8 +6,7 @@ import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useVoteControl } from './useVoteControl'
 
 export function VoteControl() {
-  const { vote, upvotesCount, handleVoteButton } = useVoteControl()
-
+  const { challenge, upvotesCount, handleVoteButton } = useVoteControl()
   const upvoteColor = 'text-green-500'
   const downVoteColor = 'text-red-500'
   const nullVoteColor = 'text-gray-400'
@@ -24,10 +23,14 @@ export function VoteControl() {
         <Icon
           name='upvote'
           weight='bold'
-          className={vote === 'upvote' ? upvoteColor : nullVoteColor}
+          size={16}
+          className={challenge?.userVote === 'upvote' ? upvoteColor : nullVoteColor}
         />
         <span
-          className={twMerge('text-sm', vote === 'upvote' ? upvoteColor : nullVoteColor)}
+          className={twMerge(
+            'text-sm',
+            challenge?.userVote === 'upvote' ? upvoteColor : nullVoteColor,
+          )}
         >
           {upvotesCount}
         </span>
@@ -42,7 +45,8 @@ export function VoteControl() {
         <Icon
           name='downvote'
           weight='bold'
-          className={vote === 'downvote' ? downVoteColor : nullVoteColor}
+          size={16}
+          className={challenge?.userVote === 'downvote' ? downVoteColor : nullVoteColor}
         />
       </button>
     </div>

@@ -37,7 +37,10 @@ export class ApiResponse<Body = unknown> {
     )
       throw new AuthError(this.errorMessage)
 
-    if (this.statusCode >= HTTP_STATUS_CODE.serverError)
+    if (
+      this.statusCode === HTTP_STATUS_CODE.notAcceptable ||
+      this.statusCode >= HTTP_STATUS_CODE.serverError
+    )
       throw new AppError(this.errorMessage)
   }
 

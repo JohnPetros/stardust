@@ -15,6 +15,7 @@ import type { ChallengeDto } from '#challenging/dtos'
 import type { ChallengeCategory } from './ChallengeCategory'
 import { InsufficientInputsError } from '#challenging/errors'
 import { ChallengeFactory } from '#challenging/factories'
+import type { ChallengeVote } from '#challenging/types'
 
 export type ChallengeProps = {
   code: string
@@ -35,6 +36,7 @@ export type ChallengeProps = {
   testCases: TestCase[]
   results: List<boolean>
   userOutputs: List<unknown>
+  userVote: ChallengeVote
   incorrectAnswersCount: Integer
   isCompleted: Logical
 }
@@ -97,25 +99,37 @@ export class Challenge extends Entity<ChallengeProps> {
     this.props.incorrectAnswersCount = this.incorrectAnswersCount.increment(1)
   }
 
-  removeUpvote() {
-    this.upvotesCount = this.upvotesCount.dencrement(1)
+  private removeUpvote() {
+    if (this.upvotesCount.value > 0) this.upvotesCount = this.upvotesCount.dencrement(1)
   }
 
-  removeDownvote() {
-    this.downvotesCount = this.downvotesCount.dencrement(1)
+  private removeDownvote() {
+    if (this.downvotesCount.value > 0)
+      this.downvotesCount = this.downvotesCount.dencrement(1)
   }
 
-  upvote() {
+  private upvote() {
     this.upvotesCount = this.upvotesCount.increment(1)
     this.removeDownvote()
   }
 
-  downvote() {
-    const hasUpvotes = this.upvotesCount.value > 0
-    if (hasUpvotes) {
-      this.removeUpvote()
-      this.downvotesCount = this.downvotesCount.increment(1)
+  private downvote() {
+    this.removeUpvote()
+    this.downvotesCount = this.downvotesCount.increment(1)
+  }
+
+  vote(vote: ChallengeVote) {
+    if (vote === this.userVote) {
+      if (vote === 'upvote') this.removeUpvote()
+      if (vote === 'downvote') this.removeDownvote()
+      this.userVote = null
+      return
     }
+    if (vote !== this.userVote) {
+      if (vote === 'upvote') this.upvote()
+      if (vote === 'downvote') this.downvote()
+    }
+    this.userVote = vote
   }
 
   private get hasFunction() {
@@ -136,6 +150,14 @@ export class Challenge extends Entity<ChallengeProps> {
 
   get userOutputs() {
     return this.props.userOutputs
+  }
+
+  get userVote() {
+    return this.props.userVote
+  }
+
+  set userVote(vote: ChallengeVote) {
+    this.props.userVote = vote
   }
 
   get incorrectAnswersCount() {

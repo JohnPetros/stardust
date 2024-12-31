@@ -40,6 +40,7 @@ export class ChallengeFactory {
         return textBlock
       }),
       categories,
+      userVote: null,
       incorrectAnswersCount: Integer.create('Contagem de respostas incorretas', 0),
       isCompleted: Logical.create('A resposta do desafio está completada?', false),
       results: List.create([]),

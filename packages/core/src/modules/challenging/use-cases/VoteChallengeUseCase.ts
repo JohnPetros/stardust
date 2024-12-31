@@ -1,6 +1,7 @@
 import type { IChallengingService, IUseCase } from '#interfaces'
 import { Challenge } from '#challenging/entities'
 import type { ChallengeVote } from '#challenging/types'
+import { AppError } from '#global/errors'
 
 type Request = {
   challengeId: string
@@ -19,27 +20,24 @@ export class VoteChallengeUseCase implements IUseCase<Request, Response> {
 
   async do({ challengeId, userId, userChallengeVote }: Request) {
     const challenge = await this.fetchChallenge(challengeId)
-    const currentChallengeVote = await this.fetchCurrentChallengeVote(challengeId, userId)
+    challenge.userVote = await this.fetchCurrentChallengeVote(challengeId, userId)
 
-    if (currentChallengeVote && userChallengeVote === currentChallengeVote) {
-      if (userChallengeVote === 'upvote') challenge.removeUpvote()
-      if (userChallengeVote === 'downvote') challenge.removeDownvote()
+    if (challenge.userVote && userChallengeVote === challenge.userVote) {
       await this.deleteChallengeVote(challenge.id, userId)
     }
 
-    if (userChallengeVote !== currentChallengeVote) {
-      if (userChallengeVote === 'upvote') challenge.upvote()
-      if (userChallengeVote === 'downvote') challenge.downvote()
-      if (currentChallengeVote)
+    if (userChallengeVote !== challenge.userVote) {
+      if (challenge.userVote)
         await this.updateChallengeVote(challengeId, userId, userChallengeVote)
       else await this.saveChallengeVote(challengeId, userId, userChallengeVote)
     }
 
+    challenge.vote(userChallengeVote)
+
     return {
       upvotesCount: challenge.upvotesCount.value,
       downvotesCount: challenge.downvotesCount.value,
-      userChallengeVote:
-        userChallengeVote === currentChallengeVote ? null : userChallengeVote,
+      userChallengeVote: challenge.userVote,
     }
   }
 
@@ -85,7 +83,7 @@ export class VoteChallengeUseCase implements IUseCase<Request, Response> {
 
   private async fetchCurrentChallengeVote(challengeId: string, userId: string) {
     const response = await this.challengingService.fetchChallengeVote(challengeId, userId)
-    if (!response.isFailure) response.throwError()
+    if (response.isFailure) return null
     return response.body.challengeVote
   }
 }

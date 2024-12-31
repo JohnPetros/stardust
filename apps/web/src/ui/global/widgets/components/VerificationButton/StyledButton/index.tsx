@@ -1,3 +1,4 @@
+import { type ForwardedRef, forwardRef } from 'react'
 import { tv } from 'tailwind-variants'
 
 import type { ButtonProps } from '@/ui/global/widgets/components/Button/types'
@@ -17,6 +18,11 @@ export type StyledButtonProps = {
   color: 'red' | 'green'
 } & ButtonProps
 
-export function StyledButton({ color, ...buttonProps }: StyledButtonProps) {
-  return <Button {...buttonProps} className={buttonStyles({ color })} />
+const StyledButtonComponent = (
+  { color, ...buttonProps }: StyledButtonProps,
+  ref: ForwardedRef<HTMLButtonElement>,
+) => {
+  return <Button ref={ref} {...buttonProps} className={buttonStyles({ color })} />
 }
+
+export const StyledButton = forwardRef(StyledButtonComponent)

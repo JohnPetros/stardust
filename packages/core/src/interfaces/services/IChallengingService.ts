@@ -39,7 +39,4 @@ export interface IChallengingService {
     challengeVote: ChallengeVote,
   ): Promise<ApiResponse>
   deleteChallengeVote(challengeId: string, userId: string): Promise<ApiResponse>
-  // getChallengeSlugByStarId(starId: string): Promise<string>
-
-  // addCompletedChallenge(challengeId: string, userId: string): Promise<void>
 }

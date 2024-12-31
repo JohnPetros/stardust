@@ -9,7 +9,7 @@ export const SupabasePostgrestError = <Data>(
   statusCode = HTTP_STATUS_CODE.serverError,
 ) => {
   console.error('Supabase postgrest error message: ', postgrestError.message)
-  console.error('Supabase postgrest error details: ', postgrestError.details)
+  console.error('Supabase postgrest error status: ', statusCode)
 
   return new ApiResponse<Data>({
     errorMessage,

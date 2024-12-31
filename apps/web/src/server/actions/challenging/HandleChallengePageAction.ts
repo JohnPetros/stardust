@@ -26,9 +26,9 @@ export const HandleChallengePageAction = (
     return Challenge.create(response.body)
   }
 
-  async function fetchUserChallengeVote(userId: string, challengeId: string) {
-    const response = await challengingService.fetchChallengeVote(userId, challengeId)
-    if (response.isFailure) response.throwError()
+  async function fetchUserChallengeVote(challengeId: string, userId: string) {
+    const response = await challengingService.fetchChallengeVote(challengeId, userId)
+    if (response.isFailure) return null
     return response.body.challengeVote
   }
 
@@ -40,8 +40,8 @@ export const HandleChallengePageAction = (
       await unlockDocuseCase.do({ userDto, challengeSlug })
       const challenge = await fetchChallengeDto(challengeSlug)
       const userChallengeVote = await fetchUserChallengeVote(
-        String(userDto.id),
         challenge.id,
+        String(userDto.id),
       )
 
       return {

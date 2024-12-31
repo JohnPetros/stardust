@@ -23,7 +23,6 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
   const { challenge, setChallenge } = getChallengeSlice()
   const { panelsLayout, setPanelsLayout } = getPanelsLayoutSlice()
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
-  const { vote, setVote } = getVoteSlice()
   const { user } = useAuthContext()
   const router = useRouter()
 
@@ -39,7 +38,11 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
   }
 
   useEffect(() => {
-    if (!challenge) setChallenge(Challenge.create(challengeDto))
+    if (!challenge) {
+      const challenge = Challenge.create(challengeDto)
+      challenge.userVote = userVote
+      setChallenge(challenge)
+    }
     if (!craftsVislibility && challenge && user) {
       const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
       setCraftsVislibility(
@@ -49,17 +52,14 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
         }),
       )
     }
-    if (!vote) setVote(userVote)
   }, [
     challenge,
     craftsVislibility,
-    vote,
     user,
     challengeDto,
     userVote,
     setChallenge,
     setCraftsVislibility,
-    setVote,
   ])
 
   return {

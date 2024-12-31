@@ -139,15 +139,19 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       return new ApiResponse({ body: categories })
     },
 
-    async fetchChallengeVote(userId: string, challengeId: string) {
-      const { data, error } = await supabase
+    async fetchChallengeVote(challengeId: string, userId: string) {
+      const { data, error, status } = await supabase
         .from('users_challenge_votes')
         .select('vote')
-        .match({ user_id: userId, challenge_id: challengeId })
+        .match({ challenge_id: challengeId, user_id: userId })
         .single()
 
       if (error) {
-        return new ApiResponse({ body: { challengeVote: null } })
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao buscar voto do desafio desse usuário',
+          status,
+        )
       }
 
       return new ApiResponse({ body: { challengeVote: data.vote } })
@@ -201,11 +205,12 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
     },
 
     async updateChallengeVote(challengeId, userId, challengeVote) {
-      const { error } = await supabase.from('users_challenge_votes').insert({
-        challenge_id: challengeId,
-        user_id: userId,
-        vote: challengeVote === 'upvote' ? 'upvote' : 'downvote',
-      })
+      const { error } = await supabase
+        .from('users_challenge_votes')
+        .update({
+          vote: challengeVote === 'upvote' ? 'upvote' : 'downvote',
+        })
+        .match({ challenge_id: challengeId, user_id: userId })
 
       if (error) {
         return SupabasePostgrestError(error, 'Error inesperado ao buscar desafios')
