@@ -32,7 +32,6 @@ type CommentProps = {
     image: string
   }
   isAuthorUser: boolean
-  topic: Topic
   onDelete: (commentId: string) => void
 }
 
@@ -47,7 +46,6 @@ export function Comment({
   authorName,
   authorSlug,
   isAuthorUser,
-  topic,
   onDelete,
 }: CommentProps) {
   const {
@@ -65,7 +63,7 @@ export function Comment({
     handleCancelUserReply,
     handleEditComment,
     handleCancelCommentEdition,
-  } = useComment(id, topic)
+  } = useComment(id)
   const { user } = useAuthContext()
   const hasReplies = (replies && replies.length > 0) || repliesCount > 0 || false
 
@@ -81,15 +79,15 @@ export function Comment({
           </p>
         }
         action={
-          <Button
-            autoFocus
-            onClick={() => onDelete(id)}
-            className='bg-red-700 text-gray-50'
-          >
+          <Button onClick={() => onDelete(id)} className='bg-red-700 text-gray-50'>
             Deletar
           </Button>
         }
-        cancel={<Button className='bg-gray-600 text-gray-50'>Cancelar</Button>}
+        cancel={
+          <Button autoFocus className='bg-green-400 text-gray-800'>
+            Cancelar
+          </Button>
+        }
         shouldPlayAudio={false}
       />
       <div className='w-full'>
@@ -127,7 +125,7 @@ export function Comment({
                   <CommentRepliesButton
                     hasReplies={hasReplies}
                     isRepliesVisible={isRepliesVisible}
-                    repliesCount={replies?.length ?? repliesCount}
+                    repliesCount={replies?.length > 0 ? replies?.length : repliesCount}
                     onToggleRepliesVisible={handleToggleIsRepliesVisible}
                   />
                   <Separator />
@@ -172,7 +170,6 @@ export function Comment({
                             name: reply.author.avatar.name.value,
                             image: reply.author.avatar.image.value,
                           }}
-                          topic={topic}
                           createdAt={reply.createdAt}
                           isAuthorUser={reply.author.slug.value === user?.slug.value}
                           onDelete={handleDeleteUserReply}

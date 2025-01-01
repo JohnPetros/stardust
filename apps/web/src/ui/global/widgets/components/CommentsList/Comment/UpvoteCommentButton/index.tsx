@@ -32,6 +32,7 @@ export function UpvoteButton({
     >
       <Icon
         name='simple-arrow-up'
+        size={16}
         className={isUpvoted ? 'text-green-700' : 'text-gray-300'}
       />
       +{upvotesCount}

@@ -84,32 +84,6 @@ export type Database = {
         }
         Relationships: []
       }
-      challenge_topics: {
-        Row: {
-          challenge_id: string
-          id: number
-          topic_id: string
-        }
-        Insert: {
-          challenge_id: string
-          id?: number
-          topic_id: string
-        }
-        Update: {
-          challenge_id?: string
-          id?: number
-          topic_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "challenge_topics_topic_id_fkey"
-            columns: ["topic_id"]
-            isOneToOne: false
-            referencedRelation: "topics"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       challenges: {
         Row: {
           code: string
@@ -234,13 +208,59 @@ export type Database = {
           },
         ]
       }
+      challenges_comments: {
+        Row: {
+          challenge_id: string | null
+          comment_id: string
+          id: string
+        }
+        Insert: {
+          challenge_id?: string | null
+          comment_id: string
+          id?: string
+        }
+        Update: {
+          challenge_id?: string | null
+          comment_id?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "challenge_comments_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "challenge_comments_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "challenge_comments_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "challenge_comments_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       comments: {
         Row: {
           content: string
           created_at: string
           id: string
           parent_comment_id: string | null
-          topic_id: string
           user_id: string
           count_comments_upvotes: number | null
         }
@@ -249,7 +269,6 @@ export type Database = {
           created_at?: string
           id?: string
           parent_comment_id?: string | null
-          topic_id: string
           user_id?: string
         }
         Update: {
@@ -257,7 +276,6 @@ export type Database = {
           created_at?: string
           id?: string
           parent_comment_id?: string | null
-          topic_id?: string
           user_id?: string
         }
         Relationships: [
@@ -273,13 +291,6 @@ export type Database = {
             columns: ["parent_comment_id"]
             isOneToOne: false
             referencedRelation: "comments_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "comments_topic_id_fkey"
-            columns: ["topic_id"]
-            isOneToOne: false
-            referencedRelation: "topics"
             referencedColumns: ["id"]
           },
           {
@@ -649,24 +660,6 @@ export type Database = {
           name?: string
           position?: number
           reward?: number
-        }
-        Relationships: []
-      }
-      topics: {
-        Row: {
-          category: Database["public"]["Enums"]["topic_category"]
-          created_at: string
-          id: string
-        }
-        Insert: {
-          category: Database["public"]["Enums"]["topic_category"]
-          created_at?: string
-          id?: string
-        }
-        Update: {
-          category?: Database["public"]["Enums"]["topic_category"]
-          created_at?: string
-          id?: string
         }
         Relationships: []
       }
@@ -1260,33 +1253,10 @@ export type Database = {
           content: string | null
           created_at: string | null
           id: string | null
-          parent_comment_id: string | null
           replies_count: number | null
-          topic_id: string | null
           upvotes_count: number | null
         }
         Relationships: [
-          {
-            foreignKeyName: "comments_parent_comment_id_fkey"
-            columns: ["parent_comment_id"]
-            isOneToOne: false
-            referencedRelation: "comments"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "comments_parent_comment_id_fkey"
-            columns: ["parent_comment_id"]
-            isOneToOne: false
-            referencedRelation: "comments_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "comments_topic_id_fkey"
-            columns: ["topic_id"]
-            isOneToOne: false
-            referencedRelation: "topics"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "comments_user_id_fkey"
             columns: ["author_id"]

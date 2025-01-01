@@ -8,14 +8,18 @@ export const SupabaseCommentMapper = () => {
       const CommentDto: CommentDto = {
         id: supabaseComment.id ?? '',
         content: supabaseComment.content ?? '',
+        repliesCount: supabaseComment.replies_count ?? 0,
+        upvotesCount: supabaseComment.upvotes_count ?? 0,
         author: {
+          id: supabaseComment.author_id ?? '',
           slug: supabaseComment.author_slug ?? '',
-          name: supabaseComment.author_slug ?? '',
+          name: supabaseComment.author_name ?? '',
           avatar: {
             name: supabaseComment.author_avatar_name ?? '',
             image: supabaseComment.author_avatar_image ?? '',
           },
         },
+        createdAt: new Date(supabaseComment.created_at ?? ''),
       }
 
       return CommentDto
@@ -32,8 +36,6 @@ export const SupabaseCommentMapper = () => {
         author_name: commentDto.author.name,
         author_avatar_name: commentDto.author.avatar.name,
         author_avatar_image: commentDto.author.avatar.image,
-        parent_comment_id: comment.parentCommentId?.value ?? null,
-        topic_id: '',
         replies_count: comment.repliesCount.value,
         upvotes_count: comment.upvotesCount.value,
         created_at: comment.createdAt.toDateString(),

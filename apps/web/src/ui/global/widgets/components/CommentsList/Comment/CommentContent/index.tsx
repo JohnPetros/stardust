@@ -19,21 +19,19 @@ export function CommentContent({
   onEdit,
   onCancel,
 }: CommentContentInputProps) {
-  const {
-    content,
-    handleCommentContentChange,
-    handleEditComment,
-    handleCancelCommentEdition,
-  } = useCommentContent(commentId, initialContent, onEdit, onCancel)
+  const { content, handleEditComment, handleCancelCommentEdition } = useCommentContent(
+    commentId,
+    initialContent,
+    onEdit,
+    onCancel,
+  )
 
   return canEditComment ? (
     <>
       <CommentInput
         id={`user-comment-${commentId}-edition`}
         title='Editar'
-        placeholder='responda esse usuário...'
-        content={content}
-        onChange={handleCommentContentChange}
+        defaultContent={content}
         onSend={handleEditComment}
       />
       <button

@@ -6,6 +6,7 @@ import { Datetime } from '@stardust/core/libs'
 import type { PopoverMenuButton } from '../../../PopoverMenu/types'
 import { ROUTES } from '@/constants'
 import { PopoverMenu } from '../../../PopoverMenu'
+import { Icon } from '../../../Icon'
 
 type CommentHeaderProps = {
   authorName: string
@@ -28,7 +29,7 @@ export function CommentHeader({
     <header className='flex items-start justify-between'>
       <Link
         href={`${ROUTES.profile.prefix}/${authorSlug}`}
-        className='text-sm text-green-700'
+        className='text-md text-green-700'
       >
         {authorName}
       </Link>
@@ -37,7 +38,7 @@ export function CommentHeader({
         {isAuthorUser && (
           <PopoverMenu label='menu do comentário' buttons={popoverMenuButtons}>
             <button type='button' className='grid translate-x-2 place-content-center p-2'>
-              <DotsThreeOutlineVertical className=' text-green-700' weight='fill' />
+              <Icon name='three-dots' size={16} className=' text-green-700' />
             </button>
           </PopoverMenu>
         )}

@@ -10,7 +10,7 @@ import type { AlertDialogRef } from '../../AlertDialog/types'
 import type { PopoverMenuButton } from '../../PopoverMenu/types'
 import { Comment, type Topic } from '@stardust/core/forum/entities'
 
-export function useComment(commentId: string, topic: Topic) {
+export function useComment(commentId: string) {
   const [shouldFetchCommentReplies, setShouldFetchCommentReplies] = useState(false)
   const [canEditComment, setCanEditComment] = useState(false)
   const [isUserReplyInputVisible, setIsUserReplyInputVisible] = useState(false)
@@ -43,19 +43,20 @@ export function useComment(commentId: string, topic: Topic) {
 
     const reply = Comment.create({
       author: {
+        id: user.id,
         name: user.name.value,
         slug: user.slug.value,
         avatar: { name: user.avatar.name.value, image: user.avatar.image.value },
       },
-      parentCommentId: commentId,
       content: replyContent,
     })
 
-    const response = await api.saveComment(reply, topic)
+    const response = await api.saveCommentReply(reply, commentId)
 
     if (response.isFailure) {
       toast.show(response.errorMessage)
       setIsUserReplyInputVisible(false)
+      return
     }
 
     if (response.isSuccess) {

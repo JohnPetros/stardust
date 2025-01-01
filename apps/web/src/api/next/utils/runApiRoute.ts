@@ -56,8 +56,6 @@ export async function runApiRoute(
       return http.send(response, HTTP_STATUS_CODE.serverError).body
     }
 
-    console.log(error)
-
     return http.send(
       {
         title: 'Unknown Api Error',

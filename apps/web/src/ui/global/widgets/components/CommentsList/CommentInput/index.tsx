@@ -13,22 +13,21 @@ import { useCommentInput } from './useCommentInput'
 
 type CommentInputProps = {
   id: string
-  placeholder: string
-  content: string
+  placeholder?: string
+  defaultContent?: string
   title: string
-  onChange: (commentContent: string) => void
   onSend: (commentContent: string) => void
 }
 
 export function CommentInput({
   id,
-  content,
   title,
   placeholder,
+  defaultContent = '',
   onSend,
-  onChange,
 }: CommentInputProps) {
   const {
+    content,
     textareaRef,
     errorMessage,
     isPreviewVisible,
@@ -36,7 +35,7 @@ export function CommentInput({
     handleTogglePreview,
     handleCommentChange,
     handlePostComment,
-  } = useCommentInput(content, onChange, onSend)
+  } = useCommentInput(onSend, defaultContent)
   const { user } = useAuthContext()
 
   if (user)
@@ -117,6 +116,7 @@ export function CommentInput({
                       <Icon
                         name='send'
                         weight='bold'
+                        size={12}
                         className='text-sm text-green-900'
                       />
                       {title}

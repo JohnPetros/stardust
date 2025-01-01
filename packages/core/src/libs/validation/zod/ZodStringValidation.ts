@@ -13,14 +13,14 @@ export class ZodStringValidation implements IStringValidation {
     this.data = data
     this.key = key ?? ''
     this.zodString = z.string({
-      required_error: message ?? `${this.key} should be a string`,
+      required_error: message ?? 'deve ser um texto',
     })
   }
 
   min(minValue: number, message?: string) {
     this.zodString = this.zodString.min(
       minValue,
-      message ?? `${this.key} value must have at least ${minValue} characters`,
+      message ?? `deve ter pelo menos ${minValue} caracteres`,
     )
     return this
   }

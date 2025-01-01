@@ -1,26 +1,33 @@
 'use client'
 
-import type { TopicDto } from '@stardust/core/forum/dtos'
-
 import { CommentsList } from '@/ui/global/widgets/components/CommentsList'
 import { ContentDialog } from '../../components/ContentDialog'
 import { useChallengeCommentsSlot } from './useChallengeCommentsSlot'
 
 type ChallengeCommentsSlotProps = {
-  topicDto: TopicDto
+  challengeId: string
 }
 
-export function ChallengeCommentsSlot({ topicDto }: ChallengeCommentsSlotProps) {
-  const { isMobile } = useChallengeCommentsSlot()
+export function ChallengeCommentsSlot({ challengeId }: ChallengeCommentsSlotProps) {
+  const { isMobile, handleCommentListFetch, handleCommentSave } =
+    useChallengeCommentsSlot(challengeId)
 
   if (isMobile)
     return (
       <div className='md:hidden'>
         <ContentDialog contentType='comments'>
-          <CommentsList topicDto={topicDto} />
+          <CommentsList
+            onFetchComments={handleCommentListFetch}
+            onSaveComment={handleCommentSave}
+          />
         </ContentDialog>
       </div>
     )
 
-  return <CommentsList topicDto={topicDto} />
+  return (
+    <CommentsList
+      onFetchComments={handleCommentListFetch}
+      onSaveComment={handleCommentSave}
+    />
+  )
 }

@@ -1,39 +1,16 @@
-import type { Supabase } from '../types/Supabase'
-import { SupabasePostgrestError } from '../errors'
-import { SupabaseCommentMapper, SupabaseTopicMapper } from '../mappers'
 import { ApiResponse, PaginationResponse } from '@stardust/core/responses'
 import type { IForumService } from '@stardust/core/interfaces'
+import type { Comment } from '@stardust/core/forum/entities'
+
+import type { Supabase } from '../types/Supabase'
+import { SupabasePostgrestError } from '../errors'
+import { SupabaseCommentMapper } from '../mappers'
 import { calculateSupabaseRange } from '../utils'
-import type { Comment, Topic } from '@stardust/core/forum/entities'
 
 export const SupabaseForumService = (supabase: Supabase): IForumService => {
   const supabaseCommentMapper = SupabaseCommentMapper()
-  const supabaseTopicMapper = SupabaseTopicMapper()
 
   return {
-    async fetchChallengeTopic(challengeId, topicCategory) {
-      const { data, error, status } = await supabase
-        .from('challenge_forum_topics')
-        .select('topics(*)')
-        .eq('challenge_id', challengeId)
-        .eq('topics.category', topicCategory)
-        .single()
-
-      if (error) {
-        return SupabasePostgrestError(
-          error,
-          'Erro inseperado ao buscar tópico desse desafio',
-          status,
-        )
-      }
-
-      if (!data.topics[0]) throw new Error()
-
-      const topic = supabaseTopicMapper.toDto(data.topics[0])
-
-      return new ApiResponse({ body: topic })
-    },
-
     async fetchCommentById() {
       const { data, error, status } = await supabase
         .from('comments_view')
@@ -52,8 +29,13 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
       return new ApiResponse({ body: comment })
     },
 
-    async fetchComments({ page, itemsPerPage, order, sorter, topicId }) {
-      let query = supabase.from('comments_view').select('*', { count: 'exact' })
+    async fetchChallengeCommentsList(
+      { page, itemsPerPage, order, sorter },
+      challengeId: string,
+    ) {
+      let query = supabase
+        .from('comments_view')
+        .select('*, challenges_comments(challenge_id)', { count: 'exact' })
 
       if (sorter === 'date') {
         query = query.order('created_at', { ascending: order === 'ascending' })
@@ -64,7 +46,8 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
       const range = calculateSupabaseRange(page, itemsPerPage)
 
       const { data, count, error, status } = await query
-        .match({ topic_id: topicId, parent_comment_id: null })
+        .eq('challenges_comments.challenge_id', challengeId)
+        .is('parent_comment_id', null)
         .range(range.from, range.to)
 
       if (error) {
@@ -85,6 +68,7 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
         .from('comments_view')
         .select('*')
         .eq('parent_comment_id', commentId)
+        .order('created_at', { ascending: false })
 
       if (error) {
         return SupabasePostgrestError(
@@ -99,21 +83,51 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
       return new ApiResponse({ body: replies })
     },
 
-    async saveComment(comment: Comment, topic: Topic) {
+    async saveChallengeComment(comment: Comment, challengeId: string) {
       const supabaseComment = supabaseCommentMapper.toSupabase(comment)
-      const supabaseTopic = supabaseTopicMapper.toSupabase(topic)
 
-      await supabase
-        .from('topics')
-        .upsert({ id: topic.id, category: supabaseTopic.category })
+      const { error: commentError, status: commentStatus } = await supabase
+        .from('comments')
+        .insert({
+          // @ts-ignore
+          id: comment.id,
+          content: supabaseComment.content,
+          user_id: supabaseComment.author_id,
+        })
 
-      // @ts-ignore
+      if (commentError) {
+        return SupabasePostgrestError(
+          commentError,
+          'Erro inesperado ao salvar comentário',
+          commentStatus,
+        )
+      }
+
+      const { error: challengeCommentError, status: challengeCommentStatus } =
+        await supabase
+          .from('challenges_comments')
+          .insert({ comment_id: comment.id, challenge_id: challengeId })
+
+      if (challengeCommentError) {
+        return SupabasePostgrestError(
+          challengeCommentError,
+          'Erro inesperado ao salvar comentário',
+          challengeCommentStatus,
+        )
+      }
+
+      return new ApiResponse()
+    },
+
+    async saveCommentReply(reply: Comment, commentId: string) {
+      const supabaseReply = supabaseCommentMapper.toSupabase(reply)
+
       const { error, status } = await supabase.from('comments').insert({
-        id: comment.id,
-        content: supabaseComment.content,
-        user_id: supabaseComment.author_id,
-        parent_comment_id: supabaseComment.parent_comment_id,
-        topic_id: topic.id,
+        // @ts-ignore
+        id: reply.id,
+        content: supabaseReply.content,
+        user_id: supabaseReply.author_id,
+        parent_comment_id: commentId,
       })
 
       if (error) {

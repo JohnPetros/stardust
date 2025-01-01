@@ -31,7 +31,6 @@ export const VoteChallengeAction = (
         userId: user.id,
         userChallengeVote,
       })
-      console.log(data)
       return data
     },
   }

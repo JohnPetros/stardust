@@ -13,7 +13,7 @@ export function ToolButton({ icon, label, onClick }: ToolButtonProps) {
   return (
     <Tooltip content={label} direction='bottom'>
       <Toolbar.Button type='button' onClick={onClick}>
-        <Icon name={icon} className='text-green-400' />
+        <Icon name={icon} size={16} className='text-green-400' />
       </Toolbar.Button>
     </Tooltip>
   )

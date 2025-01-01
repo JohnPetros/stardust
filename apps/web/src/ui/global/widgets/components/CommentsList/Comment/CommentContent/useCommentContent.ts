@@ -12,7 +12,6 @@ export function useCommentContent(
   onCancel: () => void,
 ) {
   const [content, setContent] = useState(initialContent)
-  const { user } = useAuthContext()
   const toast = useToastContext()
   const api = useApi()
 
@@ -28,7 +27,10 @@ export function useCommentContent(
       return
     }
 
-    onEdit()
+    if (response.isSuccess) {
+      setContent(newContent)
+      onEdit()
+    }
   }
 
   function handleCancelCommentEdition() {
@@ -36,14 +38,9 @@ export function useCommentContent(
     onCancel()
   }
 
-  function handleCommentContentChange(newContent: string) {
-    setContent(newContent)
-  }
-
   return {
     content,
     handleEditComment,
-    handleCommentContentChange,
     handleCancelCommentEdition,
   }
 }

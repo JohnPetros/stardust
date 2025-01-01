@@ -59,8 +59,6 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   private verifyResult(result: unknown, testCase: TestCase, code: Code) {
-    console.log('result', result)
-    console.log('expectedOutput', code.translateToCodeRunner(testCase.expectedOutput))
     return result === code.translateToCodeRunner(testCase.expectedOutput)
   }
 

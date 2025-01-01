@@ -5,7 +5,6 @@ export type CommentDto = {
   content: string
   repliesCount?: number
   upvotesCount?: number
-  parentCommentId?: string
-  createdAt?: Date
   author: AuthorDto
+  createdAt?: Date
 }

@@ -8,12 +8,12 @@ import { ValidationError } from '@stardust/core/global/errors'
 import { REGEX } from '@/constants'
 
 export function useCommentInput(
-  content: string,
-  onChange: (content: string) => void,
   onSend: (content: string) => void,
+  defaultContent: string,
 ) {
   const [errorMessage, setErrorMessage] = useState('')
   const [isPreviewVisible, setIsPreviewVisible] = useState(false)
+  const [content, setContent] = useState(defaultContent)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   function geComponentContent(component: string) {
@@ -96,19 +96,18 @@ export function useCommentInput(
 
   function handlePostComment(event: FormEvent) {
     event.preventDefault()
-    return
-
     try {
-      const commentContent = Text.create(content)
+      const commentContent = Text.create(content, 'seu comentário')
       onSend(commentContent.value)
+      setContent('')
     } catch (error) {
       if (error instanceof ValidationError)
         setErrorMessage(String(error.fieldErrors[0]?.messages[0]))
     }
   }
 
-  function handleCommentChange(comment: string) {
-    onChange(comment)
+  function handleCommentChange(content: string) {
+    setContent(content)
   }
 
   useEffect(() => {
@@ -136,6 +135,7 @@ export function useCommentInput(
   }, [isPreviewVisible])
 
   return {
+    content,
     textareaRef,
     errorMessage,
     isPreviewVisible,

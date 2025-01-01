@@ -8,7 +8,7 @@ type ReplyInputProps = {
 }
 
 export function ReplyInput({ commentId, onSend, onCancel }: ReplyInputProps) {
-  const { replyContent, handleReplySend, handleReplyChange } = useReplyInput(onSend)
+  const { handleReplySend } = useReplyInput(onSend)
 
   return (
     <>
@@ -16,8 +16,6 @@ export function ReplyInput({ commentId, onSend, onCancel }: ReplyInputProps) {
         id={`reply-${commentId}`}
         title='Responder'
         placeholder='responda esse usuário...'
-        content={replyContent}
-        onChange={handleReplyChange}
         onSend={handleReplySend}
       />
       <button

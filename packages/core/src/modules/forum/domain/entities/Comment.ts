@@ -5,7 +5,6 @@ import { Author } from './Author'
 
 type CommentProps = {
   content: Text
-  parentCommentId: Id | null
   repliesCount: Integer
   upvotesCount: Integer
   createdAt: Date
@@ -14,20 +13,23 @@ type CommentProps = {
 
 export class Comment extends Entity<CommentProps> {
   static create(dto: CommentDto) {
-    return new Comment({
-      content: Text.create(dto.content),
-      repliesCount: Integer.create(
-        'Contagem de respostas desse comentário',
-        dto.repliesCount ?? 0,
-      ),
-      upvotesCount: Integer.create(
-        'Contagem de upvotes desse comentário',
-        dto.upvotesCount ?? 0,
-      ),
-      parentCommentId: dto.parentCommentId ? Id.create(dto.parentCommentId) : null,
-      author: Author.create(dto.author),
-      createdAt: dto.createdAt ? dto.createdAt : new Date(),
-    })
+    console.log(dto)
+    return new Comment(
+      {
+        content: Text.create(dto.content),
+        repliesCount: Integer.create(
+          'Contagem de respostas desse comentário',
+          dto.repliesCount ?? 0,
+        ),
+        upvotesCount: Integer.create(
+          'Contagem de upvotes desse comentário',
+          dto.upvotesCount ?? 0,
+        ),
+        author: Author.create(dto.author),
+        createdAt: dto.createdAt ? dto.createdAt : new Date(),
+      },
+      dto?.id,
+    )
   }
 
   upvote() {
@@ -54,10 +56,6 @@ export class Comment extends Entity<CommentProps> {
     return this.props.repliesCount
   }
 
-  get parentCommentId() {
-    return this.props.parentCommentId
-  }
-
   get createdAt() {
     return this.props.createdAt
   }
@@ -68,7 +66,6 @@ export class Comment extends Entity<CommentProps> {
       content: this.content.value,
       repliesCount: this.repliesCount.value,
       upvotesCount: this.upvotesCount.value,
-      parentCommentId: this.parentCommentId?.value,
       createdAt: this.createdAt,
       author: {
         id: this.author.id,

@@ -14,12 +14,8 @@ import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
 export function useChallengePage(challengeDto: ChallengeDto, userVote: ChallengeVote) {
-  const {
-    getChallengeSlice,
-    getCraftsVisibilitySlice,
-    getPanelsLayoutSlice,
-    getVoteSlice,
-  } = useChallengeStore()
+  const { getChallengeSlice, getCraftsVisibilitySlice, getPanelsLayoutSlice } =
+    useChallengeStore()
   const { challenge, setChallenge } = getChallengeSlice()
   const { panelsLayout, setPanelsLayout } = getPanelsLayoutSlice()
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()

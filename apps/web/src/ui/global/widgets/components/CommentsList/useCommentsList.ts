@@ -3,8 +3,13 @@
 import { useState } from 'react'
 
 import type { ListingOrder } from '@stardust/core/global/types'
-import { Comment, type Topic } from '@stardust/core/forum/entities'
-import type { CommentsListingSorter } from '@stardust/core/forum/types'
+import { Comment } from '@stardust/core/forum/entities'
+import type {
+  CommentsListingParams,
+  CommentsListingSorter,
+} from '@stardust/core/forum/types'
+import type { CommentDto } from '@stardust/core/forum/dtos'
+import type { ApiResponse, PaginationResponse } from '@stardust/core/responses'
 
 import { CACHE } from '@/constants'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
@@ -12,21 +17,20 @@ import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useApi } from '@/ui/global/hooks/useApi'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 import type { PopoverMenuButton } from '../PopoverMenu/types'
+import type { CommentsListProps } from './CommentsListProps'
 
 const COMMENTS_PER_PAGE = 10
 
-export function useCommentsList(topic: Topic) {
+export function useCommentsList({ onFetchComments, onSaveComment }: CommentsListProps) {
   const [sorter, setSorter] = useState<CommentsListingSorter>('date')
   const [order, setOrder] = useState<ListingOrder>('descending')
   const [isPopoverMenuOpen, setIsPopoverMenuOpen] = useState(false)
-  const [commentContent, setCommentContent] = useState('')
-  const toast = useToastContext()
   const { user } = useAuthContext()
+  const toast = useToastContext()
   const api = useApi()
 
   async function fetchComments(page: number) {
-    const response = await api.fetchComments({
-      topicId: topic.id,
+    const response = await onFetchComments({
       itemsPerPage: COMMENTS_PER_PAGE,
       page,
       sorter,
@@ -37,14 +41,15 @@ export function useCommentsList(topic: Topic) {
       response.throwError()
     }
 
-    return response.body.items
+    return response.body
   }
 
-  const { data, isLoading, refetch } = usePaginatedCache({
+  const { data, isLoading, refetch, nextPage } = usePaginatedCache({
     key: CACHE.keys.comments,
     itemsPerPage: COMMENTS_PER_PAGE,
     fetcher: fetchComments,
-    dependencies: [topic.id, sorter, order],
+    shouldRefetchOnFocus: false,
+    dependencies: [sorter, order],
   })
 
   async function handleSendComment(commentContent: string) {
@@ -60,9 +65,8 @@ export function useCommentsList(topic: Topic) {
       },
     })
 
-    await api.saveComment(comment, topic)
+    await onSaveComment(comment)
     refetch()
-    setCommentContent('')
   }
 
   async function handleDeleteComment(commentId: string) {
@@ -70,13 +74,10 @@ export function useCommentsList(topic: Topic) {
 
     if (response.isSuccess) {
       refetch()
+      return
     }
 
     toast.show(response.errorMessage)
-  }
-
-  function handleCommentChange(CommentContent: string) {
-    setCommentContent(CommentContent)
   }
 
   function handlePopoverMenuOpenChange(isOpen: boolean) {
@@ -115,10 +116,9 @@ export function useCommentsList(topic: Topic) {
     sorter,
     order,
     comments: data.map(Comment.create),
-    commentContent,
     popoverMenuButtons,
+    nextPage,
     handlePopoverMenuOpenChange,
-    handleCommentChange,
     handleSendComment,
     handleDeleteComment,
   }

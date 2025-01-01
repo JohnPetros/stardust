@@ -28,7 +28,7 @@ export function PopoverMenu({
   return (
     <>
       <Popover.Root open={isOpen} onOpenChange={handleOpenChange}>
-        <Popover.Trigger aria-label={label} className='w-max'>
+        <Popover.Trigger aria-label={label} className='w-max' asChild>
           {trigger}
         </Popover.Trigger>
         <AnimatedPanel isOpen={isOpen}>
@@ -42,7 +42,7 @@ export function PopoverMenu({
                       aria-label={label}
                       type='button'
                       className={twMerge(
-                        'mr-auto flex w-full items-center justify-between border-t p-2 text-left text-gray-100',
+                        'mr-auto flex w-full items-center justify-between border-t p-2 text-sm text-left text-gray-100',
                         !isFirst ? 'border-green-400' : 'border-transparent',
                       )}
                       onClick={() => handleButtonClick({ action })}
