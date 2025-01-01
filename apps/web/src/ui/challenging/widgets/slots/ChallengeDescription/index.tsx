@@ -65,7 +65,7 @@ export function ChallengeDescriptionSlot() {
           )}
         </div>
       </div>
-      <div className='mt-6'>
+      <div className='mt-6 pb-6'>
         <Mdx>{mdx}</Mdx>
       </div>
     </div>
