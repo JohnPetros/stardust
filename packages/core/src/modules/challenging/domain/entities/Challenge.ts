@@ -59,27 +59,29 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   private verifyResult(result: unknown, testCase: TestCase, code: Code) {
-    if (this.hasFunction) return result === testCase.expectedOutput
-
-    return result === testCase.expectedOutput
+    console.log('result', result)
+    console.log('expectedOutput', code.translateToCodeRunner(testCase.expectedOutput))
+    return result === code.translateToCodeRunner(testCase.expectedOutput)
   }
 
   async runCode(code: Code) {
+    this.props.results = this.props.results.makeEmpty()
+    this.props.userOutputs = this.props.userOutputs.makeEmpty()
+
     for (const testCase of this.testCases) {
       const formattedCode = this.formatCode(code, testCase)
       const response = await formattedCode.run()
-
       if (response.isFailure) response.throwError()
-
-      console.log('response', response)
 
       let result = this.hasFunction.isTrue ? response.result : response.outputs[0]
 
       if (this.hasFunction.isTrue) result = response.result
       else if (response.outputs[0]) result = response.outputs[0]
 
-      this.results.add(this.verifyResult(response.outputs[0], testCase, formattedCode))
-      this.userOutputs.add(result)
+      this.props.results = this.results.add(
+        this.verifyResult(result, testCase, formattedCode),
+      )
+      this.props.userOutputs = this.userOutputs.add(result)
     }
   }
 
@@ -87,7 +89,8 @@ export class Challenge extends Entity<ChallengeProps> {
     const newUserAnswer = userAnswer.makeVerified()
 
     const isAnswerCorrect =
-      this.results.length === this.testCases.length && this.results.hasAllEqualTo(true)
+      this.results.length === this.testCases.length &&
+      this.results.hasAllEqualTo(true).isTrue
 
     if (isAnswerCorrect) {
       this.props.isCompleted = this.props.isCompleted.makeTrue()
@@ -259,6 +262,8 @@ export class Challenge extends Entity<ChallengeProps> {
       starId: this.props.starId?.value,
       upvotesCount: this.upvotesCount.value,
       completionsCount: this.completionsCount.value,
+      userOutputs: this.props.userOutputs.items,
+      results: this.props.results.items,
       categories: this.categories.map((category) => category.dto),
       testCases: this.testCases.map((testCase) => testCase.dto),
       description: this.description,

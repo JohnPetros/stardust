@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import type {
   ChallengeRewardingPayloadDto,
@@ -15,7 +15,8 @@ import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 import { UserAnswer } from '@stardust/core/global/structs'
 
 export function useChallengeResultSlot() {
-  const { getChallengeSlice, getTabHandlerSlice } = useChallengeStore()
+  const { getChallengeSlice, getTabHandlerSlice, getResults } = useChallengeStore()
+  const { results } = getResults()
   const { challenge } = getChallengeSlice()
   const { tabHandler } = getTabHandlerSlice()
   const { setCookie } = useCookieActions()
@@ -63,7 +64,6 @@ export function useChallengeResultSlot() {
     })
 
     secondsCounterStorage.remove()
-
     router.goTo(ROUTES.rewarding)
     return
   }
@@ -73,9 +73,9 @@ export function useChallengeResultSlot() {
 
     const newUserAnswer = challenge.verifyUserAnswer(userAnswer)
 
-    if (newUserAnswer.isCorrect.isTrue && newUserAnswer.isVerified.isTrue) {
-      showRewards()
-    }
+    // if (newUserAnswer.isCorrect.isTrue && newUserAnswer.isVerified.isTrue) {
+    //   showRewards()
+    // }
 
     if (newUserAnswer.isCorrect.isFalse && newUserAnswer.isVerified.isTrue && isMobile) {
       tabHandler?.showCodeTab()
@@ -86,6 +86,7 @@ export function useChallengeResultSlot() {
 
   return {
     challenge,
+    results,
     userAnswer,
     handleUserAnswer,
   }

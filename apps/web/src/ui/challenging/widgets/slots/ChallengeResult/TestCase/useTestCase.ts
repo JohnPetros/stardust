@@ -33,27 +33,26 @@ export function useTestCase({
 
   const translatedInputs = useMemo(() => {
     if (inputs.length > 0) {
-      return inputs.map(provider.translateToCodeRunner).join(', ')
+      return inputs
+        .map((input) => {
+          return provider
+            .translateToCodeRunner(JSON.stringify(input))
+            .replaceAll('\n', '')
+        })
+        .join(',')
     }
     return 'sem entrada'
   }, [inputs, provider.translateToCodeRunner])
 
-  const translatedUserOutput = useMemo(() => {
-    if (userOutput !== undefined) {
-      return provider.translateToCodeRunner(userOutput)
-    }
-
-    return 'sem resultado'
-  }, [userOutput, provider.translateToCodeRunner])
-
   const translatedExpectedOutput = useMemo(() => {
-    return provider.translateToCodeRunner(expectedOutput)
+    return provider
+      .translateToCodeRunner(JSON.stringify(expectedOutput))
+      .replaceAll('\n', '')
   }, [expectedOutput, provider.translateToCodeRunner])
 
   return {
     isOpen,
     translatedInputs,
-    translatedUserOutput,
     translatedExpectedOutput,
     handleButtonClick,
   }

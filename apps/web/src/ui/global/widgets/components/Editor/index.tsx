@@ -3,11 +3,10 @@
 import { type ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 import MonacoEditor from '@monaco-editor/react'
 
-import { Loading } from '../Loading'
-
-import type { EditorRef } from './types'
 import { useBreakpoint } from '@/ui/global/hooks'
 import { useEditorContext } from '@/ui/global/contexts/EditorContext/hooks'
+import { Loading } from '../Loading'
+import type { EditorRef } from './types'
 import { useEditor } from './useEditor'
 
 type EditorProps = {
@@ -31,7 +30,15 @@ export function EditorComponent(
   ref: ForwardedRef<EditorRef>,
 ) {
   const { state } = useEditorContext()
-  const { getValue, setValue, reloadValue, handleEditorDidMount } = useEditor(value)
+  const {
+    getValue,
+    setValue,
+    reloadValue,
+    getCursorPosition,
+    setCursorPosition,
+    getSelectedLinesRange,
+    handleEditorDidMount,
+  } = useEditor(value)
 
   const { md: isMobile } = useBreakpoint()
 
@@ -42,9 +49,19 @@ export function EditorComponent(
         getValue,
         setValue,
         reloadValue,
+        getCursorPosition,
+        setCursorPosition,
+        getSelectedLinesRange,
       }
     },
-    [getValue, setValue, reloadValue],
+    [
+      getValue,
+      setValue,
+      reloadValue,
+      getCursorPosition,
+      setCursorPosition,
+      getSelectedLinesRange,
+    ],
   )
 
   return (

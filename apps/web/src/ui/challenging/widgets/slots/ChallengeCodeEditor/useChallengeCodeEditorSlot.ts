@@ -16,9 +16,10 @@ import type { ConsoleRef } from '@/ui/global/widgets/components/Console/types'
 import type { EditorRef } from '@/ui/global/widgets/components/Editor/types'
 
 export function useChallengeCodeEditorSlot() {
-  const { getChallengeSlice, getPanelsLayoutSlice } = useChallengeStore()
+  const { getChallengeSlice, getPanelsLayoutSlice, getResults } = useChallengeStore()
+  const { setResults } = getResults()
   const { challenge } = getChallengeSlice()
-  const { panelsLayout } = getPanelsLayoutSlice()
+  const { panelsLayout, setPanelsLayout } = getPanelsLayoutSlice()
   const { provider } = useCodeRunner()
   const toast = useToastContext()
   const router = useRouter()
@@ -55,7 +56,8 @@ export function useChallengeCodeEditorSlot() {
 
     try {
       await challenge.runCode(userCode.current)
-      // router.goTo(`${ROUTES.challenging.challenge}/${challenge?.slug.value}/result`)
+      setResults(challenge.results.items)
+      router.goTo(`${ROUTES.challenging.challenge}/${challenge?.slug.value}/result`)
     } catch (error) {
       if (error instanceof CodeRunnerError) {
         handleCodeRunnerError(error.message, error.line)

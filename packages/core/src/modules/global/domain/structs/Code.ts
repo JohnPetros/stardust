@@ -37,6 +37,10 @@ export class Code {
     return this.clone({ value: value })
   }
 
+  translateToCodeRunner(jsCodeValue: unknown) {
+    return this.codeRunner.translateToCodeRunner(JSON.stringify(jsCodeValue))
+  }
+
   get inputsCount() {
     return this.codeRunner.getInputsCount(this.value)
   }

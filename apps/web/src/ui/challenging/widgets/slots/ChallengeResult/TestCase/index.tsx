@@ -7,6 +7,7 @@ import { AnimatedArrow } from '@/ui/global/widgets/components/AnimatedArrow'
 import { AnimatedFieldsContainer } from './AnimatedFieldsContainer'
 import { Field } from './Field'
 import { useTestCase } from './useTestCase'
+import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 
 type TestCaseProps = {
   position: number
@@ -25,19 +26,16 @@ export function TestCase({
   isCorrect,
   userOutput,
 }: TestCaseProps) {
-  const {
-    isOpen,
-    translatedInputs,
-    translatedUserOutput,
-    translatedExpectedOutput,
-    handleButtonClick,
-  } = useTestCase({
-    inputs,
-    isLocked,
-    isCorrect,
-    userOutput,
-    expectedOutput,
-  })
+  const { getChallengeSlice } = useChallengeStore()
+  const { challenge } = getChallengeSlice()
+  const { isOpen, translatedInputs, translatedExpectedOutput, handleButtonClick } =
+    useTestCase({
+      inputs,
+      isLocked,
+      isCorrect,
+      userOutput,
+      expectedOutput,
+    })
 
   return (
     <div
@@ -80,7 +78,11 @@ export function TestCase({
       </header>
       <AnimatedFieldsContainer isOpen={isOpen}>
         <Field label='Entrada' value={translatedInputs} />
-        <Field label='Seu resultado' value={translatedUserOutput} isFromUser={true} />
+        <Field
+          label='Seu resultado'
+          value={userOutput ? (userOutput as string) : 'sem resultado'}
+          isFromUser={true}
+        />
         <Field label='Resultado esperado' value={translatedExpectedOutput} />
       </AnimatedFieldsContainer>
     </div>

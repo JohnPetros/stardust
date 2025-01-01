@@ -6,6 +6,7 @@ import type monaco from 'monaco-editor'
 
 import { COLORS, EDITOR_THEMES } from '@/constants'
 import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
+import type { CursorPosition } from './types/CursorPosition'
 
 export function useEditor(value: string) {
   const monaco = useMonaco()
@@ -25,7 +26,7 @@ export function useEditor(value: string) {
     return rules
   }, [])
 
-  function getCursorPosition() {
+  const getCursorPosition = useCallback(() => {
     const position = editorRef.current?.getPosition()
 
     if (!position) return null
@@ -34,7 +35,27 @@ export function useEditor(value: string) {
       lineNumber: position.lineNumber,
       columnNumber: position.column,
     }
-  }
+  }, [])
+
+  const setCursorPosition = useCallback((cursorPostion: CursorPosition) => {
+    return editorRef.current?.setPosition({
+      lineNumber: cursorPostion.lineNumber,
+      column: cursorPostion.columnNumber,
+    })
+  }, [])
+
+  const getSelectedLinesRange = useCallback(() => {
+    const selection = editorRef.current?.getSelection()
+
+    if (selection) {
+      return {
+        start: selection.startLineNumber,
+        end: selection.endLineNumber,
+      }
+    }
+
+    return null
+  }, [])
 
   const getValue = useCallback(() => {
     return editorRef.current?.getValue() ?? ''
@@ -93,6 +114,8 @@ export function useEditor(value: string) {
     setValue,
     reloadValue,
     getCursorPosition,
+    setCursorPosition,
+    getSelectedLinesRange,
     handleEditorDidMount,
   }
 }

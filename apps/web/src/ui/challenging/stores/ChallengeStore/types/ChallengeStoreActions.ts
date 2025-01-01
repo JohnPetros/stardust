@@ -8,6 +8,7 @@ export type ChallengeStoreActions = {
   setPanelsLayout: (panelsLayout: PanelsLayout) => void
   setCraftsVisibility: (craftsVislibility: ChallengeCraftsVisibility) => void
   setTabHandler: (tabHandler: TabHandler) => void
+  setResults: (results: boolean[]) => void
   setMdx: (mdx: string) => void
   resetStore: () => void
 }

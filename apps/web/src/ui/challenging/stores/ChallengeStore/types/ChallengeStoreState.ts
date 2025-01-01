@@ -8,5 +8,6 @@ export type ChallengeStoreState = {
   craftsVislibility: ChallengeCraftsVisibility
   mdx: string
   panelsLayout: PanelsLayout
+  results: boolean[]
   tabHandler: TabHandler | null
 }

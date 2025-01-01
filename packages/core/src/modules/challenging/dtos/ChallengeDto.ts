@@ -18,6 +18,8 @@ export type ChallengeDto = {
   createdAt: Date
   textBlocks: TextBlockDto[]
   categories: ChallengeCategoryDto[]
+  userOutputs?: unknown[]
+  results?: boolean[]
   description: string
   testCases: TestCaseDto[]
 }

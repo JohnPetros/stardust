@@ -11,7 +11,7 @@ export const useZustandChallengeStore = create<ChallengeStore>()(
     return {
       state: INITIAL_CHALLENGE_STORE_STATE,
       actions: {
-        setChallenge(challenge: Challenge) {
+        setChallenge(challenge: Challenge | null) {
           return set(({ state }) => {
             state.challenge = challenge
           })
@@ -20,6 +20,12 @@ export const useZustandChallengeStore = create<ChallengeStore>()(
         setPanelsLayout(panelsLayout: PanelsLayout) {
           return set(({ state }) => {
             state.panelsLayout = panelsLayout
+          })
+        },
+
+        setResults(results: boolean[]) {
+          return set(({ state }) => {
+            state.results = results
           })
         },
 

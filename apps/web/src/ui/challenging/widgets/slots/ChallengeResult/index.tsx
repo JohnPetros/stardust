@@ -5,7 +5,9 @@ import { TestCase } from './TestCase'
 import { useChallengeResultSlot } from './useChallengeResultSlot'
 
 export function ChallengeResultSlot() {
-  const { challenge, userAnswer, handleUserAnswer } = useChallengeResultSlot()
+  const { challenge, results, userAnswer, handleUserAnswer } = useChallengeResultSlot()
+
+  console.log('results', results)
 
   if (challenge)
     return (
@@ -16,7 +18,7 @@ export function ChallengeResultSlot() {
               key={testCase.position.value}
               position={testCase.position.value}
               isLocked={testCase.isLocked.isTrue}
-              isCorrect={challenge.results.getByIndex(index, false)}
+              isCorrect={results[index] ?? false}
               inputs={testCase.inputs}
               userOutput={challenge.userOutputs.getByIndex(index, undefined)}
               expectedOutput={testCase.expectedOutput}

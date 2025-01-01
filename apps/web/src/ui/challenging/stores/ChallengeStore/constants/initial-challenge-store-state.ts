@@ -8,7 +8,7 @@ export const INITIAL_CHALLENGE_STORE_STATE: ChallengeStoreState = {
     canShowComments: false,
   }),
   mdx: '',
-  vote: null,
+  results: [],
   tabHandler: null,
   panelsLayout: 'tabs-left;code_editor-right',
 }

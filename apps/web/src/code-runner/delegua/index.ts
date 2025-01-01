@@ -1,4 +1,13 @@
-import { AvaliadorSintatico, InterpretadorBase, Lexador } from '@designliquido/delegua'
+import {
+  AvaliadorSintatico,
+  InterpretadorBase,
+  Lexador,
+  TradutorJavaScript,
+  TradutorReversoJavaScript,
+} from '@designliquido/delegua'
+
+import { AvaliadorSintaticoJavaScript } from '@designliquido/delegua/avaliador-sintatico/traducao/avaliador-sintatico-javascript'
+import { LexadorJavaScript } from '@designliquido/delegua/lexador/traducao/lexador-javascript'
 
 import { CodeRunnerResponse } from '@stardust/core/responses'
 import type { ICodeRunnerProvider } from '@stardust/core/interfaces'
@@ -33,8 +42,7 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
         return trateErro(erro, linhaDoErro)
       }
 
-      let result: string | boolean = ''
-
+      let result = ''
       if (resultado[1]) {
         result = resultado[1]
       }
@@ -87,13 +95,24 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
       return comandosLeia?.length ?? 0
     },
 
-    translateToCodeRunner(jsCode: unknown) {
-      return ''
+    translateToCodeRunner(jsCode: string) {
+      const lexador = new LexadorJavaScript()
+      const avaliadorSintatico = new AvaliadorSintaticoJavaScript()
+      const resultadoLexico = lexador.mapear(jsCode.split('\n'), -1)
+      const resultadoSintatico = avaliadorSintatico.analisar(resultadoLexico, -1)
+      const tradutor = new TradutorReversoJavaScript()
+      const traducao = tradutor.traduzir(resultadoSintatico.declaracoes)
+      return traducao.trim()
     },
 
     translateToJs(codeRunnerCode: string) {
-      // codeRunnerCode.replaceAll()
-      return codeRunnerCode
+      const lexador = new Lexador()
+      const avaliadorSintatico = new AvaliadorSintatico()
+      const resultadoLexico = lexador.mapear(codeRunnerCode.split('\n'), -1)
+      const resultadoSintatico = avaliadorSintatico.analisar(resultadoLexico, -1)
+      const tradutor = new TradutorJavaScript()
+      const traducao = tradutor.traduzir(resultadoSintatico.declaracoes)
+      return traducao.trim()
     },
   }
 }
