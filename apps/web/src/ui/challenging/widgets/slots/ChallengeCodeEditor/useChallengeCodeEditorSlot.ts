@@ -22,7 +22,7 @@ export function useChallengeCodeEditorSlot() {
   const { provider } = useCodeRunner()
   const toast = useToastContext()
   const router = useRouter()
-  const userCode = useRef<Code>(Code.create(provider, ''))
+  const userCode = useRef<Code>(Code.create(provider))
   const previousUserCode = useRef('')
   const editorContainerRef = useRef<HTMLDivElement>(null)
   const editorRef = useRef<EditorRef>(null)
@@ -31,7 +31,9 @@ export function useChallengeCodeEditorSlot() {
   const [codeEditorHeight, setCodeEditorHeight] = useState(0)
   const initialCode =
     typeof window !== 'undefined'
-      ? localStorage?.getItem(STORAGE.keys.challengeCode) ?? challenge?.code ?? ''
+      ? localStorage?.getItem(`${STORAGE.keys.challengeCode}:${challenge?.id}`) ??
+        challenge?.code ??
+        ''
       : ''
 
   const handleCodeRunnerError = useCallback(
@@ -53,7 +55,7 @@ export function useChallengeCodeEditorSlot() {
 
     try {
       await challenge.runCode(userCode.current)
-      router.goTo(`${ROUTES.challenging.challenge}/${challenge?.slug}/result`)
+      // router.goTo(`${ROUTES.challenging.challenge}/${challenge?.slug.value}/result`)
     } catch (error) {
       if (error instanceof CodeRunnerError) {
         handleCodeRunnerError(error.message, error.line)
@@ -70,7 +72,7 @@ export function useChallengeCodeEditorSlot() {
   }
 
   function handleCodeChange(value: string) {
-    localStorage.setItem(STORAGE.keys.challengeCode, value)
+    localStorage.setItem(`${STORAGE.keys.challengeCode}:${challenge?.id}`, value)
     // previousUserCode.current = userCode.current
     userCode.current = userCode.current.changeValue(value)
   }
@@ -80,8 +82,9 @@ export function useChallengeCodeEditorSlot() {
   }, [])
 
   useEffect(() => {
-    if (!userCode?.current && challenge)
+    if (!userCode?.current.value && challenge) {
       userCode.current = Code.create(provider, initialCode)
+    }
   }, [challenge, provider, initialCode])
 
   useEffect(() => {

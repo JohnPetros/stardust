@@ -12,7 +12,7 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
   const avaliadorSintatico = new AvaliadorSintatico()
 
   return {
-    async run(code: string, shouldReturnResult = false) {
+    async run(code: string) {
       const outputs: string[] = []
 
       function funcaoDeSaida(novaSaida: string) {
@@ -22,7 +22,6 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
       const interpretador = new InterpretadorBase('', false, funcaoDeSaida, funcaoDeSaida)
       const resultadoLexador = lexador.mapear(code.split('\n'), -1)
       const resultadoAvaliacaoSintatica = avaliadorSintatico.analisar(resultadoLexador, 0)
-
       const { resultado, erros } = await interpretador.interpretar(
         resultadoAvaliacaoSintatica.declaracoes,
         false,
@@ -36,15 +35,8 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
 
       let result: string | boolean = ''
 
-      if (resultado.length && shouldReturnResult) {
-        for (const valor of resultado) {
-          if (valor.includes('valor') && resultado[0]) {
-            result = (JSON.parse(resultado[0]) as { valor: string | boolean }).valor
-            if (result === true) result = 'verdadeiro'
-            if (result === false) result = 'falso'
-            break
-          }
-        }
+      if (resultado[1]) {
+        result = resultado[1]
       }
 
       return new CodeRunnerResponse({ result, outputs })
@@ -100,7 +92,8 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
     },
 
     translateToJs(codeRunnerCode: string) {
-      return ''
+      // codeRunnerCode.replaceAll()
+      return codeRunnerCode
     },
   }
 }

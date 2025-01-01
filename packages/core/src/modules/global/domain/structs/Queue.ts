@@ -13,7 +13,7 @@ class Node<Value = unknown> {
     return new Node(value, nextNode)
   }
 
-  setNextNode(newNode: Node) {
+  setNextNode(newNode: Node<Value>) {
     return new Node<Value>(this.value, newNode)
   }
 }

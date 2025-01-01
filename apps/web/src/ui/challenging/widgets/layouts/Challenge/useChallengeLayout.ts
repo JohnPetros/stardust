@@ -38,7 +38,6 @@ export function useChallengeLayout(
     timeout = setTimeout(() => setIsTransitionPageVisible(false), 5000)
 
     return () => {
-      localStorage.removeItem(STORAGE.keys.challengeCode)
       clearTimeout(timeout)
     }
   }, [])

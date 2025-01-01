@@ -39,7 +39,7 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
             </Tooltip>
             <ToolBar.Button
               type='button'
-              className='h-6 w-max items-center rounded bg-green-400 px-4 text-xs font-semibold text-gray-900 transition-[scale] duration-200 active:scale-95'
+              className='h-6 w-max items-center rounded bg-green-400 px-4 text-xs font-medium text-gray-900 transition-[scale] duration-200 active:scale-95'
               onClick={handleRunCode}
             >
               Executar

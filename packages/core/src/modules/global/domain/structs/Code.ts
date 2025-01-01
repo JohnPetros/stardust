@@ -15,12 +15,12 @@ export class Code {
     this.value = props.value
   }
 
-  static create(codeRunner: ICodeRunnerProvider, preCodeValue: string): Code {
+  static create(codeRunner: ICodeRunnerProvider, preCodeValue = ''): Code {
     return new Code({ codeRunner, value: preCodeValue })
   }
 
   async run() {
-    return await this.codeRunner.run(this.value, false)
+    return await this.codeRunner.run(this.value)
   }
 
   addInputs(inputs: CodeInput[]) {

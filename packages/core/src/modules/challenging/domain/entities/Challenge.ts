@@ -47,12 +47,12 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   private formatCode(code: Code, testCase: TestCase) {
-    if (code.inputsCount !== testCase.inputs.length) {
-      throw new InsufficientInputsError()
-    }
-
     if (this.props.functionName) {
       return code.addFunction(this.props.functionName.value, testCase.inputs)
+    }
+
+    if (code.inputsCount !== testCase.inputs.length) {
+      throw new InsufficientInputsError()
     }
 
     return code.addInputs(testCase.inputs)
@@ -70,6 +70,8 @@ export class Challenge extends Entity<ChallengeProps> {
       const response = await formattedCode.run()
 
       if (response.isFailure) response.throwError()
+
+      console.log('response', response)
 
       let result = this.hasFunction.isTrue ? response.result : response.outputs[0]
 
@@ -253,6 +255,8 @@ export class Challenge extends Entity<ChallengeProps> {
       docId: this.props.docId?.value,
       authorSlug: this.authorSlug.value,
       downvotesCount: this.downvotesCount.value,
+      functionName: this.props.functionName?.value,
+      starId: this.props.starId?.value,
       upvotesCount: this.upvotesCount.value,
       completionsCount: this.completionsCount.value,
       categories: this.categories.map((category) => category.dto),
