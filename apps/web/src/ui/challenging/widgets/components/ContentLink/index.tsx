@@ -42,7 +42,7 @@ export function ContentLink({
       {isBlocked ? (
         <span className='flex items-center gap-2'>
           {title}
-          <Icon name='lock' className='text-gray-500' />
+          <Icon name='lock' size={16} className='text-gray-500' />
         </span>
       ) : (
         title

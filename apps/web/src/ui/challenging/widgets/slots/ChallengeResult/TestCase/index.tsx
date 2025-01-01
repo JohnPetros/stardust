@@ -50,9 +50,9 @@ export function TestCase({
         <div className='flex items-center'>
           <span className='grid h-6 w-6 place-content-center rounded-full bg-green-900'>
             {isCorrect ? (
-              <Icon name='check' className='text-green-500' weight='bold' />
+              <Icon name='check' size={16} className='text-green-500' weight='bold' />
             ) : (
-              <Icon name='close' className='text-red-700' weight='bold' />
+              <Icon name='close' size={16} className='text-red-700' weight='bold' />
             )}
           </span>
           <h4

@@ -91,8 +91,8 @@ export class User extends Entity<UserProps> {
     this.earnCoins(reward)
   }
 
-  canBuy(coins: number): boolean {
-    return this.props.coins.value >= coins
+  canBuy(coins: number): Logical {
+    return Logical.create('Esse usuário pode comprar?', this.props.coins.value >= coins)
   }
 
   buyRocket(rocket: Rocket): void {
@@ -101,7 +101,7 @@ export class User extends Entity<UserProps> {
       return
     }
 
-    if (this.canBuy(rocket.price.value)) {
+    if (this.canBuy(rocket.price.value).isTrue) {
       this.loseCoins(rocket.price.value)
       this.selectRocket(rocket)
       this.props.acquiredRocketsIds.add(rocket.id)
@@ -115,7 +115,7 @@ export class User extends Entity<UserProps> {
       return
     }
 
-    if (this.canBuy(avatar.price.value)) {
+    if (this.canBuy(avatar.price.value).isTrue) {
       this.loseCoins(avatar.price.value)
       this.selectAvatar(avatar)
       this.props.acquiredAvatarsIds.add(avatar.id)

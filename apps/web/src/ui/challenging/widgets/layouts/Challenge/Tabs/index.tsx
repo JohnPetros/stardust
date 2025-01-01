@@ -11,6 +11,7 @@ import { BlockedSolutionsAlertDialog } from '../../../components/BlockedSolution
 import { ContentLink } from '../../../components/ContentLink'
 import { useTabs } from './useTabs'
 import { TabContent } from './TabContent'
+import { Button } from '@/ui/global/widgets/components/Button'
 
 type TabsProps = {
   children: ReactNode
@@ -24,7 +25,7 @@ export function Tabs({ children }: TabsProps) {
   return (
     <div className='max-h-screen w-full rounded-md border-4 border-gray-700'>
       <Root defaultValue='description' orientation='horizontal'>
-        <List className='flex items-center bg-gray-700 px-2'>
+        <List className='flex items-center bg-gray-700 px-2 pb-1.5'>
           <TabButton value='description'>
             <ContentLink
               title='Descrição'
@@ -44,7 +45,7 @@ export function Tabs({ children }: TabsProps) {
           <span className='text-gray-600'>|</span>
           {craftsVislibility.canShowComments.isFalse ? (
             <BlockedCommentsAlertDialog>
-              <TabButton value='comments' asChild>
+              <TabButton value='comments'>
                 <ContentLink
                   title='Comentários'
                   contentType='comments'
@@ -66,7 +67,7 @@ export function Tabs({ children }: TabsProps) {
           <span className='text-gray-600'>|</span>
           {craftsVislibility.canShowSolutions.isFalse ? (
             <BlockedSolutionsAlertDialog onShowSolutions={handleShowSolutions}>
-              <TabButton value='solutions' asChild>
+              <TabButton value='solutions'>
                 <ContentLink
                   title='Soluções'
                   contentType='solutions'
