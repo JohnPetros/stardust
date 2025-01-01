@@ -4,12 +4,7 @@ import { useState } from 'react'
 
 import type { ListingOrder } from '@stardust/core/global/types'
 import { Comment } from '@stardust/core/forum/entities'
-import type {
-  CommentsListingParams,
-  CommentsListingSorter,
-} from '@stardust/core/forum/types'
-import type { CommentDto } from '@stardust/core/forum/dtos'
-import type { ApiResponse, PaginationResponse } from '@stardust/core/responses'
+import type { CommentsListingSorter } from '@stardust/core/forum/types'
 
 import { CACHE } from '@/constants'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
@@ -44,11 +39,12 @@ export function useCommentsList({ onFetchComments, onSaveComment }: CommentsList
     return response.body
   }
 
-  const { data, isLoading, refetch, nextPage } = usePaginatedCache({
+  const { data, isLoading, isRecheadedEnd, refetch, nextPage } = usePaginatedCache({
     key: CACHE.keys.comments,
     itemsPerPage: COMMENTS_PER_PAGE,
     fetcher: fetchComments,
     shouldRefetchOnFocus: false,
+    isInfinity: true,
     dependencies: [sorter, order],
   })
 
@@ -116,6 +112,7 @@ export function useCommentsList({ onFetchComments, onSaveComment }: CommentsList
     sorter,
     order,
     comments: data.map(Comment.create),
+    isRecheadedEnd,
     popoverMenuButtons,
     nextPage,
     handlePopoverMenuOpenChange,

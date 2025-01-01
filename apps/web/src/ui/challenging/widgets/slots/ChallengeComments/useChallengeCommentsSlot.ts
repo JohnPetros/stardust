@@ -25,7 +25,6 @@ export function useChallengeCommentsSlot(challengeId: string) {
   async function handleCommentSave(comment: Comment) {
     const response = await api.saveChallengeComment(comment, challengeId)
     if (response.isFailure) toast.show(response.errorMessage)
-    console.log(response.isSuccess)
   }
 
   // useEffect(() => {

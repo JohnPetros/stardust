@@ -17,6 +17,8 @@ export function ChallengeCommentsSlot({ challengeId }: ChallengeCommentsSlotProp
       <div className='md:hidden'>
         <ContentDialog contentType='comments'>
           <CommentsList
+            inputPlaceholder='Deixe um comentário sobre esse desafio...'
+            emptyListMessage='Esse desafio ainda não tem comentários. Seja a primeira pessoa a comentar 😉.'
             onFetchComments={handleCommentListFetch}
             onSaveComment={handleCommentSave}
           />
@@ -26,6 +28,8 @@ export function ChallengeCommentsSlot({ challengeId }: ChallengeCommentsSlotProp
 
   return (
     <CommentsList
+      inputPlaceholder='Deixe um comentário sobre esse desafio...'
+      emptyListMessage='Esse desafio ainda não tem comentários. Seja a primeira pessoa a comentar 😉.'
       onFetchComments={handleCommentListFetch}
       onSaveComment={handleCommentSave}
     />

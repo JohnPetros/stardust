@@ -1,27 +1,34 @@
 'use client'
 
-import type { TopicDto } from '@stardust/core/forum/dtos'
-import { Topic } from '@stardust/core/forum/entities'
-
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useBreakpoint } from '@/ui/global/hooks'
 import { AnimatedArrow } from '../AnimatedArrow'
 import { PopoverMenu } from '../PopoverMenu'
 import { Separator } from '../Separator'
 import { useCommentsList } from './useCommentsList'
-import { Loading } from '../Loading'
 import { Comment } from './Comment'
 import { CommentInput } from './CommentInput'
 import type { CommentsListProps } from './CommentsListProps'
 import { CommentSkeleton } from './CommentSkeleton'
 import { ShowMoreButton } from '../ShowMoreButton'
 
-export function CommentsList({ onSaveComment, onFetchComments }: CommentsListProps) {
+type Props = {
+  inputPlaceholder: string
+  emptyListMessage: string
+} & CommentsListProps
+
+export function CommentsList({
+  inputPlaceholder,
+  emptyListMessage,
+  onSaveComment,
+  onFetchComments,
+}: Props) {
   const {
     isLoading,
     comments,
     sorter,
     order,
+    isRecheadedEnd,
     isPopoverMenuOpen,
     popoverMenuButtons,
     nextPage,
@@ -43,7 +50,7 @@ export function CommentsList({ onSaveComment, onFetchComments }: CommentsListPro
     <div className='pb-6 pt-4'>
       <header className='flex flex-col gap-3'>
         <strong className='text-center text-sm font-semibold text-gray-100'>
-          {comments?.length} Comentário{comments?.length === 1 && 's'}
+          {comments?.length} Comentário{comments?.length !== 1 && 's'}
         </strong>
         {comments && (
           <div className='flex justify-end rounded-md bg-gray-700 px-6 py-2 md:rounded-none md:bg-gray-800'>
@@ -67,14 +74,14 @@ export function CommentsList({ onSaveComment, onFetchComments }: CommentsListPro
         <CommentInput
           id={isMobile ? 'user-comment-mobile' : 'user-comment'}
           title='Comentar'
-          placeholder='Deixe um comentário sobre esse desafio...'
+          placeholder={inputPlaceholder}
           onSend={handleSendComment}
         />
       </div>
 
       {!isLoading && comments.length === 0 ? (
         <p className='mt-12 text-center text-sm font-medium text-gray-100'>
-          Esse desafio ainda não tem comentários. Seja a primeira pessoa a comentar 😉.
+          {emptyListMessage}
         </p>
       ) : (
         <div className='px-6'>
@@ -120,7 +127,9 @@ export function CommentsList({ onSaveComment, onFetchComments }: CommentsListPro
                   )
               })}
           </ul>
-          <ShowMoreButton isLoading={isLoading} onClick={nextPage} className='mt-12' />
+          {!isRecheadedEnd && (
+            <ShowMoreButton isLoading={isLoading} onClick={nextPage} className='mt-24' />
+          )}
         </div>
       )}
     </div>

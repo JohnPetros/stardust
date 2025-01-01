@@ -13,7 +13,6 @@ type CommentProps = {
 
 export class Comment extends Entity<CommentProps> {
   static create(dto: CommentDto) {
-    console.log(dto)
     return new Comment(
       {
         content: Text.create(dto.content),
