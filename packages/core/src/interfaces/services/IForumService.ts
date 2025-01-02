@@ -15,5 +15,5 @@ export interface IForumService {
   saveCommentUpvote(commentId: string, userId: string): Promise<ApiResponse>
   updateCommentContent(commentContent: string, commentId: string): Promise<ApiResponse>
   deleteComment(commentId: string): Promise<ApiResponse>
-  deleteCommentUpvote(commentId: string): Promise<ApiResponse>
+  deleteCommentUpvote(commentId: string, userId: string): Promise<ApiResponse>
 }

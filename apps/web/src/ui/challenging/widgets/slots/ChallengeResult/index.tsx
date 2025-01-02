@@ -7,8 +7,6 @@ import { useChallengeResultSlot } from './useChallengeResultSlot'
 export function ChallengeResultSlot() {
   const { challenge, results, userAnswer, handleUserAnswer } = useChallengeResultSlot()
 
-  console.log('results', results)
-
   if (challenge)
     return (
       <div className='relative h-full w-full scale-[1] bg-gray-800 blur-[1]'>

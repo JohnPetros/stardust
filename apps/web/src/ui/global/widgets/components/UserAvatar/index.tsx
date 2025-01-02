@@ -18,10 +18,11 @@ export function UserAvatar({ avatarImage, avatarName, size }: UserAvatarProps) {
     <Avatar.Root>
       <Avatar.Image
         src={avatarImageSrc}
-        className='skeleton relative grid place-content-center overflow-hidden border border-green-700 bg-gray-300 shrink-0 rounded-full'
         style={{ width: size, height: size, borderRadius: '50%' }}
         onLoad={(element) => element.currentTarget.classList.remove('skeleton')}
         alt={`Avatar ${avatarName}`}
+        loading='eager'
+        className='skeleton relative grid place-content-center overflow-hidden border border-green-700 bg-gray-300 shrink-0 rounded-full'
       />
     </Avatar.Root>
   )

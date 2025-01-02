@@ -13,4 +13,5 @@ export type SupabaseUser = Database['public']['Tables']['users']['Row'] & {
   users_acquired_rockets?: { rocket_id: string }[]
   users_acquired_avatars?: { avatar_id: string }[]
   users_completed_challenges?: { challenge_id: string }[]
+  users_upvoted_comments?: { comment_id: string }[]
 }

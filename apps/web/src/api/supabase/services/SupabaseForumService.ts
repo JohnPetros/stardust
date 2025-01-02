@@ -11,10 +11,11 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
   const supabaseCommentMapper = SupabaseCommentMapper()
 
   return {
-    async fetchCommentById() {
+    async fetchCommentById(commentId: string) {
       const { data, error, status } = await supabase
         .from('comments_view')
         .select('*')
+        .eq('id', commentId)
         .single()
 
       if (error) {
@@ -194,11 +195,11 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
       return new ApiResponse()
     },
 
-    async deleteCommentUpvote(commentId: string) {
+    async deleteCommentUpvote(commentId: string, userId: string) {
       const { error, status } = await supabase
         .from('users_upvoted_comments')
         .delete()
-        .eq('id', commentId)
+        .match({ comment_id: commentId, user_id: userId })
 
       if (error) {
         return SupabasePostgrestError(

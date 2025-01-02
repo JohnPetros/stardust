@@ -56,16 +56,14 @@ export const SupabaseUserMapper = () => {
           supabaseUser.users_completed_challenges?.map(
             ({ challenge_id }) => challenge_id,
           ) ?? [],
+        upvotedCommentsIds:
+          supabaseUser.users_upvoted_comments?.map(({ comment_id }) => comment_id) ?? [],
         completedPlanetsIds: [],
         canSeeRankingResult: supabaseUser.can_see_ranking,
         lastWeekRankingPosition: supabaseUser.last_week_ranking_position,
         weekStatus: supabaseUser.week_status,
         createdAt: supabaseUser.created_at,
         didIncrementStreakOnSaturday: supabaseUser.did_complete_saturday,
-
-        // studyTime: supabaseUser.study_time ?? '',
-        // didBreakStreak: supabaseUser.did_break_streak ?? false,
-        // didCompleteSaturday: supabaseUser.did_complete_saturday ?? false,
       }
 
       return userDto

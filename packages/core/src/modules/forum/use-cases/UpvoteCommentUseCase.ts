@@ -22,7 +22,7 @@ export class UpvoteCommentUseCase implements IUseCase<Request, Response> {
 
     if (isCommentUpvoted.isTrue) {
       comment.removeUpvote()
-      const response = await this.forumService.deleteCommentUpvote(comment.id)
+      const response = await this.forumService.deleteCommentUpvote(comment.id, user.id)
       if (response.isFailure) response.throwError()
     }
 

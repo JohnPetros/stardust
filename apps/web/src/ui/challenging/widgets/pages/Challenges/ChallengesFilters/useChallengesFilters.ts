@@ -165,8 +165,6 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
     removedCategoriesNames.current = removedCategoriesNames.current.makeEmpty()
   }, [categoriesIds])
 
-  console.log(tags)
-
   return {
     tags,
     difficultyLevel,

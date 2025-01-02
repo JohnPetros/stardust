@@ -13,7 +13,6 @@ type AuthorProps = {
 
 export class Author extends Entity<AuthorProps> {
   static create(dto: AuthorDto) {
-    console.log(dto)
     return new Author(
       {
         name: Name.create(dto.name),

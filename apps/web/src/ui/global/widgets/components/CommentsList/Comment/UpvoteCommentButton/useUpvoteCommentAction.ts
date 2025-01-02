@@ -11,20 +11,21 @@ export function useUpvoteCommentAction(
   const toast = useToastContext()
   const [isUpvoted, setIsUpvoted] = useState(initialIsUpvoted)
   const [upvotesCount, setUpvotesCount] = useState(initialUpvotesCount)
-  const { executeAsync } = useAction(forumActions.upvoteComment, {
+  const { executeAsync, isPending } = useAction(forumActions.upvoteComment, {
     onError: ({ error }) => {
       setUpvotesCount(initialUpvotesCount)
       setIsUpvoted(initialIsUpvoted)
       if (error.serverError) toast.show(error.serverError)
     },
-    onExecute: () => {
-      if (isUpvoted) setUpvotesCount((upvotesCount) => upvotesCount - 1)
-      else setUpvotesCount((upvotesCount) => upvotesCount + 1)
-      setIsUpvoted(!isUpvoted)
-    },
   })
 
   async function upvote(commentId: string) {
+    if (isPending) return
+
+    if (isUpvoted && upvotesCount > 0) setUpvotesCount((upvotesCount) => upvotesCount - 1)
+    else setUpvotesCount((upvotesCount) => upvotesCount + 1)
+    setIsUpvoted(!isUpvoted)
+
     const reponse = await executeAsync({ commentId })
     if (reponse?.data) setUpvotesCount(reponse?.data.upvotesCount)
   }
