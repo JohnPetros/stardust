@@ -10,6 +10,7 @@ type Request = {
 
 type Response = Promise<{
   upvotesCount: number
+  userUpvotedCommentsIds: string[]
 }>
 
 export class UpvoteCommentUseCase implements IUseCase<Request, Response> {
@@ -21,19 +22,20 @@ export class UpvoteCommentUseCase implements IUseCase<Request, Response> {
     const isCommentUpvoted = user.hasUpvotedComment(comment.id)
 
     if (isCommentUpvoted.isTrue) {
-      comment.removeUpvote()
+      user.removeUpvoteComment(comment)
       const response = await this.forumService.deleteCommentUpvote(comment.id, user.id)
       if (response.isFailure) response.throwError()
     }
 
     if (isCommentUpvoted.isFalse) {
-      comment.upvote()
+      user.upvoteComment(comment)
       const response = await this.forumService.saveCommentUpvote(comment.id, user.id)
       if (response.isFailure) response.throwError()
     }
 
     return {
       upvotesCount: comment.upvotesCount.value,
+      userUpvotedCommentsIds: user.upvotedCommentsIds.items,
     }
   }
 

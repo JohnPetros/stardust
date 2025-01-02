@@ -12,6 +12,7 @@ import {
   type Observer,
   type List,
 } from '#global/structs'
+import type { Comment } from '#forum/entities'
 import type { AchievementMetricValue } from '#profile/types'
 import type { UserDto } from '#global/dtos'
 import { UserFactory } from '#global/factories'
@@ -197,6 +198,16 @@ export class User extends Entity<UserProps> {
     return avatarId === this.avatar.id
   }
 
+  upvoteComment(comment: Comment): void {
+    comment.upvote()
+    this.props.upvotedCommentsIds = this.props.upvotedCommentsIds.add(comment.id)
+  }
+
+  removeUpvoteComment(comment: Comment): void {
+    comment.removeUpvote()
+    this.props.upvotedCommentsIds = this.props.upvotedCommentsIds.remove(comment.id)
+  }
+
   private notifyChanges(): void {
     if (this.props._observer) this.props._observer.callback()
   }
@@ -327,6 +338,10 @@ export class User extends Entity<UserProps> {
 
   get level() {
     return this.props.level
+  }
+
+  get upvotedCommentsIds() {
+    return this.props.upvotedCommentsIds
   }
 
   get canSeeRankingResult() {

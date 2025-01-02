@@ -9,5 +9,5 @@ export type AuthContextValue = {
   handleSignIn(email: string, password: string): Promise<boolean>
   handleSignOut(): Promise<void>
   updateUser(newUser: User): Promise<void>
-  mutateUserCache(userData: UserDto | null): void
+  updateUserCache(userData: UserDto | null): void
 }

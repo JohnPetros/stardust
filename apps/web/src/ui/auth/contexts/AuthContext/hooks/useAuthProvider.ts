@@ -38,7 +38,7 @@ export function useAuthProvider(serverSession: Session | null) {
   const {
     data: userDto,
     isLoading,
-    mutate,
+    updateCache,
   } = useCache({
     key: CACHE.keys.authUser,
     fetcher: fetchUser,
@@ -86,28 +86,28 @@ export function useAuthProvider(serverSession: Session | null) {
     router.goTo(ROUTES.auth.signIn)
   }
 
-  const mutateUserCache = useCallback(
+  const updateUserCache = useCallback(
     (userData: UserDto | null, shouldRevalidate = true) => {
-      mutate(userData, {
+      updateCache(userData, {
         shouldRevalidate,
       })
     },
-    [mutate],
+    [updateCache],
   )
 
   async function updateUser(user: User) {
     if (user?.id) {
       await api.updateUser(user)
-      mutateUserCache(user.dto)
+      updateUserCache(user.dto)
     }
   }
 
   useEffect(() => {
     if (!session?.user.id) {
-      mutateUserCache(null)
+      updateUserCache(null)
       return
     }
-  }, [session?.user.id, mutateUserCache])
+  }, [session?.user.id, updateUserCache])
 
   const value: AuthContextValue = {
     user: setUser(userDto),
@@ -116,7 +116,7 @@ export function useAuthProvider(serverSession: Session | null) {
     handleSignIn,
     handleSignOut,
     updateUser,
-    mutateUserCache,
+    updateUserCache,
   }
 
   return value

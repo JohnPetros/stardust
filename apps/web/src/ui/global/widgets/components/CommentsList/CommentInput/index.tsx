@@ -10,6 +10,7 @@ import { ToolButton } from './ToolButton'
 import { Button } from '../../Button'
 import { Icon } from '../../Icon'
 import { useCommentInput } from './useCommentInput'
+import { Text } from '@stardust/core/global/structs'
 
 type CommentInputProps = {
   id: string
@@ -68,8 +69,8 @@ export function CommentInput({
               <textarea
                 ref={textareaRef}
                 placeholder={placeholder}
-                className='min-h-[4rem] w-full resize-none rounded-md bg-transparent text-sm font-medium text-gray-300  outline-none placeholder:text-gray-500'
-                rows={1}
+                className='min-h-[5rem] w-full resize-none rounded-md bg-transparent text-sm font-medium text-gray-300 outline-none placeholder:text-gray-500'
+                rows={content.length > 3 ? Text.create(content).countCharacters('\n') : 1}
                 value={content}
                 autoFocus={true}
                 onChange={({ currentTarget }) => handleCommentChange(currentTarget.value)}

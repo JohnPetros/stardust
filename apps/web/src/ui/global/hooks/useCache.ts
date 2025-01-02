@@ -22,7 +22,7 @@ type Cache<CacheData> = {
   isLoading: boolean
   isRefetching: boolean
   refetch: () => void
-  mutate: (newCacheData: CacheData | null, consig: MudateConfig) => void
+  updateCache: (newCacheData: CacheData | null, consig: MudateConfig) => void
 }
 
 export function useCache<CacheData>({
@@ -58,6 +58,6 @@ export function useCache<CacheData>({
     isLoading,
     isRefetching: isValidating,
     refetch: () => mutate(),
-    mutate: mutateCache,
+    updateCache: mutateCache,
   }
 }

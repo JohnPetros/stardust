@@ -7,6 +7,7 @@ type Request = {
 
 type Response = {
   upvotesCount: number
+  userUpvotedCommentsIds: string[]
 }
 
 export const UpvoteCommentAction = (

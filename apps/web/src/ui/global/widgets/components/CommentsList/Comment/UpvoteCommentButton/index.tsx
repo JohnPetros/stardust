@@ -4,6 +4,7 @@ import { twMerge } from 'tailwind-merge'
 
 import { Icon } from '../../../Icon'
 import { useUpvoteCommentAction } from './useUpvoteCommentAction'
+import { useUpvoteComment } from './useUpvoteComment'
 
 export type UpvoteButtonProps = {
   commentId: string
@@ -16,7 +17,7 @@ export function UpvoteButton({
   commentId,
   isCommentUpvoted,
 }: UpvoteButtonProps) {
-  const { isUpvoted, upvotesCount, upvote } = useUpvoteCommentAction(
+  const { isUpvoted, upvotesCount, handleButtonClick } = useUpvoteComment(
     initialUpvotesCount,
     isCommentUpvoted,
   )
@@ -24,7 +25,7 @@ export function UpvoteButton({
   return (
     <button
       type='button'
-      onClick={async () => await upvote(commentId)}
+      onClick={() => handleButtonClick(commentId)}
       className={twMerge(
         'flex items-center gap-1 text-sm text-gray-300',
         isUpvoted ? 'text-green-700' : 'text-gray-300',

@@ -1,38 +1,29 @@
-import { useState } from 'react'
 import { useAction } from 'next-safe-action/hooks'
 
 import { forumActions } from '@/server/next-safe-action'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
-export function useUpvoteCommentAction(
-  initialUpvotesCount: number,
-  initialIsUpvoted: boolean,
-) {
+type UseUpvoteCommentActionProps = {
+  onError: VoidFunction
+}
+
+export function useUpvoteCommentAction({ onError }: UseUpvoteCommentActionProps) {
   const toast = useToastContext()
-  const [isUpvoted, setIsUpvoted] = useState(initialIsUpvoted)
-  const [upvotesCount, setUpvotesCount] = useState(initialUpvotesCount)
   const { executeAsync, isPending } = useAction(forumActions.upvoteComment, {
     onError: ({ error }) => {
-      setUpvotesCount(initialUpvotesCount)
-      setIsUpvoted(initialIsUpvoted)
+      onError()
       if (error.serverError) toast.show(error.serverError)
     },
   })
 
-  async function upvote(commentId: string) {
+  async function upvoteComment(commentId: string) {
     if (isPending) return
-
-    if (isUpvoted && upvotesCount > 0) setUpvotesCount((upvotesCount) => upvotesCount - 1)
-    else setUpvotesCount((upvotesCount) => upvotesCount + 1)
-    setIsUpvoted(!isUpvoted)
-
     const reponse = await executeAsync({ commentId })
-    if (reponse?.data) setUpvotesCount(reponse?.data.upvotesCount)
+    if (reponse?.data) return reponse?.data
   }
 
   return {
-    isUpvoted,
-    upvotesCount,
-    upvote,
+    upvoteComment,
+    isExecuting: isPending,
   }
 }
