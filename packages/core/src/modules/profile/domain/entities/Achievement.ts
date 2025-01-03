@@ -19,9 +19,12 @@ export class Achievement extends Entity<AchievementProps> {
       {
         name: Name.create(dto.name),
         metric: AchievementMetric.create(dto.metric),
-        requiredCount: Integer.create('Achievement Required Count', dto.requiredCount),
-        reward: Integer.create('Achievement Reward', dto.reward),
-        position: OrdinalNumber.create('Achievement Position', dto.position),
+        requiredCount: Integer.create(
+          dto.requiredCount,
+          'Contamge mínimia exigida pela conquista',
+        ),
+        reward: Integer.create(dto.reward, 'Recompensa da conquista'),
+        position: OrdinalNumber.create(dto.position, 'Posição da conquitas'),
         icon: Image.create(dto.icon),
         description: dto.description,
       },

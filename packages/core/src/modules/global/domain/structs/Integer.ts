@@ -7,7 +7,7 @@ export class Integer {
     this.value = value
   }
 
-  static create(key: string, value: number) {
+  static create(value: number, key = 'Número inteiro') {
     new NumberValidation(value, key).min(0).validate()
 
     return new Integer(value)

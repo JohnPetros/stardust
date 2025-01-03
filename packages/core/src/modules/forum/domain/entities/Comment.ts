@@ -1,14 +1,18 @@
 import { Entity } from '#global/abstracts'
-import { Id, Integer, Text } from '#global/structs'
+import { Integer, Text } from '#global/structs'
+import { Author } from '#global/entities'
+import { EntityNotDefinedError } from '#global/errors'
 import type { CommentDto } from '#forum/dtos'
-import { Author } from './Author'
 
 type CommentProps = {
   content: Text
   repliesCount: Integer
   upvotesCount: Integer
   createdAt: Date
-  author: Author
+  author: {
+    id: string
+    entity?: Author
+  }
 }
 
 export class Comment extends Entity<CommentProps> {
@@ -17,14 +21,17 @@ export class Comment extends Entity<CommentProps> {
       {
         content: Text.create(dto.content),
         repliesCount: Integer.create(
-          'Contagem de respostas desse comentário',
           dto.repliesCount ?? 0,
+          'Contagem de respostas desse comentário',
         ),
         upvotesCount: Integer.create(
-          'Contagem de upvotes desse comentário',
           dto.upvotesCount ?? 0,
+          'Contagem de upvotes desse comentário',
         ),
-        author: Author.create(dto.author),
+        author: {
+          id: dto.author.id,
+          entity: dto.author.dto && Author.create(dto.author.dto),
+        },
         createdAt: dto.createdAt ? dto.createdAt : new Date(),
       },
       dto?.id,
@@ -44,7 +51,12 @@ export class Comment extends Entity<CommentProps> {
   }
 
   get author() {
+    if (!this.props.author.entity) throw new EntityNotDefinedError('Solução de desafio')
     return this.props.author
+  }
+
+  get authorId() {
+    return this.props.author.id
   }
 
   get upvotesCount() {
@@ -67,13 +79,8 @@ export class Comment extends Entity<CommentProps> {
       upvotesCount: this.upvotesCount.value,
       createdAt: this.createdAt,
       author: {
-        id: this.author.id,
-        name: this.author.name.value,
-        slug: this.author.slug.value,
-        avatar: {
-          name: this.author.avatar.name.value,
-          image: this.author.avatar.image.value,
-        },
+        id: this.authorId,
+        dto: this.author.entity?.dto,
       },
     }
   }

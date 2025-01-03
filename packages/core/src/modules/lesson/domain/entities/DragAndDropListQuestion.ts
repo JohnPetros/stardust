@@ -1,8 +1,8 @@
+import type { UserAnswer } from '#global/structs'
 import { AppError } from '#global/errors'
 import { Image, OrdinalNumber, Logical, SortableList, Text } from '#global/structs'
-import type { DragAndDropListQuestionDto, QuestionDto } from '#lesson/dtos'
 import { Question } from '#lesson/abstracts'
-import type { QuestionAnswer } from '#lesson/structs'
+import type { DragAndDropListQuestionDto, QuestionDto } from '#lesson/dtos'
 
 type DragAndDropListQuestionProps = {
   sortableList: SortableList
@@ -18,8 +18,8 @@ export class DragAndDropListQuestion extends Question<DragAndDropListQuestionPro
       sortableList: SortableList.create(
         dto.items.map((item) => ({
           originalPosition: OrdinalNumber.create(
-            `${item.position}º Drag and drop list question item original position`,
             item.position,
+            `${item.position}º Drag and drop list question item original position`,
           ),
           label: item.label,
         })),
@@ -37,17 +37,14 @@ export class DragAndDropListQuestion extends Question<DragAndDropListQuestionPro
     return question instanceof DragAndDropListQuestion
   }
 
-  verifyUserAnswer(userAnswer: QuestionAnswer): Logical {
+  verifyUserAnswer(userAnswer: UserAnswer): Logical {
     if (!SortableList.isSoratableList(userAnswer.value)) {
       throw new AppError(
-        'User answer for drag and drop list question must be a sortable list.',
+        'A resposta do usuário para um pergunta de drag and drop deve ser uma lista ordenável.',
       )
     }
 
-    return Logical.create(
-      'Is user answer for drag and drop list question correct?',
-      this.sortableList.isEqualTo(userAnswer.value).value,
-    )
+    return Logical.create(this.sortableList.isEqualTo(userAnswer.value).value)
   }
 
   get sortableList(): SortableList {

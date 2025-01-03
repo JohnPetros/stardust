@@ -59,7 +59,7 @@ export class Queue<NodeValue> {
   }
 
   get isEmpty() {
-    return Logical.create('A fila está vazia?', this.firstNode === null)
+    return Logical.create(this.firstNode === null)
   }
 
   get items() {

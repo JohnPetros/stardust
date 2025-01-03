@@ -67,13 +67,13 @@ export class Quiz {
     }
 
     return new Quiz({
-      livesCount: Integer.create('Quiz lives count', 5),
-      currentQuestionIndex: Integer.create('Quiz current question index', 0),
-      incorrectAnswersCount: Integer.create('Quiz incorrect answers count', 0),
+      livesCount: Integer.create(5, 'Contagem de vidas'),
+      currentQuestionIndex: Integer.create(0, 'Índice da questão atual'),
+      incorrectAnswersCount: Integer.create(0, 'Contagem de respostas incorreta'),
       userAnswer: UserAnswer.create(),
       hasAlreadyIncrementIncorrectAnswersCount: Logical.create(
-        'Is quiz has already increment incorrect answers count?',
         false,
+        'O número de respostas incorretas foi incrementado',
       ),
       questions,
     })

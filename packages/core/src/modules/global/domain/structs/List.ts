@@ -44,7 +44,7 @@ export class List<Item> {
   }
 
   isEmpty() {
-    return Logical.create('Is list empty?', this.items.length === 0)
+    return Logical.create(this.items.length === 0)
   }
 
   isEqualTo(otherList: List<Item>) {
@@ -61,7 +61,7 @@ export class List<Item> {
         }
       }
 
-    return Logical.create(`Is ${this.items} equal to ${otherList.items}?`, isTrue)
+    return Logical.create(isTrue)
   }
 
   includesList(otherList: List<Item>): Logical {
@@ -71,18 +71,15 @@ export class List<Item> {
       return this.items.includes(item)
     })
 
-    return Logical.create('includes other list?', verification)
+    return Logical.create(verification)
   }
 
   includes(item: Item): Logical {
-    return Logical.create(`Is ${this.items} includes ${item}?`, this.items.includes(item))
+    return Logical.create(this.items.includes(item))
   }
 
   hasAllEqualTo(value: unknown) {
-    return Logical.create(
-      `Todos os itens da lista são igual a ${value}?`,
-      this.items.every((item) => item === value),
-    )
+    return Logical.create(this.items.every((item) => item === value))
   }
 
   get random() {
@@ -104,6 +101,6 @@ export class List<Item> {
   }
 
   get hasItems() {
-    return Logical.create(`List ${this.items} has items?`, this.length > 0)
+    return Logical.create(this.length > 0)
   }
 }

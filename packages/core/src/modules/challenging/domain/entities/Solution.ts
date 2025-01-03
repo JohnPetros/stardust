@@ -25,7 +25,7 @@ export class Solution extends Entity<SolutionProps> {
         id: dto.author.id,
         entity: dto.author.dto && Author.create(dto.author.dto),
       },
-      viewsCount: Integer.create('Contagem de views da solução', dto.viewsCount),
+      viewsCount: Integer.create(dto.viewsCount, 'Contagem de views da solução'),
     })
   }
 

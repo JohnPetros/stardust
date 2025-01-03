@@ -25,7 +25,7 @@ export class RankingUser extends Entity<RankingUserProps> {
           name: Name.create(dto.avatar.name),
         },
         name: Name.create(dto.name),
-        xp: Integer.create('ranking user xp', dto.xp),
+        xp: Integer.create(dto.xp, 'Xp do usuário do ranking'),
         rankingPosition: RankingPosition.create(dto.position),
         tierId: dto.tierId,
       },

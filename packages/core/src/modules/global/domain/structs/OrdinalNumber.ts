@@ -14,7 +14,7 @@ export class OrdinalNumber {
     this.value = props.value
   }
 
-  static create(key: string, value: number) {
+  static create(value: number, key = 'Número ordinal') {
     new NumberValidation(value, key).min(1).validate()
 
     return new OrdinalNumber({ key, value })

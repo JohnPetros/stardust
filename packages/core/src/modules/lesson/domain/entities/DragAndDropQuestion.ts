@@ -45,7 +45,7 @@ export class DragAndDropQuestion extends Question<DragAndDropQuestionProps> {
       }
     }
 
-    return Integer.create('Drag and drop question drop zones count', count)
+    return Integer.create(count)
   }
 
   get dragAndDrop(): DragAndDrop {

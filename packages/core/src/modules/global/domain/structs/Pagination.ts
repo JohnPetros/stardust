@@ -19,9 +19,9 @@ export class Pagination {
 
   static create(currentPage: number, totalItemsCount: number, itemsPerPage: number) {
     return new Pagination(
-      Integer.create('página atual', currentPage),
-      Integer.create('contagem total de itens', totalItemsCount),
-      Integer.create('itens por página', itemsPerPage),
+      Integer.create(currentPage, 'página atual'),
+      Integer.create(totalItemsCount, 'contagem total de itens'),
+      Integer.create(itemsPerPage, 'itens por página'),
     )
   }
 

@@ -14,7 +14,7 @@ export class Doc extends Entity<DocProps> {
       {
         title: Name.create(dto.title),
         content: Text.create(dto.content),
-        position: OrdinalNumber.create('Doc position', dto.position),
+        position: OrdinalNumber.create(dto.position, 'Posição da doc'),
       },
       dto.id,
     )

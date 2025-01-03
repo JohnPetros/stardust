@@ -15,25 +15,25 @@ export class UserFactory {
       avatar: Avatar.create(dto.avatar),
       tier: Tier.create(dto.tier),
       level: Level.create(dto.level),
-      coins: Integer.create('Moedas do usuário', dto.coins ?? 0),
-      xp: Integer.create('Xp do usuário', dto.xp ?? 0),
-      weeklyXp: Integer.create('Xp semanal do usuário', dto.weeklyXp ?? 0),
+      coins: Integer.create(dto.coins ?? 0, 'Moedas do usuário'),
+      xp: Integer.create(dto.xp ?? 0, 'Xp do usuário'),
+      weeklyXp: Integer.create(dto.weeklyXp ?? 0, 'Xp semanal do usuário'),
       weekStatus: WeekStatus.create(dto?.weekStatus),
-      streak: Integer.create('Streak do usuário', dto?.streak ?? 0),
+      streak: Integer.create(dto?.streak ?? 0, 'Streak do usuário'),
       lastWeekRankingPosition: dto.lastWeekRankingPosition
         ? RankingPosition.create(dto.lastWeekRankingPosition)
         : null,
       didBreakStreak: Logical.create(
-        'Esse usuário quebrou sua streak?',
         dto?.didBreakStreak ?? false,
+        'Esse usuário quebrou sua streak?',
       ),
       canSeeRankingResult: Logical.create(
-        'Esse usuário pode ver o resultado do ranking?',
         dto?.canSeeRankingResult ?? false,
+        'Esse usuário pode ver o resultado do ranking?',
       ),
       hasCompletedSpace: Logical.create(
-        'Esse usuário já completou todos os planetas?',
         dto?.hasCompletedSpace ?? false,
+        'Esse usuário já completou todos os planetas?',
       ),
       unlockedAchievementsIds: List.create(dto?.unlockedAchievementsIds ?? []),
       rescuableAchievementsIds: List.create(dto?.rescuableAchievementsIds ?? []),

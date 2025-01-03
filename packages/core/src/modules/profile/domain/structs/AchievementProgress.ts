@@ -11,8 +11,8 @@ export class AchievementProgress {
 
   static create(userCountValue: number, requiredCountValue: number): AchievementProgress {
     return new AchievementProgress(
-      Integer.create('User count value', userCountValue),
-      Integer.create('Achievement required count value', requiredCountValue),
+      Integer.create(userCountValue, 'Contagem do usuário'),
+      Integer.create(requiredCountValue, 'Contagem mínima exigida pela conquista'),
     )
   }
 

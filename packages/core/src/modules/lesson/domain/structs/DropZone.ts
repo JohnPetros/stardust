@@ -26,8 +26,8 @@ export class DropZone {
 
     return new DropZone({
       type: dto.type,
-      index: Integer.create('Drop zone index', dto.index),
-      hasItem: Logical.create('Drop zone has item?', dto.hasItem),
+      index: Integer.create(dto.index, 'Índice da zona de drop'),
+      hasItem: Logical.create(dto.hasItem, 'Zona de drop possui algum item'),
     })
   }
 
@@ -38,10 +38,10 @@ export class DropZone {
   }
 
   get isBank(): Logical {
-    return Logical.create('Is drop zone type bank?', this.type === 'bank')
+    return Logical.create(this.type === 'bank')
   }
 
   get isSlot(): Logical {
-    return Logical.create('Is drop zone type slot?', this.type === 'slot')
+    return Logical.create(this.type === 'slot')
   }
 }
