@@ -42,6 +42,7 @@ type UserProps = {
   canSeeRankingResult: Logical
   didIncrementStreakOnSaturday: Logical
   lastWeekRankingPosition: RankingPosition | null
+  hasCompletedSpace: Logical
   createdAt: Date
   _observer?: Observer
 }
@@ -223,6 +224,10 @@ export class User extends Entity<UserProps> {
     )
   }
 
+  get hasCompletedSpace(): Logical {
+    return this.props.hasCompletedSpace
+  }
+
   get unlockedStarsCount() {
     return Integer.create('unlocked stars', this.props.unlockedStarsIds.length - 1)
   }
@@ -386,6 +391,7 @@ export class User extends Entity<UserProps> {
       canSeeRankingResult: this.props.canSeeRankingResult.value,
       lastWeekRankingPosition: this.props.lastWeekRankingPosition?.position.value ?? null,
       didIncrementStreakOnSaturday: this.props.didIncrementStreakOnSaturday.value,
+      hasCompletedSpace: this.hasCompletedSpace.value,
       createdAt: this.createdAt.toDateString(),
     }
   }

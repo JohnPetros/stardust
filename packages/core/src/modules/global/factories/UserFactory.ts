@@ -31,6 +31,10 @@ export class UserFactory {
         'Esse usuário pode ver o resultado do ranking?',
         dto?.canSeeRankingResult ?? false,
       ),
+      hasCompletedSpace: Logical.create(
+        'Esse usuário já completou todos os planetas?',
+        dto?.hasCompletedSpace ?? false,
+      ),
       unlockedAchievementsIds: List.create(dto?.unlockedAchievementsIds ?? []),
       rescuableAchievementsIds: List.create(dto?.rescuableAchievementsIds ?? []),
       acquiredRocketsIds: List.create(dto?.acquiredRocketsIds ?? []),
