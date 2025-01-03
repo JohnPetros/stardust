@@ -29,7 +29,7 @@ export function useChallengeCommentsSlot(challengeId: string) {
 
   // useEffect(() => {
   //   if (craftsVislibility.canShowComments.isFalse)
-  //     goTo(`${ROUTES.challenging.challenge}/${challenge?.slug.value}`)
+  //     goTo(`${ROUTES.challenging.challenges}/${challenge?.slug.value}`)
   // }, [goTo, craftsVislibility, challenge?.slug])
 
   return {

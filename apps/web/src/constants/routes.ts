@@ -3,11 +3,8 @@ export const ROUTES = {
   space: '/space',
   shop: '/shop',
   challenging: {
-    challenge: '/challenging/challenge',
     challenges: '/challenging/challenges',
     challengeMaker: '/challenging/challenge-maker',
-    solutions: '/solutions',
-    comments: '/solutions',
     newSolution: '/challenging/solution/new',
   },
   profile: {

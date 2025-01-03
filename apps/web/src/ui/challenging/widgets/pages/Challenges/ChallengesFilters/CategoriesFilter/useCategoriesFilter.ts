@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
-import { QUERY_PARAMS } from '../../Challenges/query-params'
 import type { ChallengeCategory } from '@stardust/core/challenging/entities'
+
 import { useQueryArrayParam } from '@/ui/global/hooks/useQueryArrayParam'
+import { QUERY_PARAMS } from '../../query-params'
 
 export function useCategoriesFilter(initialCategories: ChallengeCategory[]) {
   const [categories, setCategories] = useState<ChallengeCategory[]>(initialCategories)

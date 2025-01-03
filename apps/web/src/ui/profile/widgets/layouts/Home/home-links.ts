@@ -13,7 +13,7 @@ export const HOME_LINKS: HomeLink[] = [
     icon: 'learn.svg',
   },
   {
-    route: ROUTES.challenging.challenges,
+    route: ROUTES.challenging.challengess,
     label: 'Desafios',
     icon: 'challenges.svg',
   },

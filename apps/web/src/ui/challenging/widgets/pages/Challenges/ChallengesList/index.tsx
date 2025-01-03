@@ -4,7 +4,7 @@ import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { ChallengeCard } from './ChallengeCard'
 import { useChallengesList } from './useChallengesList'
 import { ShowMoreButton } from '@/ui/global/widgets/components/ShowMoreButton'
-import { ChallengeCardSkeleton } from './ChallengeCardSkelleton'
+import { ChallengeCardSkeleton } from '../ChallengesList/ChallengeCardSkelleton'
 
 export function ChallengesList() {
   const { user } = useAuthContext()

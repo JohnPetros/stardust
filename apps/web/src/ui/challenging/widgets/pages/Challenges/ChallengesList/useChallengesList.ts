@@ -5,7 +5,7 @@ import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 import type { PaginationResponse } from '@stardust/core/responses'
 
 import { CACHE, ROUTES } from '@/constants'
-import { QUERY_PARAMS } from './query-params'
+import { QUERY_PARAMS } from '../query-params'
 import {
   ChallengeCompletion,
   ChallengeDifficulty,
