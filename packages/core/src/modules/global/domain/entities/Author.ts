@@ -1,6 +1,6 @@
 import { Entity } from '#global/abstracts'
 import { Image, Name, Slug } from '#global/structs'
-import type { AuthorDto } from '#forum/dtos'
+import type { AuthorDto } from '#global/dtos'
 
 type AuthorProps = {
   name: Name

@@ -8,8 +8,8 @@ export class Name {
     this.value = value
   }
 
-  static create(value: string) {
-    new StringValidation(value, 'Name').min(2).validate()
+  static create(value: string, key = 'Name') {
+    new StringValidation(value, key).min(2).validate()
 
     return new Name(value)
   }

@@ -397,7 +397,7 @@ export class User extends Entity<UserProps> {
       lastWeekRankingPosition: this.props.lastWeekRankingPosition?.position.value ?? null,
       didBreakStreak: this.props.didBreakStreak.value,
       hasCompletedSpace: this.hasCompletedSpace.value,
-      createdAt: this.createdAt.toDateString(),
+      createdAt: this.createdAt,
     }
   }
 }
