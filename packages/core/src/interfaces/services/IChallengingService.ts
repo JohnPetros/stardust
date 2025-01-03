@@ -1,4 +1,9 @@
-import type { ChallengeCategoryDto, ChallengeDto, DocDto } from '#challenging/dtos'
+import type {
+  ChallengeCategoryDto,
+  ChallengeDto,
+  DocDto,
+  SolutionDto,
+} from '#challenging/dtos'
 import type { Solution } from '#challenging/entities'
 import type { ChallengesListParams, ChallengeVote } from '#challenging/types'
 import type { PaginationResponse } from '#responses'
@@ -20,6 +25,7 @@ export interface IChallengingService {
     ApiResponse<{ id: string; difficulty: string }[]>
   >
   fetchDocs(): Promise<ApiResponse<DocDto[]>>
+  fetchSolutionBySlug(solutionSlug: string): Promise<ApiResponse<SolutionDto>>
   fetchChallengesList(
     params: ChallengesListParams,
   ): Promise<ApiResponse<PaginationResponse<ChallengeDto>>>
@@ -28,7 +34,6 @@ export interface IChallengingService {
     challengeId: string,
     userId: string,
   ): Promise<ApiResponse<{ challengeVote: ChallengeVote }>>
-  saveUnlockedDoc(docId: string, userId: string): Promise<ApiResponse>
   saveSolution(Solution: Solution, challengeId: string): Promise<ApiResponse>
   updateSolution(Solution: Solution): Promise<ApiResponse>
   deleteSolution(solutionId: string): Promise<ApiResponse>

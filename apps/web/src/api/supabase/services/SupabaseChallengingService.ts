@@ -3,25 +3,30 @@ import type { ChallengesListParams } from '@stardust/core/challenging/types'
 import type { ChallengeCategoryDto } from '@stardust/core/challenging/dtos'
 import type { IChallengingService } from '@stardust/core/interfaces'
 
-import type { Supabase } from '../types/Supabase'
+import type { Supabase } from '../types'
 import { SupabasePostgrestError } from '../errors'
-import { SupabaseChallengeMapper, SupabaseDocMapper } from '../mappers'
+import {
+  SupabaseChallengeMapper,
+  SupabaseDocMapper,
+  SupabaseSolutionMapper,
+} from '../mappers'
 import { calculateSupabaseRange } from '../utils'
 
 export const SupabaseChallengingService = (supabase: Supabase): IChallengingService => {
   const supabaseChallengeMapper = SupabaseChallengeMapper()
   const supabaseDocMapper = SupabaseDocMapper()
+  const supabaseSolutionMapper = SupabaseSolutionMapper()
 
   return {
     async fetchChallengeById(challengeId: string) {
-      const { data, error } = await supabase
+      const { data, error, status } = await supabase
         .from('challenges_view')
         .select('*')
         .eq('id', challengeId)
         .single()
 
       if (error) {
-        return SupabasePostgrestError(error, 'Desafio não encontrado com esse id')
+        return SupabasePostgrestError(error, 'Desafio não encontrado com esse id', status)
       }
 
       const challengeDto = supabaseChallengeMapper.toDto(data)
@@ -30,14 +35,18 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
     },
 
     async fetchChallengeBySlug(challengeSlug: string) {
-      const { data, error } = await supabase
+      const { data, error, status } = await supabase
         .from('challenges_view')
         .select('*')
         .eq('slug', challengeSlug)
         .single()
 
       if (error) {
-        return SupabasePostgrestError(error, 'Desafio não encontrado com esse slug')
+        return SupabasePostgrestError(
+          error,
+          'Desafio não encontrado com esse slug',
+          status,
+        )
       }
 
       const challengeDto = supabaseChallengeMapper.toDto(data)
@@ -64,10 +73,12 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
     },
 
     async fetchChallengesWithOnlyDifficulty() {
-      const { data, error } = await supabase.from('challenges').select('id, difficulty')
+      const { data, error, status } = await supabase
+        .from('challenges')
+        .select('id, difficulty')
 
       if (error) {
-        return SupabasePostgrestError(error, 'Erro ao buscar desafios')
+        return SupabasePostgrestError(error, 'Erro ao buscar desafios', status)
       }
 
       return new ApiResponse({
@@ -157,8 +168,28 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       return new ApiResponse({ body: { challengeVote: data.vote } })
     },
 
+    async fetchSolutionBySlug(solutionSlug: string) {
+      const { data, error, status } = await supabase
+        .from('solutions_view')
+        .select('*')
+        .eq('slug', solutionSlug)
+        .single()
+
+      if (error) {
+        return SupabasePostgrestError(
+          error,
+          'Desafio não encontrado com esse slug',
+          status,
+        )
+      }
+
+      const challengeDto = supabaseSolutionMapper.toDto(data)
+
+      return new ApiResponse({ body: challengeDto })
+    },
+
     async fetchDocs() {
-      const { data, error } = await supabase
+      const { data, error, status } = await supabase
         .from('docs')
         .select('*')
         .order('position', { ascending: true })
@@ -170,22 +201,26 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         )
       }
 
-      const docs = data.map(supabaseDocMapper.toDto)
+      const docs = data.map(supabaseDocMapper.toDto, status)
 
       return new ApiResponse({ body: docs })
     },
 
-    async saveUnlockedDoc(docId: string, userId: string) {
-      const { error, status } = await supabase
-        .from('users_unlocked_docs')
-        .insert({ doc_id: docId, user_id: userId })
+    async saveSolution(solution, challengeId) {
+      const supabaseSolution = supabaseSolutionMapper.toSupabase(solution)
+      const { error, status } = await supabase.from('solutions').insert({
+        // @ts-ignore
+        id: solution.id,
+        content: supabaseSolution.content,
+        views_count: supabaseSolution.views_count,
+        slug: supabaseSolution.slug,
+        title: supabaseSolution.title,
+        user_id: supabaseSolution.author_id,
+        challenge_id: challengeId,
+      })
 
       if (error) {
-        return SupabasePostgrestError(
-          error,
-          'Erro inesperado ao desbloquear dados do dicionário',
-          status,
-        )
+        return SupabasePostgrestError(error, 'Erro inesperado ao salvar solução', status)
       }
 
       return new ApiResponse()
@@ -208,21 +243,25 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
     },
 
     async saveChallengeVote(challengeId, userId, challengeVote) {
-      const { error } = await supabase.from('users_challenge_votes').insert({
+      const { error, status } = await supabase.from('users_challenge_votes').insert({
         challenge_id: challengeId,
         user_id: userId,
         vote: challengeVote === 'upvote' ? 'upvote' : 'downvote',
       })
 
       if (error) {
-        return SupabasePostgrestError(error, 'Error inesperado ao buscar desafios')
+        return SupabasePostgrestError(
+          error,
+          'Error inesperado ao buscar desafios',
+          status,
+        )
       }
 
       return new ApiResponse()
     },
 
     async updateChallengeVote(challengeId, userId, challengeVote) {
-      const { error } = await supabase
+      const { error, status } = await supabase
         .from('users_challenge_votes')
         .update({
           vote: challengeVote === 'upvote' ? 'upvote' : 'downvote',
@@ -230,20 +269,67 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         .match({ challenge_id: challengeId, user_id: userId })
 
       if (error) {
-        return SupabasePostgrestError(error, 'Error inesperado ao buscar desafios')
+        return SupabasePostgrestError(
+          error,
+          'Error inesperado ao buscar desafios',
+          status,
+        )
+      }
+
+      return new ApiResponse()
+    },
+
+    async updateSolution(solution) {
+      const solutionDto = solution.dto
+      const { error, status } = await supabase
+        .from('solutions')
+        .update({
+          content: solutionDto.content,
+          views_count: solutionDto.viewsCount,
+          slug: solutionDto.slug,
+          title: solutionDto.title,
+          user_id: solutionDto.author.id,
+        })
+        .eq('id', solution.id)
+
+      if (error) {
+        return SupabasePostgrestError(
+          error,
+          'Error inesperado ao atualizar essa solução',
+          status,
+        )
       }
 
       return new ApiResponse()
     },
 
     async deleteChallengeVote(challengeId, userId) {
-      const { error } = await supabase.from('users_challenge_votes').delete().match({
-        challenge_id: challengeId,
-        user_id: userId,
+      const { error, status } = await supabase
+        .from('users_challenge_votes')
+        .delete()
+        .match({
+          challenge_id: challengeId,
+          user_id: userId,
+        })
+
+      if (error) {
+        return SupabasePostgrestError(error, 'Error inesperado ao remover voto', status)
+      }
+
+      return new ApiResponse()
+    },
+
+    async deleteSolution(solutionId) {
+      const { error, status } = await supabase.from('solutions').delete().match({
+        id: solutionId,
       })
 
       if (error) {
-        return SupabasePostgrestError(error, 'Error inesperado ao buscar desafios')
+        return SupabasePostgrestError(
+          error,
+          'Error inesperado ao deletar solução',
+          status,
+        )
       }
 
       return new ApiResponse()

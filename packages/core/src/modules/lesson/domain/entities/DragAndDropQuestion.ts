@@ -1,6 +1,13 @@
-import { Image, Text, List, type Logical, Integer } from '#global/structs'
+import {
+  Image,
+  Text,
+  List,
+  type Logical,
+  type UserAnswer,
+  Integer,
+} from '#global/structs'
 import type { DragAndDropQuestionDto, QuestionDto } from '#lesson/dtos'
-import { DragAndDrop, QuestionCodeLine, type QuestionAnswer } from '#lesson/structs'
+import { DragAndDrop, QuestionCodeLine } from '#lesson/structs'
 import { Question } from '#lesson/abstracts'
 
 type DragAndDropQuestionProps = {
@@ -28,7 +35,7 @@ export class DragAndDropQuestion extends Question<DragAndDropQuestionProps> {
     return question.type === 'drag-and-drop'
   }
 
-  verifyUserAnswer(userAnswer: QuestionAnswer): Logical {
+  verifyUserAnswer(userAnswer: UserAnswer): Logical {
     const usersDraggableItemsIndexesSequence = List.create(userAnswer.value as number[])
 
     return usersDraggableItemsIndexesSequence.isEqualTo(

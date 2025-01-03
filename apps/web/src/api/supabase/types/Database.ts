@@ -401,6 +401,13 @@ export type Database = {
             foreignKeyName: "playgrounds_user_slug_fkey"
             columns: ["user_slug"]
             isOneToOne: false
+            referencedRelation: "solutions_view"
+            referencedColumns: ["author_slug"]
+          },
+          {
+            foreignKeyName: "playgrounds_user_slug_fkey"
+            columns: ["user_slug"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["slug"]
           },
@@ -533,16 +540,18 @@ export type Database = {
           id: string
           slug: string
           title: string
-          user_slug: string | null
+          user_id: string
+          views_count: number
         }
         Insert: {
-          challenge_id?: string
+          challenge_id: string
           content: string
           created_at?: string
           id?: string
           slug: string
           title: string
-          user_slug?: string | null
+          user_id: string
+          views_count: number
         }
         Update: {
           challenge_id?: string
@@ -551,7 +560,8 @@ export type Database = {
           id?: string
           slug?: string
           title?: string
-          user_slug?: string | null
+          user_id?: string
+          views_count?: number
         }
         Relationships: [
           {
@@ -569,32 +579,62 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "public_solutions_user_slug_fkey"
-            columns: ["user_slug"]
-            isOneToOne: false
-            referencedRelation: "challenges_view"
-            referencedColumns: ["user_slug"]
-          },
-          {
-            foreignKeyName: "public_solutions_user_slug_fkey"
-            columns: ["user_slug"]
-            isOneToOne: false
-            referencedRelation: "comments_view"
-            referencedColumns: ["author_slug"]
-          },
-          {
-            foreignKeyName: "public_solutions_user_slug_fkey"
-            columns: ["user_slug"]
+            foreignKeyName: "solutions_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
-            referencedColumns: ["slug"]
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "public_solutions_user_slug_fkey"
-            columns: ["user_slug"]
+            foreignKeyName: "solutions_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users_view"
-            referencedColumns: ["slug"]
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      solutions_comments: {
+        Row: {
+          comment_id: string
+          solution_id: string
+        }
+        Insert: {
+          comment_id: string
+          solution_id: string
+        }
+        Update: {
+          comment_id?: string
+          solution_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "solutions_comments_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "solutions_comments_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "solutions_comments_solution_id_fkey"
+            columns: ["solution_id"]
+            isOneToOne: false
+            referencedRelation: "solutions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "solutions_comments_solution_id_fkey"
+            columns: ["solution_id"]
+            isOneToOne: false
+            referencedRelation: "solutions_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -662,6 +702,50 @@ export type Database = {
           reward?: number
         }
         Relationships: []
+      }
+      user_upvoted_solutions: {
+        Row: {
+          solution_id: string
+          user_id: string
+        }
+        Insert: {
+          solution_id: string
+          user_id: string
+        }
+        Update: {
+          solution_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_upvoted_solutions_solution_id_fkey"
+            columns: ["solution_id"]
+            isOneToOne: false
+            referencedRelation: "solutions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_upvoted_solutions_solution_id_fkey"
+            columns: ["solution_id"]
+            isOneToOne: false
+            referencedRelation: "solutions_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_upvoted_solutions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_upvoted_solutions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       users: {
         Row: {
@@ -837,20 +921,17 @@ export type Database = {
       users_challenge_votes: {
         Row: {
           challenge_id: string
-          id: string
-          user_id: string | null
+          user_id: string
           vote: Database["public"]["Enums"]["challenge_vote"]
         }
         Insert: {
           challenge_id: string
-          id?: string
-          user_id?: string | null
+          user_id: string
           vote: Database["public"]["Enums"]["challenge_vote"]
         }
         Update: {
           challenge_id?: string
-          id?: string
-          user_id?: string | null
+          user_id?: string
           vote?: Database["public"]["Enums"]["challenge_vote"]
         }
         Relationships: [
@@ -887,17 +968,14 @@ export type Database = {
       users_completed_challenges: {
         Row: {
           challenge_id: string
-          id: string
           user_id: string
         }
         Insert: {
           challenge_id: string
-          id?: string
           user_id: string
         }
         Update: {
           challenge_id?: string
-          id?: string
           user_id?: string
         }
         Relationships: [
@@ -934,17 +1012,14 @@ export type Database = {
       users_rescuable_achievements: {
         Row: {
           achievement_id: string
-          id: string
           user_id: string
         }
         Insert: {
           achievement_id: string
-          id?: string
           user_id: string
         }
         Update: {
           achievement_id?: string
-          id?: string
           user_id?: string
         }
         Relationships: [
@@ -974,17 +1049,14 @@ export type Database = {
       users_unlocked_achievements: {
         Row: {
           achievement_id: string
-          id: string
           user_id: string
         }
         Insert: {
           achievement_id: string
-          id?: string
           user_id: string
         }
         Update: {
           achievement_id?: string
-          id?: string
           user_id?: string
         }
         Relationships: [
@@ -1004,46 +1076,6 @@ export type Database = {
           },
           {
             foreignKeyName: "users_unlocked_achievements_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users_view"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      users_unlocked_docs: {
-        Row: {
-          doc_id: string | null
-          id: string
-          user_id: string | null
-        }
-        Insert: {
-          doc_id?: string | null
-          id?: string
-          user_id?: string | null
-        }
-        Update: {
-          doc_id?: string | null
-          id?: string
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "users_unlocked_docs_doc_id_fkey"
-            columns: ["doc_id"]
-            isOneToOne: false
-            referencedRelation: "docs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "users_unlocked_docs_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "users_unlocked_docs_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users_view"
@@ -1101,17 +1133,14 @@ export type Database = {
       users_upvoted_comments: {
         Row: {
           comment_id: string
-          id: string
           user_id: string
         }
         Insert: {
           comment_id: string
-          id?: string
           user_id: string
         }
         Update: {
           comment_id?: string
-          id?: string
           user_id?: string
         }
         Relationships: [
@@ -1164,6 +1193,13 @@ export type Database = {
             columns: ["solution_id"]
             isOneToOne: false
             referencedRelation: "solutions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_users_upvoted_solutions_solution_id_fkey"
+            columns: ["solution_id"]
+            isOneToOne: false
+            referencedRelation: "solutions_view"
             referencedColumns: ["id"]
           },
           {
@@ -1294,6 +1330,39 @@ export type Database = {
           is_unlocked: boolean | null
         }
         Relationships: []
+      }
+      solutions_view: {
+        Row: {
+          author_avatar_image: string | null
+          author_avatar_name: string | null
+          author_id: string | null
+          author_name: string | null
+          author_slug: string | null
+          comments_count: number | null
+          content: string | null
+          created_at: string | null
+          id: string | null
+          slug: string | null
+          title: string | null
+          upvotes_count: number | null
+          views_count: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "solutions_user_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "solutions_user_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       users_view: {
         Row: {
