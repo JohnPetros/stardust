@@ -3,7 +3,6 @@ export const ROUTES = {
   space: '/space',
   shop: '/shop',
   challenging: {
-    prefix: '/challenging',
     challenge: '/challenging/challenge',
     challenges: '/challenging/challenges',
     challengeMaker: '/challenging/challenge-maker',
@@ -12,13 +11,15 @@ export const ROUTES = {
     newSolution: '/challenging/solution/new',
   },
   profile: {
-    prefix: '/profile',
+    user: '/profile',
     settings: '/profile/settings',
   },
-  lesson: {
-    prefix: '/lesson',
+  lesson: '/lesson',
+  rewarding: {
+    star: '/rewarding/star',
+    starChallenge: '/rewarding/star-challenge',
+    challenge: '/rewarding/challenge',
   },
-  rewarding: '/rewarding',
   playground: '/playground',
   auth: {
     signIn: '/auth/sign-in',
@@ -51,4 +52,4 @@ export const ROUTES = {
       countByDifficultyLevel: '/api/challenging/count-by-difficulty-level',
     },
   },
-}
+} as const

@@ -1,17 +1,15 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { AnimatePresence } from 'framer-motion'
 import { List, Root } from '@radix-ui/react-tabs'
 import { Trigger as TabButton } from '@radix-ui/react-tabs'
-
+import { AnimatePresence } from 'framer-motion'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
+import { useTabs } from './useTabs'
+import { TabContent } from './TabContent'
 import { BlockedCommentsAlertDialog } from '../../../components/BlockedCommentsAlertDialog'
 import { BlockedSolutionsAlertDialog } from '../../../components/BlockedSolutionsAlertDialog'
 import { ContentLink } from '../../../components/ContentLink'
-import { useTabs } from './useTabs'
-import { TabContent } from './TabContent'
-import { Button } from '@/ui/global/widgets/components/Button'
 
 type TabsProps = {
   children: ReactNode
@@ -25,7 +23,7 @@ export function Tabs({ children }: TabsProps) {
   return (
     <div className='max-h-screen w-full rounded-md border-4 border-gray-700'>
       <Root defaultValue='description' orientation='horizontal'>
-        <List className='flex items-center bg-gray-700 px-2 pb-1.5'>
+        <List className='flex items-center bg-gray-700 px-2'>
           <TabButton value='description'>
             <ContentLink
               title='Descrição'
@@ -43,9 +41,9 @@ export function Tabs({ children }: TabsProps) {
             />
           </TabButton>
           <span className='text-gray-600'>|</span>
-          {craftsVislibility.canShowComments.isTrue ? (
+          {craftsVislibility.canShowComments.isFalse ? (
             <BlockedCommentsAlertDialog>
-              <TabButton value='comments'>
+              <TabButton value='comments' asChild>
                 <ContentLink
                   title='Comentários'
                   contentType='comments'
@@ -67,7 +65,7 @@ export function Tabs({ children }: TabsProps) {
           <span className='text-gray-600'>|</span>
           {craftsVislibility.canShowSolutions.isFalse ? (
             <BlockedSolutionsAlertDialog onShowSolutions={handleShowSolutions}>
-              <TabButton value='solutions'>
+              <TabButton value='solutions' asChild>
                 <ContentLink
                   title='Soluções'
                   contentType='solutions'

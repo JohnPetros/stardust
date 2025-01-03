@@ -20,11 +20,7 @@ export class DayJsDatetime implements IDatetime {
   }
 
   convertSecondsToTime(seconds: number): string {
-    const date = new Date(0)
-    date.setSeconds(seconds)
-
-    const time = date.toISOString().substring(14, 19)
-    return time
+    return dayjs(seconds * 1000).format('mm:ss')
   }
 
   format(date: Date, dateFormat: DateFormat): string {
