@@ -6,7 +6,7 @@ import { HTTP_STATUS_CODE } from '@stardust/core/constants'
 export const SupabasePostgrestError = <Data>(
   postgrestError: PostgrestError,
   errorMessage: string,
-  statusCode = HTTP_STATUS_CODE.serverError,
+  statusCode: number = HTTP_STATUS_CODE.serverError,
 ) => {
   console.error('Supabase postgrest error message: ', postgrestError.message)
   console.error('Supabase postgrest error status: ', statusCode)

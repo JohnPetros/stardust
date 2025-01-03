@@ -1,11 +1,11 @@
-import type { Supabase } from '../types/Supabase'
-import { SupabasePostgrestError } from '../errors'
-import { SupabaseChallengeMapper, SupabaseDocMapper } from '../mappers'
 import { ApiResponse, PaginationResponse } from '@stardust/core/responses'
-import { HTTP_STATUS_CODE } from '@stardust/core/constants'
 import type { ChallengesListParams } from '@stardust/core/challenging/types'
 import type { ChallengeCategoryDto } from '@stardust/core/challenging/dtos'
 import type { IChallengingService } from '@stardust/core/interfaces'
+
+import type { Supabase } from '../types/Supabase'
+import { SupabasePostgrestError } from '../errors'
+import { SupabaseChallengeMapper, SupabaseDocMapper } from '../mappers'
 import { calculateSupabaseRange } from '../utils'
 
 export const SupabaseChallengingService = (supabase: Supabase): IChallengingService => {
@@ -176,7 +176,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
     },
 
     async saveUnlockedDoc(docId: string, userId: string) {
-      const { error } = await supabase
+      const { error, status } = await supabase
         .from('users_unlocked_docs')
         .insert({ doc_id: docId, user_id: userId })
 
@@ -184,6 +184,23 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         return SupabasePostgrestError(
           error,
           'Erro inesperado ao desbloquear dados do dicionário',
+          status,
+        )
+      }
+
+      return new ApiResponse()
+    },
+
+    async saveCompletedChallenge(challengeId: string, userId: string) {
+      const { error, status } = await supabase
+        .from('users_completed_challenges')
+        .insert({ challenge_id: challengeId, user_id: userId })
+
+      if (error) {
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao salvar o desafio completado',
+          status,
         )
       }
 
