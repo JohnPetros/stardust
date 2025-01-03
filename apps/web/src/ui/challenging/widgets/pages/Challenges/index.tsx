@@ -1,9 +1,10 @@
 'use client'
 
-import { ChallengesList } from './Challenges'
-import { ChallengesFilters } from './ChallengesFilters'
 import type { ChallengeCategoryDto } from '@stardust/core/challenging/dtos'
 import { ChallengeCategory } from '@stardust/core/challenging/entities'
+
+import { ChallengesFilters } from './ChallengesFilters'
+import { ChallengesList } from './ChallengesList'
 
 type ChallengesPageProps = {
   categoriesDto: ChallengeCategoryDto[]

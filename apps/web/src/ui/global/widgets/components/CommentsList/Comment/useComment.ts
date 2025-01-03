@@ -44,9 +44,6 @@ export function useComment(commentId: string) {
     const reply = Comment.create({
       author: {
         id: user.id,
-        name: user.name.value,
-        slug: user.slug.value,
-        avatar: { name: user.avatar.name.value, image: user.avatar.image.value },
       },
       content: replyContent,
     })
