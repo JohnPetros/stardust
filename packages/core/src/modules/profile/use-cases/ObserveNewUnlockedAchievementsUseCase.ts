@@ -3,10 +3,10 @@ import { Achievement } from '#profile/entities'
 import type { UserDto } from '#global/dtos'
 import type { IProfileService, IUseCase } from '#interfaces'
 
-type Response = {
+type Response = Promise<{
   newUnlockedAchievements: Achievement[]
   user: User
-}
+}>
 
 type Request = {
   userDto: UserDto
