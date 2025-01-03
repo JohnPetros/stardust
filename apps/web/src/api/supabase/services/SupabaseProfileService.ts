@@ -6,6 +6,8 @@ import { HTTP_STATUS_CODE } from '@stardust/core/constants'
 import type { Supabase } from '../types'
 import { SupabasePostgrestError } from '../errors'
 import { SupabaseAchievementMapper, SupabaseUserMapper } from '../mappers'
+import { SupabaseSpaceService } from './SupabaseSpaceService'
+import { Planet } from '@stardust/core/space/entities'
 
 export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
   const supabaseUserMapper = SupabaseUserMapper()
@@ -14,10 +16,8 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
   return {
     async fetchUserById(userId: string) {
       const { data, error } = await supabase
-        .from('users')
-        .select(
-          '*, avatar:avatars(*), rocket:rockets(*), tier:tiers(*), users_unlocked_stars(star_id), users_unlocked_achievements(achievement_id), users_acquired_rockets(rocket_id), users_acquired_avatars(avatar_id), users_completed_challenges(challenge_id), users_rescuable_achievements(achievement_id), users_upvoted_comments(comment_id)',
-        )
+        .from('users_view')
+        .select('*, avatar:avatars(*), rocket:rockets(*), tier:tiers(*)')
         .eq('id', userId)
         .single()
 
@@ -36,10 +36,8 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
 
     async fetchUserBySlug(userSlug: string) {
       const { data, error } = await supabase
-        .from('users')
-        .select(
-          '*, avatar:avatars(*), rocket:rockets(*), tier:tiers(*), users_unlocked_stars(star_id), users_unlocked_achievements(achievement_id), users_acquired_rockets(rocket_id), users_acquired_avatars(avatar_id), users_completed_challenges(challenge_id), users_rescuable_achievements(achievement_id), users_upvoted_comments(comment_id)',
-        )
+        .from('users_view')
+        .select('*, avatar:avatars(*), rocket:rockets(*), tier:tiers(*)')
         .eq('slug', userSlug)
         .single()
 
@@ -51,8 +49,23 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
         )
 
       const userDto = supabaseUserMapper.toDto(data)
-
       return new ApiResponse({ body: userDto })
+    },
+
+    async fetchUsers() {
+      const { data, error } = await supabase
+        .from('users_view')
+        .select('*, avatar:avatars(*), rocket:rockets(*), tier:tiers(*)')
+
+      if (error)
+        return SupabasePostgrestError(
+          error,
+          'Usuário não encontrado',
+          HTTP_STATUS_CODE.notFound,
+        )
+
+      const usersDto = data.map(supabaseUserMapper.toDto)
+      return new ApiResponse({ body: usersDto })
     },
 
     async fetchUserName(name: string) {

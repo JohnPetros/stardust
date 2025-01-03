@@ -40,7 +40,7 @@ type UserProps = {
   completedPlanetsIds: List<string>
   upvotedCommentsIds: List<string>
   canSeeRankingResult: Logical
-  didIncrementStreakOnSaturday: Logical
+  didBreakStreak: Logical
   lastWeekRankingPosition: RankingPosition | null
   hasCompletedSpace: Logical
   createdAt: Date
@@ -137,6 +137,11 @@ export class User extends Entity<UserProps> {
     this.props.weekStatus = this.weekStatus.updateTodayStatus('done')
     this.props.streak = this.streak.increment(1)
     this.notifyChanges()
+  }
+
+  breakStreak() {
+    this.props.streak = Integer.create('Streak do usuário', 0)
+    this.props.didBreakStreak = this.props.didBreakStreak.makeTrue()
   }
 
   getAchievementCount(metric: AchievementMetricValue) {
@@ -353,8 +358,8 @@ export class User extends Entity<UserProps> {
     return this.props.canSeeRankingResult
   }
 
-  get didIncrementStreakOnSaturday() {
-    return this.props.didIncrementStreakOnSaturday
+  get didBreakStreak() {
+    return this.props.didBreakStreak
   }
 
   get lastWeekRankingPosition() {
@@ -390,7 +395,7 @@ export class User extends Entity<UserProps> {
       completedPlanetsIds: this.props.completedPlanetsIds.items,
       canSeeRankingResult: this.props.canSeeRankingResult.value,
       lastWeekRankingPosition: this.props.lastWeekRankingPosition?.position.value ?? null,
-      didIncrementStreakOnSaturday: this.props.didIncrementStreakOnSaturday.value,
+      didBreakStreak: this.props.didBreakStreak.value,
       hasCompletedSpace: this.hasCompletedSpace.value,
       createdAt: this.createdAt.toDateString(),
     }

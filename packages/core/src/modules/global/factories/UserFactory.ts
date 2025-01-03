@@ -23,9 +23,9 @@ export class UserFactory {
       lastWeekRankingPosition: dto.lastWeekRankingPosition
         ? RankingPosition.create(dto.lastWeekRankingPosition)
         : null,
-      didIncrementStreakOnSaturday: Logical.create(
-        'Esse usuário aumentou de streak no sábado?',
-        dto?.didIncrementStreakOnSaturday ?? false,
+      didBreakStreak: Logical.create(
+        'Esse usuário quebrou sua streak?',
+        dto?.didBreakStreak ?? false,
       ),
       canSeeRankingResult: Logical.create(
         'Esse usuário pode ver o resultado do ranking?',
@@ -44,7 +44,7 @@ export class UserFactory {
       completedChallengesIds: List.create(dto?.completedChallengesIds ?? []),
       completedPlanetsIds: List.create(dto?.completedPlanetsIds ?? []),
       upvotedCommentsIds: List.create(dto?.upvotedCommentsIds ?? []),
-      createdAt: dto?.createdAt ? new Date(dto?.createdAt) : new Date(),
+      createdAt: dto?.createdAt ?? new Date(),
       id: dto?.id,
     }
   }

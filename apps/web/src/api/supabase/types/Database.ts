@@ -1297,28 +1297,31 @@ export type Database = {
       }
       users_view: {
         Row: {
-          acquired_rockets_count: number | null
+          acquired_avatars_ids: string[] | null
+          acquired_rockets_ids: string[] | null
           avatar_id: string | null
+          can_see_ranking: boolean | null
           coins: number | null
-          completed_challenges_count: number | null
-          completed_planets_count: number | null
+          completed_challenges_ids: string[] | null
+          completed_planets_ids: string[] | null
           created_at: string | null
           did_break_streak: boolean | null
           did_complete_saturday: boolean | null
-          did_update_ranking: boolean | null
           email: string | null
           id: string | null
           is_loser: boolean | null
-          last_position: number | null
+          last_week_ranking_position: number | null
           level: number | null
           name: string | null
-          ranking_id: string | null
+          rescuable_achievements_ids: string[] | null
           rocket_id: string | null
           slug: string | null
           streak: number | null
           study_time: string | null
-          unlocked_achievements_count: number | null
-          unlocked_stars_count: number | null
+          tier_id: string | null
+          unlocked_achievements_ids: string[] | null
+          unlocked_stars_ids: string[] | null
+          upvoted_comments_ids: string[] | null
           week_status: string[] | null
           weekly_xp: number | null
           xp: number | null
@@ -1333,7 +1336,7 @@ export type Database = {
           },
           {
             foreignKeyName: "users_ranking_id_fkey"
-            columns: ["ranking_id"]
+            columns: ["tier_id"]
             isOneToOne: false
             referencedRelation: "tiers"
             referencedColumns: ["id"]
@@ -1398,70 +1401,6 @@ export type Database = {
         Returns: {
           id: string | null
           is_unlocked: boolean | null
-        }[]
-      }
-      get_user_by_id: {
-        Args: {
-          _user_id: string
-        }
-        Returns: {
-          acquired_rockets_count: number | null
-          avatar_id: string | null
-          coins: number | null
-          completed_challenges_count: number | null
-          completed_planets_count: number | null
-          created_at: string | null
-          did_break_streak: boolean | null
-          did_complete_saturday: boolean | null
-          did_update_ranking: boolean | null
-          email: string | null
-          id: string | null
-          is_loser: boolean | null
-          last_position: number | null
-          level: number | null
-          name: string | null
-          ranking_id: string | null
-          rocket_id: string | null
-          slug: string | null
-          streak: number | null
-          study_time: string | null
-          unlocked_achievements_count: number | null
-          unlocked_stars_count: number | null
-          week_status: string[] | null
-          weekly_xp: number | null
-          xp: number | null
-        }[]
-      }
-      get_user_by_slug: {
-        Args: {
-          _user_slug: string
-        }
-        Returns: {
-          acquired_rockets_count: number | null
-          avatar_id: string | null
-          coins: number | null
-          completed_challenges_count: number | null
-          completed_planets_count: number | null
-          created_at: string | null
-          did_break_streak: boolean | null
-          did_complete_saturday: boolean | null
-          did_update_ranking: boolean | null
-          email: string | null
-          id: string | null
-          is_loser: boolean | null
-          last_position: number | null
-          level: number | null
-          name: string | null
-          ranking_id: string | null
-          rocket_id: string | null
-          slug: string | null
-          streak: number | null
-          study_time: string | null
-          unlocked_achievements_count: number | null
-          unlocked_stars_count: number | null
-          week_status: string[] | null
-          weekly_xp: number | null
-          xp: number | null
         }[]
       }
       install_available_extensions_and_test: {
