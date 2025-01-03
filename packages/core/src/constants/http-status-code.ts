@@ -12,4 +12,4 @@ export const HTTP_STATUS_CODE = {
   preconditionFailed: 412,
   tooManyRequests: 429,
   serverError: 500,
-}
+} as const

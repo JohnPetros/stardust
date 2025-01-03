@@ -27,7 +27,8 @@ export interface IChallengingService {
     challengeId: string,
     userId: string,
   ): Promise<ApiResponse<{ challengeVote: ChallengeVote }>>
-  saveUnlockedDoc(docId: string, userId: string): Promise<ApiResponse<true>>
+  saveUnlockedDoc(docId: string, userId: string): Promise<ApiResponse>
+  saveCompletedChallenge(challengeId: string, userId: string): Promise<ApiResponse>
   saveChallengeVote(
     challengeId: string,
     userId: string,
