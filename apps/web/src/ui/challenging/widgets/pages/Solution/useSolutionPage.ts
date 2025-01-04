@@ -34,6 +34,7 @@ export function useSolutionPage(
   }
 
   function handleContentChange(content: string) {
+    console.log(content)
     setSolutionContent(content)
   }
 

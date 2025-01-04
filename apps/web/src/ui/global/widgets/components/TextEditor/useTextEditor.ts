@@ -135,6 +135,12 @@ export function useTextEditor(onChange: (value: string) => void) {
     textareaRef.current.focus()
   }
 
+  function insertValue(value: string) {
+    if (!textareaRef.current) return
+
+    textareaRef.current.value += value
+  }
+
   const moveCursorToEnd = useCallback(() => {
     if (!textareaRef.current) return
 
@@ -157,5 +163,6 @@ export function useTextEditor(onChange: (value: string) => void) {
     handleValueChange,
     moveCursorToEnd,
     insertSnippet,
+    insertValue,
   }
 }

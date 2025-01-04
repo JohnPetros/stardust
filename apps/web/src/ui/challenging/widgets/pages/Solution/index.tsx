@@ -24,7 +24,6 @@ export function SolutionPage({ savedSolutionDto, challengeId }: SolutionPageProp
     handleSolutionPost,
     handleSolutionUpdate,
   } = useSolutionPage(savedSolutionDto, challengeId)
-  console.log({ canPostSolution })
 
   return (
     <div className='max-w-6xl mx-auto h-screen bg-gray-800'>

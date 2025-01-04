@@ -1,7 +1,10 @@
-import { type ForwardedRef, forwardRef, useImperativeHandle } from 'react'
+import {
+  type ForwardedRef,
+  forwardRef,
+  useImperativeHandle,
+  type KeyboardEvent,
+} from 'react'
 import { type ClassNameValue, twMerge } from 'tailwind-merge'
-
-import { Text } from '@stardust/core/global/structs'
 
 import { useTextEditor } from './useTextEditor'
 import type { TextEditorRef } from './types'
@@ -12,13 +15,14 @@ type TextEditorProps = {
   placeholder?: string
   hasAutoFocus?: boolean
   onChange: (value: string) => void
+  onKeyUp?: (event: KeyboardEvent<HTMLTextAreaElement>) => void
 }
 
 const TextEditorComponent = (
-  { value, placeholder, className, hasAutoFocus, onChange }: TextEditorProps,
+  { value, placeholder, className, hasAutoFocus, onChange, onKeyUp }: TextEditorProps,
   ref: ForwardedRef<TextEditorRef>,
 ) => {
-  const { textareaRef, handleValueChange, insertSnippet, moveCursorToEnd } =
+  const { textareaRef, handleValueChange, insertValue, insertSnippet, moveCursorToEnd } =
     useTextEditor(onChange)
 
   useImperativeHandle(
@@ -27,9 +31,10 @@ const TextEditorComponent = (
       return {
         moveCursorToEnd,
         insertSnippet,
+        insertValue,
       }
     },
-    [moveCursorToEnd, insertSnippet],
+    [moveCursorToEnd, insertValue, insertSnippet],
   )
 
   return (
@@ -37,12 +42,13 @@ const TextEditorComponent = (
       ref={textareaRef}
       placeholder={placeholder}
       className={twMerge(
-        'w-full resize-none rounded-md bg-transparent text-sm font-medium text-gray-300 outline-none placeholder:text-gray-500 bg-red-700',
+        'w-full resize-none rounded-md bg-transparent text-sm font-medium text-gray-300 outline-none placeholder:text-gray-500',
         className,
       )}
       // rows={value.length > 3 ? Text.create(value).countCharacters('\n') : 1}
       value={value}
       autoFocus={hasAutoFocus}
+      onKeyUp={onKeyUp}
       onChange={({ currentTarget }) => handleValueChange(currentTarget.value)}
     />
   )

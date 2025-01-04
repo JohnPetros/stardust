@@ -49,8 +49,8 @@ export function useMdx() {
 
       const content =
         textBlock.type !== 'code'
-          ? formatSpecialCharacters(textBlock.content, 'encode')
-          : textBlock.content
+          ? formatSpecialCharacters(textBlock.content, 'encode').replaceAll('<br />', '')
+          : textBlock.content.replaceAll('<br />', '')
 
       const key = uuid()
 
