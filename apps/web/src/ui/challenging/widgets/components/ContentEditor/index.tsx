@@ -19,9 +19,9 @@ export function ContentEditor({ content, onChange }: ContentEditorProps) {
   const { handleSnippetInsert } = useContentEditor(textEditorRef)
 
   return (
-    <div className='grid grid-cols-2 h-full bg-gray-800'>
+    <div className='grid grid-cols-2 h-full'>
       <div>
-        <Toolbar.Container className='flex items-center gap-3 border-b border-gray-700'>
+        <Toolbar.Container className='flex items-center gap-3 px-6 py-3 border-b border-gray-600'>
           <Toolbar.Button
             onClick={() => handleSnippetInsert('title')}
             icon='title'
@@ -53,8 +53,8 @@ export function ContentEditor({ content, onChange }: ContentEditorProps) {
             label='Inserir trecho de código'
           />
           <Toolbar.Button
-            onClick={() => handleSnippetInsert('code')}
-            icon='code'
+            onClick={() => handleSnippetInsert('runnableCode')}
+            icon='runnable-code'
             label='Inserir trecho de código não executável'
           />
           <Toolbar.Button
@@ -64,7 +64,12 @@ export function ContentEditor({ content, onChange }: ContentEditorProps) {
           />
         </Toolbar.Container>
 
-        <TextEditor ref={textEditorRef} value={content} onChange={onChange} />
+        <TextEditor
+          ref={textEditorRef}
+          value={content}
+          onChange={onChange}
+          className='h-full mt-1 pl-6'
+        />
       </div>
       <div>
         <Mdx>{content}</Mdx>

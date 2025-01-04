@@ -1,12 +1,12 @@
 'use client'
 
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { REGEX } from '@/constants'
 import { SNIPPETS } from './snippets'
 import type { TextEditorSnippet } from './types'
 
-export function useTextEditor() {
+export function useTextEditor(onChange: (value: string) => void) {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   function geComponentContent(component: string) {
@@ -144,15 +144,17 @@ export function useTextEditor() {
     textareaRef.current.value = currentValue
   }, [])
 
-  useEffect(() => {
+  function handleValueChange(value: string) {
+    onChange(value)
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto'
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
     }
-  }, [])
+  }
 
   return {
     textareaRef,
+    handleValueChange,
     moveCursorToEnd,
     insertSnippet,
   }

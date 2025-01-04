@@ -3,7 +3,6 @@ import type {
   IActionServer,
   IChallengingService,
 } from '@stardust/core/interfaces'
-import { UnlockDocUseCase } from '@stardust/core/challenging/use-cases'
 import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 import type { ChallengeVote } from '@stardust/core/challenging/types'
 import { Challenge } from '@stardust/core/challenging/entities'
@@ -36,8 +35,6 @@ export const HandleChallengePageAction = (
     async handle(actionServer: IActionServer<Request>) {
       const { challengeSlug } = actionServer.getRequest()
       const userDto = await actionServer.getUser()
-      const unlockDocuseCase = new UnlockDocUseCase(challengingService)
-      await unlockDocuseCase.do({ userDto, challengeSlug })
       const challenge = await fetchChallengeDto(challengeSlug)
       const userChallengeVote = await fetchUserChallengeVote(
         challenge.id,

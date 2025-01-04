@@ -18,7 +18,8 @@ const TextEditorComponent = (
   { value, placeholder, className, hasAutoFocus, onChange }: TextEditorProps,
   ref: ForwardedRef<TextEditorRef>,
 ) => {
-  const { textareaRef, insertSnippet, moveCursorToEnd } = useTextEditor()
+  const { textareaRef, handleValueChange, insertSnippet, moveCursorToEnd } =
+    useTextEditor(onChange)
 
   useImperativeHandle(
     ref,
@@ -36,13 +37,13 @@ const TextEditorComponent = (
       ref={textareaRef}
       placeholder={placeholder}
       className={twMerge(
-        'w-full resize-none rounded-md bg-transparent text-sm font-medium text-gray-300 outline-none placeholder:text-gray-500',
+        'w-full resize-none rounded-md bg-transparent text-sm font-medium text-gray-300 outline-none placeholder:text-gray-500 bg-red-700',
         className,
       )}
-      rows={value.length > 3 ? Text.create(value).countCharacters('\n') : 1}
+      // rows={value.length > 3 ? Text.create(value).countCharacters('\n') : 1}
       value={value}
       autoFocus={hasAutoFocus}
-      onChange={({ currentTarget }) => onChange(currentTarget.value)}
+      onChange={({ currentTarget }) => handleValueChange(currentTarget.value)}
     />
   )
 }

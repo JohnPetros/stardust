@@ -38,8 +38,8 @@ export function useCommentInput({
   }
 
   function handleSnippetInsert(snippet: TextEditorSnippet) {
-    if (!textcodeEditorRef.current) return
-    textcodeEditorRef.current.insertSnippet(snippet)
+    if (!textEditorRef.current) return
+    textEditorRef.current.insertSnippet(snippet)
   }
 
   function handleContentChange(content: string) {
@@ -51,10 +51,10 @@ export function useCommentInput({
   }, [])
 
   useEffect(() => {
-    if (!isPreviewVisible && textcodeEditorRef.current) {
-      textcodeEditorRef.current?.moveCursorToEnd()
+    if (!isPreviewVisible && textEditorRef.current) {
+      textEditorRef.current?.moveCursorToEnd()
     }
-  }, [isPreviewVisible, textcodeEditorRef.current])
+  }, [isPreviewVisible, textEditorRef.current])
 
   return {
     content,

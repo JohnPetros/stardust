@@ -143,7 +143,7 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   private get hasFunction() {
-    return Logical.create('Esse desafio tem função?', Boolean(this.props.functionName))
+    return Logical.create(Boolean(this.props.functionName))
   }
 
   get maximumIncorrectAnswersCount() {
@@ -156,7 +156,7 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   get hasAnswer() {
-    return Logical.create('Há resposta para o desafio?', this.props.results.length > 0)
+    return Logical.create(this.props.results.length > 0)
   }
 
   get results() {
@@ -184,10 +184,7 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   get isFromStar(): Logical {
-    return Logical.create(
-      'Esse desafio pertence a uma estrela?',
-      Boolean(this.props.starId),
-    )
+    return Logical.create(Boolean(this.props.starId))
   }
 
   get title() {

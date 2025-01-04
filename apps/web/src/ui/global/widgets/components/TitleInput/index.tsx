@@ -12,7 +12,7 @@ export function TitleInput({
   value,
   placeholder,
   className,
-  erroMessage,
+  errorMessage,
   onChange,
 }: TitleInputProps) {
   return (
@@ -22,9 +22,9 @@ export function TitleInput({
         value={value}
         placeholder={placeholder}
         onChange={({ currentTarget }) => onChange(currentTarget.value)}
-        className={twMerge('bg-tranparent text-xl', className)}
+        className={twMerge('text-xl outline-none border-none w-full', className)}
       />
-      <p className='text-red-700 font-bold mt-3'>{erroMessage}</p>
+      {errorMessage && <p className='text-red-700 font-bold mt-3'>{errorMessage}</p>}
     </div>
   )
 }

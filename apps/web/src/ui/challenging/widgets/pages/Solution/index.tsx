@@ -24,25 +24,27 @@ export function SolutionPage({ savedSolutionDto, challengeId }: SolutionPageProp
     handleSolutionPost,
     handleSolutionUpdate,
   } = useSolutionPage(savedSolutionDto, challengeId)
+  console.log({ canPostSolution })
 
   return (
-    <div className='bg-gray-800'>
-      <header className='grid grid-cols-2'>
+    <div className='max-w-6xl mx-auto h-screen bg-gray-800'>
+      <header className='grid grid-cols-2 px-6 py-12'>
         <TitleInput
           value={title}
           onChange={handleTitleChange}
           placeholder='Escreva um título para a sua solução'
+          className='bg-gray-800 text-gray-50'
           errorMessage={fieldErrors?.title[0]}
         />
-        <div className='flex items-end'>
-          <Button className='bg-gray-300 text-gray-50 w-24'>Cancelar</Button>
+        <div className='flex items-center justify-end gap-3'>
+          <Button className='bg-gray-600 text-gray-50 w-24'>Cancelar</Button>
           {!solution && (
             <Button
               disabled={canPostSolution}
               onClick={handleSolutionPost}
-              className='bg-gray-300 text-gray-50'
+              className='w-24'
             >
-              <Icon name='send' size={16} className='text-gray-50' />
+              <Icon name='send' size={14} className='text-green-900 mr-1' />
               Postar
             </Button>
           )}
@@ -50,16 +52,18 @@ export function SolutionPage({ savedSolutionDto, challengeId }: SolutionPageProp
             <Button
               disabled={canPostSolution}
               onClick={handleSolutionUpdate}
-              className='bg-gray-300 text-gray-50 w-24  '
+              className='w-24'
             >
-              <Icon name='send' size={16} className='text-gray-50' />
+              <Icon name='send' size={14} className='text-green-900 mr-1' />
               Atualizar
             </Button>
           )}
         </div>
       </header>
 
-      <ContentEditor content={content} onChange={handleContentChange} />
+      <main className='h-full mt-3 border-t border-gray-600'>
+        <ContentEditor content={content} onChange={handleContentChange} />
+      </main>
     </div>
   )
 }

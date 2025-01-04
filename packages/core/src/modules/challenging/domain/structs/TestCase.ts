@@ -25,8 +25,8 @@ export class TestCase {
     return new TestCase({
       inputs: dto.inputs,
       expectedOutput: dto.expectedOutput,
-      isLocked: Logical.create('O teste de caso está bloqueado?', dto.isLocked),
-      position: OrdinalNumber.create('Posição do caso de uso', dto.position),
+      isLocked: Logical.create(dto.isLocked, 'O teste de caso está bloqueado?'),
+      position: OrdinalNumber.create(dto.position, 'Posição do caso de uso'),
     })
   }
 
