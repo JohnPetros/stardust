@@ -9,18 +9,25 @@ type CodeProps = {
 }
 
 export function Code({ children, isRunnable = true, hasAnimation = true }: CodeProps) {
-  if (children)
+  let code: unknown
+
+  if (!Array.isArray(children)) {
+    code = children
+  } else if (
+    children.length > 0 &&
+    typeof children[0]?.props.children !== 'string' &&
+    'props' in children[0].props.children
+  ) {
+    code = children[0].props.children.props.children
+  } else if (children.length > 0) {
+    code = children[0].props.children
+  }
+
+  if (code)
     return (
       <Animation hasAnimation={hasAnimation}>
         <CodeSnippet
-          code={
-            !Array.isArray(children)
-              ? children
-              : typeof children[0].props.children !== 'string' &&
-                  'props' in children[0].props.children
-                ? children[0].props.children.props.children
-                : children[0].props.children
-          }
+          code={(code as string).replaceAll('\n\n', '\n')}
           isRunnable={isRunnable}
         />
       </Animation>
