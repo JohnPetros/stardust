@@ -25,9 +25,9 @@ export type UserDto = {
   completedPlanetsIds?: string[]
   upvotedCommentsIds?: string[]
   canSeeRankingResult?: boolean
+  hasCompletedSpace?: boolean
   lastWeekRankingPosition?: number | null
-  createdAt?: string
-  didIncrementStreakOnSaturday?: boolean
-  // didBreakStreak: boolean
+  createdAt?: Date
+  didBreakStreak?: boolean
   // studyTime: string
 }

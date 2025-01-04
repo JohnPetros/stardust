@@ -55,9 +55,6 @@ export function useCommentsList({ onFetchComments, onSaveComment }: CommentsList
       content: commentContent,
       author: {
         id: user.id,
-        name: user.name.value,
-        slug: user.slug.value,
-        avatar: { name: user.avatar.name.value, image: user.avatar.image.value },
       },
     })
 

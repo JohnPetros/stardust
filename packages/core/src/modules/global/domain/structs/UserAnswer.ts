@@ -19,8 +19,8 @@ export class UserAnswer {
 
   static create(value: unknown = null) {
     return new UserAnswer({
-      isCorrect: Logical.create('A resposta do usuário está correta?', false),
-      isVerified: Logical.create('A resposta do usuário está verificada?', false),
+      isCorrect: Logical.create(false),
+      isVerified: Logical.create(false),
       value,
     })
   }
@@ -42,7 +42,7 @@ export class UserAnswer {
   }
 
   get isAnswered() {
-    return Logical.create('A resposta do usuário foi respondida?', Boolean(this.value))
+    return Logical.create(Boolean(this.value))
   }
 
   private clone(props?: Partial<QuestionAnswerProps>) {

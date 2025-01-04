@@ -42,7 +42,7 @@ export function useStar({
     }
 
     const challenge = reponse.body
-    router.goTo(`${ROUTES.challenging.challenge}/${challenge.slug}`)
+    router.goTo(`${ROUTES.challenging.challenges}/${challenge.slug}`)
   }
 
   function handleStarClick() {

@@ -23,25 +23,22 @@ export class DraggableItem {
 
   static create(dto: DragglableItemDto): DraggableItem {
     return new DraggableItem({
-      index: Integer.create('Dragglabe index', dto.index),
-      dropZoneIndex: Integer.create('Dragglabe drop zone index', dto.dropZoneIndex),
+      index: Integer.create(dto.index, 'Dragglabe index'),
+      dropZoneIndex: Integer.create(dto.dropZoneIndex, 'Dragglabe drop zone index'),
       label: Text.create(dto.label),
       originalDropZoneIndex: Integer.create(
-        'Dragglabe original drop zone index',
         dto.originalDropZoneIndex,
+        'Dragglabe original drop zone index',
       ),
     })
   }
 
   setDropZone(dropZoneIndex: number): DraggableItem {
-    return this.clone({ dropZoneIndex: Integer.create('Drop zone index', dropZoneIndex) })
+    return this.clone({ dropZoneIndex: Integer.create(dropZoneIndex, 'Drop zone index') })
   }
 
   get isDropped(): Logical {
-    return Logical.create(
-      'Is draggable item dropped?',
-      this.dropZoneIndex.value !== this.originalDropZoneIndex.value,
-    )
+    return Logical.create(this.dropZoneIndex.value !== this.originalDropZoneIndex.value)
   }
 
   private clone(props?: Partial<DraggableItemProps>) {

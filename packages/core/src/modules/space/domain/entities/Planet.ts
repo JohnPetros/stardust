@@ -19,7 +19,7 @@ export class Planet extends Entity<PlanetProps> {
         name: Name.create(dto.name),
         icon: Image.create(dto.icon),
         image: Image.create(dto.image),
-        position: OrdinalNumber.create('planet position', dto.position),
+        position: OrdinalNumber.create(dto.position, 'Posição do planeta'),
         stars: dto.stars.map(Star.create),
       },
       dto.id,

@@ -55,7 +55,7 @@ export function CodeEditorToolbar({
         </div>
 
         <Toolbar.Root className='flex items-center gap-3'>
-          {currentRoute.includes(ROUTES.challenging.challenge) && (
+          {currentRoute.includes(ROUTES.challenging.challenges) && (
             <AlertDialog
               type='asking'
               title='Tem certeza que deseja voltar para o código inicial?'

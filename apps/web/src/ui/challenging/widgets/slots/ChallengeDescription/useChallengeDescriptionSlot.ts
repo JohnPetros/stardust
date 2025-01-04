@@ -47,7 +47,7 @@ export function useChallengeDescriptionSlot() {
     user.unlockChallengeSolutions(challenge.id)
     await updateUser(user)
     setCraftsVislibility(craftsVislibility.showSolutions())
-    goTo(`${ROUTES.challenging.challenge}/${challenge?.slug}/solutions`)
+    goTo(`${ROUTES.challenging.challenges}/${challenge?.slug}/solutions`)
   }
 
   useEffect(() => {
@@ -71,7 +71,6 @@ export function useChallengeDescriptionSlot() {
         setIsLoading(false)
         return
       }
-
     }
 
     if (isLoading && mdx) {

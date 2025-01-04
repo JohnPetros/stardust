@@ -27,7 +27,7 @@ export class Theory {
     })
 
     return new Theory({
-      currentTextBlockIndex: Integer.create('Theory current text index', 1),
+      currentTextBlockIndex: Integer.create(1, 'Índice do texto atual'),
       textBlocks,
     })
   }

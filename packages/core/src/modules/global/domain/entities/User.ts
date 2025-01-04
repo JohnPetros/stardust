@@ -40,8 +40,9 @@ type UserProps = {
   completedPlanetsIds: List<string>
   upvotedCommentsIds: List<string>
   canSeeRankingResult: Logical
-  didIncrementStreakOnSaturday: Logical
+  didBreakStreak: Logical
   lastWeekRankingPosition: RankingPosition | null
+  hasCompletedSpace: Logical
   createdAt: Date
   _observer?: Observer
 }
@@ -93,7 +94,7 @@ export class User extends Entity<UserProps> {
   }
 
   canBuy(coins: number): Logical {
-    return Logical.create('Esse usuário pode comprar?', this.props.coins.value >= coins)
+    return Logical.create(this.props.coins.value >= coins)
   }
 
   buyRocket(rocket: Rocket): void {
@@ -136,6 +137,11 @@ export class User extends Entity<UserProps> {
     this.props.weekStatus = this.weekStatus.updateTodayStatus('done')
     this.props.streak = this.streak.increment(1)
     this.notifyChanges()
+  }
+
+  breakStreak() {
+    this.props.streak = Integer.create(0)
+    this.props.didBreakStreak = this.props.didBreakStreak.makeTrue()
   }
 
   getAchievementCount(metric: AchievementMetricValue) {
@@ -217,53 +223,39 @@ export class User extends Entity<UserProps> {
   }
 
   get canMakeTodayStatusDone(): Logical {
-    return Logical.create(
-      'Can make today status done?',
-      this.weekStatus.todayStatus === 'todo',
-    )
+    return Logical.create(this.weekStatus.todayStatus === 'todo')
+  }
+
+  get hasCompletedSpace(): Logical {
+    return this.props.hasCompletedSpace
   }
 
   get unlockedStarsCount() {
-    return Integer.create('unlocked stars', this.props.unlockedStarsIds.length - 1)
+    return Integer.create(this.props.unlockedStarsIds.length - 1)
   }
 
   get acquiredRocketsCount() {
-    return Integer.create(
-      'acquired rockets count',
-      this.props.acquiredRocketsIds.length - 1,
-    )
+    return Integer.create(this.props.acquiredRocketsIds.length - 1)
   }
 
   get acquiredAvatarsCount() {
-    return Integer.create(
-      'acquired avatars count',
-      this.props.acquiredAvatarsIds.length - 3,
-    )
+    return Integer.create(this.props.acquiredAvatarsIds.length - 3)
   }
 
   get unlockedAchievementsCount() {
-    return Integer.create(
-      'unlocked achievements',
-      this.props.unlockedAchievementsIds.length,
-    )
+    return Integer.create(this.props.unlockedAchievementsIds.length)
   }
 
   get rescueableAchievementsCount() {
-    return Integer.create(
-      'rescuable achievements',
-      this.props.rescuableAchievementsIds.length,
-    )
+    return Integer.create(this.props.rescuableAchievementsIds.length)
   }
 
   get completedChallengesCount() {
-    return Integer.create(
-      'completed challenges',
-      this.props.completedChallengesIds.length,
-    )
+    return Integer.create(this.props.completedChallengesIds.length)
   }
 
   get completedPlanetsCount() {
-    return Integer.create('completed planets', this.props.completedPlanetsIds.length)
+    return Integer.create(this.props.completedPlanetsIds.length)
   }
 
   get isRankingWinner(): boolean {
@@ -348,8 +340,8 @@ export class User extends Entity<UserProps> {
     return this.props.canSeeRankingResult
   }
 
-  get didIncrementStreakOnSaturday() {
-    return this.props.didIncrementStreakOnSaturday
+  get didBreakStreak() {
+    return this.props.didBreakStreak
   }
 
   get lastWeekRankingPosition() {
@@ -385,8 +377,9 @@ export class User extends Entity<UserProps> {
       completedPlanetsIds: this.props.completedPlanetsIds.items,
       canSeeRankingResult: this.props.canSeeRankingResult.value,
       lastWeekRankingPosition: this.props.lastWeekRankingPosition?.position.value ?? null,
-      didIncrementStreakOnSaturday: this.props.didIncrementStreakOnSaturday.value,
-      createdAt: this.createdAt.toDateString(),
+      didBreakStreak: this.props.didBreakStreak.value,
+      hasCompletedSpace: this.hasCompletedSpace.value,
+      createdAt: this.createdAt,
     }
   }
 }

@@ -25,12 +25,12 @@ export class ChallengeFactory {
       starId: dto.starId ? Id.create(dto.starId) : null,
       testCases: dto.testCases.map(TestCase.create),
       completionsCount: Integer.create(
-        'Quantidade de vezes que esse desafio foi completado',
         dto.completionsCount,
+        'Quantidade de vezes que esse desafio foi completado',
       ),
       functionName: dto.functionName ? Name.create(dto.functionName) : null,
-      downvotesCount: Integer.create('Contagem de dowvotes', dto.downvotesCount),
-      upvotesCount: Integer.create('Contagem de upvotes', dto.upvotesCount),
+      downvotesCount: Integer.create(dto.downvotesCount, 'Contagem de dowvotes'),
+      upvotesCount: Integer.create(dto.upvotesCount, 'Contagem de upvotes'),
       description: dto.description,
       textBlocks: dto.textBlocks.map((dto) => {
         let textBlock = TextBlock.create(dto.type, dto.content)
@@ -41,8 +41,8 @@ export class ChallengeFactory {
       }),
       categories,
       userVote: null,
-      incorrectAnswersCount: Integer.create('Contagem de respostas incorretas', 0),
-      isCompleted: Logical.create('A resposta do desafio está completada?', false),
+      incorrectAnswersCount: Integer.create(0, 'Contagem de respostas incorretas'),
+      isCompleted: Logical.create(false, 'A resposta do desafio está completada?'),
       results: List.create([]),
       userOutputs: List.create([]),
       createdAt: dto.createdAt,

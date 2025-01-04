@@ -32,12 +32,12 @@ export function useVoteControl() {
     if (!challenge) return
 
     challenge.upvotesCount = Integer.create(
-      'Contagem de upvotes desse desafio',
       state.upvotesCount,
+      'Contagem de upvotes desse desafio',
     )
     challenge.downvotesCount = Integer.create(
-      'Contagem de downvotes desse desafio',
       state.downvotesCount,
+      'Contagem de downvotes desse desafio',
     )
     challenge.userVote = state.userChallengeVote
     setChallenge(challenge)

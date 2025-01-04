@@ -16,8 +16,8 @@ export class Star extends Entity<StarsProps> {
       {
         slug: Slug.create(dto.slug),
         name: Name.create(dto.name),
-        number: OrdinalNumber.create('star number', dto.number),
-        isChallenge: Logical.create('is star a challenge?', dto.isChallenge),
+        number: OrdinalNumber.create(dto.number, 'Número da estrela'),
+        isChallenge: Logical.create(dto.isChallenge, 'É um desafio?'),
         planetId: Id.create(dto.planetId),
       },
       dto?.id,

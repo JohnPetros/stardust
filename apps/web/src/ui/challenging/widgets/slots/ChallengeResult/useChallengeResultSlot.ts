@@ -1,18 +1,18 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
+import { UserAnswer } from '@stardust/core/global/structs'
 import type {
-  ChallengeRewardingPayloadDto,
-  StarChallengeRewardingPayloadDto,
-} from '@stardust/core/challenging/dtos'
+  ChallengeRewardingPayload,
+  StarChallengeRewardingPayload,
+} from '@stardust/core/challenging/types'
 
 import { COOKIES, ROUTES, STORAGE } from '@/constants'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useBreakpoint, useLocalStorage, useRouter } from '@/ui/global/hooks'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
-import { UserAnswer } from '@stardust/core/global/structs'
 
 export function useChallengeResultSlot() {
   const { getChallengeSlice, getTabHandlerSlice, getResults } = useChallengeStore()
@@ -32,12 +32,10 @@ export function useChallengeResultSlot() {
     const currentSeconds = Number(secondsCounterStorage.get())
 
     if (challenge.starId?.value) {
-      const rewardsPayload: StarChallengeRewardingPayloadDto = {
-        origin: 'star-challenge',
+      const rewardsPayload: StarChallengeRewardingPayload = {
         secondsCount: currentSeconds,
         incorrectAnswersCount: challenge.incorrectAnswersCount.value,
         challengeId: challenge?.id,
-        challengeDifficultyLevel: challenge?.difficulty.level,
         starId: challenge?.starId?.value,
       }
 
@@ -47,16 +45,14 @@ export function useChallengeResultSlot() {
       })
       console.log(rewardsPayload)
       localStorage.removeItem(STORAGE.keys.secondsCounter)
-      // router.goTo(ROUTES.rewarding)
+      router.goTo(ROUTES.rewarding.starChallenge)
       return
     }
 
-    const rewardsPayload: ChallengeRewardingPayloadDto = {
-      origin: 'challenge',
+    const rewardsPayload: ChallengeRewardingPayload = {
       secondsCount: currentSeconds,
       incorrectAnswersCount: challenge.incorrectAnswersCount.value,
       challengeId: challenge?.id,
-      challengeDifficultyLevel: challenge?.difficulty.level,
     }
 
     await setCookie({
@@ -66,7 +62,7 @@ export function useChallengeResultSlot() {
 
     console.log(rewardsPayload)
     secondsCounterStorage.remove()
-    // router.goTo(ROUTES.rewarding)
+    router.goTo(ROUTES.rewarding.challenge)
     return
   }
 

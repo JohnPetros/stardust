@@ -1,16 +1,17 @@
 'use client'
 
-import * as Toolbar from '@radix-ui/react-toolbar'
+import { useRef } from 'react'
 import { twMerge } from 'tailwind-merge'
 
+import * as Toolbar from '@/ui/global/widgets/components/Toolbar'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { Mdx } from '../../Mdx'
 import { UserAvatar } from '../../UserAvatar'
-import { ToolButton } from './ToolButton'
 import { Button } from '../../Button'
 import { Icon } from '../../Icon'
 import { useCommentInput } from './useCommentInput'
-import { Text } from '@stardust/core/global/structs'
+import type { TextEditorRef } from '../../TextEditor/types'
+import { TextEditor } from '../../TextEditor'
 
 type CommentInputProps = {
   id: string
@@ -27,16 +28,16 @@ export function CommentInput({
   defaultContent = '',
   onSend,
 }: CommentInputProps) {
+  const textEditorRef = useRef<TextEditorRef>(null)
   const {
     content,
-    textareaRef,
     errorMessage,
     isPreviewVisible,
-    handleInsertSnippet,
     handleTogglePreview,
-    handleCommentChange,
+    handleContentChange,
+    handleSnippetInsert,
     handlePostComment,
-  } = useCommentInput(onSend, defaultContent)
+  } = useCommentInput({ onSend, textEditorRef, defaultContent })
   const { user } = useAuthContext()
 
   if (user)
@@ -66,38 +67,45 @@ export function CommentInput({
                 <Mdx>{content}</Mdx>
               </div>
             ) : (
-              <textarea
-                ref={textareaRef}
+              <TextEditor
+                ref={textEditorRef}
                 placeholder={placeholder}
-                className='min-h-[5rem] w-full resize-none rounded-md bg-transparent text-sm font-medium text-gray-300 outline-none placeholder:text-gray-500'
-                rows={content.length > 3 ? Text.create(content).countCharacters('\n') : 1}
+                className='min-h-[5rem]'
                 value={content}
-                autoFocus={true}
-                onChange={({ currentTarget }) => handleCommentChange(currentTarget.value)}
+                onChange={handleContentChange}
               />
+              // <textarea
+              //   ref={textareaRef}
+              //   placeholder={placeholder}
+              //   className='min-h-[5rem] w-full resize-none rounded-md bg-transparent text-sm font-medium text-gray-300 outline-none placeholder:text-gray-500'
+              //   rows={content.length > 3 ? Text.create(content).countCharacters('\n') : 1}
+              //   value={content}
+              //   autoFocus={true}
+              //   onChange={({ currentTarget }) => handleCommentChange(currentTarget.value)}
+              // />
             )}
-            <Toolbar.Root className='flex w-full flex-col gap-4 md:flex-row md:items-center  md:justify-center'>
+            <Toolbar.Container className='flex w-full flex-col gap-4 md:flex-row md:items-center  md:justify-center'>
               {!isPreviewVisible && (
                 <div className='flex items-center justify-end gap-3 md:justify-start'>
-                  <ToolButton
-                    onClick={() => handleInsertSnippet('strong')}
+                  <Toolbar.Button
+                    onClick={() => handleSnippetInsert('strong')}
                     icon='strong'
                     label='Inserir trecho em destaque'
                   />
-                  <ToolButton
-                    onClick={() => handleInsertSnippet('code')}
+                  <Toolbar.Button
+                    onClick={() => handleSnippetInsert('code')}
                     icon='code'
                     label='Inserir trecho de código'
                   />
-                  <ToolButton
-                    onClick={() => handleInsertSnippet('runnableCode')}
+                  <Toolbar.Button
+                    onClick={() => handleSnippetInsert('runnableCode')}
                     icon='runnable-code'
                     label='Inserir trecho de código executável'
                   />
                 </div>
               )}
               <div className='ml-auto flex items-center gap-3'>
-                <Toolbar.Button asChild>
+                <Toolbar.CustomButton>
                   <Button
                     type='button'
                     className='h-6 w-24 text-xs'
@@ -105,14 +113,14 @@ export function CommentInput({
                   >
                     {isPreviewVisible ? 'Editor' : 'Preview'}
                   </Button>
-                </Toolbar.Button>
+                </Toolbar.CustomButton>
 
-                <Toolbar.Button
-                  type='submit'
-                  className='custom-outline rounded-md'
-                  asChild
-                >
-                  <Button type='submit' className='h-6 w-24 text-xs' form={id}>
+                <Toolbar.CustomButton>
+                  <Button
+                    type='submit'
+                    className='custom-outline rounded-md h-6 w-24 text-xs'
+                    form={id}
+                  >
                     <div className='flex items-center gap-1'>
                       <Icon
                         name='send'
@@ -123,9 +131,9 @@ export function CommentInput({
                       {title}
                     </div>
                   </Button>
-                </Toolbar.Button>
+                </Toolbar.CustomButton>
               </div>
-            </Toolbar.Root>
+            </Toolbar.Container>
             {errorMessage && (
               <p className='mt-3 text-sm font-medium text-red-700'>{errorMessage}</p>
             )}

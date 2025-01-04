@@ -7,7 +7,7 @@ export class Logical {
     this.value = value
   }
 
-  static create(key: string, value: boolean): Logical {
+  static create(value: boolean, key  = 'Valor lógico'): Logical {
     new BooleanValidation(value, key).validate()
 
     return new Logical(value)

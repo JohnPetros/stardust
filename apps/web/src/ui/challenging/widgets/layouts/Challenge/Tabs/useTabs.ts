@@ -30,7 +30,7 @@ export function useTabs() {
     user.loseCoins(ChallengeCraftsVisibility.solutionsVisibilityPrice)
     await updateUser(user)
     setCraftsVislibility(craftsVislibility.showSolutions())
-    router.goTo(`${ROUTES.challenging.challenge}/${challenge?.slug.value}/solutions`)
+    router.goTo(`${ROUTES.challenging.challenges}/${challenge?.slug.value}/solutions`)
   }
 
   useEffect(() => {

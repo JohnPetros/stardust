@@ -3,11 +3,13 @@
 import type { Comment } from '@stardust/core/forum/entities'
 import type { CommentsListingParams } from '@stardust/core/forum/types'
 
+import { ROUTES } from '@/constants'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useApi } from '@/ui/global/hooks/useApi'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
+import { useEffect } from 'react'
 
 export function useChallengeCommentsSlot(challengeId: string) {
   const { getChallengeSlice, getCraftsVisibilitySlice } = useChallengeStore()
@@ -27,10 +29,10 @@ export function useChallengeCommentsSlot(challengeId: string) {
     if (response.isFailure) toast.show(response.errorMessage)
   }
 
-  // useEffect(() => {
-  //   if (craftsVislibility.canShowComments.isFalse)
-  //     goTo(`${ROUTES.challenging.challenge}/${challenge?.slug.value}`)
-  // }, [goTo, craftsVislibility, challenge?.slug])
+  useEffect(() => {
+    if (craftsVislibility.canShowComments.isFalse)
+      goTo(`${ROUTES.challenging.challenges}/${challenge?.slug.value}`)
+  }, [goTo, craftsVislibility, challenge?.slug])
 
   return {
     isMobile,

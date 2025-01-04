@@ -7,11 +7,11 @@ export function useCodeSnippet({ code, isRunnable }: CodeSnippetProps) {
   const codeEditorRef = useRef<PlaygroundCodeEditorRef | null>(null)
 
   async function handleRunCode() {
-    codeEditorRef.current?.runCode()
+    codecodeEditorRef.current?.runCode()
   }
 
   function handleReloadButtonClick() {
-    codeEditorRef.current?.reloadValue()
+    codecodeEditorRef.current?.reloadValue()
   }
 
   const editorHeight = useMemo(() => {

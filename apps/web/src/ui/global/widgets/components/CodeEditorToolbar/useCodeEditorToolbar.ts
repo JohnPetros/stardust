@@ -17,11 +17,11 @@ export function useCodeEditorToolbar({
   const hasCodedEditorReset = useRef(false)
 
   function resetCode() {
-    codeEditorRef.current?.reloadValue()
+    codecodeEditorRef.current?.reloadValue()
   }
 
   function handleAltEnter() {
-    if (!codeEditorRef.current) return
+    if (!codecodeEditorRef.current) return
     runCodeButtonRef.current?.click()
   }
 
@@ -39,10 +39,10 @@ export function useCodeEditorToolbar({
   }
 
   function handleCtrlDot() {
-    const currentValue = codeEditorRef.current?.getValue()
+    const currentValue = codecodeEditorRef.current?.getValue()
     if (!currentValue) return
 
-    const selectedLinesRange = codeEditorRef.current?.getSelectedLinesRange()
+    const selectedLinesRange = codecodeEditorRef.current?.getSelectedLinesRange()
     if (!selectedLinesRange) return
 
     const lines = currentValue.split('\n')
@@ -54,8 +54,8 @@ export function useCodeEditorToolbar({
 
     const newLines = lines.map((line) => handleSelectedLines(line, selectedLines))
 
-    codeEditorRef.current?.setValue(newLines.join('\n'))
-    codeEditorRef.current?.setCursorPosition({
+    codecodeEditorRef.current?.setValue(newLines.join('\n'))
+    codecodeEditorRef.current?.setCursorPosition({
       lineNumber: selectedLinesRange.start,
       columnNumber: 1,
     })
@@ -70,13 +70,13 @@ export function useCodeEditorToolbar({
   function handleCtrlZ() {
     if (
       hasCodedEditorReset.current &&
-      codeEditorRef.current &&
+      codecodeEditorRef.current &&
       previousUserCode.current
     ) {
-      const cursorPosition = codeEditorRef.current?.getCursorPosition()
+      const cursorPosition = codecodeEditorRef.current?.getCursorPosition()
 
-      codeEditorRef.current.setValue(previousUserCode.current)
-      if (cursorPosition) codeEditorRef.current?.setCursorPosition(cursorPosition)
+      codecodeEditorRef.current.setValue(previousUserCode.current)
+      if (cursorPosition) codecodeEditorRef.current?.setCursorPosition(cursorPosition)
     }
   }
 

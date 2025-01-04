@@ -17,6 +17,12 @@ export const useZustandChallengeStore = create<ChallengeStore>()(
           })
         },
 
+        setSolutionContent(solutionContent: string) {
+          return set(({ state }) => {
+            state.solutionContent = solutionContent
+          })
+        },
+
         setPanelsLayout(panelsLayout: PanelsLayout) {
           return set(({ state }) => {
             state.panelsLayout = panelsLayout

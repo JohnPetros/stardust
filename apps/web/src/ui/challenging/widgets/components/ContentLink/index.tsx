@@ -27,7 +27,7 @@ export function ContentLink({
 
   return (
     <Link
-      href={`${ROUTES.challenging.challenge}/${challenge?.slug.value}${
+      href={`${ROUTES.challenging.challenges}/${challenge?.slug.value}${
         contentType !== 'description' ? `/${contentType}` : ''
       }`}
       className={twMerge(

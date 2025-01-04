@@ -19,14 +19,14 @@ export class Level {
   static create(value?: number): Level {
     if (!value) {
       return new Level({
-        number: OrdinalNumber.create('Level', 1),
-        didUp: Logical.create('Did level up?', false),
+        number: OrdinalNumber.create(1),
+        didUp: Logical.create(false),
       })
     }
 
     return new Level({
-      number: OrdinalNumber.create('Level', value),
-      didUp: Logical.create('Did level up?', false),
+      number: OrdinalNumber.create(value),
+      didUp: Logical.create(false),
     })
   }
 

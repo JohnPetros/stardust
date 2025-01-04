@@ -42,6 +42,8 @@ export type ChallengeProps = {
 }
 
 export class Challenge extends Entity<ChallengeProps> {
+  static readonly MAXIMUM_INCORRECT_ANSWERS_PER_TEST_CASE = 10
+
   static create(dto: ChallengeDto): Challenge {
     return new Challenge(ChallengeFactory.produce(dto), dto?.id)
   }
@@ -142,6 +144,11 @@ export class Challenge extends Entity<ChallengeProps> {
 
   private get hasFunction() {
     return Logical.create('Esse desafio tem função?', Boolean(this.props.functionName))
+  }
+
+  get maximumIncorrectAnswersCount() {
+    const testsCasesCount = this.testCases.length
+    return testsCasesCount * Challenge.MAXIMUM_INCORRECT_ANSWERS_PER_TEST_CASE
   }
 
   get isCompleted() {

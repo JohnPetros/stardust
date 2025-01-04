@@ -2,8 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import { QUERY_PARAMS } from '../Challenges/query-params'
-
 import { FILTER_SELECTS_ITEMS } from '../filter-select-items'
 import type { ChallengeCategory } from '@stardust/core/challenging/entities'
 import type {
@@ -17,6 +15,7 @@ import {
 } from '@stardust/core/challenging/structs'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useQueryArrayParam } from '@/ui/global/hooks/useQueryArrayParam'
+import { QUERY_PARAMS } from '../query-params'
 
 export function useChallengesFilter(categories: ChallengeCategory[]) {
   const [tags, setTags] = useState<List<string>>(List.create([]))
@@ -34,21 +33,6 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
   const difficultyLevelTag = useRef<string | null>(null)
   const includedCategoriesNames = useRef<List<string>>(List.create([]))
   const removedCategoriesNames = useRef<List<string>>(List.create([]))
-
-  // function getCategoriesIds() {
-  //   const ceategoriesSearchParam = queryParams.get(QUERY_PARAMS.categoriesIds)
-
-  //   if (ceategoriesSearchParam) {
-  //     const categoriesIds = ceategoriesSearchParam.split(',').filter(Boolean)
-  //     return categoriesIds
-  //   }
-
-  //   return null
-  // }
-
-  // function setCategoriesIds(categoriesIds: string[]) {
-  //   queryParams.set(QUERY_PARAMS.categoriesIds, categoriesIds.join(','))
-  // }
 
   function removeCategory(categoryName: string) {
     const category = categories.find((category) => category.name.value === categoryName)
