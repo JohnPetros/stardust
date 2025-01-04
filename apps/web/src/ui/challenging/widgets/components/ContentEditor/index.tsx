@@ -16,13 +16,8 @@ type ContentEditorProps = {
 
 export function ContentEditor({ content, onChange }: ContentEditorProps) {
   const textEditorRef = useRef<TextEditorRef>(null)
-  const { previewValue, handleSnippetInsert, handleKeyUp, textEditorChange } =
-    useContentEditor(
-      content,
-      textEditorRef,
-
-      onChange,
-    )
+  const { previewContent, handleSnippetInsert, handleKeyUp, textEditorChange } =
+    useContentEditor(content, textEditorRef, onChange)
 
   return (
     <div>
@@ -76,7 +71,7 @@ export function ContentEditor({ content, onChange }: ContentEditorProps) {
           onKeyUp={handleKeyUp}
           className='h-full mt-1 pl-6'
         />
-        <Mdx>{previewValue.replaceAll('@break', '<br />')}</Mdx>
+        <Mdx>{previewContent}</Mdx>
       </div>
     </div>
   )

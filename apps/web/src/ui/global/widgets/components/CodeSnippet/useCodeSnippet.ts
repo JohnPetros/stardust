@@ -7,14 +7,15 @@ export function useCodeSnippet({ code, isRunnable }: CodeSnippetProps) {
   const codeEditorRef = useRef<PlaygroundCodeEditorRef | null>(null)
 
   async function handleRunCode() {
-    codecodeEditorRef.current?.runCode()
+    codeEditorRef.current?.runCode()
   }
 
   function handleReloadButtonClick() {
-    codecodeEditorRef.current?.reloadValue()
+    codeEditorRef.current?.reloadValue()
   }
 
   const editorHeight = useMemo(() => {
+    if (!code) return 0
     const lines = code.split('\n').length
 
     if (isRunnable) return 100 + lines * (lines >= 10 ? 20 : 32)

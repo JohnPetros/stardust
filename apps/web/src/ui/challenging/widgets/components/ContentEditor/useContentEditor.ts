@@ -10,33 +10,22 @@ export function useContentEditor(
   textEditorRef: RefObject<TextEditorRef>,
   onChange: (value: string) => void,
 ) {
-  const [previewValue, setPreviewValue] = useState(content)
+  const [previewContent, setPreviewContent] = useState(content.replaceAll('\n', '\n\n'))
 
   function handleSnippetInsert(snippet: TextEditorSnippet) {
     if (!textEditorRef.current) return
     textEditorRef.current.insertSnippet(snippet)
   }
 
-  function handleEnter() {}
-
   function textEditorChange(value: string) {
-    setPreviewValue(value)
+    setPreviewContent(value.replaceAll('\n', '\n\n'))
     onChange(value)
   }
 
-  function handleKeyUp({ key }: KeyboardEvent) {
-    const typedKey = key.toLowerCase()
-
-    if (typedKey === 'enter') {
-      handleEnter()
-      return
-    }
-  }
-
-  console.log({ previewValue })
+  function handleKeyUp({ key }: KeyboardEvent) {}
 
   return {
-    previewValue,
+    previewContent,
     handleKeyUp,
     handleSnippetInsert,
     textEditorChange,
