@@ -59,7 +59,12 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   private verifyResult(result: unknown, testCase: TestCase, code: Code) {
-    return result === code.translateToCodeRunner(testCase.expectedOutput)
+    const isCorrect = result === code.translateToCodeRunner(testCase.expectedOutput)
+
+    if (!isCorrect)
+      this.props.incorrectAnswersCount = this.incorrectAnswersCount.increment(1)
+
+    return isCorrect
   }
 
   async runCode(code: Code) {

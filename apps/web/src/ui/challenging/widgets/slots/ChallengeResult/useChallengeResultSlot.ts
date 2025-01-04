@@ -45,8 +45,9 @@ export function useChallengeResultSlot() {
         key: COOKIES.keys.rewardingPayload,
         value: JSON.stringify(rewardsPayload),
       })
+      console.log(rewardsPayload)
       localStorage.removeItem(STORAGE.keys.secondsCounter)
-      router.goTo(ROUTES.rewarding)
+      // router.goTo(ROUTES.rewarding)
       return
     }
 
@@ -63,8 +64,9 @@ export function useChallengeResultSlot() {
       value: JSON.stringify(rewardsPayload),
     })
 
+    console.log(rewardsPayload)
     secondsCounterStorage.remove()
-    router.goTo(ROUTES.rewarding)
+    // router.goTo(ROUTES.rewarding)
     return
   }
 
@@ -73,9 +75,9 @@ export function useChallengeResultSlot() {
 
     const newUserAnswer = challenge.verifyUserAnswer(userAnswer)
 
-    // if (newUserAnswer.isCorrect.isTrue && newUserAnswer.isVerified.isTrue) {
-    //   showRewards()
-    // }
+    if (newUserAnswer.isCorrect.isTrue && newUserAnswer.isVerified.isTrue) {
+      showRewards()
+    }
 
     if (newUserAnswer.isCorrect.isFalse && newUserAnswer.isVerified.isTrue && isMobile) {
       tabHandler?.showCodeTab()

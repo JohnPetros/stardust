@@ -43,7 +43,7 @@ export function Tabs({ children }: TabsProps) {
             />
           </TabButton>
           <span className='text-gray-600'>|</span>
-          {craftsVislibility.canShowComments.isTrue ? (
+          {craftsVislibility.canShowComments.isFalse ? (
             <BlockedCommentsAlertDialog>
               <TabButton value='comments'>
                 <ContentLink
