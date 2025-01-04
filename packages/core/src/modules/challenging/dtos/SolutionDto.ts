@@ -5,9 +5,9 @@ export type SolutionDto = {
   title: string
   slug: string
   content: string
-  createdAt: Date
-  viewsCount: number
-  commentsCount: number
+  viewsCount?: number
+  commentsCount?: number
+  createdAt?: Date
   author: {
     id: string
     dto?: AuthorDto

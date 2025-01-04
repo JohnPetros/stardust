@@ -1,7 +1,7 @@
 import type { CursorPosition } from './CursorPosition'
 import type { SelectedLinesRange } from './SelectedLinesRange'
 
-export type EditorRef = {
+export type CodeEditorRef = {
   getValue: () => string
   setValue: (value: string) => void
   reloadValue: () => void

@@ -13,4 +13,13 @@ export class ValidationError extends AppError {
 
     super(message, 'Validation Error')
   }
+
+  getErrorsMap<ErrorsMap>() {
+    let errorsMap = {}
+
+    for (const fieldError of this.fieldErrors) {
+      errorsMap = { ...errorsMap, [fieldError.name]: fieldError.messages }
+    }
+    return errorsMap as ErrorsMap
+  }
 }

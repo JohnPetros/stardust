@@ -4,19 +4,20 @@ import { useCallback, useEffect, useRef } from 'react'
 import { type Monaco, useMonaco } from '@monaco-editor/react'
 import type monaco from 'monaco-editor'
 
-import { COLORS, EDITOR_THEMES } from '@/constants'
+import { COLORS } from '@/constants'
 import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
-import type { CursorPosition } from './types/CursorPosition'
+import { CODE_EDITOR_THEMES } from './code-editor-themes'
+import type { CodeEditorTheme, CursorPosition } from './types'
 
-export function useEditor(value: string) {
+export function useCodeEditor(value: string, theme: CodeEditorTheme) {
   const monaco = useMonaco()
   const codeRunner = useCodeRunner()
 
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
 
   const getEditorRules = useCallback(() => {
-    const tokens = Object.keys(EDITOR_THEMES.code.darkSpace).slice(0, -2)
-    const colors = Object.values(EDITOR_THEMES.code.darkSpace).slice(0, -2)
+    const tokens = Object.keys(CODE_EDITOR_THEMES.darkSpace).slice(0, -2)
+    const colors = Object.values(CODE_EDITOR_THEMES.darkSpace).slice(0, -2)
 
     const rules = colors.map((color, index) => ({
       token: tokens[index] ? tokens[index].slice(0, -1) : '',
@@ -83,7 +84,7 @@ export function useEditor(value: string) {
 
     const rules = getEditorRules()
 
-    monaco.editor.defineTheme('editor-theme', {
+    monaco.editor.defineTheme('dark-space', {
       base: 'vs-dark',
       inherit: true,
       rules,
@@ -92,21 +93,21 @@ export function useEditor(value: string) {
       },
     })
 
-    monaco.editor.setTheme('editor-theme')
+    monaco.editor.setTheme(theme)
   }
 
-  useEffect(() => {
-    const rules = getEditorRules()
+  // useEffect(() => {
+  //   const rules = getEditorRules()
 
-    monaco?.editor.defineTheme('editor-theme', {
-      base: 'vs-dark',
-      inherit: true,
-      rules,
-      colors: {
-        'editor.background': COLORS.gray[800],
-      },
-    })
-  }, [monaco?.editor, getEditorRules])
+  //   monaco?.editor.defineTheme('editor-theme', {
+  //     base: 'vs-dark',
+  //     inherit: true,
+  //     rules,
+  //     colors: {
+  //       'editor.background': COLORS.gray[800],
+  //     },
+  //   })
+  // }, [monaco?.editor, getEditorRules])
 
   return {
     editorRef,

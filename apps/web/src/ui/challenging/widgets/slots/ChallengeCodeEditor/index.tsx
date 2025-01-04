@@ -1,6 +1,6 @@
 'use client'
 
-import { Editor } from '@/ui/global/widgets/components/Editor'
+import { CodeEditor } from '@/ui/global/widgets/components/CodeEditor'
 import { useChallengeCodeEditorSlot } from './useChallengeCodeEditorSlot'
 import { CodeEditorToolbar } from '@/ui/global/widgets/components/CodeEditorToolbar'
 
@@ -9,7 +9,7 @@ export function ChallengeCodeEditorSlot() {
     initialCode,
     previousUserCode,
     editorContainerRef,
-    editorRef,
+    codeEditorRef,
     codeEditorHeight,
     handleCodeChange,
     handleRunCode,
@@ -19,11 +19,11 @@ export function ChallengeCodeEditorSlot() {
     <div ref={editorContainerRef} className='relative h-full w-full'>
       <CodeEditorToolbar
         previousUserCode={previousUserCode}
-        codeEditorRef={editorRef}
+        codeEditorRef={codeEditorRef}
         onRunCode={handleRunCode}
       >
-        <Editor
-          ref={editorRef}
+        <CodeEditor
+          ref={codeEditorRef}
           value={initialCode ?? ''}
           width='100%'
           height={codeEditorHeight - 40}

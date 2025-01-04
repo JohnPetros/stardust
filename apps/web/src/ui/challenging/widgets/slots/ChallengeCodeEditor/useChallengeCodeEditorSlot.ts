@@ -13,20 +13,20 @@ import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
 import type { ConsoleRef } from '@/ui/global/widgets/components/Console/types'
-import type { EditorRef } from '@/ui/global/widgets/components/Editor/types'
+import type { CodeEditorRef } from '@/ui/global/widgets/components/CodeEditor/types'
 
 export function useChallengeCodeEditorSlot() {
   const { getChallengeSlice, getPanelsLayoutSlice, getResults } = useChallengeStore()
   const { setResults } = getResults()
   const { challenge } = getChallengeSlice()
-  const { panelsLayout, setPanelsLayout } = getPanelsLayoutSlice()
+  const { panelsLayout } = getPanelsLayoutSlice()
   const { provider } = useCodeRunner()
   const toast = useToastContext()
   const router = useRouter()
   const userCode = useRef<Code>(Code.create(provider))
   const previousUserCode = useRef('')
   const editorContainerRef = useRef<HTMLDivElement>(null)
-  const editorRef = useRef<EditorRef>(null)
+  const codeEditorRef = useRef<CodeEditorRef>(null)
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
   const consoleRef = useRef<ConsoleRef>(null)
   const [codeEditorHeight, setCodeEditorHeight] = useState(0)
@@ -109,7 +109,7 @@ export function useChallengeCodeEditorSlot() {
     editorContainerRef,
     runCodeButtonRef,
     consoleRef,
-    editorRef,
+    codeEditorRef,
     codeEditorHeight,
     initialCode,
     handleRunCode,

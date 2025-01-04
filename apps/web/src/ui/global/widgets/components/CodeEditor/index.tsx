@@ -6,11 +6,12 @@ import MonacoEditor from '@monaco-editor/react'
 import { useBreakpoint } from '@/ui/global/hooks'
 import { useEditorContext } from '@/ui/global/contexts/EditorContext/hooks'
 import { Loading } from '../Loading'
-import type { EditorRef } from './types'
-import { useEditor } from './useEditor'
+import type { CodeEditorRef, CodeEditorTheme } from './types'
+import { useCodeEditor } from './useCodeEditor'
 
-type EditorProps = {
+type CodeEditorProps = {
   value: string
+  theme?: CodeEditorTheme
   width: number | string
   height: number | string
   hasMinimap?: boolean
@@ -18,16 +19,17 @@ type EditorProps = {
   onChange?: (value: string) => void
 }
 
-export function EditorComponent(
+export function CodeEditorComponent(
   {
     value,
     width,
     height,
+    theme = 'dark-space',
     hasMinimap = false,
     isReadOnly = false,
     onChange = () => {},
-  }: EditorProps,
-  ref: ForwardedRef<EditorRef>,
+  }: CodeEditorProps,
+  ref: ForwardedRef<CodeEditorRef>,
 ) {
   const { state } = useEditorContext()
   const {
@@ -38,7 +40,7 @@ export function EditorComponent(
     setCursorPosition,
     getSelectedLinesRange,
     handleEditorDidMount,
-  } = useEditor(value)
+  } = useCodeEditor(value, theme)
 
   const { md: isMobile } = useBreakpoint()
 
@@ -69,7 +71,7 @@ export function EditorComponent(
       width={width}
       height={height}
       language='delegua'
-      theme='delegua-theme'
+      theme={theme}
       options={{
         minimap: {
           enabled: hasMinimap,
@@ -95,4 +97,4 @@ export function EditorComponent(
   )
 }
 
-export const Editor = forwardRef(EditorComponent)
+export const CodeEditor = forwardRef(CodeEditorComponent)
