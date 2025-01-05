@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 
 import type { ChallengeDifficultyLevel } from '@stardust/core/challenging/types'
@@ -38,7 +36,7 @@ export function ChallengeCard({
       <div className='flex items-center gap-3'>
         <DifficultyBadge difficultyLevel={difficultyLevel} />
         <Link
-          href={`${ROUTES.challenging.challenges}/${slug}`}
+          href={`${ROUTES.challenging.challenges.challenge(slug)}`}
           className='font-semibold text-green-500 transition-colors duration-200 hover:text-green-700'
         >
           {title}

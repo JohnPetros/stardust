@@ -3,13 +3,26 @@ export const ROUTES = {
   space: '/space',
   shop: '/shop',
   challenging: {
-    challenges: '/challenging/challenges',
-    challengeMaker: '/challenging/challenge-maker',
-    newSolution: '/challenging/solution/new',
+    challenges: {
+      challenge: (challengeSlug: string) =>
+        `/challenging/challenges/${challengeSlug}/challenge`,
+      challengeResult: (challengeSlug: string) =>
+        `/challenging/challenges/${challengeSlug}/challenge/result`,
+      challengeComments: (challengeSlug: string) =>
+        `/challenging/challenges/${challengeSlug}/challenge/comments`,
+      challengeSolutions: {
+        list: (challengeSlug: string) =>
+          `/challenging/challenges/${challengeSlug}/challenge/solutions`,
+        solution: (challengeSlug: string, solutionSlug: string) =>
+          `/challenging/challenges/${challengeSlug}/challenge/solutions/${solutionSlug}`,
+      },
+      solution: (challengeSlug: string) =>
+        `/challenging/challenges/${challengeSlug}/solution`,
+    },
   },
   profile: {
-    user: '/profile',
-    settings: '/profile/settings',
+    user: (userSlug: string) => `/profile/${userSlug}`,
+    settings: (userSlug: string) => `/profile/${userSlug}/settings`,
   },
   lesson: '/lesson',
   rewarding: {

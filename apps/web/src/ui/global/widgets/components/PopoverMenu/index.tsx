@@ -13,7 +13,7 @@ import { AnimatedPanel } from './AnimatedPanel'
 type PopoverMenuProps = {
   label: string
   buttons: PopoverMenuButton[]
-  children: ReactNode
+  children: ReactNode | ((isOpen: boolean) => ReactNode)
   onOpenChange?: (isOpen: boolean) => void
 }
 
@@ -29,7 +29,7 @@ export function PopoverMenu({
     <>
       <Popover.Root open={isOpen} onOpenChange={handleOpenChange}>
         <Popover.Trigger aria-label={label} className='w-max' asChild>
-          {trigger}
+          {typeof trigger === 'function' ? trigger(isOpen) : trigger}
         </Popover.Trigger>
         <AnimatedPanel isOpen={isOpen}>
           <ul>

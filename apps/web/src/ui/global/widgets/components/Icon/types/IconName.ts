@@ -21,6 +21,8 @@ export type IconName =
   | 'eye-closed'
   | 'file'
   | 'title'
+  | 'comment'
+  | 'share'
   | 'text-block'
   | 'strong-text-block'
   | 'quote'

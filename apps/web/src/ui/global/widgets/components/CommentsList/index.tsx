@@ -59,13 +59,10 @@ export function CommentsList({
               buttons={popoverMenuButtons}
               onOpenChange={handlePopoverMenuOpenChange}
             >
-              <button
-                type='button'
-                className='flex items-center gap-3 text-sm text-gray-200'
-              >
+              <div className='flex items-center gap-3 text-sm text-gray-200'>
                 Mais {sorterButtonTitle}
                 <AnimatedArrow isUp={isPopoverMenuOpen} />
-              </button>
+              </div>
             </PopoverMenu>
           </div>
         )}
