@@ -5,7 +5,11 @@ import type {
   SolutionDto,
 } from '#challenging/dtos'
 import type { Solution } from '#challenging/entities'
-import type { ChallengesListParams, ChallengeVote } from '#challenging/types'
+import type {
+  ChallengesListParams,
+  ChallengeVote,
+  SolutionsListParams,
+} from '#challenging/types'
 import type { PaginationResponse } from '#responses'
 import type { ApiResponse } from '../../responses/ApiResponse'
 
@@ -29,6 +33,9 @@ export interface IChallengingService {
   fetchChallengesList(
     params: ChallengesListParams,
   ): Promise<ApiResponse<PaginationResponse<ChallengeDto>>>
+  fetchSolutionsList(
+    params: SolutionsListParams,
+  ): Promise<ApiResponse<PaginationResponse<SolutionDto>>>
   fetchCategories(): Promise<ApiResponse<ChallengeCategoryDto[]>>
   fetchChallengeVote(
     challengeId: string,

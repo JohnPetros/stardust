@@ -7,6 +7,7 @@ import { EntityNotDefinedError } from '#global/errors'
 type SolutionProps = {
   title: Name
   content: Text
+  upvotesCount: Integer
   viewsCount: Integer
   commentsCount: Integer
   slug: Slug
@@ -23,6 +24,10 @@ export class Solution extends Entity<SolutionProps> {
       title: Name.create(dto.title, 'Nome da solução'),
       content: Text.create(dto.content, 'Conteúdo da solução'),
       slug: Slug.create(dto.slug, 'Slug da solução'),
+      upvotesCount: Integer.create(
+        dto.upvotesCount ?? 0,
+        'Número de upvotes dessa solução',
+      ),
       commentsCount: Integer.create(
         dto.commentsCount ?? 0,
         'Contagem de comentários da solução',
@@ -63,6 +68,10 @@ export class Solution extends Entity<SolutionProps> {
 
   get slug() {
     return this.props.slug
+  }
+
+  get upvotesCount() {
+    return this.props.upvotesCount
   }
 
   get viewsCount() {

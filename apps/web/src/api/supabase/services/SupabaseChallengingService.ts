@@ -100,8 +100,8 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
     }: ChallengesListParams) {
       let query = supabase
         .from('challenges_view')
-        .select('*, challenges_categories!inner(category_id)', { count: 'exact' })
-        .is('star_id', null)
+        .select('*', { count: 'exact' })
+        .is('challenge_id', null)
 
       if (title && title.length > 1) {
         query = query.ilike('title', `%${title}%`)
@@ -130,6 +130,41 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       const challenges = data.map(supabaseChallengeMapper.toDto)
 
       return new ApiResponse({ body: new PaginationResponse(challenges, Number(count)) })
+    },
+
+    async fetchSolutionsList({ page, itemsPerPage, title, sorter, userId, challengeId }) {
+      let query = supabase
+        .from('solutions_view')
+        .select('*', { count: 'exact' })
+        .eq('challenge_id', challengeId)
+
+      if (title && title.length > 1) {
+        query = query.ilike('title', `%${title}%`)
+      }
+
+      if (userId) {
+        query = query.eq('user_id', userId)
+      }
+
+      query = query.order(sorter === 'date' ? 'created_at' : 'upvotes', {
+        ascending: true,
+      })
+
+      const range = calculateSupabaseRange(page, itemsPerPage)
+
+      const { data, count, status, error } = await query.range(range.from, range.to)
+
+      if (error) {
+        return SupabasePostgrestError(
+          error,
+          'Error inesperado ao filtrar a lista de soluções desse desafio',
+          status,
+        )
+      }
+
+      const solutions = data.map(supabaseSolutionMapper.toDto)
+
+      return new ApiResponse({ body: new PaginationResponse(solutions, Number(count)) })
     },
 
     async fetchCategories() {

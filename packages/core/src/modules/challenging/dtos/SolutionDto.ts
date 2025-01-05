@@ -5,6 +5,7 @@ export type SolutionDto = {
   title: string
   slug: string
   content: string
+  upvotesCount?: number
   viewsCount?: number
   commentsCount?: number
   createdAt?: Date
