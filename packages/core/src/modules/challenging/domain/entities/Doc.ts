@@ -1,9 +1,9 @@
 import { Entity } from '#global/abstracts'
-import { OrdinalNumber, Text } from '#global/structs'
+import { Name, OrdinalNumber, Text } from '#global/structs'
 import type { DocDto } from '#challenging/dtos'
 
 type DocProps = {
-  title: Text
+  title: Name
   content: Text
   position: OrdinalNumber
 }
@@ -12,15 +12,15 @@ export class Doc extends Entity<DocProps> {
   static create(dto: DocDto): Doc {
     return new Doc(
       {
-        title: Text.create(dto.title),
+        title: Name.create(dto.title),
         content: Text.create(dto.content),
-        position: OrdinalNumber.create('Doc position', dto.position),
+        position: OrdinalNumber.create(dto.position, 'Posição da doc'),
       },
       dto.id,
     )
   }
 
-  get title(): Text {
+  get title(): Name {
     return this.props.title
   }
 

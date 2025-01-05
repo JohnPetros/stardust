@@ -15,6 +15,7 @@ export function useCodeSnippet({ code, isRunnable }: CodeSnippetProps) {
   }
 
   const editorHeight = useMemo(() => {
+    if (!code) return 0
     const lines = code.split('\n').length
 
     if (isRunnable) return 100 + lines * (lines >= 10 ? 20 : 32)

@@ -46,7 +46,10 @@ export class ApiResponse<Body = unknown> {
     )
       throw new AuthError(this.errorMessage)
 
-    if (this.statusCode >= HTTP_STATUS_CODE.serverError)
+    if (
+      this.statusCode === HTTP_STATUS_CODE.notAcceptable ||
+      this.statusCode >= HTTP_STATUS_CODE.serverError
+    )
       throw new AppError(this.errorMessage)
 
     console.log(this.statusCode)
@@ -64,7 +67,7 @@ export class ApiResponse<Body = unknown> {
 
   get body(): Body {
     if (this._body === null) {
-      throw new AppError('Response is an error')
+      throw new AppError('Response has no body')
     }
 
     return this._body

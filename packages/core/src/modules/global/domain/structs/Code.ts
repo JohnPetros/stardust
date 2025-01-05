@@ -15,20 +15,34 @@ export class Code {
     this.value = props.value
   }
 
-  static create(codeRunner: ICodeRunnerProvider, preCodeValue: string): Code {
+  static create(codeRunner: ICodeRunnerProvider, preCodeValue = ''): Code {
     return new Code({ codeRunner, value: preCodeValue })
   }
 
   async run() {
-    return await this.codeRunner.run(this.value, false)
+    return await this.codeRunner.run(this.value)
   }
 
   addInputs(inputs: CodeInput[]) {
     return this.changeValue(this.codeRunner.addInputs(inputs, this.value))
   }
 
+  addFunction(functionName: string, functionParams: unknown[]) {
+    return this.changeValue(
+      this.codeRunner.addFunction(functionName, functionParams, this.value),
+    )
+  }
+
   changeValue(value: string) {
     return this.clone({ value: value })
+  }
+
+  translateToCodeRunner(jsCodeValue: unknown) {
+    return this.codeRunner.translateToCodeRunner(JSON.stringify(jsCodeValue))
+  }
+
+  get inputsCount() {
+    return this.codeRunner.getInputsCount(this.value)
   }
 
   get hasInput(): boolean {

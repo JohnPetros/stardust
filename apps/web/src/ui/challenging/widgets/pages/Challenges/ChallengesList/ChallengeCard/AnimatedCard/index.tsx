@@ -20,13 +20,13 @@ type AnimatedCardProps = {
 
 export function AnimatedCard({ children }: AnimatedCardProps) {
   return (
-    <motion.div
+    <motion.article
       variants={challengeVariants}
       initial='hidden'
       animate='visible'
       className='flex flex-col gap-5 rounded-md bg-gray-800 p-6'
     >
       {children}
-    </motion.div>
+    </motion.article>
   )
 }

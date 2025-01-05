@@ -4,11 +4,11 @@ import { type ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 
 import { Prompt } from '../Prompt'
 
-import { Editor } from '../Editor'
 import { Console } from '../Console'
 import { usePlaygroundCodeEditor } from './usePlaygroundCodeEditor'
 import type { PlaygroundCodeEditorRef } from './types'
 
+import { CodeEditor } from '../CodeEditor'
 type PlaygroundCodeProps = {
   height: number
   code: string
@@ -22,7 +22,7 @@ export const PlaygroundCodeEditorComponent = (
 ) => {
   const {
     outputs,
-    editorRef,
+    codeEditorRef,
     consoleRef,
     promptRef,
     runCode,
@@ -36,17 +36,17 @@ export const PlaygroundCodeEditorComponent = (
     () => {
       return {
         runCode,
-        ...editorRef.current,
+        ...codeEditorRef.current,
       } as PlaygroundCodeEditorRef
     },
-    [editorRef, runCode],
+    [codeEditorRef, runCode],
   )
 
   return (
     <>
       <div className='relative h-full w-full border-2 border-gray-700 pt-2'>
-        <Editor
-          ref={editorRef}
+        <CodeEditor
+          ref={codeEditorRef}
           width='100%'
           height={height}
           value={code}

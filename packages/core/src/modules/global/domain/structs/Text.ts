@@ -3,8 +3,8 @@ import { StringValidation } from '#libs'
 export class Text {
   private constructor(readonly value: string) {}
 
-  static create(value: string): Text {
-    new StringValidation(value, 'Text value').validate()
+  static create(value: string, key?: string): Text {
+    new StringValidation(value, key).min(3).validate()
 
     return new Text(value)
   }

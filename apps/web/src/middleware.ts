@@ -7,6 +7,7 @@ import { HandleRewardsPayloadController } from './api/controllers/lesson'
 import { SupabaseMiddlewareClient } from './api/supabase/clients/SupabaseMiddlewareClient'
 import { SupabaseAuthService } from './api/supabase/services'
 import { HandleRedirectController } from './api/controllers/global'
+import { HTTP_HEADERS } from '@stardust/core/constants'
 
 const schema = z.object({
   queryParams: z
@@ -31,7 +32,8 @@ export const middleware = async (request: NextRequest) => {
   try {
     for (const controller of controllers) {
       const constrollerResponse = await controller.handle(nextHttp)
-      if (!constrollerResponse.getHeader('X-Pass')) return constrollerResponse.body
+      if (constrollerResponse.getHeader(HTTP_HEADERS.xRedirect))
+        return constrollerResponse.body
     }
   } catch (error) {
     return NextResponse.next()

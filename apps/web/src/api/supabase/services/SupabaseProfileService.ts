@@ -6,7 +6,8 @@ import { HTTP_STATUS_CODE } from '@stardust/core/constants'
 import type { Supabase } from '../types'
 import { SupabasePostgrestError } from '../errors'
 import { SupabaseAchievementMapper, SupabaseUserMapper } from '../mappers'
-import { Slug } from '@stardust/core/global/structs'
+import { SupabaseSpaceService } from './SupabaseSpaceService'
+import { Planet } from '@stardust/core/space/entities'
 
 export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
   const supabaseUserMapper = SupabaseUserMapper()
@@ -15,10 +16,8 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
   return {
     async fetchUserById(userId: string) {
       const { data, error } = await supabase
-        .from('users')
-        .select(
-          '*, avatar:avatars(*), rocket:rockets(*), tier:tiers(*), users_unlocked_stars(star_id), users_unlocked_achievements(achievement_id), users_acquired_rockets(rocket_id), users_acquired_avatars(avatar_id), users_completed_challenges(challenge_id), users_rescuable_achievements(achievement_id)',
-        )
+        .from('users_view')
+        .select('*, avatar:avatars(*), rocket:rockets(*), tier:tiers(*)')
         .eq('id', userId)
         .single()
 
@@ -30,17 +29,15 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
         )
       }
 
-      const user = supabaseUserMapper.toDto(data)
+      const userDto = supabaseUserMapper.toDto(data)
 
-      return new ApiResponse({ body: user })
+      return new ApiResponse({ body: userDto })
     },
 
     async fetchUserBySlug(userSlug: string) {
       const { data, error } = await supabase
-        .from('users')
-        .select(
-          '*, avatar:avatars(*), rocket:rockets(*), tier:tiers(*), users_unlocked_stars(star_id), users_unlocked_achievements(achievement_id), users_acquired_rockets(rocket_id), users_acquired_avatars(avatar_id), users_completed_challenges(challenge_id), users_rescuable_achievements(achievement_id)',
-        )
+        .from('users_view')
+        .select('*, avatar:avatars(*), rocket:rockets(*), tier:tiers(*)')
         .eq('slug', userSlug)
         .single()
 
@@ -51,9 +48,24 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
           HTTP_STATUS_CODE.notFound,
         )
 
-      const user = supabaseUserMapper.toDto(data)
+      const userDto = supabaseUserMapper.toDto(data)
+      return new ApiResponse({ body: userDto })
+    },
 
-      return new ApiResponse({ body: user })
+    async fetchUsers() {
+      const { data, error } = await supabase
+        .from('users_view')
+        .select('*, avatar:avatars(*), rocket:rockets(*), tier:tiers(*)')
+
+      if (error)
+        return SupabasePostgrestError(
+          error,
+          'Usuário não encontrado',
+          HTTP_STATUS_CODE.notFound,
+        )
+
+      const usersDto = data.map(supabaseUserMapper.toDto)
+      return new ApiResponse({ body: usersDto })
     },
 
     async fetchUserName(name: string) {
@@ -91,18 +103,26 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
     },
 
     async saveUser(user: User) {
-      const { error: insertUserError } = await supabase.from('users').insert({
+      const { error } = await supabase.from('users').insert({
         id: user.id,
-        name: user.name,
-        email: user.email,
-        slug: Slug.create(user.name).value,
+        name: user.name.value,
+        email: user.email.value,
+        slug: user.name.slug,
+        avatar_id: user.avatar.id,
+        rocket_id: user.rocket.id,
+        tier_id: user.tier.id,
+        coins: user.coins.value,
+        xp: user.xp.value,
+        weekly_xp: user.weeklyXp.value,
+        streak: user.streak.value,
+        level: user.level.value,
+        week_status: user.weekStatus.statuses,
       })
 
-      if (insertUserError)
-        return SupabasePostgrestError(
-          insertUserError,
-          'Error inesperado ao cadastrar usuário',
-        )
+      if (error)
+        return SupabasePostgrestError(error, 'Error inesperado ao cadastrar usuário')
+
+      return new ApiResponse()
     },
 
     async updateUser(user: User) {

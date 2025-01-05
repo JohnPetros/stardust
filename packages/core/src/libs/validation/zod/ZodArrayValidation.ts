@@ -16,7 +16,7 @@ export class ZodArrayValidation implements IArrayValidation {
 
   string(message?: string) {
     this.zodArray = z.array(z.string(), {
-      message: message ?? `${this.key} must be a array of strings`,
+      message: message ?? 'deve ser uma lista de textos',
     })
 
     return this
@@ -24,7 +24,7 @@ export class ZodArrayValidation implements IArrayValidation {
 
   id(message?: string) {
     this.zodArray = z.array(z.string().uuid(), {
-      message: message ?? `${this.key} must be a array of ids`,
+      message: message ?? "deve ser uma lista de id's",
     })
 
     return this
@@ -32,7 +32,7 @@ export class ZodArrayValidation implements IArrayValidation {
 
   validate() {
     try {
-      this.zodArray.parse(this.data)
+      z.object({ [this.key]: this.zodArray }).parse({ [this.key]: this.data })
     } catch (error) {
       if (error instanceof ZodError) throw ZodValidationErrorFactory.produce(error)
     }

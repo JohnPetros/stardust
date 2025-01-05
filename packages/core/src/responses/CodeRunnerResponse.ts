@@ -17,6 +17,10 @@ export class CodeRunnerResponse {
     if (error) this._error = error
   }
 
+  throwError() {
+    throw new CodeRunnerError(this.errorMessage, this.errorLine)
+  }
+
   get isSuccess(): boolean {
     return this._error === null
   }

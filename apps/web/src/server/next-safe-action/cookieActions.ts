@@ -27,7 +27,7 @@ const deleteCookie = authActionClient
   .schema(z.string())
   .action(async ({ clientInput }) => {
     const actionServer = NextActionServer()
-    actionServer.getCookie(clientInput)
+    actionServer.deleteCookie(clientInput)
   })
 
 const hasCookie = authActionClient.schema(z.string()).action(async ({ clientInput }) => {

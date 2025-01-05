@@ -1,8 +1,6 @@
 import { Entity } from '#global/abstracts'
 import type { Tier } from '#ranking/entities'
-import type { Avatar, Rocket } from '#shop/entities'
-import type { Level, WeekStatus } from '#profile/structs'
-import type { RankingPosition } from '#ranking/structs'
+import type { UserDto } from '#global/dtos'
 import {
   Logical,
   Integer,
@@ -12,9 +10,13 @@ import {
   type Observer,
   type List,
 } from '#global/structs'
-import type { AchievementMetricValue } from '#profile/types'
-import type { UserDto } from '#global/dtos'
 import { UserFactory } from '#global/factories'
+import type { Avatar, Rocket } from '#shop/entities'
+import type { Level, WeekStatus } from '#profile/structs'
+import type { AchievementMetricValue } from '#profile/types'
+import type { RankingPosition } from '#ranking/structs'
+import type { Comment } from '#forum/entities'
+import type { Solution } from '#challenging/entities'
 
 type UserProps = {
   avatar: Avatar
@@ -37,9 +39,12 @@ type UserProps = {
   rescuableAchievementsIds: List<string>
   completedChallengesIds: List<string>
   completedPlanetsIds: List<string>
+  upvotedCommentsIds: List<string>
+  upvotedSolutionsIds: List<string>
   canSeeRankingResult: Logical
-  didIncrementStreakOnSaturday: Logical
+  didBreakStreak: Logical
   lastWeekRankingPosition: RankingPosition | null
+  hasCompletedSpace: Logical
   createdAt: Date
   _observer?: Observer
 }
@@ -90,8 +95,8 @@ export class User extends Entity<UserProps> {
     this.earnCoins(reward)
   }
 
-  canBuy(coins: number): boolean {
-    return this.props.coins.value >= coins
+  canBuy(coins: number): Logical {
+    return Logical.create(this.props.coins.value >= coins)
   }
 
   buyRocket(rocket: Rocket): void {
@@ -100,7 +105,7 @@ export class User extends Entity<UserProps> {
       return
     }
 
-    if (this.canBuy(rocket.price.value)) {
+    if (this.canBuy(rocket.price.value).isTrue) {
       this.loseCoins(rocket.price.value)
       this.selectRocket(rocket)
       this.props.acquiredRocketsIds.add(rocket.id)
@@ -114,11 +119,17 @@ export class User extends Entity<UserProps> {
       return
     }
 
-    if (this.canBuy(avatar.price.value)) {
+    if (this.canBuy(avatar.price.value).isTrue) {
       this.loseCoins(avatar.price.value)
       this.selectAvatar(avatar)
       this.props.acquiredAvatarsIds.add(avatar.id)
       this.notifyChanges()
+    }
+  }
+
+  unlockChallengeSolutions(challengeId: string) {
+    if (this.hasCompletedChallenge(challengeId).isFalse) {
+      this.loseCoins(10)
     }
   }
 
@@ -130,6 +141,11 @@ export class User extends Entity<UserProps> {
     this.notifyChanges()
   }
 
+  breakStreak() {
+    this.props.streak = Integer.create(0)
+    this.props.didBreakStreak = this.props.didBreakStreak.makeTrue()
+  }
+
   getAchievementCount(metric: AchievementMetricValue) {
     return this[metric]
   }
@@ -138,8 +154,8 @@ export class User extends Entity<UserProps> {
     this.props.rocket = rocket
   }
 
-  selectAvatar(Avatar: Avatar): void {
-    this.props.avatar = Avatar
+  selectAvatar(avatar: Avatar): void {
+    this.props.avatar = avatar
   }
 
   seeRankingResult() {
@@ -166,8 +182,12 @@ export class User extends Entity<UserProps> {
     return this.props.completedChallengesIds.includes(challengeId)
   }
 
-  hasUnlockedDoc(docId: string): Logical {
-    return this.props.unlockedDocsIds.includes(docId)
+  hasUpvotedComment(commentId: string): Logical {
+    return this.props.upvotedCommentsIds.includes(commentId)
+  }
+
+  hasUpvotedSolution(solutionId: string) {
+    return this.props.upvotedSolutionsIds.includes(solutionId)
   }
 
   hasAcquiredRocket(rocketId: string): boolean {
@@ -186,6 +206,26 @@ export class User extends Entity<UserProps> {
     return avatarId === this.avatar.id
   }
 
+  upvoteComment(comment: Comment): void {
+    comment.upvote()
+    this.props.upvotedCommentsIds = this.props.upvotedCommentsIds.add(comment.id)
+  }
+
+  removeUpvoteComment(comment: Comment): void {
+    comment.removeUpvote()
+    this.props.upvotedCommentsIds = this.props.upvotedCommentsIds.remove(comment.id)
+  }
+
+  upvoteSolution(solution: Solution): void {
+    solution.upvote()
+    this.props.upvotedSolutionsIds = this.props.upvotedSolutionsIds.add(solution.id)
+  }
+
+  removeUpvoteSolution(solution: Solution): void {
+    solution.removeUpvote()
+    this.props.upvotedSolutionsIds = this.props.upvotedSolutionsIds.remove(solution.id)
+  }
+
   private notifyChanges(): void {
     if (this.props._observer) this.props._observer.callback()
   }
@@ -195,53 +235,39 @@ export class User extends Entity<UserProps> {
   }
 
   get canMakeTodayStatusDone(): Logical {
-    return Logical.create(
-      'Can make today status done?',
-      this.weekStatus.todayStatus === 'todo',
-    )
+    return Logical.create(this.weekStatus.todayStatus === 'todo')
+  }
+
+  get hasCompletedSpace(): Logical {
+    return this.props.hasCompletedSpace
   }
 
   get unlockedStarsCount() {
-    return Integer.create('unlocked stars', this.props.unlockedStarsIds.length - 1)
+    return Integer.create(this.props.unlockedStarsIds.length - 1)
   }
 
   get acquiredRocketsCount() {
-    return Integer.create(
-      'acquired rockets count',
-      this.props.acquiredRocketsIds.length - 1,
-    )
+    return Integer.create(this.props.acquiredRocketsIds.length - 1)
   }
 
   get acquiredAvatarsCount() {
-    return Integer.create(
-      'acquired avatars count',
-      this.props.acquiredAvatarsIds.length - 3,
-    )
+    return Integer.create(this.props.acquiredAvatarsIds.length - 3)
   }
 
   get unlockedAchievementsCount() {
-    return Integer.create(
-      'unlocked achievements',
-      this.props.unlockedAchievementsIds.length,
-    )
+    return Integer.create(this.props.unlockedAchievementsIds.length)
   }
 
   get rescueableAchievementsCount() {
-    return Integer.create(
-      'rescuable achievements',
-      this.props.rescuableAchievementsIds.length,
-    )
+    return Integer.create(this.props.rescuableAchievementsIds.length)
   }
 
   get completedChallengesCount() {
-    return Integer.create(
-      'completed challenges',
-      this.props.completedChallengesIds.length,
-    )
+    return Integer.create(this.props.completedChallengesIds.length)
   }
 
   get completedPlanetsCount() {
-    return Integer.create('completed planets', this.props.completedPlanetsIds.length)
+    return Integer.create(this.props.completedPlanetsIds.length)
   }
 
   get isRankingWinner(): boolean {
@@ -318,8 +344,20 @@ export class User extends Entity<UserProps> {
     return this.props.level
   }
 
+  get upvotedCommentsIds() {
+    return this.props.upvotedCommentsIds
+  }
+
+  get upvotedSolutionsIds() {
+    return this.props.upvotedSolutionsIds
+  }
+
   get canSeeRankingResult() {
     return this.props.canSeeRankingResult
+  }
+
+  get didBreakStreak() {
+    return this.props.didBreakStreak
   }
 
   get lastWeekRankingPosition() {
@@ -355,8 +393,9 @@ export class User extends Entity<UserProps> {
       completedPlanetsIds: this.props.completedPlanetsIds.items,
       canSeeRankingResult: this.props.canSeeRankingResult.value,
       lastWeekRankingPosition: this.props.lastWeekRankingPosition?.position.value ?? null,
-      didIncrementStreakOnSaturday: this.props.didIncrementStreakOnSaturday.value,
-      createdAt: this.createdAt.toDateString(),
+      didBreakStreak: this.props.didBreakStreak.value,
+      hasCompletedSpace: this.hasCompletedSpace.value,
+      createdAt: this.createdAt,
     }
   }
 }

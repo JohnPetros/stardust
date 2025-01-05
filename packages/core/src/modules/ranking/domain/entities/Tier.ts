@@ -15,8 +15,8 @@ export class Tier extends Entity<TierProps> {
     return new Tier(
       {
         name: Name.create(dto.name),
-        position: OrdinalNumber.create('Tier position', dto.position),
-        reward: Integer.create('Tier reward', dto.reward),
+        position: OrdinalNumber.create(dto.position, 'Posição do tier'),
+        reward: Integer.create(dto.reward, 'Recompensa do tier'),
         image: Image.create(dto.image),
       },
       dto?.id,

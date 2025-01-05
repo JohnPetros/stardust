@@ -12,21 +12,20 @@ export class ZodNumberValidation implements INumberValidation {
     this.data = data
     this.key = key
     this.zodNumber = z.number({
-      required_error: message ?? `${key} value must be a number`,
+      required_error: message ?? 'deve ser um número',
     })
   }
 
   min(minValue: number, message?: string) {
     this.zodNumber = this.zodNumber.min(minValue, {
-      message:
-        message ?? `${this.key} value must be greater than or equal to ${minValue}`,
+      message: message ?? `deve ser igual ou maior que ${minValue}`,
     })
     return this
   }
 
   max(maxValue: number, message?: string) {
     this.zodNumber = this.zodNumber.max(maxValue, {
-      message: message ?? `${this.key} value must lower than or equal to ${maxValue}`,
+      message: message ?? `deve ser igual ou menor que ${maxValue}`,
     })
     return this
   }
@@ -34,17 +33,17 @@ export class ZodNumberValidation implements INumberValidation {
   equal(value: number, message?: string): this {
     this.zodNumber = this.zodNumber
       .min(value, {
-        message: message ?? `${this.key} value must be equal to ${value}`,
+        message: message ?? `deve ser igual a ${value}`,
       })
       .max(value, {
-        message: message ?? `${this.key} value must be equal to ${value}`,
+        message: message ?? `deve ser igual a ${value}`,
       })
     return this
   }
 
   validate() {
     try {
-      this.zodNumber.parse(this.data)
+      z.object({ [this.key]: this.zodNumber }).parse({ [this.key]: this.data })
     } catch (error) {
       if (error instanceof ZodError) throw ZodValidationErrorFactory.produce(error)
     }

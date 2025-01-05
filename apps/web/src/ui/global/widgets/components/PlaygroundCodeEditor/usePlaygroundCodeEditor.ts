@@ -10,7 +10,7 @@ import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
 import type { ConsoleRef } from '../Console/types'
 import type { PromptRef } from '../Prompt/types'
-import type { EditorRef } from '../Editor/types'
+import type { CodeEditorRef } from '../CodeEditor/types'
 
 export function usePlaygroundCodeEditor(
   preCodeValue: string,
@@ -21,12 +21,12 @@ export function usePlaygroundCodeEditor(
   const { provider } = useCodeRunner()
   const toast = useToastContext()
   const codeRef = useRef<Code>(Code.create(provider, preCodeValue))
-  const editorRef = useRef<EditorRef>(null)
+  const codeEditorRef = useRef<CodeEditorRef>(null)
   const consoleRef = useRef<ConsoleRef>(null)
   const promptRef = useRef<PromptRef>(null)
 
   function resetCode() {
-    if (editorRef.current) handleCodeChange(editorRef.current.getValue())
+    if (codeEditorRef.current) handleCodeChange(codeEditorRef.current.getValue())
   }
 
   const showError = useCallback(
@@ -118,7 +118,7 @@ export function usePlaygroundCodeEditor(
 
   return {
     outputs,
-    editorRef,
+    codeEditorRef,
     consoleRef,
     promptRef,
     runCode,

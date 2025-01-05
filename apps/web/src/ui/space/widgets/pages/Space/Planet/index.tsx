@@ -3,7 +3,7 @@
 import { memo } from 'react'
 import Image from 'next/image'
 
-import type { Star as StarEntity } from '@/@core/domain/entities'
+import type { Star as StarEntity } from '@stardust/core/space/entities'
 
 import { useApi } from '@/ui/global/hooks'
 import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
@@ -22,9 +22,6 @@ function PlanetComponent({ name, image, icon, stars }: PlanetProps) {
   const { lastUnlockedStarId } = useSpaceContext()
   const { user } = useAuthContext()
   const api = useApi()
-
-  console.log({ lastUnlockedStarId })
-
   const planetImage = api.fetchImage('planets', image)
   const planetIconImage = api.fetchImage('planets', icon)
 

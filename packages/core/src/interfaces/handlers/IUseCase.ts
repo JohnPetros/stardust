@@ -1,3 +1,3 @@
 export interface IUseCase<Request = void, Response = void> {
-  do(request: Request): Promise<Response>
+  do(request: Request): Response
 }

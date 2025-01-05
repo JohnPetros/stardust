@@ -1,29 +1,19 @@
-import { useEffect, useState } from 'react'
 import type { PaginationProps } from '.'
 
 import { Pagination } from '@stardust/core/global/structs'
 
 export function usePagination({
-  totalItems,
+  totalItemsCount,
   itemsPerPage,
-  offset,
-  setOffset,
+  page,
+  onPageChange,
 }: PaginationProps) {
-  const [pagination, setPagination] = useState<Pagination | null>(null)
-
   function handlePageButtonCLick(page: number) {
-    if (!pagination) return
-
-    const newOffset = pagination.calculateNewOffset(page)
-    setOffset(newOffset)
+    onPageChange(page)
   }
 
-  useEffect(() => {
-    setPagination(Pagination.create(offset, totalItems, itemsPerPage))
-  }, [offset, totalItems, itemsPerPage])
-
   return {
-    pagination,
+    pagination: Pagination.create(page, totalItemsCount, itemsPerPage),
     maxPageButtons: Pagination.MAX_PAGE_BUTTONS,
     handlePageButtonCLick,
   }

@@ -1,34 +1,40 @@
 'use client'
 
-import { AlignLeft, AlignRight, ArrowLeft, Layout } from '@phosphor-icons/react'
-
-import type { ChallengeDTO } from '@/@core/dtos'
+import type { ChallengeVote } from '@stardust/core/challenging/types'
+import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 
 import type { PopoverMenuButton } from '@/ui/global/widgets/components/PopoverMenu/types'
-import { PopoverMenu } from '@/ui/global/widgets/components/PopoverMenu'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { Button } from '@/ui/global/widgets/components/Button'
+import { PopoverMenu } from '@/ui/global/widgets/components/PopoverMenu'
 import { useChallengePage } from './useChallengePage'
+import { Icon } from '@/ui/global/widgets/components/Icon'
 
-type ChallengePageProps = {
+type ChallengePagePageProps = {
   challengeDto: ChallengeDto
+  userChallengeVote: ChallengeVote
 }
 
-export function ChallengePage({ challengeDTO }: ChallengePageProps) {
-  const { challenge, panelsLayout, handleBackButton, handlePanelsLayoutButton } =
-    useChallengePage(challengeDTO)
+export function ChallengePage({
+  challengeDto,
+  userChallengeVote,
+}: ChallengePagePageProps) {
+  const { handleBackButton, handlePanelsLayoutButton, panelsLayout } = useChallengePage(
+    challengeDto,
+    userChallengeVote,
+  )
 
   const popoverMenuButtons: PopoverMenuButton[] = [
     {
       label: 'Tabs do lado esquerdo e editor de código do lado direito (layout padrão)',
-      icon: <AlignLeft className='text-xl text-green-500' />,
+      icon: <Icon name='arrow-left' className='text-xl text-green-500' />,
       isToggle: true,
       value: panelsLayout === 'tabs-left;code_editor-right',
       action: () => handlePanelsLayoutButton('tabs-left;code_editor-right'),
     },
     {
       label: 'Tabs do lado direito e editor de código do lado esquerdo',
-      icon: <AlignRight className='text-xl text-green-500' />,
+      icon: <Icon name='arrow-right' className='text-xl text-green-500' />,
       isToggle: true,
       value: panelsLayout === 'tabs-right;code_editor-left',
       action: () => handlePanelsLayoutButton('tabs-right;code_editor-left'),
@@ -38,7 +44,7 @@ export function ChallengePage({ challengeDTO }: ChallengePageProps) {
   return (
     <header className='flex h-12 flex-col justify-center md:border-b md:border-green-700'>
       <div className='flex items-center justify-between px-6'>
-        <div className='flex items-center gap-3 py-3'>
+        <div className='flex items-center gap-3'>
           <AlertDialog
             type='crying'
             title='Você está saindo do desafio!'
@@ -62,19 +68,22 @@ export function ChallengePage({ challengeDTO }: ChallengePageProps) {
             }
             shouldPlayAudio={false}
           >
-            <button type='button' className='translate-y-1'>
-              <ArrowLeft className='text-xl text-green-400' weight='bold' />
+            <button type='button'>
+              <Icon
+                name='arrow-left'
+                className='text-xl text-green-400'
+                weight='normal'
+                size={20}
+              />
             </button>
           </AlertDialog>
-          <h2 className='text-lg font-semibold text-gray-100'>
-            {challenge?.title.value}
-          </h2>
+          <h1 className='text-lg font-semibold text-gray-100'>{challengeDto.title}</h1>
         </div>
         <div className='hidden md:block'>
           <PopoverMenu label='escolha de layout' buttons={popoverMenuButtons}>
-            <button type='button' className='translate-x-2 p-2'>
-              <Layout className='text-lg text-green-400' weight='bold' />
-            </button>
+            <div className='translate-x-2 p-2'>
+              <Icon name='layout' className='text-lg text-green-400' weight='bold' />
+            </div>
           </PopoverMenu>
         </div>
       </div>

@@ -25,8 +25,7 @@ export function NavLink({
   isExpanded = true,
 }: NavButtonProps) {
   const router = useRouter()
-  const currentRoute = router.getCurrentRoute()
-  const isActive = currentRoute === route
+  const isActive = router.currentRoute === route
 
   return (
     <Tooltip content={!isExpanded ? label : ''} direction='right'>

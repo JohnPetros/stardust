@@ -1,8 +1,8 @@
 'use client'
 
-import type { UserDto } from '@stardust/core/global/dtos'
+import { Datetime } from '@stardust/core/libs'
+
 import { Animation } from '@/ui/global/widgets/components/Animation'
-import { StreakIcon } from '@/ui/global/widgets/components/StreakIcon'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { Benchmark } from '@/ui/global/widgets/components/Button/Benchmark'
@@ -10,15 +10,14 @@ import { AnimatedApolloMessage } from './AnimatedApolloMessage'
 import { AnimatedEndMessage } from './AnimatedEndMessage'
 import { AnimatedButton } from './AnimatedButton'
 import { useRewardingPage } from './useRewardingPage'
-import { User } from '@/@core/domain/entities'
 import { Streak } from './Streak'
 
 export type RewardingPageProps = {
-  newLevel: number
+  newLevel: number | null
   newCoins: number
   newXp: number
-  time: string
-  accuracyPercentage: string
+  secondsCount: number
+  accuracyPercentage: number
   nextRoute: string
 }
 
@@ -26,7 +25,7 @@ export function RewardingPage({
   newCoins,
   newLevel,
   newXp,
-  time,
+  secondsCount,
   accuracyPercentage,
   nextRoute,
 }: RewardingPageProps) {
@@ -73,7 +72,7 @@ export function RewardingPage({
 
                 <Benchmark
                   title='Tempo'
-                  amount={time}
+                  amount={new Datetime().convertSecondsToTime(secondsCount)}
                   color='blue'
                   icon='clock.svg'
                   isLarge={false}

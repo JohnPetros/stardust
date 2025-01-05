@@ -71,7 +71,7 @@ button:hover {
 }
 
 .strong {
-  @apply m-1 rounded-md bg-gray-900 p-[2px] font-code text-gray-50;
+  @apply inline-block mx-1 rounded-md bg-gray-800 px-[10px] font-code text-gray-50;
 }
 
 .skeleton {

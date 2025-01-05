@@ -11,7 +11,7 @@ type Request = {
 }
 
 export class GetLastUnlockedStarIdUseCase implements IUseCase<Request, string> {
-  async do({ planetsDto, userDto }: Request): Promise<string> {
+  do({ planetsDto, userDto }: Request) {
     const planets = planetsDto.map(Planet.create)
     const user = User.create(userDto)
 

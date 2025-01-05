@@ -14,12 +14,26 @@ export function useChallengeStore() {
       }
     },
 
+    getSolutionContentSlice() {
+      const solutionContent = useZustandChallengeStore(
+        (store) => store.state.solutionContent,
+      )
+      const setSolutionContent = useZustandChallengeStore(
+        (store) => store.actions.setSolutionContent,
+      )
+
+      return {
+        solutionContent,
+        setSolutionContent,
+      }
+    },
+
     getCraftsVisibilitySlice() {
       const craftsVislibility = useZustandChallengeStore(
         (store) => store.state.craftsVislibility,
       )
       const setCraftsVislibility = useZustandChallengeStore(
-        (store) => store.actions.setCraftsVislibility,
+        (store) => store.actions.setCraftsVisibility,
       )
 
       return {
@@ -37,6 +51,38 @@ export function useChallengeStore() {
       return {
         panelsLayout,
         setPanelsLayout,
+      }
+    },
+
+    getResults() {
+      const results = useZustandChallengeStore((store) => store.state.results)
+      const setResults = useZustandChallengeStore((store) => store.actions.setResults)
+
+      return {
+        results,
+        setResults,
+      }
+    },
+
+    getMdxSlice() {
+      const mdx = useZustandChallengeStore((store) => store.state.mdx)
+      const setMdx = useZustandChallengeStore((store) => store.actions.setMdx)
+
+      return {
+        mdx,
+        setMdx,
+      }
+    },
+
+    getTabHandlerSlice() {
+      const tabHandler = useZustandChallengeStore((store) => store.state.tabHandler)
+      const setTabHandler = useZustandChallengeStore(
+        (store) => store.actions.setTabHandler,
+      )
+
+      return {
+        tabHandler,
+        setTabHandler,
       }
     },
 

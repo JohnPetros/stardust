@@ -11,13 +11,13 @@ export class ZodBooleanValidation {
     this.data = data
     this.key = key
     this.zodBoolean = z.boolean({
-      required_error: message ?? `${this.key} must be a boolean`,
+      required_error: message ?? 'deve ser verdadeiro ou falso',
     })
   }
 
   validate() {
     try {
-      this.zodBoolean.parse(this.data)
+      z.object({ [this.key]: this.zodBoolean }).parse({ [this.key]: this.data })
     } catch (error) {
       if (error instanceof ZodError) throw ZodValidationErrorFactory.produce(error)
     }

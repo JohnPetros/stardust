@@ -13,37 +13,31 @@ export class ZodStringValidation implements IStringValidation {
     this.data = data
     this.key = key ?? ''
     this.zodString = z.string({
-      required_error: message ?? `${this.key} should be a string`,
+      required_error: message ?? 'deve ser um texto',
     })
   }
 
   min(minValue: number, message?: string) {
     this.zodString = this.zodString.min(
       minValue,
-      message ?? `${this.key} value must have at least ${minValue} characters`,
+      message ?? `deve ter pelo menos ${minValue} caracteres`,
     )
     return this
   }
 
   id(message?: string) {
-    this.zodString = this.zodString.uuid(
-      message ?? `${this.key} value must be a valid uuid`,
-    )
+    this.zodString = this.zodString.uuid(message ?? 'deve ser um id válido')
 
     return this
   }
 
   email(message?: string) {
-    this.zodString = this.zodString.email(
-      message ?? 'E-mail value must be a valid format',
-    )
+    this.zodString = this.zodString.email(message ?? 'deve ser um e-mail válido')
     return this
   }
 
   url(message?: string) {
-    this.zodString = this.zodString.url(
-      message ?? `${this.key} value must be a valid url`,
-    )
+    this.zodString = this.zodString.url(message ?? 'deve ser uma url válida')
     return this
   }
 
@@ -51,9 +45,7 @@ export class ZodStringValidation implements IStringValidation {
     const extensions = ['.png', '.jpg', '.jpeg', '.gif', '.svg']
 
     this.zodEnum = z.enum(extensions as [string], {
-      message:
-        message ??
-        `${this.key} value must be have one of the extensions: ${extensions.join(', ')}`,
+      message: message ?? `deve conter uma dessas extensões: ${extensions.join(', ')}`,
     })
 
     this.data = String(this.data).slice(-4)
@@ -64,8 +56,7 @@ export class ZodStringValidation implements IStringValidation {
   oneOf(strings: string[], message?: string) {
     this.zodEnum = z.enum(strings as [string], {
       message:
-        message ??
-        `${this.key} value must be one of the following values: ${strings.slice(3).join(', ')}...`,
+        message ?? `deve ser apena um dos valores: ${strings.slice(3).join(', ')}...`,
     })
 
     return this
@@ -73,13 +64,14 @@ export class ZodStringValidation implements IStringValidation {
 
   validate() {
     try {
+      const key = this.key ?? 'erro'
       if (this.zodEnum) {
-        this.zodEnum.parse(this.data)
+        z.object({ [key]: this.zodEnum }).parse({ [key]: this.data })
       }
 
-      this.zodString.parse(this.data)
+      z.object({ [key]: this.zodString }).parse({ [key]: this.data })
     } catch (error) {
-      // if (error instanceof ZodError) throw ZodValidationErrorFactory.produce(error)
+      if (error instanceof ZodError) throw ZodValidationErrorFactory.produce(error)
     }
   }
 }

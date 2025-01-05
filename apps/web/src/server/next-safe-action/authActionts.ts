@@ -12,16 +12,15 @@ import {
   SupabaseShopService,
   SupabaseSpaceService,
 } from '@/api/supabase/services'
-import { authActionClient } from './clients/authActionClient'
 import { NextActionServer } from '../next/NextActionServer'
 import { SignUpAction } from '../actions/auth'
+import { actionClient } from './clients'
 
-const signUp = authActionClient
-  .schema(z.object({ email: emailSchema, name: nameSchema, password: passwordSchema }))
-  .action(async ({ clientInput, ctx }) => {
+const signUp = actionClient
+  .schema(z.object({ email: z.string(), name: z.string(), password: z.string() }))
+  .action(async ({ clientInput }) => {
     const actionServer = NextActionServer({
       request: clientInput,
-      user: ctx.user,
     })
     const supabase = SupabaseServerActionClient()
     const authService = SupabaseAuthService(supabase)
@@ -37,7 +36,7 @@ const signUp = authActionClient
       shopService,
       spaceService,
     })
-    return action.handle(actionServer)
+    await action.handle(actionServer)
   })
 
 export { signUp }

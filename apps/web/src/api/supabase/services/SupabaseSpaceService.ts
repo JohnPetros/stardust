@@ -62,6 +62,7 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
         .from('planets')
         .select('*, stars(id, name, number, slug, is_challenge, planet_id)')
         .eq('position', 1)
+        .order('number', { foreignTable: 'stars', ascending: true })
         .single()
 
       if (error) {

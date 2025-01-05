@@ -1,10 +1,9 @@
 'use client'
 
+import { ROUTES } from '@/constants'
+import { useRouter } from '@/ui/global/hooks/useRouter'
 import { Animation } from '../../components/Animation'
 import { Button } from '../../components/Button'
-import { useRouter } from '../../../hooks'
-import { ROUTES } from '../../../../../constants'
-
 import { Animated404 } from './Animated404'
 
 export function NotFoundPage() {
@@ -18,7 +17,7 @@ export function NotFoundPage() {
             Código <span className='sr-only'>404</span>
           </h1>
 
-          <div className='-mt-[2rem]'>
+          <div className='-mt-[2rem] size-[16rem]'>
             <Animation name='404' size={240} />
           </div>
         </div>

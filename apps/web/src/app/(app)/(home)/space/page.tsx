@@ -1,3 +1,5 @@
+import { headers } from 'next/headers'
+
 import type { PlanetDto } from '@stardust/core/space/dtos'
 
 import { SpacePage } from '@/ui/space/widgets/pages/Space'
@@ -8,6 +10,7 @@ import { ROUTES } from '@/constants'
 export default async function Space() {
   const apiClient = NextApiClient({
     isCacheEnable: true,
+    headers
   })
   const response = await apiClient.get<PlanetDto[]>(ROUTES.api.space.planets)
   if (response.isFailure) response.throwError()

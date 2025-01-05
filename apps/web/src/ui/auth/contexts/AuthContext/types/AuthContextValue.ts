@@ -6,8 +6,8 @@ export type AuthContextValue = {
   user: User | null
   isLoading: boolean
   serverSession: Session | null
-  handleSignIn(email: string, password: string): Promise<void>
+  handleSignIn(email: string, password: string): Promise<boolean>
   handleSignOut(): Promise<void>
   updateUser(newUser: User): Promise<void>
-  mutateUserCache(userData: UserDto | null): void
+  updateUserCache(userData: UserDto | null): void
 }

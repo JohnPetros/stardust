@@ -1,4 +1,4 @@
-import { Numeric } from '@/@core/domain/structs'
+import { Numeric } from "@stardust/core/global/structs"
 
 type Tipo = 'vetor' | 'texto' | 'numero'
 

@@ -5,7 +5,7 @@ import { useAnimate } from 'framer-motion'
 
 import type { OpenToastParams, ToastType } from '../types'
 
-const TOAST_DURATION_DEFAULT = 2.5 // seconds
+const TOAST_DURATION_DEFAULT = 3 // seconds
 
 export function useToast() {
   const [isOpen, setIsOpen] = useState(false)

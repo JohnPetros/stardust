@@ -21,7 +21,7 @@ export const TAB_BUTTONS: TabButtonType[] = [
   },
   {
     title: 'Desafios',
-    link: ROUTES.challenging.challenges,
+    link: ROUTES.challenging.challengess,
     icon: 'terminal',
     value: 'challenges-tab',
     canOrder: true,

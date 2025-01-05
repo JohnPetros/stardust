@@ -5,6 +5,7 @@ import { AnimatedPanel } from './AnimatedPanel'
 import { StyledButton } from './StyledButton'
 import { useVerificationButton } from './useVerificationButton'
 import type { VerificationButtonProps } from './VerificationButtonProps'
+import { Icon } from '../Icon'
 
 export function VerificationButton({
   onClick,
@@ -34,17 +35,15 @@ export function VerificationButton({
       <div>
         <AnimatedPanel isAnswerVerified={isAnswerVerified}>
           <div className='flex h-20 flex-col items-center gap-1 overflow-hidden'>
-            <Image
-              src={`/icons/${
-                isAnswerVerified && !isAnswerCorrect
-                  ? 'incorrect-answer.svg'
-                  : 'correct-answer.svg'
-              }`}
-              width={48}
-              height={48}
-              priority
-              alt=''
-            />
+            {isAnswerVerified && !isAnswerCorrect ? (
+              <div className='grid place-content-center p-2 bg-transparent border-4 border-red-700 rounded-full'>
+                <Icon name='close' size={24} className='text-red-700' />
+              </div>
+            ) : (
+              <div className='grid place-content-center p-2 bg-transparent border-4 border-green-400 rounded-full'>
+                <Icon name='check' size={24} className='text-green-400' />
+              </div>
+            )}
             <strong
               className={twMerge(
                 'text-lg',

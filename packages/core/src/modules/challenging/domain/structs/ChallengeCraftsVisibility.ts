@@ -1,6 +1,6 @@
 import { Logical } from '#global/structs'
 
-type ChallengeCraftsVisibilityDTO = {
+type ChallengeCraftsVisibilityDto = {
   canShowSolutions: boolean
   canShowComments: boolean
 }
@@ -20,10 +20,10 @@ export class ChallengeCraftsVisibility {
     this.canShowSolutions = props.canShowSolutions
   }
 
-  static create(dto: ChallengeCraftsVisibilityDTO) {
+  static create(dto: ChallengeCraftsVisibilityDto) {
     return new ChallengeCraftsVisibility({
-      canShowComments: Logical.create('Can show comments', dto.canShowComments),
-      canShowSolutions: Logical.create('Can show solutions', dto.canShowSolutions),
+      canShowComments: Logical.create(dto.canShowComments, 'Pode mostrar comentários?'),
+      canShowSolutions: Logical.create(dto.canShowSolutions, 'Pode mostrar soluções?'),
     })
   }
 

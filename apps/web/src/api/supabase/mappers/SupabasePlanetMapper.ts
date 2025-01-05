@@ -23,8 +23,6 @@ export const SupabasePlanetMapper = () => {
     toSupabase(planet: Planet): SupabasePlanet {
       const planetDto = planet.dto
 
-      planet.id
-
       const supabasePlanet: SupabasePlanet = {
         id: planet.id,
         name: planetDto.name,

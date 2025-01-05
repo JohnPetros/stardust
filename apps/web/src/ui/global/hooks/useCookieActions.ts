@@ -12,7 +12,6 @@ export function useCookieActions() {
 
   const getCookie = useCallback(
     async (key: string) => {
-      console.log(executeGetCookie)
       const result = await executeGetCookie(key)
       return result?.data ?? null
     },

@@ -20,8 +20,8 @@ export class QuestionCodeLine {
 
   static create(dto: QuestionCodeLineDto): QuestionCodeLine {
     return new QuestionCodeLine({
-      number: Integer.create('Question code line number', dto.number),
-      indentation: Integer.create('Question code line indentation', dto.indentation),
+      number: Integer.create(dto.number, 'Número da questão'),
+      indentation: Integer.create(dto.indentation, 'identação da questão'),
       texts: dto.texts,
     })
   }

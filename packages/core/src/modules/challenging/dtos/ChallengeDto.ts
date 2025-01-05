@@ -1,4 +1,6 @@
-import type { TextBlockDto } from '../../global/dtos'
+import type { TextBlockDto } from '#global/dtos'
+import type { ChallengeCategoryDto } from './ChallengeCategoryDto'
+import type { TestCaseDto } from './TestCaseDto'
 
 export type ChallengeDto = {
   id?: string
@@ -14,7 +16,10 @@ export type ChallengeDto = {
   upvotesCount: number
   completionsCount: number
   createdAt: Date
-  descriptionTextBlocks: TextBlockDto[]
+  textBlocks: TextBlockDto[]
+  categories: ChallengeCategoryDto[]
+  userOutputs?: unknown[]
+  results?: boolean[]
   description: string
-  // testCases: ChallengeTestCase[]
+  testCases: TestCaseDto[]
 }

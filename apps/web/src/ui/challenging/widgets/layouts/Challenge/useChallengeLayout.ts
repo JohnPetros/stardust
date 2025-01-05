@@ -4,7 +4,7 @@ import type { ImperativePanelHandle } from 'react-resizable-panels'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { COOKIES, STORAGE } from '@/constants'
 import { _setCookie } from '@/ui/global/actions'
-import type { PanelsOffset } from './PanelsOffset'
+import type { PanelsOffset } from './types/PanelsOffset'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useSecondsCounter } from '@/ui/global/hooks/useSecondsCounter'
 import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
@@ -35,15 +35,12 @@ export function useChallengeLayout(
 
   useEffect(() => {
     let timeout: NodeJS.Timeout | number = 0
-
     timeout = setTimeout(() => setIsTransitionPageVisible(false), 5000)
 
     return () => {
-      localStorage.removeItem(STORAGE.keys.challengeCode)
       clearTimeout(timeout)
-      resetStore()
     }
-  }, [resetStore])
+  }, [])
 
   useEffect(() => {
     setCraftsVislibility(

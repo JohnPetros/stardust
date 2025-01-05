@@ -1,5 +1,5 @@
-import type { EditorRef } from '../../Editor/types'
+import type { CodeEditorRef } from '../../CodeEditor/types'
 
-export interface PlaygroundCodeEditorRef extends EditorRef {
+export interface PlaygroundCodeEditorRef extends CodeEditorRef {
   runCode: () => void
 }

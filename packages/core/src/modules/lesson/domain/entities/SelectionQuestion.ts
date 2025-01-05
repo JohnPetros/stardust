@@ -1,7 +1,6 @@
-import { Image, Logical, ShuffledList, Text } from '#global/structs'
+import { Image, Logical, ShuffledList, Text, type UserAnswer } from '#global/structs'
 import { Question } from '#lesson/abstracts'
 import type { SelectionQuestionDto, QuestionDto } from '#lesson/dtos'
-import type { QuestionAnswer } from '#lesson/structs'
 
 type SelectionQuestionProps = {
   options: ShuffledList<string>
@@ -28,9 +27,8 @@ export class SelectionQuestion extends Question<SelectionQuestionProps> {
     return question.type === 'selection'
   }
 
-  verifyUserAnswer(userAnswer: QuestionAnswer): Logical {
+  verifyUserAnswer(userAnswer: UserAnswer): Logical {
     return Logical.create(
-      'Is user answer for selection question correct?',
       String(userAnswer.value).toLocaleLowerCase() === this.answer.toLocaleLowerCase(),
     )
   }

@@ -16,15 +16,14 @@ type RocketsListProps = {
 
 export function RocketsList({ initialItems }: RocketsListProps) {
   const {
-    offset,
-    totalRockets,
+    totalRocketsCount,
     rocketsPerPage,
     rocketsDto,
+    page,
+    handlePageChange,
     handlePriceOrderChange,
     handleSearchChange,
-    setOffset,
   } = useRocketsList(initialItems)
-
   const { user } = useAuthContext()
 
   return (
@@ -61,13 +60,13 @@ export function RocketsList({ initialItems }: RocketsListProps) {
         </ul>
       )}
 
-      {totalRockets && (
+      {totalRocketsCount && (
         <div className='mt-3'>
           <Pagination
-            totalItems={totalRockets}
+            totalItemsCount={totalRocketsCount}
+            page={page}
             itemsPerPage={rocketsPerPage}
-            offset={offset}
-            setOffset={setOffset}
+            onPageChange={handlePageChange}
           />
         </div>
       )}

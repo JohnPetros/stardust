@@ -37,7 +37,7 @@ export class TextBlock {
     return new TextBlock({
       type,
       content,
-      isRunnable: Logical.create('Is text block runnable', false),
+      isRunnable: Logical.create(false),
     })
   }
 
@@ -59,7 +59,7 @@ export class TextBlock {
 
   setIsRunnable(isRunnable: boolean) {
     return this.clone({
-      isRunnable: Logical.create('Is text block runnable?', isRunnable),
+      isRunnable: Logical.create(isRunnable),
     })
   }
 

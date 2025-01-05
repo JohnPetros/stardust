@@ -14,7 +14,7 @@
     "test:coverage": "test --coverage"
   },
   "dependencies": {
-    "@designliquido/delegua": "^0.35.3",
+    "@designliquido/delegua": "^0.38.2",
     "@dnd-kit/core": "^6.1.0",
     "@dnd-kit/modifiers": "^6.0.1",
     "@dnd-kit/sortable": "^7.0.2",
@@ -42,6 +42,8 @@
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/ssr": "^0.4.1",
     "@supabase/supabase-js": "^2.44.3",
+    "@tsparticles/react": "^3.0.0",
+    "@tsparticles/slim": "^3.7.1",
     "@types/node": "20.14.10",
     "@types/react-dom": "18.3.0",
     "apexcharts": "^3.50.0",
@@ -55,6 +57,7 @@
     "monaco-editor": "^0.50.0",
     "next": "^14.2.4",
     "next-safe-action": "^7.10.2",
+    "nuqs": "^2.2.3",
     "phosphor-icons": "^1.4.2",
     "postcss": "8.4.39",
     "react": "^18.3.1",

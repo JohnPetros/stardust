@@ -1,2 +1,7 @@
-export { UnlockDocUseCase } from './UnlockDocUseCase'
+export { ListChallengesUseCase } from './ListChallengesUseCase'
+export { VoteChallengeUseCase } from './VoteChallengeUseCase'
+export { UpvoteSolutionUseCase } from './UpvoteSolutionUseCase'
+export { EditSolutionUseCase } from './EditSolutionUseCase'
+export { PostSolutionUseCase } from './PostSolutionUseCase'
+export { CalculateRewardForChallengeCompletionUseCase } from './CalculateRewardForChallengeCompletionUseCase'
 export { CountCompletedChallengesByDifficultyLevelUseCase } from './CountCompletedChallengesByDifficultyLevelUseCase'

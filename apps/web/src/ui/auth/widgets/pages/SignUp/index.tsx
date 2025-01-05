@@ -7,9 +7,12 @@ import { AnimatedContainer } from './AnimatedContainer'
 import { SignUpForm } from './SignUpForm'
 
 import { useSignUpPage } from './useSignUpPage'
+import { Button } from '@/ui/global/widgets/components/Button'
+import { ROUTES } from '@/constants'
 
 export function SignUpPage() {
-  const { isSignUpSuccess, handleFormSubmit } = useSignUpPage()
+  const { isSignUpSuccess, isResendingEmail, handleFormSubmit, handleResendEmail } =
+    useSignUpPage()
 
   return (
     <div className='h-screen'>
@@ -29,6 +32,13 @@ export function SignUpPage() {
               <p className='text-green-400 font-medium text-md text-center'>
                 Até logo 👋🏻.
               </p>
+              <Button
+                onClick={handleResendEmail}
+                isLoading={isResendingEmail}
+                className='mt-6'
+              >
+                Reenviar e-mail de cadastro
+              </Button>
             </div>
           </AnimatedContainer>
         ) : (
@@ -41,7 +51,7 @@ export function SignUpPage() {
             </div>
 
             <div className='mt-6 flex w-full items-center justify-center'>
-              <Link href='/sign-in'>Eu já tenho uma conta 😁.</Link>
+              <Link href={ROUTES.auth.signIn}>Eu já tenho uma conta 😁.</Link>
             </div>
           </AnimatedContainer>
         )}

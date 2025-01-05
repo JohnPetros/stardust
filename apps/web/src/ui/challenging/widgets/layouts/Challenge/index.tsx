@@ -4,7 +4,7 @@ import { useRef, type ReactNode } from 'react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 
-import type { PanelsOffset } from './PanelsOffset'
+import type { PanelsOffset } from './types/PanelsOffset'
 import { type ImperativePanelHandle, Panel, PanelGroup } from 'react-resizable-panels'
 import { useChallengeLayout } from './useChallengeLayout'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
@@ -41,7 +41,7 @@ export function ChallengeLayout({
 
   return (
     <>
-      <PageTransitionAnimation isVisible={isTransitionPageVisible} hasTips={true} />
+      <PageTransitionAnimation isVisible={isTransitionPageVisible} hasTips />
       <div className='relative md:overflow-hidden'>
         {header}
         <main className='w-full'>

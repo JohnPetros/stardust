@@ -20,13 +20,11 @@ const variants: Variants = {
 
 type AnimatedContent = {
   children: ReactNode
-  key: string
 }
 
-export function AnimatedContent({ children, key }: AnimatedContent) {
+export function AnimatedContent({ children }: AnimatedContent) {
   return (
     <motion.div
-      key={key}
       variants={variants}
       initial='right'
       animate='left'

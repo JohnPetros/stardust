@@ -1,5 +1,3 @@
-'use server'
-
 import type {
   IAction,
   IActionServer,
@@ -9,9 +7,8 @@ import type {
   IShopService,
   ISpaceService,
 } from '@stardust/core/interfaces'
-import { AcquireShopItemsByDefaultUseCase } from '@stardust/core/shop/use-cases'
 import { CreateUserUseCase } from '@stardust/core/global/use-cases'
-import { UnlockFirstUserStarUseCase } from '@stardust/core/space/use-cases'
+import { AppError } from '@stardust/core/global/errors'
 
 type Request = {
   name: string
@@ -36,36 +33,20 @@ export const SignUpAction = ({
 }: Dependencies): IAction<Request> => {
   return {
     async handle(actionServer: IActionServer<Request>) {
-      const { email, password, name } = actionServer.getRequest()
-
-      const authResponse = await authService.signUp(email, password, name)
+      const { email, name, password } = actionServer.getRequest()
+      const authResponse = await authService.signUp(email, password)
       if (authResponse.isFailure) authResponse.throwError()
 
-      const rankingResponse = await rankingService.fetchFirstTier()
-      if (rankingResponse.isFailure) rankingResponse.throwError()
-
-      const unlockFirstUserStarUseCase = new UnlockFirstUserStarUseCase(spaceService)
-      unlockFirstUserStarUseCase.do({ userId: authResponse.body.userId })
-
-      const acquireShopItemsByDefaultUseCase = new AcquireShopItemsByDefaultUseCase(
-        shopService,
-      )
-      const { selectedAvatarByDefaultId, selectedRocketByDefaultId } =
-        await acquireShopItemsByDefaultUseCase.do({ userId: authResponse.body.userId })
-
-      const createUserUseCase = new CreateUserUseCase(
+      const createUserUseCase = new CreateUserUseCase({
         profileService,
         rankingService,
         shopService,
-      )
-
+        spaceService,
+      })
       await createUserUseCase.do({
         userId: authResponse.body.userId,
         userEmail: email,
         userName: name,
-        avatarId: selectedAvatarByDefaultId,
-        rocketId: selectedRocketByDefaultId,
-        tierId: rankingResponse.body.id,
       })
     },
   }

@@ -22,7 +22,7 @@ export function Mdx({ children }: MdxProps) {
   const mdx = formatCodeContent(children)
 
   return (
-    <div className='prose prose-invert mx-auto'>
+    <div className='prose prose-invert'>
       <Markdown
         options={{
           overrides: {

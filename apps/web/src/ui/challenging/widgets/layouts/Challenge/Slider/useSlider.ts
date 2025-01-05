@@ -3,18 +3,18 @@
 import { useEffect, useRef, useState } from 'react'
 import type { SwiperRef } from 'swiper/react'
 import type { Swiper as SwiperInstance } from 'swiper'
-
+import { register } from 'swiper/element'
 import { useAnimate } from 'framer-motion'
+
 import { useBreakpoint } from '@/ui/global/hooks'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import { register } from 'swiper/element'
+
 register()
 
 export function useSlider() {
   const { getTabHandlerSlice } = useChallengeStore()
   const { tabHandler, setTabHandler } = getTabHandlerSlice()
   const { md: isMobile } = useBreakpoint()
-
   const [activeSlideIndex, setActiveSlideIndex] = useState(0)
   const [motionScope, animate] = useAnimate()
   const swiperRef = useRef<SwiperRef>(null)

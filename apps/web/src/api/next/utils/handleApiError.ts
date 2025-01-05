@@ -12,7 +12,7 @@ export async function handleApiError<Body>(response: globalThis.Response) {
     })
   }
 
-  console.error('Unkown Api error: ', data)
+  console.error('Unkown Api error: ', response)
 
   return new ApiResponse<Body>({ statusCode: response.status })
 }

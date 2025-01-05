@@ -22,7 +22,7 @@ type Cache<CacheData> = {
   isLoading: boolean
   isRefetching: boolean
   refetch: () => void
-  mutate: (newCacheData: CacheData | null, consig: MudateConfig) => void
+  updateCache: (newCacheData: CacheData | null, consig: MudateConfig) => void
 }
 
 export function useCache<CacheData>({
@@ -35,7 +35,7 @@ export function useCache<CacheData>({
   initialData,
 }: CacheConfig<CacheData>): Cache<CacheData> {
   const dependenciesQuery = dependencies
-    ? dependencies.map((dependency, index) => `dep_${index + 1}=${dependency}`)
+    ? dependencies.map((dependency, index) => `dep_${index + 1}=${dependency}`).join(',')
     : ''
 
   const { data, error, isLoading, isValidating, mutate } = useSWR(
@@ -58,6 +58,6 @@ export function useCache<CacheData>({
     isLoading,
     isRefetching: isValidating,
     refetch: () => mutate(),
-    mutate: mutateCache,
+    updateCache: mutateCache,
   }
 }

@@ -3,22 +3,33 @@ export const ROUTES = {
   space: '/space',
   shop: '/shop',
   challenging: {
-    prefix: '/challenging',
-    challenge: '/challenging/challenge',
-    challenges: '/challenging/challenges',
-    challengeMaker: '/challenging/challenge-maker',
-    solutions: '/solutions',
-    comments: '/solutions',
-    newSolution: '/challenging/solution/new',
+    challenges: {
+      challenge: (challengeSlug: string) =>
+        `/challenging/challenges/${challengeSlug}/challenge`,
+      challengeResult: (challengeSlug: string) =>
+        `/challenging/challenges/${challengeSlug}/challenge/result`,
+      challengeComments: (challengeSlug: string) =>
+        `/challenging/challenges/${challengeSlug}/challenge/comments`,
+      challengeSolutions: {
+        list: (challengeSlug: string) =>
+          `/challenging/challenges/${challengeSlug}/challenge/solutions`,
+        solution: (challengeSlug: string, solutionSlug: string) =>
+          `/challenging/challenges/${challengeSlug}/challenge/solutions/${solutionSlug}`,
+      },
+      solution: (challengeSlug: string) =>
+        `/challenging/challenges/${challengeSlug}/solution`,
+    },
   },
   profile: {
-    prefix: '/profile',
-    settings: '/profile/settings',
+    user: (userSlug: string) => `/profile/${userSlug}`,
+    settings: (userSlug: string) => `/profile/${userSlug}/settings`,
   },
-  lesson: {
-    prefix: '/lesson',
+  lesson: '/lesson',
+  rewarding: {
+    star: '/rewarding/star',
+    starChallenge: '/rewarding/star-challenge',
+    challenge: '/rewarding/challenge',
   },
-  rewarding: '/rewarding',
   playground: '/playground',
   auth: {
     signIn: '/auth/sign-in',
@@ -33,10 +44,10 @@ export const ROUTES = {
       confirmPasswordReset: '/api/auth/confirm-password-reset',
     },
     space: {
-      planets: '/api/planets',
+      planets: '/api/space/planets',
     },
     shop: {
-      items: '/shop/items',
+      items: '/api/shop/items',
     },
     profile: {
       achievements: '/api/profile/achievements',
@@ -46,5 +57,9 @@ export const ROUTES = {
       current: '/api/ranking/current',
       uptade: '/api/ranking/update',
     },
+    challenging: {
+      list: '/api/challenging/list',
+      countByDifficultyLevel: '/api/challenging/count-by-difficulty-level',
+    },
   },
-}
+} as const

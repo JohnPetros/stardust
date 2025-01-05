@@ -20,6 +20,8 @@ export const SupabaseUserMapper = () => {
           image: supabaseUser.avatar?.image ?? '',
           name: supabaseUser.avatar?.name ?? '',
           price: supabaseUser.avatar?.price ?? 0,
+          isAcquiredByDefault: supabaseUser.avatar?.is_acquired_by_default ?? false,
+          isSelectedByDefault: supabaseUser.avatar?.is_selected_by_default ?? false,
         },
         tier: {
           id: supabaseUser.tier?.id ?? '',
@@ -33,62 +35,47 @@ export const SupabaseUserMapper = () => {
           image: supabaseUser.rocket?.image ?? '',
           name: supabaseUser.rocket?.name ?? '',
           price: supabaseUser.rocket?.price ?? 0,
+          isAcquiredByDefault: supabaseUser.rocket?.is_acquired_by_default ?? false,
+          isSelectedByDefault: supabaseUser.rocket?.is_selected_by_default ?? false,
         },
-        unlockedAchievementsIds:
-          supabaseUser.users_unlocked_achievements?.map(
-            ({ achievement_id }) => achievement_id,
-          ) ?? [],
-        rescuableAchievementsIds:
-          supabaseUser.users_rescuable_achievements?.map(
-            ({ achievement_id }) => achievement_id,
-          ) ?? [],
-        unlockedStarsIds:
-          supabaseUser.users_unlocked_stars?.map(({ star_id }) => star_id) ?? [],
-        acquiredRocketsIds:
-          supabaseUser.users_acquired_rockets?.map(({ rocket_id }) => rocket_id) ?? [],
-        acquiredAvatarsIds:
-          supabaseUser.users_acquired_avatars?.map(({ avatar_id }) => avatar_id) ?? [],
-        completedChallengesIds:
-          supabaseUser.users_completed_challenges?.map(
-            ({ challenge_id }) => challenge_id,
-          ) ?? [],
+        unlockedAchievementsIds: supabaseUser.unlocked_achievements_ids ?? [],
+        rescuableAchievementsIds: supabaseUser.rescuable_achievements_ids ?? [],
+        unlockedStarsIds: supabaseUser.unlocked_stars_ids ?? [],
+        acquiredRocketsIds: supabaseUser.acquired_rockets_ids ?? [],
+        acquiredAvatarsIds: supabaseUser.acquired_avatars_ids ?? [],
+        completedChallengesIds: supabaseUser.completed_challenges_ids ?? [],
+        upvotedCommentsIds: supabaseUser.upvoted_comments_ids ?? [],
+        upvotedSolutionsIds: supabaseUser.upvoted_solutions_ids ?? [],
         completedPlanetsIds: [],
-        canSeeRankingResult: supabaseUser.can_see_ranking,
+        canSeeRankingResult: supabaseUser.can_see_ranking ?? false,
         lastWeekRankingPosition: supabaseUser.last_week_ranking_position,
-        weekStatus: supabaseUser.week_status,
-        createdAt: supabaseUser.created_at,
-        didIncrementStreakOnSaturday: supabaseUser.did_complete_saturday,
-
-        // studyTime: supabaseUser.study_time ?? '',
-        // createdAt: supabaseUser.created_at ?? '',
-        // didBreakStreak: supabaseUser.did_break_streak ?? false,
-        // didCompleteSaturday: supabaseUser.did_complete_saturday ?? false,
-        // weekStatus: supabaseUser.week_status as WeekStatus[],
+        weekStatus: supabaseUser.week_status ?? [],
+        createdAt: supabaseUser.created_at
+          ? new Date(supabaseUser.created_at)
+          : new Date(),
       }
 
       return userDto
     },
 
     toSupabase(user: User): SupabaseUser {
-      const userDto = user.dto
-
       // @ts-ignore
       const supabaseUser: SupabaseUser = {
         id: user.id,
         avatar_id: user.avatar.id,
         rocket_id: user.rocket.id,
         tier_id: user.tier.id,
-        coins: userDto.coins,
-        email: userDto.email,
-        level: userDto.level,
-        name: userDto.name,
-        slug: userDto.slug,
-        xp: userDto.xp,
-        weekly_xp: userDto.weeklyXp,
-        streak: userDto.streak,
-        can_see_ranking: userDto.canSeeRankingResult,
-        created_at: userDto.createdAt,
-        week_status: userDto.weekStatus,
+        coins: user.coins.value,
+        email: user.email.value,
+        level: user.level.value,
+        name: user.name.value,
+        slug: user.slug.value,
+        xp: user.xp.value,
+        weekly_xp: user.weeklyXp.value,
+        streak: user.streak.value,
+        can_see_ranking: user.canSeeRankingResult.value,
+        week_status: user.weekStatus.statuses,
+        did_break_streak: user.didBreakStreak.value,
       }
 
       return supabaseUser as unknown as SupabaseUser

@@ -10,19 +10,18 @@ import { SupabaseAuthService } from '@/api/supabase/services'
 
 const schema = z.object({
   queryParams: z.object({
-    token: z.string(),
+    token: z.string({ required_error: 'token é obrigatório' }),
   }),
 })
 
 type Schema = z.infer<typeof schema>
 
-export async function GET(request: NextRequest, params: NextParams) {
+export async function GET(request: NextRequest) {
   return runApiRoute(async () => {
-    const http = await NextHttp<Schema>({ request, schema, params })
+    const http = await NextHttp<Schema>({ request, schema })
     const supabase = SupabaseRouteHandlerClient()
     const authService = SupabaseAuthService(supabase)
     const controller = ConfirmEmailController(authService)
-    const httpResponse = await controller.handle(http)
-    return httpResponse.body
+    return controller.handle(http)
   })
 }

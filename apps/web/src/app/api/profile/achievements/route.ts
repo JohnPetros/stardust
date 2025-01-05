@@ -10,7 +10,6 @@ export async function GET() {
     const supabase = SupabaseRouteHandlerClient()
     const service = SupabaseProfileService(supabase)
     const controller = FetchAchievementsController(service)
-    const reponse = await controller.handle(http)
-    return reponse.body
+    return await controller.handle(http)
   })
 }

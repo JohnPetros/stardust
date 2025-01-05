@@ -7,8 +7,9 @@ export const HTTP_STATUS_CODE = {
   unauthorized: 401,
   forbidden: 403,
   notFound: 404,
+  notAcceptable: 406,
   conflict: 409,
   preconditionFailed: 412,
   tooManyRequests: 429,
   serverError: 500,
-}
+} as const

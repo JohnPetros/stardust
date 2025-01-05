@@ -1,1 +1,1 @@
-export type { ShopItemsListingSettings } from './ShopItemsListingSettings'
+export type { ShopItemsListingParams } from './ShopItemsListingParams'

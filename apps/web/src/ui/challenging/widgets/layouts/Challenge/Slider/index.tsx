@@ -1,13 +1,13 @@
 'use client'
 
-import { register } from 'swiper/element/bundle'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { motion } from 'framer-motion'
 
 import { useSlider } from './useSlider'
 import { NavButton } from './NavButton'
-import { ChallengeDescriptionPage } from '../../../pages/ChallengeDescription'
-register()
+import { ChallengeDescriptionSlot } from '../../../slots/ChallengeDescription'
+import { ChallengeCodeEditorSlot } from '../../../slots/ChallengeCodeEditor'
+import { ChallengeResultSlot } from '../../../slots/ChallengeResult'
 
 export function Slider() {
   const {
@@ -66,15 +66,15 @@ export function Slider() {
         allowTouchMove={false}
       >
         <SwiperSlide className='h-full overflow-y-auto'>
-          <ChallengeDescriptionPage />
+          <ChallengeDescriptionSlot />
         </SwiperSlide>
 
         <SwiperSlide>
-          <CodeEditor />
+          <ChallengeCodeEditorSlot />
         </SwiperSlide>
 
         <SwiperSlide className='h-full overflow-y-auto'>
-          <Result />
+          <ChallengeResultSlot />
         </SwiperSlide>
       </Swiper>
     </div>

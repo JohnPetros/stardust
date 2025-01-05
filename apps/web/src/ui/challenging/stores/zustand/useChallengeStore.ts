@@ -2,24 +2,24 @@ import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
 import type { Challenge } from '@stardust/core/challenging/entities'
-import type { ChallengeCraftsVisilibity } from '@stardust/core/challenging/structs'
-
+import type { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
 import { INITIAL_CHALLENGE_STORE_STATE } from '../ChallengeStore/constants'
-import type {
-  ChallengeStoreActions,
-  ChallengeStoreState,
-  PanelsLayout,
-} from '../ChallengeStore/types'
-import type { ChallengeStore } from '../ChallengeStore/types/ChallengeStore'
+import type { ChallengeStore, PanelsLayout, TabHandler } from '../ChallengeStore/types'
 
 export const useZustandChallengeStore = create<ChallengeStore>()(
   immer((set) => {
     return {
       state: INITIAL_CHALLENGE_STORE_STATE,
       actions: {
-        setChallenge(challenge: Challenge) {
+        setChallenge(challenge: Challenge | null) {
           return set(({ state }) => {
             state.challenge = challenge
+          })
+        },
+
+        setSolutionContent(solutionContent: string) {
+          return set(({ state }) => {
+            state.solutionContent = solutionContent
           })
         },
 
@@ -29,7 +29,13 @@ export const useZustandChallengeStore = create<ChallengeStore>()(
           })
         },
 
-        setCraftsVisibility(craftsVislibility: ChallengeCraftsVisilibity) {
+        setResults(results: boolean[]) {
+          return set(({ state }) => {
+            state.results = results
+          })
+        },
+
+        setCraftsVisibility(craftsVislibility: ChallengeCraftsVisibility) {
           return set(({ state }) => {
             state.craftsVislibility = craftsVislibility
           })
@@ -38,6 +44,12 @@ export const useZustandChallengeStore = create<ChallengeStore>()(
         setTabHandler(tabHandler: TabHandler) {
           return set(({ state }) => {
             state.tabHandler = tabHandler
+          })
+        },
+
+        setMdx(mdx: string) {
+          return set(({ state }) => {
+            state.mdx = mdx
           })
         },
 

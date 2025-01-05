@@ -2,6 +2,7 @@ import type { IAuthService, IController, IHttp } from '@stardust/core/interfaces
 
 import { COOKIES, ROUTES } from '@/constants'
 import { HTTP_STATUS_CODE } from '@stardust/core/constants'
+import { Slug } from '@stardust/core/global/structs'
 
 type Schema = {
   queryParams: {
@@ -13,8 +14,10 @@ export const ConfirmPasswordResetController = (
   authService: IAuthService,
 ): IController<Schema> => {
   function redirectToSigInPage(http: IHttp, errorMessage: string) {
-    return http.redirect(`${ROUTES.auth.signIn}?error=${errorMessage}`)
+    return http.redirect(`${ROUTES.auth.signIn}?error=${Slug.create(errorMessage).value}`)
   }
+
+  // joaopcarvalho.cds@gmail.com
 
   return {
     async handle(http: IHttp<Schema>) {
@@ -36,7 +39,7 @@ export const ConfirmPasswordResetController = (
       http.setCookie(COOKIES.keys.accessToken, accessToken, cookieDuration)
       http.setCookie(COOKIES.keys.refreshToken, refreshToken, cookieDuration)
 
-      return http.send(null, HTTP_STATUS_CODE.noContent)
+      return http.redirect(ROUTES.auth.resetPassword)
     },
   }
 }

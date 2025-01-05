@@ -1,3 +1,5 @@
+'use client'
+
 import { type RefObject, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
@@ -14,13 +16,9 @@ export function useAccountConfirmationPage(rocketAnimationRef: RefObject<Animati
 
   async function handleLinkClick() {
     setIsRocketVisible(true)
-
     await waitFor(ROCKET_ANIMATION_DELAY)
-
     rocketAnimationRef.current?.restart()
-
     await waitFor(3000)
-
     router.push(ROUTES.space)
   }
 

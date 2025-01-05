@@ -1,10 +1,28 @@
 import type { Challenge } from '@stardust/core/challenging/entities'
-import type { ChallengeDto } from '@stardust/core/challenging/dtos'
+import type {
+  ChallengeCategoryDto,
+  ChallengeDto,
+  TestCaseDto,
+} from '@stardust/core/challenging/dtos'
 import type { SupabaseChallenge } from '../types'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
 export const SupabaseChallengeMapper = () => {
   return {
     toDto(supabaseChallenge: SupabaseChallenge): ChallengeDto {
+      let textsBlocks: TextBlockDto[] = []
+      if (supabaseChallenge.texts) {
+        textsBlocks = (supabaseChallenge.texts as TextBlockDto[]).map((textBlock) => {
+          return {
+            type: textBlock.type,
+            content: textBlock.content,
+            isRunnable: textBlock.isRunnable,
+            picture: textBlock.picture,
+            title: textBlock.title,
+          }
+        })
+      }
+
       const challengeDto: ChallengeDto = {
         id: supabaseChallenge.id ?? '',
         title: supabaseChallenge.title ?? '',
@@ -13,6 +31,34 @@ export const SupabaseChallengeMapper = () => {
         difficulty: supabaseChallenge.difficulty ?? '',
         docId: supabaseChallenge.doc_id,
         functionName: supabaseChallenge.function_name,
+        authorSlug: supabaseChallenge.user_slug ?? '',
+        upvotesCount: supabaseChallenge.upvotes ?? 0,
+        downvotesCount: supabaseChallenge.downvotes ?? 0,
+        completionsCount: supabaseChallenge.total_completitions ?? 0,
+        description: supabaseChallenge.description ?? '',
+        textBlocks: textsBlocks,
+        testCases: (supabaseChallenge.test_cases as TestCaseDto[]).map(
+          (supabaseTestCase) => {
+            return {
+              position: supabaseTestCase.position ?? '',
+              inputs: supabaseTestCase.inputs ?? [],
+              expectedOutput: supabaseTestCase.expectedOutput,
+              isLocked: supabaseTestCase.isLocked,
+            }
+          },
+        ),
+        categories: (supabaseChallenge.categories as ChallengeCategoryDto[]).map(
+          (supabaseCategory) => {
+            return {
+              id: supabaseCategory.id,
+              name: supabaseCategory.name,
+            }
+          },
+        ),
+        starId: supabaseChallenge.star_id,
+        createdAt: supabaseChallenge.created_at
+          ? new Date(supabaseChallenge.created_at)
+          : new Date(),
       }
 
       return challengeDto

@@ -46,7 +46,7 @@ export class WeekStatus {
   get todayStatus(): WeekdayStatus {
     const todayIndex = new Datetime().getTodayIndex()
     const todayStatus = this.statuses[todayIndex]
-    if (!todayStatus) throw new AppError('No today status')
+    if (!todayStatus) throw new AppError('Nenhum status semanal')
     return todayStatus
   }
 }

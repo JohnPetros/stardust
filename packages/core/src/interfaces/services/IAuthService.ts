@@ -1,13 +1,9 @@
-import type { ApiResponse } from '../../responses/ApiResponse'
+import type { ApiResponse } from '#responses'
 
 export interface IAuthService {
   fetchUserId(): Promise<ApiResponse<string>>
   signIn(email: string, password: string): Promise<ApiResponse<{ userId: string }>>
-  signUp(
-    email: string,
-    password: string,
-    name: string,
-  ): Promise<ApiResponse<{ userId: string }>>
+  signUp(email: string, password: string): Promise<ApiResponse<{ userId: string }>>
   signOut(): Promise<ApiResponse>
   requestPasswordReset(email: string): Promise<ApiResponse>
   resetPassword(

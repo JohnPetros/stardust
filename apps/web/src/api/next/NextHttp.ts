@@ -6,15 +6,21 @@ import type { ZodSchema } from 'zod'
 import type { HttpSchema, IHttp } from '@stardust/core/interfaces'
 import { ApiResponse } from '@stardust/core/responses'
 import { AppError } from '@stardust/core/global/errors'
-import { HTTP_STATUS_CODE } from '@stardust/core/constants'
+import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/constants'
 
 import type { NextParams } from '@/server/next/types'
 import { SupabaseRouteHandlerClient } from '../supabase/clients'
 import { SupabaseAuthService, SupabaseProfileService } from '../supabase/services'
 
-type NextHttpParams<HttpSchema> = {
+type Cookie = {
+  key: string
+  value: string
+  duration: number
+}
+
+type NextHttpParams = {
   request?: NextRequest
-  schema?: ZodSchema<HttpSchema>
+  schema?: ZodSchema
   params?: NextParams
 }
 
@@ -22,24 +28,28 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
   request,
   schema,
   params,
-}: NextHttpParams<NextSchema> = {}): Promise<IHttp<NextSchema>> => {
+}: NextHttpParams = {}): Promise<IHttp<NextSchema>> => {
   let nextRedirectResponse: NextResponse<unknown>
   let httpSchema: NextSchema
+  const cookies: Cookie[] = []
 
   if (request && schema) {
     let body: HttpSchema['body']
     let queryParams: HttpSchema['queryParams']
     let routeParams: HttpSchema['routeParams']
 
-    if ('queryParams' in schema) {
+    // @ts-ignore
+    const keys = schema.keyof().options
+
+    if (keys.includes('queryParams')) {
       queryParams = Object.fromEntries(request.nextUrl.searchParams.entries())
     }
 
-    if ('body' in schema) {
+    if (keys.includes('body')) {
       body = await request?.json()
     }
 
-    if ('routeParams' in schema) {
+    if (keys.includes('routeParams')) {
       if (!params) throw new AppError('Next params not provided')
       routeParams = params.params
     }
@@ -53,19 +63,23 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     },
 
     redirect(route: string) {
-      if (nextRedirectResponse) {
-        return new ApiResponse({
-          body: nextRedirectResponse,
-          statusCode: HTTP_STATUS_CODE.redirect,
-        })
-      }
-
       const nextResponse = NextResponse.redirect(
         new URL(route, request ? request.url : ''),
       )
+
+      if (cookies.length)
+        for (const cookie of cookies) {
+          nextResponse.cookies.set(cookie.key, cookie.value, {
+            path: '/',
+            httpOnly: true,
+            maxAge: cookie.duration,
+          })
+        }
+
       return new ApiResponse({
         body: nextResponse,
         statusCode: HTTP_STATUS_CODE.redirect,
+        headers: { [HTTP_HEADERS.xRedirect]: 'true' },
       })
     },
 
@@ -99,11 +113,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     },
 
     setCookie(key: string, value: string, duration: number) {
-      nextRedirectResponse.cookies.set(key, value, {
-        path: '/',
-        httpOnly: true,
-        maxAge: duration,
-      })
+      cookies.push({ key, value, duration })
     },
 
     getCookie(key: string) {
@@ -111,11 +121,22 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     },
 
     pass() {
-      return new ApiResponse({ headers: { 'X-Pass': 'true' } })
+      return new ApiResponse({ headers: { [HTTP_HEADERS.xPass]: 'true' } })
     },
 
-    send(data: unknown, statusCode = 200) {
-      if (nextRedirectResponse) {
+    send(data: unknown, statusCode = HTTP_STATUS_CODE.ok) {
+      if (cookies.length) {
+        const nextResponse = NextResponse.redirect(
+          new URL(request ? request.nextUrl.pathname : '', request ? request.url : ''),
+        )
+
+        for (const cookie of cookies) {
+          nextResponse.cookies.set(cookie.key, cookie.value, {
+            path: '/',
+            httpOnly: true,
+            maxAge: cookie.duration,
+          })
+        }
         return new ApiResponse({
           body: nextRedirectResponse,
           statusCode: HTTP_STATUS_CODE.redirect,

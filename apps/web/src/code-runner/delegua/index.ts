@@ -1,4 +1,13 @@
-import { AvaliadorSintatico, InterpretadorBase, Lexador } from '@designliquido/delegua'
+import {
+  AvaliadorSintatico,
+  InterpretadorBase,
+  Lexador,
+  TradutorJavaScript,
+  TradutorReversoJavaScript,
+} from '@designliquido/delegua'
+
+import { AvaliadorSintaticoJavaScript } from '@designliquido/delegua/avaliador-sintatico/traducao/avaliador-sintatico-javascript'
+import { LexadorJavaScript } from '@designliquido/delegua/lexador/traducao/lexador-javascript'
 
 import { CodeRunnerResponse } from '@stardust/core/responses'
 import type { ICodeRunnerProvider } from '@stardust/core/interfaces'
@@ -12,7 +21,7 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
   const avaliadorSintatico = new AvaliadorSintatico()
 
   return {
-    async run(code: string, shouldReturnResult = false) {
+    async run(code: string) {
       const outputs: string[] = []
 
       function funcaoDeSaida(novaSaida: string) {
@@ -22,7 +31,6 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
       const interpretador = new InterpretadorBase('', false, funcaoDeSaida, funcaoDeSaida)
       const resultadoLexador = lexador.mapear(code.split('\n'), -1)
       const resultadoAvaliacaoSintatica = avaliadorSintatico.analisar(resultadoLexador, 0)
-
       const { resultado, erros } = await interpretador.interpretar(
         resultadoAvaliacaoSintatica.declaracoes,
         false,
@@ -34,17 +42,9 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
         return trateErro(erro, linhaDoErro)
       }
 
-      let result: string | boolean = ''
-
-      if (resultado.length && shouldReturnResult) {
-        for (const valor of resultado) {
-          if (valor.includes('valor') && resultado[0]) {
-            result = (JSON.parse(resultado[0]) as { valor: string | boolean }).valor
-            if (result === true) result = 'verdadeiro'
-            if (result === false) result = 'falso'
-            break
-          }
-        }
+      let result = ''
+      if (resultado[1]) {
+        result = resultado[1]
       }
 
       return new CodeRunnerResponse({ result, outputs })
@@ -76,10 +76,43 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
         }
 
         codigo = codigo.replace(DELEGUA_REGEX.conteudoDeFuncaoLeia, entrada)
-        console.log({ codigo })
       }
 
       return codigo
+    },
+
+    addFunction(functionName: string, functionParams: unknown[], code: string) {
+      const paramsValues = functionParams.map((param) =>
+        Array.isArray(param) ? `[${param.join(',')}]` : param,
+      )
+      const params = `(${paramsValues.join(',')})`
+      return code.concat(`\n${functionName}${params};`)
+    },
+
+    getInputsCount(codeValue) {
+      const regex = new RegExp(DELEGUA_REGEX.funcaoLeia, 'g')
+      const comandosLeia = codeValue.match(regex)
+      return comandosLeia?.length ?? 0
+    },
+
+    translateToCodeRunner(jsCode: string) {
+      const lexador = new LexadorJavaScript()
+      const avaliadorSintatico = new AvaliadorSintaticoJavaScript()
+      const resultadoLexico = lexador.mapear(jsCode.split('\n'), -1)
+      const resultadoSintatico = avaliadorSintatico.analisar(resultadoLexico, -1)
+      const tradutor = new TradutorReversoJavaScript()
+      const traducao = tradutor.traduzir(resultadoSintatico.declaracoes)
+      return traducao.trim()
+    },
+
+    translateToJs(codeRunnerCode: string) {
+      const lexador = new Lexador()
+      const avaliadorSintatico = new AvaliadorSintatico()
+      const resultadoLexico = lexador.mapear(codeRunnerCode.split('\n'), -1)
+      const resultadoSintatico = avaliadorSintatico.analisar(resultadoLexico, -1)
+      const tradutor = new TradutorJavaScript()
+      const traducao = tradutor.traduzir(resultadoSintatico.declaracoes)
+      return traducao.trim()
     },
   }
 }

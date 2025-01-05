@@ -43,7 +43,7 @@ export function ProfilePage({ userDto, unlockedAchievementsDto }: ProfilePagePro
         <div className='mt-10 grid grid-cols-1 gap-6 md:grid-cols-[1fr_2fr]'>
           <div>
             <h4 className='text-gray-100'>Desafios concluídos</h4>
-            <ChallengesChart userDto={user.dto} />
+            <ChallengesChart />
           </div>
           <div>
             <h4 className='mb-3 text-center text-gray-100'>Conquistas adquiridas</h4>

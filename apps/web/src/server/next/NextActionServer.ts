@@ -1,5 +1,3 @@
-'use server'
-
 import { redirect } from 'next/navigation'
 
 import type { IActionServer } from '@stardust/core/interfaces'

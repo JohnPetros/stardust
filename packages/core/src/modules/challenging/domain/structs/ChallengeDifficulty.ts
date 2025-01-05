@@ -3,6 +3,21 @@ import { ValidationError } from '#global/errors'
 import type { ChallengeDifficultyLevel } from '#challenging/types'
 
 export class ChallengeDifficulty {
+  static readonly REWARD_BY_DIFFICULTY = {
+    easy: {
+      coins: 10,
+      xp: 20,
+    },
+    medium: {
+      coins: 20,
+      xp: 30,
+    },
+    hard: {
+      coins: 30,
+      xp: 40,
+    },
+  }
+
   private constructor(readonly level: ChallengeDifficultyLevel) {}
 
   static create(level: string) {
@@ -10,7 +25,7 @@ export class ChallengeDifficulty {
       throw new ValidationError([
         {
           name: 'challengen-difficulty',
-          messages: ['Challenge Difficulty Level is not valid'],
+          messages: ['Nível de dificuldade de desafio deve ser fácil, médio ou difícil'],
         },
       ])
     }
@@ -26,5 +41,9 @@ export class ChallengeDifficulty {
     ])
 
     return true
+  }
+
+  get reward() {
+    return ChallengeDifficulty.REWARD_BY_DIFFICULTY[this.level]
   }
 }

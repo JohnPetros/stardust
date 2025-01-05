@@ -7,15 +7,15 @@ export class Rocket extends ShopItem {
     return new Rocket(
       {
         name: Name.create(dto.name),
-        price: Integer.create('price', dto.price),
+        price: Integer.create(dto.price, 'Preço do foguete'),
         image: Image.create(dto.image),
         isAcquiredByDefault: Logical.create(
+          dto?.isAcquiredByDefault ?? false,
           'O foguete é adquirido por padrão?',
-          dto.isAcquiredByDefault,
         ),
         isSelectedByDefault: Logical.create(
+          dto?.isAcquiredByDefault ?? false,
           'O avatar é selecionado por padrão?',
-          dto.isAcquiredByDefault,
         ),
       },
       dto.id,

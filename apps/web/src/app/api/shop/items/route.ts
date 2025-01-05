@@ -10,7 +10,6 @@ export async function GET() {
     const supabase = SupabaseRouteHandlerClient()
     const shopService = SupabaseShopService(supabase)
     const controller = FetchShopItemsController(shopService)
-    const response = await controller.handle(http)
-    return response.body
+    return await controller.handle(http)
   })
 }

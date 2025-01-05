@@ -8,8 +8,8 @@ export class Slug {
     this.value = value
   }
 
-  static create(value: string) {
-    new StringValidation(value, 'Slug').min(2).validate()
+  static create(value: string, key = 'Slug') {
+    new StringValidation(value, key ).min(2).validate()
 
     return Slug.slugify(value)
   }

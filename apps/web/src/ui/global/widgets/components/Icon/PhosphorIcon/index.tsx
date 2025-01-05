@@ -1,7 +1,5 @@
 import type { ClassNameValue } from 'tailwind-merge'
-
 import type { IconName } from '../types/IconName'
-
 import { ICONS } from './icons'
 
 type IconProps = {
