@@ -62,12 +62,12 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         .single()
 
       if (error) {
-        return SupabasePostgrestError(error, 'Desafio não encontrado com esse id', status)
+        return SupabasePostgrestError(error, 'Solução não encontrado com esse id', status)
       }
 
-      const challengeDto = supabaseSolutionMapper.toDto(data)
+      const solutionDto = supabaseSolutionMapper.toDto(data)
 
-      return new ApiResponse({ body: challengeDto })
+      return new ApiResponse({ body: solutionDto })
     },
 
     async fetchChallengeByStarId(starId: string) {

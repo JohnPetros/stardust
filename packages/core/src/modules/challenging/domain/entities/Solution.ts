@@ -22,25 +22,28 @@ export class Solution extends Entity<SolutionProps> {
   static create(dto: SolutionDto) {
     const name = Name.create(dto.title, 'Nome da solução')
 
-    return new Solution({
-      title: name,
-      content: Text.create(dto.content, 'Conteúdo da solução'),
-      slug: Slug.create(dto.slug ?? name.slug, 'Slug da solução'),
-      upvotesCount: Integer.create(
-        dto.upvotesCount ?? 0,
-        'Número de upvotes dessa solução',
-      ),
-      commentsCount: Integer.create(
-        dto.commentsCount ?? 0,
-        'Contagem de comentários da solução',
-      ),
-      viewsCount: Integer.create(dto.viewsCount ?? 0, 'Contagem de views da solução'),
-      createdAt: dto.createdAt ?? new Date(),
-      author: {
-        id: dto.author.id,
-        entity: dto.author.dto && Author.create(dto.author.dto),
+    return new Solution(
+      {
+        title: name,
+        content: Text.create(dto.content, 'Conteúdo da solução'),
+        slug: Slug.create(dto.slug ?? name.slug, 'Slug da solução'),
+        upvotesCount: Integer.create(
+          dto.upvotesCount ?? 0,
+          'Número de upvotes dessa solução',
+        ),
+        commentsCount: Integer.create(
+          dto.commentsCount ?? 0,
+          'Contagem de comentários da solução',
+        ),
+        viewsCount: Integer.create(dto.viewsCount ?? 0, 'Contagem de views da solução'),
+        createdAt: dto.createdAt ?? new Date(),
+        author: {
+          id: dto.author.id,
+          entity: dto.author.dto && Author.create(dto.author.dto),
+        },
       },
-    })
+      dto.id,
+    )
   }
 
   upvote() {
@@ -107,7 +110,7 @@ export class Solution extends Entity<SolutionProps> {
       createdAt: this.createdAt,
       author: {
         id: this.authorId,
-        dto: this.author.dto,
+        dto: this.props.author.entity?.dto,
       },
     }
   }

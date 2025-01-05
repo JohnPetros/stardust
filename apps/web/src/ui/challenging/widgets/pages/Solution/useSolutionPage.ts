@@ -66,6 +66,11 @@ export function useSolutionPage(
   async function handleSolutionPost() {
     if (!user) return
 
+    setFieldErrors({
+      solutionTitle: '',
+      solutionContent: '',
+    })
+
     await postSolution({
       solutionTitle,
       solutionContent,
@@ -76,6 +81,11 @@ export function useSolutionPage(
 
   async function handleSolutionEdit() {
     if (!solution) return
+
+    setFieldErrors({
+      solutionTitle: '',
+      solutionContent: '',
+    })
 
     await editSolution({
       solutionId: solution.id,

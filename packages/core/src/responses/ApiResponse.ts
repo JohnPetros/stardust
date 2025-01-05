@@ -52,8 +52,6 @@ export class ApiResponse<Body = unknown> {
     )
       throw new AppError(this.errorMessage)
 
-    console.log(this.statusCode)
-
     throw new AppError(this.errorMessage)
   }
 
