@@ -1,10 +1,10 @@
 'use client'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { ChallengeCard } from './ChallengeCard'
-import { useChallengesList } from './useChallengesList'
 import { ShowMoreButton } from '@/ui/global/widgets/components/ShowMoreButton'
 import { ChallengeCardSkeleton } from '../ChallengesList/ChallengeCardSkelleton'
+import { ChallengeCard } from './ChallengeCard'
+import { useChallengesList } from './useChallengesList'
 
 export function ChallengesList() {
   const { user } = useAuthContext()

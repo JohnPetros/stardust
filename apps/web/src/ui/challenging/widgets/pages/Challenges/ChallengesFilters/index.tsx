@@ -49,12 +49,8 @@ export function ChallengesFilters({ categories }: FiltersProps) {
             {FILTER_SELECTS_ITEMS.slice(0, 3).map((item, index, allItems) => {
               const isLastItem = index === allItems.length - 1
               return (
-                <>
-                  <Select.Item
-                    key={String(index + 1)}
-                    value={item.value}
-                    className={item.textStyles}
-                  >
+                <div key={String(index + 1)}>
+                  <Select.Item value={item.value} className={item.textStyles}>
                     {item.icon && (
                       <Icon name={item.icon} size={16} className={item.iconStyles} />
                     )}
@@ -62,7 +58,7 @@ export function ChallengesFilters({ categories }: FiltersProps) {
                     <Select.Text>{item.text}</Select.Text>
                   </Select.Item>
                   {!isLastItem && <Select.Separator />}
-                </>
+                </div>
               )
             })}
           </Select.Content>
@@ -79,19 +75,15 @@ export function ChallengesFilters({ categories }: FiltersProps) {
             {FILTER_SELECTS_ITEMS.slice(3).map((item, index, allItems) => {
               const isLastItem = index === allItems.length - 1
               return (
-                <>
-                  <Select.Item
-                    key={String(index + 1)}
-                    value={item.value}
-                    className={item.textStyles}
-                  >
+                <div key={String(index + 1)}>
+                  <Select.Item value={item.value} className={item.textStyles}>
                     {item.icon && (
                       <Icon name={item.icon} size={16} className={item.iconStyles} />
                     )}
                     <Select.Text>{item.text}</Select.Text>
                   </Select.Item>
                   {!isLastItem && <Select.Separator />}
-                </>
+                </div>
               )
             })}
           </Select.Content>

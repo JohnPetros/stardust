@@ -116,8 +116,8 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
     }: ChallengesListParams) {
       let query = supabase
         .from('challenges_view')
-        .select('*', { count: 'exact' })
-        .is('challenge_id', null)
+        .select('*, challenges_categories!inner(category_id)', { count: 'exact' })
+        .is('star_id', null)
 
       if (title && title.length > 1) {
         query = query.ilike('title', `%${title}%`)
@@ -134,6 +134,8 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       const range = calculateSupabaseRange(page, itemsPerPage)
 
       const { data, count, status, error } = await query.range(range.from, range.to)
+
+      console.log({ error })
 
       if (error) {
         return SupabasePostgrestError(

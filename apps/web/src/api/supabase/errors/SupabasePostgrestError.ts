@@ -13,6 +13,6 @@ export const SupabasePostgrestError = <Data>(
 
   return new ApiResponse<Data>({
     errorMessage,
-    statusCode,
+    statusCode: HTTP_STATUS_CODE.serverError,
   })
 }

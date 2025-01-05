@@ -1,7 +1,7 @@
 import { ROUTES } from '@/constants'
 
 type HomeLink = {
-  route: string
+  route: string | ((param: string) => string)
   label: string
   icon: string
 }
@@ -13,7 +13,7 @@ export const HOME_LINKS: HomeLink[] = [
     icon: 'learn.svg',
   },
   {
-    route: ROUTES.challenging.challengess,
+    route: ROUTES.challenging.challenges.list,
     label: 'Desafios',
     icon: 'challenges.svg',
   },
@@ -23,7 +23,7 @@ export const HOME_LINKS: HomeLink[] = [
     icon: 'shop.svg',
   },
   {
-    route: ROUTES.profile.prefix,
+    route: ROUTES.profile.user,
     label: 'Perfil',
     icon: 'profile.svg',
   },
@@ -32,4 +32,4 @@ export const HOME_LINKS: HomeLink[] = [
     label: 'Ranking',
     icon: 'ranking.svg',
   },
-]
+] as const

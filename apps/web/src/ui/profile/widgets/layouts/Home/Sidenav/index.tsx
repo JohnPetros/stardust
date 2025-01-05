@@ -68,20 +68,22 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
             )}
           </Link>
 
-          <nav className='mt-12 flex flex-col gap-3 px-3'>
-            {HOME_LINKS.map(({ route, icon, label }) => {
-              return (
-                <NavLink
-                  key={route}
-                  route={route === '/profile' ? `${route}/${user?.slug.value}` : route}
-                  label={label}
-                  icon={icon}
-                  isExpanded={isExpanded}
-                  isColumn={false}
-                />
-              )
-            })}
-          </nav>
+          {user && (
+            <nav className='mt-12 flex flex-col gap-3 px-3'>
+              {HOME_LINKS.map(({ route, icon, label }) => {
+                return (
+                  <NavLink
+                    key={label}
+                    route={typeof route === 'function' ? route(user.slug.value) : route}
+                    label={label}
+                    icon={icon}
+                    isExpanded={isExpanded}
+                    isColumn={false}
+                  />
+                )
+              })}
+            </nav>
+          )}
         </div>
 
         <AnimatedAchievementsList isAchievementsListVisible={isAchievementsListVisible}>

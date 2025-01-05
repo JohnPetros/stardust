@@ -4,6 +4,7 @@ export const ROUTES = {
   shop: '/shop',
   challenging: {
     challenges: {
+      list: '/challenging/challenges',
       challenge: (challengeSlug: string) =>
         `/challenging/challenges/${challengeSlug}/challenge`,
       challengeResult: (challengeSlug: string) =>

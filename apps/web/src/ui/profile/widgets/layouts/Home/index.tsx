@@ -11,7 +11,6 @@ import { Sidebar } from './Sidebar'
 import { Sidenav } from './Sidenav'
 import { TabNav } from './TabNav'
 import { PageTransitionAnimation } from '@/ui/global/widgets/components/PageTransitionAnimation'
-import { ROUTES } from '@/constants'
 
 type HomeLayoutProps = {
   children: ReactNode
@@ -22,7 +21,7 @@ export function HomeLayout({ children }: HomeLayoutProps) {
     useHomeLayout()
   const { md: isMobile } = useBreakpoint()
   const { currentRoute } = useRouter()
-  const isChallengeRoute = currentRoute.includes(ROUTES.challenging.challenges)
+  const isChallengeRoute = currentRoute.includes('/challenging/challenges')
 
   if (isChallengeRoute)
     return (
