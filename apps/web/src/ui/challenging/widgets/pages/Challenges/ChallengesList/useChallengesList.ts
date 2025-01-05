@@ -15,7 +15,7 @@ import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useQueryArrayParam } from '@/ui/global/hooks/useQueryArrayParam'
 
-const CHALLENGES_PER_PAGE = 10
+const CHALLENGES_PER_PAGE = 15
 
 export function useChallengesList() {
   const [difficultyLevel] = useQueryStringParam(QUERY_PARAMS.difficultyLevel, 'all')

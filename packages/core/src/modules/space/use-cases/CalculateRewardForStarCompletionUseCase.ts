@@ -2,6 +2,7 @@ import { User } from '#global/entities'
 import type { UserDto } from '#global/dtos'
 import { Planet, Star } from '#space/entities'
 import type { ISpaceService, IUseCase } from '#interfaces'
+import { Percentage } from '#global/structs'
 
 type Request = {
   userDto: UserDto
@@ -85,7 +86,7 @@ export class CalculateRewardForStarCompletionUseCase
     questionsCount: number,
     incorrectAnswersCount: number,
   ) {
-    return ((questionsCount - incorrectAnswersCount) / questionsCount) * 100
+    return Percentage.create(incorrectAnswersCount, questionsCount).value
   }
 
   private calculateCoins(

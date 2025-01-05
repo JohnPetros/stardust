@@ -1,8 +1,8 @@
 import Link from 'next/link'
 
-import { Slug } from '@stardust/core/global/structs'
+import { Percentage, Slug } from '@stardust/core/global/structs'
 
-import { Info } from './Info'
+import { Info } from '@/ui/global/widgets/components/Info'
 
 type ChallengeInfo = {
   isCompleted: boolean
@@ -20,7 +20,7 @@ export function ChallengeInfo({
   authorSlug,
 }: ChallengeInfo) {
   const totalVotes = upvotes + downvotes
-  const acceptanceRate = totalVotes ? (upvotes / totalVotes) * 100 : 0
+  const acceptanceRate = Percentage.create(upvotes, totalVotes)
   const authorName = Slug.deslugify(authorSlug)
 
   return (
@@ -40,7 +40,7 @@ export function ChallengeInfo({
       <li>
         <Info
           icon='rate'
-          label={`${acceptanceRate}%`}
+          label={`${acceptanceRate.value}%`}
           tooltipText={`Taxa de aceitação de usuários que que deram upvote para esse desafio de um total de ${totalVotes} votos.`}
         />
       </li>
