@@ -24,6 +24,7 @@ export type UserDto = {
   completedChallengesIds?: string[]
   completedPlanetsIds?: string[]
   upvotedCommentsIds?: string[]
+  upvotedSolutionsIds?: string[]
   canSeeRankingResult?: boolean
   hasCompletedSpace?: boolean
   lastWeekRankingPosition?: number | null

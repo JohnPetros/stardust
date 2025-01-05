@@ -43,6 +43,14 @@ export class Solution extends Entity<SolutionProps> {
     })
   }
 
+  upvote() {
+    this.props.upvotesCount = this.props.upvotesCount.increment(1)
+  }
+
+  removeUpvote() {
+    this.props.upvotesCount = this.props.upvotesCount.dencrement(1)
+  }
+
   get author() {
     if (!this.props.author.entity) throw new EntityNotDefinedError('Solução de desafio')
     return this.props.author.entity

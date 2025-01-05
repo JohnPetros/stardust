@@ -51,10 +51,12 @@ export interface IChallengingService {
     userId: string,
     challengeVote: ChallengeVote,
   ): Promise<ApiResponse>
+  saveSolutionUpvote(solutionId: string, userId: string): Promise<ApiResponse>
   updateChallengeVote(
     challengeId: string,
     userId: string,
     challengeVote: ChallengeVote,
   ): Promise<ApiResponse>
   deleteChallengeVote(challengeId: string, userId: string): Promise<ApiResponse>
+  deleteSolutionUpvote(solutionId: string, userId: string): Promise<ApiResponse>
 }

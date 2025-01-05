@@ -1,8 +1,6 @@
 import { Entity } from '#global/abstracts'
 import type { Tier } from '#ranking/entities'
-import type { Avatar, Rocket } from '#shop/entities'
-import type { Level, WeekStatus } from '#profile/structs'
-import type { RankingPosition } from '#ranking/structs'
+import type { UserDto } from '#global/dtos'
 import {
   Logical,
   Integer,
@@ -12,10 +10,13 @@ import {
   type Observer,
   type List,
 } from '#global/structs'
-import type { Comment } from '#forum/entities'
-import type { AchievementMetricValue } from '#profile/types'
-import type { UserDto } from '#global/dtos'
 import { UserFactory } from '#global/factories'
+import type { Avatar, Rocket } from '#shop/entities'
+import type { Level, WeekStatus } from '#profile/structs'
+import type { AchievementMetricValue } from '#profile/types'
+import type { RankingPosition } from '#ranking/structs'
+import type { Comment } from '#forum/entities'
+import type { Solution } from '#challenging/entities'
 
 type UserProps = {
   avatar: Avatar
@@ -39,6 +40,7 @@ type UserProps = {
   completedChallengesIds: List<string>
   completedPlanetsIds: List<string>
   upvotedCommentsIds: List<string>
+  upvotedSolutionsIds: List<string>
   canSeeRankingResult: Logical
   didBreakStreak: Logical
   lastWeekRankingPosition: RankingPosition | null
@@ -188,6 +190,10 @@ export class User extends Entity<UserProps> {
     return this.props.upvotedCommentsIds.includes(commentId)
   }
 
+  hasUpvotedSolution(solutionId: string) {
+    return this.props.upvotedSolutionsIds.includes(solutionId)
+  }
+
   hasAcquiredRocket(rocketId: string): boolean {
     return this.props.acquiredRocketsIds.includes(rocketId).isTrue
   }
@@ -212,6 +218,16 @@ export class User extends Entity<UserProps> {
   removeUpvoteComment(comment: Comment): void {
     comment.removeUpvote()
     this.props.upvotedCommentsIds = this.props.upvotedCommentsIds.remove(comment.id)
+  }
+
+  upvoteSolution(solution: Solution): void {
+    solution.upvote()
+    this.props.upvotedSolutionsIds = this.props.upvotedSolutionsIds.add(solution.id)
+  }
+
+  removeUpvoteSolution(solution: Solution): void {
+    solution.removeUpvote()
+    this.props.upvotedSolutionsIds = this.props.upvotedSolutionsIds.remove(solution.id)
   }
 
   private notifyChanges(): void {
@@ -334,6 +350,10 @@ export class User extends Entity<UserProps> {
 
   get upvotedCommentsIds() {
     return this.props.upvotedCommentsIds
+  }
+
+  get upvotedSolutionsIds() {
+    return this.props.upvotedSolutionsIds
   }
 
   get canSeeRankingResult() {
