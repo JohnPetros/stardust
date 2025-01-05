@@ -204,7 +204,7 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
       if (error) {
         return SupabasePostgrestError(
           error,
-          'Erro inesperado ao deletar comentário',
+          'Erro inesperado ao deletar o upvote desse comentário',
           status,
         )
       }

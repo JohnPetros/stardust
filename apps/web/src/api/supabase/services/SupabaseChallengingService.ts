@@ -54,6 +54,22 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       return new ApiResponse({ body: challengeDto })
     },
 
+    async fetchSolutionById(solutionId) {
+      const { data, error, status } = await supabase
+        .from('solutions_view')
+        .select('*')
+        .eq('id', solutionId)
+        .single()
+
+      if (error) {
+        return SupabasePostgrestError(error, 'Desafio não encontrado com esse id', status)
+      }
+
+      const challengeDto = supabaseSolutionMapper.toDto(data)
+
+      return new ApiResponse({ body: challengeDto })
+    },
+
     async fetchChallengeByStarId(starId: string) {
       const { data, error, status } = await supabase
         .from('challenges_view')
@@ -261,6 +277,23 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       return new ApiResponse()
     },
 
+    async saveSolutionUpvote(solutionId, userId) {
+      const { error, status } = await supabase.from('users_upvoted_solutions').insert({
+        solution_id: solutionId,
+        user_id: userId,
+      })
+
+      if (error) {
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao salvar upvote dessa solução',
+          status,
+        )
+      }
+
+      return new ApiResponse()
+    },
+
     async saveCompletedChallenge(challengeId: string, userId: string) {
       const { error, status } = await supabase
         .from('users_completed_challenges')
@@ -363,6 +396,23 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         return SupabasePostgrestError(
           error,
           'Error inesperado ao deletar solução',
+          status,
+        )
+      }
+
+      return new ApiResponse()
+    },
+
+    async deleteSolutionUpvote(solutionId: string, userId: string) {
+      const { error, status } = await supabase
+        .from('users_upvoted_solutions')
+        .delete()
+        .match({ solution_id: solutionId, user_id: userId })
+
+      if (error) {
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao deletar o upvote dessa solução',
           status,
         )
       }

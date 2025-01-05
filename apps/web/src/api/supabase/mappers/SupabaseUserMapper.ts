@@ -45,6 +45,7 @@ export const SupabaseUserMapper = () => {
         acquiredAvatarsIds: supabaseUser.acquired_avatars_ids ?? [],
         completedChallengesIds: supabaseUser.completed_challenges_ids ?? [],
         upvotedCommentsIds: supabaseUser.upvoted_comments_ids ?? [],
+        upvotedSolutionsIds: supabaseUser.upvoted_solutions_ids ?? [],
         completedPlanetsIds: [],
         canSeeRankingResult: supabaseUser.can_see_ranking ?? false,
         lastWeekRankingPosition: supabaseUser.last_week_ranking_position,
