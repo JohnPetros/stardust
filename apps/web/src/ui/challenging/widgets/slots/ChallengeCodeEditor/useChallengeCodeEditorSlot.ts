@@ -57,7 +57,7 @@ export function useChallengeCodeEditorSlot() {
     try {
       await challenge.runCode(userCode.current)
       setResults(challenge.results.items)
-      router.goTo(`${ROUTES.challenging.challenges}/${challenge?.slug.value}/result`)
+      router.goTo(ROUTES.challenging.challenges.challengeResult(challenge.slug.value))
     } catch (error) {
       if (error instanceof CodeRunnerError) {
         handleCodeRunnerError(error.message, error.line)

@@ -7,6 +7,8 @@ export const ROUTES = {
       list: '/challenging/challenges',
       challenge: (challengeSlug: string) =>
         `/challenging/challenges/${challengeSlug}/challenge`,
+      challengeDescription: (challengeSlug: string) =>
+        `/challenging/challenges/${challengeSlug}/challenge/description`,
       challengeResult: (challengeSlug: string) =>
         `/challenging/challenges/${challengeSlug}/challenge/result`,
       challengeComments: (challengeSlug: string) =>
