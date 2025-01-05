@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { useAction } from 'next-safe-action/hooks'
 
 import type { ChallengeVote } from '@stardust/core/challenging/types'

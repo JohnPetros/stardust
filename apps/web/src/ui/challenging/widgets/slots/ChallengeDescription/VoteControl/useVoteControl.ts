@@ -1,10 +1,9 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import type { ChallengeVote } from '@stardust/core/challenging/types'
-import { Integer, Queue } from '@stardust/core/global/structs'
+import { Integer } from '@stardust/core/global/structs'
 
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useVoteChallengeAction } from './useVoteChallengeAction'
 
@@ -31,14 +30,8 @@ export function useVoteControl() {
   function updateChallenge(state: State) {
     if (!challenge) return
 
-    challenge.upvotesCount = Integer.create(
-      state.upvotesCount,
-      'Contagem de upvotes desse desafio',
-    )
-    challenge.downvotesCount = Integer.create(
-      state.downvotesCount,
-      'Contagem de downvotes desse desafio',
-    )
+    challenge.upvotesCount = Integer.create(state.upvotesCount)
+    challenge.downvotesCount = Integer.create(state.downvotesCount)
     challenge.userVote = state.userChallengeVote
     setChallenge(challenge)
     setInitialState(state)

@@ -1,12 +1,8 @@
 import Link from 'next/link'
 
-import type { ChallengeDifficultyLevel } from '@stardust/core/challenging/types'
-import type { ChallengeCategory } from '@stardust/core/challenging/entities'
-
 import { ROUTES } from '@/constants'
-import { DifficultyBadge } from '@/ui/global/widgets/components/DifficultyBadge'
-import { SolutionInfo } from '../../../components/SolutionInfo'
 import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'
+import { SolutionInfo } from '../../../components/SolutionInfo'
 
 type ChallengeProps = {
   slug: string
@@ -15,6 +11,7 @@ type ChallengeProps = {
   upvotesCount: number
   viewsCount: number
   commentsCount: number
+  createdAt: Date
   author: {
     slug: string
     name: string
@@ -32,6 +29,7 @@ export function SolutionCard({
   upvotesCount,
   commentsCount,
   viewsCount,
+  createdAt,
   author,
 }: ChallengeProps) {
   return (
@@ -54,6 +52,7 @@ export function SolutionCard({
               upvotesCount={upvotesCount}
               viewsCount={viewsCount}
               commentsCount={commentsCount}
+              createdAt={createdAt}
             />
           </div>
         </div>
