@@ -1,12 +1,15 @@
 import { useState } from 'react'
 
-import { useUpvoteCommentAction } from './useUpvoteCommentAction'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { useUpvoteSolutionAction } from './useUpvoteSolutionAction'
 
-export function useUpvoteComment(initialUpvotesCount: number, initialIsUpvoted: boolean) {
+export function useUpvoteSolutionButton(
+  initialUpvotesCount: number,
+  initialIsUpvoted: boolean,
+) {
   const [isUpvoted, setIsUpvoted] = useState(initialIsUpvoted)
   const [upvotesCount, setUpvotesCount] = useState(initialUpvotesCount)
-  const { upvoteComment, isExecuting } = useUpvoteCommentAction({
+  const { upvoteSolution, isExecuting } = useUpvoteSolutionAction({
     onError: () => {
       setUpvotesCount(initialUpvotesCount)
       setIsUpvoted(initialIsUpvoted)
@@ -14,7 +17,7 @@ export function useUpvoteComment(initialUpvotesCount: number, initialIsUpvoted: 
   })
   const { user, updateUserCache } = useAuthContext()
 
-  async function handleButtonClick(commentId: string) {
+  async function handleButtonClick(solutionId: string) {
     if (isExecuting || !user) return
 
     if (isUpvoted && upvotesCount > 0) {
@@ -22,12 +25,12 @@ export function useUpvoteComment(initialUpvotesCount: number, initialIsUpvoted: 
     } else setUpvotesCount((upvotesCount) => upvotesCount + 1)
     setIsUpvoted(!isUpvoted)
 
-    const response = await upvoteComment(commentId)
+    const response = await upvoteSolution(solutionId)
     if (response) {
       setUpvotesCount(response.upvotesCount)
       updateUserCache({
         ...user.dto,
-        upvotedCommentsIds: response.userUpvotedCommentsIds,
+        upvotedSolutionsIds: response.userUpvotedSolutionsIds,
       })
     }
   }
