@@ -1,5 +1,11 @@
 import { HTTP_STATUS_CODE } from '../constants/http-status-code'
-import { AppError, AuthError, ConflictError, NotFoundError } from '#global/errors'
+import {
+  AppError,
+  AuthError,
+  ConflictError,
+  NotFoundError,
+  ValidationError,
+} from '#global/errors'
 
 type ApiResponseProps<Body> = {
   body?: Body
@@ -28,6 +34,9 @@ export class ApiResponse<Body = unknown> {
     if (this.statusCode === HTTP_STATUS_CODE.conflict)
       throw new ConflictError(this.errorMessage)
 
+    if (this.statusCode === HTTP_STATUS_CODE.badRequest)
+      throw new ValidationError([{ name: 'erro', messages: [this.errorMessage] }])
+
     if (this.statusCode === HTTP_STATUS_CODE.tooManyRequests)
       throw new ConflictError(this.errorMessage)
 
@@ -39,6 +48,10 @@ export class ApiResponse<Body = unknown> {
 
     if (this.statusCode >= HTTP_STATUS_CODE.serverError)
       throw new AppError(this.errorMessage)
+
+    console.log(this.statusCode)
+
+    throw new AppError(this.errorMessage)
   }
 
   get isSuccess() {
