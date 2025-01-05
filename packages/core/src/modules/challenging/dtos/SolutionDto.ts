@@ -3,8 +3,8 @@ import type { AuthorDto } from '#global/dtos'
 export type SolutionDto = {
   id?: string
   title: string
-  slug: string
   content: string
+  slug?: string
   upvotesCount?: number
   viewsCount?: number
   commentsCount?: number

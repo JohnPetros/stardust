@@ -29,6 +29,7 @@ export interface IChallengingService {
     ApiResponse<{ id: string; difficulty: string }[]>
   >
   fetchDocs(): Promise<ApiResponse<DocDto[]>>
+  fetchSolutionById(solutionId: string): Promise<ApiResponse<SolutionDto>>
   fetchSolutionBySlug(solutionSlug: string): Promise<ApiResponse<SolutionDto>>
   fetchChallengesList(
     params: ChallengesListParams,

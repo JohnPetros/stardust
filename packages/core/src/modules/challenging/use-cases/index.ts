@@ -1,4 +1,6 @@
 export { ListChallengesUseCase } from './ListChallengesUseCase'
 export { VoteChallengeUseCase } from './VoteChallengeUseCase'
+export { EditSolutionUseCase } from './EditSolutionUseCase'
+export { PostSolutionUseCase } from './PostSolutionUseCase'
 export { CalculateRewardForChallengeCompletionUseCase } from './CalculateRewardForChallengeCompletionUseCase'
 export { CountCompletedChallengesByDifficultyLevelUseCase } from './CountCompletedChallengesByDifficultyLevelUseCase'

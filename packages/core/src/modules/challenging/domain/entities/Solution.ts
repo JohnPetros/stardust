@@ -20,10 +20,12 @@ type SolutionProps = {
 
 export class Solution extends Entity<SolutionProps> {
   static create(dto: SolutionDto) {
+    const name = Name.create(dto.title, 'Nome da solução')
+
     return new Solution({
-      title: Name.create(dto.title, 'Nome da solução'),
+      title: name,
       content: Text.create(dto.content, 'Conteúdo da solução'),
-      slug: Slug.create(dto.slug, 'Slug da solução'),
+      slug: Slug.create(dto.slug ?? name.slug, 'Slug da solução'),
       upvotesCount: Integer.create(
         dto.upvotesCount ?? 0,
         'Número de upvotes dessa solução',
