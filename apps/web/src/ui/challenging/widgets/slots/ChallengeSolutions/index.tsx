@@ -101,6 +101,7 @@ export function ChallengeSolutionsSlot() {
                 upvotesCount={solution.upvotesCount.value}
                 viewsCount={solution.viewsCount.value}
                 commentsCount={solution.commentsCount.value}
+                createdAt={solution.createdAt}
                 challengeSlug={challengeSlug}
                 author={{
                   name: solution.author.name.value,

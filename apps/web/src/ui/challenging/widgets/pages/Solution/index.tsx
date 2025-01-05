@@ -14,27 +14,27 @@ type SolutionPageProps = {
 
 export function SolutionPage({ savedSolutionDto, challengeId }: SolutionPageProps) {
   const {
-    title,
+    solutionTitle,
+    fieldErrors,
     content,
     solution,
     canPostSolution,
-    fieldErrors,
     isLoading,
     handleTitleChange,
     handleContentChange,
     handleSolutionPost,
-    handleSolutionUpdate,
+    handleSolutionEdit,
   } = useSolutionPage(savedSolutionDto, challengeId)
 
   return (
     <div className='max-w-6xl mx-auto h-screen bg-gray-800'>
       <header className='grid grid-cols-2 px-6 py-12'>
         <TitleInput
-          value={title}
+          value={solutionTitle}
           onChange={handleTitleChange}
           placeholder='Escreva um título para a sua solução'
           className='bg-gray-800 text-gray-50'
-          errorMessage={fieldErrors?.title[0]}
+          errorMessage={fieldErrors.solutionTitle}
         />
         <div className='flex items-center justify-end gap-3'>
           <Button className='bg-gray-600 text-gray-50 w-24'>Cancelar</Button>
@@ -52,7 +52,7 @@ export function SolutionPage({ savedSolutionDto, challengeId }: SolutionPageProp
           {solution && (
             <Button
               disabled={!canPostSolution}
-              onClick={handleSolutionUpdate}
+              onClick={handleSolutionEdit}
               isLoading={isLoading}
               className='w-28'
             >
@@ -64,7 +64,11 @@ export function SolutionPage({ savedSolutionDto, challengeId }: SolutionPageProp
       </header>
 
       <main className='h-full mt-3 bg-gray-800 border-t border-gray-600'>
-        <ContentEditor content={content} onChange={handleContentChange} />
+        <ContentEditor
+          content={content}
+          errorMessage={fieldErrors.solutionContent}
+          onChange={handleContentChange}
+        />
       </main>
     </div>
   )

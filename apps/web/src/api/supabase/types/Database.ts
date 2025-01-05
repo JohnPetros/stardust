@@ -1391,6 +1391,7 @@ export type Database = {
           unlocked_achievements_ids: string[] | null
           unlocked_stars_ids: string[] | null
           upvoted_comments_ids: string[] | null
+          upvoted_solutions_ids: string[] | null
           week_status: string[] | null
           weekly_xp: number | null
           xp: number | null

@@ -182,10 +182,6 @@ export class User extends Entity<UserProps> {
     return this.props.completedChallengesIds.includes(challengeId)
   }
 
-  hasUnlockedDoc(docId: string): Logical {
-    return this.props.unlockedDocsIds.includes(docId)
-  }
-
   hasUpvotedComment(commentId: string): Logical {
     return this.props.upvotedCommentsIds.includes(commentId)
   }

@@ -5,7 +5,7 @@ import type { IChallengingService, IUseCase } from '#interfaces'
 
 type Request = {
   userDto: UserDto
-  SolutionId: string
+  solutionId: string
 }
 
 type Response = Promise<{
@@ -16,9 +16,9 @@ type Response = Promise<{
 export class UpvoteSolutionUseCase implements IUseCase<Request, Response> {
   constructor(private readonly challengingService: IChallengingService) {}
 
-  async do({ userDto, SolutionId }: Request) {
+  async do({ userDto, solutionId }: Request) {
     const user = User.create(userDto)
-    const solution = await this.fetchSolution(SolutionId)
+    const solution = await this.fetchSolution(solutionId)
     const isSolutionUpvoted = user.hasUpvotedSolution(solution.id)
 
     if (isSolutionUpvoted.isTrue) {
@@ -45,8 +45,8 @@ export class UpvoteSolutionUseCase implements IUseCase<Request, Response> {
     }
   }
 
-  private async fetchSolution(SolutionId: string) {
-    const response = await this.challengingService.fetchSolutionById(SolutionId)
+  private async fetchSolution(solutionId: string) {
+    const response = await this.challengingService.fetchSolutionById(solutionId)
     if (response.isFailure) response.throwError()
     return Solution.create(response.body)
   }

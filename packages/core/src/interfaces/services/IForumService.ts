@@ -1,6 +1,6 @@
 import type { CommentDto } from '#forum/dtos'
 import type { Comment } from '#forum/entities'
-import type { CommentsListingParams, TopicCategory } from '#forum/types'
+import type { CommentsListingParams } from '#forum/types'
 import type { ApiResponse, PaginationResponse } from '#responses'
 
 export interface IForumService {
