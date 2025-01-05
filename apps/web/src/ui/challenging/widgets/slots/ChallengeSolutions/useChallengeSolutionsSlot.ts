@@ -64,8 +64,14 @@ export function useChallengeSolutionsSlot() {
     {
       title: 'Mais votados',
       isToggle: true,
-      value: sorter === 'upvotes',
-      action: () => handleSorterChange('upvotes'),
+      value: sorter === 'upvotesCount',
+      action: () => handleSorterChange('upvotesCount'),
+    },
+    {
+      title: 'Mais comentados',
+      isToggle: true,
+      value: sorter === 'commentsCount',
+      action: () => handleSorterChange('commentsCount'),
     },
   ]
 

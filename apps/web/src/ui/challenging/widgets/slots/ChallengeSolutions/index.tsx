@@ -2,13 +2,13 @@ import Link from 'next/link'
 
 import { ROUTES } from '@/constants'
 import { Search } from '@/ui/global/widgets/components/Search'
-import { useChallengeSolutionsSlot } from './useChallengeSolutionsSlot'
 import { PopoverMenu } from '@/ui/global/widgets/components/PopoverMenu'
 import { AnimatedArrow } from '@/ui/global/widgets/components/AnimatedArrow'
 import { SolutionCardSkeleton } from './SolutionCardSkeleton'
 import { ShowMoreButton } from '@/ui/global/widgets/components/ShowMoreButton'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { Icon } from '@/ui/global/widgets/components/Icon'
+import { useChallengeSolutionsSlot } from './useChallengeSolutionsSlot'
 import { SolutionCard } from './SolutionCard'
 
 export function ChallengeSolutionsSlot() {

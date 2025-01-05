@@ -162,9 +162,23 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         query = query.eq('user_id', userId)
       }
 
-      query = query.order(sorter === 'date' ? 'created_at' : 'upvotes', {
-        ascending: true,
-      })
+      switch (sorter) {
+        case 'date':
+          query = query.order('created_at', {
+            ascending: true,
+          })
+          break
+        case 'upvotesCount':
+          query = query.order('upvotes_count', {
+            ascending: true,
+          })
+          break
+        case 'commentsCount':
+          query = query.order('comments_count', {
+            ascending: true,
+          })
+          break
+      }
 
       const range = calculateSupabaseRange(page, itemsPerPage)
 
