@@ -9,6 +9,7 @@ import { Button } from '@/ui/global/widgets/components/Button'
 import Link from 'next/link'
 import { ROUTES } from '@/constants'
 import { UpvoteSolutionButton } from './UpvoteSolutionButton'
+import { UserSolutionButtons } from './UserSolutionButtons'
 
 type ChallengeSolutionSlotProps = {
   challengeSlug: string
@@ -45,18 +46,16 @@ export function ChallengeSolutionSlot({
             />
           </div>
         </div>
-        <div>
+        <div className='flex items-center gap-2'>
           <UpvoteSolutionButton
             solutionId={solution.id}
             initialUpvotesCount={solution.upvotesCount.value}
           />
-          <Button asChild className='h-12 text-sm'>
-            <Link
-              href={ROUTES.challenging.challenges.challengeSolutions.list(challengeSlug)}
-            >
-              Criar sua solução
-            </Link>
-          </Button>
+          <UserSolutionButtons
+            solutionId={solution.id}
+            authorId={solution.authorId}
+            challengeSlug={challengeSlug}
+          />
         </div>
       </header>
 

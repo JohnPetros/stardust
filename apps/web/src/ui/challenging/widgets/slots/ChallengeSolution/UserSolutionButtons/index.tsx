@@ -20,7 +20,10 @@ export function UserSolutionButtons({
   challengeSlug,
 }: UserSolutionButtonsProps) {
   const { user } = useAuthContext()
-  const { handleDeleteSolutionButtonClick } = useUserSolutionButtons(solutionId)
+  const { handleDeleteSolutionButtonClick } = useUserSolutionButtons(
+    solutionId,
+    challengeSlug,
+  )
 
   if (user)
     return (
