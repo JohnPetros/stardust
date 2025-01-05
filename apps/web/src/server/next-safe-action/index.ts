@@ -4,6 +4,7 @@ import {
   voteChallenge,
   editSolution,
   postSolution,
+  upvoteSolution,
 } from './challengingActions'
 import { setCookie, getCookie, deleteCookie, hasCookie } from './cookieActions'
 import { upvoteComment } from './forumActions'
@@ -22,6 +23,7 @@ export const challengingActions = {
   voteChallenge,
   editSolution,
   postSolution,
+  upvoteSolution,
 }
 export const profileActions = { obsverNewUnlockedAchievements }
 export const rankingActions = { getLastWeekRankingWinners }

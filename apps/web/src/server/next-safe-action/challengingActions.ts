@@ -10,6 +10,7 @@ import {
   EditSolutionAction,
   HandleChallengePageAction,
   PostSolutionAction,
+  UpvoteSolutionAction,
   VoteChallengeAction,
 } from '../actions/challenging'
 import {
@@ -18,7 +19,7 @@ import {
   titleSchema,
   contentSchema,
 } from '@stardust/validation/schemas'
-import { ActionValidationError, flattenValidationErrors } from 'next-safe-action'
+import { flattenValidationErrors } from 'next-safe-action'
 
 export const handleChallengePage = authActionClient
   .schema(z.object({ challengeSlug: z.string() }))
@@ -95,5 +96,22 @@ export const editSolution = authActionClient
     const supabase = SupabaseServerActionClient()
     const challengingService = SupabaseChallengingService(supabase)
     const action = EditSolutionAction(challengingService)
+    return action.handle(actionServer)
+  })
+
+export const upvoteSolution = authActionClient
+  .schema(
+    z.object({
+      solutionId: idSchema,
+    }),
+  )
+  .action(async ({ clientInput, ctx }) => {
+    const actionServer = NextActionServer({
+      request: clientInput,
+      user: ctx.user,
+    })
+    const supabase = SupabaseServerActionClient()
+    const challengingService = SupabaseChallengingService(supabase)
+    const action = UpvoteSolutionAction(challengingService)
     return action.handle(actionServer)
   })

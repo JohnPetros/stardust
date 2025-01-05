@@ -2,6 +2,8 @@
 
 import { z } from 'zod'
 
+import { idSchema } from '@stardust/validation/schemas'
+
 import { SupabaseServerActionClient } from '@/api/supabase/clients/SupabaseServerActionClient'
 import { SupabaseForumService } from '@/api/supabase/services'
 import { authActionClient } from './clients/authActionClient'
@@ -11,7 +13,7 @@ import { UpvoteCommentAction } from '../actions/forum'
 export const upvoteComment = authActionClient
   .schema(
     z.object({
-      commentId: z.string().uuid(),
+      commentId: idSchema,
     }),
   )
   .action(async ({ clientInput, ctx }) => {
