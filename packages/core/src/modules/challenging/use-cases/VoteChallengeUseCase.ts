@@ -1,7 +1,6 @@
 import type { IChallengingService, IUseCase } from '#interfaces'
 import { Challenge } from '#challenging/entities'
 import type { ChallengeVote } from '#challenging/types'
-import { AppError } from '#global/errors'
 
 type Request = {
   challengeId: string
