@@ -19,6 +19,7 @@ export function SolutionPage({ savedSolutionDto, challengeId }: SolutionPageProp
     solution,
     canPostSolution,
     fieldErrors,
+    isLoading,
     handleTitleChange,
     handleContentChange,
     handleSolutionPost,
@@ -39,9 +40,10 @@ export function SolutionPage({ savedSolutionDto, challengeId }: SolutionPageProp
           <Button className='bg-gray-600 text-gray-50 w-24'>Cancelar</Button>
           {!solution && (
             <Button
-              disabled={canPostSolution}
+              disabled={!canPostSolution}
               onClick={handleSolutionPost}
-              className='w-24'
+              isLoading={isLoading}
+              className='w-28'
             >
               <Icon name='send' size={14} className='text-green-900 mr-1' />
               Postar
@@ -49,9 +51,10 @@ export function SolutionPage({ savedSolutionDto, challengeId }: SolutionPageProp
           )}
           {solution && (
             <Button
-              disabled={canPostSolution}
+              disabled={!canPostSolution}
               onClick={handleSolutionUpdate}
-              className='w-24'
+              isLoading={isLoading}
+              className='w-28'
             >
               <Icon name='send' size={14} className='text-green-900 mr-1' />
               Atualizar
@@ -60,7 +63,7 @@ export function SolutionPage({ savedSolutionDto, challengeId }: SolutionPageProp
         </div>
       </header>
 
-      <main className='h-full mt-3 border-t border-gray-600'>
+      <main className='h-full mt-3 bg-gray-800 border-t border-gray-600'>
         <ContentEditor content={content} onChange={handleContentChange} />
       </main>
     </div>

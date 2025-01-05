@@ -23,9 +23,10 @@ export function useSolutionPage(
   )
   const { getSolutionContentSlice } = useChallengeStore()
   const { solutionContent, setSolutionContent } = getSolutionContentSlice()
-  const [title, setTitle] = useState(solution?.title ?? '')
+  const [title, setTitle] = useState(solution?.title.value ?? '')
   const { user } = useAuthContext()
   const [fieldErrors, setFieldErrors] = useState<FieldErrors | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
   const api = useApi()
   const toast = useToastContext()
 
@@ -34,12 +35,12 @@ export function useSolutionPage(
   }
 
   function handleContentChange(content: string) {
-    console.log(content)
     setSolutionContent(content)
   }
 
   async function handleSolutionPost() {
     if (!user) return
+    setIsLoading(true)
 
     try {
       const solutionTitle = Name.create(title, 'name')
@@ -56,17 +57,22 @@ export function useSolutionPage(
 
       if (response.isSuccess) {
         setSolution(solution)
+        toast.show('Sua solução foi postada', { type: 'success' })
         return
       }
       toast.show(response.errorMessage)
     } catch (error) {
+      console.error(error)
       if (error instanceof ValidationError)
         setFieldErrors(error.getErrorsMap<FieldErrors>())
+    } finally {
+      setIsLoading(false)
     }
   }
 
   async function handleSolutionUpdate() {
     if (!solution) return
+    setIsLoading(true)
 
     try {
       solution.content = solutionContent
@@ -74,6 +80,7 @@ export function useSolutionPage(
       const response = await api.updateSolution(solution)
       if (response.isSuccess) {
         setSolution(solution)
+        toast.show('Sua solução foi atualizada', { type: 'success' })
         return
       }
 
@@ -81,6 +88,8 @@ export function useSolutionPage(
     } catch (error) {
       if (error instanceof ValidationError)
         setFieldErrors(error.getErrorsMap<FieldErrors>())
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -89,6 +98,7 @@ export function useSolutionPage(
     title,
     content: solutionContent,
     canPostSolution: Boolean(title && solutionContent),
+    isLoading,
     fieldErrors,
     handleTitleChange,
     handleContentChange,

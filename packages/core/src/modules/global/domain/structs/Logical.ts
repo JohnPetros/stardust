@@ -8,7 +8,6 @@ export class Logical {
   }
 
   static create(value: boolean, key = 'Valor lógico'): Logical {
-    console.log(value)
     new BooleanValidation(value, key).validate()
 
     return new Logical(value)

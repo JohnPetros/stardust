@@ -24,10 +24,10 @@ export class Solution extends Entity<SolutionProps> {
       content: Text.create(dto.content, 'Conteúdo da solução'),
       slug: Slug.create(dto.slug, 'Slug da solução'),
       commentsCount: Integer.create(
-        dto.commentsCount,
+        dto.commentsCount ?? 0,
         'Contagem de comentários da solução',
       ),
-      viewsCount: Integer.create(dto.viewsCount, 'Contagem de views da solução'),
+      viewsCount: Integer.create(dto.viewsCount ?? 0, 'Contagem de views da solução'),
       createdAt: dto.createdAt ?? new Date(),
       author: {
         id: dto.author.id,
@@ -45,7 +45,7 @@ export class Solution extends Entity<SolutionProps> {
     return this.props.author.id
   }
 
-  get title() {
+  get title(): Name {
     return this.props.title
   }
 
@@ -53,7 +53,7 @@ export class Solution extends Entity<SolutionProps> {
     this.props.title = Name.create(title)
   }
 
-  get content() {
+  get content(): Text {
     return this.props.content
   }
 

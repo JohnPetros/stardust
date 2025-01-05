@@ -20,7 +20,7 @@ export function ContentEditor({ content, onChange }: ContentEditorProps) {
     useContentEditor(content, textEditorRef, onChange)
 
   return (
-    <div>
+    <>
       <Toolbar.Container className='flex items-center gap-3 px-6 py-3 border-b border-gray-600'>
         <Toolbar.Button
           onClick={() => handleSnippetInsert('title')}
@@ -63,16 +63,18 @@ export function ContentEditor({ content, onChange }: ContentEditorProps) {
           label='Inserir trecho de código não executável'
         />
       </Toolbar.Container>
-      <div className='grid grid-cols-2 h-full'>
-        <TextEditor
-          ref={textEditorRef}
-          value={content}
-          onChange={textEditorChange}
-          onKeyUp={handleKeyUp}
-          className='h-full mt-1 pl-6'
-        />
+      <div className='grid grid-cols-2 mt-3 h-full bg-gray-800'>
+        <div className='max-h-screen overflow-auto'>
+          <TextEditor
+            ref={textEditorRef}
+            value={content}
+            onChange={textEditorChange}
+            onKeyUp={handleKeyUp}
+            className='h-screen pl-6'
+          />
+        </div>
         <Mdx>{previewContent}</Mdx>
       </div>
-    </div>
+    </>
   )
 }
