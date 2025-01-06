@@ -5,13 +5,13 @@ import { useAnimate } from 'framer-motion'
 
 import type { OpenToastParams, ToastType } from '../types'
 
-const TOAST_DURATION_DEFAULT = 3 // seconds
+const DEFAULT_TOAST_DURATION = 3 // seconds
 
 export function useToast() {
   const [isOpen, setIsOpen] = useState(false)
   const [type, setType] = useState<ToastType>('error')
   const [message, setMessage] = useState('')
-  const [seconds, setSeconds] = useState(TOAST_DURATION_DEFAULT)
+  const [seconds, setSeconds] = useState(DEFAULT_TOAST_DURATION)
   const [scope, animate] = useAnimate()
   const [scrollPosition, setScrollPosition] = useState(0)
 

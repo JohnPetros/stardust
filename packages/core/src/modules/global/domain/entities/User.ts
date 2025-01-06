@@ -144,6 +144,7 @@ export class User extends Entity<UserProps> {
   breakStreak() {
     this.props.streak = Integer.create(0)
     this.props.didBreakStreak = this.props.didBreakStreak.makeTrue()
+    this.props.weekStatus = this.props.weekStatus.updateTodayStatus('undone')
   }
 
   getAchievementCount(metric: AchievementMetricValue) {

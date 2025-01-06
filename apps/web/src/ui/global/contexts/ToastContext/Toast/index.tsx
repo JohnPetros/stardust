@@ -77,7 +77,7 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
                 type === 'error' ? 'bg-red-800' : 'bg-green-900',
               )}
             >
-              <div className='flex justify-between gap-6 p-4 '>
+              <div className='flex justify-between gap-6 p-4'>
                 <Container.Description className='flex items-center gap-2 text-gray-100'>
                   <span
                     className={twMerge(

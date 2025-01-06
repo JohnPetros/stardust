@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import type { SolutionDto } from '@stardust/core/challenging/dtos'
 import { Solution } from '@stardust/core/challenging/entities'
@@ -93,6 +93,10 @@ export function useSolutionPage(
       solutionContent,
     })
   }
+
+  useEffect(() => {
+    if (solution) setSolutionContent(solution.content.value)
+  }, [solution, setSolutionContent])
 
   return {
     solution,

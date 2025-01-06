@@ -30,12 +30,12 @@ export class CodeRunnerResponse {
   }
 
   get errorMessage(): string {
-    if (!this._error) throw new AppError('Code Runner Error is not a failure')
+    if (!this._error) throw new AppError('Não há erro no exceutor de código')
     return this._error.message
   }
 
   get errorLine(): number {
-    if (!this._error) throw new AppError('Code Runner Error is not a failure')
+    if (!this._error) throw new AppError('Não há erro no exceutor de código')
     return this._error.line
   }
 }
