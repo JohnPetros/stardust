@@ -1,11 +1,14 @@
 'use client'
 
+import Link from 'next/link'
+
 import { Icon } from '@/ui/global/widgets/components/Icon'
-import { ContentEditor } from '../../components/ContentEditor'
-import { useSolutionPage } from './useSolutionPage'
 import { Button } from '@/ui/global/widgets/components/Button'
 import type { SolutionDto } from '@stardust/core/challenging/dtos'
 import { TitleInput } from '@/ui/global/widgets/components/TitleInput'
+import { useRouter } from '@/ui/global/hooks/useRouter'
+import { ContentEditor } from '../../components/ContentEditor'
+import { useSolutionPage } from './useSolutionPage'
 
 type SolutionPageProps = {
   savedSolutionDto: SolutionDto | null
@@ -25,6 +28,7 @@ export function SolutionPage({ savedSolutionDto, challengeId }: SolutionPageProp
     handleSolutionPost,
     handleSolutionEdit,
   } = useSolutionPage(savedSolutionDto, challengeId)
+  const { goBack } = useRouter()
 
   return (
     <div className='max-w-6xl mx-auto h-screen bg-gray-800'>
@@ -37,7 +41,9 @@ export function SolutionPage({ savedSolutionDto, challengeId }: SolutionPageProp
           errorMessage={fieldErrors.solutionTitle}
         />
         <div className='flex items-center justify-end gap-3'>
-          <Button className='bg-gray-600 text-gray-50 w-24'>Cancelar</Button>
+          <Button onClick={goBack} className='bg-gray-600 text-gray-50 w-24'>
+            Cancelar
+          </Button>
           {!solution && (
             <Button
               disabled={!canPostSolution}
