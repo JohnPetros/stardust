@@ -16,7 +16,7 @@ export class VerifyStreakBreakUseCase implements IUseCase<Request> {
     const promises = []
 
     for (const user of users) {
-      const didUserBreakStreak = user.weekStatus.todayStatus === 'undone'
+      const didUserBreakStreak = user.weekStatus.todayStatus === 'todo'
       if (didUserBreakStreak) {
         user.breakStreak()
         promises.push(this.profileService.updateUser(user))
