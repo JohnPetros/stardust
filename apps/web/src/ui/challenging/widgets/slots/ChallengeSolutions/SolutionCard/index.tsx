@@ -33,18 +33,19 @@ export function SolutionCard({
   author,
 }: ChallengeProps) {
   return (
-    <article>
+    <article className='w-full'>
       <Link
         href={`${ROUTES.challenging.challenges.challengeSolutions.solution(challengeSlug, slug)}`}
-        className='flex items-center gap-3'
+        className='flex gap-3'
       >
         <UserAvatar
-          size={32}
+          size={36}
           avatarImage={author.avatar.image}
           avatarName={author.avatar.name}
         />
-        <div>
-          <h2 className='font-semibold text-green-500 transition-colors duration-200 hover:text-green-700'>
+        <div className='w-full'>
+          <p className='text-gray-500 text-sm'>{author.name}</p>
+          <h2 className='font-semibold text-green-500 text-lg transition-colors duration-200 hover:text-green-700'>
             {title}
           </h2>
           <div className='mt-3'>

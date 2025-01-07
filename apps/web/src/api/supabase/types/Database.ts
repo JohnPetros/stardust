@@ -1338,6 +1338,7 @@ export type Database = {
           author_id: string | null
           author_name: string | null
           author_slug: string | null
+          challenge_id: string | null
           comments_count: number | null
           content: string | null
           created_at: string | null
@@ -1348,6 +1349,20 @@ export type Database = {
           views_count: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "public_solution_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_solution_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "solutions_user_id_fkey"
             columns: ["author_id"]

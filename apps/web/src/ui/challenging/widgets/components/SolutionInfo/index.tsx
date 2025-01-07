@@ -17,8 +17,8 @@ export function SolutionInfo({
   const date = new Datetime().format(createdAt, 'MMM D, YYYY')
 
   return (
-    <ul className='flex items-center gap-3 border-b border-gray-700'>
-      {upvotesCount && (
+    <ul className='flex gap-3 w-full border-b pb-3 border-gray-700'>
+      {upvotesCount !== undefined && (
         <li>
           <Info
             icon='upvote'
@@ -38,11 +38,7 @@ export function SolutionInfo({
         />
       </li>
       <li>
-        <Info
-          icon='calendar'
-          label={commentsCount}
-          tooltipText={`Data de postagem - ${date}`}
-        />
+        <Info icon='calendar' label={date} tooltipText={`Data de postagem - ${date}`} />
       </li>
     </ul>
   )

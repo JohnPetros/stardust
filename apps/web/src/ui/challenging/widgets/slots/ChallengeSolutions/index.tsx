@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 
 import { ROUTES } from '@/constants'
@@ -10,6 +12,7 @@ import { Button } from '@/ui/global/widgets/components/Button'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useChallengeSolutionsSlot } from './useChallengeSolutionsSlot'
 import { SolutionCard } from './SolutionCard'
+import { twMerge } from 'tailwind-merge'
 
 export function ChallengeSolutionsSlot() {
   const {
@@ -28,15 +31,23 @@ export function ChallengeSolutionsSlot() {
   const sorterButtonTitle = sorter === 'date' ? 'recentes' : 'votados'
 
   return (
-    <>
-      <div className='flex items-center'>
+    <div className='px-6 py-3'>
+      <Button asChild className='ml-auto w-max px-3 h-10 text-xs'>
+        <Link href={`${ROUTES.challenging.challenges.solution(challengeSlug)}`}>
+          <Icon name='share' size={14} className='mr-1' />
+          Compartilhar sua solução
+        </Link>
+      </Button>
+
+      <div className='flex items-center gap-6 mt-3'>
         <Search
           value={solutionTitle}
+          placeholder='procurar solução por título'
           onSearchChange={handleSolutionTitleChange}
           className='flex-1'
         />
 
-        <PopoverMenu
+        {/* <PopoverMenu
           label='Abrir menu para ordernar lista de conquistas'
           buttons={popoverMenuButtons}
         >
@@ -46,42 +57,35 @@ export function ChallengeSolutionsSlot() {
               <AnimatedArrow isUp={isPopoverMenuOpen} />
             </div>
           )}
-        </PopoverMenu>
+        </PopoverMenu> */}
       </div>
 
-      <div className='flex justify-between'>
-        <div className='space-x-3'>
-          <Button
-            onClick={() => handleIsFromUserChange(false)}
-            className={
-              !isFromUser ? 'bg-green-400 text-green-900' : 'bg-gray-700 text-gray-50'
-            }
-          >
-            Todas as soluções
-          </Button>
-          <Button
-            onClick={() => handleIsFromUserChange(true)}
-            className={
-              isFromUser ? 'bg-green-400 text-green-900' : 'bg-gray-700 text-gray-50'
-            }
-          >
-            Suas soluções
-          </Button>
-        </div>
-
-        <Button asChild>
-          <Link href={`${ROUTES.challenging.challenges.solution(challengeSlug)}`}>
-            <Icon name='share' size={20} />
-            Compartilhar sua solução
-          </Link>
+      <div className='flex w-64 gap-3 mt-3'>
+        <Button
+          onClick={() => handleIsFromUserChange(false)}
+          className={twMerge(
+            'h-8 text-xs',
+            !isFromUser ? 'bg-green-400 text-green-900' : 'bg-gray-400 text-gray-700',
+          )}
+        >
+          Todas soluções
+        </Button>
+        <Button
+          onClick={() => handleIsFromUserChange(true)}
+          className={twMerge(
+            'h-8 text-xs',
+            isFromUser ? 'bg-green-400 text-green-900' : 'bg-gray-400 text-gray-700',
+          )}
+        >
+          Suas soluções
         </Button>
       </div>
 
       {!isLoading && solutions.length === 0 && (
-        <p>Nenhuma solução encontrada para esse desafio</p>
+        <p className='text-center text-gray-50 mt-12'>Nenhuma solução encontrada.</p>
       )}
 
-      <ul className='space-y-6'>
+      <ul className='space-y-6 mt-6 w-full'>
         {isLoading && (
           <>
             <SolutionCardSkeleton />
@@ -94,7 +98,7 @@ export function ChallengeSolutionsSlot() {
         {!isLoading &&
           solutions.length > 0 &&
           solutions.map((solution) => (
-            <li key={solution.id}>
+            <li key={solution.id} className='w-full'>
               <SolutionCard
                 title={solution.title.value}
                 slug={solution.slug.value}
@@ -108,7 +112,7 @@ export function ChallengeSolutionsSlot() {
                   slug: solution.author.slug.value,
                   avatar: {
                     name: solution.author.avatar.name.value,
-                    image: solution.author.avatar.name.value,
+                    image: solution.author.avatar.image.value,
                   },
                 }}
               />
@@ -117,6 +121,6 @@ export function ChallengeSolutionsSlot() {
       </ul>
 
       {!isRecheadedEnd && <ShowMoreButton isLoading={isLoading} onClick={nextPage} />}
-    </>
+    </div>
   )
 }
