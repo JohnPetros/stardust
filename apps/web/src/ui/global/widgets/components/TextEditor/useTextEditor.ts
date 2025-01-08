@@ -49,6 +49,7 @@ export function useTextEditor(onChange: (value: string) => void) {
     const currentCursorPosition = textareaRef.current.selectionStart
     const textBeforeCursor = textareaRef.current.value.substring(0, currentCursorPosition)
     const lastNewlineIndex = textBeforeCursor.lastIndexOf('\n')
+    if (lastNewlineIndex === -1) return 0
     return lastNewlineIndex + 1
   }
 
@@ -59,6 +60,7 @@ export function useTextEditor(onChange: (value: string) => void) {
 
     switch (snippet) {
       case 'title': {
+        const titleNotation = '#'
         const currentLinePosition = getCurrentLinePosition()
         const valueBeforeCurrentLinePosition = textareaRef.current.value.substring(
           0,
@@ -67,14 +69,27 @@ export function useTextEditor(onChange: (value: string) => void) {
         const valueAfterCurrentLinePosition =
           textareaRef.current.value.substring(currentLinePosition)
 
-        const lineContent = textareaRef.current.value.substring(
+        const currentLineLastIndex = valueAfterCurrentLinePosition.indexOf('\n')
+
+        let lineContent = textareaRef.current.value.substring(
           currentLinePosition,
-          currentLinePosition + valueAfterCurrentLinePosition.indexOf('\n'),
+          currentLinePosition +
+            (currentLineLastIndex === -1
+              ? valueAfterCurrentLinePosition.length - 1
+              : currentLineLastIndex),
         )
 
-        textareaRef.current.value = `${valueBeforeCurrentLinePosition}# ${lineContent}${valueAfterCurrentLinePosition}`
+        let currentTitleNotation = '#'
+        while (lineContent[0] === titleNotation) {
+          currentTitleNotation += '#'
+          lineContent = lineContent.substring(1)
+        }
 
-        // textareaRef.current.setSelectionRange(linePosition, linePosition + 2)
+        textareaRef.current.value = `${valueBeforeCurrentLinePosition}${currentTitleNotation} ${valueAfterCurrentLinePosition.substring(currentTitleNotation.length - 1)}`
+
+        const start = currentLinePosition + currentTitleNotation.length + 1
+        const end = start + lineContent.length
+        textareaRef.current.setSelectionRange(start, end)
         break
       }
       case 'strong': {
