@@ -11,7 +11,7 @@ export function useSolutionsCommentsList(solutionId: string) {
   const toast = useToastContext()
 
   async function handleCommentListFetch(params: CommentsListingParams) {
-    return await api.fetchChallengeCommentsList(params, solutionId)
+    return await api.fetchSolutionCommentsList(params, solutionId)
   }
 
   async function handleCommentSave(comment: Comment) {

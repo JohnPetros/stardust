@@ -116,6 +116,7 @@ export class Solution extends Entity<SolutionProps> {
       title: this.title.value,
       content: this.content.value,
       slug: this.slug.value,
+      upvotesCount: this.upvotesCount.value,
       viewsCount: this.viewsCount.value,
       commentsCount: this.commentsCount.value,
       createdAt: this.createdAt,

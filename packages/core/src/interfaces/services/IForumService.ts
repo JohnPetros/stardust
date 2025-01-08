@@ -9,6 +9,10 @@ export interface IForumService {
     params: CommentsListingParams,
     challengeId: string,
   ): Promise<ApiResponse<PaginationResponse<CommentDto>>>
+  fetchSolutionCommentsList(
+    params: CommentsListingParams,
+    solutionId: string,
+  ): Promise<ApiResponse<PaginationResponse<CommentDto>>>
   fetchCommentReplies(commentId: string): Promise<ApiResponse<CommentDto[]>>
   saveChallengeComment(comment: Comment, challengeId: string): Promise<ApiResponse>
   saveCommentReply(reply: Comment, commentId: string): Promise<ApiResponse>
