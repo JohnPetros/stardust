@@ -47,24 +47,24 @@ export function ChallengeSolutionsSlot() {
           className='flex-1'
         />
 
-        {/* <PopoverMenu
+        <PopoverMenu
           label='Abrir menu para ordernar lista de conquistas'
           buttons={popoverMenuButtons}
         >
           {(isPopoverMenuOpen) => (
-            <div className='flex items-center gap-3 text-sm text-gray-200'>
+            <div className='flex items-center gap-3 text-sm text-gray-200 cursor-pointer'>
               Mais {sorterButtonTitle}
               <AnimatedArrow isUp={isPopoverMenuOpen} />
             </div>
           )}
-        </PopoverMenu> */}
+        </PopoverMenu>
       </div>
 
       <div className='flex w-64 gap-3 mt-3'>
         <Button
           onClick={() => handleIsFromUserChange(false)}
           className={twMerge(
-            'h-8 text-xs',
+            'h-6 text-xs',
             !isFromUser ? 'bg-green-400 text-green-900' : 'bg-gray-400 text-gray-700',
           )}
         >
@@ -73,7 +73,7 @@ export function ChallengeSolutionsSlot() {
         <Button
           onClick={() => handleIsFromUserChange(true)}
           className={twMerge(
-            'h-8 text-xs',
+            'h-6 text-xs',
             isFromUser ? 'bg-green-400 text-green-900' : 'bg-gray-400 text-gray-700',
           )}
         >

@@ -11,5 +11,11 @@ export default async function Slot({ params }: NextParams<{ challengeSlug: strin
   if (response.isFailure) response.throwError()
   const challenge = Challenge.create(response.body)
 
-  return <SolutionPage challengeId={challenge.id} savedSolutionDto={null} />
+  return (
+    <SolutionPage
+      challengeId={challenge.id}
+      challengeSlug={challenge.slug.value}
+      savedSolutionDto={null}
+    />
+  )
 }

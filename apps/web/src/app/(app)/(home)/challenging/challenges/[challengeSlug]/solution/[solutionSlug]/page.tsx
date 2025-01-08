@@ -21,5 +21,11 @@ export default async function Page({
   if (solutionResponse.isFailure) solutionResponse.throwError()
   const savedSolutionDto = solutionResponse.body
 
-  return <SolutionPage challengeId={challenge.id} savedSolutionDto={savedSolutionDto} />
+  return (
+    <SolutionPage
+      challengeId={challenge.id}
+      challengeSlug={challenge.slug.value}
+      savedSolutionDto={savedSolutionDto}
+    />
+  )
 }

@@ -17,7 +17,7 @@ export function SolutionInfo({
   const date = new Datetime().format(createdAt, 'MMM D, YYYY')
 
   return (
-    <ul className='flex gap-3 w-full border-b pb-3 border-gray-700'>
+    <ul className='flex gap-3 w-full'>
       {upvotesCount !== undefined && (
         <li>
           <Info

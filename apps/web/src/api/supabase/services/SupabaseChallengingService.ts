@@ -167,7 +167,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       switch (sorter) {
         case 'date':
           query = query.order('created_at', {
-            ascending: true,
+            ascending: false,
           })
           break
         case 'upvotesCount':

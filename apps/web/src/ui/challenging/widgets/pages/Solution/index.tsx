@@ -13,9 +13,14 @@ import { useSolutionPage } from './useSolutionPage'
 type SolutionPageProps = {
   savedSolutionDto: SolutionDto | null
   challengeId: string
+  challengeSlug: string
 }
 
-export function SolutionPage({ savedSolutionDto, challengeId }: SolutionPageProps) {
+export function SolutionPage({
+  savedSolutionDto,
+  challengeId,
+  challengeSlug,
+}: SolutionPageProps) {
   const {
     solutionTitle,
     fieldErrors,
@@ -27,7 +32,7 @@ export function SolutionPage({ savedSolutionDto, challengeId }: SolutionPageProp
     handleContentChange,
     handleSolutionPost,
     handleSolutionEdit,
-  } = useSolutionPage(savedSolutionDto, challengeId)
+  } = useSolutionPage(savedSolutionDto, challengeId, challengeSlug)
   const { goBack } = useRouter()
 
   return (

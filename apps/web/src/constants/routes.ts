@@ -19,8 +19,10 @@ export const ROUTES = {
         solution: (challengeSlug: string, solutionSlug: string) =>
           `/challenging/challenges/${challengeSlug}/challenge/solutions/${solutionSlug}`,
       },
-      solution: (challengeSlug: string) =>
-        `/challenging/challenges/${challengeSlug}/solution`,
+      solution: (challengeSlug: string, solutionSlug?: string) =>
+        solutionSlug
+          ? `/challenging/challenges/${challengeSlug}/solution/${solutionSlug}`
+          : `/challenging/challenges/${challengeSlug}/solution`,
     },
   },
   profile: {

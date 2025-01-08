@@ -10,6 +10,7 @@ export const SupabaseSolutionMapper = () => {
         title: supabaseSolution.title ?? '',
         content: supabaseSolution.content ?? '',
         slug: supabaseSolution.slug ?? '',
+        upvotesCount: supabaseSolution.upvotes_count ?? 0,
         viewsCount: supabaseSolution.views_count ?? 0,
         commentsCount: supabaseSolution.comments_count ?? 0,
         author: {

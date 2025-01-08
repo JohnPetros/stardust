@@ -188,6 +188,7 @@ export class User extends Entity<UserProps> {
   }
 
   hasUpvotedSolution(solutionId: string) {
+    console.log(this.props.upvotedSolutionsIds)
     return this.props.upvotedSolutionsIds.includes(solutionId)
   }
 
