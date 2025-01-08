@@ -28,6 +28,11 @@ export function ContentEditor({ content, errorMessage, onChange }: ContentEditor
           label='Título principal'
         />
         <Toolbar.Button
+          onClick={() => handleSnippetInsert('strong')}
+          icon='strong'
+          label='Inserir trecho em destaque'
+        />
+        <Toolbar.Button
           onClick={() => handleSnippetInsert('textBlock')}
           icon='text-block'
           label='Bloco de texto'

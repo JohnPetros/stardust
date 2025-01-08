@@ -93,16 +93,45 @@ export function useTextEditor(onChange: (value: string) => void) {
         break
       }
       case 'strong': {
-        textareaRef.current.value += ` ${SNIPPETS[snippet]}`
+        console.log('selectionStart', textareaRef.current.selectionStart)
+        console.log('selectionEnd', textareaRef.current.selectionEnd)
+        console.log(
+          'value',
+          textareaRef.current.value.substring(
+            textareaRef.current.selectionStart,
+            textareaRef.current.selectionEnd,
+          ),
+        )
+
+        if (textareaRef.current.selectionStart !== textareaRef.current.selectionEnd) {
+          const start = textareaRef.current.selectionStart
+          const end = textareaRef.current.selectionEnd
+
+          const selectedValue = textareaRef.current.value.substring(start, end)
+          const valueBeforePosition = textareaRef.current.value.substring(0, start)
+          const valueAfterPosition = textareaRef.current.value.substring(end)
+
+          textareaRef.current.value = `${valueBeforePosition} *${selectedValue}* ${valueAfterPosition}`
+          return
+        }
+
+        const valueBeforePosition = textareaRef.current.value.substring(
+          0,
+          currentCursorPosition,
+        )
+        const valueAfterPosition =
+          textareaRef.current.value.substring(currentCursorPosition)
+
+        textareaRef.current.value = `${valueBeforePosition}${SNIPPETS[snippet]}${valueAfterPosition}`
 
         const starsCountInEachSide = 1
 
-        const strongContent = SNIPPETS.strong.replace(/\*/g, '')
+        const snippetContent = SNIPPETS.strong.replace(/\*/g, '')
 
-        textareaRef.current.setSelectionRange(
-          currentCursorPosition - starsCountInEachSide - strongContent.length,
-          currentCursorPosition - starsCountInEachSide,
-        )
+        const start = currentCursorPosition + starsCountInEachSide + 1
+        const end = start + snippetContent.length - 1
+
+        textareaRef.current.setSelectionRange(start, end)
         break
       }
       case 'textBlock':
