@@ -1,27 +1,30 @@
+import Link from 'next/link'
+
 import { Solution } from '@stardust/core/challenging/entities'
 
+import { ROUTES } from '@/constants'
+import { challengingActions } from '@/server/next-safe-action'
 import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'
-import type { SolutionDto } from '@stardust/core/challenging/dtos'
 import { Mdx } from '@/ui/global/widgets/components/Mdx'
+import { Icon } from '@/ui/global/widgets/components/Icon'
 import { SolutionInfo } from '../../components/SolutionInfo'
 import { SolutionCommentsList } from './SolutionCommentsList'
-import { Button } from '@/ui/global/widgets/components/Button'
-import Link from 'next/link'
-import { ROUTES } from '@/constants'
 import { UpvoteSolutionButton } from './UpvoteSolutionButton'
 import { UserSolutionButtons } from './UserSolutionButtons'
-import { Icon } from '@/ui/global/widgets/components/Icon'
 
 type ChallengeSolutionSlotProps = {
   challengeSlug: string
-  solutionDto: SolutionDto
+  solutionSlug: string
 }
 
-export function ChallengeSolutionSlot({
+export async function ChallengeSolutionSlot({
   challengeSlug,
-  solutionDto,
+  solutionSlug,
 }: ChallengeSolutionSlotProps) {
-  const solution = Solution.create(solutionDto)
+  const response = await challengingActions.viewSolution({ solutionSlug })
+  if (!response?.data) return
+  const solution = Solution.create(response?.data)
+
   return (
     <div className='px-6 py-3'>
       <header>

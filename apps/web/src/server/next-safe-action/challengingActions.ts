@@ -13,6 +13,7 @@ import {
   HandleChallengePageAction,
   PostSolutionAction,
   UpvoteSolutionAction,
+  ViewSolutionAction,
   VoteChallengeAction,
 } from '../actions/challenging'
 import {
@@ -140,5 +141,22 @@ export const upvoteSolution = authActionClient
     const supabase = SupabaseServerActionClient()
     const challengingService = SupabaseChallengingService(supabase)
     const action = UpvoteSolutionAction(challengingService)
+    return action.handle(actionServer)
+  })
+
+export const viewSolution = authActionClient
+  .schema(
+    z.object({
+      solutionSlug: z.string(),
+    }),
+  )
+  .action(async ({ clientInput, ctx }) => {
+    const actionServer = NextActionServer({
+      request: clientInput,
+      user: ctx.user,
+    })
+    const supabase = SupabaseServerActionClient()
+    const challengingService = SupabaseChallengingService(supabase)
+    const action = ViewSolutionAction(challengingService)
     return action.handle(actionServer)
   })

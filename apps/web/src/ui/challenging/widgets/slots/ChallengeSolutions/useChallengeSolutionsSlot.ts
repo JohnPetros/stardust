@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Solution } from '@stardust/core/challenging/entities'
 import type { SolutionsListSorter } from '@stardust/core/challenging/types'

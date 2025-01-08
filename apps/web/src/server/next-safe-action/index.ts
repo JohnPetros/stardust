@@ -6,6 +6,7 @@ import {
   editSolution,
   postSolution,
   upvoteSolution,
+  viewSolution,
 } from './challengingActions'
 import { setCookie, getCookie, deleteCookie, hasCookie } from './cookieActions'
 import { upvoteComment } from './forumActions'
@@ -26,6 +27,7 @@ export const challengingActions = {
   editSolution,
   postSolution,
   upvoteSolution,
+  viewSolution,
 }
 export const profileActions = { obsverNewUnlockedAchievements }
 export const rankingActions = { getLastWeekRankingWinners }
