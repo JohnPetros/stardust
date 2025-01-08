@@ -37,7 +37,11 @@ export function SolutionInfo({
         />
       </li>
       <li>
-        <Info icon='calendar' label={date} tooltipText={`Data de postagem - ${date}`} />
+        <Info
+          icon='calendar'
+          label={date}
+          tooltipText={`Data de postagem - ${new Datetime().format(createdAt, 'MMM D, YYYY HH:mm:ss')}`}
+        />
       </li>
     </ul>
   )
