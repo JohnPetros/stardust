@@ -1,16 +1,19 @@
-import { SupabaseServerClient } from '@/api/supabase/clients'
-import { SupabaseChallengingService } from '@/api/supabase/services'
+import { notFound } from 'next/navigation'
+
+import { challengingActions } from '@/server/next-safe-action'
 import type { NextParams } from '@/server/next/types'
 import { ChallengeSolutionSlot } from '@/ui/challenging/widgets/slots/ChallengeSolution'
+
+export const dynamic = 'force-dynamic'
 
 export default async function DefaultSlot({
   params,
 }: NextParams<{ challengeSlug: string; solutionSlug: string }>) {
-  const supabase = SupabaseServerClient()
-  const challengingService = SupabaseChallengingService(supabase)
-  const response = await challengingService.fetchSolutionBySlug(params.solutionSlug)
-  if (response.isFailure) response.throwError()
-  const solutionDto = response.body
+  const response = await challengingActions.viewSolution({
+    solutionSlug: params.solutionSlug,
+  })
+  if (!response?.data) notFound()
+  const solutionDto = response.data
 
   return (
     <ChallengeSolutionSlot

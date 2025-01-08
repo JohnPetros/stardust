@@ -1,9 +1,9 @@
 import Link from 'next/link'
 
 import { Solution } from '@stardust/core/challenging/entities'
+import type { SolutionDto } from '@stardust/core/challenging/dtos'
 
 import { ROUTES } from '@/constants'
-import { challengingActions } from '@/server/next-safe-action'
 import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'
 import { Mdx } from '@/ui/global/widgets/components/Mdx'
 import { Icon } from '@/ui/global/widgets/components/Icon'
@@ -14,16 +14,17 @@ import { UserSolutionButtons } from './UserSolutionButtons'
 
 type ChallengeSolutionSlotProps = {
   challengeSlug: string
-  solutionSlug: string
+  solutionDto: SolutionDto
 }
 
 export async function ChallengeSolutionSlot({
   challengeSlug,
-  solutionSlug,
+  solutionDto,
 }: ChallengeSolutionSlotProps) {
-  const response = await challengingActions.viewSolution({ solutionSlug })
-  if (!response?.data) return
-  const solution = Solution.create(response?.data)
+  const solution = Solution.create(solutionDto)
+  const upvotesCount = solution.upvotesCount.value
+  const viewsCount = solution.viewsCount.value
+  const commentsCount = solution.commentsCount.value
 
   return (
     <div className='px-6 py-3'>
@@ -48,11 +49,11 @@ export async function ChallengeSolutionSlot({
             <div className='flex items-center gap-3 mt-1'>
               <UpvoteSolutionButton
                 solutionId={solution.id}
-                initialUpvotesCount={solution.upvotesCount.value}
+                initialUpvotesCount={upvotesCount}
               />
               <SolutionInfo
-                commentsCount={solution.commentsCount.value}
-                viewsCount={solution.upvotesCount.value}
+                commentsCount={commentsCount}
+                viewsCount={viewsCount}
                 createdAt={solution.createdAt}
               />
             </div>

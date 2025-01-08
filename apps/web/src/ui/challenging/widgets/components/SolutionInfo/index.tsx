@@ -15,7 +15,6 @@ export function SolutionInfo({
   createdAt,
 }: SolutionInfo) {
   const date = new Datetime().format(createdAt, 'MMM D, YYYY')
-
   return (
     <ul className='flex gap-3 w-full'>
       {upvotesCount !== undefined && (

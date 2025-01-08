@@ -84,9 +84,7 @@ export function Tabs({ children }: TabsProps) {
             </TabButton>
           )}
         </List>
-        <AnimatePresence>
-          <TabContent value='description'>{children}</TabContent>
-        </AnimatePresence>
+        <TabContent value='description'>{children}</TabContent>
       </Root>
     </div>
   )
