@@ -92,7 +92,7 @@ export function Comment({
       />
       <div className='w-full'>
         <div className='flex w-full gap-2'>
-          <Link href={`${ROUTES.profile.prefix}/${authorSlug}`}>
+          <Link href={`${ROUTES.profile.user(authorSlug)}`}>
             <UserAvatar
               avatarName={authorAvatar.name}
               avatarImage={authorAvatar.image}

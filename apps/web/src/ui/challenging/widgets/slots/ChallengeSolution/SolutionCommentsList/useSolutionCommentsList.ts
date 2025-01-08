@@ -15,7 +15,7 @@ export function useSolutionsCommentsList(solutionId: string) {
   }
 
   async function handleCommentSave(comment: Comment) {
-    const response = await api.saveChallengeComment(comment, solutionId)
+    const response = await api.saveSolutionComment(comment, solutionId)
     if (response.isFailure) toast.show(response.errorMessage)
   }
 

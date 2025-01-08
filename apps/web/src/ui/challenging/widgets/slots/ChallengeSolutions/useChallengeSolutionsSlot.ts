@@ -43,7 +43,7 @@ export function useChallengeSolutionsSlot() {
     isInfinity: true,
     isEnabled: Boolean(user && challenge),
     shouldRefetchOnFocus: false,
-    dependencies: [solutionTitle],
+    dependencies: [solutionTitle, sorter],
   })
 
   function handleSolutionTitleChange(title: string) {

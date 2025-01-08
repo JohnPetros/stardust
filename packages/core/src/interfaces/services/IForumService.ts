@@ -15,6 +15,7 @@ export interface IForumService {
   ): Promise<ApiResponse<PaginationResponse<CommentDto>>>
   fetchCommentReplies(commentId: string): Promise<ApiResponse<CommentDto[]>>
   saveChallengeComment(comment: Comment, challengeId: string): Promise<ApiResponse>
+  saveSolutionComment(comment: Comment, solutionId: string): Promise<ApiResponse>
   saveCommentReply(reply: Comment, commentId: string): Promise<ApiResponse>
   saveCommentUpvote(commentId: string, userId: string): Promise<ApiResponse>
   updateCommentContent(commentContent: string, commentId: string): Promise<ApiResponse>

@@ -172,12 +172,12 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
           break
         case 'upvotesCount':
           query = query.order('upvotes_count', {
-            ascending: true,
+            ascending: false,
           })
           break
         case 'commentsCount':
           query = query.order('comments_count', {
-            ascending: true,
+            ascending: false,
           })
           break
       }

@@ -33,7 +33,7 @@ export const SupabaseCommentMapper = () => {
       const supabaseComment: SupabaseComment = {
         id: comment.id,
         content: commentDto.content,
-        author_id: comment.author.id,
+        author_id: comment.authorId,
         created_at: comment.createdAt.toDateString(),
       } as SupabaseComment
 

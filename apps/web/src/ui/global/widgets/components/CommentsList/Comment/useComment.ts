@@ -8,7 +8,7 @@ import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import type { AlertDialogRef } from '../../AlertDialog/types'
 import type { PopoverMenuButton } from '../../PopoverMenu/types'
-import { Comment, type Topic } from '@stardust/core/forum/entities'
+import { Comment } from '@stardust/core/forum/entities'
 
 export function useComment(commentId: string) {
   const [shouldFetchCommentReplies, setShouldFetchCommentReplies] = useState(false)

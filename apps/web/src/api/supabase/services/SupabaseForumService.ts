@@ -133,7 +133,7 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
       if (commentError) {
         return SupabasePostgrestError(
           commentError,
-          'Erro inesperado ao salvar comentário',
+          'Erro inesperado ao salvar comentário desse desafio',
           commentStatus,
         )
       }
@@ -146,8 +146,44 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
       if (challengeCommentError) {
         return SupabasePostgrestError(
           challengeCommentError,
-          'Erro inesperado ao salvar comentário',
+          'Erro inesperado ao salvar comentário desse desafio',
           challengeCommentStatus,
+        )
+      }
+
+      return new ApiResponse()
+    },
+
+    async saveSolutionComment(comment: Comment, solutionId: string) {
+      const supabaseComment = supabaseCommentMapper.toSupabase(comment)
+
+      const { error: commentError, status: commentStatus } = await supabase
+        .from('comments')
+        .insert({
+          // @ts-ignore
+          id: comment.id,
+          content: supabaseComment.content,
+          user_id: supabaseComment.author_id,
+        })
+
+      if (commentError) {
+        return SupabasePostgrestError(
+          commentError,
+          'Erro inesperado ao salvar comentário dessa solução',
+          commentStatus,
+        )
+      }
+
+      const { error: solutionCommentError, status: solutionCommentStatus } =
+        await supabase
+          .from('solutions_comments')
+          .insert({ comment_id: comment.id, solution_id: solutionId })
+
+      if (solutionCommentError) {
+        return SupabasePostgrestError(
+          solutionCommentError,
+          'Erro inesperado ao salvar comentário dessa solução',
+          solutionCommentStatus,
         )
       }
 

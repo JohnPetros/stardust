@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { twMerge } from 'tailwind-merge'
 
 import { ROUTES } from '@/constants'
 import { Search } from '@/ui/global/widgets/components/Search'
@@ -12,7 +13,13 @@ import { Button } from '@/ui/global/widgets/components/Button'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useChallengeSolutionsSlot } from './useChallengeSolutionsSlot'
 import { SolutionCard } from './SolutionCard'
-import { twMerge } from 'tailwind-merge'
+import type { SolutionsListSorter } from '@stardust/core/challenging/types'
+
+const SORTER_BUTTON_TITLES: Record<SolutionsListSorter, string> = {
+  date: 'recentes',
+  upvotesCount: 'votadas',
+  commentsCount: 'comentadas',
+} as const
 
 export function ChallengeSolutionsSlot() {
   const {
@@ -28,8 +35,6 @@ export function ChallengeSolutionsSlot() {
     nextPage,
     handleSolutionTitleChange,
   } = useChallengeSolutionsSlot()
-  const sorterButtonTitle = sorter === 'date' ? 'recentes' : 'votados'
-
   return (
     <div className='px-6 py-3'>
       <Button asChild className='ml-auto w-max px-3 h-10 text-xs'>
@@ -53,7 +58,7 @@ export function ChallengeSolutionsSlot() {
         >
           {(isPopoverMenuOpen) => (
             <div className='flex items-center gap-3 text-sm text-gray-200 cursor-pointer'>
-              Mais {sorterButtonTitle}
+              Mais {SORTER_BUTTON_TITLES[sorter]}
               <AnimatedArrow isUp={isPopoverMenuOpen} />
             </div>
           )}

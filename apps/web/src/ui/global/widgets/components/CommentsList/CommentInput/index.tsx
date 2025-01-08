@@ -12,6 +12,7 @@ import { Icon } from '../../Icon'
 import { useCommentInput } from './useCommentInput'
 import type { TextEditorRef } from '../../TextEditor/types'
 import { TextEditor } from '../../TextEditor'
+import { Text } from '@stardust/core/global/structs'
 
 type CommentInputProps = {
   id: string
@@ -71,6 +72,7 @@ export function CommentInput({
                 ref={textEditorRef}
                 placeholder={placeholder}
                 className='min-h-[5rem]'
+                rows={content.length > 3 ? Text.create(content).countCharacters('\n') : 1}
                 value={content}
                 onChange={handleContentChange}
               />
