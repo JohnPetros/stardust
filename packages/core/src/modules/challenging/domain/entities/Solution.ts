@@ -1,6 +1,6 @@
 import { Entity } from '#global/abstracts'
 import { Author } from '#global/entities'
-import { Integer, Name, Slug, Text } from '#global/structs'
+import { Integer, Logical, Name, Slug, Text } from '#global/structs'
 import type { SolutionDto } from '#challenging/dtos'
 import { EntityNotDefinedError } from '#global/errors'
 
@@ -11,6 +11,7 @@ type SolutionProps = {
   viewsCount: Integer
   commentsCount: Integer
   slug: Slug
+  isViewed: Logical
   createdAt: Date
   author: {
     id: string
@@ -36,6 +37,7 @@ export class Solution extends Entity<SolutionProps> {
           'Contagem de comentários da solução',
         ),
         viewsCount: Integer.create(dto.viewsCount ?? 0, 'Contagem de views da solução'),
+        isViewed: Logical.create(false, 'A solução foi visualizada'),
         createdAt: dto.createdAt ?? new Date(),
         author: {
           id: dto.author.id,
@@ -44,6 +46,11 @@ export class Solution extends Entity<SolutionProps> {
       },
       dto.id,
     )
+  }
+
+  view() {
+    this.props.isViewed = this.isViewed.makeTrue()
+    this.props.viewsCount = this.props.viewsCount.increment(1)
   }
 
   upvote() {
@@ -93,6 +100,10 @@ export class Solution extends Entity<SolutionProps> {
 
   get commentsCount() {
     return this.props.commentsCount
+  }
+
+  get isViewed() {
+    return this.props.isViewed
   }
 
   get createdAt() {
