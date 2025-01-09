@@ -44,7 +44,7 @@ export class UserFactory {
       completedChallengesIds: List.create(dto?.completedChallengesIds ?? []),
       completedPlanetsIds: List.create(dto?.completedPlanetsIds ?? []),
       upvotedCommentsIds: List.create(dto?.upvotedCommentsIds ?? []),
-      upvotedSolutionsIds: List.create(dto?.upvotedCommentsIds ?? []),
+      upvotedSolutionsIds: List.create(dto?.upvotedSolutionsIds ?? []),
       createdAt: dto?.createdAt ?? new Date(),
       id: dto?.id,
     }

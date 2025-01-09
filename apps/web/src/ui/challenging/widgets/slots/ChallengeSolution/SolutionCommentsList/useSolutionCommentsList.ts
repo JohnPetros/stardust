@@ -11,11 +11,11 @@ export function useSolutionsCommentsList(solutionId: string) {
   const toast = useToastContext()
 
   async function handleCommentListFetch(params: CommentsListingParams) {
-    return await api.fetchChallengeCommentsList(params, solutionId)
+    return await api.fetchSolutionCommentsList(params, solutionId)
   }
 
   async function handleCommentSave(comment: Comment) {
-    const response = await api.saveChallengeComment(comment, solutionId)
+    const response = await api.saveSolutionComment(comment, solutionId)
     if (response.isFailure) toast.show(response.errorMessage)
   }
 

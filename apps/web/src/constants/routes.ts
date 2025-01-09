@@ -4,8 +4,11 @@ export const ROUTES = {
   shop: '/shop',
   challenging: {
     challenges: {
+      list: '/challenging/challenges',
       challenge: (challengeSlug: string) =>
         `/challenging/challenges/${challengeSlug}/challenge`,
+      challengeDescription: (challengeSlug: string) =>
+        `/challenging/challenges/${challengeSlug}/challenge/description`,
       challengeResult: (challengeSlug: string) =>
         `/challenging/challenges/${challengeSlug}/challenge/result`,
       challengeComments: (challengeSlug: string) =>
@@ -16,8 +19,10 @@ export const ROUTES = {
         solution: (challengeSlug: string, solutionSlug: string) =>
           `/challenging/challenges/${challengeSlug}/challenge/solutions/${solutionSlug}`,
       },
-      solution: (challengeSlug: string) =>
-        `/challenging/challenges/${challengeSlug}/solution`,
+      solution: (challengeSlug: string, solutionSlug?: string) =>
+        solutionSlug
+          ? `/challenging/challenges/${challengeSlug}/solution/${solutionSlug}`
+          : `/challenging/challenges/${challengeSlug}/solution`,
     },
   },
   profile: {

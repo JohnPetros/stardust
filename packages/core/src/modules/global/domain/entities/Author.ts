@@ -18,8 +18,8 @@ export class Author extends Entity<AuthorProps> {
         name: Name.create(dto.name),
         slug: Slug.create(dto.slug),
         avatar: {
-          image: Image.create(dto.avatar.image),
           name: Name.create(dto.avatar.name),
+          image: Image.create(dto.avatar.image),
         },
       },
       dto.id,

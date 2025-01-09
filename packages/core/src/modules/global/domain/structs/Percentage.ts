@@ -8,8 +8,8 @@ export class Percentage {
   }
 
   static create(part: number, total: number, key = 'Porcentagem') {
-    new NumberValidation(part, key).min(1).validate()
-    new NumberValidation(total, key).min(0).validate()
+    new NumberValidation(part, key).validate()
+    new NumberValidation(total, key).validate()
 
     return new Percentage(total ? (part / total) * 100 : 0)
   }

@@ -14,10 +14,13 @@ type ContentEditorProps = {
   onChange: (content: string) => void
 }
 
-export function ContentEditor({ content, onChange }: ContentEditorProps) {
+export function ContentEditor({ content, errorMessage, onChange }: ContentEditorProps) {
   const textEditorRef = useRef<TextEditorRef>(null)
-  const { previewContent, handleSnippetInsert, handleKeyUp, textEditorChange } =
-    useContentEditor(content, textEditorRef, onChange)
+  const { previewContent, handleSnippetInsert, textEditorChange } = useContentEditor(
+    content,
+    textEditorRef,
+    onChange,
+  )
 
   return (
     <>
@@ -26,6 +29,11 @@ export function ContentEditor({ content, onChange }: ContentEditorProps) {
           onClick={() => handleSnippetInsert('title')}
           icon='title'
           label='Título principal'
+        />
+        <Toolbar.Button
+          onClick={() => handleSnippetInsert('strong')}
+          icon='strong'
+          label='Inserir trecho em destaque'
         />
         <Toolbar.Button
           onClick={() => handleSnippetInsert('textBlock')}
@@ -38,12 +46,12 @@ export function ContentEditor({ content, onChange }: ContentEditorProps) {
           label='Bloco de texto destacado'
         />
         <Toolbar.Button
-          onClick={() => handleSnippetInsert('code')}
+          onClick={() => handleSnippetInsert('orderedList')}
           icon='ordered-list'
           label='Lista numéria'
         />
         <Toolbar.Button
-          onClick={() => handleSnippetInsert('code')}
+          onClick={() => handleSnippetInsert('unorderedList')}
           icon='unordered-list'
           label='Lista'
         />
@@ -63,14 +71,16 @@ export function ContentEditor({ content, onChange }: ContentEditorProps) {
           label='Inserir trecho de código não executável'
         />
       </Toolbar.Container>
-      <div className='grid grid-cols-2 mt-3 h-full bg-gray-800'>
+      <div className='grid grid-cols-2 gap-3 mt-3 h-full bg-gray-800'>
         <div className='max-h-screen overflow-auto'>
+          {errorMessage && (
+            <p className='text-red-600 font-bold text-sm mt-3 pl-6'>{errorMessage}</p>
+          )}
           <TextEditor
             ref={textEditorRef}
             value={content}
             onChange={textEditorChange}
-            onKeyUp={handleKeyUp}
-            className='h-screen pl-6'
+            className='min-h-screen pl-6'
           />
         </div>
         <Mdx>{previewContent}</Mdx>

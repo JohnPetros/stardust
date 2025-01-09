@@ -14,7 +14,7 @@ type EditSolutionActionProps = {
 
 export function useEditSolutionAction({ onSuccess, onError }: EditSolutionActionProps) {
   const toast = useToastContext()
-  const { executeAsync, isPending, result } = useAction(challengingActions.editSolution, {
+  const { executeAsync, isPending } = useAction(challengingActions.editSolution, {
     onError: ({ error }) => {
       if (error.serverError) toast.show(error.serverError)
       onError(

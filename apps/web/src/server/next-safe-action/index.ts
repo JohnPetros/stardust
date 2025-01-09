@@ -1,10 +1,12 @@
 import { signUp } from './authActionts'
 import {
+  fetchChallengesList,
   handleChallengePage,
   voteChallenge,
   editSolution,
   postSolution,
   upvoteSolution,
+  viewSolution,
 } from './challengingActions'
 import { setCookie, getCookie, deleteCookie, hasCookie } from './cookieActions'
 import { upvoteComment } from './forumActions'
@@ -19,11 +21,13 @@ import {
 export const authActions = { signUp }
 export const cookieActions = { setCookie, getCookie, deleteCookie, hasCookie }
 export const challengingActions = {
+  fetchChallengesList,
   handleChallengePage,
   voteChallenge,
   editSolution,
   postSolution,
   upvoteSolution,
+  viewSolution,
 }
 export const profileActions = { obsverNewUnlockedAchievements }
 export const rankingActions = { getLastWeekRankingWinners }

@@ -85,7 +85,7 @@ export function useMdx() {
     codeComponents.forEach((codeComponent) => {
       const codeComponentContent = getTemplateContent(codeComponent)
       if (codeComponentContent) {
-        const newContent = `\`\`\`\n${codeComponentContent}\n\`\`\``
+        const newContent = `${codeComponentContent}`
         mdx = mdx.replace(codeComponentContent, newContent)
       }
     })

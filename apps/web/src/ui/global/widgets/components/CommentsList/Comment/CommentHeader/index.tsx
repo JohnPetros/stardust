@@ -28,7 +28,7 @@ export function CommentHeader({
   return (
     <header className='flex items-start justify-between'>
       <Link
-        href={`${ROUTES.profile.prefix}/${authorSlug}`}
+        href={ROUTES.profile.user(authorSlug)}
         className='text-md text-green-700'
       >
         {authorName}

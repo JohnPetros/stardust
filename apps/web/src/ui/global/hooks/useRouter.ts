@@ -12,8 +12,13 @@ export function useRouter() {
     [router.push],
   )
 
+  const goBack = useCallback(() => {
+    router.back()
+  }, [router.back])
+
   return {
     goTo,
+    goBack,
     currentRoute: pathname,
   }
 }

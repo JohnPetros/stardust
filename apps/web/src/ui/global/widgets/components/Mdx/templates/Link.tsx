@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import NextLink from 'next/link'
 
 type LinkProps = {
   url: string
@@ -9,12 +8,13 @@ type LinkProps = {
 
 export function Link({ children, href, url }: LinkProps) {
   return (
-    <NextLink
+    <a
       href={href ?? url}
       target='_blank'
+      rel='noopener noreferrer'
       className='text-sm font-medium text-green-600'
     >
       {Array.isArray(children) ? children[0] : children}
-    </NextLink>
+    </a>
   )
 }

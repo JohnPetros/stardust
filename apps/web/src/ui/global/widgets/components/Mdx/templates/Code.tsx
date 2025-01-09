@@ -4,25 +4,14 @@ import { Animation } from './Animation'
 type CodeProps = {
   code: string
   isRunnable: boolean
-  children: string | [{ props: { children: string | { props: { children: string } } } }]
+  children: string | [{ props: { children?: string | { props: { children: string } } } }]
   hasAnimation: boolean
 }
 
 export function Code({ children, isRunnable = true, hasAnimation = true }: CodeProps) {
-  let code: unknown
+  if (!children) return
 
-  if (!Array.isArray(children)) {
-    code = children
-  } else if (
-    children.length > 0 &&
-    typeof children[0]?.props.children !== 'string' &&
-    'props' in children[0].props.children
-  ) {
-    code = children[0].props.children.props.children
-  } else if (children.length > 0) {
-    code = children[0].props.children
-  }
-
+  const code = children[0]
   if (code)
     return (
       <Animation hasAnimation={hasAnimation}>

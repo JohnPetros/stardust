@@ -1,4 +1,4 @@
-import { type RefObject, type KeyboardEvent, useState } from 'react'
+import { type RefObject, type KeyboardEvent, useState, useEffect } from 'react'
 
 import type {
   TextEditorRef,
@@ -18,15 +18,15 @@ export function useContentEditor(
   }
 
   function textEditorChange(value: string) {
-    setPreviewContent(value.replaceAll('\n', '\n\n'))
     onChange(value)
   }
 
-  function handleKeyUp({ key }: KeyboardEvent) {}
+  useEffect(() => {
+    setPreviewContent(content.replaceAll('\n', '\n\n'))
+  }, [content])
 
   return {
     previewContent,
-    handleKeyUp,
     handleSnippetInsert,
     textEditorChange,
   }

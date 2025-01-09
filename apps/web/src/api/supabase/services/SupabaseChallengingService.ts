@@ -62,12 +62,12 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         .single()
 
       if (error) {
-        return SupabasePostgrestError(error, 'Desafio não encontrado com esse id', status)
+        return SupabasePostgrestError(error, 'Solução não encontrado com esse id', status)
       }
 
-      const challengeDto = supabaseSolutionMapper.toDto(data)
+      const solutionDto = supabaseSolutionMapper.toDto(data)
 
-      return new ApiResponse({ body: challengeDto })
+      return new ApiResponse({ body: solutionDto })
     },
 
     async fetchChallengeByStarId(starId: string) {
@@ -117,7 +117,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       let query = supabase
         .from('challenges_view')
         .select('*, challenges_categories!inner(category_id)', { count: 'exact' })
-        .is('challenge_id', null)
+        .is('star_id', null)
 
       if (title && title.length > 1) {
         query = query.ilike('title', `%${title}%`)
@@ -134,6 +134,8 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       const range = calculateSupabaseRange(page, itemsPerPage)
 
       const { data, count, status, error } = await query.range(range.from, range.to)
+
+      console.log({ error })
 
       if (error) {
         return SupabasePostgrestError(
@@ -165,17 +167,17 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       switch (sorter) {
         case 'date':
           query = query.order('created_at', {
-            ascending: true,
+            ascending: false,
           })
           break
         case 'upvotesCount':
           query = query.order('upvotes_count', {
-            ascending: true,
+            ascending: false,
           })
           break
         case 'commentsCount':
           query = query.order('comments_count', {
-            ascending: true,
+            ascending: false,
           })
           break
       }

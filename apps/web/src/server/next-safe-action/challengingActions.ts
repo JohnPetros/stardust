@@ -1,5 +1,6 @@
 'use server'
 
+import { flattenValidationErrors } from 'next-safe-action'
 import { z } from 'zod'
 
 import { SupabaseServerActionClient } from '@/api/supabase/clients/SupabaseServerActionClient'
@@ -8,18 +9,45 @@ import { authActionClient } from './clients/authActionClient'
 import { NextActionServer } from '../next/NextActionServer'
 import {
   EditSolutionAction,
+  FetchChallengesListAction,
   HandleChallengePageAction,
   PostSolutionAction,
   UpvoteSolutionAction,
+  ViewSolutionAction,
   VoteChallengeAction,
 } from '../actions/challenging'
 import {
+  itemsPerPageSchema,
+  pageSchema,
+  challengeDifficultyLevelSchema,
+  challengeCompletionStatusSchema,
   challengeVoteSchema,
   idSchema,
   titleSchema,
   contentSchema,
 } from '@stardust/validation/schemas'
-import { flattenValidationErrors } from 'next-safe-action'
+
+export const fetchChallengesList = authActionClient
+  .schema(
+    z.object({
+      page: pageSchema,
+      itemsPerPage: itemsPerPageSchema,
+      difficultyLevel: challengeDifficultyLevelSchema,
+      completionStatus: challengeCompletionStatusSchema,
+      title: z.string(),
+      categoriesIds: z.string(),
+    }),
+  )
+  .action(async ({ clientInput, ctx }) => {
+    const actionServer = NextActionServer({
+      request: clientInput,
+      user: ctx.user,
+    })
+    const supabase = SupabaseServerActionClient()
+    const challengingService = SupabaseChallengingService(supabase)
+    const action = FetchChallengesListAction(challengingService)
+    return action.handle(actionServer)
+  })
 
 export const handleChallengePage = authActionClient
   .schema(z.object({ challengeSlug: z.string() }))
@@ -113,5 +141,22 @@ export const upvoteSolution = authActionClient
     const supabase = SupabaseServerActionClient()
     const challengingService = SupabaseChallengingService(supabase)
     const action = UpvoteSolutionAction(challengingService)
+    return action.handle(actionServer)
+  })
+
+export const viewSolution = authActionClient
+  .schema(
+    z.object({
+      solutionSlug: z.string(),
+    }),
+  )
+  .action(async ({ clientInput, ctx }) => {
+    const actionServer = NextActionServer({
+      request: clientInput,
+      user: ctx.user,
+    })
+    const supabase = SupabaseServerActionClient()
+    const challengingService = SupabaseChallengingService(supabase)
+    const action = ViewSolutionAction(challengingService)
     return action.handle(actionServer)
   })

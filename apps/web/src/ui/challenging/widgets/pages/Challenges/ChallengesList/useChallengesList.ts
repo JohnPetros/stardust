@@ -10,14 +10,16 @@ import {
   ChallengeCompletion,
   ChallengeDifficulty,
 } from '@stardust/core/challenging/structs'
-import { NextApiClient } from '@/api/next/NextApiClient'
+import type { IApiClient } from '@stardust/core/interfaces'
+
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useQueryArrayParam } from '@/ui/global/hooks/useQueryArrayParam'
-
+import { useFetchChallengesListAction } from './useFetchChallengesListAction'
 const CHALLENGES_PER_PAGE = 15
 
 export function useChallengesList() {
+  const { fetchList } = useFetchChallengesListAction()
   const [difficultyLevel] = useQueryStringParam(QUERY_PARAMS.difficultyLevel, 'all')
   const [completionStatus] = useQueryStringParam(QUERY_PARAMS.completionStatus, 'all')
   const [title] = useQueryStringParam(QUERY_PARAMS.title)
@@ -27,19 +29,14 @@ export function useChallengesList() {
     const completion = ChallengeCompletion.create(completionStatus)
     const difficulty = ChallengeDifficulty.create(difficultyLevel)
 
-    const apiClient = NextApiClient()
-    apiClient.setQueryParam('page', page.toString())
-    apiClient.setQueryParam('itemsPerPage', CHALLENGES_PER_PAGE.toString())
-    apiClient.setQueryParam('completionStatus', completion.status)
-    apiClient.setQueryParam('difficultyLevel', difficulty.level)
-    if (title) apiClient.setQueryParam('title', title)
-    if (categoriesIds) apiClient.setQueryParam('categoriesIds', categoriesIds.join(','))
-
-    const response = await apiClient.get<PaginationResponse<ChallengeDto>>(
-      ROUTES.api.challenging.list,
-    )
-    if (response.isFailure) response.throwError()
-    return response.body
+    return await fetchList({
+      page,
+      categoriesIds: categoriesIds.join(','),
+      completionStatus: completion.status,
+      difficultyLevel: difficulty.level,
+      itemsPerPage: CHALLENGES_PER_PAGE,
+      title,
+    })
   }
 
   const { data, isLoading, isRecheadedEnd, nextPage } = usePaginatedCache({

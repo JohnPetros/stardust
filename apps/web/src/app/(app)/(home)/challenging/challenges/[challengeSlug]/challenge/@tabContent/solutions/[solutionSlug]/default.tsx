@@ -6,7 +6,7 @@ import { ChallengeSolutionSlot } from '@/ui/challenging/widgets/slots/ChallengeS
 
 export const dynamic = 'force-dynamic'
 
-export default async function Slot({
+export default async function DefaultSlot({
   params,
 }: NextParams<{ challengeSlug: string; solutionSlug: string }>) {
   const response = await challengingActions.viewSolution({

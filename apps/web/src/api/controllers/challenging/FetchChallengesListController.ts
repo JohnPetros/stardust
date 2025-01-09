@@ -4,7 +4,6 @@ import type {
   ChallengeCompletionStatus,
   ChallengeDifficultyLevel,
 } from '@stardust/core/challenging/types'
-import { PaginationResponse } from '@stardust/core/responses'
 
 type Schema = {
   queryParams: {

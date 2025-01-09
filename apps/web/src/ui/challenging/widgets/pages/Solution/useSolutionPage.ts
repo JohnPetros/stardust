@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import type { SolutionDto } from '@stardust/core/challenging/dtos'
 import { Solution } from '@stardust/core/challenging/entities'
@@ -8,6 +8,8 @@ import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { usePostSolutionAction } from './usePostSolutionAction'
 import { useEditSolutionAction } from './useEditSolutionAction'
+import { useRouter } from '@/ui/global/hooks/useRouter'
+import { ROUTES } from '@/constants'
 
 type FieldErrors = {
   solutionTitle: string
@@ -17,6 +19,7 @@ type FieldErrors = {
 export function useSolutionPage(
   savedSolutionDto: SolutionDto | null,
   challengeId: string,
+  challengeSlug: string,
 ) {
   const [solution, setSolution] = useState<Solution | null>(
     savedSolutionDto ? Solution.create(savedSolutionDto) : null,
@@ -31,11 +34,18 @@ export function useSolutionPage(
     solutionContent: '',
   })
   const toast = useToastContext()
+  const { goTo } = useRouter()
   const { isPosting, postSolution } = usePostSolutionAction({
     onSuccess: (solution) => {
       setSolution(solution)
       setIsSuccess(true)
       toast.show('Sua solução foi postada', { type: 'success' })
+      goTo(
+        ROUTES.challenging.challenges.challengeSolutions.solution(
+          challengeSlug,
+          solution.slug.value,
+        ),
+      )
     },
     onError(solutionTitleError, solutionContentError) {
       setFieldErrors({
@@ -49,6 +59,12 @@ export function useSolutionPage(
       setSolution(solution)
       setIsSuccess(true)
       toast.show('Sua solução foi editada', { type: 'success' })
+      goTo(
+        ROUTES.challenging.challenges.challengeSolutions.solution(
+          challengeSlug,
+          solution.slug.value,
+        ),
+      )
     },
     onError(solutionTitleError, solutionContentError) {
       setFieldErrors({
@@ -95,6 +111,10 @@ export function useSolutionPage(
       solutionContent,
     })
   }
+
+  useEffect(() => {
+    if (solution) setSolutionContent(solution.content.value)
+  }, [solution, setSolutionContent])
 
   return {
     solution,

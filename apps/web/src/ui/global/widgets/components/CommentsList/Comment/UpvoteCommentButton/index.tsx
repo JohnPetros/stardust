@@ -3,7 +3,6 @@
 import { twMerge } from 'tailwind-merge'
 
 import { Icon } from '../../../Icon'
-import { useUpvoteCommentAction } from './useUpvoteCommentAction'
 import { useUpvoteComment } from './useUpvoteComment'
 
 export type UpvoteButtonProps = {

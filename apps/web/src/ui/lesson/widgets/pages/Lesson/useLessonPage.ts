@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import type { TextBlockDto } from '@stardust/core/global/dtos'
-import type { QuestionDto, StarRewardingPayloadDto } from '@stardust/core/lesson/dtos'
+import type { QuestionDto } from '@stardust/core/lesson/dtos'
 
 import { COOKIES, ROUTES, STORAGE } from '@/constants'
 import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
@@ -12,6 +12,7 @@ import { useSecondsCounter } from '@/ui/global/hooks/useSecondsCounter'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { Quiz, Theory } from '@stardust/core/lesson/structs'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
+import type { StarRewardingPayload } from '@stardust/core/space/types'
 
 export function useLessonPage(
   starId: string,
@@ -53,8 +54,7 @@ export function useLessonPage(
       async function goToRewardingPage() {
         if (!quiz) return
 
-        const rewardingPayloadDto: StarRewardingPayloadDto = {
-          origin: 'star',
+        const rewardingPayload: StarRewardingPayload = {
           questionsCount: quiz.questionsCount,
           incorrectAnswersCount: quiz.incorrectAnswersCount.value,
           secondsCount: Number(secondsCounter.get()),
@@ -63,9 +63,9 @@ export function useLessonPage(
 
         await setCookie({
           key: COOKIES.keys.rewardingPayload,
-          value: JSON.stringify(rewardingPayloadDto),
+          value: JSON.stringify(rewardingPayload),
         })
-        router.goTo(ROUTES.rewarding)
+        router.goTo(ROUTES.rewarding.star)
       }
 
       goToRewardingPage()

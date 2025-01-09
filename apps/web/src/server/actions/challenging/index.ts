@@ -1,5 +1,7 @@
 export { HandleChallengePageAction } from './HandleChallengePageAction'
 export { VoteChallengeAction } from './VoteChallengeAction'
+export { FetchChallengesListAction } from './FetchChallengesListAction'
 export { EditSolutionAction } from './EditSolutionAction'
 export { PostSolutionAction } from './PostSolutionAction'
 export { UpvoteSolutionAction } from './UpvoteSolutionAction'
+export { ViewSolutionAction } from './ViewSolutionAction'

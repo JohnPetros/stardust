@@ -23,6 +23,7 @@ export async function runApiRoute(
     return response.body
   } catch (error) {
     if (error instanceof ZodError) {
+      console.log(error)
       const validationError = ZodValidationErrorFactory.produce(error)
 
       return http.send(

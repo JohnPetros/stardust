@@ -28,7 +28,7 @@ const AlertDialogComponent = (
     body,
     action,
     cancel,
-    children,
+    children: trigger,
     shouldPlayAudio = true,
     shouldForceMount = false,
     onOpenChange,
@@ -81,7 +81,7 @@ const AlertDialogComponent = (
             </DialogAnimation>
           </AlertDialog.Content>
         </AlertDialog.Portal>
-        <AlertDialog.Trigger asChild>{children}</AlertDialog.Trigger>
+        <AlertDialog.Trigger asChild>{trigger}</AlertDialog.Trigger>
       </AlertDialog.Root>
     </Hydration>
   )

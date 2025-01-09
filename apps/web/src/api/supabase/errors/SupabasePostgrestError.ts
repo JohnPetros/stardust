@@ -11,8 +11,10 @@ export const SupabasePostgrestError = <Data>(
   console.error('Supabase postgrest error message: ', postgrestError.message)
   console.error('Supabase postgrest error status: ', statusCode)
 
+  console.log('PQ PG? ')
+
   return new ApiResponse<Data>({
     errorMessage,
-    statusCode,
+    statusCode: HTTP_STATUS_CODE.serverError,
   })
 }

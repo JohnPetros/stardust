@@ -1,9 +1,11 @@
-import { useState } from 'react'
+'use client'
+
+import { useEffect, useState } from 'react'
 
 import { Solution } from '@stardust/core/challenging/entities'
 import type { SolutionsListSorter } from '@stardust/core/challenging/types'
 
-import { CACHE, ROUTES } from '@/constants'
+import { CACHE } from '@/constants'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 import { useApi } from '@/ui/global/hooks/useApi'
 import type { PopoverMenuButton } from '@/ui/global/widgets/components/PopoverMenu/types'
@@ -39,7 +41,9 @@ export function useChallengeSolutionsSlot() {
     fetcher: fetchSolutionsList,
     itemsPerPage: SOLUTIONS_PER_PAGE,
     isInfinity: true,
-    dependencies: [solutionTitle],
+    isEnabled: Boolean(user && challenge),
+    shouldRefetchOnFocus: false,
+    dependencies: [solutionTitle, sorter],
   })
 
   function handleSolutionTitleChange(title: string) {

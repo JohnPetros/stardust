@@ -10,6 +10,7 @@ import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 
 type UserSolutionButtonsProps = {
   solutionId: string
+  solutionSlug: string
   authorId: string
   challengeSlug: string
 }
@@ -17,6 +18,7 @@ type UserSolutionButtonsProps = {
 export function UserSolutionButtons({
   solutionId,
   authorId,
+  solutionSlug,
   challengeSlug,
 }: UserSolutionButtonsProps) {
   const { user } = useAuthContext()
@@ -27,9 +29,9 @@ export function UserSolutionButtons({
 
   if (user)
     return (
-      <div className='flex items-center justify-center gap-2'>
+      <div className='flex gap-3'>
         {user.id !== authorId && (
-          <Button asChild className='h-12 text-sm'>
+          <Button asChild className='h-8 text-xs w-max px-3'>
             <Link
               href={ROUTES.challenging.challenges.challengeSolutions.list(challengeSlug)}
             >
@@ -38,9 +40,12 @@ export function UserSolutionButtons({
           </Button>
         )}
         {user.id === authorId && (
-          <Button asChild className='h-12 text-sm'>
+          <Button
+            asChild
+            className='h-8 text-gray-400 text-xs w-max bg-green-900/90 font-medium px-3'
+          >
             <Link
-              href={ROUTES.challenging.challenges.challengeSolutions.list(challengeSlug)}
+              href={ROUTES.challenging.challenges.solution(challengeSlug, solutionSlug)}
             >
               editar sua solução
             </Link>
@@ -51,15 +56,17 @@ export function UserSolutionButtons({
             title='Sua solução está preste a ser removida'
             type='crying'
             body={
-              <div>
-                <p>Tem certeza que deseja deletar essa solução?</p>
-                <p>Nenhum outro usuário poderá visualizá-la.</p>
+              <div className='mt-3'>
+                <p className='text-gray-50'>
+                  Tem certeza que deseja deletar essa solução?
+                </p>
+                <p className='text-gray-50'>Nenhum outro usuário poderá visualizá-la.</p>
               </div>
             }
             action={
               <Button
                 onClick={handleDeleteSolutionButtonClick}
-                className='bg-red-700 text-gray-100'
+                className='bg-red-700 text-gray-50'
               >
                 Deletar minha solução
               </Button>
@@ -71,7 +78,7 @@ export function UserSolutionButtons({
             }
             shouldPlayAudio={false}
           >
-            <Button asChild className='h-12 text-sm text-gray-50 bg-red-700'>
+            <Button className='h-8 text-gray-400 text-xs w-max bg-green-900/90 font-medium px-3'>
               deletar sua solução
             </Button>
           </AlertDialog>

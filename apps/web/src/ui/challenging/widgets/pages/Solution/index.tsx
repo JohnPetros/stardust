@@ -1,20 +1,26 @@
 'use client'
 
-import { Icon } from '@/ui/global/widgets/components/Icon'
-import { ContentEditor } from '../../components/ContentEditor'
-import { useSolutionPage } from './useSolutionPage'
-import { Button } from '@/ui/global/widgets/components/Button'
 import type { SolutionDto } from '@stardust/core/challenging/dtos'
+
+import type { ActionButtonTitles } from '@/ui/global/widgets/components/ActionButton/types'
+import { Button } from '@/ui/global/widgets/components/Button'
 import { TitleInput } from '@/ui/global/widgets/components/TitleInput'
 import { ActionButton } from '@/ui/global/widgets/components/ActionButton'
-import type { ActionButtonTitles } from '@/ui/global/widgets/components/ActionButton/types'
+import { useRouter } from '@/ui/global/hooks/useRouter'
+import { ContentEditor } from '../../components/ContentEditor'
+import { useSolutionPage } from './useSolutionPage'
 
 type SolutionPageProps = {
   savedSolutionDto: SolutionDto | null
   challengeId: string
+  challengeSlug: string
 }
 
-export function SolutionPage({ savedSolutionDto, challengeId }: SolutionPageProps) {
+export function SolutionPage({
+  savedSolutionDto,
+  challengeId,
+  challengeSlug,
+}: SolutionPageProps) {
   const {
     solutionTitle,
     fieldErrors,
@@ -29,7 +35,8 @@ export function SolutionPage({ savedSolutionDto, challengeId }: SolutionPageProp
     handleContentChange,
     handleSolutionPost,
     handleSolutionEdit,
-  } = useSolutionPage(savedSolutionDto, challengeId)
+  } = useSolutionPage(savedSolutionDto, challengeId, challengeSlug)
+  const { goBack } = useRouter()
 
   const ACTION_BUTTON_TITLES: ActionButtonTitles = {
     canExecute: solution ? 'atualizar?' : 'postar?',
@@ -50,7 +57,9 @@ export function SolutionPage({ savedSolutionDto, challengeId }: SolutionPageProp
           errorMessage={fieldErrors.solutionTitle}
         />
         <div className='flex items-center justify-end gap-3'>
-          <Button className='bg-gray-600 text-gray-50 w-24'>Cancelar</Button>
+          <Button onClick={goBack} className='bg-gray-600 text-gray-50 w-24'>
+            Cancelar
+          </Button>
           <ActionButton
             titles={ACTION_BUTTON_TITLES}
             isExecuting={isExecuting}

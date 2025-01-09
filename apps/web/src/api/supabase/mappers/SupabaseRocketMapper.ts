@@ -17,17 +17,20 @@ export const SupabaseRocketMapper = () => {
       return rocketDto
     },
 
-    toSupabase(rocket: Rocket): SupabaseRocket {
+    toSupabase(
+      rocket: Rocket,
+    ): Omit<SupabaseRocket, 'is_acquired_by_default' | 'is_selected_by_default'> {
       const rocketDto = rocket.dto
 
-      const supabaseRocket: SupabaseRocket = {
+      const supabaseRocket: Omit<
+        SupabaseRocket,
+        'is_acquired_by_default' | 'is_selected_by_default'
+      > = {
         id: rocket.id,
         name: rocketDto.name,
         slug: '',
         price: rocketDto.price,
         image: rocketDto.image,
-        is_acquired_by_default: rocketDto.isAcquiredByDefault,
-        is_selected_by_default: rocketDto.isSelectedByDefault,
       }
 
       return supabaseRocket

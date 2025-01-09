@@ -2,28 +2,30 @@ import {
   type ForwardedRef,
   forwardRef,
   useImperativeHandle,
-  type KeyboardEvent,
+  type ComponentProps,
 } from 'react'
-import { type ClassNameValue, twMerge } from 'tailwind-merge'
+import { twMerge } from 'tailwind-merge'
 
 import { useTextEditor } from './useTextEditor'
 import type { TextEditorRef } from './types'
 
 type TextEditorProps = {
   value: string
-  className?: ClassNameValue
-  placeholder?: string
-  hasAutoFocus?: boolean
   onChange: (value: string) => void
-  onKeyUp?: (event: KeyboardEvent<HTMLTextAreaElement>) => void
-}
+} & Omit<ComponentProps<'textarea'>, 'onChange'>
 
 const TextEditorComponent = (
-  { value, placeholder, className, hasAutoFocus, onChange, onKeyUp }: TextEditorProps,
+  { value, placeholder, className, rows, onChange }: TextEditorProps,
   ref: ForwardedRef<TextEditorRef>,
 ) => {
-  const { textareaRef, handleValueChange, insertValue, insertSnippet, moveCursorToEnd } =
-    useTextEditor(onChange)
+  const {
+    textareaRef,
+    handleValueChange,
+    handleKeyDown,
+    insertValue,
+    insertSnippet,
+    moveCursorToEnd,
+  } = useTextEditor(onChange)
 
   useImperativeHandle(
     ref,
@@ -41,14 +43,14 @@ const TextEditorComponent = (
     <textarea
       ref={textareaRef}
       placeholder={placeholder}
+      autoFocus={false}
       className={twMerge(
         'w-full resize-none rounded-md bg-transparent text-sm font-medium text-gray-300 outline-none placeholder:text-gray-500',
         className,
       )}
-      // rows={value.length > 3 ? Text.create(value).countCharacters('\n') : 1}
       value={value}
-      autoFocus={hasAutoFocus}
-      onKeyUp={onKeyUp}
+      rows={rows}
+      onKeyDown={handleKeyDown}
       onChange={({ currentTarget }) => handleValueChange(currentTarget.value)}
     />
   )

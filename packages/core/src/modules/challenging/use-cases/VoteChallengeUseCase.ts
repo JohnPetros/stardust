@@ -42,7 +42,7 @@ export class VoteChallengeUseCase implements IUseCase<Request, Response> {
 
   private async fetchChallenge(challengeId: string) {
     const response = await this.challengingService.fetchChallengeById(challengeId)
-    if (!response.isFailure) response.throwError()
+    if (response.isFailure) response.throwError()
     return Challenge.create(response.body)
   }
 
@@ -56,7 +56,7 @@ export class VoteChallengeUseCase implements IUseCase<Request, Response> {
       userId,
       challengeVote,
     )
-    if (!response.isFailure) response.throwError()
+    if (response.isFailure) response.throwError()
   }
 
   private async updateChallengeVote(
@@ -69,7 +69,7 @@ export class VoteChallengeUseCase implements IUseCase<Request, Response> {
       userId,
       challengeVote,
     )
-    if (!response.isFailure) response.throwError()
+    if (response.isFailure) response.throwError()
   }
 
   private async deleteChallengeVote(challengeId: string, userId: string) {
@@ -77,7 +77,7 @@ export class VoteChallengeUseCase implements IUseCase<Request, Response> {
       challengeId,
       userId,
     )
-    if (!response.isFailure) response.throwError()
+    if (response.isFailure) response.throwError()
   }
 
   private async fetchCurrentChallengeVote(challengeId: string, userId: string) {

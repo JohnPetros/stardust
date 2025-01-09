@@ -3,7 +3,7 @@ import { actionClient } from './actionClient'
 import { SupabaseAuthService, SupabaseProfileService } from '@/api/supabase/services'
 
 export const authActionClient = actionClient.use(async ({ next }) => {
-  const supabase = await SupabaseServerActionClient()
+  const supabase = SupabaseServerActionClient()
   const authService = SupabaseAuthService(supabase)
   const authResponse = await authService.fetchUserId()
   if (authResponse.isFailure) authResponse.throwError()

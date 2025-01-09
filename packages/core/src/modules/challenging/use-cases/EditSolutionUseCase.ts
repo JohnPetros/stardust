@@ -16,11 +16,12 @@ export class EditSolutionUseCase implements IUseCase<Request> {
     solution.content = solutionContent
 
     await this.updateSolution(solution)
+    return solution.dto
   }
 
   private async fetchSolution(SolutionId: string) {
     const response = await this.challengingService.fetchSolutionById(SolutionId)
-    if (!response.isFailure) response.throwError()
+    if (response.isFailure) response.throwError()
     return Solution.create(response.body)
   }
 

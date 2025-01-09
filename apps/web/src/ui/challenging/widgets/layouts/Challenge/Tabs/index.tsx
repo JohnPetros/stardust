@@ -63,7 +63,7 @@ export function Tabs({ children }: TabsProps) {
             </TabButton>
           )}
           <span className='text-gray-600'>|</span>
-          {craftsVislibility.canShowSolutions.isFalse ? (
+          {craftsVislibility.canShowSolutions.isTrue ? (
             <BlockedSolutionsAlertDialog onShowSolutions={handleShowSolutions}>
               <TabButton value='solutions' asChild>
                 <ContentLink
@@ -84,9 +84,7 @@ export function Tabs({ children }: TabsProps) {
             </TabButton>
           )}
         </List>
-        <AnimatePresence>
-          <TabContent value='description'>{children}</TabContent>
-        </AnimatePresence>
+        <TabContent value='description'>{children}</TabContent>
       </Root>
     </div>
   )

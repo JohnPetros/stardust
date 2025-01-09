@@ -25,7 +25,7 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
   function handleBackButton() {
     if (challenge)
       router.goTo(
-        challenge.isFromStar.isTrue ? ROUTES.space : ROUTES.challenging.challengess,
+        challenge.isFromStar.isTrue ? ROUTES.space : ROUTES.challenging.challenges.list,
       )
   }
 

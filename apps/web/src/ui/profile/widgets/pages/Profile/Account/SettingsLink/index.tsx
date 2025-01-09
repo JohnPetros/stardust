@@ -18,7 +18,7 @@ export function SettingsLink({ id }: SettingsLinkProps) {
 
   if (isAuthUser)
     return (
-      <Link href={ROUTES.profile.settings}>
+      <Link href={ROUTES.profile.settings(user.slug.value)}>
         <motion.div whileHover={{ rotate: '90deg' }}>
           <Icon name='gear' className='hidden text-4xl text-green-500 md:block' />
         </motion.div>

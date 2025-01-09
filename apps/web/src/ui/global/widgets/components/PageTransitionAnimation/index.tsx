@@ -1,3 +1,5 @@
+'use client'
+
 import { AnimatePresence, motion, type Variants } from 'framer-motion'
 
 import { usePageTransitionAnimation } from './usePageTransitionAnimation'
@@ -50,7 +52,7 @@ export function PageTransitionAnimation({
           data-testid='page transition'
         >
           <motion.div variants={apolloVariants}>
-            <Animation name='apollo-riding-rocket' size={540} hasLoop={true} />
+            {/*   <Animation name='apollo-riding-rocket' size={540} hasLoop={true} /> */}
             {/* {hasTips && codeTip && (
               <div className='mx-auto w-[32rem] max-w-[90%] -translate-y-10 rounded-md bg-gray-700 p-2 text-center leading-8 text-gray-100'>
                 <Mdx>{codeTip}</Mdx>
