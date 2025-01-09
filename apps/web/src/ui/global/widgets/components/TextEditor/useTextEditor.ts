@@ -26,24 +26,7 @@ export function useTextEditor(onChange: (value: string) => void) {
     return ''
   }
 
-  function selectSnippetComponentContent(
-    currentCursorPosition: number,
-    closeTag: string,
-    snippetComponent: string,
-  ) {
-    if (!textareaRef.current) return
-
-    const snippetComponentContent = geComponentContent(snippetComponent)
-
-    const start =
-      currentCursorPosition - (snippetComponentContent.length + closeTag.length)
-
-    const end = currentCursorPosition - closeTag.length
-
-    textareaRef.current.setSelectionRange(start, end)
-  }
-
-  function getCurrentCursorPosition() {
+  function getCursorPosition() {
     if (!textareaRef.current) return 0
     return textareaRef.current.selectionStart
   }
@@ -96,7 +79,7 @@ export function useTextEditor(onChange: (value: string) => void) {
     return oderedListIndexing.substring(0, 2) === SNIPPETS.unorderedList
   }
 
-  function getValueAfterAndBeforeCurrentLinePosition(currentLinePosition: number) {
+  function getValueAfterAndBeforeLinePosition(currentLinePosition: number) {
     if (!textareaRef.current)
       return {
         valueBeforeCursorPosition: '',
@@ -120,7 +103,7 @@ export function useTextEditor(onChange: (value: string) => void) {
     if (!textareaRef.current) return ''
 
     const { valueAfterCursorPosition } =
-      getValueAfterAndBeforeCurrentLinePosition(currentLinePosition)
+      getValueAfterAndBeforeLinePosition(currentLinePosition)
 
     const currentLineLastIndex = valueAfterCursorPosition.indexOf('\n')
 
@@ -135,6 +118,47 @@ export function useTextEditor(onChange: (value: string) => void) {
     return lineContent
   }
 
+  function insertSnippetCodeComponent(isRunnable = false) {
+    if (!textareaRef.current) return
+
+    const snippetComponentContent = geComponentContent(SNIPPETS.code)
+    const cursorPosition = getCursorPosition()
+    const { valueAfterCursorPosition, valueBeforeCursorPosition } =
+      getValueAfterAndBeforeLinePosition(cursorPosition)
+
+    const openTag = isRunnable ? '<Code>' : '<code>'
+    const closeTag = isRunnable ? '</Code>' : '</code>'
+
+    textareaRef.current.value = `${valueBeforeCursorPosition}${openTag}\n${snippetComponentContent}\n${closeTag}${valueAfterCursorPosition}`
+
+    const closeTagIndex =
+      `${valueBeforeCursorPosition}${openTag}\n${snippetComponentContent}\n`.lastIndexOf(
+        '\n',
+      )
+    const selectionStart = closeTagIndex - snippetComponentContent.length
+    const selectionEnd = selectionStart + snippetComponentContent.length
+
+    textareaRef.current.setSelectionRange(selectionStart, selectionEnd)
+  }
+
+  function insertSnippetComponent(closeTag: string, snippetComponent: string) {
+    if (!textareaRef.current) return
+
+    const snippetComponentContent = geComponentContent(snippetComponent)
+    const cursorPosition = getCursorPosition()
+    const { valueAfterCursorPosition, valueBeforeCursorPosition } =
+      getValueAfterAndBeforeLinePosition(cursorPosition)
+
+    const openTag = snippetComponent.substring(0, closeTag.length - 1)
+
+    textareaRef.current.value = `${valueBeforeCursorPosition}${openTag}${snippetComponentContent}${closeTag}${valueAfterCursorPosition}`
+
+    const selectionStart = cursorPosition + openTag.length
+    const selectionEnd = selectionStart + snippetComponentContent.length
+
+    textareaRef.current.setSelectionRange(selectionStart, selectionEnd)
+  }
+
   function insertSnippet(snippet: TextEditorSnippet) {
     if (!textareaRef.current) return
 
@@ -145,7 +169,7 @@ export function useTextEditor(onChange: (value: string) => void) {
         const titleNotation = '#'
         const currentLinePosition = getCurrentLinePosition()
         const { valueBeforeCursorPosition, valueAfterCursorPosition } =
-          getValueAfterAndBeforeCurrentLinePosition(currentLinePosition)
+          getValueAfterAndBeforeLinePosition(currentLinePosition)
 
         if (isCursorInLineFirstPosition(currentLinePosition)) {
           const lineContent = SNIPPETS.title
@@ -192,7 +216,7 @@ export function useTextEditor(onChange: (value: string) => void) {
         }
 
         const { valueBeforeCursorPosition, valueAfterCursorPosition } =
-          getValueAfterAndBeforeCurrentLinePosition(currentCursorPosition)
+          getValueAfterAndBeforeLinePosition(currentCursorPosition)
 
         textareaRef.current.value = `${valueBeforeCursorPosition}${SNIPPETS[snippet]}${valueAfterCursorPosition}`
         const starsCountInEachSide = 1
@@ -207,7 +231,7 @@ export function useTextEditor(onChange: (value: string) => void) {
         const currentLinePosition = getCurrentLinePosition()
 
         const { valueBeforeCursorPosition, valueAfterCursorPosition } =
-          getValueAfterAndBeforeCurrentLinePosition(currentLinePosition)
+          getValueAfterAndBeforeLinePosition(currentLinePosition)
 
         if (isCursorInOrderedList()) {
           const listItemContent = valueAfterCursorPosition.substring(3)
@@ -243,7 +267,7 @@ export function useTextEditor(onChange: (value: string) => void) {
         const currentLinePosition = getCurrentLinePosition()
 
         const { valueBeforeCursorPosition, valueAfterCursorPosition } =
-          getValueAfterAndBeforeCurrentLinePosition(currentLinePosition)
+          getValueAfterAndBeforeLinePosition(currentLinePosition)
 
         if (isCursorInUnorderedList()) {
           const listItemContent = valueAfterCursorPosition.substring(2)
@@ -276,41 +300,19 @@ export function useTextEditor(onChange: (value: string) => void) {
       }
 
       case 'textBlock':
-        textareaRef.current.value += ` ${SNIPPETS[snippet]}`
-
-        selectSnippetComponentContent(
-          currentCursorPosition,
-          '</Text>',
-          SNIPPETS.textBlock,
-        )
+        insertSnippetComponent('</Text>', SNIPPETS.textBlock)
         break
       case 'strongTextBlock':
-        textareaRef.current.value += ` ${SNIPPETS[snippet]}`
-
-        selectSnippetComponentContent(
-          currentCursorPosition,
-          '</Quote>',
-          SNIPPETS.strongTextBlock,
-        )
+        insertSnippetComponent('</Quote>', SNIPPETS.strongTextBlock)
         break
       case 'code':
-        textareaRef.current.value += ` ${SNIPPETS[snippet]}`
-
-        selectSnippetComponentContent(currentCursorPosition, '</code>', SNIPPETS.code)
+        insertSnippetCodeComponent(false)
         break
       case 'runnableCode':
-        textareaRef.current.value += ` ${SNIPPETS[snippet]}`
-
-        selectSnippetComponentContent(
-          currentCursorPosition,
-          '</Code>',
-          SNIPPETS.runnableCode,
-        )
+        insertSnippetCodeComponent(true)
         break
       case 'link':
-        textareaRef.current.value += ` ${SNIPPETS[snippet]}`
-
-        selectSnippetComponentContent(currentCursorPosition, '</Link>', SNIPPETS.link)
+        insertSnippetCodeComponent()
         break
 
       default:
@@ -354,7 +356,7 @@ export function useTextEditor(onChange: (value: string) => void) {
     )
     const indexingNumber = oderedListIndexing.match(numberRegex)
     const { valueBeforeCursorPosition, valueAfterCursorPosition } =
-      getValueAfterAndBeforeCurrentLinePosition(getCurrentCursorPosition())
+      getValueAfterAndBeforeLinePosition(getCursorPosition())
     textareaRef.current.value = `${valueBeforeCursorPosition}\n${Number(indexingNumber) + 1}. ${valueAfterCursorPosition}`
 
     setTimeout(() => {
@@ -371,7 +373,7 @@ export function useTextEditor(onChange: (value: string) => void) {
     if (!textareaRef.current) return
 
     const { valueBeforeCursorPosition, valueAfterCursorPosition } =
-      getValueAfterAndBeforeCurrentLinePosition(getCurrentCursorPosition())
+      getValueAfterAndBeforeLinePosition(getCursorPosition())
     textareaRef.current.value = `${valueBeforeCursorPosition}\n${SNIPPETS.unorderedList}${valueAfterCursorPosition}`
 
     setTimeout(() => {
