@@ -118,6 +118,28 @@ export function useTextEditor(onChange: (value: string) => void) {
     return lineContent
   }
 
+  function insertSnippetLinkComponent() {
+    if (!textareaRef.current) return
+
+    const linkContent = geComponentContent(SNIPPETS.link)
+    const cursorPosition = getCursorPosition()
+    const { valueAfterCursorPosition, valueBeforeCursorPosition } =
+      getValueAfterAndBeforeLinePosition(cursorPosition)
+
+    const urlPlaceholder = 'Insira a url do link aqui'
+    const urlParam = `url={${urlPlaceholder}}`
+    const openTag = `<Link ${urlParam}>`
+    const closeTag = '</Link>'
+
+    textareaRef.current.value = `${valueBeforeCursorPosition}${openTag}${linkContent}${closeTag}${valueAfterCursorPosition}`
+
+    const urlIndex = `${valueBeforeCursorPosition}${openTag}`.indexOf(urlParam) + 5
+    const selectionStart = urlIndex
+    const selectionEnd = selectionStart + urlPlaceholder.length
+
+    textareaRef.current.setSelectionRange(selectionStart, selectionEnd)
+  }
+
   function insertSnippetCodeComponent(isRunnable = false) {
     if (!textareaRef.current) return
 
@@ -312,7 +334,7 @@ export function useTextEditor(onChange: (value: string) => void) {
         insertSnippetCodeComponent(true)
         break
       case 'link':
-        insertSnippetCodeComponent()
+        insertSnippetLinkComponent()
         break
 
       default:

@@ -1,5 +1,4 @@
 import {
-  Anchor,
   ArrowUp,
   ArrowDown,
   ArrowLeft,
@@ -18,6 +17,7 @@ import {
   SignIn,
   Eye,
   X,
+  Link,
   DotsThreeOutlineVertical,
   Terminal,
   PlusCircle,
@@ -79,7 +79,7 @@ export const ICONS: Record<IconName, Icon> = {
   strong: Article,
   send: PaperPlaneRight,
   share: ShareNetwork,
-  link: Anchor,
+  link: Link,
   minus: Minus,
   divider: Minus,
   quote: Quotes,
