@@ -35,7 +35,7 @@ export function Account({
   createdAt,
   xp,
 }: UserProps) {
-  const formattedCreatedAt = new Datetime().format(createdAt, 'DD MMMM [de] YYYY')
+  const formattedCreatedAt = new Datetime(createdAt).format('DD MMMM [de] YYYY')
 
   return (
     <div className='flex flex-col border-b border-gray-300 pb-6 md:flex-row md:justify-between md:gap-6'>

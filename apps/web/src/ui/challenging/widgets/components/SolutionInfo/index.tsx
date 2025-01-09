@@ -14,7 +14,7 @@ export function SolutionInfo({
   commentsCount,
   createdAt,
 }: SolutionInfo) {
-  const date = new Datetime().format(createdAt, 'MMM D, YYYY')
+  const date = new Datetime(createdAt).format('MMM D, YYYY')
 
   return (
     <ul className='flex items-center gap-3 border-b border-gray-700'>

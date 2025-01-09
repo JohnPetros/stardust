@@ -7,6 +7,12 @@ import type { DateFormat } from '../../../interfaces/libs/IDatetime'
 dayjs.locale('pt-br')
 
 export class DayJsDatetime implements IDatetime {
+  dayjs: dayjs.Dayjs
+
+  constructor(date?: Date) {
+    this.dayjs = dayjs(date ?? new Date())
+  }
+
   getDaysCountToSunday(): number {
     const todayIndex = dayjs().day()
     const sundayIndex = 0
@@ -16,14 +22,14 @@ export class DayJsDatetime implements IDatetime {
   }
 
   getTodayIndex(): number {
-    return dayjs().day()
+    return this.dayjs.day()
   }
 
   convertSecondsToTime(seconds: number): string {
     return dayjs(seconds * 1000).format('mm:ss')
   }
 
-  format(date: Date, dateFormat: DateFormat): string {
-    return dayjs(date).format(dateFormat)
+  format(dateFormat: DateFormat): string {
+    return this.dayjs.format(dateFormat)
   }
 }

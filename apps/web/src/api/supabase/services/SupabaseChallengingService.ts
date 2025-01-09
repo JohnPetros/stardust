@@ -116,7 +116,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
     }: ChallengesListParams) {
       let query = supabase
         .from('challenges_view')
-        .select('*', { count: 'exact' })
+        .select('*, challenges_categories!inner(category_id)', { count: 'exact' })
         .is('challenge_id', null)
 
       if (title && title.length > 1) {

@@ -8,7 +8,7 @@ import { TiersList } from './TiersList'
 import { RankingUsersList } from './RankingUsersList'
 import { RankingResult } from './RankingResult'
 
-const DAYS_COUNT_TO_SUNDAY = new Datetime().getDaysCountToSunday()
+const DAYS_COUNT_TO_SUNDAY = new Datetime(new Date()).getDaysCountToSunday()
 
 export function RankingPage() {
   const { user } = useAuthContext()
