@@ -21,15 +21,12 @@ export function useContentEditor(
     onChange(value)
   }
 
-  function handleKeyUp({ key }: KeyboardEvent) {}
-
   useEffect(() => {
     setPreviewContent(content.replaceAll('\n', '\n\n'))
   }, [content])
 
   return {
     previewContent,
-    handleKeyUp,
     handleSnippetInsert,
     textEditorChange,
   }

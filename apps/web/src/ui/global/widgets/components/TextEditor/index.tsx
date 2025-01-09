@@ -15,11 +15,17 @@ type TextEditorProps = {
 } & Omit<ComponentProps<'textarea'>, 'onChange'>
 
 const TextEditorComponent = (
-  { value, placeholder, className, rows, onChange, onKeyUp }: TextEditorProps,
+  { value, placeholder, className, rows, onChange }: TextEditorProps,
   ref: ForwardedRef<TextEditorRef>,
 ) => {
-  const { textareaRef, handleValueChange, insertValue, insertSnippet, moveCursorToEnd } =
-    useTextEditor(onChange)
+  const {
+    textareaRef,
+    handleValueChange,
+    handleKeyDown,
+    insertValue,
+    insertSnippet,
+    moveCursorToEnd,
+  } = useTextEditor(onChange)
 
   useImperativeHandle(
     ref,
@@ -44,7 +50,7 @@ const TextEditorComponent = (
       )}
       value={value}
       rows={rows}
-      onKeyUp={onKeyUp}
+      onKeyDown={handleKeyDown}
       onChange={({ currentTarget }) => handleValueChange(currentTarget.value)}
     />
   )

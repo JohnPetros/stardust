@@ -16,8 +16,11 @@ type ContentEditorProps = {
 
 export function ContentEditor({ content, errorMessage, onChange }: ContentEditorProps) {
   const textEditorRef = useRef<TextEditorRef>(null)
-  const { previewContent, handleSnippetInsert, handleKeyUp, textEditorChange } =
-    useContentEditor(content, textEditorRef, onChange)
+  const { previewContent, handleSnippetInsert, textEditorChange } = useContentEditor(
+    content,
+    textEditorRef,
+    onChange,
+  )
 
   return (
     <>
@@ -43,12 +46,12 @@ export function ContentEditor({ content, errorMessage, onChange }: ContentEditor
           label='Bloco de texto destacado'
         />
         <Toolbar.Button
-          onClick={() => handleSnippetInsert('code')}
+          onClick={() => handleSnippetInsert('orderedList')}
           icon='ordered-list'
           label='Lista numéria'
         />
         <Toolbar.Button
-          onClick={() => handleSnippetInsert('code')}
+          onClick={() => handleSnippetInsert('unorderedList')}
           icon='unordered-list'
           label='Lista'
         />
@@ -77,7 +80,6 @@ export function ContentEditor({ content, errorMessage, onChange }: ContentEditor
             ref={textEditorRef}
             value={content}
             onChange={textEditorChange}
-            onKeyUp={handleKeyUp}
             className='min-h-screen pl-6'
           />
         </div>

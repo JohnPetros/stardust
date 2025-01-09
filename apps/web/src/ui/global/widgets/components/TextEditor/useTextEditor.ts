@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { type KeyboardEvent, useCallback, useRef } from 'react'
 
 import { REGEX } from '@/constants'
 import { SNIPPETS } from './snippets'
@@ -43,6 +43,11 @@ export function useTextEditor(onChange: (value: string) => void) {
     textareaRef.current.setSelectionRange(start, end)
   }
 
+  function getCurrentCursorPosition() {
+    if (!textareaRef.current) return 0
+    return textareaRef.current.selectionStart
+  }
+
   function getCurrentLinePosition() {
     if (!textareaRef.current) return 0
 
@@ -51,6 +56,64 @@ export function useTextEditor(onChange: (value: string) => void) {
     const lastNewlineIndex = textBeforeCursor.lastIndexOf('\n')
     if (lastNewlineIndex === -1) return 0
     return lastNewlineIndex + 1
+  }
+
+  function isCursorInLineFirstPosition(currentLinePosition: number) {
+    if (!textareaRef.current) return false
+    const currentCharacter = textareaRef.current.value[currentLinePosition]
+    return !currentCharacter
+  }
+
+  function isCursorInList() {
+    if (!textareaRef.current) return false
+
+    const linePosition = getCurrentLinePosition()
+    const lineContent = getCurrentLineContent(linePosition)
+    const orderedListIndexingRegex = /\d\./
+    const oderedListIndexing = textareaRef.current.value.substring(
+      linePosition,
+      linePosition + 2,
+    )
+    return orderedListIndexingRegex.test(oderedListIndexing)
+  }
+
+  function getValueAfterAndBeforeCurrentLinePosition(currentLinePosition: number) {
+    if (!textareaRef.current)
+      return {
+        valueBeforeCursorPosition: '',
+        valueAfterCursorPosition: '',
+      }
+
+    const valueBeforeCursorPosition = textareaRef.current.value.substring(
+      0,
+      currentLinePosition,
+    )
+    const valueAfterCursorPosition =
+      textareaRef.current.value.substring(currentLinePosition)
+
+    return {
+      valueBeforeCursorPosition,
+      valueAfterCursorPosition,
+    }
+  }
+
+  function getCurrentLineContent(currentLinePosition: number) {
+    if (!textareaRef.current) return ''
+
+    const { valueAfterCursorPosition } =
+      getValueAfterAndBeforeCurrentLinePosition(currentLinePosition)
+
+    const currentLineLastIndex = valueAfterCursorPosition.indexOf('\n')
+
+    const lineContent = textareaRef.current.value.substring(
+      currentLinePosition,
+      currentLinePosition +
+        (currentLineLastIndex === -1
+          ? valueAfterCursorPosition.length - 1
+          : currentLineLastIndex),
+    )
+
+    return lineContent
   }
 
   function insertSnippet(snippet: TextEditorSnippet) {
@@ -62,22 +125,21 @@ export function useTextEditor(onChange: (value: string) => void) {
       case 'title': {
         const titleNotation = '#'
         const currentLinePosition = getCurrentLinePosition()
-        const valueBeforeCurrentLinePosition = textareaRef.current.value.substring(
-          0,
-          currentLinePosition,
-        )
-        const valueAfterCurrentLinePosition =
-          textareaRef.current.value.substring(currentLinePosition)
+        const { valueBeforeCursorPosition, valueAfterCursorPosition } =
+          getValueAfterAndBeforeCurrentLinePosition(currentLinePosition)
 
-        const currentLineLastIndex = valueAfterCurrentLinePosition.indexOf('\n')
+        if (isCursorInLineFirstPosition(currentLinePosition)) {
+          const lineContent = SNIPPETS.title
 
-        let lineContent = textareaRef.current.value.substring(
-          currentLinePosition,
-          currentLinePosition +
-            (currentLineLastIndex === -1
-              ? valueAfterCurrentLinePosition.length - 1
-              : currentLineLastIndex),
-        )
+          textareaRef.current.value = `${valueBeforeCursorPosition}${lineContent} ${valueAfterCursorPosition}`
+
+          const selectionStart = currentLinePosition + 2
+          const selectionEnd = selectionStart + lineContent.substring(2).length
+          textareaRef.current.setSelectionRange(selectionStart, selectionEnd)
+          return
+        }
+
+        let lineContent = getCurrentLineContent(currentLinePosition)
 
         let currentTitleNotation = '#'
         while (lineContent[0] === titleNotation) {
@@ -85,44 +147,39 @@ export function useTextEditor(onChange: (value: string) => void) {
           lineContent = lineContent.substring(1)
         }
 
-        textareaRef.current.value = `${valueBeforeCurrentLinePosition}${currentTitleNotation} ${valueAfterCurrentLinePosition.substring(currentTitleNotation.length - 1)}`
+        textareaRef.current.value = `${valueBeforeCursorPosition}${currentTitleNotation} ${valueAfterCursorPosition.substring(currentTitleNotation.length - 1)}`
 
-        const start = currentLinePosition + currentTitleNotation.length + 1
-        const end = start + lineContent.length
-        textareaRef.current.setSelectionRange(start, end)
+        const hasExtraEndLine = valueAfterCursorPosition.includes('\n')
+
+        const selectionStart = currentLinePosition + currentTitleNotation.length + 1
+        const selectionEnd =
+          selectionStart + lineContent.length + (hasExtraEndLine ? 0 : 1)
+        textareaRef.current.setSelectionRange(selectionStart, selectionEnd)
         break
       }
       case 'strong': {
-        console.log('selectionStart', textareaRef.current.selectionStart)
-        console.log('selectionEnd', textareaRef.current.selectionEnd)
-        console.log(
-          'value',
-          textareaRef.current.value.substring(
-            textareaRef.current.selectionStart,
-            textareaRef.current.selectionEnd,
-          ),
-        )
-
         if (textareaRef.current.selectionStart !== textareaRef.current.selectionEnd) {
-          const start = textareaRef.current.selectionStart
-          const end = textareaRef.current.selectionEnd
+          const selectionStart = textareaRef.current.selectionStart
+          const selectionEnd = textareaRef.current.selectionEnd
 
-          const selectedValue = textareaRef.current.value.substring(start, end)
-          const valueBeforePosition = textareaRef.current.value.substring(0, start)
-          const valueAfterPosition = textareaRef.current.value.substring(end)
+          const selectedValue = textareaRef.current.value.substring(
+            selectionStart,
+            selectionEnd,
+          )
+          const valueBeforePosition = textareaRef.current.value.substring(
+            0,
+            selectionStart,
+          )
+          const valueAfterPosition = textareaRef.current.value.substring(selectionEnd)
 
           textareaRef.current.value = `${valueBeforePosition} *${selectedValue}* ${valueAfterPosition}`
           return
         }
 
-        const valueBeforePosition = textareaRef.current.value.substring(
-          0,
-          currentCursorPosition,
-        )
-        const valueAfterPosition =
-          textareaRef.current.value.substring(currentCursorPosition)
+        const { valueBeforeCursorPosition, valueAfterCursorPosition } =
+          getValueAfterAndBeforeCurrentLinePosition(currentCursorPosition)
 
-        textareaRef.current.value = `${valueBeforePosition}${SNIPPETS[snippet]}${valueAfterPosition}`
+        textareaRef.current.value = `${valueBeforeCursorPosition}${SNIPPETS[snippet]}${valueAfterCursorPosition}`
 
         const starsCountInEachSide = 1
 
@@ -134,6 +191,33 @@ export function useTextEditor(onChange: (value: string) => void) {
         textareaRef.current.setSelectionRange(start, end)
         break
       }
+
+      case 'orderedList': {
+        const currentLinePosition = getCurrentLinePosition()
+
+        const { valueBeforeCursorPosition, valueAfterCursorPosition } =
+          getValueAfterAndBeforeCurrentLinePosition(currentLinePosition)
+
+        if (isCursorInLineFirstPosition(currentLinePosition)) {
+          textareaRef.current.value = `${valueBeforeCursorPosition}${SNIPPETS.orderedList}${valueAfterCursorPosition}`
+          const newCursorPosition = getCurrentLinePosition() + 2
+          textareaRef.current.setSelectionRange(newCursorPosition, newCursorPosition)
+          return
+        }
+
+        const lineContent = getCurrentLineContent(currentLinePosition)
+
+        textareaRef.current.value = `${valueBeforeCursorPosition}${SNIPPETS.orderedList} ${valueAfterCursorPosition}`
+
+        const selectionStartPosition = currentLinePosition + 2
+        const selectionEndPosition = currentLinePosition + lineContent.length
+        textareaRef.current.setSelectionRange(
+          selectionStartPosition,
+          selectionEndPosition,
+        )
+        break
+      }
+
       case 'textBlock':
         textareaRef.current.value += ` ${SNIPPETS[snippet]}`
 
@@ -202,8 +286,27 @@ export function useTextEditor(onChange: (value: string) => void) {
     }
   }
 
+  function handleKeyDown({ key }: KeyboardEvent) {
+    if (!textareaRef.current) return
+    if (key === 'Enter') {
+      if (!isCursorInList()) return
+
+      const linePosition = getCurrentLinePosition()
+      const numberRegex = /\d+/g
+      const oderedListIndexing = textareaRef.current.value.substring(
+        linePosition,
+        linePosition + 2,
+      )
+      const indexingNumber = oderedListIndexing.match(numberRegex)
+      const { valueBeforeCursorPosition, valueAfterCursorPosition } =
+        getValueAfterAndBeforeCurrentLinePosition(getCurrentCursorPosition())
+      textareaRef.current.value = `${valueBeforeCursorPosition}\n${Number(indexingNumber) + 1}. ${valueAfterCursorPosition}`
+    }
+  }
+
   return {
     textareaRef,
+    handleKeyDown,
     handleValueChange,
     moveCursorToEnd,
     insertSnippet,
