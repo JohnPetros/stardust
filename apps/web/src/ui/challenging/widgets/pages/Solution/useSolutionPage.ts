@@ -24,6 +24,7 @@ export function useSolutionPage(
   const { getSolutionContentSlice } = useChallengeStore()
   const { solutionContent, setSolutionContent } = getSolutionContentSlice()
   const { user } = useAuthContext()
+  const [isSuccess, setIsSuccess] = useState(false)
   const [solutionTitle, setSolutionTitle] = useState(solution?.title.value ?? '')
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({
     solutionTitle: '',
@@ -33,6 +34,7 @@ export function useSolutionPage(
   const { isPosting, postSolution } = usePostSolutionAction({
     onSuccess: (solution) => {
       setSolution(solution)
+      setIsSuccess(true)
       toast.show('Sua solução foi postada', { type: 'success' })
     },
     onError(solutionTitleError, solutionContentError) {
@@ -45,6 +47,7 @@ export function useSolutionPage(
   const { isEditing, editSolution } = useEditSolutionAction({
     onSuccess: (solution) => {
       setSolution(solution)
+      setIsSuccess(true)
       toast.show('Sua solução foi editada', { type: 'success' })
     },
     onError(solutionTitleError, solutionContentError) {
@@ -56,6 +59,7 @@ export function useSolutionPage(
   })
 
   function handleTitleChange(title: string) {
+    setIsSuccess(false)
     setSolutionTitle(title)
   }
 
@@ -65,6 +69,10 @@ export function useSolutionPage(
 
   async function handleSolutionPost() {
     if (!user) return
+    setFieldErrors({
+      solutionTitle: '',
+      solutionContent: '',
+    })
 
     await postSolution({
       solutionTitle,
@@ -76,6 +84,10 @@ export function useSolutionPage(
 
   async function handleSolutionEdit() {
     if (!solution) return
+    setFieldErrors({
+      solutionTitle: '',
+      solutionContent: '',
+    })
 
     await editSolution({
       solutionId: solution.id,
@@ -87,9 +99,14 @@ export function useSolutionPage(
   return {
     solution,
     solutionTitle,
-    content: solutionContent,
-    canPostSolution: Boolean(solutionTitle && solutionContent),
-    isLoading: isPosting || isEditing,
+    solutionContent,
+    isActionDisable: !solutionTitle || !solutionContent,
+    canExecute:
+      solution?.title.value !== solutionTitle ||
+      solution?.content.value !== solutionContent,
+    isFailure: Boolean(fieldErrors.solutionTitle) || Boolean(fieldErrors.solutionContent),
+    isExecuting: isPosting || isEditing,
+    isSuccess,
     fieldErrors,
     handleTitleChange,
     handleContentChange,
