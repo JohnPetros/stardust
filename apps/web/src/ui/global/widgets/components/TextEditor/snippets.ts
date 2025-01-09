@@ -6,6 +6,6 @@ export const SNIPPETS = {
   code: '<code>Insira seu código aqui</code>',
   runnableCode: '<Code>Insira seu código executável aqui</Code>',
   orderedList: '1. ',
-  unorderedList: '',
+  unorderedList: '- ',
   link: '<Link url={Insira a url do link aqui}>o nome do link aqui</Link>',
 }

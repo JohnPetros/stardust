@@ -58,23 +58,42 @@ export function useTextEditor(onChange: (value: string) => void) {
     return lastNewlineIndex + 1
   }
 
+  function getSelectedValue() {
+    if (!textareaRef.current) return ''
+    const selectedValue = textareaRef.current.value.substring(
+      textareaRef.current.selectionStart,
+      textareaRef.current.selectionEnd,
+    )
+    return selectedValue
+  }
+
   function isCursorInLineFirstPosition(currentLinePosition: number) {
     if (!textareaRef.current) return false
     const currentCharacter = textareaRef.current.value[currentLinePosition]
     return !currentCharacter
   }
 
-  function isCursorInList() {
+  function isCursorInOrderedList() {
     if (!textareaRef.current) return false
 
     const linePosition = getCurrentLinePosition()
-    const lineContent = getCurrentLineContent(linePosition)
     const orderedListIndexingRegex = /\d\./
     const oderedListIndexing = textareaRef.current.value.substring(
       linePosition,
       linePosition + 2,
     )
     return orderedListIndexingRegex.test(oderedListIndexing)
+  }
+
+  function isCursorInUnorderedList() {
+    if (!textareaRef.current) return false
+
+    const linePosition = getCurrentLinePosition()
+    const oderedListIndexing = textareaRef.current.value.substring(
+      linePosition,
+      linePosition + 2,
+    )
+    return oderedListIndexing.substring(0, 2) === SNIPPETS.unorderedList
   }
 
   function getValueAfterAndBeforeCurrentLinePosition(currentLinePosition: number) {
@@ -130,9 +149,7 @@ export function useTextEditor(onChange: (value: string) => void) {
 
         if (isCursorInLineFirstPosition(currentLinePosition)) {
           const lineContent = SNIPPETS.title
-
-          textareaRef.current.value = `${valueBeforeCursorPosition}${lineContent} ${valueAfterCursorPosition}`
-
+          textareaRef.current.value = `${valueBeforeCursorPosition} ${valueAfterCursorPosition}`
           const selectionStart = currentLinePosition + 2
           const selectionEnd = selectionStart + lineContent.substring(2).length
           textareaRef.current.setSelectionRange(selectionStart, selectionEnd)
@@ -162,17 +179,15 @@ export function useTextEditor(onChange: (value: string) => void) {
           const selectionStart = textareaRef.current.selectionStart
           const selectionEnd = textareaRef.current.selectionEnd
 
-          const selectedValue = textareaRef.current.value.substring(
-            selectionStart,
-            selectionEnd,
-          )
-          const valueBeforePosition = textareaRef.current.value.substring(
+          const selectedValue = getSelectedValue()
+          const valueBeforeSelectedValue = textareaRef.current.value.substring(
             0,
             selectionStart,
           )
-          const valueAfterPosition = textareaRef.current.value.substring(selectionEnd)
+          const valueAfterSelectedValue =
+            textareaRef.current.value.substring(selectionEnd)
 
-          textareaRef.current.value = `${valueBeforePosition} *${selectedValue}* ${valueAfterPosition}`
+          textareaRef.current.value = `${valueBeforeSelectedValue} *${selectedValue}* ${valueAfterSelectedValue}`
           return
         }
 
@@ -180,15 +195,11 @@ export function useTextEditor(onChange: (value: string) => void) {
           getValueAfterAndBeforeCurrentLinePosition(currentCursorPosition)
 
         textareaRef.current.value = `${valueBeforeCursorPosition}${SNIPPETS[snippet]}${valueAfterCursorPosition}`
-
         const starsCountInEachSide = 1
-
         const snippetContent = SNIPPETS.strong.replace(/\*/g, '')
-
-        const start = currentCursorPosition + starsCountInEachSide + 1
-        const end = start + snippetContent.length - 1
-
-        textareaRef.current.setSelectionRange(start, end)
+        const selectionStart = currentCursorPosition + starsCountInEachSide + 1
+        const selectionEnd = selectionStart + snippetContent.length - 1
+        textareaRef.current.setSelectionRange(selectionStart, selectionEnd)
         break
       }
 
@@ -197,6 +208,16 @@ export function useTextEditor(onChange: (value: string) => void) {
 
         const { valueBeforeCursorPosition, valueAfterCursorPosition } =
           getValueAfterAndBeforeCurrentLinePosition(currentLinePosition)
+
+        if (isCursorInOrderedList()) {
+          const listItemContent = valueAfterCursorPosition.substring(3)
+          textareaRef.current.value = `${valueBeforeCursorPosition}${listItemContent}`
+          textareaRef.current.setSelectionRange(
+            currentLinePosition,
+            currentLinePosition + listItemContent.length,
+          )
+          return
+        }
 
         if (isCursorInLineFirstPosition(currentLinePosition)) {
           textareaRef.current.value = `${valueBeforeCursorPosition}${SNIPPETS.orderedList}${valueAfterCursorPosition}`
@@ -209,8 +230,44 @@ export function useTextEditor(onChange: (value: string) => void) {
 
         textareaRef.current.value = `${valueBeforeCursorPosition}${SNIPPETS.orderedList} ${valueAfterCursorPosition}`
 
-        const selectionStartPosition = currentLinePosition + 2
-        const selectionEndPosition = currentLinePosition + lineContent.length
+        const selectionStartPosition = currentLinePosition + 4
+        const selectionEndPosition = selectionStartPosition + lineContent.length + 1
+        textareaRef.current.setSelectionRange(
+          selectionStartPosition,
+          selectionEndPosition,
+        )
+        break
+      }
+
+      case 'unorderedList': {
+        const currentLinePosition = getCurrentLinePosition()
+
+        const { valueBeforeCursorPosition, valueAfterCursorPosition } =
+          getValueAfterAndBeforeCurrentLinePosition(currentLinePosition)
+
+        if (isCursorInUnorderedList()) {
+          const listItemContent = valueAfterCursorPosition.substring(2)
+          textareaRef.current.value = `${valueBeforeCursorPosition}${listItemContent}`
+          textareaRef.current.setSelectionRange(
+            currentLinePosition,
+            currentLinePosition + listItemContent.length,
+          )
+          return
+        }
+
+        if (isCursorInLineFirstPosition(currentLinePosition)) {
+          textareaRef.current.value = `${valueBeforeCursorPosition}${SNIPPETS.unorderedList}${valueAfterCursorPosition}`
+          const newCursorPosition = getCurrentLinePosition() + 2
+          textareaRef.current.setSelectionRange(newCursorPosition, newCursorPosition)
+          return
+        }
+
+        const lineContent = getCurrentLineContent(currentLinePosition)
+
+        textareaRef.current.value = `${valueBeforeCursorPosition}${SNIPPETS.unorderedList} ${valueAfterCursorPosition}`
+
+        const selectionStartPosition = currentLinePosition + 3
+        const selectionEndPosition = selectionStartPosition + lineContent.length + 1
         textareaRef.current.setSelectionRange(
           selectionStartPosition,
           selectionEndPosition,
@@ -286,21 +343,58 @@ export function useTextEditor(onChange: (value: string) => void) {
     }
   }
 
-  function handleKeyDown({ key }: KeyboardEvent) {
+  function insertNewOrderedListItem() {
     if (!textareaRef.current) return
-    if (key === 'Enter') {
-      if (!isCursorInList()) return
 
-      const linePosition = getCurrentLinePosition()
-      const numberRegex = /\d+/g
-      const oderedListIndexing = textareaRef.current.value.substring(
-        linePosition,
-        linePosition + 2,
-      )
-      const indexingNumber = oderedListIndexing.match(numberRegex)
-      const { valueBeforeCursorPosition, valueAfterCursorPosition } =
-        getValueAfterAndBeforeCurrentLinePosition(getCurrentCursorPosition())
-      textareaRef.current.value = `${valueBeforeCursorPosition}\n${Number(indexingNumber) + 1}. ${valueAfterCursorPosition}`
+    const linePosition = getCurrentLinePosition()
+    const numberRegex = /\d+/g
+    const oderedListIndexing = textareaRef.current.value.substring(
+      linePosition,
+      linePosition + 2,
+    )
+    const indexingNumber = oderedListIndexing.match(numberRegex)
+    const { valueBeforeCursorPosition, valueAfterCursorPosition } =
+      getValueAfterAndBeforeCurrentLinePosition(getCurrentCursorPosition())
+    textareaRef.current.value = `${valueBeforeCursorPosition}\n${Number(indexingNumber) + 1}. ${valueAfterCursorPosition}`
+
+    setTimeout(() => {
+      if (!textareaRef.current) return
+
+      textareaRef.current.value = `${textareaRef.current.value.substring(
+        0,
+        textareaRef.current?.value.length - 2,
+      )} `
+    }, 10)
+  }
+
+  function insertNewUnorderedListItem() {
+    if (!textareaRef.current) return
+
+    const { valueBeforeCursorPosition, valueAfterCursorPosition } =
+      getValueAfterAndBeforeCurrentLinePosition(getCurrentCursorPosition())
+    textareaRef.current.value = `${valueBeforeCursorPosition}\n${SNIPPETS.unorderedList}${valueAfterCursorPosition}`
+
+    setTimeout(() => {
+      if (!textareaRef.current) return
+
+      textareaRef.current.value = `${textareaRef.current.value.substring(
+        0,
+        textareaRef.current?.value.length - 2,
+      )} `
+    }, 10)
+  }
+
+  function handleKeyDown({ key }: KeyboardEvent) {
+    if (key === 'Enter') {
+      if (isCursorInOrderedList()) {
+        insertNewOrderedListItem()
+        return
+      }
+
+      if (isCursorInUnorderedList()) {
+        insertNewUnorderedListItem()
+        return
+      }
     }
   }
 
