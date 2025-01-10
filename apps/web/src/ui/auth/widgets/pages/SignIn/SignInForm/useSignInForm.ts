@@ -16,7 +16,6 @@ const signInFormSchema = z.object({
 
 export function useSignInForm(onFormSubmit: (fields: SignInFormFields) => Promise<void>) {
   const [isLoading, setIsloading] = useState(false)
-
   const {
     register,
     handleSubmit,
