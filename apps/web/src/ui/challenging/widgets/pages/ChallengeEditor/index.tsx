@@ -1,10 +1,16 @@
 import { FormProvider } from 'react-hook-form'
 
+import type { ChallengeDto } from '@stardust/core/challenging/dtos'
+
 import { ChallengeField } from './ChallengeField'
 import { ChallengeTitleField } from './ChallengeTitleField'
 import { useChallengeEditorPage } from './useChallengeEditorPage'
 
-export function ChallengeEditorPage() {
+type ChallengeEditorPageProps = {
+  savedChallengeDto?: ChallengeDto
+}
+
+export function ChallengeEditorPage({ savedChallengeDto }: ChallengeEditorPageProps) {
   const { form } = useChallengeEditorPage()
 
   return (

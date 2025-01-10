@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { contentSchema, nameSchema } from '@stardust/validation/schemas'
+import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 
 const challengeSchema = z.object({
   title: nameSchema,
@@ -25,7 +26,7 @@ const challengeSchema = z.object({
 
 export type ChallengeEditorFields = z.infer<typeof challengeSchema>
 
-export function useChallengeEditorPage() {
+export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
   const form = useForm<ChallengeEditorFields>({
     resolver: zodResolver(challengeSchema),
   })
