@@ -1,6 +1,7 @@
 export { ChallengeDifficulty } from './ChallengeDifficulty'
 export { ChallengesFilter } from './ChallengesFilter'
 export { ChallengeCompletion } from './ChallengeCompletion'
+export { ChallengeFunction } from './ChallengeFunction'
 export { ChallengeCraftsVisibility } from './ChallengeCraftsVisibility'
 export { DataType } from './DataType'
 export { TestCase } from './TestCase'
