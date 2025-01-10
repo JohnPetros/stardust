@@ -8,9 +8,9 @@ import { useInput } from './useInput'
 import { twMerge } from 'tailwind-merge'
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
-  label: string
-  icon: IconName
   type: string
+  icon?: IconName
+  label?: string
   isActive?: boolean
   error?: string
 }
@@ -46,7 +46,7 @@ const InputComponent = (
             isActive && 'border-green-400',
           )}
         >
-          <Icon name={icon} className={iconClassName} size={24} />
+          {icon && <Icon name={icon} className={iconClassName} size={24} />}
 
           <input
             id={id}
