@@ -8,9 +8,9 @@ export class ZodArrayValidation implements IArrayValidation {
   private key: string
   private zodArray: ZodArray<any>
 
-  constructor(data: unknown, key: string) {
+  constructor(data: unknown, key?: string) {
     this.data = data
-    this.key = key
+    this.key = key ?? 'Lista'
     this.zodArray = z.array(z.any())
   }
 

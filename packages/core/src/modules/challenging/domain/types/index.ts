@@ -4,6 +4,7 @@ export type { CompletedChallengesCountByDifficultyLevel } from './CompletedChall
 export type { ChallengesListParams } from './ChallengesListParams'
 export type { ChallengeVote } from './ChallengeVote'
 export type { ChallengeRewardingPayload } from './ChallengeRewardingPayload'
+export type { DataTypeName } from './DataTypeName'
 export type { StarChallengeRewardingPayload } from './StarChallengeRewardingPayload'
 export type { SolutionsListSorter } from './SolutionsListSorter'
 export type { SolutionsListParams } from './SolutionsListParams'

@@ -27,7 +27,7 @@ export class ApiResponse<Body = unknown> {
     if (headers) this.headers = headers
   }
 
-  throwError() {
+  throwError(): never {
     if (this.statusCode === HTTP_STATUS_CODE.notFound)
       throw new NotFoundError(this.errorMessage)
 

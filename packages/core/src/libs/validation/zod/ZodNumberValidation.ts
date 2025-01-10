@@ -1,4 +1,4 @@
-import { z, type ZodNumber, ZodError } from 'zod'
+import { z, type ZodNumber, ZodError, type ZodEffects } from 'zod'
 
 import type { INumberValidation } from '#interfaces'
 import { ZodValidationErrorFactory } from './ZodValidationErrorFactory'
@@ -8,9 +8,9 @@ export class ZodNumberValidation implements INumberValidation {
   private key: string
   private zodNumber: ZodNumber
 
-  constructor(data: unknown, key: string, message?: string) {
+  constructor(data: unknown, key?: string, message?: string) {
     this.data = data
-    this.key = key
+    this.key = key ?? 'Número'
     this.zodNumber = z.number({
       required_error: message ?? 'deve ser um número',
     })
@@ -43,7 +43,11 @@ export class ZodNumberValidation implements INumberValidation {
 
   validate() {
     try {
-      z.object({ [this.key]: this.zodNumber }).parse({ [this.key]: this.data })
+      z.object({
+        [this.key]: this.zodNumber.refine((value) => Number.isNaN(value), {
+          message: `${this.key} deve ser um número válido`,
+        }),
+      }).parse({ [this.key]: this.data })
     } catch (error) {
       if (error instanceof ZodError) throw ZodValidationErrorFactory.produce(error)
     }
