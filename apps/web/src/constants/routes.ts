@@ -24,6 +24,10 @@ export const ROUTES = {
           ? `/challenging/challenges/${challengeSlug}/solution/${solutionSlug}`
           : `/challenging/challenges/${challengeSlug}/solution`,
     },
+    challenge: (challengeSlug?: string) =>
+      challengeSlug
+        ? `/challenging/challenge/${challengeSlug}`
+        : '/challenging/challenge',
   },
   profile: {
     user: (userSlug: string) => `/profile/${userSlug}`,
