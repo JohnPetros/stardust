@@ -21,7 +21,7 @@ export function TestCaseInput({ testCaseIndex, paramIndex }: TestCaseInputsProps
     <CodeInput label={`${paramIndex + 1}º Parâmetro`}>
       <Controller
         control={control}
-        name={`testCases.${testCaseIndex}.inputs.${paramIndex}`}
+        name={`testCases.${testCaseIndex}.inputs.${paramIndex}.value`}
         render={({ field: { value, onChange } }) => {
           const dataType = DataType.create(
             value !== undefined

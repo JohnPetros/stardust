@@ -12,20 +12,16 @@ export function useTestCaseInputs(testCaseIndex: number) {
   })
   const functionParams = watch('function.params')
 
-  useEffect(() => {
-    // if (functionParams.length) {
-    //   remove()
-    //   functionParams.forEach((param, index) => {
-    //     const value =
-    //       fields[index]?.value !== undefined
-    //         ? fields[index].value
-    //         : DEFAULT_VALUE_BY_DATA_TYPE_NAME[param.dataTypeName]
+  console.log({ fields })
 
-    //     console.log({ value })
-    //     append({ value })
-    //   })
-    // }
-    console.log({ functionParams })
+  useEffect(() => {
+    if (functionParams.length) {
+      remove()
+      alert('oiiii')
+      functionParams.forEach((param, index) => {
+        append({ value: '' })
+      })
+    }
   }, [functionParams, append, remove])
 
   const testCaseError = formState.errors.testCases
@@ -36,6 +32,6 @@ export function useTestCaseInputs(testCaseIndex: number) {
     formControl: control,
     functionParams,
     errorMessage: testCaseError?.message,
-    hasInputs: fields.length > 0,
+    testCaseInputs: fields,
   }
 }
