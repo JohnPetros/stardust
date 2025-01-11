@@ -50,6 +50,7 @@
     "./challenging/structs": "./src/modules/challenging/domain/structs/index.ts",
     "./challenging/dtos": "./src/modules/challenging/dtos/index.ts",
     "./challenging/types": "./src/modules/challenging/domain/types/index.ts",
+    "./challenging/constants": "./src/modules/challenging/domain/constants/index.ts",
     "./challenging/errors": "./src/modules/challenging/errors/index.ts",
     "./challenging/use-cases": "./src/modules/challenging/use-cases/index.ts",
     "./shop/abstracts": "./src/modules/shop/domain/abstracts/index.ts",
