@@ -1,3 +1,4 @@
+import { v4 as generateRandomId } from 'uuid'
 import { StringValidation } from '#libs'
 
 export class Id {
@@ -7,9 +8,9 @@ export class Id {
     this.value = value
   }
 
-  static create(value: string) {
-    new StringValidation(value, 'Id').id().validate()
+  static create(value?: string) {
+    if (value) new StringValidation(value, 'Id').id().validate()
 
-    return new Id(value)
+    return new Id(value ?? generateRandomId())
   }
 }

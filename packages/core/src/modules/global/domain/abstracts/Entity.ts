@@ -1,4 +1,3 @@
-import { v4 as generateRandomId } from 'uuid'
 import { Id } from '#global/structs'
 
 export abstract class Entity<Props> {
@@ -6,7 +5,7 @@ export abstract class Entity<Props> {
   protected readonly props: Props
 
   protected constructor(props: Props, id?: string) {
-    this._id = id ? Id.create(id) : Id.create(generateRandomId())
+    this._id = Id.create(id)
     this.props = props
   }
 
