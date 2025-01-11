@@ -8,12 +8,14 @@ import { useChallengeField } from './useChallengeField'
 
 type ChallengeFieldProps = {
   title: string
+  subtitle?: string
   icon: IconName
 }
 
 export function ChallengeField({
   children,
   title,
+  subtitle,
   icon,
 }: PropsWithChildren<ChallengeFieldProps>) {
   const { isContentExpanded, handleArrowClick } = useChallengeField()
@@ -25,6 +27,7 @@ export function ChallengeField({
           <Icon name={icon} className='text-green-400' />
         </div>
         <h2 className='text-green-400'>{title}</h2>
+        {subtitle && <p className='text-gray-500 text-sm'>{subtitle}</p>}
 
         <button
           type='button'
