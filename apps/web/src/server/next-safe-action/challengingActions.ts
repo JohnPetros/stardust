@@ -11,6 +11,7 @@ import {
   EditSolutionAction,
   FetchChallengesListAction,
   HandleChallengePageAction,
+  PostChallengeAction,
   PostSolutionAction,
   UpvoteSolutionAction,
   ViewSolutionAction,
@@ -26,6 +27,7 @@ import {
   titleSchema,
   contentSchema,
 } from '@stardust/validation/schemas'
+import { challengeSchema } from '@stardust/validation/challenging/schemas'
 
 export const fetchChallengesList = authActionClient
   .schema(
@@ -158,5 +160,21 @@ export const viewSolution = authActionClient
     const supabase = SupabaseServerActionClient()
     const challengingService = SupabaseChallengingService(supabase)
     const action = ViewSolutionAction(challengingService)
+    return action.handle(actionServer)
+  })
+
+export const postChallenge = authActionClient
+  .schema(challengeSchema, {
+    handleValidationErrorsShape: async (errors) =>
+      flattenValidationErrors(errors).fieldErrors,
+  })
+  .action(async ({ clientInput, ctx }) => {
+    const actionServer = NextActionServer({
+      request: clientInput,
+      user: ctx.user,
+    })
+    const supabase = SupabaseServerActionClient()
+    const challengingService = SupabaseChallengingService(supabase)
+    const action = PostChallengeAction(challengingService)
     return action.handle(actionServer)
   })
