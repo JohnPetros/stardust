@@ -1,4 +1,3 @@
 import { stringSchema } from './stringSchema'
-import { ERROR_MESSAGES } from '../../constants'
 
-export const nameSchema = stringSchema.min(3, ERROR_MESSAGES.name.min)
+export const nameSchema = stringSchema.min(3, 'Seu nome deve conter pelo menos 3 letras')
