@@ -35,7 +35,7 @@ export function SignUpForm({ id, onSubmit }: SignUpFormProps) {
             isActive={isNameValid}
             autoFocus
             {...register('name')}
-            // error={errors.name?.message}
+            errorMessage={errors.name?.message}
           />
           {!isNameValid && (
             <p className='text-gray-100 text-sm mt-3'>Pelo meno 3 caracteres</p>

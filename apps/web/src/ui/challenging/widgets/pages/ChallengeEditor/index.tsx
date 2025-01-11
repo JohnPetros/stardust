@@ -1,17 +1,17 @@
 import { FormProvider } from 'react-hook-form'
 
 import type { ChallengeCategoryDto, ChallengeDto } from '@stardust/core/challenging/dtos'
+import { ChallengeCategory } from '@stardust/core/challenging/entities'
 
+import { ActionButton } from '@/ui/global/widgets/components/ActionButton'
+import type { ActionButtonTitles } from '@/ui/global/widgets/components/ActionButton/types'
 import { ChallengeTitleField } from './ChallengeTitleField'
 import { useChallengeEditorPage } from './useChallengeEditorPage'
 import { ChallengeFunctionField } from './ChallengeFunctionField'
-import { ChallengeCategory } from '@stardust/core/challenging/entities'
 import { ChallengeTestCasesField } from './ChallengeTestCasesField'
 import { ChallengeDescriptionField } from './ChallengeDescriptionField'
 import { ChallengeDifficultyLevelField } from './ChallengeDifficultyLevel'
 import { ChallengeCategoriesField } from './ChallengeCategoriesField'
-import { ActionButton } from '@/ui/global/widgets/components/ActionButton'
-import type { ActionButtonTitles } from '@/ui/global/widgets/components/ActionButton/types'
 import { ChallengeCodeField } from './ChallengeCodeField'
 
 type ChallengeEditorPageProps = {

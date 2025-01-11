@@ -21,7 +21,7 @@ export function SignInForm({ id, onSubmit }: SignInFormProps) {
           placeholder='Digite seu e-mail'
           autoFocus
           {...register('email')}
-          error={errors.email?.message}
+          errorMessage={errors.email?.message}
         />
         <Input
           label='Senha'
@@ -29,7 +29,7 @@ export function SignInForm({ id, onSubmit }: SignInFormProps) {
           icon='lock'
           placeholder='Digite sua senha'
           {...register('password')}
-          error={errors.password?.message}
+          errorMessage={errors.password?.message}
         />
       </div>
       <Button type='submit' name='submit' isLoading={isLoading} className='mt-6'>
