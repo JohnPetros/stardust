@@ -8,8 +8,8 @@ import type {
 } from '@stardust/core/challenging/types'
 import type { ChallengeCategory } from '@stardust/core/challenging/entities'
 
+import * as Select from '@/ui/global/widgets/components/Select'
 import { Search } from '@/ui/global/widgets/components/Search'
-import { Select } from '@/ui/global/widgets/components/Select'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { CategoriesFilter } from './CategoriesFilter'
 import { FILTER_SELECTS_ITEMS } from '../filter-select-items'

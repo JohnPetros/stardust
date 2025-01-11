@@ -34,7 +34,7 @@ export function useActionButton({
   }, [titles, canExecute, isSuccess, isExecuting, isFailure])
 
   async function handleClick() {
-    await onExecute()
+    if (onExecute) await onExecute()
   }
 
   return {

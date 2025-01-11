@@ -1,46 +1,31 @@
-import type { DataTypeName } from '@stardust/core/challenging/types'
+'use client'
 
+import * as Select from '@/ui/global/widgets/components/Select'
 import { Input } from '@/ui/global/widgets/components/Input'
-import { Select } from '@/ui/global/widgets/components/Select'
-import { CodeInput } from '../../CodeInput'
-import { DATA_TYPES } from '../data-types'
+import { DataType } from '@stardust/core/challenging/structs'
 import { useDataTypeInput } from './useDataTypeInput'
 import { AddItemButton } from '../AddItemButton'
+import { DataTypeNameSelect } from '../DataTypeNameSelect'
 
 type FunctionInputProps = {
-  position: number
-  defaultValue?: unknown
+  value: DataType
   onChange: (value: unknown) => void
 }
 
-export function DataTypeInput({ position, defaultValue, onChange }: FunctionInputProps) {
+export function DataTypeInput({ value, onChange }: FunctionInputProps) {
   const {
     dataType,
-    handleSelectChange,
     handleStringValueChange,
     handleNumberValueChange,
+    handleBooleanValueChange,
     handleArrayItemChange,
     handleAddArrayItemClick,
-  } = useDataTypeInput(onChange, defaultValue)
+    handleArrayItemDataTypeNameChange,
+  } = useDataTypeInput(onChange, value)
 
   return (
-    <CodeInput label={`Parâmetro ${position}`}>
-      <Input type='text' label='Nome do parâmetro' placeholder={`parametro${position}`} />
+    <div>
       <div className='flex gap-6'>
-        <Select.Container<DataTypeName>
-          defaultValue={dataType.name}
-          onValueChange={handleSelectChange}
-        >
-          <Select.Trigger value='undefined' />
-          <Select.Content>
-            {DATA_TYPES.map((dataType) => (
-              <Select.Item key={dataType.label} value={dataType.value}>
-                <Select.Text>{dataType.label}</Select.Text>
-              </Select.Item>
-            ))}
-          </Select.Content>
-        </Select.Container>
-
         {dataType.isString() && (
           <Input
             type='string'
@@ -57,19 +42,39 @@ export function DataTypeInput({ position, defaultValue, onChange }: FunctionInpu
             }
           />
         )}
+        {dataType.isBoolean() && (
+          <Select.Container
+            defaultValue={dataType.value === true ? 'true' : 'false'}
+            onValueChange={(value) => handleBooleanValueChange(value === 'true')}
+          >
+            <Select.Trigger value='true' />
+            <Select.Content>
+              <Select.Item value='true'>
+                <Select.Text>Verdadeiro</Select.Text>
+              </Select.Item>
+              <Select.Item value='false'>
+                <Select.Text>Falso</Select.Text>
+              </Select.Item>
+            </Select.Content>
+          </Select.Container>
+        )}
       </div>
-
       {dataType.isArray() && (
         <div>
           <span className='text-gray-500'>[</span>
           <ul className='space-y-3 pl-6'>
             {dataType.value.map((value, index) => {
-              const position = index + 1
+              const itemDataType = DataType.create(value)
               return (
-                <li key={String(position)}>
+                <li key={String(index)}>
+                  <DataTypeNameSelect
+                    defaultValue={itemDataType.name}
+                    onChange={(dataTypeName) =>
+                      handleArrayItemDataTypeNameChange(dataTypeName, index)
+                    }
+                  />
                   <DataTypeInput
-                    position={position}
-                    defaultValue={value}
+                    value={itemDataType}
                     onChange={(value) => handleArrayItemChange(value, index)}
                   />
                 </li>
@@ -84,6 +89,6 @@ export function DataTypeInput({ position, defaultValue, onChange }: FunctionInpu
           <span className='text-gray-500'>]</span>
         </div>
       )}
-    </CodeInput>
+    </div>
   )
 }

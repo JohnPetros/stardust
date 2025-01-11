@@ -1,28 +1,14 @@
 import { useState } from 'react'
 
 import type { DataTypeName } from '@stardust/core/challenging/types'
-import { DataType } from '@stardust/core/challenging/structs'
+import type { DataType } from '@stardust/core/challenging/structs'
+import { DEFAULT_VALUE_BY_DATA_TYPE_NAME } from '@stardust/core/challenging/constants'
 
 export function useDataTypeInput(
   onChange: (value: unknown) => void,
-  defaultValue?: unknown,
+  defaultDataType: DataType,
 ) {
-  const [dataType, setDataType] = useState<DataType>(DataType.create(defaultValue))
-
-  function handleSelectChange(dataTypeName: DataTypeName) {
-    switch (dataTypeName) {
-      case 'true':
-        return onChange(DataType.create(true))
-      case 'false':
-        return onChange(DataType.create(true))
-      case 'string':
-        setDataType(DataType.create(''))
-        return
-      case 'number':
-        setDataType(DataType.create(0))
-        return
-    }
-  }
+  const [dataType, setDataType] = useState<DataType>(defaultDataType)
 
   function handleStringValueChange(value: string) {
     setDataType(dataType.changeValue(value))
@@ -34,8 +20,22 @@ export function useDataTypeInput(
     onChange(value)
   }
 
+  function handleBooleanValueChange(value: boolean) {
+    setDataType(dataType.changeValue(value))
+    onChange(value)
+  }
+
   function handleArrayItemChange(item: unknown, index: number) {
     const updatedDataType = dataType.changeArrayItem(item, index)
+    setDataType(updatedDataType)
+    onChange(updatedDataType.value)
+  }
+
+  function handleArrayItemDataTypeNameChange(dataTypeName: DataTypeName, index: number) {
+    const updatedDataType = dataType.changeArrayItem(
+      DEFAULT_VALUE_BY_DATA_TYPE_NAME[dataTypeName],
+      index,
+    )
     setDataType(updatedDataType)
     onChange(updatedDataType.value)
   }
@@ -46,10 +46,11 @@ export function useDataTypeInput(
 
   return {
     dataType,
-    handleSelectChange,
     handleStringValueChange,
     handleNumberValueChange,
+    handleBooleanValueChange,
     handleArrayItemChange,
     handleAddArrayItemClick,
+    handleArrayItemDataTypeNameChange,
   }
 }

@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react'
 import { motion, type Variants } from 'framer-motion'
 
-const tagAnimations: Variants = {
+const variants: Variants = {
   hidden: {
     opacity: 0,
     y: -32,
@@ -22,7 +22,7 @@ export function AnimatedContainer({ children }: TagProps) {
   return (
     <motion.div
       layout
-      variants={tagAnimations}
+      variants={variants}
       transition={{ delay: 0.5 }}
       initial='hidden'
       animate='visible'

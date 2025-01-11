@@ -17,5 +17,5 @@ export type ActionButtonProps = {
     success: string
     failure: string
   }
-  onExecute: () => Promise<void>
+  onExecute?: () => Promise<void>
 }
