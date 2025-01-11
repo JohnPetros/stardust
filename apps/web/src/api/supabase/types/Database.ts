@@ -92,6 +92,7 @@ export type Database = {
           difficulty: string
           doc_id: string | null
           function_name: string | null
+          function_params: string[] | null
           id: string
           slug: string
           star_id: string | null
@@ -107,6 +108,7 @@ export type Database = {
           difficulty?: string
           doc_id?: string | null
           function_name?: string | null
+          function_params?: string[] | null
           id?: string
           slug: string
           star_id?: string | null
@@ -122,6 +124,7 @@ export type Database = {
           difficulty?: string
           doc_id?: string | null
           function_name?: string | null
+          function_params?: string[] | null
           id?: string
           slug?: string
           star_id?: string | null
@@ -151,6 +154,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "stars"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
             foreignKeyName: "challenges_user_id_fkey"
@@ -297,6 +307,13 @@ export type Database = {
             foreignKeyName: "comments_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
+          },
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -388,7 +405,7 @@ export type Database = {
             columns: ["user_slug"]
             isOneToOne: false
             referencedRelation: "challenges_view"
-            referencedColumns: ["user_slug"]
+            referencedColumns: ["author_slug"]
           },
           {
             foreignKeyName: "playgrounds_user_slug_fkey"
@@ -479,6 +496,13 @@ export type Database = {
           xp?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "winners_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
+          },
           {
             foreignKeyName: "winners_id_fkey"
             columns: ["id"]
@@ -577,6 +601,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "challenges_view"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "solutions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
             foreignKeyName: "solutions_user_id_fkey"
@@ -703,50 +734,6 @@ export type Database = {
         }
         Relationships: []
       }
-      user_upvoted_solutions: {
-        Row: {
-          solution_id: string
-          user_id: string
-        }
-        Insert: {
-          solution_id: string
-          user_id: string
-        }
-        Update: {
-          solution_id?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_upvoted_solutions_solution_id_fkey"
-            columns: ["solution_id"]
-            isOneToOne: false
-            referencedRelation: "solutions"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_upvoted_solutions_solution_id_fkey"
-            columns: ["solution_id"]
-            isOneToOne: false
-            referencedRelation: "solutions_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_upvoted_solutions_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_upvoted_solutions_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users_view"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       users: {
         Row: {
           avatar_id: string | null
@@ -866,6 +853,13 @@ export type Database = {
             foreignKeyName: "users_acquired_avatars_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
+          },
+          {
+            foreignKeyName: "users_acquired_avatars_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -901,6 +895,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "rockets"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_acquired_rockets_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
             foreignKeyName: "users_acquired_rockets_user_id_fkey"
@@ -953,6 +954,13 @@ export type Database = {
             foreignKeyName: "users_voted_challenges_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
+          },
+          {
+            foreignKeyName: "users_voted_challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -997,6 +1005,13 @@ export type Database = {
             foreignKeyName: "users_completed_challenges_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
+          },
+          {
+            foreignKeyName: "users_completed_challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -1034,6 +1049,13 @@ export type Database = {
             foreignKeyName: "users_rescuable_achievements_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
+          },
+          {
+            foreignKeyName: "users_rescuable_achievements_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -1066,6 +1088,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "achievements"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_unlocked_achievements_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
             foreignKeyName: "users_unlocked_achievements_user_id_fkey"
@@ -1118,6 +1147,13 @@ export type Database = {
             foreignKeyName: "users_unlocked_stars_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
+          },
+          {
+            foreignKeyName: "users_unlocked_stars_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -1162,6 +1198,13 @@ export type Database = {
             foreignKeyName: "users_upvoted_comments_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
+          },
+          {
+            foreignKeyName: "users_upvoted_comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -1189,28 +1232,35 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "public_users_upvoted_solutions_solution_id_fkey"
+            foreignKeyName: "user_upvoted_solutions_solution_id_fkey"
             columns: ["solution_id"]
             isOneToOne: false
             referencedRelation: "solutions"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "public_users_upvoted_solutions_solution_id_fkey"
+            foreignKeyName: "user_upvoted_solutions_solution_id_fkey"
             columns: ["solution_id"]
             isOneToOne: false
             referencedRelation: "solutions_view"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "public_users_upvoted_solutions_user_id_fkey"
+            foreignKeyName: "user_upvoted_solutions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
+          },
+          {
+            foreignKeyName: "user_upvoted_solutions_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "public_users_upvoted_solutions_user_id_fkey"
+            foreignKeyName: "user_upvoted_solutions_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users_view"
@@ -1222,6 +1272,11 @@ export type Database = {
     Views: {
       challenges_view: {
         Row: {
+          author_avatar_image: string | null
+          author_avatar_name: string | null
+          author_id: string | null
+          author_name: string | null
+          author_slug: string | null
           categories: Json[] | null
           code: string | null
           created_at: string | null
@@ -1230,6 +1285,7 @@ export type Database = {
           doc_id: string | null
           downvotes: number | null
           function_name: string | null
+          function_params: string[] | null
           id: string | null
           slug: string | null
           star_id: string | null
@@ -1239,7 +1295,6 @@ export type Database = {
           total_completitions: number | null
           upvotes: number | null
           user_id: string | null
-          user_slug: string | null
         }
         Relationships: [
           {
@@ -1262,6 +1317,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "stars"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
             foreignKeyName: "challenges_user_id_fkey"
@@ -1307,6 +1369,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "comments_view"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
             foreignKeyName: "comments_user_id_fkey"
@@ -1362,6 +1431,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "challenges_view"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "solutions_user_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
             foreignKeyName: "solutions_user_id_fkey"

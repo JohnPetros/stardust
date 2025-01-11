@@ -39,10 +39,10 @@ export function SolutionPage({
   const { goBack } = useRouter()
 
   const ACTION_BUTTON_TITLES: ActionButtonTitles = {
-    canExecute: solution ? 'atualizar?' : 'postar?',
-    executing: solution ? 'atualizando...' : 'postando...',
-    default: solution ? 'atualizado' : 'postar',
-    success: solution ? 'atualizado' : 'postado',
+    canExecute: savedSolutionDto ? 'atualizar?' : 'postar?',
+    executing: savedSolutionDto ? 'atualizando...' : 'postando...',
+    default: savedSolutionDto ? 'atualizar' : 'postar',
+    success: savedSolutionDto ? 'atualizado' : 'postado',
     failure: 'erro',
   }
 

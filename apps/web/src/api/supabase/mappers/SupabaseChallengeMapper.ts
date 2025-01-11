@@ -32,10 +32,21 @@ export const SupabaseChallengeMapper = () => {
         docId: supabaseChallenge.doc_id,
         function: {
           name: supabaseChallenge.function_name ?? '',
-          params: [],
+          params:
+            supabaseChallenge.function_params?.map((paramName) => ({
+              name: paramName,
+            })) ?? [],
         },
         author: {
           id: supabaseChallenge.user_id ?? '',
+          dto: {
+            slug: supabaseChallenge.author_slug ?? '',
+            name: supabaseChallenge.author_name ?? '',
+            avatar: {
+              name: supabaseChallenge.author_avatar_name ?? '',
+              image: supabaseChallenge.author_avatar_image ?? '',
+            },
+          },
         },
         upvotesCount: supabaseChallenge.upvotes ?? 0,
         downvotesCount: supabaseChallenge.downvotes ?? 0,

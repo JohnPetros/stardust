@@ -29,7 +29,7 @@ export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
     resolver: zodResolver(challengeSchema),
     defaultValues: {
       title: challenge?.title.value,
-      description: challenge?.description.value,
+      description: challenge?.description,
       code: challenge?.code,
       function: {
         name: challenge?.function?.name.value,

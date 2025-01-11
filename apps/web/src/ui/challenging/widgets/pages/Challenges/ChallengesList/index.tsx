@@ -33,7 +33,8 @@ export function ChallengesList() {
                   key={challenge.id}
                   title={challenge.title.value}
                   slug={challenge.slug.value}
-                  authorSlug={challenge.authorSlug.value}
+                  authorSlug={challenge.author.slug.value}
+                  authorName={challenge.author.name.value}
                   categories={challenge.categories}
                   difficultyLevel={challenge.difficulty.level}
                   downvotesCount={challenge.downvotesCount.value}

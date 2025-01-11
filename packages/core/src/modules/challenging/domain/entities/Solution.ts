@@ -74,6 +74,7 @@ export class Solution extends Entity<SolutionProps> {
 
   set title(title: string) {
     this.props.title = Name.create(title)
+    this.props.slug = Slug.create(this.title.value)
   }
 
   get content(): Text {

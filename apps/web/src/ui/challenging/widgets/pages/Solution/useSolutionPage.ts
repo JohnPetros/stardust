@@ -75,20 +75,24 @@ export function useSolutionPage(
   })
 
   function handleTitleChange(title: string) {
+    setFieldErrors({
+      solutionTitle: '',
+      solutionContent: '',
+    })
     setIsSuccess(false)
     setSolutionTitle(title)
   }
 
   function handleContentChange(content: string) {
+    setFieldErrors({
+      solutionTitle: '',
+      solutionContent: '',
+    })
     setSolutionContent(content)
   }
 
   async function handleSolutionPost() {
     if (!user) return
-    setFieldErrors({
-      solutionTitle: '',
-      solutionContent: '',
-    })
 
     await postSolution({
       solutionTitle,
@@ -100,10 +104,6 @@ export function useSolutionPage(
 
   async function handleSolutionEdit() {
     if (!solution) return
-    setFieldErrors({
-      solutionTitle: '',
-      solutionContent: '',
-    })
 
     await editSolution({
       solutionId: solution.id,

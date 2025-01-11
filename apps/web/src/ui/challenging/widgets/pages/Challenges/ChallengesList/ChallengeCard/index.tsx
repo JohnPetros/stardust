@@ -16,6 +16,7 @@ type ChallengeProps = {
   downvotesCount: number
   completionsCount: number
   authorSlug: string
+  authorName: string
   categories: ChallengeCategory[]
   isCompleted: boolean
 }
@@ -24,6 +25,7 @@ export function ChallengeCard({
   slug,
   title,
   authorSlug,
+  authorName,
   difficultyLevel,
   upvotesCount,
   downvotesCount,
@@ -45,6 +47,7 @@ export function ChallengeCard({
       <ChallengeInfo
         isCompleted={isCompleted ?? false}
         completionsCount={completionsCount}
+        authorName={authorName}
         authorSlug={authorSlug}
         upvotes={upvotesCount}
         downvotes={downvotesCount}
