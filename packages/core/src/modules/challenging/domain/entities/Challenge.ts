@@ -8,14 +8,21 @@ import {
   type Slug,
   type TextBlock,
   type UserAnswer,
+  type Text,
   Logical,
 } from '#global/structs'
 import type { ChallengeDifficulty, TestCase } from '#challenging/structs'
 import type { ChallengeDto } from '#challenging/dtos'
 import type { ChallengeCategory } from './ChallengeCategory'
-import { InsufficientInputsError } from '#challenging/errors'
+import {
+  ChallengeWithoutTestCaseError,
+  InsufficientInputsError,
+} from '#challenging/errors'
 import { ChallengeFactory } from '#challenging/factories'
 import type { ChallengeVote } from '#challenging/types'
+import type { Author } from '#global/entities'
+import { EntityNotDefinedError } from '#global/errors'
+import type { ChallengeFunction } from '../structs/ChallengeFunction'
 
 export type ChallengeProps = {
   code: string
@@ -23,8 +30,7 @@ export type ChallengeProps = {
   slug: Slug
   difficulty: ChallengeDifficulty
   categories: ChallengeCategory[]
-  authorSlug: Slug
-  functionName: Name | null
+  function: ChallengeFunction | null
   downvotesCount: Integer
   upvotesCount: Integer
   completionsCount: Integer
@@ -32,25 +38,32 @@ export type ChallengeProps = {
   starId: Id | null
   docId: Id | null
   textBlocks: TextBlock[]
-  description: string
+  description: Text
   testCases: TestCase[]
   results: List<boolean>
   userOutputs: List<unknown>
   userVote: ChallengeVote
   incorrectAnswersCount: Integer
   isCompleted: Logical
+  author: {
+    id: string
+    entity?: Author
+  }
 }
 
 export class Challenge extends Entity<ChallengeProps> {
   static readonly MAXIMUM_INCORRECT_ANSWERS_PER_TEST_CASE = 10
 
   static create(dto: ChallengeDto): Challenge {
+    if (!dto.testCases.length) {
+      throw new ChallengeWithoutTestCaseError()
+    }
     return new Challenge(ChallengeFactory.produce(dto), dto?.id)
   }
 
   private formatCode(code: Code, testCase: TestCase) {
-    if (this.props.functionName) {
-      return code.addFunction(this.props.functionName.value, testCase.inputs)
+    if (this.props.function) {
+      return code.addFunction(this.props.function.name.value, testCase.inputs)
     }
 
     if (code.inputsCount !== testCase.inputs.length) {
@@ -143,7 +156,7 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   private get hasFunction() {
-    return Logical.create(Boolean(this.props.functionName))
+    return Logical.create(Boolean(this.props.function))
   }
 
   get maximumIncorrectAnswersCount() {
@@ -203,6 +216,10 @@ export class Challenge extends Entity<ChallengeProps> {
     return this.props.difficulty
   }
 
+  get function() {
+    return this.props.function
+  }
+
   get description() {
     return this.props.description
   }
@@ -215,8 +232,13 @@ export class Challenge extends Entity<ChallengeProps> {
     return this.props.categories
   }
 
-  get authorSlug() {
-    return this.props.authorSlug
+  get authorId() {
+    return this.props.author.id
+  }
+
+  get author() {
+    if (!this.props.author.entity) throw new EntityNotDefinedError('Autor do desafio')
+    return this.props.author.entity
   }
 
   get upvotesCount() {
@@ -261,20 +283,23 @@ export class Challenge extends Entity<ChallengeProps> {
       title: this.title.value,
       code: this.code,
       slug: this.slug.value,
-      difficulty: this.difficulty.level,
+      difficultyLevel: this.difficulty.level,
       docId: this.props.docId?.value,
-      authorSlug: this.authorSlug.value,
+      author: {
+        id: this.authorId,
+        dto: this.author.dto,
+      },
       downvotesCount: this.downvotesCount.value,
-      functionName: this.props.functionName?.value,
+      function: this.props.function?.dto ?? undefined,
       starId: this.props.starId?.value,
       upvotesCount: this.upvotesCount.value,
       completionsCount: this.completionsCount.value,
       userOutputs: this.props.userOutputs.items,
       results: this.props.results.items,
+      description: this.description.value,
+      createdAt: this.createdAt,
       categories: this.categories.map((category) => category.dto),
       testCases: this.testCases.map((testCase) => testCase.dto),
-      description: this.description,
-      createdAt: this.createdAt,
       textBlocks: this.textBlocks.map((textBlock) => textBlock.dto),
     }
   }

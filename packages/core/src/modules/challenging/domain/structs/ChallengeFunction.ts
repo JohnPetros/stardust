@@ -23,12 +23,12 @@ export class ChallengeFunction {
     )
   }
 
-  get dto() {
+  get dto(): ChallengeFunctionDto {
     return {
       name: this.name.value,
       params: this.params.map((param) => ({
         name: param.name.value,
-        dataType: param.dataType.name,
+        value: param.dataType.value,
       })),
     }
   }

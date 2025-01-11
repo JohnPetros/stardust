@@ -26,9 +26,7 @@ export class DataType<Value = unknown> {
       case 'number':
         return new DataType<number>(value, 'number')
       case 'boolean':
-        return value === true
-          ? new DataType<true>(value, 'true')
-          : new DataType<false>(value, 'false')
+        return new DataType<boolean>(value, 'boolean')
       default:
         return new DataType<undefined>(undefined, 'undefined')
     }
@@ -42,12 +40,8 @@ export class DataType<Value = unknown> {
     return this.name === 'number'
   }
 
-  isTrue(): this is DataType<true> {
-    return this.name === 'true'
-  }
-
-  isFalse(): this is DataType<false> {
-    return this.name === 'false'
+  isBoolean(): this is DataType<boolean> {
+    return this.name === 'boolean'
   }
 
   isArray(): this is DataType<Array<unknown>> {
@@ -62,11 +56,8 @@ export class DataType<Value = unknown> {
       case 'number':
         new NumberValidation(value).validate()
         break
-      case 'true':
-        new BooleanValidation(value).true().validate()
-        break
-      case 'false':
-        new BooleanValidation(value).false().validate()
+      case 'boolean':
+        new BooleanValidation(value).validate()
         break
     }
 
