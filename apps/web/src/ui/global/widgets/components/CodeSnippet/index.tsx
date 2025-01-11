@@ -5,16 +5,16 @@ import * as ToolBar from '@radix-ui/react-toolbar'
 import { twMerge } from 'tailwind-merge'
 
 import { Tooltip } from '../Tooltip'
-
 import { useCodeSnippet } from './useCodeSnippet'
 import { PlaygroundCodeEditor } from '../PlaygroundCodeEditor'
 
 export type CodeSnippetProps = {
   code: string
   isRunnable?: boolean
+  onChange?: (code: string) => void
 }
 
-export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
+export function CodeSnippet({ code, isRunnable = false, onChange }: CodeSnippetProps) {
   const { codeEditorRef, editorHeight, handleReloadButtonClick, handleRunCode } =
     useCodeSnippet({ code, isRunnable })
 
@@ -54,6 +54,7 @@ export function CodeSnippet({ code, isRunnable = false }: CodeSnippetProps) {
           code={code}
           isRunnable={isRunnable}
           height={editorHeight}
+          onCodeChange={onChange}
         />
       </div>
     )
