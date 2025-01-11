@@ -9,19 +9,20 @@ type ChallengeInfo = {
   downvotes: number
   upvotes: number
   completionsCount: number
+  authorName: string
   authorSlug: string
 }
 
 export function ChallengeInfo({
   isCompleted,
   completionsCount,
+  authorName,
   downvotes,
   upvotes,
   authorSlug,
 }: ChallengeInfo) {
   const totalVotes = upvotes + downvotes
   const acceptanceRate = Percentage.create(upvotes, totalVotes)
-  const authorName = Slug.deslugify(authorSlug)
 
   return (
     <ul className='flex items-center gap-3'>
@@ -52,7 +53,7 @@ export function ChallengeInfo({
         />
       </li>
       <li>
-        <Link href={`/profile/${authorName}`}>
+        <Link href={`/profile/${authorSlug}`}>
           <Info icon='person' label={authorName} tooltipText={'Criador desse desafio.'} />
         </Link>
       </li>

@@ -1,4 +1,5 @@
 import { twMerge, type ClassNameValue } from 'tailwind-merge'
+import { ErrorMessage } from '../ErrorMessage'
 
 type TitleInputProps = {
   value: string
@@ -24,9 +25,7 @@ export function TitleInput({
         onChange={({ currentTarget }) => onChange(currentTarget.value)}
         className={twMerge('text-xl outline-none border-none w-full', className)}
       />
-      {errorMessage && (
-        <p className='text-red-600 font-bold text-sm mt-3'>{errorMessage}</p>
-      )}
+      {errorMessage && <ErrorMessage className='mt-3'>{errorMessage}</ErrorMessage>}
     </div>
   )
 }

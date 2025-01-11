@@ -26,7 +26,8 @@ export function ChallengeDescriptionSlot() {
       <div className='mx-auto w-fit flex flex-wrap gap-3 '>
         <DifficultyBadge difficultyLevel={challenge.difficulty.level} />
         <ChallengeInfo
-          authorSlug={challenge.authorSlug.value}
+          authorName={challenge.author.name.value}
+          authorSlug={challenge.author.slug.value}
           downvotes={challenge.downvotesCount.value}
           isCompleted={user?.hasCompletedChallenge(challenge.id).value}
           upvotes={challenge.upvotesCount.value}

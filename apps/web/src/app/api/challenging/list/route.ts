@@ -14,7 +14,7 @@ import {
 
 const schema = z.object({
   queryParams: z.object({
-    page: pageSchema,
+    page: pageSchema.optional().default(1),
     itemsPerPage: itemsPerPageSchema,
     difficultyLevel: challengeDifficultyLevelSchema.optional().default('all'),
     completionStatus: challengeCompletionStatusSchema.optional().default('all'),

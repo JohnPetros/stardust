@@ -1,3 +1,5 @@
+'use client'
+
 import { FormProvider } from 'react-hook-form'
 
 import type { ChallengeCategoryDto, ChallengeDto } from '@stardust/core/challenging/dtos'

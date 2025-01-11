@@ -1,5 +1,5 @@
 import type { ChallengeStoreState } from './types'
-import { useZustandChallengeStore } from '../zustand/useChallengeStore'
+import { useZustandChallengeStore } from '../zustand/useZustandChallengeStore'
 import { INITIAL_CHALLENGE_STORE_STATE } from './constants'
 
 export function useChallengeStore() {
