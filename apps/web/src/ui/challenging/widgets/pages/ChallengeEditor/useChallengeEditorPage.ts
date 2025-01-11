@@ -8,14 +8,18 @@ import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 import { Challenge } from '@stardust/core/challenging/entities'
 import { challengeSchema } from '@stardust/validation/challenging/schemas'
 import type { ChallengeSchema } from '@stardust/validation/challenging/types'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { usePostChallengeAction } from './usePostChallengeAction'
+import { useUpdateChallengeAction } from './useUpdateChallengeAction'
 
 export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
   const challenge = savedChallengeDto ? Challenge.create(savedChallengeDto) : null
   const [isSubmitSuccess, setIsSubmitSuccess] = useState(false)
-  const { user } = useAuthContext()
   const { isPosting, isPostFailure, postChallenge } = usePostChallengeAction({
+    onSuccess: () => {
+      setIsSubmitSuccess(true)
+    },
+  })
+  const { isUpdating, updateChallenge } = useUpdateChallengeAction({
     onSuccess: () => {
       setIsSubmitSuccess(true)
     },
@@ -42,7 +46,6 @@ export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
         id: category.id,
         name: category.name.value,
       })),
-      authorId: user?.id ?? '',
     },
   })
 
@@ -57,6 +60,11 @@ export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
   ].every(Boolean)
 
   async function handleSubmit(formData: ChallengeSchema) {
+    if (challenge) {
+      await updateChallenge({ challengeId: challenge.id, challenge: formData })
+      return
+    }
+
     await postChallenge(formData)
   }
 
@@ -70,7 +78,7 @@ export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
       (!challenge && areAllFieldsFilled) ||
       (Boolean(challenge) && form.formState.isDirty),
     shouldUpdateChallenge: challenge || form.formState.isSubmitSuccessful,
-    isFormSubmitting: form.formState.isSubmitting || isPosting,
+    isFormSubmitting: form.formState.isSubmitting || isPosting || isUpdating,
     isSubmitFailure: isPostFailure || !form.formState.isValid,
     isSubmitSuccess: isSubmitSuccess,
     handleFormSubmit: form.handleSubmit(handleSubmit),

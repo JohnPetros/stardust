@@ -5,7 +5,7 @@ import type { ChallengeSchema } from '@stardust/validation/challenging/types'
 import { DEFAULT_VALUE_BY_DATA_TYPE_NAME } from '@stardust/core/challenging/constants'
 
 export function useTestCaseInputs(testCaseIndex: number) {
-  const { control, watch } = useFormContext<ChallengeSchema>()
+  const { control, formState, watch } = useFormContext<ChallengeSchema>()
   const { fields, append, remove } = useFieldArray({
     control,
     name: `testCases.${testCaseIndex}.inputs`,
@@ -26,9 +26,13 @@ export function useTestCaseInputs(testCaseIndex: number) {
     }
   }, [fields, functionParams, append, remove])
 
+  const testCaseError =
+    formState.errors.testCases && formState.errors.testCases[testCaseIndex]
+
   return {
     formControl: control,
     functionParams,
-    testCaseInputs: fields,
+    errorMessage: testCaseError?.message,
+    hasInputs: fields.length > 0,
   }
 }

@@ -6,9 +6,9 @@ import { twMerge } from 'tailwind-merge'
 
 import type { PopoverMenuButton } from './types'
 import { Hydration } from '../Hydration'
-import { Checkbox } from './Checkbox'
 import { usePopoverMenu } from './usePopoverMenu'
 import { AnimatedPanel } from './AnimatedPanel'
+import { Checkbox } from '../Checkbox'
 
 type PopoverMenuProps = {
   label: string

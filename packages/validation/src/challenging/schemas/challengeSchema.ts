@@ -37,5 +37,4 @@ export const challengeSchema = z.object({
     }),
   ),
   difficultyLevel: z.enum(['easy', 'medium', 'hard']),
-  authorId: idSchema,
 })

@@ -5,13 +5,13 @@ import type { ActionParams } from '@/server/next-safe-action/types'
 import { challengingActions } from '@/server/next-safe-action'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
-type PostChallengeActionProps = {
+type UpdateChallengeActionProps = {
   onSuccess: VoidFunction
 }
 
-export function useUpdateChallengeAction({ onSuccess }: PostChallengeActionProps) {
+export function useUpdateChallengeAction({ onSuccess }: UpdateChallengeActionProps) {
   const toast = useToastContext()
-  const { executeAsync, isPending } = useAction(challengingActions.postChallenge, {
+  const { executeAsync, isPending } = useAction(challengingActions.updateChallenge, {
     onError: ({ error }) => {
       if (error.serverError) toast.show(error.serverError)
     },
@@ -20,8 +20,8 @@ export function useUpdateChallengeAction({ onSuccess }: PostChallengeActionProps
     },
   })
 
-  const postChallenge = useCallback(
-    async (params: ActionParams<typeof challengingActions.postChallenge>) => {
+  const updateChallenge = useCallback(
+    async (params: ActionParams<typeof challengingActions.updateChallenge>) => {
       const result = await executeAsync(params)
       return result?.data
     },
@@ -29,7 +29,7 @@ export function useUpdateChallengeAction({ onSuccess }: PostChallengeActionProps
   )
 
   return {
-    isPosting: isPending,
-    postChallenge,
+    isUpdating: isPending,
+    updateChallenge,
   }
 }

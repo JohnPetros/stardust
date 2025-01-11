@@ -6,23 +6,24 @@ import type { IconName } from '../Icon/types/IconName'
 import { Icon } from '../Icon'
 import { useInput } from './useInput'
 import { twMerge } from 'tailwind-merge'
+import { ErrorMessage } from '../ErrorMessage'
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   type: string
   icon?: IconName
   label?: string
   isActive?: boolean
-  error?: string
+  errorMessage?: string
 }
 
 const InputComponent = (
-  { label, type, icon, error, isActive = false, ...inputAttributes }: InputProps,
+  { label, type, icon, errorMessage, isActive = false, ...inputAttributes }: InputProps,
   ref: ForwardedRef<HTMLInputElement>,
 ) => {
   const { handleEyeClick, innerType } = useInput(type)
   const id = useId()
 
-  let iconClassName = error
+  let iconClassName = errorMessage
     ? 'text-red-700'
     : 'text-gray-300 group-focus-within:text-green-400'
 
@@ -34,7 +35,7 @@ const InputComponent = (
         <span
           className={twMerge(
             'text-sm font-medium',
-            error ? 'text-red-700' : 'text-gray-100 focus-within:text-green-400',
+            errorMessage ? 'text-red-700' : 'text-gray-100 focus-within:text-green-400',
           )}
         >
           {label}
@@ -42,7 +43,9 @@ const InputComponent = (
         <div
           className={twMerge(
             'flex items-center gap-2 rounded border bg-transparent group mt-3 p-3',
-            error ? 'border-red-700' : 'border-gray-400 focus-within:border-green-400',
+            errorMessage
+              ? 'border-red-700'
+              : 'border-gray-400 focus-within:border-green-400',
             isActive && 'border-green-400',
           )}
         >
@@ -70,7 +73,7 @@ const InputComponent = (
         </div>
       </label>
 
-      {error && <span className='text-sm font-medium text-red-700'>{error}</span>}
+      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </>
   )
 }

@@ -1,13 +1,13 @@
 import { useFieldArray, useFormContext } from 'react-hook-form'
+import { useState } from 'react'
 
 import type { ChallengeSchema } from '@stardust/validation/challenging/types'
 import type { DataTypeName } from '@stardust/core/challenging/types'
-import { useState } from 'react'
 
 export function useChallengeTestCasesField() {
   const [expectedOutputDataType, setExpectedOutputDataType] =
     useState<DataTypeName>('string')
-  const { control, register } = useFormContext<ChallengeSchema>()
+  const { control, formState } = useFormContext<ChallengeSchema>()
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'testCases',
@@ -32,8 +32,8 @@ export function useChallengeTestCasesField() {
   return {
     formControl: control,
     testCases: fields,
+    testCasesErrors: formState.errors.testCases,
     expectedOutputDataType,
-    registerInput: register,
     handleAddTestCaseButtonClick,
     handleRemoveTestCaseButtonClick,
     handleExpectedOutputDataTypeNameChange,

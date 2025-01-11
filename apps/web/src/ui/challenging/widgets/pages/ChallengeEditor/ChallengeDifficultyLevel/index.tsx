@@ -8,16 +8,21 @@ import { CHALLENGE_DIFFICULTY_LEVELS } from '../challenge-difficulty-levels'
 import { useChallengeDifficultyLevelField } from './useChallengeDifficultyLevelField'
 
 export function ChallengeDifficultyLevelField() {
-  const { formControl } = useChallengeDifficultyLevelField()
+  const { formControl, errorMessage } = useChallengeDifficultyLevelField()
 
   return (
-    <ChallengeField title='Nível de dificuldade' icon='level'>
+    <ChallengeField
+      title='Nível de dificuldade'
+      icon='level'
+      hasError={Boolean(errorMessage)}
+    >
       <Controller
         control={formControl}
         name='difficultyLevel'
         render={({ field: { value, onChange } }) => (
           <Select.Container<ChallengeDifficultyLevel>
             defaultValue={value}
+            errorMessage={errorMessage}
             onValueChange={onChange}
           >
             <Select.Trigger value='Nível de dificuldade' />

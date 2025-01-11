@@ -3,7 +3,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form'
 import type { ChallengeSchema } from '@stardust/validation/challenging/types'
 
 export function useChallengeCategoriesField() {
-  const { control } = useFormContext<ChallengeSchema>()
+  const { control, formState } = useFormContext<ChallengeSchema>()
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'categories',
@@ -19,6 +19,7 @@ export function useChallengeCategoriesField() {
 
   return {
     selectedCategories: fields,
+    errorMessage: formState.errors.categories?.message,
     handleSelecButtonClick,
     handleUnselectCategoryButtonClick,
   }

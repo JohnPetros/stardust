@@ -6,25 +6,35 @@ import { ChallengeField } from '../ChallengeField'
 import { AddItemButton } from '../AddItemButton'
 import { CodeInput } from '../../CodeInput'
 import { DataTypeNameSelect } from '../DataTypeNameSelect'
+import { ErrorMessage } from '@/ui/global/widgets/components/ErrorMessage'
 
 export function ChallengeFunctionField() {
   const {
     formControl,
     params,
+    hasError,
+    functionNameErrorMessage,
+    functionParamsErrorMessage,
     registerInput,
     handleAddParamButtonClick,
     handleRemoveParamButtonClick,
   } = useChallengeFunctionField()
 
   return (
-    <ChallengeField title='Função' icon='function'>
+    <ChallengeField title='Função' icon='function' hasError={hasError}>
       <Input
         type='text'
         label='Nome da função'
         placeholder='encontre3Corpos'
+        errorMessage={functionNameErrorMessage}
         {...registerInput('function.name')}
       />
       <div className='space-y-6'>
+        {functionParamsErrorMessage && (
+          <ErrorMessage className='text-center'>
+            {functionParamsErrorMessage}
+          </ErrorMessage>
+        )}
         {params.map((_, index) => {
           const position = index + 1
           return (
@@ -52,13 +62,13 @@ export function ChallengeFunctionField() {
                   }}
                 />
               </CodeInput>
-              <AddItemButton onClick={handleAddParamButtonClick}>
-                Adicionar parâmetro
-              </AddItemButton>
             </div>
           )
         })}
       </div>
+      <AddItemButton onClick={handleAddParamButtonClick}>
+        Adicionar parâmetro
+      </AddItemButton>
     </ChallengeField>
   )
 }

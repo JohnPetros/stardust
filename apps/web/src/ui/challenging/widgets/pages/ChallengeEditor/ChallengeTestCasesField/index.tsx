@@ -9,12 +9,14 @@ import { DataTypeNameSelect } from '../DataTypeNameSelect'
 import { DataType } from '@stardust/core/challenging/structs'
 import { TestCaseInputs } from './TestCaseInputs'
 import { DEFAULT_VALUE_BY_DATA_TYPE_NAME } from '@stardust/core/challenging/constants'
+import { Checkbox } from '@/ui/global/widgets/components/Checkbox'
 
 export function ChallengeTestCasesField() {
   const {
     testCases,
     formControl,
     expectedOutputDataType,
+    testCasesErrors,
     handleAddTestCaseButtonClick,
     handleRemoveTestCaseButtonClick,
     handleExpectedOutputDataTypeNameChange,
@@ -27,6 +29,7 @@ export function ChallengeTestCasesField() {
       icon='function'
     >
       {testCases.map((testCase, index) => {
+        const testCaseError = testCasesErrors ? testCasesErrors[index] : undefined
         return (
           <div key={testCase.id} className=''>
             <button
@@ -60,6 +63,20 @@ export function ChallengeTestCasesField() {
                   />
                 </div>
               </Label>
+
+              <Controller
+                control={formControl}
+                name={`testCases.${index}.isLocked`}
+                render={({ field: { value, onChange } }) => {
+                  const id = `testCase.${index}.isLocked`
+                  return (
+                    <div className='flex items-center gap-3'>
+                      <Checkbox id={id} isChecked={value} onChange={onChange} />
+                      <Label htmlFor={id} title='É visível para os outros usuários?' />
+                    </div>
+                  )
+                }}
+              />
             </CodeInput>
           </div>
         )
