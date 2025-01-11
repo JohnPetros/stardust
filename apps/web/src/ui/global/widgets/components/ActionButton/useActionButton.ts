@@ -15,12 +15,10 @@ export function useActionButton({
   canExecute,
   titles,
   isFailure,
+  isDisabled,
   onExecute,
-}: Omit<ActionButtonProps, 'isDisabled' | 'icon' | 'className'>) {
+}: Omit<ActionButtonProps, 'icon' | 'className'>) {
   const [variant, title] = useMemo(() => {
-    if (canExecute) {
-      return [variants.canExecute, titles.canExecute]
-    }
     if (isExecuting) {
       return [variants.executing, titles.executing]
     }
@@ -30,8 +28,11 @@ export function useActionButton({
     if (isFailure) {
       return [variants.failure, titles.failure]
     }
+    if (canExecute && !isDisabled) {
+      return [variants.canExecute, titles.canExecute]
+    }
     return [variants.default, titles.default]
-  }, [titles, canExecute, isSuccess, isExecuting, isFailure])
+  }, [titles, canExecute, isSuccess, isDisabled, isExecuting, isFailure])
 
   async function handleClick() {
     if (onExecute) await onExecute()

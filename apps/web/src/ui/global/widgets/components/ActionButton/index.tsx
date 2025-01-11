@@ -12,13 +12,18 @@ export function ActionButton(props: ActionButtonProps) {
     <Button
       disabled={props.isDisabled}
       className={twMerge(
-        'flex h-8 w-32 items-center gap-2 border border-transparent',
+        'flex h-10 min-w-32 items-center gap-1 border border-transparent capitalize',
         variant,
         props.className,
       )}
       onClick={handleClick}
     >
-      <Icon name={props.icon} className={twMerge('text-lg', variant)} weight='bold' />
+      <Icon
+        name={props.icon}
+        size={16}
+        className={twMerge('text-lg', variant)}
+        weight='bold'
+      />
       {title}
     </Button>
   )
