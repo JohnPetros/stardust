@@ -39,7 +39,7 @@ export function ChallengeCard({
         <DifficultyBadge difficultyLevel={difficultyLevel} />
         <Link
           href={`${ROUTES.challenging.challenges.challenge(slug)}`}
-          className='font-semibold text-green-500 transition-colors duration-200 hover:text-green-700'
+          className='font-medium text-green-500 transition-colors duration-200 hover:text-green-700'
         >
           {title}
         </Link>

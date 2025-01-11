@@ -1,16 +1,13 @@
 'use client'
 
 import { Challenge } from '@stardust/core/challenging/entities'
-import type { ChallengeDto } from '@stardust/core/challenging/dtos'
-import type { PaginationResponse } from '@stardust/core/responses'
 
-import { CACHE, ROUTES } from '@/constants'
+import { CACHE } from '@/constants'
 import { QUERY_PARAMS } from '../query-params'
 import {
   ChallengeCompletion,
   ChallengeDifficulty,
 } from '@stardust/core/challenging/structs'
-import type { IApiClient } from '@stardust/core/interfaces'
 
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
