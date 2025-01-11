@@ -37,28 +37,35 @@ export function ChallengeTestCasesField() {
                 label={`Teste de caso ${index + 1}#`}
                 onRemove={() => handleRemoveTestCaseButtonClick(index)}
               >
-                <Label title='Entrada' />
-                <TestCaseInputs testCaseIndex={index} />
+                <div>
+                  <Label title='Entrada' />
+                  {/* <TestCaseInputs testCaseIndex={index} /> */}
+                </div>
 
-                <Label title='Saída esperada'>
-                  <div className='space-x-3'>
-                    <DataTypeNameSelect
-                      value={expectedOutputDataType}
-                      onChange={handleExpectedOutputDataTypeNameChange}
-                    />
-                    <Controller
-                      control={formControl}
-                      name={`testCases.${index}.expectedOutput`}
-                      render={({ field: { value, onChange } }) => {
-                        const dataType = DataType.create(
-                          value !== undefined
-                            ? value
-                            : DEFAULT_VALUE_BY_DATA_TYPE_NAME[expectedOutputDataType],
-                        )
-                        return <DataTypeInput value={dataType} onChange={onChange} />
-                      }}
-                    />
-                  </div>
+                <Label title='Saída esperada' className='block mt-6'>
+                  <Controller
+                    control={formControl}
+                    name={`testCases.${index}.expectedOutput`}
+                    render={({ field: { value, onChange } }) => {
+                      const dataType = DataType.create(
+                        value !== undefined
+                          ? value
+                          : DEFAULT_VALUE_BY_DATA_TYPE_NAME[expectedOutputDataType],
+                      )
+                      return (
+                        <div className='flex items-center gap-3'>
+                          <DataTypeNameSelect
+                            value={expectedOutputDataType}
+                            onChange={(dataType) =>
+                              handleExpectedOutputDataTypeNameChange(dataType, index)
+                            }
+                            className='translate-y-[6px]'
+                          />
+                          <DataTypeInput value={dataType} onChange={onChange} />
+                        </div>
+                      )
+                    }}
+                  />
                 </Label>
 
                 <Controller
@@ -79,8 +86,8 @@ export function ChallengeTestCasesField() {
           )
         })}
       </ol>
-      <AddItemButton onClick={handleAddTestCaseButtonClick}>
-        Adicionar teste de caso
+      <AddItemButton onClick={handleAddTestCaseButtonClick} className='mt-6'>
+        Adicionar teste de caso {testCases.length === 0 && '(obrigatório)'}
       </AddItemButton>
     </ChallengeField>
   )

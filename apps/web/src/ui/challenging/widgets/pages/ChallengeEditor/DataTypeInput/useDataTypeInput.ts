@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import type { DataTypeName } from '@stardust/core/challenging/types'
 import type { DataType } from '@stardust/core/challenging/structs'
@@ -6,9 +6,9 @@ import { DEFAULT_VALUE_BY_DATA_TYPE_NAME } from '@stardust/core/challenging/cons
 
 export function useDataTypeInput(
   onChange: (value: unknown) => void,
-  defaultDataType: DataType,
+  selectedDataType: DataType,
 ) {
-  const [dataType, setDataType] = useState<DataType>(defaultDataType)
+  const [dataType, setDataType] = useState<DataType>(selectedDataType)
 
   function handleStringValueChange(value: string) {
     setDataType(dataType.changeValue(value))
@@ -43,6 +43,10 @@ export function useDataTypeInput(
   function handleAddArrayItemClick() {
     setDataType(dataType.addArrayItem(undefined))
   }
+
+  useEffect(() => {
+    setDataType(selectedDataType)
+  }, [selectedDataType])
 
   return {
     dataType,

@@ -30,11 +30,11 @@ const InputComponent = (
   iconClassName += isActive ? ' text-green-400' : ''
 
   return (
-    <>
+    <div>
       <label htmlFor={id} className='block'>
         <span
           className={twMerge(
-            'text-sm font-medium',
+            'text-sm font-medium mb-3',
             errorMessage ? 'text-red-700' : 'text-gray-100 focus-within:text-green-400',
           )}
         >
@@ -42,7 +42,7 @@ const InputComponent = (
         </span>
         <div
           className={twMerge(
-            'flex items-center gap-2 rounded border bg-transparent group mt-3 p-3',
+            'flex items-center gap-2 rounded border bg-transparent group p-3',
             errorMessage
               ? 'border-red-700'
               : 'border-gray-400 focus-within:border-gray-100',
@@ -74,7 +74,7 @@ const InputComponent = (
       </label>
 
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-    </>
+    </div>
   )
 }
 

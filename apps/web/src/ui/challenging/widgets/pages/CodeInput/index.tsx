@@ -40,7 +40,7 @@ export function CodeInput({
           </button>
         </div>
 
-        <AnimatedExpandable isExpanded={isContentExpanded} className='mt-6'>
+        <AnimatedExpandable isExpanded={isContentExpanded} className='mt-6 space-y-6'>
           {children}
         </AnimatedExpandable>
       </div>

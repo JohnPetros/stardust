@@ -17,6 +17,7 @@ export function useDataTypeNameSelect(
   function handleChange(selectedDataTypeName: DataTypeName) {
     const selectedDataType = getDataType(selectedDataTypeName)
     if (!selectedDataType) return
+    console.log('oi', selectedDataType)
     setLabel(selectedDataType.label)
     onChange(selectedDataType.value)
   }

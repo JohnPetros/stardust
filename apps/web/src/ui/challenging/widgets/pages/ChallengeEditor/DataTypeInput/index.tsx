@@ -27,7 +27,7 @@ export function DataTypeInput({ value, errorMessage, onChange }: FunctionInputPr
 
   return (
     <div>
-      <div className='flex gap-6'>
+      <div className='flex gap-6 translate-y-[6px]'>
         {dataType.isString() && (
           <Input
             type='string'
@@ -52,7 +52,7 @@ export function DataTypeInput({ value, errorMessage, onChange }: FunctionInputPr
             errorMessage={errorMessage}
             onValueChange={(value) => handleBooleanValueChange(value === 'true')}
           >
-            <Select.Trigger value='true' />
+            <Select.Trigger value={dataType.value === true ? 'verdadeiro' : 'falso'} />
             <Select.Content>
               <Select.Item value='true'>
                 <Select.Text>Verdadeiro</Select.Text>
@@ -74,7 +74,7 @@ export function DataTypeInput({ value, errorMessage, onChange }: FunctionInputPr
                 <li key={String(index)}>
                   <div className='flex items-center gap-3'>
                     <DataTypeNameSelect
-                      defaultValue={itemDataType.name}
+                      value={itemDataType.name}
                       onChange={(dataTypeName) =>
                         handleArrayItemDataTypeNameChange(dataTypeName, index)
                       }
