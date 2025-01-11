@@ -34,7 +34,7 @@ const InputComponent = (
         <span
           className={twMerge(
             'text-sm font-medium',
-            error ? 'text-red-700' : 'text-green-400',
+            error ? 'text-red-700' : 'text-gray-100 focus-within:text-green-400',
           )}
         >
           {label}
