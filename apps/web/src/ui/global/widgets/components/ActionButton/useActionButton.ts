@@ -17,7 +17,7 @@ export function useActionButton({
   isFailure,
   isDisabled,
   onExecute,
-}: Omit<ActionButtonProps, 'icon' | 'className'>) {
+}: Omit<ActionButtonProps, 'type' | 'icon' | 'className'>) {
   const [variant, title] = useMemo(() => {
     if (isExecuting) {
       return [variants.executing, titles.executing]

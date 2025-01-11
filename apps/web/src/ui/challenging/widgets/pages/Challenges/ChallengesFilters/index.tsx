@@ -44,7 +44,7 @@ export function ChallengesFilters({ categories }: FiltersProps) {
             handleStatusChange(newStatus as ChallengeCompletionStatus)
           }
         >
-          <Select.Trigger value='Status' />
+          <Select.Trigger value='Status' className='h-8' />
           <Select.Content>
             {FILTER_SELECTS_ITEMS.slice(0, 3).map((item, index, allItems) => {
               const isLastItem = index === allItems.length - 1

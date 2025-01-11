@@ -1,6 +1,6 @@
 import type { ListingOrder } from '@stardust/core/global/types'
 
-import { Select } from '@/ui/global/widgets/components/Select'
+import * as Select from '@/ui/global/widgets/components/Select'
 import { usePriceOrderSelect } from './usePriceOrderSelect'
 
 type SortersProps = {
@@ -18,9 +18,9 @@ export function PriceOrderSelect({ onPriceOrderChange }: SortersProps) {
       >
         <Select.Trigger value={priceOrder} />
         <Select.Content>
-          <Select.Item value={'ascending'}>Menor preço</Select.Item>
+          <Select.Item value='ascending'>Menor preço</Select.Item>
           <Select.Separator />
-          <Select.Item value={'descending'}>Maior preço</Select.Item>
+          <Select.Item value='descending'>Maior preço</Select.Item>
         </Select.Content>
       </Select.Container>
     </div>

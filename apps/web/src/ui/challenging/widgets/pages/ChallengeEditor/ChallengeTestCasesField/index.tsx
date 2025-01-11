@@ -24,63 +24,61 @@ export function ChallengeTestCasesField() {
 
   return (
     <ChallengeField
-      title='Função'
-      subtitle='Testes de caso são essencias para os usuários validarem suas respostas. Tenha pelo menos 3 testes de caso.'
-      icon='function'
+      title='Casos de teste'
+      subtitle='São essencias para os usuários validarem suas respostas. Tenha pelo menos 3 testes de caso.'
+      icon='test'
     >
-      {testCases.map((testCase, index) => {
-        const testCaseError = testCasesErrors ? testCasesErrors[index] : undefined
-        return (
-          <div key={testCase.id} className=''>
-            <button
-              type='button'
-              onClick={() => handleRemoveTestCaseButtonClick(index)}
-              className='ml-auto text-green-400'
-            >
-              Remover teste de caso
-            </button>
-            <CodeInput label={`Teste de caso ${index + 1}#`}>
-              <Label title='Entrada' />
-              <TestCaseInputs testCaseIndex={index} />
+      <ol>
+        {testCases.map((testCase, index) => {
+          const testCaseError = testCasesErrors ? testCasesErrors[index] : undefined
+          return (
+            <li key={testCase.id}>
+              <CodeInput
+                label={`Teste de caso ${index + 1}#`}
+                onRemove={() => handleRemoveTestCaseButtonClick(index)}
+              >
+                <Label title='Entrada' />
+                <TestCaseInputs testCaseIndex={index} />
 
-              <Label title='Saída esperada'>
-                <div className='space-x-3'>
-                  <DataTypeNameSelect
-                    defaultValue={expectedOutputDataType}
-                    onChange={handleExpectedOutputDataTypeNameChange}
-                  />
-                  <Controller
-                    control={formControl}
-                    name={`testCases.${index}.expectedOutput`}
-                    render={({ field: { value, onChange } }) => {
-                      const dataType = DataType.create(
-                        value !== undefined
-                          ? value
-                          : DEFAULT_VALUE_BY_DATA_TYPE_NAME[expectedOutputDataType],
-                      )
-                      return <DataTypeInput value={dataType} onChange={onChange} />
-                    }}
-                  />
-                </div>
-              </Label>
+                <Label title='Saída esperada'>
+                  <div className='space-x-3'>
+                    <DataTypeNameSelect
+                      value={expectedOutputDataType}
+                      onChange={handleExpectedOutputDataTypeNameChange}
+                    />
+                    <Controller
+                      control={formControl}
+                      name={`testCases.${index}.expectedOutput`}
+                      render={({ field: { value, onChange } }) => {
+                        const dataType = DataType.create(
+                          value !== undefined
+                            ? value
+                            : DEFAULT_VALUE_BY_DATA_TYPE_NAME[expectedOutputDataType],
+                        )
+                        return <DataTypeInput value={dataType} onChange={onChange} />
+                      }}
+                    />
+                  </div>
+                </Label>
 
-              <Controller
-                control={formControl}
-                name={`testCases.${index}.isLocked`}
-                render={({ field: { value, onChange } }) => {
-                  const id = `testCase.${index}.isLocked`
-                  return (
-                    <div className='flex items-center gap-3'>
-                      <Checkbox id={id} isChecked={value} onChange={onChange} />
-                      <Label htmlFor={id} title='É visível para os outros usuários?' />
-                    </div>
-                  )
-                }}
-              />
-            </CodeInput>
-          </div>
-        )
-      })}
+                <Controller
+                  control={formControl}
+                  name={`testCases.${index}.isLocked`}
+                  render={({ field: { value, onChange } }) => {
+                    const id = `testCase.${index}.isLocked`
+                    return (
+                      <div className='flex items-center gap-3'>
+                        <Checkbox id={id} isChecked={value} onChange={onChange} />
+                        <Label htmlFor={id} title='É visível para os outros usuários?' />
+                      </div>
+                    )
+                  }}
+                />
+              </CodeInput>
+            </li>
+          )
+        })}
+      </ol>
       <AddItemButton onClick={handleAddTestCaseButtonClick}>
         Adicionar teste de caso
       </AddItemButton>

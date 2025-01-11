@@ -3,6 +3,7 @@ import type { ClassNameValue } from 'tailwind-merge'
 import type { IconName } from '../../Icon/types'
 
 export type ActionButtonProps = {
+  type: 'button' | 'submit'
   icon: IconName
   isExecuting: boolean
   isDisabled: boolean

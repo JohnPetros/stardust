@@ -18,9 +18,12 @@ export function AddItemButton({
     <button
       type='button'
       onClick={onClick}
-      className={twMerge('bg-green-400', className)}
+      className={twMerge(
+        'flex items-center gap-1 text-green-400 bg-transparent',
+        className,
+      )}
     >
-      <Icon name='plus' size={14} className='text-green-900' />
+      <Icon name='plus' size={16} className='text-green-400' />
       {children}
     </button>
   )

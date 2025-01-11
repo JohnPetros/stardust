@@ -33,20 +33,22 @@ export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
       code: challenge?.code,
       function: {
         name: challenge?.function?.name.value,
-        params: challenge?.function?.params.map((param) => ({
-          name: param.name.value,
-          dataTypeName: param.dataType.name,
-        })),
+        params:
+          challenge?.function?.params.map((param) => ({
+            name: param.name.value,
+            dataTypeName: param.dataType.name,
+          })) ?? [],
       },
       difficultyLevel: challenge?.difficulty.level,
       testCases: challenge?.testCases.map((testCase) => ({
         isLocked: testCase.isLocked.isTrue,
         expectedOutput: testCase.expectedOutput,
       })),
-      categories: challenge?.categories.map((category) => ({
-        id: category.id,
-        name: category.name.value,
-      })),
+      categories:
+        challenge?.categories.map((category) => ({
+          id: category.id,
+          name: category.name.value,
+        })) ?? [],
     },
   })
 
@@ -80,7 +82,7 @@ export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
       (Boolean(challenge) && form.formState.isDirty),
     shouldUpdateChallenge: challenge || form.formState.isSubmitSuccessful,
     isFormSubmitting: form.formState.isSubmitting || isPosting || isUpdating,
-    isSubmitFailure: isPostFailure || !form.formState.isValid,
+    isSubmitFailure: isPostFailure || Object.keys(form.formState.errors).length > 0,
     isSubmitSuccess: isSubmitSuccess,
     handleFormSubmit: form.handleSubmit(handleSubmit),
   }

@@ -45,8 +45,9 @@ export function ChallengeEditorPage({
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleFormSubmit}>
+      <form onSubmit={handleFormSubmit} className='mx-auto max-w-5xl py-6 space-y-12'>
         <ActionButton
+          type='submit'
           titles={ACTION_BUTTON_TITLES}
           canExecute={canSubmitForm}
           isExecuting={isFormSubmitting}
@@ -54,6 +55,7 @@ export function ChallengeEditorPage({
           isSuccess={isSubmitSuccess}
           isFailure={isSubmitFailure}
           icon='send'
+          className='w-max'
         />
         <ChallengeTitleField />
         <ChallengeFunctionField />

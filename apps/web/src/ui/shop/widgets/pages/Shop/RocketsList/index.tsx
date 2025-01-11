@@ -28,7 +28,7 @@ export function RocketsList({ initialItems }: RocketsListProps) {
 
   return (
     <section id='rockets'>
-      <h2 className=' text-lg font-semibold text-white'>Foguetes</h2>
+      <h2 className='text-lg font-semibold text-white'>Foguetes</h2>
       <div className='mt-3 flex flex-col gap-3 sm:flex-row sm:items-center'>
         <Search
           id='rocket-search'
@@ -51,7 +51,7 @@ export function RocketsList({ initialItems }: RocketsListProps) {
                     name={dto.name}
                     price={dto.price}
                     isAcquired={user.hasAcquiredRocket(dto.id)}
-                    isBuyable={user.canBuy(dto.price)}
+                    isBuyable={user.canBuy(dto.price).isTrue}
                     isSelected={user.isSelectRocket(dto.id)}
                   />
                 </li>

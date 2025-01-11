@@ -20,7 +20,7 @@ export function ChallengeDescriptionField() {
         name='description'
         render={({ field: { value, onChange } }) => (
           <div>
-            <ContentEditor content={value} onChange={onChange} />
+            {/* <ContentEditor content={value} onChange={onChange} /> */}
             {errorMessage && <ErrorMessage className='mt-1'>{errorMessage}</ErrorMessage>}
           </div>
         )}

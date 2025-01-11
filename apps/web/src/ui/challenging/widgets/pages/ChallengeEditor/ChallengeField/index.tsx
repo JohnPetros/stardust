@@ -23,13 +23,17 @@ export function ChallengeField({
   const { isContentExpanded, handleArrowClick } = useChallengeField()
 
   return (
-    <div className='radius-md'>
+    <div className='radius-md bg-gray-800 p-6 rounded-md'>
       <div className='flex justify-between'>
-        <div className='grid place-content-center p-3 bg-green-900 '>
-          <Icon name={icon} className={hasError ? 'text-red-700' : 'text-green-400'} />
+        <div className='flex items-center gap-3'>
+          <div className='grid place-content-center rounded-md p-3 bg-green-900'>
+            <Icon name={icon} className={hasError ? 'text-red-700' : 'text-green-400'} />
+          </div>
+          <div>
+            <h2 className={hasError ? 'text-red-700' : 'text-green-400'}>{title}</h2>
+            {subtitle && <p className='text-gray-200 text-sm'>{subtitle}</p>}
+          </div>
         </div>
-        <h2 className={hasError ? 'text-red-700' : 'text-green-400'}>{title}</h2>
-        {subtitle && <p className='text-gray-500 text-sm'>{subtitle}</p>}
 
         <button
           type='button'

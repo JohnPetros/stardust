@@ -1,17 +1,27 @@
+import type { ClassNameValue } from 'tailwind-merge'
+
 import type { DataTypeName } from '@stardust/core/challenging/types'
 
 import * as Select from '@/ui/global/widgets/components/Select'
 import { DATA_TYPES } from '../data-types'
+import { useDataTypeNameSelect } from './useDataTypeNameSelect'
 
 type DataTypeNameSelectProps = {
-  defaultValue?: DataTypeName
-  onChange?: (dataTypeName: DataTypeName) => void
+  value: DataTypeName
+  className?: ClassNameValue
+  onChange: (dataTypeName: DataTypeName) => void
 }
 
-export function DataTypeNameSelect({ defaultValue, onChange }: DataTypeNameSelectProps) {
+export function DataTypeNameSelect({
+  value,
+  className,
+  onChange,
+}: DataTypeNameSelectProps) {
+  const { label, handleChange } = useDataTypeNameSelect(value, onChange)
+
   return (
-    <Select.Container<DataTypeName> defaultValue={defaultValue} onValueChange={onChange}>
-      <Select.Trigger value='undefined' />
+    <Select.Container<DataTypeName> onValueChange={handleChange}>
+      <Select.Trigger className={className} value={label} />
       <Select.Content>
         {DATA_TYPES.map((dataType) => (
           <Select.Item key={dataType.label} value={dataType.value}>

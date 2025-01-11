@@ -21,53 +21,60 @@ export function ChallengeFunctionField() {
   } = useChallengeFunctionField()
 
   return (
-    <ChallengeField title='Função' icon='function' hasError={hasError}>
+    <ChallengeField
+      title='Função'
+      icon='function'
+      subtitle='É onde o usuário escreverá o código da solução'
+      hasError={hasError}
+    >
       <Input
         type='text'
         label='Nome da função'
-        placeholder='encontre3Corpos'
+        placeholder='Ex.: encontre3Corpos'
         errorMessage={functionNameErrorMessage}
         {...registerInput('function.name')}
       />
-      <div className='space-y-6'>
-        {functionParamsErrorMessage && (
-          <ErrorMessage className='text-center'>
-            {functionParamsErrorMessage}
-          </ErrorMessage>
-        )}
+      {functionParamsErrorMessage && (
+        <ErrorMessage className='text-center'>{functionParamsErrorMessage}</ErrorMessage>
+      )}
+      <ol className='space-y-6 mt-6'>
         {params.map((_, index) => {
           const position = index + 1
           return (
-            <div key={String(position)} className='space-y-3'>
-              <button
-                type='button'
-                onClick={() => handleRemoveParamButtonClick(position)}
-                className='ml-auto text-green-400'
+            <li key={String(position)}>
+              <CodeInput
+                label={`Parâmetro ${position}`}
+                onRemove={() => handleRemoveParamButtonClick(position)}
               >
-                Remover parâmetro
-              </button>
-              <CodeInput label={`Parâmetro ${position}`}>
-                <Input
-                  type='text'
-                  label='Nome do parâmetro'
-                  placeholder={`parametro${position}`}
-                  {...registerInput(`function.params.${index}.name`)}
-                />
-                <Controller
-                  key={String(position)}
-                  control={formControl}
-                  name={`function.params.${index}.dataTypeName`}
-                  render={({ field: { value, onChange } }) => {
-                    return <DataTypeNameSelect defaultValue={value} onChange={onChange} />
-                  }}
-                />
+                <div className='flex gap-3 items-center'>
+                  <Input
+                    type='text'
+                    label='Nome do parâmetro'
+                    placeholder={`parametro${position}`}
+                    {...registerInput(`function.params.${index}.name`)}
+                  />
+                  <Controller
+                    key={String(position)}
+                    control={formControl}
+                    name={`function.params.${index}.dataTypeName`}
+                    render={({ field: { value, onChange } }) => {
+                      return (
+                        <DataTypeNameSelect
+                          value={value}
+                          onChange={onChange}
+                          className='translate-y-[18px]'
+                        />
+                      )
+                    }}
+                  />
+                </div>
               </CodeInput>
-            </div>
+            </li>
           )
         })}
-      </div>
-      <AddItemButton onClick={handleAddParamButtonClick}>
-        Adicionar parâmetro
+      </ol>
+      <AddItemButton onClick={handleAddParamButtonClick} className='mt-6'>
+        Adicionar parâmetro à função {params.length === 0 && '(obrigatório)'}
       </AddItemButton>
     </ChallengeField>
   )

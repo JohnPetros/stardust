@@ -10,6 +10,7 @@ export function ActionButton(props: ActionButtonProps) {
 
   return (
     <Button
+      type={props.type}
       disabled={props.isDisabled}
       className={twMerge(
         'flex h-10 min-w-32 items-center gap-1 border border-transparent capitalize',
