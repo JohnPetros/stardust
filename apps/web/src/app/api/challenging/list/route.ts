@@ -6,12 +6,11 @@ import { runApiRoute } from '@/api/next/utils'
 import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
 import { SupabaseChallengingService } from '@/api/supabase/services'
 import { FetchChallengesListController } from '@/api/controllers/challenging'
+import { itemsPerPageSchema, pageSchema } from '@stardust/validation/global/schemas'
 import {
-  itemsPerPageSchema,
-  pageSchema,
   challengeDifficultyLevelSchema,
   challengeCompletionStatusSchema,
-} from '@stardust/validation/schemas'
+} from '@stardust/validation/challenging/schemas'
 
 const schema = z.object({
   queryParams: z.object({

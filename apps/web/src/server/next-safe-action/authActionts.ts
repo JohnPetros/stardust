@@ -2,8 +2,11 @@
 
 import { z } from 'zod'
 
-import { emailSchema, nameSchema, passwordSchema } from '@stardust/validation/schemas'
-
+import {
+  emailSchema,
+  nameSchema,
+  passwordSchema,
+} from '@stardust/validation/global/schemas'
 import { SupabaseServerActionClient } from '@/api/supabase/clients/SupabaseServerActionClient'
 import {
   SupabaseAuthService,
@@ -17,7 +20,7 @@ import { SignUpAction } from '../actions/auth'
 import { actionClient } from './clients'
 
 const signUp = actionClient
-  .schema(z.object({ email: z.string(), name: z.string(), password: z.string() }))
+  .schema(z.object({ email: emailSchema, name: nameSchema, password: passwordSchema }))
   .action(async ({ clientInput }) => {
     const actionServer = NextActionServer({
       request: clientInput,

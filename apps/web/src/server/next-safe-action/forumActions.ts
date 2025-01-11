@@ -2,7 +2,7 @@
 
 import { z } from 'zod'
 
-import { idSchema } from '@stardust/validation/schemas'
+import { idSchema } from '@stardust/validation/global/schemas'
 
 import { SupabaseServerActionClient } from '@/api/supabase/clients/SupabaseServerActionClient'
 import { SupabaseForumService } from '@/api/supabase/services'

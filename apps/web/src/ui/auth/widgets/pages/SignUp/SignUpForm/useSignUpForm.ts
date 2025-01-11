@@ -5,7 +5,11 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { emailSchema, nameSchema, passwordSchema } from '@stardust/validation/schemas'
+import {
+  emailSchema,
+  nameSchema,
+  passwordSchema,
+} from '@stardust/validation/global/schemas'
 
 import { useApi } from '@/ui/global/hooks'
 import type { SignUpFormFields } from './types/SignUpFormFields'

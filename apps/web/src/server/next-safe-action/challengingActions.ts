@@ -3,6 +3,20 @@
 import { flattenValidationErrors } from 'next-safe-action'
 import { z } from 'zod'
 
+import {
+  itemsPerPageSchema,
+  pageSchema,
+  idSchema,
+  titleSchema,
+  contentSchema,
+} from '@stardust/validation/global/schemas'
+import {
+  challengeDifficultyLevelSchema,
+  challengeCompletionStatusSchema,
+  challengeVoteSchema,
+  challengeSchema,
+} from '@stardust/validation/challenging/schemas'
+
 import { SupabaseServerActionClient } from '@/api/supabase/clients/SupabaseServerActionClient'
 import { SupabaseChallengingService } from '@/api/supabase/services'
 import { authActionClient } from './clients/authActionClient'
@@ -18,17 +32,6 @@ import {
   ViewSolutionAction,
   VoteChallengeAction,
 } from '../actions/challenging'
-import {
-  itemsPerPageSchema,
-  pageSchema,
-  challengeDifficultyLevelSchema,
-  challengeCompletionStatusSchema,
-  challengeVoteSchema,
-  idSchema,
-  titleSchema,
-  contentSchema,
-} from '@stardust/validation/schemas'
-import { challengeSchema } from '@stardust/validation/challenging/schemas'
 
 export const fetchChallengesList = authActionClient
   .schema(

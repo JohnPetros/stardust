@@ -2,9 +2,9 @@
   "name": "@stardust/validation",
   "version": "0.1.0",
   "exports": {
-    "./schemas": "./src/schemas/index.ts",
-    "./challenging/schemas": "./src/challenging/schemas/index.ts",
-    "./challenging/types": "./src/challenging/types/index.ts",
+    "./global/schemas": "./src/modules/global/schemas/index.ts",
+    "./challenging/schemas": "./src/modules/challenging/schemas/index.ts",
+    "./challenging/types": "./src/modules/challenging/types/index.ts",
     "./constants": "./src/constants/index.ts",
     "./factories": "./src/factories/index.ts"
   },

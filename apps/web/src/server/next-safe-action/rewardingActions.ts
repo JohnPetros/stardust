@@ -2,11 +2,7 @@
 
 import { z } from 'zod'
 
-import {
-  challengeDifficultyLevelSchema,
-  idSchema,
-  integerSchema,
-} from '@stardust/validation/schemas'
+import { idSchema, integerSchema } from '@stardust/validation/global/schemas'
 
 import { authActionClient } from './clients/authActionClient'
 import { NextActionServer } from '../next/NextActionServer'

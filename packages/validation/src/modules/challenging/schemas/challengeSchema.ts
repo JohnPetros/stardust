@@ -1,12 +1,13 @@
 import z from 'zod'
-import { nameSchema } from '../../schemas/nameSchema'
-import { contentSchema } from '../../schemas/contentSchema'
-import { idSchema } from '../../schemas/idSchema'
+import { nameSchema } from '../../global/schemas/nameSchema'
+import { contentSchema } from '../../global/schemas/contentSchema'
+import { idSchema } from '../../global/schemas/idSchema'
 import { dataTypeNameSchema } from './dataTypeNameSchema'
-import { booleanSchema } from '../../schemas/booleanSchema'
+import { booleanSchema } from '../../global/schemas/booleanSchema'
+import { titleSchema } from '../../global/schemas'
 
 export const challengeSchema = z.object({
-  title: nameSchema,
+  title: titleSchema,
   slug: z.string(),
   function: z.object({
     name: nameSchema,
