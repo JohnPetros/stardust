@@ -203,9 +203,10 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       const { data, error } = await supabase
         .from('categories')
         .select('*, challenges:challenges_categories(id:challenge_id)')
+        .order('name')
 
       if (error) {
-        return SupabasePostgrestError(error, 'Error inesperado ao buscar desafios')
+        return SupabasePostgrestError(error, 'Error inesperado ao buscar categorias')
       }
 
       const categories: ChallengeCategoryDto[] = data.map((category) => ({
@@ -271,6 +272,28 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       const docs = data.map(supabaseDocMapper.toDto, status)
 
       return new ApiResponse({ body: docs })
+    },
+
+    async saveChallenge(challenge) {
+      const supabaseChallenge = supabaseChallengeMapper.toSupabase(challenge)
+      const { error, status } = await supabase.from('challenges').insert({
+        // @ts-ignore
+        id: supabaseChallenge.id,
+        title: supabaseChallenge.title,
+        difficulty: supabaseChallenge.difficulty,
+        slug: supabaseChallenge.slug,
+        description: supabaseChallenge.description,
+        code: supabaseChallenge.code,
+        function_name: supabaseChallenge.function_name,
+        test_cases: supabaseChallenge.test_cases,
+        user_id: supabaseChallenge.user_id,
+      })
+
+      if (error) {
+        return SupabasePostgrestError(error, 'Erro inesperado ao salvar solução', status)
+      }
+
+      return new ApiResponse()
     },
 
     async saveSolution(solution, challengeId) {
@@ -380,6 +403,48 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         return SupabasePostgrestError(
           error,
           'Error inesperado ao atualizar essa solução',
+          status,
+        )
+      }
+
+      return new ApiResponse()
+    },
+
+    async updateChallenge(challenge) {
+      const challengeDto = challenge.dto
+      const { error, status } = await supabase
+        .from('challenges')
+        .update({
+          // @ts-ignore
+          id: challengeDto.id,
+          title: challengeDto.title,
+          difficulty: challengeDto.difficultyLevel,
+          slug: challengeDto.slug,
+          description: challengeDto.description,
+          code: challengeDto.code,
+          function_name: challengeDto.function?.name,
+          test_cases: JSON.stringify(challengeDto.testCases),
+          user_id: challengeDto.author.id,
+        })
+        .eq('id', challenge.id)
+
+      if (error) {
+        return SupabasePostgrestError(error, 'Erro inesperado ao salvar solução', status)
+      }
+
+      return new ApiResponse()
+    },
+
+    async deleteChallenge(challengeId) {
+      const { error, status } = await supabase
+        .from('challenges')
+        .delete()
+        .eq('id', challengeId)
+
+      if (error) {
+        return SupabasePostgrestError(
+          error,
+          'Error inesperado ao deletar desafio',
           status,
         )
       }

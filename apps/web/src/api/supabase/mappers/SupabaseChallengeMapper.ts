@@ -28,10 +28,15 @@ export const SupabaseChallengeMapper = () => {
         title: supabaseChallenge.title ?? '',
         code: supabaseChallenge.code ?? '',
         slug: supabaseChallenge.slug ?? '',
-        difficulty: supabaseChallenge.difficulty ?? '',
+        difficultyLevel: supabaseChallenge.difficulty ?? '',
         docId: supabaseChallenge.doc_id,
-        functionName: supabaseChallenge.function_name,
-        authorSlug: supabaseChallenge.user_slug ?? '',
+        function: {
+          name: supabaseChallenge.function_name ?? '',
+          params: [],
+        },
+        author: {
+          id: supabaseChallenge.user_id ?? '',
+        },
         upvotesCount: supabaseChallenge.upvotes ?? 0,
         downvotesCount: supabaseChallenge.downvotes ?? 0,
         completionsCount: supabaseChallenge.total_completitions ?? 0,
@@ -70,10 +75,18 @@ export const SupabaseChallengeMapper = () => {
       // @ts-ignore
       const supabaseChallenge: SupabaseChallenge = {
         id: challenge.id,
+        slug: challenge.slug.value,
         title: challengeDto.title,
         code: challengeDto.code,
-        slug: challengeDto.slug,
-        difficulty: challengeDto.difficulty,
+        difficulty: challengeDto.difficultyLevel,
+        test_cases: JSON.stringify(challengeDto.testCases),
+        description: challengeDto.description,
+        user_id: challengeDto.author.id,
+        function_name: challengeDto.function?.name ?? null,
+        texts: [],
+        star_id: '',
+        doc_id: '',
+        categories: [],
       }
 
       return supabaseChallenge
