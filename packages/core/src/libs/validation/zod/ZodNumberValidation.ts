@@ -44,7 +44,7 @@ export class ZodNumberValidation implements INumberValidation {
   validate() {
     try {
       z.object({
-        [this.key]: this.zodNumber.refine((value) => Number.isNaN(value), {
+        [this.key]: this.zodNumber.refine((value) => !Number.isNaN(value), {
           message: `${this.key} deve ser um número válido`,
         }),
       }).parse({ [this.key]: this.data })

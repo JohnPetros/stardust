@@ -3,7 +3,7 @@ import type { ChallengeDto } from '#challenging/dtos'
 import type { UserDto } from '#global/dtos'
 import type { IChallengingService, IUseCase } from '#interfaces'
 import { User } from '#global/entities'
-import { Challenge, ChallengeCategory } from '#challenging/entities'
+import { Challenge } from '#challenging/entities'
 import { PaginationResponse } from '#responses'
 
 type Request = {

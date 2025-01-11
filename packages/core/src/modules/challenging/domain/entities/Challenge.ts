@@ -38,7 +38,7 @@ export type ChallengeProps = {
   starId: Id | null
   docId: Id | null
   textBlocks: TextBlock[]
-  description: Text
+  description: string // this will be a Text in the future
   testCases: TestCase[]
   results: List<boolean>
   userOutputs: List<unknown>
@@ -296,7 +296,7 @@ export class Challenge extends Entity<ChallengeProps> {
       completionsCount: this.completionsCount.value,
       userOutputs: this.props.userOutputs.items,
       results: this.props.results.items,
-      description: this.description.value,
+      description: this.description,
       createdAt: this.createdAt,
       categories: this.categories.map((category) => category.dto),
       testCases: this.testCases.map((testCase) => testCase.dto),
