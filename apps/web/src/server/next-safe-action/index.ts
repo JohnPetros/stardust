@@ -8,6 +8,7 @@ import {
   upvoteSolution,
   viewSolution,
   postChallenge,
+  updateChallenge,
 } from './challengingActions'
 import { setCookie, getCookie, deleteCookie, hasCookie } from './cookieActions'
 import { upvoteComment } from './forumActions'
@@ -28,6 +29,7 @@ export const challengingActions = {
   editSolution,
   postSolution,
   postChallenge,
+  updateChallenge,
   upvoteSolution,
   viewSolution,
 }

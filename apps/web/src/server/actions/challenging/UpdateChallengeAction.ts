@@ -3,30 +3,37 @@ import type {
   IActionServer,
   IChallengingService,
 } from '@stardust/core/interfaces'
-import { PostChallengeUseCase } from '@stardust/core/challenging/use-cases'
+import { UpdateChallengeUseCase } from '@stardust/core/challenging/use-cases'
 import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 import type { ChallengeSchema } from '@stardust/validation/challenging/types'
 import { User } from '@stardust/core/global/entities'
 
-type Request = ChallengeSchema
+type Request = {
+  challengeId: string
+  challenge: ChallengeSchema
+}
 
-export const PostChallengeAction = (
+export const UpdateChallengeAction = (
   challengingService: IChallengingService,
 ): IAction<Request, ChallengeDto> => {
   return {
     async handle(actionServer: IActionServer<Request>) {
       const {
-        title,
-        code,
-        description,
-        categories,
-        difficultyLevel,
-        testCases,
-        function: challengeFunction,
+        challengeId,
+        challenge: {
+          title,
+          code,
+          description,
+          categories,
+          difficultyLevel,
+          testCases,
+          function: challengeFunction,
+        },
       } = actionServer.getRequest()
       const user = User.create(await actionServer.getUser())
-      const useCase = new PostChallengeUseCase(challengingService)
+      const useCase = new UpdateChallengeUseCase(challengingService)
       return await useCase.do({
+        challengeId,
         challengeDto: {
           title,
           code,
