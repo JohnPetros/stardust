@@ -51,7 +51,7 @@ export class Comment extends Entity<CommentProps> {
   }
 
   get author() {
-    if (!this.props.author.entity) throw new EntityNotDefinedError('Solução de desafio')
+    if (!this.props.author.entity) throw new EntityNotDefinedError('Autor da solução')
     return this.props.author.entity
   }
 
