@@ -19,12 +19,8 @@ export const DATA_TYPES: DataTypes = [
     label: 'número',
   },
   {
-    value: 'true',
-    label: 'verdadeiro',
-  },
-  {
-    value: 'false',
-    label: 'falso',
+    value: 'boolean',
+    label: 'lógico',
   },
   {
     value: 'array',
