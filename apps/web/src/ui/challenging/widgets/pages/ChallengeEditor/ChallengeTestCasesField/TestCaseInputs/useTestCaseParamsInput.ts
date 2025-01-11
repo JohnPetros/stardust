@@ -13,21 +13,24 @@ export function useTestCaseInputs(testCaseIndex: number) {
   const functionParams = watch('function.params')
 
   useEffect(() => {
-    if (functionParams) {
-      remove()
-      functionParams.forEach((param, index) => {
-        const value =
-          fields[index] !== undefined
-            ? fields[index]
-            : DEFAULT_VALUE_BY_DATA_TYPE_NAME[param.dataTypeName]
+    // if (functionParams.length) {
+    //   remove()
+    //   functionParams.forEach((param, index) => {
+    //     const value =
+    //       fields[index]?.value !== undefined
+    //         ? fields[index].value
+    //         : DEFAULT_VALUE_BY_DATA_TYPE_NAME[param.dataTypeName]
 
-        append(value)
-      })
-    }
-  }, [fields, functionParams, append, remove])
+    //     console.log({ value })
+    //     append({ value })
+    //   })
+    // }
+    console.log({ functionParams })
+  }, [functionParams, append, remove])
 
-  const testCaseError =
-    formState.errors.testCases && formState.errors.testCases[testCaseIndex]
+  const testCaseError = formState.errors.testCases
+    ? formState.errors.testCases[testCaseIndex]
+    : {}
 
   return {
     formControl: control,

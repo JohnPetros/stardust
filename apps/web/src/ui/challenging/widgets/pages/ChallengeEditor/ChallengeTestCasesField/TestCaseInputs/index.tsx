@@ -4,6 +4,8 @@ import { DataTypeInput } from '../../DataTypeInput'
 import { useTestCaseInputs } from './useTestCaseParamsInput'
 import { DataType } from '@stardust/core/challenging/structs'
 import { ErrorMessage } from '@/ui/global/widgets/components/ErrorMessage'
+import { DataTypeNameSelect } from '../../DataTypeNameSelect'
+import { TestCaseInput } from './TestCaseInput'
 
 type TestCaseInputsProps = {
   testCaseIndex: number
@@ -16,7 +18,7 @@ export function TestCaseInputs({ testCaseIndex }: TestCaseInputsProps) {
   return (
     <div>
       {!hasInputs && !errorMessage && (
-        <p className='text-gray-100 text-lg text-center mt-6'>
+        <p className='text-gray-100 text-sm mt-6'>
           Defina os parâmetros da sua função primeiro
         </p>
       )}
@@ -24,22 +26,15 @@ export function TestCaseInputs({ testCaseIndex }: TestCaseInputsProps) {
         <ErrorMessage className='text-center mt-6'>{errorMessage}</ErrorMessage>
       )}
 
-      {functionParams.map((param, index) => {
-        return (
-          <div key={param.name} className='space-y-3 w-full'>
-            <CodeInput key={String(`param.${index}`)} label={`${index + 1}º Parâmetro`}>
-              <Controller
-                control={formControl}
-                name={`testCases.${testCaseIndex}.inputs.${index}`}
-                render={({ field: { value, onChange } }) => {
-                  const dataType = DataType.create(value)
-                  return <DataTypeInput value={dataType} onChange={onChange} />
-                }}
-              />
-            </CodeInput>
-          </div>
-        )
-      })}
+      <ol className='space-y-6 mt-3'>
+        {functionParams.map((param, index) => {
+          return (
+            <li key={param.name} className='space-y-3 w-full'>
+              <TestCaseInput testCaseIndex={testCaseIndex} paramIndex={index} />
+            </li>
+          )
+        })}
+      </ol>
     </div>
   )
 }

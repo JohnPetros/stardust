@@ -25,9 +25,13 @@ export const challengeSchema = z.object({
   testCases: z
     .array(
       z.object({
-        inputs: z.array(z.unknown()).min(1),
+        inputs: z.array(
+          z.object({
+            value: z.unknown(),
+          }),
+        ),
         expectedOutput: z.unknown(),
-        isLocked: booleanSchema,
+        isLocked: booleanSchema.default(true),
       }),
     )
     .min(1),

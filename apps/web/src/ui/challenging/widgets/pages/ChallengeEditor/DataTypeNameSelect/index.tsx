@@ -9,19 +9,21 @@ import { useDataTypeNameSelect } from './useDataTypeNameSelect'
 type DataTypeNameSelectProps = {
   value: DataTypeName
   className?: ClassNameValue
-  onChange: (dataTypeName: DataTypeName) => void
+  isDiabled?: boolean
+  onChange?: (dataTypeName: DataTypeName) => void
 }
 
 export function DataTypeNameSelect({
   value,
   className,
+  isDiabled = false,
   onChange,
 }: DataTypeNameSelectProps) {
   const { label, handleChange } = useDataTypeNameSelect(value, onChange)
 
   return (
     <Select.Container<DataTypeName> onValueChange={handleChange}>
-      <Select.Trigger className={className} value={label} />
+      <Select.Trigger className={className} value={label} isDiabled={isDiabled} />
       <Select.Content>
         {DATA_TYPES.map((dataType) => (
           <Select.Item key={dataType.label} value={dataType.value}>

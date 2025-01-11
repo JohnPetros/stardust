@@ -7,7 +7,7 @@ import { Icon } from '@/ui/global/widgets/components/Icon'
 
 type CodeFieldProps = {
   label: string
-  onRemove: VoidFunction
+  onRemove?: VoidFunction
 }
 
 export function CodeInput({
@@ -19,14 +19,16 @@ export function CodeInput({
 
   return (
     <div>
-      <button
-        type='button'
-        onClick={onRemove}
-        className='flex items-center gap-1 ml-auto mb-1 text-green-400 text-sm'
-      >
-        <Icon name='close' size={14} />
-        Remover parâmetro
-      </button>
+      {onRemove && (
+        <button
+          type='button'
+          onClick={onRemove}
+          className='flex items-center gap-1 ml-auto mb-1 text-green-400 text-sm'
+        >
+          <Icon name='close' size={14} />
+          Remover parâmetro
+        </button>
+      )}
       <div className='rounded-md border border-gray-500 p-6'>
         <div className='flex justify-between border-b pb-3 border-gray-500'>
           <p className='text-gray-50'>{label}</p>

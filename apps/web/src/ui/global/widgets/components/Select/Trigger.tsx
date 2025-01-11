@@ -7,14 +7,17 @@ import { Icon } from '../Icon'
 type SelectTriggerProps = {
   value: string
   className?: ClassNameValue
+  isDiabled?: boolean
 }
 
-export function Trigger({ value, className }: SelectTriggerProps) {
+export function Trigger({ value, className, isDiabled = false }: SelectTriggerProps) {
   return (
     <S.Trigger
+      disabled={isDiabled}
       className={twMerge(
         'flex items-center gap-2 overflow-hidden rounded-md border border-gray-400 bg-gray-800 p-3 text-sm text-green-500 duration-200',
         className,
+        isDiabled && 'opacity-75 pointer-events-none',
       )}
     >
       <S.Value>{value}</S.Value>

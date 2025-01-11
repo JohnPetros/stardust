@@ -62,7 +62,7 @@ export function ChallengeFunctionField() {
                         <DataTypeNameSelect
                           value={value}
                           onChange={onChange}
-                          className='translate-y-[18px]'
+                          className='translate-y-[16px]'
                         />
                       )
                     }}

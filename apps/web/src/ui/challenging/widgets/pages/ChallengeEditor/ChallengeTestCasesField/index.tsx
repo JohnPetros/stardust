@@ -28,7 +28,7 @@ export function ChallengeTestCasesField() {
       subtitle='São essencias para os usuários validarem suas respostas. Tenha pelo menos 3 testes de caso.'
       icon='test'
     >
-      <ol>
+      <ol className='space-y-6'>
         {testCases.map((testCase, index) => {
           const testCaseError = testCasesErrors ? testCasesErrors[index] : undefined
           return (
@@ -39,7 +39,7 @@ export function ChallengeTestCasesField() {
               >
                 <div>
                   <Label title='Entrada' />
-                  {/* <TestCaseInputs testCaseIndex={index} /> */}
+                  <TestCaseInputs testCaseIndex={index} />
                 </div>
 
                 <Label title='Saída esperada' className='block mt-6'>
@@ -53,13 +53,12 @@ export function ChallengeTestCasesField() {
                           : DEFAULT_VALUE_BY_DATA_TYPE_NAME[expectedOutputDataType],
                       )
                       return (
-                        <div className='flex items-center gap-3'>
+                        <div className='flex items-center gap-3 mt-3'>
                           <DataTypeNameSelect
                             value={expectedOutputDataType}
                             onChange={(dataType) =>
                               handleExpectedOutputDataTypeNameChange(dataType, index)
                             }
-                            className='translate-y-[6px]'
                           />
                           <DataTypeInput value={dataType} onChange={onChange} />
                         </div>

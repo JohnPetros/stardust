@@ -32,14 +32,16 @@ const InputComponent = (
   return (
     <div>
       <label htmlFor={id} className='block'>
-        <span
-          className={twMerge(
-            'text-sm font-medium mb-3',
-            errorMessage ? 'text-red-700' : 'text-gray-100 focus-within:text-green-400',
-          )}
-        >
-          {label}
-        </span>
+        {label && (
+          <span
+            className={twMerge(
+              'block text-sm font-medium mb-3',
+              errorMessage ? 'text-red-700' : 'text-gray-100 focus-within:text-green-400',
+            )}
+          >
+            {label}
+          </span>
+        )}
         <div
           className={twMerge(
             'flex items-center gap-2 rounded border bg-transparent group p-3',

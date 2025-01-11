@@ -10,7 +10,7 @@ export function useChallengeFunctionField() {
   })
 
   function handleAddParamButtonClick() {
-    append({ name: '', dataTypeName: 'undefined' })
+    append({ name: '', dataTypeName: 'string' })
   }
 
   function handleRemoveParamButtonClick(position: number) {

@@ -41,6 +41,9 @@ export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
       },
       difficultyLevel: challenge?.difficulty.level,
       testCases: challenge?.testCases.map((testCase) => ({
+        inputs: testCase.inputs.map((inputValue) => ({
+          value: inputValue,
+        })),
         isLocked: testCase.isLocked.isTrue,
         expectedOutput: testCase.expectedOutput,
       })),

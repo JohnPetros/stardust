@@ -27,7 +27,7 @@ export function DataTypeInput({ value, errorMessage, onChange }: FunctionInputPr
 
   return (
     <div>
-      <div className='flex gap-6 translate-y-[6px]'>
+      <div className='flex gap-6'>
         {dataType.isString() && (
           <Input
             type='string'

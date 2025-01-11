@@ -1,26 +1,29 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { DATA_TYPES } from '../data-types'
 import type { DataTypeName } from '@stardust/core/challenging/types'
 
 export function useDataTypeNameSelect(
-  defaultValue: DataTypeName,
-  onChange: (dataTypeName: DataTypeName) => void,
+  selectedDataTypeName: DataTypeName,
+  onChange?: (dataTypeName: DataTypeName) => void,
 ) {
-  const [label, setLabel] = useState(() => {
-    return getDataType(defaultValue)?.label ?? 'texto'
-  })
-
-  function getDataType(dataTypeName: DataTypeName) {
-    return DATA_TYPES.find(({ value }) => value === dataTypeName)
-  }
+  const [label, setLabel] = useState('')
 
   function handleChange(selectedDataTypeName: DataTypeName) {
-    const selectedDataType = getDataType(selectedDataTypeName)
+    const selectedDataType = DATA_TYPES.find(
+      ({ value }) => value === selectedDataTypeName,
+    )
     if (!selectedDataType) return
-    console.log('oi', selectedDataType)
     setLabel(selectedDataType.label)
-    onChange(selectedDataType.value)
+    if (onChange) onChange(selectedDataType.value)
   }
+
+  useEffect(() => {
+    const selectedDataType = DATA_TYPES.find(
+      ({ value }) => value === selectedDataTypeName,
+    )
+    if (!selectedDataType) return
+    setLabel(selectedDataType.label)
+  }, [selectedDataTypeName])
 
   return {
     label,
