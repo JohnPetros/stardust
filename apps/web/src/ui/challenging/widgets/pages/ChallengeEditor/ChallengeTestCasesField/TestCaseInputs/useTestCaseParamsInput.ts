@@ -17,9 +17,9 @@ export function useTestCaseInputs(testCaseIndex: number) {
   useEffect(() => {
     if (functionParams.length) {
       remove()
-      alert('oiiii')
       functionParams.forEach((param, index) => {
-        append({ value: '' })
+        const value = 0
+        append({ value })
       })
     }
   }, [functionParams, append, remove])
@@ -30,7 +30,6 @@ export function useTestCaseInputs(testCaseIndex: number) {
 
   return {
     formControl: control,
-    functionParams,
     errorMessage: testCaseError?.message,
     testCaseInputs: fields,
   }
