@@ -15,7 +15,10 @@ export class DataType<Value = unknown> {
 
   static create(value: unknown): DataType {
     if (Array.isArray(value)) {
-      return new DataType<Array<unknown>>(value, 'undefined')
+      return new DataType<Array<unknown>>(
+        value.map((item) => DataType.create(item).value),
+        'array',
+      )
     }
 
     switch (typeof value) {
@@ -75,6 +78,13 @@ export class DataType<Value = unknown> {
     if (!this.isArray()) this.throwArrayValueError()
 
     this.value.push(item)
+    return new DataType(this.value, this.name)
+  }
+
+  removeArrayItem(itemIndex: number): DataType {
+    if (!this.isArray()) this.throwArrayValueError()
+
+    this.value.splice(itemIndex)
     return new DataType(this.value, this.name)
   }
 

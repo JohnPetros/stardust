@@ -140,16 +140,16 @@ export function useTextEditor(onChange: (value: string) => void) {
     textareaRef.current.setSelectionRange(selectionStart, selectionEnd)
   }
 
-  function insertSnippetCodeComponent(isRunnable = false) {
+  function insertCodeBlockSnippetComponent() {
     if (!textareaRef.current) return
 
-    const snippetComponentContent = geComponentContent(SNIPPETS.code)
+    const snippetComponentContent = geComponentContent(SNIPPETS.codeBlock)
     const cursorPosition = getCursorPosition()
     const { valueAfterCursorPosition, valueBeforeCursorPosition } =
       getValueAfterAndBeforeLinePosition(cursorPosition)
 
-    const openTag = isRunnable ? '<Code>' : '<code>'
-    const closeTag = isRunnable ? '</Code>' : '</code>'
+    const openTag = '<Code>'
+    const closeTag = '</Code>'
 
     textareaRef.current.value = `${valueBeforeCursorPosition}${openTag}\n${snippetComponentContent}\n${closeTag}${valueAfterCursorPosition}`
 
@@ -173,7 +173,7 @@ export function useTextEditor(onChange: (value: string) => void) {
 
     const openTag = snippetComponent.substring(0, closeTag.length - 1)
 
-    textareaRef.current.value = `${valueBeforeCursorPosition}${openTag}${snippetComponentContent}${closeTag}${valueAfterCursorPosition}`
+    textareaRef.current.value = `${valueBeforeCursorPosition}\n${openTag}${snippetComponentContent}${closeTag}${valueAfterCursorPosition}`
 
     const selectionStart = cursorPosition + openTag.length
     const selectionEnd = selectionStart + snippetComponentContent.length
@@ -278,6 +278,36 @@ export function useTextEditor(onChange: (value: string) => void) {
     textareaRef.current.setSelectionRange(selectionStart, selectionEnd)
   }
 
+  function insertCodeLineSnippet() {
+    if (!textareaRef.current) return
+
+    if (textareaRef.current.selectionStart !== textareaRef.current.selectionEnd) {
+      const selectionStart = textareaRef.current.selectionStart
+      const selectionEnd = textareaRef.current.selectionEnd
+
+      const selectedValue = getSelectedValue()
+      const valueBeforeSelectedValue = textareaRef.current.value.substring(
+        0,
+        selectionStart,
+      )
+      const valueAfterSelectedValue = textareaRef.current.value.substring(selectionEnd)
+
+      textareaRef.current.value = `${valueBeforeSelectedValue} \`${selectedValue}\` ${valueAfterSelectedValue}`
+      return
+    }
+
+    const cursorPosition = getCursorPosition()
+    const { valueBeforeCursorPosition, valueAfterCursorPosition } =
+      getValueAfterAndBeforeLinePosition(cursorPosition)
+
+    textareaRef.current.value = `${valueBeforeCursorPosition}${SNIPPETS.codeLine}${valueAfterCursorPosition}`
+    const starsCountInEachSide = 1
+    const snippetContent = SNIPPETS.codeLine.replace(/\`/g, '')
+    const selectionStart = cursorPosition + starsCountInEachSide
+    const selectionEnd = selectionStart + snippetContent.length - starsCountInEachSide
+    textareaRef.current.setSelectionRange(selectionStart, selectionEnd)
+  }
+
   function insertTitleSnippet() {
     if (!textareaRef.current) return
 
@@ -331,11 +361,11 @@ export function useTextEditor(onChange: (value: string) => void) {
       case 'strongTextBlock':
         insertSnippetComponent('</Quote>', SNIPPETS.strongTextBlock)
         break
-      case 'code':
-        insertSnippetCodeComponent(false)
+      case 'codeLine':
+        insertCodeLineSnippet()
         break
-      case 'runnableCode':
-        insertSnippetCodeComponent(true)
+      case 'codeBlock':
+        insertCodeBlockSnippetComponent()
         break
       case 'link':
         insertSnippetLinkComponent()

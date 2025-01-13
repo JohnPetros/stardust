@@ -41,6 +41,7 @@ export type IconName =
   | 'checked'
   | 'unchecked'
   | 'plus'
+  | 'plus-circle'
   | 'send'
   | 'minus'
   | 'code'

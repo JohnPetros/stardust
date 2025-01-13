@@ -12,7 +12,7 @@ import { useChallengeEditorPage } from './useChallengeEditorPage'
 import { ChallengeFunctionField } from './ChallengeFunctionField'
 import { ChallengeTestCasesField } from './ChallengeTestCasesField'
 import { ChallengeDescriptionField } from './ChallengeDescriptionField'
-import { ChallengeDifficultyLevelField } from './ChallengeDifficultyLevel'
+import { ChallengeDifficultyLevelField } from './ChallengeDifficultyLevelField'
 import { ChallengeCategoriesField } from './ChallengeCategoriesField'
 import { ChallengeCodeField } from './ChallengeCodeField'
 

@@ -5,5 +5,5 @@ type BoldProps = {
 }
 
 export function Strong({ children }: BoldProps) {
-  return <span className='strong'>{children}</span>
+  return <strong className='strong'>{children}</strong>
 }

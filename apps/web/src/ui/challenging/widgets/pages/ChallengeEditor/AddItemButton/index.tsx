@@ -19,7 +19,7 @@ export function AddItemButton({
       type='button'
       onClick={onClick}
       className={twMerge(
-        'flex items-center gap-1 text-green-400 bg-transparent',
+        'flex items-center gap-1 text-green-400 text-sm bg-transparent',
         className,
       )}
     >

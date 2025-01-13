@@ -4,17 +4,17 @@ import { contentSchema } from '../../global/schemas/contentSchema'
 import { idSchema } from '../../global/schemas/idSchema'
 import { dataTypeNameSchema } from './dataTypeNameSchema'
 import { booleanSchema } from '../../global/schemas/booleanSchema'
-import { titleSchema } from '../../global/schemas'
+import { codeVariableNameSchema, titleSchema } from '../../global/schemas'
 
 export const challengeSchema = z.object({
   title: titleSchema,
   slug: z.string(),
   function: z.object({
-    name: nameSchema,
+    name: codeVariableNameSchema,
     params: z
       .array(
         z.object({
-          name: nameSchema,
+          name: codeVariableNameSchema,
           dataTypeName: dataTypeNameSchema,
         }),
       )
@@ -41,5 +41,5 @@ export const challengeSchema = z.object({
       name: nameSchema,
     }),
   ),
-  difficultyLevel: z.enum(['easy', 'medium', 'hard']),
+  difficultyLevel: z.enum(['easy', 'medium', 'hard']).default('easy'),
 })
