@@ -6,7 +6,7 @@ import { challengingActions } from '@/server/next-safe-action'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
 type PostChallengeActionProps = {
-  onSuccess: VoidFunction
+  onSuccess: (challengeSlug: string) => void
 }
 
 export function usePostChallengeAction({ onSuccess }: PostChallengeActionProps) {
@@ -18,7 +18,7 @@ export function usePostChallengeAction({ onSuccess }: PostChallengeActionProps) 
         if (error.serverError) toast.show(error.serverError)
       },
       onSuccess: ({ data }) => {
-        if (data) onSuccess()
+        if (data?.slug) onSuccess(data?.slug)
       },
     },
   )
@@ -29,9 +29,6 @@ export function usePostChallengeAction({ onSuccess }: PostChallengeActionProps) 
     },
     [executeAsync],
   )
-
-  console.log('post', result.serverError)
-  console.log('post', result.validationErrors)
 
   return {
     isPosting: isPending,

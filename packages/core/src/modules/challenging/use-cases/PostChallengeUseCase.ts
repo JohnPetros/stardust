@@ -14,7 +14,10 @@ export class PostChallengeUseCase implements IUseCase<Request, Response> {
   async do({ challengeDto }: Request) {
     const challenge = Challenge.create(challengeDto)
     await this.fetchChallenge(challenge.slug.value)
-    await this.saveChallenge(challenge)
+    await Promise.all([
+      this.saveChallengeCategories(challenge),
+      this.saveChallenge(challenge),
+    ])
     return challenge.dto
   }
 
@@ -25,6 +28,14 @@ export class PostChallengeUseCase implements IUseCase<Request, Response> {
 
   private async saveChallenge(challenge: Challenge) {
     const response = await this.challengingService.saveChallenge(challenge)
+    if (response.isFailure) response.throwError()
+  }
+
+  private async saveChallengeCategories(challenge: Challenge) {
+    const response = await this.challengingService.saveChallengeCategories(
+      challenge.id,
+      challenge.categories,
+    )
     if (response.isFailure) response.throwError()
   }
 }

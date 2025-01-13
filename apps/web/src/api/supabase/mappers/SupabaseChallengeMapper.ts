@@ -54,16 +54,16 @@ export const SupabaseChallengeMapper = () => {
         completionsCount: supabaseChallenge.total_completitions ?? 0,
         description: supabaseChallenge.description ?? '',
         textBlocks: textsBlocks,
-        testCases: (supabaseChallenge.test_cases as TestCaseDto[]).map(
-          (supabaseTestCase) => {
-            return {
-              position: supabaseTestCase.position ?? '',
-              inputs: supabaseTestCase.inputs ?? [],
-              expectedOutput: supabaseTestCase.expectedOutput,
-              isLocked: supabaseTestCase.isLocked,
-            }
-          },
-        ),
+        testCases: (
+          JSON.parse(supabaseChallenge.test_cases as string) as TestCaseDto[]
+        ).map((supabaseTestCase) => {
+          return {
+            position: supabaseTestCase.position ?? '',
+            inputs: supabaseTestCase.inputs ?? [],
+            expectedOutput: supabaseTestCase.expectedOutput,
+            isLocked: supabaseTestCase.isLocked,
+          }
+        }),
         categories: (supabaseChallenge.categories as ChallengeCategoryDto[]).map(
           (supabaseCategory) => {
             return {

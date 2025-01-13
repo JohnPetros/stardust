@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 
 import type { ChallengeSchema } from '@stardust/validation/challenging/types'
 import { challengeSchema } from '@stardust/validation/challenging/schemas'
+import { DataType } from '@stardust/core/challenging/structs'
 import { Challenge } from '@stardust/core/challenging/entities'
 import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 
@@ -13,7 +14,6 @@ import { ROUTES } from '@/constants'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { usePostChallengeAction } from './usePostChallengeAction'
 import { useUpdateChallengeAction } from './useUpdateChallengeAction'
-import { DataType } from '@stardust/core/challenging/structs'
 
 export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
   const challenge = challengeDto ? Challenge.create(challengeDto) : null
@@ -54,10 +54,11 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
     },
   })
   const [isSubmitSuccess, setIsSubmitSuccess] = useState(false)
+  const [isSubmitFailure, setIsSubmitFailure] = useState(false)
   const { isPosting, isPostFailure, postChallenge } = usePostChallengeAction({
     onSuccess: handleActionSuccess,
   })
-  const { isUpdating, updateChallenge } = useUpdateChallengeAction({
+  const { isUpdating, isUpdateFailure, updateChallenge } = useUpdateChallengeAction({
     onSuccess: handleActionSuccess,
   })
 
@@ -72,7 +73,6 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
   ].every(Boolean)
 
   async function handleSubmit(formData: ChallengeSchema) {
-    console.log(formData)
     if (challenge) {
       await updateChallenge({ challengeId: challenge.id, challenge: formData })
       return
@@ -89,15 +89,30 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
     if (allFields && !form.formState.isSubmitSuccessful) setIsSubmitSuccess(false)
   }, [allFields, form.formState.isSubmitSuccessful])
 
+  useEffect(() => {
+    if (allFields) {
+      setIsSubmitFailure(false)
+      return
+    }
+
+    setIsSubmitFailure(
+      isPostFailure || isUpdateFailure || Object.keys(form.formState.errors).length > 0,
+    )
+  }, [allFields, isPostFailure, isUpdateFailure, form.formState.errors])
+
+  const canSubmitForm =
+    (!challenge && areAllFieldsFilled) ||
+    (Boolean(challenge) && areAllFieldsFilled && form.formState.isDirty)
+
+  console.log({ isSubmitSuccess })
+
   return {
     form,
-    canSubmitForm:
-      (!challenge && areAllFieldsFilled) ||
-      (Boolean(challenge) && Object.keys(form.formState.touchedFields).length > 0),
+    canSubmitForm,
     shouldUpdateChallenge: challenge,
     isFormSubmitting: form.formState.isSubmitting || isPosting || isUpdating,
-    isSubmitFailure: isPostFailure || Object.keys(form.formState.errors).length > 0,
-    isSubmitSuccess: isSubmitSuccess,
+    isSubmitFailure,
+    isSubmitSuccess,
     handleFormSubmit: form.handleSubmit(handleSubmit),
   }
 }

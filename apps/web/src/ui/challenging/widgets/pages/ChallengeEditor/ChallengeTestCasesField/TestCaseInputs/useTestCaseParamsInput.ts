@@ -17,7 +17,7 @@ export function useTestCaseInputs(testCaseIndex: number) {
     functionParams.forEach((param, index) => {
       const value =
         fields[index] !== undefined
-          ? fields[index]
+          ? fields[index].value
           : DEFAULT_VALUE_BY_DATA_TYPE_NAME[param.dataTypeName]
       append({ value })
     })

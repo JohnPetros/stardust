@@ -171,9 +171,9 @@ export function useTextEditor(onChange: (value: string) => void) {
     const { valueAfterCursorPosition, valueBeforeCursorPosition } =
       getValueAfterAndBeforeLinePosition(cursorPosition)
 
-    const openTag = snippetComponent.substring(0, closeTag.length - 1)
+    const openTag = `\n${snippetComponent.substring(0, closeTag.length - 1)}`
 
-    textareaRef.current.value = `${valueBeforeCursorPosition}\n${openTag}${snippetComponentContent}${closeTag}${valueAfterCursorPosition}`
+    textareaRef.current.value = `${valueBeforeCursorPosition}${openTag}${snippetComponentContent}${closeTag}${valueAfterCursorPosition}`
 
     const selectionStart = cursorPosition + openTag.length
     const selectionEnd = selectionStart + snippetComponentContent.length

@@ -10,7 +10,7 @@ export class ChallengeCategory extends Entity<ChallengeCategoryProps> {
   static create(dto: ChallengeCategoryDto): ChallengeCategory {
     return new ChallengeCategory(
       {
-        name: Name.create(dto.name),
+        name: Name.create(dto.name, 'Nome da categoria'),
       },
       dto?.id,
     )

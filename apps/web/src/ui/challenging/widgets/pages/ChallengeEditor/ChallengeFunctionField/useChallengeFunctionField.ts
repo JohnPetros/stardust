@@ -19,7 +19,6 @@ export function useChallengeFunctionField() {
 
   const functionNameErrorMessage = formState.errors.function?.name?.message
   const functionParamsErrorMessages = formState.errors.function?.params ?? []
-  console.log('functionParamsErrorMessages', functionParamsErrorMessages)
 
   return {
     formControl: control,

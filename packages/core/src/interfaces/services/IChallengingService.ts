@@ -4,7 +4,7 @@ import type {
   DocDto,
   SolutionDto,
 } from '#challenging/dtos'
-import type { Challenge, Solution } from '#challenging/entities'
+import type { Challenge, ChallengeCategory, Solution } from '#challenging/entities'
 import type {
   ChallengesListParams,
   ChallengeVote,
@@ -43,6 +43,13 @@ export interface IChallengingService {
     userId: string,
   ): Promise<ApiResponse<{ challengeVote: ChallengeVote }>>
   saveChallenge(challenge: Challenge): Promise<ApiResponse>
+  saveChallengeCategories(
+    challengeId: string,
+    challengeCategories: ChallengeCategory[],
+  ): Promise<ApiResponse>
+  deleteChallengeCategories(
+    challengeId: string,
+  ): Promise<ApiResponse>
   saveSolution(solution: Solution, challengeId: string): Promise<ApiResponse>
   updateSolution(solution: Solution): Promise<ApiResponse>
   updateChallenge(challenge: Challenge): Promise<ApiResponse>

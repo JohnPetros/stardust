@@ -32,9 +32,10 @@ export const UpdateChallengeAction = (
       } = actionServer.getRequest()
       const user = User.create(await actionServer.getUser())
       const useCase = new UpdateChallengeUseCase(challengingService)
+      console.log('action', testCases)
       return await useCase.do({
-        challengeId,
         challengeDto: {
+          id: challengeId,
           title,
           code,
           description,
@@ -50,9 +51,9 @@ export const UpdateChallengeAction = (
           },
           testCases: testCases.map((testCase, index) => ({
             position: index + 1,
-            inputs: testCase.inputs,
+            inputs: testCase.inputs.map((input) => input.value),
             isLocked: testCase.isLocked,
-            expectedOutput: testCase.expectedOutput,
+            expectedOutput: testCase.expectedOutput.value,
           })),
           categories,
         },

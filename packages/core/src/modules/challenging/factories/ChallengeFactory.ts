@@ -7,13 +7,13 @@ import { Datetime } from '#libs'
 
 export class ChallengeFactory {
   static produce(dto: ChallengeDto) {
-    const includedCategoriesIds: string[] = []
     const categories: ChallengeCategory[] = []
+    const includedCategoriesIds: string[] = []
     for (const category of dto.categories) {
       const challengeCategory = ChallengeCategory.create(category)
       if (!includedCategoriesIds.includes(challengeCategory.id)) {
         categories.push(challengeCategory)
-        includedCategoriesIds.push(challengeCategory.id)
+        includedCategoriesIds.push(challengeCategory.id) // supabase's repeated categories bug fix
       }
     }
 
@@ -55,8 +55,8 @@ export class ChallengeFactory {
         }) ?? [],
       categories,
       userVote: null,
-      incorrectAnswersCount: Integer.create(0, 'Contagem de respostas incorretas'),
       isCompleted: Logical.create(false, 'A resposta do desafio está completada?'),
+      incorrectAnswersCount: Integer.create(0, 'Contagem de respostas incorretas'),
       results: List.create([]),
       userOutputs: List.create([]),
       postedAt: dto.postedAt ?? new Datetime().date(),

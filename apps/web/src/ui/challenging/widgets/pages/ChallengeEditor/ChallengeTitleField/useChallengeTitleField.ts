@@ -13,7 +13,12 @@ export function useChallengeTitleField() {
 
   useEffect(() => {
     setErrorMessage('')
-    if (!challengeTitle || formState.defaultValues?.title === challengeTitle) return
+    if (
+      challengeTitle?.length <= 2 ||
+      formState.defaultValues?.title?.trim().toLowerCase() ===
+        challengeTitle.trim().toLowerCase()
+    )
+      return
 
     async function fetchChallenge() {
       const existingChallengeWithSameSlug = await api.fetchChallengeBySlug(

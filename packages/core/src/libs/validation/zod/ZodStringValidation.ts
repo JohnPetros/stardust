@@ -13,7 +13,8 @@ export class ZodStringValidation implements IStringValidation {
     this.data = data
     this.key = key ?? ''
     this.zodString = z.string({
-      required_error: message ?? 'deve ser um texto',
+      invalid_type_error: 'deve ser um texto',
+      required_error: message ?? 'é obrigatório',
     })
   }
 

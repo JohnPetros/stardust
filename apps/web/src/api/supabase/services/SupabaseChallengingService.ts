@@ -212,7 +212,6 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       const categories: ChallengeCategoryDto[] = data.map((category) => ({
         id: category.id,
         name: category.name,
-        challengesIds: category.challenges.map(({ id }) => id),
       }))
 
       return new ApiResponse({ body: categories })
@@ -291,7 +290,26 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       })
 
       if (error) {
-        return SupabasePostgrestError(error, 'Erro inesperado ao salvar solução', status)
+        return SupabasePostgrestError(error, 'Erro inesperado ao salvar desafio', status)
+      }
+
+      return new ApiResponse()
+    },
+
+    async saveChallengeCategories(challengeId, challengeCategories) {
+      const { error, status } = await supabase.from('challenges_categories').insert(
+        challengeCategories.map((category) => ({
+          challenge_id: challengeId,
+          category_id: category.id,
+        })),
+      )
+
+      if (error) {
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao salvar as categorias desse desafio',
+          status,
+        )
       }
 
       return new ApiResponse()
@@ -430,7 +448,11 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         .eq('id', challenge.id)
 
       if (error) {
-        return SupabasePostgrestError(error, 'Erro inesperado ao salvar solução', status)
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao salvar esse desafio',
+          status,
+        )
       }
 
       return new ApiResponse()
@@ -495,6 +517,23 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         return SupabasePostgrestError(
           error,
           'Erro inesperado ao deletar o upvote dessa solução',
+          status,
+        )
+      }
+
+      return new ApiResponse()
+    },
+
+    async deleteChallengeCategories(challengeId: string) {
+      const { error, status } = await supabase
+        .from('challenges_categories')
+        .delete()
+        .eq('challenge_id', challengeId)
+
+      if (error) {
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao deletar as categorias desse desafio',
           status,
         )
       }

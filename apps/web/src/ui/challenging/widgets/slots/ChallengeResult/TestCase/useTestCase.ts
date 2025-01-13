@@ -31,6 +31,9 @@ export function useTestCase({
     }
   }, [userOutput, isLocked, isCorrect])
 
+  console.log(inputs)
+  console.log(expectedOutput)
+
   const translatedInputs = useMemo(() => {
     if (inputs.length > 0) {
       return inputs
