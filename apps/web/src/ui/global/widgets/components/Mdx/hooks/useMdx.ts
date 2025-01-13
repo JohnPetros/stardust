@@ -11,7 +11,7 @@ import { formatSpecialCharacters } from '../formatSpecialCharacters'
 export function useMdx() {
   function parseMdxToText(mdx: string) {
     const { betweenTwoAsterisks, betweenFourAsterisks } = REGEX
-    const strongTemplate = '<span class="strong">$1</span>'
+    const strongTemplate = '<strong class="strong">$1</strong>'
 
     return mdx
       .replace(betweenTwoAsterisks, strongTemplate)

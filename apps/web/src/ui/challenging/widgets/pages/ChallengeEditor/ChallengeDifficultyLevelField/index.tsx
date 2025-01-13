@@ -18,7 +18,7 @@ export function ChallengeDifficultyLevelField() {
 
   return (
     <ChallengeField
-      title='Nível de dificuldade'
+      title='Nível de dificuldade do seu desafio'
       icon='level'
       hasError={Boolean(errorMessage)}
     >

@@ -56,12 +56,12 @@ export function ContentEditor({ content, errorMessage, onChange }: ContentEditor
           label='Lista'
         />
         <Toolbar.Button
-          onClick={() => handleSnippetInsert('code')}
+          onClick={() => handleSnippetInsert('codeLine')}
           icon='code'
           label='Inserir trecho de código'
         />
         <Toolbar.Button
-          onClick={() => handleSnippetInsert('runnableCode')}
+          onClick={() => handleSnippetInsert('codeBlock')}
           icon='runnable-code'
           label='Inserir trecho de código não executável'
         />
