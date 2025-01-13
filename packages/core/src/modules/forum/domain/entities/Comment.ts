@@ -3,12 +3,13 @@ import { Integer, Text } from '#global/structs'
 import { Author } from '#global/entities'
 import { EntityNotDefinedError } from '#global/errors'
 import type { CommentDto } from '#forum/dtos'
+import { Datetime } from '#libs'
 
 type CommentProps = {
   content: Text
   repliesCount: Integer
   upvotesCount: Integer
-  createdAt: Date
+  postedAt: Date
   author: {
     id: string
     entity?: Author
@@ -32,7 +33,7 @@ export class Comment extends Entity<CommentProps> {
           id: dto.author.id,
           entity: dto.author.dto && Author.create(dto.author.dto),
         },
-        createdAt: dto.createdAt ? dto.createdAt : new Date(),
+        postedAt: dto.postedAt ?? new Datetime().date(),
       },
       dto?.id,
     )
@@ -67,8 +68,8 @@ export class Comment extends Entity<CommentProps> {
     return this.props.repliesCount
   }
 
-  get createdAt() {
-    return this.props.createdAt
+  get postedAt() {
+    return this.props.postedAt
   }
 
   get dto(): CommentDto {
@@ -77,7 +78,7 @@ export class Comment extends Entity<CommentProps> {
       content: this.content.value,
       repliesCount: this.repliesCount.value,
       upvotesCount: this.upvotesCount.value,
-      createdAt: this.createdAt,
+      postedAt: this.postedAt,
       author: {
         id: this.authorId,
         dto: this.props.author.entity?.dto,

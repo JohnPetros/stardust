@@ -43,9 +43,9 @@ export const PostChallengeAction = (
           },
           testCases: testCases.map((testCase, index) => ({
             position: index + 1,
-            inputs: testCase.inputs,
+            inputs: testCase.inputs.map((input) => input.value),
             isLocked: testCase.isLocked,
-            expectedOutput: testCase.expectedOutput,
+            expectedOutput: testCase.expectedOutput.value,
           })),
           categories,
         },

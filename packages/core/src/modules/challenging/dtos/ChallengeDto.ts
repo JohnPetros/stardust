@@ -20,7 +20,7 @@ export type ChallengeDto = {
   downvotesCount?: number
   upvotesCount?: number
   completionsCount?: number
-  createdAt?: Date
+  postedAt?: Date
   textBlocks?: TextBlockDto[]
   categories: ChallengeCategoryDto[]
   function?: ChallengeFunctionDto

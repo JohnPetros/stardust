@@ -6,6 +6,7 @@ import type {
 } from '@stardust/core/challenging/dtos'
 import type { SupabaseChallenge } from '../types'
 import type { TextBlockDto } from '@stardust/core/global/dtos'
+import { Datetime } from '@stardust/core/libs'
 
 export const SupabaseChallengeMapper = () => {
   return {
@@ -72,9 +73,7 @@ export const SupabaseChallengeMapper = () => {
           },
         ),
         starId: supabaseChallenge.star_id,
-        createdAt: supabaseChallenge.created_at
-          ? new Date(supabaseChallenge.created_at)
-          : new Date(),
+        postedAt: new Datetime(supabaseChallenge.created_at).date(),
       }
 
       return challengeDto
@@ -94,10 +93,12 @@ export const SupabaseChallengeMapper = () => {
         description: challengeDto.description,
         user_id: challengeDto.author.id,
         function_name: challengeDto.function?.name ?? null,
+        function_params: challengeDto.function?.params.map((param) => param.name) ?? [],
+        created_at: challenge.postedAt.toDateString(),
         texts: [],
+        categories: [],
         star_id: '',
         doc_id: '',
-        categories: [],
       }
 
       return supabaseChallenge

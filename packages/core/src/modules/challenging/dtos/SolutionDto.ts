@@ -8,7 +8,7 @@ export type SolutionDto = {
   upvotesCount?: number
   viewsCount?: number
   commentsCount?: number
-  createdAt?: Date
+  postedAt?: Date
   author: {
     id: string
     dto?: AuthorDto

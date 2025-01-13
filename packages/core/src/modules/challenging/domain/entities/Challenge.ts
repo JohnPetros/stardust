@@ -34,7 +34,7 @@ export type ChallengeProps = {
   downvotesCount: Integer
   upvotesCount: Integer
   completionsCount: Integer
-  createdAt: Date
+  postedAt: Date
   starId: Id | null
   docId: Id | null
   textBlocks: TextBlock[]
@@ -237,6 +237,7 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   get author() {
+    console.log(this.props.author)
     if (!this.props.author.entity) throw new EntityNotDefinedError('Autor do desafio')
     return this.props.author.entity
   }
@@ -273,11 +274,13 @@ export class Challenge extends Entity<ChallengeProps> {
     return this.props.starId
   }
 
-  get createdAt() {
-    return this.props.createdAt
+  get postedAt() {
+    return this.props.postedAt
   }
 
   get dto(): ChallengeDto {
+    console.log(this.postedAt)
+
     return {
       id: this.id,
       title: this.title.value,
@@ -287,7 +290,7 @@ export class Challenge extends Entity<ChallengeProps> {
       docId: this.props.docId?.value,
       author: {
         id: this.authorId,
-        dto: this.author.dto,
+        dto: this.props.author.entity?.dto,
       },
       downvotesCount: this.downvotesCount.value,
       function: this.props.function?.dto ?? undefined,
@@ -297,7 +300,7 @@ export class Challenge extends Entity<ChallengeProps> {
       userOutputs: this.props.userOutputs.items,
       results: this.props.results.items,
       description: this.description,
-      createdAt: this.createdAt,
+      postedAt: this.postedAt,
       categories: this.categories.map((category) => category.dto),
       testCases: this.testCases.map((testCase) => testCase.dto),
       textBlocks: this.textBlocks.map((textBlock) => textBlock.dto),

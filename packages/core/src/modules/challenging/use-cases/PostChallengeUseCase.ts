@@ -13,8 +13,14 @@ export class PostChallengeUseCase implements IUseCase<Request, Response> {
 
   async do({ challengeDto }: Request) {
     const challenge = Challenge.create(challengeDto)
+    await this.fetchChallenge(challenge.slug.value)
     await this.saveChallenge(challenge)
     return challenge.dto
+  }
+
+  private async fetchChallenge(challengeSlug: string) {
+    const response = await this.challengingService.fetchChallengeBySlug(challengeSlug)
+    if (response.isSuccess) response.throwError()
   }
 
   private async saveChallenge(challenge: Challenge) {

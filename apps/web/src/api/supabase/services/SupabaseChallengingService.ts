@@ -285,6 +285,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         description: supabaseChallenge.description,
         code: supabaseChallenge.code,
         function_name: supabaseChallenge.function_name,
+        function_params: supabaseChallenge.function_params,
         test_cases: supabaseChallenge.test_cases,
         user_id: supabaseChallenge.user_id,
       })

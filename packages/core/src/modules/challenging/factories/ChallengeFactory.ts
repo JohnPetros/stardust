@@ -3,6 +3,7 @@ import { ChallengeDifficulty, ChallengeFunction, TestCase } from '#challenging/s
 import type { ChallengeDto } from '#challenging/dtos'
 import { ChallengeCategory } from '#challenging/entities'
 import { Author } from '#global/entities'
+import { Datetime } from '#libs'
 
 export class ChallengeFactory {
   static produce(dto: ChallengeDto) {
@@ -58,7 +59,7 @@ export class ChallengeFactory {
       isCompleted: Logical.create(false, 'A resposta do desafio está completada?'),
       results: List.create([]),
       userOutputs: List.create([]),
-      createdAt: dto.createdAt ?? new Date(),
+      postedAt: dto.postedAt ?? new Datetime().date(),
     }
   }
 }

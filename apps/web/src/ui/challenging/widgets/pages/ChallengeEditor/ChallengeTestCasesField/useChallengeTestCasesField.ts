@@ -4,10 +4,9 @@ import { useState } from 'react'
 import type { ChallengeSchema } from '@stardust/validation/challenging/types'
 import type { DataTypeName } from '@stardust/core/challenging/types'
 import { DEFAULT_VALUE_BY_DATA_TYPE_NAME } from '@stardust/core/challenging/constants'
+import { DataType } from '@stardust/core/challenging/structs'
 
 export function useChallengeTestCasesField() {
-  const [expectedOutputDataType, setExpectedOutputDataType] =
-    useState<DataTypeName>('string')
   const { control, formState, setValue } = useFormContext<ChallengeSchema>()
   const { fields, append, remove } = useFieldArray({
     control,
@@ -18,17 +17,21 @@ export function useChallengeTestCasesField() {
     dataTypeName: DataTypeName,
     testCaseIndex: number,
   ) {
-    setExpectedOutputDataType(dataTypeName)
+    setValue(`testCases.${testCaseIndex}.expectedOutput.dataTypeName`, dataTypeName)
     setValue(
-      `testCases.${testCaseIndex}.expectedOutput`,
+      `testCases.${testCaseIndex}.expectedOutput.value`,
       DEFAULT_VALUE_BY_DATA_TYPE_NAME[dataTypeName],
     )
   }
 
   function handleAddTestCaseButtonClick() {
+    const dataType = DataType.create('')
     append({
       inputs: [],
-      expectedOutput: undefined,
+      expectedOutput: {
+        value: dataType.value,
+        dataTypeName: dataType.name,
+      },
       isLocked: false,
     })
   }
@@ -41,7 +44,6 @@ export function useChallengeTestCasesField() {
     formControl: control,
     testCases: fields,
     testCasesErrors: formState.errors.testCases,
-    expectedOutputDataType,
     handleAddTestCaseButtonClick,
     handleRemoveTestCaseButtonClick,
     handleExpectedOutputDataTypeNameChange,

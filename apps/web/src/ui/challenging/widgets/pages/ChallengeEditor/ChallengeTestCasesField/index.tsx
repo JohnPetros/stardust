@@ -1,22 +1,22 @@
 import { Controller } from 'react-hook-form'
-import { ChallengeField } from '../ChallengeField'
-import { DataTypeInput } from '../DataTypeInput'
-import { useChallengeTestCasesField } from './useChallengeTestCasesField'
-import { CodeInput } from '../../CodeInput'
-import { Label } from '@/ui/global/widgets/components/Label'
-import { AddItemButton } from '../AddItemButton'
-import { DataTypeNameSelect } from '../DataTypeNameSelect'
+
 import { DataType } from '@stardust/core/challenging/structs'
-import { TestCaseInputs } from './TestCaseInputs'
-import { DEFAULT_VALUE_BY_DATA_TYPE_NAME } from '@stardust/core/challenging/constants'
+
+import { Label } from '@/ui/global/widgets/components/Label'
 import { Checkbox } from '@/ui/global/widgets/components/Checkbox'
 import { ErrorMessage } from '@/ui/global/widgets/components/ErrorMessage'
+import { ChallengeField } from '../ChallengeField'
+import { DataTypeInput } from '../DataTypeInput'
+import { CodeInput } from '../../CodeInput'
+import { AddItemButton } from '../AddItemButton'
+import { DataTypeNameSelect } from '../DataTypeNameSelect'
+import { TestCaseInputs } from './TestCaseInputs'
+import { useChallengeTestCasesField } from './useChallengeTestCasesField'
 
 export function ChallengeTestCasesField() {
   const {
     testCases,
     formControl,
-    expectedOutputDataType,
     testCasesErrors,
     handleAddTestCaseButtonClick,
     handleRemoveTestCaseButtonClick,
@@ -26,7 +26,7 @@ export function ChallengeTestCasesField() {
   return (
     <ChallengeField
       title='Casos de teste'
-      subtitle='São essencias para os usuários validarem suas respostas. Tenha pelo menos 3 testes de caso.'
+      subtitle='São essencias para os usuários validarem suas respostas. Tenha pelo menos 3 casos de teste.'
       icon='test'
       hasError={Boolean(testCasesErrors?.message)}
     >
@@ -44,28 +44,30 @@ export function ChallengeTestCasesField() {
                 </div>
 
                 <Label title='Saída esperada' className='block mt-6'>
-                  <Controller
-                    control={formControl}
-                    name={`testCases.${index}.expectedOutput`}
-                    render={({ field: { value, onChange } }) => {
-                      const dataType = DataType.create(
-                        value !== undefined
-                          ? value
-                          : DEFAULT_VALUE_BY_DATA_TYPE_NAME[expectedOutputDataType],
-                      )
-                      return (
-                        <div className='flex items-center gap-3 mt-3'>
+                  <div className='flex items-center gap-3 mt-3'>
+                    <Controller
+                      control={formControl}
+                      name={`testCases.${index}.expectedOutput.dataTypeName`}
+                      render={({ field: { value } }) => {
+                        return (
                           <DataTypeNameSelect
-                            value={expectedOutputDataType}
+                            value={value}
                             onChange={(dataType) =>
                               handleExpectedOutputDataTypeNameChange(dataType, index)
                             }
                           />
-                          <DataTypeInput value={dataType} onChange={onChange} />
-                        </div>
-                      )
-                    }}
-                  />
+                        )
+                      }}
+                    />
+                    <Controller
+                      control={formControl}
+                      name={`testCases.${index}.expectedOutput.value`}
+                      render={({ field: { value, onChange } }) => {
+                        const dataType = DataType.create(value)
+                        return <DataTypeInput value={dataType} onChange={onChange} />
+                      }}
+                    />
+                  </div>
                 </Label>
 
                 <Controller
@@ -75,8 +77,8 @@ export function ChallengeTestCasesField() {
                     const id = `testCase.${index}.isLocked`
                     return (
                       <div className='flex items-center gap-3'>
-                        <Checkbox id={id} isChecked={value} onChange={onChange} />
-                        <Label htmlFor={id} title='É visível para os outros usuários?' />
+                        <Checkbox id={id} isChecked={!value} onChange={onChange} />
+                        <Label htmlFor={id} title='É visível para os usuários?' />
                       </div>
                     )
                   }}
@@ -89,8 +91,8 @@ export function ChallengeTestCasesField() {
       <AddItemButton onClick={handleAddTestCaseButtonClick} className='mt-6'>
         Adicionar teste de caso {testCases.length === 0 && '(obrigatório)'}
       </AddItemButton>
-      {testCasesErrors?.message && (
-        <ErrorMessage className='mt-3'>{testCasesErrors?.message}</ErrorMessage>
+      {testCasesErrors?.root?.message && (
+        <ErrorMessage className='mt-3'>{testCasesErrors?.root?.message}</ErrorMessage>
       )}
     </ChallengeField>
   )

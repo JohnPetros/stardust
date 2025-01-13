@@ -11,7 +11,7 @@ type PostChallengeActionProps = {
 
 export function usePostChallengeAction({ onSuccess }: PostChallengeActionProps) {
   const toast = useToastContext()
-  const { isPending, hasErrored, executeAsync } = useAction(
+  const { isPending, hasErrored, executeAsync, result } = useAction(
     challengingActions.postChallenge,
     {
       onError: ({ error }) => {
@@ -25,11 +25,13 @@ export function usePostChallengeAction({ onSuccess }: PostChallengeActionProps) 
 
   const postChallenge = useCallback(
     async (params: ActionParams<typeof challengingActions.postChallenge>) => {
-      const result = await executeAsync(params)
-      return result?.data
+      await executeAsync(params)
     },
     [executeAsync],
   )
+
+  console.log('post', result.serverError)
+  console.log('post', result.validationErrors)
 
   return {
     isPosting: isPending,

@@ -28,12 +28,12 @@ export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
   const form = useForm<ChallengeSchema>({
     resolver: zodResolver(challengeSchema),
     defaultValues: {
-      title: challenge?.title.value,
-      description: challenge?.description ?? '',
+      title: challenge?.title.value ?? 'o problema',
+      description: challenge?.description ?? 'minha descrição',
       code: challenge?.code ?? ' ',
       difficultyLevel: challenge?.difficulty.level ?? 'easy',
       function: {
-        name: challenge?.function?.name.value,
+        name: challenge?.function?.name.value ?? 'encontre3corpos',
         params:
           challenge?.function?.params.map((param) => ({
             name: param.name.value,
@@ -45,7 +45,9 @@ export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
           value: inputValue,
         })),
         isLocked: testCase.isLocked.isTrue,
-        expectedOutput: testCase.expectedOutput,
+        expectedOutput: {
+          value: testCase.expectedOutput,
+        },
       })),
       categories:
         challenge?.categories.map((category) => ({
@@ -64,8 +66,6 @@ export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
     allFields.function.params.length,
     allFields.categories.length,
   ].every(Boolean)
-  console.log('allFields', allFields.function.name)
-  console.log('errors', form.formState.errors)
 
   async function handleSubmit(formData: ChallengeSchema) {
     console.log(formData)
@@ -73,7 +73,7 @@ export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
     //   await updateChallenge({ challengeId: challenge.id, challenge: formData })
     //   return
     // }
-    // await postChallenge(formData)
+    await postChallenge(formData)
   }
 
   useEffect(() => {
@@ -82,10 +82,9 @@ export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
 
   return {
     form,
-    canSubmitForm: true,
-    // canSubmitForm:
-    //   (!challenge && areAllFieldsFilled) ||
-    //   (Boolean(challenge) && form.formState.isDirty),
+    canSubmitForm:
+      (!challenge && areAllFieldsFilled) ||
+      (Boolean(challenge) && form.formState.isDirty),
     shouldUpdateChallenge: challenge || form.formState.isSubmitSuccessful,
     isFormSubmitting: form.formState.isSubmitting || isPosting || isUpdating,
     isSubmitFailure: isPostFailure || Object.keys(form.formState.errors).length > 0,

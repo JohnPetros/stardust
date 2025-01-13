@@ -29,8 +29,11 @@ export const challengeSchema = z.object({
             value: z.unknown(),
           }),
         ),
-        expectedOutput: z.unknown(),
-        isLocked: booleanSchema.default(true),
+        expectedOutput: z.object({
+          dataTypeName: dataTypeNameSchema,
+          value: z.unknown(),
+        }),
+        isLocked: booleanSchema,
       }),
     )
     .min(3, 'Deve haver pelo menos 3 testes casos'),
@@ -42,5 +45,5 @@ export const challengeSchema = z.object({
       }),
     )
     .min(1),
-  difficultyLevel: z.enum(['easy', 'medium', 'hard']).default('easy'),
+  difficultyLevel: z.enum(['easy', 'medium', 'hard']),
 })

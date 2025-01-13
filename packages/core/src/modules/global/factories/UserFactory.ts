@@ -4,6 +4,7 @@ import { Level, WeekStatus } from '#profile/structs'
 import { Avatar, Rocket } from '#shop/entities'
 import { RankingPosition } from '#ranking/structs'
 import { Tier } from '#ranking/entities'
+import { Datetime } from '#libs'
 
 export class UserFactory {
   static produce(dto: UserDto) {
@@ -45,7 +46,7 @@ export class UserFactory {
       completedPlanetsIds: List.create(dto?.completedPlanetsIds ?? []),
       upvotedCommentsIds: List.create(dto?.upvotedCommentsIds ?? []),
       upvotedSolutionsIds: List.create(dto?.upvotedSolutionsIds ?? []),
-      createdAt: dto?.createdAt ?? new Date(),
+      createdAt: dto?.createdAt ?? new Datetime().date(),
       id: dto?.id,
     }
   }
