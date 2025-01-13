@@ -17,12 +17,12 @@ import { ChallengeCategoriesField } from './ChallengeCategoriesField'
 import { ChallengeCodeField } from './ChallengeCodeField'
 
 type ChallengeEditorPageProps = {
-  savedChallengeDto?: ChallengeDto
+  challengeDto?: ChallengeDto
   challengeCategoriesDto: ChallengeCategoryDto[]
 }
 
 export function ChallengeEditorPage({
-  savedChallengeDto,
+  challengeDto,
   challengeCategoriesDto,
 }: ChallengeEditorPageProps) {
   const categories = challengeCategoriesDto.map(ChallengeCategory.create)
@@ -34,11 +34,11 @@ export function ChallengeEditorPage({
     isSubmitSuccess,
     isSubmitFailure,
     handleFormSubmit,
-  } = useChallengeEditorPage(savedChallengeDto)
+  } = useChallengeEditorPage(challengeDto)
   const ACTION_BUTTON_TITLES: ActionButtonTitles = {
     canExecute: shouldUpdateChallenge ? 'atualizar?' : 'postar?',
     executing: shouldUpdateChallenge ? 'atualizando...' : 'postando...',
-    default: shouldUpdateChallenge ? 'atualizado' : 'postar',
+    default: shouldUpdateChallenge ? 'atualizar' : 'postar',
     success: shouldUpdateChallenge ? 'atualizado' : 'postado',
     failure: 'erro',
   }

@@ -61,6 +61,7 @@ export function SolutionPage({
             Cancelar
           </Button>
           <ActionButton
+            type='button'
             titles={ACTION_BUTTON_TITLES}
             isExecuting={isExecuting}
             canExecute={canExecute}

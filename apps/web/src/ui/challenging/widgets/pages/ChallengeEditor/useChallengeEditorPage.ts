@@ -9,52 +9,56 @@ import { challengeSchema } from '@stardust/validation/challenging/schemas'
 import { Challenge } from '@stardust/core/challenging/entities'
 import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 
+import { ROUTES } from '@/constants'
+import { useRouter } from '@/ui/global/hooks/useRouter'
 import { usePostChallengeAction } from './usePostChallengeAction'
 import { useUpdateChallengeAction } from './useUpdateChallengeAction'
+import { DataType } from '@stardust/core/challenging/structs'
 
-export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
-  const challenge = savedChallengeDto ? Challenge.create(savedChallengeDto) : null
-  const [isSubmitSuccess, setIsSubmitSuccess] = useState(false)
-  const { isPosting, isPostFailure, postChallenge } = usePostChallengeAction({
-    onSuccess: () => {
-      setIsSubmitSuccess(true)
-    },
-  })
-  const { isUpdating, updateChallenge } = useUpdateChallengeAction({
-    onSuccess: () => {
-      setIsSubmitSuccess(true)
-    },
-  })
+export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
+  const challenge = challengeDto ? Challenge.create(challengeDto) : null
+  const router = useRouter()
   const form = useForm<ChallengeSchema>({
     resolver: zodResolver(challengeSchema),
     defaultValues: {
-      title: challenge?.title.value ?? 'o problema',
-      description: challenge?.description ?? 'minha descrição',
+      title: challenge?.title.value,
+      description: challenge?.description ?? ' ',
       code: challenge?.code ?? ' ',
       difficultyLevel: challenge?.difficulty.level ?? 'easy',
       function: {
-        name: challenge?.function?.name.value ?? 'encontre3corpos',
+        name: challenge?.function?.name.value,
         params:
           challenge?.function?.params.map((param) => ({
             name: param.name.value,
             dataTypeName: param.dataType.name,
           })) ?? [],
       },
-      testCases: challenge?.testCases.map((testCase) => ({
-        inputs: testCase.inputs.map((inputValue) => ({
-          value: inputValue,
-        })),
-        isLocked: testCase.isLocked.isTrue,
-        expectedOutput: {
-          value: testCase.expectedOutput,
-        },
-      })),
+      testCases: challenge?.testCases.map((testCase) => {
+        const expectedOutputDataType = DataType.create(testCase.expectedOutput)
+        return {
+          inputs: testCase.inputs.map((inputValue) => ({
+            value: inputValue,
+          })),
+          isLocked: testCase.isLocked.isTrue,
+          expectedOutput: {
+            dataTypeName: expectedOutputDataType.name,
+            value: expectedOutputDataType.value,
+          },
+        }
+      }),
       categories:
         challenge?.categories.map((category) => ({
           id: category.id,
           name: category.name.value,
         })) ?? [],
     },
+  })
+  const [isSubmitSuccess, setIsSubmitSuccess] = useState(false)
+  const { isPosting, isPostFailure, postChallenge } = usePostChallengeAction({
+    onSuccess: handleActionSuccess,
+  })
+  const { isUpdating, updateChallenge } = useUpdateChallengeAction({
+    onSuccess: handleActionSuccess,
   })
 
   const allFields = form.watch()
@@ -69,23 +73,28 @@ export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
 
   async function handleSubmit(formData: ChallengeSchema) {
     console.log(formData)
-    // if (challenge) {
-    //   await updateChallenge({ challengeId: challenge.id, challenge: formData })
-    //   return
-    // }
+    if (challenge) {
+      await updateChallenge({ challengeId: challenge.id, challenge: formData })
+      return
+    }
     await postChallenge(formData)
   }
 
+  function handleActionSuccess(challengeSlug: string) {
+    setIsSubmitSuccess(true)
+    router.goTo(ROUTES.challenging.challenges.challenge(challengeSlug))
+  }
+
   useEffect(() => {
-    if (allFields) setIsSubmitSuccess(false)
-  }, [allFields])
+    if (allFields && !form.formState.isSubmitSuccessful) setIsSubmitSuccess(false)
+  }, [allFields, form.formState.isSubmitSuccessful])
 
   return {
     form,
     canSubmitForm:
       (!challenge && areAllFieldsFilled) ||
-      (Boolean(challenge) && form.formState.isDirty),
-    shouldUpdateChallenge: challenge || form.formState.isSubmitSuccessful,
+      (Boolean(challenge) && Object.keys(form.formState.touchedFields).length > 0),
+    shouldUpdateChallenge: challenge,
     isFormSubmitting: form.formState.isSubmitting || isPosting || isUpdating,
     isSubmitFailure: isPostFailure || Object.keys(form.formState.errors).length > 0,
     isSubmitSuccess: isSubmitSuccess,
