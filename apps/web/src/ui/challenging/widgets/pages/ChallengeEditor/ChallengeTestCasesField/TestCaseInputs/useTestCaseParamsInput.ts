@@ -12,16 +12,12 @@ export function useTestCaseInputs(testCaseIndex: number) {
   })
   const functionParams = watch('function.params')
 
-  console.log({ fields })
-
   useEffect(() => {
-    if (functionParams.length) {
-      remove()
-      functionParams.forEach((param, index) => {
-        const value = 0
-        append({ value })
-      })
-    }
+    remove()
+    functionParams.forEach((param, index) => {
+      const value = 0
+      append({ value })
+    })
   }, [functionParams, append, remove])
 
   const testCaseError = formState.errors.testCases
