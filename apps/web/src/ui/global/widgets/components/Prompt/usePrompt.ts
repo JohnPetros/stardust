@@ -22,6 +22,5 @@ export function usePrompt(initialTitle: string) {
     setValue,
     open,
     close,
-    focus,
   }
 }

@@ -12,7 +12,7 @@ type TestCaseInputsProps = {
 }
 
 export function TestCaseInputs({ testCaseIndex }: TestCaseInputsProps) {
-  const { formControl, testCaseInputs, errorMessage } = useTestCaseInputs(testCaseIndex)
+  const { testCaseInputs, errorMessage } = useTestCaseInputs(testCaseIndex)
 
   return (
     <div>
@@ -26,7 +26,7 @@ export function TestCaseInputs({ testCaseIndex }: TestCaseInputsProps) {
       )}
 
       <ol className='space-y-6 mt-3'>
-        {testCaseInputs.map((input, index) => {
+        {testCaseInputs.map((_, index) => {
           return (
             <li key={String(index)} className='space-y-3 w-full'>
               <TestCaseInput testCaseIndex={testCaseIndex} paramIndex={index} />

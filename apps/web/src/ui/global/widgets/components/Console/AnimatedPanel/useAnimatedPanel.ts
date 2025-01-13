@@ -20,8 +20,6 @@ export function useAnimatedPanel(isOpen: boolean) {
 
   return {
     controls,
-    open,
-    close,
     handleDragEnd,
   }
 }

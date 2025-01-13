@@ -6,19 +6,20 @@ import type { ChallengeSchema } from '@stardust/validation/challenging/types'
 export function useChallengeCodeField() {
   const { control, formState, watch, register, setValue } =
     useFormContext<ChallengeSchema>()
-  const challengeFunction = watch('function')
+  const challengeFunctionName = watch('function.name')
+  const challengeFunctionParams = watch('function.params')
 
   useEffect(() => {
-    if (challengeFunction.name && challengeFunction.params.length) {
-      const functionParamsNames = challengeFunction.params.map((param) => param.name)
+    if (challengeFunctionName && challengeFunctionParams) {
+      const functionParamsNames = challengeFunctionParams.map((param) => param.name)
       setValue(
         'code',
-        `funcao ${challengeFunction.name}(${functionParamsNames.join(', ')}) {
+        `funcao ${challengeFunctionName}(${functionParamsNames.join(', ')}) {
       
-      }`,
+}`,
       )
     }
-  }, [challengeFunction, setValue])
+  }, [challengeFunctionName, challengeFunctionParams, setValue])
 
   return {
     formControl: control,

@@ -1,4 +1,4 @@
-import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
+import { Controller, useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 
 import type { ChallengeSchema } from '@stardust/validation/challenging/types'
 import { DataType } from '@stardust/core/challenging/structs'
@@ -17,11 +17,10 @@ type TestCaseInputsProps = {
 export function TestCaseInput({ testCaseIndex, paramIndex }: TestCaseInputsProps) {
   const [dataType, setDataType] = useState(DataType.create(''))
   const { control, watch, setValue } = useFormContext<ChallengeSchema>()
-  const { fields } = useFieldArray({
+  const { fields, update } = useFieldArray({
     control,
     name: `testCases.${testCaseIndex}.inputs`,
   })
-  const functionParam = watch(`function.params.${paramIndex}.dataTypeName`)
 
   function handleChange(value: unknown) {
     if (!fields[paramIndex]) return
@@ -31,23 +30,30 @@ export function TestCaseInput({ testCaseIndex, paramIndex }: TestCaseInputsProps
   }
 
   useEffect(() => {
-    setDataType(DataType.create(DEFAULT_VALUE_BY_DATA_TYPE_NAME[functionParam]))
-  }, [functionParam])
+    const subscription = watch((value, { name }) => {
+      if (!name?.includes('function.params.') || !value.function?.params?.length) return
+      console.log(name, value.function)
+
+      value.function?.params.forEach((param) => {
+        if (!param?.dataTypeName) return
+        update(paramIndex, { value: DEFAULT_VALUE_BY_DATA_TYPE_NAME[param.dataTypeName] })
+        setDataType(DataType.create(DEFAULT_VALUE_BY_DATA_TYPE_NAME[param.dataTypeName]))
+      })
+    })
+    return () => subscription.unsubscribe()
+  }, [watch, update, paramIndex])
+
+  // useEffect(() => {
+  // setDataType(DataType.create(DEFAULT_VALUE_BY_DATA_TYPE_NAME[functionParam])),
+
+  // }, [functionParam])
 
   return (
     <CodeInput label={`${paramIndex + 1}º Parâmetro`}>
-      <Controller
-        control={control}
-        name={`testCases.${testCaseIndex}.inputs.${paramIndex}.value`}
-        render={({ field: { value, onChange } }) => {
-          return (
-            <div className='flex items-center gap-3'>
-              <DataTypeNameSelect value={dataType.name} isDiabled={true} />
-              <DataTypeInput value={dataType} onChange={handleChange} />
-            </div>
-          )
-        }}
-      />
+      <div className='flex items-center gap-3'>
+        <DataTypeNameSelect value={dataType.name} isDiabled={true} />
+        <DataTypeInput value={dataType} onChange={handleChange} />
+      </div>
     </CodeInput>
   )
 }

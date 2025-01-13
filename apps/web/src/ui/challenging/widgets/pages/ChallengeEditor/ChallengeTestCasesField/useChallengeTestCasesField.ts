@@ -19,7 +19,6 @@ export function useChallengeTestCasesField() {
     testCaseIndex: number,
   ) {
     setExpectedOutputDataType(dataTypeName)
-    console.log({ dataTypeName })
     setValue(
       `testCases.${testCaseIndex}.expectedOutput`,
       DEFAULT_VALUE_BY_DATA_TYPE_NAME[dataTypeName],
