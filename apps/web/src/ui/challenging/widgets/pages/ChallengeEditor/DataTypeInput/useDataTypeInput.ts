@@ -44,6 +44,10 @@ export function useDataTypeInput(
     setDataType(dataType.addArrayItem(undefined))
   }
 
+  function handleRemoveArrayItemClick(itemIndex: number) {
+    setDataType(dataType.removeArrayItem(itemIndex))
+  }
+
   useEffect(() => {
     setDataType(selectedDataType)
   }, [selectedDataType])
@@ -55,6 +59,7 @@ export function useDataTypeInput(
     handleBooleanValueChange,
     handleArrayItemChange,
     handleAddArrayItemClick,
+    handleRemoveArrayItemClick,
     handleArrayItemDataTypeNameChange,
   }
 }

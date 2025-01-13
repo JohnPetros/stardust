@@ -22,6 +22,7 @@ export function DataTypeInput({ value, errorMessage, onChange }: FunctionInputPr
     handleBooleanValueChange,
     handleArrayItemChange,
     handleAddArrayItemClick,
+    handleRemoveArrayItemClick,
     handleArrayItemDataTypeNameChange,
   } = useDataTypeInput(onChange, value)
 
@@ -73,6 +74,7 @@ export function DataTypeInput({ value, errorMessage, onChange }: FunctionInputPr
               return (
                 <li key={String(index)}>
                   <div className='flex items-center gap-3'>
+                    <p className='text-gray-100 text-sm'>item {index}:</p>
                     <DataTypeNameSelect
                       value={itemDataType.name}
                       onChange={(dataTypeName) =>
@@ -83,6 +85,13 @@ export function DataTypeInput({ value, errorMessage, onChange }: FunctionInputPr
                       value={itemDataType}
                       onChange={(value) => handleArrayItemChange(value, index)}
                     />
+                    <button
+                      type='button'
+                      onClick={() => handleRemoveArrayItemClick(index)}
+                      className='self-start text-xs text-gray-400'
+                    >
+                      Remover item
+                    </button>
                   </div>
                   {errorMessage && (
                     <ErrorMessage className='mt-1'>{errorMessage}</ErrorMessage>

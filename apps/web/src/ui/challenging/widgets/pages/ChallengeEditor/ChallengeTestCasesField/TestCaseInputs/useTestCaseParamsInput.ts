@@ -15,7 +15,10 @@ export function useTestCaseInputs(testCaseIndex: number) {
   useEffect(() => {
     remove()
     functionParams.forEach((param, index) => {
-      const value = 0
+      const value =
+        fields[index] !== undefined
+          ? fields[index]
+          : DEFAULT_VALUE_BY_DATA_TYPE_NAME[param.dataTypeName]
       append({ value })
     })
   }, [functionParams, append, remove])
