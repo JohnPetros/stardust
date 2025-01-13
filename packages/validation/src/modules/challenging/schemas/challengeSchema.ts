@@ -41,5 +41,5 @@ export const challengeSchema = z.object({
       name: nameSchema,
     }),
   ),
-  difficultyLevel: z.enum(['easy', 'medium', 'hard']),
+  difficultyLevel: z.enum(['easy', 'medium', 'hard']).default('easy'),
 })

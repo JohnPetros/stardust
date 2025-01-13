@@ -26,10 +26,14 @@ export function TestCaseInputs({ testCaseIndex }: TestCaseInputsProps) {
       )}
 
       <ol className='space-y-6 mt-3'>
-        {testCaseInputs.map((_, index) => {
+        {testCaseInputs.map((input, index) => {
           return (
             <li key={String(index)} className='space-y-3 w-full'>
-              <TestCaseInput testCaseIndex={testCaseIndex} paramIndex={index} />
+              <TestCaseInput
+                defaultValue={input.value}
+                testCaseIndex={testCaseIndex}
+                paramIndex={index}
+              />
             </li>
           )
         })}

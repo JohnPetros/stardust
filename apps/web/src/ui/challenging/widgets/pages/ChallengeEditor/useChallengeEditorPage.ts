@@ -29,8 +29,9 @@ export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
     resolver: zodResolver(challengeSchema),
     defaultValues: {
       title: challenge?.title.value,
-      description: challenge?.description ?? 'oiiiiiiii',
+      description: challenge?.description ?? '',
       code: challenge?.code ?? ' ',
+      difficultyLevel: challenge?.difficulty.level ?? 'easy',
       function: {
         name: challenge?.function?.name.value,
         params:
@@ -39,7 +40,6 @@ export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
             dataTypeName: param.dataType.name,
           })) ?? [],
       },
-      difficultyLevel: challenge?.difficulty.level,
       testCases: challenge?.testCases.map((testCase) => ({
         inputs: testCase.inputs.map((inputValue) => ({
           value: inputValue,
