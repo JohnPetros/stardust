@@ -10,6 +10,7 @@ type DataTypeNameSelectProps = {
   value: DataTypeName
   className?: ClassNameValue
   isDiabled?: boolean
+  errorMessage?: string
   onChange?: (dataTypeName: DataTypeName) => void
 }
 

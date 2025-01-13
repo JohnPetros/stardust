@@ -8,7 +8,6 @@ import { codeVariableNameSchema, titleSchema } from '../../global/schemas'
 
 export const challengeSchema = z.object({
   title: titleSchema,
-  slug: z.string(),
   function: z.object({
     name: codeVariableNameSchema,
     params: z
@@ -34,12 +33,14 @@ export const challengeSchema = z.object({
         isLocked: booleanSchema.default(true),
       }),
     )
+    .min(3, 'Deve haver pelo menos 3 testes casos'),
+  categories: z
+    .array(
+      z.object({
+        id: idSchema,
+        name: nameSchema,
+      }),
+    )
     .min(1),
-  categories: z.array(
-    z.object({
-      id: idSchema,
-      name: nameSchema,
-    }),
-  ),
   difficultyLevel: z.enum(['easy', 'medium', 'hard']).default('easy'),
 })

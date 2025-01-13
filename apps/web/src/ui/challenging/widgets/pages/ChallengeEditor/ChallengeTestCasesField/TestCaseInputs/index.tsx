@@ -1,10 +1,5 @@
-import { Controller } from 'react-hook-form'
-import { CodeInput } from '../../../CodeInput'
-import { DataTypeInput } from '../../DataTypeInput'
 import { useTestCaseInputs } from './useTestCaseParamsInput'
-import { DataType } from '@stardust/core/challenging/structs'
 import { ErrorMessage } from '@/ui/global/widgets/components/ErrorMessage'
-import { DataTypeNameSelect } from '../../DataTypeNameSelect'
 import { TestCaseInput } from './TestCaseInput'
 
 type TestCaseInputsProps = {
@@ -26,7 +21,7 @@ export function TestCaseInputs({ testCaseIndex }: TestCaseInputsProps) {
       )}
 
       <ol className='space-y-6 mt-3'>
-        {testCaseInputs.map((_, index) => {
+        {testCaseInputs.map((input, index) => {
           return (
             <li key={String(index)} className='space-y-3 w-full'>
               <TestCaseInput

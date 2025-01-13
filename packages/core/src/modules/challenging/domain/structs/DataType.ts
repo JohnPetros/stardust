@@ -84,7 +84,7 @@ export class DataType<Value = unknown> {
   removeArrayItem(itemIndex: number): DataType {
     if (!this.isArray()) this.throwArrayValueError()
 
-    this.value.splice(itemIndex)
+    this.value.splice(itemIndex, 1)
     return new DataType(this.value, this.name)
   }
 

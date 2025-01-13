@@ -6,7 +6,6 @@ import { ChallengeField } from '../ChallengeField'
 import { AddItemButton } from '../AddItemButton'
 import { CodeInput } from '../../CodeInput'
 import { DataTypeNameSelect } from '../DataTypeNameSelect'
-import { ErrorMessage } from '@/ui/global/widgets/components/ErrorMessage'
 
 export function ChallengeFunctionField() {
   const {
@@ -14,7 +13,7 @@ export function ChallengeFunctionField() {
     params,
     hasError,
     functionNameErrorMessage,
-    functionParamsErrorMessage,
+    functionParamsErrorMessages,
     registerInput,
     handleAddParamButtonClick,
     handleRemoveParamButtonClick,
@@ -34,9 +33,6 @@ export function ChallengeFunctionField() {
         errorMessage={functionNameErrorMessage}
         {...registerInput('function.name')}
       />
-      {functionParamsErrorMessage && (
-        <ErrorMessage className='text-center'>{functionParamsErrorMessage}</ErrorMessage>
-      )}
       <ol className='space-y-6 mt-6'>
         {params.map((_, index) => {
           const position = index + 1
@@ -51,6 +47,7 @@ export function ChallengeFunctionField() {
                     type='text'
                     label='Nome do parâmetro'
                     placeholder={`parametro${position}`}
+                    errorMessage={functionParamsErrorMessages[index]?.name?.message}
                     {...registerInput(`function.params.${index}.name`)}
                   />
                   <Controller

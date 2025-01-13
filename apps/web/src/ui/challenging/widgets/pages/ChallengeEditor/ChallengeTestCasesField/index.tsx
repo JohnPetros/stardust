@@ -10,6 +10,7 @@ import { DataType } from '@stardust/core/challenging/structs'
 import { TestCaseInputs } from './TestCaseInputs'
 import { DEFAULT_VALUE_BY_DATA_TYPE_NAME } from '@stardust/core/challenging/constants'
 import { Checkbox } from '@/ui/global/widgets/components/Checkbox'
+import { ErrorMessage } from '@/ui/global/widgets/components/ErrorMessage'
 
 export function ChallengeTestCasesField() {
   const {
@@ -27,10 +28,10 @@ export function ChallengeTestCasesField() {
       title='Casos de teste'
       subtitle='São essencias para os usuários validarem suas respostas. Tenha pelo menos 3 testes de caso.'
       icon='test'
+      hasError={Boolean(testCasesErrors?.message)}
     >
       <ol className='space-y-6'>
         {testCases.map((testCase, index) => {
-          const testCaseError = testCasesErrors ? testCasesErrors[index] : undefined
           return (
             <li key={testCase.id}>
               <CodeInput
@@ -88,6 +89,9 @@ export function ChallengeTestCasesField() {
       <AddItemButton onClick={handleAddTestCaseButtonClick} className='mt-6'>
         Adicionar teste de caso {testCases.length === 0 && '(obrigatório)'}
       </AddItemButton>
+      {testCasesErrors?.message && (
+        <ErrorMessage className='mt-3'>{testCasesErrors?.message}</ErrorMessage>
+      )}
     </ChallengeField>
   )
 }

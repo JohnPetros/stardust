@@ -4,7 +4,7 @@ import type { ChallengeSchema } from '@stardust/validation/challenging/types'
 
 export function useChallengeCategoriesField() {
   const { control, formState, watch } = useFormContext<ChallengeSchema>()
-  const { append, remove, replace } = useFieldArray({
+  const { append, replace } = useFieldArray({
     control,
     name: 'categories',
   })

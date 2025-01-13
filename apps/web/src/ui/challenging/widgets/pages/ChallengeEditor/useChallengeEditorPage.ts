@@ -64,14 +64,16 @@ export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
     allFields.function.params.length,
     allFields.categories.length,
   ].every(Boolean)
+  console.log('allFields', allFields.function.name)
+  console.log('errors', form.formState.errors)
 
   async function handleSubmit(formData: ChallengeSchema) {
-    if (challenge) {
-      await updateChallenge({ challengeId: challenge.id, challenge: formData })
-      return
-    }
-
-    await postChallenge(formData)
+    console.log(formData)
+    // if (challenge) {
+    //   await updateChallenge({ challengeId: challenge.id, challenge: formData })
+    //   return
+    // }
+    // await postChallenge(formData)
   }
 
   useEffect(() => {
@@ -80,9 +82,10 @@ export function useChallengeEditorPage(savedChallengeDto?: ChallengeDto) {
 
   return {
     form,
-    canSubmitForm:
-      (!challenge && areAllFieldsFilled) ||
-      (Boolean(challenge) && form.formState.isDirty),
+    canSubmitForm: true,
+    // canSubmitForm:
+    //   (!challenge && areAllFieldsFilled) ||
+    //   (Boolean(challenge) && form.formState.isDirty),
     shouldUpdateChallenge: challenge || form.formState.isSubmitSuccessful,
     isFormSubmitting: form.formState.isSubmitting || isPosting || isUpdating,
     isSubmitFailure: isPostFailure || Object.keys(form.formState.errors).length > 0,

@@ -7,6 +7,7 @@ import { useDataTypeInput } from './useDataTypeInput'
 import { AddItemButton } from '../AddItemButton'
 import { DataTypeNameSelect } from '../DataTypeNameSelect'
 import { ErrorMessage } from '@/ui/global/widgets/components/ErrorMessage'
+import { Icon } from '@/ui/global/widgets/components/Icon'
 
 type FunctionInputProps = {
   value: DataType
@@ -73,7 +74,16 @@ export function DataTypeInput({ value, errorMessage, onChange }: FunctionInputPr
               const itemDataType = DataType.create(value)
               return (
                 <li key={String(index)}>
-                  <div className='flex items-center gap-3'>
+                  {index > 0 && (
+                    <button
+                      type='button'
+                      onClick={() => handleRemoveArrayItemClick(index)}
+                      className='flex items-center gap-1 ml-auto text-xs text-gray-400'
+                    >
+                      <Icon name='close' size={12} />
+                    </button>
+                  )}
+                  <div className='flex items-center gap-3 mt-2'>
                     <p className='text-gray-100 text-sm'>item {index}:</p>
                     <DataTypeNameSelect
                       value={itemDataType.name}
@@ -85,13 +95,6 @@ export function DataTypeInput({ value, errorMessage, onChange }: FunctionInputPr
                       value={itemDataType}
                       onChange={(value) => handleArrayItemChange(value, index)}
                     />
-                    <button
-                      type='button'
-                      onClick={() => handleRemoveArrayItemClick(index)}
-                      className='self-start text-xs text-gray-400'
-                    >
-                      Remover item
-                    </button>
                   </div>
                   {errorMessage && (
                     <ErrorMessage className='mt-1'>{errorMessage}</ErrorMessage>

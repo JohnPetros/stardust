@@ -18,14 +18,16 @@ export function useChallengeFunctionField() {
   }
 
   const functionNameErrorMessage = formState.errors.function?.name?.message
-  const functionParamsErrorMessage = formState.errors.function?.params?.message
+  const functionParamsErrorMessages = formState.errors.function?.params ?? []
+  console.log('functionParamsErrorMessages', functionParamsErrorMessages)
 
   return {
     formControl: control,
     params: fields,
     functionNameErrorMessage,
-    functionParamsErrorMessage,
-    hasError: Boolean(functionNameErrorMessage) || Boolean(functionParamsErrorMessage),
+    functionParamsErrorMessages,
+    hasError:
+      Boolean(functionNameErrorMessage) || Boolean(functionParamsErrorMessages?.length),
     registerInput: register,
     handleAddParamButtonClick,
     handleRemoveParamButtonClick,

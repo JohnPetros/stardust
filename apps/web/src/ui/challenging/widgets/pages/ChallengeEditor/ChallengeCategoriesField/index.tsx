@@ -20,7 +20,6 @@ export function ChallengeCategoriesField({ categories }: ChallengeCategoriesFiel
     handleSelecButtonClick,
     handleUnselectCategoryButtonClick,
   } = useChallengeCategoriesField()
-  console.log('selectedCategoriesIds', selectedCategoriesIds)
 
   return (
     <ChallengeField
