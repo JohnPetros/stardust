@@ -4,11 +4,17 @@ import { Animation } from './Animation'
 type CodeProps = {
   code: string
   isRunnable: boolean
+  exec: boolean
   children: string | [{ props: { children?: string | { props: { children: string } } } }]
   hasAnimation: boolean
 }
 
-export function Code({ children, isRunnable = true, hasAnimation = true }: CodeProps) {
+export function Code({
+  children,
+  isRunnable = true,
+  exec = false,
+  hasAnimation = true,
+}: CodeProps) {
   if (!children) return
 
   const code = children[0]
@@ -17,7 +23,7 @@ export function Code({ children, isRunnable = true, hasAnimation = true }: CodeP
       <Animation hasAnimation={hasAnimation}>
         <CodeSnippet
           code={(code as string).replaceAll('\n\n', '\n')}
-          isRunnable={isRunnable}
+          isRunnable={isRunnable || exec}
         />
       </Animation>
     )

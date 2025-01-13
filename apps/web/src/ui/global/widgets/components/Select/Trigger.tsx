@@ -15,7 +15,7 @@ export function Trigger({ value, className, isDiabled = false }: SelectTriggerPr
     <S.Trigger
       disabled={isDiabled}
       className={twMerge(
-        'flex items-center gap-2 overflow-hidden rounded-md border border-gray-400 bg-gray-800 p-3 text-sm text-green-500 duration-200',
+        'flex items-center gap-2 overflow-hidden rounded-md border border-gray-400 bg-gray-800 p-3 text-sm text-green-500 duration-200 outline-none',
         className,
         isDiabled && 'opacity-75 pointer-events-none',
       )}

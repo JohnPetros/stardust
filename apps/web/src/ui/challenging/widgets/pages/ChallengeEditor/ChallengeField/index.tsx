@@ -44,8 +44,8 @@ export function ChallengeField({
         </button>
       </div>
 
-      <AnimatedExpandable isExpanded={isContentExpanded} className='mt-6'>
-        {children}
+      <AnimatedExpandable isExpanded={isContentExpanded}>
+        <div className='mt-6'>{children}</div>
       </AnimatedExpandable>
     </div>
   )

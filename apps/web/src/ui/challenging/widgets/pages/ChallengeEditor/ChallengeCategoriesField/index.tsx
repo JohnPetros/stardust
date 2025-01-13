@@ -15,11 +15,12 @@ type ChallengeCategoriesFieldProps = {
 
 export function ChallengeCategoriesField({ categories }: ChallengeCategoriesFieldProps) {
   const {
-    selectedCategories,
+    selectedCategoriesIds,
     errorMessage,
     handleSelecButtonClick,
     handleUnselectCategoryButtonClick,
   } = useChallengeCategoriesField()
+  console.log('selectedCategoriesIds', selectedCategoriesIds)
 
   return (
     <ChallengeField
@@ -31,37 +32,43 @@ export function ChallengeCategoriesField({ categories }: ChallengeCategoriesFiel
       <div>
         <AnimatedTagging.Container
           className={twMerge(
-            'flex gap-3 flex-wrap border rounded-md p-6',
+            'flex gap-1 flex-wrap border rounded-md p-6 min-h-24 w-full',
             errorMessage ? 'border-red-700' : 'border-gray-500',
           )}
         >
-          {selectedCategories.map((selectedCategory) => (
-            <AnimatedTagging.Tag key={selectedCategory.id}>
-              <CategoryTag
-                isActive={true}
-                onClick={() =>
-                  handleSelecButtonClick(selectedCategory.id, selectedCategory.name)
-                }
-              >
-                {selectedCategory.name}
-              </CategoryTag>
-            </AnimatedTagging.Tag>
-          ))}
+          {categories.map((category) => {
+            const isSelected = selectedCategoriesIds.includes(category.id)
+            if (isSelected)
+              return (
+                <AnimatedTagging.Tag key={category.id}>
+                  <CategoryTag
+                    isActive={true}
+                    onClick={() => handleUnselectCategoryButtonClick(category.id)}
+                  >
+                    {category.name.value}
+                  </CategoryTag>
+                </AnimatedTagging.Tag>
+              )
+          })}
         </AnimatedTagging.Container>
         {errorMessage && <ErrorMessage className='mt-1'>{errorMessage}</ErrorMessage>}
       </div>
-      <div className='flex gap-3 flex-wrap'>
-        {categories.map((category, index) => (
-          <AnimatedTagging.Tag key={category.id}>
-            <CategoryTag
-              key={category.id}
-              isActive={false}
-              onClick={() => handleUnselectCategoryButtonClick(index)}
-            >
-              {category.name.value}
-            </CategoryTag>
-          </AnimatedTagging.Tag>
-        ))}
+      <div className='flex gap-1 flex-wrap mt-6'>
+        {categories.map((category) => {
+          const isSelected = selectedCategoriesIds.includes(category.id)
+          if (!isSelected)
+            return (
+              <AnimatedTagging.Tag key={category.id}>
+                <CategoryTag
+                  key={category.id}
+                  isActive={false}
+                  onClick={() => handleSelecButtonClick(category.id, category.name.value)}
+                >
+                  {category.name.value}
+                </CategoryTag>
+              </AnimatedTagging.Tag>
+            )
+        })}
       </div>
     </ChallengeField>
   )

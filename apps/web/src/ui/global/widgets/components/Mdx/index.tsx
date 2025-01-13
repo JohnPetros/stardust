@@ -11,6 +11,7 @@ import { Strong } from './templates/Strong'
 import { Text } from './templates/Text'
 import { User } from './templates/User'
 import { useMdx } from './hooks/useMdx'
+import { CodeLine } from './templates/CodeLine'
 
 type MdxProps = {
   children: string
@@ -18,7 +19,6 @@ type MdxProps = {
 
 export function Mdx({ children }: MdxProps) {
   const { formatCodeContent } = useMdx()
-
   const mdx = formatCodeContent(children)
 
   return (
@@ -46,12 +46,12 @@ export function Mdx({ children }: MdxProps) {
             },
             Code: {
               component: Code,
-            },
-            code: {
-              component: Code,
               props: {
                 isRunnable: false,
               },
+            },
+            code: {
+              component: CodeLine,
             },
             strong: {
               component: Strong,

@@ -17,21 +17,24 @@ export function CategoryTag({
     <button
       type='button'
       onClick={onClick}
-      className={twMerge('rounded-md', isActive ? 'bg-green-400' : 'bg-gray-400')}
+      className={twMerge(
+        'flex items-center gap-1 rounded-md text-gray-900 font-medium p-2',
+        isActive ? 'bg-green-400' : 'bg-gray-400',
+      )}
     >
+      {children}
       <div
         className={twMerge(
-          'grid place-content-center rounded-full p-[1px]',
-          isActive ? 'bg-green-900' : 'bg-gray-500',
+          'grid place-content-center rounded-full size-3',
+          isActive ? 'bg-green-900' : 'bg-gray-700',
         )}
       >
         <Icon
-          name='close'
+          name={isActive ? 'close' : 'plus'}
           size={10}
-          className={isActive ? 'text-green-400' : 'text-gray-700'}
+          className={isActive ? 'text-green-400' : 'text-gray-400'}
         />
       </div>
-      {children}
     </button>
   )
 }

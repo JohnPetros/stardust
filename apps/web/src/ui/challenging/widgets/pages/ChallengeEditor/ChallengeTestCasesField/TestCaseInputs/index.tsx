@@ -29,7 +29,11 @@ export function TestCaseInputs({ testCaseIndex }: TestCaseInputsProps) {
         {testCaseInputs.map((_, index) => {
           return (
             <li key={String(index)} className='space-y-3 w-full'>
-              <TestCaseInput testCaseIndex={testCaseIndex} paramIndex={index} />
+              <TestCaseInput
+                defaultValue={input.value}
+                testCaseIndex={testCaseIndex}
+                paramIndex={index}
+              />
             </li>
           )
         })}
