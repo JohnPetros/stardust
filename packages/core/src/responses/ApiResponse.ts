@@ -3,6 +3,7 @@ import {
   AppError,
   AuthError,
   ConflictError,
+  NotAllowedError,
   NotFoundError,
   ValidationError,
 } from '#global/errors'
@@ -40,11 +41,11 @@ export class ApiResponse<Body = unknown> {
     if (this.statusCode === HTTP_STATUS_CODE.tooManyRequests)
       throw new ConflictError(this.errorMessage)
 
-    if (
-      this.statusCode === HTTP_STATUS_CODE.unauthorized ||
-      this.statusCode === HTTP_STATUS_CODE.forbidden
-    )
+    if (this.statusCode === HTTP_STATUS_CODE.unauthorized)
       throw new AuthError(this.errorMessage)
+
+    if (this.statusCode === HTTP_STATUS_CODE.forbidden)
+      throw new NotAllowedError(this.errorMessage)
 
     if (
       this.statusCode === HTTP_STATUS_CODE.notAcceptable ||

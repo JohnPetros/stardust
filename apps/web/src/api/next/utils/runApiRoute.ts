@@ -5,6 +5,7 @@ import {
   AppError,
   AuthError,
   ConflictError,
+  NotAllowedError,
   NotFoundError,
   ValidationError,
 } from '@stardust/core/global/errors'
@@ -22,8 +23,9 @@ export async function runApiRoute(
     const response = await apiRoute()
     return response.body
   } catch (error) {
+    console.log(error)
+    
     if (error instanceof ZodError) {
-      console.log(error)
       const validationError = ZodValidationErrorFactory.produce(error)
 
       return http.send(
@@ -44,6 +46,10 @@ export async function runApiRoute(
 
       if (error instanceof NotFoundError) {
         return http.send(response, HTTP_STATUS_CODE.notFound).body
+      }
+
+      if (error instanceof NotAllowedError) {
+        return http.send(response, HTTP_STATUS_CODE.forbidden).body
       }
 
       if (error instanceof ConflictError) {
