@@ -13,7 +13,7 @@ import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 import { ROUTES } from '@/constants'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { usePostChallengeAction } from './usePostChallengeAction'
-import { useUpdateChallengeAction } from './useUpdateChallengeAction'
+import { useEditChallengeAction } from './useEditChallengeAction'
 
 export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
   const challenge = challengeDto ? Challenge.create(challengeDto) : null
@@ -58,7 +58,7 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
   const { isPosting, isPostFailure, postChallenge } = usePostChallengeAction({
     onSuccess: handleActionSuccess,
   })
-  const { isUpdating, isUpdateFailure, updateChallenge } = useUpdateChallengeAction({
+  const { isEditing, isEditFailure, editChallenge } = useEditChallengeAction({
     onSuccess: handleActionSuccess,
   })
 
@@ -74,7 +74,7 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
 
   async function handleSubmit(formData: ChallengeSchema) {
     if (challenge) {
-      await updateChallenge({ challengeId: challenge.id, challenge: formData })
+      await editChallenge({ challengeId: challenge.id, challenge: formData })
       return
     }
     await postChallenge(formData)
@@ -96,21 +96,19 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
     }
 
     setIsSubmitFailure(
-      isPostFailure || isUpdateFailure || Object.keys(form.formState.errors).length > 0,
+      isPostFailure || isEditFailure || Object.keys(form.formState.errors).length > 0,
     )
-  }, [allFields, isPostFailure, isUpdateFailure, form.formState.errors])
+  }, [allFields, isPostFailure, isEditFailure, form.formState.errors])
 
   const canSubmitForm =
     (!challenge && areAllFieldsFilled) ||
     (Boolean(challenge) && areAllFieldsFilled && form.formState.isDirty)
 
-  console.log({ isSubmitSuccess })
-
   return {
     form,
     canSubmitForm,
-    shouldUpdateChallenge: challenge,
-    isFormSubmitting: form.formState.isSubmitting || isPosting || isUpdating,
+    shouldEditChallenge: challenge,
+    isFormSubmitting: form.formState.isSubmitting || isPosting || isEditing,
     isSubmitFailure,
     isSubmitSuccess,
     handleFormSubmit: form.handleSubmit(handleSubmit),

@@ -28,7 +28,7 @@ import {
   HandleChallengePageAction,
   PostChallengeAction,
   PostSolutionAction,
-  UpdateChallengeAction,
+  EditChallengeAction,
   UpvoteSolutionAction,
   ViewSolutionAction,
   VoteChallengeAction,
@@ -184,7 +184,7 @@ export const postChallenge = authActionClient
     return action.handle(actionServer)
   })
 
-export const updateChallenge = authActionClient
+export const editChallenge = authActionClient
   .schema(z.object({ challengeId: idSchema, challenge: challengeSchema }), {
     handleValidationErrorsShape: async (errors) =>
       flattenValidationErrors(errors).fieldErrors,
@@ -196,6 +196,6 @@ export const updateChallenge = authActionClient
     })
     const supabase = SupabaseServerActionClient()
     const challengingService = SupabaseChallengingService(supabase)
-    const action = UpdateChallengeAction(challengingService)
+    const action = EditChallengeAction(challengingService)
     return action.handle(actionServer)
   })

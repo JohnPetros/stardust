@@ -8,7 +8,7 @@ type Request = {
 
 type Response = Promise<ChallengeDto>
 
-export class UpdateChallengeUseCase implements IUseCase<Request, Response> {
+export class EditChallengeUseCase implements IUseCase<Request, Response> {
   constructor(private readonly challengingService: IChallengingService) {}
 
   async do({ challengeDto }: Request) {
