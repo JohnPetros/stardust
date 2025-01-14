@@ -374,69 +374,6 @@ export type Database = {
         }
         Relationships: []
       }
-      playgrounds: {
-        Row: {
-          code: string | null
-          created_at: string | null
-          id: string
-          is_public: boolean
-          title: string
-          user_slug: string
-        }
-        Insert: {
-          code?: string | null
-          created_at?: string | null
-          id?: string
-          is_public?: boolean
-          title?: string
-          user_slug: string
-        }
-        Update: {
-          code?: string | null
-          created_at?: string | null
-          id?: string
-          is_public?: boolean
-          title?: string
-          user_slug?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "playgrounds_user_slug_fkey"
-            columns: ["user_slug"]
-            isOneToOne: false
-            referencedRelation: "challenges_view"
-            referencedColumns: ["author_slug"]
-          },
-          {
-            foreignKeyName: "playgrounds_user_slug_fkey"
-            columns: ["user_slug"]
-            isOneToOne: false
-            referencedRelation: "comments_view"
-            referencedColumns: ["author_slug"]
-          },
-          {
-            foreignKeyName: "playgrounds_user_slug_fkey"
-            columns: ["user_slug"]
-            isOneToOne: false
-            referencedRelation: "solutions_view"
-            referencedColumns: ["author_slug"]
-          },
-          {
-            foreignKeyName: "playgrounds_user_slug_fkey"
-            columns: ["user_slug"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["slug"]
-          },
-          {
-            foreignKeyName: "playgrounds_user_slug_fkey"
-            columns: ["user_slug"]
-            isOneToOne: false
-            referencedRelation: "users_view"
-            referencedColumns: ["slug"]
-          },
-        ]
-      }
       questions: {
         Row: {
           content: Json
@@ -555,6 +492,97 @@ export type Database = {
           slug?: string
         }
         Relationships: []
+      }
+      snippets: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          is_public: boolean
+          title: string
+          user_id: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          title?: string
+          user_id: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "playgrounds_user_slug_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_slug"]
+          },
+          {
+            foreignKeyName: "playgrounds_user_slug_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "comments_view"
+            referencedColumns: ["author_slug"]
+          },
+          {
+            foreignKeyName: "playgrounds_user_slug_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "snippets_view"
+            referencedColumns: ["author_slug"]
+          },
+          {
+            foreignKeyName: "playgrounds_user_slug_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "solutions_view"
+            referencedColumns: ["author_slug"]
+          },
+          {
+            foreignKeyName: "playgrounds_user_slug_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["slug"]
+          },
+          {
+            foreignKeyName: "playgrounds_user_slug_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_view"
+            referencedColumns: ["slug"]
+          },
+          {
+            foreignKeyName: "snippets_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
+          },
+          {
+            foreignKeyName: "snippets_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snippets_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       solutions: {
         Row: {
@@ -1399,6 +1427,85 @@ export type Database = {
           is_unlocked: boolean | null
         }
         Relationships: []
+      }
+      snippets_view: {
+        Row: {
+          author_avatar_image: string | null
+          author_avatar_name: string | null
+          author_id: string | null
+          author_name: string | null
+          author_slug: string | null
+          code: string | null
+          created_at: string | null
+          id: string | null
+          is_public: boolean | null
+          title: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "playgrounds_user_slug_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_slug"]
+          },
+          {
+            foreignKeyName: "playgrounds_user_slug_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "comments_view"
+            referencedColumns: ["author_slug"]
+          },
+          {
+            foreignKeyName: "playgrounds_user_slug_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "snippets_view"
+            referencedColumns: ["author_slug"]
+          },
+          {
+            foreignKeyName: "playgrounds_user_slug_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "solutions_view"
+            referencedColumns: ["author_slug"]
+          },
+          {
+            foreignKeyName: "playgrounds_user_slug_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["slug"]
+          },
+          {
+            foreignKeyName: "playgrounds_user_slug_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "users_view"
+            referencedColumns: ["slug"]
+          },
+          {
+            foreignKeyName: "snippets_user_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
+          },
+          {
+            foreignKeyName: "snippets_user_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snippets_user_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       solutions_view: {
         Row: {
