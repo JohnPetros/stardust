@@ -1,25 +1,27 @@
 import { CACHE } from '@/constants'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
-import { useFetchChallengesListAction } from '@/ui/global/hooks/useFetchChallengesListAction'
-import type { ListingOrder } from '../../ListingOrder'
 import { Challenge } from '@stardust/core/challenging/entities'
+import type { TabListSorter } from '../../TabListSorter'
+import { useApi } from '@/ui/global/hooks/useApi'
 
 const CHALLENGES_PER_PAGE = 10
 
-export function useChallengesListTab(listingOrder: ListingOrder) {
-  const { fetchList } = useFetchChallengesListAction()
+export function useChallengesListTab(tabListSorter: TabListSorter, userId: string) {
+  const api = useApi()
 
   async function fetchChallengesList(page: number) {
-    return await fetchList({
+    const response = await api.fetchChallengesList({
       page,
-      categoriesIds: '',
       title: '',
-      completionStatus: 'all',
-      difficultyLevel: 'all',
-      postOrder: listingOrder === 'creation-date' ? 'descending' : 'all',
-      upvotesOrder: listingOrder === 'upvotes' ? 'descending' : 'all',
       itemsPerPage: CHALLENGES_PER_PAGE,
+      categoriesIds: [],
+      difficultyLevel: 'all',
+      upvotesCountOrder: tabListSorter === 'date' ? 'descending' : 'all',
+      postOrder: tabListSorter === 'upvotesCount' ? 'descending' : 'all',
+      userId,
     })
+    if (response.isFailure) response.throwError()
+    return response.body
   }
 
   const { data, isLoading, isRecheadedEnd, nextPage } = usePaginatedCache({
@@ -27,7 +29,7 @@ export function useChallengesListTab(listingOrder: ListingOrder) {
     fetcher: fetchChallengesList,
     itemsPerPage: CHALLENGES_PER_PAGE,
     isInfinity: true,
-    dependencies: [listingOrder],
+    dependencies: [tabListSorter],
   })
 
   return {

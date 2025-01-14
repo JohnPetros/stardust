@@ -4,7 +4,9 @@ export const CACHE = {
     userAchievements: '/user-achievements',
     challengesSummary: '/challenges-summary',
     challengesList: '/challenges-list',
+    solutionsList: '/solutions-list',
     userChallengesList: '/user-challenges-list',
+    userSolutionsList: '/solutions-list',
     userCompletedChallenges: '/user-completed-challenges',
     commentReplies: '/comment-replies',
     filteredAvatars: '/filtered-avatars',
@@ -16,7 +18,6 @@ export const CACHE = {
     shopRockets: '/shop/rocket',
     playgroundCards: '/playground-cards',
     rankingsList: '/rankings-list',
-    solutions: '/solutions',
     docs: '/docs',
   },
 }

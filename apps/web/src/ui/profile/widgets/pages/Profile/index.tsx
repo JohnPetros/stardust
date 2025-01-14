@@ -54,7 +54,7 @@ export function ProfilePage({ userDto, unlockedAchievementsDto }: ProfilePagePro
         </div>
 
         <div className='mt-12'>
-          <CraftsTable />
+          <CraftsTable userId={user.id} />
         </div>
       </div>
     </div>
