@@ -1,12 +1,12 @@
 import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/pt-br'
 
 import type { IDatetime } from '#interfaces'
 import type { DateFormat } from '../../../interfaces/libs/IDatetime'
 
 dayjs.locale('pt-br')
-dayjs.extend(utc)
+dayjs.extend(relativeTime)
 
 export class DayJsDatetime implements IDatetime {
   private dayjs: dayjs.Dayjs
@@ -33,6 +33,10 @@ export class DayJsDatetime implements IDatetime {
 
   format(dateFormat: DateFormat): string {
     return this.dayjs.format(dateFormat)
+  }
+
+  getRelativeTime(): string {
+    return this.dayjs.from(this.date())
   }
 
   date(): Date {
