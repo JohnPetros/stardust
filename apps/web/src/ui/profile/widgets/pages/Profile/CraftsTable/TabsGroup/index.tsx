@@ -3,7 +3,6 @@
 import * as Tabs from '@radix-ui/react-tabs'
 
 import { TabButton } from './TabButton'
-import { TAB_BUTTONS } from '../tab-buttons'
 import type { TabContent } from '../TabContent'
 import type { TabListSorter } from '../TabListSorter'
 import { SorterButton } from './SorterButton'
@@ -19,49 +18,66 @@ type TabsGroupProps = {
   activeTabContent: TabContent
   activeTabListSorter: TabListSorter
   userId: string
-  onTabChange: (tabContent: TabContent) => void
+  onTabContentChange: (tabContent: TabContent) => void
+  onTabListSorterChange: (tabListSorter: TabListSorter) => void
 }
 
 export function TabsGroup({
   activeTabContent,
   activeTabListSorter,
   userId,
-  onTabChange,
+  onTabContentChange,
+  onTabListSorterChange,
 }: TabsGroupProps) {
   return (
-    <Tabs.Root className='rounded-md bg-gray-800 p-6'>
+    <Tabs.Root value={activeTabContent} className='rounded-md bg-gray-800 p-6'>
       <Tabs.List className='flex items-center justify-between gap-2'>
         <div className='flex items-center gap-1'>
-          {TAB_BUTTONS.map(({ title, icon, value }) => (
-            <TabButton
-              key={value}
-              title={title}
-              icon={icon}
-              value={value}
-              isActive={value === activeTabContent}
-              onClick={() => onTabChange(value)}
-            />
-          ))}
+          <TabButton
+            title='Desafios'
+            icon='terminal'
+            value='challengesListTab'
+            isActive={activeTabContent === 'challengesListTab'}
+            onClick={() => onTabContentChange('challengesListTab')}
+          />
+          <TabButton
+            title='Soluções'
+            icon='terminal'
+            value='solutionsListTab'
+            isActive={activeTabContent === 'solutionsListTab'}
+            onClick={() => onTabContentChange('solutionsListTab')}
+          />
         </div>
 
         <div className='flex items-center justify-end'>
           {TAB_LIST_SORTER_BUTTONS_BY_TAB_CONTENT[activeTabContent].map(
             (tabListSorter) => {
               switch (tabListSorter) {
-                case 'upvotesCount':
-                  return (
-                    <SorterButton
-                      title='Mais votados'
-                      icon='arrow-up'
-                      isActive={activeTabListSorter === 'upvotesCount'}
-                    />
-                  )
                 case 'date':
                   return (
                     <SorterButton
                       title='Mais recentes'
                       icon='clock'
                       isActive={activeTabListSorter === 'date'}
+                      onClick={() => onTabListSorterChange('date')}
+                    />
+                  )
+                case 'upvotesCount':
+                  return (
+                    <SorterButton
+                      title='Mais votados'
+                      icon='arrow-up'
+                      isActive={activeTabListSorter === 'upvotesCount'}
+                      onClick={() => onTabListSorterChange('upvotesCount')}
+                    />
+                  )
+                case 'viewsCount':
+                  return (
+                    <SorterButton
+                      title='Mais visualizados'
+                      icon='double-eyes'
+                      isActive={activeTabListSorter === 'viewsCount'}
+                      onClick={() => onTabListSorterChange('viewsCount')}
                     />
                   )
               }
@@ -70,11 +86,11 @@ export function TabsGroup({
         </div>
       </Tabs.List>
 
-      <Tabs.Content value='challengesListTab'>
+      <Tabs.Content value='challengesListTab' className='mt-6'>
         <ChallengesListTab userId={userId} tabListSorter={activeTabListSorter} />
       </Tabs.Content>
 
-      <Tabs.Content value='solutionsListTab'>
+      <Tabs.Content value='solutionsListTab' className='mt-6'>
         <SolutionsListTab userId={userId} tabListSorter={activeTabListSorter} />
       </Tabs.Content>
     </Tabs.Root>

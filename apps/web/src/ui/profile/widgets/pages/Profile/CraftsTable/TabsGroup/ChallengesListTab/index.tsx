@@ -36,9 +36,7 @@ export function ChallengesListTab({ tabListSorter, userId }: ChallengesListProps
           index={index}
           href={ROUTES.challenging.challenges.challenge(challenge.slug.value)}
         >
-          <Row.Title className='text-gray-900 font-semibold'>
-            {challenge.title.value}
-          </Row.Title>
+          <Row.Title>{challenge.title.value}</Row.Title>
           <CraftMetrics.Container>
             <CraftMetrics.Metric icon='calendar'>
               {new Datetime(challenge.postedAt).getRelativeTime()}
@@ -49,8 +47,8 @@ export function ChallengesListTab({ tabListSorter, userId }: ChallengesListProps
           </CraftMetrics.Container>
         </Row.Container>
       ))}
-      {isRecheadedEnd && (
-        <ShowMoreButton isLoading={isLoading} onClick={nextPage} className='mt-3' />
+      {!isRecheadedEnd && (
+        <ShowMoreButton isLoading={isLoading} onClick={nextPage} className='mt-6' />
       )}
     </ul>
   )

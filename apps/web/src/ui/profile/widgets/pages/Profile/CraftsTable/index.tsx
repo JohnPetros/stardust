@@ -2,10 +2,10 @@
 
 import Link from 'next/link'
 
+import { ROUTES } from '@/constants'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { TabsGroup } from './TabsGroup'
-import { TAB_BUTTONS } from './tab-buttons'
 import { useCraftsTable } from './useCraftsTable'
 
 type CraftsTableProps = {
@@ -16,20 +16,18 @@ export function CraftsTable({ userId }: CraftsTableProps) {
   const {
     activeTabListSorter,
     activeTabContent,
-    buttonTitle,
     isAuthUser,
-    handleTabChange,
+    handleTabContentChange,
+    handleTabListSorterChange,
   } = useCraftsTable()
 
   return (
     <div className='flex flex-col gap-6'>
-      {isAuthUser && activeTabContent !== 'solutionsListTab' && (
-        <Link
-          href={TAB_BUTTONS.find((tab) => tab.value === activeTabContent)?.link ?? ''}
-        >
+      {isAuthUser && activeTabContent === 'challengesListTab' && (
+        <Link href={ROUTES.challenging.challenge()}>
           <Button className='w-64 gap-2'>
-            <Icon name='plus' className='text-gray-900' weight='bold' />
-            {buttonTitle[activeTabContent]}
+            <Icon name='plus' size={16} className='text-gray-900' weight='bold' />
+            Postar um desafio
           </Button>
         </Link>
       )}
@@ -38,7 +36,8 @@ export function CraftsTable({ userId }: CraftsTableProps) {
         userId={userId}
         activeTabContent={activeTabContent}
         activeTabListSorter={activeTabListSorter}
-        onTabChange={handleTabChange}
+        onTabContentChange={handleTabContentChange}
+        onTabListSorterChange={handleTabListSorterChange}
       />
     </div>
   )

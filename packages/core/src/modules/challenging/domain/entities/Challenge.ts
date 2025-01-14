@@ -275,12 +275,11 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   get postedAt() {
+    console.log(this.props.postedAt)
     return this.props.postedAt
   }
 
   get dto(): ChallengeDto {
-    console.log(this.postedAt)
-
     return {
       id: this.id,
       title: this.title.value,

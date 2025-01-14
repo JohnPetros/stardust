@@ -7,12 +7,14 @@ type SorterButtonProps = {
   title: string
   isActive: boolean
   icon: IconName
+  onClick: VoidFunction
 }
 
-export function SorterButton({ title, isActive, icon }: SorterButtonProps) {
+export function SorterButton({ title, isActive, icon, onClick }: SorterButtonProps) {
   return (
     <button
       type='button'
+      onClick={onClick}
       className={twMerge(
         'group hidden items-center gap-1 p-2 text-sm hover:text-gray-100 md:flex',
         isActive ? 'text-gray-100' : 'text-gray-400',

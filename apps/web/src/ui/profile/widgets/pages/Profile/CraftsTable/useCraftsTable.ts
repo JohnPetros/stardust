@@ -11,26 +11,25 @@ import type { TabListSorter } from './TabListSorter'
 export function useCraftsTable() {
   const [activeTabContent, setActiveTabContent] =
     useState<TabContent>('challengesListTab')
-  const [activeTabListSorter] = useState<TabListSorter>('date')
+  const [activeTabListSorter, setActiveTabListSorter] = useState<TabListSorter>('date')
 
   const { user } = useAuthContext()
   const { currentRoute } = useRouter()
   const isAuthUser = currentRoute.split('/').slice(-1)[0] === user?.slug.value
 
-  const buttonTitle: Record<TabContent, string | null> = {
-    challengesListTab: 'Criar desafio',
-    solutionsListTab: null,
+  function handleTabContentChange(tabContent: TabContent) {
+    setActiveTabContent(tabContent)
   }
 
-  function handleTabChange(tabContent: TabContent) {
-    setActiveTabContent(tabContent as TabContent)
+  function handleTabListSorterChange(tabListSorter: TabListSorter) {
+    setActiveTabListSorter(tabListSorter)
   }
 
   return {
     activeTabContent,
     activeTabListSorter,
     isAuthUser,
-    buttonTitle,
-    handleTabChange,
+    handleTabContentChange,
+    handleTabListSorterChange,
   }
 }

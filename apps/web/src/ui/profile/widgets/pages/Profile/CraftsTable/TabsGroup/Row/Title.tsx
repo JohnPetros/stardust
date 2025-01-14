@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge'
 export function Title({ children, className, ...strongProps }: ComponentProps<'strong'>) {
   return (
     <strong
-      className={twMerge('text-gray-900 font-semibold', className)}
+      className={twMerge('text-gray-100 text-sm text-ellipsis font-semibold', className)}
       {...strongProps}
     >
       {children}

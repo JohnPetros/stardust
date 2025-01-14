@@ -36,7 +36,7 @@ export class DayJsDatetime implements IDatetime {
   }
 
   getRelativeTime(): string {
-    return this.dayjs.from(this.date())
+    return this.dayjs.fromNow()
   }
 
   date(): Date {
