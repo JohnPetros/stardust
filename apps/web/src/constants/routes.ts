@@ -69,6 +69,7 @@ export const ROUTES = {
     challenging: {
       list: '/api/challenging/list',
       countByDifficultyLevel: '/api/challenging/count-by-difficulty-level',
+      solution: (solutionSlug: string) => `/api/challenging/solution/${solutionSlug}`,
     },
   },
 } as const

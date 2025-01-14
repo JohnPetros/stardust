@@ -80,7 +80,25 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       if (error) {
         return SupabasePostgrestError(
           error,
-          'Slug de desafio não encontrado para essa estrela',
+          'Desafio não encontrado para essa estrela',
+          status,
+        )
+      }
+
+      return new ApiResponse({ body: supabaseChallengeMapper.toDto(data) })
+    },
+
+    async fetchChallengeBySolutionId(solutionId: string) {
+      const { data, error, status } = await supabase
+        .from('challenges_view')
+        .select('*, solutions!inner(id)')
+        .eq('solutions.id', solutionId)
+        .single()
+
+      if (error) {
+        return SupabasePostgrestError(
+          error,
+          'Desafio não encontrado para essa solução',
           status,
         )
       }

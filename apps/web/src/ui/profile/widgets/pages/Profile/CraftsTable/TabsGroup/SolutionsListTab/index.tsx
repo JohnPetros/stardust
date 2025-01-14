@@ -34,7 +34,7 @@ export function SolutionsListTab({ tabListSorter, userId }: ChallengesListProps)
         <Row.Container
           key={solution.id}
           index={index}
-          href={ROUTES.challenging.challenges.solution(solution.slug.value)}
+          href={ROUTES.api.challenging.solution(solution.slug.value)}
         >
           <Row.Title className='text-gray-900 font-semibold'>
             {solution.title.value}

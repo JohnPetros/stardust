@@ -25,6 +25,7 @@ export interface IChallengingService {
   fetchChallengeById(challengeId: string): Promise<ApiResponse<ChallengeDto>>
   fetchChallengeBySlug(challengeSlug: string): Promise<ApiResponse<ChallengeDto>>
   fetchChallengeByStarId(starId: string): Promise<ApiResponse<ChallengeDto>>
+  fetchChallengeBySolutionId(solutionId: string): Promise<ApiResponse<ChallengeDto>>
   fetchChallengesWithOnlyDifficulty(): Promise<
     ApiResponse<{ id: string; difficulty: string }[]>
   >
@@ -47,9 +48,7 @@ export interface IChallengingService {
     challengeId: string,
     challengeCategories: ChallengeCategory[],
   ): Promise<ApiResponse>
-  deleteChallengeCategories(
-    challengeId: string,
-  ): Promise<ApiResponse>
+  deleteChallengeCategories(challengeId: string): Promise<ApiResponse>
   saveSolution(solution: Solution, challengeId: string): Promise<ApiResponse>
   updateSolution(solution: Solution): Promise<ApiResponse>
   updateChallenge(challenge: Challenge): Promise<ApiResponse>
