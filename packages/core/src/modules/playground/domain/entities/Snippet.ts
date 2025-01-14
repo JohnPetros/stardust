@@ -6,7 +6,7 @@ import { Datetime } from '#libs'
 import type { SnippetDto } from '../dtos'
 
 type SnippetProps = {
-  title: Name
+  title?: Name
   code: Text
   isPublic: Logical
   createdAt: Date
@@ -20,7 +20,7 @@ export class Snippet extends Entity<SnippetProps> {
   static create(dto: SnippetDto) {
     return new Snippet(
       {
-        title: Name.create(dto.title),
+        title: Name.create(dto.title ?? 'Sem título'),
         code: Text.create(dto.code),
         isPublic: Logical.create(dto.isPublic),
         author: {
@@ -33,12 +33,20 @@ export class Snippet extends Entity<SnippetProps> {
     )
   }
 
-  get title() {
+  get title(): Name {
     return this.props.title
   }
 
-  get code() {
+  set title(title: string) {
+    this.props.title = Name.create(title, 'Título do snippet')
+  }
+
+  get code(): Text {
     return this.props.code
+  }
+
+  set code(code: string) {
+    this.props.code = Text.create(code, 'Código do snippet')
   }
 
   get isPublic() {

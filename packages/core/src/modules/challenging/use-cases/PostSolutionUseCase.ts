@@ -1,8 +1,8 @@
 import type { IChallengingService, IUseCase } from '#interfaces'
+import { ValidationError } from '#global/errors'
+import { Slug } from '#global/structs'
 import { Challenge, Solution } from '#challenging/entities'
 import type { SolutionDto } from '#challenging/dtos'
-import { Slug } from '#global/structs'
-import { AppError, ValidationError } from '#global/errors'
 
 type Request = {
   solutionTitle: string
