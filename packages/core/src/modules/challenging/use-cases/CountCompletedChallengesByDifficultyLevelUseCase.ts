@@ -6,6 +6,7 @@ import type {
   CompletedChallengesCountByDifficultyLevel,
 } from '#challenging/types'
 import type { IChallengingService, IUseCase } from '#interfaces'
+import { Percentage } from '#global/structs'
 
 type Challenge = { id: string; difficulty: ChallengeDifficulty }
 
@@ -77,7 +78,9 @@ export class CountCompletedChallengesByDifficultyLevelUseCase
   }
 
   private filterChallengesByCompletitionState(challenges: Challenge[], user: User) {
-    return challenges.filter((challenge) => user.hasCompletedChallenge(challenge.id))
+    return challenges.filter(
+      (challenge) => user.hasCompletedChallenge(challenge.id).isTrue,
+    )
   }
 
   private calculateCompletedChallengesCountByDifficulty(
@@ -98,11 +101,11 @@ export class CountCompletedChallengesByDifficultyLevelUseCase
     const completedChallenges = this.filterChallengesByCompletitionState(challenges, user)
 
     const absolute = completedChallenges.length
-    const percentage = (completedChallenges.length / challenges.length) * 100
+    const percentage = Percentage.create(completedChallenges.length, challenges.length)
 
     return {
       absolute,
-      percentage: Number(percentage.toFixed(2)),
+      percentage: percentage.value,
       total: challenges.length,
     }
   }

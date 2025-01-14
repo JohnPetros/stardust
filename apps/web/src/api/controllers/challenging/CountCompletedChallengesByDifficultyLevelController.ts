@@ -1,9 +1,5 @@
 import type { IController, IHttp, IChallengingService } from '@stardust/core/interfaces'
 import { CountCompletedChallengesByDifficultyLevelUseCase } from '@stardust/core/challenging/use-cases'
-import type {
-  ChallengeCompletionStatus,
-  ChallengeDifficultyLevel,
-} from '@stardust/core/challenging/types'
 
 export const CountCompletedChallengesByDifficultyLevelController = (
   challengingService: IChallengingService,
