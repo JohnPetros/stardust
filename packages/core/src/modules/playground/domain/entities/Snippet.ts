@@ -1,12 +1,12 @@
+import { Datetime } from '#libs'
 import { Entity } from '#global/abstracts'
 import { Author } from '#global/entities'
 import { EntityNotDefinedError } from '#global/errors'
 import { Logical, Name, Text } from '#global/structs'
-import { Datetime } from '#libs'
-import type { SnippetDto } from '../dtos'
+import type { SnippetDto } from '#playground/dtos'
 
 type SnippetProps = {
-  title?: Name
+  title: Name
   code: Text
   isPublic: Logical
   createdAt: Date

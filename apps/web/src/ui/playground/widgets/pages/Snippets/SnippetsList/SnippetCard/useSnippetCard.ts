@@ -1,12 +1,11 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
-import type { SnippetDto } from '@stardust/core/playground/dtos'
+import type { Snippet } from '@stardust/core/playground/entities'
 
 import { getAppBaseUrl } from '@/utils'
 import { ROUTES } from '@/constants'
-import { useClipboard } from '@/ui/global/hooks/useClipboard'
 import { useApi } from '@/ui/global/hooks/useApi'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import type { PromptRef } from '@/ui/global/widgets/components/Prompt/types'
@@ -19,8 +18,7 @@ export function useSnippetCard(
 ) {
   const snippetUrl = `${getAppBaseUrl()}${ROUTES.playground.snippet(snippetId)}`
   const [snippetTitle, setSnippetTitle] = useState(inititlaSnippetTitle)
-  const { copy } = useClipboard(snippetUrl)
-  const { isEditing, editSnippet } = useEditSnippetAction({
+  const { editSnippet } = useEditSnippetAction({
     onSuccess: handleEditSnippetSuccess,
     onError: handleEditSnippetError,
   })
@@ -46,8 +44,8 @@ export function useSnippetCard(
     await editSnippet({ snippetId, snippetTitle: newSnippetTitle })
   }
 
-  function handleEditSnippetSuccess(snippetDto: SnippetDto) {
-    setSnippetTitle(snippetDto.title)
+  function handleEditSnippetSuccess(snippet: Snippet) {
+    setSnippetTitle(snippet.title.value)
   }
 
   function handleEditSnippetError() {

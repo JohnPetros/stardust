@@ -6,9 +6,10 @@ import type { SnippetDto } from '@stardust/core/playground/dtos'
 import type { ActionParams } from '@/server/next-safe-action/types'
 import { playgroundActions } from '@/server/next-safe-action'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
+import { Snippet } from '@stardust/core/playground/entities'
 
 type EditSnippetActionProps = {
-  onSuccess: (snippetDto: SnippetDto) => void
+  onSuccess: (snippet: Snippet) => void
   onError: VoidFunction
 }
 
@@ -22,7 +23,7 @@ export function useEditSnippetAction({ onSuccess, onError }: EditSnippetActionPr
       onError()
     },
     onSuccess: ({ data }) => {
-      if (data) onSuccess(data)
+      if (data) onSuccess(Snippet.create(data))
     },
   })
 

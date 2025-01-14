@@ -14,7 +14,6 @@ const SNIPPETS_PER_PAGE = 24
 export function useSnippetsList() {
   const { user } = useAuthContext()
   const api = useApi()
-  const router = useRouter()
 
   async function fetchSnippets(page: number) {
     const response = await api.fetchSnippetsList({
@@ -28,20 +27,30 @@ export function useSnippetsList() {
     return response.body
   }
 
-  const { data, page, totalItemsCount, isLoading, setPage, refetch } = usePaginatedCache({
-    key: CACHE.keys.shopRockets,
-    fetcher: fetchSnippets,
-    itemsPerPage: SNIPPETS_PER_PAGE,
-    isEnabled: Boolean(user),
-  })
+  const { data, page, totalItemsCount, isLoading, isRecheadedEnd, setPage, refetch } =
+    usePaginatedCache({
+      key: CACHE.keys.shopRockets,
+      fetcher: fetchSnippets,
+      itemsPerPage: SNIPPETS_PER_PAGE,
+      isEnabled: Boolean(user),
+    })
 
   function handleDeleteSnippetDelete() {
     refetch()
   }
 
+  function handlePaginationPageChange(page: number) {
+    setPage(page)
+  }
+
   return {
     snippets: data.map(Snippet.create),
+    page,
+    itemsPerPage: SNIPPETS_PER_PAGE,
+    totalItemsCount,
     isLoading,
+    isRecheadedEnd,
     handleDeleteSnippetDelete,
+    handlePaginationPageChange,
   }
 }
