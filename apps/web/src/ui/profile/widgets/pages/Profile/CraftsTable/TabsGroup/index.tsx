@@ -11,9 +11,8 @@ import { SolutionsListTab } from './SolutionsListTab'
 import { ChallengesListTab } from './ChallengesListTab'
 
 const TAB_LIST_SORTER_BUTTONS_BY_TAB_CONTENT: Record<TabContent, TabListSorter[]> = {
-  challengesListTab: ['upvotesCount', 'date'],
-  solutionsListTab: ['upvotesCount', 'date'],
-  snippetsListTab: [],
+  challengesListTab: ['date', 'upvotesCount'],
+  solutionsListTab: ['date', 'upvotesCount', 'viewsCount'],
 }
 
 type TabsGroupProps = {

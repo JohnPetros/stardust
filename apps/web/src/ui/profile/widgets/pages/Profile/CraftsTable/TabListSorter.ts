@@ -1,1 +1,1 @@
-export type TabListSorter = 'date' | 'upvotesCount'
+export type TabListSorter = 'date' | 'upvotesCount' | 'viewsCount'

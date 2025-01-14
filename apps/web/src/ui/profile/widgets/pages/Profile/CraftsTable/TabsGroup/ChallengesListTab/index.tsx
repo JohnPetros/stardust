@@ -4,8 +4,10 @@ import { ROUTES } from '@/constants'
 import { ShowMoreButton } from '@/ui/global/widgets/components/ShowMoreButton'
 import type { TabListSorter } from '../../TabListSorter'
 import { useChallengesListTab } from './useChallengesListTab'
-import { Row } from '../Row'
+import { RowsSkeleton } from '../RowsSkeleton'
+import * as Row from '../Row'
 import * as CraftMetrics from '../CraftMetrics'
+import { NoRowsMessage } from '../NoRowsMessage'
 
 type ChallengesListProps = {
   userId: string
@@ -18,15 +20,25 @@ export function ChallengesListTab({ tabListSorter, userId }: ChallengesListProps
     userId,
   )
 
+  if (isLoading) {
+    return <RowsSkeleton />
+  }
+
+  if (!challenges.length) {
+    return <NoRowsMessage />
+  }
+
   return (
     <ul>
       {challenges.map((challenge, index) => (
-        <Row
+        <Row.Container
           key={challenge.id}
           index={index}
           href={ROUTES.challenging.challenges.challenge(challenge.slug.value)}
         >
-          <strong className='text-gray-900 font-semibold'>{challenge.title.value}</strong>
+          <Row.Title className='text-gray-900 font-semibold'>
+            {challenge.title.value}
+          </Row.Title>
           <CraftMetrics.Container>
             <CraftMetrics.Metric icon='calendar'>
               {new Datetime(challenge.postedAt).getRelativeTime()}
@@ -35,7 +47,7 @@ export function ChallengesListTab({ tabListSorter, userId }: ChallengesListProps
               {challenge.upvotesCount.value}
             </CraftMetrics.Metric>
           </CraftMetrics.Container>
-        </Row>
+        </Row.Container>
       ))}
       {isRecheadedEnd && (
         <ShowMoreButton isLoading={isLoading} onClick={nextPage} className='mt-3' />

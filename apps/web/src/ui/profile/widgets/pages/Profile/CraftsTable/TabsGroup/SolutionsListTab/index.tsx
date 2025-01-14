@@ -3,9 +3,10 @@ import { Datetime } from '@stardust/core/libs'
 import { ROUTES } from '@/constants'
 import { ShowMoreButton } from '@/ui/global/widgets/components/ShowMoreButton'
 import type { TabListSorter } from '../../TabListSorter'
+import { NoRowsMessage } from '../NoRowsMessage'
 import { useSolutionsListTab } from './useSolutionsListTab'
-import { Metric } from '../CraftMetrics'
-import { Row } from '../Row'
+import { RowsSkeleton } from '../RowsSkeleton'
+import * as Row from '../Row'
 import * as CraftMetrics from '../CraftMetrics'
 
 type ChallengesListProps = {
@@ -19,15 +20,25 @@ export function SolutionsListTab({ tabListSorter, userId }: ChallengesListProps)
     userId,
   )
 
+  if (isLoading) {
+    return <RowsSkeleton />
+  }
+
+  if (!solutions.length) {
+    return <NoRowsMessage />
+  }
+
   return (
     <ul>
       {solutions.map((solution, index) => (
-        <Row
+        <Row.Container
           key={solution.id}
           index={index}
           href={ROUTES.challenging.challenges.solution(solution.slug.value)}
         >
-          <strong className='text-gray-900 font-semibold'>{solution.title.value}</strong>
+          <Row.Title className='text-gray-900 font-semibold'>
+            {solution.title.value}
+          </Row.Title>
           <CraftMetrics.Container>
             <CraftMetrics.Metric icon='calendar'>
               {new Datetime(solution.postedAt).getRelativeTime()}
@@ -39,7 +50,7 @@ export function SolutionsListTab({ tabListSorter, userId }: ChallengesListProps)
               {solution.viewsCount.value}
             </CraftMetrics.Metric>
           </CraftMetrics.Container>
-        </Row>
+        </Row.Container>
       ))}
       {isRecheadedEnd && (
         <ShowMoreButton isLoading={isLoading} onClick={nextPage} className='mt-3' />
