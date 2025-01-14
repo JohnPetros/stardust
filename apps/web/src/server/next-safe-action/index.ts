@@ -14,6 +14,7 @@ import { setCookie, getCookie, deleteCookie, hasCookie } from './cookieActions'
 import { upvoteComment } from './forumActions'
 import { obsverNewUnlockedAchievements } from './profileActions'
 import { getLastWeekRankingWinners } from './rankingActions'
+import { createSnippet, editSnippet } from './playgroundActions'
 import {
   rewardForStarChallengeCompletion,
   rewardForChallengeCompletion,
@@ -33,6 +34,7 @@ export const challengingActions = {
   upvoteSolution,
   viewSolution,
 }
+export const playgroundActions = { createSnippet, editSnippet }
 export const profileActions = { obsverNewUnlockedAchievements }
 export const rankingActions = { getLastWeekRankingWinners }
 export const forumActions = { upvoteComment }
