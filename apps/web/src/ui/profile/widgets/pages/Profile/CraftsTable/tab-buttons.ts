@@ -1,14 +1,12 @@
 import { ROUTES } from '@/constants'
 import type { IconName } from '@/ui/global/widgets/components/Icon/types'
-
-type TabValue = 'playground-tab' | 'challenges-tab' | 'solutions-tab'
+import type { TabContent } from './TabContent'
 
 type TabButtonType = {
   title: string
   link?: string
   icon: IconName
-  value: TabValue
-  canOrder: boolean
+  value: TabContent
 }
 
 export const TAB_BUTTONS: TabButtonType[] = [
@@ -16,14 +14,12 @@ export const TAB_BUTTONS: TabButtonType[] = [
     title: 'Códigos',
     link: ROUTES.playground,
     icon: 'file',
-    value: 'playground-tab',
-    canOrder: false,
+    value: 'snippets-tab',
   },
   {
     title: 'Desafios',
     link: ROUTES.challenging.challenges.list,
     icon: 'terminal',
     value: 'challenges-tab',
-    canOrder: true,
   },
 ]

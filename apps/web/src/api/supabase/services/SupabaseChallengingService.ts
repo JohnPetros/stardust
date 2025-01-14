@@ -112,6 +112,8 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       itemsPerPage,
       categoriesIds,
       difficultyLevel,
+      postOrder,
+      upvotesOrder,
       title,
     }: ChallengesListParams) {
       let query = supabase
@@ -127,6 +129,18 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         query = query.eq('difficulty', difficultyLevel)
       }
 
+      if (difficultyLevel !== 'all') {
+        query = query.eq('difficulty', difficultyLevel)
+      }
+
+      if (postOrder !== 'all') {
+        query = query.order('created_at', { ascending: postOrder === 'ascending' })
+      }
+
+      if (upvotesOrder !== 'all') {
+        query = query.order('upvotes', { ascending: upvotesOrder === 'ascending' })
+      }
+
       if (categoriesIds.length) {
         query = query.in('challenges_categories.category_id', categoriesIds)
       }
@@ -134,8 +148,6 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       const range = calculateSupabaseRange(page, itemsPerPage)
 
       const { data, count, status, error } = await query.range(range.from, range.to)
-
-      console.log({ error })
 
       if (error) {
         return SupabasePostgrestError(

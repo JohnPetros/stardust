@@ -1283,7 +1283,7 @@ export type Database = {
           description: string | null
           difficulty: string | null
           doc_id: string | null
-          downvotes: number | null
+          downvotes_count: number | null
           function_name: string | null
           function_params: string[] | null
           id: string | null
@@ -1293,7 +1293,7 @@ export type Database = {
           texts: Json | null
           title: string | null
           total_completitions: number | null
-          upvotes: number | null
+          upvotes_count: number | null
           user_id: string | null
         }
         Relationships: [

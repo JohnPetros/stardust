@@ -4,12 +4,12 @@ import Link from 'next/link'
 
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { Button } from '@/ui/global/widgets/components/Button'
-import { TabsGroup } from './Tabs'
+import { TabsGroup } from './TabsGroup'
 import { TAB_BUTTONS } from './tab-buttons'
 import { useCraftsTable } from './useCraftsTable'
 
 export function CraftsTable() {
-  const { activeOrder, activeTab, buttonTitle, canOrder, isAuthUser, handleTabChange } =
+  const { activeListingOrder, activeTab, buttonTitle, isAuthUser, handleTabChange } =
     useCraftsTable()
 
   return (
@@ -25,9 +25,8 @@ export function CraftsTable() {
 
       <TabsGroup
         activeTab={activeTab}
-        activeOrder={activeOrder}
+        activeListingOrder={activeListingOrder}
         onTabChange={handleTabChange}
-        canOrder={canOrder}
       />
     </div>
   )

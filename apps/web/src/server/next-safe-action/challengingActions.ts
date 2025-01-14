@@ -9,6 +9,7 @@ import {
   idSchema,
   titleSchema,
   contentSchema,
+  listingOrderSchema,
 } from '@stardust/validation/global/schemas'
 import {
   challengeDifficultyLevelSchema,
@@ -40,6 +41,8 @@ export const fetchChallengesList = authActionClient
       itemsPerPage: itemsPerPageSchema,
       difficultyLevel: challengeDifficultyLevelSchema,
       completionStatus: challengeCompletionStatusSchema,
+      postOrder: listingOrderSchema,
+      upvotesOrder: listingOrderSchema,
       title: z.string(),
       categoriesIds: z.string(),
     }),
