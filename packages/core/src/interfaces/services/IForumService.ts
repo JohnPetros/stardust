@@ -1,16 +1,16 @@
 import type { CommentDto } from '#forum/dtos'
 import type { Comment } from '#forum/entities'
-import type { CommentsListingParams } from '#forum/types'
+import type { CommentsListParams } from '#forum/types'
 import type { ApiResponse, PaginationResponse } from '#responses'
 
 export interface IForumService {
   fetchCommentById(commentId: string): Promise<ApiResponse<CommentDto>>
   fetchChallengeCommentsList(
-    params: CommentsListingParams,
+    params: CommentsListParams,
     challengeId: string,
   ): Promise<ApiResponse<PaginationResponse<CommentDto>>>
   fetchSolutionCommentsList(
-    params: CommentsListingParams,
+    params: CommentsListParams,
     solutionId: string,
   ): Promise<ApiResponse<PaginationResponse<CommentDto>>>
   fetchCommentReplies(commentId: string): Promise<ApiResponse<CommentDto[]>>
