@@ -5,6 +5,7 @@ export const CACHE = {
     challengesSummary: '/challenges-summary',
     challengesList: '/challenges-list',
     solutionsList: '/solutions-list',
+    snippetsList: '/snippets-list',
     userChallengesList: '/user-challenges-list',
     userSolutionsList: '/solutions-list',
     userCompletedChallenges: '/user-completed-challenges',

@@ -9,7 +9,7 @@ type ToolButtonProps = {
   icon: IconName
   label: string
   className?: ClassNameValue
-  onClick: VoidFunction
+  onClick?: VoidFunction
 }
 
 export function Button({ icon, label, className, onClick }: ToolButtonProps) {

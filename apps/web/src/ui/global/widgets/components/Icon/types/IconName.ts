@@ -9,6 +9,8 @@ export type IconName =
   | 'simple-arrow-right'
   | 'simple-arrow-down'
   | 'check'
+  | 'trash'
+  | 'pencil'
   | 'clock'
   | 'close'
   | 'upvote'

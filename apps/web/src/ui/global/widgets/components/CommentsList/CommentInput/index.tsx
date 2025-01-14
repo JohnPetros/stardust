@@ -76,15 +76,6 @@ export function CommentInput({
                 value={content}
                 onChange={handleContentChange}
               />
-              // <textarea
-              //   ref={textareaRef}
-              //   placeholder={placeholder}
-              //   className='min-h-[5rem] w-full resize-none rounded-md bg-transparent text-sm font-medium text-gray-300 outline-none placeholder:text-gray-500'
-              //   rows={content.length > 3 ? Text.create(content).countCharacters('\n') : 1}
-              //   value={content}
-              //   autoFocus={true}
-              //   onChange={({ currentTarget }) => handleCommentChange(currentTarget.value)}
-              // />
             )}
             <Toolbar.Container className='flex w-full flex-col gap-4 md:flex-row md:items-center  md:justify-center'>
               {!isPreviewVisible && (
@@ -95,12 +86,12 @@ export function CommentInput({
                     label='Inserir trecho em destaque'
                   />
                   <Toolbar.Button
-                    onClick={() => handleSnippetInsert('code')}
+                    onClick={() => handleSnippetInsert('codeLine')}
                     icon='code'
-                    label='Inserir trecho de código'
+                    label='Inserir trecho de código em linha'
                   />
                   <Toolbar.Button
-                    onClick={() => handleSnippetInsert('runnableCode')}
+                    onClick={() => handleSnippetInsert('codeBlock')}
                     icon='runnable-code'
                     label='Inserir trecho de código executável'
                   />

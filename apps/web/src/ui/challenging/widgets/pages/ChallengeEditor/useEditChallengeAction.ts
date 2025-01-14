@@ -5,13 +5,13 @@ import type { ActionParams } from '@/server/next-safe-action/types'
 import { challengingActions } from '@/server/next-safe-action'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
-type EditChallengeActionProps = {
+type UpdateChallengeActionProps = {
   onSuccess: (challengeSlug: string) => void
 }
 
 const action = challengingActions.editChallenge
 
-export function useEditChallengeAction({ onSuccess }: EditChallengeActionProps) {
+export function useEditChallengeAction({ onSuccess }: UpdateChallengeActionProps) {
   const toast = useToastContext()
   const { executeAsync, isPending, hasErrored } = useAction(action, {
     onError: ({ error }) => {
@@ -22,7 +22,7 @@ export function useEditChallengeAction({ onSuccess }: EditChallengeActionProps) 
     },
   })
 
-  const editChallenge = useCallback(
+  const updateChallenge = useCallback(
     async (params: ActionParams<typeof action>) => {
       const result = await executeAsync(params)
       return result?.data
@@ -33,6 +33,6 @@ export function useEditChallengeAction({ onSuccess }: EditChallengeActionProps) 
   return {
     isEditing: isPending,
     isEditFailure: hasErrored,
-    editChallenge,
+    updateChallenge,
   }
 }

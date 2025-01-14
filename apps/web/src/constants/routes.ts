@@ -39,7 +39,11 @@ export const ROUTES = {
     starChallenge: '/rewarding/star-challenge',
     challenge: '/rewarding/challenge',
   },
-  playground: '/playground',
+  playground: {
+    snippets: '/playground/snippets',
+    snippet: (snippetId?: string) =>
+      snippetId ? '/playground/snippets/new' : `/playground/snippets/${snippetId}`,
+  },
   auth: {
     signIn: '/auth/sign-in',
     signUp: '/auth/sign-up',
