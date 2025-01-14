@@ -4,7 +4,7 @@ export class Text {
   private constructor(readonly value: string) {}
 
   static create(value: string, key?: string): Text {
-    new StringValidation(value, key).min(3).validate()
+    new StringValidation(value, key).validate()
 
     return new Text(value)
   }
