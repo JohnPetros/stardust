@@ -2,14 +2,15 @@ import type { ChallengeCompletionStatus, ChallengesListParams } from '#challengi
 import type { ChallengeDto } from '#challenging/dtos'
 import type { UserDto } from '#global/dtos'
 import type { IChallengingService, IUseCase } from '#interfaces'
+import type { ListParam } from '#global/types'
 import { User } from '#global/entities'
 import { Challenge } from '#challenging/entities'
 import { PaginationResponse } from '#responses'
 
 type Request = {
   userDto: UserDto
-  listParams: ChallengesListParams
-  completionStatus: ChallengeCompletionStatus | 'all'
+  listParams: Omit<ChallengesListParams, 'postOrder' | 'upvotesCountOrder' | 'userId'>
+  completionStatus: ListParam<ChallengeCompletionStatus>
 }
 type Response = Promise<PaginationResponse<ChallengeDto>>
 
@@ -19,7 +20,12 @@ export class ListChallengesUseCase implements IUseCase<Request, Response> {
   async do({ userDto, completionStatus, listParams }: Request): Response {
     const user = User.create(userDto)
 
-    const challengesPagination = await this.fetchChallengesList(listParams)
+    const challengesPagination = await this.fetchChallengesList({
+      ...listParams,
+      postOrder: 'all',
+      upvotesCountOrder: 'all',
+      userId: null,
+    })
     let challenges = challengesPagination.items.map(Challenge.create)
 
     challenges = this.filterChallengesByCompletionStatus(

@@ -4,6 +4,6 @@ import type { SolutionsListSorter } from './SolutionsListSorter'
 export type SolutionsListParams = {
   title: string
   sorter: SolutionsListSorter
-  challengeId: string
+  challengeId: string | null
   userId: string | null
 } & PaginationParams

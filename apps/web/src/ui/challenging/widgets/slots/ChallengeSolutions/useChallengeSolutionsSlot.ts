@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { Solution } from '@stardust/core/challenging/entities'
 import type { SolutionsListSorter } from '@stardust/core/challenging/types'
@@ -37,7 +37,7 @@ export function useChallengeSolutionsSlot() {
   }
 
   const { data, isLoading, isRecheadedEnd, nextPage } = usePaginatedCache({
-    key: CACHE.keys.challengesList,
+    key: CACHE.keys.solutionsList,
     fetcher: fetchSolutionsList,
     itemsPerPage: SOLUTIONS_PER_PAGE,
     isInfinity: true,

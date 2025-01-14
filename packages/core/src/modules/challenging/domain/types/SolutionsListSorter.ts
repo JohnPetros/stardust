@@ -1,1 +1,1 @@
-export type SolutionsListSorter = 'date' | 'upvotesCount' | 'commentsCount'
+export type SolutionsListSorter = 'date' | 'upvotesCount' | 'commentsCount' | 'viewsCount'

@@ -1,10 +1,11 @@
 import type { ChallengeDifficultyLevel } from '#challenging/types'
-import type { ListingOrder, PaginationParams } from '#global/types'
+import type { ListOrder, ListParam, PaginationParams } from '#global/types'
 
 export type ChallengesListParams = {
-  difficultyLevel: ChallengeDifficultyLevel | 'all'
+  difficultyLevel: ListParam<ChallengeDifficultyLevel>
   title: string
   categoriesIds: string[]
-  postOrder: ListingOrder | 'all'
-  upvotesOrder: ListingOrder | 'all'
+  userId: string | null
+  postOrder: ListParam<ListOrder>
+  upvotesCountOrder: ListParam<ListOrder>
 } & PaginationParams

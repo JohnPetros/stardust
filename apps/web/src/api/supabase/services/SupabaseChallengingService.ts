@@ -113,8 +113,9 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       categoriesIds,
       difficultyLevel,
       postOrder,
-      upvotesOrder,
+      upvotesCountOrder,
       title,
+      userId,
     }: ChallengesListParams) {
       let query = supabase
         .from('challenges_view')
@@ -137,8 +138,20 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         query = query.order('created_at', { ascending: postOrder === 'ascending' })
       }
 
-      if (upvotesOrder !== 'all') {
-        query = query.order('upvotes', { ascending: upvotesOrder === 'ascending' })
+      if (upvotesCountOrder !== 'all') {
+        query = query.order('upvotes_count', {
+          ascending: upvotesCountOrder === 'ascending',
+        })
+      }
+
+      if (upvotesCountOrder !== 'all') {
+        query = query.order('upvotes_count', {
+          ascending: upvotesCountOrder === 'ascending',
+        })
+      }
+
+      if (userId) {
+        query = query.eq('user_id', userId)
       }
 
       if (categoriesIds.length) {
@@ -163,17 +176,18 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
     },
 
     async fetchSolutionsList({ page, itemsPerPage, title, sorter, userId, challengeId }) {
-      let query = supabase
-        .from('solutions_view')
-        .select('*', { count: 'exact' })
-        .eq('challenge_id', challengeId)
+      let query = supabase.from('solutions_view').select('*', { count: 'exact' })
 
-      if (title && title.length > 1) {
-        query = query.ilike('title', `%${title}%`)
+      if (challengeId) {
+        query = query.eq('challenge_id', challengeId)
       }
 
       if (userId) {
         query = query.eq('user_id', userId)
+      }
+
+      if (title && title.length > 1) {
+        query = query.ilike('title', `%${title}%`)
       }
 
       switch (sorter) {
@@ -189,6 +203,11 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
           break
         case 'commentsCount':
           query = query.order('comments_count', {
+            ascending: false,
+          })
+          break
+        case 'viewsCount':
+          query = query.order('views_count', {
             ascending: false,
           })
           break
