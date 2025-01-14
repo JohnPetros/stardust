@@ -18,7 +18,6 @@ export default async function Page({ params }: NextParams<{ challengeSlug: strin
   const authService = SupabaseAuthService(supabase)
   const authResponse = await authService.fetchUserId()
   const userId = authResponse.body
-
   if (challengeDto.author.id !== userId) throw new NotChallengeAuthorError()
 
   const categoriesResponse = await challengingService.fetchCategories()
