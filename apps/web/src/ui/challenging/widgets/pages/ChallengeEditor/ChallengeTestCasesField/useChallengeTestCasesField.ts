@@ -1,5 +1,4 @@
 import { useFieldArray, useFormContext } from 'react-hook-form'
-import { useState } from 'react'
 
 import type { ChallengeSchema } from '@stardust/validation/challenging/types'
 import type { DataTypeName } from '@stardust/core/challenging/types'
