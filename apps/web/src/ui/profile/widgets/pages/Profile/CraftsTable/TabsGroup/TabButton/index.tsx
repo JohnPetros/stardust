@@ -22,7 +22,7 @@ export function TabButton({ title, icon, value, isActive, onClick }: TabButtonPr
       value={value}
       onClick={onClick}
     >
-      <Icon name={icon} className='hidden text-lg text-green-500 md:block' />
+      <Icon name={icon} size={16} className='hidden text-lg text-green-500 md:block' />
       {title}
     </Tabs.Trigger>
   )

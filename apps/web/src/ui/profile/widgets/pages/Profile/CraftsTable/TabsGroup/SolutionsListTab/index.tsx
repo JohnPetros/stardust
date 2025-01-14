@@ -36,9 +36,7 @@ export function SolutionsListTab({ tabListSorter, userId }: ChallengesListProps)
           index={index}
           href={ROUTES.api.challenging.solution(solution.slug.value)}
         >
-          <Row.Title className='text-gray-900 font-semibold'>
-            {solution.title.value}
-          </Row.Title>
+          <Row.Title>{solution.title.value}</Row.Title>
           <CraftMetrics.Container>
             <CraftMetrics.Metric icon='calendar'>
               {new Datetime(solution.postedAt).getRelativeTime()}
@@ -46,13 +44,13 @@ export function SolutionsListTab({ tabListSorter, userId }: ChallengesListProps)
             <CraftMetrics.Metric icon='upvote'>
               {solution.upvotesCount.value}
             </CraftMetrics.Metric>
-            <CraftMetrics.Metric icon='upvote'>
+            <CraftMetrics.Metric icon='eye'>
               {solution.viewsCount.value}
             </CraftMetrics.Metric>
           </CraftMetrics.Container>
         </Row.Container>
       ))}
-      {isRecheadedEnd && (
+      {!isRecheadedEnd && (
         <ShowMoreButton isLoading={isLoading} onClick={nextPage} className='mt-3' />
       )}
     </ul>

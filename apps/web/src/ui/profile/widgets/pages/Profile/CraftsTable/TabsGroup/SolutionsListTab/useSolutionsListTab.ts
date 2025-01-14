@@ -4,10 +4,10 @@ import { Solution } from '@stardust/core/challenging/entities'
 
 import { CACHE } from '@/constants'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
-import type { TabListSorter } from '../../TabListSorter'
 import { useApi } from '@/ui/global/hooks/useApi'
+import type { TabListSorter } from '../../TabListSorter'
 
-const SOLUTIONS_PER_PAGE = 10
+const SOLUTIONS_PER_PAGE = 30
 
 export function useSolutionsListTab(tabListSorter: TabListSorter, userId: string) {
   const api = useApi()
@@ -30,6 +30,7 @@ export function useSolutionsListTab(tabListSorter: TabListSorter, userId: string
     fetcher: fetchSolutionsList,
     itemsPerPage: SOLUTIONS_PER_PAGE,
     isInfinity: true,
+    shouldRefetchOnFocus: false,
     dependencies: [tabListSorter],
   })
 

@@ -29,6 +29,7 @@ export function useChallengesListTab(tabListSorter: TabListSorter, userId: strin
     fetcher: fetchChallengesList,
     itemsPerPage: CHALLENGES_PER_PAGE,
     isInfinity: true,
+    shouldRefetchOnFocus: false,
     dependencies: [tabListSorter],
   })
 

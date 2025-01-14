@@ -201,7 +201,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       }
 
       if (userId) {
-        query = query.eq('user_id', userId)
+        query = query.eq('author_id', userId)
       }
 
       if (title && title.length > 1) {

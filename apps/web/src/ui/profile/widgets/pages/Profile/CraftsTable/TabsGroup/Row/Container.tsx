@@ -12,7 +12,7 @@ export function Container({ children, index, className, ...linkProps }: Containe
     <li>
       <Link
         className={twMerge(
-          'flex item-center justify-between p-6',
+          'rounded-md flex item-center justify-between p-6',
           className,
           (index + 1) % 2 === 0 ? 'bg-gray-800' : 'bg-gray-700',
         )}

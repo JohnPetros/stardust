@@ -15,6 +15,8 @@ export type IconName =
   | 'downvote'
   | 'calendar'
   | 'test'
+  | 'lightbulb'
+  | 'double-eyes'
   | 'description'
   | 'level'
   | 'tag'
