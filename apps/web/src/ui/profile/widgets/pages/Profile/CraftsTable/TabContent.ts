@@ -1,1 +1,1 @@
-export type TabContent = 'snippets-tab' | 'challenges-tab' | 'solutions-tab'
+export type TabContent = 'snippetsListTab' | 'challengesListTab' | 'solutionsListTab'

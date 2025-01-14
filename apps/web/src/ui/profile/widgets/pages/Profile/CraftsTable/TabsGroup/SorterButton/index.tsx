@@ -3,13 +3,13 @@ import { twMerge } from 'tailwind-merge'
 import type { IconName } from '@/ui/global/widgets/components/Icon/types'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 
-type OrderButtonProps = {
+type SorterButtonProps = {
   title: string
   isActive: boolean
   icon: IconName
 }
 
-export function OrderButton({ title, isActive, icon }: OrderButtonProps) {
+export function SorterButton({ title, isActive, icon }: SorterButtonProps) {
   return (
     <button
       type='button'
