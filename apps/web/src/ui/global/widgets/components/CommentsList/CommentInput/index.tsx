@@ -3,6 +3,8 @@
 import { useRef } from 'react'
 import { twMerge } from 'tailwind-merge'
 
+import { Text } from '@stardust/core/global/structs'
+
 import * as Toolbar from '@/ui/global/widgets/components/Toolbar'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { Mdx } from '../../Mdx'
@@ -10,9 +12,8 @@ import { UserAvatar } from '../../UserAvatar'
 import { Button } from '../../Button'
 import { Icon } from '../../Icon'
 import { useCommentInput } from './useCommentInput'
-import type { TextEditorRef } from '../../TextEditor/types'
 import { TextEditor } from '../../TextEditor'
-import { Text } from '@stardust/core/global/structs'
+import type { TextEditorRef } from '../../TextEditor/types'
 
 type CommentInputProps = {
   id: string

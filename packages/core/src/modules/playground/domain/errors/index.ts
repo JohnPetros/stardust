@@ -1,0 +1,1 @@
+export { SnippetNotPublicError } from './SnippetNotPublicError'

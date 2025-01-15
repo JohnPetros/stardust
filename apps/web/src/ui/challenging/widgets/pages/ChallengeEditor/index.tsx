@@ -29,17 +29,17 @@ export function ChallengeEditorPage({
   const {
     form,
     canSubmitForm,
-    shouldUpdateChallenge,
+    shouldEditChallenge,
     isFormSubmitting,
-    isSubmitSuccess,
-    isSubmitFailure,
+    isActionSuccess,
+    isActionFailure,
     handleFormSubmit,
   } = useChallengeEditorPage(challengeDto)
   const ACTION_BUTTON_TITLES: ActionButtonTitles = {
-    canExecute: shouldUpdateChallenge ? 'atualizar?' : 'postar?',
-    executing: shouldUpdateChallenge ? 'atualizando...' : 'postando...',
-    default: shouldUpdateChallenge ? 'atualizar' : 'postar',
-    success: shouldUpdateChallenge ? 'atualizado' : 'postado',
+    canExecute: shouldEditChallenge ? 'atualizar?' : 'postar?',
+    executing: shouldEditChallenge ? 'atualizando...' : 'postando...',
+    default: shouldEditChallenge ? 'atualizar' : 'postar',
+    success: shouldEditChallenge ? 'atualizado' : 'postado',
     failure: 'erro',
   }
 
@@ -52,8 +52,8 @@ export function ChallengeEditorPage({
           canExecute={canSubmitForm}
           isExecuting={isFormSubmitting}
           isDisabled={!canSubmitForm}
-          isSuccess={isSubmitSuccess}
-          isFailure={isSubmitFailure}
+          isSuccess={isActionSuccess}
+          isFailure={isActionFailure}
           icon='send'
           className='w-max'
         />

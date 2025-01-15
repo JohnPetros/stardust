@@ -1,9 +1,10 @@
 'use client'
 
-import { type FormEvent, type RefObject, useEffect, useRef, useState } from 'react'
+import { type FormEvent, type RefObject, useEffect, useState } from 'react'
 
 import { Text } from '@stardust/core/global/structs'
 import { ValidationError } from '@stardust/core/global/errors'
+
 import type { TextEditorRef, TextEditorSnippet } from '../../TextEditor/types'
 
 type UseCommentInput = {

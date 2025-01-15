@@ -1,15 +1,13 @@
 import { type KeyboardEvent, type RefObject, useRef } from 'react'
-import type { EditorRef } from '../Editor/types'
+import type { CodeEditorRef } from '../CodeEditor/types'
 
 type UseCodeEditorToolbarParams = {
-  previousUserCode: RefObject<string>
-  codeEditorRef: RefObject<EditorRef>
+  codeEditorRef: RefObject<CodeEditorRef>
   runCodeButtonRef: RefObject<HTMLButtonElement>
   docsDialogButtonRef: RefObject<HTMLButtonElement>
 }
 
 export function useCodeEditorToolbar({
-  previousUserCode,
   codeEditorRef,
   runCodeButtonRef,
   docsDialogButtonRef,
@@ -17,11 +15,11 @@ export function useCodeEditorToolbar({
   const hasCodedEditorReset = useRef(false)
 
   function resetCode() {
-    codecodeEditorRef.current?.reloadValue()
+    codeEditorRef.current?.reloadValue()
   }
 
   function handleAltEnter() {
-    if (!codecodeEditorRef.current) return
+    if (!codeEditorRef.current) return
     runCodeButtonRef.current?.click()
   }
 
@@ -39,10 +37,10 @@ export function useCodeEditorToolbar({
   }
 
   function handleCtrlDot() {
-    const currentValue = codecodeEditorRef.current?.getValue()
+    const currentValue = codeEditorRef.current?.getValue()
     if (!currentValue) return
 
-    const selectedLinesRange = codecodeEditorRef.current?.getSelectedLinesRange()
+    const selectedLinesRange = codeEditorRef.current?.getSelectedLinesRange()
     if (!selectedLinesRange) return
 
     const lines = currentValue.split('\n')
@@ -54,8 +52,8 @@ export function useCodeEditorToolbar({
 
     const newLines = lines.map((line) => handleSelectedLines(line, selectedLines))
 
-    codecodeEditorRef.current?.setValue(newLines.join('\n'))
-    codecodeEditorRef.current?.setCursorPosition({
+    codeEditorRef.current?.setValue(newLines.join('\n'))
+    codeEditorRef.current?.setCursorPosition({
       lineNumber: selectedLinesRange.start,
       columnNumber: 1,
     })
@@ -68,16 +66,7 @@ export function useCodeEditorToolbar({
   }
 
   function handleCtrlZ() {
-    if (
-      hasCodedEditorReset.current &&
-      codecodeEditorRef.current &&
-      previousUserCode.current
-    ) {
-      const cursorPosition = codecodeEditorRef.current?.getCursorPosition()
-
-      codecodeEditorRef.current.setValue(previousUserCode.current)
-      if (cursorPosition) codecodeEditorRef.current?.setCursorPosition(cursorPosition)
-    }
+    // TODO: handleCtrlZ
   }
 
   function handleKeyDown({ altKey, ctrlKey, key }: KeyboardEvent) {

@@ -53,8 +53,8 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
         })) ?? [],
     },
   })
-  const [isSubmitSuccess, setIsSubmitSuccess] = useState(false)
-  const [isSubmitFailure, setIsSubmitFailure] = useState(false)
+  const [isActionSuccess, setisActionSuccess] = useState(false)
+  const [isActionFailure, setIsActionFailure] = useState(false)
   const { isPosting, isPostFailure, postChallenge } = usePostChallengeAction({
     onSuccess: handleActionSuccess,
   })
@@ -81,21 +81,21 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
   }
 
   function handleActionSuccess(challengeSlug: string) {
-    setIsSubmitSuccess(true)
+    setisActionSuccess(true)
     router.goTo(ROUTES.challenging.challenges.challenge(challengeSlug))
   }
 
   useEffect(() => {
-    if (allFields && !form.formState.isSubmitSuccessful) setIsSubmitSuccess(false)
+    if (allFields && !form.formState.isSubmitSuccessful) setisActionSuccess(false)
   }, [allFields, form.formState.isSubmitSuccessful])
 
   useEffect(() => {
     if (allFields) {
-      setIsSubmitFailure(false)
+      setIsActionFailure(false)
       return
     }
 
-    setIsSubmitFailure(
+    setIsActionFailure(
       isPostFailure || isEditFailure || Object.keys(form.formState.errors).length > 0,
     )
   }, [allFields, isPostFailure, isEditFailure, form.formState.errors])
@@ -109,8 +109,8 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
     canSubmitForm,
     shouldEditChallenge: challenge,
     isFormSubmitting: form.formState.isSubmitting || isPosting || isEditing,
-    isSubmitFailure,
-    isSubmitSuccess,
+    isActionFailure,
+    isActionSuccess,
     handleFormSubmit: form.handleSubmit(handleSubmit),
   }
 }

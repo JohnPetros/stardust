@@ -1,17 +1,17 @@
 import type { NextRequest } from 'next/server'
 import { z } from 'zod'
 
-import { stringSchema } from '@stardust/validation/global/schemas'
+import { idSchema } from '@stardust/validation/global/schemas'
 
+import { GetSnippetController } from '@/api/controllers/playground'
 import { NextHttp } from '@/api/next/NextHttp'
 import { runApiRoute } from '@/api/next/utils'
 import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
-import { SupabaseChallengingService } from '@/api/supabase/services'
-import { AccessSolutionPageController } from '@/api/controllers/challenging'
+import { SupabasePlaygroundService } from '@/api/supabase/services'
 
 const schema = z.object({
   routeParams: z.object({
-    solutionSlug: stringSchema,
+    snippetId: idSchema,
   }),
 })
 
@@ -19,10 +19,10 @@ type Schema = z.infer<typeof schema>
 
 export async function GET(request: NextRequest) {
   return await runApiRoute(async () => {
-    const http = await NextHttp<Schema>({ request, schema })
+    const http = await NextHttp<Schema>({ schema, request })
     const supabase = SupabaseRouteHandlerClient()
-    const challengingService = SupabaseChallengingService(supabase)
-    const controller = AccessSolutionPageController(challengingService)
+    const playgroundService = SupabasePlaygroundService(supabase)
+    const controller = GetSnippetController(playgroundService)
     return await controller.handle(http)
   })
 }

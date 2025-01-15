@@ -37,7 +37,6 @@ export function SolutionPage({
     handleSolutionEdit,
   } = useSolutionPage(savedSolutionDto, challengeId, challengeSlug)
   const { goBack } = useRouter()
-
   const ACTION_BUTTON_TITLES: ActionButtonTitles = {
     canExecute: savedSolutionDto ? 'atualizar?' : 'postar?',
     executing: savedSolutionDto ? 'atualizando...' : 'postando...',
@@ -58,7 +57,7 @@ export function SolutionPage({
         />
         <div className='flex items-center justify-end gap-3'>
           <Button onClick={goBack} className='bg-gray-600 text-gray-50 w-24'>
-            Cancelar
+            Voltar
           </Button>
           <ActionButton
             type='button'

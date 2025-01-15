@@ -33,45 +33,14 @@ export function useSolutionPage(
     solutionTitle: '',
     solutionContent: '',
   })
-  const toast = useToastContext()
   const { goTo } = useRouter()
   const { isPosting, postSolution } = usePostSolutionAction({
-    onSuccess: (solution) => {
-      setSolution(solution)
-      setIsSuccess(true)
-      toast.show('Sua solução foi postada', { type: 'success' })
-      goTo(
-        ROUTES.challenging.challenges.challengeSolutions.solution(
-          challengeSlug,
-          solution.slug.value,
-        ),
-      )
-    },
-    onError(solutionTitleError, solutionContentError) {
-      setFieldErrors({
-        solutionTitle: solutionTitleError,
-        solutionContent: solutionContentError,
-      })
-    },
+    onSuccess: handleActionSuccess,
+    onError: handleActionError,
   })
   const { isEditing, editSolution } = useEditSolutionAction({
-    onSuccess: (solution) => {
-      setSolution(solution)
-      setIsSuccess(true)
-      toast.show('Sua solução foi editada', { type: 'success' })
-      goTo(
-        ROUTES.challenging.challenges.challengeSolutions.solution(
-          challengeSlug,
-          solution.slug.value,
-        ),
-      )
-    },
-    onError(solutionTitleError, solutionContentError) {
-      setFieldErrors({
-        solutionTitle: solutionTitleError,
-        solutionContent: solutionContentError,
-      })
-    },
+    onSuccess: handleActionSuccess,
+    onError: handleActionError,
   })
 
   function handleTitleChange(title: string) {
@@ -89,6 +58,24 @@ export function useSolutionPage(
       solutionContent: '',
     })
     setSolutionContent(content)
+  }
+
+  function handleActionSuccess(solution: Solution) {
+    setSolution(solution)
+    setIsSuccess(true)
+    goTo(
+      ROUTES.challenging.challenges.challengeSolutions.solution(
+        challengeSlug,
+        solution.slug.value,
+      ),
+    )
+  }
+
+  function handleActionError(solutionTitleError: string, solutionContentError: string) {
+    setFieldErrors({
+      solutionTitle: solutionTitleError,
+      solutionContent: solutionContentError,
+    })
   }
 
   async function handleSolutionPost() {

@@ -10,17 +10,25 @@ import { Snippet } from '@stardust/core/playground/entities'
 
 type EditSnippetActionProps = {
   onSuccess: (snippet: Snippet) => void
-  onError: VoidFunction
+  onError: (snippetTitleErrorMessage: string, snippetCodeErrorMessage: string) => void
 }
 
 const action = playgroundActions.editSnippet
 
 export function useEditSnippetAction({ onSuccess, onError }: EditSnippetActionProps) {
   const toast = useToastContext()
-  const { executeAsync, isPending, hasErrored } = useAction(action, {
+  const { executeAsync, isPending, hasErrored, result } = useAction(action, {
     onError: ({ error }) => {
       if (error.serverError) toast.show(error.serverError)
-      onError()
+      if (error.validationErrors)
+        onError(
+          error.validationErrors.snippetTitle
+            ? String(error.validationErrors.snippetTitle[0])
+            : '',
+          error.validationErrors.snippetCode
+            ? String(error.validationErrors.snippetCode[0])
+            : '',
+        )
     },
     onSuccess: ({ data }) => {
       if (data) onSuccess(Snippet.create(data))
@@ -38,6 +46,7 @@ export function useEditSnippetAction({ onSuccess, onError }: EditSnippetActionPr
   return {
     isEditing: isPending,
     isEditFailure: hasErrored,
+    editSnippetValidationErrors: result.validationErrors,
     editSnippet,
   }
 }

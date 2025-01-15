@@ -14,6 +14,7 @@ import { SupabasePlaygroundService } from '@/api/supabase/services'
 import { authActionClient } from './clients/authActionClient'
 import { NextActionServer } from '../next/NextActionServer'
 import { CreateSnippetAction, EditSnippetAction } from '../actions/playground'
+import { flattenValidationErrors } from 'next-safe-action'
 
 export const editSnippet = authActionClient
   .schema(
@@ -21,7 +22,12 @@ export const editSnippet = authActionClient
       snippetId: idSchema,
       snippetTitle: titleSchema.optional(),
       snippetCode: stringSchema.optional(),
+      isSnippetPublic: booleanSchema.optional(),
     }),
+    {
+      handleValidationErrorsShape: async (errors) =>
+        flattenValidationErrors(errors).fieldErrors,
+    },
   )
   .action(async ({ clientInput }) => {
     const actionServer = NextActionServer({
@@ -40,6 +46,10 @@ export const createSnippet = authActionClient
       snippetCode: stringSchema,
       isSnippetPublic: booleanSchema,
     }),
+    {
+      handleValidationErrorsShape: async (errors) =>
+        flattenValidationErrors(errors).fieldErrors,
+    },
   )
   .action(async ({ clientInput, ctx }) => {
     const actionServer = NextActionServer({

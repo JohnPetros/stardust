@@ -8,8 +8,8 @@ export async function PUT() {
   return await runApiRoute(async () => {
     const http = await NextHttp()
     const supabase = SupabaseRouteHandlerClient()
-    const rankingsService = SupabaseRankingService(supabase)
-    const controller = UpdateRakingsController(rankingsService)
+    const rankingService = SupabaseRankingService(supabase)
+    const controller = UpdateRakingsController(rankingService)
     return await controller.handle(http)
   })
 }
