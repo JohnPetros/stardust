@@ -21,8 +21,8 @@ import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/
 import { useSnippetPage } from './useSnippetPage'
 import { ShareSnippetDialog } from '../../components/ShareSnippetDialog'
 
-const HEADER_HEIGHT = 72
-const SAVE_BUTTON_CONTAINER_HEIGHT = 32
+const HEADER_HEIGHT = 68
+const SAVE_BUTTON_CONTAINER_HEIGHT = 12
 const CODE_EDITOR_MARGIN_TOP = 24
 
 type SnippetPageProps = {
@@ -78,7 +78,7 @@ export function SnippetPage({ snippetDto }: SnippetPageProps) {
                 value={value}
                 onChange={onChange}
                 placeholder='Título do seu snippet'
-                className='bg-gray-800 text-gray-50'
+                className=' text-gray-50 bg-gray-800'
                 errorMessage={snippetErrors.title}
               />
             )
@@ -101,46 +101,57 @@ export function SnippetPage({ snippetDto }: SnippetPageProps) {
             cancel={<Button className='bg-gray-400 text-gray-800'>Cancelar</Button>}
           />
 
-          <Button onClick={goBack} className='bg-gray-600 text-gray-50 w-16'>
-            Voltar
-          </Button>
-          <ActionButton
-            type='button'
-            titles={ACTION_BUTTON_TITLES}
-            isExecuting={isActionExecuting}
-            canExecute={canExecuteAction}
-            isSuccess={isActionSuccess}
-            isFailure={isActionFailure}
-            isDisabled={isActionDisabled}
-            onExecute={handleActionButtonClick}
-            icon='cloud'
-            className='w-28'
-          />
-          {isUserSnippetAuthor && isSnippetPublic && (
-            <ShareSnippetDialog snippetId={snippetId}>
-              <Button className='flex w-max items-center gap-1 px-3'>
-                <Icon name='share' size={16} className='text-gray-900' weight='bold' />
-                Compatilhar
+          <div className='absolute md:sticky bottom-0 left-0 right-0 z-50 py-3 bg-gray-800 flex xs:items-end justify-center lg:justify-end gap-2 w-full mt-6 xs:mt-0'>
+            <div className='flex items-end gap-2'>
+              <Button onClick={goBack} className='bg-gray-600 text-gray-50 w-16'>
+                Voltar
               </Button>
-            </ShareSnippetDialog>
-          )}
-          {isUserSnippetAuthor && (
-            <Controller
-              control={formControl}
-              name='isSnippetPublic'
-              render={({ field: { onChange } }) => {
-                return (
-                  <Switch
-                    label='Público'
-                    name='is-public'
-                    value='public'
-                    defaultCheck={isSnippetPublic}
-                    onCheck={onChange}
-                  />
-                )
-              }}
-            />
-          )}
+              <ActionButton
+                type='button'
+                titles={ACTION_BUTTON_TITLES}
+                isExecuting={isActionExecuting}
+                canExecute={canExecuteAction}
+                isSuccess={isActionSuccess}
+                isFailure={isActionFailure}
+                isDisabled={isActionDisabled}
+                onExecute={handleActionButtonClick}
+                icon='cloud'
+                className='w-28'
+              />
+            </div>
+            <div className='flex items-end gap-2'>
+              {isUserSnippetAuthor && isSnippetPublic && (
+                <ShareSnippetDialog snippetId={snippetId}>
+                  <Button className='flex w-max items-center gap-1 px-3'>
+                    <Icon
+                      name='share'
+                      size={16}
+                      className='text-gray-900'
+                      weight='bold'
+                    />
+                    Compatilhar
+                  </Button>
+                </ShareSnippetDialog>
+              )}
+              {isUserSnippetAuthor && (
+                <Controller
+                  control={formControl}
+                  name='isSnippetPublic'
+                  render={({ field: { onChange } }) => {
+                    return (
+                      <Switch
+                        label='Público'
+                        name='is-public'
+                        value='public'
+                        defaultCheck={isSnippetPublic}
+                        onCheck={onChange}
+                      />
+                    )
+                  }}
+                />
+              )}
+            </div>
+          </div>
         </div>
       </header>
 
