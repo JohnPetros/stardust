@@ -1,8 +1,8 @@
 'use client'
 
+import { Pagination } from '@/ui/global/widgets/components/Pagination'
 import { SnippetCard } from './SnippetCard'
 import { useSnippetsList } from './useSnippetsList'
-import { Pagination } from '@/ui/global/widgets/components/Pagination'
 import { SnippetCardsSkeleton } from '../SnippetCardsSkeleton'
 
 export function SnippetsList() {
@@ -33,7 +33,7 @@ export function SnippetsList() {
           ))}
 
         {!isLoading && snippets.length === 0 && (
-          <p className='text-gray-500 text-center text-lg font-medium'>
+          <p className='col-span-2 text-center text-gray-500 text-lg font-medium'>
             Você não criou nenhum snippet ainda 😢.
           </p>
         )}

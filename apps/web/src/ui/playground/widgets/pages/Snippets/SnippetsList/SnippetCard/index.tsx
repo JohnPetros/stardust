@@ -9,7 +9,7 @@ import { Prompt } from '@/ui/global/widgets/components/Prompt'
 import { Separator } from '@/ui/global/widgets/components/Separator'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useSnippetCard } from './useSnippetCard'
-import { ShareSnippetDialog } from '../ShareSnippetDialog'
+import { ShareSnippetDialog } from '@/ui/playground/widgets/components/ShareSnippetDialog'
 
 type SnippetCardProps = {
   id: string
@@ -30,13 +30,13 @@ export function SnippetCard({ id, title: initialTitle, onDelete }: SnippetCardPr
     <>
       <div className='flex min-w-[16rem] cursor-pointer flex-col gap-3 rounded-md bg-green-900 p-4 shadow-md'>
         <Link href={snippetUrl} className='flex w-full items-center gap-2'>
-          <Icon name='code' className='text-lg text-green-500' weight='bold' />
+          <Icon name='code' size={18} className='text-lg text-green-500' weight='bold' />
           <strong className='flex items-center gap-3 text-gray-100'>
             {snippetTitle}
           </strong>
         </Link>
         <Separator className='bg-green-700' isColumn={false} />
-        <Toolbar.Container className='justify-end'>
+        <Toolbar.Container className='flex justify-end gap-2'>
           <AlertDialog
             type='crying'
             title='Você está preste a deletar um filho seu 😢!'

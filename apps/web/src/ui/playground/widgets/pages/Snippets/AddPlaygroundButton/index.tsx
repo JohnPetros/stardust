@@ -1,8 +1,8 @@
 'use client'
 
 import { ROUTES } from '@/constants'
-import { PlusCircle } from '@phosphor-icons/react'
-import { Button } from '@radix-ui/react-toolbar'
+import { Button } from '@/ui/global/widgets/components/Button'
+import { Icon } from '@/ui/global/widgets/components/Icon'
 import Link from 'next/link'
 
 export function AddSnippetButton() {
@@ -12,7 +12,7 @@ export function AddSnippetButton() {
         href={ROUTES.playground.snippet()}
         className='flex w-max items-center gap-2 px-3 text-sm'
       >
-        <PlusCircle className='text-lg text-gray-900' weight='bold' />
+        <Icon name='plus-circle' className='text-lg text-gray-900' weight='bold' />
         Criar Novo Snippet
       </Link>
     </Button>

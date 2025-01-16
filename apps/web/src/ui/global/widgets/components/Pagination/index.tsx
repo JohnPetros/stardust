@@ -15,7 +15,7 @@ export function Pagination(paginationProps: PaginationProps) {
   const { pagination, maxPageButtons, handlePageButtonCLick } =
     usePagination(paginationProps)
 
-  if (pagination)
+  if (pagination.pagesCount > 1)
     return (
       <div className='flex w-full space-x-3'>
         <PageButton

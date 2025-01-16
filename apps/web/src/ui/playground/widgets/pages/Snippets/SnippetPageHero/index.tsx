@@ -5,8 +5,8 @@ export function SnippetPageHero() {
     <div className='flex w-max flex-col items-center gap-12'>
       <Image
         src='/images/rocket.svg'
-        width={180}
-        height={180}
+        width={160}
+        height={160}
         priority
         alt='Foguete com tons esverdeados rodeado de estrelas flututando para cima e para baixo repetidamente.'
       />
@@ -18,7 +18,7 @@ export function SnippetPageHero() {
           priority
           alt='Estar Dâsti'
         />
-        <h1 className='text-xl font-medium tracking-widest text-green-400'>Playground</h1>
+        <h1 className='text-xl text-green-400'>Playground</h1>
       </div>
     </div>
   )

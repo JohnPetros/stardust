@@ -1,7 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-
 import { Snippet } from '@stardust/core/playground/entities'
 
 import { CACHE } from '@/constants'
@@ -31,6 +29,7 @@ export function useSnippetsList() {
     usePaginatedCache({
       key: CACHE.keys.shopRockets,
       fetcher: fetchSnippets,
+      shouldRefetchOnFocus: false,
       itemsPerPage: SNIPPETS_PER_PAGE,
       isEnabled: Boolean(user),
     })
