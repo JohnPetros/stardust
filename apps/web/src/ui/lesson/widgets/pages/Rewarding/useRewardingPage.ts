@@ -36,9 +36,8 @@ export function useRewardingPage(newLevel: number | null, nextRoute: string) {
 
   const goToNextRoute = useCallback(async () => {
     setIsLoading(true)
-
     router.goTo(nextRoute)
-  }, [nextRoute, user, router.goTo, updateUser])
+  }, [nextRoute, router.goTo])
 
   async function handleSecondButtonClick() {
     await goToNextRoute()

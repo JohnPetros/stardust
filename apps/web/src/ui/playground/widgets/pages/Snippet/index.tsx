@@ -16,8 +16,10 @@ import { PlaygroundCodeEditor } from '@/ui/global/widgets/components/PlaygroundC
 import { ErrorMessage } from '@/ui/global/widgets/components/ErrorMessage'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { Button } from '@/ui/global/widgets/components/Button'
-import { ShareSnippetDialog } from '../../components/ShareSnippetDialog'
+import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
+import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useSnippetPage } from './useSnippetPage'
+import { ShareSnippetDialog } from '../../components/ShareSnippetDialog'
 
 const HEADER_HEIGHT = 72
 const SAVE_BUTTON_CONTAINER_HEIGHT = 32
@@ -29,6 +31,8 @@ type SnippetPageProps = {
 
 export function SnippetPage({ snippetDto }: SnippetPageProps) {
   const playgroudCodeEditorRef = useRef<PlaygroundCodeEditorRef>(null)
+  const authAlertDialogRef = useRef<AlertDialogRef>(null)
+  const unsaveSnippetAlertDialogRef = useRef<AlertDialogRef>(null)
   const {
     pageHeight,
     formControl,
@@ -43,7 +47,13 @@ export function SnippetPage({ snippetDto }: SnippetPageProps) {
     isActionExecuting,
     handleRunCode,
     handleActionButtonClick,
-  } = useSnippetPage(playgroudCodeEditorRef, snippetDto)
+    handleAuthAlertDialogConfirm,
+  } = useSnippetPage({
+    playgroudCodeEditorRef,
+    authAlertDialogRef,
+    unsaveSnippetAlertDialogRef,
+    snippetDto,
+  })
   const { goBack } = useRouter()
   const ACTION_BUTTON_TITLES: ActionButtonTitles = {
     canExecute: 'salvar?',
@@ -80,6 +90,19 @@ export function SnippetPage({ snippetDto }: SnippetPageProps) {
           className='flex items-center justify-end gap-3'
           style={{ height: SAVE_BUTTON_CONTAINER_HEIGHT }}
         >
+          <AlertDialog
+            ref={authAlertDialogRef}
+            type='denying'
+            title='Negado!'
+            body={
+              <p className='text-center leading-8 text-gray-100'>
+                Primeiro, faça login na sua conta antes de salvar seu snippet
+              </p>
+            }
+            action={<Button onClick={handleAuthAlertDialogConfirm}>Fazer login</Button>}
+            cancel={<Button className='bg-gray-400 text-gray-800'>Cancelar</Button>}
+          />
+
           <Button onClick={goBack} className='bg-gray-600 text-gray-50 w-16'>
             Voltar
           </Button>

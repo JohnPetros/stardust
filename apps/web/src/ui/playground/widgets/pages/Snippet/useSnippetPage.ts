@@ -19,6 +19,9 @@ import {
   stringSchema,
   titleSchema,
 } from '@stardust/validation/global/schemas'
+import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
+import { useRouter } from '@/ui/global/hooks'
+import { ROUTES } from '@/constants'
 
 const snippetSchema = z.object({
   snippetId: idSchema,
@@ -28,10 +31,20 @@ const snippetSchema = z.object({
 })
 
 type SnippetSchema = z.infer<typeof snippetSchema>
-export function useSnippetPage(
-  playgroudCodeEditorRef: RefObject<PlaygroundCodeEditorRef>,
-  snippetDto?: SnippetDto,
-) {
+
+type UseSnippetPageParams = {
+  playgroudCodeEditorRef: RefObject<PlaygroundCodeEditorRef>
+  authAlertDialogRef: RefObject<AlertDialogRef>
+  unsaveSnippetAlertDialogRef: RefObject<AlertDialogRef>
+  snippetDto?: SnippetDto
+}
+
+export function useSnippetPage({
+  snippetDto,
+  playgroudCodeEditorRef,
+  authAlertDialogRef,
+  unsaveSnippetAlertDialogRef,
+}: UseSnippetPageParams) {
   const snippet = snippetDto ? Snippet.create(snippetDto) : null
   const [snippetErrors, setSnippetErrors] = useState({ title: '', code: '' })
   const [isActionSuccess, setIsActionSuccess] = useState(false)
@@ -56,6 +69,7 @@ export function useSnippetPage(
     },
   })
   const windowSize = useWindowSize()
+  const router = useRouter()
   const formValues = getValues()
 
   async function handleActionSuccess(snippet: Snippet) {
@@ -77,7 +91,10 @@ export function useSnippetPage(
   }
 
   async function handleActionButtonClick() {
-    if (!user) return
+    if (!user) {
+      authAlertDialogRef.current?.open()
+      return
+    }
     setSnippetErrors({ title: '', code: '' })
 
     const { snippetId, snippetTitle, snippetCode, isSnippetPublic } = getValues()
@@ -95,6 +112,12 @@ export function useSnippetPage(
     playgroudCodeEditorRef.current?.runCode()
   }
 
+  function handleAuthAlertDialogConfirm() {
+    router.goTo(
+      `${ROUTES.auth.signIn}?nextRoute=${ROUTES.playground.snippet(snippet?.id)}`,
+    )
+  }
+
   useEffect(() => {
     const subscription = watch(() => {
       setIsActionSuccess(false)
@@ -107,7 +130,11 @@ export function useSnippetPage(
     setIsUserSnippetAuthor(snippet && user ? snippet.authorId === user.id : false)
   }, [snippet, user])
 
-  console.log({ isActionFailure })
+  useEffect(() => {
+    window.addEventListener('beforeunload', (event) => {
+      event.preventDefault() // Required for modern browsers
+    })
+  }, [])
 
   return {
     pageHeight: windowSize.height,
@@ -123,5 +150,6 @@ export function useSnippetPage(
     isActionSuccess,
     handleRunCode,
     handleActionButtonClick,
+    handleAuthAlertDialogConfirm,
   }
 }

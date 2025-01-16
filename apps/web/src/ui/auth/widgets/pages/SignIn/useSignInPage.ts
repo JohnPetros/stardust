@@ -8,12 +8,14 @@ import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { ROCKET_ANIMATION_DELAY } from '@/ui/auth/constants'
 import { ROUTES } from '@/constants'
 import { waitFor } from '@/utils'
-import { useRouter } from '@/ui/global/hooks'
+import { useRouter } from '@/ui/global/hooks/useRouter'
 import { Slug } from '@stardust/core/global/structs'
 import type { SignInFormFields } from './SignInForm/types'
+import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 
 export function useSignInPage(url: string, rocketAnimationRef: RefObject<AnimationRef>) {
   const [isRocketVisible, setIsRocketVisible] = useState(false)
+  const [nextRoute] = useQueryStringParam('nextRoute')
 
   const { handleSignIn } = useAuthContext()
   const toast = useToastContext()
@@ -31,6 +33,11 @@ export function useSignInPage(url: string, rocketAnimationRef: RefObject<Animati
     rocketAnimationRef.current?.restart()
 
     await waitFor(3000) // 3 seconds
+
+    if (nextRoute) {
+      router.goTo(nextRoute)
+      return
+    }
 
     router.goTo(ROUTES.space)
   }
