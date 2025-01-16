@@ -94,7 +94,7 @@ export function SnippetPage({ snippetDto }: SnippetPageProps) {
           />
           {isUserSnippetAuthor && isSnippetPublic && (
             <ShareSnippetDialog snippetId={snippetId}>
-              <Button className='flex w-max items-center gap-2 px-3'>
+              <Button className='flex w-max items-center gap-1 px-3'>
                 <Icon name='share' size={16} className='text-gray-900' weight='bold' />
                 Compatilhar
               </Button>

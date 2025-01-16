@@ -53,7 +53,7 @@ export function Switch({
         <Thumb
           className={twMerge(
             'block size-4 rounded-full transition-transform',
-            isChecked ? 'translate-x-4 bg-green-400' : 'bg-green-600',
+            isChecked ? 'translate-x-4 bg-green-400' : 'bg-green-700',
           )}
         />
       </Root>

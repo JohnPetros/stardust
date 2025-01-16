@@ -17,10 +17,12 @@ type SnippetProps = {
 }
 
 export class Snippet extends Entity<SnippetProps> {
+  static readonly DEFEAULT_TITLE = 'Sem título'
+
   static create(dto: SnippetDto) {
     return new Snippet(
       {
-        title: Name.create(dto.title ?? 'Sem título'),
+        title: Name.create(dto.title ?? Snippet.DEFEAULT_TITLE),
         code: Text.create(dto.code),
         isPublic: Logical.create(dto.isPublic),
         author: {

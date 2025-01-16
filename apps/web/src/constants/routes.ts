@@ -42,7 +42,7 @@ export const ROUTES = {
   playground: {
     snippets: '/playground/snippets',
     snippet: (snippetId?: string) =>
-      snippetId ? '/playground/snippets/new' : `/playground/snippets/${snippetId}`,
+      snippetId ? `/playground/snippets/${snippetId}` : '/playground/snippets/new',
   },
   auth: {
     signIn: '/auth/sign-in',
@@ -76,7 +76,7 @@ export const ROUTES = {
       solution: (solutionSlug: string) => `/api/challenging/solution/${solutionSlug}`,
     },
     playground: {
-      snippet: (snippets: string) => `/api/playground/snippets/${snippetId}`,
+      snippet: (snippetId: string) => `/api/playground/snippets/${snippetId}`,
     },
   },
 } as const

@@ -25,7 +25,6 @@ const snippetSchema = z.object({
   snippetTitle: titleSchema,
   snippetCode: stringSchema,
   isSnippetPublic: booleanSchema.default(true),
-  isUserSnippetAuthor: booleanSchema,
 })
 
 type SnippetSchema = z.infer<typeof snippetSchema>
@@ -37,6 +36,7 @@ export function useSnippetPage(
   const snippet = snippetDto ? Snippet.create(snippetDto) : null
   const [isActionSuccess, setIsActionSuccess] = useState(false)
   const [isActionFailure, setIsActionFailure] = useState(false)
+  const [isUserSnippetAuthor, setIsUserSnippetAuthor] = useState(false)
   const { user } = useAuthContext()
   const { editSnippet, isEditing, isEditFailure } = useEditSnippetAction({
     onSuccess: handleActionSuccess,
@@ -46,21 +46,27 @@ export function useSnippetPage(
     onSuccess: handleActionSuccess,
     onError: handleActionError,
   })
-  const { control, formState, getValues, setValue, watch } = useForm<SnippetSchema>({
-    resolver: zodResolver(snippetSchema),
-    defaultValues: {
-      snippetTitle: snippet?.title.value ?? '',
-      snippetCode: snippet?.code.value ?? '',
-      isSnippetPublic: snippet?.isPublic.value ?? true,
-      isUserSnippetAuthor: snippet && user ? snippet.authorId === user.id : false,
-    },
-  })
+  const { control, formState, getValues, setValue, reset, watch } =
+    useForm<SnippetSchema>({
+      resolver: zodResolver(snippetSchema),
+      defaultValues: {
+        snippetId: snippet?.id,
+        snippetTitle: snippet?.title.value ?? Snippet.DEFEAULT_TITLE,
+        snippetCode: snippet?.code.value ?? '',
+        isSnippetPublic: snippet?.isPublic.value ?? true,
+      },
+    })
   const windowSize = useWindowSize()
   const formValues = watch()
 
   async function handleActionSuccess(snippet: Snippet) {
-    setValue('snippetId', snippet.id)
-    setValue('isUserSnippetAuthor', true)
+    setIsUserSnippetAuthor(snippet.isPublic.isTrue)
+    reset({
+      snippetId: snippet.id,
+      snippetTitle: snippet.title.value,
+      snippetCode: snippet.code.value,
+      isSnippetPublic: snippet.isPublic.value,
+    })
   }
 
   async function handleActionError(
@@ -100,16 +106,20 @@ export function useSnippetPage(
     setIsActionFailure(isCreateFailure || isEditFailure)
   }, [isCreateFailure, isEditFailure])
 
+  useEffect(() => {
+    setIsUserSnippetAuthor(snippet && user ? snippet.authorId === user.id : false)
+  }, [snippet, user])
+
   return {
     pageHeight: windowSize.height,
     formControl: control,
     snippetErrors,
     snippetId: formValues.snippetId,
     canExecuteAction: formState.isDirty,
-    isUserSnippetAuthor: formValues.isUserSnippetAuthor,
     isSnippetPublic: formValues.isSnippetPublic,
     isActionDisabled: formValues.snippetTitle === '' && formValues.snippetCode === '',
     isActionExecuting: isCreating || isEditing,
+    isUserSnippetAuthor,
     isActionFailure,
     isActionSuccess,
     handleRunCode,
