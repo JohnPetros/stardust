@@ -32,7 +32,6 @@ type SnippetPageProps = {
 export function SnippetPage({ snippetDto }: SnippetPageProps) {
   const playgroudCodeEditorRef = useRef<PlaygroundCodeEditorRef>(null)
   const authAlertDialogRef = useRef<AlertDialogRef>(null)
-  const unsaveSnippetAlertDialogRef = useRef<AlertDialogRef>(null)
   const {
     pageHeight,
     formControl,
@@ -51,7 +50,6 @@ export function SnippetPage({ snippetDto }: SnippetPageProps) {
   } = useSnippetPage({
     playgroudCodeEditorRef,
     authAlertDialogRef,
-    unsaveSnippetAlertDialogRef,
     snippetDto,
   })
   const { goBack } = useRouter()

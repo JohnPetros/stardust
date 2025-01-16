@@ -35,7 +35,6 @@ type SnippetSchema = z.infer<typeof snippetSchema>
 type UseSnippetPageParams = {
   playgroudCodeEditorRef: RefObject<PlaygroundCodeEditorRef>
   authAlertDialogRef: RefObject<AlertDialogRef>
-  unsaveSnippetAlertDialogRef: RefObject<AlertDialogRef>
   snippetDto?: SnippetDto
 }
 
@@ -43,7 +42,6 @@ export function useSnippetPage({
   snippetDto,
   playgroudCodeEditorRef,
   authAlertDialogRef,
-  unsaveSnippetAlertDialogRef,
 }: UseSnippetPageParams) {
   const snippet = snippetDto ? Snippet.create(snippetDto) : null
   const [snippetErrors, setSnippetErrors] = useState({ title: '', code: '' })
@@ -129,12 +127,6 @@ export function useSnippetPage({
   useEffect(() => {
     setIsUserSnippetAuthor(snippet && user ? snippet.authorId === user.id : false)
   }, [snippet, user])
-
-  useEffect(() => {
-    window.addEventListener('beforeunload', (event) => {
-      event.preventDefault() // Required for modern browsers
-    })
-  }, [])
 
   return {
     pageHeight: windowSize.height,

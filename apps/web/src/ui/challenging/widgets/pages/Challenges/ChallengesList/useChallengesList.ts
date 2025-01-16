@@ -12,7 +12,7 @@ import {
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useQueryArrayParam } from '@/ui/global/hooks/useQueryArrayParam'
-import { useFetchChallengesListAction } from '../../../../../global/hooks/useFetchChallengesListAction'
+import { useFetchChallengesListAction } from './useFetchChallengesListAction'
 
 const CHALLENGES_PER_PAGE = 15
 
@@ -33,8 +33,6 @@ export function useChallengesList() {
       completionStatus: completion.status,
       difficultyLevel: difficulty.level,
       itemsPerPage: CHALLENGES_PER_PAGE,
-      postOrder: 'all',
-      upvotesOrder: 'all',
       title,
     })
   }
