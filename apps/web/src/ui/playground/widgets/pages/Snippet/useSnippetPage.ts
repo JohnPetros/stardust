@@ -32,17 +32,17 @@ export function useSnippetPage(
   playgroudCodeEditorRef: RefObject<PlaygroundCodeEditorRef>,
   snippetDto?: SnippetDto,
 ) {
-  const [snippetErrors, setSnippetErrors] = useState({ title: '', code: '' })
   const snippet = snippetDto ? Snippet.create(snippetDto) : null
+  const [snippetErrors, setSnippetErrors] = useState({ title: '', code: '' })
   const [isActionSuccess, setIsActionSuccess] = useState(false)
   const [isActionFailure, setIsActionFailure] = useState(false)
   const [isUserSnippetAuthor, setIsUserSnippetAuthor] = useState(false)
   const { user } = useAuthContext()
-  const { editSnippet, isEditing, isEditFailure } = useEditSnippetAction({
+  const { editSnippet, isEditing } = useEditSnippetAction({
     onSuccess: handleActionSuccess,
     onError: handleActionError,
   })
-  const { createSnippet, isCreating, isCreateFailure } = useCreateSnippetAction({
+  const { createSnippet, isCreating } = useCreateSnippetAction({
     onSuccess: handleActionSuccess,
     onError: handleActionError,
   })
@@ -56,7 +56,7 @@ export function useSnippetPage(
     },
   })
   const windowSize = useWindowSize()
-  const formValues = watch()
+  const formValues = getValues()
 
   async function handleActionSuccess(snippet: Snippet) {
     setIsUserSnippetAuthor(snippet.isPublic.isTrue)
@@ -73,6 +73,7 @@ export function useSnippetPage(
     snippetCodeErrorMessage: string,
   ) {
     setSnippetErrors({ title: snippetTitleErrorMessage, code: snippetCodeErrorMessage })
+    setIsActionFailure(true)
   }
 
   async function handleActionButtonClick() {
@@ -95,19 +96,18 @@ export function useSnippetPage(
   }
 
   useEffect(() => {
-    if (formValues) {
+    const subscription = watch(() => {
       setIsActionSuccess(false)
       setIsActionFailure(false)
-    }
-  }, [formValues])
-
-  useEffect(() => {
-    setIsActionFailure(isCreateFailure || isEditFailure)
-  }, [isCreateFailure, isEditFailure])
+    })
+    return () => subscription.unsubscribe()
+  }, [watch])
 
   useEffect(() => {
     setIsUserSnippetAuthor(snippet && user ? snippet.authorId === user.id : false)
   }, [snippet, user])
+
+  console.log({ isActionFailure })
 
   return {
     pageHeight: windowSize.height,
@@ -118,8 +118,8 @@ export function useSnippetPage(
     isSnippetPublic: formValues.isSnippetPublic,
     isActionDisabled: formValues.snippetTitle === '' && formValues.snippetCode === '',
     isActionExecuting: isCreating || isEditing,
-    isUserSnippetAuthor,
     isActionFailure,
+    isUserSnippetAuthor,
     isActionSuccess,
     handleRunCode,
     handleActionButtonClick,

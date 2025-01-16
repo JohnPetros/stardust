@@ -11,13 +11,13 @@ import type { CodeEditorTheme, CursorPosition } from './types'
 import { Backup } from '@stardust/core/global/structs'
 
 export function useCodeEditor(
-  value: string,
+  initialValue: string,
   theme: CodeEditorTheme,
   onChange?: (value: string) => void,
 ) {
   const codeRunner = useCodeRunner()
   const monacoEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
-  const codeBackup = useRef<Backup<string>>(Backup.create([value]))
+  const codeBackup = useRef<Backup<string>>(Backup.create([initialValue]))
 
   const getEditorRules = useCallback(() => {
     const tokens = Object.keys(CODE_EDITOR_THEMES.darkSpace).slice(0, -2)
@@ -71,8 +71,9 @@ export function useCodeEditor(
   }, [])
 
   const reloadValue = useCallback(() => {
-    monacoEditorRef.current?.setValue(value)
-  }, [value])
+    codeBackup.current = Backup.create([initialValue])
+    monacoEditorRef.current?.setValue(initialValue)
+  }, [initialValue])
 
   const undoValue = useCallback(() => {
     if (codeBackup.current.isEmpty) return

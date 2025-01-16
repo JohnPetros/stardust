@@ -20,6 +20,7 @@ type AnimatedPanelProps = {
   height: string
   isOpen: boolean
   className: ClassNameValue
+  onDragDown: VoidFunction
 }
 
 export function AnimatedPanel({
@@ -27,8 +28,9 @@ export function AnimatedPanel({
   height,
   isOpen,
   className,
+  onDragDown,
 }: AnimatedPanelProps) {
-  const { controls, handleDragEnd } = useAnimatedPanel(isOpen)
+  const { controls, handleDragEnd } = useAnimatedPanel(isOpen, onDragDown)
 
   return (
     <motion.div

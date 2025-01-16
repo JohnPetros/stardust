@@ -19,8 +19,8 @@ import { Button } from '@/ui/global/widgets/components/Button'
 import { ShareSnippetDialog } from '../../components/ShareSnippetDialog'
 import { useSnippetPage } from './useSnippetPage'
 
-const HEADER_HEIGHT = 48
-const SAVE_BUTTON_CONTAINER_HEIGHT = 64
+const HEADER_HEIGHT = 72
+const SAVE_BUTTON_CONTAINER_HEIGHT = 32
 const CODE_EDITOR_MARGIN_TOP = 24
 
 type SnippetPageProps = {
@@ -58,7 +58,7 @@ export function SnippetPage({ snippetDto }: SnippetPageProps) {
   return (
     <div className='flex flex-col'>
       <header
-        className='grid grid-cols-2 px-6 py-12 bg-gray-800'
+        className='grid grid-cols-2 px-6 pt-6 bg-gray-800'
         style={{ height: HEADER_HEIGHT }}
       >
         <Controller
@@ -76,7 +76,10 @@ export function SnippetPage({ snippetDto }: SnippetPageProps) {
             )
           }}
         />
-        <div className='flex items-center justify-end gap-3'>
+        <div
+          className='flex items-center justify-end gap-3'
+          style={{ height: SAVE_BUTTON_CONTAINER_HEIGHT }}
+        >
           <Button onClick={goBack} className='bg-gray-600 text-gray-50 w-16'>
             Voltar
           </Button>

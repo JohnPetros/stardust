@@ -25,7 +25,7 @@ export function TitleInput({
         onChange={({ currentTarget }) => onChange(currentTarget.value)}
         className={twMerge('text-xl outline-none border-none w-full', className)}
       />
-      {errorMessage && <ErrorMessage className='mt-3'>{errorMessage}</ErrorMessage>}
+      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </div>
   )
 }

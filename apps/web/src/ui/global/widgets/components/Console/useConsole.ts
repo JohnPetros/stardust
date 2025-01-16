@@ -9,6 +9,10 @@ export function useConsole(height: number) {
     return `${((height + 100) / 10) * 0.5}rem`
   }
 
+  function handlePanelDragDown() {
+    setIsOpen(false)
+  }
+
   function open() {
     setIsOpen(true)
   }
@@ -19,8 +23,9 @@ export function useConsole(height: number) {
 
   return {
     isOpen,
+    panelHeight: calculatePanelHeight(),
     open,
     close,
-    panelHeight: calculatePanelHeight(),
+    handlePanelDragDown,
   }
 }
