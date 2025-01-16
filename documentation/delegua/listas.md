@@ -8,13 +8,13 @@ Para declarar uma lista é preciso usar colchetes *[]* e separar os elementos po
 
 Listas podem conter valores de diferentes tipos:
 
-<code>
+<Code>
   var numeros = [1, 2, 3, 4, 5]
 
   var textos = ['maçã', 'banana', 'laranja']
 
   var misto = [10, 'texto', verdadeiro]
-</code>
+</Code>
 
 O alinhamento dos itens pode ser arbitrário desde que eles sejam separados por uma virgula.
 

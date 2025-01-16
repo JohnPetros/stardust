@@ -132,11 +132,11 @@ Em resumo, quando o operador aparece antes da variável, o *incremento/decrement
 
 Por isso, especificamente para literais, a construção abaixo não existe:
 
-<code>var b = 3++</code>
+<Code>var b = 3++</Code>
 
 Mas a linha embaixo é válida:
 
-<code>var b = ++3</code>
+<Code>var b = ++3</Code>
 
 ### Operadores relacionais
 
@@ -196,7 +196,7 @@ Mas a linha embaixo é válida:
 
 <Text>Todos os tipos de dados, exceto nulos e falsos, possuem valor lógico verdadeiro:</Text>
 
-<code>
+<Code>
   {} // verdadeiro
   1 // verdadeiro
   verdadeiro // verdadeiro
@@ -205,7 +205,7 @@ Mas a linha embaixo é válida:
   1 == '1' // falso, porque pertencem a tipos diferentes (o primeiro é número, enquanto o segundo é texto)
   nulo // falso
   falso // falso
-</code>
+</Code>
 
 ### Operadores lógicos
 <Text>

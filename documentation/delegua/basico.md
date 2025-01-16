@@ -8,9 +8,9 @@
 
 As variáveis são declaradas escrevendo a palavra-chave **var**, seguida pelo nome e valor.
 
-<code>
+<Code>
 var valor = "1"
-</code>
+</Code>
 
 Além disso, variáveis podem ter seus valores alterados a qualquer momento do código.
 
@@ -39,14 +39,14 @@ var maioresQue10 ✅
 
 <Quote>*Prefira o estilo camelo*: É mais comum usar estilo camelo para nomes de variáveis, onde a primeira palavra começa com uma letra minúscula e a primeira letra de cada palavra subsequente é maiúscula (parecido com as costas de um camelo 🐫)</Quote>
 
-<code>
+<Code>
 var meuNome ✅
 var usuariosComIdadeMaiorQue18 ✅
-</code>
+</Code>
 
 <Quote>*Utilize nomes qua fazem sentido*: Nomeie suas variáveis de acordo com o valor que elas armazenam.</Quote>
 
-<code>
+<Code>
 var nome = 'Ítalo Brandão' ✅
 var anoDeNascimento = 2004 ✅
 var temSexoMasculino = verdadeiro
@@ -54,8 +54,7 @@ var temSexoMasculino = verdadeiro
 var fruta = 'arroz' ❌
 var cidade = 7895 ❌
 var profissao = falso ❌
-</code>
-
+</Code>
 
 ## Entrada e saída
 
@@ -69,19 +68,18 @@ Existem duas funções nativas para entrada e saída de dados:
   *leia()*: usado para escrever uma variável ou um valor na saída.
 </Quote>
 
-
 ### escreva()
 <Text>
   A função *escreva()* pode aceitar N valores, que ele irá escrever cada valor um lado ao do outro.
 </Text>
 
 <Code>
-  escreva(1) // Escreverá 1
+escreva(1) // Escreverá 1
   
-  var valor = 'Texto'
-  escreva(valor) // Escreverá 'Texto'
+var valor = 'Texto'
+escreva(valor) // Escreverá 'Texto'
 
-  escreva(valor, 1, 2, 3) // Escreverá 'Texto' 1 2 3
+escreva(valor, 1, 2, 3) // Escreverá 'Texto' 1 2 3
 </Code>
 
 ### leia()
@@ -90,8 +88,8 @@ Existem duas funções nativas para entrada e saída de dados:
 </Text>
 
 <Code>
-  var entrada = leia()
-  escreva('Resultado: ' + entrada)
+var entrada = leia()
+escreva('Resultado: ' + entrada)
 </Code>
 
 <Alert>
@@ -101,8 +99,8 @@ Existem duas funções nativas para entrada e saída de dados:
 Além disso, caso haja um texto dentro do comando *leia()*, o mesmo será utilizado como título do campo.
 
 <Code>
-  var valor = leia("Insira um valor:")
-  escreva('Valor recebido: ' + valor)
+var valor = leia("Insira um valor:")
+escreva('Valor recebido: ' + valor)
 </Code>
 
 ### Comentários
@@ -116,19 +114,19 @@ Além disso, caso haja um texto dentro do comando *leia()*, o mesmo será utiliz
 </Alert>
 
 <Code>
-  // escreva("Não estou sendo executado")
+// escreva("Não estou sendo executado")
 
-  escreva("Estou sendo executado")
+escreva("Estou sendo executado")
 </Code>
 
  É possível também inserir um bloco de comentário em vez de uma única linha escrevendo barra asterisco /* e fechando com asterisco barra */.
 
  <Code>
-  /*
-   escreva("--------------------")
-   escreva(" BLOCO DE COMENTÁRIO )
-   escreva("--------------------")
-  */
+/*
+  escreva("--------------------")
+  escreva(" BLOCO DE COMENTÁRIO )
+  escreva("--------------------")
+*/
 
-  escreva("Estou sendo executado")
+escreva("Estou sendo executado")
 </Code>

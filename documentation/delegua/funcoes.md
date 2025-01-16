@@ -143,7 +143,7 @@ escreva(mensagem)
 
 <Alert>Por favor, não tente criar funções com nomes já utilizados pela linguagem.</Alert>
 
-<code>
+<Code>
 funcao escreva() { // ❌
   // ...
 }
@@ -159,7 +159,7 @@ funcao aleatorio() { // ❌
 funcao retorna() { // ❌
   // ...
 }
-</code>
+</Code>
 
 ### aleatorio()
 

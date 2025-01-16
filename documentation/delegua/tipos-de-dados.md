@@ -4,35 +4,35 @@
 
 <Text>Variáveis do tipo *texto* são expressas com aspas duplas *""* ou aspas simples *''*.</Text>
 
-<code>
+<Code>
   var texto1 = "abc"
   var texto2 = 'abc'
-</code>
+</Code>
 
 ### Tipo Número
 
 <Text>Números são inteiros ou decimais (com parte fracionária). Por padrão, todos os números são armazenados como decimais.</Text>
 
-<code>
+<Code>
   var numeroInteiro = 3
   var numeroDecimal = 8.5
-</code>
+</Code>
 
 Também é possível haver números negativos (menores que zero).
 
-<code>
+<Code>
   var numeroInteiroNegativo = -8
   var numeroDecimalNegativo = -0.5
-</code>
+</Code>
 
 ### Tipo Lógico
 
 <Text>Tipo de dado que só pode ser *verdadeiro* ou *falso*.</Text>
 
-<code>
+<Code>
  var valor_logico_1 = verdadeiro
  var valor_logico_0 = falso
-</code>
+</Code>
 
 ### Tipo Nulo
 

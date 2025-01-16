@@ -53,13 +53,13 @@ Na inicialização a variável de controle pode ser definida fora do laço *para
 
 <Alert>Qualquer um das três partes do *para* pode ficar em branco.</Alert>
 
-<code>
+<Code>
   para (; verdadeiro; ) {
     escreva("Olá, mundo");
   }
 
 // Resultado: Laço infinito devido à condição (segunda parte) ser sempre verdadeira.
-</code>
+</Code>
 
 ### Enquanto
 
