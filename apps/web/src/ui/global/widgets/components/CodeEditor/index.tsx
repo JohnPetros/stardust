@@ -35,12 +35,14 @@ export function CodeEditorComponent(
   const {
     getValue,
     setValue,
+    undoValue,
     reloadValue,
     getCursorPosition,
     setCursorPosition,
     getSelectedLinesRange,
+    handleChange,
     handleEditorDidMount,
-  } = useCodeEditor(value, theme)
+  } = useCodeEditor(value, theme, onChange)
 
   const { md: isMobile } = useBreakpoint()
 
@@ -50,6 +52,7 @@ export function CodeEditorComponent(
       return {
         getValue,
         setValue,
+        undoValue,
         reloadValue,
         getCursorPosition,
         setCursorPosition,
@@ -59,6 +62,7 @@ export function CodeEditorComponent(
     [
       getValue,
       setValue,
+      undoValue,
       reloadValue,
       getCursorPosition,
       setCursorPosition,
@@ -92,7 +96,7 @@ export function CodeEditorComponent(
       }
       value={value}
       onMount={handleEditorDidMount}
-      onChange={(value) => onChange(String(value))}
+      onChange={handleChange}
     />
   )
 }

@@ -46,16 +46,15 @@ export function useSnippetPage(
     onSuccess: handleActionSuccess,
     onError: handleActionError,
   })
-  const { control, formState, getValues, setValue, reset, watch } =
-    useForm<SnippetSchema>({
-      resolver: zodResolver(snippetSchema),
-      defaultValues: {
-        snippetId: snippet?.id,
-        snippetTitle: snippet?.title.value ?? Snippet.DEFEAULT_TITLE,
-        snippetCode: snippet?.code.value ?? '',
-        isSnippetPublic: snippet?.isPublic.value ?? true,
-      },
-    })
+  const { control, formState, getValues, reset, watch } = useForm<SnippetSchema>({
+    resolver: zodResolver(snippetSchema),
+    defaultValues: {
+      snippetId: snippet?.id,
+      snippetTitle: snippet?.title.value ?? Snippet.DEFEAULT_TITLE,
+      snippetCode: snippet?.code.value ?? '',
+      isSnippetPublic: snippet?.isPublic.value ?? true,
+    },
+  })
   const windowSize = useWindowSize()
   const formValues = watch()
 

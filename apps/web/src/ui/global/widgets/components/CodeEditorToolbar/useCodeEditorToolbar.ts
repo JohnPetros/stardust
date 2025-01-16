@@ -66,7 +66,7 @@ export function useCodeEditorToolbar({
   }
 
   function handleCtrlZ() {
-    // TODO: handleCtrlZ
+    codeEditorRef.current?.undoValue()
   }
 
   function handleKeyDown({ altKey, ctrlKey, key }: KeyboardEvent) {

@@ -17,11 +17,7 @@ export function ChallengeCodeEditorSlot() {
 
   return (
     <div ref={editorContainerRef} className='relative h-full w-full'>
-      <CodeEditorToolbar
-        previousUserCode={previousUserCode}
-        codeEditorRef={codeEditorRef}
-        onRunCode={handleRunCode}
-      >
+      <CodeEditorToolbar codeEditorRef={codeEditorRef} onRunCode={handleRunCode}>
         <CodeEditor
           ref={codeEditorRef}
           value={initialCode ?? ''}

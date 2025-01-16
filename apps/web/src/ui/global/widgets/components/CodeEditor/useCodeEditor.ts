@@ -1,19 +1,23 @@
 'use client'
 
-import { useCallback, useEffect, useRef } from 'react'
-import { type Monaco, useMonaco } from '@monaco-editor/react'
+import { useCallback, useRef } from 'react'
+import type { Monaco } from '@monaco-editor/react'
 import type monaco from 'monaco-editor'
 
 import { COLORS } from '@/constants'
 import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
 import { CODE_EDITOR_THEMES } from './code-editor-themes'
 import type { CodeEditorTheme, CursorPosition } from './types'
+import { Backup } from '@stardust/core/global/structs'
 
-export function useCodeEditor(value: string, theme: CodeEditorTheme) {
-  const monaco = useMonaco()
+export function useCodeEditor(
+  value: string,
+  theme: CodeEditorTheme,
+  onChange?: (value: string) => void,
+) {
   const codeRunner = useCodeRunner()
-
-  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+  const monacoEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+  const codeBackup = useRef<Backup<string>>(Backup.create([value]))
 
   const getEditorRules = useCallback(() => {
     const tokens = Object.keys(CODE_EDITOR_THEMES.darkSpace).slice(0, -2)
@@ -28,7 +32,7 @@ export function useCodeEditor(value: string, theme: CodeEditorTheme) {
   }, [])
 
   const getCursorPosition = useCallback(() => {
-    const position = editorRef.current?.getPosition()
+    const position = monacoEditorRef.current?.getPosition()
 
     if (!position) return null
 
@@ -39,14 +43,14 @@ export function useCodeEditor(value: string, theme: CodeEditorTheme) {
   }, [])
 
   const setCursorPosition = useCallback((cursorPostion: CursorPosition) => {
-    return editorRef.current?.setPosition({
+    return monacoEditorRef.current?.setPosition({
       lineNumber: cursorPostion.lineNumber,
       column: cursorPostion.columnNumber,
     })
   }, [])
 
   const getSelectedLinesRange = useCallback(() => {
-    const selection = editorRef.current?.getSelection()
+    const selection = monacoEditorRef.current?.getSelection()
 
     if (selection) {
       return {
@@ -59,22 +63,36 @@ export function useCodeEditor(value: string, theme: CodeEditorTheme) {
   }, [])
 
   const getValue = useCallback(() => {
-    return editorRef.current?.getValue() ?? ''
+    return monacoEditorRef.current?.getValue() ?? ''
   }, [])
 
   const setValue = useCallback((value: string) => {
-    editorRef.current?.setValue(value)
+    monacoEditorRef.current?.setValue(value)
   }, [])
 
   const reloadValue = useCallback(() => {
-    editorRef.current?.setValue(value)
+    monacoEditorRef.current?.setValue(value)
   }, [value])
+
+  const undoValue = useCallback(() => {
+    if (codeBackup.current.isEmpty) return
+
+    codeBackup.current = codeBackup.current.undo()
+    monacoEditorRef.current?.setValue(codeBackup.current.lastState)
+  }, [])
+
+  function handleChange(value: string | undefined) {
+    if (onChange && value) {
+      onChange(value)
+      codeBackup.current = codeBackup.current?.save(value)
+    }
+  }
 
   function handleEditorDidMount(
     editor: monaco.editor.IStandaloneCodeEditor,
     monaco: Monaco,
   ) {
-    editorRef.current = editor
+    monacoEditorRef.current = editor
 
     monaco.languages.register({ id: codeRunner.id })
 
@@ -96,27 +114,15 @@ export function useCodeEditor(value: string, theme: CodeEditorTheme) {
     monaco.editor.setTheme(theme)
   }
 
-  // useEffect(() => {
-  //   const rules = getEditorRules()
-
-  //   monaco?.editor.defineTheme('editor-theme', {
-  //     base: 'vs-dark',
-  //     inherit: true,
-  //     rules,
-  //     colors: {
-  //       'editor.background': COLORS.gray[800],
-  //     },
-  //   })
-  // }, [monaco?.editor, getEditorRules])
-
   return {
-    editorRef,
     getValue,
     setValue,
     reloadValue,
+    undoValue,
     getCursorPosition,
     setCursorPosition,
     getSelectedLinesRange,
+    handleChange,
     handleEditorDidMount,
   }
 }
