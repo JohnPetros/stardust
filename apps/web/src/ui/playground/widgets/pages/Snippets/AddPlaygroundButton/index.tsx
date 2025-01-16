@@ -10,9 +10,14 @@ export function AddSnippetButton() {
     <Button asChild className='w-max'>
       <Link
         href={ROUTES.playground.snippet()}
-        className='flex w-max items-center gap-2 px-3 text-sm'
+        className='flex w-max items-center gap-1 px-3 text-sm'
       >
-        <Icon name='plus-circle' className='text-lg text-gray-900' weight='bold' />
+        <Icon
+          name='plus-circle'
+          size={20}
+          className='text-lg text-gray-900'
+          weight='bold'
+        />
         Criar Novo Snippet
       </Link>
     </Button>

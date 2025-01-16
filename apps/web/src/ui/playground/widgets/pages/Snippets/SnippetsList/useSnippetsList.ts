@@ -32,6 +32,7 @@ export function useSnippetsList() {
       shouldRefetchOnFocus: false,
       itemsPerPage: SNIPPETS_PER_PAGE,
       isEnabled: Boolean(user),
+      dependencies: [user?.id],
     })
 
   function handleDeleteSnippetDelete() {
