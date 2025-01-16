@@ -75,5 +75,8 @@ export const ROUTES = {
       countByDifficultyLevel: '/api/challenging/count-by-difficulty-level',
       solution: (solutionSlug: string) => `/api/challenging/solution/${solutionSlug}`,
     },
+    playground: {
+      snippet: (snippets: string) => `/api/playground/snippets/${snippetId}`,
+    },
   },
 } as const

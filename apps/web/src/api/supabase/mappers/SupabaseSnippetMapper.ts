@@ -43,7 +43,7 @@ export const SupabaseSnippetMapper = () => {
         is_public: snippet.isPublic.value,
         title: snippet.title.value,
         code: snippet.code.value,
-        created_at: snippet.createdAt.toDateString(),
+        created_at: snippet.createdAt.toUTCString(),
       }
 
       return supabaseSnippet

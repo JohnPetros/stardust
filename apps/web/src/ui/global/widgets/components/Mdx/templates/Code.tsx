@@ -5,7 +5,7 @@ type CodeProps = {
   code: string
   isRunnable: boolean
   exec: boolean
-  children: string | [{ props: { children?: string | { props: { children: string } } } }]
+  children: unknown
   hasAnimation: boolean
 }
 
@@ -16,8 +16,16 @@ export function Code({
   hasAnimation = true,
 }: CodeProps) {
   if (!children) return
+  let code = ''
 
-  const code = children[0]
+  if (!Array.isArray(children)) {
+    code = String(children)
+  } else if (typeof children[0] === 'string') {
+    code = children[0]
+  } else if ('props' in children[0]) {
+    code = children[0].props.children[0]
+  }
+
   if (code)
     return (
       <Animation hasAnimation={hasAnimation}>

@@ -53,11 +53,11 @@ export const SupabasePlaygroundService = (supabase: Supabase): IPlaygroundServic
 
     async saveSnippet(snippet: Snippet) {
       const supabaseSnippet = supabaseSnippetMapper.toSupabase(snippet)
-
       const { error, status } = await supabase.from('snippets').insert({
         // @ts-ignore
         id: snippet.id,
         code: supabaseSnippet.code,
+        title: supabaseSnippet.title,
         is_public: supabaseSnippet.is_public,
         created_at: supabaseSnippet.created_at,
         user_id: supabaseSnippet.author_id,

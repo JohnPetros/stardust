@@ -69,11 +69,11 @@ export function CodeEditorToolbar({
           </DocsDialog>
 
           <HotkeysDialog>
-            <Toolbar.Button ref={docsDialogButtonRef} label='Comandos' icon='command' />
+            <Toolbar.Button label='Comandos' icon='command' />
           </HotkeysDialog>
 
           <CodeEditorSettingsDialog>
-            <Toolbar.Button ref={docsDialogButtonRef} label='Comandos' icon='gear' />
+            <Toolbar.Button label='Configurações' icon='gear' />
           </CodeEditorSettingsDialog>
         </Toolbar.Container>
       </div>

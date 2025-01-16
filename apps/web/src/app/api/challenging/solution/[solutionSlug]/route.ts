@@ -3,6 +3,7 @@ import { z } from 'zod'
 
 import { stringSchema } from '@stardust/validation/global/schemas'
 
+import type { NextParams } from '@/server/next/types'
 import { NextHttp } from '@/api/next/NextHttp'
 import { runApiRoute } from '@/api/next/utils'
 import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
@@ -17,9 +18,9 @@ const schema = z.object({
 
 type Schema = z.infer<typeof schema>
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest, params: NextParams) {
   return await runApiRoute(async () => {
-    const http = await NextHttp<Schema>({ request, schema })
+    const http = await NextHttp<Schema>({ request, schema, params })
     const supabase = SupabaseRouteHandlerClient()
     const challengingService = SupabaseChallengingService(supabase)
     const controller = AccessSolutionPageController(challengingService)

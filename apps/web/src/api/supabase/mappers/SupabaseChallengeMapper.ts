@@ -49,13 +49,15 @@ export const SupabaseChallengeMapper = () => {
             },
           },
         },
-        upvotesCount: supabaseChallenge.upvotes ?? 0,
-        downvotesCount: supabaseChallenge.downvotes ?? 0,
+        upvotesCount: supabaseChallenge.upvotes_count ?? 0,
+        downvotesCount: supabaseChallenge.downvotes_count ?? 0,
         completionsCount: supabaseChallenge.total_completitions ?? 0,
         description: supabaseChallenge.description ?? '',
         textBlocks: textsBlocks,
         testCases: (
-          JSON.parse(supabaseChallenge.test_cases as string) as TestCaseDto[]
+          (typeof supabaseChallenge.test_cases === 'string'
+            ? JSON.parse(supabaseChallenge.test_cases)
+            : supabaseChallenge.test_cases) as TestCaseDto[]
         ).map((supabaseTestCase) => {
           return {
             position: supabaseTestCase.position ?? '',

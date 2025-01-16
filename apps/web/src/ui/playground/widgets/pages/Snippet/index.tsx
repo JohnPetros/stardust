@@ -6,7 +6,6 @@ import { Controller } from 'react-hook-form'
 import type { SnippetDto } from '@stardust/core/playground/dtos'
 
 import { useRouter } from '@/ui/global/hooks/useRouter'
-import { Button } from '@radix-ui/react-toolbar'
 import { TitleInput } from '@/ui/global/widgets/components/TitleInput'
 import { ActionButton } from '@/ui/global/widgets/components/ActionButton'
 import type { PlaygroundCodeEditorRef } from '@/ui/global/widgets/components/PlaygroundCodeEditor/types'
@@ -15,16 +14,17 @@ import { Switch } from '@/ui/global/widgets/components/Switch'
 import { CodeEditorToolbar } from '@/ui/global/widgets/components/CodeEditorToolbar'
 import { PlaygroundCodeEditor } from '@/ui/global/widgets/components/PlaygroundCodeEditor'
 import { ErrorMessage } from '@/ui/global/widgets/components/ErrorMessage'
+import { Icon } from '@/ui/global/widgets/components/Icon'
+import { Button } from '@/ui/global/widgets/components/Button'
 import { ShareSnippetDialog } from '../../components/ShareSnippetDialog'
 import { useSnippetPage } from './useSnippetPage'
-import { Icon } from '@/ui/global/widgets/components/Icon'
 
 const HEADER_HEIGHT = 48
 const SAVE_BUTTON_CONTAINER_HEIGHT = 64
-const PADDING_BOTTOM = 24
+const CODE_EDITOR_MARGIN_TOP = 24
 
 type SnippetPageProps = {
-  snippetDto: SnippetDto
+  snippetDto?: SnippetDto
 }
 
 export function SnippetPage({ snippetDto }: SnippetPageProps) {
@@ -53,11 +53,14 @@ export function SnippetPage({ snippetDto }: SnippetPageProps) {
     failure: 'erro',
   }
   const editorHeight =
-    pageHeight - HEADER_HEIGHT - SAVE_BUTTON_CONTAINER_HEIGHT - PADDING_BOTTOM
+    pageHeight - HEADER_HEIGHT - SAVE_BUTTON_CONTAINER_HEIGHT - CODE_EDITOR_MARGIN_TOP
 
   return (
     <div className='flex flex-col'>
-      <header className='grid grid-cols-2 px-6 py-12' style={{ height: HEADER_HEIGHT }}>
+      <header
+        className='grid grid-cols-2 px-6 py-12 bg-gray-800'
+        style={{ height: HEADER_HEIGHT }}
+      >
         <Controller
           control={formControl}
           name='snippetTitle'
@@ -73,11 +76,8 @@ export function SnippetPage({ snippetDto }: SnippetPageProps) {
             )
           }}
         />
-        <div
-          style={{ height: SAVE_BUTTON_CONTAINER_HEIGHT }}
-          className='flex items-center justify-end gap-3'
-        >
-          <Button onClick={goBack} className='bg-gray-600 text-gray-50 w-24'>
+        <div className='flex items-center justify-end gap-3'>
+          <Button onClick={goBack} className='bg-gray-600 text-gray-50 w-16'>
             Voltar
           </Button>
           <ActionButton
@@ -89,14 +89,14 @@ export function SnippetPage({ snippetDto }: SnippetPageProps) {
             isFailure={isActionFailure}
             isDisabled={isActionDisabled}
             onExecute={handleActionButtonClick}
-            icon='send'
+            icon='cloud'
             className='w-28'
           />
           {isUserSnippetAuthor && isSnippetPublic && (
             <ShareSnippetDialog snippetId={snippetId}>
-              <Button className='flex h-8 w-max items-center gap-2 px-3 text-xs'>
-                <Icon name='share' className='text-gray-900' weight='bold' />
-                Compatilhar snippet
+              <Button className='flex w-max items-center gap-2 px-3'>
+                <Icon name='share' size={16} className='text-gray-900' weight='bold' />
+                Compatilhar
               </Button>
             </ShareSnippetDialog>
           )}
@@ -120,7 +120,10 @@ export function SnippetPage({ snippetDto }: SnippetPageProps) {
         </div>
       </header>
 
-      <div style={{ height: editorHeight }} className='overflow-hidden px-6'>
+      <div
+        style={{ height: editorHeight, marginTop: CODE_EDITOR_MARGIN_TOP }}
+        className='overflow-hidden px-6'
+      >
         <CodeEditorToolbar
           codeEditorRef={playgroudCodeEditorRef}
           onRunCode={handleRunCode}

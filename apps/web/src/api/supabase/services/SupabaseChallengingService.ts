@@ -89,10 +89,28 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
     },
 
     async fetchChallengeBySolutionId(solutionId: string) {
+      const {
+        data: solutionData,
+        error: solutionError,
+        status: solutionStatus,
+      } = await supabase
+        .from('solutions')
+        .select('challenge_id')
+        .eq('id', solutionId)
+        .single()
+
+      if (solutionError) {
+        return SupabasePostgrestError(
+          solutionError,
+          'solução não encontrada com esse id',
+          solutionStatus,
+        )
+      }
+
       const { data, error, status } = await supabase
         .from('challenges_view')
-        .select('*, solutions!inner(id)')
-        .eq('solutions.id', solutionId)
+        .select('*')
+        .eq('id', solutionData.challenge_id)
         .single()
 
       if (error) {
@@ -102,6 +120,8 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
           status,
         )
       }
+
+      console.log(data)
 
       return new ApiResponse({ body: supabaseChallengeMapper.toDto(data) })
     },
@@ -294,7 +314,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       if (error) {
         return SupabasePostgrestError(
           error,
-          'Desafio não encontrado com esse slug',
+          'Solução não encontrado com esse slug',
           status,
         )
       }

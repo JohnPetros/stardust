@@ -29,11 +29,11 @@ const snippetSchema = z.object({
 })
 
 type SnippetSchema = z.infer<typeof snippetSchema>
-const [snippetErrors, setSnippetErrors] = useState({ title: '', code: '' })
 export function useSnippetPage(
   playgroudCodeEditorRef: RefObject<PlaygroundCodeEditorRef>,
   snippetDto?: SnippetDto,
 ) {
+  const [snippetErrors, setSnippetErrors] = useState({ title: '', code: '' })
   const snippet = snippetDto ? Snippet.create(snippetDto) : null
   const [isActionSuccess, setIsActionSuccess] = useState(false)
   const [isActionFailure, setIsActionFailure] = useState(false)
@@ -49,10 +49,10 @@ export function useSnippetPage(
   const { control, formState, getValues, setValue, watch } = useForm<SnippetSchema>({
     resolver: zodResolver(snippetSchema),
     defaultValues: {
-      snippetTitle: snippet?.title.value,
-      snippetCode: snippet?.code.value,
+      snippetTitle: snippet?.title.value ?? '',
+      snippetCode: snippet?.code.value ?? '',
       isSnippetPublic: snippet?.isPublic.value ?? true,
-      isUserSnippetAuthor: snippet?.authorId === user?.id,
+      isUserSnippetAuthor: snippet && user ? snippet.authorId === user.id : false,
     },
   })
   const windowSize = useWindowSize()
@@ -90,10 +90,15 @@ export function useSnippetPage(
   }
 
   useEffect(() => {
-    if (formValues) setIsActionSuccess(false)
+    if (formValues) {
+      setIsActionSuccess(false)
+      setIsActionFailure(false)
+    }
+  }, [formValues])
 
+  useEffect(() => {
     setIsActionFailure(isCreateFailure || isEditFailure)
-  }, [formValues, isCreateFailure, isEditFailure])
+  }, [isCreateFailure, isEditFailure])
 
   return {
     pageHeight: windowSize.height,
@@ -103,7 +108,7 @@ export function useSnippetPage(
     canExecuteAction: formState.isDirty,
     isUserSnippetAuthor: formValues.isUserSnippetAuthor,
     isSnippetPublic: formValues.isSnippetPublic,
-    isActionDisabled: formValues.snippetTitle !== '' && formValues.snippetCode !== '',
+    isActionDisabled: formValues.snippetTitle === '' && formValues.snippetCode === '',
     isActionExecuting: isCreating || isEditing,
     isActionFailure,
     isActionSuccess,

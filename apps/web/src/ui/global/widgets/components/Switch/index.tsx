@@ -28,15 +28,15 @@ export function Switch({
   return (
     <div
       className={twMerge(
-        'flex items-center justify-center gap-2',
-        isDisabled ? 'pointer-events-none' : ''
+        'flex items-center justify-center gap-1 px-3 py-2 border border-gray-500 rounded-full',
+        isDisabled ? 'pointer-events-none' : '',
       )}
     >
       <label
         htmlFor={id}
         className={twMerge(
           'cursor-pointer text-sm text-gray-100',
-          isChecked ? 'opacity-1' : 'opacity-50'
+          isChecked ? 'opacity-1' : 'opacity-50',
         )}
       >
         {label}
@@ -48,12 +48,12 @@ export function Switch({
         value={value}
         checked={isChecked}
         onCheckedChange={handleCheckChange}
-        className="h-6 w-10 rounded-lg bg-gray-800 p-1"
+        className='h-4 w-8 rounded-lg bg-gray-600'
       >
         <Thumb
           className={twMerge(
-            'block h-4 w-4 rounded-full transition-transform',
-            isChecked ? 'translate-x-4 bg-green-400' : 'bg-green-800'
+            'block size-4 rounded-full transition-transform',
+            isChecked ? 'translate-x-4 bg-green-400' : 'bg-green-600',
           )}
         />
       </Root>

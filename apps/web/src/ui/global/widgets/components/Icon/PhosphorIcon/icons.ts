@@ -60,12 +60,13 @@ import {
   Code,
   Minus,
   Flag,
+  Cloud,
   TerminalWindow,
   Article,
 } from '@phosphor-icons/react/dist/ssr'
+import type { Icon } from '@phosphor-icons/react'
 
 import type { IconName } from '../types/IconName'
-import type { Icon } from '@phosphor-icons/react'
 
 export const ICONS: Record<IconName, Icon> = {
   'arrow-up': ArrowUp,
@@ -90,6 +91,7 @@ export const ICONS: Record<IconName, Icon> = {
   'plus-circle': PlusCircle,
   plus: Plus,
   comment: ChatCircle,
+  cloud: Cloud,
   reload: ArrowClockwise,
   title: TextH,
   strong: Article,
