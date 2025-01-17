@@ -56,6 +56,17 @@ var cidade = 7895 ❌
 var profissao = falso ❌
 </Code>
 
+## Constantes
+
+<Quote>Além de variáveis, é possível criar constantes, ou seja, estruturas semlhantes a variáveis, mas com a diferença fundamental que uma vez declarado seu valor esse valor nunca mais poderá ser alterado no programa.</Quote>
+
+<Code exec>
+  const nome = 'Ítalo Brandão'
+  nome = 'Leonel Sanches' ❌ 
+</Code>
+
+<Alert>As regras de nomenclatura de variáveis também se aplica às constantes.</Alert>
+
 ## Entrada e saída
 
 Existem duas funções nativas para entrada e saída de dados:
@@ -69,6 +80,7 @@ Existem duas funções nativas para entrada e saída de dados:
 </Quote>
 
 ### escreva()
+
 <Text>
   A função *escreva()* pode aceitar N valores, que ele irá escrever cada valor um lado ao do outro.
 </Text>
