@@ -282,3 +282,5 @@ Mas a linha embaixo é válida:
 
   escreva(tipo de respostaParaTudo) // número 
 </Code>
+
+CAESbENnMVVaWGgwWDI0MGQzZGxabmQzR0FJaU9oSWxRQWFvQVFEU0FSMEtHek14TGlCTllXeGxMaUJPWlhjZ1dXOXlheXdnVGxrc0lGVlRRZm9EQVBJRkRSSUpDUUFBQUFBQUFQQS9HZ0RDQVFBPQ==

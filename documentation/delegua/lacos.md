@@ -20,7 +20,7 @@ As três principais estruturas de repetição são o *para*, *enquanto* e *fazer
 
 É a terceira parte, sendo executada ao final de cada iteração do laço e é usada para atualizar a variável de controle, podendo ser um incremento, decremento ou atribuição de variável (veja o tópico sobre operadores). *Por exemplo: i++*.
 
-<Code>
+<Code exec>
   para (var i = 0; i < 5; i = i + 1) {
     escreva("Esse é o número ${i}");
   }
@@ -37,7 +37,7 @@ As três principais estruturas de repetição são o *para*, *enquanto* e *fazer
 
 Na inicialização a variável de controle pode ser definida fora do laço *para*.
 
-<Code>
+<Code exec>
   var contador = 0 
 
   para (; contador < 3; contador++) {
@@ -53,7 +53,7 @@ Na inicialização a variável de controle pode ser definida fora do laço *para
 
 <Alert>Qualquer um das três partes do *para* pode ficar em branco.</Alert>
 
-<Code>
+<Code exec>
   para (; verdadeiro; ) {
     escreva("Olá, mundo");
   }
@@ -65,7 +65,7 @@ Na inicialização a variável de controle pode ser definida fora do laço *para
 
 <Text>O laço *Enquanto* necessita apenas de uma condição que, equanto for verdadeira seu bloco de código continuará sendo executado.</Text>
 
-<Code>
+<Code exec>
   var total = 5
 
   enquanto (total > 0) {
@@ -87,7 +87,7 @@ total é maior que zero
 
 <Text>O "fazer-enquanto" é um laço muito parecido com o "enquanto", só com uma diferença crucial: a condição de execução do bloco de código é verificada no final ao invés no início.</Text>
 
-<Code>
+<Code exec>
   var numero = 0
   
   fazer {
@@ -104,7 +104,7 @@ total é maior que zero
 
 Dessa forma, o *fazer enquanto* sempre executará seu bloco de código pelo menos uma vez.
 
-<Code>
+<Code exec>
   fazer {
     escreva("sim")
   } enquanto (falso)
@@ -114,7 +114,7 @@ Dessa forma, o *fazer enquanto* sempre executará seu bloco de código pelo meno
 
 <Text>*para cada* é uma variação da instrução *para* que pega cada elemento de uma lista (Veja o tópico sobre listas) e, para cada elemento pego, executa o seu bloco de código com este elemento definido em uma variável com nome arbitrário.</Text>
 
-<Code>
+<Code exec>
   var numeros = [1, 2, 3]
 
   para cada numero de numeros {
@@ -136,7 +136,7 @@ Dessa forma, o *fazer enquanto* sempre executará seu bloco de código pelo meno
 
 Interrompe qualquer laço de repetição.
 
-<Code>
+<Code exec>
   var i = 0
   var messagem = "Ah não, esse laço foi executado mil vezes!"
 
@@ -158,7 +158,7 @@ Interrompe qualquer laço de repetição.
 
 Permite pular a excução de um laço:
 
-<Code>
+<Code exec>
   para (var i = 0; i < 5; i = i + 1) {
     se (i == 3) {
         escreva("O três foi pulado, haha!")

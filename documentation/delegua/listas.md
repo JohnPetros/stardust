@@ -18,7 +18,7 @@ Listas podem conter valores de diferentes tipos:
 
 O alinhamento dos itens pode ser arbitrário desde que eles sejam separados por uma virgula.
 
-<Code>
+<Code exec>
   // ✅
   var filmes = [
     'O Poderoso Chefão', 'Titanic', 'Matrix', 'Star Wars', 'Harry Potter'
@@ -40,7 +40,7 @@ O alinhamento dos itens pode ser arbitrário desde que eles sejam separados por 
 
 <Quote>O índice de uma lista se trata do número que corresponde a posição em que o elemento se encontra na lista, porém sempre começando do número 0, ou seja, para acessar o primeiro elemento é preciso usar índice 0 o segundo, índice 1 o terceiro, índice 2 e assim por diante.</Quote>
 
-<Code>
+<Code exec>
   var frutas = ['maçã', 'banana', 'cereja', 'damasco', 'mirtilo']
     
   escreva(frutas[0]) // maçã
@@ -52,7 +52,7 @@ O alinhamento dos itens pode ser arbitrário desde que eles sejam separados por 
 
 <Alert>Se índice for zero ou positivo, a posição a ser acessada conta a partir do primeiro elemento da lista. Caso seja negativo, a posição a ser acessada conta a partir do último elemento da lista.</Alert>
 
-<Code>
+<Code exec>
   var texto = "abc"
   var texto2 = "abc"
 
@@ -62,7 +62,7 @@ O alinhamento dos itens pode ser arbitrário desde que eles sejam separados por 
 
 <Alert>Se um índice fornecido não tiver um valor correspondente é retornado um erro.</Alert>
 
-<Code>var lista = [1, 2]
+<Code exec>var lista = [1, 2]
 
 escreva(lista[2])
 
@@ -73,7 +73,7 @@ escreva(lista[2])
 
 Pode-se alterar o valor de um elemento de uma lista atribuindo um novo valor ao índice correspondente.
 
-<Code>
+<Code exec>
   var numeros = [1, 2, 3, 4, 5]
     
   numeros[1] = 10
@@ -91,7 +91,7 @@ Pode-se alterar o valor de um elemento de uma lista atribuindo um novo valor ao 
 
 <Text>Adiciona um ou mais elementos ao final de uma lista.</Text>
 
-<Code>
+<Code exec>
   var cores = ['vermelho', 'azul']
       
   cores.adicionar('amarelo')
@@ -103,7 +103,7 @@ Pode-se alterar o valor de um elemento de uma lista atribuindo um novo valor ao 
 
 <Alert>Listas aumentam de tamanho dinamicamente, se necessário.</Alert>
 
-<Code>
+<Code exec>
   var profissoes = ['engenheiro', 'médico']
   profissoes[2] = 'professor'
 
@@ -114,7 +114,7 @@ Pode-se alterar o valor de um elemento de uma lista atribuindo um novo valor ao 
 
 <Alert>Caso uma nova posição na lista seja maior que o tamanho, todas as posições entre o último elemento anterior e o novo último elemento são preenchidas com *nulo*</Alert>
 
-<Code>
+<Code exec>
   var esportes = ['Futebol', 'Basquete']
   esportes[3] = 'Vôlei'
   escreva(esportes)
@@ -127,7 +127,7 @@ Pode-se alterar o valor de um elemento de uma lista atribuindo um novo valor ao 
 
 <Text>Remove um elemento de uma lista. O item a ser removido deve ser especificado como argumento do método, ou seja, entre seus parênteses.</Text>
 
-<Code>
+<Code exec>
   var empresas = ['Microsoft', 'Google', 'Facebook', 'Amazon']
     
   empresas.remover('Facebook')
@@ -141,7 +141,7 @@ Pode-se alterar o valor de um elemento de uma lista atribuindo um novo valor ao 
 
 Remove o último elemento de uma lista.
 
-<Code>
+<Code exec>
   var numeros = [1, 2, 3, 4, 5]
     
   numeros.removerUltimo()
@@ -155,7 +155,7 @@ Remove o último elemento de uma lista.
 
 Remove o primeiro elemento de uma lista.
 
-<Code>
+<Code exec>
   var bandas = ['Beatles', 'Queen']
     
   bandas.removerPrimeiro()
@@ -169,7 +169,7 @@ Remove o primeiro elemento de uma lista.
 
 Retorna a quantidade de elementos presentes em uma lista.
 
-<Code>
+<Code exec>
   var carros = [
     'Ferrari', 
     'Lamborghini', 
@@ -189,7 +189,7 @@ Retorna a quantidade de elementos presentes em uma lista.
 
 <Text>Combina duas ou mais lista em uma nova lista.</Text>
 
-<Code>
+<Code exec>
     var mamiferos = ['cachorro', 'gato', 'elefante']
     var aves = ['pássaro', 'pinguim', 'flamingo']
 
@@ -203,7 +203,7 @@ Retorna a quantidade de elementos presentes em uma lista.
 
 <Text>Retorna uma cópia de uma parte da lista, especificada por um índice inicial (obrigatório) e um índice final (opcional). Porém, o item que corresponde ao índice final nunca é incluído na fatia.</Text>
 
-<Code>
+<Code exec>
   var pedacos = [
     'pedaço 1',
     'pedaço 2',
@@ -220,7 +220,7 @@ Retorna a quantidade de elementos presentes em uma lista.
 
 <Alert>Se o índice final não for especificado, a cópia começará do índice inicial terminando no último elemento da lista.</Alert>
 
-<Code>
+<Code exec>
   var lista = [1, 2, 3, 4, 5]
     
   var sublista = lista.fatiar(1)
@@ -237,7 +237,7 @@ Ele possui três argumentos: o primeiro (obrigatório) é o índice inicial no q
 
 O segundo (opcional) é a quantidade de itens que vão ser removidos da lista a partir do índice inicial.
 
-<Code>
+<Code exec>
   var times = ['Real Madrid', 'Barcelona', 'Manchester United', 'Liverpool']
 
   times.encaixar(1, 2)
@@ -249,7 +249,7 @@ O segundo (opcional) é a quantidade de itens que vão ser removidos da lista a 
 
 <Alert>Os elementos removidos são retornados como uma outra lista.</Alert>
 
-<Code>
+<Code exec>
   var alunos = ['Ana', 'Beto', 'Carla', 'Daniel', 'Eduardo']
     
   var alunosRemovidos = alunos.encaixar(1, 3)
@@ -263,7 +263,7 @@ O segundo (opcional) é a quantidade de itens que vão ser removidos da lista a 
 
 Do terceiro argumento adiante (opcional) é definido os elementos que serão adicionados na lista a partir do ídice inicial.
 
-<Code>
+<Code exec>
   var jogos = [
     'Among Us',
     'League of Legends', 
@@ -285,7 +285,7 @@ Do terceiro argumento adiante (opcional) é definido os elementos que serão adi
 
 <Text>Verifica se um elemento está presente na lista, retornando um valor lógico (*verdadeiro* ou  *falso*).</Text>
 
-<Code>
+<Code exec>
   var simpsons = [
     'Homer Simpson',
     'Marge Simpson',
@@ -306,7 +306,7 @@ Do terceiro argumento adiante (opcional) é definido os elementos que serão adi
 
 <Text>Inverte a ordem dos elementos de uma lista.</Text>
 
-<Code>
+<Code exec>
   var numeros = [1, 2, 3, 4, 5]
     
   numeros.inverter()
@@ -319,7 +319,7 @@ Do terceiro argumento adiante (opcional) é definido os elementos que serão adi
 
 <Text>Cria uma nova lista com os números da lista original em ordem crescente.</Text>
 
-<Code>
+<Code exec>
   var numeros = [5, 4, 3, 2, 1]
     
   var listaOrdenada = numeros.ordenar()
@@ -330,7 +330,7 @@ Do terceiro argumento adiante (opcional) é definido os elementos que serão adi
 
 <Alert>Caso a lista contenha textos, a ordenação será por ordem alfabética.</Alert>
 
-<Code>
+<Code exec>
   var nomes = ["Erika", "Ana", "Carlos", "Daniel", "Bianca"]
       
   var nomesEmOrdemAlfabetica = nomes.ordenar()
@@ -341,7 +341,7 @@ Do terceiro argumento adiante (opcional) é definido os elementos que serão adi
 
 <Alert>Se a lista possuir números e textos a ordenação dos numéros será feita primeiro.</Alert>
 
-<Code>
+<Code exec>
   var elementos = ["Zé", 5, "Erika", 7, "Bianca"]
     
   elementos.ordenar()
@@ -354,7 +354,7 @@ Do terceiro argumento adiante (opcional) é definido os elementos que serão adi
 
 <Text>Retorna a soma de uma lista de números.</Text>
 
-<Code>
+<Code exec>
   var numeros = [1, 2, 3, 4, 5]
     
   var soma = numeros.somar()
@@ -367,7 +367,7 @@ Do terceiro argumento adiante (opcional) é definido os elementos que serão adi
 
 <Text>Textos também podem ser tratados como listas.</Text>
 
-<Code>
+<Code exec>
   var letras = "abc"
     
   escreva(letras[0])
@@ -376,7 +376,7 @@ Do terceiro argumento adiante (opcional) é definido os elementos que serão adi
 
 Logo, é possível usar alguns métodos de vetor em textos, como *tamanho()*, *inverter()* e *concatenar()* e *inclui()*.
 
-<Code>
+<Code exec>
   var letras = "abc"
     
   escreva(letras.tamanho())
@@ -398,7 +398,7 @@ Logo, é possível usar alguns métodos de vetor em textos, como *tamanho()*, *i
 
 <Text>Remove os espaços em branco qua estão no início e no final de um texto.</Text>
 
-<Code>
+<Code exec>
   var frase = "   Olá, mundo   "
 
   escreva(frase.aparar())
@@ -410,7 +410,7 @@ Logo, é possível usar alguns métodos de vetor em textos, como *tamanho()*, *i
 
 <Text>Remove os espaços em branco que estão no final de um texto.</Text>
 
-<Code>
+<Code exec>
   var frase = "Olá, mundo   "
 
   escreva(frase.apararFim())
@@ -422,7 +422,7 @@ Logo, é possível usar alguns métodos de vetor em textos, como *tamanho()*, *i
 
 <Text>Remove os espaços em branco no início de um texto.</Text>
 
-<Code>
+<Code exec>
   var frase = "        Olá, mundo"
 
   escreva(frase.apararInicio())
@@ -434,7 +434,7 @@ Logo, é possível usar alguns métodos de vetor em textos, como *tamanho()*, *i
 
 <Text>Divide uma texto em uma lista de subtextos com base em um separador especificado nos seus parênteses.</Text>
 
-<Code>
+<Code exec>
   var frase = "Olá, Mundo!"
   var palavras = frase.dividir(",")
    
@@ -442,7 +442,7 @@ Logo, é possível usar alguns métodos de vetor em textos, como *tamanho()*, *i
   // Resultado: [ "Olá", " Mundo!" ]
 </Code>
 
-<Code>        
+<Code exec>        
   var data = '2022-12-31'
 
   var numeros = data.dividir('-')
@@ -452,7 +452,7 @@ Logo, é possível usar alguns métodos de vetor em textos, como *tamanho()*, *i
 
 </Code>
 
-<Code>        
+<Code exec>        
   var frase = "Olá, Mundo! Como você está?"
   var palavras = frase.dividir(" ") 
 
@@ -462,7 +462,7 @@ Logo, é possível usar alguns métodos de vetor em textos, como *tamanho()*, *i
 
 <Alert>Se um texto vazio for definido como separador, o texto executando *dividir()* será dividido em uma lista contendo cada caractere desse texto.</Alert>
 
-<Code>        
+<Code exec>        
   var palavra = 'programação'
 
   var letras = palavra.dividir('')
@@ -478,7 +478,7 @@ Logo, é possível usar alguns métodos de vetor em textos, como *tamanho()*, *i
 
 Ele recebe dois parâmetros: o índice inicial (obrigatório) e o índice final (opcional) do subtexto desejado. O caractere no índice inicial está incluído no subtexto, enquanto o caractere no índice final não está incluído.
 
-<Code>        
+<Code exec>        
   var textoCompleto = "Olá, Mundo"
   
   var textoFatiado = textoCompleto.subtexto(0, 3)
@@ -490,7 +490,7 @@ Ele recebe dois parâmetros: o índice inicial (obrigatório) e o índice final 
 
 Se o inídice final for omitido, o método *subtexto()* extrairá do índice fornecido até o final do texto original.
 
-<Code>        
+<Code exec>        
   var textoCompleto = "Olá, Mundo"
 
   var textoFatiado = textoCompleto.subtexto(5)
@@ -504,7 +504,7 @@ Se o inídice final for omitido, o método *subtexto()* extrairá do índice for
 
 Retorna um novo texto com todos os caracteres do texto original em letras maiúsculas.
 
-<Code>        
+<Code exec>        
   var frase = "olá, mundo"
   var fraseEmMaiusculo = frase.maiusculo()
   
@@ -516,7 +516,7 @@ Retorna um novo texto com todos os caracteres do texto original em letras maiús
 
 <Text>Retorna um novo texto com todos os caracteres do texto original em letras minúsculas.</Text>
 
-<Code>        
+<Code exec>        
   var frase = "OLÁ, MUNDO"
   var fraseEmMinusculo = frase.minusculo()
 

@@ -1,0 +1,1 @@
+<Text picture='foquete-viajando.jpg'></Text>

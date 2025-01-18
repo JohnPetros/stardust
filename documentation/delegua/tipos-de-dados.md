@@ -38,7 +38,7 @@ Também é possível haver números negativos (menores que zero).
 
 <Text>Nulo representa a ausência de qualquer valor.</Text>
 
-<Code>
+<Code exec>
  var minhaVariavel = nulo
  escreva(minha_variavel)
 </Code>
@@ -47,7 +47,7 @@ Também é possível haver números negativos (menores que zero).
 
 <Alert>Caso uma variável não tenha um valor definido ela conterá valor nulo</Alert>
 
-<Code>
+<Code exec>
   var numero
   escreva(numero) // nulo
 </Code>
@@ -56,7 +56,7 @@ Também é possível haver números negativos (menores que zero).
 
 Ao escrever *\${  }* dentro de um texto, é possível inserir uma variável já definida entre esses elementos.
 
-<Code>
+<Code exec>
   var minha_variavel = "Strogonoff"
 
   // Escreverá "Eu gosto de Strogonoff"
@@ -65,7 +65,7 @@ Ao escrever *\${  }* dentro de um texto, é possível inserir uma variável já 
 
 Também é possível	inserir diretamente uma expressão que resulta em um valor, desde que esse resultado seja do tipo número, lógico ou texto.
 
-<Code>
+<Code exec>
   // Escreverá "Eu tenho 22 anos"
   escreva("Eu tenho \${2024 - 2002} anos") 
 
