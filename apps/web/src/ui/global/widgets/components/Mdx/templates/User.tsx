@@ -6,7 +6,6 @@ import { Content } from './Content'
 
 type UserProps = {
   title: string
-  picture: string
   children: string[]
   hasAnimation?: boolean
 }

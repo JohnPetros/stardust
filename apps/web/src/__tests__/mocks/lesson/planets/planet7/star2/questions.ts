@@ -1,22 +1,22 @@
-import {
-  CheckboxQuestion,
-  DragAndDropQuestion,
-  OpenQuestion,
-} from "@/@types/Quiz";
+import type {
+  CheckboxQuestionDto,
+  DragAndDropQuestionDto,
+  OpenQuestionDto,
+} from '@stardust/core/lesson/dtos'
 
 type Questions = [
-  CheckboxQuestion,
-  DragAndDropQuestion,
-  DragAndDropQuestion,
-  CheckboxQuestion,
-  OpenQuestion,
+  CheckboxQuestionDto,
+  DragAndDropQuestionDto,
+  DragAndDropQuestionDto,
+  CheckboxQuestionDto,
+  OpenQuestionDto,
 ]
 
 export const question: Questions = [
-
   {
     type: 'checkbox',
-    title: 'Por algum motivo, aparentemente há um robô passando perto de nós, mas não tenho certeza. Quais os possíveis valores que o parâmetro *robo* poderia ter para que fosse escrito "Isso é um robô"?',
+    statement:
+      'Por algum motivo, aparentemente há um robô passando perto de nós, mas não tenho certeza. Quais os possíveis valores que o parâmetro *robo* poderia ter para que fosse escrito "Isso é um robô"?',
     code: `funcao verificarRobo(robo) {
     retorna robo.inclui("Robô")
 }
@@ -30,109 +30,112 @@ se (verificarRobo(robo)) {
   },
   {
     type: 'drag-and-drop',
-    title: 'Vamos verificar antes se esse planeta (que se chama "Haskell") é habitável. Complete a função abaixo para que ela retorne "Habitável"',
+    statement:
+      'Vamos verificar antes se esse planeta (que se chama "Haskell") é habitável. Complete a função abaixo para que ela retorne "Habitável"',
     lines: [
       {
-        id: 1,
+        number: 1,
         texts: ['funcao verifiquePlaneta(', 'dropZone', ') {'],
         indentation: 0,
       },
       {
-        id: 2,
+        number: 2,
         texts: ['var planetaHabitaveis = ["Scala", "Haskell"]'],
         indentation: 2,
       },
       {
-        id: 3,
+        number: 3,
         texts: ['se (planetaHabitaveis.inclui(planeta)) {'],
         indentation: 2,
       },
       {
-        id: 4,
+        number: 4,
         texts: ['dropZone', '"Habitável"'],
         indentation: 4,
       },
       {
-        id: 5,
+        number: 5,
         texts: ['}'],
         indentation: 2,
       },
       {
-        id: 6,
+        number: 6,
         texts: ['retorna', ' dropZone'],
         indentation: 2,
       },
       {
-        id: 7,
+        number: 7,
         texts: ['escreva(verifiquePlaneta(', 'dropZone', '))'],
         indentation: 0,
       },
     ],
-    dragItems: [
+    items: [
       {
-        id: 1,
+        index: 1,
         label: 'retorna',
       },
       {
-        id: 2,
+        index: 2,
         label: '"Elixir"',
       },
       {
-        id: 3,
+        index: 3,
         label: 'planeta',
       },
       {
-        id: 4,
+        index: 4,
         label: '"Haskell"',
       },
     ],
-    correctDragItemsIdsSequence: [3, 1, 4],
+    correctItemsIndexesSequence: [3, 1, 4],
     picture: 'panda.jpg',
   },
   {
     type: 'drag-and-drop',
-    title: 'Complete a função anônima adequadamente para descobrir a população do planeta "Haskell"',
+    statement:
+      'Complete a função anônima adequadamente para descobrir a população do planeta "Haskell"',
     lines: [
       {
-        id: 1,
+        number: 1,
         texts: ['dropZone', 'obtenhaPopulacao', 'dropZone', 'funcao() {'],
         indentation: 0,
       },
       {
-        id: 2,
+        number: 2,
         texts: ['dropZone', '12200'],
         indentation: 2,
       },
       {
-        id: 3,
+        number: 3,
         texts: ['}'],
         indentation: 0,
       },
     ],
-    dragItems: [
+    items: [
       {
-        id: 1,
+        index: 1,
         label: 'retorna',
       },
       {
-        id: 2,
+        index: 2,
         label: 'funcao',
       },
       {
-        id: 3,
+        index: 3,
         label: 'var',
       },
       {
-        id: 4,
+        index: 4,
         label: '=',
       },
     ],
-    correctDragItemsIdsSequence: [3, 4, 1],
+    correctItemsIndexesSequence: [3, 4, 1],
     picture: 'panda.jpg',
   },
   {
     type: 'checkbox',
-    title: 'Vamos utilizar funções anônimas para descobrir o nome da estrela desse planeta. Quais dessas funções SÃO anônimas?',
+    statement:
+      'Vamos utilizar funções anônimas para descobrir o nome da estrela desse planeta. Quais dessas funções SÃO anônimas?',
     code: `var obtenhaNomeDeEstrela = funcao() {
         retorna "Arrakis"
 }
@@ -142,40 +145,47 @@ funcao concateneNomeDeEstrela (estrela) {
 var adicioneNomeDeEstrela = funcao(estrelas) {
     retorna estrelas.adicionar(["Arrakis"])
 }`,
-    options: ['concateneNomeDeEstrela', 'obtenhaNomeDeEstrela', 'adicioneNomeDeEstrela', 'calculeGravidade'],
+    options: [
+      'concateneNomeDeEstrela',
+      'obtenhaNomeDeEstrela',
+      'adicioneNomeDeEstrela',
+      'calculeGravidade',
+    ],
     correctOptions: ['adicioneNomeDeEstrela', 'obtenhaNomeDeEstrela'],
     picture: 'panda.jpg',
   },
   {
-    type: "open",
-    title: "Estamos nos aproximando cada vez mais do novo planeta. A função abaixo retorna a distância entre nós e ele. Qual é ela na medida de distância chamada Jp?",
-    lines: [{
-      id: 1,
-      indentation: 0,
-      texts: ["funcao calculeDistancia(fogueteJp, planetaJp) {"],
-    },
-    {
-      id: 2,
-      indentation: 2,
-      texts: ["input-1", "planetaJp - fogueteJp"],
-    },
-    {
-      id: 3,
-      indentation: 0,
-      texts: ["}"],
-    },
-    {
-      id: 4,
-      indentation: 0,
-      texts: ["var subtracao =", "input-2", "(12, 2)"],
-    },
-    {
-      id: 5,
-      indentation: 0,
-      texts: ["escreva(subtracao *", "input-3", ")"],
-    },
+    type: 'open',
+    statement:
+      'Estamos nos aproximando cada vez mais do novo planeta. A função abaixo retorna a distância entre nós e ele. Qual é ela na medida de distância chamada Jp?',
+    lines: [
+      {
+        number: 1,
+        indentation: 0,
+        texts: ['funcao calculeDistancia(fogueteJp, planetaJp) {'],
+      },
+      {
+        number: 2,
+        indentation: 2,
+        texts: ['input-1', 'planetaJp - fogueteJp'],
+      },
+      {
+        number: 3,
+        indentation: 0,
+        texts: ['}'],
+      },
+      {
+        number: 4,
+        indentation: 0,
+        texts: ['var subtracao =', 'input-2', '(12, 2)'],
+      },
+      {
+        number: 5,
+        indentation: 0,
+        texts: ['escreva(subtracao *', 'input-3', ')'],
+      },
     ],
-    answers: ["retorna", "calculeDistancia", "2"],
+    answers: ['retorna', 'calculeDistancia', '2'],
     picture: 'panda.jpg',
   },
 ]

@@ -1,7 +1,7 @@
 import type { QuestionCodeLineDto } from './QuestionCodeLineDto'
 
 export type DragAndDropQuestionDto = {
-  id: string
+  id?: string
   type: 'drag-and-drop'
   statement: string
   picture: string

@@ -1,5 +1,5 @@
 export type DragAndDropListQuestionDto = {
-  id: string
+  id?: string
   type: 'drag-and-drop-list'
   statement: string
   picture: string

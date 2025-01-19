@@ -5,6 +5,5 @@ export type SelectionQuestionDto = {
   picture: string
   options: string[]
   answer: string
-  position: number
   code?: string
 }

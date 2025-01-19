@@ -1,35 +1,35 @@
-import {
-  CheckboxQuestion,
-  DragAndDropQuestion,
-  OpenQuestion,
-  SelectionQuestion,
-} from '@/@types/Quiz'
+import type {
+  CheckboxQuestionDto,
+  SelectionQuestionDto,
+  DragAndDropQuestionDto,
+  OpenQuestionDto,
+} from '@stardust/core/lesson/dtos'
 
 type Questions = [
-  CheckboxQuestion,
-  SelectionQuestion,
-  SelectionQuestion,
-  DragAndDropQuestion,
-  OpenQuestion,
+  CheckboxQuestionDto,
+  SelectionQuestionDto,
+  SelectionQuestionDto,
+  DragAndDropQuestionDto,
+  OpenQuestionDto,
 ]
 
 export const questions: Questions = [
   {
-    title: 'Quais os valores possíveis para uma variável do tipo lógico?',
+    statement: 'Quais os valores possíveis para uma variável do tipo lógico?',
     type: 'checkbox',
     options: ['falso', 'verdadeiro', 'nulo', '"verdadeiro"'],
     correctOptions: ['falso', 'verdadeiro'],
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
-    title: 'Qual é o valor padrão de uma variável sem valor atribuído a ela?',
+    statement: 'Qual é o valor padrão de uma variável sem valor atribuído a ela?',
     type: 'selection',
     answer: 'nulo',
     options: ['falso', 'verdadeiro', 'nulo', 'falso e nulo'],
     picture: 'panda-piscando-sentado.jpg',
   },
   {
-    title: 'Qual será o resultado do seguinte código?',
+    statement: 'Qual será o resultado do seguinte código?',
     code: `var resposta = verdadeiro
 resposta = falso
 escreva("Vai chover asteroide hoje? " + resposta)   
@@ -45,33 +45,32 @@ escreva("Vai chover asteroide hoje? " + resposta)
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
-    title:
-      'Complete o código para que a resposta seja coerente com a afirmação.',
+    statement: 'Complete o código para que a resposta seja coerente com a afirmação.',
     picture: 'panda-andando-com-bambu.jpg',
     type: 'drag-and-drop',
     lines: [
-      { id: 1, texts: ['var resposta = ', 'dropZone'], indentation: 0 },
+      { number: 1, texts: ['var resposta = ', 'dropZone'], indentation: 0 },
       {
-        id: 2,
+        number: 2,
         texts: ['escreva("A terra é plana e não redonda: ")'],
         indentation: 0,
       },
-      { id: 3, texts: ['escreva(', 'dropZone', ')'], indentation: 0 },
+      { number: 3, texts: ['escreva(', 'dropZone', ')'], indentation: 0 },
     ],
-    dragItems: [
-      { id: 1, label: 'verdadeiro' },
-      { id: 2, label: 'falso' },
-      { id: 3, label: 'nulo' },
-      { id: 4, label: 'resposta' },
+    items: [
+      { index: 1, label: 'verdadeiro' },
+      { index: 2, label: 'falso' },
+      { index: 3, label: 'nulo' },
+      { index: 4, label: 'resposta' },
     ],
-    correctDragItemsIdsSequence: [2, 4],
+    correctItemsIndexesSequence: [2, 4],
   },
   {
-    title: 'Qual seria o valor lógico para a pergunta "10 é maior que 5?"',
+    statement: 'Qual seria o valor lógico para a pergunta "10 é maior que 5?"',
     type: 'open',
     lines: [
       {
-        id: 1,
+        number: 1,
         texts: ['input-1'],
         indentation: 0,
       },
