@@ -8,7 +8,7 @@ type Request = {
   newCoins: number
 }
 
-export class VerifyStreakBreakUseCase implements IUseCase<Request> {
+export class ObserveStreakBreakUseCase implements IUseCase<Request> {
   constructor(private profileService: IProfileService) {}
 
   async do() {
@@ -19,7 +19,7 @@ export class VerifyStreakBreakUseCase implements IUseCase<Request> {
       const didUserBreakStreak = user.weekStatus.todayStatus === 'todo'
       if (didUserBreakStreak) {
         user.breakStreak()
-        promises.push(this.profileService.updateUser(user))
+        promises.push(this.updateUser(user))
       }
     }
 

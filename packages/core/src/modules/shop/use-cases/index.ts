@@ -1,1 +1,1 @@
-export { AcquireShopItemsByDefaultUseCase } from './AcquireShopItemsByDefaultUseCase'
+export { GetAcquirableShopItemsByDefaultUseCase } from './GetAcquirableShopItemsByDefaultUseCase'

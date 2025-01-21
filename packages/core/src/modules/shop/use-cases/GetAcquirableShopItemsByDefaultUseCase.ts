@@ -5,28 +5,22 @@ import {
   SelectedRocketByDefaultNotFoundError,
 } from '#shop/errors'
 
-type Request = {
-  userId: string
-}
-
 type Response = Promise<{
   selectedAvatarByDefaultId: string
   selectedRocketByDefaultId: string
+  acquirableAvatarsByDefaultIds: string[]
+  acquirableRocketsByDefaultIds: string[]
 }>
 
-export class AcquireShopItemsByDefaultUseCase implements IUseCase<Request, Response> {
+export class GetAcquirableShopItemsByDefaultUseCase implements IUseCase<void, Response> {
   constructor(private readonly shopService: IShopService) {}
 
-  async do({ userId }: Request) {
+  async do() {
     const [rockets, avatars] = await Promise.all([
       this.fetchFreeRockets(),
       this.fetchFreeAvatars(),
     ])
 
-    await Promise.all([
-      ...rockets.map((rocket) => this.saveAcquiredRocket(rocket.id, userId)),
-      ...avatars.map((avatar) => this.saveAcquiredAvatar(avatar.id, userId)),
-    ])
     const selectedAvatarByDefault = avatars.find((avatar) => avatar.isSelectedByDefault)
     const selectedRocketByDefault = rockets.find((rocket) => rocket.isSelectedByDefault)
 
@@ -36,6 +30,8 @@ export class AcquireShopItemsByDefaultUseCase implements IUseCase<Request, Respo
     return {
       selectedAvatarByDefaultId: selectedAvatarByDefault.id,
       selectedRocketByDefaultId: selectedRocketByDefault.id,
+      acquirableAvatarsByDefaultIds: avatars.map((avatar) => avatar.id),
+      acquirableRocketsByDefaultIds: rockets.map((rocket) => rocket.id),
     }
   }
 
@@ -57,21 +53,5 @@ export class AcquireShopItemsByDefaultUseCase implements IUseCase<Request, Respo
     }
 
     return response.body.map(Rocket.create)
-  }
-
-  private async saveAcquiredAvatar(avatarId: string, userId: string) {
-    const response = await this.shopService.saveAcquiredAvatar(avatarId, userId)
-
-    if (response.isFailure) {
-      response.throwError()
-    }
-  }
-
-  private async saveAcquiredRocket(avatarId: string, userId: string) {
-    const response = await this.shopService.saveAcquiredAvatar(avatarId, userId)
-
-    if (response.isFailure) {
-      response.throwError()
-    }
   }
 }

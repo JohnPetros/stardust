@@ -1,0 +1,1 @@
+export { ShopItemsAcquiredByDefaultEvent } from './ShopItemsAcquiredByDefaultEvent'
