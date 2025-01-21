@@ -1,0 +1,1 @@
+export { handleUserCreted } from './handleUserCreated'
