@@ -5,9 +5,9 @@ type Request = {
   userId: string
 }
 
-type Response = {
+type Response = Promise<{
   firstUnlockedStarId: string
-}
+}>
 
 export class UnlockFirstUserStarUseCase implements IUseCase<Request, Response> {
   constructor(private readonly spaceService: ISpaceService) {}

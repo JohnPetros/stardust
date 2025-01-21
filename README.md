@@ -200,3 +200,4 @@ Esta aplicação está sob licença do MIT. Consulte o [Arquivo de licença](LIC
   Feito com 💜 por John Petros 👋🏻
 </p>
 
+![alt text](image.png)

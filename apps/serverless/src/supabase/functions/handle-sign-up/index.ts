@@ -1,9 +1,7 @@
 // deno-lint-ignore-file
 
 // import { HandleSignUpController } from 'controllers/auth/HandleSignUpController'
-// import { DenoHttp } from 'deno/DenoHttp'
-import { SupabaseAuthUser, SupabasePayload } from '../types/index.ts'
-import { RocketsFaker } from 'npm:@stardust-org/core@0.1.15'
+import { HTTP_STATUS_CODE } from '@stardust/core'
 
 Deno.serve(async (request) => {
   // const payload: SupabasePayload<SupabaseAuthUser> = await request.json()
@@ -11,12 +9,10 @@ Deno.serve(async (request) => {
   //   body: { userId: payload.record.id },
   // }
 
-  const achievement = RocketsFaker.fake()
-
   // const http = DenoHttp<typeof schema>({ body: schema.body })
   // const controller = HandleSignUpController()
   // return controller.handle(http) as unknown as Response
-  return new Response(JSON.stringify({ achievement }), {
+  return new Response(JSON.stringify({ message: HTTP_STATUS_CODE.notFound }), {
     headers: { 'Content-Type': 'application/json' },
     status: 200,
   })

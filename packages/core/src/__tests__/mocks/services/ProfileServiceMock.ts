@@ -8,6 +8,10 @@ export class ProfileServiceMock implements IProfileService {
   fakeAchievementsDto: AchievementDto[] = []
   fakeUsersDto: UserDto[] = []
 
+  fetchUsers(): Promise<ApiResponse<UserDto[]>> {
+    throw new Error('Method not implemented.')
+  }
+
   async fetchUserById(userId: string): Promise<ApiResponse<UserDto>> {
     const user = this.fakeUsersDto.find((fekeUser) => fekeUser.id === userId)
 

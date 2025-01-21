@@ -2,9 +2,9 @@
 
 import { useState } from 'react'
 
-import type { ListingOrder } from '@stardust/core/global/types'
+import type { ListOrder } from '@stardust/core/global/types'
+import type { CommentsListSorter } from '@stardust/core/forum/types'
 import { Comment } from '@stardust/core/forum/entities'
-import type { CommentsListingSorter } from '@stardust/core/forum/types'
 
 import { CACHE } from '@/constants'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
@@ -17,8 +17,8 @@ import type { CommentsListProps } from './CommentsListProps'
 const COMMENTS_PER_PAGE = 10
 
 export function useCommentsList({ onFetchComments, onSaveComment }: CommentsListProps) {
-  const [sorter, setSorter] = useState<CommentsListingSorter>('date')
-  const [order, setOrder] = useState<ListingOrder>('descending')
+  const [sorter, setSorter] = useState<CommentsListSorter>('date')
+  const [order, setOrder] = useState<ListOrder>('descending')
   const [isPopoverMenuOpen, setIsPopoverMenuOpen] = useState(false)
   const { user } = useAuthContext()
   const toast = useToastContext()
@@ -77,7 +77,7 @@ export function useCommentsList({ onFetchComments, onSaveComment }: CommentsList
     setIsPopoverMenuOpen(isOpen)
   }
 
-  function handleSortComments(sorter: CommentsListingSorter, order: ListingOrder) {
+  function handleSortComments(sorter: CommentsListSorter, order: ListOrder) {
     setSorter(sorter)
     setOrder(order)
   }

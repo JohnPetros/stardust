@@ -3,5 +3,4 @@ export {
   DraggableItemsFaker,
   DropZoneFaker,
   RankingFaker,
-  StarRewardingPayloadFaker,
 } from '../../modules/lesson/domain/structs/tests/fakers'

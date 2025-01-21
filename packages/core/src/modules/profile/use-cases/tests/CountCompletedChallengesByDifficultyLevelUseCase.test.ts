@@ -12,7 +12,7 @@ describe('Count Completed Challenges By Difficulty Level Use Case', () => {
   })
 
   it('should return the absolute count of completed challenges by difficulty', async () => {
-    const fakeChallenges = ChallengesFaker.fakeManyDto(25, { difficulty: 'easy' })
+    const fakeChallenges = ChallengesFaker.fakeManyDto(25, { difficultyLevel: 'easy' })
     challengingServiceMock.challenges = fakeChallenges
 
     const completedChallengesCount = 15
@@ -29,7 +29,7 @@ describe('Count Completed Challenges By Difficulty Level Use Case', () => {
   })
 
   it('should return the percentage count of completed challenges by difficulty', async () => {
-    const fakeChallenges = ChallengesFaker.fakeManyDto(25, { difficulty: 'easy' })
+    const fakeChallenges = ChallengesFaker.fakeManyDto(25, { difficultyLevel: 'easy' })
     challengingServiceMock.challenges = fakeChallenges
 
     const completedChallengesCount = 15
@@ -45,11 +45,11 @@ describe('Count Completed Challenges By Difficulty Level Use Case', () => {
     expect(percentage.easy).toBe(60) // 60%
   })
 
-  it('should return the total count of challenges by difficulty', async () => {
+  it('should return the total count of challenges by difficulty level', async () => {
     const completedChallengesCount = 25
 
     const fakeChallenges = ChallengesFaker.fakeManyDto(completedChallengesCount, {
-      difficulty: 'easy',
+      difficultyLevel: 'easy',
     })
     challengingServiceMock.challenges = fakeChallenges
 

@@ -13,6 +13,10 @@ export class SpaceServiceMock implements ISpaceService {
     return new ApiResponse({ body: this.planets })
   }
 
+  async fetchFirstPlanet(): Promise<ApiResponse<PlanetDto>> {
+    throw new Error('Method not implemented.')
+  }
+
   async fetchPlanetByStar(starId: string): Promise<ApiResponse<PlanetDto>> {
     const planet = this.planets.find((planet) =>
       planet.stars.some((star) => star.id === starId),

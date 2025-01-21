@@ -1,23 +1,22 @@
 {
-  "name": "@stardust/core",
+  "name": "@stardust-org/core",
   "license": "MIT",
-  "version": "0.1.15",
+  "version": "0.1.22",
   "private": false,
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
   "author": {
-    "name": "John Petros"
+    "name": "João Pedro Carvalho dos Santos"
   },
   "files": [
-    "build"
+    "dist"
   ],
-  "main": "./build/main.js",
-  "module": "./build/main.mjs",
-  "types": "./build/main.d.ts",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "tsup",
-    "deploy": "tsup && npm version patch && npm publish"
+    "build": "rollup -c --bundleConfigAsCjs",
+    "deploy": "npm version patch && npm publish"
   },
   "exports": {
     "./auth/errors": "./src/modules/auth/errors/index.ts",
@@ -140,14 +139,22 @@
     "#mocks/services": "./src/__tests__/mocks/services/index.ts"
   },
   "dependencies": {
+    "@stardust-org/core": "^0.1.17",
     "dayjs": "^1.11.11",
     "express": "5.0.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
+    "@rollup/plugin-commonjs": "^28.0.2",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-typescript": "^12.1.2",
     "@stardust/typescript-config": "*",
     "jest": "^29.7.0",
+    "npm": "^10.9.2",
+    "rollup": "^4.31.0",
+    "rollup-plugin-multi-input": "^1.5.0",
+    "rollup-plugin-tsconfig-paths": "^1.5.2",
     "tiny-glob": "^0.2.9",
     "tsup": "^8.3.5",
     "typescript": "5.5.3"

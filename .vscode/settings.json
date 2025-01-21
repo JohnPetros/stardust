@@ -1,6 +1,5 @@
 {
-  // "deno.enablePaths": ["apps/serverless", "packages/core"],
-  // "deno.disablePaths": ["packages", "apps/web"],
+  "deno.disablePaths": ["packages", "apps/web"],
   "deno.enablePaths": ["apps/serverless"],
   "deno.unstable": [
     "bare-node-builtins",

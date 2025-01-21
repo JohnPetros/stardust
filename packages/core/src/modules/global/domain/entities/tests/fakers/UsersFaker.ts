@@ -31,11 +31,10 @@ export class UsersFaker {
       unlockedDocsIds: [],
       weekStatus: ['todo', 'todo', 'todo', 'todo', 'todo', 'todo', 'todo'],
       canSeeRankingResult: false,
-      didIncrementStreakOnSaturday: false,
       avatar: AvatarsFaker.fake().dto,
       tier: TiersFaker.fake().dto,
       rocket: RocketsFaker.fake().dto,
-      createdAt: faker.date.birthdate().toString(),
+      createdAt: faker.date.birthdate(),
       ...baseDto,
     }
   }

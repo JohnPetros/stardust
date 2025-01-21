@@ -10,7 +10,7 @@ export class RankingPosition {
 
   static create(positionValue: number) {
     return new RankingPosition(
-      OrdinalNumber.create('ranking position value', positionValue),
+      OrdinalNumber.create(positionValue, 'ranking position value'),
     )
   }
 

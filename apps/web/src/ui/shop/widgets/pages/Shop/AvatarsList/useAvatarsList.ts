@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import type { ListingOrder } from '@stardust/core/global/types'
+import type { ListOrder } from '@stardust/core/global/types'
 import type { AvatarDto } from '@stardust/core/shop/dtos'
 import type { PaginationResponse } from '@stardust/core/responses'
 
@@ -15,7 +15,7 @@ const AVATARS_PER_PAGE = 8
 
 export function useAvatarsList(initialAvatarsPagination: PaginationResponse<AvatarDto>) {
   const [search, setSearch] = useState('s')
-  const [priceOrder, setPriceOrder] = useState<ListingOrder>('ascending')
+  const [priceOrder, setPriceOrder] = useState<ListOrder>('ascending')
   const api = useApi()
   const { user } = useAuthContext()
 
@@ -46,7 +46,7 @@ export function useAvatarsList(initialAvatarsPagination: PaginationResponse<Avat
     setPage(1)
   }
 
-  function handlePriceOrderChange(value: ListingOrder) {
+  function handlePriceOrderChange(value: ListOrder) {
     setPriceOrder(value)
   }
 

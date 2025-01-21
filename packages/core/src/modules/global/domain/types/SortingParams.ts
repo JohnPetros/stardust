@@ -1,5 +1,5 @@
-import type { ListingOrder } from './ListOrder'
+import type { ListOrder } from './ListOrder'
 
 export type SortingParams = {
-  order: ListingOrder
+  order: ListOrder
 }

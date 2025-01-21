@@ -9,10 +9,10 @@ type Request = {
   userId: string
 }
 
-type Response = {
+type Response = Promise<{
   selectedAvatarByDefaultId: string
   selectedRocketByDefaultId: string
-}
+}>
 
 export class AcquireShopItemsByDefaultUseCase implements IUseCase<Request, Response> {
   constructor(private readonly shopService: IShopService) {}

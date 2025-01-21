@@ -1,7 +1,7 @@
-import { List, Image, Text, type Logical } from '#global/structs'
+import { List, Image, Text, type Logical, type UserAnswer } from '#global/structs'
 import { Question } from '#lesson/abstracts'
 import type { OpenQuestionDto, QuestionDto } from '#lesson/dtos'
-import { type QuestionAnswer, QuestionCodeLine } from '#lesson/structs'
+import { QuestionCodeLine } from '#lesson/structs'
 
 type OpenQuestionProps = {
   answers: List<string>
@@ -28,7 +28,7 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
     return question.type === 'open'
   }
 
-  verifyUserAnswer(userAnswer: QuestionAnswer): Logical {
+  verifyUserAnswer(userAnswer: UserAnswer): Logical {
     const usersAnswers = List.create(userAnswer.value as string[])
 
     return this.answers.isEqualTo(usersAnswers)

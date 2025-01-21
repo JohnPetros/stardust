@@ -1,3 +1,6 @@
 {
-  "imports": {}
+  "imports": {
+    "@stardust/core": "npm:@stardust-org/core@0.1.22/constants",
+    "deno/DenoHttp": "../../deno/DenoHttp"
+  }
 }

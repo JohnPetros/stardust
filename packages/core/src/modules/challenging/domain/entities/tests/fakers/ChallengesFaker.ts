@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker'
 
 import type { ChallengeDto } from '#challenging/dtos'
 import { Challenge } from '#challenging/entities'
+import { AuthorsFakers } from '#fakers/entities'
 
 export class ChallengesFaker {
   static fake(baseDto?: Partial<ChallengeDto>): Challenge {
@@ -12,19 +13,22 @@ export class ChallengesFaker {
     return {
       id: faker.string.uuid(),
       title: faker.person.firstName(),
-      difficulty: faker.helpers.arrayElement(['easy', 'medium', 'hard']),
+      difficultyLevel: faker.helpers.arrayElement(['easy', 'medium', 'hard']),
       slug: faker.lorem.slug(),
       code: '',
-      authorSlug: '',
+      categories: [],
+      author: {
+        id: faker.string.uuid(),
+        dto: AuthorsFakers.fakeDto(),
+      },
+      testCases: [],
+      textBlocks: [],
       description: '',
       completionsCount: 0,
       downvotesCount: 0,
       upvotesCount: 0,
-      functionName: '',
-      descriptionTextBlocks: [],
       docId: '',
       starId: '',
-      createdAt: new Date(),
       ...baseDto,
     }
   }

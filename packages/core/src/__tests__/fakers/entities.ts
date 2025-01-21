@@ -1,4 +1,7 @@
-export { UsersFaker } from '../../modules/global/domain/entities/tests/fakers'
+export {
+  UsersFaker,
+  AuthorsFakers,
+} from '../../modules/global/domain/entities/tests/fakers'
 export { ChallengesFaker } from '../../modules/challenging/domain/entities/tests/fakers'
 export {
   AvatarsFaker,

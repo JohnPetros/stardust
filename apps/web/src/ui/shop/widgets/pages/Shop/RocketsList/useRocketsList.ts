@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 import type { RocketDto } from '@stardust/core/shop/dtos'
-import type { ListingOrder } from '@stardust/core/global/types'
+import type { ListOrder } from '@stardust/core/global/types'
 import type { PaginationResponse } from '@stardust/core/responses'
 
 import { CACHE } from '@/constants'
@@ -15,7 +15,7 @@ const ROCKETS_PER_PAGE = 6
 
 export function useRocketsList(initialRocketsPagination: PaginationResponse<RocketDto>) {
   const [search, setSearch] = useState('s')
-  const [priceOrder, setPriceOrder] = useState<ListingOrder>('ascending')
+  const [priceOrder, setPriceOrder] = useState<ListOrder>('ascending')
   const api = useApi()
   const { user } = useAuthContext()
 
@@ -44,7 +44,7 @@ export function useRocketsList(initialRocketsPagination: PaginationResponse<Rock
     setPage(1)
   }
 
-  function handlePriceOrderChange(value: ListingOrder) {
+  function handlePriceOrderChange(value: ListOrder) {
     setPriceOrder(value)
   }
 

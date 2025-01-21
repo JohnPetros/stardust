@@ -52,7 +52,7 @@ export function AvatarsList({ initialItems }: AvatarsListProps) {
                     name={dto.name}
                     price={dto.price}
                     isAcquired={user.hasAcquiredAvatar(dto.id)}
-                    isBuyable={user.canBuy(dto.price)}
+                    isBuyable={user.canBuy(dto.price).isTrue}
                     isSelected={user.isSelectAvatar(dto.id)}
                   />
                 </li>

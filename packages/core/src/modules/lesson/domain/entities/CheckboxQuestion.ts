@@ -1,6 +1,12 @@
 import { Question } from '#lesson/abstracts'
-import { Image, List, ShuffledList, Text, type Logical } from '#global/structs'
-import type { QuestionAnswer } from '#lesson/structs'
+import {
+  Image,
+  List,
+  ShuffledList,
+  Text,
+  type UserAnswer,
+  type Logical,
+} from '#global/structs'
 import type { CheckboxQuestionDto, QuestionDto } from '#lesson/dtos'
 
 type CheckboxQuestionProps = {
@@ -32,7 +38,7 @@ export class CheckboxQuestion extends Question<CheckboxQuestionProps> {
     return question instanceof CheckboxQuestion
   }
 
-  verifyUserAnswer(userAnswer: QuestionAnswer): Logical {
+  verifyUserAnswer(userAnswer: UserAnswer): Logical {
     const usersOptions = List.create(userAnswer.value as string[])
     return usersOptions.includesList(this.props.correctOptions)
   }
