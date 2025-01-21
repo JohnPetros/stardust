@@ -1,9 +1,11 @@
 import type { IController, IHttp } from '@stardust/core/interfaces'
 import type { IAuthService } from '@stardust/core/interfaces'
 import { ROUTES } from '@/constants'
+import { unknown } from 'zod'
 
 const PUBLIC_ROUTES = [
   ROUTES.landing,
+  ROUTES.api.serverless,
   ...Object.values(ROUTES.auth),
   ...Object.values(ROUTES.api.auth),
 ]
@@ -12,6 +14,7 @@ export const VerifyAuthRoutesController = (authService: IAuthService): IControll
   return {
     async handle(http: IHttp) {
       const currentRoute = http.getCurrentRoute()
+      // @ts-ignore
       const isPublicRoute = PUBLIC_ROUTES.includes(currentRoute)
       const response = await authService.fetchUserId()
       const hasSession = response.isSuccess

@@ -78,5 +78,6 @@ export const ROUTES = {
     playground: {
       snippet: (snippetId: string) => `/api/playground/snippets/${snippetId}`,
     },
+    serverless: '/api/serverless'
   },
 } as const
