@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:turbo": "next dev --turbo",
+    "queue": "npx inngest-cli@latest dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -51,6 +52,7 @@
     "delegua": "^0.33.15",
     "framer-motion": "^10.18.0",
     "immer": "^10.1.1",
+    "inngest": "^3.30.0",
     "jsonwebtoken": "^9.0.2",
     "lottie-react": "^2.4.0",
     "markdown-to-jsx": "^7.4.7",
