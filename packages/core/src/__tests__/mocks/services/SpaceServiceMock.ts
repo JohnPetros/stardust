@@ -59,10 +59,7 @@ export class SpaceServiceMock implements ISpaceService {
     throw new Error('Method not implemented.')
   }
 
-  async saveUserUnlockedStar(
-    starId: string,
-    userId: string,
-  ): Promise<ApiResponse<boolean>> {
+  async saveUnlockedStar(starId: string, userId: string): Promise<ApiResponse<boolean>> {
     this.unlockedStarsIds.push(starId)
     return new ApiResponse({ statusCode: HTTP_STATUS_CODE.created })
   }
