@@ -1,1 +1,1 @@
-export { HandleUserSignedJob } from './HandleUserSignedUpJob'
+export { HandleUserSignedUpJob } from './HandleUserSignedUpJob'

@@ -1,21 +1,54 @@
 import { UserSignedUpEvent } from '@stardust/core/auth/events'
 import type { IJob, IQueue, IShopService } from '@stardust/core/interfaces'
+import { UserCreatedEvent } from '@stardust/core/profile/events'
 import { ShopItemsAcquiredByDefaultEvent } from '@stardust/core/shop/events'
 import { GetAcquirableShopItemsByDefaultUseCase } from '@stardust/core/shop/use-cases'
 
+export const KEY = 'shop/handle.user.signed.up'
+
+type UserCreatedPayload = ConstructorParameters<typeof UserCreatedEvent>['0']
+
 export const HandleUserSignedUpJob = (shopService: IShopService): IJob => {
+  async function saveAcquiredAvatar(avatarId: string, userId: string) {
+    const response = await shopService.saveAcquiredAvatar(avatarId, userId)
+    if (response.isFailure) response.throwError()
+  }
+
+  async function saveAcquiredRocket(rocketId: string, userId: string) {
+    const response = await shopService.saveAcquiredRocket(rocketId, userId)
+    if (response.isFailure) response.throwError()
+  }
+
   return {
-    key: 'shop/handle.user.signed.up',
+    key: KEY,
     eventName: UserSignedUpEvent.name,
     async handle(queue: IQueue) {
-      const useCase = new GetAcquirableShopItemsByDefaultUseCase(shopService)
+      queue.sleepFor('1s')
 
-      const payload = await queue.run<ReturnType<typeof useCase.do>>(
-        useCase,
+      const useCase = new GetAcquirableShopItemsByDefaultUseCase(shopService)
+      const shopPayload = await queue.run<ReturnType<typeof useCase.do>>(
+        async () => useCase.do(),
         GetAcquirableShopItemsByDefaultUseCase.name,
       )
 
-      await queue.publish(new ShopItemsAcquiredByDefaultEvent(payload))
+      const event = new ShopItemsAcquiredByDefaultEvent(shopPayload)
+      await queue.publish(event)
+
+      const { userId } = await queue.waitFor<UserCreatedPayload>(
+        UserCreatedEvent.NAME,
+        '1h',
+      )
+
+      await queue.run(async () => {
+        await Promise.all([
+          ...shopPayload.acquirableAvatarsByDefaultIds.map((avatarId) =>
+            saveAcquiredAvatar(avatarId, userId),
+          ),
+          ...shopPayload.acquirableRocketsByDefaultIds.map((rocketId) =>
+            saveAcquiredRocket(rocketId, userId),
+          ),
+        ])
+      }, 'save acquired shop items')
     },
   }
 }
