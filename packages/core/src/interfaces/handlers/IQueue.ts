@@ -1,11 +1,18 @@
 import type { IEvent } from './IEvent'
-import type { IUseCase } from './IUseCase'
 
-type TimeoutExpression = '1 day'
+export type TimeExpression = '1d' | '1h' | '1s'
 
 export interface IQueue<Payload = void> {
-  run<Response>(useCase: IUseCase, message: string): Promise<Response>
+  run<Response = void>(
+    callBack: () => Promise<unknown>,
+    callbackName: string,
+  ): Promise<Response>
   publish(event: IEvent): Promise<void>
-  waitFor(event: IEvent, timeoutExpression: TimeoutExpression): void
+  waitFor<EventPayload>(
+    eventName: string,
+    timeExpression: TimeExpression,
+    propToMatch?: string,
+  ): Promise<EventPayload>
+  sleepFor(timeExpression: TimeExpression): Promise<void>
   getPayload(): Payload
 }

@@ -1,4 +1,5 @@
-import type { IQueue, IUseCase } from '@stardust/core/interfaces'
+import { AppError } from '@stardust/core/global/errors'
+import type { IQueue, TimeExpression } from '@stardust/core/interfaces'
 import type { Context } from 'inngest/types'
 
 type InngestQueueProps = {
@@ -11,22 +12,33 @@ export const InngestQueue = <Payload>({
   event,
 }: InngestQueueProps): IQueue<Payload> => {
   return {
-    async run<Response>(useCase: IUseCase, useCaseName: string) {
-      return step.run(
-        `run ${useCaseName}`,
-        async () => await useCase.do(),
-      ) as Response
+    async run<Response>(callBack: () => Promise<unknown>, callbackName: string) {
+      return step.run(`run ${callbackName}`, async () => await callBack()) as Response
     },
 
     async publish(event) {
-      await step.sendEvent('send-event', { name: event.name, data: event.payload })
+      await step.sendEvent(`send.${event.name}.event`, {
+        name: event.name,
+        data: event.payload,
+      })
     },
 
-    async waitFor(event, timeOutExpression) {
-      step.waitForEvent('wait-for-event', {
-        event: event.name,
+    async waitFor<Response>(
+      eventName: string,
+      timeOutExpression: TimeExpression,
+      propToMatch?: string,
+    ) {
+      const event = await step.waitForEvent(`wait.for.${eventName}.event`, {
+        event: eventName,
         timeout: timeOutExpression,
       })
+      if (!event) throw new AppError('Event not defined')
+
+      return event.data as Response
+    },
+
+    async sleepFor(timeExpression: TimeExpression) {
+      await step.sleep(`sleep.for.${timeExpression}`, timeExpression)
     },
 
     getPayload() {
