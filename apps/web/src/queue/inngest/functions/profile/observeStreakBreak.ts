@@ -1,15 +1,17 @@
-import { ObserveStreakBreakJob } from '@/queue/jobs/profile/ObserveStreakBreakJob'
-import { profileService } from '@/api/supabase/services/server'
+import { KEY, ObserveStreakBreakJob } from '@/queue/jobs/profile/ObserveStreakBreakJob'
 import { inngest } from '../../client'
 import { InngestQueue } from '../../InngestQueue'
-
-const job = ObserveStreakBreakJob(profileService)
+import { SupabaseProfileService } from '@/api/supabase/services'
+import { SupabaseServerClient } from '@/api/supabase/clients'
 
 export const observeStreakBreak = inngest.createFunction(
-  { id: job.key },
+  { id: KEY },
   { cron: 'TZ=America/Sao_Paulo 0 0 * * *' }, // Everyday at 00:00
   async (context) => {
+    const supabase = SupabaseServerClient()
+    const profileService = SupabaseProfileService(supabase)
+    const job = ObserveStreakBreakJob(profileService)
     const queue = InngestQueue(context)
-    await job.handle()
+    return await job.handle(queue)
   },
 )

@@ -1,1 +1,3 @@
-export { handleUserCreted } from './handleUserCreated'
+import { handleUserSignedUp } from './handleUserSignedUp'
+
+export const shopFunctions = [handleUserSignedUp]
