@@ -5,10 +5,10 @@ type Payload = {
 }
 
 export class FirstStarUnlockedEvent implements IEvent<Payload> {
-  static readonly name = 'space/first.star.unlocked'
+  static readonly NAME = 'space/first.star.unlocked'
   constructor(readonly payload: Payload) {}
 
   get name() {
-    return FirstStarUnlockedEvent.name
+    return FirstStarUnlockedEvent.NAME
   }
 }

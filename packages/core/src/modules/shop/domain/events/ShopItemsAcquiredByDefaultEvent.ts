@@ -8,10 +8,10 @@ type UserSignedUpPayload = {
 }
 
 export class ShopItemsAcquiredByDefaultEvent implements IEvent<UserSignedUpPayload> {
-  static readonly name = 'shop/shop-items-acquired-by-default'
+  static readonly NAME = 'shop/shop-items-acquired-by-default'
   constructor(readonly payload: UserSignedUpPayload) {}
 
   get name() {
-    return ShopItemsAcquiredByDefaultEvent.name
+    return ShopItemsAcquiredByDefaultEvent.NAME
   }
 }

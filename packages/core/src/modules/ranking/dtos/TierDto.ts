@@ -1,5 +1,5 @@
 export type TierDto = {
-  id: string
+  id?: string
   image: string
   name: string
   position: number

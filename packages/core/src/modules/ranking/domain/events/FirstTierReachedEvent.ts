@@ -5,10 +5,10 @@ type Payload = {
 }
 
 export class FirstTierReachedEvent implements IEvent<Payload> {
-  static readonly name = 'ranking/first.tier.reached'
+  static readonly NAME = 'ranking/first.tier.reached'
   constructor(readonly payload: Payload) {}
 
   get name() {
-    return FirstTierReachedEvent.name
+    return FirstTierReachedEvent.NAME
   }
 }

@@ -7,10 +7,11 @@ type Payload = {
 }
 
 export class UserSignedUpEvent implements IEvent<Payload> {
-  static readonly name = 'auth/user.signed.up'
+  static readonly NAME = 'auth/user.signed.up'
+
   constructor(readonly payload: Payload) {}
 
   get name() {
-    return UserSignedUpEvent.name
+    return UserSignedUpEvent.NAME
   }
 }
