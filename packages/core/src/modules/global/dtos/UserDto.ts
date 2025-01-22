@@ -12,9 +12,18 @@ export type UserDto = {
   weeklyXp?: number
   weekStatus?: string[]
   streak?: number
-  tier: TierDto
-  rocket: RocketDto
-  avatar: AvatarDto
+  rocket: {
+    id: string
+    dto?: RocketDto
+  }
+  avatar: {
+    id: string
+    dto?: AvatarDto
+  }
+  tier: {
+    id: string
+    dto?: TierDto
+  }
   unlockedStarsIds?: string[]
   acquiredRocketsIds?: string[]
   unlockedDocsIds?: string[]

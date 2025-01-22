@@ -12,9 +12,18 @@ export class UserFactory {
       email: Email.create(dto.email),
       slug: dto.slug ? Slug.create(dto.slug) : Slug.create(dto.name),
       name: Name.create(dto.name),
-      rocket: Rocket.create(dto.rocket),
-      avatar: Avatar.create(dto.avatar),
-      tier: Tier.create(dto.tier),
+      rocket: {
+        id: dto.rocket.id,
+        entity: dto.rocket.dto ? Rocket.create(dto.rocket.dto) : undefined,
+      },
+      avatar: {
+        id: dto.avatar.id,
+        entity: dto.avatar.dto ? Avatar.create(dto.avatar.dto) : undefined,
+      },
+      tier: {
+        id: dto.tier.id,
+        entity: dto.tier.dto ? Tier.create(dto.tier.dto) : undefined,
+      },
       level: Level.create(dto.level),
       coins: Integer.create(dto.coins ?? 0, 'Moedas do usuário'),
       xp: Integer.create(dto.xp ?? 0, 'Xp do usuário'),

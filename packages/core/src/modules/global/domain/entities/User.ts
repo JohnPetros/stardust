@@ -17,11 +17,21 @@ import type { AchievementMetricValue } from '#profile/types'
 import type { RankingPosition } from '#ranking/structs'
 import type { Comment } from '#forum/entities'
 import type { Solution } from '#challenging/entities'
+import { EntityNotDefinedError } from '#global/errors'
 
 type UserProps = {
-  avatar: Avatar
-  tier: Tier
-  rocket: Rocket
+  avatar: {
+    id: string
+    entity?: Avatar
+  }
+  tier: {
+    id: string
+    entity?: Tier
+  }
+  rocket: {
+    id: string
+    entity?: Rocket
+  }
   slug: Slug
   email: Email
   name: Name
@@ -285,10 +295,7 @@ export class User extends Entity<UserProps> {
 
   get hasNextTier(): boolean {
     if (!this.props.lastWeekRankingPosition) return false
-
-    return (
-      this.props.tier.position.value !== this.props.lastWeekRankingPosition.position.value
-    )
+    return this.tier.position.value !== this.props.lastWeekRankingPosition.position.value
   }
 
   get rewardByLastWeekRankingPosition() {
@@ -305,16 +312,37 @@ export class User extends Entity<UserProps> {
     return this.props.slug
   }
 
+  get avatarId() {
+    return this.props.avatar.id
+  }
+
   get avatar() {
-    return this.props.avatar
+    if (!this.props.avatar.entity) {
+      throw new EntityNotDefinedError('Avatar')
+    }
+    return this.props.avatar.entity
+  }
+
+  get rocketId() {
+    return this.props.rocket.id
   }
 
   get rocket() {
-    return this.props.rocket
+    if (!this.props.rocket.entity) {
+      throw new EntityNotDefinedError('Foguete')
+    }
+    return this.props.rocket.entity
+  }
+
+  get tierId() {
+    return this.props.tier.id
   }
 
   get tier() {
-    return this.props.tier
+    if (!this.props.tier.entity) {
+      throw new EntityNotDefinedError('Tier')
+    }
+    return this.props.tier.entity
   }
 
   get name() {
@@ -375,9 +403,18 @@ export class User extends Entity<UserProps> {
       slug: this.slug.value,
       email: this.email.value,
       name: this.name.value,
-      tier: this.tier.dto,
-      rocket: this.rocket.dto,
-      avatar: this.avatar.dto,
+      rocket: {
+        id: this.rocketId,
+        dto: this.props.rocket.entity?.dto,
+      },
+      avatar: {
+        id: this.avatarId,
+        dto: this.props.avatar.entity?.dto,
+      },
+      tier: {
+        id: this.tierId,
+        dto: this.props.tier.entity?.dto,
+      },
       level: this.level.number.value,
       coins: this.coins.value,
       xp: this.xp.value,
