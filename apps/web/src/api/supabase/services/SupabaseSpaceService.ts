@@ -118,7 +118,7 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
       return new ApiResponse({ body: starDto })
     },
 
-    async saveUserUnlockedStar(starId: string, userId: string) {
+    async saveUnlockedStar(starId: string, userId: string) {
       const { error } = await supabase
         .from('users_unlocked_stars')
         .insert({ star_id: starId, user_id: userId })

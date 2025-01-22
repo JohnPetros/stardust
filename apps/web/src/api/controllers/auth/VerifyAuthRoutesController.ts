@@ -1,7 +1,6 @@
 import type { IController, IHttp } from '@stardust/core/interfaces'
 import type { IAuthService } from '@stardust/core/interfaces'
 import { ROUTES } from '@/constants'
-import { unknown } from 'zod'
 
 const PUBLIC_ROUTES = [
   ROUTES.landing,

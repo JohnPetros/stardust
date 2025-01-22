@@ -6,8 +6,6 @@ import { HTTP_STATUS_CODE } from '@stardust/core/constants'
 import type { Supabase } from '../types'
 import { SupabasePostgrestError } from '../errors'
 import { SupabaseAchievementMapper, SupabaseUserMapper } from '../mappers'
-import { SupabaseSpaceService } from './SupabaseSpaceService'
-import { Planet } from '@stardust/core/space/entities'
 
 export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
   const supabaseUserMapper = SupabaseUserMapper()
@@ -103,20 +101,23 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
     },
 
     async saveUser(user: User) {
+      const supabaseUser = supabaseUserMapper.toSupabase(user)
+
       const { error } = await supabase.from('users').insert({
+        // @ts-ignore
         id: user.id,
-        name: user.name.value,
-        email: user.email.value,
-        slug: user.name.slug,
-        avatar_id: user.avatar.id,
-        rocket_id: user.rocket.id,
-        tier_id: user.tier.id,
-        coins: user.coins.value,
-        xp: user.xp.value,
-        weekly_xp: user.weeklyXp.value,
-        streak: user.streak.value,
-        level: user.level.value,
-        week_status: user.weekStatus.statuses,
+        name: supabaseUser.name,
+        email: supabaseUser.email,
+        slug: supabaseUser.slug,
+        avatar_id: supabaseUser.avatar_id,
+        rocket_id: supabaseUser.rocket_id,
+        tier_id: supabaseUser.tier_id,
+        coins: supabaseUser.coins,
+        xp: supabaseUser.xp,
+        weekly_xp: supabaseUser.weekly_xp,
+        streak: supabaseUser.streak,
+        level: supabaseUser.level,
+        week_status: supabaseUser.week_status,
       })
 
       if (error)
