@@ -6,14 +6,14 @@ import { UserSignedUpEvent } from '@stardust/core/auth/events'
 import { emailSchema, idSchema, nameSchema } from '@stardust/validation/global/schemas'
 
 const eventsSchema = {
-  [UserCreatedEvent.name]: {
+  [UserCreatedEvent.NAME]: {
     data: z.object({
       userId: idSchema,
       acquiredRocketsIds: z.array(idSchema),
       acquiredAvatarsIds: z.array(idSchema),
     }),
   },
-  [UserSignedUpEvent.name]: {
+  [UserSignedUpEvent.NAME]: {
     data: z.object({
       userId: idSchema,
       userName: nameSchema,
