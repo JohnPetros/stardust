@@ -7,14 +7,10 @@ import {
   nameSchema,
   passwordSchema,
 } from '@stardust/validation/global/schemas'
+
+import { InngestQueue } from '@/queue/inngest/InngestQueue'
 import { SupabaseServerActionClient } from '@/api/supabase/clients/SupabaseServerActionClient'
-import {
-  SupabaseAuthService,
-  SupabaseProfileService,
-  SupabaseRankingService,
-  SupabaseShopService,
-  SupabaseSpaceService,
-} from '@/api/supabase/services'
+import { SupabaseAuthService } from '@/api/supabase/services'
 import { NextActionServer } from '../next/NextActionServer'
 import { SignUpAction } from '../actions/auth'
 import { actionClient } from './clients'
@@ -27,18 +23,8 @@ const signUp = actionClient
     })
     const supabase = SupabaseServerActionClient()
     const authService = SupabaseAuthService(supabase)
-    const profileService = SupabaseProfileService(supabase)
-    const rankingService = SupabaseRankingService(supabase)
-    const shopService = SupabaseShopService(supabase)
-    const spaceService = SupabaseSpaceService(supabase)
-
-    const action = SignUpAction({
-      authService,
-      profileService,
-      rankingService,
-      shopService,
-      spaceService,
-    })
+    const queue = InngestQueue()
+    const action = SignUpAction(authService, queue)
     await action.handle(actionServer)
   })
 
