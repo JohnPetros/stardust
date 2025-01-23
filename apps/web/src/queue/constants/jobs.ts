@@ -10,6 +10,10 @@ export const JOBS = {
       key: 'profile/observe.streak.break',
       cronExpression: '0 0 * * *', // Everyday at 00:00
     },
+    resetWeekStatus: {
+      key: 'profile/reset.week.status',
+      cronExpression: '0 0 * * 0', // Every sunday at 00:00
+    },
   },
   ranking: {
     handleUserSignedUp: {

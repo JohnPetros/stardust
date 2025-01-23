@@ -6,6 +6,7 @@ import { HTTP_STATUS_CODE } from '@stardust/core/constants'
 import type { Supabase } from '../types'
 import { SupabasePostgrestError } from '../errors'
 import { SupabaseAchievementMapper, SupabaseUserMapper } from '../mappers'
+import { WeekStatus } from '@stardust/core/profile/structs'
 
 export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
   const supabaseUserMapper = SupabaseUserMapper()
@@ -98,6 +99,21 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
         )
 
       return new ApiResponse({ body: data.email })
+    },
+
+    async resetWeekStatus() {
+      const { error } = await supabase
+        .from('users')
+        .update({ week_status: WeekStatus.DEFAULT_WEEK_STATUS })
+
+      if (error)
+        return SupabasePostgrestError(
+          error,
+          'Erro ao fazer o reset do status da semana',
+          HTTP_STATUS_CODE.notFound,
+        )
+
+      return new ApiResponse()
     },
 
     async saveUser(user: User) {

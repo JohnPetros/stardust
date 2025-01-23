@@ -1,6 +1,10 @@
 import { SupabaseServerClient } from '@/api/supabase/clients'
 import { SupabaseProfileService } from '@/api/supabase/services'
-import { HandleUserSignedUpJob, ObserveStreakBreakJob } from '@/queue/jobs/profile'
+import {
+  HandleUserSignedUpJob,
+  ObserveStreakBreakJob,
+  ResetWeekStatusJob,
+} from '@/queue/jobs/profile'
 import { JOBS } from '@/queue/constants'
 import { InngestQueue } from '../InngestQueue'
 import { inngest } from '../client'
@@ -29,4 +33,16 @@ const observeStreakBreak = inngest.createFunction(
   },
 )
 
-export const profileFunctions = [handleUserSignedUp, observeStreakBreak]
+const resetWeekStatus = inngest.createFunction(
+  { id: JOBS.profile.observerStreakBreak.key },
+  { cron: `TZ=America/Sao_Paulo ${JOBS.profile.resetWeekStatus.cronExpression}` },
+  async (context) => {
+    const supabase = SupabaseServerClient()
+    const profileService = SupabaseProfileService(supabase)
+    const job = ResetWeekStatusJob(profileService)
+    const queue = InngestQueue(context)
+    return await job.handle(queue)
+  },
+)
+
+export const profileFunctions = [handleUserSignedUp, observeStreakBreak, resetWeekStatus]

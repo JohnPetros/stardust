@@ -7,6 +7,7 @@ export interface IProfileService {
   fetchAchievements(): Promise<ApiResponse<AchievementDto[]>>
   fetchUnlockedAchievements(userId: string): Promise<ApiResponse<AchievementDto[]>>
   fetchUsers(): Promise<ApiResponse<UserDto[]>>
+  resetWeekStatus(): Promise<ApiResponse>
   saveUser(user: User): Promise<ApiResponse>
   saveUnlockedAchievement(
     achievementId: string,

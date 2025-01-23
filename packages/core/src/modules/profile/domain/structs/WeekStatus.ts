@@ -3,13 +3,22 @@ import { Datetime, NumberValidation, StringValidation } from '#libs'
 import type { WeekdayStatus } from '../types'
 
 export class WeekStatus {
+  static readonly DEFAULT_WEEK_STATUS: WeekdayStatus[] = [
+    'todo',
+    'todo',
+    'todo',
+    'todo',
+    'todo',
+    'todo',
+    'todo',
+  ]
   static readonly DAYS: string[] = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SÁB']
 
   private constructor(readonly statuses: WeekdayStatus[] = []) {}
 
   static create(values?: string[]) {
     if (!values) {
-      return new WeekStatus(['todo', 'todo', 'todo', 'todo', 'todo', 'todo', 'todo'])
+      return new WeekStatus(WeekStatus.DEFAULT_WEEK_STATUS)
     }
 
     if (!WeekStatus.isStatus(values)) {
