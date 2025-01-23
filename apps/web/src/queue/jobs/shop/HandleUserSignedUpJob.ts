@@ -1,10 +1,7 @@
-import { UserSignedUpEvent } from '@stardust/core/auth/events'
 import type { IJob, IQueue, IShopService } from '@stardust/core/interfaces'
 import { UserCreatedEvent } from '@stardust/core/profile/events'
 import { ShopItemsAcquiredByDefaultEvent } from '@stardust/core/shop/events'
 import { GetAcquirableShopItemsByDefaultUseCase } from '@stardust/core/shop/use-cases'
-
-export const KEY = 'shop/handle.user.signed.up'
 
 type UserCreatedPayload = ConstructorParameters<typeof UserCreatedEvent>['0']
 
@@ -20,8 +17,6 @@ export const HandleUserSignedUpJob = (shopService: IShopService): IJob => {
   }
 
   return {
-    key: KEY,
-    eventName: UserSignedUpEvent.name,
     async handle(queue: IQueue) {
       queue.sleepFor('1s')
 

@@ -1,13 +1,13 @@
 import { SupabaseServerClient } from '@/api/supabase/clients'
 import { SupabaseShopService } from '@/api/supabase/services'
 import { HandleUserSignedUpJob } from '@/queue/jobs/shop'
-import { KEY } from '@/queue/jobs/shop/HandleUserSignedUpJob'
-import { inngest } from '../../client'
-import { InngestQueue } from '../../InngestQueue'
+import { JOBS } from '@/queue/constants'
+import { inngest } from '../client'
+import { InngestQueue } from '../InngestQueue'
 
 export const handleUserSignedUp = inngest.createFunction(
-  { id: KEY },
-  { event: 'auth/user.signed.up' },
+  { id: JOBS.shop.handleUserSignedUp.key },
+  { event: JOBS.shop.handleUserSignedUp.eventName },
   async (context) => {
     const supabase = SupabaseServerClient()
     const shopService = SupabaseShopService(supabase)
@@ -16,3 +16,5 @@ export const handleUserSignedUp = inngest.createFunction(
     return await job.handle(queue)
   },
 )
+
+export const shopFunctions = [handleUserSignedUp]

@@ -1,4 +1,3 @@
-import { UserSignedUpEvent } from '@stardust/core/auth/events'
 import type { IJob, IProfileService, IQueue } from '@stardust/core/interfaces'
 import { FirstStarUnlockedEvent } from '@stardust/core/space/events'
 import { FirstTierReachedEvent } from '@stardust/core/ranking/events'
@@ -16,12 +15,8 @@ type SpaceEventPayload = ConstructorParameters<typeof FirstStarUnlockedEvent>['0
 type RankingEventPayload = ConstructorParameters<typeof FirstTierReachedEvent>['0']
 type ShopEventPayload = ConstructorParameters<typeof ShopItemsAcquiredByDefaultEvent>['0']
 
-export const KEY = 'profile/handle.user.signed.up'
-
 export const HandleUserSignedUpJob = (profileService: IProfileService): IJob<Payload> => {
   return {
-    key: KEY,
-    eventName: UserSignedUpEvent.name,
     async handle(queue: IQueue<Payload>) {
       const spacePayload = await queue.waitFor<SpaceEventPayload>(
         FirstStarUnlockedEvent.NAME,

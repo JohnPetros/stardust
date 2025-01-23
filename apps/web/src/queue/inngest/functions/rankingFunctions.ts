@@ -1,13 +1,13 @@
 import { HandleUserSignedUpJob } from '@/queue/jobs/ranking'
-import { KEY } from '@/queue/jobs/ranking/HandleUserSignedUpJob'
 import { SupabaseServerClient } from '@/api/supabase/clients'
 import { SupabaseRankingService } from '@/api/supabase/services'
-import { inngest } from '../../client'
-import { InngestQueue } from '../../InngestQueue'
+import { JOBS } from '@/queue/constants'
+import { inngest } from '../client'
+import { InngestQueue } from '../InngestQueue'
 
 export const handleUserSignedUp = inngest.createFunction(
-  { id: KEY },
-  { event: 'auth/user.signed.up' },
+  { id: JOBS.ranking.handleUserSignedUp.key },
+  { event: JOBS.ranking.handleUserSignedUp.eventName },
   async (context) => {
     const supabase = SupabaseServerClient()
     const rankingService = SupabaseRankingService(supabase)
@@ -16,3 +16,5 @@ export const handleUserSignedUp = inngest.createFunction(
     return await job.handle(queue)
   },
 )
+
+export const rankingFunctions = [handleUserSignedUp]

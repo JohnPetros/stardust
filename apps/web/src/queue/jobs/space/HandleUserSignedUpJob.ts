@@ -1,17 +1,12 @@
-import { UserSignedUpEvent } from '@stardust/core/auth/events'
 import type { IJob, IQueue, ISpaceService } from '@stardust/core/interfaces'
 import { GetFirstStarIdUseCase, UnlockStarUseCase } from '@stardust/core/space/use-cases'
 import { FirstStarUnlockedEvent } from '@stardust/core/space/events'
 import { UserCreatedEvent } from '@stardust/core/profile/events'
 
-export const KEY = 'space/handle.user.signed.up'
-
 type UserCreatedPayload = ConstructorParameters<typeof UserCreatedEvent>['0']
 
 export const HandleUserSignedUpJob = (spaceService: ISpaceService): IJob => {
   return {
-    key: KEY,
-    eventName: UserSignedUpEvent.name,
     async handle(queue: IQueue) {
       queue.sleepFor('1s')
 
