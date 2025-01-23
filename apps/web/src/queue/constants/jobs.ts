@@ -13,23 +13,23 @@ export const JOBS = {
   },
   ranking: {
     handleUserSignedUp: {
-      key: 'auth/user.signed.up',
+      key: 'ranking/user.signed.up',
       eventName: UserSignedUpEvent.NAME,
     },
-    updateRanking: {
-      key: 'auth/update.ranking',
-      eventName: UserSignedUpEvent.NAME,
+    updateRankings: {
+      key: 'ranking/update.rankings',
+      cronExpression: '0 0 * * 0', // Every sunday at 00:00
     },
   },
   shop: {
     handleUserSignedUp: {
-      key: 'auth/user.signed.up',
+      key: 'shop/user.signed.up',
       eventName: UserSignedUpEvent.NAME,
     },
   },
   space: {
     handleUserSignedUp: {
-      key: 'auth/user.signed.up',
+      key: 'space/user.signed.up',
       eventName: UserSignedUpEvent.NAME,
     },
   },
