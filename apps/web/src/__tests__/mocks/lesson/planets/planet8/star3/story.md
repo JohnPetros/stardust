@@ -1,274 +1,174 @@
-<Image picture='tubarao.jpg'>Haha! Eu voltei</Image>
----
-<Text picture='panda-espantado.jpg'>O tubarãooo!</Text>
----
-<Image picture='princesa-vomitando.jpg'>Acalme-se Sharkorno.</Image>
----
-<Image picture='tubarao-acenando.jpg'>Sim, princesa!</Image>
----
-<User>A princesa está falando a nossa língua.</User>
----
-<Text picture='panda-espantado.jpg'>Aparentemente, o tubarão tinha sumido para buscar um tradutor para a princesa e, pelo visto, ele não é tão malvado assim.</Text>
----
-<Text picture='panda-espantado.jpg'>Aparentemente, o tubarão tinha ido embora para buscar um tradutor e, pelo visto, ele não é tão malvado assim.</Text>
----
-<Image picture='princesa-vomitando.jpg'>Peço perdão pelo meu tubarão de estimação, as vezes ele não jeito.</Image>
----
-<Image picture='princesa-vomitando.jpg'>Não temos tempo a perder. Já já os salmonenses já estão perto de chegar ao meu mundo</Image>
----
-<User>Salmonenses?</User>
----
-<Image picture='princesa-vomitando.jpg'>Sim. são aliens parecidos com macacos que amam comer bananas</Image>
----
-<Image picture='princesa-vomitando.jpg'>Ele percorrem pela galáxia a procura de bananas destruindos mundos no processo.</Image>
----
-<Image picture='princesa-vomitando.jpg'>E agora eles agora estão atrás das minhas banana!</Image>
----
-<User>O que você quer que a gente faça princesa?</User>
----
-<Image picture='princesa-vomitando.jpg'>Por favor, sejam os guerreiros das minhas bananas e em troca poderão escolher uma das recompensas:</Image>
+<Image picture='princesa-flutuando.jpg'>Estamos quase lá!</Image>
 ---
 <Code>
-  var dicionarioQualquer = {
-    0: "ganhar 1 milhão de yaggs",
-    1: "poder cuidar do meu tubarão para o resto da vida",
-    2: "voltar para sua casa",
-    3: "poder voar comigo no céu por 3 dias seguidos",
+  var bombas = {
+    "tomatomica": ["tomate", "tomate", "tomate", "tomate", "tomate", "tomate", "tomate", "tomate"],
+    "granatom": ["tomate", "tomate", "tomate", "tomate", "tomate", "tomate", "tomate", "tomate"],
+    "pomatox": ["tomate", "tomate", "tomate", "tomate", "tomate", "tomate", "tomate", "tomate"],
   }
 </Code>
 ---
-<Alert picture='princesa-vomitando.jpg'>Como pode bem ver, não é apenas possível definir as chaves de um dicionário usando tipo `texto`, mas `número` também.</Alert>
+<Image picture='princesa-animada.jpg'>Bombas de tomates!</Image>
 ---
-<Text picture='princesa-vomitando.jpg'>Com tanta opção ruim, é melhor escolher mais tarde.</Text>
+<Text picture='panda-pensando.jpg'>Podemos jogar essas bombas nos locais estratégicos que nos foram enviados por aquele pessoa desconhecida.</Text>
 ---
-<Image picture='princesa-vomitando.jpg'>Antes de partirem para a batalha, é melhor saberem como combater os salmonenses</Image>
----
-<Code>
-  var reservasDeBananas = {
-    "reserva de bananas 1": ["banana", "banana", "banana", "banana"],
-    "reserva de bananas 2 ": ["banana", "banana"],
-    "reserva de bananas 3 ": ["banana", "banana", "banana"],
-  }
-</Code>
----
-<User>Um dicionário contendo listas?</User>
----
-<Text picture='princesa-vomitando.jpg'>Sim! O valor de um dicionário pode ser um tipo de dado mais complexo como listas ou ainda dicionários.</Text>
+<Text picture='panda-segurando-bambu-de-pe.jpg'>Primeiro, permita-te colocá-los em variáveis</Text>
 ---
 <Code exec>
-  var notasDeAlunos = {
-    "Alice": [9.0, 8.5, 7.5],
-    "Bruno": [6.0, 7.0, 8.0],
-    "Clara": [10.0, 9.5, 9.0]
+  var bombas = {
+    "tomatomica": ["tomate", "tomate", "tomate", "tomate"],
+    "granatom": ["tomate", "tomate", "tomate", "tomate"],
+    "pomatox": ["tomate", "tomate", "tomate", "tomate"],
   }
 
-  escreva(notasDeAlunos)
+  var bomba1, bomba2, bomba3 = bombas["tomatomica"], bombas["granatom"], bombas["pomatox"]
+
+  escreva(bomba1, bomba2, bomba3)
 </Code>
 ---
-<Text picture='princesa-vomitando.jpg'>É claro que é possível utilizar tudo o que nós aprendemos sobre listas com um dicionário de listas</Text>
+<User>Mas o que você acabou e fazer?</User>
+---
+<Text picture='panda-sorrindo.jpg'>O que eu fiz é chamado de *atribuição de múltiplas variaveis*.</Text>
+---
+<Quote picture='panda-sorrindo-sentado.jpg' title='Atribuição de múltiplas variaveis'>É uma capacidade dos dicionários permitirem atribuir os valores de um dicionário a varias variáveis em uma única linha e com único uso da palavra-chave `var`.</Quote>
 ---
 <Code exec>
-  var notasDeAlunos = {
-    "Alice": [9.0, 8.5, 7.5],
-    "Bruno": [6.0, 7.0, 8.0],
-    "Clara": [10.0, 9.5, 9.0]
-  }
+var pessoa = {"nome": "Alice", "idade": 25, "cidade": "São Paulo"}
 
-  var primeiraNotaDeBruno = notasDeAlunos["Bruno"][0]
-  escreva(primeiraNotaDeBruno) // 6
-  
-  var ultimasNotasDeClara = notasDeAlunos["Clara"].fatiar(1)
-  escreva(ultimasNotasDeClara) // [9.5, 9]
-  
-  var notasDaAliceEmDobro = notasDeAlunos["Alice"].mapear(funcao(nota) { 
-    retorna nota
-  })
-  escreva(notasDaAliceEmDobro) // [18, 17, 15]
+// Atribuição de múltiplas variaveis
+var nome, idade = pessoa["nome"], pessoa["idade"]
+
+escreva(nome) // Alice
+escreva(idade) // 25
 </Code>
 ---
-<Image picture='princesa-vomitando.jpg'>O que vocês devem fazer é simples: substituir todas as bananas por tomates por que os salmonenses são alérgicos a tomates. Mas primeiro você saber a quantidades bananas que deverão ser substituidas.</Image>
+<Alert picture='panda-olhando-de-lado.jpg'>Para aplicar essa técnica, as variáveis precisam estar sempre separadas por vírgula.</Alert>
+---
+<Image picture='princesa-flutuando.jpg'>Eu não faço a menor ideia como vocês conseguiram essa informação, mas antes de enviarmos essas bombas precisamos calcular a distância total até o nosso alvo principal.</Image>
 ---
 <Code>
-  var reservasDeBananas = {
-    "reserva de bananas 1": ["banana", "banana", "banana", "banana"],
-    "reserva de bananas 2 ": ["banana", "banana"],
-    "reserva de bananas 3 ": ["banana", "banana", "banana"],
-  }
-
-  var totalDeBananas
-
-  // Qual é a quantidade total de bananas?
+var distancias = {
+  "estacaoTerraAteColoniaSolis": 2000, // Distância entre Estação Terra e Colônia Solis
+  "vilaOmegaAteCidadeNova": 500, // Distância entre Vila Omega e Cidade Nova
+  "luaZetAteBaseDelta": 850, // Distância entre Lua Zeta e Base Delta
+}
 </Code>
 ---
-<Text picture='princesa-vomitando.jpg'>Há várias formas de resolve esse problema. Primeiro, vamos pegar todos os valores desse dicionário.</Text>
+<Image picture='princesa-lendo.jpg'>Por favor, calculem a distancia total para mim.</Image>
+---
+<Text picture='panda-piscando.jpg'>É pra já!</Text>
+---
+<Text picture='panda-olhando-de-lado.jpg'>Primeiro, coloquemos todos esses números em variáveis.</Text>
 ---
 <Code exec>
-  var reservasDeBananas = {
-    "reserva de bananas 1": ["banana", "banana", "banana", "banana"],
-    "reserva de bananas 2 ": ["banana", "banana"],
-    "reserva de bananas 3 ": ["banana", "banana", "banana"],
-  }
+var { estacaoTerraAteColoniaSolis, vilaOmegaAteCidadeNova, luaZetAteBaseDelta } = {
+  "estacaoTerraAteColoniaSolis": 2000,
+  "vilaOmegaAteCidadeNova": 500,
+  "luaZetAteBaseDelta": 850,
+}
 
-  var reservasDeBanana = reservasDeBananas.chaves()
-
-  escreva(reservasDeBanana) // ["reserva de bananas 1", "reserva de bananas 2", "reserva de bananas 3"]
+escreva(estacaoTerraAteColoniaSolis) // 2000
+escreva(vilaOmegaAteCidadeNova) // 500
+escreva(luaZetAteBaseDelta) // 850
 </Code>
 ---
-<Quote picture='princesa-vomitando.jpg' title="Método chaves( )">O que acabei de fazer foi usar um método disponível para qualquer dicionário, `chaves()`, que justamente retorna todos os chaves de um dicionário dentro de uma `lista`.</Quote>
+<User>Outra bruxaria com variáveis?</User>
 ---
-<Text picture='princesa-vomitando.jpg'>Agora utilizando o básico de laços com listas que já aprendemos...</Text>
+<Text picture='panda-sorrindo.jpg'>O que eu fiz é chamado de *desestruturação*.</Text>
+---
+<Quote picture='panda-sorrindo-deitado.jpg' title='Desestruturação'>Desestruturação é uma forma de "desmontar" dicionários para extrair valores específicos de forma rápida e prática.</Quote>
 ---
 <Code exec>
-  var reservasDeBananas = {
-    "reserva de bananas 1": ["banana", "banana", "banana", "banana"],
-    "reserva de bananas 2 ": ["banana", "banana"],
-    "reserva de bananas 3 ": ["banana", "banana", "banana"],
-  }
-  var nomesDeReservas = reservasDeBananas.chaves()
+var panda = {
+  "nome": "Panda",
+  "idade": 2500,
+  "planeta": "Planeta dos Pandas"
+}
 
-   para cada nomeDeReserva de nomesDeReservas {
-    var tomates = reservasDeBananas[nomeDeReserva].mapear(funcao() {
-      retorna "tomate"
-    })
-    reservasDeBananas[nomeDeReserva] = tomates
-  }
+// Desestruturação
+var { nome, idade, planeta } = panda
 
-  escreva(reservasDeBananas)
+escreva(nome)   // Panda
+escreva(idade)  // 2500
+escreva(planeta) // Planeta dos Pandas
 </Code>
 ---
-<Text picture='princesa-vomitando.jpg'>Estou acessando cada lista de bananas pelo nome da reserva e transformando cada banana dessa lista em um tomate utilizando o método `mapear()`. No fim do laço, eu altero o valor da reserva atual passando a lista de tomates gerada no lugar da lista de bananas.</Text>
+<Quote picture='panda-deslumbrado.jpg'>É como abrir uma caixa organizada e pegar só o que você precisa, sem carregar a caixa inteira. E o nome das variáveis nem precisa estar em ordem.</Quote>
 ---
-<Image picture='princesa-vomitando.jpg'>Muito bem!! Logicamente nós temos uma quantidade de tomates limitada, por isso mandei meu tubarão trazer uma lista de cofres contendo algumas coisas.</Image>
----
-<Code>
-  var cofres = [
-    {
-      "cofre de beterrabas": {
-        "beterrabas": ["beterraba", "beterraba", "beterraba"],
-        "quantidade": 3,
-        "localizacao": "Zona A",
-      },
-    },
-    {
-      "cofre de tomates": {
-        "tomate": ["tomate", "tomate", "tomate", "tomate"],
-        "quantidade": 4,
-        "localizacao": "Zona B",
-      },
-    },
-    {
-      "cofre de batatas": {
-        "batatas": ["batata", "batata"],
-        "quantidade": 2,
-        "localizacao": "Zona C",
-      },
-    },
-  ]
-</Code>
----
-<User>Wow!! Uma lista contendo dicionários de dicionários</User>
----
-<Text picture='princesa-vomitando.jpg'>Não priemos cânico! E sim é possível sim criar um dicionário de dicionários, como no exemplo a seguir</Text>
----
-<Code>
-  var biblioteca = {
-    "Livro A": {"autor": "Autor 1", "ano": 1990, "genero": "Ficção"},
-    "Livro B": {"autor": "Autor 2", "ano": 2005, "genero": "História"},
-    "Livro C": {"autor": "Autor 3", "ano": 2020, "genero": "Tecnologia"}
-  }
-</Code>
----
-<Quote picture='princesa-vomitando.jpg'>Para acessar o valor de um dicionário interno é preciso passar entre colchetes `[]` o valor da chave desse dicionario após a chave do dicionário maior.</Quote>
+<Alert picture='panda-espantado.jpg'>Cuidado! os nomes das variáveis têm que estar iguaizinhos as chaves do dicionário senão a variável terá valor `nulo`!</Alert>
 ---
 <Code exec>
-  var biblioteca = {
-    "Livro A": {"autor": "Autor 1", "ano": 1990, "genero": "Ficção"},
-    "Livro B": {"autor": "Autor 2", "ano": 2005, "genero": "História"},
-    "Livro C": {"autor": "Autor 3", "ano": 2020, "genero": "Tecnologia"}
-  }
+var panda = {
+  "nome": "Panda",
+  "idade": 2500,
+  "planeta": "Planeta dos Pandas",
+}
 
-  escreva(biblioteca["Livro B"]["genero"]) // História
+// Desestruturação
+var { nome, idade, cidade } = panda
+
+escreva(nome)   // Panda
+escreva(idade)  // 2500
+escreva(cidade) // nulo
 </Code>
 ---
-<Quote picture='princesa-vomitando.jpg'>Claro, se houvesse um dicionário dentro do dicionário que está dentro do outro dicionário você repetiria o processo com os colchetes `["Chave 1"]["Chave 2"]["Chave 3"]` e assim vai.</Quote>
----
-<Text picture='princesa-vomitando.jpg' title='Método valores( )'>Como temos uma lista primeiro, criemos um laço.</Text>
----
-<Code>
-  var cofres = [
-    {
-      "cofre de beterrabas": {
-        "beterrabas": ["beterraba", "beterraba", "beterraba"],
-        "quantidade": 3,
-        "localizacao": "Zona A",
-      },
-    },
-    {
-      "cofre de tomates": {
-        "tomate": ["tomate", "tomate", "tomate", "tomate"],
-        "quantidade": 4,
-        "localizacao": "Zona B",
-      },
-    },
-    {
-      "cofre de batatas": {
-        "batatas": ["batata", "batata"],
-        "quantidade": 2,
-        "localizacao": "Zona C",
-      },
-    },
-  ]
-
-  para cofre em cofres {
-
-  }
-</Code>
----
-<Text picture='princesa-vomitando.jpg'>Agora, precisamos descobrir qual é o cofre de tomates. Podemos descobrir isso pelo nome do cofre utilizando o operador `em`.</Text>
----
-<Quote picture='princesa-vomitando.jpg' title="operadore em">Ele retorna `verdadeiro` caso um determinado valor em `texto` seja igual a uma das chaves do dicionário, retorando `falso` caso contrário, claro.</Quote>
+<Text picture='panda-sorrindo.jpg'>Agora com as variáveis prontas só precisamos somá-las.</Text>
 ---
 <Code exec>
-  var zoologico = {
-    "leão": {"habitat": "savanas", "dieta": "carnívoro"},
-    "elefante": {"habitat": "florestas", "dieta": "herbívoro"},
-    "pinguim": {"habitat": "regiões polares", "dieta": "carnívoro"}
-  }
+var { estacaoTerraAteColoniaSolis, vilaOmegaAteCidadeNova, luaZetAteBaseDelta } = {
+  "estacaoTerraAteColoniaSolis": 2000,
+  "vilaOmegaAteCidadeNova": 500,
+  "luaZetAteBaseDelta": 850,
+}
 
-  escreva("elefante" em zoologico) // verdadeiro
-  escreva("urso" em zoologico) // falso
+var distanciaTotal = [
+  estacaoTerraAteColoniaSolis, 
+  vilaOmegaAteCidadeNova, 
+  luaZetAteBaseDelta
+].somar()
+
+escreva(distanciaTotal) // 3350
 </Code>
 ---
-<Text picture='princesa-vomitando.jpg'>Vamos aplicar isso no nosso problema.</Text>
+<Text picture='panda-piscando-sentado.jpg'>Antes que pergunte, sim é possível utilizar `métodos` sem a necessidade de variáveis</Text>
+---
+<Code exec>
+escreva("texto em maiusculo".maiusculo()) // TEXTO EM MAIUSCULO
+
+escreva([1, 2, 3].fatiar(1)) // [2, 3]
+
+escreva([1, 2, 3].mapear(funcao (numero) {
+  retorna numero * 2
+})) // [2, 4, 6]
+</Code>
+---
+<Image picture='princesa-animada.jpg'>Muto bem! As bombas já estão chegando no alvo perfeito.</Image>
+---
+<Text picture='panda-espantado.jpg'>Acertou em cheio! E os macacos parecem estar fugindo</Text>
+---
+<Image picture='salmonense-dando-tchau.jpg'>Já bricamos suficiente com vocês. Tchau tchau.</Image>
+---
+<User>Mas tão fácil assim?</User>
+---
+<Text picture='panda-pensando.jpg'>E tudo graças àquele ser desconhecido. Quem será que nos ajudou e por quê?</Text>
+---
+<Image picture='princesa-soltando-fogos.jpg'>Não sei como agradecer vocês. Por favor, aceitam um dos presentes que mostrei.</Image>
 ---
 <Code>
-  var cofres = [
-    {
-      "cofre de beterrabas": {
-        "beterrabas": ["beterraba", "beterraba", "beterraba"],
-        "quantidade": 3,
-        "localizacao": "Zona A",
-      },
-    },
-    {
-      "cofre de tomates": {
-        "tomates": ["tomate", "tomate", "tomate", "tomate"],
-        "quantidade": 4,
-        "localizacao": "Zona B",
-      },
-    },
-    {
-      "cofre de batatas": {
-        "batatas": ["batata", "batata"],
-        "quantidade": 2,
-        "localizacao": "Zona C",
-      },
-    },
-  ]
-
-  para cada cofre em cofres {
-    se ("cofre de tomates" em cofre) {
-      
-    }
-  }
+var dicionarioQualquer = {
+  0: "ganhar 1 milhão de yaggs, mas perder todos os seus órgãos",
+  1: "poder cuidar do meu tubarão para o resto da vida",
+  2: "voltar para sua casa",
+  3: "poder voar comigo no céu por 3 dias seguidos, mas depois ficar preso no espaço por 3 meses",
+}
 </Code>
+---
+<Text picture='panda-triste.jpg'>Acho que não há outra escolha melhor a não ser voltar para casa.</Text>
+---
+<Text picture='panda-sentado-com-mochila.jpg'>A jornada pelo espaço foi mais incrível do que qualquer um poderia imaginar. Cada estrela, cada planeta, cada conceito aprendido...</Text>
+---
+<Text picture='panda-pulando-de-alegria.jpg'>Tudo ficará gravado na minha memória. Agora, está na hora de voltarmos para casa, mas o que vivemos aqui vai permanecer conosco para sempre.</Text>
+---
+<Text picture='panda-fazendo-coracao.jpg'>Quem sabe um dia nossos caminhos se cruzem novamente, mas por enquanto, vou sentir falta da imensidão ao nosso redor. Até logo. Nossa aventura nunca vai ser esquecida.</Text>
+---
+<Text picture='panda.jpg'>Mas não antes de praticarmos o que aprendemos aqui ;).</Text>

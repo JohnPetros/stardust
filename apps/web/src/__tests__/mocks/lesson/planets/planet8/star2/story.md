@@ -12,11 +12,13 @@
 ---
 <Image picture='princesa-smilling.jpg'>Peço perdão pelo meu tubarão de estimação, as vezes ele não jeito.</Image>
 ---
-<Image picture='princesa-animada.jpg'>Não temos tempo a perder. Já já os salmonenses já estão perto de chegar ao meu mundo</Image>
+<Image picture='princesa-animada.jpg'>Não temos tempo a perder. Já já os salmonenses já estão perto de chegar ao meu mundo.</Image>
 ---
 <User>Salmonenses?</User>
 ---
-<Image picture='princesa-lendo.jpg'>Sim. são aliens parecidos com macacos que amam comer bananas</Image>
+<Image picture='princesa-lendo.jpg'>Sim. são aliens parecidos com macacos que amam comer bananas.</Image>
+---
+<Image picture='salmonense-fisionomia.jpg'>Não se deixem enganar pela sua aparência fofa.</Image>
 ---
 <Image picture='princesa-lendo.jpg'>Ele percorrem pela galáxia a procura de bananas destruindos mundos no processo.</Image>
 ---
@@ -27,12 +29,12 @@
 <Image picture='princesa-vomitando.jpg'>Por favor, sejam os guerreiros das minhas bananas e em troca poderão escolher uma das recompensas:</Image>
 ---
 <Code>
-  var dicionarioQualquer = {
-    0: "ganhar 1 milhão de yaggs",
-    1: "poder cuidar do meu tubarão para o resto da vida",
-    2: "voltar para sua casa",
-    3: "poder voar comigo no céu por 3 dias seguidos",
-  }
+var dicionarioQualquer = {
+  0: "ganhar 1 milhão de yaggs, mas perder todos os seus órgãos",
+  1: "poder cuidar do meu tubarão para o resto da vida",
+  2: "voltar para sua casa",
+  3: "poder voar comigo no céu por 3 dias seguidos, mas depois ficar preso no espaço por 3 meses",
+}
 </Code>
 ---
 <Alert picture='princesa-deslumbrada.png'>Como pode bem ver, não é apenas possível definir as chaves de um dicionário usando tipo `texto`, mas `número` também.</Alert>
