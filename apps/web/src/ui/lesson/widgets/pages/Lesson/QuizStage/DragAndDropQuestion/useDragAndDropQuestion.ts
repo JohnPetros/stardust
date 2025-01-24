@@ -8,7 +8,6 @@ import type {
   DropZone,
   QuestionCodeLine,
 } from '@stardust/core/lesson/structs'
-import { DropZoneDto } from '@stardust/core/lesson/dtos'
 
 export function useDragAndDropQuestion(
   initialdragAndDrop: DragAndDrop,
