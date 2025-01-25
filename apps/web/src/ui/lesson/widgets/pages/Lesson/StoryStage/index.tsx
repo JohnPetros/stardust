@@ -1,48 +1,67 @@
 import { useRef } from 'react'
 
+import { Story } from '@stardust/core/lesson/structs'
+
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { TextBlockMdx } from './TextBlockMdx'
 import { Title } from './Title'
-import { useTheoryStage } from './useTheoryStage'
+import { useStoryStage } from './useStoryStage'
+import { StoryChunk } from './StoryChunk'
 
-type TheoryStageProps = {
+type StoryStageProps = {
   title: string
   number: number
 }
 
-export function TheoryStage({ title, number }: TheoryStageProps) {
-  const { theory, mdxTemplates, handleContinueButtonClick, handleQuizStageButtonClick } =
-    useTheoryStage()
+export function StoryStage({ title, number }: StoryStageProps) {
+  const { story, textBlocks, handleContinueButtonClick, handleQuizStageButtonClick } =
+    useStoryStage()
   const buttonHasFocus = useRef(false)
 
-  if (theory && mdxTemplates.length)
+  if (story)
     return (
       <>
-        <div id='theory' className='mt-20'>
+        <div id='story' className='mt-20'>
           <div className='mx-auto max-w-3xl'>
             <div className='mt-6'>
               <Title number={number}>{title}</Title>
             </div>
 
             <div className='mt-10 space-y-10 px-6 pb-[360px] md:px-0'>
-              {theory.readTextBlocks.map((textBlock, index) => {
-                const shouldMemoized = index < theory.currentTextBlockIndex.value - 2
-                const hasAnimation = index === theory.currentTextBlockIndex.value - 1
-                return (
-                  <TextBlockMdx
-                    key={textBlock.content}
-                    content={mdxTemplates[index]}
-                    hasAnimation={hasAnimation}
-                    shouldMemoized={shouldMemoized}
-                  />
-                )
+              {story.readChunks.map((chunk, index) => {
+                const shouldMemoized = index < story.currentChunkIndex.value - 2
+                const hasAnimation = index === story.currentChunkIndex.value - 1
+                if (typeof chunk === 'string')
+                  return (
+                    <StoryChunk
+                      key={chunk}
+                      value={chunk}
+                      hasAnimation={hasAnimation}
+                      shouldMemoized={shouldMemoized}
+                    />
+                  )
+              })}
+
+              {/* old way to render story content */}
+              {story.readChunks.map((textBlock, index) => {
+                const shouldMemoized = index < story.currentChunkIndex.value - 2
+                const hasAnimation = index === story.currentChunkIndex.value - 1
+                if (Story.isTextBlock(textBlock))
+                  return (
+                    <TextBlockMdx
+                      key={textBlock.content}
+                      content={textBlock.content}
+                      hasAnimation={hasAnimation}
+                      shouldMemoized={shouldMemoized}
+                    />
+                  )
               })}
             </div>
           </div>
 
           <footer className='fixed bottom-0 z-50 flex w-full items-center justify-center border-t border-gray-800 bg-gray-900 p-4'>
-            {!theory.hasNextTextBlock ? (
+            {!story.hasNextTextBlock ? (
               <AlertDialog
                 type='asking'
                 title='Parabéns! Agora você pode ir para a próxima etapa 🚀'
@@ -72,7 +91,7 @@ export function TheoryStage({ title, number }: TheoryStageProps) {
                 autoFocus
                 onFocus={() => (buttonHasFocus.current = true)}
                 onBlur={() => (buttonHasFocus.current = false)}
-                disabled={!theory.hasNextTextBlock}
+                disabled={!story.hasNextTextBlock}
               >
                 Continuar
               </Button>

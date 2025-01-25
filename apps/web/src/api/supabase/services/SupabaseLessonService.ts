@@ -52,5 +52,22 @@ export const SupabaseLessonService = (supabase: Supabase): ILessonService => {
 
       return new ApiResponse({ body: textsBlocks })
     },
+
+    async fetchStarStory(starId) {
+      const { data, error } = await supabase
+        .from('stars')
+        .select('story')
+        .eq('id', starId)
+        .single()
+
+      if (error) {
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao buscar história dessa estrela',
+        )
+      }
+
+      return new ApiResponse({ body: { story: data } })
+    },
   }
 }

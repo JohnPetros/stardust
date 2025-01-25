@@ -1,32 +1,32 @@
 import type { Quiz } from './Quiz'
-import type { Theory } from './Theory'
+import type { Story } from './Story'
 
 type LessonProgressProps = {
-  theory: Theory
+  story: Story
   quiz: Quiz
 }
 
 export class LessonProgress {
-  readonly theory: Theory
+  readonly story: Story
   readonly quiz: Quiz
 
   constructor(props: LessonProgressProps) {
-    this.theory = props.theory
+    this.story = props.story
     this.quiz = props.quiz
   }
 
-  static create(theory: Theory, quiz: Quiz) {
-    return new LessonProgress({ quiz, theory })
+  static create(story: Story, quiz: Quiz) {
+    return new LessonProgress({ quiz, story })
   }
 
   get value(): number {
-    const total = this.theory.textsBlockCount + this.quiz.questionsCount
+    const total = this.story.chunksCount + this.quiz.questionsCount
     if (total === 0) return 0
 
     const half = total / 2
 
     const progress =
-      (this.theory.progress * half) / total + (this.quiz.progress * half) / total
+      (this.story.progress * half) / total + (this.quiz.progress * half) / total
 
     return progress * 100
   }

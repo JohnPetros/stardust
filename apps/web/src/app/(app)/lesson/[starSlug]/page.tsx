@@ -38,6 +38,10 @@ export default async function Lesson({ params }: NextParams<{ starSlug: string }
   if (textsBlocksResponse.isFailure) textsBlocksResponse.throwError()
   const textsBlocks = textsBlocksResponse.body
 
+  const storyResponse = await lessonService.fetchStarStory(star.id)
+  if (textsBlocksResponse.isFailure) textsBlocksResponse.throwError()
+  const story = storyResponse.body
+
   return (
     <LessonPage
       starId={star.id}

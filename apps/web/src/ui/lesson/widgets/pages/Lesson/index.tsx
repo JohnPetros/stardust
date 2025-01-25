@@ -6,13 +6,14 @@ import type { TextBlockDto } from '@stardust/core/global/dtos'
 import { PageTransitionAnimation } from '@/ui/global/widgets/components/PageTransitionAnimation'
 import { useLessonPage } from './useLessonPage'
 import { LessonHeader } from './LessonHeader'
-import { TheoryStage } from './TheoryStage'
+import { StoryStage } from './StoryStage'
 import { QuizStage } from './QuizStage'
 
 type LessonPageProps = {
   starId: string
   starName: string
   starNumber: number
+  storyContent: string
   questionsDto: QuestionDto[]
   textsBlocksDto: TextBlockDto[]
 }
@@ -21,6 +22,7 @@ export function LessonPage({
   starId,
   starName,
   starNumber,
+  storyContent,
   questionsDto,
   textsBlocksDto,
 }: LessonPageProps) {
@@ -28,6 +30,7 @@ export function LessonPage({
     starId,
     questionsDto,
     textsBlocksDto,
+    storyContent,
   )
 
   return (
@@ -37,7 +40,7 @@ export function LessonPage({
         {stage !== 'rewards' && <LessonHeader onLeavePage={handleLeavePage} />}
 
         <main>
-          {stage === 'theory' && <TheoryStage title={starName} number={starNumber} />}
+          {stage === 'theory' && <StoryStage title={starName} number={starNumber} />}
           {stage === 'quiz' && <QuizStage leaveLesson={handleLeavePage} />}
         </main>
       </div>

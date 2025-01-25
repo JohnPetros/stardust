@@ -4,13 +4,13 @@ import { INITIAL_LESSON_STATE } from './constants'
 
 export function useLessonStore() {
   return {
-    getTheorySlice() {
-      const theory = useZustandLessonStore((store) => store.state.theory)
-      const setTheory = useZustandLessonStore((store) => store.actions.setTheory)
+    getStorySlice() {
+      const story = useZustandLessonStore((store) => store.state.story)
+      const setStory = useZustandLessonStore((store) => store.actions.setStory)
 
       return {
-        theory,
-        setTheory,
+        story,
+        setStory,
       }
     },
 

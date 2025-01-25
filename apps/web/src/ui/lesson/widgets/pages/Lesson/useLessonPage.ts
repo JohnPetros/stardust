@@ -10,7 +10,7 @@ import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 import { useSecondsCounter } from '@/ui/global/hooks/useSecondsCounter'
 import { useRouter } from '@/ui/global/hooks/useRouter'
-import { Quiz, Theory } from '@stardust/core/lesson/structs'
+import { Quiz, Story } from '@stardust/core/lesson/structs'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 import type { StarRewardingPayload } from '@stardust/core/space/types'
 
@@ -18,12 +18,13 @@ export function useLessonPage(
   starId: string,
   questionsDto: QuestionDto[],
   textsBlocksDto: TextBlockDto[],
+  storyContent: string,
 ) {
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
-  const { getStageSlice, getQuizSlice, getTheorySlice, resetStore } = useLessonStore()
+  const { getStageSlice, getQuizSlice, getStorySlice, resetStore } = useLessonStore()
   const { quiz, setQuiz } = getQuizSlice()
   const { stage } = getStageSlice()
-  const { setTheory } = getTheorySlice()
+  const { setStory } = getStorySlice()
   const { setCookie } = useCookieActions()
   const router = useRouter()
   const secondsCounter = useLocalStorage(STORAGE.keys.secondsCounter)
@@ -39,7 +40,9 @@ export function useLessonPage(
   useEffect(() => {
     const timeout = setTimeout(() => setIsTransitionVisible(false), 1000)
 
-    setTheory(Theory.create(textsBlocksDto))
+    setStory(
+      Story.create(textsBlocksDto.length ? textsBlocksDto : storyContent.split('---')),
+    )
     setQuiz(Quiz.create(questionsDto))
 
     localStorage.removeItem(STORAGE.keys.secondsCounter)
@@ -47,7 +50,7 @@ export function useLessonPage(
     return () => {
       clearTimeout(timeout)
     }
-  }, [textsBlocksDto, questionsDto, setTheory, setQuiz])
+  }, [textsBlocksDto, storyContent, questionsDto, setStory, setQuiz])
 
   useEffect(() => {
     if (stage === 'rewards') {
