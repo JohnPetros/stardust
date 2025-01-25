@@ -200,3 +200,24 @@ var dado = frotas["FrotaExploradora"]["naves"]["Galáxia"]["velocidade"]`,
     picture: 'panda-olhando-de-lado.jpg',
   },
 ]
+
+// const data = {
+//   data: {
+//     accounts: [
+//       {
+//         id: '66351aa667f1bfcf0cbfa916',
+//         accountInterests: { primary: [], secondary: [] },
+//         accountMedia: {
+//           profilePicture:
+//             'https://storage.googleapis.com/waves_general_bucket/app_assets/default_pfp.png',
+//         },
+//         name: { firstName: null, lastName: null },
+//         email: { value: 'tahtianacrawford+353421@gmail.com' },
+//         creatorId: 'a107feb1-92f8-4e05-9aa4-18a3040d3aa5',
+//         accountExternals: { instagramExternal: null, tiktokExternal: null },
+//       },
+//     ],
+//   },
+// }
+
+// 639f1848-998c-414c-aa64-9f0645efe6f3
