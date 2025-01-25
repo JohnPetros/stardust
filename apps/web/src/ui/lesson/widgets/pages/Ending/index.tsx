@@ -21,7 +21,7 @@ export function EndingPage() {
       </div>
 
       <main>
-        <AnimatedProgressBar ref={progressBarRef} value={0} height={40} />
+        <AnimatedProgressBar ref={progressBarRef} value={0} height={12} />
 
         {TEXTS.map((text, textIndex) => {
           return (
