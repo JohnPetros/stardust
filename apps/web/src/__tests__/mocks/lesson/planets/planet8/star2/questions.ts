@@ -1,16 +1,16 @@
 import type {
   CheckboxQuestionDto,
-  DragAndDropListQuestionDto,
   DragAndDropQuestionDto,
   OpenQuestionDto,
+  SelectionQuestionDto,
 } from '@stardust/core/lesson/dtos'
 
 type Questions = [
   OpenQuestionDto,
   DragAndDropQuestionDto,
   CheckboxQuestionDto,
+  SelectionQuestionDto,
   DragAndDropQuestionDto,
-  DragAndDropListQuestionDto,
 ]
 
 export const questions: Questions = [
@@ -27,17 +27,17 @@ export const questions: Questions = [
       {
         number: 2,
         indentation: 2,
-        texts: ['"caixa 1": ["tomate", "tomate", "tomate"]'],
+        texts: ['"caixa 1": ["tomate", "tomate", "tomate"],'],
       },
       {
         number: 3,
         indentation: 2,
-        texts: ['"caixa 2": ["tomate", "tomate", "tomate"]'],
+        texts: ['"caixa 2": ["tomate", "tomate", "tomate"],'],
       },
       {
         number: 4,
         indentation: 2,
-        texts: ['"caixa 3": ["tomate", "tomate", "tomate"]'],
+        texts: ['"caixa 3": ["tomate", "tomate", "tomate"],'],
       },
       {
         number: 5,
@@ -119,64 +119,84 @@ escreva(planos.valores())`,
     picture: 'panda-espantado.jpg',
   },
   {
+    type: 'selection',
     statement:
-      'Monte um dicionario que dispare tomates com os seguintes atributos: munição: "tomate", alcance: 500, velocidade: 100, tipo de disparo: rápido',
+      'temos parte de um dicionário contendo as frotas deles. Qual é o tipo de dado que está sendo acessado pelo dicionário?',
+    code: `var frotas = {
+  "FrotaExploradora": {
+    "naves": {
+      "Pioneira": {
+        "tripulacao": "50",
+          "armamento": "canhões laser",
+          "velocidade": 20000
+      },
+      "Galáxia": {
+          "tripulacao": 100,
+          "armamento": ["raios de plasma", "escudos defletores"],
+          "velocidade": "15.000 km/h"
+      }
+    },
+    "missao": "Explorar novos sistemas estelares"
+}
+var dado = frotas["FrotaExploradora"]["naves"]["Galáxia"]["velocidade"]`,
+    answer: 'texto',
+    options: ['texto', 'lista', 'número', 'lógico'],
+    picture: 'panda-pensando.jpg',
+  },
+  {
+    statement:
+      'Precisamos saber quanto nosso disparador de tomates tem de munição. Consegue capturar essa imformação pelo dicionário abaixo?',
     type: 'drag-and-drop',
     lines: [
       {
         number: 1,
-        texts: ['var disparadorDeTomates = {'],
+        texts: ['var disparadores = {'],
         indentation: 0,
       },
       {
         number: 2,
-        texts: ['"munição":', 'dropZone', ','],
+        texts: ['"BlasterLX": {'],
         indentation: 2,
+      },
+      {
+        number: 2,
+        texts: ['"potencia": "alta",'],
+        indentation: 4,
+      },
+      {
+        number: 2,
+        texts: ['"munição": {'],
+        indentation: 4,
       },
       {
         number: 3,
-        texts: ['"alcance":', 'dropZone', ','],
-        indentation: 2,
+        texts: ['"tipo": "energia",'],
+        indentation: 6,
       },
       {
-        number: 4,
-        texts: ['"velocidade":', 'dropZone', ','],
-        indentation: 2,
+        number: 3,
+        texts: ['"quantidade": 100'],
+        indentation: 6,
       },
       {
-        number: 5,
-        texts: ['"tipo de disparo":', 'dropZone', ','],
-        indentation: 2,
+        number: 6,
+        texts: ['var disparador = disparadores[', 'dropZone', '][', 'dropZone', ']'],
+        indentation: 0,
       },
-      { number: 6, texts: ['}'], indentation: 0 },
+      {
+        number: 6,
+        texts: ['var municao = disparador[', 'dropZone', '][', 'dropZone', ']'],
+        indentation: 0,
+      },
     ],
     items: [
-      { index: 1, label: '"munição"' },
-      { index: 2, label: '"alcance"' },
-      { index: 3, label: '"velocidade"' },
-      { index: 4, label: 'velocidade' },
-      { index: 5, label: '"tipo de disparo"' },
+      { index: 1, label: '"tipo"' },
+      { index: 2, label: '"munição"' },
+      { index: 3, label: '"BlasterLX"' },
+      { index: 4, label: '"quantidade"' },
+      { index: 5, label: '"potencia"' },
     ],
-    correctItemsIndexesSequence: [1, 2, 3, 5],
+    correctItemsIndexesSequence: [3, 2, 4],
     picture: 'panda-olhando-de-lado.jpg',
-  },
-  {
-    statement:
-      'Organize o código para que ele escreva nos nomes das naves que já finalizamos com tomates, nessa ordem: "Banana Cruiser", "Macacômica V", "Chimp Explorer", "Cascamóvel Espacial"',
-    type: 'drag-and-drop-list',
-    items: [
-      { position: 1, label: 'var naves = {' },
-      { position: 2, label: '\t"Banana Cruise": "finalizado",' },
-      { position: 3, label: '\t"Macacômica V": "finalizado",' },
-      { position: 4, label: '\t"Chimp Explorer": "finalizado",' },
-      { position: 5, label: '\t"Cascamóvel Espacial": "finalizado",' },
-      { position: 6, label: '}' },
-      { position: 7, label: '}' },
-      {
-        position: 8,
-        label: 'escreva(naves.chaves())',
-      },
-    ],
-    picture: 'panda-piscando.jpg',
   },
 ]
