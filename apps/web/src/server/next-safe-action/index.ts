@@ -11,6 +11,7 @@ import {
   editChallenge,
 } from './challengingActions'
 import { setCookie, getCookie, deleteCookie, hasCookie } from './cookieActions'
+import { accessEndingPage } from './lessonActions'
 import { upvoteComment } from './forumActions'
 import { obsverNewUnlockedAchievements } from './profileActions'
 import { getLastWeekRankingWinners } from './rankingActions'
@@ -36,6 +37,7 @@ export const challengingActions = {
 }
 export const playgroundActions = { createSnippet, editSnippet }
 export const profileActions = { obsverNewUnlockedAchievements }
+export const lessonActions = { accessEndingPage }
 export const rankingActions = { getLastWeekRankingWinners }
 export const forumActions = { upvoteComment }
 export const rewardingActions = {

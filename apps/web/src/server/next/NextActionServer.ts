@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 
 import type { IActionServer } from '@stardust/core/interfaces'
 import { AppError } from '@stardust/core/global/errors'
@@ -22,6 +22,10 @@ export const NextActionServer = <Request = unknown>({
 
     redirect(route: string) {
       redirect(route)
+    },
+
+    notFound() {
+      notFound()
     },
 
     async setCookie(key, value) {
