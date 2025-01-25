@@ -6,9 +6,9 @@ import { useApi } from '@/ui/global/hooks'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useLessonHeader } from './useLessonHeader'
-import { ProgressBar } from '@/ui/global/widgets/components/ProgressBar'
+import { AnimatedProgressBar } from '@/ui/global/widgets/components/AnimatedProgressBar'
 import { Icon } from '@/ui/global/widgets/components/Icon'
+import { useLessonHeader } from './useLessonHeader'
 
 type LessonHeaderProps = {
   onLeavePage: VoidFunction
@@ -49,7 +49,7 @@ export function LessonHeader({ onLeavePage }: LessonHeaderProps) {
             </button>
           </AlertDialog>
 
-          <ProgressBar
+          <AnimatedProgressBar
             value={lessonProgress.value}
             height={16}
             indicatorImage={rocketImage}

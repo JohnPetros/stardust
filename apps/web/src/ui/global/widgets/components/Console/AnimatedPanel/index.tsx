@@ -30,12 +30,12 @@ export function AnimatedPanel({
   className,
   onDragDown,
 }: AnimatedPanelProps) {
-  const { controls, handleDragEnd } = useAnimatedPanel(isOpen, onDragDown)
+  const { animation, handleDragEnd } = useAnimatedPanel(isOpen, onDragDown)
 
   return (
     <motion.div
       variants={variants}
-      animate={controls}
+      animate={animation}
       initial='closed'
       drag='y'
       dragConstraints={{ top: 0 }}

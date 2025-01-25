@@ -2,7 +2,7 @@ import { type PanInfo, useAnimation } from 'framer-motion'
 import { useEffect } from 'react'
 
 export function useAnimatedPanel(isOpen: boolean, onDragDown: VoidFunction) {
-  const controls = useAnimation()
+  const animation = useAnimation()
 
   function handleDragEnd(_: unknown, info: PanInfo) {
     if (info.velocity.y > 20 && info.offset.y >= 50) {
@@ -12,14 +12,14 @@ export function useAnimatedPanel(isOpen: boolean, onDragDown: VoidFunction) {
 
   useEffect(() => {
     if (isOpen) {
-      controls.start('open')
+      animation.start('open')
       return
     }
-    controls.start('closed')
-  }, [isOpen, controls])
+    animation.start('closed')
+  }, [isOpen, animation])
 
   return {
-    controls,
+    animation,
     handleDragEnd,
   }
 }
