@@ -17,6 +17,7 @@ import type { AchievementMetricValue } from '#profile/types'
 import type { RankingPosition } from '#ranking/structs'
 import type { Comment } from '#forum/entities'
 import type { Solution } from '#challenging/entities'
+import { PLANETS_COUNT } from '#space/constants'
 import { EntityNotDefinedError } from '#global/errors'
 
 type UserProps = {
@@ -250,7 +251,7 @@ export class User extends Entity<UserProps> {
   }
 
   get hasCompletedSpace(): Logical {
-    return this.props.hasCompletedSpace
+    return Logical.create(this.props.completedPlanetsIds.length === PLANETS_COUNT)
   }
 
   get unlockedStarsCount() {
