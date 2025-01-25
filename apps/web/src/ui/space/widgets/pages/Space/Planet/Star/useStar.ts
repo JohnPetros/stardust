@@ -2,13 +2,13 @@
 
 import { type RefObject, useEffect, useRef } from 'react'
 
-import { useApi } from '@/ui/global/hooks'
-import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
-import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
-import { useInView, useRouter } from '@/ui/global/hooks'
 import { ROUTES } from '@/constants'
 import { playAudio } from '@/utils'
+import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
+import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
+import { useApi } from '@/ui/global/hooks/useApi'
+import { useInView } from '@/ui/global/hooks/useInView'
+import { useRouter } from '@/ui/global/hooks/useRouter'
 
 type UseStarProps = {
   id: string
@@ -26,9 +26,7 @@ export function useStar({
 }: UseStarProps) {
   const { lastUnlockedStarRef, scrollIntoLastUnlockedStar, setLastUnlockedStarPosition } =
     useSpaceContext()
-  const toast = useToastContext()
   const isFirstScroll = useRef(true)
-
   const router = useRouter()
   const api = useApi()
   const isInView = useInView(lastUnlockedStarRef)
@@ -37,12 +35,13 @@ export function useStar({
     const reponse = await api.fetchChallengeByStarId(id)
 
     if (reponse.isFailure) {
-      router.goTo(`${ROUTES.lesson.prefix}/${slug}`)
+      router.goTo(ROUTES.lesson.star(slug))
       return
     }
 
     const challenge = reponse.body
-    router.goTo(`${ROUTES.challenging.challenges}/${challenge.slug}`)
+    if (challenge.slug)
+      router.goTo(ROUTES.challenging.challenges.challenge(challenge.slug))
   }
 
   function handleStarClick() {

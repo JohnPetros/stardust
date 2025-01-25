@@ -33,7 +33,10 @@ export const ROUTES = {
     user: (userSlug: string) => `/profile/${userSlug}`,
     settings: (userSlug: string) => `/profile/${userSlug}/settings`,
   },
-  lesson: '/lesson',
+  lesson: {
+    star: (starSlug: string) => `/lesson/${starSlug}`,
+    ending: '/lesson/ending',
+  },
   rewarding: {
     star: '/rewarding/star',
     starChallenge: '/rewarding/star-challenge',
@@ -78,6 +81,6 @@ export const ROUTES = {
     playground: {
       snippet: (snippetId: string) => `/api/playground/snippets/${snippetId}`,
     },
-    serverless: '/api/serverless'
+    serverless: '/api/serverless',
   },
 } as const

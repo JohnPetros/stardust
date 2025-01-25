@@ -6,17 +6,17 @@ import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 
 export function useLessonHeader() {
   const [lessonProgress, setLessonProgress] = useState<LessonProgress | null>(null)
-  const { getQuizSlice, getTheorySlice } = useLessonStore()
+  const { getQuizSlice, getStorySlice } = useLessonStore()
   const { quiz } = getQuizSlice()
-  const { theory } = getTheorySlice()
+  const { story } = getStorySlice()
 
   useEffect(() => {
-    if (theory && quiz) {
-      const lessonProgress = LessonProgress.create(theory, quiz)
+    if (story && quiz) {
+      const lessonProgress = LessonProgress.create(story, quiz)
 
       setLessonProgress(lessonProgress)
     }
-  }, [theory, quiz])
+  }, [story, quiz])
 
   return {
     livesCount: quiz?.livesCount.value,

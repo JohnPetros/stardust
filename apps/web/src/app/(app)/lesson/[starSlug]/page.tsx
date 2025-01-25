@@ -40,13 +40,14 @@ export default async function Lesson({ params }: NextParams<{ starSlug: string }
 
   const storyResponse = await lessonService.fetchStarStory(star.id)
   if (textsBlocksResponse.isFailure) textsBlocksResponse.throwError()
-  const story = storyResponse.body
+  const story = storyResponse.body.story
 
   return (
     <LessonPage
       starId={star.id}
       starName={star.name}
       starNumber={star.number}
+      storyContent={story}
       questionsDto={questions}
       textsBlocksDto={textsBlocks}
     />
