@@ -2,14 +2,25 @@ import { type RefObject, useEffect, useState } from 'react'
 
 import type { AnimatedProgressBarRef } from '@/ui/global/widgets/components/AnimatedProgressBar/types'
 
-const ANIMATION_DURATION_BETWEEN_TEXTS = 5 // seconds
+const ANIMATION_DURATION_BETWEEN_TEXTS = 7 // seconds
+const LAST_THANK_INDEX = 3
 
 export function useEndingPage(progressBarRef: RefObject<AnimatedProgressBarRef>) {
-  const [activeTextIndex, setActiveTextIndex] = useState(0)
+  const [activeThankIndex, setActiveThankIndex] = useState(0)
+
+  function nextText() {
+    setActiveThankIndex((activeThankIndex) => activeThankIndex + 1)
+    setTimeout(() => {
+      progressBarRef.current?.fill(100, ANIMATION_DURATION_BETWEEN_TEXTS)
+    }, 10)
+  }
 
   function handleProgressBarAnimationEnd() {
-    setActiveTextIndex((activeTextIndex) => activeTextIndex + 1)
-    progressBarRef.current?.fill(100, ANIMATION_DURATION_BETWEEN_TEXTS)
+    nextText()
+  }
+
+  function handleSkipTextButtonClick() {
+    nextText()
   }
 
   useEffect(() => {
@@ -17,8 +28,9 @@ export function useEndingPage(progressBarRef: RefObject<AnimatedProgressBarRef>)
   }, [progressBarRef.current?.fill])
 
   return {
-    activeTextIndex,
-    progressBarRef,
+    activeThankIndex,
+    lastThankIndex: LAST_THANK_INDEX,
     handleProgressBarAnimationEnd,
+    handleSkipTextButtonClick,
   }
 }

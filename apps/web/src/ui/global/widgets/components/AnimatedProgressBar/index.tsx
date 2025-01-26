@@ -21,7 +21,7 @@ const AnimatedProgressBarComponent = (
   { value, height, indicatorImage, onAnimationEnd }: ProgessBarProps,
   ref: ForwardedRef<AnimatedProgressBarRef>,
 ) => {
-  const { animation, fill } = useAnimatedProgressBar(value)
+  const { animation, fill, handleAnimationComplete } = useAnimatedProgressBar(value, onAnimationEnd)
 
   useImperativeHandle(
     ref,
@@ -41,14 +41,13 @@ const AnimatedProgressBarComponent = (
       style={{ height: height }}
     >
       <AnimatedIndicator
-        className='h-full rounded-lg bg-green-400'
-        // style={{ width: `${value}%`, transition: 'width .3s linear' }}
-        onAnimationEnd={onAnimationEnd}
         animate={animation}
+        onAnimationComplete={handleAnimationComplete}
+        className='h-full rounded-lg bg-green-400'
       />
 
-      <div className='relative z-10 -ml-2 h-10 w-10 rotate-90'>
-        {indicatorImage && (
+      {indicatorImage && (
+        <div className='relative z-10 -ml-2 h-10 w-10 rotate-90'>
           <Image
             src={indicatorImage}
             fill
@@ -56,8 +55,8 @@ const AnimatedProgressBarComponent = (
             alt=''
             priority
           />
-        )}
-      </div>
+        </div>
+      )}
     </Progress.Root>
   )
 }

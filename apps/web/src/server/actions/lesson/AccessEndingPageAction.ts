@@ -5,7 +5,7 @@ export const AccessEndingPageAction = (): IAction => {
   return {
     async handle(actionServer: IActionServer) {
       const user = User.create(await actionServer.getUser())
-      if (user.hasCompletedSpace.isFalse) {
+      if (user.hasCompletedSpace.isTrue) {
         actionServer.notFound()
       }
     },
