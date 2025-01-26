@@ -2,8 +2,6 @@
 
 import type { ReactNode } from 'react'
 import { motion, type Variants } from 'framer-motion'
-import { useBreakpoint } from '@/ui/global/hooks'
-import { useSiderbarContext } from '@/ui/profile/contexts/SidebarContext'
 
 const variants: Variants = {
   hidden: {
@@ -20,21 +18,19 @@ const variants: Variants = {
 type AnimatedContainerProps = {
   children: ReactNode
   isSidenavExpanded: boolean
-  isMobile: boolean
   onClick: VoidFunction
 }
 
 export function AnimatedContainer({
   children,
   isSidenavExpanded,
-  isMobile,
   onClick,
 }: AnimatedContainerProps) {
   return (
     <motion.main
       variants={variants}
       initial='shrink'
-      animate={isSidenavExpanded ? 'expand' : isMobile ? 'mobile' : 'shrink'}
+      animate={isSidenavExpanded ? 'expand' : 'shrink'}
       className='h-full pt-16'
       onClick={onClick}
     >

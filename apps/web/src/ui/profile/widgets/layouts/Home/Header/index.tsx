@@ -22,11 +22,11 @@ export function Header() {
             type='button'
             aria-expanded={isOpen ? 'true' : 'false'}
             aria-controls='sidebar'
-            onClick={toggle}
+            onClick={() => toggle()}
             className='relative'
           >
             <CountBadge count={user.rescueableAchievementsCount.value} />
-            <Icon name='three-dots' className='text-green-400' weight='bold' />
+            <Icon name='menu' className='text-green-400' weight='bold' />
           </button>
           <Image src='/images/logo.svg' width={100} height={100} alt='StarDust' />
         </div>

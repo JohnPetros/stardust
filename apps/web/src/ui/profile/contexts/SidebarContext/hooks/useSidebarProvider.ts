@@ -7,7 +7,7 @@ export function useSidebarProvider() {
   const [isAchievementsListVisible, setIsAchievementsListVisible] = useState(false)
 
   function toggle() {
-    setIsOpen(!isOpen)
+    setIsOpen((isOpen) => !isOpen)
   }
 
   return {

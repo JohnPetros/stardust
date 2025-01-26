@@ -1,40 +1,41 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { AnimatePresence, motion, type Variants } from 'framer-motion'
+import { motion, type Variants } from 'framer-motion'
+import { twMerge } from 'tailwind-merge'
 
 const variants: Variants = {
-  mobile: {
-    paddingLeft: 0,
+  close: {
+    x: -300,
   },
-  shrink: {
-    paddingLeft: 80,
-  },
-  expand: {
-    paddingLeft: 160,
+  open: {
+    x: 0,
+    transition: {
+      delay: 2,
+      ease: 'linear',
+    },
   },
 }
 
 type AnimatedBarProps = {
   children: ReactNode
   isOpen: boolean
+  className?: string
 }
 
-export function AnimatedBar({ children, isOpen }: AnimatedBarProps) {
+export function AnimatedBar({ children, isOpen, className }: AnimatedBarProps) {
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.aside
-          id='sidebar'
-          variants={variants}
-          initial='close'
-          animate='open'
-          exit='close'
-          className='fixed left-0 z-20 h-screen w-80 bg-gray-900 pb-32 pt-16'
-        >
-          {children}
-        </motion.aside>
+    <motion.aside
+      id='sidebar'
+      variants={variants}
+      initial='close'
+      animate={isOpen ? 'open' : ''}
+      className={twMerge(
+        'fixed left-0 z-20 h-screen w-80 bg-gray-900 pb-32 pt-16',
+        className,
       )}
-    </AnimatePresence>
+    >
+      {children}
+    </motion.aside>
   )
 }

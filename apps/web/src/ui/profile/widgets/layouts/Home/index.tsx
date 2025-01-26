@@ -38,10 +38,9 @@ export function HomeLayout({ children }: HomeLayoutProps) {
       <Sidenav isExpanded={isSidenavExpanded} toggleSidenav={toggleSidenav} />
       <PageTransitionAnimation isVisible={isTransitionVisible} />
       <StreakBreakDialog />
-      {isMobile && <Sidebar />}
+      <Sidebar />
       <AnimatedContainer
         isSidenavExpanded={isSidenavExpanded}
-        isMobile={isMobile}
         onClick={handleContainerClick}
       >
         {children}
