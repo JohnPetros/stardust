@@ -50,7 +50,7 @@ export function ResetPasswordDialog({ children }: ResetPasswordDialogProps) {
                 icon='lock'
                 autoFocus
                 {...register('password')}
-                error={errors.password?.message}
+                errorMessage={errors.password?.message}
                 placeholder='********'
               />
             </div>
@@ -60,7 +60,7 @@ export function ResetPasswordDialog({ children }: ResetPasswordDialogProps) {
                 type='password'
                 icon='lock'
                 {...register('passwordConfirmation')}
-                error={errors.passwordConfirmation?.message}
+                errorMessage={errors.passwordConfirmation?.message}
                 placeholder='********'
               />
             </div>

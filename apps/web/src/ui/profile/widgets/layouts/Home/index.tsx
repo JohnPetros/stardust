@@ -4,13 +4,14 @@ import type { ReactNode } from 'react'
 
 import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 import { useRouter } from '@/ui/global/hooks/useRouter'
+import { PageTransitionAnimation } from '@/ui/global/widgets/components/PageTransitionAnimation'
 import { AnimatedContainer } from './AnimatedContainer'
 import { Header } from './Header'
 import { useHomeLayout } from './useHomeLayout'
 import { Sidebar } from './Sidebar'
 import { Sidenav } from './Sidenav'
 import { TabNav } from './TabNav'
-import { PageTransitionAnimation } from '@/ui/global/widgets/components/PageTransitionAnimation'
+import { StreakBreakDialog } from './StreakBreakDialog'
 
 type HomeLayoutProps = {
   children: ReactNode
@@ -35,11 +36,9 @@ export function HomeLayout({ children }: HomeLayoutProps) {
     <>
       <Header />
       <Sidenav isExpanded={isSidenavExpanded} toggleSidenav={toggleSidenav} />
-
       <PageTransitionAnimation isVisible={isTransitionVisible} />
-
+      <StreakBreakDialog />
       {isMobile && <Sidebar />}
-
       <AnimatedContainer
         isSidenavExpanded={isSidenavExpanded}
         isMobile={isMobile}
