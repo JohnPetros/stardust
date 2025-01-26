@@ -7,7 +7,7 @@ import { twMerge } from 'tailwind-merge'
 
 import { Tooltip } from '@/ui/global/widgets/components/Tooltip'
 import { AnimatedLabel } from './AnimatedLabel'
-import { useRouter } from '@/ui/global/hooks'
+import { useRouter } from '@/ui/global/hooks/useRouter'
 
 type NavButtonProps = {
   route: string

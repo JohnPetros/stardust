@@ -1,10 +1,10 @@
 'use client'
 
-import { useApi } from '@/ui/global/hooks'
+import { useApi } from '@/ui/global/hooks/useApi'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { playAudio } from '@/utils'
 import { Avatar } from '@stardust/core/shop/entities'
+import { useAudioContext } from '@/ui/global/contexts/AudioContext'
 
 type UseAvatarItemProps = {
   id: string
@@ -15,7 +15,7 @@ type UseAvatarItemProps = {
 
 export function useAvatarItem({ id, name, price, image }: UseAvatarItemProps) {
   const { user, updateUser } = useAuthContext()
-
+  const { playAudio } = useAudioContext()
   const toast = useToastContext()
   const api = useApi()
 

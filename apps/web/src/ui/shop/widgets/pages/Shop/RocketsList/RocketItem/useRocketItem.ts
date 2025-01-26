@@ -1,10 +1,11 @@
 'use client'
 
-import { useApi } from '@/ui/global/hooks'
+import { Rocket } from '@stardust/core/shop/entities'
+
+import { useApi } from '@/ui/global/hooks/useApi'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { playAudio } from '@/utils'
-import { Rocket } from '@stardust/core/shop/entities'
+import { useAudioContext } from '@/ui/global/contexts/AudioContext'
 
 type UseRocketItemProps = {
   id: string
@@ -15,7 +16,7 @@ type UseRocketItemProps = {
 
 export function useRocketItem({ id, name, price, image }: UseRocketItemProps) {
   const { user, updateUser } = useAuthContext()
-
+  const { playAudio } = useAudioContext()
   const toast = useToastContext()
   const api = useApi()
 

@@ -1,5 +1,5 @@
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { useClipboard } from '@/ui/global/hooks'
+import { useClipboard } from '@/ui/global/hooks/useClipboard'
 
 export function useShareSnippetDialog(snippetUrl: string) {
   const { copy } = useClipboard(snippetUrl)

@@ -8,7 +8,7 @@ import { AnimatedSpan } from './AnimatedSpan'
 import { RewardAlertDialog } from './RewardAlertDialog'
 
 import { Button } from '@/ui/global/widgets/components/Button'
-import { useApi } from '@/ui/global/hooks'
+import { useApi } from '@/ui/global/hooks/useApi'
 
 import { useAchievementCard } from './useAchievementCard'
 

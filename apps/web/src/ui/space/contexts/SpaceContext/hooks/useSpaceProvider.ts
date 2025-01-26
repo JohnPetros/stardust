@@ -6,7 +6,7 @@ import { Planet } from '@stardust/core/space/entities'
 import type { PlanetDto } from '@stardust/core/space/dtos'
 import { GetLastUnlockedStarIdUseCase } from '@stardust/core/space/use-cases'
 
-import { useScrollEvent } from '@/ui/global/hooks'
+import { useScrollEvent } from '@/ui/global/hooks/useScrollEvent'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import type { LastUnlockedStarViewPortPosition } from '../types'
 

@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { _deleteCookie, _setCookie } from '@/ui/global/actions'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useRouter } from '@/ui/global/hooks'
+import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useRefreshPage } from '@/ui/global/hooks/useRefreshPage'
 import { useAudioContext } from '@/ui/global/contexts/AudioContext'
 

@@ -20,7 +20,7 @@ import {
   titleSchema,
 } from '@stardust/validation/global/schemas'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
-import { useRouter } from '@/ui/global/hooks'
+import { useRouter } from '@/ui/global/hooks/useRouter'
 import { ROUTES } from '@/constants'
 
 const snippetSchema = z.object({

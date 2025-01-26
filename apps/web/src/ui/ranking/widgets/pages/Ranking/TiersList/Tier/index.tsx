@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useRef } from 'react'
 import { twMerge } from 'tailwind-merge'
 
-import { useApi } from '@/ui/global/hooks'
+import { useApi } from '@/ui/global/hooks/useApi'
 import { useTier } from './useTier'
 import { AnimatedImage } from './AnimatedImage'
 

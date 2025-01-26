@@ -1,10 +1,11 @@
 import { type RefObject, useEffect, useState } from 'react'
 
-import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { playAudio } from '@/utils'
 import { Podium } from '@stardust/core/ranking/structs'
 import { Tier } from '@stardust/core/ranking/entities'
+
+import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { useAudioContext } from '@/ui/global/contexts/AudioContext'
 import { useGetLastWeekRankingWinnersAction } from './useGetLastWeekRankingWinnersAction'
 
 type UseRankingResultProps = {
@@ -23,6 +24,7 @@ export function useRankingResult({
   const [isUserLoser, setIsUserLoser] = useState<boolean>(false)
   const [isLoading, setIsloading] = useState<boolean>(true)
   const { user, updateUser } = useAuthContext()
+  const { playAudio } = useAudioContext()
   const { getLastWeekRankingWinners } = useGetLastWeekRankingWinnersAction()
 
   async function handleWRankingResultButtonClick() {
@@ -82,7 +84,7 @@ export function useRankingResult({
     }
 
     setRankingResult()
-  }, [user, isLoading, getLastWeekRankingWinners])
+  }, [user, isLoading, getLastWeekRankingWinners, playAudio])
 
   return {
     lastWeekRankingPodium,
