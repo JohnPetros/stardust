@@ -32,7 +32,7 @@ export function Content({
         .map((child) =>
           typeof child !== 'string'
             ? `<strong class="strong">${child.props.children}</strong>`
-            : child
+            : child,
         )
         .join(' ')
     : children
@@ -44,7 +44,7 @@ export function Content({
       {typeof content === 'string' ? (
         <>
           {hasAnimation ? (
-            <TypeWriter text={content} isEnable={hasAnimation} />
+            <TypeWriter content={content} isEnable={hasAnimation} />
           ) : (
             <span dangerouslySetInnerHTML={{ __html: formattedContent }} />
           )}

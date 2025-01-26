@@ -17,7 +17,7 @@ export function SignUpPage() {
   return (
     <div className='h-screen'>
       <div className='fixed z-[-5] brightness-[0.25]'>
-        <AnimatedOpacity delay={0.5}>
+        <AnimatedOpacity delay={0.5} className='h-full w-full'>
           <Animation name='rocket-exploring' size='full' hasLoop={true} />
         </AnimatedOpacity>
       </div>

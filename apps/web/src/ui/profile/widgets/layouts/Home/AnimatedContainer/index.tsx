@@ -18,21 +18,19 @@ const variants: Variants = {
 type AnimatedContainerProps = {
   children: ReactNode
   isSidenavExpanded: boolean
-  isMobile: boolean
   onClick: VoidFunction
 }
 
 export function AnimatedContainer({
   children,
   isSidenavExpanded,
-  isMobile,
   onClick,
 }: AnimatedContainerProps) {
   return (
     <motion.main
       variants={variants}
       initial='shrink'
-      animate={isSidenavExpanded ? 'expand' : isMobile ? 'mobile' : 'shrink'}
+      animate={isSidenavExpanded ? 'expand' : 'shrink'}
       className='h-full pt-16'
       onClick={onClick}
     >

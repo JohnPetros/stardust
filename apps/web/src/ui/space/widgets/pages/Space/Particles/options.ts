@@ -4,7 +4,6 @@ export const options = {
     color: {
       value: '#141521',
     },
-
     position: '50% 50%',
     repeat: 'no-repeat',
     size: '20%',

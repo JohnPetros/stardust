@@ -5,6 +5,7 @@ import type { LottieRef } from 'lottie-react'
 
 export function useLottieAnimation() {
   const [windowWidth, setWindowWidth] = useState(0)
+  const [windowHeight, setWindowHeight] = useState(0)
   const lottieRef = useRef(null) as LottieRef
 
   function restart() {
@@ -12,11 +13,15 @@ export function useLottieAnimation() {
   }
 
   useEffect(() => {
-    if (typeof window !== 'undefined') setWindowWidth(window.innerWidth)
+    if (typeof window !== 'undefined') {
+      setWindowWidth(window.innerWidth)
+      setWindowHeight(window.innerHeight)
+    }
   }, [])
 
   return {
     windowWidth,
+    windowHeight,
     lottieRef,
     restart,
   }

@@ -14,7 +14,7 @@ function LottieAnimationComponent(
   { name, size, hasLoop = true }: AnimationProps,
   ref: ForwardedRef<AnimationRef>,
 ) {
-  const { lottieRef, windowWidth, restart } = useLottieAnimation()
+  const { lottieRef, windowWidth, windowHeight, restart } = useLottieAnimation()
   const lottieData = LOTTIES[name]
 
   useImperativeHandle(
@@ -32,7 +32,13 @@ function LottieAnimationComponent(
       <Lottie
         lottieRef={lottieRef}
         animationData={lottieData}
-        style={{ width: windowWidth }}
+        style={{
+          width: windowWidth,
+          top: 0,
+          right: 0,
+          left: 0,
+          bottom: 0,
+        }}
         loop={hasLoop}
       />
     )

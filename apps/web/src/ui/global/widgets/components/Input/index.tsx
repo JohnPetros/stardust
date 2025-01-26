@@ -47,7 +47,7 @@ const InputComponent = (
             'flex items-center gap-2 rounded border bg-transparent group p-3',
             errorMessage
               ? 'border-red-700'
-              : 'border-gray-400 focus-within:border-gray-100',
+              : 'border-gray-400 focus-within:border-green-400',
             isActive && 'border-green-400',
           )}
         >

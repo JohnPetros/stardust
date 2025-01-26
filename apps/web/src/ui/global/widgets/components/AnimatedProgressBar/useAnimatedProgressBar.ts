@@ -20,8 +20,6 @@ export function useAnimatedProgressBar(value: number, onAnimationEnd?: VoidFunct
       'width' in animationDefinition &&
       animationDefinition.width === '100%'
 
-    console.log(animationDefinition)
-
     if (isAnimationEnd) {
       onAnimationEnd()
     }

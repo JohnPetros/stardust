@@ -31,11 +31,11 @@ export function EndingPage() {
     <div className='h-screen'>
       <div className='fixed z-[-5] brightness-[0.25]'>
         <AnimatedOpacity delay={0.5} className='text-gray-50 text-center'>
-          <Animation name='rocket-exploring' size='full' hasLoop={true} />
+          <Animation name='space' size='full' hasLoop={true} />
         </AnimatedOpacity>
       </div>
 
-      <main className='flex flex-col h-full mx-auto max-w-2xl'>
+      <main className='flex flex-col h-full mx-auto max-w-2xl px-6 md:px-0'>
         {lastThankIndex !== activeThankIndex && (
           <AnimatedProgressBar
             key={activeThankIndex}
