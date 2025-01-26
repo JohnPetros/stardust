@@ -7,6 +7,7 @@ import ApolloRidingRocket from '../../../../../../../public/lotties/apollo-ridin
 import ApolloCongratulating from '../../../../../../../public/lotties/apollo-congratulating.json'
 import RocketLaunching from '../../../../../../../public/lotties/rocket-launching.json'
 import PageNotFound from '../../../../../../../public/lotties/404.json'
+import Galaxy from '../../../../../../../public/lotties/galaxy.json'
 import RocketFloating from '../../../../../../../public/lotties/rocket-floating.json'
 import RocketExploring from '../../../../../../../public/lotties/rocket-exploring.json'
 import UnlockedStar from '../../../../../../../public/lotties/unlocked-star.json'
@@ -30,6 +31,7 @@ export const LOTTIES: Record<AnimationName, unknown> = {
   'rocket-exploring': RocketExploring,
   'apollo-congratulating': ApolloCongratulating,
   'unlocked-star': UnlockedStar,
+  galaxy: Galaxy,
   shinning: Shinning,
   streak: Streak,
   space: Space,

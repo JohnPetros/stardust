@@ -1,10 +1,9 @@
 'use client'
 
 import { type ForwardedRef, forwardRef, useImperativeHandle } from 'react'
-import { LOTTIES } from './lotties'
 import type { AnimationRef, AnimationProps } from '../types'
+import { LOTTIES } from './lotties'
 import { useLottieAnimation } from './useLottieAnimation'
-// import Lottie from 'lottie-react'
 import dynamic from 'next/dynamic'
 
 const Lottie = dynamic(() => import('lottie-react'), {
