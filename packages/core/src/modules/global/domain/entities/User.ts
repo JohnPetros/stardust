@@ -158,6 +158,10 @@ export class User extends Entity<UserProps> {
     this.props.weekStatus = this.props.weekStatus.updateTodayStatus('undone')
   }
 
+  resetStreak() {
+    this.props.didBreakStreak = this.didBreakStreak.makeFalse()
+  }
+
   getAchievementCount(metric: AchievementMetricValue) {
     return this[metric]
   }
