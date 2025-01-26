@@ -16,9 +16,14 @@ export function useRouter() {
     router.back()
   }, [router.back])
 
+  const refresh = useCallback(() => {
+    window.location.reload()
+  }, [])
+
   return {
     goTo,
     goBack,
+    refresh,
     currentRoute: pathname,
   }
 }
