@@ -1,50 +1,69 @@
 'use client'
 
-import Typewriter from 'typewriter-effect'
+import TypewriterEffect from 'typewriter-effect'
+import { Typewriter as SimpleTypewriter } from 'react-simple-typewriter'
 
 import { useTypeWriter } from './useTypeWriter'
 
 export type TypeWriterProps = {
-  text: string
+  content: string | string[]
   isEnable?: boolean
   delay?: number
   deleteDelay?: number
   hasLoop?: boolean
+  onTypeChar?: VoidFunction
   onDeleteChar?: VoidFunction
 }
 
 export function TypeWriter({
-  text,
+  content,
   isEnable = true,
   delay = 20,
   deleteDelay = 40,
   hasLoop = false,
+  onTypeChar,
   onDeleteChar,
 }: TypeWriterProps) {
-  const { options, formattedText } = useTypeWriter({
-    text,
+  const { options, formattedContent } = useTypeWriter({
+    content,
     delay,
     deleteDelay,
     hasLoop,
+    onTypeChar,
     onDeleteChar,
   })
 
-  if (isEnable)
+  if (!isEnable) {
+    return <span dangerouslySetInnerHTML={{ __html: content }} />
+  }
+
+  if (Array.isArray(content)) {
     return (
-      <Typewriter
-        component={'span'}
-        options={options}
-        onInit={(typewriter) => {
-          typewriter
-            .callFunction(() => {
-              const cursors = document.querySelectorAll('.Typewriter__cursor')
-              cursors.forEach((cursor) => cursor.remove())
-            })
-            .typeString(formattedText)
-            .start()
-        }}
+      <SimpleTypewriter
+        words={content}
+        loop={hasLoop ? false : 1}
+        cursor
+        cursorStyle='|'
+        typeSpeed={70}
+        deleteSpeed={deleteDelay}
+        delaySpeed={delay}
       />
     )
+  }
 
-  return <span dangerouslySetInnerHTML={{ __html: text }} />
+  return (
+    <TypewriterEffect
+      component={'span'}
+      options={options}
+      onInit={(typewriter) => {
+        typewriter
+          .callFunction(() => {
+            const cursors = document.querySelectorAll('.Typewriter__cursor')
+            cursors.forEach((cursor) => cursor.remove())
+          })
+          .typeString(formattedContent)
+          .start()
+      }}
+    />
+  )
 }

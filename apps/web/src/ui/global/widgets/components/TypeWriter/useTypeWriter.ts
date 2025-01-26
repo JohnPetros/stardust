@@ -5,22 +5,22 @@ import type { TypeWriterProps } from '.'
 import { SPECIAL_CHARACTERS } from '@/constants'
 
 export function useTypeWriter({
-  text,
+  content,
   delay,
   deleteDelay,
   hasLoop,
   onDeleteChar,
 }: Omit<TypeWriterProps, 'isEnable'>) {
-  function formatSpecialCharacters(text: string) {
-    let formattedText = text
+  function formatSpecialCharacters(content: string | string[]) {
+    let formattedContent = Array.isArray(content) ? content.join(' ') : content
 
     for (const [character, code] of Object.entries(SPECIAL_CHARACTERS)) {
-      if (formattedText.includes(code)) {
-        formattedText = formattedText.replaceAll(code, `<span>${character}<span>`)
+      if (formattedContent.includes(code)) {
+        formattedContent = formattedContent.replaceAll(code, `<span>${character}<span>`)
       }
     }
 
-    return formattedText
+    return formattedContent
   }
 
   function handleDeleteChar() {
@@ -37,11 +37,14 @@ export function useTypeWriter({
   }
 
   if (onDeleteChar && hasLoop) {
-    options = { ...options, onRemoveNode: () => handleDeleteChar() }
+    options = {
+      ...options,
+      onRemoveNode: () => handleDeleteChar(),
+    }
   }
 
   return {
     options,
-    formattedText: formatSpecialCharacters(text),
+    formattedContent: formatSpecialCharacters(content),
   }
 }
