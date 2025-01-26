@@ -8,6 +8,16 @@ export class List<Item> {
     return new List<Item>(items)
   }
 
+  static createListOfNumbers(min: number, max: number) {
+    let list = new List<number>()
+
+    for (let number = min; number <= max; number++) {
+      list = list.add(number)
+    }
+
+    return list
+  }
+
   add(item: Item) {
     this.items.push(item)
     return new List(this.items)

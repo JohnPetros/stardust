@@ -4,31 +4,23 @@ import { List } from '@stardust/core/global/structs'
 
 import { QUOTES } from './quotes'
 
-export function useHero(charactersDeletingDelay: number) {
-  const [quote, setQuote] = useState(List.create(QUOTES).random)
+export function useHero() {
+  const listOfIndexes = List.createListOfNumbers(0, QUOTES.length - 1)
+  const [activeQuoteIndex, setActiveQuoteIndex] = useState(listOfIndexes.random)
   const deletedCharactersCount = useRef(0)
-  const canDelete = useRef(true)
 
   async function handleDeleteQuoteChar() {
-    if (canDelete.current)
-      deletedCharactersCount.current = deletedCharactersCount.current + 1
+    deletedCharactersCount.current = deletedCharactersCount.current + 1
+    const activeQuote = QUOTES[activeQuoteIndex]
 
-    if (deletedCharactersCount.current === quote.length && canDelete.current) {
-      canDelete.current = false
-
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          setQuote(List.create(QUOTES).random)
-          deletedCharactersCount.current = 0
-          canDelete.current = true
-          resolve(true)
-        }, quote.length * charactersDeletingDelay)
-      })
+    if (activeQuote && deletedCharactersCount.current === activeQuote.length) {
+      setActiveQuoteIndex(listOfIndexes.random)
     }
   }
 
   return {
+    activeQuoteIndex,
+    quotes: QUOTES,
     handleDeleteQuoteChar,
-    quote,
   }
 }
