@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 
-import { useApi } from '@/ui/global/hooks'
+import { useApi } from '@/ui/global/hooks/useApi'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'

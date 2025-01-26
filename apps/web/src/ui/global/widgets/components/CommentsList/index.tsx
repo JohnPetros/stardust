@@ -1,7 +1,7 @@
 'use client'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useBreakpoint } from '@/ui/global/hooks'
+import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 import { AnimatedArrow } from '../AnimatedArrow'
 import { PopoverMenu } from '../PopoverMenu'
 import { Separator } from '../Separator'
@@ -114,7 +114,7 @@ export function CommentsList({
                             name: comment.author.avatar.name.value,
                             image: comment.author.avatar.image.value,
                           }}
-                          createdAt={comment.createdAt}
+                          createdAt={comment.postedAt}
                           isAuthorUser={comment.author.slug.value === user?.slug.value}
                           onDelete={handleDeleteComment}
                         />

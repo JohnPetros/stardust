@@ -2,7 +2,7 @@
 
 import * as Avatar from '@radix-ui/react-avatar'
 
-import { useApi } from '@/ui/global/hooks'
+import { useApi } from '@/ui/global/hooks/useApi'
 
 type UserAvatarProps = {
   avatarImage: string

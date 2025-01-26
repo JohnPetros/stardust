@@ -6,7 +6,7 @@ import type { Swiper as SwiperInstance } from 'swiper'
 import { register } from 'swiper/element'
 import { useAnimate } from 'framer-motion'
 
-import { useBreakpoint } from '@/ui/global/hooks'
+import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 
 register()

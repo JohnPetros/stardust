@@ -2,7 +2,7 @@ import { useFormContext } from 'react-hook-form'
 
 import type { ChallengeSchema } from '@stardust/validation/challenging/types'
 import { useEffect, useState } from 'react'
-import { useApi } from '@/ui/global/hooks'
+import { useApi } from '@/ui/global/hooks/useApi'
 import { Slug } from '@stardust/core/global/structs'
 
 export function useChallengeTitleField() {

@@ -3,7 +3,7 @@
 import { type ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 import MonacoEditor from '@monaco-editor/react'
 
-import { useBreakpoint } from '@/ui/global/hooks'
+import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 import { useEditorContext } from '@/ui/global/contexts/EditorContext/hooks'
 import { Loading } from '../Loading'
 import type { CodeEditorRef, CodeEditorTheme } from './types'

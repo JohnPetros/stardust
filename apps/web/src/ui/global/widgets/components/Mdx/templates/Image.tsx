@@ -2,7 +2,7 @@ import Img from 'next/image'
 
 import { Animation } from './Animation'
 import { Content } from './Content'
-import { useApi } from '@/ui/global/hooks'
+import { useApi } from '@/ui/global/hooks/useApi'
 import { REGEX } from '@/constants'
 
 type ImageProps = {

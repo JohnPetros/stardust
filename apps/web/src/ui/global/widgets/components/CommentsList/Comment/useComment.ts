@@ -3,7 +3,8 @@
 import { useRef, useState } from 'react'
 
 import { CACHE } from '@/constants'
-import { useApi, useCache } from '@/ui/global/hooks'
+import { useApi } from '@/ui/global/hooks/useApi'
+import { useCache } from '@/ui/global/hooks/useCache'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import type { AlertDialogRef } from '../../AlertDialog/types'

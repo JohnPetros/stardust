@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useMdx } from '@/ui/global/widgets/components/Mdx/hooks/useMdx'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useRouter } from '@/ui/global/hooks'
+import { useRouter } from '@/ui/global/hooks/useRouter'
 import { ROUTES } from '@/constants'
 
 export function useChallengeDescriptionSlot() {

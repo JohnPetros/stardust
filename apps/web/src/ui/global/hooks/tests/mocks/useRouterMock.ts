@@ -1,19 +1,23 @@
-import { useRouter } from ''@/ui/global/hooks'/useRouter'
+import { useRouter } from '@/ui/global/hooks/useRouter'
 
-jest.mock(''@/ui/global/hooks'/useRouter')
+jest.mock('@/ui/global/hooks/useRouter')
 
 export function useRouterMock(returnMock?: Partial<ReturnType<typeof useRouter>>) {
   const goToMock = jest.fn()
-  const getCurrentrouteMock = jest.fn()
+  const goBackMock = jest.fn()
+  const refreshMock = jest.fn()
 
   jest.mocked(useRouter).mockReturnValue({
     goTo: goToMock,
-    getCurrentRoute: getCurrentrouteMock,
+    goBack: goBackMock,
+    refresh: refreshMock,
+    currentRoute: '',
     ...returnMock,
   })
 
   return {
     goToMock,
-    getCurrentrouteMock,
+    goBackMock,
+    refreshMock,
   }
 }

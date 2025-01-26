@@ -7,13 +7,13 @@ import { InsufficientInputsError } from '@stardust/core/challenging/errors'
 import { CodeRunnerError } from '@stardust/core/global/errors'
 
 import { ROUTES, STORAGE } from '@/constants'
-import { playAudio } from '@/utils'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
 import type { ConsoleRef } from '@/ui/global/widgets/components/Console/types'
 import type { CodeEditorRef } from '@/ui/global/widgets/components/CodeEditor/types'
+import { useAudioContext } from '@/ui/global/contexts/AudioContext'
 
 export function useChallengeCodeEditorSlot() {
   const { getChallengeSlice, getPanelsLayoutSlice, getResults } = useChallengeStore()
@@ -21,6 +21,7 @@ export function useChallengeCodeEditorSlot() {
   const { challenge } = getChallengeSlice()
   const { panelsLayout } = getPanelsLayoutSlice()
   const { provider } = useCodeRunner()
+  const { playAudio } = useAudioContext()
   const toast = useToastContext()
   const router = useRouter()
   const userCode = useRef<Code>(Code.create(provider))

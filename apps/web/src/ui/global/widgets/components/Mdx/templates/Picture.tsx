@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 
-import { useApi } from '@/ui/global/hooks'
+import { useApi } from '@/ui/global/hooks/useApi'
 import { REGEX } from '@/constants'
 
 type PictureProps = {

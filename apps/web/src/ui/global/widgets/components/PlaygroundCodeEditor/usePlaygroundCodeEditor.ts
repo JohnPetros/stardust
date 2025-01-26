@@ -5,9 +5,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Code } from '@stardust/core/global/structs'
 
 import { REGEX } from '@/constants'
-import { playAudio } from '@/utils'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
+import { useAudioContext } from '@/ui/global/contexts/AudioContext'
 import type { ConsoleRef } from '../Console/types'
 import type { PromptRef } from '../Prompt/types'
 import type { CodeEditorRef } from '../CodeEditor/types'
@@ -19,6 +19,7 @@ export function usePlaygroundCodeEditor(
   const [outputs, setOutputs] = useState<string[]>([])
   const [shouldOpenPrompt, setShouldOpenPrompt] = useState(false)
   const { provider } = useCodeRunner()
+  const { playAudio } = useAudioContext()
   const toast = useToastContext()
   const codeRef = useRef<Code>(Code.create(provider, preCodeValue))
   const codeEditorRef = useRef<CodeEditorRef>(null)

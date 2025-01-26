@@ -1,6 +1,6 @@
 'use client'
 
-import { useApi } from '@/ui/global/hooks'
+import { useApi } from '@/ui/global/hooks/useApi'
 import { useMdx } from '@/ui/global/widgets/components/Mdx/hooks/useMdx'
 import Image from 'next/image'
 

@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import type { SignUpFormFields } from './SignUpForm/types/SignUpFormFields'
 import { useSignUpAction } from './useSignUpAction'
-import { useApi } from '@/ui/global/hooks'
+import { useApi } from '@/ui/global/hooks/useApi'
 
 type UserCredentials = {
   email: string

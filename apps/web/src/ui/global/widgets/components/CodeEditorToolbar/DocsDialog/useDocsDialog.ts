@@ -1,7 +1,10 @@
 import { useState } from 'react'
-import { CACHE } from '@/constants'
-import { useApi, useCache } from '@/ui/global/hooks'
+
 import { Doc } from '@stardust/core/challenging/entities'
+
+import { CACHE } from '@/constants'
+import { useApi } from '@/ui/global/hooks/useApi'
+import { useCache } from '@/ui/global/hooks/useCache'
 
 export function useDocsDialog() {
   const api = useApi()

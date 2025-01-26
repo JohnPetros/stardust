@@ -15,7 +15,7 @@ import { ThanksToDeleguaTeam } from './ThanksToDeleguaTeam'
 import { ThanksToFamily } from './ThanksToFamily'
 import { ThanksToEtec } from './ThanksToEtec'
 import { Icon } from '@/ui/global/widgets/components/Icon'
-import { useRouter } from '@/ui/global/hooks'
+import { useRouter } from '@/ui/global/hooks/useRouter'
 
 export function EndingPage() {
   const progressBarRef = useRef<AnimatedProgressBarRef>(null)
