@@ -11,7 +11,7 @@ export async function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang='pt-BR'>
+    <html lang='pt-BR' className='scroll-smooth'>
       <body
         className={`${roboto_mono.variable} ${poppins.variable} relative h-screen w-screen bg-gray-900 font-normal`}
       >

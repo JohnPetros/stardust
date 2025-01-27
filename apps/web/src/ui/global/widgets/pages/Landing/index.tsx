@@ -1,10 +1,15 @@
-import { Hero } from './Hero'
+import { AbountSection } from './AboutSection'
+import { HeroSection } from './HeroSection'
+import { RankingSection } from './RankingSection'
 
 export function LandingPage() {
   return (
-    <>
-      <Hero />
-      {/* <main id='content'>oiiiiiiiiiiiiiii</main> */}
-    </>
+    <div>
+      <HeroSection />
+      <div className='max-w-6xl mx-auto space-y-24'>
+        <AbountSection />
+        <RankingSection />
+      </div>
+    </div>
   )
 }

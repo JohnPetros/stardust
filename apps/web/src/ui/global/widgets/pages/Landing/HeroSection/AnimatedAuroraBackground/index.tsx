@@ -34,9 +34,9 @@ export const AnimatedAuroraBackground = ({ children }: PropsWithChildren) => {
     >
       {children}
 
-      <AnimatedOpacity delay={1.5} className='grid place-content-center h-48'>
+      <AnimatedOpacity delay={2.5} className='flex flex-col justify-center h-64 mt-12'>
         <motion.a
-          href='#content'
+          href='#about'
           style={{
             border,
             boxShadow,

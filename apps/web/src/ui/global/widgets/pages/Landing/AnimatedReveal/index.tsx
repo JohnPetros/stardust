@@ -3,7 +3,16 @@
 import { motion, useAnimationControls, useInView } from 'framer-motion'
 import { type PropsWithChildren, useEffect, useRef } from 'react'
 
-export function AnimatedReveal({ children }: PropsWithChildren) {
+type AnimatedRevealProps = {
+  delay?: number
+  className?: string
+}
+
+export function AnimatedReveal({
+  children,
+  delay = 0.25,
+  className,
+}: PropsWithChildren<AnimatedRevealProps>) {
   const containerRef = useRef(null)
   const contentAnimationControls = useAnimationControls()
   const slideAnimationControls = useAnimationControls()
@@ -17,12 +26,12 @@ export function AnimatedReveal({ children }: PropsWithChildren) {
   }, [isInView, contentAnimationControls.start, slideAnimationControls.start])
 
   return (
-    <div ref={containerRef} className='relative w-fit'>
+    <div ref={containerRef} className='relative w-fit h-fit'>
       <motion.div
         variants={{
           hidden: {
             opacity: 0,
-            y: 75,
+            y: 35,
           },
           visible: {
             opacity: 1,
@@ -31,7 +40,8 @@ export function AnimatedReveal({ children }: PropsWithChildren) {
         }}
         initial='hidden'
         animate={contentAnimationControls}
-        transition={{ duration: 0.5, delay: 0.25 }}
+        transition={{ duration: 0.5, delay: delay + 0.1 }}
+        className={className}
       >
         {children}
       </motion.div>
@@ -46,8 +56,8 @@ export function AnimatedReveal({ children }: PropsWithChildren) {
         }}
         initial='hidden'
         animate={slideAnimationControls}
-        transition={{ duration: 0.5, ease: 'easeIn' }}
-        className='absolute top-1 right-1 left-0 bottom-0 z-20 bg-green-400'
+        transition={{ duration: 0.5, delay, ease: 'easeIn' }}
+        className='absolute top-1 right-1 left-0 bottom-0 z-20 bg-green-500'
       />
     </div>
   )
