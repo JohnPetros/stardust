@@ -4,7 +4,7 @@ export function LandingPage() {
   return (
     <>
       <Hero />
-      <main id='content'></main>
+      {/* <main id='content'>oiiiiiiiiiiiiiii</main> */}
     </>
   )
 }

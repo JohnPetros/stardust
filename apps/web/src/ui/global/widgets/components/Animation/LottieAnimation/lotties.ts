@@ -5,7 +5,10 @@ import ApolloEarning from '../../../../../../../public/lotties/apollo-earning.js
 import ApolloMissing from '../../../../../../../public/lotties/apollo-missing.json'
 import ApolloRidingRocket from '../../../../../../../public/lotties/apollo-riding-rocket.json'
 import ApolloCongratulating from '../../../../../../../public/lotties/apollo-congratulating.json'
-import ApolloGreeting from '../../../../../../../public/lotties/apollo-greeting.lottie'
+import ApolloGreeting from '../../../../../../../public/lotties/apollo-greeting.json'
+import PlanetsExploration from '../../../../../../../public/lotties/planets-exploration.json'
+import Trophy from '../../../../../../../public/lotties/trophy.json'
+import Podium from '../../../../../../../public/lotties/podium.json'
 import RocketLaunching from '../../../../../../../public/lotties/rocket-launching.json'
 import PageNotFound from '../../../../../../../public/lotties/404.json'
 import Galaxy from '../../../../../../../public/lotties/galaxy.json'
@@ -33,7 +36,10 @@ export const LOTTIES: Record<AnimationName, unknown> = {
   'apollo-congratulating': ApolloCongratulating,
   'apollo-greeting': ApolloGreeting,
   'unlocked-star': UnlockedStar,
+  'planets-exploration': PlanetsExploration,
   galaxy: Galaxy,
+  podium: Podium,
+  trophy: Trophy,
   shinning: Shinning,
   streak: Streak,
   space: Space,

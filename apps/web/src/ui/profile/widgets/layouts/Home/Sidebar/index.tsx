@@ -6,9 +6,9 @@ import { Button } from '@/ui/global/widgets/components/Button'
 import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { SignOutAlertDialog } from '@/ui/global/widgets/components/SignOutAlertDialog'
+import { Separator } from '@/ui/global/widgets/components/Separator'
 import { AnimatedBar } from './AnimatedBar'
 import { AchievementsList } from '../AchievementsList'
-import { Separator } from '@/ui/global/widgets/components/Separator'
 
 export function Sidebar() {
   const { user } = useAuthContext()
