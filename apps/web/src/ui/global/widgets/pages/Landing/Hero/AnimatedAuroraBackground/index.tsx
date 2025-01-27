@@ -5,14 +5,15 @@ import { useMotionTemplate, useMotionValue, motion, animate } from 'framer-motio
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { Particles } from '../../Particles'
 import { Animation } from '@/ui/global/widgets/components/Animation'
+import { AnimatedOpacity } from '@/ui/global/widgets/components/AnimatedOpacity'
 
-const COLORS_TOP = ['#13FFAA', '#1E67C6', '#CE84CF', '#DD335C']
+const COLORS = ['#13FFAA', '#1E67C6', '#CE84CF', '#DD335C']
 
 export const AnimatedAuroraBackground = ({ children }: PropsWithChildren) => {
-  const color = useMotionValue(COLORS_TOP[0])
+  const color = useMotionValue(COLORS[0])
 
   useEffect(() => {
-    animate(color, COLORS_TOP, {
+    animate(color, COLORS, {
       ease: 'easeInOut',
       duration: 10,
       repeat: Infinity,
@@ -33,27 +34,29 @@ export const AnimatedAuroraBackground = ({ children }: PropsWithChildren) => {
     >
       {children}
 
-      <motion.a
-        href='#content'
-        style={{
-          border,
-          boxShadow,
-        }}
-        whileHover={{
-          scale: 1.015,
-        }}
-        whileTap={{
-          scale: 0.985,
-        }}
-        className='mx-auto group relative flex w-fit items-center gap-1.5 rounded-full bg-gray-950/10 px-4 py-2 text-gray-50 transition-colors hover:bg-gray-950/50 z-50'
-      >
-        Ver mais
-        <Icon name='arrow-down' size={20} />
-      </motion.a>
+      <AnimatedOpacity delay={1.5} className='grid place-content-center h-48'>
+        <motion.a
+          href='#content'
+          style={{
+            border,
+            boxShadow,
+          }}
+          whileHover={{
+            scale: 1.015,
+          }}
+          whileTap={{
+            scale: 0.985,
+          }}
+          className='mx-auto group relative flex w-fit items-center gap-1.5 rounded-full bg-gray-950/10 px-4 py-2 text-gray-50 transition-colors hover:bg-gray-950/50 z-50'
+        >
+          Ver mais
+          <Icon name='arrow-down' size={20} />
+        </motion.a>
 
-      <div className='mx-auto translate-y-3'>
-        <Animation name='apollo-greeting' size={140} />
-      </div>
+        <div className='mx-auto translate-y-3'>
+          <Animation name='apollo-greeting' size={140} />
+        </div>
+      </AnimatedOpacity>
 
       <Particles />
     </motion.section>
