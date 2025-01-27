@@ -3,12 +3,12 @@
 import { type RefObject, useEffect, useRef } from 'react'
 
 import { ROUTES } from '@/constants'
-import { playAudio } from '@/utils'
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
-import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
 import { useApi } from '@/ui/global/hooks/useApi'
+import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
 import { useInView } from '@/ui/global/hooks/useInView'
 import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useAudioContext } from '@/ui/global/contexts/AudioContext'
 
 type UseStarProps = {
   id: string
@@ -26,6 +26,7 @@ export function useStar({
 }: UseStarProps) {
   const { lastUnlockedStarRef, scrollIntoLastUnlockedStar, setLastUnlockedStarPosition } =
     useSpaceContext()
+  const { playAudio } = useAudioContext()
   const isFirstScroll = useRef(true)
   const router = useRouter()
   const api = useApi()
