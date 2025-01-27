@@ -5,6 +5,7 @@ export type AnimationName =
   | 'apollo-earning'
   | 'apollo-missing'
   | 'apollo-riding-rocket'
+  | 'apollo-greeting'
   | 'apollo-congratulating'
   | 'galaxy'
   | 'rocket-lauching'
