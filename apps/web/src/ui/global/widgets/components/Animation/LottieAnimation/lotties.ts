@@ -10,6 +10,7 @@ import PlanetsExploration from '../../../../../../../public/lotties/planets-expl
 import Trophy from '../../../../../../../public/lotties/trophy.json'
 import Podium from '../../../../../../../public/lotties/podium.json'
 import RocketLaunching from '../../../../../../../public/lotties/rocket-launching.json'
+import FastRocket from '../../../../../../../public/lotties/fast-rocket.json'
 import PageNotFound from '../../../../../../../public/lotties/404.json'
 import Galaxy from '../../../../../../../public/lotties/galaxy.json'
 import RocketFloating from '../../../../../../../public/lotties/rocket-floating.json'
@@ -37,6 +38,7 @@ export const LOTTIES: Record<AnimationName, unknown> = {
   'apollo-greeting': ApolloGreeting,
   'unlocked-star': UnlockedStar,
   'planets-exploration': PlanetsExploration,
+  'fast-rocket': FastRocket,
   galaxy: Galaxy,
   podium: Podium,
   trophy: Trophy,
