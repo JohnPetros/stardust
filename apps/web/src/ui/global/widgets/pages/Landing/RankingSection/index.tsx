@@ -3,6 +3,7 @@ import { RankingUser } from '@/ui/ranking/widgets/pages/Ranking/RankingUsersList
 import { SectionTitle } from '../SectionTitle'
 import { Animation } from '../../../components/Animation'
 import { AnimatedBorder } from '../../../components/AnimatedBorder'
+import { AnimatedRankingUser } from './AnimatedRankingUser'
 import { Paragraph } from '../Paragraph'
 
 export function RankingSection() {
@@ -29,44 +30,54 @@ export function RankingSection() {
             </div>
           </div>
 
-          <div className='space-y-2'>
-            <RankingUser
-              id='1'
-              name='Leonel Sanches'
-              position={1}
-              xp={1100}
-              avatarName='apollo'
-              avatarImage='apollo.jpg'
-              losersPositionOffset={100}
-            />
-            <RankingUser
-              id='2'
-              name='Samuel Renan'
-              position={2}
-              xp={950}
-              avatarName='apollo'
-              avatarImage='apollo.jpg'
-              losersPositionOffset={100}
-            />
-            <RankingUser
-              id='3'
-              name='Ítalo Brandão'
-              position={3}
-              xp={625}
-              avatarName='apollo'
-              avatarImage='apollo.jpg'
-              losersPositionOffset={100}
-            />
-            <RankingUser
-              id='4'
-              name='Aristides da costa'
-              position={4}
-              xp={500}
-              avatarName='apollo'
-              avatarImage='apollo.jpg'
-              losersPositionOffset={100}
-            />
-          </div>
+          <ul className='space-y-2'>
+            <AnimatedRankingUser index={0}>
+              <RankingUser
+                id='1'
+                name='Leonel Sanches'
+                position={1}
+                xp={1100}
+                avatarName='apollo'
+                avatarImage='apollo.jpg'
+                losersPositionOffset={100}
+              />
+            </AnimatedRankingUser>
+            <AnimatedRankingUser index={1}>
+              <RankingUser
+                id='2'
+                name='Samuel Renan'
+                position={2}
+                xp={950}
+                avatarName='apollo'
+                avatarImage='apollo.jpg'
+                losersPositionOffset={100}
+              />
+            </AnimatedRankingUser>
+
+            <AnimatedRankingUser index={2}>
+              <RankingUser
+                id='3'
+                name='Ítalo Brandão'
+                position={3}
+                xp={625}
+                avatarName='apollo'
+                avatarImage='apollo.jpg'
+                losersPositionOffset={100}
+              />
+            </AnimatedRankingUser>
+
+            <AnimatedRankingUser index={3}>
+              <RankingUser
+                id='4'
+                name='Aristides da costa'
+                position={4}
+                xp={500}
+                avatarName='apollo'
+                avatarImage='apollo.jpg'
+                losersPositionOffset={100}
+              />
+            </AnimatedRankingUser>
+          </ul>
         </div>
       </AnimatedBorder>
     </section>
