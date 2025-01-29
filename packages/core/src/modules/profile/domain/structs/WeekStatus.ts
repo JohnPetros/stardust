@@ -2,8 +2,18 @@ import { AppError, ValidationError } from '#global/errors'
 import { Datetime, NumberValidation, StringValidation } from '#libs'
 import type { WeekdayStatus } from '../types'
 
+type WeekStatusValue = [
+  WeekdayStatus,
+  WeekdayStatus,
+  WeekdayStatus,
+  WeekdayStatus,
+  WeekdayStatus,
+  WeekdayStatus,
+  WeekdayStatus,
+]
+
 export class WeekStatus {
-  static readonly DEFAULT_WEEK_STATUS: WeekdayStatus[] = [
+  static readonly DEFAULT_WEEK_STATUS: WeekStatusValue = [
     'todo',
     'todo',
     'todo',
@@ -14,7 +24,7 @@ export class WeekStatus {
   ]
   static readonly DAYS: string[] = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SÁB']
 
-  private constructor(readonly statuses: WeekdayStatus[] = []) {}
+  private constructor(readonly statuses: WeekStatusValue) {}
 
   static create(values?: string[]) {
     if (!values) {
@@ -34,7 +44,7 @@ export class WeekStatus {
     return new WeekStatus(values)
   }
 
-  static isStatus(values: string[]): values is WeekdayStatus[] {
+  static isStatus(values: string[]): values is WeekStatusValue {
     for (const value of values) {
       new StringValidation(value, 'Weekday Status')
         .oneOf(['todo', 'undone', 'done'])
@@ -48,7 +58,9 @@ export class WeekStatus {
     const todayIndex = new Datetime().getTodayIndex()
 
     return new WeekStatus(
-      this.statuses.map((status, index) => (index === todayIndex ? newStatus : status)),
+      this.statuses.map((status, index) =>
+        index === todayIndex ? newStatus : status,
+      ) as WeekStatusValue,
     )
   }
 

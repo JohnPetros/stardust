@@ -7,7 +7,7 @@ import { Paragraph } from '../Paragraph'
 
 export function RankingSection() {
   return (
-    <section id='#ranking' className='max-w-6xl mx-auto'>
+    <section id='ranking' className='max-w-6xl mx-auto'>
       <SectionTitle>Seja ranqueado com outros viajantes</SectionTitle>
 
       <AnimatedBorder className='mt-6 p-8'>
@@ -41,7 +41,7 @@ export function RankingSection() {
             />
             <RankingUser
               id='2'
-              name='Samuel'
+              name='Samuel Renan'
               position={2}
               xp={950}
               avatarName='apollo'
@@ -50,7 +50,7 @@ export function RankingSection() {
             />
             <RankingUser
               id='3'
-              name='Felipe nogueira'
+              name='Ítalo Brandão'
               position={3}
               xp={625}
               avatarName='apollo'
@@ -59,7 +59,7 @@ export function RankingSection() {
             />
             <RankingUser
               id='4'
-              name='Felipe nogueira'
+              name='Aristides da costa'
               position={4}
               xp={500}
               avatarName='apollo'

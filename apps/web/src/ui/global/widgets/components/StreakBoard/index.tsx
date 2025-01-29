@@ -8,7 +8,7 @@ import { WEEK_DAY_STATUS_ICONS } from './week-day-status-icons'
 
 type StreakProps = {
   weekStatus: WeekStatus
-  streakCount: number
+  streakCount?: number
 }
 
 export function StreakBoard({ weekStatus, streakCount }: StreakProps) {
@@ -34,12 +34,14 @@ export function StreakBoard({ weekStatus, streakCount }: StreakProps) {
         })}
       </div>
 
-      <div className='flex items-center justify-center gap-1'>
-        <StreakIcon size={32} />
-        <p className='text-center font-medium text-green-500'>
-          {streakCount} {streakCount > 1 ? 'dias' : 'dia'} estudados seguidos
-        </p>
-      </div>
+      {streakCount && (
+        <div className='flex items-center justify-center gap-1'>
+          <StreakIcon size={32} />
+          <p className='text-center font-medium text-green-500'>
+            {streakCount} {streakCount > 1 ? 'dias' : 'dia'} estudados seguidos
+          </p>
+        </div>
+      )}
     </div>
   )
 }
