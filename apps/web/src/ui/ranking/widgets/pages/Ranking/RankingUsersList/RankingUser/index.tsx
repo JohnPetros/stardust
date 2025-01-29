@@ -4,10 +4,10 @@ import { useMemo } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { tv } from 'tailwind-variants'
 
-import { RankingPosition } from '@/@core/domain/structs'
 import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'
 import { PODIUM } from '../../RankingResult/podium'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { RankingPosition } from '@stardust/core/ranking/structs'
 
 const positionStyles = tv({
   base: 'font-semibold p-2 w-12 grid place-content-center group-hover:text-gray-100/90',
