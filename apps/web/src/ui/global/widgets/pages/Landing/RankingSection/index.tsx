@@ -1,14 +1,59 @@
-import { Paragraph } from '../Paragraph'
+import { RankingUser } from '@/ui/ranking/widgets/pages/Ranking/RankingUsersList/RankingUser'
+
 import { SectionTitle } from '../SectionTitle'
-import { TrophyAnimation } from './TrophyAnimation'
+import { Animation } from '../../../components/Animation'
+import { Paragraph } from '../Paragraph'
+import { AnimatedBorder } from '../../../components/AnimatedBorder'
 
 export function RankingSection() {
   return (
     <section id='#ranking'>
       <SectionTitle>Seja ranqueado com outros viajantes</SectionTitle>
-      <div className='flex items-center'>
-        <TrophyAnimation />
-        <div className='flex-1'>
+      <AnimatedBorder>
+        <div className='flex justify-between'>
+          <Animation name='podium' size={120} />
+
+          <div className='space-y-2'>
+            <RankingUser
+              id='1'
+              name='Felipe nogueira'
+              position={1}
+              xp={1100}
+              avatarName='apollo'
+              avatarImage='apollo.jpg'
+              losersPositionOffset={100}
+            />
+            <RankingUser
+              id='2'
+              name='Felipe nogueira'
+              position={2}
+              xp={950}
+              avatarName='apollo'
+              avatarImage='apollo.jpg'
+              losersPositionOffset={100}
+            />
+            <RankingUser
+              id='3'
+              name='Felipe nogueira'
+              position={3}
+              xp={625}
+              avatarName='apollo'
+              avatarImage='apollo.jpg'
+              losersPositionOffset={100}
+            />
+            <RankingUser
+              id='4'
+              name='Felipe nogueira'
+              position={4}
+              xp={500}
+              avatarName='apollo'
+              avatarImage='apollo.jpg'
+              losersPositionOffset={100}
+            />
+          </div>
+        </div>
+
+        <div className='flex items-center justify-between w-full mt-6'>
           <Paragraph>
             Aqueles que exploram os planetas e que conseguem resolver mais desafios de
             código ganham mais pontos de{' '}
@@ -20,7 +65,7 @@ export function RankingSection() {
             para o próximo tier.
           </Paragraph>
         </div>
-      </div>
+      </AnimatedBorder>
     </section>
   )
 }
