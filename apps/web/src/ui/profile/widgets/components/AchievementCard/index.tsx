@@ -17,10 +17,9 @@ type AchievementCardProps = {
   name: string
   icon: string
   description: string
-  requiredCount: number
-  reward: number
-  isUnlocked: boolean
-  isRescuable: boolean
+  reward?: number
+  isUnlocked?: boolean
+  isRescuable?: boolean
   children?: ReactNode
 }
 
@@ -29,13 +28,12 @@ export function AchievementCard({
   icon,
   name,
   description,
-  reward,
-  isUnlocked,
-  isRescuable,
+  reward = 0,
+  isUnlocked = false,
+  isRescuable = false,
   children: progress,
 }: AchievementCardProps) {
   const { handleRescueButtonClick } = useAchievementCard(id, reward)
-
   const api = useApi()
   const iconImage = api.fetchImage('achievements', icon)
 
