@@ -11,7 +11,7 @@ import {
 export function useAnimatedBorder(containerRef: RefObject<HTMLDivElement>) {
   const xPercentage = useMotionValue(0)
   const yPercentage = useMotionValue(0)
-  const maskImage = useMotionTemplate`radial-gradient(80px 80px ${xPercentage}% ${yPercentage}%, black, transparent)`
+  const maskImage = useMotionTemplate`radial-gradient(80px 80px at ${xPercentage}% ${yPercentage}%, black, transparent)`
 
   useEffect(() => {
     if (!containerRef.current) return

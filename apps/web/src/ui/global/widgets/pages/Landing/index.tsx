@@ -8,12 +8,13 @@ export function LandingPage() {
   return (
     <div>
       <HeroSection />
-      <div className='space-y-24 mt-24'>
-        <AbountSection />
+      <div className='space-y-24 py-24'>
+        <RankingSection />
+        {/* <AbountSection /> */}
         {/* 
         <CodeSection />
-        <RankingSection /> */}
-        <AchievementsSection />
+        < */}
+        {/* <AchievementsSection /> */}
       </div>
     </div>
   )

@@ -7,16 +7,32 @@ import { Paragraph } from '../Paragraph'
 
 export function RankingSection() {
   return (
-    <section id='#ranking'>
+    <section id='#ranking' className='max-w-6xl mx-auto'>
       <SectionTitle>Seja ranqueado com outros viajantes</SectionTitle>
-      <AnimatedBorder>
-        <div className='flex justify-between'>
-          <Animation name='podium' size={120} />
+
+      <AnimatedBorder className='mt-6 p-8'>
+        <div className='grid grid-cols-2 gap-6'>
+          <div>
+            <Animation name='podium' size={120} />
+
+            <div>
+              <Paragraph>
+                Aqueles que exploram os planetas e que conseguem resolver mais desafios de
+                código ganham mais pontos de{' '}
+                <strong className='text-green-500 font-medium'>ranking</strong>.
+              </Paragraph>
+              <Paragraph>
+                Os primeiros do ranking ganham{' '}
+                <strong className='text-green-500 font-medium'>recompensas</strong> e
+                sobem para o próximo tier.
+              </Paragraph>
+            </div>
+          </div>
 
           <div className='space-y-2'>
             <RankingUser
               id='1'
-              name='Felipe nogueira'
+              name='Leonel Sanches'
               position={1}
               xp={1100}
               avatarName='apollo'
@@ -25,7 +41,7 @@ export function RankingSection() {
             />
             <RankingUser
               id='2'
-              name='Felipe nogueira'
+              name='Samuel'
               position={2}
               xp={950}
               avatarName='apollo'
@@ -51,19 +67,6 @@ export function RankingSection() {
               losersPositionOffset={100}
             />
           </div>
-        </div>
-
-        <div className='flex items-center justify-between w-full mt-6'>
-          <Paragraph>
-            Aqueles que exploram os planetas e que conseguem resolver mais desafios de
-            código ganham mais pontos de{' '}
-            <strong className='text-green-500 font-medium'>ranking</strong>.
-          </Paragraph>
-          <Paragraph>
-            Os primeiros do ranking ganham{' '}
-            <strong className='text-green-500 font-medium'>recompensas</strong> e sobem
-            para o próximo tier.
-          </Paragraph>
         </div>
       </AnimatedBorder>
     </section>
