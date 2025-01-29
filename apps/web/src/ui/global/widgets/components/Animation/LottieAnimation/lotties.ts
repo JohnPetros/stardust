@@ -9,6 +9,7 @@ import ApolloGreeting from '../../../../../../../public/lotties/apollo-greeting.
 import PlanetsExploration from '../../../../../../../public/lotties/planets-exploration.json'
 import Trophy from '../../../../../../../public/lotties/trophy.json'
 import Podium from '../../../../../../../public/lotties/podium.json'
+import RocketCrossingSky from '../../../../../../../public/lotties/rocket-crossing-sky.json'
 import RocketLaunching from '../../../../../../../public/lotties/rocket-launching.json'
 import FastRocket from '../../../../../../../public/lotties/fast-rocket.json'
 import PageNotFound from '../../../../../../../public/lotties/404.json'
@@ -17,6 +18,7 @@ import RocketFloating from '../../../../../../../public/lotties/rocket-floating.
 import RocketExploring from '../../../../../../../public/lotties/rocket-exploring.json'
 import UnlockedStar from '../../../../../../../public/lotties/unlocked-star.json'
 import Streak from '../../../../../../../public/lotties/streak.json'
+import Spiral from '../../../../../../../public/lotties/spiral.json'
 import Space from '../../../../../../../public/lotties/space.json'
 import Spinner from '../../../../../../../public/lotties/spinner.json'
 import Shinning from '../../../../../../../public/lotties/reward-shinning.json'
@@ -33,6 +35,7 @@ export const LOTTIES: Record<AnimationName, unknown> = {
   'apollo-riding-rocket': ApolloRidingRocket,
   'rocket-lauching': RocketLaunching,
   'rocket-floating': RocketFloating,
+  'rocket-crossing-sky': RocketCrossingSky,
   'rocket-exploring': RocketExploring,
   'apollo-congratulating': ApolloCongratulating,
   'apollo-greeting': ApolloGreeting,
@@ -40,6 +43,7 @@ export const LOTTIES: Record<AnimationName, unknown> = {
   'planets-exploration': PlanetsExploration,
   'fast-rocket': FastRocket,
   galaxy: Galaxy,
+  spiral: Spiral,
   podium: Podium,
   trophy: Trophy,
   shinning: Shinning,
