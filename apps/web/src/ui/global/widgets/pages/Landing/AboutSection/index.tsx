@@ -5,11 +5,11 @@ import { TextBlock } from './TextBlock'
 
 export function AbountSection() {
   return (
-    <section id='about' className='py-12'>
+    <section id='about' className='max-w-6xl mx-auto'>
       <SectionTitle>Chamada à missão espacial</SectionTitle>
       <div className='flex mt-6'>
-        <Animation name='planets-exploration' size={600} />
-        <div className='w-96 flex flex-col gap-10 mt-6'>
+        <Animation name='planets-exploration' size={610} />
+        <div className='w-96 flex flex-col gap-6 mt-6'>
           <TextBlock title='Aprenda de Forma Divertida e Acessível' icon='smile'>
             Nosso principal objetivo é tornar o aprendizado de lógica de programação
             acessível e prazeroso, utilizando uma didática envolvente e divertida.

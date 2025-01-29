@@ -1,6 +1,7 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
-import { useMemo } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { tv } from 'tailwind-variants'
 

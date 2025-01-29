@@ -8,10 +8,11 @@ export function LandingPage() {
   return (
     <div>
       <HeroSection />
-      <div className='max-w-6xl mx-auto space-y-24'>
+      <div className='space-y-24 mt-24'>
         <AbountSection />
+        {/* 
         <CodeSection />
-        <RankingSection />
+        <RankingSection /> */}
         <AchievementsSection />
       </div>
     </div>

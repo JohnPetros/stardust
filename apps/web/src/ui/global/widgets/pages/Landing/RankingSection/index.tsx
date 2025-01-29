@@ -2,8 +2,8 @@ import { RankingUser } from '@/ui/ranking/widgets/pages/Ranking/RankingUsersList
 
 import { SectionTitle } from '../SectionTitle'
 import { Animation } from '../../../components/Animation'
-import { Paragraph } from '../Paragraph'
 import { AnimatedBorder } from '../../../components/AnimatedBorder'
+import { Paragraph } from '../Paragraph'
 
 export function RankingSection() {
   return (

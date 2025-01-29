@@ -21,22 +21,29 @@ export function AnimatedSection({
     target: sectionRef,
     offset: ['start start', 'end start'],
   })
-  const textBlockYPosition = useTransform(scrollYProgress, [0, 1], ['0%', '500%'])
-  const spaceXPosition = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
+  const textBlockYPosition = useTransform(scrollYProgress, [0, 1], ['0%', '300%'])
 
   return (
-    <section ref={sectionRef} id='achivements'>
-      <motion.div style={{ x: spaceXPosition }} className='z-[-5] brightness-[0.25]'>
-        <AnimatedOpacity delay={0.5} className='h-full w-full'>
+    <section
+      ref={sectionRef}
+      id='achivements'
+      className='relative h-screen bg-[#160E30] overflow-hidden'
+    >
+      <motion.div className='absolute top-0 left-0 z-0 brightness-[0.50]'>
+        <AnimatedOpacity delay={0.5} className='w-full'>
           <Animation name='space' size='full' hasLoop={true} />
         </AnimatedOpacity>
       </motion.div>
 
-      <SectionTitle>{title}</SectionTitle>
+      <motion.div
+        style={{ y: textBlockYPosition }}
+        className='flex flex-col items-center justify-center w-[28rem] mx-auto pt-16 z-20'
+      >
+        <Animation name='trophy' size={220} hasLoop={true} />
+        {children}
+      </motion.div>
 
-      <motion.div style={{ y: textBlockYPosition }}>{children}</motion.div>
-
-      <div className='w-full'>
+      <div className='relative w-full h-full -translate-y-96'>
         <Image src='/images/mountains.png' fill alt='Montanhas' />
       </div>
     </section>

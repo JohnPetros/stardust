@@ -4,7 +4,7 @@ import { Feature } from './Feature'
 
 export function CodeSection() {
   return (
-    <section id='code'>
+    <section id='code' className='max-w-6xl mx-auto'>
       <div className='sticky top-0 py-12 z-20'>
         <SectionTitle>Código criado para aprendizagem</SectionTitle>
       </div>
