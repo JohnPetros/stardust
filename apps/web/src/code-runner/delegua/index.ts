@@ -5,7 +5,6 @@ import {
   TradutorJavaScript,
   TradutorReversoJavaScript,
 } from '@designliquido/delegua'
-
 import { AvaliadorSintaticoJavaScript } from '@designliquido/delegua/avaliador-sintatico/traducao/avaliador-sintatico-javascript'
 import { LexadorJavaScript } from '@designliquido/delegua/lexador/traducao/lexador-javascript'
 

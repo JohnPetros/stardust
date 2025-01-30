@@ -7,7 +7,7 @@ export type HttpSchema = {
   queryParams?: unknown
 }
 
-export interface IHttp<Schema extends HttpSchema = HttpSchema> {
+export interface IHttp<Schema extends HttpSchema = HttpSchema, Response = unknown> {
   getCurrentRoute(): string
   redirect(route: string): ApiResponse
   getBody(): Schema['body']
@@ -17,5 +17,5 @@ export interface IHttp<Schema extends HttpSchema = HttpSchema> {
   setCookie(key: string, value: string, duration: number): void
   getCookie(key: string): string | null
   pass(): ApiResponse
-  send(data?: unknown, statusCode?: number): ApiResponse
+  send(data?: unknown, statusCode?: number): ApiResponse<Response>
 }

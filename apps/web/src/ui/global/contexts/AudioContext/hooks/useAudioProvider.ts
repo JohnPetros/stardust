@@ -1,11 +1,12 @@
 'use client'
 
+import { useCallback } from 'react'
 import type { AudioFile } from '../types'
 
 export function useAudioProvider() {
-  function playAudio(audioFile: AudioFile) {
+  const playAudio = useCallback((audioFile: AudioFile) => {
     new Audio(`/audios/${audioFile}`).play()
-  }
+  }, [])
 
   return {
     playAudio,

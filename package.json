@@ -16,7 +16,7 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "test": "turbo test",
-    "check-types": "tsc --noEmit"
+    "type-check": "turbo type-check"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",

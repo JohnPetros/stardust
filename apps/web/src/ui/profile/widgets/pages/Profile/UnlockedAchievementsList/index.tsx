@@ -1,4 +1,4 @@
-import type { Achievement } from '@/@core/domain/entities'
+import type { Achievement } from '@stardust/core/profile/entities'
 import { AchievementCard } from '../../../components/AchievementCard'
 import { EmptyListMessage } from './EmptyListMessage'
 
@@ -17,7 +17,6 @@ export function UnlockedAchievementsList({
             <AchievementCard
               id={achievement.id}
               name={achievement.name.value}
-              requiredCount={achievement.requiredCount.value}
               icon={achievement.icon.value}
               reward={achievement.reward.value}
               description={achievement.description}

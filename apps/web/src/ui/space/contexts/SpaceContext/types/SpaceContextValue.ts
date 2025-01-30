@@ -1,6 +1,6 @@
 import type { RefObject } from 'react'
 import type { LastUnlockedStarViewPortPosition } from './LastUnlockedStarViewPortPosition'
-import type { Planet } from '@/@core/domain/entities'
+import type { Planet } from '@stardust/core/space/entities'
 
 export type SpaceContextValue = {
   planets: Planet[]
@@ -9,6 +9,6 @@ export type SpaceContextValue = {
   lastUnlockedStarPosition: LastUnlockedStarViewPortPosition
   scrollIntoLastUnlockedStar: () => void
   setLastUnlockedStarPosition: (
-    viewPortposition: LastUnlockedStarViewPortPosition
+    viewPortposition: LastUnlockedStarViewPortPosition,
   ) => void
 }

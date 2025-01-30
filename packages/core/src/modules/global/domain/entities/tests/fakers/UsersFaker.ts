@@ -1,8 +1,9 @@
 import { faker } from '@faker-js/faker'
 
-import { User } from '../../User'
 import type { UserDto } from '#global/dtos'
 import { AvatarsFaker, RocketsFaker, TiersFaker } from '#fakers/entities'
+import { WeekStatus } from '#profile/structs'
+import { User } from '../../User'
 
 export class UsersFaker {
   static fake(baseDto?: Partial<UserDto>): User {
@@ -10,6 +11,10 @@ export class UsersFaker {
   }
 
   static fakeDto(baseDto?: Partial<UserDto>): UserDto {
+    const fakeAvatar = AvatarsFaker.fake()
+    const fakeTier = TiersFaker.fake()
+    const fakeRocket = RocketsFaker.fake()
+
     return {
       id: faker.string.uuid(),
       name: faker.person.firstName(),
@@ -29,11 +34,20 @@ export class UsersFaker {
       acquiredRocketsIds: [],
       acquiredAvatarsIds: [],
       unlockedDocsIds: [],
-      weekStatus: ['todo', 'todo', 'todo', 'todo', 'todo', 'todo', 'todo'],
+      weekStatus: WeekStatus.DEFAULT_WEEK_STATUS,
       canSeeRankingResult: false,
-      avatar: AvatarsFaker.fake().dto,
-      tier: TiersFaker.fake().dto,
-      rocket: RocketsFaker.fake().dto,
+      avatar: {
+        id: fakeAvatar.id,
+        dto: fakeAvatar.dto,
+      },
+      tier: {
+        id: fakeTier.id,
+        dto: fakeTier.dto,
+      },
+      rocket: {
+        id: fakeRocket.id,
+        dto: fakeRocket.dto,
+      },
       createdAt: faker.date.birthdate(),
       ...baseDto,
     }

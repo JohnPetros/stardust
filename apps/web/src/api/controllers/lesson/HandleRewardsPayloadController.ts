@@ -8,7 +8,7 @@ export const HandleRewardsPayloadController = (): IController => {
     async handle(http: IHttp) {
       const currentRoute = http.getCurrentRoute()
 
-      if (currentRoute === ROUTES.rewarding) {
+      if (currentRoute.startsWith('/rewarding')) {
         const hasRewardsPayloadCookie = (
           await cookieActions.hasCookie(COOKIES.keys.rewardingPayload)
         )?.data

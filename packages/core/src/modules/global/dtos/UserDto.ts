@@ -39,5 +39,4 @@ export type UserDto = {
   lastWeekRankingPosition?: number | null
   createdAt?: Date
   didBreakStreak?: boolean
-  // studyTime: string
 }

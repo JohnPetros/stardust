@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 
-import { playAudio } from '@/utils'
 import { useEventListener } from '@/ui/global/hooks/useEventListener'
+import { useAudioContext } from '@/ui/global/contexts/AudioContext'
 import type { VerificationButtonProps } from './VerificationButtonProps'
 
 export function useVerificationButton({
@@ -14,6 +14,7 @@ export function useVerificationButton({
   const buttonRef = useRef<HTMLButtonElement>(null)
   const buttonHasFocus = useRef(false)
   const pathname = usePathname()
+  const { playAudio } = useAudioContext()
 
   const buttonTitle = useMemo(() => {
     if (isAnswerVerified && !isAnswerCorrect) {
@@ -44,7 +45,7 @@ export function useVerificationButton({
     if (isAnswerVerified) {
       playAudio(isAnswerCorrect ? 'success.wav' : 'fail.wav')
     }
-  }, [isAnswerVerified, isAnswerCorrect])
+  }, [isAnswerVerified, isAnswerCorrect, playAudio])
 
   useEventListener('keydown', handleGlobalKeyDown)
 

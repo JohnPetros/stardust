@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { passwordSchema, stringSchema } from '@stardust/validation/global/schemas'
-import { ERROR_MESSAGES } from '@stardust/validation/constants'
 
 import { COOKIES, ROUTES } from '@/constants'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
@@ -22,7 +21,7 @@ const resetPasswordFormSchema = z
   })
   .refine((fields) => fields.password === fields.passwordConfirmation, {
     path: ['passwordConfirmation'],
-    message: ERROR_MESSAGES.passwordConfirmation.equal,
+    message: 'as senhas devem ser iguais',
   })
 
 type ResetPasswordFormFields = z.infer<typeof resetPasswordFormSchema>

@@ -1,20 +1,12 @@
-import type { Challenge } from '@/@types/Challenge'
+import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 
-export const challenge: Challenge = {
+export const challenge: Omit<ChallengeDto, 'author'> = {
   id: '68456',
   title: 'Jutando Listas',
   slug: 'juntando-listas',
-  difficulty: 'easy',
-  userSlug: 'apollo',
-  createdAt: '',
-  starId: '',
+  difficultyLevel: 'easy',
   description: '',
   categories: [],
-  isCompleted: false,
-  downvotesCount: 0,
-  upvotesCount: 0,
-  totalCompletitions: 0,
-  docId: 'f60a0e67-c0b9-401a-a652-c9d5f8042ff1',
   code: `funcao junteListas(lista1, lista2) {
     var naves = [];
   
@@ -28,11 +20,14 @@ export const challenge: Challenge = {
   
     retorna naves;
   }`,
-  functionName: 'junteListas',
+  function: {
+    name: 'junteListas',
+    params: [],
+  },
   testCases: [
     {
-      id: 1,
-      input: [
+      position: 1,
+      inputs: [
         [1, 2, 3],
         [4, 5, 6],
       ],
@@ -40,8 +35,8 @@ export const challenge: Challenge = {
       expectedOutput: [1, 2, 3, 4, 5, 6],
     },
     {
-      id: 2,
-      input: [
+      position: 2,
+      inputs: [
         [0, 7, 8],
         [100, 200],
       ],
@@ -49,35 +44,35 @@ export const challenge: Challenge = {
       expectedOutput: [0, 7, 8, 100, 200],
     },
     {
-      id: 3,
-      input: [[], [1, 2, 3]],
+      position: 3,
+      inputs: [[], [1, 2, 3]],
       isLocked: false,
       expectedOutput: [1, 2, 3],
     },
   ],
-  texts: [
-    {
-      content:
-        'Em um futuro distante, várias espécies alienígenas se unem para explorar o espaço. Cada espécie possui uma lista de espaçonaves identificadas por números, letras ou combinações.',
-      type: 'default',
-      title: null,
-    },
-    {
-      content:
-        'Para facilitar a união, você deve unir as listas de cada espécie em uma só, para que todos possam explorar juntos.',
-      type: 'list',
-    },
-    {
-      content:
-        '\nEntrada: [1, 3, 5], [2, 6, 8]\nResultado: [1, 3, 5, 2, 6, 8]\n\nEntrada: [7, 8], [10, 9, 1, 1, 2]\nResultado: [7, 8, 10, 9, 1, 1, 2]\n\nEntrada: [4, 5, 1], [3, 3, 3, 3, 3]\nResultado: [4, 5, 1, 3, 3, 3, 3, 3]',
-      type: 'code',
-    },
-    {
-      content:
-        'Dica: Você pode resolver esse desafio usando dois laços "*para*", uma para cada lista e então juntar em uma lista única.',
-      type: 'alert',
-    },
-  ],
+  // texts: [
+  //   {
+  //     content:
+  //       'Em um futuro distante, várias espécies alienígenas se unem para explorar o espaço. Cada espécie possui uma lista de espaçonaves identificadas por números, letras ou combinações.',
+  //     type: 'default',
+  //     title: null,
+  //   },
+  //   {
+  //     content:
+  //       'Para facilitar a união, você deve unir as listas de cada espécie em uma só, para que todos possam explorar juntos.',
+  //     type: 'list',
+  //   },
+  //   {
+  //     content:
+  //       '\nEntrada: [1, 3, 5], [2, 6, 8]\nResultado: [1, 3, 5, 2, 6, 8]\n\nEntrada: [7, 8], [10, 9, 1, 1, 2]\nResultado: [7, 8, 10, 9, 1, 1, 2]\n\nEntrada: [4, 5, 1], [3, 3, 3, 3, 3]\nResultado: [4, 5, 1, 3, 3, 3, 3, 3]',
+  //     type: 'code',
+  //   },
+  //   {
+  //     content:
+  //       'Dica: Você pode resolver esse desafio usando dois laços "*para*", uma para cada lista e então juntar em uma lista única.',
+  //     type: 'alert',
+  //   },
+  // ],
 }
 
 /**

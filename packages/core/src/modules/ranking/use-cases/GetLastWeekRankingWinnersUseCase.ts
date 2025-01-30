@@ -1,7 +1,8 @@
 import { User } from '#global/entities'
 import type { UserDto } from '#global/dtos'
-import type { RankingUserDto, TierDto } from '#ranking/dtos'
 import type { IRankingService, IUseCase } from '#interfaces'
+import type { RankingUserDto, TierDto } from '#ranking/dtos'
+import { Tier } from '#ranking/entities'
 
 type Response = Promise<{
   isUserLoser: boolean
@@ -17,13 +18,11 @@ export class GetLastWeekRankingWinnersUseCase implements IUseCase<UserDto, Respo
 
     const isUserLoser = await this.verifyRankingLoserState(user.id)
     const lastWeekTier = await this.fetchLastWeekTier(user, isUserLoser)
-    const lastWeekRankingWinners = await this.fetchLastWeekRankingWinners(
-      lastWeekTier?.id,
-    )
+    const lastWeekRankingWinners = await this.fetchLastWeekRankingWinners(lastWeekTier.id)
 
     return {
       isUserLoser,
-      lastWeekTier,
+      lastWeekTier: lastWeekTier.dto,
       lastWeekRankingWinners,
     }
   }
@@ -41,9 +40,9 @@ export class GetLastWeekRankingWinnersUseCase implements IUseCase<UserDto, Respo
 
     const response = await this.rankingsService.fetchTierByPosition(lastWeekTierPosition)
 
-    if (response.isSuccess) return response.body
+    if (response.isSuccess) return Tier.create(response.body)
 
-    return user.tier.dto
+    return user.tier
   }
 
   private async fetchLastWeekRankingWinners(lastWeekTierId: string) {

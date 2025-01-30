@@ -1,6 +1,6 @@
-import type { Challenge } from '@/@types/Challenge'
+import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 
-export const challenge: Challenge = {
+export const challenge: Omit<ChallengeDto, 'author'> = {
   id: 'Reconhecendo raça alienígena',
   slug: 'reconhecendo-raca-alienígena',
   description: '',
@@ -26,17 +26,17 @@ var cor = leia()
 // Escreva sua solução abaixo`,
   functionName: null,
   testCases: [
-    { id: 1, input: [3, "'verde'"], isLocked: false, expectedOutput: 'Trox' },
+    { position: 1, inputs: [3, "'verde'"], isLocked: false, expectedOutput: 'Trox' },
     {
-      id: 2,
-      input: [2, "'laranja'"],
+      position: 2,
+      inputs: [2, "'laranja'"],
       isLocked: false,
       expectedOutput: 'Blonk',
     },
-    { id: 3, input: [6, "'marrom'"], isLocked: false, expectedOutput: 'Plimp' },
+    { position: 3, inputs: [6, "'marrom'"], isLocked: false, expectedOutput: 'Plimp' },
     {
-      id: 4,
-      input: [4, "'preto'"],
+      position: 4,
+      inputs: [4, "'preto'"],
       isLocked: false,
       expectedOutput: 'raça desconhecida',
     },

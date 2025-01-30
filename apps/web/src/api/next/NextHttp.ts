@@ -28,7 +28,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
   request,
   schema,
   params,
-}: NextHttpParams = {}): Promise<IHttp<NextSchema>> => {
+}: NextHttpParams = {}): Promise<IHttp<NextSchema, Response>> => {
   let nextRedirectResponse: NextResponse<unknown>
   let httpSchema: NextSchema
   const cookies: Cookie[] = []
@@ -138,7 +138,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
           })
         }
         return new ApiResponse({
-          body: nextRedirectResponse,
+          body: nextResponse,
           statusCode: HTTP_STATUS_CODE.redirect,
         })
       }

@@ -16,15 +16,15 @@ import type { ApiResponse } from '@stardust/core/responses'
 
 export async function runApiRoute(
   apiRoute: () => Promise<ApiResponse>,
-): Promise<unknown> {
+): Promise<Response> {
   const http = await NextHttp()
 
   try {
     const response = await apiRoute()
-    return response.body
+    return response.body as Response
   } catch (error) {
     console.log(error)
-    
+
     if (error instanceof ZodError) {
       const validationError = ZodValidationErrorFactory.produce(error)
 
