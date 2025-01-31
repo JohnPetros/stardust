@@ -1,4 +1,4 @@
-import type { AuthorDto, TextBlockDto } from '#global/dtos'
+import type { AuthorDto } from '#global/dtos'
 import type { ChallengeCategoryDto } from './ChallengeCategoryDto'
 import type { ChallengeFunctionDto } from './ChallengeFunctionDto'
 import type { TestCaseDto } from './TestCaseDto'
@@ -17,12 +17,12 @@ export type ChallengeDto = {
   }
   docId?: string | null
   starId?: string | null
+  categories: ChallengeCategoryDto[]
+  isPublic?: boolean
   downvotesCount?: number
   upvotesCount?: number
   completionsCount?: number
   postedAt?: Date
-  textBlocks?: TextBlockDto[]
-  categories: ChallengeCategoryDto[]
   function?: ChallengeFunctionDto
   userOutputs?: unknown[]
   results?: boolean[]

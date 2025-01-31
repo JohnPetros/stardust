@@ -1,5 +1,6 @@
 import type { CodeInput } from '#global/types'
 import type { ICodeRunnerProvider } from '#interfaces'
+import { Logical } from './Logical'
 
 type CodeProps = {
   codeRunner: ICodeRunnerProvider
@@ -27,10 +28,8 @@ export class Code {
     return this.changeValue(this.codeRunner.addInputs(inputs, this.value))
   }
 
-  addFunction(functionName: string, functionParams: unknown[]) {
-    return this.changeValue(
-      this.codeRunner.addFunction(functionName, functionParams, this.value),
-    )
+  addFunctionCall(functionParams: unknown[]) {
+    return this.changeValue(this.codeRunner.addFunctionCall(functionParams, this.value))
   }
 
   changeValue(value: string) {
@@ -45,8 +44,14 @@ export class Code {
     return this.codeRunner.getInputsCount(this.value)
   }
 
-  get hasInput(): boolean {
-    return !!this.codeRunner.getInput(this.value)
+  get hasInput(): Logical {
+    const input = this.codeRunner.getInput(this.value)
+    return Logical.create(Boolean(input))
+  }
+
+  get hasFunction(): Logical {
+    const functionName = this.codeRunner.getFunctionName(this.value)
+    return Logical.create(Boolean(functionName))
   }
 
   get firstInput(): string {

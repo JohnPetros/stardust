@@ -1,4 +1,5 @@
 import { Entity } from '#global/abstracts'
+import { EntityNotDefinedError } from '#global/errors'
 import {
   type Code,
   type Id,
@@ -6,11 +7,11 @@ import {
   type List,
   type Name,
   type Slug,
-  type TextBlock,
   type UserAnswer,
   type Text,
   Logical,
 } from '#global/structs'
+import type { Author } from '#global/entities'
 import type { ChallengeDifficulty, TestCase } from '#challenging/structs'
 import type { ChallengeDto } from '#challenging/dtos'
 import type { ChallengeCategory } from './ChallengeCategory'
@@ -20,9 +21,6 @@ import {
 } from '#challenging/errors'
 import { ChallengeFactory } from '#challenging/factories'
 import type { ChallengeVote } from '#challenging/types'
-import type { Author } from '#global/entities'
-import { EntityNotDefinedError } from '#global/errors'
-import type { ChallengeFunction } from '../structs/ChallengeFunction'
 
 export type ChallengeProps = {
   code: string
@@ -30,21 +28,20 @@ export type ChallengeProps = {
   slug: Slug
   difficulty: ChallengeDifficulty
   categories: ChallengeCategory[]
-  function: ChallengeFunction | null
   downvotesCount: Integer
   upvotesCount: Integer
   completionsCount: Integer
   postedAt: Date
   starId: Id | null
   docId: Id | null
-  textBlocks: TextBlock[]
-  description: string // this will be a Text in the future
+  description: Text
   testCases: TestCase[]
   results: List<boolean>
   userOutputs: List<unknown>
   userVote: ChallengeVote
   incorrectAnswersCount: Integer
   isCompleted: Logical
+  isPublic: Logical
   author: {
     id: string
     entity?: Author
@@ -62,8 +59,8 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   private formatCode(code: Code, testCase: TestCase) {
-    if (this.props.function) {
-      return code.addFunction(this.props.function.name.value, testCase.inputs)
+    if (code.hasFunction.isTrue) {
+      return code.addFunctionCall(testCase.inputs)
     }
 
     if (code.inputsCount !== testCase.inputs.length) {
@@ -91,9 +88,9 @@ export class Challenge extends Entity<ChallengeProps> {
       const response = await formattedCode.run()
       if (response.isFailure) response.throwError()
 
-      let result = this.hasFunction.isTrue ? response.result : response.outputs[0]
+      let result = code.hasFunction.isTrue ? response.result : response.outputs[0]
 
-      if (this.hasFunction.isTrue) result = response.result
+      if (code.hasFunction.isTrue) result = response.result
       else if (response.outputs[0]) result = response.outputs[0]
 
       this.props.results = this.results.add(
@@ -155,10 +152,6 @@ export class Challenge extends Entity<ChallengeProps> {
     this.userVote = vote
   }
 
-  private get hasFunction() {
-    return Logical.create(Boolean(this.props.function))
-  }
-
   get maximumIncorrectAnswersCount() {
     const testsCasesCount = this.testCases.length
     return testsCasesCount * Challenge.MAXIMUM_INCORRECT_ANSWERS_PER_TEST_CASE
@@ -216,20 +209,20 @@ export class Challenge extends Entity<ChallengeProps> {
     return this.props.difficulty
   }
 
-  get function() {
-    return this.props.function
-  }
-
   get description() {
     return this.props.description
   }
 
-  get textBlocks() {
-    return this.props.textBlocks
-  }
-
   get categories() {
     return this.props.categories
+  }
+
+  get isPublic(): Logical {
+    return this.props.isPublic
+  }
+
+  set isPublic(isPublic: boolean) {
+    this.props.isPublic = Logical.create(isPublic)
   }
 
   get authorId() {
@@ -292,17 +285,15 @@ export class Challenge extends Entity<ChallengeProps> {
         dto: this.props.author.entity?.dto,
       },
       downvotesCount: this.downvotesCount.value,
-      function: this.props.function?.dto ?? undefined,
       starId: this.props.starId?.value,
       upvotesCount: this.upvotesCount.value,
       completionsCount: this.completionsCount.value,
       userOutputs: this.props.userOutputs.items,
       results: this.props.results.items,
-      description: this.description,
+      description: this.description.value,
       postedAt: this.postedAt,
       categories: this.categories.map((category) => category.dto),
       testCases: this.testCases.map((testCase) => testCase.dto),
-      textBlocks: this.textBlocks.map((textBlock) => textBlock.dto),
     }
   }
 }
