@@ -1,6 +1,6 @@
-import { Text } from '@/@types/Text'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
-export const texts: Text[] = [
+export const texts: TextBlockDto[] = [
   {
     type: 'image',
     content: 'Muito bem!! você se salvou da chuva de asteroides gigantes 🎉!.',
@@ -33,9 +33,9 @@ export const texts: Text[] = [
     picture: 'panda-piscando.jpg',
   },
   {
-    content: 'Há 3 maneiras de criar uma instrução condicional:',
-    items: ['1 - se', '2 - senão', '3 - senão se'],
-    type: 'list',
+    content: '1 - se, 2 - senão, 3 - senão se',
+    type: 'default',
+    title: 'Há 3 maneiras de criar uma instrução condicional:',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {

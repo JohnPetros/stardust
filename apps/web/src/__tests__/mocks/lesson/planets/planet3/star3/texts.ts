@@ -1,6 +1,6 @@
-import { Text } from '@/@types/Text'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
-export const texts: Text[] = [
+export const texts: TextBlockDto[] = [
   {
     content:
       'Ok, agora com as verificações já feitas, a prioridade agora é concertar os motores do foguete!',
@@ -162,8 +162,7 @@ escreva(girandoTurbina1 e combustivelAtual > combustivelMinimo)
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
-    content:
-      'Logo, apenas uma condição precisa ser verdadeira para o motor funcionar.',
+    content: 'Logo, apenas uma condição precisa ser verdadeira para o motor funcionar.',
     type: 'default',
     picture: 'panda-fazendo-coracao.jpg',
   },
@@ -183,8 +182,7 @@ escreva(combustivel == "Etherium" ou combustivel == "Plasmatron")
     isRunnable: true,
   },
   {
-    content:
-      'Como esperado, o combustível consumido por esse motor não é aceitável',
+    content: 'Como esperado, o combustível consumido por esse motor não é aceitável',
     type: 'default',
     picture: 'panda-triste.jpg',
   },

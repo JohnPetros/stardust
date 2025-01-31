@@ -6,15 +6,15 @@ export const FetchShopItemsController = (shopService: IShopService): IController
   return {
     async handle(http: IHttp) {
       const rocketsResponse = await shopService.fetchShopRocketsList({
-        limit: 5,
-        offset: 0,
+        itemsPerPage: 5,
+        page: 1,
         order: 'ascending',
       })
       if (rocketsResponse.isFailure) rocketsResponse.throwError()
 
       const avatarsResponse = await shopService.fetchShopAvatarsList({
-        limit: 5,
-        offset: 0,
+        itemsPerPage: 5,
+        page: 1,
         order: 'ascending',
       })
       if (avatarsResponse.isFailure) avatarsResponse.throwError()

@@ -1,10 +1,9 @@
-import { Text } from '@/@types/Text'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
-export const texts: Text[] = [
+export const texts: TextBlockDto[] = [
   {
     type: 'default',
-    content:
-      'Ufa, parace que aqueles aliens estranhos foram para outra direção.',
+    content: 'Ufa, parace que aqueles aliens estranhos foram para outra direção.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
@@ -74,8 +73,7 @@ escreva(totalAmostras)
   },
   {
     type: 'default',
-    content:
-      'É claro que existe uma maneira muuuuuuito mais fácil de fazer isso.',
+    content: 'É claro que existe uma maneira muuuuuuito mais fácil de fazer isso.',
     picture: 'panda-abracando-bambu.jpg',
   },
   {
@@ -205,8 +203,7 @@ escreva(totalAmostras)
   },
   {
     type: 'default',
-    content:
-      'No Passo, a variável *contador* será incrementado em 1 a cada iteração.',
+    content: 'No Passo, a variável *contador* será incrementado em 1 a cada iteração.',
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -275,8 +272,7 @@ escreva(totalAmostras) // 10`,
   },
   {
     type: 'default',
-    content:
-      'Esse é nosso robô analisador, que veio junto no foguete, é claro.',
+    content: 'Esse é nosso robô analisador, que veio junto no foguete, é claro.',
     picture: 'panda-sorrindo.jpg',
   },
 ]

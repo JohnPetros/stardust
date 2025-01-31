@@ -1,6 +1,6 @@
-import { Text } from '@/@types/Text'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
-export const texts: Text[] = [
+export const texts: TextBlockDto[] = [
   {
     type: 'image',
     content: 'Sério?!',
@@ -242,8 +242,7 @@ escreva(morte)
     picture: 'panda-de-oculos.jpg',
   },
   {
-    content:
-      'Essa é mais uma situação para usarmos a estrutura de *escolha caso*.',
+    content: 'Essa é mais uma situação para usarmos a estrutura de *escolha caso*.',
     type: 'default',
     picture: 'panda-comemorando.jpg',
   },

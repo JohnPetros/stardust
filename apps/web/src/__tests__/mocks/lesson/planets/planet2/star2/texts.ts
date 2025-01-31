@@ -1,4 +1,6 @@
-export const texts = [
+import type { TextBlockDto } from '@stardust/core/global/dtos'
+
+export const texts: TextBlockDto[] = [
   {
     type: 'default',
     content:
@@ -7,8 +9,7 @@ export const texts = [
   },
   {
     type: 'default',
-    content:
-      'Dados do tipo *número* em um programa podem ser inteiros ou decimais.',
+    content: 'Dados do tipo *número* em um programa podem ser inteiros ou decimais.',
     picture: 'panda.jpg',
   },
   {
@@ -134,8 +135,7 @@ escreva("Novo número inteiro: ", numero)
   },
   {
     type: 'quote',
-    content:
-      'Por enquanto, vamos testar o que você aprendeu sobre o tipo *número*!',
+    content: 'Por enquanto, vamos testar o que você aprendeu sobre o tipo *número*!',
     picture: 'panda-deslumbrado.jpg',
   },
 ]

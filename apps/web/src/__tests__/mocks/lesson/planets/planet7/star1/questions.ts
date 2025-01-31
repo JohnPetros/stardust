@@ -15,8 +15,7 @@ type Questions = [
 
 export const question: Questions = [
   {
-    statement:
-      'Vamos treinar funções. Coloque o código na ordem para que a função *escrevaMensagem* seja executada corretamente',
+    stem: 'Vamos treinar funções. Coloque o código na ordem para que a função *escrevaMensagem* seja executada corretamente',
     type: 'drag-and-drop-list',
     items: [
       { position: 1, label: 'funcao escrevaMensagem() {' },
@@ -33,7 +32,7 @@ export const question: Questions = [
 }
 
 mostrePeso(72,  9.8)`,
-    statement: 'Quais são os parâmetros da função *mostrePeso()*?',
+    stem: 'Quais são os parâmetros da função *mostrePeso()*?',
     type: 'checkbox',
     options: ['massa', 'gravidade', 'peso', 'mostrePeso'],
     correctOptions: ['massa', 'gravidade'],
@@ -48,7 +47,7 @@ mostrePeso(72,  9.8)`,
 mostrePlanetaGrande(400000)
 mostrePlanetaGrande(100)
 mostrePlanetaGrande(8000000)`,
-    statement: 'Quantas vezes será escrito "Planeta grande"?',
+    stem: 'Quantas vezes será escrito "Planeta grande"?',
     type: 'selection',
     answer: '2',
     options: ['2', '3', '4', '1'],
@@ -63,15 +62,14 @@ mostrePlanetaGrande(8000000)`,
 var velocidade =  180
 var tempo =  200
 mostreDistancia(velocidade, tempo)`,
-    statement:
-      'Com exceção dos parâmetros de função, qual variável no código abaixo tem escopo local?',
+    stem: 'Com exceção dos parâmetros de função, qual variável no código abaixo tem escopo local?',
     type: 'selection',
     answer: 'distancia',
     options: ['velocidade', 'tempo', 'distancia', 'mostreDistancia'],
     picture: 'panda-sorrindo.jpg',
   },
   {
-    statement: 'Complete a função *mostreLancamento()*',
+    stem: 'Complete a função *mostreLancamento()*',
     type: 'drag-and-drop',
     lines: [
       {

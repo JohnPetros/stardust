@@ -1,6 +1,6 @@
-import { Text } from '@/@types/Text'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
-export const texts: Text[] = [
+export const texts: TextBlockDto[] = [
   {
     type: 'default',
     content:
@@ -66,8 +66,7 @@ escreva(combustivelAtual > combustivelExigido)
   },
   {
     type: 'alert',
-    content:
-      'Não se esqueça disso, pois isso vai ser bastante importante depois!',
+    content: 'Não se esqueça disso, pois isso vai ser bastante importante depois!',
     picture: 'panda-fazendo-coracao.jpg',
   },
   {

@@ -67,7 +67,7 @@ export const SupabaseLessonService = (supabase: Supabase): ILessonService => {
         )
       }
 
-      return new ApiResponse({ body: { story: data } })
+      return new ApiResponse({ body: { story: data.story ?? '' } })
     },
   }
 }

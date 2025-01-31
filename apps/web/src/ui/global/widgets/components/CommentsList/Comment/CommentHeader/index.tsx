@@ -1,10 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { DotsThreeOutlineVertical } from '@phosphor-icons/react'
+
 import { Datetime } from '@stardust/core/libs'
-import type { PopoverMenuButton } from '../../../PopoverMenu/types'
+
 import { ROUTES } from '@/constants'
+import type { PopoverMenuButton } from '../../../PopoverMenu/types'
 import { PopoverMenu } from '../../../PopoverMenu'
 import { Icon } from '../../../Icon'
 
@@ -23,14 +24,11 @@ export function CommentHeader({
   authorSlug,
   isAuthorUser,
 }: CommentHeaderProps) {
-  const date = new Datetime().format(commentCreatedAt, 'DD/MM/YYYY')
+  const date = new Datetime(commentCreatedAt).format('DD/MM/YYYY')
 
   return (
     <header className='flex items-start justify-between'>
-      <Link
-        href={ROUTES.profile.user(authorSlug)}
-        className='text-md text-green-700'
-      >
+      <Link href={ROUTES.profile.user(authorSlug)} className='text-md text-green-700'>
         {authorName}
       </Link>
       <div className='flex items-center'>

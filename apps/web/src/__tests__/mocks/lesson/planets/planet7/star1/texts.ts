@@ -1,6 +1,6 @@
 import type { Text } from '@/@types/Text'
 
-export const texts: Text[] = [
+export const texts: TextBlockDto[] = [
   {
     type: 'image',
     content: 'Aqui estamos mais uma vez no espaço.',
@@ -8,8 +8,7 @@ export const texts: Text[] = [
   },
   {
     type: 'default',
-    content:
-      'Só que agora temos que procurar quem mandou aquela mensagem de ajuda.',
+    content: 'Só que agora temos que procurar quem mandou aquela mensagem de ajuda.',
     picture: 'panda-pensando.jpg',
   },
   {
@@ -21,7 +20,7 @@ export const texts: Text[] = [
   {
     type: 'image',
     content: 'E por falar em mensagem, acabamos de receber mais uma.',
-    picture: 'celular.jpg'
+    picture: 'celular.jpg',
   },
   {
     type: 'default',
@@ -226,8 +225,7 @@ se (!mensagem.inclui('script') e telaAcesa) {
   },
   {
     type: 'quote',
-    content:
-      'As funções são escrita utilizando a palavra-chave *funcao* (sem ~)',
+    content: 'As funções são escrita utilizando a palavra-chave *funcao* (sem ~)',
     picture: 'panda-piscando.jpg',
   },
   {
@@ -253,8 +251,7 @@ se (!mensagem.inclui('script') e telaAcesa) {
   },
   {
     type: 'alert',
-    content:
-      'Uma boa prática é começar o nome da função com um verbo no imperativo 😁.',
+    content: 'Uma boa prática é começar o nome da função com um verbo no imperativo 😁.',
     picture: 'panda-pulando-de-alegria.jpg',
   },
   {
@@ -352,14 +349,13 @@ escreva(minhaVariavel[0])
   },
   {
     type: 'user',
-    content:
-      'Como?',
+    content: 'Como?',
   },
   {
     type: 'default',
     content:
       'Sabe para que servem os parênteses de uma função? Servem para passar valores para o código dentro dela.',
-    picture: 'panda-sorrindo.jpg'
+    picture: 'panda-sorrindo.jpg',
   },
   {
     type: 'user',
@@ -370,7 +366,7 @@ escreva(minhaVariavel[0])
     title: 'Parâmetros de função',
     content:
       'É isso mesmo! Ao chamar uma função, podemos passar qualquer valor entre seus parênteses.',
-    picture: 'panda-segurando-bambu-de-pe.jpg'
+    picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'code',
@@ -385,7 +381,7 @@ mostreMensagem("Olá, mundo!")`,
     type: 'default',
     content:
       'Para usar esse "Olá, mundo!" dentro da função "mostreMensagem()", devemos criar variáveis no bloco da função',
-    picture: 'panda-segurando-bambu-de-pe.jpg'
+    picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'code',
@@ -403,7 +399,7 @@ mostreMensagem("Olá, mundo!")
     type: 'default',
     content:
       'Essas variáveis entre parênteses se chamam *parâmetros de função* e elas podem ter qualquer nome, e caso você queira passar mais valores para a função, você terá que criar mais parâmetros.',
-    picture: 'panda-piscando.jpg'
+    picture: 'panda-piscando.jpg',
   },
   {
     type: 'code',
@@ -421,19 +417,19 @@ some(1, 2, 3)
     type: 'default',
     content:
       'É por meio dos parâmetros é que podemos criar resultados dinâmicos com uma mesma função.',
-    picture: 'panda-piscando.jpg'
+    picture: 'panda-piscando.jpg',
   },
   {
     type: 'default',
     content:
       'No nosso caso, podemos passar a mensagem que queremos como parâmetro da função *useRadar()*',
-    picture: 'panda-segurando-bambu-de-pe.jpg'
+    picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'default',
     content:
       'Assim, a função irá fazer todo o trabalho de configurar o radar usando qualquer tipo de mensagem, seja de resposta ou de envio, veja:',
-    picture: 'panda-sorrindo.jpg'
+    picture: 'panda-sorrindo.jpg',
   },
   {
     type: 'code',
@@ -470,18 +466,16 @@ Muito obrigado
     type: 'default',
     content:
       'Viu só, enviamos e recebemos várias mensagens diferentes, e precisamos escrever o código de configuração do radar apenas uma vez 😆.',
-    picture: 'panda-deslumbrado.jpg'
+    picture: 'panda-deslumbrado.jpg',
   },
   {
     type: 'default',
-    content:
-      'Isso não é incrível? Agora temos um código bem mais limpo e organizado.',
-    picture: 'panda-comemorando.jpg'
+    content: 'Isso não é incrível? Agora temos um código bem mais limpo e organizado.',
+    picture: 'panda-comemorando.jpg',
   },
   {
     type: 'default',
-    content:
-      'Mas voltando... Agora vamos em direção a essa pessoa desconhecida.',
-    picture: 'panda-sorrindo-sentado.jpg'
+    content: 'Mas voltando... Agora vamos em direção a essa pessoa desconhecida.',
+    picture: 'panda-sorrindo-sentado.jpg',
   },
 ]

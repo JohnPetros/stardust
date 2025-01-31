@@ -1,30 +1,29 @@
-import {
-  CheckboxQuestion,
-  DragAndDropQuestion,
-  SelectionQuestion,
-} from '@/@types/Quiz'
+import type {
+  DragAndDropQuestionDto,
+  SelectionQuestionDto,
+  CheckboxQuestionDto,
+} from '@stardust/core/lesson/dtos'
 
 type Questions = [
-  DragAndDropQuestion,
-  CheckboxQuestion,
-  DragAndDropQuestion,
-  SelectionQuestion,
-  DragAndDropQuestion,
+  DragAndDropQuestionDto,
+  CheckboxQuestionDto,
+  DragAndDropQuestionDto,
+  SelectionQuestionDto,
+  DragAndDropQuestionDto,
 ]
 
 export const questions: Questions = [
   {
-    title:
-      'Ok, dessa vez mandaremos nossas localização de forma mais detalhada. Primeiro Complete o subtexto para que a variável primeiraPalavra seja igual a "UNIVERSO 7" em maiúsculo',
+    stem: 'Ok, dessa vez mandaremos nossas localização de forma mais detalhada. Primeiro Complete o subtexto para que a variável primeiraPalavra seja igual a "UNIVERSO 7" em maiúsculo',
     type: 'drag-and-drop',
     lines: [
       {
-        id: 1,
+        number: 1,
         texts: ['var localizacao = "Universo 7 da dimensão y"'],
         indentation: 0,
       },
       {
-        id: 2,
+        number: 2,
         texts: [
           'var primeiraPalavra = ',
           'localizacao.subtexto',
@@ -37,19 +36,19 @@ export const questions: Questions = [
         indentation: 0,
       },
       {
-        id: 3,
+        number: 3,
         texts: ['escreva(primeiraPalavra.', 'dropZone', '( ))'],
         indentation: 0,
       },
     ],
-    dragItems: [
-      { id: 1, label: 'maiusculo' },
-      { id: 2, label: 'minusculo' },
-      { id: 3, label: '0' },
-      { id: 4, label: '10' },
-      { id: 5, label: '7' },
+    items: [
+      { index: 1, label: 'maiusculo' },
+      { index: 2, label: 'minusculo' },
+      { index: 3, label: '0' },
+      { index: 4, label: '10' },
+      { index: 5, label: '7' },
     ],
-    correctDragItemsIdsSequence: [3, 4, 1],
+    correctItemsIndexesSequence: [3, 4, 1],
     picture: 'panda-com-raiva.jpg',
   },
   {
@@ -57,25 +56,23 @@ export const questions: Questions = [
 var abreviacao = galaxia.subtexto(2, 4)
 
 escreva(abreviacao.maiusculo())`,
-    title:
-      'Agora peguemos o nome da galáxia em que estamos de forma abreviada. Quais letras da palavra "Setral" estarão contidas na variável *caracteres*?',
+    stem: 'Agora peguemos o nome da galáxia em que estamos de forma abreviada. Quais letras da palavra "Setral" estarão contidas na variável *caracteres*?',
     type: 'checkbox',
     options: ['E', 'S', 'T', 'R'],
     correctOptions: ['T', 'R'],
     picture: 'panda-fazendo-coracao.jpg',
   },
   {
-    title:
-      'Como disse antes, o planeta em que estamos se chama Arrayon e não Matrizion, logo complete o código para o resultado seja igual a falso.',
+    stem: 'Como disse antes, o planeta em que estamos se chama Arrayon e não Matrizion, logo complete o código para o resultado seja igual a falso.',
     type: 'drag-and-drop',
     lines: [
       {
-        id: 1,
+        number: 1,
         texts: ['var planeta = "Planeta: Matrizion"'],
         indentation: 0,
       },
       {
-        id: 2,
+        number: 2,
         texts: [
           'var planeta = ',
           'planeta.',
@@ -89,23 +86,22 @@ escreva(abreviacao.maiusculo())`,
         indentation: 0,
       },
       {
-        id: 3,
+        number: 3,
         texts: ['escreva(planeta.inclui("Matrizion"))'],
         indentation: 0,
       },
     ],
-    dragItems: [
-      { id: 1, label: '"Matrizion"' },
-      { id: 2, label: 'remover' },
-      { id: 3, label: 'substituir' },
-      { id: 4, label: '"Arrayon"' },
+    items: [
+      { index: 1, label: '"Matrizion"' },
+      { index: 2, label: 'remover' },
+      { index: 3, label: 'substituir' },
+      { index: 4, label: '"Arrayon"' },
     ],
-    correctDragItemsIdsSequence: [3, 1, 4],
+    correctItemsIndexesSequence: [3, 1, 4],
     picture: 'panda-confuso.jpg',
   },
   {
-    title:
-      'Agora peguemos o hemisfério em que estamos. Qual é de acordo com o código abaixo?',
+    stem: 'Agora peguemos o hemisfério em que estamos. Qual é de acordo com o código abaixo?',
     code: `var frase = "O Sul é mais frio que o Norte"
 
 var novaFrase = frase.maiusculo()
@@ -118,34 +114,33 @@ escreva(hemisferio)`,
     picture: 'panda-sorrindo.jpg',
   },
   {
-    title:
-      'A mensagem em si não pode ter espaços desnecessários. Complete o código para que o tamanho da variável *mensagem* permaneça igual a *25*, ou seja, que o código resulte em *25*.',
+    stem: 'A mensagem em si não pode ter espaços desnecessários. Complete o código para que o tamanho da variável *mensagem* permaneça igual a *25*, ou seja, que o código resulte em *25*.',
     type: 'drag-and-drop',
     lines: [
       {
-        id: 1,
+        number: 1,
         texts: ['var mensagemAtual = "   UNIVERSO 7 - TR - Arrayon - SUL  "'],
         indentation: 0,
       },
       {
-        id: 2,
+        number: 2,
         texts: ['var mensagem = mensagemAtual.', 'dropZone', '( )'],
         indentation: 0,
       },
       {
-        id: 3,
+        number: 3,
         texts: ['escreva(mensagem.', 'dropZone', '( ))'],
         indentation: 0,
       },
     ],
-    dragItems: [
-      { id: 1, label: 'aparar' },
-      { id: 2, label: 'dividir' },
-      { id: 3, label: 'subtexto' },
-      { id: 4, label: 'tamanho' },
-      { id: 5, label: 'fatiar' },
+    items: [
+      { index: 1, label: 'aparar' },
+      { index: 2, label: 'dividir' },
+      { index: 3, label: 'subtexto' },
+      { index: 4, label: 'tamanho' },
+      { index: 5, label: 'fatiar' },
     ],
-    correctDragItemsIdsSequence: [1, 4],
+    correctItemsIndexesSequence: [1, 4],
     picture: 'panda-com-raiva.jpg',
   },
 ]

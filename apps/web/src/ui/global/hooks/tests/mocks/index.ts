@@ -1,1 +1,0 @@
-export { useRouterMock } from './useRouterMock'

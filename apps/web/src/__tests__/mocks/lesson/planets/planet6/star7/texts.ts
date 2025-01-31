@@ -1,6 +1,6 @@
-import { Text } from '@/@types/Text'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
-export const texts: Text[] = [
+export const texts: TextBlockDto[] = [
   {
     type: 'default',
     content: 'Estamos esperando a um tempão, e nada do foguete.',
@@ -13,14 +13,12 @@ export const texts: Text[] = [
   },
   {
     type: 'default',
-    content:
-      'Acho que o radar só transforma em listas mensagens que são recebidas.',
+    content: 'Acho que o radar só transforma em listas mensagens que são recebidas.',
     picture: 'panda-pensando.jpg',
   },
   {
     type: 'default',
-    content:
-      'Portanto, podemos enviar mensagens apenas em texto sem problema algum.',
+    content: 'Portanto, podemos enviar mensagens apenas em texto sem problema algum.',
     picture: 'panda-oferecendo-bambu.jpg',
   },
   {
@@ -44,8 +42,7 @@ export const texts: Text[] = [
   },
   {
     type: 'default',
-    content:
-      'Isso pode explodir sua cabeça, mas textos também podem ser *listas*.',
+    content: 'Isso pode explodir sua cabeça, mas textos também podem ser *listas*.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -73,8 +70,7 @@ escreva(meuTexto[0])
   },
   {
     type: 'default',
-    content:
-      'Mas podemos usar alguns, como *tamanho()*, *inclui()* e *concatenar()*',
+    content: 'Mas podemos usar alguns, como *tamanho()*, *inclui()* e *concatenar()*',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -186,8 +182,7 @@ escreva(novaMensagem)
   },
   {
     type: 'default',
-    content:
-      'Agora a nossa mensagem está bem melhor, mas podemos melhorá-la ainda mais.',
+    content: 'Agora a nossa mensagem está bem melhor, mas podemos melhorá-la ainda mais.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -337,8 +332,7 @@ escreva(mensagem.juntar(" "))
   },
   {
     type: 'default',
-    content:
-      'Mande assim: Se não vier agora, irei te mandar para o ferro-velho!',
+    content: 'Mande assim: Se não vier agora, irei te mandar para o ferro-velho!',
     picture: 'panda-com-raiva.jpg',
   },
   {

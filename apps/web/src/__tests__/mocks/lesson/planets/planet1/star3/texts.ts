@@ -1,14 +1,13 @@
-import { Text } from '@/@types/Text'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
-export const texts: Text[] = [
+export const texts: TextBlockDto[] = [
   {
     type: 'image',
     picture: 'foquete-viajando.jpg',
     content: 'Vagando no espaço...',
   },
   {
-    content:
-      'Ok, parace que você não encontrou nada de interessante no espaço ainda.',
+    content: 'Ok, parace que você não encontrou nada de interessante no espaço ainda.',
     type: 'default',
     picture: 'panda-triste.jpg',
   },
@@ -17,8 +16,7 @@ export const texts: Text[] = [
     type: 'user',
   },
   {
-    content:
-      'Justamente porque seu foguete ainda não sabe quem o está pilotando.',
+    content: 'Justamente porque seu foguete ainda não sabe quem o está pilotando.',
     type: 'default',
     picture: 'panda-andando-com-bambu.jpg',
   },
@@ -105,8 +103,7 @@ escreva(nomeCompleto)
   },
   {
     type: 'default',
-    content:
-      'Agora, observe um exemplo completo utilizando tudo que vimos até agora.',
+    content: 'Agora, observe um exemplo completo utilizando tudo que vimos até agora.',
     picture: 'panda-deslumbrado.jpg',
   },
   {
@@ -134,8 +131,7 @@ escreva("e sua idade é ", idade)
     picture: 'panda-fazendo-coracao.jpg',
   },
   {
-    content:
-      '1 - O nome da variável deve iniciar com uma letra ou sublinhado *(_)*.',
+    content: '1 - O nome da variável deve iniciar com uma letra ou sublinhado *(_)*.',
     type: 'quote',
     picture: 'panda-de-oculos.jpg',
   },

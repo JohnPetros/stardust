@@ -1,6 +1,6 @@
-import { Text } from '@/@types/Text'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
-export const texts: Text[] = [
+export const texts: TextBlockDto[] = [
   {
     type: 'image',
     content: 'Novos planetas encontrados.',
@@ -268,8 +268,7 @@ escreva(alimentos)
   },
   {
     type: 'default',
-    content:
-      'Como disse, já estamos bem em conhecimento novo, até a próxima 👋.',
+    content: 'Como disse, já estamos bem em conhecimento novo, até a próxima 👋.',
     picture: 'panda.jpg',
   },
 ]

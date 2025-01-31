@@ -1,6 +1,6 @@
-import { Text } from '@/@types/Text'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
-export const texts: Text[] = [
+export const texts: TextBlockDto[] = [
   {
     type: 'default',
     content:
@@ -186,8 +186,7 @@ se (
   },
   {
     type: 'default',
-    content:
-      'Mas não antes de praticar o tudo o que vimos até agora sobre condicionais.',
+    content: 'Mas não antes de praticar o tudo o que vimos até agora sobre condicionais.',
     picture: 'panda-sorrindo.jpg',
   },
 ]

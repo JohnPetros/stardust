@@ -1,6 +1,6 @@
-import { Text } from '@/@types/Text'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
-export const texts: Text[] = [
+export const texts: TextBlockDto[] = [
   {
     type: 'default',
     content:
@@ -21,8 +21,7 @@ export const texts: Text[] = [
   {
     type: 'default',
     title: '#PatiuMercadao',
-    content:
-      'Agora que estamos no mercadão, podemos colocar os itens no carrinho.',
+    content: 'Agora que estamos no mercadão, podemos colocar os itens no carrinho.',
     picture: 'panda-deslumbrado.jpg',
   },
   {
@@ -42,8 +41,7 @@ escreva(carrinho)
   },
   {
     type: 'default',
-    content:
-      'Absolutamente nada, ou seja, temos uma lista completamente vazio.',
+    content: 'Absolutamente nada, ou seja, temos uma lista completamente vazio.',
     picture: 'panda-triste.jpg',
   },
   {

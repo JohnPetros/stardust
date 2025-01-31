@@ -22,12 +22,10 @@ export class ChallengesFaker {
         dto: AuthorsFakers.fakeDto(),
       },
       testCases: [],
-      textBlocks: [],
       description: '',
       completionsCount: 0,
       downvotesCount: 0,
       upvotesCount: 0,
-      docId: '',
       starId: '',
       ...baseDto,
     }

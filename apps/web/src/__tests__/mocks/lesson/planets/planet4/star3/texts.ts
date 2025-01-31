@@ -1,4 +1,6 @@
-export const texts = [
+import type { TextBlockDto } from '@stardust/core/global/dtos'
+
+export const texts: TextBlockDto[] = [
   {
     type: 'default',
     content: 'Enfim, pousamos com segurança!',
@@ -236,8 +238,7 @@ se (povoAmigavel == falso) {
   },
   {
     type: 'default',
-    content:
-      'Muito bem, agora sim podemos conhecer melhor os seres desse planeta.',
+    content: 'Muito bem, agora sim podemos conhecer melhor os seres desse planeta.',
     picture: 'panda-deslumbrado.jpg',
   },
 ]

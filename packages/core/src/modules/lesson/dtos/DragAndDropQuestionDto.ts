@@ -3,7 +3,7 @@ import type { QuestionCodeLineDto } from './QuestionCodeLineDto'
 export type DragAndDropQuestionDto = {
   id?: string
   type: 'drag-and-drop'
-  statement: string
+  stem: string
   picture: string
   lines: QuestionCodeLineDto[]
   items: Array<{

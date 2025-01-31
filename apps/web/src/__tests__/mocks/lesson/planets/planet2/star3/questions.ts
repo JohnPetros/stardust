@@ -15,21 +15,21 @@ type Questions = [
 
 export const questions: Questions = [
   {
-    statement: 'Quais os valores possíveis para uma variável do tipo lógico?',
+    stem: 'Quais os valores possíveis para uma variável do tipo lógico?',
     type: 'checkbox',
     options: ['falso', 'verdadeiro', 'nulo', '"verdadeiro"'],
     correctOptions: ['falso', 'verdadeiro'],
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
-    statement: 'Qual é o valor padrão de uma variável sem valor atribuído a ela?',
+    stem: 'Qual é o valor padrão de uma variável sem valor atribuído a ela?',
     type: 'selection',
     answer: 'nulo',
     options: ['falso', 'verdadeiro', 'nulo', 'falso e nulo'],
     picture: 'panda-piscando-sentado.jpg',
   },
   {
-    statement: 'Qual será o resultado do seguinte código?',
+    stem: 'Qual será o resultado do seguinte código?',
     code: `var resposta = verdadeiro
 resposta = falso
 escreva("Vai chover asteroide hoje? " + resposta)   
@@ -45,7 +45,7 @@ escreva("Vai chover asteroide hoje? " + resposta)
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
-    statement: 'Complete o código para que a resposta seja coerente com a afirmação.',
+    stem: 'Complete o código para que a resposta seja coerente com a afirmação.',
     picture: 'panda-andando-com-bambu.jpg',
     type: 'drag-and-drop',
     lines: [
@@ -66,7 +66,7 @@ escreva("Vai chover asteroide hoje? " + resposta)
     correctItemsIndexesSequence: [2, 4],
   },
   {
-    statement: 'Qual seria o valor lógico para a pergunta "10 é maior que 5?"',
+    stem: 'Qual seria o valor lógico para a pergunta "10 é maior que 5?"',
     type: 'open',
     lines: [
       {

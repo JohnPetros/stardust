@@ -1,23 +1,37 @@
-import { IHttp, type Cookie } from '@stardust/core/interfaces'
+import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/constants'
+import { UsersFaker } from '@stardust/core/fakers/entities'
+import type { UserDto } from '@stardust/core/global/dtos'
+import type { IHttp, HttpSchema } from '@stardust/core/interfaces'
 import { ApiResponse } from '@stardust/core/responses'
 
-type HttpMockProps = {
-  fakeSearchParams?: Record<string, string>
-  fakeRoute?: string
-  fakeCookies?: Cookie[]
+type Cookie = {
+  key: string
+  value: string
+  duration: number
 }
 
-export const HttpMock = ({
+type HttpMockProps<fakeSchema> = {
+  fakeSchema?: fakeSchema
+  fakeRoute?: string
+  fakeCookies?: Cookie[]
+  fakeUser?: UserDto
+}
+
+export const HttpMock = <FakeSchema extends HttpSchema>({
+  fakeSchema,
   fakeRoute = '',
-  fakeSearchParams = {},
   fakeCookies = [],
-}: HttpMockProps = {}): IHttp => {
-  const searchParams = fakeSearchParams
+  fakeUser = UsersFaker.fakeDto(),
+}: HttpMockProps<FakeSchema> = {}): IHttp<FakeSchema> => {
   const cookies: Cookie[] = fakeCookies
 
   return {
-    getSearchParam(key: string) {
-      return searchParams[key]
+    getQueryParams() {
+      return fakeSchema?.queryParams
+    },
+
+    getRouteParams() {
+      return fakeSchema?.routeParams
     },
 
     getCurrentRoute() {
@@ -25,24 +39,31 @@ export const HttpMock = ({
     },
 
     redirect(route: string) {
-      return new ApiResponse(route, 303)
+      return new ApiResponse({ statusCode: HTTP_STATUS_CODE.redirect })
     },
 
-    setCookie(cookie: Cookie) {
-      cookies.push(cookie)
+    setCookie(key, value, duration) {
+      cookies.push({ key, value, duration })
     },
 
     getCookie(key: string) {
-      const cookie = cookies.find((cookie) => cookie.key === key)
-      return cookie ?? null
+      throw new Error('NextHttp getCookie method not implemented')
     },
 
     getBody() {
       throw new Error('Method not implemented')
     },
 
-    send(data: unknown, statusCode: number) {
-      return new ApiResponse(data, statusCode)
+    async getUser() {
+      return fakeUser
+    },
+
+    pass() {
+      return new ApiResponse({ headers: { [HTTP_HEADERS.xPass]: 'true' } })
+    },
+
+    send(body: unknown, statusCode: number) {
+      return new ApiResponse({ body, statusCode })
     },
   }
 }

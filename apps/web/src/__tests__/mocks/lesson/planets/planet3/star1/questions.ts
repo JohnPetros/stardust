@@ -1,98 +1,77 @@
-import {
-  CheckboxQuestion,
-  DragAndDropQuestion,
-  SelectionQuestion,
-} from '@/@types/Quiz'
+import type {
+  DragAndDropQuestionDto,
+  SelectionQuestionDto,
+  CheckboxQuestionDto,
+} from '@stardust/core/lesson/dtos'
 
 type Questions = [
-  CheckboxQuestion,
-  SelectionQuestion,
-  SelectionQuestion,
-  DragAndDropQuestion,
-  DragAndDropQuestion,
+  CheckboxQuestionDto,
+  SelectionQuestionDto,
+  SelectionQuestionDto,
+  DragAndDropQuestionDto,
+  DragAndDropQuestionDto,
 ]
 
 export const questions: Questions = [
   {
-    title:
-      'Vamos verificar se há alguém por perto para ajudar. Para isso, precisamos dos operadores aritméticos. Quais os operadores abaixo estão escritos da maneira correta em um programa?',
+    stem: 'Vamos verificar se há alguém por perto para ajudar. Para isso, precisamos dos operadores aritméticos. Quais os operadores abaixo estão escritos da maneira correta em um programa?',
     type: 'checkbox',
     options: ['/', '+', '÷', 'x'],
     correctOptions: ['/', '+'],
     picture: 'panda-olhando-computador.jpg',
   },
   {
-    title:
-      'O foguete detectou uma quantidade de seres lá fora, no caso: *5 + 3 * 2*. Qual é esse número?',
+    stem: 'O foguete detectou uma quantidade de seres lá fora, no caso: *5 + 3 * 2*. Qual é esse número?',
     type: 'selection',
     options: ['11', '16', '13', '15'],
     answer: '13',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
-    title:
-      'Foi recebido uma mensagem em forma de operação usando *módulo*: 50 % 2. Qual é esse resultado?',
+    stem: 'Foi recebido uma mensagem em forma de operação usando *módulo*: 50 % 2. Qual é esse resultado?',
     type: 'selection',
     answer: '0',
     options: ['0', '25', '1', '100'],
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
-    title:
-      'Complete a linha abaixo com os operadores corretos, de modo que indique que o número do nosso foguete é o *13*.',
+    stem: 'Complete a linha abaixo com os operadores corretos, de modo que indique que o número do nosso foguete é o *13*.',
     type: 'drag-and-drop',
     lines: [
       {
-        id: 1,
-        texts: [
-          'var numero = ',
-          '5 ',
-          'dropZone',
-          ' 2 ',
-          'dropZone',
-          ' 4',
-          ' = 13',
-        ],
+        number: 1,
+        texts: ['var numero = ', '5 ', 'dropZone', ' 2 ', 'dropZone', ' 4', ' = 13'],
         indentation: 0,
       },
     ],
-    dragItems: [
-      { id: 1, label: '/' },
-      { id: 2, label: '+' },
-      { id: 3, label: '*' },
-      { id: 4, label: 'x' },
-      { id: 5, label: '-' },
+    items: [
+      { index: 1, label: '/' },
+      { index: 2, label: '+' },
+      { index: 3, label: '*' },
+      { index: 4, label: 'x' },
+      { index: 5, label: '-' },
     ],
     picture: 'panda-olhando-de-lado.jpg',
-    correctDragItemsIdsSequence: [2, 3],
+    correctItemsIndexesSequence: [2, 3],
   },
   {
-    title:
-      'Agora complete a linha de código com os números certos para que o resultado seja igual a *10*, indicando que temos 10 assentos disponíveis.',
+    stem: 'Agora complete a linha de código com os números certos para que o resultado seja igual a *10*, indicando que temos 10 assentos disponíveis.',
     type: 'drag-and-drop',
     lines: [
       {
-        id: 1,
-        texts: [
-          'var assentos = ',
-          'dropZone',
-          ' + ',
-          'dropZone',
-          ' / ',
-          '2',
-          ' = 10',
-        ],
+        number: 1,
+        texts: ['var assentos = ', 'dropZone', ' + ', 'dropZone', ' / ', '2', ' = 10'],
         indentation: 0,
       },
     ],
-    dragItems: [
-      { id: 1, label: '4' },
-      { id: 2, label: '12' },
-      { id: 3, label: '6' },
-      { id: 4, label: '-4' },
-      { id: 5, label: '10' },
+    items: [
+      { index: 1, label: '4' },
+      { index: 2, label: '12' },
+      { index: 3, label: '6' },
+      { index: 4, label: '-4' },
+      { index: 5, label: '10' },
     ],
     picture: 'panda-piscando.jpg',
-    correctDragItemsIdsSequence: [1, 2],
+    correctItemsIndexesSequence: [1, 2],
   },
 ]

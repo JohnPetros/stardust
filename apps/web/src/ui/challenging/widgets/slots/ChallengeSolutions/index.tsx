@@ -19,6 +19,7 @@ const SORTER_BUTTON_TITLES: Record<SolutionsListSorter, string> = {
   date: 'recentes',
   upvotesCount: 'votadas',
   commentsCount: 'comentadas',
+  viewsCount: 'visualizadas',
 } as const
 
 export function ChallengeSolutionsSlot() {
@@ -110,7 +111,7 @@ export function ChallengeSolutionsSlot() {
                 upvotesCount={solution.upvotesCount.value}
                 viewsCount={solution.viewsCount.value}
                 commentsCount={solution.commentsCount.value}
-                createdAt={solution.createdAt}
+                postedAt={solution.postedAt}
                 challengeSlug={challengeSlug}
                 author={{
                   name: solution.author.name.value,

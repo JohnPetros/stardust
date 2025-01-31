@@ -15,8 +15,7 @@ type Questions = [
 export const questions: Questions = [
   {
     type: 'selection',
-    statement:
-      'Que tal tentarmos cumprimentar a princesa de fora do castelo. Qual função abaixo faz uma saudação? Dica: ela é uma função avançada.',
+    stem: 'Que tal tentarmos cumprimentar a princesa de fora do castelo. Qual função abaixo faz uma saudação? Dica: ela é uma função avançada.',
     code: `funcao facaSaudacao(nome) {
   retorna "Olá, \${nome}! Tudo bem?"
 }
@@ -32,16 +31,14 @@ escreva(retornaSaudacao("Princesa"))`,
   },
   {
     type: 'selection',
-    statement:
-      'Vamos ver se você está afiado com funções de alta ordem. Qual função avançada de lista eu teria que usar se eu quisesse que a quantidade da lista original se mantivesse?',
+    stem: 'Vamos ver se você está afiado com funções de alta ordem. Qual função avançada de lista eu teria que usar se eu quisesse que a quantidade da lista original se mantivesse?',
     options: ['mapear()', 'filtrarPor()', 'inclui()', 'numerar()'],
     answer: 'mapear()',
     picture: 'panda.jpg',
   },
   {
     type: 'drag-and-drop',
-    statement:
-      'O tubarão nos pediu tranformar todo abacate em ABACATE. complete o código abaixo para atender esse pedido.',
+    stem: 'O tubarão nos pediu tranformar todo abacate em ABACATE. complete o código abaixo para atender esse pedido.',
     lines: [
       {
         number: 1,
@@ -92,8 +89,7 @@ escreva(retornaSaudacao("Princesa"))`,
   },
   {
     type: 'drag-and-drop',
-    statement:
-      'Tem alguns espinhos venenosos no caminho até a porta do castelo. Use o *filtrarPor()* para que apenas pedras estejam na lista caminho.',
+    stem: 'Tem alguns espinhos venenosos no caminho até a porta do castelo. Use o *filtrarPor()* para que apenas pedras estejam na lista caminho.',
     lines: [
       {
         number: 1,
@@ -144,8 +140,7 @@ escreva(retornaSaudacao("Princesa"))`,
   },
   {
     type: 'open',
-    statement:
-      'Podemos aproveitar a viagem para pegar algumas plantas do tipo *xeno*. complete o programa abaixo para que ele retorne somente plantas que inclui o texto "xeno" em minúsculo.',
+    stem: 'Podemos aproveitar a viagem para pegar algumas plantas do tipo *xeno*. complete o programa abaixo para que ele retorne somente plantas que inclui o texto "xeno" em minúsculo.',
 
     lines: [
       {

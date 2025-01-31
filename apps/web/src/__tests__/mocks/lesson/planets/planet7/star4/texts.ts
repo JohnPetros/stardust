@@ -1,19 +1,19 @@
-import { Text } from "@/@types/Text"
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
-export const texts: Text[] = [
+export const texts: TextBlockDto[] = [
   {
-    type: "image",
-    content: "O próximo desafio é dobrar cada número de uma lista.",
-    picture: "tubarao-malvado.jpg",
+    type: 'image',
+    content: 'O próximo desafio é dobrar cada número de uma lista.',
+    picture: 'tubarao-malvado.jpg',
   },
   {
-    type: "default",
+    type: 'default',
     content:
-      "Por exemplo, uma lista sendo *[1, 2, 3, 4]*, deve gerar uma lista com *[2, 4, 6, 8]*.",
-    picture: "tubarao-malvado.jpg",
+      'Por exemplo, uma lista sendo *[1, 2, 3, 4]*, deve gerar uma lista com *[2, 4, 6, 8]*.',
+    picture: 'tubarao-malvado.jpg',
   },
   {
-    type: "code",
+    type: 'code',
     content: `var numeros = [1, 2, 3, 4]
 var novaLista = []
 
@@ -27,38 +27,37 @@ escreva(novaLista)
     isRunnable: true,
   },
   {
-    type: "user",
-    content: "Pronto 😎.",
+    type: 'user',
+    content: 'Pronto 😎.',
   },
   {
-    type: "default",
-    content: "Muito bem!!",
-    picture: "panda-pulando-de-alegria.jpg",
+    type: 'default',
+    content: 'Muito bem!!',
+    picture: 'panda-pulando-de-alegria.jpg',
   },
   {
-    type: "default",
+    type: 'default',
+    content: 'Só que, há uma maneira de fazer exatamente isso em bem menos linhas.',
+    picture: 'panda-dando-risadinha.jpg',
+  },
+  {
+    type: 'user',
+    content: 'Como?',
+  },
+  {
+    type: 'default',
+    content: 'Usando funções de alta ordem!',
+    picture: 'panda-sorrindo-sentado.jpg',
+  },
+  {
+    type: 'quote',
+    title: 'Funções de alta ordem',
     content:
-      "Só que, há uma maneira de fazer exatamente isso em bem menos linhas.",
-    picture: "panda-dando-risadinha.jpg",
+      'Funções de alta ordem ou funções de ordem superior (vamos chamar de apenas funções avançadas), são funções que recebem outras funções como parâmetro.',
+    picture: 'panda-oferecendo-bambu.jpg',
   },
   {
-    type: "user",
-    content: "Como?",
-  },
-  {
-    type: "default",
-    content: "Usando funções de alta ordem!",
-    picture: "panda-sorrindo-sentado.jpg",
-  },
-  {
-    type: "quote",
-    title: "Funções de alta ordem",
-    content:
-      "Funções de alta ordem ou funções de ordem superior (vamos chamar de apenas funções avançadas), são funções que recebem outras funções como parâmetro.",
-    picture: "panda-oferecendo-bambu.jpg",
-  },
-  {
-    type: "code",
+    type: 'code',
     content: `funcao cumprimente() {
   escreva("Olá!")
 }
@@ -72,19 +71,19 @@ souOutraFuncao(cumprimente)
     isRunnable: true,
   },
   {
-    type: "quote",
+    type: 'quote',
     content:
-      "Nesse exemplo, a função *cumprimente()* foi passado como parâmetro para a funcao *souOutraFuncao()*. Assim, a função *cumprimente()* foi executada dentro de *souOutraFuncao()*.",
-    picture: "panda.jpg",
+      'Nesse exemplo, a função *cumprimente()* foi passado como parâmetro para a funcao *souOutraFuncao()*. Assim, a função *cumprimente()* foi executada dentro de *souOutraFuncao()*.',
+    picture: 'panda.jpg',
   },
   {
-    type: "quote",
+    type: 'quote',
     content:
-      "Uma função avançada também é aquela que retorna uma função que foi passada como parâmetro.",
-    picture: "panda-piscando.jpg",
+      'Uma função avançada também é aquela que retorna uma função que foi passada como parâmetro.',
+    picture: 'panda-piscando.jpg',
   },
   {
-    type: "code",
+    type: 'code',
     content: `funcao somar(num1, num2) {
   retorna num1 + num2
 }
@@ -96,92 +95,91 @@ funcao executeSomar(num1, num2, somar) {
 escreva(executeSomar(1, 2, somar))
 // Resultado: 3`,
     isRunnable: true,
-    picture: "panda.jpg",
+    picture: 'panda.jpg',
   },
   {
-    type: "default",
+    type: 'default',
     content:
-      "Neste exemplo, a funcao *executeSomar()* recebe 3 parâmetros. Os dois primeiros são números e o terceiro é uma função que soma dois números.",
-    picture: "panda-andando-com-bambu.jpg",
+      'Neste exemplo, a funcao *executeSomar()* recebe 3 parâmetros. Os dois primeiros são números e o terceiro é uma função que soma dois números.',
+    picture: 'panda-andando-com-bambu.jpg',
   },
   {
-    type: "default",
+    type: 'default',
     content:
-      "A função *somar()* é executada dentro da funcao *executeSomar()* usando os parâmetros que foram originalmente passados para a funcao *executeSomar()*.",
-    picture: "panda-andando-com-bambu.jpg",
+      'A função *somar()* é executada dentro da funcao *executeSomar()* usando os parâmetros que foram originalmente passados para a funcao *executeSomar()*.',
+    picture: 'panda-andando-com-bambu.jpg',
   },
   {
-    type: "default",
+    type: 'default',
+    content: 'E o retorno de *somar()* é retornado pela funcao *executeSomar()*.',
+    picture: 'panda-andando-com-bambu.jpg',
+  },
+  {
+    type: 'default',
+    content: 'Parece complicado? Com certeza é.',
+    picture: 'panda-rindo-deitado.jpg',
+  },
+  {
+    type: 'default',
     content:
-      "E o retorno de *somar()* é retornado pela funcao *executeSomar()*.",
-    picture: "panda-andando-com-bambu.jpg",
+      'Contudo, você percebeu que a forma de escrever uma função desse tipo não é diferente de escrever uma função normal.',
+    picture: 'panda.jpg',
   },
   {
-    type: "default",
-    content: "Parece complicado? Com certeza é.",
-    picture: "panda-rindo-deitado.jpg",
-  },
-  {
-    type: "default",
+    type: 'default',
     content:
-      "Contudo, você percebeu que a forma de escrever uma função desse tipo não é diferente de escrever uma função normal.",
-    picture: "panda.jpg",
+      'Então, no final das contas, *função de ordem superior* acaba sendo um nome chique de funções que recebem ou que retornam outras funções.',
+    picture: 'panda-sorrindo.jpg',
   },
   {
-    type: "default",
+    type: 'default',
     content:
-      "Então, no final das contas, *função de ordem superior* acaba sendo um nome chique de funções que recebem ou que retornam outras funções.",
-    picture: "panda-sorrindo.jpg",
+      'Mas porque eu estou explicando isso? Porque a função nativa que iremos usar agora é uma função desse tipo.',
+    picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
-    type: "default",
+    type: 'default',
     content:
-      "Mas porque eu estou explicando isso? Porque a função nativa que iremos usar agora é uma função desse tipo.",
-    picture: "panda-segurando-bambu-de-pe.jpg",
+      'Existem algumas funções avançadas que devem ser usadas especificamente para listas, e uma delas é o *mapear()*.',
+    picture: 'panda-amando-bambu.jpg',
   },
   {
-    type: "default",
+    type: 'quote',
+    title: 'Método mapear()',
     content:
-      "Existem algumas funções avançadas que devem ser usadas especificamente para listas, e uma delas é o *mapear()*.",
-    picture: "panda-amando-bambu.jpg",
+      'O método *mapear()* transforma cada elemento de uma lista por meio de um laço, retornando um nova lista.',
+    picture: 'panda-amando-bambu.jpg',
   },
   {
-    type: "quote",
-    title: "Método mapear()",
-    content:
-      "O método *mapear()* transforma cada elemento de uma lista por meio de um laço, retornando um nova lista.",
-    picture: "panda-amando-bambu.jpg",
+    type: 'default',
+    content: 'Para escrevê-la é simples:',
+    picture: 'panda.jpg',
   },
   {
-    type: "default",
-    content: "Para escrevê-la é simples:",
-    picture: "panda.jpg",
-  },
-  {
-    type: "code",
-    content: "var novaLista = listaOriginal.mapear(funcaoTranformadora)",
+    type: 'code',
+    content: 'var novaLista = listaOriginal.mapear(funcaoTranformadora)',
     isRunnable: false,
   },
   {
-    type: "quote",
+    type: 'quote',
     content:
-      "O *mapear()* recebe como parâmetro uma função transformadora, ou seja, uma que transformará cada elemento da lista original.",
-    picture: "panda-de-oculos.jpg",
+      'O *mapear()* recebe como parâmetro uma função transformadora, ou seja, uma que transformará cada elemento da lista original.',
+    picture: 'panda-de-oculos.jpg',
   },
   {
-    type: "default",
+    type: 'default',
     content:
-      "Quando o *mapear()* for executado essa função transformadora será aplicada a cada elemento da lista original. E cada retorno dessa função será incluído em um nova lista.",
-    picture: "panda-de-oculos.jpg",
+      'Quando o *mapear()* for executado essa função transformadora será aplicada a cada elemento da lista original. E cada retorno dessa função será incluído em um nova lista.',
+    picture: 'panda-de-oculos.jpg',
   },
   {
-    type: "default",
+    type: 'default',
     content:
-      "No nosso caso, a função transformadora será que função que dobra um número. Então vamos criá-la.",
-    picture: "panda-piscando-sentado.jpg",
+      'No nosso caso, a função transformadora será que função que dobra um número. Então vamos criá-la.',
+    picture: 'panda-piscando-sentado.jpg',
   },
   {
-    type: "code",
+    type: 'code',
     content: ` var numeros = [1, 2, 3, 4]
 
 funcao dobre(numero) {
@@ -196,35 +194,35 @@ escreva(novosNumeros)
     isRunnable: true,
   },
   {
-    type: "default",
+    type: 'default',
     content:
-      "A função transformadora, no caso *dobre()*, está recebendo o parâmetro *numero*. Mas de onde esse parâmetro está vindo?",
-    picture: "panda-pensando.jpg",
+      'A função transformadora, no caso *dobre()*, está recebendo o parâmetro *numero*. Mas de onde esse parâmetro está vindo?',
+    picture: 'panda-pensando.jpg',
   },
   {
-    type: "default",
+    type: 'default',
     content:
-      "Lembra que eu disse que *mapear()* faz um laço na lista original passado cada item da lista como parâmetro para a função transformadora?",
-    picture: "panda-sorrindo.jpg",
+      'Lembra que eu disse que *mapear()* faz um laço na lista original passado cada item da lista como parâmetro para a função transformadora?',
+    picture: 'panda-sorrindo.jpg',
   },
   {
-    type: "default",
+    type: 'default',
     content:
-      "A cada iteração desse laço a função *dobrar()* é executada recebendo como parâmetro o número atual da lista *numeros*.",
-    picture: "panda-sorrindo.jpg",
+      'A cada iteração desse laço a função *dobrar()* é executada recebendo como parâmetro o número atual da lista *numeros*.',
+    picture: 'panda-sorrindo.jpg',
   },
   {
-    type: "user",
-    content: "Que?",
+    type: 'user',
+    content: 'Que?',
   },
   {
-    type: "default",
+    type: 'default',
     content:
-      "Bugou agora? Aqui temos uma função que mostra o funcionamento do *mapear()* por baixo dos panos.",
-    picture: "panda.jpg",
+      'Bugou agora? Aqui temos uma função que mostra o funcionamento do *mapear()* por baixo dos panos.',
+    picture: 'panda.jpg',
   },
   {
-    type: "code",
+    type: 'code',
     content: `funcao meuMapear(lista, funcaoTrasnformadora) {
   var novaLista = []
         
@@ -238,17 +236,17 @@ escreva(novosNumeros)
     isRunnable: false,
   },
   {
-    type: "user",
-    content: "Hmm...",
+    type: 'user',
+    content: 'Hmm...',
   },
   {
-    type: "default",
+    type: 'default',
     content:
-      "É bem parecido com o laço que criamos logo no começo, não é? Só que o *mapear()* faz isso automaticamente, veja de novo.",
-    picture: "panda-segurando-bambu-de-pe.jpg",
+      'É bem parecido com o laço que criamos logo no começo, não é? Só que o *mapear()* faz isso automaticamente, veja de novo.',
+    picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
-    type: "code",
+    type: 'code',
     content: `var numeros = [1, 2, 3, 4]
 
 funcao dobre(numero) {
@@ -260,68 +258,67 @@ var novosNumeros = mapear(numeros, dobre)
 escreva(novosNumeros)
 // Resultado: [2,4,6,8]`,
     isRunnable: true,
-    picture: "panda.jpg",
+    picture: 'panda.jpg',
   },
   {
-    type: "image",
+    type: 'image',
     content:
-      "Ok, vocês passaram nesse desafio. O próximo é criar uma lista com os números de outra lista que são maiores que 10.",
-    picture: "tubarao-malvado.jpg",
+      'Ok, vocês passaram nesse desafio. O próximo é criar uma lista com os números de outra lista que são maiores que 10.',
+    picture: 'tubarao-malvado.jpg',
   },
   {
-    type: "default",
+    type: 'default',
     content:
-      "Por exemplo, uma lista *[1, 4, 9, 12, 45, 60]* deve gerar uma lista *[12, 45, 60]*.",
-    picture: "tubarao-malvado.jpg",
+      'Por exemplo, uma lista *[1, 4, 9, 12, 45, 60]* deve gerar uma lista *[12, 45, 60]*.',
+    picture: 'tubarao-malvado.jpg',
   },
   {
-    type: "default",
+    type: 'default',
     content:
-      "Ok, não será possível resolver esse desafio com *mapear()*, porque esse método de lista retorna obrigatoriamente uma lista com a mesma quantidade de itens da lista original.",
-    picture: "panda-sorrindo-sentado.jpg",
+      'Ok, não será possível resolver esse desafio com *mapear()*, porque esse método de lista retorna obrigatoriamente uma lista com a mesma quantidade de itens da lista original.',
+    picture: 'panda-sorrindo-sentado.jpg',
   },
   {
-    type: "default",
+    type: 'default',
+    content: 'E a lista gerada nesse desafio pode ter bem menos, não é?',
+    picture: 'panda-triste.jpg',
+  },
+  {
+    type: 'default',
     content:
-      "E a lista gerada nesse desafio pode ter bem menos, não é?",
-    picture: "panda-triste.jpg",
+      'Então teremos que usar outra função avançada, no caso uma que filtre os elementos de uma lista.',
+    picture: 'panda.jpg',
   },
   {
-    type: "default",
+    type: 'default',
+    content: 'Esse é um trabalho para a função *filtrarPor()*.',
+    picture: 'panda-sorrindo.jpg',
+  },
+  {
+    type: 'quote',
+    title: 'Método filtrarPor()',
     content:
-      "Então teremos que usar outra função avançada, no caso uma que filtre os elementos de uma lista.",
-    picture: "panda.jpg",
+      'Esse método cria uma outra lista contendo apenas os elementos da lista original que passarem em uma condição fornecida.',
+    picture: 'panda-piscando.jpg',
   },
   {
-    type: "default",
-    content: "Esse é um trabalho para a função *filtrarPor()*.",
-    picture: "panda-sorrindo.jpg",
-  },
-  {
-    type: "quote",
-    title: "Método filtrarPor()",
+    type: 'quote',
     content:
-      "Esse método cria uma outra lista contendo apenas os elementos da lista original que passarem em uma condição fornecida.",
-    picture: "panda-piscando.jpg",
+      'E já que ele é uma função avançada, assim como o *mapear()*, ele cria um laço na lista, onde cada elemento da lista é passado como parâmetro para função filtradora.',
+    picture: 'panda.jpg',
   },
   {
-    type: "quote",
-    content:
-      "E já que ele é uma função avançada, assim como o *mapear()*, ele cria um laço na lista, onde cada elemento da lista é passado como parâmetro para função filtradora.",
-    picture: "panda.jpg",
-  },
-  {
-    type: "code",
-    content: "var novaLista = listaOriginal.filtrarPor(funcaoFiltradora)",
+    type: 'code',
+    content: 'var novaLista = listaOriginal.filtrarPor(funcaoFiltradora)',
     isRunnable: false,
   },
   {
-    type: "default",
-    content: "Então, no nosso caso:",
-    picture: "panda-segurando-bambu-de-pe.jpg",
+    type: 'default',
+    content: 'Então, no nosso caso:',
+    picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
-    type: "code",
+    type: 'code',
     content: `var numeros = [5, 10, 15, 20]
 
 funcao verifiqueSeEMaiorQue10(numero) {
@@ -333,28 +330,27 @@ var numerosFiltrados = filtrarPor(numeros, verifiqueSeEMaiorQue10)
 escreva(numerosFiltrados)
 // Resultado: 15, 20`,
     isRunnable: true,
-    picture: "panda.jpg",
+    picture: 'panda.jpg',
   },
   {
-    type: "default",
+    type: 'default',
+    content: 'Está vendo que a função *verifiqueSeEMaiorQue10()* retorna um lógico?',
+    picture: 'panda.jpg',
+  },
+  {
+    type: 'default',
     content:
-      'Está vendo que a função *verifiqueSeEMaiorQue10()* retorna um lógico?',
-    picture: "panda.jpg",
+      'Isso porque a função filtradora deve obrigatoriamente retornar um lógico, que:\nse for *verdadeiro*, o elemento atual é colocado no nova lista, caso falso ele é excluído.',
+    picture: 'panda-sorrindo-sentado.jpg',
   },
   {
-    type: "default",
+    type: 'default',
     content:
-      "Isso porque a função filtradora deve obrigatoriamente retornar um lógico, que:\nse for *verdadeiro*, o elemento atual é colocado no nova lista, caso falso ele é excluído.",
-    picture: "panda-sorrindo-sentado.jpg",
+      'Por exemplo, se em uma outra situação o retorno da função filtradora fosse sempre *verdadeiro*, nenhum elemento da lista original seria excluído.',
+    picture: 'panda-fazendo-coracao.jpg',
   },
   {
-    type: "default",
-    content:
-      "Por exemplo, se em uma outra situação o retorno da função filtradora fosse sempre *verdadeiro*, nenhum elemento da lista original seria excluído.",
-    picture: "panda-fazendo-coracao.jpg",
-  },
-  {
-    type: "code",
+    type: 'code',
     content: `var numeros = [5, 10, 15, 20]
 
 funcao verifiqueSeEMaiorQue10(numero) {
@@ -368,12 +364,12 @@ escreva(numerosFiltrados)
     isRunnable: true,
   },
   {
-    type: "default",
-    content: "E se fosse falso...",
-    picture: "panda-sorrindo.jpg",
+    type: 'default',
+    content: 'E se fosse falso...',
+    picture: 'panda-sorrindo.jpg',
   },
   {
-    type: "code",
+    type: 'code',
     content: `var numeros = [5, 10, 15, 20]
 
 funcao verifiqueSeEMaiorQue10(numero) {
@@ -387,18 +383,18 @@ escreva(numerosFiltrados)
     isRunnable: true,
   },
   {
-    type: "default",
+    type: 'default',
     content:
-      "Talvez você ache que o nome da função filtradora grande demais (o que não é problema nenhum, quanto mais descritivo melhor). Você pode usar uma função anônima no lugar.",
-    picture: "panda-segurando-bambu-de-pe.jpg",
+      'Talvez você ache que o nome da função filtradora grande demais (o que não é problema nenhum, quanto mais descritivo melhor). Você pode usar uma função anônima no lugar.',
+    picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
-    type: "default",
-    content: "Assim ó:",
-    picture: "panda-sorrindo.jpg",
+    type: 'default',
+    content: 'Assim ó:',
+    picture: 'panda-sorrindo.jpg',
   },
   {
-    type: "code",
+    type: 'code',
     content: `var numeros = [5, 10, 15, 20]
 
 var numerosFiltrados = filtrarPor(numeros, funcao(numero) {
@@ -410,19 +406,19 @@ escreva(numerosFiltrados)
     isRunnable: true,
   },
   {
-    type: "default",
+    type: 'default',
     content:
-      "Essa é uma das vantagens da função anônima que eu disse antes, de criar a função diretamente como parâmetro de outra função.",
-    picture: "panda-deslumbrado.jpg",
+      'Essa é uma das vantagens da função anônima que eu disse antes, de criar a função diretamente como parâmetro de outra função.',
+    picture: 'panda-deslumbrado.jpg',
   },
   {
-    type: "default",
+    type: 'default',
     content:
       'E antes que pergunte, sim, também dá para usar uma função anônima no *mapear()*.',
-    picture: "panda-comemorando.jpg",
+    picture: 'panda-comemorando.jpg',
   },
   {
-    type: "code",
+    type: 'code',
     content: `
 var numeros = [1, 2, 3, 4]
 
@@ -433,7 +429,7 @@ var novosNumeros = mapear(numeros, funcao(numero) {
 escreva(novosNumeros)
 // Resultado: [2,4,6,8]`,
     isRunnable: true,
-    picture: "panda.jpg",
+    picture: 'panda.jpg',
   },
   //   {
   //     type: "image",
@@ -716,18 +712,18 @@ escreva(novosNumeros)
   //     picture: "panda.jpg",
   //   },
   {
-    type: "image",
-    content: "Puxa, vocês conseguiram resolver todos os desafios.",
-    picture: "tubarao-malvado.jpg",
+    type: 'image',
+    content: 'Puxa, vocês conseguiram resolver todos os desafios.',
+    picture: 'tubarao-malvado.jpg',
   },
   {
-    type: "image",
-    content: "Vocês podem ver a princesa, ela está no castelo logo à frente.",
-    picture: "castelo-alien.jpg",
+    type: 'image',
+    content: 'Vocês podem ver a princesa, ela está no castelo logo à frente.',
+    picture: 'castelo-alien.jpg',
   },
   {
-    type: "default",
-    content: "Espera aí! A pessoa que pediu nossa ajuda é uma princesa?",
-    picture: "panda-espantado.jpg",
+    type: 'default',
+    content: 'Espera aí! A pessoa que pediu nossa ajuda é uma princesa?',
+    picture: 'panda-espantado.jpg',
   },
 ]

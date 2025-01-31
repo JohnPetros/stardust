@@ -33,7 +33,7 @@ para cada palavra de palavras {
   var palavraTraduzida = dicionario[palavra]
 }
     `,
-    statement: 'A princesa falou denovo. O que ela disse?',
+    stem: 'A princesa falou denovo. O que ela disse?',
     type: 'selection',
     answer: 'vocês serão meus guerreiros',
     options: [
@@ -45,7 +45,7 @@ para cada palavra de palavras {
     picture: 'panda-espantado.jpg',
   },
   {
-    statement: 'Complete a função *mostreLancamento()*',
+    stem: 'Complete a função *mostreLancamento()*',
     type: 'drag-and-drop',
     lines: [
       {
@@ -94,7 +94,7 @@ para cada palavra de palavras {
   },
   {
     type: 'open',
-    statement: 'Seus guerreiros?? Mande uma resposta dizendo: "Como assim guerreiros?"',
+    stem: 'Seus guerreiros?? Mande uma resposta dizendo: "Como assim guerreiros?"',
     lines: [
       {
         number: 1,
@@ -140,8 +140,7 @@ para cada palavra de palavras {
   },
   {
     type: 'checkbox',
-    statement:
-      'A princesa mandou uma resposta em dicionário. Qual possíveis chaves você pode utilizar para não deixar o resultado ser igual a `nulo`',
+    stem: 'A princesa mandou uma resposta em dicionário. Qual possíveis chaves você pode utilizar para não deixar o resultado ser igual a `nulo`',
     code: `
 var pergunta = 'Aceitam minha proposta'
 var dicionario = {
@@ -157,8 +156,7 @@ escreva(dicionario[chave])`,
     picture: 'panda.jpg',
   },
   {
-    statement:
-      'Mande uma resposta à princesa em duas frases utilizando dicionário: reorganize as linhas do código para fazer isso',
+    stem: 'Mande uma resposta à princesa em duas frases utilizando dicionário: reorganize as linhas do código para fazer isso',
     type: 'drag-and-drop-list',
     items: [
       { position: 1, label: 'var frase2 = "Estamos curiosos"' },

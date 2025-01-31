@@ -1,4 +1,4 @@
-import { useRefMock } from '@/__tests__/mocks/hooks/useRefMock'
+import { useRefMock } from '@/ui/global/hooks/tests/mocks/useRefMock'
 import type { AnimationRef } from '../../types'
 
 const restartMock = jest.fn()

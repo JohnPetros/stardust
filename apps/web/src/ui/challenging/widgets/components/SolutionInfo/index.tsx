@@ -5,16 +5,16 @@ type SolutionInfo = {
   upvotesCount?: number
   viewsCount: number
   commentsCount: number
-  createdAt: Date
+  postedAt: Date
 }
 
 export function SolutionInfo({
   upvotesCount,
   viewsCount,
   commentsCount,
-  createdAt,
+  postedAt,
 }: SolutionInfo) {
-  const date = new Datetime(createdAt).format('MMM D, YYYY')
+  const date = new Datetime(postedAt).format('MMM D, YYYY')
 
   return (
     <ul className='flex gap-3 w-full'>
@@ -41,7 +41,7 @@ export function SolutionInfo({
         <Info
           icon='calendar'
           label={date}
-          tooltipText={`Data de postagem - ${new Datetime(createdAt).format('MMM D, YYYY HH:mm:ss')}`}
+          tooltipText={`Data de postagem - ${new Datetime(postedAt).format('MMM D, YYYY HH:mm:ss')}`}
         />
       </li>
     </ul>

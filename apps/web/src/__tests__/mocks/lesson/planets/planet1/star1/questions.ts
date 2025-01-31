@@ -1,17 +1,19 @@
-import { DragAndDropListQuestion, SelectionQuestion } from '@/@types/Quiz'
+import type {
+  DragAndDropListQuestionDto,
+  SelectionQuestionDto,
+} from '@stardust/core/lesson/dtos'
 
 type Questions = [
-  SelectionQuestion,
-  SelectionQuestion,
-  DragAndDropListQuestion,
-  DragAndDropListQuestion,
-  DragAndDropListQuestion,
+  SelectionQuestionDto,
+  SelectionQuestionDto,
+  DragAndDropListQuestionDto,
+  DragAndDropListQuestionDto,
+  DragAndDropListQuestionDto,
 ]
 
 export const questionsMock: Questions = [
   {
-    title:
-      'Muito bem, você acaba de embarcar no foguete. Antes de proseguirmos quero que responda primeiro: O que é lógica de programação mesmo?',
+    stem: 'Muito bem, você acaba de embarcar no foguete. Antes de proseguirmos quero que responda primeiro: O que é lógica de programação mesmo?',
     picture: 'panda.jpg',
     type: 'selection',
     answer: 'sequência lógica de instruções',
@@ -23,8 +25,7 @@ export const questionsMock: Questions = [
     ],
   },
   {
-    title:
-      'Muito bem, então na hora de escrever uma programa o que você NÃO deve pensar em fazer é:',
+    stem: 'Muito bem, então na hora de escrever uma programa o que você NÃO deve pensar em fazer é:',
     picture: 'panda.jpg',
     type: 'selection',
     answer: 'desordem',
@@ -36,39 +37,36 @@ export const questionsMock: Questions = [
     ],
   },
   {
-    title:
-      'Para mostrar para você que tudo pode ser pensado como um programa, ordene a sequência correta de se vestir um traje espacial (Pressione e arraste o item)',
+    stem: 'Para mostrar para você que tudo pode ser pensado como um programa, ordene a sequência correta de se vestir um traje espacial (Pressione e arraste o item)',
     picture: 'panda.jpg',
     type: 'drag-and-drop-list',
     items: [
-      { id: 1, label: 'Retirar o traje do compartimento' },
-      { id: 2, label: 'Abrir zíper do traje' },
-      { id: 3, label: 'Colocar o traje' },
-      { id: 4, label: 'Fechar o zíper do traje' },
+      { position: 1, label: 'Retirar o traje do compartimento' },
+      { position: 2, label: 'Abrir zíper do traje' },
+      { position: 3, label: 'Colocar o traje' },
+      { position: 4, label: 'Fechar o zíper do traje' },
     ],
   },
   {
-    title:
-      'Agora ordene a sequência correta de se ligar um foguete (Pressione e arraste o item)',
+    stem: 'Agora ordene a sequência correta de se ligar um foguete (Pressione e arraste o item)',
     type: 'drag-and-drop-list',
     picture: 'panda.jpg',
     items: [
-      { id: 1, label: 'Ir para o painel de controle' },
-      { id: 2, label: 'Encontrar o botão de ligar' },
-      { id: 3, label: 'Pressionar o botão' },
-      { id: 4, label: 'Esperar o foguete decolar' },
+      { position: 1, label: 'Ir para o painel de controle' },
+      { position: 2, label: 'Encontrar o botão de ligar' },
+      { position: 3, label: 'Pressionar o botão' },
+      { position: 4, label: 'Esperar o foguete decolar' },
     ],
   },
   {
-    title:
-      'Por fim, coloque o foguete no modo automático (já que você não sabe pilotar, não é mesmo?)',
+    stem: 'Por fim, coloque o foguete no modo automático (já que você não sabe pilotar, não é mesmo?)',
     type: 'drag-and-drop-list',
     picture: 'panda.jpg',
     items: [
-      { id: 1, label: 'Acessar painel de controle' },
-      { id: 2, label: 'Pressionar o botão do piloto automático' },
-      { id: 3, label: 'Corrigir desvios na trajetória, se necessário' },
-      { id: 4, label: 'Curtir a viagem 🚀' },
+      { position: 1, label: 'Acessar painel de controle' },
+      { position: 2, label: 'Pressionar o botão do piloto automático' },
+      { position: 3, label: 'Corrigir desvios na trajetória, se necessário' },
+      { position: 4, label: 'Curtir a viagem 🚀' },
     ],
   },
 ]

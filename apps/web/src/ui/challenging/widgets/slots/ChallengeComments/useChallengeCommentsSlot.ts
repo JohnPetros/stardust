@@ -1,7 +1,9 @@
 'use client'
 
+import { useEffect } from 'react'
+
 import type { Comment } from '@stardust/core/forum/entities'
-import type { CommentsListingParams } from '@stardust/core/forum/types'
+import type { CommentsListParams } from '@stardust/core/forum/types'
 
 import { ROUTES } from '@/constants'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
@@ -9,7 +11,6 @@ import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useApi } from '@/ui/global/hooks/useApi'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { useEffect } from 'react'
 
 export function useChallengeCommentsSlot(challengeId: string) {
   const { getChallengeSlice, getCraftsVisibilitySlice } = useChallengeStore()
@@ -20,7 +21,7 @@ export function useChallengeCommentsSlot(challengeId: string) {
   const api = useApi()
   const toast = useToastContext()
 
-  async function handleCommentListFetch(params: CommentsListingParams) {
+  async function handleCommentListFetch(params: CommentsListParams) {
     return await api.fetchChallengeCommentsList(params, challengeId)
   }
 

@@ -1,4 +1,4 @@
-import { MutableRefObject } from 'react'
+import type { MutableRefObject } from 'react'
 
 export function useRefMock<RefData>(refData: RefData) {
   const refMock = {

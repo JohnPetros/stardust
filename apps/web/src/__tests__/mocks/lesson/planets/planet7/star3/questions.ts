@@ -15,8 +15,7 @@ type Questions = [
 export const questions: Questions = [
   {
     type: 'selection',
-    statement:
-      'Vamos treinar as funções nativas para não esquecermos o que acabamos de aprender. Primeiro a função *texto*. Qual será o resultado desse código?',
+    stem: 'Vamos treinar as funções nativas para não esquecermos o que acabamos de aprender. Primeiro a função *texto*. Qual será o resultado desse código?',
     code: `var numero = texto(22)
     
 escreva(22 + numero)`,
@@ -26,30 +25,28 @@ escreva(22 + numero)`,
   },
   {
     type: 'checkbox',
-    statement:
-      'Quais os possíveis números podem ser retornados pelo "aleatorioEntre(1, 4)"?',
+    stem: 'Quais os possíveis números podem ser retornados pelo "aleatorioEntre(1, 4)"?',
     options: ['1', '2', '3', '4'],
     correctOptions: ['1', '2', '3'],
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'checkbox',
-    statement:
-      'Quais funções nativas posso utilizar para converter um valor em um número?',
+    stem: 'Quais funções nativas posso utilizar para converter um valor em um número?',
     options: ['texto()', 'numero()', 'inteiro()', 'real()'],
     correctOptions: ['inteiro()', 'real()'],
     picture: 'panda-sorrindo.jpg',
   },
   {
     type: 'checkbox',
-    statement: 'Quais os dados abaixo podem ser convertidos para número?',
+    stem: 'Quais os dados abaixo podem ser convertidos para número?',
     options: ['"24"', 'verdadeiro', '"9999"', '[42]'],
     correctOptions: ['"24"', '"9999"'],
     picture: 'panda.jpg',
   },
   {
     type: 'drag-and-drop',
-    statement: 'Complete o código para que seja retornado um texto.',
+    stem: 'Complete o código para que seja retornado um texto.',
     lines: [
       {
         number: 1,

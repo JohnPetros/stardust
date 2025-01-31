@@ -41,6 +41,10 @@ export class ProfileServiceMock implements IProfileService {
     return new ApiResponse({ body: this.fakeAchievementsDto })
   }
 
+  async resetWeekStatus(): Promise<ApiResponse> {
+    throw new Error('Method not implemented.')
+  }
+
   saveUser(user: User): Promise<ApiResponse> {
     throw new Error('Method not implemented.')
   }

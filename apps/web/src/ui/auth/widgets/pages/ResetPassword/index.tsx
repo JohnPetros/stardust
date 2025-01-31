@@ -1,19 +1,19 @@
 'use client'
 
 import { Input } from '@/ui/global/widgets/components/Input'
-import { AppMessage } from '../../components/AppMessage'
-import { useResetPassword } from './useResetPassword'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { ROUTES } from '@/constants'
 import { Link } from '../../components/Link'
 import { AnimatedForm } from './AnimatedForm'
 import { ResetPasswordDialog } from './ResetPasswordDialog'
+import { AppMessage } from '../../components/AppMessage'
+import { useResetPassword } from './useResetPassword'
 
 export function ResetPasswordPage() {
   const {
     isLoading,
     email,
-    error,
+    errorMessage,
     shouldResetPassword,
     handleEmailChange,
     handleSubmit,
@@ -44,7 +44,7 @@ export function ResetPasswordPage() {
             icon='mail'
             value={email}
             onChange={({ currentTarget }) => handleEmailChange(currentTarget.value)}
-            error={error}
+            errorMessage={errorMessage}
             placeholder='seu@email.com'
             className='w-[100rem]'
           />

@@ -15,7 +15,6 @@ export type ChallengeDto = {
     id: string
     dto?: AuthorDto
   }
-  docId?: string | null
   starId?: string | null
   categories: ChallengeCategoryDto[]
   isPublic?: boolean

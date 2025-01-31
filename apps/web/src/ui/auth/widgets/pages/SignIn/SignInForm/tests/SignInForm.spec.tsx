@@ -1,9 +1,8 @@
 import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { VALIDATION_ERROR_MESSAGES } from '@/@core/lib/validation/constants'
-
 import { SignInForm } from '..'
+import { ERROR_MESSAGES } from '@stardust/validation/global/constants'
 
 const onSubmitMock = jest.fn()
 const fakeId = 'fake form id'
@@ -37,7 +36,7 @@ describe('SignInForm Component', () => {
     userEvent.type(emailInput, ' ')
     userEvent.type(passwordInput, ' ')
 
-    const errorMessages = screen.queryAllByText(VALIDATION_ERROR_MESSAGES.nonempty)
+    const errorMessages = screen.queryAllByText(ERROR_MESSAGES.nonempty)
     expect(errorMessages).toHaveLength(0)
 
     act(() => {
@@ -45,7 +44,7 @@ describe('SignInForm Component', () => {
     })
 
     await waitFor(() => {
-      const errorMessages = screen.getAllByText(VALIDATION_ERROR_MESSAGES.nonempty)
+      const errorMessages = screen.getAllByText(ERROR_MESSAGES.nonempty)
       expect(errorMessages).toHaveLength(2)
     })
   })
@@ -59,7 +58,7 @@ describe('SignInForm Component', () => {
 
     userEvent.type(emailInput, invalidEmail)
 
-    const errorMessage = screen.queryByText(VALIDATION_ERROR_MESSAGES.email.regex)
+    const errorMessage = screen.queryByText(ERROR_MESSAGES.email.regex)
     expect(errorMessage).not.toBeInTheDocument()
 
     act(() => {
@@ -68,7 +67,7 @@ describe('SignInForm Component', () => {
 
     await waitFor(() => {
       expect(emailInput).toHaveValue(invalidEmail)
-      const errorMessage = screen.getByText(VALIDATION_ERROR_MESSAGES.email.regex)
+      const errorMessage = screen.getByText(ERROR_MESSAGES.email.regex)
       expect(errorMessage).toBeVisible()
     })
   })
@@ -82,7 +81,7 @@ describe('SignInForm Component', () => {
     const invalidPassword = 'aaaa42'
     await userEvent.type(passwordInput, invalidPassword)
 
-    const errorMessage = screen.queryByText(VALIDATION_ERROR_MESSAGES.password.regex)
+    const errorMessage = screen.queryByText(ERROR_MESSAGES.password.regex)
     expect(errorMessage).not.toBeInTheDocument()
 
     act(() => {
@@ -91,7 +90,7 @@ describe('SignInForm Component', () => {
 
     await waitFor(() => {
       expect(passwordInput).toHaveValue(invalidPassword)
-      const errorMessage = screen.getByText(VALIDATION_ERROR_MESSAGES.password.regex)
+      const errorMessage = screen.getByText(ERROR_MESSAGES.password.regex)
       expect(errorMessage).toBeVisible()
     })
   })
@@ -104,7 +103,7 @@ describe('SignInForm Component', () => {
     await userEvent.type(emailInput, fakeEmail)
     await userEvent.type(passwordInput, fakePassword)
 
-    const errorMessage = screen.queryByText(VALIDATION_ERROR_MESSAGES.password.regex)
+    const errorMessage = screen.queryByText(ERROR_MESSAGES.password.regex)
     expect(errorMessage).not.toBeInTheDocument()
 
     act(() => {
@@ -112,13 +111,9 @@ describe('SignInForm Component', () => {
     })
 
     await waitFor(() => {
-      expect(screen.queryAllByText(VALIDATION_ERROR_MESSAGES.nonempty)).toHaveLength(0)
-      expect(
-        screen.queryByText(VALIDATION_ERROR_MESSAGES.email.regex)
-      ).not.toBeInTheDocument()
-      expect(
-        screen.queryByText(VALIDATION_ERROR_MESSAGES.password.regex)
-      ).not.toBeInTheDocument()
+      expect(screen.queryAllByText(ERROR_MESSAGES.nonempty)).toHaveLength(0)
+      expect(screen.queryByText(ERROR_MESSAGES.email.regex)).not.toBeInTheDocument()
+      expect(screen.queryByText(ERROR_MESSAGES.password.regex)).not.toBeInTheDocument()
     })
   })
 

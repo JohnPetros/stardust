@@ -26,7 +26,6 @@ export class ChallengeFactory {
       },
       code: dto.code,
       difficulty: ChallengeDifficulty.create(dto.difficultyLevel),
-      docId: dto.docId ? Id.create(dto.docId) : null,
       starId: dto.starId ? Id.create(dto.starId) : null,
       testCases: dto.testCases.map(TestCase.create),
       completionsCount: Integer.create(

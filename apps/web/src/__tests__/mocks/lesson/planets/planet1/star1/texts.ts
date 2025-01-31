@@ -1,6 +1,6 @@
-import { Text } from '@/@types/Text'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
-export const textsMock: Text[] = [
+export const textsMock: TextBlockDto[] = [
   {
     content:
       'Olá! Parabéns, você acaba de entrar na equipe de exploração espacial para desbravar os confins do espaço.',

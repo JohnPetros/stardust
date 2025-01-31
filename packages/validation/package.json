@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "exports": {
     "./global/schemas": "./src/modules/global/schemas/index.ts",
+    "./global/constants": "./src/modules/global/constants/index.ts",
     "./challenging/schemas": "./src/modules/challenging/schemas/index.ts",
     "./challenging/types": "./src/modules/challenging/types/index.ts",
     "./factories": "./src/factories/index.ts"

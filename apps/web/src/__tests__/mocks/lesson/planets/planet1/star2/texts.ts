@@ -1,6 +1,5 @@
-import { Text } from '@/@types/Text'
-
-export const texts: Text[] = [
+import type { TextBlockDto } from '@stardust/core/global/dtos'
+export const texts: TextBlockDto[] = [
   { type: 'image', content: 'Decolando...', picture: 'foguete-decolando.jpg' },
   {
     type: 'default',

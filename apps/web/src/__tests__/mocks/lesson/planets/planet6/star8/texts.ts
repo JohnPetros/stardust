@@ -1,6 +1,6 @@
-import { Text } from '@/@types/Text'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
-export const texts: Text[] = [
+export const texts: TextBlockDto[] = [
   {
     type: 'default',
     content:
@@ -137,8 +137,7 @@ export const texts: Text[] = [
   },
   {
     type: 'default',
-    content:
-      'Agora podemos verificar se o valor atual da lista é igual ao que buscamos.',
+    content: 'Agora podemos verificar se o valor atual da lista é igual ao que buscamos.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -273,8 +272,7 @@ export const texts: Text[] = [
   },
   {
     type: 'default',
-    content:
-      'Agora só resta colocar o lista que conterá as quantidades de cada item.',
+    content: 'Agora só resta colocar o lista que conterá as quantidades de cada item.',
     picture: 'panda-sorrindo-sentado.jpg',
   },
   {
@@ -326,8 +324,7 @@ export const texts: Text[] = [
   },
   {
     type: 'default',
-    content:
-      'Nós tínhamos pegado 4 quatro ovos de Icelope durante a exploração, lembra?',
+    content: 'Nós tínhamos pegado 4 quatro ovos de Icelope durante a exploração, lembra?',
     picture: 'panda-rindo-deitado.jpg',
   },
   {
@@ -444,8 +441,7 @@ export const texts: Text[] = [
   },
   {
     type: 'alert',
-    content:
-      'Mas, voltando para o urgente: temos que devolver os ovos para a mãe deles.',
+    content: 'Mas, voltando para o urgente: temos que devolver os ovos para a mãe deles.',
     picture: 'panda-triste.jpg',
   },
   {
@@ -484,20 +480,17 @@ export const texts: Text[] = [
   },
   {
     type: 'quote',
-    content:
-      '*[-1]* -> Pegar o último item de mochila, que no caso é uma lista.',
+    content: '*[-1]* -> Pegar o último item de mochila, que no caso é uma lista.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'quote',
-    content:
-      '*[1]* -> Pegar o segundo valor desse lista interno, que no caso é quatro.',
+    content: '*[1]* -> Pegar o segundo valor desse lista interno, que no caso é quatro.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'alert',
-    content:
-      'Agora que temos o número 4, multiplicamos com o item "ovo de Icelope"',
+    content: 'Agora que temos o número 4, multiplicamos com o item "ovo de Icelope"',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {

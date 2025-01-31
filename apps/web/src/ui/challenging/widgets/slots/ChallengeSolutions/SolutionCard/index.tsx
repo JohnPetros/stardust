@@ -11,7 +11,7 @@ type ChallengeProps = {
   upvotesCount: number
   viewsCount: number
   commentsCount: number
-  createdAt: Date
+  postedAt: Date
   author: {
     slug: string
     name: string
@@ -29,7 +29,7 @@ export function SolutionCard({
   upvotesCount,
   commentsCount,
   viewsCount,
-  createdAt,
+  postedAt,
   author,
 }: ChallengeProps) {
   return (
@@ -53,7 +53,7 @@ export function SolutionCard({
               upvotesCount={upvotesCount}
               viewsCount={viewsCount}
               commentsCount={commentsCount}
-              createdAt={createdAt}
+              postedAt={postedAt}
             />
           </div>
         </div>

@@ -5,7 +5,7 @@ import type { ZodSchema } from 'zod'
 
 import type { HttpSchema, IHttp } from '@stardust/core/interfaces'
 import { ApiResponse } from '@stardust/core/responses'
-import { AppError } from '@stardust/core/global/errors'
+import { AppError, MethodNotImplementedError } from '@stardust/core/global/errors'
 import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/constants'
 
 import type { NextParams } from '@/server/next/types'
@@ -28,8 +28,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
   request,
   schema,
   params,
-}: NextHttpParams = {}): Promise<IHttp<NextSchema, Response>> => {
-  let nextRedirectResponse: NextResponse<unknown>
+}: NextHttpParams = {}): Promise<IHttp<NextSchema, NextResponse<unknown>>> => {
   let httpSchema: NextSchema
   const cookies: Cookie[] = []
 
@@ -117,7 +116,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     },
 
     getCookie(key: string) {
-      throw new Error('NextHttp getCookie method not implemented')
+      throw new MethodNotImplementedError('NextHttp.getCookie')
     },
 
     pass() {

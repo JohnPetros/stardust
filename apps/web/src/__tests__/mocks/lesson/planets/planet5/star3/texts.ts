@@ -1,6 +1,6 @@
-import { Text } from '@/@types/Text'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
-export const texts: Text[] = [
+export const texts: TextBlockDto[] = [
   {
     type: 'default',
     content:
@@ -172,8 +172,7 @@ enquanto (distanciaAteEspaco > 0) {
   },
   {
     type: 'default',
-    content:
-      'Pode ser uma boa, mas tem um jeito mais elegante de fazer isso em um laço.',
+    content: 'Pode ser uma boa, mas tem um jeito mais elegante de fazer isso em um laço.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
@@ -246,8 +245,7 @@ velocidade: 1550
   },
   {
     type: 'default',
-    content:
-      'Caso contrário, *comprimentoDaOrbita* ficaria com *-1000* no final 😯.',
+    content: 'Caso contrário, *comprimentoDaOrbita* ficaria com *-1000* no final 😯.',
     picture: 'panda-espantado.jpg',
   },
   {
@@ -342,8 +340,7 @@ vezes: 2000
   },
   {
     type: 'default',
-    content:
-      'Com o tempo você pega o jeito, agora é hora de se concentrar na fuga.',
+    content: 'Com o tempo você pega o jeito, agora é hora de se concentrar na fuga.',
     picture: 'panda.jpg',
   },
 ]

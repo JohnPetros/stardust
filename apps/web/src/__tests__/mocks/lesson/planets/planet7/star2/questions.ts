@@ -15,8 +15,7 @@ type Questions = [
 export const question: Questions = [
   {
     type: 'checkbox',
-    statement:
-      'Por algum motivo, aparentemente há um robô passando perto de nós, mas não tenho certeza. Quais os possíveis valores que o parâmetro *robo* poderia ter para que fosse escrito "Isso é um robô"?',
+    stem: 'Por algum motivo, aparentemente há um robô passando perto de nós, mas não tenho certeza. Quais os possíveis valores que o parâmetro *robo* poderia ter para que fosse escrito "Isso é um robô"?',
     code: `funcao verificarRobo(robo) {
     retorna robo.inclui("Robô")
 }
@@ -30,8 +29,7 @@ se (verificarRobo(robo)) {
   },
   {
     type: 'drag-and-drop',
-    statement:
-      'Vamos verificar antes se esse planeta (que se chama "Haskell") é habitável. Complete a função abaixo para que ela retorne "Habitável"',
+    stem: 'Vamos verificar antes se esse planeta (que se chama "Haskell") é habitável. Complete a função abaixo para que ela retorne "Habitável"',
     lines: [
       {
         number: 1,
@@ -92,8 +90,7 @@ se (verificarRobo(robo)) {
   },
   {
     type: 'drag-and-drop',
-    statement:
-      'Complete a função anônima adequadamente para descobrir a população do planeta "Haskell"',
+    stem: 'Complete a função anônima adequadamente para descobrir a população do planeta "Haskell"',
     lines: [
       {
         number: 1,
@@ -134,8 +131,7 @@ se (verificarRobo(robo)) {
   },
   {
     type: 'checkbox',
-    statement:
-      'Vamos utilizar funções anônimas para descobrir o nome da estrela desse planeta. Quais dessas funções SÃO anônimas?',
+    stem: 'Vamos utilizar funções anônimas para descobrir o nome da estrela desse planeta. Quais dessas funções SÃO anônimas?',
     code: `var obtenhaNomeDeEstrela = funcao() {
         retorna "Arrakis"
 }
@@ -156,8 +152,7 @@ var adicioneNomeDeEstrela = funcao(estrelas) {
   },
   {
     type: 'open',
-    statement:
-      'Estamos nos aproximando cada vez mais do novo planeta. A função abaixo retorna a distância entre nós e ele. Qual é ela na medida de distância chamada Jp?',
+    stem: 'Estamos nos aproximando cada vez mais do novo planeta. A função abaixo retorna a distância entre nós e ele. Qual é ela na medida de distância chamada Jp?',
     lines: [
       {
         number: 1,

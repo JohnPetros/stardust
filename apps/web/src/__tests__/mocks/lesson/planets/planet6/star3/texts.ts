@@ -1,6 +1,6 @@
-import type { Text } from '@/@types/Text'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
-export const texts: Text[] = [
+export const texts: TextBlockDto[] = [
   {
     type: 'default',
     content: 'Finalmente, já pousamos na superficie do planeta Arrayon.',
@@ -19,8 +19,7 @@ export const texts: Text[] = [
   },
   {
     type: 'default',
-    content:
-      'Para fazer isso, devemos usar outro método, no caso, o *inclui()*.',
+    content: 'Para fazer isso, devemos usar outro método, no caso, o *inclui()*.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -90,8 +89,7 @@ escreva(equipamentos.inclui("blaster"))
   },
   {
     type: 'default',
-    content:
-      'De fato, esquecemos coisas que ainda não tiramos do nossa lista compras.',
+    content: 'De fato, esquecemos coisas que ainda não tiramos do nossa lista compras.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -121,8 +119,7 @@ escreva(equipamentos.inclui("blaster"))
   },
   {
     type: 'default',
-    content:
-      'Isso! Você já deve ter percebido que temos métodos para quase tudo.',
+    content: 'Isso! Você já deve ter percebido que temos métodos para quase tudo.',
     picture: 'panda-sorrindo.jpg',
   },
   {
@@ -186,8 +183,7 @@ escreva(novosNumeros)
   },
   {
     type: 'default',
-    content:
-      'Não passeremos fome. Eu coloquei os alimentos em uma lista separadamente.',
+    content: 'Não passeremos fome. Eu coloquei os alimentos em uma lista separadamente.',
     picture: 'panda-sorrindo.jpg',
   },
   {
@@ -316,8 +312,7 @@ escreva(numerosOrdenados)
   },
   {
     type: 'default',
-    content:
-      'Agora que temos tudo organizado, podemos partir para a exploração.',
+    content: 'Agora que temos tudo organizado, podemos partir para a exploração.',
     picture: 'panda-com-mochila.jpg',
   },
 ]

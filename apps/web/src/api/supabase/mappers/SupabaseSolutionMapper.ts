@@ -24,7 +24,7 @@ export const SupabaseSolutionMapper = () => {
             },
           },
         },
-        createdAt: new Date(supabaseSolution.created_at ?? ''),
+        postedAt: new Date(supabaseSolution.created_at ?? ''),
       }
 
       return solutionDto

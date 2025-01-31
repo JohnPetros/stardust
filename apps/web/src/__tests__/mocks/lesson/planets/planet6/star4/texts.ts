@@ -1,6 +1,6 @@
-import { Text } from '@/@types/Text'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
-export const texts: Text[] = [
+export const texts: TextBlockDto[] = [
   {
     type: 'default',
     content:
@@ -196,8 +196,7 @@ escreva(alimentos)
   },
   {
     type: 'user',
-    content:
-      'Mas por que 3? O item que tem índice 3 não está incluido na fatia.',
+    content: 'Mas por que 3? O item que tem índice 3 não está incluido na fatia.',
   },
   {
     type: 'default',
@@ -292,8 +291,7 @@ escreva(exoticos)
   },
   {
     type: 'user',
-    content:
-      'Mas espera aí! no último, o *fatiar()* só tem um valor nos parênteses!',
+    content: 'Mas espera aí! no último, o *fatiar()* só tem um valor nos parênteses!',
   },
   {
     type: 'default',

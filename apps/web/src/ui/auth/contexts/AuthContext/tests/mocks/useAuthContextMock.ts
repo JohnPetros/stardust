@@ -9,8 +9,7 @@ export function useAuthContextMock(
   const handleSignUpMock = jest.fn()
   const handleSignOutMock = jest.fn()
   const updateUserMock = jest.fn()
-  const mutateUserCacheMock = jest.fn()
-
+  const updateUserCacheMock = jest.fn()
   const fakeUser = UsersFaker.fake()
 
   jest.mocked(useAuthContext).mockReturnValue({
@@ -18,10 +17,9 @@ export function useAuthContextMock(
     isLoading: false,
     serverSession: null,
     handleSignIn: handleSignInMock,
-    handleSignUp: handleSignUpMock,
     handleSignOut: handleSignOutMock,
     updateUser: updateUserMock,
-    mutateUserCache: mutateUserCacheMock,
+    updateUserCache: updateUserCacheMock,
     ...returnMock,
   })
 
@@ -31,6 +29,6 @@ export function useAuthContextMock(
     handleSignUpMock,
     handleSignOutMock,
     updateUserMock,
-    mutateUserCacheMock,
+    updateUserCacheMock,
   }
 }

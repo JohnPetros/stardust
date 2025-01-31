@@ -54,7 +54,7 @@ export async function ChallengeSolutionSlot({
               <SolutionInfo
                 commentsCount={commentsCount}
                 viewsCount={viewsCount}
-                createdAt={solution.createdAt}
+                postedAt={solution.postedAt}
               />
             </div>
           </div>

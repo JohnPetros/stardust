@@ -16,8 +16,7 @@ type Questions = [
 export const questions: Questions = [
   {
     type: 'open',
-    statement:
-      'Chegaram mais caixas de tomate para reforço. Qual método utilizar para pegar essas caixas',
+    stem: 'Chegaram mais caixas de tomate para reforço. Qual método utilizar para pegar essas caixas',
     lines: [
       {
         number: 1,
@@ -54,8 +53,7 @@ export const questions: Questions = [
     picture: 'panda-pulando-de-alegria.jpg',
   },
   {
-    statement:
-      'A princesa passou a lista dos salmonenses mais importantes: Complete o programa abaixo para que ele escreve os nomes dos salmonenses e suas patentes.',
+    stem: 'A princesa passou a lista dos salmonenses mais importantes: Complete o programa abaixo para que ele escreve os nomes dos salmonenses e suas patentes.',
     type: 'drag-and-drop',
     lines: [
       {
@@ -101,8 +99,7 @@ export const questions: Questions = [
   },
   {
     type: 'checkbox',
-    statement:
-      'Ei, um desconhecido nos enviou os planos de ataque dos salmonenses, qual é o resultado do código?',
+    stem: 'Ei, um desconhecido nos enviou os planos de ataque dos salmonenses, qual é o resultado do código?',
     code: `
 planos = {
   "base secreta": "Lua Oculta", 
@@ -120,8 +117,7 @@ escreva(planos.valores())`,
   },
   {
     type: 'selection',
-    statement:
-      'temos parte de um dicionário contendo as frotas deles. Qual é o tipo de dado que está sendo acessado pelo dicionário?',
+    stem: 'temos parte de um dicionário contendo as frotas deles. Qual é o tipo de dado que está sendo acessado pelo dicionário?',
     code: `var frotas = {
   "FrotaExploradora": {
     "naves": {
@@ -144,8 +140,7 @@ var dado = frotas["FrotaExploradora"]["naves"]["Galáxia"]["velocidade"]`,
     picture: 'panda-pensando.jpg',
   },
   {
-    statement:
-      'Precisamos saber quanto nosso disparador de tomates tem de munição. Consegue capturar essa imformação pelo dicionário abaixo?',
+    stem: 'Precisamos saber quanto nosso disparador de tomates tem de munição. Consegue capturar essa imformação pelo dicionário abaixo?',
     type: 'drag-and-drop',
     lines: [
       {
@@ -200,24 +195,3 @@ var dado = frotas["FrotaExploradora"]["naves"]["Galáxia"]["velocidade"]`,
     picture: 'panda-olhando-de-lado.jpg',
   },
 ]
-
-// const data = {
-//   data: {
-//     accounts: [
-//       {
-//         id: '66351aa667f1bfcf0cbfa916',
-//         accountInterests: { primary: [], secondary: [] },
-//         accountMedia: {
-//           profilePicture:
-//             'https://storage.googleapis.com/waves_general_bucket/app_assets/default_pfp.png',
-//         },
-//         name: { firstName: null, lastName: null },
-//         email: { value: 'tahtianacrawford+353421@gmail.com' },
-//         creatorId: 'a107feb1-92f8-4e05-9aa4-18a3040d3aa5',
-//         accountExternals: { instagramExternal: null, tiktokExternal: null },
-//       },
-//     ],
-//   },
-// }
-
-// 639f1848-998c-414c-aa64-9f0645efe6f3

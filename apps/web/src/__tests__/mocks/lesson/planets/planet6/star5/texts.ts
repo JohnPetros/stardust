@@ -1,6 +1,6 @@
-import { Text } from '@/@types/Text'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
-export const texts: Text[] = [
+export const texts: TextBlockDto[] = [
   {
     type: 'default',
     content: 'Até agora tudo ok, mas ainda temos um problema.',
@@ -62,8 +62,7 @@ escreva(itens.tamanho())
   },
   {
     type: 'default',
-    content:
-      'Percebeu? A lista *itens* foi modificado, restando apenas 5 itens.',
+    content: 'Percebeu? A lista *itens* foi modificado, restando apenas 5 itens.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {

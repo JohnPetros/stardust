@@ -33,7 +33,6 @@ export type ChallengeProps = {
   completionsCount: Integer
   postedAt: Date
   starId: Id | null
-  docId: Id | null
   description: Text
   testCases: TestCase[]
   results: List<boolean>
@@ -259,10 +258,6 @@ export class Challenge extends Entity<ChallengeProps> {
     return this.props.testCases
   }
 
-  get docId() {
-    return this.props.docId
-  }
-
   get starId() {
     return this.props.starId
   }
@@ -279,7 +274,6 @@ export class Challenge extends Entity<ChallengeProps> {
       code: this.code,
       slug: this.slug.value,
       difficultyLevel: this.difficulty.level,
-      docId: this.props.docId?.value,
       author: {
         id: this.authorId,
         dto: this.props.author.entity?.dto,

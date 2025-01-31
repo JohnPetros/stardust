@@ -16,8 +16,7 @@ type Questions = [
 export const questions: Questions = [
   {
     type: 'checkbox',
-    statement:
-      'Vamos arrumar nossos itens para a viagem de volta. Qual dos itens vão ser escritos no código a seguir?',
+    stem: 'Vamos arrumar nossos itens para a viagem de volta. Qual dos itens vão ser escritos no código a seguir?',
     code: `var itens = {
   "item1": "navegação", 
   "item2": "combustível", 
@@ -38,16 +37,14 @@ escreva(Item1, item2, item3, item 4)`,
 }
 var equipamento1, equipamento3 = equipamentosDeEmergencia
 escreva(equipamento1, equipamento3)`,
-    statement:
-      'Conferindo equipamentos de emergencia. Qual será o resultado do código abaixo?',
+    stem: 'Conferindo equipamentos de emergencia. Qual será o resultado do código abaixo?',
     type: 'selection',
     answer: 'sim não',
     options: ['sim não', 'sim não sim', 'não sim', 'sim sim'],
     picture: 'panda-meditando.jpg',
   },
   {
-    statement:
-      'Calculando a melhor rota para casa. Complete o código para que a distância percorrida seja igual a 6000.',
+    stem: 'Calculando a melhor rota para casa. Complete o código para que a distância percorrida seja igual a 6000.',
     type: 'drag-and-drop',
     lines: [
       {
@@ -98,8 +95,7 @@ escreva(equipamento1, equipamento3)`,
     picture: 'panda-olhando-computador.jpg',
   },
   {
-    statement:
-      'A princesa nos ofereceu suprimentos médicos. Mas somente precisamos somente a lista que contém `antibióticos`. Conseque pegar essa lista pelo código abaixo?',
+    stem: 'A princesa nos ofereceu suprimentos médicos. Mas somente precisamos somente a lista que contém `antibióticos`. Conseque pegar essa lista pelo código abaixo?',
     type: 'drag-and-drop',
     lines: [
       {
@@ -153,8 +149,7 @@ escreva(equipamento1, equipamento3)`,
   },
   {
     type: 'open',
-    statement:
-      'Por fim, que tal enviar uma carta de despedida à princesa? Com saudação, agradecimento e assinatura.',
+    stem: 'Por fim, que tal enviar uma carta de despedida à princesa? Com saudação, agradecimento e assinatura.',
     lines: [
       {
         number: 1,

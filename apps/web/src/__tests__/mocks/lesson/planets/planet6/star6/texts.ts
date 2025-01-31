@@ -1,6 +1,6 @@
-import { Text } from '@/@types/Text'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
-export const texts: Text[] = [
+export const texts: TextBlockDto[] = [
   {
     type: 'image',
     content: 'Ei, acabamos de receber mais uma mensagem no nosso radar.',
@@ -54,8 +54,7 @@ escreva(mensagemCerta)
   },
   {
     type: 'default',
-    content:
-      'Mas queremos que as palavras estejam separadas por um espaço, correto?',
+    content: 'Mas queremos que as palavras estejam separadas por um espaço, correto?',
     picture: 'panda-pensando.jpg',
   },
   {

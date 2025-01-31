@@ -1,7 +1,7 @@
 export type SelectionQuestionDto = {
   id?: string
   type: 'selection'
-  statement: string
+  stem: string
   picture: string
   options: string[]
   answer: string

@@ -1,10 +1,9 @@
-import { Text } from '@/@types/Text'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
-export const texts: Text[] = [
+export const texts: TextBlockDto[] = [
   {
     type: 'default',
-    content:
-      'Com as amostras coletadas e o analisador pronto, resta analisá-las.',
+    content: 'Com as amostras coletadas e o analisador pronto, resta analisá-las.',
     picture: 'panda-amando-bambu.jpg',
   },
   {
@@ -153,8 +152,7 @@ escreva(totalAmostras)
   },
   {
     type: 'default',
-    content:
-      'É claro, isso também funciona para outros tipos de laço, como o *para*.',
+    content: 'É claro, isso também funciona para outros tipos de laço, como o *para*.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {

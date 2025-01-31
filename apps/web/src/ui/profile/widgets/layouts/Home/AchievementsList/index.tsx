@@ -6,11 +6,10 @@ import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { PopoverMenu } from '@/ui/global/widgets/components/PopoverMenu'
 import { Search } from '@/ui/global/widgets/components/Search'
 import { Loading } from '@/ui/global/widgets/components/Loading'
-import { AchievementCard } from '../../../components/AchievementCard'
-
-import { useAchievementsList } from './useAchievementsList'
 import { Icon } from '@/ui/global/widgets/components/Icon'
+import { AchievementCard } from '../../../components/AchievementCard'
 import { AchievementProgress } from '../../../components/AchievementProgress'
+import { useAchievementsList } from './useAchievementsList'
 
 export function AchievementsList() {
   const { user } = useAuthContext()

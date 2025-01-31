@@ -38,7 +38,6 @@ export function NewUnlockedAchievementsAlertDialog({
                   icon={achievement.icon.value}
                   description={achievement.description}
                   name={achievement.name.value}
-                  requiredCount={achievement.requiredCount.value}
                   reward={achievement.reward.value}
                   isUnlocked={true}
                   isRescuable={false}
