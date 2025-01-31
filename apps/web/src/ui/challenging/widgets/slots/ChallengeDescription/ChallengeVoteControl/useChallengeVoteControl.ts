@@ -6,6 +6,7 @@ import { Integer } from '@stardust/core/global/structs'
 
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useVoteChallengeAction } from './useVoteChallengeAction'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
 type State = {
   userChallengeVote: ChallengeVote
@@ -13,7 +14,8 @@ type State = {
   downvotesCount: number
 }
 
-export function useVoteControl() {
+export function useChallengeVoteControl() {
+  const { user } = useAuthContext()
   const { getChallengeSlice } = useChallengeStore()
   const { challenge, setChallenge } = getChallengeSlice()
   const [initialState, setInitialState] = useState<State>({
@@ -57,6 +59,7 @@ export function useVoteControl() {
   return {
     challenge,
     upvotesCount: challenge?.upvotesCount.value ?? 0,
+    isUserChallengeAuthor: challenge?.author.id === user?.id,
     handleVoteButton,
   }
 }

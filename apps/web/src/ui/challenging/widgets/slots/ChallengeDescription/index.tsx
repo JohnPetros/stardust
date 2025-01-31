@@ -4,11 +4,12 @@ import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { ChallengeInfo } from '@/ui/challenging/widgets/components/ChallengeInfo'
 import { DifficultyBadge } from '@/ui/global/widgets/components/DifficultyBadge'
 import { Loading } from '@/ui/global/widgets/components/Loading'
+import { Mdx } from '@/ui/global/widgets/components/Mdx'
 import { ContentLink } from '@/ui/challenging/widgets/components/ContentLink'
 import { BlockedCommentsAlertDialog } from '@/ui/challenging/widgets/components/BlockedCommentsAlertDialog'
 import { BlockedSolutionsAlertDialog } from '@/ui/challenging/widgets/components/BlockedSolutionsAlertDialog'
-import { Mdx } from '@/ui/global/widgets/components/Mdx'
-import { VoteControl } from './VoteControl'
+import { VoteControl } from './ChallengeVoteControl'
+import { ChallengeControl } from './ChallengeControl'
 import { useChallengeDescriptionSlot } from './useChallengeDescriptionSlot'
 
 export function ChallengeDescriptionSlot() {
@@ -65,6 +66,10 @@ export function ChallengeDescriptionSlot() {
             <ContentLink title='Soluções' contentType='solutions' isActive={false} />
           )}
         </div>
+        <ChallengeControl
+          challengeSlug={challenge.slug.value}
+          isChallengePublic={challenge.isPublic.value}
+        />
       </div>
       <div className='mt-6 pb-6'>
         <Mdx>{mdx}</Mdx>

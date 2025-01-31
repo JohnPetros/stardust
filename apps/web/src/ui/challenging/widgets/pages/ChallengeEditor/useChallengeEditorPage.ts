@@ -14,24 +14,30 @@ import { ROUTES } from '@/constants'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { usePostChallengeAction } from './usePostChallengeAction'
 import { useEditChallengeAction } from './useEditChallengeAction'
+import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
 
 export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
   const challenge = challengeDto ? Challenge.create(challengeDto) : null
   const router = useRouter()
+  const { provider } = useCodeRunner()
   const form = useForm<ChallengeSchema>({
     resolver: zodResolver(challengeSchema),
     defaultValues: {
       title: challenge?.title.value,
-      description: challenge?.description ?? ' ',
+      description: challenge?.description.value ?? ' ',
       code: challenge?.code ?? ' ',
       difficultyLevel: challenge?.difficulty.level ?? 'easy',
       function: {
-        name: challenge?.function?.name.value,
-        params:
-          challenge?.function?.params.map((param) => ({
-            name: param.name.value,
-            dataTypeName: param.dataType.name,
-          })) ?? [],
+        name: challenge?.code ? provider.getFunctionName(challenge.code) : ' ',
+        params: challenge
+          ? provider
+              .getFunctionParamsNames(challenge.code)
+              .map((paramName: string, paramIndex: number) => ({
+                name: paramName,
+                dataTypeName: DataType.create(challenge.testCases[0]?.inputs[paramIndex])
+                  .name,
+              }))
+          : [],
       },
       testCases: challenge?.testCases.map((testCase) => {
         const expectedOutputDataType = DataType.create(testCase.expectedOutput)
@@ -99,6 +105,21 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
       isPostFailure || isEditFailure || Object.keys(form.formState.errors).length > 0,
     )
   }, [allFields, isPostFailure, isEditFailure, form.formState.errors])
+
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (!name?.includes('function') || !value.function?.params?.length) return
+      const functionName = value.function.name
+      const functionParamsNames = value.function.params.map((param) => param?.name)
+      form.setValue(
+        'code',
+        `funcao ${functionName}(${functionParamsNames.join(', ')}) {
+
+}`,
+      )
+    })
+    return () => subscription.unsubscribe()
+  }, [form.watch, form.setValue])
 
   const canSubmitForm =
     (!challenge && areAllFieldsFilled) ||

@@ -1,7 +1,7 @@
 import { signUp } from './authActionts'
 import {
   fetchChallengesList,
-  handleChallengePage,
+  accessChallengePage,
   voteChallenge,
   editSolution,
   postSolution,
@@ -26,7 +26,7 @@ export const authActions = { signUp }
 export const cookieActions = { setCookie, getCookie, deleteCookie, hasCookie }
 export const challengingActions = {
   fetchChallengesList,
-  handleChallengePage,
+  accessChallengePage,
   voteChallenge,
   editSolution,
   postSolution,

@@ -7,8 +7,8 @@ import { useSwitch } from './useSwitch'
 
 type SwitchProps = {
   label: string
-  name: string
-  value: string
+  name?: string
+  value?: string
   defaultCheck?: boolean
   isDisabled?: boolean
   onCheck: (isChecked: boolean) => void
