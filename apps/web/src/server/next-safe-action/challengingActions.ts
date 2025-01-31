@@ -25,7 +25,7 @@ import { NextActionServer } from '../next/NextActionServer'
 import {
   EditSolutionAction,
   FetchChallengesListAction,
-  HandleChallengePageAction,
+  AccessChallengePageAction,
   PostChallengeAction,
   PostSolutionAction,
   EditChallengeAction,
@@ -56,7 +56,7 @@ export const fetchChallengesList = authActionClient
     return action.handle(actionServer)
   })
 
-export const handleChallengePage = authActionClient
+export const accessChallengePage = authActionClient
   .schema(z.object({ challengeSlug: z.string() }))
   .action(async ({ clientInput, ctx }) => {
     const actionServer = NextActionServer({
@@ -65,7 +65,7 @@ export const handleChallengePage = authActionClient
     })
     const supabase = SupabaseServerActionClient()
     const challengingService = SupabaseChallengingService(supabase)
-    const action = HandleChallengePageAction(challengingService)
+    const action = AccessChallengePageAction(challengingService)
     return action.handle(actionServer)
   })
 

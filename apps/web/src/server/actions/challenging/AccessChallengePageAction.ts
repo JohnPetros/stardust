@@ -6,6 +6,7 @@ import type {
 import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 import type { ChallengeVote } from '@stardust/core/challenging/types'
 import { Challenge } from '@stardust/core/challenging/entities'
+import { ROUTES } from '@/constants'
 
 type Request = {
   challengeSlug: string
@@ -16,10 +17,10 @@ type Response = {
   userChallengeVote: ChallengeVote
 }
 
-export const HandleChallengePageAction = (
+export const AccessChallengePageAction = (
   challengingService: IChallengingService,
 ): IAction<Request, Response> => {
-  async function fetchChallengeDto(challengeSlug: string) {
+  async function fetchChallenge(challengeSlug: string) {
     const response = await challengingService.fetchChallengeBySlug(challengeSlug)
     if (response.isFailure) response.throwError()
     return Challenge.create(response.body)
@@ -35,7 +36,12 @@ export const HandleChallengePageAction = (
     async handle(actionServer: IActionServer<Request>) {
       const { challengeSlug } = actionServer.getRequest()
       const userDto = await actionServer.getUser()
-      const challenge = await fetchChallengeDto(challengeSlug)
+      const challenge = await fetchChallenge(challengeSlug)
+
+      if (challenge.isPublic.isFalse && challenge.author.id !== userDto.id) {
+        actionServer.redirect(ROUTES.challenging.challenges.list)
+      }
+
       const userChallengeVote = await fetchUserChallengeVote(
         challenge.id,
         String(userDto.id),

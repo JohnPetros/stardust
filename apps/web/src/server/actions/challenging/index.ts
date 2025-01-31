@@ -1,4 +1,4 @@
-export { HandleChallengePageAction } from './HandleChallengePageAction'
+export { AccessChallengePageAction } from './AccessChallengePageAction'
 export { VoteChallengeAction } from './VoteChallengeAction'
 export { FetchChallengesListAction } from './FetchChallengesListAction'
 export { EditSolutionAction } from './EditSolutionAction'
