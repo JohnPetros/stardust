@@ -5,39 +5,17 @@ import type {
   TestCaseDto,
 } from '@stardust/core/challenging/dtos'
 import type { SupabaseChallenge } from '../types'
-import type { TextBlockDto } from '@stardust/core/global/dtos'
 import { Datetime } from '@stardust/core/libs'
 
 export const SupabaseChallengeMapper = () => {
   return {
     toDto(supabaseChallenge: SupabaseChallenge): ChallengeDto {
-      let textsBlocks: TextBlockDto[] = []
-      if (supabaseChallenge.texts) {
-        textsBlocks = (supabaseChallenge.texts as TextBlockDto[]).map((textBlock) => {
-          return {
-            type: textBlock.type,
-            content: textBlock.content,
-            isRunnable: textBlock.isRunnable,
-            picture: textBlock.picture,
-            title: textBlock.title,
-          }
-        })
-      }
-
       const challengeDto: ChallengeDto = {
         id: supabaseChallenge.id ?? '',
         title: supabaseChallenge.title ?? '',
         code: supabaseChallenge.code ?? '',
         slug: supabaseChallenge.slug ?? '',
-        difficultyLevel: supabaseChallenge.difficulty ?? '',
-        docId: supabaseChallenge.doc_id,
-        function: {
-          name: supabaseChallenge.function_name ?? '',
-          params:
-            supabaseChallenge.function_params?.map((paramName) => ({
-              name: paramName,
-            })) ?? [],
-        },
+        difficultyLevel: supabaseChallenge.difficulty_level ?? '',
         author: {
           id: supabaseChallenge.user_id ?? '',
           dto: {
@@ -53,7 +31,7 @@ export const SupabaseChallengeMapper = () => {
         downvotesCount: supabaseChallenge.downvotes_count ?? 0,
         completionsCount: supabaseChallenge.total_completitions ?? 0,
         description: supabaseChallenge.description ?? '',
-        textBlocks: textsBlocks,
+        isPublic: Boolean(supabaseChallenge.is_public),
         testCases: (
           (typeof supabaseChallenge.test_cases === 'string'
             ? JSON.parse(supabaseChallenge.test_cases)
@@ -90,17 +68,14 @@ export const SupabaseChallengeMapper = () => {
         slug: challenge.slug.value,
         title: challengeDto.title,
         code: challengeDto.code,
-        difficulty: challengeDto.difficultyLevel,
+        difficulty_level: challengeDto.difficultyLevel,
         test_cases: JSON.stringify(challengeDto.testCases),
         description: challengeDto.description,
         user_id: challengeDto.author.id,
-        function_name: challengeDto.function?.name ?? null,
-        function_params: challengeDto.function?.params.map((param) => param.name) ?? [],
+        is_public: challenge.isPublic.value,
         created_at: challenge.postedAt.toDateString(),
-        texts: [],
         categories: [],
         star_id: '',
-        doc_id: '',
       }
 
       return supabaseChallenge

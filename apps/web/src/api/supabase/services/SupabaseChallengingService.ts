@@ -121,25 +121,23 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         )
       }
 
-      console.log(data)
-
       return new ApiResponse({ body: supabaseChallengeMapper.toDto(data) })
     },
 
     async fetchChallengesWithOnlyDifficulty() {
       const { data, error, status } = await supabase
         .from('challenges')
-        .select('id, difficulty')
+        .select('id, difficulty_level')
 
       if (error) {
         return SupabasePostgrestError(error, 'Erro ao buscar desafios', status)
       }
 
       return new ApiResponse({
-        body: data.filter(({ id, difficulty }) => {
+        body: data.map(({ id, difficulty_level }) => {
           return {
             id,
-            difficulty: difficulty,
+            difficulty: difficulty_level,
           }
         }),
       })
@@ -348,12 +346,10 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         // @ts-ignore
         id: supabaseChallenge.id,
         title: supabaseChallenge.title,
-        difficulty: supabaseChallenge.difficulty,
+        difficulty: supabaseChallenge.difficulty_level,
         slug: supabaseChallenge.slug,
         description: supabaseChallenge.description,
         code: supabaseChallenge.code,
-        function_name: supabaseChallenge.function_name,
-        function_params: supabaseChallenge.function_params,
         test_cases: supabaseChallenge.test_cases,
         user_id: supabaseChallenge.user_id,
       })
@@ -506,11 +502,10 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
           // @ts-ignore
           id: challengeDto.id,
           title: challengeDto.title,
-          difficulty: challengeDto.difficultyLevel,
+          difficulty_level: challengeDto.difficultyLevel,
           slug: challengeDto.slug,
           description: challengeDto.description,
           code: challengeDto.code,
-          function_name: challengeDto.function?.name,
           test_cases: JSON.stringify(challengeDto.testCases),
           user_id: challengeDto.author.id,
         })
