@@ -80,12 +80,39 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
       return codigo
     },
 
-    addFunction(functionName: string, functionParams: unknown[], code: string) {
+    addFunctionCall(functionParams: unknown[], code: string) {
       const paramsValues = functionParams.map((param) =>
         Array.isArray(param) ? `[${param.join(',')}]` : param,
       )
       const params = `(${paramsValues.join(',')})`
+      const functionName = this.getFunctionName(code)
       return code.concat(`\n${functionName}${params};`)
+    },
+
+    buildFunction(functionName: string, functionParamsNames: string[]) {
+      return `funcao ${functionName}(${functionParamsNames.join(', ')}) {
+
+}`
+    },
+
+    getFunctionName(codeValue: string) {
+      const match = codeValue.match(DELEGUA_REGEX.nomeDeFuncaoQualquer)
+      if (match) {
+        return match[1] ?? ''
+      }
+
+      return ''
+    },
+
+    getFunctionParamsNames(codeValue: string) {
+      const match = codeValue.match(DELEGUA_REGEX.parametrosDeFuncaoQualquer)
+
+      if (match) {
+        const params = match[1]?.split(',').map((param) => param.trim())
+        if (Array.isArray(params)) return params
+      }
+
+      return []
     },
 
     getInputsCount(codeValue) {
