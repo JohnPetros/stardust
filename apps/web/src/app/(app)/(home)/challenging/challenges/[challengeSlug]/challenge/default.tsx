@@ -5,7 +5,7 @@ import type { NextParams } from '@/server/next/types'
 import { ChallengePage } from '@/ui/challenging/widgets/pages/Challenge'
 
 export default async function Page({ params }: NextParams<{ challengeSlug: string }>) {
-  const response = await challengingActions.handleChallengePage({
+  const response = await challengingActions.accessChallengePage({
     challengeSlug: params.challengeSlug,
   })
   if (!response?.data) notFound()

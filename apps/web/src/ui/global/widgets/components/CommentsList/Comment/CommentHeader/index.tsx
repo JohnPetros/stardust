@@ -12,19 +12,19 @@ import { Icon } from '../../../Icon'
 type CommentHeaderProps = {
   authorName: string
   authorSlug: string
-  commentCreatedAt: Date
+  commentPostedAt: Date
   popoverMenuButtons: PopoverMenuButton[]
   isAuthorUser: boolean
 }
 
 export function CommentHeader({
   popoverMenuButtons,
-  commentCreatedAt,
+  commentPostedAt,
   authorName,
   authorSlug,
   isAuthorUser,
 }: CommentHeaderProps) {
-  const date = new Datetime(commentCreatedAt).format('DD/MM/YYYY')
+  const date = new Datetime(commentPostedAt).format('DD/MM/YYYY')
 
   return (
     <header className='flex items-start justify-between'>

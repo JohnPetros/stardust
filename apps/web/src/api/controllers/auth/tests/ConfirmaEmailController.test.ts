@@ -1,58 +1,49 @@
-import { AuthServiceMock } from '@/@core/__tests__/mocks/services'
-
-import { HttpMock } from '@/infra/api/next/tests/mocks'
 import { ConfirmEmailController } from '../ConfirmEmailController'
-import { ConfirmEmailUnexpectedError, TokenNotFoundError } from '@/@core/errors/auth'
 import { ROUTES } from '@/constants'
 import { ApiResponse } from '@stardust/core/responses'
-import { IHttp } from '@stardust/core/interfaces'
+import type { IHttp } from '@stardust/core/interfaces'
+import { AuthServiceMock } from '@stardust/core/mocks/services'
+import { HttpMock } from '../../tests/mocks'
+import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/constants'
 
-let httpMock: IHttp
+const fakeSchema = { queryParams: { token: 'fake-token' } }
+
+let httpMock: IHttp<typeof fakeSchema>
 let authServiceMock: AuthServiceMock
 
 describe('Confirm Email Controller', () => {
   beforeEach(() => {
-    httpMock = HttpMock({ fakeSearchParams: { token: 'fake-token' } })
+    httpMock = HttpMock({
+      fakeSchema,
+    })
     authServiceMock = new AuthServiceMock()
   })
 
-  it('should redirect to the sign in page if any auth token from url is not found', async () => {
-    httpMock = HttpMock({ fakeSearchParams: {} })
-
+  it('should redirect to the sign in page if any error is found when confirming email', async () => {
+    const authServiceResponse = new ApiResponse({
+      statusCode: HTTP_STATUS_CODE.unauthorized,
+    })
+    authServiceMock.confirmEmail = async () => authServiceResponse
     const controller = ConfirmEmailController(authServiceMock)
+    const controllerResponse = await controller.handle(httpMock)
 
-    const response = await controller.handle(httpMock)
-
-    const error = new TokenNotFoundError()
-    const url = String(response.body)
-
-    expect(url.startsWith(ROUTES.auth.signIn))
-    expect(url.endsWith(`error=${error.message}`))
-  })
-
-  it('should redirect to the sign in page if any error is found on confirm email', async () => {
-    authServiceMock.confirmEmail = async () =>
-      new ApiResponse(false, ConfirmEmailUnexpectedError)
-
-    const controller = ConfirmEmailController(authServiceMock)
-
-    const response = await controller.handle(httpMock)
-
-    const error = new ConfirmEmailUnexpectedError()
-
-    const url = String(response.body)
-
-    expect(url.startsWith(ROUTES.auth.signIn)).toBeTruthy()
-    expect(url.endsWith(`error=${error.message}`))
+    expect(controllerResponse.isRedirecting).toBeTruthy()
+    const newRoute = controllerResponse.getHeader(HTTP_HEADERS.location)
+    expect(
+      String(newRoute).endsWith(`error=${authServiceResponse.errorMessage}`),
+    ).toBeTruthy()
   })
 
   it('should redirect to the account confirmation route if the email was successfully confirmed', async () => {
-    authServiceMock.confirmEmail = async () => new ApiResponse(true)
-
+    const authServiceResponse = new ApiResponse({
+      statusCode: HTTP_STATUS_CODE.ok,
+    })
+    authServiceMock.confirmEmail = async () => authServiceResponse
     const controller = ConfirmEmailController(authServiceMock)
+    const controllerResponse = await controller.handle(httpMock)
 
-    const response = await controller.handle(httpMock)
-
-    expect(String(response.body).startsWith(ROUTES.accountConfirmation)).toBeTruthy()
+    expect(controllerResponse.isRedirecting).toBeTruthy()
+    const newRoute = controllerResponse.getHeader(HTTP_HEADERS.location)
+    expect(String(newRoute).startsWith(ROUTES.auth.accountConfirmation)).toBeTruthy()
   })
 })

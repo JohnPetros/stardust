@@ -1,6 +1,6 @@
 import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 
-export const challenge: ChallengeDto = {
+export const challenge: Omit<ChallengeDto, 'author'> = {
   id: 'Análise do ambiente',
   slug: 'analise-do-ambiente',
   description: '',
@@ -8,12 +8,6 @@ export const challenge: ChallengeDto = {
   difficultyLevel: 'easy',
   categories: [],
   title: 'Análise do ambiente',
-  author: {
-    id: '',
-  },
-  upvotesCount: 0,
-  downvotesCount: 0,
-  docId: 'f60a0e67-c0b9-401a-a652-c9d5f8042ff1',
   code: `var nome = "Datahon"
 var temperatura = 53.5
 var temOxigenio = falso

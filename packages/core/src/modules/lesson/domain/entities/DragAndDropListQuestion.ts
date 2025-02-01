@@ -13,7 +13,7 @@ export class DragAndDropListQuestion extends Question<DragAndDropListQuestionPro
     return new DragAndDropListQuestion({
       id: dto.id,
       picture: Image.create(dto.picture),
-      statement: Text.create(dto.statement),
+      stem: Text.create(dto.stem),
       type: 'drag-and-drop-list',
       sortableList: SortableList.create(
         dto.items.map((item) => ({

@@ -4,6 +4,6 @@ import type { QuestionType } from './QuestionType'
 export type QuestionProps = {
   id?: string
   type: QuestionType
-  statement: Text
+  stem: Text
   picture: Image
 }

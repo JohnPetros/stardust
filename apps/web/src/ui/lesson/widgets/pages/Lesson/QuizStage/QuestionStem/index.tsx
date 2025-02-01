@@ -9,7 +9,7 @@ type TitleProps = {
   picture?: string
 }
 
-export function QuestionStatement({ children, picture }: TitleProps) {
+export function QuestionStem({ children, picture }: TitleProps) {
   const { parseMdxToText } = useMdx()
   const api = useApi()
   const image = picture ? api.fetchImage('theory', picture) : ''

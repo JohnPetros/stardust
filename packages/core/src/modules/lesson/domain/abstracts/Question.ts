@@ -9,8 +9,8 @@ export abstract class Question<Props = unknown> extends Entity<QuestionProps & P
     return this.props.type
   }
 
-  get statement() {
-    return this.props.statement
+  get stem() {
+    return this.props.stem
   }
 
   get picture() {

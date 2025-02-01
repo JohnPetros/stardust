@@ -2,8 +2,6 @@
 
 import Link from 'next/link'
 
-import type { Topic } from '@stardust/core/forum/entities'
-
 import { useComment } from './useComment'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { AlertDialog } from '../../AlertDialog'
@@ -21,7 +19,7 @@ import { ReplyInput } from './ReplyInput'
 type CommentProps = {
   id: string
   content: string
-  createdAt: Date
+  postedAt: Date
   upvotesCount: number
   repliesCount: number
   isUpvoted: boolean
@@ -38,7 +36,7 @@ type CommentProps = {
 export function Comment({
   id,
   content,
-  createdAt,
+  postedAt,
   isUpvoted,
   repliesCount,
   upvotesCount,
@@ -103,7 +101,7 @@ export function Comment({
             <CommentHeader
               authorName={authorName}
               authorSlug={authorSlug}
-              commentCreatedAt={createdAt}
+              commentPostedAt={postedAt}
               isAuthorUser={isAuthorUser}
               popoverMenuButtons={popoverMenuButtons}
             />
@@ -170,7 +168,7 @@ export function Comment({
                             name: reply.author.avatar.name.value,
                             image: reply.author.avatar.image.value,
                           }}
-                          createdAt={reply.createdAt}
+                          postedAt={reply.postedAt}
                           isAuthorUser={reply.author.slug.value === user?.slug.value}
                           onDelete={handleDeleteUserReply}
                         />

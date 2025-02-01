@@ -1,7 +1,7 @@
 'use client'
 
 import type { DragAndDrop, QuestionCodeLine } from '@stardust/core/lesson/structs'
-import { QuestionStatement } from '../QuestionStatement'
+import { QuestionStem } from '../QuestionStem'
 import { Dnd } from './Dnd'
 import { DropZoneBank } from './DropZoneBank'
 import { DropZoneSlot } from './DropZoneSlot'
@@ -10,7 +10,7 @@ import { Item } from './Item'
 import { useDragAndDropQuestion } from './useDragAndDropQuestion'
 
 type DragAndDropQuestionProps = {
-  statement: string
+  stem: string
   picture: string
   correctItemIndexesSequence: number[]
   codeLines: QuestionCodeLine[]
@@ -19,7 +19,7 @@ type DragAndDropQuestionProps = {
 }
 
 export function DragAndDropQuestion({
-  statement,
+  stem,
   codeLines,
   initialDragAndDrop,
   dropZonesCount,
@@ -42,7 +42,7 @@ export function DragAndDropQuestion({
       onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
     >
-      <QuestionStatement picture={picture}>{statement}</QuestionStatement>
+      <QuestionStem picture={picture}>{stem}</QuestionStem>
 
       <ul className='mt-6 space-y-4'>
         {codeLines.map((line) => {

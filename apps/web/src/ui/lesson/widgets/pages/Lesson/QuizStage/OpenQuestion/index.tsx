@@ -5,11 +5,11 @@ import type { QuestionCodeLine } from '@stardust/core/lesson/structs'
 import { CodeSnippet } from '@/ui/global/widgets/components/CodeSnippet'
 
 import { Input } from './Input'
-import { QuestionStatement } from '../QuestionStatement'
+import { QuestionStem } from '../QuestionStem'
 import { useOpenQuestion } from './useOpenQuestion'
 
 type OpenQuestionProps = {
-  statement: string
+  stem: string
   picture: string
   answers: string[]
   codeLines: QuestionCodeLine[]
@@ -17,7 +17,7 @@ type OpenQuestionProps = {
 }
 
 export function OpenQuestion({
-  statement,
+  stem,
   picture,
   code,
   answers,
@@ -27,7 +27,7 @@ export function OpenQuestion({
 
   return (
     <>
-      <QuestionStatement picture={picture}>{statement}</QuestionStatement>
+      <QuestionStem picture={picture}>{stem}</QuestionStem>
 
       {code && (
         <div className='w-full'>

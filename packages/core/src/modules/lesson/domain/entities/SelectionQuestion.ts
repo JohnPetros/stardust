@@ -14,7 +14,7 @@ export class SelectionQuestion extends Question<SelectionQuestionProps> {
       {
         type: 'selection',
         picture: Image.create(dto.picture),
-        statement: Text.create(dto.statement),
+        stem: Text.create(dto.stem),
         answer: dto.answer,
         code: dto.code,
         options: ShuffledList.create(dto.options),

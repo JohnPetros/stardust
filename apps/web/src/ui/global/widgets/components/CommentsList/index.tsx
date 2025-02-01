@@ -114,7 +114,7 @@ export function CommentsList({
                             name: comment.author.avatar.name.value,
                             image: comment.author.avatar.image.value,
                           }}
-                          createdAt={comment.postedAt}
+                          postedAt={comment.postedAt}
                           isAuthorUser={comment.author.slug.value === user?.slug.value}
                           onDelete={handleDeleteComment}
                         />

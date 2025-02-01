@@ -6,18 +6,18 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import type { SortableList } from '@stardust/core/global/structs'
 
 import { useDragAndDropListQuestion } from './useDragAndDropListQuestion'
-import { QuestionStatement } from '../QuestionStatement'
+import { QuestionStem } from '../QuestionStem'
 import { Item } from './Item'
 import { Dnd } from './Dnd'
 
 type DragAndDropListQuestionProps = {
-  statement: string
+  stem: string
   picture: string
   preSortableList: SortableList
 }
 
 export function DragAndDropListQuestion({
-  statement,
+  stem,
   preSortableList,
   picture,
 }: DragAndDropListQuestionProps) {
@@ -30,7 +30,7 @@ export function DragAndDropListQuestion({
       onDragEnd={handleDragEnd}
       onDragStart={handleDragStart}
     >
-      <QuestionStatement picture={picture}>{statement}</QuestionStatement>
+      <QuestionStem picture={picture}>{stem}</QuestionStem>
 
       <SortableContext
         items={sortableList.items.map((item) => ({ id: item.originalPosition.value }))}

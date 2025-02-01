@@ -22,7 +22,7 @@ export class DragAndDropQuestion extends Question<DragAndDropQuestionProps> {
       {
         type: 'drag-and-drop',
         picture: Image.create(dto.picture),
-        statement: Text.create(dto.statement),
+        stem: Text.create(dto.stem),
         codeLines: dto.lines.map(QuestionCodeLine.create),
         correctItemIndexesSequence: List.create(dto.correctItemsIndexesSequence),
         dragAndDrop: DragAndDrop.create(dto.items),

@@ -7,6 +7,7 @@ import {
   NotFoundError,
   ValidationError,
 } from '#global/errors'
+import { HTTP_HEADERS } from '#constants'
 
 type ApiResponseProps<Body> = {
   body?: Body
@@ -82,5 +83,12 @@ export class ApiResponse<Body = unknown> {
     }
 
     return this._errorMessage
+  }
+
+  get isRedirecting() {
+    return (
+      this.statusCode === HTTP_STATUS_CODE.redirect &&
+      this.getHeader(HTTP_HEADERS.location)
+    )
   }
 }

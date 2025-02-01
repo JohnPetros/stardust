@@ -1,4 +1,4 @@
-import type { Text } from '@/@types/Text'
+import type { TextBlockDto } from '@stardust/core/global/dtos'
 
 export const texts: TextBlockDto[] = [
   {

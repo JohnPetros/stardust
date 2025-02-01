@@ -45,7 +45,7 @@ export function QuizStage({ leaveLesson }: QuizProps) {
           {question instanceof SelectionQuestionEntity && (
             <QuestionContainer id={question.id}>
               <SelectionQuestion
-                statement={question.statement.value}
+                stem={question.stem.value}
                 options={question.options}
                 code={question.code}
                 picture={question.picture.value}
@@ -56,7 +56,7 @@ export function QuizStage({ leaveLesson }: QuizProps) {
           {question instanceof CheckboxQuestionEntity && (
             <QuestionContainer id={question.id}>
               <CheckboxQuestion
-                statement={question.statement.value}
+                stem={question.stem.value}
                 options={question.options}
                 code={question.code}
                 picture={question.picture.value}
@@ -67,7 +67,7 @@ export function QuizStage({ leaveLesson }: QuizProps) {
           {question instanceof OpenQuestionEntity && (
             <QuestionContainer id={question.id}>
               <OpenQuestion
-                statement={question.statement.value}
+                stem={question.stem.value}
                 answers={question.answers.items}
                 codeLines={question.codeLines}
                 code={question.code}
@@ -80,7 +80,7 @@ export function QuizStage({ leaveLesson }: QuizProps) {
             <QuestionContainer id={question.id}>
               <DragAndDropListQuestion
                 preSortableList={question.sortableList}
-                statement={question.statement.value}
+                stem={question.stem.value}
                 picture={question.picture.value}
               />
             </QuestionContainer>
@@ -89,7 +89,7 @@ export function QuizStage({ leaveLesson }: QuizProps) {
           {question instanceof DragAndDropQuestionEntity && (
             <QuestionContainer id={question.id}>
               <DragAndDropQuestion
-                statement={question.statement.value}
+                stem={question.stem.value}
                 picture={question.picture.value}
                 correctItemIndexesSequence={question.correctItemIndexesSequence.items}
                 codeLines={question.codeLines}

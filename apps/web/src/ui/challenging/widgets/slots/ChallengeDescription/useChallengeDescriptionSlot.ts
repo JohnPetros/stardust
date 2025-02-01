@@ -13,7 +13,6 @@ export function useChallengeDescriptionSlot() {
   const { mdx, setMdx } = getMdxSlice()
   const { challenge } = getChallengeSlice()
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
-  const { parseTextBlocksToMdx } = useMdx()
   const { user, updateUser } = useAuthContext()
   const { goTo } = useRouter()
 
@@ -23,7 +22,7 @@ export function useChallengeDescriptionSlot() {
     user.unlockChallengeSolutions(challenge.id)
     await updateUser(user)
     setCraftsVislibility(craftsVislibility.showSolutions())
-    goTo(`${ROUTES.challenging.challenges}/${challenge?.slug}/solutions`)
+    goTo(ROUTES.challenging.challenges.challengeSolutions.list(challenge.slug.value))
   }
 
   useEffect(() => {
@@ -36,15 +35,7 @@ export function useChallengeDescriptionSlot() {
       if (!challenge) return
 
       if (challenge.description) {
-        setMdx(challenge.description)
-        return
-      }
-
-      if (challenge.textBlocks) {
-        const mdxComponents = parseTextBlocksToMdx(challenge.textBlocks)
-
-        setMdx(mdxComponents.join('<br />'))
-        setIsLoading(false)
+        setMdx(challenge.description.value)
         return
       }
     }
@@ -55,7 +46,7 @@ export function useChallengeDescriptionSlot() {
     }
 
     fetchMdx()
-  }, [isLoading, challenge, mdx, setMdx, parseTextBlocksToMdx])
+  }, [isLoading, challenge, mdx, setMdx])
 
   return {
     isLoading,

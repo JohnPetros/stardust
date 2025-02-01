@@ -39,7 +39,10 @@ export const HttpMock = <FakeSchema extends HttpSchema>({
     },
 
     redirect(route: string) {
-      return new ApiResponse({ statusCode: HTTP_STATUS_CODE.redirect })
+      return new ApiResponse({
+        statusCode: HTTP_STATUS_CODE.redirect,
+        headers: { [HTTP_HEADERS.location]: route },
+      })
     },
 
     setCookie(key, value, duration) {

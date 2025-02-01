@@ -14,7 +14,7 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
     return new OpenQuestion(
       {
         picture: Image.create(dto.picture),
-        statement: Text.create(dto.statement),
+        stem: Text.create(dto.stem),
         type: 'open',
         answers: List.create(dto.answers),
         codeLines: dto.lines.map(QuestionCodeLine.create),

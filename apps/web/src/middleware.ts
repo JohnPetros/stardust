@@ -18,11 +18,9 @@ const schema = z.object({
 })
 
 export const middleware = async (request: NextRequest) => {
-  const nextHttp = await NextHttp<z.infer<typeof schema>>({ request, schema })
-
+  const http = await NextHttp<z.infer<typeof schema>>({ request, schema })
   const supabase = SupabaseMiddlewareClient(request)
   const authService = SupabaseAuthService(supabase)
-
   const controllers = [
     VerifyAuthRoutesController(authService),
     HandleRewardsPayloadController(),
@@ -31,9 +29,8 @@ export const middleware = async (request: NextRequest) => {
 
   try {
     for (const controller of controllers) {
-      const constrollerResponse = await controller.handle(nextHttp)
-      if (constrollerResponse.getHeader(HTTP_HEADERS.xRedirect))
-        return constrollerResponse.body
+      const constrollerResponse = await controller.handle(http)
+      if (constrollerResponse.isRedirecting) return constrollerResponse.body
     }
   } catch (error) {
     return NextResponse.next()

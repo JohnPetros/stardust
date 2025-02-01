@@ -1,19 +1,19 @@
 'use client'
 
 import { CodeSnippet } from '@/ui/global/widgets/components/CodeSnippet'
-import { QuestionStatement } from '../QuestionStatement'
+import { QuestionStem } from '../QuestionStem'
 import { Checkbox } from './Checkbox'
 import { useCheckboxQuestion } from './useCheckboxQuestion'
 
 type CheckboxQuestionProps = {
-  statement: string
+  stem: string
   picture: string
   options: string[]
   code: string | null
 }
 
 export function CheckboxQuestion({
-  statement,
+  stem,
   options,
   picture,
   code,
@@ -22,7 +22,7 @@ export function CheckboxQuestion({
 
   return (
     <>
-      <QuestionStatement picture={picture}>{statement}</QuestionStatement>
+      <QuestionStem picture={picture}>{stem}</QuestionStem>
 
       {code && (
         <div className='mt-3 w-full'>

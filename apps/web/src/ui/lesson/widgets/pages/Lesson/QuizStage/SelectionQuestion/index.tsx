@@ -3,19 +3,19 @@
 import * as RadioGroup from '@radix-ui/react-radio-group'
 
 import { useSelectionQuestion } from './useSelectionQuestion'
-import { QuestionStatement } from '../QuestionStatement'
+import { QuestionStem } from '../QuestionStem'
 import { Option } from './Option'
 import { CodeSnippet } from '@/ui/global/widgets/components/CodeSnippet'
 
 type SelectionQuestionProps = {
-  statement: string
+  stem: string
   picture: string
   options: string[]
   code: string | null
 }
 
 export function SelectionQuestion({
-  statement,
+  stem,
   options,
   picture,
   code,
@@ -24,7 +24,7 @@ export function SelectionQuestion({
 
   return (
     <>
-      <QuestionStatement picture={picture}>{statement}</QuestionStatement>
+      <QuestionStem picture={picture}>{stem}</QuestionStem>
 
       {code && (
         <div className='mt-3 w-full'>

@@ -18,13 +18,13 @@ export class AuthServiceMock implements IAuthService {
   fetchUserId(): Promise<ApiResponse<string>> {
     throw new Error('Method not implemented.')
   }
-  signOut(): Promise<ApiResponse<boolean>> {
+  signOut(): Promise<ApiResponse> {
     throw new Error('Method not implemented.')
   }
-  requestPasswordReset(email: string): Promise<ApiResponse<boolean>> {
+  requestPasswordReset(email: string): Promise<ApiResponse> {
     throw new Error('Method not implemented.')
   }
-  confirmEmail(token: string): Promise<ApiResponse<boolean>> {
+  confirmEmail(token: string): Promise<ApiResponse> {
     throw new Error('Method not implemented.')
   }
   confirmPasswordReset(

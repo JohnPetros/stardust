@@ -21,7 +21,7 @@ export class CheckboxQuestion extends Question<CheckboxQuestionProps> {
       {
         type: 'checkbox',
         picture: Image.create(dto.picture),
-        statement: Text.create(dto.statement),
+        stem: Text.create(dto.stem),
         code: dto.code,
         correctOptions: List.create(dto.correctOptions),
         options: ShuffledList.create(dto.options),

@@ -78,7 +78,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       return new ApiResponse({
         body: nextResponse,
         statusCode: HTTP_STATUS_CODE.redirect,
-        headers: { [HTTP_HEADERS.xRedirect]: 'true' },
+        headers: { [HTTP_HEADERS.location]: route },
       })
     },
 

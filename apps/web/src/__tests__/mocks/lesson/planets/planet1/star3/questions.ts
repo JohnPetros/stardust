@@ -1,37 +1,35 @@
-import {
-  CheckboxQuestion,
-  DragAndDropQuestion,
-  OpenQuestion,
-  SelectionQuestion,
-} from '@/@types/Quiz'
+import type {
+  CheckboxQuestionDto,
+  DragAndDropQuestionDto,
+  OpenQuestionDto,
+  SelectionQuestionDto,
+} from '@stardust/core/lesson/dtos'
 
 type Questions = [
-  OpenQuestion,
-  CheckboxQuestion,
-  SelectionQuestion,
-  DragAndDropQuestion,
-  SelectionQuestion,
+  OpenQuestionDto,
+  CheckboxQuestionDto,
+  SelectionQuestionDto,
+  DragAndDropQuestionDto,
+  SelectionQuestionDto,
 ]
 
 export const questions: Questions = [
   {
-    title:
-      'Vamos declarar uma variável contendo o nome de um planeta que vamos explorar. Mas qual palavra eu devo escrever antes do nome de qualquer variável na hora de declará-la?',
+    stem: 'Vamos declarar uma variável contendo o nome de um planeta que vamos explorar. Mas qual palavra eu devo escrever antes do nome de qualquer variável na hora de declará-la?',
     type: 'open',
-    lines: [{ id: 1, texts: ['input-1', 'nomePlaneta'], indentation: 0 }],
+    lines: [{ number: 1, texts: ['input-1', 'nomePlaneta'], indentation: 0 }],
     answers: ['var'],
     picture: 'panda.jpg',
   },
   {
-    title:
-      'Quais dos itens abaixo pode ser um nome válido de variável? (Você deve selecionar todos os itens que estão corretos)',
+    stem: 'Quais dos itens abaixo pode ser um nome válido de variável? (Você deve selecionar todos os itens que estão corretos)',
     type: 'checkbox',
     options: ['_planeta', '4planeta', 'planeta_alvo', 'planeta alvo'],
     correctOptions: ['_planeta', 'planeta_alvo'],
     picture: 'panda-piscando.jpg',
   },
   {
-    title: 'Agora, como devo atribuir um valor a uma variável corretamente?',
+    stem: 'Agora, como devo atribuir um valor a uma variável corretamente?',
     type: 'selection',
     answer: 'nomeDaVariavel = valor',
     options: [
@@ -43,19 +41,19 @@ export const questions: Questions = [
     picture: 'panda-piscando.jpg',
   },
   {
-    title: 'Atribua o nome do planeta à variável planeta',
+    stem: 'Atribua o nome do planeta à variável planeta',
     type: 'drag-and-drop',
-    lines: [{ id: 1, texts: ['var planeta = ', 'dropZone'], indentation: 0 }],
-    dragItems: [
-      { id: 1, label: 'escreva' },
-      { id: 2, label: '"Planeta Datahon"' },
-      { id: 3, label: '333' },
+    lines: [{ number: 1, texts: ['var planeta = ', 'dropZone'], indentation: 0 }],
+    items: [
+      { index: 1, label: 'escreva' },
+      { index: 2, label: '"Planeta Datahon"' },
+      { index: 3, label: '333' },
     ],
-    correctDragItemsIdsSequence: [2],
+    correctItemsIndexesSequence: [2],
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
-    title: 'Analisando tudo, qual será o resultado do seguinte código?',
+    stem: 'Analisando tudo, qual será o resultado do seguinte código?',
     code: `var nomePlaneta = "Planeta 0thigs"
 var nome = "Planeta Datahon"
 

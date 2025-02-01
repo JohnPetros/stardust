@@ -49,7 +49,6 @@ export function AchievementsList() {
                     id={achievement.id}
                     name={achievement.name.value}
                     description={achievement.description}
-                    requiredCount={achievement.requiredCount.value}
                     icon={achievement.icon.value}
                     reward={achievement.reward.value}
                     isUnlocked={user.hasUnlockedAchievement(achievement.id)}
