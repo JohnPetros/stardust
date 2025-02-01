@@ -1,0 +1,26 @@
+# Docker
+.dockerignore
+Dockerfile
+
+# dependencies
+node_modules
+
+# testing
+/coverage
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+
+# local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Supabase
+.branches
+.temp
