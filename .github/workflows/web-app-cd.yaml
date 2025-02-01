@@ -30,7 +30,7 @@ jobs:
         run: gcloud auth configure-docker
 
       - name: Create .env file
-        run: echo "EITA" >> apps/web/.env
+        run: echo "${{ secrets.GOOGLE_CLOUD_RUN_SERVICE_ACCOUNT }}" >> apps/web/.env
 
       - name: Build and tag the Docker image
         run: |
