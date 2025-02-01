@@ -6,7 +6,7 @@ RUN apk update
 WORKDIR /stardust
 RUN npm install -g turbo
 COPY . .
-RUN ls ./apps/web
+RUN ls ./apps/web -la
 RUN turbo prune --scope=@stardust/web --docker
 
 FROM base AS installer
@@ -18,7 +18,7 @@ COPY --from=builder /stardust/out/json/ .
 RUN npm install
 COPY --from=builder /stardust/out/full/ .
 COPY turbo.json turbo.json
-RUN ls ./apps/web
+RUN ls ./apps/web -la
 RUN npx turbo run build --filter=@stardust/web
 
 FROM base AS runner
