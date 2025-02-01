@@ -30,7 +30,7 @@ jobs:
         run: gcloud auth configure-docker
 
       - name: Create .env file
-        run: echo "EITA" >> apps/web/.env.local
+        run: echo "EITA" >> apps/web/env.local
 
       - name: Build and tag the Docker image
         run: |
