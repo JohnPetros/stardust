@@ -31,7 +31,7 @@ jobs:
 
       - name: Build and tag the Docker image
         run: |-
-          docker build . --tag grc.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA
+          docker build -t grc.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA -f apps/web/Dockerfile .
 
       - name: Deploy
         run: |-
