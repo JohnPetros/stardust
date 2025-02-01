@@ -15,7 +15,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /stardust
 COPY .gitignore .gitignore
 COPY --from=builder /stardust/out/json/ .
-RUN npm ci
+RUN npm install
 COPY --from=builder /stardust/out/full/ .
 COPY turbo.json turbo.json
 RUN npm run build
