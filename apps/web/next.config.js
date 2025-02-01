@@ -13,6 +13,7 @@ const nextConfig = {
     ],
   },
   swcMinify: true,
+  output: 'standalone'
 }
 
 module.exports = nextConfig
