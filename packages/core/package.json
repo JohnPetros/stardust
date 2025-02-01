@@ -14,10 +14,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "scripts": {
-    "build": "rollup -c --bundleConfigAsCjs",
-    "deploy": "npm version patch && npm publish"
-  },
   "exports": {
     "./auth/errors": "./src/modules/auth/errors/index.ts",
     "./auth/events": "./src/modules/auth/events/index.ts",
