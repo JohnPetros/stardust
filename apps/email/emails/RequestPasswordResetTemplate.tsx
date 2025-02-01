@@ -8,7 +8,7 @@ type RequestPasswordResetTemplateProps = {
   baseUrl: string
 }
 
-export function RequestPasswordResetTemplate({
+export default function RequestPasswordResetTemplate({
   baseUrl,
 }: RequestPasswordResetTemplateProps) {
   return (

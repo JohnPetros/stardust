@@ -5,11 +5,13 @@ type HeaderProps = {
 }
 
 export function Header({ children }: HeaderProps) {
-  const logo = `${process.env.NEXT_PUBLIC_CDN_URL}/utils/logo.png`
-
   return (
     <Container>
-      <Img width={140} height={30} src={logo} />
+      <Img
+        width={180}
+        height={30}
+        src='https://aukqejqsiqsqowafpppb.supabase.co/storage/v1/object/public/images/marketing/logo.png'
+      />
 
       <Text className='text-lg font-medium text-green-400'>{children}</Text>
     </Container>
