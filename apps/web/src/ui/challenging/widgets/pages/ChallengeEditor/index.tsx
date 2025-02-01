@@ -61,7 +61,6 @@ export function ChallengeEditorPage({
         <ChallengeFunctionField />
         <ChallengeTestCasesField />
         <ChallengeDescriptionField />
-        <ChallengeCodeField />
         <ChallengeCategoriesField categories={categories} />
         <ChallengeDifficultyLevelField />
       </form>

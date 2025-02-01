@@ -17,7 +17,7 @@ COPY --from=builder /stardust/out/json/ .
 RUN npm install
 COPY --from=builder /stardust/out/full/ .
 COPY turbo.json turbo.json
-RUN ls /out/full/ 
+RUN ls ./out/full/ 
 RUN npx turbo run build --filter=@stardust/web
 
 FROM base AS runner
