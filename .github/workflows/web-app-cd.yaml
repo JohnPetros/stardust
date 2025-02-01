@@ -18,6 +18,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Create .env file
+        run: echo "${{ WEB_ENV_VARIABLES }}" >> apps/web/.env.prod
+
       - id: "auth"
         uses: "google-github-actions/auth@v2"
         with:
@@ -30,11 +33,11 @@ jobs:
         run: gcloud auth configure-docker
 
       - name: Build and tag the Docker image
-        run: |-
+        run: |
           docker build -t grc.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA -f apps/web/Dockerfile .
 
       - name: Deploy
-        run: |-
+        run: |
           gcloud run deploy $REPO_NAME \
           --region $REGION \
           --image gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA \
