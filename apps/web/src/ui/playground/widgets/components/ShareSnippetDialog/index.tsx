@@ -2,7 +2,7 @@
 
 import type { PropsWithChildren } from 'react'
 
-import { ROUTES } from '@/constants'
+import { ENV, ROUTES } from '@/constants'
 import { Button } from '@/ui/global/widgets/components/Button'
 import {
   Dialog,
@@ -11,7 +11,6 @@ import {
   DialogTrigger,
 } from '@/ui/global/widgets/components/Dialog'
 import { Input } from '@/ui/global/widgets/components/Input'
-import { getAppBaseUrl } from '@/utils'
 
 import { useShareSnippetDialog } from './useShareSnippetDialog'
 
@@ -23,7 +22,7 @@ export function ShareSnippetDialog({
   children: trigger,
   snippetId,
 }: PropsWithChildren<ShareSnippetDialogProps>) {
-  const playgroundUrl = `${getAppBaseUrl()}${ROUTES.playground.snippet(snippetId)}`
+  const playgroundUrl = `${ENV.appHost}${ROUTES.playground.snippet(snippetId)}`
   const { handleShareSnippet } = useShareSnippetDialog(playgroundUrl)
 
   return (

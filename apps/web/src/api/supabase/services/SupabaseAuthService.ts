@@ -1,12 +1,10 @@
 import type { IAuthService } from '@stardust/core/interfaces'
-import { Slug } from '@stardust/core/global/structs'
 import { ApiResponse } from '@stardust/core/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/constants'
 
-import { getAppBaseUrl } from '@/utils'
-import { ROUTES } from '@/constants'
+import { ENV, ROUTES } from '@/constants'
 import type { Supabase } from '../types'
-import { SupabaseAuthError, SupabasePostgrestError } from '../errors'
+import { SupabaseAuthError } from '../errors'
 
 export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
   return {
@@ -26,7 +24,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
         email,
         password,
         options: {
-          emailRedirectTo: `${getAppBaseUrl()}/${ROUTES.api.auth.confirmEmail}`,
+          emailRedirectTo: `${ENV.appHost}/${ROUTES.api.auth.confirmEmail}`,
         },
       })
 
@@ -70,7 +68,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
 
     async requestPasswordReset(email: string) {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${getAppBaseUrl()}${ROUTES.api.auth.confirmPasswordReset}`,
+        redirectTo: `${ENV.appHost}${ROUTES.api.auth.confirmPasswordReset}`,
       })
 
       if (error)
@@ -100,7 +98,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
 
     async confirmEmail(token: string) {
       const {
-        data: { user, session },
+        data: { session },
         error,
       } = await supabase.auth.verifyOtp({
         type: 'email',

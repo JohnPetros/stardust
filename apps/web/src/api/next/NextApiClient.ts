@@ -33,7 +33,7 @@ export const NextApiClient = ({
   return {
     async get<Body>(route: string): Promise<ApiResponse<Body>> {
       const response = await fetch(
-        `${ENV.url}${addQueryParams(route, queryParams)}`,
+        `${ENV.appHost}${addQueryParams(route, queryParams)}`,
         requestInit,
       )
 
@@ -53,11 +53,14 @@ export const NextApiClient = ({
     },
 
     async post<Body>(route: string, body: unknown): Promise<ApiResponse<Body>> {
-      const response = await fetch(`${ENV.url}${addQueryParams(route, queryParams)}`, {
-        ...requestInit,
-        method: 'POST',
-        body: JSON.stringify(body),
-      })
+      const response = await fetch(
+        `${ENV.appHost}${addQueryParams(route, queryParams)}`,
+        {
+          ...requestInit,
+          method: 'POST',
+          body: JSON.stringify(body),
+        },
+      )
 
       if (!response.ok) {
         return await handleApiError<Body>(response)
