@@ -14,7 +14,7 @@ function LottieAnimationComponent(
   { name, size, hasLoop = true }: AnimationProps,
   ref: ForwardedRef<AnimationRef>,
 ) {
-  const { lottieRef, windowWidth, stopAt, restart } = useLottieAnimation()
+  const { lottieRef, windowWidth, stopAt, setSpeed, restart } = useLottieAnimation()
   const lottieData = LOTTIES[name]
 
   useImperativeHandle(
@@ -22,10 +22,11 @@ function LottieAnimationComponent(
     () => {
       return {
         stopAt,
+        setSpeed,
         restart,
       }
     },
-    [stopAt, restart],
+    [stopAt, setSpeed, restart],
   )
 
   if (size === 'full')

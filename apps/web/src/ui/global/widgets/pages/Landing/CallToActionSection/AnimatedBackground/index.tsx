@@ -10,19 +10,25 @@ import { useAnimatedBackground } from './useAnimatedBackground'
 export function AnimatedBackground({ children }: PropsWithChildren) {
   const containerRef = useRef<HTMLDivElement>(null)
   const animationRef = useRef<AnimationRef>(null)
-  useAnimatedBackground(containerRef, animationRef)
+  const { isInView, animationDuration } = useAnimatedBackground(
+    containerRef,
+    animationRef,
+  )
 
   return (
-    <div ref={containerRef} className='relative'>
+    <div
+      ref={containerRef}
+      className='relative flex flex-col items-center justify-center'
+    >
       <Animation
         ref={animationRef}
         name='rocket-crossing-sky'
-        size='full'
-        hasLoop={false}
+        size={600}
+        hasLoop={true}
       />
-      <AnimatedOpacity delay={5}>
-        <div className='absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-1/2 space-y-3'>
-          <Animation name='apollo-asking' size='full' />
+      <AnimatedOpacity isVisible={isInView} delay={animationDuration}>
+        <div className='flex items-center justify-center flex-col absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 space-y-3 max-w-6xl mx-auto'>
+          <Animation name='apollo-asking' size={180} />
           {children}
         </div>
       </AnimatedOpacity>
