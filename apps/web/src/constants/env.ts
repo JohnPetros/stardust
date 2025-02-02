@@ -7,6 +7,8 @@ const ENV = {
   appHost: process?.env?.NEXT_PUBLIC_APP_HOST ?? 'http://localhost:3000',
 }
 
+console.log(ENV)
+
 new StringValidation(ENV.supabaseUrl, 'Supabase Url').validate()
 new StringValidation(ENV.supabaseKey, 'Supabase Key').validate()
 new StringValidation(ENV.supabaseCdnUrl, 'Supabase CDN Url').url().validate()
