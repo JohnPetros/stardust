@@ -1,7 +1,18 @@
 'use client'
 
-import { motion, useTransform, useScroll, useSpring } from 'framer-motion'
+import { motion, useTransform, useScroll, useSpring, type Variants } from 'framer-motion'
 import type { PropsWithChildren, RefObject } from 'react'
+
+const variants: Variants = {
+  hidden: {
+    opacity: 0,
+    x: -100,
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+  },
+}
 
 type AnimatedCardProps = {
   containerRef: RefObject<HTMLDivElement>
@@ -20,7 +31,13 @@ export function AnimatedCard({
   const springItemYPositioon = useSpring(itemYPosition)
 
   return (
-    <motion.div style={{ y: springItemYPositioon }} className={className}>
+    <motion.div
+      style={{ y: springItemYPositioon }}
+      variants={variants}
+      initial='hidden'
+      whileInView='visible'
+      className={className}
+    >
       {children}
     </motion.div>
   )

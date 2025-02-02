@@ -10,6 +10,7 @@ import { PODIUM } from '../../RankingResult/podium'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { RankingPosition } from '@stardust/core/ranking/structs'
 import { ROUTES } from '@/constants'
+import { AnimatedCounter } from '@/ui/global/widgets/components/AnimatedCounter'
 
 const positionStyles = tv({
   base: 'font-semibold p-2 w-12 grid place-content-center group-hover:text-gray-100/90',
@@ -85,7 +86,8 @@ export function RankingUser({
       </strong>
 
       <strong className='block w-24 text-right uppercase text-gray-600 group-hover:text-gray-100/90'>
-        {canShowXp && `${xp} xp`}
+        {canShowXp && <AnimatedCounter from={0} to={xp} speed={1} />}
+        {canShowXp && ' XP'}
       </strong>
     </Link>
   )

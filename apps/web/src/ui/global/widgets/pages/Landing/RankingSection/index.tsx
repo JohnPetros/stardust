@@ -1,7 +1,6 @@
 import { RankingUser } from '@/ui/ranking/widgets/pages/Ranking/RankingUsersList/RankingUser'
 
 import { SectionTitle } from '../SectionTitle'
-import { Animation } from '../../../components/Animation'
 import { AnimatedBorder } from '../../../components/AnimatedBorder'
 import { AnimatedRankingUser } from './AnimatedRankingUser'
 import { Paragraph } from '../Paragraph'

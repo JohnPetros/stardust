@@ -1,7 +1,7 @@
 import { AbountSection } from './AboutSection'
-import { AchievementsSection } from './AchievementsSection'
 import { CodeSection } from './CodeSection'
 import { HeroSection } from './HeroSection'
+import { AchievementsSection } from './AchievementsSection'
 import { Header } from './Header'
 import { RankingSection } from './RankingSection'
 
@@ -11,12 +11,12 @@ export function LandingPage() {
       <Header />
       <HeroSection />
       <div className='space-y-24 py-24'>
-        <RankingSection />
+        {/* <RankingSection /> */}
         {/* <AbountSection /> */}
         {/* 
         <CodeSection />
         < */}
-        {/* <AchievementsSection /> */}
+        <AchievementsSection />
       </div>
     </div>
   )
