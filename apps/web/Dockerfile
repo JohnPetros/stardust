@@ -25,8 +25,8 @@ WORKDIR /stardust
 RUN addgroup --system --gid 1001 stardust
 RUN adduser --system --uid 1001 web
 USER web
-COPY --from=installer /app/apps/web/next.config.js .
-COPY --from=installer /app/apps/web/package.json .
+COPY --from=installer /stardust/apps/web/next.config.js .
+COPY --from=installer /stardust/apps/web/package.json .
 COPY --from=installer --chown=stardust:web /stardust/apps/web/.next/standalone ./
 COPY --from=installer --chown=stardust:web /stardust/apps/web/.next/static ./apps/web/.next/static
 COPY --from=installer --chown=stardust:web /stardust/apps/web/public ./apps/web/public
