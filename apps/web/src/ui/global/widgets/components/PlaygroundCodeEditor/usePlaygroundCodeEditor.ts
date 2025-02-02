@@ -72,7 +72,7 @@ export function usePlaygroundCodeEditor(
   const runCode = useCallback(async () => {
     if (!codeRef.current || !promptRef.current) return
 
-    if (codeRef.current.hasInput) {
+    if (codeRef.current.hasInput.isTrue) {
       openPrompt()
       return
     }
@@ -82,19 +82,19 @@ export function usePlaygroundCodeEditor(
 
     const response = await codeRef.current.run()
 
-    if (response.isSuccess) {
-      setOutputs(response.outputs)
-    }
-
     if (response.isFailure) {
       showError(response.errorMessage, response.errorLine)
     }
 
-    consoleRef.current?.open()
+    if (response.isSuccess) {
+      setOutputs(response.outputs)
+      consoleRef.current?.open()
+    }
+
     playAudio('running-code.wav')
 
     resetCode()
-  }, [openPrompt, showError, outputs])
+  }, [openPrompt, showError, playAudio, outputs])
 
   function handlePromptConfirm() {
     if (promptRef.current) runCodeWithInput(promptRef.current.value)

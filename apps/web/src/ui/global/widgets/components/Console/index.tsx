@@ -65,7 +65,7 @@ export function ConsoleComponent(
           ))}
         </ul>
       ) : (
-        <p className='block text-sm text-gray-300'>Sem resultado</p>
+        <p className='block px-6 py-2 text-sm text-gray-300'>Sem saída</p>
       )}
     </AnimatedPanel>
   )

@@ -1,17 +1,28 @@
-import { useMemo, useRef } from 'react'
+import { type RefObject, useMemo } from 'react'
 
-import type { CodeSnippetProps } from '.'
 import type { PlaygroundCodeEditorRef } from '../PlaygroundCodeEditor/types'
+import { useClipboard } from '@/ui/global/hooks/useClipboard'
 
-export function useCodeSnippet({ code, isRunnable }: CodeSnippetProps) {
-  const codeEditorRef = useRef<PlaygroundCodeEditorRef | null>(null)
+type UseCodeSnippetProps = {
+  code: string
+  isRunnable?: boolean
+  codeEditorRef: RefObject<PlaygroundCodeEditorRef>
+}
+
+export function useCodeSnippet({ codeEditorRef, code, isRunnable }: UseCodeSnippetProps) {
+  const { copy } = useClipboard()
 
   async function handleRunCode() {
     codeEditorRef.current?.runCode()
   }
 
-  function handleReloadButtonClick() {
+  function handleReloadCodeButtonClick() {
     codeEditorRef.current?.reloadValue()
+  }
+
+  async function handleCopyCodeButtonClick() {
+    const codeValue = codeEditorRef.current?.getValue()
+    if (codeValue) await copy(codeValue, 'Código copiado!')
   }
 
   const editorHeight = useMemo(() => {
@@ -27,6 +38,7 @@ export function useCodeSnippet({ code, isRunnable }: CodeSnippetProps) {
     codeEditorRef,
     editorHeight,
     handleRunCode,
-    handleReloadButtonClick,
+    handleReloadCodeButtonClick,
+    handleCopyCodeButtonClick,
   }
 }
