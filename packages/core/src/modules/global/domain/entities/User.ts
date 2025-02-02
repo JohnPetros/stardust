@@ -215,11 +215,11 @@ export class User extends Entity<UserProps> {
   }
 
   isSelectRocket(rocketId: string): boolean {
-    return rocketId === this.rocket.id
+    return rocketId === this.rocketId
   }
 
   isSelectAvatar(avatarId: string): boolean {
-    return avatarId === this.avatar.id
+    return avatarId === this.avatarId
   }
 
   upvoteComment(comment: Comment): void {
