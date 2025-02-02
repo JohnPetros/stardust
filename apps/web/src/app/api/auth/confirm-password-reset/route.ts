@@ -7,6 +7,8 @@ import { SupabaseAuthService } from '@/api/supabase/services'
 import { ConfirmPasswordResetController } from '@/api/controllers/auth'
 import { runApiRoute } from '@/api/next/utils'
 
+export const dynamic = "force-dynamic"
+
 const schema = z.object({
   queryParams: z.object({
     token: z.string({ required_error: 'token é obrigatório' }),

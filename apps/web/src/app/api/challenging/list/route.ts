@@ -12,6 +12,8 @@ import {
   challengeCompletionStatusSchema,
 } from '@stardust/validation/challenging/schemas'
 
+export const dynamic = 'force-dynamic'
+
 const schema = z.object({
   queryParams: z.object({
     page: pageSchema.optional().default(1),
