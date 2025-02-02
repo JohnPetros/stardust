@@ -10,6 +10,7 @@ export type AnimationName =
   | 'fast-rocket'
   | 'trophy'
   | 'spiral'
+  | 'coins'
   | 'planets-exploration'
   | 'podium'
   | 'galaxy'
