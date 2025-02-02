@@ -1,9 +1,11 @@
-name: web-app-cd
+name: Web app CD
 
 on:
   push:
     branches:
       - clean-arch
+    # paths:
+    #   - "apps/web/**"
 
 env:
   PROJECT_ID: ${{ secrets.GOOGLE_CLOUD_RUN_PROJECT_ID }}
@@ -34,7 +36,7 @@ jobs:
 
       - name: Build and tag the Docker image
         run: |
-          docker build -t grc.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA -f apps/web/Dockerfile .
+          docker build -t gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA -f apps/web/Dockerfile .
 
       - name: Deploy
         run: |
