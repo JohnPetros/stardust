@@ -53,7 +53,7 @@ export const NextApiClient = ({
 
     async post<Body>(route: string, body: unknown): Promise<ApiResponse<Body>> {
       const response = await fetch(
-        `${ENV.appHost}${addQueryParams(route, queryParams)}`,
+        `${ENV.appHost}/${addQueryParams(route, queryParams)}`,
         {
           ...requestInit,
           method: 'POST',
