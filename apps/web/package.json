@@ -7,7 +7,7 @@
     "dev:turbo": "next dev --turbo",
     "queue": "npx inngest-cli@latest dev",
     "build": "next build",
-    "start": "next start -p $PORT",
+    "start": "node .next/standalone/apps/web/server.js -p $PORT",
     "lint": "next lint",
     "db:types": "supabase gen types typescript --project-id aukqejqsiqsqowafpppb > src/api/supabase/types/Database.ts",
     "type-check": "tsc",
