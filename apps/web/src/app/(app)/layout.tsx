@@ -19,10 +19,6 @@ export default async function App({ children }: AppProps) {
   if (response.isFailure) response.throwError()
 
   return (
-    <AudioProvider>
-      <AchivementsProvider achievementsDto={response.body}>
-        <EditorProvider>{children}</EditorProvider>
-      </AchivementsProvider>
-    </AudioProvider>
+    <AchivementsProvider achievementsDto={response.body}>{children}</AchivementsProvider>
   )
 }
