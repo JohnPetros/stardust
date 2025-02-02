@@ -1,20 +1,29 @@
 'use client'
 
-import { useRef, type PropsWithChildren } from 'react'
+import { useRef, useEffect, type PropsWithChildren } from 'react'
 import { useInView } from 'framer-motion'
 
 import { AnimatedOpacity } from '@/ui/global/widgets/components/AnimatedOpacity'
 import { Animation } from '@/ui/global/widgets/components/Animation'
 import { AchievementCard } from '@/ui/profile/widgets/components/AchievementCard'
+import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 import { AnimatedCard } from './AnimatedCard'
 
 export function AnimatedSpiral({ children }: PropsWithChildren) {
   const containerRef = useRef(null)
+  const animationRef = useRef<AnimationRef>(null)
   const isInView = useInView(containerRef, { once: true })
+
+  useEffect(() => {
+    if (isInView) animationRef.current?.restart()
+  }, [isInView])
 
   return (
     <div ref={containerRef} className='grid grid-cols-2'>
-      <div className='grid place-content-center'>{children}</div>
+      <div className='grid place-content-center'>
+        <Animation name='trophy' size={220} hasLoop={false} />
+        {children}
+      </div>
 
       <div className='relative'>
         <AnimatedOpacity delay={0.5} isVisible={isInView} className='absoute z-[-5]'>

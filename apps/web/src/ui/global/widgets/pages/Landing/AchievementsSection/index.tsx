@@ -2,6 +2,7 @@ import { SectionTitle } from '../SectionTitle'
 import { AnimatedReveal } from '../AnimatedReveal'
 import { AnimatedSpiral } from './AnimatedSpiral'
 import { Paragraph } from '../Paragraph'
+import { Animation } from '../../../components/Animation'
 
 export function AchievementsSection() {
   return (

@@ -16,7 +16,7 @@ export function Sidebar() {
 
   if (user)
     return (
-      <AnimatedBar isOpen={isOpen} className='z-[100]'>
+      <AnimatedBar isOpen={isOpen}>
         <div className='relative'>
           <button type='button' className='absolute right-2 p-2' onClick={toggle}>
             <Icon name='close' size={20} className='text-gray-500' />

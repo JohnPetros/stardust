@@ -6,7 +6,7 @@ export function ShopSection() {
   return (
     <AnimatedSection title='Conquiste tudo'>
       <AnimatedReveal>
-        <Paragraph className='text-2xl'>Adquire moedas e compre itens na loja</Paragraph>
+        <Paragraph className='text-xl'>Adquire moedas e compre itens na loja</Paragraph>
       </AnimatedReveal>
     </AnimatedSection>
   )
