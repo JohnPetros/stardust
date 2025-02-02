@@ -22,8 +22,6 @@ export function useAnimatedCounter(
       },
     })
 
-    return () => {
-      animation.stop()
-    }
+    return () => animation.stop()
   }, [from, to, elementRef.current, isInView])
 }

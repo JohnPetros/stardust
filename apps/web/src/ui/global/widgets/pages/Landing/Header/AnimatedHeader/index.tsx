@@ -7,10 +7,10 @@ import { useAnimatedHeader } from './useAnimatedHeader'
 
 const variants: Variants = {
   hidden: {
-    y: 0,
+    y: '-100%',
   },
   visible: {
-    y: '-100% ',
+    y: 0,
   },
 }
 
@@ -26,7 +26,7 @@ export function AnimatedHeader({ children }: PropsWithChildren) {
         duration: 0.35,
         ease: 'easeInOut',
       }}
-      className='sticky top-0 bg-gray-900 border-b border-gray-600'
+      className='sticky top-0 bg-gray-900 border-b border-gray-600 py-2'
     >
       {children}
     </motion.header>

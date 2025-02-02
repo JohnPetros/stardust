@@ -11,10 +11,10 @@ export function useAnimatedHeader() {
       currentScrollYValue > previosScrollYValue &&
       currentScrollYValue > window.innerHeight
     ) {
-      setIsVisible(false)
+      setIsVisible(true)
       return
     }
-    setIsVisible(true)
+    setIsVisible(false)
   }
 
   useMotionValueEvent(scrollY, 'change', handleScrollYChange)
