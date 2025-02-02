@@ -2,8 +2,7 @@ import type { ReadonlyHeaders } from 'next/dist/server/web/spec-extension/adapte
 import { ENV } from '@/constants'
 import type { IApiClient } from '@stardust/core/interfaces'
 import { ApiResponse, PaginationResponse } from '@stardust/core/responses'
-import { handleApiError } from './utils'
-import { addQueryParams } from './utils/addQueryParams'
+import { addQueryParams, handleApiError } from './utils'
 
 type CacheConfig = {
   isCacheEnable?: boolean

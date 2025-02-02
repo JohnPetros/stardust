@@ -4,6 +4,8 @@ import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
 import { SupabaseRankingService } from '@/api/supabase/services'
 import { FetchCurrentRankingController } from '@/api/controllers/ranking'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   return await runApiRoute(async () => {
     const http = await NextHttp()

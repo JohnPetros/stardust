@@ -4,6 +4,8 @@ import { SupabaseProfileService } from '@/api/supabase/services'
 import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
 import { FetchAchievementsController } from '@/api/controllers/profile'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   return runApiRoute(async () => {
     const http = await NextHttp()

@@ -9,6 +9,8 @@ import { runApiRoute } from '@/api/next/utils'
 import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
 import { SupabasePlaygroundService } from '@/api/supabase/services'
 
+export const dynamic = 'force-dynamic'
+
 const schema = z.object({
   routeParams: z.object({
     snippetId: idSchema,

@@ -1,12 +1,13 @@
 import type { NextRequest } from 'next/server'
 import { z } from 'zod'
 
-import type { NextParams } from '@/server/next/types'
 import { NextHttp } from '@/api/next/NextHttp'
 import { runApiRoute } from '@/api/next/utils'
 import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
 import { ConfirmEmailController } from '@/api/controllers/auth'
 import { SupabaseAuthService } from '@/api/supabase/services'
+
+export const dynamic = "force-dynamic"
 
 const schema = z.object({
   queryParams: z.object({

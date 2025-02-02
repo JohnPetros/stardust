@@ -4,6 +4,8 @@ import { FetchShopItemsController } from '@/api/controllers/shop'
 import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
 import { SupabaseShopService } from '@/api/supabase/services'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   return runApiRoute(async () => {
     const http = await NextHttp()

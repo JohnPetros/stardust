@@ -4,6 +4,9 @@ import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
 import { SupabaseChallengingService } from '@/api/supabase/services'
 import { CountCompletedChallengesByDifficultyLevelController } from '@/api/controllers/challenging'
 
+
+export const dynamic = "force-dynamic"
+
 export async function GET() {
   return await runApiRoute(async () => {
     const http = await NextHttp()
