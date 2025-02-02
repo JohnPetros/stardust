@@ -34,7 +34,7 @@ const observeStreakBreak = inngest.createFunction(
 )
 
 const resetWeekStatus = inngest.createFunction(
-  { id: JOBS.profile.observerStreakBreak.key },
+  { id: JOBS.profile.resetWeekStatus.key },
   { cron: `TZ=America/Sao_Paulo ${JOBS.profile.resetWeekStatus.cronExpression}` },
   async (context) => {
     const supabase = SupabaseServerClient()
