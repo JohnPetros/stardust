@@ -13,7 +13,7 @@ type StreakProps = {
 
 export function StreakBoard({ weekStatus, streakCount }: StreakProps) {
   return (
-    <div className='flex flex-col items-center justify-center gap-4 rounded-md border border-gray-300 p-6'>
+    <div className='flex flex-col items-center justify-center gap-4 rounded-md border border-gray-300 p-6 w-full'>
       <h4 className='text-gray-300'>Sequência de dias estudados</h4>
 
       <div className='grid grid-cols-7 gap-3'>

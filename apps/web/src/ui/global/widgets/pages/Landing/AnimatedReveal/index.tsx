@@ -2,6 +2,7 @@
 
 import { motion, useAnimationControls, useInView } from 'framer-motion'
 import { type PropsWithChildren, useEffect, useRef } from 'react'
+import { twMerge } from 'tailwind-merge'
 
 type AnimatedRevealProps = {
   delay?: number
@@ -26,7 +27,7 @@ export function AnimatedReveal({
   }, [isInView, contentAnimationControls.start, slideAnimationControls.start])
 
   return (
-    <div ref={containerRef} className='relative w-fit h-fit'>
+    <div ref={containerRef} className={twMerge('relative w-fit h-fit', className)}>
       <motion.div
         variants={{
           hidden: {
@@ -41,7 +42,6 @@ export function AnimatedReveal({
         initial='hidden'
         animate={contentAnimationControls}
         transition={{ duration: 0.5, delay: delay + 0.1 }}
-        className={className}
       >
         {children}
       </motion.div>
