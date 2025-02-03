@@ -14,12 +14,13 @@ export function LandingPage() {
       <Header />
       <HeroSection />
       <div className='space-y-40 py-24'>
+        <ShopSection />
         {/* <AbountSection /> */}
         {/* <CodeSection /> */}
         {/* <StreakSection /> */}
         {/* 
         
-        <ShopSection />
+       
         <RankingSection />
         <AchievementsSection />
         <CallToActionSection /> */}
