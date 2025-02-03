@@ -27,7 +27,7 @@ export function AnimatedBackground({ children }: PropsWithChildren) {
         hasLoop={true}
       />
       <AnimatedOpacity isVisible={isInView} delay={animationDuration}>
-        <div className='flex items-center justify-center flex-col absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 space-y-3 max-w-6xl mx-auto'>
+        <div className='flex items-center justify-center flex-col absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 space-y-3 mx-auto w-max'>
           <Animation name='apollo-asking' size={180} />
           {children}
         </div>

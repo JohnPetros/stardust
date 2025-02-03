@@ -5,11 +5,11 @@ import { AnimatedFeature } from './AnimatedFeature'
 export function CodeSection() {
   return (
     <section id='code' className='max-w-6xl mx-auto'>
-      <div className='sticky top-0 px-6 lg:px-0 py-12 md:py-0 z-20'>
+      <div className='sticky top-0 px-6 lg:px-0 py-16 z-20'>
         <SectionTitle>Código criado para aprendizagem</SectionTitle>
       </div>
 
-      <ul className='lg:mt-6'>
+      <ul>
         <li>
           <AnimatedFeature
             title='Linguagem de programação em português'

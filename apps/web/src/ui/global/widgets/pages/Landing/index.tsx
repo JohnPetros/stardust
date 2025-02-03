@@ -10,21 +10,17 @@ import { RankingSection } from './RankingSection'
 
 export function LandingPage() {
   return (
-    <div className='overflow-x-hidden'>
+    <div>
       <Header />
       <HeroSection />
       <div className='space-y-40 py-24'>
+        <AbountSection />
+        <CodeSection />
+        <StreakSection />
         <RankingSection />
-        {/* <ShopSection /> */}
-        {/* <AbountSection /> */}
-        {/* <CodeSection /> */}
-        {/* <StreakSection /> */}
-        {/* 
-        
-       
-       
+        <ShopSection />
         <AchievementsSection />
-        <CallToActionSection /> */}
+        <CallToActionSection />
       </div>
     </div>
   )

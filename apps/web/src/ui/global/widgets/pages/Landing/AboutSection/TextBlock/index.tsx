@@ -14,7 +14,7 @@ export function TextBlock({ children, icon, title }: PropsWithChildren<TextBlock
   return (
     <div>
       <AnimatedReveal>
-        <h3 className='flex items-center gap-1 text-gray-50 font-semibold'>
+        <h3 className='flex items-center gap-1 text-md text-gray-50 font-semibold'>
           <Icon name={icon} className='text-green-400' />
           {title}
         </h3>

@@ -26,10 +26,10 @@ export function AnimatedFeature({
   return (
     <div className='flex w-full h-screen'>
       <div className='mx-auto flex-1 flex flex-col lg:flex-row lg:items-center lg:justify-center gap-6'>
-        <div className='flex gap-6 px-6 lg:px-0'>
+        <div className='flex items-start lg:items-end gap-6 px-6 lg:px-0'>
           <motion.div
             style={{ rotate: '135deg' }}
-            initial={{ y: -250, x: lg ? -40 : 0, opacity: 0 }}
+            initial={{ y: -250, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 1 }}
           >
@@ -43,7 +43,7 @@ export function AnimatedFeature({
             <AnimatedReveal>
               <h3 className='text-xl md:text-2xl text-gray-50 font-semibold'>{title}</h3>
             </AnimatedReveal>
-            <Paragraph className='mt-3'>{paragraph}</Paragraph>
+            <Paragraph className='mt-3 text-md'>{paragraph}</Paragraph>
           </motion.div>
         </div>
         <div ref={contentRef} className='flex-1'>

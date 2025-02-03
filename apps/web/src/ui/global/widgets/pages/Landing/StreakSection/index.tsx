@@ -25,7 +25,7 @@ export function StreakSection() {
         </AnimatedBoard>
 
         <AnimatedReveal>
-          <Paragraph className='text-center'>
+          <Paragraph className='text-center text-lg'>
             Matenha sua{' '}
             <strong className='text-green-500 font-medium'>Sequência Espacial</strong>{' '}
             intacta, estudando e praticando todos os dias.
