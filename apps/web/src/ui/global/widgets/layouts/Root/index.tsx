@@ -13,7 +13,7 @@ export async function RootLayout({
   return (
     <html lang='pt-BR' className='scroll-smooth'>
       <body
-        className={`${roboto_mono.variable} ${poppins.variable} relative h-screen w-screen bg-gray-900 font-normal`}
+        className={`${roboto_mono.variable} ${poppins.variable} relative h-screen bg-gray-900 font-normal`}
       >
         <Providers>{children}</Providers>
       </body>

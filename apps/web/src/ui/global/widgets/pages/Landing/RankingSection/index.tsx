@@ -8,11 +8,11 @@ import { PodiumAnimation } from './PodiumAnimation'
 
 export function RankingSection() {
   return (
-    <section id='ranking' className='max-w-6xl mx-auto'>
+    <section id='ranking' className='max-w-6xl mx-auto px-6 md:px-0'>
       <SectionTitle>Seja ranqueado com outros viajantes</SectionTitle>
 
       <AnimatedBorder className='mt-6 p-8'>
-        <div className='grid grid-cols-2 gap-6'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
           <div>
             <PodiumAnimation />
 

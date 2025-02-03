@@ -2,11 +2,10 @@ import { SectionTitle } from '../SectionTitle'
 import { AnimatedReveal } from '../AnimatedReveal'
 import { AnimatedSpiral } from './AnimatedSpiral'
 import { Paragraph } from '../Paragraph'
-import { Animation } from '../../../components/Animation'
 
 export function AchievementsSection() {
   return (
-    <section id='shop' className='max-w-6xl mx-auto'>
+    <section id='shop' className='max-w-6xl mx-auto px-6 lg:px-0'>
       <SectionTitle>Conquiste tudo</SectionTitle>
       <AnimatedSpiral>
         <AnimatedReveal>

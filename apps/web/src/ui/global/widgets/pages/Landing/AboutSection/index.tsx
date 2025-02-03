@@ -1,4 +1,3 @@
-import { Animation } from '../../../components/Animation'
 import { Separator } from '../../../components/Separator'
 import { SectionTitle } from '../SectionTitle'
 import { AnimatedContent } from './AnimatedContent'
@@ -6,7 +5,7 @@ import { TextBlock } from './TextBlock'
 
 export function AbountSection() {
   return (
-    <section id='about' className='max-w-6xl mx-auto'>
+    <section id='about' className='max-w-6xl mx-auto py-16 px-6 md:px-6'>
       <SectionTitle>Chamada à missão espacial</SectionTitle>
       <AnimatedContent>
         <TextBlock title='Aprenda de Forma Divertida e Acessível' icon='smile'>
