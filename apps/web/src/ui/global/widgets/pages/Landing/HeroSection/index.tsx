@@ -17,7 +17,7 @@ export const HeroSection = () => {
           </h1>
         </AnimatedOpacity>
         <AnimatedOpacity delay={1.5}>
-          <p className='max-w-xl mt-3 text-center text-base leading-relaxed md:text-lg md:leading-relaxed'>
+          <p className='max-w-xl mt-3 text-center text-sm xs:text-base leading-relaxed md:text-lg md:leading-relaxed'>
             Aprenda programação explorando o espaço.
           </p>
         </AnimatedOpacity>
