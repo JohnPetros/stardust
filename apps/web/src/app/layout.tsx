@@ -7,6 +7,9 @@ import { RootLayout } from '@/ui/global/widgets/layouts/Root'
 export const metadata: Metadata = {
   title: 'StarDust',
   description: 'Aprenda lógica de programação explorando o espaço.',
+  icons: {
+    icon: 'https://aukqejqsiqsqowafpppb.supabase.co/storage/v1/object/public/images/marketing/favicon.png',
+  },
 }
 
 type RootProps = {
