@@ -15,8 +15,11 @@ export function AnimatedContent({ children }: PropsWithChildren) {
   const animationXPosition = useTransform(scrollYProgress, [0, 1], [0, '100%'])
 
   return (
-    <div ref={ref} className='flex flex-col md:flex-row mt-6'>
-      <motion.div style={{ x: animationXPosition }} className='hidden md:block'>
+    <div ref={ref} className='flex flex-col md:flex-row mt-6 w-full'>
+      <motion.div
+        style={{ x: animationXPosition }}
+        className='hidden sm:block absolute right-0'
+      >
         <Animation name='planets-exploration' size={610} />
       </motion.div>
       <motion.div
