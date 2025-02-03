@@ -1,9 +1,12 @@
-import { AbountSection } from './AboutSection'
-import { AchievementsSection } from './AchievementsSection'
+// import { AbountSection } from './AboutSection'
 import { CodeSection } from './CodeSection'
+import { CallToActionSection } from './CallToActionSection'
+// import { StreakSection } from './StreakSection'
+// import { AchievementsSection } from './AchievementsSection'
 import { HeroSection } from './HeroSection'
+import { ShopSection } from './ShopSection'
 import { Header } from './Header'
-import { RankingSection } from './RankingSection'
+// import { RankingSection } from './RankingSection'
 
 export function LandingPage() {
   return (
@@ -11,12 +14,13 @@ export function LandingPage() {
       <Header />
       <HeroSection />
       <div className='space-y-24 py-24'>
-        <RankingSection />
+        <ShopSection />
+        {/* <StreakSection /> */}
+        {/* <CodeSection /> */}
+        {/* <RankingSection /> */}
         {/* <AbountSection /> */}
-        {/* 
-        <CodeSection />
-        < */}
         {/* <AchievementsSection /> */}
+        <CallToActionSection />
       </div>
     </div>
   )

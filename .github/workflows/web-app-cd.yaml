@@ -4,9 +4,8 @@ on:
   push:
     branches:
       - clean-arch
-    # Uncomment and specify paths if needed:
-    # paths:
-    #   - "apps/web/**"
+    paths:
+      - "apps/web/**"
 
 env:
   PROJECT_ID: ${{ secrets.GOOGLE_CLOUD_RUN_PROJECT_ID }}

@@ -1,10 +1,10 @@
 import { RankingUser } from '@/ui/ranking/widgets/pages/Ranking/RankingUsersList/RankingUser'
 
 import { SectionTitle } from '../SectionTitle'
-import { Animation } from '../../../components/Animation'
 import { AnimatedBorder } from '../../../components/AnimatedBorder'
 import { AnimatedRankingUser } from './AnimatedRankingUser'
 import { Paragraph } from '../Paragraph'
+import { PodiumAnimation } from './PodiumAnimation'
 
 export function RankingSection() {
   return (
@@ -14,7 +14,7 @@ export function RankingSection() {
       <AnimatedBorder className='mt-6 p-8'>
         <div className='grid grid-cols-2 gap-6'>
           <div>
-            <Animation name='podium' size={120} />
+            <PodiumAnimation />
 
             <div>
               <Paragraph>

@@ -4,12 +4,12 @@ import { useRef } from 'react'
 
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 import { Animation } from '@/ui/global/widgets/components/Animation'
-import { useTrophyAnimation } from './useTrophyAnimation'
+import { usePodiumAnimation } from './usePodiumAnimation'
 
 export function PodiumAnimation() {
   const containerRef = useRef<HTMLDivElement>(null)
   const animationRef = useRef<AnimationRef>(null)
-  useTrophyAnimation(containerRef, animationRef)
+  usePodiumAnimation(containerRef, animationRef)
 
   return (
     <div ref={containerRef}>

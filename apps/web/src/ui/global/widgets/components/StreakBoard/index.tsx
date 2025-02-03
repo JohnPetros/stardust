@@ -5,6 +5,7 @@ import { WeekStatus } from '@stardust/core/profile/structs'
 import { StreakIcon } from '../StreakIcon'
 import { AnimatedWeekday } from './AnimatedWeekday'
 import { WEEK_DAY_STATUS_ICONS } from './week-day-status-icons'
+import { AnimatedBorder } from '../AnimatedBorder'
 
 type StreakProps = {
   weekStatus: WeekStatus
@@ -13,7 +14,7 @@ type StreakProps = {
 
 export function StreakBoard({ weekStatus, streakCount }: StreakProps) {
   return (
-    <div className='flex flex-col items-center justify-center gap-4 rounded-md border border-gray-300 p-6'>
+    <AnimatedBorder className='flex flex-col items-center justify-center gap-4 rounded-md p-6 w-full'>
       <h4 className='text-gray-300'>Sequência de dias estudados</h4>
 
       <div className='grid grid-cols-7 gap-3'>
@@ -42,6 +43,6 @@ export function StreakBoard({ weekStatus, streakCount }: StreakProps) {
           </p>
         </div>
       )}
-    </div>
+    </AnimatedBorder>
   )
 }

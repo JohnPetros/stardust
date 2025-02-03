@@ -1,11 +1,19 @@
 import { type RefObject, useEffect } from 'react'
 import { animate, useInView } from 'framer-motion'
 
-export function useAnimatedCounter(
-  from: number,
-  to: number,
-  elementRef: RefObject<HTMLElement>,
-) {
+type AnimatedCounterProps = {
+  from: number
+  to: number
+  speed: number
+  elementRef: RefObject<HTMLElement>
+}
+
+export function useAnimatedCounter({
+  from,
+  to,
+  speed,
+  elementRef,
+}: AnimatedCounterProps) {
   const isInView = useInView(elementRef, { once: true })
 
   useEffect(() => {
@@ -15,15 +23,13 @@ export function useAnimatedCounter(
     element.textContent = String(from)
 
     const animation = animate(from, to, {
-      duration: 10,
+      duration: speed,
       ease: 'easeOut',
       onUpdate: (value) => {
         element.textContent = value.toFixed(0)
       },
     })
 
-    return () => {
-      animation.stop()
-    }
-  }, [from, to, elementRef.current, isInView])
+    return () => animation.stop()
+  }, [from, to, speed, elementRef.current, isInView])
 }

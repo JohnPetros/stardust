@@ -31,7 +31,7 @@ export function SidenavButton({
         type='button'
         onClick={onClick}
         className={twMerge(
-          'relative flex h-auto w-max items-center justify-center rounded-md bg-transparent p-3 text-sm text-gray-100 outline-green-500 transition-colors duration-200 hover:bg-green-700/30',
+          'relative flex h-auto w-max items-center justify-center rounded-md bg-transparent p-3 text-sm text-gray-100 outline-green-500 transition-colors duration-200 z-20 hover:bg-green-700/30',
           isActive ? 'bg-green-500/30' : '',
         )}
       >

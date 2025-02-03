@@ -29,7 +29,7 @@ export function AvatarsList({ initialItems }: AvatarsListProps) {
 
   return (
     <section id='avatars'>
-      <h2 className='text-lg font-semibold text-white'>Foguetes</h2>
+      <h2 className='text-lg font-semibold text-white'>Avatares</h2>
       <div className='mt-3 flex flex-col gap-3 sm:flex-row sm:items-center'>
         <Search
           id='Avatar-search'

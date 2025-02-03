@@ -1,4 +1,4 @@
-import { PlaygroundCodeEditor } from '../../../components/PlaygroundCodeEditor'
+import { CodeSnippet } from '../../../components/CodeSnippet'
 import { SectionTitle } from '../SectionTitle'
 import { Feature } from './Feature'
 
@@ -9,12 +9,14 @@ export function CodeSection() {
         <SectionTitle>Código criado para aprendizagem</SectionTitle>
       </div>
 
-      <Feature
-        title='Linguagem de programação em português'
-        paragraph='Domine a arte da programação com uma linguagem desenvolvida especialmente para falantes de português. Simples, intuitiva e projetada para facilitar seu aprendizado desde o primeiro comando.'
-      >
-        <PlaygroundCodeEditor
-          code={`funcao fala(mensagem) {
+      <div className='mt-6'>
+        <Feature
+          title='Linguagem de programação em português'
+          paragraph='Domine a arte da programação com uma linguagem desenvolvida especialmente para falantes de português. Simples, intuitiva e projetada para facilitar seu aprendizado desde o primeiro comando.'
+        >
+          <CodeSnippet
+            isRunnable={true}
+            code={`funcao fala(mensagem) {
   escreva(mensagem)
 }
 
@@ -24,59 +26,44 @@ funcao soma(a, b) {
 
 escreva("Olá, mundo!") // Saída: Olá, mundo!
 escreva('A soma de 5 e 3 é \${soma(5, 3)}.') // Saída: A soma de 5 e 3 é 8.`}
-          height={400}
-        />
-      </Feature>
-      <Feature
-        title='Do básico ao avançado'
-        paragraph='Comece com os conceitos mais básicos, como declarar variáveis, e evolua para a criação de programas complexos que resolvem problemas reais. Tudo em uma jornada contínua e estruturada.'
-      >
-        <PlaygroundCodeEditor
-          code='var maximoDeElementos = 4
-var indiceInicial = 0
-var indiceFinal = 0
-var indice = 0
-var fila = []
-
-funcao enfileirar (valorEntrada) {
-  se (indiceFinal == maximoDeElementos) {
-    escreva("Fila Cheia")
-  } senao {
-  fila[indiceFinal] = valorEntrada
-  escreva("Valor inserido com sucesso: " + texto(fila[indiceFinal]))
-    retorna indiceFinal = indiceFinal + 1
-  }
-}
-função desenfileirar() {
-  se (indiceInicial == indiceFinal) {
-    escreva("Fila Vazia")
-  } senao {
-    para (indice = 0 indice <= indiceFinal indice = indice + 1){
-      se (indice + 1 == indiceFinal) {
-        indiceFinal = indiceFinal - 1
-        escreva("Valor retirado com sucesso.")
-      } senao {
-        fila[indice] = fila[indice+1]
-      }
+          />
+        </Feature>
+        <Feature
+          title='Do básico ao avançado'
+          paragraph='Comece com os conceitos mais básicos, como declarar variáveis, e evolua para a criação de programas complexos que resolvem problemas reais. Tudo em uma jornada contínua e estruturada.'
+        >
+          <CodeSnippet
+            isRunnable={true}
+            code={` funcao fibonacci(maximo) {
+    var a, b = 0, 1
+    
+    enquanto (a < maximo) {
+        escreva(a)
+        var aAtual = a
+        a = b
+        b = aAtual + b
     }
-  }
-}
-enfileirar(1)'
-          height={400}
-        />
-      </Feature>
-      <Feature
-        title='Desafios de código'
-        paragraph='Teste suas habilidades com desafios de código práticos. Além de consolidar seu conhecimento, você pode criar e compartilhar desafios para outros viajantes, tornando-se parte de uma comunidade colaborativa.'
-      >
-        <PlaygroundCodeEditor
-          code={`// Desafio: Verificar se uma palavra é um palíndromo
+ }
+    
+fibonacci(1000)
+
+`}
+          />
+        </Feature>
+        <Feature
+          title='Desafios de código'
+          paragraph='Teste suas habilidades com desafios de código práticos. Além de consolidar seu conhecimento, você pode criar e compartilhar desafios para outros viajantes, tornando-se parte de uma comunidade colaborativa.'
+        >
+          <CodeSnippet
+            isRunnable={true}
+            code={`// Desafio: Verificar se uma palavra é um palíndromo
 funcao verifiquePalindromo(frase) {
   var palavras = frase.dividir(" ")
   var fraseSemEspaco = palavras.juntar("")
   var fraseSemEspacoEInvertida = ''
+  var fraseTamanho = fraseSemEspaco.tamanho()
 
-  para (var letra = fraseSemEspaco.tamanho() - 1; letra >= 0; letra--) {
+  para (var letra = fraseTamanho - 1; letra >= 0; letra--) {
     fraseSemEspacoEInvertida += fraseSemEspaco[letra] 
   }
   retorna fraseSemEspaco.minusculo() == fraseSemEspacoEInvertida.minusculo()
@@ -85,10 +72,11 @@ funcao verifiquePalindromo(frase) {
 // Testando o desafio
 escreva(verifiquePalindromo("arara")) // Saída: verdadeiro
 escreva(verifiquePalindromo("programação é legal")) // Saída: falso
-escreva(verifiquePalindromo("Ame o poema")) // Saída: verdadeiro`}
-          height={400}
-        />
-      </Feature>
+escreva(verifiquePalindromo("Ame o poema")) // Saída: verdadeiro
+`}
+          />
+        </Feature>
+      </div>
     </section>
   )
 }

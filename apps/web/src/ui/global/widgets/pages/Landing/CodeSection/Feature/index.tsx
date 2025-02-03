@@ -13,27 +13,33 @@ type FeatureProps = {
 }
 
 export function Feature({ title, paragraph, children }: PropsWithChildren<FeatureProps>) {
-  const containerRef = useRef(null)
-  const { scrollXProgress } = useScroll({ target: containerRef })
-  // const rocketYPosition = useTransform(scrollXProgress, [0, 1], [0, 300])
-  const textYPosition = useTransform(scrollXProgress, [0, 1], [0, 300])
-
-  console.log({ scrollXProgress })
-  console.log({ textYPosition })
+  const contentRef = useRef(null)
+  const { scrollYProgress } = useScroll({ target: contentRef })
+  const textYPosition = useTransform(scrollYProgress, [0, 1], [0, 100])
 
   return (
-    <div className='flex w-full h-screen'>
-      {/* <motion.div style={{ y: rocketYPosition }}>
-        <Animation name='apollo-riding-rocket' size={96} />
-      </motion.div> */}
-      <div className='mx-auto flex-1 flex items-center justify-center gap-12'>
-        <motion.div style={{ y: textYPosition }} className='max-w-96'>
+    <div className='flex w-full h-screen pt-12'>
+      <div className='mx-auto flex-1 flex items-center justify-center gap-6'>
+        <motion.div
+          style={{ rotate: '135deg' }}
+          initial={{ y: -250, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          transition={{ duration: 1 }}
+          className='w-max'
+        >
+          <Animation name='fast-rocket' size={96} />
+        </motion.div>
+        <motion.div
+          style={{ y: textYPosition }}
+          transition={{ duration: 0.2 }}
+          className='w-96'
+        >
           <AnimatedReveal>
             <h3 className='text-2xl text-gray-50 font-semibold'>{title}</h3>
           </AnimatedReveal>
           <Paragraph className='mt-3'>{paragraph}</Paragraph>
         </motion.div>
-        <div ref={containerRef} className='w-full'>
+        <div ref={contentRef} className='flex-1'>
           {children}
         </div>
       </div>

@@ -11,6 +11,9 @@ const weekDayAnimations: Variants = {
   down: {
     opacity: 1,
     y: 0,
+    transition: (index: number) => ({
+      delay: index * 0.4,
+    }),
   },
 }
 
@@ -25,7 +28,7 @@ export function AnimatedWeekday({ index, children }: AnimatedWeekdayProps) {
       variants={weekDayAnimations}
       initial='up'
       animate='down'
-      transition={{ delay: index * 0.4 }}
+      custom={index}
       className='flex flex-col items-center justify-center gap-2'
     >
       {children}

@@ -12,7 +12,7 @@ const variants: Variants = {
     opacity: 1,
     y: 0,
     transition: (index: number) => ({
-      delay: 0.05 * index,
+      delay: 0.5 * index,
     }),
   },
 }
@@ -26,7 +26,7 @@ export function AnimatedRankingUser({
   index,
 }: PropsWithChildren<AnimatedRankingUserProps>) {
   return (
-    <motion.li variants={variants} initial='hidden' animate='visible' custom={index}>
+    <motion.li variants={variants} initial='hidden' whileInView='visible' custom={index}>
       {children}
     </motion.li>
   )

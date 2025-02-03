@@ -9,6 +9,8 @@ import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'
 import { PODIUM } from '../../RankingResult/podium'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { RankingPosition } from '@stardust/core/ranking/structs'
+import { ROUTES } from '@/constants'
+import { AnimatedCounter } from '@/ui/global/widgets/components/AnimatedCounter'
 
 const positionStyles = tv({
   base: 'font-semibold p-2 w-12 grid place-content-center group-hover:text-gray-100/90',
@@ -55,38 +57,38 @@ export function RankingUser({
   else if (rankingPosition.isInDangerArea(losersPositionOffset)) color = 'danger'
   else color = 'neutral'
 
-  if (user)
-    return (
-      <Link
-        href={`/profile/${id}`}
+  return (
+    <Link
+      href={ROUTES.profile.user(id)}
+      className={twMerge(
+        'group flex w-full items-center justify-between rounded-md border-2 p-3 hover:border-gray-100/90',
+        user?.id === id ? 'border-green-700' : 'border-gray-800',
+      )}
+    >
+      <div className='mr-2 flex items-center gap-2 text-lg'>
+        <span className={positionStyles({ color })}>
+          {rankingPosition.isInPodiumArea ? (
+            <Image src={`/icons/${icon}`} width={32} height={32} alt='' />
+          ) : (
+            position
+          )}
+        </span>
+        <UserAvatar avatarImage={avatarImage} avatarName={avatarName} size={48} />
+      </div>
+
+      <strong
         className={twMerge(
-          'group flex w-full items-center justify-between rounded-md border-2 p-3 hover:border-gray-100/90',
-          user.id === id ? 'border-green-700' : 'border-gray-800',
+          'block truncate text-gray-500 group-hover:text-gray-100/90',
+          user?.id === id ? 'text-gray-100' : 'text-gray-500',
         )}
       >
-        <div className='mr-2 flex items-center gap-2 text-lg'>
-          <span className={positionStyles({ color })}>
-            {rankingPosition.isInPodiumArea ? (
-              <Image src={`/icons/${icon}`} width={32} height={32} alt='' />
-            ) : (
-              position
-            )}
-          </span>
-          <UserAvatar avatarImage={avatarImage} avatarName={avatarName} size={48} />
-        </div>
+        {name}
+      </strong>
 
-        <strong
-          className={twMerge(
-            'block truncate text-gray-500 group-hover:text-gray-100/90',
-            user?.id === id ? 'text-gray-100' : 'text-gray-500',
-          )}
-        >
-          {name}
-        </strong>
-
-        <strong className='block w-24 text-right uppercase text-gray-600 group-hover:text-gray-100/90'>
-          {canShowXp && `${xp} xp`}
-        </strong>
-      </Link>
-    )
+      <strong className='block w-24 text-right uppercase text-gray-600 group-hover:text-gray-100/90'>
+        {canShowXp && <AnimatedCounter from={0} to={xp} speed={1} />}
+        {canShowXp && ' XP'}
+      </strong>
+    </Link>
+  )
 }
