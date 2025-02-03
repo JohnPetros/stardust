@@ -1,27 +1,23 @@
 'use client'
 
-import { useRef, useEffect, type PropsWithChildren } from 'react'
-import { useInView } from 'framer-motion'
+import { useRef, type PropsWithChildren } from 'react'
 
+import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 import { AnimatedOpacity } from '@/ui/global/widgets/components/AnimatedOpacity'
 import { Animation } from '@/ui/global/widgets/components/Animation'
 import { AchievementCard } from '@/ui/profile/widgets/components/AchievementCard'
-import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 import { AnimatedCard } from './AnimatedCard'
+import { useAnimatedSpiral } from './useAnimatedSpiral'
 
 export function AnimatedSpiral({ children }: PropsWithChildren) {
-  const containerRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const animationRef = useRef<AnimationRef>(null)
-  const isInView = useInView(containerRef, { once: true })
-
-  useEffect(() => {
-    if (isInView) animationRef.current?.restart()
-  }, [isInView])
+  const { isInView } = useAnimatedSpiral(containerRef, animationRef)
 
   return (
     <div ref={containerRef} className='grid grid-cols-2'>
       <div className='grid place-content-center'>
-        <Animation name='trophy' size={220} hasLoop={false} />
+        <Animation ref={animationRef} name='trophy' size={220} hasLoop={false} />
         {children}
       </div>
 

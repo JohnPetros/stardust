@@ -12,7 +12,11 @@ type FeatureProps = {
   paragraph: string
 }
 
-export function Feature({ title, paragraph, children }: PropsWithChildren<FeatureProps>) {
+export function AnimatedFeature({
+  title,
+  paragraph,
+  children,
+}: PropsWithChildren<FeatureProps>) {
   const contentRef = useRef(null)
   const { scrollYProgress } = useScroll({ target: contentRef })
   const textYPosition = useTransform(scrollYProgress, [0, 1], [0, 100])

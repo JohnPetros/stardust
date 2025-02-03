@@ -1,12 +1,13 @@
 'use client'
 
 import Image from 'next/image'
-import { type PropsWithChildren, useEffect, useRef } from 'react'
-import { useScroll, useTransform, useInView, motion } from 'framer-motion'
+import { type PropsWithChildren, useRef } from 'react'
+import { motion } from 'framer-motion'
 
 import { AnimatedOpacity } from '@/ui/global/widgets/components/AnimatedOpacity'
 import { Animation } from '@/ui/global/widgets/components/Animation'
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
+import { useAnimatedSection } from './useAnimatedSection'
 
 type AnimatedSectionProps = {
   title: string
@@ -15,17 +16,10 @@ type AnimatedSectionProps = {
 export function AnimatedSection({ children }: PropsWithChildren<AnimatedSectionProps>) {
   const sectionRef = useRef(null)
   const animationRef = useRef<AnimationRef>(null)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end start'],
-  })
-  const isInView = useInView(sectionRef, { once: true })
-  const textBlockYPosition = useTransform(scrollYProgress, [0, 1], ['0%', '300%'])
-  const shopPreviewXPosition = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
-
-  useEffect(() => {
-    if (isInView) animationRef.current?.restart()
-  }, [isInView])
+  const { textBlockYPosition, shopPreviewXPosition } = useAnimatedSection(
+    sectionRef,
+    animationRef,
+  )
 
   return (
     <section
