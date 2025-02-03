@@ -10,7 +10,7 @@ export function Paragraph({
   return (
     <AnimatedReveal>
       <p
-        className={twMerge('text-gray-200 text-sm md:text-md leading-8 mt-3', className)}
+        className={twMerge('text-gray-200 text-lg leading-8 mt-3', className)}
         {...paragraphProps}
       >
         {children}

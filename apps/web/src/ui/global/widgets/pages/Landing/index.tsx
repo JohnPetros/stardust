@@ -15,9 +15,10 @@ export function LandingPage() {
       <HeroSection />
       <div className='space-y-40 py-24'>
         {/* <AbountSection /> */}
-        <CodeSection />
+        {/* <CodeSection /> */}
+        {/* <StreakSection /> */}
         {/* 
-        <StreakSection />
+        
         <ShopSection />
         <RankingSection />
         <AchievementsSection />
