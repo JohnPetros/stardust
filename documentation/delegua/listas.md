@@ -374,7 +374,7 @@ Do terceiro argumento adiante (opcional) é definido os elementos que serão adi
   // Resultado: a
 </Code>
 
-Logo, é possível usar alguns métodos de vetor em textos, como *tamanho()*, *inverter()* e *concatenar()* e *inclui()*.
+Logo, é possível usar alguns métodos de lista em textos, como *tamanho()*, *inverter()* e *concatenar()* e *inclui()*.
 
 <Code exec>
   var letras = "abc"
