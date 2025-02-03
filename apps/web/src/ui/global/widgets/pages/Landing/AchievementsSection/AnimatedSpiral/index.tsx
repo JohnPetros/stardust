@@ -15,13 +15,13 @@ export function AnimatedSpiral({ children }: PropsWithChildren) {
   const { isInView } = useAnimatedSpiral(containerRef, animationRef)
 
   return (
-    <div ref={containerRef} className='grid grid-cols-2'>
+    <div ref={containerRef} className='grid grid-cols-1 md:grid-cols-2'>
       <div className='grid place-content-center'>
         <Animation ref={animationRef} name='trophy' size={220} hasLoop={false} />
         {children}
       </div>
 
-      <div className='relative'>
+      <div className='relative w-fit'>
         <AnimatedOpacity delay={0.5} isVisible={isInView} className='absoute z-[-5]'>
           <Animation name='spiral' size={620} hasLoop={true} />
         </AnimatedOpacity>

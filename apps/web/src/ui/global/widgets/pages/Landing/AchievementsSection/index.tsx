@@ -5,7 +5,7 @@ import { Paragraph } from '../Paragraph'
 
 export function AchievementsSection() {
   return (
-    <section id='shop' className='max-w-6xl mx-auto'>
+    <section id='shop' className='max-w-6xl mx-auto px-6 lg:px-0'>
       <SectionTitle>Conquiste tudo</SectionTitle>
       <AnimatedSpiral>
         <AnimatedReveal>
