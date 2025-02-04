@@ -1,4 +1,4 @@
-import { type RefObject, type KeyboardEvent, useState, useEffect } from 'react'
+import { type RefObject, useState, useEffect } from 'react'
 
 import type {
   TextEditorRef,

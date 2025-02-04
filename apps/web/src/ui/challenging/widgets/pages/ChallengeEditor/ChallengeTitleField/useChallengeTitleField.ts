@@ -14,6 +14,7 @@ export function useChallengeTitleField() {
   useEffect(() => {
     setErrorMessage('')
     if (
+      !challengeTitle ||
       challengeTitle?.length <= 2 ||
       formState.defaultValues?.title?.trim().toLowerCase() ===
         challengeTitle.trim().toLowerCase()

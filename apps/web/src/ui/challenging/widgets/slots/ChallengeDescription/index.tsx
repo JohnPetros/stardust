@@ -11,18 +11,13 @@ import { BlockedSolutionsAlertDialog } from '@/ui/challenging/widgets/components
 import { VoteControl } from './ChallengeVoteControl'
 import { ChallengeControl } from './ChallengeControl'
 import { useChallengeDescriptionSlot } from './useChallengeDescriptionSlot'
+import { ChallengeContentNav } from '../../components/ChallengeContentNav'
 
 export function ChallengeDescriptionSlot() {
   const { getCraftsVisibilitySlice } = useChallengeStore()
   const { craftsVislibility } = getCraftsVisibilitySlice()
-  const {
-    mdx,
-    isUserChallengeAuthor,
-    isCompleted,
-    challenge,
-    isLoading,
-    handleShowSolutions,
-  } = useChallengeDescriptionSlot()
+  const { mdx, isUserChallengeAuthor, isCompleted, challenge, isLoading } =
+    useChallengeDescriptionSlot()
 
   return isLoading || !challenge ? (
     <div className='grid h-full place-content-center'>
@@ -41,37 +36,7 @@ export function ChallengeDescriptionSlot() {
           completionsCount={challenge.completionsCount.value}
         />
         <VoteControl />
-        <div className='flex items-center gap-2 md:hidden'>
-          {craftsVislibility.canShowSolutions.isFalse ? (
-            <BlockedCommentsAlertDialog>
-              <ContentLink
-                title='Comentários'
-                contentType='comments'
-                isActive={false}
-                isBlocked={true}
-              />
-            </BlockedCommentsAlertDialog>
-          ) : (
-            <ContentLink
-              title='Comentários'
-              contentType='comments'
-              isActive={false}
-              isBlocked={false}
-            />
-          )}
-          {craftsVislibility.canShowSolutions.isFalse ? (
-            <BlockedSolutionsAlertDialog onShowSolutions={handleShowSolutions}>
-              <ContentLink
-                title='Soluções'
-                contentType='solutions'
-                isActive={false}
-                isBlocked={true}
-              />
-            </BlockedSolutionsAlertDialog>
-          ) : (
-            <ContentLink title='Soluções' contentType='solutions' isActive={false} />
-          )}
-        </div>
+        <ChallengeContentNav contents={['comments', 'solutions']} />
         {isUserChallengeAuthor && (
           <ChallengeControl
             challengeSlug={challenge.slug.value}

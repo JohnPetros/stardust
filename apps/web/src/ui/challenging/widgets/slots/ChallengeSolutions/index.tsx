@@ -14,6 +14,7 @@ import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useChallengeSolutionsSlot } from './useChallengeSolutionsSlot'
 import { SolutionCard } from './SolutionCard'
 import type { SolutionsListSorter } from '@stardust/core/challenging/types'
+import { ChallengeContentNav } from '../../components/ChallengeContentNav'
 
 const SORTER_BUTTON_TITLES: Record<SolutionsListSorter, string> = {
   date: 'recentes',
@@ -38,6 +39,8 @@ export function ChallengeSolutionsSlot() {
   } = useChallengeSolutionsSlot()
   return (
     <div className='px-6 py-3'>
+      <ChallengeContentNav contents={['description', 'comments']} />
+
       <Button asChild className='ml-auto w-max px-3 h-10 text-xs'>
         <Link href={`${ROUTES.challenging.challenges.solution(challengeSlug)}`}>
           <Icon name='share' size={14} className='mr-1' />

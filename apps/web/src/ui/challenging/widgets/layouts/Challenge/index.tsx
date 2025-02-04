@@ -46,7 +46,7 @@ export function ChallengeLayout({
         {header}
         <main className='w-full'>
           <div className='md:hidden'>
-            <Slider />
+            <Slider>{tabContent}</Slider>
           </div>
           <div
             style={{

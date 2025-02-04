@@ -7,7 +7,6 @@ import type { CommentsListParams } from '@stardust/core/forum/types'
 
 import { ROUTES } from '@/constants'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useApi } from '@/ui/global/hooks/useApi'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
@@ -17,7 +16,6 @@ export function useChallengeCommentsSlot(challengeId: string) {
   const { challenge } = getChallengeSlice()
   const { craftsVislibility } = getCraftsVisibilitySlice()
   const { goTo } = useRouter()
-  const { md: isMobile } = useBreakpoint()
   const api = useApi()
   const toast = useToastContext()
 
@@ -36,7 +34,6 @@ export function useChallengeCommentsSlot(challengeId: string) {
   }, [goTo, craftsVislibility, challenge?.slug])
 
   return {
-    isMobile,
     handleCommentSave,
     handleCommentListFetch,
   }

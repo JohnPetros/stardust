@@ -3,7 +3,6 @@
 import type { ReactNode } from 'react'
 import { List, Root } from '@radix-ui/react-tabs'
 import { Trigger as TabButton } from '@radix-ui/react-tabs'
-import { AnimatePresence } from 'framer-motion'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useTabs } from './useTabs'
 import { TabContent } from './TabContent'
@@ -41,7 +40,7 @@ export function Tabs({ children }: TabsProps) {
             />
           </TabButton>
           <span className='text-gray-600'>|</span>
-          {craftsVislibility.canShowComments.isFalse ? (
+          {craftsVislibility.canShowComments.isTrue ? (
             <BlockedCommentsAlertDialog>
               <TabButton value='comments' asChild>
                 <ContentLink

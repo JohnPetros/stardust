@@ -2,6 +2,7 @@
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { motion } from 'framer-motion'
+import type { PropsWithChildren } from 'react'
 
 import { useSlider } from './useSlider'
 import { NavButton } from './NavButton'
@@ -9,7 +10,7 @@ import { ChallengeDescriptionSlot } from '../../../slots/ChallengeDescription'
 import { ChallengeCodeEditorSlot } from '../../../slots/ChallengeCodeEditor'
 import { ChallengeResultSlot } from '../../../slots/ChallengeResult'
 
-export function Slider() {
+export function Slider({ children }: PropsWithChildren) {
   const {
     swiperRef,
     motionScope,
@@ -66,7 +67,7 @@ export function Slider() {
         allowTouchMove={false}
       >
         <SwiperSlide className='h-full overflow-y-auto'>
-          <ChallengeDescriptionSlot />
+          {children}
         </SwiperSlide>
 
         <SwiperSlide>

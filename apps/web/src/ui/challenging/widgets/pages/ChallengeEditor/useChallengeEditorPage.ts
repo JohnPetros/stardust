@@ -24,11 +24,11 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
     resolver: zodResolver(challengeSchema),
     defaultValues: {
       title: challenge?.title.value,
-      description: challenge?.description.value ?? ' ',
-      code: challenge?.code ?? ' ',
+      description: challenge?.description.value ?? '',
+      code: challenge?.code ?? '',
       difficultyLevel: challenge?.difficulty.level ?? 'easy',
       function: {
-        name: challenge?.code ? provider.getFunctionName(challenge.code) : ' ',
+        name: challenge?.code ? provider.getFunctionName(challenge.code) : '',
         params: challenge
           ? provider
               .getFunctionParamsNames(challenge.code)

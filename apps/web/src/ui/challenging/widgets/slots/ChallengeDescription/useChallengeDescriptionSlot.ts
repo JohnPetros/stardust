@@ -9,22 +9,11 @@ import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
 
 export function useChallengeDescriptionSlot() {
   const [isLoading, setIsLoading] = useState(true)
-  const { getChallengeSlice, getCraftsVisibilitySlice, getMdxSlice } = useChallengeStore()
+  const { getChallengeSlice, getMdxSlice } = useChallengeStore()
   const { mdx, setMdx } = getMdxSlice()
   const { challenge } = getChallengeSlice()
-  const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
-  const { user, updateUser } = useAuthContext()
-  const { goTo } = useRouter()
+  const { user } = useAuthContext()
   const { provider } = useCodeRunner()
-
-  async function handleShowSolutions() {
-    if (!user || !challenge) return
-
-    user.unlockChallengeSolutions(challenge.id)
-    await updateUser(user)
-    setCraftsVislibility(craftsVislibility.showSolutions())
-    goTo(ROUTES.challenging.challenges.challengeSolutions.list(challenge.slug.value))
-  }
 
   useEffect(() => {
     if (mdx) {
@@ -55,6 +44,5 @@ export function useChallengeDescriptionSlot() {
     isUserChallengeAuthor: Boolean(challenge?.authorId === user?.id),
     isCompleted:
       challenge && user ? user.hasCompletedChallenge(challenge.id).isTrue : false,
-    handleShowSolutions,
   }
 }

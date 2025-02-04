@@ -40,11 +40,12 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
       setChallenge(challenge)
     }
     if (!craftsVislibility && challenge && user) {
+      const isUserChallengeAuthor = user.id === challenge.authorId
       const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
       setCraftsVislibility(
         ChallengeCraftsVisibility.create({
-          canShowComments: isChallengeCompleted.isTrue,
-          canShowSolutions: isChallengeCompleted.isTrue,
+          canShowComments: isUserChallengeAuthor || isChallengeCompleted.isTrue,
+          canShowSolutions: isUserChallengeAuthor || isChallengeCompleted.isTrue,
         }),
       )
     }
