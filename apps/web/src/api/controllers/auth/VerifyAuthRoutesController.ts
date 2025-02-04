@@ -18,6 +18,7 @@ export const VerifyAuthRoutesController = (authService: IAuthService): IControll
       const response = await authService.fetchUserId()
       const hasSession = response.isSuccess
       const isRootRoute = currentRoute === '/'
+      const isSignInRoute = currentRoute === ROUTES.auth.signIn
 
       if (!hasSession && !isPublicRoute) {
         return http.redirect(ROUTES.auth.signIn)
@@ -28,6 +29,10 @@ export const VerifyAuthRoutesController = (authService: IAuthService): IControll
       }
 
       if (hasSession && isRootRoute) {
+        return http.redirect(ROUTES.space)
+      }
+
+      if (hasSession && isSignInRoute) {
         return http.redirect(ROUTES.space)
       }
 
