@@ -4,11 +4,11 @@ import { type Variants, motion } from 'framer-motion'
 const variants: Variants = {
   hidden: {
     x: -120,
-    // opacity: 0,
+    opacity: 0,
   },
   visible: {
     x: 0,
-    // opacity: 1,
+    opacity: 1,
     transition: {
       type: 'spring',
       duration: 0.2,

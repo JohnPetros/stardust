@@ -229,7 +229,6 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   get author() {
-    console.log(this.props.author)
     if (!this.props.author.entity) throw new EntityNotDefinedError('Autor do desafio')
     return this.props.author.entity
   }

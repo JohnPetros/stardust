@@ -59,12 +59,24 @@ export function Sidenav({ isExpanded, toggleSidenav }: SidenavProps) {
         <div>
           <Link
             href='/'
-            className='mx-3 grid h-16 place-content-center border-b border-green-700'
+            className='mx-3 grid h-16 place-content-center border-b border-green-700 overflow-hidden'
           >
             {isExpanded ? (
-              <Image src='/images/logo.svg' width={96} height={96} alt='StarDust' />
+              <Image
+                src='/images/logo.svg'
+                width={96}
+                height={96}
+                loading='eager'
+                alt='StarDust'
+              />
             ) : (
-              <Image src='/icons/rocket.svg' width={30} height={30} alt='' />
+              <Image
+                src='/icons/rocket.svg'
+                width={30}
+                height={30}
+                loading='eager'
+                alt=''
+              />
             )}
           </Link>
 

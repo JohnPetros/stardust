@@ -3,7 +3,7 @@ import { Datetime } from '@stardust/core/libs'
 import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { AdornmentGroup } from './AdornmentsGroup'
-import { SettingsLink } from './SettingsLink'
+import { AccountLinks } from './SettingsLink'
 
 type UserProps = {
   id: string
@@ -38,11 +38,11 @@ export function Account({
   const formattedCreatedAt = new Datetime(createdAt).format('DD MMMM [de] YYYY')
 
   return (
-    <div className='flex flex-col border-b border-gray-300 pb-6 md:flex-row md:justify-between md:gap-6'>
+    <div className='flex flex-col border-b border-gray-700 md:pb-6 md:flex-row md:justify-between md:gap-6'>
       <div className='flex flex-col items-center justify-center gap-3 md:flex-row md:gap-6'>
         <UserAvatar avatarName={avatar.name} avatarImage={avatar.image} size={148} />
         <div className='flex flex-col gap-2 md:items-start'>
-          <strong className='mt-3 truncate text-center text-lg text-green-500'>
+          <strong className='mt-3 truncate text-center text-lg font-semibold text-green-500'>
             {name}
           </strong>
           <div className='flex items-center justify-center gap-2'>
@@ -63,8 +63,8 @@ export function Account({
         <AdornmentGroup tier={tier} rocket={rocket} />
       </dl>
 
-      <div className='flex h-full w-6 justify-start'>
-        <SettingsLink id={id} />
+      <div className='flex w-full md:w-6 md:h-full justify-start'>
+        <AccountLinks id={id} />
       </div>
     </div>
   )

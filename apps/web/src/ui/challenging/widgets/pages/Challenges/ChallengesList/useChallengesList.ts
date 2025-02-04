@@ -13,6 +13,7 @@ import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useQueryArrayParam } from '@/ui/global/hooks/useQueryArrayParam'
 import { useFetchChallengesListAction } from './useFetchChallengesListAction'
+import { useSleep } from '@/ui/global/hooks/useSleep'
 
 const CHALLENGES_PER_PAGE = 15
 
@@ -20,12 +21,15 @@ export function useChallengesList() {
   const { fetchList } = useFetchChallengesListAction()
   const [difficultyLevel] = useQueryStringParam(QUERY_PARAMS.difficultyLevel, 'all')
   const [completionStatus] = useQueryStringParam(QUERY_PARAMS.completionStatus, 'all')
-  const [title] = useQueryStringParam(QUERY_PARAMS.title)
+  const [title] = useQueryStringParam(QUERY_PARAMS.title, '')
   const [categoriesIds] = useQueryArrayParam(QUERY_PARAMS.categoriesIds)
+  const { sleep } = useSleep()
 
   async function fetchChallengesList(page: number) {
     const completion = ChallengeCompletion.create(completionStatus)
     const difficulty = ChallengeDifficulty.create(difficultyLevel)
+
+    await sleep(500)
 
     return await fetchList({
       page,

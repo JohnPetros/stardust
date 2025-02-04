@@ -35,6 +35,7 @@ export function ChallengesListTab({ tabListSorter, userId }: ChallengesListProps
           key={challenge.id}
           index={index}
           href={ROUTES.challenging.challenges.challenge(challenge.slug.value)}
+          className='flex flex-col gap-2'
         >
           <Row.Title>{challenge.title.value}</Row.Title>
           <CraftMetrics.Container>

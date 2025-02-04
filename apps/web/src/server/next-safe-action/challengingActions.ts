@@ -41,7 +41,7 @@ export const fetchChallengesList = authActionClient
       itemsPerPage: itemsPerPageSchema,
       difficultyLevel: challengeDifficultyLevelSchema,
       completionStatus: challengeCompletionStatusSchema,
-      title: titleSchema,
+      title: stringSchema,
       categoriesIds: stringSchema,
     }),
   )

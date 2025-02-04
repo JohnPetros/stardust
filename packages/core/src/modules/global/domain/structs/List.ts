@@ -88,6 +88,17 @@ export class List<Item> {
     return Logical.create(this.items.includes(item))
   }
 
+  includesSome(items: Item[]): Logical {
+    return Logical.create(this.items.some((item) => items.includes(item)))
+  }
+
+  getSome(items: Item[]): Item | null {
+    for (const item of items) {
+      if (this.items.includes(item)) return item
+    }
+    return null
+  }
+
   hasAllEqualTo(value: unknown) {
     return Logical.create(this.items.every((item) => item === value))
   }

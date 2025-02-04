@@ -10,49 +10,56 @@ import type {
 
 type SelectsItem = {
   value: ChallengeCompletionStatus | ChallengeDifficultyLevel | 'all'
-  text: string
-  textStyles?: ClassNameValue
+  label: string
+  labelStyles?: ClassNameValue
   icon?: IconName
   iconStyles?: string
 }
 
-export const FILTER_SELECTS_ITEMS: SelectsItem[] = [
-  {
-    value: 'all',
-    text: 'Todos',
-    icon: 'minus',
-    iconStyles: 'text-gray-500 text-sm',
-  },
-  {
-    value: 'completed',
-    text: 'Resolvido',
-    icon: 'check',
-    iconStyles: 'text-green-500 text-sm',
-  },
-  {
-    value: 'not-completed',
-    text: 'Não Resolvido',
-    icon: 'unchecked',
-    iconStyles: 'text-red-700 text-sm',
-  },
-  {
-    value: 'all',
-    text: 'Todos',
-    textStyles: 'text-gray-500',
-  },
-  {
-    value: 'easy',
-    text: 'Fácil',
-    textStyles: 'text-green-400',
-  },
-  {
-    value: 'medium',
-    text: 'Médio',
-    textStyles: 'text-yellow-400',
-  },
-  {
-    value: 'hard',
-    text: 'Difícil',
-    textStyles: 'text-red-700',
-  },
-]
+export const FILTER_SELECTS_ITEMS: Record<
+  'completionStatus' | 'difficultyLevel',
+  SelectsItem[]
+> = {
+  completionStatus: [
+    {
+      value: 'all',
+      label: 'Todos',
+      icon: 'minus',
+      iconStyles: 'text-gray-500 text-sm',
+    },
+    {
+      value: 'completed',
+      label: 'Resolvido',
+      icon: 'check',
+      iconStyles: 'text-green-500 text-sm',
+    },
+    {
+      value: 'not-completed',
+      label: 'Não Resolvido',
+      icon: 'unchecked',
+      iconStyles: 'text-red-700 text-sm',
+    },
+  ],
+  difficultyLevel: [
+    {
+      value: 'all',
+      label: 'Todos',
+      labelStyles: 'text-gray-500',
+    },
+    {
+      value: 'easy',
+      label: 'Fácil',
+      labelStyles: 'text-green-400',
+    },
+    {
+      value: 'medium',
+      label: 'Médio',
+      labelStyles: 'text-yellow-400',
+    },
+    {
+      value: 'hard',
+      label: 'Difícil',
+      labelStyles: 'text-red-700',
+    },
+  ],
+} as const

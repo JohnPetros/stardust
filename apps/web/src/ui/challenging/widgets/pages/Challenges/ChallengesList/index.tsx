@@ -5,7 +5,6 @@ import { ShowMoreButton } from '@/ui/global/widgets/components/ShowMoreButton'
 import { ChallengeCardSkeleton } from '../ChallengesList/ChallengeCardSkelleton'
 import { ChallengeCard } from './ChallengeCard'
 import { useChallengesList } from './useChallengesList'
-import { Button } from '@/ui/global/widgets/components/Button'
 
 export function ChallengesList() {
   const { user } = useAuthContext()
@@ -13,7 +12,7 @@ export function ChallengesList() {
 
   if (user)
     return (
-      <div className='mx-auto max-w-2xl px-6 pb-40 md:px-0'>
+      <div className='mx-auto max-w-2xl pb-40'>
         <div className='space-y-6'>
           {isLoading ? (
             <>

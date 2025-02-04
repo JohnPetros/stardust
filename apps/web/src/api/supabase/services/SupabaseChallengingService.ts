@@ -163,11 +163,11 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       }
 
       if (difficultyLevel !== 'all') {
-        query = query.eq('difficulty', difficultyLevel)
+        query = query.eq('difficulty_level', difficultyLevel)
       }
 
       if (difficultyLevel !== 'all') {
-        query = query.eq('difficulty', difficultyLevel)
+        query = query.eq('difficulty_level', difficultyLevel)
       }
 
       if (postOrder !== 'all') {

@@ -10,7 +10,6 @@ import type {
 } from '@stardust/core/challenging/types'
 import { ListChallengesUseCase } from '@stardust/core/challenging/use-cases'
 import type { PaginationResponse } from '@stardust/core/responses'
-import type { ListOrder } from '@stardust/core/global/types'
 
 type Request = {
   page: number

@@ -22,7 +22,7 @@ export function AdornmentGroup({ tier, rocket }: ItemsProps) {
 
   return (
     <>
-      <span className='hidden w-[1px] rounded-md bg-gray-300 md:block' />
+      <span className='hidden w-[1px] rounded-md bg-gray-700 md:block' />
       <Adornment title='Tier atual' image={tierImage} value={tier.name} />
       <Adornment title='Foguete atual' image={rocketImage} value={rocket.name} />
     </>

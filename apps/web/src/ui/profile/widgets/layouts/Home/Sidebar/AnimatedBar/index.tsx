@@ -11,8 +11,8 @@ const variants: Variants = {
   open: {
     x: 0,
     transition: {
-      delay: 2,
       ease: 'linear',
+      duration: 0.25,
     },
   },
 }
