@@ -10,7 +10,7 @@ export function Statistic({ title, image, value }: StatisctProps) {
   return (
     <div className='flex flex-col items-center justify-center gap-2 md:flex-row md:justify-start'>
       <div className='flex items-center justify-center gap-3'>
-        <span className='text-gray-100'>{value}</span>
+        <span className='text-gray-100 text-base'>{value}</span>
         <div className='h-6 w-6'>
           <Image src={image} width={54} height={54} alt='' />
         </div>

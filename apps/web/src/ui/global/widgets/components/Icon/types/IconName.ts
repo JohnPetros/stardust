@@ -16,6 +16,7 @@ export type IconName =
   | 'pencil'
   | 'reload'
   | 'copy'
+  | 'snippet'
   | 'clock'
   | 'command'
   | 'close'

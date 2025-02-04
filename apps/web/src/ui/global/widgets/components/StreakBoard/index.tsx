@@ -35,7 +35,7 @@ export function StreakBoard({ weekStatus, streakCount }: StreakProps) {
         })}
       </div>
 
-      {streakCount && (
+      {typeof streakCount === 'number' && (
         <div className='flex items-center justify-center gap-1'>
           <StreakIcon size={32} />
           <p className='text-center font-medium text-green-500'>
