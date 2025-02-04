@@ -15,10 +15,16 @@ import { useChallengeDescriptionSlot } from './useChallengeDescriptionSlot'
 export function ChallengeDescriptionSlot() {
   const { getCraftsVisibilitySlice } = useChallengeStore()
   const { craftsVislibility } = getCraftsVisibilitySlice()
-  const { mdx, user, challenge, isLoading, handleShowSolutions } =
-    useChallengeDescriptionSlot()
+  const {
+    mdx,
+    isUserChallengeAuthor,
+    isCompleted,
+    challenge,
+    isLoading,
+    handleShowSolutions,
+  } = useChallengeDescriptionSlot()
 
-  return isLoading || !challenge || !user ? (
+  return isLoading || !challenge ? (
     <div className='grid h-full place-content-center'>
       <Loading />
     </div>
@@ -30,7 +36,7 @@ export function ChallengeDescriptionSlot() {
           authorName={challenge.author.name.value}
           authorSlug={challenge.author.slug.value}
           downvotes={challenge.downvotesCount.value}
-          isCompleted={user?.hasCompletedChallenge(challenge.id).value}
+          isCompleted={isCompleted}
           upvotes={challenge.upvotesCount.value}
           completionsCount={challenge.completionsCount.value}
         />
@@ -66,10 +72,12 @@ export function ChallengeDescriptionSlot() {
             <ContentLink title='Soluções' contentType='solutions' isActive={false} />
           )}
         </div>
-        <ChallengeControl
-          challengeSlug={challenge.slug.value}
-          isChallengePublic={challenge.isPublic.value}
-        />
+        {isUserChallengeAuthor && (
+          <ChallengeControl
+            challengeSlug={challenge.slug.value}
+            isChallengePublic={challenge.isPublic.value}
+          />
+        )}
       </div>
       <div className='mt-6 pb-6'>
         <Mdx>{mdx}</Mdx>

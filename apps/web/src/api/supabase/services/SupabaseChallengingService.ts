@@ -157,6 +157,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         .from('challenges_view')
         .select('*, challenges_categories!inner(category_id)', { count: 'exact' })
         .is('star_id', null)
+        .eq('is_public', true)
 
       if (title && title.length > 1) {
         query = query.ilike('title', `%${title}%`)
@@ -505,6 +506,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
           difficulty_level: challengeDto.difficultyLevel,
           slug: challengeDto.slug,
           description: challengeDto.description,
+          is_public: challengeDto.isPublic,
           code: challengeDto.code,
           test_cases: JSON.stringify(challengeDto.testCases),
           user_id: challengeDto.author.id,

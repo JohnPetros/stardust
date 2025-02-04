@@ -27,14 +27,14 @@ export function ChallengePage({
   const popoverMenuButtons: PopoverMenuButton[] = [
     {
       label: 'Tabs do lado esquerdo e editor de código do lado direito (layout padrão)',
-      icon: <Icon name='arrow-left' className='text-xl text-green-500' />,
+      icon: <Icon name='arrow-left' size={16} className='text-xl text-green-500' />,
       isToggle: true,
       value: panelsLayout === 'tabs-left;code_editor-right',
       action: () => handlePanelsLayoutButton('tabs-left;code_editor-right'),
     },
     {
       label: 'Tabs do lado direito e editor de código do lado esquerdo',
-      icon: <Icon name='arrow-right' className='text-xl text-green-500' />,
+      icon: <Icon name='arrow-right' size={16} className='text-xl text-green-500' />,
       isToggle: true,
       value: panelsLayout === 'tabs-right;code_editor-left',
       action: () => handlePanelsLayoutButton('tabs-right;code_editor-left'),

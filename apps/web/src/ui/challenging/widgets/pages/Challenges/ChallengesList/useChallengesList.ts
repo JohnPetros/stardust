@@ -29,7 +29,7 @@ export function useChallengesList() {
     const completion = ChallengeCompletion.create(completionStatus)
     const difficulty = ChallengeDifficulty.create(difficultyLevel)
 
-    await sleep(500)
+    await sleep(100)
 
     return await fetchList({
       page,
@@ -45,6 +45,7 @@ export function useChallengesList() {
     key: CACHE.keys.challengesList,
     fetcher: fetchChallengesList,
     itemsPerPage: CHALLENGES_PER_PAGE,
+    shouldRefetchOnFocus: false,
     isInfinity: true,
     dependencies: [completionStatus, difficultyLevel, categoriesIds, title],
   })

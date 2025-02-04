@@ -37,7 +37,10 @@ export class ChallengeFactory {
       categories,
       userVote: null,
       description: Text.create(dto.description),
-      isPublic: Logical.create(dto.isPublic ?? false, 'O desafio é público?'),
+      isPublic: Logical.create(
+        typeof dto.isPublic !== 'undefined' ? dto.isPublic : false,
+        'O desafio é público?',
+      ),
       isCompleted: Logical.create(false, 'A resposta do desafio está completada?'),
       incorrectAnswersCount: Integer.create(0, 'Contagem de respostas incorretas'),
       results: List.create([]),
