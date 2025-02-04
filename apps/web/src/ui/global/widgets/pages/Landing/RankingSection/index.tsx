@@ -33,7 +33,6 @@ export function RankingSection() {
           <ul className='space-y-2'>
             <AnimatedRankingUser index={0}>
               <RankingUser
-                id='1'
                 name='Leonel Sanches'
                 position={1}
                 xp={1100}
@@ -44,7 +43,6 @@ export function RankingSection() {
             </AnimatedRankingUser>
             <AnimatedRankingUser index={1}>
               <RankingUser
-                id='2'
                 name='Samuel Renan'
                 position={2}
                 xp={950}
@@ -56,7 +54,6 @@ export function RankingSection() {
 
             <AnimatedRankingUser index={2}>
               <RankingUser
-                id='3'
                 name='Ítalo Brandão'
                 position={3}
                 xp={625}
@@ -68,7 +65,6 @@ export function RankingSection() {
 
             <AnimatedRankingUser index={3}>
               <RankingUser
-                id='4'
                 name='Aristides da costa'
                 position={4}
                 xp={500}

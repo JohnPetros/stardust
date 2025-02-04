@@ -24,7 +24,7 @@ const positionStyles = tv({
 })
 
 type RankingUserProps = {
-  id: string
+  id?: string
   name: string
   avatarImage: string
   avatarName: string
@@ -59,10 +59,11 @@ export function RankingUser({
 
   return (
     <Link
-      href={ROUTES.profile.user(id)}
+      href={ROUTES.api.profile.user(id ?? '')}
       className={twMerge(
         'group flex w-full items-center justify-between rounded-md border-2 p-3 hover:border-gray-100/90',
         user?.id === id ? 'border-green-700' : 'border-gray-800',
+        id ? 'pointer-events-auto' : 'pointer-events-none',
       )}
     >
       <div className='mr-2 flex items-center gap-2 text-lg'>
