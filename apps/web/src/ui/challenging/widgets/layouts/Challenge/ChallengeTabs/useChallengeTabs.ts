@@ -1,23 +1,22 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
 
+import { ROUTES } from '@/constants'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { ROUTES } from '@/constants'
-import type { ContentType } from '../types/ContentType'
-import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
-export function useTabs() {
-  const { getChallengeSlice, getCraftsVisibilitySlice } = useChallengeStore()
+export function useChallengeTabs() {
+  const { getChallengeSlice, getCraftsVisibilitySlice, getActiveContentSlice } =
+    useChallengeStore()
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
+  const { activeContent } = getActiveContentSlice()
   const { challenge } = getChallengeSlice()
-  const [activeTab, setActiveTab] = useState<ContentType>('description')
+  const { user, updateUser } = useAuthContext()
   const router = useRouter()
   const toast = useToastContext()
-  const { user, updateUser } = useAuthContext()
 
   async function handleShowSolutions() {
     if (!user) return
@@ -33,19 +32,8 @@ export function useTabs() {
     router.goTo(`${ROUTES.challenging.challenges}/${challenge?.slug.value}/solutions`)
   }
 
-  useEffect(() => {
-    setActiveTab('description')
-
-    if (!challenge) return
-
-    const activeTab = router.currentRoute.split('/').pop()
-    if (!activeTab) return
-
-    if (activeTab !== challenge.slug.value) setActiveTab(activeTab as ContentType)
-  }, [router.currentRoute, challenge])
-
   return {
-    activeTab,
+    activeContent,
     handleShowSolutions,
   }
 }

@@ -11,9 +11,10 @@ import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 
 register()
 
-export function useSlider() {
-  const { getTabHandlerSlice } = useChallengeStore()
+export function useChallengeSlider() {
+  const { getTabHandlerSlice, getActiveContentSlice } = useChallengeStore()
   const { tabHandler, setTabHandler } = getTabHandlerSlice()
+  const { activeContent } = getActiveContentSlice()
   const { md: isMobile } = useBreakpoint()
   const [activeSlideIndex, setActiveSlideIndex] = useState(0)
   const [motionScope, animate] = useAnimate()
@@ -51,6 +52,7 @@ export function useSlider() {
   return {
     swiperRef,
     motionScope,
+    activeContent,
     activeSlideIndex,
     handleNavButtonClick,
     handleSlideChange,

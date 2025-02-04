@@ -1,12 +1,15 @@
-import type { ComponentProps } from 'react'
+import type { ComponentProps, PropsWithChildren } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 type NavButtonProps = {
-  children: string
   isActive: boolean
 } & ComponentProps<'button'>
 
-export function NavButton({ children, isActive, ...buttonProps }: NavButtonProps) {
+export function NavButton({
+  children,
+  isActive,
+  ...buttonProps
+}: PropsWithChildren<NavButtonProps>) {
   return (
     <button
       className={twMerge(

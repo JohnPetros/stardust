@@ -3,19 +3,20 @@
 import type { ReactNode } from 'react'
 import { List, Root } from '@radix-ui/react-tabs'
 import { Trigger as TabButton } from '@radix-ui/react-tabs'
+
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import { useTabs } from './useTabs'
-import { TabContent } from './TabContent'
+import { useChallengeTabs } from './useChallengeTabs'
+import { ChallengeTabContent } from './ChallengeTabContent'
 import { BlockedCommentsAlertDialog } from '../../../components/BlockedCommentsAlertDialog'
 import { BlockedSolutionsAlertDialog } from '../../../components/BlockedSolutionsAlertDialog'
-import { ContentLink } from '../../../components/ContentLink'
+import { ChallengeContentLink } from '../../../components/ChallengeContentLink'
 
 type TabsProps = {
   children: ReactNode
 }
 
-export function Tabs({ children }: TabsProps) {
-  const { activeTab, handleShowSolutions } = useTabs()
+export function ChallengeTabs({ children }: TabsProps) {
+  const { activeContent, handleShowSolutions } = useChallengeTabs()
   const { getCraftsVisibilitySlice } = useChallengeStore()
   const { craftsVislibility } = getCraftsVisibilitySlice()
 
@@ -24,39 +25,39 @@ export function Tabs({ children }: TabsProps) {
       <Root defaultValue='description' orientation='horizontal'>
         <List className='flex items-center bg-gray-700 px-2'>
           <TabButton value='description'>
-            <ContentLink
+            <ChallengeContentLink
               title='Descrição'
               contentType='description'
-              isActive={activeTab === 'description'}
+              isActive={activeContent === 'description'}
             />
           </TabButton>
 
           <span className='text-gray-600'>|</span>
           <TabButton value='result'>
-            <ContentLink
+            <ChallengeContentLink
               title='Resultado'
               contentType='result'
-              isActive={activeTab === 'result'}
+              isActive={activeContent === 'result'}
             />
           </TabButton>
           <span className='text-gray-600'>|</span>
           {craftsVislibility.canShowComments.isTrue ? (
             <BlockedCommentsAlertDialog>
               <TabButton value='comments' asChild>
-                <ContentLink
+                <ChallengeContentLink
                   title='Comentários'
                   contentType='comments'
-                  isActive={activeTab === 'comments'}
+                  isActive={activeContent === 'comments'}
                   isBlocked={true}
                 />
               </TabButton>
             </BlockedCommentsAlertDialog>
           ) : (
             <TabButton value='comments' asChild>
-              <ContentLink
+              <ChallengeContentLink
                 title='Comentários'
                 contentType='comments'
-                isActive={activeTab === 'comments'}
+                isActive={activeContent === 'comments'}
                 isBlocked={false}
               />
             </TabButton>
@@ -65,25 +66,25 @@ export function Tabs({ children }: TabsProps) {
           {craftsVislibility.canShowSolutions.isTrue ? (
             <BlockedSolutionsAlertDialog onShowSolutions={handleShowSolutions}>
               <TabButton value='solutions' asChild>
-                <ContentLink
+                <ChallengeContentLink
                   title='Soluções'
                   contentType='solutions'
-                  isActive={activeTab === 'solutions'}
+                  isActive={activeContent === 'solutions'}
                   isBlocked={true}
                 />
               </TabButton>
             </BlockedSolutionsAlertDialog>
           ) : (
             <TabButton value='solutions' asChild>
-              <ContentLink
+              <ChallengeContentLink
                 title='Soluções'
                 contentType='solutions'
-                isActive={activeTab === 'solutions'}
+                isActive={activeContent === 'solutions'}
               />
             </TabButton>
           )}
         </List>
-        <TabContent value='description'>{children}</TabContent>
+        <ChallengeTabContent value='description'>{children}</ChallengeTabContent>
       </Root>
     </div>
   )

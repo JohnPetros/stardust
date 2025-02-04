@@ -1,5 +1,3 @@
-// import 'swiper/css'
-// import 'swiper/css/navigation'
 import '@/ui/global/styles/global.css'
 
 import { Providers } from './providers'

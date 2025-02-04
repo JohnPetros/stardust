@@ -6,17 +6,17 @@ import { twMerge } from 'tailwind-merge'
 import { ROUTES } from '@/constants'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import type { ContentType } from '../../layouts/Challenge/types'
+import type { ChallengeContent } from '@/ui/challenging/stores/ChallengeStore/types'
 
 type TabButtonProps = {
-  contentType: ContentType
+  contentType: ChallengeContent
   isActive: boolean
   title: string
   isBlocked?: boolean
   blockMessage?: string
 }
 
-export function ContentLink({
+export function ChallengeContentLink({
   contentType,
   isActive,
   isBlocked = false,

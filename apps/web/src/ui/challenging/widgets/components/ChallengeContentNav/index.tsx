@@ -1,13 +1,13 @@
 'use client'
 
-import type { ContentType } from '../../layouts/Challenge/types'
+import type { ChallengeContent } from '@/ui/challenging/stores/ChallengeStore/types'
 import { BlockedCommentsAlertDialog } from '../BlockedCommentsAlertDialog'
 import { BlockedSolutionsAlertDialog } from '../BlockedSolutionsAlertDialog'
-import { ContentLink } from '../ContentLink'
+import { ChallengeContentLink } from '../ChallengeContentLink'
 import { useChallengeContentNav } from './useChallengeContentNav'
 
 type ChallengeContentNavProps = {
-  contents: ContentType[]
+  contents: ChallengeContent[]
 }
 
 export function ChallengeContentNav({ contents }: ChallengeContentNavProps) {
@@ -16,7 +16,7 @@ export function ChallengeContentNav({ contents }: ChallengeContentNavProps) {
   return (
     <nav className='flex items-center gap-2 md:hidden'>
       {contents.includes('description') && (
-        <ContentLink
+        <ChallengeContentLink
           title='Descrição'
           contentType='description'
           isActive={false}
@@ -27,7 +27,7 @@ export function ChallengeContentNav({ contents }: ChallengeContentNavProps) {
         <>
           {craftsVislibility.canShowSolutions.isFalse ? (
             <BlockedCommentsAlertDialog>
-              <ContentLink
+              <ChallengeContentLink
                 title='Comentários'
                 contentType='comments'
                 isActive={false}
@@ -35,7 +35,7 @@ export function ChallengeContentNav({ contents }: ChallengeContentNavProps) {
               />
             </BlockedCommentsAlertDialog>
           ) : (
-            <ContentLink
+            <ChallengeContentLink
               title='Comentários'
               contentType='comments'
               isActive={false}
@@ -48,7 +48,7 @@ export function ChallengeContentNav({ contents }: ChallengeContentNavProps) {
         <>
           {craftsVislibility.canShowSolutions.isTrue ? (
             <BlockedSolutionsAlertDialog onShowSolutions={handleShowSolutions}>
-              <ContentLink
+              <ChallengeContentLink
                 title='Soluções'
                 contentType='solutions'
                 isActive={false}
@@ -56,7 +56,11 @@ export function ChallengeContentNav({ contents }: ChallengeContentNavProps) {
               />
             </BlockedSolutionsAlertDialog>
           ) : (
-            <ContentLink title='Soluções' contentType='solutions' isActive={false} />
+            <ChallengeContentLink
+              title='Soluções'
+              contentType='solutions'
+              isActive={false}
+            />
           )}
         </>
       )}

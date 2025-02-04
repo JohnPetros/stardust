@@ -4,20 +4,27 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { motion } from 'framer-motion'
 import type { PropsWithChildren } from 'react'
 
-import { useSlider } from './useSlider'
+import { useChallengeSlider } from './useChallengeSlider'
 import { NavButton } from './NavButton'
-import { ChallengeDescriptionSlot } from '../../../slots/ChallengeDescription'
 import { ChallengeCodeEditorSlot } from '../../../slots/ChallengeCodeEditor'
 import { ChallengeResultSlot } from '../../../slots/ChallengeResult'
+import type { ChallengeContent } from '@/ui/challenging/stores/ChallengeStore/types'
 
-export function Slider({ children }: PropsWithChildren) {
+const CHALLENGE_CONTENT_LABELS: Record<string, string> = {
+  comments: 'Comentários',
+  solutions: 'Soluções',
+  description: 'Descrição',
+}
+
+export function ChallengeSlider({ children }: PropsWithChildren) {
   const {
     swiperRef,
     motionScope,
     activeSlideIndex,
+    activeContent,
     handleNavButtonClick,
     handleSlideChange,
-  } = useSlider()
+  } = useChallengeSlider()
 
   return (
     <div>
@@ -28,7 +35,7 @@ export function Slider({ children }: PropsWithChildren) {
               isActive={activeSlideIndex === 0}
               onClick={() => handleNavButtonClick(0)}
             >
-              Problema
+              {CHALLENGE_CONTENT_LABELS[activeContent]}
             </NavButton>
           </li>
           <li>
@@ -66,9 +73,7 @@ export function Slider({ children }: PropsWithChildren) {
         simulateTouch={false}
         allowTouchMove={false}
       >
-        <SwiperSlide className='h-full overflow-y-auto'>
-          {children}
-        </SwiperSlide>
+        <SwiperSlide className='h-full overflow-y-auto'>{children}</SwiperSlide>
 
         <SwiperSlide>
           <ChallengeCodeEditorSlot />

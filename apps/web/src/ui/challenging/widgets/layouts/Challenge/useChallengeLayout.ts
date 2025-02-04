@@ -2,12 +2,12 @@ import { useEffect, useState, type RefObject } from 'react'
 import type { ImperativePanelHandle } from 'react-resizable-panels'
 
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import { COOKIES, STORAGE } from '@/constants'
-import { _setCookie } from '@/ui/global/actions'
-import type { PanelsOffset } from './types/PanelsOffset'
+import { COOKIES } from '@/constants'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useSecondsCounter } from '@/ui/global/hooks/useSecondsCounter'
 import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
+import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
+import type { PanelsOffset } from './types/PanelsOffset'
 
 export function useChallengeLayout(
   tabsPanelRef: RefObject<ImperativePanelHandle>,
@@ -17,6 +17,7 @@ export function useChallengeLayout(
   const { setCraftsVislibility } = getCraftsVisibilitySlice()
   const { challenge } = getChallengeSlice()
   const { user } = useAuthContext()
+  const { setCookie } = useCookieActions()
   const [isTransitionPageVisible, setIsTransitionPageVisible] = useState(true)
   const isChallengeCompleted =
     user?.hasCompletedChallenge(challenge?.id ?? '').isTrue ?? false
@@ -30,7 +31,10 @@ export function useChallengeLayout(
       codeEditorPanelSize: codeEditorPanelRef.current?.getSize(),
     }
 
-    await _setCookie(COOKIES.keys.challengePanelsOffset, JSON.stringify(newLayout))
+    await setCookie({
+      key: COOKIES.keys.challengePanelsOffset,
+      value: JSON.stringify(newLayout),
+    })
   }
 
   useEffect(() => {

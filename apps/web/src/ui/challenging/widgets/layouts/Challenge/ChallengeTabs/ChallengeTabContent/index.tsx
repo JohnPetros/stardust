@@ -4,16 +4,16 @@ import { useRef, type ReactNode } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 
 import { AnimatedContent } from './AnimatedContent'
-import { useTabContent } from './useTabContent'
+import { useChallengeTabContent } from './useChallengeTabContent'
 
 type TabContent = {
   children: ReactNode
   value: string
 }
 
-export function TabContent({ children, value }: TabContent) {
+export function ChallengeTabContent({ children, value }: TabContent) {
   const contentRef = useRef<HTMLDivElement>(null)
-  useTabContent(contentRef)
+  useChallengeTabContent(contentRef)
 
   return (
     <Tabs.Content

@@ -4,14 +4,14 @@ import { useRef, type ReactNode } from 'react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 
-import type { PanelsOffset } from './types/PanelsOffset'
 import { type ImperativePanelHandle, Panel, PanelGroup } from 'react-resizable-panels'
 import { useChallengeLayout } from './useChallengeLayout'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { PageTransitionAnimation } from '@/ui/global/widgets/components/PageTransitionAnimation'
-import { Slider } from './Slider'
-import { Tabs } from './Tabs'
+import { ChallengeSlider } from './ChallengeSlider'
+import { ChallengeTabs } from './ChallengeTabs'
 import { PanelHandle } from './PandleHandle'
+import type { PanelsOffset } from './types'
 
 const DIRECTION = 'horizontal'
 const HORIZONTAL_PADDNG = 24
@@ -46,7 +46,7 @@ export function ChallengeLayout({
         {header}
         <main className='w-full'>
           <div className='md:hidden'>
-            <Slider>{tabContent}</Slider>
+            <ChallengeSlider>{tabContent}</ChallengeSlider>
           </div>
           <div
             style={{
@@ -64,7 +64,7 @@ export function ChallengeLayout({
                   minSize={1}
                   order={1}
                 >
-                  <Tabs>{tabContent}</Tabs>
+                  <ChallengeTabs>{tabContent}</ChallengeTabs>
                 </Panel>
 
                 <PanelHandle direction={DIRECTION} onDragging={handlePanelDragging} />
@@ -101,7 +101,7 @@ export function ChallengeLayout({
                   minSize={1}
                   order={2}
                 >
-                  <Tabs>{tabContent}</Tabs>
+                  <ChallengeTabs>{tabContent}</ChallengeTabs>
                 </Panel>
               </PanelGroup>
             )}

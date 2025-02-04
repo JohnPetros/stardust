@@ -5,7 +5,7 @@ import { ChallengeInfo } from '@/ui/challenging/widgets/components/ChallengeInfo
 import { DifficultyBadge } from '@/ui/global/widgets/components/DifficultyBadge'
 import { Loading } from '@/ui/global/widgets/components/Loading'
 import { Mdx } from '@/ui/global/widgets/components/Mdx'
-import { ContentLink } from '@/ui/challenging/widgets/components/ContentLink'
+import { ContentLink } from '@/ui/challenging/widgets/components/ChallengeContentLink'
 import { BlockedCommentsAlertDialog } from '@/ui/challenging/widgets/components/BlockedCommentsAlertDialog'
 import { BlockedSolutionsAlertDialog } from '@/ui/challenging/widgets/components/BlockedSolutionsAlertDialog'
 import { VoteControl } from './ChallengeVoteControl'

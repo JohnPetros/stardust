@@ -8,23 +8,31 @@ import { Challenge } from '@stardust/core/challenging/entities'
 import { ROUTES } from '@/constants'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import type { PanelsLayout } from '@/ui/challenging/stores/ChallengeStore/types'
+import type {
+  ChallengeContent,
+  PanelsLayout,
+} from '@/ui/challenging/stores/ChallengeStore/types'
 import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
 export function useChallengePage(challengeDto: ChallengeDto, userVote: ChallengeVote) {
-  const { getChallengeSlice, getCraftsVisibilitySlice, getPanelsLayoutSlice } =
-    useChallengeStore()
+  const {
+    getChallengeSlice,
+    getCraftsVisibilitySlice,
+    getActiveContentSlice,
+    getPanelsLayoutSlice,
+  } = useChallengeStore()
+  const { activeContent, setActiveContent } = getActiveContentSlice()
   const { challenge, setChallenge } = getChallengeSlice()
   const { panelsLayout, setPanelsLayout } = getPanelsLayoutSlice()
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
   const { user } = useAuthContext()
-  const router = useRouter()
+  const { currentRoute, goTo } = useRouter()
 
   function handleBackButton() {
     if (challenge)
-      router.goTo(
+      goTo(
         challenge.isFromStar.isTrue ? ROUTES.space : ROUTES.challenging.challenges.list,
       )
   }
@@ -58,6 +66,17 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
     setChallenge,
     setCraftsVislibility,
   ])
+
+  useEffect(() => {
+    setActiveContent('description')
+    if (!challenge) return
+
+    const activeContent = currentRoute.split('/').pop()
+    if (!activeContent) return
+
+    if (activeContent !== challenge.slug.value)
+      setActiveContent(activeContent as ChallengeContent)
+  }, [currentRoute, challenge, setActiveContent])
 
   return {
     panelsLayout,
