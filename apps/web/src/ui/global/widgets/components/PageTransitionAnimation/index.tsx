@@ -4,8 +4,8 @@ import { AnimatePresence, motion, type Variants } from 'framer-motion'
 
 import { usePageTransitionAnimation } from './usePageTransitionAnimation'
 
-import { formatText } from '@/utils'
 import { Animation } from '../Animation'
+import { Mdx } from '../Mdx'
 
 const containerVariants: Variants = {
   hidden: {
@@ -38,7 +38,7 @@ export function PageTransitionAnimation({
   isVisible,
   hasTips = false,
 }: TransitionPageAnimationProps) {
-  // const { codeTip } = usePageTransitionAnimation(hasTips)
+  const { codeTip } = usePageTransitionAnimation(hasTips)
 
   return (
     <AnimatePresence>
@@ -53,11 +53,11 @@ export function PageTransitionAnimation({
         >
           <motion.div variants={apolloVariants}>
             <Animation name='apollo-riding-rocket' size={540} hasLoop={true} />
-            {/* {hasTips && codeTip && (
+            {hasTips && codeTip && (
               <div className='mx-auto w-[32rem] max-w-[90%] -translate-y-10 rounded-md bg-gray-700 p-2 text-center leading-8 text-gray-100'>
                 <Mdx>{codeTip}</Mdx>
               </div>
-            )} */}
+            )}
           </motion.div>
         </motion.div>
       )}
