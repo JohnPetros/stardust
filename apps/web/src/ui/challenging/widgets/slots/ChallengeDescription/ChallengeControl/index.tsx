@@ -4,7 +4,6 @@ import { ROUTES } from '@/constants'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { Switch } from '@/ui/global/widgets/components/Switch'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
-import { AnimatedBorder } from '@/ui/global/widgets/components/AnimatedBorder'
 import { useChallengeControl } from './useChallengeControl'
 
 type ChallengeControlControl = {
@@ -16,20 +15,23 @@ export function ChallengeControl({
   challengeSlug,
   isChallengePublic,
 }: ChallengeControlControl) {
-  const { handleDeleteChallengeButtonClick, handleIsChallengePublicSwitchChange } =
-    useChallengeControl(challengeSlug)
+  const {
+    isPublic,
+    handleDeleteChallengeButtonClick,
+    handleIsChallengePublicSwitchChange,
+  } = useChallengeControl(challengeSlug, isChallengePublic)
 
   return (
     <div>
-      <AnimatedBorder>
-        <p className='text-gray-50 font-medium'>
-          Você é o autor do desafio, qualquer recompensa recebida será inválida. Use essa
-          página apenas como um meio para testar o seu desafio. Lembre-se que você não
-          habilitou seu desafio como público para outros usuários
+      <div>
+        <p className='p-3 rounded-md border border-dashed border-yellow-500 text-sm leading-6 text-yellow-500 font-medium'>
+          Você é o autor desse desafio, qualquer recompensa recebida será inválida. Use
+          essa página apenas como um meio para testar o seu desafio. Lembre-se que você
+          não habilitou seu desafio como público para outros usuários
         </p>
-      </AnimatedBorder>
-      <div className='flex items-center justify-center gap-3 mt-3'>
-        <Button asChild>
+      </div>
+      <div className='flex items-center gap-3 mt-3 px-3'>
+        <Button asChild className='w-max h-8 px-3 text-xs'>
           <Link href={ROUTES.challenging.challenge(challengeSlug)}>editar desafio</Link>
         </Button>
         <AlertDialog
@@ -58,13 +60,13 @@ export function ChallengeControl({
           }
           shouldPlayAudio={false}
         >
-          <Button className='h-8 text-gray-400 text-xs w-max bg-green-900/90 font-medium px-3'>
+          <Button className='h-8 text-gray-50 text-xs w-max bg-red-800 font-medium px-3'>
             deletar seu desafio
           </Button>
         </AlertDialog>
         <Switch
-          label={isChallengePublic ? 'público' : 'privado'}
-          defaultCheck={isChallengePublic}
+          label={isPublic ? 'público' : 'privado'}
+          defaultCheck={isPublic}
           onCheck={handleIsChallengePublicSwitchChange}
         />
       </div>

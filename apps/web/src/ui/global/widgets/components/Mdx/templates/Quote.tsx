@@ -13,7 +13,7 @@ type QuoteProps = {
 export function Quote({ title, picture, children, hasAnimation = false }: QuoteProps) {
   return (
     <Animation hasAnimation={hasAnimation}>
-      <div className='not-prose flex w-full flex-col items-center'>
+      <div className='not-prose flex w-full flex-col'>
         {title && (
           <div className='mb-4'>
             <Title>{title}</Title>

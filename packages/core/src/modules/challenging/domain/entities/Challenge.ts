@@ -281,6 +281,7 @@ export class Challenge extends Entity<ChallengeProps> {
       starId: this.props.starId?.value,
       upvotesCount: this.upvotesCount.value,
       completionsCount: this.completionsCount.value,
+      isPublic: this.isPublic.value,
       userOutputs: this.props.userOutputs.items,
       results: this.props.results.items,
       description: this.description.value,

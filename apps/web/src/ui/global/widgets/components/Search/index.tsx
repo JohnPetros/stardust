@@ -14,7 +14,7 @@ const SearchComponent = (
     id,
     className,
     onSearchChange,
-    ...rest
+    ...inputProps
   }: SearchProps & InputHTMLAttributes<HTMLInputElement>,
   ref: ForwardedRef<HTMLInputElement>,
 ) => {
@@ -37,7 +37,7 @@ const SearchComponent = (
         className='w-full bg-transparent text-sm text-gray-300 outline-none placeholder:text-gray-400'
         value={value}
         onChange={({ target }) => handleValueChange(target.value)}
-        {...rest}
+        {...inputProps}
       />
     </label>
   )
