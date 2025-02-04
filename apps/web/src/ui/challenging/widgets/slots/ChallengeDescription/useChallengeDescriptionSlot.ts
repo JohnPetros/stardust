@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import { useMdx } from '@/ui/global/widgets/components/Mdx/hooks/useMdx'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { ROUTES } from '@/constants'
+import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
 
 export function useChallengeDescriptionSlot() {
   const [isLoading, setIsLoading] = useState(true)
@@ -15,6 +15,7 @@ export function useChallengeDescriptionSlot() {
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
   const { user, updateUser } = useAuthContext()
   const { goTo } = useRouter()
+  const { provider } = useCodeRunner()
 
   async function handleShowSolutions() {
     if (!user || !challenge) return
@@ -31,28 +32,29 @@ export function useChallengeDescriptionSlot() {
       return
     }
 
-    async function fetchMdx() {
-      if (!challenge) return
-
-      if (challenge.description) {
-        setMdx(challenge.description.value)
-        return
-      }
-    }
-
     if (isLoading && mdx) {
       setIsLoading(false)
       return
     }
 
-    fetchMdx()
-  }, [isLoading, challenge, mdx, setMdx])
+    if (!challenge) return
+
+    const hasFunction = provider.getFunctionName(challenge.code)
+
+    const alertText = hasFunction
+      ? '<Alert>Você deve `retornar` a resposta utilizando a função que já existe no código ao lado. Então por favor não altere o nome da função nem os seus parâmetros, senão não será possível validar seu desafio!</Alert>'
+      : '<Alert>Por favor, não remova nenhum comando *leia()*, pois será a partir deles que virão os dados para o seu programa.</Alert>'
+
+    setMdx(challenge.description.value.concat(alertText))
+  }, [isLoading, challenge, mdx, setMdx, provider.getFunctionName])
 
   return {
     isLoading,
-    user,
     mdx,
     challenge,
+    isUserChallengeAuthor: Boolean(challenge?.authorId === user?.id),
+    isCompleted:
+      challenge && user ? user.hasCompletedChallenge(challenge.id).isTrue : false,
     handleShowSolutions,
   }
 }
