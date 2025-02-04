@@ -68,6 +68,7 @@ export const ROUTES = {
     profile: {
       achievements: '/api/profile/achievements',
       reward: '/api/profile/reward',
+      user: (userId: string) => `/api/profile/${userId}`,
     },
     ranking: {
       current: '/api/ranking/current',
