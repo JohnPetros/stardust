@@ -69,10 +69,10 @@ export function Star({
             </AnimatedImage>
           ) : (
             <Image
-              src={'/images/locked-star.svg'}
+              src='/images/locked-star.svg'
               width={80}
               height={80}
-              className='-translate-x-6'
+              className='-translate-x-6 max-w-none'
               alt=''
             />
           )}
@@ -88,7 +88,7 @@ export function Star({
         <div
           style={{ boxShadow: STAR_LIGHT }}
           className={twMerge(
-            'grid max-w-[220px] place-content-center rounded-lg border-2 border-dashed bg-green-900 px-6 py-3',
+            'grid place-content-center rounded-lg border-2 border-dashed bg-green-900 max-w-[220px] px-6 py-3',
             isUnlocked ? 'border-yellow-400' : 'border-gray-500',
           )}
         >
