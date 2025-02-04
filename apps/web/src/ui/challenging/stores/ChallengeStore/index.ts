@@ -14,6 +14,18 @@ export function useChallengeStore() {
       }
     },
 
+    getActiveContentSlice() {
+      const activeContent = useZustandChallengeStore((store) => store.state.activeContent)
+      const setActiveContent = useZustandChallengeStore(
+        (store) => store.actions.setActiveContent,
+      )
+
+      return {
+        activeContent,
+        setActiveContent,
+      }
+    },
+
     getSolutionContentSlice() {
       const solutionContent = useZustandChallengeStore(
         (store) => store.state.solutionContent,
