@@ -17,19 +17,28 @@ export function SnippetsList() {
   } = useSnippetsList()
 
   return (
-    <div className='mx-auto mt-3 max-w-4xl'>
-      <ul className='grid grid-cols-2 gap-2'>
+    <div className='mx-auto mt-3 w-full max-w-4xl px-6 md:px-0'>
+      <ul className='grid grid-cols-1 md:grid-cols-2 gap-2'>
         {isLoading && <SnippetCardsSkeleton />}
 
         {!isLoading &&
           snippets.map((snippet) => (
-            <li key={snippet.id}>
-              <SnippetCard
-                id={snippet.id}
-                title={snippet.title.value}
-                onDelete={handleDeleteSnippetDelete}
-              />
-            </li>
+            <>
+              <li key={snippet.id}>
+                <SnippetCard
+                  id={snippet.id}
+                  title={snippet.title.value}
+                  onDelete={handleDeleteSnippetDelete}
+                />
+              </li>
+              <li key={snippet.id}>
+                <SnippetCard
+                  id={snippet.id}
+                  title={snippet.title.value}
+                  onDelete={handleDeleteSnippetDelete}
+                />
+              </li>
+            </>
           ))}
 
         {!isLoading && snippets.length === 0 && (

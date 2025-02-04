@@ -1,121 +1,130 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { FILTER_SELECTS_ITEMS } from '../filter-select-items'
+import { List } from '@stardust/core/global/structs'
 import type { ChallengeCategory } from '@stardust/core/challenging/entities'
 import type {
   ChallengeCompletionStatus,
   ChallengeDifficultyLevel,
 } from '@stardust/core/challenging/types'
-import { List } from '@stardust/core/global/structs'
 import {
   ChallengeCompletion,
   ChallengeDifficulty,
 } from '@stardust/core/challenging/structs'
+
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useQueryArrayParam } from '@/ui/global/hooks/useQueryArrayParam'
+import { FILTER_SELECTS_ITEMS } from '../filter-select-items'
 import { QUERY_PARAMS } from '../query-params'
 
 export function useChallengesFilter(categories: ChallengeCategory[]) {
-  const [tags, setTags] = useState<List<string>>(List.create([]))
-  const [difficultyLevel, setDifficultyLevel] = useQueryStringParam(
-    QUERY_PARAMS.difficultyLevel,
-    'all',
-  )
-  const [completionStatus, setCompletionStatus] = useQueryStringParam(
-    QUERY_PARAMS.completionStatus,
-    'all',
-  )
+  const [tags, setTags] = useState(List.create<string>([]))
+  const [difficultyLevel, setDifficultyLevel] =
+    useQueryStringParam<ChallengeDifficultyLevel>(QUERY_PARAMS.difficultyLevel, 'all')
+  const [completionStatus, setCompletionStatus] =
+    useQueryStringParam<ChallengeCompletionStatus>(QUERY_PARAMS.completionStatus, 'all')
   const [title, setTitle] = useQueryStringParam(QUERY_PARAMS.title, 'all')
   const [categoriesIds, setCategoriesIds] = useQueryArrayParam(QUERY_PARAMS.categoriesIds)
-  const completionStatusTag = useRef<string | null>(null)
-  const difficultyLevelTag = useRef<string | null>(null)
   const includedCategoriesNames = useRef<List<string>>(List.create([]))
   const removedCategoriesNames = useRef<List<string>>(List.create([]))
 
   function removeCategory(categoryName: string) {
     const category = categories.find((category) => category.name.value === categoryName)
+    if (!category || !categoriesIds) return
 
-    if (category) {
-      // const categoriesIds = getCategoriesIds()
+    const updatedCategoriesIds = categoriesIds.filter((id) => id !== category.id)
 
-      if (!categoriesIds) return
-
-      const updatedCategoriesIds = categoriesIds.filter((id) => id !== category.id)
-
-      includedCategoriesNames.current = includedCategoriesNames.current.remove(
-        category.name.value,
-      )
-      removedCategoriesNames.current = removedCategoriesNames.current.add(
-        category.name.value,
-      )
-      setCategoriesIds(updatedCategoriesIds)
-    }
+    includedCategoriesNames.current = includedCategoriesNames.current.remove(
+      category.name.value,
+    )
+    removedCategoriesNames.current = removedCategoriesNames.current.add(
+      category.name.value,
+    )
+    setCategoriesIds(updatedCategoriesIds)
   }
 
-  function getTag(value: ChallengeCompletionStatus | ChallengeDifficultyLevel) {
-    return FILTER_SELECTS_ITEMS.find((item) => item.value === value)?.text
-  }
+  const getTag = useCallback(
+    (
+      value: ChallengeCompletionStatus | ChallengeDifficultyLevel,
+      filter: 'completionStatus' | 'difficultyLevel',
+    ) => {
+      return FILTER_SELECTS_ITEMS[filter].find((item) => item.value === value)?.label
+    },
+    [],
+  )
 
-  function handleTagClick(tagText: string, tagValue: string) {
+  function handleTagClick(tagLabel: string, tagValue: string) {
     if (tagValue === 'category') {
-      removeCategory(tagText)
-      setTags(tags.remove(tagText))
+      removeCategory(tagLabel)
+      setTags(tags.remove(tagLabel))
       return
     }
 
-    if (['completed', 'not-completed'].includes(tagValue)) {
+    const completionStatuses = FILTER_SELECTS_ITEMS.completionStatus.map((item) =>
+      String(item.value),
+    )
+    if (completionStatuses.includes(tagValue)) {
       setCompletionStatus('all')
-      completionStatusTag.current = null
-      setTags(tags.remove(tagText))
+      setTags(tags.remove(tagLabel))
       return
     }
 
-    if (['easy', 'medium', 'hard'].includes(tagValue)) {
-      setTags(tags.remove(tagText))
+    const difficultyLevels = FILTER_SELECTS_ITEMS.difficultyLevel.map((item) =>
+      String(item.value),
+    )
+    if (difficultyLevels.includes(tagValue)) {
       setDifficultyLevel('all')
-      difficultyLevelTag.current = null
+      setTags(tags.remove(tagLabel))
       return
     }
   }
 
-  function handleStatusChange(newCompletionStatus: ChallengeCompletionStatus) {
-    if (!ChallengeCompletion.isStatus(newCompletionStatus)) return
-
-    const tag = getTag(newCompletionStatus)
-    if (!tag) return
-
-    let currentTags = tags
-    if (completionStatusTag.current) {
-      currentTags = currentTags.remove(completionStatusTag.current)
-    }
-    if (tag !== 'Todos') {
-      currentTags = currentTags.add(tag)
-    }
-
+  function handleCompletionStatusChange(newCompletionStatus: ChallengeCompletionStatus) {
     setCompletionStatus(newCompletionStatus)
-    setTags(currentTags)
-    completionStatusTag.current = tag
   }
 
-  function handleDifficultyChange(newDifficulty: ChallengeDifficultyLevel) {
-    if (!ChallengeDifficulty.isDifficultyLevel(newDifficulty)) return
-
-    const tag = getTag(newDifficulty)
-    if (!tag) return
+  function addCompletionStatusTag(completionStatus: ChallengeCompletionStatus) {
+    if (!ChallengeCompletion.isStatus(completionStatus)) return
+    const tag = getTag(completionStatus, 'completionStatus')
+    if (!tag || tag === 'Todos') return
 
     let currentTags = tags
-    if (difficultyLevelTag.current) {
-      currentTags = currentTags.remove(difficultyLevelTag.current)
-    }
-    if (tag !== 'Todos') {
-      currentTags = currentTags.add(tag)
-    }
 
-    setDifficultyLevel(newDifficulty)
+    const possibleCompletionStatusTags = FILTER_SELECTS_ITEMS.completionStatus.map(
+      (item) => item.label,
+    )
+    const currentDifficultyLevelTag = tags.getSome(possibleCompletionStatusTags)
+    if (currentDifficultyLevelTag) {
+      currentTags = currentTags.remove(currentDifficultyLevelTag)
+    }
+    currentTags = currentTags.add(tag)
+
     setTags(currentTags)
-    difficultyLevelTag.current = tag
+  }
+
+  function handleDifficultyLevelChange(newDifficultyLevel: ChallengeDifficultyLevel) {
+    setDifficultyLevel(newDifficultyLevel)
+  }
+
+  function addDifficultyLevelTag(difficultyLevel: ChallengeDifficultyLevel) {
+    if (!ChallengeDifficulty.isDifficultyLevel(difficultyLevel)) return
+    const tag = getTag(difficultyLevel, 'difficultyLevel')
+    if (!tag || tag === 'Todos') return
+
+    let currentTags = tags
+
+    const possibleDifficultyLevelTags = FILTER_SELECTS_ITEMS.difficultyLevel.map(
+      (item) => item.label,
+    )
+    const currentDifficultyLevelTag = tags.getSome(possibleDifficultyLevelTags)
+
+    if (currentDifficultyLevelTag) {
+      currentTags = currentTags.remove(currentDifficultyLevelTag)
+    }
+    currentTags = currentTags.add(tag)
+
+    setTags(currentTags)
   }
 
   function handleTitleChange(title: string) {
@@ -123,12 +132,12 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
   }
 
   useEffect(() => {
-    if (difficultyLevel)
-      handleDifficultyChange(difficultyLevel as ChallengeDifficultyLevel)
-    if (completionStatus)
-      handleStatusChange(completionStatus as ChallengeCompletionStatus)
-    if (title) handleTitleChange(title)
-  }, [])
+    if (completionStatus) addCompletionStatusTag(completionStatus)
+  }, [completionStatus])
+
+  useEffect(() => {
+    if (difficultyLevel) addDifficultyLevelTag(difficultyLevel)
+  }, [difficultyLevel])
 
   useEffect(() => {
     categoriesIds.filter(Boolean).forEach((id) => {
@@ -147,13 +156,16 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
     })
 
     removedCategoriesNames.current = removedCategoriesNames.current.makeEmpty()
-  }, [categoriesIds])
+  }, [categoriesIds, categories])
+
+  console.log(tags)
 
   return {
+    title,
     tags,
     difficultyLevel,
-    handleStatusChange,
-    handleDifficultyChange,
+    handleDifficultyLevelChange,
+    handleCompletionStatusChange,
     handleTitleChange,
     handleTagClick,
   }
