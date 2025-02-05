@@ -1,5 +1,5 @@
 export type StarDto = {
-  id: string
+  id?: string
   slug: string
   name: string
   number: number

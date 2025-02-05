@@ -41,10 +41,10 @@ export const questions: Questions = [
     picture: 'panda.jpg',
     type: 'drag-and-drop-list',
     items: [
-      { position: 1, indentantion: 0, label: 'Retirar o traje do compartimento' },
-      { position: 2, indentantion: 0, label: 'Abrir zíper do traje' },
-      { position: 3, indentantion: 0, label: 'Colocar o traje' },
-      { position: 4, indentantion: 0, label: 'Fechar o zíper do traje' },
+      { position: 1, indentation: 0, label: 'Retirar o traje do compartimento' },
+      { position: 2, indentation: 0, label: 'Abrir zíper do traje' },
+      { position: 3, indentation: 0, label: 'Colocar o traje' },
+      { position: 4, indentation: 0, label: 'Fechar o zíper do traje' },
     ],
   },
   {
@@ -52,10 +52,10 @@ export const questions: Questions = [
     type: 'drag-and-drop-list',
     picture: 'panda.jpg',
     items: [
-      { position: 1, indentantion: 0, label: 'Ir para o painel de controle' },
-      { position: 2, indentantion: 0, label: 'Encontrar o botão de ligar' },
-      { position: 3, indentantion: 0, label: 'Pressionar o botão' },
-      { position: 4, indentantion: 0, label: 'Esperar o foguete decolar' },
+      { position: 1, indentation: 0, label: 'Ir para o painel de controle' },
+      { position: 2, indentation: 0, label: 'Encontrar o botão de ligar' },
+      { position: 3, indentation: 0, label: 'Pressionar o botão' },
+      { position: 4, indentation: 0, label: 'Esperar o foguete decolar' },
     ],
   },
   {
@@ -63,14 +63,14 @@ export const questions: Questions = [
     type: 'drag-and-drop-list',
     picture: 'panda.jpg',
     items: [
-      { position: 1, indentantion: 0, label: 'Acessar painel de controle' },
-      { position: 2, indentantion: 0, label: 'Pressionar o botão do piloto automático' },
+      { position: 1, indentation: 0, label: 'Acessar painel de controle' },
+      { position: 2, indentation: 0, label: 'Pressionar o botão do piloto automático' },
       {
         position: 3,
-        indentantion: 0,
+        indentation: 0,
         label: 'Aguardar piloto automático responder',
       },
-      { position: 4, indentantion: 0, label: 'Curtir a viagem 🚀' },
+      { position: 4, indentation: 0, label: 'Curtir a viagem 🚀' },
     ],
   },
 ]
