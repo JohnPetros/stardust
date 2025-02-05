@@ -13,7 +13,6 @@ import { useAudioContext } from '@/ui/global/contexts/AudioContext'
 type UseStarProps = {
   id: string
   slug: string
-  isChallenge: boolean
   isLastUnlockedStar: boolean
   starAnimationRef: RefObject<AnimationRef>
 }

@@ -10,6 +10,8 @@ import { SupabaseServerClient } from '@/api/supabase/clients/SupabaseServerClien
 import { LessonPage } from '@/ui/lesson/widgets/pages/Lesson'
 import { ROUTES } from '@/constants'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Lesson({ params }: NextParams<{ starSlug: string }>) {
   const supabase = SupabaseServerClient()
   const authService = SupabaseAuthService(supabase)
@@ -41,6 +43,8 @@ export default async function Lesson({ params }: NextParams<{ starSlug: string }
   const storyResponse = await lessonService.fetchStarStory(star.id)
   if (textsBlocksResponse.isFailure) textsBlocksResponse.throwError()
   const story = storyResponse.body.story
+
+  console.log('questions', questions)
 
   return (
     <LessonPage

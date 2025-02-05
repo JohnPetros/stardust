@@ -33,6 +33,8 @@ export function LessonPage({
     storyContent,
   )
 
+  return
+
   return (
     <>
       <PageTransitionAnimation isVisible={isTransitionVisible} />

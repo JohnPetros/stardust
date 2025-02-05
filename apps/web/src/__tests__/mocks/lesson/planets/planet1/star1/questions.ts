@@ -11,7 +11,7 @@ type Questions = [
   DragAndDropListQuestionDto,
 ]
 
-export const questionsMock: Questions = [
+export const questions: Questions = [
   {
     stem: 'Muito bem, você acaba de embarcar no foguete. Antes de proseguirmos quero que responda primeiro: O que é lógica de programação mesmo?',
     picture: 'panda.jpg',
@@ -41,10 +41,10 @@ export const questionsMock: Questions = [
     picture: 'panda.jpg',
     type: 'drag-and-drop-list',
     items: [
-      { position: 1, label: 'Retirar o traje do compartimento' },
-      { position: 2, label: 'Abrir zíper do traje' },
-      { position: 3, label: 'Colocar o traje' },
-      { position: 4, label: 'Fechar o zíper do traje' },
+      { position: 1, indentantion: 0, label: 'Retirar o traje do compartimento' },
+      { position: 2, indentantion: 0, label: 'Abrir zíper do traje' },
+      { position: 3, indentantion: 0, label: 'Colocar o traje' },
+      { position: 4, indentantion: 0, label: 'Fechar o zíper do traje' },
     ],
   },
   {
@@ -52,10 +52,10 @@ export const questionsMock: Questions = [
     type: 'drag-and-drop-list',
     picture: 'panda.jpg',
     items: [
-      { position: 1, label: 'Ir para o painel de controle' },
-      { position: 2, label: 'Encontrar o botão de ligar' },
-      { position: 3, label: 'Pressionar o botão' },
-      { position: 4, label: 'Esperar o foguete decolar' },
+      { position: 1, indentantion: 0, label: 'Ir para o painel de controle' },
+      { position: 2, indentantion: 0, label: 'Encontrar o botão de ligar' },
+      { position: 3, indentantion: 0, label: 'Pressionar o botão' },
+      { position: 4, indentantion: 0, label: 'Esperar o foguete decolar' },
     ],
   },
   {
@@ -63,10 +63,14 @@ export const questionsMock: Questions = [
     type: 'drag-and-drop-list',
     picture: 'panda.jpg',
     items: [
-      { position: 1, label: 'Acessar painel de controle' },
-      { position: 2, label: 'Pressionar o botão do piloto automático' },
-      { position: 3, label: 'Corrigir desvios na trajetória, se necessário' },
-      { position: 4, label: 'Curtir a viagem 🚀' },
+      { position: 1, indentantion: 0, label: 'Acessar painel de controle' },
+      { position: 2, indentantion: 0, label: 'Pressionar o botão do piloto automático' },
+      {
+        position: 3,
+        indentantion: 0,
+        label: 'Aguardar piloto automático responder',
+      },
+      { position: 4, indentantion: 0, label: 'Curtir a viagem 🚀' },
     ],
   },
 ]

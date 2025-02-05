@@ -1,13 +1,11 @@
 import { Entity } from '#global/abstracts'
-import { Id, OrdinalNumber, Logical, Slug, Name } from '#global/structs'
+import { OrdinalNumber, Slug, Name } from '#global/structs'
 import type { StarDto } from '#space/dtos'
 
 type StarsProps = {
   slug: Slug
   name: Name
   number: OrdinalNumber
-  isChallenge: Logical
-  planetId: Id
 }
 
 export class Star extends Entity<StarsProps> {
@@ -17,8 +15,6 @@ export class Star extends Entity<StarsProps> {
         slug: Slug.create(dto.slug),
         name: Name.create(dto.name),
         number: OrdinalNumber.create(dto.number, 'Número da estrela'),
-        isChallenge: Logical.create(dto.isChallenge, 'É um desafio?'),
-        planetId: Id.create(dto.planetId),
       },
       dto?.id,
     )
@@ -30,8 +26,6 @@ export class Star extends Entity<StarsProps> {
       name: this.name.value,
       number: this.number.value,
       slug: this.slug.value,
-      isChallenge: this.isChallenge.value,
-      planetId: this.props.planetId.value,
     }
   }
 
@@ -46,12 +40,4 @@ export class Star extends Entity<StarsProps> {
   get slug() {
     return this.props.slug
   }
-
-  get isChallenge() {
-    return this.props.isChallenge
-  }
-
-  // get texts() {
-  //   return this.props.texts
-  // }
 }

@@ -5,6 +5,7 @@ export type DragAndDropListQuestionDto = {
   picture: string
   items: Array<{
     position: number
+    indentantion?: number
     label: string
     indentation: number
   }>

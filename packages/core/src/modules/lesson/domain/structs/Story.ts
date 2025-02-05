@@ -21,7 +21,7 @@ export class Story {
   static create(chunks: TextBlockDto[] | string[]): Story {
     if (Story.areChunks(chunks)) {
       return new Story({
-        currentChunkIndex: Integer.create(1, 'Índice do pedaço atual'),
+        currentChunkIndex: Integer.create(0, 'Índice do pedaço atual'),
         textBlocks: [],
         chunks,
       })
@@ -38,7 +38,7 @@ export class Story {
     })
 
     return new Story({
-      currentChunkIndex: Integer.create(1, 'Índice do pedaço atual'),
+      currentChunkIndex: Integer.create(0, 'Índice do pedaço atual'),
       textBlocks,
       chunks: [],
     })

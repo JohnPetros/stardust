@@ -10,6 +10,7 @@ type SelectionQuestionProps = {
 
 export class SelectionQuestion extends Question<SelectionQuestionProps> {
   static create(dto: SelectionQuestionDto) {
+    console.log(dto)
     return new SelectionQuestion(
       {
         type: 'selection',
