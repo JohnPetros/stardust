@@ -9,9 +9,7 @@ export const SupabaseStarMapper = () => {
         id: supabaseStar.id ?? '',
         name: supabaseStar.name ?? '',
         number: supabaseStar.number ?? 1,
-        isChallenge: supabaseStar.is_challenge,
         slug: supabaseStar.slug,
-        planetId: supabaseStar.planet_id,
       }
 
       return StarDto
@@ -25,8 +23,6 @@ export const SupabaseStarMapper = () => {
         name: StarDto.name,
         number: StarDto.number,
         slug: StarDto.slug,
-        is_challenge: StarDto.isChallenge,
-        planet_id: StarDto.planetId,
       }
 
       return supabaseStar
