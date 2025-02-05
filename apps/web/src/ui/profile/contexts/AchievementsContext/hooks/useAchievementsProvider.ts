@@ -1,6 +1,6 @@
 'use client'
 
-import { type RefObject, useState } from 'react'
+import { type RefObject, useEffect, useState } from 'react'
 
 import { Achievement } from '@stardust/core/profile/entities'
 import { User } from '@stardust/core/global/entities'
@@ -12,13 +12,14 @@ import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
 import { useObserveNewUnlockedAchievementsAction } from './useObserveNewUnlockedAchievementsAction'
+import { DOM_EVENTS } from '@/constants'
 
 export function useAchivementsProvider(
   newUnlockedAchievementsAlertDialogRef: RefObject<AlertDialogRef>,
 ) {
   const api = useApi()
   const toast = useToastContext()
-  const { user, updateUser } = useAuthContext()
+  const { user, updateUser, notifyUserChanges } = useAuthContext()
   const { observe } = useObserveNewUnlockedAchievementsAction(() =>
     toast.show('Error ao observar novas conquistas desbloqueadas'),
   )
@@ -56,8 +57,6 @@ export function useAchivementsProvider(
   }
 
   async function observeNewUnlockedAchievements() {
-    if (!user) return
-
     const { updatedUserDto, newUnlockedAchievementsDto } = await observe()
 
     if (!updatedUserDto || !newUnlockedAchievementsDto) return
@@ -65,11 +64,16 @@ export function useAchivementsProvider(
     setNewUnlockedAchievements(newUnlockedAchievementsDto.map(Achievement.create))
     newUnlockedAchievementsAlertDialogRef.current?.open()
     await updateUser(User.create(updatedUserDto))
-    toast.show('Error ao observar conquistas')
   }
 
   // @ts-ignore
-  useEventListener('userChange', observeNewUnlockedAchievements)
+  useEventListener(DOM_EVENTS.userChange, observeNewUnlockedAchievements)
+
+  useEffect(() => {
+    setTimeout(() => {
+      notifyUserChanges()
+    }, 100)
+  }, [notifyUserChanges])
 
   return {
     newUnlockedAchievements,

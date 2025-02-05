@@ -10,4 +10,5 @@ export type AuthContextValue = {
   handleSignOut(): Promise<void>
   updateUser(newUser: User): Promise<void>
   updateUserCache(userData: UserDto | null): void
+  notifyUserChanges(): void
 }

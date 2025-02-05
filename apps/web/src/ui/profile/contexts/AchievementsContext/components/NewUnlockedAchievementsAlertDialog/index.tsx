@@ -25,11 +25,12 @@ export function NewUnlockedAchievementsAlertDialog({
         ref={alertDialogRef}
         type='earning'
         title='Uau! Parece que você ganhou recompensa(s)'
+        shouldPlayAudio
         body={
-          <div className='max-h-64 overflow-auto px-6'>
+          <div className='max-h-80 overflow-auto px-6'>
             {achievements.map((achievement) => (
               <div key={achievement.id} className='relative'>
-                <span className='absolute block' style={{ top: -18, left: -31.5 }}>
+                <span className='absolute block' style={{ top: -18, left: -15.5 }}>
                   <Animation name='shinning' size={110} />
                 </span>
 

@@ -6,7 +6,7 @@ import type { UserDto } from '@stardust/core/global/dtos'
 import { Observer } from '@stardust/core/global/structs'
 import { User } from '@stardust/core/global/entities'
 
-import { CACHE, ROUTES } from '@/constants'
+import { CACHE, DOM_EVENTS, ROUTES } from '@/constants'
 import { useApi } from '@/ui/global/hooks/useApi'
 import { useCache } from '@/ui/global/hooks/useCache'
 import { useRouter } from '@/ui/global/hooks/useRouter'
@@ -46,10 +46,10 @@ export function useAuthProvider(serverSession: Session | null) {
     dependencies: [session?.user.id],
   })
 
-  function notifyUserChanges() {
-    const userChangeEvent = new Event('userChange')
+  const notifyUserChanges = useCallback(() => {
+    const userChangeEvent = new Event(DOM_EVENTS.userChange)
     window.dispatchEvent(userChangeEvent)
-  }
+  }, [])
 
   function setUser(userDto: UserDto | null) {
     if (!userDto) return null
@@ -117,6 +117,7 @@ export function useAuthProvider(serverSession: Session | null) {
     handleSignOut,
     updateUser,
     updateUserCache,
+    notifyUserChanges,
   }
 
   return value
