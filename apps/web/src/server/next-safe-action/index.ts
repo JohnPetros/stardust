@@ -2,6 +2,8 @@ import { signUp } from './authActionts'
 import {
   fetchChallengesList,
   accessChallengePage,
+  accessChallengeCommentsSlot,
+  accessChallengeSolutionsSlot,
   voteChallenge,
   editSolution,
   postSolution,
@@ -27,6 +29,8 @@ export const cookieActions = { setCookie, getCookie, deleteCookie, hasCookie }
 export const challengingActions = {
   fetchChallengesList,
   accessChallengePage,
+  accessChallengeCommentsSlot,
+  accessChallengeSolutionsSlot,
   voteChallenge,
   editSolution,
   postSolution,

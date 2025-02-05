@@ -1,25 +1,22 @@
-import { ROUTES } from '@/constants'
-import type { SolutionDto } from '@stardust/core/challenging/dtos'
-import { Challenge } from '@stardust/core/challenging/entities'
-import { ViewSolutionUseCase } from '@stardust/core/challenging/use-cases'
-import { User } from '@stardust/core/global/entities'
 import type {
   IAction,
   IActionServer,
   IChallengingService,
 } from '@stardust/core/interfaces'
+import { Challenge } from '@stardust/core/challenging/entities'
+import { ROUTES } from '@/constants'
+import { User } from '@stardust/core/global/entities'
 
 type Request = {
   challengeSlug: string
-  solutionSlug: string
 }
 
-export const ViewSolutionAction = (
+export const AccessChallengeSolutionsSlotAction = (
   service: IChallengingService,
-): IAction<Request, SolutionDto> => {
+): IAction<Request> => {
   return {
     async handle(actionServer: IActionServer<Request>) {
-      const { solutionSlug, challengeSlug } = actionServer.getRequest()
+      const { challengeSlug } = actionServer.getRequest()
       const user = User.create(await actionServer.getUser())
       const response = await service.fetchChallengeBySlug(challengeSlug)
       if (response.isFailure) response.throwError()
@@ -30,12 +27,6 @@ export const ViewSolutionAction = (
           ROUTES.challenging.challenges.challenge(challenge.slug.value),
         )
       }
-
-      const useCase = new ViewSolutionUseCase(service)
-
-      return await useCase.do({
-        solutionSlug,
-      })
     },
   }
 }
