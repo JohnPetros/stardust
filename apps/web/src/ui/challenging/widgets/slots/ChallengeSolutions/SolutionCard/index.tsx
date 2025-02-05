@@ -45,7 +45,7 @@ export function SolutionCard({
         />
         <div className='w-full'>
           <p className='text-gray-500 text-sm'>{author.name}</p>
-          <h2 className='font-semibold text-green-500 text-lg transition-colors duration-200 hover:text-green-700'>
+          <h2 className='font-semibold text-green-500 text-md transition-colors duration-200 hover:text-green-700'>
             {title}
           </h2>
           <div className='mt-3'>

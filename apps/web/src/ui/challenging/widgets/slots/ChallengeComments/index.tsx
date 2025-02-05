@@ -14,7 +14,9 @@ export function ChallengeCommentsSlot({ challengeId }: ChallengeCommentsSlotProp
 
   return (
     <>
-      <ChallengeContentNav contents={['description', 'solutions']} />
+      <div className='px-6 pt-3'>
+        <ChallengeContentNav contents={['description', 'solutions']} />
+      </div>
       <CommentsList
         inputPlaceholder='Deixe um comentário sobre esse desafio...'
         emptyListMessage='Esse desafio ainda não tem comentários. Seja a primeira pessoa a comentar 😉.'

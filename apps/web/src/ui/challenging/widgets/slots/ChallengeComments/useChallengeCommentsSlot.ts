@@ -12,10 +12,6 @@ import { useApi } from '@/ui/global/hooks/useApi'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
 export function useChallengeCommentsSlot(challengeId: string) {
-  const { getChallengeSlice, getCraftsVisibilitySlice } = useChallengeStore()
-  const { challenge } = getChallengeSlice()
-  const { craftsVislibility } = getCraftsVisibilitySlice()
-  const { goTo } = useRouter()
   const api = useApi()
   const toast = useToastContext()
 
@@ -27,11 +23,6 @@ export function useChallengeCommentsSlot(challengeId: string) {
     const response = await api.saveChallengeComment(comment, challengeId)
     if (response.isFailure) toast.show(response.errorMessage)
   }
-
-  useEffect(() => {
-    if (craftsVislibility.canShowComments.isFalse)
-      goTo(`${ROUTES.challenging.challenges}/${challenge?.slug.value}`)
-  }, [goTo, craftsVislibility, challenge?.slug])
 
   return {
     handleCommentSave,

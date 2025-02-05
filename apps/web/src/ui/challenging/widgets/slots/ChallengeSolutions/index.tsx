@@ -39,16 +39,23 @@ export function ChallengeSolutionsSlot() {
   } = useChallengeSolutionsSlot()
   return (
     <div className='px-6 py-3'>
-      <ChallengeContentNav contents={['description', 'comments']} />
+      <div className='flex flex-wrap justify-between'>
+        <div className='md:hidden'>
+          <ChallengeContentNav contents={['description', 'comments']} />
+        </div>
 
-      <Button asChild className='ml-auto w-max px-3 h-10 text-xs'>
-        <Link href={`${ROUTES.challenging.challenges.solution(challengeSlug)}`}>
-          <Icon name='share' size={14} className='mr-1' />
-          Compartilhar sua solução
-        </Link>
-      </Button>
+        <Button
+          asChild
+          className='md:ml-auto w-full md:w-max mt-2 md:m-0 px-3 h-10 text-xs'
+        >
+          <Link href={`${ROUTES.challenging.challenges.solution(challengeSlug)}`}>
+            <Icon name='share' size={14} className='mr-1' />
+            Compartilhar sua solução
+          </Link>
+        </Button>
+      </div>
 
-      <div className='flex items-center gap-6 mt-3'>
+      <div className='flex items-center gap-6 mt-6'>
         <Search
           value={solutionTitle}
           placeholder='procurar solução por título'
@@ -69,11 +76,11 @@ export function ChallengeSolutionsSlot() {
         </PopoverMenu>
       </div>
 
-      <div className='flex w-64 gap-3 mt-3'>
+      <div className='flex w-64 gap-3 mt-6'>
         <Button
           onClick={() => handleIsFromUserChange(false)}
           className={twMerge(
-            'h-6 text-xs',
+            'h-8 text-xs',
             !isFromUser ? 'bg-green-400 text-green-900' : 'bg-gray-400 text-gray-700',
           )}
         >
@@ -82,7 +89,7 @@ export function ChallengeSolutionsSlot() {
         <Button
           onClick={() => handleIsFromUserChange(true)}
           className={twMerge(
-            'h-6 text-xs',
+            'h-8 text-xs',
             isFromUser ? 'bg-green-400 text-green-900' : 'bg-gray-400 text-gray-700',
           )}
         >

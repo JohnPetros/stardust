@@ -20,7 +20,7 @@ export function ChallengeContentNav({ contents }: ChallengeContentNavProps) {
           title='Descrição'
           contentType='description'
           isActive={false}
-          isBlocked={true}
+          isBlocked={false}
         />
       )}
       {contents.includes('comments') && (
@@ -31,7 +31,7 @@ export function ChallengeContentNav({ contents }: ChallengeContentNavProps) {
                 title='Comentários'
                 contentType='comments'
                 isActive={false}
-                isBlocked={true}
+                isBlocked={craftsVislibility.canShowComments.isTrue}
               />
             </BlockedCommentsAlertDialog>
           ) : (
@@ -39,7 +39,7 @@ export function ChallengeContentNav({ contents }: ChallengeContentNavProps) {
               title='Comentários'
               contentType='comments'
               isActive={false}
-              isBlocked={false}
+              isBlocked={craftsVislibility.canShowSolutions.isTrue}
             />
           )}
         </>
