@@ -32,6 +32,8 @@ import {
   UpvoteSolutionAction,
   ViewSolutionAction,
   VoteChallengeAction,
+  AccessChallengeCommentsSlotAction,
+  AccessChallengeSolutionsSlotAction,
 } from '../actions/challenging'
 
 export const fetchChallengesList = authActionClient
@@ -151,9 +153,44 @@ export const upvoteSolution = authActionClient
     return action.handle(actionServer)
   })
 
+export const accessChallengeCommentsSlot = authActionClient
+  .schema(
+    z.object({
+      challengeSlug: z.string(),
+    }),
+  )
+  .action(async ({ clientInput, ctx }) => {
+    const actionServer = NextActionServer({
+      request: clientInput,
+      user: ctx.user,
+    })
+    const supabase = SupabaseServerActionClient()
+    const challengingService = SupabaseChallengingService(supabase)
+    const action = AccessChallengeCommentsSlotAction(challengingService)
+    return action.handle(actionServer)
+  })
+
+export const accessChallengeSolutionsSlot = authActionClient
+  .schema(
+    z.object({
+      challengeSlug: z.string(),
+    }),
+  )
+  .action(async ({ clientInput, ctx }) => {
+    const actionServer = NextActionServer({
+      request: clientInput,
+      user: ctx.user,
+    })
+    const supabase = SupabaseServerActionClient()
+    const challengingService = SupabaseChallengingService(supabase)
+    const action = AccessChallengeSolutionsSlotAction(challengingService)
+    return action.handle(actionServer)
+  })
+
 export const viewSolution = authActionClient
   .schema(
     z.object({
+      challengeSlug: z.string(),
       solutionSlug: z.string(),
     }),
   )

@@ -1,11 +1,12 @@
 import { useEffect, useState, type RefObject } from 'react'
 import type { ImperativePanelHandle } from 'react-resizable-panels'
 
-import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
+import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
+
 import { COOKIES } from '@/constants'
+import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useSecondsCounter } from '@/ui/global/hooks/useSecondsCounter'
-import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 import type { PanelsOffset } from './types/PanelsOffset'
 
