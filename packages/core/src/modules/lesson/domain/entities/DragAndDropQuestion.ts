@@ -12,7 +12,7 @@ import { Question } from '#lesson/abstracts'
 
 type DragAndDropQuestionProps = {
   codeLines: QuestionCodeLine[]
-  correctItemIndexesSequence: List<number>
+  correctItems: List<string>
   dragAndDrop: DragAndDrop
 }
 
@@ -24,7 +24,7 @@ export class DragAndDropQuestion extends Question<DragAndDropQuestionProps> {
         picture: Image.create(dto.picture),
         stem: Text.create(dto.stem),
         codeLines: dto.lines.map(QuestionCodeLine.create),
-        correctItemIndexesSequence: List.create(dto.correctItemsIndexesSequence),
+        correctItems: List.create(dto.correctItems),
         dragAndDrop: DragAndDrop.create(dto.items),
       },
       dto.id,
@@ -36,11 +36,9 @@ export class DragAndDropQuestion extends Question<DragAndDropQuestionProps> {
   }
 
   verifyUserAnswer(userAnswer: UserAnswer): Logical {
-    const usersDraggableItemsIndexesSequence = List.create(userAnswer.value as number[])
+    const userItems = List.create(userAnswer.value as string[])
 
-    return usersDraggableItemsIndexesSequence.isEqualTo(
-      this.props.correctItemIndexesSequence,
-    )
+    return userItems.isEqualTo(this.props.correctItems)
   }
 
   get dropZonesCount(): Integer {
@@ -63,7 +61,7 @@ export class DragAndDropQuestion extends Question<DragAndDropQuestionProps> {
     return this.props.codeLines
   }
 
-  get correctItemIndexesSequence(): List<number> {
-    return this.props.correctItemIndexesSequence
+  get correctItems(): List<string> {
+    return this.props.correctItems
   }
 }

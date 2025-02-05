@@ -5,17 +5,17 @@ import { DraggableItem } from './DraggableItem'
 
 type DragAndDropProps = {
   items: DraggableItem[]
-  userItemsIndexes: List<number>
+  userItems: List<number>
 }
 
 export class DragAndDrop {
   static readonly FIRST_ORIGINAL_DROP_ZONE_INDEX = 100
   readonly items: DraggableItem[]
-  readonly userItemsIndexes: List<number>
+  readonly userItems: List<number>
 
   private constructor(props: DragAndDropProps) {
     this.items = props.items
-    this.userItemsIndexes = props.userItemsIndexes
+    this.userItems = props.userItems
   }
 
   static create(
@@ -34,7 +34,7 @@ export class DragAndDrop {
       })
     })
 
-    return new DragAndDrop({ items, userItemsIndexes: List.create([]) })
+    return new DragAndDrop({ items, userItems: List.create([]) })
   }
 
   dragItem(item: DraggableItem, dropZone: DropZone): DragAndDrop {
@@ -97,7 +97,7 @@ export class DragAndDrop {
   private clone(props?: Partial<DragAndDropProps>): DragAndDrop {
     return new DragAndDrop({
       items: this.items,
-      userItemsIndexes: this.userItemsIndexes,
+      userItems: this.userItems,
       ...props,
     })
   }

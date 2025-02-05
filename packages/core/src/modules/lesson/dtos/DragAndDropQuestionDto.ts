@@ -10,5 +10,5 @@ export type DragAndDropQuestionDto = {
     index: number
     label: string
   }>
-  correctItemsIndexesSequence: number[]
+  correctItems: string[]
 }

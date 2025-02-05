@@ -37,19 +37,18 @@ export function useDragAndDropQuestion(
 
     const newDragAndDrop = dragAndDrop.dragItem(item, dropZone)
 
-    const userItemIndexesSenquence: number[] = []
+    const userItems: string[] = []
 
     for (const line of codeLines) {
       line.texts.forEach((text, index) => {
         const item = newDragAndDrop.getItemByDropZone(index + 1)
         if (text === 'dropZone' && item) {
-          userItemIndexesSenquence.push(item.index.value)
+          userItems.push(item.label.value)
         }
       })
     }
 
-    if (userItemIndexesSenquence.length === dropZonesCount)
-      setQuiz(quiz.changeUserAnswer(userItemIndexesSenquence))
+    if (userItems.length === dropZonesCount) setQuiz(quiz.changeUserAnswer(userItems))
     else setQuiz(quiz.changeUserAnswer(null))
 
     setDragAndDrop(newDragAndDrop)
