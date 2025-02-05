@@ -63,13 +63,13 @@ Fim`,
   },
   {
     content:
-      'Veja que sempre um programa tem início meio e fim, e os passos sempre devem ser colocados de maneira lógica, visto que não dá para servir o café pronto sem antes prepara ele.',
+      'Veja que sempre um programa tem início, meio e fim, e os passos sempre devem ser colocados de maneira lógica, visto que não dá para servir o café pronto sem antes prepará-lo.',
     type: 'default',
     picture: 'panda.jpg',
   },
   {
     content:
-      'Essa abordagem de pensar logicamente para escrever um programa, chamamos de lógica de programação. ',
+      'Essa abordagem de pensar logicamente para escrever um programa chamamos de lógica de programação. ',
     type: 'default',
     picture: 'panda-fazendo-coracao.jpg',
   },

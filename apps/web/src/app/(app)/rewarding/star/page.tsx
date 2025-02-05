@@ -5,6 +5,7 @@ import { COOKIES } from '@/constants'
 import { cookieActions, rewardingActions } from '@/server/next-safe-action'
 
 export default async function Page() {
+  return 'oi'
   const rewardsPayloadCookie = await cookieActions.getCookie(
     COOKIES.keys.rewardingPayload,
   )

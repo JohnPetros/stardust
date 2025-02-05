@@ -12,7 +12,6 @@ import { useDragAndDropQuestion } from './useDragAndDropQuestion'
 type DragAndDropQuestionProps = {
   stem: string
   picture: string
-  correctItemIndexesSequence: number[]
   codeLines: QuestionCodeLine[]
   dropZonesCount: number
   initialDragAndDrop: DragAndDrop

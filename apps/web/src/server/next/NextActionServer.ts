@@ -28,7 +28,7 @@ export const NextActionServer = <Request = unknown>({
       notFound()
     },
 
-    async setCookie(key, value) {
+    async setCookie(key: string, value: string) {
       cookies().set({
         name: key,
         value,
@@ -41,7 +41,12 @@ export const NextActionServer = <Request = unknown>({
       return cookies().get(key)?.value ?? null
     },
 
-    async deleteCookie(key) {
+    async hasCookie(key) {
+      const cookie = cookies().get(key)
+      return !!cookie
+    },
+
+    async deleteCookie(key: string) {
       cookies().delete(key)
     },
 

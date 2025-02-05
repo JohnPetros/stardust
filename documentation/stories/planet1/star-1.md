@@ -25,9 +25,9 @@ Inicio
 Fim
 </Code>
 ---
-<Text picture="panda-deslumbrado.jpg">Veja que sempre um programa tem início meio e fim, e os passos sempre devem ser colocados de maneira lógica, visto que não dá para servir o café pronto sem antes prepara ele.</Text>
+<Text picture="panda.jpg">Veja que sempre um programa tem início meio e fim, e os passos sempre devem ser colocados de maneira lógica, visto que não dá para servir o café pronto sem antes prepara ele.</Text>
 ---
-<Text picture="panda-deslumbrado.jpg">Essa abordagem de pensar logicamente para escrever um programa, chamamos de lógica de programação.</Text>
+<Text picture="panda-fazendo-coracao.jpg">Essa abordagem de pensar logicamente para escrever um programa, chamamos de lógica de programação.</Text>
 ---
 <Image picture="apollo-teclando.jpg">A lógica está em todo lugar...</Image>
 ---

@@ -33,16 +33,14 @@ export function LessonPage({
     storyContent,
   )
 
-  return
-
   return (
     <>
       <PageTransitionAnimation isVisible={isTransitionVisible} />
       <div ref={scrollRef} className='relative overflow-x-hidden'>
-        {stage !== 'rewards' && <LessonHeader onLeavePage={handleLeavePage} />}
+        {stage !== 'rewarding' && <LessonHeader onLeavePage={handleLeavePage} />}
 
         <main>
-          {stage === 'theory' && <StoryStage title={starName} number={starNumber} />}
+          {stage === 'story' && <StoryStage title={starName} number={starNumber} />}
           {stage === 'quiz' && <QuizStage leaveLesson={handleLeavePage} />}
         </main>
       </div>

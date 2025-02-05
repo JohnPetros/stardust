@@ -15,7 +15,7 @@ export function Picture({ url }: PictureProps) {
   const formattedImage = image.replace(REGEX.quotes, '')
 
   return (
-    <div className='relative mr-3 overflow-hidden rounded-md md:h-16 md:w-24 '>
+    <div className='relative mr-3 overflow-hidden rounded-md h-16 md:w-24 '>
       <Image
         src={formattedImage}
         alt='Panda'
@@ -23,6 +23,7 @@ export function Picture({ url }: PictureProps) {
         sizes='(min-width: 375px) 5rem, (min-width: 769px) 6rem'
         priority
         fill
+        loading='eager'
         style={{ objectFit: 'cover' }}
         onLoadingComplete={(image) => image.classList.remove('skeleton')}
       />

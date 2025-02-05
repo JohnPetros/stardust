@@ -28,7 +28,7 @@ export const questions: Questions = [
     stem: 'Muito bem, então na hora de escrever uma programa o que você NÃO deve pensar em fazer é:',
     picture: 'panda.jpg',
     type: 'selection',
-    answer: 'desordem',
+    answer: 'Colocar os passos de forma desordenada',
     options: [
       'Usar raciocínio lógico',
       'Colocar os passos de forma desordenada',

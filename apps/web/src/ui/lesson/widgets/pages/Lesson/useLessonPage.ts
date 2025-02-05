@@ -40,9 +40,7 @@ export function useLessonPage(
   useEffect(() => {
     const timeout = setTimeout(() => setIsTransitionVisible(false), 1000)
 
-    setStory(
-      Story.create(textsBlocksDto.length ? textsBlocksDto : storyContent.split('---')),
-    )
+    setStory(Story.create(storyContent ? storyContent.split('---') : textsBlocksDto))
     setQuiz(Quiz.create(questionsDto))
 
     localStorage.removeItem(STORAGE.keys.secondsCounter)
@@ -52,8 +50,10 @@ export function useLessonPage(
     }
   }, [textsBlocksDto, storyContent, questionsDto, setStory, setQuiz])
 
+  console.log('stage', stage)
+
   useEffect(() => {
-    if (stage === 'rewards') {
+    if (stage === 'rewarding') {
       async function goToRewardingPage() {
         if (!quiz) return
 

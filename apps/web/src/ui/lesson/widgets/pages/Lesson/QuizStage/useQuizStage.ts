@@ -16,9 +16,8 @@ export function useQuizStage(alertDialogRef: RefObject<AlertDialogRef>) {
   }
 
   useEffect(() => {
-    if (quiz && !quiz.hasNextQuestion) {
-      alert('REWARDS')
-      setStage('rewards')
+    if (quiz?.hasNextQuestion.isFalse) {
+      setStage('rewarding')
       return
     }
 

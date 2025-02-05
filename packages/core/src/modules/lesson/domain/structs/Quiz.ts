@@ -46,24 +46,24 @@ export class Quiz {
         continue
       }
 
-      // if (CheckboxQuestion.canBeCreatedBy(questionDto)) {
-      //   questions.push(CheckboxQuestion.create(questionDto))
-      //   continue
-      // }
+      if (CheckboxQuestion.canBeCreatedBy(questionDto)) {
+        questions.push(CheckboxQuestion.create(questionDto))
+        continue
+      }
 
-      // if (OpenQuestion.canBeCreatedBy(questionDto)) {
-      //   questions.push(OpenQuestion.create(questionDto))
-      //   continue
-      // }
+      if (OpenQuestion.canBeCreatedBy(questionDto)) {
+        questions.push(OpenQuestion.create(questionDto))
+        continue
+      }
 
-      // if (DragAndDropListQuestion.canBeCreatedBy(questionDto)) {
-      //   questions.push(DragAndDropListQuestion.create(questionDto))
-      //   continue
-      // }
+      if (DragAndDropListQuestion.canBeCreatedBy(questionDto)) {
+        questions.push(DragAndDropListQuestion.create(questionDto))
+        continue
+      }
 
-      // if (DragAndDropQuestion.canBeCreatedBy(questionDto)) {
-      //   questions.push(DragAndDropQuestion.create(questionDto))
-      // }
+      if (DragAndDropQuestion.canBeCreatedBy(questionDto)) {
+        questions.push(DragAndDropQuestion.create(questionDto))
+      }
     }
 
     return new Quiz({
@@ -84,7 +84,8 @@ export class Quiz {
   }
 
   verifyUserAnswer(): Quiz {
-    const isUserAnswerCorrect = this.currentQuestion.verifyUserAnswer(this.userAnswer)
+    const isUserAnswerCorrect = this.currentQuestion?.verifyUserAnswer(this.userAnswer)
+    if (!isUserAnswerCorrect) return this
 
     const oldUserAnswer = this.userAnswer
     let newUserAnswer = oldUserAnswer.makeVerified()
@@ -134,8 +135,7 @@ export class Quiz {
 
   get currentQuestion() {
     const currentQuestion = this.questions[this.currentQuestionIndex.value]
-    if (!currentQuestion) throw new NotFoundError('Current question not found')
-    return currentQuestion
+    return currentQuestion ?? null
   }
 
   get progress() {
@@ -151,7 +151,11 @@ export class Quiz {
   }
 
   get hasNextQuestion() {
-    return this.currentQuestionIndex.value < this.questionsCount
+    console.log(
+      'has next question',
+      this.currentQuestionIndex.value < this.questionsCount,
+    )
+    return Logical.create(this.currentQuestionIndex.value < this.questionsCount)
   }
 
   private clone(props?: Partial<QuizProps>) {

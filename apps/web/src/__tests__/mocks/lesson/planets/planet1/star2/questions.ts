@@ -56,9 +56,9 @@ export const questions: Questions = [
     stem: 'Agora organize o código abaixo para que ele fique na ordem correta. Dica: as variáveis devem começar no início.',
     type: 'drag-and-drop-list',
     items: [
-      { position: 1, label: 'var mensagem' },
-      { position: 2, label: 'mensagem = leia()' },
-      { position: 3, label: 'escreva(mensagem)' },
+      { position: 1, indentation: 0, label: 'var mensagem' },
+      { position: 2, indentation: 0, label: 'mensagem = leia()' },
+      { position: 3, indentation: 0, label: 'escreva(mensagem)' },
     ],
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
@@ -76,6 +76,6 @@ export const questions: Questions = [
       { index: 3, label: 'leia( )' },
       { index: 4, label: 'leia' },
     ],
-    correctItemsIndexesSequence: [3, 2],
+    correctItems: ['leia( )', 'escreva'],
   },
 ]

@@ -1,5 +1,5 @@
 import type { LessonState } from './types'
-import { useZustandLessonStore } from '../zustand/useLessonStore'
+import { useZustandLessonStore } from '../zustand/useZustandLessonStore'
 import { INITIAL_LESSON_STATE } from './constants'
 
 export function useLessonStore() {

@@ -20,7 +20,7 @@ export const AccessStarPageAction = (
       const user = User.create(await actionServer.getUser())
 
       const starResponse = await service.fetchStarBySlug(starSlug)
-      if (starResponse.isFailure) starResponse.throwError()
+      if (starResponse.isFailure) actionServer.notFound()
       const star = Star.create(starResponse.body)
 
       const starIsUnlockedResponse = await service.verifyStarIsUnlocked(star.id, user.id)

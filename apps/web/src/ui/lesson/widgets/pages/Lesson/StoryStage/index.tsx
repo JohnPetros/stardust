@@ -15,9 +15,10 @@ type StoryStageProps = {
 }
 
 export function StoryStage({ title, number }: StoryStageProps) {
-  const { story, textBlocks, handleContinueButtonClick, handleQuizStageButtonClick } =
-    useStoryStage()
+  const { story, handleContinueButtonClick, handleQuizStageButtonClick } = useStoryStage()
   const buttonHasFocus = useRef(false)
+
+  console.log(story?.chunks)
 
   if (story)
     return (

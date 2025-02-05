@@ -15,24 +15,28 @@ const setCookie = authActionClient
   )
   .action(async ({ clientInput }) => {
     const actionServer = NextActionServer()
-    actionServer.setCookie(clientInput.key, clientInput.value, clientInput.duration)
+    await actionServer.setCookie(clientInput.key, clientInput.value)
   })
 
-const getCookie = authActionClient.schema(z.string()).action(async ({ clientInput }) => {
-  const actionServer = NextActionServer()
-  return actionServer.getCookie(clientInput)
-})
-
-const deleteCookie = authActionClient
-  .schema(z.string())
+const getCookie = authActionClient
+  .schema(z.object({ key: z.string() }))
   .action(async ({ clientInput }) => {
     const actionServer = NextActionServer()
-    actionServer.deleteCookie(clientInput)
+    return actionServer.getCookie(clientInput.key)
   })
 
-const hasCookie = authActionClient.schema(z.string()).action(async ({ clientInput }) => {
-  const actionServer = NextActionServer()
-  actionServer.deleteCookie(clientInput)
-})
+const deleteCookie = authActionClient
+  .schema(z.object({ key: z.string() }))
+  .action(async ({ clientInput }) => {
+    const actionServer = NextActionServer()
+    await actionServer.deleteCookie(clientInput.key)
+  })
+
+const hasCookie = authActionClient
+  .schema(z.object({ key: z.string() }))
+  .action(async ({ clientInput }) => {
+    const actionServer = NextActionServer()
+    return await actionServer.hasCookie(clientInput.key)
+  })
 
 export { setCookie, getCookie, deleteCookie, hasCookie }

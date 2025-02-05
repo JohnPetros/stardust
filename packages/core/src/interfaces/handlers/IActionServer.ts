@@ -7,5 +7,6 @@ export interface IActionServer<Request = void> {
   setCookie(key: string, value: string, duration?: number): Promise<void>
   getCookie(key: string): Promise<string | null>
   deleteCookie(key: string): Promise<void>
+  hasCookie(key: string): Promise<boolean>
   getUser(): Promise<UserDto>
 }

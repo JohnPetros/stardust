@@ -1,1 +1,1 @@
-export type LessonStage = 'theory' | 'quiz' | 'rewards'
+export type LessonStage = 'story' | 'quiz' | 'rewarding'

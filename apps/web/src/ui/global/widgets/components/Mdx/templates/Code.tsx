@@ -18,21 +18,21 @@ export function Code({
   if (!children) return
   let code = ''
 
+  console.log(children)
+
   if (!Array.isArray(children)) {
     code = String(children)
   } else if (typeof children[0] === 'string') {
     code = children[0]
   } else if ('props' in children[0]) {
     code = children[0].props.children[0]
+    code = children.map((child) => child.props.children[0]).join('\n')
   }
 
   if (code)
     return (
       <Animation hasAnimation={hasAnimation}>
-        <CodeSnippet
-          code={(code as string).replaceAll('\n\n', '\n')}
-          isRunnable={isRunnable || exec}
-        />
+        <CodeSnippet code={code as string} isRunnable={isRunnable || exec} />
       </Animation>
     )
 }
