@@ -6,5 +6,6 @@ export type DragAndDropListQuestionDto = {
   items: Array<{
     position: number
     label: string
+    indentation: number
   }>
 }

@@ -22,6 +22,7 @@ export class DragAndDropListQuestion extends Question<DragAndDropListQuestionPro
             `${item.position}º Drag and drop list question item original position`,
           ),
           label: item.label,
+          indentation: item?.indentation,
         })),
       ),
     })
