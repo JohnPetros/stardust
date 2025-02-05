@@ -50,8 +50,6 @@ export function useLessonPage(
     }
   }, [textsBlocksDto, storyContent, questionsDto, setStory, setQuiz])
 
-  console.log('stage', stage)
-
   useEffect(() => {
     if (stage === 'rewarding') {
       async function goToRewardingPage() {
@@ -61,7 +59,7 @@ export function useLessonPage(
           questionsCount: quiz.questionsCount,
           incorrectAnswersCount: quiz.incorrectAnswersCount.value,
           secondsCount: Number(secondsCounter.get()),
-          starId: starId,
+          starId,
         }
 
         await setCookie({

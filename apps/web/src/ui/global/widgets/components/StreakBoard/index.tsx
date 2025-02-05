@@ -19,7 +19,7 @@ export function StreakBoard({ weekStatus, streakCount }: StreakProps) {
 
       <div className='grid grid-cols-7 gap-3'>
         {WeekStatus.DAYS.map((weekday, index) => {
-          const status = weekStatus.statuses[index]
+          const status = weekStatus.value[index]
           if (status)
             return (
               <AnimatedWeekday key={weekday} index={index}>

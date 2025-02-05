@@ -32,7 +32,7 @@ describe('User Entity', () => {
     })
 
     user.makeTodayStatusDone()
-    expect(user.weekStatus.statuses[todayIndex]).toBe('done')
+    expect(user.weekStatus.value[todayIndex]).toBe('done')
 
     weekStatus[todayIndex] = 'undone'
 
@@ -41,7 +41,7 @@ describe('User Entity', () => {
     })
 
     user.makeTodayStatusDone()
-    expect(user.weekStatus.statuses[todayIndex]).toBe('undone')
+    expect(user.weekStatus.value[todayIndex]).toBe('undone')
   })
 
   it('should increment streak on make Today status done', () => {

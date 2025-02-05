@@ -1,21 +1,26 @@
 'use client'
 
 import { Datetime } from '@stardust/core/libs'
+import type { WeekStatusValue } from '@stardust/core/profile/types'
 
 import { Animation } from '@/ui/global/widgets/components/Animation'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { Benchmark } from '@/ui/global/widgets/components/Button/Benchmark'
+import { StreakIcon } from '@/ui/global/widgets/components/StreakIcon'
+import { StreakBoard } from '@/ui/global/widgets/components/StreakBoard'
 import { AnimatedApolloMessage } from './AnimatedApolloMessage'
 import { AnimatedEndMessage } from './AnimatedEndMessage'
 import { AnimatedButton } from './AnimatedButton'
 import { useRewardingPage } from './useRewardingPage'
-import { Streak } from './Streak'
+import { WeekStatus } from '@stardust/core/profile/structs'
 
 export type RewardingPageProps = {
-  newLevel: number | null
   newCoins: number
   newXp: number
+  newLevel: number | null
+  newStreak: number | null
+  newWeekStatus: WeekStatusValue | null
   secondsCount: number
   accuracyPercentage: number
   nextRoute: string
@@ -25,6 +30,8 @@ export function RewardingPage({
   newCoins,
   newLevel,
   newXp,
+  newStreak,
+  newWeekStatus,
   secondsCount,
   accuracyPercentage,
   nextRoute,
@@ -37,7 +44,7 @@ export function RewardingPage({
     alertDialogRef,
     handleFirstButtonClick,
     handleSecondButtonClick,
-  } = useRewardingPage(newLevel, nextRoute)
+  } = useRewardingPage(newLevel, newStreak, nextRoute)
 
   return (
     <div className='mx-auto flex h-screen w-full max-w-lg flex-col items-center justify-center px-6'>
@@ -92,7 +99,15 @@ export function RewardingPage({
           </>
         )}
 
-        {isStreakVisible && <Streak />}
+        {isStreakVisible && newStreak && newWeekStatus && (
+          <>
+            <StreakIcon size={220} />
+            <StreakBoard
+              weekStatus={WeekStatus.create(newWeekStatus)}
+              streakCount={newStreak}
+            />
+          </>
+        )}
 
         {isEndMessageVisible && (
           <AnimatedEndMessage>

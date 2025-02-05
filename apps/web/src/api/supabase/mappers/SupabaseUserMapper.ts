@@ -81,7 +81,7 @@ export const SupabaseUserMapper = () => {
         slug: user.slug.value,
         xp: user.xp.value,
         weekly_xp: user.weeklyXp.value,
-        week_status: user.weekStatus.statuses,
+        week_status: user.weekStatus.value,
         streak: user.streak.value,
         can_see_ranking: user.canSeeRankingResult.value,
         did_break_streak: user.didBreakStreak.value,

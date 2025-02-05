@@ -142,22 +142,6 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
       return new ApiResponse()
     },
 
-    async updateUser(user: User) {
-      const supabaseUser = supabaseUserMapper.toSupabase(user)
-
-      const { error } = await supabase
-        .from('users')
-        // @ts-ignore
-        .update(supabaseUser)
-        .eq('id', user.id)
-
-      if (error) {
-        return SupabasePostgrestError(error, 'Error inesperado ao atualizar usuário')
-      }
-
-      return new ApiResponse()
-    },
-
     async fetchAchievements() {
       const { data, error } = await supabase
         .from('achievements')
@@ -214,6 +198,22 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
           error,
           'Erro inesperado ao salvar conquista resgatável',
         )
+      }
+
+      return new ApiResponse()
+    },
+
+    async updateUser(user: User) {
+      const supabaseUser = supabaseUserMapper.toSupabase(user)
+      console.log('supabaseUser', supabaseUser)
+      const { error } = await supabase
+        .from('users')
+        // @ts-ignore
+        .update(supabaseUser)
+        .eq('id', user.id)
+
+      if (error) {
+        return SupabasePostgrestError(error, 'Error inesperado ao atualizar usuário')
       }
 
       return new ApiResponse()

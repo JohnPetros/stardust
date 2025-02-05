@@ -86,7 +86,8 @@ export class CalculateRewardForStarCompletionUseCase
     questionsCount: number,
     incorrectAnswersCount: number,
   ) {
-    return Percentage.create(incorrectAnswersCount, questionsCount).value
+    const percentage = Percentage.create(incorrectAnswersCount, questionsCount)
+    return 100 - percentage.value
   }
 
   private calculateCoins(

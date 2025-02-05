@@ -1,16 +1,28 @@
 import type { ReactNode } from 'react'
+import { headers } from 'next/headers'
 
-import { HomeLayout } from '@/ui/profile/widgets/layouts/Home'
+import type { AchievementDto } from '@stardust/core/profile/dtos'
+
+import { ROUTES } from '@/constants'
+import { NextApiClient } from '@/api/next/NextApiClient'
 import { SidebarProvider } from '@/ui/profile/contexts/SidebarContext'
+import { HomeLayout } from '@/ui/profile/widgets/layouts/Home'
+import { AchivementsProvider } from '@/ui/profile/contexts/AchievementsContext'
 
 type HomeProps = {
   children: ReactNode
 }
 
-export default function Home({ children }: HomeProps) {
+export default async function Home({ children }: HomeProps) {
+  const apiClient = NextApiClient({ isCacheEnable: true, headers })
+  const response = await apiClient.get<AchievementDto[]>(ROUTES.api.profile.achievements)
+  if (response.isFailure) response.throwError()
+
   return (
-    <SidebarProvider>
-      <HomeLayout>{children}</HomeLayout>
-    </SidebarProvider>
+    <AchivementsProvider achievementsDto={response.body}>
+      <SidebarProvider>
+        <HomeLayout>{children}</HomeLayout>
+      </SidebarProvider>
+    </AchivementsProvider>
   )
 }

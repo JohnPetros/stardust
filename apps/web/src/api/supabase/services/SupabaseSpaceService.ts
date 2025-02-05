@@ -32,16 +32,23 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
     },
 
     async fetchPlanetByStar(starId: string) {
-      const response = await this.fetchStarById(starId)
+      const { data: starData, error: starError } = await supabase
+        .from('stars')
+        .select('planet_id')
+        .eq('id', starId)
+        .single()
 
-      if (response.isFailure) {
-        return new ApiResponse<PlanetDto>({ errorMessage: response.errorMessage })
+      if (starError) {
+        return SupabasePostgrestError(
+          starError,
+          'Erro inesperado ao buscar planeta dessa estrela',
+        )
       }
 
       const { data, error } = await supabase
         .from('planets')
         .select('*, stars(id, name, number, slug, is_challenge, planet_id)')
-        .eq('id', response.body.planetId)
+        .eq('id', starData.planet_id)
         .order('number', { foreignTable: 'stars', ascending: true })
         .single<SupabasePlanet>()
 
@@ -52,9 +59,7 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
         )
       }
 
-      const planet = supabasePlanetMapper.toDto(data)
-
-      return new ApiResponse({ body: planet })
+      return new ApiResponse({ body: supabasePlanetMapper.toDto(data) })
     },
 
     async fetchFirstPlanet() {

@@ -1,17 +1,6 @@
 import { AppError, ValidationError } from '#global/errors'
 import { Datetime, NumberValidation, StringValidation } from '#libs'
-import type { WeekdayStatus } from '../types'
-
-type WeekStatusValue = [
-  WeekdayStatus,
-  WeekdayStatus,
-  WeekdayStatus,
-  WeekdayStatus,
-  WeekdayStatus,
-  WeekdayStatus,
-  WeekdayStatus,
-]
-
+import type { WeekdayStatus, WeekStatusValue } from '../types'
 export class WeekStatus {
   static readonly DEFAULT_WEEK_STATUS: WeekStatusValue = [
     'todo',
@@ -24,7 +13,7 @@ export class WeekStatus {
   ]
   static readonly DAYS: string[] = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SÁB']
 
-  private constructor(readonly statuses: WeekStatusValue) {}
+  private constructor(readonly value: WeekStatusValue) {}
 
   static create(values?: string[]) {
     if (!values) {
@@ -58,7 +47,7 @@ export class WeekStatus {
     const todayIndex = new Datetime().getTodayIndex()
 
     return new WeekStatus(
-      this.statuses.map((status, index) =>
+      this.value.map((status, index) =>
         index === todayIndex ? newStatus : status,
       ) as WeekStatusValue,
     )
@@ -66,7 +55,7 @@ export class WeekStatus {
 
   get todayStatus(): WeekdayStatus {
     const todayIndex = new Datetime().getTodayIndex()
-    const todayStatus = this.statuses[todayIndex]
+    const todayStatus = this.value[todayIndex]
     if (!todayStatus) throw new AppError('Nenhum status semanal')
     return todayStatus
   }

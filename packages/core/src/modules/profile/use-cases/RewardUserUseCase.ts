@@ -10,6 +10,7 @@ type Request = {
 
 type Response = Promise<{
   newLevel: number | null
+  newStreak: number | null
 }>
 
 export class RewardUserUseCase implements IUseCase<Request, Response> {
@@ -19,11 +20,14 @@ export class RewardUserUseCase implements IUseCase<Request, Response> {
     const user = User.create(userDto)
     user.earnXp(newXp)
     user.earnCoins(newCoins)
+    const streakStatus = user.makeTodayStatusDone()
     const respose = await this.profileService.updateUser(user)
     if (respose.isFailure) respose.throwError()
 
     return {
       newLevel: user.level.didUp.isTrue ? user.level.value : null,
+      newStreak: streakStatus?.newStreak?.value ?? null,
+      newWeekStatus: streakStatus?.newWeekStatus.value ?? null,
     }
   }
 }

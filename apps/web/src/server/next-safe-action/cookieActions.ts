@@ -19,24 +19,24 @@ const setCookie = authActionClient
   })
 
 const getCookie = authActionClient
-  .schema(z.object({ key: z.string() }))
+  .schema(z.string())
   .action(async ({ clientInput }) => {
     const actionServer = NextActionServer()
-    return actionServer.getCookie(clientInput.key)
+    return actionServer.getCookie(clientInput)
   })
 
 const deleteCookie = authActionClient
-  .schema(z.object({ key: z.string() }))
+  .schema(z.string())
   .action(async ({ clientInput }) => {
     const actionServer = NextActionServer()
-    await actionServer.deleteCookie(clientInput.key)
+    await actionServer.deleteCookie(clientInput)
   })
 
 const hasCookie = authActionClient
-  .schema(z.object({ key: z.string() }))
+  .schema(z.string())
   .action(async ({ clientInput }) => {
     const actionServer = NextActionServer()
-    return await actionServer.hasCookie(clientInput.key)
+    return await actionServer.hasCookie(clientInput)
   })
 
 export { setCookie, getCookie, deleteCookie, hasCookie }

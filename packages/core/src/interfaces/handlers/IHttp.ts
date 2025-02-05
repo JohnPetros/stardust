@@ -7,6 +7,8 @@ export type HttpSchema = {
   queryParams?: unknown
 }
 
+export type HttpMethod = 'GET' | 'POST'
+
 export interface IHttp<Schema extends HttpSchema = HttpSchema, Response = unknown> {
   getCurrentRoute(): string
   redirect(route: string): ApiResponse
@@ -14,8 +16,10 @@ export interface IHttp<Schema extends HttpSchema = HttpSchema, Response = unknow
   getRouteParams(): Schema['routeParams']
   getQueryParams(): Schema['queryParams']
   getUser(): Promise<UserDto>
+  getMethod(): HttpMethod
   setCookie(key: string, value: string, duration: number): void
-  getCookie(key: string): string | null
+  getCookie(key: string): Promise<string | null>
+  hasCookie(key: string): Promise<boolean>
   pass(): ApiResponse
   send(data?: unknown, statusCode?: number): ApiResponse<Response>
 }

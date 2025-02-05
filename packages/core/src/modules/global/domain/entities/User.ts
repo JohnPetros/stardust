@@ -149,7 +149,10 @@ export class User extends Entity<UserProps> {
 
     this.props.weekStatus = this.weekStatus.updateTodayStatus('done')
     this.props.streak = this.streak.increment(1)
-    this.notifyChanges()
+    return {
+      newStreak: this.props.streak,
+      newWeekStatus: this.props.weekStatus,
+    }
   }
 
   breakStreak() {
@@ -425,7 +428,7 @@ export class User extends Entity<UserProps> {
       xp: this.xp.value,
       weeklyXp: this.weeklyXp.value,
       streak: this.streak.value,
-      weekStatus: this.props.weekStatus.statuses,
+      weekStatus: this.props.weekStatus.value,
       unlockedStarsIds: this.props.unlockedStarsIds.items,
       acquiredRocketsIds: this.props.acquiredRocketsIds.items,
       acquiredAvatarsIds: this.props.acquiredAvatarsIds.items,

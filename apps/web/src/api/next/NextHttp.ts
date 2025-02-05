@@ -1,9 +1,10 @@
 'use server'
 
 import { type NextRequest, NextResponse } from 'next/server'
+
 import type { ZodSchema } from 'zod'
 
-import type { HttpSchema, IHttp } from '@stardust/core/interfaces'
+import type { HttpMethod, HttpSchema, IHttp } from '@stardust/core/interfaces'
 import { ApiResponse } from '@stardust/core/responses'
 import { AppError, MethodNotImplementedError } from '@stardust/core/global/errors'
 import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/constants'
@@ -11,6 +12,7 @@ import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/constants'
 import type { NextParams } from '@/server/next/types'
 import { SupabaseRouteHandlerClient } from '../supabase/clients'
 import { SupabaseAuthService, SupabaseProfileService } from '../supabase/services'
+import { cookieActions } from '@/server/next-safe-action'
 
 type Cookie = {
   key: string
@@ -96,6 +98,11 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       return profileResponse.body
     },
 
+    getMethod() {
+      if (!request) throw new AppError('Next request is not defined')
+      return request.method as HttpMethod
+    },
+
     getBody() {
       if (!httpSchema?.body) throw new AppError('Body is not defined')
       return httpSchema?.body
@@ -115,8 +122,14 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       cookies.push({ key, value, duration })
     },
 
-    getCookie(key: string) {
-      throw new MethodNotImplementedError('NextHttp.getCookie')
+    async getCookie(key: string) {
+      const response = await cookieActions.getCookie(key)
+      return response?.data ?? null
+    },
+
+    async hasCookie(key: string) {
+      const response = await cookieActions.hasCookie(key)
+      return Boolean(response?.data)
     },
 
     pass() {
