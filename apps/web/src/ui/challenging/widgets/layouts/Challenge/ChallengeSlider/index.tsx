@@ -8,7 +8,7 @@ import { useChallengeSlider } from './useChallengeSlider'
 import { NavButton } from './NavButton'
 import { ChallengeCodeEditorSlot } from '../../../slots/ChallengeCodeEditor'
 import { ChallengeResultSlot } from '../../../slots/ChallengeResult'
-import type { ChallengeContent } from '@/ui/challenging/stores/ChallengeStore/types'
+import { ChallengeDescriptionSlot } from '../../../slots/ChallengeDescription'
 
 const CHALLENGE_CONTENT_LABELS: Record<string, string> = {
   comments: 'Comentários',
@@ -35,7 +35,7 @@ export function ChallengeSlider({ children }: PropsWithChildren) {
               isActive={activeSlideIndex === 0}
               onClick={() => handleNavButtonClick(0)}
             >
-              {CHALLENGE_CONTENT_LABELS[activeContent]}
+              {CHALLENGE_CONTENT_LABELS[activeContent] ?? 'Descrição'}
             </NavButton>
           </li>
           <li>
@@ -73,7 +73,9 @@ export function ChallengeSlider({ children }: PropsWithChildren) {
         simulateTouch={false}
         allowTouchMove={false}
       >
-        <SwiperSlide className='h-full overflow-y-auto'>{children}</SwiperSlide>
+        <SwiperSlide className='h-full overflow-y-auto'>
+          {activeContent === 'result' ? <ChallengeDescriptionSlot /> : children}
+        </SwiperSlide>
 
         <SwiperSlide>
           <ChallengeCodeEditorSlot />

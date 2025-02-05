@@ -47,7 +47,9 @@ export function useChallengeSlider() {
         showResultTab,
         showCodeTab,
       })
-  }, [setTabHandler, tabHandler, isMobile])
+
+    if (activeContent === 'result') showResultTab()
+  }, [setTabHandler, tabHandler, isMobile, activeContent])
 
   return {
     swiperRef,
