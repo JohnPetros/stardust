@@ -18,7 +18,6 @@ type StarProps = {
   slug: string
   number: number
   isUnlocked: boolean
-  isChallenge: boolean
   isLastUnlockedStar: boolean
 }
 
@@ -26,17 +25,14 @@ export function Star({
   id,
   name,
   number,
-  isChallenge,
   isUnlocked,
   slug,
   isLastUnlockedStar,
 }: StarProps) {
   const starAnimationRef = useRef<AnimationRef>(null)
-
   const { lastUnlockedStarRef, handleStarClick } = useStar({
     id,
     slug,
-    isChallenge,
     isLastUnlockedStar,
     starAnimationRef,
   })

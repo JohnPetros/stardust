@@ -15,10 +15,12 @@ type LessonHeaderProps = {
 }
 
 export function LessonHeader({ onLeavePage }: LessonHeaderProps) {
-  const { user } = useAuthContext()
-  const { lessonProgress, livesCount } = useLessonHeader()
-  const api = useApi()
-  const rocketImage = user ? api.fetchImage('rockets', user.rocket.image.value) : ''
+  // const { user } = useAuthContext()
+  // const { lessonProgress, livesCount } = useLessonHeader()
+  // const api = useApi()
+  // const rocketImage = user ? api.fetchImage('rockets', user.rocket.image.value) : ''
+
+  return
 
   if (lessonProgress)
     return (

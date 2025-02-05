@@ -46,24 +46,24 @@ export class Quiz {
         continue
       }
 
-      if (CheckboxQuestion.canBeCreatedBy(questionDto)) {
-        questions.push(CheckboxQuestion.create(questionDto))
-        continue
-      }
+      // if (CheckboxQuestion.canBeCreatedBy(questionDto)) {
+      //   questions.push(CheckboxQuestion.create(questionDto))
+      //   continue
+      // }
 
-      if (OpenQuestion.canBeCreatedBy(questionDto)) {
-        questions.push(OpenQuestion.create(questionDto))
-        continue
-      }
+      // if (OpenQuestion.canBeCreatedBy(questionDto)) {
+      //   questions.push(OpenQuestion.create(questionDto))
+      //   continue
+      // }
 
-      if (DragAndDropListQuestion.canBeCreatedBy(questionDto)) {
-        questions.push(DragAndDropListQuestion.create(questionDto))
-        continue
-      }
+      // if (DragAndDropListQuestion.canBeCreatedBy(questionDto)) {
+      //   questions.push(DragAndDropListQuestion.create(questionDto))
+      //   continue
+      // }
 
-      if (DragAndDropQuestion.canBeCreatedBy(questionDto)) {
-        questions.push(DragAndDropQuestion.create(questionDto))
-      }
+      // if (DragAndDropQuestion.canBeCreatedBy(questionDto)) {
+      //   questions.push(DragAndDropQuestion.create(questionDto))
+      // }
     }
 
     return new Quiz({

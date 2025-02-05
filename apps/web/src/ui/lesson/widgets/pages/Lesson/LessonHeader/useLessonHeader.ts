@@ -12,9 +12,9 @@ export function useLessonHeader() {
 
   useEffect(() => {
     if (story && quiz) {
-      const lessonProgress = LessonProgress.create(story, quiz)
+      // const lessonProgress = LessonProgress.create(story, quiz)
 
-      setLessonProgress(lessonProgress)
+      setLessonProgress(null)
     }
   }, [story, quiz])
 
