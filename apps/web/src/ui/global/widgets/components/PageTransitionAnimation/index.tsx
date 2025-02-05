@@ -52,11 +52,19 @@ export function PageTransitionAnimation({
           data-testid='page transition'
         >
           <motion.div variants={apolloVariants}>
-            <Animation name='apollo-riding-rocket' size={540} hasLoop={true} />
+            <div className='h-[540px]'>
+              <Animation name='apollo-riding-rocket' size={540} hasLoop={true} />
+            </div>
             {hasTips && codeTip && (
-              <div className='mx-auto w-[32rem] max-w-[90%] -translate-y-10 rounded-md bg-gray-700 p-2 text-center leading-8 text-gray-100'>
+              <motion.div
+                variants={containerVariants}
+                initial='initial'
+                animate='visible'
+                transition={{ delay: 0.5 }}
+                className='mx-auto w-[32rem] max-w-[90%] -translate-y-10 rounded-md bg-gray-700 p-2 text-center leading-8 text-gray-100'
+              >
                 <Mdx>{codeTip}</Mdx>
-              </div>
+              </motion.div>
             )}
           </motion.div>
         </motion.div>
