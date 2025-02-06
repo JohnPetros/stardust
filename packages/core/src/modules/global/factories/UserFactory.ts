@@ -9,7 +9,7 @@ import { Datetime } from '#libs'
 export class UserFactory {
   static produce(dto: UserDto) {
     return {
-      email: Email.create(dto.email),
+      email: Email.create(dto.email.trim()),
       slug: dto.slug ? Slug.create(dto.slug) : Slug.create(dto.name),
       name: Name.create(dto.name),
       rocket: {

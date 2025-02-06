@@ -1,7 +1,7 @@
+import { JOBS } from '@/queue/constants'
 import { HandleUserSignedUpJob, UpdateRankingsJob } from '@/queue/jobs/ranking'
 import { SupabaseServerClient } from '@/api/supabase/clients'
 import { SupabaseRankingService } from '@/api/supabase/services'
-import { JOBS } from '@/queue/constants'
 import { inngest } from '../client'
 import { InngestQueue } from '../InngestQueue'
 

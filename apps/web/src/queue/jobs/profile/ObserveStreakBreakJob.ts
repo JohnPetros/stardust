@@ -5,7 +5,7 @@ export const ObserveStreakBreakJob = (service: IProfileService): IJob => {
   return {
     async handle(queue: IQueue) {
       const useCase = new ObserveStreakBreakUseCase(service)
-      await queue.run(async () => console.log('oi'), ObserveStreakBreakUseCase.name)
+      await queue.run(async () => useCase.do(), ObserveStreakBreakUseCase.name)
     },
   }
 }

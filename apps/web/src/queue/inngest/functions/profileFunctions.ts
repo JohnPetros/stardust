@@ -23,25 +23,24 @@ const handleUserSignedUp = inngest.createFunction(
 
 const observeStreakBreak = inngest.createFunction(
   { id: JOBS.profile.observerStreakBreak.key },
-  { cron: `TZ=America/Sao_Paulo * * * * *` },
-  async () => {
+  { cron: `TZ=America/Sao_Paulo ${JOBS.profile.observerStreakBreak.cronExpression}` },
+  async (context) => {
     const supabase = SupabaseServerClient()
     const service = SupabaseProfileService(supabase)
-    const job = ResetWeekStatusJob(service)
-    const queue = InngestQueue()
-    await job.handle(queue)
-    return { status: 'ok' }
+    const job = ObserveStreakBreakJob(service)
+    const queue = InngestQueue(context)
+    return await job.handle(queue)
   },
 )
 
 const resetWeekStatus = inngest.createFunction(
   { id: JOBS.profile.resetWeekStatus.key },
   { cron: `TZ=America/Sao_Paulo ${JOBS.profile.resetWeekStatus.cronExpression}` },
-  async () => {
+  async (context) => {
     const supabase = SupabaseServerClient()
     const service = SupabaseProfileService(supabase)
     const job = ResetWeekStatusJob(service)
-    const queue = InngestQueue()
+    const queue = InngestQueue(context)
     return await job.handle(queue)
   },
 )
