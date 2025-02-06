@@ -26,8 +26,8 @@ export class CalculateRewardForChallengeCompletionUseCase
     const challenge = await this.fetchChallenge(challengeId)
     await this.saveCompletedChallenge(challenge.id, user)
 
-    const newCoins = this.calculateCoins(challenge, user)
-    const newXp = this.calculateXp(challenge, user)
+    const newCoins = this.calculateCoins(challenge)
+    const newXp = this.calculateXp(challenge)
     const accuracyPercentage = this.calculateAccuracyPercentage(
       challenge,
       incorrectAnswersCount,
@@ -46,14 +46,12 @@ export class CalculateRewardForChallengeCompletionUseCase
     }
   }
 
-  private calculateCoins(challenge: Challenge, user: User) {
-    const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
-    return challenge.difficulty.reward.coins / (isChallengeCompleted.isTrue ? 5 : 1)
+  private calculateCoins(challenge: Challenge) {
+    return challenge.difficulty.reward.coins
   }
 
-  private calculateXp(challenge: Challenge, user: User) {
-    const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
-    return challenge.difficulty.reward.xp / (isChallengeCompleted.isTrue ? 5 : 1)
+  private calculateXp(challenge: Challenge) {
+    return challenge.difficulty.reward.xp
   }
 
   private calculateAccuracyPercentage(
