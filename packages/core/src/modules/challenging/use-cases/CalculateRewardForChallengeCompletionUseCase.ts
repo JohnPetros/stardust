@@ -2,6 +2,7 @@ import { User } from '#global/entities'
 import type { UserDto } from '#global/dtos'
 import type { IUseCase, IChallengingService } from '#interfaces'
 import { Challenge } from '#challenging/entities'
+import { Percentage } from '#global/structs'
 
 type Request = {
   userDto: UserDto
@@ -32,6 +33,12 @@ export class CalculateRewardForChallengeCompletionUseCase
       incorrectAnswersCount,
     )
 
+    console.log({
+      newCoins,
+      newXp,
+      accuracyPercentage,
+    })
+
     return {
       newCoins,
       newXp,
@@ -41,23 +48,23 @@ export class CalculateRewardForChallengeCompletionUseCase
 
   private calculateCoins(challenge: Challenge, user: User) {
     const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
-    return challenge.difficulty.reward.coins / (isChallengeCompleted.isFalse ? 2 : 1)
+    return challenge.difficulty.reward.coins / (isChallengeCompleted.isTrue ? 5 : 1)
   }
 
   private calculateXp(challenge: Challenge, user: User) {
     const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
-    return challenge.difficulty.reward.xp / (isChallengeCompleted.isFalse ? 2 : 1)
+    return challenge.difficulty.reward.xp / (isChallengeCompleted.isTrue ? 5 : 1)
   }
 
   private calculateAccuracyPercentage(
     challenge: Challenge,
     incorrectUserAnswersCount: number,
   ) {
-    return (
-      (challenge.maximumIncorrectAnswersCount -
-        incorrectUserAnswersCount / challenge.maximumIncorrectAnswersCount) *
-      100
+    const percentage = Percentage.create(
+      incorrectUserAnswersCount,
+      challenge.maximumIncorrectAnswersCount,
     )
+    return 100 - percentage.value
   }
 
   private async fetchChallenge(challengeId: string) {
@@ -68,7 +75,7 @@ export class CalculateRewardForChallengeCompletionUseCase
 
   private async saveCompletedChallenge(challengeId: string, user: User) {
     const isChallengeCompleted = user.hasCompletedChallenge(challengeId)
-    if (isChallengeCompleted.isFalse) return
+    if (isChallengeCompleted.isTrue) return
 
     const response = await this.challengingService.saveCompletedChallenge(
       challengeId,
