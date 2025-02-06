@@ -2,9 +2,6 @@
 
 import { type FormEvent, type RefObject, useEffect, useState } from 'react'
 
-import { Text } from '@stardust/core/global/structs'
-import { ValidationError } from '@stardust/core/global/errors'
-
 import type { TextEditorRef, TextEditorSnippet } from '../../TextEditor/types'
 
 type UseCommentInput = {
@@ -28,14 +25,13 @@ export function useCommentInput({
 
   function handlePostComment(event: FormEvent) {
     event.preventDefault()
-    try {
-      const commentContent = Text.create(content, 'seu comentário')
-      onSend(commentContent.value)
-      setContent('')
-    } catch (error) {
-      if (error instanceof ValidationError)
-        setErrorMessage(String(error.fieldErrors[0]?.messages[0]))
+    if (!content) {
+      setErrorMessage('Seu cometário não pode estar vazio')
+      return
     }
+    onSend(content)
+    setContent('')
+    setErrorMessage('')
   }
 
   function handleSnippetInsert(snippet: TextEditorSnippet) {
@@ -52,10 +48,10 @@ export function useCommentInput({
   }, [])
 
   useEffect(() => {
-    if (!isPreviewVisible && textEditorRef.current) {
+    if (!isPreviewVisible) {
       textEditorRef.current?.moveCursorToEnd()
     }
-  }, [isPreviewVisible, textEditorRef.current])
+  }, [isPreviewVisible, textEditorRef.current?.moveCursorToEnd])
 
   return {
     content,

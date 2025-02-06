@@ -273,8 +273,8 @@ export function useTextEditor(onChange: (value: string) => void) {
     textareaRef.current.value = `${valueBeforeCursorPosition}${SNIPPETS.strong}${valueAfterCursorPosition}`
     const starsCountInEachSide = 1
     const snippetContent = SNIPPETS.strong.replace(/\*/g, '')
-    const selectionStart = cursorPosition + starsCountInEachSide + 1
-    const selectionEnd = selectionStart + snippetContent.length - 1
+    const selectionStart = cursorPosition + starsCountInEachSide
+    const selectionEnd = selectionStart + snippetContent.length
     textareaRef.current.setSelectionRange(selectionStart, selectionEnd)
   }
 
@@ -304,7 +304,7 @@ export function useTextEditor(onChange: (value: string) => void) {
     const starsCountInEachSide = 1
     const snippetContent = SNIPPETS.codeLine.replace(/\`/g, '')
     const selectionStart = cursorPosition + starsCountInEachSide
-    const selectionEnd = selectionStart + snippetContent.length - starsCountInEachSide
+    const selectionEnd = selectionStart + snippetContent.length
     textareaRef.current.setSelectionRange(selectionStart, selectionEnd)
   }
 

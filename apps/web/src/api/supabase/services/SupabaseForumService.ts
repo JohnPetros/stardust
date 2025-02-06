@@ -121,6 +121,8 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
     async saveChallengeComment(comment: Comment, challengeId: string) {
       const supabaseComment = supabaseCommentMapper.toSupabase(comment)
 
+      console.log(supabaseComment)
+
       const { error: commentError, status: commentStatus } = await supabase
         .from('comments')
         .insert({
