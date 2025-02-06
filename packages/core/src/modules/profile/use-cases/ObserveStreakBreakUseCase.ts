@@ -12,11 +12,13 @@ export class ObserveStreakBreakUseCase implements IUseCase<Request> {
   constructor(private profileService: IProfileService) {}
 
   async do() {
+    console.log('users')
     const users = await this.fetchUsers()
     const promises = []
 
     for (const user of users) {
       const didUserBreakStreak = user.weekStatus.todayStatus === 'todo'
+      console.log(didUserBreakStreak)
       if (didUserBreakStreak) {
         user.breakStreak()
         promises.push(this.updateUser(user))

@@ -10,9 +10,9 @@ const handleUserSignedUp = inngest.createFunction(
   { event: JOBS.ranking.handleUserSignedUp.eventName },
   async (context) => {
     const supabase = SupabaseServerClient()
-    const rankingService = SupabaseRankingService(supabase)
+    const service = SupabaseRankingService(supabase)
     const queue = InngestQueue<typeof context.event.data>(context)
-    const job = HandleUserSignedUpJob(rankingService)
+    const job = HandleUserSignedUpJob(service)
     return await job.handle(queue)
   },
 )
@@ -20,11 +20,11 @@ const handleUserSignedUp = inngest.createFunction(
 const updateRankings = inngest.createFunction(
   { id: JOBS.ranking.updateRankings.key },
   { cron: `TZ=America/Sao_Paulo ${JOBS.ranking.updateRankings.cronExpression}` },
-  async (context) => {
+  async () => {
     const supabase = SupabaseServerClient()
-    const rankingService = SupabaseRankingService(supabase)
-    const queue = InngestQueue(context)
-    const job = UpdateRankingsJob(rankingService)
+    const service = SupabaseRankingService(supabase)
+    const queue = InngestQueue()
+    const job = UpdateRankingsJob(service)
     return await job.handle(queue)
   },
 )

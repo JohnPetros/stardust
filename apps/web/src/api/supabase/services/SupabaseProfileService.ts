@@ -52,16 +52,12 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
     },
 
     async fetchUsers() {
-      const { data, error } = await supabase
+      const { data, error, status } = await supabase
         .from('users_view')
         .select('*, avatar:avatars(*), rocket:rockets(*), tier:tiers(*)')
 
       if (error)
-        return SupabasePostgrestError(
-          error,
-          'Usuário não encontrado',
-          HTTP_STATUS_CODE.notFound,
-        )
+        return SupabasePostgrestError(error, 'Erro inesperado ao buscar usuários', status)
 
       const usersDto = data.map(supabaseUserMapper.toDto)
       return new ApiResponse({ body: usersDto })
@@ -105,6 +101,7 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
       const { error } = await supabase
         .from('users')
         .update({ week_status: WeekStatus.DEFAULT_WEEK_STATUS })
+        .neq('id', 0)
 
       if (error)
         return SupabasePostgrestError(

@@ -14,33 +14,34 @@ const handleUserSignedUp = inngest.createFunction(
   { event: JOBS.profile.handleUserSignedUp.eventName },
   async (context) => {
     const supabase = SupabaseServerClient()
-    const profileService = SupabaseProfileService(supabase)
+    const service = SupabaseProfileService(supabase)
     const queue = InngestQueue<typeof context.event.data>(context)
-    const job = HandleUserSignedUpJob(profileService)
+    const job = HandleUserSignedUpJob(service)
     return await job.handle(queue)
   },
 )
 
 const observeStreakBreak = inngest.createFunction(
   { id: JOBS.profile.observerStreakBreak.key },
-  { cron: `TZ=America/Sao_Paulo ${JOBS.profile.observerStreakBreak.cronExpression}` },
-  async (context) => {
+  { cron: `TZ=America/Sao_Paulo * * * * *` },
+  async () => {
     const supabase = SupabaseServerClient()
-    const profileService = SupabaseProfileService(supabase)
-    const job = ObserveStreakBreakJob(profileService)
-    const queue = InngestQueue(context)
-    return await job.handle(queue)
+    const service = SupabaseProfileService(supabase)
+    const job = ResetWeekStatusJob(service)
+    const queue = InngestQueue()
+    await job.handle(queue)
+    return { status: 'ok' }
   },
 )
 
 const resetWeekStatus = inngest.createFunction(
   { id: JOBS.profile.resetWeekStatus.key },
   { cron: `TZ=America/Sao_Paulo ${JOBS.profile.resetWeekStatus.cronExpression}` },
-  async (context) => {
+  async () => {
     const supabase = SupabaseServerClient()
-    const profileService = SupabaseProfileService(supabase)
-    const job = ResetWeekStatusJob(profileService)
-    const queue = InngestQueue(context)
+    const service = SupabaseProfileService(supabase)
+    const job = ResetWeekStatusJob(service)
+    const queue = InngestQueue()
     return await job.handle(queue)
   },
 )

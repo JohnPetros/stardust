@@ -13,8 +13,7 @@ export const VerifyAuthRoutesController = (authService: IAuthService): IControll
   return {
     async handle(http: IHttp) {
       const currentRoute = http.getCurrentRoute()
-      // @ts-ignore
-      const isPublicRoute = PUBLIC_ROUTES.includes(currentRoute)
+      const isPublicRoute = PUBLIC_ROUTES.map(String).includes(currentRoute)
       const response = await authService.fetchUserId()
       const hasSession = response.isSuccess
       const isRootRoute = currentRoute === '/'

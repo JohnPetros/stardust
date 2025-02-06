@@ -159,6 +159,7 @@ export class User extends Entity<UserProps> {
     this.props.streak = Integer.create(0)
     this.props.didBreakStreak = this.props.didBreakStreak.makeTrue()
     this.props.weekStatus = this.props.weekStatus.updateTodayStatus('undone')
+    console.log(this.props.weekStatus)
   }
 
   resetStreak() {
