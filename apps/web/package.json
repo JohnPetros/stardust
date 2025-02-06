@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:turbo": "next dev --turbo",
-    "queue": "npx inngest-cli@latest dev",
+    "queue": "npx inngest-cli@latest dev --no-discovery -u http://localhost:3000/api/serverless",
     "build": "next build",
     "start": "node .next/standalone/apps/web/server.js -p $PORT",
     "lint": "next lint",
