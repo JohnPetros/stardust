@@ -12,6 +12,7 @@ export class EditChallengeUseCase implements IUseCase<Request, Response> {
   constructor(private readonly challengingService: IChallengingService) {}
 
   async do({ challengeDto }: Request) {
+    console.log(challengeDto)
     const challenge = Challenge.create(challengeDto)
     await this.fetchChallengeById(challenge.id)
 

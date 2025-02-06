@@ -57,6 +57,7 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
           id: category.id,
           name: category.name.value,
         })) ?? [],
+      isPublic: challenge?.isPublic.value,
     },
   })
   const [isActionSuccess, setisActionSuccess] = useState(false)

@@ -158,8 +158,6 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
     removedCategoriesNames.current = removedCategoriesNames.current.makeEmpty()
   }, [categoriesIds, categories])
 
-  console.log(tags)
-
   return {
     title,
     tags,

@@ -28,11 +28,7 @@ export class ListChallengesUseCase implements IUseCase<Request, Response> {
     })
     let challenges = challengesPagination.items.map(Challenge.create)
 
-    challenges = this.filterChallengesByCompletionStatus(
-      completionStatus,
-      challenges,
-      user,
-    )
+    challenges = this.filterChallenges(completionStatus, challenges, user)
 
     challenges = this.orderChallengesByDifficultyLevel(challenges)
 
@@ -56,20 +52,30 @@ export class ListChallengesUseCase implements IUseCase<Request, Response> {
     return easyChallenges.concat(mediumChallenges, hardChallenges)
   }
 
-  private filterChallengesByCompletionStatus(
+  private filterChallenges(
     completionStatus: ChallengeCompletionStatus | 'all',
     challenges: Challenge[],
     user: User,
   ) {
     switch (completionStatus) {
       case 'completed':
-        return challenges.filter(
-          (challenge) => user.hasCompletedChallenge(challenge.id).isTrue,
-        )
+        return challenges.filter((challenge) => {
+          const isCompleted = user.hasCompletedChallenge(challenge.id)
+          const isUserChallengeAuthor = user.id === challenge.authorId
+          if (isUserChallengeAuthor) {
+            return isCompleted.isTrue
+          }
+          return isCompleted.isTrue && challenge.isPublic.isTrue
+        })
       case 'not-completed':
-        return challenges.filter(
-          (challenge) => user.hasCompletedChallenge(challenge.id).isFalse,
-        )
+        return challenges.filter((challenge) => {
+          const isCompleted = user.hasCompletedChallenge(challenge.id)
+          const isUserChallengeAuthor = user.id === challenge.authorId
+          if (isUserChallengeAuthor) {
+            return isCompleted.isFalse
+          }
+          return isCompleted.isTrue && challenge.isPublic.isTrue
+        })
       default:
         return challenges
     }

@@ -23,7 +23,7 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
     getActiveContentSlice,
     getPanelsLayoutSlice,
   } = useChallengeStore()
-  const { activeContent, setActiveContent } = getActiveContentSlice()
+  const { setActiveContent } = getActiveContentSlice()
   const { challenge, setChallenge } = getChallengeSlice()
   const { panelsLayout, setPanelsLayout } = getPanelsLayoutSlice()
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
@@ -79,6 +79,7 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
   }, [currentRoute, challenge, setActiveContent])
 
   return {
+    challenge,
     panelsLayout,
     handleBackButton,
     handlePanelsLayoutButton,

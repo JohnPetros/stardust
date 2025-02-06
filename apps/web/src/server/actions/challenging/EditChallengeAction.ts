@@ -26,6 +26,7 @@ export const EditChallengeAction = (
           description,
           categories,
           difficultyLevel,
+          isPublic,
           testCases,
           function: challengeFunction,
         },
@@ -55,6 +56,7 @@ export const EditChallengeAction = (
             expectedOutput: testCase.expectedOutput.value,
           })),
           categories,
+          isPublic,
         },
       })
     },
