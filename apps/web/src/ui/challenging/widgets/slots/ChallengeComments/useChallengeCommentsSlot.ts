@@ -10,12 +10,14 @@ import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useApi } from '@/ui/global/hooks/useApi'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
 export function useChallengeCommentsSlot(challengeId: string) {
   const api = useApi()
   const router = useRouter()
   const toast = useToastContext()
   const [isVerifyingVisibility, setIsVerifyingVisibility] = useState(true)
+  const { user } = useAuthContext()
   const { getChallengeSlice } = useChallengeStore()
   const { challenge } = getChallengeSlice()
 
@@ -29,14 +31,16 @@ export function useChallengeCommentsSlot(challengeId: string) {
   }
 
   useEffect(() => {
-    if (!challenge) return
+    // if (!challenge || !user) return
 
-    if (challenge.isCompleted.isFalse) {
-      router.goTo(ROUTES.challenging.challenges.challenge(challenge.slug.value))
-      return
-    }
+    // const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
+
+    // if (isChallengeCompleted.isFalse) {
+    //   router.goTo(ROUTES.challenging.challenges.challenge(challenge.slug.value))
+    //   return
+    // }
     setIsVerifyingVisibility(false)
-  }, [challenge, router.goTo])
+  }, [user, router.goTo])
 
   return {
     isVerifyingVisibility,

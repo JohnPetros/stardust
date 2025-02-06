@@ -37,7 +37,6 @@ export function CommentsList({
     handleDeleteComment,
   } = useCommentsList({ onSaveComment, onFetchComments })
   const { user } = useAuthContext()
-  const { md: isMobile } = useBreakpoint()
 
   const sorterButtonTitle =
     sorter === 'date' && order === 'ascending'
@@ -52,24 +51,22 @@ export function CommentsList({
         <strong className='text-center text-sm font-semibold text-gray-100'>
           {comments?.length} Comentário{comments?.length !== 1 && 's'}
         </strong>
-        {comments && (
-          <div className='flex justify-end rounded-md bg-gray-700 px-6 py-2 md:rounded-none md:bg-gray-800'>
-            <PopoverMenu
-              label='Abrir menu para ordernar lista de conquistas'
-              buttons={popoverMenuButtons}
-              onOpenChange={handlePopoverMenuOpenChange}
-            >
-              <div className='flex items-center gap-3 text-sm text-gray-200'>
-                Mais {sorterButtonTitle}
-                <AnimatedArrow isUp={isPopoverMenuOpen} />
-              </div>
-            </PopoverMenu>
-          </div>
-        )}
+        <div className='flex justify-end rounded-md bg-gray-700 px-6 py-2 md:rounded-none md:bg-gray-800'>
+          <PopoverMenu
+            label='Abrir menu para ordernar lista de conquistas'
+            buttons={popoverMenuButtons}
+            onOpenChange={handlePopoverMenuOpenChange}
+          >
+            <div className='flex items-center gap-3 text-sm text-gray-200'>
+              Mais {sorterButtonTitle}
+              <AnimatedArrow isUp={isPopoverMenuOpen} />
+            </div>
+          </PopoverMenu>
+        </div>
       </header>
       <div className='mt-6 px-6'>
         <CommentInput
-          id={isMobile ? 'user-comment-mobile' : 'user-comment'}
+          id='user-comment'
           title='Comentar'
           placeholder={inputPlaceholder}
           onSend={handleSendComment}

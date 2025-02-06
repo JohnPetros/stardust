@@ -13,7 +13,7 @@ import type { ICodeRunnerProvider } from '@stardust/core/interfaces'
 import type { CodeInput } from '@stardust/core/global/types'
 
 import { DELEGUA_REGEX } from './constants'
-import { obtenhaTipo, trateErro } from './utils'
+import { formateValor, obtenhaTipo, trateErro } from './utils'
 
 export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
   const lexador = new Lexador()
@@ -23,9 +23,11 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
     async run(code: string) {
       const outputs: string[] = []
 
-      function funcaoDeSaida(novaSaida: string) {
-        outputs.push(novaSaida)
+      function funcaoDeSaida(saida: string) {
+        outputs.push(formateValor(saida))
       }
+
+      console.log(code)
 
       const interpretador = new InterpretadorBase('', false, funcaoDeSaida, funcaoDeSaida)
       const resultadoLexador = lexador.mapear(code.split('\n'), -1)
@@ -42,8 +44,9 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
       }
 
       let result = ''
-      if (resultado[1]) {
-        result = resultado[1]
+      if (resultado.length) {
+        const resultadoValor = resultado.at(-1)
+        if (resultadoValor !== undefined) result = formateValor(String(resultadoValor))
       }
 
       return new CodeRunnerResponse({ result, outputs })
@@ -60,20 +63,7 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
       let codigo = codeValue
 
       for (const input of codeInputs) {
-        let entrada = input
-        const tipo = obtenhaTipo(entrada)
-
-        switch (tipo) {
-          case 'vetor':
-            entrada = `[${input}]`
-            break
-          case 'numero':
-            entrada = input.toString()
-            break
-          case 'texto':
-            entrada = `"${input}"`
-        }
-
+        const entrada = formateValor(input)
         codigo = codigo.replace(DELEGUA_REGEX.conteudoDeFuncaoLeia, entrada)
       }
 
@@ -81,9 +71,11 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
     },
 
     addFunctionCall(functionParams: unknown[], code: string) {
-      const paramsValues = functionParams.map((param) =>
-        Array.isArray(param) ? `[${param.join(',')}]` : param,
-      )
+      const paramsValues = functionParams.map((param) => {
+        return Array.isArray(param)
+          ? `[${param.map((value) => this.translateToCodeRunner(value)).join(',')}]`
+          : this.translateToCodeRunner(param)
+      })
       const params = `(${paramsValues.join(',')})`
       const functionName = this.getFunctionName(code)
       return code.concat(`\n${functionName}${params};`)
@@ -121,14 +113,17 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
       return comandosLeia?.length ?? 0
     },
 
-    translateToCodeRunner(jsCode: string) {
+    translateToCodeRunner(jsCode: unknown) {
+      const codigo =
+        obtenhaTipo(jsCode) === 'texto' ? JSON.stringify(jsCode) : String(jsCode)
+
       const lexador = new LexadorJavaScript()
       const avaliadorSintatico = new AvaliadorSintaticoJavaScript()
-      const resultadoLexico = lexador.mapear(jsCode.split('\n'), -1)
+      const resultadoLexico = lexador.mapear(codigo.split('\n'), -1)
       const resultadoSintatico = avaliadorSintatico.analisar(resultadoLexico, -1)
       const tradutor = new TradutorReversoJavaScript()
       const traducao = tradutor.traduzir(resultadoSintatico.declaracoes)
-      return traducao.trim()
+      return traducao.trim().replaceAll('\\"', '')
     },
 
     translateToJs(codeRunnerCode: string) {

@@ -39,7 +39,6 @@ export type ChallengeProps = {
   userOutputs: List<unknown>
   userVote: ChallengeVote
   incorrectAnswersCount: Integer
-  isCompleted: Logical
   isPublic: Logical
   author: {
     id: string
@@ -62,15 +61,14 @@ export class Challenge extends Entity<ChallengeProps> {
       return code.addFunctionCall(testCase.inputs)
     }
 
-    if (code.inputsCount !== testCase.inputs.length) {
-      throw new InsufficientInputsError()
-    }
-
     return code.addInputs(testCase.inputs)
   }
 
   private verifyResult(result: unknown, testCase: TestCase, code: Code) {
-    const isCorrect = result === code.translateToCodeRunner(testCase.expectedOutput)
+    const translatedExpectedOutput = code.translateToCodeRunner(testCase.expectedOutput)
+    console.log('result', result)
+    console.log('translatedExpectedOutput', translatedExpectedOutput)
+    const isCorrect = result === translatedExpectedOutput
 
     if (!isCorrect)
       this.props.incorrectAnswersCount = this.incorrectAnswersCount.increment(1)
@@ -88,6 +86,7 @@ export class Challenge extends Entity<ChallengeProps> {
       if (response.isFailure) response.throwError()
 
       let result = code.hasFunction.isTrue ? response.result : response.outputs[0]
+      console.log('run result', result)
 
       if (code.hasFunction.isTrue) result = response.result
       else if (response.outputs[0]) result = response.outputs[0]
@@ -105,7 +104,6 @@ export class Challenge extends Entity<ChallengeProps> {
       this.results.hasAllEqualTo(true).isTrue
 
     if (isAnswerCorrect) {
-      this.props.isCompleted = this.props.isCompleted.makeTrue()
       return userAnswer.makeVerified().makeCorrect()
     }
 
@@ -152,10 +150,6 @@ export class Challenge extends Entity<ChallengeProps> {
   get maximumIncorrectAnswersCount() {
     const testsCasesCount = this.testCases.length
     return testsCasesCount * Challenge.MAXIMUM_INCORRECT_ANSWERS_PER_TEST_CASE
-  }
-
-  get isCompleted() {
-    return this.props.isCompleted
   }
 
   get hasAnswer() {

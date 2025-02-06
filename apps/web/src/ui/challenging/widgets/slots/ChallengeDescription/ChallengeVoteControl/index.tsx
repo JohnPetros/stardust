@@ -17,7 +17,7 @@ export function VoteControl() {
       <button
         type='button'
         onClick={() => handleVoteButton('upvote')}
-        disabled={!isUserChallengeAuthor}
+        disabled={isUserChallengeAuthor}
         className={
           'flex h-8 items-center justify-center gap-1 rounded-lg bg-green-900/90 px-2'
         }
@@ -41,6 +41,7 @@ export function VoteControl() {
         <button
           type='button'
           onClick={() => handleVoteButton('downvote')}
+          disabled={isUserChallengeAuthor}
           className={
             'flex h-8 items-center justify-center gap-1 rounded-lg bg-green-900/90 px-2'
           }

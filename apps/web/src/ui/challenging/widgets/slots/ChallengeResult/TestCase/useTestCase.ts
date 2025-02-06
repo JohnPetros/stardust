@@ -35,9 +35,7 @@ export function useTestCase({
     if (inputs.length > 0) {
       return inputs
         .map((input) => {
-          return provider
-            .translateToCodeRunner(JSON.stringify(input))
-            .replaceAll('\n', '')
+          return provider.translateToCodeRunner(input).replaceAll('\n', '')
         })
         .join(',')
     }
@@ -45,9 +43,7 @@ export function useTestCase({
   }, [inputs, provider.translateToCodeRunner])
 
   const translatedExpectedOutput = useMemo(() => {
-    return provider
-      .translateToCodeRunner(JSON.stringify(expectedOutput))
-      .replaceAll('\n', '')
+    return provider.translateToCodeRunner(expectedOutput).replaceAll('\n', '')
   }, [expectedOutput, provider.translateToCodeRunner])
 
   return {

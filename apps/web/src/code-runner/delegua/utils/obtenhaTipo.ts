@@ -1,11 +1,15 @@
-import { Numeric } from "@stardust/core/global/structs"
+import { Numeric } from '@stardust/core/global/structs'
 
-type Tipo = 'vetor' | 'texto' | 'numero'
+type Tipo = 'lista' | 'texto' | 'numero' | 'lógico'
 
 export function obtenhaTipo(valor: unknown): Tipo {
   if (Array.isArray(valor)) {
-    return 'vetor'
+    return 'lista'
   }
+
+  const eUmLogico = valor === true || valor === false
+
+  if (eUmLogico) return 'lógico'
 
   const eUmTexto =
     typeof valor === 'string' && (valor.at(0) === '"' || valor.at(-1) === '"')

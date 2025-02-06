@@ -17,13 +17,8 @@ import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 
 export function useChallengeResultSlot() {
-  const {
-    getChallengeSlice,
-    getCraftsVisibilitySlice,
-    getTabHandlerSlice,
-    getResults,
-    resetStore,
-  } = useChallengeStore()
+  const { getChallengeSlice, getCraftsVisibilitySlice, getTabHandlerSlice, getResults } =
+    useChallengeStore()
   const { results } = getResults()
   const { challenge, setChallenge } = getChallengeSlice()
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
@@ -33,15 +28,12 @@ export function useChallengeResultSlot() {
   const [userAnswer, setUserAnswer] = useState<UserAnswer>(UserAnswer.create())
   const secondsCounterStorage = useLocalStorage(STORAGE.keys.secondsCounter)
   const { md: isMobile } = useBreakpoint()
-  const { user } = useAuthContext()
-  const router = useRouter()
+  const { user, updateUserCache } = useAuthContext()
+  const { goTo, currentRoute } = useRouter()
 
-  function goToRewardingPage(routeSource: 'starChallenge' | 'challenge') {
-    router.goTo(ROUTES.rewarding[routeSource])
-    setTimeout(() => {
-      resetStore()
-      secondsCounterStorage.remove()
-    }, 500)
+  function leavePage(route: string) {
+    secondsCounterStorage.remove()
+    goTo(route)
   }
 
   async function showRewards() {
@@ -62,7 +54,7 @@ export function useChallengeResultSlot() {
         key: COOKIES.keys.rewardingPayload,
         value: JSON.stringify(rewardsPayload),
       })
-      goToRewardingPage('starChallenge')
+      leavePage(ROUTES.rewarding.starChallenge)
       return
     }
 
@@ -76,23 +68,28 @@ export function useChallengeResultSlot() {
       key: COOKIES.keys.rewardingPayload,
       value: JSON.stringify(rewardsPayload),
     })
-    goToRewardingPage('challenge')
+    leavePage(ROUTES.rewarding.challenge)
     return
   }
 
   function handleUserAnswer() {
-    if (!challenge) return
+    if (!challenge || !user) return
 
-    if (challenge.isCompleted.isTrue) {
-      showRewards()
+    const isUserChallengeAuthor = challenge.authorId === user?.id
+    const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
+
+    if (isChallengeCompleted.isTrue) {
+      if (user.hasCompletedChallenge(challenge.id).isTrue || isUserChallengeAuthor)
+        leavePage(ROUTES.challenging.challenges.list)
+      else showRewards()
       return
     }
 
-    const isUserChallengeAuthor = challenge.authorId === user?.id
     const newUserAnswer = challenge.verifyUserAnswer(userAnswer)
 
-    if (newUserAnswer.isCorrect.isTrue && !isUserChallengeAuthor) {
-      setChallenge(challenge)
+    if (newUserAnswer.isCorrect.isTrue) {
+      user.completeChallenge(challenge)
+      updateUserCache(user.dto)
       setCraftsVislibility(craftsVislibility.showAll())
     }
 
@@ -104,16 +101,18 @@ export function useChallengeResultSlot() {
   }
 
   useEffect(() => {
+    if (!challenge) return
+
     if (
-      router.currentRoute.endsWith('/result') &&
+      currentRoute.endsWith('/result') &&
       userAnswer.isVerified.isFalse &&
-      challenge?.isCompleted.isTrue &&
+      user?.hasCompletedChallenge(challenge.id) &&
       challenge.hasAnswer.isTrue &&
       !isSavingCookie
     ) {
       setUserAnswer(userAnswer.makeCorrect().makeVerified())
     }
-  }, [challenge, userAnswer, isSavingCookie, router.currentRoute])
+  }, [challenge, userAnswer, isSavingCookie, currentRoute])
 
   return {
     challenge,

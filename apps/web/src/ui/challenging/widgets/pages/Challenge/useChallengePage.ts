@@ -4,17 +4,18 @@ import { useEffect } from 'react'
 
 import type { ChallengeVote } from '@stardust/core/challenging/types'
 import { Challenge } from '@stardust/core/challenging/entities'
+import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 
-import { ROUTES } from '@/constants'
+import { ROUTES, STORAGE } from '@/constants'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import type {
   ChallengeContent,
   PanelsLayout,
 } from '@/ui/challenging/stores/ChallengeStore/types'
-import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 
 export function useChallengePage(challengeDto: ChallengeDto, userVote: ChallengeVote) {
   const {
@@ -22,6 +23,7 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
     getCraftsVisibilitySlice,
     getActiveContentSlice,
     getPanelsLayoutSlice,
+    resetStore,
   } = useChallengeStore()
   const { setActiveContent } = getActiveContentSlice()
   const { challenge, setChallenge } = getChallengeSlice()
@@ -29,6 +31,7 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
   const { user } = useAuthContext()
   const { currentRoute, goTo } = useRouter()
+  const secondsCounterStorage = useLocalStorage(STORAGE.keys.secondsCounter)
 
   function handleBackButton() {
     if (challenge)
@@ -77,6 +80,12 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
     if (activeContent !== challenge.slug.value)
       setActiveContent(activeContent as ChallengeContent)
   }, [currentRoute, challenge, setActiveContent])
+
+  useEffect(() => {
+    return () => {
+      resetStore()
+    }
+  }, [])
 
   return {
     challenge,
