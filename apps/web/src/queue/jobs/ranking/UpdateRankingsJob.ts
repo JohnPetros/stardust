@@ -5,7 +5,7 @@ export const UpdateRankingsJob = (rankingService: IRankingService): IJob => {
   return {
     async handle(queue: IQueue) {
       const useCase = new UpdateRankingsUseCase(rankingService)
-      await queue.run(useCase.do, UpdateRankingsUseCase.name)
+      await queue.run(async () => useCase.do(), UpdateRankingsUseCase.name)
     },
   }
 }

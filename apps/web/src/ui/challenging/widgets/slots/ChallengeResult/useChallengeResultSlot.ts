@@ -17,7 +17,8 @@ import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 
 export function useChallengeResultSlot() {
-  const { getChallengeSlice, getTabHandlerSlice, getResults } = useChallengeStore()
+  const { getChallengeSlice, getTabHandlerSlice, getResults, resetStore } =
+    useChallengeStore()
   const { results } = getResults()
   const { challenge } = getChallengeSlice()
   const { tabHandler } = getTabHandlerSlice()
@@ -27,6 +28,12 @@ export function useChallengeResultSlot() {
   const { md: isMobile } = useBreakpoint()
   const { user } = useAuthContext()
   const router = useRouter()
+
+  function goToRewardingPage(routeSource: 'starChallenge' | 'challenge') {
+    resetStore()
+    secondsCounterStorage.remove()
+    router.goTo(ROUTES.rewarding[routeSource])
+  }
 
   async function showRewards() {
     if (!challenge || !user) return
@@ -45,8 +52,7 @@ export function useChallengeResultSlot() {
         key: COOKIES.keys.rewardingPayload,
         value: JSON.stringify(rewardsPayload),
       })
-      localStorage.removeItem(STORAGE.keys.secondsCounter)
-      router.goTo(ROUTES.rewarding.starChallenge)
+      goToRewardingPage('starChallenge')
       return
     }
 
@@ -60,9 +66,7 @@ export function useChallengeResultSlot() {
       key: COOKIES.keys.rewardingPayload,
       value: JSON.stringify(rewardsPayload),
     })
-
-    secondsCounterStorage.remove()
-    router.goTo(ROUTES.rewarding.challenge)
+    goToRewardingPage('challenge')
     return
   }
 
