@@ -5,5 +5,6 @@ export type VerificationButtonProps = {
   isAnswered: boolean
   isAnswerVerified: boolean
   isAnswerCorrect: boolean
+  isLoading?: boolean
   className?: ClassNameValue
 }

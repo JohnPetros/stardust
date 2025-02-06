@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { UserAnswer } from '@stardust/core/global/structs'
 import type {
@@ -17,12 +17,19 @@ import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 
 export function useChallengeResultSlot() {
-  const { getChallengeSlice, getTabHandlerSlice, getResults, resetStore } =
-    useChallengeStore()
+  const {
+    getChallengeSlice,
+    getCraftsVisibilitySlice,
+    getTabHandlerSlice,
+    getResults,
+    resetStore,
+  } = useChallengeStore()
   const { results } = getResults()
-  const { challenge } = getChallengeSlice()
+  const { challenge, setChallenge } = getChallengeSlice()
+  const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
   const { tabHandler } = getTabHandlerSlice()
   const { setCookie } = useCookieActions()
+  const [isSavingCookie, setIsSavingCookie] = useState(false)
   const [userAnswer, setUserAnswer] = useState<UserAnswer>(UserAnswer.create())
   const secondsCounterStorage = useLocalStorage(STORAGE.keys.secondsCounter)
   const { md: isMobile } = useBreakpoint()
@@ -30,13 +37,16 @@ export function useChallengeResultSlot() {
   const router = useRouter()
 
   function goToRewardingPage(routeSource: 'starChallenge' | 'challenge') {
-    resetStore()
-    secondsCounterStorage.remove()
     router.goTo(ROUTES.rewarding[routeSource])
+    setTimeout(() => {
+      resetStore()
+      secondsCounterStorage.remove()
+    }, 500)
   }
 
   async function showRewards() {
     if (!challenge || !user) return
+    setIsSavingCookie(true)
 
     const currentSeconds = Number(secondsCounterStorage.get())
 
@@ -72,15 +82,18 @@ export function useChallengeResultSlot() {
 
   function handleUserAnswer() {
     if (!challenge) return
-    const isUserChallengeAuthor = challenge.author.id === user?.id
+
+    if (challenge.isCompleted.isTrue) {
+      showRewards()
+      return
+    }
+
+    const isUserChallengeAuthor = challenge.authorId === user?.id
     const newUserAnswer = challenge.verifyUserAnswer(userAnswer)
 
-    if (
-      newUserAnswer.isCorrect.isTrue &&
-      newUserAnswer.isVerified.isTrue &&
-      !isUserChallengeAuthor
-    ) {
-      showRewards()
+    if (newUserAnswer.isCorrect.isTrue && !isUserChallengeAuthor) {
+      setChallenge(challenge)
+      setCraftsVislibility(craftsVislibility.showAll())
     }
 
     if (newUserAnswer.isCorrect.isFalse && newUserAnswer.isVerified.isTrue && isMobile) {
@@ -90,10 +103,23 @@ export function useChallengeResultSlot() {
     setUserAnswer(newUserAnswer)
   }
 
+  useEffect(() => {
+    if (
+      router.currentRoute.endsWith('/result') &&
+      userAnswer.isVerified.isFalse &&
+      challenge?.isCompleted.isTrue &&
+      challenge.hasAnswer.isTrue &&
+      !isSavingCookie
+    ) {
+      setUserAnswer(userAnswer.makeCorrect().makeVerified())
+    }
+  }, [challenge, userAnswer, isSavingCookie, router.currentRoute])
+
   return {
     challenge,
     results,
     userAnswer,
+    isSavingCookie,
     handleUserAnswer,
   }
 }

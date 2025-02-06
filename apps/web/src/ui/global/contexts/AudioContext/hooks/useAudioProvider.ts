@@ -10,7 +10,7 @@ export function useAudioProvider() {
   const playAudio = useCallback(
     (audioFile: AudioFile) => {
       if (!user) return
-      // new Audio(`/audios/${audioFile}`).play()
+      new Audio(`/audios/${audioFile}`).play()
     },
     [user],
   )

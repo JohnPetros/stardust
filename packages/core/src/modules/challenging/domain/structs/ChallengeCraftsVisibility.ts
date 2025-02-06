@@ -31,6 +31,14 @@ export class ChallengeCraftsVisibility {
     return this.clone({ canShowSolutions: this.canShowSolutions.makeTrue() })
   }
 
+  showComments() {
+    return this.clone({ canShowComments: this.canShowComments.makeTrue() })
+  }
+
+  showAll() {
+    return this.showComments().showSolutions()
+  }
+
   private clone(props?: Partial<ChallengeCraftsVisibilityProps>) {
     return new ChallengeCraftsVisibility({
       canShowComments: this.canShowComments,

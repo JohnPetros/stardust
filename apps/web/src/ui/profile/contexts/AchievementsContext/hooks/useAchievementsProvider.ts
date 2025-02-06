@@ -58,7 +58,6 @@ export function useAchivementsProvider(
   async function observeNewUnlockedAchievements() {
     const { updatedUserDto, newUnlockedAchievementsDto } = await observe()
 
-    console.log(newUnlockedAchievementsDto)
     if (!updatedUserDto || !newUnlockedAchievementsDto?.length) return
 
     setNewUnlockedAchievements(newUnlockedAchievementsDto.map(Achievement.create))
