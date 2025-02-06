@@ -9,7 +9,14 @@ import { Loading } from '../Loading'
 import type { ButtonProps } from './types/ButtonProps'
 
 export function ButtonComponent(
-  { children, className, asChild = false, isLoading = false, ...rest }: ButtonProps,
+  {
+    children,
+    className,
+    asChild = false,
+    isLoading = false,
+    disabled,
+    ...rest
+  }: ButtonProps,
   ref: ForwardedRef<HTMLButtonElement>,
 ) {
   const mergedClassName = twMerge(
@@ -30,6 +37,7 @@ export function ButtonComponent(
       ref={ref}
       whileTap={{ scale: 0.99 }}
       className={mergedClassName}
+      disabled={disabled || isLoading}
       {...rest}
     >
       {isLoading ? <Loading /> : children}

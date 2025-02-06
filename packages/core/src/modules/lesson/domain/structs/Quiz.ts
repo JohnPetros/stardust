@@ -151,10 +151,6 @@ export class Quiz {
   }
 
   get hasNextQuestion() {
-    console.log(
-      'has next question',
-      this.currentQuestionIndex.value < this.questionsCount,
-    )
     return Logical.create(this.currentQuestionIndex.value < this.questionsCount)
   }
 

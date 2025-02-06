@@ -35,10 +35,7 @@ export function ChallengeDescriptionSlot() {
         <VoteControl />
         <ChallengeContentNav contents={['comments', 'solutions']} />
         {isUserChallengeAuthor && (
-          <ChallengeControl
-            challengeSlug={challenge.slug.value}
-            isChallengePublic={challenge.isPublic.value}
-          />
+          <ChallengeControl isChallengePublic={challenge.isPublic.value} />
         )}
       </div>
       <div className='mt-6 pb-6'>

@@ -41,7 +41,7 @@ export function ChallengeTabs({ children }: TabsProps) {
             />
           </TabButton>
           <span className='text-gray-600'>|</span>
-          {craftsVislibility.canShowComments.isTrue ? (
+          {craftsVislibility.canShowComments.isFalse ? (
             <BlockedCommentsAlertDialog>
               <TabButton value='comments' asChild>
                 <ChallengeContentLink
@@ -63,7 +63,7 @@ export function ChallengeTabs({ children }: TabsProps) {
             </TabButton>
           )}
           <span className='text-gray-600'>|</span>
-          {craftsVislibility.canShowSolutions.isTrue ? (
+          {craftsVislibility.canShowSolutions.isFalse ? (
             <BlockedSolutionsAlertDialog onShowSolutions={handleShowSolutions}>
               <TabButton value='solutions' asChild>
                 <ChallengeContentLink

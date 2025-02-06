@@ -32,8 +32,6 @@ export class ObserveNewUnlockedAchievementsUseCase
       this.isNewUnlockedAchievement(achievement, user),
     )
 
-    console.log(newUnlockedAchievements)
-
     for (const { id } of newUnlockedAchievements) {
       const unlockedAchievementResponse =
         await this.profileService.saveUnlockedAchievement(id, user.id)

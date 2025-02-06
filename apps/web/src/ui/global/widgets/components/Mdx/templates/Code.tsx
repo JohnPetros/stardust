@@ -18,8 +18,6 @@ export function Code({
   if (!children) return
   let code = ''
 
-  console.log(children)
-
   if (!Array.isArray(children)) {
     code = String(children)
   } else if (typeof children[0] === 'string') {

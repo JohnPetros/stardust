@@ -27,13 +27,6 @@ export class GetAcquirableShopItemsByDefaultUseCase implements IUseCase<void, Re
     if (!selectedAvatarByDefault) throw new SelectedAvatarByDefaultNotFoundError()
     if (!selectedRocketByDefault) throw new SelectedRocketByDefaultNotFoundError()
 
-    console.log('use case', {
-      selectedAvatarByDefaultId: selectedAvatarByDefault.id,
-      selectedRocketByDefaultId: selectedRocketByDefault.id,
-      acquirableAvatarsByDefaultIds: avatars.map((avatar) => avatar.id),
-      acquirableRocketsByDefaultIds: rockets.map((rocket) => rocket.id),
-    })
-
     return {
       selectedAvatarByDefaultId: selectedAvatarByDefault.id,
       selectedRocketByDefaultId: selectedRocketByDefault.id,

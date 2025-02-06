@@ -18,8 +18,6 @@ export function StoryStage({ title, number }: StoryStageProps) {
   const { story, handleContinueButtonClick, handleQuizStageButtonClick } = useStoryStage()
   const buttonHasFocus = useRef(false)
 
-  console.log(story?.chunks)
-
   if (story)
     return (
       <>

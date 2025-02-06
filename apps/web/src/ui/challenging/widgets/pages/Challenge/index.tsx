@@ -9,6 +9,9 @@ import { Button } from '@/ui/global/widgets/components/Button'
 import { PopoverMenu } from '@/ui/global/widgets/components/PopoverMenu'
 import { useChallengePage } from './useChallengePage'
 import { Icon } from '@/ui/global/widgets/components/Icon'
+import { Loading } from '@/ui/global/widgets/components/Loading'
+
+// http://localhost:3000/challenging/challenges/area-do-escudo-protetor/challenge/result
 
 type ChallengePagePageProps = {
   challengeDto: ChallengeDto
@@ -19,10 +22,12 @@ export function ChallengePage({
   challengeDto,
   userChallengeVote,
 }: ChallengePagePageProps) {
-  const { handleBackButton, handlePanelsLayoutButton, panelsLayout } = useChallengePage(
-    challengeDto,
-    userChallengeVote,
-  )
+  const { challenge, panelsLayout, handleBackButton, handlePanelsLayoutButton } =
+    useChallengePage(challengeDto, userChallengeVote)
+
+  if (!challenge) {
+    return <Loading isSmall={false} />
+  }
 
   const popoverMenuButtons: PopoverMenuButton[] = [
     {

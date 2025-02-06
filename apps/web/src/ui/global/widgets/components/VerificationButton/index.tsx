@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { twMerge } from 'tailwind-merge'
 
 import { AnimatedPanel } from './AnimatedPanel'
@@ -11,6 +10,7 @@ export function VerificationButton({
   onClick,
   isAnswerCorrect,
   isAnswerVerified,
+  isLoading,
   isAnswered,
   className,
 }: VerificationButtonProps) {
@@ -62,6 +62,7 @@ export function VerificationButton({
         onFocus={() => (buttonHasFocus.current = true)}
         onBlur={() => (buttonHasFocus.current = false)}
         disabled={!isAnswered}
+        isLoading={isLoading}
         color={isAnswerVerified && !isAnswerCorrect ? 'red' : 'green'}
       >
         {buttonTitle}

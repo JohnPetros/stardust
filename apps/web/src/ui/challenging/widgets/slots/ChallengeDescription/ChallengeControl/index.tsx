@@ -7,19 +7,16 @@ import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { useChallengeControl } from './useChallengeControl'
 
 type ChallengeControlControl = {
-  challengeSlug: string
   isChallengePublic: boolean
 }
 
-export function ChallengeControl({
-  challengeSlug,
-  isChallengePublic,
-}: ChallengeControlControl) {
+export function ChallengeControl({ isChallengePublic }: ChallengeControlControl) {
   const {
+    challenge,
     isPublic,
     handleDeleteChallengeButtonClick,
     handleIsChallengePublicSwitchChange,
-  } = useChallengeControl(challengeSlug, isChallengePublic)
+  } = useChallengeControl(isChallengePublic)
 
   return (
     <div>
@@ -32,7 +29,9 @@ export function ChallengeControl({
       </div>
       <div className='flex items-center gap-3 mt-3 px-3'>
         <Button asChild className='w-max h-8 px-3 text-xs'>
-          <Link href={ROUTES.challenging.challenge(challengeSlug)}>editar desafio</Link>
+          <Link href={ROUTES.challenging.challenge(challenge?.slug.value)}>
+            editar desafio
+          </Link>
         </Button>
         <AlertDialog
           title='Seu desafio está preste a ser removido'
@@ -48,7 +47,7 @@ export function ChallengeControl({
           action={
             <Button
               onClick={handleDeleteChallengeButtonClick}
-              className='bg-red-700 text-gray-50'
+              className='bg-red-800 text-gray-50'
             >
               Deletar meu desafio
             </Button>
