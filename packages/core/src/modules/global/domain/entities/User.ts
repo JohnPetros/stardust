@@ -16,7 +16,7 @@ import type { Level, WeekStatus } from '#profile/structs'
 import type { AchievementMetricValue } from '#profile/types'
 import type { RankingPosition } from '#ranking/structs'
 import type { Comment } from '#forum/entities'
-import type { Solution } from '#challenging/entities'
+import type { Challenge, Solution } from '#challenging/entities'
 import { PLANETS_COUNT } from '#space/constants'
 import { EntityNotDefinedError } from '#global/errors'
 
@@ -243,6 +243,12 @@ export class User extends Entity<UserProps> {
   removeUpvoteSolution(solution: Solution): void {
     solution.removeUpvote()
     this.props.upvotedSolutionsIds = this.props.upvotedSolutionsIds.remove(solution.id)
+  }
+
+  completeChallenge(challenge: Challenge): void {
+    this.props.completedChallengesIds = this.props.completedChallengesIds.add(
+      challenge.id,
+    )
   }
 
   private notifyChanges(): void {
