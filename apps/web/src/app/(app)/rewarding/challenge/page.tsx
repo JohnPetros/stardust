@@ -14,14 +14,24 @@ export default async function Page() {
   const response = await rewardingActions.rewardForChallengeCompletion(rewardsPayloadDto)
   if (!response?.data) notFound()
 
-  const { nextRoute, newLevel, newCoins, newXp, accuracyPercentage, secondsCount } =
-    response.data
+  const {
+    nextRoute,
+    newLevel,
+    newCoins,
+    newStreak,
+    newWeekStatus,
+    newXp,
+    accuracyPercentage,
+    secondsCount,
+  } = response.data
 
   return (
     <RewardingPage
       newLevel={newLevel}
       newCoins={newCoins}
       newXp={newXp}
+      newStreak={newStreak}
+      newWeekStatus={newWeekStatus}
       accuracyPercentage={accuracyPercentage}
       secondsCount={secondsCount}
       nextRoute={nextRoute}

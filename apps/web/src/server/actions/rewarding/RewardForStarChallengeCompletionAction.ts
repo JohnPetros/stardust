@@ -1,9 +1,10 @@
 import type { IAction, IChallengingService } from '@stardust/core/interfaces'
 import type { IProfileService, ISpaceService } from '@stardust/core/interfaces'
 import type { IActionServer } from '@stardust/core/interfaces'
+import type { WeekStatusValue } from '@stardust/core/profile/types'
+import type { StarChallengeRewardingPayload } from '@stardust/core/challenging/types'
 import { RewardUserUseCase } from '@stardust/core/profile/use-cases'
 import { UnlockNextStarUseCase } from '@stardust/core/space/use-cases'
-import type { StarChallengeRewardingPayload } from '@stardust/core/challenging/types'
 import { CalculateRewardForChallengeCompletionUseCase } from '@stardust/core/challenging/use-cases'
 
 import { ROUTES } from '@/constants'
@@ -11,6 +12,8 @@ import { ROUTES } from '@/constants'
 type Response = {
   nextRoute: string
   newLevel: number | null
+  newStreak: number | null
+  newWeekStatus: WeekStatusValue | null
   newCoins: number
   newXp: number
   accuracyPercentage: number
@@ -42,7 +45,7 @@ export const RewardForStarChallengeCompletionAction = (
       ])
 
       const rewardUserUseCase = new RewardUserUseCase(profileService)
-      const { newLevel } = await rewardUserUseCase.do({
+      const { newLevel, newStreak, newWeekStatus } = await rewardUserUseCase.do({
         userDto,
         newCoins,
         newXp,
@@ -52,6 +55,8 @@ export const RewardForStarChallengeCompletionAction = (
         newCoins,
         newXp,
         newLevel,
+        newStreak,
+        newWeekStatus,
         accuracyPercentage,
         secondsCount,
         nextRoute: ROUTES.space,
