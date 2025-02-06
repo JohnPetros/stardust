@@ -5,7 +5,8 @@ import { TestCase } from './TestCase'
 import { useChallengeResultSlot } from './useChallengeResultSlot'
 
 export function ChallengeResultSlot() {
-  const { challenge, results, userAnswer, handleUserAnswer } = useChallengeResultSlot()
+  const { challenge, results, userAnswer, isSavingCookie, handleUserAnswer } =
+    useChallengeResultSlot()
 
   if (challenge)
     return (
@@ -29,6 +30,7 @@ export function ChallengeResultSlot() {
           isAnswered={challenge.hasAnswer.isTrue}
           isAnswerVerified={userAnswer.isVerified.isTrue}
           isAnswerCorrect={userAnswer.isCorrect.isTrue}
+          isLoading={isSavingCookie}
           onClick={handleUserAnswer}
         />
       </div>

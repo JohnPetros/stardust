@@ -1,11 +1,12 @@
+import { useState } from 'react'
+
 import { ROUTES } from '@/constants'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useApi } from '@/ui/global/hooks/useApi'
 import { useRouter } from '@/ui/global/hooks/useRouter'
-import { useEffect, useState } from 'react'
 
-export function useChallengeControl(challengeId: string, isChallengePublic: boolean) {
+export function useChallengeControl(isChallengePublic: boolean) {
   const api = useApi()
   const router = useRouter()
   const toast = useToastContext()
@@ -33,7 +34,9 @@ export function useChallengeControl(challengeId: string, isChallengePublic: bool
   }
 
   async function handleDeleteChallengeButtonClick() {
-    const response = await api.deleteChallenge(challengeId)
+    if (!challenge) return
+
+    const response = await api.deleteChallenge(challenge.id)
     if (response.isFailure) {
       toast.show(response.errorMessage)
       return
@@ -43,6 +46,7 @@ export function useChallengeControl(challengeId: string, isChallengePublic: bool
   }
 
   return {
+    challenge,
     isPublic,
     handleIsChallengePublicSwitchChange,
     handleDeleteChallengeButtonClick,

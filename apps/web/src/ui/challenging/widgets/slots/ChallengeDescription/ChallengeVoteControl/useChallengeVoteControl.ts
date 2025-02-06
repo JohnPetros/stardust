@@ -59,7 +59,7 @@ export function useChallengeVoteControl() {
   return {
     challenge,
     upvotesCount: challenge?.upvotesCount.value ?? 0,
-    isUserChallengeAuthor: challenge?.author.id === user?.id,
+    isUserChallengeAuthor: challenge?.authorId === user?.id,
     handleVoteButton,
   }
 }

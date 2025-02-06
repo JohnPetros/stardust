@@ -3,14 +3,19 @@
 import { CommentsList } from '@/ui/global/widgets/components/CommentsList'
 import { useChallengeCommentsSlot } from './useChallengeCommentsSlot'
 import { ChallengeContentNav } from '../../components/ChallengeContentNav'
+import { Loading } from '@/ui/global/widgets/components/Loading'
 
 type ChallengeCommentsSlotProps = {
   challengeId: string
 }
 
 export function ChallengeCommentsSlot({ challengeId }: ChallengeCommentsSlotProps) {
-  const { handleCommentListFetch, handleCommentSave } =
+  const { isVerifyingVisibility, handleCommentListFetch, handleCommentSave } =
     useChallengeCommentsSlot(challengeId)
+
+  if (isVerifyingVisibility) {
+    return <Loading isSmall={false} />
+  }
 
   return (
     <>
