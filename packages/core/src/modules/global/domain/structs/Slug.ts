@@ -9,7 +9,7 @@ export class Slug {
   }
 
   static create(value: string, key = 'Slug') {
-    new StringValidation(value, key ).min(2).validate()
+    new StringValidation(value, key).min(2).validate()
 
     return Slug.slugify(value)
   }
@@ -22,6 +22,9 @@ export class Slug {
       .trim()
       .replace(/\s+/g, '-')
       .replace(/-+/g, '-')
+      .replace('?', '')
+      .replace('!', '')
+      .replace('.', '')
 
     return new Slug(slugValue)
   }
