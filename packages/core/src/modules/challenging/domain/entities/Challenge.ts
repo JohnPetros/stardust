@@ -43,7 +43,7 @@ export type ChallengeProps = {
   isPublic: Logical
   author: {
     id: string
-    entity?: Author
+    entity?: Omit<Author, 'id'>
   }
 }
 
@@ -100,18 +100,16 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   verifyUserAnswer(userAnswer: UserAnswer): UserAnswer {
-    const newUserAnswer = userAnswer.makeVerified()
-
     const isAnswerCorrect =
       this.results.length === this.testCases.length &&
       this.results.hasAllEqualTo(true).isTrue
 
     if (isAnswerCorrect) {
       this.props.isCompleted = this.props.isCompleted.makeTrue()
-      return newUserAnswer.makeCorrect()
+      return userAnswer.makeVerified().makeCorrect()
     }
 
-    return newUserAnswer.makeIncorrect()
+    return userAnswer.makeVerified().makeIncorrect()
   }
 
   incrementIncorrectAnswersCount() {
@@ -262,7 +260,6 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   get postedAt() {
-    console.log(this.props.postedAt)
     return this.props.postedAt
   }
 

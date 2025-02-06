@@ -157,7 +157,6 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         .from('challenges_view')
         .select('*, challenges_categories!inner(category_id)', { count: 'exact' })
         .is('star_id', null)
-        .eq('is_public', true)
 
       if (title && title.length > 1) {
         query = query.ilike('title', `%${title}%`)

@@ -23,16 +23,15 @@ export const AccessChallengeCommentsSlotAction = (
   return {
     async handle(actionServer: IActionServer<Request>) {
       const { challengeSlug } = actionServer.getRequest()
-      const user = User.create(await actionServer.getUser())
       const response = await service.fetchChallengeBySlug(challengeSlug)
       if (response.isFailure) response.throwError()
       const challenge = Challenge.create(response.body)
 
-      if (user.hasCompletedChallenge(challenge.id).isFalse) {
-        actionServer.redirect(
-          ROUTES.challenging.challenges.challenge(challenge.slug.value),
-        )
-      }
+      // if (user.hasCompletedChallenge(challenge.id).isFalse) {
+      //   actionServer.redirect(
+      //     ROUTES.challenging.challenges.challenge(challenge.slug.value),
+      //   )
+      // }
 
       return {
         challengeId: challenge.id,

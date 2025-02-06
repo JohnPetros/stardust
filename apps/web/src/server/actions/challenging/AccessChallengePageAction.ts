@@ -38,8 +38,8 @@ export const AccessChallengePageAction = (
       const userDto = await actionServer.getUser()
       const challenge = await fetchChallenge(challengeSlug)
 
-      if (challenge.isPublic.isFalse && challenge.author.id !== userDto.id) {
-        actionServer.redirect(ROUTES.challenging.challenges.list)
+      if (challenge.isPublic.isFalse && challenge.authorId !== userDto.id) {
+        actionServer.notFound()
       }
 
       const userChallengeVote = await fetchUserChallengeVote(
