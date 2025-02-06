@@ -34,23 +34,22 @@ export class ObserveNewUnlockedAchievementsUseCase
 
     console.log(newUnlockedAchievements)
 
-    for (const { id, reward } of newUnlockedAchievements) {
-      // const unlockedAchievementResponse =
-      //   await this.profileService.saveUnlockedAchievement(id, user.id)
+    for (const { id } of newUnlockedAchievements) {
+      const unlockedAchievementResponse =
+        await this.profileService.saveUnlockedAchievement(id, user.id)
 
-      // if (unlockedAchievementResponse.isFailure) {
-      //   unlockedAchievementResponse.throwError()
-      // }
+      if (unlockedAchievementResponse.isFailure) {
+        unlockedAchievementResponse.throwError()
+      }
 
-      // const rescuableAchievementResponse =
-      //   await this.profileService.saveRescuableAchievement(id, user.id)
+      const rescuableAchievementResponse =
+        await this.profileService.saveRescuableAchievement(id, user.id)
 
-      // if (rescuableAchievementResponse.isFailure) {
-      //   rescuableAchievementResponse.throwError()
-      // }
+      if (rescuableAchievementResponse.isFailure) {
+        rescuableAchievementResponse.throwError()
+      }
 
       user.unlockAchievement(id)
-      user.earnCoins(reward.value)
     }
 
     return {

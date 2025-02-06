@@ -23,7 +23,7 @@ export const useZustandLessonStore = create<LessonStore>()(
           })
         },
 
-        setQuiz(quiz: Quiz) {
+        setQuiz(quiz: Quiz | null) {
           return set(({ state }) => {
             state.quiz = quiz
           })

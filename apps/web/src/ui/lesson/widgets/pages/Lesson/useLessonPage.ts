@@ -51,27 +51,39 @@ export function useLessonPage(
   }, [textsBlocksDto, storyContent, questionsDto, setStory, setQuiz])
 
   useEffect(() => {
-    if (stage === 'rewarding') {
-      async function goToRewardingPage() {
-        if (!quiz) return
+    if (stage !== 'rewarding' || !quiz) return
 
-        const rewardingPayload: StarRewardingPayload = {
-          questionsCount: quiz.questionsCount,
-          incorrectAnswersCount: quiz.incorrectAnswersCount.value,
-          secondsCount: Number(secondsCounter.get()),
-          starId,
-        }
+    async function goToRewardingPage() {
+      if (!quiz) return
 
-        await setCookie({
-          key: COOKIES.keys.rewardingPayload,
-          value: JSON.stringify(rewardingPayload),
-        })
-        router.goTo(ROUTES.rewarding.star)
+      const rewardingPayload: StarRewardingPayload = {
+        questionsCount: quiz.questionsCount,
+        incorrectAnswersCount: quiz.incorrectAnswersCount.value,
+        secondsCount: Number(secondsCounter.get()),
+        starId,
       }
 
-      goToRewardingPage()
+      await setCookie({
+        key: COOKIES.keys.rewardingPayload,
+        value: JSON.stringify(rewardingPayload),
+      })
+      localStorage.removeItem(STORAGE.keys.secondsCounter)
+      resetStore()
+      router.goTo(ROUTES.rewarding.star)
     }
-  }, [stage, quiz, router.goTo, secondsCounter.get, setCookie, starId])
+
+    setQuiz(null)
+    goToRewardingPage()
+  }, [
+    stage,
+    quiz,
+    router.goTo,
+    secondsCounter.get,
+    resetStore,
+    setCookie,
+    setQuiz,
+    starId,
+  ])
 
   return {
     scrollRef,

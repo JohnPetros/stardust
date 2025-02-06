@@ -205,7 +205,6 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
 
     async updateUser(user: User) {
       const supabaseUser = supabaseUserMapper.toSupabase(user)
-      console.log('supabaseUser', supabaseUser)
       const { error } = await supabase
         .from('users')
         // @ts-ignore

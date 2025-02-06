@@ -3,7 +3,7 @@
 import { motion, type Variants } from 'framer-motion'
 import type { ReactNode } from 'react'
 
-const weekDayAnimations: Variants = {
+const variants: Variants = {
   up: {
     opacity: 0,
     y: -12,
@@ -12,7 +12,7 @@ const weekDayAnimations: Variants = {
     opacity: 1,
     y: 0,
     transition: (index: number) => ({
-      delay: index * 0.4,
+      delay: 0.5 * index,
     }),
   },
 }
@@ -25,7 +25,7 @@ type AnimatedWeekdayProps = {
 export function AnimatedWeekday({ index, children }: AnimatedWeekdayProps) {
   return (
     <motion.div
-      variants={weekDayAnimations}
+      variants={variants}
       initial='up'
       animate='down'
       custom={index}

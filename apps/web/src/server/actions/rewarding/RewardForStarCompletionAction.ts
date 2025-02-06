@@ -52,7 +52,7 @@ export const RewardForStarCompletionAction = (
         newCoins,
         newXp,
       })
-      console.log({ newWeekStatus })
+      console.log({ newLevel })
       console.log(newXp, newCoins, accuracyPercentage, newStreak)
 
       return {

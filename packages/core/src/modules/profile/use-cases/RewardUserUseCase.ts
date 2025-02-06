@@ -24,6 +24,8 @@ export class RewardUserUseCase implements IUseCase<Request, Response> {
     const respose = await this.profileService.updateUser(user)
     if (respose.isFailure) respose.throwError()
 
+    console.log('did level up', user.level.didUp.isTrue)
+
     return {
       newLevel: user.level.didUp.isTrue ? user.level.value : null,
       newStreak: streakStatus?.newStreak?.value ?? null,

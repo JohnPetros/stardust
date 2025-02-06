@@ -13,7 +13,7 @@ export class Backup<State> {
   }
 
   get lastState() {
-    if (this.isEmpty) {
+    if (this.isEmpty.isTrue) {
       throw new AppError('Backup is empty', 'Backup error')
     }
 

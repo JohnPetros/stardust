@@ -22,6 +22,7 @@ import { DragAndDropListQuestion } from './DragAndDropListQuestion'
 import { OpenQuestion } from './OpenQuestion'
 import { useQuizStage } from './useQuizStage'
 import { CheckboxQuestion } from './CheckboxQuestion'
+import { Loading } from '@/ui/global/widgets/components/Loading'
 
 type QuizProps = {
   leaveLesson: () => void
@@ -30,11 +31,9 @@ type QuizProps = {
 export function QuizStage({ leaveLesson }: QuizProps) {
   const alertDialogRef = useRef<AlertDialogRef>(null)
   const { quiz, handleVerificationButtonClick } = useQuizStage(alertDialogRef)
-
-  if (!quiz) return null
+  if (!quiz) return
 
   const question = quiz.currentQuestion
-  console.log('question', question)
 
   if (question)
     return (

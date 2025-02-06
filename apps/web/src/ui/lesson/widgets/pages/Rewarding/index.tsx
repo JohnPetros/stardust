@@ -1,8 +1,12 @@
 'use client'
 
+import { useRef } from 'react'
+
 import { Datetime } from '@stardust/core/libs'
 import type { WeekStatusValue } from '@stardust/core/profile/types'
+import { WeekStatus } from '@stardust/core/profile/structs'
 
+import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { Animation } from '@/ui/global/widgets/components/Animation'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
@@ -13,7 +17,6 @@ import { AnimatedApolloMessage } from './AnimatedApolloMessage'
 import { AnimatedEndMessage } from './AnimatedEndMessage'
 import { AnimatedButton } from './AnimatedButton'
 import { useRewardingPage } from './useRewardingPage'
-import { WeekStatus } from '@stardust/core/profile/structs'
 
 export type RewardingPageProps = {
   newCoins: number
@@ -36,15 +39,16 @@ export function RewardingPage({
   accuracyPercentage,
   nextRoute,
 }: RewardingPageProps) {
+  const newLevelAlertDialogRef = useRef<AlertDialogRef>(null)
   const {
     isEndMessageVisible,
     isFirstClick,
     isLoading,
     isStreakVisible,
-    alertDialogRef,
     handleFirstButtonClick,
     handleSecondButtonClick,
-  } = useRewardingPage(newLevel, newStreak, nextRoute)
+    handleNewLevelAlertDialogOpenChange,
+  } = useRewardingPage({ newLevel, newStreak, nextRoute, newLevelAlertDialogRef })
 
   return (
     <div className='mx-auto flex h-screen w-full max-w-lg flex-col items-center justify-center px-6'>
@@ -129,7 +133,7 @@ export function RewardingPage({
       </AnimatedButton>
 
       <AlertDialog
-        ref={alertDialogRef}
+        ref={newLevelAlertDialogRef}
         type='earning'
         title={'Parabéns! Você alcançou um novo nível!'}
         body={
@@ -145,6 +149,7 @@ export function RewardingPage({
           </div>
         }
         action={<Button>Show!</Button>}
+        onOpenChange={handleNewLevelAlertDialogOpenChange}
       />
     </div>
   )

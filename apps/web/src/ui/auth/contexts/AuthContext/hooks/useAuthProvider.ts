@@ -39,6 +39,7 @@ export function useAuthProvider(serverSession: Session | null) {
     data: userDto,
     isLoading,
     updateCache,
+    refetch,
   } = useCache({
     key: CACHE.keys.authUser,
     fetcher: fetchUser,
@@ -116,6 +117,7 @@ export function useAuthProvider(serverSession: Session | null) {
     handleSignIn,
     handleSignOut,
     updateUser,
+    refetchUser: refetch,
     updateUserCache,
     notifyUserChanges,
   }

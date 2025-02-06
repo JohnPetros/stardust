@@ -52,14 +52,14 @@ export function useAchivementsProvider(
   function handleNewUnlockedAchievementsAlertDialogClose(isOpen: boolean) {
     if (!isOpen) {
       newUnlockedAchievementsAlertDialogRef.current?.close()
-      setNewUnlockedAchievements([])
     }
   }
 
   async function observeNewUnlockedAchievements() {
     const { updatedUserDto, newUnlockedAchievementsDto } = await observe()
 
-    if (!updatedUserDto || !newUnlockedAchievementsDto) return
+    console.log(newUnlockedAchievementsDto)
+    if (!updatedUserDto || !newUnlockedAchievementsDto?.length) return
 
     setNewUnlockedAchievements(newUnlockedAchievementsDto.map(Achievement.create))
     newUnlockedAchievementsAlertDialogRef.current?.open()
@@ -68,12 +68,6 @@ export function useAchivementsProvider(
 
   // @ts-ignore
   useEventListener(DOM_EVENTS.userChange, observeNewUnlockedAchievements)
-
-  useEffect(() => {
-    setTimeout(() => {
-      notifyUserChanges()
-    }, 100)
-  }, [notifyUserChanges])
 
   return {
     newUnlockedAchievements,

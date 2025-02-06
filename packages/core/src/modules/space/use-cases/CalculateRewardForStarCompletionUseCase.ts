@@ -20,8 +20,8 @@ type Response = Promise<{
 export class CalculateRewardForStarCompletionUseCase
   implements IUseCase<Request, Response>
 {
-  static readonly COINS_INCREASE_BASE = 2
-  static readonly XP_INCREASE_BASE = 4
+  static readonly COINS_INCREASE_BASE = 4
+  static readonly XP_INCREASE_BASE = 6
 
   constructor(private readonly spaceService: ISpaceService) {}
 

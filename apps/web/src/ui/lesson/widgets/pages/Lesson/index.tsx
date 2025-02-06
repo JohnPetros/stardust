@@ -4,6 +4,7 @@ import type { QuestionDto } from '@stardust/core/lesson/dtos'
 import type { TextBlockDto } from '@stardust/core/global/dtos'
 
 import { PageTransitionAnimation } from '@/ui/global/widgets/components/PageTransitionAnimation'
+import { Loading } from '@/ui/global/widgets/components/Loading'
 import { useLessonPage } from './useLessonPage'
 import { LessonHeader } from './LessonHeader'
 import { StoryStage } from './StoryStage'
@@ -42,6 +43,7 @@ export function LessonPage({
         <main>
           {stage === 'story' && <StoryStage title={starName} number={starNumber} />}
           {stage === 'quiz' && <QuizStage leaveLesson={handleLeavePage} />}
+          {stage === 'rewarding' && <Loading isSmall={false} />}
         </main>
       </div>
     </>
