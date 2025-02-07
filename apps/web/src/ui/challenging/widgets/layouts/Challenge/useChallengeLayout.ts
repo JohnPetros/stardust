@@ -15,7 +15,7 @@ export function useChallengeLayout(
   const { challenge } = getChallengeSlice()
   const { setCookie } = useCookieActions()
   const [isTransitionPageVisible, setIsTransitionPageVisible] = useState(true)
-  const isChallengeCompleted = challenge?.isCompleted.isTrue ?? false
+  const isChallengeCompleted = challenge?.isCompleted.isFalse ?? false
   useSecondsCounter(isChallengeCompleted)
 
   async function handlePanelDragging() {

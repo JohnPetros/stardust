@@ -32,8 +32,8 @@ export function useChallengeResultSlot() {
   const { goTo, currentRoute } = useRouter()
 
   function leavePage(route: string) {
-    // secondsCounterStorage.remove()
-    // goTo(route)
+    secondsCounterStorage.remove()
+    goTo(route)
   }
 
   async function showRewards() {
@@ -68,7 +68,7 @@ export function useChallengeResultSlot() {
       key: COOKIES.keys.rewardingPayload,
       value: JSON.stringify(rewardsPayload),
     })
-    // leavePage(ROUTES.rewarding.challenge)
+    leavePage(ROUTES.rewarding.challenge)
     return
   }
 
@@ -108,13 +108,13 @@ export function useChallengeResultSlot() {
     if (
       currentRoute.endsWith('/result') &&
       userAnswer.isVerified.isFalse &&
-      user?.hasCompletedChallenge(challenge.id).isTrue &&
+      challenge.isCompleted.isTrue &&
       challenge.hasAnswer.isTrue &&
       !isLeavingPage
     ) {
       setUserAnswer(userAnswer.makeCorrect().makeVerified())
     }
-  }, [user, challenge, userAnswer, isLeavingPage, currentRoute])
+  }, [challenge, userAnswer, isLeavingPage, currentRoute])
 
   return {
     challenge,
