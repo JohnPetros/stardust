@@ -4,11 +4,12 @@ import { useCallback, useRef } from 'react'
 import type { Monaco } from '@monaco-editor/react'
 import type monaco from 'monaco-editor'
 
+import { Backup } from '@stardust/core/global/structs'
+
 import { COLORS } from '@/constants'
 import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
 import { CODE_EDITOR_THEMES } from './code-editor-themes'
 import type { CodeEditorTheme, CursorPosition } from './types'
-import { Backup } from '@stardust/core/global/structs'
 
 export function useCodeEditor(
   initialValue: string,
@@ -95,14 +96,17 @@ export function useCodeEditor(
   ) {
     monacoEditorRef.current = editor
 
-    monaco.languages.register({ id: codeRunner.id })
+    const monacoTokensProvider = codeRunner.getMonacoTokensProvider()
+    const monacoLanguageConfiguration = codeRunner.getMonacoLanguageConfiguration()
 
-    const monacoEditorConfig = codeRunner.getMonacoEditorConfig()
-
-    monaco.languages.setMonarchTokensProvider(codeRunner.id, monacoEditorConfig)
+    monaco.languages.register({ id: codeRunner.language })
+    monaco.languages.setMonarchTokensProvider(codeRunner.language, monacoTokensProvider)
+    monaco.languages.setLanguageConfiguration(
+      codeRunner.language,
+      monacoLanguageConfiguration,
+    )
 
     const rules = getEditorRules()
-
     monaco.editor.defineTheme('dark-space', {
       base: 'vs-dark',
       inherit: true,
@@ -116,6 +120,7 @@ export function useCodeEditor(
   }
 
   return {
+    language: codeRunner.language,
     getValue,
     setValue,
     reloadValue,

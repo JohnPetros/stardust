@@ -15,7 +15,7 @@ import type { CodeInput } from '@stardust/core/global/types'
 import { DELEGUA_REGEX } from './constants'
 import { formateValor, obtenhaTipo, trateErro } from './utils'
 
-export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
+export const ExecutorDeCodigoDelegua = (): ICodeRunnerProvider => {
   const lexador = new Lexador()
   const avaliadorSintatico = new AvaliadorSintatico()
 
@@ -26,8 +26,6 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
       function funcaoDeSaida(saida: string) {
         outputs.push(formateValor(saida))
       }
-
-      console.log(code)
 
       const interpretador = new InterpretadorBase('', false, funcaoDeSaida, funcaoDeSaida)
       const resultadoLexador = lexador.mapear(code.split('\n'), -1)
@@ -46,7 +44,10 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
       let result = ''
       if (resultado.length) {
         const resultadoValor = resultado.at(-1)
-        if (resultadoValor !== undefined) result = formateValor(String(resultadoValor))
+        if (resultadoValor !== undefined) {
+          if (resultadoValor === '{"valor":null}') result = 'nulo'
+          else result = formateValor(String(resultadoValor))
+        }
       }
 
       return new CodeRunnerResponse({ result, outputs })

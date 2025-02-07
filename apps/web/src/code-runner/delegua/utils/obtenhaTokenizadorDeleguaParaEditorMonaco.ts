@@ -1,6 +1,6 @@
 import type monaco from 'monaco-editor'
 
-export function obtenhaConfiguracaoDeleguaParaEditorMonaco(): monaco.languages.IMonarchLanguage {
+export function obtenhaTokenizadorDeleguaParaEditorMonaco(): monaco.languages.IMonarchLanguage {
   return {
     defaultToken: 'invalid',
     tokenPostfix: '.delegua',

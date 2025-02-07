@@ -15,7 +15,7 @@ import { useQueryArrayParam } from '@/ui/global/hooks/useQueryArrayParam'
 import { useFetchChallengesListAction } from './useFetchChallengesListAction'
 import { useSleep } from '@/ui/global/hooks/useSleep'
 
-const CHALLENGES_PER_PAGE = 15
+const CHALLENGES_PER_PAGE = 20
 
 export function useChallengesList() {
   const { fetchList } = useFetchChallengesListAction()

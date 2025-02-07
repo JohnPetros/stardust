@@ -1,14 +1,14 @@
+import { ExecutorDeCodigoDelegua } from '@/code-runner/delegua/ExecutorDeCodigoDelegua'
 import {
-  DeleguaCodeRunnerProvider,
-  obtenhaConfiguracaoDeleguaParaEditorMonaco,
-} from '@/code-runner'
+  obtenhaConfiguracaoDeLinguagemDeleguaParaEditorMonaco,
+  obtenhaTokenizadorDeleguaParaEditorMonaco,
+} from '@/code-runner/delegua/utils'
 
 export function useCodeRunner() {
   return {
-    id: 'delegua',
-    getMonacoEditorConfig() {
-      return obtenhaConfiguracaoDeleguaParaEditorMonaco()
-    },
-    provider: DeleguaCodeRunnerProvider(),
+    language: 'delegua',
+    getMonacoTokensProvider: obtenhaTokenizadorDeleguaParaEditorMonaco,
+    getMonacoLanguageConfiguration: obtenhaConfiguracaoDeLinguagemDeleguaParaEditorMonaco,
+    provider: ExecutorDeCodigoDelegua(),
   }
 }
