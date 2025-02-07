@@ -54,7 +54,7 @@ export const RewardForChallengeCompletionAction = (
         newWeekStatus,
         accuracyPercentage,
         secondsCount,
-        nextRoute: ROUTES.space,
+        nextRoute: ROUTES.challenging.challenges.list,
       }
     },
   }
