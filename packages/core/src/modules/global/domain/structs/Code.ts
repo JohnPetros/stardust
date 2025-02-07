@@ -37,7 +37,7 @@ export class Code {
   }
 
   translateToCodeRunner(jsCodeValue: unknown) {
-    return this.codeRunner.translateToCodeRunner(JSON.stringify(jsCodeValue))
+    return this.codeRunner.translateToCodeRunner(jsCodeValue)
   }
 
   get inputsCount() {

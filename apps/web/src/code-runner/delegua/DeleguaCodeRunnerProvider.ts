@@ -123,7 +123,7 @@ export const DeleguaCodeRunnerProvider = (): ICodeRunnerProvider => {
       const resultadoSintatico = avaliadorSintatico.analisar(resultadoLexico, -1)
       const tradutor = new TradutorReversoJavaScript()
       const traducao = tradutor.traduzir(resultadoSintatico.declaracoes)
-      return traducao.trim().replaceAll('\\"', '')
+      return traducao.trim().replace(' \n', '').replaceAll('\\"', '')
     },
 
     translateToJs(codeRunnerCode: string) {

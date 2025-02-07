@@ -39,6 +39,7 @@ export type ChallengeProps = {
   userOutputs: List<unknown>
   userVote: ChallengeVote
   incorrectAnswersCount: Integer
+  isCompleted: Logical
   isPublic: Logical
   author: {
     id: string
@@ -66,8 +67,6 @@ export class Challenge extends Entity<ChallengeProps> {
 
   private verifyResult(result: unknown, testCase: TestCase, code: Code) {
     const translatedExpectedOutput = code.translateToCodeRunner(testCase.expectedOutput)
-    console.log('result', result)
-    console.log('translatedExpectedOutput', translatedExpectedOutput)
     const isCorrect = result === translatedExpectedOutput
 
     if (!isCorrect)
@@ -145,6 +144,10 @@ export class Challenge extends Entity<ChallengeProps> {
       if (vote === 'downvote') this.downvote()
     }
     this.userVote = vote
+  }
+
+  makeCompleted() {
+    this.props.isCompleted = this.props.isCompleted.makeTrue()
   }
 
   get maximumIncorrectAnswersCount() {
@@ -251,6 +254,10 @@ export class Challenge extends Entity<ChallengeProps> {
 
   get starId() {
     return this.props.starId
+  }
+
+  get isCompleted() {
+    return this.props.isCompleted
   }
 
   get postedAt() {

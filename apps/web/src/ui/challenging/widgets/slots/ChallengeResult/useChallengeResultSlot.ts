@@ -24,11 +24,11 @@ export function useChallengeResultSlot() {
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
   const { tabHandler } = getTabHandlerSlice()
   const { setCookie } = useCookieActions()
-  const [isSavingCookie, setIsSavingCookie] = useState(false)
+  const [isLeavingPage, setIsLeavingPage] = useState(false)
   const [userAnswer, setUserAnswer] = useState<UserAnswer>(UserAnswer.create())
   const secondsCounterStorage = useLocalStorage(STORAGE.keys.secondsCounter)
   const { md: isMobile } = useBreakpoint()
-  const { user, updateUserCache } = useAuthContext()
+  const { user } = useAuthContext()
   const { goTo, currentRoute } = useRouter()
 
   function leavePage(route: string) {
@@ -38,7 +38,7 @@ export function useChallengeResultSlot() {
 
   async function showRewards() {
     if (!challenge || !user) return
-    setIsSavingCookie(true)
+    setIsLeavingPage(true)
 
     const currentSeconds = Number(secondsCounterStorage.get())
 
@@ -75,11 +75,11 @@ export function useChallengeResultSlot() {
   function handleUserAnswer() {
     if (!challenge || !user) return
 
-    const isUserChallengeAuthor = challenge.authorId === user?.id
-    const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
-
-    if (isChallengeCompleted.isTrue) {
-      if (user.hasCompletedChallenge(challenge.id).isTrue || isUserChallengeAuthor)
+    if (challenge.isCompleted.isTrue) {
+      if (
+        user.hasCompletedChallenge(challenge.id).isTrue ||
+        challenge.authorId === user?.id
+      )
         leavePage(ROUTES.challenging.challenges.list)
       else showRewards()
       return
@@ -88,8 +88,8 @@ export function useChallengeResultSlot() {
     const newUserAnswer = challenge.verifyUserAnswer(userAnswer)
 
     if (newUserAnswer.isCorrect.isTrue) {
-      user.completeChallenge(challenge)
-      updateUserCache(user.dto)
+      challenge.makeCompleted()
+      setChallenge(challenge)
       setCraftsVislibility(craftsVislibility.showAll())
     }
 
@@ -106,19 +106,19 @@ export function useChallengeResultSlot() {
     if (
       currentRoute.endsWith('/result') &&
       userAnswer.isVerified.isFalse &&
-      user?.hasCompletedChallenge(challenge.id) &&
+      user?.hasCompletedChallenge(challenge.id).isTrue &&
       challenge.hasAnswer.isTrue &&
-      !isSavingCookie
+      !isLeavingPage
     ) {
       setUserAnswer(userAnswer.makeCorrect().makeVerified())
     }
-  }, [challenge, userAnswer, isSavingCookie, currentRoute])
+  }, [user, challenge, userAnswer, isLeavingPage, currentRoute])
 
   return {
     challenge,
     results,
     userAnswer,
-    isSavingCookie,
+    isLeavingPage,
     handleUserAnswer,
   }
 }
