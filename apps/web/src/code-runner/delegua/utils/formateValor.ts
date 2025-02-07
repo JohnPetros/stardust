@@ -1,6 +1,10 @@
 const NUMBER_REGEX = /^-?\d+(\.\d+)?$/
 
 export function formateValor(valor: string) {
+  if (Array.isArray(valor)) {
+    return JSON.stringify(valor).replaceAll(',', ', ')
+  }
+
   const ehTipoLogico = ['verdadeiro', 'falso', 'nulo'].includes(valor)
 
   if (ehTipoLogico) {

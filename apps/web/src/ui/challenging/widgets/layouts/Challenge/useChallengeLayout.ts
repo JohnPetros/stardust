@@ -1,11 +1,8 @@
 import { useEffect, useState, type RefObject } from 'react'
 import type { ImperativePanelHandle } from 'react-resizable-panels'
 
-import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
-
 import { COOKIES } from '@/constants'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useSecondsCounter } from '@/ui/global/hooks/useSecondsCounter'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 import type { PanelsOffset } from './types/PanelsOffset'
@@ -14,14 +11,11 @@ export function useChallengeLayout(
   tabsPanelRef: RefObject<ImperativePanelHandle>,
   codeEditorPanelRef: RefObject<ImperativePanelHandle>,
 ) {
-  const { getChallengeSlice, getCraftsVisibilitySlice, resetStore } = useChallengeStore()
-  const { setCraftsVislibility } = getCraftsVisibilitySlice()
+  const { getChallengeSlice } = useChallengeStore()
   const { challenge } = getChallengeSlice()
-  const { user } = useAuthContext()
   const { setCookie } = useCookieActions()
   const [isTransitionPageVisible, setIsTransitionPageVisible] = useState(true)
-  const isChallengeCompleted =
-    user?.hasCompletedChallenge(challenge?.id ?? '').isTrue ?? false
+  const isChallengeCompleted = challenge?.isCompleted.isTrue ?? false
   useSecondsCounter(isChallengeCompleted)
 
   async function handlePanelDragging() {
@@ -39,22 +33,9 @@ export function useChallengeLayout(
   }
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout | number = 0
-    timeout = setTimeout(() => setIsTransitionPageVisible(false), 5000)
-
-    return () => {
-      clearTimeout(timeout)
-    }
+    const timeout = setTimeout(() => setIsTransitionPageVisible(false), 5000)
+    return () => clearTimeout(timeout)
   }, [])
-
-  useEffect(() => {
-    setCraftsVislibility(
-      ChallengeCraftsVisibility.create({
-        canShowComments: isChallengeCompleted,
-        canShowSolutions: isChallengeCompleted,
-      }),
-    )
-  }, [isChallengeCompleted, setCraftsVislibility])
 
   return {
     isTransitionPageVisible,

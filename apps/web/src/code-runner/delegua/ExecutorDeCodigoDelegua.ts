@@ -46,7 +46,7 @@ export const ExecutorDeCodigoDelegua = (): ICodeRunnerProvider => {
         const resultadoValor = resultado.at(-1)
         if (resultadoValor !== undefined) {
           if (resultadoValor === '{"valor":null}') result = 'nulo'
-          else result = formateValor(String(resultadoValor))
+          else result = formateValor(resultadoValor)
         }
       }
 
@@ -115,8 +115,10 @@ export const ExecutorDeCodigoDelegua = (): ICodeRunnerProvider => {
     },
 
     translateToCodeRunner(jsCode: unknown) {
-      const codigo =
-        obtenhaTipo(jsCode) === 'texto' ? JSON.stringify(jsCode) : String(jsCode)
+      const tipo = obtenhaTipo(jsCode)
+      const codigo = ['texto', 'lista'].includes(tipo)
+        ? JSON.stringify(jsCode)
+        : String(jsCode)
 
       const lexador = new LexadorJavaScript()
       const avaliadorSintatico = new AvaliadorSintaticoJavaScript()

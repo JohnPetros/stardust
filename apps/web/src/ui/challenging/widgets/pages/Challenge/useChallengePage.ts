@@ -31,7 +31,6 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
   const { user } = useAuthContext()
   const { currentRoute, goTo } = useRouter()
-  const secondsCounterStorage = useLocalStorage(STORAGE.keys.secondsCounter)
 
   function handleBackButton() {
     if (challenge)

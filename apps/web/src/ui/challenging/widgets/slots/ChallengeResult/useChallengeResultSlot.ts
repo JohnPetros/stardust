@@ -32,8 +32,8 @@ export function useChallengeResultSlot() {
   const { goTo, currentRoute } = useRouter()
 
   function leavePage(route: string) {
-    secondsCounterStorage.remove()
-    goTo(route)
+    // secondsCounterStorage.remove()
+    // goTo(route)
   }
 
   async function showRewards() {
@@ -68,11 +68,13 @@ export function useChallengeResultSlot() {
       key: COOKIES.keys.rewardingPayload,
       value: JSON.stringify(rewardsPayload),
     })
-    leavePage(ROUTES.rewarding.challenge)
+    // leavePage(ROUTES.rewarding.challenge)
     return
   }
 
   function handleUserAnswer() {
+    const currentSeconds = Number(secondsCounterStorage.get())
+    console.log({ currentSeconds })
     if (!challenge || !user) return
 
     if (challenge.isCompleted.isTrue) {

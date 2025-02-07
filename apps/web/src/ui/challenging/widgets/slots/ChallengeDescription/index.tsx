@@ -1,18 +1,15 @@
 'use client'
 
-import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { ChallengeInfo } from '@/ui/challenging/widgets/components/ChallengeInfo'
 import { DifficultyBadge } from '@/ui/global/widgets/components/DifficultyBadge'
 import { Loading } from '@/ui/global/widgets/components/Loading'
 import { Mdx } from '@/ui/global/widgets/components/Mdx'
-import { VoteControl } from './ChallengeVoteControl'
+import { ChallengeVoteControl } from './ChallengeVoteControl'
 import { ChallengeControl } from './ChallengeControl'
 import { useChallengeDescriptionSlot } from './useChallengeDescriptionSlot'
 import { ChallengeContentNav } from '../../components/ChallengeContentNav'
 
 export function ChallengeDescriptionSlot() {
-  const { getCraftsVisibilitySlice } = useChallengeStore()
-  const { craftsVislibility } = getCraftsVisibilitySlice()
   const { mdx, isUserChallengeAuthor, isCompleted, challenge, isLoading } =
     useChallengeDescriptionSlot()
 
@@ -32,7 +29,7 @@ export function ChallengeDescriptionSlot() {
           upvotes={challenge.upvotesCount.value}
           completionsCount={challenge.completionsCount.value}
         />
-        <VoteControl />
+        <ChallengeVoteControl />
         <ChallengeContentNav contents={['comments', 'solutions']} />
         {isUserChallengeAuthor && (
           <ChallengeControl isChallengePublic={challenge.isPublic.value} />
