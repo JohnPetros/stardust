@@ -64,10 +64,10 @@ export function useSolutionPage(
     setSolution(solution)
     setIsSuccess(true)
     goTo(
-      ROUTES.challenging.challenges.challengeSolutions.solution(
+      `${ROUTES.challenging.challenges.challengeSolutions.solution(
         challengeSlug,
         solution.slug.value,
-      ),
+      )}?isNew=true`,
     )
   }
 

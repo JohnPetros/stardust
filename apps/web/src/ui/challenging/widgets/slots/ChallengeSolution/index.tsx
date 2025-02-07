@@ -11,15 +11,18 @@ import { SolutionInfo } from '../../components/SolutionInfo'
 import { SolutionCommentsList } from './SolutionCommentsList'
 import { UpvoteSolutionButton } from './UpvoteSolutionButton'
 import { UserSolutionButtons } from './UserSolutionButtons'
+import { ConfettiAnimation } from '../../components/ConfettiAnimation'
 
 type ChallengeSolutionSlotProps = {
   challengeSlug: string
   solutionDto: SolutionDto
+  isSolutionNew: boolean
 }
 
 export async function ChallengeSolutionSlot({
   challengeSlug,
   solutionDto,
+  isSolutionNew,
 }: ChallengeSolutionSlotProps) {
   const solution = Solution.create(solutionDto)
   const upvotesCount = solution.upvotesCount.value
@@ -28,6 +31,8 @@ export async function ChallengeSolutionSlot({
 
   return (
     <div className='px-6 py-3'>
+      {isSolutionNew && <ConfettiAnimation />}
+
       <header>
         <Link
           href={ROUTES.challenging.challenges.challengeSolutions.list(challengeSlug)}

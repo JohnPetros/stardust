@@ -12,9 +12,9 @@ import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 
 import { ROUTES } from '@/constants'
 import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
 import { usePostChallengeAction } from './usePostChallengeAction'
 import { useEditChallengeAction } from './useEditChallengeAction'
-import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
 
 export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
   const challenge = challengeDto ? Challenge.create(challengeDto) : null
@@ -89,7 +89,7 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
 
   function handleActionSuccess(challengeSlug: string) {
     setisActionSuccess(true)
-    router.goTo(ROUTES.challenging.challenges.challenge(challengeSlug))
+    router.goTo(`${ROUTES.challenging.challenges.challenge(challengeSlug)}?isNew=true`)
   }
 
   useEffect(() => {

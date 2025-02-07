@@ -16,6 +16,7 @@ import type {
 import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
+import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 
 export function useChallengePage(challengeDto: ChallengeDto, userVote: ChallengeVote) {
   const {
@@ -31,6 +32,7 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
   const { user } = useAuthContext()
   const { currentRoute, goTo } = useRouter()
+  const [isNew] = useQueryStringParam('isNew', 'true')
 
   function handleBackButton() {
     if (challenge)
@@ -89,6 +91,8 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
   return {
     challenge,
     panelsLayout,
+    shouldHaveConfettiAnimation:
+      challenge && user && isNew && user?.hasCompletedChallenge(challenge.id).isTrue,
     handleBackButton,
     handlePanelsLayoutButton,
   }

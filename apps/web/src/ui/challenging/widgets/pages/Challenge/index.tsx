@@ -10,6 +10,7 @@ import { PopoverMenu } from '@/ui/global/widgets/components/PopoverMenu'
 import { useChallengePage } from './useChallengePage'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { Loading } from '@/ui/global/widgets/components/Loading'
+import { ConfettiAnimation } from '../../components/ConfettiAnimation'
 
 // http://localhost:3000/challenging/challenges/area-do-escudo-protetor/challenge/result
 
@@ -22,8 +23,13 @@ export function ChallengePage({
   challengeDto,
   userChallengeVote,
 }: ChallengePagePageProps) {
-  const { challenge, panelsLayout, handleBackButton, handlePanelsLayoutButton } =
-    useChallengePage(challengeDto, userChallengeVote)
+  const {
+    challenge,
+    panelsLayout,
+    shouldHaveConfettiAnimation,
+    handleBackButton,
+    handlePanelsLayoutButton,
+  } = useChallengePage(challengeDto, userChallengeVote)
 
   if (!challenge) {
     return <Loading isSmall={false} />
@@ -48,6 +54,7 @@ export function ChallengePage({
 
   return (
     <header className='flex h-12 flex-col justify-center md:border-b md:border-green-700'>
+      {shouldHaveConfettiAnimation && <ConfettiAnimation />}
       <div className='flex items-center justify-between px-6'>
         <div className='flex items-center gap-3'>
           <AlertDialog

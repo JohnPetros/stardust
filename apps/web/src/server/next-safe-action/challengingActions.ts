@@ -190,7 +190,6 @@ export const accessChallengeSolutionsSlot = authActionClient
 export const viewSolution = authActionClient
   .schema(
     z.object({
-      challengeSlug: z.string(),
       solutionSlug: z.string(),
     }),
   )

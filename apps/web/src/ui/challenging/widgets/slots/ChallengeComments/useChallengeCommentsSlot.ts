@@ -31,16 +31,15 @@ export function useChallengeCommentsSlot(challengeId: string) {
   }
 
   useEffect(() => {
-    // if (!challenge || !user) return
+    if (!challenge || !user) return
 
-    // const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
-
-    // if (isChallengeCompleted.isFalse) {
-    //   router.goTo(ROUTES.challenging.challenges.challenge(challenge.slug.value))
-    //   return
-    // }
+    const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
+    if (isChallengeCompleted.isFalse) {
+      router.goTo(ROUTES.challenging.challenges.challenge(challenge.slug.value))
+      return
+    }
     setIsVerifyingVisibility(false)
-  }, [user, router.goTo])
+  }, [challenge, user, router.goTo])
 
   return {
     isVerifyingVisibility,
