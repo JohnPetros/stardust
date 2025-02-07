@@ -43,10 +43,28 @@ export const ExecutorDeCodigoDelegua = (): ICodeRunnerProvider => {
 
       let result = ''
       if (resultado.length) {
-        const resultadoValor = resultado.at(-1)
-        if (resultadoValor !== undefined) {
-          if (resultadoValor === '{"valor":null}') result = 'nulo'
-          else result = formateValor(resultadoValor)
+        const resultadoComValor = resultado.find((resultado) =>
+          resultado.startsWith('{"valor":'),
+        )
+
+        let valor: unknown
+        if (resultadoComValor) {
+          const resultadoParseado = JSON.parse(resultadoComValor)
+
+          if ('valor' in resultadoParseado) {
+            const temValorInterno =
+              typeof resultadoParseado.valor === 'object' &&
+              'valor' in resultadoParseado.valor
+
+            if (temValorInterno) {
+              valor = resultadoParseado.valor.valor
+            } else {
+              valor = resultadoParseado.valor
+            }
+            result = this.translateToCodeRunner(valor)
+          }
+        } else {
+          result = String(resultado[0])
         }
       }
 

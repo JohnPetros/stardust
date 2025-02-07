@@ -1,22 +1,30 @@
 const NUMBER_REGEX = /^-?\d+(\.\d+)?$/
 
-export function formateValor(valor: string) {
+export function formateValor(valor: unknown) {
   if (Array.isArray(valor)) {
     return JSON.stringify(valor).replaceAll(',', ', ')
   }
 
-  const ehTipoLogico = ['verdadeiro', 'falso', 'nulo'].includes(valor)
+  const valorFormatado = String(valor)
 
-  if (ehTipoLogico) {
-    return valor
+  switch (typeof valor) {
+    case 'number':
+      return valorFormatado
+    case 'boolean':
+      if (valor === true) {
+        return 'verdadeiro'
+      }
+      if (valor === false) {
+        return 'falso'
+      }
+      return 'nulo'
   }
 
-  const ehTipoTexto =
-    !valor.startsWith('[') && !valor.endsWith('[') && !NUMBER_REGEX.test(valor)
+  const ehTipoLogicoDelegua = ['verdadeiro', 'falso', 'nulo'].includes(valorFormatado)
 
-  if (ehTipoTexto) {
-    return `"${valor}"`
+  if (ehTipoLogicoDelegua) {
+    return valorFormatado
   }
 
-  return valor
+  return `"${valorFormatado}"`
 }

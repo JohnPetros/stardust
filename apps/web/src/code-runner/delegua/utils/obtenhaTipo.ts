@@ -1,5 +1,3 @@
-import { Numeric } from '@stardust/core/global/structs'
-
 type Tipo = 'lista' | 'texto' | 'numero' | 'lógico'
 
 export function obtenhaTipo(valor: unknown): Tipo {
@@ -7,18 +5,14 @@ export function obtenhaTipo(valor: unknown): Tipo {
     return 'lista'
   }
 
-  const eUmLogico = valor === true || valor === false
-
-  if (eUmLogico) return 'lógico'
-
-  const eUmTexto =
-    typeof valor === 'string' && (valor.at(0) === '"' || valor.at(-1) === '"')
-
-  if (eUmTexto) return 'texto'
-
-  const eUmNumero = Numeric.isNumeric(valor)
-
-  if (eUmNumero) return 'numero'
+  switch (typeof valor) {
+    case 'string':
+      return 'texto'
+    case 'number':
+      return 'numero'
+    case 'boolean':
+      return 'lógico'
+  }
 
   return 'texto'
 }
