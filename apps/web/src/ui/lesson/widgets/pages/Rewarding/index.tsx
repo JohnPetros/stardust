@@ -91,7 +91,7 @@ export function RewardingPage({
                 />
 
                 <Benchmark
-                  title='Acertos'
+                  title='% de acertos'
                   amount={`${accuracyPercentage}%`}
                   color='red'
                   icon='percent.svg'

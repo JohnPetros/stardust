@@ -85,7 +85,6 @@ export class Challenge extends Entity<ChallengeProps> {
       if (response.isFailure) response.throwError()
 
       let result = code.hasFunction.isTrue ? response.result : response.outputs[0]
-      console.log('run result', result)
 
       if (code.hasFunction.isTrue) result = response.result
       else if (response.outputs[0]) result = response.outputs[0]

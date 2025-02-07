@@ -33,6 +33,7 @@ export function CodeEditorComponent(
 ) {
   const { state } = useEditorContext()
   const {
+    language,
     getValue,
     setValue,
     undoValue,
@@ -74,12 +75,14 @@ export function CodeEditorComponent(
     <MonacoEditor
       width={width}
       height={height}
-      language='delegua'
+      language={language}
       theme={theme}
       options={{
         minimap: {
           enabled: hasMinimap,
         },
+        autoClosingBrackets: 'always',
+        autoClosingQuotes: 'always',
         tabSize: state.tabSize,
         fontSize: state.fontSize - (isMobile ? 2 : 0),
         fontFamily: 'Menlo',
@@ -101,4 +104,4 @@ export function CodeEditorComponent(
   )
 }
 
-export const  CodeEditor = forwardRef(CodeEditorComponent)
+export const CodeEditor = forwardRef(CodeEditorComponent)
