@@ -2,18 +2,17 @@ import { useCallback } from 'react'
 
 const IS_SERVER = typeof window === 'undefined'
 
-export function useLocalStorage<Value>(key: string) {
-  function deserialize(value: string) {
-    return JSON.parse(value) as Value
-  }
+export function useLocalStorage<Value = string>(key: string) {
+  const get = useCallback(() => {
+    function deserialize(value: string) {
+      return JSON.parse(value) as Value
+    }
 
-  function get() {
     if (IS_SERVER) return null
 
     const item = window.localStorage.getItem(key)
-
     return item && item !== undefined ? deserialize(item) : null
-  }
+  }, [key])
 
   const set = useCallback(
     (value: Value) => {
@@ -23,7 +22,7 @@ export function useLocalStorage<Value>(key: string) {
 
       window.localStorage.setItem(key, serialize(value))
     },
-    [key]
+    [key],
   )
 
   function has() {
