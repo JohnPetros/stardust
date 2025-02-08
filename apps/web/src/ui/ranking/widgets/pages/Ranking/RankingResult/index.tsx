@@ -154,7 +154,7 @@ export function RankingResult() {
                 <strong className='text-green-400 font-semibold'>
                   {user.rewardByLastWeekRankingPosition}
                 </strong>{' '}
-                de poeira estelar por esse feito!
+                de starcoins por esse feito!
               </p>
             </div>
           }

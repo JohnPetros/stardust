@@ -22,8 +22,8 @@ export function BlockedSolutionsAlertDialog({
         <div>
           <p className='text-center leading-8 text-gray-100'>
             Para ver as soluções de outros usuários para esse desafio você deve pagar{' '}
-            <span className='font-medium text-yellow-400'>10 de poeira estelar</span> em
-            troca. Você possui atualmente {user?.coins.value} de poeira estelar.{' '}
+            <span className='font-medium text-yellow-400'>10 de starcoins</span> em troca.
+            Você possui atualmente {user?.coins.value} de starcoins.{' '}
             {user?.canBuy(ChallengeCraftsVisibility.solutionsVisibilityPrice).isTrue &&
               `Contudo, você não será mais apto a ganhar recompensas ao terminar esse
             desafio.`}

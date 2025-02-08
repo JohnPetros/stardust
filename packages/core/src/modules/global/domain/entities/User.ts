@@ -170,11 +170,17 @@ export class User extends Entity<UserProps> {
   }
 
   selectRocket(rocket: Rocket): void {
-    this.props.rocket = rocket
+    this.props.rocket = {
+      id: rocket.id,
+      entity: rocket,
+    }
   }
 
   selectAvatar(avatar: Avatar): void {
-    this.props.avatar = avatar
+    this.props.avatar = {
+      id: avatar.id,
+      entity: avatar,
+    }
   }
 
   seeRankingResult() {

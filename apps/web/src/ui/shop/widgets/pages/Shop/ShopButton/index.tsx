@@ -79,7 +79,7 @@ export function ShopButton({
   return (
     <AlertDialog
       type='denying'
-      title='Parece que você não tem poeira estelar o suficiente'
+      title='Parece que você não tem StarCoins o suficiente'
       body={
         <p className='my-6 px-6 text-center text-sm font-medium text-gray-100'>
           Mas você pode adquirir mais completando estrelas ou resolvendo desafios.
