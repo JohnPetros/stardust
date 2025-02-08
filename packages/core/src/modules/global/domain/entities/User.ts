@@ -96,6 +96,7 @@ export class User extends Entity<UserProps> {
   earnXp(newXp: number) {
     this.props.level = this.level.up(this.xp.value, newXp)
     this.props.xp = this.props.xp.increment(newXp)
+    this.props.weeklyXp = this.props.weeklyXp.increment(newXp)
     this.notifyChanges()
   }
 
