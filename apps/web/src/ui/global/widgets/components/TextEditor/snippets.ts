@@ -2,6 +2,7 @@ export const SNIPPETS = {
   title: '# Escreva seu título',
   textBlock: '<Text>Insira seu texto aqui</Text>',
   strongTextBlock: '<Quote>Insira seu texto aqui</Quote>',
+  alertTextBlock: '<Alert>Insira seu texto em alerta aqui</Alert>',
   strong: '*Insira seu texto em destaque aqui*',
   codeLine: '`Escreva seu código aqui`',
   codeBlock: '<Code>Insira seu código executável aqui</Code>',

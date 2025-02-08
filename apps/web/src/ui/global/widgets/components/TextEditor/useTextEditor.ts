@@ -361,6 +361,9 @@ export function useTextEditor(onChange: (value: string) => void) {
       case 'strongTextBlock':
         insertSnippetComponent('</Quote>', SNIPPETS.strongTextBlock)
         break
+      case 'alertTextBlock':
+        insertSnippetComponent('</Alert>', SNIPPETS.alertTextBlock)
+        break
       case 'codeLine':
         insertCodeLineSnippet()
         break
