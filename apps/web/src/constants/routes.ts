@@ -73,6 +73,7 @@ export const ROUTES = {
     ranking: {
       current: '/api/ranking/current',
       uptade: '/api/ranking/update',
+      tiers: '/api/ranking/tiers',
     },
     challenging: {
       list: '/api/challenging/list',
