@@ -17,9 +17,7 @@ type TierProps = {
 
 export function Tier({ index, rankingId, rankingName, rankingImage }: TierProps) {
   const tierRef = useRef<HTMLDivElement | null>(null)
-
   const { isLocked, isFromCurrentTier } = useTier(tierRef, rankingId, index)
-
   const api = useApi()
   const imageSrc = api.fetchImage('rankings', rankingImage)
 

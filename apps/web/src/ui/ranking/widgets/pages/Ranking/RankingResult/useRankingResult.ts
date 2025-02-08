@@ -28,14 +28,17 @@ export function useRankingResult({
   const { getLastWeekRankingWinners } = useGetLastWeekRankingWinnersAction()
 
   async function handleWRankingResultButtonClick() {
-    if (!user) return
+    if (!user || !lastWeekTier) return
 
     if (user.isTopRankingWinner) {
       rewardAlertDialog.current?.open()
       return
     }
 
-    if (user.isRankingWinner) {
+    const userLastWeekVeteran =
+      user.tier.isLastTier.isTrue && lastWeekTier.isLastTier.isTrue
+
+    if (user.isRankingWinner.isTrue && !userLastWeekVeteran) {
       successAlertDialog.current?.open()
       return
     }
@@ -56,9 +59,8 @@ export function useRankingResult({
       rewardAlertDialog.current?.close()
 
       user.earnLastWeekRankingPositionReward()
-      user.seeRankingResult()
 
-      user.tier.hasNextTier
+      user.tier.hasNextTier.isTrue
         ? successAlertDialog.current?.open()
         : handleAlertDialogButtonClick('success')
       return
@@ -66,6 +68,7 @@ export function useRankingResult({
 
     successAlertDialog.current?.close()
     failAlertDialog.current?.close()
+    user.seeRankingResult()
     await updateUser(user)
   }
 
