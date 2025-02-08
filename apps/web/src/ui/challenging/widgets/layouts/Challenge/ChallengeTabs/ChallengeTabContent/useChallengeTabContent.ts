@@ -7,9 +7,11 @@ export function useChallengeTabContent(contentRef: RefObject<HTMLDivElement>) {
 
   useEffect(() => {
     if (currentRoute && contentRef.current)
-      contentRef.current.scrollTo({
-        top: 0,
-        behavior: 'instant',
-      })
+      setTimeout(() => {
+        contentRef.current?.scrollTo({
+          top: 0,
+          behavior: 'instant',
+        })
+      }, 500)
   }, [currentRoute, contentRef.current])
 }

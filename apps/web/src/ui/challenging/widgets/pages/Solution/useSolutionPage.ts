@@ -3,13 +3,12 @@ import { useEffect, useState } from 'react'
 import type { SolutionDto } from '@stardust/core/challenging/dtos'
 import { Solution } from '@stardust/core/challenging/entities'
 
-import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { usePostSolutionAction } from './usePostSolutionAction'
 import { useEditSolutionAction } from './useEditSolutionAction'
 import { useRouter } from '@/ui/global/hooks/useRouter'
-import { ROUTES } from '@/constants'
+import { ROUTES, STORAGE } from '@/constants'
+import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 
 type FieldErrors = {
   solutionTitle: string
@@ -24,24 +23,24 @@ export function useSolutionPage(
   const [solution, setSolution] = useState<Solution | null>(
     savedSolutionDto ? Solution.create(savedSolutionDto) : null,
   )
-  const { getSolutionContentSlice } = useChallengeStore()
-  const { solutionContent, setSolutionContent } = getSolutionContentSlice()
   const { user } = useAuthContext()
   const [isSuccess, setIsSuccess] = useState(false)
   const [solutionTitle, setSolutionTitle] = useState(solution?.title.value ?? '')
+  const [solutionContent, setSolutionContent] = useState(solution?.content.value ?? '')
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({
     solutionTitle: '',
     solutionContent: '',
   })
   const { goTo } = useRouter()
   const { isPosting, postSolution } = usePostSolutionAction({
-    onSuccess: handleActionSuccess,
+    onSuccess: (newSolution) => handleActionSuccess(newSolution, true),
     onError: handleActionError,
   })
   const { isEditing, editSolution } = useEditSolutionAction({
-    onSuccess: handleActionSuccess,
+    onSuccess: (solution) => handleActionSuccess(solution, false),
     onError: handleActionError,
   })
+  const localStorage = useLocalStorage(STORAGE.keys.challengeCode(challengeId))
 
   function handleTitleChange(title: string) {
     setFieldErrors({
@@ -60,14 +59,14 @@ export function useSolutionPage(
     setSolutionContent(content)
   }
 
-  function handleActionSuccess(solution: Solution) {
+  function handleActionSuccess(solution: Solution, isNew: boolean) {
     setSolution(solution)
     setIsSuccess(true)
     goTo(
-      `${ROUTES.challenging.challenges.challengeSolutions.solution(
+      ROUTES.challenging.challenges.challengeSolutions.solution(
         challengeSlug,
-        solution.slug.value,
-      )}?isNew=true`,
+        solution.slug.value.concat(isNew ? '?isNew=true' : ''),
+      ),
     )
   }
 
@@ -100,8 +99,16 @@ export function useSolutionPage(
   }
 
   useEffect(() => {
-    if (solution) setSolutionContent(solution.content.value)
-  }, [solution, setSolutionContent])
+    const storageSolutionContent = localStorage.get()
+    if (!solutionContent && storageSolutionContent)
+      setSolutionContent(`# Abordagem
+Descreva passo a passo como você chegou na sua solução.
+
+## Código
+<Code>
+${storageSolutionContent}    
+</Code>`)
+  }, [solutionContent, localStorage.get])
 
   return {
     solution,

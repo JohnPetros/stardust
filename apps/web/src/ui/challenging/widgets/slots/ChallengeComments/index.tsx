@@ -11,12 +11,8 @@ type ChallengeCommentsSlotProps = {
 }
 
 export function ChallengeCommentsSlot({ challengeId }: ChallengeCommentsSlotProps) {
-  const { isVerifyingVisibility, handleCommentListFetch, handleCommentSave } =
+  const { handleCommentListFetch, handleCommentSave } =
     useChallengeCommentsSlot(challengeId)
-
-  if (isVerifyingVisibility) {
-    return <Loading isSmall={false} />
-  }
 
   return (
     <BlockedContentAlertDialog content='comments'>

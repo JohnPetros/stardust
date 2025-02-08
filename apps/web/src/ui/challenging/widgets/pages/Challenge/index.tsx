@@ -54,7 +54,7 @@ export function ChallengePage({
 
   return (
     <header className='flex h-12 flex-col justify-center md:border-b md:border-green-700'>
-      {shouldHaveConfettiAnimation && <ConfettiAnimation />}
+      {shouldHaveConfettiAnimation && <ConfettiAnimation delay={3} />}
       <div className='flex items-center justify-between px-6'>
         <div className='flex items-center gap-3'>
           <AlertDialog

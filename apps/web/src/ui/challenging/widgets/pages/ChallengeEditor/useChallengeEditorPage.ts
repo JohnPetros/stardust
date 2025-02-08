@@ -63,10 +63,10 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
   const [isActionSuccess, setisActionSuccess] = useState(false)
   const [isActionFailure, setIsActionFailure] = useState(false)
   const { isPosting, isPostFailure, postChallenge } = usePostChallengeAction({
-    onSuccess: handleActionSuccess,
+    onSuccess: (newSolution) => handleActionSuccess(newSolution, true),
   })
   const { isEditing, isEditFailure, editChallenge } = useEditChallengeAction({
-    onSuccess: handleActionSuccess,
+    onSuccess: (newSolution) => handleActionSuccess(newSolution, true),
   })
 
   const allFields = form.watch()
@@ -87,9 +87,12 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
     await postChallenge(formData)
   }
 
-  function handleActionSuccess(challengeSlug: string) {
+  function handleActionSuccess(challengeSlug: string, isNew: boolean) {
     setisActionSuccess(true)
-    router.goTo(`${ROUTES.challenging.challenges.challenge(challengeSlug)}?isNew=true`)
+    const route = ROUTES.challenging.challenges
+      .challenge(challengeSlug)
+      .concat(isNew ? '?isNew=true' : '')
+    router.goTo(route)
   }
 
   useEffect(() => {

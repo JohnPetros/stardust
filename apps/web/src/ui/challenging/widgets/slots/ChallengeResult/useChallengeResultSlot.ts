@@ -17,9 +17,13 @@ import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 
 export function useChallengeResultSlot() {
-  const { getChallengeSlice, getCraftsVisibilitySlice, getTabHandlerSlice, getResults } =
-    useChallengeStore()
-  const { results } = getResults()
+  const {
+    getChallengeSlice,
+    getCraftsVisibilitySlice,
+    getTabHandlerSlice,
+    getResultsSlice,
+  } = useChallengeStore()
+  const { results } = getResultsSlice()
   const { challenge, setChallenge } = getChallengeSlice()
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
   const { tabHandler } = getTabHandlerSlice()
@@ -73,8 +77,6 @@ export function useChallengeResultSlot() {
   }
 
   function handleUserAnswer() {
-    const currentSeconds = Number(secondsCounterStorage.get())
-    console.log({ currentSeconds })
     if (!challenge || !user) return
 
     if (challenge.isCompleted.isTrue) {
