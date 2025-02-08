@@ -6,7 +6,7 @@ import { Code } from '@stardust/core/global/structs'
 import { InsufficientInputsError } from '@stardust/core/challenging/errors'
 import { CodeRunnerError } from '@stardust/core/global/errors'
 
-import { STORAGE } from '@/constants'
+import { ROUTES, STORAGE } from '@/constants'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
@@ -14,6 +14,7 @@ import type { ConsoleRef } from '@/ui/global/widgets/components/Console/types'
 import type { CodeEditorRef } from '@/ui/global/widgets/components/CodeEditor/types'
 import { useAudioContext } from '@/ui/global/contexts/AudioContext'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
+import { useRouter } from '@/ui/global/hooks/useRouter'
 
 export function useChallengeCodeEditorSlot() {
   const { getChallengeSlice, getPanelsLayoutSlice, getResultsSlice } = useChallengeStore()
@@ -23,6 +24,7 @@ export function useChallengeCodeEditorSlot() {
   const { provider } = useCodeRunner()
   const { playAudio } = useAudioContext()
   const toast = useToastContext()
+  const router = useRouter()
   const userCode = useRef<Code>(Code.create(provider))
   const previousUserCode = useRef('')
   const editorContainerRef = useRef<HTMLDivElement>(null)
@@ -54,6 +56,7 @@ export function useChallengeCodeEditorSlot() {
     try {
       await challenge.runCode(userCode.current)
       setResults(challenge.results.items)
+      router.goTo(ROUTES.challenging.challenges.challengeResult(challenge.slug.value))
     } catch (error) {
       if (error instanceof CodeRunnerError) {
         handleCodeRunnerError(error.message, error.line)

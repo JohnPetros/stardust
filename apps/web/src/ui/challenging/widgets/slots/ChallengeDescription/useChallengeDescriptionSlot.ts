@@ -3,8 +3,6 @@
 import { useEffect, useState } from 'react'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useRouter } from '@/ui/global/hooks/useRouter'
-import { ROUTES } from '@/constants'
 import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
 
 export function useChallengeDescriptionSlot() {

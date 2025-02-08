@@ -63,11 +63,15 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
   }, [challenge, user, challengeDto, userVote, setChallenge, setCraftsVislibility])
 
   useEffect(() => {
-    setActiveContent('description')
     if (!challenge) return
 
     const activeContent = currentRoute.split('/').pop()
     if (!activeContent) return
+
+    if (activeContent === 'challenge') {
+      setActiveContent('description')
+      return
+    }
 
     if (activeContent !== challenge.slug.value)
       setActiveContent(activeContent as ChallengeContent)

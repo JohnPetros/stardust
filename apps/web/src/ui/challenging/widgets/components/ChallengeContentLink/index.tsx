@@ -21,9 +21,23 @@ export function ChallengeContentLink({
   isActive,
   isBlocked = false,
   title,
+  ...props
 }: TabButtonProps) {
   const { getChallengeSlice } = useChallengeStore()
   const { challenge } = getChallengeSlice()
+
+  if (isBlocked) {
+    return (
+      <button
+        {...props}
+        type='button'
+        className='flex items-center gap-2 rounded-md bg-gray-700 p-2 text-gray-500 text-sm'
+      >
+        {title}
+        <Icon name='lock' size={16} className='text-gray-500' />
+      </button>
+    )
+  }
 
   return (
     <Link
@@ -32,21 +46,10 @@ export function ChallengeContentLink({
       }`}
       className={twMerge(
         'rounded-md bg-gray-700 p-2 text-sm',
-        isActive
-          ? 'p-2 text-green-500'
-          : isBlocked
-            ? 'pointer-events-none flex items-center gap-2 text-gray-500 opacity-50'
-            : 'text-gray-100',
+        isActive ? 'p-2 text-green-500' : 'text-gray-100',
       )}
     >
-      {isBlocked ? (
-        <span className='flex items-center gap-2'>
-          {title}
-          <Icon name='lock' size={16} className='text-gray-500' />
-        </span>
-      ) : (
-        title
-      )}
+      {title}
     </Link>
   )
 }

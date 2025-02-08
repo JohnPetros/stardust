@@ -15,10 +15,7 @@ import type { Author } from '#global/entities'
 import type { ChallengeDifficulty, TestCase } from '#challenging/structs'
 import type { ChallengeDto } from '#challenging/dtos'
 import type { ChallengeCategory } from './ChallengeCategory'
-import {
-  ChallengeWithoutTestCaseError,
-  InsufficientInputsError,
-} from '#challenging/errors'
+import { ChallengeWithoutTestCaseError } from '#challenging/errors'
 import { ChallengeFactory } from '#challenging/factories'
 import type { ChallengeVote } from '#challenging/types'
 
@@ -95,6 +92,7 @@ export class Challenge extends Entity<ChallengeProps> {
       this.props.results = this.results.add(
         this.verifyResult(result, testCase, formattedCode),
       )
+      console.log(this.props.results)
       this.props.userOutputs = this.userOutputs.add(result)
     }
   }
