@@ -5,7 +5,7 @@ import type { ReactNode } from 'react'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { PageTransitionAnimation } from '@/ui/global/widgets/components/PageTransitionAnimation'
 import { AnimatedContainer } from './AnimatedContainer'
-import { Header } from './Header'
+import { HomeHeader } from './HomeHeader'
 import { useHomeLayout } from './useHomeLayout'
 import { Sidebar } from './Sidebar'
 import { Sidenav } from './Sidenav'
@@ -32,7 +32,7 @@ export function HomeLayout({ children }: HomeLayoutProps) {
 
   return (
     <>
-      <Header />
+      <HomeHeader />
       <Sidenav isExpanded={isSidenavExpanded} toggleSidenav={toggleSidenav} />
       <PageTransitionAnimation isVisible={isTransitionVisible} />
       <StreakBreakDialog />

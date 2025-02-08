@@ -1,18 +1,22 @@
 'use client'
 
 import Image from 'next/image'
+import { useRef } from 'react'
+import { twMerge } from 'tailwind-merge'
 
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useSiderbarContext } from '@/ui/profile/contexts/SidebarContext'
 import { CountBadge } from '@/ui/global/widgets/components/CountBadge'
 import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'
 import { Animation } from '@/ui/global/widgets/components/Animation'
-import { AnimatedContainer } from './AnimatedContainer'
 import { Icon } from '@/ui/global/widgets/components/Icon'
+import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
+import { AnimatedContainer } from './AnimatedContainer'
+import { useHomeHeader } from './useHomeHeader'
 
-export function Header() {
-  const { user } = useAuthContext()
+export function HomeHeader() {
+  const streakAnimationRef = useRef<AnimationRef>(null)
   const { isOpen, toggle } = useSiderbarContext()
+  const { user } = useHomeHeader(streakAnimationRef)
 
   if (user)
     return (
@@ -40,8 +44,13 @@ export function Header() {
           </div>
 
           <div className='flex items-center'>
-            <Animation name='streak' size={32} hasLoop={false} />
-            <span className='text-lg font-semibold text-green-500'>
+            <Animation ref={streakAnimationRef} name='streak' size={32} hasLoop={false} />
+            <span
+              className={twMerge(
+                'text-lg font-semibold ',
+                user.weekStatus.isTodayDone.isTrue ? 'text-green-500' : 'text-gray-300',
+              )}
+            >
               {user.streak.value}
             </span>
           </div>
