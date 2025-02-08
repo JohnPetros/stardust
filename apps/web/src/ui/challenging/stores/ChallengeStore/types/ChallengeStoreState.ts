@@ -6,7 +6,6 @@ import type { ChallengeContent } from './ChallengeContent'
 
 export type ChallengeStoreState = {
   challenge: Challenge | null
-  solutionContent: string
   activeContent: ChallengeContent
   craftsVislibility: ChallengeCraftsVisibility
   mdx: string

@@ -6,7 +6,6 @@ import type { ChallengeContent } from './ChallengeContent'
 
 export type ChallengeStoreActions = {
   setChallenge: (challenge: Challenge | null) => void
-  setSolutionContent: (solutionContent: string) => void
   setActiveContent: (challengeContent: ChallengeContent) => void
   setPanelsLayout: (panelsLayout: PanelsLayout) => void
   setCraftsVisibility: (craftsVislibility: ChallengeCraftsVisibility) => void
