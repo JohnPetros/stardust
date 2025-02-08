@@ -11,7 +11,7 @@ type CodeProps = {
 
 export function Code({
   children,
-  isRunnable = true,
+  isRunnable = false,
   exec = false,
   hasAnimation = true,
 }: CodeProps) {
