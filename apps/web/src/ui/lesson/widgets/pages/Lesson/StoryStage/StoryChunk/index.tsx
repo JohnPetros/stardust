@@ -15,7 +15,7 @@ function MemoizedStoryChunk({ value, hasAnimation }: StoryChunkProps) {
   const { storyChunkRef, animatedChunk } = useStoryChunk(value, hasAnimation)
 
   return (
-    <div ref={storyChunkRef}>
+    <div ref={storyChunkRef} className='w-full'>
       <Mdx>{animatedChunk}</Mdx>
     </div>
   )

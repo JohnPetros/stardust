@@ -7,8 +7,6 @@ export function useStoryStage() {
   const { getStageSlice, getStorySlice } = useLessonStore()
   const { setStage } = getStageSlice()
   const { story, setStory } = getStorySlice()
-  const { parseTextBlocksToMdx } = useMdx()
-  const [textBlocks, setTextBlocks] = useState<string[]>([])
 
   function handleContinueButtonClick() {
     if (!story) return
@@ -20,16 +18,8 @@ export function useStoryStage() {
     setStage('quiz')
   }
 
-  useEffect(() => {
-    if (story) {
-      const textBlocks = parseTextBlocksToMdx(story.textBlocks)
-      setTextBlocks(textBlocks)
-    }
-  }, [story, parseTextBlocksToMdx])
-
   return {
     story,
-    textBlocks,
     handleContinueButtonClick,
     handleQuizStageButtonClick,
   }
