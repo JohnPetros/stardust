@@ -12,7 +12,7 @@ const variants: Variants = {
     opacity: 1,
     y: 0,
     transition: (index: number) => ({
-      delay: 0.5 * index,
+      delay: 1 * index,
     }),
   },
 }

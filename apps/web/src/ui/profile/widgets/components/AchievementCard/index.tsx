@@ -39,7 +39,7 @@ export function AchievementCard({
 
   return (
     <AnimatedContainer>
-      <div className='relative grid h-12 w-12 place-content-center'>
+      <div className='relative grid h-12 w-10 place-content-center'>
         {isUnlocked ? (
           <Image
             src={iconImage}
