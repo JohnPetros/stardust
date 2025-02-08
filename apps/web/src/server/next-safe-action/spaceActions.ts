@@ -2,7 +2,7 @@
 
 import { z } from 'zod'
 
-import { SupabaseServerClient } from '@/api/supabase/clients'
+import { SupabaseServerActionClient } from '@/api/supabase/clients'
 import { SupabaseSpaceService } from '@/api/supabase/services'
 import { authActionClient } from './clients/authActionClient'
 import { NextActionServer } from '../next/NextActionServer'
@@ -19,8 +19,8 @@ export const accessStarPage = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const supabase = SupabaseServerClient()
-    const spaceService = SupabaseSpaceService(supabase)
-    const action = AccessStarPageAction(spaceService)
-    return action.handle(actionServer)
+    const supabase = SupabaseServerActionClient()
+    const service = SupabaseSpaceService(supabase)
+    const action = AccessStarPageAction(service)
+    return await action.handle(actionServer)
   })

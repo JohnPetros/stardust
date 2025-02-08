@@ -1,26 +1,10 @@
 import type { NextParams } from '@/server/next/types'
 import { LessonPage } from '@/ui/lesson/widgets/pages/Lesson'
 import { lessonActions, spaceActions } from '@/server/next-safe-action'
-import { questions } from '@/__tests__/mocks/lesson/planets/planet1/star1/questions'
+import { questions } from '@/__tests__/mocks/lesson/planets/planet2/star1/questions'
 
-const story = `<Code>
-programa preparar o foguete
-
-Inicio
-
-  Localizar um foguete disponivel
-  Verificar os niveis de combustivel
-  Verificar o suprimento a bordo
-  Verificar os niveis de oxigenio
-
-  Se necessario, obter recursos adicionais
-  Caso contrario, preparar a decolagem do foguete
-
-  Aguardar ate que o foguete entre em orbita
-  Aproveitar a jornada enquanto o foguete viaja pelo espaço
-
-Fim
-</Code>`
+const story = `<Code key={'1dc2b735-704a-43e7-aafc-dff164a2ed06'}  hasAnimation={false} isRunnable={true}>var seuNome = leia("Insira seu nome: ")
+escreva(seuNome)</Code>`
 
 export default async function Lesson({ params }: NextParams<{ starSlug: string }>) {
   const spaceResponse = await spaceActions.accessStarPage({ starSlug: params.starSlug })

@@ -1,8 +1,6 @@
 import type { IAction, IActionServer, ISpaceService } from '@stardust/core/interfaces'
 import type { StarDto } from '@stardust/core/space/dtos'
 import { User } from '@stardust/core/global/entities'
-
-import { ROUTES } from '@/constants'
 import { Star } from '@stardust/core/space/entities'
 
 type Request = {
@@ -21,13 +19,10 @@ export const AccessStarPageAction = (
 
       const starResponse = await service.fetchStarBySlug(starSlug)
       if (starResponse.isFailure) actionServer.notFound()
+
       const star = Star.create(starResponse.body)
-
-      const starIsUnlockedResponse = await service.verifyStarIsUnlocked(star.id, user.id)
-
-      if (starIsUnlockedResponse.isFailure || !starIsUnlockedResponse.body) {
-        actionServer.redirect(ROUTES.space)
-      }
+      const isStarUnlocked = user.hasUnlockedStar(star.id)
+      if (isStarUnlocked.isFalse) actionServer.notFound()
 
       return star.dto
     },
