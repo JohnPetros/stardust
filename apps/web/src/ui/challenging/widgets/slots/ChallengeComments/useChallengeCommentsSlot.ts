@@ -1,11 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import type { Comment } from '@stardust/core/forum/entities'
 import type { CommentsListParams } from '@stardust/core/forum/types'
 
-import { ROUTES } from '@/constants'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useApi } from '@/ui/global/hooks/useApi'
@@ -30,19 +29,7 @@ export function useChallengeCommentsSlot(challengeId: string) {
     if (response.isFailure) toast.show(response.errorMessage)
   }
 
-  useEffect(() => {
-    if (!challenge || !user) return
-
-    const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
-    if (isChallengeCompleted.isFalse) {
-      router.goTo(ROUTES.challenging.challenges.challenge(challenge.slug.value))
-      return
-    }
-    setIsVerifyingVisibility(false)
-  }, [challenge, user, router.goTo])
-
   return {
-    isVerifyingVisibility,
     handleCommentSave,
     handleCommentListFetch,
   }
