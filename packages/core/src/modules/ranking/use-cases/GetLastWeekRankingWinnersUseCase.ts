@@ -15,48 +15,37 @@ export class GetLastWeekRankingWinnersUseCase implements IUseCase<UserDto, Respo
 
   async do(userDto: UserDto) {
     const user = User.create(userDto)
-
-    const isUserLoser = await this.verifyRankingLoserState(user.id)
-    const lastWeekTier = await this.fetchLastWeekTier(user, isUserLoser)
+    const lastWeekTierPosition = await this.fetchLastWeekTierPosition(user)
+    const lastWeekTier = await this.fetchLastWeekTier(lastWeekTierPosition)
     const lastWeekRankingWinners = await this.fetchLastWeekRankingWinners(lastWeekTier.id)
+    const isUserLoser = user.tier.position.isLessThan(lastWeekTier.position)
 
     return {
-      isUserLoser,
+      isUserLoser: isUserLoser.isTrue,
       lastWeekTier: lastWeekTier.dto,
       lastWeekRankingWinners,
     }
   }
 
-  private async fetchLastWeekTier(user: User, isUserLoser: boolean) {
-    let lastWeekTierPosition = user.tier.position.value
-
-    if (isUserLoser && !user.tier.isFirstTier) {
-      lastWeekTierPosition += 1
-    }
-
-    if (user.isRankingWinner && !user.tier.isLastTier) {
-      lastWeekTierPosition -= 1
-    }
-
-    const response = await this.rankingsService.fetchTierByPosition(lastWeekTierPosition)
-
-    if (response.isSuccess) return Tier.create(response.body)
-
-    return user.tier
+  private async fetchLastWeekTier(tierPosition: number) {
+    const response = await this.rankingsService.fetchTierByPosition(tierPosition)
+    if (response.isFailure) response.throwError()
+    return Tier.create(response.body)
   }
 
   private async fetchLastWeekRankingWinners(lastWeekTierId: string) {
     const response = await this.rankingsService.fetchRankingWinnersByTier(lastWeekTierId)
-
     if (response.isSuccess) {
       return response.body
     }
-
     return []
   }
 
-  private async verifyRankingLoserState(userId: string) {
-    const response = await this.rankingsService.verifyRankingLoserState(userId)
-    return response.isSuccess
+  private async fetchLastWeekTierPosition(user: User) {
+    const response = await this.rankingsService.fetchLastWeekRankingUserTierPosition(
+      user.id,
+    )
+    if (response.isFailure) return user.tier.position.value
+    return response.body.position
   }
 }
