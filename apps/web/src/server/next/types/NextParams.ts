@@ -1,3 +1,3 @@
-export type NextParams<Data = unknown> = {
+export type NextParams<Data = Record<string, string>> = {
   params: Data
 }
