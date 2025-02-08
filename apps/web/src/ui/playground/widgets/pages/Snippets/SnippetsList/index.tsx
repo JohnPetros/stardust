@@ -23,22 +23,13 @@ export function SnippetsList() {
 
         {!isLoading &&
           snippets.map((snippet) => (
-            <>
-              <li key={snippet.id}>
-                <SnippetCard
-                  id={snippet.id}
-                  title={snippet.title.value}
-                  onDelete={handleDeleteSnippetDelete}
-                />
-              </li>
-              <li key={snippet.id}>
-                <SnippetCard
-                  id={snippet.id}
-                  title={snippet.title.value}
-                  onDelete={handleDeleteSnippetDelete}
-                />
-              </li>
-            </>
+            <li key={snippet.id}>
+              <SnippetCard
+                id={snippet.id}
+                title={snippet.title.value}
+                onDelete={handleDeleteSnippetDelete}
+              />
+            </li>
           ))}
 
         {!isLoading && snippets.length === 0 && (

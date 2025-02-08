@@ -103,7 +103,10 @@ export function SnippetPage({ snippetDto }: SnippetPageProps) {
 
           <div className='absolute md:sticky bottom-0 left-0 right-0 z-50 py-3 bg-gray-800 flex xs:items-end justify-center lg:justify-end gap-2 w-full mt-6 xs:mt-0'>
             <div className='flex items-end gap-2'>
-              <Button onClick={goBack} className='bg-gray-600 text-gray-50 w-16'>
+              <Button
+                onClick={goBack}
+                className='bg-gray-600 text-gray-50 w-16 h-8 text-sm'
+              >
                 Voltar
               </Button>
               <ActionButton
@@ -116,16 +119,16 @@ export function SnippetPage({ snippetDto }: SnippetPageProps) {
                 isDisabled={isActionDisabled}
                 onExecute={handleActionButtonClick}
                 icon='cloud'
-                className='w-28'
+                className='w-28 h-8'
               />
             </div>
             <div className='flex items-end gap-2'>
               {isUserSnippetAuthor && isSnippetPublic && (
                 <ShareSnippetDialog snippetId={snippetId}>
-                  <Button className='flex w-max items-center gap-1 px-3'>
+                  <Button className='flex w-max items-center gap-1 px-3 h-8 text-sm'>
                     <Icon
                       name='share'
-                      size={16}
+                      size={14}
                       className='text-gray-900'
                       weight='bold'
                     />

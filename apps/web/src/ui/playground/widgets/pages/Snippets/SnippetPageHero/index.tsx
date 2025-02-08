@@ -1,8 +1,12 @@
 import Image from 'next/image'
+import { GoBackLink } from './GoBackLink'
 
 export function SnippetPageHero() {
   return (
-    <div className='flex w-max flex-col items-center gap-12'>
+    <div className='relative flex w-max flex-col items-center gap-12'>
+      <div className='absolute top-0 -left-12'>
+        <GoBackLink />
+      </div>
       <Image
         src='/images/rocket.svg'
         width={160}

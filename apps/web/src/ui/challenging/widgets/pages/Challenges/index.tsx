@@ -14,7 +14,10 @@ type ChallengesPageProps = {
 
 export function ChallengesPage({ categoriesDto }: ChallengesPageProps) {
   return (
-    <div className='mx-auto mt-10 max-w-2xl px-6 pb-40 md:px-0'>
+    <div className='relative mx-auto mt-10 max-w-2xl px-6 pb-40 md:px-0'>
+      <Link href={ROUTES.space} className='absolute -top-8 text-green-400'>
+        <Icon name='arrow-left' />
+      </Link>
       <WarningMessage />
       <Link
         href={ROUTES.challenging.challenge()}
