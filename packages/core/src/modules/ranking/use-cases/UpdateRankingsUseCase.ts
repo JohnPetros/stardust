@@ -11,11 +11,9 @@ export class UpdateRankingsUseCase {
       this.deleteLastWeekRankingUsers(),
       this.updateLastWeekRankingPositions(),
     ])
-
     await this.saveLosers(tiers)
     await this.saveWinners(tiers)
     await this.rankingService.allowUsersSeeRankingResult()
-
     await this.resetRankingUsersXp()
   }
 
