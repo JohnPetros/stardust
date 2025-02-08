@@ -6,7 +6,6 @@ import type {
 import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 import type { ChallengeVote } from '@stardust/core/challenging/types'
 import { Challenge } from '@stardust/core/challenging/entities'
-import { ROUTES } from '@/constants'
 
 type Request = {
   challengeSlug: string

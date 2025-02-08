@@ -1,14 +1,15 @@
 import { notFound } from 'next/navigation'
 
 import { challengingActions } from '@/server/next-safe-action'
-import type { NextParams } from '@/server/next/types'
+import type { NextParams, NextSearchParams } from '@/server/next/types'
 import { ChallengeSolutionSlot } from '@/ui/challenging/widgets/slots/ChallengeSolution'
 
 export const dynamic = 'force-dynamic'
 
-export default async function DefaultSlot({
-  params,
-}: NextParams<{ challengeSlug: string; solutionSlug: string }>) {
+type PageProps = NextParams<{ challengeSlug: string; solutionSlug: string }> &
+  NextSearchParams<'isNew'>
+
+export default async function DefaultSlot({ params, searchParams }: PageProps) {
   const response = await challengingActions.viewSolution({
     solutionSlug: params.solutionSlug,
   })
@@ -18,6 +19,7 @@ export default async function DefaultSlot({
   return (
     <ChallengeSolutionSlot
       solutionDto={solutionDto}
+      isSolutionNew={Boolean(searchParams.isNew)}
       challengeSlug={params.challengeSlug}
     />
   )
