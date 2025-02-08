@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { headers } from 'next/headers'
 
 import type { AchievementDto } from '@stardust/core/profile/dtos'
 
@@ -14,7 +13,7 @@ type HomeProps = {
 }
 
 export default async function Home({ children }: HomeProps) {
-  const apiClient = NextApiClient({ isCacheEnable: true, headers })
+  const apiClient = NextApiClient({ isCacheEnable: true })
   const response = await apiClient.get<AchievementDto[]>(ROUTES.api.profile.achievements)
   if (response.isFailure) response.throwError()
 
