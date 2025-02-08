@@ -8,6 +8,7 @@ export type IconName =
   | 'simple-arrow-left'
   | 'simple-arrow-right'
   | 'simple-arrow-down'
+  | 'alert'
   | 'check'
   | 'smile'
   | 'planet'
