@@ -33,13 +33,6 @@ export class CalculateRewardForChallengeCompletionUseCase
     const newCoins = this.calculateCoins(challenge, accuracyPercentage)
     const newXp = this.calculateXp(challenge, accuracyPercentage)
 
-    console.log({
-      incorrectAnswersCount,
-      newCoins,
-      newXp,
-      accuracyPercentage,
-    })
-
     return {
       newCoins,
       newXp,
@@ -48,11 +41,11 @@ export class CalculateRewardForChallengeCompletionUseCase
   }
 
   private calculateCoins(challenge: Challenge, accuracyPercentage: number) {
-    return challenge.difficulty.reward.coins * (accuracyPercentage / 100)
+    return Math.floor(challenge.difficulty.reward.coins * (accuracyPercentage / 100))
   }
 
   private calculateXp(challenge: Challenge, accuracyPercentage: number) {
-    return challenge.difficulty.reward.xp * (accuracyPercentage / 100)
+    return Math.floor(challenge.difficulty.reward.xp * (accuracyPercentage / 100))
   }
 
   private calculateAccuracyPercentage(
