@@ -10,7 +10,7 @@ export function useHomeLayout() {
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
   const { isOpen, isAchievementsListVisible, toggle, setIsAchievementsListVisible } =
     useSiderbarContext()
-  const { refetchUser, notifyUserChanges } = useAuthContext()
+  const { notifyUserChanges } = useAuthContext()
 
   function toggleSidenav() {
     setIsSidenavExpanded(!isSidenavExpanded)
@@ -24,7 +24,7 @@ export function useHomeLayout() {
   useEffect(() => {
     if (!isTransitionVisible) return
 
-    const timeout = setTimeout(() => setIsTransitionVisible(false), 2500)
+    const timeout = setTimeout(() => setIsTransitionVisible(false), 4000)
 
     return () => {
       clearTimeout(timeout)
@@ -32,13 +32,8 @@ export function useHomeLayout() {
   }, [isTransitionVisible])
 
   useEffect(() => {
-    refetchUser()
-    const timeout = setTimeout(() => {
-      notifyUserChanges()
-    }, 100)
-
-    return () => clearTimeout(timeout)
-  }, [notifyUserChanges])
+    notifyUserChanges()
+  }, [])
 
   return {
     isSidenavExpanded,
