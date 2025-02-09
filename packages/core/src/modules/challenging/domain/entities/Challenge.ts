@@ -15,7 +15,7 @@ import type { Author } from '#global/entities'
 import type { ChallengeDifficulty, TestCase } from '#challenging/structs'
 import type { ChallengeDto } from '#challenging/dtos'
 import type { ChallengeCategory } from './ChallengeCategory'
-import { ChallengeWithoutTestCaseError } from '#challenging/errors'
+import { ChallengeWithoutTestCaseError, InsufficientInputsError } from '#challenging/errors'
 import { ChallengeFactory } from '#challenging/factories'
 import type { ChallengeVote } from '#challenging/types'
 
@@ -57,6 +57,10 @@ export class Challenge extends Entity<ChallengeProps> {
   private formatCode(code: Code, testCase: TestCase) {
     if (code.hasFunction.isTrue) {
       return code.addFunctionCall(testCase.inputs)
+    }
+
+    if (code.inputsCount !== testCase.inputs.length) {
+      throw new InsufficientInputsError()
     }
 
     return code.addInputs(testCase.inputs)
