@@ -31,7 +31,7 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
   verifyUserAnswer(userAnswer: UserAnswer): Logical {
     const usersAnswers = List.create(userAnswer.value as string[])
 
-    return this.answers.isEqualTo(usersAnswers)
+    return this.answers.isStrictlyEqualTo(usersAnswers)
   }
 
   get answers(): List<string> {

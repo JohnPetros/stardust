@@ -14,7 +14,7 @@ export const texts: TextBlockDto[] = [
   },
   {
     type: 'user',
-    content: '#Partiu',
+    content: '\#Partiu',
   },
   {
     type: 'default',
@@ -111,7 +111,7 @@ escreva(combustivelAtual < combustivelExigido)
   {
     type: 'default',
     content:
-      'Para fazer isso não dá para usar operador *>* porque ele só verifica se um valor é maior ou não que outro valor.',
+      'Para fazer isso não dá para usar operador *maior que* porque ele só verifica se um valor é maior ou não que outro valor.',
     picture: 'panda-triste.jpg',
   },
   {

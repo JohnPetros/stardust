@@ -41,11 +41,11 @@ export const questions: Questions = [
       { index: 2, label: '!' },
       { index: 3, label: 'ou' },
     ],
-    correctItemsIndexesSequence: [3],
+    correctItems: ['ou'],
     picture: 'panda-de-oculos.jpg',
   },
   {
-    stem: 'Verificando a resistencia do foguete: complete o código para que o resultado seja igual a *verdadeiro*.',
+    stem: 'Verificando a resistencia do foguete: complete o código para que a variável *seguranca* tenha valor *verdadeiro*.',
     type: 'drag-and-drop',
     lines: [
       {
@@ -70,7 +70,7 @@ export const questions: Questions = [
       { index: 3, label: 'falso' },
       { index: 4, label: '3700' },
     ],
-    correctItemsIndexesSequence: [1, 2],
+    correctItems: ['1200', 'verdadeiro'],
     picture: 'panda-abracando-bambu.jpg',
   },
   {
@@ -118,7 +118,7 @@ export const questions: Questions = [
       { index: 3, label: 'ou' },
       { index: 4, label: '<' },
     ],
-    correctItemsIndexesSequence: [4, 1, 2, 3],
+    correctItems: ['<', '>', 'e', 'ou'],
     picture: 'panda-olhando-computador.jpg',
   },
 ]

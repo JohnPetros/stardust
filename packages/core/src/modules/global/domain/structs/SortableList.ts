@@ -40,7 +40,7 @@ export class SortableList {
   }
 
   isEqualTo(otherList: SortableList): Logical {
-    return List.create(this.orderedItems).isEqualTo(List.create(otherList.items))
+    return List.create(this.orderedItems).isStrictlyEqualTo(List.create(otherList.items))
   }
 
   get orderedItems(): Item[] {

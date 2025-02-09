@@ -64,7 +64,7 @@ export class DragAndDropQuestion extends Question<DragAndDropQuestionProps> {
 
   verifyUserAnswer(userAnswer: UserAnswer): Logical {
     const userItems = List.create(userAnswer.value as string[])
-    return userItems.isEqualTo(this.props.correctItems)
+    return userItems.isStrictlyEqualTo(this.props.correctItems)
   }
 
   get dropZoneSlotsCount(): Integer {

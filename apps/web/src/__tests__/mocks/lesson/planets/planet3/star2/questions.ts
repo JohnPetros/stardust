@@ -66,7 +66,7 @@ escreva(altitudeSegura < altitudeAtual)`,
       { index: 3, label: '==' },
       { index: 4, label: '<' },
     ],
-    correctItemsIndexesSequence: [1, 2],
+    correctItems: ['=', '=='],
     picture: 'panda-olhando-computador.jpg',
   },
   {
@@ -91,9 +91,7 @@ escreva(altitudeSegura < altitudeAtual)`,
       { index: 3, label: 'verdadeiro' },
       { index: 4, label: '<' },
     ],
-    correctItemsIndexesSequence: [1, 2],
+    correctItems: ['250', '300'],
     picture: 'panda-olhando-computador.jpg',
   },
 ]
-
-// 8d260fac-f904-42b3-b37b-88832caf0f6e
