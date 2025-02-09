@@ -126,7 +126,7 @@ escolha (planeta) {
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
-    stem: 'Para sairmos dentro desse portal, precisamos ligar o motor turbo. Complete o código abaixo para que resulte em "Motor turbo ativado desativado".',
+    stem: 'Para sairmos dentro desse portal, precisamos ligar o motor turbo. Complete o código abaixo para que resulte em "Motor turbo ativado".',
     type: 'drag-and-drop',
     lines: [
       {
@@ -193,7 +193,7 @@ escolha (planeta) {
         label: '"ativarMotorTurbo"',
       },
     ],
-    correctItemsIndexesSequence: [1, 4, 2, 3],
+    correctItems: ['escolha', '"ativarMotorTurbo"', 'caso', 'padrao'],
     picture: 'panda-amando-bambu.jpg',
   },
 ]

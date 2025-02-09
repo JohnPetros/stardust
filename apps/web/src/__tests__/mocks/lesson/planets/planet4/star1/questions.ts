@@ -47,7 +47,7 @@ export const questions: Questions = [
       { index: 3, label: 'pequeno' },
       { index: 4, label: 'grande' },
     ],
-    correctItemsIndexesSequence: [1, 4],
+    correctItems: ['>', 'grande'],
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -66,7 +66,7 @@ escreva(planetaCor)`,
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
-    stem: 'Qual é o status da população do planeta "Ifthenia"?',
+    stem: 'Qual é o status da população do planeta "Ifthenia"? (Preste a atenção no escopo das variáveis)',
     code: `var planetaPopulacao = 1000 * 1000
 var status = "pouca gente"
 
@@ -76,7 +76,7 @@ se (planetaPopulacao > 1000) {
 
 escreva(status)`,
     type: 'selection',
-    answer: 'muita gente',
+    answer: 'pouca gente',
     options: ['pouca gente', 'muita gente', 'gente', 'variável indefinpositiona'],
     picture: 'panda-olhando-de-lado.jpg',
   },
@@ -95,7 +95,7 @@ escreva(status)`,
       { index: 3, label: '!falso' },
       { index: 4, label: '!verdadeiro' },
     ],
-    correctItemsIndexesSequence: [3],
+    correctItems: ['!falso'],
     picture: 'panda-de-oculos.jpg',
   },
 ]

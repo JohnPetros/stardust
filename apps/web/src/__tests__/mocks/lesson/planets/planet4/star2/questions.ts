@@ -15,15 +15,15 @@ type Questions = [
 export const questions: Questions = [
   {
     type: 'drag-and-drop',
-    stem: 'Complete o código para que a variavel *qualOSentidoDaVida* seja igual a *42*.',
+    stem: 'Complete o código para que a variavel *sentidoDaVida* seja igual a *42*.',
     lines: [
-      { number: 1, texts: ['var qualOSentidoDaVida = ', '2'], indentation: 0 },
+      { number: 1, texts: ['var sentidoDaVida = ', '2'], indentation: 0 },
       {
         number: 2,
-        texts: ['qualOSentidoDaVida ', 'dropZone', ' 21'],
+        texts: ['var sentidoDaVida ', 'dropZone', ' 21'],
         indentation: 0,
       },
-      { number: 3, texts: ['escreva(qualOSentidoDaVida)'], indentation: 0 },
+      { number: 3, texts: ['escreva(sentidoDaVida)'], indentation: 0 },
     ],
     items: [
       { index: 1, label: '+=' },
@@ -31,12 +31,12 @@ export const questions: Questions = [
       { index: 3, label: '*=' },
       { index: 4, label: '/=' },
     ],
-    correctItemsIndexesSequence: [3],
+    correctItems: ['*='],
     picture: 'panda-amando-bambu.jpg',
   },
   {
     stem: 'Quais os possíveis valores que a variável *radiacao* tem que ter para que o resultado seja igual a "Seguro"?',
-    code: `var radiacao = ?
+    code: `var radiacao 
 
 se (radiacao > 500) {
   escreva("Não seguro") 
@@ -60,10 +60,10 @@ se (radiacao > 500) {
       { number: 6, texts: ['}'], indentation: 0 },
     ],
     items: [
-      { index: 1, label: 'planeta rico' },
-      { index: 2, label: 'planeta pobre' },
+      { index: 1, label: '"planeta rico"' },
+      { index: 2, label: '"planeta pobre"' },
     ],
-    correctItemsIndexesSequence: [1, 2],
+    correctItems: ['"planeta rico"', '"planeta pobre"'],
     picture: 'panda-com-bola-de-boliche.jpg',
   },
   {
@@ -95,41 +95,26 @@ se (radiacao > 500) {
       },
       {
         number: 2,
-        texts: ['se ('],
+        texts: ['se (', 'temSol ', 'dropZone', 'planetas >', 'dropZone', ') {'],
         indentation: 0,
       },
       {
         number: 3,
-        texts: ['temSol ', 'dropZone'],
-        indentation: 1,
-      },
-      {
-        number: 4,
-        texts: ['planetas >', 'dropZone'],
-        indentation: 1,
-      },
-      {
-        number: 5,
-        texts: [')'],
-        indentation: 1,
-      },
-      {
-        number: 6,
         texts: ['escreva("É possível formar um sistema solar")'],
         indentation: 1,
       },
       {
-        number: 7,
+        number: 4,
         texts: ['} senao {'],
         indentation: 0,
       },
       {
-        number: 8,
+        number: 5,
         texts: ['escreva("Não é possível formar um sistema solar")'],
         indentation: 1,
       },
       {
-        number: 9,
+        number: 6,
         texts: ['}'],
         indentation: 0,
       },
@@ -137,7 +122,7 @@ se (radiacao > 500) {
     items: [
       {
         index: 1,
-        label: 'ou',
+        label: 'nem',
       },
       {
         index: 2,
@@ -151,11 +136,12 @@ se (radiacao > 500) {
         index: 4,
         label: '8',
       },
+      {
+        index: 5,
+        label: 'verdadeiro',
+      },
     ],
-    correctItemsIndexesSequence: [2, 3],
+    correctItems: ['e', '4'],
     picture: 'panda-de-oculos.jpg',
   },
 ]
-
-// 0077876f-6693-4286-8340-be99ca0dba9f
-// c20e0e55-2a21-4512-a080-be80b037117a
