@@ -24,7 +24,7 @@ export const ExecutorDeCodigoDelegua = (): ICodeRunnerProvider => {
       const outputs: string[] = []
 
       function funcaoDeSaida(saida: string) {
-        outputs.push(formateValor(saida))
+        outputs.push(saida)
       }
 
       const interpretador = new InterpretadorBase('', false, funcaoDeSaida, funcaoDeSaida)
