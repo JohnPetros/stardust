@@ -13,18 +13,21 @@ import type { CodeEditorRef } from '../CodeEditor/types'
 
 type CodeEditorToolbarProps = {
   children: ReactNode
+  originalCode: string
   codeEditorRef: RefObject<CodeEditorRef>
   onRunCode: () => void
 }
 
 export function CodeEditorToolbar({
   children,
+  originalCode,
   codeEditorRef,
   onRunCode,
 }: CodeEditorToolbarProps) {
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
   const docsDialogButtonRef = useRef<HTMLButtonElement>(null)
   const { handleKeyDown, resetCode } = useCodeEditorToolbar({
+    originalCode,
     codeEditorRef,
     runCodeButtonRef,
     docsDialogButtonRef,

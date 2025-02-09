@@ -7,7 +7,7 @@ import { CodeEditorToolbar } from '@/ui/global/widgets/components/CodeEditorTool
 export function ChallengeCodeEditorSlot() {
   const {
     initialCode,
-    previousUserCode,
+    originalCode,
     editorContainerRef,
     codeEditorRef,
     codeEditorHeight,
@@ -17,7 +17,7 @@ export function ChallengeCodeEditorSlot() {
 
   return (
     <div ref={editorContainerRef} className='relative h-full w-full'>
-      <CodeEditorToolbar codeEditorRef={codeEditorRef} onRunCode={handleRunCode}>
+      <CodeEditorToolbar originalCode={originalCode} codeEditorRef={codeEditorRef} onRunCode={handleRunCode}>
         <CodeEditor
           ref={codeEditorRef}
           value={initialCode ?? ''}
