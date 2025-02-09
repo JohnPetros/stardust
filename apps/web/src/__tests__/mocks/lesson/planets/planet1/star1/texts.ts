@@ -110,22 +110,22 @@ Fim`,
   },
   {
     type: 'code',
-    content: `programa preparar o foguete
+      content: `programa preparar o foguete
 
-Inicio
+  Inicio
 
-  Localizar um foguete disponivel
-  Verificar os niveis de combustivel
-  Verificar o suprimento a bordo
-  Verificar os niveis de oxigenio
+    Localizar um foguete disponivel
+    Verificar os niveis de combustivel
+    Verificar o suprimento a bordo
+    Verificar os niveis de oxigenio
 
-  Se necessario, obter recursos adicionais
-  Caso contrario, preparar a decolagem do foguete
+    Se necessario, obter recursos adicionais
+    Caso contrario, preparar a decolagem do foguete
 
-  Aguardar ate que o foguete entre em orbita
-  Aproveitar a jornada enquanto o foguete viaja pelo espaço
+    Aguardar ate que o foguete entre em orbita
+    Aproveitar a jornada enquanto o foguete viaja pelo espaço
 
-Fim`,
+  Fim`,
     isRunnable: false,
   },
   {

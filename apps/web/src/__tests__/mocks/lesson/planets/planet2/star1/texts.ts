@@ -48,7 +48,7 @@ export const texts: TextBlockDto[] = [
   },
   {
     content: `var mensagem = "Olá, mundo!"
-var nome = 'Kauê Cabess'
+var nome = 'Thiago Martins'
 var numero = "250"
 var simbolos = '$@%&'`,
     type: 'code',

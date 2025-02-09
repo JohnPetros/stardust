@@ -29,7 +29,7 @@ export const questions: Questions = [
     picture: 'panda-piscando-sentado.jpg',
   },
   {
-    stem: 'Qual será o resultado do seguinte código?',
+    stem: 'Qual será a saída do seguinte código?',
     code: `var resposta = verdadeiro
 resposta = falso
 escreva("Vai chover asteroide hoje? " + resposta)   
@@ -63,7 +63,7 @@ escreva("Vai chover asteroide hoje? " + resposta)
       { index: 3, label: 'nulo' },
       { index: 4, label: 'resposta' },
     ],
-    correctItemsIndexesSequence: [2, 4],
+    correctItems: ['falso', 'resposta'],
   },
   {
     stem: 'Qual seria o valor lógico para a pergunta "10 é maior que 5?"',

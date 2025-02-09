@@ -2,6 +2,17 @@ import type { TextBlockDto } from '@stardust/core/global/dtos'
 
 export const texts: TextBlockDto[] = [
   {
+    type: 'code',
+    content: `var combustivel = 2500 
+var combustivelAtual = 200
+var totalCombustivel = combustivel + combustivelAtual
+
+escreva("A nave agora tem " + totalCombustivel + " galões de combustível")
+
+// Resultado: A nave agora tem 300 galões de combustível`,
+    isRunnable: true,
+  },
+  {
     type: 'default',
     title: 'Missão cumprida!',
     content:

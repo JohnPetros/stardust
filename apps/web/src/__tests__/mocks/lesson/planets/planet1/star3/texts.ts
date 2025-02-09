@@ -7,7 +7,7 @@ export const texts: TextBlockDto[] = [
     content: 'Vagando no espaço...',
   },
   {
-    content: 'Ok, parace que você não encontrou nada de interessante no espaço ainda.',
+    content: 'Ok, parece que você não encontrou nada de interessante no espaço ainda.',
     type: 'default',
     picture: 'panda-triste.jpg',
   },
@@ -54,7 +54,7 @@ export const texts: TextBlockDto[] = [
     picture: 'panda-olhando-computador.jpg',
   },
   {
-    content: `var nomeCompleto`,
+    content: 'var nomeCompleto',
     type: 'code',
     isRunnable: false,
   },
@@ -69,7 +69,7 @@ export const texts: TextBlockDto[] = [
     type: 'default',
   },
   {
-    content: `var nome = "Kauê Cabess"
+    content: `var nome = "Kauê Cabessa"
 var idade = 90`,
     type: 'code',
     isRunnable: false,
@@ -77,7 +77,7 @@ var idade = 90`,
   {
     type: 'default',
     content:
-      'No exemplo acima, estamos criando duas variáveis, uma chamada *nome* que armazenará o valor *Kauê Cabess* e outra chamada *idade* que armazenará o valor *90*.',
+      'No exemplo acima, estamos criando duas variáveis, uma chamada *nome* que armazenará o valor *Kauê Cabessa* e outra chamada *idade* que armazenará o valor *90*.',
     picture: 'panda-oferecendo-bambu.jpg',
   },
   {
@@ -93,11 +93,11 @@ var idade = 90`,
     picture: 'panda-sorrindo-sentado.jpg',
   },
   {
-    content: `var nome = "Kauê Cabess"
+    content: `var nome = "Kauê Cabessa"
 var nomeCompleto = nome
 escreva(nomeCompleto)
 
-// Resultado: Kauê Cabess`,
+// Resultado: Kauê Cabessa`,
     type: 'code',
     isRunnable: true,
   },
@@ -139,7 +139,7 @@ escreva("e sua idade é ", idade)
     content: `// Nada de iniciar nome de variaveis com números ❌
 var 15Cavalos
 
-// Mas o nome pode conter números desde que não seja no começo do nome
+// Mas o nome pode conter números desde que não seja no começo do nome ✅
 var numero999`,
     type: 'code',
     isRunnable: true,

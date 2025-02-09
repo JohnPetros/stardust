@@ -30,7 +30,7 @@ export const texts: TextBlockDto[] = [
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
-    content: `var numero = 2370`,
+    content: 'var numero = 2370',
     type: 'code',
     isRunnable: false,
   },
@@ -46,7 +46,7 @@ export const texts: TextBlockDto[] = [
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
-    content: `var negativo = -999`,
+    content: 'var negativo = -999',
     type: 'code',
     isRunnable: false,
   },
@@ -58,7 +58,7 @@ export const texts: TextBlockDto[] = [
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
-    content: `var serie = 8.5`,
+    content: 'var serie = 8.5',
     type: 'code',
     isRunnable: false,
   },

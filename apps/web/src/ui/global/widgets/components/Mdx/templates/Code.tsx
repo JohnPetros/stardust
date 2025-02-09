@@ -18,14 +18,19 @@ export function Code({
   if (!children) return
   let code = ''
 
+  console.log(children)
+
   if (!Array.isArray(children)) {
     code = String(children)
   } else if (typeof children[0] === 'string') {
     code = children[0]
-  } else if ('props' in children[0]) {
-    code = children[0].props.children[0]
-    code = children.map((child) => child.props.children[0]).join('\n')
+  } else if (typeof children[0] === 'object') {
+    if (typeof children[0].props.children === 'object') {
+      code = children[0].props.children.props.children
+    } else code = children[0].props.children
   }
+
+  console.log({ code })
 
   if (code)
     return (

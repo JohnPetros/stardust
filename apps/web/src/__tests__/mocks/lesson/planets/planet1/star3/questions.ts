@@ -49,7 +49,7 @@ export const questions: Questions = [
       { index: 2, label: '"Planeta Datahon"' },
       { index: 3, label: '333' },
     ],
-    correctItemsIndexesSequence: [2],
+    correctItems: ['"Planeta Datahon"'],
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -60,7 +60,7 @@ var nome = "Planeta Datahon"
 nomePlaneta = nome
 escreva("planeta encontrado: ", nomePlaneta)`,
     type: 'selection',
-    answer: 'planeta encontrado: Datahon',
+    answer: 'planeta encontrado: Planeta Datahon',
     options: [
       'planeta encontrado: Planeta Datahon',
       'planeta encontrado: Planeta 0thigs',

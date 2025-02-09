@@ -6,7 +6,6 @@ import type { TextBlock } from '@stardust/core/global/structs'
 
 import { REGEX } from '@/constants'
 import { getTemplateContent } from '@/utils'
-import { formatSpecialCharacters } from '../formatSpecialCharacters'
 
 export function useMdx() {
   function parseMdxToText(mdx: string) {
@@ -26,32 +25,21 @@ export function useMdx() {
     function parseOrtherProps(textBlockDto: TextBlockDto) {
       const props = Object.keys(textBlockDto)
 
-      const otherProps = props.filter(
-        (prop) =>
+      const otherProps = props.filter((prop) => {
+        return (
           ['title', 'picture'].includes(prop) &&
-          getPropValue(prop, textBlockDto) !== undefined,
-      )
+          getPropValue(prop, textBlockDto) !== undefined
+        )
+      })
 
       return otherProps
-        .map(
-          (prop) =>
-            `${prop}={'${
-              prop === 'title'
-                ? formatSpecialCharacters(String(textBlockDto[prop]), 'encode')
-                : getPropValue(prop, textBlockDto)
-            }'}`,
-        )
+        .map((prop) => `${prop}={'${getPropValue(prop, textBlockDto)}'}`)
         .join(' ')
     }
 
     function parseMdx(textBlock: TextBlock) {
       const props = parseOrtherProps(textBlock.dto)
-
-      const content =
-        textBlock.type !== 'code'
-          ? formatSpecialCharacters(textBlock.content, 'encode')
-          : textBlock.content
-
+      const content = textBlock.content
       const key = uuid()
 
       switch (textBlock.type) {
@@ -85,7 +73,8 @@ export function useMdx() {
     codeComponents.forEach((codeComponent) => {
       const codeComponentContent = getTemplateContent(codeComponent)
       if (codeComponentContent) {
-        const newContent = `${codeComponentContent}`
+        const newContent = `\`\`\`
+${codeComponentContent}\`\`\``
         mdx = mdx.replace(codeComponentContent, newContent)
       }
     })

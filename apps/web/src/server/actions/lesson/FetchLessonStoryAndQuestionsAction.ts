@@ -19,18 +19,15 @@ export const FetchLessonStoryAndQuestionsAction = (
     async handle(actionServer: IActionServer<Request>) {
       const { starId } = actionServer.getRequest()
 
-      const [questionsResponse, textsBlocksResponse, storyResponse] = await Promise.all([
-        service.fetchQuestionsByStar(starId),
-        service.fetchTextsBlocksByStar(starId),
-        service.fetchStarStory(starId),
-      ])
-
+      const questionsResponse = await service.fetchQuestionsByStar(starId)
       if (questionsResponse.isFailure) questionsResponse.throwError()
       const questions = questionsResponse.body
 
+      const textsBlocksResponse = await service.fetchTextsBlocksByStar(starId)
       if (textsBlocksResponse.isFailure) textsBlocksResponse.throwError()
       const textsBlocks = textsBlocksResponse.body
 
+      const storyResponse = await service.fetchStarStory(starId)
       if (storyResponse.isFailure) storyResponse.throwError()
       const story = storyResponse.body.story
 

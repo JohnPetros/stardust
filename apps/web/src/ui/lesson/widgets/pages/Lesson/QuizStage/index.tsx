@@ -22,7 +22,6 @@ import { DragAndDropListQuestion } from './DragAndDropListQuestion'
 import { OpenQuestion } from './OpenQuestion'
 import { useQuizStage } from './useQuizStage'
 import { CheckboxQuestion } from './CheckboxQuestion'
-import { Loading } from '@/ui/global/widgets/components/Loading'
 
 type QuizProps = {
   leaveLesson: () => void
@@ -93,7 +92,8 @@ export function QuizStage({ leaveLesson }: QuizProps) {
                   stem={question.stem.value}
                   picture={question.picture.value}
                   codeLines={question.codeLines}
-                  dropZonesCount={question.dropZonesCount.value}
+                  dropZoneSlotsCount={question.dropZoneSlotsCount.value}
+                  dropZoneSlotsIndexes={question.dropZoneSlotsIndexes}
                   initialDragAndDrop={question.dragAndDrop}
                 />
               </QuestionContainer>

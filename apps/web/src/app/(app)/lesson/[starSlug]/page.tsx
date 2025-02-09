@@ -1,10 +1,8 @@
 import type { NextParams } from '@/server/next/types'
 import { LessonPage } from '@/ui/lesson/widgets/pages/Lesson'
 import { lessonActions, spaceActions } from '@/server/next-safe-action'
-import { questions } from '@/__tests__/mocks/lesson/planets/planet2/star1/questions'
-
-const story = `<Code key={'1dc2b735-704a-43e7-aafc-dff164a2ed06'}  hasAnimation={false} isRunnable={true}>var seuNome = leia("Insira seu nome: ")
-escreva(seuNome)</Code>`
+import { texts } from '@/__tests__/mocks/lesson/planets/planet3/star1/texts'
+import { questions } from '@/__tests__/mocks/lesson/planets/planet3/star1/questions'
 
 export default async function Lesson({ params }: NextParams<{ starSlug: string }>) {
   const spaceResponse = await spaceActions.accessStarPage({ starSlug: params.starSlug })
@@ -23,7 +21,7 @@ export default async function Lesson({ params }: NextParams<{ starSlug: string }
       starNumber={starDto.number}
       questionsDto={questions}
       storyContent={lessonResponse.data.story}
-      textsBlocksDto={lessonResponse.data.textsBlocks}
+      textsBlocksDto={texts}
     />
   )
 }

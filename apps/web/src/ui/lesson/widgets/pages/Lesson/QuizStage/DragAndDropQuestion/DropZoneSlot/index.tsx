@@ -16,12 +16,10 @@ type DropZoneProps = {
 
 export function DropZoneSlot({ index, item }: DropZoneProps) {
   const { borderColor } = useDropZoneSlot()
-
   const { setNodeRef } = useDroppable({
     id: index,
     data: { type: 'slot', hasItem: Boolean(item) },
   })
-
   const width = item ? getItemWidth(item.label.value) : ''
 
   return (
