@@ -39,7 +39,7 @@ export function QuizStage({ leaveLesson }: QuizProps) {
       <div className='flex flex-col'>
         <div
           key={quiz.currentQuestionIndex.value}
-          className='mt-12 flex h-[calc(100vh-8rem)] w-full overflow-auto'
+          className='mt-12 flex h-[calc(100vh-8rem)] w-full'
         >
           <AnimatePresence>
             {question instanceof SelectionQuestionEntity && (

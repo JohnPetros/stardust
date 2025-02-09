@@ -69,7 +69,7 @@ export function useRewardingPage({
   useEffect(() => {
     refetchUser()
     playAudio('earning.wav')
-  }, [playAudio])
+  }, [])
 
   useEffect(() => {
     history.pushState(null, '', location.href)

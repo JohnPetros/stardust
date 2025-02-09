@@ -21,7 +21,7 @@ export function useItem({ label, isActive, isDragging }: UseSortableItemProps) {
     const labelText = Text.create(label)
     const tabsCount = labelText.countCharacters('\t')
 
-    return 24 * tabsCount
+    return 12 * tabsCount
   }, [label])
 
   const labelBackground: LabelBackground = useMemo(() => {
