@@ -24,6 +24,10 @@ export class Code {
     return await this.codeRunner.run(this.value)
   }
 
+  format(codeValue: string) {
+    return this.changeValue(this.codeRunner.translateToCodeRunner(codeValue))
+  }
+
   addInputs(inputs: CodeInput[]) {
     return this.changeValue(this.codeRunner.addInputs(inputs, this.value))
   }

@@ -15,7 +15,10 @@ import type { Author } from '#global/entities'
 import type { ChallengeDifficulty, TestCase } from '#challenging/structs'
 import type { ChallengeDto } from '#challenging/dtos'
 import type { ChallengeCategory } from './ChallengeCategory'
-import { ChallengeWithoutTestCaseError, InsufficientInputsError } from '#challenging/errors'
+import {
+  ChallengeWithoutTestCaseError,
+  InsufficientInputsError,
+} from '#challenging/errors'
 import { ChallengeFactory } from '#challenging/factories'
 import type { ChallengeVote } from '#challenging/types'
 
@@ -88,15 +91,14 @@ export class Challenge extends Entity<ChallengeProps> {
       const response = await formattedCode.run()
       if (response.isFailure) response.throwError()
 
-      let result = code.hasFunction.isTrue ? response.result : response.outputs[0]
+      let result = ''
 
       if (code.hasFunction.isTrue) result = response.result
-      else if (response.outputs[0]) result = response.outputs[0]
+      else if (response.outputs[0]) result = code.format(response.outputs[0]).value
 
       this.props.results = this.results.add(
         this.verifyResult(result, testCase, formattedCode),
       )
-      console.log(this.props.results)
       this.props.userOutputs = this.userOutputs.add(result)
     }
   }
