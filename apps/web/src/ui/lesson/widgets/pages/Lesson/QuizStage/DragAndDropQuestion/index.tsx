@@ -1,5 +1,6 @@
 'use client'
 
+import { DragAndDropQuestion as DragAndDropQuestionEntity } from '@stardust/core/lesson/entities'
 import type { DragAndDrop, QuestionCodeLine } from '@stardust/core/lesson/structs'
 import { QuestionStem } from '../QuestionStem'
 import { Dnd } from './Dnd'
@@ -13,7 +14,8 @@ type DragAndDropQuestionProps = {
   stem: string
   picture: string
   codeLines: QuestionCodeLine[]
-  dropZonesCount: number
+  dropZoneSlotsCount: number
+  dropZoneSlotsIndexes: Record<string, number>
   initialDragAndDrop: DragAndDrop
 }
 
@@ -21,7 +23,8 @@ export function DragAndDropQuestion({
   stem,
   codeLines,
   initialDragAndDrop,
-  dropZonesCount,
+  dropZoneSlotsCount,
+  dropZoneSlotsIndexes,
   picture,
 }: DragAndDropQuestionProps) {
   const {
@@ -30,9 +33,16 @@ export function DragAndDropQuestion({
     handleDragStart,
     handleDragEnd,
     handleDragCancel,
-  } = useDragAndDropQuestion(initialDragAndDrop, dropZonesCount, codeLines)
+  } = useDragAndDropQuestion({
+    initialDragAndDrop,
+    dropZoneSlotsIndexes,
+    dropZoneSlotsCount,
+    codeLines,
+  })
 
   const activeItem = activeItemIndex ? dragAndDrop.getItemByIndex(activeItemIndex) : null
+
+  console.log(codeLines)
 
   return (
     <Dnd
@@ -52,18 +62,17 @@ export function DragAndDropQuestion({
               style={{ marginLeft }}
               className='flex items-center gap-3'
             >
-              {line.texts.map((text, index) => {
-                const key = `${index}-${line.number.value}`
-                const isDropZone = text === 'dropZone'
-                const item = dragAndDrop.getItemByDropZone(index + 1)
+              {line.texts.map((text, textIndex) => {
+                const key = DragAndDropQuestionEntity.getDropZoneSlotKey(line, textIndex)
+                console.log(text)
+                if (!key) return <span className='font-code text-gray-100'>{text}</span>
 
+                const index = dropZoneSlotsIndexes[key]
+                if (!index) return
+                const item = dragAndDrop.getItemByDropZone(index)
                 return (
                   <div key={key}>
-                    {isDropZone ? (
-                      <DropZoneSlot index={index + 1} item={item} />
-                    ) : (
-                      <span className='font-code text-gray-100'>{text}</span>
-                    )}
+                    <DropZoneSlot index={index} item={item} />
                   </div>
                 )
               })}

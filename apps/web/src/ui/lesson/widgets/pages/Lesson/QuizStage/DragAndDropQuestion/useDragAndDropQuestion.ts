@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 import type {
@@ -8,13 +8,22 @@ import type {
   DropZone,
   QuestionCodeLine,
 } from '@stardust/core/lesson/structs'
+import { DragAndDropQuestion } from '@stardust/core/lesson/entities'
 
-export function useDragAndDropQuestion(
-  initialdragAndDrop: DragAndDrop,
-  dropZonesCount: number,
-  codeLines: QuestionCodeLine[],
-) {
-  const [dragAndDrop, setDragAndDrop] = useState<DragAndDrop>(initialdragAndDrop)
+type UseDragAndDropQuestionProps = {
+  initialDragAndDrop: DragAndDrop
+  dropZoneSlotsCount: number
+  dropZoneSlotsIndexes: Record<string, number>
+  codeLines: QuestionCodeLine[]
+}
+
+export function useDragAndDropQuestion({
+  codeLines,
+  dropZoneSlotsCount,
+  dropZoneSlotsIndexes,
+  initialDragAndDrop,
+}: UseDragAndDropQuestionProps) {
+  const [dragAndDrop, setDragAndDrop] = useState<DragAndDrop>(initialDragAndDrop)
   const [activeItemIndex, setActiveItemIndex] = useState<null | number>(null)
   const { getQuizSlice } = useLessonStore()
   const { quiz, setQuiz } = getQuizSlice()
@@ -40,15 +49,19 @@ export function useDragAndDropQuestion(
     const userItems: string[] = []
 
     for (const line of codeLines) {
-      line.texts.forEach((text, index) => {
-        const item = newDragAndDrop.getItemByDropZone(index + 1)
-        if (text === 'dropZone' && item) {
-          userItems.push(item.label.value)
-        }
+      line.texts.forEach((_, textIndex) => {
+        const key = DragAndDropQuestion.getDropZoneSlotKey(line, textIndex)
+        if (!key) return
+        const dropZoneIndex = dropZoneSlotsIndexes[key]
+        if (!dropZoneIndex) return
+
+        const item = newDragAndDrop.getItemByDropZone(dropZoneIndex)
+        if (item) userItems.push(item.label.value)
       })
     }
 
-    if (userItems.length === dropZonesCount) setQuiz(quiz.changeUserAnswer(userItems))
+    console.log(dropZoneSlotsCount)
+    if (userItems.length === dropZoneSlotsCount) setQuiz(quiz.changeUserAnswer(userItems))
     else setQuiz(quiz.changeUserAnswer(null))
 
     setDragAndDrop(newDragAndDrop)

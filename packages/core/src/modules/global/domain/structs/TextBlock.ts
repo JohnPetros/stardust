@@ -78,6 +78,8 @@ export class TextBlock {
       type: this.type,
       content: this.content,
       isRunnable: this.isRunnable,
+      title: this.title,
+      picture: this.picture,
       ...dto,
     })
   }
