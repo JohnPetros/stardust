@@ -6,6 +6,7 @@ import type { TextBlock } from '@stardust/core/global/structs'
 
 import { REGEX } from '@/constants'
 import { getTemplateContent } from '@/utils'
+import { formatSpecialCharacters } from '../formatSpecialCharacters'
 
 export function useMdx() {
   function parseMdxToText(mdx: string) {
@@ -33,8 +34,15 @@ export function useMdx() {
       })
 
       return otherProps
-        .map((prop) => `${prop}={'${getPropValue(prop, textBlockDto)}'}`)
-        .join(' ')
+      .map(
+        (prop) =>
+          `${prop}={'${
+            prop === 'title'
+              ? formatSpecialCharacters(String(textBlockDto[prop]), 'encode')
+              : getPropValue(prop, textBlockDto)
+          }'}`,
+      )
+      .join(' ')
     }
 
     function parseMdx(textBlock: TextBlock) {
@@ -44,7 +52,7 @@ export function useMdx() {
 
       switch (textBlock.type) {
         case 'default':
-          return `<Text key={'${key}'} ${props} hasAnimation={false}>${content}</Text>`
+          return `<Text key={'${key}'} ${props} hasAnimation={false}>${formatSpecialCharacters(content, 'encode')}</Text>`
         case 'alert':
           return `<Alert key={'${key}'} ${props} hasAnimation={false}>${content}</Alert>`
         case 'quote':
