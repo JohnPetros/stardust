@@ -191,7 +191,7 @@ escreva(soma)
 var alimentos = itens.fatiar(0, 3)
 
 escreva(alimentos)
-// Resultado: fruta, ovo de Icelope, amêndua`,
+// Resultado: ['fruta', 'ovo de Icelope', 'amêndua']`,
     isRunnable: true,
   },
   {
@@ -224,8 +224,8 @@ escreva(fatia)
 escreva(pizza)
 
 // Resultado: 
-// pedaço 1
-// pedaço 1, pedaço 2, pedaço 3`,
+// ['pedaço 1']
+// ['pedaço 1', 'pedaço 2', 'pedaço 3']`,
     isRunnable: true,
   },
   {
@@ -311,7 +311,7 @@ escreva(exoticos)
 var fatia = numeros.fatiar(2)
 escreva(fatia)
 
-// Resultado: 3, 4, 5
+// Resultado: [3, 4, 5]
 // fatiar(2) = Terceiro item até o último item da lista`,
     isRunnable: true,
   },
@@ -366,7 +366,7 @@ escreva(fatia)
   {
     type: 'quote',
     content:
-      'E estou falando de inverter mesmo, ou seja, ao aplicar o método *inverter()* em uma lista, o último elemento passa a ser o primeiro, o penúltimo passa a ser o segundo, e assim por diante. E sim, ele altera a lista original, mas também retorna a lista invertida',
+      'E estou falando de inverter mesmo, ou seja, ao aplicar o método *inverter()* em uma lista, o último elemento passa a ser o primeiro, o penúltimo passa a ser o segundo, e assim por diante. E sim, ele altera a lista original, mas também retorna a lista invertida.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -379,7 +379,7 @@ escreva(fatia)
     
 var alimentosInvertidos = alimentos.inverter()
 escreva(alimentosInvertidos)
-// Resultado: amêndua, ovo de Icelope, fruta`,
+// Resultado: ['amêndua', 'ovo de Icelope', 'fruta']`,
     isRunnable: true,
   },
   {

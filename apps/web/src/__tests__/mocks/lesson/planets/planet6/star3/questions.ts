@@ -119,7 +119,7 @@ se (tecnologias.inclui("propulsor")) {
         label: 'concatenar',
       },
     ],
-    correctItems: [5, 6, 1],
+    correctItems: ['"C-3PO"', 'concatenar', '["BB-8", "K-250"]'],
     picture: 'panda-com-mochila.jpg',
   },
   {
@@ -202,7 +202,7 @@ se (tecnologias.inclui("propulsor")) {
         label: 'concatenar',
       },
     ],
-    correctItems: [2, 3],
+    correctItems: ['"Silício"', 'inclui'],
     picture: 'panda-com-mochila.jpg',
   },
 ]

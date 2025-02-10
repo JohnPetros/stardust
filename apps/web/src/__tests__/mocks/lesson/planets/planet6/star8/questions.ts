@@ -21,13 +21,11 @@ export const questions: Questions = [
   "guarda-chuva", 
   "chave de fenda"
 ]
-
 var lixo = []
 para (var i = 0; i < itens.tamanho(); i++) {
-     se (i == 2 ou i == 3) {
-      continua
+  se (i == 2 ou i == 3) {
+    continua
   }
-
   var itemAtual = itens[i]
   lixo.adicionar(itemAtual)
 }`,
@@ -43,7 +41,7 @@ para (var i = 0; i < itens.tamanho(); i++) {
     items: [
       { position: 1, label: 'var numeros = [2, 4, 6, 8]' },
       { position: 2, label: 'para cada numero em numeros {' },
-      { position: 3, label: '\tse (numero < 6)' },
+      { position: 3, label: '\tse (numero < 6) {' },
       { position: 4, label: '\t\tescreva(numero)' },
       { position: 5, label: '\t}' },
       { position: 6, label: '}' },
@@ -79,7 +77,7 @@ para (var i = 0; i < itens.tamanho(); i++) {
       { index: 3, label: 'parte' },
       { index: 5, label: 'partes' },
     ],
-    correctItems: [1, 3, 5],
+    correctItems: ['para', 'parte', 'partes'],
     picture: 'panda-sorrindo.jpg',
   },
   {
@@ -107,34 +105,35 @@ para (var i = 0; i < itens.tamanho(); i++) {
       },
       {
         number: 4,
-        texts: ['frase =', 'dropZone', '("${palavras[', 'dropZone', ']} ")'],
+        texts: ['frase.', 'dropZone', '("${palavras[', 'dropZone', ']} ")'],
         indentation: 2,
       },
-      { number: 5, texts: ['}'], indentation: 2 },
+      { number: 5, texts: ['}'], indentation: 0 },
       { number: 6, texts: ['escreva(frase)'], indentation: 0 },
     ],
     items: [
       { index: 1, label: 'i' },
       { index: 2, label: 'remover' },
-      { index: 3, label: 'tamanho' },
+      { index: 3, label: 'adicionar' },
+      { index: 4, label: 'tamanho' },
       { index: 5, label: 'inclui' },
       { index: 6, label: 'concatenar' },
     ],
-    correctItems: [3, 6, 1],
+    correctItems: ['tamanho', 'concatenar', 'i'],
     picture: 'panda-piscando.jpg',
   },
   {
-    code: `var vetores = [
+    code: `var listas = [
   ['a', 'b', 'c'],
   [verdadeiro, 3, 4],
   ["falso", verdadeiro]
 ]
 
-escreva(vetores[2][0])`,
-    stem: 'Só para saber que você está manjando de tudo. Qual será o tipo de dado de *vetores[2][0]*',
+escreva(listas[2][0])`,
+    stem: 'Só para saber que você está manjando de tudo. Qual será o tipo de dado de *listas[2][0]*',
     type: 'selection',
     answer: 'texto',
-    options: ['lógico', 'texto', 'número', 'vetor'],
+    options: ['lógico', 'texto', 'número', 'lista'],
     picture: 'panda-pensando.jpg',
   },
 ]

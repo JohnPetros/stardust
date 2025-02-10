@@ -132,13 +132,13 @@ escreva(mensagemCerta)
     content: `var mensagem = "Venha já aqui"
 var mensagemCerta = mensagem.dividir()       
 escreva(mensagemCerta)
-// Resultado: Venha já aqui
+// Resultado: ["Venha já aqui"]
     `,
     isRunnable: true,
   },
   {
     type: 'user',
-    content: 'Mas não aconteceu nada!',
+    content: 'Mas não aconteceu nada! Só o texto que está dentro de uma lista agora.',
   },
   {
     type: 'default',
@@ -157,7 +157,7 @@ escreva(mensagemCerta)
 
 var mensagemCerta = mensagem.dividir("a")       
 escreva(mensagemCerta)
-// Resultado: Venh, já, qui
+// Resultado: ['Venh', 'já', 'qui']
     `,
     isRunnable: true,
   },
@@ -175,7 +175,7 @@ escreva(mensagemCerta)
   },
   {
     type: 'user',
-    content: 'Mas, como separar as palavras da forma correta?',
+    content: 'Mas como separar as palavras da forma correta?',
   },
   {
     type: 'code',
@@ -184,7 +184,7 @@ escreva(mensagemCerta)
 var mensagemCerta = mensagem.dividir(" ")       
 escreva(mensagemCerta)
 
-// Resultado: Venha, já, aqui`,
+// Resultado: ['Venha', 'já', 'aqui']`,
     isRunnable: true,
   },
   {
@@ -220,7 +220,7 @@ escreva(mensagemCerta)
     type: 'code',
     content: `var mensagem = "Venha já aqui"
 
-// Nesse caso, lista gerado por dividir() terá apenas 1 palavra
+// Nesse caso, lista gerada por dividir() terá apenas 1 palavra
 var mensagemCerta = mensagem.dividir(" ", 1)    
 
 escreva(mensagemCerta)

@@ -31,12 +31,12 @@ escreva(frase)`,
     picture: 'panda-olhando-computador.jpg',
   },
   {
-    code: `var palavra = "galáxia"
+    code: `var palavra = "galactico"
 
-var vetor = palavra.dividir("a")
+var lista = palavra.dividir("a")
 
-escrever(vetor.tamanho())`,
-    stem: 'Só por curiosidade: Quantos itens posso ter em uma lista ao dividir a palavra "galáxia" usando a letra "a" como separador?',
+escreva(lista.tamanho())`,
+    stem: 'Só por curiosidade: Quantos itens posso ter em uma lista ao dividir a palavra "galactico" (sem acento) usando a letra "a" como separador?',
     type: 'selection',
     answer: '3',
     options: ['1', '2', '3', '4'],
@@ -95,7 +95,7 @@ escreva(bancoDePalavras)`,
       { index: 4, label: '"-"' },
       { index: 6, label: '" "' },
     ],
-    correctItems: [1, 3, 2, 4],
+    correctItems: ['dividir', '", "', 'juntar', '"-"'],
     picture: 'panda-oferecendo-bambu.jpg',
   },
 ]

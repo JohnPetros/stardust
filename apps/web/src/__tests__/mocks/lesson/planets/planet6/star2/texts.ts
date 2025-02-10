@@ -171,7 +171,7 @@ escreva(carrinho)`,
   {
     type: 'default',
     content:
-      'Podemos ver quantos itens já temos no carrinho, utilizando outro método de vetor: *tamanho()*.',
+      'Podemos ver quantos itens já temos no carrinho, utilizando outro método de lista: *tamanho()*.',
     picture: 'panda-piscando.jpg',
   },
   {
@@ -301,7 +301,7 @@ escreva(quantideDeItens)
   {
     type: 'default',
     content:
-      'Você pode me perguntar: se existe *removerPrimeiro()*, então existe *removerUltimo()*. De fato, você está certo, e esse método sempre remove o último item de qualquer vetor.',
+      'Você pode me perguntar: se existe *removerPrimeiro()*, então existe *removerUltimo()*. De fato, você está certo, e esse método sempre remove o último item de qualquer lista.',
     picture: 'panda-piscando-sentado.jpg',
   },
   {

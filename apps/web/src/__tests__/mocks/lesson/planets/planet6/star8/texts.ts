@@ -15,12 +15,12 @@ export const texts: TextBlockDto[] = [
   {
     type: 'code',
     content: `var coordenadas = [
-    "x:12;y:6", 
-    "x:70;y:32", 
-    "x:25;y:18", 
-    "x:8;y:40", 
-  ]
-  escreva(coordenadas)`,
+  "x:12;y:6", 
+  "x:70;y:32", 
+  "x:25;y:18", 
+  "x:8;y:40", 
+]
+escreva(coordenadas)`,
     isRunnable: true,
   },
   {
@@ -55,7 +55,7 @@ export const texts: TextBlockDto[] = [
     type: 'code',
     content: `para (var i = 0;) {
 
-  }`,
+}`,
     isRunnable: false,
   },
   {
@@ -68,7 +68,7 @@ export const texts: TextBlockDto[] = [
     type: 'code',
     content: `para (var i = 0; i < coordenadas.tamanho();) {
 
-  }`,
+}`,
     isRunnable: false,
   },
   {
@@ -80,7 +80,7 @@ export const texts: TextBlockDto[] = [
     type: 'code',
     content: `para (var i = 0; i < coordenadas.tamanho(); i++) {
 
-  }`,
+}`,
     isRunnable: false,
   },
   {
@@ -92,15 +92,15 @@ export const texts: TextBlockDto[] = [
   {
     type: 'code',
     content: `var coordenadas = [
-    "x:12;y:6", 
-    "x:70;y:32", 
-    "x:25;y:18", 
-    "x:8;y:40", 
-  ]
+  "x:12;y:6", 
+  "x:70;y:32", 
+  "x:25;y:18", 
+  "x:8;y:40", 
+]
 
-  para (var i = 0; i < coordenadas.tamanho(); i++) {
-    coordenadas[i]
-  }`,
+para (var i = 0; i < coordenadas.tamanho(); i++) {
+  coordenadas[i]
+}`,
     isRunnable: false,
   },
   {
@@ -111,22 +111,21 @@ export const texts: TextBlockDto[] = [
   {
     type: 'code',
     content: `var coordenadas = [
-    "x:12;y:6", 
-    "x:70;y:32", 
-    "x:25;y:18", 
-    "x:8;y:40", 
-  ]
+  "x:12;y:6", 
+  "x:70;y:32", 
+  "x:25;y:18", 
+  "x:8;y:40", 
+]
 
-  para (var i = 0; i < coordenadas.tamanho(); i++) {
-    escreva(coordenadas[i]);
-  }
+para (var i = 0; i < coordenadas.tamanho(); i++) {
+  escreva(coordenadas[i])
+}
 
-  /* Resultado:  
-    x:12;y:6, 
-    x:70;y:32, 
-    x:25;y:18, 
-    x:8;y:40,
-  */`,
+// Resultado:  
+// x:12;y:6, 
+// x:70;y:32, 
+// x:25;y:18, 
+// x:8;y:40`,
     isRunnable: true,
   },
   {
@@ -143,18 +142,18 @@ export const texts: TextBlockDto[] = [
   {
     type: 'code',
     content: `var coordenadas = [
-    "x:12;y:6", 
-    "x:70;y:32", 
-    "x:25;y:18", 
-    "x:8;y:40", 
-  ]
+  "x:12;y:6", 
+  "x:70;y:32", 
+  "x:25;y:18", 
+  "x:8;y:40", 
+]
 
-  para (var i = 0; i < coordenadas.tamanho(); i++) {
-    se (coordenadas[i] == "x:25;y:18") {
-      escreva("Achei a coordenada certa: " + coordenadas[i])
-    }
+para (var i = 0; i < coordenadas.tamanho(); i++) {
+  se (coordenadas[i] == "x:25;y:18") {
+    escreva("Achei a coordenada certa: " + coordenadas[i])
   }
-  // Resultado: Achei a coordenada certa: x:25;y:18`,
+}
+// Resultado: Achei a coordenada certa: x:25;y:18`,
     isRunnable: true,
   },
   {
@@ -166,22 +165,22 @@ export const texts: TextBlockDto[] = [
   {
     type: 'code',
     content: `var coordenadas = [
-    "x:12;y:6", 
-    "x:70;y:32", 
-    "x:25;y:18", 
-    "x:8;y:40", 
-  ]
+  "x:12;y:6", 
+  "x:70;y:32", 
+  "x:25;y:18", 
+  "x:8;y:40", 
+]
 
-  var coordenadaCerta = ""
-  para (var i = 0; i < coordenadas.tamanho(); i++) {
-      se (coordenadas[i] == "x:25;y:18") {
-        coordenadaCerta = coordenadas[i]
-    }
+var coordenadaCerta = ""
+para (var i = 0; i < coordenadas.tamanho(); i++) {
+  se (coordenadas[i] == "x:25;y:18") {
+    coordenadaCerta = coordenadas[i]
   }
+}
 
-  var mensagem = "Essas são minhas coordenadas: \${coordenadaCerta}"
-  escreva(mensagem)
-  // Resultado: Essas são minhas coordenadas: x:25;y:18`,
+var mensagem = "Essas são minhas coordenadas: \${coordenadaCerta}"
+escreva(mensagem)
+// Resultado: Essas são minhas coordenadas: x:25;y:18`,
     isRunnable: true,
   },
   {
@@ -193,7 +192,7 @@ export const texts: TextBlockDto[] = [
   {
     type: 'alert',
     content:
-      'E também porque ela não poderia ser acessada de fora do escopo do *para* ou do *se*, lembra?',
+      'E também porque ela não poderia ser acessada de fora do *para* ou do *se*, pois uma vez sendo criada dentro de uma dessas estruturas, essa variável teria escopo local e não global, lembra?',
     picture: 'panda-sorrindo-sentado.jpg',
   },
   {
@@ -206,7 +205,7 @@ export const texts: TextBlockDto[] = [
     type: 'code',
     content: `var alimentos = ["fruta", "ovo de Icelope", "amêndua"]
 
-  var mochila = []`,
+var mochila = []`,
     isRunnable: false,
   },
   {
@@ -218,14 +217,14 @@ export const texts: TextBlockDto[] = [
     type: 'code',
     content: `var alimentos = ["fruta", "ovo de Icelope", "amêndua"]
 
-  var mochila = []
-  para (var i = 0; i < alimentos.tamanho(); i++) {
-    var alimentoAtual = alimentos[i]
-    mochila.adicionar(alimentoAtual)
-  }
+var mochila = []
+para (var i = 0; i < alimentos.tamanho(); i++) {
+  var alimentoAtual = alimentos[i]
+  mochila.adicionar(alimentoAtual)
+}
 
-  escreva(mochila)
-  // Resultado: fruta, ovo de Icelope, amêndua`,
+escreva(mochila)
+// Resultado: ['fruta', 'ovo de Icelope', 'amêndua']`,
     isRunnable: true,
   },
   {
@@ -237,16 +236,16 @@ export const texts: TextBlockDto[] = [
   {
     type: 'code',
     content: `var minerais = ["cristal", "pirita"]
-  var i = 0
-  var mochila = []
+var i = 0
+var mochila = []
 
-  enquanto (i < minerais.tamanho()) {
-    var mineralAtual = minerais[i]
-    mochila.adicionar(mineralAtual)
-    i++
-  }
-  escreva(mochila);
-  // Resultado: cristal, pirita`,
+enquanto (i < minerais.tamanho()) {
+  var mineralAtual = minerais[i]
+  mochila.adicionar(mineralAtual)
+  i++
+}
+escreva(mochila);
+// Resultado: ['cristal', 'pirita']`,
     isRunnable: true,
   },
   {
@@ -257,17 +256,17 @@ export const texts: TextBlockDto[] = [
   {
     type: 'code',
     content: `var exoticos = ["fóssil de urso anão", "meteorito congelado"]
-  var mochila = []
-  var i = 0
+var mochila = []
+var i = 0
 
-  fazer {
-    var exoticoAtual = exoticos[i]
-    mochila.adicionar(exoticoAtual)
-    i++
-  } enquanto (i < exoticos.tamanho())
+fazer {
+  var exoticoAtual = exoticos[i]
+  mochila.adicionar(exoticoAtual)
+  i++
+} enquanto (i < exoticos.tamanho())
 
-  escreva(mochila)
-  // Resultado: fóssil de urso anão, meteorito congelado`,
+escreva(mochila)
+// Resultado: ['fóssil de urso anão', 'meteorito congelado']`,
     isRunnable: true,
   },
   {
@@ -278,29 +277,29 @@ export const texts: TextBlockDto[] = [
   {
     type: 'code',
     content: `var mochila = [
-    "fruta",
-    "ovo de Icelope", 
-    "amêndua",
-    "cristal", 
-    "pirita", 
-    "bastão laser quebrado", 
-    "fóssil de urso anão",
-    "meteorito congelado"
-  ]
+  "fruta",
+  "ovo de Icelope", 
+  "amêndua",
+  "cristal", 
+  "pirita", 
+  "bastão laser quebrado", 
+  "fóssil de urso anão",
+  "meteorito congelado"
+]
 
-  var quantidadeDeItens = [9, 4, 20, 37, 12, 1, 2, 1]
-  mochila.adicionar(quantidadeDeItens)
-  escreva(mochila)`,
+var quantidadeDeItens = [9, 4, 20, 37, 12, 1, 2, 1]
+mochila.adicionar(quantidadeDeItens)
+escreva(mochila)`,
     isRunnable: true,
   },
   {
     type: 'user',
-    content: 'Mas aí não estaríamos colocando uma lista dentro de outro?',
+    content: 'Mas aí não estaríamos colocando uma lista dentro de outra lista?',
   },
   {
     type: 'default',
     content:
-      'Sim! é possível colocar listas dentro de uma lista sem problema algum. Na verdade é possível colocar qualquer tipo de dado dentro uma lista, seja do tipo texto, número ou lógico.',
+      'Sim! é possível colocar listas dentro de uma lista sem problema algum. Na verdade é possível colocar qualquer tipo de dado dentro uma lista, seja do tipo `texto`, `número` ou `lógico`.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -340,24 +339,24 @@ export const texts: TextBlockDto[] = [
   {
     type: 'code',
     content: `var mochila = [
-    "fruta",
-    "ovo de Icelope", 
-    "amêndua",
-    "cristal", 
-    "pirita", 
-    "bastão laser quebrado", 
-    "fóssil de urso anão",
-    "meteorito congelado",
-    [9, 4, 20, 37, 12, 1, 2, 1]
-  ]
+  "fruta",
+  "ovo de Icelope", 
+  "amêndua",
+  "cristal", 
+  "pirita", 
+  "bastão laser quebrado", 
+  "fóssil de urso anão",
+  "meteorito congelado",
+  [9, 4, 20, 37, 12, 1, 2, 1]
+]
 
-  para cada item em mochila {
-    se (item == "ovo de Icelope") {
+para cada item em mochila {
+  se (item == "ovo de Icelope") {
     escreva(item)
-    }
   }
+}
 
-  // Resultado: ovo de Icelope`,
+// Resultado: ovo de Icelope`,
     isRunnable: true,
   },
   {
@@ -380,28 +379,27 @@ export const texts: TextBlockDto[] = [
     type: 'code',
     content: `var numeros = [1, 2, 3, 4]
 
-  para cada numero em numeros {
-    escreva(numero)
-  }
+para cada numero em numeros {
+  escreva(numero)
+}
 
-  /* Resultado: 
-    1
-    2
-    3
-    4
-  */`,
+// Resultado: 
+// 1
+// 2
+// 3
+// 4`,
     isRunnable: true,
   },
   {
     type: 'default',
     content:
-      'Neste exemplo, `numeros` é o lista que está sendo usado no laço, e `numero` é a variável que assume um valor da lista `numeros` a cada iteração do laço.',
+      'Neste exemplo, `numeros` é a lista que está sendo usado no laço, e `numero` é a variável que assume um valor da lista `numeros` a cada iteração do laço.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
     type: 'alert',
     content:
-      'E detalhe, a variável que vai ao lado de `para cada` não precisa ser declarada antes e você pode dar o nome que você quiser.',
+      'E detalhe, a variável que vai ao lado de `para cada` não precisa ser declarada antes e você pode dar o nome que você quiser a ela.',
     picture: 'panda-piscando.jpg',
   },
   {
@@ -413,30 +411,33 @@ export const texts: TextBlockDto[] = [
     type: 'code',
     content: `var valores = [falso, verdadeiro, falso]
   
-  para cada valor em valores {
-    escreva(valor)
-  }
+para cada valor em valores {
+  escreva(valor)
+}
 
-  /* Resultado: 
-    falso
-    verdadeiro
-    falso
-  */`,
+// Resultado: 
+// falso
+// verdadeiro
+// falso
+`,
     isRunnable: true,
   },
   {
     type: 'code',
-    content: `var nomes = ['Petros', 'Kaue', '0Thigs']
+    content: `var nomes = ['Petros', 'Kaue Cabessa', '0Thigs', 'Gui', 'Lipe', 'Suga']
 
-  para cada nome em nomes {
-    escreva(nome)
-  }
+para cada nome em nomes {
+  escreva(nome)
+}
 
-  /* Resultado: 
-    Petros
-    Kaue
-    0Thigs
-  */`,
+// Resultado: 
+// Petros
+// Kaue Cabessa
+// 0Thigs
+// Gui
+// Lipe
+// Suga
+  `,
     isRunnable: true,
   },
   {
@@ -447,26 +448,26 @@ export const texts: TextBlockDto[] = [
   {
     type: 'code',
     content: `var mochila = [
-    "fruta",
-    "ovo de Icelope", 
-    "amêndua",
-    "cristal", 
-    "pirita", 
-    "bastão laser quebrado", 
-    "fóssil de urso anão",
-    "meteorito congelado",
-    [9, 4, 20, 37, 12, 1, 2, 1]
-  ]
+  "fruta",
+  "ovo de Icelope", 
+  "amêndua",
+  "cristal", 
+  "pirita", 
+  "bastão laser quebrado", 
+  "fóssil de urso anão",
+  "meteorito congelado",
+  [9, 4, 20, 37, 12, 1, 2, 1]
+]
 
-  var ovos = []
-  para cada item em mochila {
-    se (item == "ovo de Icelope") {
-      var quantidadeDeOvos = mochila[-1][1]
+var ovos = []
+para cada item em mochila {
+  se (item == "ovo de Icelope") {
+    var quantidadeDeOvos = mochila[-1][1]
 
-      escreva('Quantidade de ovos: ' + quantidadeDeOvos)
-    }
+    escreva('Quantidade de ovos: ' + quantidadeDeOvos)
   }
-  // Resultado: Quantidade de ovos: 4`,
+}
+// Resultado: Quantidade de ovos: 4`,
     isRunnable: true,
   },
   {
@@ -475,17 +476,17 @@ export const texts: TextBlockDto[] = [
   },
   {
     type: 'default',
-    content: 'Sim, escrever *mochila[-1][1]* quer dizer:',
+    content: 'Sim, escrever `mochila[-1][1]` quer dizer:',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'quote',
-    content: '*[-1]* -> Pegar o último item de mochila, que no caso é uma lista.',
+    content: '`[-1]` -> Pegar o último item de mochila, que no caso é uma lista.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'quote',
-    content: '*[1]* -> Pegar o segundo valor desse lista interno, que no caso é quatro.',
+    content: '`[1]` -> Pegar o segundo valor desse lista interna, que no caso é quatro.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -496,29 +497,29 @@ export const texts: TextBlockDto[] = [
   {
     type: 'code',
     content: `var mochila = [
-    "fruta",
-    "ovo de Icelope", 
-    "amêndua",
-    "cristal", 
-    "pirita", 
-    "bastão laser quebrado", 
-    "fóssil de urso anão",
-    "meteorito congelado",
-    [9, 4, 20, 37, 12, 1, 2, 1]
-  ]
+  "fruta",
+  "ovo de Icelope", 
+  "amêndua",
+  "cristal", 
+  "pirita", 
+  "bastão laser quebrado", 
+  "fóssil de urso anão",
+  "meteorito congelado",
+  [9, 4, 20, 37, 12, 1, 2, 1]
+]
 
-  var ovos = []
-  para cada item em mochila {
-    se (item == "ovo de Icelope") {
-        var quantidadeDeOvos = mochila[-1][1];
-        para (var i = 0; i < quantidadeDeOvos; i++) {
-            ovos.adicionar(item);
-      }
+var ovos = []
+para cada item em mochila {
+  se (item == "ovo de Icelope") {
+    var quantidadeDeOvos = mochila[-1][1];
+    para (var i = 0; i < quantidadeDeOvos; i++) {
+      ovos.adicionar(item);
     }
   }
+}
 
-  escreva(ovos)
-  // Resultado: ovo de Icelope, ovo de Icelope, ovo de Icelope, ovo de Icelope`,
+escreva(ovos)
+// Resultado: ovo de Icelope, ovo de Icelope, ovo de Icelope, ovo de Icelope`,
     isRunnable: true,
   },
   {

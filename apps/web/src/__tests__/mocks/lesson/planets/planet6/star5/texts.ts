@@ -9,7 +9,7 @@ export const texts: TextBlockDto[] = [
   {
     type: 'default',
     content:
-      'Eu disse que o método *fatiar()* não altera a lista original, mas sim gera um novo.',
+      'Eu disse que o método `fatiar()` não altera a lista original, mas sim gera um novo.',
     picture: 'panda-triste.jpg',
   },
   {
@@ -19,25 +19,25 @@ export const texts: TextBlockDto[] = [
   {
     type: 'default',
     content:
-      'A nossa sorte que é existe um método que pode fazer a mesma coisa que o *fatiar()* faz, mas alterando a lista original.',
+      'A nossa sorte que é existe um método que pode fazer a mesma coisa que o `fatiar()` faz, mas alterando a lista original.',
     picture: 'panda-dando-risadinha.jpg',
   },
   {
     type: 'default',
-    content: 'O método *encaixar()*.',
+    content: 'O método `encaixar()`.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'quote',
     title: 'Método encaixar()',
     content:
-      'O método *encaixar()* pode ser utilizado para vários objetivos, mas o principal é remover elementos de uma lista.',
+      'O método `encaixar()` pode ser utilizado para vários objetivos, mas o principal é remover elementos de uma lista.',
     picture: 'panda-sorrindo.jpg',
   },
   {
     type: 'list',
     content:
-      'Nos parênteses do *encaixar()* é necessário colocar 2 números obrigatórios:',
+      'Nos parênteses do `encaixar()` é necessário colocar 2 números obrigatórios:',
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -56,13 +56,12 @@ export const texts: TextBlockDto[] = [
 itens.encaixar(0, 3)
 
 escreva(itens)
-escreva(itens.tamanho())
-// Resultado: 5`,
+escreva(itens.tamanho())`,
     isRunnable: true,
   },
   {
     type: 'default',
-    content: 'Percebeu? A lista *itens* foi modificado, restando apenas 5 itens.',
+    content: 'Percebeu? A lista `itens` foi modificado, restando apenas 5 itens.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -72,7 +71,7 @@ escreva(itens.tamanho())
   {
     type: 'default',
     content:
-      'É que método *encaixar()* retorna os elementos removidos por ele. Então, para pegar os alimentos removidos pelo *encaixar()* será preciso criar uma nova varíavel.',
+      'É que método `encaixar()` retorna os elementos removidos por ele. Então, para pegar os alimentos removidos pelo `encaixar()` será preciso criar uma nova varíavel.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -88,11 +87,11 @@ escreva(itens.tamanho())
   "meteorito congelado"
 ]
 
-// encaixar(0, 3) = Começar a partir da posição 0 e remover 3 elementos
+// encaixar(0, 3) = Começar a partir da posição 0 e remove 3 elementos
 var alimentos = itens.encaixar(0, 3)
 escreva(alimentos)
 
-// Resultado: fruta, ovo de Icelope, amêndua`,
+// Resultado: ['fruta', 'ovo de Icelope', 'amêndua']`,
     isRunnable: true,
   },
   {
@@ -139,25 +138,25 @@ escreva(exoticos)
   {
     type: 'default',
     content:
-      'Sim. Acontece que toda vez que o *encaixar()* é executado, os itens são removidos da lista original, correto? Então na próxima execução, a lista *itens* terá menos elementos do que o esperado.',
+      'Sim. Acontece que toda vez que o `encaixar()` é executado, os itens são removidos da lista original, correto? Então na próxima execução, a lista `itens` terá menos elementos do que o esperado.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
     type: 'default',
     content:
-      'Isso é para mostrar que o *encaixar()* não fuciona da mesma maneira que o *fatiar()*.',
+      'Isso é para mostrar que o `encaixar()` não fuciona da mesma maneira que o `fatiar()`.',
     picture: 'panda-sorrindo.jpg',
   },
   {
     type: 'alert',
     content:
-      'Lembre-se: A diferença entre os dois é que o segundo número do *encaixar()* indica a QUANTIDADE de elementos que serão removidos, enquanto o do *fatiar()* indica o ponto de parada da fatia. E apenas o *encaixar()* consegue alterar a lista original.',
+      'Lembre-se: A diferença entre os dois é que o segundo número do `encaixar()` indica a QUANTIDADE de elementos que serão removidos, enquanto o do `fatiar()` indica o ponto de parada da fatia. E apenas o `encaixar()` consegue alterar a lista original.',
     picture: 'panda-piscando.jpg',
   },
   {
     type: 'default',
     content:
-      'Agora vamos fazer do jeito certo. Nesse caso, basta começarmos sempre da posição zero, já que estamos sempre removendo os primeiros itens da lista *itens*.',
+      'Agora vamos fazer do jeito certo. Nesse caso, basta começarmos sempre da posição zero, já que estamos sempre removendo os primeiros itens da lista `itens`.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -193,13 +192,13 @@ escreva(itens)`,
   {
     type: 'default',
     content:
-      'Veja que no último foi colocado apenas um número. Isso quer dizer que se você passar apenas um número no *encaixar()* ele vai remover todo os itens da lista a partir desse número índice.',
+      'Veja que no último foi colocado apenas um número. Isso quer dizer que se você passar apenas um número no `encaixar()` ele vai remover todo os itens da lista a partir desse número índice.',
     picture: 'panda-deslumbrado.jpg',
   },
   {
     type: 'default',
     content:
-      'Veja também que agora a lista *itens* está vazia, então nos livramos completamente dele.',
+      'Veja também que agora a lista `itens` está vazia, então nos livramos completamente dele.',
     picture: 'panda-sentado-com-mochila.jpg',
   },
   {
@@ -237,7 +236,7 @@ var textos = ["é", "daí", "perigoso"]`,
   },
   {
     type: 'default',
-    content: 'Para nossa sorte acabamos de conhecer o método *encaixar()*.',
+    content: 'Para nossa sorte acabamos de conhecer o método `encaixar()`.',
     picture: 'panda-piscando.jpg',
   },
   {
@@ -247,25 +246,25 @@ var textos = ["é", "daí", "perigoso"]`,
   {
     type: 'default',
     content:
-      'Lembra que eu disse que o *encaixar()* é usada para várias finalidades? Você deve ter se perguntado, por que "encaixar" tem esse nome? É porque com ele podemos remontar qualquer lista, removendo ou adicionando itens.',
+      'Lembra que eu disse que o `encaixar()` é usada para várias finalidades? Você deve ter se perguntado, por que "encaixar" tem esse nome? É porque com ele podemos remontar qualquer lista, removendo ou adicionando itens.',
     picture: 'panda-piscando.jpg',
   },
   {
     type: 'default',
     content:
-      'O que eu quero dizer é que podemos adicionar itens usando *encaixar()*. Para isso, deve-se passar um terceiro valor, mas não um número e sim o item que você queira adicionar.',
+      'O que eu quero dizer é que podemos adicionar itens usando `encaixar()`. Para isso, deve-se passar um terceiro valor, mas não um número e sim o item que você quer adicionar.',
     picture: 'panda-comemorando.jpg',
   },
   {
     type: 'default',
     content:
-      'É possível ver que na lista *mensagem*, há números indicando onde os itens da lista textos devem ser colocados para completar a mensagem.',
+      'É possível ver que na lista `mensagem`, há números indicando onde os itens da lista `textos` devem ser colocados para completar a mensagem.',
     picture: 'panda-olhando-computador.jpg',
   },
   {
     type: 'default',
     content:
-      'Então faremos isso: primeiro encaixaremos a palavra *daí* onde está o índice 1',
+      'Então faremos isso: primeiro encaixaremos a palavra `daí` onde está o índice 1',
     picture: 'panda-fazendo-coracao.jpg',
   },
   {
@@ -277,19 +276,19 @@ var textos = ["perigoso", "daí"]
 mensagem.encaixar(1, 1, "daí")
 
 escreva(mensagem)
-// Resultado: Saia, daí, planeta, 3`,
-    isRunnable: false,
+// Resultado: ['Saia', 'daí', 'planeta', 3]`,
+    isRunnable: true,
   },
   {
     type: 'alert',
     content:
-      'Se o número do meio fosse zero, nenhum elemento seria removido, ou seja, o resultado seria: *Saia, 1, daí, planeta, 3*.',
+      'Se o número do meio fosse zero, nenhum elemento seria removido, ou seja, o resultado seria: `["Saia", 1, "daí", "planeta", 3]`.',
     picture: 'panda-piscando.jpg',
   },
   {
     type: 'alert',
     content:
-      'Mas ao colocar 1, o método *encaixar()* torna-se uma boa maneira também de substituir um valor de uma lista por outro.',
+      'Mas ao colocar 1, o método `encaixar()` se torna uma boa maneira também de substituir um valor de uma lista por outro.',
     picture: 'panda-piscando.jpg',
   },
   {
@@ -307,7 +306,7 @@ var textos = ["perigoso", "daí"]
 mensagem.encaixar(3, 1, "perigoso")
     
 escreva(mensagem)
-// Resultado: Saia, daí, planeta, perigoso`,
+// Resultado: ['Saia', 'daí', 'planeta', 'perigoso']`,
     isRunnable: false,
   },
   {

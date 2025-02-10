@@ -80,11 +80,11 @@ escreva(meuTexto.tamanho())
 escreva(meuTexto.inclui("b"))
 escreva(meuTexto.concatenar("d"))
     
-/* Resultado: 
-  3
-  verdadeiro
-  abcd
-*/
+// Resultado: 
+//  3
+//  verdadeiro
+//  abcd
+
     `,
     isRunnable: true,
   },
@@ -116,8 +116,9 @@ escreva(meuTexto.concatenar("d"))
         
 var novaMensagem = mensagem.aparar()
 
-escreva(novaMensagem.tamanho() == novaMensagem.tamanho())
-// Resultado: vardadeiro`,
+escreva(mensagem.tamanho() == novaMensagem.tamanho())
+// Resultado: falso
+// Já que as mensagens já não são do mesmo tamanho.`,
     isRunnable: true,
     picture: 'panda-olhando-de-lado.jpg',
   },
@@ -301,6 +302,7 @@ escreva(mensagem.juntar(" "))
 
 // Resultado: Não quero`,
     picture: 'panda-olhando-de-lado.jpg',
+    isRunnable: true,
   },
   {
     type: 'default',

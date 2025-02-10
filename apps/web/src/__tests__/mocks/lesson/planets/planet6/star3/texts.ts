@@ -110,7 +110,7 @@ escreva(equipamentos.inclui("blaster"))
   {
     type: 'default',
     content:
-      'A mais simples é usando um método que junte esses vetores em um única lista, ou seja, que concatene eles.',
+      'A mais simples é usando um método que junte esses listas em um única lista, ou seja, que concatene eles.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -126,7 +126,7 @@ escreva(equipamentos.inclui("blaster"))
     type: 'quote',
     title: 'Método concatenar()',
     content:
-      'O método *concatenar()* uni vetores diferentes em uma lista, só que ele não altera nenhum das listas originais. Então o resultado dessa união é um nova lista.',
+      'O método *concatenar()* uni listas diferentes em uma lista, só que ele não altera nenhum das listas originais. Então o resultado dessa união é um nova lista.',
     picture: 'panda-rindo-deitado.jpg',
   },
   {
@@ -149,7 +149,7 @@ var meusItens = equipamentos.concatenar(equipamentos)
 escreva(meusItens)
 
 // Resultado: 
-// mochila, lanterna, aquecedor, sinalizador, mochila, lanterna, aquecedor, sinalizador`,
+// ['mochila', 'lanterna', 'aquecedor', 'sinalizador', 'mochila', 'lanterna', 'aquecedor', 'sinalizador']`,
     isRunnable: true,
   },
   {
@@ -172,7 +172,7 @@ var novosNumeros = numeros.concatenar([4, 5, 6])
 
 escreva(novosNumeros)
 
-// Resultado: 1, 2, 3, 4, 5, 6`,
+// Resultado: [1, 2, 3, 4, 5, 6]`,
     isRunnable: true,
   },
   {
@@ -200,18 +200,10 @@ var quantidadeParaCadaAlimento = [2, 7, 3, 4]
 escreva(alimentos)
 escreva(quantidadeParaCadaAlimento)
 
-/* 
-Resultado: 
-garrafa d'água, barra de cereal, carne enlatada, fruta
-2, 7, 3, 4
-*/`,
+// Resultado: 
+// ['garrafa d'água', 'barra de cereal', 'carne enlatada', 'fruta']
+// [2, 7, 3, 4]`,
     isRunnable: true,
-  },
-  {
-    type: 'alert',
-    content:
-      'Antes que pergunte usar `/* */` é outra maneira para comentar código, só que para várias linhas ao mesmo tempo.',
-    picture: 'panda-piscando.jpg',
   },
   {
     type: 'user',
@@ -255,11 +247,11 @@ var quantidadeParaCadaAlimento = [2, 7, 3, 4]
 escreva(alimentos.ordenar())
 escreva(quantidadeParaCadaAlimento.ordenar())
 
-/* 
-Resultado: 
-barra de cereal, carne enlatada, fruta, garrafa d'água
-2, 3, 4, 7
-*/`,
+
+// Resultado: 
+// ['barra de cereal', 'carne enlatada', 'fruta', 'garrafa d'água']
+// [2, 3, 4, 7]
+`,
     isRunnable: true,
   },
   {
@@ -282,7 +274,7 @@ numeros.ordenar()
 
 escreva(numeros)
 
-// Resultado: 1, 2, 3`,
+// Resultado: [1, 2, 3]`,
     isRunnable: true,
   },
   {
@@ -301,8 +293,8 @@ escreva(numeros)
 escreva(numerosOrdenados)
 
 // Resultado: 
-// 1, 2, 3
-// 1, 2, 3`,
+// [1, 2, 3]
+// [1, 2, 3]`,
     isRunnable: true,
   },
   {
