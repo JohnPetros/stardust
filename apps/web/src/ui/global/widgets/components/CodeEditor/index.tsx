@@ -79,7 +79,7 @@ export function CodeEditorComponent(
       theme={theme}
       options={{
         minimap: {
-          enabled: hasMinimap,
+          enabled: false,
         },
         autoClosingBrackets: 'always',
         autoClosingQuotes: 'always',

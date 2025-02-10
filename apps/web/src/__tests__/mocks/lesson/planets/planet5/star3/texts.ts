@@ -158,7 +158,7 @@ enquanto (distanciaAteEspaco > 0) {
   {
     type: 'default',
     content:
-      'Porém no momento que conseguirmos sairmos da atmosfera, temos que estabilizar a velocidade em um valor fixo para entrar em órbita com o planeta e então acelerar de novo para pegar mais impulso para ir ainda mais longe.',
+      'Porém, no momento que conseguirmos sairmos da atmosfera, temos que estabilizar a velocidade em um valor fixo para entrar em órbita com o planeta e então acelerar de novo para pegar mais impulso para conseguirmos ir ainda mais longe.',
     picture: 'panda-olhando-computador.jpg',
   },
   {
@@ -229,12 +229,11 @@ escreva("distanciaAteEspaco: " + distanciaAteEspaco)
 escreva("comprimentoDaOrbita: " + comprimentoDaOrbita)
 escreva("velocidade: " + velocidade)
 
-/* 
-Resultado: 
-distanciaAteEspaco: 0
-comprimentoDaOrbita: 0
-velocidade: 1550
-*/`,
+
+// Resultado: 
+// distanciaAteEspaco: 0
+// comprimentoDaOrbita: 0
+// velocidade: 1550`,
     isRunnable: true,
   },
   {
@@ -245,7 +244,7 @@ velocidade: 1550
   },
   {
     type: 'default',
-    content: 'Caso contrário, *comprimentoDaOrbita* ficaria com *-1000* no final 😯.',
+    content: 'Caso contrário, `comprimentoDaOrbita` ficaria com `-1000` no final 😯.',
     picture: 'panda-espantado.jpg',
   },
   {
@@ -265,12 +264,11 @@ escreva("distanciaAteEspaco: " + distanciaAteEspaco)
 escreva("comprimentoDaOrbita: " + comprimentoDaOrbita)
 escreva("velocidade: " + velocidade)
 
-/* 
-Resultado: 
-distanciaAteEspaco: 0
-comprimentoDaOrbita: -1000
-velocidade: 1550
-*/`,
+
+// Resultado: 
+// distanciaAteEspaco: 0
+// comprimentoDaOrbita: -1000
+// velocidade: 1550`,
     isRunnable: true,
   },
   {
@@ -280,7 +278,7 @@ velocidade: 1550
   {
     type: 'default',
     content:
-      'Vou colocar uma variável *vezes* para ajudar você a entender melhor o que está acontecendo.',
+      'Vou colocar uma variável `vezes` para ajudar você a entender melhor o que está acontecendo.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -307,13 +305,12 @@ escreva("comprimentoDaOrbita: " + comprimentoDaOrbita)
 escreva("velocidade: " + velocidade)
 escreva("vezes: " + vezes)
 
-/*
-Resultado: 
-distanciaAteEspaco: 0
-comprimentoDaOrbita: 0
-velocidade: 1550
-vezes: 2000
-*/`,
+
+// Resultado: 
+// distanciaAteEspaco: 0
+// comprimentoDaOrbita: 0
+// velocidade: 1550
+// vezes: 2000`,
     isRunnable: true,
   },
   {

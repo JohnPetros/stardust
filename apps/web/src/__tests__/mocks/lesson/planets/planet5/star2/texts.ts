@@ -15,7 +15,7 @@ export const texts: TextBlockDto[] = [
   {
     type: 'default',
     content:
-      'Para fazer o programa a partir disso podemos usar outro tipo de laço, conhecido como *enquanto*.',
+      'Para fazer o programa a partir disso podemos usar outro tipo de laço, conhecido como `enquanto`.',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
@@ -27,7 +27,7 @@ export const texts: TextBlockDto[] = [
     type: 'quote',
     title: 'enquanto',
     content:
-      'O *enquanto* apenas precisa de uma condição, que enquanto for verdadeira, será executado tudo o que estiver no seu bloco de código repetidas vezes.',
+      'O `enquanto` apenas precisa de uma condição, que enquanto for verdadeira, será executado tudo o que estiver no seu bloco de código repetidas vezes.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -45,14 +45,13 @@ enquanto(conexaoAtiva) {
   totalAmostras--
 }
 
-escreva(totalAmostras)
-// Resultado: 0`,
+escreva(totalAmostras)`,
     isRunnable: false,
   },
   {
     type: 'alert',
     content:
-      'Perceba que foi utilizado outro operador especial, no caso o operador de *decremento*, ou seja, ao contrario do de *incremento*, ele subtrai 1 do valor atual de uma variável.',
+      'Perceba que foi utilizado outro operador especial, no caso o operador de `decremento`, ou seja, ao contrario do de `incremento`, ele subtrai 1 do valor atual de uma variável.',
     picture: 'panda-olhando-computador.jpg',
   },
   {
@@ -67,13 +66,13 @@ escreva(totalAmostras)
   {
     type: 'default',
     content:
-      'Como dito, o comando *enquanto* executará tudo que estiver no seu bloco enquanto sua condição for verdadeira.',
+      'Como dito, o comando `enquanto` executará tudo que estiver no seu bloco enquanto sua condição for verdadeira.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'default',
     content:
-      'O que acontece é que com o código desse jeito, a execução nunca terminará, pois a variável *conexaoAtiva* sempre será verdadeira até o fim do programa.',
+      'O que acontece é que com o código desse jeito, a execução nunca terminará, pois a variável `conexaoAtiva` sempre será verdadeira até o fim do programa.',
     picture: 'panda-triste.jpg',
   },
   {
@@ -126,7 +125,7 @@ escreva(totalAmostras)
   {
     type: 'default',
     content:
-      'Por exemplo, caso queiramos que apenas cinco amostras sejam analisadas, podemos colocar o *pausa* quando a variável *totalAmostras* for igual a esse valor:',
+      'Por exemplo, caso queiramos que apenas cinco amostras sejam analisadas, podemos colocar o `pausa` quando a variável `totalAmostras` for igual a esse valor:',
     picture: 'panda-sorrindo.jpg',
   },
   {
@@ -152,13 +151,13 @@ escreva(totalAmostras)
   },
   {
     type: 'default',
-    content: 'É claro, isso também funciona para outros tipos de laço, como o *para*.',
+    content: 'É claro, isso também funciona para outros tipos de laço, como o `para`.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
     type: 'default',
     content:
-      'Por exemplo, é totalmente possível realizar o que acabamos de fazer usando um *para* também.',
+      'Por exemplo, é totalmente possível realizar o que acabamos de fazer usando um `para` também.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
@@ -179,22 +178,27 @@ escreva(totalAmostras)
   },
   {
     type: 'user',
-    content: 'Espera aí, o *para* só está com 2 parâmetros?',
+    content: 'Espera aí, o `para` só está com 2 parâmetros?',
+  },
+  {
+    type: 'alert',
+    content: 'Boa observação!',
+    picture: 'panda-piscando-sentado.jpg',
   },
   {
     type: 'alert',
     content:
-      'Sim, veja que não há inicialização nesse *para*, pois a variável de controle, no caso *totalAmostras*, foi declarada fora dele, e ao invés de incremetá-la na expressão final, estamos decrementando-a.',
+      'Sim, veja que não há inicialização nesse `para`, pois a variável de controle, no caso `totalAmostras`, foi declarada fora dele, e ao invés de incremetá-la na expressão final, estamos decrementando-a.',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
     type: 'user',
-    content: 'Mas quando usar *para* ou *enquanto*?',
+    content: 'Mas quando usar `para` ou `enquanto`?',
   },
   {
     type: 'alert',
     content:
-      'Boa pergunta, usamos o *enquanto* apenas em situações que não sabemos quantas repetições o laço irá ter, e o *para* quando já sabemos disso.',
+      'Boa pergunta, usamos o `enquanto` apenas em situações que não sabemos quantas repetições o laço irá ter, e o `para` quando já sabemos disso.',
     picture: 'panda.jpg',
   },
   {

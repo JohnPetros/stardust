@@ -61,7 +61,7 @@ export function useRewardingPage({
   }, [nextRoute, router.goTo])
 
   async function handleSecondButtonClick() {
-    await goToNextRoute()
+    goToNextRoute()
   }
 
   useRefreshPage(handleSecondButtonClick)

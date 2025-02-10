@@ -80,10 +80,10 @@ fazer {
     picture: 'panda-de-oculos.jpg',
   },
   {
-    stem: 'Reordene o laço *fazer enquanto* corretamente, de modo que depois de 4 iterações a última mensagem escrita seja "Esse foguete tem 4 turbinas funcionando.".',
+    stem: 'Reordene o laço *fazer enquanto* corretamente, de modo que a primeira mensagem escrita seja "Esse foguete tem 2 turbinas funcionando." e a última seja "Esse foguete tem 4 turbinas funcionando.".',
     type: 'drag-and-drop-list',
     items: [
-      { position: 1, label: 'var numero = 1' },
+      { position: 1, label: 'var numero = 2' },
       { position: 2, label: 'fazer {' },
       {
         position: 3,
@@ -123,7 +123,7 @@ fazer {
       { index: 5, label: '50' },
       { index: 6, label: '25' },
     ],
-    correctItemsIndexesSequence: [1, 6, 3],
+    correctItems: ['fazer', '25', 'pausa'],
     picture: 'panda-abracando-bambu.jpg',
   },
 ]

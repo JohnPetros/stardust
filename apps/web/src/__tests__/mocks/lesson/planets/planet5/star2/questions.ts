@@ -92,7 +92,7 @@ enquanto (temperatura > 0) {
       { index: 4, label: '>' },
       { index: 5, label: 'numero' },
     ],
-    correctItemsIndexesSequence: [2, 3, 1, 5],
+    correctItems: ['enquanto', '<', 'frase', 'numero'],
     picture: 'panda-andando-com-bambu.jpg',
   },
   {

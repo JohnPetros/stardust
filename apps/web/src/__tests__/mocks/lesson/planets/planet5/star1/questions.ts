@@ -55,15 +55,15 @@ export const questions: Questions = [
       { index: 4, label: '5' },
       { index: 5, label: 'contador' },
     ],
-    correctItemsIndexesSequence: [2, 3, 4],
+    correctItems: ['para', '0', '5'],
     picture: 'panda-sorrindo.jpg',
   },
 
   {
-    stem: 'O analisador está enviando uma sequência de números por meio de um laço. Qual é essa sequência?',
+    stem: 'O analisador está enviando uma sequência de números por meio de um laço. Qual é essa sequência? (Lembre-se do operador de módulo *%*, que calcula o resto da divisão)',
     type: 'selection',
     code: `para (var numero = 1; numero <= 10; numero++) {
-  se (numero * 2 === 0) {
+  se (numero % 2 == 0) {
     escreva(numero)
   }
 } `,
@@ -107,7 +107,7 @@ export const questions: Questions = [
       { index: 3, label: 'contador' },
       { index: 4, label: 'energia' },
     ],
-    correctItemsIndexesSequence: [2, 3, 4],
+    correctItems: ['<=', 'contador', 'energia'],
     picture: 'panda-andando-com-bambu.jpg',
   },
 ]
