@@ -42,6 +42,8 @@ export function obtenhaTokenizadorDeleguaParaEditorMonaco(): monaco.languages.IM
       'senao se',
       'senao',
       'sustar',
+      'encaixar',
+      'pausa',
       'tente',
       'texto[]',
       'tipo',

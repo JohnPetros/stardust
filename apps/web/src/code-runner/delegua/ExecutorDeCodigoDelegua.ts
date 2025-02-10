@@ -82,7 +82,7 @@ export const ExecutorDeCodigoDelegua = (): ICodeRunnerProvider => {
       let codigo = codeValue
 
       for (const input of codeInputs) {
-        const entrada = formateValor(input)
+        const entrada = this.translateToCodeRunner(input)
         codigo = codigo.replace(DELEGUA_REGEX.conteudoDeFuncaoLeia, entrada)
       }
 

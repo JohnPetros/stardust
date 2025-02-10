@@ -68,6 +68,7 @@ export const DELEGUA_TOKENS = {
     'removerPrimeiro',
     'removerUltimo',
     'somar',
+    'encaixar',
 
     /* funções nativas gerais*/
     'aleatorio',
