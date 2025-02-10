@@ -55,8 +55,14 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
       const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
       setCraftsVislibility(
         ChallengeCraftsVisibility.create({
-          canShowComments: isUserChallengeAuthor || isChallengeCompleted.isTrue,
-          canShowSolutions: isUserChallengeAuthor || isChallengeCompleted.isTrue,
+          canShowComments:
+            isUserChallengeAuthor ||
+            isChallengeCompleted.isTrue ||
+            challenge.isCompleted.isTrue,
+          canShowSolutions:
+            isUserChallengeAuthor ||
+            isChallengeCompleted.isTrue ||
+            challenge.isCompleted.isTrue,
         }),
       )
     }

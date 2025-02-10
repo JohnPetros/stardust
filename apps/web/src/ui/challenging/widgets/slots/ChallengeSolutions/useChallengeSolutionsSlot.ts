@@ -88,6 +88,8 @@ export function useChallengeSolutionsSlot() {
     isRecheadedEnd,
     popoverMenuButtons,
     challengeSlug: challenge?.slug.value ?? '',
+    isChallengeCompleted:
+      challenge && user && user.hasCompletedChallenge(challenge.id).isTrue,
     nextPage,
     handleIsFromUserChange,
     handleSolutionTitleChange,

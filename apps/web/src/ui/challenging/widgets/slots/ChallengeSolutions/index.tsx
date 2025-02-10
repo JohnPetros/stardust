@@ -34,6 +34,7 @@ export function ChallengeSolutionsSlot() {
     solutionTitle,
     popoverMenuButtons,
     challengeSlug,
+    isChallengeCompleted,
     handleIsFromUserChange,
     nextPage,
     handleSolutionTitleChange,
@@ -47,15 +48,17 @@ export function ChallengeSolutionsSlot() {
             <ChallengeContentNav contents={['description', 'comments']} />
           </div>
 
-          <Button
-            asChild
-            className='md:ml-auto w-full md:w-max mt-2 md:m-0 px-3 h-10 text-xs'
-          >
-            <Link href={`${ROUTES.challenging.challenges.solution(challengeSlug)}`}>
-              <Icon name='share' size={14} className='mr-1' />
-              Compartilhar sua solução
-            </Link>
-          </Button>
+          {isChallengeCompleted && (
+            <Button
+              asChild
+              className='md:ml-auto w-full md:w-max mt-2 md:m-0 px-3 h-10 text-xs'
+            >
+              <Link href={`${ROUTES.challenging.challenges.solution(challengeSlug)}`}>
+                <Icon name='share' size={14} className='mr-1' />
+                Compartilhar sua solução
+              </Link>
+            </Button>
+          )}
         </div>
 
         <div className='flex items-center gap-6 mt-6'>
