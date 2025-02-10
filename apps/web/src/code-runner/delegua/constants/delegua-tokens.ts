@@ -36,6 +36,7 @@ export const DELEGUA_TOKENS = {
     'senao se',
     'senao',
     'sustar',
+    'pausa',
     'tente',
     'texto[]',
     'tipo',
