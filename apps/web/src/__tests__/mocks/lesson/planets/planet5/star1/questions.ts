@@ -55,7 +55,7 @@ export const questions: Questions = [
       { index: 4, label: '5' },
       { index: 5, label: 'contador' },
     ],
-    correctItemsIndexesSequence: [2, 3, 4],
+    correctItems: [2, 3, 4],
     picture: 'panda-sorrindo.jpg',
   },
 
@@ -107,7 +107,7 @@ export const questions: Questions = [
       { index: 3, label: 'contador' },
       { index: 4, label: 'energia' },
     ],
-    correctItemsIndexesSequence: [2, 3, 4],
+    correctItems: [2, 3, 4],
     picture: 'panda-andando-com-bambu.jpg',
   },
 ]

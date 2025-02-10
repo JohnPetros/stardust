@@ -67,6 +67,6 @@ escreva(mensagem)`,
       { index: 3, label: '+ 50' },
       { index: 4, label: '75' },
     ],
-    correctItemsIndexesSequence: [3],
+    correctItems: [3],
   },
 ]

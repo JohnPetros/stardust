@@ -38,7 +38,7 @@ export const questions: Questions = [
       { index: 4, label: '4' },
       { index: 5, label: '2' },
     ],
-    correctItemsIndexesSequence: [1, 5],
+    correctItems: [1, 5],
     picture: 'panda-piscando.jpg',
   },
   {
@@ -71,7 +71,7 @@ var elementosRemovidos = elementos.encaixar(1)`,
       { index: 2, label: '1' },
       { index: 3, label: '"Novo receptor"' },
     ],
-    correctItemsIndexesSequence: [1, 2, 3],
+    correctItems: [1, 2, 3],
     picture: 'panda-piscando.jpg',
   },
   {

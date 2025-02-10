@@ -25,7 +25,6 @@ export function useChallengeCodeEditorSlot() {
   const toast = useToastContext()
   const router = useRouter()
   const userCode = useRef<Code>(Code.create(provider))
-  const previousUserCode = useRef('')
   const editorContainerRef = useRef<HTMLDivElement>(null)
   const codeEditorRef = useRef<CodeEditorRef>(null)
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
@@ -107,12 +106,12 @@ export function useChallengeCodeEditorSlot() {
 
   return {
     userCode,
-    previousUserCode,
     editorContainerRef,
     runCodeButtonRef,
     consoleRef,
     codeEditorRef,
     codeEditorHeight,
+    originalCode: String(challenge?.code),
     initialCode,
     handleRunCode,
     handleCodeChange,

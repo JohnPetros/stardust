@@ -95,7 +95,7 @@ escreva(bancoDePalavras)`,
       { index: 4, label: '"-"' },
       { index: 6, label: '" "' },
     ],
-    correctItemsIndexesSequence: [1, 3, 2, 4],
+    correctItems: [1, 3, 2, 4],
     picture: 'panda-oferecendo-bambu.jpg',
   },
 ]

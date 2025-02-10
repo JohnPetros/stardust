@@ -123,7 +123,7 @@ fazer {
       { index: 5, label: '50' },
       { index: 6, label: '25' },
     ],
-    correctItemsIndexesSequence: [1, 6, 3],
+    correctItems: [1, 6, 3],
     picture: 'panda-abracando-bambu.jpg',
   },
 ]

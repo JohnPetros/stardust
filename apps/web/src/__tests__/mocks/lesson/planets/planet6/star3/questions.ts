@@ -119,7 +119,7 @@ se (tecnologias.inclui("propulsor")) {
         label: 'concatenar',
       },
     ],
-    correctItemsIndexesSequence: [5, 6, 1],
+    correctItems: [5, 6, 1],
     picture: 'panda-com-mochila.jpg',
   },
   {
@@ -202,7 +202,7 @@ se (tecnologias.inclui("propulsor")) {
         label: 'concatenar',
       },
     ],
-    correctItemsIndexesSequence: [2, 3],
+    correctItems: [2, 3],
     picture: 'panda-com-mochila.jpg',
   },
 ]

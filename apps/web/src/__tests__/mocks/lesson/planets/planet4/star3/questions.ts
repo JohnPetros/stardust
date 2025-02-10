@@ -91,7 +91,7 @@ escreva(tipo)`,
       { index: 3, label: 'senao se' },
       { index: 4, label: 'seguro' },
     ],
-    correctItemsIndexesSequence: [1, 3, 2],
+    correctItems: [1, 3, 2],
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
 ]

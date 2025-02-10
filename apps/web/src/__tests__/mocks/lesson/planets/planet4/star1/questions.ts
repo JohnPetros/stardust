@@ -47,7 +47,7 @@ export const questions: Questions = [
       { index: 3, label: 'pequeno' },
       { index: 4, label: 'grande' },
     ],
-    correctItemsIndexesSequence: [1, 4],
+    correctItems: [1, 4],
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -95,7 +95,7 @@ escreva(status)`,
       { index: 3, label: '!falso' },
       { index: 4, label: '!verdadeiro' },
     ],
-    correctItemsIndexesSequence: [3],
+    correctItems: [3],
     picture: 'panda-de-oculos.jpg',
   },
 ]

@@ -12,7 +12,7 @@ import { Question } from '#lesson/abstracts'
 
 type DragAndDropQuestionProps = {
   codeLines: QuestionCodeLine[]
-  correctItems: List<string>
+  correctItems:: List<string>
   dragAndDrop: DragAndDrop
 }
 
@@ -24,7 +24,7 @@ export class DragAndDropQuestion extends Question<DragAndDropQuestionProps> {
         picture: Image.create(dto.picture),
         stem: Text.create(dto.stem),
         codeLines: dto.lines.map(QuestionCodeLine.create),
-        correctItems: List.create(dto.correctItems),
+        correctItems:: List.create(dto.correctItems:),
         dragAndDrop: DragAndDrop.create(dto.items),
       },
       dto.id,
@@ -38,7 +38,7 @@ export class DragAndDropQuestion extends Question<DragAndDropQuestionProps> {
   verifyUserAnswer(userAnswer: UserAnswer): Logical {
     const userItems = List.create(userAnswer.value as string[])
 
-    return userItems.isEqualTo(this.props.correctItems)
+    return userItems.isEqualTo(this.props.correctItems:)
   }
 
   get dropZonesCount(): Integer {
@@ -61,7 +61,7 @@ export class DragAndDropQuestion extends Question<DragAndDropQuestionProps> {
     return this.props.codeLines
   }
 
-  get correctItems(): List<string> {
-    return this.props.correctItems
+  get correctItems:(): List<string> {
+    return this.props.correctItems:
   }
 }

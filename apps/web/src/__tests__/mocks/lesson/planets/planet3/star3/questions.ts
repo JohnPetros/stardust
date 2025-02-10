@@ -41,7 +41,7 @@ export const questions: Questions = [
       { index: 2, label: '!' },
       { index: 3, label: 'ou' },
     ],
-    correctItemsIndexesSequence: [3],
+    correctItems: [3],
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -70,7 +70,7 @@ export const questions: Questions = [
       { index: 3, label: 'falso' },
       { index: 4, label: '3700' },
     ],
-    correctItemsIndexesSequence: [1, 2],
+    correctItems: [1, 2],
     picture: 'panda-abracando-bambu.jpg',
   },
   {
@@ -118,7 +118,7 @@ export const questions: Questions = [
       { index: 3, label: 'ou' },
       { index: 4, label: '<' },
     ],
-    correctItemsIndexesSequence: [4, 1, 2, 3],
+    correctItems: [4, 1, 2, 3],
     picture: 'panda-olhando-computador.jpg',
   },
 ]

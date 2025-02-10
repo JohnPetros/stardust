@@ -49,7 +49,7 @@ export const questions: Questions = [
       { index: 2, label: '"Planeta Datahon"' },
       { index: 3, label: '333' },
     ],
-    correctItemsIndexesSequence: [2],
+    correctItems: [2],
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {

@@ -52,7 +52,7 @@ export const questions: Questions = [
       { index: 5, label: '-' },
     ],
     picture: 'panda-olhando-de-lado.jpg',
-    correctItemsIndexesSequence: [2, 3],
+    correctItems: [2, 3],
   },
   {
     stem: 'Agora complete a linha de código com os números certos para que o resultado seja igual a *10*, indicando que temos 10 assentos disponíveis.',
@@ -72,6 +72,6 @@ export const questions: Questions = [
       { index: 5, label: '10' },
     ],
     picture: 'panda-piscando.jpg',
-    correctItemsIndexesSequence: [1, 2],
+    correctItems: [1, 2],
   },
 ]

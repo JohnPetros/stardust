@@ -39,7 +39,7 @@ export const questions: Questions = [
       { index: 3, label: '- data -' },
       { index: 4, label: 'data' },
     ],
-    correctItemsIndexesSequence: [4, 2],
+    correctItems: [4, 2],
   },
 
   {
@@ -97,6 +97,6 @@ escreva(nome + " tem a cor " + cor)`,
       { index: 3, label: '${mensagem}' },
       { index: 4, label: "'Olá, mundo!'" },
     ],
-    correctItemsIndexesSequence: [3],
+    correctItems: [3],
   },
 ]

@@ -193,7 +193,7 @@ escolha (planeta) {
         label: '"ativarMotorTurbo"',
       },
     ],
-    correctItemsIndexesSequence: [1, 4, 2, 3],
+    correctItems: [1, 4, 2, 3],
     picture: 'panda-amando-bambu.jpg',
   },
 ]

@@ -31,7 +31,7 @@ export const questions: Questions = [
       { index: 3, label: '*=' },
       { index: 4, label: '/=' },
     ],
-    correctItemsIndexesSequence: [3],
+    correctItems: [3],
     picture: 'panda-amando-bambu.jpg',
   },
   {
@@ -63,7 +63,7 @@ se (radiacao > 500) {
       { index: 1, label: 'planeta rico' },
       { index: 2, label: 'planeta pobre' },
     ],
-    correctItemsIndexesSequence: [1, 2],
+    correctItems: [1, 2],
     picture: 'panda-com-bola-de-boliche.jpg',
   },
   {
@@ -152,7 +152,7 @@ se (radiacao > 500) {
         label: '8',
       },
     ],
-    correctItemsIndexesSequence: [2, 3],
+    correctItems: [2, 3],
     picture: 'panda-de-oculos.jpg',
   },
 ]

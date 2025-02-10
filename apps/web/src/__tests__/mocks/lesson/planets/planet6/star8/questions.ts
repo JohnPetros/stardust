@@ -79,7 +79,7 @@ para (var i = 0; i < itens.tamanho(); i++) {
       { index: 3, label: 'parte' },
       { index: 5, label: 'partes' },
     ],
-    correctItemsIndexesSequence: [1, 3, 5],
+    correctItems: [1, 3, 5],
     picture: 'panda-sorrindo.jpg',
   },
   {
@@ -120,7 +120,7 @@ para (var i = 0; i < itens.tamanho(); i++) {
       { index: 5, label: 'inclui' },
       { index: 6, label: 'concatenar' },
     ],
-    correctItemsIndexesSequence: [3, 6, 1],
+    correctItems: [3, 6, 1],
     picture: 'panda-piscando.jpg',
   },
   {

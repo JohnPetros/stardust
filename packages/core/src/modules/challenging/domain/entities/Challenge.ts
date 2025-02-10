@@ -62,6 +62,10 @@ export class Challenge extends Entity<ChallengeProps> {
       return code.addFunctionCall(testCase.inputs)
     }
 
+    if (code.inputsCount !== testCase.inputs.length) {
+      throw new InsufficientInputsError()
+    }
+
     return code.addInputs(testCase.inputs)
   }
 

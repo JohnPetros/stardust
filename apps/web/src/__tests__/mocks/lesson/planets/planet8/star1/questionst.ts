@@ -89,7 +89,7 @@ para cada palavra de palavras {
       { index: 3, label: 'guerreiros' },
       { index: 4, label: 'palavra 2' },
     ],
-    correctItemsIndexesSequence: [3, 2, 1, 4],
+    correctItems: [3, 2, 1, 4],
     picture: 'panda-espantado.jpg',
   },
   {
