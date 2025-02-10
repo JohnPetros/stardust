@@ -15,7 +15,7 @@
     "test:coverage": "test --coverage"
   },
   "dependencies": {
-    "@designliquido/delegua": "^0.37.1",
+    "@designliquido/delegua": "^0.37.0",
     "@dnd-kit/core": "^6.1.0",
     "@dnd-kit/modifiers": "^6.0.1",
     "@dnd-kit/sortable": "^7.0.2",
