@@ -32,7 +32,7 @@ export const texts: TextBlockDto[] = [
     content: `var alimentos = ["maçã", "batata", "bife", "geleia"]
 escreva(alimentos)
 
-// Resultado: maçã, batata, bife, geleia`,
+// Resultado: ['maçã', 'batata', 'bife', 'geleia']`,
     isRunnable: true,
   },
   {
@@ -181,7 +181,7 @@ escreva(alimentos[-2])
 alimentos[4] = "abacaxi"
 
 escreva(alimentos)
-// Resultado: maçã, batata, bife, geleia, abacaxi`,
+// Resultado: ['maçã', 'batata', 'bife', 'geleia', 'abacaxi']`,
     isRunnable: true,
   },
   {
@@ -203,7 +203,7 @@ escreva(alimentos)
 alimentos[7] = "abacaxi"
 
 escreva(alimentos)
-// Resultado: maçã, batata, bife, geleia, , , , abacaxi`,
+// Resultado: ['maçã', 'batata', 'bife', 'geleia', nulo, nulo, nulo, 'abacaxi']`,
     isRunnable: true,
   },
   {
@@ -241,7 +241,7 @@ escreva(alimentos)
 alimentos[2] = "iogurte"
 
 escreva(alimentos)
-// Resultado: maçã, batata, iogurte, geleia, abacaxi`,
+// Resultado: ['maçã', 'batata', 'iogurte', 'geleia', 'abacaxi']`,
     isRunnable: true,
   },
   {
