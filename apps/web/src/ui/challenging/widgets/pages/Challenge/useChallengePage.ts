@@ -3,19 +3,20 @@
 import { useEffect } from 'react'
 
 import type { ChallengeVote } from '@stardust/core/challenging/types'
-import { Challenge } from '@stardust/core/challenging/entities'
 import type { ChallengeDto } from '@stardust/core/challenging/dtos'
+import { Challenge } from '@stardust/core/challenging/entities'
+import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
 
-import { ROUTES } from '@/constants'
+import { ROUTES, STORAGE } from '@/constants'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import type {
   ChallengeContent,
   PanelsLayout,
 } from '@/ui/challenging/stores/ChallengeStore/types'
-import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
+import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 
 export function useChallengePage(challengeDto: ChallengeDto, userVote: ChallengeVote) {
   const {
@@ -32,12 +33,14 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
   const { user } = useAuthContext()
   const { currentRoute, goTo } = useRouter()
   const [isNew] = useQueryStringParam('isNew', 'true')
+  const secondCounterLocalstorage = useLocalStorage(STORAGE.keys.secondsCounter)
 
   function handleBackButton() {
-    if (challenge)
-      goTo(
-        challenge.isFromStar.isTrue ? ROUTES.space : ROUTES.challenging.challenges.list,
-      )
+    if (!challenge) return
+
+    secondCounterLocalstorage.remove()
+    resetStore()
+    goTo(challenge.isFromStar.isTrue ? ROUTES.space : ROUTES.challenging.challenges.list)
   }
 
   function handlePanelsLayoutButton(panelsLayout: PanelsLayout) {

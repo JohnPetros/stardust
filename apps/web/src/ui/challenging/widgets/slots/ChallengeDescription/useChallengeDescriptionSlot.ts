@@ -41,6 +41,7 @@ export function useChallengeDescriptionSlot() {
     challenge,
     isUserChallengeAuthor: Boolean(challenge?.authorId === user?.id),
     isCompleted:
-      challenge && user ? user.hasCompletedChallenge(challenge.id).isTrue : false,
+      user?.hasCompletedChallenge(challenge?.id ?? '').isTrue ||
+      Boolean(challenge?.isCompleted.isTrue),
   }
 }

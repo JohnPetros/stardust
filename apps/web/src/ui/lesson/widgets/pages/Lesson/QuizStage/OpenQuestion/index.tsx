@@ -30,7 +30,7 @@ export function OpenQuestion({
       <QuestionStem picture={picture}>{stem}</QuestionStem>
 
       {code && (
-        <div className='w-full'>
+        <div className='mt-3 w-full'>
           <CodeSnippet code={code} isRunnable={false} />
         </div>
       )}

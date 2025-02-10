@@ -37,7 +37,7 @@ export function ChallengeVoteControl() {
           {upvotesCount}
         </span>
       </button>
-      {isUserChallengeAuthor && (
+      {!isUserChallengeAuthor && (
         <button
           type='button'
           onClick={() => handleVoteButton('downvote')}
