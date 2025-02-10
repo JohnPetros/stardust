@@ -63,7 +63,7 @@ escreva("Vai chover asteroide hoje? " + resposta)
       { index: 3, label: 'nulo' },
       { index: 4, label: 'resposta' },
     ],
-    correctItems: ['falso', 'resposta'],
+    correctItems: [2, 4],
   },
   {
     stem: 'Qual seria o valor lógico para a pergunta "10 é maior que 5?"',

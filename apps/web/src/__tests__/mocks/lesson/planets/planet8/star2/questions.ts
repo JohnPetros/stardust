@@ -94,7 +94,7 @@ export const questions: Questions = [
       { index: 3, label: 'chaves' },
       { index: 4, label: 'nomes' },
     ],
-    correctItemsIndexesSequence: [1, 4],
+    correctItems: [1, 4],
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -191,7 +191,7 @@ var dado = frotas["FrotaExploradora"]["naves"]["Galáxia"]["velocidade"]`,
       { index: 4, label: '"quantidade"' },
       { index: 5, label: '"potencia"' },
     ],
-    correctItemsIndexesSequence: [3, 2, 4],
+    correctItems: [3, 2, 4],
     picture: 'panda-olhando-de-lado.jpg',
   },
 ]

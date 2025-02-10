@@ -96,7 +96,7 @@ mostreDistancia(velocidade, tempo)`,
       { index: 3, label: 'funcao' },
       { index: 4, label: 'mostreLancamento' },
     ],
-    correctItemsIndexesSequence: [3, 2, 1, 4],
+    correctItems: [3, 2, 1, 4],
     picture: 'panda-olhando-de-lado.jpg',
   },
 ]

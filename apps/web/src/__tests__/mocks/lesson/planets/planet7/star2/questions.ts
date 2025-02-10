@@ -85,7 +85,7 @@ se (verificarRobo(robo)) {
         label: '"Haskell"',
       },
     ],
-    correctItemsIndexesSequence: [3, 1, 4],
+    correctItems: [3, 1, 4],
     picture: 'panda.jpg',
   },
   {
@@ -126,7 +126,7 @@ se (verificarRobo(robo)) {
         label: '=',
       },
     ],
-    correctItemsIndexesSequence: [3, 4, 1],
+    correctItems: [3, 4, 1],
     picture: 'panda.jpg',
   },
   {

@@ -44,7 +44,7 @@ export const questions: Questions = [
       { index: 3, label: 'remover' },
       { index: 4, label: '2' },
     ],
-    correctItemsIndexesSequence: [3, 2],
+    correctItems: [3, 2],
     picture: 'panda-rindo-deitado.jpg',
   },
   {
@@ -64,7 +64,7 @@ export const questions: Questions = [
       { index: 2, label: 'NebulaShield' },
       { index: 3, label: 'PolarProtec' },
     ],
-    correctItemsIndexesSequence: [1, 2, 3],
+    correctItems: [1, 2, 3],
     picture: 'panda-piscando.jpg',
   },
   {

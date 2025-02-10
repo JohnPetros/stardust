@@ -15,9 +15,15 @@ export function ChallengeCodeEditorSlot() {
     handleRunCode,
   } = useChallengeCodeEditorSlot()
 
+  console.log(originalCode)
+
   return (
     <div ref={editorContainerRef} className='relative h-full w-full'>
-      <CodeEditorToolbar originalCode={originalCode} codeEditorRef={codeEditorRef} onRunCode={handleRunCode}>
+      <CodeEditorToolbar
+        originalCode={originalCode}
+        codeEditorRef={codeEditorRef}
+        onRunCode={handleRunCode}
+      >
         <CodeEditor
           ref={codeEditorRef}
           value={initialCode ?? ''}

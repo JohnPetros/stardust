@@ -76,6 +76,6 @@ export const questions: Questions = [
       { index: 3, label: 'leia( )' },
       { index: 4, label: 'leia' },
     ],
-    correctItems: ['leia( )', 'escreva'],
+    correctItems:: ['leia( )', 'escreva'],
   },
 ]

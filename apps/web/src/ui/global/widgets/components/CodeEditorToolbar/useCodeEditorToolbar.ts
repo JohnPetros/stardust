@@ -2,7 +2,7 @@ import { type KeyboardEvent, type RefObject, useRef } from 'react'
 import type { CodeEditorRef } from '../CodeEditor/types'
 
 type UseCodeEditorToolbarParams = {
-  originalCode: string
+  originalCode?: string
   codeEditorRef: RefObject<CodeEditorRef>
   runCodeButtonRef: RefObject<HTMLButtonElement>
   docsDialogButtonRef: RefObject<HTMLButtonElement>
@@ -17,7 +17,11 @@ export function useCodeEditorToolbar({
   const hasCodedEditorReset = useRef(false)
 
   function resetCode() {
-    codeEditorRef.current?.setValue(originalCode)
+    if (originalCode) {
+      codeEditorRef.current?.setValue(originalCode)
+      return
+    }
+    codeEditorRef.current?.reloadValue()
   }
 
   function handleAltEnter() {

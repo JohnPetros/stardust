@@ -87,7 +87,7 @@ escreva(22 + numero)`,
         label: 'real',
       },
     ],
-    correctItemsIndexesSequence: [2, 1],
+    correctItems: [2, 1],
     picture: 'panda-deslumbrado.jpg',
   },
 ]

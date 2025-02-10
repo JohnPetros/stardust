@@ -88,7 +88,7 @@ escreva(numerosDaSorte)`,
       { index: 5, label: '4' },
       { index: 6, label: '5' },
     ],
-    correctItemsIndexesSequence: [2, 3, 4],
+    correctItems: [2, 3, 4],
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
