@@ -53,12 +53,20 @@ export const HttpMock = <FakeSchema extends HttpSchema>({
       throw new Error('NextHttp getCookie method not implemented')
     },
 
+    hasCookie(key) {
+      throw new Error('NextHttp getCookie method not implemented')
+    },
+
     getBody() {
       throw new Error('Method not implemented')
     },
 
     async getUser() {
       return fakeUser
+    },
+
+    getMethod() {
+      throw new Error('Method not implemented')
     },
 
     pass() {
