@@ -2,59 +2,107 @@ import type { IProfileService } from '@stardust/core/interfaces'
 import type { User } from '@stardust/core/global/entities'
 import { ApiResponse } from '@stardust/core/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/constants'
+import { WeekStatus } from '@stardust/core/profile/structs'
 
-import type { Supabase } from '../types'
+import type { Supabase, SupabaseUser } from '../types'
 import { SupabasePostgrestError } from '../errors'
 import { SupabaseAchievementMapper, SupabaseUserMapper } from '../mappers'
-import { WeekStatus } from '@stardust/core/profile/structs'
 
 export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
   const supabaseUserMapper = SupabaseUserMapper()
   const supabaseAchievementMapper = SupabaseAchievementMapper()
 
+  async function fetchUsersCompletedPlanets(userId: string) {
+    const { data, error } = await supabase
+      .from('users_completed_planets_view')
+      .select('planet_id')
+      .eq('user_id', userId)
+
+    if (error) return []
+
+    return data
+  }
+
   return {
     async fetchUserById(userId: string) {
-      const { data, error } = await supabase
-        .from('users_view')
-        .select('*, avatar:avatars(*), rocket:rockets(*), tier:tiers(*)')
+      const { data, error, status } = await supabase
+        .from('users')
+        .select(
+          `*, 
+          avatar:avatars(*), 
+          rocket:rockets(*), 
+          tier:tiers(*),
+          users_unlocked_stars(star_id),
+          users_unlocked_achievements(achievement_id),
+          users_rescuable_achievements(achievement_id),
+          users_acquired_rockets(rocket_id),
+          users_acquired_avatars(avatar_id),
+          users_completed_challenges(challenge_id),
+          users_upvoted_solutions(solution_id),
+          users_upvoted_comments(comment_id)`,
+        )
         .eq('id', userId)
         .single()
 
-      if (error) {
-        return SupabasePostgrestError(
-          error,
-          'Usuário não encontrado',
-          HTTP_STATUS_CODE.notFound,
-        )
+      if (error) return SupabasePostgrestError(error, 'Usuário não encontrado', status)
+
+      const supabaseUser: SupabaseUser = {
+        ...data,
+        users_completed_planets: await fetchUsersCompletedPlanets(data.id),
       }
 
-      const userDto = supabaseUserMapper.toDto(data)
+      const userDto = supabaseUserMapper.toDto(supabaseUser)
 
       return new ApiResponse({ body: userDto })
     },
 
     async fetchUserBySlug(userSlug: string) {
-      const { data, error } = await supabase
-        .from('users_view')
-        .select('*, avatar:avatars(*), rocket:rockets(*), tier:tiers(*)')
+      const { data, error, status } = await supabase
+        .from('users')
+        .select(
+          `*, 
+          avatar:avatars(*), 
+          rocket:rockets(*), 
+          tier:tiers(*),
+          users_unlocked_stars(star_id),
+          users_unlocked_achievements(achievement_id),
+          users_rescuable_achievements(achievement_id),
+          users_acquired_rockets(rocket_id),
+          users_acquired_avatars(avatar_id),
+          users_completed_challenges(challenge_id),
+          users_upvoted_solutions(solution_id),
+          users_upvoted_comments(comment_id)`,
+        )
         .eq('slug', userSlug)
         .single()
 
-      if (error)
-        return SupabasePostgrestError(
-          error,
-          'Usuário não encontrado',
-          HTTP_STATUS_CODE.notFound,
-        )
+      if (error) return SupabasePostgrestError(error, 'Usuário não encontrado', status)
 
-      const userDto = supabaseUserMapper.toDto(data)
+      const supabaseUser: SupabaseUser = {
+        ...data,
+        users_completed_planets: await fetchUsersCompletedPlanets(data.id),
+      }
+
+      const userDto = supabaseUserMapper.toDto(supabaseUser)
       return new ApiResponse({ body: userDto })
     },
 
     async fetchUsers() {
-      const { data, error, status } = await supabase
-        .from('users_view')
-        .select('*, avatar:avatars(*), rocket:rockets(*), tier:tiers(*)')
+      const { data, error, status } = await supabase.from('users').select(
+        `*, 
+        avatar:avatars(*), 
+        rocket:rockets(*), 
+        tier:tiers(*),
+        users_unlocked_stars(star_id),
+        users_unlocked_achievements(achievement_id),
+        users_rescuable_achievements(achievement_id),
+        users_acquired_rockets(rocket_id),
+        users_acquired_avatars(avatar_id),
+        users_completed_challenges(challenge_id),
+        users_upvoted_solutions(solution_id),
+        users_upvoted_comments(comment_id),
+        users_completed_planets_view:users_completed_planets(planet_id)`,
+      )
 
       if (error)
         return SupabasePostgrestError(error, 'Erro inesperado ao buscar usuários', status)

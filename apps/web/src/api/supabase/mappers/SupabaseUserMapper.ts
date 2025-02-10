@@ -1,5 +1,6 @@
 import type { UserDto } from '@stardust/core/global/dtos'
 import type { User } from '@stardust/core/global/entities'
+
 import type { SupabaseUser } from '../types/SupabaseUser'
 
 export const SupabaseUserMapper = () => {
@@ -45,17 +46,32 @@ export const SupabaseUserMapper = () => {
           },
         },
         unlockedAchievementsIds:
-          supabaseUser.unlocked_achievements_ids?.filter(Boolean) ?? [],
+          supabaseUser.users_unlocked_achievements?.map(
+            ({ achievement_id }) => achievement_id,
+          ) ?? [],
         rescuableAchievementsIds:
-          supabaseUser.rescuable_achievements_ids?.filter(Boolean) ?? [],
-        unlockedStarsIds: supabaseUser.unlocked_stars_ids?.filter(Boolean) ?? [],
-        acquiredRocketsIds: supabaseUser.acquired_rockets_ids?.filter(Boolean) ?? [],
-        acquiredAvatarsIds: supabaseUser.acquired_avatars_ids?.filter(Boolean) ?? [],
+          supabaseUser.users_rescuable_achievements?.map(
+            ({ achievement_id }) => achievement_id,
+          ) ?? [],
+        unlockedStarsIds:
+          supabaseUser.users_unlocked_stars?.map(({ star_id }) => star_id) ?? [],
+        acquiredRocketsIds:
+          supabaseUser.users_acquired_rockets?.map(({ rocket_id }) => rocket_id) ?? [],
+        acquiredAvatarsIds:
+          supabaseUser.users_acquired_avatars?.map(({ avatar_id }) => avatar_id) ?? [],
         completedChallengesIds:
-          supabaseUser.completed_challenges_ids?.filter(Boolean) ?? [],
-        upvotedCommentsIds: supabaseUser.upvoted_comments_ids?.filter(Boolean) ?? [],
-        upvotedSolutionsIds: supabaseUser.upvoted_solutions_ids?.filter(Boolean) ?? [],
-        completedPlanetsIds: [],
+          supabaseUser.users_completed_challenges?.map(
+            ({ challenge_id }) => challenge_id,
+          ) ?? [],
+        upvotedCommentsIds:
+          supabaseUser.users_upvoted_comments?.map(({ comment_id }) => comment_id) ?? [],
+        upvotedSolutionsIds:
+          supabaseUser.users_upvoted_solutions?.map(({ solution_id }) => solution_id) ??
+          [],
+        completedPlanetsIds:
+          supabaseUser.users_completed_planets?.map(({ planet_id }) =>
+            String(planet_id),
+          ) ?? [],
         canSeeRankingResult: supabaseUser.can_see_ranking ?? false,
         lastWeekRankingPosition: supabaseUser.last_week_ranking_position,
         weekStatus: supabaseUser.week_status ?? [],

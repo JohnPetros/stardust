@@ -156,8 +156,22 @@ export type Database = {
             foreignKeyName: "challenges_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_completed_planets_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "challenges_user_id_fkey"
@@ -304,8 +318,22 @@ export type Database = {
             foreignKeyName: "comments_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_completed_planets_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "comments_user_id_fkey"
@@ -431,8 +459,22 @@ export type Database = {
             foreignKeyName: "winners_id_fkey"
             columns: ["id"]
             isOneToOne: true
+            referencedRelation: "user_completed_planets_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "winners_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "winners_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "winners_id_fkey"
@@ -517,8 +559,22 @@ export type Database = {
             foreignKeyName: "snippets_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_completed_planets_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snippets_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snippets_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "snippets_user_id_fkey"
@@ -586,8 +642,22 @@ export type Database = {
             foreignKeyName: "solutions_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_completed_planets_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "solutions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "solutions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "solutions_user_id_fkey"
@@ -683,6 +753,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "planets"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stars_planet_id_fkey"
+            columns: ["planet_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["planet_id"]
           },
         ]
       }
@@ -836,8 +913,22 @@ export type Database = {
             foreignKeyName: "users_acquired_avatars_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_completed_planets_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_acquired_avatars_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_acquired_avatars_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "users_acquired_avatars_user_id_fkey"
@@ -883,8 +974,22 @@ export type Database = {
             foreignKeyName: "users_acquired_rockets_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_completed_planets_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_acquired_rockets_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_acquired_rockets_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "users_acquired_rockets_user_id_fkey"
@@ -937,8 +1042,22 @@ export type Database = {
             foreignKeyName: "users_voted_challenges_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_completed_planets_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_voted_challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_voted_challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "users_voted_challenges_user_id_fkey"
@@ -988,8 +1107,22 @@ export type Database = {
             foreignKeyName: "users_completed_challenges_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_completed_planets_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_completed_challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_completed_challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "users_completed_challenges_user_id_fkey"
@@ -1032,8 +1165,22 @@ export type Database = {
             foreignKeyName: "users_rescuable_achievements_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_completed_planets_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_rescuable_achievements_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_rescuable_achievements_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "users_rescuable_achievements_user_id_fkey"
@@ -1076,8 +1223,22 @@ export type Database = {
             foreignKeyName: "users_unlocked_achievements_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_completed_planets_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_unlocked_achievements_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_unlocked_achievements_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "users_unlocked_achievements_user_id_fkey"
@@ -1130,8 +1291,22 @@ export type Database = {
             foreignKeyName: "users_unlocked_stars_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_completed_planets_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_unlocked_stars_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_unlocked_stars_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "users_unlocked_stars_user_id_fkey"
@@ -1181,8 +1356,22 @@ export type Database = {
             foreignKeyName: "users_upvoted_comments_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_completed_planets_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_upvoted_comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_upvoted_comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "users_upvoted_comments_user_id_fkey"
@@ -1232,8 +1421,22 @@ export type Database = {
             foreignKeyName: "user_upvoted_solutions_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_completed_planets_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_upvoted_solutions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_upvoted_solutions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "user_upvoted_solutions_user_id_fkey"
@@ -1297,8 +1500,22 @@ export type Database = {
             foreignKeyName: "challenges_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_completed_planets_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "challenges_user_id_fkey"
@@ -1349,8 +1566,22 @@ export type Database = {
             foreignKeyName: "comments_user_id_fkey"
             columns: ["author_id"]
             isOneToOne: false
+            referencedRelation: "user_completed_planets_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "comments_user_id_fkey"
@@ -1393,8 +1624,22 @@ export type Database = {
             foreignKeyName: "snippets_user_id_fkey"
             columns: ["author_id"]
             isOneToOne: false
+            referencedRelation: "user_completed_planets_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snippets_user_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snippets_user_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "snippets_user_id_fkey"
@@ -1448,8 +1693,22 @@ export type Database = {
             foreignKeyName: "solutions_user_id_fkey"
             columns: ["author_id"]
             isOneToOne: false
+            referencedRelation: "user_completed_planets_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "solutions_user_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "solutions_user_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "solutions_user_id_fkey"
@@ -1459,6 +1718,20 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_completed_planets_view: {
+        Row: {
+          completed_planets_ids: string[] | null
+          id: string | null
+        }
+        Relationships: []
+      }
+      users_completed_planets_view: {
+        Row: {
+          planet_id: string | null
+          user_id: string | null
+        }
+        Relationships: []
       }
       users_view: {
         Row: {
