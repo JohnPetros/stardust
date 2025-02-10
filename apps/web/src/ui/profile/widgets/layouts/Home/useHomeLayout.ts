@@ -32,8 +32,10 @@ export function useHomeLayout() {
   }, [isTransitionVisible])
 
   useEffect(() => {
-    notifyUserChanges()
-  }, [])
+    setTimeout(() => {
+      notifyUserChanges()
+    }, 320)
+  }, [notifyUserChanges])
 
   return {
     isSidenavExpanded,
