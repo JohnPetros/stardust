@@ -22,7 +22,7 @@ export class RankingServiceMock implements IRankingService {
     return new ApiResponse<TierDto>()
   }
 
-  fetchFirstTier(): Promise<ApiResponse<TierDto>> {
+  async fetchFirstTier(): Promise<ApiResponse<TierDto>> {
     throw new Error('Method not implemented.')
   }
 
@@ -91,27 +91,43 @@ export class RankingServiceMock implements IRankingService {
     return new ApiResponse()
   }
 
-  fetchTierByPosition(tierPosition: number): Promise<ApiResponse<TierDto>> {
+  asyncfetchLastWeekRankingUserTierPosition(
+    rankingUserId: string,
+  ): Promise<ApiResponse<{ position: number }>> {
     throw new Error('Method not implemented.')
   }
+
   fetchLastWeekRankingUsersByTier(
     tierId: string,
   ): Promise<ApiResponse<RankingUserDto[]>> {
     throw new Error('Method not implemented.')
   }
-  verifyRankingLoserState(rankingUserId: string): Promise<ApiResponse<boolean>> {
+
+  fetchLastWeekRankingUserTierPosition(
+    rankingUserId: string,
+  ): Promise<ApiResponse<{ position: number }>> {
     throw new Error('Method not implemented.')
   }
+
   updateRankingUsersTier(
     rankingUsers: RankingUser[],
     tierId: string,
-  ): Promise<ApiResponse<true>> {
+  ): Promise<ApiResponse> {
     throw new Error('Method not implemented.')
   }
-  deleteLastWeekRankingUsers(): Promise<ApiResponse<true>> {
+
+  async fetchTierByPosition(tierPosition: number): Promise<ApiResponse<TierDto>> {
     throw new Error('Method not implemented.')
   }
-  resetRankingUsersXp(): Promise<ApiResponse<true>> {
+
+  async verifyRankingLoserState(rankingUserId: string): Promise<ApiResponse<boolean>> {
+    throw new Error('Method not implemented.')
+  }
+
+  async deleteLastWeekRankingUsers(): Promise<ApiResponse<true>> {
+    throw new Error('Method not implemented.')
+  }
+  async resetRankingUsersXp(): Promise<ApiResponse<true>> {
     throw new Error('Method not implemented.')
   }
 }
