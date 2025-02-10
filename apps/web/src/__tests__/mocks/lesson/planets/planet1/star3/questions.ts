@@ -60,7 +60,7 @@ var nome = "Planeta Datahon"
 nomePlaneta = nome
 escreva("planeta encontrado: ", nomePlaneta)`,
     type: 'selection',
-    answer: 'planeta encontrado: Datahon',
+    answer: 'planeta encontrado: Planeta Datahon',
     options: [
       'planeta encontrado: Planeta Datahon',
       'planeta encontrado: Planeta 0thigs',

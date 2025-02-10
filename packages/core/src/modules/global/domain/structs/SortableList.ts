@@ -13,8 +13,8 @@ export class SortableList {
   private constructor(readonly items: Item[]) {}
 
   static create(items: Item[]): SortableList {
-    // return new SortableList(ShuffledList.create(items).items)
-    return new SortableList(items)
+    return new SortableList(ShuffledList.create(items).items)
+    // return new SortableList(items)
   }
 
   static isSoratableList(list: unknown): list is SortableList {
@@ -40,7 +40,7 @@ export class SortableList {
   }
 
   isEqualTo(otherList: SortableList): Logical {
-    return List.create(this.orderedItems).isEqualTo(List.create(otherList.items))
+    return List.create(this.orderedItems).isStrictlyEqualTo(List.create(otherList.items))
   }
 
   get orderedItems(): Item[] {

@@ -28,7 +28,7 @@ export class CalculateRewardForStarCompletionUseCase
   async do({ userDto, incorrectAnswersCount, questionsCount, starId }: Request) {
     const user = User.create(userDto)
 
-    const { nextStar, isNextStarUnlocked } = await this.fetchNextStar(starId, user)
+    const { isNextStarUnlocked } = await this.fetchNextStar(starId, user)
 
     const newXp = this.calculateXp(
       isNextStarUnlocked,
@@ -44,7 +44,6 @@ export class CalculateRewardForStarCompletionUseCase
       questionsCount,
       incorrectAnswersCount,
     )
-    await this.saveStarReward(user, nextStar)
 
     return {
       newCoins,
@@ -118,15 +117,6 @@ export class CalculateRewardForStarCompletionUseCase
 
     const xp = increase - decrease
     return xp
-  }
-
-  private async saveStarReward(user: User, nextStar: Star | null) {
-    if (nextStar) {
-      if (user.hasUnlockedStar(nextStar.id).isFalse) {
-        const response = await this.spaceService.saveUnlockedStar(nextStar.id, user.id)
-        if (response.isFailure) response.throwError()
-      }
-    }
   }
 
   private async fetchPlanet(starId: string) {

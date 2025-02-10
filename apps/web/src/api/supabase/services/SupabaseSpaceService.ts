@@ -1,6 +1,5 @@
 import type { ISpaceService } from '@stardust/core/interfaces'
 import type { Planet } from '@stardust/core/space/entities'
-import type { PlanetDto } from '@stardust/core/space/dtos'
 import { ApiResponse } from '@stardust/core/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/constants'
 
@@ -156,24 +155,6 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
       const star = supabaseStarMapper.toDto(data)
 
       return new ApiResponse({ body: star })
-    },
-
-    async verifyStarIsUnlocked(starId: string, userId: string) {
-      const { data, error } = await supabase
-        .from('users_unlocked_stars')
-        .select('star_id, user_id')
-        .eq('star_id', starId)
-        .eq('user_id', userId)
-        .single()
-
-      if (error) {
-        return SupabasePostgrestError(
-          error,
-          'Estrela inseperado ao verificar status de bloqueio dessa estrela',
-        )
-      }
-
-      return new ApiResponse({ body: Boolean(data) })
     },
   }
 }

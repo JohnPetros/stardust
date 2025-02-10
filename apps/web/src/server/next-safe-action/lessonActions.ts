@@ -6,7 +6,7 @@ import {
   AccessEndingPageAction,
   FetchLessonStoryAndQuestionsAction,
 } from '../actions/lesson'
-import { SupabaseServerActionClient } from '@/api/supabase/clients'
+import { SupabaseServerClient } from '@/api/supabase/clients'
 import { SupabaseLessonService } from '@/api/supabase/services'
 import { z } from 'zod'
 import { idSchema } from '@stardust/validation/global/schemas'
@@ -22,10 +22,10 @@ export const fetchLessonStoryAndQuestions = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const supabase = SupabaseServerActionClient()
+    const supabase = SupabaseServerClient()
     const service = SupabaseLessonService(supabase)
     const action = FetchLessonStoryAndQuestionsAction(service)
-    return action.handle(actionServer)
+    return await action.handle(actionServer)
   })
 
 const accessEndingPage = authActionClient.action(async ({ clientInput, ctx }) => {
@@ -34,7 +34,7 @@ const accessEndingPage = authActionClient.action(async ({ clientInput, ctx }) =>
     user: ctx.user,
   })
   const action = AccessEndingPageAction()
-  return action.handle(actionServer)
+  return await action.handle(actionServer)
 })
 
 export { accessEndingPage }

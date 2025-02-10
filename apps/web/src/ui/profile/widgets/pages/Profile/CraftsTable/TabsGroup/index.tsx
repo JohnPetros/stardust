@@ -42,7 +42,7 @@ export function TabsGroup({
           />
           <TabButton
             title='Soluções'
-            icon='terminal'
+            icon='lightbulb'
             value='solutionsListTab'
             isActive={activeTabContent === 'solutionsListTab'}
             onClick={() => onTabContentChange('solutionsListTab')}

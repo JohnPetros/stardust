@@ -25,7 +25,7 @@ export function ChallengesListTab({ tabListSorter, userId }: ChallengesListProps
   }
 
   if (!challenges.length) {
-    return <NoRowsMessage />
+    return <NoRowsMessage>Você ainda não criou nenhum desafio ainda.</NoRowsMessage>
   }
 
   return (

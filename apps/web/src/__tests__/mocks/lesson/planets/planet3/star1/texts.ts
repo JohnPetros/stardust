@@ -135,7 +135,6 @@ escreva("Em um mês você terá " + suprimentosNoMes + " suprimentos")
     type: 'list',
     content:
       'Parece muito para você? Ok, mas agora é necessário calcular a quantidade de suprimentos que você consome por mês.',
-    title: 'Multiplicação (*)',
     picture: 'panda-olhando-computador.jpg',
   },
   {
@@ -282,7 +281,7 @@ escreva('no final do mês você terá ' + consumoTotal + ' de suprimentos')
 var resto = 10125 % 2
 escreva('O resto da divisão de 10125 por 2 é igual a ' + resto)
 
-// Resultado: Portanto, o resto da divisão de 10125 por 2 é igual a 1`,
+// Resultado: O resto da divisão de 10125 por 2 é igual a 1`,
     type: 'code',
     isRunnable: true,
   },

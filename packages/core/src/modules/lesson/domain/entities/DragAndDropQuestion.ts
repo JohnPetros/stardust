@@ -12,23 +12,50 @@ import { Question } from '#lesson/abstracts'
 
 type DragAndDropQuestionProps = {
   codeLines: QuestionCodeLine[]
-  correctItems:: List<string>
+  correctItems: List<string>
   dragAndDrop: DragAndDrop
+  dropZoneSlotsIndexes: Record<string, number>
 }
 
 export class DragAndDropQuestion extends Question<DragAndDropQuestionProps> {
   static create(dto: DragAndDropQuestionDto) {
+    let dropZoneSlotsIndexes: Record<string, number> = {}
+    let dropZoneIndex = 1
+    const codeLines: QuestionCodeLine[] = []
+    for (const line of dto.lines) {
+      const codeLine = QuestionCodeLine.create(line)
+      codeLines.push(codeLine)
+      line.texts.forEach((_, textIndex) => {
+        const key = DragAndDropQuestion.getDropZoneSlotKey(codeLine, textIndex)
+        if (key) {
+          dropZoneSlotsIndexes = {
+            ...dropZoneSlotsIndexes,
+            [key]: dropZoneIndex,
+          }
+          dropZoneIndex += 1
+        }
+      })
+    }
     return new DragAndDropQuestion(
       {
         type: 'drag-and-drop',
         picture: Image.create(dto.picture),
         stem: Text.create(dto.stem),
-        codeLines: dto.lines.map(QuestionCodeLine.create),
-        correctItems:: List.create(dto.correctItems:),
+        correctItems: List.create(dto.correctItems),
         dragAndDrop: DragAndDrop.create(dto.items),
+        codeLines: codeLines,
+        dropZoneSlotsIndexes,
       },
       dto.id,
     )
+  }
+
+  static getDropZoneSlotKey(line: QuestionCodeLine, textIndex: number) {
+    const text = line.texts[textIndex]
+    if (text === 'dropZone') {
+      const key = `${textIndex}-${line.number.value}`
+      return key
+    }
   }
 
   static canBeCreatedBy(question: QuestionDto): question is DragAndDropQuestionDto {
@@ -37,16 +64,15 @@ export class DragAndDropQuestion extends Question<DragAndDropQuestionProps> {
 
   verifyUserAnswer(userAnswer: UserAnswer): Logical {
     const userItems = List.create(userAnswer.value as string[])
-
-    return userItems.isEqualTo(this.props.correctItems:)
+    return userItems.isStrictlyEqualTo(this.props.correctItems)
   }
 
-  get dropZonesCount(): Integer {
+  get dropZoneSlotsCount(): Integer {
     let count = 0
 
     for (const codeLine of this.codeLines) {
       for (const text of codeLine.texts) {
-        if (text !== 'dropZone') count++
+        if (text === 'dropZone') count++
       }
     }
 
@@ -57,11 +83,15 @@ export class DragAndDropQuestion extends Question<DragAndDropQuestionProps> {
     return this.props.dragAndDrop
   }
 
+  get dropZoneSlotsIndexes(): Record<string, number> {
+    return this.props.dropZoneSlotsIndexes
+  }
+
   get codeLines(): QuestionCodeLine[] {
     return this.props.codeLines
   }
 
-  get correctItems:(): List<string> {
-    return this.props.correctItems:
+  get correctItems(): List<string> {
+    return this.props.correctItems
   }
 }

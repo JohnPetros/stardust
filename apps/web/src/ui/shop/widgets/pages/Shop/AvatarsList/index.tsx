@@ -41,7 +41,7 @@ export function AvatarsList({ initialItems }: AvatarsListProps) {
       </div>
 
       {user && (
-        <ul className='mt-6 grid grid-cols-1 content-start justify-center gap-8 pb-12 sm:grid-cols-2 md:h-[72rem] lg:grid-cols-2'>
+        <ul className='mt-6 grid grid-cols-1 content-start justify-center gap-8 pb-12 sm:grid-cols-2 md:h-[90rem] lg:grid-cols-2'>
           {AvatarsDto.map(
             (dto) =>
               dto.id && (

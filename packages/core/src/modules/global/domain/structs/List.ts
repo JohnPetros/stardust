@@ -57,7 +57,7 @@ export class List<Item> {
     return Logical.create(this.items.length === 0)
   }
 
-  isEqualTo(otherList: List<Item>) {
+  isStrictlyEqualTo(otherList: List<Item>) {
     let isTrue = true
 
     if (this.length !== otherList.length) {
@@ -72,6 +72,14 @@ export class List<Item> {
       }
 
     return Logical.create(isTrue)
+  }
+
+  isEqualTo(otherList: List<Item>) {
+    if (this.length !== otherList.length) {
+      return Logical.create(false)
+    }
+
+    return this.includesList(otherList)
   }
 
   includesList(otherList: List<Item>): Logical {

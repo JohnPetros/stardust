@@ -4,10 +4,9 @@ import { ROUTES } from '@/constants'
 import { NextApiClient } from '@/api/next/NextApiClient'
 import { Legend } from './Legend'
 import { Chart } from './ApexChallengesChart'
-import { headers } from 'next/headers'
 
 export async function ChallengesChart() {
-  const apiClient = NextApiClient({ isCacheEnable: false, headers })
+  const apiClient = NextApiClient({ isCacheEnable: false })
   const response = await apiClient.get<CompletedChallengesCountByDifficultyLevel>(
     ROUTES.api.challenging.countByDifficultyLevel,
   )

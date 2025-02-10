@@ -33,20 +33,20 @@ export const questions: Questions = [
   },
   {
     code: `var numeroDePernas = 1 + 1
-var tipo = nulo
+var especie = nulo
 
 se (numeroDePernas == 4) {
-  tipo = "quadrúpede"
+  especie = "quadrúpede"
 } senao se (numeroDePernas == 2) {
-  tipo = "bípede"
+  especie = "bípede"
 } senao {
-  tipo = "miriápode" 
+  especie = "monópode" 
 } 
-escreva(tipo)`,
-    stem: 'Qual é o tipo do povo de "Ifthenia" com relação ao seu número de pernas?',
+escreva(especie)`,
+    stem: 'Qual é o tipo de especie do povo de "Ifthenia" com relação ao seu número de pernas?',
     type: 'selection',
     answer: 'bípede',
-    options: ['quadrúpede', 'bípede', 'miriápode', 'indefinido'],
+    options: ['quadrúpede', 'bípede', 'monópode', 'indefinido'],
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -91,7 +91,7 @@ escreva(tipo)`,
       { index: 3, label: 'senao se' },
       { index: 4, label: 'seguro' },
     ],
-    correctItems: [1, 3, 2],
+    correctItems: ['se', 'senao se', 'senao'],
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
 ]

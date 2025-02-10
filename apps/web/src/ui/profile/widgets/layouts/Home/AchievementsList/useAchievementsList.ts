@@ -55,10 +55,10 @@ export function useAchievementsList() {
   }
 
   useEffect(() => {
-    let timer: NodeJS.Timeout
+    let timeout: NodeJS.Timeout
 
     if (achievementsDto?.length && isLoading) {
-      timer = setTimeout(() => {
+      timeout = setTimeout(() => {
         setIsloading(false)
       }, 5000)
     }
@@ -67,7 +67,7 @@ export function useAchievementsList() {
       setAchievementsList(AchievementsListStruct.create(achievementsDto, user.dto))
     }
 
-    return () => clearTimeout(timer)
+    return () => clearTimeout(timeout)
   }, [achievementsDto, user, isLoading])
 
   const popoverMenuButtons: PopoverMenuButton[] = [

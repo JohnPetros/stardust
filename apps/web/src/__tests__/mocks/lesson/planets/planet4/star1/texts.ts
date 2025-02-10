@@ -84,7 +84,9 @@ se (souBonito) {
   escreva(souBonito)
 }
 
-escreva(souBonito)`,
+escreva(souBonito)
+
+// falso será escrito apenas uma vez`,
     picture: 'panda-deslumbrado.jpg',
     isRunnable: true,
     type: 'code',

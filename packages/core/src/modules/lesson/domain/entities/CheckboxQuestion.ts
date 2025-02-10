@@ -40,7 +40,9 @@ export class CheckboxQuestion extends Question<CheckboxQuestionProps> {
 
   verifyUserAnswer(userAnswer: UserAnswer): Logical {
     const usersOptions = List.create(userAnswer.value as string[])
-    return usersOptions.includesList(this.props.correctOptions)
+    const l = usersOptions.isEqualTo(this.props.correctOptions)
+    console.log(l)
+    return l
   }
 
   get options() {

@@ -13,7 +13,8 @@ export function useGetLastWeekRankingWinnersAction() {
 
   const getLastWeekRankingWinners = useCallback(async () => {
     const result = await executeAsync()
-    if (!result?.data) throw new AppError('Erro ao gerar gráfico de conquistas')
+    if (!result?.data)
+      throw new AppError('Erro ao buscar os ganhadores do ranking da semana passada')
     return result.data
   }, [executeAsync])
 

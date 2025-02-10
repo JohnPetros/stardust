@@ -22,7 +22,7 @@ export function Mdx({ children }: MdxProps) {
   const mdx = formatCodeContent(children)
 
   return (
-    <div className='prose prose-invert'>
+    <div className='prose prose-invert max-w-[80ch]'>
       <Markdown
         options={{
           overrides: {
@@ -46,9 +46,6 @@ export function Mdx({ children }: MdxProps) {
             },
             Code: {
               component: Code,
-              props: {
-                isRunnable: false,
-              },
             },
             code: {
               component: CodeLine,

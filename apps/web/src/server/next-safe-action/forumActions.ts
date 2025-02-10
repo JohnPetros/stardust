@@ -24,5 +24,5 @@ export const upvoteComment = authActionClient
     const supabase = SupabaseServerActionClient()
     const challengingService = SupabaseForumService(supabase)
     const action = UpvoteCommentAction(challengingService)
-    return action.handle(actionServer)
+    return await action.handle(actionServer)
   })

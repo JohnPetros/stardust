@@ -7,6 +7,7 @@ import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useRefreshPage } from '@/ui/global/hooks/useRefreshPage'
 import { useAudioContext } from '@/ui/global/contexts/AudioContext'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
 type UseRewardingPageProps = {
   newLevel: number | null
@@ -26,6 +27,7 @@ export function useRewardingPage({
   const [isEndMessageVisible, setIsEndMessageVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const { playAudio } = useAudioContext()
+  const { refetchUser } = useAuthContext()
   const router = useRouter()
 
   function handleFirstButtonClick() {
@@ -65,8 +67,9 @@ export function useRewardingPage({
   useRefreshPage(handleSecondButtonClick)
 
   useEffect(() => {
+    refetchUser()
     playAudio('earning.wav')
-  }, [playAudio])
+  }, [])
 
   useEffect(() => {
     history.pushState(null, '', location.href)

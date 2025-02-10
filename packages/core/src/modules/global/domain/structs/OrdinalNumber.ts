@@ -1,4 +1,5 @@
 import { NumberValidation } from '#libs'
+import { Logical } from './Logical'
 
 type OrdinalNumberProps = {
   key: string
@@ -22,5 +23,17 @@ export class OrdinalNumber {
 
   incrementOne() {
     return new OrdinalNumber({ key: this.key, value: this.value + 1 })
+  }
+
+  decrementOne() {
+    return new OrdinalNumber({ key: this.key, value: this.value - 1 })
+  }
+
+  isGreaterThan(ordinalNumber: OrdinalNumber) {
+    return Logical.create(this.value > ordinalNumber.value)
+  }
+
+  isLessThan(ordinalNumber: OrdinalNumber) {
+    return Logical.create(this.value < ordinalNumber.value)
   }
 }

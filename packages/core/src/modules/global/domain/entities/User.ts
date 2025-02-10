@@ -23,15 +23,15 @@ import { EntityNotDefinedError } from '#global/errors'
 type UserProps = {
   avatar: {
     id: string
-    entity?: Avatar
+    entity?: Omit<Avatar, 'id'>
   }
   tier: {
     id: string
-    entity?: Tier
+    entity?: Omit<Tier, 'id'>
   }
   rocket: {
     id: string
-    entity?: Rocket
+    entity?: Omit<Rocket, 'id'>
   }
   slug: Slug
   email: Email
@@ -96,6 +96,7 @@ export class User extends Entity<UserProps> {
   earnXp(newXp: number) {
     this.props.level = this.level.up(this.xp.value, newXp)
     this.props.xp = this.props.xp.increment(newXp)
+    this.props.weeklyXp = this.props.weeklyXp.increment(newXp)
     this.notifyChanges()
   }
 
@@ -170,11 +171,17 @@ export class User extends Entity<UserProps> {
   }
 
   selectRocket(rocket: Rocket): void {
-    this.props.rocket = rocket
+    this.props.rocket = {
+      id: rocket.id,
+      entity: rocket,
+    }
   }
 
   selectAvatar(avatar: Avatar): void {
-    this.props.avatar = avatar
+    this.props.avatar = {
+      id: avatar.id,
+      entity: avatar,
+    }
   }
 
   seeRankingResult() {
@@ -295,10 +302,10 @@ export class User extends Entity<UserProps> {
     return Integer.create(this.props.completedPlanetsIds.length)
   }
 
-  get isRankingWinner(): boolean {
-    if (!this.props.lastWeekRankingPosition) return false
+  get isRankingWinner(): Logical {
+    if (!this.props.lastWeekRankingPosition) return Logical.create(false)
 
-    return this.props.lastWeekRankingPosition.isInWinningArea
+    return Logical.create(this.props.lastWeekRankingPosition.isInWinningArea)
   }
 
   get isTopRankingWinner(): boolean {

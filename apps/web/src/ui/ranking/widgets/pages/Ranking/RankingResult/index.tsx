@@ -19,10 +19,10 @@ export function RankingResult() {
   const rewardAlertDialog = useRef<AlertDialogRef>(null)
   const successAlertDialog = useRef<AlertDialogRef>(null)
   const failAlertDialog = useRef<AlertDialogRef>(null)
-
   const {
     isUserLoser,
     isLoading,
+    lastWeekTier,
     lastWeekRankingPodium,
     handleAlertDialogButtonClick,
     handleWRankingResultButtonClick,
@@ -31,11 +31,10 @@ export function RankingResult() {
     successAlertDialog,
     failAlertDialog,
   })
-
   const { user } = useAuthContext()
   const api = useApi()
-
   const tierImage = user ? api.fetchImage('rankings', user.tier.image.value) : ''
+  console.log(user?.tier.image.value)
 
   if (isLoading) return <Loading isSmall={false} />
 
@@ -154,7 +153,7 @@ export function RankingResult() {
                 <strong className='text-green-400 font-semibold'>
                   {user.rewardByLastWeekRankingPosition}
                 </strong>{' '}
-                de poeira estelar por esse feito!
+                de starcoins por esse feito!
               </p>
             </div>
           }

@@ -11,7 +11,7 @@ import { useApi } from '@/ui/global/hooks/useApi'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 
-const AVATARS_PER_PAGE = 8
+const AVATARS_PER_PAGE = 10
 
 export function useAvatarsList(initialAvatarsPagination: PaginationResponse<AvatarDto>) {
   const [search, setSearch] = useState('s')

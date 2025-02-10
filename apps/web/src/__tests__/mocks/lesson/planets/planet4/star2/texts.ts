@@ -38,13 +38,19 @@ se (gravidade < 10) {
   {
     type: 'alert',
     content:
-      'Perceba que usei *+=* e *-=* para alterar o valor da variável *velocidadeFoguete*. Isso é a mesma coisa que escrever: *velocidadeFoguete = velocidadeFoguete + 20* e *velocidadeFoguete = velocidadeFoguete - 20*, só que de um jeito mais curto.',
+      'Perceba que usei *+=* e *-=* para alterar o valor da variável *velocidadeFoguete*.',
     picture: 'panda-sorrindo.jpg',
   },
   {
     type: 'alert',
     content:
-      'Esse operador especial é chamado de operador de atribuição aritmética, ou seja, ele pode ser usado para fazer qualquer uma das quatros operações aritméticas vimos anteriormente: (+=, -=, *=, /=)',
+      'Isso é a mesma coisa que escrever: *velocidadeFoguete = velocidadeFoguete + 20* e *velocidadeFoguete = velocidadeFoguete - 20*, só que de um jeito mais curto.',
+    picture: 'panda-sorrindo.jpg',
+  },
+  {
+    type: 'alert',
+    content:
+      'Esse operador especial é chamado de operador de atribuição aritmética, ou seja, ele pode ser usado para fazer qualquer uma das quatros operações aritméticas vimos anteriormente: (`+=`, `-=`, `*=`, `/=`)',
     picture: 'panda-piscando.jpg',
   },
   {
@@ -112,7 +118,7 @@ se (gravidade > 10) {
   {
     type: 'alert',
     content:
-      'Acho que você já percebeu, mas ao escrever código dentro do bloco entre chaves *{}* de qualquer estrutura, é comum inserir um espaço antes de cada linha. Você pode fazer isso apertando *tab* no teclado',
+      'Acho que você já percebeu, mas ao escrever código dentro do bloco entre chaves *{}* de qualquer estrutura, é comum inserir um espaço antes de escrever na linha. Isso deixa o código mais légivel para você e para os outros.',
     picture: 'panda-abracando-bambu.jpg',
   },
   {

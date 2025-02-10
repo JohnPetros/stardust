@@ -7,8 +7,8 @@ import { SolutionPage } from '@/ui/challenging/widgets/pages/Solution'
 
 export default async function Slot({ params }: NextParams<{ challengeSlug: string }>) {
   const supabase = SupabaseServerClient()
-  const challengingService = SupabaseChallengingService(supabase)
-  const response = await challengingService.fetchChallengeBySlug(params.challengeSlug)
+  const service = SupabaseChallengingService(supabase)
+  const response = await service.fetchChallengeBySlug(params.challengeSlug)
   if (response.isFailure) response.throwError()
   const challenge = Challenge.create(response.body)
 

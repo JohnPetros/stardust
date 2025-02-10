@@ -16,7 +16,7 @@ type SolutionProps = {
   postedAt: Date
   author: {
     id: string
-    entity?: Author
+    entity?: Omit<Author, 'id'>
   }
 }
 

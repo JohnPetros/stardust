@@ -11,7 +11,7 @@ export class ShuffledList<Item> {
       return Math.random() - 0.5
     })
 
-    while (List.create(originalItems).isEqualTo(List.create(shuffledItems)).isTrue) {
+    while (List.create(originalItems).isStrictlyEqualTo(List.create(shuffledItems)).isTrue) {
       originalItems.sort(() => {
         return Math.random() - 0.5
       })

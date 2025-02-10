@@ -9,15 +9,16 @@ import { CodeRunnerError } from '@stardust/core/global/errors'
 import { ROUTES, STORAGE } from '@/constants'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
 import type { ConsoleRef } from '@/ui/global/widgets/components/Console/types'
 import type { CodeEditorRef } from '@/ui/global/widgets/components/CodeEditor/types'
 import { useAudioContext } from '@/ui/global/contexts/AudioContext'
+import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
+import { useRouter } from '@/ui/global/hooks/useRouter'
 
 export function useChallengeCodeEditorSlot() {
-  const { getChallengeSlice, getPanelsLayoutSlice, getResults } = useChallengeStore()
-  const { setResults } = getResults()
+  const { getChallengeSlice, getPanelsLayoutSlice, getResultsSlice } = useChallengeStore()
+  const { setResults } = getResultsSlice()
   const { challenge } = getChallengeSlice()
   const { panelsLayout } = getPanelsLayoutSlice()
   const { provider } = useCodeRunner()
@@ -30,12 +31,9 @@ export function useChallengeCodeEditorSlot() {
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
   const consoleRef = useRef<ConsoleRef>(null)
   const [codeEditorHeight, setCodeEditorHeight] = useState(0)
+  const localStorage = useLocalStorage(STORAGE.keys.challengeCode(challenge?.id ?? ''))
   const initialCode =
-    typeof window !== 'undefined'
-      ? localStorage?.getItem(`${STORAGE.keys.challengeCode}:${challenge?.id}`) ??
-        challenge?.code ??
-        ''
-      : ''
+    typeof window !== 'undefined' ? localStorage.get() ?? challenge?.code ?? '' : ''
 
   const handleCodeRunnerError = useCallback(
     (message: string, line: number) => {
@@ -56,7 +54,6 @@ export function useChallengeCodeEditorSlot() {
 
     try {
       await challenge.runCode(userCode.current)
-      console.log(challenge.results.items)
       setResults(challenge.results.items)
       router.goTo(ROUTES.challenging.challenges.challengeResult(challenge.slug.value))
     } catch (error) {
@@ -75,8 +72,7 @@ export function useChallengeCodeEditorSlot() {
   }
 
   function handleCodeChange(value: string) {
-    localStorage.setItem(`${STORAGE.keys.challengeCode}:${challenge?.id}`, value)
-    // previousUserCode.current = userCode.current
+    localStorage.set(value)
     userCode.current = userCode.current.changeValue(value)
   }
 

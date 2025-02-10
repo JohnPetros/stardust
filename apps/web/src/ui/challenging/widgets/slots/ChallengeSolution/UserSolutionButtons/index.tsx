@@ -42,7 +42,7 @@ export function UserSolutionButtons({
         {user.id === authorId && (
           <Button
             asChild
-            className='h-8 text-gray-400 text-xs w-max bg-green-900/90 font-medium px-3'
+            className='h-8 text-gray-200 text-xs w-max bg-green-900/90 font-medium px-3'
           >
             <Link
               href={ROUTES.challenging.challenges.solution(challengeSlug, solutionSlug)}
@@ -66,7 +66,7 @@ export function UserSolutionButtons({
             action={
               <Button
                 onClick={handleDeleteSolutionButtonClick}
-                className='bg-red-700 text-gray-50'
+                className='bg-red-800 text-gray-50'
               >
                 Deletar minha solução
               </Button>
@@ -78,7 +78,7 @@ export function UserSolutionButtons({
             }
             shouldPlayAudio={false}
           >
-            <Button className='h-8 text-gray-400 text-xs w-max bg-green-900/90 font-medium px-3'>
+            <Button className='h-8 text-gray-50 text-xs w-max bg-red-800 font-medium px-3'>
               deletar sua solução
             </Button>
           </AlertDialog>

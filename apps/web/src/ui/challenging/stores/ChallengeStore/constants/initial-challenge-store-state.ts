@@ -4,7 +4,6 @@ import type { ChallengeStoreState } from '../types'
 export const INITIAL_CHALLENGE_STORE_STATE: ChallengeStoreState = {
   challenge: null,
   activeContent: 'description',
-  solutionContent: '',
   craftsVislibility: ChallengeCraftsVisibility.create({
     canShowSolutions: false,
     canShowComments: false,

@@ -60,12 +60,15 @@ export function useStar({
   }, [isLastUnlockedStar, isInView, setLastUnlockedStarPosition])
 
   useEffect(() => {
+    let timeout: NodeJS.Timeout
+
     if (isLastUnlockedStar && lastUnlockedStarRef.current && isFirstScroll.current) {
-      setTimeout(() => {
+      timeout = setTimeout(() => {
         scrollIntoLastUnlockedStar()
         isFirstScroll.current = false
       }, 1500)
     }
+    return () => clearTimeout(timeout)
   }, [isLastUnlockedStar, lastUnlockedStarRef, scrollIntoLastUnlockedStar])
 
   return {

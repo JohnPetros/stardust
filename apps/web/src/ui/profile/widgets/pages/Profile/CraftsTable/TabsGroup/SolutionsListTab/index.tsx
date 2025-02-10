@@ -25,7 +25,7 @@ export function SolutionsListTab({ tabListSorter, userId }: ChallengesListProps)
   }
 
   if (!solutions.length) {
-    return <NoRowsMessage />
+    return <NoRowsMessage>Você ainda não criou nenhuma solução ainda.</NoRowsMessage>
   }
 
   return (

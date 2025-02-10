@@ -46,6 +46,11 @@ export function ContentEditor({ content, errorMessage, onChange }: ContentEditor
           label='Bloco de texto destacado'
         />
         <Toolbar.Button
+          onClick={() => handleSnippetInsert('alertTextBlock')}
+          icon='alert'
+          label='Bloco de texto de alerta'
+        />
+        <Toolbar.Button
           onClick={() => handleSnippetInsert('orderedList')}
           icon='ordered-list'
           label='Lista numéria'

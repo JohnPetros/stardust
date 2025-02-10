@@ -1,10 +1,7 @@
 import { useRef } from 'react'
 
-import { Story } from '@stardust/core/lesson/structs'
-
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { Button } from '@/ui/global/widgets/components/Button'
-import { TextBlockMdx } from './TextBlockMdx'
 import { Title } from './Title'
 import { useStoryStage } from './useStoryStage'
 import { StoryChunk } from './StoryChunk'
@@ -31,30 +28,14 @@ export function StoryStage({ title, number }: StoryStageProps) {
               {story.readChunks.map((chunk, index) => {
                 const shouldMemoized = index < story.currentChunkIndex.value - 2
                 const hasAnimation = index === story.currentChunkIndex.value - 1
-                if (typeof chunk === 'string')
-                  return (
-                    <StoryChunk
-                      key={chunk}
-                      value={chunk}
-                      hasAnimation={hasAnimation}
-                      shouldMemoized={shouldMemoized}
-                    />
-                  )
-              })}
-
-              {/* old way to render story content */}
-              {story.readChunks.map((textBlock, index) => {
-                const shouldMemoized = index < story.currentChunkIndex.value - 2
-                const hasAnimation = index === story.currentChunkIndex.value - 1
-                if (Story.isTextBlock(textBlock))
-                  return (
-                    <TextBlockMdx
-                      key={textBlock.content}
-                      content={textBlock.content}
-                      hasAnimation={hasAnimation}
-                      shouldMemoized={shouldMemoized}
-                    />
-                  )
+                return (
+                  <StoryChunk
+                    key={chunk}
+                    value={chunk}
+                    hasAnimation={hasAnimation}
+                    shouldMemoized={shouldMemoized}
+                  />
+                )
               })}
             </div>
           </div>

@@ -91,10 +91,10 @@ export class Challenge extends Entity<ChallengeProps> {
       const response = await formattedCode.run()
       if (response.isFailure) response.throwError()
 
-      let result = code.hasFunction.isTrue ? response.result : response.outputs[0]
+      let result = ''
 
       if (code.hasFunction.isTrue) result = response.result
-      else if (response.outputs[0]) result = response.outputs[0]
+      else if (response.outputs[0]) result = code.format(response.outputs[0]).value
 
       this.props.results = this.results.add(
         this.verifyResult(result, testCase, formattedCode),

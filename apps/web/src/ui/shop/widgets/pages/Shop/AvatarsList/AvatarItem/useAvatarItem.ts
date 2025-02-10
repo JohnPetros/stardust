@@ -19,7 +19,7 @@ export function useAvatarItem({ id, name, price, image }: UseAvatarItemProps) {
   const toast = useToastContext()
   const api = useApi()
 
-  async function handleShopButtonBuy() {
+  async function handleBuy() {
     if (!user) return
 
     const response = await api.saveAcquiredAvatar(id, user.id)
@@ -46,7 +46,7 @@ export function useAvatarItem({ id, name, price, image }: UseAvatarItemProps) {
   }
 
   return {
-    handleShopButtonBuy,
+    handleBuy,
     handleShopButtonClick,
   }
 }

@@ -5,9 +5,8 @@ type TitleProps = {
 }
 
 export function Title({ children }: TitleProps) {
-  // const title = formatSpecialCharacters(children, 'decode').slice(1, -1) // bug fix
+  let title = formatSpecialCharacters(children, 'decode')
+  if (title.startsWith("'") && title.endsWith("'")) title = title.slice(1, title.length - 1) // title with quotes bug fix
 
-  return (
-    <h3 className='not-prose w-full text-lg font-semibold text-gray-100'>{children}</h3>
-  )
+  return <h3 className='not-prose w-full text-lg font-semibold text-gray-100'>{title}</h3>
 }

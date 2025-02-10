@@ -25,7 +25,6 @@ export class DragAndDrop {
 
     const items = shuffledList.items.map((item, index) => {
       const originalDropZoneIndex = DragAndDrop.FIRST_ORIGINAL_DROP_ZONE_INDEX + index
-
       return DraggableItem.create({
         index: item.index,
         label: item.label,

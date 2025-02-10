@@ -7,6 +7,6 @@ export const STORAGE = {
     shouldSkipHomeTransitionAnimation: `${APP_PREFIX}:should-skip-home-transition-animation`,
     shouldFormatConsoleOutput: `${APP_PREFIX}:should-format-console-output`,
     challengeLayout: `${APP_PREFIX}:challenge-layout`,
-    challengeCode: `${APP_PREFIX}:challenge-code`,
+    challengeCode: (challengeId: string) => `${APP_PREFIX}:challenge-code.${challengeId}`,
   },
 }

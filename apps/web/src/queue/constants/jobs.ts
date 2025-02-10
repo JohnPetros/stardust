@@ -8,11 +8,11 @@ export const JOBS = {
     },
     observerStreakBreak: {
       key: 'profile/observe.streak.break',
-      cronExpression: '0 0 * * *', // Everyday at 00:00
+      cronExpression: '59 23 * * *', // Everyday at 23:59
     },
     resetWeekStatus: {
       key: 'profile/reset.week.status',
-      cronExpression: '0 0 * * 0', // Every sunday at 00:00
+      cronExpression: '0 0 * * 0', // Every Sunday at 00:00
     },
   },
   ranking: {
@@ -22,7 +22,7 @@ export const JOBS = {
     },
     updateRankings: {
       key: 'ranking/update.rankings',
-      cronExpression: '0 0 * * 0', // Every sunday at 00:00
+      cronExpression: '0 0 * * 0', // Every Sunday at 00:00
     },
   },
   shop: {

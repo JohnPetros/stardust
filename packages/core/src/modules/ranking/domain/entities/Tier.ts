@@ -1,5 +1,5 @@
 import { Entity } from '#global/abstracts'
-import { Image, Integer, Name, OrdinalNumber } from '#global/structs'
+import { Image, Integer, Logical, Name, OrdinalNumber } from '#global/structs'
 import type { TierDto } from '#ranking/dtos'
 import { TIERS_COUNT } from '#ranking/constants'
 
@@ -24,15 +24,15 @@ export class Tier extends Entity<TierProps> {
   }
 
   get isFirstTier() {
-    return this.position.value === 0
+    return Logical.create(this.position.value === 0)
   }
 
   get isLastTier() {
-    return this.position.value === TIERS_COUNT
+    return Logical.create(this.position.value === TIERS_COUNT)
   }
 
   get hasNextTier() {
-    return this.position.value <= TIERS_COUNT
+    return Logical.create(this.position.value <= TIERS_COUNT)
   }
 
   get position() {

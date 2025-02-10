@@ -29,7 +29,7 @@ export const questions: Questions = [
     picture: 'panda-piscando-sentado.jpg',
   },
   {
-    stem: 'Qual será o resultado do seguinte código?',
+    stem: 'Qual será a saída do seguinte código?',
     code: `var resposta = verdadeiro
 resposta = falso
 escreva("Vai chover asteroide hoje? " + resposta)   

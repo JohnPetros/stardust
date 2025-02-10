@@ -39,7 +39,7 @@ export const questions: Questions = [
       { index: 3, label: '- data -' },
       { index: 4, label: 'data' },
     ],
-    correctItems: [4, 2],
+    correctItems: ['data', '+ data +'],
   },
 
   {
@@ -63,7 +63,7 @@ export const questions: Questions = [
   },
 
   {
-    stem: 'Qual será o resultado do seguinte código?',
+    stem: 'Qual será a saída do seguinte código?',
     code: `var cor = "vermelha"
 var nome = "Datahon"
 var nome = "Planeta " + nome
@@ -97,6 +97,6 @@ escreva(nome + " tem a cor " + cor)`,
       { index: 3, label: '${mensagem}' },
       { index: 4, label: "'Olá, mundo!'" },
     ],
-    correctItems: [3],
+    correctItems: ['${mensagem}'],
   },
 ]

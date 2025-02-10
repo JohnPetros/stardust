@@ -30,7 +30,7 @@ export function ShareSnippetDialog({
       <DialogContent>
         <Input
           type='text'
-          label='Url desse playground'
+          label='Url desse snippet'
           icon='share'
           value={playgroundUrl}
           readOnly

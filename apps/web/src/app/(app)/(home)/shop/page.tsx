@@ -18,7 +18,7 @@ type ShopItems = {
 }
 
 export default async function Shop() {
-  const apiClient = NextApiClient({ isCacheEnable: true, headers })
+  const apiClient = NextApiClient({ isCacheEnable: true })
   const response = await apiClient.get<ShopItems>(ROUTES.api.shop.items)
   if (response.isFailure) response.throwError()
 

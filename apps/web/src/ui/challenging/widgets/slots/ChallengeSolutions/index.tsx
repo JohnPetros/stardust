@@ -79,7 +79,7 @@ export function ChallengeSolutionsSlot() {
           </PopoverMenu>
         </div>
 
-        <div className='flex w-64 gap-3 mt-6'>
+        <div className='flex w-64 gap-2 mt-6'>
           <Button
             onClick={() => handleIsFromUserChange(false)}
             className={twMerge(

@@ -62,7 +62,7 @@ export function RewardingPage({
             <dl className='mt-3 flex flex-col items-center justify-center'>
               <div className='mx-auto'>
                 <Benchmark
-                  title='Poeira estelar'
+                  title='starcoins'
                   amount={newCoins}
                   color='yellow'
                   icon='coin.svg'

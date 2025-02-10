@@ -24,7 +24,7 @@ export function AnimatedContainer({ children }: AnimatedContainerProps) {
   return (
     <motion.main
       variants={variants}
-      className='grid grid-cols-[48px_1fr] gap-4 border-b border-green-500 bg-gray-900 p-4 rounded-t-md overflow-hidden'
+      className='grid grid-cols-[48px_1fr] gap-2 border-b border-green-500 bg-gray-900 p-4 rounded-t-md overflow-hidden'
       data-testid='achievement'
     >
       {children}

@@ -9,10 +9,6 @@ saída de dados respectivamente.</Text>
 
 <Text picture='panda.jpg'>Veja o exemplo para entender melhor:</Text>
 
-<Quote title="Exemplo 1">Entrada: `"Olá, mundo!"`, Saída: `"Olá, mundo!"`</Quote>
+<Quote title="Exemplo">Entrada: `"Olá, mundo!"`, Saída: `"Olá, mundo!"`</Quote>
 
 <Text picture='panda-comemorando.jpg'>Se o resultado do seu código passar no teste de caso na aba de resultado, você conclui o desafio 🎉.</Text>
-
-<Text picture='panda-comemorando.jpg'>Se o resultado do seu código passar no teste de caso na aba de *resultado*, você conclui o desafio 🎉.</Text>
-
-<Alert picture='panda-comemorando.jpg'>Lembre-se de manter o comando `leia()` (que já está no código) para capturar os dados de entrada.</Alert>

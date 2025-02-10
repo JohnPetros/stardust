@@ -13,6 +13,8 @@ import { useRouter } from '@/ui/global/hooks/useRouter'
 import { Quiz, Story } from '@stardust/core/lesson/structs'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 import type { StarRewardingPayload } from '@stardust/core/space/types'
+import { TextBlock } from '@stardust/core/global/structs'
+import { useMdx } from '@/ui/global/widgets/components/Mdx/hooks/useMdx'
 
 export function useLessonPage(
   starId: string,
@@ -26,6 +28,7 @@ export function useLessonPage(
   const { stage } = getStageSlice()
   const { setStory } = getStorySlice()
   const { setCookie } = useCookieActions()
+  const { parseTextBlocksToMdx } = useMdx()
   const router = useRouter()
   const secondsCounter = useLocalStorage(STORAGE.keys.secondsCounter)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -40,7 +43,20 @@ export function useLessonPage(
   useEffect(() => {
     const timeout = setTimeout(() => setIsTransitionVisible(false), 1000)
 
-    setStory(Story.create(storyContent ? storyContent.split('---') : textsBlocksDto))
+    const textBlocks = textsBlocksDto.map((dto) => {
+      let textBlock = TextBlock.create(dto.type, dto.content)
+
+      if (dto.picture) textBlock = textBlock.setPicture(dto.picture)
+      if (dto.title) textBlock = textBlock.setTitle(dto.title)
+      if (dto.isRunnable) textBlock = textBlock.setIsRunnable(dto.isRunnable)
+
+      return textBlock
+    })
+    setStory(
+      Story.create(
+        storyContent ? storyContent.split('---') : parseTextBlocksToMdx(textBlocks),
+      ),
+    )
     setQuiz(Quiz.create(questionsDto))
 
     localStorage.removeItem(STORAGE.keys.secondsCounter)
@@ -48,7 +64,14 @@ export function useLessonPage(
     return () => {
       clearTimeout(timeout)
     }
-  }, [textsBlocksDto, storyContent, questionsDto, setStory, setQuiz])
+  }, [
+    textsBlocksDto,
+    storyContent,
+    questionsDto,
+    setStory,
+    setQuiz,
+    parseTextBlocksToMdx,
+  ])
 
   useEffect(() => {
     if (stage !== 'rewarding' || !quiz) return

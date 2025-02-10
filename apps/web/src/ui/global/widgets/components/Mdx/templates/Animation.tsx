@@ -31,7 +31,7 @@ export function Animation({ hasAnimation = false, children }: AnimationProps) {
       variants={textAnimations}
       initial={hasAnimation && 'hidden'}
       animate={hasAnimation && 'visible'}
-      className='mt-4 w-full'
+      className='mt-10 w-full'
     >
       {children}
     </motion.div>

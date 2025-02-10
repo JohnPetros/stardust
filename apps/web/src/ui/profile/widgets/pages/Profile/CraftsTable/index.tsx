@@ -26,7 +26,7 @@ export function CraftsTable({ userId }: CraftsTableProps) {
       {isAuthUser && activeTabContent === 'challengesListTab' && (
         <Link href={ROUTES.challenging.challenge()}>
           <Button className='w-64 gap-2'>
-            <Icon name='plus' size={16} className='text-gray-900' weight='bold' />
+            <Icon name='plus-circle' size={16} className='text-gray-900' weight='bold' />
             Postar um desafio
           </Button>
         </Link>

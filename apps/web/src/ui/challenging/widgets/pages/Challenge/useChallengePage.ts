@@ -6,7 +6,7 @@ import type { ChallengeVote } from '@stardust/core/challenging/types'
 import { Challenge } from '@stardust/core/challenging/entities'
 import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 
-import { ROUTES, STORAGE } from '@/constants'
+import { ROUTES } from '@/constants'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import type {
@@ -15,7 +15,6 @@ import type {
 } from '@/ui/challenging/stores/ChallengeStore/types'
 import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 
 export function useChallengePage(challengeDto: ChallengeDto, userVote: ChallengeVote) {
@@ -29,7 +28,7 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
   const { setActiveContent } = getActiveContentSlice()
   const { challenge, setChallenge } = getChallengeSlice()
   const { panelsLayout, setPanelsLayout } = getPanelsLayoutSlice()
-  const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
+  const { setCraftsVislibility } = getCraftsVisibilitySlice()
   const { user } = useAuthContext()
   const { currentRoute, goTo } = useRouter()
   const [isNew] = useQueryStringParam('isNew', 'true')
@@ -51,7 +50,7 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
       challenge.userVote = userVote
       setChallenge(challenge)
     }
-    if (!craftsVislibility && challenge && user) {
+    if (challenge && user) {
       const isUserChallengeAuthor = user.id === challenge.authorId
       const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
       setCraftsVislibility(
@@ -61,22 +60,18 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
         }),
       )
     }
-  }, [
-    challenge,
-    craftsVislibility,
-    user,
-    challengeDto,
-    userVote,
-    setChallenge,
-    setCraftsVislibility,
-  ])
+  }, [challenge, user, challengeDto, userVote, setChallenge, setCraftsVislibility])
 
   useEffect(() => {
-    setActiveContent('description')
     if (!challenge) return
 
     const activeContent = currentRoute.split('/').pop()
     if (!activeContent) return
+
+    if (activeContent === 'challenge') {
+      setActiveContent('description')
+      return
+    }
 
     if (activeContent !== challenge.slug.value)
       setActiveContent(activeContent as ChallengeContent)
@@ -91,8 +86,7 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
   return {
     challenge,
     panelsLayout,
-    shouldHaveConfettiAnimation:
-      challenge && user && isNew && user?.hasCompletedChallenge(challenge.id).isTrue,
+    shouldHaveConfettiAnimation: isNew && Boolean(challenge?.authorId === user?.id),
     handleBackButton,
     handlePanelsLayoutButton,
   }

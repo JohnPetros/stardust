@@ -9,12 +9,14 @@ export function useTier(
 ) {
   const { user } = useAuthContext()
 
-  const isFromCurrentTier = user ? user?.tier.id === tierId : false
+  const isFromCurrentTier = user ? user?.tierId === tierId : false
   const isLocked = user ? index >= user?.tier.position.value : false
 
   useEffect(() => {
+    let timeout: NodeJS.Timeout
+
     if (tierRef.current && isFromCurrentTier) {
-      setTimeout(() => {
+      timeout = setTimeout(() => {
         tierRef.current?.scrollIntoView({
           behavior: 'auto',
           block: 'nearest',
@@ -22,6 +24,8 @@ export function useTier(
         })
       }, 100)
     }
+
+    return () => clearTimeout(timeout)
   }, [tierRef.current, isFromCurrentTier])
 
   return {

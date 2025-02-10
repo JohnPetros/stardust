@@ -89,7 +89,7 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
     },
 
     async fetchRankingUsersByTier(tierId: string) {
-      const { data, error } = await supabase
+      const { data, error, status } = await supabase
         .from('users')
         .select('id, name, slug, tier_id, xp:weekly_xp, avatar:avatars(name, image)')
         .eq('tier_id', tierId)
@@ -99,6 +99,7 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
         return SupabasePostgrestError(
           error,
           'Erro inesperado ao buscar usuários desse ranking',
+          status,
         )
       }
 
@@ -222,21 +223,18 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
       return new ApiResponse({ body: true })
     },
 
-    async verifyRankingLoserState(rankingUserId: string) {
+    async fetchLastWeekRankingUserTierPosition(rankingUserId: string) {
       const { error, data } = await supabase
         .from('ranking_users')
-        .select('status')
+        .select('tiers(position)')
         .eq('id', rankingUserId)
         .single()
 
       if (error) {
-        return SupabasePostgrestError(
-          error,
-          'Erro inesperado ao verificar o status de perdedor desse usuário',
-        )
+        return SupabasePostgrestError(error, 'Erro ao buscar esse usuário de ranking')
       }
 
-      return new ApiResponse({ body: data.status === 'loser' })
+      return new ApiResponse({ body: { position: data.tiers?.position as number } })
     },
 
     async updateRankingUsersTier(rankingUsers: RankingUser[], tierId: string) {

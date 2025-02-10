@@ -28,7 +28,7 @@ export function AvatarItem({
   isBuyable,
   isSelected,
 }: AvatarItemProps) {
-  const { handleShopButtonClick, handleShopButtonBuy } = useAvatarItem({
+  const { handleShopButtonClick, handleBuy } = useAvatarItem({
     id,
     name,
     image,
@@ -64,7 +64,7 @@ export function AvatarItem({
             isSelected={isSelected}
             product={{ image: avatarImage, name }}
             onClick={handleShopButtonClick}
-            onBuy={handleShopButtonBuy}
+            onBuy={handleBuy}
           />
         </div>
 

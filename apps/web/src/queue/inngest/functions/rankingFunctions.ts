@@ -20,10 +20,10 @@ const handleUserSignedUp = inngest.createFunction(
 const updateRankings = inngest.createFunction(
   { id: JOBS.ranking.updateRankings.key },
   { cron: `TZ=America/Sao_Paulo ${JOBS.ranking.updateRankings.cronExpression}` },
-  async () => {
+  async (context) => {
     const supabase = SupabaseServerClient()
     const service = SupabaseRankingService(supabase)
-    const queue = InngestQueue()
+    const queue = InngestQueue(context)
     const job = UpdateRankingsJob(service)
     return await job.handle(queue)
   },

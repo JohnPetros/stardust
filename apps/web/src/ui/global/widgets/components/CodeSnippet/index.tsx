@@ -57,7 +57,7 @@ export function CodeSnippet({ code, isRunnable = false, onChange }: CodeSnippetP
                   />
                 </ToolBar.Button>
               </Tooltip>
-              <Tooltip content='Voltar para o código inicial' direction='bottom'>
+              <Tooltip content='Copiar código' direction='bottom'>
                 <ToolBar.Button
                   type='button'
                   className={TOOLBAR_BUTTON_CLASS_NAME}

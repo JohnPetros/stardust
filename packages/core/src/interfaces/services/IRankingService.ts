@@ -13,7 +13,9 @@ export interface IRankingService {
   fetchRankingWinnersByTier(tierId: string): Promise<ApiResponse<RankingUserDto[]>>
   saveRankingLosers(losers: RankingUser[], tierId: string): Promise<ApiResponse>
   saveRankingWinners(winners: RankingUser[], tierId: string): Promise<ApiResponse>
-  verifyRankingLoserState(rankingUserId: string): Promise<ApiResponse>
+  fetchLastWeekRankingUserTierPosition(
+    rankingUserId: string,
+  ): Promise<ApiResponse<{ position: number }>>
   updateLastWeekRankingPositions(): Promise<ApiResponse>
   updateRankingUsersTier(
     rankingUsers: RankingUser[],
