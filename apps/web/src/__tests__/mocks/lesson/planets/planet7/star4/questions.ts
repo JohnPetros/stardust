@@ -15,13 +15,13 @@ type Questions = [
 export const questions: Questions = [
   {
     type: 'selection',
-    stem: 'Que tal tentarmos cumprimentar a princesa de fora do castelo. Qual função abaixo faz uma saudação? Dica: ela é uma função avançada.',
+    stem: 'Que tal tentarmos cumprimentar a princesa de fora do castelo. Qual das funções abaixo é uma função avançada?',
     code: `funcao facaSaudacao(nome) {
   retorna "Olá, \${nome}! Tudo bem?"
 }
     
 funcao retornaSaudacao(nome) {
-    retorna facaSaudacao(nome)
+  retorna facaSaudacao(nome)
 }
 
 escreva(retornaSaudacao("Princesa"))`,
@@ -84,7 +84,7 @@ escreva(retornaSaudacao("Princesa"))`,
         label: 'minuscula',
       },
     ],
-    correctItems: [3, 1],
+    correctItems: ['maiuscula', 'mapear'],
     picture: 'panda.jpg',
   },
   {
@@ -135,7 +135,7 @@ escreva(retornaSaudacao("Princesa"))`,
         label: 'verifiqueEspinho',
       },
     ],
-    correctItems: [3, 2, 1],
+    correctItems: ['elemento', 'caminho', 'verifiqueCaminho'],
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -156,7 +156,7 @@ escreva(retornaSaudacao("Princesa"))`,
       {
         number: 3,
         indentation: 2,
-        texts: ['planta.', 'input-2', '()'],
+        texts: ['var plantaEmMinusculo = planta.', 'input-2', '()'],
       },
       {
         number: 5,

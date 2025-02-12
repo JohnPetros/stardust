@@ -20,7 +20,7 @@ export const textsMock: TextBlockDto[] = [
   },
   {
     content:
-      'Um programa é uma sequência escrita de passos que instrui computadores a realizarem uma determinada tarefa.',
+      'Um programa é uma sequência de passos escrita que instrui os computadores a realizarem uma determinada tarefa.',
     type: 'default',
     picture: 'panda.jpg',
   },
@@ -32,7 +32,7 @@ export const textsMock: TextBlockDto[] = [
   },
   {
     content:
-      'Um programa de computador é como uma lista de etapas que você escreve para o robô seguir. Imagine que esses passos estão escritos em uma linguagem que só o robô entende. Cada passo é como uma instrução  que diz ao robô o que pegar, o que cortar, como montar o sanduíche e como servi-lo.',
+      'Um programa de computador é como uma lista de etapas que você escreve para o robô seguir. Imagine que esses passos estão escritos em uma linguagem que só o robô entende. Cada passo é como uma instrução que diz ao robô o que pegar, o que cortar, como montar o sanduíche e como servi-lo.',
     type: 'default',
     picture: 'panda-sorrindo.jpg',
   },
@@ -69,7 +69,7 @@ Fim`,
   },
   {
     content:
-      'Essa abordagem de pensar logicamente para escrever um programa chamamos de lógica de programação. ',
+      'Essa abordagem de pensar logicamente para escrever um programa chamamos de lógica de programação.',
     type: 'default',
     picture: 'panda-fazendo-coracao.jpg',
   },
@@ -80,7 +80,7 @@ Fim`,
   },
   {
     content:
-      'E acredite, não é só coisa de tecnologia, é um modo de pensar que usamos até nas tarefas cotidianas.',
+      'E acredite, não é exclusividade da tecnologia, é um modo de pensar que usamos até nas tarefas cotidianas.',
     type: 'default',
     picture: 'panda-sorrindo.jpg',
   },
@@ -104,28 +104,28 @@ Fim`,
   },
   {
     content:
-      'Se o seu objetivo é preparar o foguete para o espaço, seu programa pode ser algo assim:',
+      'Se o seu objetivo for preparar o foguete para o espaço, o seu programa pode ser algo assim:',
     type: 'default',
     picture: 'panda.jpg',
   },
   {
     type: 'code',
-      content: `programa preparar o foguete
+    content: `programa preparar o foguete
 
-  Inicio
+Inicio
 
-    Localizar um foguete disponivel
-    Verificar os niveis de combustivel
-    Verificar o suprimento a bordo
-    Verificar os niveis de oxigenio
+  Localizar um foguete disponivel
+  Verificar os niveis de combustivel
+  Verificar o suprimento a bordo
+  Verificar os niveis de oxigenio
 
-    Se necessario, obter recursos adicionais
-    Caso contrario, preparar a decolagem do foguete
+  Se necessario, adquirir recursos adicionais
+  Caso contrario, preparar a decolagem do foguete
 
-    Aguardar ate que o foguete entre em orbita
-    Aproveitar a jornada enquanto o foguete viaja pelo espaço
+  Aguardar até que o foguete entre em órbita
+  Aproveitar a jornada enquanto o foguete viaja pelo espaço
 
-  Fim`,
+Fim`,
     isRunnable: false,
   },
   {
@@ -143,7 +143,7 @@ Fim`,
   },
   {
     content:
-      'Agora que você conpreende o básico de lógica de programação, vamos agora embarcar nesse foguete 🚀.',
+      'Agora que você compreende o básico de lógica de programação, vamos agora embarcar nesse foguete 🚀.',
     type: 'quote',
     picture: 'panda-fazendo-coracao.jpg',
   },

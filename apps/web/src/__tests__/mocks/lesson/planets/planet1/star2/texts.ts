@@ -1,4 +1,5 @@
 import type { TextBlockDto } from '@stardust/core/global/dtos'
+
 export const texts: TextBlockDto[] = [
   { type: 'image', content: 'Decolando...', picture: 'foguete-decolando.jpg' },
   {
@@ -10,7 +11,7 @@ export const texts: TextBlockDto[] = [
   {
     type: 'default',
     content:
-      'Para isso você vai ter que instruir seu foguete escrevendo programas, e para escrever programas é preciso usar uma linguagem de programação.',
+      'Para isso, você vai ter que instruir seu foguete escrevendo programas, e para escrever programas é preciso usar uma linguagem de programação.',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
@@ -45,7 +46,7 @@ export const texts: TextBlockDto[] = [
   {
     type: 'default',
     content:
-      'Simples e fácil, mas caso você queria que o foguete receba e leia informações suas (o que chamamos de entrada de dados), você pode usar o comando *leia()*.',
+      'Simples e fácil, mas caso você queira que o foguete receba e leia informações suas (o que chamamos de entrada de dados), você pode usar o comando *leia()*.',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
@@ -55,11 +56,11 @@ export const texts: TextBlockDto[] = [
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   { type: 'code', content: 'leia()', isRunnable: true },
-  { type: 'user', content: 'Oxe! Nada foi imprimido na tela!' },
+  { type: 'user', content: 'Oxe! Nada foi impresso na tela!' },
   {
     type: 'default',
     content:
-      'Exatamente! Primeiro, veja que se algum texto for colocado dentro do parênteses do *leia()*, esse texto servirá como mensagem dentro da janela.',
+      'Exatamente! Primeiro, veja que se algum texto for colocado dentro do parênteses do *leia()*, esse texto será exibido como mensagem dentro da janela.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -72,7 +73,7 @@ escreva(mensagem)`,
   {
     type: 'default',
     content:
-      'Para receber dados, naturalmente, você tem que colocar em algum lugar, que no caso de um programa sempre vai ser em algo que chamamos de variável.',
+      'Para receber dados, naturalmente, você deve armazená-los em algum lugar, e no caso de um programa, esse lugar é algo que chamamos de variável.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -84,7 +85,7 @@ escreva(mensagem)`,
   {
     type: 'default',
     content:
-      'Elas tem esse nome porque elas podem variar de valor, ou seja, receber outros valores no decorrer do programa.',
+      'Elas têm esse nome porque podem variar de valor, ou seja, receber outros valores no decorrer do programa.',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
@@ -96,30 +97,31 @@ escreva(mensagem)`,
   {
     type: 'default',
     content:
-      'Vamos fazer o seguinte: Colocar seu nome em uma variável usando *leia()* e depois exibí-lo usando *escreva()*.',
+      'Vamos fazer o seguinte: Colocar seu nome em uma variável usando *leia()* e depois exibi-lo usando *escreva()*.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'code',
-    content: `var seuNome = leia("Insira seu nome: ")\nescreva(seuNome)`,
+    content: `var seuNome = leia("Insira seu nome: ")
+escreva(seuNome)`,
     isRunnable: true,
   },
   {
     type: 'default',
     content:
-      'Bacana!! Porém, na hora de escrever um código consistente em sem erros você precisa tomar alguns cuidados:',
+      'Bacana!! Porém, na hora de escrever um código consistente e sem erros, você precisa tomar alguns cuidados:',
     picture: 'panda-comemorando.jpg',
   },
   {
     type: 'quote',
     content:
-      '1 - É preciso respeitar sempre o nome dos comandos definida pela linguagem. Por exemplo, caso você tivesse colocado *exiba* em vez de *escreva*, deixado de usar os parênteses ou as aspas para escrever as mensagem dentro dos parênteses, o código daria erro.',
+      '1 - É preciso respeitar sempre o nome dos comandos definidos pela linguagem. Por exemplo, caso você tivesse colocado *exiba* em vez de *escreva*, deixado de usar os parênteses ou as aspas para escrever as mensagens dentro dos parênteses, o código daria erro.',
     picture: 'panda-exercitando.jpg',
   },
   {
     type: 'quote',
     content:
-      '2 - Você deve entender o objetivo, quando e porquê usar cada comando. Por exemplo, para exibir dados que serão inseridos no programa, eu preciso usar primeiro o comando *leia()* porque ele serve para ler informações que vem de fora do programa. Depois devo usar o comando *escreva()* para exibir esses dados.',
+      '2 - Você deve entender o objetivo, quando e porquê usar cada comando. Por exemplo, para exibir dados que serão inseridos no programa, eu preciso usar primeiro o comando *leia()* porque ele serve para ler informações que vêm de fora do programa. Depois devo usar o comando *escreva()* para exibir esses dados.',
     picture: 'panda-exercitando.jpg',
   },
   {
@@ -148,20 +150,19 @@ escreva(mensagem)`,
   {
     type: 'code',
     content: `// Não estou sendo executado
-escreva("Estou sendo executado")
-    `,
+escreva("Estou sendo executado")`,
     isRunnable: true,
   },
   {
     type: 'default',
     content:
-      'Os comandos *leia()* e *escreva()* são considerados comandos de entrada e saída, respectivamente. Podemos dizer que usando o comando *leia()* você está fanzendo os dados "entrarem" no programa, enquanto com o *escreva()* você está fazendo dados "saírem" para serem exibidos.',
+      'Os comandos *leia()* e *escreva()* são considerados comandos de entrada e saída, respectivamente. Podemos dizer que usando o comando *leia()* você está fazendo os dados "entrarem" no programa, enquanto com o *escreva()* você está fazendo dados "saírem" para serem exibidos.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'quote',
     content:
-      'Agora que você sabe um pouco mais, está na hora revisar tudo isso, que tal?',
+      'Agora que você sabe um pouco mais, está na hora de revisar tudo isso, que tal?',
     picture: 'panda.jpg',
   },
 ]

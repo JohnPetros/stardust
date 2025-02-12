@@ -3,7 +3,7 @@ import type { TextBlockDto } from '@stardust/core/global/dtos'
 export const texts: TextBlockDto[] = [
   {
     type: 'image',
-    picture: 'foquete-viajando.jpg',
+    picture: 'foguete-viajando.jpg',
     content: 'Vagando no espaço...',
   },
   {
@@ -83,7 +83,7 @@ var idade = 90`,
   {
     type: 'alert',
     content:
-      'O valor 90 não tem aspas porque ele é não é um texto, mas sim um número, mas podemos falar sobre isso depois.',
+      'O valor 90 não tem aspas porque ele não é um texto, mas sim um número, mas podemos falar sobre isso depois.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -136,7 +136,7 @@ escreva("e sua idade é ", idade)
     picture: 'panda-de-oculos.jpg',
   },
   {
-    content: `// Nada de iniciar nome de variaveis com números ❌
+    content: `// Nada de iniciar nome de variáveis com números ❌
 var 15Cavalos
 
 // Mas o nome pode conter números desde que não seja no começo do nome ✅
@@ -163,7 +163,7 @@ var minhaVariavel`,
   },
   {
     content:
-      '3 - O nome da variável não pode ser uma palavra já utilizada pela liguagem, por exemplo, um nome de um comando.',
+      '3 - O nome da variável não pode ser uma palavra já utilizada pela linguagem, por exemplo, um nome de um comando.',
     type: 'quote',
     picture: 'panda-de-oculos.jpg',
   },

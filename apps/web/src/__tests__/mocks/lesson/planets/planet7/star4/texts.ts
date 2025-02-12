@@ -9,7 +9,7 @@ export const texts: TextBlockDto[] = [
   {
     type: 'default',
     content:
-      'Por exemplo, uma lista sendo *[1, 2, 3, 4]*, deve gerar uma lista com *[2, 4, 6, 8]*.',
+      'Por exemplo, a partir de uma lista sendo *[1, 2, 3, 4]*, deve ser gerarada uma lista com *[2, 4, 6, 8]*.',
     picture: 'tubarao-malvado.jpg',
   },
   {
@@ -23,7 +23,7 @@ para (var i = 0; i < numeros.tamanho(); i++) {
 }
 
 escreva(novaLista)
-// Resultado: [2,4,6,8]`,
+// Resultado: [2, 4, 6, 8]`,
     isRunnable: true,
   },
   {
@@ -53,7 +53,7 @@ escreva(novaLista)
     type: 'quote',
     title: 'Funções de alta ordem',
     content:
-      'Funções de alta ordem ou funções de ordem superior (vamos chamar de apenas funções avançadas), são funções que recebem outras funções como parâmetro.',
+      'Funções de alta ordem ou funções de ordem superior (vamos chamar de apenas funções avançadas) são funções que recebem outras funções como parâmetro.',
     picture: 'panda-oferecendo-bambu.jpg',
   },
   {
@@ -73,7 +73,7 @@ souOutraFuncao(cumprimente)
   {
     type: 'quote',
     content:
-      'Nesse exemplo, a função *cumprimente()* foi passado como parâmetro para a funcao *souOutraFuncao()*. Assim, a função *cumprimente()* foi executada dentro de *souOutraFuncao()*.',
+      'Nesse exemplo, a função *cumprimente()* foi passada como parâmetro para a função *souOutraFuncao()*. Assim, a função *cumprimente()* foi executada dentro de *souOutraFuncao()*.',
     picture: 'panda.jpg',
   },
   {
@@ -100,18 +100,18 @@ escreva(executeSomar(1, 2, somar))
   {
     type: 'default',
     content:
-      'Neste exemplo, a funcao *executeSomar()* recebe 3 parâmetros. Os dois primeiros são números e o terceiro é uma função que soma dois números.',
+      'Neste exemplo, a função *executeSomar()* recebe 3 parâmetros. Os dois primeiros são números e o terceiro é uma função que soma dois números.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
     type: 'default',
     content:
-      'A função *somar()* é executada dentro da funcao *executeSomar()* usando os parâmetros que foram originalmente passados para a funcao *executeSomar()*.',
+      'A função *somar()* é executada dentro da função *executeSomar()* usando os parâmetros que foram originalmente passados para a função *executeSomar()*.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
     type: 'default',
-    content: 'E o retorno de *somar()* é retornado pela funcao *executeSomar()*.',
+    content: 'E o retorno de *somar()* é retornado pela função *executeSomar()*.',
     picture: 'panda-andando-com-bambu.jpg',
   },
   {
@@ -163,19 +163,19 @@ escreva(executeSomar(1, 2, somar))
   {
     type: 'quote',
     content:
-      'O *mapear()* recebe como parâmetro uma função transformadora, ou seja, uma que transformará cada elemento da lista original.',
+      'O *mapear()* recebe como parâmetro uma função transformadora, ou seja, uma função que transformará cada elemento da lista original.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'default',
     content:
-      'Quando o *mapear()* for executado essa função transformadora será aplicada a cada elemento da lista original. E cada retorno dessa função será incluído em um nova lista.',
+      'Quando o *mapear()* for executada essa função transformadora será aplicada a cada elemento da lista original. E cada elemento retornado por essa função será incluído em um nova lista.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'default',
     content:
-      'No nosso caso, a função transformadora será que função que dobra um número. Então vamos criá-la.',
+      'No nosso caso, a função transformadora será a função que dobra um número. Então, vamos criá-la.',
     picture: 'panda-piscando-sentado.jpg',
   },
   {
@@ -190,7 +190,7 @@ var novosNumeros = mapear(numeros, dobre)
 
 escreva(novosNumeros)
 
-// Resultado: 2, 4, 6, 8`,
+// Resultado: [2, 4, 6, 8]`,
     isRunnable: true,
   },
   {
@@ -202,13 +202,13 @@ escreva(novosNumeros)
   {
     type: 'default',
     content:
-      'Lembra que eu disse que *mapear()* faz um laço na lista original passado cada item da lista como parâmetro para a função transformadora?',
+      'Lembra-se de que eu disse que *mapear()* aplica um laço na lista original, passando cada item da lista como parâmetro para a função transformadora?',
     picture: 'panda-sorrindo.jpg',
   },
   {
     type: 'default',
     content:
-      'A cada iteração desse laço a função *dobrar()* é executada recebendo como parâmetro o número atual da lista *numeros*.',
+      'A cada iteração desse laço a função *dobre()* é executada recebendo como parâmetro o número atual da lista *numeros*.',
     picture: 'panda-sorrindo.jpg',
   },
   {
@@ -328,25 +328,36 @@ funcao verifiqueSeEMaiorQue10(numero) {
 var numerosFiltrados = filtrarPor(numeros, verifiqueSeEMaiorQue10)
       
 escreva(numerosFiltrados)
-// Resultado: 15, 20`,
+// Resultado: [15, 20]`,
     isRunnable: true,
     picture: 'panda.jpg',
   },
   {
     type: 'default',
-    content: 'Está vendo que a função *verifiqueSeEMaiorQue10()* retorna um lógico?',
+    content:
+      'Está vendo que a função *verifiqueSeEMaiorQue10()* retorna um valor lógico?',
     picture: 'panda.jpg',
   },
   {
     type: 'default',
     content:
-      'Isso porque a função filtradora deve obrigatoriamente retornar um lógico, que:\nse for *verdadeiro*, o elemento atual é colocado no nova lista, caso falso ele é excluído.',
+      'Isso porque a função filtradora deve, obrigatoriamente, retornar um valor lógico, que determina o seguinte:',
+    picture: 'panda-sorrindo-sentado.jpg',
+  },
+  {
+    type: 'quote',
+    content: 'Se for verdadeiro, o elemento atual é colocado na nova lista.',
+    picture: 'panda-sorrindo-sentado.jpg',
+  },
+  {
+    type: 'quote',
+    content: 'Caso seja falso, ele não é incluído na nova lista.',
     picture: 'panda-sorrindo-sentado.jpg',
   },
   {
     type: 'default',
     content:
-      'Por exemplo, se em uma outra situação o retorno da função filtradora fosse sempre *verdadeiro*, nenhum elemento da lista original seria excluído.',
+      'Por exemplo, se em outra situação o retorno da função filtradora fosse sempre *verdadeiro*, nenhum elemento da lista original seria excluído.',
     picture: 'panda-fazendo-coracao.jpg',
   },
   {
@@ -379,13 +390,13 @@ funcao verifiqueSeEMaiorQue10(numero) {
 var numerosFiltrados = numeros.filtrarPor(verifiqueSeEMaiorQue10)
       
 escreva(numerosFiltrados)
-// Resultado: Nada`,
+// Resultado: []`,
     isRunnable: true,
   },
   {
     type: 'default',
     content:
-      'Talvez você ache que o nome da função filtradora grande demais (o que não é problema nenhum, quanto mais descritivo melhor). Você pode usar uma função anônima no lugar.',
+      'Talvez você ache que o nome da função filtradora grande demais (o que não é problema nenhum, quanto mais descritivo melhor). Você pode usar uma função anônima no lugar também.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -402,7 +413,7 @@ var numerosFiltrados = filtrarPor(numeros, funcao(numero) {
 })
       
 escreva(numerosFiltrados)
-// Resultado: 15, 20`,
+// Resultado: [15, 20]`,
     isRunnable: true,
   },
   {
@@ -713,12 +724,12 @@ escreva(novosNumeros)
   //   },
   {
     type: 'image',
-    content: 'Puxa, vocês conseguiram resolver todos os desafios.',
+    content: 'Puxa! Vocês conseguiram resolver todos os desafios.',
     picture: 'tubarao-malvado.jpg',
   },
   {
     type: 'image',
-    content: 'Vocês podem ver a princesa, ela está no castelo logo à frente.',
+    content: 'Vocês podem ver a princesa. Ela está no castelo logo à frente.',
     picture: 'castelo-alien.jpg',
   },
   {

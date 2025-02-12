@@ -197,17 +197,16 @@ reabastecer(48)
 }
 
 escreva(reabastecer(48))
-/* Resultado: 
-    Agora há 52 litros
-    48
-*/`,
+// Resultado: 
+// Agora há 52 litros
+// 48`,
     isRunnable: true,
     picture: 'panda.jpg',
   },
   {
     type: 'alert',
     content:
-      'Caso a *função anônima* seja associada a uma variável, para chamar essa função, deverá ser usado o nome dessa variável.',
+      'Caso a `função anônima` seja associada a uma variável, para chamar essa função, deverá ser usado o nome dessa variável.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -284,7 +283,7 @@ escreva('O \${achePlaneta("x:42;y:84")} é para onde temos que ir!')
 }
 
 mostreAlgo()
-// Resultado: Sem resultado`,
+// Resultado: Sem saída`,
     isRunnable: true,
   },
   {
@@ -307,6 +306,23 @@ mostreAlgo()
 
 verifiqueIdade(999)
 // Resultado Pode pilotar um foguete`,
+    isRunnable: true,
+  },
+  {
+    type: 'alert',
+    content:
+      'Além disso, uma função que não retorna nada está, na verdade, retornando valor `nulo`.',
+    picture: 'panda.jpg',
+  },
+  {
+    type: 'code',
+    content: `funcao retorneAlgo() {
+  retorna
+}
+
+escreva(retorneAlgo(retorneAlgo()))
+
+// Resultado: nulo`,
     isRunnable: true,
   },
   {
@@ -334,7 +350,7 @@ escreva('O \${achePlaneta("x:42;y:84")} é para onde temos que ir!')
   {
     type: 'default',
     content:
-      'Viu que usei a função *reabastecer* como se fosse uma variável? Esse é mais um poder do *retorna*.',
+      'Viu que usei a função `achePlaneta` como se fosse uma variável? Esse é mais um poder do *retorna*.',
     picture: 'panda-comemorando.jpg',
   },
   {
@@ -359,10 +375,9 @@ var quantidadeDeLetras = letras.tamanho()
 escreva(quantidadeDeLetras)
 escreva(numeros.tamanho())
 
-/* Resultado: 
-  3
-  3
-*/`,
+// Resultado: 
+// 3
+// 3`,
     isRunnable: true,
     picture: 'panda.jpg',
   },

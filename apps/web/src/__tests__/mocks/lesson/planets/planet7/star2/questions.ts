@@ -12,7 +12,7 @@ type Questions = [
   OpenQuestionDto,
 ]
 
-export const question: Questions = [
+export const questions: Questions = [
   {
     type: 'checkbox',
     stem: 'Por algum motivo, aparentemente há um robô passando perto de nós, mas não tenho certeza. Quais os possíveis valores que o parâmetro *robo* poderia ter para que fosse escrito "Isso é um robô"?',
@@ -58,7 +58,7 @@ se (verificarRobo(robo)) {
       },
       {
         number: 6,
-        texts: ['retorna', ' dropZone'],
+        texts: ['retorna', 'dropZone'],
         indentation: 2,
       },
       {
@@ -84,8 +84,12 @@ se (verificarRobo(robo)) {
         index: 4,
         label: '"Haskell"',
       },
+      {
+        index: 5,
+        label: '"Não habitável"',
+      },
     ],
-    correctItems: [3, 1, 4],
+    correctItems: ['planeta', 'retorna', '"Não habitável"', '"Haskell"'],
     picture: 'panda.jpg',
   },
   {
@@ -126,20 +130,20 @@ se (verificarRobo(robo)) {
         label: '=',
       },
     ],
-    correctItems: [3, 4, 1],
+    correctItems: ['var', '=', 'retorna'],
     picture: 'panda.jpg',
   },
   {
     type: 'checkbox',
     stem: 'Vamos utilizar funções anônimas para descobrir o nome da estrela desse planeta. Quais dessas funções SÃO anônimas?',
     code: `var obtenhaNomeDeEstrela = funcao() {
-        retorna "Arrakis"
+  retorna "Arrakis"
 }
 funcao concateneNomeDeEstrela (estrela) {
-    estrelas += "Arrakis"
+  estrelas += "Arrakis"
 }
 var adicioneNomeDeEstrela = funcao(estrelas) {
-    retorna estrelas.adicionar(["Arrakis"])
+  retorna estrelas.adicionar(["Arrakis"])
 }`,
     options: [
       'concateneNomeDeEstrela',
@@ -172,15 +176,15 @@ var adicioneNomeDeEstrela = funcao(estrelas) {
       {
         number: 4,
         indentation: 0,
-        texts: ['var subtracao =', 'input-2', '(12, 2)'],
+        texts: ['var distancia =', 'input-2', '(12, 2)'],
       },
       {
         number: 5,
         indentation: 0,
-        texts: ['escreva(subtracao *', 'input-3', ')'],
+        texts: ['escreva(', 'input-3', ')'],
       },
     ],
-    answers: ['retorna', 'calculeDistancia', '2'],
+    answers: ['retorna', 'calculeDistancia', 'distancia'],
     picture: 'panda.jpg',
   },
 ]

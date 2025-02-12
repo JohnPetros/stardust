@@ -15,8 +15,6 @@ export function ChallengeCodeEditorSlot() {
     handleRunCode,
   } = useChallengeCodeEditorSlot()
 
-  console.log(originalCode)
-
   return (
     <div ref={editorContainerRef} className='relative h-full w-full'>
       <CodeEditorToolbar

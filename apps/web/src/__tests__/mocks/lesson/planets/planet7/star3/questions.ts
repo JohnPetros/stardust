@@ -19,13 +19,13 @@ export const questions: Questions = [
     code: `var numero = texto(22)
     
 escreva(22 + numero)`,
-    options: ['44', '"2222"', '22', '"2244"'],
+    options: ['44', '"2222"', '22', '2222', '"2244"'],
     answer: '"2222"',
     picture: 'panda-piscando.jpg',
   },
   {
     type: 'checkbox',
-    stem: 'Quais os possíveis números podem ser retornados pelo "aleatorioEntre(1, 4)"?',
+    stem: 'Quais os possíveis números podem ser retornados pelo *aleatorioEntre(1, 4)*?',
     options: ['1', '2', '3', '4'],
     correctOptions: ['1', '2', '3'],
     picture: 'panda-segurando-bambu-de-pe.jpg',
@@ -87,7 +87,7 @@ escreva(22 + numero)`,
         label: 'real',
       },
     ],
-    correctItems: [2, 1],
+    correctItems: ['texto', '500'],
     picture: 'panda-deslumbrado.jpg',
   },
 ]

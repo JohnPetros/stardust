@@ -13,7 +13,7 @@ type Questions = [
   DragAndDropQuestionDto,
 ]
 
-export const question: Questions = [
+export const questions: Questions = [
   {
     stem: 'Vamos treinar funções. Coloque o código na ordem para que a função *escrevaMensagem* seja executada corretamente',
     type: 'drag-and-drop-list',
@@ -96,7 +96,7 @@ mostreDistancia(velocidade, tempo)`,
       { index: 3, label: 'funcao' },
       { index: 4, label: 'mostreLancamento' },
     ],
-    correctItems: [3, 2, 1, 4],
+    correctItems: ['funcao', 'destino', 'data', 'mostreLancamento'],
     picture: 'panda-olhando-de-lado.jpg',
   },
 ]

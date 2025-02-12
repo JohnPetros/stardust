@@ -183,7 +183,8 @@ se (!mensagem.inclui('script') e telaAcesa) {
   },
   {
     type: 'default',
-    content: 'Ok, isso já está ficando chato.',
+    content:
+      'Ok, isso já está ficando chato. E o código nem está mais cabendo na sua tela de tão grande.',
     picture: 'panda-triste.jpg',
   },
   {
@@ -288,7 +289,7 @@ se (!mensagem.inclui('script') e telaAcesa) {
   {
     type: 'default',
     content:
-      'Isso porque não falamos para a função "useRadar()" executar o seu bloco de código.',
+      'Isso porque não falamos para a função `useRadar()` executar o seu bloco de código.',
     picture: 'panda-rindo-deitado.jpg',
   },
   {
@@ -380,7 +381,7 @@ mostreMensagem("Olá, mundo!")`,
   {
     type: 'default',
     content:
-      'Para usar esse "Olá, mundo!" dentro da função "mostreMensagem()", devemos criar variáveis no bloco da função',
+      'Para usar esse "Olá, mundo!" dentro da função "mostreMensagem()", devemos criar uma variável no bloco da função.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -398,7 +399,7 @@ mostreMensagem("Olá, mundo!")
   {
     type: 'default',
     content:
-      'Essas variáveis entre parênteses se chamam *parâmetros de função* e elas podem ter qualquer nome, e caso você queira passar mais valores para a função, você terá que criar mais parâmetros.',
+      'Essa variável entre parênteses se chama *parâmetro de função* e elas pode ter qualquer nome de variável válida, e caso você queira passar mais valores para a função, você terá que criar mais parâmetros.',
     picture: 'panda-piscando.jpg',
   },
   {
@@ -454,12 +455,11 @@ useRadar("Tudo bem, vou estar te esperando")
 useRadar("Minhas coordenadas são: x:42y:84")
 useRadar("Muito obrigado")
 
-/* Resultado: 
-Ok, vou procurar
-Tudo bem, vou estar te esperando
-Minhas coordenadas são: x:42y:84
-Muito obrigado
-*/`,
+// Resultado:
+// Ok, vou procurar
+// Tudo bem, vou estar te esperando
+// Minhas coordenadas são: x:42y:84
+// Muito obrigado`,
     isRunnable: true,
   },
   {

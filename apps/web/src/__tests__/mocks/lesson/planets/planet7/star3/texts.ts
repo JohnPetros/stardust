@@ -232,7 +232,7 @@ escreva(numero)
   {
     type: 'default',
     content:
-      'Essa vai ser fácil também, pois existem funções nativas que convertem um tipo de dado para outro.',
+      'Essa vai ser fácil também, pois existem funções nativas que convertem um tipo de dado para outro tipo de dado.',
     picture: 'panda-piscando.jpg',
   },
   {
