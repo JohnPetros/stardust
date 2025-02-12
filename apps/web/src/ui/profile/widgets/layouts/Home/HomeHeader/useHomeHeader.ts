@@ -7,8 +7,9 @@ export function useHomeHeader(streakAnimationRef: RefObject<AnimationRef>) {
   const { user } = useAuthContext()
 
   useEffect(() => {
-    if (user?.weekStatus.isTodayDone.isFalse) streakAnimationRef.current?.stopAt(0)
-  }, [user])
+    if (user?.weekStatus.isTodayDone.isFalse && streakAnimationRef.current)
+      streakAnimationRef.current.stopAt(0)
+  }, [user, streakAnimationRef.current])
 
   return {
     user,
