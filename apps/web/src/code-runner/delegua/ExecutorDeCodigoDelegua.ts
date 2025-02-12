@@ -13,7 +13,7 @@ import type { ICodeRunnerProvider } from '@stardust/core/interfaces'
 import type { CodeInput } from '@stardust/core/global/types'
 
 import { DELEGUA_REGEX } from './constants'
-import { formateValor, obtenhaTipo, trateErro } from './utils'
+import { obtenhaTipo, trateErro } from './utils'
 
 export const ExecutorDeCodigoDelegua = (): ICodeRunnerProvider => {
   const lexador = new Lexador()
@@ -35,6 +35,8 @@ export const ExecutorDeCodigoDelegua = (): ICodeRunnerProvider => {
         false,
       )
 
+      console.log('resultado', resultado)
+
       if (erros.length && erros[0]) {
         const erro = erros[0]
         const linhaDoErro = erro.linha ?? 0
@@ -43,12 +45,16 @@ export const ExecutorDeCodigoDelegua = (): ICodeRunnerProvider => {
 
       let result = ''
       if (resultado.length) {
-        const resultadoComValor = resultado.find((resultado) =>
-          resultado.startsWith('{"valor":'),
-        )
+        if (resultado[0] === '{"valor":null}') {
+          result = 'nulo'
+        }
+
+        const resultadoComValor = resultado
+          .reverse()
+          .find((resultado) => resultado.startsWith('{"valor":'))
 
         let valor: unknown
-        if (resultadoComValor) {
+        if (resultadoComValor && !result) {
           const resultadoParseado = JSON.parse(resultadoComValor)
 
           if ('valor' in resultadoParseado) {
@@ -63,7 +69,7 @@ export const ExecutorDeCodigoDelegua = (): ICodeRunnerProvider => {
             }
             result = this.translateToCodeRunner(valor)
           }
-        } else {
+        } else if (!result) {
           result = String(resultado[0])
         }
       }
