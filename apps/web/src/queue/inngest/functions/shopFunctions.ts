@@ -13,7 +13,7 @@ export const handleUserSignedUp = inngest.createFunction(
     const shopService = SupabaseShopService(supabase)
     const queue = InngestQueue<typeof context.event.data>(context)
     const job = HandleUserSignedUpJob(shopService)
-    return await job.handle(queue)
+    return job.handle(queue)
   },
 )
 

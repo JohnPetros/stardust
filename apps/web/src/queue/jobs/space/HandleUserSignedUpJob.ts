@@ -27,13 +27,14 @@ export const HandleUserSignedUpJob = (spaceService: ISpaceService): IJob => {
         '1h',
       )
 
-      await queue.run(async () => {
-        const useCase = new UnlockStarUseCase(spaceService)
-        await useCase.do({
-          userId: userId,
-          starId: firstUnlockedStarId,
-        })
-      }, UnlockStarUseCase.name)
+      if (userId)
+        await queue.run(async () => {
+          const useCase = new UnlockStarUseCase(spaceService)
+          await useCase.do({
+            userId: userId,
+            starId: firstUnlockedStarId,
+          })
+        }, UnlockStarUseCase.name)
     },
   }
 }

@@ -13,7 +13,7 @@ const handleUserSignedUp = inngest.createFunction(
     const service = SupabaseRankingService(supabase)
     const queue = InngestQueue<typeof context.event.data>(context)
     const job = HandleUserSignedUpJob(service)
-    return await job.handle(queue)
+    return job.handle(queue)
   },
 )
 
@@ -25,7 +25,7 @@ const updateRankings = inngest.createFunction(
     const service = SupabaseRankingService(supabase)
     const queue = InngestQueue(context)
     const job = UpdateRankingsJob(service)
-    return await job.handle(queue)
+    return job.handle(queue)
   },
 )
 

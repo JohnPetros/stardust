@@ -17,7 +17,7 @@ const handleUserSignedUp = inngest.createFunction(
     const service = SupabaseProfileService(supabase)
     const queue = InngestQueue<typeof context.event.data>(context)
     const job = HandleUserSignedUpJob(service)
-    return await job.handle(queue)
+    return job.handle(queue)
   },
 )
 
@@ -29,7 +29,7 @@ const observeStreakBreak = inngest.createFunction(
     const service = SupabaseProfileService(supabase)
     const job = ObserveStreakBreakJob(service)
     const queue = InngestQueue(context)
-    return await job.handle(queue)
+    return job.handle(queue)
   },
 )
 
@@ -41,7 +41,7 @@ const resetWeekStatus = inngest.createFunction(
     const service = SupabaseProfileService(supabase)
     const job = ResetWeekStatusJob(service)
     const queue = InngestQueue(context)
-    return await job.handle(queue)
+    return job.handle(queue)
   },
 )
 

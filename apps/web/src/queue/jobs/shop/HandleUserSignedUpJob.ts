@@ -34,16 +34,17 @@ export const HandleUserSignedUpJob = (shopService: IShopService): IJob => {
         '1h',
       )
 
-      await queue.run(async () => {
-        await Promise.all([
-          ...shopPayload.acquirableAvatarsByDefaultIds.map((avatarId) =>
-            saveAcquiredAvatar(avatarId, userId),
-          ),
-          ...shopPayload.acquirableRocketsByDefaultIds.map((rocketId) =>
-            saveAcquiredRocket(rocketId, userId),
-          ),
-        ])
-      }, 'save acquired shop items')
+      if (userId)
+        await queue.run(async () => {
+          await Promise.all([
+            ...shopPayload.acquirableAvatarsByDefaultIds.map((avatarId) =>
+              saveAcquiredAvatar(avatarId, userId),
+            ),
+            ...shopPayload.acquirableRocketsByDefaultIds.map((rocketId) =>
+              saveAcquiredRocket(rocketId, userId),
+            ),
+          ])
+        }, 'save acquired shop items')
     },
   }
 }
