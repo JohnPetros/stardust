@@ -53,7 +53,7 @@ export function DragAndDropQuestion({
     >
       <QuestionStem picture={picture}>{stem}</QuestionStem>
 
-      <ul className='mt-6 space-y-4'>
+      <ul className='mt-3 px-6 md:w-max space-y-4 overflow-auto'>
         {codeLines.map((line) => {
           const marginLeft = 24 * line.indentation.value
           return (
@@ -64,8 +64,8 @@ export function DragAndDropQuestion({
             >
               {line.texts.map((text, textIndex) => {
                 const key = DragAndDropQuestionEntity.getDropZoneSlotKey(line, textIndex)
-                console.log(text)
-                if (!key) return <span className='font-code text-gray-100'>{text}</span>
+                if (!key)
+                  return <span className='font-code w-max text-gray-100'>{text}</span>
 
                 const index = dropZoneSlotsIndexes[key]
                 if (!index) return
@@ -81,7 +81,7 @@ export function DragAndDropQuestion({
         })}
       </ul>
 
-      <ul className='mt-12 flex w-full flex-wrap justify-center gap-3'>
+      <ul className='mt-3 md:mt-12 flex w-full flex-wrap justify-center gap-3'>
         {dragAndDrop.items.map((item) => {
           const itemWidth = getItemWidth(item.label.value)
 

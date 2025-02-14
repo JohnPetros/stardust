@@ -35,7 +35,7 @@ export function OpenQuestion({
         </div>
       )}
 
-      <ul className='mt-12 space-y-6'>
+      <ul className='mt-6 w-[24rem] pr-6 pb-1 md:w-max mx-auto space-y-6  overflow-x-auto'>
         {codeLines.map((codeLine) => {
           const marginLeft = 24 * codeLine.indentation.value
 
