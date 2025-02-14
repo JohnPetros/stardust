@@ -22,9 +22,12 @@ export class Slug {
       .trim()
       .replace(/\s+/g, '-')
       .replace(/-+/g, '-')
-      .replace('?', '')
-      .replace('!', '')
-      .replace('.', '')
+      .replaceAll('?', '')
+      .replaceAll('!', '')
+      .replaceAll('.', '')
+      .replaceAll('.', '')
+      .replaceAll(',', '')
+      .replaceAll(';', '')
 
     return new Slug(slugValue)
   }
