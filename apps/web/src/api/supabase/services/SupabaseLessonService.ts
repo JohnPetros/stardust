@@ -9,22 +9,23 @@ import type { QuestionDto } from '@stardust/core/lesson/dtos'
 export const SupabaseLessonService = (supabase: Supabase): ILessonService => {
   return {
     async fetchQuestionsByStar(starId: string) {
-      const { data, error } = await supabase
-        .from('questions')
-        .select('*')
-        .eq('star_id', starId)
-        .order('position', { ascending: true })
+      const { data, error, status } = await supabase
+        .from('stars')
+        .select('questions')
+        .eq('id', starId)
+        .single()
 
       if (error) {
-        return SupabasePostgrestError(error, 'Erro inesperado ao buscar textos')
+        return SupabasePostgrestError(
+          error,
+          'Erro inesperado ao buscar as questões dessa estrela',
+          status,
+        )
       }
 
-      const questions = data.map(({ id, content }) => ({
-        id,
-        ...Object(content),
-      })) as QuestionDto[]
-
-      return new ApiResponse({ body: questions })
+      return new ApiResponse({
+        body: data.questions as QuestionDto[],
+      })
     },
 
     async fetchTextsBlocksByStar(starId) {

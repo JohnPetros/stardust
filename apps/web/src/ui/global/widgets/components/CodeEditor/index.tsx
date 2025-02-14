@@ -87,7 +87,7 @@ export function CodeEditorComponent(
         fontSize: state.fontSize - (isMobile ? 2 : 0),
         fontFamily: 'Menlo',
         cursorStyle: 'line',
-        wordWrap: 'on',
+        wordWrap: 'off',
         autoIndent: 'full',
         readOnly: isReadOnly,
         domReadOnly: true,

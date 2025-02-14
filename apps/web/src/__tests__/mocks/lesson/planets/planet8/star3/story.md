@@ -1,32 +1,32 @@
 <Image picture='princesa-flutuando.jpg'>Estamos quase lá!</Image>
 ---
 <Code>
-  var bombas = {
-    "tomatomica": ["tomate", "tomate", "tomate", "tomate", "tomate", "tomate", "tomate", "tomate"],
-    "granatom": ["tomate", "tomate", "tomate", "tomate", "tomate", "tomate", "tomate", "tomate"],
-    "pomatox": ["tomate", "tomate", "tomate", "tomate", "tomate", "tomate", "tomate", "tomate"],
-  }
+var bombas = {
+  "tomatomica": ["tomate", "tomate", "tomate", "tomate"],
+  "granatom": ["tomate", "tomate", "tomate", "tomate"],
+  "pomatox": ["tomate", "tomate", "tomate", "tomate"],
+}
 </Code>
 ---
 <Image picture='princesa-animada.jpg'>Bombas de tomates!</Image>
 ---
-<Text picture='panda-pensando.jpg'>Podemos jogar essas bombas nos locais estratégicos que nos foram enviados por aquele pessoa desconhecida.</Text>
+<Text picture='panda-pensando.jpg'>Podemos jogar essas bombas nos locais estratégicos que nos foram enviados por aquela pessoa desconhecida.</Text>
 ---
-<Text picture='panda-segurando-bambu-de-pe.jpg'>Primeiro, permita-te colocá-los em variáveis</Text>
+<Text picture='panda-segurando-bambu-de-pe.jpg'>Primeiro, permita-me colocá-los em variáveis.</Text>
 ---
 <Code exec>
-  var bombas = {
-    "tomatomica": ["tomate", "tomate", "tomate", "tomate"],
-    "granatom": ["tomate", "tomate", "tomate", "tomate"],
-    "pomatox": ["tomate", "tomate", "tomate", "tomate"],
-  }
+var bombas = {
+  "tomatomica": ["tomate", "tomate", "tomate", "tomate"],
+  "granatom": ["tomate", "tomate", "tomate", "tomate"],
+  "pomatox": ["tomate", "tomate", "tomate", "tomate"],
+}
 
-  var bomba1, bomba2, bomba3 = bombas["tomatomica"], bombas["granatom"], bombas["pomatox"]
+var bomba1, bomba2, bomba3 = bombas["tomatomica"], bombas["granatom"], bombas["pomatox"]
 
-  escreva(bomba1, bomba2, bomba3)
+escreva(bomba1, bomba2, bomba3)
 </Code>
 ---
-<User>Mas o que você acabou e fazer?</User>
+<User>Mas o que você acabou de fazer?</User>
 ---
 <Text picture='panda-sorrindo.jpg'>O que eu fiz é chamado de *atribuição de múltiplas variaveis*.</Text>
 ---
@@ -76,7 +76,7 @@ escreva(luaZetAteBaseDelta) // 850
 ---
 <Text picture='panda-sorrindo.jpg'>O que eu fiz é chamado de *desestruturação*.</Text>
 ---
-<Quote picture='panda-sorrindo-deitado.jpg' title='Desestruturação'>Desestruturação é uma forma de "desmontar" dicionários para extrair valores específicos de forma rápida e prática.</Quote>
+<Quote picture='panda-sorrindo-sentado.jpg' title='Desestruturação'>Desestruturação é uma forma de "desmontar" dicionários para extrair valores específicos de forma rápida e prática.</Quote>
 ---
 <Code exec>
 var panda = {
@@ -88,14 +88,14 @@ var panda = {
 // Desestruturação
 var { nome, idade, planeta } = panda
 
-escreva(nome)   // Panda
-escreva(idade)  // 2500
+escreva(nome) // Panda
+escreva(idade) // 2500
 escreva(planeta) // Planeta dos Pandas
 </Code>
 ---
 <Quote picture='panda-deslumbrado.jpg'>É como abrir uma caixa organizada e pegar só o que você precisa, sem carregar a caixa inteira. E o nome das variáveis nem precisa estar em ordem.</Quote>
 ---
-<Alert picture='panda-espantado.jpg'>Cuidado! os nomes das variáveis têm que estar iguaizinhos as chaves do dicionário senão a variável terá valor `nulo`!</Alert>
+<Alert picture='panda-espantado.jpg'>Cuidado! os nomes das variáveis têm que estar iguaizinhos às chaves do dicionário, senão a variável terá valor `nulo`!</Alert>
 ---
 <Code exec>
 var panda = {
@@ -144,7 +144,7 @@ escreva([1, 2, 3].mapear(funcao (numero) {
 ---
 <Image picture='princesa-animada.jpg'>Muto bem! As bombas já estão chegando no alvo perfeito.</Image>
 ---
-<Text picture='panda-espantado.jpg'>Acertou em cheio! E os macacos parecem estar fugindo</Text>
+<Text picture='panda-espantado.jpg'>Acertou em cheio! E os macacos parecem estar fugindo.</Text>
 ---
 <Image picture='salmonense-dando-tchau.jpg'>Já bricamos suficiente com vocês. Tchau tchau.</Image>
 ---
@@ -167,8 +167,8 @@ var dicionarioQualquer = {
 ---
 <Text picture='panda-sentado-com-mochila.jpg'>A jornada pelo espaço foi mais incrível do que qualquer um poderia imaginar. Cada estrela, cada planeta, cada conceito aprendido...</Text>
 ---
-<Text picture='panda-pulando-de-alegria.jpg'>Tudo ficará gravado na minha memória. Agora, está na hora de voltarmos para casa, mas o que vivemos aqui vai permanecer conosco para sempre.</Text>
+<Text picture='panda-pulando-de-alegria.jpg'>Tudo ficará gravado na minha memória. Agora está na hora de voltarmos para casa, mas o que vivemos aqui vai permanecer conosco para sempre.</Text>
 ---
-<Text picture='panda-fazendo-coracao.jpg'>Quem sabe um dia nossos caminhos se cruzem novamente, mas por enquanto, vou sentir falta da imensidão ao nosso redor. Até logo. Nossa aventura nunca vai ser esquecida.</Text>
+<Text picture='panda-fazendo-coracao.jpg'>Quem sabe um dia nossos caminhos se cruzem novamente. Até logo. Nossa aventura nunca vai ser esquecida.</Text>
 ---
 <Text picture='panda.jpg'>Mas não antes de praticarmos o que aprendemos aqui ;).</Text>

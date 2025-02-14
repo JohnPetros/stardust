@@ -16,7 +16,7 @@ type Questions = [
 export const questions: Questions = [
   {
     type: 'open',
-    stem: 'Chegaram mais caixas de tomate para reforço. Qual método utilizar para pegar essas caixas',
+    stem: 'Chegaram mais caixas de tomate para reforço. Qual método utilizar para pegar essas caixas? Quero dizer os tomates e não os nomes das caixas.',
     lines: [
       {
         number: 1,
@@ -53,7 +53,7 @@ export const questions: Questions = [
     picture: 'panda-pulando-de-alegria.jpg',
   },
   {
-    stem: 'A princesa passou a lista dos salmonenses mais importantes: Complete o programa abaixo para que ele escreve os nomes dos salmonenses e suas patentes.',
+    stem: 'A princesa passou a lista dos salmonenses mais importantes do exército deles. Complete o programa abaixo para que ele escreve os nomes dos salmonenses e suas patentes.',
     type: 'drag-and-drop',
     lines: [
       {
@@ -67,24 +67,24 @@ export const questions: Questions = [
         indentation: 2,
       },
       {
-        number: 2,
+        number: 3,
         texts: ['"Caco, o Imbatível": "Sargento"'],
         indentation: 2,
       },
       {
-        number: 2,
+        number: 4,
         texts: ['"Zeca Casca-de-Banana": "Capitão"'],
         indentation: 2,
       },
-      { number: 4, texts: ['}'], indentation: 0 },
+      { number: 5, texts: ['}'], indentation: 0 },
       {
-        number: 4,
-        texts: ['var nomes = palavras[', 'dropZone', ']'],
+        number: 6,
+        texts: ['var nomes = palavras.', 'dropZone', '()'],
         indentation: 0,
       },
       {
-        number: 4,
-        texts: ['var patentes = palavras[', 'dropZone', ']'],
+        number: 7,
+        texts: ['var patentes = palavras.', 'dropZone', '()'],
         indentation: 0,
       },
     ],
@@ -94,14 +94,14 @@ export const questions: Questions = [
       { index: 3, label: 'chaves' },
       { index: 4, label: 'nomes' },
     ],
-    correctItems: [1, 4],
+    correctItems: ['chaves', 'valores'],
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'checkbox',
-    stem: 'Ei, um desconhecido nos enviou os planos de ataque dos salmonenses, qual é o resultado do código?',
+    stem: 'Ei, um desconhecido nos enviou os planos de ataque dos salmonenses. Quais elementos estão incluidos na lista *dados*',
     code: `
-planos = {
+var planos = {
   "base secreta": "Lua Oculta", 
   "armas": {
     "tipo": "blaster 72",
@@ -110,14 +110,14 @@ planos = {
   "defesa": "campo energético",
   "duracao de ataque": 700
 }
-escreva(planos.valores())`,
-    options: ['"Lua Oculta"', '120', '"campo energetico"', '72', '700'],
-    correctOptions: ['"Lua Oculta"', '"campo energetico"', '700'],
+var dados = planos["armas"].valores()`,
+    options: ['"Lua Oculta"', '120', '"campo energetico"', '"blaster 72"', '120'],
+    correctOptions: ['"blaster 72"', '120'],
     picture: 'panda-espantado.jpg',
   },
   {
     type: 'selection',
-    stem: 'temos parte de um dicionário contendo as frotas deles. Qual é o tipo de dado que está sendo acessado pelo dicionário?',
+    stem: 'temos parte de um dicionário contendo as frotas deles. Qual é o tipo de dado que está sendo acessado pelo dicionário *frotas*?',
     code: `var frotas = {
   "FrotaExploradora": {
     "naves": {
@@ -140,7 +140,7 @@ var dado = frotas["FrotaExploradora"]["naves"]["Galáxia"]["velocidade"]`,
     picture: 'panda-pensando.jpg',
   },
   {
-    stem: 'Precisamos saber quanto nosso disparador de tomates tem de munição. Consegue capturar essa imformação pelo dicionário abaixo?',
+    stem: 'Precisamos saber o quanto nosso disparador de tomates tem de munição. Consegue capturar essa informação pelo dicionário abaixo?',
     type: 'drag-and-drop',
     lines: [
       {
@@ -154,33 +154,38 @@ var dado = frotas["FrotaExploradora"]["naves"]["Galáxia"]["velocidade"]`,
         indentation: 2,
       },
       {
-        number: 2,
+        number: 3,
         texts: ['"potencia": "alta",'],
         indentation: 4,
       },
       {
-        number: 2,
+        number: 4,
         texts: ['"munição": {'],
         indentation: 4,
       },
       {
-        number: 3,
+        number: 5,
         texts: ['"tipo": "energia",'],
         indentation: 6,
       },
       {
-        number: 3,
+        number: 6,
         texts: ['"quantidade": 100'],
         indentation: 6,
       },
       {
-        number: 6,
+        number: 7,
+        texts: ['"munição": {'],
+        indentation: 0,
+      },
+      {
+        number: 8,
         texts: ['var disparador = disparadores[', 'dropZone', '][', 'dropZone', ']'],
         indentation: 0,
       },
       {
-        number: 6,
-        texts: ['var municao = disparador[', 'dropZone', '][', 'dropZone', ']'],
+        number: 9,
+        texts: ['var municao = disparador[', 'dropZone', ']'],
         indentation: 0,
       },
     ],
@@ -191,7 +196,7 @@ var dado = frotas["FrotaExploradora"]["naves"]["Galáxia"]["velocidade"]`,
       { index: 4, label: '"quantidade"' },
       { index: 5, label: '"potencia"' },
     ],
-    correctItems: [3, 2, 4],
+    correctItems: ['"BlasterLX"', '"munição"', '"quantidade"'],
     picture: 'panda-olhando-de-lado.jpg',
   },
 ]
