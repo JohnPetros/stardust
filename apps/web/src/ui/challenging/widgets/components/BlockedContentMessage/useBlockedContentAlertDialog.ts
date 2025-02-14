@@ -19,9 +19,9 @@ export function useBlockedContentAlertDialog(ref: RefObject<AlertDialogRef>) {
   }
 
   useEffect(() => {
-    if (!challenge || !user) return
+    if (!challenge || !user || challenge.isCompleted.isTrue) return
 
-    if (challenge.isCompleted.isFalse) {
+    if (user.hasCompletedChallenge(challenge.id).isFalse) {
       ref.current?.open()
       return
     }
