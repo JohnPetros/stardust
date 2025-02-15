@@ -14,10 +14,8 @@ export class PostChallengeUseCase implements IUseCase<Request, Response> {
   async do({ challengeDto }: Request) {
     const challenge = Challenge.create(challengeDto)
     await this.fetchChallenge(challenge.slug.value)
-    await Promise.all([
-      this.saveChallengeCategories(challenge),
-      this.saveChallenge(challenge),
-    ])
+    await this.saveChallenge(challenge)
+    await this.saveChallengeCategories(challenge)
     return challenge.dto
   }
 
