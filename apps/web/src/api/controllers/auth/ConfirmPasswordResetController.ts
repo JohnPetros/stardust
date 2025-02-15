@@ -17,25 +17,22 @@ export const ConfirmPasswordResetController = (
     return http.redirect(`${ROUTES.auth.signIn}?error=${Slug.create(errorMessage).value}`)
   }
 
-  // joaopcarvalho.cds@gmail.com
-
   return {
     async handle(http: IHttp<Schema>) {
       const { token } = http.getQueryParams()
 
       const response = await authService.confirmPasswordReset(token)
 
-      if (response.isFailure)
-        return redirectToSigInPage(
-          http,
-          'Erro inesperado ao confirmar redefinição de senha',
-        )
+      if (response.isFailure) {
+        http.deleteCookie(COOKIES.keys.shouldResetPassword)
+        return redirectToSigInPage(http, response.errorMessage)
+      }
 
       const accessToken = response.body.accessToken
       const refreshToken = response.body.refreshToken
       const cookieDuration = 60 * 15 // 15 minutes
 
-      http.setCookie(COOKIES.keys.shouldReturnPassword, 'true', cookieDuration)
+      http.setCookie(COOKIES.keys.shouldResetPassword, 'true', cookieDuration)
       http.setCookie(COOKIES.keys.accessToken, accessToken, cookieDuration)
       http.setCookie(COOKIES.keys.refreshToken, refreshToken, cookieDuration)
 
