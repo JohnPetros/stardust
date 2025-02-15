@@ -18,24 +18,21 @@ type ShopEventPayload = ConstructorParameters<typeof ShopItemsAcquiredByDefaultE
 export const HandleUserSignedUpJob = (profileService: IProfileService): IJob<Payload> => {
   return {
     async handle(queue: IQueue<Payload>) {
-      const { userId, userEmail, userName } = queue.getPayload()
-
-      const spacePayload = await queue.waitFor<SpaceEventPayload>(
-        FirstStarUnlockedEvent.NAME,
-        '1h',
-      )
-
-      const rankingPayload = await queue.waitFor<RankingEventPayload>(
-        FirstTierReachedEvent.NAME,
-        '1h',
-      )
-
       const shopPayload = await queue.waitFor<ShopEventPayload>(
         ShopItemsAcquiredByDefaultEvent.NAME,
-        '1h',
+        '20s',
+      )
+      const spacePayload = await queue.waitFor<SpaceEventPayload>(
+        FirstStarUnlockedEvent.NAME,
+        '20s',
+      )
+      const rankingPayload = await queue.waitFor<RankingEventPayload>(
+        FirstTierReachedEvent.NAME,
+        '20s',
       )
 
       if (spacePayload && rankingPayload && shopPayload) {
+        const { userId, userEmail, userName } = queue.getPayload()
         const useCase = new CreateUserUseCase(profileService)
 
         await queue.run(

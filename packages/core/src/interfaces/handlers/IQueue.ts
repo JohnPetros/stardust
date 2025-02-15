@@ -1,6 +1,6 @@
 import type { IEvent } from './IEvent'
 
-export type TimeExpression = '1d' | '1h' | '1s'
+export type TimeExpression = '1d' | '1h' | '1s' | '2s' | '3s' | '20s'
 
 export interface IQueue<Payload = void> {
   run<Response = void>(

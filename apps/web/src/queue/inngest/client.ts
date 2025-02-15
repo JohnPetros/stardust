@@ -8,14 +8,14 @@ import { emailSchema, idSchema, nameSchema } from '@stardust/validation/global/s
 const eventsSchema = {
   [UserCreatedEvent.NAME]: {
     data: z.object({
-      userId: idSchema,
+      userId: z.string(),
       acquiredRocketsIds: z.array(idSchema),
       acquiredAvatarsIds: z.array(idSchema),
     }),
   },
   [UserSignedUpEvent.NAME]: {
     data: z.object({
-      userId: idSchema,
+      userId: z.string(),
       userName: nameSchema,
       userEmail: emailSchema,
     }),
@@ -23,6 +23,6 @@ const eventsSchema = {
 }
 
 export const inngest = new Inngest({
-  id: 'stardust-queue',
+  id: 'StarDust Queue',
   schemas: new EventSchemas().fromZod(eventsSchema),
 })

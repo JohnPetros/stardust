@@ -5,7 +5,7 @@ import { FirstTierReachedEvent } from '@stardust/core/ranking/events'
 export const HandleUserSignedUpJob = (rankingService: IRankingService): IJob => {
   return {
     async handle(queue: IQueue) {
-      queue.sleepFor('1s')
+      await queue.sleepFor('1s')
 
       const useCase = new GetFirstTierIdUseCase(rankingService)
       const { firstTierId } = await queue.run<ReturnType<typeof useCase.do>>(
@@ -14,6 +14,7 @@ export const HandleUserSignedUpJob = (rankingService: IRankingService): IJob => 
       )
 
       const event = new FirstTierReachedEvent({ firstTierId })
+      await queue.sleepFor('3s')
       await queue.publish(event)
     },
   }

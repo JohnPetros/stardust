@@ -8,7 +8,7 @@ type UserCreatedPayload = ConstructorParameters<typeof UserCreatedEvent>['0']
 export const HandleUserSignedUpJob = (spaceService: ISpaceService): IJob => {
   return {
     async handle(queue: IQueue) {
-      queue.sleepFor('1s')
+      await queue.sleepFor('1s')
 
       const getFirstStarIdUseCase = new GetFirstStarIdUseCase(spaceService)
 
@@ -20,11 +20,12 @@ export const HandleUserSignedUpJob = (spaceService: ISpaceService): IJob => {
         firstUnlockedStarId,
       })
 
+      await queue.sleepFor('2s')
       await queue.publish(event)
 
       const { userId } = await queue.waitFor<UserCreatedPayload>(
         UserCreatedEvent.NAME,
-        '1h',
+        '20s',
       )
 
       if (userId)

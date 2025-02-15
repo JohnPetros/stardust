@@ -18,7 +18,7 @@ export const HandleUserSignedUpJob = (shopService: IShopService): IJob => {
 
   return {
     async handle(queue: IQueue) {
-      queue.sleepFor('1s')
+      await queue.sleepFor('1s')
 
       const useCase = new GetAcquirableShopItemsByDefaultUseCase(shopService)
       const shopPayload = await queue.run<ReturnType<typeof useCase.do>>(
@@ -27,11 +27,12 @@ export const HandleUserSignedUpJob = (shopService: IShopService): IJob => {
       )
 
       const event = new ShopItemsAcquiredByDefaultEvent(shopPayload)
+      await queue.sleepFor('1s')
       await queue.publish(event)
 
       const { userId } = await queue.waitFor<UserCreatedPayload>(
         UserCreatedEvent.NAME,
-        '1h',
+        '20s',
       )
 
       if (userId)

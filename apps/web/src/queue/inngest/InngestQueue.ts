@@ -14,12 +14,15 @@ export const InngestQueue = <Payload>({
 }: InngestQueueProps = {}): IQueue<Payload> => {
   return {
     async run<Response>(callBack: () => Promise<unknown>, callbackName: string) {
-      return step?.run(`run ${callbackName}`, async () => await callBack()) as Response
+      return (await step?.run(
+        `run ${callbackName}`,
+        async () => await callBack(),
+      )) as Response
     },
 
     async publish(event) {
       if (!step) {
-        inngest.send({
+        await inngest.send({
           // @ts-ignore
           name: event.name,
           // @ts-ignore
