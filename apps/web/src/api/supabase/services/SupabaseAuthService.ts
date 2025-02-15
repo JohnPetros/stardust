@@ -124,7 +124,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
       })
 
       if (otpError) {
-        return SupabaseAuthError(otpError, 'Error inesperado ao confirmar e-mail')
+        return SupabaseAuthError(otpError, 'Link de email inválido ou expirado')
       }
 
       if (!session) {

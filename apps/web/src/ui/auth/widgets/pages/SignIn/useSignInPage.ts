@@ -49,7 +49,7 @@ export function useSignInPage(url: string, rocketAnimationRef: RefObject<Animati
 
       toast.show(Slug.deslugify(errorMessage), {
         type: 'error',
-        seconds: 2.5,
+        seconds: 3.5,
       })
     }
   }, [url, toast])
