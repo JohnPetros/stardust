@@ -19,6 +19,7 @@ export interface IHttp<Schema extends HttpSchema = HttpSchema, Response = unknow
   getMethod(): HttpMethod
   setCookie(key: string, value: string, duration: number): void
   getCookie(key: string): Promise<string | null>
+  deleteCookie(key: string): Promise<void>
   hasCookie(key: string): Promise<boolean>
   pass(): ApiResponse
   send(data?: unknown, statusCode?: number): ApiResponse<Response>

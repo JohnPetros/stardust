@@ -132,6 +132,10 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       return Boolean(response?.data)
     },
 
+    async deleteCookie(key) {
+      await cookieActions.deleteCookie(key)
+    },
+
     pass() {
       return new ApiResponse({ headers: { [HTTP_HEADERS.xPass]: 'true' } })
     },
