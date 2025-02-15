@@ -24,7 +24,7 @@ export function useCookieActions() {
       const result = await executeHasCookie(key)
       return typeof result?.data !== 'undefined' ? result.data : false
     },
-    [executeGetCookie],
+    [executeHasCookie],
   )
 
   return {

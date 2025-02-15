@@ -28,12 +28,13 @@ export const NextActionServer = <Request = unknown>({
       notFound()
     },
 
-    async setCookie(key: string, value: string) {
+    async setCookie(key: string, value: string, expirationInSeconds?: number) {
       cookies().set({
         name: key,
         value,
         httpOnly: true,
         path: '/',
+        maxAge: expirationInSeconds,
       })
     },
 
