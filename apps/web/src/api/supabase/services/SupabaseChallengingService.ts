@@ -348,7 +348,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         // @ts-ignore
         id: supabaseChallenge.id,
         title: supabaseChallenge.title,
-        difficulty: supabaseChallenge.difficulty_level,
+        difficulty_level: supabaseChallenge.difficulty_level,
         slug: supabaseChallenge.slug,
         description: supabaseChallenge.description,
         code: supabaseChallenge.code,
