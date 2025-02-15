@@ -25,9 +25,17 @@ export const challengeSchema = z.object({
     .array(
       z.object({
         inputs: z.array(
-          z.object({
-            value: z.unknown(),
-          }),
+          z
+            .object({
+              value: z.unknown(),
+            })
+            .transform((input) => {
+              if (Array.isArray(input?.value))
+                return {
+                  value: input.value.filter((item) => typeof item !== 'undefined'),
+                }
+              return input
+            }),
         ),
         expectedOutput: z.object({
           dataTypeName: dataTypeNameSchema,

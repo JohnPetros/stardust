@@ -4,6 +4,6 @@ export const DEFAULT_VALUE_BY_DATA_TYPE_NAME: Record<DataTypeName, unknown> = {
   boolean: true,
   string: '',
   number: 0,
-  array: [''],
+  array: [],
   undefined: undefined,
 } as const
