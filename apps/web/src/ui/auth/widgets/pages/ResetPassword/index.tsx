@@ -9,19 +9,17 @@ import { ResetPasswordDialog } from './ResetPasswordDialog'
 import { AppMessage } from '../../components/AppMessage'
 import { useResetPassword } from './useResetPassword'
 
-export function ResetPasswordPage() {
-  const {
-    isLoading,
-    email,
-    errorMessage,
-    shouldResetPassword,
-    handleEmailChange,
-    handleSubmit,
-  } = useResetPassword()
+type ResetPasswordPageProps = {
+  canResetPassword: boolean
+}
+
+export function ResetPasswordPage({ canResetPassword }: ResetPasswordPageProps) {
+  const { isLoading, email, errorMessage, handleEmailChange, handleSubmit } =
+    useResetPassword()
 
   return (
     <div className='mx-auto flex h-full w-full max-w-[24rem] items-center justify-center px-6 md:px-0'>
-      {shouldResetPassword ? (
+      {canResetPassword ? (
         <AppMessage
           title='Você já pode redefinir sua senha 🚀!'
           subtitle='clique no botão abaixo para redefiní-la.'
@@ -46,6 +44,7 @@ export function ResetPasswordPage() {
             onChange={({ currentTarget }) => handleEmailChange(currentTarget.value)}
             errorMessage={errorMessage}
             placeholder='seu@email.com'
+            autoFocus
             className='w-[100rem]'
           />
           <Button onClick={handleSubmit} isLoading={isLoading}>

@@ -20,9 +20,14 @@ interface ResetPasswordDialogProps {
 
 export function ResetPasswordDialog({ children }: ResetPasswordDialogProps) {
   const alertRef = useRef<AlertDialogRef | null>(null)
-
-  const { errors, isLoading, register, handleSubmit, handleAlert } =
-    useResetPasswordDialog(alertRef.current)
+  const {
+    errors,
+    isSubmitting,
+    register,
+    handleSubmit,
+    handleOpenChange,
+    handleConfirmButtonClick,
+  } = useResetPasswordDialog(alertRef.current)
 
   return (
     <>
@@ -36,7 +41,8 @@ export function ResetPasswordDialog({ children }: ResetPasswordDialogProps) {
           </p>
         }
         shouldPlayAudio={false}
-        action={<Button onClick={handleAlert}>Fazer login</Button>}
+        onOpenChange={handleOpenChange}
+        action={<Button onClick={handleConfirmButtonClick}>Fazer login</Button>}
       />
       <Dialog>
         <DialogContent>
@@ -64,7 +70,7 @@ export function ResetPasswordDialog({ children }: ResetPasswordDialogProps) {
                 placeholder='********'
               />
             </div>
-            <Button onClick={handleSubmit} isLoading={isLoading} className='mt-8'>
+            <Button onClick={handleSubmit} isLoading={isSubmitting} className='mt-8'>
               Redefinir senha
             </Button>
           </form>

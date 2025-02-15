@@ -1,21 +1,18 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { StringValidation } from '@stardust/core/libs'
 import { ValidationError } from '@stardust/core/global/errors'
 
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useApi } from '@/ui/global/hooks/useApi'
-import { COOKIES } from '@/constants'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 
 export function useResetPassword() {
   const [email, setEmail] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [shouldResetPassword, setShouldResetPassword] = useState(false)
-  const { getCookie, deleteCookie } = useCookieActions()
 
   const toast = useToastContext()
   const api = useApi()
@@ -48,22 +45,10 @@ export function useResetPassword() {
     }
   }
 
-  useEffect(() => {
-    async function fetchCookie() {
-      const shouldResetPassword = await getCookie(COOKIES.keys.shouldReturnPassword)
-      if (shouldResetPassword) {
-        setShouldResetPassword(true)
-      }
-    }
-
-    fetchCookie()
-  }, [getCookie])
-
   return {
     isLoading,
     email,
     errorMessage,
-    shouldResetPassword,
     handleSubmit,
     handleEmailChange,
     handleResetPasswordDialogClose,

@@ -35,17 +35,21 @@ export function useResetPasswordDialog(alertDialogRef: AlertDialogRef | null) {
     resolver: zodResolver(resetPasswordFormSchema),
   })
   const { getCookie, deleteCookie } = useCookieActions()
-  const [isLoading, setIsLoading] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const toast = useToastContext()
   const router = useRouter()
   const api = useApi()
 
-  function handleAlert() {
+  function handleConfirmButtonClick() {
     router.goTo(ROUTES.auth.signIn)
   }
 
+  function handleOpenChange(isOpen: boolean) {
+    if (!isOpen) router.goTo(ROUTES.auth.signIn)
+  }
+
   async function handleFormSubmit({ password }: ResetPasswordFormFields) {
-    setIsLoading(true)
+    setIsSubmitting(true)
 
     const [accessToken, refreshToken] = await Promise.all([
       getCookie(COOKIES.keys.accessToken),
@@ -69,19 +73,19 @@ export function useResetPasswordDialog(alertDialogRef: AlertDialogRef | null) {
       await Promise.all([
         deleteCookie(COOKIES.keys.accessToken),
         deleteCookie(COOKIES.keys.refreshToken),
-        deleteCookie(COOKIES.keys.shouldReturnPassword),
+        deleteCookie(COOKIES.keys.shouldResetPassword),
       ])
     }
 
-    setIsLoading(false)
+    setIsSubmitting(false)
   }
 
   return {
-    alertDialogRef,
-    isLoading,
+    isSubmitting,
     errors,
     register,
-    handleAlert,
+    handleOpenChange,
+    handleConfirmButtonClick,
     handleSubmit: handleSubmit(handleFormSubmit),
   }
 }
