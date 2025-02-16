@@ -1,6 +1,6 @@
 {
   "name": "stardust",
-  "description": "Aplicação para o ap",
+  "description": "Aplicação para a aprendizagem de lógica de programação",
   "version": "0.1.0",
   "private": true,
   "engines": {
