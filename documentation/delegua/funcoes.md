@@ -11,7 +11,7 @@ As funções podem ser identificadas por um nome ou não.
 
 O nome da função pode ser qualquer coisa, desde que obedeça as regras de nomeação de variáveis (veja o tópico *básico*). Porém, uma boa prática de nomeação é começar o nome da função com um verbo.
 
-<Code>
+<Code exec>
 funcao exibaMensagem() {
   escreva("Olá!")
 }
@@ -19,7 +19,7 @@ funcao exibaMensagem() {
 
 Para executar uma função é preciso escrever, depois de declara-la, o nome dela seguido de parênteses.
 
-<Code>
+<Code exec>
 funcao exibaMensagem() {
   escreva("Olá!")
 }
@@ -36,7 +36,7 @@ exibaMensagem()
 
 <Text>Antes de chamar uma função , também é possível fornecer os valores de entrada, que são chamados de *argumentos*.</Text>
 
-<Code>
+<Code exec>
 funcao comprimente(nome) /* parâmetro */ {
   escreva("Olá, " + nome + "! Seja bem-vindo!")
 }
@@ -47,7 +47,7 @@ comprimente("João") // argumento
 
 <Alert>Uma função pode receber múltiplos argumentos e parâmetros separados por vírgula.</Alert>
 
-<Code>
+<Code exec>
 funcao someNumeros(numero1, numero2, numero3) {
   var resultado = numero1 + numero2 + numero3
   escreva(resultado)
@@ -59,7 +59,7 @@ someNumeros(1, 2, 3)
 
 <Alert>Contudo, a quantidade de parâmetros e argumentos tem que ser igual, senão ocorrerá resultados inesperados.</Alert>
 
-<Code>
+<Code exec>
 funcao someNumeros(numero1, numero2, numero3) {
   var resultado = numero1 + numero2 + numero3
   escreva(resultado)
@@ -73,7 +73,7 @@ someNumeros(1)
 
 <Text>Uma função pode retornar um valor ou o resultado de uma expressão usando a palavra-chave *retorna*. O valor de retorno pode ser usado em outras partes do código.</Text>
 
-<Code>
+<Code exec>
 funcao someNumeros(a, b) {
   retorna a + b
 }
@@ -86,7 +86,7 @@ escreva(resultado)
 
 <Alert>Funções com *retorna* podem ser usadas como qualquer outra variável dentro do programa.</Alert>
 
-<Code>
+<Code exec>
 funcao exibaMensagem(nome) {
   retorna nome
 }
@@ -99,7 +99,7 @@ escreva("Olá, " + exibaMensagem('Leonel') + "! Seja bem-vindo!")
 
 <Text>De modo similar às *condicionais* (veja o tópico sobre condicionais) e aos *laços* (veja o tópico sobre laços), as variáveis declaradas dentro de uma função são chamadas de variáveis locais e só podem ser acessadas dentro da própria função. Porém, as variáveis globais podem ser acessadas dentro de qualquer função</Text>
 
-<Code>
+<Code exec>
 var global = "Variável global"
     
 funcao execute() {
@@ -118,7 +118,7 @@ escreva(local)
 
 Porém, uma das maneiras de chamar uma função desse tipo, é associar essa função a uma variável.
 
-<Code>
+<Code exec>
 var conteUmaPiada = funcao() {
   escreva("O computador disse que meu nível é 101, mas ele quis dizer nível 5.")
 }
@@ -136,14 +136,14 @@ conteUmaPiada()
 
 Essas funções estão disponíveis globalmente e podem ser usadas em qualquer parte do código sem a necessidade de definição adicional. As funções nativas mais famosas são *escreva()* e *leia()* (veja o tópico *básico*).
 
-<Code>
+<Code exec>
 var mensagem= leia()
 escreva(mensagem)
 </Code>
 
 <Alert>Por favor, não tente criar funções com nomes já utilizados pela linguagem.</Alert>
 
-<code>
+<Code exec>
 funcao escreva() { // ❌
   // ...
 }
@@ -159,13 +159,13 @@ funcao aleatorio() { // ❌
 funcao retorna() { // ❌
   // ...
 }
-</code>
+</Code>
 
 ### aleatorio()
 
 <Text>Retorna um número decimal aleatório entre 0 e menor que 1.</Text>
 
-<Code>
+<Code exec>
 var numeroAleatorio = aleatorio()
     
 escreva(numeroAleatorio)
@@ -176,7 +176,7 @@ escreva(numeroAleatorio)
 
 <Text>Retorna um número inteiro aleatório entre os valores passados para a função. O primeiro argumento é o número mínimo e o segundo é o máximo. Além disso, o valor gerado aleatoriamente nunca será igual ao número máximo passado para a função, ou seja, sempre será um a menos que o máximo definido.</Text>
 
-<Code>
+<Code exec>
 var numeroAleatorio = aleatorioEntre(1, 9)
 
 escreva(numeroAleatorio)
@@ -193,7 +193,7 @@ escreva(numeroAleatorio)
 
 <Text>Converte um número decimal ou um texto que não apresenta letras em um número inteiro.</Text>
 
-<Code>
+<Code exec>
 var valorEmTexto = "111"
     
 escreva(111 + inteiro(valorEmTexto))
@@ -204,7 +204,7 @@ escreva(111 + inteiro(valorEmTexto))
 
 <Text>Converte um número inteiro ou texto que não apresente letras, em um número decimal.</Text>
 
-<Code>
+<Code exec>
   var valorEmTexto = "504.69"
 
   escreva(0.01 + real(valorEmTexto))
@@ -213,7 +213,7 @@ escreva(111 + inteiro(valorEmTexto))
 
 <Text>Converte um número inteiro ou texto que não apresente letras, em um número decimal.</Text>
 
-<Code>
+<Code exec>
   var valorEmTexto = "504.69"
 
   escreva(0.01 + real(valorEmTexto))
@@ -224,7 +224,7 @@ escreva(111 + inteiro(valorEmTexto))
 
 <Alert>Lembre-se que textos numéricos que são "somados", são concatenados em vez disso.</Alert>
 
-<Code>
+<Code exec>
   var valorEmNumero = 123
 
   escreva("123" + texto(valorEmNumero))
@@ -235,7 +235,7 @@ escreva(111 + inteiro(valorEmTexto))
 
 *Funções de ordem superior* ou *funcções de alta ordem* são funções que podem receber outras funções como argumentos e/ou retornar funções como resultado.
 
-<Code>
+<Code exec>
 funcao comprimentePessoa(funcaoQueRetornaPessoa) {
   retorna funcaoQueRetornaPessoa()
 }
@@ -255,7 +255,7 @@ escreva(mensagem)
 
 <Text>Método de lista que cria um nova lista a partir de uma função que é executada usando cada elemento da lista original como parâmetro.</Text>
 
-<Code>
+<Code exec>
 var numeros = [1, 2, 3, 4, 5]
 
 var numerosDobrados = numeros.mapear(funcao (numero) {
@@ -268,7 +268,7 @@ escreva(numerosDobrados)
 
 <Alert>*funções de alta ordem* também podem receber diretamente o nome da função como argumento, sendo que o resultado será o mesmo.</Alert>
 
-<Code>
+<Code exec>
 var numeros = [1, 2, 3, 4, 5]
 
 funcao dobre(numero) {
@@ -287,7 +287,7 @@ escreva(numerosDobrados)
 
 Se o valor retornado for *verdadeiro*, o elemento atual é colocado na nova lista, caso contrário ele será descartado.
 
-<Code>
+<Code exec>
 var numeros = [1, 2, 3, 4, 5, 6]
 
 funcao verifiqueNumeroPar(numero) {
@@ -314,7 +314,7 @@ A função de comparação passada para o método ordernar() deve retornar um n�
 
 <Quote>*Número positivo:* Se a função de comparação retornar um número positivo, o primeiro elemento será colocado depois do segundo elemento na lista ordenada.</Quote>
 
-<Code>
+<Code exec>
 var numeros = [4, 2, 5, 1, 3]
 
 numeros.ordenar(funcao(a, b) {

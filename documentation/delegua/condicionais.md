@@ -8,7 +8,7 @@
 
 <Text>Permite que um bloco de código (delimitado entre chaves *{}*) seja executado se uma determinada condição for verdadeira.</Text>
 
-<Code>
+<Code exec>
   se (verdadeiro) {
     escreva('sim')
   }
@@ -18,7 +18,7 @@
 
 Caso a condição não seja verdadeira o bloco de código do *se* não será executado.
 
-<Code>
+<Code exec>
   se (falso) {
     escreva('sim')
   }
@@ -28,7 +28,7 @@ Caso a condição não seja verdadeira o bloco de código do *se* não será exe
 
 É possível inserir na condição (que está entre parênteses) do *se* qualquer expressão que resulte em um valor do tipo *lógico*.
 
-<Code>
+<Code exec>
   se (4 > 2) {
     escreva('sim')
   }
@@ -47,7 +47,7 @@ Caso a condição não seja verdadeira o bloco de código do *se* não será exe
 
 Se a condição do bloco do *se* não for verdadeira, escrevendo *senao*, é possível inserir um segundo bloco de código que será executado imediatamente caso isso ocorra.
 
-<Code>
+<Code exec>
   var temperatura = 25
 
   se (temperatura > 30) {
@@ -63,7 +63,7 @@ Se a condição do bloco do *se* não for verdadeira, escrevendo *senao*, é pos
 
 Logo, escrever dessa maneira é errado.
 
-<Code>
+<Code exec>
   se (verdadeiro) {
     escreva(1)
   } se (falso) { // ❌
@@ -87,7 +87,7 @@ se (verdadeiro) {
 
 Para contornar isso é possível inserir outras condições escrevendo *senao se*. Caso a condição do *se* não seja verdadeira, a condição de execução do bloco de código do *senao se* será verificada.
 
-<Code>
+<Code exec>
   var pontuacao = 85
 
   se (pontuacao <= 50) {
@@ -101,7 +101,7 @@ Para contornar isso é possível inserir outras condições escrevendo *senao se
 
 <Alert>Dessa forma é possível inserir múltiplos blocos de código com condicionais, em que, se a condição do bloco anterior não for verdadeira, o próximo bloco será verificado e assim sucessivamente.</Alert>
 
-<Code>
+<Code exec>
   var animal = "cachorro"
 
   se (animal == "gato") {
@@ -127,7 +127,7 @@ Para escreve-la, primeiro é preciso escrever a palavra-chave *escolha* inserir 
 
 No início da *escolha*, o valor é comparado ao valor de cada expressão *caso*. Se os valores foram iguais, o bloco de código do *caso* em questão é executado.
 
-<Code>
+<Code exec>
   var numero = 3
 
   escolha (numero) {
@@ -144,7 +144,7 @@ No início da *escolha*, o valor é comparado ao valor de cada expressão *caso*
 
 Sempre no final da estrutura é possível inserir um bloco *padrao* (sendo opcional) que será sempre executado quando nenhum *caso* for verdadeiro.
 
-<Code>
+<Code exec>
 var cor = "roxo"
 
 escolha (cor) {
@@ -163,7 +163,7 @@ escolha (cor) {
 
 <Alert>Dois ou mais *casos* podem ter o mesmo bloco de código.</Alert>
 
-<Code>
+<Code exec>
   var alimento = "maçã"
 
   escolha (alimento) {
@@ -181,7 +181,7 @@ escolha (cor) {
   }
 </Code>
 
-<Code>
+<Code exec>
   var idade = 20
   var temCarteira = verdadeiro
 
@@ -203,7 +203,7 @@ escolha (cor) {
   */
 </Code>
 
-<Code>
+<Code exec>
   var dia = 'quarta'
   var hora = 15
 
@@ -230,7 +230,7 @@ escolha (cor) {
 
 <Text>Se uma variável for definida dentro de um bloco de código, ela só estará disponível dentro desse bloco, ou seja, ela terá um *escopo local*.</Text>
 
-<Code>
+<Code exec>
 
 se (falso) {
   var x = 1
@@ -245,7 +245,7 @@ escreva(x)
 Porém uma variável estará diponível no bloco de código que for definido dentro do bloco em que essa variável foi definida.
 
 
-<Code>
+<Code exec>
 se (verdadeiro) {
   var x = 1
   escreva(x) // 1
@@ -261,7 +261,7 @@ se (verdadeiro) {
 
 A variável poderá ser acessada em qualquer bloco de código se ela for definida fora de qualquer outro bloco, nesse caso ela terá *escopo global*.
 
-<Code>
+<Code exec>
   var x = 1
 
   se (falso) {

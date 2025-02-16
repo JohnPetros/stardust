@@ -1,0 +1,1 @@
+export { UserCreatedEvent } from './UserCreatedEvent'

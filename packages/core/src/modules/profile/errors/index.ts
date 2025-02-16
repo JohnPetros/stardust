@@ -1,0 +1,1 @@
+export { UserNotFoundError } from './UserNotFoundError'

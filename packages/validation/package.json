@@ -1,0 +1,23 @@
+{
+  "name": "@stardust/validation",
+  "version": "0.1.0",
+  "exports": {
+    "./global/schemas": "./src/modules/global/schemas/index.ts",
+    "./global/constants": "./src/modules/global/constants/index.ts",
+    "./challenging/schemas": "./src/modules/challenging/schemas/index.ts",
+    "./challenging/types": "./src/modules/challenging/types/index.ts",
+    "./factories": "./src/factories/index.ts"
+  },
+  "imports": {
+    "#schemas": "./src/schemas/index.ts",
+    "#constants": "./src/dtos/index.ts"
+  },
+  "dependencies": {
+    "@stardust/core": "*",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@stardust/typescript-config": "*",
+    "typescript": "5.5.3"
+  }
+}

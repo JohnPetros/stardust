@@ -1,0 +1,1 @@
+export { UpvoteCommentUseCase } from './UpvoteCommentUseCase'
