@@ -126,13 +126,18 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       return new ApiResponse({ body: supabaseChallengeMapper.toDto(data) })
     },
 
-    async fetchChallengesWithOnlyDifficulty() {
+    async fetchCompletableChallenges(userId: string) {
       const { data, error, status } = await supabase
         .from('challenges')
         .select('id, difficulty_level')
+        .neq('user_id', userId)
 
       if (error) {
-        return SupabasePostgrestError(error, 'Erro ao buscar desafios', status)
+        return SupabasePostgrestError(
+          error,
+          'Erro ao buscar desafios completáveis',
+          status,
+        )
       }
 
       return new ApiResponse({

@@ -20,7 +20,7 @@ export class CountCompletedChallengesByDifficultyLevelUseCase
   async do(userDto: UserDto) {
     const user = User.create(userDto)
 
-    const response = await this.challengesService.fetchChallengesWithOnlyDifficulty()
+    const response = await this.challengesService.fetchCompletableChallenges(user.id)
 
     if (response.isFailure) {
       response.throwError()
@@ -36,13 +36,11 @@ export class CountCompletedChallengesByDifficultyLevelUseCase
       'easy',
       user,
     )
-
     const mediumChallenges = this.calculateCompletedChallengesCountByDifficulty(
       allChallenges,
       'medium',
       user,
     )
-
     const hardChallenges = this.calculateCompletedChallengesCountByDifficulty(
       allChallenges,
       'hard',

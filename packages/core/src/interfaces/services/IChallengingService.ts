@@ -26,9 +26,9 @@ export interface IChallengingService {
   fetchChallengeBySlug(challengeSlug: string): Promise<ApiResponse<ChallengeDto>>
   fetchChallengeByStarId(starId: string): Promise<ApiResponse<ChallengeDto>>
   fetchChallengeBySolutionId(solutionId: string): Promise<ApiResponse<ChallengeDto>>
-  fetchChallengesWithOnlyDifficulty(): Promise<
-    ApiResponse<{ id: string; difficulty: string }[]>
-  >
+  fetchCompletableChallenges(
+    userId: string,
+  ): Promise<ApiResponse<{ id: string; difficulty: string }[]>>
   fetchDocs(): Promise<ApiResponse<DocDto[]>>
   fetchSolutionById(solutionId: string): Promise<ApiResponse<SolutionDto>>
   fetchSolutionBySlug(solutionSlug: string): Promise<ApiResponse<SolutionDto>>
