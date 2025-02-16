@@ -1,8 +1,10 @@
 <div align="center">
-  <img width="200" height="80" src="https://aukqejqsiqsqowafpppb.supabase.co/storage/v1/object/public/images/marketing/logo.png" alt="StarDustt" />
+  <img width="300" height="80" src="https://aukqejqsiqsqowafpppb.supabase.co/storage/v1/object/public/images/marketing/logo.png" alt="StarDustt" />
 </div>
 
-<div align="center">
+<br />
+
+<div align="center" >
    <a href="https://github.com/JohnPetros">
       <img alt="Made by JohnPetros" src="https://img.shields.io/badge/made%20by-JohnPetros-blueviolet">
    </a>
