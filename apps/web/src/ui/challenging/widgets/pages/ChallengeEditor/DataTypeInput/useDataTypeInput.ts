@@ -48,6 +48,10 @@ export function useDataTypeInput(
     setDataType(dataType.removeArrayItem(itemIndex))
   }
 
+  useEffect(() => {
+    setDataType(selectedDataType)
+  }, [selectedDataType])
+
   return {
     dataType,
     handleStringValueChange,

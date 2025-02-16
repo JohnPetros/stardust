@@ -17,13 +17,12 @@ export function useChallengeTestCasesField() {
     testCaseIndex: number,
   ) {
     const currentExpectedOutput = fields[testCaseIndex]?.expectedOutput
-    console.log(currentExpectedOutput)
-    // if (currentExpectedOutput?.dataTypeName !== dataTypeName)
-    //   setValue(
-    //     `testCases.${testCaseIndex}.expectedOutput.value`,
-    //     DEFAULT_VALUE_BY_DATA_TYPE_NAME[dataTypeName],
-    //   )
-    // setValue(`testCases.${testCaseIndex}.expectedOutput.dataTypeName`, dataTypeName)
+    if (currentExpectedOutput?.dataTypeName !== dataTypeName)
+      setValue(
+        `testCases.${testCaseIndex}.expectedOutput.value`,
+        DEFAULT_VALUE_BY_DATA_TYPE_NAME[dataTypeName],
+      )
+    setValue(`testCases.${testCaseIndex}.expectedOutput.dataTypeName`, dataTypeName)
   }
 
   function handleAddTestCaseButtonClick() {
