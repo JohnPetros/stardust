@@ -8,6 +8,7 @@ import { useRefreshPage } from '@/ui/global/hooks/useRefreshPage'
 import { useAudioContext } from '@/ui/global/contexts/AudioContext'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { COOKIES } from '@/constants'
 
 type UseRewardingPageProps = {
   newLevel: number | null
@@ -28,6 +29,7 @@ export function useRewardingPage({
   const [isLoading, setIsLoading] = useState(false)
   const { playAudio } = useAudioContext()
   const { refetchUser } = useAuthContext()
+  const { deleteCookie } = useCookieActions()
   const router = useRouter()
 
   function handleFirstButtonClick() {
@@ -61,6 +63,7 @@ export function useRewardingPage({
   }, [nextRoute, router.goTo])
 
   async function handleSecondButtonClick() {
+    await deleteCookie(COOKIES.keys.rewardingPayload)
     goToNextRoute()
   }
 
