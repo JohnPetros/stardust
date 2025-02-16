@@ -27,5 +27,6 @@ const eventsSchema = {
 export const inngest = new Inngest({
   id: 'StarDust Queue',
   eventKey: SERVER_ENV.inngestEventKey,
+  signingKey: SERVER_ENV.inngestSigningKey,
   schemas: new EventSchemas().fromZod(eventsSchema),
 })
