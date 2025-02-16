@@ -24,7 +24,7 @@ export class ChallengingServiceMock implements IChallengingService {
     throw new Error('Method not implemented.')
   }
 
-  async fetchChallengesWithOnlyDifficulty(): Promise<
+  async fetchCompletableChallenges(): Promise<
     ApiResponse<{ id: string; difficulty: string }[]>
   > {
     return new ApiResponse({

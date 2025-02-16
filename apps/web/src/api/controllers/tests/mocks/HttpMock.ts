@@ -1,6 +1,7 @@
 import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/constants'
 import { UsersFaker } from '@stardust/core/fakers/entities'
 import type { UserDto } from '@stardust/core/global/dtos'
+import { MethodNotImplementedError } from '@stardust/core/global/errors'
 import type { IHttp, HttpSchema } from '@stardust/core/interfaces'
 import { ApiResponse } from '@stardust/core/responses'
 
@@ -50,15 +51,19 @@ export const HttpMock = <FakeSchema extends HttpSchema>({
     },
 
     getCookie(key: string) {
-      throw new Error('NextHttp getCookie method not implemented')
+      throw new MethodNotImplementedError('NextHttp.getCookie')
+    },
+
+    deleteCookie(key) {
+      throw new MethodNotImplementedError('NextHttp.deleteCookie')
     },
 
     hasCookie(key) {
-      throw new Error('NextHttp getCookie method not implemented')
+      throw new MethodNotImplementedError('NextHttp.hasCookie')
     },
 
     getBody() {
-      throw new Error('Method not implemented')
+      throw new MethodNotImplementedError('NextHttp.getBody')
     },
 
     async getUser() {
@@ -66,7 +71,7 @@ export const HttpMock = <FakeSchema extends HttpSchema>({
     },
 
     getMethod() {
-      throw new Error('Method not implemented')
+      throw new MethodNotImplementedError('NextHttp.getMethod')
     },
 
     pass() {
