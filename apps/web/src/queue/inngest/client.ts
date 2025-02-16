@@ -5,6 +5,8 @@ import { UserCreatedEvent } from '@stardust/core/profile/events'
 import { UserSignedUpEvent } from '@stardust/core/auth/events'
 import { emailSchema, idSchema, nameSchema } from '@stardust/validation/global/schemas'
 
+import { SERVER_ENV } from '@/constants'
+
 const eventsSchema = {
   [UserCreatedEvent.NAME]: {
     data: z.object({
@@ -24,5 +26,6 @@ const eventsSchema = {
 
 export const inngest = new Inngest({
   id: 'StarDust Queue',
+  eventKey: SERVER_ENV.inngestSigningKey,
   schemas: new EventSchemas().fromZod(eventsSchema),
 })
