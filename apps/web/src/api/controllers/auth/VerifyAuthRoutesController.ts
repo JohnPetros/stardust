@@ -1,5 +1,6 @@
 import type { IController, IHttp } from '@stardust/core/interfaces'
 import type { IAuthService } from '@stardust/core/interfaces'
+
 import { ROUTES } from '@/constants'
 
 const PUBLIC_ROUTES = [
@@ -13,7 +14,9 @@ export const VerifyAuthRoutesController = (authService: IAuthService): IControll
   return {
     async handle(http: IHttp) {
       const currentRoute = http.getCurrentRoute()
-      const isPublicRoute = PUBLIC_ROUTES.map(String).includes(currentRoute)
+      const isSnippetsPageRoute = currentRoute === ROUTES.playground.snippets
+      const isPublicRoute =
+        PUBLIC_ROUTES.map(String).includes(currentRoute) && !isSnippetsPageRoute
       const response = await authService.fetchUserId()
       const hasSession = response.isSuccess
       const isRootRoute = currentRoute === '/'

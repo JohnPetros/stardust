@@ -23,7 +23,6 @@ export function useDataTypeNameSelect(
     )
     if (!selectedDataType) return
     setLabel(selectedDataType.label)
-    if (onChange) onChange(selectedDataType.value)
   }, [selectedDataTypeName])
 
   return {

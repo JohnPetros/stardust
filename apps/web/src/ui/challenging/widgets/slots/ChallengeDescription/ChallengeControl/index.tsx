@@ -23,8 +23,9 @@ export function ChallengeControl({ isChallengePublic }: ChallengeControlControl)
       <div>
         <p className='p-3 rounded-md border border-dashed border-yellow-500 text-sm leading-6 text-yellow-500 font-medium'>
           Você é o autor desse desafio, qualquer recompensa recebida será inválida. Use
-          essa página apenas como um meio para testar o seu desafio. Lembre-se que você
-          não habilitou seu desafio como público para outros usuários
+          essa página apenas como um meio para testar o seu desafio.{' '}
+          {!isPublic &&
+            'Lembre-se também que você não habilitou seu desafio como público para outros usuários acessarem.'}
         </p>
       </div>
       <div className='flex items-center gap-3 mt-3 px-3'>

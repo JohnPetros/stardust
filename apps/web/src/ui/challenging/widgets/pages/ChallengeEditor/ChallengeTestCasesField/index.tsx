@@ -35,7 +35,7 @@ export function ChallengeTestCasesField() {
           return (
             <li key={testCase.id}>
               <CodeInput
-                label={`Teste de caso ${index + 1}#`}
+                label={`Teste de caso #${index + 1}`}
                 onRemove={() => handleRemoveTestCaseButtonClick(index)}
               >
                 <div>
@@ -62,7 +62,7 @@ export function ChallengeTestCasesField() {
                     <Controller
                       control={formControl}
                       name={`testCases.${index}.expectedOutput.value`}
-                      render={({ field: { value, onChange } }) => {
+                      render={({ formState, field: { value, onChange } }) => {
                         const dataType = DataType.create(value)
                         return <DataTypeInput value={dataType} onChange={onChange} />
                       }}

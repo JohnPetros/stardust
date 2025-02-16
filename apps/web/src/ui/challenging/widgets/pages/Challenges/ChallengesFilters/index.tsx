@@ -35,7 +35,6 @@ export function ChallengesFilters({ categoriesDto }: FiltersProps) {
     <div className='flex flex-col'>
       <Search
         placeholder='Pesquisar desafio por título...'
-        defaultValue={title}
         onSearchChange={handleTitleChange}
         className='bg-gray-800'
       />

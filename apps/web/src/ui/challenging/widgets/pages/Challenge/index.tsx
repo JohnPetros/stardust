@@ -12,8 +12,6 @@ import { Icon } from '@/ui/global/widgets/components/Icon'
 import { Loading } from '@/ui/global/widgets/components/Loading'
 import { ConfettiAnimation } from '../../components/ConfettiAnimation'
 
-// http://localhost:3000/challenging/challenges/area-do-escudo-protetor/challenge/result
-
 type ChallengePagePageProps = {
   challengeDto: ChallengeDto
   userChallengeVote: ChallengeVote

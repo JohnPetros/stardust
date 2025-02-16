@@ -4,11 +4,11 @@ import type { SolutionDto } from '@stardust/core/challenging/dtos'
 import { Solution } from '@stardust/core/challenging/entities'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { usePostSolutionAction } from './usePostSolutionAction'
-import { useEditSolutionAction } from './useEditSolutionAction'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { ROUTES, STORAGE } from '@/constants'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
+import { usePostSolutionAction } from './usePostSolutionAction'
+import { useEditSolutionAction } from './useEditSolutionAction'
 
 type FieldErrors = {
   solutionTitle: string

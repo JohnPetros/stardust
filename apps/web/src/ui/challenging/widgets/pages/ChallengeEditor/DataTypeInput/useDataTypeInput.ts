@@ -5,8 +5,8 @@ import type { DataType } from '@stardust/core/challenging/structs'
 import { DEFAULT_VALUE_BY_DATA_TYPE_NAME } from '@stardust/core/challenging/constants'
 
 export function useDataTypeInput(
-  onChange: (value: unknown) => void,
   selectedDataType: DataType,
+  onChange: (value: unknown) => void,
 ) {
   const [dataType, setDataType] = useState<DataType>(selectedDataType)
 
@@ -47,10 +47,6 @@ export function useDataTypeInput(
   function handleRemoveArrayItemClick(itemIndex: number) {
     setDataType(dataType.removeArrayItem(itemIndex))
   }
-
-  useEffect(() => {
-    setDataType(selectedDataType)
-  }, [selectedDataType])
 
   return {
     dataType,

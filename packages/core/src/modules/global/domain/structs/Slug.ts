@@ -34,14 +34,7 @@ export class Slug {
 
   static deslugify(value: string) {
     const words = value.split('-')
-
-    const name = words
-      .map((word) => {
-        const firstLetter = word[0]
-        return firstLetter?.toUpperCase() + word.slice(1)
-      })
-      .join(' ')
-
+    const name = words.join(' ')
     return name
   }
 }

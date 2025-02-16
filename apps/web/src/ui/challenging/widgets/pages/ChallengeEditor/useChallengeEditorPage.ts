@@ -57,16 +57,17 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
           id: category.id,
           name: category.name.value,
         })) ?? [],
-      isPublic: challenge?.isPublic.value,
+      isPublic:
+        typeof challenge?.isPublic === 'undefined' ? false : challenge?.isPublic.value,
     },
   })
   const [isActionSuccess, setisActionSuccess] = useState(false)
   const [isActionFailure, setIsActionFailure] = useState(false)
   const { isPosting, isPostFailure, postChallenge } = usePostChallengeAction({
-    onSuccess: (newSolution) => handleActionSuccess(newSolution, true),
+    onSuccess: (challenge) => handleActionSuccess(challenge, true),
   })
   const { isEditing, isEditFailure, editChallenge } = useEditChallengeAction({
-    onSuccess: (newSolution) => handleActionSuccess(newSolution, true),
+    onSuccess: (newChallenge) => handleActionSuccess(newChallenge, false),
   })
 
   const allFields = form.watch()
@@ -80,6 +81,7 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
   ].every(Boolean)
 
   async function handleSubmit(formData: ChallengeSchema) {
+    console.log('dirtyFields', formData.testCases)
     if (challenge) {
       await editChallenge({ challengeId: challenge.id, challenge: formData })
       return
@@ -93,6 +95,10 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
       .challenge(challengeSlug)
       .concat(isNew ? '?isNew=true' : '')
     router.goTo(route)
+  }
+
+  function handleBackButtonClick() {
+    router.goBack()
   }
 
   useEffect(() => {
@@ -137,5 +143,6 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
     isActionFailure,
     isActionSuccess,
     handleFormSubmit: form.handleSubmit(handleSubmit),
+    handleBackButtonClick,
   }
 }

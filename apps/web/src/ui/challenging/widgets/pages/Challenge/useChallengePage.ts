@@ -32,7 +32,7 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
   const { setCraftsVislibility } = getCraftsVisibilitySlice()
   const { user } = useAuthContext()
   const { currentRoute, goTo } = useRouter()
-  const [isNew] = useQueryStringParam('isNew', 'true')
+  const [isNew] = useQueryStringParam('isNew')
   const secondCounterLocalstorage = useLocalStorage(STORAGE.keys.secondsCounter)
 
   function handleBackButton() {

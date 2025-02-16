@@ -25,7 +25,7 @@ export function DataTypeInput({ value, errorMessage, onChange }: FunctionInputPr
     handleAddArrayItemClick,
     handleRemoveArrayItemClick,
     handleArrayItemDataTypeNameChange,
-  } = useDataTypeInput(onChange, value)
+  } = useDataTypeInput(value, onChange)
 
   return (
     <div>
@@ -72,17 +72,16 @@ export function DataTypeInput({ value, errorMessage, onChange }: FunctionInputPr
           <ul className='space-y-3 pl-6'>
             {dataType.value.map((value, index) => {
               const itemDataType = DataType.create(value)
+              // console.log('itemDataType', itemDataType)
               return (
                 <li key={String(index)}>
-                  {index > 0 && (
-                    <button
-                      type='button'
-                      onClick={() => handleRemoveArrayItemClick(index)}
-                      className='flex items-center gap-1 ml-auto text-xs text-gray-400'
-                    >
-                      <Icon name='close' size={12} />
-                    </button>
-                  )}
+                  <button
+                    type='button'
+                    onClick={() => handleRemoveArrayItemClick(index)}
+                    className='flex items-center gap-1 ml-auto text-xs text-gray-400'
+                  >
+                    <Icon name='close' size={12} />
+                  </button>
                   <div className='flex items-center gap-3 mt-2'>
                     <p className='text-gray-100 text-sm'>item {index}:</p>
                     <DataTypeNameSelect
