@@ -48,7 +48,7 @@ escreva('A soma de 5 e 3 é \${soma(5, 3)}.') // Saída: A soma de 5 e 3 é 8.`}
     }
  }
     
-fibonacci(1000)
+fibonacci(100)
 
 `}
             />

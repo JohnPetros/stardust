@@ -7,7 +7,7 @@ export function useAnimatedSpiral(
   containerRef: RefObject<HTMLDivElement>,
   animationRef: RefObject<AnimationRef>,
 ) {
-  const isInView = useInView(containerRef)
+  const isInView = useInView(containerRef, { once: true })
 
   useEffect(() => {
     if (isInView) animationRef.current?.restart()
