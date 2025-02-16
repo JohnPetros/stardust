@@ -3,7 +3,7 @@ name: Web app CD
 on:
   push:
     branches:
-      - clean-arch
+      - main
     paths:
       - "apps/web/**"
 
