@@ -14,9 +14,9 @@ export const VerifyAuthRoutesController = (authService: IAuthService): IControll
   return {
     async handle(http: IHttp) {
       const currentRoute = http.getCurrentRoute()
-      const isSnippetsPageRoute = currentRoute === ROUTES.playground.snippets
+      const isSnippetPageRoute = currentRoute.includes(`${ROUTES.playground.snippets}/`)
       const isPublicRoute =
-        PUBLIC_ROUTES.map(String).includes(currentRoute) && !isSnippetsPageRoute
+        PUBLIC_ROUTES.map(String).includes(currentRoute) || isSnippetPageRoute
       const response = await authService.fetchUserId()
       const hasSession = response.isSuccess
       const isRootRoute = currentRoute === '/'
