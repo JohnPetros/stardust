@@ -5,7 +5,7 @@ import { UserCreatedEvent } from '@stardust/core/profile/events'
 import { UserSignedUpEvent } from '@stardust/core/auth/events'
 import { emailSchema, idSchema, nameSchema } from '@stardust/validation/global/schemas'
 
-import { SERVER_ENV } from '@/constants'
+import { SERVER_ENV } from '@/constants/server-env'
 
 const eventsSchema = {
   [UserCreatedEvent.NAME]: {
