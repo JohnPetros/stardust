@@ -100,8 +100,7 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
         users_acquired_avatars(avatar_id),
         users_completed_challenges(challenge_id),
         users_upvoted_solutions(solution_id),
-        users_upvoted_comments(comment_id),
-        users_completed_planets_view:users_completed_planets(planet_id)`,
+        users_upvoted_comments(comment_id)`,
       )
 
       if (error)
