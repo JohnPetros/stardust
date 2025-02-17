@@ -3,8 +3,8 @@ import { StringValidation } from '@stardust/core/libs'
 const ENV = {
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
   supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
-  supabaseCdnUrl: process.env.NEXT_PUBLIC_SUPABASE_CDN_URL,
-  appHost: process?.env?.NEXT_PUBLIC_APP_HOST ?? 'http://localhost:3000',
+  supabaseCdnUrl: process.env.NEXT_PUBLIC_SUPABASE_CDN_URL ?? '',
+  appHost: process.env.NEXT_PUBLIC_APP_HOST ?? '',
 }
 
 new StringValidation(ENV.supabaseUrl, 'Supabase Url').validate()
