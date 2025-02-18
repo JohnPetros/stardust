@@ -15,7 +15,7 @@ type SignUpFormProps = {
 export function SignUpForm({ id, onSubmit }: SignUpFormProps) {
   const {
     errors,
-    isLoading,
+    isSubmitting,
     isNameValid,
     isEmailValid,
     isPasswordValid,
@@ -35,10 +35,9 @@ export function SignUpForm({ id, onSubmit }: SignUpFormProps) {
             isActive={isNameValid}
             autoFocus
             {...register('name')}
-            errorMessage={errors.name?.message}
           />
           {!isNameValid && (
-            <p className='text-gray-100 text-sm mt-3'>Pelo meno 3 caracteres</p>
+            <p className='text-gray-100 text-sm mt-3'>Pelo menos 3 caracteres</p>
           )}
         </AnimatedContainer>
         {isNameValid && (
@@ -49,6 +48,11 @@ export function SignUpForm({ id, onSubmit }: SignUpFormProps) {
               icon='mail'
               placeholder='Digite seu e-mail'
               isActive={isEmailValid}
+              errorMessage={
+                errors.email?.message === 'E-mail já utilizado por outro usuário'
+                  ? errors.email?.message
+                  : ''
+              }
               {...register('email')}
             />
             {!isEmailValid && (
@@ -80,7 +84,7 @@ export function SignUpForm({ id, onSubmit }: SignUpFormProps) {
       </div>
       {isPasswordValid && (
         <AnimatedContainer>
-          <Button className='mt-6' isLoading={isLoading}>
+          <Button className='mt-6' isLoading={isSubmitting}>
             Criar conta
           </Button>
         </AnimatedContainer>

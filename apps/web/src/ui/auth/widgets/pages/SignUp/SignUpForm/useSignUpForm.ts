@@ -21,7 +21,6 @@ const signUpFormSchema = z.object({
 })
 
 export function useSignUpForm(onFormSubmit: (fields: SignUpFormFields) => Promise<void>) {
-  const [isLoading, setIsloading] = useState(false)
   const api = useApi()
   const {
     watch,
@@ -29,7 +28,7 @@ export function useSignUpForm(onFormSubmit: (fields: SignUpFormFields) => Promis
     handleSubmit,
     getFieldState,
     setError,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<SignUpFormFields>({
     mode: 'onChange',
     resolver: zodResolver(signUpFormSchema),
@@ -39,9 +38,7 @@ export function useSignUpForm(onFormSubmit: (fields: SignUpFormFields) => Promis
   const passwordFieldWatch = watch('password')
 
   async function handleFormSubmit(fields: SignUpFormFields) {
-    setIsloading(true)
     await onFormSubmit(fields)
-    setIsloading(false)
   }
 
   const checkUserAlreadyExistsByName = useCallback(async () => {
@@ -83,7 +80,7 @@ export function useSignUpForm(onFormSubmit: (fields: SignUpFormFields) => Promis
   ])
 
   return {
-    isLoading,
+    isSubmitting,
     errors,
     isNameValid,
     isEmailValid,
