@@ -12,6 +12,4 @@ new StringValidation(ENV.supabaseKey, 'Supabase Key').validate()
 new StringValidation(ENV.supabaseCdnUrl, 'Supabase CDN Url').url().validate()
 new StringValidation(ENV.appHost, 'App Url').url().validate()
 
-console.log(ENV)
-
 export { ENV }

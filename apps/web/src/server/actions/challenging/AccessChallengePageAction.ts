@@ -26,9 +26,10 @@ export const AccessChallengePageAction = (
   }
 
   async function fetchUserChallengeVote(challengeId: string, userId: string) {
-    const response = await challengingService.fetchChallengeVote(challengeId, userId)
-    if (response.isFailure) return null
-    return response.body.challengeVote
+    // const response = await challengingService.fetchChallengeVote(challengeId, userId)
+    return null
+    // if (response.isFailure) return null
+    // return response.body.challengeVote
   }
 
   return {

@@ -41,8 +41,6 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         .eq('slug', challengeSlug)
         .single()
 
-      console.log('challenge', error)
-
       if (error) {
         return SupabasePostgrestError(
           error,
