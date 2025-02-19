@@ -51,9 +51,9 @@ export function useApexChallengesChart(
   }
 
   const series = [
-    chartData.absolute.easy,
-    chartData.absolute.medium,
-    chartData.absolute.hard,
+    chartData.percentage.easy,
+    chartData.percentage.medium,
+    chartData.percentage.hard,
   ]
 
   return { options, series }
