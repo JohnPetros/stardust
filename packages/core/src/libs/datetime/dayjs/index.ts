@@ -27,6 +27,10 @@ export class DayJsDatetime implements IDatetime {
     return this.dayjs.day()
   }
 
+  getYesterdayWeekdayIndex(): number {
+    return this.dayjs.subtract(1, 'day').day()
+  }
+
   convertSecondsToTime(seconds: number): string {
     return dayjs(seconds * 1000).format('mm:ss')
   }
