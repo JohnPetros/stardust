@@ -22,8 +22,8 @@ const handleUserSignedUp = inngest.createFunction(
 )
 
 const observeStreakBreak = inngest.createFunction(
-  { id: JOBS.profile.observerStreakBreak.key },
-  { cron: `TZ=America/Sao_Paulo ${JOBS.profile.observerStreakBreak.cronExpression}` },
+  { id: JOBS.profile.observeStreakBreak.key },
+  { cron: `TZ=America/Sao_Paulo ${JOBS.profile.observeStreakBreak.cronExpression}` },
   async (context) => {
     const supabase = SupabaseServerClient()
     const service = SupabaseProfileService(supabase)
