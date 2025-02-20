@@ -72,6 +72,7 @@ export const SupabaseUserMapper = () => {
           supabaseUser.users_completed_planets?.map(({ planet_id }) =>
             String(planet_id),
           ) ?? [],
+        didBreakStreak: supabaseUser.did_break_streak,
         canSeeRankingResult: supabaseUser.can_see_ranking ?? false,
         lastWeekRankingPosition: supabaseUser.last_week_ranking_position,
         weekStatus: supabaseUser.week_status ?? [],
