@@ -18,9 +18,9 @@ export default async function Lesson({ params }: NextParams<{ starSlug: string }
       starId={starDto.id}
       starName={starDto.name}
       starNumber={starDto.number}
-      questionsDto={questions}
+      questionsDto={lessonResponse.data.questions}
       storyContent={lessonResponse.data.story}
-      textsBlocksDto={[]}
+      textsBlocksDto={lessonResponse.data.textsBlocks}
     />
   )
 }
