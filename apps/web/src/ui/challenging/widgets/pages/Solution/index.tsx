@@ -1,7 +1,10 @@
 'use client'
 
+import Link from 'next/link'
+
 import type { SolutionDto } from '@stardust/core/challenging/dtos'
 
+import { ROUTES } from '@/constants'
 import type { ActionButtonTitles } from '@/ui/global/widgets/components/ActionButton/types'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { TitleInput } from '@/ui/global/widgets/components/TitleInput'
@@ -56,8 +59,12 @@ export function SolutionPage({
           errorMessage={fieldErrors.solutionTitle}
         />
         <div className='flex items-center justify-end gap-3'>
-          <Button onClick={goBack} className='bg-gray-600 text-gray-50 w-24'>
-            Voltar
+          <Button asChild className='bg-gray-600 text-gray-50 w-24'>
+            <Link
+              href={ROUTES.challenging.challenges.challengeSolutions.list(challengeSlug)}
+            >
+              Voltar
+            </Link>
           </Button>
           <ActionButton
             type='button'
