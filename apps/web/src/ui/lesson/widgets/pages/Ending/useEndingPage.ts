@@ -12,9 +12,9 @@ export function useEndingPage(progressBarRef: RefObject<AnimatedProgressBarRef>)
 
   async function nextText() {
     alert('OI')
-    setActiveThankIndex((activeThankIndex) => activeThankIndex + 1)
+    setActiveThankIndex(activeThankIndex + 1)
     await sleep(300)
-    progressBarRef.current?.fill(100, ANIMATION_DURATION_BETWEEN_TEXTS)
+    // progressBarRef.current?.fill(100, ANIMATION_DURATION_BETWEEN_TEXTS)
   }
 
   function handleProgressBarAnimationEnd() {
@@ -27,7 +27,7 @@ export function useEndingPage(progressBarRef: RefObject<AnimatedProgressBarRef>)
 
   useEffect(() => {
     progressBarRef.current?.fill(100, ANIMATION_DURATION_BETWEEN_TEXTS)
-  }, [progressBarRef.current?.fill])
+  }, [progressBarRef.current])
 
   return {
     activeThankIndex,
