@@ -11,6 +11,7 @@ export function useEndingPage(progressBarRef: RefObject<AnimatedProgressBarRef>)
   const { sleep } = useSleep()
 
   async function nextText() {
+    alert('OI')
     setActiveThankIndex((activeThankIndex) => activeThankIndex + 1)
     await sleep(300)
     progressBarRef.current?.fill(100, ANIMATION_DURATION_BETWEEN_TEXTS)
