@@ -10,9 +10,10 @@ export function useEndingPage(progressBarRef: RefObject<AnimatedProgressBarRef>)
 
   function nextText() {
     setActiveThankIndex((activeThankIndex) => activeThankIndex + 1)
+    console.log({ activeThankIndex })
     setTimeout(() => {
       progressBarRef.current?.fill(100, ANIMATION_DURATION_BETWEEN_TEXTS)
-    }, 100)
+    }, 250)
   }
 
   function handleProgressBarAnimationEnd() {

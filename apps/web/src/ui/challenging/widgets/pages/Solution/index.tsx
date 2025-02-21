@@ -39,7 +39,6 @@ export function SolutionPage({
     handleSolutionPost,
     handleSolutionEdit,
   } = useSolutionPage(savedSolutionDto, challengeId, challengeSlug)
-  const { goBack } = useRouter()
   const ACTION_BUTTON_TITLES: ActionButtonTitles = {
     canExecute: savedSolutionDto ? 'atualizar?' : 'postar?',
     executing: savedSolutionDto ? 'atualizando...' : 'postando...',
