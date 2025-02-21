@@ -29,7 +29,7 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
   const { setActiveContent } = getActiveContentSlice()
   const { challenge, setChallenge } = getChallengeSlice()
   const { panelsLayout, setPanelsLayout } = getPanelsLayoutSlice()
-  const { setCraftsVislibility } = getCraftsVisibilitySlice()
+  const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
   const { user } = useAuthContext()
   const { currentRoute, goTo } = useRouter()
   const [isNew] = useQueryStringParam('isNew')
@@ -53,7 +53,7 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
       challenge.userVote = userVote
       setChallenge(challenge)
     }
-    if (challenge && user) {
+    if (challenge && user && !craftsVislibility) {
       const isUserChallengeAuthor = user.id === challenge.authorId
       const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
       setCraftsVislibility(
@@ -69,7 +69,15 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
         }),
       )
     }
-  }, [challenge, user, challengeDto, userVote, setChallenge, setCraftsVislibility])
+  }, [
+    challenge,
+    user,
+    craftsVislibility,
+    challengeDto,
+    userVote,
+    setChallenge,
+    setCraftsVislibility,
+  ])
 
   useEffect(() => {
     if (!challenge) return

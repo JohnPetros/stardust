@@ -25,7 +25,7 @@ export function ChallengeContentNav({ contents }: ChallengeContentNavProps) {
       )}
       {contents.includes('comments') && (
         <>
-          {craftsVislibility.canShowSolutions.isFalse ? (
+          {craftsVislibility?.canShowSolutions.isFalse ? (
             <BlockedCommentsAlertDialog>
               <ChallengeContentLink
                 title='Comentários'
@@ -46,7 +46,7 @@ export function ChallengeContentNav({ contents }: ChallengeContentNavProps) {
       )}
       {contents.includes('solutions') && (
         <>
-          {craftsVislibility.canShowSolutions.isTrue ? (
+          {craftsVislibility?.canShowSolutions.isTrue ? (
             <BlockedSolutionsAlertDialog onShowSolutions={handleShowSolutions}>
               <ChallengeContentLink
                 title='Soluções'
