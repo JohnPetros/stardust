@@ -2,10 +2,10 @@ import { StringValidation } from '@stardust/core/libs'
 
 const ENV = {
   mode: process.env.NODE_ENV,
-  supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-  supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-  supabaseCdnUrl: process.env.NEXT_PUBLIC_SUPABASE_CDN_URL,
-  appHost: process.env.NEXT_PUBLIC_APP_HOST,
+  supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
+  supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
+  supabaseCdnUrl: process.env.NEXT_PUBLIC_SUPABASE_CDN_URL ?? '',
+  appHost: process.env.NEXT_PUBLIC_APP_HOST ?? '',
 }
 
 new StringValidation(ENV.mode, 'App Mode').validate()
