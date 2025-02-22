@@ -18,7 +18,7 @@ export const HandleUserSignedUpJob = (shopService: IShopService): IJob => {
 
   return {
     async handle(queue: IQueue) {
-      await queue.sleepFor('2s')
+      await queue.sleepFor('1s')
 
       const useCase = new GetAcquirableShopItemsByDefaultUseCase(shopService)
       const shopPayload = await queue.run<ReturnType<typeof useCase.do>>(
