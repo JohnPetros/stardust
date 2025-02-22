@@ -30,7 +30,7 @@ export function useSignUpPage() {
 
   async function handleFormSubmit({ email, password, name }: SignUpFormFields) {
     await signUp(email, password, name)
-    await sleep(1500)
+    await sleep(2500)
     setUserCredentials({ email, password })
   }
 
