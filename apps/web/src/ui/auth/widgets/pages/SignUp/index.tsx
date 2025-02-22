@@ -45,7 +45,7 @@ export function SignUpPage() {
           <AnimatedOpacity delay={2}>
             <div className='w-[24rem] pt-12'>
               <div className='text-center'>
-                <Title title='Bem-vindo ao StarDust' icon='rocket' text='' />
+                <Title title='Bem-vindo(a) ao StarDust' icon='rocket' text='' />
               </div>
               <SignUpForm id='sign-up-form' onSubmit={handleFormSubmit} />
             </div>
