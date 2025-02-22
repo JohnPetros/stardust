@@ -1,7 +1,5 @@
 import { StringValidation } from '@stardust/core/libs'
 
-console.log('NODE_ENV', process.env.NODE_ENV)
-
 const ENV = {
   mode: process.env.NODE_ENV,
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
