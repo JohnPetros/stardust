@@ -109,7 +109,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
         await supabase.auth.refreshSession({ refresh_token: session?.refresh_token })
       }
 
-      if (error) return SupabaseAuthError(error, 'Error inesperado ao confirmar e-mail')
+      if (error) return SupabaseAuthError(error, 'Error inesperado ao confirmar email')
 
       return new ApiResponse()
     },

@@ -144,13 +144,17 @@ export const ExecutorDeCodigoDelegua = (): ICodeRunnerProvider => {
         ? JSON.stringify(jsCode)
         : String(jsCode)
 
-      const lexador = new LexadorJavaScript()
-      const avaliadorSintatico = new AvaliadorSintaticoJavaScript()
-      const resultadoLexico = lexador.mapear(codigo.split('\n'), -1)
-      const resultadoSintatico = avaliadorSintatico.analisar(resultadoLexico, -1)
-      const tradutor = new TradutorReversoJavaScript()
-      const traducao = tradutor.traduzir(resultadoSintatico.declaracoes)
-      return traducao.trim().replace(' \n', '').replaceAll('\\"', '')
+      try {
+        const lexador = new LexadorJavaScript()
+        const avaliadorSintatico = new AvaliadorSintaticoJavaScript()
+        const resultadoLexico = lexador.mapear(codigo.split('\n'), -1)
+        const resultadoSintatico = avaliadorSintatico.analisar(resultadoLexico, -1)
+        const tradutor = new TradutorReversoJavaScript()
+        const traducao = tradutor.traduzir(resultadoSintatico.declaracoes)
+        return traducao.trim().replace(' \n', '').replaceAll('\\"', '')
+      } catch (error) {
+        return codigo
+      }
     },
 
     translateToJs(codeRunnerCode: string) {

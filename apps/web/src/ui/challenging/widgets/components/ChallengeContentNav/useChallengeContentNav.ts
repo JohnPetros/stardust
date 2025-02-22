@@ -11,7 +11,7 @@ export function useChallengeContentNav() {
   const { goTo } = useRouter()
 
   async function handleShowSolutions() {
-    if (!user || !challenge) return
+    if (!user || !challenge || !craftsVislibility) return
 
     user.unlockChallengeSolutions(challenge.id)
     await updateUser(user)

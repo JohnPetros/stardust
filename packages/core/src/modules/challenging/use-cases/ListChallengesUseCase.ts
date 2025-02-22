@@ -74,7 +74,7 @@ export class ListChallengesUseCase implements IUseCase<Request, Response> {
           if (isUserChallengeAuthor) {
             return isCompleted.isFalse
           }
-          return isCompleted.isTrue && challenge.isPublic.isTrue
+          return isCompleted.isFalse && challenge.isPublic.isTrue
         })
       default:
         return challenges

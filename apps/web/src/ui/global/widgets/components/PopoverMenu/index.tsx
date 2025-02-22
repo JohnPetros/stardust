@@ -36,7 +36,7 @@ export function PopoverMenu({
             {buttons.map(({ title, label, icon, isToggle, value, action }, index) => {
               const isFirst = index === 0
               return (
-                <li key={label}>
+                <li key={`${title}-${index}`}>
                   <Hydration>
                     <button
                       aria-label={label}

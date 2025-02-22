@@ -16,7 +16,7 @@ export class ObserveStreakBreakUseCase implements IUseCase<Request> {
     const promises = []
 
     for (const user of users) {
-      const didUserBreakStreak = user.weekStatus.todayStatus === 'todo'
+      const didUserBreakStreak = user.weekStatus.yesterdayStatus === 'todo'
       if (didUserBreakStreak) {
         user.breakStreak()
         promises.push(this.updateUser(user))

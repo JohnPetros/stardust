@@ -45,7 +45,7 @@ escreva(altitudeSegura < altitudeAtual)`,
     picture: 'panda-fazendo-coracao.jpg',
   },
   {
-    stem: 'Agora, checando a velocidade limite. Complete a código com os operadores certos para que o resultado seja igual a *verdadeiro*',
+    stem: 'Agora, checando a velocidade limite. Complete a código com os operadores certos para que o resultado seja igual a *falso*',
     type: 'drag-and-drop',
     lines: [
       { number: 1, texts: ['var velocidadeLimite = 5000'], indentation: 0 },

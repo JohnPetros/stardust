@@ -54,11 +54,28 @@ export class WeekStatus {
     )
   }
 
+  updateYesterdayWeekdayStatus(newStatus: WeekdayStatus): WeekStatus {
+    const yesterdayWeekdayIndex = new Datetime().getYesterdayWeekdayIndex()
+
+    return new WeekStatus(
+      this.value.map((status, index) =>
+        index === yesterdayWeekdayIndex ? newStatus : status,
+      ) as WeekStatusValue,
+    )
+  }
+
   get todayStatus(): WeekdayStatus {
-    const todayIndex = new Datetime().getTodayIndex()
-    const todayStatus = this.value[todayIndex]
-    if (!todayStatus) throw new AppError('Nenhum status semanal')
-    return todayStatus
+    const todayWeekdayIndex = new Datetime().getTodayIndex()
+    const todayWeekdayStatus = this.value[todayWeekdayIndex]
+    if (!todayWeekdayStatus) throw new AppError('Nenhum status semanal')
+    return todayWeekdayStatus
+  }
+
+  get yesterdayStatus(): WeekdayStatus {
+    const yesterdayWeekdayIndex = new Datetime().getYesterdayWeekdayIndex()
+    const yesterdayWeekdayStatus = this.value[yesterdayWeekdayIndex]
+    if (!yesterdayWeekdayStatus) throw new AppError('Nenhum status semanal')
+    return yesterdayWeekdayStatus
   }
 
   get isTodayDone(): Logical {

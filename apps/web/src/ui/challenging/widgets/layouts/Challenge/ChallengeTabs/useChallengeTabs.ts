@@ -19,7 +19,7 @@ export function useChallengeTabs() {
   const toast = useToastContext()
 
   async function handleShowSolutions() {
-    if (!user) return
+    if (!user || !challenge || !craftsVislibility) return
 
     if (user.canBuy(ChallengeCraftsVisibility.solutionsVisibilityPrice).isFalse) {
       toast.show('Você não possui moedas suficiente')
@@ -29,7 +29,9 @@ export function useChallengeTabs() {
     user.loseCoins(ChallengeCraftsVisibility.solutionsVisibilityPrice)
     await updateUser(user)
     setCraftsVislibility(craftsVislibility.showSolutions())
-    router.goTo(`${ROUTES.challenging.challenges}/${challenge?.slug.value}/solutions`)
+    router.goTo(
+      ROUTES.challenging.challenges.challengeSolutions.list(challenge.slug.value),
+    )
   }
 
   return {

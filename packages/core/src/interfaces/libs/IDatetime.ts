@@ -11,6 +11,7 @@ export interface IDatetime {
   getDaysCountToSunday(): number
   convertSecondsToTime(seconds: number): string
   getTodayIndex(): number
+  getYesterdayWeekdayIndex(): number
   getRelativeTime(): string
   date(): Date
 }

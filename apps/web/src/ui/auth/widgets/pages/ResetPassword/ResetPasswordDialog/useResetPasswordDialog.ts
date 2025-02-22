@@ -13,6 +13,7 @@ import { useApi } from '@/ui/global/hooks/useApi'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
 const resetPasswordFormSchema = z
   .object({
@@ -74,6 +75,7 @@ export function useResetPasswordDialog(alertDialogRef: RefObject<AlertDialogRef>
         deleteCookie(COOKIES.keys.accessToken),
         deleteCookie(COOKIES.keys.refreshToken),
         deleteCookie(COOKIES.keys.shouldResetPassword),
+        api.signOut(),
       ])
     }
 

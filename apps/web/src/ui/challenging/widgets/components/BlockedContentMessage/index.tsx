@@ -10,6 +10,7 @@ import { Button } from '@/ui/global/widgets/components/Button'
 import { Loading } from '@/ui/global/widgets/components/Loading'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useBlockedContentAlertDialog } from './useBlockedContentAlertDialog'
+import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 
 const CONTENT_TYPES = {
   comments: 'os comentários de outros usuários.',
@@ -27,7 +28,7 @@ export function BlockedContentAlertDialog({
 }: PropsWithChildren<BlockedContentMessageProps>) {
   const ref = useRef<AlertDialogRef>(null)
   const { challengeSlug, isVerifyingVisibility, handleOpenChange } =
-    useBlockedContentAlertDialog(ref)
+    useBlockedContentAlertDialog(ref, content)
 
   return (
     <>

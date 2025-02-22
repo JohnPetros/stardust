@@ -34,6 +34,11 @@ export function SignUpForm({ id, onSubmit }: SignUpFormProps) {
             placeholder='Digite seu nome de usuário'
             isActive={isNameValid}
             autoFocus
+            errorMessage={
+              errors.email?.message === 'Nome já utilizado por outro usuário'
+                ? errors.email?.message
+                : ''
+            }
             {...register('name')}
           />
           {!isNameValid && (

@@ -7,7 +7,7 @@ import type { ChallengeContent } from './ChallengeContent'
 export type ChallengeStoreState = {
   challenge: Challenge | null
   activeContent: ChallengeContent
-  craftsVislibility: ChallengeCraftsVisibility
+  craftsVislibility: ChallengeCraftsVisibility | null
   mdx: string
   panelsLayout: PanelsLayout
   results: boolean[]

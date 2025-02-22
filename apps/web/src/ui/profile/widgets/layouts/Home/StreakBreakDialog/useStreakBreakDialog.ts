@@ -14,8 +14,8 @@ export function useStreakBreakDialog(alertDialogRef: RefObject<AlertDialogRef>) 
   }
 
   useEffect(() => {
-    if (user?.didBreakStreak.isTrue) alertDialogRef.current?.open()
-  }, [user?.didBreakStreak.isTrue, alertDialogRef.current?.open])
+    if (user?.didBreakStreak.isTrue && alertDialogRef.current) alertDialogRef.current.open()
+  }, [user?.didBreakStreak.isTrue, alertDialogRef.current])
 
   return {
     handleAlertDialogOpenChange,

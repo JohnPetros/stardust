@@ -13,6 +13,7 @@ import type { NextParams } from '@/server/next/types'
 import { SupabaseRouteHandlerClient } from '../supabase/clients'
 import { SupabaseAuthService, SupabaseProfileService } from '../supabase/services'
 import { cookieActions } from '@/server/next-safe-action'
+import { ENV } from '@/constants'
 
 type Cookie = {
   key: string
@@ -64,9 +65,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     },
 
     redirect(route: string) {
-      const nextResponse = NextResponse.redirect(
-        new URL(route, request ? request.url : ''),
-      )
+      const nextResponse = NextResponse.redirect(new URL(route, ENV.appHost))
 
       if (cookies.length)
         for (const cookie of cookies) {
@@ -143,7 +142,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     send(data: unknown, statusCode = HTTP_STATUS_CODE.ok) {
       if (cookies.length) {
         const nextResponse = NextResponse.redirect(
-          new URL(request ? request.nextUrl.pathname : '', request ? request.url : ''),
+          new URL(request ? request.nextUrl.pathname : '', ENV.appHost),
         )
 
         for (const cookie of cookies) {

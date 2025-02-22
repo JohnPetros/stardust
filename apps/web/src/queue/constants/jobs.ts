@@ -6,9 +6,9 @@ export const JOBS = {
       key: 'profile/handle.user.signed.up',
       eventName: UserSignedUpEvent.NAME,
     },
-    observerStreakBreak: {
+    observeStreakBreak: {
       key: 'profile/observe.streak.break',
-      cronExpression: '59 23 * * *', // Everyday at 23:59
+      cronExpression: '0 0 * * *', // Everyday at 00:00
     },
     resetWeekStatus: {
       key: 'profile/reset.week.status',

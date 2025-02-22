@@ -47,7 +47,7 @@ export function Checkbox({ children, onCheck, isChecked }: CheckboxProps) {
           </AnimatedIndicator>
         </C.Indicator>
       </C.Root>
-      <span className='text-gray-100'>{children}</span>
+      {children}
     </AnimatedLabel>
   )
 }

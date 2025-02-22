@@ -7,6 +7,7 @@ import { ROUTES } from '@/constants'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import type { ChallengeContent } from '@/ui/challenging/stores/ChallengeStore/types'
+import { ForwardedRef, forwardRef } from 'react'
 
 type TabButtonProps = {
   contentType: ChallengeContent
@@ -16,13 +17,13 @@ type TabButtonProps = {
   blockMessage?: string
 }
 
-export function ChallengeContentLink({
+ const ChallengeContentLinkComponent = ({
   contentType,
   isActive,
   isBlocked = false,
   title,
   ...props
-}: TabButtonProps) {
+}: TabButtonProps, ref: ForwardedRef<HTMLAnchorElement>) => {
   const { getChallengeSlice } = useChallengeStore()
   const { challenge } = getChallengeSlice()
 
@@ -41,6 +42,7 @@ export function ChallengeContentLink({
 
   return (
     <Link
+      ref={ref}
       href={`${ROUTES.challenging.challenges.challenge(challenge?.slug.value ?? '')}${
         contentType !== 'description' ? `/${contentType}` : ''
       }`}
@@ -53,3 +55,5 @@ export function ChallengeContentLink({
     </Link>
   )
 }
+
+export const ChallengeContentLink = forwardRef(ChallengeContentLinkComponent)
