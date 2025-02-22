@@ -36,6 +36,7 @@ export class CreateUserUseCase implements IUseCase<Request> {
       tier: {
         id: firstTierId,
       },
+      createdAt: new Date(),
     })
 
     const response = await this.profileService.saveUser(user)
