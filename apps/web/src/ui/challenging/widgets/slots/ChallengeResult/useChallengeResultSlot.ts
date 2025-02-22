@@ -94,7 +94,7 @@ export function useChallengeResultSlot() {
     if (newUserAnswer.isCorrect.isTrue) {
       challenge.makeCompleted()
       setChallenge(challenge)
-      setCraftsVislibility(craftsVislibility.showAll())
+      if (craftsVislibility) setCraftsVislibility(craftsVislibility.showAll())
     }
 
     if (newUserAnswer.isCorrect.isFalse && newUserAnswer.isVerified.isTrue && isMobile) {
