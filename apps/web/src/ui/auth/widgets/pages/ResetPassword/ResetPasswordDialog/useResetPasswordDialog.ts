@@ -41,7 +41,12 @@ export function useResetPasswordDialog(alertDialogRef: RefObject<AlertDialogRef>
   const router = useRouter()
   const api = useApi()
 
-  function handleConfirmButtonClick() {
+  async function handleConfirmButtonClick() {
+    await Promise.all([
+      deleteCookie(COOKIES.keys.accessToken),
+      deleteCookie(COOKIES.keys.refreshToken),
+      deleteCookie(COOKIES.keys.shouldResetPassword),
+    ])
     router.goTo(ROUTES.auth.signIn)
   }
 
@@ -71,12 +76,7 @@ export function useResetPasswordDialog(alertDialogRef: RefObject<AlertDialogRef>
 
     if (response.isSuccess) {
       alertDialogRef.current?.open()
-      await Promise.all([
-        deleteCookie(COOKIES.keys.accessToken),
-        deleteCookie(COOKIES.keys.refreshToken),
-        deleteCookie(COOKIES.keys.shouldResetPassword),
-        api.signOut(),
-      ])
+      await api.signOut()
     }
 
     setIsSubmitting(false)
