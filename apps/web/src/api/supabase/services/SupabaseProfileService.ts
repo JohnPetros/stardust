@@ -178,6 +178,7 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
         streak: supabaseUser.streak,
         level: supabaseUser.level,
         week_status: supabaseUser.week_status,
+        created_at: supabaseUser.created_at,
       })
 
       if (error)
