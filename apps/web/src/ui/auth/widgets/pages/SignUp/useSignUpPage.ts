@@ -6,6 +6,7 @@ import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import type { SignUpFormFields } from './SignUpForm/types/SignUpFormFields'
 import { useSignUpAction } from './useSignUpAction'
 import { useApi } from '@/ui/global/hooks/useApi'
+import { useSleep } from '@/ui/global/hooks/useSleep'
 
 type UserCredentials = {
   email: string
@@ -18,6 +19,7 @@ export function useSignUpPage() {
   const [userCredentials, setUserCredentials] = useState<UserCredentials | null>(null)
   const api = useApi()
   const toast = useToastContext()
+  const { sleep } = useSleep()
   const { signUp } = useSignUpAction(() => {
     toast.show('Enviamos para você um e-mail de confirmação', {
       type: 'success',
@@ -28,6 +30,7 @@ export function useSignUpPage() {
 
   async function handleFormSubmit({ email, password, name }: SignUpFormFields) {
     await signUp(email, password, name)
+    await sleep(1500)
     setUserCredentials({ email, password })
   }
 
