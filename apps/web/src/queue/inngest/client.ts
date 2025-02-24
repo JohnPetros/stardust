@@ -7,20 +7,57 @@ import { emailSchema, idSchema, nameSchema } from '@stardust/validation/global/s
 
 import { SERVER_ENV } from '@/constants/server-env'
 import { ENV } from '@/constants/env'
+import { FirstStarUnlockedEvent } from '@stardust/core/space/events'
+import { ShopItemsAcquiredByDefaultEvent } from '@stardust/core/shop/events'
+import { FirstTierReachedEvent } from '@stardust/core/ranking/events'
 
 const eventsSchema = {
   [UserCreatedEvent.NAME]: {
     data: z.object({
-      userId: z.string(),
+      userId: idSchema,
       acquiredRocketsIds: z.array(idSchema),
       acquiredAvatarsIds: z.array(idSchema),
     }),
   },
   [UserSignedUpEvent.NAME]: {
     data: z.object({
-      userId: z.string(),
+      userId: idSchema,
       userName: nameSchema,
       userEmail: emailSchema,
+    }),
+  },
+  [FirstStarUnlockedEvent.NAME]: {
+    data: z.object({
+      user: z.object({
+        id: idSchema,
+        name: nameSchema,
+        email: emailSchema,
+      }),
+      selectedAvatarByDefaultId: idSchema,
+      selectedRocketByDefaultId: idSchema,
+    }),
+  },
+  [ShopItemsAcquiredByDefaultEvent.NAME]: {
+    data: z.object({
+      user: z.object({
+        id: idSchema,
+        name: nameSchema,
+        email: emailSchema,
+      }),
+      firstUnlockedStarId: idSchema,
+    }),
+  },
+  [FirstTierReachedEvent.NAME]: {
+    data: z.object({
+      user: z.object({
+        id: idSchema,
+        name: nameSchema,
+        email: emailSchema,
+      }),
+      selectedAvatarByDefaultId: idSchema,
+      selectedRocketByDefaultId: idSchema,
+      firstUnlockedStarId: idSchema,
+      firstTierId: idSchema,
     }),
   },
 }

@@ -1,6 +1,11 @@
 import type { IEvent } from '#interfaces'
 
 type Payload = {
+  user: {
+    id: string
+    name: string
+    email: string
+  }
   firstUnlockedStarId: string
 }
 

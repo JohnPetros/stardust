@@ -35,8 +35,8 @@ export function SignUpForm({ id, onSubmit }: SignUpFormProps) {
             isActive={isNameValid}
             autoFocus
             errorMessage={
-              errors.email?.message === 'Nome já utilizado por outro usuário'
-                ? errors.email?.message
+              errors.name?.message === 'Nome já utilizado por outro usuário'
+                ? errors.name?.message
                 : ''
             }
             {...register('name')}

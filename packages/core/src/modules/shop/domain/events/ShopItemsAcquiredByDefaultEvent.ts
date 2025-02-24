@@ -1,14 +1,17 @@
 import type { IEvent } from '#interfaces'
 
 type UserSignedUpPayload = {
+  user: {
+    id: string
+    name: string
+    email: string
+  }
   selectedAvatarByDefaultId: string
   selectedRocketByDefaultId: string
-  acquirableAvatarsByDefaultIds: string[]
-  acquirableRocketsByDefaultIds: string[]
 }
 
 export class ShopItemsAcquiredByDefaultEvent implements IEvent<UserSignedUpPayload> {
-  static readonly NAME = 'shop/shop-items-acquired-by-default'
+  static readonly NAME = 'shop/shop.items.acquired.by.default'
   constructor(readonly payload: UserSignedUpPayload) {}
 
   get name() {

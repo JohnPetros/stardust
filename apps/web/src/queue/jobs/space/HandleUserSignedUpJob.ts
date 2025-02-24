@@ -5,9 +5,15 @@ import { UserCreatedEvent } from '@stardust/core/profile/events'
 
 type UserCreatedPayload = ConstructorParameters<typeof UserCreatedEvent>['0']
 
+type Payload = {
+  userId: string
+  userName: string
+  userEmail: string
+}
+
 export const HandleUserSignedUpJob = (spaceService: ISpaceService): IJob => {
   return {
-    async handle(queue: IQueue) {
+    async handle(queue: IQueue<Payload>) {
       await queue.sleepFor('1s')
 
       const getFirstStarIdUseCase = new GetFirstStarIdUseCase(spaceService)
@@ -15,8 +21,14 @@ export const HandleUserSignedUpJob = (spaceService: ISpaceService): IJob => {
       const { firstUnlockedStarId } = await queue.run<
         ReturnType<typeof getFirstStarIdUseCase.do>
       >(async () => await getFirstStarIdUseCase.do(), GetFirstStarIdUseCase.name)
+      const payload = queue.getPayload()
 
       const event = new FirstStarUnlockedEvent({
+        user: {
+          id: payload.userId,
+          name: payload.userName,
+          email: payload.userEmail,
+        },
         firstUnlockedStarId,
       })
 

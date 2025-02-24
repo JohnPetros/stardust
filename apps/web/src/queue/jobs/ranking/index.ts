@@ -1,2 +1,2 @@
-export { HandleUserSignedUpJob } from './HandleUserSignedUpJob'
+export { HandleShopItemsAcquiredByDefaultJob } from './HandleShopItemsAcquiredByDefaultJob'
 export { UpdateRankingsJob } from './UpdateRankingsJob'

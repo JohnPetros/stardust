@@ -1,6 +1,13 @@
 import type { IEvent } from '#interfaces'
 
 type Payload = {
+  user: {
+    id: string
+    name: string
+    email: string
+  }
+  selectedAvatarByDefaultId: string
+  selectedRocketByDefaultId: string
   firstTierId: string
 }
 
