@@ -11,7 +11,7 @@ export const JOBS = {
     },
     observeStreakBreak: {
       key: 'profile/observe.streak.break',
-      cronExpression: '0 0 * * *', // Everyday at 00:00
+      cronExpression: '2 0 * * *', // Everyday at 00:02
     },
     resetWeekStatus: {
       key: 'profile/reset.week.status',
