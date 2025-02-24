@@ -19,7 +19,7 @@ interface ResetPasswordDialogProps {
 }
 
 export function ResetPasswordDialog({ children }: ResetPasswordDialogProps) {
-  const alertRef = useRef<AlertDialogRef | null>(null)
+  const alertDialogRef = useRef<AlertDialogRef | null>(null)
   const {
     errors,
     isSubmitting,
@@ -27,13 +27,13 @@ export function ResetPasswordDialog({ children }: ResetPasswordDialogProps) {
     handleSubmit,
     handleOpenChange,
     handleConfirmButtonClick,
-  } = useResetPasswordDialog(alertRef.current)
+  } = useResetPasswordDialog(alertDialogRef)
 
   return (
     <>
       <AlertDialog
         type='asking'
-        ref={alertRef}
+        ref={alertDialogRef}
         title='Você redefiniu sua senha com sucesso!'
         body={
           <p className='mb-3 text-center text-base text-green-500'>

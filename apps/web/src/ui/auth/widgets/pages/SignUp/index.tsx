@@ -32,20 +32,13 @@ export function SignUpPage() {
               <p className='text-green-400 font-medium text-md text-center'>
                 Até logo 👋🏻.
               </p>
-              <Button
-                onClick={handleResendEmail}
-                isLoading={isResendingEmail}
-                className='mt-6'
-              >
-                Reenviar e-mail de cadastro
-              </Button>
             </div>
           </AnimatedOpacity>
         ) : (
           <AnimatedOpacity delay={2}>
             <div className='w-[24rem] pt-12'>
               <div className='text-center'>
-                <Title title='Bem-vindo ao StarDust' icon='rocket' text='' />
+                <Title title='Bem-vindo(a) ao StarDust' icon='rocket' text='' />
               </div>
               <SignUpForm id='sign-up-form' onSubmit={handleFormSubmit} />
             </div>

@@ -1,7 +1,7 @@
 'use client'
 
 import { z } from 'zod'
-import { useState } from 'react'
+import { type RefObject, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -27,7 +27,7 @@ const resetPasswordFormSchema = z
 
 type ResetPasswordFormFields = z.infer<typeof resetPasswordFormSchema>
 
-export function useResetPasswordDialog(alertDialogRef: AlertDialogRef | null) {
+export function useResetPasswordDialog(alertDialogRef: RefObject<AlertDialogRef>) {
   const {
     register,
     handleSubmit,
@@ -41,7 +41,12 @@ export function useResetPasswordDialog(alertDialogRef: AlertDialogRef | null) {
   const router = useRouter()
   const api = useApi()
 
-  function handleConfirmButtonClick() {
+  async function handleConfirmButtonClick() {
+    await Promise.all([
+      deleteCookie(COOKIES.keys.accessToken),
+      deleteCookie(COOKIES.keys.refreshToken),
+      deleteCookie(COOKIES.keys.shouldResetPassword),
+    ])
     router.goTo(ROUTES.auth.signIn)
   }
 
@@ -70,13 +75,8 @@ export function useResetPasswordDialog(alertDialogRef: AlertDialogRef | null) {
     }
 
     if (response.isSuccess) {
-      alertDialogRef?.open()
-      await Promise.all([
-        deleteCookie(COOKIES.keys.accessToken),
-        deleteCookie(COOKIES.keys.refreshToken),
-        deleteCookie(COOKIES.keys.shouldResetPassword),
-        api.signOut(),
-      ])
+      alertDialogRef.current?.open()
+      await api.signOut()
     }
 
     setIsSubmitting(false)
