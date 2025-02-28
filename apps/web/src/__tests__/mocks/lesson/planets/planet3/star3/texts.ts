@@ -3,7 +3,7 @@ import type { TextBlockDto } from '@stardust/core/global/dtos'
 export const texts: TextBlockDto[] = [
   {
     content:
-      'Ok, agora com as verificações já feitas, a prioridade agora é concertar os motores do foguete!',
+      'Ok, agora com as verificações já feitas, a prioridade agora é consertar os motores do foguete!',
     type: 'default',
     picture: 'panda-de-oculos.jpg',
   },
@@ -81,7 +81,7 @@ var turbinasGirando = girandoTurbina1 e girandoTurbina2
 
 escreva(turbinasGirando)
 
-//  Resultado: verdadeiro`,
+//  Resultado: falso`,
     isRunnable: true,
   },
   {

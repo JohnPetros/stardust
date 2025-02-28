@@ -83,6 +83,7 @@ export function usePlaygroundCodeEditor(
     const response = await codeRef.current.run()
 
     if (response.isFailure) {
+      playAudio('fail-code-result.wav')
       showError(response.errorMessage, response.errorLine)
     }
 
@@ -90,8 +91,6 @@ export function usePlaygroundCodeEditor(
       setOutputs(response.outputs)
       consoleRef.current?.open()
     }
-
-    playAudio('running-code.wav')
 
     resetCode()
   }, [openPrompt, showError, playAudio, outputs])

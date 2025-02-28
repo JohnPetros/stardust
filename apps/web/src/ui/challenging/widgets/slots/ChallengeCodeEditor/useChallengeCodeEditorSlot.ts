@@ -57,6 +57,8 @@ export function useChallengeCodeEditorSlot() {
       setResults(challenge.results.items)
       router.goTo(ROUTES.challenging.challenges.challengeResult(challenge.slug.value))
     } catch (error) {
+      playAudio('fail-code-result.wav')
+
       if (error instanceof CodeRunnerError) {
         handleCodeRunnerError(error.message, error.line)
         return
@@ -66,8 +68,6 @@ export function useChallengeCodeEditorSlot() {
         toast.show('Não mexa em nenhum comando Leia()!')
         return
       }
-    } finally {
-      playAudio('running-code.wav')
     }
   }
 

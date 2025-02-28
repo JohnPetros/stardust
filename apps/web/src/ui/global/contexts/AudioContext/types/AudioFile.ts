@@ -8,4 +8,4 @@ export type AudioFile =
   | 'switch.wav'
   | 'earning.wav'
   | 'fail.wav'
-  | 'running-code.wav'
+  | 'fail-code-result.wav'
