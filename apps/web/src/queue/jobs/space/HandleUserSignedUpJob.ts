@@ -14,8 +14,6 @@ type Payload = {
 export const HandleUserSignedUpJob = (spaceService: ISpaceService): IJob => {
   return {
     async handle(queue: IQueue<Payload>) {
-      await queue.sleepFor('1s')
-
       const getFirstStarIdUseCase = new GetFirstStarIdUseCase(spaceService)
 
       const { firstUnlockedStarId } = await queue.run<
@@ -32,7 +30,6 @@ export const HandleUserSignedUpJob = (spaceService: ISpaceService): IJob => {
         firstUnlockedStarId,
       })
 
-      await queue.sleepFor('2s')
       await queue.publish(event)
 
       const { userId } = await queue.waitFor<UserCreatedPayload>(
