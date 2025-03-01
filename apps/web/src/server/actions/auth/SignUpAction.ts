@@ -12,10 +12,14 @@ type Request = {
   password: string
 }
 
+type Response = {
+  userId: string
+}
+
 export const SignUpAction = (
   authService: IAuthService,
   queue: IQueue,
-): IAction<Request> => {
+): IAction<Request, Response> => {
   return {
     async handle(actionServer: IActionServer<Request>) {
       const { email, name, password } = actionServer.getRequest()
@@ -28,6 +32,9 @@ export const SignUpAction = (
         userName: name,
       })
       await queue.publish(event)
+      return {
+        userId: response.body.userId,
+      }
     },
   }
 }
