@@ -11,11 +11,11 @@ export const JOBS = {
     },
     observeStreakBreak: {
       key: 'profile/observe.streak.break',
-      cronExpression: '2 0 * * *', // Everyday at 00:02
+      cronExpression: '1 0 * * *', // Everyday at 00:01
     },
     resetWeekStatus: {
       key: 'profile/reset.week.status',
-      cronExpression: '0 0 * * 0', // Every Sunday at 00:00
+      cronExpression: '3 0 * * 0', // Every Sunday at 00:03
     },
   },
   ranking: {
