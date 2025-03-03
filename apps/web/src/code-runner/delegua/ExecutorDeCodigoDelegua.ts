@@ -36,6 +36,7 @@ export const ExecutorDeCodigoDelegua = (): ICodeRunnerProvider => {
       )
 
       console.log('resultado', resultado)
+      console.log('erros', erros)
 
       if (erros.length && erros[0]) {
         const erro = erros[0]
@@ -47,6 +48,10 @@ export const ExecutorDeCodigoDelegua = (): ICodeRunnerProvider => {
       if (resultado.length) {
         if (resultado[0] === '{"valor":null}') {
           result = 'nulo'
+        }
+
+        if (resultado[0] === '{"valor":{}}') {
+          result = '{}'
         }
 
         const resultadoComValor = resultado
