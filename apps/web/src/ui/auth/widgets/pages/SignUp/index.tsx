@@ -37,6 +37,9 @@ export function SignUpPage() {
               <p className='text-green-400 font-medium text-md text-center'>
                 Até logo 👋🏻.
               </p>
+              <Button onClick={handleResendEmail} isLoading={isResendingEmail} className='mt-6'>
+                Reenviar e-mail de confirmação de cadastro.
+              </Button>
             </div>
           </AnimatedOpacity>
         ) : (
