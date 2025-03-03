@@ -11,8 +11,13 @@ import { Button } from '@/ui/global/widgets/components/Button'
 import { ROUTES } from '@/constants'
 
 export function SignUpPage() {
-  const { isSignUpSuccess, isResendingEmail, handleFormSubmit, handleResendEmail } =
-    useSignUpPage()
+  const {
+    isSubmitting,
+    isSignUpSuccess,
+    isResendingEmail,
+    handleFormSubmit,
+    handleResendEmail,
+  } = useSignUpPage()
 
   return (
     <div className='h-screen'>
@@ -40,7 +45,11 @@ export function SignUpPage() {
               <div className='text-center'>
                 <Title title='Bem-vindo(a) ao StarDust' icon='rocket' text='' />
               </div>
-              <SignUpForm id='sign-up-form' onSubmit={handleFormSubmit} />
+              <SignUpForm
+                id='sign-up-form'
+                isSubmitting={isSubmitting}
+                onSubmit={handleFormSubmit}
+              />
             </div>
 
             <div className='mt-6 flex w-full items-center justify-center'>

@@ -1,12 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import type { SignUpFormFields } from './SignUpForm/types/SignUpFormFields'
 import { useSignUpAction } from './useSignUpAction'
 import { useApi } from '@/ui/global/hooks/useApi'
-import { useSleep } from '@/ui/global/hooks/useSleep'
+import { useUserCreatedSocket } from './useUserCreatedSocket'
 
 type UserCredentials = {
   email: string
@@ -17,20 +17,26 @@ export function useSignUpPage() {
   const [isSignUpSuccess, setIsSignUpSuccess] = useState(false)
   const [isResendingEmail, setIsResendingEmail] = useState(false)
   const [userCredentials, setUserCredentials] = useState<UserCredentials | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const api = useApi()
   const toast = useToastContext()
-  const { sleep } = useSleep()
-  const { signUp } = useSignUpAction(() => {
-    toast.show('Enviamos para você um e-mail de confirmação', {
-      type: 'success',
-      seconds: 10,
-    })
-    setIsSignUpSuccess(true)
+  const createdUserId = useRef('')
+  const { signUp } = useSignUpAction((userId) => {
+    createdUserId.current = userId
+  })
+  useUserCreatedSocket((event) => {
+    if (event.payload.userId === createdUserId.current) {
+      toast.show('Enviamos para você um e-mail de confirmação', {
+        type: 'success',
+        seconds: 10,
+      })
+      setIsSignUpSuccess(true)
+    }
   })
 
   async function handleFormSubmit({ email, password, name }: SignUpFormFields) {
+    setIsSubmitting(true)
     await signUp(email, password, name)
-    await sleep(3500)
     setUserCredentials({ email, password })
   }
 
@@ -47,6 +53,7 @@ export function useSignUpPage() {
   }
 
   return {
+    isSubmitting,
     isSignUpSuccess,
     isResendingEmail,
     handleFormSubmit,

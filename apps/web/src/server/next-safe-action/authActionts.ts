@@ -25,7 +25,7 @@ const signUp = actionClient
     const authService = SupabaseAuthService(supabase)
     const queue = InngestQueue()
     const action = SignUpAction(authService, queue)
-    await action.handle(actionServer)
+    return await action.handle(actionServer)
   })
 
 export { signUp }

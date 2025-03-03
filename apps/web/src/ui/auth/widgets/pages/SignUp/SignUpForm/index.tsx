@@ -9,19 +9,13 @@ import type { SignUpFormFields } from './types'
 
 type SignUpFormProps = {
   id: string
+  isSubmitting: boolean
   onSubmit: (fields: SignUpFormFields) => Promise<void>
 }
 
-export function SignUpForm({ id, onSubmit }: SignUpFormProps) {
-  const {
-    errors,
-    isSubmitting,
-    isNameValid,
-    isEmailValid,
-    isPasswordValid,
-    register,
-    handleSubmit,
-  } = useSignUpForm(onSubmit)
+export function SignUpForm({ id, isSubmitting, onSubmit }: SignUpFormProps) {
+  const { errors, isNameValid, isEmailValid, isPasswordValid, register, handleSubmit } =
+    useSignUpForm(onSubmit)
 
   return (
     <form aria-label={id} onSubmit={handleSubmit} className='mt-4'>
