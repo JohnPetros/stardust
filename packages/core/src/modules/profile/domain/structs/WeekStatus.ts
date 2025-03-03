@@ -72,6 +72,13 @@ export class WeekStatus {
   }
 
   get yesterdayStatus(): WeekdayStatus {
+    const currentDatetime = new Datetime()
+    const isTodaySunday = currentDatetime.getTodayIndex() === 0
+
+    if (isTodaySunday) {
+      return this.value[6]
+    }
+
     const yesterdayWeekdayIndex = new Datetime().getYesterdayWeekdayIndex()
     const yesterdayWeekdayStatus = this.value[yesterdayWeekdayIndex]
     if (!yesterdayWeekdayStatus) throw new AppError('Nenhum status semanal')
