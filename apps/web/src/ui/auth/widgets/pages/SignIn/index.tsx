@@ -21,7 +21,7 @@ export function SignInPage() {
     <>
       <RocketAnimation animationRef={rocketAnimationRef} isVisible={isRocketVisible} />
 
-      <div className='h-screen lg:grid lg:grid-cols-[1fr_1.5fr]'>
+      <div className='h-screen lg:grid lg:grid-cols-[1fr_1.5fr] z-50'>
         <main className='flex h-full flex-col items-center justify-center'>
           <AnimatedForm isVisible={isRocketVisible}>
             <Title

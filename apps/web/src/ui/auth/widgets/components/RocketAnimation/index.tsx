@@ -31,7 +31,7 @@ export function RocketAnimation({ animationRef, isVisible }: RocketProps) {
       variants={rocketVariants}
       initial='hidden'
       animate={isVisible ? 'visible' : ''}
-      className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'
+      className='fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -z-20'
       aria-live='polite'
     >
       <Animation ref={animationRef} name='rocket-lauching' size={640} hasLoop={false} />
