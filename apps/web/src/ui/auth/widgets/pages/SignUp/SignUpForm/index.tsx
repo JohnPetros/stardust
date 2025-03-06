@@ -73,8 +73,7 @@ export function SignUpForm({ id, isSubmitting, onSubmit }: SignUpFormProps) {
               />
               {!isPasswordValid && (
                 <p className='text-gray-100 text-sm tracking-wider leading-6'>
-                  Sua senha deve conter pelo menos 6 caracteres, uma letra minúscula, uma
-                  maiúscula, um número e um caractere especial 😙.
+                  Senha deve conter pelo menos 6 caracteres 😙.
                 </p>
               )}
             </div>
