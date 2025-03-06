@@ -230,7 +230,7 @@ escreva(quantidadeParaCadaAlimento)
     type: 'quote',
     title: 'Método ordenar()',
     content:
-      'O método *ordenar()* é usado para colocar os elementos de uma lista em ordem alfabética caso ele tenha textos, ou numérica, caso tenha números. Esse método já não cria umm nova lista, mas sim modifica a lista original.',
+      'O método *ordenar()* é usado para colocar os elementos de uma lista em ordem alfabética caso ele tenha textos, ou numérica, caso tenha números. Esse método já não cria uma nova lista, mas sim modifica a lista original.',
     picture: 'panda-de-oculos.jpg',
   },
   {
