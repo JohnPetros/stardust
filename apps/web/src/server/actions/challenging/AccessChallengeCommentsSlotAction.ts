@@ -2,7 +2,7 @@ import type {
   IAction,
   IActionServer,
   IChallengingService,
-} from '@stardust/core/interfaces'
+} from '@stardust/core/global/interfaces'
 import { Challenge } from '@stardust/core/challenging/entities'
 
 type Request = {

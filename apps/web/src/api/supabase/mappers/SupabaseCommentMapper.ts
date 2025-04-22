@@ -1,7 +1,7 @@
 import type { CommentDto } from '@stardust/core/forum/dtos'
 import type { Comment } from '@stardust/core/forum/entities'
 import type { SupabaseComment } from '../types'
-import { Datetime } from '@stardust/core/libs'
+import { Datetime } from '@stardust/core/global/libs'
 
 export const SupabaseCommentMapper = () => {
   return {

@@ -1,7 +1,7 @@
-import { ApiResponse, PaginationResponse } from '@stardust/core/responses'
+import { ApiResponse, PaginationResponse } from '@stardust/core/global/responses'
 import type { ShopItemsListingParams } from '@stardust/core/shop/types'
-import type { IShopService } from '@stardust/core/interfaces'
-import { HTTP_STATUS_CODE } from '@stardust/core/constants'
+import type { IShopService } from '@stardust/core/global/interfaces'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 import type { Supabase } from '../types/Supabase'
 import { SupabasePostgrestError } from '../errors'

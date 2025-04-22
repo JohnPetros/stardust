@@ -5,7 +5,7 @@ import type {
   TestCaseDto,
 } from '@stardust/core/challenging/dtos'
 import type { SupabaseChallenge } from '../types'
-import { Datetime } from '@stardust/core/libs'
+import { Datetime } from '@stardust/core/global/libs'
 
 export const SupabaseChallengeMapper = () => {
   return {

@@ -1,8 +1,8 @@
 import { headers } from 'next/headers'
 
 import { ENV } from '@/constants'
-import type { IApiClient } from '@stardust/core/interfaces'
-import { ApiResponse, PaginationResponse } from '@stardust/core/responses'
+import type { IApiClient } from '@stardust/core/global/interfaces'
+import { ApiResponse, PaginationResponse } from '@stardust/core/global/responses'
 import { addQueryParams, handleApiError } from './utils'
 
 type CacheConfig = {

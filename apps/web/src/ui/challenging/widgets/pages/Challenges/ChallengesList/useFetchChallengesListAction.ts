@@ -6,7 +6,7 @@ import { useAction } from 'next-safe-action/hooks'
 import type { ActionParams } from '@/server/next-safe-action/types'
 import { challengingActions } from '@/server/next-safe-action'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { PaginationResponse } from '@stardust/core/responses'
+import { PaginationResponse } from '@stardust/core/global/responses'
 
 const action = challengingActions.fetchChallengesList
 

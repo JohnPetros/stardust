@@ -1,6 +1,6 @@
-import { HTTP_STATUS_CODE } from '@stardust/core/constants'
-import type { IController, IHttp } from '@stardust/core/interfaces'
-import type { IShopService } from '@stardust/core/interfaces'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
+import type { IController, IHttp } from '@stardust/core/global/interfaces'
+import type { IShopService } from '@stardust/core/global/interfaces'
 
 export const FetchShopItemsController = (shopService: IShopService): IController => {
   return {

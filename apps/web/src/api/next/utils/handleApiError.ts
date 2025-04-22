@@ -1,4 +1,4 @@
-import { ApiResponse } from '@stardust/core/responses'
+import { ApiResponse } from '@stardust/core/global/responses'
 
 export async function handleApiError<Body>(response: globalThis.Response) {
   const data = await response.json()

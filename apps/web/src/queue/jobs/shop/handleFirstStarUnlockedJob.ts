@@ -1,5 +1,5 @@
 import type { EventPayload } from '@stardust/core/global/types'
-import type { IJob, IQueue, IShopService } from '@stardust/core/interfaces'
+import type { IJob, IQueue, IShopService } from '@stardust/core/global/interfaces'
 import { UserCreatedEvent } from '@stardust/core/profile/events'
 import { ShopItemsAcquiredByDefaultEvent } from '@stardust/core/shop/events'
 import { GetAcquirableShopItemsByDefaultUseCase } from '@stardust/core/shop/use-cases'

@@ -2,7 +2,7 @@ import type {
   IAction,
   IActionServer,
   IPlaygroundService,
-} from '@stardust/core/interfaces'
+} from '@stardust/core/global/interfaces'
 import type { SnippetDto } from '@stardust/core/playground/dtos'
 import { EditSnippetUseCase } from '@stardust/core/playground/use-cases'
 

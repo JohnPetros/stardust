@@ -1,6 +1,10 @@
-import type { IController, IHttp, IRankingService } from '@stardust/core/interfaces'
+import type {
+  IController,
+  IHttp,
+  IRankingService,
+} from '@stardust/core/global/interfaces'
 import { UpdateRankingsUseCase } from '@stardust/core/ranking/use-cases'
-import { HTTP_STATUS_CODE } from '@stardust/core/constants'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 export const UpdateRakingsController = (rankingService: IRankingService): IController => {
   return {

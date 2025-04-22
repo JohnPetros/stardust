@@ -1,7 +1,7 @@
 'use client'
 
 import type { AvatarDto } from '@stardust/core/shop/dtos'
-import type { PaginationResponse } from '@stardust/core/responses'
+import type { PaginationResponse } from '@stardust/core/global/responses'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { Search } from '@/ui/global/widgets/components/Search'

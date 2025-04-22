@@ -1,7 +1,7 @@
-import type { IAuthService, IController, IHttp } from '@stardust/core/interfaces'
+import type { IAuthService, IController, IHttp } from '@stardust/core/global/interfaces'
 
 import { COOKIES, ROUTES } from '@/constants'
-import { HTTP_STATUS_CODE } from '@stardust/core/constants'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { Slug } from '@stardust/core/global/structs'
 
 type Schema = {

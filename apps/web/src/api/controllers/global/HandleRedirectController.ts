@@ -1,4 +1,4 @@
-import type { IController, IHttp } from '@stardust/core/interfaces'
+import type { IController, IHttp } from '@stardust/core/global/interfaces'
 
 type Schema = {
   queryParams?: {

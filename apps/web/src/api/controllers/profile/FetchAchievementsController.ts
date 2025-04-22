@@ -1,5 +1,5 @@
-import type { IController, IHttp } from '@stardust/core/interfaces'
-import type { IProfileService } from '@stardust/core/interfaces'
+import type { IController, IHttp } from '@stardust/core/global/interfaces'
+import type { IProfileService } from '@stardust/core/global/interfaces'
 
 export const FetchAchievementsController = (service: IProfileService): IController => {
   return {

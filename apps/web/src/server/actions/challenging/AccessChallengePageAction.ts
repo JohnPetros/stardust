@@ -3,7 +3,7 @@ import type {
   IActionServer,
   IChallengingService,
   ISpaceService,
-} from '@stardust/core/interfaces'
+} from '@stardust/core/global/interfaces'
 import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 import type { ChallengeVote } from '@stardust/core/challenging/types'
 import { Challenge } from '@stardust/core/challenging/entities'
@@ -56,10 +56,7 @@ export const AccessChallengePageAction = (
         actionServer.notFound()
       }
 
-      const userChallengeVote = await fetchUserChallengeVote(
-        challenge.id,
-        user.id,
-      )
+      const userChallengeVote = await fetchUserChallengeVote(challenge.id, user.id)
 
       return {
         challengeDto: challenge.dto,

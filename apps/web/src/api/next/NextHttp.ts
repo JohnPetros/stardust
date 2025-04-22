@@ -4,10 +4,10 @@ import { type NextRequest, NextResponse } from 'next/server'
 
 import type { ZodSchema } from 'zod'
 
-import type { HttpMethod, HttpSchema, IHttp } from '@stardust/core/interfaces'
-import { ApiResponse } from '@stardust/core/responses'
+import type { HttpMethod, HttpSchema, IHttp } from '@stardust/core/global/interfaces'
+import { ApiResponse } from '@stardust/core/global/responses'
 import { AppError, MethodNotImplementedError } from '@stardust/core/global/errors'
-import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/constants'
+import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 import type { NextParams } from '@/server/next/types'
 import { SupabaseRouteHandlerClient } from '../supabase/clients'

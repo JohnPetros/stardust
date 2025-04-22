@@ -1,4 +1,4 @@
-import type { PaginationResponse } from '@stardust/core/responses'
+import type { PaginationResponse } from '@stardust/core/global/responses'
 import type { AvatarDto, RocketDto } from '@stardust/core/shop/dtos'
 
 import { RocketsList } from './RocketsList'

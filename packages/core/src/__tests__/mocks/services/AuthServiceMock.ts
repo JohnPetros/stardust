@@ -1,5 +1,5 @@
-import type { IAuthService } from '#interfaces'
-import type { ApiResponse } from '#responses'
+import type { IAuthService } from '../../../global/interfaces'
+import type { ApiResponse } from '../../../global/responses'
 
 export class AuthServiceMock implements IAuthService {
   signIn(email: string, password: string): Promise<ApiResponse<{ userId: string }>> {

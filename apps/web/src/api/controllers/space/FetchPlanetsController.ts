@@ -1,5 +1,5 @@
-import type { ISpaceService, IController, IHttp } from '@stardust/core/interfaces'
-import { HTTP_STATUS_CODE } from '@stardust/core/constants'
+import type { ISpaceService, IController, IHttp } from '@stardust/core/global/interfaces'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 export const FetchPlanetsController = (spaceService: ISpaceService): IController => {
   return {

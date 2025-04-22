@@ -1,7 +1,7 @@
 import type { PostgrestError } from '@supabase/supabase-js'
 
-import { ApiResponse } from '@stardust/core/responses'
-import { HTTP_STATUS_CODE } from '@stardust/core/constants'
+import { ApiResponse } from '@stardust/core/global/responses'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 export const SupabasePostgrestError = <Data>(
   postgrestError: PostgrestError,

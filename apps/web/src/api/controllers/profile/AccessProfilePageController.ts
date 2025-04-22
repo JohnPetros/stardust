@@ -1,7 +1,7 @@
 import { ROUTES } from '@/constants'
 import { User } from '@stardust/core/global/entities'
-import type { IController, IHttp } from '@stardust/core/interfaces'
-import type { IProfileService } from '@stardust/core/interfaces'
+import type { IController, IHttp } from '@stardust/core/global/interfaces'
+import type { IProfileService } from '@stardust/core/global/interfaces'
 
 type Schema = {
   routeParams: {

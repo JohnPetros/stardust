@@ -4,7 +4,7 @@ import type {
   IAction,
   IActionServer,
   IChallengingService,
-} from '@stardust/core/interfaces'
+} from '@stardust/core/global/interfaces'
 
 type Request = {
   solutionSlug: string

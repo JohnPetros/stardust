@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 
-import { Datetime } from '@stardust/core/libs'
+import { Datetime } from '@stardust/core/global/libs'
 
 import { ROUTES } from '@/constants'
 import type { PopoverMenuButton } from '../../../PopoverMenu/types'

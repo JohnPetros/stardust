@@ -1,4 +1,4 @@
-import type { IJob, IProfileService, IQueue } from '@stardust/core/interfaces'
+import type { IJob, IProfileService, IQueue } from '@stardust/core/global/interfaces'
 import type { EventPayload } from '@stardust/core/global/types'
 import type { FirstTierReachedEvent } from '@stardust/core/ranking/events'
 import { UserCreatedEvent } from '@stardust/core/profile/events'

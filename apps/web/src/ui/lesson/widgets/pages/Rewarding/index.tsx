@@ -2,7 +2,7 @@
 
 import { useRef } from 'react'
 
-import { Datetime } from '@stardust/core/libs'
+import { Datetime } from '@stardust/core/global/libs'
 import type { WeekStatusValue } from '@stardust/core/profile/types'
 import { WeekStatus } from '@stardust/core/profile/structs'
 

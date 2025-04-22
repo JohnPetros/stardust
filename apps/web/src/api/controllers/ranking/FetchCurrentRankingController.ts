@@ -1,5 +1,9 @@
-import { HTTP_STATUS_CODE } from '@stardust/core/constants'
-import type { IController, IHttp, IRankingService } from '@stardust/core/interfaces'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
+import type {
+  IController,
+  IHttp,
+  IRankingService,
+} from '@stardust/core/global/interfaces'
 
 export const FetchCurrentRankingController = (service: IRankingService): IController => {
   return {

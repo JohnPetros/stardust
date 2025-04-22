@@ -1,6 +1,6 @@
-import type { IAuthService } from '@stardust/core/interfaces'
-import { ApiResponse } from '@stardust/core/responses'
-import { HTTP_STATUS_CODE } from '@stardust/core/constants'
+import type { IAuthService } from '@stardust/core/global/interfaces'
+import { ApiResponse } from '@stardust/core/global/responses'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 import { ENV, ROUTES } from '@/constants'
 import type { Supabase } from '../types'

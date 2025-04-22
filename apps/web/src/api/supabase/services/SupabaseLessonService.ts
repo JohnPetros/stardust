@@ -1,8 +1,8 @@
-import type { ILessonService } from '@stardust/core/interfaces'
+import type { ILessonService } from '@stardust/core/global/interfaces'
 
 import type { Supabase } from '../types/Supabase'
 import { SupabasePostgrestError } from '../errors'
-import { ApiResponse } from '@stardust/core/responses'
+import { ApiResponse } from '@stardust/core/global/responses'
 import type { TextBlockDto } from '@stardust/core/global/dtos'
 import type { QuestionDto } from '@stardust/core/lesson/dtos'
 

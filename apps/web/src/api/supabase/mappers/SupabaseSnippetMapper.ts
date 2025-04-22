@@ -1,4 +1,4 @@
-import { Datetime } from '@stardust/core/libs'
+import { Datetime } from '@stardust/core/global/libs'
 import type { SnippetDto } from '@stardust/core/playground/dtos'
 import type { SupabaseSnippet } from '../types'
 import type { Snippet } from '@stardust/core/playground/entities'

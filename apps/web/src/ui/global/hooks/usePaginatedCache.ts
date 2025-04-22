@@ -4,7 +4,7 @@ import useSWRInfinite from 'swr/infinite'
 import { useMemo, useState } from 'react'
 
 import { useToastContext } from '../contexts/ToastContext'
-import type { PaginationResponse } from '@stardust/core/responses'
+import type { PaginationResponse } from '@stardust/core/global/responses'
 
 type PaginatedCacheConfig<CacheItem> = {
   key: string

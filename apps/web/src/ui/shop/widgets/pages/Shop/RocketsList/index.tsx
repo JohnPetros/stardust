@@ -1,6 +1,6 @@
 'use client'
 
-import type { PaginationResponse } from '@stardust/core/responses'
+import type { PaginationResponse } from '@stardust/core/global/responses'
 import type { RocketDto } from '@stardust/core/shop/dtos'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'

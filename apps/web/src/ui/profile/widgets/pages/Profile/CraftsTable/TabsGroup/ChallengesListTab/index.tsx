@@ -1,4 +1,4 @@
-import { Datetime } from '@stardust/core/libs'
+import { Datetime } from '@stardust/core/global/libs'
 
 import { ROUTES } from '@/constants'
 import { ShowMoreButton } from '@/ui/global/widgets/components/ShowMoreButton'

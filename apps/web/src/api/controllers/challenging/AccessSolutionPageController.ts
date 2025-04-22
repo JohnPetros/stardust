@@ -1,4 +1,8 @@
-import type { IController, IHttp, IChallengingService } from '@stardust/core/interfaces'
+import type {
+  IController,
+  IHttp,
+  IChallengingService,
+} from '@stardust/core/global/interfaces'
 import { Challenge, Solution } from '@stardust/core/challenging/entities'
 
 import { ROUTES } from '@/constants'

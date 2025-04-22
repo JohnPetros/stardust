@@ -1,6 +1,6 @@
 'use client'
 
-import { Datetime } from '@stardust/core/libs'
+import { Datetime } from '@stardust/core/global/libs'
 
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'

@@ -1,10 +1,10 @@
 import { ConfirmEmailController } from '../ConfirmEmailController'
 import { ROUTES } from '@/constants'
-import { ApiResponse } from '@stardust/core/responses'
-import type { IHttp } from '@stardust/core/interfaces'
+import { ApiResponse } from '@stardust/core/global/responses'
+import type { IHttp } from '@stardust/core/global/interfaces'
 import { AuthServiceMock } from '@stardust/core/mocks/services'
 import { HttpMock } from '../../tests/mocks'
-import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/constants'
+import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 const fakeSchema = { queryParams: { token: 'fake-token' } }
 

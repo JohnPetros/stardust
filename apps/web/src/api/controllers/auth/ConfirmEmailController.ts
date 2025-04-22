@@ -1,6 +1,6 @@
 import { Slug } from '@stardust/core/global/structs'
-import type { IController, IHttp } from '@stardust/core/interfaces'
-import type { IAuthService } from '@stardust/core/interfaces'
+import type { IController, IHttp } from '@stardust/core/global/interfaces'
+import type { IAuthService } from '@stardust/core/global/interfaces'
 
 import { ROUTES } from '@/constants'
 

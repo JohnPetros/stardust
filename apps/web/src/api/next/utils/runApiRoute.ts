@@ -1,6 +1,6 @@
 import { ZodError } from 'zod'
 
-import { HTTP_STATUS_CODE } from '@stardust/core/constants'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import {
   AppError,
   AuthError,
@@ -12,7 +12,7 @@ import {
 import { ZodValidationErrorFactory } from '@stardust/validation/factories'
 
 import { NextHttp } from '../NextHttp'
-import type { ApiResponse } from '@stardust/core/responses'
+import type { ApiResponse } from '@stardust/core/global/responses'
 
 export async function runApiRoute(
   apiRoute: () => Promise<ApiResponse>,

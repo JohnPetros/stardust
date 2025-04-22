@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { StringValidation } from '@stardust/core/libs'
+import { StringValidation } from '@stardust/core/global/libs'
 import { ValidationError } from '@stardust/core/global/errors'
 
 import { useToastContext } from '@/ui/global/contexts/ToastContext'

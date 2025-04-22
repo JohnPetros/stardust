@@ -3,15 +3,19 @@ import type {
   ChallengeDto,
   DocDto,
   SolutionDto,
-} from '#challenging/dtos'
-import type { Challenge, ChallengeCategory, Solution } from '#challenging/entities'
+} from '../../../challenging/dtos'
+import type {
+  Challenge,
+  ChallengeCategory,
+  Solution,
+} from '../../../challenging/domain/entities'
 import type {
   ChallengesListParams,
   ChallengeVote,
   SolutionsListParams,
-} from '#challenging/types'
-import type { IChallengingService } from '#interfaces'
-import { ApiResponse, type PaginationResponse } from '#responses'
+} from '../../../challenging/domain/types'
+import type { IChallengingService } from '../../../global/interfaces'
+import { ApiResponse, type PaginationResponse } from '../../../global/responses'
 
 export class ChallengingServiceMock implements IChallengingService {
   challenges: ChallengeDto[] = []

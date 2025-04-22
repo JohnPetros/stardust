@@ -1,4 +1,8 @@
-import type { IController, IHttp, IChallengingService } from '@stardust/core/interfaces'
+import type {
+  IController,
+  IHttp,
+  IChallengingService,
+} from '@stardust/core/global/interfaces'
 import { CountCompletedChallengesByDifficultyLevelUseCase } from '@stardust/core/challenging/use-cases'
 
 export const CountCompletedChallengesByDifficultyLevelController = (

@@ -1,5 +1,5 @@
 import { AppError } from '@stardust/core/global/errors'
-import type { IQueue, TimeExpression } from '@stardust/core/interfaces'
+import type { IQueue, TimeExpression } from '@stardust/core/global/interfaces'
 import type { Context } from 'inngest/types'
 import { inngest } from './client'
 

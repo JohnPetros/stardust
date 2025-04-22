@@ -1,7 +1,7 @@
-import { ApiResponse, PaginationResponse } from '@stardust/core/responses'
+import { ApiResponse, PaginationResponse } from '@stardust/core/global/responses'
 import type { ChallengesListParams } from '@stardust/core/challenging/types'
 import type { ChallengeCategoryDto } from '@stardust/core/challenging/dtos'
-import type { IChallengingService } from '@stardust/core/interfaces'
+import type { IChallengingService } from '@stardust/core/global/interfaces'
 
 import type { Supabase } from '../types'
 import { SupabasePostgrestError } from '../errors'

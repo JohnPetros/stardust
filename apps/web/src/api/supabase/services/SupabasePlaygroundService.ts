@@ -1,5 +1,5 @@
-import { ApiResponse, PaginationResponse } from '@stardust/core/responses'
-import type { IPlaygroundService } from '@stardust/core/interfaces'
+import { ApiResponse, PaginationResponse } from '@stardust/core/global/responses'
+import type { IPlaygroundService } from '@stardust/core/global/interfaces'
 import type { Snippet } from '@stardust/core/playground/entities'
 
 import type { Supabase } from '../types/Supabase'

@@ -1,5 +1,9 @@
-import type { IController, IHttp, IPlaygroundService } from '@stardust/core/interfaces'
-import { HTTP_STATUS_CODE } from '@stardust/core/constants'
+import type {
+  IController,
+  IHttp,
+  IPlaygroundService,
+} from '@stardust/core/global/interfaces'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { GetSnippetUseCase } from '@stardust/core/playground/use-cases'
 
 type Schema = {

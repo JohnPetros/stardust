@@ -1,9 +1,9 @@
 import { fireEvent, renderHook, waitFor } from '@testing-library/react'
 
 import { AchievementsFaker, UsersFaker } from '@stardust/core/fakers/entities'
-import { HTTP_STATUS_CODE } from '@stardust/core/constants'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { AppError } from '@stardust/core/global/errors'
-import { ApiResponse } from '@stardust/core/responses'
+import { ApiResponse } from '@stardust/core/global/responses'
 
 import { alertDialogRefMock } from '@/ui/global/widgets/components/AlertDialog/tests/mocks/alertDialogRefMock'
 import { useAuthContextMock } from '@/ui/auth/contexts/AuthContext/tests/mocks'

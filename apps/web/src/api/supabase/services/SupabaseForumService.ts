@@ -1,5 +1,5 @@
-import { ApiResponse, PaginationResponse } from '@stardust/core/responses'
-import type { IForumService } from '@stardust/core/interfaces'
+import { ApiResponse, PaginationResponse } from '@stardust/core/global/responses'
+import type { IForumService } from '@stardust/core/global/interfaces'
 import type { Comment } from '@stardust/core/forum/entities'
 
 import type { Supabase } from '../types/Supabase'

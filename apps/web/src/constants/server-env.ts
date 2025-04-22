@@ -1,4 +1,4 @@
-import { StringValidation } from '@stardust/core/libs'
+import { StringValidation } from '@stardust/core/global/libs'
 
 const SERVER_ENV = {
   inngestSigningKey: process.env.INNGEST_SIGNING_KEY,

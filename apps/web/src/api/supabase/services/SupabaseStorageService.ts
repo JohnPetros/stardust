@@ -1,5 +1,5 @@
 import { ENV } from '@/constants'
-import type { IStorageService } from '@stardust/core/interfaces'
+import type { IStorageService } from '@stardust/core/global/interfaces'
 import type { ImagesBucket } from '@stardust/core/storage/types'
 
 export const SupabaseStorageService = (): IStorageService => {

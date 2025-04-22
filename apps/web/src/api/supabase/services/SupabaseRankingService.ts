@@ -1,8 +1,8 @@
-import type { IRankingService } from '@stardust/core/interfaces'
+import type { IRankingService } from '@stardust/core/global/interfaces'
 import type { RankingUser } from '@stardust/core/ranking/entities'
 import type { RankingUserDto } from '@stardust/core/ranking/dtos'
-import { ApiResponse } from '@stardust/core/responses'
-import { HTTP_STATUS_CODE } from '@stardust/core/constants'
+import { ApiResponse } from '@stardust/core/global/responses'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 import type { Supabase } from '../types/Supabase'
 import { SupabasePostgrestError } from '../errors'

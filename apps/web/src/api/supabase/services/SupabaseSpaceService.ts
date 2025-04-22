@@ -1,7 +1,7 @@
-import type { ISpaceService } from '@stardust/core/interfaces'
+import type { ISpaceService } from '@stardust/core/global/interfaces'
 import type { Planet } from '@stardust/core/space/entities'
-import { ApiResponse } from '@stardust/core/responses'
-import { HTTP_STATUS_CODE } from '@stardust/core/constants'
+import { ApiResponse } from '@stardust/core/global/responses'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 import type { Supabase } from '../types/Supabase'
 import { SupabasePlanetMapper, SupabaseStarMapper } from '../mappers'
