@@ -2,7 +2,7 @@ import { User } from '../../global/domain/entities'
 import type { UserDto } from '../../global/dtos'
 import type { IUseCase, IChallengingService } from '../../global/interfaces'
 import { Challenge } from '../domain/entities'
-import { Percentage } from '../../global/domain/structures'
+import { Id, Percentage } from '#global/structures'
 
 type Request = {
   userDto: UserDto
@@ -23,7 +23,7 @@ export class CalculateRewardForChallengeCompletionUseCase
 
   async do({ userDto, challengeId, incorrectAnswersCount }: Request) {
     const user = User.create(userDto)
-    const challenge = await this.fetchChallenge(challengeId)
+    const challenge = await this.fetchChallenge(Id.create(challengeId))
     await this.saveCompletedChallenge(challenge.id, user)
 
     const accuracyPercentage = this.calculateAccuracyPercentage(
@@ -59,19 +59,19 @@ export class CalculateRewardForChallengeCompletionUseCase
     return 100 - percentage.value
   }
 
-  private async fetchChallenge(challengeId: string) {
-    const response = await this.challengingService.fetchChallengeById(challengeId)
+  private async fetchChallenge(challengeId: Id) {
+    const response = await this.challengingService.fetchChallengeById(challengeId.value)
     if (response.isFailure) response.throwError()
     return Challenge.create(response.body)
   }
 
-  private async saveCompletedChallenge(challengeId: string, user: User) {
+  private async saveCompletedChallenge(challengeId: Id, user: User) {
     const isChallengeCompleted = user.hasCompletedChallenge(challengeId)
     if (isChallengeCompleted.isTrue) return
 
     const response = await this.challengingService.saveCompletedChallenge(
-      challengeId,
-      user.id,
+      challengeId.value,
+      user.id.value,
     )
     if (response.isFailure) response.throwError()
   }

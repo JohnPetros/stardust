@@ -1,19 +1,15 @@
-import { Id } from '../structures'
+import { Id, Logical } from '../structures'
 
-export abstract class Entity<Props> {
-  private readonly _id: Id
+export abstract class Entity<Props = unknown> {
+  readonly id: Id
   protected readonly props: Props
 
   protected constructor(props: Props, id?: string) {
-    this._id = Id.create(id)
+    this.id = Id.create(id)
     this.props = props
   }
 
-  isEqualTo(entity: Entity<Props>) {
-    return this.id === entity.id
-  }
-
-  get id() {
-    return this._id.value
+  isEqualTo(entity: Entity<Props>): Logical {
+    return Logical.create(this.id === entity.id)
   }
 }

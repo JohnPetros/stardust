@@ -26,7 +26,7 @@ export class GetLastUnlockedStarIdUseCase implements IUseCase<Request, string> {
         const isUnlocked = user.hasUnlockedStar(star.id)
 
         if (isUnlocked.isTrue) {
-          return star.id
+          return star.id.value
         }
       }
     }
@@ -36,6 +36,6 @@ export class GetLastUnlockedStarIdUseCase implements IUseCase<Request, string> {
     if (!lastUnlockedStarId)
       throw new NotFoundError('Estrela desbloqueada não encontrada')
 
-    return lastUnlockedStarId
+    return lastUnlockedStarId.value
   }
 }

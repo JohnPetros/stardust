@@ -3,8 +3,9 @@
 import { useApi } from '@/ui/global/hooks/useApi'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { Avatar } from '@stardust/core/shop/entities'
 import { useAudioContext } from '@/ui/global/contexts/AudioContext'
+import { AvatarAggregate } from '@stardust/core/profile/aggregates'
+import { Integer } from '@stardust/core/global/structures'
 
 type UseAvatarItemProps = {
   id: string
@@ -37,8 +38,10 @@ export function useAvatarItem({ id, name, price, image }: UseAvatarItemProps) {
 
     const currentAcquiredAvatarsCount = user.acquiredAvatarsCount
 
-    user.buyAvatar(Avatar.create({ id, name, image, price }))
-
+    user.buyRocket(
+      AvatarAggregate.create({ id, entity: { name, image } }),
+      Integer.create(price),
+    )
     if (currentAcquiredAvatarsCount.value === user.acquiredAvatarsCount.value) {
       await updateUser(user)
       playAudio('switch.wav')

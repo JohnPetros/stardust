@@ -1,3 +1,4 @@
+import { Integer } from '#global/structures'
 import { User } from '../../global/domain/entities'
 import type { UserDto } from '../../global/dtos'
 import type { IProfileService, IUseCase } from '../../global/interfaces'
@@ -18,8 +19,8 @@ export class RewardUserUseCase implements IUseCase<Request, Response> {
 
   async do({ userDto, newXp, newCoins }: Request) {
     const user = User.create(userDto)
-    user.earnXp(newXp)
-    user.earnCoins(newCoins)
+    user.earnXp(Integer.create(newXp))
+    user.earnCoins(Integer.create(newCoins))
     const streakStatus = user.makeTodayStatusDone()
     const respose = await this.profileService.updateUser(user)
     if (respose.isFailure) respose.throwError()

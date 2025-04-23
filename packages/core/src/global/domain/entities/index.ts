@@ -1,2 +1,2 @@
-export { User } from './User'
+export { User } from '../../../profile/domain/entities/User'
 export { Author } from './Author'

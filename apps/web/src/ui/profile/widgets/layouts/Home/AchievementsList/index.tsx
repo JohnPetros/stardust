@@ -44,15 +44,15 @@ export function AchievementsList() {
             </div>
             <ul className='-mt-8'>
               {achievementsList?.achievements?.map((achievement) => (
-                <li key={achievement.id}>
+                <li key={achievement.id.value}>
                   <AchievementCard
-                    id={achievement.id}
+                    id={achievement.id.value}
                     name={achievement.name.value}
                     description={achievement.description}
                     icon={achievement.icon.value}
                     reward={achievement.reward.value}
-                    isUnlocked={user.hasUnlockedAchievement(achievement.id)}
-                    isRescuable={user.hasRescuableAchievement(achievement.id)}
+                    isUnlocked={user.hasUnlockedAchievement(achievement.id).isTrue}
+                    isRescuable={user.hasRescuableAchievement(achievement.id).isTrue}
                   >
                     <AchievementProgress
                       metric={achievement.metric.value}

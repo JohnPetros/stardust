@@ -17,7 +17,10 @@ export class UnlockNextStarUseCase implements IUseCase<Request> {
 
     if (nextStar) {
       if (user.hasUnlockedStar(nextStar.id).isFalse) {
-        const response = await this.spaceService.saveUnlockedStar(nextStar.id, user.id)
+        const response = await this.spaceService.saveUnlockedStar(
+          nextStar.id.value,
+          user.id.value,
+        )
         if (response.isFailure) response.throwError()
       }
     }

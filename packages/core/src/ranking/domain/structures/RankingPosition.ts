@@ -1,4 +1,4 @@
-import { OrdinalNumber } from '../../../global/domain/structures'
+import { Integer, OrdinalNumber } from '../../../global/domain/structures'
 import { RANKING } from '../constants'
 
 export class RankingPosition {
@@ -14,8 +14,9 @@ export class RankingPosition {
     )
   }
 
-  getReward(rankingReward: number) {
-    return rankingReward + RANKING.baseReward * this.rewardMultiplicator
+  getReward(rankingReward: Integer) {
+    const baseReward = Integer.create(RANKING.baseReward)
+    return this.rewardMultiplicator.multiply(baseReward).plus(rankingReward)
   }
 
   isInDangerArea(lastPositionsOffset: number): boolean {
@@ -41,13 +42,13 @@ export class RankingPosition {
   private get rewardMultiplicator() {
     switch (this.position.value) {
       case 1:
-        return 3
+        return Integer.create(3)
       case 2:
-        return 2
+        return Integer.create(2)
       case 3:
-        return 1
+        return Integer.create(1)
       default:
-        return this.position.value
+        return Integer.create(this.position.value)
     }
   }
 }
