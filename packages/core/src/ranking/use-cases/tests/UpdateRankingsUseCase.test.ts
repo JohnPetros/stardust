@@ -1,5 +1,5 @@
-import { RankingFaker } from '#fakers/structs'
-import { RankingServiceMock } from '#mocks/services'
+import { RankingFaker } from '../../../lesson/domain/structs/tests/fakers'
+import { RankingServiceMock } from '../../../mocks/services'
 import type { Ranking } from '../../domain/structs'
 import { UpdateRankingsUseCase } from '../UpdateRankingsUseCase'
 
@@ -26,7 +26,7 @@ describe('Update Rankings Use Case', () => {
     for (const tier of rankingServiceMock.tiers) {
       const rankingData = RankingFaker.fake()
 
-      rankings.push({ data: rankingData, tierId: tier.id })
+      rankings.push({ data: rankingData, tierId: String(tier.id) })
       rankingServiceMock.users.push(...rankingData.users.map((user) => ({ ...user.dto })))
     }
 
@@ -56,7 +56,7 @@ describe('Update Rankings Use Case', () => {
     for (const tier of rankingServiceMock.tiers) {
       const rankingData = RankingFaker.fake()
 
-      rankings.push({ data: rankingData, tierId: tier.id })
+      rankings.push({ data: rankingData, tierId: String(tier.id) })
       rankingServiceMock.users.push(...rankingData.users.map((user) => ({ ...user.dto })))
     }
 

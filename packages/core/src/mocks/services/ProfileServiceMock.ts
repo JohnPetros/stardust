@@ -1,8 +1,8 @@
-import type { UserDto } from '../../../global/dtos'
-import type { User } from '../../../global/domain/entities'
-import type { AchievementDto } from '../../../profile/dtos'
-import type { IProfileService } from '../../../global/interfaces'
-import { ApiResponse } from '../../../global/responses'
+import type { UserDto } from '../../global/dtos'
+import type { User } from '../../global/domain/entities'
+import type { AchievementDto } from '../../profile/dtos'
+import type { IProfileService } from '../../global/interfaces'
+import { ApiResponse } from '../../global/responses'
 
 export class ProfileServiceMock implements IProfileService {
   fakeAchievementsDto: AchievementDto[] = []

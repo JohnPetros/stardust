@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
-import { Avatar } from '../../Avatar'
-import type { AvatarDto } from '../../../../dtos'
+import { Avatar } from '../Avatar'
+import type { AvatarDto } from '../../../dtos'
 
 export class AvatarsFaker {
   static fake(baseDto?: Partial<AvatarDto>): Avatar {

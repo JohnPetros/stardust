@@ -1,8 +1,8 @@
-import type { Planet } from '../../../space/domain/entities'
-import type { PlanetDto, StarDto } from '../../../space/dtos'
-import type { ISpaceService } from '../../../global/interfaces'
-import { ApiResponse } from '../../../global/responses'
-import { HTTP_STATUS_CODE } from '../../../global/constants'
+import type { Planet } from '../../space/domain/entities'
+import type { PlanetDto, StarDto } from '../../space/dtos'
+import type { ISpaceService } from '../../global/interfaces'
+import { ApiResponse } from '../../global/responses'
+import { HTTP_STATUS_CODE } from '../../global/constants'
 
 export class SpaceServiceMock implements ISpaceService {
   planets: PlanetDto[] = []

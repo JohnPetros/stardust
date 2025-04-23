@@ -1,11 +1,12 @@
 import { ApiResponse } from '../../../global/responses'
 import { AppError } from '../../../global/domain/errors'
 import { HTTP_STATUS_CODE } from '../../../global/constants'
-import { UsersFaker, AchievementsFaker } from '#fakers/entities'
-import { IdFaker } from '#fakers/structs'
-import { ProfileServiceMock } from '#mocks/services'
+import { ProfileServiceMock } from '../../../mocks/services'
 import { Achievement } from '../../domain/entities'
 import { ObserveNewUnlockedAchievementsUseCase } from '../ObserveNewUnlockedAchievementsUseCase'
+import { UsersFaker } from '../../../global/domain/entities/fakers'
+import { AchievementsFaker } from '#profile/entities/fakers'
+import { IdFaker } from '../../../global/domain/structs/fakers'
 
 let useCase: ObserveNewUnlockedAchievementsUseCase
 let profileService: ProfileServiceMock

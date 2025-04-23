@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker'
-import type { RocketDto } from '../../../../dtos'
-import { Rocket } from '../..'
+
+import type { RocketDto } from '../../../dtos'
+import { Rocket } from '..'
 
 export class RocketsFaker {
   static fake(baseDto?: Partial<RocketDto>): Rocket {

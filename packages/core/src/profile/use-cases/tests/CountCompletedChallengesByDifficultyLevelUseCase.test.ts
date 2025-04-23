@@ -1,6 +1,7 @@
-import { ChallengesFaker, UsersFaker } from '#fakers/entities'
-import { ChallengingServiceMock } from '#mocks/services'
+import { ChallengingServiceMock } from '../../../mocks/services'
 import { CountCompletedChallengesByDifficultyLevelUseCase } from '../../../challenging/use-cases/CountCompletedChallengesByDifficultyLevelUseCase'
+import { ChallengesFaker } from '../../../challenging/domain/entities/fakers'
+import { UsersFaker } from '../../../global/domain/entities/fakers'
 
 let challengingServiceMock: ChallengingServiceMock
 let useCase: CountCompletedChallengesByDifficultyLevelUseCase

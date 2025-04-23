@@ -1,10 +1,10 @@
-import type { IRankingService } from '../../../global/interfaces'
-import type { RankingUserDto, TierDto } from '../../../ranking/dtos'
-import { TiersFaker } from '#fakers/entities'
-import { TIERS_COUNT } from '../../../ranking/domain/constants'
-import { ApiResponse } from '../../../global/responses'
-import { HTTP_STATUS_CODE } from '../../../global/constants'
-import type { RankingUser } from '../../../ranking/domain/entities'
+import type { IRankingService } from '../../global/interfaces'
+import type { RankingUserDto, TierDto } from '../../ranking/dtos'
+import { TIERS_COUNT } from '../../ranking/domain/constants'
+import { ApiResponse } from '../../global/responses'
+import { HTTP_STATUS_CODE } from '../../global/constants'
+import type { RankingUser } from '../../ranking/domain/entities'
+import { TiersFaker } from '#ranking/entities/fakers'
 
 export class RankingServiceMock implements IRankingService {
   tiers: TierDto[] = TiersFaker.fakeManyDto(TIERS_COUNT)

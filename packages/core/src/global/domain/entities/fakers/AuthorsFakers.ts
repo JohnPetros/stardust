@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 
-import { Author } from '../../Author'
-import type { AuthorDto } from '../../../../dtos'
+import type { AuthorDto } from '#global/dtos'
+import { Author } from '../Author'
 
 export class AuthorsFakers {
   static fake(baseDto?: Partial<AuthorDto>): Author {

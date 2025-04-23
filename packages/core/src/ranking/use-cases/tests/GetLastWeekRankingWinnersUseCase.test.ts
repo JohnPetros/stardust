@@ -1,8 +1,9 @@
-import { RankingUsersFaker, TiersFaker, UsersFaker } from '#fakers/entities'
-import { RankingServiceMock } from '#mocks/services'
+import { RankingServiceMock } from '../../../mocks/services'
 import { GetLastWeekRankingWinnersUseCase } from '../GetLastWeekRankingWinnersUseCase'
 import type { RankingUserDto } from '../../dtos'
 import type { UserDto } from '../../../global/dtos'
+import { RankingUsersFaker, TiersFaker } from '#ranking/entities/fakers'
+import { UsersFaker } from '../../../global/domain/entities/fakers'
 
 let rankingServiceMock: RankingServiceMock
 let useCase: GetLastWeekRankingWinnersUseCase
@@ -24,13 +25,16 @@ describe('Get Last Week Ranking Winners Use Case', () => {
     const fakeRankingUser = RankingUsersFaker.fakeDto({
       tierId: fakeLastWeekTier?.id,
     })
-
-    fakeUserDto = UsersFaker.fakeDto({ id: fakeRankingUser.id, tier: fakeLastWeekTier })
-
+    if (!fakeLastWeekTier) return
+    fakeUserDto = UsersFaker.fakeDto({
+      id: fakeRankingUser.id,
+      tier: {
+        id: String(fakeLastWeekTier.id),
+        dto: fakeLastWeekTier,
+      },
+    })
     rankingServiceMock.users.push(fakeRankingUser)
-
     const { lastWeekTier } = await useCase.do(fakeUserDto)
-
     expect(lastWeekTier).toEqual(fakeLastWeekTier)
   })
 
@@ -53,8 +57,9 @@ describe('Get Last Week Ranking Winners Use Case', () => {
     const fakeLastWeekTier = rankingServiceMock.tiers[0]
     let fakeRankingWinners: RankingUserDto[] = []
 
-    if (fakeLastWeekTier)
-      fakeRankingWinners = fakeRankingUsersFixture(fakeLastWeekTier?.id)
+    if (!fakeLastWeekTier) return
+
+    fakeRankingWinners = fakeRankingUsersFixture(String(fakeLastWeekTier?.id))
 
     const firstFakeWinner = RankingUsersFaker.fakeDto({
       xp: 3000,
@@ -70,7 +75,10 @@ describe('Get Last Week Ranking Winners Use Case', () => {
     })
 
     fakeUserDto = UsersFaker.fakeDto({
-      tier: fakeLastWeekTier,
+      tier: {
+        id: String(fakeLastWeekTier.id),
+        dto: fakeLastWeekTier,
+      },
     })
 
     rankingServiceMock.winners = [
