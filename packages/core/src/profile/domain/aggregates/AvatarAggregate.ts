@@ -1,6 +1,6 @@
 import { Aggregate } from '#global/abstracts'
-import type { AvatarAggregateDto } from '#global/dtos'
 import { Image, Name } from '#global/structures'
+import type { AvatarAggregateDto } from '#profile/dtos'
 
 type AvatarAggregateEntity = {
   name: Name
@@ -9,6 +9,7 @@ type AvatarAggregateEntity = {
 
 export class AvatarAggregate extends Aggregate<AvatarAggregateEntity> {
   private static readonly ENTITY_NAME = 'Avatar de usuário'
+
   static create(dto: AvatarAggregateDto) {
     if (dto.entity) {
       const entity = {
