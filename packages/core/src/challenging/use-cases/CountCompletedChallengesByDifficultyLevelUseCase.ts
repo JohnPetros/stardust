@@ -1,12 +1,12 @@
 import { User } from '../../global/domain/entities'
 import type { UserDto } from '../../global/dtos'
-import { ChallengeDifficulty } from '../domain/structs'
+import { ChallengeDifficulty } from '../domain/structures'
 import type {
   ChallengeDifficultyLevel,
   CompletedChallengesCountByDifficultyLevel,
 } from '../domain/types'
 import type { IChallengingService, IUseCase } from '../../global/interfaces'
-import { Percentage } from '../../global/domain/structs'
+import { Percentage } from '../../global/domain/structures'
 
 type Challenge = { id: string; difficulty: ChallengeDifficulty }
 

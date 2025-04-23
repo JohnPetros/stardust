@@ -1,5 +1,5 @@
 import { Entity } from '../../../global/domain/abstracts'
-import { Name } from '#global/structs'
+import { Name } from '../../../global/domain/structures'
 import type { ChallengeCategoryDto } from '../../dtos'
 
 type ChallengeCategoryProps = {

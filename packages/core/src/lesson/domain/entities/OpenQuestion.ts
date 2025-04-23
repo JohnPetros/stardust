@@ -1,7 +1,13 @@
-import { List, Image, Text, type Logical, type UserAnswer } from '#global/structs'
+import {
+  List,
+  Image,
+  Text,
+  type Logical,
+  type UserAnswer,
+} from '../../../global/domain/structures'
 import { Question } from '../abstracts'
 import type { OpenQuestionDto, QuestionDto } from '../../dtos'
-import { QuestionCodeLine } from '../structs'
+import { QuestionCodeLine } from '../structures'
 
 type OpenQuestionProps = {
   answers: List<string>

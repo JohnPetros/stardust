@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import type { DataTypeName } from '@stardust/core/challenging/types'
-import type { DataType } from '@stardust/core/challenging/structs'
+import type { DataType } from '@stardust/core/challenging/structures'
 import { DEFAULT_VALUE_BY_DATA_TYPE_NAME } from '@stardust/core/challenging/constants'
 
 export function useDataTypeInput(

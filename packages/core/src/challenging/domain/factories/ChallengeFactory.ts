@@ -1,5 +1,13 @@
-import { Id, Integer, List, Logical, Name, Slug, Text } from '#global/structs'
-import { ChallengeDifficulty, TestCase } from '../structs'
+import {
+  Id,
+  Integer,
+  List,
+  Logical,
+  Name,
+  Slug,
+  Text,
+} from '../../../global/domain/structures'
+import { ChallengeDifficulty, TestCase } from '../structures'
 import type { ChallengeDto } from '../../dtos'
 import { ChallengeCategory } from '../entities'
 import { Author } from '../../../global/domain/entities'

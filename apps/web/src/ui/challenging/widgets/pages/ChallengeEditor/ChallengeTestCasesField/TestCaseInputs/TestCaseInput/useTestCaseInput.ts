@@ -2,7 +2,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 
 import type { ChallengeSchema } from '@stardust/validation/challenging/types'
-import { DataType } from '@stardust/core/challenging/structs'
+import { DataType } from '@stardust/core/challenging/structures'
 import { DEFAULT_VALUE_BY_DATA_TYPE_NAME } from '@stardust/core/challenging/constants'
 
 type UseTestCaseInputsProps = {

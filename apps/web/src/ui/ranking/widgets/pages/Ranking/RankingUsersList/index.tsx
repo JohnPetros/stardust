@@ -1,7 +1,7 @@
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useRankingContext } from '@/ui/ranking/contexts/RankingContext'
 import { RankingUser } from './RankingUser'
-import { Ranking } from '@stardust/core/ranking/structs'
+import { Ranking } from '@stardust/core/ranking/structures'
 
 const ICON_SIZE = 16
 

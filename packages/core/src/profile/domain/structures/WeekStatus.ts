@@ -1,5 +1,5 @@
 import { AppError, ValidationError } from '../../../global/domain/errors'
-import { Logical } from '#global/structs'
+import { Logical } from '../../../global/domain/structures'
 import { Datetime, NumberValidation, StringValidation } from '../../../global/libs'
 import type { WeekdayStatus, WeekStatusValue } from '../types'
 export class WeekStatus {

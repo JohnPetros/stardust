@@ -1,4 +1,4 @@
-import { Id } from '../structs'
+import { Id } from '../structures'
 
 export abstract class Entity<Props> {
   private readonly _id: Id

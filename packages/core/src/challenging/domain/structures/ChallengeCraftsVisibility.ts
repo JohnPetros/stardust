@@ -1,4 +1,4 @@
-import { Logical } from '#global/structs'
+import { Logical } from '../../../global/domain/structures'
 
 type ChallengeCraftsVisibilityDto = {
   canShowSolutions: boolean

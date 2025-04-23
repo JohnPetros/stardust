@@ -2,7 +2,7 @@ import type { IProfileService } from '@stardust/core/global/interfaces'
 import type { User } from '@stardust/core/global/entities'
 import { ApiResponse } from '@stardust/core/global/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
-import { WeekStatus } from '@stardust/core/profile/structs'
+import { WeekStatus } from '@stardust/core/profile/structures'
 
 import type { Supabase, SupabaseUser } from '../types'
 import { SupabasePostgrestError } from '../errors'

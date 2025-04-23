@@ -1,6 +1,6 @@
 import { Entity } from '../../../global/domain/abstracts'
-import { Image, Integer, Name, OrdinalNumber } from '#global/structs'
-import { AchievementMetric } from '../structs'
+import { Image, Integer, Name, OrdinalNumber } from '../../../global/domain/structures'
+import { AchievementMetric } from '../structures'
 import type { AchievementDto } from '../../dtos'
 
 type AchievementProps = {

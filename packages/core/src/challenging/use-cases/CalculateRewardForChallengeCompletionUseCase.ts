@@ -2,7 +2,7 @@ import { User } from '../../global/domain/entities'
 import type { UserDto } from '../../global/dtos'
 import type { IUseCase, IChallengingService } from '../../global/interfaces'
 import { Challenge } from '../domain/entities'
-import { Percentage } from '../../global/domain/structs'
+import { Percentage } from '../../global/domain/structures'
 
 type Request = {
   userDto: UserDto

@@ -1,5 +1,11 @@
 import { Entity } from '../../../global/domain/abstracts'
-import { Image, Integer, Logical, Name, OrdinalNumber } from '#global/structs'
+import {
+  Image,
+  Integer,
+  Logical,
+  Name,
+  OrdinalNumber,
+} from '../../../global/domain/structures'
 import type { TierDto } from '../../dtos'
 import { TIERS_COUNT } from '../constants'
 

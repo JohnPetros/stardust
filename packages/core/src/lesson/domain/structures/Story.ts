@@ -1,4 +1,4 @@
-import { Integer } from '#global/structs'
+import { Integer } from '../../../global/domain/structures'
 
 type StoryProps = {
   currentChunkIndex: Integer

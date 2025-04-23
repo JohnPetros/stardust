@@ -1,4 +1,4 @@
-import type { Integer } from '../structs'
+import type { Integer } from '../structures'
 import type { RewardingPayloadOrigin } from '../../../lesson/domain/types'
 import { Datetime } from '../../libs'
 

@@ -1,5 +1,5 @@
 import type { ChallengeFunctionDto } from '../../dtos'
-import { Name } from '#global/structs'
+import { Name } from '../../../global/domain/structures'
 import { DataType } from './DataType'
 
 type ChallengeFunctionParam = {

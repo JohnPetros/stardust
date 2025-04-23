@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { List } from '@stardust/core/global/structs'
+import { List } from '@stardust/core/global/structures'
 import type { ChallengeCategory } from '@stardust/core/challenging/entities'
 import type {
   ChallengeCompletionStatus,
@@ -11,7 +11,7 @@ import type {
 import {
   ChallengeCompletion,
   ChallengeDifficulty,
-} from '@stardust/core/challenging/structs'
+} from '@stardust/core/challenging/structures'
 
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useQueryArrayParam } from '@/ui/global/hooks/useQueryArrayParam'

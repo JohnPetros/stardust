@@ -1,6 +1,6 @@
 'use client'
 
-import type { QuestionCodeLine } from '@stardust/core/lesson/structs'
+import type { QuestionCodeLine } from '@stardust/core/lesson/structures'
 
 import { CodeSnippet } from '@/ui/global/widgets/components/CodeSnippet'
 

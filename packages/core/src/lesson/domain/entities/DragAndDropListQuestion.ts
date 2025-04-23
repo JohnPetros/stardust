@@ -1,6 +1,12 @@
-import type { UserAnswer } from '#global/structs'
+import type { UserAnswer } from '../../../global/domain/structures'
 import { AppError } from '#global/errors'
-import { Image, OrdinalNumber, Logical, SortableList, Text } from '#global/structs'
+import {
+  Image,
+  OrdinalNumber,
+  Logical,
+  SortableList,
+  Text,
+} from '../../../global/domain/structures'
 import { Question } from '../abstracts'
 import type { DragAndDropListQuestionDto, QuestionDto } from '../../dtos'
 

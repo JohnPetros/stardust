@@ -1,4 +1,4 @@
-import { Integer } from '#global/structs'
+import { Integer } from '../../../global/domain/structures'
 import type { QuestionCodeLineDto } from '../../dtos'
 
 type QuestionCodeLineProps = {

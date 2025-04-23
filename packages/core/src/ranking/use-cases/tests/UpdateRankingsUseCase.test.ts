@@ -1,6 +1,6 @@
-import { RankingFaker } from '../../../lesson/domain/structs/tests/fakers'
+import { RankingFaker } from '../../../lesson/domain/structures/tests/fakers'
 import { RankingServiceMock } from '../../../mocks/services'
-import type { Ranking } from '../../domain/structs'
+import type { Ranking } from '../../domain/structures'
 import { UpdateRankingsUseCase } from '../UpdateRankingsUseCase'
 
 let rankingServiceMock: RankingServiceMock

@@ -1,4 +1,4 @@
-import { Integer, Logical, Text } from '#global/structs'
+import { Integer, Logical, Text } from '../../../global/domain/structures'
 import type { DragglableItemDto } from '../../dtos'
 
 type DraggableItemProps = {

@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form'
 import type { ChallengeSchema } from '@stardust/validation/challenging/types'
 import { useEffect, useState } from 'react'
 import { useApi } from '@/ui/global/hooks/useApi'
-import { Slug } from '@stardust/core/global/structs'
+import { Slug } from '@stardust/core/global/structures'
 
 export function useChallengeTitleField() {
   const [errorMessage, setErrorMessage] = useState('')

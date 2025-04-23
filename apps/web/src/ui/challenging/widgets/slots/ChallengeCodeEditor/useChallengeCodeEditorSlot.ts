@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { Code } from '@stardust/core/global/structs'
+import { Code } from '@stardust/core/global/structures'
 import { InsufficientInputsError } from '@stardust/core/challenging/errors'
 import { CodeRunnerError } from '@stardust/core/global/errors'
 

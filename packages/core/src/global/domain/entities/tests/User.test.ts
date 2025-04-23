@@ -1,7 +1,7 @@
 import { UsersFaker } from './fakers'
-import { IdFaker } from '#fakers/structs'
+import { IdFaker } from '#fakers/structures'
 import { AchievementsFaker } from '#fakers/entities'
-import { Observer } from '../../structs'
+import { Observer } from '../../structures'
 import { Datetime } from '../../../libs'
 
 describe('User Entity', () => {

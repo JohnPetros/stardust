@@ -8,7 +8,7 @@ import { tv } from 'tailwind-variants'
 import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'
 import { PODIUM } from '../../RankingResult/podium'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { RankingPosition } from '@stardust/core/ranking/structs'
+import { RankingPosition } from '@stardust/core/ranking/structures'
 import { ROUTES } from '@/constants'
 import { AnimatedCounter } from '@/ui/global/widgets/components/AnimatedCounter'
 

@@ -1,5 +1,5 @@
 import { Entity } from '../../../global/domain/abstracts'
-import { OrdinalNumber, Slug, Name } from '#global/structs'
+import { OrdinalNumber, Slug, Name } from '../../../global/domain/structures'
 import type { StarDto } from '../../dtos'
 
 type StarsProps = {
