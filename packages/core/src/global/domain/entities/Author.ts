@@ -40,7 +40,7 @@ export class Author extends Entity<AuthorProps> {
 
   get dto(): AuthorDto {
     return {
-      id: this.id,
+      id: this.id.value,
       name: this.props.name.value,
       slug: this.props.slug.value,
       avatar: {

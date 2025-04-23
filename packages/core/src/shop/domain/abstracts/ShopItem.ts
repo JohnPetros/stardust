@@ -35,7 +35,7 @@ export abstract class ShopItem<ItemProps = ShopItemProps> extends Entity<
 
   get dto(): ShopItemDto {
     return {
-      id: this.id,
+      id: this.id.value,
       name: this.name.value,
       price: this.price.value,
       image: this.image.value,

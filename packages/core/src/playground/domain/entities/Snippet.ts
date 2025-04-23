@@ -70,7 +70,7 @@ export class Snippet extends Entity<SnippetProps> {
 
   get dto(): SnippetDto {
     return {
-      id: this.id,
+      id: this.id.value,
       code: this.code.value,
       isPublic: this.isPublic.value,
       title: this.title.value,

@@ -112,7 +112,7 @@ export class Solution extends Entity<SolutionProps> {
 
   get dto(): SolutionDto {
     return {
-      id: this.id,
+      id: this.id.value,
       title: this.title.value,
       content: this.content.value,
       slug: this.slug.value,

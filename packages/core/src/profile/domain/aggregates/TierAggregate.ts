@@ -35,7 +35,7 @@ export class TierAggregate extends Aggregate<TierAggregateEntity> {
 
   get dto(): TierAggregateDto {
     return {
-      id: this.id,
+      id: this.id.value,
       entity: {
         name: this.name.value,
         image: this.image.value,

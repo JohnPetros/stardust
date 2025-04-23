@@ -51,7 +51,7 @@ export class RankingUser extends Entity<RankingUserProps> {
 
   get dto(): RankingUserDto {
     return {
-      id: this.id,
+      id: this.id.value,
       name: this.props.name.value,
       slug: this.props.slug.value,
       xp: this.xp.value,

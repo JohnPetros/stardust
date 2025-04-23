@@ -22,7 +22,7 @@ export class ChallengeCategory extends Entity<ChallengeCategoryProps> {
 
   get dto(): ChallengeCategoryDto {
     return {
-      id: this.id,
+      id: this.id.value,
       name: this.name.value,
     }
   }

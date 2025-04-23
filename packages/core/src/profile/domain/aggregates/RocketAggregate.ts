@@ -31,7 +31,7 @@ export class RocketAggregate extends Aggregate<RocketAggregateEntity> {
 
   get dto(): RocketAggregateDto {
     return {
-      id: this.id,
+      id: this.id.value,
       entity: {
         name: this.name.value,
         image: this.image.value,

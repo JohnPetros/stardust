@@ -62,7 +62,7 @@ export class Achievement extends Entity<AchievementProps> {
 
   get dto(): AchievementDto {
     return {
-      id: this.id,
+      id: this.id.value,
       name: this.name.value,
       icon: this.icon.value,
       reward: this.reward.value,
