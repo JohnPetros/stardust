@@ -1,12 +1,12 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 
-import { VerifyAuthRoutesController } from './api/controllers/auth'
-import { NextHttp } from './api/next/NextHttp'
-import { HandleRewardsPayloadController } from './api/controllers/lesson'
-import { SupabaseMiddlewareClient } from './api/supabase/clients/SupabaseMiddlewareClient'
-import { SupabaseAuthService } from './api/supabase/services'
-import { HandleRedirectController } from './api/controllers/global'
+import { VerifyAuthRoutesController } from './rest/controllers/auth'
+import { NextHttp } from './rest/next/NextHttp'
+import { HandleRewardsPayloadController } from './rest/controllers/lesson'
+import { SupabaseMiddlewareClient } from './rest/supabase/clients/SupabaseMiddlewareClient'
+import { SupabaseAuthService } from './rest/supabase/services'
+import { HandleRedirectController } from './rest/controllers/global'
 
 const schema = z.object({
   queryParams: z

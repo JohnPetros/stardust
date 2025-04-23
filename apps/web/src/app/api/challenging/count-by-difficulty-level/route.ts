@@ -1,11 +1,10 @@
-import { NextHttp } from '@/api/next/NextHttp'
-import { runApiRoute } from '@/api/next/utils'
-import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
-import { SupabaseChallengingService } from '@/api/supabase/services'
-import { CountCompletedChallengesByDifficultyLevelController } from '@/api/controllers/challenging'
+import { NextHttp } from '@/rest/next/NextHttp'
+import { runApiRoute } from '@/rest/next/utils'
+import { SupabaseRouteHandlerClient } from '@/rest/supabase/clients'
+import { SupabaseChallengingService } from '@/rest/supabase/services'
+import { CountCompletedChallengesByDifficultyLevelController } from '@/rest/controllers/challenging'
 
-
-export const dynamic = "force-dynamic"
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
   return await runApiRoute(async () => {

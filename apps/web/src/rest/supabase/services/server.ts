@@ -9,7 +9,7 @@ import {
   SupabasePlaygroundService,
   SupabaseForumService,
   SupabaseStorageService,
-} from '@/api/supabase/services'
+} from '@/rest/supabase/services'
 import { SupabaseServerClient } from '../clients'
 
 const supabase = SupabaseServerClient()

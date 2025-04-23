@@ -1,11 +1,11 @@
 import type { NextRequest } from 'next/server'
 import { z } from 'zod'
 
-import { NextHttp } from '@/api/next/NextHttp'
-import { runApiRoute } from '@/api/next/utils'
-import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
-import { SupabaseChallengingService } from '@/api/supabase/services'
-import { FetchChallengesListController } from '@/api/controllers/challenging'
+import { NextHttp } from '@/rest/next/NextHttp'
+import { runApiRoute } from '@/rest/next/utils'
+import { SupabaseRouteHandlerClient } from '@/rest/supabase/clients'
+import { SupabaseChallengingService } from '@/rest/supabase/services'
+import { FetchChallengesListController } from '@/rest/controllers/challenging'
 import { itemsPerPageSchema, pageSchema } from '@stardust/validation/global/schemas'
 import {
   challengeDifficultyLevelSchema,

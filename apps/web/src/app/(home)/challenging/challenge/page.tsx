@@ -1,5 +1,5 @@
-import { SupabaseServerClient } from '@/api/supabase/clients'
-import { SupabaseChallengingService } from '@/api/supabase/services'
+import { SupabaseServerClient } from '@/rest/supabase/clients'
+import { SupabaseChallengingService } from '@/rest/supabase/services'
 import { ChallengeEditorPage } from '@/ui/challenging/widgets/pages/ChallengeEditor'
 
 export const dynamic = 'force-dynamic'

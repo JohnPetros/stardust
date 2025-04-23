@@ -1,5 +1,5 @@
-import { SupabaseServerClient } from '@/api/supabase/clients'
-import { SupabaseAuthService, SupabaseChallengingService } from '@/api/supabase/services'
+import { SupabaseServerClient } from '@/rest/supabase/clients'
+import { SupabaseAuthService, SupabaseChallengingService } from '@/rest/supabase/services'
 import type { NextParams } from '@/server/next/types'
 import { SolutionPage } from '@/ui/challenging/widgets/pages/Solution'
 import { Challenge } from '@stardust/core/challenging/entities'

@@ -1,5 +1,5 @@
-import { SupabaseServerClient } from '@/api/supabase/clients/SupabaseServerClient'
-import { SupabaseChallengingService } from '@/api/supabase/services'
+import { SupabaseServerClient } from '@/rest/supabase/clients/SupabaseServerClient'
+import { SupabaseChallengingService } from '@/rest/supabase/services'
 import { ChallengesPage } from '@/ui/challenging/widgets/pages/Challenges'
 
 export default async function Page() {

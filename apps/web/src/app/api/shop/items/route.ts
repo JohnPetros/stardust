@@ -1,8 +1,8 @@
-import { NextHttp } from '@/api/next/NextHttp'
-import { runApiRoute } from '@/api/next/utils'
-import { FetchShopItemsController } from '@/api/controllers/shop'
-import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
-import { SupabaseShopService } from '@/api/supabase/services'
+import { NextHttp } from '@/rest/next/NextHttp'
+import { runApiRoute } from '@/rest/next/utils'
+import { FetchShopItemsController } from '@/rest/controllers/shop'
+import { SupabaseRouteHandlerClient } from '@/rest/supabase/clients'
+import { SupabaseShopService } from '@/rest/supabase/services'
 
 export const dynamic = 'force-dynamic'
 

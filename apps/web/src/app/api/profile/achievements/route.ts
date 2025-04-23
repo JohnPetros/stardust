@@ -1,8 +1,8 @@
-import { NextHttp } from '@/api/next/NextHttp'
-import { runApiRoute } from '@/api/next/utils'
-import { SupabaseProfileService } from '@/api/supabase/services'
-import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
-import { FetchAchievementsController } from '@/api/controllers/profile'
+import { NextHttp } from '@/rest/next/NextHttp'
+import { runApiRoute } from '@/rest/next/utils'
+import { SupabaseProfileService } from '@/rest/supabase/services'
+import { SupabaseRouteHandlerClient } from '@/rest/supabase/clients'
+import { FetchAchievementsController } from '@/rest/controllers/profile'
 
 export const dynamic = 'force-dynamic'
 

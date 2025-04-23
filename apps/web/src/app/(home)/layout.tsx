@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import type { AchievementDto } from '@stardust/core/profile/dtos'
 
 import { ROUTES } from '@/constants'
-import { NextApiClient } from '@/api/next/NextApiClient'
+import { NextApiClient } from '@/rest/next/NextApiClient'
 import { SidebarProvider } from '@/ui/profile/contexts/SidebarContext'
 import { HomeLayout } from '@/ui/profile/widgets/layouts/Home'
 import { AchivementsProvider } from '@/ui/profile/contexts/AchievementsContext'

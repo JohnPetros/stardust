@@ -1,7 +1,7 @@
 'use server'
 
-import { SupabaseServerActionClient } from '@/api/supabase/clients'
-import { SupabaseRankingService } from '@/api/supabase/services'
+import { SupabaseServerActionClient } from '@/rest/supabase/clients'
+import { SupabaseRankingService } from '@/rest/supabase/services'
 import { authActionClient } from './clients/authActionClient'
 import { NextActionServer } from '../next/NextActionServer'
 import { GetLastWeekRankingWinnersAction } from '../actions/ranking'

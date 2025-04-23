@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 
-import { SupabaseServerClient } from '@/api/supabase/clients/SupabaseServerClient'
-import { SupabaseProfileService } from '@/api/supabase/services'
+import { SupabaseServerClient } from '@/rest/supabase/clients/SupabaseServerClient'
+import { SupabaseProfileService } from '@/rest/supabase/services'
 
 import { ProfilePage } from '@/ui/profile/widgets/pages/Profile'
 

@@ -9,8 +9,8 @@ import {
 } from '@stardust/validation/global/schemas'
 
 import { InngestQueue } from '@/queue/inngest/InngestQueue'
-import { SupabaseServerActionClient } from '@/api/supabase/clients/SupabaseServerActionClient'
-import { SupabaseAuthService } from '@/api/supabase/services'
+import { SupabaseServerActionClient } from '@/rest/supabase/clients/SupabaseServerActionClient'
+import { SupabaseAuthService } from '@/rest/supabase/services'
 import { NextActionServer } from '../next/NextActionServer'
 import { SignUpAction } from '../actions/auth'
 import { actionClient } from './clients'

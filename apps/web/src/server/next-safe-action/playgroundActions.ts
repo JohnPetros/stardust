@@ -9,8 +9,8 @@ import {
   booleanSchema,
 } from '@stardust/validation/global/schemas'
 
-import { SupabaseServerActionClient } from '@/api/supabase/clients/SupabaseServerActionClient'
-import { SupabasePlaygroundService } from '@/api/supabase/services'
+import { SupabaseServerActionClient } from '@/rest/supabase/clients/SupabaseServerActionClient'
+import { SupabasePlaygroundService } from '@/rest/supabase/services'
 import { authActionClient } from './clients/authActionClient'
 import { NextActionServer } from '../next/NextActionServer'
 import { CreateSnippetAction, EditSnippetAction } from '../actions/playground'

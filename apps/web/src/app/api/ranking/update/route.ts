@@ -1,8 +1,8 @@
-import { UpdateRakingsController } from '@/api/controllers/ranking'
-import { NextHttp } from '@/api/next/NextHttp'
-import { runApiRoute } from '@/api/next/utils'
-import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
-import { SupabaseRankingService } from '@/api/supabase/services'
+import { UpdateRakingsController } from '@/rest/controllers/ranking'
+import { NextHttp } from '@/rest/next/NextHttp'
+import { runApiRoute } from '@/rest/next/utils'
+import { SupabaseRouteHandlerClient } from '@/rest/supabase/clients'
+import { SupabaseRankingService } from '@/rest/supabase/services'
 
 export async function PUT() {
   return await runApiRoute(async () => {
