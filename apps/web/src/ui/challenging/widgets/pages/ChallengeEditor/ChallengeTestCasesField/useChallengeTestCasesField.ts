@@ -3,7 +3,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form'
 import type { ChallengeSchema } from '@stardust/validation/challenging/types'
 import type { DataTypeName } from '@stardust/core/challenging/types'
 import { DEFAULT_VALUE_BY_DATA_TYPE_NAME } from '@stardust/core/challenging/constants'
-import { DataType } from '@stardust/core/challenging/structs'
+import { DataType } from '@stardust/core/challenging/structures'
 
 export function useChallengeTestCasesField() {
   const { control, formState, setValue } = useFormContext<ChallengeSchema>()

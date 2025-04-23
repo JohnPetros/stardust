@@ -1,6 +1,6 @@
 import { type RefObject, useEffect, useState } from 'react'
 
-import { Podium } from '@stardust/core/ranking/structs'
+import { Podium } from '@stardust/core/ranking/structures'
 import { Tier } from '@stardust/core/ranking/entities'
 
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'

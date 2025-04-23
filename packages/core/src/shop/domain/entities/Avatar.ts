@@ -1,4 +1,4 @@
-import { Image, Integer, Logical, Name } from '#global/structs'
+import { Image, Integer, Logical, Name } from '../../../global/domain/structures'
 import type { AvatarDto } from '../../dtos'
 import { ShopItem } from '../abstracts'
 

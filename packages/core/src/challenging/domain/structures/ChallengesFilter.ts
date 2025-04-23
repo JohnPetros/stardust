@@ -1,7 +1,7 @@
 import { ChallengeDifficulty } from './ChallengeDifficulty'
 import { ChallengeCompletion } from './ChallengeCompletion'
 import type { ChallengeCategory } from '../entities'
-import { List } from '#global/structs'
+import { List } from '../../../global/domain/structures'
 
 type ChallengesFilterDTO = {
   difficultyLevel: string

@@ -1,4 +1,4 @@
-import { Logical, OrdinalNumber } from '#global/structs'
+import { Logical, OrdinalNumber } from '../../../global/domain/structures'
 import type { TestCaseDto } from '../../dtos'
 
 type TestCaseProps = {

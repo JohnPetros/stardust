@@ -1,8 +1,8 @@
 import type { UserDto } from '../../dtos'
-import { Email, Integer, List, Logical, Name, Slug } from '../structs'
-import { Level, WeekStatus } from '../../../profile/domain/structs'
+import { Email, Integer, List, Logical, Name, Slug } from '../structures'
+import { Level, WeekStatus } from '../../../profile/domain/structures'
 import { Avatar, Rocket } from '../../../shop/domain/entities'
-import { RankingPosition } from '../../../ranking/domain/structs'
+import { RankingPosition } from '../../../ranking/domain/structures'
 import { Tier } from '../../../ranking/domain/entities'
 import { Datetime } from '../../libs'
 

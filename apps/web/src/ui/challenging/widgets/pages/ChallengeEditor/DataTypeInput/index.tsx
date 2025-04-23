@@ -2,7 +2,7 @@
 
 import * as Select from '@/ui/global/widgets/components/Select'
 import { Input } from '@/ui/global/widgets/components/Input'
-import { DataType } from '@stardust/core/challenging/structs'
+import { DataType } from '@stardust/core/challenging/structures'
 import { useDataTypeInput } from './useDataTypeInput'
 import { AddItemButton } from '../AddItemButton'
 import { DataTypeNameSelect } from '../DataTypeNameSelect'

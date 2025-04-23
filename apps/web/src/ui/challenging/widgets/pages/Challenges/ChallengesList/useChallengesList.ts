@@ -7,7 +7,7 @@ import { QUERY_PARAMS } from '../query-params'
 import {
   ChallengeCompletion,
   ChallengeDifficulty,
-} from '@stardust/core/challenging/structs'
+} from '@stardust/core/challenging/structures'
 
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'

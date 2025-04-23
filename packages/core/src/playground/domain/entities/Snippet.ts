@@ -2,7 +2,7 @@ import { Datetime } from '../../../global/libs'
 import { Entity } from '../../../global/domain/abstracts'
 import { Author } from '../../../global/domain/entities'
 import { EntityNotDefinedError } from '../../../global/domain/errors'
-import { Logical, Name, Text } from '#global/structs'
+import { Logical, Name, Text } from '../../../global/domain/structures'
 import type { SnippetDto } from '../dtos'
 
 type SnippetProps = {

@@ -10,9 +10,9 @@ import {
   type UserAnswer,
   type Text,
   Logical,
-} from '#global/structs'
+} from '../../../global/domain/structures'
 import type { Author } from '../../../global/domain/entities'
-import type { ChallengeDifficulty, TestCase } from '../structs'
+import type { ChallengeDifficulty, TestCase } from '../structures'
 import type { ChallengeDto } from '../../dtos'
 import type { ChallengeCategory } from './ChallengeCategory'
 import { ChallengeWithoutTestCaseError, InsufficientInputsError } from '../errors'

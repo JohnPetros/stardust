@@ -5,9 +5,9 @@ import {
   type Logical,
   type UserAnswer,
   Integer,
-} from '#global/structs'
+} from '../../../global/domain/structures'
 import type { DragAndDropQuestionDto, QuestionDto } from '../../dtos'
-import { DragAndDrop, QuestionCodeLine } from '../structs'
+import { DragAndDrop, QuestionCodeLine } from '../structures'
 import { Question } from '../abstracts'
 
 type DragAndDropQuestionProps = {

@@ -4,7 +4,7 @@ import type { UserDto } from '#global/dtos'
 import { User } from '../User'
 import { AvatarsFaker, RocketsFaker } from '../../../../shop/domain/entities/fakers'
 import { TiersFaker } from '#ranking/entities/fakers'
-import { WeekStatus } from '#profile/structs'
+import { WeekStatus } from '../../../../profile/domain/structures'
 
 export class UsersFaker {
   static fake(baseDto?: Partial<UserDto>): User {

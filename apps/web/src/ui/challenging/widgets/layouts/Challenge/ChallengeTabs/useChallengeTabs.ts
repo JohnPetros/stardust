@@ -1,6 +1,6 @@
 'use client'
 
-import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
+import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structures'
 
 import { ROUTES } from '@/constants'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'

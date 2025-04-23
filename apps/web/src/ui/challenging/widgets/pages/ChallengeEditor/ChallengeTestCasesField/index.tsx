@@ -1,6 +1,6 @@
 import { Controller } from 'react-hook-form'
 
-import { DataType } from '@stardust/core/challenging/structs'
+import { DataType } from '@stardust/core/challenging/structures'
 
 import { Label } from '@/ui/global/widgets/components/Label'
 import { Checkbox } from '@/ui/global/widgets/components/Checkbox'

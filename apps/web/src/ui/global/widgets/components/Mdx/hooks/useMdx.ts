@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { v4 as uuid } from 'uuid'
 
 import type { TextBlockDto } from '@stardust/core/global/dtos'
-import type { TextBlock } from '@stardust/core/global/structs'
+import type { TextBlock } from '@stardust/core/global/structures'
 
 import { REGEX } from '@/constants'
 import { getTemplateContent } from '@/utils'
@@ -34,15 +34,15 @@ export function useMdx() {
       })
 
       return otherProps
-      .map(
-        (prop) =>
-          `${prop}={'${
-            prop === 'title'
-              ? formatSpecialCharacters(String(textBlockDto[prop]), 'encode')
-              : getPropValue(prop, textBlockDto)
-          }'}`,
-      )
-      .join(' ')
+        .map(
+          (prop) =>
+            `${prop}={'${
+              prop === 'title'
+                ? formatSpecialCharacters(String(textBlockDto[prop]), 'encode')
+                : getPropValue(prop, textBlockDto)
+            }'}`,
+        )
+        .join(' ')
     }
 
     function parseMdx(textBlock: TextBlock) {

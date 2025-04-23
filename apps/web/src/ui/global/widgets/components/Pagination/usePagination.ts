@@ -1,6 +1,6 @@
 import type { PaginationProps } from '.'
 
-import { Pagination } from '@stardust/core/global/structs'
+import { Pagination } from '@stardust/core/global/structures'
 
 export function usePagination({
   totalItemsCount,

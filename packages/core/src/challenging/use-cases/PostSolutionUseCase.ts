@@ -1,6 +1,6 @@
 import type { IChallengingService, IUseCase } from '../../global/interfaces'
 import { ValidationError } from '../../global/domain/errors'
-import { Slug } from '../../global/domain/structs'
+import { Slug } from '../../global/domain/structures'
 import { Challenge, Solution } from '../domain/entities'
 import type { SolutionDto } from '../dtos'
 

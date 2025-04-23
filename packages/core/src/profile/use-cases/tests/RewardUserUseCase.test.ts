@@ -1,6 +1,6 @@
 // import { ProfileServiceMock, SpaceServiceMock } from '#mocks/services'
 // import { StarsFaker, PlanetsFaker, UsersFaker } from '#fakers/entities'
-// import { StarRewardingPayloadFaker } from '#fakers/structs'
+// import { StarRewardingPayloadFaker } from '#fakers/structures'
 // import { RewardUserUseCase } from '../RewardUserUseCase'
 
 // let profileServiceMock: ProfileServiceMock

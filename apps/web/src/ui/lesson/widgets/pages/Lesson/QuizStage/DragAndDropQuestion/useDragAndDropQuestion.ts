@@ -7,7 +7,7 @@ import type {
   DragAndDrop,
   DropZone,
   QuestionCodeLine,
-} from '@stardust/core/lesson/structs'
+} from '@stardust/core/lesson/structures'
 import { DragAndDropQuestion } from '@stardust/core/lesson/entities'
 
 type UseDragAndDropQuestionProps = {

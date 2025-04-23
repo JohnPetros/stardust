@@ -6,7 +6,7 @@ import { Achievement } from '../../domain/entities'
 import { ObserveNewUnlockedAchievementsUseCase } from '../ObserveNewUnlockedAchievementsUseCase'
 import { UsersFaker } from '../../../global/domain/entities/fakers'
 import { AchievementsFaker } from '#profile/entities/fakers'
-import { IdFaker } from '../../../global/domain/structs/fakers'
+import { IdFaker } from '../../../global/domain/structures/fakers'
 
 let useCase: ObserveNewUnlockedAchievementsUseCase
 let profileService: ProfileServiceMock

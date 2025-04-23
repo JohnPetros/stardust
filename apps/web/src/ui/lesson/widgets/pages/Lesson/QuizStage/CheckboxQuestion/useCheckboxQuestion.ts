@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { List } from '@stardust/core/global/structs'
+import { List } from '@stardust/core/global/structures'
 
 import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 

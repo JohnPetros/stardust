@@ -1,4 +1,10 @@
-import { Image, Logical, ShuffledList, Text, type UserAnswer } from '#global/structs'
+import {
+  Image,
+  Logical,
+  ShuffledList,
+  Text,
+  type UserAnswer,
+} from '../../../global/domain/structures'
 import { Question } from '../abstracts'
 import type { SelectionQuestionDto, QuestionDto } from '../../dtos'
 

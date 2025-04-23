@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 
 import type { ChallengeSchema } from '@stardust/validation/challenging/types'
 import { challengeSchema } from '@stardust/validation/challenging/schemas'
-import { DataType } from '@stardust/core/challenging/structs'
+import { DataType } from '@stardust/core/challenging/structures'
 import { Challenge } from '@stardust/core/challenging/entities'
 import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 

@@ -6,7 +6,7 @@ import {
   Text,
   type UserAnswer,
   type Logical,
-} from '#global/structs'
+} from '../../../global/domain/structures'
 import type { CheckboxQuestionDto, QuestionDto } from '../../dtos'
 
 type CheckboxQuestionProps = {

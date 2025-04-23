@@ -1,5 +1,5 @@
 import { Entity } from '../../../global/domain/abstracts'
-import { Integer, Text } from '#global/structs'
+import { Integer, Text } from '../../../global/domain/structures'
 import { Author } from '../../../global/domain/entities'
 import { EntityNotDefinedError } from '../../../global/domain/errors'
 import type { CommentDto } from '../../dtos'
