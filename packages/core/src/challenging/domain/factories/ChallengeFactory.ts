@@ -1,17 +1,9 @@
-import {
-  Id,
-  Integer,
-  List,
-  Logical,
-  Name,
-  Slug,
-  Text,
-} from '../../../global/domain/structures'
+import { Id, Integer, List, Logical, Name, Slug, Text } from '#global/structures'
+import { AuthorAggregate } from '#global/aggregates'
+import { Datetime } from '#global/libs'
 import { ChallengeDifficulty, TestCase } from '../structures'
 import type { ChallengeDto } from '../../dtos'
 import { ChallengeCategory } from '../entities'
-import { Author } from '../../../global/domain/entities'
-import { Datetime } from '../../../global/libs'
 
 export class ChallengeFactory {
   static produce(dto: ChallengeDto) {
@@ -19,19 +11,16 @@ export class ChallengeFactory {
     const includedCategoriesIds: string[] = []
     for (const category of dto.categories) {
       const challengeCategory = ChallengeCategory.create(category)
-      if (!includedCategoriesIds.includes(challengeCategory.id)) {
+      if (!includedCategoriesIds.includes(challengeCategory.id.value)) {
         categories.push(challengeCategory)
-        includedCategoriesIds.push(challengeCategory.id) // supabase's repeated categories bug fix
+        includedCategoriesIds.push(challengeCategory.id.value) // supabase's repeated categories bug fix
       }
     }
 
     return {
       title: Name.create(dto.title),
       slug: Slug.create(dto.title),
-      author: {
-        id: dto.author.id,
-        entity: dto.author.dto && Author.create(dto.author.dto),
-      },
+      author: AuthorAggregate.create(dto.author),
       code: dto.code,
       difficulty: ChallengeDifficulty.create(dto.difficultyLevel),
       starId: dto.starId ? Id.create(dto.starId) : null,

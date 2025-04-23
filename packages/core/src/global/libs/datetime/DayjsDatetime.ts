@@ -2,8 +2,8 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/pt-br'
 
-import type { IDatetime } from '../../../interfaces'
-import type { DateFormat } from '../../../interfaces/libs/IDatetime'
+import type { IDatetime } from '../../interfaces'
+import type { DateFormat } from '../../interfaces/libs/IDatetime'
 
 dayjs.locale('pt-br')
 dayjs.extend(relativeTime)

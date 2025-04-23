@@ -1,5 +1,5 @@
-import { Entity } from '../../../global/domain/abstracts'
-import { EntityNotDefinedError } from '../../../global/domain/errors'
+import { Entity } from '#global/abstracts'
+import { EntityNotDefinedError } from '#global/errors'
 import {
   type Code,
   type Id,
@@ -10,14 +10,14 @@ import {
   type UserAnswer,
   type Text,
   Logical,
-} from '../../../global/domain/structures'
-import type { Author } from '../../../global/domain/entities'
+} from '#global/structures'
 import type { ChallengeDifficulty, TestCase } from '../structures'
-import type { ChallengeDto } from '../../dtos'
 import type { ChallengeCategory } from './ChallengeCategory'
-import { ChallengeWithoutTestCaseError, InsufficientInputsError } from '../errors'
-import { ChallengeFactory } from '../factories'
 import type { ChallengeVote } from '../types'
+import type { AuthorAggregate } from '#global/aggregates'
+import type { ChallengeDto } from '#challenging/dtos'
+import { ChallengeFactory } from '../factories'
+import { ChallengeWithoutTestCaseError, InsufficientInputsError } from '../errors'
 
 export type ChallengeProps = {
   code: string
@@ -38,10 +38,7 @@ export type ChallengeProps = {
   incorrectAnswersCount: Integer
   isCompleted: Logical
   isPublic: Logical
-  author: {
-    id: string
-    entity?: Omit<Author, 'id'>
-  }
+  author: AuthorAggregate
 }
 
 export class Challenge extends Entity<ChallengeProps> {
@@ -74,7 +71,7 @@ export class Challenge extends Entity<ChallengeProps> {
     console.log({ translatedExpectedOutput })
 
     if (!isCorrect)
-      this.props.incorrectAnswersCount = this.incorrectAnswersCount.increment(1)
+      this.props.incorrectAnswersCount = this.incorrectAnswersCount.increment()
 
     return isCorrect
   }
@@ -113,26 +110,26 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   incrementIncorrectAnswersCount() {
-    this.props.incorrectAnswersCount = this.incorrectAnswersCount.increment(1)
+    this.props.incorrectAnswersCount = this.incorrectAnswersCount.increment()
   }
 
   private removeUpvote() {
-    if (this.upvotesCount.value > 0) this.upvotesCount = this.upvotesCount.dencrement(1)
+    if (this.upvotesCount.value > 0) this.upvotesCount = this.upvotesCount.dencrement()
   }
 
   private removeDownvote() {
     if (this.downvotesCount.value > 0)
-      this.downvotesCount = this.downvotesCount.dencrement(1)
+      this.downvotesCount = this.downvotesCount.dencrement()
   }
 
   private upvote() {
-    this.upvotesCount = this.upvotesCount.increment(1)
+    this.upvotesCount = this.upvotesCount.increment()
     this.removeDownvote()
   }
 
   private downvote() {
     this.removeUpvote()
-    this.downvotesCount = this.downvotesCount.increment(1)
+    this.downvotesCount = this.downvotesCount.increment()
   }
 
   vote(vote: ChallengeVote) {
@@ -222,13 +219,8 @@ export class Challenge extends Entity<ChallengeProps> {
     this.props.isPublic = Logical.create(isPublic)
   }
 
-  get authorId() {
-    return this.props.author.id
-  }
-
   get author() {
-    if (!this.props.author.entity) throw new EntityNotDefinedError('Autor do desafio')
-    return this.props.author.entity
+    return this.props.author
   }
 
   get upvotesCount() {
@@ -269,15 +261,12 @@ export class Challenge extends Entity<ChallengeProps> {
 
   get dto(): ChallengeDto {
     return {
-      id: this.id,
+      id: this.id.value,
       title: this.title.value,
       code: this.code,
       slug: this.slug.value,
       difficultyLevel: this.difficulty.level,
-      author: {
-        id: this.authorId,
-        dto: this.props.author.entity?.dto,
-      },
+      author: this.props.author.dto,
       downvotesCount: this.downvotesCount.value,
       starId: this.props.starId?.value,
       upvotesCount: this.upvotesCount.value,

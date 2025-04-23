@@ -26,15 +26,11 @@ export class Integer {
     return Logical.create(this.value === integer.value)
   }
 
-  increment(integer?: Integer) {
-    if (!integer) {
-      return new Integer(this.value + 1)
-    }
-
-    return new Integer(this.value + integer.value)
+  increment() {
+    return new Integer(this.value + 1)
   }
 
-  dencrement(integer: Integer) {
-    return new Integer(this.value - integer.value)
+  dencrement() {
+    return new Integer(this.value - 1)
   }
 }
