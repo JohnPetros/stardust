@@ -1,5 +1,6 @@
-import type { Action, Call, PlaygroundService } from '@stardust/core/global/interfaces'
+import type { Action, Call } from '@stardust/core/global/interfaces'
 import type { SnippetDto } from '@stardust/core/playground/dtos'
+import type { PlaygroundService } from '@stardust/core/playground/interfaces'
 import { EditSnippetUseCase } from '@stardust/core/playground/use-cases'
 
 type Request = {

@@ -1,4 +1,4 @@
-import type { IChallengingService, UseCase } from '../../global/interfaces'
+import type { ChallengingService, UseCase } from '../../global/interfaces'
 import { Solution } from '../domain/entities'
 
 type Request = {
@@ -8,7 +8,7 @@ type Request = {
 }
 
 export class EditSolutionUseCase implements UseCase<Request> {
-  constructor(private readonly challengingService: IChallengingService) {}
+  constructor(private readonly challengingService: ChallengingService) {}
 
   async do({ solutionId, solutionTitle, solutionContent }: Request) {
     const solution = await this.fetchSolution(solutionId)

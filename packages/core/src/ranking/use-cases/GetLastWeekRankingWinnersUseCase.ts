@@ -1,6 +1,6 @@
 import { User } from '../../global/domain/entities'
 import type { UserDto } from '../../global/dtos'
-import type { IRankingService, UseCase } from '../../global/interfaces'
+import type { RankingService, UseCase } from '../../global/interfaces'
 import type { RankingUserDto, TierDto } from '../dtos'
 import { Tier } from '../domain/entities'
 
@@ -11,7 +11,7 @@ type Response = Promise<{
 }>
 
 export class GetLastWeekRankingWinnersUseCase implements UseCase<UserDto, Response> {
-  constructor(private rankingsService: IRankingService) {}
+  constructor(private rankingsService: RankingService) {}
 
   async do(userDto: UserDto) {
     const user = User.create(userDto)

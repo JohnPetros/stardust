@@ -1,9 +1,6 @@
-import type {
-  Action,
-  Call,
-  IChallengingService,
-  ISpaceService,
-} from '@stardust/core/global/interfaces'
+import type { Action, Call } from '@stardust/core/global/interfaces'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
+import type { SpaceService } from '@stardust/core/space/interfaces'
 import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 import type { ChallengeVote } from '@stardust/core/challenging/types'
 import { Challenge } from '@stardust/core/challenging/entities'
@@ -20,8 +17,8 @@ type Response = {
 }
 
 export const AccessChallengePageAction = (
-  challengingService: IChallengingService,
-  spaceService: ISpaceService,
+  challengingService: ChallengingService,
+  spaceService: SpaceService,
 ): Action<Request, Response> => {
   async function fetchChallenge(challengeSlug: string) {
     const response = await challengingService.fetchChallengeBySlug(challengeSlug)

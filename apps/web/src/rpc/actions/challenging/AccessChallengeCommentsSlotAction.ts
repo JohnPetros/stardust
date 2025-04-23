@@ -1,4 +1,5 @@
-import type { Action, Call, IChallengingService } from '@stardust/core/global/interfaces'
+import type { Action, Call } from '@stardust/core/global/interfaces'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import { Challenge } from '@stardust/core/challenging/entities'
 
 type Request = {
@@ -10,7 +11,7 @@ type Response = {
 }
 
 export const AccessChallengeCommentsSlotAction = (
-  service: IChallengingService,
+  service: ChallengingService,
 ): Action<Request, Response> => {
   return {
     async handle(call: Call<Request>) {

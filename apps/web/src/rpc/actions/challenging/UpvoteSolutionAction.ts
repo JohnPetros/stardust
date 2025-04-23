@@ -1,5 +1,6 @@
 import { UpvoteSolutionUseCase } from '@stardust/core/challenging/use-cases'
-import type { Action, Call, IChallengingService } from '@stardust/core/global/interfaces'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
+import type { Action, Call } from '@stardust/core/global/interfaces'
 
 type Request = {
   solutionId: string
@@ -11,7 +12,7 @@ type Response = {
 }
 
 export const UpvoteSolutionAction = (
-  challeningService: IChallengingService,
+  challeningService: ChallengingService,
 ): Action<Request, Response> => {
   return {
     async handle(call: Call<Request>) {

@@ -1,5 +1,6 @@
 import type { TextBlockDto } from '@stardust/core/global/dtos'
-import type { Action, Call, ILessonService } from '@stardust/core/global/interfaces'
+import type { Action, Call } from '@stardust/core/global/interfaces'
+import type { LessonService } from '@stardust/core/lesson/interfaces'
 import type { QuestionDto } from '@stardust/core/lesson/dtos'
 
 type Request = {
@@ -13,7 +14,7 @@ type Response = {
 }
 
 export const FetchLessonStoryAndQuestionsAction = (
-  service: ILessonService,
+  service: LessonService,
 ): Action<Request, Response> => {
   return {
     async handle(call: Call<Request>) {

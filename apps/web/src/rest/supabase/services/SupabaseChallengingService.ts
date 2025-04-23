@@ -1,7 +1,7 @@
 import { RestResponse, PaginationResponse } from '@stardust/core/global/responses'
 import type { ChallengesListParams } from '@stardust/core/challenging/types'
 import type { ChallengeCategoryDto } from '@stardust/core/challenging/dtos'
-import type { IChallengingService } from '@stardust/core/global/interfaces'
+import type { ChallengingService } from '@stardust/core/global/interfaces'
 
 import type { Supabase } from '../types'
 import { SupabasePostgrestError } from '../errors'
@@ -12,7 +12,7 @@ import {
 } from '../mappers'
 import { calculateSupabaseRange } from '../utils'
 
-export const SupabaseChallengingService = (supabase: Supabase): IChallengingService => {
+export const SupabaseChallengingService = (supabase: Supabase): ChallengingService => {
   const supabaseChallengeMapper = SupabaseChallengeMapper()
   const supabaseDocMapper = SupabaseDocMapper()
   const supabaseSolutionMapper = SupabaseSolutionMapper()

@@ -14,10 +14,10 @@ import type {
   ChallengeVote,
   SolutionsListParams,
 } from '../../challenging/domain/types'
-import type { IChallengingService } from '../../global/interfaces'
+import type { ChallengingService } from '../../global/interfaces'
 import { RestResponse, type PaginationResponse } from '../../global/responses'
 
-export class ChallengingServiceMock implements IChallengingService {
+export class ChallengingServiceMock implements ChallengingService {
   challenges: ChallengeDto[] = []
 
   fetchChallengeBySlug(challengeId: string): Promise<RestResponse<ChallengeDto>> {

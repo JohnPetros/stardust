@@ -1,4 +1,4 @@
-import type { IAuthService } from '@stardust/core/global/interfaces'
+import type { AuthService } from '@stardust/core/auth/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
@@ -6,7 +6,7 @@ import { ENV, ROUTES } from '@/constants'
 import type { Supabase } from '../types'
 import { SupabaseAuthError } from '../errors'
 
-export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
+export const SupabaseAuthService = (supabase: Supabase): AuthService => {
   return {
     async signIn(email: string, password: string) {
       const { data, error } = await supabase.auth.signInWithPassword({

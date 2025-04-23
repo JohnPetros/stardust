@@ -1,4 +1,5 @@
-import type { Action, Call, IChallengingService } from '@stardust/core/global/interfaces'
+import type { Action, Call } from '@stardust/core/global/interfaces'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 import type {
   ChallengeCompletionStatus,
@@ -17,7 +18,7 @@ type Request = {
 }
 
 export const FetchChallengesListAction = (
-  challengingService: IChallengingService,
+  challengingService: ChallengingService,
 ): Action<Request, PaginationResponse<ChallengeDto>> => {
   return {
     async handle(call: Call<Request>) {

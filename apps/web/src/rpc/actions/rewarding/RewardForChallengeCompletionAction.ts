@@ -1,5 +1,6 @@
-import type { Action, IChallengingService } from '@stardust/core/global/interfaces'
-import type { ProfileService } from '@stardust/core/global/interfaces'
+import type { Action } from '@stardust/core/global/interfaces'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
+import type { ProfileService } from '@stardust/core/profile/interfaces'
 import type { Call } from '@stardust/core/global/interfaces'
 import type { ChallengeRewardingPayload } from '@stardust/core/challenging/types'
 import type { WeekStatusValue } from '@stardust/core/profile/types'
@@ -21,7 +22,7 @@ type Response = {
 
 export const RewardForChallengeCompletionAction = (
   profileService: ProfileService,
-  challengingService: IChallengingService,
+  challengingService: ChallengingService,
 ): Action<ChallengeRewardingPayload, Response> => {
   return {
     async handle(call: Call<ChallengeRewardingPayload>) {

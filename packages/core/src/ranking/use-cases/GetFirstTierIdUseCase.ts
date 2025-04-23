@@ -1,4 +1,4 @@
-import type { IRankingService, UseCase } from '../../global/interfaces'
+import type { RankingService, UseCase } from '../../global/interfaces'
 import { Tier } from '../domain/entities'
 
 type Reponse = Promise<{
@@ -6,7 +6,7 @@ type Reponse = Promise<{
 }>
 
 export class GetFirstTierIdUseCase implements UseCase<void, Reponse> {
-  constructor(private readonly rankingService: IRankingService) {}
+  constructor(private readonly rankingService: RankingService) {}
 
   async do() {
     const response = await this.rankingService.fetchFirstTier()

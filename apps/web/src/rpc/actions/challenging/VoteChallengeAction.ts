@@ -1,6 +1,7 @@
-import type { Action, Call, IChallengingService } from '@stardust/core/global/interfaces'
+import type { Action, Call } from '@stardust/core/global/interfaces'
 import type { ChallengeVote } from '@stardust/core/challenging/types'
 import { VoteChallengeUseCase } from '@stardust/core/challenging/use-cases'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import { User } from '@stardust/core/global/entities'
 
 type Request = {
@@ -15,7 +16,7 @@ type Response = {
 }
 
 export const VoteChallengeAction = (
-  challengingService: IChallengingService,
+  challengingService: ChallengingService,
 ): Action<Request, Response> => {
   return {
     async handle(call: Call<Request>) {

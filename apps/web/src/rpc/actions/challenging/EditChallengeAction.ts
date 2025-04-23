@@ -1,7 +1,8 @@
-import type { Action, Call, IChallengingService } from '@stardust/core/global/interfaces'
-import { EditChallengeUseCase } from '@stardust/core/challenging/use-cases'
+import type { Action, Call } from '@stardust/core/global/interfaces'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 import type { ChallengeSchema } from '@stardust/validation/challenging/types'
+import { EditChallengeUseCase } from '@stardust/core/challenging/use-cases'
 import { User } from '@stardust/core/global/entities'
 
 type Request = {
@@ -10,7 +11,7 @@ type Request = {
 }
 
 export const EditChallengeAction = (
-  challengingService: IChallengingService,
+  challengingService: ChallengingService,
 ): Action<Request, ChallengeDto> => {
   return {
     async handle(call: Call<Request>) {
