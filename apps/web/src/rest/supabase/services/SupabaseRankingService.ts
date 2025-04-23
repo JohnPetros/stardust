@@ -1,7 +1,7 @@
 import type { IRankingService } from '@stardust/core/global/interfaces'
 import type { RankingUser } from '@stardust/core/ranking/entities'
 import type { RankingUserDto } from '@stardust/core/ranking/dtos'
-import { ApiResponse } from '@stardust/core/global/responses'
+import { RestResponse } from '@stardust/core/global/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 import type { Supabase } from '../types/Supabase'
@@ -30,7 +30,7 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
 
       const tier = supabaseTierMapper.toTier(data)
 
-      return new ApiResponse({ body: tier })
+      return new RestResponse({ body: tier })
     },
 
     async fetchTierByPosition(tierPosition: number) {
@@ -50,7 +50,7 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
 
       const tier = supabaseTierMapper.toTier(data)
 
-      return new ApiResponse({ body: tier })
+      return new RestResponse({ body: tier })
     },
 
     async fetchTiers() {
@@ -65,7 +65,7 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
 
       const ranking = data.map(supabaseTierMapper.toTier)
 
-      return new ApiResponse({ body: ranking })
+      return new RestResponse({ body: ranking })
     },
 
     async fetchFirstTier() {
@@ -85,7 +85,7 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
 
       const ranking = supabaseTierMapper.toTier(data)
 
-      return new ApiResponse({ body: ranking })
+      return new RestResponse({ body: ranking })
     },
 
     async fetchRankingUsersByTier(tierId: string) {
@@ -116,7 +116,7 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
         position: index + 1,
       }))
 
-      return new ApiResponse({ body: rankingUsers })
+      return new RestResponse({ body: rankingUsers })
     },
 
     async fetchLastWeekRankingUsersByTier(tierId: string) {
@@ -149,7 +149,7 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
         position: user.last_week_ranking_position ?? index,
       }))
 
-      return new ApiResponse({ body: rankingUsers })
+      return new RestResponse({ body: rankingUsers })
     },
 
     async fetchRankingWinnersByTier(tierId: string) {
@@ -172,7 +172,7 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
 
       const rankingWinners = data.map(supabaseRankingUserMapper.toRankingUser)
 
-      return new ApiResponse({ body: rankingWinners })
+      return new RestResponse({ body: rankingWinners })
     },
 
     async fetchRankingLosersByTier(tierId: string) {
@@ -198,7 +198,7 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async saveRankingWinners(winners: RankingUser[], tierId: string) {
@@ -220,7 +220,7 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
         )
       }
 
-      return new ApiResponse({ body: true })
+      return new RestResponse({ body: true })
     },
 
     async fetchLastWeekRankingUserTierPosition(rankingUserId: string) {
@@ -234,7 +234,7 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
         return SupabasePostgrestError(error, 'Erro ao buscar esse usuário de ranking')
       }
 
-      return new ApiResponse({ body: { position: data.tiers?.position as number } })
+      return new RestResponse({ body: { position: data.tiers?.position as number } })
     },
 
     async updateRankingUsersTier(rankingUsers: RankingUser[], tierId: string) {
@@ -252,7 +252,7 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
         )
       }
 
-      return new ApiResponse({ body: true })
+      return new RestResponse({ body: true })
     },
 
     async updateLastWeekRankingPositions() {
@@ -265,7 +265,7 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async allowUsersSeeRankingResult() {
@@ -281,7 +281,7 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async deleteLastWeekRankingUsers() {
@@ -294,7 +294,7 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async resetRankingUsersXp() {
@@ -307,7 +307,7 @@ export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
   }
 }

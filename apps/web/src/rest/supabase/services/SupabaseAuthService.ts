@@ -1,5 +1,5 @@
 import type { IAuthService } from '@stardust/core/global/interfaces'
-import { ApiResponse } from '@stardust/core/global/responses'
+import { RestResponse } from '@stardust/core/global/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 import { ENV, ROUTES } from '@/constants'
@@ -16,7 +16,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
 
       if (error) return SupabaseAuthError(error, 'E-mail ou senha incorretos')
 
-      return new ApiResponse({ body: { userId: data.session.user.id } })
+      return new RestResponse({ body: { userId: data.session.user.id } })
     },
 
     async signUp(email: string, password: string) {
@@ -31,17 +31,17 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
       if (error)
         switch (error?.code) {
           case 'weak_password':
-            return new ApiResponse({
+            return new RestResponse({
               errorMessage: 'Senha de conter pelo menos 6 caracteres',
               statusCode: HTTP_STATUS_CODE.conflict,
             })
           case 'email_exists':
-            return new ApiResponse({
+            return new RestResponse({
               errorMessage: 'E-mail já em uso',
               statusCode: HTTP_STATUS_CODE.conflict,
             })
           case 'over_request_rate_limit':
-            return new ApiResponse({
+            return new RestResponse({
               errorMessage: 'E-mail já em uso',
               statusCode: HTTP_STATUS_CODE.tooManyRequests,
             })
@@ -51,7 +51,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
 
       const userId = data.user?.id
 
-      return new ApiResponse({
+      return new RestResponse({
         body: { userId: String(userId) },
         statusCode: HTTP_STATUS_CODE.created,
       })
@@ -63,7 +63,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
       if (error)
         return SupabaseAuthError(error, 'Erro inesperado ao tentar sair da conta')
 
-      return new ApiResponse({ body: true })
+      return new RestResponse({ body: true })
     },
 
     async requestPasswordReset(email: string) {
@@ -74,7 +74,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
       if (error)
         return SupabaseAuthError(error, 'Erro inesperado ao tentar sair da conta')
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async resetPassword(newPassword: string, accessToken: string, refreshToken: string) {
@@ -93,7 +93,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
 
       if (error) return SupabaseAuthError(error, 'Erro inesperado ao redefinir a senha')
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async confirmEmail(token: string) {
@@ -111,7 +111,7 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
 
       if (error) return SupabaseAuthError(error, 'Error inesperado ao confirmar email')
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async confirmPasswordReset(token: string) {
@@ -128,13 +128,13 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
       }
 
       if (!session) {
-        return new ApiResponse<{ accessToken: string; refreshToken: string }>({
+        return new RestResponse<{ accessToken: string; refreshToken: string }>({
           errorMessage: 'Sessão não encontrada',
           statusCode: HTTP_STATUS_CODE.unauthorized,
         })
       }
 
-      return new ApiResponse({
+      return new RestResponse({
         body: {
           accessToken: session.access_token,
           refreshToken: session.refresh_token,
@@ -152,12 +152,12 @@ export const SupabaseAuthService = (supabase: Supabase): IAuthService => {
 
       if (error) return SupabaseAuthError(error, errorMessage)
       if (!user)
-        return new ApiResponse({
+        return new RestResponse({
           errorMessage,
           statusCode: HTTP_STATUS_CODE.unauthorized,
         })
 
-      return new ApiResponse({ body: user.id })
+      return new RestResponse({ body: user.id })
     },
   }
 }

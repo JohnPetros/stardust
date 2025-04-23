@@ -1,27 +1,27 @@
 import type { RankingUser } from '../../../ranking/domain/entities'
 import type { RankingUserDto, TierDto } from '../../../ranking/dtos'
-import type { ApiResponse } from '../../responses'
+import type { RestResponse } from '../../responses'
 
 export interface IRankingService {
-  fetchTierById(tierId: string): Promise<ApiResponse<TierDto>>
-  fetchTierByPosition(tierPosition: number): Promise<ApiResponse<TierDto>>
-  fetchTiers(): Promise<ApiResponse<TierDto[]>>
-  fetchFirstTier(): Promise<ApiResponse<TierDto>>
-  fetchRankingUsersByTier(tierId: string): Promise<ApiResponse<RankingUserDto[]>>
-  fetchLastWeekRankingUsersByTier(tierId: string): Promise<ApiResponse<RankingUserDto[]>>
-  fetchRankingLosersByTier(tierId: string): Promise<ApiResponse<RankingUserDto[]>>
-  fetchRankingWinnersByTier(tierId: string): Promise<ApiResponse<RankingUserDto[]>>
-  saveRankingLosers(losers: RankingUser[], tierId: string): Promise<ApiResponse>
-  saveRankingWinners(winners: RankingUser[], tierId: string): Promise<ApiResponse>
+  fetchTierById(tierId: string): Promise<RestResponse<TierDto>>
+  fetchTierByPosition(tierPosition: number): Promise<RestResponse<TierDto>>
+  fetchTiers(): Promise<RestResponse<TierDto[]>>
+  fetchFirstTier(): Promise<RestResponse<TierDto>>
+  fetchRankingUsersByTier(tierId: string): Promise<RestResponse<RankingUserDto[]>>
+  fetchLastWeekRankingUsersByTier(tierId: string): Promise<RestResponse<RankingUserDto[]>>
+  fetchRankingLosersByTier(tierId: string): Promise<RestResponse<RankingUserDto[]>>
+  fetchRankingWinnersByTier(tierId: string): Promise<RestResponse<RankingUserDto[]>>
+  saveRankingLosers(losers: RankingUser[], tierId: string): Promise<RestResponse>
+  saveRankingWinners(winners: RankingUser[], tierId: string): Promise<RestResponse>
   fetchLastWeekRankingUserTierPosition(
     rankingUserId: string,
-  ): Promise<ApiResponse<{ position: number }>>
-  updateLastWeekRankingPositions(): Promise<ApiResponse>
+  ): Promise<RestResponse<{ position: number }>>
+  updateLastWeekRankingPositions(): Promise<RestResponse>
   updateRankingUsersTier(
     rankingUsers: RankingUser[],
     tierId: string,
-  ): Promise<ApiResponse>
-  allowUsersSeeRankingResult(): Promise<ApiResponse>
-  deleteLastWeekRankingUsers(): Promise<ApiResponse>
-  resetRankingUsersXp(): Promise<ApiResponse>
+  ): Promise<RestResponse>
+  allowUsersSeeRankingResult(): Promise<RestResponse>
+  deleteLastWeekRankingUsers(): Promise<RestResponse>
+  resetRankingUsersXp(): Promise<RestResponse>
 }

@@ -1,4 +1,4 @@
-import { ApiResponse, PaginationResponse } from '@stardust/core/global/responses'
+import { RestResponse, PaginationResponse } from '@stardust/core/global/responses'
 import type { ChallengesListParams } from '@stardust/core/challenging/types'
 import type { ChallengeCategoryDto } from '@stardust/core/challenging/dtos'
 import type { IChallengingService } from '@stardust/core/global/interfaces'
@@ -31,7 +31,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
 
       const challengeDto = supabaseChallengeMapper.toDto(data)
 
-      return new ApiResponse({ body: challengeDto })
+      return new RestResponse({ body: challengeDto })
     },
 
     async fetchChallengeBySlug(challengeSlug: string) {
@@ -51,7 +51,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
 
       const challengeDto = supabaseChallengeMapper.toDto(data)
 
-      return new ApiResponse({ body: challengeDto })
+      return new RestResponse({ body: challengeDto })
     },
 
     async fetchSolutionById(solutionId) {
@@ -67,7 +67,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
 
       const solutionDto = supabaseSolutionMapper.toDto(data)
 
-      return new ApiResponse({ body: solutionDto })
+      return new RestResponse({ body: solutionDto })
     },
 
     async fetchChallengeByStarId(starId: string) {
@@ -85,7 +85,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         )
       }
 
-      return new ApiResponse({ body: supabaseChallengeMapper.toDto(data) })
+      return new RestResponse({ body: supabaseChallengeMapper.toDto(data) })
     },
 
     async fetchChallengeBySolutionId(solutionId: string) {
@@ -121,7 +121,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         )
       }
 
-      return new ApiResponse({ body: supabaseChallengeMapper.toDto(data) })
+      return new RestResponse({ body: supabaseChallengeMapper.toDto(data) })
     },
 
     async fetchCompletableChallenges(userId: string) {
@@ -138,7 +138,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         )
       }
 
-      return new ApiResponse({
+      return new RestResponse({
         body: data.map(({ id, difficulty_level }) => {
           return {
             id,
@@ -213,7 +213,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
 
       const challenges = data.map(supabaseChallengeMapper.toDto)
 
-      return new ApiResponse({ body: new PaginationResponse(challenges, Number(count)) })
+      return new RestResponse({ body: new PaginationResponse(challenges, Number(count)) })
     },
 
     async fetchSolutionsList({ page, itemsPerPage, title, sorter, userId, challengeId }) {
@@ -268,7 +268,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
 
       const solutions = data.map(supabaseSolutionMapper.toDto)
 
-      return new ApiResponse({ body: new PaginationResponse(solutions, Number(count)) })
+      return new RestResponse({ body: new PaginationResponse(solutions, Number(count)) })
     },
 
     async fetchCategories() {
@@ -286,7 +286,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         name: category.name,
       }))
 
-      return new ApiResponse({ body: categories })
+      return new RestResponse({ body: categories })
     },
 
     async fetchChallengeVote(challengeId: string, userId: string) {
@@ -304,7 +304,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         )
       }
 
-      return new ApiResponse({ body: { challengeVote: data.vote } })
+      return new RestResponse({ body: { challengeVote: data.vote } })
     },
 
     async fetchSolutionBySlug(solutionSlug: string) {
@@ -324,7 +324,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
 
       const challengeDto = supabaseSolutionMapper.toDto(data)
 
-      return new ApiResponse({ body: challengeDto })
+      return new RestResponse({ body: challengeDto })
     },
 
     async fetchDocs() {
@@ -342,7 +342,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
 
       const docs = data.map(supabaseDocMapper.toDto, status)
 
-      return new ApiResponse({ body: docs })
+      return new RestResponse({ body: docs })
     },
 
     async saveChallenge(challenge) {
@@ -363,7 +363,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         return SupabasePostgrestError(error, 'Erro inesperado ao salvar desafio', status)
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async saveChallengeCategories(challengeId, challengeCategories) {
@@ -382,7 +382,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async saveSolution(solution, challengeId) {
@@ -402,7 +402,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         return SupabasePostgrestError(error, 'Erro inesperado ao salvar solução', status)
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async saveSolutionUpvote(solutionId, userId) {
@@ -419,7 +419,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async saveCompletedChallenge(challengeId: string, userId: string) {
@@ -435,7 +435,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async saveChallengeVote(challengeId, userId, challengeVote) {
@@ -453,7 +453,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async updateChallengeVote(challengeId, userId, challengeVote) {
@@ -472,7 +472,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async updateSolution(solution) {
@@ -496,7 +496,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async updateChallenge(challenge) {
@@ -525,7 +525,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async deleteChallenge(challengeId) {
@@ -542,7 +542,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async deleteChallengeVote(challengeId, userId) {
@@ -558,7 +558,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         return SupabasePostgrestError(error, 'Error inesperado ao remover voto', status)
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async deleteSolution(solutionId) {
@@ -574,7 +574,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async deleteSolutionUpvote(solutionId: string, userId: string) {
@@ -591,7 +591,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async deleteChallengeCategories(challengeId: string) {
@@ -608,7 +608,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
   }
 }

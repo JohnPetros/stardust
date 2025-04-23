@@ -12,10 +12,10 @@ import {
 import { ZodValidationErrorFactory } from '@stardust/validation/factories'
 
 import { NextHttp } from '../NextHttp'
-import type { ApiResponse } from '@stardust/core/global/responses'
+import type { RestResponse } from '@stardust/core/global/responses'
 
 export async function runApiRoute(
-  apiRoute: () => Promise<ApiResponse>,
+  apiRoute: () => Promise<RestResponse>,
 ): Promise<Response> {
   const http = await NextHttp()
 
