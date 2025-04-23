@@ -1,5 +1,5 @@
 import type { UserDto } from '../../dtos'
-import type { ApiResponse } from '../../responses'
+import type { RestResponse } from '../../responses'
 
 export type HttpSchema = {
   body?: unknown
@@ -11,7 +11,7 @@ export type HttpMethod = 'GET' | 'POST'
 
 export interface IHttp<Schema extends HttpSchema = HttpSchema, Response = unknown> {
   getCurrentRoute(): string
-  redirect(route: string): ApiResponse
+  redirect(route: string): RestResponse
   getBody(): Schema['body']
   getRouteParams(): Schema['routeParams']
   getQueryParams(): Schema['queryParams']
@@ -21,6 +21,6 @@ export interface IHttp<Schema extends HttpSchema = HttpSchema, Response = unknow
   getCookie(key: string): Promise<string | null>
   deleteCookie(key: string): Promise<void>
   hasCookie(key: string): Promise<boolean>
-  pass(): ApiResponse
-  send(data?: unknown, statusCode?: number): ApiResponse<Response>
+  pass(): RestResponse
+  send(data?: unknown, statusCode?: number): RestResponse<Response>
 }

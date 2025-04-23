@@ -1,4 +1,4 @@
-import { ApiResponse, PaginationResponse } from '@stardust/core/global/responses'
+import { RestResponse, PaginationResponse } from '@stardust/core/global/responses'
 import type { IPlaygroundService } from '@stardust/core/global/interfaces'
 import type { Snippet } from '@stardust/core/playground/entities'
 
@@ -27,7 +27,7 @@ export const SupabasePlaygroundService = (supabase: Supabase): IPlaygroundServic
       }
 
       const snippet = supabaseSnippetMapper.toDto(data)
-      return new ApiResponse({ body: snippet })
+      return new RestResponse({ body: snippet })
     },
 
     async fetchSnippetsList({ page, itemsPerPage, authorId }) {
@@ -48,7 +48,7 @@ export const SupabasePlaygroundService = (supabase: Supabase): IPlaygroundServic
       }
 
       const snippets = data.map(supabaseSnippetMapper.toDto)
-      return new ApiResponse({ body: new PaginationResponse(snippets, Number(count)) })
+      return new RestResponse({ body: new PaginationResponse(snippets, Number(count)) })
     },
 
     async saveSnippet(snippet: Snippet) {
@@ -71,7 +71,7 @@ export const SupabasePlaygroundService = (supabase: Supabase): IPlaygroundServic
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async updateSnippet(snippet: Snippet) {
@@ -92,7 +92,7 @@ export const SupabasePlaygroundService = (supabase: Supabase): IPlaygroundServic
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async deleteSnippet(snippetId: string) {
@@ -109,7 +109,7 @@ export const SupabasePlaygroundService = (supabase: Supabase): IPlaygroundServic
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
   }
 }

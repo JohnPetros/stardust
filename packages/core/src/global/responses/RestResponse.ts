@@ -9,20 +9,20 @@ import {
 } from '../domain/errors'
 import { HTTP_HEADERS } from '../constants'
 
-type ApiResponseProps<Body> = {
+type RestResponseProps<Body> = {
   body?: Body
   statusCode?: number
   errorMessage?: string
   headers?: Record<string, string>
 }
 
-export class ApiResponse<Body = unknown> {
+export class RestResponse<Body = unknown> {
   private readonly _body: Body | null
   private readonly _errorMessage: string | null
   readonly statusCode: number = HTTP_STATUS_CODE.ok
   readonly headers: Record<string, string> = {}
 
-  constructor({ body, statusCode, errorMessage, headers }: ApiResponseProps<Body> = {}) {
+  constructor({ body, statusCode, errorMessage, headers }: RestResponseProps<Body> = {}) {
     this._body = body ?? null
     this._errorMessage = errorMessage ?? null
     if (statusCode) this.statusCode = statusCode

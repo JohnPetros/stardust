@@ -1,18 +1,18 @@
-import type { ApiResponse } from '../../responses'
+import type { RestResponse } from '../../responses'
 
 export interface IAuthService {
-  fetchUserId(): Promise<ApiResponse<string>>
-  signIn(email: string, password: string): Promise<ApiResponse<{ userId: string }>>
-  signUp(email: string, password: string): Promise<ApiResponse<{ userId: string }>>
-  signOut(): Promise<ApiResponse>
-  requestPasswordReset(email: string): Promise<ApiResponse>
+  fetchUserId(): Promise<RestResponse<string>>
+  signIn(email: string, password: string): Promise<RestResponse<{ userId: string }>>
+  signUp(email: string, password: string): Promise<RestResponse<{ userId: string }>>
+  signOut(): Promise<RestResponse>
+  requestPasswordReset(email: string): Promise<RestResponse>
   resetPassword(
     newPassword: string,
     accessToken: string,
     refreshToken: string,
-  ): Promise<ApiResponse>
-  confirmEmail(token: string): Promise<ApiResponse>
+  ): Promise<RestResponse>
+  confirmEmail(token: string): Promise<RestResponse>
   confirmPasswordReset(
     token: string,
-  ): Promise<ApiResponse<{ accessToken: string; refreshToken: string }>>
+  ): Promise<RestResponse<{ accessToken: string; refreshToken: string }>>
 }

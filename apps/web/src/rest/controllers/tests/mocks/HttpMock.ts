@@ -3,7 +3,7 @@ import { UsersFaker } from '@stardust/core/fakers/entities'
 import type { UserDto } from '@stardust/core/global/dtos'
 import { MethodNotImplementedError } from '@stardust/core/global/errors'
 import type { IHttp, HttpSchema } from '@stardust/core/global/interfaces'
-import { ApiResponse } from '@stardust/core/global/responses'
+import { RestResponse } from '@stardust/core/global/responses'
 
 type Cookie = {
   key: string
@@ -40,7 +40,7 @@ export const HttpMock = <FakeSchema extends HttpSchema>({
     },
 
     redirect(route: string) {
-      return new ApiResponse({
+      return new RestResponse({
         statusCode: HTTP_STATUS_CODE.redirect,
         headers: { [HTTP_HEADERS.location]: route },
       })
@@ -75,11 +75,11 @@ export const HttpMock = <FakeSchema extends HttpSchema>({
     },
 
     pass() {
-      return new ApiResponse({ headers: { [HTTP_HEADERS.xPass]: 'true' } })
+      return new RestResponse({ headers: { [HTTP_HEADERS.xPass]: 'true' } })
     },
 
     send(body: unknown, statusCode: number) {
-      return new ApiResponse({ body, statusCode })
+      return new RestResponse({ body, statusCode })
     },
   }
 }

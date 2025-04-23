@@ -1,6 +1,6 @@
 import type { IProfileService } from '@stardust/core/global/interfaces'
 import type { User } from '@stardust/core/global/entities'
-import { ApiResponse } from '@stardust/core/global/responses'
+import { RestResponse } from '@stardust/core/global/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { WeekStatus } from '@stardust/core/profile/structs'
 
@@ -53,7 +53,7 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
 
       const userDto = supabaseUserMapper.toDto(supabaseUser)
 
-      return new ApiResponse({ body: userDto })
+      return new RestResponse({ body: userDto })
     },
 
     async fetchUserBySlug(userSlug: string) {
@@ -84,7 +84,7 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
       }
 
       const userDto = supabaseUserMapper.toDto(supabaseUser)
-      return new ApiResponse({ body: userDto })
+      return new RestResponse({ body: userDto })
     },
 
     async fetchUsers() {
@@ -107,7 +107,7 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
         return SupabasePostgrestError(error, 'Erro inesperado ao buscar usuários', status)
 
       const usersDto = data.map(supabaseUserMapper.toDto)
-      return new ApiResponse({ body: usersDto })
+      return new RestResponse({ body: usersDto })
     },
 
     async fetchUserName(name: string) {
@@ -124,7 +124,7 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
           HTTP_STATUS_CODE.notFound,
         )
 
-      return new ApiResponse({ body: data.name })
+      return new RestResponse({ body: data.name })
     },
 
     async fetchUserEmail(email: string) {
@@ -141,7 +141,7 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
           HTTP_STATUS_CODE.notFound,
         )
 
-      return new ApiResponse({ body: data.email })
+      return new RestResponse({ body: data.email })
     },
 
     async resetWeekStatus() {
@@ -157,7 +157,7 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
           HTTP_STATUS_CODE.notFound,
         )
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async saveUser(user: User) {
@@ -184,7 +184,7 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
       if (error)
         return SupabasePostgrestError(error, 'Error inesperado ao cadastrar usuário')
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async fetchAchievements() {
@@ -199,7 +199,7 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
 
       const achievements = data.map(supabaseAchievementMapper.toDto)
 
-      return new ApiResponse({ body: achievements })
+      return new RestResponse({ body: achievements })
     },
 
     async fetchUnlockedAchievements(userId: string) {
@@ -218,7 +218,7 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
 
       const achievements = data.map(supabaseAchievementMapper.toDto)
 
-      return new ApiResponse({ body: achievements })
+      return new RestResponse({ body: achievements })
     },
 
     async saveUnlockedAchievement(achievementId: string, userId: string) {
@@ -230,7 +230,7 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
         return SupabasePostgrestError(error, 'Erro inesperado ao salvar conquista')
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async saveRescuableAchievement(achievementId: string, userId: string) {
@@ -245,7 +245,7 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async updateUser(user: User) {
@@ -260,7 +260,7 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
         return SupabasePostgrestError(error, 'Error inesperado ao atualizar usuário')
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async deleteRescuableAchievement(achievementId: string, userId: string) {
@@ -279,7 +279,7 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
   }
 }

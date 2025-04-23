@@ -1,6 +1,6 @@
 import type { ISpaceService } from '@stardust/core/global/interfaces'
 import type { Planet } from '@stardust/core/space/entities'
-import { ApiResponse } from '@stardust/core/global/responses'
+import { RestResponse } from '@stardust/core/global/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 import type { Supabase } from '../types/Supabase'
@@ -27,7 +27,7 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
 
       const planets = data.map(supabasePlanetMapper.toDto)
 
-      return new ApiResponse({ body: planets })
+      return new RestResponse({ body: planets })
     },
 
     async fetchPlanetByStar(starId: string) {
@@ -58,7 +58,7 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
         )
       }
 
-      return new ApiResponse({ body: supabasePlanetMapper.toDto(data) })
+      return new RestResponse({ body: supabasePlanetMapper.toDto(data) })
     },
 
     async fetchFirstPlanet() {
@@ -79,7 +79,7 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
 
       const planet = supabasePlanetMapper.toDto(data)
 
-      return new ApiResponse({ body: planet })
+      return new RestResponse({ body: planet })
     },
 
     async fetchStarBySlug(starSlug: string) {
@@ -99,7 +99,7 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
 
       const star = supabaseStarMapper.toDto(data)
 
-      return new ApiResponse({ body: star })
+      return new RestResponse({ body: star })
     },
 
     async fetchStarById(starId: string) {
@@ -119,7 +119,7 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
 
       const starDto = supabaseStarMapper.toDto(data)
 
-      return new ApiResponse({ body: starDto })
+      return new RestResponse({ body: starDto })
     },
 
     async saveUnlockedStar(starId: string, userId: string) {
@@ -131,7 +131,7 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
         return SupabasePostgrestError(error, 'Erro inesperado ao desbloquear estrela')
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async fetchNextStarFromNextPlanet(starPlanet: Planet) {
@@ -154,7 +154,7 @@ export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
 
       const star = supabaseStarMapper.toDto(data)
 
-      return new ApiResponse({ body: star })
+      return new RestResponse({ body: star })
     },
   }
 }

@@ -2,7 +2,7 @@ import type { ILessonService } from '@stardust/core/global/interfaces'
 
 import type { Supabase } from '../types/Supabase'
 import { SupabasePostgrestError } from '../errors'
-import { ApiResponse } from '@stardust/core/global/responses'
+import { RestResponse } from '@stardust/core/global/responses'
 import type { TextBlockDto } from '@stardust/core/global/dtos'
 import type { QuestionDto } from '@stardust/core/lesson/dtos'
 
@@ -23,7 +23,7 @@ export const SupabaseLessonService = (supabase: Supabase): ILessonService => {
         )
       }
 
-      return new ApiResponse({
+      return new RestResponse({
         body: data.questions as QuestionDto[],
       })
     },
@@ -51,7 +51,7 @@ export const SupabaseLessonService = (supabase: Supabase): ILessonService => {
         },
       )
 
-      return new ApiResponse({ body: textsBlocks })
+      return new RestResponse({ body: textsBlocks })
     },
 
     async fetchStarStory(starId) {
@@ -68,7 +68,7 @@ export const SupabaseLessonService = (supabase: Supabase): ILessonService => {
         )
       }
 
-      return new ApiResponse({ body: { story: data.story ?? '' } })
+      return new RestResponse({ body: { story: data.story ?? '' } })
     },
   }
 }

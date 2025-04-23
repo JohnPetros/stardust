@@ -1,4 +1,4 @@
-import { ApiResponse, PaginationResponse } from '@stardust/core/global/responses'
+import { RestResponse, PaginationResponse } from '@stardust/core/global/responses'
 import type { IForumService } from '@stardust/core/global/interfaces'
 import type { Comment } from '@stardust/core/forum/entities'
 
@@ -27,7 +27,7 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
       }
 
       const comment = supabaseCommentMapper.toDto(data)
-      return new ApiResponse({ body: comment })
+      return new RestResponse({ body: comment })
     },
 
     async fetchChallengeCommentsList(
@@ -61,7 +61,7 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
 
       const comments = data.map(supabaseCommentMapper.toDto)
 
-      return new ApiResponse({ body: new PaginationResponse(comments, Number(count)) })
+      return new RestResponse({ body: new PaginationResponse(comments, Number(count)) })
     },
 
     async fetchSolutionCommentsList(
@@ -95,7 +95,7 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
 
       const comments = data.map(supabaseCommentMapper.toDto)
 
-      return new ApiResponse({ body: new PaginationResponse(comments, Number(count)) })
+      return new RestResponse({ body: new PaginationResponse(comments, Number(count)) })
     },
 
     async fetchCommentReplies(commentId: string) {
@@ -115,7 +115,7 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
 
       const replies = data.map(supabaseCommentMapper.toDto)
 
-      return new ApiResponse({ body: replies })
+      return new RestResponse({ body: replies })
     },
 
     async saveChallengeComment(comment: Comment, challengeId: string) {
@@ -153,7 +153,7 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async saveSolutionComment(comment: Comment, solutionId: string) {
@@ -189,7 +189,7 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async saveCommentReply(reply: Comment, commentId: string) {
@@ -211,7 +211,7 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async saveCommentUpvote(commentId, userId) {
@@ -228,7 +228,7 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async updateCommentContent(commentContent: string, commentId: string) {
@@ -247,7 +247,7 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async deleteComment(commentId: string) {
@@ -264,7 +264,7 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async deleteCommentUpvote(commentId: string, userId: string) {
@@ -281,7 +281,7 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
   }
 }
