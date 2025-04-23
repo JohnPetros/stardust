@@ -1,6 +1,6 @@
-import type { NextParams } from '@/server/next/types'
+import type { NextParams } from '@/rpc/next/types'
 import { LessonPage } from '@/ui/lesson/widgets/pages/Lesson'
-import { lessonActions, spaceActions } from '@/server/next-safe-action'
+import { lessonActions, spaceActions } from '@/rpc/next-safe-action'
 
 export default async function Lesson({ params }: NextParams<{ starSlug: string }>) {
   const spaceResponse = await spaceActions.accessStarPage({ starSlug: params.starSlug })

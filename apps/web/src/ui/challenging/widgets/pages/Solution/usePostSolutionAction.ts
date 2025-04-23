@@ -3,8 +3,8 @@ import { useAction } from 'next-safe-action/hooks'
 
 import { Solution } from '@stardust/core/challenging/entities'
 
-import type { ActionParams } from '@/server/next-safe-action/types'
-import { challengingActions } from '@/server/next-safe-action'
+import type { ActionParams } from '@/rpc/next-safe-action/types'
+import { challengingActions } from '@/rpc/next-safe-action'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
 type PostSolutionActionProps = {

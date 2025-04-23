@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { idSchema } from '@stardust/validation/global/schemas'
 
-import type { NextParams } from '@/server/next/types'
+import type { NextParams } from '@/rpc/next/types'
 import { NextHttp } from '@/rest/next/NextHttp'
 import { runApiRoute } from '@/rest/next/utils'
 import { SupabaseProfileService } from '@/rest/supabase/services'

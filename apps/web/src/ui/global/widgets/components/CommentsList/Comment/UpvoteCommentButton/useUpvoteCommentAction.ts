@@ -1,6 +1,6 @@
 import { useAction } from 'next-safe-action/hooks'
 
-import { forumActions } from '@/server/next-safe-action'
+import { forumActions } from '@/rpc/next-safe-action'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
 type UseUpvoteCommentActionProps = {

@@ -1,5 +1,5 @@
-import { challengingActions } from '@/server/next-safe-action'
-import type { NextParams } from '@/server/next/types'
+import { challengingActions } from '@/rpc/next-safe-action'
+import type { NextParams } from '@/rpc/next/types'
 import { ChallengeCommentsSlot } from '@/ui/challenging/widgets/slots/ChallengeComments'
 
 export default async function Slot({ params }: NextParams<{ challengeSlug: string }>) {

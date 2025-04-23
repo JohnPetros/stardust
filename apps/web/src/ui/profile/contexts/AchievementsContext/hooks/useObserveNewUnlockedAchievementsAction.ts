@@ -1,7 +1,7 @@
 import { useAction } from 'next-safe-action/hooks'
 import { useCallback } from 'react'
 
-import { profileActions } from '@/server/next-safe-action'
+import { profileActions } from '@/rpc/next-safe-action'
 
 export function useObserveNewUnlockedAchievementsAction(onError: VoidFunction) {
   const { executeAsync } = useAction(profileActions.obsverNewUnlockedAchievements, {

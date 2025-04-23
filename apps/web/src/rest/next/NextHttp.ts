@@ -9,10 +9,10 @@ import { ApiResponse } from '@stardust/core/global/responses'
 import { AppError, MethodNotImplementedError } from '@stardust/core/global/errors'
 import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
-import type { NextParams } from '@/server/next/types'
+import type { NextParams } from '@/rpc/next/types'
 import { SupabaseRouteHandlerClient } from '../supabase/clients'
 import { SupabaseAuthService, SupabaseProfileService } from '../supabase/services'
-import { cookieActions } from '@/server/next-safe-action'
+import { cookieActions } from '@/rpc/next-safe-action'
 import { ENV } from '@/constants'
 
 type Cookie = {

@@ -1,4 +1,4 @@
-import { cookieActions } from '@/server/next-safe-action'
+import { cookieActions } from '@/rpc/next-safe-action'
 import { COOKIES } from '@/constants'
 import { ResetPasswordPage } from '@/ui/auth/widgets/pages/ResetPassword'
 

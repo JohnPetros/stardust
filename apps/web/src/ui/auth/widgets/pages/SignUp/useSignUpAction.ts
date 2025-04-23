@@ -1,5 +1,5 @@
 import { useAction } from 'next-safe-action/hooks'
-import { authActions } from '@/server/next-safe-action'
+import { authActions } from '@/rpc/next-safe-action'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
 export function useSignUpAction(onSuccess: (userId: string) => void) {
