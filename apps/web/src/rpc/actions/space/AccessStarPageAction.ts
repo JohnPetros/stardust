@@ -1,8 +1,4 @@
-import type {
-  IAction,
-  IActionServer,
-  ISpaceService,
-} from '@stardust/core/global/interfaces'
+import type { Action, Call, ISpaceService } from '@stardust/core/global/interfaces'
 import type { StarDto } from '@stardust/core/space/dtos'
 import { User } from '@stardust/core/global/entities'
 import { Star } from '@stardust/core/space/entities'
@@ -15,18 +11,18 @@ type Response = StarDto
 
 export const AccessStarPageAction = (
   service: ISpaceService,
-): IAction<Request, Response> => {
+): Action<Request, Response> => {
   return {
-    async handle(actionServer: IActionServer<Request>) {
-      const { starSlug } = actionServer.getRequest()
-      const user = User.create(await actionServer.getUser())
+    async handle(call: Call<Request>) {
+      const { starSlug } = call.getRequest()
+      const user = User.create(await call.getUser())
 
       const starResponse = await service.fetchStarBySlug(starSlug)
-      if (starResponse.isFailure) actionServer.notFound()
+      if (starResponse.isFailure) call.notFound()
 
       const star = Star.create(starResponse.body)
       const isStarUnlocked = user.hasUnlockedStar(star.id)
-      if (isStarUnlocked.isFalse) actionServer.notFound()
+      if (isStarUnlocked.isFalse) call.notFound()
 
       return star.dto
     },

@@ -1,8 +1,4 @@
-import type {
-  IAction,
-  IActionServer,
-  IForumService,
-} from '@stardust/core/global/interfaces'
+import type { Action, Call, IForumService } from '@stardust/core/global/interfaces'
 import { UpvoteCommentUseCase } from '@stardust/core/forum/use-cases'
 
 type Request = {
@@ -16,11 +12,11 @@ type Response = {
 
 export const UpvoteCommentAction = (
   forumService: IForumService,
-): IAction<Request, Response> => {
+): Action<Request, Response> => {
   return {
-    async handle(actionServer: IActionServer<Request>) {
-      const userDto = await actionServer.getUser()
-      const { commentId } = actionServer.getRequest()
+    async handle(call: Call<Request>) {
+      const userDto = await call.getUser()
+      const { commentId } = call.getRequest()
       const useCase = new UpvoteCommentUseCase(forumService)
       return await useCase.do({
         commentId,

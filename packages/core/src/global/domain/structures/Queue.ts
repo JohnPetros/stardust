@@ -18,7 +18,7 @@ class Node<Value = unknown> {
   }
 }
 
-export class Queue<NodeValue> {
+export class Amqp<NodeValue> {
   readonly firstNode: Node<NodeValue> | null
   readonly lastNode: Node<NodeValue> | null
 
@@ -31,18 +31,18 @@ export class Queue<NodeValue> {
   }
 
   static create<NodeValue>() {
-    return new Queue<NodeValue>(null, null)
+    return new Amqp<NodeValue>(null, null)
   }
 
   enqueue(value: NodeValue) {
     const node = Node.create(value)
 
     if (this.isEmpty) {
-      return new Queue<NodeValue>(node, node)
+      return new Amqp<NodeValue>(node, node)
     }
 
     const lastNode = this.lastNode?.setNextNode(node)
-    return new Queue<NodeValue>(this.firstNode, lastNode ?? null)
+    return new Amqp<NodeValue>(this.firstNode, lastNode ?? null)
   }
 
   dequeue() {
@@ -55,7 +55,7 @@ export class Queue<NodeValue> {
       newLastNode = null
     }
 
-    return new Queue<NodeValue>(newFirstNode, newLastNode)
+    return new Amqp<NodeValue>(newFirstNode, newLastNode)
   }
 
   get isEmpty() {

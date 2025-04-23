@@ -1,4 +1,4 @@
-import type { IJob, IQueue, ISpaceService } from '@stardust/core/global/interfaces'
+import type { Job, Amqp, ISpaceService } from '@stardust/core/global/interfaces'
 import { GetFirstStarIdUseCase, UnlockStarUseCase } from '@stardust/core/space/use-cases'
 import { FirstStarUnlockedEvent } from '@stardust/core/space/events'
 import { UserCreatedEvent } from '@stardust/core/profile/events'
@@ -11,9 +11,9 @@ type Payload = {
   userEmail: string
 }
 
-export const HandleUserSignedUpJob = (spaceService: ISpaceService): IJob => {
+export const HandleUserSignedUpJob = (spaceService: ISpaceService): Job => {
   return {
-    async handle(queue: IQueue<Payload>) {
+    async handle(queue: Amqp<Payload>) {
       const getFirstStarIdUseCase = new GetFirstStarIdUseCase(spaceService)
 
       const { firstUnlockedStarId } = await queue.run<

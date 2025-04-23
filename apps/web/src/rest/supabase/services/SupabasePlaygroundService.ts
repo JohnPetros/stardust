@@ -1,5 +1,5 @@
 import { RestResponse, PaginationResponse } from '@stardust/core/global/responses'
-import type { IPlaygroundService } from '@stardust/core/global/interfaces'
+import type { PlaygroundService } from '@stardust/core/global/interfaces'
 import type { Snippet } from '@stardust/core/playground/entities'
 
 import type { Supabase } from '../types/Supabase'
@@ -7,7 +7,7 @@ import { SupabasePostgrestError } from '../errors'
 import { SupabaseSnippetMapper } from '../mappers'
 import { calculateSupabaseRange } from '../utils'
 
-export const SupabasePlaygroundService = (supabase: Supabase): IPlaygroundService => {
+export const SupabasePlaygroundService = (supabase: Supabase): PlaygroundService => {
   const supabaseSnippetMapper = SupabaseSnippetMapper()
 
   return {

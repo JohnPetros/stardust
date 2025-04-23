@@ -1,9 +1,5 @@
 import { UpvoteSolutionUseCase } from '@stardust/core/challenging/use-cases'
-import type {
-  IAction,
-  IActionServer,
-  IChallengingService,
-} from '@stardust/core/global/interfaces'
+import type { Action, Call, IChallengingService } from '@stardust/core/global/interfaces'
 
 type Request = {
   solutionId: string
@@ -16,11 +12,11 @@ type Response = {
 
 export const UpvoteSolutionAction = (
   challeningService: IChallengingService,
-): IAction<Request, Response> => {
+): Action<Request, Response> => {
   return {
-    async handle(actionServer: IActionServer<Request>) {
-      const userDto = await actionServer.getUser()
-      const { solutionId } = actionServer.getRequest()
+    async handle(call: Call<Request>) {
+      const userDto = await call.getUser()
+      const { solutionId } = call.getRequest()
       const useCase = new UpvoteSolutionUseCase(challeningService)
       return await useCase.do({
         solutionId,

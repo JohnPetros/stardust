@@ -1,6 +1,6 @@
 import type {
-  IAction,
-  IActionServer,
+  Action,
+  Call,
   IChallengingService,
   ISpaceService,
 } from '@stardust/core/global/interfaces'
@@ -22,7 +22,7 @@ type Response = {
 export const AccessChallengePageAction = (
   challengingService: IChallengingService,
   spaceService: ISpaceService,
-): IAction<Request, Response> => {
+): Action<Request, Response> => {
   async function fetchChallenge(challengeSlug: string) {
     const response = await challengingService.fetchChallengeBySlug(challengeSlug)
     if (response.isFailure) response.throwError()
@@ -42,18 +42,18 @@ export const AccessChallengePageAction = (
   }
 
   return {
-    async handle(actionServer: IActionServer<Request>) {
-      const { challengeSlug } = actionServer.getRequest()
-      const user = User.create(await actionServer.getUser())
+    async handle(call: Call<Request>) {
+      const { challengeSlug } = call.getRequest()
+      const user = User.create(await call.getUser())
       const challenge = await fetchChallenge(challengeSlug)
 
       if (challenge.starId) {
         const star = await fetchChallengeStar(challenge.starId.value)
-        if (user.hasUnlockedStar(star.id).isFalse) actionServer.notFound()
+        if (user.hasUnlockedStar(star.id).isFalse) call.notFound()
       }
 
       if (challenge.isPublic.isFalse && challenge.authorId !== user.id) {
-        actionServer.notFound()
+        call.notFound()
       }
 
       const userChallengeVote = await fetchUserChallengeVote(challenge.id, user.id)

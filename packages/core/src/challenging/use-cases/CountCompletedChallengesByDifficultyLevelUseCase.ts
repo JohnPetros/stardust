@@ -5,7 +5,7 @@ import type {
   ChallengeDifficultyLevel,
   CompletedChallengesCountByDifficultyLevel,
 } from '../domain/types'
-import type { IChallengingService, IUseCase } from '../../global/interfaces'
+import type { IChallengingService, UseCase } from '../../global/interfaces'
 import { Percentage } from '../../global/domain/structures'
 
 type Challenge = { id: string; difficulty: ChallengeDifficulty }
@@ -13,7 +13,7 @@ type Challenge = { id: string; difficulty: ChallengeDifficulty }
 type Response = Promise<CompletedChallengesCountByDifficultyLevel>
 
 export class CountCompletedChallengesByDifficultyLevelUseCase
-  implements IUseCase<UserDto, Response>
+  implements UseCase<UserDto, Response>
 {
   constructor(private readonly challengesService: IChallengingService) {}
 

@@ -1,7 +1,7 @@
 'use server'
 
 import { authActionClient } from './clients/authActionClient'
-import { NextActionServer } from '../next/NextActionServer'
+import { NextCall } from '../next/NextCall'
 import {
   AccessEndingPageAction,
   FetchLessonStoryAndQuestionsAction,
@@ -18,23 +18,23 @@ export const fetchLessonStoryAndQuestions = authActionClient
     }),
   )
   .action(async ({ clientInput, ctx }) => {
-    const actionServer = NextActionServer({
+    const call = NextCall({
       request: clientInput,
       user: ctx.user,
     })
     const supabase = SupabaseServerClient()
     const service = SupabaseLessonService(supabase)
     const action = FetchLessonStoryAndQuestionsAction(service)
-    return await action.handle(actionServer)
+    return await action.handle(call)
   })
 
 const accessEndingPage = authActionClient.action(async ({ clientInput, ctx }) => {
-  const actionServer = NextActionServer({
+  const call = NextCall({
     request: clientInput,
     user: ctx.user,
   })
   const action = AccessEndingPageAction()
-  return await action.handle(actionServer)
+  return await action.handle(call)
 })
 
 export { accessEndingPage }

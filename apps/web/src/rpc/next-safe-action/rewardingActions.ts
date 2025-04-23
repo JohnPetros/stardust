@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { idSchema, integerSchema } from '@stardust/validation/global/schemas'
 
 import { authActionClient } from './clients/authActionClient'
-import { NextActionServer } from '../next/NextActionServer'
+import { NextCall } from '../next/NextCall'
 import { SupabaseServerActionClient } from '@/rest/supabase/clients'
 import {
   SupabaseChallengingService,
@@ -28,7 +28,7 @@ export const rewardForStarCompletion = authActionClient
     }),
   )
   .action(async ({ clientInput, ctx }) => {
-    const actionServer = NextActionServer({
+    const call = NextCall({
       request: clientInput,
       user: ctx.user,
     })
@@ -36,7 +36,7 @@ export const rewardForStarCompletion = authActionClient
     const profileService = SupabaseProfileService(supabase)
     const spaceService = SupabaseSpaceService(supabase)
     const action = RewardForStarCompletionAction(profileService, spaceService)
-    return action.handle(actionServer)
+    return action.handle(call)
   })
 
 export const rewardForStarChallengeCompletion = authActionClient
@@ -49,7 +49,7 @@ export const rewardForStarChallengeCompletion = authActionClient
     }),
   )
   .action(async ({ clientInput, ctx }) => {
-    const actionServer = NextActionServer({
+    const call = NextCall({
       request: clientInput,
       user: ctx.user,
     })
@@ -62,7 +62,7 @@ export const rewardForStarChallengeCompletion = authActionClient
       spaceService,
       challengingService,
     )
-    return action.handle(actionServer)
+    return action.handle(call)
   })
 
 export const rewardForChallengeCompletion = authActionClient
@@ -74,7 +74,7 @@ export const rewardForChallengeCompletion = authActionClient
     }),
   )
   .action(async ({ clientInput, ctx }) => {
-    const actionServer = NextActionServer({
+    const call = NextCall({
       request: clientInput,
       user: ctx.user,
     })
@@ -82,5 +82,5 @@ export const rewardForChallengeCompletion = authActionClient
     const profileService = SupabaseProfileService(supabase)
     const challengingService = SupabaseChallengingService(supabase)
     const action = RewardForChallengeCompletionAction(profileService, challengingService)
-    return action.handle(actionServer)
+    return action.handle(call)
   })

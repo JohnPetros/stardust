@@ -1,10 +1,6 @@
 import type { SolutionDto } from '@stardust/core/challenging/dtos'
 import { ViewSolutionUseCase } from '@stardust/core/challenging/use-cases'
-import type {
-  IAction,
-  IActionServer,
-  IChallengingService,
-} from '@stardust/core/global/interfaces'
+import type { Action, Call, IChallengingService } from '@stardust/core/global/interfaces'
 
 type Request = {
   solutionSlug: string
@@ -12,10 +8,10 @@ type Request = {
 
 export const ViewSolutionAction = (
   service: IChallengingService,
-): IAction<Request, SolutionDto> => {
+): Action<Request, SolutionDto> => {
   return {
-    async handle(actionServer: IActionServer<Request>) {
-      const { solutionSlug } = actionServer.getRequest()
+    async handle(call: Call<Request>) {
+      const { solutionSlug } = call.getRequest()
       const useCase = new ViewSolutionUseCase(service)
       return await useCase.do({
         solutionSlug,

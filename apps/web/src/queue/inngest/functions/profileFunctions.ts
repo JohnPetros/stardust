@@ -6,7 +6,7 @@ import {
   ResetWeekStatusJob,
 } from '@/queue/jobs/profile'
 import { JOBS } from '@/queue/constants'
-import { InngestQueue } from '../InngestQueue'
+import { InngestAmqp } from '../InngestAmqp'
 import { inngest } from '../client'
 
 const handleFirstTierReached = inngest.createFunction(
@@ -15,7 +15,7 @@ const handleFirstTierReached = inngest.createFunction(
   async (context) => {
     const supabase = SupabaseServerClient()
     const service = SupabaseProfileService(supabase)
-    const queue = InngestQueue<typeof context.event.data>(context)
+    const queue = InngestAmqp<typeof context.event.data>(context)
     const job = HandleFirstTierReachedJob(service)
     return job.handle(queue)
   },
@@ -28,7 +28,7 @@ const observeStreakBreak = inngest.createFunction(
     const supabase = SupabaseServerClient()
     const service = SupabaseProfileService(supabase)
     const job = ObserveStreakBreakJob(service)
-    const queue = InngestQueue(context)
+    const queue = InngestAmqp(context)
     return job.handle(queue)
   },
 )
@@ -40,7 +40,7 @@ const resetWeekStatus = inngest.createFunction(
     const supabase = SupabaseServerClient()
     const service = SupabaseProfileService(supabase)
     const job = ResetWeekStatusJob(service)
-    const queue = InngestQueue(context)
+    const queue = InngestAmqp(context)
     return job.handle(queue)
   },
 )

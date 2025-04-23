@@ -1,11 +1,11 @@
-import type { IRankingService, IUseCase } from '../../global/interfaces'
+import type { IRankingService, UseCase } from '../../global/interfaces'
 import { Tier } from '../domain/entities'
 
 type Reponse = Promise<{
   firstTierId: string
 }>
 
-export class GetFirstTierIdUseCase implements IUseCase<void, Reponse> {
+export class GetFirstTierIdUseCase implements UseCase<void, Reponse> {
   constructor(private readonly rankingService: IRankingService) {}
 
   async do() {

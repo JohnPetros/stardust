@@ -1,11 +1,11 @@
-import type { ISpaceService, IUseCase } from '../../global/interfaces'
+import type { ISpaceService, UseCase } from '../../global/interfaces'
 import { Planet } from '../domain/entities'
 
 type Response = Promise<{
   firstUnlockedStarId: string
 }>
 
-export class GetFirstStarIdUseCase implements IUseCase<void, Response> {
+export class GetFirstStarIdUseCase implements UseCase<void, Response> {
   constructor(private readonly spaceService: ISpaceService) {}
 
   async do() {

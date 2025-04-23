@@ -1,4 +1,4 @@
-import type { IEvent } from '../../../global/interfaces'
+import { Event } from '#global/abstracts'
 
 type Payload = {
   user: {
@@ -11,11 +11,10 @@ type Payload = {
   firstTierId: string
 }
 
-export class FirstTierReachedEvent implements IEvent<Payload> {
-  static readonly NAME = 'ranking/first.tier.reached'
-  constructor(readonly payload: Payload) {}
+export class FirstTierReachedEvent extends Event<Payload> {
+  static readonly _NAME = 'ranking/first.tier.reached'
 
-  get name() {
-    return FirstTierReachedEvent.NAME
+  constructor(payload: Payload) {
+    super(FirstTierReachedEvent._NAME, payload)
   }
 }

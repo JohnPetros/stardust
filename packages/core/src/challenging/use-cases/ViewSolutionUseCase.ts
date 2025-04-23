@@ -1,6 +1,6 @@
 import type { UserDto } from '../../global/dtos'
 import { Solution } from '../domain/entities'
-import type { IChallengingService, IUseCase } from '../../global/interfaces'
+import type { IChallengingService, UseCase } from '../../global/interfaces'
 import type { SolutionDto } from '../dtos'
 
 type Request = {
@@ -9,7 +9,7 @@ type Request = {
 
 type Response = Promise<SolutionDto>
 
-export class ViewSolutionUseCase implements IUseCase<Request, Response> {
+export class ViewSolutionUseCase implements UseCase<Request, Response> {
   constructor(private readonly challengingService: IChallengingService) {}
 
   async do({ solutionSlug }: Request) {
