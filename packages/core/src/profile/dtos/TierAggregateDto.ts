@@ -3,5 +3,7 @@ export type TierAggregateDto = {
   entity?: {
     name: string
     image: string
+    position: number
+    reward: number
   }
 }

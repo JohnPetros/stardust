@@ -1,4 +1,4 @@
-import { OrdinalNumber, Logical } from '../../../global/domain/structures'
+import { OrdinalNumber, Logical, type Integer } from '#global/structures'
 
 type LevelProps = {
   number: OrdinalNumber
@@ -30,11 +30,11 @@ export class Level {
     })
   }
 
-  up(currentXp: number, newXp: number) {
-    const xpSum = currentXp + newXp
+  up(currentXp: Integer, newXp: Integer) {
+    const xpSum = currentXp.plus(newXp)
 
     const hasNewLevel =
-      xpSum >= Level.BASE_INCREASE_XP * (this.number.value - 1) + Level.MINIMUM_XP
+      xpSum.value >= Level.BASE_INCREASE_XP * (this.number.value - 1) + Level.MINIMUM_XP
 
     if (hasNewLevel) {
       return new Level({

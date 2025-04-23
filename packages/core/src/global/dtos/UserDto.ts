@@ -1,5 +1,8 @@
-import type { TierDto } from '../../ranking/dtos'
-import type { AvatarDto, RocketDto } from '../../shop/dtos'
+import type {
+  AvatarAggregateDto,
+  RocketAggregateDto,
+  TierAggregateDto,
+} from '#profile/dtos'
 
 export type UserDto = {
   id?: string
@@ -12,18 +15,9 @@ export type UserDto = {
   weeklyXp?: number
   weekStatus?: string[]
   streak?: number
-  rocket: {
-    id: string
-    dto?: RocketDto
-  }
-  avatar: {
-    id: string
-    dto?: AvatarDto
-  }
-  tier: {
-    id: string
-    dto?: TierDto
-  }
+  rocket: RocketAggregateDto
+  avatar: AvatarAggregateDto
+  tier: TierAggregateDto
   unlockedStarsIds?: string[]
   acquiredRocketsIds?: string[]
   unlockedDocsIds?: string[]
