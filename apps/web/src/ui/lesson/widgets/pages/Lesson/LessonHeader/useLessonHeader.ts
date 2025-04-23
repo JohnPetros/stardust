@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { LessonProgress } from '@stardust/core/lesson/structs'
+import { LessonProgress } from '@stardust/core/lesson/structures'
 
 import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 

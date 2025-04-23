@@ -1,6 +1,6 @@
 import type { IRankingService } from '../../global/interfaces'
 import { Tier, type RankingUser } from '../domain/entities'
-import { Ranking } from '../domain/structs'
+import { Ranking } from '../domain/structures'
 
 export class UpdateRankingsUseCase {
   constructor(private readonly rankingService: IRankingService) {}

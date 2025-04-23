@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 
 import type { RankingUserDto } from '@stardust/core/ranking/dtos'
-import { Ranking } from '@stardust/core/ranking/structs'
+import { Ranking } from '@stardust/core/ranking/structures'
 
 export function useRankingProvider(rankingUsers: RankingUserDto[]) {
   const [ranking, setRanking] = useState<Ranking | null>(null)

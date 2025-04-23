@@ -1,4 +1,4 @@
-import { OrdinalNumber } from '#global/structs'
+import { OrdinalNumber } from '../../../global/domain/structures'
 import { RANKING } from '../constants'
 
 export class RankingPosition {

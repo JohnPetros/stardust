@@ -1,4 +1,4 @@
-import { Slug } from '@stardust/core/global/structs'
+import { Slug } from '@stardust/core/global/structures'
 import type { IController, IHttp } from '@stardust/core/global/interfaces'
 import type { IAuthService } from '@stardust/core/global/interfaces'
 

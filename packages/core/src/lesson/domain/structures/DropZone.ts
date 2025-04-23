@@ -1,4 +1,4 @@
-import { Integer, Logical } from '#global/structs'
+import { Integer, Logical } from '../../../global/domain/structures'
 import type { DropZoneDto } from '../../dtos'
 import { StringValidation } from '../../../global/libs'
 

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import type { PopoverMenuButton } from '@/ui/global/widgets/components/PopoverMenu/types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useAchievementsContext } from '@/ui/profile/contexts/AchievementsContext'
-import { AchievementsList as AchievementsListStruct } from '@stardust/core/profile/structs'
+import { AchievementsList as AchievementsListStruct } from '@stardust/core/profile/structures'
 
 type Sorter = 'Ordem padrão' | 'Desbloqueadas' | 'Bloqueadas'
 

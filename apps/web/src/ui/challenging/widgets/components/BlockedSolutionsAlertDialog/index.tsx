@@ -1,7 +1,7 @@
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { Button } from '@/ui/global/widgets/components/Button'
-import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
+import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structures'
 import type { ReactNode } from 'react'
 
 type BlockedCommentsAlertDialogProps = {

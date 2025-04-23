@@ -2,7 +2,7 @@ import type { IAuthService, IController, IHttp } from '@stardust/core/global/int
 
 import { COOKIES, ROUTES } from '@/constants'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
-import { Slug } from '@stardust/core/global/structs'
+import { Slug } from '@stardust/core/global/structures'
 
 type Schema = {
   queryParams: {

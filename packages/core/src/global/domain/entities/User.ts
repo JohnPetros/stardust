@@ -9,12 +9,12 @@ import {
   type Slug,
   type Observer,
   type List,
-} from '../structs'
+} from '../structures'
 import { UserFactory } from '../factories'
 import type { Avatar, Rocket } from '../../../shop/domain/entities'
-import type { Level, WeekStatus } from '../../../profile/domain/structs'
+import type { Level, WeekStatus } from '../../../profile/domain/structures'
 import type { AchievementMetricValue } from '../../../profile/domain/types'
-import type { RankingPosition } from '../../../ranking/domain/structs'
+import type { RankingPosition } from '../../../ranking/domain/structures'
 import type { Comment } from '../../../forum/domain/entities'
 import type { Challenge, Solution } from '../../../challenging/domain/entities'
 import { PLANETS_COUNT } from '../../../space/domain/constants'

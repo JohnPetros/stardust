@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-import { UserAnswer } from '@stardust/core/global/structs'
+import { UserAnswer } from '@stardust/core/global/structures'
 import type {
   ChallengeRewardingPayload,
   StarChallengeRewardingPayload,

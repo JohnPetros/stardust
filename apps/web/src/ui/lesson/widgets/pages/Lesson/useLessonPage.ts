@@ -10,10 +10,10 @@ import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 import { useSecondsCounter } from '@/ui/global/hooks/useSecondsCounter'
 import { useRouter } from '@/ui/global/hooks/useRouter'
-import { Quiz, Story } from '@stardust/core/lesson/structs'
+import { Quiz, Story } from '@stardust/core/lesson/structures'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 import type { StarRewardingPayload } from '@stardust/core/space/types'
-import { TextBlock } from '@stardust/core/global/structs'
+import { TextBlock } from '@stardust/core/global/structures'
 import { useMdx } from '@/ui/global/widgets/components/Mdx/hooks/useMdx'
 
 export function useLessonPage(

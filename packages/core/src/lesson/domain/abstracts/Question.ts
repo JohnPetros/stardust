@@ -1,5 +1,5 @@
 import { Entity } from '../../../global/domain/abstracts'
-import type { Logical, UserAnswer } from '#global/structs'
+import type { Logical, UserAnswer } from '../../../global/domain/structures'
 import type { QuestionProps } from '../types'
 
 export abstract class Question<Props = unknown> extends Entity<QuestionProps & Props> {

@@ -1,5 +1,5 @@
 import { Entity } from '../../../global/domain/abstracts'
-import { Image, Name, OrdinalNumber } from '#global/structs'
+import { Image, Name, OrdinalNumber } from '../../../global/domain/structures'
 import type { PlanetDto } from '../../dtos'
 import { EmptyPlanetError } from '../errors'
 import { Star } from './Star'

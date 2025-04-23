@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import type { SortableList } from '@stardust/core/global/structs'
+import type { SortableList } from '@stardust/core/global/structures'
 
 import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 

@@ -1,5 +1,5 @@
 import { Entity } from '../abstracts'
-import { Image, Name, Slug } from '../structs'
+import { Image, Name, Slug } from '../structures'
 import type { AuthorDto } from '../../dtos'
 
 type AuthorProps = {

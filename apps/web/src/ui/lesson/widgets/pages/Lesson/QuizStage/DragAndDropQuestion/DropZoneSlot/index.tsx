@@ -3,7 +3,7 @@
 import { useDroppable } from '@dnd-kit/core'
 import { twMerge } from 'tailwind-merge'
 
-import type { DraggableItem } from '@stardust/core/lesson/structs'
+import type { DraggableItem } from '@stardust/core/lesson/structures'
 
 import { Item } from '../Item'
 import { getItemWidth } from '../getItemWidth'

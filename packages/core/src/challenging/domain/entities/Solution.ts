@@ -1,6 +1,6 @@
 import { Entity } from '../../../global/domain/abstracts'
 import { Author } from '../../../global/domain/entities'
-import { Integer, Logical, Name, Slug, Text } from '#global/structs'
+import { Integer, Logical, Name, Slug, Text } from '../../../global/domain/structures'
 import type { SolutionDto } from '../../dtos'
 import { EntityNotDefinedError } from '../../../global/domain/errors'
 import { Datetime } from '../../../global/libs'
