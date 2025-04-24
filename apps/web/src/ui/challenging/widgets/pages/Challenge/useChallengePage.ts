@@ -54,18 +54,16 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
       setChallenge(challenge)
     }
     if (challenge && user && !craftsVislibility) {
-      const isUserChallengeAuthor = user.id === challenge.authorId
+      const isUserChallengeAuthor = challenge.author.isEqualTo(user)
       const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
       setCraftsVislibility(
         ChallengeCraftsVisibility.create({
-          canShowComments:
-            isUserChallengeAuthor ||
-            isChallengeCompleted.isTrue ||
-            challenge.isCompleted.isTrue,
-          canShowSolutions:
-            isUserChallengeAuthor ||
-            isChallengeCompleted.isTrue ||
-            challenge.isCompleted.isTrue,
+          canShowComments: isUserChallengeAuthor
+            .or(isChallengeCompleted)
+            .or(challenge.isCompleted).isTrue,
+          canShowSolutions: isUserChallengeAuthor
+            .or(isChallengeCompleted)
+            .or(challenge.isCompleted).isTrue,
         }),
       )
     }
@@ -103,7 +101,8 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
   return {
     challenge,
     panelsLayout,
-    shouldHaveConfettiAnimation: isNew && Boolean(challenge?.authorId === user?.id),
+    shouldHaveConfettiAnimation:
+      user && isNew ? challenge?.author.isEqualTo(user).isTrue : false,
     handleBackButton,
     handlePanelsLayoutButton,
   }

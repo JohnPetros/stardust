@@ -23,7 +23,7 @@ export function useAvatarItem({ id, name, price, image }: UseAvatarItemProps) {
   async function handleBuy() {
     if (!user) return
 
-    const response = await api.saveAcquiredAvatar(id, user.id)
+    const response = await api.saveAcquiredAvatar(id, user.id.value)
 
     if (response.isFailure) {
       toast.show(response.errorMessage)

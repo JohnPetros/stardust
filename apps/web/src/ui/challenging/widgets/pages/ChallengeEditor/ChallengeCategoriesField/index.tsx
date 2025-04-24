@@ -36,13 +36,13 @@ export function ChallengeCategoriesField({ categories }: ChallengeCategoriesFiel
           )}
         >
           {categories.map((category) => {
-            const isSelected = selectedCategoriesIds.includes(category.id)
+            const isSelected = selectedCategoriesIds.includes(category.id.value)
             if (isSelected)
               return (
-                <AnimatedTagging.Tag key={category.id}>
+                <AnimatedTagging.Tag key={category.id.value}>
                   <CategoryTag
                     isActive={true}
-                    onClick={() => handleUnselectCategoryButtonClick(category.id)}
+                    onClick={() => handleUnselectCategoryButtonClick(category.id.value)}
                   >
                     {category.name.value}
                   </CategoryTag>
@@ -54,14 +54,16 @@ export function ChallengeCategoriesField({ categories }: ChallengeCategoriesFiel
       </div>
       <div className='flex gap-1 flex-wrap mt-6'>
         {categories.map((category) => {
-          const isSelected = selectedCategoriesIds.includes(category.id)
+          const isSelected = selectedCategoriesIds.includes(category.id.value)
           if (!isSelected)
             return (
-              <AnimatedTagging.Tag key={category.id}>
+              <AnimatedTagging.Tag key={category.id.value}>
                 <CategoryTag
-                  key={category.id}
+                  key={category.id.value}
                   isActive={false}
-                  onClick={() => handleSelecButtonClick(category.id, category.name.value)}
+                  onClick={() =>
+                    handleSelecButtonClick(category.id.value, category.name.value)
+                  }
                 >
                   {category.name.value}
                 </CategoryTag>

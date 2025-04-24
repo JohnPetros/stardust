@@ -10,7 +10,7 @@ export class GetFirstStarIdUseCase implements IUseCase<void, Response> {
 
   async do() {
     const planet = await this.fetchFirstPlanet()
-    return { firstUnlockedStarId: planet.firstStar.id }
+    return { firstUnlockedStarId: planet.firstStar.id.value }
   }
 
   private async fetchFirstPlanet() {

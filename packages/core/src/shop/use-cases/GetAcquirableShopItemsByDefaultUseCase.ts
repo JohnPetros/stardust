@@ -28,10 +28,10 @@ export class GetAcquirableShopItemsByDefaultUseCase implements IUseCase<void, Re
     if (!selectedRocketByDefault) throw new SelectedRocketByDefaultNotFoundError()
 
     return {
-      selectedAvatarByDefaultId: selectedAvatarByDefault.id,
-      selectedRocketByDefaultId: selectedRocketByDefault.id,
-      acquirableAvatarsByDefaultIds: avatars.map((avatar) => avatar.id),
-      acquirableRocketsByDefaultIds: rockets.map((rocket) => rocket.id),
+      selectedAvatarByDefaultId: selectedAvatarByDefault.id.value,
+      selectedRocketByDefaultId: selectedRocketByDefault.id.value,
+      acquirableAvatarsByDefaultIds: avatars.map((avatar) => avatar.id.value),
+      acquirableRocketsByDefaultIds: rockets.map((rocket) => rocket.id.value),
     }
   }
 

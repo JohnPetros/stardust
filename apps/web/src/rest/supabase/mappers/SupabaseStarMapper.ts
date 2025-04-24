@@ -19,7 +19,7 @@ export const SupabaseStarMapper = () => {
       const StarDto = star.dto
 
       const supabaseStar: SupabaseStar = {
-        id: star.id,
+        id: star.id.value,
         name: StarDto.name,
         number: StarDto.number,
         slug: StarDto.slug,

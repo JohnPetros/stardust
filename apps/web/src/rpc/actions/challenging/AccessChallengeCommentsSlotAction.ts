@@ -23,7 +23,7 @@ export const AccessChallengeCommentsSlotAction = (
       if (response.isFailure) response.throwError()
       const challenge = Challenge.create(response.body)
       return {
-        challengeId: challenge.id,
+        challengeId: challenge.id.value,
       }
     },
   }

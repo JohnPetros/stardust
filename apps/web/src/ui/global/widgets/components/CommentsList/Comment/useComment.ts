@@ -44,7 +44,7 @@ export function useComment(commentId: string) {
 
     const reply = Comment.create({
       author: {
-        id: user.id,
+        id: user.id.value,
       },
       content: replyContent,
     })

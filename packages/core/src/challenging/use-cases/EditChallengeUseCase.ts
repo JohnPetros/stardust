@@ -14,13 +14,13 @@ export class EditChallengeUseCase implements IUseCase<Request, Response> {
   async do({ challengeDto }: Request) {
     console.log(challengeDto)
     const challenge = Challenge.create(challengeDto)
-    await this.fetchChallengeById(challenge.id)
+    await this.fetchChallengeById(challenge.id.value)
 
     if (challenge.title.value !== challengeDto.title) {
       await this.fetchChallengeBySlug(challenge.slug.value)
     }
 
-    await this.deleteChallengeCategories(challenge.id)
+    await this.deleteChallengeCategories(challenge.id.value)
     await Promise.all([
       this.saveChallengeCategories(challenge),
       this.updateChallenge(challenge),
@@ -45,7 +45,7 @@ export class EditChallengeUseCase implements IUseCase<Request, Response> {
 
   private async saveChallengeCategories(challenge: Challenge) {
     const response = await this.challengingService.saveChallengeCategories(
-      challenge.id,
+      challenge.id.value,
       challenge.categories,
     )
     if (response.isFailure) response.throwError()

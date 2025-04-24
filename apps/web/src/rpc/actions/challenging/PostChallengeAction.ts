@@ -33,7 +33,7 @@ export const PostChallengeAction = (
           description,
           difficultyLevel,
           author: {
-            id: user.id,
+            id: user.id.value,
           },
           function: {
             name: challengeFunction.name,

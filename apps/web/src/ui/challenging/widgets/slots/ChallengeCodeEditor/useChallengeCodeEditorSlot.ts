@@ -31,7 +31,9 @@ export function useChallengeCodeEditorSlot() {
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
   const consoleRef = useRef<ConsoleRef>(null)
   const [codeEditorHeight, setCodeEditorHeight] = useState(0)
-  const localStorage = useLocalStorage(STORAGE.keys.challengeCode(challenge?.id ?? ''))
+  const localStorage = useLocalStorage(
+    STORAGE.keys.challengeCode(challenge?.id.value ?? ''),
+  )
   const initialCode =
     typeof window !== 'undefined' ? localStorage.get() ?? challenge?.code ?? '' : ''
 

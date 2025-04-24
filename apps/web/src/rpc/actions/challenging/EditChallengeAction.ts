@@ -41,7 +41,7 @@ export const EditChallengeAction = (
           description,
           difficultyLevel,
           author: {
-            id: user.id,
+            id: user.id.value,
           },
           function: {
             name: challengeFunction.name,

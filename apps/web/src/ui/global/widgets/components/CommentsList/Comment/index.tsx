@@ -155,9 +155,9 @@ export function Comment({
                 ) : (
                   <ul className='mt-3'>
                     {replies.map((reply) => (
-                      <li key={reply.id}>
+                      <li key={reply.id.value}>
                         <Comment
-                          id={reply.id}
+                          id={reply.id.value}
                           content={reply.content.value}
                           upvotesCount={reply.upvotesCount.value}
                           repliesCount={reply.repliesCount.value}

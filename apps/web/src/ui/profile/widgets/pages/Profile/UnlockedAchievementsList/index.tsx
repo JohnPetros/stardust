@@ -13,9 +13,9 @@ export function UnlockedAchievementsList({
     return (
       <div className='custom-scroll grid h-72 grid-cols-1 content-start gap-4 overflow-y-auto px-1 md:grid-cols-2'>
         {unlockedAchievements.map((achievement) => (
-          <div key={achievement.id} className='h-24'>
+          <div key={achievement.id.value} className='h-24'>
             <AchievementCard
-              id={achievement.id}
+              id={achievement.id.value}
               name={achievement.name.value}
               icon={achievement.icon.value}
               reward={achievement.reward.value}

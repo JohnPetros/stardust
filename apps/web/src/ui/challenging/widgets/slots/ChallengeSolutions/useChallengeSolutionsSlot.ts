@@ -29,8 +29,8 @@ export function useChallengeSolutionsSlot() {
       title: solutionTitle,
       itemsPerPage: SOLUTIONS_PER_PAGE,
       sorter,
-      userId: isFromUser ? String(user?.id) : null,
-      challengeId: String(challenge?.id),
+      userId: isFromUser ? String(user?.id.value) : null,
+      challengeId: String(challenge?.id.value),
     })
     if (response.isFailure) response.throwError()
     return response.body

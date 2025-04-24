@@ -57,10 +57,6 @@ export class Solution extends Entity<SolutionProps> {
     return this.props.author
   }
 
-  get authorId() {
-    return this.props.author.id
-  }
-
   get title(): Name {
     return this.props.title
   }

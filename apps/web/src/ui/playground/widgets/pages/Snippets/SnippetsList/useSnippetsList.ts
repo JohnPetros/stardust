@@ -15,7 +15,7 @@ export function useSnippetsList() {
 
   async function fetchSnippets(page: number) {
     const response = await api.fetchSnippetsList({
-      authorId: String(user?.id),
+      authorId: String(user?.id.value),
       page,
       itemsPerPage: SNIPPETS_PER_PAGE,
     })
@@ -32,7 +32,7 @@ export function useSnippetsList() {
       shouldRefetchOnFocus: false,
       itemsPerPage: SNIPPETS_PER_PAGE,
       isEnabled: Boolean(user),
-      dependencies: [user?.id],
+      dependencies: [user?.id.value],
     })
 
   function handleDeleteSnippetDelete() {

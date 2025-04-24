@@ -20,7 +20,7 @@ export const SupabaseDocMapper = () => {
 
       // @ts-ignore
       const supabaseDoc: SupabaseDoc = {
-        id: doc.id,
+        id: doc.id.value,
         title: docDto.title,
         content: docDto.content,
         position: docDto.position,

@@ -370,7 +370,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       const { error, status } = await supabase.from('challenges_categories').insert(
         challengeCategories.map((category) => ({
           challenge_id: challengeId,
-          category_id: category.id,
+          category_id: category.id.value,
         })),
       )
 

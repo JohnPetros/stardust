@@ -6,7 +6,7 @@ describe('Planet entity', () => {
     const nextStar = StarsFaker.fake({ number: 2 })
     const planet = PlanetsFaker.fake({ stars: [currentStar.dto, nextStar.dto] })
 
-    expect(planet.getNextStar(currentStar.id)).toEqual(nextStar)
-    expect(planet.getNextStar(nextStar.id)).toBe(null)
+    expect(planet.getNextStar(currentStar.id.value)).toEqual(nextStar)
+    expect(planet.getNextStar(nextStar.id.value)).toBe(null)
   })
 })

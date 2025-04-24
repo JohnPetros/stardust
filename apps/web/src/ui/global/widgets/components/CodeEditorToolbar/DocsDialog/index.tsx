@@ -1,8 +1,6 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { ArrowLeft, Lock } from '@phosphor-icons/react'
-import { twMerge } from 'tailwind-merge'
 
 import { Button } from '../../Button'
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../../Dialog'
@@ -10,6 +8,7 @@ import { Loading } from '../../Loading'
 import { Mdx } from '../../Mdx'
 import { useDocsDialog } from './useDocsDialog'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { Icon } from '../../Icon'
 
 type DocsDialogProps = {
   children: ReactNode
@@ -38,7 +37,8 @@ export function DocsDialog({ children }: DocsDialogProps) {
                 className='flex items-center gap-2 p-2 text-gray-100'
                 onClick={handleBackButton}
               >
-                <ArrowLeft
+                <Icon
+                  name='arrow-left'
                   className='-translate-x-2 text-xl text-gray-100'
                   weight='bold'
                 />
@@ -60,11 +60,11 @@ export function DocsDialog({ children }: DocsDialogProps) {
                     if (doc)
                       return (
                         <div
-                          key={doc.id}
+                          key={doc.id.value}
                           className='w-full max-w-[12rem] cursor-not-allowed'
                         >
                           <Button
-                            onClick={() => handleDocButton(doc.id)}
+                            onClick={() => handleDocButton(doc.id.value)}
                             className='text-sm text-gray-100 bg-gray-600'
                           >
                             <div className='flex w-full items-center px-4'>

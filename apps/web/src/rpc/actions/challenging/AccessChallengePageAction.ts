@@ -56,7 +56,7 @@ export const AccessChallengePageAction = (
         if (user.hasUnlockedStar(star.id).isFalse) actionServer.notFound()
       }
 
-      if (challenge.isPublic.isFalse && challenge.authorId !== user.id.value) {
+      if (challenge.isPublic.isFalse && challenge.author.isEqualTo(user).isFalse) {
         actionServer.notFound()
       }
 
