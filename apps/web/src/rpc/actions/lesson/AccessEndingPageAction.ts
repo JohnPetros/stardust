@@ -1,12 +1,12 @@
-import type { IAction, IActionServer } from '@stardust/core/global/interfaces'
+import type { Action, Call } from '@stardust/core/global/interfaces'
 import { User } from '@stardust/core/global/entities'
 
-export const AccessEndingPageAction = (): IAction => {
+export const AccessEndingPageAction = (): Action => {
   return {
-    async handle(actionServer: IActionServer) {
-      const user = User.create(await actionServer.getUser())
+    async handle(call: Call) {
+      const user = User.create(await call.getUser())
       if (user.hasCompletedSpace.isFalse) {
-        actionServer.notFound()
+        call.notFound()
       }
     },
   }

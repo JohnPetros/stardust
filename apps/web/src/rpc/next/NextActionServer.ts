@@ -1,19 +1,19 @@
 import { notFound, redirect } from 'next/navigation'
 
-import type { IActionServer } from '@stardust/core/global/interfaces'
+import type { Call } from '@stardust/core/global/interfaces'
 import { AppError } from '@stardust/core/global/errors'
 import type { UserDto } from '@stardust/core/global/dtos'
 import { cookies } from 'next/headers'
 
-type NextActionServerParams<Request> = {
+type NextCallParams<Request> = {
   request?: Request
   user?: UserDto
 }
 
-export const NextActionServer = <Request = unknown>({
+export const NextCall = <Request = unknown>({
   request,
   user,
-}: NextActionServerParams<Request> = {}): IActionServer<Request> => {
+}: NextCallParams<Request> = {}): Call<Request> => {
   return {
     getRequest() {
       if (!request) throw new AppError('Action server request undefined')

@@ -1,6 +1,6 @@
 import { User } from '../../global/domain/entities'
 import type { UserDto } from '../../global/dtos'
-import type { IUseCase, IChallengingService } from '../../global/interfaces'
+import type { UseCase, ChallengingService } from '../../global/interfaces'
 import { Challenge } from '../domain/entities'
 import { Id, Percentage } from '#global/structures'
 
@@ -17,9 +17,9 @@ type Response = Promise<{
 }>
 
 export class CalculateRewardForChallengeCompletionUseCase
-  implements IUseCase<Request, Response>
+  implements UseCase<Request, Response>
 {
-  constructor(private readonly challengingService: IChallengingService) {}
+  constructor(private readonly challengingService: ChallengingService) {}
 
   async do({ userDto, challengeId, incorrectAnswersCount }: Request) {
     const user = User.create(userDto)

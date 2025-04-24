@@ -6,7 +6,7 @@ import {
 import { SupabaseServerClient } from '@/rest/supabase/clients'
 import { SupabaseRankingService } from '@/rest/supabase/services'
 import { inngest } from '../client'
-import { InngestQueue } from '../InngestQueue'
+import { InngestAmqp } from '../InngestAmqp'
 
 const handleUserSignedUp = inngest.createFunction(
   { id: JOBS.ranking.handleShopItemsAcquiredByDefault.key },
@@ -14,7 +14,7 @@ const handleUserSignedUp = inngest.createFunction(
   async (context) => {
     const supabase = SupabaseServerClient()
     const service = SupabaseRankingService(supabase)
-    const queue = InngestQueue<typeof context.event.data>(context)
+    const queue = InngestAmqp<typeof context.event.data>(context)
     const job = HandleShopItemsAcquiredByDefaultJob(service)
     return job.handle(queue)
   },
@@ -26,7 +26,7 @@ const updateRankings = inngest.createFunction(
   async (context) => {
     const supabase = SupabaseServerClient()
     const service = SupabaseRankingService(supabase)
-    const queue = InngestQueue(context)
+    const queue = InngestAmqp(context)
     const job = UpdateRankingsJob(service)
     return job.handle(queue)
   },

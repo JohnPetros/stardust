@@ -2,7 +2,7 @@
 
 import { z } from 'zod'
 
-import { NextActionServer } from '../next/NextActionServer'
+import { NextCall } from '../next/NextCall'
 import { actionClient } from './clients/actionClient'
 
 const setCookie = actionClient
@@ -14,8 +14,8 @@ const setCookie = actionClient
     }),
   )
   .action(async ({ clientInput }) => {
-    const actionServer = NextActionServer()
-    await actionServer.setCookie(
+    const call = NextCall()
+    await call.setCookie(
       clientInput.key,
       clientInput.value,
       clientInput.expirationInSeconds,
@@ -23,18 +23,18 @@ const setCookie = actionClient
   })
 
 const getCookie = actionClient.schema(z.string()).action(async ({ clientInput }) => {
-  const actionServer = NextActionServer()
-  return actionServer.getCookie(clientInput)
+  const call = NextCall()
+  return call.getCookie(clientInput)
 })
 
 const deleteCookie = actionClient.schema(z.string()).action(async ({ clientInput }) => {
-  const actionServer = NextActionServer()
-  await actionServer.deleteCookie(clientInput)
+  const call = NextCall()
+  await call.deleteCookie(clientInput)
 })
 
 const hasCookie = actionClient.schema(z.string()).action(async ({ clientInput }) => {
-  const actionServer = NextActionServer()
-  return await actionServer.hasCookie(clientInput)
+  const call = NextCall()
+  return await call.hasCookie(clientInput)
 })
 
 export { setCookie, getCookie, deleteCookie, hasCookie }

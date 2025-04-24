@@ -1,4 +1,4 @@
-import type { IEvent } from '../../../global/interfaces'
+import { Event } from '#global/abstracts'
 
 type Payload = {
   user: {
@@ -9,11 +9,10 @@ type Payload = {
   firstUnlockedStarId: string
 }
 
-export class FirstStarUnlockedEvent implements IEvent<Payload> {
-  static readonly NAME = 'space/first.star.unlocked'
-  constructor(readonly payload: Payload) {}
+export class FirstStarUnlockedEvent extends Event<Payload> {
+  static readonly _NAME = 'space/first.star.unlocked'
 
-  get name() {
-    return FirstStarUnlockedEvent.NAME
+  constructor(payload: Payload) {
+    super(FirstStarUnlockedEvent._NAME, payload)
   }
 }

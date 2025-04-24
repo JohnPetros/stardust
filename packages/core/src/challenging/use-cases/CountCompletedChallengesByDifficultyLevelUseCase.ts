@@ -5,7 +5,9 @@ import type {
   ChallengeDifficultyLevel,
   CompletedChallengesCountByDifficultyLevel,
 } from '../domain/types'
-import type { IChallengingService, IUseCase } from '../../global/interfaces'
+
+import { Id, Percentage } from '../../global/domain/structures'
+import type { ChallengingService, UseCase } from '../../global/interfaces'
 import { Id, Percentage } from '../../global/domain/structures'
 
 type Challenge = { id: Id; difficulty: ChallengeDifficulty }
@@ -13,9 +15,9 @@ type Challenge = { id: Id; difficulty: ChallengeDifficulty }
 type Response = Promise<CompletedChallengesCountByDifficultyLevel>
 
 export class CountCompletedChallengesByDifficultyLevelUseCase
-  implements IUseCase<UserDto, Response>
+  implements UseCase<UserDto, Response>
 {
-  constructor(private readonly challengesService: IChallengingService) {}
+  constructor(private readonly challengesService: ChallengingService) {}
 
   async do(userDto: UserDto) {
     const user = User.create(userDto)

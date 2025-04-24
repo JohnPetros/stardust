@@ -1,7 +1,8 @@
 import { Integer } from '#global/structures'
-import { User } from '../../global/domain/entities'
-import type { UserDto } from '../../global/dtos'
-import type { IProfileService, IUseCase } from '../../global/interfaces'
+import { User } from '#global/entities'
+import type { UserDto } from '#global/dtos'
+import type { UseCase } from '#global/interfaces'
+import type { ProfileService } from '#profile/interfaces'
 
 type Request = {
   userDto: UserDto
@@ -14,8 +15,8 @@ type Response = Promise<{
   newStreak: number | null
 }>
 
-export class RewardUserUseCase implements IUseCase<Request, Response> {
-  constructor(private profileService: IProfileService) {}
+export class RewardUserUseCase implements UseCase<Request, Response> {
+  constructor(private profileService: ProfileService) {}
 
   async do({ userDto, newXp, newCoins }: Request) {
     const user = User.create(userDto)

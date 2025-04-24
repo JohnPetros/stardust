@@ -1,15 +1,13 @@
-import type { IEvent } from '../../../global/interfaces'
+import { Event } from '#global/abstracts'
 
 type Payload = {
   userId: string
 }
 
-export class UserCreatedEvent implements IEvent<Payload> {
-  static readonly NAME = 'profile/user-created'
+export class UserCreatedEvent extends Event<Payload> {
+  static readonly _NAME = 'profile/user.created'
 
-  constructor(readonly payload: Payload) {}
-
-  get name() {
-    return UserCreatedEvent.NAME
+  constructor(readonly payload: Payload) {
+    super(UserCreatedEvent._NAME, payload)
   }
 }

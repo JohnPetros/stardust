@@ -24,7 +24,7 @@ import {
   SupabaseSpaceService,
 } from '@/rest/supabase/services'
 import { authActionClient } from './clients/authActionClient'
-import { NextActionServer } from '../next/NextActionServer'
+import { NextCall } from '../next/NextCall'
 import {
   EditSolutionAction,
   FetchChallengesListAction,
@@ -50,20 +50,20 @@ export const fetchChallengesList = authActionClient
     }),
   )
   .action(async ({ clientInput, ctx }) => {
-    const actionServer = NextActionServer({
+    const call = NextCall({
       request: clientInput,
       user: ctx.user,
     })
     const supabase = SupabaseServerActionClient()
     const challengingService = SupabaseChallengingService(supabase)
     const action = FetchChallengesListAction(challengingService)
-    return action.handle(actionServer)
+    return action.handle(call)
   })
 
 export const accessChallengePage = authActionClient
   .schema(z.object({ challengeSlug: z.string() }))
   .action(async ({ clientInput, ctx }) => {
-    const actionServer = NextActionServer({
+    const call = NextCall({
       request: clientInput,
       user: ctx.user,
     })
@@ -71,7 +71,7 @@ export const accessChallengePage = authActionClient
     const challengingService = SupabaseChallengingService(supabase)
     const spaceService = SupabaseSpaceService(supabase)
     const action = AccessChallengePageAction(challengingService, spaceService)
-    return action.handle(actionServer)
+    return action.handle(call)
   })
 
 export const voteChallenge = authActionClient
@@ -82,14 +82,14 @@ export const voteChallenge = authActionClient
     }),
   )
   .action(async ({ clientInput, ctx }) => {
-    const actionServer = NextActionServer({
+    const call = NextCall({
       request: clientInput,
       user: ctx.user,
     })
     const supabase = SupabaseServerActionClient()
     const challengingService = SupabaseChallengingService(supabase)
     const action = VoteChallengeAction(challengingService)
-    return action.handle(actionServer)
+    return action.handle(call)
   })
 
 export const postSolution = authActionClient
@@ -106,14 +106,14 @@ export const postSolution = authActionClient
     },
   )
   .action(async ({ clientInput, ctx }) => {
-    const actionServer = NextActionServer({
+    const call = NextCall({
       request: clientInput,
       user: ctx.user,
     })
     const supabase = SupabaseServerActionClient()
     const challengingService = SupabaseChallengingService(supabase)
     const action = PostSolutionAction(challengingService)
-    return action.handle(actionServer)
+    return action.handle(call)
   })
 
 export const editSolution = authActionClient
@@ -129,14 +129,14 @@ export const editSolution = authActionClient
     },
   )
   .action(async ({ clientInput, ctx }) => {
-    const actionServer = NextActionServer({
+    const call = NextCall({
       request: clientInput,
       user: ctx.user,
     })
     const supabase = SupabaseServerActionClient()
     const challengingService = SupabaseChallengingService(supabase)
     const action = EditSolutionAction(challengingService)
-    return action.handle(actionServer)
+    return action.handle(call)
   })
 
 export const upvoteSolution = authActionClient
@@ -146,14 +146,14 @@ export const upvoteSolution = authActionClient
     }),
   )
   .action(async ({ clientInput, ctx }) => {
-    const actionServer = NextActionServer({
+    const call = NextCall({
       request: clientInput,
       user: ctx.user,
     })
     const supabase = SupabaseServerActionClient()
     const challengingService = SupabaseChallengingService(supabase)
     const action = UpvoteSolutionAction(challengingService)
-    return action.handle(actionServer)
+    return action.handle(call)
   })
 
 export const accessChallengeCommentsSlot = authActionClient
@@ -163,14 +163,14 @@ export const accessChallengeCommentsSlot = authActionClient
     }),
   )
   .action(async ({ clientInput, ctx }) => {
-    const actionServer = NextActionServer({
+    const call = NextCall({
       request: clientInput,
       user: ctx.user,
     })
     const supabase = SupabaseServerActionClient()
     const challengingService = SupabaseChallengingService(supabase)
     const action = AccessChallengeCommentsSlotAction(challengingService)
-    return action.handle(actionServer)
+    return action.handle(call)
   })
 
 export const viewSolution = authActionClient
@@ -180,14 +180,14 @@ export const viewSolution = authActionClient
     }),
   )
   .action(async ({ clientInput, ctx }) => {
-    const actionServer = NextActionServer({
+    const call = NextCall({
       request: clientInput,
       user: ctx.user,
     })
     const supabase = SupabaseServerActionClient()
     const challengingService = SupabaseChallengingService(supabase)
     const action = ViewSolutionAction(challengingService)
-    return action.handle(actionServer)
+    return action.handle(call)
   })
 
 export const postChallenge = authActionClient
@@ -196,14 +196,14 @@ export const postChallenge = authActionClient
       flattenValidationErrors(errors).fieldErrors,
   })
   .action(async ({ clientInput, ctx }) => {
-    const actionServer = NextActionServer({
+    const call = NextCall({
       request: clientInput,
       user: ctx.user,
     })
     const supabase = SupabaseServerActionClient()
     const challengingService = SupabaseChallengingService(supabase)
     const action = PostChallengeAction(challengingService)
-    return action.handle(actionServer)
+    return action.handle(call)
   })
 
 export const editChallenge = authActionClient
@@ -212,12 +212,12 @@ export const editChallenge = authActionClient
       flattenValidationErrors(errors).fieldErrors,
   })
   .action(async ({ clientInput, ctx }) => {
-    const actionServer = NextActionServer({
+    const call = NextCall({
       request: clientInput,
       user: ctx.user,
     })
     const supabase = SupabaseServerActionClient()
     const challengingService = SupabaseChallengingService(supabase)
     const action = EditChallengeAction(challengingService)
-    return action.handle(actionServer)
+    return action.handle(call)
   })
