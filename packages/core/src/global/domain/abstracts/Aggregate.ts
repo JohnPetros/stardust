@@ -2,13 +2,11 @@ import { EntityNotDefinedError } from '#global/errors'
 import { Logical } from '#global/structures'
 import { Entity } from './Entity'
 
-type AggregateProps<AggregateEntity> = {
+type Props<AggregateEntity> = {
   entity?: AggregateEntity
 }
 
-export abstract class Aggregate<AggregateEntity> extends Entity<
-  AggregateProps<AggregateEntity>
-> {
+export abstract class Aggregate<AggregateEntity> extends Entity<Props<AggregateEntity>> {
   constructor(
     readonly entityName: string,
     id: string,
@@ -28,3 +26,5 @@ export abstract class Aggregate<AggregateEntity> extends Entity<
     return Logical.create(this.id === entity.id)
   }
 }
+
+Aggregate.name

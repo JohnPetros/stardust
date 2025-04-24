@@ -1,11 +1,8 @@
 import type { UserDto } from '@stardust/core/global/dtos'
+import type { Call, Action } from '@stardust/core/global/interfaces'
 import type { AchievementDto } from '@stardust/core/profile/dtos'
+import type { ProfileService } from '@stardust/core/profile/interfaces'
 import { ObserveNewUnlockedAchievementsUseCase } from '@stardust/core/profile/use-cases'
-import type {
-  IAction,
-  IActionServer,
-  IProfileService,
-} from '@stardust/core/global/interfaces'
 
 type Response = {
   userDto: UserDto
@@ -13,11 +10,11 @@ type Response = {
 }
 
 export const ObsverNewUnlockedAchievementsAction = (
-  profileService: IProfileService,
-): IAction<void, Response> => {
+  profileService: ProfileService,
+): Action<void, Response> => {
   return {
-    async handle(actionServer: IActionServer) {
-      const userDto = await actionServer.getUser()
+    async handle(call: Call) {
+      const userDto = await call.getUser()
       const useCase = new ObserveNewUnlockedAchievementsUseCase(profileService)
       const { user, newUnlockedAchievements } = await useCase.do({
         userDto,

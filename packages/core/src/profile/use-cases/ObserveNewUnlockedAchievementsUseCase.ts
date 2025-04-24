@@ -1,7 +1,8 @@
 import { User } from '../../global/domain/entities'
 import { Achievement } from '../domain/entities'
 import type { UserDto } from '../../global/dtos'
-import type { IProfileService, IUseCase } from '../../global/interfaces'
+import type { UseCase } from '../../global/interfaces'
+import type { ProfileService } from '#profile/interfaces'
 
 type Response = Promise<{
   newUnlockedAchievements: Achievement[]
@@ -12,12 +13,10 @@ type Request = {
   userDto: UserDto
 }
 
-export class ObserveNewUnlockedAchievementsUseCase
-  implements IUseCase<Request, Response>
-{
-  private profileService: IProfileService
+export class ObserveNewUnlockedAchievementsUseCase implements UseCase<Request, Response> {
+  private profileService: ProfileService
 
-  constructor(profileService: IProfileService) {
+  constructor(profileService: ProfileService) {
     this.profileService = profileService
   }
 

@@ -1,7 +1,7 @@
 import type {
   IController,
   IHttp,
-  IChallengingService,
+  ChallengingService,
 } from '@stardust/core/global/interfaces'
 import { ListChallengesUseCase } from '@stardust/core/challenging/use-cases'
 import type {
@@ -21,7 +21,7 @@ type Schema = {
 }
 
 export const FetchChallengesListController = (
-  challengingService: IChallengingService,
+  challengingService: ChallengingService,
 ): IController<Schema> => {
   return {
     async handle(http: IHttp<Schema>) {

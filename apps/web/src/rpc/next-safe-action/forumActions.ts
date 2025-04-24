@@ -7,7 +7,7 @@ import { idSchema } from '@stardust/validation/global/schemas'
 import { SupabaseServerActionClient } from '@/rest/supabase/clients/SupabaseServerActionClient'
 import { SupabaseForumService } from '@/rest/supabase/services'
 import { authActionClient } from './clients/authActionClient'
-import { NextActionServer } from '../next/NextActionServer'
+import { NextCall } from '../next/NextCall'
 import { UpvoteCommentAction } from '../actions/forum'
 
 export const upvoteComment = authActionClient
@@ -17,12 +17,12 @@ export const upvoteComment = authActionClient
     }),
   )
   .action(async ({ clientInput, ctx }) => {
-    const actionServer = NextActionServer({
+    const call = NextCall({
       request: clientInput,
       user: ctx.user,
     })
     const supabase = SupabaseServerActionClient()
     const challengingService = SupabaseForumService(supabase)
     const action = UpvoteCommentAction(challengingService)
-    return await action.handle(actionServer)
+    return await action.handle(call)
   })

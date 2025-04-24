@@ -1,7 +1,7 @@
 import type {
   IController,
   IHttp,
-  IPlaygroundService,
+  PlaygroundService,
 } from '@stardust/core/global/interfaces'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { GetSnippetUseCase } from '@stardust/core/playground/use-cases'
@@ -13,7 +13,7 @@ type Schema = {
 }
 
 export const GetSnippetController = (
-  playgroundService: IPlaygroundService,
+  playgroundService: PlaygroundService,
 ): IController => {
   return {
     async handle(http: IHttp<Schema>) {

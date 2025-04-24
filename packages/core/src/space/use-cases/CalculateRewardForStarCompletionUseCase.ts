@@ -1,7 +1,7 @@
 import { User } from '../../global/domain/entities'
 import type { UserDto } from '../../global/dtos'
 import { Planet, Star } from '../domain/entities'
-import type { ISpaceService, IUseCase } from '../../global/interfaces'
+import type { SpaceService, UseCase } from '../../global/interfaces'
 import { Percentage } from '../../global/domain/structures'
 
 type Request = {
@@ -18,12 +18,12 @@ type Response = Promise<{
 }>
 
 export class CalculateRewardForStarCompletionUseCase
-  implements IUseCase<Request, Response>
+  implements UseCase<Request, Response>
 {
   static readonly COINS_INCREASE_BASE = 4
   static readonly XP_INCREASE_BASE = 6
 
-  constructor(private readonly spaceService: ISpaceService) {}
+  constructor(private readonly spaceService: SpaceService) {}
 
   async do({ userDto, incorrectAnswersCount, questionsCount, starId }: Request) {
     const user = User.create(userDto)

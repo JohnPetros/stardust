@@ -1,7 +1,7 @@
 import type {
   IController,
   IHttp,
-  IChallengingService,
+  ChallengingService,
 } from '@stardust/core/global/interfaces'
 import { Challenge, Solution } from '@stardust/core/challenging/entities'
 
@@ -14,7 +14,7 @@ type Schema = {
 }
 
 export const AccessSolutionPageController = (
-  challengingService: IChallengingService,
+  challengingService: ChallengingService,
 ): IController<Schema> => {
   return {
     async handle(http: IHttp<Schema>) {
