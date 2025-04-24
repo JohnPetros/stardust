@@ -73,17 +73,17 @@ export class User extends Entity<UserProps> {
   }
 
   earnCoins(newCoins: Integer): void {
-    this.props.coins = this.props.coins.increment(newCoins)
+    this.props.coins = this.props.coins.plus(newCoins)
   }
 
   loseCoins(coins: Integer): void {
-    this.props.coins = this.props.coins.dencrement(coins)
+    this.props.coins = this.props.coins.minus(coins)
   }
 
   earnXp(newXp: Integer) {
     this.props.level = this.level.up(this.xp, newXp)
-    this.props.xp = this.props.xp.increment(newXp)
-    this.props.weeklyXp = this.props.weeklyXp.increment(newXp)
+    this.props.xp = this.props.xp.plus(newXp)
+    this.props.weeklyXp = this.props.weeklyXp.plus(newXp)
     this.notifyChanges()
   }
 
@@ -206,11 +206,11 @@ export class User extends Entity<UserProps> {
   }
 
   isSelectRocket(rocketId: Id): Logical {
-    return Logical.create(rocketId === this.rocketId)
+    return Logical.create(rocketId.value === this.rocket.id.value)
   }
 
   isSelectAvatar(avatarId: Id): Logical {
-    return Logical.create(avatarId === this.avatarId)
+    return Logical.create(avatarId.value === this.avatar.id.value)
   }
 
   upvoteComment(commentId: Id): void {
@@ -308,20 +308,12 @@ export class User extends Entity<UserProps> {
     return this.props.slug
   }
 
-  get avatarId() {
-    return this.props.avatar.id
-  }
-
   get avatar() {
-    return this.props.avatar.entity
-  }
-
-  get rocketId() {
-    return this.props.rocket.id
+    return this.props.avatar
   }
 
   get rocket() {
-    return this.props.rocket.entity
+    return this.props.rocket
   }
 
   get tierId() {
@@ -329,7 +321,7 @@ export class User extends Entity<UserProps> {
   }
 
   get tier() {
-    return this.props.tier.entity
+    return this.props.tier
   }
 
   get name() {
