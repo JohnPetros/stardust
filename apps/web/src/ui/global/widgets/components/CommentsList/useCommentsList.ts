@@ -54,7 +54,7 @@ export function useCommentsList({ onFetchComments, onSaveComment }: CommentsList
     const comment = Comment.create({
       content: commentContent,
       author: {
-        id: user.id,
+        id: user.id.value,
       },
     })
 

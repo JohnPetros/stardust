@@ -18,7 +18,7 @@ export const SupabaseChallengeMapper = () => {
         difficultyLevel: supabaseChallenge.difficulty_level ?? '',
         author: {
           id: supabaseChallenge.user_id ?? '',
-          dto: {
+          entity: {
             slug: supabaseChallenge.author_slug ?? '',
             name: supabaseChallenge.author_name ?? '',
             avatar: {
@@ -64,7 +64,7 @@ export const SupabaseChallengeMapper = () => {
 
       // @ts-ignore
       const supabaseChallenge: SupabaseChallenge = {
-        id: challenge.id,
+        id: challenge.id.value,
         slug: challenge.slug.value,
         title: challengeDto.title,
         code: challengeDto.code,

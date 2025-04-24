@@ -11,6 +11,7 @@ type TierAggregateEntity = {
 
 export class TierAggregate extends Aggregate<TierAggregateEntity> {
   private static readonly ENTITY_NAME = 'Tier do usuário'
+
   static create(dto: TierAggregateDto) {
     if (dto.entity) {
       const entity = {
@@ -33,9 +34,17 @@ export class TierAggregate extends Aggregate<TierAggregateEntity> {
     return this.entity.image
   }
 
+  get reward() {
+    return this.entity.reward
+  }
+
+  get position() {
+    return this.entity.position
+  }
+
   get dto(): TierAggregateDto {
     return {
-      id: this.id,
+      id: this.id.value,
       entity: {
         name: this.name.value,
         image: this.image.value,

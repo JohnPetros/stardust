@@ -74,7 +74,7 @@ export class Comment extends Entity<CommentProps> {
 
   get dto(): CommentDto {
     return {
-      id: this.id,
+      id: this.id.value,
       content: this.content.value,
       repliesCount: this.repliesCount.value,
       upvotesCount: this.upvotesCount.value,

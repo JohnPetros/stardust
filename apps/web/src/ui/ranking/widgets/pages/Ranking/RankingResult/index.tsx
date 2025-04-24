@@ -48,7 +48,7 @@ export function RankingResult() {
         <div className='mt-6 flex items-end justify-center gap-6'>
           {lastWeekRankingPodium.winners.map((winner) => (
             <RankingWinner
-              key={winner.id}
+              key={winner.id.value}
               xp={winner.xp.value}
               name={winner.name.value}
               avatarImage={winner.avatar.image.value}
@@ -71,7 +71,7 @@ export function RankingResult() {
                   no ranking da última semana.
                 </p>
                 <RankingUser
-                  id={user.id}
+                  id={user.id.value}
                   name={user.name.value}
                   xp={user.weeklyXp.value}
                   position={user.lastWeekRankingPosition.position.value}
@@ -151,7 +151,7 @@ export function RankingResult() {
               <p className='text-gray-100 mt-1'>
                 Você ganhou{' '}
                 <strong className='text-green-400 font-semibold'>
-                  {user.rewardByLastWeekRankingPosition}
+                  {user.rewardByLastWeekRankingPosition.value}
                 </strong>{' '}
                 de starcoins por esse feito!
               </p>

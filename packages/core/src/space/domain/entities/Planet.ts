@@ -62,7 +62,7 @@ export class Planet extends Entity<PlanetProps> {
 
   get dto(): PlanetDto {
     return {
-      id: this.id,
+      id: this.id.value,
       name: this.name.value,
       image: this.image.value,
       icon: this.icon.value,

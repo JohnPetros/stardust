@@ -5,10 +5,12 @@ import type {
   ChallengeDifficultyLevel,
   CompletedChallengesCountByDifficultyLevel,
 } from '../domain/types'
-import type { ChallengingService, UseCase } from '../../global/interfaces'
-import { Percentage } from '../../global/domain/structures'
 
-type Challenge = { id: string; difficulty: ChallengeDifficulty }
+import { Id, Percentage } from '../../global/domain/structures'
+import type { ChallengingService, UseCase } from '../../global/interfaces'
+import { Id, Percentage } from '../../global/domain/structures'
+
+type Challenge = { id: Id; difficulty: ChallengeDifficulty }
 
 type Response = Promise<CompletedChallengesCountByDifficultyLevel>
 
@@ -20,14 +22,16 @@ export class CountCompletedChallengesByDifficultyLevelUseCase
   async do(userDto: UserDto) {
     const user = User.create(userDto)
 
-    const response = await this.challengesService.fetchCompletableChallenges(user.id)
+    const response = await this.challengesService.fetchCompletableChallenges(
+      user.id.value,
+    )
 
     if (response.isFailure) {
       response.throwError()
     }
 
     const allChallenges = response.body.map((challenge) => ({
-      id: challenge.id,
+      id: Id.create(challenge.id),
       difficulty: ChallengeDifficulty.create(challenge.difficulty),
     }))
 

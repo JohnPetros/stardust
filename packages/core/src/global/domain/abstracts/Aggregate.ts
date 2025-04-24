@@ -15,15 +15,11 @@ export abstract class Aggregate<AggregateEntity> extends Entity<Props<AggregateE
     super({ entity }, id)
   }
 
-  get entity(): AggregateEntity {
+  protected get entity(): AggregateEntity {
     if (!this.props.entity) {
       throw new EntityNotDefinedError(this.entityName)
     }
     return this.props.entity
-  }
-
-  isEntityEqualTo(entity: Entity): Logical {
-    return Logical.create(this.id === entity.id)
   }
 }
 

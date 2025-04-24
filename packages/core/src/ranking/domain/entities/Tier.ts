@@ -59,7 +59,7 @@ export class Tier extends Entity<TierProps> {
 
   get dto(): TierDto {
     return {
-      id: this.id,
+      id: this.id.value,
       name: this.name.value,
       position: this.position.value,
       reward: this.reward.value,

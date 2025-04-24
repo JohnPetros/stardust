@@ -30,7 +30,7 @@ export class Doc extends Entity<DocProps> {
 
   get dto(): DocDto {
     return {
-      id: this.id,
+      id: this.id.value,
       title: this.title.value,
       content: this.content.value,
       position: this.props.position.value,

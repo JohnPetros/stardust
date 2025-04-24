@@ -29,13 +29,13 @@ export function NewUnlockedAchievementsAlertDialog({
         body={
           <div className='max-h-80 overflow-auto px-6'>
             {achievements.map((achievement) => (
-              <div key={achievement.id} className='relative'>
+              <div key={achievement.id.value} className='relative'>
                 <span className='absolute block' style={{ top: -18, left: -15.5 }}>
                   <Animation name='shinning' size={110} />
                 </span>
 
                 <AchievementCard
-                  id={achievement.id}
+                  id={achievement.id.value}
                   icon={achievement.icon.value}
                   description={achievement.description}
                   name={achievement.name.value}

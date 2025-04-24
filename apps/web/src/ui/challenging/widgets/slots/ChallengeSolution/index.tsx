@@ -55,8 +55,8 @@ export async function ChallengeSolutionSlot({
 
               <div className='flex items-center gap-3 mt-1'>
                 <UpvoteSolutionButton
-                  solutionId={solution.id}
-                  authorId={solution.authorId}
+                  solutionId={solution.id.value}
+                  authorId={solution.author.id.value}
                   initialUpvotesCount={upvotesCount}
                 />
                 <SolutionInfo
@@ -69,8 +69,8 @@ export async function ChallengeSolutionSlot({
           </div>
           <div className='pl-12 mt-3'>
             <UserSolutionButtons
-              solutionId={solution.id}
-              authorId={solution.authorId}
+              solutionId={solution.id.value}
+              authorId={solution.author.id.value}
               solutionSlug={solution.slug.value}
               challengeSlug={challengeSlug}
             />
@@ -82,7 +82,7 @@ export async function ChallengeSolutionSlot({
         </div>
 
         <div className='mt-24'>
-          <SolutionCommentsList solutionId={solution.id} />
+          <SolutionCommentsList solutionId={solution.id.value} />
         </div>
       </div>
     </BlockedContentAlertDialog>

@@ -4,6 +4,7 @@ import type { RankingUserDto } from '../../dtos'
 import type { UserDto } from '../../../global/dtos'
 import { RankingUsersFaker, TiersFaker } from '#ranking/entities/fakers'
 import { UsersFaker } from '../../../global/domain/entities/fakers'
+import { TierAggregatesFaker } from '#profile/aggregates/fakers'
 
 let rankingServiceMock: RankingServiceMock
 let useCase: GetLastWeekRankingWinnersUseCase
@@ -30,7 +31,7 @@ describe('Get Last Week Ranking Winners Use Case', () => {
       id: fakeRankingUser.id,
       tier: {
         id: String(fakeLastWeekTier.id),
-        dto: fakeLastWeekTier,
+        entity: fakeLastWeekTier,
       },
     })
     rankingServiceMock.users.push(fakeRankingUser)
@@ -38,8 +39,8 @@ describe('Get Last Week Ranking Winners Use Case', () => {
     expect(lastWeekTier).toEqual(fakeLastWeekTier)
   })
 
-  it("should set the last week tier of user to the user's current tier if no tier is found on search the the last week", async () => {
-    const fakeCurrentTier = TiersFaker.fakeDto()
+  it("should set the last week tier of user to the user's current tier if no tier is found when search the last week", async () => {
+    const fakeCurrentTier = TierAggregatesFaker.fakeDto()
 
     fakeUserDto = UsersFaker.fakeDto({ tier: fakeCurrentTier })
 
@@ -77,7 +78,7 @@ describe('Get Last Week Ranking Winners Use Case', () => {
     fakeUserDto = UsersFaker.fakeDto({
       tier: {
         id: String(fakeLastWeekTier.id),
-        dto: fakeLastWeekTier,
+        entity: fakeLastWeekTier,
       },
     })
 

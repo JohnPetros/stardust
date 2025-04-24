@@ -26,11 +26,12 @@ export function UserSolutionButtons({
     solutionId,
     challengeSlug,
   )
+  const isUserAuthor = user?.id.value === authorId
 
   if (user)
     return (
       <div className='flex gap-3'>
-        {user.id !== authorId && (
+        {!isUserAuthor && (
           <Button asChild className='h-8 text-xs w-max px-3'>
             <Link
               href={ROUTES.challenging.challenges.challengeSolutions.list(challengeSlug)}
@@ -39,7 +40,7 @@ export function UserSolutionButtons({
             </Link>
           </Button>
         )}
-        {user.id === authorId && (
+        {isUserAuthor && (
           <Button
             asChild
             className='h-8 text-gray-200 text-xs w-max bg-green-900/90 font-medium px-3'
@@ -51,7 +52,7 @@ export function UserSolutionButtons({
             </Link>
           </Button>
         )}
-        {user.id === authorId && (
+        {isUserAuthor && (
           <AlertDialog
             title='Sua solução está preste a ser removida'
             type='crying'

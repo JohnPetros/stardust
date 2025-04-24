@@ -26,7 +26,7 @@ export const SupabaseRocketMapper = () => {
         SupabaseRocket,
         'is_acquired_by_default' | 'is_selected_by_default'
       > = {
-        id: rocket.id,
+        id: rocket.id.value,
         name: rocketDto.name,
         slug: '',
         price: rocketDto.price,

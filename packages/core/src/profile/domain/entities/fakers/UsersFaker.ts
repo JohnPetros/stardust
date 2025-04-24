@@ -1,10 +1,13 @@
 import { faker } from '@faker-js/faker'
 
 import type { UserDto } from '#global/dtos'
-import { User } from '../../../../profile/domain/entities/User'
-import { AvatarsFaker, RocketsFaker } from '../../../../shop/domain/entities/fakers'
-import { TiersFaker } from '#ranking/entities/fakers'
-import { WeekStatus } from '../../../../profile/domain/structures'
+import {
+  AvatarAggregatesFaker,
+  RocketAggregatesFaker,
+  TierAggregatesFaker,
+} from '#profile/aggregates/fakers'
+import { User } from '#profile/entities'
+import { WeekStatus } from '#profile/structures'
 
 export class UsersFaker {
   static fake(baseDto?: Partial<UserDto>): User {
@@ -12,10 +15,6 @@ export class UsersFaker {
   }
 
   static fakeDto(baseDto?: Partial<UserDto>): UserDto {
-    const fakeAvatar = AvatarsFaker.fake()
-    const fakeTier = TiersFaker.fake()
-    const fakeRocket = RocketsFaker.fake()
-
     return {
       id: faker.string.uuid(),
       name: faker.person.firstName(),
@@ -27,6 +26,12 @@ export class UsersFaker {
       xp: faker.number.int({ max: 100 }),
       weeklyXp: faker.number.int({ max: 100 }),
       lastWeekRankingPosition: faker.number.int({ min: 1, max: 100 }),
+      createdAt: faker.date.birthdate(),
+      canSeeRankingResult: false,
+      avatar: AvatarAggregatesFaker.fakeDto(),
+      rocket: RocketAggregatesFaker.fakeDto(),
+      tier: TierAggregatesFaker.fakeDto(),
+      weekStatus: WeekStatus.DEFAULT_WEEK_STATUS,
       completedChallengesIds: [],
       completedPlanetsIds: [],
       rescuableAchievementsIds: [],
@@ -35,21 +40,6 @@ export class UsersFaker {
       acquiredRocketsIds: [],
       acquiredAvatarsIds: [],
       unlockedDocsIds: [],
-      weekStatus: WeekStatus.DEFAULT_WEEK_STATUS,
-      canSeeRankingResult: false,
-      avatar: {
-        id: fakeAvatar.id,
-        dto: fakeAvatar.dto,
-      },
-      tier: {
-        id: fakeTier.id,
-        dto: fakeTier.dto,
-      },
-      rocket: {
-        id: fakeRocket.id,
-        dto: fakeRocket.dto,
-      },
-      createdAt: faker.date.birthdate(),
       ...baseDto,
     }
   }

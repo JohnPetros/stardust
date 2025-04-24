@@ -30,7 +30,7 @@ export function ChallengesList() {
               )}
               {challenges.map((challenge) => (
                 <ChallengeCard
-                  key={challenge.id}
+                  key={challenge.id.value}
                   title={challenge.title.value}
                   slug={challenge.slug.value}
                   authorSlug={challenge.author.slug.value}

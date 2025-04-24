@@ -22,7 +22,7 @@ export class VoteChallengeUseCase implements UseCase<Request, Response> {
     challenge.userVote = await this.fetchCurrentChallengeVote(challengeId, userId)
 
     if (challenge.userVote && userChallengeVote === challenge.userVote) {
-      await this.deleteChallengeVote(challenge.id, userId)
+      await this.deleteChallengeVote(challenge.id.value, userId)
     }
 
     if (userChallengeVote !== challenge.userVote) {

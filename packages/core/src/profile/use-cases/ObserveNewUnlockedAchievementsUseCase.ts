@@ -33,14 +33,14 @@ export class ObserveNewUnlockedAchievementsUseCase implements UseCase<Request, R
 
     for (const { id } of newUnlockedAchievements) {
       const unlockedAchievementResponse =
-        await this.profileService.saveUnlockedAchievement(id, user.id)
+        await this.profileService.saveUnlockedAchievement(id.value, user.id.value)
 
       if (unlockedAchievementResponse.isFailure) {
         unlockedAchievementResponse.throwError()
       }
 
       const rescuableAchievementResponse =
-        await this.profileService.saveRescuableAchievement(id, user.id)
+        await this.profileService.saveRescuableAchievement(id.value, user.id.value)
 
       if (rescuableAchievementResponse.isFailure) {
         rescuableAchievementResponse.throwError()

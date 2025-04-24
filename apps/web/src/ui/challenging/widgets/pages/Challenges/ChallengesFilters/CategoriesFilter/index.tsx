@@ -36,10 +36,10 @@ export function CategoriesFilter({ initialCategories }: CategoriesProps) {
           <Dropdown.Group className='flex flex-wrap justify-start gap-2 px-2 py-3'>
             {categories.length > 0 ? (
               categories.map((category) => {
-                const isActive = categoriesIds.includes(category.id)
+                const isActive = categoriesIds.includes(category.id.value)
                 return (
                   <Dropdown.Item
-                    key={category.id}
+                    key={category.id.value}
                     className={twMerge(
                       ' cursor-pointer rounded-md p-1 text-xs font-semibold outline-none hover:brightness-110',
                       isActive
@@ -49,7 +49,7 @@ export function CategoriesFilter({ initialCategories }: CategoriesProps) {
                   >
                     <button
                       type='button'
-                      onClick={() => handleCategoryClick(category.id, isActive)}
+                      onClick={() => handleCategoryClick(category.id.value, isActive)}
                     >
                       {category.name.value.toLowerCase()}
                     </button>

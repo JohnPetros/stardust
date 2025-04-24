@@ -60,7 +60,7 @@ export function useSnippetPage({
   const { control, formState, getValues, reset, watch } = useForm<SnippetSchema>({
     resolver: zodResolver(snippetSchema),
     defaultValues: {
-      snippetId: snippet?.id,
+      snippetId: snippet?.id.value,
       snippetTitle: snippet?.title.value ?? Snippet.DEFEAULT_TITLE,
       snippetCode: snippet?.code.value ?? '',
       isSnippetPublic: snippet?.isPublic.value ?? true,
@@ -73,7 +73,7 @@ export function useSnippetPage({
   async function handleActionSuccess(snippet: Snippet) {
     setIsUserSnippetAuthor(snippet.isPublic.isTrue)
     reset({
-      snippetId: snippet.id,
+      snippetId: snippet.id.value,
       snippetTitle: snippet.title.value,
       snippetCode: snippet.code.value,
       isSnippetPublic: snippet.isPublic.value,
@@ -112,7 +112,7 @@ export function useSnippetPage({
 
   function handleAuthAlertDialogConfirm() {
     router.goTo(
-      `${ROUTES.auth.signIn}?nextRoute=${ROUTES.playground.snippet(snippet?.id)}`,
+      `${ROUTES.auth.signIn}?nextRoute=${ROUTES.playground.snippet(snippet?.id.value)}`,
     )
   }
 
@@ -125,7 +125,9 @@ export function useSnippetPage({
   }, [watch])
 
   useEffect(() => {
-    setIsUserSnippetAuthor(snippet && user ? snippet.authorId === user.id : false)
+    setIsUserSnippetAuthor(
+      snippet && user ? snippet.author.isEqualTo(user).isTrue : false,
+    )
   }, [snippet, user])
 
   return {

@@ -33,7 +33,7 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
     const category = categories.find((category) => category.name.value === categoryName)
     if (!category || !categoriesIds) return
 
-    const updatedCategoriesIds = categoriesIds.filter((id) => id !== category.id)
+    const updatedCategoriesIds = categoriesIds.filter((id) => id !== category.id.value)
 
     includedCategoriesNames.current = includedCategoriesNames.current.remove(
       category.name.value,
@@ -141,7 +141,7 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
 
   useEffect(() => {
     categoriesIds.filter(Boolean).forEach((id) => {
-      const categoryName = categories.find((category) => category.id === id)?.name
+      const categoryName = categories.find((category) => category.id.value === id)?.name
 
       if (
         categoryName &&

@@ -61,8 +61,7 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
       case 'completed':
         return challenges.filter((challenge) => {
           const isCompleted = user.hasCompletedChallenge(challenge.id)
-          const isUserChallengeAuthor = user.id === challenge.authorId
-          if (isUserChallengeAuthor) {
+          if (challenge.author.isEqualTo(user).isTrue) {
             return isCompleted.isTrue
           }
           return isCompleted.isTrue && challenge.isPublic.isTrue
@@ -70,8 +69,7 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
       case 'not-completed':
         return challenges.filter((challenge) => {
           const isCompleted = user.hasCompletedChallenge(challenge.id)
-          const isUserChallengeAuthor = user.id === challenge.authorId
-          if (isUserChallengeAuthor) {
+          if (challenge.author.isEqualTo(user).isTrue) {
             return isCompleted.isFalse
           }
           return isCompleted.isFalse && challenge.isPublic.isTrue

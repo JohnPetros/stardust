@@ -22,7 +22,7 @@ export class Star extends Entity<StarsProps> {
 
   get dto(): StarDto {
     return {
-      id: this.id,
+      id: this.id.value,
       name: this.name.value,
       number: this.number.value,
       slug: this.slug.value,

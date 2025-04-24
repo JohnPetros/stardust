@@ -13,6 +13,7 @@ import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
 import { useObserveNewUnlockedAchievementsAction } from './useObserveNewUnlockedAchievementsAction'
 import { DOM_EVENTS } from '@/constants'
+import { Id, Integer } from '@stardust/core/global/structures'
 
 export function useAchivementsProvider(
   newUnlockedAchievementsAlertDialogRef: RefObject<AlertDialogRef>,
@@ -33,7 +34,10 @@ export function useAchivementsProvider(
   ) {
     if (!user) return
 
-    const response = await api.deleteRescuableAchievement(rescuableAchievementId, user.id)
+    const response = await api.deleteRescuableAchievement(
+      rescuableAchievementId,
+      user.id.value,
+    )
 
     if (response.isFailure) {
       toast.show(response.errorMessage, {
@@ -44,7 +48,10 @@ export function useAchivementsProvider(
       return
     }
 
-    user.rescueAchievement(rescuableAchievementId, rescuableAchievementReward)
+    user.rescueAchievement(
+      Id.create(rescuableAchievementId),
+      Integer.create(rescuableAchievementReward),
+    )
 
     await updateUser(user)
   }

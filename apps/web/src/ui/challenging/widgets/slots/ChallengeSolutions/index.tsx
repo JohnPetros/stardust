@@ -120,7 +120,7 @@ export function ChallengeSolutionsSlot() {
           {!isLoading &&
             solutions.length > 0 &&
             solutions.map((solution) => (
-              <li key={solution.id} className='w-full'>
+              <li key={solution.id.value} className='w-full'>
                 <SolutionCard
                   title={solution.title.value}
                   slug={solution.slug.value}

@@ -50,7 +50,7 @@ export function useChallengeResultSlot() {
       const rewardsPayload: StarChallengeRewardingPayload = {
         secondsCount: currentSeconds,
         incorrectAnswersCount: challenge.incorrectAnswersCount.value,
-        challengeId: challenge?.id,
+        challengeId: challenge?.id.value,
         starId: challenge?.starId?.value,
       }
 
@@ -65,7 +65,7 @@ export function useChallengeResultSlot() {
     const rewardsPayload: ChallengeRewardingPayload = {
       secondsCount: currentSeconds,
       incorrectAnswersCount: challenge.incorrectAnswersCount.value,
-      challengeId: challenge?.id,
+      challengeId: challenge?.id.value,
     }
 
     await setCookie({
@@ -81,8 +81,8 @@ export function useChallengeResultSlot() {
 
     if (challenge.isCompleted.isTrue) {
       if (
-        user.hasCompletedChallenge(challenge.id).isTrue ||
-        challenge.authorId === user?.id
+        user.hasCompletedChallenge(challenge.id).or(challenge.author.isEqualTo(user))
+          .isTrue
       )
         leavePage(ROUTES.challenging.challenges.list)
       else showRewards()

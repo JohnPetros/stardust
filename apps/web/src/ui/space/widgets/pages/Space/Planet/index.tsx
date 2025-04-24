@@ -39,13 +39,13 @@ function PlanetComponent({ name, image, icon, stars }: PlanetProps) {
       {user && lastUnlockedStarId && (
         <ul className='pl-[2.2rem]'>
           {stars.map((star) => (
-            <li key={star.id}>
+            <li key={star.id.value}>
               <Star
-                id={star.id}
+                id={star.id.value}
                 name={star.name.value}
                 number={star.number.value}
                 slug={star.slug.value}
-                isLastUnlockedStar={lastUnlockedStarId === star.id}
+                isLastUnlockedStar={lastUnlockedStarId === star.id.value}
                 isUnlocked={user.hasUnlockedStar(star.id).isTrue}
               />
             </li>

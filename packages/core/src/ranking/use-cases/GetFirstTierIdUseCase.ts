@@ -15,7 +15,7 @@ export class GetFirstTierIdUseCase implements UseCase<void, Reponse> {
     }
     const tier = Tier.create(response.body)
     return {
-      firstTierId: tier.id,
+      firstTierId: tier.id.value,
     }
   }
 }

@@ -17,7 +17,9 @@ export class GetLastWeekRankingWinnersUseCase implements UseCase<UserDto, Respon
     const user = User.create(userDto)
     const lastWeekTierPosition = await this.fetchLastWeekTierPosition(user)
     const lastWeekTier = await this.fetchLastWeekTier(lastWeekTierPosition)
-    const lastWeekRankingWinners = await this.fetchLastWeekRankingWinners(lastWeekTier.id)
+    const lastWeekRankingWinners = await this.fetchLastWeekRankingWinners(
+      lastWeekTier.id.value,
+    )
     const isUserLoser = user.tier.position.isLessThan(lastWeekTier.position)
 
     return {
@@ -43,7 +45,7 @@ export class GetLastWeekRankingWinnersUseCase implements UseCase<UserDto, Respon
 
   private async fetchLastWeekTierPosition(user: User) {
     const response = await this.rankingsService.fetchLastWeekRankingUserTierPosition(
-      user.id,
+      user.id.value,
     )
     if (response.isFailure) return user.tier.position.value
     return response.body.position

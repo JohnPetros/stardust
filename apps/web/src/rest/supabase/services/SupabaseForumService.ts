@@ -143,7 +143,7 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
       const { error: challengeCommentError, status: challengeCommentStatus } =
         await supabase
           .from('challenges_comments')
-          .insert({ comment_id: comment.id, challenge_id: challengeId })
+          .insert({ comment_id: comment.id.value, challenge_id: challengeId })
 
       if (challengeCommentError) {
         return SupabasePostgrestError(
@@ -179,7 +179,7 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
       const { error: solutionCommentError, status: solutionCommentStatus } =
         await supabase
           .from('solutions_comments')
-          .insert({ comment_id: comment.id, solution_id: solutionId })
+          .insert({ comment_id: comment.id.value, solution_id: solutionId })
 
       if (solutionCommentError) {
         return SupabasePostgrestError(

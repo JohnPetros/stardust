@@ -32,7 +32,7 @@ export function SolutionsListTab({ tabListSorter, userId }: ChallengesListProps)
     <ul>
       {solutions.map((solution, index) => (
         <Row.Container
-          key={solution.id}
+          key={solution.id.value}
           index={index}
           href={ROUTES.api.challenging.solution(solution.slug.value)}
           className='flex flex-col gap-2'

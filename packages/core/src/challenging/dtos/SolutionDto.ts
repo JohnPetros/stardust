@@ -1,4 +1,4 @@
-import type { AuthorDto } from '../../global/dtos'
+import type { AuthorAggregateDto } from '../../global/dtos'
 
 export type SolutionDto = {
   id?: string
@@ -9,8 +9,5 @@ export type SolutionDto = {
   viewsCount?: number
   commentsCount?: number
   postedAt?: Date
-  author: {
-    id: string
-    dto?: AuthorDto
-  }
+  author: AuthorAggregateDto
 }

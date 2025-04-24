@@ -83,7 +83,7 @@ export function useSolutionPage(
     await postSolution({
       solutionTitle,
       solutionContent,
-      authorId: user.id,
+      authorId: user.id.value,
       challengeId,
     })
   }
@@ -92,7 +92,7 @@ export function useSolutionPage(
     if (!solution) return
 
     await editSolution({
-      solutionId: solution.id,
+      solutionId: solution.id.value,
       solutionTitle,
       solutionContent,
     })

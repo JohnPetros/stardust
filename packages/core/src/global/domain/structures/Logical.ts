@@ -13,6 +13,14 @@ export class Logical {
     return new Logical(value)
   }
 
+  and(logical: Logical) {
+    return new Logical(this.value && logical.value)
+  }
+
+  or(logical: Logical) {
+    return new Logical(this.value || logical.value)
+  }
+
   invertValue() {
     return new Logical(!this.value)
   }

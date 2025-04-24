@@ -9,6 +9,7 @@ type RocketAggregateEntity = {
 
 export class RocketAggregate extends Aggregate<RocketAggregateEntity> {
   private static readonly ENTITY_NAME = 'Foguete do usuário'
+
   static create(dto: RocketAggregateDto) {
     if (dto.entity) {
       const entity = {
@@ -31,7 +32,7 @@ export class RocketAggregate extends Aggregate<RocketAggregateEntity> {
 
   get dto(): RocketAggregateDto {
     return {
-      id: this.id,
+      id: this.id.value,
       entity: {
         name: this.name.value,
         image: this.image.value,

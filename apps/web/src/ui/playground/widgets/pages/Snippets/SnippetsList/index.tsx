@@ -23,9 +23,9 @@ export function SnippetsList() {
 
         {!isLoading &&
           snippets.map((snippet) => (
-            <li key={snippet.id}>
+            <li key={snippet.id.value}>
               <SnippetCard
-                id={snippet.id}
+                id={snippet.id.value}
                 title={snippet.title.value}
                 onDelete={handleDeleteSnippetDelete}
               />

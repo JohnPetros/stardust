@@ -24,7 +24,7 @@ export function useRocketItem({ id, name, price, image }: UseRocketItemProps) {
   async function handleShopButtonBuy() {
     if (!user) return
 
-    const response = await api.saveAcquiredRocket(id, user.id)
+    const response = await api.saveAcquiredRocket(id, user.id.value)
 
     if (response.isFailure) {
       toast.show(response.errorMessage)

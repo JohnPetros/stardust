@@ -1,9 +1,8 @@
-import { Entity } from '../../../global/domain/abstracts'
-import { Author } from '../../../global/domain/entities'
-import { Integer, Logical, Name, Slug, Text } from '../../../global/domain/structures'
-import type { SolutionDto } from '../../dtos'
-import { EntityNotDefinedError } from '../../../global/domain/errors'
-import { Datetime } from '../../../global/libs'
+import type { SolutionDto } from '#challenging/dtos'
+import { Entity } from '#global/abstracts'
+import { AuthorAggregate } from '#global/aggregates'
+import { Datetime } from '#global/libs'
+import { Integer, Logical, Name, Slug, Text } from '#global/structures'
 
 type SolutionProps = {
   title: Name
@@ -14,10 +13,7 @@ type SolutionProps = {
   slug: Slug
   isViewed: Logical
   postedAt: Date
-  author: {
-    id: string
-    entity?: Omit<Author, 'id'>
-  }
+  author: AuthorAggregate
 }
 
 export class Solution extends Entity<SolutionProps> {
@@ -38,10 +34,7 @@ export class Solution extends Entity<SolutionProps> {
         viewsCount: Integer.create(dto.viewsCount ?? 0, 'Contagem de views da solução'),
         isViewed: Logical.create(false, 'A solução foi visualizada'),
         postedAt: dto.postedAt ?? new Datetime().date(),
-        author: {
-          id: dto.author.id,
-          entity: dto.author.dto && Author.create(dto.author.dto),
-        },
+        author: AuthorAggregate.create(dto.author),
       },
       dto.id,
     )
@@ -49,24 +42,19 @@ export class Solution extends Entity<SolutionProps> {
 
   view() {
     this.props.isViewed = this.isViewed.makeTrue()
-    this.props.viewsCount = this.props.viewsCount.increment(1)
+    this.props.viewsCount = this.props.viewsCount.increment()
   }
 
   upvote() {
-    this.props.upvotesCount = this.props.upvotesCount.increment(1)
+    this.props.upvotesCount = this.props.upvotesCount.increment()
   }
 
   removeUpvote() {
-    this.props.upvotesCount = this.props.upvotesCount.dencrement(1)
+    this.props.upvotesCount = this.props.upvotesCount.dencrement()
   }
 
   get author() {
-    if (!this.props.author.entity) throw new EntityNotDefinedError('Solução de desafio')
-    return this.props.author.entity
-  }
-
-  get authorId() {
-    return this.props.author.id
+    return this.props.author
   }
 
   get title(): Name {
@@ -112,7 +100,7 @@ export class Solution extends Entity<SolutionProps> {
 
   get dto(): SolutionDto {
     return {
-      id: this.id,
+      id: this.id.value,
       title: this.title.value,
       content: this.content.value,
       slug: this.slug.value,
@@ -120,10 +108,7 @@ export class Solution extends Entity<SolutionProps> {
       viewsCount: this.viewsCount.value,
       commentsCount: this.commentsCount.value,
       postedAt: this.postedAt,
-      author: {
-        id: this.authorId,
-        dto: this.props.author.entity?.dto,
-      },
+      author: this.author.dto,
     }
   }
 }
