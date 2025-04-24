@@ -3,7 +3,7 @@ import { fireEvent, renderHook, waitFor } from '@testing-library/react'
 import { AchievementsFaker, UsersFaker } from '@stardust/core/fakers/entities'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { AppError } from '@stardust/core/global/errors'
-import { ApiResponse } from '@stardust/core/global/responses'
+import { RestResponse } from '@stardust/core/global/responses'
 
 import { alertDialogRefMock } from '@/ui/global/widgets/components/AlertDialog/tests/mocks/alertDialogRefMock'
 import { useAuthContextMock } from '@/ui/auth/contexts/AuthContext/tests/mocks'
@@ -133,7 +133,7 @@ describe('useAchievementsProvider hook', () => {
     const { fakeUser } = useAuthContextMock()
 
     const apiMock = useApiMock({
-      deleteRescuableAchievement: jest.fn().mockResolvedValue(new ApiResponse()),
+      deleteRescuableAchievement: jest.fn().mockResolvedValue(new RestResponse()),
     })
 
     const fakeRescuableAchievement = AchievementsFaker.fake()
@@ -158,7 +158,9 @@ describe('useAchievementsProvider hook', () => {
     useApiMock({
       deleteRescuableAchievement: jest
         .fn()
-        .mockResolvedValue(new ApiResponse({ statusCode: HTTP_STATUS_CODE.serverError })),
+        .mockResolvedValue(
+          new RestResponse({ statusCode: HTTP_STATUS_CODE.serverError }),
+        ),
     })
 
     const fakeRescuableAchievement = AchievementsFaker.fake()
@@ -184,7 +186,7 @@ describe('useAchievementsProvider hook', () => {
     const { updateUserMock } = useAuthContextMock({ user: fakeUser })
 
     useApiMock({
-      deleteRescuableAchievement: jest.fn().mockResolvedValue(new ApiResponse()),
+      deleteRescuableAchievement: jest.fn().mockResolvedValue(new RestResponse()),
     })
 
     const { result } = renderHook(() => useAchivementsProvider(alertDialogRefMock))

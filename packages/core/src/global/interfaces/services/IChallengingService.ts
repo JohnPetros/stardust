@@ -15,7 +15,7 @@ import type {
   SolutionsListParams,
 } from '../../../challenging/domain/types'
 import type { PaginationResponse } from '../../responses'
-import type { ApiResponse } from '../../responses/ApiResponse'
+import type { RestResponse } from '../../responses/RestResponse'
 
 export type GetFilteredChallengesParams = {
   userId: string
@@ -26,50 +26,50 @@ export type GetFilteredChallengesParams = {
 }
 
 export interface IChallengingService {
-  fetchChallengeById(challengeId: string): Promise<ApiResponse<ChallengeDto>>
-  fetchChallengeBySlug(challengeSlug: string): Promise<ApiResponse<ChallengeDto>>
-  fetchChallengeByStarId(starId: string): Promise<ApiResponse<ChallengeDto>>
-  fetchChallengeBySolutionId(solutionId: string): Promise<ApiResponse<ChallengeDto>>
+  fetchChallengeById(challengeId: string): Promise<RestResponse<ChallengeDto>>
+  fetchChallengeBySlug(challengeSlug: string): Promise<RestResponse<ChallengeDto>>
+  fetchChallengeByStarId(starId: string): Promise<RestResponse<ChallengeDto>>
+  fetchChallengeBySolutionId(solutionId: string): Promise<RestResponse<ChallengeDto>>
   fetchCompletableChallenges(
     userId: string,
-  ): Promise<ApiResponse<{ id: string; difficulty: string }[]>>
-  fetchDocs(): Promise<ApiResponse<DocDto[]>>
-  fetchSolutionById(solutionId: string): Promise<ApiResponse<SolutionDto>>
-  fetchSolutionBySlug(solutionSlug: string): Promise<ApiResponse<SolutionDto>>
+  ): Promise<RestResponse<{ id: string; difficulty: string }[]>>
+  fetchDocs(): Promise<RestResponse<DocDto[]>>
+  fetchSolutionById(solutionId: string): Promise<RestResponse<SolutionDto>>
+  fetchSolutionBySlug(solutionSlug: string): Promise<RestResponse<SolutionDto>>
   fetchChallengesList(
     params: ChallengesListParams,
-  ): Promise<ApiResponse<PaginationResponse<ChallengeDto>>>
+  ): Promise<RestResponse<PaginationResponse<ChallengeDto>>>
   fetchSolutionsList(
     params: SolutionsListParams,
-  ): Promise<ApiResponse<PaginationResponse<SolutionDto>>>
-  fetchCategories(): Promise<ApiResponse<ChallengeCategoryDto[]>>
+  ): Promise<RestResponse<PaginationResponse<SolutionDto>>>
+  fetchCategories(): Promise<RestResponse<ChallengeCategoryDto[]>>
   fetchChallengeVote(
     challengeId: string,
     userId: string,
-  ): Promise<ApiResponse<{ challengeVote: ChallengeVote }>>
-  saveChallenge(challenge: Challenge): Promise<ApiResponse>
+  ): Promise<RestResponse<{ challengeVote: ChallengeVote }>>
+  saveChallenge(challenge: Challenge): Promise<RestResponse>
   saveChallengeCategories(
     challengeId: string,
     challengeCategories: ChallengeCategory[],
-  ): Promise<ApiResponse>
-  deleteChallengeCategories(challengeId: string): Promise<ApiResponse>
-  saveSolution(solution: Solution, challengeId: string): Promise<ApiResponse>
-  updateSolution(solution: Solution): Promise<ApiResponse>
-  updateChallenge(challenge: Challenge): Promise<ApiResponse>
-  deleteSolution(solutionId: string): Promise<ApiResponse>
-  deleteChallenge(challengeId: string): Promise<ApiResponse>
-  saveCompletedChallenge(challengeId: string, userId: string): Promise<ApiResponse>
+  ): Promise<RestResponse>
+  deleteChallengeCategories(challengeId: string): Promise<RestResponse>
+  saveSolution(solution: Solution, challengeId: string): Promise<RestResponse>
+  updateSolution(solution: Solution): Promise<RestResponse>
+  updateChallenge(challenge: Challenge): Promise<RestResponse>
+  deleteSolution(solutionId: string): Promise<RestResponse>
+  deleteChallenge(challengeId: string): Promise<RestResponse>
+  saveCompletedChallenge(challengeId: string, userId: string): Promise<RestResponse>
   saveChallengeVote(
     challengeId: string,
     userId: string,
     challengeVote: ChallengeVote,
-  ): Promise<ApiResponse>
-  saveSolutionUpvote(solutionId: string, userId: string): Promise<ApiResponse>
+  ): Promise<RestResponse>
+  saveSolutionUpvote(solutionId: string, userId: string): Promise<RestResponse>
   updateChallengeVote(
     challengeId: string,
     userId: string,
     challengeVote: ChallengeVote,
-  ): Promise<ApiResponse>
-  deleteChallengeVote(challengeId: string, userId: string): Promise<ApiResponse>
-  deleteSolutionUpvote(solutionId: string, userId: string): Promise<ApiResponse>
+  ): Promise<RestResponse>
+  deleteChallengeVote(challengeId: string, userId: string): Promise<RestResponse>
+  deleteSolutionUpvote(solutionId: string, userId: string): Promise<RestResponse>
 }

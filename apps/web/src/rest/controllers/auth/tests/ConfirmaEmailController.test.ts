@@ -1,6 +1,6 @@
 import { ConfirmEmailController } from '../ConfirmEmailController'
 import { ROUTES } from '@/constants'
-import { ApiResponse } from '@stardust/core/global/responses'
+import { RestResponse } from '@stardust/core/global/responses'
 import type { IHttp } from '@stardust/core/global/interfaces'
 import { AuthServiceMock } from '@stardust/core/mocks/services'
 import { HttpMock } from '../../tests/mocks'
@@ -20,7 +20,7 @@ describe('Confirm Email Controller', () => {
   })
 
   it('should redirect to the sign in page if any error is found when confirming email', async () => {
-    const authServiceResponse = new ApiResponse({
+    const authServiceResponse = new RestResponse({
       statusCode: HTTP_STATUS_CODE.unauthorized,
     })
     authServiceMock.confirmEmail = async () => authServiceResponse
@@ -35,7 +35,7 @@ describe('Confirm Email Controller', () => {
   })
 
   it('should redirect to the account confirmation route if the email was successfully confirmed', async () => {
-    const authServiceResponse = new ApiResponse({
+    const authServiceResponse = new RestResponse({
       statusCode: HTTP_STATUS_CODE.ok,
     })
     authServiceMock.confirmEmail = async () => authServiceResponse

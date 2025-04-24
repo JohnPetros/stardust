@@ -3,7 +3,7 @@ import { z } from 'zod'
 
 import { stringSchema } from '@stardust/validation/global/schemas'
 
-import type { NextParams } from '@/server/next/types'
+import type { NextParams } from '@/rpc/next/types'
 import { NextHttp } from '@/rest/next/NextHttp'
 import { runApiRoute } from '@/rest/next/utils'
 import { SupabaseRouteHandlerClient } from '@/rest/supabase/clients'

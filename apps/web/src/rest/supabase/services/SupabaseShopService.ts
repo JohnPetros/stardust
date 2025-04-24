@@ -1,4 +1,4 @@
-import { ApiResponse, PaginationResponse } from '@stardust/core/global/responses'
+import { RestResponse, PaginationResponse } from '@stardust/core/global/responses'
 import type { ShopItemsListingParams } from '@stardust/core/shop/types'
 import type { IShopService } from '@stardust/core/global/interfaces'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
@@ -30,7 +30,7 @@ export const SupabaseShopService = (supabase: Supabase): IShopService => {
 
       const avatar = supabaseAvatarMapper.toDto(data)
 
-      return new ApiResponse({ body: avatar })
+      return new RestResponse({ body: avatar })
     },
 
     async fetchShopAvatarsList({
@@ -64,7 +64,7 @@ export const SupabaseShopService = (supabase: Supabase): IShopService => {
 
       const pagination = new PaginationResponse(avatars, Number(count))
 
-      return new ApiResponse({ body: pagination })
+      return new RestResponse({ body: pagination })
     },
 
     async fetchAcquirableRocketsByDefault() {
@@ -79,7 +79,7 @@ export const SupabaseShopService = (supabase: Supabase): IShopService => {
 
       const rockets = data.map(supabaseRocketMapper.toDto)
 
-      return new ApiResponse({ body: rockets })
+      return new RestResponse({ body: rockets })
     },
 
     async fetchRocketById(rocketId: string) {
@@ -99,7 +99,7 @@ export const SupabaseShopService = (supabase: Supabase): IShopService => {
 
       const rocket = supabaseRocketMapper.toDto(data)
 
-      return new ApiResponse({ body: rocket })
+      return new RestResponse({ body: rocket })
     },
 
     async fetchShopRocketsList({
@@ -136,7 +136,7 @@ export const SupabaseShopService = (supabase: Supabase): IShopService => {
 
       const pagination = new PaginationResponse(rockets, Number(count))
 
-      return new ApiResponse({ body: pagination })
+      return new RestResponse({ body: pagination })
     },
 
     async saveAcquiredAvatar(avatarId: string, userId: string) {
@@ -148,7 +148,7 @@ export const SupabaseShopService = (supabase: Supabase): IShopService => {
         return SupabasePostgrestError(error, 'Erro inesperado ao salvar avatar adquirido')
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
 
     async fetchAcquirableAvatarsByDefault() {
@@ -163,7 +163,7 @@ export const SupabaseShopService = (supabase: Supabase): IShopService => {
 
       const avatars = data.map(supabaseAvatarMapper.toDto)
 
-      return new ApiResponse({ body: avatars })
+      return new RestResponse({ body: avatars })
     },
 
     async saveAcquiredRocket(rocketId: string, userId: string) {
@@ -178,7 +178,7 @@ export const SupabaseShopService = (supabase: Supabase): IShopService => {
         )
       }
 
-      return new ApiResponse()
+      return new RestResponse()
     },
   }
 }

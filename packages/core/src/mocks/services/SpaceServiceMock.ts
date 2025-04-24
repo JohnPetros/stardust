@@ -1,7 +1,7 @@
 import type { Planet } from '../../space/domain/entities'
 import type { PlanetDto, StarDto } from '../../space/dtos'
 import type { ISpaceService } from '../../global/interfaces'
-import { ApiResponse } from '../../global/responses'
+import { RestResponse } from '../../global/responses'
 import { HTTP_STATUS_CODE } from '../../global/constants'
 
 export class SpaceServiceMock implements ISpaceService {
@@ -9,58 +9,58 @@ export class SpaceServiceMock implements ISpaceService {
   stars: StarDto[] = []
   unlockedStarsIds: string[] = []
 
-  async fetchPlanets(): Promise<ApiResponse<PlanetDto[]>> {
-    return new ApiResponse({ body: this.planets })
+  async fetchPlanets(): Promise<RestResponse<PlanetDto[]>> {
+    return new RestResponse({ body: this.planets })
   }
 
-  async fetchFirstPlanet(): Promise<ApiResponse<PlanetDto>> {
+  async fetchFirstPlanet(): Promise<RestResponse<PlanetDto>> {
     throw new Error('Method not implemented.')
   }
 
-  async fetchPlanetByStar(starId: string): Promise<ApiResponse<PlanetDto>> {
+  async fetchPlanetByStar(starId: string): Promise<RestResponse<PlanetDto>> {
     const planet = this.planets.find((planet) =>
       planet.stars.some((star) => star.id === starId),
     )
-    if (planet) return new ApiResponse({ body: planet })
-    return new ApiResponse<PlanetDto>()
+    if (planet) return new RestResponse({ body: planet })
+    return new RestResponse<PlanetDto>()
   }
 
-  async savePlanet(planet: Planet): Promise<ApiResponse<true>> {
+  async savePlanet(planet: Planet): Promise<RestResponse<true>> {
     this.planets.push(planet.dto)
-    return new ApiResponse()
+    return new RestResponse()
   }
 
-  async fetchStarBySlug(starSlug: string): Promise<ApiResponse<StarDto>> {
+  async fetchStarBySlug(starSlug: string): Promise<RestResponse<StarDto>> {
     const star = this.stars.find((star) => star.slug === starSlug)
-    if (star) return new ApiResponse({ body: star })
-    return new ApiResponse({ statusCode: HTTP_STATUS_CODE.notFound })
+    if (star) return new RestResponse({ body: star })
+    return new RestResponse({ statusCode: HTTP_STATUS_CODE.notFound })
   }
 
-  async fetchStarById(starId: string): Promise<ApiResponse<StarDto>> {
+  async fetchStarById(starId: string): Promise<RestResponse<StarDto>> {
     const star = this.stars.find((star) => star.id === starId)
-    if (star) return new ApiResponse({ body: star })
-    return new ApiResponse({ statusCode: HTTP_STATUS_CODE.notFound })
+    if (star) return new RestResponse({ body: star })
+    return new RestResponse({ statusCode: HTTP_STATUS_CODE.notFound })
   }
 
   async fetchNextStarFromNextPlanet(
     currentPlanet: Planet,
-  ): Promise<ApiResponse<StarDto>> {
+  ): Promise<RestResponse<StarDto>> {
     const planet = this.planets.find(
       (planet) => planet.position === currentPlanet.position.incrementOne().value,
     )
-    if (planet) return new ApiResponse({ body: planet.stars[0] })
-    return new ApiResponse({ statusCode: HTTP_STATUS_CODE.notFound })
+    if (planet) return new RestResponse({ body: planet.stars[0] })
+    return new RestResponse({ statusCode: HTTP_STATUS_CODE.notFound })
   }
 
   async verifyStarIsUnlocked(
     starId: string,
     userId: string,
-  ): Promise<ApiResponse<boolean>> {
+  ): Promise<RestResponse<boolean>> {
     throw new Error('Method not implemented.')
   }
 
-  async saveUnlockedStar(starId: string, userId: string): Promise<ApiResponse<boolean>> {
+  async saveUnlockedStar(starId: string, userId: string): Promise<RestResponse<boolean>> {
     this.unlockedStarsIds.push(starId)
-    return new ApiResponse({ statusCode: HTTP_STATUS_CODE.created })
+    return new RestResponse({ statusCode: HTTP_STATUS_CODE.created })
   }
 }

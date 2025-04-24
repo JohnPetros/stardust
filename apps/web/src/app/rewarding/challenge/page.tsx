@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 
 import { COOKIES } from '@/constants'
-import { cookieActions, rewardingActions } from '@/server/next-safe-action'
+import { cookieActions, rewardingActions } from '@/rpc/next-safe-action'
 import { RewardingPage } from '@/ui/lesson/widgets/pages/Rewarding'
 
 export default async function Page() {

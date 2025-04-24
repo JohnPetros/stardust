@@ -3,7 +3,7 @@
 import { useAction } from 'next-safe-action/hooks'
 import { useCallback } from 'react'
 
-import { cookieActions } from '@/server/next-safe-action'
+import { cookieActions } from '@/rpc/next-safe-action'
 
 export function useCookieActions() {
   const { executeAsync: executeGetCookie } = useAction(cookieActions.getCookie)

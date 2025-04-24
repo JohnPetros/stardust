@@ -2,7 +2,7 @@ import { headers } from 'next/headers'
 
 import { ENV } from '@/constants'
 import type { IApiClient } from '@stardust/core/global/interfaces'
-import { ApiResponse, PaginationResponse } from '@stardust/core/global/responses'
+import { RestResponse, PaginationResponse } from '@stardust/core/global/responses'
 import { addQueryParams, handleApiError } from './utils'
 
 type CacheConfig = {
@@ -29,7 +29,7 @@ export const NextApiClient = ({
   const queryParams: Record<string, string> = {}
 
   return {
-    async get<Body>(route: string): Promise<ApiResponse<Body>> {
+    async get<Body>(route: string): Promise<RestResponse<Body>> {
       const response = await fetch(
         `${ENV.appHost}${addQueryParams(route, queryParams)}`,
         requestInit,
@@ -42,15 +42,15 @@ export const NextApiClient = ({
       const data = await response.json()
 
       if (response.headers.get('X-Pagination')) {
-        return new ApiResponse<Body>({
+        return new RestResponse<Body>({
           body: new PaginationResponse(data.items, data.count) as Body,
         })
       }
 
-      return new ApiResponse({ body: data, statusCode: response.status })
+      return new RestResponse({ body: data, statusCode: response.status })
     },
 
-    async post<Body>(route: string, body: unknown): Promise<ApiResponse<Body>> {
+    async post<Body>(route: string, body: unknown): Promise<RestResponse<Body>> {
       const response = await fetch(
         `${ENV.appHost}/${addQueryParams(route, queryParams)}`,
         {
@@ -65,7 +65,7 @@ export const NextApiClient = ({
       }
 
       const data = await response.json()
-      return new ApiResponse({ body: data, statusCode: response.status })
+      return new RestResponse({ body: data, statusCode: response.status })
     },
 
     setQueryParam(key: string, value: string) {

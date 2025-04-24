@@ -1,6 +1,6 @@
 import { useAction } from 'next-safe-action/hooks'
 
-import { rankingActions } from '@/server/next-safe-action'
+import { rankingActions } from '@/rpc/next-safe-action'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useCallback } from 'react'
 import { AppError } from '@stardust/core/global/errors'

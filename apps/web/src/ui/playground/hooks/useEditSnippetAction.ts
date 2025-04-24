@@ -3,8 +3,8 @@ import { useAction } from 'next-safe-action/hooks'
 
 import type { SnippetDto } from '@stardust/core/playground/dtos'
 
-import type { ActionParams } from '@/server/next-safe-action/types'
-import { playgroundActions } from '@/server/next-safe-action'
+import type { ActionParams } from '@/rpc/next-safe-action/types'
+import { playgroundActions } from '@/rpc/next-safe-action'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { Snippet } from '@stardust/core/playground/entities'
 

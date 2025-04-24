@@ -1,4 +1,4 @@
-import { ApiResponse } from '../../../global/responses'
+import { RestResponse } from '../../../global/responses'
 import { AppError } from '../../../global/domain/errors'
 import { HTTP_STATUS_CODE } from '../../../global/constants'
 import { ProfileServiceMock } from '../../../mocks/services'
@@ -119,7 +119,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       userId: string,
     ) => {
       fakeSavedRescuedAchivementRequests.push({ unlcokedAchievementId, userId })
-      return new ApiResponse()
+      return new RestResponse()
     }
 
     profileService.saveRescuableAchievement = async (
@@ -127,7 +127,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       userId: string,
     ) => {
       fakeSavedRescuedAchivementRequests.push({ rescuableAchievementId, userId })
-      return new ApiResponse()
+      return new RestResponse()
     }
 
     useCase = new ObserveNewUnlockedAchievementsUseCase(profileService)
@@ -154,7 +154,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
     ]
 
     profileService.saveUnlockedAchievement = async () => {
-      return new ApiResponse({ statusCode: HTTP_STATUS_CODE.serverError })
+      return new RestResponse({ statusCode: HTTP_STATUS_CODE.serverError })
     }
 
     useCase = new ObserveNewUnlockedAchievementsUseCase(profileService)
@@ -163,10 +163,10 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       await useCase.do({ userDto })
     }).rejects.toThrow(AppError)
 
-    profileService.saveUnlockedAchievement = async () => new ApiResponse()
+    profileService.saveUnlockedAchievement = async () => new RestResponse()
 
     profileService.saveRescuableAchievement = async () => {
-      return new ApiResponse({ statusCode: HTTP_STATUS_CODE.serverError })
+      return new RestResponse({ statusCode: HTTP_STATUS_CODE.serverError })
     }
 
     useCase = new ObserveNewUnlockedAchievementsUseCase(profileService)

@@ -5,14 +5,14 @@ import { type NextRequest, NextResponse } from 'next/server'
 import type { ZodSchema } from 'zod'
 
 import type { HttpMethod, HttpSchema, IHttp } from '@stardust/core/global/interfaces'
-import { ApiResponse } from '@stardust/core/global/responses'
+import { RestResponse } from '@stardust/core/global/responses'
 import { AppError, MethodNotImplementedError } from '@stardust/core/global/errors'
 import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
-import type { NextParams } from '@/server/next/types'
+import type { NextParams } from '@/rpc/next/types'
 import { SupabaseRouteHandlerClient } from '../supabase/clients'
 import { SupabaseAuthService, SupabaseProfileService } from '../supabase/services'
-import { cookieActions } from '@/server/next-safe-action'
+import { cookieActions } from '@/rpc/next-safe-action'
 import { ENV } from '@/constants'
 
 type Cookie = {
@@ -76,7 +76,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
           })
         }
 
-      return new ApiResponse({
+      return new RestResponse({
         body: nextResponse,
         statusCode: HTTP_STATUS_CODE.redirect,
         headers: { [HTTP_HEADERS.location]: route },
@@ -136,7 +136,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     },
 
     pass() {
-      return new ApiResponse({ headers: { [HTTP_HEADERS.xPass]: 'true' } })
+      return new RestResponse({ headers: { [HTTP_HEADERS.xPass]: 'true' } })
     },
 
     send(data: unknown, statusCode = HTTP_STATUS_CODE.ok) {
@@ -152,13 +152,13 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
             maxAge: cookie.duration,
           })
         }
-        return new ApiResponse({
+        return new RestResponse({
           body: nextResponse,
           statusCode: HTTP_STATUS_CODE.redirect,
         })
       }
 
-      return new ApiResponse({
+      return new RestResponse({
         body: NextResponse.json(data, { status: statusCode }),
         statusCode,
       })

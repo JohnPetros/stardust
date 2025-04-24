@@ -4,7 +4,7 @@ import { useAction } from 'next-safe-action/hooks'
 import type { ChallengeVote } from '@stardust/core/challenging/types'
 import { AppError } from '@stardust/core/global/errors'
 
-import { challengingActions } from '@/server/next-safe-action'
+import { challengingActions } from '@/rpc/next-safe-action'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
 type UseVoteChallengeActionProps = {

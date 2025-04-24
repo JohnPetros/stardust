@@ -1,7 +1,7 @@
 import { RewardingPage } from '@/ui/lesson/widgets/pages/Rewarding'
 import { COOKIES } from '@/constants'
 import { notFound } from 'next/navigation'
-import { cookieActions, rewardingActions } from '@/server/next-safe-action'
+import { cookieActions, rewardingActions } from '@/rpc/next-safe-action'
 
 export default async function Page() {
   const rewardsPayloadCookie = await cookieActions.getCookie(

@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 
-import { challengingActions } from '@/server/next-safe-action'
-import type { NextParams, NextSearchParams } from '@/server/next/types'
+import { challengingActions } from '@/rpc/next-safe-action'
+import type { NextParams, NextSearchParams } from '@/rpc/next/types'
 import { ChallengeSolutionSlot } from '@/ui/challenging/widgets/slots/ChallengeSolution'
 
 export const dynamic = 'force-dynamic'

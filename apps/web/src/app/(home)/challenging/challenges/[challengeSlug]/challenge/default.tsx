@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 
-import { challengingActions } from '@/server/next-safe-action'
-import type { NextParams } from '@/server/next/types'
+import { challengingActions } from '@/rpc/next-safe-action'
+import type { NextParams } from '@/rpc/next/types'
 import { ChallengePage } from '@/ui/challenging/widgets/pages/Challenge'
 
 export default async function Page({ params }: NextParams<{ challengeSlug: string }>) {

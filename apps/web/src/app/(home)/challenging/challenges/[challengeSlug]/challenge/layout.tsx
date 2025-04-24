@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 
 import { ChallengeLayout } from '@/ui/challenging/widgets/layouts/Challenge'
 import type { PanelsOffset } from '@/ui/challenging/widgets/layouts/Challenge/types'
-import { cookieActions } from '@/server/next-safe-action'
+import { cookieActions } from '@/rpc/next-safe-action'
 import { COOKIES } from '@/constants'
 
 const DEFAULT_PANELS_OFFSET: PanelsOffset = {

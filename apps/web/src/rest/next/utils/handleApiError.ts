@@ -1,4 +1,4 @@
-import { ApiResponse } from '@stardust/core/global/responses'
+import { RestResponse } from '@stardust/core/global/responses'
 
 export async function handleApiError<Body>(response: globalThis.Response) {
   const data = await response.json()
@@ -6,7 +6,7 @@ export async function handleApiError<Body>(response: globalThis.Response) {
   if ('title' in data && 'message' in data) {
     console.error('Api error: ', data.title)
 
-    return new ApiResponse<Body>({
+    return new RestResponse<Body>({
       errorMessage: String(data.message),
       statusCode: response.status,
     })
@@ -14,5 +14,5 @@ export async function handleApiError<Body>(response: globalThis.Response) {
 
   console.error('Unkown Api error: ', response)
 
-  return new ApiResponse<Body>({ statusCode: response.status })
+  return new RestResponse<Body>({ statusCode: response.status })
 }

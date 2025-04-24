@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 
-import type { NextParams } from '@/server/next/types'
+import type { NextParams } from '@/rpc/next/types'
 import { SupabaseServerClient } from '@/rest/supabase/clients'
 import { SupabaseAuthService, SupabaseChallengingService } from '@/rest/supabase/services'
 import { ChallengeEditorPage } from '@/ui/challenging/widgets/pages/ChallengeEditor'

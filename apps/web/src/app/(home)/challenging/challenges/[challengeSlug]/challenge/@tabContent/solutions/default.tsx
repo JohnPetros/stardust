@@ -1,4 +1,4 @@
-import type { NextParams } from '@/server/next/types'
+import type { NextParams } from '@/rpc/next/types'
 import { ChallengeSolutionsSlot } from '@/ui/challenging/widgets/slots/ChallengeSolutions'
 
 export default async function DefaultSlot({
