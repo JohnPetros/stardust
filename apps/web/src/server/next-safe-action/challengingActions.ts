@@ -18,8 +18,11 @@ import {
   challengeSchema,
 } from '@stardust/validation/challenging/schemas'
 
-import { SupabaseServerActionClient } from '@/api/supabase/clients/SupabaseServerActionClient'
-import { SupabaseChallengingService, SupabaseSpaceService } from '@/api/supabase/services'
+import { SupabaseServerActionClient } from '@/rest/supabase/clients/SupabaseServerActionClient'
+import {
+  SupabaseChallengingService,
+  SupabaseSpaceService,
+} from '@/rest/supabase/services'
 import { authActionClient } from './clients/authActionClient'
 import { NextActionServer } from '../next/NextActionServer'
 import {

@@ -2,7 +2,7 @@ import type { PlanetDto } from '@stardust/core/space/dtos'
 
 import { SpacePage } from '@/ui/space/widgets/pages/Space'
 import { SpaceProvider } from '@/ui/space/contexts/SpaceContext'
-import { NextApiClient } from '@/api/next/NextApiClient'
+import { NextApiClient } from '@/rest/next/NextApiClient'
 import { ROUTES } from '@/constants'
 
 export default async function Space() {

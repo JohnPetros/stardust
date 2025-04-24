@@ -1,5 +1,5 @@
 import { Info } from '@/ui/global/widgets/components/Info'
-import { Datetime } from '@stardust/core/libs'
+import { Datetime } from '@stardust/core/global/libs'
 
 type SolutionInfo = {
   upvotesCount?: number

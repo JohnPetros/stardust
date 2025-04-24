@@ -2,14 +2,14 @@ import type {
   IAction,
   IActionServer,
   IChallengingService,
-} from '@stardust/core/interfaces'
+} from '@stardust/core/global/interfaces'
 import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 import type {
   ChallengeCompletionStatus,
   ChallengeDifficultyLevel,
 } from '@stardust/core/challenging/types'
 import { ListChallengesUseCase } from '@stardust/core/challenging/use-cases'
-import type { PaginationResponse } from '@stardust/core/responses'
+import type { PaginationResponse } from '@stardust/core/global/responses'
 
 type Request = {
   page: number

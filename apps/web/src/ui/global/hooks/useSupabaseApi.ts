@@ -15,7 +15,7 @@ import {
   SupabasePlaygroundService,
   SupabaseForumService,
   SupabaseStorageService,
-} from '@/api/supabase/services'
+} from '@/rest/supabase/services'
 
 export function useSupabaseApi() {
   const { supabase } = useSupabaseContext()

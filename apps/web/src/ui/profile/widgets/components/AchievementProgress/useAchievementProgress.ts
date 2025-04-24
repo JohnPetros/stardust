@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { AchievementMetricValue } from '@stardust/core/profile/types'
-import { AchievementProgress } from '@stardust/core/profile/structs'
+import type { AchievementMetricValue } from '@stardust/core/profile/types'
+import { AchievementProgress } from '@stardust/core/profile/structures'
 
 export function useAchievementProgress(
   metric: AchievementMetricValue,

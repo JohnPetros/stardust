@@ -6,12 +6,12 @@ import { idSchema, integerSchema } from '@stardust/validation/global/schemas'
 
 import { authActionClient } from './clients/authActionClient'
 import { NextActionServer } from '../next/NextActionServer'
-import { SupabaseServerActionClient } from '@/api/supabase/clients'
+import { SupabaseServerActionClient } from '@/rest/supabase/clients'
 import {
   SupabaseChallengingService,
   SupabaseProfileService,
   SupabaseSpaceService,
-} from '@/api/supabase/services'
+} from '@/rest/supabase/services'
 import {
   RewardForChallengeCompletionAction,
   RewardForStarChallengeCompletionAction,

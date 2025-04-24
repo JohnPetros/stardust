@@ -1,4 +1,4 @@
-import { StringValidation } from '@stardust/core/libs'
+import { StringValidation } from '@stardust/core/global/libs'
 
 const ENV = {
   mode: process.env.NODE_ENV,

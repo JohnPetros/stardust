@@ -1,7 +1,7 @@
 import type { RankingUserDto, TierDto } from '@stardust/core/ranking/dtos'
 
 import { ROUTES } from '@/constants'
-import { NextApiClient } from '@/api/next/NextApiClient'
+import { NextApiClient } from '@/rest/next/NextApiClient'
 import { RankingPage } from '@/ui/ranking/widgets/pages/Ranking'
 import { RankingProvider } from '@/ui/ranking/contexts/RankingContext'
 

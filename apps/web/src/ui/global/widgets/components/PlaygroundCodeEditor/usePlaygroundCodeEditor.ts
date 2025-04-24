@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { Code } from '@stardust/core/global/structs'
+import { Code } from '@stardust/core/global/structures'
 
 import { REGEX } from '@/constants'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'

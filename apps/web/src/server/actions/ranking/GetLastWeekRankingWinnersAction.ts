@@ -1,5 +1,9 @@
 import type { TierDto, RankingUserDto } from '@stardust/core/ranking/dtos'
-import type { IAction, IActionServer, IRankingService } from '@stardust/core/interfaces'
+import type {
+  IAction,
+  IActionServer,
+  IRankingService,
+} from '@stardust/core/global/interfaces'
 import { GetLastWeekRankingWinnersUseCase } from '@stardust/core/ranking/use-cases'
 
 type Response = {

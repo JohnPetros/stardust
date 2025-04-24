@@ -1,4 +1,4 @@
-import type { IJob, IQueue, IRankingService } from '@stardust/core/interfaces'
+import type { IJob, IQueue, IRankingService } from '@stardust/core/global/interfaces'
 import { UpdateRankingsUseCase } from '@stardust/core/ranking/use-cases'
 
 export const UpdateRankingsJob = (service: IRankingService): IJob => {

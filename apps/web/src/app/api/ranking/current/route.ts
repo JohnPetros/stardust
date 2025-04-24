@@ -1,8 +1,8 @@
-import { NextHttp } from '@/api/next/NextHttp'
-import { runApiRoute } from '@/api/next/utils'
-import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
-import { SupabaseRankingService } from '@/api/supabase/services'
-import { FetchCurrentRankingController } from '@/api/controllers/ranking'
+import { NextHttp } from '@/rest/next/NextHttp'
+import { runApiRoute } from '@/rest/next/utils'
+import { SupabaseRouteHandlerClient } from '@/rest/supabase/clients'
+import { SupabaseRankingService } from '@/rest/supabase/services'
+import { FetchCurrentRankingController } from '@/rest/controllers/ranking'
 
 export const dynamic = 'force-dynamic'
 

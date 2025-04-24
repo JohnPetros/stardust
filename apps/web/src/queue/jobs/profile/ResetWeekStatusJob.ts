@@ -1,4 +1,4 @@
-import type { IJob, IQueue, IProfileService } from '@stardust/core/interfaces'
+import type { IJob, IQueue, IProfileService } from '@stardust/core/global/interfaces'
 
 export const ResetWeekStatusJob = (service: IProfileService): IJob => {
   return {

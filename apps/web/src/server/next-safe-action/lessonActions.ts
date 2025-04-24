@@ -6,8 +6,8 @@ import {
   AccessEndingPageAction,
   FetchLessonStoryAndQuestionsAction,
 } from '../actions/lesson'
-import { SupabaseServerClient } from '@/api/supabase/clients'
-import { SupabaseLessonService } from '@/api/supabase/services'
+import { SupabaseServerClient } from '@/rest/supabase/clients'
+import { SupabaseLessonService } from '@/rest/supabase/services'
 import { z } from 'zod'
 import { idSchema } from '@stardust/validation/global/schemas'
 

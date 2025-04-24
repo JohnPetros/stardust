@@ -1,5 +1,5 @@
-import { SupabaseServerClient } from '@/api/supabase/clients'
-import { SupabaseProfileService } from '@/api/supabase/services'
+import { SupabaseServerClient } from '@/rest/supabase/clients'
+import { SupabaseProfileService } from '@/rest/supabase/services'
 import {
   HandleFirstTierReachedJob,
   ObserveStreakBreakJob,

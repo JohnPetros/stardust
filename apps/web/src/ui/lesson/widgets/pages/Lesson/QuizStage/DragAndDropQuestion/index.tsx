@@ -1,7 +1,7 @@
 'use client'
 
 import { DragAndDropQuestion as DragAndDropQuestionEntity } from '@stardust/core/lesson/entities'
-import type { DragAndDrop, QuestionCodeLine } from '@stardust/core/lesson/structs'
+import type { DragAndDrop, QuestionCodeLine } from '@stardust/core/lesson/structures'
 import { QuestionStem } from '../QuestionStem'
 import { Dnd } from './Dnd'
 import { DropZoneBank } from './DropZoneBank'

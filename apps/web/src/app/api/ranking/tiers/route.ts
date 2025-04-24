@@ -1,8 +1,8 @@
-import { NextHttp } from '@/api/next/NextHttp'
-import { runApiRoute } from '@/api/next/utils'
-import { SupabaseRankingService } from '@/api/supabase/services'
-import { FetchTiersController } from '@/api/controllers/ranking'
-import { SupabaseServerClient } from '@/api/supabase/clients'
+import { NextHttp } from '@/rest/next/NextHttp'
+import { runApiRoute } from '@/rest/next/utils'
+import { SupabaseRankingService } from '@/rest/supabase/services'
+import { FetchTiersController } from '@/rest/controllers/ranking'
+import { SupabaseServerClient } from '@/rest/supabase/clients'
 
 export async function GET() {
   return await runApiRoute(async () => {

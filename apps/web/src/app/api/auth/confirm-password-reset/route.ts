@@ -1,13 +1,13 @@
 import { z } from 'zod'
 import type { NextRequest } from 'next/server'
 
-import { NextHttp } from '@/api/next/NextHttp'
-import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
-import { SupabaseAuthService } from '@/api/supabase/services'
-import { ConfirmPasswordResetController } from '@/api/controllers/auth'
-import { runApiRoute } from '@/api/next/utils'
+import { NextHttp } from '@/rest/next/NextHttp'
+import { SupabaseRouteHandlerClient } from '@/rest/supabase/clients'
+import { SupabaseAuthService } from '@/rest/supabase/services'
+import { ConfirmPasswordResetController } from '@/rest/controllers/auth'
+import { runApiRoute } from '@/rest/next/utils'
 
-export const dynamic = "force-dynamic"
+export const dynamic = 'force-dynamic'
 
 const schema = z.object({
   queryParams: z.object({

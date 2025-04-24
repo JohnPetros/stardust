@@ -1,4 +1,4 @@
-import type { IJob, IQueue, IProfileService } from '@stardust/core/interfaces'
+import type { IJob, IQueue, IProfileService } from '@stardust/core/global/interfaces'
 import { ObserveStreakBreakUseCase } from '@stardust/core/profile/use-cases'
 
 export const ObserveStreakBreakJob = (service: IProfileService): IJob => {

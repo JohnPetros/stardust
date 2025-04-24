@@ -4,11 +4,11 @@ import { z } from 'zod'
 import { stringSchema } from '@stardust/validation/global/schemas'
 
 import type { NextParams } from '@/server/next/types'
-import { NextHttp } from '@/api/next/NextHttp'
-import { runApiRoute } from '@/api/next/utils'
-import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
-import { SupabaseChallengingService } from '@/api/supabase/services'
-import { AccessSolutionPageController } from '@/api/controllers/challenging'
+import { NextHttp } from '@/rest/next/NextHttp'
+import { runApiRoute } from '@/rest/next/utils'
+import { SupabaseRouteHandlerClient } from '@/rest/supabase/clients'
+import { SupabaseChallengingService } from '@/rest/supabase/services'
+import { AccessSolutionPageController } from '@/rest/controllers/challenging'
 
 const schema = z.object({
   routeParams: z.object({

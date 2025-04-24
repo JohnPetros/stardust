@@ -1,5 +1,5 @@
-import { SupabaseServerClient } from '@/api/supabase/clients'
-import { SupabaseSpaceService } from '@/api/supabase/services'
+import { SupabaseServerClient } from '@/rest/supabase/clients'
+import { SupabaseSpaceService } from '@/rest/supabase/services'
 import { HandleUserSignedUpJob } from '@/queue/jobs/space'
 import { JOBS } from '@/queue/constants'
 import { inngest } from '../client'

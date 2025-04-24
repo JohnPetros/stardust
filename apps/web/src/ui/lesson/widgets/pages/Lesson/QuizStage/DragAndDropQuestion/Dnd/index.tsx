@@ -12,7 +12,7 @@ import {
   type DropAnimation,
 } from '@dnd-kit/core'
 
-import type { DraggableItem, DropZone } from '@stardust/core/lesson/structs'
+import type { DraggableItem, DropZone } from '@stardust/core/lesson/structures'
 
 import { getItemWidth } from '../getItemWidth'
 import { Item } from '../Item'

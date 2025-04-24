@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
-import { SupabaseServerClient } from '@/api/supabase/clients/SupabaseServerClient'
+import { SupabaseServerClient } from '@/rest/supabase/clients/SupabaseServerClient'
 import { SupabaseProvider } from '@/ui/global/contexts/SupabaseContext'
 import { ToastProvider } from '@/ui/global/contexts/ToastContext'
 import { AuthProvider } from '@/ui/auth/contexts/AuthContext'

@@ -1,4 +1,4 @@
-import type { IApi } from '@stardust/core/interfaces'
+import type { IApi } from '@stardust/core/global/interfaces'
 import { useApi } from '../../useApi'
 import { useInMemoryApi } from '../../useInMemoryApi'
 

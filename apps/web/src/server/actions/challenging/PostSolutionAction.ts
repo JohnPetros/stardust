@@ -2,7 +2,7 @@ import type {
   IAction,
   IActionServer,
   IChallengingService,
-} from '@stardust/core/interfaces'
+} from '@stardust/core/global/interfaces'
 import type { SolutionDto } from '@stardust/core/challenging/dtos'
 import { PostSolutionUseCase } from '@stardust/core/challenging/use-cases'
 

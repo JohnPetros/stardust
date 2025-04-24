@@ -1,4 +1,4 @@
-import { Datetime } from '@stardust/core/libs'
+import { Datetime } from '@stardust/core/global/libs'
 
 import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'
 import { Icon } from '@/ui/global/widgets/components/Icon'

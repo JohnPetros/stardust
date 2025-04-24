@@ -1,7 +1,11 @@
 import type { UserDto } from '@stardust/core/global/dtos'
 import type { AchievementDto } from '@stardust/core/profile/dtos'
 import { ObserveNewUnlockedAchievementsUseCase } from '@stardust/core/profile/use-cases'
-import type { IAction, IActionServer, IProfileService } from '@stardust/core/interfaces'
+import type {
+  IAction,
+  IActionServer,
+  IProfileService,
+} from '@stardust/core/global/interfaces'
 
 type Response = {
   userDto: UserDto

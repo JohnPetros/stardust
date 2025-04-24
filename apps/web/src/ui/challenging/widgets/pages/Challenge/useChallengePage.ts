@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import type { ChallengeVote } from '@stardust/core/challenging/types'
 import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 import { Challenge } from '@stardust/core/challenging/entities'
-import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
+import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structures'
 
 import { ROUTES, STORAGE } from '@/constants'
 import { useRouter } from '@/ui/global/hooks/useRouter'

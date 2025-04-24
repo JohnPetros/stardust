@@ -1,4 +1,4 @@
-import type { IJob, IQueue, ISpaceService } from '@stardust/core/interfaces'
+import type { IJob, IQueue, ISpaceService } from '@stardust/core/global/interfaces'
 import { GetFirstStarIdUseCase, UnlockStarUseCase } from '@stardust/core/space/use-cases'
 import { FirstStarUnlockedEvent } from '@stardust/core/space/events'
 import { UserCreatedEvent } from '@stardust/core/profile/events'

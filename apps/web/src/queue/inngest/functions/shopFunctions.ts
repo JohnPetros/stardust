@@ -1,5 +1,5 @@
-import { SupabaseServerClient } from '@/api/supabase/clients'
-import { SupabaseShopService } from '@/api/supabase/services'
+import { SupabaseServerClient } from '@/rest/supabase/clients'
+import { SupabaseShopService } from '@/rest/supabase/services'
 import { handleFirstStarUnlockedJob } from '@/queue/jobs/shop'
 import { JOBS } from '@/queue/constants'
 import { inngest } from '../client'

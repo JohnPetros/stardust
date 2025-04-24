@@ -3,8 +3,8 @@ import {
   HandleShopItemsAcquiredByDefaultJob,
   UpdateRankingsJob,
 } from '@/queue/jobs/ranking'
-import { SupabaseServerClient } from '@/api/supabase/clients'
-import { SupabaseRankingService } from '@/api/supabase/services'
+import { SupabaseServerClient } from '@/rest/supabase/clients'
+import { SupabaseRankingService } from '@/rest/supabase/services'
 import { inngest } from '../client'
 import { InngestQueue } from '../InngestQueue'
 

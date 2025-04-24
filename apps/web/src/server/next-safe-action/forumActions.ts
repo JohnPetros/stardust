@@ -4,8 +4,8 @@ import { z } from 'zod'
 
 import { idSchema } from '@stardust/validation/global/schemas'
 
-import { SupabaseServerActionClient } from '@/api/supabase/clients/SupabaseServerActionClient'
-import { SupabaseForumService } from '@/api/supabase/services'
+import { SupabaseServerActionClient } from '@/rest/supabase/clients/SupabaseServerActionClient'
+import { SupabaseForumService } from '@/rest/supabase/services'
 import { authActionClient } from './clients/authActionClient'
 import { NextActionServer } from '../next/NextActionServer'
 import { UpvoteCommentAction } from '../actions/forum'

@@ -3,8 +3,8 @@
 import { authActionClient } from './clients/authActionClient'
 import { NextActionServer } from '../next/NextActionServer'
 import { ObsverNewUnlockedAchievementsAction } from '../actions/profile'
-import { SupabaseServerActionClient } from '@/api/supabase/clients'
-import { SupabaseProfileService } from '@/api/supabase/services'
+import { SupabaseServerActionClient } from '@/rest/supabase/clients'
+import { SupabaseProfileService } from '@/rest/supabase/services'
 
 const obsverNewUnlockedAchievements = authActionClient.action(
   async ({ clientInput, ctx }) => {

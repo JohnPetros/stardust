@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import type { ChallengeVote } from '@stardust/core/challenging/types'
-import { Integer } from '@stardust/core/global/structs'
+import { Integer } from '@stardust/core/global/structures'
 
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useVoteChallengeAction } from './useVoteChallengeAction'

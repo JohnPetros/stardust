@@ -2,7 +2,7 @@ import type {
   IAction,
   IActionServer,
   IChallengingService,
-} from '@stardust/core/interfaces'
+} from '@stardust/core/global/interfaces'
 import type { ChallengeVote } from '@stardust/core/challenging/types'
 import { VoteChallengeUseCase } from '@stardust/core/challenging/use-cases'
 import { User } from '@stardust/core/global/entities'

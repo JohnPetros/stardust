@@ -3,7 +3,7 @@
 import { DragOverlay } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 
-import type { SortableList } from '@stardust/core/global/structs'
+import type { SortableList } from '@stardust/core/global/structures'
 
 import { useDragAndDropListQuestion } from './useDragAndDropListQuestion'
 import { QuestionStem } from '../QuestionStem'

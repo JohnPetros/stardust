@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import type { UserDto } from '@stardust/core/global/dtos'
-import { Observer } from '@stardust/core/global/structs'
+import { Observer } from '@stardust/core/global/structures'
 import { User } from '@stardust/core/global/entities'
 
 import { CACHE, DOM_EVENTS, ROUTES } from '@/constants'

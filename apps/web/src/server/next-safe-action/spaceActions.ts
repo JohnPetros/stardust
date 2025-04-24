@@ -2,8 +2,8 @@
 
 import { z } from 'zod'
 
-import { SupabaseServerActionClient } from '@/api/supabase/clients'
-import { SupabaseSpaceService } from '@/api/supabase/services'
+import { SupabaseServerActionClient } from '@/rest/supabase/clients'
+import { SupabaseSpaceService } from '@/rest/supabase/services'
 import { authActionClient } from './clients/authActionClient'
 import { NextActionServer } from '../next/NextActionServer'
 import { AccessStarPageAction } from '../actions/space'

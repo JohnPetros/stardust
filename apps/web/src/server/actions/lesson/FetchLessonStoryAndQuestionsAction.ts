@@ -1,5 +1,9 @@
 import type { TextBlockDto } from '@stardust/core/global/dtos'
-import type { IAction, IActionServer, ILessonService } from '@stardust/core/interfaces'
+import type {
+  IAction,
+  IActionServer,
+  ILessonService,
+} from '@stardust/core/global/interfaces'
 import type { QuestionDto } from '@stardust/core/lesson/dtos'
 
 type Request = {

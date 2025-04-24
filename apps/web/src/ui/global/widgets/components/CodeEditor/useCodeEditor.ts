@@ -4,7 +4,7 @@ import { useCallback, useRef } from 'react'
 import type { Monaco } from '@monaco-editor/react'
 import type monaco from 'monaco-editor'
 
-import { Backup } from '@stardust/core/global/structs'
+import { Backup } from '@stardust/core/global/structures'
 
 import { COLORS } from '@/constants'
 import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'

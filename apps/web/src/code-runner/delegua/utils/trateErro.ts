@@ -1,7 +1,7 @@
 import type { ErroInterpretador } from '@designliquido/delegua/interfaces/erros/erro-interpretador'
 
 import { CodeRunnerError } from '@stardust/core/global/errors'
-import { CodeRunnerResponse } from '@stardust/core/responses'
+import { CodeRunnerResponse } from '@stardust/core/global/responses'
 
 export function trateErro(erro: ErroInterpretador, linhaDoErro: number) {
   let mensagemDeErro = String(erro.mensagem)

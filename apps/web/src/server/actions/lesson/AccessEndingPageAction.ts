@@ -1,4 +1,4 @@
-import type { IAction, IActionServer } from '@stardust/core/interfaces'
+import type { IAction, IActionServer } from '@stardust/core/global/interfaces'
 import { User } from '@stardust/core/global/entities'
 
 export const AccessEndingPageAction = (): IAction => {

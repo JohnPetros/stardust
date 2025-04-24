@@ -1,4 +1,4 @@
-import type { IJob, IQueue, IRankingService } from '@stardust/core/interfaces'
+import type { IJob, IQueue, IRankingService } from '@stardust/core/global/interfaces'
 import { GetFirstTierIdUseCase } from '@stardust/core/ranking/use-cases'
 import { FirstTierReachedEvent } from '@stardust/core/ranking/events'
 import type { ShopItemsAcquiredByDefaultEvent } from '@stardust/core/shop/events'

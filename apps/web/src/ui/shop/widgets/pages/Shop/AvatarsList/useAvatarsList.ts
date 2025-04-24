@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 import type { ListOrder } from '@stardust/core/global/types'
 import type { AvatarDto } from '@stardust/core/shop/dtos'
-import type { PaginationResponse } from '@stardust/core/responses'
+import type { PaginationResponse } from '@stardust/core/global/responses'
 
 import { CACHE } from '@/constants'
 import { useApi } from '@/ui/global/hooks/useApi'

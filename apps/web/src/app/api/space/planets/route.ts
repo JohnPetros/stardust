@@ -1,8 +1,8 @@
-import { NextHttp } from '@/api/next/NextHttp'
-import { runApiRoute } from '@/api/next/utils'
-import { SupabaseServerClient } from '@/api/supabase/clients'
-import { FetchPlanetsController } from '@/api/controllers/space'
-import { SupabaseSpaceService } from '@/api/supabase/services'
+import { NextHttp } from '@/rest/next/NextHttp'
+import { runApiRoute } from '@/rest/next/utils'
+import { SupabaseServerClient } from '@/rest/supabase/clients'
+import { FetchPlanetsController } from '@/rest/controllers/space'
+import { SupabaseSpaceService } from '@/rest/supabase/services'
 
 export async function GET() {
   return runApiRoute(async () => {

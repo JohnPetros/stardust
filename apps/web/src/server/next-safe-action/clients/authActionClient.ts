@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 
-import { SupabaseAuthService, SupabaseProfileService } from '@/api/supabase/services'
-import { SupabaseServerActionClient } from '@/api/supabase/clients'
+import { SupabaseAuthService, SupabaseProfileService } from '@/rest/supabase/services'
+import { SupabaseServerActionClient } from '@/rest/supabase/clients'
 import { actionClient } from './actionClient'
 
 export const authActionClient = actionClient.use(async ({ next }) => {

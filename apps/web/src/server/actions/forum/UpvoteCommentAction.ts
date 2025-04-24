@@ -1,4 +1,8 @@
-import type { IAction, IActionServer, IForumService } from '@stardust/core/interfaces'
+import type {
+  IAction,
+  IActionServer,
+  IForumService,
+} from '@stardust/core/global/interfaces'
 import { UpvoteCommentUseCase } from '@stardust/core/forum/use-cases'
 
 type Request = {

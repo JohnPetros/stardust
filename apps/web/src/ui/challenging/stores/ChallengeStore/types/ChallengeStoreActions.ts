@@ -1,6 +1,6 @@
 import type { Challenge } from '@stardust/core/challenging/entities'
 import type { PanelsLayout } from './PanelsLayout'
-import type { ChallengeCraftsVisibility } from '@stardust/core/challenging/structs'
+import type { ChallengeCraftsVisibility } from '@stardust/core/challenging/structures'
 import type { TabHandler } from './TabHandler'
 import type { ChallengeContent } from './ChallengeContent'
 

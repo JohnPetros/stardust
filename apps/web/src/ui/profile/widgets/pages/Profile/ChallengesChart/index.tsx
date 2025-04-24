@@ -1,7 +1,7 @@
 import type { CompletedChallengesCountByDifficultyLevel } from '@stardust/core/challenging/types'
 
 import { ROUTES } from '@/constants'
-import { NextApiClient } from '@/api/next/NextApiClient'
+import { NextApiClient } from '@/rest/next/NextApiClient'
 import { Legend } from './Legend'
 import { Chart } from './ApexChallengesChart'
 

@@ -1,4 +1,8 @@
-import type { IAction, IActionServer, ISpaceService } from '@stardust/core/interfaces'
+import type {
+  IAction,
+  IActionServer,
+  ISpaceService,
+} from '@stardust/core/global/interfaces'
 import type { StarDto } from '@stardust/core/space/dtos'
 import { User } from '@stardust/core/global/entities'
 import { Star } from '@stardust/core/space/entities'

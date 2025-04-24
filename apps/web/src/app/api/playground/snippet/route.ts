@@ -3,11 +3,11 @@ import { z } from 'zod'
 
 import { idSchema } from '@stardust/validation/global/schemas'
 
-import { GetSnippetController } from '@/api/controllers/playground'
-import { NextHttp } from '@/api/next/NextHttp'
-import { runApiRoute } from '@/api/next/utils'
-import { SupabaseRouteHandlerClient } from '@/api/supabase/clients'
-import { SupabasePlaygroundService } from '@/api/supabase/services'
+import { GetSnippetController } from '@/rest/controllers/playground'
+import { NextHttp } from '@/rest/next/NextHttp'
+import { runApiRoute } from '@/rest/next/utils'
+import { SupabaseRouteHandlerClient } from '@/rest/supabase/clients'
+import { SupabasePlaygroundService } from '@/rest/supabase/services'
 
 export const dynamic = 'force-dynamic'
 

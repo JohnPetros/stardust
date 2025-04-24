@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-import { WeekStatus } from '@stardust/core/profile/structs'
+import { WeekStatus } from '@stardust/core/profile/structures'
 
 import { StreakIcon } from '../StreakIcon'
 import { AnimatedWeekday } from './AnimatedWeekday'

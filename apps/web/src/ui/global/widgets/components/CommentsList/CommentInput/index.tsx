@@ -3,7 +3,7 @@
 import { useRef } from 'react'
 import { twMerge } from 'tailwind-merge'
 
-import { Text } from '@stardust/core/global/structs'
+import { Text } from '@stardust/core/global/structures'
 
 import * as Toolbar from '@/ui/global/widgets/components/Toolbar'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'

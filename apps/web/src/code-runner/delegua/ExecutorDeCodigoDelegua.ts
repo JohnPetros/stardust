@@ -8,8 +8,8 @@ import {
 import { AvaliadorSintaticoJavaScript } from '@designliquido/delegua/avaliador-sintatico/traducao/avaliador-sintatico-javascript'
 import { LexadorJavaScript } from '@designliquido/delegua/lexador/traducao/lexador-javascript'
 
-import { CodeRunnerResponse } from '@stardust/core/responses'
-import type { ICodeRunnerProvider } from '@stardust/core/interfaces'
+import { CodeRunnerResponse } from '@stardust/core/global/responses'
+import type { ICodeRunnerProvider } from '@stardust/core/global/interfaces'
 import type { CodeInput } from '@stardust/core/global/types'
 
 import { DELEGUA_REGEX } from './constants'

@@ -1,4 +1,4 @@
-import { WeekStatus } from '@stardust/core/profile/structs'
+import { WeekStatus } from '@stardust/core/profile/structures'
 import { StreakBoard } from '../../../components/StreakBoard'
 import { SectionTitle } from '../SectionTitle'
 import { AnimatedReveal } from '../AnimatedReveal'

@@ -3,8 +3,8 @@
 import { createContext, type ReactNode, useState } from 'react'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
-import { SupabaseBrowserClient } from '@/api/supabase/clients/SupabaseBrowserClient'
-import type { Database } from '@/api/supabase/types'
+import { SupabaseBrowserClient } from '@/rest/supabase/clients/SupabaseBrowserClient'
+import type { Database } from '@/rest/supabase/types'
 
 type SupabaseContextValue = {
   supabase: SupabaseClient<Database>

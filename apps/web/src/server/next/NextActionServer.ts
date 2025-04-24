@@ -1,6 +1,6 @@
 import { notFound, redirect } from 'next/navigation'
 
-import type { IActionServer } from '@stardust/core/interfaces'
+import type { IActionServer } from '@stardust/core/global/interfaces'
 import { AppError } from '@stardust/core/global/errors'
 import type { UserDto } from '@stardust/core/global/dtos'
 import { cookies } from 'next/headers'

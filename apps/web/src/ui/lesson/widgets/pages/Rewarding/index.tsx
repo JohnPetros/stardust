@@ -2,9 +2,9 @@
 
 import { useRef } from 'react'
 
-import { Datetime } from '@stardust/core/libs'
+import { Datetime } from '@stardust/core/global/libs'
 import type { WeekStatusValue } from '@stardust/core/profile/types'
-import { WeekStatus } from '@stardust/core/profile/structs'
+import { WeekStatus } from '@stardust/core/profile/structures'
 
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { Animation } from '@/ui/global/widgets/components/Animation'
