@@ -7,7 +7,7 @@ export const JOBS = {
   profile: {
     handleFirstTierReached: {
       key: 'profile/handle.first.tier.reached',
-      eventName: FirstTierReachedEvent.NAME,
+      eventName: FirstTierReachedEvent._NAME,
     },
     observeStreakBreak: {
       key: 'profile/observe.streak.break',
@@ -21,7 +21,7 @@ export const JOBS = {
   ranking: {
     handleShopItemsAcquiredByDefault: {
       key: 'ranking/handle.shop.items.acquired.by.default',
-      eventName: ShopItemsAcquiredByDefaultEvent.NAME,
+      eventName: ShopItemsAcquiredByDefaultEvent._NAME,
     },
     updateRankings: {
       key: 'ranking/update.rankings',
@@ -31,13 +31,13 @@ export const JOBS = {
   shop: {
     handleFirstStarUnlocked: {
       key: 'shop/handle.first.star.unlocked',
-      eventName: FirstStarUnlockedEvent.NAME,
+      eventName: FirstStarUnlockedEvent._NAME,
     },
   },
   space: {
     handleUserSignedUp: {
       key: 'space/handle.user.signed.up',
-      eventName: UserSignedUpEvent.NAME,
+      eventName: UserSignedUpEvent._NAME,
     },
   },
 } as const

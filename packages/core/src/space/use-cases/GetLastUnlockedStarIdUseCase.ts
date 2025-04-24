@@ -1,4 +1,4 @@
-import type { IUseCase } from '../../global/interfaces'
+import type { UseCase } from '../../global/interfaces'
 import type { UserDto } from '../../global/dtos'
 import { User } from '../../global/domain/entities'
 import type { PlanetDto } from '../dtos'
@@ -10,7 +10,7 @@ type Request = {
   userDto: UserDto
 }
 
-export class GetLastUnlockedStarIdUseCase implements IUseCase<Request, string> {
+export class GetLastUnlockedStarIdUseCase implements UseCase<Request, string> {
   do({ planetsDto, userDto }: Request) {
     const planets = planetsDto.map(Planet.create)
     const user = User.create(userDto)

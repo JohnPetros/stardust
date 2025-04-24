@@ -1,7 +1,7 @@
 import type { UserDto } from '../../global/dtos'
 import { User } from '../../global/domain/entities'
 import { Comment } from '../domain/entities'
-import type { IForumService, IUseCase } from '../../global/interfaces'
+import type { IForumService, UseCase } from '../../global/interfaces'
 
 type Request = {
   userDto: UserDto
@@ -13,7 +13,7 @@ type Response = Promise<{
   userUpvotedCommentsIds: string[]
 }>
 
-export class UpvoteCommentUseCase implements IUseCase<Request, Response> {
+export class UpvoteCommentUseCase implements UseCase<Request, Response> {
   constructor(private readonly forumService: IForumService) {}
 
   async do({ userDto, commentId }: Request) {

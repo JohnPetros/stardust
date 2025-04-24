@@ -1,4 +1,4 @@
-import type { IChallengingService, IUseCase } from '../../global/interfaces'
+import type { ChallengingService, UseCase } from '../../global/interfaces'
 import { Challenge } from '../domain/entities'
 import type { ChallengeVote } from '../domain/types'
 
@@ -14,8 +14,8 @@ type Response = Promise<{
   userChallengeVote: ChallengeVote
 }>
 
-export class VoteChallengeUseCase implements IUseCase<Request, Response> {
-  constructor(private readonly challengingService: IChallengingService) {}
+export class VoteChallengeUseCase implements UseCase<Request, Response> {
+  constructor(private readonly challengingService: ChallengingService) {}
 
   async do({ challengeId, userId, userChallengeVote }: Request) {
     const challenge = await this.fetchChallenge(challengeId)

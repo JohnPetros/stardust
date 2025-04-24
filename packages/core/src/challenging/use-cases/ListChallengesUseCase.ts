@@ -1,7 +1,7 @@
 import type { ChallengeCompletionStatus, ChallengesListParams } from '../domain/types'
 import type { ChallengeDto } from '../dtos'
 import type { UserDto } from '../../global/dtos'
-import type { IChallengingService, IUseCase } from '../../global/interfaces'
+import type { ChallengingService, UseCase } from '../../global/interfaces'
 import type { ListParam } from '../../global/domain/types'
 import { User } from '../../global/domain/entities'
 import { Challenge } from '../domain/entities'
@@ -14,8 +14,8 @@ type Request = {
 }
 type Response = Promise<PaginationResponse<ChallengeDto>>
 
-export class ListChallengesUseCase implements IUseCase<Request, Response> {
-  constructor(private readonly challengingService: IChallengingService) {}
+export class ListChallengesUseCase implements UseCase<Request, Response> {
+  constructor(private readonly challengingService: ChallengingService) {}
 
   async do({ userDto, completionStatus, listParams }: Request): Response {
     const user = User.create(userDto)

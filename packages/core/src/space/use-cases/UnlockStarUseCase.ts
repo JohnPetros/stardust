@@ -1,12 +1,12 @@
-import type { ISpaceService, IUseCase } from '../../global/interfaces'
+import type { SpaceService, UseCase } from '../../global/interfaces'
 
 type Request = {
   starId: string
   userId: string
 }
 
-export class UnlockStarUseCase implements IUseCase<Request> {
-  constructor(private readonly spaceService: ISpaceService) {}
+export class UnlockStarUseCase implements UseCase<Request> {
+  constructor(private readonly spaceService: SpaceService) {}
 
   async do({ starId, userId }: Request) {
     await this.fetchStar(starId)

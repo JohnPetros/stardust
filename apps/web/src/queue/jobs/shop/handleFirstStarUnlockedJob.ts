@@ -1,5 +1,5 @@
 import type { EventPayload } from '@stardust/core/global/types'
-import type { IJob, IQueue, IShopService } from '@stardust/core/global/interfaces'
+import type { Job, Amqp, ShopService } from '@stardust/core/global/interfaces'
 import { UserCreatedEvent } from '@stardust/core/profile/events'
 import { ShopItemsAcquiredByDefaultEvent } from '@stardust/core/shop/events'
 import { GetAcquirableShopItemsByDefaultUseCase } from '@stardust/core/shop/use-cases'
@@ -8,7 +8,7 @@ import type { FirstStarUnlockedEvent } from '@stardust/core/space/events'
 type UserCreatedEventPayload = EventPayload<typeof UserCreatedEvent>
 type FirstStarUnlockedEventPayload = EventPayload<typeof FirstStarUnlockedEvent>
 
-export const handleFirstStarUnlockedJob = (service: IShopService): IJob => {
+export const handleFirstStarUnlockedJob = (service: ShopService): Job => {
   async function saveAcquiredAvatar(avatarId: string, userId: string) {
     const response = await service.saveAcquiredAvatar(avatarId, userId)
     if (response.isFailure) response.throwError()
@@ -20,7 +20,7 @@ export const handleFirstStarUnlockedJob = (service: IShopService): IJob => {
   }
 
   return {
-    async handle(queue: IQueue<FirstStarUnlockedEventPayload>) {
+    async handle(queue: Amqp<FirstStarUnlockedEventPayload>) {
       const useCase = new GetAcquirableShopItemsByDefaultUseCase(service)
       const {
         selectedRocketByDefaultId,

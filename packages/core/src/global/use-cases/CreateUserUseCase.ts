@@ -1,4 +1,4 @@
-import type { IProfileService, IUseCase } from '../interfaces'
+import type { ProfileService, UseCase } from '../interfaces'
 import { User } from '../domain/entities'
 
 type Request = {
@@ -10,8 +10,8 @@ type Request = {
   selectedRocketByDefaultId: string
 }
 
-export class CreateUserUseCase implements IUseCase<Request> {
-  constructor(private readonly profileService: IProfileService) {}
+export class CreateUserUseCase implements UseCase<Request> {
+  constructor(private readonly profileService: ProfileService) {}
 
   async do({
     userId,

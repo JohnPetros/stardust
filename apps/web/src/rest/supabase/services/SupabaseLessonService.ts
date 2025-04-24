@@ -1,4 +1,4 @@
-import type { ILessonService } from '@stardust/core/global/interfaces'
+import type { LessonService } from '@stardust/core/global/interfaces'
 
 import type { Supabase } from '../types/Supabase'
 import { SupabasePostgrestError } from '../errors'
@@ -6,7 +6,7 @@ import { RestResponse } from '@stardust/core/global/responses'
 import type { TextBlockDto } from '@stardust/core/global/dtos'
 import type { QuestionDto } from '@stardust/core/lesson/dtos'
 
-export const SupabaseLessonService = (supabase: Supabase): ILessonService => {
+export const SupabaseLessonService = (supabase: Supabase): LessonService => {
   return {
     async fetchQuestionsByStar(starId: string) {
       const { data, error, status } = await supabase

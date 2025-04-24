@@ -1,6 +1,7 @@
-import { User } from '../../global/domain/entities'
-import type { UserDto } from '../../global/dtos'
-import type { IProfileService, IUseCase } from '../../global/interfaces'
+import { User } from '#global/entities'
+import type { UserDto } from '#global/dtos'
+import type { UseCase } from '#global/interfaces'
+import type { ProfileService } from '#profile/interfaces'
 
 type Request = {
   userDto: UserDto
@@ -8,8 +9,8 @@ type Request = {
   newCoins: number
 }
 
-export class ObserveStreakBreakUseCase implements IUseCase<Request> {
-  constructor(private profileService: IProfileService) {}
+export class ObserveStreakBreakUseCase implements UseCase<Request> {
+  constructor(private profileService: ProfileService) {}
 
   async do() {
     const users = await this.fetchUsers()

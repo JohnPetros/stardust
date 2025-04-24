@@ -1,10 +1,5 @@
 import { UserSignedUpEvent } from '@stardust/core/auth/events'
-import type {
-  IAction,
-  IActionServer,
-  IAuthService,
-  IQueue,
-} from '@stardust/core/global/interfaces'
+import type { Action, Call, IAuthService, Amqp } from '@stardust/core/global/interfaces'
 
 type Request = {
   name: string
@@ -18,11 +13,11 @@ type Response = {
 
 export const SignUpAction = (
   authService: IAuthService,
-  queue: IQueue,
-): IAction<Request, Response> => {
+  queue: Amqp,
+): Action<Request, Response> => {
   return {
-    async handle(actionServer: IActionServer<Request>) {
-      const { email, name, password } = actionServer.getRequest()
+    async handle(call: Call<Request>) {
+      const { email, name, password } = call.getRequest()
       const response = await authService.signUp(email, password)
       if (response.isFailure) response.throwError()
 

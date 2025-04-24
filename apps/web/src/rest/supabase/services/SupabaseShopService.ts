@@ -1,6 +1,6 @@
 import { RestResponse, PaginationResponse } from '@stardust/core/global/responses'
 import type { ShopItemsListingParams } from '@stardust/core/shop/types'
-import type { IShopService } from '@stardust/core/global/interfaces'
+import type { ShopService } from '@stardust/core/global/interfaces'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 import type { Supabase } from '../types/Supabase'
@@ -8,7 +8,7 @@ import { SupabasePostgrestError } from '../errors'
 import { SupabaseAvatarMapper, SupabaseRocketMapper } from '../mappers'
 import { calculateSupabaseRange } from '../utils'
 
-export const SupabaseShopService = (supabase: Supabase): IShopService => {
+export const SupabaseShopService = (supabase: Supabase): ShopService => {
   const supabaseAvatarMapper = SupabaseAvatarMapper()
   const supabaseRocketMapper = SupabaseRocketMapper()
 

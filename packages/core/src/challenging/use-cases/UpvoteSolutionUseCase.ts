@@ -1,7 +1,7 @@
 import type { UserDto } from '../../global/dtos'
 import { User } from '../../global/domain/entities'
 import { Solution } from '../domain/entities'
-import type { IChallengingService, IUseCase } from '../../global/interfaces'
+import type { ChallengingService, UseCase } from '../../global/interfaces'
 
 type Request = {
   userDto: UserDto
@@ -13,8 +13,8 @@ type Response = Promise<{
   userUpvotedSolutionsIds: string[]
 }>
 
-export class UpvoteSolutionUseCase implements IUseCase<Request, Response> {
-  constructor(private readonly challengingService: IChallengingService) {}
+export class UpvoteSolutionUseCase implements UseCase<Request, Response> {
+  constructor(private readonly challengingService: ChallengingService) {}
 
   async do({ userDto, solutionId }: Request) {
     const user = User.create(userDto)

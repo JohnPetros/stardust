@@ -1,4 +1,4 @@
-import type { IRankingService } from '@stardust/core/global/interfaces'
+import type { RankingService } from '@stardust/core/global/interfaces'
 import type { RankingUser } from '@stardust/core/ranking/entities'
 import type { RankingUserDto } from '@stardust/core/ranking/dtos'
 import { RestResponse } from '@stardust/core/global/responses'
@@ -8,7 +8,7 @@ import type { Supabase } from '../types/Supabase'
 import { SupabasePostgrestError } from '../errors'
 import { SupabaseRankingUserMapper, SupabaseTierMapper } from '../mappers'
 
-export const SupabaseRankingService = (supabase: Supabase): IRankingService => {
+export const SupabaseRankingService = (supabase: Supabase): RankingService => {
   const supabaseTierMapper = SupabaseTierMapper()
   const supabaseRankingUserMapper = SupabaseRankingUserMapper()
 
