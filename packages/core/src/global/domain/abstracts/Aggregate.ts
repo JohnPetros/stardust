@@ -1,4 +1,5 @@
 import { EntityNotDefinedError } from '#global/errors'
+import { Logical } from '#global/structures'
 import { Entity } from './Entity'
 
 type Props<AggregateEntity> = {
@@ -19,6 +20,10 @@ export abstract class Aggregate<AggregateEntity> extends Entity<Props<AggregateE
       throw new EntityNotDefinedError(this.entityName)
     }
     return this.props.entity
+  }
+
+  isEntityEqualTo(entity: Entity): Logical {
+    return Logical.create(this.id === entity.id)
   }
 }
 

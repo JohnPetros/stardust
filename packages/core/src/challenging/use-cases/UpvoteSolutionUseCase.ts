@@ -22,26 +22,26 @@ export class UpvoteSolutionUseCase implements UseCase<Request, Response> {
     const isSolutionUpvoted = user.hasUpvotedSolution(solution.id)
 
     if (isSolutionUpvoted.isTrue) {
-      user.removeUpvoteSolution(solution)
+      user.removeUpvoteSolution(solution.id)
       const response = await this.challengingService.deleteSolutionUpvote(
-        solution.id,
-        user.id,
+        solution.id.value,
+        user.id.value,
       )
       if (response.isFailure) response.throwError()
     }
 
     if (isSolutionUpvoted.isFalse) {
-      user.upvoteSolution(solution)
+      user.upvoteSolution(solution.id)
       const response = await this.challengingService.saveSolutionUpvote(
-        solution.id,
-        user.id,
+        solution.id.value,
+        user.id.value,
       )
       if (response.isFailure) response.throwError()
     }
 
     return {
       upvotesCount: solution.upvotesCount.value,
-      userUpvotedSolutionsIds: user.upvotedSolutionsIds.items,
+      userUpvotedSolutionsIds: user.upvotedSolutionsIds.dto,
     }
   }
 

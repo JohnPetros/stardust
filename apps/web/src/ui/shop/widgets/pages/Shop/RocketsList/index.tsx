@@ -18,7 +18,7 @@ export function RocketsList({ initialItems }: RocketsListProps) {
   const {
     totalRocketsCount,
     rocketsPerPage,
-    rocketsDto,
+    rockets,
     page,
     handlePageChange,
     handlePriceOrderChange,
@@ -41,22 +41,19 @@ export function RocketsList({ initialItems }: RocketsListProps) {
 
       {user && (
         <ul className='mt-6 grid min-h-[36rem] grid-cols-1 items-start justify-center gap-6 sm:grid-cols-2 lg:grid-cols-3'>
-          {rocketsDto.map(
-            (dto) =>
-              dto.id && (
-                <li key={dto.id}>
-                  <RocketItem
-                    id={dto.id}
-                    image={dto.image}
-                    name={dto.name}
-                    price={dto.price}
-                    isAcquired={user.hasAcquiredRocket(dto.id)}
-                    isBuyable={user.canBuy(dto.price).isTrue}
-                    isSelected={user.isSelectRocket(dto.id)}
-                  />
-                </li>
-              ),
-          )}
+          {rockets.map((rocket) => (
+            <li key={rocket.id.value}>
+              <RocketItem
+                id={rocket.id.value}
+                image={rocket.image.value}
+                name={rocket.name.value}
+                price={rocket.price.value}
+                isAcquired={user.hasAcquiredRocket(rocket.id).isTrue}
+                isBuyable={user.canBuy(rocket.price).isTrue}
+                isSelected={user.isSelectRocket(rocket.id).isTrue}
+              />
+            </li>
+          ))}
         </ul>
       )}
 

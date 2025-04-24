@@ -98,9 +98,9 @@ export function CommentsList({
                 if (user)
                   return (
                     <>
-                      <li key={comment.id}>
+                      <li key={comment.id.value}>
                         <Comment
-                          id={comment.id}
+                          id={comment.id.value}
                           content={comment.content.value}
                           upvotesCount={comment.upvotesCount.value}
                           repliesCount={comment.repliesCount.value}

@@ -1,19 +1,23 @@
 import { Aggregate } from '#global/abstracts'
-import { Image, Name } from '#global/structs'
+import { Image, Integer, Name, OrdinalNumber } from '#global/structures'
 import type { TierAggregateDto } from '#profile/dtos'
 
 type TierAggregateEntity = {
   name: Name
   image: Image
+  position: OrdinalNumber
+  reward: Integer
 }
 
 export class TierAggregate extends Aggregate<TierAggregateEntity> {
-  private static readonly ENTITY_NAME = 'Tier de usuário'
+  private static readonly ENTITY_NAME = 'Tier do usuário'
   static create(dto: TierAggregateDto) {
     if (dto.entity) {
       const entity = {
         name: Name.create(dto.entity.name),
         image: Image.create(dto.entity.image),
+        position: OrdinalNumber.create(dto.entity.position, 'Posição do tier'),
+        reward: Integer.create(dto.entity.reward, 'Recompensa do tier'),
       }
       return new TierAggregate(TierAggregate.ENTITY_NAME, dto.id, entity)
     }
@@ -35,6 +39,8 @@ export class TierAggregate extends Aggregate<TierAggregateEntity> {
       entity: {
         name: this.name.value,
         image: this.image.value,
+        position: this.entity.position.value,
+        reward: this.entity.reward.value,
       },
     }
   }

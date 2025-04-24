@@ -17,7 +17,7 @@ type AvatarsListProps = {
 export function AvatarsList({ initialItems }: AvatarsListProps) {
   const {
     page,
-    AvatarsDto,
+    avatars,
     totalAvatarsCount,
     avatarsPerPage,
     handlePageChange,
@@ -42,22 +42,21 @@ export function AvatarsList({ initialItems }: AvatarsListProps) {
 
       {user && (
         <ul className='mt-6 grid grid-cols-1 content-start justify-center gap-8 pb-12 sm:grid-cols-2 md:h-[90rem] lg:grid-cols-2'>
-          {AvatarsDto.map(
-            (dto) =>
-              dto.id && (
-                <li key={dto.id}>
-                  <AvatarItem
-                    id={dto.id}
-                    image={dto.image}
-                    name={dto.name}
-                    price={dto.price}
-                    isAcquired={user.hasAcquiredAvatar(dto.id)}
-                    isBuyable={user.canBuy(dto.price).isTrue}
-                    isSelected={user.isSelectAvatar(dto.id)}
-                  />
-                </li>
-              ),
-          )}
+          {avatars.map((avatar) => {
+            return (
+              <li key={avatar.id.value}>
+                <AvatarItem
+                  id={avatar.id.value}
+                  image={avatar.image.value}
+                  name={avatar.name.value}
+                  price={avatar.price.value}
+                  isAcquired={user.hasAcquiredAvatar(avatar.id).isTrue}
+                  isBuyable={user.canBuy(avatar.price).isTrue}
+                  isSelected={user.isSelectAvatar(avatar.id).isTrue}
+                />
+              </li>
+            )
+          })}
         </ul>
       )}
 

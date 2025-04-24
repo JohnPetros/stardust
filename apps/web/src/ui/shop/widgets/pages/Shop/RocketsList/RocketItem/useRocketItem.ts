@@ -1,11 +1,12 @@
 'use client'
 
-import { Rocket } from '@stardust/core/shop/entities'
+import { RocketAggregate } from '@stardust/core/profile/aggregates'
 
 import { useApi } from '@/ui/global/hooks/useApi'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useAudioContext } from '@/ui/global/contexts/AudioContext'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { Integer } from '@stardust/core/global/structures'
 
 type UseRocketItemProps = {
   id: string
@@ -38,7 +39,10 @@ export function useRocketItem({ id, name, price, image }: UseRocketItemProps) {
 
     const currentAcquiredRocketsCount = user.acquiredRocketsCount
 
-    user.buyRocket(Rocket.create({ id, name, image, price }))
+    user.buyRocket(
+      RocketAggregate.create({ id, entity: { name, image } }),
+      Integer.create(price),
+    )
 
     if (currentAcquiredRocketsCount.value === user.acquiredRocketsCount.value) {
       await updateUser(user)

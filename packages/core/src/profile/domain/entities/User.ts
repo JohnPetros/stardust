@@ -1,6 +1,5 @@
-import { Entity } from '../abstracts'
-import type { Tier } from '../../../ranking/domain/entities'
-import type { UserDto } from '../../dtos'
+import { Entity } from '#global/abstracts'
+import type { UserDto } from '#global/dtos'
 import {
   Logical,
   Integer,
@@ -8,31 +7,19 @@ import {
   type Name,
   type Slug,
   type Observer,
-  type List,
-} from '../structures'
-import { UserFactory } from '../factories'
-import type { Avatar, Rocket } from '../../../shop/domain/entities'
-import type { Level, WeekStatus } from '../../../profile/domain/structures'
-import type { AchievementMetricValue } from '../../../profile/domain/types'
-import type { RankingPosition } from '../../../ranking/domain/structures'
-import type { Comment } from '../../../forum/domain/entities'
-import type { Challenge, Solution } from '../../../challenging/domain/entities'
-import { PLANETS_COUNT } from '../../../space/domain/constants'
-import { EntityNotDefinedError } from '../errors'
+  type Id,
+  type IdsList,
+} from '#global/structures'
+import { UserFactory } from '../../factories'
+import type { Level, WeekStatus } from '../structures'
+import type { AchievementMetricValue } from '../types'
+import type { AvatarAggregate, RocketAggregate, TierAggregate } from '../aggregates'
+import type { RankingPosition } from '#ranking/structures'
 
 type UserProps = {
-  avatar: {
-    id: string
-    entity?: Omit<Avatar, 'id'>
-  }
-  tier: {
-    id: string
-    entity?: Omit<Tier, 'id'>
-  }
-  rocket: {
-    id: string
-    entity?: Omit<Rocket, 'id'>
-  }
+  avatar: AvatarAggregate
+  tier: TierAggregate
+  rocket: RocketAggregate
   slug: Slug
   email: Email
   name: Name
@@ -42,16 +29,16 @@ type UserProps = {
   weeklyXp: Integer
   streak: Integer
   weekStatus: WeekStatus
-  unlockedStarsIds: List<string>
-  acquiredRocketsIds: List<string>
-  acquiredAvatarsIds: List<string>
-  unlockedAchievementsIds: List<string>
-  unlockedDocsIds: List<string>
-  rescuableAchievementsIds: List<string>
-  completedChallengesIds: List<string>
-  completedPlanetsIds: List<string>
-  upvotedCommentsIds: List<string>
-  upvotedSolutionsIds: List<string>
+  unlockedStarsIds: IdsList
+  acquiredRocketsIds: IdsList
+  acquiredAvatarsIds: IdsList
+  unlockedAchievementsIds: IdsList
+  unlockedDocsIds: IdsList
+  rescuableAchievementsIds: IdsList
+  completedChallengesIds: IdsList
+  completedPlanetsIds: IdsList
+  upvotedCommentsIds: IdsList
+  upvotedSolutionsIds: IdsList
   canSeeRankingResult: Logical
   didBreakStreak: Logical
   lastWeekRankingPosition: RankingPosition | null
@@ -65,36 +52,36 @@ export class User extends Entity<UserProps> {
     return new User(UserFactory.produce(dto), dto.id)
   }
 
-  unlockAchievement(achievementId: string): void {
+  unlockAchievement(achievementId: Id): void {
     this.props.unlockedAchievementsIds.add(achievementId)
     this.props.rescuableAchievementsIds.add(achievementId)
 
     this.notifyChanges()
   }
 
-  unlockStar(starId: string): void {
+  unlockStar(starId: Id): void {
     this.props.unlockedStarsIds.add(starId)
 
     this.notifyChanges()
   }
 
-  rescueAchievement(achievementId: string, achievementReward: number): void {
+  rescueAchievement(achievementId: Id, achievementReward: Integer): void {
     this.props.rescuableAchievementsIds =
       this.props.rescuableAchievementsIds.remove(achievementId)
 
     this.earnCoins(achievementReward)
   }
 
-  earnCoins(newCoins: number): void {
+  earnCoins(newCoins: Integer): void {
     this.props.coins = this.props.coins.increment(newCoins)
   }
 
-  loseCoins(coins: number): void {
+  loseCoins(coins: Integer): void {
     this.props.coins = this.props.coins.dencrement(coins)
   }
 
-  earnXp(newXp: number) {
-    this.props.level = this.level.up(this.xp.value, newXp)
+  earnXp(newXp: Integer) {
+    this.props.level = this.level.up(this.xp, newXp)
     this.props.xp = this.props.xp.increment(newXp)
     this.props.weeklyXp = this.props.weeklyXp.increment(newXp)
     this.notifyChanges()
@@ -107,41 +94,41 @@ export class User extends Entity<UserProps> {
     this.earnCoins(reward)
   }
 
-  canBuy(coins: number): Logical {
-    return Logical.create(this.props.coins.value >= coins)
+  canBuy(coins: Integer): Logical {
+    return Logical.create(this.props.coins.value >= coins.value)
   }
 
-  buyRocket(rocket: Rocket): void {
+  buyRocket(rocket: RocketAggregate, rocketPrice: Integer): void {
     if (this.hasAcquiredRocket(rocket.id)) {
       this.selectRocket(rocket)
       return
     }
 
-    if (this.canBuy(rocket.price.value).isTrue) {
-      this.loseCoins(rocket.price.value)
+    if (this.canBuy(rocketPrice).isTrue) {
+      this.loseCoins(rocketPrice)
       this.selectRocket(rocket)
       this.props.acquiredRocketsIds.add(rocket.id)
       this.notifyChanges()
     }
   }
 
-  buyAvatar(avatar: Avatar): void {
+  buyAvatar(avatar: AvatarAggregate, avatarPrice: Integer): void {
     if (this.hasAcquiredAvatar(avatar.id)) {
       this.selectAvatar(avatar)
       return
     }
 
-    if (this.canBuy(avatar.price.value).isTrue) {
-      this.loseCoins(avatar.price.value)
+    if (this.canBuy(avatarPrice).isTrue) {
+      this.loseCoins(avatarPrice)
       this.selectAvatar(avatar)
       this.props.acquiredAvatarsIds.add(avatar.id)
       this.notifyChanges()
     }
   }
 
-  unlockChallengeSolutions(challengeId: string) {
+  unlockChallengeSolutions(challengeId: Id) {
     if (this.hasCompletedChallenge(challengeId).isFalse) {
-      this.loseCoins(10)
+      this.loseCoins(Integer.create(10))
     }
   }
 
@@ -149,7 +136,7 @@ export class User extends Entity<UserProps> {
     if (this.weekStatus.todayStatus !== 'todo') return
 
     this.props.weekStatus = this.weekStatus.updateTodayStatus('done')
-    this.props.streak = this.streak.increment(1)
+    this.props.streak = this.streak.increment()
     return {
       newStreak: this.props.streak,
       newWeekStatus: this.props.weekStatus,
@@ -170,92 +157,80 @@ export class User extends Entity<UserProps> {
     return this[metric]
   }
 
-  selectRocket(rocket: Rocket): void {
-    this.props.rocket = {
-      id: rocket.id,
-      entity: rocket,
-    }
+  selectRocket(rocket: RocketAggregate): void {
+    this.props.rocket = rocket
   }
 
-  selectAvatar(avatar: Avatar): void {
-    this.props.avatar = {
-      id: avatar.id,
-      entity: avatar,
-    }
+  selectAvatar(avatar: AvatarAggregate): void {
+    this.props.avatar = avatar
   }
 
-  seeRankingResult() {
+  seeRankingResult(): void {
     this.props.canSeeRankingResult = this.props.canSeeRankingResult.invertValue()
   }
 
-  resetRankingLoserState() {
+  resetRankingLoserState(): void {
     this.props.lastWeekRankingPosition = null
   }
 
-  hasUnlockedAchievement(achievementId: string): boolean {
-    return this.props.unlockedAchievementsIds.includes(achievementId).isTrue
+  hasUnlockedAchievement(achievementId: Id): Logical {
+    return this.props.unlockedAchievementsIds.includes(achievementId)
   }
 
-  hasRescuableAchievement(achievementId: string): boolean {
-    return this.props.rescuableAchievementsIds.includes(achievementId).isTrue
+  hasRescuableAchievement(achievementId: Id): Logical {
+    return this.props.rescuableAchievementsIds.includes(achievementId)
   }
 
-  hasUnlockedStar(starId: string): Logical {
+  hasUnlockedStar(starId: Id): Logical {
     return this.props.unlockedStarsIds.includes(starId)
   }
 
-  hasCompletedChallenge(challengeId: string): Logical {
+  hasCompletedChallenge(challengeId: Id): Logical {
     return this.props.completedChallengesIds.includes(challengeId)
   }
 
-  hasUpvotedComment(commentId: string): Logical {
+  hasUpvotedComment(commentId: Id): Logical {
     return this.props.upvotedCommentsIds.includes(commentId)
   }
 
-  hasUpvotedSolution(solutionId: string) {
+  hasUpvotedSolution(solutionId: Id): Logical {
     return this.props.upvotedSolutionsIds.includes(solutionId)
   }
 
-  hasAcquiredRocket(rocketId: string): boolean {
-    return this.props.acquiredRocketsIds.includes(rocketId).isTrue
+  hasAcquiredRocket(rocketId: Id): Logical {
+    return this.props.acquiredRocketsIds.includes(rocketId)
   }
 
-  hasAcquiredAvatar(rocketId: string): boolean {
-    return this.props.acquiredAvatarsIds.includes(rocketId).isTrue
+  hasAcquiredAvatar(rocketId: Id): Logical {
+    return this.props.acquiredAvatarsIds.includes(rocketId)
   }
 
-  isSelectRocket(rocketId: string): boolean {
-    return rocketId === this.rocketId
+  isSelectRocket(rocketId: Id): Logical {
+    return Logical.create(rocketId === this.rocketId)
   }
 
-  isSelectAvatar(avatarId: string): boolean {
-    return avatarId === this.avatarId
+  isSelectAvatar(avatarId: Id): Logical {
+    return Logical.create(avatarId === this.avatarId)
   }
 
-  upvoteComment(comment: Comment): void {
-    comment.upvote()
-    this.props.upvotedCommentsIds = this.props.upvotedCommentsIds.add(comment.id)
+  upvoteComment(commentId: Id): void {
+    this.props.upvotedCommentsIds = this.props.upvotedCommentsIds.add(commentId)
   }
 
-  removeUpvoteComment(comment: Comment): void {
-    comment.removeUpvote()
-    this.props.upvotedCommentsIds = this.props.upvotedCommentsIds.remove(comment.id)
+  removeUpvoteComment(commentId: Id): void {
+    this.props.upvotedCommentsIds = this.props.upvotedCommentsIds.remove(commentId)
   }
 
-  upvoteSolution(solution: Solution): void {
-    solution.upvote()
-    this.props.upvotedSolutionsIds = this.props.upvotedSolutionsIds.add(solution.id)
+  upvoteSolution(solutionId: Id): void {
+    this.props.upvotedSolutionsIds = this.props.upvotedSolutionsIds.add(solutionId)
   }
 
-  removeUpvoteSolution(solution: Solution): void {
-    solution.removeUpvote()
-    this.props.upvotedSolutionsIds = this.props.upvotedSolutionsIds.remove(solution.id)
+  removeUpvoteSolution(solutionId: Id): void {
+    this.props.upvotedSolutionsIds = this.props.upvotedSolutionsIds.remove(solutionId)
   }
 
-  completeChallenge(challenge: Challenge): void {
-    this.props.completedChallengesIds = this.props.completedChallengesIds.add(
-      challenge.id,
-    )
+  completeChallenge(challengeId: Id): void {
+    this.props.completedChallengesIds = this.props.completedChallengesIds.add(challengeId)
   }
 
   private notifyChanges(): void {
@@ -271,35 +246,35 @@ export class User extends Entity<UserProps> {
   }
 
   get hasCompletedSpace(): Logical {
-    return Logical.create(this.props.completedPlanetsIds.length === PLANETS_COUNT)
+    return this.props.completedPlanetsIds.count.isEqualTo(Integer.create(8))
   }
 
-  get unlockedStarsCount() {
-    return Integer.create(this.props.unlockedStarsIds.length - 1)
+  get unlockedStarsCount(): Integer {
+    return this.props.unlockedStarsIds.count.minus(Integer.create(1))
   }
 
   get acquiredRocketsCount() {
-    return Integer.create(this.props.acquiredRocketsIds.length - 1)
+    return this.props.acquiredRocketsIds.count.minus(Integer.create(1))
   }
 
   get acquiredAvatarsCount() {
-    return Integer.create(this.props.acquiredAvatarsIds.length - 3)
+    return this.props.acquiredRocketsIds.count.minus(Integer.create(3))
   }
 
   get unlockedAchievementsCount() {
-    return Integer.create(this.props.unlockedAchievementsIds.length)
+    return this.props.unlockedAchievementsIds.count
   }
 
   get rescueableAchievementsCount() {
-    return Integer.create(this.props.rescuableAchievementsIds.length)
+    return this.props.rescuableAchievementsIds.count
   }
 
   get completedChallengesCount() {
-    return Integer.create(this.props.completedChallengesIds.length)
+    return this.props.completedChallengesIds.count
   }
 
   get completedPlanetsCount() {
-    return Integer.create(this.props.completedPlanetsIds.length)
+    return this.props.completedPlanetsIds.count
   }
 
   get isRankingWinner(): Logical {
@@ -320,9 +295,9 @@ export class User extends Entity<UserProps> {
   }
 
   get rewardByLastWeekRankingPosition() {
-    if (!this.props.lastWeekRankingPosition) return 0
+    if (!this.props.lastWeekRankingPosition) return Integer.create(0)
 
-    return this.props.lastWeekRankingPosition.getReward(this.tier.reward.value)
+    return this.props.lastWeekRankingPosition.getReward(this.tier.reward)
   }
 
   get email() {
@@ -338,9 +313,6 @@ export class User extends Entity<UserProps> {
   }
 
   get avatar() {
-    if (!this.props.avatar.entity) {
-      throw new EntityNotDefinedError('Avatar')
-    }
     return this.props.avatar.entity
   }
 
@@ -349,9 +321,6 @@ export class User extends Entity<UserProps> {
   }
 
   get rocket() {
-    if (!this.props.rocket.entity) {
-      throw new EntityNotDefinedError('Foguete')
-    }
     return this.props.rocket.entity
   }
 
@@ -360,9 +329,6 @@ export class User extends Entity<UserProps> {
   }
 
   get tier() {
-    if (!this.props.tier.entity) {
-      throw new EntityNotDefinedError('Tier')
-    }
     return this.props.tier.entity
   }
 
@@ -420,36 +386,27 @@ export class User extends Entity<UserProps> {
 
   get dto(): UserDto {
     return {
-      id: this.id,
+      id: this.id.value,
       slug: this.slug.value,
       email: this.email.value,
       name: this.name.value,
-      rocket: {
-        id: this.rocketId,
-        dto: this.props.rocket.entity?.dto,
-      },
-      avatar: {
-        id: this.avatarId,
-        dto: this.props.avatar.entity?.dto,
-      },
-      tier: {
-        id: this.tierId,
-        dto: this.props.tier.entity?.dto,
-      },
+      rocket: this.props.rocket.dto,
+      avatar: this.props.avatar.dto,
+      tier: this.props.tier.dto,
       level: this.level.number.value,
       coins: this.coins.value,
       xp: this.xp.value,
       weeklyXp: this.weeklyXp.value,
       streak: this.streak.value,
       weekStatus: this.props.weekStatus.value,
-      unlockedStarsIds: this.props.unlockedStarsIds.items,
-      acquiredRocketsIds: this.props.acquiredRocketsIds.items,
-      acquiredAvatarsIds: this.props.acquiredAvatarsIds.items,
-      unlockedAchievementsIds: this.props.unlockedAchievementsIds.items,
-      rescuableAchievementsIds: this.props.rescuableAchievementsIds.items,
-      unlockedDocsIds: this.props.unlockedDocsIds.items,
-      completedChallengesIds: this.props.completedChallengesIds.items,
-      completedPlanetsIds: this.props.completedPlanetsIds.items,
+      unlockedStarsIds: this.props.unlockedStarsIds.dto,
+      acquiredRocketsIds: this.props.acquiredRocketsIds.dto,
+      acquiredAvatarsIds: this.props.acquiredAvatarsIds.dto,
+      unlockedAchievementsIds: this.props.unlockedAchievementsIds.dto,
+      rescuableAchievementsIds: this.props.rescuableAchievementsIds.dto,
+      unlockedDocsIds: this.props.unlockedDocsIds.dto,
+      completedChallengesIds: this.props.completedChallengesIds.dto,
+      completedPlanetsIds: this.props.completedPlanetsIds.dto,
       canSeeRankingResult: this.props.canSeeRankingResult.value,
       lastWeekRankingPosition: this.props.lastWeekRankingPosition?.position.value ?? null,
       didBreakStreak: this.props.didBreakStreak.value,

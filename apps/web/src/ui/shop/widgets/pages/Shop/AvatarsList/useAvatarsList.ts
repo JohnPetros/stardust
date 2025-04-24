@@ -10,6 +10,7 @@ import { CACHE } from '@/constants'
 import { useApi } from '@/ui/global/hooks/useApi'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
+import { Avatar } from '@stardust/core/shop/entities'
 
 const AVATARS_PER_PAGE = 10
 
@@ -55,7 +56,7 @@ export function useAvatarsList(initialAvatarsPagination: PaginationResponse<Avat
   }
 
   return {
-    AvatarsDto: data,
+    avatars: data.map(Avatar.create),
     totalAvatarsCount: totalItemsCount,
     avatarsPerPage: AVATARS_PER_PAGE,
     page,

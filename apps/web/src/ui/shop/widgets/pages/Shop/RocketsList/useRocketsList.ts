@@ -5,6 +5,7 @@ import { useState } from 'react'
 import type { RocketDto } from '@stardust/core/shop/dtos'
 import type { ListOrder } from '@stardust/core/global/types'
 import type { PaginationResponse } from '@stardust/core/global/responses'
+import { Rocket } from '@stardust/core/shop/entities'
 
 import { CACHE } from '@/constants'
 import { useApi } from '@/ui/global/hooks/useApi'
@@ -53,7 +54,7 @@ export function useRocketsList(initialRocketsPagination: PaginationResponse<Rock
   }
 
   return {
-    rocketsDto: data,
+    rockets: data.map(Rocket.create),
     totalRocketsCount: totalItemsCount,
     rocketsPerPage: ROCKETS_PER_PAGE,
     page,

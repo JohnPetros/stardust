@@ -22,20 +22,28 @@ export class UpvoteCommentUseCase implements UseCase<Request, Response> {
     const isCommentUpvoted = user.hasUpvotedComment(comment.id)
 
     if (isCommentUpvoted.isTrue) {
-      user.removeUpvoteComment(comment)
-      const response = await this.forumService.deleteCommentUpvote(comment.id, user.id)
+      user.removeUpvoteComment(comment.id)
+      comment.removeUpvote()
+      const response = await this.forumService.deleteCommentUpvote(
+        comment.id.value,
+        user.id.value,
+      )
       if (response.isFailure) response.throwError()
     }
 
     if (isCommentUpvoted.isFalse) {
-      user.upvoteComment(comment)
-      const response = await this.forumService.saveCommentUpvote(comment.id, user.id)
+      user.upvoteComment(comment.id)
+      comment.upvote()
+      const response = await this.forumService.saveCommentUpvote(
+        comment.id.value,
+        user.id.value,
+      )
       if (response.isFailure) response.throwError()
     }
 
     return {
       upvotesCount: comment.upvotesCount.value,
-      userUpvotedCommentsIds: user.upvotedCommentsIds.items,
+      userUpvotedCommentsIds: user.upvotedCommentsIds.items.map((id) => id.value),
     }
   }
 

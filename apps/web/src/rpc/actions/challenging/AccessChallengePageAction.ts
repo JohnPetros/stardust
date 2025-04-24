@@ -6,6 +6,7 @@ import type { ChallengeVote } from '@stardust/core/challenging/types'
 import { Challenge } from '@stardust/core/challenging/entities'
 import { Star } from '@stardust/core/space/entities'
 import { User } from '@stardust/core/global/entities'
+import type { Id } from '@stardust/core/global/structures'
 
 type Request = {
   challengeSlug: string
@@ -26,14 +27,17 @@ export const AccessChallengePageAction = (
     return Challenge.create(response.body)
   }
 
-  async function fetchChallengeStar(starId: string) {
-    const response = await spaceService.fetchStarById(starId)
+  async function fetchChallengeStar(starId: Id) {
+    const response = await spaceService.fetchStarById(starId.value)
     if (response.isFailure) response.throwError()
     return Star.create(response.body)
   }
 
-  async function fetchUserChallengeVote(challengeId: string, userId: string) {
-    const response = await challengingService.fetchChallengeVote(challengeId, userId)
+  async function fetchUserChallengeVote(challengeId: Id, userId: Id) {
+    const response = await challengingService.fetchChallengeVote(
+      challengeId.value,
+      userId.value,
+    )
     if (response.isFailure) return null
     return response.body.challengeVote
   }

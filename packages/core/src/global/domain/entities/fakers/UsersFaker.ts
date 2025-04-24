@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 
 import type { UserDto } from '#global/dtos'
-import { User } from '../User'
+import { User } from '../../../../profile/domain/entities/User'
 import { AvatarsFaker, RocketsFaker } from '../../../../shop/domain/entities/fakers'
 import { TiersFaker } from '#ranking/entities/fakers'
 import { WeekStatus } from '../../../../profile/domain/structures'
