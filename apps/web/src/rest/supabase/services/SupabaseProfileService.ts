@@ -254,7 +254,7 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
         .from('users')
         // @ts-ignore
         .update(supabaseUser)
-        .eq('id', user.id)
+        .eq('id', user.id.value)
 
       if (error) {
         return SupabasePostgrestError(error, 'Error inesperado ao atualizar usuário')

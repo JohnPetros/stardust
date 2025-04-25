@@ -54,7 +54,7 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
       }),
       categories:
         challenge?.categories.map((category) => ({
-          id: category.id,
+          id: category.id.value,
           name: category.name.value,
         })) ?? [],
       isPublic:
@@ -81,9 +81,8 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
   ].every(Boolean)
 
   async function handleSubmit(formData: ChallengeSchema) {
-    console.log('dirtyFields', formData.testCases)
     if (challenge) {
-      await editChallenge({ challengeId: challenge.id, challenge: formData })
+      await editChallenge({ challengeId: challenge.id.value, challenge: formData })
       return
     }
     await postChallenge(formData)

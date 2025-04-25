@@ -28,7 +28,7 @@ export const VoteChallengeAction = (
       const useCase = new VoteChallengeUseCase(challengingService)
       const data = await useCase.do({
         challengeId: challengeId,
-        userId: user.id,
+        userId: user.id.value,
         userChallengeVote,
       })
       return data
