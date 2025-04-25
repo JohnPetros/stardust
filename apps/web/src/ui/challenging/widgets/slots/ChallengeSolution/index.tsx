@@ -7,11 +7,11 @@ import { ROUTES } from '@/constants'
 import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'
 import { Mdx } from '@/ui/global/widgets/components/Mdx'
 import { Icon } from '@/ui/global/widgets/components/Icon'
-import { SolutionInfo } from '../../components/SolutionInfo'
 import { SolutionCommentsList } from './SolutionCommentsList'
 import { UpvoteSolutionButton } from './UpvoteSolutionButton'
 import { UserSolutionButtons } from './UserSolutionButtons'
 import { ConfettiAnimation } from '../../components/ConfettiAnimation'
+import { SolutionInfo } from '../../components/SolutionInfo'
 import { BlockedContentAlertDialog } from '../../components/BlockedContentMessage'
 
 type ChallengeSolutionSlotProps = {

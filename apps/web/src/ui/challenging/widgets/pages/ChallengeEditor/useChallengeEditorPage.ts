@@ -81,7 +81,6 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
   ].every(Boolean)
 
   async function handleSubmit(formData: ChallengeSchema) {
-    console.log('dirtyFields', formData.testCases)
     if (challenge) {
       await editChallenge({ challengeId: challenge.id.value, challenge: formData })
       return
