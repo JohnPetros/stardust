@@ -1,6 +1,7 @@
-import type { IAction, IChallengingService } from '@stardust/core/global/interfaces'
-import type { IProfileService, ISpaceService } from '@stardust/core/global/interfaces'
-import type { IActionServer } from '@stardust/core/global/interfaces'
+import type { Action, Call } from '@stardust/core/global/interfaces'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
+import type { ProfileService } from '@stardust/core/profile/interfaces'
+import type { SpaceService } from '@stardust/core/space/interfaces'
 import type { WeekStatusValue } from '@stardust/core/profile/types'
 import type { StarChallengeRewardingPayload } from '@stardust/core/challenging/types'
 import { RewardUserUseCase } from '@stardust/core/profile/use-cases'
@@ -21,15 +22,15 @@ type Response = {
 }
 
 export const RewardForStarChallengeCompletionAction = (
-  profileService: IProfileService,
-  spaceService: ISpaceService,
-  challengingService: IChallengingService,
-): IAction<StarChallengeRewardingPayload, Response> => {
+  profileService: ProfileService,
+  spaceService: SpaceService,
+  challengingService: ChallengingService,
+): Action<StarChallengeRewardingPayload, Response> => {
   return {
-    async handle(actionServer: IActionServer<StarChallengeRewardingPayload>) {
+    async handle(call: Call<StarChallengeRewardingPayload>) {
       const { starId, challengeId, incorrectAnswersCount, secondsCount } =
-        actionServer.getRequest()
-      const userDto = await actionServer.getUser()
+        call.getRequest()
+      const userDto = await call.getUser()
 
       const calculateRewardForChallengeCompletionUseCase =
         new CalculateRewardForChallengeCompletionUseCase(challengingService)

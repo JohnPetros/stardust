@@ -1,8 +1,8 @@
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import type { IController, IHttp } from '@stardust/core/global/interfaces'
-import type { IShopService } from '@stardust/core/global/interfaces'
+import type { ShopService } from '@stardust/core/global/interfaces'
 
-export const FetchShopItemsController = (shopService: IShopService): IController => {
+export const FetchShopItemsController = (shopService: ShopService): IController => {
   return {
     async handle(http: IHttp) {
       const rocketsResponse = await shopService.fetchShopRocketsList({

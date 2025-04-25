@@ -2,31 +2,31 @@ import { EventSchemas, Inngest } from 'inngest'
 import { z } from 'zod'
 
 import { UserCreatedEvent } from '@stardust/core/profile/events'
-import { UserSignedUpEvent } from '@stardust/core/auth/events'
 import { emailSchema, idSchema, nameSchema } from '@stardust/validation/global/schemas'
-
-import { SERVER_ENV } from '@/constants/server-env'
-import { ENV } from '@/constants/env'
 import { FirstStarUnlockedEvent } from '@stardust/core/space/events'
 import { ShopItemsAcquiredByDefaultEvent } from '@stardust/core/shop/events'
 import { FirstTierReachedEvent } from '@stardust/core/ranking/events'
+import { UserSignedUpEvent } from '@stardust/core/auth/events'
+
+import { SERVER_ENV } from '@/constants/server-env'
+import { ENV } from '@/constants/env'
 
 const eventsSchema = {
-  [UserCreatedEvent.NAME]: {
+  [UserCreatedEvent._NAME]: {
     data: z.object({
       userId: idSchema,
       acquiredRocketsIds: z.array(idSchema),
       acquiredAvatarsIds: z.array(idSchema),
     }),
   },
-  [UserSignedUpEvent.NAME]: {
+  [UserSignedUpEvent._NAME]: {
     data: z.object({
       userId: idSchema,
       userName: nameSchema,
       userEmail: emailSchema,
     }),
   },
-  [FirstStarUnlockedEvent.NAME]: {
+  [FirstStarUnlockedEvent._NAME]: {
     data: z.object({
       user: z.object({
         id: idSchema,
@@ -37,7 +37,7 @@ const eventsSchema = {
       selectedRocketByDefaultId: idSchema,
     }),
   },
-  [ShopItemsAcquiredByDefaultEvent.NAME]: {
+  [ShopItemsAcquiredByDefaultEvent._NAME]: {
     data: z.object({
       user: z.object({
         id: idSchema,
@@ -47,7 +47,7 @@ const eventsSchema = {
       firstUnlockedStarId: idSchema,
     }),
   },
-  [FirstTierReachedEvent.NAME]: {
+  [FirstTierReachedEvent._NAME]: {
     data: z.object({
       user: z.object({
         id: idSchema,
@@ -63,7 +63,7 @@ const eventsSchema = {
 }
 
 export const inngest = new Inngest({
-  id: 'StarDust Queue',
+  id: 'StarDust Amqp',
   eventKey: ENV.mode === 'production' ? SERVER_ENV.inngestEventKey : undefined,
   signingKey: ENV.mode === 'production' ? SERVER_ENV.inngestSigningKey : undefined,
   schemas: new EventSchemas().fromZod(eventsSchema),

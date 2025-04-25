@@ -1,6 +1,6 @@
-import type { IEvent } from '../../../global/interfaces'
+import { Event } from '#global/abstracts'
 
-type UserSignedUpPayload = {
+type Payload = {
   user: {
     id: string
     name: string
@@ -10,11 +10,10 @@ type UserSignedUpPayload = {
   selectedRocketByDefaultId: string
 }
 
-export class ShopItemsAcquiredByDefaultEvent implements IEvent<UserSignedUpPayload> {
-  static readonly NAME = 'shop/shop.items.acquired.by.default'
-  constructor(readonly payload: UserSignedUpPayload) {}
+export class ShopItemsAcquiredByDefaultEvent extends Event<Payload> {
+  static readonly _NAME = 'shop/shop.items.acquired.by.default'
 
-  get name() {
-    return ShopItemsAcquiredByDefaultEvent.NAME
+  constructor(payload: Payload) {
+    super(ShopItemsAcquiredByDefaultEvent._NAME, payload)
   }
 }

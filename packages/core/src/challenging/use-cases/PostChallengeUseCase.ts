@@ -1,4 +1,4 @@
-import type { IChallengingService, IUseCase } from '../../global/interfaces'
+import type { ChallengingService, UseCase } from '../../global/interfaces'
 import { Challenge } from '../domain/entities'
 import type { ChallengeDto } from '../dtos'
 
@@ -8,8 +8,8 @@ type Request = {
 
 type Response = Promise<ChallengeDto>
 
-export class PostChallengeUseCase implements IUseCase<Request, Response> {
-  constructor(private readonly challengingService: IChallengingService) {}
+export class PostChallengeUseCase implements UseCase<Request, Response> {
+  constructor(private readonly challengingService: ChallengingService) {}
 
   async do({ challengeDto }: Request) {
     const challenge = Challenge.create(challengeDto)

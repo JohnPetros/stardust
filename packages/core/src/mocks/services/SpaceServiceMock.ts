@@ -1,10 +1,10 @@
 import type { Planet } from '../../space/domain/entities'
 import type { PlanetDto, StarDto } from '../../space/dtos'
-import type { ISpaceService } from '../../global/interfaces'
+import type { SpaceService } from '../../global/interfaces'
 import { RestResponse } from '../../global/responses'
 import { HTTP_STATUS_CODE } from '../../global/constants'
 
-export class SpaceServiceMock implements ISpaceService {
+export class SpaceServiceMock implements SpaceService {
   planets: PlanetDto[] = []
   stars: StarDto[] = []
   unlockedStarsIds: string[] = []

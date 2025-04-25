@@ -1,15 +1,15 @@
 import { User } from '../../global/domain/entities'
 import type { UserDto } from '../../global/dtos'
 import { Planet, Star } from '../domain/entities'
-import type { ISpaceService, IUseCase } from '../../global/interfaces'
+import type { SpaceService, UseCase } from '../../global/interfaces'
 
 type Request = {
   userDto: UserDto
   starId: string
 }
 
-export class UnlockNextStarUseCase implements IUseCase<Request> {
-  constructor(private readonly spaceService: ISpaceService) {}
+export class UnlockNextStarUseCase implements UseCase<Request> {
+  constructor(private readonly spaceService: SpaceService) {}
 
   async do({ userDto, starId }: Request) {
     const user = User.create(userDto)

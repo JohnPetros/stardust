@@ -1,4 +1,4 @@
-import type { IProfileService } from '@stardust/core/global/interfaces'
+import type { ProfileService } from '@stardust/core/global/interfaces'
 import type { User } from '@stardust/core/global/entities'
 import { RestResponse } from '@stardust/core/global/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
@@ -8,7 +8,7 @@ import type { Supabase, SupabaseUser } from '../types'
 import { SupabasePostgrestError } from '../errors'
 import { SupabaseAchievementMapper, SupabaseUserMapper } from '../mappers'
 
-export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
+export const SupabaseProfileService = (supabase: Supabase): ProfileService => {
   const supabaseUserMapper = SupabaseUserMapper()
   const supabaseAchievementMapper = SupabaseAchievementMapper()
 
@@ -254,7 +254,7 @@ export const SupabaseProfileService = (supabase: Supabase): IProfileService => {
         .from('users')
         // @ts-ignore
         .update(supabaseUser)
-        .eq('id', user.id)
+        .eq('id', user.id.value)
 
       if (error) {
         return SupabasePostgrestError(error, 'Error inesperado ao atualizar usuário')

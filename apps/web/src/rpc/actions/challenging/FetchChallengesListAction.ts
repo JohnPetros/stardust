@@ -1,8 +1,5 @@
-import type {
-  IAction,
-  IActionServer,
-  IChallengingService,
-} from '@stardust/core/global/interfaces'
+import type { Action, Call } from '@stardust/core/global/interfaces'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 import type {
   ChallengeCompletionStatus,
@@ -21,11 +18,11 @@ type Request = {
 }
 
 export const FetchChallengesListAction = (
-  challengingService: IChallengingService,
-): IAction<Request, PaginationResponse<ChallengeDto>> => {
+  challengingService: ChallengingService,
+): Action<Request, PaginationResponse<ChallengeDto>> => {
   return {
-    async handle(actionServer: IActionServer<Request>) {
-      const userDto = await actionServer.getUser()
+    async handle(call: Call<Request>) {
+      const userDto = await call.getUser()
       const {
         page,
         itemsPerPage,
@@ -33,7 +30,7 @@ export const FetchChallengesListAction = (
         categoriesIds,
         completionStatus,
         difficultyLevel,
-      } = actionServer.getRequest()
+      } = call.getRequest()
 
       const useCase = new ListChallengesUseCase(challengingService)
       const pagination = await useCase.do({

@@ -1,12 +1,12 @@
-import type { ISpaceService, IUseCase } from '../../global/interfaces'
+import type { SpaceService, UseCase } from '../../global/interfaces'
 import { Planet } from '../domain/entities'
 
 type Response = Promise<{
   firstUnlockedStarId: string
 }>
 
-export class GetFirstStarIdUseCase implements IUseCase<void, Response> {
-  constructor(private readonly spaceService: ISpaceService) {}
+export class GetFirstStarIdUseCase implements UseCase<void, Response> {
+  constructor(private readonly spaceService: SpaceService) {}
 
   async do() {
     const planet = await this.fetchFirstPlanet()
