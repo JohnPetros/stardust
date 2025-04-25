@@ -9,10 +9,7 @@
     "start": "node .next/standalone/apps/web/server.js -p $PORT",
     "lint": "next lint",
     "db:types": "supabase gen types typescript --project-id aukqejqsiqsqowafpppb > src/api/supabase/types/Database.ts",
-    "type-check": "tsc",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "test --coverage"
+    "type-check": "tsc"
   },
   "dependencies": {
     "@designliquido/delegua": "^0.37.0",
