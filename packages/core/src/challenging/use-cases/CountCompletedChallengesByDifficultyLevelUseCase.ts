@@ -1,14 +1,13 @@
-import { User } from '../../global/domain/entities'
-import type { UserDto } from '../../global/dtos'
+import { Id, Percentage } from '@/global/domain/structures'
 import { ChallengeDifficulty } from '../domain/structures'
+import type { UserDto } from '@/profile/domain/entities/dtos'
+import type { UseCase } from '@/global/interfaces'
 import type {
   ChallengeDifficultyLevel,
   CompletedChallengesCountByDifficultyLevel,
 } from '../domain/types'
-
-import { Id, Percentage } from '../../global/domain/structures'
-import type { ChallengingService, UseCase } from '../../global/interfaces'
-import { Id, Percentage } from '../../global/domain/structures'
+import type { ChallengingService } from '../interfaces'
+import { User } from '@/profile/domain/entities'
 
 type Challenge = { id: Id; difficulty: ChallengeDifficulty }
 

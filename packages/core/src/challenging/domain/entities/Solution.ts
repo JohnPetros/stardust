@@ -1,8 +1,8 @@
-import type { SolutionDto } from '#challenging/dtos'
-import { Entity } from '#global/abstracts'
-import { AuthorAggregate } from '#global/aggregates'
-import { Datetime } from '#global/libs'
-import { Integer, Logical, Name, Slug, Text } from '#global/structures'
+import { AuthorAggregate } from '@/global/domain/aggregates'
+import { Integer, Logical, Name, Slug, Text } from '@/global/domain/structures'
+import { Entity } from '@/global/domain/abstracts'
+import type { SolutionDto } from './dtos'
+import { Datetime } from '@/global/libs'
 
 type SolutionProps = {
   title: Name

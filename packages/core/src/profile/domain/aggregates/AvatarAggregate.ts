@@ -1,6 +1,6 @@
-import { Aggregate } from '#global/abstracts'
-import { Image, Name } from '#global/structures'
-import type { AvatarAggregateDto } from '#profile/dtos'
+import { Aggregate } from '@/global/domain/abstracts'
+import { Image, Name } from '@/global/domain/structures'
+import type { AvatarAggregateDto } from '@/profile/domain/aggregates/dtos'
 
 type AvatarAggregateEntity = {
   name: Name

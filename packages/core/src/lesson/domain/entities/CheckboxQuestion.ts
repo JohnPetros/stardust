@@ -1,13 +1,14 @@
-import { Question } from '../abstracts'
 import {
   Image,
   List,
   ShuffledList,
   Text,
-  type UserAnswer,
   type Logical,
-} from '../../../global/domain/structures'
-import type { CheckboxQuestionDto, QuestionDto } from '../../dtos'
+  type UserAnswer,
+} from '@/global/domain/structures'
+import { Question } from '../abstracts'
+
+import type { CheckboxQuestionDto, QuestionDto } from './dtos'
 
 type CheckboxQuestionProps = {
   options: ShuffledList<string>

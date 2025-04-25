@@ -1,8 +1,9 @@
-import { User } from '../../global/domain/entities'
-import type { UserDto } from '../../global/dtos'
-import type { UseCase, ChallengingService } from '../../global/interfaces'
+import { Id, Percentage } from '@/global/domain/structures'
+import type { UseCase } from '@/global/interfaces'
+import { User } from '@/profile/domain/entities'
+import type { UserDto } from '@/profile/domain/entities/dtos'
+import type { ChallengingService } from '../interfaces'
 import { Challenge } from '../domain/entities'
-import { Id, Percentage } from '#global/structures'
 
 type Request = {
   userDto: UserDto

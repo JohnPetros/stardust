@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { DropZone } from '../../DropZone'
-import type { DropZoneDto } from '../../../../dtos'
+import type { DropZoneDto } from '../../../entities/dtos'
 
 export class DropZoneFaker {
   static fake(baseDto?: Partial<DropZoneDto>): DropZone {

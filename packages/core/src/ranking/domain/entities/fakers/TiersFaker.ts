@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 
-import type { TierDto } from '#ranking/dtos'
+import type { TierDto } from '../dtos'
 import { Tier } from '../Tier'
 
 export class TiersFaker {

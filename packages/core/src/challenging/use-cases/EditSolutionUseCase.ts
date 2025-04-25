@@ -1,4 +1,5 @@
-import type { ChallengingService, UseCase } from '../../global/interfaces'
+import type { UseCase } from '../../global/interfaces'
+import type { ChallengingService } from '../interfaces'
 import { Solution } from '../domain/entities'
 
 type Request = {

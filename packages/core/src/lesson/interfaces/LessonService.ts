@@ -1,6 +1,6 @@
-import type { TextBlockDto } from '#global/dtos'
-import type { RestResponse } from '#global/responses'
-import type { QuestionDto } from '#lesson/dtos'
+import type { TextBlockDto } from "@/global/domain/entities/dtos"
+import type { RestResponse } from "@/global/responses"
+import type { QuestionDto } from "../domain/entities/dtos"
 
 export interface LessonService {
   fetchQuestionsByStar(starId: string): Promise<RestResponse<QuestionDto[]>>

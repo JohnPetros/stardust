@@ -1,7 +1,7 @@
 import { User } from '../../global/domain/entities'
-import type { UserDto } from '../../global/dtos'
+import type { UserDto } from '../../global/domain/entities/dtos'
 import type { RankingService, UseCase } from '../../global/interfaces'
-import type { RankingUserDto, TierDto } from '../dtos'
+import type { RankingUserDto, TierDto } from '../domain/entities/dtos'
 import { Tier } from '../domain/entities'
 
 type Response = Promise<{

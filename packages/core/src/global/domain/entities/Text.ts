@@ -1,5 +1,5 @@
 import { Entity } from '../abstracts'
-import type { TextDto } from '../../dtos'
+import type { TextDto } from './dtos'
 
 export type TextType = 'default' | 'quote' | 'alert' | 'list' | 'image' | 'code' | 'user'
 

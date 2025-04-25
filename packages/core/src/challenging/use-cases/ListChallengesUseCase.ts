@@ -1,11 +1,12 @@
 import type { ChallengeCompletionStatus, ChallengesListParams } from '../domain/types'
-import type { ChallengeDto } from '../dtos'
-import type { UserDto } from '../../global/dtos'
-import type { ChallengingService, UseCase } from '../../global/interfaces'
+import type { ChallengeDto } from '../domain/entities/dtos'
 import type { ListParam } from '../../global/domain/types'
 import { User } from '../../global/domain/entities'
 import { Challenge } from '../domain/entities'
 import { PaginationResponse } from '../../global/responses'
+import type { UserDto } from '@/profile/domain/entities/dtos'
+import type { UseCase } from '@/global/interfaces'
+import type { ChallengingService } from '../interfaces'
 
 type Request = {
   userDto: UserDto

@@ -1,4 +1,4 @@
-import type { AuthorDto } from '../../../global/dtos'
+import type { AuthorDto } from '../../../global/domain/entities/dtos'
 
 export type SnippetDto = {
   id?: string

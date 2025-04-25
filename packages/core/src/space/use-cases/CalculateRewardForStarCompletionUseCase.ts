@@ -1,5 +1,5 @@
 import { User } from '../../global/domain/entities'
-import type { UserDto } from '../../global/dtos'
+import type { UserDto } from '../../global/domain/entities/dtos'
 import { Planet, Star } from '../domain/entities'
 import type { SpaceService, UseCase } from '../../global/interfaces'
 import { Percentage } from '../../global/domain/structures'

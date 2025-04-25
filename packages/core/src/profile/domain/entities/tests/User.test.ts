@@ -1,25 +1,23 @@
-import { UsersFaker } from './fakers'
-import { IdFaker } from '#fakers/structures'
-import { AchievementsFaker } from '#fakers/entities'
-import { Observer } from '../../structures'
-import { Datetime } from '../../../libs'
+import { IdFaker } from '@/global/domain/structures/fakers'
+import { Integer, Observer } from '@/global/domain/structures'
+import { Datetime } from '@/global/libs'
+import { AchievementsFaker, UsersFaker } from '../fakers'
 
 describe('User Entity', () => {
-  it('should return whether user has the unlocked achievement or not', () => {
+  it('should return true if the user has the unlocked achievement, false otherwise', () => {
     const fakeUnlockedAchivementId = IdFaker.fake()
 
     const user = UsersFaker.fake({
       unlockedAchievementsIds: [fakeUnlockedAchivementId.value],
     })
 
-    expect(user.hasUnlockedAchievement(fakeUnlockedAchivementId.value)).toBe(true)
-    expect(user.hasUnlockedAchievement(IdFaker.fake().value)).toBe(false)
+    expect(user.hasUnlockedAchievement(fakeUnlockedAchivementId).isTrue).toBeTruthy()
+    expect(user.hasUnlockedAchievement(IdFaker.fake()).isFalse).toBeTruthy()
   })
 
-  it('should up level if earns enough xp', () => {
+  it('should level up when the user earns enough XP', () => {
     const user = UsersFaker.fake({ level: 1, xp: 0 })
-
-    user.earnXp(50)
+    user.earnXp(Integer.create(50))
     expect(user.level.value).toBe(2)
   })
 
@@ -39,7 +37,6 @@ describe('User Entity', () => {
     user = UsersFaker.fake({
       weekStatus,
     })
-
     user.makeTodayStatusDone()
     expect(user.weekStatus.value[todayIndex]).toBe('undone')
   })
@@ -58,8 +55,8 @@ describe('User Entity', () => {
       rescuableAchievementsIds: [fakeRescuableAchivementId.value],
     })
 
-    expect(user.hasRescuableAchievement(fakeRescuableAchivementId.value)).toBe(true)
-    expect(user.hasRescuableAchievement(IdFaker.fake().value)).toBe(false)
+    expect(user.hasRescuableAchievement(fakeRescuableAchivementId)).toBe(true)
+    expect(user.hasRescuableAchievement(IdFaker.fake())).toBe(false)
   })
 
   it('should return whether user has the unlocked star or not', () => {
@@ -69,8 +66,8 @@ describe('User Entity', () => {
       unlockedStarsIds: [fakeUnlockedStarId.value],
     })
 
-    expect(user.hasUnlockedStar(fakeUnlockedStarId.value).isTrue).toBe(true)
-    expect(user.hasUnlockedStar(IdFaker.fake().value).isTrue).toBe(false)
+    expect(user.hasUnlockedStar(fakeUnlockedStarId).isTrue).toBe(true)
+    expect(user.hasUnlockedStar(IdFaker.fake()).isTrue).toBe(false)
   })
 
   it('should return whether user has the completed challenge or not', () => {
@@ -80,8 +77,8 @@ describe('User Entity', () => {
       completedChallengesIds: [fakeCompletedChallengeId.value],
     })
 
-    expect(user.hasCompletedChallenge(fakeCompletedChallengeId.value)).toBe(true)
-    expect(user.hasCompletedChallenge(IdFaker.fake().value)).toBe(false)
+    expect(user.hasCompletedChallenge(fakeCompletedChallengeId)).toBe(true)
+    expect(user.hasCompletedChallenge(IdFaker.fake())).toBe(false)
   })
 
   it('should return the count of unlocked achievements', () => {
@@ -126,9 +123,7 @@ describe('User Entity', () => {
 
   it('should earn coins', () => {
     const user = UsersFaker.fake({ coins: 10 })
-
-    user.earnCoins(50)
-
+    user.earnCoins(Integer.create(50))
     expect(user.coins.value).toBe(60)
   })
 
@@ -153,7 +148,7 @@ describe('User Entity', () => {
       coins: 0,
     })
 
-    user.rescueAchievement(fakeAchievement.id, fakeAchievement.reward.value)
+    user.rescueAchievement(fakeAchievement.id, fakeAchievement.reward)
 
     expect(user.coins.value).toBe(fakeAchievement.reward.value)
   })
@@ -169,7 +164,7 @@ describe('User Entity', () => {
 
     expect(user.rescueableAchievementsCount.value).toBe(1)
 
-    user.rescueAchievement(fakeAchievement.id, fakeAchievement.reward.value)
+    user.rescueAchievement(fakeAchievement.id, fakeAchievement.reward)
 
     expect(user.rescueableAchievementsCount.value).toBe(0)
   })
@@ -185,10 +180,10 @@ describe('User Entity', () => {
     user.unlockAchievement(fakeAchievement.id)
     expect(callback).toHaveBeenCalled()
 
-    user.rescueAchievement(fakeAchievement.id, fakeAchievement.reward.value)
+    user.rescueAchievement(fakeAchievement.id, fakeAchievement.reward)
     expect(callback).toHaveBeenCalled()
 
-    user.earnCoins(42)
+    user.earnCoins(Integer.create(42))
     expect(callback).toHaveBeenCalled()
   })
 

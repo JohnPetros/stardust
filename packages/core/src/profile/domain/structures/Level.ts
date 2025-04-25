@@ -1,4 +1,4 @@
-import { OrdinalNumber, Logical, type Integer } from '#global/structures'
+import { type Integer, Logical, OrdinalNumber } from '@/global/domain/structures'
 
 type LevelProps = {
   number: OrdinalNumber

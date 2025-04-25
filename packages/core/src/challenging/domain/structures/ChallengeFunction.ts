@@ -1,4 +1,4 @@
-import type { ChallengeFunctionDto } from '../../dtos'
+import type { ChallengeFunctionDto } from '../entities/dtos'
 import { Name } from '../../../global/domain/structures'
 import { DataType } from './DataType'
 

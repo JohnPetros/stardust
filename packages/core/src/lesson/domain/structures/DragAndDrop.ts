@@ -1,5 +1,5 @@
 import { List, ShuffledList } from '../../../global/domain/structures'
-import type { DragglableItemDto } from '../../dtos'
+import type { DragglableItemDto } from '../entities/dtos'
 import type { DropZone } from './DropZone'
 import { DraggableItem } from './DraggableItem'
 

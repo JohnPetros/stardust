@@ -1,5 +1,5 @@
 import { Integer } from '../../../global/domain/structures'
-import type { QuestionCodeLineDto } from '../../dtos'
+import type { QuestionCodeLineDto } from '../entities/dtos'
 
 type QuestionCodeLineProps = {
   number: Integer

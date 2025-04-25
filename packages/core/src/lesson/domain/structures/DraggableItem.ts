@@ -1,5 +1,5 @@
 import { Integer, Logical, Text } from '../../../global/domain/structures'
-import type { DragglableItemDto } from '../../dtos'
+import type { DragglableItemDto } from '../entities/dtos'
 
 type DraggableItemProps = {
   index: Integer

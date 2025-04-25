@@ -1,4 +1,4 @@
-import { RankingUsersFaker } from '#fakers/entities'
+import { RankingUsersFaker } from '../../entities/fakers'
 import { Ranking } from '../Ranking'
 
 describe('Ranking Struct', () => {

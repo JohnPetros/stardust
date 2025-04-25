@@ -1,5 +1,5 @@
 import { Logical, OrdinalNumber } from '../../../global/domain/structures'
-import type { TestCaseDto } from '../../dtos'
+import type { TestCaseDto } from '../entities/dtos'
 
 type TestCaseProps = {
   position: OrdinalNumber

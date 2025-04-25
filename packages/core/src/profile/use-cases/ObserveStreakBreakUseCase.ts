@@ -1,7 +1,7 @@
-import { User } from '#global/entities'
-import type { UserDto } from '#global/dtos'
-import type { UseCase } from '#global/interfaces'
-import type { ProfileService } from '#profile/interfaces'
+import type { UseCase } from '@/global/interfaces'
+import type { ProfileService } from '../interfaces'
+import type { UserDto } from '../domain/entities/dtos'
+import { User } from '../domain/entities'
 
 type Request = {
   userDto: UserDto

@@ -1,6 +1,6 @@
-import type { PaginationResponse, RestResponse } from '#global/responses'
-import type { AvatarDto, RocketDto } from '#shop/dtos'
-import type { ShopItemsListingParams } from '#shop/types'
+import type { PaginationResponse, RestResponse } from '@/global/responses'
+import type { ShopItemsListingParams } from '../domain/types'
+import type { AvatarDto, RocketDto } from '../dtos'
 
 export interface ShopService {
   fetchShopAvatarsList(

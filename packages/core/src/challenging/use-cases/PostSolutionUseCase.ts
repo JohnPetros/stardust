@@ -1,8 +1,9 @@
-import type { ChallengingService, UseCase } from '../../global/interfaces'
-import { ValidationError } from '../../global/domain/errors'
-import { Slug } from '../../global/domain/structures'
+import type { UseCase } from '@/global/interfaces'
 import { Challenge, Solution } from '../domain/entities'
-import type { SolutionDto } from '../dtos'
+import type { ChallengingService } from '../interfaces'
+import type { SolutionDto } from '../domain/entities/dtos'
+import { Slug } from '@/global/domain/structures'
+import { ValidationError } from '@/global/domain/errors'
 
 type Request = {
   solutionTitle: string

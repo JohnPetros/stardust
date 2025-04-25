@@ -1,7 +1,7 @@
-import type { UserDto } from '../../global/dtos'
+import type { UserDto } from '../../global/domain/entities/dtos'
 import { Solution } from '../domain/entities'
 import type { ChallengingService, UseCase } from '../../global/interfaces'
-import type { SolutionDto } from '../dtos'
+import type { SolutionDto } from '../domain/entities/dtos'
 
 type Request = {
   solutionSlug: string

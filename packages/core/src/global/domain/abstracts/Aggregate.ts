@@ -1,5 +1,4 @@
-import { EntityNotDefinedError } from '#global/errors'
-import { Logical } from '#global/structures'
+import { EntityNotDefinedError } from '../errors'
 import { Entity } from './Entity'
 
 type Props<AggregateEntity> = {

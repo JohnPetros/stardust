@@ -1,5 +1,5 @@
-import type { TierAggregateDto } from '#profile/dtos'
-import { TiersFaker } from '#ranking/entities/fakers'
+import { TiersFaker } from '@/ranking/domain/entities/fakers'
+import type { TierAggregateDto } from '../dtos'
 
 export class TierAggregatesFaker {
   static fakeDto(baseDto?: Partial<TierAggregateDto>): TierAggregateDto {

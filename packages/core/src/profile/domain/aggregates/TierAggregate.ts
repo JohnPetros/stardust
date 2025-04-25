@@ -1,6 +1,6 @@
-import { Aggregate } from '#global/abstracts'
-import { Image, Integer, Name, OrdinalNumber } from '#global/structures'
-import type { TierAggregateDto } from '#profile/dtos'
+import { Aggregate } from '@/global/domain/abstracts'
+import { Image, Integer, Name, OrdinalNumber } from '@/global/domain/structures'
+import type { TierAggregateDto } from '@/profile/domain/aggregates/dtos'
 
 type TierAggregateEntity = {
   name: Name

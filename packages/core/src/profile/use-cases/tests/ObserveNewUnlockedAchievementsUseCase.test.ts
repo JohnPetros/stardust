@@ -1,12 +1,12 @@
-import { RestResponse } from '../../../global/responses'
-import { AppError } from '../../../global/domain/errors'
-import { HTTP_STATUS_CODE } from '../../../global/constants'
-import { ProfileServiceMock } from '../../../mocks/services'
-import { Achievement } from '../../domain/entities'
+import { ProfileServiceMock } from '@/mocks/services'
+import { UsersFaker } from '@/global/domain/entities/fakers'
+import { IdFaker } from '@/global/domain/structures/fakers'
+import { AchievementsFaker } from '@/profile/domain/entities/fakers'
+import { Achievement } from '@/profile/domain/entities'
+import { RestResponse } from '@/global/responses'
+import { HTTP_STATUS_CODE } from '@/global/constants'
+import { AppError } from '@/global/domain/errors'
 import { ObserveNewUnlockedAchievementsUseCase } from '../ObserveNewUnlockedAchievementsUseCase'
-import { UsersFaker } from '../../../global/domain/entities/fakers'
-import { AchievementsFaker } from '#profile/entities/fakers'
-import { IdFaker } from '../../../global/domain/structures/fakers'
 
 let useCase: ObserveNewUnlockedAchievementsUseCase
 let profileService: ProfileServiceMock

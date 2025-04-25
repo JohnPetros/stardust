@@ -1,7 +1,6 @@
-import type { UserDto } from '#global/dtos'
-import type { User } from '#global/entities'
-import type { RestResponse } from '#global/responses'
-import type { AchievementDto } from '#profile/dtos'
+import type { RestResponse } from '@/global/responses'
+import type { AchievementDto, UserDto } from '../domain/entities/dtos'
+import type { User } from '../domain/entities'
 
 export interface ProfileService {
   fetchAchievements(): Promise<RestResponse<AchievementDto[]>>

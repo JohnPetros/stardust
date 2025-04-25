@@ -2,7 +2,7 @@ import { Image } from './Image'
 import { Logical } from './Logical'
 import { Name } from './Name'
 import { StringValidation } from '../../libs'
-import type { TextBlockDto } from '../../dtos'
+import type { TextBlockDto } from '../entities/dtos'
 
 type TextBlockType = 'default' | 'quote' | 'alert' | 'list' | 'image' | 'code' | 'user'
 

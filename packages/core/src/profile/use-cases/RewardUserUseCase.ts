@@ -1,8 +1,8 @@
-import { Integer } from '#global/structures'
-import { User } from '#global/entities'
-import type { UserDto } from '#global/dtos'
-import type { UseCase } from '#global/interfaces'
-import type { ProfileService } from '#profile/interfaces'
+import type { UseCase } from '@/global/interfaces'
+import type { UserDto } from '../domain/entities/dtos'
+import type { ProfileService } from '../interfaces'
+import { User } from '../domain/entities'
+import { Integer } from '@/global/domain/structures'
 
 type Request = {
   userDto: UserDto

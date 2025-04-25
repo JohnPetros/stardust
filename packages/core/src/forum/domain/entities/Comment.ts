@@ -1,19 +1,16 @@
-import { Entity } from '../../../global/domain/abstracts'
-import { Integer, Text } from '../../../global/domain/structures'
-import { Author } from '../../../global/domain/entities'
-import { EntityNotDefinedError } from '../../../global/domain/errors'
-import type { CommentDto } from '../../dtos'
-import { Datetime } from '../../../global/libs'
+import { Entity } from '@/global/domain/abstracts'
+import { Author } from '@/global/domain/entities'
+import { Integer, Text } from '@/global/domain/structures'
+import { Datetime } from '@/global/libs'
+import type { CommentDto } from './dtos'
+import { AuthorAggregate } from '@/global/domain/aggregates'
 
 type CommentProps = {
   content: Text
   repliesCount: Integer
   upvotesCount: Integer
   postedAt: Date
-  author: {
-    id: string
-    entity?: Author
-  }
+  author: AuthorAggregate
 }
 
 export class Comment extends Entity<CommentProps> {
@@ -29,10 +26,7 @@ export class Comment extends Entity<CommentProps> {
           dto.upvotesCount ?? 0,
           'Contagem de upvotes desse comentário',
         ),
-        author: {
-          id: dto.author.id,
-          entity: dto.author.dto && Author.create(dto.author.dto),
-        },
+        author: AuthorAggregate.create(dto.author),
         postedAt: dto.postedAt ?? new Datetime().date(),
       },
       dto?.id,
@@ -40,11 +34,11 @@ export class Comment extends Entity<CommentProps> {
   }
 
   upvote() {
-    this.props.upvotesCount = this.props.upvotesCount.increment(1)
+    this.props.upvotesCount = this.props.upvotesCount.increment()
   }
 
   removeUpvote() {
-    this.props.upvotesCount = this.props.upvotesCount.dencrement(1)
+    this.props.upvotesCount = this.props.upvotesCount.dencrement()
   }
 
   get content() {
@@ -52,12 +46,7 @@ export class Comment extends Entity<CommentProps> {
   }
 
   get author() {
-    if (!this.props.author.entity) throw new EntityNotDefinedError('Autor da solução')
-    return this.props.author.entity
-  }
-
-  get authorId() {
-    return this.props.author.id
+    return this.props.author
   }
 
   get upvotesCount() {
@@ -79,10 +68,7 @@ export class Comment extends Entity<CommentProps> {
       repliesCount: this.repliesCount.value,
       upvotesCount: this.upvotesCount.value,
       postedAt: this.postedAt,
-      author: {
-        id: this.authorId,
-        dto: this.props.author.entity?.dto,
-      },
+      author: this.author.dto,
     }
   }
 }

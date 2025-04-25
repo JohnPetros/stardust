@@ -1,4 +1,4 @@
-import type { RestResponse } from '#global/responses'
+import type { RestResponse } from '@/global/responses'
 
 export interface AuthService {
   fetchUserId(): Promise<RestResponse<string>>

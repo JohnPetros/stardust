@@ -1,4 +1,4 @@
-import type { UserDto } from '../../dtos'
+import type { UserDto } from '../../domain/entities/dtos'
 import type { RestResponse } from '../../responses'
 
 export type HttpSchema = {
