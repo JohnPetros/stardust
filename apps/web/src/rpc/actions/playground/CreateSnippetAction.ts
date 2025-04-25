@@ -1,10 +1,8 @@
 import { User } from '@stardust/core/global/entities'
-import type {
-  IAction,
-  IActionServer,
-  IPlaygroundService,
-} from '@stardust/core/global/interfaces'
+
+import type { Action, Call } from '@stardust/core/global/interfaces'
 import type { SnippetDto } from '@stardust/core/playground/dtos'
+import type { PlaygroundService } from '@stardust/core/playground/interfaces'
 import { CreateSnippetUseCase } from '@stardust/core/playground/use-cases'
 
 type Request = {
@@ -16,15 +14,15 @@ type Request = {
 type Response = SnippetDto
 
 export const CreateSnippetAction = (
-  playgroundService: IPlaygroundService,
-): IAction<Request, Response> => {
+  playgroundService: PlaygroundService,
+): Action<Request, Response> => {
   return {
-    async handle(actionServer: IActionServer<Request>) {
-      const user = User.create(await actionServer.getUser())
-      const { snippetTitle, snippetCode, isSnippetPublic } = actionServer.getRequest()
+    async handle(call: Call<Request>) {
+      const user = User.create(await call.getUser())
+      const { snippetTitle, snippetCode, isSnippetPublic } = call.getRequest()
       const useCase = new CreateSnippetUseCase(playgroundService)
       return await useCase.do({
-        authorId: user.id,
+        authorId: user.id.value,
         snippetTitle,
         snippetCode,
         isSnippetPublic,

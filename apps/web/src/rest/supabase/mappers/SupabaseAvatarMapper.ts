@@ -21,7 +21,7 @@ export const SupabaseAvatarMapper = () => {
       const avatarDto = avatar.dto
 
       const supabaseAvatar: SupabaseAvatar = {
-        id: avatar.id,
+        id: avatar.id.value,
         name: avatarDto.name,
         image: avatarDto.image,
         price: avatarDto.price,

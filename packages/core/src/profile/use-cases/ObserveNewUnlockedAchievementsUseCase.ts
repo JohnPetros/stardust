@@ -1,7 +1,8 @@
 import { User } from '../../global/domain/entities'
 import { Achievement } from '../domain/entities'
 import type { UserDto } from '../../global/dtos'
-import type { IProfileService, IUseCase } from '../../global/interfaces'
+import type { UseCase } from '../../global/interfaces'
+import type { ProfileService } from '#profile/interfaces'
 
 type Response = Promise<{
   newUnlockedAchievements: Achievement[]
@@ -12,12 +13,10 @@ type Request = {
   userDto: UserDto
 }
 
-export class ObserveNewUnlockedAchievementsUseCase
-  implements IUseCase<Request, Response>
-{
-  private profileService: IProfileService
+export class ObserveNewUnlockedAchievementsUseCase implements UseCase<Request, Response> {
+  private profileService: ProfileService
 
-  constructor(profileService: IProfileService) {
+  constructor(profileService: ProfileService) {
     this.profileService = profileService
   }
 
@@ -34,14 +33,14 @@ export class ObserveNewUnlockedAchievementsUseCase
 
     for (const { id } of newUnlockedAchievements) {
       const unlockedAchievementResponse =
-        await this.profileService.saveUnlockedAchievement(id, user.id)
+        await this.profileService.saveUnlockedAchievement(id.value, user.id.value)
 
       if (unlockedAchievementResponse.isFailure) {
         unlockedAchievementResponse.throwError()
       }
 
       const rescuableAchievementResponse =
-        await this.profileService.saveRescuableAchievement(id, user.id)
+        await this.profileService.saveRescuableAchievement(id.value, user.id.value)
 
       if (rescuableAchievementResponse.isFailure) {
         rescuableAchievementResponse.throwError()

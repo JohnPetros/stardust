@@ -3,7 +3,7 @@ import { SupabaseSpaceService } from '@/rest/supabase/services'
 import { HandleUserSignedUpJob } from '@/queue/jobs/space'
 import { JOBS } from '@/queue/constants'
 import { inngest } from '../client'
-import { InngestQueue } from '../InngestQueue'
+import { InngestAmqp } from '../InngestAmqp'
 
 export const handleUserSignedUp = inngest.createFunction(
   { id: JOBS.space.handleUserSignedUp.key },
@@ -11,7 +11,7 @@ export const handleUserSignedUp = inngest.createFunction(
   async (context) => {
     const supabase = SupabaseServerClient()
     const spaceService = SupabaseSpaceService(supabase)
-    const queue = InngestQueue<typeof context.event.data>(context)
+    const queue = InngestAmqp<typeof context.event.data>(context)
     const job = HandleUserSignedUpJob(spaceService)
     return job.handle(queue)
   },

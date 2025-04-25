@@ -28,7 +28,7 @@ export function SpacePage() {
         {lastUnlockedStarId && (
           <ul className='mt-10 flex max-w-[75vw] flex-col items-start justify-center gap-12 z-40'>
             {planets.map((planet) => (
-              <li key={planet.id}>
+              <li key={planet.id.value}>
                 <Planet
                   name={planet.name.value}
                   icon={planet.icon.value}

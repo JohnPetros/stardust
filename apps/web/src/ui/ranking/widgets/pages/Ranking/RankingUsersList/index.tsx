@@ -16,9 +16,9 @@ export function RankingUsersList() {
     <ul className='mx-auto mt-6 flex max-w-2xl flex-col items-center gap-2 w-full'>
       {ranking.users.map((user) => {
         return (
-          <li key={user.id} className='w-full'>
+          <li key={user.id.value} className='w-full'>
             <RankingUser
-              id={user.id}
+              id={user.id.value}
               name={user.name.value}
               avatarImage={user.avatar.image.value}
               avatarName={user.avatar.name.value}

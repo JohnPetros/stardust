@@ -1,9 +1,10 @@
-import type { IShopService, IUseCase } from '../../global/interfaces'
-import { Avatar, Rocket } from '../domain/entities'
+import type { UseCase } from '#global/interfaces'
+import { Avatar, Rocket } from '#shop/entities'
 import {
   SelectedAvatarByDefaultNotFoundError,
   SelectedRocketByDefaultNotFoundError,
-} from '../domain/errors'
+} from '#shop/errors'
+import type { ShopService } from '#shop/interfaces'
 
 type Response = Promise<{
   selectedAvatarByDefaultId: string
@@ -12,8 +13,8 @@ type Response = Promise<{
   acquirableRocketsByDefaultIds: string[]
 }>
 
-export class GetAcquirableShopItemsByDefaultUseCase implements IUseCase<void, Response> {
-  constructor(private readonly shopService: IShopService) {}
+export class GetAcquirableShopItemsByDefaultUseCase implements UseCase<void, Response> {
+  constructor(private readonly shopService: ShopService) {}
 
   async do() {
     const [rockets, avatars] = await Promise.all([
@@ -28,10 +29,10 @@ export class GetAcquirableShopItemsByDefaultUseCase implements IUseCase<void, Re
     if (!selectedRocketByDefault) throw new SelectedRocketByDefaultNotFoundError()
 
     return {
-      selectedAvatarByDefaultId: selectedAvatarByDefault.id,
-      selectedRocketByDefaultId: selectedRocketByDefault.id,
-      acquirableAvatarsByDefaultIds: avatars.map((avatar) => avatar.id),
-      acquirableRocketsByDefaultIds: rockets.map((rocket) => rocket.id),
+      selectedAvatarByDefaultId: selectedAvatarByDefault.id.value,
+      selectedRocketByDefaultId: selectedRocketByDefault.id.value,
+      acquirableAvatarsByDefaultIds: avatars.map((avatar) => avatar.id.value),
+      acquirableRocketsByDefaultIds: rockets.map((rocket) => rocket.id.value),
     }
   }
 

@@ -1,9 +1,6 @@
-import type {
-  IAction,
-  IActionServer,
-  IChallengingService,
-  ISpaceService,
-} from '@stardust/core/global/interfaces'
+import type { Action, Call } from '@stardust/core/global/interfaces'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
+import type { SpaceService } from '@stardust/core/space/interfaces'
 import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 import type { ChallengeVote } from '@stardust/core/challenging/types'
 import { Challenge } from '@stardust/core/challenging/entities'
@@ -21,9 +18,9 @@ type Response = {
 }
 
 export const AccessChallengePageAction = (
-  challengingService: IChallengingService,
-  spaceService: ISpaceService,
-): IAction<Request, Response> => {
+  challengingService: ChallengingService,
+  spaceService: SpaceService,
+): Action<Request, Response> => {
   async function fetchChallenge(challengeSlug: string) {
     const response = await challengingService.fetchChallengeBySlug(challengeSlug)
     if (response.isFailure) response.throwError()
@@ -46,18 +43,18 @@ export const AccessChallengePageAction = (
   }
 
   return {
-    async handle(actionServer: IActionServer<Request>) {
-      const { challengeSlug } = actionServer.getRequest()
-      const user = User.create(await actionServer.getUser())
+    async handle(call: Call<Request>) {
+      const { challengeSlug } = call.getRequest()
+      const user = User.create(await call.getUser())
       const challenge = await fetchChallenge(challengeSlug)
 
       if (challenge.starId) {
-        const star = await fetchChallengeStar(challenge.starId)
-        if (user.hasUnlockedStar(star.id).isFalse) actionServer.notFound()
+        const star = await fetchChallengeStar(challenge.starId.value)
+        if (user.hasUnlockedStar(star.id).isFalse) call.notFound()
       }
 
-      if (challenge.isPublic.isFalse && challenge.authorId !== user.id.value) {
-        actionServer.notFound()
+      if (challenge.isPublic.isFalse && challenge.authorId !== user.id) {
+        call.notFound()
       }
 
       const userChallengeVote = await fetchUserChallengeVote(challenge.id, user.id)

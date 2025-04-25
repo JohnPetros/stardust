@@ -1,4 +1,4 @@
-import type { IChallengingService, IUseCase } from '../../global/interfaces'
+import type { ChallengingService, UseCase } from '../../global/interfaces'
 import { ValidationError } from '../../global/domain/errors'
 import { Slug } from '../../global/domain/structures'
 import { Challenge, Solution } from '../domain/entities'
@@ -13,8 +13,8 @@ type Request = {
 
 type Response = Promise<SolutionDto>
 
-export class PostSolutionUseCase implements IUseCase<Request, Response> {
-  constructor(private readonly challengingService: IChallengingService) {}
+export class PostSolutionUseCase implements UseCase<Request, Response> {
+  constructor(private readonly challengingService: ChallengingService) {}
 
   async do({ solutionTitle, solutionContent, authorId, challengeId }: Request) {
     await this.fetchSolution(solutionTitle)

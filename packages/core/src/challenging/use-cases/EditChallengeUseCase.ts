@@ -1,4 +1,4 @@
-import type { IChallengingService, IUseCase } from '../../global/interfaces'
+import type { ChallengingService, UseCase } from '../../global/interfaces'
 import { Challenge } from '../domain/entities'
 import type { ChallengeDto } from '../dtos'
 
@@ -8,19 +8,19 @@ type Request = {
 
 type Response = Promise<ChallengeDto>
 
-export class EditChallengeUseCase implements IUseCase<Request, Response> {
-  constructor(private readonly challengingService: IChallengingService) {}
+export class EditChallengeUseCase implements UseCase<Request, Response> {
+  constructor(private readonly challengingService: ChallengingService) {}
 
   async do({ challengeDto }: Request) {
     console.log(challengeDto)
     const challenge = Challenge.create(challengeDto)
-    await this.fetchChallengeById(challenge.id)
+    await this.fetchChallengeById(challenge.id.value)
 
     if (challenge.title.value !== challengeDto.title) {
       await this.fetchChallengeBySlug(challenge.slug.value)
     }
 
-    await this.deleteChallengeCategories(challenge.id)
+    await this.deleteChallengeCategories(challenge.id.value)
     await Promise.all([
       this.saveChallengeCategories(challenge),
       this.updateChallenge(challenge),
@@ -45,7 +45,7 @@ export class EditChallengeUseCase implements IUseCase<Request, Response> {
 
   private async saveChallengeCategories(challenge: Challenge) {
     const response = await this.challengingService.saveChallengeCategories(
-      challenge.id,
+      challenge.id.value,
       challenge.categories,
     )
     if (response.isFailure) response.throwError()

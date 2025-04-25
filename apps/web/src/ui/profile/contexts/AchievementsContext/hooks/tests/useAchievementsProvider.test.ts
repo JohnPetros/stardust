@@ -1,7 +1,7 @@
 import { fireEvent, renderHook, waitFor } from '@testing-library/react'
 
-import { AchievementsFaker, UsersFaker } from '@stardust/core/fakers/entities'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
+import { AchievementsFaker, UsersFaker } from '@stardust/core/profile/entities/fakers'
 import { AppError } from '@stardust/core/global/errors'
 import { RestResponse } from '@stardust/core/global/responses'
 

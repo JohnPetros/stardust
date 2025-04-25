@@ -1,12 +1,12 @@
 import type {
   IController,
   IHttp,
-  IChallengingService,
+  ChallengingService,
 } from '@stardust/core/global/interfaces'
 import { CountCompletedChallengesByDifficultyLevelUseCase } from '@stardust/core/challenging/use-cases'
 
 export const CountCompletedChallengesByDifficultyLevelController = (
-  challengingService: IChallengingService,
+  challengingService: ChallengingService,
 ): IController => {
   return {
     async handle(http: IHttp) {

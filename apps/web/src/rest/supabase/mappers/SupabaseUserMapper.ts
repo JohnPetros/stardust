@@ -18,17 +18,14 @@ export const SupabaseUserMapper = () => {
         weeklyXp: supabaseUser.weekly_xp ?? 0,
         avatar: {
           id: supabaseUser.avatar?.id ?? '',
-          dto: {
+          entity: {
             image: supabaseUser.avatar?.image ?? '',
             name: supabaseUser.avatar?.name ?? '',
-            price: supabaseUser.avatar?.price ?? 0,
-            isAcquiredByDefault: supabaseUser.avatar?.is_acquired_by_default ?? false,
-            isSelectedByDefault: supabaseUser.avatar?.is_selected_by_default ?? false,
           },
         },
         tier: {
           id: supabaseUser.tier?.id ?? '',
-          dto: {
+          entity: {
             image: supabaseUser.tier?.image ?? '',
             name: supabaseUser.tier?.name ?? '',
             position: supabaseUser.tier?.position ?? 0,
@@ -37,12 +34,9 @@ export const SupabaseUserMapper = () => {
         },
         rocket: {
           id: supabaseUser.rocket?.id ?? '',
-          dto: {
+          entity: {
             image: supabaseUser.rocket?.image ?? '',
             name: supabaseUser.rocket?.name ?? '',
-            price: supabaseUser.rocket?.price ?? 0,
-            isAcquiredByDefault: supabaseUser.rocket?.is_acquired_by_default ?? false,
-            isSelectedByDefault: supabaseUser.rocket?.is_selected_by_default ?? false,
           },
         },
         unlockedAchievementsIds:
@@ -87,10 +81,10 @@ export const SupabaseUserMapper = () => {
     toSupabase(user: User): SupabaseUser {
       // @ts-ignore
       const supabaseUser: SupabaseUser = {
-        id: user.id,
-        avatar_id: user.avatarId,
-        rocket_id: user.rocketId,
-        tier_id: user.tierId,
+        id: user.id.value,
+        avatar_id: user.avatar.id.value,
+        rocket_id: user.rocket.id.value,
+        tier_id: user.tier.id.value,
         coins: user.coins.value,
         email: user.email.value,
         level: user.level.value,

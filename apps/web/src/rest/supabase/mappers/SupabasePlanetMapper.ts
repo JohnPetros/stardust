@@ -24,7 +24,7 @@ export const SupabasePlanetMapper = () => {
       const planetDto = planet.dto
 
       const supabasePlanet: SupabasePlanet = {
-        id: planet.id,
+        id: planet.id.value,
         name: planetDto.name,
         icon: planetDto.icon,
         image: planetDto.image,

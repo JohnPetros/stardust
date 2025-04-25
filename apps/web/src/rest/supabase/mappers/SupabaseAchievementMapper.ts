@@ -23,7 +23,7 @@ export const SupabaseAchievementMapper = () => {
       const achievementDto = achievement.dto
 
       const supabaseAchievement: SupabaseAchievement = {
-        id: achievement.id,
+        id: achievement.id.value,
         name: achievementDto.name,
         icon: achievementDto.icon,
         reward: achievementDto.reward,

@@ -43,7 +43,7 @@ export function QuizStage({ leaveLesson }: QuizProps) {
         >
           <AnimatePresence>
             {question instanceof SelectionQuestionEntity && (
-              <QuestionContainer id={question.id}>
+              <QuestionContainer id={question.id.value}>
                 <SelectionQuestion
                   stem={question.stem.value}
                   options={question.options}
@@ -54,7 +54,7 @@ export function QuizStage({ leaveLesson }: QuizProps) {
             )}
 
             {question instanceof CheckboxQuestionEntity && (
-              <QuestionContainer id={question.id}>
+              <QuestionContainer id={question.id.value}>
                 <CheckboxQuestion
                   stem={question.stem.value}
                   options={question.options}
@@ -65,7 +65,7 @@ export function QuizStage({ leaveLesson }: QuizProps) {
             )}
 
             {question instanceof OpenQuestionEntity && (
-              <QuestionContainer id={question.id}>
+              <QuestionContainer id={question.id.value}>
                 <OpenQuestion
                   stem={question.stem.value}
                   answers={question.answers.items}
@@ -77,7 +77,7 @@ export function QuizStage({ leaveLesson }: QuizProps) {
             )}
 
             {question instanceof DragAndDropListQuestionEntity && (
-              <QuestionContainer id={question.id}>
+              <QuestionContainer id={question.id.value}>
                 <DragAndDropListQuestion
                   preSortableList={question.sortableList}
                   stem={question.stem.value}
@@ -87,7 +87,7 @@ export function QuizStage({ leaveLesson }: QuizProps) {
             )}
 
             {question instanceof DragAndDropQuestionEntity && (
-              <QuestionContainer id={question.id}>
+              <QuestionContainer id={question.id.value}>
                 <DragAndDropQuestion
                   stem={question.stem.value}
                   picture={question.picture.value}

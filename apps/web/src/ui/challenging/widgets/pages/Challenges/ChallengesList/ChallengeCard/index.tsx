@@ -57,7 +57,7 @@ export function ChallengeCard({
           {categories.map((category) => {
             return (
               <li
-                key={category.id}
+                key={category.id.value}
                 className='rounded-md bg-gray-400 p-1 text-xs font-semibold text-gray-900'
               >
                 {category.name.value}

@@ -1,4 +1,4 @@
-import type { IChallengingService, IUseCase } from '../../global/interfaces'
+import type { ChallengingService, UseCase } from '../../global/interfaces'
 import { Solution } from '../domain/entities'
 
 type Request = {
@@ -7,8 +7,8 @@ type Request = {
   solutionContent: string
 }
 
-export class EditSolutionUseCase implements IUseCase<Request> {
-  constructor(private readonly challengingService: IChallengingService) {}
+export class EditSolutionUseCase implements UseCase<Request> {
+  constructor(private readonly challengingService: ChallengingService) {}
 
   async do({ solutionId, solutionTitle, solutionContent }: Request) {
     const solution = await this.fetchSolution(solutionId)

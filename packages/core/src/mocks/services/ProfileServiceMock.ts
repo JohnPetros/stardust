@@ -1,10 +1,10 @@
 import type { UserDto } from '../../global/dtos'
 import type { User } from '../../global/domain/entities'
 import type { AchievementDto } from '../../profile/dtos'
-import type { IProfileService } from '../../global/interfaces'
+import type { ProfileService } from '../../global/interfaces'
 import { RestResponse } from '../../global/responses'
 
-export class ProfileServiceMock implements IProfileService {
+export class ProfileServiceMock implements ProfileService {
   fakeAchievementsDto: AchievementDto[] = []
   fakeUsersDto: UserDto[] = []
 

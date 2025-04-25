@@ -12,7 +12,7 @@ import {
 import { SupabaseServerActionClient } from '@/rest/supabase/clients/SupabaseServerActionClient'
 import { SupabasePlaygroundService } from '@/rest/supabase/services'
 import { authActionClient } from './clients/authActionClient'
-import { NextActionServer } from '../next/NextActionServer'
+import { NextCall } from '../next/NextCall'
 import { CreateSnippetAction, EditSnippetAction } from '../actions/playground'
 import { flattenValidationErrors } from 'next-safe-action'
 
@@ -30,13 +30,13 @@ export const editSnippet = authActionClient
     },
   )
   .action(async ({ clientInput }) => {
-    const actionServer = NextActionServer({
+    const call = NextCall({
       request: clientInput,
     })
     const supabase = SupabaseServerActionClient()
     const playgroundService = SupabasePlaygroundService(supabase)
     const action = EditSnippetAction(playgroundService)
-    return action.handle(actionServer)
+    return action.handle(call)
   })
 
 export const createSnippet = authActionClient
@@ -52,12 +52,12 @@ export const createSnippet = authActionClient
     },
   )
   .action(async ({ clientInput, ctx }) => {
-    const actionServer = NextActionServer({
+    const call = NextCall({
       request: clientInput,
       user: ctx.user,
     })
     const supabase = SupabaseServerActionClient()
     const playgroundService = SupabasePlaygroundService(supabase)
     const action = CreateSnippetAction(playgroundService)
-    return action.handle(actionServer)
+    return action.handle(call)
   })

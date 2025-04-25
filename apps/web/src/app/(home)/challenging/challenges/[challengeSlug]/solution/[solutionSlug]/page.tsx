@@ -29,7 +29,7 @@ export default async function Page({
 
   return (
     <SolutionPage
-      challengeId={challenge.id}
+      challengeId={challenge.id.value}
       challengeSlug={challenge.slug.value}
       savedSolutionDto={savedSolutionDto}
     />

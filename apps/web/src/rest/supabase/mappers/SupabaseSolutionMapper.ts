@@ -15,7 +15,7 @@ export const SupabaseSolutionMapper = () => {
         commentsCount: supabaseSolution.comments_count ?? 0,
         author: {
           id: supabaseSolution.author_id ?? '',
-          dto: {
+          entity: {
             slug: supabaseSolution.author_slug ?? '',
             name: supabaseSolution.author_name ?? '',
             avatar: {
@@ -32,11 +32,11 @@ export const SupabaseSolutionMapper = () => {
 
     toSupabase(solution: Solution): SupabaseSolution {
       const supabaseSolution: SupabaseSolution = {
-        id: solution.id,
+        id: solution.id.value,
         title: solution.title.value,
         content: solution.content.value,
         views_count: solution.viewsCount.value,
-        author_id: solution.authorId,
+        author_id: solution.author.id.value,
         comments_count: solution.commentsCount.value,
         slug: solution.slug.value,
       } as SupabaseSolution

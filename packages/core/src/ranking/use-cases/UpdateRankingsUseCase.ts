@@ -1,9 +1,9 @@
-import type { IRankingService } from '../../global/interfaces'
+import type { RankingService } from '../../global/interfaces'
 import { Tier, type RankingUser } from '../domain/entities'
 import { Ranking } from '../domain/structures'
 
 export class UpdateRankingsUseCase {
-  constructor(private readonly rankingService: IRankingService) {}
+  constructor(private readonly rankingService: RankingService) {}
 
   async do() {
     const [tiers] = await Promise.all([
@@ -24,10 +24,13 @@ export class UpdateRankingsUseCase {
       let previousTier = tiers[index - 1]
       previousTier = !previousTier ? currentTier : previousTier
 
-      const ranking = await this.fetchRankingByTier(currentTier.id)
+      const ranking = await this.fetchRankingByTier(currentTier.id.value)
       const losers = ranking.losers
 
-      const response = await this.rankingService.saveRankingLosers(losers, currentTier.id)
+      const response = await this.rankingService.saveRankingLosers(
+        losers,
+        currentTier.id.value,
+      )
 
       if (response.isFailure) {
         await this.deleteLastWeekRankingUsers()
@@ -35,7 +38,7 @@ export class UpdateRankingsUseCase {
       }
 
       if (!previousTier.isEqualTo(currentTier)) {
-        await this.updateRankingUsersTier(losers, previousTier.id)
+        await this.updateRankingUsersTier(losers, previousTier.id.value)
       }
     }
   }
@@ -47,12 +50,12 @@ export class UpdateRankingsUseCase {
       let nextTier = tiers[index + 1]
       nextTier = !nextTier ? currentTier : nextTier
 
-      const ranking = await this.fetchRankingByTier(currentTier.id)
+      const ranking = await this.fetchRankingByTier(currentTier.id.value)
       const winners = ranking.winners
 
       const response = await this.rankingService.saveRankingWinners(
         winners,
-        currentTier.id,
+        currentTier.id.value,
       )
 
       if (response.isFailure) {
@@ -61,7 +64,7 @@ export class UpdateRankingsUseCase {
       }
 
       if (!nextTier.isEqualTo(currentTier)) {
-        await this.updateRankingUsersTier(winners, nextTier.id)
+        await this.updateRankingUsersTier(winners, nextTier.id.value)
       }
     }
   }

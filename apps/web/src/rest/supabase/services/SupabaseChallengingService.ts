@@ -1,7 +1,7 @@
 import { RestResponse, PaginationResponse } from '@stardust/core/global/responses'
 import type { ChallengesListParams } from '@stardust/core/challenging/types'
 import type { ChallengeCategoryDto } from '@stardust/core/challenging/dtos'
-import type { IChallengingService } from '@stardust/core/global/interfaces'
+import type { ChallengingService } from '@stardust/core/global/interfaces'
 
 import type { Supabase } from '../types'
 import { SupabasePostgrestError } from '../errors'
@@ -12,7 +12,7 @@ import {
 } from '../mappers'
 import { calculateSupabaseRange } from '../utils'
 
-export const SupabaseChallengingService = (supabase: Supabase): IChallengingService => {
+export const SupabaseChallengingService = (supabase: Supabase): ChallengingService => {
   const supabaseChallengeMapper = SupabaseChallengeMapper()
   const supabaseDocMapper = SupabaseDocMapper()
   const supabaseSolutionMapper = SupabaseSolutionMapper()
@@ -370,7 +370,7 @@ export const SupabaseChallengingService = (supabase: Supabase): IChallengingServ
       const { error, status } = await supabase.from('challenges_categories').insert(
         challengeCategories.map((category) => ({
           challenge_id: challengeId,
-          category_id: category.id,
+          category_id: category.id.value,
         })),
       )
 

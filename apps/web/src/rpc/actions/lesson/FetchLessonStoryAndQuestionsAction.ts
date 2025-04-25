@@ -1,9 +1,6 @@
 import type { TextBlockDto } from '@stardust/core/global/dtos'
-import type {
-  IAction,
-  IActionServer,
-  ILessonService,
-} from '@stardust/core/global/interfaces'
+import type { Action, Call } from '@stardust/core/global/interfaces'
+import type { LessonService } from '@stardust/core/lesson/interfaces'
 import type { QuestionDto } from '@stardust/core/lesson/dtos'
 
 type Request = {
@@ -17,11 +14,11 @@ type Response = {
 }
 
 export const FetchLessonStoryAndQuestionsAction = (
-  service: ILessonService,
-): IAction<Request, Response> => {
+  service: LessonService,
+): Action<Request, Response> => {
   return {
-    async handle(actionServer: IActionServer<Request>) {
-      const { starId } = actionServer.getRequest()
+    async handle(call: Call<Request>) {
+      const { starId } = call.getRequest()
 
       const questionsResponse = await service.fetchQuestionsByStar(starId)
       if (questionsResponse.isFailure) questionsResponse.throwError()

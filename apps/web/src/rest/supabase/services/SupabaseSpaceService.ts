@@ -1,4 +1,4 @@
-import type { ISpaceService } from '@stardust/core/global/interfaces'
+import type { SpaceService } from '@stardust/core/global/interfaces'
 import type { Planet } from '@stardust/core/space/entities'
 import { RestResponse } from '@stardust/core/global/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
@@ -8,7 +8,7 @@ import { SupabasePlanetMapper, SupabaseStarMapper } from '../mappers'
 import { SupabasePostgrestError } from '../errors'
 import type { SupabasePlanet } from '../types'
 
-export const SupabaseSpaceService = (supabase: Supabase): ISpaceService => {
+export const SupabaseSpaceService = (supabase: Supabase): SpaceService => {
   const supabasePlanetMapper = SupabasePlanetMapper()
   const supabaseStarMapper = SupabaseStarMapper()
 

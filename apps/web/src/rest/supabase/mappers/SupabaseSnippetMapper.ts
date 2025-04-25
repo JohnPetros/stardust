@@ -38,7 +38,7 @@ export const SupabaseSnippetMapper = () => {
         SupabaseSnippet,
         'author_name' | 'author_avatar_image' | 'author_avatar_name' | 'author_slug'
       > = {
-        id: snippet.id,
+        id: snippet.id.value,
         author_id: snippet.authorId,
         is_public: snippet.isPublic.value,
         title: snippet.title.value,

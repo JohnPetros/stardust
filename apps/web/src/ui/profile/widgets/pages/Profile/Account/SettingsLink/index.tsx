@@ -15,7 +15,7 @@ type AccountLinksProps = {
 export function AccountLinks({ id }: AccountLinksProps) {
   const { user } = useAuthContext()
 
-  const isAuthUser = id === user?.id
+  const isAuthUser = id === user?.id.value
 
   if (isAuthUser)
     return (

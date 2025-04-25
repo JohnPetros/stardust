@@ -14,7 +14,7 @@ export default async function Slot({ params }: NextParams<{ challengeSlug: strin
 
   return (
     <SolutionPage
-      challengeId={challenge.id}
+      challengeId={challenge.id.value}
       challengeSlug={challenge.slug.value}
       savedSolutionDto={null}
     />

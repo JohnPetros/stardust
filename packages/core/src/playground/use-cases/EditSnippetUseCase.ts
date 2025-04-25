@@ -1,4 +1,4 @@
-import type { IPlaygroundService, IUseCase } from '../../global/interfaces'
+import type { PlaygroundService, UseCase } from '../../global/interfaces'
 import { Snippet } from '../domain/entities'
 
 type Request = {
@@ -7,8 +7,8 @@ type Request = {
   snippetCode?: string
 }
 
-export class EditSnippetUseCase implements IUseCase<Request> {
-  constructor(private readonly playgroundService: IPlaygroundService) {}
+export class EditSnippetUseCase implements UseCase<Request> {
+  constructor(private readonly playgroundService: PlaygroundService) {}
 
   async do({ snippetId, snippetTitle, snippetCode }: Request) {
     const snippet = await this.fetchSnippet(snippetId)
