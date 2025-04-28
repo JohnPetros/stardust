@@ -20,21 +20,21 @@ export class Slug {
     const slugValue = name.value
       .toLowerCase()
       .trim()
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .replaceAll('?', '')
-      .replaceAll('!', '')
-      .replaceAll('.', '')
-      .replaceAll('.', '')
-      .replaceAll(',', '')
-      .replaceAll(';', '')
+      .replace(/[^a-z0-9\s-]/g, '') // remove qualquer caractere que não seja letra, número, espaço ou hífen
+      .replace(/\s+/g, '-') // troca espaços por hífens
+      .replace(/-+/g, '-') // evita múltiplos hífens seguidos
+      .replace(/^-+|-+$/g, '') // remove hífens do início e do final
 
     return new Slug(slugValue)
   }
 
   static deslugify(value: string) {
-    const words = value.split('-')
-    const name = words.join(' ')
-    return name
+    const deslugified = value
+      .trim()
+      .replace(/-+/g, ' ') // substitui hífens por espaço
+      .replace(/\s+/g, ' ') // normaliza múltiplos espaços
+      .toLowerCase()
+
+    return deslugified
   }
 }
