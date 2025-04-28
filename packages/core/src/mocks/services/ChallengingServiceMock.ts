@@ -3,7 +3,7 @@ import type {
   ChallengeDto,
   DocDto,
   SolutionDto,
-} from '../../challenging/dtos'
+} from '../../challenging/domain/entities/dtos'
 import type {
   Challenge,
   ChallengeCategory,

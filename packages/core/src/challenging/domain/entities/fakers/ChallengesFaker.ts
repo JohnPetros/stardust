@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 
-import type { ChallengeDto } from '../../../dtos'
+import type { ChallengeDto } from '../dtos'
 import { Challenge } from '..'
 import { AuthorsFakers } from '#fakers/entities'
 

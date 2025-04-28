@@ -1,5 +1,5 @@
-import type { RocketAggregateDto } from '#profile/dtos'
-import { RocketsFaker } from '#shop/entities/fakers'
+import { RocketsFaker } from '@/shop/domain/entities/fakers'
+import type { RocketAggregateDto } from '../dtos'
 
 export class RocketAggregatesFaker {
   static fakeDto(): RocketAggregateDto {

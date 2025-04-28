@@ -1,5 +1,3 @@
-import { Entity } from '#global/abstracts'
-import { EntityNotDefinedError } from '#global/errors'
 import {
   type Code,
   type Id,
@@ -10,14 +8,15 @@ import {
   type UserAnswer,
   type Text,
   Logical,
-} from '#global/structures'
+} from '@/global/domain/structures'
 import type { ChallengeDifficulty, TestCase } from '../structures'
 import type { ChallengeCategory } from './ChallengeCategory'
 import type { ChallengeVote } from '../types'
-import type { AuthorAggregate } from '#global/aggregates'
-import type { ChallengeDto } from '#challenging/dtos'
-import { ChallengeFactory } from '../factories'
+import type { AuthorAggregate } from '@/global/domain/aggregates'
+import type { ChallengeDto } from './dtos'
+import { Entity } from '@/global/domain/abstracts'
 import { ChallengeWithoutTestCaseError, InsufficientInputsError } from '../errors'
+import { ChallengeFactory } from '../factories'
 
 export type ChallengeProps = {
   code: string

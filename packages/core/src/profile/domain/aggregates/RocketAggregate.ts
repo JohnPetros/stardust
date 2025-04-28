@@ -1,6 +1,6 @@
-import { Aggregate } from '#global/abstracts'
-import { Image, Name } from '#global/structures'
-import type { RocketAggregateDto } from '#profile/dtos'
+import { Aggregate } from '@/global/domain/abstracts'
+import { Image, Name } from '@/global/domain/structures'
+import type { RocketAggregateDto } from '@/profile/domain/aggregates/dtos'
 
 type RocketAggregateEntity = {
   name: Name

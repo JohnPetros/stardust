@@ -1,5 +1,5 @@
-import type { AvatarAggregateDto } from '#profile/dtos'
-import { AvatarsFaker } from '#shop/entities/fakers'
+import { AvatarsFaker } from '@/shop/domain/entities/fakers'
+import type { AvatarAggregateDto } from '../dtos'
 
 export class AvatarAggregatesFaker {
   static fakeDto(): AvatarAggregateDto {

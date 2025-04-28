@@ -6,7 +6,7 @@ import {
   Name,
   OrdinalNumber,
 } from '../../../global/domain/structures'
-import type { TierDto } from '../../dtos'
+import type { TierDto } from './dtos'
 import { TIERS_COUNT } from '../constants'
 
 type TierProps = {

@@ -1,4 +1,4 @@
-import type { RankingUserDto } from '../../dtos'
+import type { RankingUserDto } from '../entities/dtos'
 import { RankingUser } from '../entities'
 
 export class Podium {

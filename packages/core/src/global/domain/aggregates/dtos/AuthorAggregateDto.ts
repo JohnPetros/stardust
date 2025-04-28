@@ -1,4 +1,4 @@
-import type { AuthorDto } from './AuthorDto'
+import type { AuthorDto } from '@/global/domain/entities/dtos'
 
 export type AuthorAggregateDto = {
   id: string

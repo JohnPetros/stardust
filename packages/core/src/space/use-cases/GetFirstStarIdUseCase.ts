@@ -1,4 +1,5 @@
-import type { SpaceService, UseCase } from '../../global/interfaces'
+import type { UseCase } from '@/global/interfaces'
+import type { SpaceService } from '../interfaces'
 import { Planet } from '../domain/entities'
 
 type Response = Promise<{

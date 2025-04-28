@@ -1,6 +1,6 @@
-import type { RestResponse } from '#global/responses'
-import type { RankingUserDto, TierDto } from '#ranking/dtos'
-import type { RankingUser } from '#ranking/entities'
+import type { RestResponse } from '@/global/responses'
+import type { RankingUserDto, TierDto } from '../domain/entities/dtos'
+import type { RankingUser } from '../domain/entities'
 
 export interface RankingService {
   fetchTierById(tierId: string): Promise<RestResponse<TierDto>>

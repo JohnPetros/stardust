@@ -1,6 +1,6 @@
-import { Aggregate } from '#global/abstracts'
-import type { AuthorAggregateDto } from '#global/dtos'
-import { Author } from '#global/entities'
+import { Aggregate } from '../abstracts'
+import { Author } from '../entities'
+import type { AuthorAggregateDto } from './dtos/AuthorAggregateDto'
 
 export class AuthorAggregate extends Aggregate<Author> {
   private static readonly ENTITY_NAME = 'Autor'

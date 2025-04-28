@@ -1,14 +1,14 @@
-import type { UserAnswer } from '../../../global/domain/structures'
-import { AppError } from '#global/errors'
 import {
   Image,
   OrdinalNumber,
-  Logical,
   SortableList,
   Text,
-} from '../../../global/domain/structures'
+  type Logical,
+  type UserAnswer,
+} from '@/global/domain/structures'
 import { Question } from '../abstracts'
-import type { DragAndDropListQuestionDto, QuestionDto } from '../../dtos'
+import type { DragAndDropListQuestionDto, QuestionDto } from './dtos'
+import { AppError } from '@/global/domain/errors'
 
 type DragAndDropListQuestionProps = {
   sortableList: SortableList
@@ -50,7 +50,7 @@ export class DragAndDropListQuestion extends Question<DragAndDropListQuestionPro
       )
     }
 
-    return Logical.create(this.sortableList.isEqualTo(userAnswer.value).value)
+    return this.sortableList.isEqualTo(userAnswer.value)
   }
 
   get sortableList(): SortableList {

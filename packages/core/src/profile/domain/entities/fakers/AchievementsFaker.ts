@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker'
-import type { AchievementDto } from '../../../../dtos'
-import { Achievement } from '../..'
+
+import type { AchievementDto } from '../dtos'
+import { Achievement } from '../Achievement'
 
 export class AchievementsFaker {
   static fake(baseDto?: Partial<AchievementDto>): Achievement {

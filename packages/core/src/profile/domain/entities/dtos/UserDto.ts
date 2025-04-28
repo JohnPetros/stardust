@@ -2,7 +2,7 @@ import type {
   AvatarAggregateDto,
   RocketAggregateDto,
   TierAggregateDto,
-} from '#profile/dtos'
+} from '../../aggregates/dtos'
 
 export type UserDto = {
   id?: string

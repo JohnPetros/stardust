@@ -1,9 +1,9 @@
-import { Id, Integer, List, Logical, Name, Slug, Text } from '#global/structures'
-import { AuthorAggregate } from '#global/aggregates'
-import { Datetime } from '#global/libs'
 import { ChallengeDifficulty, TestCase } from '../structures'
-import type { ChallengeDto } from '../../dtos'
+import type { ChallengeDto } from '../entities/dtos'
 import { ChallengeCategory } from '../entities'
+import { Id, Integer, List, Logical, Name, Slug, Text } from '@/global/domain/structures'
+import { AuthorAggregate } from '@/global/domain/aggregates'
+import { Datetime } from '@/global/libs'
 
 export class ChallengeFactory {
   static produce(dto: ChallengeDto) {

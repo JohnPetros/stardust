@@ -1,5 +1,5 @@
-import type { UserDto } from '../../../global/dtos'
-import type { AchievementDto } from '../../dtos'
+import type { UserDto } from '../../../global/domain/entities/dtos'
+import type { AchievementDto } from '../aggregates/dtos'
 import { Achievement } from '../entities'
 import { User } from '../../../global/domain/entities'
 

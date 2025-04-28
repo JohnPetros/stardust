@@ -1,8 +1,8 @@
 import { User } from '../../global/domain/entities'
 import { Achievement } from '../domain/entities'
-import type { UserDto } from '../../global/dtos'
 import type { UseCase } from '../../global/interfaces'
-import type { ProfileService } from '#profile/interfaces'
+import type { ProfileService } from '../interfaces'
+import type { UserDto } from '../domain/entities/dtos'
 
 type Response = Promise<{
   newUnlockedAchievements: Achievement[]

@@ -1,13 +1,13 @@
 import { faker } from '@faker-js/faker'
 
-import type { UserDto } from '#global/dtos'
+import type { UserDto } from '../dtos'
+import { User } from '../User'
 import {
   AvatarAggregatesFaker,
   RocketAggregatesFaker,
   TierAggregatesFaker,
-} from '#profile/aggregates/fakers'
-import { User } from '#profile/entities'
-import { WeekStatus } from '#profile/structures'
+} from '../../aggregates/fakers'
+import { WeekStatus } from '../../structures'
 
 export class UsersFaker {
   static fake(baseDto?: Partial<UserDto>): User {

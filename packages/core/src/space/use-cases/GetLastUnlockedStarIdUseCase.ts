@@ -1,7 +1,7 @@
+import type { UserDto } from '@/profile/domain/entities/dtos'
 import type { UseCase } from '../../global/interfaces'
-import type { UserDto } from '../../global/dtos'
+import type { PlanetDto } from '../domain/entities/dtos'
 import { User } from '../../global/domain/entities'
-import type { PlanetDto } from '../dtos'
 import { Planet } from '../domain/entities'
 import { NotFoundError } from '../../global/domain/errors'
 

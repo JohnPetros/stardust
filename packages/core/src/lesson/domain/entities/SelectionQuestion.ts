@@ -1,12 +1,12 @@
 import {
   Image,
-  Logical,
   ShuffledList,
   Text,
+  Logical,
   type UserAnswer,
-} from '../../../global/domain/structures'
+} from '@/global/domain/structures'
 import { Question } from '../abstracts'
-import type { SelectionQuestionDto, QuestionDto } from '../../dtos'
+import type { SelectionQuestionDto, QuestionDto } from './dtos'
 
 type SelectionQuestionProps = {
   options: ShuffledList<string>

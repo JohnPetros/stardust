@@ -1,4 +1,4 @@
-import { NumberValidation } from '../../libs'
+import { NumberValidation } from '@/global/libs'
 import { Logical } from './Logical'
 
 export class Integer {

@@ -1,20 +1,20 @@
-import { Entity } from '#global/abstracts'
-import type { UserDto } from '#global/dtos'
 import {
-  Logical,
-  Integer,
   type Email,
-  type Name,
-  type Slug,
-  type Observer,
   type Id,
   type IdsList,
-} from '#global/structures'
-import { UserFactory } from '../../factories'
-import type { Level, WeekStatus } from '../structures'
-import type { AchievementMetricValue } from '../types'
+  type Name,
+  type Observer,
+  type Slug,
+  Integer,
+  Logical,
+} from '@/global/domain/structures'
 import type { AvatarAggregate, RocketAggregate, TierAggregate } from '../aggregates'
-import type { RankingPosition } from '#ranking/structures'
+import type { RankingPosition } from '@/ranking/domain/structures'
+import { Entity } from '@/global/domain/abstracts'
+import { UserFactory } from '@/profile/factories'
+import type { AchievementMetricValue } from '../types'
+import type { Level, WeekStatus } from '../structures'
+import type { UserDto } from './dtos'
 
 type UserProps = {
   avatar: AvatarAggregate

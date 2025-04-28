@@ -1,16 +1,16 @@
+import type { PaginationResponse, RestResponse } from '@/global/responses'
 import type {
   ChallengeCategoryDto,
   ChallengeDto,
   DocDto,
   SolutionDto,
-} from '#challenging/dtos'
-import type { Challenge, ChallengeCategory, Solution } from '#challenging/entities'
+} from '../domain/entities/dtos'
 import type {
   ChallengesListParams,
   ChallengeVote,
   SolutionsListParams,
-} from '#challenging/types'
-import type { PaginationResponse, RestResponse } from '#global/responses'
+} from '../domain/types'
+import type { Challenge, ChallengeCategory, Solution } from '../domain/entities'
 
 export interface ChallengingService {
   fetchChallengeById(challengeId: string): Promise<RestResponse<ChallengeDto>>

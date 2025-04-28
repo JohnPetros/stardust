@@ -1,4 +1,4 @@
-import type { UserDto } from '../../global/dtos'
+import type { UserDto } from '../../global/domain/entities/dtos'
 import { User } from '../../global/domain/entities'
 import { Comment } from '../domain/entities'
 import type { IForumService, UseCase } from '../../global/interfaces'

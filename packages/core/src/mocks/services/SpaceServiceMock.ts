@@ -1,5 +1,5 @@
 import type { Planet } from '../../space/domain/entities'
-import type { PlanetDto, StarDto } from '../../space/dtos'
+import type { PlanetDto, StarDto } from '../../space/domain/entities/dtos'
 import type { SpaceService } from '../../global/interfaces'
 import { RestResponse } from '../../global/responses'
 import { HTTP_STATUS_CODE } from '../../global/constants'

@@ -1,12 +1,12 @@
 import {
   Image,
-  Text,
+  Integer,
   List,
+  Text,
   type Logical,
   type UserAnswer,
-  Integer,
-} from '../../../global/domain/structures'
-import type { DragAndDropQuestionDto, QuestionDto } from '../../dtos'
+} from '@/global/domain/structures'
+import type { DragAndDropQuestionDto, QuestionDto } from './dtos'
 import { DragAndDrop, QuestionCodeLine } from '../structures'
 import { Question } from '../abstracts'
 

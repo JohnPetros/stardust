@@ -1,5 +1,5 @@
 import { Integer, Logical } from '../../../global/domain/structures'
-import type { DropZoneDto } from '../../dtos'
+import type { DropZoneDto } from '../entities/dtos'
 import { StringValidation } from '../../../global/libs'
 
 type DropZoneType = 'slot' | 'bank'

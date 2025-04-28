@@ -1,10 +1,10 @@
-import { RankingServiceMock } from '../../../mocks/services'
+import type { UserDto } from '@/profile/domain/entities/dtos'
 import { GetLastWeekRankingWinnersUseCase } from '../GetLastWeekRankingWinnersUseCase'
-import type { RankingUserDto } from '../../dtos'
-import type { UserDto } from '../../../global/dtos'
-import { RankingUsersFaker, TiersFaker } from '#ranking/entities/fakers'
-import { UsersFaker } from '../../../global/domain/entities/fakers'
-import { TierAggregatesFaker } from '#profile/aggregates/fakers'
+import { RankingServiceMock } from '@/mocks/services'
+import { RankingUsersFaker } from '@/ranking/domain/entities/fakers'
+import { UsersFaker } from '@/global/domain/entities/fakers'
+import type { RankingUserDto } from '@/ranking/domain/entities/dtos'
+import { TierAggregatesFaker } from '@/profile/domain/aggregates/fakers'
 
 let rankingServiceMock: RankingServiceMock
 let useCase: GetLastWeekRankingWinnersUseCase

@@ -1,4 +1,4 @@
-import type { Event } from '#global/abstracts'
+import type { Event } from '@/global/domain/abstracts'
 
 export type TimeExpression = '1d' | '1h' | '1s' | '2s' | '3s' | '20s'
 

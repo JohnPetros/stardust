@@ -1,6 +1,6 @@
 import { Entity } from '../../../global/domain/abstracts'
 import { Name } from '../../../global/domain/structures'
-import type { ChallengeCategoryDto } from '../../dtos'
+import type { ChallengeCategoryDto } from './dtos'
 
 type ChallengeCategoryProps = {
   name: Name

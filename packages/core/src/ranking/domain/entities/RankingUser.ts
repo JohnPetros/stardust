@@ -1,7 +1,7 @@
 import { Entity } from '../../../global/domain/abstracts'
 import { Image, Integer, Name, Slug } from '../../../global/domain/structures'
 import { RankingPosition } from '../structures'
-import type { RankingUserDto } from '../../dtos'
+import type { RankingUserDto } from './dtos'
 
 type RankingUserProps = {
   name: Name

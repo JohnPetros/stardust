@@ -1,10 +1,10 @@
-import type { UseCase } from '#global/interfaces'
-import { Avatar, Rocket } from '#shop/entities'
+import type { UseCase } from '@/global/interfaces'
+import type { ShopService } from '../interfaces'
 import {
   SelectedAvatarByDefaultNotFoundError,
   SelectedRocketByDefaultNotFoundError,
-} from '#shop/errors'
-import type { ShopService } from '#shop/interfaces'
+} from '../domain/errors'
+import { Avatar, Rocket } from '../domain/entities'
 
 type Response = Promise<{
   selectedAvatarByDefaultId: string

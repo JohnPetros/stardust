@@ -1,6 +1,6 @@
-import type { CommentDto } from '#forum/dtos'
-import type { CommentsListParams } from '#forum/types'
-import type { PaginationResponse, RestResponse } from '#global/responses'
+import type { PaginationResponse, RestResponse } from '@/global/responses'
+import type { CommentDto } from '../domain/entities/dtos'
+import type { CommentsListParams } from '../domain/types'
 
 export interface ForumService {
   fetchCommentById(commentId: string): Promise<RestResponse<CommentDto>>

@@ -1,6 +1,6 @@
-import type { Integer } from '../structures'
-import type { RewardingPayloadOrigin } from '../../../lesson/domain/types'
 import { Datetime } from '../../libs'
+import type { Integer } from '../structures'
+import type { RewardingPayloadOrigin } from '../types'
 
 export abstract class RewardingPayload {
   constructor(

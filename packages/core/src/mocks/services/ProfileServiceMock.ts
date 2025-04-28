@@ -1,6 +1,6 @@
-import type { UserDto } from '../../global/dtos'
+import type { UserDto } from '../../global/domain/entities/dtos'
 import type { User } from '../../global/domain/entities'
-import type { AchievementDto } from '../../profile/dtos'
+import type { AchievementDto } from '../../profile/domain/aggregates/dtos'
 import type { ProfileService } from '../../global/interfaces'
 import { RestResponse } from '../../global/responses'
 
