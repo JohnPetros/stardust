@@ -29,22 +29,23 @@ export class List<Item> {
   }
 
   swap(item1: Item, item2: Item) {
-    const item1Index = this.items.indexOf(item1)
-    const item2Index = this.items.indexOf(item2)
-
-    const items = [...this.items]
-
-    if (!items[item2Index]) return new List(items)
-    items[item1Index] = items[item2Index]
-
-    const firstItem = items[item1Index]
-    if (!firstItem) return new List(items)
-    items[item2Index] = firstItem
-
-    return new List(items)
+    const item1Index = this.items.indexOf(item1);
+    const item2Index = this.items.indexOf(item2);
+  
+    const items = [...this.items];
+  
+    if (item1Index === -1 || item2Index === -1) {
+      return new List(items);
+    }
+  
+    const temp = items[item1Index];
+    items[item1Index] = items[item2Index];
+    items[item2Index] = temp;
+  
+    return new List(items);
   }
 
-  makeEmpty() {
+  becomeEmpty() {
     return new List([])
   }
 

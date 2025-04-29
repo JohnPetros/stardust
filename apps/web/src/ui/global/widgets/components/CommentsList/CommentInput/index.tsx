@@ -74,7 +74,7 @@ export function CommentInput({
               ref={textEditorRef}
               placeholder={placeholder}
               className='min-h-[5rem]'
-              rows={content.length > 3 ? Text.create(content).countCharacters('\n') : 1}
+              rows={content.length > 3 ? Text.create(content).countCharacters('\n').value : 1}
               value={content}
               onChange={handleContentChange}
             />

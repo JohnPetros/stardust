@@ -14,7 +14,6 @@ export class SortableList {
 
   static create(items: Item[]): SortableList {
     return new SortableList(ShuffledList.create(items).items)
-    // return new SortableList(items)
   }
 
   static isSoratableList(list: unknown): list is SortableList {

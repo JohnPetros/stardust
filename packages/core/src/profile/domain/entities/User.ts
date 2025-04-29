@@ -145,12 +145,12 @@ export class User extends Entity<UserProps> {
 
   breakStreak() {
     this.props.streak = Integer.create(0)
-    this.props.didBreakStreak = this.props.didBreakStreak.makeTrue()
+    this.props.didBreakStreak = this.props.didBreakStreakbecomeTrue()
     this.props.weekStatus = this.props.weekStatus.updateYesterdayWeekdayStatus('undone')
   }
 
   resetStreak() {
-    this.props.didBreakStreak = this.didBreakStreak.makeFalse()
+    this.props.didBreakStreak = this.didBreakStreakbecomeFalse()
   }
 
   getAchievementCount(metric: AchievementMetricValue) {

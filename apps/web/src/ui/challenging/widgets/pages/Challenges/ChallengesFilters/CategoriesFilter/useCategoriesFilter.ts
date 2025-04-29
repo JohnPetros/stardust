@@ -6,6 +6,7 @@ import type { ChallengeCategory } from '@stardust/core/challenging/entities'
 
 import { useQueryArrayParam } from '@/ui/global/hooks/useQueryArrayParam'
 import { QUERY_PARAMS } from '../../query-params'
+import { Text } from '@stardust/core/global/structures'
 
 export function useCategoriesFilter(initialCategories: ChallengeCategory[]) {
   const [categories, setCategories] = useState<ChallengeCategory[]>(initialCategories)
@@ -27,7 +28,7 @@ export function useCategoriesFilter(initialCategories: ChallengeCategory[]) {
   function handleSearchChange(search: string) {
     const filteredCategories = !search
       ? initialCategories
-      : initialCategories.filter((category) => category.name.isLike(search))
+      : initialCategories.filter((category) => category.name.isLike(Text.create(search)).isTrue)
     setCategories(filteredCategories)
     searchRef.current?.focus()
   }

@@ -41,7 +41,7 @@ export class Solution extends Entity<SolutionProps> {
   }
 
   view() {
-    this.props.isViewed = this.isViewed.makeTrue()
+    this.props.isViewed = this.isViewedbecomeTrue()
     this.props.viewsCount = this.props.viewsCount.increment()
   }
 
