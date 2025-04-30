@@ -6,7 +6,7 @@ export interface CodeRunnerProvider {
   addInputs(codeInput: CodeInput, codeValue: string): string
   addFunctionCall(functionParams: unknown[], codeValue: string): string
   buildFunction(functionName: string, functionParamsNames: string[]): string
-  getFunctionName(codeValue: string): string
+  getFunctionName(codeValue: string): string | null
   getFunctionParamsNames(codeValue: string): string[]
   getInput(codeValue: string): string | null
   translateToCodeRunner(jsCode: unknown): string
