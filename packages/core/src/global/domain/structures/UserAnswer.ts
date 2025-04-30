@@ -1,4 +1,4 @@
-import { Logical } from '.'
+import { Logical } from './Logical'
 
 type QuestionAnswerProps = {
   isCorrect: Logical
