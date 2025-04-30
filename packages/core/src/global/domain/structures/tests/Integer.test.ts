@@ -40,4 +40,16 @@ describe('Integer structure', () => {
     const integer = Integer.create(2).multiply(Integer.create(10))
     expect(integer.value).toBe(20)
   })
+
+  it('should determini if it is greater than another integer', () => {
+    expect(Integer.create(1).isGreaterThan(Integer.create(2)).isFalse).toBeTruthy()
+    expect(Integer.create(2).isGreaterThan(Integer.create(1)).isTrue).toBeTruthy()
+    expect(Integer.create(2).isGreaterThan(Integer.create(2)).isFalse).toBeTruthy()
+  })
+
+  it('should determini if it is less than another integer', () => {
+    expect(Integer.create(1).isLessThan(Integer.create(2)).isTrue).toBeTruthy()
+    expect(Integer.create(2).isLessThan(Integer.create(1)).isFalse).toBeTruthy()
+    expect(Integer.create(2).isLessThan(Integer.create(2)).isFalse).toBeTruthy()
+  })
 })

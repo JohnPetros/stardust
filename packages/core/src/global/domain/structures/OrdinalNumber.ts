@@ -1,39 +1,37 @@
 import { NumberValidation } from '../../libs'
-import { Logical } from './Logical'
+import { Integer } from './Integer'
 
 type OrdinalNumberProps = {
   key: string
-  value: number
+  number: Integer
 }
 
 export class OrdinalNumber {
   readonly key: string
-  readonly value: number
+  readonly number: Integer
 
   private constructor(props: OrdinalNumberProps) {
     this.key = props.key
-    this.value = props.value
+    this.number = props.number
   }
 
-  static create(value: number, key = 'Número ordinal') {
-    new NumberValidation(value, key).min(1).validate()
+  static create(number: number, key = 'Número ordinal') {
+    new NumberValidation(number, key).min(1).validate()
 
-    return new OrdinalNumber({ key, value })
+    return new OrdinalNumber({ key, number: Integer.create(number) })
   }
 
-  incrementOne() {
-    return new OrdinalNumber({ key: this.key, value: this.value + 1 })
+  increment() {
+    return new OrdinalNumber({
+      key: this.key,
+      number: this.number.increment(),
+    })
   }
 
-  decrementOne() {
-    return new OrdinalNumber({ key: this.key, value: this.value - 1 })
-  }
-
-  isGreaterThan(ordinalNumber: OrdinalNumber) {
-    return Logical.create(this.value > ordinalNumber.value)
-  }
-
-  isLessThan(ordinalNumber: OrdinalNumber) {
-    return Logical.create(this.value < ordinalNumber.value)
+  dencrement() {
+    return new OrdinalNumber({
+      key: this.key,
+      number: this.number.dencrement(),
+    })
   }
 }

@@ -33,4 +33,20 @@ export class Integer {
   dencrement() {
     return Integer.create(this.value - 1)
   }
+
+  isGreaterThan(integer: Integer) {
+    return Logical.create(this.value > integer.value)
+  }
+
+  isGreaterOrEqualThan(integer: Integer) {
+    return Logical.create(this.value >= integer.value)
+  }
+
+  isLessThan(integer: Integer) {
+    return Logical.create(this.value < integer.value)
+  }
+
+  isLessOrEqualThan(integer: Integer) {
+    return Logical.create(this.value <= integer.value)
+  }
 }
