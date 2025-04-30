@@ -1,4 +1,4 @@
-import { type ZodEnum, ZodError, z, type ZodString } from 'zod'
+import { type ZodEnum, ZodError, z, type ZodString, type ZodEffects } from 'zod'
 
 import type { IStringValidation } from '../../../interfaces'
 import { ZodValidationErrorFactory } from './ZodValidationErrorFactory'
@@ -8,6 +8,7 @@ export class ZodStringValidation implements IStringValidation {
   private key: string
   private zodString: ZodString
   private zodEnum: ZodEnum<[string]> | undefined
+  private zodEffects: ZodEffects<z.ZodString, string, string> | undefined
 
   constructor(data: unknown, key?: string, message?: string) {
     this.data = data
@@ -45,11 +46,15 @@ export class ZodStringValidation implements IStringValidation {
   image(message?: string) {
     const extensions = ['.png', '.jpg', '.jpeg', '.gif', '.svg']
 
-    this.zodEnum = z.enum(extensions as [string], {
-      message: message ?? `deve conter uma dessas extensões: ${extensions.join(', ')}`,
-    })
-
-    this.data = String(this.data).slice(-4)
+    this.zodEffects = z
+      .string()
+      .refine(
+        (val) => extensions.some((ext) => String(val).toLowerCase().endsWith(ext)),
+        {
+          message:
+            message ?? `deve conter uma dessas extensões: ${extensions.join(', ')}`,
+        },
+      )
 
     return this
   }
@@ -68,6 +73,10 @@ export class ZodStringValidation implements IStringValidation {
       const key = this.key ?? 'erro'
       if (this.zodEnum) {
         z.object({ [key]: this.zodEnum }).parse({ [key]: this.data })
+      }
+
+      if (this.zodEffects) {
+        z.object({ [key]: this.zodEffects }).parse({ [key]: this.data })
       }
 
       z.object({ [key]: this.zodString }).parse({ [key]: this.data })

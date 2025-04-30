@@ -3,7 +3,7 @@ import { Percentage } from '../Percentage'
 
 describe('Percentage structure', () => {
   it('should be created from two valid numbers', () => {
-    expect(() => Percentage.create(1, 1)).not.toThrow(ValidationError)
+    expect(() => Percentage.create(1, 1)).not.toThrow()
     expect(() => Percentage.create(1, 'invalid number' as unknown as number)).toThrow(
       ValidationError,
     )

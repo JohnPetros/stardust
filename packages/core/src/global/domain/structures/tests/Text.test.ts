@@ -3,8 +3,8 @@ import { Text } from '../Text'
 
 describe('Text Struct', () => {
   it('should be created if its value is a valid string', () => {
-    expect(() => Text.create('JP')).not.toThrow(ValidationError)
-    expect(() => Text.create('')).not.toThrow(ValidationError)
+    expect(() => Text.create('JP')).not.toThrow()
+    expect(() => Text.create('')).not.toThrow()
     expect(() => Text.create(false as unknown as string)).toThrow(ValidationError)
   })
 
