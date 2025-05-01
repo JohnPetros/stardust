@@ -114,7 +114,7 @@ export function useChallengeResultSlot() {
       challenge.hasAnswer.isTrue &&
       !isLeavingPage
     ) {
-      setUserAnswer(userAnswer.becomeCorrect().becomeVerified())
+      setUserAnswer(userAnswer.makeCorrect().makeVerified())
     }
   }, [challenge, userAnswer, isLeavingPage, currentRoute])
 

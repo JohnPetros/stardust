@@ -155,7 +155,7 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
       }
     })
 
-    removedCategoriesNames.current = removedCategoriesNames.current.becomeEmpty()
+    removedCategoriesNames.current = removedCategoriesNames.current.makeEmpty()
   }, [categoriesIds, categories])
 
   return {

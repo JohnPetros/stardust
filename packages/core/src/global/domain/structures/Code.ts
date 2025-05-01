@@ -1,14 +1,14 @@
-import type { CodeRunnerProvider } from '@/global/interfaces'
 import type { CodeInput } from '../types'
+import type { ICodeRunnerProvider } from '../../interfaces'
 import { Logical } from './Logical'
 
 type CodeProps = {
-  codeRunner: CodeRunnerProvider
+  codeRunner: ICodeRunnerProvider
   value: string
 }
 
 export class Code {
-  readonly codeRunner: CodeRunnerProvider
+  readonly codeRunner: ICodeRunnerProvider
   readonly value: string
 
   private constructor(props: CodeProps) {
@@ -16,7 +16,7 @@ export class Code {
     this.value = props.value
   }
 
-  static create(codeRunner: CodeRunnerProvider, preCodeValue = ''): Code {
+  static create(codeRunner: ICodeRunnerProvider, preCodeValue = ''): Code {
     return new Code({ codeRunner, value: preCodeValue })
   }
 

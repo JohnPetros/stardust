@@ -1,7 +1,5 @@
 import { StringValidation } from '../../libs'
-import { Logical } from './Logical'
 import { Slug } from './Slug'
-import type { Text } from './Text'
 
 export class Name {
   readonly value: string
@@ -22,12 +20,10 @@ export class Name {
     return Name.create(newValue)
   }
 
-  isLike(text: Text): Logical {
-    if (text.value === '') {
-      return Logical.createAsFalse()
-    }
+  isLike(value: string) {
     const currentValue = this.removeAccentuation().value.trim().toLowerCase()
-    return Logical.create(currentValue.includes(text.value.trim().toLowerCase()))
+
+    return currentValue.includes(value.trim().toLowerCase())
   }
 
   get slug() {

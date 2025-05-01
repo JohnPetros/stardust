@@ -13,14 +13,6 @@ export class Logical {
     return new Logical(value)
   }
 
-  static createAsTrue(): Logical {
-    return new Logical(true)
-  }
-
-  static createAsFalse(): Logical {
-    return new Logical(false)
-  }
-
   and(logical: Logical) {
     return new Logical(this.value && logical.value)
   }
@@ -33,11 +25,11 @@ export class Logical {
     return new Logical(!this.value)
   }
 
-  becomeTrue() {
+  makeTrue() {
     return new Logical(true)
   }
 
-  becomeFalse() {
+  makeFalse() {
     return new Logical(false)
   }
 

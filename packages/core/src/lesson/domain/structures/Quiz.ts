@@ -88,10 +88,10 @@ export class Quiz {
     if (!isUserAnswerCorrect) return this
 
     const oldUserAnswer = this.userAnswer
-    let newUserAnswer = oldUserAnswer.becomeVerified()
+    let newUserAnswer = oldUserAnswer.makeVerified()
 
     if (isUserAnswerCorrect.isTrue) {
-      newUserAnswer = newUserAnswer.becomeCorrect()
+      newUserAnswer = newUserAnswer.makeCorrect()
 
       if (oldUserAnswer.isVerified.isTrue) {
         return this.nextQuestion()
@@ -100,7 +100,7 @@ export class Quiz {
       return this.clone({ userAnswer: newUserAnswer })
     }
 
-    newUserAnswer = newUserAnswer.becomeIncorrect()
+    newUserAnswer = newUserAnswer.makeIncorrect()
 
     if (oldUserAnswer.isVerified.isTrue) {
       return this.decrementLivesCount(newUserAnswer)

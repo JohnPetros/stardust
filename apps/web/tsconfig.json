@@ -1,20 +1,14 @@
 {
   "extends": "@stardust/typescript-config/nextjs.json",
   "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
     "module": "ESNext",
     "moduleResolution": "Bundler",
@@ -22,13 +16,7 @@
     "jsx": "preserve",
     "noEmit": true,
     "declaration": false,
-    "declarationMap": false,
-    "skipLibCheck": true,
-    "strict": false,
-    "incremental": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true
+    "declarationMap": false
   },
   "include": [
     "next-env.d.ts",
@@ -37,7 +25,5 @@
     ".next/types/**/*.ts",
     "../../node_modules/monaco-editor/monaco.d.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

@@ -1,4 +1,4 @@
-import { Logical } from './Logical'
+import { Logical } from '.'
 
 type QuestionAnswerProps = {
   isCorrect: Logical
@@ -25,16 +25,16 @@ export class UserAnswer {
     })
   }
 
-  becomeVerified() {
+  makeVerified() {
     return this.clone({ isVerified: this.isVerified.invertValue() })
   }
 
-  becomeCorrect() {
-    return this.clone({ isCorrect: this.isCorrect.becomeTrue() })
+  makeCorrect() {
+    return this.clone({ isCorrect: this.isCorrect.makeTrue() })
   }
 
-  becomeIncorrect() {
-    return this.clone({ isCorrect: this.isCorrect.becomeFalse() })
+  makeIncorrect() {
+    return this.clone({ isCorrect: this.isCorrect.makeFalse() })
   }
 
   changeAnswerValue(answerValue: unknown) {

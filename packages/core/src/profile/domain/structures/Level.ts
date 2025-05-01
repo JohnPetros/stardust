@@ -38,7 +38,7 @@ export class Level {
 
     if (hasNewLevel) {
       return new Level({
-        didUp: this.didUpbecomeTrue(),
+        didUp: this.didUp.makeTrue(),
         number: this.number.incrementOne(),
       })
     }
