@@ -3,7 +3,7 @@ import { Integer } from './Integer'
 import { Logical } from './Logical'
 
 export class IdsList {
-  private constructor(private readonly ids: Id[]) {}
+  private constructor(readonly ids: Id[]) {}
 
   static create(ids?: string[]): IdsList {
     return new IdsList(ids ? ids.map(Id.create) : [])

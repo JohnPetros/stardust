@@ -14,7 +14,6 @@ export class SortableList {
 
   static create(items: Item[]): SortableList {
     return new SortableList(ShuffledList.create(items).items)
-    // return new SortableList(items)
   }
 
   static isSoratableList(list: unknown): list is SortableList {
@@ -32,7 +31,9 @@ export class SortableList {
   }
 
   getItemByPosition(position: number): Item {
-    const item = this.items.find((item) => item.originalPosition.value === position)
+    const item = this.items.find(
+      (item) => item.originalPosition.number.value === position,
+    )
 
     if (!item) throw new AppError('No item found at the given position')
 
@@ -45,12 +46,14 @@ export class SortableList {
 
   get orderedItems(): Item[] {
     const items = [...this.items]
-    return items.sort((a, b) => a.originalPosition.value - b.originalPosition.value)
+    return items.sort(
+      (a, b) => a.originalPosition.number.minus(b.originalPosition.number).value,
+    )
   }
 
   private getItemIndex(itemOriginalPosition: number): number {
     return this.items.findIndex(
-      (item) => item.originalPosition.value === itemOriginalPosition,
+      (item) => item.originalPosition.number.value === itemOriginalPosition,
     )
   }
 }

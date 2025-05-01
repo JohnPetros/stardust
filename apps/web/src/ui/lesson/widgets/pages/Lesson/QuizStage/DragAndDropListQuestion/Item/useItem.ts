@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 import type { IconColor } from './IconColor'
 import type { LabelBackground } from './LabelBackground'
-import { Text } from '@stardust/core/global/structures'
+import { Integer, Text } from '@stardust/core/global/structures'
 
 type UseSortableItemProps = {
   label: string
@@ -21,7 +21,7 @@ export function useItem({ label, isActive, isDragging }: UseSortableItemProps) {
     const labelText = Text.create(label)
     const tabsCount = labelText.countCharacters('\t')
 
-    return 12 * tabsCount
+    return tabsCount.multiply(Integer.create(12)).value
   }, [label])
 
   const labelBackground: LabelBackground = useMemo(() => {

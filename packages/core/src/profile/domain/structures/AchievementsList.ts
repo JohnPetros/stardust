@@ -1,7 +1,6 @@
-import type { UserDto } from '../../../global/domain/entities/dtos'
-import type { AchievementDto } from '../aggregates/dtos'
-import { Achievement } from '../entities'
-import { User } from '../../../global/domain/entities'
+import { Text } from '@/global/domain/structures'
+import { Achievement, User } from '../entities'
+import type { AchievementDto, UserDto } from '../entities/dtos'
 
 export class AchievementsList {
   readonly achievements: Achievement[]
@@ -42,7 +41,7 @@ export class AchievementsList {
 
   filterAchievementsByName(name: string) {
     return new AchievementsList(
-      this.achievements.filter((achievement) => achievement.name.isLike(name)),
+      this.achievements.filter((achievement) => achievement.name.isLike(Text.create(name)).isTrue),
       this.user,
     )
   }

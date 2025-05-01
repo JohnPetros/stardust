@@ -11,15 +11,15 @@ export class Integer {
   }
 
   plus(integer: Integer) {
-    return new Integer(this.value + integer.value)
+    return Integer.create(this.value + integer.value)
   }
 
   minus(integer: Integer) {
-    return new Integer(this.value - integer.value)
+    return Integer.create(this.value - integer.value)
   }
 
   multiply(integer: Integer) {
-    return new Integer(this.value * integer.value)
+    return Integer.create(this.value * integer.value)
   }
 
   isEqualTo(integer: Integer) {
@@ -27,10 +27,26 @@ export class Integer {
   }
 
   increment() {
-    return new Integer(this.value + 1)
+    return Integer.create(this.value + 1)
   }
 
   dencrement() {
-    return new Integer(this.value - 1)
+    return Integer.create(this.value - 1)
+  }
+
+  isGreaterThan(integer: Integer) {
+    return Logical.create(this.value > integer.value)
+  }
+
+  isGreaterOrEqualThan(integer: Integer) {
+    return Logical.create(this.value >= integer.value)
+  }
+
+  isLessThan(integer: Integer) {
+    return Logical.create(this.value < integer.value)
+  }
+
+  isLessOrEqualThan(integer: Integer) {
+    return Logical.create(this.value <= integer.value)
   }
 }

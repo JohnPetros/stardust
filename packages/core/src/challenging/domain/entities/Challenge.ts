@@ -76,8 +76,8 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   async runCode(code: Code) {
-    this.props.results = this.props.results.makeEmpty()
-    this.props.userOutputs = this.props.userOutputs.makeEmpty()
+    this.props.results = this.props.results.becomeEmpty()
+    this.props.userOutputs = this.props.userOutputs.becomeEmpty()
 
     for (const testCase of this.testCases) {
       const formattedCode = this.formatCode(code, testCase)
@@ -102,10 +102,10 @@ export class Challenge extends Entity<ChallengeProps> {
       this.results.hasAllEqualTo(true).isTrue
 
     if (isAnswerCorrect) {
-      return userAnswer.makeVerified().makeCorrect()
+      return userAnswer.becomeVerified().becomeCorrect()
     }
 
-    return userAnswer.makeVerified().makeIncorrect()
+    return userAnswer.becomeVerified().becomeIncorrect()
   }
 
   incrementIncorrectAnswersCount() {
@@ -146,7 +146,7 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   makeCompleted() {
-    this.props.isCompleted = this.props.isCompleted.makeTrue()
+    this.props.isCompleted = this.props.isCompletedbecomeTrue()
   }
 
   get maximumIncorrectAnswersCount() {

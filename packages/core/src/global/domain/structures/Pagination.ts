@@ -1,43 +1,44 @@
 import { Integer } from './Integer'
+import { Logical } from './Logical'
 
 export class Pagination {
   static readonly MAX_PAGE_BUTTONS = 5
   static readonly SINBLING_PAGE_BUTTONS = (Pagination.MAX_PAGE_BUTTONS - 1) / 2
   readonly currentPage: Integer
-  readonly totalItemsCount: Integer
+  readonly totalItems: Integer
   readonly itemsPerPage: Integer
 
-  private constructor(
-    currentPage: Integer,
-    totalItemsCount: Integer,
-    itemsPerPage: Integer,
-  ) {
+  private constructor(currentPage: Integer, totalItems: Integer, itemsPerPage: Integer) {
     this.currentPage = currentPage
-    this.totalItemsCount = totalItemsCount
+    this.totalItems = totalItems
     this.itemsPerPage = itemsPerPage
   }
 
-  static create(currentPage: number, totalItemsCount: number, itemsPerPage: number) {
+  static create(currentPage: number, totalItems: number, itemsPerPage: number) {
     return new Pagination(
       Integer.create(currentPage, 'página atual'),
-      Integer.create(totalItemsCount, 'contagem total de itens'),
+      Integer.create(totalItems, 'contagem total de itens'),
       Integer.create(itemsPerPage, 'itens por página'),
     )
   }
 
-  get firstPage() {
-    return Math.max(this.currentPage.value - Pagination.SINBLING_PAGE_BUTTONS, 1)
+  get firstPage(): Integer {
+    return Integer.create(
+      Math.max(this.currentPage.value - Pagination.SINBLING_PAGE_BUTTONS, 1),
+    )
   }
 
-  get pagesCount() {
-    return Math.ceil(this.totalItemsCount.value / this.itemsPerPage.value)
+  get pagesCount(): Integer {
+    return Integer.create(Math.ceil(this.totalItems.value / this.itemsPerPage.value))
   }
 
-  get isFarFromLastPage() {
-    return this.currentPage.value + Pagination.SINBLING_PAGE_BUTTONS < this.pagesCount
+  get isFarFromLastPage(): Logical {
+    return Logical.create(
+      this.currentPage.value + Pagination.SINBLING_PAGE_BUTTONS < this.pagesCount.value,
+    )
   }
 
-  get hasPages() {
-    return this.pagesCount > 0
+  get hasPages(): Logical {
+    return this.pagesCount.isGreaterThan(Integer.create(0))
   }
 }

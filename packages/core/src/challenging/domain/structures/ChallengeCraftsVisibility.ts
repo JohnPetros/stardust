@@ -28,11 +28,11 @@ export class ChallengeCraftsVisibility {
   }
 
   showSolutions() {
-    return this.clone({ canShowSolutions: this.canShowSolutions.makeTrue() })
+    return this.clone({ canShowSolutions: this.canShowSolutionsbecomeTrue() })
   }
 
   showComments() {
-    return this.clone({ canShowComments: this.canShowComments.makeTrue() })
+    return this.clone({ canShowComments: this.canShowCommentsbecomeTrue() })
   }
 
   showAll() {

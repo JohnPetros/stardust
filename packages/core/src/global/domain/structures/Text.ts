@@ -1,4 +1,5 @@
 import { StringValidation } from '../../libs'
+import { Integer } from './Integer'
 
 export class Text {
   private constructor(readonly value: string) {}
@@ -9,13 +10,13 @@ export class Text {
     return new Text(value)
   }
 
-  countCharacters(characters: string): number {
+  countCharacters(characters: string): Integer {
     let count = 0
 
     for (let i = 0; i < this.value.length; i++) {
       if (characters === this.value.slice(i, characters.length + i)) count++
     }
 
-    return count
+    return Integer.create(count)
   }
 }
