@@ -7,4 +7,10 @@ describe('Ordinal number structure', () => {
     expect(() => OrdinalNumber.create(0)).toThrow(ValidationError)
     expect(() => OrdinalNumber.create(-1)).toThrow(ValidationError)
   })
+
+  it('should return value', () => {
+    expect(OrdinalNumber.create(1).value).toBe(1)
+    expect(OrdinalNumber.create(10).value).toBe(10)
+    expect(OrdinalNumber.create(100).value).toBe(100)
+  })
 })

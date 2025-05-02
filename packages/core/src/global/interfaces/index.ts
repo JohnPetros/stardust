@@ -1,4 +1,5 @@
 export type { UseCase } from './UseCase'
+export * from './rest'
 export * from './rpc'
 export * from './provision'
 export * from './libs'

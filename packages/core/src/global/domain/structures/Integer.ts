@@ -1,4 +1,4 @@
-import { NumberValidation } from '@/global/libs'
+import { NumberValidation } from '#global/libs/index'
 import { Logical } from './Logical'
 
 export class Integer {
@@ -30,7 +30,7 @@ export class Integer {
     return Integer.create(this.value + 1)
   }
 
-  dencrement() {
+  decrement() {
     return Integer.create(this.value - 1)
   }
 
@@ -38,7 +38,7 @@ export class Integer {
     return Logical.create(this.value > integer.value)
   }
 
-  isGreaterOrEqualThan(integer: Integer) {
+  isGreaterOrEqualTo(integer: Integer) {
     return Logical.create(this.value >= integer.value)
   }
 
@@ -46,7 +46,7 @@ export class Integer {
     return Logical.create(this.value < integer.value)
   }
 
-  isLessOrEqualThan(integer: Integer) {
+  isLessOrEqualTo(integer: Integer) {
     return Logical.create(this.value <= integer.value)
   }
 }

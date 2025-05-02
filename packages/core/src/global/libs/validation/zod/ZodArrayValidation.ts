@@ -1,9 +1,9 @@
 import { type ZodArray, z, ZodError } from 'zod'
 
-import type { IArrayValidation } from '../../../interfaces'
+import type { ArrayValidation } from '../../../interfaces'
 import { ZodValidationErrorFactory } from './ZodValidationErrorFactory'
 
-export class ZodArrayValidation implements IArrayValidation {
+export class ZodArrayValidation implements ArrayValidation {
   private data: unknown
   private key: string
   private zodArray: ZodArray<any>

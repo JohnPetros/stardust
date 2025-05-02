@@ -1,9 +1,16 @@
-import { Email, IdsList, Integer, Logical, Name, Slug } from '@/global/domain/structures'
+import {
+  Email,
+  IdsList,
+  Integer,
+  Logical,
+  Name,
+  Slug,
+} from '#global/domain/structures/index'
+import { Datetime } from '#global/libs/index'
+import { RankingPosition } from '#ranking/domain/structures/index'
 import { AvatarAggregate, RocketAggregate, TierAggregate } from '../domain/aggregates'
 import { Level, WeekStatus } from '../domain/structures'
 import type { UserDto } from '../domain/entities/dtos'
-import { RankingPosition } from '@/ranking/domain/structures'
-import { Datetime } from '@/global/libs'
 
 export class UserFactory {
   static produce(dto: UserDto) {

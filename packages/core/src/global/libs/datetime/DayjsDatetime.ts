@@ -3,7 +3,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/pt-br'
 
 import type { IDatetime } from '../../interfaces'
-import type { DateFormat } from '../../interfaces/libs/IDatetime'
+import type { DateFormat } from '../../interfaces/libs/Datetime'
 
 dayjs.locale('pt-br')
 dayjs.extend(relativeTime)

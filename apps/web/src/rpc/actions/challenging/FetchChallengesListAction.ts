@@ -1,12 +1,12 @@
 import type { Action, Call } from '@stardust/core/global/interfaces'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
-import type { ChallengeDto } from '@stardust/core/challenging/dtos'
 import type {
   ChallengeCompletionStatus,
   ChallengeDifficultyLevel,
 } from '@stardust/core/challenging/types'
 import { ListChallengesUseCase } from '@stardust/core/challenging/use-cases'
 import type { PaginationResponse } from '@stardust/core/global/responses'
+import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 
 type Request = {
   page: number

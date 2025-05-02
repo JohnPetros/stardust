@@ -1,5 +1,5 @@
-import { Image, Integer, Name, OrdinalNumber } from '@/global/domain/structures'
-import { Entity } from '@/global/domain/abstracts'
+import { Entity } from '#global/domain/abstracts/Entity'
+import { Image, Integer, Name, OrdinalNumber } from '#global/domain/structures/index'
 import { AchievementMetric } from '../structures'
 import type { AchievementDto } from './dtos'
 
@@ -67,7 +67,7 @@ export class Achievement extends Entity<AchievementProps> {
       icon: this.icon.value,
       reward: this.reward.value,
       requiredCount: this.requiredCount.value,
-      position: this.position.value,
+      position: this.position.number.value,
       description: this.description,
       metric: String(this.metric.value),
     }

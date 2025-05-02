@@ -121,6 +121,19 @@
     "./storage/interfaces": "./src/storage/interfaces/index.ts",
     "./mocks/services": "./src/__tests__/mocks/services/index.ts"
   },
+  "imports": {
+    "#global/*": "./src/global/*.ts",
+    "#profile/*": "./src/profile/*.ts",
+    "#space/*": "./src/space/*.ts",
+    "#challenging/*": "./src/challenging/*.ts",
+    "#shop/*": "./src/shop/*.ts",
+    "#ranking/*": "./src/ranking/*.ts",
+    "#playground/*": "./src/playground/*.ts",
+    "#lesson/*": "./src/lesson/*.ts",
+    "#forum/*": "./src/profile/*.ts",
+    "#auth/*": "./src/auth/*.ts",
+    "#storage/*": "./src/storage/*.ts"
+  },
   "dependencies": {
     "@stardust-org/core": "^0.1.17",
     "dayjs": "^1.11.11",

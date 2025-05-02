@@ -30,6 +30,8 @@ export default async function Profile({ params }: ProfilePageProps) {
   }
   const unlockedAchievementsDto = unlockedAchievementsResponse.body
 
+// (Line removed)
+
   return (
     <ProfilePage userDto={userDto} unlockedAchievementsDto={unlockedAchievementsDto} />
   )

@@ -1,5 +1,5 @@
-import { Entity } from '../../../global/domain/abstracts'
-import { OrdinalNumber, Slug, Name } from '../../../global/domain/structures'
+import { Entity } from '#global/domain/abstracts/Entity'
+import { Slug, OrdinalNumber, Name } from '#global/domain/structures/index'
 import type { StarDto } from './dtos'
 
 type StarsProps = {
@@ -20,6 +20,18 @@ export class Star extends Entity<StarsProps> {
     )
   }
 
+  get name(): Name {
+    return this.props.name
+  }
+
+  get number(): OrdinalNumber {
+    return this.props.number
+  }
+
+  get slug(): Slug {
+    return this.props.slug
+  }
+
   get dto(): StarDto {
     return {
       id: this.id.value,
@@ -27,17 +39,5 @@ export class Star extends Entity<StarsProps> {
       number: this.number.value,
       slug: this.slug.value,
     }
-  }
-
-  get name() {
-    return this.props.name
-  }
-
-  get number() {
-    return this.props.number
-  }
-
-  get slug() {
-    return this.props.slug
   }
 }

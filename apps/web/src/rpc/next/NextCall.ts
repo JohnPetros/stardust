@@ -1,9 +1,9 @@
 import { notFound, redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 
 import type { Call } from '@stardust/core/global/interfaces'
 import { AppError } from '@stardust/core/global/errors'
-import type { UserDto } from '@stardust/core/global/dtos'
-import { cookies } from 'next/headers'
+import type { UserDto } from '@stardust/core/profile/entities/dtos'
 
 type NextCallParams<Request> = {
   request?: Request

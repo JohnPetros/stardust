@@ -1,6 +1,6 @@
-import { Aggregate } from '@/global/domain/abstracts'
-import { Image, Integer, Name, OrdinalNumber } from '@/global/domain/structures'
-import type { TierAggregateDto } from '@/profile/domain/aggregates/dtos'
+import { Aggregate } from '#global/domain/abstracts/index'
+import { Image, Integer, Name, OrdinalNumber } from '#global/domain/structures/index'
+import type { TierAggregateDto } from '#profile/domain/aggregates/dtos/index'
 
 type TierAggregateEntity = {
   name: Name
@@ -48,7 +48,7 @@ export class TierAggregate extends Aggregate<TierAggregateEntity> {
       entity: {
         name: this.name.value,
         image: this.image.value,
-        position: this.entity.position.value,
+        position: this.entity.position.number.value,
         reward: this.entity.reward.value,
       },
     }

@@ -1,9 +1,9 @@
-import { z, type ZodNumber, ZodError, type ZodEffects } from 'zod'
+import { z, type ZodNumber, ZodError } from 'zod'
 
-import type { INumberValidation } from '../../../interfaces'
+import type { NumberValidation } from '../../../interfaces'
 import { ZodValidationErrorFactory } from './ZodValidationErrorFactory'
 
-export class ZodNumberValidation implements INumberValidation {
+export class ZodNumberValidation implements NumberValidation {
   private data: unknown
   private key: string
   private zodNumber: ZodNumber

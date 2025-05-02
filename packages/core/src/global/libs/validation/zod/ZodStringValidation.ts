@@ -1,9 +1,9 @@
 import { type ZodEnum, ZodError, z, type ZodString, type ZodEffects } from 'zod'
 
-import type { IStringValidation } from '../../../interfaces'
+import type { StringValidation } from '../../../interfaces'
 import { ZodValidationErrorFactory } from './ZodValidationErrorFactory'
 
-export class ZodStringValidation implements IStringValidation {
+export class ZodStringValidation implements StringValidation {
   private data: unknown
   private key: string
   private zodString: ZodString

@@ -1,4 +1,4 @@
-import { Event } from '@/global/domain/abstracts'
+import { Event } from '#global/domain/abstracts/Event'
 
 type Payload = {
   userId: string

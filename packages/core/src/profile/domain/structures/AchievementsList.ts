@@ -1,4 +1,4 @@
-import { Text } from '@/global/domain/structures'
+import { Text } from '#global/domain/structures/Text'
 import { Achievement, User } from '../entities'
 import type { AchievementDto, UserDto } from '../entities/dtos'
 
@@ -41,7 +41,9 @@ export class AchievementsList {
 
   filterAchievementsByName(name: string) {
     return new AchievementsList(
-      this.achievements.filter((achievement) => achievement.name.isLike(Text.create(name)).isTrue),
+      this.achievements.filter(
+        (achievement) => achievement.name.isLike(Text.create(name)).isTrue,
+      ),
       this.user,
     )
   }
@@ -50,7 +52,8 @@ export class AchievementsList {
     previousAchievement: Achievement,
     nextAchievement: Achievement,
   ) {
-    return previousAchievement.position.value - nextAchievement.position.value
+    return previousAchievement.position.number.minus(nextAchievement.position.number)
+      .value
   }
 
   private sortByLockingState(
