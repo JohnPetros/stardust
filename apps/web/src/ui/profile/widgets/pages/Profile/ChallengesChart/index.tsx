@@ -1,12 +1,12 @@
 import type { CompletedChallengesCountByDifficultyLevel } from '@stardust/core/challenging/types'
 
 import { ROUTES } from '@/constants'
-import { NextApiClient } from '@/rest/next/NextApiClient'
+import { NextRestClient } from '@/rest/next/NextRestClient'
 import { Legend } from './Legend'
 import { Chart } from './ApexChallengesChart'
 
 export async function ChallengesChart() {
-  const apiClient = NextApiClient({ isCacheEnable: false })
+  const apiClient = NextRestClient({ isCacheEnable: false })
   const response = await apiClient.get<CompletedChallengesCountByDifficultyLevel>(
     ROUTES.api.challenging.countByDifficultyLevel,
   )

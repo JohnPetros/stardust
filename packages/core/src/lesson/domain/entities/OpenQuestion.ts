@@ -4,7 +4,7 @@ import {
   Text,
   type Logical,
   type UserAnswer,
-} from '@/global/domain/structures'
+} from '#global/domain/structures/index'
 import { Question } from '../abstracts'
 import type { OpenQuestionDto, QuestionDto } from './dtos'
 import { QuestionCodeLine } from '../structures'

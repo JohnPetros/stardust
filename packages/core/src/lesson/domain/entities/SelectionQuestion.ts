@@ -4,7 +4,7 @@ import {
   Text,
   Logical,
   type UserAnswer,
-} from '@/global/domain/structures'
+} from '#global/domain/structures/index'
 import { Question } from '../abstracts'
 import type { SelectionQuestionDto, QuestionDto } from './dtos'
 

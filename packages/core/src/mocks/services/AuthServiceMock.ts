@@ -1,7 +1,7 @@
-import type { IAuthService } from '../../global/interfaces'
+import type { AuthService } from '../../global/interfaces'
 import type { RestResponse } from '../../global/responses'
 
-export class AuthServiceMock implements IAuthService {
+export class AuthServiceMock implements AuthService {
   signIn(email: string, password: string): Promise<RestResponse<{ userId: string }>> {
     throw new Error('Method not implemented.')
   }

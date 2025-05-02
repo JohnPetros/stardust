@@ -5,7 +5,7 @@ import {
   Text,
   type Logical,
   type UserAnswer,
-} from '@/global/domain/structures'
+} from '#global/domain/structures/index'
 import { Question } from '../abstracts'
 
 import type { CheckboxQuestionDto, QuestionDto } from './dtos'

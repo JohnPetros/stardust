@@ -6,7 +6,7 @@ export type DateFormat =
   | 'MMM D, YYYY HH:mm:ss'
   | 'mm:ss'
 
-export interface IDatetime {
+export interface Datetime {
   format(dateFormat: DateFormat): string
   getDaysCountToSunday(): number
   convertSecondsToTime(seconds: number): string

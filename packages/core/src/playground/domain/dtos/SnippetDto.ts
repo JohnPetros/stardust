@@ -1,4 +1,4 @@
-import type { AuthorDto } from '../../../global/domain/entities/dtos'
+import type { AuthorAggregateDto } from "#global/domain/aggregates/dtos/index"
 
 export type SnippetDto = {
   id?: string
@@ -6,8 +6,5 @@ export type SnippetDto = {
   code: string
   isPublic: boolean
   createdAt?: Date
-  author: {
-    id: string
-    dto?: AuthorDto
-  }
+  author: AuthorAggregateDto
 }

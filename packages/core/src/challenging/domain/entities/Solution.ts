@@ -1,8 +1,8 @@
-import { AuthorAggregate } from '@/global/domain/aggregates'
-import { Integer, Logical, Name, Slug, Text } from '@/global/domain/structures'
-import { Entity } from '@/global/domain/abstracts'
+import { AuthorAggregate } from '#global/domain/aggregates/index'
+import { Integer, Logical, Name, Slug, Text } from '#global/domain/structures/index'
+import { Entity } from '#global/domain/abstracts/index'
+import { Datetime } from '#global/libs/index'
 import type { SolutionDto } from './dtos'
-import { Datetime } from '@/global/libs'
 
 type SolutionProps = {
   title: Name
@@ -41,7 +41,7 @@ export class Solution extends Entity<SolutionProps> {
   }
 
   view() {
-    this.props.isViewed = this.isViewedbecomeTrue()
+    this.props.isViewed = this.isViewed.becomeTrue()
     this.props.viewsCount = this.props.viewsCount.increment()
   }
 
@@ -50,7 +50,7 @@ export class Solution extends Entity<SolutionProps> {
   }
 
   removeUpvote() {
-    this.props.upvotesCount = this.props.upvotesCount.dencrement()
+    this.props.upvotesCount = this.props.upvotesCount.decrement()
   }
 
   get author() {

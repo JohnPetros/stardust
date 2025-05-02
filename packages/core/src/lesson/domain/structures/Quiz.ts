@@ -128,7 +128,7 @@ export class Quiz {
   decrementLivesCount(userAnswer: UserAnswer): Quiz {
     return this.clone({
       userAnswer,
-      livesCount: this.livesCount.dencrement(1),
+      livesCount: this.livesCount.decrement(1),
       ...this.incrementIncorrectAnswersCount(),
     })
   }

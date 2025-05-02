@@ -1,6 +1,6 @@
 import { Slug } from '@stardust/core/global/structures'
 import type { IController, IHttp } from '@stardust/core/global/interfaces'
-import type { IAuthService } from '@stardust/core/global/interfaces'
+import type { AuthService } from '@stardust/core/global/interfaces'
 
 import { ROUTES } from '@/constants'
 
@@ -10,9 +10,7 @@ type Schema = {
   }
 }
 
-export const ConfirmEmailController = (
-  authService: IAuthService,
-): IController<Schema> => {
+export const ConfirmEmailController = (authService: AuthService): IController<Schema> => {
   function redirectToSigInPage(http: IHttp, errorMessage: string) {
     return http.redirect(`${ROUTES.auth.signIn}?error=${Slug.create(errorMessage).value}`)
   }

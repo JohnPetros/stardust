@@ -1,9 +1,8 @@
-import { Entity } from '@/global/domain/abstracts'
-import { Author } from '@/global/domain/entities'
-import { Integer, Text } from '@/global/domain/structures'
-import { Datetime } from '@/global/libs'
+import { Entity } from '#global/domain/abstracts/index'
+import { Integer, Text } from '#global/domain/structures/index'
+import { AuthorAggregate } from '#global/domain/aggregates/index'
+import { Datetime } from '#global/libs/index'
 import type { CommentDto } from './dtos'
-import { AuthorAggregate } from '@/global/domain/aggregates'
 
 type CommentProps = {
   content: Text
@@ -38,7 +37,7 @@ export class Comment extends Entity<CommentProps> {
   }
 
   removeUpvote() {
-    this.props.upvotesCount = this.props.upvotesCount.dencrement()
+    this.props.upvotesCount = this.props.upvotesCount.decrement()
   }
 
   get content() {

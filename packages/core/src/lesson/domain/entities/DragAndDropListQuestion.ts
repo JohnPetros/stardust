@@ -5,10 +5,10 @@ import {
   Text,
   type Logical,
   type UserAnswer,
-} from '@/global/domain/structures'
+} from '#global/domain/structures/index'
 import { Question } from '../abstracts'
 import type { DragAndDropListQuestionDto, QuestionDto } from './dtos'
-import { AppError } from '@/global/domain/errors'
+import { AppError } from '#global/domain/errors/index'
 
 type DragAndDropListQuestionProps = {
   sortableList: SortableList

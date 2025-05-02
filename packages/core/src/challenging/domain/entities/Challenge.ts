@@ -8,13 +8,13 @@ import {
   type UserAnswer,
   type Text,
   Logical,
-} from '@/global/domain/structures'
+} from '#global/domain/structures/index'
+import { Entity } from '#global/domain/abstracts/index'
+import type { AuthorAggregate } from '#global/domain/aggregates/index'
 import type { ChallengeDifficulty, TestCase } from '../structures'
 import type { ChallengeCategory } from './ChallengeCategory'
 import type { ChallengeVote } from '../types'
-import type { AuthorAggregate } from '@/global/domain/aggregates'
 import type { ChallengeDto } from './dtos'
-import { Entity } from '@/global/domain/abstracts'
 import { ChallengeWithoutTestCaseError, InsufficientInputsError } from '../errors'
 import { ChallengeFactory } from '../factories'
 
@@ -113,12 +113,12 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   private removeUpvote() {
-    if (this.upvotesCount.value > 0) this.upvotesCount = this.upvotesCount.dencrement()
+    if (this.upvotesCount.value > 0) this.upvotesCount = this.upvotesCount.decrement()
   }
 
   private removeDownvote() {
     if (this.downvotesCount.value > 0)
-      this.downvotesCount = this.downvotesCount.dencrement()
+      this.downvotesCount = this.downvotesCount.decrement()
   }
 
   private upvote() {
@@ -146,7 +146,7 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   makeCompleted() {
-    this.props.isCompleted = this.props.isCompletedbecomeTrue()
+    this.props.isCompleted = this.props.isCompleted.becomeTrue()
   }
 
   get maximumIncorrectAnswersCount() {

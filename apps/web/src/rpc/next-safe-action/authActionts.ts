@@ -11,16 +11,23 @@ import {
 import { InngestAmqp } from '@/queue/inngest/InngestAmqp'
 import { SupabaseServerActionClient } from '@/rest/supabase/clients/SupabaseServerActionClient'
 import { SupabaseAuthService } from '@/rest/supabase/services'
-import { NextCall } from '../next/NextCall'
 import { SignUpAction } from '../actions/auth'
 import { actionClient } from './clients'
+import { NextCall } from '../next/NextCall'
 
 const signUp = actionClient
-  .schema(z.object({ email: emailSchema, name: nameSchema, password: passwordSchema }))
+  .schema(z.object({ email: z.string(), name: nameSchema, password: passwordSchema }))
   .action(async ({ clientInput }) => {
     const call = NextCall({
       request: clientInput,
     })
+    const fff = z.object({
+      email: emailSchema,
+      name: nameSchema,
+      password: passwordSchema,
+    })
+    const oi = fff.parse(clientInput)
+    oi.email
     const supabase = SupabaseServerActionClient()
     const authService = SupabaseAuthService(supabase)
     const queue = InngestAmqp()

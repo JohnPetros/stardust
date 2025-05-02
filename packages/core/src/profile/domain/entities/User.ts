@@ -1,17 +1,17 @@
 import {
   type Email,
   type Id,
-  type IdsList,
   type Name,
   type Observer,
   type Slug,
+  type IdsList,
   Integer,
   Logical,
-} from '@/global/domain/structures'
+} from '#global/domain/structures/index'
 import type { AvatarAggregate, RocketAggregate, TierAggregate } from '../aggregates'
-import type { RankingPosition } from '@/ranking/domain/structures'
-import { Entity } from '@/global/domain/abstracts'
-import { UserFactory } from '@/profile/factories'
+import type { RankingPosition } from '#ranking/domain/structures/index'
+import { Entity } from '#global/domain/abstracts/index'
+import { UserFactory } from '#profile/factories/index'
 import type { AchievementMetricValue } from '../types'
 import type { Level, WeekStatus } from '../structures'
 import type { UserDto } from './dtos'
@@ -145,12 +145,12 @@ export class User extends Entity<UserProps> {
 
   breakStreak() {
     this.props.streak = Integer.create(0)
-    this.props.didBreakStreak = this.props.didBreakStreakbecomeTrue()
+    this.props.didBreakStreak = this.props.didBreakStreak.becomeTrue()
     this.props.weekStatus = this.props.weekStatus.updateYesterdayWeekdayStatus('undone')
   }
 
   resetStreak() {
-    this.props.didBreakStreak = this.didBreakStreakbecomeFalse()
+    this.props.didBreakStreak = this.didBreakStreak.becomeFalse()
   }
 
   getAchievementCount(metric: AchievementMetricValue) {
@@ -291,7 +291,10 @@ export class User extends Entity<UserProps> {
 
   get hasNextTier(): boolean {
     if (!this.props.lastWeekRankingPosition) return false
-    return this.tier.position.value !== this.props.lastWeekRankingPosition.position.value
+    return (
+      this.tier.position.number.value !==
+      this.props.lastWeekRankingPosition.position.number.value
+    )
   }
 
   get rewardByLastWeekRankingPosition() {
@@ -385,7 +388,7 @@ export class User extends Entity<UserProps> {
       rocket: this.props.rocket.dto,
       avatar: this.props.avatar.dto,
       tier: this.props.tier.dto,
-      level: this.level.number.value,
+      level: this.level.value.number.value,
       coins: this.coins.value,
       xp: this.xp.value,
       weeklyXp: this.weeklyXp.value,
@@ -400,7 +403,8 @@ export class User extends Entity<UserProps> {
       completedChallengesIds: this.props.completedChallengesIds.dto,
       completedPlanetsIds: this.props.completedPlanetsIds.dto,
       canSeeRankingResult: this.props.canSeeRankingResult.value,
-      lastWeekRankingPosition: this.props.lastWeekRankingPosition?.position.value ?? null,
+      lastWeekRankingPosition:
+        this.props.lastWeekRankingPosition?.position.number.value ?? null,
       didBreakStreak: this.props.didBreakStreak.value,
       hasCompletedSpace: this.hasCompletedSpace.value,
       createdAt: this.createdAt,

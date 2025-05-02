@@ -5,7 +5,7 @@ import {
   Text,
   type Logical,
   type UserAnswer,
-} from '@/global/domain/structures'
+} from '#global/domain/structures/index'
 import type { DragAndDropQuestionDto, QuestionDto } from './dtos'
 import { DragAndDrop, QuestionCodeLine } from '../structures'
 import { Question } from '../abstracts'

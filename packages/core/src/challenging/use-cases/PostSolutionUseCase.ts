@@ -1,9 +1,9 @@
-import type { UseCase } from '@/global/interfaces'
+import type { UseCase } from '#global/interfaces/index'
+import { Slug } from '#global/domain/structures/index'
+import { ValidationError } from '#global/domain/errors/index'
 import { Challenge, Solution } from '../domain/entities'
 import type { ChallengingService } from '../interfaces'
 import type { SolutionDto } from '../domain/entities/dtos'
-import { Slug } from '@/global/domain/structures'
-import { ValidationError } from '@/global/domain/errors'
 
 type Request = {
   solutionTitle: string

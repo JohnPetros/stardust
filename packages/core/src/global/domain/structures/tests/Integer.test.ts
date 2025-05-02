@@ -22,7 +22,7 @@ describe('Integer structure', () => {
   })
 
   it('should decrement the integer value by one', () => {
-    const integer = Integer.create(1).dencrement()
+    const integer = Integer.create(1).decrement()
     expect(integer.value).toBe(0)
   })
 

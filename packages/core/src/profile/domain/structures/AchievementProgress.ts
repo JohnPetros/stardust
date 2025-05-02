@@ -1,4 +1,4 @@
-import { Integer } from '@/global/domain/structures'
+import { Integer } from '#global/domain/structures/index'
 
 export class AchievementProgress {
   readonly userCount: Integer
