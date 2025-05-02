@@ -1,7 +1,7 @@
-import { Id, Percentage } from '@/global/domain/structures'
-import type { UseCase } from '@/global/interfaces'
-import { User } from '@/profile/domain/entities'
-import type { UserDto } from '@/profile/domain/entities/dtos'
+import { Id, Percentage } from '#global/domain/structures/index'
+import type { UseCase } from '#global/interfaces/index'
+import { User } from '#profile/domain/entities/index'
+import type { UserDto } from '#profile/domain/entities/dtos/index'
 import type { ChallengingService } from '../interfaces'
 import { Challenge } from '../domain/entities'
 

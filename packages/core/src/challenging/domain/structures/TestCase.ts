@@ -1,4 +1,4 @@
-import { Logical, OrdinalNumber } from '../../../global/domain/structures'
+import { OrdinalNumber, Logical } from '#global/domain/structures/index'
 import type { TestCaseDto } from '../entities/dtos'
 
 type TestCaseProps = {
@@ -35,7 +35,7 @@ export class TestCase {
       inputs: this.inputs,
       expectedOutput: this.expectedOutput,
       isLocked: this.isLocked.value,
-      position: this.position.value,
+      position: this.position.number.value,
     }
   }
 }

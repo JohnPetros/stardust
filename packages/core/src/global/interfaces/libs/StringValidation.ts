@@ -1,4 +1,4 @@
-export interface IStringValidation {
+export interface StringValidation {
   min(minValue: number, message?: string): this
   id(message?: string): this
   email(message?: string): this

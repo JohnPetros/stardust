@@ -21,17 +21,21 @@ export class OrdinalNumber {
     return new OrdinalNumber({ key, number: Integer.create(number) })
   }
 
-  increment() {
+  increment(): OrdinalNumber {
     return new OrdinalNumber({
       key: this.key,
       number: this.number.increment(),
     })
   }
 
-  dencrement() {
+  decrement(): OrdinalNumber {
     return new OrdinalNumber({
       key: this.key,
-      number: this.number.dencrement(),
+      number: this.number.decrement(),
     })
+  }
+
+  get value(): number {
+    return this.number.value
   }
 }

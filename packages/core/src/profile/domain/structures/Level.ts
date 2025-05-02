@@ -1,31 +1,31 @@
-import { type Integer, Logical, OrdinalNumber } from '@/global/domain/structures'
+import { Integer, Logical, OrdinalNumber } from '#global/domain/structures/index'
 
 type LevelProps = {
-  number: OrdinalNumber
+  value: OrdinalNumber
   didUp: Logical
 }
 
 export class Level {
-  private static readonly BASE_INCREASE_XP = 50
-  private static readonly MINIMUM_XP = 25
-  readonly number: OrdinalNumber
+  private static readonly BASE_INCREASE_XP = Integer.create(50)
+  private static readonly MINIMUM_XP = Integer.create(25)
+  readonly value: OrdinalNumber
   readonly didUp: Logical
 
-  private constructor({ number, didUp }: LevelProps) {
-    this.number = number
+  private constructor({ value, didUp }: LevelProps) {
+    this.value = value
     this.didUp = didUp
   }
 
   static create(value?: number): Level {
     if (!value) {
       return new Level({
-        number: OrdinalNumber.create(1),
+        value: OrdinalNumber.create(1),
         didUp: Logical.create(false),
       })
     }
 
     return new Level({
-      number: OrdinalNumber.create(value),
+      value: OrdinalNumber.create(value),
       didUp: Logical.create(false),
     })
   }
@@ -33,20 +33,19 @@ export class Level {
   up(currentXp: Integer, newXp: Integer) {
     const xpSum = currentXp.plus(newXp)
 
-    const hasNewLevel =
-      xpSum.value >= Level.BASE_INCREASE_XP * (this.number.value - 1) + Level.MINIMUM_XP
+    const baseXp = Level.BASE_INCREASE_XP.multiply(this.value.number.decrement()).plus(
+      Level.MINIMUM_XP,
+    )
 
-    if (hasNewLevel) {
+    const hasNewLevel = xpSum.isGreaterOrEqualTo(baseXp)
+
+    if (hasNewLevel.isTrue) {
       return new Level({
-        didUp: this.didUpbecomeTrue(),
-        number: this.number.incrementOne(),
+        didUp: this.didUp.becomeTrue(),
+        value: this.value.increment(),
       })
     }
 
     return this
-  }
-
-  get value() {
-    return this.number.value
   }
 }

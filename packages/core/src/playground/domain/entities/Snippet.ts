@@ -1,8 +1,7 @@
-import { Datetime } from '../../../global/libs'
-import { Entity } from '../../../global/domain/abstracts'
-import { Author } from '../../../global/domain/entities'
-import { EntityNotDefinedError } from '../../../global/domain/errors'
-import { Logical, Name, Text } from '../../../global/domain/structures'
+import { Entity } from '#global/domain/abstracts/Entity'
+import { AuthorAggregate } from '#global/domain/aggregates/AuthorAggregate'
+import { Logical, Name, Text } from '#global/domain/structures/index'
+import { Datetime } from '#global/libs/index'
 import type { SnippetDto } from '../dtos'
 
 type SnippetProps = {
@@ -10,10 +9,7 @@ type SnippetProps = {
   code: Text
   isPublic: Logical
   createdAt: Date
-  author: {
-    id: string
-    entity?: Author
-  }
+  author: AuthorAggregate
 }
 
 export class Snippet extends Entity<SnippetProps> {
@@ -25,10 +21,7 @@ export class Snippet extends Entity<SnippetProps> {
         title: Name.create(dto.title ?? Snippet.DEFEAULT_TITLE),
         code: Text.create(dto.code),
         isPublic: Logical.create(dto.isPublic),
-        author: {
-          id: dto.author.id,
-          entity: dto.author.dto && Author.create(dto.author.dto),
-        },
+        author: AuthorAggregate.create(dto.author),
         createdAt: dto.createdAt ?? new Datetime().date(),
       },
       dto?.id,
@@ -64,8 +57,7 @@ export class Snippet extends Entity<SnippetProps> {
   }
 
   get author() {
-    if (!this.props.author.entity) throw new EntityNotDefinedError('Autor do snippet')
-    return this.props.author.entity
+    return this.props.author
   }
 
   get dto(): SnippetDto {
@@ -75,10 +67,7 @@ export class Snippet extends Entity<SnippetProps> {
       isPublic: this.isPublic.value,
       title: this.title.value,
       createdAt: this.createdAt,
-      author: {
-        id: this.authorId,
-        dto: this.props.author.entity?.dto,
-      },
+      author: this.author.dto,
     }
   }
 }

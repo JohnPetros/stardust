@@ -1,8 +1,9 @@
 import { headers } from 'next/headers'
 
 import { ENV } from '@/constants'
-import type { IApiClient } from '@stardust/core/global/interfaces'
 import { RestResponse, PaginationResponse } from '@stardust/core/global/responses'
+import type { RestClient } from '@stardust/core/global/interfaces'
+
 import { addQueryParams, handleApiError } from './utils'
 
 type CacheConfig = {
@@ -11,11 +12,11 @@ type CacheConfig = {
   cacheKeys?: string[]
 }
 
-export const NextApiClient = ({
+export const NextRestClient = ({
   isCacheEnable = true,
   refetchInterval = 60 * 60 * 24, // 1 day
   cacheKeys = [],
-}: CacheConfig = {}): IApiClient => {
+}: CacheConfig = {}): RestClient => {
   const requestInit: RequestInit = {
     cache: !isCacheEnable ? 'no-store' : undefined,
     headers: headers(),

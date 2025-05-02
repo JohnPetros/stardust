@@ -3,7 +3,7 @@ import { headers } from 'next/headers'
 import type { AvatarDto, RocketDto } from '@stardust/core/shop/dtos'
 
 import { ROUTES } from '@/constants'
-import { NextApiClient } from '@/rest/next/NextApiClient'
+import { NextRestClient } from '@/rest/next/NextRestClient'
 import { ShopPage } from '@/ui/shop/widgets/pages/Shop'
 
 type ShopItems = {
@@ -18,7 +18,7 @@ type ShopItems = {
 }
 
 export default async function Shop() {
-  const apiClient = NextApiClient({ isCacheEnable: true })
+  const apiClient = NextRestClient({ isCacheEnable: true })
   const response = await apiClient.get<ShopItems>(ROUTES.api.shop.items)
   if (response.isFailure) response.throwError()
 

@@ -1,5 +1,5 @@
 import type { IController, IHttp } from '@stardust/core/global/interfaces'
-import type { IAuthService } from '@stardust/core/global/interfaces'
+import type { AuthService } from '@stardust/core/global/interfaces'
 
 import { ROUTES } from '@/constants'
 
@@ -10,7 +10,7 @@ const PUBLIC_ROUTES = [
   ...Object.values(ROUTES.api.auth),
 ]
 
-export const VerifyAuthRoutesController = (authService: IAuthService): IController => {
+export const VerifyAuthRoutesController = (authService: AuthService): IController => {
   return {
     async handle(http: IHttp) {
       const currentRoute = http.getCurrentRoute()

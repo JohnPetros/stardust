@@ -8,8 +8,8 @@ import {
 } from '../actions/lesson'
 import { SupabaseServerClient } from '@/rest/supabase/clients'
 import { SupabaseLessonService } from '@/rest/supabase/services'
-import { z } from 'zod'
 import { idSchema } from '@stardust/validation/global/schemas'
+import { z } from 'zod'
 
 export const fetchLessonStoryAndQuestions = authActionClient
   .schema(
@@ -28,9 +28,8 @@ export const fetchLessonStoryAndQuestions = authActionClient
     return await action.handle(call)
   })
 
-const accessEndingPage = authActionClient.action(async ({ clientInput, ctx }) => {
+const accessEndingPage = authActionClient.action(async ({ ctx }) => {
   const call = NextCall({
-    request: clientInput,
     user: ctx.user,
   })
   const action = AccessEndingPageAction()

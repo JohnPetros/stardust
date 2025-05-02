@@ -1,7 +1,6 @@
 import { User } from '@stardust/core/global/entities'
 import { Achievement } from '@stardust/core/profile/entities'
-import type { UserDto } from '@stardust/core/global/dtos'
-import type { AchievementDto } from '@stardust/core/profile/dtos'
+import type { AchievementDto, UserDto } from '@stardust/core/profile/entities/dtos'
 
 import { StreakBoard } from '@/ui/global/widgets/components/StreakBoard'
 import { Account } from './Account'
@@ -25,7 +24,7 @@ export function ProfilePage({ userDto, unlockedAchievementsDto }: ProfilePagePro
         <Account
           id={user.id.value}
           name={user.name.value}
-          level={user.level.value}
+          level={user.level.value.number.value}
           xp={user.xp.value}
           avatar={{ name: user.avatar.name.value, image: user.avatar.image.value }}
           rocket={{ name: user.rocket.name.value, image: user.rocket.image.value }}

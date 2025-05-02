@@ -1,8 +1,9 @@
-import type { UseCase } from '@/global/interfaces'
+import type { UseCase } from '#global/interfaces/index'
+import { Integer } from '#global/domain/structures/index'
 import type { UserDto } from '../domain/entities/dtos'
 import type { ProfileService } from '../interfaces'
 import { User } from '../domain/entities'
-import { Integer } from '@/global/domain/structures'
+import type { WeekStatusValue } from '../domain/types'
 
 type Request = {
   userDto: UserDto
@@ -13,6 +14,7 @@ type Request = {
 type Response = Promise<{
   newLevel: number | null
   newStreak: number | null
+  newWeekStatus: WeekStatusValue | null
 }>
 
 export class RewardUserUseCase implements UseCase<Request, Response> {
@@ -27,7 +29,7 @@ export class RewardUserUseCase implements UseCase<Request, Response> {
     if (respose.isFailure) respose.throwError()
 
     return {
-      newLevel: user.level.didUp.isTrue ? user.level.value : null,
+      newLevel: user.level.didUp.isTrue ? user.level.value.number.value : null,
       newStreak: streakStatus?.newStreak?.value ?? null,
       newWeekStatus: streakStatus?.newWeekStatus.value ?? null,
     }

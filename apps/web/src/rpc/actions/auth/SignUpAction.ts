@@ -1,5 +1,6 @@
 import { UserSignedUpEvent } from '@stardust/core/auth/events'
-import type { Action, Call, IAuthService, Amqp } from '@stardust/core/global/interfaces'
+import type { Action, Call, Amqp } from '@stardust/core/global/interfaces'
+import type { AuthService } from '@stardust/core/auth/interfaces'
 
 type Request = {
   name: string
@@ -12,7 +13,7 @@ type Response = {
 }
 
 export const SignUpAction = (
-  authService: IAuthService,
+  authService: AuthService,
   queue: Amqp,
 ): Action<Request, Response> => {
   return {
