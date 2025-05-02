@@ -21,7 +21,7 @@ export const Pagination = (paginationProps: PaginationProps) => {
       <div className='flex w-full space-x-3'>
         <PageButton
           isActive={false}
-          onClick={() => handlePageButtonCLick(pagination.currentPage.decrement().value)}
+          onClick={() => handlePageButtonClick(pagination.currentPage.decrement().value)}
           isVisible={pagination.currentPage.value > 1}
         >
           <Icon name='simple-arrow-left' className='text-gray-300' />
