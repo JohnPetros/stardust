@@ -36,11 +36,6 @@ jobs:
           docker build -t ${{ env.IMAGE_NAME }}:${{ github.sha }} -f apps/web/Dockerfile .
           docker push ${{ env.IMAGE_NAME }}:${{ github.sha }}
 
-      - name: Set up Azure CLI
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
