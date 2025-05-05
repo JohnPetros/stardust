@@ -11,7 +11,7 @@ env:
   AZURE_WEBAPP_NAME: stardust-web-app
   AZURE_WEBAPP_PACKAGE_PATH: '.'
   DOCKER_REGISTRY: docker.io
-  DOCKER_USERNAME: joaopetros
+  DOCKER_HUB_USERNAME: joaopetros
   IMAGE_NAME: joaopetros/stardust-web-app
 
 jobs:
