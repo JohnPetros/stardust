@@ -1,4 +1,4 @@
-import type { SpaceService } from '@stardust/core/global/interfaces'
+import type { SpaceService } from '@stardust/core/space/interfaces'
 import type { Planet } from '@stardust/core/space/entities'
 import { RestResponse } from '@stardust/core/global/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
@@ -141,7 +141,7 @@ export const SupabaseSpaceService = (supabase: Supabase): SpaceService => {
           'id, name, number, slug, is_challenge, planet_id, planets!inner(position)',
         )
         .eq('number', 1)
-        .eq('planets.position', starPlanet.position.incrementOne().value)
+        .eq('planets.position', starPlanet.position.increment().value)
         .single()
 
       if (error) {

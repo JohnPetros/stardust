@@ -1,8 +1,8 @@
-import type { RankingService } from '@stardust/core/global/interfaces'
 import type { RankingUser } from '@stardust/core/ranking/entities'
-import type { RankingUserDto } from '@stardust/core/ranking/dtos'
 import { RestResponse } from '@stardust/core/global/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
+import type { RankingService } from '@stardust/core/ranking/interfaces'
+import type { RankingUserDto } from '@stardust/core/ranking/entities/dtos'
 
 import type { Supabase } from '../types/Supabase'
 import { SupabasePostgrestError } from '../errors'

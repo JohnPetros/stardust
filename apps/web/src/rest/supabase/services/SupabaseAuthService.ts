@@ -2,7 +2,7 @@ import type { AuthService } from '@stardust/core/auth/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
-import { ENV, ROUTES } from '@/constants'
+import { CLIENT_ENV, ROUTES } from '@/constants'
 import type { Supabase } from '../types'
 import { SupabaseAuthError } from '../errors'
 
@@ -24,7 +24,7 @@ export const SupabaseAuthService = (supabase: Supabase): AuthService => {
         email,
         password,
         options: {
-          emailRedirectTo: `${ENV.appHost}/${ROUTES.api.auth.confirmEmail}`,
+          emailRedirectTo: `${CLIENT_ENV.appHost}/${ROUTES.api.auth.confirmEmail}`,
         },
       })
 
@@ -68,7 +68,7 @@ export const SupabaseAuthService = (supabase: Supabase): AuthService => {
 
     async requestPasswordReset(email: string) {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${ENV.appHost}${ROUTES.api.auth.confirmPasswordReset}`,
+        redirectTo: `${CLIENT_ENV.appHost}${ROUTES.api.auth.confirmPasswordReset}`,
       })
 
       if (error)

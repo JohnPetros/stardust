@@ -1,13 +1,13 @@
 import { RestResponse, PaginationResponse } from '@stardust/core/global/responses'
-import type { IForumService } from '@stardust/core/global/interfaces'
 import type { Comment } from '@stardust/core/forum/entities'
+import type { ForumService } from '@stardust/core/forum/interfaces'
 
 import type { Supabase } from '../types/Supabase'
 import { SupabasePostgrestError } from '../errors'
 import { SupabaseCommentMapper } from '../mappers'
 import { calculateSupabaseRange } from '../utils'
 
-export const SupabaseForumService = (supabase: Supabase): IForumService => {
+export const SupabaseForumService = (supabase: Supabase): ForumService => {
   const supabaseCommentMapper = SupabaseCommentMapper()
 
   return {
@@ -120,8 +120,6 @@ export const SupabaseForumService = (supabase: Supabase): IForumService => {
 
     async saveChallengeComment(comment: Comment, challengeId: string) {
       const supabaseComment = supabaseCommentMapper.toSupabase(comment)
-
-      console.log(supabaseComment)
 
       const { error: commentError, status: commentStatus } = await supabase
         .from('comments')

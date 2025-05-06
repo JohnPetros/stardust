@@ -4,16 +4,16 @@ import { type NextRequest, NextResponse } from 'next/server'
 
 import type { ZodSchema } from 'zod'
 
-import type { HttpMethod, HttpSchema, IHttp } from '@stardust/core/global/interfaces'
+import type { Http, HttpMethod, HttpSchema } from '@stardust/core/global/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
-import { AppError, MethodNotImplementedError } from '@stardust/core/global/errors'
+import { AppError } from '@stardust/core/global/errors'
 import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
+import { CLIENT_ENV } from '@/constants'
 import type { NextParams } from '@/rpc/next/types'
 import { SupabaseRouteHandlerClient } from '../supabase/clients'
 import { SupabaseAuthService, SupabaseProfileService } from '../supabase/services'
 import { cookieActions } from '@/rpc/next-safe-action'
-import { ENV } from '@/constants'
 
 type Cookie = {
   key: string
@@ -31,7 +31,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
   request,
   schema,
   params,
-}: NextHttpParams = {}): Promise<IHttp<NextSchema, NextResponse<unknown>>> => {
+}: NextHttpParams = {}): Promise<Http<NextSchema, NextResponse<unknown>>> => {
   let httpSchema: NextSchema
   const cookies: Cookie[] = []
 
@@ -65,7 +65,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     },
 
     redirect(route: string) {
-      const nextResponse = NextResponse.redirect(new URL(route, ENV.appHost))
+      const nextResponse = NextResponse.redirect(new URL(route, CLIENT_ENV.appHost))
 
       if (cookies.length)
         for (const cookie of cookies) {
@@ -131,7 +131,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       return Boolean(response?.data)
     },
 
-    async deleteCookie(key) {
+    async deleteCookie(key: string) {
       await cookieActions.deleteCookie(key)
     },
 
@@ -142,7 +142,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     send(data: unknown, statusCode = HTTP_STATUS_CODE.ok) {
       if (cookies.length) {
         const nextResponse = NextResponse.redirect(
-          new URL(request ? request.nextUrl.pathname : '', ENV.appHost),
+          new URL(request ? request.nextUrl.pathname : '', CLIENT_ENV.appHost),
         )
 
         for (const cookie of cookies) {
