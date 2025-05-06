@@ -1,11 +1,10 @@
 import { useCallback } from 'react'
 import { v4 as uuid } from 'uuid'
 
-import type { TextBlockDto } from '@stardust/core/global/dtos'
 import type { TextBlock } from '@stardust/core/global/structures'
+import type { TextBlockDto } from '@stardust/core/global/entities/dtos'
 
 import { REGEX } from '@/constants'
-import { getTemplateContent } from '@/utils'
 import { formatSpecialCharacters } from '../formatSpecialCharacters'
 
 export function useMdx() {
@@ -70,6 +69,23 @@ export function useMdx() {
 
     return textBlocks.map(parseMdx)
   }, [])
+
+  function getTemplateContent(component: string) {
+    const nameMatch = REGEX.componentName.exec(component)
+    const componentName = nameMatch ? nameMatch[1] : 'Text'
+
+    const componentRegex = new RegExp(
+      `<${componentName}[^>]*>([\\s\\S]*?)</${componentName}>`,
+      'g',
+    )
+
+    const contentMatch = componentRegex.exec(component)
+    if (contentMatch !== null) {
+      return contentMatch[1]
+    }
+
+    return ''
+  }
 
   function formatCodeContent(initialMdx: string) {
     let mdx = initialMdx
