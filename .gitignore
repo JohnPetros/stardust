@@ -29,9 +29,10 @@ node_modules
 # debug
 npm-debug.log*
 
-# local env files
+# .env files
 .env.local
-.env.prod
+.env.production
+.env.development
 
 # vercel
 .vercel
