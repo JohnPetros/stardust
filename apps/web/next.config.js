@@ -1,4 +1,3 @@
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   productionBrowserSourceMaps: false,
@@ -11,9 +10,9 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'aukqejqsiqsqowafpppb.supabase.co',
+        hostname: process.env.NEXT_PUBLIC_SUPABASE_CDN_HOST,
         port: '',
-        pathname: '/storage/v1/object/public/images/**',
+        pathname: process.env.NEXT_PUBLIC_SUPABASE_CDN_PATH,
       },
     ],
   },
