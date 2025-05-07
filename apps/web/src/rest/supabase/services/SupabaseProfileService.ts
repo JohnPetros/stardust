@@ -1,8 +1,8 @@
-import type { ProfileService } from '@stardust/core/global/interfaces'
 import type { User } from '@stardust/core/global/entities'
 import { RestResponse } from '@stardust/core/global/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { WeekStatus } from '@stardust/core/profile/structures'
+import type { ProfileService } from '@stardust/core/profile/interfaces'
 
 import type { Supabase, SupabaseUser } from '../types'
 import { SupabasePostgrestError } from '../errors'

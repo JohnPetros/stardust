@@ -1,6 +1,6 @@
 import { RestResponse, PaginationResponse } from '@stardust/core/global/responses'
-import type { PlaygroundService } from '@stardust/core/global/interfaces'
 import type { Snippet } from '@stardust/core/playground/entities'
+import type { PlaygroundService } from '@stardust/core/playground/interfaces'
 
 import type { Supabase } from '../types/Supabase'
 import { SupabasePostgrestError } from '../errors'

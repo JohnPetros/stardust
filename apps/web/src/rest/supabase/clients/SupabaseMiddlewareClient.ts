@@ -3,14 +3,14 @@ import { type NextRequest, NextResponse } from 'next/server'
 
 import type { Database } from '../types/Database'
 
-import { ENV } from '@/constants'
+import { CLIENT_ENV } from '@/constants'
 
 const SupabaseMiddlewareClient = (request: NextRequest) => {
   let supabaseResponse = NextResponse.next({
     request,
   })
 
-  return createServerClient<Database>(ENV.supabaseUrl, ENV.supabaseKey, {
+  return createServerClient<Database>(CLIENT_ENV.supabaseUrl, CLIENT_ENV.supabaseKey, {
     cookies: {
       getAll() {
         return request.cookies.getAll()

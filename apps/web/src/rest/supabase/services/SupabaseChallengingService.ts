@@ -1,7 +1,7 @@
 import { RestResponse, PaginationResponse } from '@stardust/core/global/responses'
 import type { ChallengesListParams } from '@stardust/core/challenging/types'
-import type { ChallengeCategoryDto } from '@stardust/core/challenging/dtos'
-import type { ChallengingService } from '@stardust/core/global/interfaces'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
+import type { ChallengeCategoryDto } from '@stardust/core/challenging/entities/dtos'
 
 import type { Supabase } from '../types'
 import { SupabasePostgrestError } from '../errors'

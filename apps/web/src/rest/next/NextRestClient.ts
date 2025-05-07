@@ -1,6 +1,6 @@
 import { headers } from 'next/headers'
 
-import { ENV } from '@/constants'
+import { CLIENT_ENV } from '@/constants'
 import { RestResponse, PaginationResponse } from '@stardust/core/global/responses'
 import type { RestClient } from '@stardust/core/global/interfaces'
 
@@ -32,7 +32,7 @@ export const NextRestClient = ({
   return {
     async get<Body>(route: string): Promise<RestResponse<Body>> {
       const response = await fetch(
-        `${ENV.appHost}${addQueryParams(route, queryParams)}`,
+        `${CLIENT_ENV.appHost}${addQueryParams(route, queryParams)}`,
         requestInit,
       )
 
@@ -53,7 +53,7 @@ export const NextRestClient = ({
 
     async post<Body>(route: string, body: unknown): Promise<RestResponse<Body>> {
       const response = await fetch(
-        `${ENV.appHost}/${addQueryParams(route, queryParams)}`,
+        `${CLIENT_ENV.appHost}/${addQueryParams(route, queryParams)}`,
         {
           ...requestInit,
           method: 'POST',

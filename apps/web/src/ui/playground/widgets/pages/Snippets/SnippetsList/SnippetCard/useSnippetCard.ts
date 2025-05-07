@@ -4,7 +4,7 @@ import { useRef, useState } from 'react'
 
 import type { Snippet } from '@stardust/core/playground/entities'
 
-import { ENV, ROUTES } from '@/constants'
+import { CLIENT_ENV, ROUTES } from '@/constants'
 import { useApi } from '@/ui/global/hooks/useApi'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import type { PromptRef } from '@/ui/global/widgets/components/Prompt/types'
@@ -15,7 +15,7 @@ export function useSnippetCard(
   inititlaSnippetTitle: string,
   onDelete: (deletedPlaygroundId: string) => void,
 ) {
-  const snippetUrl = `${ENV.appHost}${ROUTES.playground.snippet(snippetId)}`
+  const snippetUrl = `${CLIENT_ENV.appHost}${ROUTES.playground.snippet(snippetId)}`
   const [snippetTitle, setSnippetTitle] = useState(inititlaSnippetTitle)
   const { editSnippet } = useEditSnippetAction({
     onSuccess: handleEditSnippetSuccess,

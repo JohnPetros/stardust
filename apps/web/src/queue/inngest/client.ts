@@ -9,7 +9,7 @@ import { FirstTierReachedEvent } from '@stardust/core/ranking/events'
 import { UserSignedUpEvent } from '@stardust/core/auth/events'
 
 import { SERVER_ENV } from '@/constants/server-env'
-import { ENV } from '@/constants/env'
+import { CLIENT_ENV } from '@/constants/client-env'
 
 const eventsSchema = {
   [UserCreatedEvent._NAME]: {
@@ -64,7 +64,7 @@ const eventsSchema = {
 
 export const inngest = new Inngest({
   id: 'StarDust Amqp',
-  eventKey: ENV.mode === 'production' ? SERVER_ENV.inngestEventKey : undefined,
-  signingKey: ENV.mode === 'production' ? SERVER_ENV.inngestSigningKey : undefined,
+  eventKey: CLIENT_ENV.mode === 'production' ? SERVER_ENV.inngestEventKey : undefined,
+  signingKey: CLIENT_ENV.mode === 'production' ? SERVER_ENV.inngestSigningKey : undefined,
   schemas: new EventSchemas().fromZod(eventsSchema),
 })
