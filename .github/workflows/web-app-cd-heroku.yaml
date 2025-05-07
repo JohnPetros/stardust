@@ -26,13 +26,13 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: heroku container:login
-
-      - name: Build and push Docker image
+ 
+      - name: Build and push Docker image to Heroku
         run: |
           docker build -t ${{ env.IMAGE_NAME }} -f apps/web/Dockerfile .
-          docker push ${{ env.IMAGE_NAME }}
+          heroku container:push -a ${{ env.IMAGE_NAME }} web
 
       - name: Release to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:release web -a ${{ env.HEROKU_APP_NAME }}
+        run: heroku container:release -a ${{ env.HEROKU_APP_NAME }} web
