@@ -1,7 +1,7 @@
 export { APP_PREFIX } from './app-prefix'
 export { CACHE } from './cache'
 export { COOKIES } from './cookies'
-export { ENV } from './env'
+export { CLIENT_ENV } from './client-env'
 export { ROUTES } from './routes'
 export { REGEX } from './regex'
 export { STORAGE } from './storage'

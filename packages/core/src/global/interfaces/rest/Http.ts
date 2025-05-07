@@ -1,5 +1,5 @@
-import type { UserDto } from '../../domain/entities/dtos'
-import type { RestResponse } from '../../responses'
+import type { RestResponse } from '#global/responses/RestResponse'
+import type { UserDto } from '#profile/domain/entities/dtos/UserDto'
 
 export type HttpSchema = {
   body?: unknown

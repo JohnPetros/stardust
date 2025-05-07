@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useState } from 'react'
 
-import type { UserDto } from '@stardust/core/global/dtos'
 import { Observer } from '@stardust/core/global/structures'
 import { User } from '@stardust/core/global/entities'
+import type { UserDto } from '@stardust/core/profile/entities/dtos'
 
 import { CACHE, DOM_EVENTS, ROUTES } from '@/constants'
 import { useApi } from '@/ui/global/hooks/useApi'
@@ -99,6 +99,7 @@ export function useAuthProvider(serverSession: Session | null) {
   async function updateUser(user: User) {
     if (user?.id) {
       await api.updateUser(user)
+      console.log(user.dto)
       updateUserCache(user.dto)
     }
   }

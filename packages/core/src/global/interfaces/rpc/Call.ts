@@ -1,4 +1,4 @@
-import type { UserDto } from '../../domain/entities/dtos'
+import type { UserDto } from '#profile/domain/entities/dtos/UserDto'
 
 export interface Call<Request = void> {
   getRequest(): Request
