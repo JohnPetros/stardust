@@ -7,14 +7,14 @@ on:
     paths:
       - "apps/web/**"
 
-env:
-  HEROKU_APP_NAME: stardust-web-app
-  IMAGE_NAME: registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
-
 jobs:
   build-and-deploy:
     name: Build and Deploy
     runs-on: ubuntu-latest
+    env:
+      HEROKU_APP_NAME: stardust-web-app
+      IMAGE_NAME: registry.heroku.com/stardust-web-app/web
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
