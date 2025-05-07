@@ -22,15 +22,18 @@ jobs:
       - name: Create .env file
         run: echo "${{ secrets.WEB_ENV }}" >> apps/web/.env
 
+      - name: Install Heroku CLI
+        run: curl https://cli-assets.heroku.com/install.sh | sh
+
       - name: Login to Heroku Container Registry
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: heroku container:login
  
       - name: Build and push Docker image to Heroku
-        run: |
-          docker build -t ${{ env.IMAGE_NAME }} -f apps/web/Dockerfile .
-          heroku container:push -a ${{ env.IMAGE_NAME }} web
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: cd apps/web && heroku container:push web -a ${{ env.HEROKU_APP_NAME }}
 
       - name: Release to Heroku
         env:
