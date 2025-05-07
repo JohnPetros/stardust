@@ -1,5 +1,5 @@
-import type { AchievementDto } from '@stardust/core/profile/dtos'
 import type { Achievement } from '@stardust/core/profile/entities'
+import type { AchievementDto } from '@stardust/core/profile/entities/dtos'
 
 export type AchivementsContextValue = {
   achievementsDto: AchievementDto[]

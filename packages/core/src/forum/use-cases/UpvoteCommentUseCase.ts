@@ -1,7 +1,8 @@
-import type { UserDto } from '../../global/domain/entities/dtos'
+import type { UseCase } from '#global/interfaces/UseCase'
+import type { UserDto } from '#profile/domain/entities/dtos/UserDto'
+import type { ForumService } from '../interfaces'
 import { User } from '../../global/domain/entities'
 import { Comment } from '../domain/entities'
-import type { IForumService, UseCase } from '../../global/interfaces'
 
 type Request = {
   userDto: UserDto
@@ -14,7 +15,7 @@ type Response = Promise<{
 }>
 
 export class UpvoteCommentUseCase implements UseCase<Request, Response> {
-  constructor(private readonly forumService: IForumService) {}
+  constructor(private readonly forumService: ForumService) {}
 
   async do({ userDto, commentId }: Request) {
     const user = User.create(userDto)
@@ -43,7 +44,7 @@ export class UpvoteCommentUseCase implements UseCase<Request, Response> {
 
     return {
       upvotesCount: comment.upvotesCount.value,
-      userUpvotedCommentsIds: user.upvotedCommentsIds.items.map((id) => id.value),
+      userUpvotedCommentsIds: user.upvotedCommentsIds.ids.map((id) => id.value),
     }
   }
 

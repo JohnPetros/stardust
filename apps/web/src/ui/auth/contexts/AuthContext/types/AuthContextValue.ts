@@ -1,6 +1,6 @@
 import type { User } from '@stardust/core/global/entities'
-import type { UserDto } from '@stardust/core/global/dtos'
 import type { Session } from './Session'
+import type { UserDto } from '@stardust/core/profile/entities/dtos'
 
 export type AuthContextValue = {
   user: User | null

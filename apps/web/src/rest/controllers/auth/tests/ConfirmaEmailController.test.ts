@@ -1,22 +1,24 @@
+import { mock } from 'ts-jest-mocker'
+
 import { ConfirmEmailController } from '../ConfirmEmailController'
 import { ROUTES } from '@/constants'
 import { RestResponse } from '@stardust/core/global/responses'
-import type { IHttp } from '@stardust/core/global/interfaces'
-import { AuthServiceMock } from '@stardust/core/mocks/services'
+import type { Http } from '@stardust/core/global/interfaces'
 import { HttpMock } from '../../tests/mocks'
 import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
+import type { AuthService } from '@stardust/core/auth/interfaces'
 
 const fakeSchema = { queryParams: { token: 'fake-token' } }
 
-let httpMock: IHttp<typeof fakeSchema>
-let authServiceMock: AuthServiceMock
+let httpMock: Http<typeof fakeSchema>
+let authServiceMock: AuthService
 
 describe('Confirm Email Controller', () => {
   beforeEach(() => {
     httpMock = HttpMock({
       fakeSchema,
     })
-    authServiceMock = new AuthServiceMock()
+    authServiceMock = mock()
   })
 
   it('should redirect to the sign in page if any error is found when confirming email', async () => {

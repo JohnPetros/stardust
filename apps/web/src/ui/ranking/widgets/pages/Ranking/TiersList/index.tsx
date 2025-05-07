@@ -11,9 +11,9 @@ export function TiersList() {
     >
       {tiers.map(({ id, name, image }, index) => (
         <Tier
-          key={id}
+          key={id.value}
           index={index}
-          rankingId={id}
+          rankingId={id.value}
           rankingImage={image.value}
           rankingName={name.value}
         />

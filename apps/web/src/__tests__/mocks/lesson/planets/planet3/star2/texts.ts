@@ -1,4 +1,4 @@
-import type { TextBlockDto } from '@stardust/core/global/dtos'
+import type { TextBlockDto } from '@stardust/core/global/entities/dtos'
 
 export const texts: TextBlockDto[] = [
   {
@@ -14,7 +14,7 @@ export const texts: TextBlockDto[] = [
   },
   {
     type: 'user',
-    content: '\#Partiu',
+    content: '#Partiu',
   },
   {
     type: 'default',

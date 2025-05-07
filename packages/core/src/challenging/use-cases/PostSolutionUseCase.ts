@@ -1,5 +1,5 @@
 import type { UseCase } from '#global/interfaces/index'
-import { Slug } from '#global/domain/structures/index'
+import { Id, Slug } from '#global/domain/structures/index'
 import { ValidationError } from '#global/domain/errors/index'
 import { Challenge, Solution } from '../domain/entities'
 import type { ChallengingService } from '../interfaces'
@@ -24,13 +24,13 @@ export class PostSolutionUseCase implements UseCase<Request, Response> {
       content: solutionContent,
       author: { id: authorId },
     })
-    await this.fetchChallenge(challengeId)
+    await this.fetchChallenge(Id.create(challengeId))
 
-    await this.saveSolution(solution, challengeId)
+    await this.saveSolution(solution, Id.create(challengeId))
     return solution.dto
   }
 
-  private async fetchChallenge(challengeId: string) {
+  private async fetchChallenge(challengeId: Id) {
     const response = await this.challengingService.fetchChallengeById(challengeId)
     if (response.isFailure) response.throwError()
     return Challenge.create(response.body)
@@ -46,7 +46,7 @@ export class PostSolutionUseCase implements UseCase<Request, Response> {
       ])
   }
 
-  private async saveSolution(solution: Solution, challengeId: string) {
+  private async saveSolution(solution: Solution, challengeId: Id) {
     const response = await this.challengingService.saveSolution(solution, challengeId)
     if (response.isFailure) response.throwError()
   }

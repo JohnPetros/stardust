@@ -1,9 +1,9 @@
 import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
-import { UsersFaker } from '@stardust/core/fakers/entities'
-import type { UserDto } from '@stardust/core/global/dtos'
 import { MethodNotImplementedError } from '@stardust/core/global/errors'
-import type { IHttp, HttpSchema } from '@stardust/core/global/interfaces'
+import type { Http, HttpSchema } from '@stardust/core/global/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
+import type { UserDto } from '@stardust/core/profile/entities/dtos'
+import { UsersFaker } from '@stardust/core/profile/entities/fakers'
 
 type Cookie = {
   key: string
@@ -23,7 +23,7 @@ export const HttpMock = <FakeSchema extends HttpSchema>({
   fakeRoute = '',
   fakeCookies = [],
   fakeUser = UsersFaker.fakeDto(),
-}: HttpMockProps<FakeSchema> = {}): IHttp<FakeSchema> => {
+}: HttpMockProps<FakeSchema> = {}): Http<FakeSchema> => {
   const cookies: Cookie[] = fakeCookies
 
   return {

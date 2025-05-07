@@ -4,7 +4,7 @@ import type {
   OpenQuestionDto,
   CheckboxQuestionDto,
   DragAndDropListQuestionDto,
-} from '@stardust/core/lesson/dtos'
+} from '@stardust/core/lesson/entities/dtos'
 
 type Questions = [
   SelectionQuestionDto,

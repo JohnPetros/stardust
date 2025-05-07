@@ -1,7 +1,7 @@
 import type { Action, Call } from '@stardust/core/global/interfaces'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import type { SpaceService } from '@stardust/core/space/interfaces'
-import type { ChallengeDto } from '@stardust/core/challenging/dtos'
+import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 import type { ChallengeVote } from '@stardust/core/challenging/types'
 import { Challenge } from '@stardust/core/challenging/entities'
 import { Star } from '@stardust/core/space/entities'
@@ -34,10 +34,7 @@ export const AccessChallengePageAction = (
   }
 
   async function fetchUserChallengeVote(challengeId: Id, userId: Id) {
-    const response = await challengingService.fetchChallengeVote(
-      challengeId.value,
-      userId.value,
-    )
+    const response = await challengingService.fetchChallengeVote(challengeId, userId)
     if (response.isFailure) return null
     return response.body.challengeVote
   }
@@ -49,11 +46,11 @@ export const AccessChallengePageAction = (
       const challenge = await fetchChallenge(challengeSlug)
 
       if (challenge.starId) {
-        const star = await fetchChallengeStar(challenge.starId.value)
+        const star = await fetchChallengeStar(challenge.starId)
         if (user.hasUnlockedStar(star.id).isFalse) call.notFound()
       }
 
-      if (challenge.isPublic.isFalse && challenge.authorId !== user.id) {
+      if (challenge.isPublic.isFalse && challenge.author.id !== user.id) {
         call.notFound()
       }
 

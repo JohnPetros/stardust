@@ -22,7 +22,6 @@ export function RankingResult() {
   const {
     isUserLoser,
     isLoading,
-    lastWeekTier,
     lastWeekRankingPodium,
     handleAlertDialogButtonClick,
     handleWRankingResultButtonClick,
@@ -34,7 +33,6 @@ export function RankingResult() {
   const { user } = useAuthContext()
   const api = useApi()
   const tierImage = user ? api.fetchImage('rankings', user.tier.image.value) : ''
-  console.log(user?.tier.image.value)
 
   if (isLoading) return <Loading isSmall={false} />
 

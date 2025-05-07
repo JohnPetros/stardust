@@ -2,13 +2,12 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/pt-br'
 
-import type { IDatetime } from '../../interfaces'
-import type { DateFormat } from '../../interfaces/libs/Datetime'
+import type { DateFormat, Datetime } from '#global/interfaces/libs/Datetime'
 
 dayjs.locale('pt-br')
 dayjs.extend(relativeTime)
 
-export class DayJsDatetime implements IDatetime {
+export class DayJsDatetime implements Datetime {
   private dayjs: dayjs.Dayjs
 
   constructor(date?: Date | string | null) {

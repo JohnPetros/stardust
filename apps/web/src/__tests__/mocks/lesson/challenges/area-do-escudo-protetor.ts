@@ -1,4 +1,4 @@
-import type { ChallengeDto } from '@stardust/core/challenging/dtos'
+import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 
 export const challenge: ChallengeDto = {
   id: '68456',

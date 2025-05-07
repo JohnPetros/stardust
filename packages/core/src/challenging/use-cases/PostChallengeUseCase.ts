@@ -1,6 +1,7 @@
-import type { ChallengingService, UseCase } from '../../global/interfaces'
-import { Challenge } from '../domain/entities'
+import type { ChallengingService } from '../interfaces'
+import type { UseCase } from '#global/interfaces/UseCase'
 import type { ChallengeDto } from '../domain/entities/dtos'
+import { Challenge } from '../domain/entities'
 
 type Request = {
   challengeDto: ChallengeDto

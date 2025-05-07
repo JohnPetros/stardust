@@ -1,7 +1,7 @@
 import { ROUTES } from '@/constants'
 import { User } from '@stardust/core/global/entities'
-import type { IController, IHttp } from '@stardust/core/global/interfaces'
-import type { ProfileService } from '@stardust/core/global/interfaces'
+import type { Controller, Http } from '@stardust/core/global/interfaces'
+import type { ProfileService } from '@stardust/core/profile/interfaces'
 
 type Schema = {
   routeParams: {
@@ -11,9 +11,9 @@ type Schema = {
 
 export const AccessProfilePageController = (
   service: ProfileService,
-): IController<Schema> => {
+): Controller<Schema> => {
   return {
-    async handle(http: IHttp<Schema>) {
+    async handle(http: Http<Schema>) {
       const { userId } = http.getRouteParams()
       const response = await service.fetchUserById(userId)
       if (response.isFailure) response.throwError()

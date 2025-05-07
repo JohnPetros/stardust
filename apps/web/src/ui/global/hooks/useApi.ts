@@ -1,7 +1,6 @@
-import type { IApi } from '@stardust/core/global/interfaces'
 import { useSupabaseApi } from './useSupabaseApi'
 
-export function useApi(): IApi {
+export function useApi() {
   const supabaseApi = useSupabaseApi()
 
   return supabaseApi

@@ -1,4 +1,4 @@
-import { RocketsFaker } from '@/shop/domain/entities/fakers'
+import { RocketsFaker } from '#shop/domain/entities/fakers/RocketsFaker'
 import type { RocketAggregateDto } from '../dtos'
 
 export class RocketAggregatesFaker {

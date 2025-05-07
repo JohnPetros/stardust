@@ -7,6 +7,7 @@ import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useAudioContext } from '@/ui/global/contexts/AudioContext'
 import { useGetLastWeekRankingWinnersAction } from './useGetLastWeekRankingWinnersAction'
+import { useRankingContext } from '@/ui/ranking/contexts/RankingContext'
 
 type UseRankingResultProps = {
   rewardAlertDialog: RefObject<AlertDialogRef>
@@ -25,10 +26,11 @@ export function useRankingResult({
   const [isLoading, setIsloading] = useState<boolean>(true)
   const { user, updateUser } = useAuthContext()
   const { playAudio } = useAudioContext()
+  const { userTier } = useRankingContext()
   const { getLastWeekRankingWinners } = useGetLastWeekRankingWinnersAction()
 
   async function handleWRankingResultButtonClick() {
-    if (!user || !lastWeekTier) return
+    if (!user || !lastWeekTier || !userTier) return
 
     if (user.isTopRankingWinner) {
       rewardAlertDialog.current?.open()
@@ -36,7 +38,7 @@ export function useRankingResult({
     }
 
     const userLastWeekVeteran =
-      user.tier.isLastTier.isTrue && lastWeekTier.isLastTier.isTrue
+      userTier.isLastTier.isTrue && lastWeekTier.isLastTier.isTrue
 
     if (user.isRankingWinner.isTrue && !userLastWeekVeteran) {
       successAlertDialog.current?.open()
@@ -60,7 +62,7 @@ export function useRankingResult({
 
       user.earnLastWeekRankingPositionReward()
 
-      user.tier.hasNextTier.isTrue
+      userTier?.hasNextTier.isTrue
         ? successAlertDialog.current?.open()
         : handleAlertDialogButtonClick('success')
       return

@@ -1,8 +1,9 @@
-import { User } from '../../global/domain/entities'
-import type { UserDto } from '../../global/domain/entities/dtos'
+import { Percentage } from '#global/domain/structures/Percentage'
+import type { UseCase } from '#global/interfaces/UseCase'
+import type { UserDto } from '#profile/domain/entities/dtos/UserDto'
+import { User } from '#profile/domain/entities/index'
 import { Planet, Star } from '../domain/entities'
-import type { SpaceService, UseCase } from '../../global/interfaces'
-import { Percentage } from '../../global/domain/structures'
+import type { SpaceService } from '../interfaces'
 
 type Request = {
   userDto: UserDto

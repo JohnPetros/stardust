@@ -1,4 +1,4 @@
-import type { RankingUserDto, TierDto } from '@stardust/core/ranking/dtos'
+import type { RankingUserDto, TierDto } from '@stardust/core/ranking/entities/dtos'
 
 import { ROUTES } from '@/constants'
 import { NextRestClient } from '@/rest/next/NextRestClient'
@@ -6,8 +6,8 @@ import { RankingPage } from '@/ui/ranking/widgets/pages/Ranking'
 import { RankingProvider } from '@/ui/ranking/contexts/RankingContext'
 
 export default async function Ranking() {
-  const apiClientWithCache = NextRestClient({ isCacheEnable: true })
-  const apiClientWithoutCache = NextRestClient({ isCacheEnable: false })
+  const apiClientWithCache = NextRestClient({ isCacheEnabled: true })
+  const apiClientWithoutCache = NextRestClient({ isCacheEnabled: false })
 
   const [tiersResponse, rankingUsersResponse] = await Promise.all([
     apiClientWithCache.get<TierDto[]>(ROUTES.api.ranking.tiers),

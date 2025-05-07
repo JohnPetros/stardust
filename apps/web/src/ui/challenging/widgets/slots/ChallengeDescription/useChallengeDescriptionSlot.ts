@@ -39,9 +39,10 @@ export function useChallengeDescriptionSlot() {
     isLoading,
     mdx,
     challenge,
-    isUserChallengeAuthor: Boolean(challenge?.authorId === user?.id),
+    isUserChallengeAuthor: user ? challenge?.author.isEqualTo(user).isTrue : false,
     isCompleted:
-      user?.hasCompletedChallenge(challenge?.id ?? '').isTrue ||
-      Boolean(challenge?.isCompleted.isTrue),
+      challenge && user
+        ? user?.hasCompletedChallenge(challenge?.id).or(challenge?.isCompleted).isTrue
+        : false,
   }
 }

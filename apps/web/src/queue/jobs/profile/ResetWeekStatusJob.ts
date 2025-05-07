@@ -1,4 +1,5 @@
-import type { Job, Amqp, ProfileService } from '@stardust/core/global/interfaces'
+import type { Amqp, Job } from '@stardust/core/global/interfaces'
+import type { ProfileService } from '@stardust/core/profile/interfaces'
 
 export const ResetWeekStatusJob = (service: ProfileService): Job => {
   return {

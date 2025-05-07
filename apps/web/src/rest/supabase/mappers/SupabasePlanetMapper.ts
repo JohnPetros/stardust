@@ -1,4 +1,4 @@
-import type { PlanetDto } from '@stardust/core/space/dtos'
+import type { PlanetDto } from '@stardust/core/space/entities/dtos'
 import type { Planet } from '@stardust/core/space/entities'
 import type { SupabasePlanet } from '../types'
 import { SupabaseStarMapper } from './SupabaseStarMapper'

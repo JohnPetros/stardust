@@ -2,7 +2,7 @@
 
 import { createContext, type ReactNode } from 'react'
 
-import type { RankingUserDto, TierDto } from '@stardust/core/ranking/dtos'
+import type { RankingUserDto, TierDto } from '@stardust/core/ranking/entities/dtos'
 import { Tier } from '@stardust/core/ranking/entities'
 
 import type { RankingContextValue } from './types/RankingContextValue'
@@ -18,13 +18,14 @@ type RankingContextProps = {
 export const RankingContext = createContext({} as RankingContextValue)
 
 export function RankingProvider({ children, tiers, rankingUsers }: RankingContextProps) {
-  const { ranking } = useRankingProvider(rankingUsers)
+  const { ranking, userTier } = useRankingProvider(rankingUsers, tiers)
 
   return (
     <RankingContext.Provider
       value={{
         ranking,
         tiers: tiers.map(Tier.create),
+        userTier,
       }}
     >
       {children}

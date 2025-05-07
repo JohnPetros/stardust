@@ -27,7 +27,7 @@ export class Story {
 
   nextChunk(): Story {
     return this.clone({
-      currentChunkIndex: this.currentChunkIndex.increment(1),
+      currentChunkIndex: this.currentChunkIndex.increment(),
     })
   }
 

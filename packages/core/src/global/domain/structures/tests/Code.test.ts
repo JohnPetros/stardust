@@ -1,8 +1,8 @@
 import { mock } from 'ts-jest-mocker'
 
-import type { CodeRunnerProvider } from '@/global/interfaces'
 import { Code } from '../Code'
-import { CodeRunnerResponse } from '@/global/responses'
+import type { CodeRunnerProvider } from '#global/interfaces/index'
+import { CodeRunnerResponse } from '#global/responses/CodeRunnerResponse'
 
 describe('Code strucutre', () => {
   it('should be created with pre code value if it is provided', () => {

@@ -1,6 +1,6 @@
-import type { CommentDto } from '@stardust/core/forum/dtos'
 import type { Comment } from '@stardust/core/forum/entities'
 import type { SupabaseComment } from '../types'
+import type { CommentDto } from '@stardust/core/forum/entities/dtos'
 import { Datetime } from '@stardust/core/global/libs'
 
 export const SupabaseCommentMapper = () => {
@@ -13,7 +13,7 @@ export const SupabaseCommentMapper = () => {
         upvotesCount: supabaseComment.upvotes_count ?? 0,
         author: {
           id: supabaseComment.author_id ?? '',
-          dto: {
+          entity: {
             slug: supabaseComment.author_slug ?? '',
             name: supabaseComment.author_name ?? '',
             avatar: {
@@ -34,7 +34,7 @@ export const SupabaseCommentMapper = () => {
       const supabaseComment: SupabaseComment = {
         id: comment.id.value,
         content: commentDto.content,
-        author_id: comment.authorId,
+        author_id: comment.author.id.value,
         created_at: comment.postedAt.toDateString(),
       } as SupabaseComment
 

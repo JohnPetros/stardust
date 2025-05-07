@@ -1,8 +1,9 @@
-import type { Job, ProfileService, Amqp } from '@stardust/core/global/interfaces'
 import type { EventPayload } from '@stardust/core/global/types'
 import type { FirstTierReachedEvent } from '@stardust/core/ranking/events'
 import { UserCreatedEvent } from '@stardust/core/profile/events'
 import { CreateUserUseCase } from '@stardust/core/global/use-cases'
+import type { Amqp, Job } from '@stardust/core/global/interfaces'
+import type { ProfileService } from '@stardust/core/profile/interfaces'
 
 type Payload = EventPayload<typeof FirstTierReachedEvent>
 

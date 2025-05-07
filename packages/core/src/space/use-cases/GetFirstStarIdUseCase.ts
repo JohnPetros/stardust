@@ -1,4 +1,4 @@
-import type { UseCase } from '@/global/interfaces'
+import type { UseCase } from '#global/interfaces/UseCase'
 import type { SpaceService } from '../interfaces'
 import { Planet } from '../domain/entities'
 

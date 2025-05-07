@@ -1,4 +1,4 @@
-import { TiersFaker } from '@/ranking/domain/entities/fakers'
+import { TiersFaker } from '#ranking/domain/entities/fakers/TiersFaker'
 import type { TierAggregateDto } from '../dtos'
 
 export class TierAggregatesFaker {

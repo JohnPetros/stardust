@@ -1,4 +1,5 @@
-import type { Job, Amqp, SpaceService } from '@stardust/core/global/interfaces'
+import type { Job, Amqp } from '@stardust/core/global/interfaces'
+import type { SpaceService } from '@stardust/core/space/interfaces'
 import { GetFirstStarIdUseCase, UnlockStarUseCase } from '@stardust/core/space/use-cases'
 import { FirstStarUnlockedEvent } from '@stardust/core/space/events'
 import { UserCreatedEvent } from '@stardust/core/profile/events'
@@ -33,7 +34,7 @@ export const HandleUserSignedUpJob = (spaceService: SpaceService): Job => {
       await queue.publish(event)
 
       const { userId } = await queue.waitFor<UserCreatedPayload>(
-        UserCreatedEvent.NAME,
+        UserCreatedEvent._NAME,
         '20s',
       )
 

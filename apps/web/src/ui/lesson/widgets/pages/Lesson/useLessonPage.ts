@@ -2,9 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import type { TextBlockDto } from '@stardust/core/global/dtos'
-import type { QuestionDto } from '@stardust/core/lesson/dtos'
-
 import { COOKIES, ROUTES, STORAGE } from '@/constants'
 import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
@@ -15,6 +12,8 @@ import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 import type { StarRewardingPayload } from '@stardust/core/space/types'
 import { TextBlock } from '@stardust/core/global/structures'
 import { useMdx } from '@/ui/global/widgets/components/Mdx/hooks/useMdx'
+import type { TextBlockDto } from '@stardust/core/global/entities/dtos'
+import type { QuestionDto } from '@stardust/core/lesson/entities/dtos'
 
 export function useLessonPage(
   starId: string,

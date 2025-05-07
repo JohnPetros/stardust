@@ -9,13 +9,13 @@ import { AvaliadorSintaticoJavaScript } from '@designliquido/delegua/avaliador-s
 import { LexadorJavaScript } from '@designliquido/delegua/lexador/traducao/lexador-javascript'
 
 import { CodeRunnerResponse } from '@stardust/core/global/responses'
-import type { ICodeRunnerProvider } from '@stardust/core/global/interfaces'
 import type { CodeInput } from '@stardust/core/global/types'
+import type { CodeRunnerProvider } from '@stardust/core/global/interfaces'
 
 import { DELEGUA_REGEX } from './constants'
 import { obtenhaTipo, trateErro } from './utils'
 
-export const ExecutorDeCodigoDelegua = (): ICodeRunnerProvider => {
+export const ExecutorDeCodigoDelegua = (): CodeRunnerProvider => {
   const lexador = new Lexador()
   const avaliadorSintatico = new AvaliadorSintatico()
 

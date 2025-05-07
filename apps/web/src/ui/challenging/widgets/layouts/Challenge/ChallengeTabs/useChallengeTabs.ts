@@ -7,6 +7,7 @@ import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
+import { Integer } from '@stardust/core/global/structures'
 
 export function useChallengeTabs() {
   const { getChallengeSlice, getCraftsVisibilitySlice, getActiveContentSlice } =
@@ -21,12 +22,15 @@ export function useChallengeTabs() {
   async function handleShowSolutions() {
     if (!user || !challenge || !craftsVislibility) return
 
-    if (user.canBuy(ChallengeCraftsVisibility.solutionsVisibilityPrice).isFalse) {
+    if (
+      user.canBuy(Integer.create(ChallengeCraftsVisibility.solutionsVisibilityPrice))
+        .isFalse
+    ) {
       toast.show('Você não possui moedas suficiente')
       return
     }
 
-    user.loseCoins(ChallengeCraftsVisibility.solutionsVisibilityPrice)
+    user.loseCoins(Integer.create(ChallengeCraftsVisibility.solutionsVisibilityPrice))
     await updateUser(user)
     setCraftsVislibility(craftsVislibility.showSolutions())
     router.goTo(

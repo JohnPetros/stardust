@@ -1,6 +1,7 @@
 import { StringValidation } from '../../../global/libs'
 import { ValidationError } from '../../../global/domain/errors'
 import type { ChallengeDifficultyLevel } from '../types'
+import { Logical } from '#global/domain/structures/Logical'
 
 export class ChallengeDifficulty {
   static readonly REWARD_BY_DIFFICULTY = {
@@ -45,5 +46,17 @@ export class ChallengeDifficulty {
 
   get reward() {
     return ChallengeDifficulty.REWARD_BY_DIFFICULTY[this.level]
+  }
+
+  get isHard(): Logical {
+    return Logical.create(this.level === 'hard')
+  }
+
+  get isMedium(): Logical {
+    return Logical.create(this.level === 'medium')
+  }
+
+  get isEasy(): Logical {
+    return Logical.create(this.level === 'easy')
   }
 }

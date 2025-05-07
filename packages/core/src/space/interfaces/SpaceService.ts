@@ -1,6 +1,6 @@
-import type { RestResponse } from '@/global/responses'
 import type { PlanetDto, StarDto } from '../domain/entities/dtos'
 import type { Planet } from '../domain/entities'
+import type { RestResponse } from '#global/responses/RestResponse'
 
 export interface SpaceService {
   fetchStarBySlug(starSlug: string): Promise<RestResponse<StarDto>>

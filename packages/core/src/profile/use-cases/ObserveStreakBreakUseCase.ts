@@ -1,5 +1,5 @@
-import type { UseCase } from '@/global/interfaces'
 import type { ProfileService } from '../interfaces'
+import type { UseCase } from '#global/interfaces/UseCase'
 import type { UserDto } from '../domain/entities/dtos'
 import { User } from '../domain/entities'
 

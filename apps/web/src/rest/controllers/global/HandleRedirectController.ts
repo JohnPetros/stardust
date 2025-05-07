@@ -1,4 +1,4 @@
-import type { IController, IHttp } from '@stardust/core/global/interfaces'
+import type { Controller, Http } from '@stardust/core/global/interfaces'
 
 type Schema = {
   queryParams?: {
@@ -6,9 +6,9 @@ type Schema = {
   }
 }
 
-export const HandleRedirectController = (): IController<Schema> => {
+export const HandleRedirectController = (): Controller<Schema> => {
   return {
-    async handle(http: IHttp<Schema>) {
+    async handle(http: Http<Schema>) {
       const queryParams = http.getQueryParams()
       if (queryParams?.redirect_to) return http.redirect(queryParams?.redirect_to)
 

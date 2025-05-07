@@ -1,8 +1,5 @@
-import type {
-  IController,
-  IHttp,
-  ChallengingService,
-} from '@stardust/core/global/interfaces'
+import type { Controller, Http } from '@stardust/core/global/interfaces'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import { ListChallengesUseCase } from '@stardust/core/challenging/use-cases'
 import type {
   ChallengeCompletionStatus,
@@ -22,9 +19,9 @@ type Schema = {
 
 export const FetchChallengesListController = (
   challengingService: ChallengingService,
-): IController<Schema> => {
+): Controller<Schema> => {
   return {
-    async handle(http: IHttp<Schema>) {
+    async handle(http: Http<Schema>) {
       const userDto = await http.getUser()
       const {
         page,

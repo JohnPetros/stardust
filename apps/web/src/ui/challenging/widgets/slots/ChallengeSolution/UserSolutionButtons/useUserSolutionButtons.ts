@@ -1,3 +1,5 @@
+import { Id } from '@stardust/core/global/structures'
+
 import { ROUTES } from '@/constants'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useApi } from '@/ui/global/hooks/useApi'
@@ -9,7 +11,7 @@ export function useUserSolutionButtons(solutionId: string, challengeSlug: string
   const toast = useToastContext()
 
   async function handleDeleteSolutionButtonClick() {
-    const response = await api.deleteSolution(solutionId)
+    const response = await api.deleteSolution(Id.create(solutionId))
     if (response.isFailure) {
       toast.show(response.errorMessage)
       return

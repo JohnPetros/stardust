@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 
-import type { SolutionDto } from '@stardust/core/challenging/dtos'
+import type { SolutionDto } from '@stardust/core/challenging/entities/dtos'
 
 import { ROUTES } from '@/constants'
 import type { ActionButtonTitles } from '@/ui/global/widgets/components/ActionButton/types'

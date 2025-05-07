@@ -1,6 +1,6 @@
-import type { RankingService } from '../../global/interfaces'
 import { Tier, type RankingUser } from '../domain/entities'
 import { Ranking } from '../domain/structures'
+import type { RankingService } from '../interfaces'
 
 export class UpdateRankingsUseCase {
   constructor(private readonly rankingService: RankingService) {}

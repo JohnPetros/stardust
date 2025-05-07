@@ -1,4 +1,4 @@
-import type { AuthorAggregateDto } from '../../../../global/domain/entities/dtos'
+import type { AuthorAggregateDto } from '#global/domain/aggregates/dtos/AuthorAggregateDto'
 
 export type SolutionDto = {
   id?: string

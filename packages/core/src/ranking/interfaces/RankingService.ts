@@ -1,4 +1,4 @@
-import type { RestResponse } from '@/global/responses'
+import type { RestResponse } from '#global/responses/RestResponse'
 import type { RankingUserDto, TierDto } from '../domain/entities/dtos'
 import type { RankingUser } from '../domain/entities'
 

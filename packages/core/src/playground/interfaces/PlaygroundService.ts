@@ -1,7 +1,7 @@
-import type { PaginationResponse, RestResponse } from '@/global/responses'
 import type { Snippet } from '../domain/entities'
 import type { SnippetsListParams } from '../domain/types'
 import type { SnippetDto } from '../domain/dtos'
+import type { PaginationResponse, RestResponse } from '#global/responses/index'
 
 export interface PlaygroundService {
   fetchSnippetById(snippetId: string): Promise<RestResponse<SnippetDto>>

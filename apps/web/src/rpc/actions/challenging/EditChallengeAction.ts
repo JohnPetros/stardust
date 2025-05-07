@@ -1,6 +1,6 @@
 import type { Action, Call } from '@stardust/core/global/interfaces'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
-import type { ChallengeDto } from '@stardust/core/challenging/dtos'
+import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 import type { ChallengeSchema } from '@stardust/validation/challenging/types'
 import { EditChallengeUseCase } from '@stardust/core/challenging/use-cases'
 import { User } from '@stardust/core/global/entities'

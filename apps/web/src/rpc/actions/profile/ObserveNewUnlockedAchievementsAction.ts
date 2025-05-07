@@ -1,6 +1,5 @@
-import type { UserDto } from '@stardust/core/global/dtos'
 import type { Call, Action } from '@stardust/core/global/interfaces'
-import type { AchievementDto } from '@stardust/core/profile/dtos'
+import type { AchievementDto, UserDto } from '@stardust/core/profile/entities/dtos'
 import type { ProfileService } from '@stardust/core/profile/interfaces'
 import { ObserveNewUnlockedAchievementsUseCase } from '@stardust/core/profile/use-cases'
 

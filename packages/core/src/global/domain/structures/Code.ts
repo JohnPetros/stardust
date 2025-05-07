@@ -1,4 +1,4 @@
-import type { CodeRunnerProvider } from '@/global/interfaces'
+import type { CodeRunnerProvider } from '#global/interfaces/index'
 import type { CodeInput } from '../types'
 import { Logical } from './Logical'
 

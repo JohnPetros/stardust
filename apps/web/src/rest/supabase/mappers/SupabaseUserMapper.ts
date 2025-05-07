@@ -1,5 +1,5 @@
-import type { UserDto } from '@stardust/core/global/dtos'
 import type { User } from '@stardust/core/global/entities'
+import type { UserDto } from '@stardust/core/profile/entities/dtos'
 
 import type { SupabaseUser } from '../types/SupabaseUser'
 
@@ -87,7 +87,7 @@ export const SupabaseUserMapper = () => {
         tier_id: user.tier.id.value,
         coins: user.coins.value,
         email: user.email.value,
-        level: user.level.value,
+        level: user.level.value.number.value,
         name: user.name.value,
         slug: user.slug.value,
         xp: user.xp.value,

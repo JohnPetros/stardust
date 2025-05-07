@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 
 import { Planet } from '@stardust/core/space/entities'
-import type { PlanetDto } from '@stardust/core/space/dtos'
+import type { PlanetDto } from '@stardust/core/space/entities/dtos'
 import { GetLastUnlockedStarIdUseCase } from '@stardust/core/space/use-cases'
 
 import { useScrollEvent } from '@/ui/global/hooks/useScrollEvent'

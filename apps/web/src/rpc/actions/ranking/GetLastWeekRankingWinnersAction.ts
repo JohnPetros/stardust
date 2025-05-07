@@ -1,4 +1,4 @@
-import type { TierDto, RankingUserDto } from '@stardust/core/ranking/dtos'
+import type { TierDto, RankingUserDto } from '@stardust/core/ranking/entities/dtos'
 import type { Action, Call } from '@stardust/core/global/interfaces'
 import type { RankingService } from '@stardust/core/ranking/interfaces'
 import { GetLastWeekRankingWinnersUseCase } from '@stardust/core/ranking/use-cases'

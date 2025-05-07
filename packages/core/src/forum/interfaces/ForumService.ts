@@ -1,4 +1,4 @@
-import type { PaginationResponse, RestResponse } from '@/global/responses'
+import type { PaginationResponse, RestResponse } from '#global/responses/index'
 import type { CommentDto } from '../domain/entities/dtos'
 import type { CommentsListParams } from '../domain/types'
 import type { Comment } from '../domain/entities'

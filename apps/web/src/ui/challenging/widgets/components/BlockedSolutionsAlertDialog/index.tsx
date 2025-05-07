@@ -2,6 +2,7 @@ import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structures'
+import { Integer } from '@stardust/core/global/structures'
 import type { ReactNode } from 'react'
 
 type BlockedCommentsAlertDialogProps = {
@@ -24,7 +25,9 @@ export function BlockedSolutionsAlertDialog({
             Para ver as soluções de outros usuários para esse desafio você deve pagar{' '}
             <span className='font-medium text-yellow-400'>10 de starcoins</span> em troca.
             Você possui atualmente {user?.coins.value} de starcoins.{' '}
-            {user?.canBuy(ChallengeCraftsVisibility.solutionsVisibilityPrice).isTrue &&
+            {user?.canBuy(
+              Integer.create(ChallengeCraftsVisibility.solutionsVisibilityPrice),
+            ).isTrue &&
               `Contudo, você não será mais apto a ganhar recompensas ao terminar esse
             desafio.`}
           </p>

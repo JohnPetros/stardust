@@ -7,11 +7,6 @@
     ],
     "module": "nodenext",
     "target": "es2022",
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    },
     "strict": true,
     "isolatedModules": true,
     "esModuleInterop": true,

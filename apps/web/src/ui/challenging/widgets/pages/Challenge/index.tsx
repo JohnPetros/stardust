@@ -1,7 +1,7 @@
 'use client'
 
 import type { ChallengeVote } from '@stardust/core/challenging/types'
-import type { ChallengeDto } from '@stardust/core/challenging/dtos'
+import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 
 import type { PopoverMenuButton } from '@/ui/global/widgets/components/PopoverMenu/types'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'

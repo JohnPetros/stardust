@@ -8,13 +8,13 @@ export function usePagination({
   page,
   onPageChange,
 }: PaginationProps) {
-  function handlePageButtonCLick(page: number) {
+  function handlePageButtonClick(page: number) {
     onPageChange(page)
   }
 
   return {
     pagination: Pagination.create(page, totalItemsCount, itemsPerPage),
     maxPageButtons: Pagination.MAX_PAGE_BUTTONS,
-    handlePageButtonCLick,
+    handlePageButtonClick,
   }
 }

@@ -1,4 +1,5 @@
 import { RestResponse, PaginationResponse } from '@stardust/core/global/responses'
+import type { Id } from '@stardust/core/global/structures'
 import type { ChallengesListParams } from '@stardust/core/challenging/types'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import type { ChallengeCategoryDto } from '@stardust/core/challenging/entities/dtos'
@@ -18,11 +19,11 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
   const supabaseSolutionMapper = SupabaseSolutionMapper()
 
   return {
-    async fetchChallengeById(challengeId: string) {
+    async fetchChallengeById(challengeId: Id) {
       const { data, error, status } = await supabase
         .from('challenges_view')
         .select('*')
-        .eq('id', challengeId)
+        .eq('id', challengeId.value)
         .single()
 
       if (error) {
@@ -70,11 +71,11 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
       return new RestResponse({ body: solutionDto })
     },
 
-    async fetchChallengeByStarId(starId: string) {
+    async fetchChallengeByStarId(starId: Id) {
       const { data, error, status } = await supabase
         .from('challenges_view')
         .select('*')
-        .eq('star_id', starId)
+        .eq('star_id', starId.value)
         .single()
 
       if (error) {
@@ -88,7 +89,7 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
       return new RestResponse({ body: supabaseChallengeMapper.toDto(data) })
     },
 
-    async fetchChallengeBySolutionId(solutionId: string) {
+    async fetchChallengeBySolutionId(solutionId: Id) {
       const {
         data: solutionData,
         error: solutionError,
@@ -96,7 +97,7 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
       } = await supabase
         .from('solutions')
         .select('challenge_id')
-        .eq('id', solutionId)
+        .eq('id', solutionId.value)
         .single()
 
       if (solutionError) {
@@ -124,11 +125,11 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
       return new RestResponse({ body: supabaseChallengeMapper.toDto(data) })
     },
 
-    async fetchCompletableChallenges(userId: string) {
+    async fetchCompletableChallenges(userId: Id) {
       const { data, error, status } = await supabase
         .from('challenges')
         .select('id, difficulty_level')
-        .neq('user_id', userId)
+        .neq('user_id', userId.value)
 
       if (error) {
         return SupabasePostgrestError(
@@ -289,11 +290,11 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
       return new RestResponse({ body: categories })
     },
 
-    async fetchChallengeVote(challengeId: string, userId: string) {
+    async fetchChallengeVote(challengeId: Id, userId: Id) {
       const { data, error, status } = await supabase
         .from('users_challenge_votes')
         .select('vote')
-        .match({ challenge_id: challengeId, user_id: userId })
+        .match({ challenge_id: challengeId.value, user_id: userId.value })
         .single()
 
       if (error) {
@@ -369,7 +370,7 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
     async saveChallengeCategories(challengeId, challengeCategories) {
       const { error, status } = await supabase.from('challenges_categories').insert(
         challengeCategories.map((category) => ({
-          challenge_id: challengeId,
+          challenge_id: challengeId.value,
           category_id: category.id.value,
         })),
       )
@@ -407,8 +408,8 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
 
     async saveSolutionUpvote(solutionId, userId) {
       const { error, status } = await supabase.from('users_upvoted_solutions').insert({
-        solution_id: solutionId,
-        user_id: userId,
+        solution_id: solutionId.value,
+        user_id: userId.value,
       })
 
       if (error) {
@@ -422,10 +423,10 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
       return new RestResponse()
     },
 
-    async saveCompletedChallenge(challengeId: string, userId: string) {
+    async saveCompletedChallenge(challengeId: Id, userId: Id) {
       const { error, status } = await supabase
         .from('users_completed_challenges')
-        .insert({ challenge_id: challengeId, user_id: userId })
+        .insert({ challenge_id: challengeId.value, user_id: userId.value })
 
       if (error) {
         return SupabasePostgrestError(
@@ -440,8 +441,8 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
 
     async saveChallengeVote(challengeId, userId, challengeVote) {
       const { error, status } = await supabase.from('users_challenge_votes').insert({
-        challenge_id: challengeId,
-        user_id: userId,
+        challenge_id: challengeId.value,
+        user_id: userId.value,
         vote: challengeVote === 'upvote' ? 'upvote' : 'downvote',
       })
 
@@ -577,11 +578,11 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
       return new RestResponse()
     },
 
-    async deleteSolutionUpvote(solutionId: string, userId: string) {
+    async deleteSolutionUpvote(solutionId: Id, userId: Id) {
       const { error, status } = await supabase
         .from('users_upvoted_solutions')
         .delete()
-        .match({ solution_id: solutionId, user_id: userId })
+        .match({ solution_id: solutionId.value, user_id: userId.value })
 
       if (error) {
         return SupabasePostgrestError(
@@ -594,11 +595,11 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
       return new RestResponse()
     },
 
-    async deleteChallengeCategories(challengeId: string) {
+    async deleteChallengeCategories(challengeId: Id) {
       const { error, status } = await supabase
         .from('challenges_categories')
         .delete()
-        .eq('challenge_id', challengeId)
+        .eq('challenge_id', challengeId.value)
 
       if (error) {
         return SupabasePostgrestError(

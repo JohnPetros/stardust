@@ -1,4 +1,4 @@
-import type { TextBlockDto } from '@stardust/core/global/dtos'
+import type { TextBlockDto } from '@stardust/core/global/entities/dtos'
 
 export const textsMock: TextBlockDto[] = [
   {

@@ -4,9 +4,9 @@ import type { ListParam } from '../../global/domain/types'
 import { User } from '../../global/domain/entities'
 import { Challenge } from '../domain/entities'
 import { PaginationResponse } from '../../global/responses'
-import type { UserDto } from '@/profile/domain/entities/dtos'
-import type { UseCase } from '@/global/interfaces'
 import type { ChallengingService } from '../interfaces'
+import type { UserDto } from '#profile/domain/entities/dtos/UserDto'
+import type { UseCase } from '#global/interfaces/UseCase'
 
 type Request = {
   userDto: UserDto
@@ -18,7 +18,7 @@ type Response = Promise<PaginationResponse<ChallengeDto>>
 export class ListChallengesUseCase implements UseCase<Request, Response> {
   constructor(private readonly challengingService: ChallengingService) {}
 
-  async do({ userDto, completionStatus, listParams }: Request): Response {
+  async do({ userDto, completionStatus, listParams }: Request) {
     const user = User.create(userDto)
 
     const challengesPagination = await this.fetchChallengesList({
@@ -39,15 +39,15 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
     )
   }
 
-  private orderChallengesByDifficultyLevel(challenges: Challenge[]) {
+  private orderChallengesByDifficultyLevel(challenges: Challenge[]): Challenge[] {
     const easyChallenges = challenges.filter(
-      (challenge) => challenge.difficulty.level === 'easy',
+      (challenge) => challenge.difficulty.isEasy.isTrue,
     )
     const mediumChallenges = challenges.filter(
-      (challenge) => challenge.difficulty.level === 'medium',
+      (challenge) => challenge.difficulty.isMedium.isTrue,
     )
     const hardChallenges = challenges.filter(
-      (challenge) => challenge.difficulty.level === 'hard',
+      (challenge) => challenge.difficulty.isHard.isTrue,
     )
 
     return easyChallenges.concat(mediumChallenges, hardChallenges)
@@ -57,7 +57,7 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
     completionStatus: ChallengeCompletionStatus | 'all',
     challenges: Challenge[],
     user: User,
-  ) {
+  ): Challenge[] {
     switch (completionStatus) {
       case 'completed':
         return challenges.filter((challenge) => {

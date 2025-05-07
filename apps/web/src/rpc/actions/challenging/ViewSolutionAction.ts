@@ -1,4 +1,4 @@
-import type { SolutionDto } from '@stardust/core/challenging/dtos'
+import type { SolutionDto } from '@stardust/core/challenging/entities/dtos'
 import { ViewSolutionUseCase } from '@stardust/core/challenging/use-cases'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import type { Action, Call } from '@stardust/core/global/interfaces'

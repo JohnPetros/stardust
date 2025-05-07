@@ -1,4 +1,4 @@
-import type { AchievementDto } from '@stardust/core/profile/dtos'
+import type { AchievementDto } from '@stardust/core/profile/entities/dtos'
 import type { SupabaseAchievement } from '../types'
 import type { Achievement } from '@stardust/core/profile/entities'
 

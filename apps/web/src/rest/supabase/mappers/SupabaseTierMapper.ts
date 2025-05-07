@@ -1,4 +1,4 @@
-import type { TierDto } from '@stardust/core/ranking/dtos'
+import type { TierDto } from '@stardust/core/ranking/entities/dtos'
 import type { SupabaseTier } from '../types/SupabaseTier'
 
 export const SupabaseTierMapper = () => {

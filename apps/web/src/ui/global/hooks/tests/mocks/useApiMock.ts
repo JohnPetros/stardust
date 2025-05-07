@@ -1,15 +1,12 @@
-import type { IApi } from '@stardust/core/global/interfaces'
 import { useApi } from '../../useApi'
-import { useInMemoryApi } from '../../useInMemoryApi'
 
-export function useApiMock(customApiMock?: Partial<IApi>) {
+export function useApiMock() {
   const mockedUseApi = jest.mocked(useApi)
-  const inMemoryApi = useInMemoryApi()
+  // const inMemoryApi = useInMemoryApi()
 
-  mockedUseApi.mockReturnValue({
-    ...inMemoryApi,
-    ...customApiMock,
-  })
+  // mockedUseApi.mockReturnValue({
+  //   ...inMemoryApi,
+  // })
 
   const apiMock = mockedUseApi()
 

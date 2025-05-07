@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 
 import type { ChallengeVote } from '@stardust/core/challenging/types'
-import type { ChallengeDto } from '@stardust/core/challenging/dtos'
+import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 import { Challenge } from '@stardust/core/challenging/entities'
 import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structures'
 

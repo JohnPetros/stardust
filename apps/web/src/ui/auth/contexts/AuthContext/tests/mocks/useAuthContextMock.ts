@@ -1,5 +1,4 @@
-import { UsersFaker } from '@stardust/core/fakers/entities'
-
+import { UsersFaker } from '@stardust/core/profile/entities/fakers'
 import { useAuthContext } from '../..'
 
 export function useAuthContextMock(

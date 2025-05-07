@@ -1,4 +1,4 @@
-import type { AuthorAggregateDto } from '@/global/domain/aggregates/dtos'
+import type { AuthorAggregateDto } from '#global/domain/aggregates/dtos/AuthorAggregateDto'
 import type { ChallengeCategoryDto } from './ChallengeCategoryDto'
 import type { ChallengeFunctionDto } from './ChallengeFunctionDto'
 import type { TestCaseDto } from './TestCaseDto'

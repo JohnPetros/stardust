@@ -319,10 +319,6 @@ export class User extends Entity<UserProps> {
     return this.props.rocket
   }
 
-  get tierId() {
-    return this.props.tier.id
-  }
-
   get tier() {
     return this.props.tier
   }

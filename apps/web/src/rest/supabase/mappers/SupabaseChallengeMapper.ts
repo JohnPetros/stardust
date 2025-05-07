@@ -3,7 +3,7 @@ import type {
   ChallengeCategoryDto,
   ChallengeDto,
   TestCaseDto,
-} from '@stardust/core/challenging/dtos'
+} from '@stardust/core/challenging/entities/dtos'
 import type { SupabaseChallenge } from '../types'
 import { Datetime } from '@stardust/core/global/libs'
 

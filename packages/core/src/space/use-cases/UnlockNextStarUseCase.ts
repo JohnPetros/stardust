@@ -1,7 +1,8 @@
+import type { UseCase } from '#global/interfaces/UseCase'
+import type { UserDto } from '#profile/domain/entities/dtos/UserDto'
+import type { SpaceService } from '../interfaces'
 import { User } from '../../global/domain/entities'
-import type { UserDto } from '../../global/domain/entities/dtos'
 import { Planet, Star } from '../domain/entities'
-import type { SpaceService, UseCase } from '../../global/interfaces'
 
 type Request = {
   userDto: UserDto

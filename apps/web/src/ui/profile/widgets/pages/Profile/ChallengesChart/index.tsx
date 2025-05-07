@@ -6,7 +6,7 @@ import { Legend } from './Legend'
 import { Chart } from './ApexChallengesChart'
 
 export async function ChallengesChart() {
-  const apiClient = NextRestClient({ isCacheEnable: false })
+  const apiClient = NextRestClient({ isCacheEnabled: false })
   const response = await apiClient.get<CompletedChallengesCountByDifficultyLevel>(
     ROUTES.api.challenging.countByDifficultyLevel,
   )

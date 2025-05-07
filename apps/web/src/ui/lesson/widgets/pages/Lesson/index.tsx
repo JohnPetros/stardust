@@ -1,14 +1,13 @@
 'use client'
 
-import type { QuestionDto } from '@stardust/core/lesson/dtos'
-import type { TextBlockDto } from '@stardust/core/global/dtos'
-
 import { PageTransitionAnimation } from '@/ui/global/widgets/components/PageTransitionAnimation'
 import { Loading } from '@/ui/global/widgets/components/Loading'
 import { useLessonPage } from './useLessonPage'
 import { LessonHeader } from './LessonHeader'
 import { StoryStage } from './StoryStage'
 import { QuizStage } from './QuizStage'
+import type { TextBlockDto } from '@stardust/core/global/entities/dtos'
+import type { QuestionDto } from '@stardust/core/lesson/entities/dtos'
 
 type LessonPageProps = {
   starId: string

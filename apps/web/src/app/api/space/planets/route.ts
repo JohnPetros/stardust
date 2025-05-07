@@ -4,6 +4,8 @@ import { SupabaseServerClient } from '@/rest/supabase/clients'
 import { FetchPlanetsController } from '@/rest/controllers/space'
 import { SupabaseSpaceService } from '@/rest/supabase/services'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   return runApiRoute(async () => {
     const http = await NextHttp()

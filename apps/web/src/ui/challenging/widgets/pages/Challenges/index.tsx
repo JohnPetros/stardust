@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import type { ChallengeCategoryDto } from '@stardust/core/challenging/dtos'
+import type { ChallengeCategoryDto } from '@stardust/core/challenging/entities/dtos'
 
 import { ROUTES } from '@/constants'
 import { Icon } from '@/ui/global/widgets/components/Icon'

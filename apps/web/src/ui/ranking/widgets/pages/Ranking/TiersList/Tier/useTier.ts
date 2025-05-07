@@ -9,7 +9,7 @@ export function useTier(
 ) {
   const { user } = useAuthContext()
 
-  const isFromCurrentTier = user ? user?.tierId === tierId : false
+  const isFromCurrentTier = user ? user?.tier.id.value === tierId : false
   const isLocked = user ? index >= user?.tier.position.value : false
 
   useEffect(() => {

@@ -5,7 +5,7 @@ import type {
   ChallengeDifficultyLevel,
 } from '@stardust/core/challenging/types'
 import { ChallengeCategory } from '@stardust/core/challenging/entities'
-import type { ChallengeCategoryDto } from '@stardust/core/challenging/dtos'
+import type { ChallengeCategoryDto } from '@stardust/core/challenging/entities/dtos'
 
 import * as Select from '@/ui/global/widgets/components/Select'
 import * as AnimatedTagging from '@/ui/global/widgets/components/AnimatedTagging'

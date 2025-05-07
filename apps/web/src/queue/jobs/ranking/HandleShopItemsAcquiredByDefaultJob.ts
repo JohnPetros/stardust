@@ -1,8 +1,9 @@
-import type { Job, Amqp, RankingService } from '@stardust/core/global/interfaces'
+import type { Job, Amqp } from '@stardust/core/global/interfaces'
 import { GetFirstTierIdUseCase } from '@stardust/core/ranking/use-cases'
 import { FirstTierReachedEvent } from '@stardust/core/ranking/events'
 import type { ShopItemsAcquiredByDefaultEvent } from '@stardust/core/shop/events'
 import type { EventPayload } from '@stardust/core/global/types'
+import type { RankingService } from '@stardust/core/ranking/interfaces'
 
 type Payload = EventPayload<typeof ShopItemsAcquiredByDefaultEvent>
 

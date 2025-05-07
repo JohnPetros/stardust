@@ -1,4 +1,5 @@
-import type { PlaygroundService, UseCase } from '../../global/interfaces'
+import type { UseCase } from '#global/interfaces/UseCase'
+import type { PlaygroundService } from '../interfaces'
 import { Snippet } from '../domain/entities'
 
 type Request = {

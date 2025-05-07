@@ -1,6 +1,8 @@
-import type { ChallengingService, UseCase } from '../../global/interfaces'
+import { Id } from '#global/domain/structures/Id'
+import type { UseCase } from '#global/interfaces/UseCase'
 import { Challenge } from '../domain/entities'
 import type { ChallengeVote } from '../domain/types'
+import type { ChallengingService } from '../interfaces'
 
 type Request = {
   challengeId: string
@@ -17,12 +19,18 @@ type Response = Promise<{
 export class VoteChallengeUseCase implements UseCase<Request, Response> {
   constructor(private readonly challengingService: ChallengingService) {}
 
-  async do({ challengeId, userId, userChallengeVote }: Request) {
+  async do({
+    challengeId: challengeIdValue,
+    userId: userValueId,
+    userChallengeVote,
+  }: Request) {
+    const challengeId = Id.create(challengeIdValue)
+    const userId = Id.create(userValueId)
     const challenge = await this.fetchChallenge(challengeId)
     challenge.userVote = await this.fetchCurrentChallengeVote(challengeId, userId)
 
     if (challenge.userVote && userChallengeVote === challenge.userVote) {
-      await this.deleteChallengeVote(challenge.id.value, userId)
+      await this.deleteChallengeVote(challenge.id, userId)
     }
 
     if (userChallengeVote !== challenge.userVote) {
@@ -40,15 +48,15 @@ export class VoteChallengeUseCase implements UseCase<Request, Response> {
     }
   }
 
-  private async fetchChallenge(challengeId: string) {
+  private async fetchChallenge(challengeId: Id) {
     const response = await this.challengingService.fetchChallengeById(challengeId)
     if (response.isFailure) response.throwError()
     return Challenge.create(response.body)
   }
 
   private async saveChallengeVote(
-    challengeId: string,
-    userId: string,
+    challengeId: Id,
+    userId: Id,
     challengeVote: ChallengeVote,
   ) {
     const response = await this.challengingService.saveChallengeVote(
@@ -60,8 +68,8 @@ export class VoteChallengeUseCase implements UseCase<Request, Response> {
   }
 
   private async updateChallengeVote(
-    challengeId: string,
-    userId: string,
+    challengeId: Id,
+    userId: Id,
     challengeVote: ChallengeVote,
   ) {
     const response = await this.challengingService.updateChallengeVote(
@@ -72,7 +80,7 @@ export class VoteChallengeUseCase implements UseCase<Request, Response> {
     if (response.isFailure) response.throwError()
   }
 
-  private async deleteChallengeVote(challengeId: string, userId: string) {
+  private async deleteChallengeVote(challengeId: Id, userId: Id) {
     const response = await this.challengingService.deleteChallengeVote(
       challengeId,
       userId,
@@ -80,7 +88,7 @@ export class VoteChallengeUseCase implements UseCase<Request, Response> {
     if (response.isFailure) response.throwError()
   }
 
-  private async fetchCurrentChallengeVote(challengeId: string, userId: string) {
+  private async fetchCurrentChallengeVote(challengeId: Id, userId: Id) {
     const response = await this.challengingService.fetchChallengeVote(challengeId, userId)
     if (response.isFailure) return null
     return response.body.challengeVote

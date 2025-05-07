@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import type { SolutionDto } from '@stardust/core/challenging/dtos'
+import type { SolutionDto } from '@stardust/core/challenging/entities/dtos'
 import { Solution } from '@stardust/core/challenging/entities'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'

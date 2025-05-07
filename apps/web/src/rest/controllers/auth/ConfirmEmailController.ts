@@ -1,6 +1,6 @@
 import { Slug } from '@stardust/core/global/structures'
-import type { IController, IHttp } from '@stardust/core/global/interfaces'
-import type { AuthService } from '@stardust/core/global/interfaces'
+import type { Controller, Http } from '@stardust/core/global/interfaces'
+import type { AuthService } from '@stardust/core/auth/interfaces'
 
 import { ROUTES } from '@/constants'
 
@@ -10,13 +10,13 @@ type Schema = {
   }
 }
 
-export const ConfirmEmailController = (authService: AuthService): IController<Schema> => {
-  function redirectToSigInPage(http: IHttp, errorMessage: string) {
+export const ConfirmEmailController = (authService: AuthService): Controller<Schema> => {
+  function redirectToSigInPage(http: Http, errorMessage: string) {
     return http.redirect(`${ROUTES.auth.signIn}?error=${Slug.create(errorMessage).value}`)
   }
 
   return {
-    async handle(http: IHttp<Schema>) {
+    async handle(http: Http<Schema>) {
       const { token } = http.getQueryParams()
       const response = await authService.confirmEmail(token)
       if (response.isSuccess) return http.redirect(ROUTES.auth.accountConfirmation)

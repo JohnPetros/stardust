@@ -7,23 +7,23 @@ import type { RestClient } from '@stardust/core/global/interfaces'
 import { addQueryParams, handleApiError } from './utils'
 
 type CacheConfig = {
-  isCacheEnable?: boolean
+  isCacheEnabled?: boolean
   refetchInterval?: number
-  cacheKeys?: string[]
+  cacheKey?: string
 }
 
 export const NextRestClient = ({
-  isCacheEnable = true,
+  isCacheEnabled = true,
   refetchInterval = 60 * 60 * 24, // 1 day
-  cacheKeys = [],
+  cacheKey,
 }: CacheConfig = {}): RestClient => {
   const requestInit: RequestInit = {
-    cache: !isCacheEnable ? 'no-store' : undefined,
+    cache: !isCacheEnabled ? 'no-store' : undefined,
     headers: headers(),
-    next: isCacheEnable
+    next: isCacheEnabled
       ? {
           revalidate: refetchInterval,
-          tags: cacheKeys,
+          tags: cacheKey ? [cacheKey] : [],
         }
       : undefined,
   }

@@ -111,7 +111,7 @@ export class Quiz {
 
   nextQuestion(): Quiz {
     return this.clone({
-      currentQuestionIndex: this.currentQuestionIndex.increment(1),
+      currentQuestionIndex: this.currentQuestionIndex.increment(),
       userAnswer: UserAnswer.create(null),
     })
   }
@@ -119,7 +119,7 @@ export class Quiz {
   incrementIncorrectAnswersCount() {
     if (this.hasAlreadyIncrementIncorrectAnswersCount.isFalse)
       return {
-        incorrectAnswersCount: this.incorrectAnswersCount.increment(1),
+        incorrectAnswersCount: this.incorrectAnswersCount.increment(),
         hasAlreadyIncrementIncorrectAnswersCount:
           this.hasAlreadyIncrementIncorrectAnswersCount.invertValue(),
       }
@@ -128,7 +128,7 @@ export class Quiz {
   decrementLivesCount(userAnswer: UserAnswer): Quiz {
     return this.clone({
       userAnswer,
-      livesCount: this.livesCount.decrement(1),
+      livesCount: this.livesCount.decrement(),
       ...this.incrementIncorrectAnswersCount(),
     })
   }

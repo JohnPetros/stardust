@@ -8,7 +8,7 @@ import type { ChallengeSchema } from '@stardust/validation/challenging/types'
 import { challengeSchema } from '@stardust/validation/challenging/schemas'
 import { DataType } from '@stardust/core/challenging/structures'
 import { Challenge } from '@stardust/core/challenging/entities'
-import type { ChallengeDto } from '@stardust/core/challenging/dtos'
+import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 
 import { ROUTES } from '@/constants'
 import { useRouter } from '@/ui/global/hooks/useRouter'
@@ -28,7 +28,7 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
       code: challenge?.code ?? '',
       difficultyLevel: challenge?.difficulty.level ?? 'easy',
       function: {
-        name: challenge?.code ? provider.getFunctionName(challenge.code) : '',
+        name: challenge?.code ? provider.getFunctionName(challenge.code) ?? '' : '',
         params: challenge
           ? provider
               .getFunctionParamsNames(challenge.code)

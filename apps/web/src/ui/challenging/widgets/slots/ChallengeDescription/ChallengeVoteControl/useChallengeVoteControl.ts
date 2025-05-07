@@ -42,7 +42,7 @@ export function useChallengeVoteControl() {
   async function executeVoteChallengeAction(userVote: ChallengeVote) {
     if (!challenge) return
     const { upvotesCount, downvotesCount, userChallengeVote } = await voteChallenge(
-      challenge.id,
+      challenge.id.value,
       userVote,
     )
 
@@ -59,7 +59,8 @@ export function useChallengeVoteControl() {
   return {
     challenge,
     upvotesCount: challenge?.upvotesCount.value ?? 0,
-    isUserChallengeAuthor: challenge?.authorId === user?.id,
+    isUserChallengeAuthor:
+      challenge && user ? challenge?.author.isEqualTo(user).isTrue : false,
     handleVoteButton,
   }
 }

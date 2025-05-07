@@ -1,7 +1,7 @@
-import type { TextBlockDto } from '@stardust/core/global/dtos'
 import type { Action, Call } from '@stardust/core/global/interfaces'
 import type { LessonService } from '@stardust/core/lesson/interfaces'
-import type { QuestionDto } from '@stardust/core/lesson/dtos'
+import type { TextBlockDto } from '@stardust/core/global/entities/dtos'
+import type { QuestionDto } from '@stardust/core/lesson/entities/dtos'
 
 type Request = {
   starId: string

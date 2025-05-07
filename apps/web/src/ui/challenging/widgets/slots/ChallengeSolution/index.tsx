@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import { Solution } from '@stardust/core/challenging/entities'
-import type { SolutionDto } from '@stardust/core/challenging/dtos'
+import type { SolutionDto } from '@stardust/core/challenging/entities/dtos'
 
 import { ROUTES } from '@/constants'
 import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'

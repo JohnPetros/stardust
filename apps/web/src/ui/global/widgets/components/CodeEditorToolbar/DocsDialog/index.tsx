@@ -23,7 +23,6 @@ export function DocsDialog({ children }: DocsDialogProps) {
     handleDocButton,
     handleBackButton,
   } = useDocsDialog()
-  const { user } = useAuthContext()
 
   return (
     <Dialog onOpenChange={handleDialogOpen}>

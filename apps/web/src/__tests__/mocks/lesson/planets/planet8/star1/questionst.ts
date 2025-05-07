@@ -4,7 +4,7 @@ import type {
   DragAndDropQuestionDto,
   OpenQuestionDto,
   SelectionQuestionDto,
-} from '@stardust/core/lesson/dtos'
+} from '@stardust/core/lesson/entities/dtos'
 
 type Questions = [
   DragAndDropQuestionDto,

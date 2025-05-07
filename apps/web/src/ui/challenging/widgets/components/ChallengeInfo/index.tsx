@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { Percentage, Slug } from '@stardust/core/global/structures'
+import { Percentage } from '@stardust/core/global/structures'
 
 import { Info } from '@/ui/global/widgets/components/Info'
 

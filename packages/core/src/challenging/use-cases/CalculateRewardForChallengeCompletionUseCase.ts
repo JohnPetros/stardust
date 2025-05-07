@@ -61,7 +61,7 @@ export class CalculateRewardForChallengeCompletionUseCase
   }
 
   private async fetchChallenge(challengeId: Id) {
-    const response = await this.challengingService.fetchChallengeById(challengeId.value)
+    const response = await this.challengingService.fetchChallengeById(challengeId)
     if (response.isFailure) response.throwError()
     return Challenge.create(response.body)
   }
@@ -71,8 +71,8 @@ export class CalculateRewardForChallengeCompletionUseCase
     if (isChallengeCompleted.isTrue) return
 
     const response = await this.challengingService.saveCompletedChallenge(
-      challengeId.value,
-      user.id.value,
+      challengeId,
+      user.id,
     )
     if (response.isFailure) response.throwError()
   }

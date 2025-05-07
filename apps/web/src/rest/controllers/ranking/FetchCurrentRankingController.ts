@@ -1,9 +1,10 @@
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
-import type { IController, IHttp, RankingService } from '@stardust/core/global/interfaces'
+import type { Controller, Http } from '@stardust/core/global/interfaces'
+import type { RankingService } from '@stardust/core/ranking/interfaces'
 
-export const FetchCurrentRankingController = (service: RankingService): IController => {
+export const FetchCurrentRankingController = (service: RankingService): Controller => {
   return {
-    async handle(http: IHttp) {
+    async handle(http: Http) {
       const userDto = await http.getUser()
       const response = await service.fetchRankingUsersByTier(userDto.tier.id)
       if (response.isFailure) response.throwError()

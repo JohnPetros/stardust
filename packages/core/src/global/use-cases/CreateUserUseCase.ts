@@ -1,4 +1,5 @@
-import type { ProfileService, UseCase } from '../interfaces'
+import type { ProfileService } from '#profile/interfaces/ProfileService'
+import type { UseCase } from '../interfaces'
 import { User } from '../domain/entities'
 
 type Request = {

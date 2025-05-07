@@ -1,7 +1,9 @@
-import type { UserDto } from '../../global/domain/entities/dtos'
+import type { UseCase } from '#global/interfaces/UseCase'
+import type { UserDto } from '#profile/domain/entities/dtos/UserDto'
+import type { ChallengingService } from '../interfaces'
 import { User } from '../../global/domain/entities'
 import { Solution } from '../domain/entities'
-import type { ChallengingService, UseCase } from '../../global/interfaces'
+import { Id } from '#global/domain/structures/Id'
 
 type Request = {
   userDto: UserDto
@@ -18,14 +20,14 @@ export class UpvoteSolutionUseCase implements UseCase<Request, Response> {
 
   async do({ userDto, solutionId }: Request) {
     const user = User.create(userDto)
-    const solution = await this.fetchSolution(solutionId)
+    const solution = await this.fetchSolution(Id.create(solutionId))
     const isSolutionUpvoted = user.hasUpvotedSolution(solution.id)
 
     if (isSolutionUpvoted.isTrue) {
       user.removeUpvoteSolution(solution.id)
       const response = await this.challengingService.deleteSolutionUpvote(
-        solution.id.value,
-        user.id.value,
+        solution.id,
+        user.id,
       )
       if (response.isFailure) response.throwError()
     }
@@ -33,8 +35,8 @@ export class UpvoteSolutionUseCase implements UseCase<Request, Response> {
     if (isSolutionUpvoted.isFalse) {
       user.upvoteSolution(solution.id)
       const response = await this.challengingService.saveSolutionUpvote(
-        solution.id.value,
-        user.id.value,
+        solution.id,
+        user.id,
       )
       if (response.isFailure) response.throwError()
     }
@@ -45,7 +47,7 @@ export class UpvoteSolutionUseCase implements UseCase<Request, Response> {
     }
   }
 
-  private async fetchSolution(solutionId: string) {
+  private async fetchSolution(solutionId: Id) {
     const response = await this.challengingService.fetchSolutionById(solutionId)
     if (response.isFailure) response.throwError()
     return Solution.create(response.body)

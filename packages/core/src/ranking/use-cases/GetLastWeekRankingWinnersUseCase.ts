@@ -1,8 +1,9 @@
 import { User } from '../../global/domain/entities'
-import type { UserDto } from '../../global/domain/entities/dtos'
-import type { RankingService, UseCase } from '../../global/interfaces'
 import type { RankingUserDto, TierDto } from '../domain/entities/dtos'
 import { Tier } from '../domain/entities'
+import type { UserDto } from '#profile/domain/entities/dtos/UserDto'
+import type { RankingService } from '../interfaces'
+import type { UseCase } from '#global/interfaces/UseCase'
 
 type Response = Promise<{
   isUserLoser: boolean
@@ -20,7 +21,7 @@ export class GetLastWeekRankingWinnersUseCase implements UseCase<UserDto, Respon
     const lastWeekRankingWinners = await this.fetchLastWeekRankingWinners(
       lastWeekTier.id.value,
     )
-    const isUserLoser = user.tier.position.isLessThan(lastWeekTier.position)
+    const isUserLoser = user.tier.position.number.isLessThan(lastWeekTier.position.number)
 
     return {
       isUserLoser: isUserLoser.isTrue,

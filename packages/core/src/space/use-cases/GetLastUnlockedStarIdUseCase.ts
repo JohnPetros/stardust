@@ -1,4 +1,4 @@
-import type { UserDto } from '@/profile/domain/entities/dtos'
+import type { UserDto } from '#profile/domain/entities/dtos/UserDto'
 import type { UseCase } from '../../global/interfaces'
 import type { PlanetDto } from '../domain/entities/dtos'
 import { User } from '../../global/domain/entities'

@@ -1,10 +1,10 @@
-import type { IController, IHttp } from '@stardust/core/global/interfaces'
+import type { Controller, Http } from '@stardust/core/global/interfaces'
 
 import { COOKIES, ROUTES } from '@/constants'
 
-export const HandleRewardsPayloadController = (): IController => {
+export const HandleRewardsPayloadController = (): Controller => {
   return {
-    async handle(http: IHttp) {
+    async handle(http: Http) {
       const currentRoute = http.getCurrentRoute()
       const method = http.getMethod()
 

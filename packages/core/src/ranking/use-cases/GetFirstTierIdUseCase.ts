@@ -1,4 +1,5 @@
-import type { RankingService, UseCase } from '../../global/interfaces'
+import type { UseCase } from '#global/interfaces/UseCase'
+import type { RankingService } from '../interfaces'
 import { Tier } from '../domain/entities'
 
 type Reponse = Promise<{

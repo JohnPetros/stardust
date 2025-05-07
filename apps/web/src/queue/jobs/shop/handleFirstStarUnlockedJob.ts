@@ -1,5 +1,6 @@
 import type { EventPayload } from '@stardust/core/global/types'
-import type { Job, Amqp, ShopService } from '@stardust/core/global/interfaces'
+import type { Amqp, Job } from '@stardust/core/global/interfaces'
+import type { ShopService } from '@stardust/core/shop/interfaces'
 import { UserCreatedEvent } from '@stardust/core/profile/events'
 import { ShopItemsAcquiredByDefaultEvent } from '@stardust/core/shop/events'
 import { GetAcquirableShopItemsByDefaultUseCase } from '@stardust/core/shop/use-cases'
@@ -41,7 +42,7 @@ export const handleFirstStarUnlockedJob = (service: ShopService): Job => {
       await queue.publish(event)
 
       const { userId } = await queue.waitFor<UserCreatedEventPayload>(
-        UserCreatedEvent.NAME,
+        UserCreatedEvent._NAME,
         '20s',
       )
 

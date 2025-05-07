@@ -1,6 +1,7 @@
 import type { UseCase } from '../../global/interfaces'
 import type { ChallengingService } from '../interfaces'
 import { Solution } from '../domain/entities'
+import { Id } from '#global/domain/structures/Id'
 
 type Request = {
   solutionId: string
@@ -12,7 +13,7 @@ export class EditSolutionUseCase implements UseCase<Request> {
   constructor(private readonly challengingService: ChallengingService) {}
 
   async do({ solutionId, solutionTitle, solutionContent }: Request) {
-    const solution = await this.fetchSolution(solutionId)
+    const solution = await this.fetchSolution(Id.create(solutionId))
     solution.title = solutionTitle
     solution.content = solutionContent
 
@@ -20,8 +21,8 @@ export class EditSolutionUseCase implements UseCase<Request> {
     return solution.dto
   }
 
-  private async fetchSolution(SolutionId: string) {
-    const response = await this.challengingService.fetchSolutionById(SolutionId)
+  private async fetchSolution(solutionId: Id) {
+    const response = await this.challengingService.fetchSolutionById(solutionId)
     if (response.isFailure) response.throwError()
     return Solution.create(response.body)
   }

@@ -1,5 +1,5 @@
 import type { Doc } from '@stardust/core/challenging/entities'
-import type { DocDto } from '@stardust/core/challenging/dtos'
+import type { DocDto } from '@stardust/core/challenging/entities/dtos'
 import type { SupabaseDoc } from '../types'
 
 export const SupabaseDocMapper = () => {

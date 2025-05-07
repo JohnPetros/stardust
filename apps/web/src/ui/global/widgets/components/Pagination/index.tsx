@@ -13,7 +13,7 @@ export type PaginationProps = {
 }
 
 export const Pagination = (paginationProps: PaginationProps) => {
-  const { pagination, maxPageButtons, handlePageButtonCLick } =
+  const { pagination, maxPageButtons, handlePageButtonClick } =
     usePagination(paginationProps)
 
   if (pagination.pagesCount.isGreaterThan(Integer.create(1)).isTrue) {
@@ -30,7 +30,7 @@ export const Pagination = (paginationProps: PaginationProps) => {
           <PageButton
             isActive={false}
             isVisible={true}
-            onClick={() => handlePageButtonCLick(1)}
+            onClick={() => handlePageButtonClick(1)}
           >
             1 ...
           </PageButton>
@@ -46,7 +46,7 @@ export const Pagination = (paginationProps: PaginationProps) => {
                 key={page.value}
                 isActive={page.isEqualTo(pagination.currentPage).isTrue}
                 isVisible={true}
-                onClick={() => handlePageButtonCLick(page.value)}
+                onClick={() => handlePageButtonClick(page.value)}
               >
                 {page.value}
               </PageButton>
@@ -58,7 +58,7 @@ export const Pagination = (paginationProps: PaginationProps) => {
           <PageButton
             isActive={false}
             isVisible={true}
-            onClick={() => handlePageButtonCLick(pagination.pagesCount.value)}
+            onClick={() => handlePageButtonClick(pagination.pagesCount.value)}
           >
             ... {pagination.pagesCount.value}
           </PageButton>
@@ -68,7 +68,7 @@ export const Pagination = (paginationProps: PaginationProps) => {
             isActive={false}
             isVisible={pagination.currentPage.isEqualTo(pagination.pagesCount).isFalse}
             onClick={() =>
-              handlePageButtonCLick(pagination.currentPage.increment().value)
+              handlePageButtonClick(pagination.currentPage.increment().value)
             }
           >
             <Icon name='simple-arrow-right' className='text-gray-300' />

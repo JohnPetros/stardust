@@ -62,7 +62,7 @@ export function RankingUser({
       href={ROUTES.api.profile.user(id ?? '')}
       className={twMerge(
         'group flex w-full items-center justify-between rounded-md border-2 p-3 hover:border-gray-100/90',
-        id && user?.id === id ? 'border-green-700' : 'border-gray-800',
+        id && user?.id.value === id ? 'border-green-700' : 'border-gray-800',
         id ? 'pointer-events-auto' : 'pointer-events-none',
       )}
     >

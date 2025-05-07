@@ -1,4 +1,5 @@
-import type { PaginationResponse, RestResponse } from '@/global/responses'
+import type { PaginationResponse } from '#global/responses/PaginationResponse'
+import type { RestResponse } from '#global/responses/RestResponse'
 import type { ShopItemsListingParams } from '../domain/types'
 import type { AvatarDto, RocketDto } from '../dtos'
 

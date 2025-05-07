@@ -2,7 +2,10 @@
 
 import { FormProvider } from 'react-hook-form'
 
-import type { ChallengeCategoryDto, ChallengeDto } from '@stardust/core/challenging/dtos'
+import type {
+  ChallengeCategoryDto,
+  ChallengeDto,
+} from '@stardust/core/challenging/entities/dtos'
 import { ChallengeCategory } from '@stardust/core/challenging/entities'
 
 import type { ActionButtonTitles } from '@/ui/global/widgets/components/ActionButton/types'

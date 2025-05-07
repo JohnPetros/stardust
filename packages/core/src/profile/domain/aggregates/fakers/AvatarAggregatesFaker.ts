@@ -1,4 +1,4 @@
-import { AvatarsFaker } from '@/shop/domain/entities/fakers'
+import { AvatarsFaker } from '#shop/domain/entities/fakers/AvatarsFaker'
 import type { AvatarAggregateDto } from '../dtos'
 
 export class AvatarAggregatesFaker {

@@ -1,8 +1,6 @@
-import type {
-  IController,
-  IHttp,
-  ChallengingService,
-} from '@stardust/core/global/interfaces'
+import type { Controller, Http } from '@stardust/core/global/interfaces'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
+
 import { Challenge, Solution } from '@stardust/core/challenging/entities'
 
 import { ROUTES } from '@/constants'
@@ -15,9 +13,9 @@ type Schema = {
 
 export const AccessSolutionPageController = (
   challengingService: ChallengingService,
-): IController<Schema> => {
+): Controller<Schema> => {
   return {
-    async handle(http: IHttp<Schema>) {
+    async handle(http: Http<Schema>) {
       const { solutionSlug } = http.getRouteParams()
 
       const solutionResponse = await challengingService.fetchSolutionBySlug(solutionSlug)

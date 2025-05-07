@@ -13,7 +13,7 @@ export const SupabaseSnippetMapper = () => {
         title: supabaseSnippet.title ?? '',
         author: {
           id: supabaseSnippet.author_id ?? '',
-          dto: {
+          entity: {
             slug: supabaseSnippet.author_slug ?? '',
             name: supabaseSnippet.author_name ?? '',
             avatar: {
@@ -39,7 +39,7 @@ export const SupabaseSnippetMapper = () => {
         'author_name' | 'author_avatar_image' | 'author_avatar_name' | 'author_slug'
       > = {
         id: snippet.id.value,
-        author_id: snippet.authorId,
+        author_id: snippet.authorId.value,
         is_public: snippet.isPublic.value,
         title: snippet.title.value,
         code: snippet.code.value,

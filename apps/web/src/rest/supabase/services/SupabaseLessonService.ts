@@ -1,7 +1,7 @@
 import { RestResponse } from '@stardust/core/global/responses'
 import type { LessonService } from '@stardust/core/lesson/interfaces'
-import type { QuestionDto } from '@stardust/core/lesson/entities/dtos'
 import type { TextBlockDto } from '@stardust/core/global/entities/dtos'
+import type { QuestionDto } from '@stardust/core/lesson/entities/dtos'
 
 import type { Supabase } from '../types/Supabase'
 import { SupabasePostgrestError } from '../errors'

@@ -21,9 +21,7 @@ export class CountCompletedChallengesByDifficultyLevelUseCase
   async do(userDto: UserDto) {
     const user = User.create(userDto)
 
-    const response = await this.challengesService.fetchCompletableChallenges(
-      user.id.value,
-    )
+    const response = await this.challengesService.fetchCompletableChallenges(user.id)
 
     if (response.isFailure) {
       response.throwError()

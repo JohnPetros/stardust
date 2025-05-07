@@ -1,6 +1,7 @@
-import type { UseCase } from '@/global/interfaces'
 import type { ChallengeDto } from '../domain/entities/dtos'
 import type { ChallengingService } from '../interfaces'
+import type { UseCase } from '#global/interfaces/UseCase'
+import type { Id } from '#global/domain/structures/Id'
 import { Challenge } from '../domain/entities'
 
 type Request = {
@@ -15,13 +16,13 @@ export class EditChallengeUseCase implements UseCase<Request, Response> {
   async do({ challengeDto }: Request) {
     console.log(challengeDto)
     const challenge = Challenge.create(challengeDto)
-    await this.fetchChallengeById(challenge.id.value)
+    await this.fetchChallengeById(challenge.id)
 
     if (challenge.title.value !== challengeDto.title) {
       await this.fetchChallengeBySlug(challenge.slug.value)
     }
 
-    await this.deleteChallengeCategories(challenge.id.value)
+    await this.deleteChallengeCategories(challenge.id)
     await Promise.all([
       this.saveChallengeCategories(challenge),
       this.updateChallenge(challenge),
@@ -34,7 +35,7 @@ export class EditChallengeUseCase implements UseCase<Request, Response> {
     if (response.isFailure) response.throwError()
   }
 
-  private async fetchChallengeById(challengeId: string) {
+  private async fetchChallengeById(challengeId: Id) {
     const response = await this.challengingService.fetchChallengeById(challengeId)
     if (response.isFailure) response.throwError()
   }
@@ -46,13 +47,13 @@ export class EditChallengeUseCase implements UseCase<Request, Response> {
 
   private async saveChallengeCategories(challenge: Challenge) {
     const response = await this.challengingService.saveChallengeCategories(
-      challenge.id.value,
+      challenge.id,
       challenge.categories,
     )
     if (response.isFailure) response.throwError()
   }
 
-  private async deleteChallengeCategories(challengeId: string) {
+  private async deleteChallengeCategories(challengeId: Id) {
     const response = await this.challengingService.deleteChallengeCategories(challengeId)
     if (response.isFailure) response.throwError()
   }

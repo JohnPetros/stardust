@@ -1,4 +1,4 @@
-import type { SolutionDto } from '@stardust/core/challenging/dtos'
+import type { SolutionDto } from '@stardust/core/challenging/entities/dtos'
 import type { Solution } from '@stardust/core/challenging/entities'
 import type { SupabaseSolution } from '../types'
 
