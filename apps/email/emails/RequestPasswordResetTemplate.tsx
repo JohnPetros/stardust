@@ -8,9 +8,9 @@ type RequestPasswordResetTemplateProps = {
   baseUrl: string
 }
 
-export default function RequestPasswordResetTemplate({
+export const RequestPasswordResetTemplate = ({
   baseUrl,
-}: RequestPasswordResetTemplateProps) {
+}: RequestPasswordResetTemplateProps) => {
   return (
     <Body>
       <Header>Pedido de redefinição de senha.</Header>
@@ -38,9 +38,12 @@ export default function RequestPasswordResetTemplate({
   )
 }
 
+export default RequestPasswordResetTemplate
+
 /**
  * <h2>Redefinição de senha - <span style="color: #00FF88">Star</span><span style="color: #027558">Dust</span></h2>
 
 <p>Clique no link abaixo para mudar sua senha:</p>
 <p><a href="{{ .SiteURL }}/server/auth/confirm?token={{ .TokenHash }}&action=password_reset">Redefinir Senha</a></p>
  */
+

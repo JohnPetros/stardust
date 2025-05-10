@@ -5,7 +5,7 @@ type ParagraphProps = {
   className?: string
 }
 
-export function Paragraph({ children, className }: ParagraphProps) {
+export const Paragraph = ({ children, className }: ParagraphProps) => {
   return (
     <Text className={`font-medium tracking-wider text-gray-100 ${className}`}>
       {children}

@@ -4,7 +4,7 @@ type HeaderProps = {
   children: string
 }
 
-export function Header({ children }: HeaderProps) {
+export const Header = ({ children }: HeaderProps) => {
   return (
     <Container>
       <Img

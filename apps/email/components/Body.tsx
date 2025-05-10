@@ -6,7 +6,7 @@ type BodyProps = {
   children: ReactNode
 }
 
-export function Body({ children }: BodyProps) {
+export const Body = ({ children }: BodyProps) => {
   return (
     <Tailwind
       config={{

@@ -8,7 +8,7 @@ type ConfirmSignUpTemplateProps = {
   baseUrl: string
 }
 
-export default function ConfirmSignUpTemplate({ baseUrl }: ConfirmSignUpTemplateProps) {
+export const ConfirmSignUpTemplate = ({ baseUrl }: ConfirmSignUpTemplateProps) => {
   return (
     <Body>
       <Header>Confirmação de cadastro.</Header>
@@ -40,3 +40,5 @@ export default function ConfirmSignUpTemplate({ baseUrl }: ConfirmSignUpTemplate
     </Body>
   )
 }
+
+export default ConfirmSignUpTemplate
