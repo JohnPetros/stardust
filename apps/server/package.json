@@ -2,7 +2,7 @@
   "name": "@stardust/server",
   "main": "dist/main.js",
   "scripts": {
-    "dev": "tsx watch src/main.ts --env-file=.env",
+    "dev": "tsx watch --env-file .env src/main.ts",
     "start": "tsx src/main.ts"
   },
   "dependencies": {
@@ -10,6 +10,7 @@
     "@hono/zod-validator": "^0.5.0",
     "@stardust/core": "*",
     "@stardust/validation": "*",
+    "@supabase/supabase-js": "^2.49.4",
     "hono": "^4.7.9",
     "zod": "^3.24.4"
   },
