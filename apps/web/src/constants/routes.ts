@@ -53,7 +53,7 @@ export const ROUTES = {
     resetPassword: '/auth/reset-password',
     accountConfirmation: '/auth/account-confirmation',
   },
-  landing: '/landing',
+  landing: '/',
   api: {
     auth: {
       confirmEmail: '/api/auth/confirm-email',
