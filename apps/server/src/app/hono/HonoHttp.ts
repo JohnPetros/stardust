@@ -51,12 +51,12 @@ export class HonoHttp<HttpSchema extends Schema>
     return this.context.req.valid('json')
   }
 
-  async getRouteParams(): Promise<ReturnType<Context['req']['valid']>> {
+  getRouteParams(): Promise<ReturnType<Context['req']['valid']>> {
     // @ts-ignore
     return this.context.req.valid('param')
   }
 
-  async getQueryParams(): Promise<HonoHttpSchema<HttpSchema>['queryParams']> {
+  getQueryParams(): Promise<HonoHttpSchema<HttpSchema>['queryParams']> {
     // @ts-ignore
     return this.context.req.valid('query')
   }
@@ -77,8 +77,6 @@ export class HonoHttp<HttpSchema extends Schema>
   }
 
   async getCookie(key: string): Promise<string | null> {
-    const { ping } = await this.context.req.json<{ ping: 'pong' }>()
-
     return getCookie(this.context, key) ?? null
   }
 
