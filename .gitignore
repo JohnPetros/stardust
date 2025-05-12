@@ -25,7 +25,6 @@ node_modules/
 **/html/**
 
 # environment
-.env
 .env.local
 .env.production
 .env.development
