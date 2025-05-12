@@ -26,10 +26,6 @@ export const VerifyAuthRoutesController = (authService: AuthService): Controller
         return http.redirect(ROUTES.auth.signIn)
       }
 
-      if (!hasSession && isRootRoute) {
-        return http.redirect(ROUTES.landing)
-      }
-
       if (hasSession && isRootRoute) {
         return http.redirect(ROUTES.space)
       }
