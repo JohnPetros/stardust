@@ -1,0 +1,1 @@
+export { FetchUserController } from './FetchUserController'

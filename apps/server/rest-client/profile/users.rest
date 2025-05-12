@@ -1,0 +1,7 @@
+@RESOURCE = profile/users 
+@USER_ID = 56ab2a6d-39f7-4fba-a001-f33ccbe39dfe 
+@URL = {{BASE_URL}}/{{RESOURCE}}
+
+### Fetch user
+GET {{URL}}/{{USER_ID}} 
+Content-Type: application/json 
