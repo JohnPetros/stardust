@@ -1,12 +1,14 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-node_modules
+node_modules/
 /.pnp
 .pnp.js
 .react-email
 .swc
 .turbo
+.yarn/
+!.yarn/releases
 
 # testing
 /coverage
@@ -22,24 +24,33 @@ node_modules
 **/public/fallback*
 **/html/**
 
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-
-# .env files
+# environment
+.env
 .env.local
 .env.production
 .env.development
 
-# vercel
-.vercel
+# logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Supabase
+# IDE and editor files
+.vscode/*
+!.vscode/launch.json
+!.vscode/*.code-snippets
+.idea/workspace.xml
+.idea/usage.statistics.xml
+.idea/shelf
+
+# misc
+.DS_Store
+*.pem
+.vercel
 .branches
 .temp
-
-# Build
 dist
