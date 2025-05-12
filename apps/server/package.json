@@ -1,0 +1,21 @@
+{
+  "name": "@stardust/server",
+  "main": "dist/main.js",
+  "scripts": {
+    "dev": "tsx watch src/main.ts --env-file=.env",
+    "start": "tsx src/main.ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.14.1",
+    "@hono/zod-validator": "^0.5.0",
+    "@stardust/core": "*",
+    "@stardust/validation": "*",
+    "hono": "^4.7.9",
+    "zod": "^3.24.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "tsx": "^4.7.1",
+    "typescript": "^5.8.3"
+  }
+}
