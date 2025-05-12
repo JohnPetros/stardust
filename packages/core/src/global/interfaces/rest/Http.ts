@@ -13,8 +13,8 @@ export interface Http<Schema extends HttpSchema = HttpSchema, Response = unknown
   getCurrentRoute(): string
   redirect(route: string): RestResponse<Response>
   getBody(): Promise<Schema['body']>
-  getRouteParams(): Promise<Schema['routeParams']>
-  getQueryParams(): Promise<Schema['queryParams']>
+  getRouteParams(): Schema['routeParams']
+  getQueryParams(): Schema['queryParams']
   getUser(): Promise<UserDto>
   getMethod(): HttpMethod
   setCookie(key: string, value: string, duration: number): void

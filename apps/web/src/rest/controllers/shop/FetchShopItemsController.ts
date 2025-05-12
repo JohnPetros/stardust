@@ -19,7 +19,7 @@ export const FetchShopItemsController = (shopService: ShopService): Controller =
       })
       if (avatarsResponse.isFailure) avatarsResponse.throwError()
 
-      return http.send(
+      return http.sendJson(
         {
           rockets: {
             items: rocketsResponse.body.items,

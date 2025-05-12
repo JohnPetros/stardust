@@ -82,7 +82,7 @@ export const SupabasePlaygroundService = (supabase: Supabase): PlaygroundService
           code: snippet.code.value,
           is_public: snippet.isPublic.value,
         })
-        .eq('id', snippet.id)
+        .eq('id', snippet.id.value)
 
       if (error) {
         return SupabasePostgrestError(

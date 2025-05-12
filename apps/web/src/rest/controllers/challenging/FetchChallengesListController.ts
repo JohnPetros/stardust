@@ -30,7 +30,7 @@ export const FetchChallengesListController = (
         categoriesIds,
         completionStatus,
         difficultyLevel,
-      } = http.getQueryParams()
+      } = await http.getQueryParams()
 
       const useCase = new ListChallengesUseCase(challengingService)
       const data = await useCase.do({
@@ -45,7 +45,7 @@ export const FetchChallengesListController = (
         },
       })
 
-      return http.send(data)
+      return http.sendJson(data)
     },
   }
 }

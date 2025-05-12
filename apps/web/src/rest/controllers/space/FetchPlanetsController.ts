@@ -7,7 +7,7 @@ export const FetchPlanetsController = (spaceService: SpaceService): Controller =
     async handle(http: Http) {
       const response = await spaceService.fetchPlanets()
       if (response.isFailure) response.throwError()
-      return http.send(response.body, HTTP_STATUS_CODE.ok)
+      return http.sendJson(response.body, HTTP_STATUS_CODE.ok)
     },
   }
 }

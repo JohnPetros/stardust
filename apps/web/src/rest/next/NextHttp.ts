@@ -102,17 +102,17 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       return request.method as HttpMethod
     },
 
-    getBody() {
+    async getBody() {
       if (!httpSchema?.body) throw new AppError('Body is not defined')
       return httpSchema?.body
     },
 
-    getRouteParams() {
+    async getRouteParams() {
       if (!httpSchema?.routeParams) throw new AppError('Route params are not defined')
       return httpSchema?.routeParams
     },
 
-    getQueryParams() {
+    async getQueryParams() {
       if (!httpSchema?.queryParams) throw new AppError('Query params are not defined')
       return httpSchema?.queryParams
     },
@@ -135,11 +135,11 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       await cookieActions.deleteCookie(key)
     },
 
-    pass() {
+    async pass() {
       return new RestResponse({ headers: { [HTTP_HEADERS.xPass]: 'true' } })
     },
 
-    send(data: unknown, statusCode = HTTP_STATUS_CODE.ok) {
+    sendJson(data: unknown, statusCode = HTTP_STATUS_CODE.ok) {
       if (cookies.length) {
         const nextResponse = NextResponse.redirect(
           new URL(request ? request.nextUrl.pathname : '', CLIENT_ENV.appHost),

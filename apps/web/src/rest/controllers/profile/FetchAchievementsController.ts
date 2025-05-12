@@ -6,7 +6,7 @@ export const FetchAchievementsController = (service: ProfileService): Controller
     async handle(http: Http) {
       const response = await service.fetchAchievements()
       if (response.isFailure) response.throwError()
-      return http.send(response.body, 200)
+      return http.sendJson(response.body, 200)
     },
   }
 }

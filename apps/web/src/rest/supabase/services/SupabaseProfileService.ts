@@ -148,7 +148,7 @@ export const SupabaseProfileService = (supabase: Supabase): ProfileService => {
       const { error } = await supabase
         .from('users')
         .update({ week_status: WeekStatus.DEFAULT_WEEK_STATUS })
-        .neq('id', 0)
+        .neq('id', '0')
 
       if (error)
         return SupabasePostgrestError(

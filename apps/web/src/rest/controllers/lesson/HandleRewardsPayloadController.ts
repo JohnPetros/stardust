@@ -15,7 +15,7 @@ export const HandleRewardsPayloadController = (): Controller => {
         if (!hasRewardsPayloadCookie) return http.redirect(ROUTES.space)
       }
 
-      return http.pass()
+      return await http.pass()
     },
   }
 }

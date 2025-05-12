@@ -59,7 +59,7 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
       const { data, error, status } = await supabase
         .from('solutions_view')
         .select('*')
-        .eq('id', solutionId)
+        .eq('id', solutionId.value)
         .single()
 
       if (error) {
@@ -487,7 +487,7 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
           title: solutionDto.title,
           user_id: solutionDto.author.id,
         })
-        .eq('id', solution.id)
+        .eq('id', solution.id.value)
 
       if (error) {
         return SupabasePostgrestError(
@@ -516,7 +516,7 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
           test_cases: JSON.stringify(challengeDto.testCases),
           user_id: challengeDto.author.id,
         })
-        .eq('id', challenge.id)
+        .eq('id', challenge.id.value)
 
       if (error) {
         return SupabasePostgrestError(
@@ -533,7 +533,7 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
       const { error, status } = await supabase
         .from('challenges')
         .delete()
-        .eq('id', challengeId)
+        .eq('id', challengeId.value)
 
       if (error) {
         return SupabasePostgrestError(

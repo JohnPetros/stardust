@@ -28,7 +28,7 @@ export async function runApiRoute(
     if (error instanceof ZodError) {
       const validationError = ZodValidationErrorFactory.produce(error)
 
-      return http.send(
+      return http.sendJson(
         {
           title: validationError.title,
           fieldErrors: validationError.fieldErrors,
@@ -41,29 +41,29 @@ export async function runApiRoute(
       const response = { title: error.title, message: error.message }
 
       if (error instanceof AuthError) {
-        return http.send(response, HTTP_STATUS_CODE.unauthorized).body
+        return http.sendJson(response, HTTP_STATUS_CODE.unauthorized).body
       }
 
       if (error instanceof NotFoundError) {
-        return http.send(response, HTTP_STATUS_CODE.notFound).body
+        return http.sendJson(response, HTTP_STATUS_CODE.notFound).body
       }
 
       if (error instanceof NotAllowedError) {
-        return http.send(response, HTTP_STATUS_CODE.forbidden).body
+        return http.sendJson(response, HTTP_STATUS_CODE.forbidden).body
       }
 
       if (error instanceof ConflictError) {
-        return http.send(response, HTTP_STATUS_CODE.conflict).body
+        return http.sendJson(response, HTTP_STATUS_CODE.conflict).body
       }
 
       if (error instanceof ValidationError) {
-        return http.send(response, HTTP_STATUS_CODE.badRequest).body
+        return http.sendJson(response, HTTP_STATUS_CODE.badRequest).body
       }
 
-      return http.send(response, HTTP_STATUS_CODE.serverError).body
+      return http.sendJson(response, HTTP_STATUS_CODE.serverError).body
     }
 
-    return http.send(
+    return http.sendJson(
       {
         title: 'Unknown Api Error',
         message:

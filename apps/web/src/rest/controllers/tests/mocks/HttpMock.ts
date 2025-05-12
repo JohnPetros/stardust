@@ -74,11 +74,11 @@ export const HttpMock = <FakeSchema extends HttpSchema>({
       throw new MethodNotImplementedError('NextHttp.getMethod')
     },
 
-    pass() {
+    async pass() {
       return new RestResponse({ headers: { [HTTP_HEADERS.xPass]: 'true' } })
     },
 
-    send(body: unknown, statusCode: number) {
+    sendJson(body: unknown, statusCode: number) {
       return new RestResponse({ body, statusCode })
     },
   }

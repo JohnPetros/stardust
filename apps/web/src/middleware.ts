@@ -7,6 +7,8 @@ import { HandleRewardsPayloadController } from './rest/controllers/lesson'
 import { SupabaseMiddlewareClient } from './rest/supabase/clients/SupabaseMiddlewareClient'
 import { SupabaseAuthService } from './rest/supabase/services'
 import { HandleRedirectController } from './rest/controllers/global'
+import { Slug } from '@stardust/core/global/structures'
+import { AppError } from '@stardust/core/global/errors'
 
 const schema = z.object({
   queryParams: z

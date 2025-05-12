@@ -14,10 +14,10 @@ export const GetSnippetController = (
 ): Controller => {
   return {
     async handle(http: Http<Schema>) {
-      const { snippetId } = http.getRouteParams()
+      const { snippetId } = await http.getRouteParams()
       const useCase = new GetSnippetUseCase(playgroundService)
       const snippetDto = await useCase.do({ snippetId })
-      return http.send(snippetDto, HTTP_STATUS_CODE.ok)
+      return http.sendJson(snippetDto, HTTP_STATUS_CODE.ok)
     },
   }
 }

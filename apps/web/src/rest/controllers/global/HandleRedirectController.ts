@@ -12,7 +12,7 @@ export const HandleRedirectController = (): Controller<Schema> => {
       const queryParams = http.getQueryParams()
       if (queryParams?.redirect_to) return http.redirect(queryParams?.redirect_to)
 
-      return http.pass()
+      return await http.pass()
     },
   }
 }

@@ -243,7 +243,10 @@ export const SupabaseRankingService = (supabase: Supabase): RankingService => {
       const { error } = await supabase
         .from('users')
         .update({ tier_id: tierId })
-        .in('id', ids)
+        .in(
+          'id',
+          ids.map((id) => id.value),
+        )
 
       if (error) {
         return SupabasePostgrestError(
@@ -272,7 +275,7 @@ export const SupabaseRankingService = (supabase: Supabase): RankingService => {
       const { error } = await supabase
         .from('users')
         .update({ can_see_ranking: true })
-        .neq('id', 0)
+        .neq('id', '0')
 
       if (error) {
         return SupabasePostgrestError(
@@ -285,7 +288,7 @@ export const SupabaseRankingService = (supabase: Supabase): RankingService => {
     },
 
     async deleteLastWeekRankingUsers() {
-      const { error } = await supabase.from('ranking_users').delete().neq('id', 0)
+      const { error } = await supabase.from('ranking_users').delete().neq('id', '0')
 
       if (error) {
         return SupabasePostgrestError(
@@ -298,7 +301,10 @@ export const SupabaseRankingService = (supabase: Supabase): RankingService => {
     },
 
     async resetRankingUsersXp() {
-      const { error } = await supabase.from('users').update({ weekly_xp: 0 }).neq('id', 0)
+      const { error } = await supabase
+        .from('users')
+        .update({ weekly_xp: 0 })
+        .neq('id', '0')
 
       if (error) {
         return SupabasePostgrestError(
