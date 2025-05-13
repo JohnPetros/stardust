@@ -12,7 +12,7 @@ type Response = Promise<ChallengeDto>
 export class PostChallengeUseCase implements UseCase<Request, Response> {
   constructor(private readonly challengingService: ChallengingService) {}
 
-  async do({ challengeDto }: Request) {
+  async execute({ challengeDto }: Request) {
     const challenge = Challenge.create(challengeDto)
     await this.fetchChallenge(challenge.slug.value)
     await this.saveChallenge(challenge)

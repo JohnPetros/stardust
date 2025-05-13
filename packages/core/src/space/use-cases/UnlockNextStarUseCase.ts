@@ -12,7 +12,7 @@ type Request = {
 export class UnlockNextStarUseCase implements UseCase<Request> {
   constructor(private readonly spaceService: SpaceService) {}
 
-  async do({ userDto, starId }: Request) {
+  async execute({ userDto, starId }: Request) {
     const user = User.create(userDto)
     const nextStar = await this.fetchNextStar(starId)
 

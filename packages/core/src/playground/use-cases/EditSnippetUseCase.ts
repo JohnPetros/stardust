@@ -11,7 +11,7 @@ type Request = {
 export class EditSnippetUseCase implements UseCase<Request> {
   constructor(private readonly playgroundService: PlaygroundService) {}
 
-  async do({ snippetId, snippetTitle, snippetCode }: Request) {
+  async execute({ snippetId, snippetTitle, snippetCode }: Request) {
     const snippet = await this.fetchSnippet(snippetId)
     if (snippetTitle) snippet.title = snippetTitle
     if (snippetCode) snippet.code = snippetCode

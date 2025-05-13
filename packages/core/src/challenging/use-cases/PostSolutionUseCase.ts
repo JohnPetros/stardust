@@ -17,7 +17,7 @@ type Response = Promise<SolutionDto>
 export class PostSolutionUseCase implements UseCase<Request, Response> {
   constructor(private readonly challengingService: ChallengingService) {}
 
-  async do({ solutionTitle, solutionContent, authorId, challengeId }: Request) {
+  async execute({ solutionTitle, solutionContent, authorId, challengeId }: Request) {
     await this.fetchSolution(solutionTitle)
     const solution = Solution.create({
       title: solutionTitle,

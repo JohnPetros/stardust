@@ -22,5 +22,7 @@ export interface Http<Schema extends HttpSchema = HttpSchema, Response = unknown
   deleteCookie(key: string): Promise<void>
   hasCookie(key: string): Promise<boolean>
   pass(): Promise<RestResponse<Response>>
+  statusOk(): this
+  statusCreated(): this
   sendJson(json: unknown, statusCode?: number): RestResponse<Response>
 }

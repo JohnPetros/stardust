@@ -9,7 +9,7 @@ type Reponse = Promise<{
 export class GetFirstTierIdUseCase implements UseCase<void, Reponse> {
   constructor(private readonly rankingService: RankingService) {}
 
-  async do() {
+  async execute() {
     const response = await this.rankingService.fetchFirstTier()
     if (response.isFailure) {
       response.throwError()

@@ -5,7 +5,7 @@ import type { RankingService } from '../interfaces'
 export class UpdateRankingsUseCase {
   constructor(private readonly rankingService: RankingService) {}
 
-  async do() {
+  async execute() {
     const [tiers] = await Promise.all([
       this.fetchTiers(),
       this.deleteLastWeekRankingUsers(),

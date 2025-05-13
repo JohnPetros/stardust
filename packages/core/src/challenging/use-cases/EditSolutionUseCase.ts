@@ -12,7 +12,7 @@ type Request = {
 export class EditSolutionUseCase implements UseCase<Request> {
   constructor(private readonly challengingService: ChallengingService) {}
 
-  async do({ solutionId, solutionTitle, solutionContent }: Request) {
+  async execute({ solutionId, solutionTitle, solutionContent }: Request) {
     const solution = await this.fetchSolution(Id.create(solutionId))
     solution.title = solutionTitle
     solution.content = solutionContent

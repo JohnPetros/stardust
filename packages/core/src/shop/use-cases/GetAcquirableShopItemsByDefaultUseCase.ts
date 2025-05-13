@@ -16,7 +16,7 @@ type Response = Promise<{
 export class GetAcquirableShopItemsByDefaultUseCase implements UseCase<void, Response> {
   constructor(private readonly shopService: ShopService) {}
 
-  async do() {
+  async execute() {
     const [rockets, avatars] = await Promise.all([
       this.fetchFreeRockets(),
       this.fetchFreeAvatars(),

@@ -18,7 +18,7 @@ type Response = Promise<{
 export class UpvoteSolutionUseCase implements UseCase<Request, Response> {
   constructor(private readonly challengingService: ChallengingService) {}
 
-  async do({ userDto, solutionId }: Request) {
+  async execute({ userDto, solutionId }: Request) {
     const user = User.create(userDto)
     const solution = await this.fetchSolution(Id.create(solutionId))
     const isSolutionUpvoted = user.hasUpvotedSolution(solution.id)

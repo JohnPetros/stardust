@@ -18,7 +18,7 @@ type Response = Promise<PaginationResponse<ChallengeDto>>
 export class ListChallengesUseCase implements UseCase<Request, Response> {
   constructor(private readonly challengingService: ChallengingService) {}
 
-  async do({ userDto, completionStatus, listParams }: Request) {
+  async execute({ userDto, completionStatus, listParams }: Request) {
     const user = User.create(userDto)
 
     const challengesPagination = await this.fetchChallengesList({

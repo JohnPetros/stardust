@@ -19,7 +19,7 @@ type Response = Promise<{
 export class VoteChallengeUseCase implements UseCase<Request, Response> {
   constructor(private readonly challengingService: ChallengingService) {}
 
-  async do({
+  async execute({
     challengeId: challengeIdValue,
     userId: userValueId,
     userChallengeVote,

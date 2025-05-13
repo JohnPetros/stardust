@@ -15,7 +15,7 @@ type Response = Promise<SnippetDto>
 export class CreateSnippetUseCase implements UseCase<Request, Response> {
   constructor(private readonly playgroundService: PlaygroundService) {}
 
-  async do({ snippetTitle, snippetCode, isSnippetPublic, authorId }: Request) {
+  async execute({ snippetTitle, snippetCode, isSnippetPublic, authorId }: Request) {
     const snippet = Snippet.create({
       title: snippetTitle,
       code: snippetCode,

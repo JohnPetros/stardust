@@ -9,7 +9,7 @@ type Response = Promise<{
 export class GetFirstStarIdUseCase implements UseCase<void, Response> {
   constructor(private readonly spaceService: SpaceService) {}
 
-  async do() {
+  async execute() {
     const planet = await this.fetchFirstPlanet()
     return { firstUnlockedStarId: planet.firstStar.id.value }
   }

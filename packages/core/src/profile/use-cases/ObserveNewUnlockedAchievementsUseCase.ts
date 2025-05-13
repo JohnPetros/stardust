@@ -20,7 +20,7 @@ export class ObserveNewUnlockedAchievementsUseCase implements UseCase<Request, R
     this.profileService = profileService
   }
 
-  async do({ userDto }: Request) {
+  async execute({ userDto }: Request) {
     const response = await this.profileService.fetchAchievements()
     if (response.isFailure) response.throwError()
 

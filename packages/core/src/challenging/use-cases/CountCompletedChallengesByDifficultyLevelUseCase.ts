@@ -18,7 +18,7 @@ export class CountCompletedChallengesByDifficultyLevelUseCase
 {
   constructor(private readonly challengesService: ChallengingService) {}
 
-  async do(userDto: UserDto) {
+  async execute(userDto: UserDto) {
     const user = User.create(userDto)
 
     const response = await this.challengesService.fetchCompletableChallenges(user.id)

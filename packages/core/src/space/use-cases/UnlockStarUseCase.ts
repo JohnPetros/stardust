@@ -9,7 +9,7 @@ type Request = {
 export class UnlockStarUseCase implements UseCase<Request> {
   constructor(private readonly spaceService: SpaceService) {}
 
-  async do({ starId, userId }: Request) {
+  async execute({ starId, userId }: Request) {
     await this.fetchStar(starId)
     await this.saveUnlockedStar(starId, userId)
   }
