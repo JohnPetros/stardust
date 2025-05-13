@@ -1,7 +1,7 @@
 import type { Context, Input, Next } from 'hono'
 import type { BlankEnv } from 'hono/types'
 import { getCookie, setCookie, deleteCookie } from 'hono/cookie'
-import type { StatusCode } from 'hono/utils/http-status'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 import type { Http, HttpMethod } from '@stardust/core/global/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
@@ -17,9 +17,9 @@ type Schema = {
 }
 
 type HonoHttpSchema<HttpSchema extends Schema> = {
-  body?: HttpSchema['json']
-  routeParams?: HttpSchema['param']
-  queryParams?: HttpSchema['query']
+  body: HttpSchema['json']
+  routeParams: HttpSchema['param']
+  queryParams: HttpSchema['query']
 }
 
 export class HonoHttp<HttpSchema extends Schema>
@@ -27,6 +27,7 @@ export class HonoHttp<HttpSchema extends Schema>
 {
   private readonly context: HonoContext
   private readonly next?: Next
+  readonly schema?: HonoHttpSchema<HttpSchema>
 
   constructor(context: HonoContext, next?: Next) {
     this.context = context
@@ -51,12 +52,12 @@ export class HonoHttp<HttpSchema extends Schema>
     return this.context.req.valid('json')
   }
 
-  getRouteParams(): Promise<ReturnType<Context['req']['valid']>> {
+  getRouteParams(): HonoHttpSchema<HttpSchema>['routeParams'] {
     // @ts-ignore
     return this.context.req.valid('param')
   }
 
-  getQueryParams(): Promise<HonoHttpSchema<HttpSchema>['queryParams']> {
+  getQueryParams(): HonoHttpSchema<HttpSchema>['queryParams'] {
     // @ts-ignore
     return this.context.req.valid('query')
   }
@@ -95,13 +96,26 @@ export class HonoHttp<HttpSchema extends Schema>
     return new RestResponse()
   }
 
+  statusOk(): this {
+    this.context.status(200)
+    return this
+  }
+
+  statusCreated(): this {
+    this.context.status(201)
+    return this
+  }
+
   sendJson(json: unknown, statusCode?: number): RestResponse<Response> {
-    this.context.status(statusCode as StatusCode)
     const response = this.context.json(json as object)
     return this.sendRestResponse(response)
   }
 
   sendResponse(response: Response): RestResponse<Response> {
     return this.sendRestResponse(response)
+  }
+
+  getSupabase(): SupabaseClient {
+    return this.context.get('supabase')
   }
 }
