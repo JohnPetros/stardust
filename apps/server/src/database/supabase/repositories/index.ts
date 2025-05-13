@@ -1,0 +1,1 @@
+export { SupabaseUsersRepository } from './SupabaseUsersRepository'
