@@ -1,22 +1,21 @@
 import type { Controller } from '@stardust/core/global/interfaces'
 import type { Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
+import type { UserDto } from '@stardust/core/profile/entities/dtos'
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
-import { FetchUserUseCase } from '@stardust/core/profile/use-cases'
+import { UpdateUserUseCase } from '@stardust/core/profile/use-cases'
 
 type Schema = {
-  routeParams: {
-    userId: string
-  }
+  body: UserDto
 }
 
-export class FetchUserController implements Controller<Schema> {
+export class UpdateUserController implements Controller<Schema> {
   constructor(private readonly usersRepository: UsersRepository) {}
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
-    const { userId } = http.getRouteParams()
-    const useCase = new FetchUserUseCase(this.usersRepository)
-    const user = await useCase.execute(userId)
+    const userDto = await http.getBody()
+    const useCase = new UpdateUserUseCase(this.usersRepository)
+    const user = await useCase.execute(userDto)
     return http.sendJson(user)
   }
 }
