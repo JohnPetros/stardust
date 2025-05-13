@@ -1,7 +1,42 @@
 @RESOURCE = profile/users 
-@USER_ID = 56ab2a6d-39f7-4fba-a001-f33ccbe39dfe 
 @URL = {{BASE_URL}}/{{RESOURCE}}
+@USER_ID = 56ab2a6d-39f7-4fba-a001-f33ccbe39dfe 
 
 ### Fetch user
 GET {{URL}}/{{USER_ID}} 
 Content-Type: application/json 
+
+### Update user
+PUT {{URL}}/{{USER_ID}}
+Content-Type: application/json
+
+{
+  "name": "Jane Doe",
+  "email": "jane.doe@example.com",
+  "slug": "jane-doe",
+  "avatarId": "avatar id",
+  "rocketId": "rocket id",
+  "tierId": "tier id",
+  "coins": 150,
+  "xp": 1200,
+  "weeklyXp": 300,
+  "streak": 5,
+  "level": 7,
+  "weekStatus": ["todo", "done", "todo", "todo", "todo", "todo", "todo"]
+}
+
+### Verify user name in use
+POST {{URL}}/verify-name-in-use
+Content-Type: application/json
+
+{
+  "name": "Jane Doe"
+}
+
+### Verify user email in use
+POST {{URL}}/verify-email-in-use
+Content-Type: application/json
+
+{
+  "email": "jane.doe@example.com"
+}
