@@ -14,7 +14,7 @@ type Request = {
 export class CreateUserUseCase implements UseCase<Request> {
   constructor(private readonly profileService: ProfileService) {}
 
-  async do({
+  async execute({
     userId,
     userEmail,
     userName,

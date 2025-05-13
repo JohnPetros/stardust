@@ -20,7 +20,7 @@ type Response = Promise<{
 export class RewardUserUseCase implements UseCase<Request, Response> {
   constructor(private profileService: ProfileService) {}
 
-  async do({ userDto, newXp, newCoins }: Request) {
+  async execute({ userDto, newXp, newCoins }: Request) {
     const user = User.create(userDto)
     user.earnXp(Integer.create(newXp))
     user.earnCoins(Integer.create(newCoins))

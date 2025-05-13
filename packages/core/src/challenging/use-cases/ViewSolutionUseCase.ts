@@ -12,7 +12,7 @@ type Response = Promise<SolutionDto>
 export class ViewSolutionUseCase implements UseCase<Request, Response> {
   constructor(private readonly challengingService: ChallengingService) {}
 
-  async do({ solutionSlug }: Request) {
+  async execute({ solutionSlug }: Request) {
     const solution = await this.fetchSolution(solutionSlug)
     solution.view()
 

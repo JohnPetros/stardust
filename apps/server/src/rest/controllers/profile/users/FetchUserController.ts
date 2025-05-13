@@ -1,6 +1,8 @@
 import type { Controller } from '@stardust/core/global/interfaces'
 import type { Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
+import type { UsersRepository } from '@stardust/core/profile/interfaces'
+import { FetchUserUseCase } from '@stardust/core/profile/use-cases'
 
 type Schema = {
   routeParams: {
@@ -9,7 +11,12 @@ type Schema = {
 }
 
 export class FetchUserController implements Controller<Schema> {
+  constructor(private readonly usersRepository: UsersRepository) {}
+
   async handle(http: Http<Schema>): Promise<RestResponse> {
-    return http.sendJson({ message: 'Hello World' })
+    const { userId } = http.getRouteParams()
+    const useCase = new FetchUserUseCase(this.usersRepository)
+    const user = await useCase.execute(userId)
+    return http.sendJson(user)
   }
 }

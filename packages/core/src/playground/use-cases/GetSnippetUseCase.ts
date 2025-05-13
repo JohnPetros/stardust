@@ -12,7 +12,7 @@ type Response = Promise<SnippetDto>
 export class GetSnippetUseCase implements UseCase<Request, Response> {
   constructor(private readonly playgroundService: PlaygroundService) {}
 
-  async do({ snippetId }: Request) {
+  async execute({ snippetId }: Request) {
     const snippet = await this.fetchSnippet(snippetId)
 
     if (snippet.isPublic.isFalse) {

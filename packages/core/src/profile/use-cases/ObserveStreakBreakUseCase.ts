@@ -12,7 +12,7 @@ type Request = {
 export class ObserveStreakBreakUseCase implements UseCase<Request> {
   constructor(private profileService: ProfileService) {}
 
-  async do() {
+  async execute() {
     const users = await this.fetchUsers()
     const promises = []
 

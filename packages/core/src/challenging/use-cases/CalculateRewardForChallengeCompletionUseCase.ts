@@ -22,7 +22,7 @@ export class CalculateRewardForChallengeCompletionUseCase
 {
   constructor(private readonly challengingService: ChallengingService) {}
 
-  async do({ userDto, challengeId, incorrectAnswersCount }: Request) {
+  async execute({ userDto, challengeId, incorrectAnswersCount }: Request) {
     const user = User.create(userDto)
     const challenge = await this.fetchChallenge(Id.create(challengeId))
     await this.saveCompletedChallenge(challenge.id, user)

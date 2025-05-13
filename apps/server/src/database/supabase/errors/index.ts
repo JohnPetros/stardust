@@ -1,0 +1,1 @@
+export { SupabasePostgreError } from './SupabasePostgreError'

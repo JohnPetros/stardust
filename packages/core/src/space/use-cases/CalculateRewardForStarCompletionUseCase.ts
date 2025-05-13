@@ -26,7 +26,7 @@ export class CalculateRewardForStarCompletionUseCase
 
   constructor(private readonly spaceService: SpaceService) {}
 
-  async do({ userDto, incorrectAnswersCount, questionsCount, starId }: Request) {
+  async execute({ userDto, incorrectAnswersCount, questionsCount, starId }: Request) {
     const user = User.create(userDto)
 
     const { isNextStarUnlocked } = await this.fetchNextStar(starId, user)

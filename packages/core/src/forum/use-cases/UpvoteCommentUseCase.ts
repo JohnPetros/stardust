@@ -17,7 +17,7 @@ type Response = Promise<{
 export class UpvoteCommentUseCase implements UseCase<Request, Response> {
   constructor(private readonly forumService: ForumService) {}
 
-  async do({ userDto, commentId }: Request) {
+  async execute({ userDto, commentId }: Request) {
     const user = User.create(userDto)
     const comment = await this.fetchComment(commentId)
     const isCommentUpvoted = user.hasUpvotedComment(comment.id)

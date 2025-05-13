@@ -14,7 +14,7 @@ type Response = Promise<{
 export class GetLastWeekRankingWinnersUseCase implements UseCase<UserDto, Response> {
   constructor(private rankingsService: RankingService) {}
 
-  async do(userDto: UserDto) {
+  async execute(userDto: UserDto) {
     const user = User.create(userDto)
     const lastWeekTierPosition = await this.fetchLastWeekTierPosition(user)
     const lastWeekTier = await this.fetchLastWeekTier(lastWeekTierPosition)
