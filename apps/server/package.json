@@ -2,7 +2,7 @@
   "name": "@stardust/server",
   "main": "dist/main.js",
   "scripts": {
-    "dev": "tsx watch --env-file .env src/main.ts",
+    "dev": "tsx watch --env-file .env.development src/main.ts",
     "start": "tsx src/main.ts"
   },
   "dependencies": {
