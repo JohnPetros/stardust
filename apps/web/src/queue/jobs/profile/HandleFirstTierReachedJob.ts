@@ -16,7 +16,7 @@ export const HandleFirstTierReachedJob = (service: ProfileService): Job<Payload>
 
       await queue.run(
         async () =>
-          await useCase.do({
+          await useCase.execute({
             userId: user.id,
             userName: user.name,
             userEmail: user.email,

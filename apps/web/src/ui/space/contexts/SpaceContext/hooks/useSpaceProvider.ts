@@ -54,7 +54,7 @@ export function useSpaceProvider(planetsDto: PlanetDto[]) {
   const spaceContextValue = useMemo(() => {
     const getLastUnlockedStarIdUseCase = new GetLastUnlockedStarIdUseCase()
     const lastUnlockedStarId = user
-      ? getLastUnlockedStarIdUseCase.do({
+      ? getLastUnlockedStarIdUseCase.execute({
           planetsDto,
           userDto: user?.dto,
         })

@@ -13,8 +13,8 @@ export const HandleShopItemsAcquiredByDefaultJob = (
   return {
     async handle(queue: Amqp<Payload>) {
       const useCase = new GetFirstTierIdUseCase(rankingService)
-      const { firstTierId } = await queue.run<ReturnType<typeof useCase.do>>(
-        async () => useCase.do(),
+      const { firstTierId } = await queue.run<ReturnType<typeof useCase.execute>>(
+        async () => useCase.execute(),
         GetFirstTierIdUseCase.name,
       )
       const shopEventPayload = queue.getPayload()

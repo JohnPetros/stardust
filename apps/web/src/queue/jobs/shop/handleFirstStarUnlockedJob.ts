@@ -28,8 +28,8 @@ export const handleFirstStarUnlockedJob = (service: ShopService): Job => {
         selectedAvatarByDefaultId,
         acquirableAvatarsByDefaultIds,
         acquirableRocketsByDefaultIds,
-      } = await queue.run<ReturnType<typeof useCase.do>>(
-        async () => useCase.do(),
+      } = await queue.run<ReturnType<typeof useCase.execute>>(
+        async () => useCase.execute(),
         GetAcquirableShopItemsByDefaultUseCase.name,
       )
       const { user } = queue.getPayload()

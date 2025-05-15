@@ -30,7 +30,7 @@ export const EditChallengeAction = (
       } = call.getRequest()
       const user = User.create(await call.getUser())
       const useCase = new EditChallengeUseCase(challengingService)
-      return await useCase.do({
+      return await useCase.execute({
         challengeDto: {
           id: challengeId,
           title,

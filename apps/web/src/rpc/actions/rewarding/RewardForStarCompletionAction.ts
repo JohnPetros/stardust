@@ -38,17 +38,17 @@ export const RewardForStarCompletionAction = (
       const unlockNextStarUseCase = new UnlockNextStarUseCase(spaceService)
 
       const [{ newXp, newCoins, accuracyPercentage }] = await Promise.all([
-        calculateRewardForStarCompletionUseCase.do({
+        calculateRewardForStarCompletionUseCase.execute({
           userDto,
           incorrectAnswersCount,
           questionsCount,
           starId,
         }),
-        unlockNextStarUseCase.do({ starId, userDto }),
+        unlockNextStarUseCase.execute({ starId, userDto }),
       ])
 
       const rewardUserUseCase = new RewardUserUseCase(profileService)
-      const { newLevel, newStreak, newWeekStatus } = await rewardUserUseCase.do({
+      const { newLevel, newStreak, newWeekStatus } = await rewardUserUseCase.execute({
         userDto,
         newCoins,
         newXp,

@@ -11,7 +11,7 @@ type Request = {
 }
 
 export class GetLastUnlockedStarIdUseCase implements UseCase<Request, string> {
-  do({ planetsDto, userDto }: Request) {
+  execute({ planetsDto, userDto }: Request) {
     const planets = planetsDto.map(Planet.create)
     const user = User.create(userDto)
 

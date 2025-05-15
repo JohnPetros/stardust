@@ -15,7 +15,7 @@ export const ObsverNewUnlockedAchievementsAction = (
     async handle(call: Call) {
       const userDto = await call.getUser()
       const useCase = new ObserveNewUnlockedAchievementsUseCase(profileService)
-      const { user, newUnlockedAchievements } = await useCase.do({
+      const { user, newUnlockedAchievements } = await useCase.execute({
         userDto,
       })
 

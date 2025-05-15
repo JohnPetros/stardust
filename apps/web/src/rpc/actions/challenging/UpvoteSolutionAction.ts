@@ -19,7 +19,7 @@ export const UpvoteSolutionAction = (
       const userDto = await call.getUser()
       const { solutionId } = call.getRequest()
       const useCase = new UpvoteSolutionUseCase(challeningService)
-      return await useCase.do({
+      return await useCase.execute({
         solutionId,
         userDto,
       })

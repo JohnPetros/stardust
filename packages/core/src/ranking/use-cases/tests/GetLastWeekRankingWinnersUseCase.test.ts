@@ -35,7 +35,7 @@ describe('Get Last Week Ranking Winners Use Case', () => {
       },
     })
     rankingServiceMock.users.push(fakeRankingUser)
-    const { lastWeekTier } = await useCase.do(fakeUserDto)
+    const { lastWeekTier } = await useCase.execute(fakeUserDto)
     expect(lastWeekTier).toEqual(fakeLastWeekTier)
   })
 
@@ -49,7 +49,7 @@ describe('Get Last Week Ranking Winners Use Case', () => {
     })
     rankingServiceMock.users = fakeRankingUsers
 
-    const { lastWeekTier } = await useCase.do(fakeUserDto)
+    const { lastWeekTier } = await useCase.execute(fakeUserDto)
 
     expect(lastWeekTier).toEqual(fakeCurrentTier)
   })
@@ -89,7 +89,7 @@ describe('Get Last Week Ranking Winners Use Case', () => {
       thirdFakeWinner,
     ]
 
-    const { lastWeekRankingWinners } = await useCase.do(fakeUserDto)
+    const { lastWeekRankingWinners } = await useCase.execute(fakeUserDto)
 
     expect(lastWeekRankingWinners[0]).toEqual(secondFakeWinner)
     expect(lastWeekRankingWinners[1]).toEqual(firstFakeWinner)
@@ -99,13 +99,13 @@ describe('Get Last Week Ranking Winners Use Case', () => {
   it("should return user's loser state", async () => {
     rankingServiceMock.losers = [RankingUsersFaker.fakeDto({ id: fakeUserDto.id })]
 
-    const response1 = await useCase.do(fakeUserDto)
+    const response1 = await useCase.execute(fakeUserDto)
 
     expect(response1.isUserLoser).toBe(true)
 
     rankingServiceMock.losers = []
 
-    const response2 = await useCase.do(fakeUserDto)
+    const response2 = await useCase.execute(fakeUserDto)
 
     expect(response2.isUserLoser).toBe(false)
   })

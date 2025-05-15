@@ -23,7 +23,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       AchievementsFaker.fakeDto({ requiredCount: 1000 }),
     ]
 
-    const { newUnlockedAchievements } = await useCase.do({ userDto })
+    const { newUnlockedAchievements } = await useCase.execute({ userDto })
 
     expect(newUnlockedAchievements).toHaveLength(0)
   })
@@ -50,7 +50,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       AchievementsFaker.fakeDto({ metric: 'unlockedStarsCount', requiredCount: 1 }), // Locked
     ]
 
-    const { newUnlockedAchievements } = await useCase.do({ userDto })
+    const { newUnlockedAchievements } = await useCase.execute({ userDto })
 
     expect(newUnlockedAchievements).toHaveLength(4)
 
@@ -76,7 +76,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       AchievementsFaker.fakeDto({ metric: 'streak', requiredCount: 99 }), // locked
     ]
 
-    const { user } = await useCase.do({ userDto })
+    const { user } = await useCase.execute({ userDto })
 
     expect(user.coins.value).toBe(unlockedAchievementReward)
   })
@@ -97,7 +97,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       AchievementsFaker.fakeDto({ metric: 'streak', requiredCount: 99 }), // locked
     ]
 
-    const { user } = await useCase.do({ userDto })
+    const { user } = await useCase.execute({ userDto })
 
     expect(user.unlockedAchievementsCount.value).toBe(2)
     expect(user.rescueableAchievementsCount.value).toBe(1)
@@ -132,7 +132,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
 
     useCase = new ObserveNewUnlockedAchievementsUseCase(profileService)
 
-    await useCase.do({ userDto })
+    await useCase.execute({ userDto })
 
     expect(fakeSavedRescuedAchivementRequests[0]?.unlcokedAchievementId).toBe(
       fakeAchievement.id,
@@ -160,7 +160,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
     useCase = new ObserveNewUnlockedAchievementsUseCase(profileService)
 
     expect(async () => {
-      await useCase.do({ userDto })
+      await useCase.execute({ userDto })
     }).rejects.toThrow(AppError)
 
     profileService.saveUnlockedAchievement = async () => new RestResponse()
@@ -172,7 +172,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
     useCase = new ObserveNewUnlockedAchievementsUseCase(profileService)
 
     expect(async () => {
-      await useCase.do({ userDto })
+      await useCase.execute({ userDto })
     }).rejects.toThrow(AppError)
   })
 })

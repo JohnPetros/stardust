@@ -15,7 +15,7 @@ describe('Update Rankings Use Case', () => {
   it('should reset all rankings state', async () => {
     expect(rankingServiceMock.isReset).toBeFalsy()
 
-    await useCase.do()
+    await useCase.execute()
 
     expect(rankingServiceMock.isReset).toBeTruthy()
   })
@@ -30,7 +30,7 @@ describe('Update Rankings Use Case', () => {
       rankingServiceMock.users.push(...rankingData.users.map((user) => ({ ...user.dto })))
     }
 
-    await useCase.do()
+    await useCase.execute()
 
     for (let index = 0; index < rankings.length; index++) {
       const currentRanking = rankings[index]
@@ -60,7 +60,7 @@ describe('Update Rankings Use Case', () => {
       rankingServiceMock.users.push(...rankingData.users.map((user) => ({ ...user.dto })))
     }
 
-    await useCase.do()
+    await useCase.execute()
 
     for (let index = 1; index < rankings.length; index++) {
       const currentRanking = rankings[index]
@@ -83,7 +83,7 @@ describe('Update Rankings Use Case', () => {
   it('should allow users to see their ranking result', async () => {
     expect(rankingServiceMock.canUsersSeeRankingResult).toBeFalsy()
 
-    await useCase.do()
+    await useCase.execute()
 
     expect(rankingServiceMock.canUsersSeeRankingResult).toBeTruthy()
   })
@@ -91,7 +91,7 @@ describe('Update Rankings Use Case', () => {
   it('should update last week ranking positions', async () => {
     expect(rankingServiceMock.areLastWeekRankingPositionsUpdated).toBeFalsy()
 
-    await useCase.do()
+    await useCase.execute()
 
     expect(rankingServiceMock.areLastWeekRankingPositionsUpdated).toBeTruthy()
   })

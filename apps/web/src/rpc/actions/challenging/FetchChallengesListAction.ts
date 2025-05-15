@@ -33,7 +33,7 @@ export const FetchChallengesListAction = (
       } = call.getRequest()
 
       const useCase = new ListChallengesUseCase(challengingService)
-      const pagination = await useCase.do({
+      const pagination = await useCase.execute({
         userDto,
         completionStatus,
         listParams: {

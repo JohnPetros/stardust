@@ -6,7 +6,7 @@ export const UpdateRankingsJob = (service: RankingService): Job => {
   return {
     async handle(queue: Amqp) {
       const useCase = new UpdateRankingsUseCase(service)
-      await queue.run(async () => useCase.do(), UpdateRankingsUseCase.name)
+      await queue.run(async () => useCase.execute(), UpdateRankingsUseCase.name)
     },
   }
 }
