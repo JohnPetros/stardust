@@ -24,6 +24,7 @@ export const HttpMock = <FakeSchema extends HttpSchema>({
   fakeCookies = [],
   fakeUser = UsersFaker.fakeDto(),
 }: HttpMockProps<FakeSchema> = {}): Http<FakeSchema> => {
+  let statusCode: number = HTTP_STATUS_CODE.ok
   const cookies: Cookie[] = fakeCookies
 
   return {
@@ -76,6 +77,16 @@ export const HttpMock = <FakeSchema extends HttpSchema>({
 
     async pass() {
       return new RestResponse({ headers: { [HTTP_HEADERS.xPass]: 'true' } })
+    },
+
+    statusOk() {
+      statusCode = HTTP_STATUS_CODE.ok
+      return this
+    },
+
+    statusCreated() {
+      statusCode = HTTP_STATUS_CODE.created
+      return this
     },
 
     sendJson(body: unknown, statusCode: number) {
