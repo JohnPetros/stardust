@@ -7,7 +7,7 @@ export const UpdateRakingsController = (rankingService: RankingService): Control
   return {
     async handle(http: Http) {
       const useCase = new UpdateRankingsUseCase(rankingService)
-      await useCase.do()
+      await useCase.execute()
       return http.sendJson({ message: 'rankings are updated!' }, HTTP_STATUS_CODE.ok)
     },
   }

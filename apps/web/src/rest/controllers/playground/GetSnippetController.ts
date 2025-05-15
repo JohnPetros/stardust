@@ -16,7 +16,7 @@ export const GetSnippetController = (
     async handle(http: Http<Schema>) {
       const { snippetId } = await http.getRouteParams()
       const useCase = new GetSnippetUseCase(playgroundService)
-      const snippetDto = await useCase.do({ snippetId })
+      const snippetDto = await useCase.execute({ snippetId })
       return http.sendJson(snippetDto, HTTP_STATUS_CODE.ok)
     },
   }

@@ -6,7 +6,7 @@ export const ObserveStreakBreakJob = (service: ProfileService): Job => {
   return {
     async handle(queue: Amqp) {
       const useCase = new ObserveStreakBreakUseCase(service)
-      await queue.run(async () => useCase.do(), ObserveStreakBreakUseCase.name)
+      await queue.run(async () => useCase.execute(), ObserveStreakBreakUseCase.name)
     },
   }
 }

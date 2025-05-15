@@ -23,7 +23,7 @@ export const PostChallengeAction = (
       } = call.getRequest()
       const user = User.create(await call.getUser())
       const useCase = new PostChallengeUseCase(challengingService)
-      return await useCase.do({
+      return await useCase.execute({
         challengeDto: {
           title,
           code,

@@ -33,7 +33,7 @@ export const FetchChallengesListController = (
       } = await http.getQueryParams()
 
       const useCase = new ListChallengesUseCase(challengingService)
-      const data = await useCase.do({
+      const data = await useCase.execute({
         userDto,
         completionStatus,
         listParams: {

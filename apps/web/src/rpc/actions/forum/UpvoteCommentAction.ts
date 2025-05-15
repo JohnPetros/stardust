@@ -19,7 +19,7 @@ export const UpvoteCommentAction = (
       const userDto = await call.getUser()
       const { commentId } = call.getRequest()
       const useCase = new UpvoteCommentUseCase(forumService)
-      return await useCase.do({
+      return await useCase.execute({
         commentId,
         userDto,
       })

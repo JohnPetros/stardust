@@ -21,7 +21,7 @@ export const CreateSnippetAction = (
       const user = User.create(await call.getUser())
       const { snippetTitle, snippetCode, isSnippetPublic } = call.getRequest()
       const useCase = new CreateSnippetUseCase(playgroundService)
-      return await useCase.do({
+      return await useCase.execute({
         authorId: user.id.value,
         snippetTitle,
         snippetCode,

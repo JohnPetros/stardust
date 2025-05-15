@@ -16,7 +16,7 @@ export const GetLastWeekRankingWinnersAction = (
     async handle(call: Call) {
       const userDto = await call.getUser()
       const useCase = new GetLastWeekRankingWinnersUseCase(service)
-      return await useCase.do(userDto)
+      return await useCase.execute(userDto)
     },
   }
 }

@@ -34,6 +34,8 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
 }: NextHttpParams = {}): Promise<Http<NextSchema, NextResponse<unknown>>> => {
   let httpSchema: NextSchema
   const cookies: Cookie[] = []
+  let statusCode: (typeof HTTP_STATUS_CODE)[keyof typeof HTTP_STATUS_CODE] =
+    HTTP_STATUS_CODE.ok
 
   if (request && schema) {
     let body: HttpSchema['body']
@@ -139,6 +141,16 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       return new RestResponse({ headers: { [HTTP_HEADERS.xPass]: 'true' } })
     },
 
+    statusOk() {
+      statusCode = HTTP_STATUS_CODE.ok
+      return this as Http<NextSchema, NextResponse<unknown>>
+    },
+
+    statusCreated() {
+      statusCode = HTTP_STATUS_CODE.created
+      return this as Http<NextSchema, NextResponse<unknown>>
+    },
+
     sendJson(data: unknown, statusCode = HTTP_STATUS_CODE.ok) {
       if (cookies.length) {
         const nextResponse = NextResponse.redirect(
@@ -154,7 +166,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
         }
         return new RestResponse({
           body: nextResponse,
-          statusCode: HTTP_STATUS_CODE.redirect,
+          statusCode,
         })
       }
 

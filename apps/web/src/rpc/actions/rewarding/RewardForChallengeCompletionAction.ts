@@ -33,14 +33,14 @@ export const RewardForChallengeCompletionAction = (
         new CalculateRewardForChallengeCompletionUseCase(challengingService)
 
       const { newXp, newCoins, accuracyPercentage } =
-        await calculateRewardForChallengeCompletionUseCase.do({
+        await calculateRewardForChallengeCompletionUseCase.execute({
           userDto,
           challengeId,
           incorrectAnswersCount,
         })
 
       const rewardUserUseCase = new RewardUserUseCase(profileService)
-      const { newLevel, newStreak, newWeekStatus } = await rewardUserUseCase.do({
+      const { newLevel, newStreak, newWeekStatus } = await rewardUserUseCase.execute({
         userDto,
         newCoins,
         newXp,

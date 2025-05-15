@@ -11,7 +11,7 @@ export const CountCompletedChallengesByDifficultyLevelController = (
       const useCase = new CountCompletedChallengesByDifficultyLevelUseCase(
         challengingService,
       )
-      const data = await useCase.do(userDto)
+      const data = await useCase.execute(userDto)
       return http.sendJson(data)
     },
   }

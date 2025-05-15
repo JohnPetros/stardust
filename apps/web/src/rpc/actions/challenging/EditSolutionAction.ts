@@ -16,7 +16,7 @@ export const EditSolutionAction = (
     async handle(call: Call<Request>) {
       const { solutionId, solutionTitle, solutionContent } = call.getRequest()
       const useCase = new EditSolutionUseCase(challengingService)
-      return await useCase.do({
+      return await useCase.execute({
         solutionId,
         solutionTitle,
         solutionContent,

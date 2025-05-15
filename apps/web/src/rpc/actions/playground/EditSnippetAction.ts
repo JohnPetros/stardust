@@ -18,7 +18,7 @@ export const EditSnippetAction = (
     async handle(call: Call<Request>) {
       const { snippetId, snippetTitle, snippetCode } = call.getRequest()
       const useCase = new EditSnippetUseCase(playgroundService)
-      return await useCase.do({
+      return await useCase.execute({
         snippetId,
         snippetTitle,
         snippetCode,

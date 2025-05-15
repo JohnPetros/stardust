@@ -17,7 +17,7 @@ export const PostSolutionAction = (
     async handle(call: Call<Request>) {
       const { challengeId, solutionTitle, solutionContent, authorId } = call.getRequest()
       const useCase = new PostSolutionUseCase(challengingService)
-      return await useCase.do({
+      return await useCase.execute({
         challengeId,
         solutionTitle,
         solutionContent,

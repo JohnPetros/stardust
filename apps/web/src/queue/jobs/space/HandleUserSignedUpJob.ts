@@ -18,8 +18,8 @@ export const HandleUserSignedUpJob = (spaceService: SpaceService): Job => {
       const getFirstStarIdUseCase = new GetFirstStarIdUseCase(spaceService)
 
       const { firstUnlockedStarId } = await queue.run<
-        ReturnType<typeof getFirstStarIdUseCase.do>
-      >(async () => await getFirstStarIdUseCase.do(), GetFirstStarIdUseCase.name)
+        ReturnType<typeof getFirstStarIdUseCase.execute>
+      >(async () => await getFirstStarIdUseCase.execute(), GetFirstStarIdUseCase.name)
       const payload = queue.getPayload()
 
       const event = new FirstStarUnlockedEvent({
@@ -41,7 +41,7 @@ export const HandleUserSignedUpJob = (spaceService: SpaceService): Job => {
       if (userId)
         await queue.run(async () => {
           const useCase = new UnlockStarUseCase(spaceService)
-          await useCase.do({
+          await useCase.execute({
             userId: userId,
             starId: firstUnlockedStarId,
           })

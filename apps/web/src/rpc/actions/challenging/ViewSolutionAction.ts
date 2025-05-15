@@ -14,7 +14,7 @@ export const ViewSolutionAction = (
     async handle(call: Call<Request>) {
       const { solutionSlug } = call.getRequest()
       const useCase = new ViewSolutionUseCase(service)
-      return await useCase.do({
+      return await useCase.execute({
         solutionSlug,
       })
     },

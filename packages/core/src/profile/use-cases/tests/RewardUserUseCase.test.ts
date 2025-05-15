@@ -25,7 +25,7 @@
 //       PlanetsFaker.fake({ stars: [currentStar, nextStar] }),
 //     )
 
-//     return await useCase.do({
+//     return await useCase.execute({
 //       userDto: UsersFaker.fakeDto({ coins: 0, xp: 0 }),
 //       rewardingPayloadDto: StarRewardingPayloadFaker.fakeDto({
 //         questionsCount,
@@ -46,7 +46,7 @@
 //       PlanetsFaker.fake({ stars: [currentStar, nextStar] }),
 //     )
 
-//     return await useCase.do({
+//     return await useCase.execute({
 //       userDto: UsersFaker.fakeDto({
 //         coins: 0,
 //         xp: 0,
@@ -140,7 +140,7 @@
 //       PlanetsFaker.fake({ stars: [currentStar, nextStar] }),
 //     )
 
-//     await useCase.do({
+//     await useCase.execute({
 //       userDto: UsersFaker.fakeDto({ unlockedStarsIds: [currentStar.id] }),
 //       rewardingPayloadDto: StarRewardingPayloadFaker.fakeDto({
 //         starId: currentStar.id,
@@ -161,7 +161,7 @@
 //       spaceServiceMock.savePlanet(PlanetsFaker.fake({ position: 2, stars: [nextStar] })),
 //     ])
 
-//     await useCase.do({
+//     await useCase.execute({
 //       userDto: UsersFaker.fakeDto(),
 //       rewardingPayloadDto: StarRewardingPayloadFaker.fakeDto({
 //         starId: currentStar.id,
@@ -176,7 +176,7 @@
 
 //     await spaceServiceMock.savePlanet(PlanetsFaker.fake({ stars: [currentStar] }))
 
-//     const { newCoins, newXp } = await useCase.do({
+//     const { newCoins, newXp } = await useCase.execute({
 //       userDto: UsersFaker.fakeDto({ coins: 0, xp: 0 }),
 //       rewardingPayloadDto: StarRewardingPayloadFaker.fakeDto({
 //         questionsCount: 5,

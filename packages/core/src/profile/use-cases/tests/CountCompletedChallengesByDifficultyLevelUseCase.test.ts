@@ -24,7 +24,7 @@ describe('Count Completed Challenges By Difficulty Level Use Case', () => {
         .map(({ id }) => String(id)),
     })
 
-    const { absolute } = await useCase.do(fakeUserDto)
+    const { absolute } = await useCase.execute(fakeUserDto)
 
     expect(absolute.easy).toBe(completedChallengesCount)
   })
@@ -41,7 +41,7 @@ describe('Count Completed Challenges By Difficulty Level Use Case', () => {
         .map(({ id }) => String(id)),
     })
 
-    const { percentage } = await useCase.do(fakeUserDto)
+    const { percentage } = await useCase.execute(fakeUserDto)
 
     expect(percentage.easy).toBe(60) // 60%
   })
@@ -58,7 +58,7 @@ describe('Count Completed Challenges By Difficulty Level Use Case', () => {
       completedChallengesIds: fakeChallenges.slice(0, 15).map(({ id }) => String(id)),
     })
 
-    const { total } = await useCase.do(fakeUserDto)
+    const { total } = await useCase.execute(fakeUserDto)
 
     expect(total.easy).toBe(completedChallengesCount)
   })
