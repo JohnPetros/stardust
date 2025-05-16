@@ -14,6 +14,7 @@ import type { UserDto } from '../domain/entities/dtos'
 
 export class UserFactory {
   static produce(dto: UserDto) {
+    console.log(dto)
     return {
       email: Email.create(dto.email.trim()),
       slug: dto.slug ? Slug.create(dto.slug) : Slug.create(dto.name),
