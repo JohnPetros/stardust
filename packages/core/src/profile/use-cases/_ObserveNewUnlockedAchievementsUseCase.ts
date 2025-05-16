@@ -4,11 +4,9 @@ import type { AchievementDto, UserDto } from '../domain/entities/dtos'
 import type { AchievementsRepository, UsersRepository } from '../interfaces'
 import type { User, Achievement } from '../domain/entities/index'
 import { UserNotFoundError } from '../errors'
+import { Logical } from '#global/domain/structures/Logical'
 
-type Response = Promise<{
-  newUnlockedAchievements: AchievementDto[]
-  user: UserDto
-}>
+type Response = Promise<AchievementDto[]>
 
 type Request = {
   userId: string
@@ -26,8 +24,8 @@ export class _ObserveNewUnlockedAchievementsUseCase
     const user = await this.findUser(userId)
     const achievements = await this.achievementsRepository.findAll()
 
-    const newUnlockedAchievements = achievements.filter((achievement) =>
-      this.isNewUnlockedAchievement(achievement, user),
+    const newUnlockedAchievements = achievements.filter(
+      (achievement) => this.isNewUnlockedAchievement(achievement, user).isTrue,
     )
 
     for (const achievement of newUnlockedAchievements) {
@@ -38,34 +36,35 @@ export class _ObserveNewUnlockedAchievementsUseCase
       user.unlockAchievement(achievement.id)
     }
 
-    return {
-      newUnlockedAchievements: newUnlockedAchievements.map(
-        (achievement) => achievement.dto,
-      ),
-      user: user.dto,
-    }
+    await this.usersRepository.replace(user)
+
+    return newUnlockedAchievements.map((achievement) => achievement.dto)
   }
 
-  private isNewUnlockedAchievement(achievement: Achievement, user: User) {
+  private isNewUnlockedAchievement(achievement: Achievement, user: User): Logical {
     const isUnlocked = user.hasUnlockedAchievement(achievement.id)
 
-    if (isUnlocked) return false
+    if (isUnlocked.isTrue) return Logical.createAsFalse()
 
     switch (achievement.metric.value) {
       case 'unlockedStarsCount':
-        return user.unlockedStarsCount.value >= achievement.requiredCount.value
+        return user.unlockedStarsCount.isGreaterThanOrEqualTo(achievement.requiredCount)
       case 'completedPlanetsCount':
-        return user.completedPlanetsCount.value >= achievement.requiredCount.value
+        return user.completedPlanetsCount.isGreaterThanOrEqualTo(
+          achievement.requiredCount,
+        )
       case 'acquiredRocketsCount':
-        return user.acquiredRocketsCount.value >= achievement.requiredCount.value
+        return user.acquiredRocketsCount.isGreaterThanOrEqualTo(achievement.requiredCount)
       case 'completedChallengesCount':
-        return user.completedChallengesCount.value >= achievement.requiredCount.value
+        return user.completedChallengesCount.isGreaterThanOrEqualTo(
+          achievement.requiredCount,
+        )
       case 'xp':
-        return user.xp.value >= achievement.requiredCount.value
+        return user.xp.isGreaterThanOrEqualTo(achievement.requiredCount)
       case 'streak':
-        return user.streak.value >= achievement.requiredCount.value
+        return user.streak.isGreaterThanOrEqualTo(achievement.requiredCount)
       default:
-        return false
+        return Logical.createAsFalse()
     }
   }
 

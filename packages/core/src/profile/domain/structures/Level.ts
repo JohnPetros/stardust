@@ -37,7 +37,7 @@ export class Level {
       Level.MINIMUM_XP,
     )
 
-    const hasNewLevel = xpSum.isGreaterOrEqualTo(baseXp)
+    const hasNewLevel = xpSum.isGreaterThanOrEqualTo(baseXp)
 
     if (hasNewLevel.isTrue) {
       return new Level({
