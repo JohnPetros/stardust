@@ -58,7 +58,7 @@ export class ObserveNewUnlockedAchievementsUseCase implements UseCase<Request, R
   private isNewUnlockedAchievement(achievement: Achievement, user: User) {
     const isUnlocked = user.hasUnlockedAchievement(achievement.id)
 
-    if (isUnlocked) return false
+    if (isUnlocked.isTrue) return false
 
     switch (achievement.metric.value) {
       case 'unlockedStarsCount':

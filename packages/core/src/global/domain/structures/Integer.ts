@@ -38,7 +38,7 @@ export class Integer {
     return Logical.create(this.value > integer.value)
   }
 
-  isGreaterOrEqualTo(integer: Integer) {
+  isGreaterThanOrEqualTo(integer: Integer) {
     return Logical.create(this.value >= integer.value)
   }
 

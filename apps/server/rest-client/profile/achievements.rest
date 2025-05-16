@@ -1,0 +1,15 @@
+@URL = {{BASE_URL}}/profile/achievements
+@USER_ID = 56ab2a6d-39f7-4fba-a001-f33ccbe39dfe 
+@ACHIEVEMENT_ID = 56ab2a6d-39f7-4fba-a001-f33ccbe39dfe
+
+### Fetch achievements
+GET {{URL}} 
+
+### Fetch all unlocked achievements
+GET {{URL}}/{{USER_ID}} 
+
+### Observe new unlocked achievements
+PUT {{URL}}/{{USER_ID}}/{{ACHIEVEMENT_ID}}
+
+### Rescue achievement
+PUT {{URL}}/{{USER_ID}}/{{ACHIEVEMENT_ID}}

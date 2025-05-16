@@ -1,178 +1,182 @@
-import { ProfileServiceMock } from '@/mocks/services'
-import { UsersFaker } from '@/global/domain/entities/fakers'
-import { IdFaker } from '@/global/domain/structures/fakers'
-import { AchievementsFaker } from '@/profile/domain/entities/fakers'
-import { Achievement } from '@/profile/domain/entities'
-import { RestResponse } from '@/global/responses'
-import { HTTP_STATUS_CODE } from '@/global/constants'
-import { AppError } from '@/global/domain/errors'
-import { ObserveNewUnlockedAchievementsUseCase } from '../ObserveNewUnlockedAchievementsUseCase'
+import { mock, type Mock } from 'ts-jest-mocker'
 
-let useCase: ObserveNewUnlockedAchievementsUseCase
-let profileService: ProfileServiceMock
+import { AchievementsFaker } from '#profile/domain/entities/fakers/AchievementsFaker'
+import { UsersFaker } from '#profile/domain/entities/fakers/index'
+import type { UsersRepository, AchievementsRepository } from '#profile/interfaces/index'
+import { UserNotFoundError } from '#profile/errors/UserNotFoundError'
+import { IdFaker } from '#global/domain/structures/fakers/IdFaker'
+import { Achievement } from '#profile/domain/entities/Achievement'
+import { _ObserveNewUnlockedAchievementsUseCase } from '../_ObserveNewUnlockedAchievementsUseCase'
+
+let usersRepositoryMock: Mock<UsersRepository>
+let achievementsRepositoryMock: Mock<AchievementsRepository>
+let useCase: _ObserveNewUnlockedAchievementsUseCase
 
 describe('Observe New Unlocked Achievements Use Case', () => {
   beforeAll(() => {
-    profileService = new ProfileServiceMock()
-    useCase = new ObserveNewUnlockedAchievementsUseCase(profileService)
+    usersRepositoryMock = mock<UsersRepository>()
+    achievementsRepositoryMock = mock<AchievementsRepository>()
+    usersRepositoryMock.findById.mockImplementation()
+    usersRepositoryMock.replace.mockImplementation()
+    achievementsRepositoryMock.findAll.mockImplementation()
+    achievementsRepositoryMock.addUnlocked.mockImplementation()
+    achievementsRepositoryMock.addRescuable.mockImplementation()
+
+    useCase = new _ObserveNewUnlockedAchievementsUseCase(
+      usersRepositoryMock,
+      achievementsRepositoryMock,
+    )
+  })
+
+  it('should throw error if user is not found', async () => {
+    usersRepositoryMock.findById.mockResolvedValue(null)
+
+    await expect(useCase.execute({ userId: IdFaker.fake().value })).rejects.toThrow(
+      UserNotFoundError,
+    )
   })
 
   it('should not return any new unlocked achievements if user has no unlocked achivement', async () => {
-    const userDto = UsersFaker.fakeDto()
-    profileService.fakeAchievementsDto = [
-      AchievementsFaker.fakeDto({ requiredCount: 1000 }),
-    ]
+    const user = UsersFaker.fake()
+    usersRepositoryMock.findById.mockResolvedValueOnce(user)
+    achievementsRepositoryMock.findAll.mockResolvedValueOnce(
+      AchievementsFaker.fakeMany(10, { requiredCount: 1000 }),
+    )
 
-    const { newUnlockedAchievements } = await useCase.execute({ userDto })
+    const newUnlockedAchievements = await useCase.execute({ userId: user.id.value })
 
     expect(newUnlockedAchievements).toHaveLength(0)
   })
 
-  it('should return new unlocked achievements if user metric count is greater than the one which is required by the respective achievement', async () => {
-    const userDto = UsersFaker.fakeDto({
-      xp: 101,
+  it('should make the user unlock the achievement if the user metric count is greater than the one which is required by the respective achievement', async () => {
+    const user = UsersFaker.fake({
+      xp: 100,
+      streak: 0,
+    })
+    user.unlockAchievement = jest.fn()
+    const unlockedAchievement = AchievementsFaker.fake({
+      metric: 'xp',
+      requiredCount: 99,
+    })
+    const lockedAchievement = AchievementsFaker.fake({
+      metric: 'streak',
+      requiredCount: 99,
+    })
+    achievementsRepositoryMock.findAll.mockResolvedValue([
+      unlockedAchievement,
+      lockedAchievement,
+    ])
+
+    await useCase.execute({ userId: user.id.value })
+
+    expect(user.unlockAchievement).toHaveBeenCalledTimes(1)
+    expect(user.unlockAchievement).toHaveBeenCalledWith(unlockedAchievement.id)
+    expect(user.unlockAchievement).not.toHaveBeenCalledWith(lockedAchievement.id)
+  })
+
+  it('should return the new unlocked achievements if the user metric count is greater than the one which is required by the respective achievement', async () => {
+    const user = UsersFaker.fake({
+      xp: 100,
       streak: 10,
       completedChallengesIds: [
         IdFaker.fake().value,
         IdFaker.fake().value,
         IdFaker.fake().value,
       ],
-      completedPlanetsIds: [IdFaker.fake().value, IdFaker.fake().value],
+      completedPlanetsIds: [
+        IdFaker.fake().value,
+        IdFaker.fake().value,
+        IdFaker.fake().value,
+      ],
       acquiredRocketsIds: [IdFaker.fake().value],
       unlockedStarsIds: [IdFaker.fake().value],
     })
-    profileService.fakeAchievementsDto = [
-      AchievementsFaker.fakeDto({ metric: 'xp', requiredCount: 99 }), // Unlocked
-      AchievementsFaker.fakeDto({ metric: 'streak', requiredCount: 5 }), // Unlocked
-      AchievementsFaker.fakeDto({ metric: 'completedChallengesCount', requiredCount: 1 }), // Unlocked
-      AchievementsFaker.fakeDto({ metric: 'completedPlanetsCount', requiredCount: 2 }), // Unlocked
-      AchievementsFaker.fakeDto({ metric: 'acquiredRocketsCount', requiredCount: 2 }), // Locked
-      AchievementsFaker.fakeDto({ metric: 'unlockedStarsCount', requiredCount: 1 }), // Locked
+    usersRepositoryMock.findById.mockResolvedValue(user)
+    const unlockedAchievements = [
+      AchievementsFaker.fakeDto({ metric: 'xp', requiredCount: 100 }),
+      AchievementsFaker.fakeDto({ metric: 'streak', requiredCount: 9 }),
+      AchievementsFaker.fakeDto({ metric: 'completedChallengesCount', requiredCount: 3 }),
+      AchievementsFaker.fakeDto({ metric: 'completedPlanetsCount', requiredCount: 2 }),
     ]
+    const lockedAchievements = [
+      AchievementsFaker.fakeDto({ metric: 'acquiredRocketsCount', requiredCount: 1 }),
+      AchievementsFaker.fakeDto({ metric: 'unlockedStarsCount', requiredCount: 1 }),
+    ]
+    achievementsRepositoryMock.findAll.mockResolvedValue([
+      ...unlockedAchievements.map(Achievement.create),
+      ...lockedAchievements.map(Achievement.create),
+    ])
 
-    const { newUnlockedAchievements } = await useCase.execute({ userDto })
+    const newUnlockedAchievements = await useCase.execute({ userId: user.id.value })
 
-    expect(newUnlockedAchievements).toHaveLength(4)
-
-    for (const achievement of newUnlockedAchievements)
-      expect(achievement).toBeInstanceOf(Achievement)
+    expect(newUnlockedAchievements).toHaveLength(unlockedAchievements.length)
+    expect(newUnlockedAchievements.sort()).toEqual(unlockedAchievements.sort())
   })
 
-  it("should increment user's coins with the respective unlocked achievement reward", async () => {
-    const userDto = UsersFaker.fakeDto({
-      xp: 101,
+  it('should make the unlocked achievements be added to the repository as unlocked and rescuable', async () => {
+    const user = UsersFaker.fake({
+      xp: 100,
       streak: 0,
-      coins: 0,
     })
+    usersRepositoryMock.findById.mockResolvedValue(user)
+    const unlockedAchievement = AchievementsFaker.fake({
+      metric: 'xp',
+      requiredCount: 99,
+    })
+    const lockedAchievement = AchievementsFaker.fake({
+      metric: 'streak',
+      requiredCount: 99,
+    })
+    achievementsRepositoryMock.findAll.mockResolvedValue([
+      unlockedAchievement,
+      lockedAchievement,
+    ])
 
-    const unlockedAchievementReward = 50
+    await useCase.execute({ userId: user.id.value })
 
-    profileService.fakeAchievementsDto = [
-      AchievementsFaker.fakeDto({
-        metric: 'xp',
-        requiredCount: 99,
-        reward: unlockedAchievementReward,
-      }), // Unlocked
-      AchievementsFaker.fakeDto({ metric: 'streak', requiredCount: 99 }), // locked
-    ]
-
-    const { user } = await useCase.execute({ userDto })
-
-    expect(user.coins.value).toBe(unlockedAchievementReward)
+    expect(achievementsRepositoryMock.addUnlocked).toHaveBeenCalledTimes(1)
+    expect(achievementsRepositoryMock.addRescuable).toHaveBeenCalledTimes(1)
+    expect(achievementsRepositoryMock.addUnlocked).toHaveBeenCalledWith(
+      unlockedAchievement,
+      user.id,
+    )
+    expect(achievementsRepositoryMock.addRescuable).toHaveBeenCalledWith(
+      unlockedAchievement,
+      user.id,
+    )
+    expect(achievementsRepositoryMock.addRescuable).not.toHaveBeenCalledWith(
+      lockedAchievement,
+      user.id,
+    )
+    expect(achievementsRepositoryMock.addRescuable).not.toHaveBeenCalledWith(
+      lockedAchievement,
+      user.id,
+    )
   })
 
-  it("should increment user's unlocked and rescuable achievements count with the quantity of the new unlocked achievements", async () => {
-    const userDto = UsersFaker.fakeDto({
-      xp: 101,
+  it('should replace the user in the repos with the updated user', async () => {
+    const user = UsersFaker.fake({
+      xp: 100,
       streak: 0,
-      unlockedAchievementsIds: [IdFaker.fake().value],
-      rescuableAchievementsIds: [],
     })
-
-    profileService.fakeAchievementsDto = [
-      AchievementsFaker.fakeDto({
-        metric: 'xp',
-        requiredCount: 99,
-      }), // Unlocked
-      AchievementsFaker.fakeDto({ metric: 'streak', requiredCount: 99 }), // locked
-    ]
-
-    const { user } = await useCase.execute({ userDto })
-
-    expect(user.unlockedAchievementsCount.value).toBe(2)
-    expect(user.rescueableAchievementsCount.value).toBe(1)
-  })
-
-  it('should save the new unlocked and rescuable achievements if any', async () => {
-    const userDto = UsersFaker.fakeDto({
-      xp: 101,
+    usersRepositoryMock.findById.mockResolvedValue(user)
+    const unlockedAchievement = AchievementsFaker.fake({
+      metric: 'xp',
+      requiredCount: 99,
     })
-
-    const fakeAchievement = AchievementsFaker.fakeDto({ metric: 'xp', requiredCount: 99 })
-
-    profileService.fakeAchievementsDto = [fakeAchievement]
-
-    const fakeSavedRescuedAchivementRequests: Record<string, string>[] = []
-
-    profileService.saveUnlockedAchievement = async (
-      unlcokedAchievementId: string,
-      userId: string,
-    ) => {
-      fakeSavedRescuedAchivementRequests.push({ unlcokedAchievementId, userId })
-      return new RestResponse()
-    }
-
-    profileService.saveRescuableAchievement = async (
-      rescuableAchievementId: string,
-      userId: string,
-    ) => {
-      fakeSavedRescuedAchivementRequests.push({ rescuableAchievementId, userId })
-      return new RestResponse()
-    }
-
-    useCase = new ObserveNewUnlockedAchievementsUseCase(profileService)
-
-    await useCase.execute({ userDto })
-
-    expect(fakeSavedRescuedAchivementRequests[0]?.unlcokedAchievementId).toBe(
-      fakeAchievement.id,
-    )
-    expect(fakeSavedRescuedAchivementRequests[0]?.userId).toBe(userDto.id)
-    expect(fakeSavedRescuedAchivementRequests[1]?.rescuableAchievementId).toBe(
-      fakeAchievement.id,
-    )
-    expect(fakeSavedRescuedAchivementRequests[1]?.userId).toBe(userDto.id)
-  })
-
-  it('should throw error on save the new unlocked and rescuable achievements if any', async () => {
-    const userDto = UsersFaker.fakeDto({
-      xp: 5,
+    const lockedAchievement = AchievementsFaker.fake({
+      metric: 'streak',
+      requiredCount: 99,
     })
+    achievementsRepositoryMock.findAll.mockResolvedValue([
+      unlockedAchievement,
+      lockedAchievement,
+    ])
+    user.unlockAchievement(unlockedAchievement.id)
 
-    profileService.fakeAchievementsDto = [
-      AchievementsFaker.fakeDto({ metric: 'xp', requiredCount: 1 }),
-    ]
+    await useCase.execute({ userId: user.id.value })
 
-    profileService.saveUnlockedAchievement = async () => {
-      return new RestResponse({ statusCode: HTTP_STATUS_CODE.serverError })
-    }
-
-    useCase = new ObserveNewUnlockedAchievementsUseCase(profileService)
-
-    expect(async () => {
-      await useCase.execute({ userDto })
-    }).rejects.toThrow(AppError)
-
-    profileService.saveUnlockedAchievement = async () => new RestResponse()
-
-    profileService.saveRescuableAchievement = async () => {
-      return new RestResponse({ statusCode: HTTP_STATUS_CODE.serverError })
-    }
-
-    useCase = new ObserveNewUnlockedAchievementsUseCase(profileService)
-
-    expect(async () => {
-      await useCase.execute({ userDto })
-    }).rejects.toThrow(AppError)
+    expect(usersRepositoryMock.replace).toHaveBeenCalledTimes(1)
+    expect(usersRepositoryMock.replace).toHaveBeenCalledWith(user)
   })
 })
