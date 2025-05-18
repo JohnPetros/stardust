@@ -1,14 +1,11 @@
-@RESOURCE = profile/users 
-@URL = {{BASE_URL}}/{{RESOURCE}}
+@URL = {{BASE_URL}}/profile/users
 @USER_ID = 56ab2a6d-39f7-4fba-a001-f33ccbe39dfe 
 
 ### Fetch user
 GET {{URL}}/{{USER_ID}} 
-Content-Type: application/json 
 
 ### Update user
 PUT {{URL}}/{{USER_ID}}
-Content-Type: application/json
 
 {
   "name": "Jane Doe",
@@ -27,7 +24,6 @@ Content-Type: application/json
 
 ### Verify user name in use
 POST {{URL}}/verify-name-in-use
-Content-Type: application/json
 
 {
   "name": "Jane Doe"
@@ -35,7 +31,6 @@ Content-Type: application/json
 
 ### Verify user email in use
 POST {{URL}}/verify-email-in-use
-Content-Type: application/json
 
 {
   "email": "jane.doe@example.com"

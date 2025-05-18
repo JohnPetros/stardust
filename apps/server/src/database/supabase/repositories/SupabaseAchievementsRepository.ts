@@ -10,6 +10,21 @@ export class SupabaseAchievementsRepository
   extends SupabaseRepository
   implements AchievementsRepository
 {
+  async findById(achievementId: Id): Promise<Achievement | null> {
+    const { data, error } = await this.supabase
+      .from('achievements')
+      .select('*')
+      .eq('id', achievementId)
+      .single()
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+
+    const achievement = SupabaseAchievementMapper.toEntity(data)
+    return achievement
+  }
+
   async findAll(): Promise<Achievement[]> {
     const { data, error } = await this.supabase
       .from('achievements')
@@ -19,9 +34,7 @@ export class SupabaseAchievementsRepository
     if (error) {
       throw new SupabasePostgreError(error)
     }
-
     const achievements = data.map(SupabaseAchievementMapper.toEntity)
-
     return achievements
   }
 
@@ -61,12 +74,12 @@ export class SupabaseAchievementsRepository
     }
   }
 
-  async deleteRescuable(achievement: Achievement, userId: Id): Promise<void> {
+  async removeRescuable(achievementId: Id, userId: Id): Promise<void> {
     const { error } = await this.supabase
       .from('users_rescuable_achievements')
       .delete()
       .match({
-        achievement_id: achievement.id.value,
+        achievement_id: achievementId,
         user_id: userId,
       })
 

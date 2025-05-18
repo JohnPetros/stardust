@@ -4,7 +4,7 @@ import type { User } from '../domain/entities'
 import { UserNotFoundError } from '../errors'
 import type { UsersRepository } from '../interfaces'
 
-export class FetchUserUseCase implements UseCase<string, Promise<User>> {
+export class GetUserUseCase implements UseCase<string, Promise<User>> {
   constructor(private readonly repository: UsersRepository) {}
 
   async execute(userId: string): Promise<User> {
