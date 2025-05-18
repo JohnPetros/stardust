@@ -163,4 +163,14 @@ export class SupabaseUsersRepository
       throw new SupabasePostgreError(error)
     }
   }
+
+  async replaceMany(users: User[]): Promise<void> {
+    const promises = []
+
+    for (const user of users) {
+      promises.push(this.replace(user))
+    }
+
+    await Promise.all(promises)
+  }
 }

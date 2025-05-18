@@ -13,4 +13,5 @@ export interface UsersRepository {
   findAll(): Promise<User[]>
   add(user: User): Promise<void>
   replace(user: User): Promise<void>
+  replaceMany(users: User[]): Promise<void>
 }
