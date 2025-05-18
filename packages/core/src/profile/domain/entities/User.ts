@@ -13,7 +13,7 @@ import type { RankingPosition } from '#ranking/domain/structures/index'
 import { Entity } from '#global/domain/abstracts/index'
 import { UserFactory } from '#profile/factories/index'
 import type { AchievementMetricValue } from '../types'
-import type { Level, WeekStatus } from '../structures'
+import { type Level, WeekStatus } from '../structures'
 import type { UserDto } from './dtos'
 
 type UserProps = {
@@ -141,6 +141,10 @@ export class User extends Entity<UserProps> {
       newStreak: this.props.streak,
       newWeekStatus: this.props.weekStatus,
     }
+  }
+
+  resetWeekStatus() {
+    this.props.weekStatus = WeekStatus.create()
   }
 
   breakStreak() {

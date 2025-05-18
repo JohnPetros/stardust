@@ -7,7 +7,7 @@ export class VerifyUserEmailInUseUseCase implements UseCase<string, Promise<void
   constructor(private readonly repository: UsersRepository) {}
 
   async execute(email: string): Promise<void> {
-    const user = await this.repository.hasWithEmail(Email.create(email))
+    const user = await this.repository.containsWithEmail(Email.create(email))
     if (user) {
       throw new UserEmailAlreadyInUseError()
     }
