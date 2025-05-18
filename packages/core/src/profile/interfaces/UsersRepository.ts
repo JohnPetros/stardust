@@ -8,8 +8,8 @@ import type { User } from '../domain/entities'
 export interface UsersRepository {
   findById(id: Id): Promise<User | null>
   findBySlug(slug: Slug): Promise<User | null>
-  hasWithEmail(email: Email): Promise<Logical>
-  hasWithName(name: Name): Promise<Logical>
+  containsWithEmail(email: Email): Promise<Logical>
+  containsWithName(name: Name): Promise<Logical>
   findAll(): Promise<User[]>
   add(user: User): Promise<void>
   replace(user: User): Promise<void>

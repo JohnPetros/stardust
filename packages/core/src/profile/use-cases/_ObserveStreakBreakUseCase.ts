@@ -1,7 +1,6 @@
-import type { ProfileService, UsersRepository } from '../interfaces'
+import type { UsersRepository } from '../interfaces'
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { UserDto } from '../domain/entities/dtos'
-import { User } from '../domain/entities'
 
 type Request = {
   userDto: UserDto
