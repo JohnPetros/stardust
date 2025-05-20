@@ -1,4 +1,4 @@
-import { NotFoundError } from '../../../global/domain/errors'
+import { NotFoundError } from '#global/domain/errors/NotFoundError'
 
 export class RankingNotFoundError extends NotFoundError {
   constructor() {
