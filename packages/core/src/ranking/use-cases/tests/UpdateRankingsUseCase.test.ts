@@ -1,98 +1,115 @@
-import { RankingFaker } from '../../../lesson/domain/structures/tests/fakers'
-import { RankingServiceMock } from '../../../mocks/services'
-import type { Ranking } from '../../domain/structures'
-import { UpdateRankingsUseCase } from '../UpdateRankingsUseCase'
-
-let rankingServiceMock: RankingServiceMock
-let useCase: UpdateRankingsUseCase
+import { mock, type Mock } from 'ts-jest-mocker'
+import { _UpdateRankingsUseCase } from '../_UpdateRankingsUseCase'
+import type { TiersRepository } from '#ranking/interfaces/TiersRepository'
+import type { RankersRepository } from '#ranking/interfaces/RankersRepository'
+import type { EventBroker } from '#global/interfaces/EventBroker'
+import { TiersFaker } from '#ranking/domain/entities/fakers/TiersFaker'
+import { RankersFaker } from '#ranking/domain/entities/fakers/RankersFaker'
+import { RankingUpdatedEvent } from '#ranking/domain/events/RankingUpdatedEvent'
+import { Ranking } from '#ranking/domain/structures/Ranking'
+import { RankingLosersDefinedEvent } from '#ranking/domain/events/RankingLosersDefinedEvent'
+import { RankingWinnersDefinedEvent } from '#ranking/domain/events/RankingWinnersDefinedEvent'
 
 describe('Update Rankings Use Case', () => {
+  let tiersRepository: Mock<TiersRepository>
+  let rankersRepository: Mock<RankersRepository>
+  let eventBroker: Mock<EventBroker>
+  let useCase: _UpdateRankingsUseCase
+
   beforeEach(() => {
-    rankingServiceMock = new RankingServiceMock()
-    useCase = new UpdateRankingsUseCase(rankingServiceMock)
+    tiersRepository = mock<TiersRepository>()
+    rankersRepository = mock<RankersRepository>()
+    eventBroker = mock<EventBroker>()
+    tiersRepository.findAll.mockImplementation()
+    rankersRepository.removeAll.mockImplementation()
+    rankersRepository.findAllByTier.mockImplementation()
+    rankersRepository.addLosers.mockImplementation()
+    rankersRepository.addWinners.mockImplementation()
+    eventBroker.publish.mockImplementation()
+
+    useCase = new _UpdateRankingsUseCase(tiersRepository, rankersRepository, eventBroker)
   })
 
-  it('should reset all rankings state', async () => {
-    expect(rankingServiceMock.isReset).toBeFalsy()
+  it('should remove all current rankers', async () => {
+    tiersRepository.findAll.mockResolvedValue(TiersFaker.fakeMany(6))
+    rankersRepository.findAllByTier.mockResolvedValue(RankersFaker.fakeMany(6))
+    await useCase.execute()
+
+    expect(rankersRepository.removeAll).toHaveBeenCalled()
+  })
+
+  it('should publish a ranking updated event for each tier', async () => {
+    const tiers = TiersFaker.fakeMany(6)
+    tiersRepository.findAll.mockResolvedValue(tiers)
+    rankersRepository.findAllByTier.mockResolvedValue(RankersFaker.fakeMany(6))
+    await useCase.execute()
+
+    tiers.forEach((tier) =>
+      expect(eventBroker.publish).toHaveBeenCalledWith(
+        new RankingUpdatedEvent({ tierId: tier.id.value }),
+      ),
+    )
+  })
+
+  it('should add losers to the repository for each tier', async () => {
+    const tiers = TiersFaker.fakeMany(6)
+    const ranking = Ranking.create(RankersFaker.fakeManyDto(10))
+    tiersRepository.findAll.mockResolvedValue(tiers)
+    rankersRepository.findAllByTier.mockResolvedValue(ranking.users)
+    await useCase.execute()
+
+    expect(rankersRepository.addLosers).toHaveBeenCalledTimes(tiers.length)
+    tiers.forEach((tier) =>
+      expect(rankersRepository.addLosers).toHaveBeenCalledWith(ranking.losers, tier.id),
+    )
+  })
+
+  it('should publish a ranking losers defined event for each tier except the last one', async () => {
+    const tiers = TiersFaker.fakeMany(6)
+    const ranking = Ranking.create(RankersFaker.fakeManyDto(10))
+    tiersRepository.findAll.mockResolvedValue(tiers)
+    rankersRepository.findAllByTier.mockResolvedValue(ranking.users)
 
     await useCase.execute()
 
-    expect(rankingServiceMock.isReset).toBeTruthy()
+    tiers.slice(0, tiers.length - 1).forEach((tier) =>
+      expect(eventBroker.publish).toHaveBeenCalledWith(
+        new RankingLosersDefinedEvent({
+          tierId: tier.id.value,
+          losersIds: ranking.losers.map((loser) => loser.id.value),
+        }),
+      ),
+    )
   })
 
-  it('should put each loser in the previous ranking if any', async () => {
-    const rankings: Array<{ data: Ranking; tierId: string }> = []
-
-    for (const tier of rankingServiceMock.tiers) {
-      const rankingData = RankingFaker.fake()
-
-      rankings.push({ data: rankingData, tierId: String(tier.id) })
-      rankingServiceMock.users.push(...rankingData.users.map((user) => ({ ...user.dto })))
-    }
+  it('should publish a ranking winners defined event for each tier except the first one', async () => {
+    const tiers = TiersFaker.fakeMany(6)
+    const ranking = Ranking.create(RankersFaker.fakeManyDto(10))
+    tiersRepository.findAll.mockResolvedValue(tiers)
+    rankersRepository.findAllByTier.mockResolvedValue(ranking.users)
 
     await useCase.execute()
 
-    for (let index = 0; index < rankings.length; index++) {
-      const currentRanking = rankings[index]
-      const nextRanking = rankings[index + 1]
-
-      if (!currentRanking || !nextRanking) continue
-
-      const losers = await rankingServiceMock.fetchRankingLosersByTier(
-        currentRanking.tierId,
-      )
-      expect(losers.body).toEqual(
-        nextRanking.data.losers.map((loser) => ({
-          ...loser.dto,
-          tierId: currentRanking.tierId,
-        })),
-      )
-    }
+    tiers.slice(1, tiers.length).forEach((tier) =>
+      expect(eventBroker.publish).toHaveBeenCalledWith(
+        new RankingWinnersDefinedEvent({
+          tierId: tier.id.value,
+          winnersIds: ranking.winners.map((winner) => winner.id.value),
+        }),
+      ),
+    )
   })
 
-  it('should put each winner in the next ranking', async () => {
-    const rankings: Array<{ data: Ranking; tierId: string }> = []
-
-    for (const tier of rankingServiceMock.tiers) {
-      const rankingData = RankingFaker.fake()
-
-      rankings.push({ data: rankingData, tierId: String(tier.id) })
-      rankingServiceMock.users.push(...rankingData.users.map((user) => ({ ...user.dto })))
-    }
-
+  it('should add losers to the repository for each tier', async () => {
+    const tiers = TiersFaker.fakeMany(6)
+    const ranking = Ranking.create(RankersFaker.fakeManyDto(10))
+    tiersRepository.findAll.mockResolvedValue(tiers)
+    rankersRepository.findAllByTier.mockResolvedValue(ranking.users)
     await useCase.execute()
 
-    for (let index = 1; index < rankings.length; index++) {
-      const currentRanking = rankings[index]
-      const previousRanking = rankings[index - 1]
-
-      if (!currentRanking || !previousRanking) continue
-
-      const winners = await rankingServiceMock.fetchRankingWinnersByTier(
-        currentRanking.tierId,
-      )
-      expect(winners.body).toEqual(
-        previousRanking.data.winners.map((winner) => ({
-          ...winner.dto,
-          tierId: currentRanking.tierId,
-        })),
-      )
-    }
-  })
-
-  it('should allow users to see their ranking result', async () => {
-    expect(rankingServiceMock.canUsersSeeRankingResult).toBeFalsy()
-
-    await useCase.execute()
-
-    expect(rankingServiceMock.canUsersSeeRankingResult).toBeTruthy()
-  })
-
-  it('should update last week ranking positions', async () => {
-    expect(rankingServiceMock.areLastWeekRankingPositionsUpdated).toBeFalsy()
-
-    await useCase.execute()
-
-    expect(rankingServiceMock.areLastWeekRankingPositionsUpdated).toBeTruthy()
+    expect(rankersRepository.addLosers).toHaveBeenCalledTimes(tiers.length)
+    tiers.forEach((tier) =>
+      expect(rankersRepository.addLosers).toHaveBeenCalledWith(ranking.losers, tier.id),
+    )
   })
 })

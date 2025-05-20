@@ -1,3 +1,5 @@
 export { GetFirstTierIdUseCase } from './GetFirstTierIdUseCase'
 export { GetLastWeekRankingWinnersUseCase } from './GetLastWeekRankingWinnersUseCase'
 export { UpdateRankingsUseCase } from './UpdateRankingsUseCase'
+export { ReachFirstTierUseCase } from './ReachFirstTierUseCase'
+export { _UpdateRankingsUseCase } from './_UpdateRankingsUseCase'
