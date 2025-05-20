@@ -1,11 +1,11 @@
 name: Web app CD to Heroku
 
-on:
-  push:
-    branches:
-      - main
-    # paths:
-    #   - "apps/web/**"
+# on:
+#   push:
+#     branches:
+#       - main
+#     # paths:
+#     #   - "apps/web/**"
 
 jobs:
   build-and-deploy:
