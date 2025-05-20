@@ -1,9 +1,12 @@
-import type { UsersRepository } from '#profile/interfaces/UsersRepository'
-import type { UseCase } from '../../global/interfaces'
-import { User } from '../../global/domain/entities'
-import { Name } from '#global/domain/structures/Name'
-import { Email } from '#global/domain/structures/Email'
-import { UserNameAlreadyInUseError, UserEmailAlreadyInUseError } from '../errors'
+import type { UseCase } from '#global/interfaces/index'
+import { Name, Email } from '#global/domain/structures/index'
+import { User } from '#global/domain/entities/index'
+import type { UsersRepository } from '#profile/interfaces/index'
+import {
+  UserNameAlreadyInUseError,
+  UserEmailAlreadyInUseError,
+} from '#profile/errors/index'
+import type { UserDto } from '#profile/domain/entities/dtos/UserDto'
 
 type Request = {
   userId: string
@@ -14,7 +17,9 @@ type Request = {
   selectedRocketByDefaultId: string
 }
 
-export class _CreateUserUseCase implements UseCase<Request> {
+type Response = Promise<void>
+
+export class CreateUserUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: UsersRepository) {}
 
   async execute({
