@@ -33,10 +33,12 @@ export class AvatarAggregate extends Aggregate<AvatarAggregateEntity> {
   get dto(): AvatarAggregateDto {
     return {
       id: this.id.value,
-      entity: {
-        name: this.name.value,
-        image: this.image.value,
-      },
+      entity: this.hasEntity.isTrue
+        ? {
+            name: this.name.value,
+            image: this.image.value,
+          }
+        : undefined,
     }
   }
 }

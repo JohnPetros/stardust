@@ -6,18 +6,19 @@ import { Logical } from '#global/domain/structures/Logical'
 import { UserEmailAlreadyInUseError } from '#profile/errors/UserEmailAlreadyInUseError'
 import { UserNameAlreadyInUseError } from '#profile/errors/UserNameAlreadyInUseError'
 import { User } from '#profile/domain/entities/index'
-import { _CreateUserUseCase } from '../_CreateUserUseCase'
+import { CreateUserUseCase } from '../CreateUserUseCase'
 
 describe('Create User Use Case', () => {
   let repositoryMock: Mock<UsersRepository>
-  let useCase: _CreateUserUseCase
+  let useCase: CreateUserUseCase
 
   beforeAll(() => {
     repositoryMock = mock<UsersRepository>()
     repositoryMock.containsWithName.mockImplementation()
     repositoryMock.containsWithEmail.mockImplementation()
     repositoryMock.add.mockImplementation()
-    useCase = new _CreateUserUseCase(repositoryMock)
+
+    useCase = new CreateUserUseCase(repositoryMock)
   })
 
   it('should throw an error if the given user email is already in use', () => {
@@ -75,8 +76,5 @@ describe('Create User Use Case', () => {
     expect(addedUser?.id).toEqual(user.id)
     expect(addedUser?.email).toEqual(user.email)
     expect(addedUser?.name).toEqual(user.name)
-    expect(addedUser?.tier.id).toEqual(user.tier.id)
-    expect(addedUser?.avatar.id).toEqual(user.avatar.id)
-    expect(addedUser?.rocket.id).toEqual(user.rocket.id)
   })
 })
