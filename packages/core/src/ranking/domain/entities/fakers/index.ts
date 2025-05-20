@@ -1,2 +1,2 @@
-export { RankingUsersFaker } from './RankingUserFaker'
+export { RankersFaker } from './RankersFaker'
 export { TiersFaker } from './TiersFaker'
