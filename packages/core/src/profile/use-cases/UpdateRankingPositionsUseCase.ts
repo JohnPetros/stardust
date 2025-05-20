@@ -1,7 +1,7 @@
 import type { UsersRepository } from '../interfaces'
 import { Id, Integer } from '#global/domain/structures/index'
 
-export class UpdateRankingPositionUseCase {
+export class UpdateRankingPositionsUseCase {
   constructor(private readonly repository: UsersRepository) {}
 
   async execute(tierId: string) {
