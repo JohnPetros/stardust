@@ -35,7 +35,9 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "../../node_modules/monaco-editor/monaco.d.ts"
+    "../../node_modules/monaco-editor/monaco.d.ts",
+    "../server/src/queue/inngest/client.ts",
+    "../server/src/queue/inngest/InngestAmqp.ts"
   ],
   "exclude": [
     "node_modules"

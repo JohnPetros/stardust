@@ -12,7 +12,7 @@ import {
 import {
   SupabaseAchievementsRepository,
   SupabaseUsersRepository,
-} from '@/database/supabase/repositories'
+} from '@/database/supabase/repositories/profile'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
 import type { HonoSchema } from '../../types'

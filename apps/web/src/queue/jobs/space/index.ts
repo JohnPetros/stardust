@@ -1,1 +1,0 @@
-export { HandleUserSignedUpJob } from './HandleUserSignedUpJob'
