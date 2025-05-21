@@ -16,7 +16,7 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "test": "turbo test",
-    "type-check": "turbo type-check"
+    "typecheck": "turbo typecheck"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",

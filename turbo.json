@@ -10,10 +10,9 @@
         "!.next/cache/**"
       ]
     },
-    "check-types": {
-      "dependsOn": [
-        "^check-types"
-      ]
+    "typecheck": {
+      "persistent": false,
+      "cache": false
     },
     "dev": {
       "persistent": true,
