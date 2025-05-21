@@ -3,7 +3,12 @@
   "main": "dist/main.js",
   "scripts": {
     "dev": "tsx watch --env-file .env.development src/main.ts",
-    "start": "tsx src/main.ts"
+    "start": "tsx src/main.ts",
+    "db:prod": "supabase link --project-ref aukqejqsiqsqowafpppb --workdir src/database",
+    "db:dev": "supabase link --project-ref rveubqzvfbqbcpmuevnm --workdir src/database/",
+    "db:pull": "supabase db pull --schema auth,public,storage,cron,extensions,realtime --workdir src/database",
+    "db:push": "supabase db push --workdir src/database",
+    "db:revert": "supabase migration repair --status reverted $npm_config_migration_id --workdir src/database"
   },
   "dependencies": {
     "@hono/node-server": "^1.14.1",
