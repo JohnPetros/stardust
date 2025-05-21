@@ -1,5 +1,5 @@
-export { AquireAvatarUseCase } from './AquireAvatarUseCase'
-export { AquireRocketUseCase } from './AquireRocketUseCase'
+export { AcquireAvatarUseCase } from './AcquireAvatarUseCase'
+export { AcquireRocketUseCase } from './AcquireRocketUseCase'
 export { CreateUserUseCase } from './CreateUserUseCase'
 export { ObserveNewUnlockedAchievementsUseCase } from './ObserveNewUnlockedAchievementsUseCase'
 export { _ObserveNewUnlockedAchievementsUseCase } from './_ObserveNewUnlockedAchievementsUseCase'

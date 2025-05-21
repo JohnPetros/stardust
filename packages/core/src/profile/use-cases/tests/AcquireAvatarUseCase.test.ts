@@ -1,4 +1,4 @@
-import { AquireAvatarUseCase } from '../AquireAvatarUseCase'
+import { AcquireAvatarUseCase } from '../AcquireAvatarUseCase'
 import type { UsersRepository } from '../../interfaces'
 import { mock, type Mock } from 'ts-jest-mocker'
 import { UsersFaker } from '#profile/domain/entities/fakers/UsersFaker'
@@ -6,16 +6,16 @@ import { AvatarAggregatesFaker } from '#profile/domain/aggregates/fakers/AvatarA
 import { UserNotFoundError } from '#profile/errors/UserNotFoundError'
 import { Integer } from '#global/domain/structures/Integer'
 
-describe('Aquire Avatar Use Case', () => {
+describe('Acquire Avatar Use Case', () => {
   let usersRepository: Mock<UsersRepository>
-  let useCase: AquireAvatarUseCase
+  let useCase: AcquireAvatarUseCase
 
   beforeEach(() => {
     usersRepository = mock<UsersRepository>()
     usersRepository.findById.mockImplementation()
     usersRepository.replace.mockImplementation()
     usersRepository.addAcquiredAvatar.mockImplementation()
-    useCase = new AquireAvatarUseCase(usersRepository)
+    useCase = new AcquireAvatarUseCase(usersRepository)
   })
 
   it('should throw an error if the user is not found', () => {

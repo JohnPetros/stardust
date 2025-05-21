@@ -16,7 +16,7 @@ type Request = {
   firstStarId: string
 }
 
-export class AquireDefaultShopItemsUseCase implements UseCase<Request, void> {
+export class AcquireDefaultShopItemsUseCase implements UseCase<Request, void> {
   constructor(
     private readonly rocketsRepository: RocketsRepository,
     private readonly avatarsRepository: AvatarsRepository,

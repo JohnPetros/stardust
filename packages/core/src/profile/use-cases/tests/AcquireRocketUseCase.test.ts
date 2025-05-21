@@ -1,21 +1,22 @@
-import { AquireRocketUseCase } from '../AquireRocketUseCase'
-import type { UsersRepository } from '../../interfaces'
 import { mock, type Mock } from 'ts-jest-mocker'
+
+import { Integer } from '#global/domain/structures/Integer'
 import { UsersFaker } from '#profile/domain/entities/fakers/UsersFaker'
 import { RocketAggregatesFaker } from '#profile/domain/aggregates/fakers/RocketAggregatesFaker'
 import { UserNotFoundError } from '#profile/errors/UserNotFoundError'
-import { Integer } from '#global/domain/structures/Integer'
+import { AcquireRocketUseCase } from '../AcquireRocketUseCase'
+import type { UsersRepository } from '../../interfaces'
 
-describe('Aquire Rocket Use Case', () => {
+describe('Acquire Rocket Use Case', () => {
   let usersRepository: Mock<UsersRepository>
-  let useCase: AquireRocketUseCase
+  let useCase: AcquireRocketUseCase
 
   beforeEach(() => {
     usersRepository = mock<UsersRepository>()
     usersRepository.findById.mockImplementation()
     usersRepository.replace.mockImplementation()
     usersRepository.addAcquiredRocket.mockImplementation()
-    useCase = new AquireRocketUseCase(usersRepository)
+    useCase = new AcquireRocketUseCase(usersRepository)
   })
 
   it('should throw an error if the user is not found', () => {
