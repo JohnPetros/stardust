@@ -8,12 +8,13 @@ import {
   Integer,
   Logical,
 } from '#global/domain/structures/index'
-import type { AvatarAggregate, RocketAggregate, TierAggregate } from '../aggregates'
-import type { RankingPosition } from '#ranking/domain/structures/index'
+import type { AvatarAggregate, RocketAggregate } from '../aggregates'
+import { TierAggregate } from '../aggregates'
+import { RankingPosition } from '#ranking/domain/structures/index'
 import { Entity } from '#global/domain/abstracts/index'
 import { UserFactory } from '#profile/factories/index'
 import type { AchievementMetricValue } from '../types'
-import type { Level, WeekStatus } from '../structures'
+import { type Level, WeekStatus } from '../structures'
 import type { UserDto } from './dtos'
 
 type UserProps = {
@@ -143,6 +144,10 @@ export class User extends Entity<UserProps> {
     }
   }
 
+  resetWeekStatus() {
+    this.props.weekStatus = WeekStatus.create()
+  }
+
   breakStreak() {
     this.props.streak = Integer.create(0)
     this.props.didBreakStreak = this.props.didBreakStreak.becomeTrue()
@@ -231,6 +236,18 @@ export class User extends Entity<UserProps> {
 
   completeChallenge(challengeId: Id): void {
     this.props.completedChallengesIds = this.props.completedChallengesIds.add(challengeId)
+  }
+
+  updateRankingPosition(rankingPosition: Integer): void {
+    this.props.lastWeekRankingPosition = RankingPosition.create(rankingPosition.value)
+    this.props.canSeeRankingResult = this.props.canSeeRankingResult.becomeTrue()
+    this.props.weeklyXp = Integer.create(0)
+  }
+
+  updateTier(tierId: Id): void {
+    this.props.tier = TierAggregate.create({
+      id: tierId.value,
+    })
   }
 
   private notifyChanges(): void {

@@ -1,4 +1,5 @@
 export type { UseCase } from './UseCase'
+export type { EventBroker } from './EventBroker'
 export * from './rest'
 export * from './rpc'
 export * from './provision'

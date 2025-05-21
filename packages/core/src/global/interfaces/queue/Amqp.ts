@@ -7,7 +7,7 @@ export interface Amqp<Payload = void> {
     callBack: () => Promise<unknown>,
     callbackName: string,
   ): Promise<Response>
-  publish(event: Event): Promise<void>
+  sendEvent(event: Event): Promise<void>
   waitFor<EventPayload>(
     eventName: string,
     timeExpression: TimeExpression,

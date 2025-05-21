@@ -44,8 +44,8 @@ export class UsersFaker {
     }
   }
 
-  static fakeMany(count?: number): User[] {
-    return Array.from({ length: count ?? 10 }).map(() => UsersFaker.fake())
+  static fakeMany(count?: number, baseDto?: Partial<UserDto>): User[] {
+    return Array.from({ length: count ?? 10 }).map(() => UsersFaker.fake(baseDto))
   }
 
   static fakeManyDto(count?: number, baseDto?: Partial<UserDto>): UserDto[] {

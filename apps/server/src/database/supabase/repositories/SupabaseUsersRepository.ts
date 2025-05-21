@@ -100,7 +100,7 @@ export class SupabaseUsersRepository
     throw new Error('Method not implemented.')
   }
 
-  async hasWithEmail(email: Email): Promise<Logical> {
+  async containsWithEmail(email: Email): Promise<Logical> {
     const { data, error } = await this.supabase
       .from('users')
       .select('*')
@@ -114,7 +114,7 @@ export class SupabaseUsersRepository
     return Logical.create(data !== null)
   }
 
-  async hasWithName(name: Name): Promise<Logical> {
+  async containsWithName(name: Name): Promise<Logical> {
     const { data, error } = await this.supabase
       .from('users')
       .select('*')
@@ -162,5 +162,15 @@ export class SupabaseUsersRepository
     if (error) {
       throw new SupabasePostgreError(error)
     }
+  }
+
+  async replaceMany(users: User[]): Promise<void> {
+    const promises = []
+
+    for (const user of users) {
+      promises.push(this.replace(user))
+    }
+
+    await Promise.all(promises)
   }
 }

@@ -1,7 +1,13 @@
 import { faker } from '@faker-js/faker'
-import type { RankingUserDto } from '../../../../dtos'
 
-export class RankingUsersFaker {
+import type { RankingUserDto } from '../dtos'
+import { RankingUser } from '../RankingUser'
+
+export class RankersFaker {
+  static fake(): RankingUser {
+    return RankingUser.create(RankersFaker.fakeDto())
+  }
+
   static fakeDto(baseDto?: Partial<RankingUserDto>): RankingUserDto {
     return {
       id: faker.string.uuid(),
@@ -22,8 +28,10 @@ export class RankingUsersFaker {
     count?: number,
     baseDto?: Partial<RankingUserDto>,
   ): RankingUserDto[] {
-    return Array.from({ length: count ?? 10 }).map(() =>
-      RankingUsersFaker.fakeDto(baseDto),
-    )
+    return Array.from({ length: count ?? 10 }).map(() => RankersFaker.fakeDto(baseDto))
+  }
+
+  static fakeMany(count?: number): RankingUser[] {
+    return Array.from({ length: count ?? 10 }).map(() => RankersFaker.fake())
   }
 }

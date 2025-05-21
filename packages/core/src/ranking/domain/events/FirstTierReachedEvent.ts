@@ -6,9 +6,8 @@ type Payload = {
     name: string
     email: string
   }
-  selectedAvatarByDefaultId: string
-  selectedRocketByDefaultId: string
   firstTierId: string
+  firstStarId: string
 }
 
 export class FirstTierReachedEvent extends Event<Payload> {
