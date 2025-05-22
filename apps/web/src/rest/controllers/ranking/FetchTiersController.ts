@@ -7,7 +7,7 @@ export const FetchTiersController = (service: RankingService): Controller => {
     async handle(http: Http) {
       const response = await service.fetchTiers()
       const tiersDto = response.body
-      return http.sendJson(tiersDto, HTTP_STATUS_CODE.ok)
+      return http.send(tiersDto, HTTP_STATUS_CODE.ok)
     },
   }
 }

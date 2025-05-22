@@ -8,6 +8,6 @@ export class FetchAllAchievementsController implements Controller {
 
   async handle(http: Http): Promise<RestResponse> {
     const achievements = await this.repository.findAll()
-    return http.sendJson(achievements.map((achievement) => achievement.dto))
+    return http.send(achievements.map((achievement) => achievement.dto))
   }
 }

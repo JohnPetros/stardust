@@ -151,7 +151,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       return this as Http<NextSchema, NextResponse<unknown>>
     },
 
-    sendJson(data: unknown, statusCode = HTTP_STATUS_CODE.ok) {
+    send(data: unknown, statusCode = HTTP_STATUS_CODE.ok) {
       if (cookies.length) {
         const nextResponse = NextResponse.redirect(
           new URL(request ? request.nextUrl.pathname : '', CLIENT_ENV.appHost),

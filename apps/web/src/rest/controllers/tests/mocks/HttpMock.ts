@@ -89,7 +89,7 @@ export const HttpMock = <FakeSchema extends HttpSchema>({
       return this
     },
 
-    sendJson(body: unknown, statusCode: number) {
+    send(body: unknown, statusCode: number) {
       return new RestResponse({ body, statusCode })
     },
   }

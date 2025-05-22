@@ -24,5 +24,6 @@ export interface Http<Schema extends HttpSchema = HttpSchema, Response = unknown
   pass(): Promise<RestResponse<Response>>
   statusOk(): this
   statusCreated(): this
-  sendJson(json: unknown, statusCode?: number): RestResponse<Response>
+  statusNoContent(): this
+  send(json?: unknown, statusCode?: number): RestResponse<Response>
 }

@@ -1,7 +1,7 @@
 export const HTTP_STATUS_CODE = {
   ok: 200,
   created: 201,
-  noContent: 209,
+  noContent: 204,
   redirect: 301,
   badRequest: 400,
   unauthorized: 401,

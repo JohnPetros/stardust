@@ -17,6 +17,6 @@ export class FetchUserController implements Controller<Schema> {
     const { userId } = http.getRouteParams()
     const useCase = new GetUserUseCase(this.usersRepository)
     const user = await useCase.execute(userId)
-    return http.sendJson(user)
+    return http.send(user)
   }
 }

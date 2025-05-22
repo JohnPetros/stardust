@@ -26,7 +26,7 @@ export class AchievementsRouter extends HonoRouter {
       const repository = new SupabaseAchievementsRepository(http.getSupabase())
       const controller = new FetchAllAchievementsController(repository)
       const response = await controller.handle(http)
-      return this.app.sendRestResponse(response)
+      return http.sendResponse(response)
     })
   }
 
@@ -44,7 +44,7 @@ export class AchievementsRouter extends HonoRouter {
         const repository = new SupabaseAchievementsRepository(http.getSupabase())
         const controller = new FetchAllUnlockedAchievementsController(repository)
         const response = await controller.handle(http)
-        return this.app.sendRestResponse(response)
+        return http.sendResponse(response)
       },
     )
   }
@@ -69,7 +69,7 @@ export class AchievementsRouter extends HonoRouter {
           usersRepository,
         )
         const response = await controller.handle(http)
-        return this.app.sendRestResponse(response)
+        return http.sendResponse(response)
       },
     )
   }

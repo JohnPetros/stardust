@@ -25,6 +25,6 @@ export class ObserveNewUnlockedAchievementsController implements Controller<Sche
       this.achievementsRepository,
     )
     const response = await useCase.execute({ userId })
-    return http.sendJson(response)
+    return http.send(response)
   }
 }
