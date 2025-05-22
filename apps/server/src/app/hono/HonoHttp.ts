@@ -134,7 +134,13 @@ export class HonoHttp<HttpSchema extends Schema>
     }
 
     this.context.status(response.statusCode as StatusCode)
-    return this.context.json({})
+
+    if (response.isFailure) {
+      return this.context.json({
+        error: response.errorMessage,
+      })
+    }
+    return this.context.json(response.body ?? {})
   }
 
   getSupabase(): SupabaseClient {

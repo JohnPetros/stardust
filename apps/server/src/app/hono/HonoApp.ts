@@ -86,7 +86,10 @@ export class HonoApp {
           setAll(cookiesToSet) {
             cookiesToSet.forEach(({ name, value, options }) =>
               // @ts-ignore
-              setCookie(context, name, value, options),
+              setCookie(context, name, value, {
+                ...options,
+                maxAge: 60 * 60 * 24 * 400,
+              }),
             )
           },
         },
