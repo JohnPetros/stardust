@@ -4,11 +4,7 @@ import { Header } from '../components/Header'
 import { Link } from '../components/Link'
 import { Paragraph } from '../components/Paragraph'
 
-type ConfirmSignUpTemplateProps = {
-  baseUrl: string
-}
-
-export const ConfirmSignUpTemplate = ({ baseUrl }: ConfirmSignUpTemplateProps) => {
+export const ConfirmSignUpTemplate = () => {
   return (
     <Body>
       <Header>Confirmação de cadastro.</Header>
@@ -31,9 +27,7 @@ export const ConfirmSignUpTemplate = ({ baseUrl }: ConfirmSignUpTemplateProps) =
 
         <Paragraph>- Equipe StarDust! 🚀</Paragraph>
 
-        <Link
-          href={`{{ .SiteURL }}${baseUrl}?token={{ .TokenHash }}&action=signup-confirmation`}
-        >
+        <Link href='{{ .SiteURL }}/confirm-email?token={{ .TokenHash }}'>
           Confirmar cadastro
         </Link>
       </Box>
