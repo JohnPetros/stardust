@@ -18,6 +18,7 @@ export class SupabaseAuthService implements AuthService {
       return this.supabaseAuthError<{ userId: string }>(
         error,
         'E-mail ou senha incorretos',
+        HTTP_STATUS_CODE.unauthorized,
       )
 
     return new RestResponse({ body: { userId: data.session.user.id } })
@@ -74,7 +75,10 @@ export class SupabaseAuthService implements AuthService {
     const { error } = await this.supabase.auth.resetPasswordForEmail(email)
 
     if (error)
-      return this.supabaseAuthError(error, 'Erro inesperado ao tentar sair da conta')
+      return this.supabaseAuthError(
+        error,
+        'Erro inesperado ao enviar e-mail de pedido de redefinição de senha',
+      )
 
     return new RestResponse()
   }
@@ -167,10 +171,15 @@ export class SupabaseAuthService implements AuthService {
     return new RestResponse({ body: user.id })
   }
 
-  private supabaseAuthError<Data>(error: AuthError, errorMessage: string) {
+  private supabaseAuthError<Data>(
+    error: AuthError,
+    errorMessage: string,
+    statusCode: number = HTTP_STATUS_CODE.serverError,
+  ) {
+    console.error('Supabase auth error message: ', error.message)
     return new RestResponse<Data>({
       errorMessage,
-      statusCode: error.status,
+      statusCode,
     })
   }
 }

@@ -66,11 +66,11 @@ export class RestResponse<Body = unknown> {
   }
 
   get body(): Body {
-    if (this._body === null) {
-      throw new AppError('Response has no body')
+    if (this._errorMessage) {
+      throw new AppError('Response is a failure')
     }
 
-    return this._body
+    return this._body as Body
   }
 
   getHeader(key: string) {
