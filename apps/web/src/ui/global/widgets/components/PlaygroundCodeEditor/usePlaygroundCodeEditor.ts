@@ -87,7 +87,7 @@ export function usePlaygroundCodeEditor(
       showError(response.errorMessage, response.errorLine)
     }
 
-    if (response.isSuccess) {
+    if (response.isSuccessful) {
       setOutputs(response.outputs)
       consoleRef.current?.open()
     }

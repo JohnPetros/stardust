@@ -151,6 +151,11 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       return this as Http<NextSchema, NextResponse<unknown>>
     },
 
+    statusNoContent() {
+      statusCode = HTTP_STATUS_CODE.noContent
+      return this as Http<NextSchema, NextResponse<unknown>>
+    },
+
     send(data: unknown, statusCode = HTTP_STATUS_CODE.ok) {
       if (cookies.length) {
         const nextResponse = NextResponse.redirect(

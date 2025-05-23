@@ -4,7 +4,7 @@ import { Header } from '../components/Header'
 import { Link } from '../components/Link'
 import { Paragraph } from '../components/Paragraph'
 
-export const ConfirmPasswordResetTemplate = () => {
+const ConfirmPasswordResetTemplate = () => {
   return (
     <Body>
       <Header>Pedido de redefinição de senha.</Header>
@@ -31,10 +31,3 @@ export const ConfirmPasswordResetTemplate = () => {
 }
 
 export default ConfirmPasswordResetTemplate
-
-/**
- * <h2>Redefinição de senha - <span style="color: #00FF88">Star</span><span style="color: #027558">Dust</span></h2>
-
-<p>Clique no link abaixo para mudar sua senha:</p>
-<p><a href="{{ .SiteURL }}/server/auth/confirm?token={{ .TokenHash }}&action=password_reset">Redefinir Senha</a></p>
- */

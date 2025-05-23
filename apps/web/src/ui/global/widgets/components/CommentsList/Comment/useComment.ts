@@ -57,7 +57,7 @@ export function useComment(commentId: string) {
       return
     }
 
-    if (response.isSuccess) {
+    if (response.isSuccessful) {
       refetchReplies()
       setIsRepliesVisible(true)
       setIsUserReplyInputVisible(false)
@@ -68,7 +68,7 @@ export function useComment(commentId: string) {
   async function handleDeleteUserReply(replyId: string) {
     if (!user) return
     const response = await api.deleteComment(replyId)
-    if (response.isSuccess) {
+    if (response.isSuccessful) {
       refetchReplies()
       return
     }

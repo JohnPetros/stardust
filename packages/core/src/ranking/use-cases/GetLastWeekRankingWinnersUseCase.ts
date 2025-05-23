@@ -38,7 +38,7 @@ export class GetLastWeekRankingWinnersUseCase implements UseCase<UserDto, Respon
 
   private async fetchLastWeekRankingWinners(lastWeekTierId: string) {
     const response = await this.rankingsService.fetchRankingWinnersByTier(lastWeekTierId)
-    if (response.isSuccess) {
+    if (response.isSuccessful) {
       return response.body
     }
     return []

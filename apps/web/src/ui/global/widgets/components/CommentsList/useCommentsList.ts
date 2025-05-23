@@ -65,7 +65,7 @@ export function useCommentsList({ onFetchComments, onSaveComment }: CommentsList
   async function handleDeleteComment(commentId: string) {
     const response = await api.deleteComment(commentId)
 
-    if (response.isSuccess) {
+    if (response.isSuccessful) {
       refetch()
       return
     }
