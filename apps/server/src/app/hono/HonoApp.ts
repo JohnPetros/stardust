@@ -7,16 +7,16 @@ import { createServerClient } from '@supabase/ssr'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 import { ENV } from '@/constants'
-import { ProfileRouter } from './routers'
 import { inngest } from '@/queue/inngest/client'
 import {
   ProfileFunctions,
   SpaceFunctions,
   ShopFunctions,
   RankingFunctions,
+  StorageFunctions,
 } from '@/queue/inngest/functions'
-import { AuthRouter } from './routers/auth'
 import { InngestAmqp } from '@/queue/inngest/InngestAmqp'
+import { AuthRouter, ProfileRouter } from './routers'
 
 declare module 'hono' {
   interface ContextVariableMap {
@@ -62,6 +62,7 @@ export class HonoApp {
       const spaceFunctions = new SpaceFunctions(inngest)
       const shopFunctions = new ShopFunctions(inngest)
       const rankingFunctions = new RankingFunctions(inngest)
+      const storageFunctions = new StorageFunctions(inngest)
 
       return serveInngest({
         client: inngest,
@@ -70,6 +71,7 @@ export class HonoApp {
           ...spaceFunctions.getFunctions(supabase),
           ...shopFunctions.getFunctions(supabase),
           ...rankingFunctions.getFunctions(supabase),
+          ...storageFunctions.getFunctions(),
         ],
       })(context)
     })
