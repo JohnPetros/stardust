@@ -31,7 +31,7 @@ export class UsersRouter extends HonoRouter {
         const repository = new SupabaseUsersRepository(http.getSupabase())
         const controller = new FetchUserController(repository)
         const response = await controller.handle(http)
-        return this.app.sendRestResponse(response)
+        return http.sendResponse(response)
       },
     )
   }
@@ -50,7 +50,7 @@ export class UsersRouter extends HonoRouter {
         const repository = new SupabaseUsersRepository(http.getSupabase())
         const controller = new VerifyUserNameInUseController(repository)
         const response = await controller.handle(http)
-        return this.app.sendRestResponse(response)
+        return http.sendResponse(response)
       },
     )
   }
@@ -69,7 +69,7 @@ export class UsersRouter extends HonoRouter {
         const repository = new SupabaseUsersRepository(http.getSupabase())
         const controller = new VerifyUserEmailInUseController(repository)
         const response = await controller.handle(http)
-        return this.app.sendRestResponse(response)
+        return http.sendResponse(response)
       },
     )
   }

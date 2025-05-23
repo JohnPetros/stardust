@@ -1,0 +1,49 @@
+@URL = {{BASE_URL}}/auth
+@EMAIL = stardust.teste@gmail.com
+
+### Sign in
+POST {{URL}}/sign-in
+Content-Type: application/json
+
+{
+  "email": "{{EMAIL}}",
+  "password": "654321"
+}
+
+### Sign up
+POST {{URL}}/sign-up
+Content-Type: application/json
+
+{
+  "email": "{{EMAIL}}",
+  "password": "123456",
+  "name": "John Doe"
+}
+
+### Sign out
+DELETE {{URL}}/sign-out
+
+### Confirm email
+GET {{URL}}/confirm-email?token=123456
+
+### Request password reset
+POST {{URL}}/request-password-reset
+Content-Type: application/json
+
+{
+  "email": "{{EMAIL}}"
+}
+
+### Confirm password reset
+GET {{URL}}/confirm-password-reset?token=123456
+
+### Reset password
+PATCH {{URL}}/reset-password
+Content-Type: application/json
+
+{
+  "newPassword": "654321",
+  "accessToken": "eyJhbGciOiJIUzI1NiIsImtpZCI6ImF5WTVaRFRGK1hUVEtRK1EiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3J2ZXVicXp2ZmJxYmNwbXVldm5tLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiJmNmFkMzZlNS0xZmJiLTRlYjItYWM0Yi04ZjBiMmQ1NDM0MjkiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzQ3OTU4Njk1LCJpYXQiOjE3NDc5NTUwOTUsImVtYWlsIjoiam9hb3BjYXJ2YWxoby5jZHNAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbCI6ImpvYW9wY2FydmFsaG8uY2RzQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaG9uZV92ZXJpZmllZCI6ZmFsc2UsInN1YiI6ImY2YWQzNmU1LTFmYmItNGViMi1hYzRiLThmMGIyZDU0MzQyOSJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6Im90cCIsInRpbWVzdGFtcCI6MTc0Nzk1NTA5NX1dLCJzZXNzaW9uX2lkIjoiMDk1YTdlZmUtZGVmYy00MDE0LTkyYzAtYjJlNzNjMzNjZDZiIiwiaXNfYW5vbnltb3VzIjpmYWxzZX0.9tODii9CE1TNEwQtjJNJtD7H9B9oqMsJjTJNIzpm8us",
+  "refreshToken": "nsdwkkd2j6va"
+}
+

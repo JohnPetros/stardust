@@ -6,8 +6,6 @@ import { parseCookieHeader } from '@supabase/ssr'
 import { createServerClient } from '@supabase/ssr'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
-import type { RestResponse } from '@stardust/core/global/responses'
-
 import { ENV } from '@/constants'
 import { ProfileRouter } from './routers'
 import { inngest } from '@/queue/inngest/client'
@@ -17,10 +15,13 @@ import {
   ShopFunctions,
   RankingFunctions,
 } from '@/queue/inngest/functions'
+import { AuthRouter } from './routers/auth'
+import { InngestAmqp } from '@/queue/inngest/InngestAmqp'
 
 declare module 'hono' {
   interface ContextVariableMap {
     supabase: SupabaseClient
+    inngest: InngestAmqp<void>
   }
 }
 
@@ -43,12 +44,15 @@ export class HonoApp {
 
   private registerRoutes() {
     const profileRouter = new ProfileRouter(this)
+    const authRouter = new AuthRouter(this)
     this.hono.route('/', profileRouter.registerRoutes())
+    this.hono.route('/', authRouter.registerRoutes())
     this.registerInngestRoute()
   }
 
   private registerMiddlewares() {
     this.hono.use('*', this.createSupabaseClient())
+    this.hono.use('*', this.createInngestAmqp())
   }
 
   private registerInngestRoute() {
@@ -72,31 +76,34 @@ export class HonoApp {
   }
 
   private createSupabaseClient() {
-    return async (c: Context, next: Next) => {
+    return async (context: Context, next: Next) => {
       const supabase = createServerClient(ENV.supabaseUrl, ENV.supabaseKey, {
         cookies: {
           getAll() {
-            const cookies = parseCookieHeader(c.req.header('Cookie') ?? '')
-            return cookies.map((cookie) => ({
-              name: cookie.name,
-              value: String(cookie.value),
-            }))
+            return parseCookieHeader(context.req.header('Cookie') ?? '')
           },
 
           setAll(cookiesToSet) {
             cookiesToSet.forEach(({ name, value, options }) =>
               // @ts-ignore
-              setCookie(c, name, value, options),
+              setCookie(context, name, value, {
+                ...options,
+                maxAge: 60 * 60 * 24 * 400,
+              }),
             )
           },
         },
       })
-      c.set('supabase', supabase)
+      context.set('supabase', supabase)
       await next()
     }
   }
 
-  sendRestResponse(response: RestResponse) {
-    return response.body as Response
+  private createInngestAmqp() {
+    return async (context: Context, next: Next) => {
+      const inngest = new InngestAmqp()
+      context.set('inngest', inngest)
+      await next()
+    }
   }
 }

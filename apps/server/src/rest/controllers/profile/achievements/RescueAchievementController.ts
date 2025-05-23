@@ -26,6 +26,6 @@ export class RescueAchievementController implements Controller<Schema> {
       this.usersRepository,
     )
     const response = await useCase.execute({ achievementId, userId })
-    return http.sendJson(response)
+    return http.send(response)
   }
 }

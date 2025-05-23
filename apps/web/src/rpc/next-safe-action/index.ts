@@ -1,4 +1,3 @@
-import { signUp } from './authActionts'
 import {
   fetchChallengesList,
   accessChallengePage,
@@ -24,7 +23,6 @@ import {
   rewardForStarCompletion,
 } from './rewardingActions'
 
-export const authActions = { signUp }
 export const cookieActions = { setCookie, getCookie, deleteCookie, hasCookie }
 export const challengingActions = {
   fetchChallengesList,

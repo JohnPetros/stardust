@@ -74,7 +74,7 @@ export function useResetPasswordDialog(alertDialogRef: RefObject<AlertDialogRef>
       })
     }
 
-    if (response.isSuccess) {
+    if (response.isSuccessful) {
       alertDialogRef.current?.open()
       await api.signOut()
     }

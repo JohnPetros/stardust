@@ -17,6 +17,6 @@ export class VerifyUserNameInUseController implements Controller<Schema> {
     const { name } = await http.getBody()
     const useCase = new VerifyUserNameInUseUseCase(this.usersRepository)
     const updatedUser = await useCase.execute(name)
-    return http.sendJson(updatedUser)
+    return http.send(updatedUser)
   }
 }

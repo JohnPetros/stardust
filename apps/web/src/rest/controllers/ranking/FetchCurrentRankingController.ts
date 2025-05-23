@@ -9,7 +9,7 @@ export const FetchCurrentRankingController = (service: RankingService): Controll
       const response = await service.fetchRankingUsersByTier(userDto.tier.id)
       if (response.isFailure) response.throwError()
       const rankingUsersDto = response.body
-      return http.sendJson(rankingUsersDto, HTTP_STATUS_CODE.ok)
+      return http.send(rankingUsersDto, HTTP_STATUS_CODE.ok)
     },
   }
 }

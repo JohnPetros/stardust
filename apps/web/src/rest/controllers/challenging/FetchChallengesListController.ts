@@ -45,7 +45,7 @@ export const FetchChallengesListController = (
         },
       })
 
-      return http.sendJson(data)
+      return http.send(data)
     },
   }
 }

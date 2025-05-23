@@ -4,13 +4,7 @@ import { Header } from '../components/Header'
 import { Link } from '../components/Link'
 import { Paragraph } from '../components/Paragraph'
 
-type RequestPasswordResetTemplateProps = {
-  baseUrl: string
-}
-
-export const RequestPasswordResetTemplate = ({
-  baseUrl,
-}: RequestPasswordResetTemplateProps) => {
+const ConfirmPasswordResetTemplate = () => {
   return (
     <Body>
       <Header>Pedido de redefinição de senha.</Header>
@@ -28,9 +22,7 @@ export const RequestPasswordResetTemplate = ({
 
         <Paragraph>- Equipe StarDust! 🚀</Paragraph>
 
-        <Link
-          href={`{{ .SiteURL }}${baseUrl}?token={{ .TokenHash }}&action=password_reset`}
-        >
+        <Link href={'{{ .SiteURL }}/confirm-password-reset?token={{ .TokenHash }}'}>
           Redefinir senha
         </Link>
       </Box>
@@ -38,12 +30,4 @@ export const RequestPasswordResetTemplate = ({
   )
 }
 
-export default RequestPasswordResetTemplate
-
-/**
- * <h2>Redefinição de senha - <span style="color: #00FF88">Star</span><span style="color: #027558">Dust</span></h2>
-
-<p>Clique no link abaixo para mudar sua senha:</p>
-<p><a href="{{ .SiteURL }}/server/auth/confirm?token={{ .TokenHash }}&action=password_reset">Redefinir Senha</a></p>
- */
-
+export default ConfirmPasswordResetTemplate

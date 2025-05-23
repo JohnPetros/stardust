@@ -27,7 +27,7 @@ export function useSnippetCard(
 
   async function handleDeleteSnippetButtonClick() {
     const response = await api.deleteSnippet(snippetId)
-    if (response.isSuccess) {
+    if (response.isSuccessful) {
       onDelete(snippetId)
       return
     }

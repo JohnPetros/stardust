@@ -12,7 +12,7 @@ export const CountCompletedChallengesByDifficultyLevelController = (
         challengingService,
       )
       const data = await useCase.execute(userDto)
-      return http.sendJson(data)
+      return http.send(data)
     },
   }
 }

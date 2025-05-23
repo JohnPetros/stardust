@@ -40,7 +40,7 @@ export class PostSolutionUseCase implements UseCase<Request, Response> {
     const response = await this.challengingService.fetchSolutionBySlug(
       Slug.create(solutionTitle).value,
     )
-    if (response.isSuccess)
+    if (response.isSuccessful)
       throw new ValidationError([
         { name: 'solutionTitle', messages: ['Título já usado por outra solução'] },
       ])

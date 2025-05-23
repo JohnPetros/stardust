@@ -17,6 +17,6 @@ export class VerifyUserEmailInUseController implements Controller<Schema> {
     const { email } = await http.getBody()
     const useCase = new VerifyUserEmailInUseUseCase(this.usersRepository)
     await useCase.execute(email)
-    return http.sendJson({})
+    return http.send({})
   }
 }

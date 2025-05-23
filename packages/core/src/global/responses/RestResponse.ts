@@ -57,7 +57,7 @@ export class RestResponse<Body = unknown> {
     throw new AppError(this.errorMessage)
   }
 
-  get isSuccess() {
+  get isSuccessful() {
     return this.statusCode <= HTTP_STATUS_CODE.redirect
   }
 
@@ -66,11 +66,11 @@ export class RestResponse<Body = unknown> {
   }
 
   get body(): Body {
-    if (this._body === null) {
-      throw new AppError('Response has no body')
+    if (this._errorMessage) {
+      throw new AppError('Response failed')
     }
 
-    return this._body
+    return this._body as Body
   }
 
   getHeader(key: string) {

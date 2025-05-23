@@ -28,7 +28,7 @@ export function useChallengeControl(isChallengePublic: boolean) {
       toast.show(response.errorMessage)
     }
 
-    if (response.isSuccess) {
+    if (response.isSuccessful) {
       setChallenge(challenge)
     }
   }

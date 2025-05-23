@@ -60,7 +60,7 @@ export class CalculateRewardForStarCompletionUseCase
 
     if (!nextStar) {
       const response = await this.spaceService.fetchNextStarFromNextPlanet(planet)
-      if (response.isSuccess) {
+      if (response.isSuccessful) {
         nextStar = Star.create(response.body)
       }
       if (response.isFailure) {

@@ -2,6 +2,7 @@ import type { Context } from 'inngest'
 
 import type { Amqp, TimeExpression } from '@stardust/core/global/interfaces'
 import { AppError } from '@stardust/core/global/errors'
+import type { Event } from '@stardust/core/global/abstracts'
 
 import { inngest } from './client'
 
@@ -50,7 +51,20 @@ export class InngestAmqp<Payload> implements Amqp<Payload> {
     return this.event?.data
   }
 
-  async sendEvent(event: any) {
-    await inngest.send({ name: event.name, data: event.payload })
+  async sendEvent(event: Event) {
+    if (!this.step) {
+      await inngest.send({
+        // @ts-ignore
+        name: event.name,
+        // @ts-ignore
+        data: event.payload,
+      })
+      return
+    }
+
+    await this.step?.sendEvent(`send.${event.name}.event`, {
+      name: event.name,
+      data: event.payload,
+    })
   }
 }

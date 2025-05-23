@@ -16,6 +16,6 @@ export class UpdateUserController implements Controller<Schema> {
     const userDto = await http.getBody()
     const useCase = new UpdateUserUseCase(this.usersRepository)
     const user = await useCase.execute(userDto)
-    return http.sendJson(user)
+    return http.send(user)
   }
 }
