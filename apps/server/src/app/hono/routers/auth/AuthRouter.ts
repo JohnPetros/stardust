@@ -15,9 +15,9 @@ import {
   SignInController,
   SignOutController,
   SignUpController,
+  ConfirmEmailController,
 } from '@/rest/controllers/auth'
 import { SupabaseAuthService } from '@/rest/services/SupabaseAuthService'
-import { ConfirmEmailController } from '@/rest/controllers/auth'
 import { InngestEventBroker } from '@/queue/inngest/InngestEventBroker'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
