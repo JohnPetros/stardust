@@ -21,7 +21,7 @@ export class CodeRunnerResponse {
     throw new CodeRunnerError(this.errorMessage, this.errorLine)
   }
 
-  get isSuccess(): boolean {
+  get isSuccessful(): boolean {
     return this._error === null
   }
 

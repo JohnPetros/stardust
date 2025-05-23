@@ -4,7 +4,7 @@ import { Header } from '../components/Header'
 import { Link } from '../components/Link'
 import { Paragraph } from '../components/Paragraph'
 
-export const ConfirmSignUpTemplate = () => {
+const ConfirmSignUpTemplate = () => {
   return (
     <Body>
       <Header>Confirmação de cadastro.</Header>

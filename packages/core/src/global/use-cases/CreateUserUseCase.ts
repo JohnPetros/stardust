@@ -46,11 +46,11 @@ export class CreateUserUseCase implements UseCase<Request> {
 
   async fetchUserByName(name: string) {
     const response = await this.profileService.fetchUserName(name)
-    if (response.isSuccess) response.throwError()
+    if (response.isSuccessful) response.throwError()
   }
 
   async fetchUserByEmail(email: string) {
     const response = await this.profileService.fetchUserEmail(email)
-    if (response.isSuccess) response.throwError()
+    if (response.isSuccessful) response.throwError()
   }
 }

@@ -25,7 +25,7 @@ export function useChallengeTitleField() {
       const existingChallengeWithSameSlug = await api.fetchChallengeBySlug(
         Slug.create(challengeTitle).value,
       )
-      if (existingChallengeWithSameSlug.isSuccess)
+      if (existingChallengeWithSameSlug.isSuccessful)
         setErrorMessage('Título já utilizado em outro desafio')
     }
 

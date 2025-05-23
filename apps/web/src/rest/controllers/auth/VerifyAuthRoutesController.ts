@@ -18,7 +18,7 @@ export const VerifyAuthRoutesController = (authService: AuthService): Controller
       const isPublicRoute =
         PUBLIC_ROUTES.map(String).includes(currentRoute) || isSnippetPageRoute
       const response = await authService.fetchUserId()
-      const hasSession = response.isSuccess
+      const hasSession = response.isSuccessful
       const isRootRoute = currentRoute === '/'
       const isSignInRoute = currentRoute === ROUTES.auth.signIn
 

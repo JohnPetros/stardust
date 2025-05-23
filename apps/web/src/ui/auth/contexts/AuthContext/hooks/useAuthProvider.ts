@@ -63,7 +63,7 @@ export function useAuthProvider(serverSession: Session | null) {
   async function handleSignIn(email: string, password: string) {
     const response = await api.signIn(email, password)
 
-    if (response.isSuccess) {
+    if (response.isSuccessful) {
       setSession({ user: { id: response.body.userId } })
       return true
     }

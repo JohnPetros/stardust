@@ -27,7 +27,7 @@ export function useCommentContent(
       return
     }
 
-    if (response.isSuccess) {
+    if (response.isSuccessful) {
       setContent(newContent)
       onEdit()
     }

@@ -22,7 +22,7 @@ export class PostChallengeUseCase implements UseCase<Request, Response> {
 
   private async fetchChallenge(challengeSlug: string) {
     const response = await this.challengingService.fetchChallengeBySlug(challengeSlug)
-    if (response.isSuccess) response.throwError()
+    if (response.isSuccessful) response.throwError()
   }
 
   private async saveChallenge(challenge: Challenge) {

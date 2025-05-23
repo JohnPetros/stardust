@@ -19,7 +19,7 @@ export const ConfirmEmailController = (authService: AuthService): Controller<Sch
     async handle(http: Http<Schema>) {
       const { token } = http.getQueryParams()
       const response = await authService.confirmEmail(token)
-      if (response.isSuccess) return http.redirect(ROUTES.auth.accountConfirmation)
+      if (response.isSuccessful) return http.redirect(ROUTES.auth.accountConfirmation)
       return redirectToSigInPage(http, response.errorMessage)
     },
   }

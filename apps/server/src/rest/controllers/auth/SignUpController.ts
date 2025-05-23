@@ -22,14 +22,14 @@ export class SignUpController implements Controller<Schema> {
     const { email, password, name } = await http.getBody()
     const response = await this.authService.signUp(email, password)
 
-    // if (response.isSuccess) {
-    //   const event = new UserSignedUpEvent({
-    //     userId: response.body.userId,
-    //     userEmail: email,
-    //     userName: name,
-    //   })
-    //   await this.eventBroker.publish(event)
-    // }
+    if (response.isSuccessful) {
+      const event = new UserSignedUpEvent({
+        userId: response.body.userId,
+        userEmail: email,
+        userName: name,
+      })
+      await this.eventBroker.publish(event)
+    }
 
     return response
   }
