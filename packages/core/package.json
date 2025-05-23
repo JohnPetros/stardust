@@ -120,6 +120,7 @@
     "./forum/use-cases": "./src/forum/use-cases/index.ts",
     "./storage/types": "./src/storage/types/index.ts",
     "./storage/interfaces": "./src/storage/interfaces/index.ts",
+    "./storage/use-cases": "./src/storage/use-cases/index.ts",
     "./mocks/services": "./src/__tests__/mocks/services/index.ts"
   },
   "imports": {
