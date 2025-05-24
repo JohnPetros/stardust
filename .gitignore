@@ -53,3 +53,6 @@ lerna-debug.log*
 .branches
 .temp
 dist
+
+# Certificates
+google-key-file.json
