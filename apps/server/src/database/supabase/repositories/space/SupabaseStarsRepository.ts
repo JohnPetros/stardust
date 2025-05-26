@@ -1,10 +1,9 @@
 import type { StarsRepository } from '@stardust/core/space/interfaces'
-import type { Id } from '@stardust/core/global/structures'
+import type { Id, Slug } from '@stardust/core/global/structures'
 import type { Star } from '@stardust/core/space/entities'
 
 import { SupabaseRepository } from '../SupabaseRepository'
 import { SupabaseStarMapper } from '../../mappers/space'
-import { SupabasePostgreError } from '../../errors'
 
 export class SupabaseStarsRepository
   extends SupabaseRepository
@@ -18,19 +17,23 @@ export class SupabaseStarsRepository
       .single()
 
     if (error) {
-      throw new SupabasePostgreError(error)
+      return null
     }
 
     return SupabaseStarMapper.toEntity(data)
   }
 
-  async addUnlocked(starId: Id, userId: Id): Promise<void> {
-    const { error } = await this.supabase
-      .from('users_unlocked_stars')
-      .insert({ star_id: starId.value, user_id: userId.value })
+  async findBySlug(starSlug: Slug): Promise<Star | null> {
+    const { data, error } = await this.supabase
+      .from('stars')
+      .select('*')
+      .eq('slug', starSlug)
+      .single()
 
     if (error) {
-      throw new SupabasePostgreError(error)
+      return null
     }
+
+    return SupabaseStarMapper.toEntity(data)
   }
 }
