@@ -16,7 +16,16 @@ import {
   StorageFunctions,
 } from '@/queue/inngest/functions'
 import { InngestAmqp } from '@/queue/inngest/InngestAmqp'
-import { AuthRouter, ProfileRouter } from './routers'
+import { AuthRouter, ProfileRouter, SpaceRouter } from './routers'
+import { ZodError } from 'zod'
+import {
+  AuthError,
+  ConflictError,
+  NotFoundError,
+  ValidationError,
+} from '@stardust/core/global/errors'
+import { AppError } from '@stardust/core/global/errors'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 declare module 'hono' {
   interface ContextVariableMap {
@@ -31,6 +40,7 @@ export class HonoApp {
   startServer() {
     this.registerMiddlewares()
     this.registerRoutes()
+    this.setUpErrorHandler()
     serve(
       {
         fetch: this.hono.fetch,
@@ -42,11 +52,57 @@ export class HonoApp {
     )
   }
 
+  private setUpErrorHandler() {
+    this.hono.onError((error, context) => {
+      if (error instanceof AppError) {
+        console.error('Error title:', error.title)
+        console.error('Error message:', error.message)
+
+        const response = {
+          title: error.title,
+          message: error.message,
+        }
+
+        if (error instanceof AuthError)
+          return context.json(response, HTTP_STATUS_CODE.unauthorized)
+
+        if (error instanceof NotFoundError)
+          return context.json(response, HTTP_STATUS_CODE.notFound)
+
+        if (error instanceof ConflictError)
+          return context.json(response, HTTP_STATUS_CODE.conflict)
+
+        if (error instanceof ValidationError)
+          return context.json(response, HTTP_STATUS_CODE.badRequest)
+
+        return context.json(response, HTTP_STATUS_CODE.serverError)
+      }
+
+      console.error(error)
+
+      if (error instanceof ZodError)
+        return context.json(
+          { title: 'Validation Error', message: error.issues },
+          HTTP_STATUS_CODE.badRequest,
+        )
+
+      return context.json(
+        {
+          title: 'Server Error',
+          message: error.message,
+        },
+        HTTP_STATUS_CODE.serverError,
+      )
+    })
+  }
+
   private registerRoutes() {
     const profileRouter = new ProfileRouter(this)
     const authRouter = new AuthRouter(this)
+    const spaceRouter = new SpaceRouter(this)
     this.hono.route('/', profileRouter.registerRoutes())
     this.hono.route('/', authRouter.registerRoutes())
+    this.hono.route('/', spaceRouter.registerRoutes())
     this.registerInngestRoute()
   }
 
@@ -90,7 +146,7 @@ export class HonoApp {
               // @ts-ignore
               setCookie(context, name, value, {
                 ...options,
-                maxAge: 60 * 60 * 24 * 400,
+                maxAge: 60 * 60 * 24 * 400, // 400 days
               }),
             )
           },
