@@ -1,5 +1,5 @@
 export { GetLastUnlockedStarIdUseCase } from './GetLastUnlockedStarIdUseCase'
-export { GetFirstStarIdUseCase } from './GetFirstStarIdUseCase'
+export { GetStarUseCase } from './GetStarUseCase'
 export { CalculateRewardForStarCompletionUseCase } from './CalculateRewardForStarCompletionUseCase'
 export { UnlockStarUseCase } from './UnlockStarUseCase'
 export { UnlockFirstStarUseCase } from './UnlockFirstStarUseCase'
