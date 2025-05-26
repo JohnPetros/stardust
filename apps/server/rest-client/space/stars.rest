@@ -1,0 +1,5 @@
+@URL = {{BASE_URL}}/space/stars
+@STAR_SLUG = "opa-opa"
+
+### Fetch star
+GET {{URL}}/{{STAR_SLUG}}
