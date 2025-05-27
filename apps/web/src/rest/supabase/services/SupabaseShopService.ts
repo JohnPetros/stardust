@@ -44,14 +44,14 @@ export const SupabaseShopService = (supabase: Supabase): ShopService => {
         head: false,
       })
 
-      if (search && search.length > 1) {
+      if (search && search.value.length > 1) {
         query = query.ilike('name', `%${search}%`)
       }
 
-      const range = calculateSupabaseRange(page, itemsPerPage)
+      const range = calculateSupabaseRange(page.value, itemsPerPage.value)
 
       query = query
-        .order('price', { ascending: order === 'ascending' })
+        .order('price', { ascending: order.value === 'ascending' })
         .range(range.from, range.to)
 
       const { data, count, error } = await query
@@ -113,14 +113,14 @@ export const SupabaseShopService = (supabase: Supabase): ShopService => {
         head: false,
       })
 
-      if (search && search.length > 1) {
+      if (search && search.value.length > 1) {
         query = query.ilike('name', `%${search}%`)
       }
 
-      const range = calculateSupabaseRange(page, itemsPerPage)
+      const range = calculateSupabaseRange(page.value, itemsPerPage.value)
 
       query = query
-        .order('price', { ascending: order === 'ascending' })
+        .order('price', { ascending: order.value === 'ascending' })
         .range(range.from, range.to)
 
       const { data, count, error } = await query
