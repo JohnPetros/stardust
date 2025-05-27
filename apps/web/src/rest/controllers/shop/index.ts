@@ -1,1 +1,0 @@
-export { FetchShopItemsController } from './FetchShopItemsController'
