@@ -5,6 +5,7 @@ import { serve as serveInngest } from 'inngest/hono'
 import { parseCookieHeader } from '@supabase/ssr'
 import { createServerClient } from '@supabase/ssr'
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { ZodError } from 'zod'
 
 import { ENV } from '@/constants'
 import { inngest } from '@/queue/inngest/client'
@@ -16,8 +17,7 @@ import {
   StorageFunctions,
 } from '@/queue/inngest/functions'
 import { InngestAmqp } from '@/queue/inngest/InngestAmqp'
-import { AuthRouter, ProfileRouter, SpaceRouter } from './routers'
-import { ZodError } from 'zod'
+import { AuthRouter, ProfileRouter, SpaceRouter, ShopRouter } from './routers'
 import {
   AuthError,
   ConflictError,
@@ -100,9 +100,12 @@ export class HonoApp {
     const profileRouter = new ProfileRouter(this)
     const authRouter = new AuthRouter(this)
     const spaceRouter = new SpaceRouter(this)
+    const shopRouter = new ShopRouter(this)
+
     this.hono.route('/', profileRouter.registerRoutes())
     this.hono.route('/', authRouter.registerRoutes())
     this.hono.route('/', spaceRouter.registerRoutes())
+    this.hono.route('/', shopRouter.registerRoutes())
     this.registerInngestRoute()
   }
 
