@@ -13,8 +13,8 @@ export class Text {
   countCharacters(characters: string): Integer {
     let count = 0
 
-    for (let i = 0; i < this.value.length; i++) {
-      if (characters === this.value.slice(i, characters.length + i)) count++
+    for (let index = 0; index < this.value.length; index++) {
+      if (characters === this.value.slice(index, characters.length + index)) count++
     }
 
     return Integer.create(count)
