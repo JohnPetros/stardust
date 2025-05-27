@@ -15,7 +15,6 @@ export class GetStarUseCase implements UseCase<Request, Response> {
 
   async execute({ starSlug }: Request) {
     const star = await this.repository.findBySlug(Slug.create(starSlug))
-    console.log(star)
     if (!star) {
       throw new StarNotFoundError()
     }
