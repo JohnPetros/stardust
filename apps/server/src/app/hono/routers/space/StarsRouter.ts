@@ -23,7 +23,7 @@ export class StarsRouter extends HonoRouter {
         }),
       ),
       async (context) => {
-        const http = new HonoHttp<HonoSchema<typeof context>>(context)
+        const http = new HonoHttp(context)
         const repository = new SupabaseStarsRepository(http.getSupabase())
         const controller = new FetchStarController(repository)
         const response = await controller.handle(http)

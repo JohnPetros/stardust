@@ -1,9 +1,9 @@
 import { Hono } from 'hono'
+import { SupabasePlanetsRepository } from '@/database'
 
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
 import { FetchAllPlanetsController } from '@/rest/controllers/space/planets'
-import { SupabasePlanetsRepository } from '@/database'
 
 export class PlanetsRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/planets')

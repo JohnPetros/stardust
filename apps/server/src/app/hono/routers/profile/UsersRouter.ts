@@ -2,17 +2,24 @@ import { Hono } from 'hono'
 import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
 
-import { emailSchema, idSchema, nameSchema } from '@stardust/validation/global/schemas'
+import {
+  emailSchema,
+  idSchema,
+  integerSchema,
+  nameSchema,
+  stringSchema,
+} from '@stardust/validation/global/schemas'
 
 import {
   FetchUserController,
+  AcquireAvatarController,
+  AcquireRocketController,
   VerifyUserNameInUseController,
   VerifyUserEmailInUseController,
 } from '@/rest/controllers/profile'
-import { HonoHttp } from '../../HonoHttp'
 import { HonoRouter } from '../../HonoRouter'
-import type { HonoSchema } from '../../types'
 import { SupabaseUsersRepository } from '@/database'
+import { HonoHttp } from '../../HonoHttp'
 
 export class UsersRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/users')
@@ -27,9 +34,65 @@ export class UsersRouter extends HonoRouter {
         }),
       ),
       async (context) => {
-        const http = new HonoHttp<HonoSchema<typeof context>>(context)
+        const http = new HonoHttp(context)
         const repository = new SupabaseUsersRepository(http.getSupabase())
         const controller = new FetchUserController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private acquireAvatarRoute() {
+    this.router.put(
+      '/:userId/avatar',
+      zValidator(
+        'param',
+        z.object({
+          userId: idSchema,
+        }),
+      ),
+      zValidator(
+        'json',
+        z.object({
+          avatarId: idSchema,
+          avatarName: nameSchema,
+          avatarImage: stringSchema,
+          avatarPrice: integerSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const controller = new AcquireAvatarController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private acquireRocketRoute() {
+    this.router.put(
+      '/:userId/rocket',
+      zValidator(
+        'param',
+        z.object({
+          userId: idSchema,
+        }),
+      ),
+      zValidator(
+        'json',
+        z.object({
+          rocketId: idSchema,
+          rocketName: nameSchema,
+          rocketImage: stringSchema,
+          rocketPrice: integerSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const controller = new AcquireRocketController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -46,7 +109,7 @@ export class UsersRouter extends HonoRouter {
         }),
       ),
       async (context) => {
-        const http = new HonoHttp<HonoSchema<typeof context>>(context)
+        const http = new HonoHttp(context)
         const repository = new SupabaseUsersRepository(http.getSupabase())
         const controller = new VerifyUserNameInUseController(repository)
         const response = await controller.handle(http)
@@ -65,7 +128,7 @@ export class UsersRouter extends HonoRouter {
         }),
       ),
       async (context) => {
-        const http = new HonoHttp<HonoSchema<typeof context>>(context)
+        const http = new HonoHttp(context)
         const repository = new SupabaseUsersRepository(http.getSupabase())
         const controller = new VerifyUserEmailInUseController(repository)
         const response = await controller.handle(http)
@@ -76,6 +139,8 @@ export class UsersRouter extends HonoRouter {
 
   registerRoutes(): Hono {
     this.fetchUserRoute()
+    this.acquireAvatarRoute()
+    this.acquireRocketRoute()
     this.verifyUserNameInUseRoute()
     this.verifyUserEmailInUseRoute()
     return this.router
