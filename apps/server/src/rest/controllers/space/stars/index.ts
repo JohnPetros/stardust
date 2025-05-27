@@ -1,0 +1,1 @@
+export { FetchStarController } from './FetchStarController'
