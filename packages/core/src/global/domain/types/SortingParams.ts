@@ -1,4 +1,4 @@
-import type { ListOrder } from './ListOrder'
+import type { ListOrder } from '../structures/ListOder'
 
 export type SortingParams = {
   order: ListOrder

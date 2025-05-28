@@ -35,7 +35,7 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
 
     return new PaginationResponse(
       challenges.map((challenge) => challenge.dto),
-      challengesPagination.count,
+      challengesPagination.totalItemsCount,
     )
   }
 

@@ -200,7 +200,7 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
         query = query.in('challenges_categories.category_id', categoriesIds)
       }
 
-      const range = calculateSupabaseRange(page, itemsPerPage)
+      const range = calculateSupabaseRange(page.value, itemsPerPage.value)
 
       const { data, count, status, error } = await query.range(range.from, range.to)
 
@@ -255,7 +255,7 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
           break
       }
 
-      const range = calculateSupabaseRange(page, itemsPerPage)
+      const range = calculateSupabaseRange(page.value, itemsPerPage.value)
 
       const { data, count, status, error } = await query.range(range.from, range.to)
 

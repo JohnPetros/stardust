@@ -1,3 +1,4 @@
-export { ProfileRouter } from './profile/ProfileRouter'
-export { AuthRouter } from './auth/AuthRouter'
-export { SpaceRouter } from './space/SpaceRouter'
+export { ProfileRouter } from './profile'
+export { AuthRouter } from './auth'
+export { SpaceRouter } from './space'
+export { ShopRouter } from './shop'

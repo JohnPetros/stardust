@@ -5,8 +5,9 @@ import type {
   ChallengeDifficultyLevel,
 } from '@stardust/core/challenging/types'
 import { ListChallengesUseCase } from '@stardust/core/challenging/use-cases'
-import type { PaginationResponse } from '@stardust/core/global/responses'
 import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
+import { PaginationResponse } from '@stardust/core/global/responses'
+import { OrdinalNumber } from '@stardust/core/global/structures'
 
 type Request = {
   page: number
@@ -37,15 +38,15 @@ export const FetchChallengesListAction = (
         userDto,
         completionStatus,
         listParams: {
-          page,
-          itemsPerPage,
+          page: OrdinalNumber.create(page),
+          itemsPerPage: OrdinalNumber.create(itemsPerPage),
           title,
           difficultyLevel,
           categoriesIds: categoriesIds ? categoriesIds.split(',') : [],
         },
       })
 
-      return { items: pagination.items, count: pagination.count }
+      return new PaginationResponse(pagination.items, pagination.totalItemsCount)
     },
   }
 }

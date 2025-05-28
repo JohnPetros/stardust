@@ -1,0 +1,4 @@
+@URL = {{BASE_URL}}/shop/rockets
+
+### Fetch rockets list
+GET {{URL}}?order=ascending&page=1&itemsPerPage=6

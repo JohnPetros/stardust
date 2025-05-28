@@ -1,4 +1,6 @@
+import type { OrdinalNumber } from '../structures'
+
 export type PaginationParams = {
-  page: number
-  itemsPerPage: number
+  page: OrdinalNumber
+  itemsPerPage: OrdinalNumber
 }

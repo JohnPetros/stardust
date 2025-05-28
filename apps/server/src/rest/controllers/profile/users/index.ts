@@ -1,3 +1,5 @@
 export { FetchUserController } from './FetchUserController'
+export { AcquireAvatarController } from './AcquireAvatarController'
+export { AcquireRocketController } from './AcquireRocketController'
 export { VerifyUserNameInUseController } from './VerifyUserNameInUseController'
 export { VerifyUserEmailInUseController } from './VerifyUserEmailInUseController'

@@ -7,6 +7,10 @@ export class AvatarsFaker {
     return Avatar.create(AvatarsFaker.fakeDto(baseDto))
   }
 
+  static fakeMany(count?: number): Avatar[] {
+    return Array.from({ length: count ?? 10 }).map(() => AvatarsFaker.fake())
+  }
+
   static fakeDto(baseDto?: Partial<AvatarDto>): AvatarDto {
     return {
       id: faker.string.uuid(),

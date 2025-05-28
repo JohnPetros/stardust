@@ -15,7 +15,6 @@ import {
 } from '@/database/supabase/repositories/profile'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
-import type { HonoSchema } from '../../types'
 
 export class AchievementsRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/achievements')
@@ -40,7 +39,7 @@ export class AchievementsRouter extends HonoRouter {
         }),
       ),
       async (context) => {
-        const http = new HonoHttp<HonoSchema<typeof context>>(context)
+        const http = new HonoHttp(context)
         const repository = new SupabaseAchievementsRepository(http.getSupabase())
         const controller = new FetchAllUnlockedAchievementsController(repository)
         const response = await controller.handle(http)
@@ -60,7 +59,7 @@ export class AchievementsRouter extends HonoRouter {
         }),
       ),
       async (context) => {
-        const http = new HonoHttp<HonoSchema<typeof context>>(context)
+        const http = new HonoHttp(context)
         const supabase = http.getSupabase()
         const achievementsRepository = new SupabaseAchievementsRepository(supabase)
         const usersRepository = new SupabaseUsersRepository(supabase)
