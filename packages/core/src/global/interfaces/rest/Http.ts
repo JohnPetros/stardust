@@ -1,3 +1,4 @@
+import type { PaginationResponse } from '#global/responses/PaginationResponse'
 import type { RestResponse } from '#global/responses/RestResponse'
 import type { UserDto } from '#profile/domain/entities/dtos/UserDto'
 
@@ -25,5 +26,6 @@ export interface Http<Schema extends HttpSchema = HttpSchema, Response = unknown
   statusOk(): this
   statusCreated(): this
   statusNoContent(): this
+  sendPagination<Item>(pagination: PaginationResponse<Item>): RestResponse<Response>
   send(json?: unknown, statusCode?: number): RestResponse<Response>
 }
