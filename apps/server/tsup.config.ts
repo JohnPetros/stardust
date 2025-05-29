@@ -7,7 +7,6 @@ export default defineConfig((options: Options) => {
     clean: true,
     sourcemap: false,
     outDir: 'build',
-    external: ['@stardust/core', '@stardust/validation'],
     esbuildOptions(options) {
       options.loader = {
         ...options.loader,
