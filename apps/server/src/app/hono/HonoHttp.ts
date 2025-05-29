@@ -130,6 +130,7 @@ export class HonoHttp<HonoContext extends Context>
     })
   }
 
+
   sendPagination<Item>(response: PaginationResponse<Item>): RestResponse<Response> {
     this.context.header(HTTP_HEADERS.xPaginationResponse, 'true')
     this.context.header(

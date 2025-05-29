@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 
 import type { ChallengeDto } from '../dtos'
 import { Challenge } from '..'
-import { AuthorsFakers } from '#fakers/entities'
+import { AuthorsFakers } from '#global/domain/entities/fakers/AuthorsFakers'
 
 export class ChallengesFaker {
   static fake(baseDto?: Partial<ChallengeDto>): Challenge {
@@ -19,7 +19,7 @@ export class ChallengesFaker {
       categories: [],
       author: {
         id: faker.string.uuid(),
-        dto: AuthorsFakers.fakeDto(),
+        entity: AuthorsFakers.fakeDto(),
       },
       testCases: [],
       description: '',

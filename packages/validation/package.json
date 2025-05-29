@@ -1,7 +1,14 @@
 {
   "name": "@stardust/validation",
   "version": "0.1.0",
+  "main": "build/main.js",
+  "module": "build/main.mjs",
+  "types": "build/main.d.ts",
+  "scripts": {
+    "build": "tsup"
+  },
   "exports": {
+    ".": "./build/main.js",
     "./global/schemas": "./src/modules/global/schemas/index.ts",
     "./global/constants": "./src/modules/global/constants/index.ts",
     "./challenging/schemas": "./src/modules/challenging/schemas/index.ts",
@@ -18,6 +25,7 @@
   },
   "devDependencies": {
     "@stardust/typescript-config": "*",
+    "tsup": "^8.5.0",
     "typescript": "5.5.3"
   }
 }
