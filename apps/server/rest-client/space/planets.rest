@@ -1,4 +1,4 @@
 @URL = {{BASE_URL}}/space/planets
 
-### Fetch star
-GET {{URL}}/escreva-e-leia
+### Fetch planets
+GET {{URL}}

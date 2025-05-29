@@ -37,7 +37,7 @@ export class AuthRouter extends HonoRouter {
         }),
       ),
       async (context) => {
-        const http = new HonoHttp<HonoSchema<typeof context>>(context)
+        const http = new HonoHttp(context)
         const service = new SupabaseAuthService(http.getSupabase())
         const controller = new SignInController(service)
         const response = await controller.handle(http)
@@ -58,7 +58,7 @@ export class AuthRouter extends HonoRouter {
         }),
       ),
       async (context) => {
-        const http = new HonoHttp<HonoSchema<typeof context>>(context)
+        const http = new HonoHttp(context)
         const service = new SupabaseAuthService(http.getSupabase())
         const eventBroker = new InngestEventBroker(http.getInngest())
         const controller = new SignUpController(service, eventBroker)
@@ -89,7 +89,7 @@ export class AuthRouter extends HonoRouter {
         }),
       ),
       async (context) => {
-        const http = new HonoHttp<HonoSchema<typeof context>>(context)
+        const http = new HonoHttp(context)
         const supabase = http.getSupabase()
         const service = new SupabaseAuthService(supabase)
         const controller = new ConfirmEmailController(service)
@@ -109,7 +109,7 @@ export class AuthRouter extends HonoRouter {
         }),
       ),
       async (context) => {
-        const http = new HonoHttp<HonoSchema<typeof context>>(context)
+        const http = new HonoHttp(context)
         const supabase = http.getSupabase()
         const service = new SupabaseAuthService(supabase)
         const controller = new RequestPasswordResetController(service)
@@ -129,7 +129,7 @@ export class AuthRouter extends HonoRouter {
         }),
       ),
       async (context) => {
-        const http = new HonoHttp<HonoSchema<typeof context>>(context)
+        const http = new HonoHttp(context)
         const supabase = http.getSupabase()
         const service = new SupabaseAuthService(supabase)
         const controller = new ConfirmPasswordResetController(service)
@@ -151,7 +151,7 @@ export class AuthRouter extends HonoRouter {
         }),
       ),
       async (context) => {
-        const http = new HonoHttp<HonoSchema<typeof context>>(context)
+        const http = new HonoHttp(context)
         const supabase = http.getSupabase()
         const service = new SupabaseAuthService(supabase)
         const controller = new ResetPasswordController(service)
