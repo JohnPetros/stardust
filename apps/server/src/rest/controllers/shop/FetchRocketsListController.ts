@@ -20,6 +20,6 @@ export class FetchRocketsListController implements Controller<Schema> {
     const request = http.getQueryParams()
     const useCase = new ListRocketsUseCase(this.rocketsRepository)
     const response = await useCase.execute(request)
-    return http.send(response)
+    return http.sendPagination(response)
   }
 }

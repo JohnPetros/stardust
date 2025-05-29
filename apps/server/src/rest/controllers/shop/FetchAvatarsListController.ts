@@ -20,6 +20,6 @@ export class FetchAvatarsListController implements Controller<Schema> {
     const request = http.getQueryParams()
     const useCase = new ListAvatarsUseCase(this.avatarsRepository)
     const response = await useCase.execute(request)
-    return http.send(response)
+    return http.sendPagination(response)
   }
 }

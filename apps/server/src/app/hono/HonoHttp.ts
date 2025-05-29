@@ -5,10 +5,10 @@ import type { StatusCode } from 'hono/utils/http-status'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 import type { Http, HttpMethod } from '@stardust/core/global/interfaces'
-import { RestResponse } from '@stardust/core/global/responses'
+import { type PaginationResponse, RestResponse } from '@stardust/core/global/responses'
 import type { UserDto } from '@stardust/core/profile/entities/dtos'
 import { AppError } from '@stardust/core/global/errors'
-import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
+import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 import type { InngestAmqp } from '@/queue/inngest/InngestAmqp'
 
@@ -119,13 +119,30 @@ export class HonoHttp<HonoContext extends Context>
 
   send(data: unknown): RestResponse<Response> {
     const body = this.context.json(data as object)
+    const headers = this.getResponseHeaders()
     return new RestResponse({
       body,
       statusCode: body.status,
       headers: {
         'X-Hono-Response': 'true',
+        ...headers,
       },
     })
+  }
+
+
+  sendPagination<Item>(response: PaginationResponse<Item>): RestResponse<Response> {
+    this.context.header(HTTP_HEADERS.xPaginationResponse, 'true')
+    this.context.header(
+      HTTP_HEADERS.xTotalItemsCount,
+      response.totalItemsCount.toString(),
+    )
+    this.context.header(
+      HTTP_HEADERS.xTotalPagesCount,
+      response.totalPagesCount.toString(),
+    )
+    this.context.header(HTTP_HEADERS.xItemsPerPage, response.itemsPerPage.toString())
+    return this.send(response.items)
   }
 
   sendResponse(response: RestResponse): Response {
@@ -141,6 +158,14 @@ export class HonoHttp<HonoContext extends Context>
       })
     }
     return this.context.json(response.body ?? {})
+  }
+
+  getResponseHeaders(): Record<string, string> {
+    const headers: Record<string, string> = {}
+    this.context.res.headers.forEach((value, key) => {
+      headers[key] = value
+    })
+    return headers
   }
 
   getSupabase(): SupabaseClient {
