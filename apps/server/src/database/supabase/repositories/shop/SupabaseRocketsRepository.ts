@@ -32,7 +32,7 @@ export class SupabaseRocketsRepository
     })
 
     if (search && search.value.length > 1) {
-      query = query.ilike('name', `%${search}%`)
+      query = query.ilike('name', `%${search.value}%`)
     }
 
     const range = this.calculateQueryRange(page.value, itemsPerPage.value)
