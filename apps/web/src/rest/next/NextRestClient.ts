@@ -1,9 +1,10 @@
 import { headers } from 'next/headers'
 
-import { CLIENT_ENV } from '@/constants'
-import { RestResponse, PaginationResponse } from '@stardust/core/global/responses'
 import type { RestClient } from '@stardust/core/global/interfaces'
+import { RestResponse, PaginationResponse } from '@stardust/core/global/responses'
+import { HTTP_HEADERS } from '@stardust/core/global/constants'
 
+import { CLIENT_ENV } from '@/constants'
 import { addQueryParams, handleApiError } from './utils'
 
 type CacheConfig = {
@@ -42,9 +43,13 @@ export const NextRestClient = ({
 
       const data = await response.json()
 
-      if (response.headers.get('X-Pagination')) {
+      if (response.headers.get(HTTP_HEADERS.xPaginationResponse)) {
         return new RestResponse<Body>({
-          body: new PaginationResponse(data.items, data.count) as Body,
+          body: new PaginationResponse(
+            data.items,
+            Number(response.headers.get(HTTP_HEADERS.xTotalItemsCount)),
+            Number(response.headers.get(HTTP_HEADERS.xItemsPerPage)),
+          ) as Body,
         })
       }
 
