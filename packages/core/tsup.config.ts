@@ -9,5 +9,4 @@ export default defineConfig({
   treeshake: true,
   sourcemap: true,
   outDir: 'build',
-  // external: ['zod', 'dayjs'],
 })
