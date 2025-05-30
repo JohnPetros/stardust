@@ -11,8 +11,8 @@ import type { ShopItemsAcquiredByDefaultEvent } from '@stardust/core/shop/events
 
 type Payload = EventPayload<typeof ShopItemsAcquiredByDefaultEvent>
 
-export class AcquireDefaultShopItemsJob implements Job<Payload> {
-  static readonly KEY = 'profile/acquire.default.shop.items.job'
+export class CreateUserJob implements Job<Payload> {
+  static readonly KEY = 'profile/create.user.job'
 
   constructor(private readonly usersRepository: UsersRepository) {}
 
@@ -30,6 +30,8 @@ export class AcquireDefaultShopItemsJob implements Job<Payload> {
     const unlockStarUseCase = new UnlockStarUseCase(this.usersRepository)
     const acquireRocketUseCase = new AcquireRocketUseCase(this.usersRepository)
     const acquireAvatarUseCase = new AcquireAvatarUseCase(this.usersRepository)
+
+    console.log('payload', amqp.getPayload())
 
     await amqp.run(
       async () =>

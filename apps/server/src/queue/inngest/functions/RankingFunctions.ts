@@ -17,7 +17,7 @@ export class RankingFunctions extends InngestFunctions {
       async (context) => {
         const repository = new SupabaseTiersRepository(supabase)
         const amqp = new InngestAmqp<typeof context.event.data>(context)
-        const eventBroker = new InngestEventBroker(amqp)
+        const eventBroker = new InngestEventBroker()
         const job = new ReachFirstTierJob(repository, eventBroker)
         return job.handle(amqp)
       },
@@ -32,7 +32,7 @@ export class RankingFunctions extends InngestFunctions {
         const tiersRepository = new SupabaseTiersRepository(supabase)
         const rankersRepository = new SupabaseRankersRepository(supabase)
         const amqp = new InngestAmqp<typeof context.event.data>(context)
-        const eventBroker = new InngestEventBroker(amqp)
+        const eventBroker = new InngestEventBroker()
         const job = new UpdateRankingsJob(tiersRepository, rankersRepository, eventBroker)
         return job.handle(amqp)
       },

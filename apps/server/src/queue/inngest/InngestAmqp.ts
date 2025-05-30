@@ -50,21 +50,4 @@ export class InngestAmqp<Payload> implements Amqp<Payload> {
   getPayload(): Payload {
     return this.event?.data
   }
-
-  async sendEvent(event: Event) {
-    if (!this.step) {
-      await inngest.send({
-        // @ts-ignore
-        name: event.name,
-        // @ts-ignore
-        data: event.payload,
-      })
-      return
-    }
-
-    await this.step?.sendEvent(`send.${event.name}.event`, {
-      name: event.name,
-      data: event.payload,
-    })
-  }
 }
