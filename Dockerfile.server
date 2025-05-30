@@ -1,0 +1,44 @@
+FROM node:23.11.0-alpine AS base
+
+FROM base AS builder
+RUN apk add --no-cache libc6-compat
+RUN apk update
+WORKDIR /stardust
+RUN npm install -g turbo
+COPY . .
+RUN turbo prune --scope=@stardust/server --docker
+
+FROM base AS installer
+RUN apk update
+RUN apk add --no-cache libc6-compat
+WORKDIR /stardust
+COPY .gitignore .gitignore
+COPY ./scripts/replace-packages-imports.sh ./scripts/replace-packages-imports.sh
+COPY --from=builder /stardust/out/json/ .
+RUN npm install
+COPY --from=builder /stardust/out/full/ .
+COPY turbo.json turbo.json
+RUN npm run build:server
+
+FROM base AS runner
+WORKDIR /stardust
+RUN addgroup --system --gid 1001 stardust
+RUN adduser --system --uid 1001 server
+USER server
+COPY --from=installer --chown=stardust:server /stardust/node_modules ./node_modules
+COPY --from=installer --chown=stardust:server /stardust/packages/core/package.json ./packages/core/package.json
+COPY --from=installer --chown=stardust:server /stardust/packages/core/node_modules ./packages/core/node_modules
+COPY --from=installer --chown=stardust:server /stardust/packages/core/build ./packages/core/build
+
+COPY --from=installer --chown=stardust:server /stardust/packages/validation/node_modules ./packages/validation/node_modules
+COPY --from=installer --chown=stardust:server /stardust/packages/validation/package.json ./packages/validation/package.json
+COPY --from=installer --chown=stardust:server /stardust/packages/validation/build ./packages/validation/build
+
+COPY --from=installer --chown=stardust:server /stardust/apps/server/package.json ./apps/server/package.json
+COPY --from=installer --chown=stardust:server /stardust/apps/server/node_modules ./apps/server/node_modules
+COPY --from=installer --chown=stardust:server /stardust/apps/server/build ./apps/server/build
+COPY --from=installer --chown=stardust:server /stardust/apps/server/.env ./apps/server/.env
+
+EXPOSE 3333
+
+CMD node --env-file apps/server/.env apps/server/build/main.js
