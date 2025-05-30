@@ -20,6 +20,10 @@
       "persistent": true,
       "cache": false
     },
+    "prod": {
+      "persistent": true,
+      "cache": false
+    },
     "test": {
       "persistent": true,
       "cache": false

@@ -12,8 +12,9 @@
     "packages/*"
   ],
   "scripts": {
+    "prod": "turbo prod",
     "dev": "turbo dev",
-    "build:server": "turbo build --filter=@stardust/server && ./scripts/replace-packages-imports.sh",
+    "build:server": "turbo build --filter=@stardust/server && /bin/sh ./scripts/replace-packages-imports.sh",
     "build:web": "turbo build --filter=@stardust/web",
     "lint": "turbo lint",
     "test": "turbo test",
