@@ -27,7 +27,7 @@ export class SupabaseAvatarsRepository
 
   async findAllByPrice(price: Integer): Promise<Rocket[]> {
     const { data, error } = await this.supabase
-      .from('rockets')
+      .from('avatars')
       .select('*')
       .eq('price', price.value)
 
