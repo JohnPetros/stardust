@@ -2,8 +2,7 @@ import { type Context, type Next, Hono } from 'hono'
 import { serve } from '@hono/node-server'
 import { setCookie } from 'hono/cookie'
 import { serve as serveInngest } from 'inngest/hono'
-import { parseCookieHeader } from '@supabase/ssr'
-import { createServerClient } from '@supabase/ssr'
+import { createServerClient, parseCookieHeader } from '@supabase/ssr'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { ZodError } from 'zod'
 
@@ -102,6 +101,9 @@ export class HonoApp {
     const spaceRouter = new SpaceRouter(this)
     const shopRouter = new ShopRouter(this)
 
+    this.hono.get('/', (context) => {
+      return context.json({ message: 'Everything is working!' })
+    })
     this.hono.route('/', profileRouter.registerRoutes())
     this.hono.route('/', authRouter.registerRoutes())
     this.hono.route('/', spaceRouter.registerRoutes())
@@ -141,7 +143,11 @@ export class HonoApp {
       const supabase = createServerClient(ENV.supabaseUrl, ENV.supabaseKey, {
         cookies: {
           getAll() {
-            return parseCookieHeader(context.req.header('Cookie') ?? '')
+            const cookies = parseCookieHeader(context.req.header('Cookie') ?? '')
+            return cookies.map((cookie) => ({
+              name: cookie.name,
+              value: cookie.value ?? '',
+            }))
           },
 
           setAll(cookiesToSet) {
