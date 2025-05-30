@@ -16,6 +16,7 @@ import { UserFactory } from '#profile/factories/index'
 import type { AchievementMetricValue } from '../types'
 import { type Level, WeekStatus } from '../structures'
 import type { UserDto } from './dtos'
+import { AchievementAlreadyUnlockedError, StarAlreadyUnlockedError } from '../../errors'
 
 type UserProps = {
   avatar: AvatarAggregate
@@ -54,6 +55,9 @@ export class User extends Entity<UserProps> {
   }
 
   unlockAchievement(achievementId: Id): void {
+    if (this.props.unlockedAchievementsIds.includes(achievementId).isTrue) {
+      throw new AchievementAlreadyUnlockedError()
+    }
     this.props.unlockedAchievementsIds.add(achievementId)
     this.props.rescuableAchievementsIds.add(achievementId)
 
@@ -61,8 +65,11 @@ export class User extends Entity<UserProps> {
   }
 
   unlockStar(starId: Id): void {
-    this.props.unlockedStarsIds.add(starId)
+    if (this.props.unlockedStarsIds.includes(starId).isTrue) {
+      throw new StarAlreadyUnlockedError()
+    }
 
+    this.props.unlockedStarsIds.add(starId)
     this.notifyChanges()
   }
 
