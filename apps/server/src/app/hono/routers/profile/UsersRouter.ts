@@ -16,6 +16,7 @@ import {
   AcquireRocketController,
   VerifyUserNameInUseController,
   VerifyUserEmailInUseController,
+  UpdateUserController,
 } from '@/rest/controllers/profile'
 import { HonoRouter } from '../../HonoRouter'
 import { SupabaseUsersRepository } from '@/database'
@@ -37,6 +38,25 @@ export class UsersRouter extends HonoRouter {
         const http = new HonoHttp(context)
         const repository = new SupabaseUsersRepository(http.getSupabase())
         const controller = new FetchUserController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private updateUserRoute() {
+    this.router.put(
+      '/:userId',
+      zValidator(
+        'param',
+        z.object({
+          userId: idSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const controller = new UpdateUserController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -139,6 +159,7 @@ export class UsersRouter extends HonoRouter {
 
   registerRoutes(): Hono {
     this.fetchUserRoute()
+    this.updateUserRoute()
     this.acquireAvatarRoute()
     this.acquireRocketRoute()
     this.verifyUserNameInUseRoute()

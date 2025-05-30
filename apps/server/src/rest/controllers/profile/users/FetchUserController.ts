@@ -16,7 +16,7 @@ export class FetchUserController implements Controller<Schema> {
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const { userId } = http.getRouteParams()
     const useCase = new GetUserUseCase(this.usersRepository)
-    const user = await useCase.execute(userId)
+    const user = await useCase.execute({ userId })
     return http.send(user)
   }
 }

@@ -21,7 +21,6 @@ import { SupabaseAuthService } from '@/rest/services/SupabaseAuthService'
 import { InngestEventBroker } from '@/queue/inngest/InngestEventBroker'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
-import type { HonoSchema } from '../../types'
 
 export class AuthRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/auth')
@@ -60,7 +59,7 @@ export class AuthRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         const service = new SupabaseAuthService(http.getSupabase())
-        const eventBroker = new InngestEventBroker(http.getInngest())
+        const eventBroker = new InngestEventBroker()
         const controller = new SignUpController(service, eventBroker)
         const response = await controller.handle(http)
         return http.sendResponse(response)
