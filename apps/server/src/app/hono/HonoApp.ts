@@ -25,6 +25,7 @@ import {
 } from '@stardust/core/global/errors'
 import { AppError } from '@stardust/core/global/errors'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
+import { cors } from 'hono/cors'
 
 declare module 'hono' {
   interface ContextVariableMap {
@@ -37,6 +38,7 @@ export class HonoApp {
   private readonly hono = new Hono()
 
   startServer() {
+    this.setUpCors()
     this.registerMiddlewares()
     this.registerRoutes()
     this.setUpErrorHandler()
@@ -93,6 +95,15 @@ export class HonoApp {
         HTTP_STATUS_CODE.serverError,
       )
     })
+  }
+
+  private setUpCors() {
+    this.hono.use(
+      '*',
+      cors({
+        origin: '*',
+      }),
+    )
   }
 
   private registerRoutes() {
