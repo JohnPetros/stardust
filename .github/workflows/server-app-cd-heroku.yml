@@ -1,0 +1,47 @@
+name: Server app CD to Heroku
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/server/**"
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    env:
+      HEROKU_APP_NAME: stardust-server-app
+      IMAGE_NAME: registry.heroku.com/stardust-server-app/server
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create .env file
+        run: echo "${{ secrets.SERVER_ENV }}" >> apps/server/.env
+
+      - name: Install Heroku CLI
+        run: curl https://cli-assets.heroku.com/install.sh | sh
+
+      - name: Login to Heroku Container Registry
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:login
+
+      - name: Set Heroku stack to container
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku stack:set container --app ${{ env.HEROKU_APP_NAME }}
+
+ 
+      - name: Build and push Docker image to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:push server -a ${{ env.HEROKU_APP_NAME }} --recursive
+
+      - name: Release to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:release -a ${{ env.HEROKU_APP_NAME }} server
