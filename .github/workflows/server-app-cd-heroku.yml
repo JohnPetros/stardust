@@ -22,6 +22,9 @@ jobs:
       - name: Create .env file
         run: echo "${{ secrets.SERVER_ENV }}" > apps/server/.env
 
+      - name: Ensure Heroku find the correct Dockerfile for server app
+        run: rm Dockerfile.web && mv Dockerfile.server Dockerfile.web
+
       - name: Install Heroku CLI
         run: curl https://cli-assets.heroku.com/install.sh | sh
 
@@ -34,14 +37,13 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: heroku stack:set container --app ${{ env.HEROKU_APP_NAME }}
-
  
       - name: Build and push Docker image to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:push server -a ${{ env.HEROKU_APP_NAME }} --recursive
+        run: heroku container:push web -a ${{ env.HEROKU_APP_NAME }} --recursive
 
       - name: Release to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:release -a ${{ env.HEROKU_APP_NAME }} server
+        run: heroku container:release -a ${{ env.HEROKU_APP_NAME }} web
