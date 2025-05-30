@@ -21,3 +21,6 @@ npm-debug.log*
 # Supabase
 .branches
 .temp
+
+# Environment
+.env.example
