@@ -41,4 +41,4 @@ COPY --from=installer --chown=stardust:server /stardust/apps/server/.env ./apps/
 
 EXPOSE 3333
 
-CMD NODE_URLS=http://*:$PORT node --env-file apps/server/.env apps/server/build/main.js
+CMD node --env-file apps/server/.env apps/server/build/main.js --bind 0.0.0.0:$PORT
