@@ -1,51 +1,60 @@
-import { mock } from 'ts-jest-mocker'
+import { mock, type Mock } from 'ts-jest-mocker'
 
-import { ConfirmEmailController } from '../ConfirmEmailController'
-import { ROUTES } from '@/constants'
-import { RestResponse } from '@stardust/core/global/responses'
-import type { Http } from '@stardust/core/global/interfaces'
-import { HttpMock } from '../../tests/mocks'
-import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
+import type { Controller, Http } from '@stardust/core/global/interfaces'
 import type { AuthService } from '@stardust/core/auth/interfaces'
+import { RestResponse } from '@stardust/core/global/responses'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
-const fakeSchema = { queryParams: { token: 'fake-token' } }
-
-let httpMock: Http<typeof fakeSchema>
-let authServiceMock: AuthService
+import { ROUTES } from '@/constants'
+import { ConfirmEmailController } from '../ConfirmEmailController'
 
 describe('Confirm Email Controller', () => {
+  let http: Mock<Http>
+  let authService: Mock<AuthService>
+  let controller: Controller
+
   beforeEach(() => {
-    httpMock = HttpMock({
-      fakeSchema,
-    })
-    authServiceMock = mock()
+    http = mock()
+    authService = mock<AuthService>()
+    http.getQueryParams.mockImplementation()
+    http.redirect.mockImplementation()
+    authService.confirmEmail.mockImplementation()
+    controller = ConfirmEmailController(authService)
   })
 
-  it('should redirect to the sign in page if any error is found when confirming email', async () => {
-    const authServiceResponse = new RestResponse({
+  it('should try to confirm email with the token', async () => {
+    const token = 'fake-token'
+    http.getQueryParams.mockReturnValue({ token })
+
+    await controller.handle(http)
+
+    expect(authService.confirmEmail).toHaveBeenCalledWith(token)
+  })
+
+  it('should redirect to the sign in page with the error message as query param if any error is found when confirming email', async () => {
+    const token = 'fake-token'
+    const response = new RestResponse({
       statusCode: HTTP_STATUS_CODE.unauthorized,
+      errorMessage: 'fake-error-message',
     })
-    authServiceMock.confirmEmail = async () => authServiceResponse
-    const controller = ConfirmEmailController(authServiceMock)
-    const controllerResponse = await controller.handle(httpMock)
+    http.getQueryParams.mockReturnValue({ token })
+    authService.confirmEmail.mockResolvedValue(response)
 
-    expect(controllerResponse.isRedirecting).toBeTruthy()
-    const newRoute = controllerResponse.getHeader(HTTP_HEADERS.location)
-    expect(
-      String(newRoute).endsWith(`error=${authServiceResponse.errorMessage}`),
-    ).toBeTruthy()
+    await controller.handle(http)
+
+    expect(http.redirect).toHaveBeenCalledWith(
+      `${ROUTES.auth.signIn}?error=fake-error-message`,
+    )
   })
 
-  it('should redirect to the account confirmation route if the email was successfully confirmed', async () => {
-    const authServiceResponse = new RestResponse({
+  it('should redirect to the account confirmation page if the email was successfully confirmed', async () => {
+    const response = new RestResponse({
       statusCode: HTTP_STATUS_CODE.ok,
     })
-    authServiceMock.confirmEmail = async () => authServiceResponse
-    const controller = ConfirmEmailController(authServiceMock)
-    const controllerResponse = await controller.handle(httpMock)
+    authService.confirmEmail.mockResolvedValue(response)
 
-    expect(controllerResponse.isRedirecting).toBeTruthy()
-    const newRoute = controllerResponse.getHeader(HTTP_HEADERS.location)
-    expect(String(newRoute).startsWith(ROUTES.auth.accountConfirmation)).toBeTruthy()
+    await controller.handle(http)
+
+    expect(http.redirect).toHaveBeenCalledWith(ROUTES.auth.accountConfirmation)
   })
 })

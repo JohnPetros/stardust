@@ -1,5 +1,5 @@
 @URL = {{BASE_URL}}/profile/users
-@USER_ID = 56ab2a6d-39f7-4fba-a001-f33ccbe39dfe 
+@USER_ID = 669be3b4-5d8a-4e2b-82a9-531e36ee6bec
 
 ### Fetch user
 GET {{URL}}/{{USER_ID}} 
@@ -8,30 +8,32 @@ GET {{URL}}/{{USER_ID}}
 PUT {{URL}}/{{USER_ID}}
 
 {
-  "name": "Jane Doe",
-  "email": "jane.doe@example.com",
-  "slug": "jane-doe",
-  "avatarId": "avatar id",
-  "rocketId": "rocket id",
-  "tierId": "tier id",
-  "coins": 150,
-  "xp": 1200,
-  "weeklyXp": 300,
-  "streak": 5,
-  "level": 7,
+  "slug": "ctrl-alt-del",
+  "email": "ctrlaltdel.cursor@gmail.com",
+  "name": "Ctrl Alt Del",
+  "avatarId": "03f3f359-a0ee-42c1-bd5f-b2ad01810d47",
+  "rocketId": "54eb3e10-b1b2-44aa-a496-ba7f042e09a2",
+  "tierId": "f542f61a-4e42-4914-88f6-9aa7c2358473",
+  "level": 1,
+  "coins": 0,
+  "xp": 0,
+  "weeklyXp": 0,
+  "streak": 0,
   "weekStatus": ["todo", "done", "todo", "todo", "todo", "todo", "todo"]
 }
 
 ### Verify user name in use
 POST {{URL}}/verify-name-in-use
+Content-Type: application/json
 
 {
-  "name": "Jane Doe"
+  "name": "John Doe"
 }
 
 ### Verify user email in use
 POST {{URL}}/verify-email-in-use
+Content-Type: application/json
 
 {
-  "email": "jane.doe@example.com"
+  "email": "johndoe@example.com"
 }

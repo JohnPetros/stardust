@@ -1,8 +1,8 @@
 import type { Controller, Http } from '@stardust/core/global/interfaces'
 import type { AuthService } from '@stardust/core/auth/interfaces'
+import { Slug, Text } from '@stardust/core/global/structures'
 
 import { COOKIES, ROUTES } from '@/constants'
-import { Slug } from '@stardust/core/global/structures'
 
 type Schema = {
   queryParams: {
@@ -21,20 +21,27 @@ export const ConfirmPasswordResetController = (
     async handle(http: Http<Schema>) {
       const { token } = http.getQueryParams()
 
-      const response = await authService.confirmPasswordReset(token)
+      const response = await authService.confirmPasswordReset(Text.create(token))
 
       if (response.isFailure) {
-        http.deleteCookie(COOKIES.keys.shouldResetPassword)
+        http.deleteCookie(COOKIES.shouldResetPassword.key)
         return redirectToSigInPage(http, response.errorMessage)
       }
 
       const accessToken = response.body.accessToken
       const refreshToken = response.body.refreshToken
-      const cookieDuration = 60 * 15 // 15 minutes
 
-      http.setCookie(COOKIES.keys.shouldResetPassword, 'true', cookieDuration)
-      http.setCookie(COOKIES.keys.accessToken, accessToken, cookieDuration)
-      http.setCookie(COOKIES.keys.refreshToken, refreshToken, cookieDuration)
+      http.setCookie(
+        COOKIES.shouldResetPassword.key,
+        'true',
+        COOKIES.shouldResetPassword.duration,
+      )
+      http.setCookie(COOKIES.accessToken.key, accessToken, COOKIES.accessToken.duration)
+      http.setCookie(
+        COOKIES.refreshToken.key,
+        refreshToken,
+        COOKIES.refreshToken.duration,
+      )
 
       return http.redirect(ROUTES.auth.resetPassword)
     },
