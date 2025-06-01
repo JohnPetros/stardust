@@ -28,13 +28,13 @@ export const NextCall = <Request = unknown>({
       notFound()
     },
 
-    async setCookie(key: string, value: string, expirationInSeconds?: number) {
+    async setCookie(key: string, value: string, durationInSeconds?: number) {
       cookies().set({
         name: key,
         value,
         httpOnly: true,
         path: '/',
-        maxAge: expirationInSeconds,
+        maxAge: durationInSeconds,
       })
     },
 
