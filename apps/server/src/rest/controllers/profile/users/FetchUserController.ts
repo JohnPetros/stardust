@@ -6,7 +6,8 @@ import { GetUserUseCase } from '@stardust/core/profile/use-cases'
 
 type Schema = {
   routeParams: {
-    userId: string
+    userId?: string
+    userSlug?: string
   }
 }
 
@@ -14,9 +15,9 @@ export class FetchUserController implements Controller<Schema> {
   constructor(private readonly usersRepository: UsersRepository) {}
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
-    const { userId } = http.getRouteParams()
+    const { userId, userSlug } = http.getRouteParams()
     const useCase = new GetUserUseCase(this.usersRepository)
-    const user = await useCase.execute({ userId })
+    const user = await useCase.execute({ userId, userSlug })
     return http.send(user)
   }
 }
