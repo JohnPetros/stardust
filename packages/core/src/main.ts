@@ -1,7 +1,11 @@
 // Auth
+export * from './auth/domain/entities/index'
+export * from './auth/domain/entities/dtos/index'
+export * from './auth/domain/structures/index'
+export * from './auth/domain/structures/dtos/index'
 export * from './auth/domain/errors/index'
 export * from './auth/domain/events/index'
-export * from './auth/domain/errors/index'
+export * from './auth/interfaces/index'
 
 // Global
 export * from './global/domain/abstracts/index'

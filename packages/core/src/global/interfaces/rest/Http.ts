@@ -26,6 +26,8 @@ export interface Http<Schema extends HttpSchema = HttpSchema, Response = unknown
   statusOk(): this
   statusCreated(): this
   statusNoContent(): this
-  sendPagination<Item>(pagination: PaginationResponse<Item>): RestResponse<Response>
+  sendPagination<PaginationItem>(
+    pagination: PaginationResponse<PaginationItem>,
+  ): RestResponse<Response>
   send(json?: unknown, statusCode?: number): RestResponse<Response>
 }

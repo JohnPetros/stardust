@@ -2,6 +2,8 @@ import { Event } from '#global/domain/abstracts/index'
 
 type Payload = {
   userId: string
+  userName: string
+  userEmail: string
 }
 
 export class UserCreatedEvent extends Event<Payload> {
