@@ -4,11 +4,9 @@ import { z } from 'zod'
 import { VerifyAuthRoutesController } from './rest/controllers/auth'
 import { NextHttp } from './rest/next/NextHttp'
 import { HandleRewardsPayloadController } from './rest/controllers/lesson'
-import { SupabaseMiddlewareClient } from './rest/supabase/clients/SupabaseMiddlewareClient'
-import { SupabaseAuthService } from './rest/supabase/services'
 import { HandleRedirectController } from './rest/controllers/global'
-import { Slug } from '@stardust/core/global/structures'
-import { AppError } from '@stardust/core/global/errors'
+import { AuthService } from './rest/services'
+import { NextServerRestClient } from './rest/next/NextServerRestClient'
 
 const schema = z.object({
   queryParams: z
@@ -18,10 +16,12 @@ const schema = z.object({
     .optional(),
 })
 
+type Schema = z.infer<typeof schema>
+
 export const middleware = async (request: NextRequest) => {
-  const http = await NextHttp<z.infer<typeof schema>>({ request, schema })
-  const supabase = SupabaseMiddlewareClient(request)
-  const authService = SupabaseAuthService(supabase)
+  const http = await NextHttp<Schema>({ request, schema })
+  const restClient = await NextServerRestClient({ isCacheEnabled: false })
+  const authService = AuthService(restClient)
   const controllers = [
     VerifyAuthRoutesController(authService),
     HandleRewardsPayloadController(),
@@ -30,8 +30,8 @@ export const middleware = async (request: NextRequest) => {
 
   try {
     for (const controller of controllers) {
-      const constrollerResponse = await controller.handle(http)
-      if (constrollerResponse.isRedirecting) return constrollerResponse.body
+      const response = await controller.handle(http)
+      if (response.isRedirecting) return response.body
     }
   } catch (error) {
     return NextResponse.next()

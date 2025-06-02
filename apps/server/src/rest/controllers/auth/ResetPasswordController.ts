@@ -17,7 +17,6 @@ export class ResetPasswordController implements Controller {
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const { newPassword, accessToken, refreshToken } = await http.getBody()
-    console.log(newPassword, accessToken, refreshToken)
     return await this.authService.resetPassword(
       Password.create(newPassword),
       Text.create(accessToken),
