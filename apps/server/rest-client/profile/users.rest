@@ -1,11 +1,24 @@
 @URL = {{BASE_URL}}/profile/users
 @USER_ID = 669be3b4-5d8a-4e2b-82a9-531e36ee6bec
+@USER_SLUG = ctrl-alt-del
 
-### Fetch user
-GET {{URL}}/{{USER_ID}} 
+### Fetch user by id
+GET {{URL}}/id/{{USER_ID}}
+Authorization: Bearer {{JWT}}
+
+### Fetch user by slug
+GET {{URL}}/slug/{{USER_SLUG}} 
+Authorization: Bearer {{JWT}}
+
+### Verify user name in use
+GET {{URL}}/verify-name-in-use?name=John Doe
+
+### Verify user email in use
+GET {{URL}}/verify-email-in-use?email=johndoe@example.com
 
 ### Update user
 PUT {{URL}}/{{USER_ID}}
+Authorization: Bearer {{JWT}}
 
 {
   "slug": "ctrl-alt-del",
@@ -22,18 +35,4 @@ PUT {{URL}}/{{USER_ID}}
   "weekStatus": ["todo", "done", "todo", "todo", "todo", "todo", "todo"]
 }
 
-### Verify user name in use
-POST {{URL}}/verify-name-in-use
-Content-Type: application/json
 
-{
-  "name": "John Doe"
-}
-
-### Verify user email in use
-POST {{URL}}/verify-email-in-use
-Content-Type: application/json
-
-{
-  "email": "johndoe@example.com"
-}
