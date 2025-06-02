@@ -5,7 +5,7 @@ import type { AuthService } from '@stardust/core/auth/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
-import { ROUTES } from '@/constants'
+import { COOKIES, ROUTES } from '@/constants'
 import { ConfirmEmailController } from '../ConfirmEmailController'
 
 describe('Confirm Email Controller', () => {
@@ -32,10 +32,21 @@ describe('Confirm Email Controller', () => {
   })
 
   it('should redirect to the sign in page with the error message as query param if any error is found when confirming email', async () => {
+    const sessionDto = {
+      account: {
+        id: 'fake-id',
+        email: 'fake-email',
+        isAuthenticated: true,
+      },
+      accessToken: 'fake-access-token',
+      refreshToken: 'fake-refresh-token',
+      durationInSeconds: 1000,
+    }
     const token = 'fake-token'
     const response = new RestResponse({
       statusCode: HTTP_STATUS_CODE.unauthorized,
       errorMessage: 'fake-error-message',
+      body: sessionDto,
     })
     http.getQueryParams.mockReturnValue({ token })
     authService.confirmEmail.mockResolvedValue(response)
@@ -47,9 +58,54 @@ describe('Confirm Email Controller', () => {
     )
   })
 
-  it('should redirect to the account confirmation page if the email was successfully confirmed', async () => {
+  it('should set cookies for access and refresh tokens if the email was successfully confirmed', async () => {
+    const sessionDto = {
+      account: {
+        id: 'fake-id',
+        email: 'fake-email',
+        isAuthenticated: true,
+      },
+      accessToken: 'fake-access-token',
+      refreshToken: 'fake-refresh-token',
+      durationInSeconds: 1000,
+    }
     const response = new RestResponse({
       statusCode: HTTP_STATUS_CODE.ok,
+      body: sessionDto,
+    })
+    authService.confirmEmail.mockResolvedValue(response)
+
+    await controller.handle(http)
+
+    expect(http.setCookie).toHaveBeenCalledTimes(2)
+    expect(http.setCookie).toHaveBeenNthCalledWith(
+      1,
+      COOKIES.accessToken.key,
+      sessionDto.accessToken,
+      sessionDto.durationInSeconds,
+    )
+    expect(http.setCookie).toHaveBeenNthCalledWith(
+      2,
+      COOKIES.refreshToken.key,
+      sessionDto.refreshToken,
+      COOKIES.refreshToken.durationInSeconds,
+    )
+  })
+
+  it('should redirect to the account confirmation page if the email was successfully confirmed', async () => {
+    const sessionDto = {
+      account: {
+        id: 'fake-id',
+        email: 'fake-email',
+        isAuthenticated: true,
+      },
+      accessToken: 'fake-access-token',
+      refreshToken: 'fake-refresh-token',
+      durationInSeconds: 1000,
+    }
+    const response = new RestResponse({
+      statusCode: HTTP_STATUS_CODE.ok,
+      body: sessionDto,
     })
     authService.confirmEmail.mockResolvedValue(response)
 

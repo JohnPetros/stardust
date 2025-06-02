@@ -13,37 +13,34 @@ type Schema = {
 export const ConfirmPasswordResetController = (
   authService: AuthService,
 ): Controller<Schema> => {
-  function redirectToSigInPage(http: Http, errorMessage: string) {
-    return http.redirect(`${ROUTES.auth.signIn}?error=${Slug.create(errorMessage).value}`)
-  }
-
   return {
     async handle(http: Http<Schema>) {
       const { token } = http.getQueryParams()
-
       const response = await authService.confirmPasswordReset(Text.create(token))
 
-      if (response.isFailure) {
-        http.deleteCookie(COOKIES.shouldResetPassword.key)
-        return redirectToSigInPage(http, response.errorMessage)
+      if (response.isSuccessful) {
+        const session = response.body
+        http.setCookie(
+          COOKIES.shouldResetPassword.key,
+          'true',
+          COOKIES.shouldResetPassword.durationInSeconds,
+        )
+        http.setCookie(
+          COOKIES.accessToken.key,
+          session.accessToken,
+          session.durationInSeconds,
+        )
+        http.setCookie(
+          COOKIES.refreshToken.key,
+          session.refreshToken,
+          COOKIES.refreshToken.durationInSeconds,
+        )
+        return http.redirect(ROUTES.auth.resetPassword)
       }
 
-      const accessToken = response.body.accessToken
-      const refreshToken = response.body.refreshToken
-
-      http.setCookie(
-        COOKIES.shouldResetPassword.key,
-        'true',
-        COOKIES.shouldResetPassword.duration,
-      )
-      http.setCookie(COOKIES.accessToken.key, accessToken, COOKIES.accessToken.duration)
-      http.setCookie(
-        COOKIES.refreshToken.key,
-        refreshToken,
-        COOKIES.refreshToken.duration,
-      )
-
-      return http.redirect(ROUTES.auth.resetPassword)
+      http.deleteCookie(COOKIES.shouldResetPassword.key)
+      const errorQueryParam = Slug.create(response.errorMessage).value
+      return http.redirect(`${ROUTES.auth.signIn}?error=${errorQueryParam}`)
     },
   }
 }
