@@ -1,19 +1,19 @@
 'use server'
 
 import { type NextRequest, NextResponse } from 'next/server'
-
 import type { ZodSchema } from 'zod'
 
 import type { Http, HttpMethod, HttpSchema } from '@stardust/core/global/interfaces'
-import { RestResponse } from '@stardust/core/global/responses'
+import { type PaginationResponse, RestResponse } from '@stardust/core/global/responses'
+import { Id } from '@stardust/core/global/structures'
 import { AppError } from '@stardust/core/global/errors'
 import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 import { CLIENT_ENV } from '@/constants'
 import type { NextParams } from '@/rpc/next/types'
+import { cookieActions } from '@/rpc/next-safe-action'
 import { SupabaseRouteHandlerClient } from '../supabase/clients'
 import { SupabaseAuthService, SupabaseProfileService } from '../supabase/services'
-import { cookieActions } from '@/rpc/next-safe-action'
 
 type Cookie = {
   key: string
@@ -67,7 +67,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     },
 
     redirect(route: string) {
-      const nextResponse = NextResponse.redirect(new URL(route, CLIENT_ENV.appHost))
+      const nextResponse = NextResponse.redirect(new URL(route, CLIENT_ENV.webAppUrl))
 
       if (cookies.length)
         for (const cookie of cookies) {
@@ -90,10 +90,12 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       const authService = SupabaseAuthService(supabase)
       const profileService = SupabaseProfileService(supabase)
 
-      const authResponse = await authService.fetchUserId()
+      const authResponse = await authService.fetchAccount()
       if (authResponse.isFailure) authResponse.throwError()
 
-      const profileResponse = await profileService.fetchUserById(authResponse.body)
+      const profileResponse = await profileService.fetchUserById(
+        Id.create(authResponse.body.id),
+      )
       if (profileResponse.isFailure) profileResponse.throwError()
 
       return profileResponse.body
@@ -109,12 +111,12 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       return httpSchema?.body
     },
 
-    async getRouteParams() {
+    getRouteParams() {
       if (!httpSchema?.routeParams) throw new AppError('Route params are not defined')
       return httpSchema?.routeParams
     },
 
-    async getQueryParams() {
+    getQueryParams() {
       if (!httpSchema?.queryParams) throw new AppError('Query params are not defined')
       return httpSchema?.queryParams
     },
@@ -156,10 +158,18 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       return this as Http<NextSchema, NextResponse<unknown>>
     },
 
+    sendPagination<PaginationItem>(pagination: PaginationResponse<PaginationItem>) {
+      const statusCode = HTTP_STATUS_CODE.ok
+      return new RestResponse({
+        body: NextResponse.json(pagination, { status: statusCode }),
+        statusCode,
+      })
+    },
+
     send(data: unknown, statusCode = HTTP_STATUS_CODE.ok) {
       if (cookies.length) {
         const nextResponse = NextResponse.redirect(
-          new URL(request ? request.nextUrl.pathname : '', CLIENT_ENV.appHost),
+          new URL(request ? request.nextUrl.pathname : '', CLIENT_ENV.webAppUrl),
         )
 
         for (const cookie of cookies) {

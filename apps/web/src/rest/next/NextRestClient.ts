@@ -1,26 +1,25 @@
-import { headers } from 'next/headers'
-
 import type { RestClient } from '@stardust/core/global/interfaces'
-import { RestResponse, PaginationResponse } from '@stardust/core/global/responses'
+import { PaginationResponse, RestResponse } from '@stardust/core/global/responses'
+
+import { addQueryParams, handleRestError, parseResponseJson } from './utils'
 import { HTTP_HEADERS } from '@stardust/core/global/constants'
-
-import { CLIENT_ENV } from '@/constants'
-import { addQueryParams, handleApiError } from './utils'
-
-type CacheConfig = {
-  isCacheEnabled?: boolean
-  refetchInterval?: number
-  cacheKey?: string
-}
+import type { NextRestClientConfig } from './types'
 
 export const NextRestClient = ({
   isCacheEnabled = true,
   refetchInterval = 60 * 60 * 24, // 1 day
   cacheKey,
-}: CacheConfig = {}): RestClient => {
+  headers = new Headers(),
+}: NextRestClientConfig = {}): RestClient => {
+  let baseUrl: string
+  const requestHeaders = {
+    ...Object.fromEntries(headers),
+    'Content-Type': 'application/json',
+  }
+
   const requestInit: RequestInit = {
     cache: !isCacheEnabled ? 'no-store' : undefined,
-    headers: headers(),
+    headers: requestHeaders,
     next: isCacheEnabled
       ? {
           revalidate: refetchInterval,
@@ -28,20 +27,20 @@ export const NextRestClient = ({
         }
       : undefined,
   }
-  const queryParams: Record<string, string> = {}
+  let queryParams: Record<string, string> = {}
 
   return {
     async get<Body>(route: string): Promise<RestResponse<Body>> {
-      const response = await fetch(
-        `${CLIENT_ENV.appHost}${addQueryParams(route, queryParams)}`,
-        requestInit,
-      )
+      const response = await fetch(`${baseUrl}${addQueryParams(route, queryParams)}`, {
+        ...requestInit,
+        method: 'GET',
+      })
 
       if (!response.ok) {
-        return await handleApiError<Body>(response)
+        return await handleRestError<Body>(response)
       }
 
-      const data = await response.json()
+      const data = await parseResponseJson(response)
 
       if (response.headers.get(HTTP_HEADERS.xPaginationResponse)) {
         return new RestResponse<Body>({
@@ -57,25 +56,87 @@ export const NextRestClient = ({
     },
 
     async post<Body>(route: string, body: unknown): Promise<RestResponse<Body>> {
-      const response = await fetch(
-        `${CLIENT_ENV.appHost}/${addQueryParams(route, queryParams)}`,
-        {
-          ...requestInit,
-          method: 'POST',
-          body: JSON.stringify(body),
-        },
-      )
+      const response = await fetch(`${baseUrl}${addQueryParams(route, queryParams)}`, {
+        ...requestInit,
+        method: 'POST',
+        body: JSON.stringify(body),
+      })
 
       if (!response.ok) {
-        return await handleApiError<Body>(response)
+        return await handleRestError<Body>(response)
       }
 
-      const data = await response.json()
+      const data = await parseResponseJson(response)
       return new RestResponse({ body: data, statusCode: response.status })
     },
 
-    setQueryParam(key: string, value: string) {
+    async put<Body>(route: string, body: unknown): Promise<RestResponse<Body>> {
+      const response = await fetch(`${baseUrl}${addQueryParams(route, queryParams)}`, {
+        ...requestInit,
+        method: 'PUT',
+        body: JSON.stringify(body),
+      })
+
+      if (!response.ok) {
+        return await handleRestError<Body>(response)
+      }
+
+      const data = await parseResponseJson(response)
+      return new RestResponse({ body: data, statusCode: response.status })
+    },
+
+    async patch<Body>(route: string, body: unknown): Promise<RestResponse<Body>> {
+      const response = await fetch(`${baseUrl}${addQueryParams(route, queryParams)}`, {
+        ...requestInit,
+        method: 'PATCH',
+        body: JSON.stringify(body),
+      })
+
+      if (!response.ok) {
+        return await handleRestError<Body>(response)
+      }
+
+      const data = await parseResponseJson(response)
+      return new RestResponse({ body: data, statusCode: response.status })
+    },
+
+    async delete(route: string) {
+      const response = await fetch(`${baseUrl}${addQueryParams(route, queryParams)}`, {
+        ...requestInit,
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        return await handleRestError<void>(response)
+      }
+
+      return new RestResponse({ statusCode: response.status })
+    },
+
+    setBaseUrl(url: string): void {
+      baseUrl = url
+    },
+
+    setHeader(key: string, value: string): void {
+      if (requestInit.headers) {
+        requestInit.headers = {
+          ...requestInit.headers,
+          [key]: value,
+        }
+        return
+      }
+
+      requestInit.headers = {
+        [key]: value,
+      }
+    },
+
+    setQueryParam(key: string, value: string): void {
       queryParams[key] = value
+    },
+
+    clearQueryParams(): void {
+      queryParams = {}
     },
   }
 }
