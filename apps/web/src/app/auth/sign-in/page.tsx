@@ -1,5 +1,7 @@
 import { SignInPage } from '@/ui/auth/widgets/pages/SignIn'
 
-export default function SignIn() {
+const Page = () => {
   return <SignInPage />
 }
+
+export default Page
