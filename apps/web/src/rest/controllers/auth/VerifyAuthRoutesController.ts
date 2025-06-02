@@ -30,9 +30,9 @@ export const VerifyAuthRoutesController = (authService: AuthService): Controller
         return http.redirect(ROUTES.space)
       }
 
-      // if (hasSession && isSignInRoute) {
-      //   return http.redirect(ROUTES.space)
-      // }
+      if (hasSession && isSignInRoute) {
+        return http.redirect(ROUTES.space)
+      }
 
       return http.pass()
     },

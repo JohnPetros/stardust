@@ -15,7 +15,7 @@ export function useSnippetCard(
   inititlaSnippetTitle: string,
   onDelete: (deletedPlaygroundId: string) => void,
 ) {
-  const snippetUrl = `${CLIENT_ENV.appHost}${ROUTES.playground.snippet(snippetId)}`
+  const snippetUrl = `${CLIENT_ENV.webAppUrl}${ROUTES.playground.snippet(snippetId)}`
   const [snippetTitle, setSnippetTitle] = useState(inititlaSnippetTitle)
   const { editSnippet } = useEditSnippetAction({
     onSuccess: handleEditSnippetSuccess,
