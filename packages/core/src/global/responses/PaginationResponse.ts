@@ -1,10 +1,10 @@
-export class PaginationResponse<PaginationItem> {
-  readonly items: PaginationItem[]
+export class PaginationResponse<Item> {
+  readonly items: Item[]
   readonly totalItemsCount: number
   readonly itemsPerPage: number
   readonly totalPagesCount: number
 
-  constructor(items: PaginationItem[], totalItemsCount: number, itemsPerPage = 10) {
+  constructor(items: Item[], totalItemsCount: number, itemsPerPage = 10) {
     this.items = items
     this.totalItemsCount = totalItemsCount
     this.itemsPerPage = itemsPerPage

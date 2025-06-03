@@ -16,61 +16,17 @@ import {
   AcquireRocketController,
   VerifyUserNameInUseController,
   VerifyUserEmailInUseController,
-  UpdateUserController,
 } from '@/rest/controllers/profile'
 import { HonoRouter } from '../../HonoRouter'
 import { SupabaseUsersRepository } from '@/database'
 import { HonoHttp } from '../../HonoHttp'
-import { AuthMiddleware } from '../../middlewares'
 
 export class UsersRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/users')
-  private readonly authMiddleware = new AuthMiddleware()
 
-  private fetchUserByIdRoute() {
+  private fetchUserRoute() {
     this.router.get(
-      '/id/:userId',
-      this.authMiddleware.verifyAuthentication,
-      zValidator(
-        'param',
-        z.object({
-          userId: stringSchema,
-        }),
-      ),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
-        const controller = new FetchUserController(repository)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
-    )
-  }
-
-  private fetchUserBySlugRoute() {
-    this.router.get(
-      '/slug/:userSlug',
-      this.authMiddleware.verifyAuthentication,
-      zValidator(
-        'param',
-        z.object({
-          userSlug: stringSchema,
-        }),
-      ),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
-        const controller = new FetchUserController(repository)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
-    )
-  }
-
-  private updateUserRoute() {
-    this.router.put(
       '/:userId',
-      this.authMiddleware.verifyAuthentication,
       zValidator(
         'param',
         z.object({
@@ -80,7 +36,7 @@ export class UsersRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseUsersRepository(http.getSupabase())
-        const controller = new UpdateUserController(repository)
+        const controller = new FetchUserController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -90,7 +46,6 @@ export class UsersRouter extends HonoRouter {
   private acquireAvatarRoute() {
     this.router.put(
       '/:userId/avatar',
-      this.authMiddleware.verifyAuthentication,
       zValidator(
         'param',
         z.object({
@@ -119,7 +74,6 @@ export class UsersRouter extends HonoRouter {
   private acquireRocketRoute() {
     this.router.put(
       '/:userId/rocket',
-      this.authMiddleware.verifyAuthentication,
       zValidator(
         'param',
         z.object({
@@ -146,10 +100,10 @@ export class UsersRouter extends HonoRouter {
   }
 
   private verifyUserNameInUseRoute() {
-    this.router.get(
+    this.router.post(
       '/verify-name-in-use',
       zValidator(
-        'query',
+        'json',
         z.object({
           name: nameSchema,
         }),
@@ -165,10 +119,10 @@ export class UsersRouter extends HonoRouter {
   }
 
   private verifyUserEmailInUseRoute() {
-    this.router.get(
+    this.router.post(
       '/verify-email-in-use',
       zValidator(
-        'query',
+        'json',
         z.object({
           email: emailSchema,
         }),
@@ -184,9 +138,7 @@ export class UsersRouter extends HonoRouter {
   }
 
   registerRoutes(): Hono {
-    this.fetchUserByIdRoute()
-    this.fetchUserBySlugRoute()
-    this.updateUserRoute()
+    this.fetchUserRoute()
     this.acquireAvatarRoute()
     this.acquireRocketRoute()
     this.verifyUserNameInUseRoute()

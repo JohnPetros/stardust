@@ -79,6 +79,7 @@ export class SupabaseUserMapper {
   static toSupabase(user: User): SupabaseUser {
     // @ts-ignore
     const supabaseUser: SupabaseUser = {
+      id: user.id.value,
       avatar_id: user.avatar.id.value,
       rocket_id: user.rocket.id.value,
       tier_id: user.tier.id.value,
@@ -93,6 +94,7 @@ export class SupabaseUserMapper {
       streak: user.streak.value,
       can_see_ranking: user.canSeeRankingResult.value,
       did_break_streak: user.didBreakStreak.value,
+      created_at: user.createdAt.toDateString(),
     }
 
     return supabaseUser as unknown as SupabaseUser

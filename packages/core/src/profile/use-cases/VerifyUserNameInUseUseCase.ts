@@ -7,8 +7,8 @@ export class VerifyUserNameInUseUseCase implements UseCase<string, Promise<void>
   constructor(private readonly repository: UsersRepository) {}
 
   async execute(name: string): Promise<void> {
-    const isNameInUse = await this.repository.containsWithName(Name.create(name))
-    if (isNameInUse.isTrue) {
+    const user = await this.repository.containsWithName(Name.create(name))
+    if (user) {
       throw new UserNameAlreadyInUseError()
     }
   }

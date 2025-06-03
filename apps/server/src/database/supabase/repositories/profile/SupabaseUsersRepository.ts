@@ -35,16 +35,10 @@ export class SupabaseUsersRepository
           users_upvoted_solutions(solution_id),
           users_upvoted_comments(comment_id)`,
       )
-      .eq('id', userId.value)
+      .eq('id', userId)
       .single()
 
-    if (error && error.code === this.POSTGRES_ERROR_CODES.PGRST116) {
-      return null
-    }
-
-    if (error) {
-      throw new SupabasePostgreError(error)
-    }
+    if (error) throw new SupabasePostgreError(error)
 
     const supabaseUser: SupabaseUser = {
       ...data,
@@ -79,7 +73,7 @@ export class SupabaseUsersRepository
   }
 
   async findBySlug(slug: Slug): Promise<User | null> {
-    const { data, error } = await this.supabase
+    const { data, error, status } = await this.supabase
       .from('users')
       .select(
         `*, 
@@ -98,13 +92,7 @@ export class SupabaseUsersRepository
       .eq('slug', slug)
       .single()
 
-    if (error && error.code === this.POSTGRES_ERROR_CODES.PGRST116) {
-      return null
-    }
-
-    if (error) {
-      throw new SupabasePostgreError(error)
-    }
+    if (error) throw new SupabasePostgreError(error)
 
     const supabaseUser: SupabaseUser = {
       ...data,
@@ -158,16 +146,10 @@ export class SupabaseUsersRepository
     const { data, error } = await this.supabase
       .from('users')
       .select('*')
-      .ilike('email', `%${email.value}%`)
+      .eq('email', email)
       .single()
 
-    if (error && error.code === this.POSTGRES_ERROR_CODES.PGRST116) {
-      return Logical.createAsFalse()
-    }
-
-    if (error) {
-      throw new SupabasePostgreError(error)
-    }
+    if (error) throw new SupabasePostgreError(error)
 
     return Logical.create(data !== null)
   }
@@ -176,16 +158,10 @@ export class SupabaseUsersRepository
     const { data, error } = await this.supabase
       .from('users')
       .select('*')
-      .ilike('name', `%${name.value}%`)
+      .eq('name', name)
       .single()
 
-    if (error && error.code === this.POSTGRES_ERROR_CODES.PGRST116) {
-      return Logical.createAsFalse()
-    }
-
-    if (error) {
-      throw new SupabasePostgreError(error)
-    }
+    if (error) throw new SupabasePostgreError(error)
 
     return Logical.create(data !== null)
   }
@@ -194,7 +170,7 @@ export class SupabaseUsersRepository
     const supabaseUser = SupabaseUserMapper.toSupabase(user)
 
     const { error } = await this.supabase.from('users').insert({
-      id: user.id.value,
+      id: user.id,
       name: supabaseUser.name,
       email: supabaseUser.email,
       slug: supabaseUser.slug,

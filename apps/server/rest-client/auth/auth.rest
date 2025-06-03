@@ -1,5 +1,5 @@
 @URL = {{BASE_URL}}/auth
-@EMAIL = ctrlaltdel.cursor@gmail.com
+@EMAIL = stardust.teste@gmail.com
 
 ### Sign in
 POST {{URL}}/sign-in
@@ -17,19 +17,14 @@ Content-Type: application/json
 {
   "email": "{{EMAIL}}",
   "password": "123456",
-  "name": "Ctrl Alt Del"
+  "name": "John Doe"
 }
 
 ### Sign out
 DELETE {{URL}}/sign-out
 
-### Resend sign up email
-POST {{URL}}/resend-email/sign-up
-Content-Type: application/json
-
-{
-  "email": "{{EMAIL}}"
-}
+### Confirm email
+GET {{URL}}/confirm-email?token=123456
 
 ### Request password reset
 POST {{URL}}/request-password-reset
@@ -39,21 +34,8 @@ Content-Type: application/json
   "email": "{{EMAIL}}"
 }
 
-### Confirm email
-POST {{URL}}/confirm-email
-Content-Type: application/json
-
-{
-  "token": "61d0464ea60acf99aa3717839f1e60dedf20f66630aba78c1db05983"
-}
-
 ### Confirm password reset
-POST {{URL}}/confirm-password-reset
-Content-Type: application/json
-
-{
-  "token": "6eaa5b310fefda81e5ea6c88f104c47384b55245797b19a93dd7cbeb"
-}
+GET {{URL}}/confirm-password-reset?token=123456
 
 ### Reset password
 PATCH {{URL}}/reset-password
@@ -61,10 +43,7 @@ Content-Type: application/json
 
 {
   "newPassword": "654321",
-  "accessToken": "accessToken",
-  "refreshToken": "refreshToken"
+  "accessToken": "eyJhbGciOiJIUzI1NiIsImtpZCI6ImF5WTVaRFRGK1hUVEtRK1EiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3J2ZXVicXp2ZmJxYmNwbXVldm5tLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiJmNmFkMzZlNS0xZmJiLTRlYjItYWM0Yi04ZjBiMmQ1NDM0MjkiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzQ3OTU4Njk1LCJpYXQiOjE3NDc5NTUwOTUsImVtYWlsIjoiam9hb3BjYXJ2YWxoby5jZHNAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbCI6ImpvYW9wY2FydmFsaG8uY2RzQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaG9uZV92ZXJpZmllZCI6ZmFsc2UsInN1YiI6ImY2YWQzNmU1LTFmYmItNGViMi1hYzRiLThmMGIyZDU0MzQyOSJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6Im90cCIsInRpbWVzdGFtcCI6MTc0Nzk1NTA5NX1dLCJzZXNzaW9uX2lkIjoiMDk1YTdlZmUtZGVmYy00MDE0LTkyYzAtYjJlNzNjMzNjZDZiIiwiaXNfYW5vbnltb3VzIjpmYWxzZX0.9tODii9CE1TNEwQtjJNJtD7H9B9oqMsJjTJNIzpm8us",
+  "refreshToken": "nsdwkkd2j6va"
 }
 
-### Fetch account
-GET {{URL}}/account
-Authorization: Bearer {{JWT}}

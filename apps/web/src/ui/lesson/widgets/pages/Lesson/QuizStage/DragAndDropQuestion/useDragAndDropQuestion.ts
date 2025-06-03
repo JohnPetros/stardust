@@ -60,6 +60,7 @@ export function useDragAndDropQuestion({
       })
     }
 
+    console.log(dropZoneSlotsCount)
     if (userItems.length === dropZoneSlotsCount) setQuiz(quiz.changeUserAnswer(userItems))
     else setQuiz(quiz.changeUserAnswer(null))
 

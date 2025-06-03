@@ -5,6 +5,7 @@ export { ObserveNewUnlockedAchievementsUseCase } from './ObserveNewUnlockedAchie
 export { _ObserveNewUnlockedAchievementsUseCase } from './_ObserveNewUnlockedAchievementsUseCase'
 export { RewardUserUseCase } from './RewardUserUseCase'
 export { ObserveStreakBreakUseCase } from './ObserveStreakBreakUseCase'
+export { _ObserveStreakBreakUseCase } from './_ObserveStreakBreakUseCase'
 export { GetUserUseCase } from './GetUserUseCase'
 export { UpdateUserUseCase } from './UpdateUserUseCase'
 export { VerifyUserNameInUseUseCase } from './VerifyUserNameInUseUseCase'

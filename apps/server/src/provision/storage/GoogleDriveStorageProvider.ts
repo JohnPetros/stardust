@@ -48,6 +48,8 @@ export class GoogleDriveStorageProvider implements StorageProvider {
       unlinkSync(file.name)
     }
 
+    console.log('fileKey', response.data.id)
+
     return { fileKey: response.data.id }
   }
 }

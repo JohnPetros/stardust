@@ -5,7 +5,7 @@ import type { UsersRepository } from '@stardust/core/profile/interfaces'
 import { VerifyUserEmailInUseUseCase } from '@stardust/core/profile/use-cases'
 
 type Schema = {
-  queryParams: {
+  body: {
     email: string
   }
 }
@@ -14,9 +14,9 @@ export class VerifyUserEmailInUseController implements Controller<Schema> {
   constructor(private readonly usersRepository: UsersRepository) {}
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
-    const { email } = http.getQueryParams()
+    const { email } = await http.getBody()
     const useCase = new VerifyUserEmailInUseUseCase(this.usersRepository)
     await useCase.execute(email)
-    return http.send()
+    return http.send({})
   }
 }

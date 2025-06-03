@@ -1,54 +1,21 @@
 'use client'
 
-import { createContext, type PropsWithChildren } from 'react'
+import { createContext, type ReactNode } from 'react'
 
-import type { AccountDto } from '@stardust/core/auth/entities/dtos'
-
-import type { AuthContextValue } from './types'
+import type { Session, AuthContextValue } from './types'
 import { useAuthProvider, useAuthContext } from './hooks'
-import { useSignInAction } from './hooks/useSignInAction'
-import { AuthService, ProfileService } from '@/rest/services'
-import { NextRestClient } from '@/rest/next/NextRestClient'
-import { CLIENT_ENV } from '@/constants'
-import { HTTP_HEADERS } from '@stardust/core/global/constants'
 
-type Props = {
-  accountDto: AccountDto | null
-  accessToken: string | null
+type AuthProviderProps = {
+  serverSession: Session | null
+  children: ReactNode
 }
-
-const restClient = NextRestClient({ isCacheEnabled: false })
-restClient.setBaseUrl(CLIENT_ENV.serverAppUrl)
 
 export const AuthContext = createContext({} as AuthContextValue)
 
-export const AuthProvider = ({
-  accountDto,
-  accessToken,
-  children,
-}: PropsWithChildren<Props>) => {
-  if (accessToken)
-    restClient.setHeader(HTTP_HEADERS.authorization, `Bearer ${accessToken}`)
-  const authService = AuthService(restClient)
-  const profileService = ProfileService(restClient)
-  const { runSignInAction } = useSignInAction()
-  const authContextValue = useAuthProvider({
-    authService,
-    profileService,
-    accountDto,
-    runSignInAction,
-  })
+export function AuthProvider({ serverSession, children }: AuthProviderProps) {
+  const authContextValue = useAuthProvider(serverSession)
 
-  return (
-    <AuthContext.Provider
-      value={{
-        ...authContextValue,
-        accessToken,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={authContextValue}>{children}</AuthContext.Provider>
 }
 
 export { useAuthContext }

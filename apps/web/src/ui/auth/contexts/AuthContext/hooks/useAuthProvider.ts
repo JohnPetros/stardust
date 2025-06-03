@@ -5,42 +5,33 @@ import { useCallback, useEffect, useState } from 'react'
 import { Observer } from '@stardust/core/global/structures'
 import { User } from '@stardust/core/global/entities'
 import type { UserDto } from '@stardust/core/profile/entities/dtos'
-import type { AuthService } from '@stardust/core/auth/interfaces'
-import type { ProfileService } from '@stardust/core/profile/interfaces'
-import type { AccountDto } from '@stardust/core/auth/entities/dtos'
-import { Account } from '@stardust/core/auth/entities'
-import type { ActionResponse } from '@stardust/core/global/responses'
 
 import { CACHE, DOM_EVENTS, ROUTES } from '@/constants'
+import { useApi } from '@/ui/global/hooks/useApi'
 import { useCache } from '@/ui/global/hooks/useCache'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
+import type { AuthContextValue } from '../types/AuthContextValue'
+import type { Session } from '../types/Session'
 
-type Params = {
-  authService: AuthService
-  profileService: ProfileService
-  accountDto: AccountDto | null
-  runSignInAction: (
-    email: string,
-    password: string,
-  ) => Promise<ActionResponse<AccountDto>>
-}
-
-export function useAuthProvider({
-  authService,
-  profileService,
-  accountDto,
-  runSignInAction,
-}: Params) {
-  const [account, setAccount] = useState<Account | null>(
-    accountDto ? Account.create(accountDto) : null,
-  )
+export function useAuthProvider(serverSession: Session | null) {
+  const [session, setSession] = useState<Session | null>(serverSession)
+  const api = useApi()
   const router = useRouter()
   const toast = useToastContext()
 
   async function fetchUser() {
-    if (!account) return
-    const response = await profileService.fetchUserById(account.id)
+    const userId = session?.user?.id
+
+    if (!userId) return
+
+    const response = await api.fetchUserById(userId)
+
+    if (response.isFailure) {
+      toast.show(response.errorMessage)
+      return
+    }
+
     return response.body
   }
 
@@ -52,8 +43,8 @@ export function useAuthProvider({
   } = useCache({
     key: CACHE.keys.authUser,
     fetcher: fetchUser,
-    isEnabled: Boolean(accountDto),
-    dependencies: [account?.id],
+    isEnabled: Boolean(session?.user?.id),
+    dependencies: [session?.user.id],
   })
 
   const notifyUserChanges = useCallback(() => {
@@ -61,35 +52,34 @@ export function useAuthProvider({
     window.dispatchEvent(userChangeEvent)
   }, [])
 
-  const setUser = useCallback(
-    (userDto: UserDto | null) => {
-      if (!userDto) return null
+  function setUser(userDto: UserDto | null) {
+    if (!userDto) return null
 
-      const user = User.create(userDto)
-      user.observer = new Observer(notifyUserChanges)
-      return user
-    },
-    [notifyUserChanges],
-  )
+    const user = User.create(userDto)
+    user.observer = new Observer(notifyUserChanges)
+    return user
+  }
 
   async function handleSignIn(email: string, password: string) {
-    const response = await runSignInAction(email, password)
+    const response = await api.signIn(email, password)
 
     if (response.isSuccessful) {
-      console.log('handleSignIn response', response.data)
-      setAccount(Account.create(response.data))
+      setSession({ user: { id: response.body.userId } })
       return true
     }
 
-    toast.showError(response.errorMessage, 10)
+    toast.show(response.errorMessage, { type: 'error', seconds: 10 })
     return false
   }
 
   async function handleSignOut() {
-    const response = await authService.signOut()
+    const response = await api.signOut()
 
     if (response.isFailure) {
-      toast.showError(response.errorMessage, 4)
+      toast.show(response.errorMessage, {
+        type: 'error',
+        seconds: 4,
+      })
 
       return
     }
@@ -106,33 +96,25 @@ export function useAuthProvider({
     [updateCache],
   )
 
-  const updateUser = useCallback(
-    async (user: User) => {
-      if (user?.id) {
-        const response = await profileService.updateUser(user)
-
-        if (response.isFailure) {
-          toast.showError(response.errorMessage)
-        }
-
-        if (response.isSuccessful) {
-          updateUserCache(user.dto)
-        }
-      }
-    },
-    [profileService, updateUserCache, toast],
-  )
+  async function updateUser(user: User) {
+    if (user?.id) {
+      await api.updateUser(user)
+      console.log(user.dto)
+      updateUserCache(user.dto)
+    }
+  }
 
   useEffect(() => {
-    if (account?.isAuthenticated.isFalse) {
+    if (!session?.user.id) {
       updateUserCache(null)
       return
     }
-  }, [account, updateUserCache])
+  }, [session?.user.id, updateUserCache])
 
-  return {
+  const value: AuthContextValue = {
     user: setUser(userDto),
     isLoading,
+    serverSession,
     handleSignIn,
     handleSignOut,
     updateUser,
@@ -140,4 +122,6 @@ export function useAuthProvider({
     updateUserCache,
     notifyUserChanges,
   }
+
+  return value
 }

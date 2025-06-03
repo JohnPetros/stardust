@@ -36,6 +36,9 @@ export function useBlockedContentAlertDialog(
         break
     }
 
+    console.log(craftsVislibility)
+    console.log({ canShowContent })
+
     if (!canShowContent) {
       ref.current?.open()
       return

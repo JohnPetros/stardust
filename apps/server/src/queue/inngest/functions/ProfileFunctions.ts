@@ -1,36 +1,24 @@
+import type { Inngest } from 'inngest'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 import {
+  FirstTierReachedEvent,
   RankingLosersDefinedEvent,
   RankingWinnersDefinedEvent,
 } from '@stardust/core/ranking/events'
-import { ShopItemsAcquiredByDefaultEvent } from '@stardust/core/shop/events'
 
 import {
+  AcquireDefaultShopItemsJob,
   ObserveStreakBreakJob,
   ResetWeekStatusForAllUsersJob,
   UpdateTierForRankingWinnersJob,
   UpdateTierForRankingLosersJob,
-  CreateUserJob,
 } from '@/queue/jobs/profile'
 import { SupabaseUsersRepository } from '@/database'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestFunctions } from './InngestFunctions'
 
 export class ProfileFunctions extends InngestFunctions {
-  private createUserJob(supabase: SupabaseClient) {
-    return this.inngest.createFunction(
-      { id: CreateUserJob.KEY },
-      { event: ShopItemsAcquiredByDefaultEvent._NAME },
-      async (context) => {
-        const repository = new SupabaseUsersRepository(supabase)
-        const amqp = new InngestAmqp<typeof context.event.data>(context)
-        const job = new CreateUserJob(repository)
-        return job.handle(amqp)
-      },
-    )
-  }
-
   private updateTierForRankingWinnersJob(supabase: SupabaseClient) {
     return this.inngest.createFunction(
       { id: UpdateTierForRankingWinnersJob.KEY },
@@ -52,6 +40,19 @@ export class ProfileFunctions extends InngestFunctions {
         const repository = new SupabaseUsersRepository(supabase)
         const amqp = new InngestAmqp<typeof context.event.data>(context)
         const job = new UpdateTierForRankingLosersJob(repository)
+        return job.handle(amqp)
+      },
+    )
+  }
+
+  private acquireDefaultShopItemsJob(supabase: SupabaseClient) {
+    return this.inngest.createFunction(
+      { id: AcquireDefaultShopItemsJob.KEY },
+      { event: FirstTierReachedEvent._NAME },
+      async (context) => {
+        const repository = new SupabaseUsersRepository(supabase)
+        const amqp = new InngestAmqp<typeof context.event.data>(context)
+        const job = new AcquireDefaultShopItemsJob(repository)
         return job.handle(amqp)
       },
     )
@@ -85,7 +86,7 @@ export class ProfileFunctions extends InngestFunctions {
 
   getFunctions(supabase: SupabaseClient) {
     return [
-      this.createUserJob(supabase),
+      this.acquireDefaultShopItemsJob(supabase),
       this.observeStreakBreakFunction(supabase),
       this.resetWeekStatusForAllUsersFunction(supabase),
       this.updateTierForRankingWinnersJob(supabase),

@@ -66,6 +66,9 @@ export class Challenge extends Entity<ChallengeProps> {
     const translatedExpectedOutput = code.translateToCodeRunner(testCase.expectedOutput)
     const isCorrect = result === translatedExpectedOutput
 
+    console.log({ result })
+    console.log({ translatedExpectedOutput })
+
     if (!isCorrect)
       this.props.incorrectAnswersCount = this.incorrectAnswersCount.increment()
 

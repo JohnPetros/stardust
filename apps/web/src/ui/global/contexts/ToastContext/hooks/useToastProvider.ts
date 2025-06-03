@@ -1,45 +1,23 @@
 'use client'
 
-import { useCallback, type RefObject } from 'react'
+import { useCallback, useRef } from 'react'
 
-import type { OpenToastParams } from '../types/OpenToastParams'
-import type { ToastRef } from '../types/ToastRef'
+import { OpenToastParams } from '../types/OpenToastParams'
+import { ToastRef } from '../types/ToastRef'
 
-const DEFAULT_DURATION_IN_SECONDS = 2.5
+export function useToastProvider() {
+  const toastRef = useRef<ToastRef | null>(null)
 
-export function useToastProvider(toastRef: RefObject<ToastRef>) {
   const showToast = useCallback(
     (message: string, options?: Partial<Omit<OpenToastParams, 'message'>>) => {
       toastRef.current?.open({
         message,
         type: options?.type ?? 'error',
-        seconds: options?.seconds ?? DEFAULT_DURATION_IN_SECONDS,
+        seconds: options?.seconds ?? 2.5,
       })
     },
-    [toastRef.current?.open],
+    []
   )
 
-  const showSuccess = useCallback(
-    (message: string, durationInSeconds = DEFAULT_DURATION_IN_SECONDS) => {
-      toastRef.current?.open({
-        message,
-        type: 'success',
-        seconds: durationInSeconds,
-      })
-    },
-    [toastRef.current?.open],
-  )
-
-  const showError = useCallback(
-    (message: string, durationInSeconds = DEFAULT_DURATION_IN_SECONDS) => {
-      toastRef.current?.open({
-        message,
-        type: 'error',
-        seconds: durationInSeconds,
-      })
-    },
-    [toastRef.current?.open],
-  )
-
-  return { toastRef, showToast, showSuccess, showError }
+  return { toastRef, showToast }
 }

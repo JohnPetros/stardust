@@ -2,15 +2,13 @@
 
 import { type RefObject, useEffect, useState } from 'react'
 
-import { Slug } from '@stardust/core/global/structures'
-
 import { ROUTES } from '@/constants'
-import { NextRestClient } from '@/rest/next/NextRestClient'
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { ROCKET_ANIMATION_DELAY } from '@/ui/auth/constants'
 import { useRouter } from '@/ui/global/hooks/useRouter'
+import { Slug } from '@stardust/core/global/structures'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useSleep } from '@/ui/global/hooks/useSleep'
 import type { SignInFormFields } from './SignInForm/types'
@@ -22,7 +20,6 @@ export function useSignInPage(url: string, rocketAnimationRef: RefObject<Animati
   const { handleSignIn } = useAuthContext()
   const toast = useToastContext()
   const router = useRouter()
-  NextRestClient()
 
   async function handleFormSubmit({ email, password }: SignInFormFields) {
     const isSuccess = await handleSignIn(email, password)
