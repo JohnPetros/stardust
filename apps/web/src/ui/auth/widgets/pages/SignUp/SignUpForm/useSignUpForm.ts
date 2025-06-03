@@ -11,8 +11,8 @@ import {
   passwordSchema,
 } from '@stardust/validation/global/schemas'
 
-import type { ProfileService } from '@stardust/core/profile/interfaces'
-import { Email, Name } from '@stardust/core/global/structures'
+import { useApi } from '@/ui/global/hooks/useApi'
+import type { SignUpFormFields } from './types/SignUpFormFields'
 
 const signUpFormSchema = z.object({
   name: nameSchema,
@@ -20,12 +20,8 @@ const signUpFormSchema = z.object({
   password: passwordSchema,
 })
 
-type SignUpFormFields = z.infer<typeof signUpFormSchema>
-
-export function useSignUpForm(
-  profileService: ProfileService,
-  onFormSubmit: (email: string, password: string, name: string) => Promise<void>,
-) {
+export function useSignUpForm(onFormSubmit: (fields: SignUpFormFields) => Promise<void>) {
+  const api = useApi()
   const {
     watch,
     register,
@@ -42,32 +38,25 @@ export function useSignUpForm(
   const passwordFieldWatch = watch('password')
 
   async function handleFormSubmit(fields: SignUpFormFields) {
-    await onFormSubmit(fields.email, fields.password, fields.name)
+    await onFormSubmit(fields)
   }
 
   const checkUserAlreadyExistsByName = useCallback(async () => {
-    try {
-      const response = await profileService.verifyUserNameInUse(
-        Name.create(nameFieldWatch),
-      )
-      if (response.isSuccessful) {
-        setError('name', { message: 'Nome já utilizado por outro usuário' })
-      }
-    } catch (error) {}
-  }, [nameFieldWatch, profileService.verifyUserNameInUse, setError])
+    const response = await api.fetchUserName(nameFieldWatch)
+
+    if (response.isSuccessful) {
+      setError('name', { message: 'Nome já utilizado por outro usuário' })
+    }
+  }, [nameFieldWatch, api.fetchUserName, setError])
 
   const checkUserAlreadyExistsByEmail = useCallback(async () => {
-    try {
-      const response = await profileService.verifyUserEmailInUse(
-        Email.create(emailFieldWatch),
-      )
+    const response = await api.fetchUserEmail(emailFieldWatch)
 
-      if (response.isSuccessful) {
-        setError('email', { message: 'E-mail já utilizado por outro usuário' })
-        return false
-      }
-    } catch (error) {}
-  }, [emailFieldWatch, profileService.verifyUserEmailInUse, setError])
+    if (response.isSuccessful) {
+      setError('email', { message: 'E-mail já utilizado por outro usuário' })
+      return false
+    }
+  }, [emailFieldWatch, api.fetchUserEmail, setError])
 
   function checkFieldIsValid(fieldName: keyof SignUpFormFields) {
     const nameFieldState = getFieldState(fieldName)

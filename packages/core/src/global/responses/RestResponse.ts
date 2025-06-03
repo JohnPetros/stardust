@@ -62,24 +62,24 @@ export class RestResponse<Body = unknown> {
   }
 
   get isFailure() {
-    return this.statusCode >= HTTP_STATUS_CODE.badRequest || Boolean(this._errorMessage)
+    return this.statusCode >= HTTP_STATUS_CODE.badRequest || this._errorMessage
+  }
+
+  get body(): Body {
+    if (this._errorMessage) {
+      throw new AppError('Response failed')
+    }
+
+    return this._body as Body
   }
 
   getHeader(key: string) {
     return this.headers[key] ?? null
   }
 
-  get body(): Body {
-    if (this._errorMessage) {
-      throw new AppError('Rest Response failed')
-    }
-
-    return this._body as Body
-  }
-
   get errorMessage(): string {
     if (!this._errorMessage) {
-      throw new AppError('Rest Response has no error message')
+      throw new AppError('Response has no error message')
     }
 
     return this._errorMessage

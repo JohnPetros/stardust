@@ -22,12 +22,8 @@ import {
   rewardForChallengeCompletion,
   rewardForStarCompletion,
 } from './rewardingActions'
-import { signIn } from './authActions'
-
-export const authActions = { signIn }
 
 export const cookieActions = { setCookie, getCookie, deleteCookie, hasCookie }
-
 export const challengingActions = {
   fetchChallengesList,
   accessChallengePage,
@@ -40,19 +36,12 @@ export const challengingActions = {
   upvoteSolution,
   viewSolution,
 }
-
 export const playgroundActions = { createSnippet, editSnippet }
-
 export const profileActions = { obsverNewUnlockedAchievements }
-
 export const spaceActions = { accessStarPage }
-
 export const lessonActions = { accessEndingPage, fetchLessonStoryAndQuestions }
-
 export const rankingActions = { getLastWeekRankingWinners }
-
 export const forumActions = { upvoteComment }
-
 export const rewardingActions = {
   rewardForStarChallengeCompletion,
   rewardForChallengeCompletion,

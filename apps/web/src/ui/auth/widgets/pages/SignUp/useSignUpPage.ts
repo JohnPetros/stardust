@@ -1,69 +1,64 @@
 'use client'
 
-import { useState } from 'react'
-
-import type { AuthService } from '@stardust/core/auth/interfaces'
-import { Email, Name } from '@stardust/core/global/structures'
-import { Password } from '@stardust/core/auth/structures'
+import { useRef, useState } from 'react'
 
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
+import type { SignUpFormFields } from './SignUpForm/types/SignUpFormFields'
+import { useApi } from '@/ui/global/hooks/useApi'
 import { useUserCreatedSocket } from './useUserCreatedSocket'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
-export function useSignUpPage(authService: AuthService, isUserCreated: boolean) {
-  const [isSignUpSuccessfull, setIsSignUpSuccessfull] = useState(false)
+type UserCredentials = {
+  email: string
+  password: string
+}
+
+export function useSignUpPage() {
+  const [isSignUpSuccess, setIsSignUpSuccess] = useState(false)
   const [isResendingEmail, setIsResendingEmail] = useState(false)
-  const [userEmail, setUserEmail] = useState<Email | null>(null)
+  const [userCredentials, setUserCredentials] = useState<UserCredentials | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { user } = useAuthContext()
+  const api = useApi()
   const toast = useToastContext()
+  const createdUserId = useRef('')
+
   useUserCreatedSocket((event) => {
-    if (event.payload.userEmail === userEmail?.value) {
-      toast.showSuccess('Enviamos para você um e-mail de confirmação', 10)
-      setIsSignUpSuccessfull(true)
+    if (event.payload.userId === createdUserId.current) {
+      toast.show('Enviamos para você um e-mail de confirmação', {
+        type: 'success',
+        seconds: 10,
+      })
+      setIsSignUpSuccess(true)
     }
   })
 
-  async function handleFormSubmit(email: string, password: string, name: string) {
+  async function handleFormSubmit({ email, password, name }: SignUpFormFields) {
     setIsSubmitting(true)
-
-    const userEmail = Email.create(email)
-    const response = await authService.requestSignUp(
-      userEmail,
-      Password.create(password),
-      Name.create(name),
-    )
-
-    if (response.isSuccessful) {
-      setUserEmail(userEmail)
-      return
-    }
-
-    toast.showError(response.errorMessage, 5)
-    setIsSubmitting(false)
+    setUserCredentials({ email, password })
   }
 
   async function handleResendEmail() {
-    if (isUserCreated) {
-      toast.showError('Seu cadastro já foi confirmado', 5)
+    if (user) {
+      toast.show('Seu cadastro já foi confirmado', {
+        type: 'error',
+        seconds: 5,
+      })
     }
     setIsResendingEmail(true)
-
-    if (userEmail) {
-      const response = await authService.resendSignUpEmail(userEmail)
-
-      if (response.isSuccessful) {
-        toast.showSuccess('Reenviamos para você o e-mail de confirmação', 10)
-      }
-
-      if (response.isFailure) {
-        toast.showError(response.errorMessage, 5)
-      }
+    if (userCredentials) {
+      await api.signUp(userCredentials.email, userCredentials.password)
+      toast.show('Reenviamos para você o e-mail de confirmação', {
+        type: 'success',
+        seconds: 10,
+      })
     }
     setIsResendingEmail(false)
   }
 
   return {
     isSubmitting,
-    isSignUpSuccessfull,
+    isSignUpSuccess,
     isResendingEmail,
     handleFormSubmit,
     handleResendEmail,

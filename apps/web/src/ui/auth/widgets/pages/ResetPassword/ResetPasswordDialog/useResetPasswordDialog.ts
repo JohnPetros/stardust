@@ -6,14 +6,14 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { passwordSchema, stringSchema } from '@stardust/validation/global/schemas'
-import { Password } from '@stardust/core/auth/structures'
-import { Text } from '@stardust/core/global/structures'
-import type { AuthService } from '@stardust/core/auth/interfaces'
 
-import { ROUTES } from '@/constants'
+import { COOKIES, ROUTES } from '@/constants'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
+import { useApi } from '@/ui/global/hooks/useApi'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
+import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
 const resetPasswordFormSchema = z
   .object({
@@ -27,14 +27,7 @@ const resetPasswordFormSchema = z
 
 type ResetPasswordFormFields = z.infer<typeof resetPasswordFormSchema>
 
-export function useResetPasswordFormDialog(
-  authService: AuthService,
-  alertDialogRef: RefObject<AlertDialogRef>,
-  onNewPasswordSubmit: () => Promise<{
-    accessToken: string | null
-    refreshToken: string | null
-  }>,
-) {
+export function useResetPasswordDialog(alertDialogRef: RefObject<AlertDialogRef>) {
   const {
     register,
     handleSubmit,
@@ -42,9 +35,20 @@ export function useResetPasswordFormDialog(
   } = useForm<ResetPasswordFormFields>({
     resolver: zodResolver(resetPasswordFormSchema),
   })
+  const { getCookie, deleteCookie } = useCookieActions()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const toast = useToastContext()
   const router = useRouter()
+  const api = useApi()
+
+  async function handleConfirmButtonClick() {
+    await Promise.all([
+      deleteCookie(COOKIES.keys.accessToken),
+      deleteCookie(COOKIES.keys.refreshToken),
+      deleteCookie(COOKIES.keys.shouldResetPassword),
+    ])
+    router.goTo(ROUTES.auth.signIn)
+  }
 
   function handleOpenChange(isOpen: boolean) {
     if (!isOpen) router.goTo(ROUTES.auth.signIn)
@@ -53,24 +57,26 @@ export function useResetPasswordFormDialog(
   async function handleFormSubmit({ password }: ResetPasswordFormFields) {
     setIsSubmitting(true)
 
-    const { accessToken, refreshToken } = await onNewPasswordSubmit()
+    const [accessToken, refreshToken] = await Promise.all([
+      getCookie(COOKIES.keys.accessToken),
+      getCookie(COOKIES.keys.refreshToken),
+    ])
 
     if (!accessToken || !refreshToken)
       throw new Error('Access or refresh token not found')
 
-    const response = await authService.resetPassword(
-      Password.create(password),
-      Text.create(accessToken),
-      Text.create(refreshToken),
-    )
+    const response = await api.resetPassword(password, accessToken, refreshToken)
 
     if (response.isFailure) {
-      toast.showError('Erro de redefinição, escolha outra senha', 5)
+      toast.show('Erro de redefinição, escolha outra senha', {
+        type: 'error',
+        seconds: 5,
+      })
     }
 
     if (response.isSuccessful) {
       alertDialogRef.current?.open()
-      await authService.signOut()
+      await api.signOut()
     }
 
     setIsSubmitting(false)
@@ -81,6 +87,7 @@ export function useResetPasswordFormDialog(
     errors,
     register,
     handleOpenChange,
+    handleConfirmButtonClick,
     handleSubmit: handleSubmit(handleFormSubmit),
   }
 }

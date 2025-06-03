@@ -9,7 +9,6 @@ const env = {
   databaseUrl: process.env.SUPABASE_DATABASE_URL,
   inngestEventKey: process.env.INNGEST_EVENT_KEY,
   inngestSigningKey: process.env.INNGEST_SIGNING_KEY,
-  webAppUrl: process.env.WEB_APP_URL,
 }
 
 const envSchema = z.object({
@@ -21,7 +20,6 @@ const envSchema = z.object({
   databaseUrl: z.string().url(),
   inngestEventKey: z.string().optional(),
   inngestSigningKey: z.string().optional(),
-  webAppUrl: z.string().url(),
 })
 
 export const ENV = envSchema.parse(env)

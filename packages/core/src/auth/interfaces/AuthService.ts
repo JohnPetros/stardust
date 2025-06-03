@@ -1,22 +1,18 @@
-import type { Email, Name, Text } from '#global/domain/structures/index'
 import type { RestResponse } from '#global/responses/RestResponse'
-import type { Password } from '../domain/structures'
-import type { AccountDto } from '../domain/entities/dtos'
-import type { SessionDto } from '../domain/structures/dtos'
 
 export interface AuthService {
-  fetchAccount(): Promise<RestResponse<AccountDto>>
-  signIn(email: Email, password: Password): Promise<RestResponse<SessionDto>>
-  signUp(email: Email, password: Password): Promise<RestResponse<AccountDto>>
+  fetchUserId(): Promise<RestResponse<string>>
+  signIn(email: string, password: string): Promise<RestResponse<{ userId: string }>>
+  signUp(email: string, password: string): Promise<RestResponse<{ userId: string }>>
   signOut(): Promise<RestResponse>
-  resendSignUpEmail(email: Email): Promise<RestResponse>
-  requestSignUp(email: Email, password: Password, name: Name): Promise<RestResponse>
-  requestPasswordReset(email: Email): Promise<RestResponse>
+  requestPasswordReset(email: string): Promise<RestResponse>
   resetPassword(
-    newPassword: Password,
-    accessToken: Text,
-    refreshToken: Text,
+    newPassword: string,
+    accessToken: string,
+    refreshToken: string,
   ): Promise<RestResponse>
-  confirmEmail(token: Text): Promise<RestResponse<SessionDto>>
-  confirmPasswordReset(token: Text): Promise<RestResponse<SessionDto>>
+  confirmEmail(token: string): Promise<RestResponse>
+  confirmPasswordReset(
+    token: string,
+  ): Promise<RestResponse<{ accessToken: string; refreshToken: string }>>
 }

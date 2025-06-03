@@ -20,7 +20,7 @@ export class ShopFunctions extends InngestFunctions {
         const rocketsRepository = new SupabaseRocketsRepository(supabase)
         const avatarsRepository = new SupabaseAvatarsRepository(supabase)
         const amqp = new InngestAmqp<typeof context.event.data>(context)
-        const eventBroker = new InngestEventBroker()
+        const eventBroker = new InngestEventBroker(amqp)
         const job = new AcquireDefaultShopItemsJob(
           rocketsRepository,
           avatarsRepository,

@@ -15,14 +15,13 @@ import {
   SignInController,
   SignOutController,
   SignUpController,
-  FetchSessionController,
   ConfirmEmailController,
-  ResendSignUpEmailController,
 } from '@/rest/controllers/auth'
-import { SupabaseAuthService } from '@/rest/services'
+import { SupabaseAuthService } from '@/rest/services/SupabaseAuthService'
 import { InngestEventBroker } from '@/queue/inngest/InngestEventBroker'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
+import type { HonoSchema } from '../../types'
 
 export class AuthRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/auth')
@@ -61,7 +60,7 @@ export class AuthRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         const service = new SupabaseAuthService(http.getSupabase())
-        const eventBroker = new InngestEventBroker()
+        const eventBroker = new InngestEventBroker(http.getInngest())
         const controller = new SignUpController(service, eventBroker)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -80,20 +79,20 @@ export class AuthRouter extends HonoRouter {
     })
   }
 
-  private resendSignUpEmailRoute(): void {
-    this.router.post(
-      '/resend-email/sign-up',
+  private confirmEmailRoute(): void {
+    this.router.get(
+      '/confirm-email',
       zValidator(
-        'json',
+        'query',
         z.object({
-          email: emailSchema,
+          token: z.string(),
         }),
       ),
       async (context) => {
         const http = new HonoHttp(context)
         const supabase = http.getSupabase()
         const service = new SupabaseAuthService(supabase)
-        const controller = new ResendSignUpEmailController(service)
+        const controller = new ConfirmEmailController(service)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -120,31 +119,11 @@ export class AuthRouter extends HonoRouter {
     )
   }
 
-  private confirmEmailRoute(): void {
-    this.router.post(
-      '/confirm-email',
-      zValidator(
-        'json',
-        z.object({
-          token: z.string(),
-        }),
-      ),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const service = new SupabaseAuthService(supabase)
-        const controller = new ConfirmEmailController(service)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
-    )
-  }
-
   private confirmPasswordResetRoute(): void {
-    this.router.post(
+    this.router.get(
       '/confirm-password-reset',
       zValidator(
-        'json',
+        'query',
         z.object({
           token: z.string(),
         }),
@@ -182,27 +161,14 @@ export class AuthRouter extends HonoRouter {
     )
   }
 
-  private fetchAccountRoute(): void {
-    this.router.get('/account', async (context) => {
-      const http = new HonoHttp(context)
-      const supabase = http.getSupabase()
-      const service = new SupabaseAuthService(supabase)
-      const controller = new FetchSessionController(service)
-      const response = await controller.handle(http)
-      return http.sendResponse(response)
-    })
-  }
-
   registerRoutes(): Hono {
     this.signInRoute()
     this.signUpRoute()
     this.signOutRoute()
-    this.resendSignUpEmailRoute()
-    this.requestPasswordResetRoute()
     this.confirmEmailRoute()
+    this.requestPasswordResetRoute()
     this.confirmPasswordResetRoute()
     this.resetPasswordRoute()
-    this.fetchAccountRoute()
     return this.router
   }
 }

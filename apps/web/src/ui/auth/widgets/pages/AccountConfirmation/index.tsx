@@ -1,25 +1,45 @@
 'use client'
 
 import { useRef } from 'react'
+import { AnimatePresence } from 'framer-motion'
 
-import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
+import { AppMessage } from '@/ui/auth/widgets/components/AppMessage'
+import { Loading } from '@/ui/global/widgets/components/Loading'
 
 import { useAccountConfirmationPage } from './useAccountConfirmationPage'
-import { AccountConfirmationPageView } from './AccountConfirmationPageView'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { RocketAnimation } from '../../components/RocketAnimation'
+import { Button } from '@/ui/global/widgets/components/Button'
+import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 
 export function AccountConfirmationPage() {
   const rocketAnimationRef = useRef<AnimationRef>(null)
-  const { isRocketVisible, handleLinkClick } =
+
+  const { isRocketVisible, user, handleLinkClick } =
     useAccountConfirmationPage(rocketAnimationRef)
-  const { user } = useAuthContext()
 
   return (
-    <AccountConfirmationPageView
-      rocketAnimationRef={rocketAnimationRef}
-      isRocketVisible={isRocketVisible}
-      user={user ? user.dto : null}
-      onLinkClick={handleLinkClick}
-    />
+    <>
+      <RocketAnimation animationRef={rocketAnimationRef} isVisible={isRocketVisible} />
+
+      <AnimatePresence>
+        {!isRocketVisible && (
+          <main className='flex h-full w-full items-center justify-center'>
+            {user ? (
+              <AppMessage
+                title='Bem-vindo(a) 👋'
+                subtitle='Seu perfil foi criado com sucesso!'
+                footer={
+                  <Button onClick={handleLinkClick} className='w-72'>
+                    Ir para a página principal
+                  </Button>
+                }
+              />
+            ) : (
+              <Loading />
+            )}
+          </main>
+        )}
+      </AnimatePresence>
+    </>
   )
 }

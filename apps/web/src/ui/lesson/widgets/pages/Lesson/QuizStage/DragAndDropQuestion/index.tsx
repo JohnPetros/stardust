@@ -39,7 +39,10 @@ export function DragAndDropQuestion({
     dropZoneSlotsCount,
     codeLines,
   })
+
   const activeItem = activeItemIndex ? dragAndDrop.getItemByIndex(activeItemIndex) : null
+
+  console.log(codeLines)
 
   return (
     <Dnd

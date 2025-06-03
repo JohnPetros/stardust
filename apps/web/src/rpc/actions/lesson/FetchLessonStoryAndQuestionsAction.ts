@@ -24,6 +24,8 @@ export const FetchLessonStoryAndQuestionsAction = (
       if (questionsResponse.isFailure) questionsResponse.throwError()
       const questions = questionsResponse.body
 
+      console.log('questions', questions)
+
       const textsBlocksResponse = await service.fetchTextsBlocksByStar(starId)
       if (textsBlocksResponse.isFailure) textsBlocksResponse.throwError()
       const textsBlocks = textsBlocksResponse.body
