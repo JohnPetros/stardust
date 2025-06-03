@@ -10,7 +10,7 @@ const setCookie = actionClient
     z.object({
       key: z.string(),
       value: z.string(),
-      expirationInSeconds: z.number().default(3600 * 24), // 1 day
+      durationInSeconds: z.number().default(3600 * 24), // 1 day
     }),
   )
   .action(async ({ clientInput }) => {
@@ -18,7 +18,7 @@ const setCookie = actionClient
     await call.setCookie(
       clientInput.key,
       clientInput.value,
-      clientInput.expirationInSeconds,
+      clientInput.durationInSeconds,
     )
   })
 

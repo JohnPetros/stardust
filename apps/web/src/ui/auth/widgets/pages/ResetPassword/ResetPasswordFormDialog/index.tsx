@@ -12,22 +12,27 @@ import {
   DialogTrigger,
 } from '@/ui/global/widgets/components/Dialog'
 import { Button } from '@/ui/global/widgets/components/Button'
-import { useResetPasswordDialog } from './useResetPasswordDialog'
+import { useResetPasswordFormDialog } from './useResetPasswordFormDialog'
+import { useRest } from '@/ui/global/hooks/useRest'
 
-interface ResetPasswordDialogProps {
+type Props = {
   children: ReactNode
+  onNewPasswordSubmit: () => Promise<{
+    accessToken: string | null
+    refreshToken: string | null
+  }>
+  onPasswordReset: () => Promise<void>
 }
 
-export function ResetPasswordDialog({ children }: ResetPasswordDialogProps) {
+export const ResetPasswordFormDialog = ({
+  children,
+  onNewPasswordSubmit,
+  onPasswordReset,
+}: Props) => {
   const alertDialogRef = useRef<AlertDialogRef | null>(null)
-  const {
-    errors,
-    isSubmitting,
-    register,
-    handleSubmit,
-    handleOpenChange,
-    handleConfirmButtonClick,
-  } = useResetPasswordDialog(alertDialogRef)
+  const { authService } = useRest()
+  const { errors, isSubmitting, register, handleSubmit, handleOpenChange } =
+    useResetPasswordFormDialog(authService, alertDialogRef, onNewPasswordSubmit)
 
   return (
     <>
@@ -42,7 +47,7 @@ export function ResetPasswordDialog({ children }: ResetPasswordDialogProps) {
         }
         shouldPlayAudio={false}
         onOpenChange={handleOpenChange}
-        action={<Button onClick={handleConfirmButtonClick}>Fazer login</Button>}
+        action={<Button onClick={onPasswordReset}>Fazer login</Button>}
       />
       <Dialog>
         <DialogContent>

@@ -16,8 +16,6 @@ export function useDnd({ onDragStart, onDragEnd, onDragCancel }: UseDndProps) {
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event
 
-    console.log(active, over)
-
     if (!over) return
 
     const dropZone = DropZone.create({

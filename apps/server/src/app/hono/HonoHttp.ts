@@ -130,7 +130,6 @@ export class HonoHttp<HonoContext extends Context>
     })
   }
 
-
   sendPagination<Item>(response: PaginationResponse<Item>): RestResponse<Response> {
     this.context.header(HTTP_HEADERS.xPaginationResponse, 'true')
     this.context.header(
@@ -154,7 +153,8 @@ export class HonoHttp<HonoContext extends Context>
 
     if (response.isFailure) {
       return this.context.json({
-        error: response.errorMessage,
+        title: 'Service Error',
+        message: response.errorMessage,
       })
     }
     return this.context.json(response.body ?? {})

@@ -18,8 +18,6 @@ export function Code({
   if (!children) return
   let code = ''
 
-  console.log(children)
-
   if (!Array.isArray(children)) {
     code = String(children)
   } else if (typeof children[0] === 'string') {
@@ -29,8 +27,6 @@ export function Code({
       code = children[0].props.children.props.children
     } else code = children[0].props.children
   }
-
-  console.log({ code })
 
   if (code)
     return (

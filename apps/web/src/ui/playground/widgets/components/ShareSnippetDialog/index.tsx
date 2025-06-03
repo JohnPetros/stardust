@@ -22,7 +22,7 @@ export function ShareSnippetDialog({
   children: trigger,
   snippetId,
 }: PropsWithChildren<ShareSnippetDialogProps>) {
-  const playgroundUrl = `${CLIENT_ENV.appHost}${ROUTES.playground.snippet(snippetId)}`
+  const playgroundUrl = `${CLIENT_ENV.webAppUrl}${ROUTES.playground.snippet(snippetId)}`
   const { handleShareSnippet } = useShareSnippetDialog(playgroundUrl)
 
   return (

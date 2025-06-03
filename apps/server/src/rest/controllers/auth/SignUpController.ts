@@ -2,6 +2,8 @@ import type { Controller, EventBroker } from '@stardust/core/global/interfaces'
 import type { Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
 import type { AuthService } from '@stardust/core/auth/interfaces'
+import { Email } from '@stardust/core/global/structures'
+import { Password } from '@stardust/core/auth/structures'
 import { UserSignedUpEvent } from '@stardust/core/auth/events'
 
 type Schema = {
@@ -20,11 +22,15 @@ export class SignUpController implements Controller<Schema> {
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const { email, password, name } = await http.getBody()
-    const response = await this.authService.signUp(email, password)
+    const response = await this.authService.signUp(
+      Email.create(email),
+      Password.create(password),
+    )
+    const accountId = String(response.body.id)
 
     if (response.isSuccessful) {
       const event = new UserSignedUpEvent({
-        userId: response.body.userId,
+        userId: accountId,
         userEmail: email,
         userName: name,
       })

@@ -15,12 +15,14 @@ import {
 } from '@/database/supabase/repositories/profile'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
+import { AuthMiddleware } from '../../middlewares'
 
 export class AchievementsRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/achievements')
+  private readonly authMiddleware = new AuthMiddleware()
 
   private fetchAchievementsRoute(): void {
-    this.router.get('/', async (context) => {
+    this.router.get('/', this.authMiddleware.verifyAuthentication, async (context) => {
       const http = new HonoHttp(context)
       const repository = new SupabaseAchievementsRepository(http.getSupabase())
       const controller = new FetchAllAchievementsController(repository)
@@ -32,6 +34,7 @@ export class AchievementsRouter extends HonoRouter {
   private fetchUnlockedAchievementsRoute(): void {
     this.router.get(
       '/:userId',
+      this.authMiddleware.verifyAuthentication,
       zValidator(
         'param',
         z.object({
@@ -51,6 +54,7 @@ export class AchievementsRouter extends HonoRouter {
   private rescueAchievementRoute(): void {
     this.router.put(
       '/:userId/:achievementId',
+      this.authMiddleware.verifyAuthentication,
       zValidator(
         'param',
         z.object({

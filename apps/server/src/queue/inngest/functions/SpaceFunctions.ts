@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 
-import { UserCreatedEvent } from '@stardust/core/profile/events'
+import { UserSignedUpEvent } from '@stardust/core/auth/events'
 
 import { UnlockFirstStarJob } from '@/queue/jobs/space'
 import { SupabasePlanetsRepository } from '@/database'
@@ -12,11 +12,11 @@ export class SpaceFunctions extends InngestFunctions {
   private unlockFirstStarFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
       { id: UnlockFirstStarJob.KEY },
-      { event: UserCreatedEvent._NAME },
+      { event: UserSignedUpEvent._NAME },
       async (context) => {
         const planetsRepository = new SupabasePlanetsRepository(supabase)
         const amqp = new InngestAmqp<typeof context.event.data>(context)
-        const eventBroker = new InngestEventBroker(amqp)
+        const eventBroker = new InngestEventBroker()
         const job = new UnlockFirstStarJob(planetsRepository, eventBroker)
         return job.handle(amqp)
       },

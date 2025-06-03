@@ -4,6 +4,7 @@ import { useAction } from 'next-safe-action/hooks'
 import { useCallback } from 'react'
 
 import { cookieActions } from '@/rpc/next-safe-action'
+import { ActionResponse } from '@stardust/core/global/responses'
 
 export function useCookieActions() {
   const { executeAsync: executeGetCookie } = useAction(cookieActions.getCookie)
@@ -14,9 +15,40 @@ export function useCookieActions() {
   const getCookie = useCallback(
     async (key: string) => {
       const result = await executeGetCookie(key)
-      return result?.data ?? null
+      if (result?.serverError) {
+        return new ActionResponse<string | null>({
+          errorMessage: result.serverError,
+        })
+      }
+      return new ActionResponse<string | null>({
+        data: result?.data ?? null,
+      })
     },
     [executeGetCookie],
+  )
+
+  const setCookie = useCallback(
+    async (input: {
+      value: string
+      key: string
+      durationInSeconds?: number | undefined
+    }) => {
+      const result = await executeSetCookie(input)
+      return result?.serverError
+        ? new ActionResponse({ errorMessage: result.serverError })
+        : new ActionResponse()
+    },
+    [executeSetCookie],
+  )
+
+  const deleteCookie = useCallback(
+    async (key: string) => {
+      const result = await executeDeleteCookie(key)
+      return result?.serverError
+        ? new ActionResponse({ errorMessage: result.serverError })
+        : new ActionResponse()
+    },
+    [executeDeleteCookie],
   )
 
   const hasCookie = useCallback(
@@ -29,8 +61,8 @@ export function useCookieActions() {
 
   return {
     getCookie,
-    setCookie: executeSetCookie,
-    deleteCookie: executeDeleteCookie,
+    setCookie,
+    deleteCookie,
     hasCookie,
   }
 }

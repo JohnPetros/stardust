@@ -14,7 +14,6 @@ export class EditChallengeUseCase implements UseCase<Request, Response> {
   constructor(private readonly challengingService: ChallengingService) {}
 
   async execute({ challengeDto }: Request) {
-    console.log(challengeDto)
     const challenge = Challenge.create(challengeDto)
     await this.fetchChallengeById(challenge.id)
 

@@ -27,7 +27,7 @@ const ConfirmSignUpTemplate = () => {
 
         <Paragraph>- Equipe StarDust! 🚀</Paragraph>
 
-        <Link href='{{ .SiteURL }}/confirm-email?token={{ .TokenHash }}'>
+        <Link href='{{ .RedirectTo }}/confirm-email?token={{ .TokenHash }}'>
           Confirmar cadastro
         </Link>
       </Box>

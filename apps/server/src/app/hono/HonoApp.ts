@@ -1,9 +1,7 @@
 import { type Context, type Next, Hono } from 'hono'
 import { serve } from '@hono/node-server'
-import { setCookie } from 'hono/cookie'
 import { serve as serveInngest } from 'inngest/hono'
-import { createServerClient, parseCookieHeader } from '@supabase/ssr'
-import type { SupabaseClient } from '@supabase/supabase-js'
+import { type SupabaseClient, createClient } from '@supabase/supabase-js'
 import { ZodError } from 'zod'
 
 import { ENV } from '@/constants'
@@ -26,6 +24,10 @@ import {
 import { AppError } from '@stardust/core/global/errors'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { cors } from 'hono/cors'
+import { VerifyAuthenticationController } from '@/rest/controllers/auth'
+import { SupabaseAuthService } from '@/rest/services'
+import { HonoHttp } from './HonoHttp'
+import { AuthMiddleware } from './middlewares'
 
 declare module 'hono' {
   interface ContextVariableMap {
@@ -111,15 +113,17 @@ export class HonoApp {
     const authRouter = new AuthRouter(this)
     const spaceRouter = new SpaceRouter(this)
     const shopRouter = new ShopRouter(this)
+    const authMiddleware = new AuthMiddleware()
 
     this.hono.get('/', (context) => {
       return context.json({ message: 'Everything is working!' })
     })
-    this.hono.route('/', profileRouter.registerRoutes())
+    this.registerInngestRoute()
     this.hono.route('/', authRouter.registerRoutes())
+    this.hono.route('/', profileRouter.registerRoutes())
+    this.hono.use('/', authMiddleware.verifyAuthentication)
     this.hono.route('/', spaceRouter.registerRoutes())
     this.hono.route('/', shopRouter.registerRoutes())
-    this.registerInngestRoute()
   }
 
   private registerMiddlewares() {
@@ -151,27 +155,16 @@ export class HonoApp {
 
   private createSupabaseClient() {
     return async (context: Context, next: Next) => {
-      const supabase = createServerClient(ENV.supabaseUrl, ENV.supabaseKey, {
-        cookies: {
-          getAll() {
-            const cookies = parseCookieHeader(context.req.header('Cookie') ?? '')
-            return cookies.map((cookie) => ({
-              name: cookie.name,
-              value: cookie.value ?? '',
-            }))
-          },
-
-          setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              // @ts-ignore
-              setCookie(context, name, value, {
-                ...options,
-                maxAge: 60 * 60 * 24 * 400, // 400 days
-              }),
-            )
+      const accessToken = context.req.header('Authorization')?.split(' ')[1]
+      const supabase = createClient(ENV.supabaseUrl, ENV.supabaseKey, {
+        global: {
+          headers: {
+            apikey: ENV.supabaseKey,
+            Authorization: accessToken ? `Bearer ${accessToken}` : '',
           },
         },
       })
+      await supabase.auth.refreshSession({ refresh_token: 't45pjkqsryp6' })
       context.set('supabase', supabase)
       await next()
     }
