@@ -2,7 +2,7 @@ import type { Controller, Http } from '@stardust/core/global/interfaces'
 
 import { COOKIES, ROUTES } from '@/constants'
 
-export const HandleRewardsPayloadController = (): Controller => {
+export const HandleRewardingPayloadController = (): Controller => {
   return {
     async handle(http: Http) {
       const currentRoute = http.getCurrentRoute()

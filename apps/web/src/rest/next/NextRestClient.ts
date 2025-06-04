@@ -1,12 +1,12 @@
 import type { RestClient } from '@stardust/core/global/interfaces'
 import { PaginationResponse, RestResponse } from '@stardust/core/global/responses'
+import { HTTP_HEADERS } from '@stardust/core/global/constants'
 
 import { addQueryParams, handleRestError, parseResponseJson } from './utils'
-import { HTTP_HEADERS } from '@stardust/core/global/constants'
 import type { NextRestClientConfig } from './types'
 
 export const NextRestClient = ({
-  isCacheEnabled = true,
+  isCacheEnabled = false,
   refetchInterval = 60 * 60 * 24, // 1 day
   cacheKey,
   headers = new Headers(),
