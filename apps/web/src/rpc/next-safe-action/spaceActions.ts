@@ -2,11 +2,11 @@
 
 import { z } from 'zod'
 
-import { SupabaseServerActionClient } from '@/rest/supabase/clients'
-import { SupabaseSpaceService } from '@/rest/supabase/services'
 import { authActionClient } from './clients/authActionClient'
 import { NextCall } from '../next/NextCall'
 import { AccessStarPageAction } from '../actions/space'
+import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
+import { SpaceService } from '@/rest/services'
 
 export const accessStarPage = authActionClient
   .schema(
@@ -19,8 +19,8 @@ export const accessStarPage = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const supabase = SupabaseServerActionClient()
-    const service = SupabaseSpaceService(supabase)
+    const restClient = await NextServerRestClient({ isCacheEnabled: true })
+    const service = SpaceService(restClient)
     const action = AccessStarPageAction(service)
     return await action.handle(call)
   })

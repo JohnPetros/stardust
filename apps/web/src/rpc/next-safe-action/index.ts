@@ -18,13 +18,13 @@ import { obsverNewUnlockedAchievements } from './profileActions'
 import { getLastWeekRankingWinners } from './rankingActions'
 import { createSnippet, editSnippet } from './playgroundActions'
 import {
-  rewardForStarChallengeCompletion,
-  rewardForChallengeCompletion,
-  rewardForStarCompletion,
+  accessRewardForStarCompletionPage,
+  accessRewardForStarChallengeCompletionPage,
+  accessRewardForChallengeCompletionPage,
 } from './rewardingActions'
-import { signIn } from './authActions'
+import { signIn, signOut } from './authActions'
 
-export const authActions = { signIn }
+export const authActions = { signIn, signOut }
 
 export const cookieActions = { setCookie, getCookie, deleteCookie, hasCookie }
 
@@ -54,7 +54,7 @@ export const rankingActions = { getLastWeekRankingWinners }
 export const forumActions = { upvoteComment }
 
 export const rewardingActions = {
-  rewardForStarChallengeCompletion,
-  rewardForChallengeCompletion,
-  rewardForStarCompletion,
+  accessRewardForStarCompletionPage,
+  accessRewardForChallengeCompletionPage,
+  accessRewardForStarChallengeCompletionPage,
 }
