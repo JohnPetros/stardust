@@ -22,6 +22,7 @@ export interface Http<Schema extends HttpSchema = HttpSchema, Response = unknown
   getCookie(key: string): Promise<string | null>
   deleteCookie(key: string): Promise<void>
   hasCookie(key: string): Promise<boolean>
+  extendBody(body: unknown): void
   pass(): Promise<RestResponse<Response>>
   statusOk(): this
   statusCreated(): this

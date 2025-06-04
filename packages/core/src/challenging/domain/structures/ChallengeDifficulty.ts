@@ -1,7 +1,7 @@
-import { StringValidation } from '../../../global/libs'
-import { ValidationError } from '../../../global/domain/errors'
-import type { ChallengeDifficultyLevel } from '../types'
+import { ValidationError } from '#global/domain/errors/ValidationError'
+import { StringValidation } from '#global/libs/validation/index'
 import { Logical } from '#global/domain/structures/Logical'
+import type { ChallengeDifficultyLevel } from '../types'
 
 export class ChallengeDifficulty {
   static readonly REWARD_BY_DIFFICULTY = {
