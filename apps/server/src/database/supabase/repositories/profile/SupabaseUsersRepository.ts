@@ -236,6 +236,48 @@ export class SupabaseUsersRepository
     if (error) throw new SupabasePostgreError(error)
   }
 
+  async addUnlockedAchievement(achievementId: Id, userId: Id): Promise<void> {
+    const { error } = await this.supabase
+      .from('users_unlocked_achievements')
+      .insert({ achievement_id: achievementId.value, user_id: userId.value })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
+  async addRescuableAchievement(achievementId: Id, userId: Id): Promise<void> {
+    const { error } = await this.supabase
+      .from('users_rescuable_achievements')
+      .insert({ achievement_id: achievementId.value, user_id: userId.value })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
+  async removeRescuableAchievement(achievementId: Id, userId: Id): Promise<void> {
+    const { error } = await this.supabase
+      .from('users_rescuable_achievements')
+      .delete()
+      .match({
+        achievement_id: achievementId.value,
+        user_id: userId.value,
+      })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
+  async addCompletedChallenge(challengeId: Id, userId: Id): Promise<void> {
+    const { error } = await this.supabase
+      .from('users_completed_challenges')
+      .insert({ challenge_id: challengeId.value, user_id: userId.value })
+
+    if (error) throw new SupabasePostgreError(error)
+  }
+
   async replace(user: User): Promise<void> {
     const supabaseUser = SupabaseUserMapper.toSupabase(user)
     const { error } = await this.supabase

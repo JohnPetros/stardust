@@ -1,0 +1,1 @@
+export { SupabaseChallengesRepository } from './SupabaseChallengesRepository'

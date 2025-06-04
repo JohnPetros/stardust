@@ -1,0 +1,1 @@
+export { SupabaseChallengeMapper } from './SupabaseChallengeMapper'
