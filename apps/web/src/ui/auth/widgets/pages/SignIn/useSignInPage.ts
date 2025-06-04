@@ -26,7 +26,6 @@ export function useSignInPage(url: string, rocketAnimationRef: RefObject<Animati
 
   async function handleFormSubmit({ email, password }: SignInFormFields) {
     const isSuccess = await handleSignIn(email, password)
-
     if (!isSuccess) return
 
     setIsRocketVisible(true)
