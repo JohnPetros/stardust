@@ -1,5 +1,5 @@
 @URL = {{BASE_URL}}/profile/users
-@USER_ID = 669be3b4-5d8a-4e2b-82a9-531e36ee6bec
+@USER_ID = 76dc903b-eeae-45a3-9ed1-43240249e457
 @USER_SLUG = ctrl-alt-del
 
 ### Fetch user by id
@@ -9,6 +9,39 @@ Authorization: Bearer {{JWT}}
 ### Fetch user by slug
 GET {{URL}}/slug/{{USER_SLUG}} 
 Authorization: Bearer {{JWT}}
+
+### Reward user for star completion
+PUT {{URL}}/{{USER_ID}}/reward/star
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "starId": "82279f67-c250-4015-9242-04eed9a1670a",
+  "questionsCount": 10,
+  "incorrectAnswersCount": 5
+}
+
+### Reward user for star challenge completion
+PUT {{URL}}/{{USER_ID}}/reward/star-challenge
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "challengeId": "56373af2-ac24-4bcd-a312-7d01bd7b5f53",
+  "maximumIncorrectAnswersCount": 10,
+  "incorrectAnswersCount": 2
+}
+
+### Reward user for challenge completion
+PUT {{URL}}/{{USER_ID}}/reward/challenge
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "challengeId": "56373af2-ac24-4bcd-a312-7d01bd7b5f53",
+  "maximumIncorrectAnswersCount": 10,
+  "incorrectAnswersCount": 2
+}
 
 ### Verify user name in use
 GET {{URL}}/verify-name-in-use?name=John Doe

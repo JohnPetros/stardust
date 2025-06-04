@@ -1,8 +1,18 @@
 import { type Context, type Next, Hono } from 'hono'
 import { serve } from '@hono/node-server'
+import { cors } from 'hono/cors'
 import { serve as serveInngest } from 'inngest/hono'
 import { type SupabaseClient, createClient } from '@supabase/supabase-js'
 import { ZodError } from 'zod'
+
+import {
+  AuthError,
+  ConflictError,
+  NotFoundError,
+  ValidationError,
+} from '@stardust/core/global/errors'
+import { AppError } from '@stardust/core/global/errors'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 import { ENV } from '@/constants'
 import { inngest } from '@/queue/inngest/client'
@@ -15,19 +25,6 @@ import {
 } from '@/queue/inngest/functions'
 import { InngestAmqp } from '@/queue/inngest/InngestAmqp'
 import { AuthRouter, ProfileRouter, SpaceRouter, ShopRouter } from './routers'
-import {
-  AuthError,
-  ConflictError,
-  NotFoundError,
-  ValidationError,
-} from '@stardust/core/global/errors'
-import { AppError } from '@stardust/core/global/errors'
-import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
-import { cors } from 'hono/cors'
-import { VerifyAuthenticationController } from '@/rest/controllers/auth'
-import { SupabaseAuthService } from '@/rest/services'
-import { HonoHttp } from './HonoHttp'
-import { AuthMiddleware } from './middlewares'
 
 declare module 'hono' {
   interface ContextVariableMap {
@@ -113,7 +110,6 @@ export class HonoApp {
     const authRouter = new AuthRouter(this)
     const spaceRouter = new SpaceRouter(this)
     const shopRouter = new ShopRouter(this)
-    const authMiddleware = new AuthMiddleware()
 
     this.hono.get('/', (context) => {
       return context.json({ message: 'Everything is working!' })
@@ -121,7 +117,6 @@ export class HonoApp {
     this.registerInngestRoute()
     this.hono.route('/', authRouter.registerRoutes())
     this.hono.route('/', profileRouter.registerRoutes())
-    this.hono.use('/', authMiddleware.verifyAuthentication)
     this.hono.route('/', spaceRouter.registerRoutes())
     this.hono.route('/', shopRouter.registerRoutes())
   }
@@ -159,7 +154,6 @@ export class HonoApp {
       const supabase = createClient(ENV.supabaseUrl, ENV.supabaseKey, {
         global: {
           headers: {
-            apikey: ENV.supabaseKey,
             Authorization: accessToken ? `Bearer ${accessToken}` : '',
           },
         },

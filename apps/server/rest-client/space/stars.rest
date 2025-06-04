@@ -1,5 +1,12 @@
 @URL = {{BASE_URL}}/space/stars
-@STAR_SLUG = "opa-opa"
+@STAR_SLUG = logica-de-programacao
+@STAR_ID = 82279f67-c250-4015-9242-04eed9a1670a
 
-### Fetch star
-GET {{URL}}/{{STAR_SLUG}}
+### Fetch star by slug
+GET {{URL}}/slug/{{STAR_SLUG}}
+Authorization: Bearer {{JWT}}
+
+### Fetch star by id
+GET {{URL}}/id/{{STAR_ID}}
+Authorization: Bearer {{JWT}}
+

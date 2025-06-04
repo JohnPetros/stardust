@@ -54,8 +54,20 @@ export class HonoHttp<HonoContext extends Context>
   }
 
   async getBody(): Promise<HonoHttpSchema<HonoContext>['body']> {
-    // @ts-ignore
-    return this.context.req.valid('json')
+    const extraBody = this.context.get('extra-body')
+    let body: HonoHttpSchema<HonoContext>['body']
+
+    if (this.next) {
+      body = await this.context.req.json()
+    } else {
+      // @ts-ignore
+      body = this.context.req.valid('json')
+    }
+
+    return {
+      ...(body as object),
+      ...extraBody,
+    } as HonoHttpSchema<HonoContext>['body']
   }
 
   getRouteParams(): HonoHttpSchema<HonoContext>['routeParams'] {
@@ -95,6 +107,13 @@ export class HonoHttp<HonoContext extends Context>
     return this.getCookie(key) !== null
   }
 
+  extendBody(body: unknown): void {
+    this.context.set('extra-body', {
+      ...this.context.get('extra-body'),
+      ...(body as object),
+    })
+  }
+
   async pass(): Promise<RestResponse<Response>> {
     if (!this.next) throw new AppError('HonoHttp next is not defined')
 
@@ -117,7 +136,7 @@ export class HonoHttp<HonoContext extends Context>
     return this
   }
 
-  send(data: unknown): RestResponse<Response> {
+  send(data?: unknown): RestResponse<Response> {
     const body = this.context.json(data as object)
     const headers = this.getResponseHeaders()
     return new RestResponse({

@@ -18,7 +18,7 @@ import { InngestAmqp } from '../InngestAmqp'
 import { InngestFunctions } from './InngestFunctions'
 
 export class ProfileFunctions extends InngestFunctions {
-  private createUserJob(supabase: SupabaseClient) {
+  private createCreateUserFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
       { id: CreateUserJob.KEY },
       { event: ShopItemsAcquiredByDefaultEvent._NAME },
@@ -31,7 +31,7 @@ export class ProfileFunctions extends InngestFunctions {
     )
   }
 
-  private updateTierForRankingWinnersJob(supabase: SupabaseClient) {
+  private createUpdateTierForRankingWinnersFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
       { id: UpdateTierForRankingWinnersJob.KEY },
       { event: RankingWinnersDefinedEvent._NAME },
@@ -44,7 +44,7 @@ export class ProfileFunctions extends InngestFunctions {
     )
   }
 
-  private updateTierForRankingLosersJob(supabase: SupabaseClient) {
+  private createUpdateTierForRankingLosersFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
       { id: UpdateTierForRankingLosersJob.KEY },
       { event: RankingLosersDefinedEvent._NAME },
@@ -57,7 +57,7 @@ export class ProfileFunctions extends InngestFunctions {
     )
   }
 
-  private observeStreakBreakFunction(supabase: SupabaseClient) {
+  private createObserveStreakBreakFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
       { id: ObserveStreakBreakJob.KEY },
       { cron: ObserveStreakBreakJob.CRON_EXPRESSION },
@@ -70,7 +70,7 @@ export class ProfileFunctions extends InngestFunctions {
     )
   }
 
-  private resetWeekStatusForAllUsersFunction(supabase: SupabaseClient) {
+  private createResetWeekStatusForAllUsersFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
       { id: ResetWeekStatusForAllUsersJob.KEY },
       { cron: ResetWeekStatusForAllUsersJob.CRON_EXPRESSION },
@@ -85,11 +85,11 @@ export class ProfileFunctions extends InngestFunctions {
 
   getFunctions(supabase: SupabaseClient) {
     return [
-      this.createUserJob(supabase),
-      this.observeStreakBreakFunction(supabase),
-      this.resetWeekStatusForAllUsersFunction(supabase),
-      this.updateTierForRankingWinnersJob(supabase),
-      this.updateTierForRankingLosersJob(supabase),
+      this.createCreateUserFunction(supabase),
+      this.createObserveStreakBreakFunction(supabase),
+      this.createResetWeekStatusForAllUsersFunction(supabase),
+      this.createUpdateTierForRankingWinnersFunction(supabase),
+      this.createUpdateTierForRankingLosersFunction(supabase),
     ]
   }
 }

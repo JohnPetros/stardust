@@ -1,6 +1,6 @@
 @URL = {{BASE_URL}}/profile/achievements
-@USER_ID = 669be3b4-5d8a-4e2b-82a9-531e36ee6bec
 @ACHIEVEMENT_ID = 56ab2a6d-39f7-4fba-a001-f33ccbe39dfe
+@USER_ID = 76dc903b-eeae-45a3-9ed1-43240249e457
 
 ### Fetch achievements
 GET {{URL}} 
@@ -9,10 +9,11 @@ Authorization: Bearer {{JWT}}
 ### Fetch all unlocked achievements
 GET {{URL}}/{{USER_ID}} 
 Authorization: Bearer {{JWT}}
+
 ### Observe new unlocked achievements
-PUT {{URL}}/{{USER_ID}}/{{ACHIEVEMENT_ID}}
+POST {{URL}}/{{USER_ID}}/observe
 Authorization: Bearer {{JWT}}
 
 ### Rescue achievement
-PUT {{URL}}/{{USER_ID}}/{{ACHIEVEMENT_ID}}
+PUT {{URL}}/{{USER_ID}}/{{ACHIEVEMENT_ID}}/rescue
 Authorization: Bearer {{JWT}}
