@@ -3,7 +3,7 @@ import { z } from 'zod'
 
 import { VerifyAuthRoutesController } from './rest/controllers/auth'
 import { NextHttp } from './rest/next/NextHttp'
-import { HandleRewardsPayloadController } from './rest/controllers/lesson'
+import { HandleRewardingPayloadController } from './rest/controllers/lesson'
 import { HandleRedirectController } from './rest/controllers/global'
 import { AuthService } from './rest/services'
 import { NextServerRestClient } from './rest/next/NextServerRestClient'
@@ -24,7 +24,7 @@ export const middleware = async (request: NextRequest) => {
   const authService = AuthService(restClient)
   const controllers = [
     VerifyAuthRoutesController(authService),
-    HandleRewardsPayloadController(),
+    HandleRewardingPayloadController(),
     HandleRedirectController(),
   ]
 

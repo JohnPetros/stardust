@@ -4,7 +4,6 @@ import { useCallback, useMemo, useRef, useState } from 'react'
 
 import { Planet } from '@stardust/core/space/entities'
 import type { PlanetDto } from '@stardust/core/space/entities/dtos'
-import { GetLastUnlockedStarIdUseCase } from '@stardust/core/space/use-cases'
 
 import { useScrollEvent } from '@/ui/global/hooks/useScrollEvent'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
@@ -12,7 +11,6 @@ import type { LastUnlockedStarViewPortPosition } from '../types'
 
 export function useSpaceProvider(planetsDto: PlanetDto[]) {
   const { user } = useAuthContext()
-
   const [lastUnlockedStarPosition, setLastUnlockedStarPosition] =
     useState<LastUnlockedStarViewPortPosition>('above')
   const lastUnlockedStarRef = useRef<HTMLLIElement>(null)
@@ -52,13 +50,32 @@ export function useSpaceProvider(planetsDto: PlanetDto[]) {
   useScrollEvent(handleScroll)
 
   const spaceContextValue = useMemo(() => {
-    const getLastUnlockedStarIdUseCase = new GetLastUnlockedStarIdUseCase()
-    const lastUnlockedStarId = user
-      ? getLastUnlockedStarIdUseCase.execute({
-          planetsDto,
-          userDto: user?.dto,
-        })
-      : null
+    function getLastUnlockedStarId() {
+      if (!user) return null
+
+      const planets = planetsDto.map(Planet.create)
+
+      const reversedPlants = [...planets]
+      reversedPlants.reverse()
+
+      for (const planet of reversedPlants) {
+        const reversedStars = [...planet.stars]
+        reversedStars.reverse()
+
+        for (const star of reversedStars) {
+          const isUnlocked = user.hasUnlockedStar(star.id)
+
+          if (isUnlocked.isTrue) {
+            return star.id.value
+          }
+        }
+      }
+
+      const lastUnlockedStarId = planets[0]?.stars[0]?.id
+      return lastUnlockedStarId?.value
+    }
+
+    const lastUnlockedStarId = getLastUnlockedStarId()
 
     return {
       planets: planetsDto.map(Planet.create),

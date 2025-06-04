@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import type { SortableList } from '@stardust/core/global/structures'
+import { Integer, type SortableList } from '@stardust/core/global/structures'
 
 import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 
@@ -18,7 +18,10 @@ export function useDragAndDropListQuestion(preSortableList: SortableList) {
     setActiveItemId(null)
 
     setSortableList((sortableList) => {
-      const newSortableList = sortableList.moveItem(fromItemPosition, toItemPosition)
+      const newSortableList = sortableList.moveItem(
+        Integer.create(fromItemPosition),
+        Integer.create(toItemPosition),
+      )
       setQuiz(quiz.changeUserAnswer(newSortableList))
 
       return newSortableList
