@@ -5,24 +5,25 @@ import { UserNotFoundError } from '../errors'
 import type { UsersRepository } from '../interfaces'
 
 type Request = {
-  starId: string
+  challengeId: string
   userId: string
 }
 
 type Response = Promise<UserDto>
 
-export class UnlockStarUseCase implements UseCase<Request, Response> {
+export class CompleteChallengeUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: UsersRepository) {}
 
-  async execute({ starId, userId }: Request) {
+  async execute({ challengeId, userId }: Request) {
     const user = await this.repository.findById(Id.create(userId))
     if (!user) throw new UserNotFoundError()
 
-    const unlockedStarId = Id.create(starId)
-    user.unlockStar(unlockedStarId)
-    if (user.hasUnlockedStar(unlockedStarId).isFalse) {
-      await this.repository.addUnlockedStar(unlockedStarId, user.id)
+    const completedChallengeId = Id.create(challengeId)
+    user.completeChallenge(completedChallengeId)
+    if (user.hasCompletedChallenge(completedChallengeId).isFalse) {
+      await this.repository.addCompletedChallenge(completedChallengeId, user.id)
     }
+
     return user.dto
   }
 }

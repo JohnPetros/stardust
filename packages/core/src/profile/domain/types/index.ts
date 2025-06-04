@@ -1,3 +1,6 @@
 export type { AchievementMetricValue } from './AchievementMetricValue'
 export type { WeekdayStatus } from './WeekdayStatus'
 export type { WeekStatusValue } from './WeekStatusValue'
+export type { StarRewardingPayload } from './StarRewardingPayload'
+export type { StarChallengeRewardingPayload } from './StarChallengeRewardingPayload'
+export type { ChallengeRewardingPayload } from './ChallengeRewardingPayload'

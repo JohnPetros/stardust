@@ -1,11 +1,12 @@
 import type { UseCase } from '#global/interfaces/index'
-import { Id, Integer } from '#global/domain/structures/index'
-import type { UsersRepository } from '../interfaces'
+import { Integer } from '#global/domain/structures/index'
+import type { UserDto } from '../domain/entities/dtos'
+import type { ProfileService } from '../interfaces'
+import { User } from '../domain/entities'
 import type { WeekStatusValue } from '../domain/types'
-import { UserNotFoundError } from '../errors'
 
 type Request = {
-  userId: string
+  userDto: UserDto
   newXp: number
   newCoins: number
 }
@@ -16,16 +17,16 @@ type Response = Promise<{
   newWeekStatus: WeekStatusValue | null
 }>
 
-export class RewardUserUseCase implements UseCase<Request, Response> {
-  constructor(private repository: UsersRepository) {}
+export class _RewardUserUseCase implements UseCase<Request, Response> {
+  constructor(private profileService: ProfileService) {}
 
-  async execute({ userId, newXp, newCoins }: Request) {
-    const user = await this.repository.findById(Id.create(userId))
-    if (!user) throw new UserNotFoundError()
+  async execute({ userDto, newXp, newCoins }: Request) {
+    const user = User.create(userDto)
     user.earnXp(Integer.create(newXp))
     user.earnCoins(Integer.create(newCoins))
     const streakStatus = user.makeTodayStatusDone()
-    await this.repository.replace(user)
+    const respose = await this.profileService.updateUser(user)
+    if (respose.isFailure) respose.throwError()
 
     return {
       newLevel: user.level.didUp.isTrue ? user.level.value.number.value : null,

@@ -4,5 +4,6 @@ import type { PlanetDto, StarDto } from '../domain/entities/dtos'
 
 export interface SpaceService {
   fetchStarBySlug(starSlug: Slug): Promise<RestResponse<StarDto>>
+  fetchStarById(starId: Id): Promise<RestResponse<StarDto>>
   fetchPlanets(): Promise<RestResponse<PlanetDto[]>>
 }

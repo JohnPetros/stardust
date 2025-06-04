@@ -18,6 +18,10 @@ export interface UsersRepository {
   addAcquiredAvatar(avatarId: Id, userId: Id): Promise<void>
   addAcquiredRocket(rocketId: Id, userId: Id): Promise<void>
   addUnlockedStar(starId: Id, userId: Id): Promise<void>
+  addUnlockedAchievement(achievementId: Id, userId: Id): Promise<void>
+  addRescuableAchievement(achievementId: Id, userId: Id): Promise<void>
+  removeRescuableAchievement(achievementId: Id, userId: Id): Promise<void>
+  addCompletedChallenge(challengeId: Id, userId: Id): Promise<void>
   replace(user: User): Promise<void>
   replaceMany(users: User[]): Promise<void>
 }
