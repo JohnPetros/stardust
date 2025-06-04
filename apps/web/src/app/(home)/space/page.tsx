@@ -1,15 +1,12 @@
-import type { PlanetDto } from '@stardust/core/space/entities/dtos'
-
 import { SpacePage } from '@/ui/space/widgets/pages/Space'
 import { SpaceProvider } from '@/ui/space/contexts/SpaceContext'
-import { NextRestClient } from '@/rest/next/NextRestClient'
-import { ROUTES } from '@/constants'
+import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
+import { SpaceService } from '@/rest/services/SpaceService'
 
 export default async function Space() {
-  const apiClient = NextRestClient({
-    isCacheEnabled: true,
-  })
-  const response = await apiClient.get<PlanetDto[]>(ROUTES.api.space.planets)
+  const restClient = await NextServerRestClient({ isCacheEnabled: true })
+  const spaceService = SpaceService(restClient)
+  const response = await spaceService.fetchPlanets()
   if (response.isFailure) response.throwError()
 
   return (

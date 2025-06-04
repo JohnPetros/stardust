@@ -5,13 +5,14 @@ import { cookieActions, rewardingActions } from '@/rpc/next-safe-action'
 import { RewardingPage } from '@/ui/lesson/widgets/pages/Rewarding'
 
 export default async function Page() {
-  const rewardsPayloadCookie = await cookieActions.getCookie(
+  const rewardingPayloadCookie = await cookieActions.getCookie(
     COOKIES.keys.rewardingPayload,
   )
-  if (!rewardsPayloadCookie?.data) return notFound()
+  if (!rewardingPayloadCookie?.data) return notFound()
 
-  const rewardsPayloadDto = JSON.parse(rewardsPayloadCookie.data)
-  const response = await rewardingActions.rewardForChallengeCompletion(rewardsPayloadDto)
+  const rewardingPayload = JSON.parse(rewardingPayloadCookie.data)
+  const response =
+    await rewardingActions.accessRewardForChallengeCompletionPage(rewardingPayload)
   if (!response?.data) notFound()
 
   const {
