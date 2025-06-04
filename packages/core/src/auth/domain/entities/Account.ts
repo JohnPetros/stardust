@@ -10,7 +10,6 @@ type Props = {
 
 export class Account extends Entity<Props> {
   static create(dto: AccountDto): Account {
-    console.log('dto', dto)
     return new Account(
       {
         email: Email.create(dto.email),

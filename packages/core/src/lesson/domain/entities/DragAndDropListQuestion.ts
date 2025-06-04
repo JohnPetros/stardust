@@ -1,6 +1,6 @@
 import {
   Image,
-  OrdinalNumber,
+  Integer,
   SortableList,
   Text,
   type Logical,
@@ -23,11 +23,11 @@ export class DragAndDropListQuestion extends Question<DragAndDropListQuestionPro
       type: 'drag-and-drop-list',
       sortableList: SortableList.create(
         dto.items.map((item) => ({
-          originalPosition: OrdinalNumber.create(
+          originalPosition: Integer.create(
             item.position,
             `${item.position}º Drag and drop list question item original position`,
           ),
-          label: item.label,
+          label: Text.create(item.label),
         })),
       ),
     })
