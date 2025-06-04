@@ -1,0 +1,1 @@
+export { AppendChallengeRewardToBodyController } from './AppendChallengeRewardToBody'
