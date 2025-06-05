@@ -2,8 +2,9 @@ import { type Context, type Next, Hono } from 'hono'
 import { serve } from '@hono/node-server'
 import { cors } from 'hono/cors'
 import { serve as serveInngest } from 'inngest/hono'
-import { type SupabaseClient, createClient } from '@supabase/supabase-js'
+import { type SupabaseClient, type User, createClient } from '@supabase/supabase-js'
 import { ZodError } from 'zod'
+import { jwtDecode } from 'jwt-decode'
 
 import {
   AuthError,
@@ -12,7 +13,8 @@ import {
   ValidationError,
 } from '@stardust/core/global/errors'
 import { AppError } from '@stardust/core/global/errors'
-import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
+import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
+import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 
 import { ENV } from '@/constants'
 import { inngest } from '@/queue/inngest/client'
@@ -101,6 +103,7 @@ export class HonoApp {
       '*',
       cors({
         origin: '*',
+        exposeHeaders: Object.values(HTTP_HEADERS),
       }),
     )
   }
@@ -148,6 +151,16 @@ export class HonoApp {
     })
   }
 
+  private setAccount(accessToken: string, context: Context) {
+    const session = jwtDecode<User>(accessToken)
+    const accountDto: AccountDto = {
+      id: session.user_metadata.sub,
+      email: session.user_metadata.email,
+      isAuthenticated: session.user_metadata.email_verified,
+    }
+    context.set('account', accountDto)
+  }
+
   private createSupabaseClient() {
     return async (context: Context, next: Next) => {
       const accessToken = context.req.header('Authorization')?.split(' ')[1]
@@ -158,8 +171,8 @@ export class HonoApp {
           },
         },
       })
-      await supabase.auth.refreshSession({ refresh_token: 't45pjkqsryp6' })
       context.set('supabase', supabase)
+      if (accessToken) this.setAccount(accessToken, context)
       await next()
     }
   }

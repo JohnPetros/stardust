@@ -1,6 +1,6 @@
-import type { PaginationResponse } from '#global/responses/PaginationResponse'
 import type { RestResponse } from '#global/responses/RestResponse'
-import type { UserDto } from '#profile/domain/entities/dtos/UserDto'
+import type { AccountDto } from '#auth/domain/entities/dtos/index'
+import type { PaginationResponse } from '#global/responses/index'
 
 export type HttpSchema = {
   body?: unknown
@@ -8,7 +8,7 @@ export type HttpSchema = {
   queryParams?: unknown
 }
 
-export type HttpMethod = 'GET' | 'POST'
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
 export interface Http<Schema extends HttpSchema = HttpSchema, Response = unknown> {
   getCurrentRoute(): string
@@ -16,7 +16,7 @@ export interface Http<Schema extends HttpSchema = HttpSchema, Response = unknown
   getBody(): Promise<Schema['body']>
   getRouteParams(): Schema['routeParams']
   getQueryParams(): Schema['queryParams']
-  getUser(): Promise<UserDto>
+  getAccount(): Promise<AccountDto>
   getMethod(): HttpMethod
   setCookie(key: string, value: string, duration: number): void
   getCookie(key: string): Promise<string | null>

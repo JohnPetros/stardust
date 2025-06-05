@@ -6,7 +6,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 
 import type { Http, HttpMethod } from '@stardust/core/global/interfaces'
 import { type PaginationResponse, RestResponse } from '@stardust/core/global/responses'
-import type { UserDto } from '@stardust/core/profile/entities/dtos'
+import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 import { AppError } from '@stardust/core/global/errors'
 import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
@@ -80,8 +80,8 @@ export class HonoHttp<HonoContext extends Context>
     return this.context.req.valid('query')
   }
 
-  async getUser(): Promise<UserDto> {
-    return (await this.context.req.json()) as UserDto
+  async getAccount(): Promise<AccountDto> {
+    return this.context.get('account')
   }
 
   getMethod(): HttpMethod {
