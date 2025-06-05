@@ -1,5 +1,5 @@
 import type { RestResponse } from '#global/responses/index'
-import type { Email, Id, Name, Slug } from '#global/domain/structures/index'
+import type { Email, Id, Integer, Name, Slug } from '#global/domain/structures/index'
 import type { AchievementDto, UserDto } from '../domain/entities/dtos'
 import type { User } from '../domain/entities'
 import type {
@@ -8,6 +8,7 @@ import type {
   ChallengeRewardingPayload,
 } from '../domain/types'
 import type { WeekStatusValue } from '../domain/types'
+import type { AvatarAggregate, RocketAggregate } from '../domain/aggregates'
 
 type RewardingResponse = {
   newLevel: number | null
@@ -25,6 +26,7 @@ export interface ProfileService {
   rescueAchievement(achievementId: Id, userId: Id): Promise<RestResponse<UserDto>>
   fetchUserById(userId: Id): Promise<RestResponse<UserDto>>
   fetchUserBySlug(userSlug: Slug): Promise<RestResponse<UserDto>>
+  updateUser(user: User): Promise<RestResponse<UserDto>>
   verifyUserNameInUse(userName: Name): Promise<RestResponse>
   verifyUserEmailInUse(userEmail: Email): Promise<RestResponse>
   rewardUserForStarCompletion(
@@ -39,5 +41,12 @@ export interface ProfileService {
     userId: Id,
     rewardingPayload: ChallengeRewardingPayload,
   ): Promise<RestResponse<RewardingResponse>>
-  updateUser(user: User): Promise<RestResponse<boolean>>
+  acquireRocket(
+    rocket: RocketAggregate,
+    rocketPrice: Integer,
+  ): Promise<RestResponse<UserDto>>
+  acquireAvatar(
+    avatar: AvatarAggregate,
+    avatarPrice: Integer,
+  ): Promise<RestResponse<UserDto>>
 }

@@ -1,6 +1,6 @@
 import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
 import { Text } from '#global/domain/structures/Text'
-import { ListOrder } from '#global/domain/structures/ListOder'
+import { ListingOrder } from '#global/domain/structures/ListingOrder'
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { AvatarsRepository } from '../interfaces'
 import { PaginationResponse } from '#global/responses/PaginationResponse'
@@ -20,7 +20,7 @@ export class ListAvatarsUseCase implements UseCase<Request, void> {
       search: Text.create(search),
       page: OrdinalNumber.create(page),
       itemsPerPage: OrdinalNumber.create(itemsPerPage),
-      order: ListOrder.create(order),
+      order: ListingOrder.create(order),
     })
 
     return new PaginationResponse(

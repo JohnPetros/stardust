@@ -1,1 +1,1 @@
-export type ListOrder = 'ascending' | 'descending'
+export type ListingOrder = 'ascending' | 'descending'

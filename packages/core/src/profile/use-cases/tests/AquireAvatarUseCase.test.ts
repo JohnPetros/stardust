@@ -36,7 +36,7 @@ describe('Aquire Avatar Use Case', () => {
 
   it('should add the acquire avatar to the repository', async () => {
     const user = UsersFaker.fake()
-    user.buyAvatar = jest.fn()
+    user.acquireAvatar = jest.fn()
     const avatar = AvatarAggregatesFaker.fake()
     const avatarPrice = Integer.create(0)
     usersRepository.findById.mockResolvedValue(user)
@@ -49,7 +49,7 @@ describe('Aquire Avatar Use Case', () => {
       avatarPrice: 0,
     })
 
-    expect(user.buyAvatar).toHaveBeenCalledWith(avatar, avatarPrice)
+    expect(user.acquireAvatar).toHaveBeenCalledWith(avatar, avatarPrice)
     expect(usersRepository.addAcquiredAvatar).toHaveBeenCalledWith(avatar, user.id)
   })
 })

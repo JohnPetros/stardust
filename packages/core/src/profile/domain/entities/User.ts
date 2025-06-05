@@ -92,33 +92,34 @@ export class User extends Entity<UserProps> {
     this.earnCoins(reward)
   }
 
-  canBuy(coins: Integer): Logical {
-    return Logical.create(this.props.coins.value >= coins.value)
+  canAcquire(coins: Integer): Logical {
+    return this.props.coins.isGreaterThanOrEqualTo(coins)
   }
 
-  buyRocket(rocket: RocketAggregate, rocketPrice: Integer): void {
-    if (this.hasAcquiredRocket(rocket.id)) {
+  acquireRocket(rocket: RocketAggregate, rocketPrice: Integer): void {
+    if (this.hasAcquiredRocket(rocket.id).isTrue) {
       this.selectRocket(rocket)
       return
     }
 
-    if (this.canBuy(rocketPrice).isTrue) {
+    if (this.canAcquire(rocketPrice).isTrue) {
       this.loseCoins(rocketPrice)
       this.selectRocket(rocket)
-      this.props.acquiredRocketsIds.add(rocket.id)
+      this.props.acquiredRocketsIds = this.props.acquiredRocketsIds.add(rocket.id)
     }
   }
 
-  buyAvatar(avatar: AvatarAggregate, avatarPrice: Integer): void {
-    if (this.hasAcquiredAvatar(avatar.id)) {
+  acquireAvatar(avatar: AvatarAggregate, avatarPrice: Integer): void {
+    console.log('hasAcquiredAvatar', this.hasAcquiredAvatar(avatar.id).isTrue)
+    if (this.hasAcquiredAvatar(avatar.id).isTrue) {
       this.selectAvatar(avatar)
       return
     }
 
-    if (this.canBuy(avatarPrice).isTrue) {
+    if (this.canAcquire(avatarPrice).isTrue) {
       this.loseCoins(avatarPrice)
       this.selectAvatar(avatar)
-      this.props.acquiredAvatarsIds.add(avatar.id)
+      this.props.acquiredAvatarsIds = this.props.acquiredAvatarsIds.add(avatar.id)
     }
   }
 
@@ -260,11 +261,11 @@ export class User extends Entity<UserProps> {
   }
 
   get acquiredRocketsCount() {
-    return this.props.acquiredRocketsIds.count.minus(Integer.create(1))
+    return this.props.acquiredRocketsIds.count
   }
 
   get acquiredAvatarsCount() {
-    return this.props.acquiredRocketsIds.count.minus(Integer.create(3))
+    return this.props.acquiredAvatarsIds.count
   }
 
   get unlockedAchievementsCount() {
