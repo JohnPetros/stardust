@@ -9,6 +9,7 @@ import {
   nameSchema,
   stringSchema,
 } from '@stardust/validation/global/schemas'
+import { userSchema } from '@stardust/validation/profile/schemas'
 
 import { SupabaseUsersRepository } from '@/database'
 import {
@@ -82,6 +83,7 @@ export class UsersRouter extends HonoRouter {
           userId: idSchema,
         }),
       ),
+      zValidator('json', userSchema),
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseUsersRepository(http.getSupabase())
@@ -179,45 +181,10 @@ export class UsersRouter extends HonoRouter {
     )
   }
 
-  private registerAcquireAvatarRoute() {
-    this.router.put(
-      '/:userId/avatar',
-      this.authMiddleware.verifyAuthentication,
-      zValidator(
-        'param',
-        z.object({
-          userId: idSchema,
-        }),
-      ),
-      zValidator(
-        'json',
-        z.object({
-          avatarId: idSchema,
-          avatarName: nameSchema,
-          avatarImage: stringSchema,
-          avatarPrice: integerSchema,
-        }),
-      ),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
-        const controller = new AcquireAvatarController(repository)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
-    )
-  }
-
   private registerAcquireRocketRoute() {
-    this.router.put(
-      '/:userId/rocket',
+    this.router.post(
+      '/rockets/acquire',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
-        'param',
-        z.object({
-          userId: idSchema,
-        }),
-      ),
       zValidator(
         'json',
         z.object({
@@ -231,6 +198,29 @@ export class UsersRouter extends HonoRouter {
         const http = new HonoHttp(context)
         const repository = new SupabaseUsersRepository(http.getSupabase())
         const controller = new AcquireRocketController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private registerAcquireAvatarRoute() {
+    this.router.post(
+      '/avatars/acquire',
+      this.authMiddleware.verifyAuthentication,
+      zValidator(
+        'json',
+        z.object({
+          avatarId: idSchema,
+          avatarName: nameSchema,
+          avatarImage: stringSchema,
+          avatarPrice: integerSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const controller = new AcquireAvatarController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },

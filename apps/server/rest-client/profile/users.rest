@@ -10,6 +10,22 @@ Authorization: Bearer {{JWT}}
 GET {{URL}}/slug/{{USER_SLUG}} 
 Authorization: Bearer {{JWT}}
 
+### Update user
+PUT {{URL}}/{{USER_ID}}
+Authorization: Bearer {{JWT}}
+
+{
+  "slug": "ctrl-alt-del",
+  "email": "ctrlaltdel.cursor@gmail.com",
+  "name": "Ctrl Alt Del",
+  "level": 1,
+  "coins": 0,
+  "xp": 0,
+  "weeklyXp": 0,
+  "streak": 0,
+  "weekStatus": ["todo", "done", "todo", "todo", "todo", "todo", "todo"]
+}
+
 ### Reward user for star completion
 PUT {{URL}}/{{USER_ID}}/reward/star
 Authorization: Bearer {{JWT}}
@@ -49,23 +65,26 @@ GET {{URL}}/verify-name-in-use?name=John Doe
 ### Verify user email in use
 GET {{URL}}/verify-email-in-use?email=johndoe@example.com
 
-### Update user
-PUT {{URL}}/{{USER_ID}}
+### Acquire rocket
+POST {{URL}}/rockets/acquire
 Authorization: Bearer {{JWT}}
+Content-Type: application/json
 
 {
-  "slug": "ctrl-alt-del",
-  "email": "ctrlaltdel.cursor@gmail.com",
-  "name": "Ctrl Alt Del",
-  "avatarId": "03f3f359-a0ee-42c1-bd5f-b2ad01810d47",
-  "rocketId": "54eb3e10-b1b2-44aa-a496-ba7f042e09a2",
-  "tierId": "f542f61a-4e42-4914-88f6-9aa7c2358473",
-  "level": 1,
-  "coins": 0,
-  "xp": 0,
-  "weeklyXp": 0,
-  "streak": 0,
-  "weekStatus": ["todo", "done", "todo", "todo", "todo", "todo", "todo"]
+  "rocketId": "db9b36bd-0b94-4587-88aa-9ad9ecd4fd7b",
+  "rocketName": "Solaris Sprinter",
+  "rocketImage": "https://example.com/rocket.png",
+  "rocketPrice": 1000
 }
 
+### Acquire avatar
+POST {{URL}}/avatars/acquire
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
 
+{
+  "avatarId": "a785d743-52f5-4b78-90ff-18b408bb0566",
+  "avatarName": "Apollo testador",
+  "avatarImage": "https://example.com/avatar.png",
+  "avatarPrice": 1000
+}
