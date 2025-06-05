@@ -1,24 +1,29 @@
-'use client'
-
 import { useState } from 'react'
 
-export function useShopButton(onClick: () => Promise<void>) {
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+
+export function useShopButton(onItemAcquire: () => Promise<boolean>) {
   const [isLoading, setIsLoading] = useState(false)
+  const { refetchUser } = useAuthContext()
+  const [hasAcquiredItem, setHasAcquiredItem] = useState(false)
 
   async function handleShopButtonClick() {
     setIsLoading(true)
+    const hasAcquiredItem = await onItemAcquire()
+    setHasAcquiredItem(hasAcquiredItem)
+    setIsLoading(false)
+  }
 
-    try {
-      await onClick()
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setIsLoading(false)
+  function handleAlertOpenChange(isOpen: boolean) {
+    if (!isOpen && hasAcquiredItem) {
+      refetchUser()
     }
+    setHasAcquiredItem(false)
   }
 
   return {
     isLoading,
     handleShopButtonClick,
+    handleAlertOpenChange,
   }
 }

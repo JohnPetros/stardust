@@ -2,7 +2,7 @@ import { HTTP_HEADERS } from '@stardust/core/global/constants'
 
 import { CLIENT_ENV } from '@/constants'
 import { NextRestClient } from '@/rest/next/NextRestClient'
-import { AuthService, ProfileService, SpaceService } from '@/rest/services'
+import { AuthService, ProfileService, SpaceService, ShopService } from '@/rest/services'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
 const restClient = NextRestClient({ isCacheEnabled: false })
@@ -19,5 +19,6 @@ export function useRest() {
     authService: AuthService(restClient),
     profileService: ProfileService(restClient),
     spaceService: SpaceService(restClient),
+    shopService: ShopService(restClient),
   }
 }

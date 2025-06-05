@@ -1,55 +1,43 @@
-'use client'
+import type { AvatarAggregate } from '@stardust/core/profile/aggregates'
+import type { ProfileService } from '@stardust/core/profile/interfaces'
+import type { Integer } from '@stardust/core/global/structures'
 
-import { useApi } from '@/ui/global/hooks/useApi'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useAudioContext } from '@/ui/global/contexts/AudioContext'
-import { AvatarAggregate } from '@stardust/core/profile/aggregates'
-import { Integer } from '@stardust/core/global/structures'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
-type UseAvatarItemProps = {
-  id: string
-  name: string
-  image: string
-  price: number
-}
-
-export function useAvatarItem({ id, name, price, image }: UseAvatarItemProps) {
-  const { user, updateUser } = useAuthContext()
-  const { playAudio } = useAudioContext()
+export function useAvatarItem(
+  avatar: AvatarAggregate,
+  avatarPrice: Integer,
+  profileService: ProfileService,
+) {
   const toast = useToastContext()
-  const api = useApi()
+  const { playAudio } = useAudioContext()
+  const { user, updateUserCache } = useAuthContext()
 
-  async function handleBuy() {
-    if (!user) return
+  async function handleAvatarAcquire() {
+    if (!user) return false
 
-    const response = await api.saveAcquiredAvatar(id, user.id.value)
+    const response = await profileService.acquireAvatar(avatar, avatarPrice)
 
     if (response.isFailure) {
-      toast.show(response.errorMessage)
-      return
+      toast.showError(response.errorMessage)
+      return false
     }
 
-    await updateUser(user)
-  }
+    const hasAcquiredAvatar =
+      Number(response.body.acquiredAvatarsIds?.length) > user.acquiredAvatarsCount.value
 
-  async function handleShopButtonClick() {
-    if (!user) return
-
-    const currentAcquiredAvatarsCount = user.acquiredAvatarsCount
-
-    user.buyRocket(
-      AvatarAggregate.create({ id, entity: { name, image } }),
-      Integer.create(price),
-    )
-    if (currentAcquiredAvatarsCount.value === user.acquiredAvatarsCount.value) {
-      await updateUser(user)
+    if (response.isSuccessful && !hasAcquiredAvatar) {
       playAudio('switch.wav')
+      updateUserCache(response.body)
+      return false
     }
+
+    return true
   }
 
   return {
-    handleBuy,
-    handleShopButtonClick,
+    handleAvatarAcquire,
   }
 }

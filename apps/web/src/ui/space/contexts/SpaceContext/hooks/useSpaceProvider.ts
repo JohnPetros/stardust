@@ -1,16 +1,12 @@
-'use client'
-
 import { useCallback, useMemo, useRef, useState } from 'react'
 
-import { Planet } from '@stardust/core/space/entities'
-import type { PlanetDto } from '@stardust/core/space/entities/dtos'
+import type { Planet } from '@stardust/core/space/entities'
+import type { User } from '@stardust/core/profile/entities'
 
 import { useScrollEvent } from '@/ui/global/hooks/useScrollEvent'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import type { LastUnlockedStarViewPortPosition } from '../types'
 
-export function useSpaceProvider(planetsDto: PlanetDto[]) {
-  const { user } = useAuthContext()
+export function useSpaceProvider(planets: Planet[], user: User | null) {
   const [lastUnlockedStarPosition, setLastUnlockedStarPosition] =
     useState<LastUnlockedStarViewPortPosition>('above')
   const lastUnlockedStarRef = useRef<HTMLLIElement>(null)
@@ -53,8 +49,6 @@ export function useSpaceProvider(planetsDto: PlanetDto[]) {
     function getLastUnlockedStarId() {
       if (!user) return null
 
-      const planets = planetsDto.map(Planet.create)
-
       const reversedPlants = [...planets]
       reversedPlants.reverse()
 
@@ -78,14 +72,14 @@ export function useSpaceProvider(planetsDto: PlanetDto[]) {
     const lastUnlockedStarId = getLastUnlockedStarId()
 
     return {
-      planets: planetsDto.map(Planet.create),
+      planets,
       lastUnlockedStarId,
       lastUnlockedStarRef,
       lastUnlockedStarPosition,
       scrollIntoLastUnlockedStar,
       setLastUnlockedStarPosition,
     }
-  }, [user, planetsDto, lastUnlockedStarPosition, scrollIntoLastUnlockedStar])
+  }, [user, planets, lastUnlockedStarPosition, scrollIntoLastUnlockedStar])
 
   return spaceContextValue
 }

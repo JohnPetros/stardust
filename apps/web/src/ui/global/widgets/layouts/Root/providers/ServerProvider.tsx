@@ -3,10 +3,10 @@ import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 import { AuthService } from '@/rest/services'
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
+import { cookieActions } from '@/rpc/next-safe-action'
 import { SupabaseProvider } from '@/ui/global/contexts/SupabaseContext'
 import { ToastProvider } from '@/ui/global/contexts/ToastContext'
 import { AuthProvider } from '@/ui/auth/contexts/AuthContext'
-import { cookieActions } from '@/rpc/next-safe-action'
 import { COOKIES } from '@/constants'
 
 type ServerProps = {
