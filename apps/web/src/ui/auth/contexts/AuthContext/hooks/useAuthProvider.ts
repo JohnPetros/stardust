@@ -19,7 +19,7 @@ type Params = {
 }
 
 export function useAuthProvider({ profileService, accountDto, signIn, signOut }: Params) {
-  const [account] = useState<Account | null>(
+  const [account, setAccount] = useState<Account | null>(
     accountDto ? Account.create(accountDto) : null,
   )
   const toast = useToastContext()
@@ -51,6 +51,7 @@ export function useAuthProvider({ profileService, accountDto, signIn, signOut }:
     const response = await signIn(email, password)
 
     if (response.isSuccessful) {
+      setAccount(Account.create(response.data))
       return true
     }
 
