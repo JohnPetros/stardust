@@ -45,13 +45,14 @@ export const NextRestClient = ({
       if (response.headers.get(HTTP_HEADERS.xPaginationResponse)) {
         return new RestResponse<Body>({
           body: new PaginationResponse(
-            data.items,
+            data,
             Number(response.headers.get(HTTP_HEADERS.xTotalItemsCount)),
             Number(response.headers.get(HTTP_HEADERS.xItemsPerPage)),
           ) as Body,
         })
       }
 
+      this.clearQueryParams()
       return new RestResponse({ body: data, statusCode: response.status })
     },
 
@@ -67,6 +68,7 @@ export const NextRestClient = ({
       }
 
       const data = await parseResponseJson(response)
+      this.clearQueryParams()
       return new RestResponse({ body: data, statusCode: response.status })
     },
 
@@ -82,6 +84,7 @@ export const NextRestClient = ({
       }
 
       const data = await parseResponseJson(response)
+      this.clearQueryParams()
       return new RestResponse({ body: data, statusCode: response.status })
     },
 
@@ -97,6 +100,7 @@ export const NextRestClient = ({
       }
 
       const data = await parseResponseJson(response)
+      this.clearQueryParams()
       return new RestResponse({ body: data, statusCode: response.status })
     },
 
@@ -110,6 +114,7 @@ export const NextRestClient = ({
         return await handleRestError<void>(response)
       }
 
+      this.clearQueryParams()
       return new RestResponse({ statusCode: response.status })
     },
 

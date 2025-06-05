@@ -1,12 +1,13 @@
 import type { ProfileService as IProfileService } from '@stardust/core/profile/interfaces'
 import type { RestClient } from '@stardust/core/global/interfaces'
-import type { Email, Id, Name, Slug } from '@stardust/core/global/structures'
+import type { Email, Id, Integer, Name, Slug } from '@stardust/core/global/structures'
 import type { User } from '@stardust/core/profile/entities'
 import type {
   StarRewardingPayload,
   StarChallengeRewardingPayload,
   ChallengeRewardingPayload,
 } from '@stardust/core/profile/types'
+import type { AvatarAggregate, RocketAggregate } from '@stardust/core/profile/aggregates'
 
 export const ProfileService = (restClient: RestClient): IProfileService => {
   return {
@@ -24,6 +25,10 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
 
     async fetchUnlockedAchievements(userId: Id) {
       return await restClient.get(`/profile/achievements/${userId.value}/unlocked`)
+    },
+
+    async updateUser(user: User) {
+      return await restClient.put(`/profile/users/${user.id.value}`, user.dto)
     },
 
     async rewardUserForStarCompletion(userId: Id, rewardsPayload: StarRewardingPayload) {
@@ -75,8 +80,22 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
       )
     },
 
-    async updateUser(user: User) {
-      return await restClient.put(`/profile/users/${user.id.value}`, user.dto)
+    async acquireRocket(rocket: RocketAggregate, rocketPrice: Integer) {
+      return await restClient.post('/profile/users/rockets/acquire', {
+        rocketId: rocket.id.value,
+        rocketName: rocket.name.value,
+        rocketImage: rocket.image.value,
+        rocketPrice: rocketPrice.value,
+      })
+    },
+
+    async acquireAvatar(avatar: AvatarAggregate, avatarPrice: Integer) {
+      return await restClient.post('/profile/users/avatars/acquire', {
+        avatarId: avatar.id.value,
+        avatarName: avatar.name.value,
+        avatarImage: avatar.image.value,
+        avatarPrice: avatarPrice.value,
+      })
     },
   }
 }
