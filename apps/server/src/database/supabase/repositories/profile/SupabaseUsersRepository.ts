@@ -95,7 +95,7 @@ export class SupabaseUsersRepository
           users_upvoted_solutions(solution_id),
           users_upvoted_comments(comment_id)`,
       )
-      .eq('slug', slug)
+      .eq('slug', slug.value)
       .single()
 
     if (error && error.code === this.POSTGRES_ERROR_CODES.PGRST116) {
