@@ -1,9 +1,16 @@
 import { z } from 'zod'
 
-import { emailSchema, integerSchema, nameSchema, stringSchema } from '../global/schemas'
+import {
+  emailSchema,
+  idSchema,
+  integerSchema,
+  nameSchema,
+  stringSchema,
+} from '../global/schemas'
 import { textsListSchema } from './textsListSchema'
 
 export const userSchema = z.object({
+  id: idSchema.optional(),
   slug: stringSchema,
   email: emailSchema,
   name: nameSchema,
