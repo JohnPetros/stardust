@@ -7,7 +7,7 @@ GET {{URL}}
 Authorization: Bearer {{JWT}}
 
 ### Fetch all unlocked achievements
-GET {{URL}}/{{USER_ID}} 
+GET {{URL}}/{{USER_ID}}
 Authorization: Bearer {{JWT}}
 
 ### Observe new unlocked achievements

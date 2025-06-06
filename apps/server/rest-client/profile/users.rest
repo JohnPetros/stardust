@@ -1,6 +1,6 @@
 @URL = {{BASE_URL}}/profile/users
 @USER_ID = 76dc903b-eeae-45a3-9ed1-43240249e457
-@USER_SLUG = ctrl-alt-del
+@USER_SLUG = ctrl
 
 ### Fetch user by id
 GET {{URL}}/id/{{USER_ID}}

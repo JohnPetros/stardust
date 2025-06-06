@@ -26,7 +26,13 @@ import {
   StorageFunctions,
 } from '@/queue/inngest/functions'
 import { InngestAmqp } from '@/queue/inngest/InngestAmqp'
-import { AuthRouter, ProfileRouter, SpaceRouter, ShopRouter } from './routers'
+import {
+  AuthRouter,
+  ProfileRouter,
+  SpaceRouter,
+  ShopRouter,
+  ChallengingRouter,
+} from './routers'
 
 declare module 'hono' {
   interface ContextVariableMap {
@@ -56,6 +62,8 @@ export class HonoApp {
 
   private setUpErrorHandler() {
     this.hono.onError((error, context) => {
+      console.error(error)
+
       if (error instanceof AppError) {
         console.error('Error title:', error.title)
         console.error('Error message:', error.message)
@@ -79,8 +87,6 @@ export class HonoApp {
 
         return context.json(response, HTTP_STATUS_CODE.serverError)
       }
-
-      console.error(error)
 
       if (error instanceof ZodError)
         return context.json(
@@ -113,6 +119,7 @@ export class HonoApp {
     const authRouter = new AuthRouter(this)
     const spaceRouter = new SpaceRouter(this)
     const shopRouter = new ShopRouter(this)
+    const challengingRouter = new ChallengingRouter(this)
 
     this.hono.get('/', (context) => {
       return context.json({ message: 'Everything is working!' })
@@ -122,6 +129,7 @@ export class HonoApp {
     this.hono.route('/', profileRouter.registerRoutes())
     this.hono.route('/', spaceRouter.registerRoutes())
     this.hono.route('/', shopRouter.registerRoutes())
+    this.hono.route('/', challengingRouter.registerRoutes())
   }
 
   private registerMiddlewares() {
