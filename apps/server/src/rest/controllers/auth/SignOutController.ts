@@ -7,6 +7,7 @@ export class SignOutController implements Controller {
   constructor(private readonly authService: AuthService) {}
 
   async handle(_: Http): Promise<RestResponse> {
+    console.log('SignOutController')
     return await this.authService.signOut()
   }
 }

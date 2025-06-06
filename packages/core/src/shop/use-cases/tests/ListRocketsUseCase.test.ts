@@ -3,7 +3,7 @@ import { mock, type Mock } from 'ts-jest-mocker'
 import type { RocketsRepository } from '#shop/interfaces/RocketsRepository'
 import { ListRocketsUseCase } from '../ListRocketsUseCase'
 import { Text } from '#global/domain/structures/Text'
-import { ListOrder } from '#global/domain/structures/ListOder'
+import { ListingOrder } from '#global/domain/structures/ListingOrder'
 import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
 import { PaginationResponse } from '#global/responses/PaginationResponse'
 import { RocketsFaker } from '#shop/domain/entities/fakers/RocketsFaker'
@@ -25,7 +25,7 @@ describe('List Rockets Use Case', () => {
     })
     const request = {
       search: Text.create(''),
-      order: ListOrder.create('ascending'),
+      order: ListingOrder.create('ascending'),
       page: OrdinalNumber.create(1),
       itemsPerPage: OrdinalNumber.create(10),
     }
@@ -48,7 +48,7 @@ describe('List Rockets Use Case', () => {
     })
     const request = {
       search: Text.create(''),
-      order: ListOrder.create('ascending'),
+      order: ListingOrder.create('ascending'),
       page: OrdinalNumber.create(1),
       itemsPerPage: OrdinalNumber.create(10),
     }

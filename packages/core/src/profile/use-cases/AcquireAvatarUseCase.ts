@@ -29,8 +29,15 @@ export class AcquireAvatarUseCase implements UseCase<Request, Response> {
     }
     const avatar = AvatarAggregate.create({ id: avatarId, entity })
 
-    user.buyAvatar(avatar, Integer.create(avatarPrice))
-    await this.repository.addAcquiredAvatar(avatar.id, Id.create(userId))
+    const canAcquireAvatar = user
+      .canAcquire(Integer.create(avatarPrice))
+      .andNot(user.hasAcquiredAvatar(avatar.id))
+
+    if (canAcquireAvatar.isTrue) {
+      await this.repository.addAcquiredAvatar(avatar.id, Id.create(userId))
+    }
+    user.acquireAvatar(avatar, Integer.create(avatarPrice))
+    await this.repository.replace(user)
     return user.dto
   }
 }

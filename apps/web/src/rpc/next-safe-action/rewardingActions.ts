@@ -6,19 +6,17 @@ import { idSchema, integerSchema } from '@stardust/validation/global/schemas'
 
 import { authActionClient } from './clients/authActionClient'
 import { NextCall } from '../next/NextCall'
+import { SupabaseProfileService } from '@/rest/supabase/services'
 import { SupabaseServerActionClient } from '@/rest/supabase/clients'
 import {
-  SupabaseChallengingService,
-  SupabaseProfileService,
-  SupabaseSpaceService,
-} from '@/rest/supabase/services'
-import {
-  RewardForChallengeCompletionAction,
-  RewardForStarChallengeCompletionAction,
-  RewardForStarCompletionAction,
+  AccessStarRewardingPageAction,
+  AccessChallengeRewardingPageAction,
+  AccessStarChallengeRewardingPageAction,
 } from '../actions/rewarding'
+import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
+import { ProfileService } from '@/rest/services'
 
-export const rewardForStarCompletion = authActionClient
+export const accessRewardForStarCompletionPage = authActionClient
   .schema(
     z.object({
       questionsCount: integerSchema,
@@ -32,14 +30,13 @@ export const rewardForStarCompletion = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const supabase = SupabaseServerActionClient()
-    const profileService = SupabaseProfileService(supabase)
-    const spaceService = SupabaseSpaceService(supabase)
-    const action = RewardForStarCompletionAction(profileService, spaceService)
+    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const profileService = ProfileService(restClient)
+    const action = AccessStarRewardingPageAction(profileService)
     return action.handle(call)
   })
 
-export const rewardForStarChallengeCompletion = authActionClient
+export const accessRewardForStarChallengeCompletionPage = authActionClient
   .schema(
     z.object({
       incorrectAnswersCount: integerSchema,
@@ -55,17 +52,11 @@ export const rewardForStarChallengeCompletion = authActionClient
     })
     const supabase = SupabaseServerActionClient()
     const profileService = SupabaseProfileService(supabase)
-    const spaceService = SupabaseSpaceService(supabase)
-    const challengingService = SupabaseChallengingService(supabase)
-    const action = RewardForStarChallengeCompletionAction(
-      profileService,
-      spaceService,
-      challengingService,
-    )
+    const action = AccessStarChallengeRewardingPageAction(profileService)
     return action.handle(call)
   })
 
-export const rewardForChallengeCompletion = authActionClient
+export const accessRewardForChallengeCompletionPage = authActionClient
   .schema(
     z.object({
       incorrectAnswersCount: integerSchema,
@@ -80,7 +71,6 @@ export const rewardForChallengeCompletion = authActionClient
     })
     const supabase = SupabaseServerActionClient()
     const profileService = SupabaseProfileService(supabase)
-    const challengingService = SupabaseChallengingService(supabase)
-    const action = RewardForChallengeCompletionAction(profileService, challengingService)
+    const action = AccessChallengeRewardingPageAction(profileService)
     return action.handle(call)
   })

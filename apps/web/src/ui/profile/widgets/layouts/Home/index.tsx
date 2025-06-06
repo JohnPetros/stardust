@@ -1,49 +1,27 @@
 'use client'
 
-import type { ReactNode } from 'react'
+import type { PropsWithChildren } from 'react'
 
 import { useRouter } from '@/ui/global/hooks/useRouter'
-import { PageTransitionAnimation } from '@/ui/global/widgets/components/PageTransitionAnimation'
-import { AnimatedContainer } from './AnimatedContainer'
-import { HomeHeader } from './HomeHeader'
 import { useHomeLayout } from './useHomeLayout'
-import { Sidebar } from './Sidebar'
-import { Sidenav } from './Sidenav'
-import { TabNav } from './TabNav'
-import { StreakBreakDialog } from './StreakBreakDialog'
+import { HomeLayoutView } from './HomeLayoutView'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
-type HomeLayoutProps = {
-  children: ReactNode
-}
-
-export function HomeLayout({ children }: HomeLayoutProps) {
+export function HomeLayout({ children }: PropsWithChildren) {
+  const { notifyUserChanges } = useAuthContext()
   const { isSidenavExpanded, isTransitionVisible, handleContainerClick, toggleSidenav } =
-    useHomeLayout()
+    useHomeLayout(notifyUserChanges)
   const { currentRoute } = useRouter()
-  const isChallengeRoute = currentRoute.startsWith('/challenging')
-
-  if (isChallengeRoute)
-    return (
-      <>
-        <PageTransitionAnimation isVisible={isTransitionVisible} />
-        {children}
-      </>
-    )
 
   return (
-    <>
-      <HomeHeader />
-      <Sidenav isExpanded={isSidenavExpanded} toggleSidenav={toggleSidenav} />
-      <PageTransitionAnimation isVisible={isTransitionVisible} />
-      <StreakBreakDialog />
-      <Sidebar />
-      <AnimatedContainer
-        isSidenavExpanded={isSidenavExpanded}
-        onClick={handleContainerClick}
-      >
-        {children}
-      </AnimatedContainer>
-      <TabNav />
-    </>
+    <HomeLayoutView
+      isSidenavExpanded={isSidenavExpanded}
+      isTransitionVisible={isTransitionVisible}
+      currentRoute={currentRoute}
+      onContainerClick={handleContainerClick}
+      onSidenavToggle={toggleSidenav}
+    >
+      {children}
+    </HomeLayoutView>
   )
 }

@@ -1,17 +1,17 @@
 import { Hono } from 'hono'
-
 import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
 
-import { HonoRouter } from '../../HonoRouter'
-import { HonoHttp } from '../../HonoHttp'
-import { FetchRocketsListController } from '@/rest/controllers/shop'
-import { SupabaseRocketsRepository } from '@/database/supabase/repositories/shop'
 import {
   itemsPerPageSchema,
   pageSchema,
   stringSchema,
 } from '@stardust/validation/global/schemas'
+
+import { HonoRouter } from '../../HonoRouter'
+import { HonoHttp } from '../../HonoHttp'
+import { FetchAvatarsListController } from '@/rest/controllers/shop'
+import { SupabaseAvatarsRepository } from '@/database/supabase/repositories/shop'
 
 export class AvatarsRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/avatars')
@@ -30,8 +30,8 @@ export class AvatarsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseRocketsRepository(http.getSupabase())
-        const controller = new FetchRocketsListController(repository)
+        const repository = new SupabaseAvatarsRepository(http.getSupabase())
+        const controller = new FetchAvatarsListController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },

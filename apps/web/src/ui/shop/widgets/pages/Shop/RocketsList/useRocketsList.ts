@@ -1,30 +1,23 @@
-'use client'
-
 import { useState } from 'react'
 
-import type { RocketDto } from '@stardust/core/shop/dtos'
-import type { ListOrder } from '@stardust/core/global/types'
-import type { PaginationResponse } from '@stardust/core/global/responses'
 import { Rocket } from '@stardust/core/shop/entities'
+import { OrdinalNumber, ListingOrder, Text } from '@stardust/core/global/structures'
+import type { ShopService } from '@stardust/core/shop/interfaces'
 
 import { CACHE } from '@/constants'
-import { useApi } from '@/ui/global/hooks/useApi'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 
 const ROCKETS_PER_PAGE = 6
 
-export function useRocketsList(initialRocketsPagination: PaginationResponse<RocketDto>) {
-  const [search, setSearch] = useState('s')
-  const [priceOrder, setPriceOrder] = useState<ListOrder>('ascending')
-  const api = useApi()
-  const { user } = useAuthContext()
+export function useRocketsList(shopService: ShopService) {
+  const [search, setSearch] = useState<Text>(Text.create(''))
+  const [priceOrder, setPriceOrder] = useState<ListingOrder>(ListingOrder.create())
 
   async function fetchRockets(page: number) {
-    const response = await api.fetchShopRocketsList({
-      search,
-      page,
-      itemsPerPage: ROCKETS_PER_PAGE,
+    const response = await shopService.fetchRocketsList({
+      search: search,
+      page: OrdinalNumber.create(page),
+      itemsPerPage: OrdinalNumber.create(ROCKETS_PER_PAGE),
       order: priceOrder,
     })
     if (response.isFailure) response.throwError()
@@ -34,19 +27,17 @@ export function useRocketsList(initialRocketsPagination: PaginationResponse<Rock
   const { data, page, totalItemsCount, setPage } = usePaginatedCache({
     key: CACHE.keys.shopRockets,
     fetcher: fetchRockets,
-    dependencies: [search, priceOrder],
+    dependencies: [search.value, priceOrder.value],
     itemsPerPage: ROCKETS_PER_PAGE,
-    isEnabled: Boolean(user),
-    initialData: initialRocketsPagination,
   })
 
   function handleSearchChange(value: string) {
-    setSearch(value)
+    setSearch(Text.create(value))
     setPage(1)
   }
 
-  function handlePriceOrderChange(value: ListOrder) {
-    setPriceOrder(value)
+  function handlePriceOrderChange(value: string) {
+    setPriceOrder(ListingOrder.create(value))
   }
 
   function handlePageChange(page: number) {

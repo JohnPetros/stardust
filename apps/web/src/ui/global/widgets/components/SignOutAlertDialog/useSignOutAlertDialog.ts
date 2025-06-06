@@ -1,24 +1,20 @@
-'use client'
-
 import { useState } from 'react'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
 export function useSignOutAlertDialog() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isSigningOut, setIsSigningOut] = useState(false)
 
   const { handleSignOut } = useAuthContext()
 
-  async function handleConfirm() {
-    setIsLoading(true)
-
+  async function handleDialogConfirm() {
+    setIsSigningOut(true)
     await handleSignOut()
-
-    setIsLoading(false)
+    setIsSigningOut(false)
   }
 
   return {
-    isLoading,
-    handleConfirm,
+    isSigningOut,
+    handleDialogConfirm,
   }
 }

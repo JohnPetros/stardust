@@ -1,12 +1,11 @@
-import { cookies, headers } from 'next/headers'
-
 import type { RestClient } from '@stardust/core/global/interfaces'
 
-import { NextRestClient } from './NextRestClient'
+import { HTTP_HEADERS } from '@stardust/core/global/constants'
+import { cookieActions } from '@/rpc/next-safe-action'
 import { CLIENT_ENV, COOKIES } from '@/constants'
 import type { NextRestClientConfig } from './types'
-import { cookieActions } from '@/rpc/next-safe-action'
-import { HTTP_HEADERS } from '@stardust/core/global/constants'
+
+import { NextRestClient } from './NextRestClient'
 
 export const NextServerRestClient = async (
   config?: NextRestClientConfig,

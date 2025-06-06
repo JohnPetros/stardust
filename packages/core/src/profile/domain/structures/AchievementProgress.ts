@@ -16,10 +16,13 @@ export class AchievementProgress {
     )
   }
 
-  get percentageProgress() {
-    const percentageProgress = (this.userCount.value / this.requiredCount.value) * 100
+  get percentageProgress(): number {
+    const percentageProgress = Math.min(
+      (this.userCount.value / this.requiredCount.value) * 100,
+      100,
+    )
 
-    return percentageProgress
+    return Math.max(0, percentageProgress)
   }
 
   get absoluteProgress() {

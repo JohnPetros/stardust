@@ -5,6 +5,7 @@ import { createContext, useRef, type ReactNode } from 'react'
 import type { AchievementDto } from '@stardust/core/profile/entities/dtos'
 
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
+import { useRest } from '@/ui/global/hooks/useRest'
 import { NewUnlockedAchievementsAlertDialog } from './components/NewUnlockedAchievementsAlertDialog'
 import { useAchivementsProvider } from './hooks/useAchievementsProvider'
 import { useAchievementsContext } from './hooks/useAchievementsContext'
@@ -21,13 +22,13 @@ export function AchivementsProvider({
   children,
   achievementsDto,
 }: AchivementsContextProps) {
+  const { profileService } = useRest()
   const newUnlockedAchievementsAlertDialogRef = useRef<AlertDialogRef>(null)
-
   const {
     newUnlockedAchievements,
     rescueAchivement,
     handleNewUnlockedAchievementsAlertDialogClose,
-  } = useAchivementsProvider(newUnlockedAchievementsAlertDialogRef)
+  } = useAchivementsProvider(profileService, newUnlockedAchievementsAlertDialogRef)
 
   return (
     <AchivementsContext.Provider

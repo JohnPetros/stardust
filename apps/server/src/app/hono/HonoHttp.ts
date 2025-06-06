@@ -6,7 +6,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 
 import type { Http, HttpMethod } from '@stardust/core/global/interfaces'
 import { type PaginationResponse, RestResponse } from '@stardust/core/global/responses'
-import type { UserDto } from '@stardust/core/profile/entities/dtos'
+import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 import { AppError } from '@stardust/core/global/errors'
 import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
@@ -54,8 +54,20 @@ export class HonoHttp<HonoContext extends Context>
   }
 
   async getBody(): Promise<HonoHttpSchema<HonoContext>['body']> {
-    // @ts-ignore
-    return this.context.req.valid('json')
+    const extraBody = this.context.get('extra-body')
+    let body: HonoHttpSchema<HonoContext>['body']
+
+    if (this.next) {
+      body = await this.context.req.json()
+    } else {
+      // @ts-ignore
+      body = this.context.req.valid('json')
+    }
+
+    return {
+      ...(body as object),
+      ...extraBody,
+    } as HonoHttpSchema<HonoContext>['body']
   }
 
   getRouteParams(): HonoHttpSchema<HonoContext>['routeParams'] {
@@ -68,8 +80,8 @@ export class HonoHttp<HonoContext extends Context>
     return this.context.req.valid('query')
   }
 
-  async getUser(): Promise<UserDto> {
-    return (await this.context.req.json()) as UserDto
+  async getAccount(): Promise<AccountDto> {
+    return this.context.get('account')
   }
 
   getMethod(): HttpMethod {
@@ -95,6 +107,13 @@ export class HonoHttp<HonoContext extends Context>
     return this.getCookie(key) !== null
   }
 
+  extendBody(body: unknown): void {
+    this.context.set('extra-body', {
+      ...this.context.get('extra-body'),
+      ...(body as object),
+    })
+  }
+
   async pass(): Promise<RestResponse<Response>> {
     if (!this.next) throw new AppError('HonoHttp next is not defined')
 
@@ -117,7 +136,7 @@ export class HonoHttp<HonoContext extends Context>
     return this
   }
 
-  send(data: unknown): RestResponse<Response> {
+  send(data?: unknown): RestResponse<Response> {
     const body = this.context.json(data as object)
     const headers = this.getResponseHeaders()
     return new RestResponse({

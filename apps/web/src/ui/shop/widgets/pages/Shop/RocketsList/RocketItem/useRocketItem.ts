@@ -1,57 +1,43 @@
-'use client'
+import type { RocketAggregate } from '@stardust/core/profile/aggregates'
+import type { ProfileService } from '@stardust/core/profile/interfaces'
+import type { Integer } from '@stardust/core/global/structures'
 
-import { RocketAggregate } from '@stardust/core/profile/aggregates'
-
-import { useApi } from '@/ui/global/hooks/useApi'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useAudioContext } from '@/ui/global/contexts/AudioContext'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { Integer } from '@stardust/core/global/structures'
 
-type UseRocketItemProps = {
-  id: string
-  name: string
-  image: string
-  price: number
-}
-
-export function useRocketItem({ id, name, price, image }: UseRocketItemProps) {
-  const { user, updateUser } = useAuthContext()
-  const { playAudio } = useAudioContext()
+export function useRocketItem(
+  rocket: RocketAggregate,
+  rocketPrice: Integer,
+  profileService: ProfileService,
+) {
   const toast = useToastContext()
-  const api = useApi()
+  const { playAudio } = useAudioContext()
+  const { user, updateUserCache } = useAuthContext()
 
-  async function handleShopButtonBuy() {
-    if (!user) return
+  async function handleRocketAcquire() {
+    if (!user) return false
 
-    const response = await api.saveAcquiredRocket(id, user.id.value)
+    const response = await profileService.acquireRocket(rocket, rocketPrice)
 
     if (response.isFailure) {
-      toast.show(response.errorMessage)
-      return
+      toast.showError(response.errorMessage)
+      return false
     }
 
-    await updateUser(user)
-  }
+    const hasAcquiredRocket =
+      Number(response.body.acquiredRocketsIds?.length) > user.acquiredRocketsCount.value
 
-  async function handleShopButtonClick() {
-    if (!user) return
-
-    const currentAcquiredRocketsCount = user.acquiredRocketsCount
-
-    user.buyRocket(
-      RocketAggregate.create({ id, entity: { name, image } }),
-      Integer.create(price),
-    )
-
-    if (currentAcquiredRocketsCount.value === user.acquiredRocketsCount.value) {
-      await updateUser(user)
+    if (response.isSuccessful && !hasAcquiredRocket) {
       playAudio('switch.wav')
+      updateUserCache(response.body)
+      return false
     }
+
+    return true
   }
 
   return {
-    handleShopButtonBuy,
-    handleShopButtonClick,
+    handleRocketAcquire,
   }
 }

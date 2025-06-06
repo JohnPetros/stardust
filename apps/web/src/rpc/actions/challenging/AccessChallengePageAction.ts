@@ -28,7 +28,7 @@ export const AccessChallengePageAction = (
   }
 
   async function fetchChallengeStar(starId: Id) {
-    const response = await spaceService.fetchStarById(starId.value)
+    const response = await spaceService.fetchStarById(starId)
     if (response.isFailure) response.throwError()
     return Star.create(response.body)
   }

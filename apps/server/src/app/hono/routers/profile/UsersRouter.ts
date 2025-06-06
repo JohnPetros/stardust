@@ -9,7 +9,9 @@ import {
   nameSchema,
   stringSchema,
 } from '@stardust/validation/global/schemas'
+import { userSchema } from '@stardust/validation/profile/schemas'
 
+import { SupabaseUsersRepository } from '@/database'
 import {
   FetchUserController,
   AcquireAvatarController,
@@ -17,17 +19,21 @@ import {
   VerifyUserNameInUseController,
   VerifyUserEmailInUseController,
   UpdateUserController,
+  RewardUserForStarCompletionController,
+  RewardUserForStarChallengeCompletionController,
+  RewardUserForChallengeCompletionController,
 } from '@/rest/controllers/profile'
 import { HonoRouter } from '../../HonoRouter'
-import { SupabaseUsersRepository } from '@/database'
 import { HonoHttp } from '../../HonoHttp'
-import { AuthMiddleware } from '../../middlewares'
+import { AuthMiddleware, SpaceMiddleware, ChallengingMiddleware } from '../../middlewares'
 
 export class UsersRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/users')
   private readonly authMiddleware = new AuthMiddleware()
+  private readonly spaceMiddleware = new SpaceMiddleware()
+  private readonly challengingMiddleware = new ChallengingMiddleware()
 
-  private fetchUserByIdRoute() {
+  private registerFetchUserByIdRoute() {
     this.router.get(
       '/id/:userId',
       this.authMiddleware.verifyAuthentication,
@@ -47,7 +53,7 @@ export class UsersRouter extends HonoRouter {
     )
   }
 
-  private fetchUserBySlugRoute() {
+  private registerFetchUserBySlugRoute() {
     this.router.get(
       '/slug/:userSlug',
       this.authMiddleware.verifyAuthentication,
@@ -67,30 +73,27 @@ export class UsersRouter extends HonoRouter {
     )
   }
 
-  private updateUserRoute() {
+  private registerUpdateUserRoute() {
     this.router.put(
       '/:userId',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
-        'param',
-        z.object({
-          userId: idSchema,
-        }),
-      ),
+      zValidator('param', userSchema),
+      zValidator('json', userSchema),
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseUsersRepository(http.getSupabase())
         const controller = new UpdateUserController(repository)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
+        // const response = await controller.handle(http)
+        return http.sendResponse(http.send())
       },
     )
   }
 
-  private acquireAvatarRoute() {
+  private registerRewardUserForStarCompletionRoute() {
     this.router.put(
-      '/:userId/avatar',
+      '/:userId/reward/star',
       this.authMiddleware.verifyAuthentication,
+      this.spaceMiddleware.appendNextStarToBody,
       zValidator(
         'param',
         z.object({
@@ -100,32 +103,83 @@ export class UsersRouter extends HonoRouter {
       zValidator(
         'json',
         z.object({
-          avatarId: idSchema,
-          avatarName: nameSchema,
-          avatarImage: stringSchema,
-          avatarPrice: integerSchema,
+          starId: idSchema,
+          questionsCount: integerSchema,
+          incorrectAnswersCount: integerSchema,
         }),
       ),
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseUsersRepository(http.getSupabase())
-        const controller = new AcquireAvatarController(repository)
+        const controller = new RewardUserForStarCompletionController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
     )
   }
 
-  private acquireRocketRoute() {
+  private registerRewardUserForStarChallengeCompletionRoute() {
     this.router.put(
-      '/:userId/rocket',
+      '/:userId/reward/star-challenge',
       this.authMiddleware.verifyAuthentication,
+      this.challengingMiddleware.appendChallengeRewardToBody,
       zValidator(
         'param',
         z.object({
           userId: idSchema,
         }),
       ),
+      zValidator(
+        'json',
+        z.object({
+          challengeId: idSchema,
+          maximumIncorrectAnswersCount: integerSchema,
+          incorrectAnswersCount: integerSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const controller = new RewardUserForStarChallengeCompletionController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private registerRewardUserForChallengeCompletionRoute() {
+    this.router.put(
+      '/:userId/reward/challenge',
+      this.authMiddleware.verifyAuthentication,
+      this.challengingMiddleware.appendChallengeRewardToBody,
+      zValidator(
+        'param',
+        z.object({
+          userId: idSchema,
+        }),
+      ),
+      zValidator(
+        'json',
+        z.object({
+          challengeId: idSchema,
+          maximumIncorrectAnswersCount: integerSchema,
+          incorrectAnswersCount: integerSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const controller = new RewardUserForChallengeCompletionController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private registerAcquireRocketRoute() {
+    this.router.post(
+      '/rockets/acquire',
+      this.authMiddleware.verifyAuthentication,
       zValidator(
         'json',
         z.object({
@@ -145,7 +199,30 @@ export class UsersRouter extends HonoRouter {
     )
   }
 
-  private verifyUserNameInUseRoute() {
+  private registerAcquireAvatarRoute() {
+    this.router.post(
+      '/avatars/acquire',
+      this.authMiddleware.verifyAuthentication,
+      zValidator(
+        'json',
+        z.object({
+          avatarId: idSchema,
+          avatarName: nameSchema,
+          avatarImage: stringSchema,
+          avatarPrice: integerSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const controller = new AcquireAvatarController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private registerVerifyUserNameInUseRoute() {
     this.router.get(
       '/verify-name-in-use',
       zValidator(
@@ -164,7 +241,7 @@ export class UsersRouter extends HonoRouter {
     )
   }
 
-  private verifyUserEmailInUseRoute() {
+  private registerVerifyUserEmailInUseRoute() {
     this.router.get(
       '/verify-email-in-use',
       zValidator(
@@ -184,13 +261,16 @@ export class UsersRouter extends HonoRouter {
   }
 
   registerRoutes(): Hono {
-    this.fetchUserByIdRoute()
-    this.fetchUserBySlugRoute()
-    this.updateUserRoute()
-    this.acquireAvatarRoute()
-    this.acquireRocketRoute()
-    this.verifyUserNameInUseRoute()
-    this.verifyUserEmailInUseRoute()
+    this.registerFetchUserByIdRoute()
+    this.registerFetchUserBySlugRoute()
+    this.registerUpdateUserRoute()
+    this.registerRewardUserForStarCompletionRoute()
+    this.registerRewardUserForStarChallengeCompletionRoute()
+    this.registerRewardUserForChallengeCompletionRoute()
+    this.registerAcquireAvatarRoute()
+    this.registerAcquireRocketRoute()
+    this.registerVerifyUserNameInUseRoute()
+    this.registerVerifyUserEmailInUseRoute()
     return this.router
   }
 }

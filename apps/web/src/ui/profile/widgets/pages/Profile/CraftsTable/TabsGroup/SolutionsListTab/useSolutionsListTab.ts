@@ -1,24 +1,26 @@
-'use client'
-
 import { Solution } from '@stardust/core/challenging/entities'
+import { OrdinalNumber, Text, Id } from '@stardust/core/global/structures'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
+import { SolutionsListingSorter } from '@stardust/core/challenging/structures'
 
 import { CACHE } from '@/constants'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
-import { useApi } from '@/ui/global/hooks/useApi'
 import type { TabListSorter } from '../../TabListSorter'
 
-const SOLUTIONS_PER_PAGE = 30
+const SOLUTIONS_PER_PAGE = OrdinalNumber.create(30)
 
-export function useSolutionsListTab(tabListSorter: TabListSorter, userId: string) {
-  const api = useApi()
-
+export function useSolutionsListTab(
+  service: ChallengingService,
+  tabListSorter: TabListSorter,
+  userId: string,
+) {
   async function fetchSolutionsList(page: number) {
-    const response = await api.fetchSolutionsList({
-      page,
-      title: '',
+    const response = await service.fetchSolutionsList({
+      page: OrdinalNumber.create(page),
       itemsPerPage: SOLUTIONS_PER_PAGE,
-      sorter: tabListSorter,
-      userId: userId,
+      title: Text.create(''),
+      sorter: SolutionsListingSorter.create(tabListSorter),
+      userId: Id.create(userId),
       challengeId: null,
     })
     if (response.isFailure) response.throwError()
@@ -28,7 +30,7 @@ export function useSolutionsListTab(tabListSorter: TabListSorter, userId: string
   const { data, isLoading, isRecheadedEnd, nextPage } = usePaginatedCache({
     key: CACHE.keys.solutionsList,
     fetcher: fetchSolutionsList,
-    itemsPerPage: SOLUTIONS_PER_PAGE,
+    itemsPerPage: SOLUTIONS_PER_PAGE.value,
     isInfinity: true,
     shouldRefetchOnFocus: false,
     dependencies: [tabListSorter],

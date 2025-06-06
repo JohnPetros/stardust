@@ -1,32 +1,19 @@
-import type { Achievement } from '@stardust/core/profile/entities'
-import { AchievementCard } from '../../../components/AchievementCard'
-import { EmptyListMessage } from './EmptyListMessage'
+import { Id } from '@stardust/core/global/structures'
 
-type UnlockedAchievementsListProps = {
-  unlockedAchievements: Achievement[]
+import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
+import { ProfileService } from '@/rest/services'
+import { UnlockedAchievementsListView } from './UnlockedAchievementsListView'
+
+type Props = {
+  userId: string
 }
 
-export function UnlockedAchievementsList({
-  unlockedAchievements,
-}: UnlockedAchievementsListProps) {
-  if (unlockedAchievements.length) {
-    return (
-      <div className='custom-scroll grid h-72 grid-cols-1 content-start gap-4 overflow-y-auto px-1 md:grid-cols-2'>
-        {unlockedAchievements.map((achievement) => (
-          <div key={achievement.id.value} className='h-24'>
-            <AchievementCard
-              id={achievement.id.value}
-              name={achievement.name.value}
-              icon={achievement.icon.value}
-              reward={achievement.reward.value}
-              description={achievement.description}
-              isUnlocked={true}
-              isRescuable={false}
-            />
-          </div>
-        ))}
-      </div>
-    )
-  }
-  return <EmptyListMessage />
+export const UnlockedAchievementsList = async ({ userId }: Props) => {
+  const restClient = await NextServerRestClient()
+  const achievementsService = ProfileService(restClient)
+  const response = await achievementsService.fetchUnlockedAchievements(Id.create(userId))
+  if (response.isFailure) response.throwError()
+  const unlockedAchievements = response.body
+
+  return <UnlockedAchievementsListView unlockedAchievements={unlockedAchievements} />
 }

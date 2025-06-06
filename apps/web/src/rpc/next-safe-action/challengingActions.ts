@@ -19,10 +19,7 @@ import {
 } from '@stardust/validation/challenging/schemas'
 
 import { SupabaseServerActionClient } from '@/rest/supabase/clients/SupabaseServerActionClient'
-import {
-  SupabaseChallengingService,
-  SupabaseSpaceService,
-} from '@/rest/supabase/services'
+import { SupabaseChallengingService } from '@/rest/supabase/services'
 import { authActionClient } from './clients/authActionClient'
 import { NextCall } from '../next/NextCall'
 import {
@@ -37,6 +34,8 @@ import {
   VoteChallengeAction,
   AccessChallengeCommentsSlotAction,
 } from '../actions/challenging'
+import { SpaceService } from '@/rest/services'
+import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 
 export const fetchChallengesList = authActionClient
   .schema(
@@ -68,8 +67,9 @@ export const accessChallengePage = authActionClient
       user: ctx.user,
     })
     const supabase = SupabaseServerActionClient()
+    const restClient = await NextServerRestClient({ isCacheEnabled: false })
     const challengingService = SupabaseChallengingService(supabase)
-    const spaceService = SupabaseSpaceService(supabase)
+    const spaceService = SpaceService(restClient)
     const action = AccessChallengePageAction(challengingService, spaceService)
     return action.handle(call)
   })

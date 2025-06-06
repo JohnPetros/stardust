@@ -8,21 +8,21 @@ import { AcquireRocketUseCase } from '../AcquireRocketUseCase'
 import type { UsersRepository } from '../../interfaces'
 
 describe('Acquire Rocket Use Case', () => {
-  let usersRepository: Mock<UsersRepository>
+  let repository: Mock<UsersRepository>
   let useCase: AcquireRocketUseCase
 
   beforeEach(() => {
-    usersRepository = mock<UsersRepository>()
-    usersRepository.findById.mockImplementation()
-    usersRepository.replace.mockImplementation()
-    usersRepository.addAcquiredRocket.mockImplementation()
-    useCase = new AcquireRocketUseCase(usersRepository)
+    repository = mock<UsersRepository>()
+    repository.findById.mockImplementation()
+    repository.replace.mockImplementation()
+    repository.addAcquiredRocket.mockImplementation()
+    useCase = new AcquireRocketUseCase(repository)
   })
 
   it('should throw an error if the user is not found', () => {
     const user = UsersFaker.fake()
     const rocket = RocketAggregatesFaker.fake()
-    usersRepository.findById.mockResolvedValue(null)
+    repository.findById.mockResolvedValue(null)
 
     expect(
       useCase.execute({
@@ -35,12 +35,24 @@ describe('Acquire Rocket Use Case', () => {
     ).rejects.toThrow(UserNotFoundError)
   })
 
-  it('should add the acquire rocket to the repository', async () => {
-    const user = UsersFaker.fake()
-    user.buyRocket = jest.fn()
+  it('should add the acquire rocket to the repository only if the user can acquire the rocket and not has acquired it yet', async () => {
     const rocket = RocketAggregatesFaker.fake()
-    const rocketPrice = Integer.create(0)
-    usersRepository.findById.mockResolvedValue(user)
+    let user = UsersFaker.fake({ coins: 100, acquiredRocketsIds: [rocket.id.value] })
+    user.acquireRocket = jest.fn()
+    repository.findById.mockResolvedValue(user)
+
+    await useCase.execute({
+      userId: user.id.value,
+      rocketId: rocket.id.value,
+      rocketName: rocket.name.value,
+      rocketImage: rocket.image.value,
+      rocketPrice: 101,
+    })
+
+    expect(repository.addAcquiredRocket).toHaveBeenCalledTimes(0)
+
+    user = UsersFaker.fake({ coins: 100, acquiredRocketsIds: [rocket.id.value] })
+    repository.findById.mockResolvedValue(user)
 
     await useCase.execute({
       userId: user.id.value,
@@ -50,7 +62,39 @@ describe('Acquire Rocket Use Case', () => {
       rocketPrice: 0,
     })
 
-    expect(user.buyRocket).toHaveBeenCalledWith(rocket, rocketPrice)
-    expect(usersRepository.addAcquiredRocket).toHaveBeenCalledWith(rocket, user.id)
+    expect(repository.addAcquiredRocket).toHaveBeenCalledTimes(0)
+
+    user = UsersFaker.fake({ coins: 100, acquiredRocketsIds: [] })
+    repository.findById.mockResolvedValue(user)
+
+    await useCase.execute({
+      userId: user.id.value,
+      rocketId: rocket.id.value,
+      rocketName: rocket.name.value,
+      rocketImage: rocket.image.value,
+      rocketPrice: 0,
+    })
+
+    expect(repository.addAcquiredRocket).toHaveBeenCalledTimes(1)
+    expect(repository.addAcquiredRocket).toHaveBeenCalledWith(rocket.id, user.id)
+  })
+
+  it('should try to acquire the rocket', async () => {
+    const rocket = RocketAggregatesFaker.fake()
+    const user = UsersFaker.fake()
+    user.acquireRocket = jest.fn()
+    const rocketPrice = Integer.create(100)
+    repository.findById.mockResolvedValue(user)
+
+    await useCase.execute({
+      userId: user.id.value,
+      rocketId: rocket.id.value,
+      rocketName: rocket.name.value,
+      rocketImage: rocket.image.value,
+      rocketPrice: rocketPrice.value,
+    })
+
+    expect(user.acquireRocket).toHaveBeenCalledTimes(1)
+    expect(user.acquireRocket).toHaveBeenCalledWith(rocket, rocketPrice)
   })
 })

@@ -2,18 +2,19 @@ import { StringValidation } from '../../../global/libs'
 import type { ChallengeCompletionStatus } from '../types'
 
 export class ChallengeCompletion {
-  private constructor(readonly status: ChallengeCompletionStatus) {}
+  private constructor(readonly value: ChallengeCompletionStatus) {}
 
-  static create(status: string) {
-    if (!ChallengeCompletion.isStatus(status)) throw new Error()
+  static create(value: string) {
+    if (!ChallengeCompletion.isStatus(value)) throw new Error()
 
-    return new ChallengeCompletion(status)
+    return new ChallengeCompletion(value)
   }
 
-  static isStatus(status: string): status is ChallengeCompletionStatus {
-    new StringValidation(status, 'Challenge completition status').oneOf([
+  static isStatus(value: string): value is ChallengeCompletionStatus {
+    new StringValidation(value, 'Challenge completition status').oneOf([
       'completed',
       'not-completed',
+      'any',
     ])
 
     return true

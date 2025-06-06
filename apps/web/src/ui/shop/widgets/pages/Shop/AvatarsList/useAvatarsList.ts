@@ -1,30 +1,36 @@
-'use client'
-
 import { useState } from 'react'
 
-import type { ListOrder } from '@stardust/core/global/types'
-import type { AvatarDto } from '@stardust/core/shop/dtos'
-import type { PaginationResponse } from '@stardust/core/global/responses'
+import type { ShopService } from '@stardust/core/shop/interfaces'
+import { Avatar } from '@stardust/core/shop/entities'
+import { OrdinalNumber, ListingOrder, Text } from '@stardust/core/global/structures'
 
 import { CACHE } from '@/constants'
-import { useApi } from '@/ui/global/hooks/useApi'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
-import { Avatar } from '@stardust/core/shop/entities'
 
 const AVATARS_PER_PAGE = 10
 
-export function useAvatarsList(initialAvatarsPagination: PaginationResponse<AvatarDto>) {
-  const [search, setSearch] = useState('s')
-  const [priceOrder, setPriceOrder] = useState<ListOrder>('ascending')
-  const api = useApi()
-  const { user } = useAuthContext()
+export function useAvatarsList(shopService: ShopService) {
+  const [search, setSearch] = useState<Text>(Text.create(''))
+  const [priceOrder, setPriceOrder] = useState<ListingOrder>(ListingOrder.create())
+
+  function handleSearchChange(value: string) {
+    setSearch(Text.create(value))
+    setPage(1)
+  }
+
+  function handlePriceOrderChange(value: string) {
+    setPriceOrder(ListingOrder.create(value))
+  }
+
+  function handlePageChange(page: number) {
+    setPage(page)
+  }
 
   async function fetchAvatars(page: number) {
-    const response = await api.fetchShopAvatarsList({
-      search,
-      page,
-      itemsPerPage: AVATARS_PER_PAGE,
+    const response = await shopService.fetchAvatarsList({
+      search: search,
+      page: OrdinalNumber.create(page),
+      itemsPerPage: OrdinalNumber.create(AVATARS_PER_PAGE),
       order: priceOrder,
     })
 
@@ -36,24 +42,9 @@ export function useAvatarsList(initialAvatarsPagination: PaginationResponse<Avat
   const { data, page, totalItemsCount, setPage } = usePaginatedCache({
     key: CACHE.keys.shopRockets,
     fetcher: fetchAvatars,
-    dependencies: [search, priceOrder],
+    dependencies: [search.value, priceOrder.value],
     itemsPerPage: AVATARS_PER_PAGE,
-    isEnabled: Boolean(user),
-    initialData: initialAvatarsPagination,
   })
-
-  function handleSearchChange(value: string) {
-    setSearch(value)
-    setPage(1)
-  }
-
-  function handlePriceOrderChange(value: ListOrder) {
-    setPriceOrder(value)
-  }
-
-  function handlePageChange(page: number) {
-    setPage(page)
-  }
 
   return {
     avatars: data.map(Avatar.create),

@@ -43,8 +43,7 @@ export const NextCall = <Request = unknown>({
     },
 
     async hasCookie(key) {
-      const cookie = cookies().get(key)
-      return !!cookie
+      return cookies().has(key)
     },
 
     async deleteCookie(key: string) {

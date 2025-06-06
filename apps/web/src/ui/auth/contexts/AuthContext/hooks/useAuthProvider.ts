@@ -1,41 +1,27 @@
-'use client'
-
 import { useCallback, useEffect, useState } from 'react'
 
-import { Observer } from '@stardust/core/global/structures'
 import { User } from '@stardust/core/global/entities'
 import type { UserDto } from '@stardust/core/profile/entities/dtos'
-import type { AuthService } from '@stardust/core/auth/interfaces'
 import type { ProfileService } from '@stardust/core/profile/interfaces'
 import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 import { Account } from '@stardust/core/auth/entities'
 import type { ActionResponse } from '@stardust/core/global/responses'
 
-import { CACHE, DOM_EVENTS, ROUTES } from '@/constants'
+import { CACHE, DOM_EVENTS } from '@/constants'
 import { useCache } from '@/ui/global/hooks/useCache'
-import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
 type Params = {
-  authService: AuthService
   profileService: ProfileService
   accountDto: AccountDto | null
-  runSignInAction: (
-    email: string,
-    password: string,
-  ) => Promise<ActionResponse<AccountDto>>
+  signIn: (email: string, password: string) => Promise<ActionResponse<AccountDto>>
+  signOut: () => Promise<ActionResponse<void>>
 }
 
-export function useAuthProvider({
-  authService,
-  profileService,
-  accountDto,
-  runSignInAction,
-}: Params) {
+export function useAuthProvider({ profileService, accountDto, signIn, signOut }: Params) {
   const [account, setAccount] = useState<Account | null>(
     accountDto ? Account.create(accountDto) : null,
   )
-  const router = useRouter()
   const toast = useToastContext()
 
   async function fetchUser() {
@@ -53,7 +39,7 @@ export function useAuthProvider({
     key: CACHE.keys.authUser,
     fetcher: fetchUser,
     isEnabled: Boolean(accountDto),
-    dependencies: [account?.id],
+    dependencies: [],
   })
 
   const notifyUserChanges = useCallback(() => {
@@ -61,22 +47,10 @@ export function useAuthProvider({
     window.dispatchEvent(userChangeEvent)
   }, [])
 
-  const setUser = useCallback(
-    (userDto: UserDto | null) => {
-      if (!userDto) return null
-
-      const user = User.create(userDto)
-      user.observer = new Observer(notifyUserChanges)
-      return user
-    },
-    [notifyUserChanges],
-  )
-
   async function handleSignIn(email: string, password: string) {
-    const response = await runSignInAction(email, password)
+    const response = await signIn(email, password)
 
     if (response.isSuccessful) {
-      console.log('handleSignIn response', response.data)
       setAccount(Account.create(response.data))
       return true
     }
@@ -86,15 +60,12 @@ export function useAuthProvider({
   }
 
   async function handleSignOut() {
-    const response = await authService.signOut()
+    const response = await signOut()
 
     if (response.isFailure) {
       toast.showError(response.errorMessage, 4)
-
       return
     }
-
-    router.goTo(ROUTES.auth.signIn)
   }
 
   const updateUserCache = useCallback(
@@ -131,7 +102,7 @@ export function useAuthProvider({
   }, [account, updateUserCache])
 
   return {
-    user: setUser(userDto),
+    user: userDto ? User.create(userDto) : null,
     isLoading,
     handleSignIn,
     handleSignOut,

@@ -1,1 +1,1 @@
-export { HandleRewardsPayloadController } from './HandleRewardsPayloadController'
+export { HandleRewardingPayloadController } from './HandleRewardingPayloadController'

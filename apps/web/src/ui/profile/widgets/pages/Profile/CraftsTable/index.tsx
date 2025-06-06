@@ -1,44 +1,33 @@
 'use client'
 
-import Link from 'next/link'
-
-import { ROUTES } from '@/constants'
-import { Icon } from '@/ui/global/widgets/components/Icon'
-import { Button } from '@/ui/global/widgets/components/Button'
-import { TabsGroup } from './TabsGroup'
+import { useRouter } from '@/ui/global/hooks/useRouter'
+import { CraftsTableView } from './CraftsTableView'
 import { useCraftsTable } from './useCraftsTable'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext/hooks/useAuthContext'
 
-type CraftsTableProps = {
+type Props = {
   userId: string
 }
 
-export function CraftsTable({ userId }: CraftsTableProps) {
+export function CraftsTable({ userId }: Props) {
+  const { currentRoute } = useRouter()
+  const { user } = useAuthContext()
   const {
     activeTabListSorter,
     activeTabContent,
-    isAuthUser,
+    isAccountUser,
     handleTabContentChange,
     handleTabListSorterChange,
-  } = useCraftsTable()
+  } = useCraftsTable(currentRoute, String(user?.slug.value))
 
   return (
-    <div className='flex flex-col gap-6'>
-      {isAuthUser && activeTabContent === 'challengesListTab' && (
-        <Link href={ROUTES.challenging.challenge()}>
-          <Button className='w-64 gap-2'>
-            <Icon name='plus-circle' size={16} className='text-gray-900' weight='bold' />
-            Postar um desafio
-          </Button>
-        </Link>
-      )}
-
-      <TabsGroup
-        userId={userId}
-        activeTabContent={activeTabContent}
-        activeTabListSorter={activeTabListSorter}
-        onTabContentChange={handleTabContentChange}
-        onTabListSorterChange={handleTabListSorterChange}
-      />
-    </div>
+    <CraftsTableView
+      userId={userId}
+      isAccountUser={isAccountUser}
+      activeTabContent={activeTabContent}
+      activeTabListSorter={activeTabListSorter}
+      onTabContentChange={handleTabContentChange}
+      onTabListSorterChange={handleTabListSorterChange}
+    />
   )
 }

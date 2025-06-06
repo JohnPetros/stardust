@@ -4,16 +4,10 @@ import type { ShopItemsListingParams } from '../domain/types'
 import type { AvatarDto, RocketDto } from '../dtos'
 
 export interface ShopService {
-  fetchShopAvatarsList(
-    params: ShopItemsListingParams,
-  ): Promise<RestResponse<PaginationResponse<AvatarDto>>>
-  fetchAvatarById(avatarId: string): Promise<RestResponse<AvatarDto>>
-  fetchAcquirableRocketsByDefault(): Promise<RestResponse<RocketDto[]>>
-  fetchAcquirableAvatarsByDefault(): Promise<RestResponse<AvatarDto[]>>
-  saveAcquiredAvatar(avatarId: string, userId: string): Promise<RestResponse<boolean>>
-  fetchRocketById(rocketId: string): Promise<RestResponse<RocketDto>>
-  fetchShopRocketsList(
+  fetchRocketsList(
     params: ShopItemsListingParams,
   ): Promise<RestResponse<PaginationResponse<RocketDto>>>
-  saveAcquiredRocket(rocketId: string, userId: string): Promise<RestResponse<boolean>>
+  fetchAvatarsList(
+    params: ShopItemsListingParams,
+  ): Promise<RestResponse<PaginationResponse<AvatarDto>>>
 }

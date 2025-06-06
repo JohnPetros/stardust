@@ -18,7 +18,7 @@ const schema = z.object({
 
 type Schema = z.infer<typeof schema>
 
-export async function GET(request: NextRequest, params: NextParams) {
+export async function GET(request: NextRequest, params: NextParams<'solutionSlug'>) {
   return await runApiRoute(async () => {
     const http = await NextHttp<Schema>({ request, schema, params })
     const supabase = SupabaseRouteHandlerClient()

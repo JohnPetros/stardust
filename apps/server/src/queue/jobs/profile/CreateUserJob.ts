@@ -31,7 +31,6 @@ export class CreateUserJob implements Job<Payload> {
     const acquireRocketUseCase = new AcquireRocketUseCase(this.usersRepository)
     const acquireAvatarUseCase = new AcquireAvatarUseCase(this.usersRepository)
 
-    console.log('payload', amqp.getPayload())
 
     await amqp.run(
       async () =>

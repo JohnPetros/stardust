@@ -25,7 +25,7 @@ export function BlockedSolutionsAlertDialog({
             Para ver as soluções de outros usuários para esse desafio você deve pagar{' '}
             <span className='font-medium text-yellow-400'>10 de starcoins</span> em troca.
             Você possui atualmente {user?.coins.value} de starcoins.{' '}
-            {user?.canBuy(
+            {user?.canAcquire(
               Integer.create(ChallengeCraftsVisibility.solutionsVisibilityPrice),
             ).isTrue &&
               `Contudo, você não será mais apto a ganhar recompensas ao terminar esse

@@ -26,8 +26,7 @@ export class Planet extends Entity<PlanetProps> {
     )
   }
 
-  getNextStar(starId: string): Star | null {
-    const currentStar = this.stars.find((star) => star.id.value === starId)
+  getNextStar(currentStar: Star): Star | null {
     const nextStar = this.stars.find(
       (star) => star.number.value === currentStar?.number.increment().value,
     )

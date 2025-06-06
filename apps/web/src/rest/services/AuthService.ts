@@ -22,7 +22,7 @@ export const AuthService = (restClient: RestClient): IAuthService => {
     },
 
     async signOut() {
-      return await restClient.post('/auth/sign-out')
+      return await restClient.delete('/auth/sign-out')
     },
 
     async resendSignUpEmail(email: Email) {

@@ -1,59 +1,39 @@
-'use client'
-
-import { type RefObject, useEffect, useState } from 'react'
+import { type RefObject, useState } from 'react'
 
 import { Achievement } from '@stardust/core/profile/entities'
-import { User } from '@stardust/core/global/entities'
+import { Id } from '@stardust/core/global/structures'
+import type { ProfileService } from '@stardust/core/profile/interfaces'
 
-import { useApi } from '@/ui/global/hooks/useApi'
-import { useEventListener } from '@/ui/global/hooks/useEventListener'
+import { DOM_EVENTS } from '@/constants'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-
-import { useObserveNewUnlockedAchievementsAction } from './useObserveNewUnlockedAchievementsAction'
-import { DOM_EVENTS } from '@/constants'
-import { Id, Integer } from '@stardust/core/global/structures'
+import { useEventListener } from '@/ui/global/hooks/useEventListener'
 
 export function useAchivementsProvider(
+  profileService: ProfileService,
   newUnlockedAchievementsAlertDialogRef: RefObject<AlertDialogRef>,
 ) {
-  const api = useApi()
   const toast = useToastContext()
-  const { user, updateUser, notifyUserChanges } = useAuthContext()
-  const { observe } = useObserveNewUnlockedAchievementsAction(() =>
-    toast.show('Error ao observar novas conquistas desbloqueadas'),
-  )
+  const { user, refetchUser } = useAuthContext()
   const [newUnlockedAchievements, setNewUnlockedAchievements] = useState<Achievement[]>(
     [],
   )
 
-  async function rescueAchivement(
-    rescuableAchievementId: string,
-    rescuableAchievementReward: number,
-  ) {
+  async function rescueAchivement(rescuableAchievementId: string) {
     if (!user) return
 
-    const response = await api.deleteRescuableAchievement(
-      rescuableAchievementId,
-      user.id.value,
+    const response = await profileService.rescueAchievement(
+      Id.create(rescuableAchievementId),
+      user.id,
     )
 
     if (response.isFailure) {
-      toast.show(response.errorMessage, {
-        type: 'error',
-        seconds: 8,
-      })
-
+      toast.showError(response.errorMessage, 8)
       return
     }
 
-    user.rescueAchievement(
-      Id.create(rescuableAchievementId),
-      Integer.create(rescuableAchievementReward),
-    )
-
-    await updateUser(user)
+    refetchUser()
   }
 
   function handleNewUnlockedAchievementsAlertDialogClose(isOpen: boolean) {
@@ -63,13 +43,20 @@ export function useAchivementsProvider(
   }
 
   async function observeNewUnlockedAchievements() {
-    const { updatedUserDto, newUnlockedAchievementsDto } = await observe()
+    if (!user) return
 
-    if (!updatedUserDto || !newUnlockedAchievementsDto?.length) return
+    const response = await profileService.observeNewUnlockedAchievements(user.id)
+    if (response.isFailure) {
+      toast.showError(response.errorMessage, 8)
+      return
+    }
 
-    setNewUnlockedAchievements(newUnlockedAchievementsDto.map(Achievement.create))
-    newUnlockedAchievementsAlertDialogRef.current?.open()
-    await updateUser(User.create(updatedUserDto))
+    const newUnlockedAchievementsDto = response.body
+    if (newUnlockedAchievementsDto.length) {
+      setNewUnlockedAchievements(newUnlockedAchievementsDto.map(Achievement.create))
+      newUnlockedAchievementsAlertDialogRef.current?.open()
+      refetchUser()
+    }
   }
 
   // @ts-ignore

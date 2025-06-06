@@ -1,7 +1,7 @@
 import type { AchievementMetricValue } from '@stardust/core/profile/types'
 
-import { AnimatedProgressBar } from '@/ui/global/widgets/components/AnimatedProgressBar'
 import { useAchievementProgress } from './useAchievementProgress'
+import { AchievementProgressView } from './AchievementProgressView'
 
 type AchievementProgressProps = {
   metric: AchievementMetricValue
@@ -10,14 +10,5 @@ type AchievementProgressProps = {
 
 export function AchievementProgress({ metric, requiredCount }: AchievementProgressProps) {
   const progress = useAchievementProgress(metric, requiredCount)
-
-  if (progress)
-    return (
-      <div className='flex w-full items-center gap-2 text-xs text-gray-100'>
-        <AnimatedProgressBar height={4} value={progress.percentageProgress} />
-        <span>
-          {progress.absoluteProgress}/{requiredCount}
-        </span>
-      </div>
-    )
+  return <AchievementProgressView progress={progress} requiredCount={requiredCount} />
 }

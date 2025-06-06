@@ -4,14 +4,14 @@ import { notFound } from 'next/navigation'
 import { cookieActions, rewardingActions } from '@/rpc/next-safe-action'
 
 export default async function Page() {
-  const rewardsPayloadCookie = await cookieActions.getCookie(
+  const rewardingPayloadCookie = await cookieActions.getCookie(
     COOKIES.keys.rewardingPayload,
   )
-  if (!rewardsPayloadCookie?.data) return notFound()
+  if (!rewardingPayloadCookie?.data) return notFound()
 
-  const rewardsPayloadDto = JSON.parse(rewardsPayloadCookie.data)
+  const rewardingPayload = JSON.parse(rewardingPayloadCookie.data)
   const response =
-    await rewardingActions.rewardForStarChallengeCompletion(rewardsPayloadDto)
+    await rewardingActions.accessRewardForStarChallengeCompletionPage(rewardingPayload)
   if (!response?.data) notFound()
 
   const {

@@ -1,8 +1,20 @@
 import { type Context, type Next, Hono } from 'hono'
 import { serve } from '@hono/node-server'
+import { cors } from 'hono/cors'
 import { serve as serveInngest } from 'inngest/hono'
-import { type SupabaseClient, createClient } from '@supabase/supabase-js'
+import { type SupabaseClient, type User, createClient } from '@supabase/supabase-js'
 import { ZodError } from 'zod'
+import { jwtDecode } from 'jwt-decode'
+
+import {
+  AuthError,
+  ConflictError,
+  NotFoundError,
+  ValidationError,
+} from '@stardust/core/global/errors'
+import { AppError } from '@stardust/core/global/errors'
+import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
+import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 
 import { ENV } from '@/constants'
 import { inngest } from '@/queue/inngest/client'
@@ -14,20 +26,13 @@ import {
   StorageFunctions,
 } from '@/queue/inngest/functions'
 import { InngestAmqp } from '@/queue/inngest/InngestAmqp'
-import { AuthRouter, ProfileRouter, SpaceRouter, ShopRouter } from './routers'
 import {
-  AuthError,
-  ConflictError,
-  NotFoundError,
-  ValidationError,
-} from '@stardust/core/global/errors'
-import { AppError } from '@stardust/core/global/errors'
-import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
-import { cors } from 'hono/cors'
-import { VerifyAuthenticationController } from '@/rest/controllers/auth'
-import { SupabaseAuthService } from '@/rest/services'
-import { HonoHttp } from './HonoHttp'
-import { AuthMiddleware } from './middlewares'
+  AuthRouter,
+  ProfileRouter,
+  SpaceRouter,
+  ShopRouter,
+  ChallengingRouter,
+} from './routers'
 
 declare module 'hono' {
   interface ContextVariableMap {
@@ -57,6 +62,8 @@ export class HonoApp {
 
   private setUpErrorHandler() {
     this.hono.onError((error, context) => {
+      console.error(error)
+
       if (error instanceof AppError) {
         console.error('Error title:', error.title)
         console.error('Error message:', error.message)
@@ -81,8 +88,6 @@ export class HonoApp {
         return context.json(response, HTTP_STATUS_CODE.serverError)
       }
 
-      console.error(error)
-
       if (error instanceof ZodError)
         return context.json(
           { title: 'Validation Error', message: error.issues },
@@ -104,6 +109,7 @@ export class HonoApp {
       '*',
       cors({
         origin: '*',
+        exposeHeaders: Object.values(HTTP_HEADERS),
       }),
     )
   }
@@ -113,7 +119,7 @@ export class HonoApp {
     const authRouter = new AuthRouter(this)
     const spaceRouter = new SpaceRouter(this)
     const shopRouter = new ShopRouter(this)
-    const authMiddleware = new AuthMiddleware()
+    const challengingRouter = new ChallengingRouter(this)
 
     this.hono.get('/', (context) => {
       return context.json({ message: 'Everything is working!' })
@@ -121,9 +127,9 @@ export class HonoApp {
     this.registerInngestRoute()
     this.hono.route('/', authRouter.registerRoutes())
     this.hono.route('/', profileRouter.registerRoutes())
-    this.hono.use('/', authMiddleware.verifyAuthentication)
     this.hono.route('/', spaceRouter.registerRoutes())
     this.hono.route('/', shopRouter.registerRoutes())
+    this.hono.route('/', challengingRouter.registerRoutes())
   }
 
   private registerMiddlewares() {
@@ -153,19 +159,28 @@ export class HonoApp {
     })
   }
 
+  private setAccount(accessToken: string, context: Context) {
+    const session = jwtDecode<User>(accessToken)
+    const accountDto: AccountDto = {
+      id: session.user_metadata.sub,
+      email: session.user_metadata.email,
+      isAuthenticated: session.user_metadata.email_verified,
+    }
+    context.set('account', accountDto)
+  }
+
   private createSupabaseClient() {
     return async (context: Context, next: Next) => {
       const accessToken = context.req.header('Authorization')?.split(' ')[1]
       const supabase = createClient(ENV.supabaseUrl, ENV.supabaseKey, {
         global: {
           headers: {
-            apikey: ENV.supabaseKey,
             Authorization: accessToken ? `Bearer ${accessToken}` : '',
           },
         },
       })
-      await supabase.auth.refreshSession({ refresh_token: 't45pjkqsryp6' })
       context.set('supabase', supabase)
+      if (accessToken) this.setAccount(accessToken, context)
       await next()
     }
   }

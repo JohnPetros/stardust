@@ -5,9 +5,6 @@ import type { UsersRepository } from '@stardust/core/profile/interfaces'
 import { AcquireRocketUseCase } from '@stardust/core/profile/use-cases'
 
 type Schema = {
-  routeParams: {
-    userId: string
-  }
   body: {
     rocketId: string
     rocketName: string
@@ -20,11 +17,11 @@ export class AcquireRocketController implements Controller<Schema> {
   constructor(private readonly usersRepository: UsersRepository) {}
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
-    const { userId } = http.getRouteParams()
+    const account = await http.getAccount()
     const { rocketId, rocketName, rocketImage, rocketPrice } = await http.getBody()
     const useCase = new AcquireRocketUseCase(this.usersRepository)
     const user = await useCase.execute({
-      userId,
+      userId: String(account.id),
       rocketId,
       rocketName,
       rocketImage,

@@ -1,38 +1,15 @@
-import { notFound } from 'next/navigation'
-
-import { SupabaseServerClient } from '@/rest/supabase/clients/SupabaseServerClient'
-import { SupabaseProfileService } from '@/rest/supabase/services'
-
+import type { NextParams } from '@/rpc/next/types'
 import { ProfilePage } from '@/ui/profile/widgets/pages/Profile'
+import { profileActions } from '@/rpc/next-safe-action'
 
-export const dynamic = 'force-dynamic'
+const Profile = async ({ params }: NextParams<'userSlug'>) => {
+  const response = await profileActions.accessProfilePage({
+    userSlug: params.userSlug,
+  })
+  if (!response?.data) return
+  const userDto = response.data
 
-type ProfilePageProps = {
-  params: { userSlug: string }
+  return <ProfilePage userDto={userDto} />
 }
 
-export default async function Profile({ params }: ProfilePageProps) {
-  const supabase = SupabaseServerClient()
-  const usersService = SupabaseProfileService(supabase)
-  const userResponse = await usersService.fetchUserBySlug(params.userSlug)
-
-  if (userResponse.isFailure) {
-    return notFound()
-  }
-  const userDto = userResponse.body
-
-  const achievementsService = SupabaseProfileService(supabase)
-  const unlockedAchievementsResponse =
-    await achievementsService.fetchUnlockedAchievements(String(userDto.id))
-
-  if (unlockedAchievementsResponse.isFailure) {
-    unlockedAchievementsResponse.throwError()
-  }
-  const unlockedAchievementsDto = unlockedAchievementsResponse.body
-
-// (Line removed)
-
-  return (
-    <ProfilePage userDto={userDto} unlockedAchievementsDto={unlockedAchievementsDto} />
-  )
-}
+export default Profile

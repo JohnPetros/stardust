@@ -29,4 +29,8 @@ export class IdsList {
   get dto() {
     return this.ids.map((id) => id.value)
   }
+
+  get isEmpty(): Logical {
+    return Logical.create(this.ids.length === 0)
+  }
 }

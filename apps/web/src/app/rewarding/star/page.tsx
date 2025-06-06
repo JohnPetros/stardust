@@ -10,8 +10,9 @@ export default async function Page() {
   )
   if (!rewardsPayloadCookie?.data) return notFound()
 
-  const rewardsPayloadDto = JSON.parse(rewardsPayloadCookie.data)
-  const response = await rewardingActions.rewardForStarCompletion(rewardsPayloadDto)
+  const rewardsPayload = JSON.parse(rewardsPayloadCookie.data)
+  const response =
+    await rewardingActions.accessRewardForStarCompletionPage(rewardsPayload)
   if (!response?.data) notFound()
 
   const {

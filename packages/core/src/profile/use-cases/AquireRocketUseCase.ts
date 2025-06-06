@@ -29,7 +29,7 @@ export class AquireRocketUseCase implements UseCase<Request, Response> {
     }
     const rocket = RocketAggregate.create({ id: rocketId, entity })
 
-    user.buyRocket(rocket, Integer.create(rocketPrice))
+    user.acquireRocket(rocket, Integer.create(rocketPrice))
     await this.repository.addAcquiredRocket(rocket.id, Id.create(userId))
     return user.dto
   }

@@ -13,6 +13,7 @@
     "./global/constants": "./src/modules/global/constants/index.ts",
     "./challenging/schemas": "./src/modules/challenging/schemas/index.ts",
     "./challenging/types": "./src/modules/challenging/types/index.ts",
+    "./profile/schemas": "./src/modules/profile/index.ts",
     "./factories": "./src/factories/index.ts"
   },
   "imports": {

@@ -2,23 +2,56 @@ import { CACHE } from '@/constants'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 import { Challenge } from '@stardust/core/challenging/entities'
 import type { TabListSorter } from '../../TabListSorter'
-import { useApi } from '@/ui/global/hooks/useApi'
+import {
+  IdsList,
+  Text,
+  ListingOrder,
+  OrdinalNumber,
+  Id,
+} from '@stardust/core/global/structures'
+import {
+  ChallengeCompletion,
+  ChallengeDifficulty,
+} from '@stardust/core/challenging/structures'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 
-const CHALLENGES_PER_PAGE = 10
+const CHALLENGES_PER_PAGE = OrdinalNumber.create(10)
 
-export function useChallengesListTab(tabListSorter: TabListSorter, userId: string) {
-  const api = useApi()
-
+export function useChallengesListTab(
+  service: ChallengingService,
+  tabListSorter: TabListSorter,
+  userId: string,
+) {
   async function fetchChallengesList(page: number) {
-    const response = await api.fetchChallengesList({
-      page,
-      title: '',
+    const response = await service.fetchChallengesList({
+      page: OrdinalNumber.create(page),
       itemsPerPage: CHALLENGES_PER_PAGE,
-      categoriesIds: [],
-      difficultyLevel: 'all',
-      upvotesCountOrder: tabListSorter === 'date' ? 'descending' : 'all',
-      postOrder: tabListSorter === 'upvotesCount' ? 'descending' : 'all',
-      userId,
+      title: Text.create(''),
+      categoriesIds: IdsList.create([]),
+      difficulty: ChallengeDifficulty.create('any'),
+      completionStatus: ChallengeCompletion.create('any'),
+      upvotesCountOrder: ListingOrder.create(
+        tabListSorter === 'date' ? 'descending' : 'any',
+      ),
+      postingOrder: ListingOrder.create(
+        tabListSorter === 'upvotesCount' ? 'descending' : 'any',
+      ),
+      userId: Id.create(userId),
+    })
+    console.log({
+      page: OrdinalNumber.create(page),
+      itemsPerPage: CHALLENGES_PER_PAGE,
+      title: Text.create(''),
+      categoriesIds: IdsList.create([]),
+      difficulty: ChallengeDifficulty.create('any'),
+      completionStatus: ChallengeCompletion.create('any'),
+      upvotesCountOrder: ListingOrder.create(
+        tabListSorter === 'date' ? 'descending' : 'any',
+      ),
+      postingOrder: ListingOrder.create(
+        tabListSorter === 'upvotesCount' ? 'descending' : 'any',
+      ),
+      userId: Id.create(userId),
     })
     if (response.isFailure) response.throwError()
     return response.body
@@ -27,7 +60,7 @@ export function useChallengesListTab(tabListSorter: TabListSorter, userId: strin
   const { data, isLoading, isRecheadedEnd, nextPage } = usePaginatedCache({
     key: CACHE.keys.userChallengesList,
     fetcher: fetchChallengesList,
-    itemsPerPage: CHALLENGES_PER_PAGE,
+    itemsPerPage: CHALLENGES_PER_PAGE.value,
     isInfinity: true,
     shouldRefetchOnFocus: false,
     dependencies: [tabListSorter],

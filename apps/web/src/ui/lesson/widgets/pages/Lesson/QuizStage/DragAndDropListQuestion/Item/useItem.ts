@@ -18,7 +18,7 @@ export function useItem({ label, isActive, isDragging }: UseSortableItemProps) {
   const { quiz } = getQuizSlice()
 
   const marginLeft = useMemo(() => {
-    const labelText = Text.create(label)
+    const labelText = Text.create(label ?? '')
     const tabsCount = labelText.countCharacters('\t')
 
     return tabsCount.multiply(Integer.create(12)).value

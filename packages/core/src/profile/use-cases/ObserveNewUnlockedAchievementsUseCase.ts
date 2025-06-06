@@ -1,80 +1,76 @@
-import { User } from '../../global/domain/entities'
-import { Achievement } from '../domain/entities'
-import type { UseCase } from '../../global/interfaces'
-import type { ProfileService } from '../interfaces'
-import type { UserDto } from '../domain/entities/dtos'
+import { Id } from '#global/domain/structures/Id'
+import type { UseCase } from '#global/interfaces/index'
+import type { AchievementDto, UserDto } from '../domain/entities/dtos'
+import type { AchievementsRepository, UsersRepository } from '../interfaces'
+import type { User, Achievement } from '../domain/entities/index'
+import { UserNotFoundError } from '../errors'
+import { Logical } from '#global/domain/structures/Logical'
 
-type Response = Promise<{
-  newUnlockedAchievements: Achievement[]
-  user: User
-}>
+type Response = Promise<AchievementDto[]>
 
 type Request = {
-  userDto: UserDto
+  userId: string
 }
 
 export class ObserveNewUnlockedAchievementsUseCase implements UseCase<Request, Response> {
-  private profileService: ProfileService
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private readonly achievementsRepository: AchievementsRepository,
+  ) {}
 
-  constructor(profileService: ProfileService) {
-    this.profileService = profileService
-  }
+  async execute({ userId }: Request) {
+    const user = await this.findUser(userId)
+    const achievements = await this.achievementsRepository.findAll()
 
-  async execute({ userDto }: Request) {
-    const response = await this.profileService.fetchAchievements()
-    if (response.isFailure) response.throwError()
-
-    const user = User.create(userDto)
-    const achievements = response.body.map(Achievement.create)
-
-    const newUnlockedAchievements = achievements.filter((achievement) =>
-      this.isNewUnlockedAchievement(achievement, user),
+    const newUnlockedAchievements = achievements.filter(
+      (achievement) => this.isNewUnlockedAchievement(achievement, user).isTrue,
     )
 
-    for (const { id } of newUnlockedAchievements) {
-      const unlockedAchievementResponse =
-        await this.profileService.saveUnlockedAchievement(id.value, user.id.value)
-
-      if (unlockedAchievementResponse.isFailure) {
-        unlockedAchievementResponse.throwError()
+    for (const achievement of newUnlockedAchievements) {
+      if (user.hasUnlockedAchievement(achievement.id).isFalse) {
+        await Promise.all([
+          this.usersRepository.addUnlockedAchievement(achievement.id, user.id),
+          this.usersRepository.addRescuableAchievement(achievement.id, user.id),
+        ])
+        user.unlockAchievement(achievement.id)
       }
-
-      const rescuableAchievementResponse =
-        await this.profileService.saveRescuableAchievement(id.value, user.id.value)
-
-      if (rescuableAchievementResponse.isFailure) {
-        rescuableAchievementResponse.throwError()
-      }
-
-      user.unlockAchievement(id)
     }
 
-    return {
-      newUnlockedAchievements,
-      user,
-    }
+    return newUnlockedAchievements.map((achievement) => achievement.dto)
   }
 
-  private isNewUnlockedAchievement(achievement: Achievement, user: User) {
+  private isNewUnlockedAchievement(achievement: Achievement, user: User): Logical {
     const isUnlocked = user.hasUnlockedAchievement(achievement.id)
 
-    if (isUnlocked.isTrue) return false
+    if (isUnlocked.isTrue) return Logical.createAsFalse()
 
     switch (achievement.metric.value) {
       case 'unlockedStarsCount':
-        return user.unlockedStarsCount.value >= achievement.requiredCount.value
+        return user.unlockedStarsCount.isGreaterThanOrEqualTo(achievement.requiredCount)
       case 'completedPlanetsCount':
-        return user.completedPlanetsCount.value >= achievement.requiredCount.value
+        return user.completedPlanetsCount.isGreaterThanOrEqualTo(
+          achievement.requiredCount,
+        )
       case 'acquiredRocketsCount':
-        return user.acquiredRocketsCount.value >= achievement.requiredCount.value
+        return user.acquiredRocketsCount.isGreaterThanOrEqualTo(achievement.requiredCount)
       case 'completedChallengesCount':
-        return user.completedChallengesCount.value >= achievement.requiredCount.value
+        return user.completedChallengesCount.isGreaterThanOrEqualTo(
+          achievement.requiredCount,
+        )
       case 'xp':
-        return user.xp.value >= achievement.requiredCount.value
+        return user.xp.isGreaterThanOrEqualTo(achievement.requiredCount)
       case 'streak':
-        return user.streak.value >= achievement.requiredCount.value
+        return user.streak.isGreaterThanOrEqualTo(achievement.requiredCount)
       default:
-        return false
+        return Logical.createAsFalse()
     }
+  }
+
+  private async findUser(userId: string) {
+    const user = await this.usersRepository.findById(Id.create(userId))
+    if (!user) {
+      throw new UserNotFoundError()
+    }
+    return user
   }
 }

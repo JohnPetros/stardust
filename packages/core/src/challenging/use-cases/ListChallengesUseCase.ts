@@ -1,41 +1,57 @@
-import type { ChallengeCompletionStatus, ChallengesListParams } from '../domain/types'
-import type { ChallengeDto } from '../domain/entities/dtos'
-import type { ListParam } from '../../global/domain/types'
-import { User } from '../../global/domain/entities'
-import { Challenge } from '../domain/entities'
-import { PaginationResponse } from '../../global/responses'
-import type { ChallengingService } from '../interfaces'
-import type { UserDto } from '#profile/domain/entities/dtos/UserDto'
 import type { UseCase } from '#global/interfaces/UseCase'
+import { IdsList } from '#global/domain/structures/IdsList'
+import { ListingOrder } from '#global/domain/structures/ListingOrder'
+import { Id, Text, OrdinalNumber } from '#global/domain/structures/index'
+import type { ChallengeDto } from '../domain/entities/dtos'
+import type { Challenge } from '../domain/entities'
+import { ChallengeCompletion, ChallengeDifficulty } from '../domain/structures'
+import { PaginationResponse } from '../../global/responses'
+import type { ChallengesRepository } from '../interfaces'
 
 type Request = {
-  userDto: UserDto
-  listParams: Omit<ChallengesListParams, 'postOrder' | 'upvotesCountOrder' | 'userId'>
-  completionStatus: ListParam<ChallengeCompletionStatus>
+  userCompletedChallengesIds: string[]
+  page: number
+  itemsPerPage: number
+  title: string
+  categoriesIds: string[]
+  difficulty: string
+  upvotesCountOrder: string
+  postingOrder: string
+  completionStatus: string
+  userId?: string
 }
 type Response = Promise<PaginationResponse<ChallengeDto>>
 
 export class ListChallengesUseCase implements UseCase<Request, Response> {
-  constructor(private readonly challengingService: ChallengingService) {}
+  constructor(private readonly repository: ChallengesRepository) {}
 
-  async execute({ userDto, completionStatus, listParams }: Request) {
-    const user = User.create(userDto)
+  async execute(request: Request) {
+    const completedChallengesIds = IdsList.create(request.userCompletedChallengesIds)
 
-    const challengesPagination = await this.fetchChallengesList({
-      ...listParams,
-      postOrder: 'all',
-      upvotesCountOrder: 'all',
-      userId: null,
+    const response = await this.repository.findMany({
+      categoriesIds: IdsList.create(request.categoriesIds),
+      difficulty: ChallengeDifficulty.create(request.difficulty),
+      title: Text.create(request.title),
+      upvotesCountOrder: ListingOrder.create(request.upvotesCountOrder),
+      postingOrder: ListingOrder.create(request.postingOrder),
+      userId: request.userId ? Id.create(request.userId) : null,
+      page: OrdinalNumber.create(request.page),
+      itemsPerPage: OrdinalNumber.create(request.itemsPerPage),
+      completionStatus: ChallengeCompletion.create(request.completionStatus),
     })
-    let challenges = challengesPagination.items.map(Challenge.create)
+    let challenges = response.challenges
 
-    challenges = this.filterChallenges(completionStatus, challenges, user)
-
+    challenges = this.filterChallenges(
+      ChallengeCompletion.create(request.completionStatus),
+      challenges,
+      completedChallengesIds,
+      request.userId ? Id.create(request.userId) : null,
+    )
     challenges = this.orderChallengesByDifficultyLevel(challenges)
 
     return new PaginationResponse(
       challenges.map((challenge) => challenge.dto),
-      challengesPagination.totalItemsCount,
+      response.totalChallengesCount,
     )
   }
 
@@ -54,23 +70,24 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
   }
 
   private filterChallenges(
-    completionStatus: ChallengeCompletionStatus | 'all',
+    challengeCompletion: ChallengeCompletion,
     challenges: Challenge[],
-    user: User,
+    completedChallengesIds: IdsList,
+    userId: Id | null,
   ): Challenge[] {
-    switch (completionStatus) {
+    switch (challengeCompletion.value) {
       case 'completed':
         return challenges.filter((challenge) => {
-          const isCompleted = user.hasCompletedChallenge(challenge.id)
-          if (challenge.author.isEqualTo(user).isTrue) {
+          const isCompleted = completedChallengesIds.includes(challenge.id)
+          if (challenge.author.id.value === userId?.value) {
             return isCompleted.isTrue
           }
           return isCompleted.isTrue && challenge.isPublic.isTrue
         })
       case 'not-completed':
         return challenges.filter((challenge) => {
-          const isCompleted = user.hasCompletedChallenge(challenge.id)
-          if (challenge.author.isEqualTo(user).isTrue) {
+          const isCompleted = completedChallengesIds.includes(challenge.id)
+          if (challenge.author.id.value === userId?.value) {
             return isCompleted.isFalse
           }
           return isCompleted.isFalse && challenge.isPublic.isTrue
@@ -78,11 +95,5 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
       default:
         return challenges
     }
-  }
-
-  private async fetchChallengesList(params: ChallengesListParams) {
-    const response = await this.challengingService.fetchChallengesList(params)
-    if (response.isFailure) response.throwError()
-    return response.body
   }
 }

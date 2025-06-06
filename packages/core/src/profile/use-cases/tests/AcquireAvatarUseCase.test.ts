@@ -1,27 +1,28 @@
-import { AcquireAvatarUseCase } from '../AcquireAvatarUseCase'
-import type { UsersRepository } from '../../interfaces'
 import { mock, type Mock } from 'ts-jest-mocker'
+
+import { Integer } from '#global/domain/structures/Integer'
 import { UsersFaker } from '#profile/domain/entities/fakers/UsersFaker'
 import { AvatarAggregatesFaker } from '#profile/domain/aggregates/fakers/AvatarAggregatesFaker'
 import { UserNotFoundError } from '#profile/errors/UserNotFoundError'
-import { Integer } from '#global/domain/structures/Integer'
+import { AcquireAvatarUseCase } from '../AcquireAvatarUseCase'
+import type { UsersRepository } from '../../interfaces'
 
 describe('Acquire Avatar Use Case', () => {
-  let usersRepository: Mock<UsersRepository>
+  let repository: Mock<UsersRepository>
   let useCase: AcquireAvatarUseCase
 
   beforeEach(() => {
-    usersRepository = mock<UsersRepository>()
-    usersRepository.findById.mockImplementation()
-    usersRepository.replace.mockImplementation()
-    usersRepository.addAcquiredAvatar.mockImplementation()
-    useCase = new AcquireAvatarUseCase(usersRepository)
+    repository = mock<UsersRepository>()
+    repository.findById.mockImplementation()
+    repository.replace.mockImplementation()
+    repository.addAcquiredAvatar.mockImplementation()
+    useCase = new AcquireAvatarUseCase(repository)
   })
 
   it('should throw an error if the user is not found', () => {
     const user = UsersFaker.fake()
     const avatar = AvatarAggregatesFaker.fake()
-    usersRepository.findById.mockResolvedValue(null)
+    repository.findById.mockResolvedValue(null)
 
     expect(
       useCase.execute({
@@ -34,12 +35,24 @@ describe('Acquire Avatar Use Case', () => {
     ).rejects.toThrow(UserNotFoundError)
   })
 
-  it('should add the acquire avatar to the repository', async () => {
-    const user = UsersFaker.fake()
-    user.buyAvatar = jest.fn()
+  it('should add the acquire avatar to the repository only if the user can acquire the avatar and not has acquired it yet', async () => {
     const avatar = AvatarAggregatesFaker.fake()
-    const avatarPrice = Integer.create(0)
-    usersRepository.findById.mockResolvedValue(user)
+    let user = UsersFaker.fake({ coins: 100, acquiredAvatarsIds: [avatar.id.value] })
+    user.acquireAvatar = jest.fn()
+    repository.findById.mockResolvedValue(user)
+
+    await useCase.execute({
+      userId: user.id.value,
+      avatarId: avatar.id.value,
+      avatarName: avatar.name.value,
+      avatarImage: avatar.image.value,
+      avatarPrice: 101,
+    })
+
+    expect(repository.addAcquiredAvatar).toHaveBeenCalledTimes(0)
+
+    user = UsersFaker.fake({ coins: 100, acquiredAvatarsIds: [avatar.id.value] })
+    repository.findById.mockResolvedValue(user)
 
     await useCase.execute({
       userId: user.id.value,
@@ -49,7 +62,39 @@ describe('Acquire Avatar Use Case', () => {
       avatarPrice: 0,
     })
 
-    expect(user.buyAvatar).toHaveBeenCalledWith(avatar, avatarPrice)
-    expect(usersRepository.addAcquiredAvatar).toHaveBeenCalledWith(avatar, user.id)
+    expect(repository.addAcquiredAvatar).toHaveBeenCalledTimes(0)
+
+    user = UsersFaker.fake({ coins: 100, acquiredAvatarsIds: [] })
+    repository.findById.mockResolvedValue(user)
+
+    await useCase.execute({
+      userId: user.id.value,
+      avatarId: avatar.id.value,
+      avatarName: avatar.name.value,
+      avatarImage: avatar.image.value,
+      avatarPrice: 0,
+    })
+
+    expect(repository.addAcquiredAvatar).toHaveBeenCalledTimes(1)
+    expect(repository.addAcquiredAvatar).toHaveBeenCalledWith(avatar.id, user.id)
+  })
+
+  it('should try to acquire the avatar', async () => {
+    const avatar = AvatarAggregatesFaker.fake()
+    const user = UsersFaker.fake()
+    user.acquireAvatar = jest.fn()
+    const avatarPrice = Integer.create(100)
+    repository.findById.mockResolvedValue(user)
+
+    await useCase.execute({
+      userId: user.id.value,
+      avatarId: avatar.id.value,
+      avatarName: avatar.name.value,
+      avatarImage: avatar.image.value,
+      avatarPrice: avatarPrice.value,
+    })
+
+    expect(user.acquireAvatar).toHaveBeenCalledTimes(1)
+    expect(user.acquireAvatar).toHaveBeenCalledWith(avatar, avatarPrice)
   })
 })

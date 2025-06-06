@@ -2,3 +2,5 @@
 
 ### Fetch planets
 GET {{URL}}
+Authorization: Bearer {{JWT}}
+
