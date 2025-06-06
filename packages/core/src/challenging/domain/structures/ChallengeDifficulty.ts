@@ -17,6 +17,10 @@ export class ChallengeDifficulty {
       coins: 30,
       xp: 40,
     },
+    any: {
+      coins: 0,
+      xp: 0,
+    },
   }
 
   private constructor(readonly level: ChallengeDifficultyLevel) {}
@@ -39,6 +43,7 @@ export class ChallengeDifficulty {
       'easy',
       'medium',
       'hard',
+      'any',
     ])
 
     return true
@@ -58,5 +63,9 @@ export class ChallengeDifficulty {
 
   get isEasy(): Logical {
     return Logical.create(this.level === 'easy')
+  }
+
+  get isAny(): Logical {
+    return Logical.create(this.level === 'any')
   }
 }
