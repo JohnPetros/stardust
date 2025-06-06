@@ -1,1 +1,1 @@
-export { ObsverNewUnlockedAchievementsAction } from './ObserveNewUnlockedAchievementsAction'
+export { AccessProfilePageAction } from './AccessProfilePageAction'

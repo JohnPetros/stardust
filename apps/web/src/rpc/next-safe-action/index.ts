@@ -14,7 +14,7 @@ import { setCookie, getCookie, deleteCookie, hasCookie } from './cookieActions'
 import { accessEndingPage, fetchLessonStoryAndQuestions } from './lessonActions'
 import { accessStarPage } from './spaceActions'
 import { upvoteComment } from './forumActions'
-import { obsverNewUnlockedAchievements } from './profileActions'
+import { accessProfilePage } from './profileActions'
 import { getLastWeekRankingWinners } from './rankingActions'
 import { createSnippet, editSnippet } from './playgroundActions'
 import {
@@ -43,7 +43,7 @@ export const challengingActions = {
 
 export const playgroundActions = { createSnippet, editSnippet }
 
-export const profileActions = { obsverNewUnlockedAchievements }
+export const profileActions = { accessProfilePage }
 
 export const spaceActions = { accessStarPage }
 

@@ -1,3 +1,5 @@
-export type NextParams<Data = Record<string, string>> = {
-  params: Data
+export type NextParams<Params extends string> = {
+  params: {
+    [key in Params]: string
+  }
 }

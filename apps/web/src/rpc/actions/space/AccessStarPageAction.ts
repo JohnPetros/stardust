@@ -17,7 +17,6 @@ export const AccessStarPageAction = (
   return {
     async handle(call: Call<Request>) {
       const { starSlug } = call.getRequest()
-      console.log('starSlug', starSlug)
       const user = User.create(await call.getUser())
 
       const starResponse = await service.fetchStarBySlug(Slug.create(starSlug))
