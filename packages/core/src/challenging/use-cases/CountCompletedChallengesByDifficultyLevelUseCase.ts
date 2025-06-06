@@ -1,51 +1,43 @@
 import { Id, Percentage } from '#global/domain/structures/index'
-import { ChallengeDifficulty } from '../domain/structures'
-import type { UserDto } from '#profile/domain/entities/dtos/index'
+import type { ChallengeDifficulty } from '../domain/structures'
 import type { UseCase } from '#global/interfaces/index'
 import type {
   ChallengeDifficultyLevel,
   CompletedChallengesCountByDifficultyLevel,
 } from '../domain/types'
-import type { ChallengingService } from '../interfaces'
-import { User } from '#profile/domain/entities/index'
+import type { ChallengesRepository } from '../interfaces'
 
 type Challenge = { id: Id; difficulty: ChallengeDifficulty }
+
+type Request = {
+  userId: string
+  userCompletedChallengesIds: string[]
+}
 
 type Response = Promise<CompletedChallengesCountByDifficultyLevel>
 
 export class CountCompletedChallengesByDifficultyLevelUseCase
-  implements UseCase<UserDto, Response>
+  implements UseCase<Request, Response>
 {
-  constructor(private readonly challengesService: ChallengingService) {}
+  constructor(private readonly repository: ChallengesRepository) {}
 
-  async execute(userDto: UserDto) {
-    const user = User.create(userDto)
-
-    const response = await this.challengesService.fetchCompletableChallenges(user.id)
-
-    if (response.isFailure) {
-      response.throwError()
-    }
-
-    const allChallenges = response.body.map((challenge) => ({
-      id: Id.create(challenge.id),
-      difficulty: ChallengeDifficulty.create(challenge.difficulty),
-    }))
+  async execute({ userId, userCompletedChallengesIds }: Request) {
+    const challenges = await this.repository.findAllByNotAuthor(Id.create(userId))
 
     const easyChallenges = this.calculateCompletedChallengesCountByDifficulty(
-      allChallenges,
+      challenges,
       'easy',
-      user,
+      userCompletedChallengesIds,
     )
     const mediumChallenges = this.calculateCompletedChallengesCountByDifficulty(
-      allChallenges,
+      challenges,
       'medium',
-      user,
+      userCompletedChallengesIds,
     )
     const hardChallenges = this.calculateCompletedChallengesCountByDifficulty(
-      allChallenges,
+      challenges,
       'hard',
-      user,
+      userCompletedChallengesIds,
     )
 
     return {
@@ -76,16 +68,19 @@ export class CountCompletedChallengesByDifficultyLevelUseCase
     )
   }
 
-  private filterChallengesByCompletitionState(challenges: Challenge[], user: User) {
-    return challenges.filter(
-      (challenge) => user.hasCompletedChallenge(challenge.id).isTrue,
+  private filterChallengesByCompletitionState(
+    challenges: Challenge[],
+    userCompletedChallengesIds: string[],
+  ) {
+    return challenges.filter((challenge) =>
+      userCompletedChallengesIds.includes(challenge.id.value),
     )
   }
 
   private calculateCompletedChallengesCountByDifficulty(
     allChallenges: Challenge[],
     difficulty: ChallengeDifficultyLevel,
-    user: User,
+    userCompletedChallengesIds: string[],
   ) {
     const challenges = this.filterChallengesByDifficultyLevel(allChallenges, difficulty)
 
@@ -97,7 +92,10 @@ export class CountCompletedChallengesByDifficultyLevelUseCase
       }
     }
 
-    const completedChallenges = this.filterChallengesByCompletitionState(challenges, user)
+    const completedChallenges = this.filterChallengesByCompletitionState(
+      challenges,
+      userCompletedChallengesIds,
+    )
 
     const absolute = completedChallenges.length
     const percentage = Percentage.create(completedChallenges.length, challenges.length)
