@@ -7,3 +7,4 @@ export { VerifyUserEmailInUseController } from './VerifyUserEmailInUseController
 export { RewardUserForStarCompletionController } from './RewardUserForStarCompletionController'
 export { RewardUserForStarChallengeCompletionController } from './RewardUserForStarChallengeCompletionController'
 export { RewardUserForChallengeCompletionController } from './RewardUserForChallengeCompletionController'
+export { AppendUserCompletedChallengesIdsToBodyController } from './AppendUserCompletedChallengesIdsToBodyController'
