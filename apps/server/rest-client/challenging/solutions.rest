@@ -1,0 +1,15 @@
+@URL = {{BASE_URL}}/challenging/solutions
+@CHALLENGE_ID = "challenge-id"
+@SOLUTION_SLUG = 10-minutes-to-build-a-simple-web-app-with-react-and-nodejs
+
+### Fetch solutions list
+GET {{URL}}
+?page=1
+&itemsPerPage=25
+&title=
+&sorter=date
+Authorization: Bearer {{JWT}}
+
+### Fetch solution by slug
+GET {{URL}}/{{SOLUTION_SLUG}}
+Authorization: Bearer {{JWT}}
