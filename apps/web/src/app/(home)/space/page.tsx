@@ -3,7 +3,7 @@ import { SpaceProvider } from '@/ui/space/contexts/SpaceContext'
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 import { SpaceService } from '@/rest/services/SpaceService'
 
-export default async function Space() {
+export const Space = async () => {
   const restClient = await NextServerRestClient({ isCacheEnabled: true })
   const spaceService = SpaceService(restClient)
   const response = await spaceService.fetchPlanets()
@@ -15,3 +15,5 @@ export default async function Space() {
     </SpaceProvider>
   )
 }
+
+export default Space

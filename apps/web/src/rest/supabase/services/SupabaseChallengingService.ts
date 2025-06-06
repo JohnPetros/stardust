@@ -1,5 +1,5 @@
 import { RestResponse, PaginationResponse } from '@stardust/core/global/responses'
-import type { Id } from '@stardust/core/global/structures'
+import type { Id, Slug } from '@stardust/core/global/structures'
 import type { ChallengesListParams } from '@stardust/core/challenging/types'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import type { ChallengeCategoryDto } from '@stardust/core/challenging/entities/dtos'
@@ -35,11 +35,11 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
       return new RestResponse({ body: challengeDto })
     },
 
-    async fetchChallengeBySlug(challengeSlug: string) {
+    async fetchChallengeBySlug(challengeSlug: Slug) {
       const { data, error, status } = await supabase
         .from('challenges_view')
         .select('*')
-        .eq('slug', challengeSlug)
+        .eq('slug', challengeSlug.value)
         .single()
 
       if (error) {
@@ -53,6 +53,10 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
       const challengeDto = supabaseChallengeMapper.toDto(data)
 
       return new RestResponse({ body: challengeDto })
+    },
+
+    async fetchCompletedChallengesByDifficultyLevel() {
+      throw new Error('Not implemented')
     },
 
     async fetchSolutionById(solutionId) {
@@ -125,36 +129,12 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
       return new RestResponse({ body: supabaseChallengeMapper.toDto(data) })
     },
 
-    async fetchCompletableChallenges(userId: Id) {
-      const { data, error, status } = await supabase
-        .from('challenges')
-        .select('id, difficulty_level')
-        .neq('user_id', userId.value)
-
-      if (error) {
-        return SupabasePostgrestError(
-          error,
-          'Erro ao buscar desafios completáveis',
-          status,
-        )
-      }
-
-      return new RestResponse({
-        body: data.map(({ id, difficulty_level }) => {
-          return {
-            id,
-            difficulty: difficulty_level,
-          }
-        }),
-      })
-    },
-
     async fetchChallengesList({
       page,
       itemsPerPage,
       categoriesIds,
       difficultyLevel,
-      postOrder,
+      postingOrder,
       upvotesCountOrder,
       title,
       userId,
@@ -176,8 +156,8 @@ export const SupabaseChallengingService = (supabase: Supabase): ChallengingServi
         query = query.eq('difficulty_level', difficultyLevel)
       }
 
-      if (postOrder !== 'all') {
-        query = query.order('created_at', { ascending: postOrder === 'ascending' })
+      if (postingOrder !== 'all') {
+        query = query.order('created_at', { ascending: postingOrder === 'ascending' })
       }
 
       if (upvotesCountOrder !== 'all') {
