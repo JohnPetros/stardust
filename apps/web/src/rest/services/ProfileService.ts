@@ -24,7 +24,7 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
     },
 
     async fetchUnlockedAchievements(userId: Id) {
-      return await restClient.get(`/profile/achievements/${userId.value}/unlocked`)
+      return await restClient.get(`/profile/achievements/${userId.value}`)
     },
 
     async updateUser(user: User) {
