@@ -1,21 +1,14 @@
-'use client'
-
 import { useState } from 'react'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useRouter } from '@/ui/global/hooks/useRouter'
-
 import type { TabContent } from './TabContent'
 import type { TabListSorter } from './TabListSorter'
 
-export function useCraftsTable() {
+export function useCraftsTable(currentRoute: string, userSlug: string) {
   const [activeTabContent, setActiveTabContent] =
     useState<TabContent>('challengesListTab')
   const [activeTabListSorter, setActiveTabListSorter] = useState<TabListSorter>('date')
-
-  const { user } = useAuthContext()
-  const { currentRoute } = useRouter()
-  const isAuthUser = currentRoute.split('/').slice(-1)[0] === user?.slug.value
+  const isAccountUser = currentRoute.split('/').slice(-1)[0] === userSlug
 
   function handleTabContentChange(tabContent: TabContent) {
     setActiveTabContent(tabContent)
@@ -28,7 +21,7 @@ export function useCraftsTable() {
   return {
     activeTabContent,
     activeTabListSorter,
-    isAuthUser,
+    isAccountUser,
     handleTabContentChange,
     handleTabListSorterChange,
   }

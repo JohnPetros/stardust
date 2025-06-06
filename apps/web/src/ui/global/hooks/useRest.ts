@@ -2,13 +2,18 @@ import { HTTP_HEADERS } from '@stardust/core/global/constants'
 
 import { CLIENT_ENV } from '@/constants'
 import { NextRestClient } from '@/rest/next/NextRestClient'
-import { AuthService, ProfileService, SpaceService, ShopService } from '@/rest/services'
+import {
+  AuthService,
+  ProfileService,
+  SpaceService,
+  ShopService,
+  ChallengingService,
+} from '@/rest/services'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
-const restClient = NextRestClient({ isCacheEnabled: false })
-restClient.setBaseUrl(CLIENT_ENV.serverAppUrl)
-
 export function useRest() {
+  const restClient = NextRestClient({ isCacheEnabled: false })
+  restClient.setBaseUrl(CLIENT_ENV.serverAppUrl)
   const { accessToken } = useAuthContext()
 
   if (accessToken) {
@@ -20,5 +25,6 @@ export function useRest() {
     profileService: ProfileService(restClient),
     spaceService: SpaceService(restClient),
     shopService: ShopService(restClient),
+    challengingService: ChallengingService(restClient),
   }
 }

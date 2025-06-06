@@ -431,7 +431,7 @@
       "../../packages/core/src/global/interfaces/UseCase.ts",
       "../../packages/core/src/global/domain/types/CodeInput.ts",
       "../../packages/core/src/global/domain/types/TextBlockType.ts",
-      "../../packages/core/src/global/domain/types/ListOrder.ts",
+      "../../packages/core/src/global/domain/types/ListingOrder.ts",
       "../../packages/core/src/global/domain/types/SortingParams.ts",
       "../../packages/core/src/global/domain/types/PaginationParams.ts",
       "../../packages/core/src/global/domain/types/FilteringParams.ts",

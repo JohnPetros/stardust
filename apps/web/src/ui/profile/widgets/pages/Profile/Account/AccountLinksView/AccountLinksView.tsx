@@ -1,27 +1,21 @@
-'use client'
-
 import { motion } from 'framer-motion'
 
 import { ROUTES } from '@/constants'
 import { Link } from '@/ui/auth/widgets/components/Link'
 import { Icon } from '@/ui/global/widgets/components/Icon'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { Tooltip } from '@/ui/global/widgets/components/Tooltip'
 
-type AccountLinksProps = {
-  id: string
+type Props = {
+  isAccountUser: boolean
+  accountSlug: string
 }
 
-export function AccountLinks({ id }: AccountLinksProps) {
-  const { user } = useAuthContext()
-
-  const isAuthUser = id === user?.id.value
-
-  if (isAuthUser)
+export const AccountLinksView = ({ isAccountUser, accountSlug }: Props) => {
+  if (isAccountUser)
     return (
       <ul className='flex items-center gap-3'>
         <li>
-          <Link href={ROUTES.profile.settings(user.slug.value)}>
+          <Link href={ROUTES.profile.settings(accountSlug)}>
             <Tooltip direction='top' content='Configurações'>
               <motion.div whileHover={{ rotate: '90deg' }}>
                 <Icon name='gear' className='text-green-500' />
