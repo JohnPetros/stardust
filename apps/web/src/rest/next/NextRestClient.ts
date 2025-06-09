@@ -31,6 +31,7 @@ export const NextRestClient = ({
 
   return {
     async get<Body>(route: string): Promise<RestResponse<Body>> {
+      console.log(Object.entries(queryParams))
       const response = await fetch(`${baseUrl}${addQueryParams(route, queryParams)}`, {
         ...requestInit,
         method: 'GET',
@@ -68,7 +69,6 @@ export const NextRestClient = ({
       }
 
       const data = await parseResponseJson(response)
-      this.clearQueryParams()
       return new RestResponse({ body: data, statusCode: response.status })
     },
 
@@ -84,7 +84,6 @@ export const NextRestClient = ({
       }
 
       const data = await parseResponseJson(response)
-      this.clearQueryParams()
       return new RestResponse({ body: data, statusCode: response.status })
     },
 
@@ -100,7 +99,6 @@ export const NextRestClient = ({
       }
 
       const data = await parseResponseJson(response)
-      this.clearQueryParams()
       return new RestResponse({ body: data, statusCode: response.status })
     },
 
@@ -114,7 +112,6 @@ export const NextRestClient = ({
         return await handleRestError<void>(response)
       }
 
-      this.clearQueryParams()
       return new RestResponse({ statusCode: response.status })
     },
 
@@ -136,8 +133,12 @@ export const NextRestClient = ({
       }
     },
 
-    setQueryParam(key: string, value: string): void {
-      queryParams[key] = value
+    setQueryParam(key: string, value: string | string[]): void {
+      if (Array.isArray(value)) {
+        queryParams[key.concat('[]')] = value.join(',')
+      } else {
+        queryParams[key] = value
+      }
     },
 
     clearQueryParams(): void {
