@@ -1,20 +1,20 @@
-import type { ListOrder } from '@stardust/core/global/types'
+import type { ListingOrder } from '@stardust/core/global/types'
 
 import * as Select from '@/ui/global/widgets/components/Select'
 import { usePriceOrderSelect } from './usePriceOrderSelect'
 
 type SortersProps = {
-  onPriceOrderChange: (listOrder: ListOrder) => void
+  onPriceOrderChange: (ListingOrder: ListingOrder) => void
 }
 
 export function PriceOrderSelect({ onPriceOrderChange }: SortersProps) {
-  const { priceOrder, handleListOrderSelectChange } =
+  const { priceOrder, handleListingOrderSelectChange } =
     usePriceOrderSelect(onPriceOrderChange)
 
   return (
     <div className='flex items-center gap-3'>
       <Select.Container
-        onValueChange={(value) => handleListOrderSelectChange(value as ListOrder)}
+        onValueChange={(value) => handleListingOrderSelectChange(value as ListingOrder)}
       >
         <Select.Trigger value={priceOrder} />
         <Select.Content>

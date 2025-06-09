@@ -1,12 +1,11 @@
 import type { UseCase } from '#global/interfaces/index'
-import { Integer } from '#global/domain/structures/index'
-import type { UserDto } from '../domain/entities/dtos'
-import type { ProfileService } from '../interfaces'
-import { User } from '../domain/entities'
+import { Id, Integer } from '#global/domain/structures/index'
+import type { UsersRepository } from '../interfaces'
 import type { WeekStatusValue } from '../domain/types'
+import { UserNotFoundError } from '../errors'
 
 type Request = {
-  userDto: UserDto
+  userId: string
   newXp: number
   newCoins: number
 }
@@ -18,15 +17,15 @@ type Response = Promise<{
 }>
 
 export class RewardUserUseCase implements UseCase<Request, Response> {
-  constructor(private profileService: ProfileService) {}
+  constructor(private repository: UsersRepository) {}
 
-  async execute({ userDto, newXp, newCoins }: Request) {
-    const user = User.create(userDto)
+  async execute({ userId, newXp, newCoins }: Request) {
+    const user = await this.repository.findById(Id.create(userId))
+    if (!user) throw new UserNotFoundError()
     user.earnXp(Integer.create(newXp))
     user.earnCoins(Integer.create(newCoins))
     const streakStatus = user.makeTodayStatusDone()
-    const respose = await this.profileService.updateUser(user)
-    if (respose.isFailure) respose.throwError()
+    await this.repository.replace(user)
 
     return {
       newLevel: user.level.didUp.isTrue ? user.level.value.number.value : null,

@@ -1,5 +1,6 @@
 import { StringValidation } from '../../libs'
 import { Integer } from './Integer'
+import { Logical } from './Logical'
 
 export class Text {
   private constructor(readonly value: string) {}
@@ -18,5 +19,9 @@ export class Text {
     }
 
     return Integer.create(count)
+  }
+
+  get isEmpty(): Logical {
+    return Logical.create(this.value.length === 0)
   }
 }

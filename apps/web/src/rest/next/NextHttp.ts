@@ -12,8 +12,8 @@ import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { CLIENT_ENV } from '@/constants'
 import type { NextParams } from '@/rpc/next/types'
 import { cookieActions } from '@/rpc/next-safe-action'
-import { SupabaseRouteHandlerClient } from '../supabase/clients'
-import { SupabaseAuthService, SupabaseProfileService } from '../supabase/services'
+import { NextServerRestClient } from './NextServerRestClient'
+import { AuthService, ProfileService } from '../services'
 
 type Cookie = {
   key: string
@@ -86,9 +86,9 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     },
 
     async getUser() {
-      const supabase = SupabaseRouteHandlerClient()
-      const authService = SupabaseAuthService(supabase)
-      const profileService = SupabaseProfileService(supabase)
+      const restClient = await NextServerRestClient()
+      const authService = AuthService(restClient)
+      const profileService = ProfileService(restClient)
 
       const authResponse = await authService.fetchAccount()
       if (authResponse.isFailure) authResponse.throwError()

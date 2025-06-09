@@ -239,7 +239,7 @@ export class SupabaseAuthService implements AuthService {
     } = await this.supabase.auth.getUser()
 
     if (error) {
-      switch (error?.code) {
+      switch (error.code) {
         case this.AUTH_ERROR_CODES.no_authorization:
           return new RestResponse<AccountDto>({
             errorMessage: 'Conta não autorizada',

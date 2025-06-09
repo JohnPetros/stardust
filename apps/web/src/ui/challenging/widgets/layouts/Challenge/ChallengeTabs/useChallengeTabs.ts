@@ -23,7 +23,7 @@ export function useChallengeTabs() {
     if (!user || !challenge || !craftsVislibility) return
 
     if (
-      user.canBuy(Integer.create(ChallengeCraftsVisibility.solutionsVisibilityPrice))
+      user.canAcquire(Integer.create(ChallengeCraftsVisibility.solutionsVisibilityPrice))
         .isFalse
     ) {
       toast.show('Você não possui moedas suficiente')

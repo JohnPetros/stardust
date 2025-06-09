@@ -6,9 +6,7 @@ import { useSupabaseContext } from '@/ui/global/contexts/SupabaseContext/hooks'
 
 import {
   SupabaseProfileService,
-  SupabaseAuthService,
   SupabaseShopService,
-  SupabaseSpaceService,
   SupabaseLessonService,
   SupabaseRankingService,
   SupabaseChallengingService,
@@ -23,8 +21,6 @@ export function useSupabaseApi() {
   const supabaseApi = useMemo(() => {
     return {
       ...SupabaseProfileService(supabase),
-      ...SupabaseAuthService(supabase),
-      ...SupabaseSpaceService(supabase),
       ...SupabaseShopService(supabase),
       ...SupabaseLessonService(supabase),
       ...SupabaseRankingService(supabase),

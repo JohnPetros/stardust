@@ -1,5 +1,3 @@
-'use client'
-
 import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
 
 export function useSpacePage() {

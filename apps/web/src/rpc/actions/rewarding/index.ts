@@ -1,3 +1,3 @@
-export { RewardForChallengeCompletionAction } from './RewardForChallengeCompletionAction'
-export { RewardForStarChallengeCompletionAction } from './RewardForStarChallengeCompletionAction'
-export { RewardForStarCompletionAction } from './RewardForStarCompletionAction'
+export { AccessStarRewardingPageAction } from './AccessStarRewardingPageAction'
+export { AccessStarChallengeRewardingPageAction } from './AccessStarChallengeRewardingPageAction'
+export { AccessChallengeRewardingPageAction } from './AccessChallengeRewardingPageAction'

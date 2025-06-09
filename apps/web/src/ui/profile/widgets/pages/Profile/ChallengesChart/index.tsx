@@ -1,43 +1,13 @@
-import type { CompletedChallengesCountByDifficultyLevel } from '@stardust/core/challenging/types'
+import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
+import { ChallengesChartView } from './ChallengesChartView'
+import { ChallengingService } from '@/rest/services'
 
-import { ROUTES } from '@/constants'
-import { NextRestClient } from '@/rest/next/NextRestClient'
-import { Legend } from './Legend'
-import { Chart } from './ApexChallengesChart'
-
-export async function ChallengesChart() {
-  const apiClient = NextRestClient({ isCacheEnabled: false })
-  const response = await apiClient.get<CompletedChallengesCountByDifficultyLevel>(
-    ROUTES.api.challenging.countByDifficultyLevel,
-  )
+export const ChallengesChart = async () => {
+  const restClient = await NextServerRestClient()
+  const service = ChallengingService(restClient)
+  const response = await service.fetchCompletedChallengesByDifficultyLevel()
   if (response.isFailure) response.throwError()
   const chartData = response.body
 
-  if (chartData)
-    return (
-      <div className='flex'>
-        <Chart size={280} chartData={chartData} />
-
-        <dl className='-ml-20 flex flex-col gap-3'>
-          <Legend
-            label='Fácil'
-            value={chartData.absolute.easy}
-            total={chartData.total.easy}
-            color='bg-green-500'
-          />
-          <Legend
-            label='Médio'
-            value={chartData.absolute.medium}
-            total={chartData.total.medium}
-            color='bg-yellow-400'
-          />
-          <Legend
-            label='Difícil'
-            value={chartData.absolute.hard}
-            total={chartData.total.hard}
-            color='bg-red-700'
-          />
-        </dl>
-      </div>
-    )
+  return <ChallengesChartView chartData={chartData} />
 }

@@ -1,16 +1,13 @@
-'use client'
-
 import { useEffect, useState } from 'react'
 
 import { useSiderbarContext } from '@/ui/profile/contexts/SidebarContext'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
-export function useHomeLayout() {
+export function useHomeLayout(notifyUserChanges: () => void) {
   const [isSidenavExpanded, setIsSidenavExpanded] = useState(false)
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
   const { isOpen, isAchievementsListVisible, toggle, setIsAchievementsListVisible } =
     useSiderbarContext()
-  const { notifyUserChanges } = useAuthContext()
+  const [hasNotifiedUserChanges, setHasNotifiedUserChanges] = useState(false)
 
   function toggleSidenav() {
     setIsSidenavExpanded(!isSidenavExpanded)
@@ -32,10 +29,17 @@ export function useHomeLayout() {
   }, [isTransitionVisible])
 
   useEffect(() => {
-    setTimeout(() => {
-      notifyUserChanges()
+    const timeout = setTimeout(() => {
+      if (!hasNotifiedUserChanges) {
+        notifyUserChanges()
+        setHasNotifiedUserChanges(true)
+      }
     }, 320)
-  }, [notifyUserChanges])
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [hasNotifiedUserChanges, notifyUserChanges])
 
   return {
     isSidenavExpanded,

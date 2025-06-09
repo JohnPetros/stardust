@@ -95,7 +95,7 @@ export class SupabaseUsersRepository
           users_upvoted_solutions(solution_id),
           users_upvoted_comments(comment_id)`,
       )
-      .eq('slug', slug)
+      .eq('slug', slug.value)
       .single()
 
     if (error && error.code === this.POSTGRES_ERROR_CODES.PGRST116) {
@@ -232,6 +232,48 @@ export class SupabaseUsersRepository
     const { error } = await this.supabase
       .from('users_unlocked_stars')
       .insert({ star_id: starId.value, user_id: userId.value })
+
+    if (error) throw new SupabasePostgreError(error)
+  }
+
+  async addUnlockedAchievement(achievementId: Id, userId: Id): Promise<void> {
+    const { error } = await this.supabase
+      .from('users_unlocked_achievements')
+      .insert({ achievement_id: achievementId.value, user_id: userId.value })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
+  async addRescuableAchievement(achievementId: Id, userId: Id): Promise<void> {
+    const { error } = await this.supabase
+      .from('users_rescuable_achievements')
+      .insert({ achievement_id: achievementId.value, user_id: userId.value })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
+  async removeRescuableAchievement(achievementId: Id, userId: Id): Promise<void> {
+    const { error } = await this.supabase
+      .from('users_rescuable_achievements')
+      .delete()
+      .match({
+        achievement_id: achievementId.value,
+        user_id: userId.value,
+      })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
+  async addCompletedChallenge(challengeId: Id, userId: Id): Promise<void> {
+    const { error } = await this.supabase
+      .from('users_completed_challenges')
+      .insert({ challenge_id: challengeId.value, user_id: userId.value })
 
     if (error) throw new SupabasePostgreError(error)
   }

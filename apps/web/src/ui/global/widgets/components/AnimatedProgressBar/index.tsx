@@ -21,7 +21,10 @@ const AnimatedProgressBarComponent = (
   { value, height, indicatorImage, onAnimationEnd }: ProgessBarProps,
   ref: ForwardedRef<AnimatedProgressBarRef>,
 ) => {
-  const { animation, fill, handleAnimationComplete } = useAnimatedProgressBar(value, onAnimationEnd)
+  const { animation, fill, handleAnimationComplete } = useAnimatedProgressBar(
+    value,
+    onAnimationEnd,
+  )
 
   useImperativeHandle(
     ref,
@@ -37,6 +40,7 @@ const AnimatedProgressBarComponent = (
     <Progress.Root
       data-testid={`progress:${value}%`}
       value={value}
+      max={100}
       className='flex w-full items-center rounded-lg bg-gray-400'
       style={{ height: height }}
     >

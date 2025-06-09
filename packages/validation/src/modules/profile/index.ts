@@ -1,0 +1,4 @@
+export { userSchema } from './userSchema'
+export { textsListSchema } from './textsListSchema'
+export { rocketAggregateSchema } from './rocketAggregateSchema'
+export { avatarAggregateSchema } from './avatarAggregateSchema'

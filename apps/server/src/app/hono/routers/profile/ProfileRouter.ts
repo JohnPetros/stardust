@@ -2,7 +2,6 @@ import { Hono } from 'hono'
 import { UsersRouter } from './UsersRouter'
 import { HonoRouter } from '../../HonoRouter'
 import { AchievementsRouter } from './AchievementsRouter'
-import { AuthMiddleware } from '../../middlewares'
 
 export class ProfileRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/profile')

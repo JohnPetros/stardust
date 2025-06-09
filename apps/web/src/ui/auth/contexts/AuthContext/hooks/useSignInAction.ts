@@ -7,16 +7,15 @@ import { ActionResponse } from '@stardust/core/global/responses'
 export function useSignInAction() {
   const { executeAsync } = useAction(authActions.signIn)
 
-  async function runSignInAction(
+  async function signIn(
     email: string,
     password: string,
   ): Promise<ActionResponse<AccountDto>> {
     const response = await executeAsync({ email, password })
-    if (response?.serverError) {
-      return new ActionResponse({ errorMessage: response.serverError })
-    }
-    return new ActionResponse({ data: response?.data })
+    return response?.serverError
+      ? new ActionResponse({ errorMessage: response.serverError })
+      : new ActionResponse({ data: response?.data })
   }
 
-  return { runSignInAction }
+  return { signIn }
 }

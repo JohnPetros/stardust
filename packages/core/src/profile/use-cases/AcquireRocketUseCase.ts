@@ -29,8 +29,15 @@ export class AcquireRocketUseCase implements UseCase<Request, Response> {
     }
     const rocket = RocketAggregate.create({ id: rocketId, entity })
 
-    user.buyRocket(rocket, Integer.create(rocketPrice))
-    await this.repository.addAcquiredRocket(rocket.id, Id.create(userId))
+    const canAcquireRocket = user
+      .canAcquire(Integer.create(rocketPrice))
+      .andNot(user.hasAcquiredRocket(rocket.id))
+
+    if (canAcquireRocket.isTrue) {
+      await this.repository.addAcquiredRocket(rocket.id, Id.create(userId))
+    }
+    user.acquireRocket(rocket, Integer.create(rocketPrice))
+    await this.repository.replace(user)
     return user.dto
   }
 }

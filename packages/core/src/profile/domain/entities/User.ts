@@ -2,7 +2,6 @@ import {
   type Email,
   type Id,
   type Name,
-  type Observer,
   type Slug,
   type IdsList,
   Integer,
@@ -16,7 +15,6 @@ import { UserFactory } from '#profile/factories/index'
 import type { AchievementMetricValue } from '../types'
 import { type Level, WeekStatus } from '../structures'
 import type { UserDto } from './dtos'
-import { AchievementAlreadyUnlockedError, StarAlreadyUnlockedError } from '../../errors'
 
 type UserProps = {
   avatar: AvatarAggregate
@@ -46,7 +44,6 @@ type UserProps = {
   lastWeekRankingPosition: RankingPosition | null
   hasCompletedSpace: Logical
   createdAt: Date
-  _observer?: Observer
 }
 
 export class User extends Entity<UserProps> {
@@ -55,22 +52,16 @@ export class User extends Entity<UserProps> {
   }
 
   unlockAchievement(achievementId: Id): void {
-    if (this.props.unlockedAchievementsIds.includes(achievementId).isTrue) {
-      throw new AchievementAlreadyUnlockedError()
+    if (this.props.unlockedAchievementsIds.includes(achievementId).isFalse) {
+      this.props.unlockedAchievementsIds.add(achievementId)
+      this.props.rescuableAchievementsIds.add(achievementId)
     }
-    this.props.unlockedAchievementsIds.add(achievementId)
-    this.props.rescuableAchievementsIds.add(achievementId)
-
-    this.notifyChanges()
   }
 
   unlockStar(starId: Id): void {
-    if (this.props.unlockedStarsIds.includes(starId).isTrue) {
-      throw new StarAlreadyUnlockedError()
+    if (this.props.unlockedStarsIds.includes(starId).isFalse) {
+      this.props.unlockedStarsIds.add(starId)
     }
-
-    this.props.unlockedStarsIds.add(starId)
-    this.notifyChanges()
   }
 
   rescueAchievement(achievementId: Id, achievementReward: Integer): void {
@@ -92,7 +83,6 @@ export class User extends Entity<UserProps> {
     this.props.level = this.level.up(this.xp, newXp)
     this.props.xp = this.props.xp.plus(newXp)
     this.props.weeklyXp = this.props.weeklyXp.plus(newXp)
-    this.notifyChanges()
   }
 
   earnLastWeekRankingPositionReward(): void {
@@ -102,35 +92,34 @@ export class User extends Entity<UserProps> {
     this.earnCoins(reward)
   }
 
-  canBuy(coins: Integer): Logical {
-    return Logical.create(this.props.coins.value >= coins.value)
+  canAcquire(coins: Integer): Logical {
+    return this.props.coins.isGreaterThanOrEqualTo(coins)
   }
 
-  buyRocket(rocket: RocketAggregate, rocketPrice: Integer): void {
-    if (this.hasAcquiredRocket(rocket.id)) {
+  acquireRocket(rocket: RocketAggregate, rocketPrice: Integer): void {
+    if (this.hasAcquiredRocket(rocket.id).isTrue) {
       this.selectRocket(rocket)
       return
     }
 
-    if (this.canBuy(rocketPrice).isTrue) {
+    if (this.canAcquire(rocketPrice).isTrue) {
       this.loseCoins(rocketPrice)
       this.selectRocket(rocket)
-      this.props.acquiredRocketsIds.add(rocket.id)
-      this.notifyChanges()
+      this.props.acquiredRocketsIds = this.props.acquiredRocketsIds.add(rocket.id)
     }
   }
 
-  buyAvatar(avatar: AvatarAggregate, avatarPrice: Integer): void {
-    if (this.hasAcquiredAvatar(avatar.id)) {
+  acquireAvatar(avatar: AvatarAggregate, avatarPrice: Integer): void {
+    console.log('hasAcquiredAvatar', this.hasAcquiredAvatar(avatar.id).isTrue)
+    if (this.hasAcquiredAvatar(avatar.id).isTrue) {
       this.selectAvatar(avatar)
       return
     }
 
-    if (this.canBuy(avatarPrice).isTrue) {
+    if (this.canAcquire(avatarPrice).isTrue) {
       this.loseCoins(avatarPrice)
       this.selectAvatar(avatar)
-      this.props.acquiredAvatarsIds.add(avatar.id)
-      this.notifyChanges()
+      this.props.acquiredAvatarsIds = this.props.acquiredAvatarsIds.add(avatar.id)
     }
   }
 
@@ -242,7 +231,9 @@ export class User extends Entity<UserProps> {
   }
 
   completeChallenge(challengeId: Id): void {
-    this.props.completedChallengesIds = this.props.completedChallengesIds.add(challengeId)
+    if (this.props.completedChallengesIds.includes(challengeId).isFalse) {
+      this.props.completedChallengesIds.add(challengeId)
+    }
   }
 
   updateRankingPosition(rankingPosition: Integer): void {
@@ -255,14 +246,6 @@ export class User extends Entity<UserProps> {
     this.props.tier = TierAggregate.create({
       id: tierId.value,
     })
-  }
-
-  private notifyChanges(): void {
-    if (this.props._observer) this.props._observer.callback()
-  }
-
-  set observer(observer: Observer) {
-    this.props._observer = observer
   }
 
   get canMakeTodayStatusDone(): Logical {
@@ -278,11 +261,11 @@ export class User extends Entity<UserProps> {
   }
 
   get acquiredRocketsCount() {
-    return this.props.acquiredRocketsIds.count.minus(Integer.create(1))
+    return this.props.acquiredRocketsIds.count
   }
 
   get acquiredAvatarsCount() {
-    return this.props.acquiredRocketsIds.count.minus(Integer.create(3))
+    return this.props.acquiredAvatarsIds.count
   }
 
   get unlockedAchievementsCount() {

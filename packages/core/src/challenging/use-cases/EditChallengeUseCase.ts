@@ -1,7 +1,7 @@
 import type { ChallengeDto } from '../domain/entities/dtos'
 import type { ChallengingService } from '../interfaces'
 import type { UseCase } from '#global/interfaces/UseCase'
-import type { Id } from '#global/domain/structures/Id'
+import type { Id, Slug } from '#global/domain/structures/index'
 import { Challenge } from '../domain/entities'
 
 type Request = {
@@ -18,7 +18,7 @@ export class EditChallengeUseCase implements UseCase<Request, Response> {
     await this.fetchChallengeById(challenge.id)
 
     if (challenge.title.value !== challengeDto.title) {
-      await this.fetchChallengeBySlug(challenge.slug.value)
+      await this.fetchChallengeBySlug(challenge.slug)
     }
 
     await this.deleteChallengeCategories(challenge.id)
@@ -39,7 +39,7 @@ export class EditChallengeUseCase implements UseCase<Request, Response> {
     if (response.isFailure) response.throwError()
   }
 
-  private async fetchChallengeBySlug(challengeSlug: string) {
+  private async fetchChallengeBySlug(challengeSlug: Slug) {
     const response = await this.challengingService.fetchChallengeBySlug(challengeSlug)
     if (response.isSuccessful) response.throwError()
   }

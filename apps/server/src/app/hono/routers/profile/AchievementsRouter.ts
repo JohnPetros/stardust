@@ -7,6 +7,7 @@ import { idSchema } from '@stardust/validation/global/schemas'
 import {
   FetchAllAchievementsController,
   FetchAllUnlockedAchievementsController,
+  ObserveNewUnlockedAchievementsController,
   RescueAchievementController,
 } from '@/rest/controllers/profile/achievements'
 import {
@@ -51,9 +52,34 @@ export class AchievementsRouter extends HonoRouter {
     )
   }
 
+  private observeNewUnlockedAchievementsRoute(): void {
+    this.router.post(
+      '/:userId/observe',
+      this.authMiddleware.verifyAuthentication,
+      zValidator(
+        'param',
+        z.object({
+          userId: idSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const supabase = http.getSupabase()
+        const achievementsRepository = new SupabaseAchievementsRepository(supabase)
+        const usersRepository = new SupabaseUsersRepository(supabase)
+        const controller = new ObserveNewUnlockedAchievementsController(
+          achievementsRepository,
+          usersRepository,
+        )
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   private rescueAchievementRoute(): void {
     this.router.put(
-      '/:userId/:achievementId',
+      '/:userId/:achievementId/rescue',
       this.authMiddleware.verifyAuthentication,
       zValidator(
         'param',
@@ -80,6 +106,7 @@ export class AchievementsRouter extends HonoRouter {
   registerRoutes(): Hono {
     this.fetchAchievementsRoute()
     this.fetchUnlockedAchievementsRoute()
+    this.observeNewUnlockedAchievementsRoute()
     this.rescueAchievementRoute()
     return this.router
   }

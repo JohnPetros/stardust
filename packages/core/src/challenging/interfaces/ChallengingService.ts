@@ -7,20 +7,21 @@ import type {
 import type {
   ChallengesListParams,
   ChallengeVote,
-  SolutionsListParams,
+  CompletedChallengesCountByDifficultyLevel,
 } from '../domain/types'
 import type { Challenge, ChallengeCategory, Solution } from '../domain/entities'
+import type { SolutionsListingParams } from '../domain/types'
 import type { PaginationResponse, RestResponse } from '#global/responses/index'
-import type { Id } from '#global/domain/structures/Id'
+import type { Id, Slug } from '#global/domain/structures/index'
 
 export interface ChallengingService {
   fetchChallengeById(challengeId: Id): Promise<RestResponse<ChallengeDto>>
-  fetchChallengeBySlug(challengeSlug: string): Promise<RestResponse<ChallengeDto>>
+  fetchChallengeBySlug(challengeSlug: Slug): Promise<RestResponse<ChallengeDto>>
+  fetchCompletedChallengesByDifficultyLevel(): Promise<
+    RestResponse<CompletedChallengesCountByDifficultyLevel>
+  >
   fetchChallengeByStarId(starId: Id): Promise<RestResponse<ChallengeDto>>
   fetchChallengeBySolutionId(solutionId: Id): Promise<RestResponse<ChallengeDto>>
-  fetchCompletableChallenges(
-    userId: Id,
-  ): Promise<RestResponse<{ id: string; difficulty: string }[]>>
   fetchDocs(): Promise<RestResponse<DocDto[]>>
   fetchSolutionById(solutionId: Id): Promise<RestResponse<SolutionDto>>
   fetchSolutionBySlug(solutionSlug: string): Promise<RestResponse<SolutionDto>>
@@ -28,7 +29,7 @@ export interface ChallengingService {
     params: ChallengesListParams,
   ): Promise<RestResponse<PaginationResponse<ChallengeDto>>>
   fetchSolutionsList(
-    params: SolutionsListParams,
+    params: SolutionsListingParams,
   ): Promise<RestResponse<PaginationResponse<SolutionDto>>>
   fetchCategories(): Promise<RestResponse<ChallengeCategoryDto[]>>
   fetchChallengeVote(

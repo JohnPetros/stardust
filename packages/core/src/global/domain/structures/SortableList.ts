@@ -1,26 +1,27 @@
 import type { Logical } from './Logical'
 import { List } from './List'
 import { ShuffledList } from './ShuffledList'
-import type { OrdinalNumber } from './OrdinalNumber'
 import { AppError } from '../errors'
+import type { Integer } from './Integer'
+import type { Text } from './Text'
 
 type Item = {
-  originalPosition: OrdinalNumber
-  label: string
+  originalPosition: Integer
+  label: Text
 }
 
 export class SortableList {
   private constructor(readonly items: Item[]) {}
 
   static create(items: Item[]): SortableList {
-    return new SortableList(ShuffledList.create(items).items)
+    return new SortableList(items)
   }
 
   static isSoratableList(list: unknown): list is SortableList {
     return list instanceof SortableList
   }
 
-  moveItem(fromPosition: number, toPosition: number): SortableList {
+  moveItem(fromPosition: Integer, toPosition: Integer): SortableList {
     const currentItems = [...this.items]
     const fromIndex = this.getItemIndex(fromPosition)
     const toIndex = this.getItemIndex(toPosition)
@@ -30,9 +31,9 @@ export class SortableList {
     return new SortableList(currentItems)
   }
 
-  getItemByPosition(position: number): Item {
+  getItemByPosition(position: Integer): Item {
     const item = this.items.find(
-      (item) => item.originalPosition.number.value === position,
+      (item) => item.originalPosition.isEqualTo(position).isTrue,
     )
 
     if (!item) throw new AppError('No item found at the given position')
@@ -46,14 +47,12 @@ export class SortableList {
 
   get orderedItems(): Item[] {
     const items = [...this.items]
-    return items.sort(
-      (a, b) => a.originalPosition.number.minus(b.originalPosition.number).value,
-    )
+    return items.sort((a, b) => a.originalPosition.minus(b.originalPosition).value)
   }
 
-  private getItemIndex(itemOriginalPosition: number): number {
+  private getItemIndex(itemOriginalPosition: Integer): number {
     return this.items.findIndex(
-      (item) => item.originalPosition.number.value === itemOriginalPosition,
+      (item) => item.originalPosition.isEqualTo(itemOriginalPosition).isTrue,
     )
   }
 }

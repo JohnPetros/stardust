@@ -1,12 +1,12 @@
 import type { RestClient } from '@stardust/core/global/interfaces'
 import { PaginationResponse, RestResponse } from '@stardust/core/global/responses'
+import { HTTP_HEADERS } from '@stardust/core/global/constants'
 
 import { addQueryParams, handleRestError, parseResponseJson } from './utils'
-import { HTTP_HEADERS } from '@stardust/core/global/constants'
 import type { NextRestClientConfig } from './types'
 
 export const NextRestClient = ({
-  isCacheEnabled = true,
+  isCacheEnabled = false,
   refetchInterval = 60 * 60 * 24, // 1 day
   cacheKey,
   headers = new Headers(),
@@ -45,13 +45,14 @@ export const NextRestClient = ({
       if (response.headers.get(HTTP_HEADERS.xPaginationResponse)) {
         return new RestResponse<Body>({
           body: new PaginationResponse(
-            data.items,
+            data,
             Number(response.headers.get(HTTP_HEADERS.xTotalItemsCount)),
             Number(response.headers.get(HTTP_HEADERS.xItemsPerPage)),
           ) as Body,
         })
       }
 
+      this.clearQueryParams()
       return new RestResponse({ body: data, statusCode: response.status })
     },
 
@@ -67,6 +68,7 @@ export const NextRestClient = ({
       }
 
       const data = await parseResponseJson(response)
+      this.clearQueryParams()
       return new RestResponse({ body: data, statusCode: response.status })
     },
 
@@ -82,6 +84,7 @@ export const NextRestClient = ({
       }
 
       const data = await parseResponseJson(response)
+      this.clearQueryParams()
       return new RestResponse({ body: data, statusCode: response.status })
     },
 
@@ -97,6 +100,7 @@ export const NextRestClient = ({
       }
 
       const data = await parseResponseJson(response)
+      this.clearQueryParams()
       return new RestResponse({ body: data, statusCode: response.status })
     },
 
@@ -110,6 +114,7 @@ export const NextRestClient = ({
         return await handleRestError<void>(response)
       }
 
+      this.clearQueryParams()
       return new RestResponse({ statusCode: response.status })
     },
 

@@ -1,5 +1,5 @@
-import type { ListOrder } from '../structures/ListOder'
+import type { ListingOrder } from '../structures/ListingOrder'
 
 export type SortingParams = {
-  order: ListOrder
+  order: ListingOrder
 }

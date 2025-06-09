@@ -14,17 +14,17 @@ import { setCookie, getCookie, deleteCookie, hasCookie } from './cookieActions'
 import { accessEndingPage, fetchLessonStoryAndQuestions } from './lessonActions'
 import { accessStarPage } from './spaceActions'
 import { upvoteComment } from './forumActions'
-import { obsverNewUnlockedAchievements } from './profileActions'
+import { accessProfilePage } from './profileActions'
 import { getLastWeekRankingWinners } from './rankingActions'
 import { createSnippet, editSnippet } from './playgroundActions'
 import {
-  rewardForStarChallengeCompletion,
-  rewardForChallengeCompletion,
-  rewardForStarCompletion,
+  accessRewardForStarCompletionPage,
+  accessRewardForStarChallengeCompletionPage,
+  accessRewardForChallengeCompletionPage,
 } from './rewardingActions'
-import { signIn } from './authActions'
+import { signIn, signOut } from './authActions'
 
-export const authActions = { signIn }
+export const authActions = { signIn, signOut }
 
 export const cookieActions = { setCookie, getCookie, deleteCookie, hasCookie }
 
@@ -43,7 +43,7 @@ export const challengingActions = {
 
 export const playgroundActions = { createSnippet, editSnippet }
 
-export const profileActions = { obsverNewUnlockedAchievements }
+export const profileActions = { accessProfilePage }
 
 export const spaceActions = { accessStarPage }
 
@@ -54,7 +54,7 @@ export const rankingActions = { getLastWeekRankingWinners }
 export const forumActions = { upvoteComment }
 
 export const rewardingActions = {
-  rewardForStarChallengeCompletion,
-  rewardForChallengeCompletion,
-  rewardForStarCompletion,
+  accessRewardForStarCompletionPage,
+  accessRewardForChallengeCompletionPage,
+  accessRewardForStarChallengeCompletionPage,
 }

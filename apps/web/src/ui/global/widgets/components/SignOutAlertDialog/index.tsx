@@ -1,37 +1,16 @@
 'use client'
 
-import type { ReactNode } from 'react'
-
-import { AlertDialog } from '../AlertDialog'
-import { Button } from '../Button'
+import type { PropsWithChildren } from 'react'
 
 import { useSignOutAlertDialog } from './useSignOutAlertDialog'
+import { SignOutAlertDialogView } from './SignOutAlertDialogView'
 
-type SignOutAlertDialogProps = {
-  children: ReactNode
-}
-
-export function SignOutAlertDialog({ children }: SignOutAlertDialogProps) {
-  const { isLoading, handleConfirm } = useSignOutAlertDialog()
+export const SignOutAlertDialog = ({ children }: PropsWithChildren) => {
+  const { isSigningOut, handleDialogConfirm } = useSignOutAlertDialog()
 
   return (
-    <AlertDialog
-      type='crying'
-      title={'Calma aí! Deseja mesmo\nSAIR DA SUA CONTA 😢?'}
-      shouldPlayAudio={false}
-      body={null}
-      action={
-        <Button
-          className='w-32 bg-red-700 text-gray-100'
-          onClick={handleConfirm}
-          isLoading={isLoading}
-        >
-          Sair
-        </Button>
-      }
-      cancel={<Button className='w-32 bg-green-400 text-green-900'>Cancelar</Button>}
-    >
+    <SignOutAlertDialogView isSigningOut={isSigningOut} onConfirm={handleDialogConfirm}>
       {children}
-    </AlertDialog>
+    </SignOutAlertDialogView>
   )
 }

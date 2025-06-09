@@ -3,12 +3,12 @@
 import { DragOverlay } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 
-import type { SortableList } from '@stardust/core/global/structures'
+import { Integer, type SortableList } from '@stardust/core/global/structures'
 
+import { Dnd } from './Dnd'
 import { useDragAndDropListQuestion } from './useDragAndDropListQuestion'
 import { QuestionStem } from '../QuestionStem'
 import { Item } from './Item'
-import { Dnd } from './Dnd'
 
 type DragAndDropListQuestionProps = {
   stem: string
@@ -41,7 +41,7 @@ export function DragAndDropListQuestion({
             <Item
               key={item.originalPosition.value}
               id={item.originalPosition.value}
-              label={item.label}
+              label={item.label.value}
               isActive={activeItemId === item.originalPosition.value}
             />
           ))}
@@ -52,7 +52,9 @@ export function DragAndDropListQuestion({
         {activeItemId ? (
           <Item
             id={activeItemId}
-            label={sortableList.getItemByPosition(activeItemId).label}
+            label={
+              sortableList.getItemByPosition(Integer.create(activeItemId)).label.value
+            }
             isActive={true}
           />
         ) : null}

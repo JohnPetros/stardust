@@ -1,4 +1,4 @@
-import { ListOrder } from '#global/domain/structures/ListOder'
+import { ListingOrder } from '#global/domain/structures/ListingOrder'
 import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
 import { Text } from '#global/domain/structures/Text'
 import type { UseCase } from '#global/interfaces/UseCase'
@@ -23,7 +23,7 @@ export class ListRocketsUseCase implements UseCase<Request, Response> {
       search: Text.create(search),
       page: OrdinalNumber.create(page),
       itemsPerPage: OrdinalNumber.create(itemsPerPage),
-      order: ListOrder.create(order),
+      order: ListingOrder.create(order),
     })
 
     return new PaginationResponse(

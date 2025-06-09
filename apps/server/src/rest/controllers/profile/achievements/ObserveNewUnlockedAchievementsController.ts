@@ -4,7 +4,7 @@ import type {
   AchievementsRepository,
   UsersRepository,
 } from '@stardust/core/profile/interfaces'
-import { _ObserveNewUnlockedAchievementsUseCase } from '@stardust/core/profile/use-cases'
+import { ObserveNewUnlockedAchievementsUseCase } from '@stardust/core/profile/use-cases'
 
 type Schema = {
   routeParams: {
@@ -20,7 +20,7 @@ export class ObserveNewUnlockedAchievementsController implements Controller<Sche
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const { userId } = http.getRouteParams()
-    const useCase = new _ObserveNewUnlockedAchievementsUseCase(
+    const useCase = new ObserveNewUnlockedAchievementsUseCase(
       this.usersRepository,
       this.achievementsRepository,
     )

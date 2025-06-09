@@ -1,19 +1,28 @@
 'use server'
 
+import { z } from 'zod'
+
 import { authActionClient } from './clients/authActionClient'
 import { NextCall } from '../next/NextCall'
-import { ObsverNewUnlockedAchievementsAction } from '../actions/profile'
-import { SupabaseServerActionClient } from '@/rest/supabase/clients'
-import { SupabaseProfileService } from '@/rest/supabase/services'
+import { AccessProfilePageAction } from '../actions/profile'
+import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
+import { ProfileService } from '@/rest/services'
+import { stringSchema } from '@stardust/validation/global/schemas'
 
-const obsverNewUnlockedAchievements = authActionClient.action(async ({ ctx }) => {
-  const call = NextCall({
-    user: ctx.user,
+const accessProfilePage = authActionClient
+  .schema(
+    z.object({
+      userSlug: stringSchema,
+    }),
+  )
+  .action(async ({ clientInput }) => {
+    const call = NextCall({
+      request: clientInput,
+    })
+    const restClient = await NextServerRestClient()
+    const profileService = ProfileService(restClient)
+    const action = AccessProfilePageAction(profileService)
+    return await action.handle(call)
   })
-  const supabase = SupabaseServerActionClient()
-  const profileService = SupabaseProfileService(supabase)
-  const action = ObsverNewUnlockedAchievementsAction(profileService)
-  return action.handle(call)
-})
 
-export { obsverNewUnlockedAchievements }
+export { accessProfilePage }

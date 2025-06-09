@@ -1,11 +1,15 @@
-import type { ChallengeDifficultyLevel } from '.'
-import type { ListOrder, ListParam, PaginationParams } from '../../../global/domain/types'
+import type { Id, IdsList } from '#global/domain/structures/index'
+import type { ListingOrder } from '#global/domain/structures/ListingOrder'
+import type { Text } from '#global/domain/structures/Text'
+import type { ChallengeDifficulty, ChallengeCompletion } from '../structures'
+import type { PaginationParams } from '../../../global/domain/types'
 
 export type ChallengesListParams = {
-  difficultyLevel: ListParam<ChallengeDifficultyLevel>
-  title: string
-  categoriesIds: string[]
-  userId: string | null
-  postOrder: ListParam<ListOrder>
-  upvotesCountOrder: ListParam<ListOrder>
+  userId: Id | null
+  difficulty: ChallengeDifficulty
+  title: Text
+  categoriesIds: IdsList
+  postingOrder: ListingOrder
+  upvotesCountOrder: ListingOrder
+  completionStatus: ChallengeCompletion
 } & PaginationParams

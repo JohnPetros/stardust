@@ -17,8 +17,12 @@ export class UnlockStarUseCase implements UseCase<Request, Response> {
   async execute({ starId, userId }: Request) {
     const user = await this.repository.findById(Id.create(userId))
     if (!user) throw new UserNotFoundError()
-    user.unlockStar(Id.create(starId))
-    await this.repository.addUnlockedStar(Id.create(starId), user.id)
+
+    const unlockedStarId = Id.create(starId)
+    user.unlockStar(unlockedStarId)
+    if (user.hasUnlockedStar(unlockedStarId).isFalse) {
+      await this.repository.addUnlockedStar(unlockedStarId, user.id)
+    }
     return user.dto
   }
 }
