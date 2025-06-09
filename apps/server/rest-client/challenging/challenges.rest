@@ -6,9 +6,13 @@ GET {{URL}}/slug/{{SLUG}}
 Authorization: Bearer {{JWT}}
 
 ### Fetch challenges list
-GET http://localhost:3333/challenging/challenges?page=1&itemsPerPage=10&title=&difficulty=any&upvotesCountOrder=descending&postingOrder=any&completionStatus=any
+GET http://localhost:3333/challenging/challenges?page=1&itemsPerPage=2&title=&difficulty=any&completionStatus=any&upvotesCountOrder=any&postingOrder=any&page=2&itemsPerPage=2&title=&difficulty=any&completionStatus=any&upvotesCountOrder=any&postingOrder=any
 Authorization: Bearer {{JWT}}
 
 ### Fetch completed challenges count by difficulty level
 GET {{URL}}/completed-by-difficulty-level
+Authorization: Bearer {{JWT}}
+
+### Fetch all categories
+GET {{URL}}/categories
 Authorization: Bearer {{JWT}}

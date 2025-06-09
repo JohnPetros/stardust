@@ -14,6 +14,7 @@ import {
   FetchChallengeController,
   FetchChallengesListController,
   FetchCompletedChallengesCountByDifficultyLevelController,
+  FetchAllChallengeCategoriesController,
 } from '@/rest/controllers/challenging/challenges'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
@@ -56,7 +57,7 @@ export class ChallengesRouter extends HonoRouter {
           page: pageSchema,
           itemsPerPage: itemsPerPageSchema,
           title: stringSchema,
-          categoriesIds: idsListSchema.default([]),
+          categoriesIds: z.array(stringSchema).default([]),
           difficulty: stringSchema,
           upvotesCountOrder: stringSchema,
           postingOrder: stringSchema,
@@ -91,10 +92,26 @@ export class ChallengesRouter extends HonoRouter {
     )
   }
 
+  private registerFetchAllCategoriesRoute(): void {
+    this.router.get(
+      '/categories',
+      this.authMiddleware.verifyAuthentication,
+      this.profileMiddleware.appendUserCompletedChallengesIdsToBody,
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const controller = new FetchAllChallengeCategoriesController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   registerRoutes(): Hono {
     this.registerFetchChallengeRoute()
     this.registerFetchChallengesListRoute()
     this.registerFetchCompletedChallengesByDifficultyLevelRoute()
+    this.registerFetchAllCategoriesRoute()
     return this.router
   }
 }

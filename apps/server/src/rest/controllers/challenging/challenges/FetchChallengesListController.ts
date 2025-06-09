@@ -46,6 +46,7 @@ export class FetchChallengesListController implements Controller<Schema> {
       title,
       completionStatus,
     })
+    console.log(categoriesIds)
     return http.sendPagination(response)
   }
 }

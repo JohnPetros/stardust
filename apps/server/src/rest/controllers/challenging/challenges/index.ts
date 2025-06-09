@@ -2,3 +2,4 @@ export { AppendChallengeRewardToBodyController } from './AppendChallengeRewardTo
 export { FetchCompletedChallengesCountByDifficultyLevelController } from './FetchCompletedChallengesCountByDifficultyLevelController'
 export { FetchChallengeController } from './FetchChallengeController'
 export { FetchChallengesListController } from './FetchChallengesListController'
+export { FetchAllChallengeCategoriesController } from './FetchAllChallengeCategories'

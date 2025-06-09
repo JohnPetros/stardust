@@ -1,11 +1,12 @@
 import type { Id, Slug } from '@stardust/core/global/structures'
 import type { ChallengesRepository } from '@stardust/core/challenging/interfaces'
-import type { Challenge } from '@stardust/core/challenging/entities'
+import { type Challenge, ChallengeCategory } from '@stardust/core/challenging/entities'
 import type { ChallengesListParams } from '@stardust/core/challenging/types'
 
 import { SupabaseRepository } from '../SupabaseRepository'
 import { SupabaseChallengeMapper } from '../../mappers/challenging'
 import { SupabasePostgreError } from '../../errors'
+import { ChallengeCategoryDto } from '@stardust/core/challenging/entities/dtos'
 
 export class SupabaseChallengesRepository
   extends SupabaseRepository
@@ -94,11 +95,11 @@ export class SupabaseChallengesRepository
       })
     }
 
-    console.log({ userId })
-
     if (userId) {
       query = query.eq('user_id', userId.value)
     }
+
+    console.log(categoriesIds.dto)
 
     if (categoriesIds.isEmpty.isFalse) {
       query = query.in('challenges_categories.category_id', categoriesIds.dto)
@@ -114,5 +115,25 @@ export class SupabaseChallengesRepository
 
     const challenges = data.map(SupabaseChallengeMapper.toEntity)
     return { challenges, totalChallengesCount: Number(count) }
+  }
+
+  async findAllCategories(): Promise<ChallengeCategory[]> {
+    const { data, error } = await this.supabase
+      .from('categories')
+      .select('*, challenges:challenges_categories(id:challenge_id)')
+      .order('name')
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+
+    const categories: ChallengeCategory[] = data.map((category) =>
+      ChallengeCategory.create({
+        id: category.id,
+        name: category.name,
+      }),
+    )
+
+    return categories
   }
 }
