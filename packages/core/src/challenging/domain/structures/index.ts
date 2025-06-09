@@ -1,6 +1,5 @@
 export { ChallengeDifficulty } from './ChallengeDifficulty'
-export { ChallengesFilter } from './ChallengesFilter'
-export { ChallengeCompletion } from './ChallengeCompletion'
+export { ChallengeCompletionStatus } from './ChallengeCompletionStatus'
 export { ChallengeFunction } from './ChallengeFunction'
 export { ChallengeCraftsVisibility } from './ChallengeCraftsVisibility'
 export { SolutionsListingSorter } from './SolutionsListingSorter'

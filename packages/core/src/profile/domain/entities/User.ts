@@ -358,6 +358,10 @@ export class User extends Entity<UserProps> {
     return this.props.level
   }
 
+  get completedChallengesIds() {
+    return this.props.completedChallengesIds
+  }
+
   get upvotedCommentsIds() {
     return this.props.upvotedCommentsIds
   }

@@ -1,5 +1,5 @@
 import type { Id, Slug } from '#global/domain/structures/index'
-import type { Challenge } from '../domain/entities'
+import type { Challenge, ChallengeCategory } from '../domain/entities'
 import type { ChallengesListParams } from '../domain/types'
 
 export interface ChallengesRepository {
@@ -9,4 +9,5 @@ export interface ChallengesRepository {
   findMany(
     params: ChallengesListParams,
   ): Promise<{ challenges: Challenge[]; totalChallengesCount: number }>
+  findAllCategories(): Promise<ChallengeCategory[]>
 }

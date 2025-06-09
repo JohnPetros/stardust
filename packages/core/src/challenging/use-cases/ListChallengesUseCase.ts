@@ -4,7 +4,7 @@ import { ListingOrder } from '#global/domain/structures/ListingOrder'
 import { Id, Text, OrdinalNumber } from '#global/domain/structures/index'
 import type { ChallengeDto } from '../domain/entities/dtos'
 import type { Challenge } from '../domain/entities'
-import { ChallengeCompletion, ChallengeDifficulty } from '../domain/structures'
+import { ChallengeCompletionStatus, ChallengeDifficulty } from '../domain/structures'
 import { PaginationResponse } from '../../global/responses'
 import type { ChallengesRepository } from '../interfaces'
 
@@ -37,12 +37,12 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
       userId: request.userId ? Id.create(request.userId) : null,
       page: OrdinalNumber.create(request.page),
       itemsPerPage: OrdinalNumber.create(request.itemsPerPage),
-      completionStatus: ChallengeCompletion.create(request.completionStatus),
+      completionStatus: ChallengeCompletionStatus.create(request.completionStatus),
     })
     let challenges = response.challenges
 
     challenges = this.filterChallenges(
-      ChallengeCompletion.create(request.completionStatus),
+      ChallengeCompletionStatus.create(request.completionStatus),
       challenges,
       completedChallengesIds,
       request.userId ? Id.create(request.userId) : null,
@@ -70,12 +70,12 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
   }
 
   private filterChallenges(
-    challengeCompletion: ChallengeCompletion,
+    challengeCompletionStatus: ChallengeCompletionStatus,
     challenges: Challenge[],
     completedChallengesIds: IdsList,
     userId: Id | null,
   ): Challenge[] {
-    switch (challengeCompletion.value) {
+    switch (challengeCompletionStatus.value) {
       case 'completed':
         return challenges.filter((challenge) => {
           const isCompleted = completedChallengesIds.includes(challenge.id)

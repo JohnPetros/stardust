@@ -8,6 +8,6 @@ export interface RestClient {
   delete(url: string): Promise<RestResponse<void>>
   setBaseUrl(url: string): void
   setHeader(key: string, value: string): void
-  setQueryParam(key: string, value: string): void
+  setQueryParam(key: string, value: string | string[]): void
   clearQueryParams(): void
 }
