@@ -11,9 +11,10 @@ import {
 } from '@/rest/services'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
+const restClient = NextRestClient({ isCacheEnabled: false })
+restClient.setBaseUrl(CLIENT_ENV.serverAppUrl)
+
 export function useRest() {
-  const restClient = NextRestClient({ isCacheEnabled: false })
-  restClient.setBaseUrl(CLIENT_ENV.serverAppUrl)
   const { accessToken } = useAuthContext()
 
   if (accessToken) {

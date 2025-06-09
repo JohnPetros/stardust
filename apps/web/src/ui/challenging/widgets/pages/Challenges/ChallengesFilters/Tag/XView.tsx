@@ -1,10 +1,10 @@
 import { Icon } from '@/ui/global/widgets/components/Icon'
 
-type XProps = {
+type Props = {
   onRemove: VoidFunction
 }
 
-export function X({ onRemove }: XProps) {
+export const XView = ({ onRemove }: Props) => {
   return (
     <button
       type='button'

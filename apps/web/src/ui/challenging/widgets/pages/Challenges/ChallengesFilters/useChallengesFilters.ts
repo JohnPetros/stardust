@@ -1,15 +1,9 @@
-'use client'
-
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { List } from '@stardust/core/global/structures'
 import type { ChallengeCategory } from '@stardust/core/challenging/entities'
-import type {
-  ChallengeCompletionStatus,
-  ChallengeDifficultyLevel,
-} from '@stardust/core/challenging/types'
+import { List } from '@stardust/core/global/structures'
 import {
-  ChallengeCompletion,
+  ChallengeCompletionStatus,
   ChallengeDifficulty,
 } from '@stardust/core/challenging/structures'
 
@@ -20,10 +14,14 @@ import { QUERY_PARAMS } from '../query-params'
 
 export function useChallengesFilter(categories: ChallengeCategory[]) {
   const [tags, setTags] = useState(List.create<string>([]))
-  const [difficultyLevel, setDifficultyLevel] =
-    useQueryStringParam<ChallengeDifficultyLevel>(QUERY_PARAMS.difficultyLevel, 'all')
-  const [completionStatus, setCompletionStatus] =
-    useQueryStringParam<ChallengeCompletionStatus>(QUERY_PARAMS.completionStatus, 'all')
+  const [difficultyLevel, setDifficultyLevel] = useQueryStringParam(
+    QUERY_PARAMS.difficultyLevel,
+    'all',
+  )
+  const [completionStatus, setCompletionStatus] = useQueryStringParam(
+    QUERY_PARAMS.completionStatus,
+    'all',
+  )
   const [title, setTitle] = useQueryStringParam(QUERY_PARAMS.title, 'all')
   const [categoriesIds, setCategoriesIds] = useQueryArrayParam(QUERY_PARAMS.categoriesIds)
   const includedCategoriesNames = useRef<List<string>>(List.create([]))
@@ -45,10 +43,7 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
   }
 
   const getTag = useCallback(
-    (
-      value: ChallengeCompletionStatus | ChallengeDifficultyLevel,
-      filter: 'completionStatus' | 'difficultyLevel',
-    ) => {
+    (value: string, filter: 'completionStatus' | 'difficultyLevel') => {
       return FILTER_SELECTS_ITEMS[filter].find((item) => item.value === value)?.label
     },
     [],
@@ -80,12 +75,12 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
     }
   }
 
-  function handleCompletionStatusChange(newCompletionStatus: ChallengeCompletionStatus) {
+  function handleCompletionStatusChange(newCompletionStatus: string) {
     setCompletionStatus(newCompletionStatus)
   }
 
-  function addCompletionStatusTag(completionStatus: ChallengeCompletionStatus) {
-    if (!ChallengeCompletion.isStatus(completionStatus)) return
+  function addCompletionStatusTag(completionStatus: string) {
+    if (!ChallengeCompletionStatus.isValid(completionStatus)) return
     const tag = getTag(completionStatus, 'completionStatus')
     if (!tag || tag === 'Todos') return
 
@@ -103,11 +98,11 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
     setTags(currentTags)
   }
 
-  function handleDifficultyLevelChange(newDifficultyLevel: ChallengeDifficultyLevel) {
+  function handleDifficultyLevelChange(newDifficultyLevel: string) {
     setDifficultyLevel(newDifficultyLevel)
   }
 
-  function addDifficultyLevelTag(difficultyLevel: ChallengeDifficultyLevel) {
+  function addDifficultyLevelTag(difficultyLevel: string) {
     if (!ChallengeDifficulty.isDifficultyLevel(difficultyLevel)) return
     const tag = getTag(difficultyLevel, 'difficultyLevel')
     if (!tag || tag === 'Todos') return

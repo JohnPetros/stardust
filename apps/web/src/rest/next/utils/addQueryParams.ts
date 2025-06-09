@@ -14,6 +14,5 @@ export function addQueryParams(url: string, params: Record<string, string>) {
     }
   }
 
-  console.log(`${url}?${urlParams.join('&')}`)
   return `${url}?${urlParams.join('&')}`
 }
