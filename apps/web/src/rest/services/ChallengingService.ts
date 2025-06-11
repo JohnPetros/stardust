@@ -5,6 +5,7 @@ import type {
   ChallengesListParams,
   SolutionsListingParams,
 } from '@stardust/core/challenging/types'
+import type { ChallengeVote } from '@stardust/core/challenging/structures'
 
 export const ChallengingService = (restClient: RestClient): IChallengingService => {
   return {
@@ -43,6 +44,14 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       return await restClient.get('/challenging/challenges')
     },
 
+    async fetchChallengeVote(challengeId: Id) {
+      return await restClient.get(`/challenging/challenges/${challengeId.value}/vote`)
+    },
+
+    async fetchAllChallengeCategories() {
+      return await restClient.get('/challenging/categories')
+    },
+
     async fetchSolutionsList({
       page,
       itemsPerPage,
@@ -60,14 +69,10 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       return await restClient.get('/challenging/solutions')
     },
 
-    async fetchCategories() {
-      return await restClient.get('/challenging/categories')
-    },
-
-    async fetchChallengeVote(challengeId: Id, userId: Id) {
-      return await restClient.get(
-        `/challenging/challenges/${challengeId.value}/vote/${userId.value}`,
-      )
+    async voteChallenge(challengeId: Id, challengeVote: ChallengeVote) {
+      return await restClient.post(`/challenging/challenges/${challengeId.value}/vote`, {
+        challengeVote: challengeVote.value,
+      })
     },
   } as IChallengingService
 }

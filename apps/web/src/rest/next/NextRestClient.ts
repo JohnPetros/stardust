@@ -31,7 +31,6 @@ export const NextRestClient = ({
 
   return {
     async get<Body>(route: string): Promise<RestResponse<Body>> {
-      console.log(Object.entries(queryParams))
       const response = await fetch(`${baseUrl}${addQueryParams(route, queryParams)}`, {
         ...requestInit,
         method: 'GET',
