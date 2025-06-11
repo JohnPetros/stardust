@@ -1,11 +1,11 @@
-'use client'
-
 import { useEffect } from 'react'
 
-import type { ChallengeVote } from '@stardust/core/challenging/types'
 import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 import { Challenge } from '@stardust/core/challenging/entities'
-import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structures'
+import {
+  ChallengeCraftsVisibility,
+  ChallengeVote,
+} from '@stardust/core/challenging/structures'
 
 import { ROUTES, STORAGE } from '@/constants'
 import { useRouter } from '@/ui/global/hooks/useRouter'
@@ -18,7 +18,7 @@ import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 
-export function useChallengePage(challengeDto: ChallengeDto, userVote: ChallengeVote) {
+export function useChallengePage(challengeDto: ChallengeDto, userVote: string) {
   const {
     getChallengeSlice,
     getCraftsVisibilitySlice,
@@ -35,7 +35,7 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
   const [isNew] = useQueryStringParam('isNew')
   const secondCounterLocalstorage = useLocalStorage(STORAGE.keys.secondsCounter)
 
-  function handleBackButton() {
+  function handleBackButtonClick() {
     if (!challenge) return
 
     secondCounterLocalstorage.remove()
@@ -43,14 +43,14 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
     goTo(challenge.isFromStar.isTrue ? ROUTES.space : ROUTES.challenging.challenges.list)
   }
 
-  function handlePanelsLayoutButton(panelsLayout: PanelsLayout) {
+  function handlePanelsLayoutButtonClick(panelsLayout: PanelsLayout) {
     setPanelsLayout(panelsLayout)
   }
 
   useEffect(() => {
     if (!challenge) {
       const challenge = Challenge.create(challengeDto)
-      challenge.userVote = userVote
+      challenge.userVote = ChallengeVote.create(userVote)
       setChallenge(challenge)
     }
     if (challenge && user && !craftsVislibility) {
@@ -99,11 +99,11 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: Challenge
   }, [])
 
   return {
-    challenge,
+    challengeTitle: challenge?.title.value ?? null,
     panelsLayout,
     shouldHaveConfettiAnimation:
-      user && isNew ? challenge?.author.isEqualTo(user).isTrue : false,
-    handleBackButton,
-    handlePanelsLayoutButton,
+      challenge && user && isNew ? challenge?.author.isEqualTo(user).isTrue : false,
+    handleBackButtonClick,
+    handlePanelsLayoutButtonClick,
   }
 }

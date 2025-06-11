@@ -1,12 +1,12 @@
-'use client'
-
 import { useState } from 'react'
-import type { ChallengeVote } from '@stardust/core/challenging/types'
+
 import { Integer } from '@stardust/core/global/structures'
+import { ChallengeVote } from '@stardust/core/challenging/structures'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import { useVoteChallengeAction } from './useVoteChallengeAction'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
 type State = {
   userChallengeVote: ChallengeVote
@@ -14,22 +14,20 @@ type State = {
   downvotesCount: number
 }
 
-export function useChallengeVoteControl() {
+export function useChallengeVoteControl(challengingService: ChallengingService) {
   const { user } = useAuthContext()
   const { getChallengeSlice } = useChallengeStore()
+  const toast = useToastContext()
   const { challenge, setChallenge } = getChallengeSlice()
   const [initialState, setInitialState] = useState<State>({
-    userChallengeVote: challenge?.userVote ?? null,
+    userChallengeVote: ChallengeVote.createAsNone(),
     upvotesCount: challenge?.upvotesCount.value ?? 0,
     downvotesCount: challenge?.downvotesCount.value ?? 0,
   })
-  const { voteChallenge } = useVoteChallengeAction({
-    onError: () => {
-      updateChallenge(initialState)
-    },
-  })
 
-  function updateChallenge(state: State) {
+  console.log(initialState)
+
+  function updateState(state: State) {
     if (!challenge) return
 
     challenge.upvotesCount = Integer.create(state.upvotesCount)
@@ -41,26 +39,35 @@ export function useChallengeVoteControl() {
 
   async function executeVoteChallengeAction(userVote: ChallengeVote) {
     if (!challenge) return
-    const { upvotesCount, downvotesCount, userChallengeVote } = await voteChallenge(
-      challenge.id.value,
-      userVote,
-    )
 
-    updateChallenge({ upvotesCount, downvotesCount, userChallengeVote })
+    const response = await challengingService.voteChallenge(challenge.id, userVote)
+
+    if (response.isFailure) {
+      toast.showError(response.errorMessage)
+      updateState(initialState)
+    }
+
+    if (response.isSuccessful) {
+      updateState({
+        upvotesCount: challenge.upvotesCount.value,
+        downvotesCount: challenge.downvotesCount.value,
+        userChallengeVote: ChallengeVote.create(response.body.userChallengeVote),
+      })
+    }
   }
 
-  async function handleVoteButton(userVote: ChallengeVote) {
+  async function handleVoteButtonClick(userVote: string) {
     if (!challenge) return
-    challenge.vote(userVote)
+    challenge.vote(ChallengeVote.create(userVote))
     setChallenge(challenge)
-    await executeVoteChallengeAction(userVote)
+    await executeVoteChallengeAction(ChallengeVote.create(userVote))
   }
 
   return {
-    challenge,
+    challengeVote: challenge?.userVote,
     upvotesCount: challenge?.upvotesCount.value ?? 0,
     isUserChallengeAuthor:
       challenge && user ? challenge?.author.isEqualTo(user).isTrue : false,
-    handleVoteButton,
+    handleVoteButtonClick,
   }
 }
