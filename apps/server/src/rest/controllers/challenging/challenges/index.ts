@@ -3,3 +3,5 @@ export { FetchCompletedChallengesCountByDifficultyLevelController } from './Fetc
 export { FetchChallengeController } from './FetchChallengeController'
 export { FetchChallengesListController } from './FetchChallengesListController'
 export { FetchAllChallengeCategoriesController } from './FetchAllChallengeCategories'
+export { FetchChallengeVoteController } from './FetchChallengeVoteController'
+export { VoteChallengeController } from './VoteChallengeController'
