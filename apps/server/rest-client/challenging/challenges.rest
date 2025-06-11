@@ -1,18 +1,43 @@
 @URL = {{BASE_URL}}/challenging/challenges
-@SLUG = "challenge-slug"
+@CHALLENGE_ID = 17ba01ec-7aa6-4971-9760-537127e03b4d
+@SLUG = inversao-de-lista
 
 ### Fetch challenge by slug
 GET {{URL}}/slug/{{SLUG}}
 Authorization: Bearer {{JWT}}
 
 ### Fetch challenges list
-GET http://localhost:3333/challenging/challenges?page=1&itemsPerPage=2&title=&difficulty=any&completionStatus=any&upvotesCountOrder=any&postingOrder=any&page=2&itemsPerPage=2&title=&difficulty=any&completionStatus=any&upvotesCountOrder=any&postingOrder=any
+GET {{URL}}
+?page=1
+&itemsPerPage=2
+&title=
+&difficulty=any
+&completionStatus=any
+&upvotesCountOrder=any
+&postingOrder=any
 Authorization: Bearer {{JWT}}
 
 ### Fetch completed challenges count by difficulty level
 GET {{URL}}/completed-by-difficulty-level
 Authorization: Bearer {{JWT}}
 
+### Fetch challenge vote
+GET {{URL}}/{{CHALLENGE_ID}}/vote
+Authorization: Bearer {{JWT}}
+
 ### Fetch all categories
 GET {{URL}}/categories
 Authorization: Bearer {{JWT}}
+
+### Fetch challenge vote
+GET {{URL}}/{{CHALLENGE_ID}}/vote
+Authorization: Bearer {{JWT}}
+
+### Vote challenge
+POST {{URL}}/{{CHALLENGE_ID}}/vote
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "challengeVote": "downvote"
+}
