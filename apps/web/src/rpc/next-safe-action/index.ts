@@ -9,6 +9,7 @@ import {
   viewSolution,
   postChallenge,
   editChallenge,
+  accessChallengeEditorPage,
 } from './challengingActions'
 import { setCookie, getCookie, deleteCookie, hasCookie } from './cookieActions'
 import { accessEndingPage, fetchLessonStoryAndQuestions } from './lessonActions'
@@ -29,9 +30,10 @@ export const authActions = { signIn, signOut }
 export const cookieActions = { setCookie, getCookie, deleteCookie, hasCookie }
 
 export const challengingActions = {
-  fetchChallengesList,
   accessChallengePage,
   accessChallengeCommentsSlot,
+  accessChallengeEditorPage,
+  fetchChallengesList,
   voteChallenge,
   editSolution,
   postSolution,
