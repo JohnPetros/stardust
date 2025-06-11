@@ -14,7 +14,7 @@ describe('Get Challenge Vote Use Case', () => {
   beforeEach(() => {
     repository = mock<ChallengesRepository>()
     repository.findById.mockImplementation()
-    repository.findVoteByIdAndUser.mockImplementation()
+    repository.findVoteByChallengeAndUser.mockImplementation()
 
     useCase = new GetChallengeVoteUseCase(repository)
   })
@@ -35,7 +35,7 @@ describe('Get Challenge Vote Use Case', () => {
     const challengeVote = ChallengeVote.createAsUpvote()
     const userId = Id.create()
     repository.findById.mockResolvedValue(challenge)
-    repository.findVoteByIdAndUser.mockResolvedValue(challengeVote)
+    repository.findVoteByChallengeAndUser.mockResolvedValue(challengeVote)
 
     const response = await useCase.execute({
       challengeId: challenge.id.value,
@@ -43,7 +43,10 @@ describe('Get Challenge Vote Use Case', () => {
     })
 
     expect(repository.findById).toHaveBeenCalledWith(challenge.id)
-    expect(repository.findVoteByIdAndUser).toHaveBeenCalledWith(challenge.id, userId)
+    expect(repository.findVoteByChallengeAndUser).toHaveBeenCalledWith(
+      challenge.id,
+      userId,
+    )
     expect(response.challengeVote).toEqual(challengeVote.value)
   })
 })

@@ -82,7 +82,7 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
           if (challenge.author.id.value === userId?.value) {
             return isCompleted.isTrue
           }
-          return isCompleted.isTrue && challenge.isPublic.isTrue
+          return challenge.isPublic.and(isCompleted).isTrue
         })
       case 'not-completed':
         return challenges.filter((challenge) => {
@@ -90,7 +90,7 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
           if (challenge.author.id.value === userId?.value) {
             return isCompleted.isFalse
           }
-          return isCompleted.isFalse && challenge.isPublic.isTrue
+          return challenge.isPublic.andNot(isCompleted).isTrue
         })
       default:
         return challenges
