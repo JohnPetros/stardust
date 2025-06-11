@@ -1,6 +1,7 @@
 export { ChallengeDifficulty } from './ChallengeDifficulty'
 export { ChallengeCompletionStatus } from './ChallengeCompletionStatus'
 export { ChallengeFunction } from './ChallengeFunction'
+export { ChallengeVote } from './ChallengeVote'
 export { ChallengeCraftsVisibility } from './ChallengeCraftsVisibility'
 export { SolutionsListingSorter } from './SolutionsListingSorter'
 export { DataType } from './DataType'
