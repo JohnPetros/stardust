@@ -25,8 +25,6 @@ export function useChallengeVoteControl(challengingService: ChallengingService) 
     downvotesCount: challenge?.downvotesCount.value ?? 0,
   })
 
-  console.log(initialState)
-
   function updateState(state: State) {
     if (!challenge) return
 

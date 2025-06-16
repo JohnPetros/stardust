@@ -1,12 +1,12 @@
 import {
   type Code,
   type Id,
-  type Integer,
   type List,
   type Name,
   type Slug,
   type UserAnswer,
   type Text,
+  Integer,
   Logical,
 } from '#global/domain/structures/index'
 import { Entity } from '#global/domain/abstracts/index'
@@ -141,7 +141,7 @@ export class Challenge extends Entity<ChallengeProps> {
     this.userVote = vote
   }
 
-  makeCompleted() {
+  becomeCompleted() {
     this.props.isCompleted = this.props.isCompleted.becomeTrue()
   }
 
@@ -149,9 +149,11 @@ export class Challenge extends Entity<ChallengeProps> {
     return Logical.create(this.props.author.id.value === userId.value)
   }
 
-  get maximumIncorrectAnswersCount() {
+  get maximumIncorrectAnswersCount(): Integer {
     const testsCasesCount = this.testCases.length
-    return testsCasesCount * Challenge.MAXIMUM_INCORRECT_ANSWERS_PER_TEST_CASE
+    return Integer.create(
+      testsCasesCount * Challenge.MAXIMUM_INCORRECT_ANSWERS_PER_TEST_CASE,
+    )
   }
 
   get hasAnswer() {
