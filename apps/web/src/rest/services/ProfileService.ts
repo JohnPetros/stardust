@@ -31,30 +31,33 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
       return await restClient.put(`/profile/users/${user.id.value}`, user.dto)
     },
 
-    async rewardUserForStarCompletion(userId: Id, rewardsPayload: StarRewardingPayload) {
+    async rewardUserForStarCompletion(
+      userId: Id,
+      rewardingPayload: StarRewardingPayload,
+    ) {
       return await restClient.put(
         `/profile/users/${userId.value}/reward/star`,
-        rewardsPayload,
+        rewardingPayload,
       )
     },
 
     async rewardUserForStarChallengeCompletion(
       userId: Id,
-      rewardsPayload: StarChallengeRewardingPayload,
+      rewardingPayload: StarChallengeRewardingPayload,
     ) {
       return await restClient.put(
         `/profile/users/${userId.value}/reward/star-challenge`,
-        rewardsPayload,
+        rewardingPayload,
       )
     },
 
     async rewardUserForChallengeCompletion(
       userId: Id,
-      rewardsPayload: ChallengeRewardingPayload,
+      rewardingPayload: ChallengeRewardingPayload,
     ) {
       return await restClient.put(
         `/profile/users/${userId.value}/reward/challenge`,
-        rewardsPayload,
+        rewardingPayload,
       )
     },
 
