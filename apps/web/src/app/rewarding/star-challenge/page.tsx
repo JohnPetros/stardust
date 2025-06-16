@@ -3,7 +3,7 @@ import { COOKIES } from '@/constants'
 import { notFound } from 'next/navigation'
 import { cookieActions, rewardingActions } from '@/rpc/next-safe-action'
 
-export default async function Page() {
+const Page = async () => {
   const rewardingPayloadCookie = await cookieActions.getCookie(
     COOKIES.keys.rewardingPayload,
   )
@@ -38,3 +38,5 @@ export default async function Page() {
     />
   )
 }
+
+export default Page

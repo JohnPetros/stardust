@@ -4,7 +4,7 @@ import { COOKIES } from '@/constants'
 import { cookieActions, rewardingActions } from '@/rpc/next-safe-action'
 import { RewardingPage } from '@/ui/lesson/widgets/pages/Rewarding'
 
-export default async function Page() {
+const Page = async () => {
   const rewardingPayloadCookie = await cookieActions.getCookie(
     COOKIES.keys.rewardingPayload,
   )
@@ -39,3 +39,5 @@ export default async function Page() {
     />
   )
 }
+
+export default Page
