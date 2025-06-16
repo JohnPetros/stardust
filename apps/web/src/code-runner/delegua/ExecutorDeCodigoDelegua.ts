@@ -1,6 +1,5 @@
 import {
   AvaliadorSintatico,
-  InterpretadorBase,
   Lexador,
   TradutorJavaScript,
   TradutorReversoJavaScript,
@@ -14,6 +13,7 @@ import type { CodeRunnerProvider } from '@stardust/core/global/interfaces'
 
 import { DELEGUA_REGEX } from './constants'
 import { obtenhaTipo, trateErro } from './utils'
+import { DeleguaInterpretador } from './DeleguaInterpretador'
 
 export const ExecutorDeCodigoDelegua = (): CodeRunnerProvider => {
   const lexador = new Lexador()
@@ -27,7 +27,12 @@ export const ExecutorDeCodigoDelegua = (): CodeRunnerProvider => {
         outputs.push(saida)
       }
 
-      const interpretador = new InterpretadorBase('', false, funcaoDeSaida, funcaoDeSaida)
+      const interpretador = new DeleguaInterpretador(
+        '',
+        false,
+        funcaoDeSaida,
+        funcaoDeSaida,
+      )
       const resultadoLexador = lexador.mapear(code.split('\n'), -1)
       const resultadoAvaliacaoSintatica = avaliadorSintatico.analisar(resultadoLexador, 0)
       const { resultado, erros } = await interpretador.interpretar(
