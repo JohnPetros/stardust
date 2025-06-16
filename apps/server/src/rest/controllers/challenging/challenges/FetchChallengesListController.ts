@@ -46,7 +46,7 @@ export class FetchChallengesListController implements Controller<Schema> {
       title,
       completionStatus,
     })
-    console.log(categoriesIds)
+    // Removed debugging statement to avoid exposing internal state in production
     return http.sendPagination(response)
   }
 }
