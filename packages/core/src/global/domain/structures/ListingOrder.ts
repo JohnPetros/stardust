@@ -14,6 +14,14 @@ export class ListingOrder {
     return new ListingOrder(value)
   }
 
+  static createAsAscending() {
+    return ListingOrder.create('ascending')
+  }
+
+  static createAsDescending() {
+    return ListingOrder.create('descending')
+  }
+
   private static isListingOrderValue(value: string): value is ListingOrderValue {
     new StringValidation(value).oneOf(['ascending', 'descending', 'any'])
     return true
