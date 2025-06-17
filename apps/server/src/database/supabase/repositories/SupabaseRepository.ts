@@ -1,5 +1,6 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { PostgrestError, SupabaseClient } from '@supabase/supabase-js'
 import type { Database } from '../types/Database'
+import { SupabasePostgreError } from '../errors'
 
 export abstract class SupabaseRepository {
   constructor(protected readonly supabase: SupabaseClient<Database>) {}
@@ -26,6 +27,14 @@ export abstract class SupabaseRepository {
     PGRST120: 'PGRST120', // Embedded resource can only be filtered using is.null/not.is.null
     PGRST121: 'PGRST121', // Cannot parse JSON objects in RAISE
     PGRST122: 'PGRST122', // Invalid preferences in Prefer header
+  }
+
+  protected handleQueryPostgresError(error: PostgrestError) {
+    if (error.code === this.POSTGRES_ERROR_CODES.PGRST116) {
+      return null
+    }
+
+    throw new SupabasePostgreError(error)
   }
 
   protected calculateQueryRange(page: number, itemsPerPage: number) {

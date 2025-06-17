@@ -14,7 +14,6 @@ import {
 import { setCookie, getCookie, deleteCookie, hasCookie } from './cookieActions'
 import { accessEndingPage, fetchLessonStoryAndQuestions } from './lessonActions'
 import { accessStarPage } from './spaceActions'
-import { upvoteComment } from './forumActions'
 import { accessProfilePage } from './profileActions'
 import { getLastWeekRankingWinners } from './rankingActions'
 import { createSnippet, editSnippet } from './playgroundActions'
@@ -52,8 +51,6 @@ export const spaceActions = { accessStarPage }
 export const lessonActions = { accessEndingPage, fetchLessonStoryAndQuestions }
 
 export const rankingActions = { getLastWeekRankingWinners }
-
-export const forumActions = { upvoteComment }
 
 export const rewardingActions = {
   accessRewardForStarCompletionPage,

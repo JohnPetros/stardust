@@ -8,6 +8,7 @@ import {
   SpaceService,
   ShopService,
   ChallengingService,
+  ForumService,
 } from '@/rest/services'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
@@ -27,5 +28,6 @@ export function useRest() {
     spaceService: SpaceService(restClient),
     shopService: ShopService(restClient),
     challengingService: ChallengingService(restClient),
+    forumService: ForumService(restClient),
   }
 }

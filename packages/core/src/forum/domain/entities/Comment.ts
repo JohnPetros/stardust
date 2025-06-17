@@ -40,6 +40,10 @@ export class Comment extends Entity<CommentProps> {
     this.props.upvotesCount = this.props.upvotesCount.decrement()
   }
 
+  set content(content: Text) {
+    this.props.content = content
+  }
+
   get content() {
     return this.props.content
   }

@@ -1,41 +1,30 @@
-'use client'
-
-import { twMerge } from 'tailwind-merge'
-
-import { Icon } from '../../../Icon'
 import { useUpvoteComment } from './useUpvoteComment'
+import { UpvoteButtonView } from './UpvoteButtonView'
+import { useRest } from '@/ui/global/hooks/useRest'
 
-export type UpvoteButtonProps = {
+export type Props = {
   commentId: string
   isCommentUpvoted: boolean
   initialUpvotesCount: number
 }
 
-export function UpvoteButton({
+export const UpvoteButton = ({
   initialUpvotesCount,
-  commentId,
   isCommentUpvoted,
-}: UpvoteButtonProps) {
-  const { isUpvoted, upvotesCount, handleButtonClick } = useUpvoteComment(
+  commentId,
+}: Props) => {
+  const { profileService } = useRest()
+  const { isUpvoted, upvotesCount, handleButtonClick } = useUpvoteComment({
+    profileService,
     initialUpvotesCount,
-    isCommentUpvoted,
-  )
+    initialIsUpvoted: isCommentUpvoted,
+  })
 
   return (
-    <button
-      type='button'
+    <UpvoteButtonView
+      isUpvoted={isUpvoted}
+      upvotesCount={upvotesCount}
       onClick={() => handleButtonClick(commentId)}
-      className={twMerge(
-        'flex items-center gap-1 text-sm text-gray-300',
-        isUpvoted ? 'text-green-700' : 'text-gray-300',
-      )}
-    >
-      <Icon
-        name='simple-arrow-up'
-        size={16}
-        className={isUpvoted ? 'text-green-700' : 'text-gray-300'}
-      />
-      +{upvotesCount}
-    </button>
+    />
   )
 }

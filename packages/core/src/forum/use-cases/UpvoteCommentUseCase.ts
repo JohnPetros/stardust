@@ -1,56 +1,43 @@
+import { Id } from '#global/domain/structures/Id'
 import type { UseCase } from '#global/interfaces/UseCase'
-import type { UserDto } from '#profile/domain/entities/dtos/UserDto'
-import type { ForumService } from '../interfaces'
-import { User } from '../../global/domain/entities'
-import { Comment } from '../domain/entities'
+import { UserNotFoundError } from '#profile/errors/UserNotFoundError'
+import type { UsersRepository } from '#profile/interfaces/UsersRepository'
 
 type Request = {
-  userDto: UserDto
+  userId: string
   commentId: string
 }
 
 type Response = Promise<{
-  upvotesCount: number
   userUpvotedCommentsIds: string[]
 }>
 
 export class UpvoteCommentUseCase implements UseCase<Request, Response> {
-  constructor(private readonly forumService: ForumService) {}
+  constructor(private readonly repository: UsersRepository) {}
 
-  async execute({ userDto, commentId }: Request) {
-    const user = User.create(userDto)
-    const comment = await this.fetchComment(commentId)
-    const isCommentUpvoted = user.hasUpvotedComment(comment.id)
+  async execute(request: Request) {
+    const user = await this.fetchUser(request.userId)
+    const commentId = Id.create(request.commentId)
+    const isCommentUpvoted = user.hasUpvotedComment(commentId)
 
     if (isCommentUpvoted.isTrue) {
-      user.removeUpvoteComment(comment.id)
-      comment.removeUpvote()
-      const response = await this.forumService.deleteCommentUpvote(
-        comment.id.value,
-        user.id.value,
-      )
-      if (response.isFailure) response.throwError()
+      user.removeUpvoteComment(commentId)
+      await this.repository.removeUpvotedComment(commentId, user.id)
     }
 
     if (isCommentUpvoted.isFalse) {
-      user.upvoteComment(comment.id)
-      comment.upvote()
-      const response = await this.forumService.saveCommentUpvote(
-        comment.id.value,
-        user.id.value,
-      )
-      if (response.isFailure) response.throwError()
+      user.upvoteComment(commentId)
+      await this.repository.addUpvotedComment(commentId, user.id)
     }
 
     return {
-      upvotesCount: comment.upvotesCount.value,
-      userUpvotedCommentsIds: user.upvotedCommentsIds.ids.map((id) => id.value),
+      userUpvotedCommentsIds: user.upvotedCommentsIds.dto,
     }
   }
 
-  private async fetchComment(commentId: string) {
-    const response = await this.forumService.fetchCommentById(commentId)
-    if (response.isFailure) response.throwError()
-    return Comment.create(response.body)
+  private async fetchUser(userId: string) {
+    const user = await this.repository.findById(Id.create(userId))
+    if (!user) throw new UserNotFoundError()
+    return user
   }
 }

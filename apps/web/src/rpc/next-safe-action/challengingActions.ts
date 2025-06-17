@@ -54,8 +54,8 @@ export const fetchChallengesList = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const supabase = SupabaseServerActionClient()
-    const challengingService = SupabaseChallengingService(supabase)
+    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const challengingService = ChallengingService(restClient)
     const action = FetchChallengesListAction(challengingService)
     return action.handle(call)
   })
@@ -76,7 +76,7 @@ export const accessChallengePage = authActionClient
 
 export const accessChallengeEditorPage = authActionClient
   .schema(z.object({ challengeSlug: z.string() }))
-  .action(async ({ clientInput, ctx }) => {
+  .action(async ({ clientInput }) => {
     const call = NextCall({
       request: clientInput,
     })
@@ -98,8 +98,8 @@ export const voteChallenge = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const supabase = SupabaseServerActionClient()
-    const challengingService = SupabaseChallengingService(supabase)
+    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const challengingService = ChallengingService(restClient)
     const action = VoteChallengeAction(challengingService)
     return action.handle(call)
   })
@@ -122,8 +122,8 @@ export const postSolution = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const supabase = SupabaseServerActionClient()
-    const challengingService = SupabaseChallengingService(supabase)
+    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const challengingService = ChallengingService(restClient)
     const action = PostSolutionAction(challengingService)
     return action.handle(call)
   })
@@ -145,8 +145,8 @@ export const editSolution = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const supabase = SupabaseServerActionClient()
-    const challengingService = SupabaseChallengingService(supabase)
+    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const challengingService = ChallengingService(restClient)
     const action = EditSolutionAction(challengingService)
     return action.handle(call)
   })
@@ -162,8 +162,8 @@ export const upvoteSolution = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const supabase = SupabaseServerActionClient()
-    const challengingService = SupabaseChallengingService(supabase)
+    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const challengingService = ChallengingService(restClient)
     const action = UpvoteSolutionAction(challengingService)
     return action.handle(call)
   })
@@ -179,8 +179,8 @@ export const accessChallengeCommentsSlot = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const supabase = SupabaseServerActionClient()
-    const challengingService = SupabaseChallengingService(supabase)
+    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const challengingService = ChallengingService(restClient)
     const action = AccessChallengeCommentsSlotAction(challengingService)
     return action.handle(call)
   })
@@ -196,8 +196,8 @@ export const viewSolution = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const supabase = SupabaseServerActionClient()
-    const challengingService = SupabaseChallengingService(supabase)
+    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const challengingService = ChallengingService(restClient)
     const action = ViewSolutionAction(challengingService)
     return action.handle(call)
   })
@@ -212,8 +212,8 @@ export const postChallenge = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const supabase = SupabaseServerActionClient()
-    const challengingService = SupabaseChallengingService(supabase)
+    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const challengingService = ChallengingService(restClient)
     const action = PostChallengeAction(challengingService)
     return action.handle(call)
   })
@@ -228,8 +228,8 @@ export const editChallenge = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const supabase = SupabaseServerActionClient()
-    const challengingService = SupabaseChallengingService(supabase)
+    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const challengingService = ChallengingService(restClient)
     const action = EditChallengeAction(challengingService)
     return action.handle(call)
   })
