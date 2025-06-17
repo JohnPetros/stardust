@@ -59,6 +59,10 @@ Content-Type: application/json
   "incorrectAnswersCount": 2
 }
 
+### Upvote comment
+POST {{URL}}/comments/da7989c8-1123-4e65-ad19-79073a58bee6/upvote
+Authorization: Bearer {{JWT}}
+
 ### Verify user name in use
 GET {{URL}}/verify-name-in-use?name=John Doe
 
