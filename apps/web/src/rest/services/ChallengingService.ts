@@ -6,6 +6,8 @@ import type {
   SolutionsListingParams,
 } from '@stardust/core/challenging/types'
 import type { ChallengeVote } from '@stardust/core/challenging/structures'
+import type { Comment } from '@stardust/core/forum/entities'
+import type { CommentsListParams } from '@stardust/core/forum/types'
 
 export const ChallengingService = (restClient: RestClient): IChallengingService => {
   return {
@@ -67,6 +69,29 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       if (challengeId) restClient.setQueryParam('challengeId', challengeId.value)
       if (userId) restClient.setQueryParam('userId', userId.value)
       return await restClient.get('/challenging/solutions')
+    },
+
+    async fetchChallengeCommentsList(params: CommentsListParams, challengeId: Id) {
+      restClient.setQueryParam('page', params.page.value.toString())
+      restClient.setQueryParam('itemsPerPage', params.itemsPerPage.value.toString())
+      restClient.setQueryParam('sorter', params.sorter.value)
+      restClient.setQueryParam('order', params.order.value)
+      return await restClient.get(`/challenging/comments/challenge/${challengeId.value}`)
+    },
+
+    async fetchSolutionCommentsList(params: CommentsListParams, solutionId: Id) {
+      restClient.setQueryParam('page', params.page.value.toString())
+      restClient.setQueryParam('itemsPerPage', params.itemsPerPage.value.toString())
+      restClient.setQueryParam('sorter', params.sorter.value)
+      restClient.setQueryParam('order', params.order.value)
+      return await restClient.get(`/challenging/comments/solution/${solutionId.value}`)
+    },
+
+    async postChallengeComment(challengeId: Id, comment: Comment) {
+      return await restClient.post(
+        `/challenging/comments/challenge/${challengeId.value}`,
+        comment.dto,
+      )
     },
 
     async voteChallenge(challengeId: Id, challengeVote: ChallengeVote) {
