@@ -7,6 +7,7 @@ import {
   pageSchema,
   stringSchema,
 } from '@stardust/validation/global/schemas'
+import { idSchema } from '@stardust/validation'
 
 import { SupabaseSolutionsRepository } from '@/database/supabase/repositories/challenging'
 import {
@@ -16,7 +17,6 @@ import {
 import { HonoRouter } from '../../HonoRouter'
 import { AuthMiddleware } from '../../middlewares'
 import { HonoHttp } from '../../HonoHttp'
-import { idSchema } from '@stardust/validation'
 
 export class SolutionsRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/solutions')

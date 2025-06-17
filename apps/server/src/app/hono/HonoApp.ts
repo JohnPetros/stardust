@@ -33,6 +33,7 @@ import {
   ShopRouter,
   ChallengingRouter,
 } from './routers'
+import { ForumRouter } from './routers/forum'
 
 declare module 'hono' {
   interface ContextVariableMap {
@@ -120,6 +121,7 @@ export class HonoApp {
     const spaceRouter = new SpaceRouter(this)
     const shopRouter = new ShopRouter(this)
     const challengingRouter = new ChallengingRouter(this)
+    const forumRouter = new ForumRouter(this)
 
     this.hono.get('/', (context) => {
       return context.json({ message: 'Everything is working!' })
@@ -130,6 +132,7 @@ export class HonoApp {
     this.hono.route('/', spaceRouter.registerRoutes())
     this.hono.route('/', shopRouter.registerRoutes())
     this.hono.route('/', challengingRouter.registerRoutes())
+    this.hono.route('/', forumRouter.registerRoutes())
   }
 
   private registerMiddlewares() {
