@@ -20,13 +20,16 @@ type RewardingResponse = {
 }
 
 export interface ProfileService {
+  fetchUserById(userId: Id): Promise<RestResponse<UserDto>>
+  fetchUserBySlug(userSlug: Slug): Promise<RestResponse<UserDto>>
   fetchAchievements(): Promise<RestResponse<AchievementDto[]>>
   fetchUnlockedAchievements(userId: Id): Promise<RestResponse<AchievementDto[]>>
   observeNewUnlockedAchievements(userId: Id): Promise<RestResponse<AchievementDto[]>>
   rescueAchievement(achievementId: Id, userId: Id): Promise<RestResponse<UserDto>>
-  fetchUserById(userId: Id): Promise<RestResponse<UserDto>>
-  fetchUserBySlug(userSlug: Slug): Promise<RestResponse<UserDto>>
   updateUser(user: User): Promise<RestResponse<UserDto>>
+  upvoteComment(
+    commentId: Id,
+  ): Promise<RestResponse<{ userUpvotedCommentsIds: string[] }>>
   verifyUserNameInUse(userName: Name): Promise<RestResponse>
   verifyUserEmailInUse(userEmail: Email): Promise<RestResponse>
   rewardUserForStarCompletion(

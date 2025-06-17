@@ -407,6 +407,7 @@ export class User extends Entity<UserProps> {
       unlockedAchievementsIds: this.props.unlockedAchievementsIds.dto,
       rescuableAchievementsIds: this.props.rescuableAchievementsIds.dto,
       unlockedDocsIds: this.props.unlockedDocsIds.dto,
+      upvotedCommentsIds: this.props.upvotedCommentsIds.dto,
       completedChallengesIds: this.props.completedChallengesIds.dto,
       completedPlanetsIds: this.props.completedPlanetsIds.dto,
       canSeeRankingResult: this.props.canSeeRankingResult.value,
