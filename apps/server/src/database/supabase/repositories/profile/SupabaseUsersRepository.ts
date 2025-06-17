@@ -71,7 +71,7 @@ export class SupabaseUsersRepository
           users_upvoted_solutions(solution_id),
           users_upvoted_comments(comment_id)`,
       )
-      .in('id', idsList.ids)
+      .in('id', idsList.dto)
 
     if (error) throw new SupabasePostgreError(error)
 
@@ -139,7 +139,9 @@ export class SupabaseUsersRepository
     return data.map(SupabaseUserMapper.toEntity)
   }
 
-  private async findUserCompletedPlanets(userId: string): Promise<string[]> {
+  private async findUserCompletedPlanets(
+    userId: string,
+  ): Promise<{ planet_id: string | null }[]> {
     const { data, error } = await this.supabase
       .from('users_completed_planets_view')
       .select('planet_id')
@@ -147,7 +149,7 @@ export class SupabaseUsersRepository
 
     if (error) throw new SupabasePostgreError(error)
 
-    return data.map(({ planet_id }) => planet_id)
+    return data
   }
 
   async findAll(): Promise<User[]> {
@@ -254,6 +256,23 @@ export class SupabaseUsersRepository
     if (error) {
       throw new SupabasePostgreError(error)
     }
+  }
+
+  async addUpvotedComment(commentId: Id, userId: Id): Promise<void> {
+    const { error } = await this.supabase
+      .from('users_upvoted_comments')
+      .insert({ comment_id: commentId.value, user_id: userId.value })
+
+    if (error) throw new SupabasePostgreError(error)
+  }
+
+  async removeUpvotedComment(commentId: Id, userId: Id): Promise<void> {
+    const { error } = await this.supabase
+      .from('users_upvoted_comments')
+      .delete()
+      .match({ comment_id: commentId.value, user_id: userId.value })
+
+    if (error) throw new SupabasePostgreError(error)
   }
 
   async removeRescuableAchievement(achievementId: Id, userId: Id): Promise<void> {
