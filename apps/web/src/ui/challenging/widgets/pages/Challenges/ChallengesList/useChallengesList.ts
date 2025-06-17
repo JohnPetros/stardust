@@ -1,44 +1,50 @@
-'use client'
-
 import { Challenge } from '@stardust/core/challenging/entities'
 
 import { CACHE } from '@/constants'
 import { QUERY_PARAMS } from '../query-params'
 import {
-  ChallengeCompletion,
+  ChallengeCompletionStatus,
   ChallengeDifficulty,
 } from '@stardust/core/challenging/structures'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
+import {
+  IdsList,
+  ListingOrder,
+  OrdinalNumber,
+  Text,
+} from '@stardust/core/global/structures'
 
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useQueryArrayParam } from '@/ui/global/hooks/useQueryArrayParam'
-import { useFetchChallengesListAction } from './useFetchChallengesListAction'
 import { useSleep } from '@/ui/global/hooks/useSleep'
 
 const CHALLENGES_PER_PAGE = 20
 
-export function useChallengesList() {
-  const { fetchList } = useFetchChallengesListAction()
-  const [difficultyLevel] = useQueryStringParam(QUERY_PARAMS.difficultyLevel, 'all')
-  const [completionStatus] = useQueryStringParam(QUERY_PARAMS.completionStatus, 'all')
+export function useChallengesList(challengingService: ChallengingService) {
+  const [difficultyLevel] = useQueryStringParam(QUERY_PARAMS.difficultyLevel, 'any')
+  const [completionStatus] = useQueryStringParam(QUERY_PARAMS.completionStatus, 'any')
   const [title] = useQueryStringParam(QUERY_PARAMS.title, '')
   const [categoriesIds] = useQueryArrayParam(QUERY_PARAMS.categoriesIds)
   const { sleep } = useSleep()
 
   async function fetchChallengesList(page: number) {
-    const completion = ChallengeCompletion.create(completionStatus)
-    const difficulty = ChallengeDifficulty.create(difficultyLevel)
-
     await sleep(100)
 
-    return await fetchList({
-      page,
-      categoriesIds: categoriesIds.join(','),
-      completionStatus: completion.status,
-      difficultyLevel: difficulty.level,
-      itemsPerPage: CHALLENGES_PER_PAGE,
-      title,
+    const response = await challengingService.fetchChallengesList({
+      page: OrdinalNumber.create(page),
+      categoriesIds: IdsList.create(categoriesIds),
+      completionStatus: ChallengeCompletionStatus.create(completionStatus),
+      difficulty: ChallengeDifficulty.create(difficultyLevel),
+      itemsPerPage: OrdinalNumber.create(CHALLENGES_PER_PAGE),
+      postingOrder: ListingOrder.create('any'),
+      upvotesCountOrder: ListingOrder.create('any'),
+      title: Text.create(title),
+      userId: null,
     })
+    if (response.isFailure) response.throwError()
+
+    return response.body
   }
 
   const { data, isLoading, isRecheadedEnd, nextPage } = usePaginatedCache({

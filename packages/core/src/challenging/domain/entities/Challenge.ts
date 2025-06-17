@@ -1,19 +1,18 @@
 import {
   type Code,
   type Id,
-  type Integer,
   type List,
   type Name,
   type Slug,
   type UserAnswer,
   type Text,
+  Integer,
   Logical,
 } from '#global/domain/structures/index'
 import { Entity } from '#global/domain/abstracts/index'
 import type { AuthorAggregate } from '#global/domain/aggregates/index'
-import type { ChallengeDifficulty, TestCase } from '../structures'
+import type { ChallengeDifficulty, ChallengeVote, TestCase } from '../structures'
 import type { ChallengeCategory } from './ChallengeCategory'
-import type { ChallengeVote } from '../types'
 import type { ChallengeDto } from './dtos'
 import { ChallengeWithoutTestCaseError, InsufficientInputsError } from '../errors'
 import { ChallengeFactory } from '../factories'
@@ -129,26 +128,32 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   vote(vote: ChallengeVote) {
-    if (vote === this.userVote) {
-      if (vote === 'upvote') this.removeUpvote()
-      if (vote === 'downvote') this.removeDownvote()
-      this.userVote = null
+    if (vote.isEqualTo(this.userVote).isTrue) {
+      if (vote.isUpvote.isTrue) this.removeUpvote()
+      if (vote.isDownvote.isTrue) this.removeDownvote()
+      this.userVote = vote.becomeNone()
       return
     }
-    if (vote !== this.userVote) {
-      if (vote === 'upvote') this.upvote()
-      if (vote === 'downvote') this.downvote()
+    if (vote.isEqualTo(this.userVote).isFalse) {
+      if (vote.isUpvote.isTrue) this.upvote()
+      if (vote.isDownvote.isTrue) this.downvote()
     }
     this.userVote = vote
   }
 
-  makeCompleted() {
+  becomeCompleted() {
     this.props.isCompleted = this.props.isCompleted.becomeTrue()
   }
 
-  get maximumIncorrectAnswersCount() {
+  isChallengeAuthor(userId: Id): Logical {
+    return Logical.create(this.props.author.id.value === userId.value)
+  }
+
+  get maximumIncorrectAnswersCount(): Integer {
     const testsCasesCount = this.testCases.length
-    return testsCasesCount * Challenge.MAXIMUM_INCORRECT_ANSWERS_PER_TEST_CASE
+    return Integer.create(
+      testsCasesCount * Challenge.MAXIMUM_INCORRECT_ANSWERS_PER_TEST_CASE,
+    )
   }
 
   get hasAnswer() {
@@ -169,6 +174,10 @@ export class Challenge extends Entity<ChallengeProps> {
 
   set userVote(vote: ChallengeVote) {
     this.props.userVote = vote
+  }
+
+  get isVoted(): Logical {
+    return Logical.create(this.userVote.isNone.isFalse)
   }
 
   get incorrectAnswersCount() {

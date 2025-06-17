@@ -2,11 +2,10 @@ import type { Action, Call } from '@stardust/core/global/interfaces'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import type { SpaceService } from '@stardust/core/space/interfaces'
 import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
-import type { ChallengeVote } from '@stardust/core/challenging/types'
 import { Challenge } from '@stardust/core/challenging/entities'
 import { Star } from '@stardust/core/space/entities'
 import { User } from '@stardust/core/global/entities'
-import type { Id } from '@stardust/core/global/structures'
+import { Slug, type Id } from '@stardust/core/global/structures'
 
 type Request = {
   challengeSlug: string
@@ -14,7 +13,7 @@ type Request = {
 
 type Response = {
   challengeDto: ChallengeDto
-  userChallengeVote: ChallengeVote
+  userChallengeVote: string
 }
 
 export const AccessChallengePageAction = (
@@ -22,7 +21,9 @@ export const AccessChallengePageAction = (
   spaceService: SpaceService,
 ): Action<Request, Response> => {
   async function fetchChallenge(challengeSlug: string) {
-    const response = await challengingService.fetchChallengeBySlug(challengeSlug)
+    const response = await challengingService.fetchChallengeBySlug(
+      Slug.create(challengeSlug),
+    )
     if (response.isFailure) response.throwError()
     return Challenge.create(response.body)
   }
@@ -33,9 +34,9 @@ export const AccessChallengePageAction = (
     return Star.create(response.body)
   }
 
-  async function fetchUserChallengeVote(challengeId: Id, userId: Id) {
-    const response = await challengingService.fetchChallengeVote(challengeId, userId)
-    if (response.isFailure) return null
+  async function fetchUserChallengeVote(challengeId: Id) {
+    const response = await challengingService.fetchChallengeVote(challengeId)
+    if (response.isFailure) response.throwError()
     return response.body.challengeVote
   }
 
@@ -54,7 +55,7 @@ export const AccessChallengePageAction = (
         call.notFound()
       }
 
-      const userChallengeVote = await fetchUserChallengeVote(challenge.id, user.id)
+      const userChallengeVote = await fetchUserChallengeVote(challenge.id)
 
       return {
         challengeDto: challenge.dto,

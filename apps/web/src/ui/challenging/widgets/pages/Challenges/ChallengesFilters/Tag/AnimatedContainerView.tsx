@@ -1,5 +1,3 @@
-'use client'
-
 import type { ReactNode } from 'react'
 import { motion, type Variants } from 'framer-motion'
 
@@ -14,11 +12,11 @@ const variants: Variants = {
   },
 }
 
-type TagProps = {
+type Props = {
   children: ReactNode
 }
 
-export function AnimatedContainer({ children }: TagProps) {
+export const AnimatedContainerView = ({ children }: Props) => {
   return (
     <motion.div
       layout

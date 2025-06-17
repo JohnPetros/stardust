@@ -33,8 +33,9 @@ import {
   ViewSolutionAction,
   VoteChallengeAction,
   AccessChallengeCommentsSlotAction,
+  AccessChallengeEditorPageAction,
 } from '../actions/challenging'
-import { SpaceService } from '@/rest/services'
+import { ChallengingService, SpaceService } from '@/rest/services'
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 
 export const fetchChallengesList = authActionClient
@@ -66,11 +67,22 @@ export const accessChallengePage = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const supabase = SupabaseServerActionClient()
     const restClient = await NextServerRestClient({ isCacheEnabled: false })
-    const challengingService = SupabaseChallengingService(supabase)
+    const challengingService = ChallengingService(restClient)
     const spaceService = SpaceService(restClient)
     const action = AccessChallengePageAction(challengingService, spaceService)
+    return action.handle(call)
+  })
+
+export const accessChallengeEditorPage = authActionClient
+  .schema(z.object({ challengeSlug: z.string() }))
+  .action(async ({ clientInput, ctx }) => {
+    const call = NextCall({
+      request: clientInput,
+    })
+    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const challengingService = ChallengingService(restClient)
+    const action = AccessChallengeEditorPageAction(challengingService)
     return action.handle(call)
   })
 

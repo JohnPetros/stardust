@@ -1,7 +1,7 @@
 import type { Action, Call } from '@stardust/core/global/interfaces'
 import type { ProfileService } from '@stardust/core/profile/interfaces'
 import type { WeekStatusValue } from '@stardust/core/profile/types'
-import type { StarChallengeRewardingPayload } from '@stardust/core/challenging/types'
+import type { StarChallengeRewardingPayload } from '@stardust/core/profile/types'
 import { Id } from '@stardust/core/global/structures'
 
 import { COOKIES, ROUTES } from '@/constants'

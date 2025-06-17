@@ -46,6 +46,7 @@ export class FetchChallengesListController implements Controller<Schema> {
       title,
       completionStatus,
     })
+    // Removed debugging statement to avoid exposing internal state in production
     return http.sendPagination(response)
   }
 }

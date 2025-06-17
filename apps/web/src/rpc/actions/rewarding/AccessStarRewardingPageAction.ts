@@ -1,12 +1,11 @@
 import type { Action } from '@stardust/core/global/interfaces'
 import type { ProfileService } from '@stardust/core/profile/interfaces'
 import type { Call } from '@stardust/core/global/interfaces'
-import type { StarRewardingPayload } from '@stardust/core/space/types'
+import type { StarRewardingPayload } from '@stardust/core/profile/types'
 import type { WeekStatusValue } from '@stardust/core/profile/types'
 import { Id } from '@stardust/core/global/structures'
 
 import { COOKIES, ROUTES } from '@/constants'
-import { cookies } from 'next/headers'
 
 type Response = {
   newLevel: number | null
@@ -28,13 +27,11 @@ export const AccessStarRewardingPageAction = (
       if (!rewardingPayloadCookie) call.notFound()
 
       const user = await call.getUser()
-
       const rewardingPayload = JSON.parse(rewardingPayloadCookie)
       const response = await service.rewardUserForStarCompletion(
         Id.create(user.id),
         rewardingPayload,
       )
-      console.log(response)
       if (response.isFailure) response.throwError()
 
       const { newCoins, newXp, newLevel, newStreak, newWeekStatus, accuracyPercentage } =

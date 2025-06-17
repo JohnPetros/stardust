@@ -1,8 +1,8 @@
 import type { Action } from '@stardust/core/global/interfaces'
 import type { ProfileService } from '@stardust/core/profile/interfaces'
 import type { Call } from '@stardust/core/global/interfaces'
-import type { ChallengeRewardingPayload } from '@stardust/core/challenging/types'
 import type { WeekStatusValue } from '@stardust/core/profile/types'
+import type { ChallengeRewardingPayload } from '@stardust/core/profile/types'
 import { Id } from '@stardust/core/global/structures'
 
 import { COOKIES, ROUTES } from '@/constants'
@@ -25,11 +25,10 @@ export const AccessChallengeRewardingPageAction = (
     async handle(call: Call<ChallengeRewardingPayload>) {
       const rewardingPayloadCookie = await call.getCookie(COOKIES.keys.rewardingPayload)
       if (!rewardingPayloadCookie) call.notFound()
-
       const user = await call.getUser()
 
       const rewardingPayload = JSON.parse(rewardingPayloadCookie)
-      const response = await service.rewardUserForStarCompletion(
+      const response = await service.rewardUserForChallengeCompletion(
         Id.create(user.id),
         rewardingPayload,
       )

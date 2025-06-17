@@ -1,42 +1,41 @@
 import { Id } from '#global/domain/structures/Id'
 import type { UseCase } from '#global/interfaces/UseCase'
-import { Challenge } from '../domain/entities'
-import type { ChallengeVote } from '../domain/types'
-import type { ChallengingService } from '../interfaces'
+import { ChallengeNotFoundError } from '../domain/errors'
+import { ChallengeVote } from '../domain/structures'
+import type { ChallengesRepository } from '../interfaces'
 
 type Request = {
   challengeId: string
   userId: string
-  userChallengeVote: ChallengeVote
+  challengeVote: string
 }
 
 type Response = Promise<{
   upvotesCount: number
   downvotesCount: number
-  userChallengeVote: ChallengeVote
+  userChallengeVote: string
 }>
 
 export class VoteChallengeUseCase implements UseCase<Request, Response> {
-  constructor(private readonly challengingService: ChallengingService) {}
+  constructor(private readonly repository: ChallengesRepository) {}
 
-  async execute({
-    challengeId: challengeIdValue,
-    userId: userValueId,
-    userChallengeVote,
-  }: Request) {
-    const challengeId = Id.create(challengeIdValue)
+  async execute({ userId: userValueId, challengeId, challengeVote }: Request) {
     const userId = Id.create(userValueId)
-    const challenge = await this.fetchChallenge(challengeId)
-    challenge.userVote = await this.fetchCurrentChallengeVote(challengeId, userId)
+    const userChallengeVote = ChallengeVote.create(challengeVote)
+    const challenge = await this.findChallenge(Id.create(challengeId))
+    challenge.userVote = await this.repository.findVoteByChallengeAndUser(
+      challenge.id,
+      userId,
+    )
 
-    if (challenge.userVote && userChallengeVote === challenge.userVote) {
-      await this.deleteChallengeVote(challenge.id, userId)
+    if (challenge.isVoted.and(userChallengeVote.isEqualTo(challenge.userVote)).isTrue) {
+      await this.repository.removeVote(challenge.id, userId)
     }
 
-    if (userChallengeVote !== challenge.userVote) {
-      if (challenge.userVote)
-        await this.updateChallengeVote(challengeId, userId, userChallengeVote)
-      else await this.saveChallengeVote(challengeId, userId, userChallengeVote)
+    if (userChallengeVote.isEqualTo(challenge.userVote).isFalse) {
+      if (challenge.isVoted.isTrue) {
+        await this.repository.replaceVote(challenge.id, userId, userChallengeVote)
+      } else await this.repository.addVote(challenge.id, userId, userChallengeVote)
     }
 
     challenge.vote(userChallengeVote)
@@ -44,53 +43,13 @@ export class VoteChallengeUseCase implements UseCase<Request, Response> {
     return {
       upvotesCount: challenge.upvotesCount.value,
       downvotesCount: challenge.downvotesCount.value,
-      userChallengeVote: challenge.userVote,
+      userChallengeVote: challenge.userVote.value,
     }
   }
 
-  private async fetchChallenge(challengeId: Id) {
-    const response = await this.challengingService.fetchChallengeById(challengeId)
-    if (response.isFailure) response.throwError()
-    return Challenge.create(response.body)
-  }
-
-  private async saveChallengeVote(
-    challengeId: Id,
-    userId: Id,
-    challengeVote: ChallengeVote,
-  ) {
-    const response = await this.challengingService.saveChallengeVote(
-      challengeId,
-      userId,
-      challengeVote,
-    )
-    if (response.isFailure) response.throwError()
-  }
-
-  private async updateChallengeVote(
-    challengeId: Id,
-    userId: Id,
-    challengeVote: ChallengeVote,
-  ) {
-    const response = await this.challengingService.updateChallengeVote(
-      challengeId,
-      userId,
-      challengeVote,
-    )
-    if (response.isFailure) response.throwError()
-  }
-
-  private async deleteChallengeVote(challengeId: Id, userId: Id) {
-    const response = await this.challengingService.deleteChallengeVote(
-      challengeId,
-      userId,
-    )
-    if (response.isFailure) response.throwError()
-  }
-
-  private async fetchCurrentChallengeVote(challengeId: Id, userId: Id) {
-    const response = await this.challengingService.fetchChallengeVote(challengeId, userId)
-    if (response.isFailure) return null
-    return response.body.challengeVote
+  private async findChallenge(challengeId: Id) {
+    const challenge = await this.repository.findById(challengeId)
+    if (!challenge) throw new ChallengeNotFoundError()
+    return challenge
   }
 }

@@ -1,7 +1,7 @@
 import type { Id, IdsList } from '#global/domain/structures/index'
 import type { ListingOrder } from '#global/domain/structures/ListingOrder'
 import type { Text } from '#global/domain/structures/Text'
-import type { ChallengeDifficulty, ChallengeCompletion } from '../structures'
+import type { ChallengeDifficulty, ChallengeCompletionStatus } from '../structures'
 import type { PaginationParams } from '../../../global/domain/types'
 
 export type ChallengesListParams = {
@@ -11,5 +11,5 @@ export type ChallengesListParams = {
   categoriesIds: IdsList
   postingOrder: ListingOrder
   upvotesCountOrder: ListingOrder
-  completionStatus: ChallengeCompletion
+  completionStatus: ChallengeCompletionStatus
 } & PaginationParams

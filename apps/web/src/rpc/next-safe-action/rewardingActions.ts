@@ -6,8 +6,6 @@ import { idSchema, integerSchema } from '@stardust/validation/global/schemas'
 
 import { authActionClient } from './clients/authActionClient'
 import { NextCall } from '../next/NextCall'
-import { SupabaseProfileService } from '@/rest/supabase/services'
-import { SupabaseServerActionClient } from '@/rest/supabase/clients'
 import {
   AccessStarRewardingPageAction,
   AccessChallengeRewardingPageAction,
@@ -33,13 +31,14 @@ export const accessRewardForStarCompletionPage = authActionClient
     const restClient = await NextServerRestClient({ isCacheEnabled: false })
     const profileService = ProfileService(restClient)
     const action = AccessStarRewardingPageAction(profileService)
-    return action.handle(call)
+    return await action.handle(call)
   })
 
 export const accessRewardForStarChallengeCompletionPage = authActionClient
   .schema(
     z.object({
       incorrectAnswersCount: integerSchema,
+      maximumIncorrectAnswersCount: integerSchema,
       secondsCount: integerSchema,
       starId: idSchema,
       challengeId: idSchema,
@@ -50,16 +49,17 @@ export const accessRewardForStarChallengeCompletionPage = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const supabase = SupabaseServerActionClient()
-    const profileService = SupabaseProfileService(supabase)
+    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const profileService = ProfileService(restClient)
     const action = AccessStarChallengeRewardingPageAction(profileService)
-    return action.handle(call)
+    return await action.handle(call)
   })
 
 export const accessRewardForChallengeCompletionPage = authActionClient
   .schema(
     z.object({
       incorrectAnswersCount: integerSchema,
+      maximumIncorrectAnswersCount: integerSchema,
       secondsCount: integerSchema,
       challengeId: idSchema,
     }),
@@ -69,8 +69,8 @@ export const accessRewardForChallengeCompletionPage = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const supabase = SupabaseServerActionClient()
-    const profileService = SupabaseProfileService(supabase)
+    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const profileService = ProfileService(restClient)
     const action = AccessChallengeRewardingPageAction(profileService)
-    return action.handle(call)
+    return await action.handle(call)
   })

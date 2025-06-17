@@ -1,16 +1,14 @@
-'use client'
-
 import { useEffect, useState } from 'react'
-import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
 
-export function useChallengeDescriptionSlot() {
+import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
+import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
+import type { User } from '@stardust/core/profile/entities'
+
+export function useChallengeDescriptionSlot(user: User | null) {
   const [isLoading, setIsLoading] = useState(true)
   const { getChallengeSlice, getMdxSlice } = useChallengeStore()
   const { mdx, setMdx } = getMdxSlice()
   const { challenge } = getChallengeSlice()
-  const { user } = useAuthContext()
   const { provider } = useCodeRunner()
 
   useEffect(() => {
@@ -39,10 +37,11 @@ export function useChallengeDescriptionSlot() {
     isLoading,
     mdx,
     challenge,
-    isUserChallengeAuthor: user ? challenge?.author.isEqualTo(user).isTrue : false,
+    isUserChallengeAuthor:
+      user && challenge ? challenge.author.isEqualTo(user).isTrue : false,
     isCompleted:
-      challenge && user
-        ? user?.hasCompletedChallenge(challenge?.id).or(challenge?.isCompleted).isTrue
+      user && challenge
+        ? user.hasCompletedChallenge(challenge.id).or(challenge.isCompleted).isTrue
         : false,
   }
 }

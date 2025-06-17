@@ -1,12 +1,10 @@
-'use client'
-
 import { useEffect, useState } from 'react'
 
 import { UserAnswer } from '@stardust/core/global/structures'
 import type {
   ChallengeRewardingPayload,
   StarChallengeRewardingPayload,
-} from '@stardust/core/challenging/types'
+} from '@stardust/core/profile/types'
 
 import { COOKIES, ROUTES, STORAGE } from '@/constants'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
@@ -43,37 +41,37 @@ export function useChallengeResultSlot() {
   async function showRewards() {
     if (!challenge || !user) return
     setIsLeavingPage(true)
-
     const currentSeconds = Number(secondsCounterStorage.get())
 
     if (challenge.starId?.value) {
-      const rewardsPayload: StarChallengeRewardingPayload = {
+      const rewardingPayload: StarChallengeRewardingPayload = {
         secondsCount: currentSeconds,
         incorrectAnswersCount: challenge.incorrectAnswersCount.value,
+        maximumIncorrectAnswersCount: challenge.maximumIncorrectAnswersCount.value,
         challengeId: challenge?.id.value,
         starId: challenge?.starId?.value,
       }
 
       await setCookie({
         key: COOKIES.keys.rewardingPayload,
-        value: JSON.stringify(rewardsPayload),
+        value: JSON.stringify(rewardingPayload),
       })
       leavePage(ROUTES.rewarding.starChallenge)
       return
     }
 
-    const rewardsPayload: ChallengeRewardingPayload = {
+    const rewardingPayload: ChallengeRewardingPayload = {
       secondsCount: currentSeconds,
       incorrectAnswersCount: challenge.incorrectAnswersCount.value,
+      maximumIncorrectAnswersCount: challenge.maximumIncorrectAnswersCount.value,
       challengeId: challenge?.id.value,
     }
 
     await setCookie({
       key: COOKIES.keys.rewardingPayload,
-      value: JSON.stringify(rewardsPayload),
+      value: JSON.stringify(rewardingPayload),
     })
     leavePage(ROUTES.rewarding.challenge)
-    return
   }
 
   function handleUserAnswer() {

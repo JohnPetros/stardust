@@ -1,10 +1,9 @@
 'use client'
 
-import { CodeEditor } from '@/ui/global/widgets/components/CodeEditor'
 import { useChallengeCodeEditorSlot } from './useChallengeCodeEditorSlot'
-import { CodeEditorToolbar } from '@/ui/global/widgets/components/CodeEditorToolbar'
+import { ChallengeCodeEditorSlotView } from './ChallengeCodeEditorSlotView'
 
-export function ChallengeCodeEditorSlot() {
+export const ChallengeCodeEditorSlot = () => {
   const {
     initialCode,
     originalCode,
@@ -16,21 +15,14 @@ export function ChallengeCodeEditorSlot() {
   } = useChallengeCodeEditorSlot()
 
   return (
-    <div ref={editorContainerRef} className='relative h-full w-full'>
-      <CodeEditorToolbar
-        originalCode={originalCode}
-        codeEditorRef={codeEditorRef}
-        onRunCode={handleRunCode}
-      >
-        <CodeEditor
-          ref={codeEditorRef}
-          value={initialCode ?? ''}
-          width='100%'
-          height={codeEditorHeight - 40}
-          hasMinimap
-          onChange={handleCodeChange}
-        />
-      </CodeEditorToolbar>
-    </div>
+    <ChallengeCodeEditorSlotView
+      editorContainerRef={editorContainerRef}
+      codeEditorRef={codeEditorRef}
+      codeEditorHeight={codeEditorHeight}
+      originalCode={originalCode}
+      initialCode={initialCode}
+      onCodeChange={handleCodeChange}
+      onRunCode={handleRunCode}
+    />
   )
 }

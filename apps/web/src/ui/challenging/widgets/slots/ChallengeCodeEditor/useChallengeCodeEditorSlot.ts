@@ -1,5 +1,3 @@
-'use client'
-
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { Code } from '@stardust/core/global/structures'

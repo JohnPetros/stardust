@@ -9,7 +9,7 @@ import {
 } from '#global/domain/structures/index'
 import { AuthorAggregate } from '#global/domain/aggregates/index'
 import { Datetime } from '#global/libs/index'
-import { ChallengeDifficulty, TestCase } from '../structures'
+import { ChallengeDifficulty, ChallengeVote, TestCase } from '../structures'
 import type { ChallengeDto } from '../entities/dtos'
 import { ChallengeCategory } from '../entities'
 
@@ -40,7 +40,7 @@ export class ChallengeFactory {
       downvotesCount: Integer.create(dto.downvotesCount ?? 0, 'Contagem de dowvotes'),
       upvotesCount: Integer.create(dto.upvotesCount ?? 0, 'Contagem de upvotes'),
       categories,
-      userVote: null,
+      userVote: ChallengeVote.createAsNone(),
       description: Text.create(dto.description),
       isPublic: Logical.create(
         typeof dto.isPublic !== 'undefined' ? dto.isPublic : false,

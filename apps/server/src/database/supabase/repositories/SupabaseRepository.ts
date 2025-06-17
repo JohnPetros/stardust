@@ -1,7 +1,8 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
+import type { Database } from '../types/Database'
 
 export abstract class SupabaseRepository {
-  constructor(protected readonly supabase: SupabaseClient) {}
+  constructor(protected readonly supabase: SupabaseClient<Database>) {}
 
   protected readonly POSTGRES_ERROR_CODES = {
     PGRST100: 'PGRST100', // Parsing error in the query string parameter

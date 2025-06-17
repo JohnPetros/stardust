@@ -1,9 +1,8 @@
-'use client'
-
-import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
 import { useEffect, useMemo, useState } from 'react'
 
-type UseTestCaseProps = {
+import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
+
+type Params = {
   isLocked: boolean
   isCorrect: boolean
   inputs: unknown[]
@@ -17,7 +16,7 @@ export function useTestCase({
   inputs,
   userOutput,
   expectedOutput,
-}: UseTestCaseProps) {
+}: Params) {
   const [isOpen, setIsOpen] = useState(false)
   const { provider } = useCodeRunner()
 

@@ -1,5 +1,6 @@
 export { AccessChallengePageAction } from './AccessChallengePageAction'
 export { AccessChallengeCommentsSlotAction } from './AccessChallengeCommentsSlotAction'
+export { AccessChallengeEditorPageAction } from './AccessChallengeEditorPage'
 export { VoteChallengeAction } from './VoteChallengeAction'
 export { FetchChallengesListAction } from './FetchChallengesListAction'
 export { EditSolutionAction } from './EditSolutionAction'
