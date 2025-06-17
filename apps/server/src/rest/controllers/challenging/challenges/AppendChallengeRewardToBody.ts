@@ -1,6 +1,6 @@
-import { GetChallengeRewardUseCase } from '@stardust/core/challenging/use-cases'
 import type { Controller, Http } from '@stardust/core/global/interfaces'
 import type { ChallengesRepository } from '@stardust/core/challenging/interfaces'
+import { GetChallengeRewardUseCase } from '@stardust/core/challenging/use-cases'
 
 type Schema = {
   body: {
@@ -14,8 +14,15 @@ export class AppendChallengeRewardToBodyController implements Controller<Schema>
   async handle(http: Http<Schema>) {
     const { challengeId } = await http.getBody()
     const useCase = new GetChallengeRewardUseCase(this.challengesRepository)
-    const challengeReward = await useCase.execute({ challengeId })
-    http.extendBody({ challengeReward })
+    const { xp, coins } = await useCase.execute({
+      challengeId,
+    })
+    http.extendBody({
+      challengeReward: {
+        xp,
+        coins,
+      },
+    })
     return http.pass()
   }
 }
