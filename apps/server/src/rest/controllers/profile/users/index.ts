@@ -8,3 +8,4 @@ export { RewardUserForStarCompletionController } from './RewardUserForStarComple
 export { RewardUserForStarChallengeCompletionController } from './RewardUserForStarChallengeCompletionController'
 export { RewardUserForChallengeCompletionController } from './RewardUserForChallengeCompletionController'
 export { AppendUserCompletedChallengesIdsToBodyController } from './AppendUserCompletedChallengesIdsToBodyController'
+export { UpvoteCommentController } from './UpvoteCommentController'
