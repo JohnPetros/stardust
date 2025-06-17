@@ -1,5 +1,3 @@
-'use client'
-
 import { type FormEvent, type RefObject, useEffect, useState } from 'react'
 
 import type { TextEditorRef, TextEditorSnippet } from '../../TextEditor/types'

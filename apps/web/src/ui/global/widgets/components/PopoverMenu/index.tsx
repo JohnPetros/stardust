@@ -37,31 +37,29 @@ export function PopoverMenu({
               const isFirst = index === 0
               return (
                 <li key={`${title}-${index}`}>
-                  <Hydration>
-                    <button
-                      aria-label={label}
-                      type='button'
-                      className={twMerge(
-                        'mr-auto flex w-full items-center justify-between border-t p-2 text-sm text-left text-gray-100',
-                        !isFirst ? 'border-green-400' : 'border-transparent',
+                  <button
+                    aria-label={label}
+                    type='button'
+                    className={twMerge(
+                      'mr-auto flex w-full items-center justify-between border-t p-3 text-sm text-left text-gray-100',
+                      !isFirst ? 'border-green-400' : 'border-transparent',
+                    )}
+                    onClick={() => handleButtonClick({ action })}
+                    name={title}
+                  >
+                    <div className='flex gap-2'>
+                      {icon && icon}
+                      {title && (
+                        <label htmlFor={`button-${index}`} className='cursor-pointer'>
+                          {title}
+                        </label>
                       )}
-                      onClick={() => handleButtonClick({ action })}
-                      name={title}
-                    >
-                      <div className='flex gap-2'>
-                        {icon && icon}
-                        {title && (
-                          <label htmlFor={`button-${index}`} className='cursor-pointer'>
-                            {title}
-                          </label>
-                        )}
-                      </div>
+                    </div>
 
-                      {isToggle && (
-                        <Checkbox id={`button-${index}`} isChecked={Boolean(value)} />
-                      )}
-                    </button>
-                  </Hydration>
+                    {isToggle && (
+                      <Checkbox id={`button-${index}`} isChecked={Boolean(value)} />
+                    )}
+                  </button>
                 </li>
               )
             })}

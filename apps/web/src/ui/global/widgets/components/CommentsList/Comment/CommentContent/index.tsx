@@ -1,10 +1,11 @@
 'use client'
 
-import { Mdx } from '../../../Mdx'
-import { CommentInput } from '../../CommentInput'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { CommentContentView } from './CommentContentView'
 import { useCommentContent } from './useCommentContent'
+import { useRest } from '@/ui/global/hooks/useRest'
 
-type CommentContentInputProps = {
+type Props = {
   commentId: string
   initialContent: string
   canEditComment: boolean
@@ -12,39 +13,30 @@ type CommentContentInputProps = {
   onCancel: () => void
 }
 
-export function CommentContent({
+export const CommentContent = ({
   commentId,
   initialContent,
   canEditComment,
   onEdit,
   onCancel,
-}: CommentContentInputProps) {
-  const { content, handleEditComment, handleCancelCommentEdition } = useCommentContent(
+}: Props) => {
+  const { forumService } = useRest()
+  const { content, handleEditComment, handleCancelCommentEdition } = useCommentContent({
+    forumService,
     commentId,
     initialContent,
-    onEdit,
-    onCancel,
-  )
+    onEdit: () => onEdit(),
+    onEditionCancel: () => onCancel(),
+  })
 
-  return canEditComment ? (
-    <>
-      <CommentInput
-        id={`user-comment-${commentId}-edition`}
-        title='Editar'
-        defaultContent={content}
-        onSend={handleEditComment}
-      />
-      <button
-        type='button'
-        className='mt-3 translate-x-6 text-sm text-green-700'
-        onClick={handleCancelCommentEdition}
-      >
-        Cancelar edição
-      </button>
-    </>
-  ) : (
-    <div className='text-sm'>
-      <Mdx>{content}</Mdx>
-    </div>
+  return (
+    <CommentContentView
+      commentId={commentId}
+      initialContent={initialContent}
+      canEditComment={canEditComment}
+      content={content}
+      onEdit={handleEditComment}
+      onEditionCancel={handleCancelCommentEdition}
+    />
   )
 }

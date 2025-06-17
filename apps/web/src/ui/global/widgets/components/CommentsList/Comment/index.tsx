@@ -2,21 +2,24 @@
 
 import Link from 'next/link'
 
-import { useComment } from './useComment'
+import { Id } from '@stardust/core/global/structures'
+
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { useRest } from '@/ui/global/hooks/useRest'
+import { ROUTES } from '@/constants'
+import { useComment } from './useComment'
 import { AlertDialog } from '../../AlertDialog'
 import { Button } from '../../Button'
 import { UserAvatar } from '../../UserAvatar'
-import { ROUTES } from '@/constants'
 import { Loading } from '../../Loading'
 import { Separator } from '../../Separator'
 import { UpvoteButton } from './UpvoteCommentButton'
 import { CommentHeader } from './CommentHeader'
 import { CommentContent } from './CommentContent'
-import { CommentRepliesButton } from './CommentRepliesButton/CommentRepliesButton'
+import { CommentRepliesButton } from './CommentRepliesButton'
 import { ReplyInput } from './ReplyInput'
 
-type CommentProps = {
+type Props = {
   id: string
   content: string
   postedAt: Date
@@ -33,7 +36,7 @@ type CommentProps = {
   onDelete: (commentId: string) => void
 }
 
-export function Comment({
+export const Comment = ({
   id,
   content,
   postedAt,
@@ -45,7 +48,8 @@ export function Comment({
   authorSlug,
   isAuthorUser,
   onDelete,
-}: CommentProps) {
+}: Props) => {
+  const { forumService } = useRest()
   const {
     replies,
     isUserReplyInputVisible,
@@ -61,9 +65,11 @@ export function Comment({
     handleCancelUserReply,
     handleEditComment,
     handleCancelCommentEdition,
-  } = useComment(id)
+  } = useComment(forumService, Id.create(id))
   const { user } = useAuthContext()
   const hasReplies = (replies && replies.length > 0) || repliesCount > 0 || false
+
+  console.log(user?.upvotedCommentsIds)
 
   return (
     <>
@@ -161,7 +167,6 @@ export function Comment({
                           content={reply.content.value}
                           upvotesCount={reply.upvotesCount.value}
                           repliesCount={reply.repliesCount.value}
-                          isUpvoted={user.hasUpvotedComment(reply.id).isTrue}
                           authorSlug={reply.author.slug.value}
                           authorName={reply.author.name.value}
                           authorAvatar={{
@@ -170,6 +175,7 @@ export function Comment({
                           }}
                           postedAt={reply.postedAt}
                           isAuthorUser={reply.author.slug.value === user?.slug.value}
+                          isUpvoted={user.hasUpvotedComment(reply.id).isTrue}
                           onDelete={handleDeleteUserReply}
                         />
                       </li>

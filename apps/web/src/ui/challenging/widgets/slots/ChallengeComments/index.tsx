@@ -1,30 +1,25 @@
 'use client'
 
-import { CommentsList } from '@/ui/global/widgets/components/CommentsList'
-import { Loading } from '@/ui/global/widgets/components/Loading'
-import { ChallengeContentNav } from '../../components/ChallengeContentNav'
-import { BlockedContentAlertDialog } from '../../components/BlockedContentMessage'
 import { useChallengeCommentsSlot } from './useChallengeCommentsSlot'
+import { ChallengeCommentsSlotView } from './ChallengeCommentsSlotView'
+import { useRest } from '@/ui/global/hooks/useRest'
+import { Id } from '@stardust/core/global/structures'
 
-type ChallengeCommentsSlotProps = {
+type Props = {
   challengeId: string
 }
 
-export function ChallengeCommentsSlot({ challengeId }: ChallengeCommentsSlotProps) {
-  const { handleCommentListFetch, handleCommentSave } =
-    useChallengeCommentsSlot(challengeId)
+export const ChallengeCommentsSlot = ({ challengeId }: Props) => {
+  const { forumService } = useRest()
+  const { handleCommentListFetch, handleCommentPost } = useChallengeCommentsSlot(
+    forumService,
+    Id.create(challengeId),
+  )
 
   return (
-    <BlockedContentAlertDialog content='comments'>
-      <div className='px-6 pt-3'>
-        <ChallengeContentNav contents={['description', 'solutions']} />
-      </div>
-      <CommentsList
-        inputPlaceholder='Deixe um comentário sobre esse desafio...'
-        emptyListMessage='Esse desafio ainda não tem comentários. Seja a primeira pessoa a comentar 😉.'
-        onFetchComments={handleCommentListFetch}
-        onSaveComment={handleCommentSave}
-      />
-    </BlockedContentAlertDialog>
+    <ChallengeCommentsSlotView
+      onFetchComments={handleCommentListFetch}
+      onPostComment={handleCommentPost}
+    />
   )
 }

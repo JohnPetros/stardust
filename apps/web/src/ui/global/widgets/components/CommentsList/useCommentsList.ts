@@ -1,33 +1,38 @@
-'use client'
-
 import { useState } from 'react'
 
-import type { ListingOrder } from '@stardust/core/global/types'
-import type { CommentsListSorter } from '@stardust/core/forum/types'
+import type { ForumService } from '@stardust/core/forum/interfaces'
 import { Comment } from '@stardust/core/forum/entities'
+import { Id, ListingOrder, OrdinalNumber } from '@stardust/core/global/structures'
+import { CommentsListSorter } from '@stardust/core/forum/structures'
 
 import { CACHE } from '@/constants'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { useApi } from '@/ui/global/hooks/useApi'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 import type { PopoverMenuButton } from '../PopoverMenu/types'
 import type { CommentsListProps } from './CommentsListProps'
 
-const COMMENTS_PER_PAGE = 10
+const COMMENTS_PER_PAGE = OrdinalNumber.create(10)
 
-export function useCommentsList({ onFetchComments, onSaveComment }: CommentsListProps) {
-  const [sorter, setSorter] = useState<CommentsListSorter>('date')
-  const [order, setOrder] = useState<ListingOrder>('descending')
+type Params = {
+  userId?: string
+  forumService: ForumService
+} & CommentsListProps
+
+export function useCommentsList({
+  userId,
+  forumService,
+  onFetchComments,
+  onPostComment,
+}: Params) {
+  const [sorter, setSorter] = useState(CommentsListSorter.createAsByDate())
+  const [order, setOrder] = useState(ListingOrder.createAsDescending())
   const [isPopoverMenuOpen, setIsPopoverMenuOpen] = useState(false)
-  const { user } = useAuthContext()
   const toast = useToastContext()
-  const api = useApi()
 
   async function fetchComments(page: number) {
     const response = await onFetchComments({
       itemsPerPage: COMMENTS_PER_PAGE,
-      page,
+      page: OrdinalNumber.create(page),
       sorter,
       order,
     })
@@ -41,29 +46,28 @@ export function useCommentsList({ onFetchComments, onSaveComment }: CommentsList
 
   const { data, isLoading, isRecheadedEnd, refetch, nextPage } = usePaginatedCache({
     key: CACHE.keys.comments,
-    itemsPerPage: COMMENTS_PER_PAGE,
+    itemsPerPage: COMMENTS_PER_PAGE.value,
     fetcher: fetchComments,
     shouldRefetchOnFocus: false,
     isInfinity: true,
-    dependencies: [sorter, order],
+    dependencies: [sorter.value, order.value],
   })
 
   async function handleSendComment(commentContent: string) {
-    if (!user) return
-
+    if (!userId) return
     const comment = Comment.create({
       content: commentContent,
       author: {
-        id: user.id.value,
+        id: userId,
       },
     })
 
-    await onSaveComment(comment)
+    await onPostComment(comment)
     refetch()
   }
 
   async function handleDeleteComment(commentId: string) {
-    const response = await api.deleteComment(commentId)
+    const response = await forumService.deleteComment(Id.create(commentId))
 
     if (response.isSuccessful) {
       refetch()
@@ -86,20 +90,32 @@ export function useCommentsList({ onFetchComments, onSaveComment }: CommentsList
     {
       title: 'Mais recentes',
       isToggle: true,
-      value: sorter === 'date' && order === 'descending',
-      action: () => handleSortComments('date', 'descending'),
+      value: sorter.isByDate.and(order.isDescending).isTrue,
+      action: () =>
+        handleSortComments(
+          CommentsListSorter.createAsByDate(),
+          ListingOrder.createAsDescending(),
+        ),
     },
     {
       title: 'Mais antigos',
       isToggle: true,
-      value: sorter === 'date' && order === 'ascending',
-      action: () => handleSortComments('date', 'ascending'),
+      value: sorter.isByDate.and(order.isAscending).isTrue,
+      action: () =>
+        handleSortComments(
+          CommentsListSorter.createAsByDate(),
+          ListingOrder.createAsAscending(),
+        ),
     },
     {
       title: 'Mais votados',
       isToggle: true,
-      value: sorter === 'upvotes',
-      action: () => handleSortComments('upvotes', 'descending'),
+      value: sorter.isByUpvotes.isTrue,
+      action: () =>
+        handleSortComments(
+          CommentsListSorter.createAsByUpvotes(),
+          ListingOrder.createAsDescending(),
+        ),
     },
   ]
 
