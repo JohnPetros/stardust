@@ -1,0 +1,65 @@
+@URL = {{BASE_URL}}/forum/comments
+@COMMENT_ID = 701a7328-3117-4be9-a1e2-ee4468f5151e
+@CHALLENGE_ID = 17ba01ec-7aa6-4971-9760-537127e03b4d
+@SOLUTION_ID = 17ba01ec-7aa6-4971-9760-537127e03b4d
+
+### Fetch challenge comments list
+GET {{URL}}/challenge/{{CHALLENGE_ID}}
+?sorter=date
+&order=desc
+&page=1
+&itemsPerPage=10
+Authorization: Bearer {{JWT}}
+
+### Fetch solution comments list
+GET {{URL}}/solution/{{SOLUTION_ID}}
+?sorter=date
+&order=desc
+&page=1
+&itemsPerPage=10
+Authorization: Bearer {{JWT}}
+
+### Fetch comment replies
+GET {{URL}}/{{COMMENT_ID}}/replies
+Authorization: Bearer {{JWT}}
+
+### Post challenge comment
+POST {{URL}}/challenge/{{CHALLENGE_ID}}
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "content": "This is a test comment for challenge"
+}
+
+### Post solution comment
+POST {{URL}}/solution/{{SOLUTION_ID}}
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "content": "This is a test comment for solution",
+}
+
+### Reply comment
+POST {{URL}}/{{COMMENT_ID}}/replies
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "content": "This is a test reply for comment"
+}
+
+### Edit comment
+PATCH {{URL}}/{{COMMENT_ID}}
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "content": "This is a test edited comment"
+}
+
+### Delete comment
+DELETE {{URL}}/{{COMMENT_ID}}
+Authorization: Bearer {{JWT}}
+

@@ -29,7 +29,7 @@ export class AuthorAggregate extends Aggregate<Author> {
   get dto(): AuthorAggregateDto {
     return {
       id: this.id.value,
-      entity: this.entity?.dto,
+      entity: this.hasEntity.isTrue ? this.entity.dto : undefined,
     }
   }
 }

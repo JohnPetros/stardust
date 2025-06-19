@@ -18,6 +18,8 @@ export interface UsersRepository {
   addAcquiredAvatar(avatarId: Id, userId: Id): Promise<void>
   addAcquiredRocket(rocketId: Id, userId: Id): Promise<void>
   addUnlockedStar(starId: Id, userId: Id): Promise<void>
+  addUpvotedComment(commentId: Id, userId: Id): Promise<void>
+  removeUpvotedComment(commentId: Id, userId: Id): Promise<void>
   addUnlockedAchievement(achievementId: Id, userId: Id): Promise<void>
   addRescuableAchievement(achievementId: Id, userId: Id): Promise<void>
   removeRescuableAchievement(achievementId: Id, userId: Id): Promise<void>

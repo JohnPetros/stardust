@@ -1,28 +1,27 @@
-'use client'
-
 import { useRef, useState } from 'react'
 
+import type { ForumService } from '@stardust/core/forum/interfaces'
+import { Comment } from '@stardust/core/forum/entities'
+import { Id } from '@stardust/core/global/structures'
+
 import { CACHE } from '@/constants'
-import { useApi } from '@/ui/global/hooks/useApi'
 import { useCache } from '@/ui/global/hooks/useCache'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import type { AlertDialogRef } from '../../AlertDialog/types'
 import type { PopoverMenuButton } from '../../PopoverMenu/types'
-import { Comment } from '@stardust/core/forum/entities'
 
-export function useComment(commentId: string) {
+export function useComment(forumService: ForumService, commentId: Id) {
   const [shouldFetchCommentReplies, setShouldFetchCommentReplies] = useState(false)
   const [canEditComment, setCanEditComment] = useState(false)
   const [isUserReplyInputVisible, setIsUserReplyInputVisible] = useState(false)
   const [isRepliesVisible, setIsRepliesVisible] = useState(false)
   const { user } = useAuthContext()
   const toast = useToastContext()
-  const api = useApi()
   const alertDialogRef = useRef<AlertDialogRef>(null)
 
   async function fetchReplies() {
-    const response = await api.fetchCommentReplies(commentId)
+    const response = await forumService.fetchCommentReplies(commentId)
     if (response.isFailure) response.throwError()
     return response.body
   }
@@ -49,7 +48,7 @@ export function useComment(commentId: string) {
       content: replyContent,
     })
 
-    const response = await api.saveCommentReply(reply, commentId)
+    const response = await forumService.replyComment(reply, commentId)
 
     if (response.isFailure) {
       toast.show(response.errorMessage)
@@ -67,7 +66,7 @@ export function useComment(commentId: string) {
 
   async function handleDeleteUserReply(replyId: string) {
     if (!user) return
-    const response = await api.deleteComment(replyId)
+    const response = await forumService.deleteComment(Id.create(replyId))
     if (response.isSuccessful) {
       refetchReplies()
       return

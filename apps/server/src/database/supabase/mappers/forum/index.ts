@@ -1,0 +1,1 @@
+export { SupabaseCommentMapper } from './SupabaseCommentMapper'

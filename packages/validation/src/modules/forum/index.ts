@@ -1,0 +1,1 @@
+export { commentSchema } from './commentSchema'

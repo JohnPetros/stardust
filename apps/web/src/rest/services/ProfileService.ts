@@ -71,6 +71,10 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
       )
     },
 
+    async upvoteComment(commentId: Id) {
+      return await restClient.post(`/profile/users/comments/${commentId.value}/upvote`)
+    },
+
     async verifyUserNameInUse(userName: Name) {
       return await restClient.get(
         `/profile/users/verify-user-name-in-use?name=${userName.value}`,

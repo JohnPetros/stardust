@@ -2,19 +2,19 @@
 
 import { twMerge } from 'tailwind-merge'
 
-type CommentRepliesButtonProps = {
+type Props = {
   repliesCount: number
   hasReplies: boolean
   isRepliesVisible: boolean
   onToggleRepliesVisible: VoidFunction
 }
 
-export function CommentRepliesButton({
+export const CommentRepliesButtonView = ({
   repliesCount,
   hasReplies,
   isRepliesVisible,
   onToggleRepliesVisible,
-}: CommentRepliesButtonProps) {
+}: Props) => {
   return (
     <button
       type='button'

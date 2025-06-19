@@ -22,6 +22,7 @@ import {
   RewardUserForStarCompletionController,
   RewardUserForStarChallengeCompletionController,
   RewardUserForChallengeCompletionController,
+  UpvoteCommentController,
 } from '@/rest/controllers/profile'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
@@ -222,6 +223,26 @@ export class UsersRouter extends HonoRouter {
     )
   }
 
+  private registerUpvoteCommentRoute() {
+    this.router.post(
+      '/comments/:commentId/upvote',
+      this.authMiddleware.verifyAuthentication,
+      zValidator(
+        'param',
+        z.object({
+          commentId: idSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const controller = new UpvoteCommentController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   private registerVerifyUserNameInUseRoute() {
     this.router.get(
       '/verify-name-in-use',
@@ -269,6 +290,7 @@ export class UsersRouter extends HonoRouter {
     this.registerRewardUserForChallengeCompletionRoute()
     this.registerAcquireAvatarRoute()
     this.registerAcquireRocketRoute()
+    this.registerUpvoteCommentRoute()
     this.registerVerifyUserNameInUseRoute()
     this.registerVerifyUserEmailInUseRoute()
     return this.router

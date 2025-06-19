@@ -1,33 +1,39 @@
 import { useState } from 'react'
 
-import { useUpvoteCommentAction } from './useUpvoteCommentAction'
+import type { ProfileService } from '@stardust/core/profile/interfaces'
+import { Id } from '@stardust/core/global/structures'
+
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
-export function useUpvoteComment(initialUpvotesCount: number, initialIsUpvoted: boolean) {
+type Params = {
+  profileService: ProfileService
+  initialUpvotesCount: number
+  initialIsUpvoted: boolean
+}
+
+export function useUpvoteComment({
+  profileService,
+  initialUpvotesCount,
+  initialIsUpvoted,
+}: Params) {
   const [isUpvoted, setIsUpvoted] = useState(initialIsUpvoted)
   const [upvotesCount, setUpvotesCount] = useState(initialUpvotesCount)
-  const { upvoteComment, isExecuting } = useUpvoteCommentAction({
-    onError: () => {
-      setUpvotesCount(initialUpvotesCount)
-      setIsUpvoted(initialIsUpvoted)
-    },
-  })
   const { user, updateUserCache } = useAuthContext()
 
   async function handleButtonClick(commentId: string) {
-    if (isExecuting || !user) return
+    if (!user) return
 
     if (isUpvoted && upvotesCount > 0) {
       setUpvotesCount((currentUpvotesCount) => currentUpvotesCount - 1)
     } else setUpvotesCount((upvotesCount) => upvotesCount + 1)
     setIsUpvoted(!isUpvoted)
 
-    const response = await upvoteComment(commentId)
-    if (response) {
-      setUpvotesCount(response.upvotesCount)
+    const response = await profileService.upvoteComment(Id.create(commentId))
+
+    if (response.isSuccessful) {
       updateUserCache({
         ...user.dto,
-        upvotedCommentsIds: response.userUpvotedCommentsIds,
+        upvotedCommentsIds: response.body.userUpvotedCommentsIds,
       })
     }
   }

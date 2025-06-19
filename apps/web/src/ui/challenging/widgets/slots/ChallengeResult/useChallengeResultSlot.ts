@@ -90,7 +90,7 @@ export function useChallengeResultSlot() {
     const newUserAnswer = challenge.verifyUserAnswer(userAnswer)
 
     if (newUserAnswer.isCorrect.isTrue) {
-      challenge.makeCompleted()
+      challenge.becomeCompleted()
       setChallenge(challenge)
       if (craftsVislibility) setCraftsVislibility(craftsVislibility.showAll())
     }

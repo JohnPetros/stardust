@@ -1,0 +1,1 @@
+export { CommentNotFoundError } from './CommentNotFoundError'
