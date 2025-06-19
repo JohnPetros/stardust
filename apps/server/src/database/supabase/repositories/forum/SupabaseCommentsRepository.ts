@@ -64,7 +64,7 @@ export class SupabaseCommentsRepository
   ): Promise<{ comments: Comment[]; totalCommentsCount: number }> {
     let query = this.supabase
       .from('comments_view')
-      .select('*, challenges_comments!inner(challenge_id)', { count: 'exact' })
+      .select('*, solutions_comments!inner(solution_id)', { count: 'exact' })
 
     if (params.sorter.isByDate.isTrue) {
       query = query.order('created_at', { ascending: params.order.isAscending.isTrue })
