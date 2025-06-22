@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="340" height="100" src="https://aukqejqsiqsqowafpppb.supabase.co/storage/v1/object/public/images/marketing/logo.png" alt="StarDustt" />
+  <img width="360" height="100" src="https://aukqejqsiqsqowafpppb.supabase.co/storage/v1/object/public/images/marketing/logo.png" alt="StarDustt" />
 </div>
 
 <br />
