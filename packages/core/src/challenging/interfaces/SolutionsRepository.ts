@@ -8,4 +8,9 @@ export interface SolutionsRepository {
   findMany(
     params: SolutionsListingParams,
   ): Promise<{ solutions: Solution[]; totalSolutionsCount: number }>
+  add(solution: Solution, challengeId: Id): Promise<void>
+  replace(solution: Solution): Promise<void>
+  remove(solutionId: Id): Promise<void>
+  addSolutionUpvote(solutionId: Id, userId: Id): Promise<void>
+  removeSolutionUpvote(solutionId: Id, userId: Id): Promise<void>
 }

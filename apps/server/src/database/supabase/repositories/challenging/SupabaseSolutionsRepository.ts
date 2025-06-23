@@ -11,6 +11,24 @@ export class SupabaseSolutionsRepository
   extends SupabaseRepository
   implements SolutionsRepository
 {
+  async add(solution: Solution, challengeId: Id): Promise<void> {
+    const supabaseSolution = SupabaseSolutionMapper.toSupabase(solution)
+    const { error } = await this.supabase.from('solutions').insert({
+      // @ts-ignore
+      id: solution.id.value,
+      content: supabaseSolution.content,
+      views_count: supabaseSolution.views_count,
+      slug: supabaseSolution.slug,
+      title: supabaseSolution.title,
+      user_id: supabaseSolution.author_id,
+      challenge_id: challengeId.value,
+    })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
   async findById(solutionId: Id): Promise<Solution | null> {
     const { data, error } = await this.supabase
       .from('solutions_view')
@@ -41,7 +59,7 @@ export class SupabaseSolutionsRepository
 
   async findAllByNotAuthor(userId: Id) {
     const { data, error } = await this.supabase
-      .from('challenges_view')
+      .from('solutions_view')
       .select('*')
       .neq('user_id', userId.value)
 
@@ -65,14 +83,12 @@ export class SupabaseSolutionsRepository
   }> {
     let query = this.supabase.from('solutions_view').select('*', { count: 'exact' })
 
-    console.log({ page, itemsPerPage, title, sorter, userId, challengeId })
-
     if (challengeId) {
-      query = query.eq('challenge_id', challengeId)
+      query = query.eq('challenge_id', challengeId.value)
     }
 
     if (userId) {
-      query = query.eq('author_id', userId)
+      query = query.eq('author_id', userId.value)
     }
 
     if (title.isEmpty.isFalse) {
@@ -112,5 +128,56 @@ export class SupabaseSolutionsRepository
 
     const solutions = data.map(SupabaseSolutionMapper.toEntity)
     return { solutions, totalSolutionsCount: Number(count) }
+  }
+
+  async addSolutionUpvote(solutionId: Id, userId: Id): Promise<void> {
+    const { error } = await this.supabase.from('users_upvoted_solutions').insert({
+      solution_id: solutionId.value,
+      user_id: userId.value,
+    })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
+  async replace(solution: Solution): Promise<void> {
+    const solutionDto = solution.dto
+    const { error } = await this.supabase
+      .from('solutions')
+      .update({
+        content: solutionDto.content,
+        views_count: solutionDto.viewsCount,
+        slug: solutionDto.slug,
+        title: solutionDto.title,
+        user_id: solutionDto.author.id,
+      })
+      .eq('id', solution.id.value)
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
+  async removeSolutionUpvote(solutionId: Id, userId: Id): Promise<void> {
+    const { error } = await this.supabase
+      .from('users_upvoted_solutions')
+      .delete()
+      .match({ solution_id: solutionId.value, user_id: userId.value })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
+  async remove(solutionId: Id): Promise<void> {
+    const { error } = await this.supabase
+      .from('solutions')
+      .delete()
+      .match({ id: solutionId.value })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
   }
 }
