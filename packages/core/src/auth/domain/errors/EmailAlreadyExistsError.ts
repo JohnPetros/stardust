@@ -1,4 +1,4 @@
-import { ConflictError } from '../../../global/domain/errors'
+import { ConflictError } from '#global/domain/errors/index'
 
 export class EmailAlreadyExistsError extends ConflictError {
   constructor() {

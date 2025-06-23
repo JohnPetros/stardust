@@ -1,7 +1,9 @@
-import type { UseCase } from '../../global/interfaces'
-import type { ChallengingService } from '../interfaces'
-import { Solution } from '../domain/entities'
 import { Id } from '#global/domain/structures/Id'
+import { SolutionNotFoundError } from '#challenging/domain/errors/SolutionNotFoundError'
+import { SolutionTitleAlreadyInUseError } from '#challenging/domain/errors/SolutionTitleAlreadyInUseError'
+import { Slug } from '#global/domain/structures/Slug'
+import type { UseCase } from '../../global/interfaces'
+import type { SolutionsRepository } from '../interfaces'
 
 type Request = {
   solutionId: string
@@ -10,25 +12,23 @@ type Request = {
 }
 
 export class EditSolutionUseCase implements UseCase<Request> {
-  constructor(private readonly challengingService: ChallengingService) {}
+  constructor(private readonly repository: SolutionsRepository) {}
 
   async execute({ solutionId, solutionTitle, solutionContent }: Request) {
-    const solution = await this.fetchSolution(Id.create(solutionId))
+    const solution = await this.repository.findById(Id.create(solutionId))
+    if (!solution) throw new SolutionNotFoundError()
+
+    await this.checkIfSolutionTitleIsInUse(solutionTitle)
+
     solution.title = solutionTitle
     solution.content = solutionContent
 
-    await this.updateSolution(solution)
+    await this.repository.replace(solution)
     return solution.dto
   }
 
-  private async fetchSolution(solutionId: Id) {
-    const response = await this.challengingService.fetchSolutionById(solutionId)
-    if (response.isFailure) response.throwError()
-    return Solution.create(response.body)
-  }
-
-  private async updateSolution(solution: Solution) {
-    const response = await this.challengingService.updateSolution(solution)
-    if (response.isFailure) response.throwError()
+  private async checkIfSolutionTitleIsInUse(solutionTitle: string) {
+    const solution = await this.repository.findBySlug(Slug.create(solutionTitle))
+    if (solution) throw new SolutionTitleAlreadyInUseError()
   }
 }

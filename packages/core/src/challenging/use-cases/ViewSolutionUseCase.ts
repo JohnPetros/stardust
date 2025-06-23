@@ -1,7 +1,8 @@
-import { Solution } from '../domain/entities'
 import type { SolutionDto } from '../domain/entities/dtos'
 import type { UseCase } from '#global/interfaces/UseCase'
-import type { ChallengingService } from '../interfaces'
+import type { SolutionsRepository } from '../interfaces'
+import { SolutionNotFoundError } from '#challenging/domain/errors/SolutionNotFoundError'
+import { Slug } from '#global/domain/structures/Slug'
 
 type Request = {
   solutionSlug: string
@@ -10,21 +11,15 @@ type Request = {
 type Response = Promise<SolutionDto>
 
 export class ViewSolutionUseCase implements UseCase<Request, Response> {
-  constructor(private readonly challengingService: ChallengingService) {}
+  constructor(private readonly repository: SolutionsRepository) {}
 
   async execute({ solutionSlug }: Request) {
-    const solution = await this.fetchSolution(solutionSlug)
+    const solution = await this.repository.findBySlug(Slug.create(solutionSlug))
+    if (!solution) throw new SolutionNotFoundError()
+
     solution.view()
 
-    const response = await this.challengingService.updateSolution(solution)
-    if (response.isFailure) response.throwError()
-
+    await this.repository.replace(solution)
     return solution.dto
-  }
-
-  private async fetchSolution(solutionSlug: string) {
-    const response = await this.challengingService.fetchSolutionBySlug(solutionSlug)
-    if (response.isFailure) response.throwError()
-    return Solution.create(response.body)
   }
 }
