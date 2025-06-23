@@ -1,9 +1,9 @@
 import type { UseCase } from '#global/interfaces/index'
 import { Id, Slug } from '#global/domain/structures/index'
-import { ValidationError } from '#global/domain/errors/index'
-import { Challenge, Solution } from '../domain/entities'
-import type { ChallengingService } from '../interfaces'
+import { Solution } from '../domain/entities'
+import type { ChallengesRepository, SolutionsRepository } from '../interfaces'
 import type { SolutionDto } from '../domain/entities/dtos'
+import { ChallengeNotFoundError, SolutionTitleAlreadyInUseError } from '../domain/errors'
 
 type Request = {
   solutionTitle: string
@@ -15,39 +15,33 @@ type Request = {
 type Response = Promise<SolutionDto>
 
 export class PostSolutionUseCase implements UseCase<Request, Response> {
-  constructor(private readonly challengingService: ChallengingService) {}
+  constructor(
+    private readonly solutionsRepository: SolutionsRepository,
+    private readonly challengesRepository: ChallengesRepository,
+  ) {}
 
   async execute({ solutionTitle, solutionContent, authorId, challengeId }: Request) {
-    await this.fetchSolution(solutionTitle)
+    await this.checkIfSolutionTitleIsInUse(solutionTitle)
+    await this.checkIfChallengeExists(Id.create(challengeId))
+
     const solution = Solution.create({
       title: solutionTitle,
       content: solutionContent,
       author: { id: authorId },
     })
-    await this.fetchChallenge(Id.create(challengeId))
 
-    await this.saveSolution(solution, Id.create(challengeId))
+    await this.solutionsRepository.add(solution, Id.create(challengeId))
     return solution.dto
   }
 
-  private async fetchChallenge(challengeId: Id) {
-    const response = await this.challengingService.fetchChallengeById(challengeId)
-    if (response.isFailure) response.throwError()
-    return Challenge.create(response.body)
+  private async checkIfSolutionTitleIsInUse(solutionTitle: string) {
+    const solution = await this.solutionsRepository.findBySlug(Slug.create(solutionTitle))
+    if (solution) throw new SolutionTitleAlreadyInUseError()
   }
 
-  private async fetchSolution(solutionTitle: string) {
-    const response = await this.challengingService.fetchSolutionBySlug(
-      Slug.create(solutionTitle).value,
-    )
-    if (response.isSuccessful)
-      throw new ValidationError([
-        { name: 'solutionTitle', messages: ['Título já usado por outra solução'] },
-      ])
-  }
-
-  private async saveSolution(solution: Solution, challengeId: Id) {
-    const response = await this.challengingService.saveSolution(solution, challengeId)
-    if (response.isFailure) response.throwError()
+  private async checkIfChallengeExists(challengeId: Id) {
+    const challenge = await this.challengesRepository.findById(challengeId)
+    if (!challenge) throw new ChallengeNotFoundError()
+    return challenge
   }
 }
