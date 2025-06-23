@@ -14,8 +14,7 @@ export class SupabaseSolutionsRepository
   async add(solution: Solution, challengeId: Id): Promise<void> {
     const supabaseSolution = SupabaseSolutionMapper.toSupabase(solution)
     const { error } = await this.supabase.from('solutions').insert({
-      // @ts-ignore
-      id: solution.id.value,
+      id: solution.id.value as string, // Ensure type alignment with the database schema
       content: supabaseSolution.content,
       views_count: supabaseSolution.views_count,
       slug: supabaseSolution.slug,
