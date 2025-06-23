@@ -107,6 +107,11 @@ export class HonoHttp<HonoContext extends Context>
     return this.getCookie(key) !== null
   }
 
+  async getAccountId(): Promise<string> {
+    const account = await this.getAccount()
+    return String(account.id)
+  }
+
   extendBody(body: unknown): void {
     this.context.set('extra-body', {
       ...this.context.get('extra-body'),

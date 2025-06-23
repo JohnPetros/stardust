@@ -17,6 +17,7 @@ export interface Http<Schema extends HttpSchema = HttpSchema, Response = unknown
   getRouteParams(): Schema['routeParams']
   getQueryParams(): Schema['queryParams']
   getAccount(): Promise<AccountDto>
+  getAccountId(): Promise<string>
   getMethod(): HttpMethod
   setCookie(key: string, value: string, duration: number): void
   getCookie(key: string): Promise<string | null>
