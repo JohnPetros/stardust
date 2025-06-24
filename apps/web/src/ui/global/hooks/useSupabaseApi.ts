@@ -1,5 +1,3 @@
-'use client'
-
 import { useMemo } from 'react'
 
 import { useSupabaseContext } from '@/ui/global/contexts/SupabaseContext/hooks'
@@ -11,7 +9,6 @@ import {
   SupabaseRankingService,
   SupabaseChallengingService,
   SupabasePlaygroundService,
-  SupabaseForumService,
   SupabaseStorageService,
 } from '@/rest/supabase/services'
 
@@ -25,7 +22,6 @@ export function useSupabaseApi() {
       ...SupabaseLessonService(supabase),
       ...SupabaseRankingService(supabase),
       ...SupabaseChallengingService(supabase),
-      ...SupabaseForumService(supabase),
       ...SupabasePlaygroundService(supabase),
       ...SupabaseStorageService(),
     }
