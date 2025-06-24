@@ -14,7 +14,7 @@ export class SortableList {
   private constructor(readonly items: Item[]) {}
 
   static create(items: Item[]): SortableList {
-    return new SortableList(items)
+    return new SortableList(ShuffledList.create(items).items)
   }
 
   static isSoratableList(list: unknown): list is SortableList {
@@ -42,12 +42,14 @@ export class SortableList {
   }
 
   isEqualTo(otherList: SortableList): Logical {
-    return List.create(this.orderedItems).isStrictlyEqualTo(List.create(otherList.items))
+    return List.create(
+      this.orderedItems.map((item) => item.label.value),
+    ).isStrictlyEqualTo(List.create(otherList.items.map((item) => item.label.value)))
   }
 
   get orderedItems(): Item[] {
     const items = [...this.items]
-    return items.sort((a, b) => a.originalPosition.minus(b.originalPosition).value)
+    return items.sort((a, b) => a.originalPosition.value - b.originalPosition.value)
   }
 
   private getItemIndex(itemOriginalPosition: Integer): number {
