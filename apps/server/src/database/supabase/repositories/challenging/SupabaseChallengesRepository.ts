@@ -53,6 +53,20 @@ export class SupabaseChallengesRepository
     return SupabaseChallengeMapper.toEntity(data)
   }
 
+  async findByStar(starId: Id): Promise<Challenge | null> {
+    const { data, error } = await this.supabase
+      .from('challenges_view')
+      .select('*')
+      .eq('star_id', starId.value)
+      .single()
+
+    if (error) {
+      return null
+    }
+
+    return SupabaseChallengeMapper.toEntity(data)
+  }
+
   async findAllByNotAuthor(userId: Id) {
     const { data, error } = await this.supabase
       .from('challenges_view')
@@ -190,19 +204,5 @@ export class SupabaseChallengesRepository
     if (error) {
       throw new SupabasePostgreError(error)
     }
-  }
-
-  async findByStar(starId: Id): Promise<Challenge | null> {
-    const { data, error } = await this.supabase
-      .from('challenges_view')
-      .select('*')
-      .eq('star_id', starId.value)
-      .single()
-
-    if (error) {
-      return null
-    }
-
-    return SupabaseChallengeMapper.toEntity(data)
   }
 }

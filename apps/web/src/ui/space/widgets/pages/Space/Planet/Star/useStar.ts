@@ -31,7 +31,6 @@ export function useStar({
   const { playAudio } = useAudioContext()
   const isFirstScroll = useRef(true)
   const router = useRouter()
-  const api = useApi()
   const isInView = useInView(lastUnlockedStarRef)
 
   async function handleStarNavigation() {

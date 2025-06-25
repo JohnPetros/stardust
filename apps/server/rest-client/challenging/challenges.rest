@@ -1,9 +1,14 @@
 @URL = {{BASE_URL}}/challenging/challenges
 @CHALLENGE_ID = 17ba01ec-7aa6-4971-9760-537127e03b4d
 @SLUG = inversao-de-lista
+@STAR_ID = bda4c82c-9466-4619-bdd6-89f719c54c27
 
 ### Fetch challenge by slug
 GET {{URL}}/slug/{{SLUG}}
+Authorization: Bearer {{JWT}}
+
+### Fetch challenge by star
+GET {{URL}}/star/{{STAR_ID}}
 Authorization: Bearer {{JWT}}
 
 ### Fetch challenges list

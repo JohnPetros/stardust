@@ -50,6 +50,21 @@ export class ChallengesRouter extends HonoRouter {
     )
   }
 
+  private registerFetchChallengeByStarRoute(): void {
+    this.router.get(
+      '/star/:starId',
+      this.authMiddleware.verifyAuthentication,
+      zValidator('param', z.object({ starId: idSchema })),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const controller = new FetchChallengeController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   private registerFetchChallengesListRoute(): void {
     this.router.get(
       '/',
@@ -159,6 +174,7 @@ export class ChallengesRouter extends HonoRouter {
 
   registerRoutes(): Hono {
     this.registerFetchChallengeRoute()
+    this.registerFetchChallengeByStarRoute()
     this.registerFetchChallengesListRoute()
     this.registerFetchCompletedChallengesByDifficultyLevelRoute()
     this.registerFetchAllChallengeCategoriesRoute()

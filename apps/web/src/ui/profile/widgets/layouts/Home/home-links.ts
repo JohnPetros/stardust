@@ -27,9 +27,9 @@ export const HOME_LINKS: HomeLink[] = [
     label: 'Perfil',
     icon: 'profile.svg',
   },
-  {
-    route: ROUTES.ranking,
-    label: 'Ranking',
-    icon: 'ranking.svg',
-  },
+  // {
+  //   route: ROUTES.ranking,
+  //   label: 'Ranking',
+  //   icon: 'ranking.svg',
+  // },
 ] as const
