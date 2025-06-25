@@ -7,7 +7,7 @@ import { AuthService, ProfileService } from '@/rest/services'
 import { actionClient } from './actionClient'
 
 export const authActionClient = actionClient.use(async ({ next }) => {
-  const restClient = await NextServerRestClient({ isCacheEnabled: true })
+  const restClient = await NextServerRestClient({ isCacheEnabled: false })
   const authService = AuthService(restClient)
   const authResponse = await authService.fetchAccount()
   if (authResponse.isFailure) notFound()

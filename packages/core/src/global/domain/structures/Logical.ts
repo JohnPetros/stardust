@@ -29,6 +29,10 @@ export class Logical {
     return new Logical(this.value && !logical.value)
   }
 
+  notAndNot(logical: Logical) {
+    return new Logical(!this.value && !logical.value)
+  }
+
   or(logical: Logical) {
     return new Logical(this.value || logical.value)
   }

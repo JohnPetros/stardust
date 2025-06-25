@@ -51,7 +51,7 @@ export const AccessChallengePageAction = (
         if (user.hasUnlockedStar(star.id).isFalse) call.notFound()
       }
 
-      if (challenge.isPublic.isFalse && challenge.author.id !== user.id) {
+      if (challenge.isPublic.notAndNot(challenge.isChallengeAuthor(user.id)).isTrue) {
         call.notFound()
       }
 

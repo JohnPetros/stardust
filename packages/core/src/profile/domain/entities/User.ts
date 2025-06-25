@@ -183,6 +183,7 @@ export class User extends Entity<UserProps> {
   }
 
   hasUnlockedStar(starId: Id): Logical {
+    console.log('this.props.unlockedStarsIds', this.props.unlockedStarsIds.dto)
     return this.props.unlockedStarsIds.includes(starId)
   }
 
