@@ -5,7 +5,7 @@ import { NextRestClient } from '@/rest/next/NextRestClient'
 import { RankingPage } from '@/ui/ranking/widgets/pages/Ranking'
 import { RankingProvider } from '@/ui/ranking/contexts/RankingContext'
 
-export default async function Ranking() {
+const Ranking = async () => {
   const apiClientWithCache = NextRestClient({ isCacheEnabled: true })
   const apiClientWithoutCache = NextRestClient({ isCacheEnabled: false })
 
@@ -20,3 +20,5 @@ export default async function Ranking() {
     </RankingProvider>
   )
 }
+
+export default Ranking

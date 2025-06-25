@@ -1,5 +1,7 @@
 import { ShopPage } from '@/ui/shop/widgets/pages/Shop'
 
-export default async function Shop() {
+const Shop = async () => {
   return <ShopPage />
 }
+
+export default Shop

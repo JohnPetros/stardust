@@ -16,6 +16,8 @@ type RootProps = {
   children: React.ReactNode
 }
 
-export default async function Root({ children }: RootProps) {
+const Root = async ({ children }: RootProps) => {
   return <RootLayout>{children}</RootLayout>
 }
+
+export default Root

@@ -1,5 +1,7 @@
 import { ChallengeResultSlot } from '@/ui/challenging/widgets/slots/ChallengeResult'
 
-export default function DefaultSlot() {
+const DefaultSlot = () => {
   return <ChallengeResultSlot />
 }
+
+export default DefaultSlot

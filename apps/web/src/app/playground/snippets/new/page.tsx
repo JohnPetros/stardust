@@ -1,5 +1,7 @@
 import { SnippetPage } from '@/ui/playground/widgets/pages/Snippet'
 
-export default async function Page() {
+const Page = async () => {
   return <SnippetPage />
 }
+
+export default Page

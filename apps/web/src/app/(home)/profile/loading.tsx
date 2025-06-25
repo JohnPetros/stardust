@@ -1,5 +1,7 @@
 import { Loading } from '@/ui/global/widgets/components/Loading'
 
-export default function ProfileLoading() {
+const ProfileLoading = () => {
   return <Loading isSmall={false} />
 }
+
+export default ProfileLoading

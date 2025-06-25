@@ -2,7 +2,7 @@ import { ChallengingService } from '@/rest/services/ChallengingService'
 import { ChallengesPage } from '@/ui/challenging/widgets/pages/Challenges'
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 
-export const Page = async () => {
+export default async function Page() {
   const restClient = await NextServerRestClient()
   const challengingService = ChallengingService(restClient)
   const response = await challengingService.fetchAllChallengeCategories()
@@ -11,5 +11,3 @@ export const Page = async () => {
 
   return <ChallengesPage categoriesDto={categoriesDto} />
 }
-
-export default Page

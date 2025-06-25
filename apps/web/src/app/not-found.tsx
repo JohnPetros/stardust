@@ -1,5 +1,7 @@
 import { NotFoundPage } from '@/ui/global/widgets/pages/NotFound'
 
-export default function NotFound() {
+const NotFound = () => {
   return <NotFoundPage />
 }
+
+export default NotFound

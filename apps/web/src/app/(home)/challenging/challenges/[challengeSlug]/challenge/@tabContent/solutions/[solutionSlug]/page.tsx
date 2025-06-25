@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic'
 
 type PageProps = NextParams<'challengeSlug' | 'solutionSlug'> & NextSearchParams<'isNew'>
 
-export const Slot = async ({ params, searchParams }: PageProps) => {
+const Slot = async ({ params, searchParams }: PageProps) => {
   const restClient = await NextServerRestClient()
   const service = ChallengingService(restClient)
   const response = await service.fetchSolutionBySlug(Slug.create(params.solutionSlug))

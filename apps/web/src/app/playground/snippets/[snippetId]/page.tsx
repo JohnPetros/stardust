@@ -6,7 +6,7 @@ import { NotPublicSnippetPage } from '@/ui/playground/widgets/pages/NotPublicPla
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 import { PlaygroundService } from '@/rest/services'
 
-export const Page = async ({ params }: NextParams<'snippetId'>) => {
+const Page = async ({ params }: NextParams<'snippetId'>) => {
   // const restClient = await NextServerRestClient()
   // const playgroundService = PlaygroundService(restClient)
   // const playgroundResponse = await playgroundService.fetchSnippetById(params.snippetId)
@@ -20,3 +20,5 @@ export const Page = async ({ params }: NextParams<'snippetId'>) => {
   //   return <NotPublicSnippetPage />
   // return <SnippetPage snippetDto={snippetDto} />
 }
+
+export default Page

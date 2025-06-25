@@ -1,5 +1,7 @@
 import { LandingPage } from '@/ui/global/widgets/pages/Landing'
 
-export default async function Page() {
+const Page = async () => {
   return <LandingPage />
 }
+
+export default Page

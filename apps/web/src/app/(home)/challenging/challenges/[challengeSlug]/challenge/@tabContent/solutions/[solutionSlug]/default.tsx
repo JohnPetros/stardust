@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 
 type PageProps = NextParams<'challengeSlug' | 'solutionSlug'> & NextSearchParams<'isNew'>
 
-export default async function DefaultSlot({ params, searchParams }: PageProps) {
+const DefaultSlot = async ({ params, searchParams }: PageProps) => {
   const restClient = await NextServerRestClient()
   const service = ChallengingService(restClient)
   const response = await service.viewSolution(Slug.create(params.solutionSlug))
@@ -24,3 +24,5 @@ export default async function DefaultSlot({ params, searchParams }: PageProps) {
     />
   )
 }
+
+export default DefaultSlot

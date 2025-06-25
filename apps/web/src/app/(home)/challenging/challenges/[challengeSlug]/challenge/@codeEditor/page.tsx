@@ -1,5 +1,7 @@
 import { ChallengeCodeEditorSlot } from '@/ui/challenging/widgets/slots/ChallengeCodeEditor'
 
-export default function Slot() {
+const Slot = () => {
   return <ChallengeCodeEditorSlot />
 }
+
+export default Slot
