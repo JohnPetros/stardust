@@ -1,6 +1,6 @@
 import { Entity } from '../../../global/domain/abstracts'
 import type { Image, Integer, Logical, Name } from '../../../global/domain/structures'
-import type { ShopItemDto } from '../../dtos'
+import type { ShopItemDto } from '../abstracts/dtos'
 
 type ShopItemProps = {
   name: Name

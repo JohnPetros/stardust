@@ -1,4 +1,4 @@
-import type { AvatarDto } from '@stardust/core/shop/dtos'
+import type { AvatarDto } from '@stardust/core/shop/entities/dtos'
 import { Avatar } from '@stardust/core/shop/entities'
 
 import type { SupabaseAvatar } from '../../types'

@@ -14,7 +14,7 @@ type Response = Promise<UserDto>
 export class GetUserUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: UsersRepository) {}
 
-  async execute({ userId, userSlug }: Request): Response {
+  async execute({ userId, userSlug }: Request) {
     if (userId) {
       const user = await this.repository.findById(Id.create(userId))
       if (!user) {

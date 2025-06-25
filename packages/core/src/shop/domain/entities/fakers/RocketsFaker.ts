@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 
-import type { RocketDto } from '../../../dtos'
+import type { RocketDto } from '../dtos'
 import { Rocket } from '..'
 
 export class RocketsFaker {

@@ -4,7 +4,7 @@ import { Text } from '#global/domain/structures/Text'
 import type { UseCase } from '#global/interfaces/UseCase'
 import { PaginationResponse } from '#global/responses/PaginationResponse'
 import type { RocketsRepository } from '../interfaces'
-import type { RocketDto } from '../dtos'
+import type { RocketDto } from '../domain/entities/dtos'
 
 type Request = {
   search: string

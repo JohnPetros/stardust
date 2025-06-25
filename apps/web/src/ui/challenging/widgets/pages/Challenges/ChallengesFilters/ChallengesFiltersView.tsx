@@ -1,5 +1,5 @@
 import type {
-  ChallengeCompletionStatus,
+  ChallengeCompletionStatusValue,
   ChallengeDifficultyLevel,
 } from '@stardust/core/challenging/types'
 import { ChallengeCategory } from '@stardust/core/challenging/entities'
@@ -40,7 +40,7 @@ export const ChallengesFiltersView = ({ categoriesDto }: Props) => {
         <Select.Container
           defaultValue='all'
           onValueChange={(newStatus: string) =>
-            handleCompletionStatusChange(newStatus as ChallengeCompletionStatus)
+            handleCompletionStatusChange(newStatus as ChallengeCompletionStatusValue)
           }
         >
           <Select.Trigger value='Status' className='h-10' />

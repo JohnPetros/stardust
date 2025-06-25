@@ -1,15 +1,13 @@
-'use client'
-
 import type { ClassNameValue } from 'tailwind-merge'
 
 import type { IconName } from '@/ui/global/widgets/components/Icon/types'
 import type {
-  ChallengeCompletionStatus,
+  ChallengeCompletionStatusValue,
   ChallengeDifficultyLevel,
 } from '@stardust/core/challenging/types'
 
 type SelectsItem = {
-  value: ChallengeCompletionStatus | ChallengeDifficultyLevel | 'all'
+  value: ChallengeCompletionStatusValue | ChallengeDifficultyLevel | 'all'
   label: string
   labelStyles?: ClassNameValue
   icon?: IconName

@@ -1,5 +1,5 @@
 import { Image, Integer, Logical, Name } from '../../../global/domain/structures'
-import type { RocketDto } from '../../dtos'
+import type { RocketDto } from './dtos'
 import { ShopItem } from '../abstracts'
 
 export class Rocket extends ShopItem {

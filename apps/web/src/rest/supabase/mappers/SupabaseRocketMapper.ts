@@ -1,4 +1,4 @@
-import type { RocketDto } from '@stardust/core/shop/dtos'
+import type { RocketDto } from '@stardust/core/shop/entities/dtos'
 import type { Rocket } from '@stardust/core/shop/entities'
 import type { SupabaseRocket } from '../types'
 
