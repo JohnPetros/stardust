@@ -6,8 +6,9 @@ import { CACHE } from '@/constants'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useApi } from '@/ui/global/hooks/useApi'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
+import { OrdinalNumber } from '@stardust/core/global/structures'
 
-const SNIPPETS_PER_PAGE = 24
+const SNIPPETS_PER_PAGE = OrdinalNumber.create(24)
 
 export function useSnippetsList() {
   const { user } = useAuthContext()
@@ -16,7 +17,7 @@ export function useSnippetsList() {
   async function fetchSnippets(page: number) {
     const response = await api.fetchSnippetsList({
       authorId: String(user?.id.value),
-      page,
+      page: OrdinalNumber.create(page),
       itemsPerPage: SNIPPETS_PER_PAGE,
     })
 
@@ -30,7 +31,7 @@ export function useSnippetsList() {
       key: CACHE.keys.shopRockets,
       fetcher: fetchSnippets,
       shouldRefetchOnFocus: false,
-      itemsPerPage: SNIPPETS_PER_PAGE,
+      itemsPerPage: SNIPPETS_PER_PAGE.value,
       isEnabled: Boolean(user),
       dependencies: [user?.id.value],
     })
@@ -46,7 +47,7 @@ export function useSnippetsList() {
   return {
     snippets: data.map(Snippet.create),
     page,
-    itemsPerPage: SNIPPETS_PER_PAGE,
+    itemsPerPage: SNIPPETS_PER_PAGE.value,
     totalItemsCount,
     isLoading,
     isRecheadedEnd,

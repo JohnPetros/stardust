@@ -7,5 +7,5 @@ export type CommentsListProps = {
   onFetchComments: (
     params: CommentsListParams,
   ) => Promise<RestResponse<PaginationResponse<CommentDto>>>
-  onPostComment: (comment: Comment) => Promise<void>
+  onPostComment: (comment: Comment) => Promise<RestResponse<CommentDto>>
 }

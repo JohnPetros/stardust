@@ -18,8 +18,8 @@ export function useAvatarsList(shopService: ShopService) {
     setPage(1)
   }
 
-  function handlePriceOrderChange(value: string) {
-    setPriceOrder(ListingOrder.create(value))
+  function handlePriceOrderChange(ListingOrder: ListingOrder) {
+    setPriceOrder(ListingOrder)
   }
 
   function handlePageChange(page: number) {

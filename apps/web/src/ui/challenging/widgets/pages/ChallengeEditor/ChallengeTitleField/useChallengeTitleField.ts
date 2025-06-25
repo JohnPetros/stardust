@@ -4,8 +4,9 @@ import type { ChallengeSchema } from '@stardust/validation/challenging/types'
 import { useEffect, useState } from 'react'
 import { useApi } from '@/ui/global/hooks/useApi'
 import { Slug } from '@stardust/core/global/structures'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 
-export function useChallengeTitleField() {
+export function useChallengeTitleField(challengingService: ChallengingService) {
   const [errorMessage, setErrorMessage] = useState('')
   const { formState, register, watch } = useFormContext<ChallengeSchema>()
   const api = useApi()
@@ -22,15 +23,19 @@ export function useChallengeTitleField() {
       return
 
     async function fetchChallenge() {
-      const existingChallengeWithSameSlug = await api.fetchChallengeBySlug(
-        Slug.create(challengeTitle).value,
+      const existingChallengeWithSameSlug = await challengingService.fetchChallengeBySlug(
+        Slug.create(challengeTitle),
       )
       if (existingChallengeWithSameSlug.isSuccessful)
         setErrorMessage('Título já utilizado em outro desafio')
     }
 
     fetchChallenge()
-  }, [challengeTitle, formState.defaultValues?.title, api.fetchChallengeBySlug])
+  }, [
+    challengeTitle,
+    formState.defaultValues?.title,
+    challengingService.fetchChallengeBySlug,
+  ])
 
   useEffect(() => {
     if (formState.errors.title?.message) setErrorMessage(formState.errors.title?.message)

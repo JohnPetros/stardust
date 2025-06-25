@@ -4,6 +4,7 @@ import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useUpvoteSolutionButton } from './useUpvoteSolutionButton'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { Id } from '@stardust/core/global/structures'
+import { useRest } from '@/ui/global/hooks/useRest'
 
 type VoteSolutionButtonProps = {
   solutionId: string
@@ -16,11 +17,13 @@ export function UpvoteSolutionButton({
   initialUpvotesCount,
   authorId,
 }: VoteSolutionButtonProps) {
+  const { challengingService } = useRest()
   const { user } = useAuthContext()
-  const { isUpvoted, upvotesCount, handleButtonClick } = useUpvoteSolutionButton(
+  const { isUpvoted, upvotesCount, handleButtonClick } = useUpvoteSolutionButton({
     initialUpvotesCount,
-    user?.hasUpvotedSolution(Id.create(solutionId)).isTrue ?? false,
-  )
+    initialIsUpvoted: user?.hasUpvotedSolution(Id.create(solutionId)).isTrue ?? false,
+    challengingService,
+  })
   const isUserSolutionAuthor = user?.id.value === authorId
   const textStyle = isUpvoted ? 'text-green-500' : 'text-gray-400'
 

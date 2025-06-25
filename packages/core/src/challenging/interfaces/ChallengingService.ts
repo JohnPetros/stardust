@@ -11,7 +11,7 @@ import type {
 import type { Challenge, ChallengeCategory, Solution } from '../domain/entities'
 import type { SolutionsListingParams } from '../domain/types'
 import type { PaginationResponse, RestResponse } from '#global/responses/index'
-import type { Id, Slug } from '#global/domain/structures/index'
+import type { Id, Slug, Text } from '#global/domain/structures/index'
 import type { ChallengeVote } from '../domain/structures'
 
 export interface ChallengingService {
@@ -24,7 +24,7 @@ export interface ChallengingService {
   fetchChallengeBySolutionId(solutionId: Id): Promise<RestResponse<ChallengeDto>>
   fetchDocs(): Promise<RestResponse<DocDto[]>>
   fetchSolutionById(solutionId: Id): Promise<RestResponse<SolutionDto>>
-  fetchSolutionBySlug(solutionSlug: string): Promise<RestResponse<SolutionDto>>
+  fetchSolutionBySlug(solutionSlug: Slug): Promise<RestResponse<SolutionDto>>
   fetchChallengesList(
     params: ChallengesListParams,
   ): Promise<RestResponse<PaginationResponse<ChallengeDto>>>
@@ -42,12 +42,20 @@ export interface ChallengingService {
     challengeId: Id,
     challengeCategories: ChallengeCategory[],
   ): Promise<RestResponse>
-  deleteChallengeCategories(challengeId: Id): Promise<RestResponse>
-  saveSolution(solution: Solution, challengeId: Id): Promise<RestResponse>
-  updateSolution(solution: Solution): Promise<RestResponse>
+  postSolution(
+    solutionTitle: Text,
+    solutionContent: Text,
+    challengeId: Id,
+  ): Promise<RestResponse<SolutionDto>>
+  viewSolution(solutionSlug: Slug): Promise<RestResponse<SolutionDto>>
+  editSolution(
+    solutionId: Id,
+    solutionTitle: Text,
+    solutionContent: Text,
+  ): Promise<RestResponse>
   updateChallenge(challenge: Challenge): Promise<RestResponse>
+  upvoteSolution(solutionId: Id): Promise<RestResponse<{ upvotesCount: number }>>
   deleteSolution(solutionId: Id): Promise<RestResponse>
+  deleteChallengeCategories(challengeId: Id): Promise<RestResponse>
   deleteChallenge(challengeId: Id): Promise<RestResponse>
-  saveSolutionUpvote(solutionId: Id, userId: Id): Promise<RestResponse>
-  deleteSolutionUpvote(solutionId: Id, userId: Id): Promise<RestResponse>
 }

@@ -13,7 +13,7 @@ import {
 } from '@stardust/core/ranking/events'
 import { UserSignedUpEvent } from '@stardust/core/auth/events'
 
-import { ENV } from '@/constants/env'
+import { ENV } from '../../constants'
 
 const eventsSchema = {
   [UserCreatedEvent._NAME]: {

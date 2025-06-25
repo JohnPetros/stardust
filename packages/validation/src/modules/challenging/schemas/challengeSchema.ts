@@ -53,6 +53,6 @@ export const challengeSchema = z.object({
       }),
     )
     .min(1),
-  difficultyLevel: z.enum(['easy', 'medium', 'hard']),
+  difficultyLevel: z.enum(['easy', 'medium', 'hard', 'any']),
   isPublic: booleanSchema,
 })

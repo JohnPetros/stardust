@@ -1,5 +1,7 @@
 import { ChallengeDescriptionSlot } from '@/ui/challenging/widgets/slots/ChallengeDescription'
 
-export default function Slot() {
+const Slot = () => {
   return <ChallengeDescriptionSlot />
 }
+
+export default Slot

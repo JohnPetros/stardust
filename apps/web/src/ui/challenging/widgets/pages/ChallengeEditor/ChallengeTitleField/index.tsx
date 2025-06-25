@@ -1,9 +1,11 @@
 import { Input } from '@/ui/global/widgets/components/Input'
 import { ChallengeField } from '../ChallengeField'
 import { useChallengeTitleField } from './useChallengeTitleField'
+import { useRest } from '@/ui/global/hooks/useRest'
 
 export function ChallengeTitleField() {
-  const { errorMessage, registerInput } = useChallengeTitleField()
+  const { challengingService } = useRest()
+  const { errorMessage, registerInput } = useChallengeTitleField(challengingService)
 
   return (
     <ChallengeField

@@ -13,9 +13,15 @@ export class SupabaseRankersRepository
     const { data, error } = await this.supabase
       .from('users')
       .select(
-        'id, name, slug, tier_id, xp:weekly_xp, last_week_ranking_position, avatar:avatars(name, image)',
+        `id,
+        name,
+        slug,
+        tier_id,
+        xp:weekly_xp,
+        last_week_ranking_position,
+        avatar:avatars(name, image)`,
       )
-      .eq('tier_id', tierId)
+      .eq('tier_id', tierId.value)
       .not('last_week_ranking_position', 'is', null)
       .order('last_week_ranking_position', { ascending: false })
 
@@ -27,8 +33,8 @@ export class SupabaseRankersRepository
         name: user.name ?? '',
         slug: user.slug ?? '',
         avatar: {
-          image: user.avatar[0]?.image ?? '',
-          name: user.avatar[0]?.name ?? '',
+          image: user.avatar?.image ?? '',
+          name: user.avatar?.name ?? '',
         },
         tierId: user.tier_id ?? '',
         xp: user.xp,
@@ -41,10 +47,11 @@ export class SupabaseRankersRepository
 
   async addWinners(rankers: RankingUser[], tierId: Id): Promise<void> {
     const { error } = await this.supabase.from('ranking_users').insert(
+      // @ts-ignore
       rankers.map((winner) => ({
-        id: winner.id,
+        id: winner.id.value,
         xp: winner.xp.value,
-        tier_id: tierId,
+        tier_id: tierId.value,
         status: 'winner',
         position: winner.rankingPosition.position.value,
       })),
@@ -55,10 +62,11 @@ export class SupabaseRankersRepository
 
   async addLosers(rankers: RankingUser[], tierId: Id): Promise<void> {
     const { error } = await this.supabase.from('ranking_users').insert(
+      // @ts-ignore
       rankers.map((loser) => ({
-        id: loser.id,
+        id: loser.id.value,
         xp: loser.xp.value,
-        tier_id: tierId,
+        tier_id: tierId.value,
         status: 'loser',
         position: loser.rankingPosition.position.value,
       })),

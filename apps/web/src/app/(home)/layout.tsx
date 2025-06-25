@@ -10,7 +10,7 @@ type HomeProps = {
   children: ReactNode
 }
 
-export default async function Home({ children }: HomeProps) {
+const Layout = async ({ children }: HomeProps) => {
   const restClient = await NextServerRestClient({ isCacheEnabled: true })
   const profileService = ProfileService(restClient)
   const response = await profileService.fetchAchievements()
@@ -24,3 +24,5 @@ export default async function Home({ children }: HomeProps) {
     </AchivementsProvider>
   )
 }
+
+export default Layout

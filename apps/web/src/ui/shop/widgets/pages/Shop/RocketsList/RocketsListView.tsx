@@ -1,8 +1,10 @@
+import type { Rocket } from '@stardust/core/shop/entities'
+import type { ListingOrder } from '@stardust/core/global/structures'
+
 import { Search } from '@/ui/global/widgets/components/Search'
 import { Pagination } from '@/ui/global/widgets/components/Pagination'
 import { RocketItem } from './RocketItem'
 import { PriceOrderSelect } from '../PriceOrderSelect'
-import type { Rocket } from '@stardust/core/shop/entities'
 
 type Props = {
   totalRocketsCount: number
@@ -10,7 +12,7 @@ type Props = {
   page: number
   rockets: Rocket[]
   onSearchChange: (value: string) => void
-  onPriceOrderChange: (value: string) => void
+  onPriceOrderChange: (ListingOrder: ListingOrder) => void
   onPageChange: (value: number) => void
 }
 

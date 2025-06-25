@@ -7,6 +7,8 @@ import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { useUserSolutionButtons } from './useUserSolutionButtons'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
+import { useRest } from '@/ui/global/hooks/useRest'
+import { Id, Slug } from '@stardust/core/global/structures'
 
 type UserSolutionButtonsProps = {
   solutionId: string
@@ -22,10 +24,12 @@ export function UserSolutionButtons({
   challengeSlug,
 }: UserSolutionButtonsProps) {
   const { user } = useAuthContext()
-  const { handleDeleteSolutionButtonClick } = useUserSolutionButtons(
-    solutionId,
-    challengeSlug,
-  )
+  const { challengingService } = useRest()
+  const { handleDeleteSolutionButtonClick } = useUserSolutionButtons({
+    solutionId: Id.create(solutionId),
+    challengeSlug: Slug.create(challengeSlug),
+    challengingService,
+  })
   const isUserAuthor = user?.id.value === authorId
 
   if (user)

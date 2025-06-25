@@ -5,17 +5,17 @@ import type { PlaygroundService } from '@stardust/core/playground/interfaces'
 import type { Supabase } from '../types/Supabase'
 import { SupabasePostgrestError } from '../errors'
 import { SupabaseSnippetMapper } from '../mappers'
-import { calculateSupabaseRange } from '../utils'
+import type { Id } from '@stardust/core/global/structures'
 
 export const SupabasePlaygroundService = (supabase: Supabase): PlaygroundService => {
   const supabaseSnippetMapper = SupabaseSnippetMapper()
 
   return {
-    async fetchSnippetById(snippetId: string) {
+    async fetchSnippetById(snippetId: Id) {
       const { data, error, status } = await supabase
         .from('snippets_view')
         .select('*')
-        .eq('id', snippetId)
+        .eq('id', snippetId.value)
         .single()
 
       if (error) {
@@ -31,13 +31,13 @@ export const SupabasePlaygroundService = (supabase: Supabase): PlaygroundService
     },
 
     async fetchSnippetsList({ page, itemsPerPage, authorId }) {
-      const range = calculateSupabaseRange(page, itemsPerPage)
+      // const range = calculateSupabaseRange(page, itemsPerPage)
 
       const { data, error, status, count } = await supabase
         .from('snippets_view')
         .select('*', { count: 'exact' })
         .eq('author_id', authorId)
-        .range(range.from, range.to)
+      // .range(range.from, range.to)
 
       if (error) {
         return SupabasePostgrestError(
@@ -95,11 +95,11 @@ export const SupabasePlaygroundService = (supabase: Supabase): PlaygroundService
       return new RestResponse()
     },
 
-    async deleteSnippet(snippetId: string) {
+    async deleteSnippet(snippetId: Id) {
       const { error, status } = await supabase
         .from('snippets')
         .delete()
-        .eq('id', snippetId)
+        .eq('id', snippetId.value)
 
       if (error) {
         return SupabasePostgrestError(

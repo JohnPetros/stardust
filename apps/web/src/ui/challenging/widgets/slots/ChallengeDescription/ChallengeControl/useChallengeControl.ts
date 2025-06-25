@@ -3,11 +3,13 @@ import { useState } from 'react'
 import { ROUTES } from '@/constants'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { useApi } from '@/ui/global/hooks/useApi'
 import { useRouter } from '@/ui/global/hooks/useRouter'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 
-export function useChallengeControl(isChallengePublic: boolean) {
-  const api = useApi()
+export function useChallengeControl(
+  challengingService: ChallengingService,
+  isChallengePublic: boolean,
+) {
   const router = useRouter()
   const toast = useToastContext()
   const { getChallengeSlice } = useChallengeStore()
@@ -20,7 +22,7 @@ export function useChallengeControl(isChallengePublic: boolean) {
     challenge.isPublic = isPublic
     setIsPublic(isPublic)
 
-    const response = await api.updateChallenge(challenge)
+    const response = await challengingService.updateChallenge(challenge)
 
     if (response.isFailure) {
       challenge.isPublic = !isPublic
@@ -36,7 +38,7 @@ export function useChallengeControl(isChallengePublic: boolean) {
   async function handleDeleteChallengeButtonClick() {
     if (!challenge) return
 
-    const response = await api.deleteChallenge(challenge.id)
+    const response = await challengingService.deleteChallenge(challenge.id)
     if (response.isFailure) {
       toast.show(response.errorMessage)
       return

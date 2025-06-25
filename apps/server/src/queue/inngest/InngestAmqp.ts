@@ -2,9 +2,6 @@ import type { Context } from 'inngest'
 
 import type { Amqp, TimeExpression } from '@stardust/core/global/interfaces'
 import { AppError } from '@stardust/core/global/errors'
-import type { Event } from '@stardust/core/global/abstracts'
-
-import { inngest } from './client'
 
 type Props = {
   step?: Context['step']

@@ -1,6 +1,4 @@
-'use client'
-
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
@@ -14,11 +12,15 @@ import { ROUTES } from '@/constants'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
 import { usePostChallengeAction } from './usePostChallengeAction'
-import { useEditChallengeAction } from './useEditChallengeAction'
 
 export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
   const challenge = challengeDto ? Challenge.create(challengeDto) : null
   const router = useRouter()
+  const difficultyLevel = useMemo(() => {
+    if (!challenge) return 'easy'
+    if (challenge.difficulty.isAny.isFalse) return challenge.difficulty.level
+    return 'easy'
+  }, [challenge])
   const { provider } = useCodeRunner()
   const form = useForm<ChallengeSchema>({
     resolver: zodResolver(challengeSchema),
@@ -26,7 +28,7 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
       title: challenge?.title.value,
       description: challenge?.description.value ?? '',
       code: challenge?.code ?? '',
-      difficultyLevel: challenge?.difficulty.level ?? 'easy',
+      difficultyLevel,
       function: {
         name: challenge?.code ? provider.getFunctionName(challenge.code) ?? '' : '',
         params: challenge
@@ -66,9 +68,6 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
   const { isPosting, isPostFailure, postChallenge } = usePostChallengeAction({
     onSuccess: (challenge) => handleActionSuccess(challenge, true),
   })
-  const { isEditing, isEditFailure, editChallenge } = useEditChallengeAction({
-    onSuccess: (newChallenge) => handleActionSuccess(newChallenge, false),
-  })
 
   const allFields = form.watch()
   const areAllFieldsFilled = [
@@ -82,7 +81,7 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
 
   async function handleSubmit(formData: ChallengeSchema) {
     if (challenge) {
-      await editChallenge({ challengeId: challenge.id.value, challenge: formData })
+      // await editChallenge({ challengeId: challenge.id.value, challenge: formData })
       return
     }
     await postChallenge(formData)
@@ -110,10 +109,8 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
       return
     }
 
-    setIsActionFailure(
-      isPostFailure || isEditFailure || Object.keys(form.formState.errors).length > 0,
-    )
-  }, [allFields, isPostFailure, isEditFailure, form.formState.errors])
+    setIsActionFailure(isPostFailure || Object.keys(form.formState.errors).length > 0)
+  }, [allFields, isPostFailure, form.formState.errors])
 
   useEffect(() => {
     const subscription = form.watch((value, { name }) => {
@@ -138,7 +135,7 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
     form,
     canSubmitForm,
     shouldEditChallenge: challenge,
-    isFormSubmitting: form.formState.isSubmitting || isPosting || isEditing,
+    isFormSubmitting: form.formState.isSubmitting || isPosting,
     isActionFailure,
     isActionSuccess,
     handleFormSubmit: form.handleSubmit(handleSubmit),

@@ -1,4 +1,4 @@
-import type { ListingOrder } from '@stardust/core/global/types'
+import type { ListingOrder } from '@stardust/core/global/structures'
 import { useState } from 'react'
 
 type PriceOrder = 'Menor preço' | 'Maior preço'
@@ -9,7 +9,7 @@ export function usePriceOrderSelect(
   const [priceOrder, setPriceOrder] = useState<PriceOrder>('Menor preço')
 
   function handleListingOrderSelectChange(ListingOrder: ListingOrder) {
-    setPriceOrder(ListingOrder === 'ascending' ? 'Menor preço' : 'Maior preço')
+    setPriceOrder(ListingOrder.isAscending.isTrue ? 'Menor preço' : 'Maior preço')
     onPriceOrderChange(ListingOrder)
   }
 

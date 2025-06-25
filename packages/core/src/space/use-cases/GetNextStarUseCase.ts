@@ -17,7 +17,7 @@ export class GetNextStarUseCase implements UseCase<Request, Response> {
     private readonly planetsRepository: PlanetsRepository,
   ) {}
 
-  async execute({ currentStarId }: Request): Response {
+  async execute({ currentStarId }: Request) {
     const currentStar = await this.findCurrentStar(Id.create(currentStarId))
     const currentPlanet = await this.findCurrentPlanet(currentStar)
     let nextStar = currentPlanet.getNextStar(currentStar)

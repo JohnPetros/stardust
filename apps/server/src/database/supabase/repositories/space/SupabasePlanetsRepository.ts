@@ -52,10 +52,14 @@ export class SupabasePlanetsRepository
       return null
     }
 
-    const { data: stars } = await this.supabase
+    const { data: stars, error: starsError } = await this.supabase
       .from('stars')
       .select('*')
       .eq('planet_id', data?.id)
+
+    if (starsError) {
+      throw new SupabasePostgreError(starsError)
+    }
 
     data.stars = stars
 

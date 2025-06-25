@@ -16,11 +16,11 @@ type ChallengeLayoutProps = {
   codeEditor: ReactNode
 }
 
-export default async function Layout({
+const Layout = async ({
   children: header,
   tabContent,
   codeEditor,
-}: ChallengeLayoutProps) {
+}: ChallengeLayoutProps) => {
   const storagedPanelsOffset = await cookieActions.getCookie(
     COOKIES.keys.challengePanelsOffset,
   )
@@ -41,3 +41,5 @@ export default async function Layout({
     />
   )
 }
+
+export default Layout

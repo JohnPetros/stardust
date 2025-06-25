@@ -1,13 +1,12 @@
 import { useState } from 'react'
 
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import { Doc } from '@stardust/core/challenging/entities'
 
 import { CACHE } from '@/constants'
-import { useApi } from '@/ui/global/hooks/useApi'
 import { useCache } from '@/ui/global/hooks/useCache'
 
-export function useDocsDialog() {
-  const api = useApi()
+export function useDocsDialog(challengingService: ChallengingService) {
   const [content, setContent] = useState('')
   const [shouldFetchDocs, setShouldFetchDocs] = useState(false)
 
@@ -22,7 +21,7 @@ export function useDocsDialog() {
   }
 
   async function fetchDocs() {
-    const response = await api.fetchDocs()
+    const response = await challengingService.fetchDocs()
     if (response.isFailure) response.throwError()
     return response.body
   }

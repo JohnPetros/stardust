@@ -1,5 +1,8 @@
 import { type RefObject, useEffect, useRef } from 'react'
 
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
+import type { Id, Slug } from '@stardust/core/global/structures'
+
 import { ROUTES } from '@/constants'
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 import { useApi } from '@/ui/global/hooks/useApi'
@@ -7,21 +10,22 @@ import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
 import { useInView } from '@/ui/global/hooks/useInView'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useAudioContext } from '@/ui/global/contexts/AudioContext'
-import { Id } from '@stardust/core/global/structures'
 
-type UseStarProps = {
-  id: string
-  slug: string
+type Params = {
+  starId: Id
+  starSlug: Slug
   isLastUnlockedStar: boolean
   starAnimationRef: RefObject<AnimationRef>
+  challengingService: ChallengingService
 }
 
 export function useStar({
-  id,
-  slug,
+  starId,
+  starSlug,
   isLastUnlockedStar,
   starAnimationRef,
-}: UseStarProps) {
+  challengingService,
+}: Params) {
   const { lastUnlockedStarRef, scrollIntoLastUnlockedStar, setLastUnlockedStarPosition } =
     useSpaceContext()
   const { playAudio } = useAudioContext()
@@ -31,10 +35,10 @@ export function useStar({
   const isInView = useInView(lastUnlockedStarRef)
 
   async function handleStarNavigation() {
-    const reponse = await api.fetchChallengeByStarId(Id.create(id))
+    const reponse = await challengingService.fetchChallengeByStarId(starId)
 
     if (reponse.isFailure) {
-      router.goTo(ROUTES.lesson.star(slug))
+      router.goTo(ROUTES.lesson.star(starSlug.value))
       return
     }
 

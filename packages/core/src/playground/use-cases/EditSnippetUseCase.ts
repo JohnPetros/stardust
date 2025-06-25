@@ -1,4 +1,5 @@
 import type { UseCase } from '#global/interfaces/UseCase'
+import { Id } from '#global/domain/structures/Id'
 import type { PlaygroundService } from '../interfaces'
 import { Snippet } from '../domain/entities'
 
@@ -21,7 +22,7 @@ export class EditSnippetUseCase implements UseCase<Request> {
   }
 
   private async fetchSnippet(snippetId: string) {
-    const response = await this.playgroundService.fetchSnippetById(snippetId)
+    const response = await this.playgroundService.fetchSnippetById(Id.create(snippetId))
     if (response.isFailure) response.throwError()
     return Snippet.create(response.body)
   }

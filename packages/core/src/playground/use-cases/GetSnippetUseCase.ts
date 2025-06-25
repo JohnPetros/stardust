@@ -2,6 +2,7 @@ import type { UseCase } from '#global/interfaces/UseCase'
 import type { PlaygroundService } from '../interfaces'
 import type { SnippetDto } from '../domain/dtos'
 import { Snippet } from '../domain/entities'
+import { Id } from '../../main'
 
 type Request = {
   snippetId: string
@@ -22,7 +23,7 @@ export class GetSnippetUseCase implements UseCase<Request, Response> {
   }
 
   private async fetchSnippet(snippetId: string) {
-    const response = await this.playgroundService.fetchSnippetById(snippetId)
+    const response = await this.playgroundService.fetchSnippetById(Id.create(snippetId))
     if (response.isFailure) response.throwError()
     return Snippet.create(response.body)
   }

@@ -9,9 +9,10 @@ import type { ActionButtonTitles } from '@/ui/global/widgets/components/ActionBu
 import { Button } from '@/ui/global/widgets/components/Button'
 import { TitleInput } from '@/ui/global/widgets/components/TitleInput'
 import { ActionButton } from '@/ui/global/widgets/components/ActionButton'
-import { useRouter } from '@/ui/global/hooks/useRouter'
 import { ContentEditor } from '../../components/ContentEditor'
 import { useSolutionPage } from './useSolutionPage'
+import { Id, Slug } from '@stardust/core/global/structures'
+import { useRest } from '@/ui/global/hooks/useRest'
 
 type SolutionPageProps = {
   savedSolutionDto: SolutionDto | null
@@ -24,9 +25,9 @@ export function SolutionPage({
   challengeId,
   challengeSlug,
 }: SolutionPageProps) {
+  const { challengingService } = useRest()
   const {
     solutionTitle,
-    fieldErrors,
     solutionContent,
     solution,
     isActionDisable,
@@ -38,7 +39,12 @@ export function SolutionPage({
     handleContentChange,
     handleSolutionPost,
     handleSolutionEdit,
-  } = useSolutionPage(savedSolutionDto, challengeId, challengeSlug)
+  } = useSolutionPage({
+    challengingService,
+    savedSolutionDto,
+    challengeId: Id.create(challengeId),
+    challengeSlug: Slug.create(challengeSlug),
+  })
   const ACTION_BUTTON_TITLES: ActionButtonTitles = {
     canExecute: savedSolutionDto ? 'atualizar?' : 'postar?',
     executing: savedSolutionDto ? 'atualizando...' : 'postando...',
@@ -55,7 +61,6 @@ export function SolutionPage({
           onChange={handleTitleChange}
           placeholder='Escreva um título para a sua solução'
           className='bg-gray-800 text-gray-50'
-          errorMessage={fieldErrors.solutionTitle}
         />
         <div className='flex items-center justify-end gap-3'>
           <Button asChild className='bg-gray-600 text-gray-50 w-24'>
@@ -81,11 +86,7 @@ export function SolutionPage({
       </header>
 
       <main className='h-full mt-3 bg-gray-800 border-t border-gray-600'>
-        <ContentEditor
-          content={solutionContent}
-          errorMessage={fieldErrors.solutionContent}
-          onChange={handleContentChange}
-        />
+        <ContentEditor content={solutionContent} onChange={handleContentChange} />
       </main>
     </div>
   )

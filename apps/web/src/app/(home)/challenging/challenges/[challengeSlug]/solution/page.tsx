@@ -1,14 +1,16 @@
 import { Challenge } from '@stardust/core/challenging/entities'
 
+import { Slug } from '@stardust/core/global/structures'
+
 import type { NextParams } from '@/rpc/next/types'
-import { SupabaseServerClient } from '@/rest/supabase/clients'
-import { SupabaseChallengingService } from '@/rest/supabase/services'
+import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
+import { ChallengingService } from '@/rest/services'
 import { SolutionPage } from '@/ui/challenging/widgets/pages/Solution'
 
-export default async function Slot({ params }: NextParams<{ challengeSlug: string }>) {
-  const supabase = SupabaseServerClient()
-  const service = SupabaseChallengingService(supabase)
-  const response = await service.fetchChallengeBySlug(params.challengeSlug)
+const Slot = async ({ params }: NextParams<'challengeSlug'>) => {
+  const restClient = await NextServerRestClient()
+  const service = ChallengingService(restClient)
+  const response = await service.fetchChallengeBySlug(Slug.create(params.challengeSlug))
   if (response.isFailure) response.throwError()
   const challenge = Challenge.create(response.body)
 
@@ -20,3 +22,5 @@ export default async function Slot({ params }: NextParams<{ challengeSlug: strin
     />
   )
 }
+
+export default Slot

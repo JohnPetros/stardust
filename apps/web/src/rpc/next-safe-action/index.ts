@@ -1,14 +1,7 @@
 import {
-  fetchChallengesList,
   accessChallengePage,
   accessChallengeCommentsSlot,
-  voteChallenge,
-  editSolution,
-  postSolution,
-  upvoteSolution,
-  viewSolution,
   postChallenge,
-  editChallenge,
   accessChallengeEditorPage,
 } from './challengingActions'
 import { setCookie, getCookie, deleteCookie, hasCookie } from './cookieActions'
@@ -32,14 +25,7 @@ export const challengingActions = {
   accessChallengePage,
   accessChallengeCommentsSlot,
   accessChallengeEditorPage,
-  fetchChallengesList,
-  voteChallenge,
-  editSolution,
-  postSolution,
   postChallenge,
-  editChallenge,
-  upvoteSolution,
-  viewSolution,
 }
 
 export const playgroundActions = { createSnippet, editSnippet }

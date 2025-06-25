@@ -1,36 +1,36 @@
-'use client'
-
 import { useState } from 'react'
 
 import { Solution } from '@stardust/core/challenging/entities'
-import type { SolutionsListSorter } from '@stardust/core/challenging/types'
 
 import { CACHE } from '@/constants'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
-import { useApi } from '@/ui/global/hooks/useApi'
 import type { PopoverMenuButton } from '@/ui/global/widgets/components/PopoverMenu/types'
-import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { Id, OrdinalNumber, Text } from '@stardust/core/global/structures'
+import { SolutionsListingSorter } from '@stardust/core/challenging/structures'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
+import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 
-const SOLUTIONS_PER_PAGE = 15
+const SOLUTIONS_PER_PAGE = OrdinalNumber.create(15)
 
-export function useChallengeSolutionsSlot() {
-  const { getChallengeSlice } = useChallengeStore()
-  const { challenge } = getChallengeSlice()
-  const [sorter, setSorter] = useState<SolutionsListSorter>('date')
+export function useChallengeSolutionsSlot(challengingService: ChallengingService) {
+  const [sorter, setSorter] = useState<SolutionsListingSorter>(
+    SolutionsListingSorter.create('date'),
+  )
   const [solutionTitle, setSolutionTitle] = useState('')
   const [isFromUser, setIsFromUser] = useState(false)
+  const { getChallengeSlice } = useChallengeStore()
+  const { challenge } = getChallengeSlice()
   const { user } = useAuthContext()
-  const api = useApi()
 
   async function fetchSolutionsList(page: number) {
-    const response = await api.fetchSolutionsList({
-      page,
-      title: solutionTitle,
+    const response = await challengingService.fetchSolutionsList({
+      page: OrdinalNumber.create(page),
+      title: Text.create(solutionTitle),
       itemsPerPage: SOLUTIONS_PER_PAGE,
       sorter,
-      userId: isFromUser ? String(user?.id.value) : null,
-      challengeId: String(challenge?.id.value),
+      userId: isFromUser ? Id.create(user?.id.value) : null,
+      challengeId: Id.create(challenge?.id.value),
     })
     if (response.isFailure) response.throwError()
     return response.body
@@ -39,7 +39,7 @@ export function useChallengeSolutionsSlot() {
   const { data, isLoading, isRecheadedEnd, nextPage } = usePaginatedCache({
     key: CACHE.keys.solutionsList,
     fetcher: fetchSolutionsList,
-    itemsPerPage: SOLUTIONS_PER_PAGE,
+    itemsPerPage: SOLUTIONS_PER_PAGE.value,
     isInfinity: true,
     isEnabled: Boolean(user && challenge),
     shouldRefetchOnFocus: false,
@@ -50,8 +50,8 @@ export function useChallengeSolutionsSlot() {
     setSolutionTitle(title)
   }
 
-  function handleSorterChange(sorter: SolutionsListSorter) {
-    setSorter(sorter)
+  function handleSorterChange(sorter: string) {
+    setSorter(SolutionsListingSorter.create(sorter))
   }
 
   function handleIsFromUserChange(isFromUser: boolean) {
@@ -62,19 +62,19 @@ export function useChallengeSolutionsSlot() {
     {
       title: 'Mais recentes',
       isToggle: true,
-      value: sorter === 'date',
+      value: sorter.isDate.isTrue,
       action: () => handleSorterChange('date'),
     },
     {
       title: 'Mais votados',
       isToggle: true,
-      value: sorter === 'upvotesCount',
+      value: sorter.isUpvotesCount.isTrue,
       action: () => handleSorterChange('upvotesCount'),
     },
     {
       title: 'Mais comentados',
       isToggle: true,
-      value: sorter === 'commentsCount',
+      value: sorter.isCommentsCount.isTrue,
       action: () => handleSorterChange('commentsCount'),
     },
   ]

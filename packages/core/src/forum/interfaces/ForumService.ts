@@ -14,8 +14,11 @@ export interface ForumService {
     solutionId: Id,
   ): Promise<RestResponse<PaginationResponse<CommentDto>>>
   fetchCommentReplies(commentId: Id): Promise<RestResponse<CommentDto[]>>
-  postChallengeComment(comment: Comment, challengeId: Id): Promise<RestResponse>
-  postSolutionComment(comment: Comment, solutionId: Id): Promise<RestResponse>
+  postChallengeComment(
+    comment: Comment,
+    challengeId: Id,
+  ): Promise<RestResponse<CommentDto>>
+  postSolutionComment(comment: Comment, solutionId: Id): Promise<RestResponse<CommentDto>>
   replyComment(reply: Comment, commentId: Id): Promise<RestResponse>
   editComment(commentContent: Text, commentId: Id): Promise<RestResponse>
   deleteComment(commentId: Id): Promise<RestResponse>

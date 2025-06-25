@@ -10,7 +10,7 @@ import {
   Id,
 } from '@stardust/core/global/structures'
 import {
-  ChallengeCompletion,
+  ChallengeCompletionStatus,
   ChallengeDifficulty,
 } from '@stardust/core/challenging/structures'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
@@ -29,7 +29,7 @@ export function useChallengesListTab(
       title: Text.create(''),
       categoriesIds: IdsList.create([]),
       difficulty: ChallengeDifficulty.create('any'),
-      completionStatus: ChallengeCompletion.create('any'),
+      completionStatus: ChallengeCompletionStatus.create('any'),
       upvotesCountOrder: ListingOrder.create(
         tabListSorter === 'date' ? 'descending' : 'any',
       ),
@@ -44,7 +44,7 @@ export function useChallengesListTab(
       title: Text.create(''),
       categoriesIds: IdsList.create([]),
       difficulty: ChallengeDifficulty.create('any'),
-      completionStatus: ChallengeCompletion.create('any'),
+      completionStatus: ChallengeCompletionStatus.create('any'),
       upvotesCountOrder: ListingOrder.create(
         tabListSorter === 'date' ? 'descending' : 'any',
       ),

@@ -2,8 +2,10 @@ import type { NextParams } from '@/rpc/next/types'
 import { LessonPage } from '@/ui/lesson/widgets/pages/Lesson'
 import { lessonActions, spaceActions } from '@/rpc/next-safe-action'
 
-export default async function Lesson({ params }: NextParams<{ starSlug: string }>) {
-  const spaceResponse = await spaceActions.accessStarPage({ starSlug: params.starSlug })
+const Page = async ({ params }: NextParams<'starSlug'>) => {
+  const spaceResponse = await spaceActions.accessStarPage({
+    starSlug: params.starSlug,
+  })
   const starDto = spaceResponse?.data
   if (!starDto?.id) return
 
@@ -23,3 +25,5 @@ export default async function Lesson({ params }: NextParams<{ starSlug: string }
     />
   )
 }
+
+export default Page

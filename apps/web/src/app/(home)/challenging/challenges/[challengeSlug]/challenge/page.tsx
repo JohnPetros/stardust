@@ -2,7 +2,7 @@ import { challengingActions } from '@/rpc/next-safe-action'
 import type { NextParams } from '@/rpc/next/types'
 import { ChallengePage } from '@/ui/challenging/widgets/pages/Challenge'
 
-export const Page = async ({ params }: NextParams<'challengeSlug'>) => {
+const Page = async ({ params }: NextParams<'challengeSlug'>) => {
   const response = await challengingActions.accessChallengePage({
     challengeSlug: params.challengeSlug,
   })

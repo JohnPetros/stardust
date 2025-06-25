@@ -1,31 +1,30 @@
-import { SupabaseServerClient } from '@/rest/supabase/clients'
-import { SupabaseAuthService, SupabaseChallengingService } from '@/rest/supabase/services'
+import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
+import { AuthService, ChallengingService } from '@/rest/services'
 import type { NextParams } from '@/rpc/next/types'
 import { SolutionPage } from '@/ui/challenging/widgets/pages/Solution'
 import { Challenge } from '@stardust/core/challenging/entities'
 import { NotSolutionAuthorError } from '@stardust/core/challenging/errors'
+import { Slug } from '@stardust/core/global/structures'
 
-export default async function Page({
-  params,
-}: NextParams<{ challengeSlug: string; solutionSlug: string }>) {
-  const supabase = SupabaseServerClient()
-  const challengingService = SupabaseChallengingService(supabase)
+const Page = async ({ params }: NextParams<'challengeSlug' | 'solutionSlug'>) => {
+  const restClient = await NextServerRestClient()
+  const challengingService = ChallengingService(restClient)
   const challengeResponse = await challengingService.fetchChallengeBySlug(
-    params.challengeSlug,
+    Slug.create(params.challengeSlug),
   )
   if (challengeResponse.isFailure) challengeResponse.throwError()
   const challenge = Challenge.create(challengeResponse.body)
 
   const solutionResponse = await challengingService.fetchSolutionBySlug(
-    params.solutionSlug,
+    Slug.create(params.solutionSlug),
   )
   if (solutionResponse.isFailure) solutionResponse.throwError()
   const savedSolutionDto = solutionResponse.body
 
-  const authService = SupabaseAuthService(supabase)
-  const authResponse = await authService.fetchUserId()
-  const userId = authResponse.body
-  if (savedSolutionDto.author.id !== userId) throw new NotSolutionAuthorError()
+  const authService = AuthService(restClient)
+  const authResponse = await authService.fetchAccount()
+  const account = authResponse.body
+  if (savedSolutionDto.author.id !== account.id) throw new NotSolutionAuthorError()
 
   return (
     <SolutionPage
@@ -35,3 +34,5 @@ export default async function Page({
     />
   )
 }
+
+export default Page

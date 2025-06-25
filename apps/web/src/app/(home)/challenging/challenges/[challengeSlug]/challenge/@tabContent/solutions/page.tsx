@@ -1,5 +1,7 @@
 import { ChallengeSolutionsSlot } from '@/ui/challenging/widgets/slots/ChallengeSolutions'
 
-export default async function Slot() {
+const Slot = async () => {
   return <ChallengeSolutionsSlot />
 }
+
+export default Slot

@@ -13,11 +13,11 @@ import { Button } from '@/ui/global/widgets/components/Button'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useChallengeSolutionsSlot } from './useChallengeSolutionsSlot'
 import { SolutionCard } from './SolutionCard'
-import type { SolutionsListSorter } from '@stardust/core/challenging/types'
 import { ChallengeContentNav } from '../../components/ChallengeContentNav'
 import { BlockedContentAlertDialog } from '../../components/BlockedContentMessage'
+import { useRest } from '@/ui/global/hooks/useRest'
 
-const SORTER_BUTTON_TITLES: Record<SolutionsListSorter, string> = {
+const SORTER_BUTTON_TITLES: Record<string, string> = {
   date: 'recentes',
   upvotesCount: 'votadas',
   commentsCount: 'comentadas',
@@ -25,6 +25,7 @@ const SORTER_BUTTON_TITLES: Record<SolutionsListSorter, string> = {
 } as const
 
 export function ChallengeSolutionsSlot() {
+  const { challengingService } = useRest()
   const {
     solutions,
     sorter,
@@ -38,7 +39,7 @@ export function ChallengeSolutionsSlot() {
     handleIsFromUserChange,
     nextPage,
     handleSolutionTitleChange,
-  } = useChallengeSolutionsSlot()
+  } = useChallengeSolutionsSlot(challengingService)
 
   return (
     <BlockedContentAlertDialog content='solutions'>
@@ -75,7 +76,7 @@ export function ChallengeSolutionsSlot() {
           >
             {(isPopoverMenuOpen) => (
               <div className='flex items-center gap-3 text-sm text-gray-200 cursor-pointer'>
-                Mais {SORTER_BUTTON_TITLES[sorter]}
+                Mais {SORTER_BUTTON_TITLES[sorter.value]}
                 <AnimatedArrow isUp={isPopoverMenuOpen} />
               </div>
             )}

@@ -94,10 +94,34 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       )
     },
 
+    async fetchSolutionById(solutionId: Id) {
+      return await restClient.get(`/challenging/solutions/id/${solutionId.value}`)
+    },
+
+    async fetchSolutionBySlug(solutionSlug: Slug) {
+      return await restClient.get(`/challenging/solutions/slug/${solutionSlug.value}`)
+    },
+
+    async fetchChallengeByStarId(starId: Id) {
+      return await restClient.get(`/challenging/challenges/star/${starId.value}`)
+    },
+
+    async fetchChallengeBySolutionId(solutionId: Id) {
+      return await restClient.get(`/challenging/challenges/solution/${solutionId.value}`)
+    },
+
+    async fetchDocs() {
+      return await restClient.get('/challenging/docs')
+    },
+
     async voteChallenge(challengeId: Id, challengeVote: ChallengeVote) {
       return await restClient.post(`/challenging/challenges/${challengeId.value}/vote`, {
         challengeVote: challengeVote.value,
       })
     },
-  } as IChallengingService
+
+    async viewSolution(solutionSlug: Slug) {
+      return await restClient.patch(`/challenging/solutions/${solutionSlug.value}/view`)
+    },
+  } as unknown as IChallengingService
 }

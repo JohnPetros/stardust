@@ -7,7 +7,7 @@ import type { ShopService } from '@stardust/core/shop/interfaces'
 import { CACHE } from '@/constants'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 
-const ROCKETS_PER_PAGE = 6
+const ROCKETS_PER_PAGE = OrdinalNumber.create(6)
 
 export function useRocketsList(shopService: ShopService) {
   const [search, setSearch] = useState<Text>(Text.create(''))
@@ -17,7 +17,7 @@ export function useRocketsList(shopService: ShopService) {
     const response = await shopService.fetchRocketsList({
       search: search,
       page: OrdinalNumber.create(page),
-      itemsPerPage: OrdinalNumber.create(ROCKETS_PER_PAGE),
+      itemsPerPage: ROCKETS_PER_PAGE,
       order: priceOrder,
     })
     if (response.isFailure) response.throwError()
@@ -28,7 +28,7 @@ export function useRocketsList(shopService: ShopService) {
     key: CACHE.keys.shopRockets,
     fetcher: fetchRockets,
     dependencies: [search.value, priceOrder.value],
-    itemsPerPage: ROCKETS_PER_PAGE,
+    itemsPerPage: ROCKETS_PER_PAGE.value,
   })
 
   function handleSearchChange(value: string) {
@@ -36,8 +36,8 @@ export function useRocketsList(shopService: ShopService) {
     setPage(1)
   }
 
-  function handlePriceOrderChange(value: string) {
-    setPriceOrder(ListingOrder.create(value))
+  function handlePriceOrderChange(ListingOrder: ListingOrder) {
+    setPriceOrder(ListingOrder)
   }
 
   function handlePageChange(page: number) {
@@ -47,7 +47,7 @@ export function useRocketsList(shopService: ShopService) {
   return {
     rockets: data.map(Rocket.create),
     totalRocketsCount: totalItemsCount,
-    rocketsPerPage: ROCKETS_PER_PAGE,
+    rocketsPerPage: ROCKETS_PER_PAGE.value,
     page,
     handlePageChange,
     handleSearchChange,

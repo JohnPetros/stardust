@@ -1,10 +1,7 @@
 import type { EventPayload } from '@stardust/core/global/types'
 import type { Amqp, EventBroker, Job } from '@stardust/core/global/interfaces'
 import type { AvatarsRepository, RocketsRepository } from '@stardust/core/shop/interfaces'
-import {
-  AcquireDefaultShopItemsUseCase,
-  GetAcquirableShopItemsByDefaultUseCase,
-} from '@stardust/core/shop/use-cases'
+import { AcquireDefaultShopItemsUseCase } from '@stardust/core/shop/use-cases'
 import type { FirstTierReachedEvent } from '@stardust/core/ranking/events'
 
 type Payload = EventPayload<typeof FirstTierReachedEvent>
@@ -27,7 +24,7 @@ export class AcquireDefaultShopItemsJob implements Job<Payload> {
     )
     await amqp.run(
       async () => useCase.execute({ user, firstStarId, firstTierId }),
-      GetAcquirableShopItemsByDefaultUseCase.name,
+      AcquireDefaultShopItemsUseCase.name,
     )
   }
 }

@@ -15,6 +15,7 @@ export function useChallengeCommentsSlot(forumService: ForumService, challengeId
   async function handleCommentPost(comment: Comment) {
     const response = await forumService.postChallengeComment(comment, challengeId)
     if (response.isFailure) toast.show(response.errorMessage)
+    return response
   }
 
   return {

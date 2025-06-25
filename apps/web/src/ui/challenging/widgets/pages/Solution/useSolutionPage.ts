@@ -7,19 +7,28 @@ import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { ROUTES, STORAGE } from '@/constants'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
-import { usePostSolutionAction } from './usePostSolutionAction'
-import { useEditSolutionAction } from './useEditSolutionAction'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
+import { Text, type Id } from '@stardust/core/global/structures'
+import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
 type FieldErrors = {
   solutionTitle: string
   solutionContent: string
 }
 
-export function useSolutionPage(
-  savedSolutionDto: SolutionDto | null,
-  challengeId: string,
-  challengeSlug: string,
-) {
+type Params = {
+  challengingService: ChallengingService
+  savedSolutionDto: SolutionDto | null
+  challengeId: Id
+  challengeSlug: Id
+}
+
+export function useSolutionPage({
+  challengingService,
+  savedSolutionDto,
+  challengeId,
+  challengeSlug,
+}: Params) {
   const [solution, setSolution] = useState<Solution | null>(
     savedSolutionDto ? Solution.create(savedSolutionDto) : null,
   )
@@ -27,20 +36,14 @@ export function useSolutionPage(
   const [isSuccess, setIsSuccess] = useState(false)
   const [solutionTitle, setSolutionTitle] = useState(solution?.title.value ?? '')
   const [solutionContent, setSolutionContent] = useState(solution?.content.value ?? '')
+  const [isLoading, setIsLoading] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({
     solutionTitle: '',
     solutionContent: '',
   })
   const { goTo } = useRouter()
-  const { isPosting, postSolution } = usePostSolutionAction({
-    onSuccess: (newSolution) => handleActionSuccess(newSolution, true),
-    onError: handleActionError,
-  })
-  const { isEditing, editSolution } = useEditSolutionAction({
-    onSuccess: (solution) => handleActionSuccess(solution, false),
-    onError: handleActionError,
-  })
-  const localStorage = useLocalStorage(STORAGE.keys.challengeCode(challengeId))
+  const toast = useToastContext()
+  const localStorage = useLocalStorage(STORAGE.keys.challengeCode(challengeId.value))
 
   function handleTitleChange(title: string) {
     setFieldErrors({
@@ -64,38 +67,41 @@ export function useSolutionPage(
     setIsSuccess(true)
     goTo(
       ROUTES.challenging.challenges.challengeSolutions.solution(
-        challengeSlug,
+        challengeSlug.value,
         solution.slug.value.concat(isNew ? '?isNew=true' : ''),
       ),
     )
   }
 
-  function handleActionError(solutionTitleError: string, solutionContentError: string) {
-    setFieldErrors({
-      solutionTitle: solutionTitleError,
-      solutionContent: solutionContentError,
-    })
-  }
-
   async function handleSolutionPost() {
     if (!user) return
+    setIsLoading(true)
 
-    await postSolution({
-      solutionTitle,
-      solutionContent,
-      authorId: user.id.value,
+    const response = await challengingService.postSolution(
+      Text.create(solutionTitle),
+      Text.create(solutionContent),
       challengeId,
-    })
+    )
+
+    if (response.isFailure) {
+      toast.showError(response.errorMessage)
+    }
+
+    if (response.isSuccessful) {
+      handleActionSuccess(Solution.create(response.body), true)
+    }
+
+    setIsLoading(false)
   }
 
   async function handleSolutionEdit() {
     if (!solution) return
 
-    await editSolution({
-      solutionId: solution.id.value,
-      solutionTitle,
-      solutionContent,
-    })
+    await challengingService.editSolution(
+      solution.id,
+      Text.create(solutionTitle),
+      Text.create(solutionContent),
+    )
   }
 
   useEffect(() => {
@@ -119,9 +125,8 @@ ${storageSolutionContent}
       solution?.title.value !== solutionTitle ||
       solution?.content.value !== solutionContent,
     isFailure: Boolean(fieldErrors.solutionTitle) || Boolean(fieldErrors.solutionContent),
-    isExecuting: isPosting || isEditing,
+    isExecuting: isLoading,
     isSuccess,
-    fieldErrors,
     handleTitleChange,
     handleContentChange,
     handleSolutionPost,

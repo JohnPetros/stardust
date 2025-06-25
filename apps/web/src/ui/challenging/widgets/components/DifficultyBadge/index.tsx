@@ -7,6 +7,7 @@ const DIFFICULTIES = {
   easy: 'Fácil',
   medium: 'Médio',
   hard: 'Difícil',
+  any: 'Qualquer',
 }
 
 const difficultyStyles = tv({
@@ -16,6 +17,7 @@ const difficultyStyles = tv({
       easy: 'border-green-400 text-green-400',
       medium: 'border-yellow-400 text-yellow-400',
       hard: 'border-red-700 text-red-700',
+      any: 'border-gray-400 text-gray-400',
     },
   },
 })

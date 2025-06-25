@@ -2,12 +2,12 @@
 
 import type { ReactNode } from 'react'
 
+import { useRest } from '@/ui/global/hooks/useRest'
 import { Button } from '../../Button'
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../../Dialog'
 import { Loading } from '../../Loading'
 import { Mdx } from '../../Mdx'
 import { useDocsDialog } from './useDocsDialog'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { Icon } from '../../Icon'
 
 type DocsDialogProps = {
@@ -15,6 +15,7 @@ type DocsDialogProps = {
 }
 
 export function DocsDialog({ children }: DocsDialogProps) {
+  const { challengingService } = useRest()
   const {
     isLoading,
     content,
@@ -22,7 +23,7 @@ export function DocsDialog({ children }: DocsDialogProps) {
     handleDialogOpen,
     handleDocButton,
     handleBackButton,
-  } = useDocsDialog()
+  } = useDocsDialog(challengingService)
 
   return (
     <Dialog onOpenChange={handleDialogOpen}>

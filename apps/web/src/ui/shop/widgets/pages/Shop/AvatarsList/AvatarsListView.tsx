@@ -1,13 +1,9 @@
-'use client'
-
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { Search } from '@/ui/global/widgets/components/Search'
 import { Pagination } from '@/ui/global/widgets/components/Pagination'
 import { AvatarItem } from './AvatarItem'
-import { useAvatarsList } from './useAvatarsList'
 import { PriceOrderSelect } from '../PriceOrderSelect'
-import { useRest } from '@/ui/global/hooks/useRest'
 import type { Avatar } from '@stardust/core/shop/entities'
+import type { ListingOrder } from '@stardust/core/global/structures'
 
 type Props = {
   totalAvatarsCount: number
@@ -15,7 +11,7 @@ type Props = {
   page: number
   avatars: Avatar[]
   onSearchChange: (value: string) => void
-  onPriceOrderChange: (value: string) => void
+  onPriceOrderChange: (ListingOrder: ListingOrder) => void
   onPageChange: (value: number) => void
 }
 

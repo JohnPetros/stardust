@@ -36,6 +36,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
   const cookies: Cookie[] = []
   let statusCode: (typeof HTTP_STATUS_CODE)[keyof typeof HTTP_STATUS_CODE] =
     HTTP_STATUS_CODE.ok
+  let extendedBody = {}
 
   if (request && schema) {
     let body: HttpSchema['body']
@@ -85,25 +86,21 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       })
     },
 
-    async getUser() {
-      const restClient = await NextServerRestClient()
-      const authService = AuthService(restClient)
-      const profileService = ProfileService(restClient)
-
-      const authResponse = await authService.fetchAccount()
-      if (authResponse.isFailure) authResponse.throwError()
-
-      const profileResponse = await profileService.fetchUserById(
-        Id.create(authResponse.body.id),
-      )
-      if (profileResponse.isFailure) profileResponse.throwError()
-
-      return profileResponse.body
+    async getAccount() {
+      throw new AppError('Not implemented')
     },
 
     getMethod() {
       if (!request) throw new AppError('Next request is not defined')
       return request.method as HttpMethod
+    },
+
+    getAccountId() {
+      throw new AppError('Not implemented')
+    },
+
+    extendBody(body: object) {
+      extendedBody = { ...extendedBody, ...body }
     },
 
     async getBody() {

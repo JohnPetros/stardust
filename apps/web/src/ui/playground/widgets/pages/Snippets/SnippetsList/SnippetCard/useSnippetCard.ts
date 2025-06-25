@@ -9,6 +9,7 @@ import { useApi } from '@/ui/global/hooks/useApi'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import type { PromptRef } from '@/ui/global/widgets/components/Prompt/types'
 import { useEditSnippetAction } from '@/ui/playground/hooks/useEditSnippetAction'
+import { Id } from '@stardust/core/global/structures'
 
 export function useSnippetCard(
   snippetId: string,
@@ -26,7 +27,7 @@ export function useSnippetCard(
   const promptRef = useRef<PromptRef>(null)
 
   async function handleDeleteSnippetButtonClick() {
-    const response = await api.deleteSnippet(snippetId)
+    const response = await api.deleteSnippet(Id.create(snippetId))
     if (response.isSuccessful) {
       onDelete(snippetId)
       return

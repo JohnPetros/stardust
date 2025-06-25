@@ -1,4 +1,5 @@
 import type { ChallengingService } from '../interfaces'
+import { Slug } from '#global/domain/structures/Slug'
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { ChallengeDto } from '../domain/entities/dtos'
 import { Challenge } from '../domain/entities'
@@ -21,7 +22,9 @@ export class PostChallengeUseCase implements UseCase<Request, Response> {
   }
 
   private async fetchChallenge(challengeSlug: string) {
-    const response = await this.challengingService.fetchChallengeBySlug(challengeSlug)
+    const response = await this.challengingService.fetchChallengeBySlug(
+      Slug.create(challengeSlug),
+    )
     if (response.isSuccessful) response.throwError()
   }
 

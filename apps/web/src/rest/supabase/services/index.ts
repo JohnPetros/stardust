@@ -1,7 +1,4 @@
 export { SupabaseStorageService } from './SupabaseStorageService'
 export { SupabaseRankingService } from './SupabaseRankingService'
-export { SupabaseChallengingService } from './SupabaseChallengingService'
-export { SupabaseProfileService } from './SupabaseProfileService'
-export { SupabaseShopService } from './SupabaseShopService'
 export { SupabaseLessonService } from './SupabaseLessonService'
 export { SupabasePlaygroundService } from './SupabasePlaygroundService'

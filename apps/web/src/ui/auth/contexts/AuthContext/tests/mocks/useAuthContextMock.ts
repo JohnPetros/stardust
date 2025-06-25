@@ -16,7 +16,7 @@ export function useAuthContextMock(
   jest.mocked(useAuthContext).mockReturnValue({
     user: fakeUser,
     isLoading: false,
-    serverSession: null,
+    accessToken: null,
     handleSignIn: handleSignInMock,
     handleSignOut: handleSignOutMock,
     updateUser: updateUserMock,
