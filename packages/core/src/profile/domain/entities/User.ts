@@ -261,7 +261,7 @@ export class User extends Entity<UserProps> {
   }
 
   get acquiredRocketsCount() {
-    return this.props.acquiredRocketsIds.count
+    return this.props.acquiredRocketsIds.count.minus(Integer.create(1))
   }
 
   get acquiredAvatarsCount() {

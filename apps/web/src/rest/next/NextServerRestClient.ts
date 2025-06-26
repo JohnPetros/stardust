@@ -11,8 +11,12 @@ export const NextServerRestClient = async (
   config?: NextRestClientConfig,
 ): Promise<RestClient> => {
   const accessToken = await cookieActions.getCookie(COOKIES.accessToken.key)
+
   const restClient = NextRestClient(config)
   restClient.setBaseUrl(CLIENT_ENV.serverAppUrl)
-  restClient.setHeader(HTTP_HEADERS.authorization, `Bearer ${accessToken?.data}`)
+
+  if (accessToken?.data)
+    restClient.setHeader(HTTP_HEADERS.authorization, `Bearer ${accessToken?.data}`)
+
   return restClient
 }

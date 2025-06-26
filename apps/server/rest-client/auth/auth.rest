@@ -7,7 +7,7 @@ Content-Type: application/json
 
 {
   "email": "{{EMAIL}}",
-  "password": "654321"
+  "password": "123456"
 }
 
 ### Sign up

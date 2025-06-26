@@ -21,7 +21,6 @@ export const SignInAction = (authService: AuthService): Action<Request, Response
         Email.create(email),
         Password.create(password),
       )
-      console.log('response', response)
       if (response.isFailure) response.throwError()
 
       const session = response.body

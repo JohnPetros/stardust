@@ -67,25 +67,6 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       return request ? request.nextUrl.pathname : ''
     },
 
-    redirect(route: string) {
-      const nextResponse = NextResponse.redirect(new URL(route, CLIENT_ENV.webAppUrl))
-
-      if (cookies.length)
-        for (const cookie of cookies) {
-          nextResponse.cookies.set(cookie.key, cookie.value, {
-            path: '/',
-            httpOnly: true,
-            maxAge: cookie.duration,
-          })
-        }
-
-      return new RestResponse({
-        body: nextResponse,
-        statusCode: HTTP_STATUS_CODE.redirect,
-        headers: { [HTTP_HEADERS.location]: route },
-      })
-    },
-
     async getAccount() {
       throw new AppError('Not implemented')
     },
@@ -160,6 +141,25 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       return new RestResponse({
         body: NextResponse.json(pagination, { status: statusCode }),
         statusCode,
+      })
+    },
+
+    redirect(route: string) {
+      const nextResponse = NextResponse.redirect(new URL(route, CLIENT_ENV.webAppUrl))
+
+      if (cookies.length)
+        for (const cookie of cookies) {
+          nextResponse.cookies.set(cookie.key, cookie.value, {
+            path: '/',
+            httpOnly: true,
+            maxAge: cookie.duration,
+          })
+        }
+
+      return new RestResponse({
+        body: nextResponse,
+        statusCode: HTTP_STATUS_CODE.redirect,
+        headers: { [HTTP_HEADERS.location]: route },
       })
     },
 

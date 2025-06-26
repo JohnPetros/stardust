@@ -24,6 +24,4 @@ const envSchema = z.object({
   webAppUrl: z.string().url(),
 })
 
-console.log('env', env)
-
 export const ENV = envSchema.parse(env)
