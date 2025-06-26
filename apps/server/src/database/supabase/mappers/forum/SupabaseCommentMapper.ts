@@ -25,7 +25,7 @@ export class SupabaseCommentMapper {
           },
         },
       },
-      postedAt: new Datetime(supabaseComment.created_at).date(),
+      postedAt: new Date(),
     }
 
     return CommentDto

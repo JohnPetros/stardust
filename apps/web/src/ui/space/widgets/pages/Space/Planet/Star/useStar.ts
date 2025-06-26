@@ -5,7 +5,6 @@ import type { Id, Slug } from '@stardust/core/global/structures'
 
 import { ROUTES } from '@/constants'
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
-import { useApi } from '@/ui/global/hooks/useApi'
 import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
 import { useInView } from '@/ui/global/hooks/useInView'
 import { useRouter } from '@/ui/global/hooks/useRouter'

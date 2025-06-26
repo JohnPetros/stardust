@@ -33,14 +33,6 @@ export class CalculateRewardForChallengeCompletionUseCase
   }: Request) {
     const user = await this.findUser(Id.create(userId))
     const isChallengeCompleted = user.hasCompletedChallenge(Id.create(challengeId))
-
-    console.log({
-      challengeXp,
-      challengeCoins,
-      maximumIncorrectAnswersCount,
-      incorrectAnswersCount,
-    })
-
     const accuracyPercentage = this.calculateAccuracyPercentage(
       maximumIncorrectAnswersCount,
       incorrectAnswersCount,

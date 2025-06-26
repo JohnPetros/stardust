@@ -38,21 +38,6 @@ export function useChallengesListTab(
       ),
       userId: Id.create(userId),
     })
-    console.log({
-      page: OrdinalNumber.create(page),
-      itemsPerPage: CHALLENGES_PER_PAGE,
-      title: Text.create(''),
-      categoriesIds: IdsList.create([]),
-      difficulty: ChallengeDifficulty.create('any'),
-      completionStatus: ChallengeCompletionStatus.create('any'),
-      upvotesCountOrder: ListingOrder.create(
-        tabListSorter === 'date' ? 'descending' : 'any',
-      ),
-      postingOrder: ListingOrder.create(
-        tabListSorter === 'upvotesCount' ? 'descending' : 'any',
-      ),
-      userId: Id.create(userId),
-    })
     if (response.isFailure) response.throwError()
     return response.body
   }

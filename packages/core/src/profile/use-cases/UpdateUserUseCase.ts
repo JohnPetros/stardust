@@ -9,10 +9,9 @@ export class UpdateUserUseCase implements UseCase<UserDto, Promise<UserDto>> {
   constructor(private readonly repository: UsersRepository) {}
 
   async execute(userDto: UserDto): Promise<UserDto> {
-    console.log('userDto', userDto)
     const user = User.create(userDto)
     await this.findUser(user.id)
-    // await this.repository.replace(user)
+    await this.repository.replace(user)
     return user.dto
   }
 

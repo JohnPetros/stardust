@@ -15,10 +15,10 @@ export * from './global/domain/aggregates/index'
 export * from './global/domain/structures/index'
 export * from './global/domain/structures/fakers/index'
 export * from './global/domain/types/index'
-export * from './global/responses/index'
 export * from './global/domain/errors/index'
-export * from './global/interfaces/index'
 export * from './global/constants/index'
+export * from './global/responses/index'
+export * from './global/libs/index'
 
 // Lesson
 export * from './lesson/domain/abstracts/index'

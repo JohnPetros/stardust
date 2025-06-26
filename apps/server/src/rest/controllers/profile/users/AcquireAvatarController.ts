@@ -27,7 +27,6 @@ export class AcquireAvatarController implements Controller<Schema> {
       avatarImage,
       avatarPrice,
     })
-    console.log({ user })
     return http.send(user)
   }
 }

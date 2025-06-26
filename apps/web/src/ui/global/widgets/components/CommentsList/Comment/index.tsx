@@ -69,8 +69,6 @@ export const Comment = ({
   const { user } = useAuthContext()
   const hasReplies = (replies && replies.length > 0) || repliesCount > 0 || false
 
-  console.log(user?.upvotedCommentsIds)
-
   return (
     <>
       <AlertDialog

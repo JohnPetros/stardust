@@ -1,11 +1,12 @@
-import { Challenge } from '@stardust/core/challenging/entities'
 import type {
   ChallengeCategoryDto,
   ChallengeDto,
   TestCaseDto,
 } from '@stardust/core/challenging/entities/dtos'
-import type { SupabaseChallenge } from '../../types'
+import { Challenge } from '@stardust/core/challenging/entities'
 import { Datetime } from '@stardust/core/global/libs'
+
+import type { SupabaseChallenge } from '../../types'
 
 export class SupabaseChallengeMapper {
   static toEntity(supabaseChallenge: SupabaseChallenge): Challenge {
@@ -13,6 +14,7 @@ export class SupabaseChallengeMapper {
   }
 
   static toDto(supabaseChallenge: SupabaseChallenge): ChallengeDto {
+    console.log('new Datetime(supabaseChallenge.created_at).date()', Datetime)
     const challengeDto: ChallengeDto = {
       id: supabaseChallenge.id ?? '',
       title: supabaseChallenge.title ?? '',

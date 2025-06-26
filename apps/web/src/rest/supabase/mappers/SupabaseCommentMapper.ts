@@ -1,7 +1,6 @@
 import type { Comment } from '@stardust/core/forum/entities'
 import type { SupabaseComment } from '../types'
 import type { CommentDto } from '@stardust/core/forum/entities/dtos'
-import { Datetime } from '@stardust/core/global/libs'
 
 export const SupabaseCommentMapper = () => {
   return {
@@ -22,7 +21,6 @@ export const SupabaseCommentMapper = () => {
             },
           },
         },
-        postedAt: new Datetime(supabaseComment.created_at).date(),
       }
 
       return CommentDto
