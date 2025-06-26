@@ -1,6 +1,6 @@
 import { type ZodArray, z, ZodError } from 'zod'
 
-import type { ArrayValidation } from '../../../interfaces'
+import type { ArrayValidation } from '../../../interfaces/libs/ArrayValidation'
 import { ZodValidationErrorFactory } from './ZodValidationErrorFactory'
 
 export class ZodArrayValidation implements ArrayValidation {

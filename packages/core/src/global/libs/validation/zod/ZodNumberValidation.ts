@@ -1,6 +1,6 @@
 import { z, type ZodNumber, ZodError } from 'zod'
 
-import type { NumberValidation } from '../../../interfaces'
+import type { NumberValidation } from '../../../interfaces/libs/NumberValidation'
 import { ZodValidationErrorFactory } from './ZodValidationErrorFactory'
 
 export class ZodNumberValidation implements NumberValidation {

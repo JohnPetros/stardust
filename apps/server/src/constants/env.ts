@@ -1,12 +1,5 @@
 import { z } from 'zod'
 
-import { Datetime } from '@stardust/core/global/libs'
-import { SupabaseChallengeMapper } from '@/database/supabase/mappers/challenging'
-
-const datetime = new Datetime()
-
-console.log('datetime', datetime)
-
 const env = {
   mode: process.env.MODE,
   port: process.env.PORT,

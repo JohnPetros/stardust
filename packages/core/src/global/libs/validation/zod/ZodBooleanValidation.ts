@@ -1,7 +1,7 @@
 import { type ZodBoolean, z, ZodError, type ZodLiteral } from 'zod'
 
 import { ZodValidationErrorFactory } from './ZodValidationErrorFactory'
-import type { BooleanValidation } from '..'
+import type { BooleanValidation } from '../../../interfaces/libs/BooleanValidation'
 
 export class ZodBooleanValidation implements BooleanValidation {
   private data: unknown
