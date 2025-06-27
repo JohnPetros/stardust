@@ -213,7 +213,7 @@ escreva(mensagemCerta)
   {
     type: 'default',
     content:
-      'Através do segundo valor passado nos parênteses do `dividir()`, que difine quantos itens o lista gerado deve conter.',
+      'Através do segundo valor passado nos parênteses do `dividir()`, que define quantos itens o lista gerado deve conter.',
     picture: 'panda-olhando-computador.jpg',
   },
   {
