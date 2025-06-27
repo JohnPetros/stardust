@@ -1,5 +1,3 @@
-'use client'
-
 import { useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -50,7 +48,7 @@ export function useSignUpForm(
       const response = await profileService.verifyUserNameInUse(
         Name.create(nameFieldWatch),
       )
-      if (response.isSuccessful) {
+      if (response.isFailure) {
         setError('name', { message: 'Nome já utilizado por outro usuário' })
       }
     } catch (error) {}
@@ -62,7 +60,7 @@ export function useSignUpForm(
         Email.create(emailFieldWatch),
       )
 
-      if (response.isSuccessful) {
+      if (response.isFailure) {
         setError('email', { message: 'E-mail já utilizado por outro usuário' })
         return false
       }

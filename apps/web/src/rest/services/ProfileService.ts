@@ -77,13 +77,13 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
 
     async verifyUserNameInUse(userName: Name) {
       return await restClient.get(
-        `/profile/users/verify-user-name-in-use?name=${userName.value}`,
+        `/profile/users/verify-name-in-use?name=${userName.value}`,
       )
     },
 
     async verifyUserEmailInUse(userEmail: Email) {
       return await restClient.get(
-        `/profile/users/verify-user-email-in-use?email=${userEmail.value}`,
+        `/profile/users/verify-email-in-use?email=${userEmail.value}`,
       )
     },
 
