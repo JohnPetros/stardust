@@ -3,6 +3,41 @@ import type { TextBlockDto } from '@stardust/core/global/entities/dtos'
 export const texts: TextBlockDto[] = [
   {
     type: 'default',
+    content: 'Se escrevermos `coordenadas[i]` em cada iteração:',
+    picture: 'panda-de-oculos.jpg',
+  },
+  {
+    type: 'code',
+    content: `var coordenadas = [
+  "x:12;y:6", 
+  "x:70;y:32", 
+  "x:25;y:18", 
+  "x:8;y:40", 
+]
+
+para (var i = 0; i < coordenadas.tamanho(); i++) {
+  escreva(coordenadas[i])
+}
+
+// Resultado:  
+// x:12;y:6, 
+// x:70;y:32, 
+// x:25;y:18, 
+// x:8;y:40`,
+    isRunnable: true,
+  },
+  {
+    type: 'default',
+    content: 'Sim, escrever `mochila[-1][1]` quer dizer:',
+    picture: 'panda-segurando-bambu-de-pe.jpg',
+  },
+  {
+    type: 'quote',
+    content: '`[-1]` -> Pegar o último item de mochila, que no caso é uma lista.',
+    picture: 'panda-segurando-bambu-de-pe.jpg',
+  },
+  {
+    type: 'default',
     content:
       'Agora só falta inserir as coordenadas numéricas da nossa localização na mensagem.',
     picture: 'panda-olhando-computador.jpg',
@@ -48,7 +83,7 @@ escreva(coordenadas)`,
   {
     type: 'default',
     content:
-      'Primeiramente, montamos um *para*, com a variável de controle (i) iniciando com 0, já que os índices de lista começam do zero e não do um.',
+      'Primeiramente, montamos um `para`, com a variável de controle (i) iniciando com 0, já que os índices de lista começam do zero e não do um.',
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -61,7 +96,7 @@ escreva(coordenadas)`,
   {
     type: 'default',
     content:
-      'Depois colocamos a condição do laço como *i* menor que o tamanho da lista *coordenadas*, ou seja, indicamos ao *para* que execute algo até que a variável *i* seja igual ou maior que a quantidade de *coordenadas*.',
+      'Depois colocamos a condição do laço como `i` menor que o tamanho da lista `coordenadas`, ou seja, indicamos ao `para` que execute algo até que a variável `i` seja igual ou maior que a quantidade de `coordenadas`.',
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -73,7 +108,7 @@ escreva(coordenadas)`,
   },
   {
     type: 'default',
-    content: 'Por fim, incrementamos a variável *i* a cada nova iteração.',
+    content: 'Por fim, incrementamos a variável `i` a cada nova iteração.',
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -105,7 +140,7 @@ para (var i = 0; i < coordenadas.tamanho(); i++) {
   },
   {
     type: 'default',
-    content: 'Se escrevermos *coordenadas[i]* em cada iteração:',
+    content: 'Se escrevermos `coordenadas[i]` em cada iteração:',
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -131,7 +166,7 @@ para (var i = 0; i < coordenadas.tamanho(); i++) {
   {
     type: 'default',
     content:
-      'Percebeu a mágica? A cada iteração o *i* é um número diferente. Dessa forma podemos pegar cada valor da lista usando essa variável como índice.',
+      'Percebeu a mágica? A cada iteração o `i` é um número diferente. Dessa forma podemos pegar cada valor da lista usando essa variável como índice.',
     picture: 'panda-deslumbrado.jpg',
   },
   {
@@ -186,13 +221,13 @@ escreva(mensagem)
   {
     type: 'alert',
     content:
-      'A variável *coordenadaCerta* foi colocada para fora do laço porque senão ela seria reiniciada toda vez a cada iteração do laço.',
+      'A variável `coordenadaCerta` foi colocada para fora do laço porque senão ela seria reiniciada toda vez a cada iteração do laço.',
     picture: 'panda-triste.jpg',
   },
   {
     type: 'alert',
     content:
-      'E também porque ela não poderia ser acessada de fora do *para* ou do *se*, pois uma vez sendo criada dentro de uma dessas estruturas, essa variável teria escopo local e não global, lembra?',
+      'E também porque ela não poderia ser acessada de fora do `para` ou do `se`, pois uma vez sendo criada dentro de uma dessas estruturas, essa variável teria escopo local e não global, lembra?',
     picture: 'panda-sorrindo-sentado.jpg',
   },
   {
@@ -230,7 +265,7 @@ escreva(mochila)
   {
     type: 'default',
     content:
-      'Além disso, podemos não usar apenas o *para*, mas qualquer outro tipo de laço que já vimos, como o *enquanto*.',
+      'Além disso, podemos não usar apenas o `para`, mas qualquer outro tipo de laço que já vimos, como o `enquanto`.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -250,7 +285,7 @@ escreva(mochila);
   },
   {
     type: 'default',
-    content: 'E o *fazer-enquanto*.',
+    content: 'E o `fazer-enquanto`.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -361,18 +396,18 @@ para cada item em mochila {
   },
   {
     type: 'user',
-    content: 'Mas que espécie de *para* é esse?',
+    content: 'Mas que espécie de `para` é esse?',
   },
   {
     type: 'default',
-    content: 'Apresento-lhe o *para-cada*',
+    content: 'Apresento-lhe o `para-cada`',
     picture: 'panda-sorrindo.jpg',
   },
   {
     type: 'quote',
     title: 'Para cada',
     content:
-      'O laço *para-cada* faz a mesma coisa que um simples *para* só que com um código mais bonito.',
+      'O laço `para-cada` faz a mesma coisa que um simples `para` só que com um código mais bonito.',
     picture: 'panda-sorrindo-sentado.jpg',
   },
   {

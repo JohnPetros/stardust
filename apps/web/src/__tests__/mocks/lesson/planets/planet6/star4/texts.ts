@@ -322,7 +322,7 @@ escreva(fatia)
   {
     type: 'default',
     content:
-      'Sim, agora temos itens duplicados em listas diferentes, justo porque o *fatiar()* não modifica a lista originial.',
+      'Sim, agora temos itens duplicados em listas diferentes, justo porque o *fatiar()* não modifica a lista original.',
     picture: 'panda-confuso.jpg',
   },
   {

@@ -144,7 +144,7 @@ escreva(exoticos)
   {
     type: 'default',
     content:
-      'Isso é para mostrar que o `encaixar()` não fuciona da mesma maneira que o `fatiar()`.',
+      'Isso é para mostrar que o `encaixar()` não funciona da mesma maneira que o `fatiar()`.',
     picture: 'panda-sorrindo.jpg',
   },
   {
