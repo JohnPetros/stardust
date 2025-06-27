@@ -1,13 +1,10 @@
 'use client'
 
-import { PageTransitionAnimation } from '@/ui/global/widgets/components/PageTransitionAnimation'
-import { Loading } from '@/ui/global/widgets/components/Loading'
 import { useLessonPage } from './useLessonPage'
-import { LessonHeader } from './LessonHeader'
-import { StoryStage } from './StoryStage'
-import { QuizStage } from './QuizStage'
 import type { TextBlockDto } from '@stardust/core/global/entities/dtos'
 import type { QuestionDto } from '@stardust/core/lesson/entities/dtos'
+import { LessonPageView } from './LessonPageView'
+import { useRef } from 'react'
 
 type LessonPageProps = {
   starId: string
@@ -18,15 +15,16 @@ type LessonPageProps = {
   textsBlocksDto: TextBlockDto[]
 }
 
-export function LessonPage({
+export const LessonPage = ({
   starId,
   starName,
   starNumber,
   storyContent,
   questionsDto,
   textsBlocksDto,
-}: LessonPageProps) {
-  const { scrollRef, stage, isTransitionVisible, handleLeavePage } = useLessonPage(
+}: LessonPageProps) => {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const { stage, isTransitionVisible, handleLeavePage } = useLessonPage(
     starId,
     questionsDto,
     textsBlocksDto,
@@ -34,17 +32,14 @@ export function LessonPage({
   )
 
   return (
-    <>
-      <PageTransitionAnimation isVisible={isTransitionVisible} />
-      <div ref={scrollRef} className='relative overflow-x-hidden'>
-        {stage !== 'rewarding' && <LessonHeader onLeavePage={handleLeavePage} />}
-
-        <main>
-          {stage === 'story' && <StoryStage title={starName} number={starNumber} />}
-          {stage === 'quiz' && <QuizStage leaveLesson={handleLeavePage} />}
-          {stage === 'rewarding' && <Loading isSmall={false} />}
-        </main>
-      </div>
-    </>
+    <LessonPageView
+      starId={starId}
+      starName={starName}
+      starNumber={starNumber}
+      stage={stage}
+      scrollRef={scrollRef}
+      isTransitionVisible={isTransitionVisible}
+      onLeavePage={handleLeavePage}
+    />
   )
 }
