@@ -44,7 +44,7 @@ POST {{URL}}/confirm-email
 Content-Type: application/json
 
 {
-  "token": "61d0464ea60acf99aa3717839f1e60dedf20f66630aba78c1db05983"
+  "token": "5e48b989c9313315a1c3b397d4b06efc9ea77f08b92366bbd28ba71e"
 }
 
 ### Confirm password reset
