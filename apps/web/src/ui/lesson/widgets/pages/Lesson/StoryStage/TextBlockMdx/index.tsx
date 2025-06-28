@@ -1,27 +1,23 @@
 'use client'
 
-import React, { memo } from 'react'
-
 import { useTextBlockMdx } from './useTextBlockMdx'
-import { Mdx } from '@/ui/global/widgets/components/Mdx'
+import { TextBlockMdxView } from './TextBlockMdxView'
 
-type MdxTextProps = {
+type Props = {
   content: string
   hasAnimation: boolean
   shouldMemoized: boolean
 }
 
-function MemoizedTextBlockMdx({ content, hasAnimation }: MdxTextProps) {
+export const TextBlockMdx = ({ content, hasAnimation, shouldMemoized }: Props) => {
   const { textBlockMdxRef, mdxTemplate } = useTextBlockMdx(content, hasAnimation)
 
   return (
-    <div ref={textBlockMdxRef}>
-      <Mdx>{mdxTemplate}</Mdx>
-    </div>
+    <TextBlockMdxView
+      content={content}
+      shouldMemoized={shouldMemoized}
+      textBlockMdxRef={textBlockMdxRef}
+      mdxTemplate={mdxTemplate}
+    />
   )
 }
-
-export const TextBlockMdx = memo(MemoizedTextBlockMdx, (_, currentProps) => {
-  const isCodeComponent = currentProps.content.slice(0, 5) === '<Code'
-  return currentProps.shouldMemoized || isCodeComponent
-})

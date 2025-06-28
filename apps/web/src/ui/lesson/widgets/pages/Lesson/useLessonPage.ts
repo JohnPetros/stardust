@@ -1,6 +1,4 @@
-'use client'
-
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import type { TextBlockDto } from '@stardust/core/global/entities/dtos'
 import type { QuestionDto } from '@stardust/core/lesson/entities/dtos'
@@ -31,7 +29,6 @@ export function useLessonPage(
   const { parseTextBlocksToMdx } = useMdx()
   const router = useRouter()
   const secondsCounter = useLocalStorage(STORAGE.keys.secondsCounter)
-  const scrollRef = useRef<HTMLDivElement>(null)
   useSecondsCounter(stage === 'quiz')
 
   function handleLeavePage() {
@@ -109,7 +106,6 @@ export function useLessonPage(
   ])
 
   return {
-    scrollRef,
     stage,
     isTransitionVisible,
     handleLeavePage,

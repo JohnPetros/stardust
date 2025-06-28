@@ -21,19 +21,19 @@ export const texts: TextBlockDto[] = [
     type: 'quote',
     title: 'Método juntar()',
     content:
-      'O método *juntar()* permite unir os elementos de uma lista, transformando em um único texto.',
+      'O método `juntar()` permite unir os elementos de uma lista, transformando em um único texto.',
     picture: 'panda-triste.jpg',
   },
   {
     type: 'default',
     content:
-      'Só que para usar o *juntar()*, é preciso passar um valor do tipo *texto* nos parênteses para que ele use esse texto como separador para cada elemento.',
+      'Só que para usar o `juntar()`, é preciso passar um valor do tipo `texto` nos parênteses para que ele use esse texto como separador para cada elemento.',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'quote',
     content:
-      'Além disso, o método *juntar()* não altera o lista original, então será preciso colocar o texto gerado em uma nova variável.',
+      'Além disso, o método `juntar()` não altera o lista original, então será preciso colocar o texto gerado em uma nova variável.',
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -59,7 +59,7 @@ escreva(mensagemCerta)
   },
   {
     type: 'default',
-    content: 'Então, por exemplo, se colocarmos um traço (-) no *juntar()*:',
+    content: 'Então, por exemplo, se colocarmos um traço (-) no `juntar()`:',
     picture: 'panda-pensando.jpg',
   },
   {
@@ -79,7 +79,7 @@ escreva(mensagemCerta)
   {
     type: 'default',
     content:
-      'Logo, para separar cada palavra adequadamente, usando espaço, basta colocar um texto que seja um espaço no *juntar()*.',
+      'Logo, para separar cada palavra adequadamente, usando espaço, basta colocar um texto que seja um espaço no `juntar()`.',
     picture: 'panda-olhando-computador.jpg',
   },
   {
@@ -117,14 +117,14 @@ escreva(mensagemCerta)
   {
     type: 'default',
     content:
-      'Para nossa sorte (de novo), existe um método que faz literalmente isso: o método *dividir()*.',
+      'Para nossa sorte (de novo), existe um método que faz literalmente isso: o método `dividir()`.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'quote',
     title: 'Método dividir()',
     content:
-      'O método *dividir()* divide um texto em subtextos, transformando-o em uma lista.',
+      'O método `dividir()` divide um texto em subtextos, transformando-o em uma lista.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -143,7 +143,7 @@ escreva(mensagemCerta)
   {
     type: 'default',
     content:
-      'Isso porque também é preciso passar nos parênteses do *juntar()* um texto que servirá como separador da divisão.',
+      'Isso porque também é preciso passar nos parênteses do `juntar()` um texto que servirá como separador da divisão.',
     picture: 'panda-olhando-computador.jpg',
   },
   {
@@ -202,7 +202,7 @@ escreva(mensagemCerta)
     type: 'default',
     title: 'Método dividir()',
     content:
-      'Para facilitar podemos dizer para o *dividir()* que apenas gere uma lista com apenas 1 elemento.',
+      'Para facilitar podemos dizer para o `dividir()` que apenas gere uma lista com apenas 1 elemento.',
     picture: 'panda-olhando-de-lado.jpg',
   },
   {
@@ -213,7 +213,7 @@ escreva(mensagemCerta)
   {
     type: 'default',
     content:
-      'Através do segundo valor passado nos parênteses do *dividir()*, que difine quantos itens o lista gerado deve conter.',
+      'Através do segundo valor passado nos parênteses do `dividir()`, que define quantos itens o lista gerado deve conter.',
     picture: 'panda-olhando-computador.jpg',
   },
   {
