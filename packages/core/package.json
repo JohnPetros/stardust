@@ -125,6 +125,8 @@
     "./forum/errors": "./src/forum/domain/errors/index.ts",
     "./forum/interfaces": "./src/forum/interfaces/index.ts",
     "./forum/use-cases": "./src/forum/use-cases/index.ts",
+    "./documentation/entities": "./src/documentation/domain/entities/index.ts",
+    "./documentation/interfaces": "./src/documentation/interfaces/index.ts",
     "./storage/types": "./src/storage/types/index.ts",
     "./storage/interfaces": "./src/storage/interfaces/index.ts",
     "./storage/use-cases": "./src/storage/use-cases/index.ts",

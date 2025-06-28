@@ -101,6 +101,10 @@ export * from './forum/domain/errors/index'
 export * from './forum/interfaces/index'
 export * from './forum/use-cases/index'
 
+// Documentation
+export * from './documentation/domain/entities/index'
+export * from './documentation/interfaces/index'
+
 // Storage
 export * from './storage/types/index'
 export * from './storage/interfaces/index'
