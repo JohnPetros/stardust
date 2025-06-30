@@ -51,7 +51,7 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
     },
 
     async fetchAllChallengeCategories() {
-      return await restClient.get('/challenging/categories')
+      return await restClient.get('/challenging/challenges/categories')
     },
 
     async fetchSolutionsList({
@@ -108,10 +108,6 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
 
     async fetchChallengeBySolutionId(solutionId: Id) {
       return await restClient.get(`/challenging/challenges/solution/${solutionId.value}`)
-    },
-
-    async fetchDocs() {
-      return await restClient.get('/challenging/docs')
     },
 
     async voteChallenge(challengeId: Id, challengeVote: ChallengeVote) {

@@ -1,14 +1,13 @@
 import type {
   ChallengeCategoryDto,
   ChallengeDto,
-  DocDto,
   SolutionDto,
 } from '../domain/entities/dtos'
 import type {
   ChallengesListParams,
   CompletedChallengesCountByDifficultyLevel,
 } from '../domain/types'
-import type { Challenge, ChallengeCategory, Solution } from '../domain/entities'
+import type { Challenge, ChallengeCategory } from '../domain/entities'
 import type { SolutionsListingParams } from '../domain/types'
 import type { PaginationResponse, RestResponse } from '#global/responses/index'
 import type { Id, Slug, Text } from '#global/domain/structures/index'
@@ -22,7 +21,6 @@ export interface ChallengingService {
   >
   fetchChallengeByStarId(starId: Id): Promise<RestResponse<ChallengeDto>>
   fetchChallengeBySolutionId(solutionId: Id): Promise<RestResponse<ChallengeDto>>
-  fetchDocs(): Promise<RestResponse<DocDto[]>>
   fetchSolutionById(solutionId: Id): Promise<RestResponse<SolutionDto>>
   fetchSolutionBySlug(solutionSlug: Slug): Promise<RestResponse<SolutionDto>>
   fetchChallengesList(
