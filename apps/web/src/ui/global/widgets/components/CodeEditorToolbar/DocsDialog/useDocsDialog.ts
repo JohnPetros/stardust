@@ -1,12 +1,12 @@
 import { useState } from 'react'
 
-import type { ChallengingService } from '@stardust/core/challenging/interfaces'
+import type { DocumentationService } from '@stardust/core/documentation/interfaces'
 import { Doc } from '@stardust/core/challenging/entities'
 
 import { CACHE } from '@/constants'
 import { useCache } from '@/ui/global/hooks/useCache'
 
-export function useDocsDialog(challengingService: ChallengingService) {
+export function useDocsDialog(documentationService: DocumentationService) {
   const [content, setContent] = useState('')
   const [shouldFetchDocs, setShouldFetchDocs] = useState(false)
 
@@ -16,12 +16,18 @@ export function useDocsDialog(challengingService: ChallengingService) {
     }
   }
 
-  function handleBackButton() {
+  function handleDocButtonClick(docId: string) {
+    if (!docs) return
+    const docContent = docs.find((doc) => doc.id === docId)?.content
+    if (docContent) setContent(docContent)
+  }
+
+  function handleBackButtonClick() {
     setContent('')
   }
 
   async function fetchDocs() {
-    const response = await challengingService.fetchDocs()
+    const response = await documentationService.fetchAllDocs()
     if (response.isFailure) response.throwError()
     return response.body
   }
@@ -31,18 +37,12 @@ export function useDocsDialog(challengingService: ChallengingService) {
     fetcher: fetchDocs,
   })
 
-  function handleDocButton(docId: string) {
-    if (!docs) return
-    const docContent = docs.find((doc) => doc.id === docId)?.content
-    if (docContent) setContent(docContent)
-  }
-
   return {
-    docs: docs?.map(Doc.create),
+    docs: docs ? docs.map(Doc.create) : [],
     isLoading,
     content,
-    handleDocButton,
-    handleBackButton,
+    handleDocButtonClick,
+    handleBackButtonClick,
     handleDialogOpen,
   }
 }
