@@ -7,7 +7,10 @@ import { SupabasePostgreError } from '../../errors'
 
 export class SupabaseDocsRepository extends SupabaseRepository implements DocsRepository {
   async findAll(): Promise<Doc[]> {
-    const { data, error } = await this.supabase.from('docs').select('*')
+    const { data, error } = await this.supabase
+      .from('docs')
+      .select('*')
+      .order('position', { ascending: true })
 
     if (error) {
       throw new SupabasePostgreError(error)
