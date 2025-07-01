@@ -1,0 +1,1 @@
+export { SupabaseDocMapper } from './SupabaseDocMapper'

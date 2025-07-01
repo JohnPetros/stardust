@@ -1,6 +1,6 @@
-import { Entity } from '../../../global/domain/abstracts'
-import { Name, OrdinalNumber, Text } from '../../../global/domain/structures'
-import type { DocDto } from './dtos'
+import { Entity } from '#global/domain/abstracts/index'
+import { Name, OrdinalNumber, Text } from '#global/domain/structures/index'
+import type { DocDto } from './dtos/DocDto'
 
 type DocProps = {
   title: Name

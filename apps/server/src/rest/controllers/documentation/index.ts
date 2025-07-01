@@ -1,0 +1,1 @@
+export { FetchAllDocsController } from './FetchAllDocsController'

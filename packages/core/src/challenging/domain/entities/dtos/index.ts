@@ -1,6 +1,6 @@
 export type { ChallengeDto } from './ChallengeDto'
 export type { ChallengeCategoryDto } from './ChallengeCategoryDto'
-export type { DocDto } from './DocDto'
+export type { DocDto } from '../../../../documentation/domain/entities/dtos/DocDto'
 export type { TestCaseDto } from './TestCaseDto'
 export type { SolutionDto } from './SolutionDto'
 export type { ChallengeFunctionDto } from './ChallengeFunctionDto'
