@@ -13,6 +13,7 @@ import {
   AccessChallengeCommentsSlotAction,
   AccessChallengeEditorPageAction,
   AccessSolutionPageAction,
+  ViewSolutionAction,
 } from '../actions/challenging'
 import { ChallengingService, SpaceService } from '@/rest/services'
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
@@ -75,6 +76,18 @@ export const accessSolutionPage = authActionClient
     const restClient = await NextServerRestClient({ isCacheEnabled: false })
     const challengingService = ChallengingService(restClient)
     const action = AccessSolutionPageAction(challengingService)
+    return action.handle(call)
+  })
+
+export const viewSolution = authActionClient
+  .schema(z.object({ solutionSlug: z.string() }))
+  .action(async ({ clientInput }) => {
+    const call = NextCall({
+      request: clientInput,
+    })
+    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const challengingService = ChallengingService(restClient)
+    const action = ViewSolutionAction(challengingService)
     return action.handle(call)
   })
 
