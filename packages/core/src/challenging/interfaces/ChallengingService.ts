@@ -21,7 +21,6 @@ export interface ChallengingService {
   >
   fetchChallengeByStarId(starId: Id): Promise<RestResponse<ChallengeDto>>
   fetchChallengeBySolutionId(solutionId: Id): Promise<RestResponse<ChallengeDto>>
-  fetchSolutionById(solutionId: Id): Promise<RestResponse<SolutionDto>>
   fetchSolutionBySlug(solutionSlug: Slug): Promise<RestResponse<SolutionDto>>
   fetchChallengesList(
     params: ChallengesListParams,
@@ -50,7 +49,7 @@ export interface ChallengingService {
     solutionId: Id,
     solutionTitle: Text,
     solutionContent: Text,
-  ): Promise<RestResponse>
+  ): Promise<RestResponse<SolutionDto>>
   updateChallenge(challenge: Challenge): Promise<RestResponse>
   upvoteSolution(solutionId: Id): Promise<RestResponse<{ upvotesCount: number }>>
   deleteSolution(solutionId: Id): Promise<RestResponse>
