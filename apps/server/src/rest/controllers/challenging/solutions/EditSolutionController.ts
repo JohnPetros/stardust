@@ -19,11 +19,11 @@ export class EditSolutionController implements Controller<Schema> {
     const { solutionId } = http.getRouteParams()
     const { solutionTitle, solutionContent } = await http.getBody()
     const useCase = new EditSolutionUseCase(this.repository)
-    const solution = await useCase.execute({
+    const response = await useCase.execute({
       solutionId,
       solutionTitle,
       solutionContent,
     })
-    return http.send(solution)
+    return http.send(response)
   }
 }

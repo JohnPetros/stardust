@@ -3,7 +3,6 @@ import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 
 import { ROUTES } from '@/constants'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { useApi } from '@/ui/global/hooks/useApi'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 
 type Params = {
@@ -17,7 +16,6 @@ export function useUserSolutionButtons({
   challengeSlug,
   challengingService,
 }: Params) {
-  const api = useApi()
   const router = useRouter()
   const toast = useToastContext()
 
