@@ -7,12 +7,10 @@ import {
   nameSchema,
   stringSchema,
 } from '../global/schemas'
-import {
-  avatarAggregateSchema,
-  rocketAggregateSchema,
-  tierAggregateSchema,
-} from '../profile'
 import { textsListSchema } from './textsListSchema'
+import { avatarAggregateSchema } from './avatarAggregateSchema'
+import { rocketAggregateSchema } from './rocketAggregateSchema'
+import { tierAggregateSchema } from './tierAggregateSchema'
 
 export const userSchema = z.object({
   id: idSchema.optional(),
