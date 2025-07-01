@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
 
-import { challengingActions } from '@/rpc/next-safe-action'
 import type { NextParams, NextSearchParams } from '@/rpc/next/types'
 import { ChallengeSolutionSlot } from '@/ui/challenging/widgets/slots/ChallengeSolution'
 import { ChallengingService } from '@/rest/services'
