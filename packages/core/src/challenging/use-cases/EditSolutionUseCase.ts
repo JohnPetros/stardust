@@ -4,6 +4,7 @@ import { SolutionTitleAlreadyInUseError } from '#challenging/domain/errors/Solut
 import { Slug } from '#global/domain/structures/Slug'
 import type { UseCase } from '../../global/interfaces'
 import type { SolutionsRepository } from '../interfaces'
+import type { SolutionDto } from '../domain/entities/dtos'
 
 type Request = {
   solutionId: string
@@ -11,14 +12,18 @@ type Request = {
   solutionContent: string
 }
 
-export class EditSolutionUseCase implements UseCase<Request> {
+type Response = Promise<SolutionDto>
+
+export class EditSolutionUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: SolutionsRepository) {}
 
   async execute({ solutionId, solutionTitle, solutionContent }: Request) {
     const solution = await this.repository.findById(Id.create(solutionId))
     if (!solution) throw new SolutionNotFoundError()
 
-    await this.checkIfSolutionTitleIsInUse(solutionTitle)
+    if (solution.title.value !== solutionTitle) {
+      await this.checkIfSolutionTitleIsInUse(solutionTitle)
+    }
 
     solution.title = solutionTitle
     solution.content = solutionContent
