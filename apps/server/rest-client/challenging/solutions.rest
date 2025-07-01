@@ -11,7 +11,7 @@ GET {{URL}}
 &sorter=date
 Authorization: Bearer {{JWT}}
 
-### Fetch solution by slug
+### Fetch solution
 GET {{URL}}/{{SOLUTION_SLUG}}
 Authorization: Bearer {{JWT}}
 
