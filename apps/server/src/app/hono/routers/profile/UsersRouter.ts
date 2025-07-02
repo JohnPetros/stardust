@@ -78,14 +78,14 @@ export class UsersRouter extends HonoRouter {
     this.router.put(
       '/:userId',
       this.authMiddleware.verifyAuthentication,
-      zValidator('param', userSchema),
+      zValidator('param', z.object({ userId: idSchema })),
       zValidator('json', userSchema),
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseUsersRepository(http.getSupabase())
         const controller = new UpdateUserController(repository)
-        // const response = await controller.handle(http)
-        return http.sendResponse(http.send())
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
       },
     )
   }

@@ -1,26 +1,20 @@
-import { notFound } from 'next/navigation'
-
-import { challengingActions } from '@/rpc/next-safe-action'
 import type { NextParams, NextSearchParams } from '@/rpc/next/types'
 import { ChallengeSolutionSlot } from '@/ui/challenging/widgets/slots/ChallengeSolution'
-import { ChallengingService } from '@/rest/services'
-import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
-import { Slug } from '@stardust/core/global/structures'
+import { challengingActions } from '@/rpc/next-safe-action'
 
 export const dynamic = 'force-dynamic'
 
 type PageProps = NextParams<'challengeSlug' | 'solutionSlug'> & NextSearchParams<'isNew'>
 
 const Slot = async ({ params, searchParams }: PageProps) => {
-  const restClient = await NextServerRestClient()
-  const service = ChallengingService(restClient)
-  const response = await service.fetchSolutionBySlug(Slug.create(params.solutionSlug))
-  if (response.isFailure) notFound()
-  const solutionDto = response.body
+  const response = await challengingActions.viewSolution({
+    solutionSlug: params.solutionSlug,
+  })
+  if (!response?.data) return
 
   return (
     <ChallengeSolutionSlot
-      solutionDto={solutionDto}
+      solutionDto={response.data.solution}
       isSolutionNew={Boolean(searchParams.isNew)}
       challengeSlug={params.challengeSlug}
     />

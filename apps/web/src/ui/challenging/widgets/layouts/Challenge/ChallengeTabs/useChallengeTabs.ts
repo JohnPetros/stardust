@@ -1,13 +1,11 @@
-'use client'
-
 import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structures'
+import { Integer } from '@stardust/core/global/structures'
 
 import { ROUTES } from '@/constants'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { Integer } from '@stardust/core/global/structures'
 
 export function useChallengeTabs() {
   const { getChallengeSlice, getCraftsVisibilitySlice, getActiveContentSlice } =

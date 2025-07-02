@@ -1,13 +1,11 @@
 import type { ChallengingService as IChallengingService } from '@stardust/core/challenging/interfaces'
 import type { RestClient } from '@stardust/core/global/interfaces'
-import type { Id, Slug } from '@stardust/core/global/structures'
+import type { Id, Slug, Text } from '@stardust/core/global/structures'
 import type {
   ChallengesListParams,
   SolutionsListingParams,
 } from '@stardust/core/challenging/types'
 import type { ChallengeVote } from '@stardust/core/challenging/structures'
-import type { Comment } from '@stardust/core/forum/entities'
-import type { CommentsListParams } from '@stardust/core/forum/types'
 
 export const ChallengingService = (restClient: RestClient): IChallengingService => {
   return {
@@ -71,35 +69,8 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       return await restClient.get('/challenging/solutions')
     },
 
-    async fetchChallengeCommentsList(params: CommentsListParams, challengeId: Id) {
-      restClient.setQueryParam('page', params.page.value.toString())
-      restClient.setQueryParam('itemsPerPage', params.itemsPerPage.value.toString())
-      restClient.setQueryParam('sorter', params.sorter.value)
-      restClient.setQueryParam('order', params.order.value)
-      return await restClient.get(`/challenging/comments/challenge/${challengeId.value}`)
-    },
-
-    async fetchSolutionCommentsList(params: CommentsListParams, solutionId: Id) {
-      restClient.setQueryParam('page', params.page.value.toString())
-      restClient.setQueryParam('itemsPerPage', params.itemsPerPage.value.toString())
-      restClient.setQueryParam('sorter', params.sorter.value)
-      restClient.setQueryParam('order', params.order.value)
-      return await restClient.get(`/challenging/comments/solution/${solutionId.value}`)
-    },
-
-    async postChallengeComment(challengeId: Id, comment: Comment) {
-      return await restClient.post(
-        `/challenging/comments/challenge/${challengeId.value}`,
-        comment.dto,
-      )
-    },
-
-    async fetchSolutionById(solutionId: Id) {
-      return await restClient.get(`/challenging/solutions/id/${solutionId.value}`)
-    },
-
     async fetchSolutionBySlug(solutionSlug: Slug) {
-      return await restClient.get(`/challenging/solutions/slug/${solutionSlug.value}`)
+      return await restClient.get(`/challenging/solutions/${solutionSlug.value}`)
     },
 
     async fetchChallengeByStarId(starId: Id) {
@@ -118,6 +89,25 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
 
     async viewSolution(solutionSlug: Slug) {
       return await restClient.patch(`/challenging/solutions/${solutionSlug.value}/view`)
+    },
+
+    async postSolution(solutionTitle: Text, solutionContent: Text, challengeId: Id) {
+      return await restClient.post('/challenging/solutions', {
+        solutionTitle: solutionTitle.value,
+        solutionContent: solutionContent.value,
+        challengeId: challengeId.value,
+      })
+    },
+
+    async editSolution(solutionId: Id, solutionTitle: Text, solutionContent: Text) {
+      return await restClient.put(`/challenging/solutions/${solutionId.value}`, {
+        solutionTitle: solutionTitle.value,
+        solutionContent: solutionContent.value,
+      })
+    },
+
+    async deleteSolution(solutionId: Id) {
+      return await restClient.delete(`/challenging/solutions/${solutionId.value}`)
     },
   } as unknown as IChallengingService
 }

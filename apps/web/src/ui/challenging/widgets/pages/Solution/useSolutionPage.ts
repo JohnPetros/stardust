@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 
 import type { SolutionDto } from '@stardust/core/challenging/entities/dtos'
 import { Solution } from '@stardust/core/challenging/entities'
-
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useRouter } from '@/ui/global/hooks/useRouter'
-import { ROUTES, STORAGE } from '@/constants'
-import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import { Text, type Id } from '@stardust/core/global/structures'
+
+import { ROUTES, STORAGE } from '@/constants'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
 type FieldErrors = {
@@ -97,11 +97,21 @@ export function useSolutionPage({
   async function handleSolutionEdit() {
     if (!solution) return
 
-    await challengingService.editSolution(
+    const response = await challengingService.editSolution(
       solution.id,
       Text.create(solutionTitle),
       Text.create(solutionContent),
     )
+
+    if (response.isFailure) {
+      toast.showError(response.errorMessage)
+    }
+
+    if (response.isSuccessful) {
+      handleActionSuccess(Solution.create(response.body), false)
+    }
+
+    setIsLoading(false)
   }
 
   useEffect(() => {
@@ -117,7 +127,6 @@ ${storageSolutionContent}
   }, [solutionContent, localStorage.get])
 
   return {
-    solution,
     solutionTitle,
     solutionContent,
     isActionDisable: !solutionTitle || !solutionContent,

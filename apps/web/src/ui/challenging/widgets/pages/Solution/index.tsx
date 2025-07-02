@@ -1,18 +1,11 @@
 'use client'
 
-import Link from 'next/link'
-
 import type { SolutionDto } from '@stardust/core/challenging/entities/dtos'
 
-import { ROUTES } from '@/constants'
-import type { ActionButtonTitles } from '@/ui/global/widgets/components/ActionButton/types'
-import { Button } from '@/ui/global/widgets/components/Button'
-import { TitleInput } from '@/ui/global/widgets/components/TitleInput'
-import { ActionButton } from '@/ui/global/widgets/components/ActionButton'
-import { ContentEditor } from '../../components/ContentEditor'
 import { useSolutionPage } from './useSolutionPage'
 import { Id, Slug } from '@stardust/core/global/structures'
 import { useRest } from '@/ui/global/hooks/useRest'
+import { SolutionPageView } from './SolutionPageView'
 
 type SolutionPageProps = {
   savedSolutionDto: SolutionDto | null
@@ -20,16 +13,15 @@ type SolutionPageProps = {
   challengeSlug: string
 }
 
-export function SolutionPage({
+export const SolutionPage = ({
   savedSolutionDto,
   challengeId,
   challengeSlug,
-}: SolutionPageProps) {
+}: SolutionPageProps) => {
   const { challengingService } = useRest()
   const {
     solutionTitle,
     solutionContent,
-    solution,
     isActionDisable,
     canExecute,
     isFailure,
@@ -45,49 +37,22 @@ export function SolutionPage({
     challengeId: Id.create(challengeId),
     challengeSlug: Slug.create(challengeSlug),
   })
-  const ACTION_BUTTON_TITLES: ActionButtonTitles = {
-    canExecute: savedSolutionDto ? 'atualizar?' : 'postar?',
-    executing: savedSolutionDto ? 'atualizando...' : 'postando...',
-    default: savedSolutionDto ? 'atualizar' : 'postar',
-    success: savedSolutionDto ? 'atualizado' : 'postado',
-    failure: 'erro',
-  }
 
   return (
-    <div className='max-w-6xl mx-auto h-screen bg-gray-800'>
-      <header className='grid grid-cols-2 px-6 py-12'>
-        <TitleInput
-          value={solutionTitle}
-          onChange={handleTitleChange}
-          placeholder='Escreva um título para a sua solução'
-          className='bg-gray-800 text-gray-50'
-        />
-        <div className='flex items-center justify-end gap-3'>
-          <Button asChild className='bg-gray-600 text-gray-50 w-24'>
-            <Link
-              href={ROUTES.challenging.challenges.challengeSolutions.list(challengeSlug)}
-            >
-              Voltar
-            </Link>
-          </Button>
-          <ActionButton
-            type='button'
-            titles={ACTION_BUTTON_TITLES}
-            isExecuting={isExecuting}
-            canExecute={canExecute}
-            isSuccess={isSuccess}
-            isFailure={isFailure}
-            isDisabled={isActionDisable}
-            onExecute={solution ? handleSolutionEdit : handleSolutionPost}
-            icon='send'
-            className='w-28'
-          />
-        </div>
-      </header>
-
-      <main className='h-full mt-3 bg-gray-800 border-t border-gray-600'>
-        <ContentEditor content={solutionContent} onChange={handleContentChange} />
-      </main>
-    </div>
+    <SolutionPageView
+      savedSolutionDto={savedSolutionDto}
+      challengeSlug={challengeSlug}
+      solutionTitle={solutionTitle}
+      solutionContent={solutionContent}
+      isActionDisable={isActionDisable}
+      canExecute={canExecute}
+      isFailure={isFailure}
+      isSuccess={isSuccess}
+      isExecuting={isExecuting}
+      onTitleChange={handleTitleChange}
+      onContentChange={handleContentChange}
+      onSolutionPost={handleSolutionPost}
+      onSolutionEdit={handleSolutionEdit}
+    />
   )
 }

@@ -11,11 +11,11 @@ type Params = {
   challengingService: ChallengingService
 }
 
-export function useUpvoteSolutionButton({
+export const useUpvoteSolutionButton = ({
   initialUpvotesCount,
   initialIsUpvoted,
   challengingService,
-}: Params) {
+}: Params) => {
   const [isUpvoted, setIsUpvoted] = useState(initialIsUpvoted)
   const [upvotesCount, setUpvotesCount] = useState(initialUpvotesCount)
   const { user, updateUserCache } = useAuthContext()

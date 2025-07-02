@@ -8,6 +8,9 @@ import {
   stringSchema,
 } from '../global/schemas'
 import { textsListSchema } from './textsListSchema'
+import { avatarAggregateSchema } from './avatarAggregateSchema'
+import { rocketAggregateSchema } from './rocketAggregateSchema'
+import { tierAggregateSchema } from './tierAggregateSchema'
 
 export const userSchema = z.object({
   id: idSchema.optional(),
@@ -20,4 +23,7 @@ export const userSchema = z.object({
   weeklyXp: integerSchema,
   streak: integerSchema,
   weekStatus: textsListSchema,
+  avatar: avatarAggregateSchema,
+  rocket: rocketAggregateSchema,
+  tier: tierAggregateSchema,
 })

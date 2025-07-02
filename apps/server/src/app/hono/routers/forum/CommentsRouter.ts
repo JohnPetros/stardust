@@ -30,7 +30,7 @@ export class CommentsRouter extends HonoRouter {
 
   private registerFetchSolutionCommentsListRoute(): void {
     this.router.get(
-      '/solutions/:solutionId',
+      '/solution/:solutionId',
       this.authMiddleware.verifyAuthentication,
       zValidator(
         'param',

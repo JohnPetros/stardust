@@ -1,8 +1,10 @@
 import {
   accessChallengePage,
   accessChallengeCommentsSlot,
+  accessSolutionPage,
   postChallenge,
   accessChallengeEditorPage,
+  viewSolution,
 } from './challengingActions'
 import { setCookie, getCookie, deleteCookie, hasCookie } from './cookieActions'
 import { accessEndingPage, fetchLessonStoryAndQuestions } from './lessonActions'
@@ -25,7 +27,9 @@ export const challengingActions = {
   accessChallengePage,
   accessChallengeCommentsSlot,
   accessChallengeEditorPage,
+  accessSolutionPage,
   postChallenge,
+  viewSolution,
 }
 
 export const playgroundActions = { createSnippet, editSnippet }
