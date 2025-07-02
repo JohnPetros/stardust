@@ -83,7 +83,7 @@ export function useChallengeResultSlot() {
         user.hasCompletedChallenge(challenge.id).or(challenge.author.isEqualTo(user))
           .isTrue
       ) {
-        leavePage(ROUTES.challenging.challenges.list)
+        leavePage(ROUTES.space)
       } else {
         showRewards()
       }
