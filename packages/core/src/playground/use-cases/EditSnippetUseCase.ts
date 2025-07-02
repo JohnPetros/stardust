@@ -1,7 +1,8 @@
-import type { UseCase } from '#global/interfaces/UseCase'
+import { SnippetNotFoundError } from '#playground/domain/errors/SnippetNotFoundError'
 import { Id } from '#global/domain/structures/Id'
-import type { PlaygroundService } from '../interfaces'
-import { Snippet } from '../domain/entities'
+import type { UseCase } from '#global/interfaces/UseCase'
+import type { SnippetsRepository } from '../interfaces'
+import type { SnippetDto } from '../domain/entities/dtos'
 
 type Request = {
   snippetId: string
@@ -9,26 +10,23 @@ type Request = {
   snippetCode?: string
 }
 
-export class EditSnippetUseCase implements UseCase<Request> {
-  constructor(private readonly playgroundService: PlaygroundService) {}
+type Response = Promise<SnippetDto>
+
+export class EditSnippetUseCase implements UseCase<Request, Response> {
+  constructor(private readonly repository: SnippetsRepository) {}
 
   async execute({ snippetId, snippetTitle, snippetCode }: Request) {
-    const snippet = await this.fetchSnippet(snippetId)
+    const snippet = await this.findSnippet(Id.create(snippetId))
     if (snippetTitle) snippet.title = snippetTitle
     if (snippetCode) snippet.code = snippetCode
 
-    await this.updateSnippet(snippet)
+    await this.repository.replace(snippet)
     return snippet.dto
   }
 
-  private async fetchSnippet(snippetId: string) {
-    const response = await this.playgroundService.fetchSnippetById(Id.create(snippetId))
-    if (response.isFailure) response.throwError()
-    return Snippet.create(response.body)
-  }
-
-  private async updateSnippet(snippet: Snippet) {
-    const response = await this.playgroundService.updateSnippet(snippet)
-    if (response.isFailure) response.throwError()
+  private async findSnippet(snippetId: Id) {
+    const snippet = await this.repository.findById(snippetId)
+    if (!snippet) throw new SnippetNotFoundError()
+    return snippet
   }
 }

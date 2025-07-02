@@ -1,6 +1,6 @@
-import type { PlaygroundService } from '../interfaces'
+import type { SnippetsRepository } from '../interfaces'
 import type { UseCase } from '#global/interfaces/UseCase'
-import type { SnippetDto } from '../domain/dtos'
+import type { SnippetDto } from '../domain/entities/dtos'
 import { Snippet } from '../domain/entities'
 
 type Request = {
@@ -13,7 +13,7 @@ type Request = {
 type Response = Promise<SnippetDto>
 
 export class CreateSnippetUseCase implements UseCase<Request, Response> {
-  constructor(private readonly playgroundService: PlaygroundService) {}
+  constructor(private readonly repository: SnippetsRepository) {}
 
   async execute({ snippetTitle, snippetCode, isSnippetPublic, authorId }: Request) {
     const snippet = Snippet.create({
@@ -23,12 +23,7 @@ export class CreateSnippetUseCase implements UseCase<Request, Response> {
       author: { id: authorId },
     })
 
-    await this.saveSnippet(snippet)
+    await this.repository.add(snippet)
     return snippet.dto
-  }
-
-  private async saveSnippet(snippet: Snippet) {
-    const response = await this.playgroundService.saveSnippet(snippet)
-    if (response.isFailure) response.throwError()
   }
 }

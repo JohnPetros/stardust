@@ -2,7 +2,7 @@ import { Entity } from '#global/domain/abstracts/Entity'
 import { AuthorAggregate } from '#global/domain/aggregates/AuthorAggregate'
 import { Logical, Name, Text } from '#global/domain/structures/index'
 import { Datetime } from '#global/libs/index'
-import type { SnippetDto } from '../dtos'
+import type { SnippetDto } from './dtos'
 
 type SnippetProps = {
   title: Name
