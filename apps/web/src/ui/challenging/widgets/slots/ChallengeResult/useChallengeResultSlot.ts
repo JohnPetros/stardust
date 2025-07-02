@@ -79,11 +79,20 @@ export function useChallengeResultSlot() {
 
     if (challenge.isCompleted.and(challenge.isStarChallenge).isTrue) {
       showRewards()
+      if (user.hasCompletedChallenge(challenge.id).isTrue) {
+        leavePage(ROUTES.space)
+      } else {
+        showRewards()
+      }
+      return
+    }
+
+    if (challenge.isCompleted.andNot(challenge.isStarChallenge).isTrue) {
       if (
         user.hasCompletedChallenge(challenge.id).or(challenge.author.isEqualTo(user))
           .isTrue
       ) {
-        leavePage(ROUTES.space)
+        leavePage(ROUTES.challenging.challenges.list)
       } else {
         showRewards()
       }
