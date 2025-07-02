@@ -42,7 +42,6 @@ type UserProps = {
   canSeeRankingResult: Logical
   didBreakStreak: Logical
   lastWeekRankingPosition: RankingPosition | null
-  hasCompletedSpace: Logical
   createdAt: Date
 }
 
