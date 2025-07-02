@@ -77,13 +77,16 @@ export function useChallengeResultSlot() {
   function handleUserAnswer() {
     if (!challenge || !user) return
 
-    if (challenge.isCompleted.isTrue) {
+    if (challenge.isCompleted.and(challenge.isStarChallenge).isTrue) {
+      showRewards()
       if (
         user.hasCompletedChallenge(challenge.id).or(challenge.author.isEqualTo(user))
           .isTrue
-      )
+      ) {
         leavePage(ROUTES.challenging.challenges.list)
-      else showRewards()
+      } else {
+        showRewards()
+      }
       return
     }
 
