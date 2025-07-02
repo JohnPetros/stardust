@@ -149,6 +149,10 @@ export class Challenge extends Entity<ChallengeProps> {
     return Logical.create(this.props.author.id.value === userId.value)
   }
 
+  get isStarChallenge(): Logical {
+    return Logical.create(this.props.starId !== null)
+  }
+
   get maximumIncorrectAnswersCount(): Integer {
     const testsCasesCount = this.testCases.length
     return Integer.create(
