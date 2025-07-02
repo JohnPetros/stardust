@@ -123,6 +123,7 @@ export class UsersRouter extends HonoRouter {
     this.router.put(
       '/:userId/reward/star-challenge',
       this.authMiddleware.verifyAuthentication,
+      this.spaceMiddleware.appendNextStarToBody,
       this.challengingMiddleware.appendChallengeRewardToBody,
       zValidator(
         'param',
