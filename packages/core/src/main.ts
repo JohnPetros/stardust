@@ -52,7 +52,8 @@ export * from './ranking/use-cases/index'
 
 // Playground
 export * from './playground/domain/entities/index'
-export * from './playground/domain/dtos/index'
+export * from './playground/domain/entities/dtos/index'
+export * from './playground/domain/types/index'
 export * from './playground/interfaces/index'
 export * from './playground/use-cases/index'
 
