@@ -1,1 +1,0 @@
-export { GetSnippetController } from './GetSnippetController'
