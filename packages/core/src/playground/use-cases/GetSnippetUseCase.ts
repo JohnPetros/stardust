@@ -1,30 +1,30 @@
 import type { UseCase } from '#global/interfaces/UseCase'
-import type { PlaygroundService } from '../interfaces'
-import type { SnippetDto } from '../domain/dtos'
-import { Snippet } from '../domain/entities'
-import { Id } from '../../main'
+import { Id } from '#global/domain/structures/index'
+import { SnippetNotPublicError } from '#playground/domain/errors/SnippetNotPublicError'
+import { SnippetNotFoundError } from '#playground/domain/errors/SnippetNotFoundError'
+import type { SnippetDto } from '../domain/entities/dtos'
+import type { SnippetsRepository } from '../interfaces'
 
 type Request = {
   snippetId: string
+  authorId: string
 }
 
 type Response = Promise<SnippetDto>
 
 export class GetSnippetUseCase implements UseCase<Request, Response> {
-  constructor(private readonly playgroundService: PlaygroundService) {}
+  constructor(private readonly repository: SnippetsRepository) {}
 
-  async execute({ snippetId }: Request) {
-    const snippet = await this.fetchSnippet(snippetId)
+  async execute({ snippetId, authorId }: Request) {
+    const snippet = await this.repository.findById(Id.create(snippetId))
+    if (!snippet) throw new SnippetNotFoundError()
 
-    if (snippet.isPublic.isFalse) {
+    const isSnippetAuthor = snippet.author.id.value === authorId
+
+    if (!isSnippetAuthor && snippet.isPublic.isFalse) {
+      throw new SnippetNotPublicError()
     }
 
     return snippet.dto
-  }
-
-  private async fetchSnippet(snippetId: string) {
-    const response = await this.playgroundService.fetchSnippetById(Id.create(snippetId))
-    if (response.isFailure) response.throwError()
-    return Snippet.create(response.body)
   }
 }
