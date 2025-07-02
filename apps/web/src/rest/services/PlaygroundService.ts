@@ -13,11 +13,11 @@ export const PlaygroundService = (restClient: RestClient): IPlaygroundService =>
       return restClient.get('/playground/snippets')
     },
 
-    saveSnippet(snippet: Snippet) {
+    createSnippet(snippet: Snippet) {
       return restClient.post('/playground/snippets', snippet)
     },
 
-    updateSnippet(snippet: Snippet) {
+    editSnippet(snippet: Snippet) {
       return restClient.put(`/playground/snippets/${snippet.id.value}`, snippet)
     },
 
