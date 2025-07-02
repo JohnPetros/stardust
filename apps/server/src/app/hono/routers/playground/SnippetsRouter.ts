@@ -112,13 +112,13 @@ export class SnippetsRouter extends HonoRouter {
   private registerDeleteSnippetRoute(): void {
     this.router.delete(
       '/:snippetId',
+      this.authMiddleware.verifyAuthentication,
       zValidator(
         'param',
         z.object({
           snippetId: idSchema,
         }),
       ),
-      this.authMiddleware.verifyAuthentication,
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseSnippetsRepository(http.getSupabase())
