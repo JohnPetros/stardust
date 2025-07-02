@@ -29,7 +29,7 @@ export class CalculateRewardForStarCompletionUseCase
     const user = await this.findUser(Id.create(userId))
     const isLastSpaceStar = nextStarId === null
     const isNextStarUnlocked = isLastSpaceStar
-      ? user.hasCompletedSpace.isFalse
+      ? user.hasCompletedSpace.isTrue
       : user.hasUnlockedStar(Id.create(nextStarId)).isTrue
 
     const newXp = this.calculateXp(
