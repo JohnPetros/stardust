@@ -1,0 +1,1 @@
+export { snippetSchema } from './snippetSchema'

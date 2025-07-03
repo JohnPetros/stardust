@@ -15,6 +15,7 @@
     "./challenging/types": "./src/modules/challenging/types/index.ts",
     "./profile/schemas": "./src/modules/profile/index.ts",
     "./forum/schemas": "./src/modules/forum/index.ts",
+    "./playground/schemas": "./src/modules/playground/schema/index.ts",
     "./factories": "./src/factories/index.ts"
   },
   "imports": {
