@@ -3,48 +3,23 @@
 import type { PropsWithChildren } from 'react'
 
 import { CLIENT_ENV, ROUTES } from '@/constants'
-import { Button } from '@/ui/global/widgets/components/Button'
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogTrigger,
-} from '@/ui/global/widgets/components/Dialog'
-import { Input } from '@/ui/global/widgets/components/Input'
-
 import { useShareSnippetDialog } from './useShareSnippetDialog'
+import { ShareSnippetDialogView } from './ShareSnippetDialogView'
 
-type ShareSnippetDialogProps = {
+type Props = {
   snippetId: string
 }
 
-export function ShareSnippetDialog({
-  children: trigger,
-  snippetId,
-}: PropsWithChildren<ShareSnippetDialogProps>) {
+export const ShareSnippetDialog = ({ children, snippetId }: PropsWithChildren<Props>) => {
   const playgroundUrl = `${CLIENT_ENV.webAppUrl}${ROUTES.playground.snippet(snippetId)}`
   const { handleShareSnippet } = useShareSnippetDialog(playgroundUrl)
 
   return (
-    <Dialog>
-      <DialogContent>
-        <Input
-          type='text'
-          label='Url desse snippet'
-          icon='share'
-          value={playgroundUrl}
-          readOnly
-        />
-        <div className='mt-6 grid grid-cols-2 items-center gap-2'>
-          <DialogClose asChild>
-            <Button className='text-gray-900' onClick={handleShareSnippet}>
-              Copiar
-            </Button>
-          </DialogClose>
-          <DialogClose>Cancelar</DialogClose>
-        </div>
-      </DialogContent>
-      <DialogTrigger>{trigger}</DialogTrigger>
-    </Dialog>
+    <ShareSnippetDialogView
+      playgroundUrl={playgroundUrl}
+      onShareSnippet={handleShareSnippet}
+    >
+      {children}
+    </ShareSnippetDialogView>
   )
 }

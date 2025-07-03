@@ -28,7 +28,7 @@ Content-Type: application/json
 Authorization: Bearer {{JWT}}
 
 {
-  "title": "Snippet de teste atualizado",
+  "title": "",
   "code": "escreva('Código atualizado!')",
   "isPublic": false
 }

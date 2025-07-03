@@ -3,20 +3,15 @@
 import { Snippet } from '@stardust/core/playground/entities'
 
 import { CACHE } from '@/constants'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useApi } from '@/ui/global/hooks/useApi'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
-import { OrdinalNumber } from '@stardust/core/global/structures'
+import { type Id, OrdinalNumber } from '@stardust/core/global/structures'
+import type { PlaygroundService } from '@stardust/core/playground/interfaces'
 
 const SNIPPETS_PER_PAGE = OrdinalNumber.create(24)
 
-export function useSnippetsList() {
-  const { user } = useAuthContext()
-  const api = useApi()
-
+export function useSnippetsList(playgroundService: PlaygroundService) {
   async function fetchSnippets(page: number) {
-    const response = await api.fetchSnippetsList({
-      authorId: String(user?.id.value),
+    const response = await playgroundService.fetchSnippetsList({
       page: OrdinalNumber.create(page),
       itemsPerPage: SNIPPETS_PER_PAGE,
     })
@@ -32,11 +27,9 @@ export function useSnippetsList() {
       fetcher: fetchSnippets,
       shouldRefetchOnFocus: false,
       itemsPerPage: SNIPPETS_PER_PAGE.value,
-      isEnabled: Boolean(user),
-      dependencies: [user?.id.value],
     })
 
-  function handleDeleteSnippetDelete() {
+  function handleDeleteSnippet() {
     refetch()
   }
 
@@ -51,7 +44,7 @@ export function useSnippetsList() {
     totalItemsCount,
     isLoading,
     isRecheadedEnd,
-    handleDeleteSnippetDelete,
+    handleDeleteSnippet,
     handlePaginationPageChange,
   }
 }

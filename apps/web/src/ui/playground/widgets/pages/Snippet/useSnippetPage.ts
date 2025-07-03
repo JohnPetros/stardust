@@ -5,23 +5,23 @@ import z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import type { SnippetDto } from '@stardust/core/playground/dtos'
-
-import type { PlaygroundCodeEditorRef } from '@/ui/global/widgets/components/PlaygroundCodeEditor/types'
-import { useWindowSize } from '@/ui/global/hooks/useWindowSize'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import type { SnippetDto } from '@stardust/core/playground/entities/dtos'
 import { Snippet } from '@stardust/core/playground/entities'
-import { useEditSnippetAction } from '@/ui/playground/hooks/useEditSnippetAction'
-import { useCreateSnippetAction } from '@/ui/playground/hooks/useCreateSnippetAction'
 import {
   booleanSchema,
   idSchema,
   stringSchema,
   titleSchema,
 } from '@stardust/validation/global/schemas'
+import type { PlaygroundService } from '@stardust/core/playground/interfaces'
+import { Name, type Id } from '@stardust/core/global/structures'
+
+import type { PlaygroundCodeEditorRef } from '@/ui/global/widgets/components/PlaygroundCodeEditor/types'
+import { useWindowSize } from '@/ui/global/hooks/useWindowSize'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { ROUTES } from '@/constants'
+import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
 const snippetSchema = z.object({
   snippetId: idSchema,
@@ -33,30 +33,28 @@ const snippetSchema = z.object({
 type SnippetSchema = z.infer<typeof snippetSchema>
 
 type UseSnippetPageParams = {
+  playgroundService: PlaygroundService
+  userId?: Id
   playgroudCodeEditorRef: RefObject<PlaygroundCodeEditorRef>
   authAlertDialogRef: RefObject<AlertDialogRef>
   snippetDto?: SnippetDto
 }
 
 export function useSnippetPage({
+  playgroundService,
+  userId,
   snippetDto,
   playgroudCodeEditorRef,
   authAlertDialogRef,
 }: UseSnippetPageParams) {
   const snippet = snippetDto ? Snippet.create(snippetDto) : null
-  const [snippetErrors, setSnippetErrors] = useState({ title: '', code: '' })
   const [isActionSuccess, setIsActionSuccess] = useState(false)
   const [isActionFailure, setIsActionFailure] = useState(false)
   const [isUserSnippetAuthor, setIsUserSnippetAuthor] = useState(false)
-  const { user } = useAuthContext()
-  const { editSnippet, isEditing } = useEditSnippetAction({
-    onSuccess: handleActionSuccess,
-    onError: handleActionError,
-  })
-  const { createSnippet, isCreating } = useCreateSnippetAction({
-    onSuccess: handleActionSuccess,
-    onError: handleActionError,
-  })
+  const [isLoading, setIsLoading] = useState(false)
+  const [snippetFieldErrors, setSnippetFieldErrors] = useState<Record<string, string[]>>(
+    {},
+  )
   const { control, formState, getValues, reset, watch } = useForm<SnippetSchema>({
     resolver: zodResolver(snippetSchema),
     defaultValues: {
@@ -66,11 +64,12 @@ export function useSnippetPage({
       isSnippetPublic: snippet?.isPublic.value ?? true,
     },
   })
+  const toast = useToastContext()
   const windowSize = useWindowSize()
   const router = useRouter()
   const formValues = getValues()
 
-  async function handleActionSuccess(snippet: Snippet) {
+  async function handleSnippetCreated(snippet: Snippet) {
     setIsUserSnippetAuthor(snippet.isPublic.isTrue)
     reset({
       snippetId: snippet.id.value,
@@ -80,30 +79,87 @@ export function useSnippetPage({
     })
   }
 
-  async function handleActionError(
-    snippetTitleErrorMessage: string,
-    snippetCodeErrorMessage: string,
-  ) {
-    setSnippetErrors({ title: snippetTitleErrorMessage, code: snippetCodeErrorMessage })
-    setIsActionFailure(true)
-  }
-
   async function handleActionButtonClick() {
-    if (!user) {
+    if (!userId) {
       authAlertDialogRef.current?.open()
       return
     }
-    setSnippetErrors({ title: '', code: '' })
+    setIsLoading(true)
 
     const { snippetId, snippetTitle, snippetCode, isSnippetPublic } = getValues()
 
     const hasSnippet = !snippetId
     if (hasSnippet) {
-      await createSnippet({ snippetTitle, snippetCode, isSnippetPublic })
+      const response = await playgroundService.createSnippet(
+        Snippet.create({
+          title: snippetTitle,
+          code: snippetCode,
+          isPublic: isSnippetPublic,
+          author: {
+            id: userId.value,
+          },
+        }),
+      )
+
+      if (response.isSuccessful) {
+        setIsActionSuccess(true)
+        handleSnippetCreated(Snippet.create(response.body))
+      }
+
+      if (response.isFailure) {
+        setIsActionFailure(true)
+        if (response.isValidationFailure) {
+          setSnippetFieldErrors({
+            snippetTitle: response.getValidationFieldErrors('snippetTitle'),
+            snippetCode: response.getValidationFieldErrors('snippetCode'),
+          })
+        } else toast.showError(response.errorMessage)
+      }
+
+      setIsLoading(false)
       return
     }
 
-    editSnippet({ snippetId, snippetTitle, snippetCode, isSnippetPublic })
+    let title: Name
+
+    try {
+      title = Name.create(snippetTitle)
+    } catch (error) {
+      setSnippetFieldErrors({
+        snippetTitle: ['Título deve conter no mínimo 3 caracteres'],
+      })
+      setIsActionFailure(true)
+      setIsLoading(false)
+      return
+    }
+
+    const response = await playgroundService.updateSnippet(
+      Snippet.create({
+        id: snippetId,
+        title: title.value,
+        code: snippetCode,
+        isPublic: isSnippetPublic,
+        author: {
+          id: userId.value,
+        },
+      }),
+    )
+
+    if (response.isSuccessful) {
+      setIsActionSuccess(true)
+    }
+
+    if (response.isFailure) {
+      setIsActionFailure(true)
+      if (response.isValidationFailure) {
+        setSnippetFieldErrors({
+          snippetTitle: response.getValidationFieldErrors('snippetTitle'),
+          snippetCode: response.getValidationFieldErrors('snippetCode'),
+        })
+      } else toast.showError(response.errorMessage)
+    }
+
+    setIsLoading(false)
   }
 
   async function handleRunCode() {
@@ -126,19 +182,19 @@ export function useSnippetPage({
 
   useEffect(() => {
     setIsUserSnippetAuthor(
-      snippet && user ? snippet.author.isEqualTo(user).isTrue : false,
+      snippet && userId ? snippet.author.id.value === userId.value : false,
     )
-  }, [snippet, user])
+  }, [snippet, userId])
 
   return {
     pageHeight: windowSize.height,
     formControl: control,
-    snippetErrors,
     snippetId: formValues.snippetId,
     canExecuteAction: formState.isDirty,
     isSnippetPublic: formValues.isSnippetPublic,
     isActionDisabled: formValues.snippetTitle === '' && formValues.snippetCode === '',
-    isActionExecuting: isCreating || isEditing,
+    isActionExecuting: isLoading,
+    snippetFieldErrors,
     isActionFailure,
     isUserSnippetAuthor,
     isActionSuccess,

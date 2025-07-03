@@ -1,55 +1,57 @@
-'use client'
-
 import { useRef, useState } from 'react'
 
-import type { Snippet } from '@stardust/core/playground/entities'
+import type { PlaygroundService } from '@stardust/core/playground/interfaces'
+import { type Id, Text } from '@stardust/core/global/structures'
 
 import { CLIENT_ENV, ROUTES } from '@/constants'
-import { useApi } from '@/ui/global/hooks/useApi'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import type { PromptRef } from '@/ui/global/widgets/components/Prompt/types'
-import { useEditSnippetAction } from '@/ui/playground/hooks/useEditSnippetAction'
-import { Id } from '@stardust/core/global/structures'
 
-export function useSnippetCard(
-  snippetId: string,
-  inititlaSnippetTitle: string,
-  onDelete: (deletedPlaygroundId: string) => void,
-) {
-  const snippetUrl = `${CLIENT_ENV.webAppUrl}${ROUTES.playground.snippet(snippetId)}`
-  const [snippetTitle, setSnippetTitle] = useState(inititlaSnippetTitle)
-  const { editSnippet } = useEditSnippetAction({
-    onSuccess: handleEditSnippetSuccess,
-    onError: handleEditSnippetError,
-  })
-  const api = useApi()
+type Params = {
+  playgroundService: PlaygroundService
+  snippetId: Id
+  initialSnippetTitle: Text
+  onDeleteSnippet: (deletedSnippetId: string) => void
+}
+
+export function useSnippetCard({
+  playgroundService,
+  snippetId,
+  initialSnippetTitle,
+  onDeleteSnippet,
+}: Params) {
+  const snippetUrl = `${CLIENT_ENV.webAppUrl}${ROUTES.playground.snippet(snippetId.value)}`
+  const [snippetTitle, setSnippetTitle] = useState<Text>(initialSnippetTitle)
   const toast = useToastContext()
   const promptRef = useRef<PromptRef>(null)
 
   async function handleDeleteSnippetButtonClick() {
-    const response = await api.deleteSnippet(Id.create(snippetId))
+    const response = await playgroundService.deleteSnippet(snippetId)
     if (response.isSuccessful) {
-      onDelete(snippetId)
+      onDeleteSnippet(snippetId.value)
       return
     }
     toast.show(response.errorMessage)
   }
 
   async function handleEditSnippetTitlePromptConfirm() {
-    const newSnippetTitle = promptRef.current?.value
-    if (!newSnippetTitle) return
+    const newSnippetTitleValue = promptRef.current?.value
+    if (!newSnippetTitleValue) return
 
+    const newSnippetTitle = Text.create(newSnippetTitleValue)
     setSnippetTitle(newSnippetTitle)
     promptRef.current.setValue('')
-    await editSnippet({ snippetId, snippetTitle: newSnippetTitle })
-  }
 
-  function handleEditSnippetSuccess(snippet: Snippet) {
-    setSnippetTitle(snippet.title.value)
-  }
+    const response = await playgroundService.editSnippetTitle(snippetId, newSnippetTitle)
 
-  function handleEditSnippetError() {
-    setSnippetTitle(inititlaSnippetTitle)
+    if (response.isSuccessful) {
+      setSnippetTitle(newSnippetTitle)
+    }
+
+    if (response.isFailure) {
+      setSnippetTitle(initialSnippetTitle)
+      toast.show(response.errorMessage)
+    }
   }
 
   return {
