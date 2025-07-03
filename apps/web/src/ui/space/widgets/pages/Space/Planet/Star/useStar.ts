@@ -8,7 +8,7 @@ import type { AnimationRef } from '@/ui/global/widgets/components/Animation/type
 import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
 import { useInView } from '@/ui/global/hooks/useInView'
 import { useRouter } from '@/ui/global/hooks/useRouter'
-import { useAudioContext } from '@/ui/global/contexts/AudioContext'
+import { useAudioContext } from '@/ui/global/hooks/useAudioContext'
 
 type Params = {
   starId: Id

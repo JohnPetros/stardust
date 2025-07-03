@@ -5,7 +5,7 @@ import { Tier } from '@stardust/core/ranking/entities'
 
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useAudioContext } from '@/ui/global/contexts/AudioContext'
+import { useAudioContext } from '@/ui/global/hooks/useAudioContext'
 import { useGetLastWeekRankingWinnersAction } from './useGetLastWeekRankingWinnersAction'
 import { useRankingContext } from '@/ui/ranking/contexts/RankingContext'
 

@@ -3,7 +3,7 @@
 import { createContext, type ReactNode } from 'react'
 
 import type { AudioContextValue } from './types'
-import { useAudioProvider, useAudioContext } from './hooks'
+import { useAudioContextProvider } from './useAudioContextProvider'
 
 type AudioContextProps = {
   children: ReactNode
@@ -11,8 +11,8 @@ type AudioContextProps = {
 
 export const AudioContext = createContext({} as AudioContextValue)
 
-export function AudioProvider({ children }: AudioContextProps) {
-  const { playAudio } = useAudioProvider()
+export const AudioContextProvider = ({ children }: AudioContextProps) => {
+  const { playAudio } = useAudioContextProvider()
 
   return (
     <AudioContext.Provider
@@ -24,5 +24,3 @@ export function AudioProvider({ children }: AudioContextProps) {
     </AudioContext.Provider>
   )
 }
-
-export { useAudioContext }

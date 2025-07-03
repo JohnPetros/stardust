@@ -109,7 +109,6 @@ export class User extends Entity<UserProps> {
   }
 
   acquireAvatar(avatar: AvatarAggregate, avatarPrice: Integer): void {
-    console.log('hasAcquiredAvatar', this.hasAcquiredAvatar(avatar.id).isTrue)
     if (this.hasAcquiredAvatar(avatar.id).isTrue) {
       this.selectAvatar(avatar)
       return
