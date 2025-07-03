@@ -11,7 +11,7 @@ import { accessEndingPage, fetchLessonStoryAndQuestions } from './lessonActions'
 import { accessStarPage } from './spaceActions'
 import { accessProfilePage } from './profileActions'
 import { getLastWeekRankingWinners } from './rankingActions'
-import { createSnippet, editSnippet } from './playgroundActions'
+import { accessSnippetPage } from './playgroundActions'
 import {
   accessRewardForStarCompletionPage,
   accessRewardForStarChallengeCompletionPage,
@@ -32,7 +32,7 @@ export const challengingActions = {
   viewSolution,
 }
 
-export const playgroundActions = { createSnippet, editSnippet }
+export const playgroundActions = { accessSnippetPage }
 
 export const profileActions = { accessProfilePage }
 

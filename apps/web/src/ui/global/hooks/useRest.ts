@@ -9,6 +9,7 @@ import {
   ShopService,
   ChallengingService,
   ForumService,
+  PlaygroundService,
   DocumentationService,
 } from '@/rest/services'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
@@ -30,6 +31,7 @@ export function useRest() {
     shopService: ShopService(restClient),
     challengingService: ChallengingService(restClient),
     forumService: ForumService(restClient),
+    playgroundService: PlaygroundService(restClient),
     documentationService: DocumentationService(restClient),
   }
 }
