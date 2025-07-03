@@ -5,7 +5,7 @@ export interface RestClient {
   patch<ResponseBody>(url: string, body?: unknown): Promise<RestResponse<ResponseBody>>
   post<ResponseBody>(url: string, body?: unknown): Promise<RestResponse<ResponseBody>>
   put<ResponseBody>(url: string, body?: unknown): Promise<RestResponse<ResponseBody>>
-  delete(url: string): Promise<RestResponse<void>>
+  delete(url: string): Promise<RestResponse>
   setBaseUrl(url: string): void
   setHeader(key: string, value: string): void
   setQueryParam(key: string, value: string | string[]): void
