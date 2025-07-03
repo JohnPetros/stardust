@@ -1,5 +1,6 @@
 export { CreateSnippetController } from './CreateSnippetController'
 export { DeleteSnippetController } from './DeleteSnippetController'
-export { EditSnippetController } from './EditSnippetController'
+export { EditSnippetTitleController } from './EditSnippetTitleController'
 export { FetchSnippetController } from './FetchSnippetController'
 export { FetchSnippetsListController } from './FetchSnippetsListController'
+export { UpdateSnippetController } from './UpdateSnippetController'

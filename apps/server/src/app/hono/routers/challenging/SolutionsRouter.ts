@@ -3,11 +3,11 @@ import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
 
 import {
+  idSchema,
   itemsPerPageSchema,
   pageSchema,
   stringSchema,
 } from '@stardust/validation/global/schemas'
-import { idSchema } from '@stardust/validation'
 
 import {
   SupabaseChallengesRepository,
