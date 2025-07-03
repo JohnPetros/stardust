@@ -1,5 +1,6 @@
 export { CreateSnippetUseCase } from './CreateSnippetUseCase'
-export { EditSnippetUseCase } from './EditSnippetUseCase'
+export { UpdateSnippetUseCase } from './UpdateSnippetUseCase'
 export { GetSnippetUseCase } from './GetSnippetUseCase'
 export { DeleteSnippetUseCase } from './DeleteSnippetUseCase'
 export { ListSnippetsUseCase } from './ListSnippetsUseCase'
+export { EditSnippetTitleUseCase } from './EditSnippetTitleUseCase'
