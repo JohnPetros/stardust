@@ -32,20 +32,24 @@ export class Snippet extends Entity<SnippetProps> {
     return this.props.title
   }
 
-  set title(title: string) {
-    this.props.title = Name.create(title, 'Título do snippet')
+  set title(title: Name) {
+    this.props.title = title
   }
 
   get code(): Text {
     return this.props.code
   }
 
-  set code(code: string) {
-    this.props.code = Text.create(code, 'Código do snippet')
+  set code(code: Text) {
+    this.props.code = code
   }
 
-  get isPublic() {
+  get isPublic(): Logical {
     return this.props.isPublic
+  }
+
+  set isPublic(isPublic: Logical) {
+    this.props.isPublic = isPublic
   }
 
   get authorId() {
