@@ -17,6 +17,7 @@
   },
   "scripts": {
     "build": "tsup",
+    "lint": "biome lint src",
     "test": "jest"
   },
   "exports": {
