@@ -65,6 +65,7 @@
     "@biomejs/biome": "2.0.6",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
+    "@release-it/conventional-changelog": "^10.0.1",
     "commitlint-config-git-commit-emoji": "^1.0.0"
   }
 }
