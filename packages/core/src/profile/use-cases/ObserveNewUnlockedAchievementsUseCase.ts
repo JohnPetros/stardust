@@ -1,10 +1,10 @@
 import { Id } from '#global/domain/structures/Id'
+import { Logical } from '#global/domain/structures/Logical'
 import type { UseCase } from '#global/interfaces/index'
-import type { AchievementDto, UserDto } from '../domain/entities/dtos'
-import type { AchievementsRepository, UsersRepository } from '../interfaces'
+import type { AchievementDto } from '../domain/entities/dtos'
 import type { User, Achievement } from '../domain/entities/index'
 import { UserNotFoundError } from '../errors'
-import { Logical } from '#global/domain/structures/Logical'
+import type { AchievementsRepository, UsersRepository } from '../interfaces'
 
 type Response = Promise<AchievementDto[]>
 

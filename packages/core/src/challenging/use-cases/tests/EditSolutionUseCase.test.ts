@@ -15,7 +15,6 @@ describe('Edit Solution Use Case', () => {
     repository.findById.mockImplementation()
     repository.findBySlug.mockImplementation()
     repository.replace.mockImplementation()
-
     useCase = new EditSolutionUseCase(repository)
   })
 
