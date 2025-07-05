@@ -13,7 +13,7 @@
     "db:push": "supabase db push --workdir src/database",
     "db:revert": "supabase migration repair --status reverted $npm_config_migration_id --workdir src/database",
     "typecheck": "tsc --noEmit",
-    "lint": "biome lint src"
+    "lint": "biome lint src --apply"
   },
   "dependencies": {
     "@hono/node-server": "^1.14.1",
