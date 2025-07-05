@@ -1,16 +1,13 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.5.1/schema.json",
-  "organizeImports": {
-    "enabled": false
-  },
   "linter": {
     "enabled": true,
     "rules": {
       "correctness": {
         "useExhaustiveDependencies": "warn",
         "noInnerDeclarations": "warn",
-        "noUnnecessaryContinue": "warn",
-        "noConstructorReturn": "warn"
+        "noConstructorReturn": "warn",
+        "useHookAtTopLevel": "warn"
       },
       "suspicious": {
         "noImplicitAnyLet": "warn",
@@ -20,14 +17,12 @@
         "noExplicitAny": "off",
         "noArrayIndexKey": "warn",
         "noDoubleEquals": "warn",
-        "noConsoleLog": "off",
         "noAssignInExpressions": "off",
         "noRedeclare": "warn"
       },
       "style": {
         "noParameterAssign": "warn",
         "noNonNullAssertion": "warn",
-        "noArguments": "warn",
         "noUnusedTemplateLiteral": "warn",
         "useDefaultParameterLast": "warn",
         "useConst": "warn",
@@ -58,6 +53,9 @@
         "noHeaderScope": "warn",
         "useAltText": "warn",
         "useButtonType": "warn",
+        "noStaticElementInteractions": "warn",
+        "noLabelWithoutControl": "warn",
+        "useSemanticElements": "warn",
         "noAutofocus": "off"
       }
     }
@@ -67,11 +65,14 @@
     "formatWithErrors": false,
     "indentStyle": "space",
     "indentWidth": 2,
-    "lineWidth": 90,
-    "ignore": [
-      "**/*/generated-new.ts",
-      "**/*/generated-v2.ts"
-    ]
+    "lineWidth": 90
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "off"
+      }
+    }
   },
   "javascript": {
     "formatter": {
@@ -83,9 +84,6 @@
   },
   "overrides": [
     {
-      "include": [
-        "apps/serverless"
-      ],
       "linter": {
         "rules": {
           "style": {
