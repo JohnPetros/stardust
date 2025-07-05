@@ -1,23 +1,26 @@
-name: Web app CD to Heroku
+name: Web app staging CD to Heroku
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/web/**"
 
 jobs:
   build-and-deploy:
     name: Build and Deploy
     runs-on: ubuntu-latest
     env:
-      HEROKU_APP_NAME: stardust-web-app
-      IMAGE_NAME: registry.heroku.com/stardust-web-app/web
+      HEROKU_APP_NAME: stardust-web-staging-app
+      IMAGE_NAME: registry.heroku.com/stardust-web-staging-app/web
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Create .env file
-        run: echo "${{ secrets.WEB_ENV }}" >> apps/web/.env
+        run: echo "${{ secrets.WEB_STAGING_ENV }}" >> apps/web/.env
 
       - name: Install Heroku CLI
         run: curl https://cli-assets.heroku.com/install.sh | sh
