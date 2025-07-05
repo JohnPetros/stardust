@@ -7,7 +7,7 @@
     "queue": "npx inngest-cli@latest dev --no-discovery -u http://localhost:3000/api/serverless",
     "build": "next build",
     "start": "node .next/standalone/apps/web/server.js -p $PORT",
-    "lint": "biome lint src --apply",
+    "lint": "biome lint src --diagnostic-level=error",
     "db:types": "supabase gen types typescript --project-id aukqejqsiqsqowafpppb > src/api/supabase/types/Database.ts",
     "typecheck": "tsc --noEmit"
   },
@@ -100,6 +100,7 @@
     "jest-canvas-mock": "^2.5.2",
     "jest-environment-jsdom": "^29.7.0",
     "ts-jest": "^29.2.1",
+    "ts-jest-mocker": "^1.3.0",
     "ts-node": "^10.9.2",
     "typescript": "5.5.3"
   }

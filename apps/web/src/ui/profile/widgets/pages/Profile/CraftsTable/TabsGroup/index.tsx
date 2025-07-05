@@ -56,6 +56,7 @@ export function TabsGroup({
                 case 'date':
                   return (
                     <SorterButton
+                      key={tabListSorter}
                       title='Mais recentes'
                       icon='clock'
                       isActive={activeTabListSorter === 'date'}
@@ -65,6 +66,7 @@ export function TabsGroup({
                 case 'upvotesCount':
                   return (
                     <SorterButton
+                      key={tabListSorter}
                       title='Mais votados'
                       icon='arrow-up'
                       isActive={activeTabListSorter === 'upvotesCount'}
@@ -74,6 +76,7 @@ export function TabsGroup({
                 case 'viewsCount':
                   return (
                     <SorterButton
+                      key={tabListSorter}
                       title='Mais visualizados'
                       icon='double-eyes'
                       isActive={activeTabListSorter === 'viewsCount'}
