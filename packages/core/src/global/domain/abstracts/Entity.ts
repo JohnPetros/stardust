@@ -10,6 +10,6 @@ export abstract class Entity<Props = unknown> {
   }
 
   isEqualTo(entity: Entity): Logical {
-    return Logical.create(this.id === entity.id)
+    return Logical.create(this.id.value === entity.id.value)
   }
 }

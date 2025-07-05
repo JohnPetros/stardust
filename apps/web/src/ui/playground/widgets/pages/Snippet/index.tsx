@@ -1,10 +1,12 @@
 'use client'
 
+import Link from 'next/link'
 import { useRef } from 'react'
 import { Controller } from 'react-hook-form'
 
-import type { SnippetDto } from '@stardust/core/playground/dtos'
+import type { SnippetDto } from '@stardust/core/playground/entities/dtos'
 
+import { useRest } from '@/ui/global/hooks/useRest'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { TitleInput } from '@/ui/global/widgets/components/TitleInput'
 import { ActionButton } from '@/ui/global/widgets/components/ActionButton'
@@ -13,13 +15,15 @@ import type { ActionButtonTitles } from '@/ui/global/widgets/components/ActionBu
 import { Switch } from '@/ui/global/widgets/components/Switch'
 import { CodeEditorToolbar } from '@/ui/global/widgets/components/CodeEditorToolbar'
 import { PlaygroundCodeEditor } from '@/ui/global/widgets/components/PlaygroundCodeEditor'
-import { ErrorMessage } from '@/ui/global/widgets/components/ErrorMessage'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useSnippetPage } from './useSnippetPage'
 import { ShareSnippetDialog } from '../../components/ShareSnippetDialog'
+import { ErrorMessage } from '@/ui/global/widgets/components/ErrorMessage'
+import { ROUTES } from '@/constants'
 
 const HEADER_HEIGHT = 68
 const SAVE_BUTTON_CONTAINER_HEIGHT = 12
@@ -29,15 +33,17 @@ type SnippetPageProps = {
   snippetDto?: SnippetDto
 }
 
-export function SnippetPage({ snippetDto }: SnippetPageProps) {
+export const SnippetPage = ({ snippetDto }: SnippetPageProps) => {
   const playgroudCodeEditorRef = useRef<PlaygroundCodeEditorRef>(null)
   const authAlertDialogRef = useRef<AlertDialogRef>(null)
+  const { user } = useAuthContext()
+  const { playgroundService } = useRest()
   const {
     pageHeight,
     formControl,
     snippetId,
-    snippetErrors,
     canExecuteAction,
+    snippetFieldErrors,
     isSnippetPublic,
     isActionDisabled,
     isActionSuccess,
@@ -48,11 +54,12 @@ export function SnippetPage({ snippetDto }: SnippetPageProps) {
     handleActionButtonClick,
     handleAuthAlertDialogConfirm,
   } = useSnippetPage({
+    userId: user?.id,
     playgroudCodeEditorRef,
     authAlertDialogRef,
     snippetDto,
+    playgroundService,
   })
-  const { goBack } = useRouter()
   const ACTION_BUTTON_TITLES: ActionButtonTitles = {
     canExecute: 'salvar?',
     executing: 'salvando...',
@@ -78,8 +85,8 @@ export function SnippetPage({ snippetDto }: SnippetPageProps) {
                 value={value}
                 onChange={onChange}
                 placeholder='Título do seu snippet'
-                className=' text-gray-50 bg-gray-800'
-                errorMessage={snippetErrors.title}
+                className='text-gray-50 bg-gray-800'
+                errorMessage={snippetFieldErrors.snippetTitle?.join(', ')}
               />
             )
           }}
@@ -103,11 +110,8 @@ export function SnippetPage({ snippetDto }: SnippetPageProps) {
 
           <div className='absolute md:sticky bottom-0 left-0 right-0 z-50 py-3 bg-gray-800 flex xs:items-end justify-center lg:justify-end gap-2 w-full mt-6 xs:mt-0'>
             <div className='flex items-end gap-2'>
-              <Button
-                onClick={goBack}
-                className='bg-gray-600 text-gray-50 w-16 h-8 text-sm'
-              >
-                Voltar
+              <Button asChild className='bg-gray-600 text-gray-50 w-16 h-8 text-sm'>
+                <Link href={ROUTES.playground.snippets}>Voltar</Link>
               </Button>
               <ActionButton
                 type='button'
@@ -162,12 +166,14 @@ export function SnippetPage({ snippetDto }: SnippetPageProps) {
         style={{ height: editorHeight, marginTop: CODE_EDITOR_MARGIN_TOP }}
         className='overflow-hidden px-6'
       >
+        {snippetFieldErrors.snippetCode && (
+          <ErrorMessage>{snippetFieldErrors.snippetCode?.join(', ')}</ErrorMessage>
+        )}
         <CodeEditorToolbar
           codeEditorRef={playgroudCodeEditorRef}
           onRunCode={handleRunCode}
         >
           <div className='-translate-y-2'>
-            {snippetErrors.code && <ErrorMessage>{snippetErrors.code}</ErrorMessage>}
             <Controller
               control={formControl}
               name='snippetCode'

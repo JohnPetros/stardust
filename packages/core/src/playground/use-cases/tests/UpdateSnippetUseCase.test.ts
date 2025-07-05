@@ -3,17 +3,19 @@ import { mock, type Mock } from 'ts-jest-mocker'
 import { SnippetsFaker } from '#playground/domain/entities/fakers/SnippetsFaker'
 import { SnippetNotFoundError } from '#playground/domain/errors/SnippetNotFoundError'
 import type { SnippetsRepository } from '../../interfaces'
-import { EditSnippetUseCase } from '../EditSnippetUseCase'
+import { UpdateSnippetUseCase } from '../UpdateSnippetUseCase'
+import { Name } from '#global/domain/structures/Name'
+import { Text } from '#global/domain/structures/Text'
 
-describe('Edit Snippet Use Case', () => {
+describe('Update Snippet Use Case', () => {
   let repository: Mock<SnippetsRepository>
-  let useCase: EditSnippetUseCase
+  let useCase: UpdateSnippetUseCase
 
   beforeEach(() => {
     repository = mock<SnippetsRepository>()
     repository.findById.mockImplementation()
     repository.replace.mockImplementation()
-    useCase = new EditSnippetUseCase(repository)
+    useCase = new UpdateSnippetUseCase(repository)
   })
 
   it('should throw an error if the snippet is not found', async () => {
@@ -25,6 +27,7 @@ describe('Edit Snippet Use Case', () => {
         snippetId: snippet.id.value,
         snippetTitle: snippet.title.value,
         snippetCode: snippet.code.value,
+        isSnippetPublic: snippet.isPublic.value,
       }),
     ).rejects.toThrow(SnippetNotFoundError)
   })
@@ -32,13 +35,14 @@ describe('Edit Snippet Use Case', () => {
   it('should replace the snippet in the repository with the new title and code', async () => {
     const snippet = SnippetsFaker.fake()
     repository.findById.mockResolvedValue(snippet)
-    const newTitle = 'New Title'
-    const newCode = 'New Code'
+    const newTitle = Name.create('New Title')
+    const newCode = Text.create('New Code')
 
     await useCase.execute({
       snippetId: snippet.id.value,
-      snippetTitle: newTitle,
-      snippetCode: newCode,
+      snippetTitle: newTitle.value,
+      snippetCode: newCode.value,
+      isSnippetPublic: snippet.isPublic.value,
     })
 
     snippet.title = newTitle
@@ -51,13 +55,14 @@ describe('Edit Snippet Use Case', () => {
   it('should return the updated snippet', async () => {
     const snippet = SnippetsFaker.fake()
     repository.findById.mockResolvedValue(snippet)
-    const newTitle = 'New Title'
-    const newCode = 'New Code'
+    const newTitle = Name.create('New Title')
+    const newCode = Text.create('New Code')
 
     const response = await useCase.execute({
       snippetId: snippet.id.value,
-      snippetTitle: newTitle,
-      snippetCode: newCode,
+      snippetTitle: newTitle.value,
+      snippetCode: newCode.value,
+      isSnippetPublic: snippet.isPublic.value,
     })
 
     snippet.title = newTitle

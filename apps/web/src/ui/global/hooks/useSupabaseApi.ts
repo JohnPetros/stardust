@@ -5,7 +5,6 @@ import { useSupabaseContext } from '@/ui/global/contexts/SupabaseContext/hooks'
 import {
   SupabaseLessonService,
   SupabaseRankingService,
-  SupabasePlaygroundService,
   SupabaseStorageService,
 } from '@/rest/supabase/services'
 
@@ -16,7 +15,6 @@ export function useSupabaseApi() {
     return {
       ...SupabaseLessonService(supabase),
       ...SupabaseRankingService(supabase),
-      ...SupabasePlaygroundService(supabase),
       ...SupabaseStorageService(),
     }
   }, [supabase])

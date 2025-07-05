@@ -1,2 +1,1 @@
-export { CreateSnippetAction } from './CreateSnippetAction'
-export { EditSnippetAction } from './EditSnippetAction'
+export { AccessSnippetPageAction } from './AccessSnippetPageAction'

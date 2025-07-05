@@ -65,6 +65,24 @@ export class RestResponse<Body = unknown> {
     return this.statusCode >= HTTP_STATUS_CODE.badRequest || Boolean(this._errorMessage)
   }
 
+  get isValidationFailure() {
+    return this.statusCode === HTTP_STATUS_CODE.badRequest
+  }
+
+  getValidationFieldErrors(fieldName: string) {
+    if (!this.isValidationFailure)
+      throw new AppError('Rest Response is not a validation failure')
+
+    const validationError = this.body as ValidationError
+    const fieldError = validationError.fieldErrors.find(
+      (error) => error.name === fieldName,
+    )
+
+    if (!fieldError) throw new AppError(`Field error not found for field ${fieldName}`)
+
+    return fieldError.messages
+  }
+
   getHeader(key: string) {
     return this.headers[key] ?? null
   }

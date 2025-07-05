@@ -65,7 +65,7 @@ export class HonoApp {
 
   private setUpErrorHandler() {
     this.hono.onError((error, context) => {
-      console.error(error)
+      console.error('Error:', error.message)
 
       if (error instanceof AppError) {
         console.error('Error title:', error.title)
