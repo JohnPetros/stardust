@@ -2,12 +2,12 @@
 
 import Link from 'next/link'
 import { twMerge } from 'tailwind-merge'
+import { type ForwardedRef, forwardRef } from 'react'
 
 import { ROUTES } from '@/constants'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import type { ChallengeContent } from '@/ui/challenging/stores/ChallengeStore/types'
-import { ForwardedRef, forwardRef } from 'react'
 
 type TabButtonProps = {
   contentType: ChallengeContent
@@ -17,13 +17,10 @@ type TabButtonProps = {
   blockMessage?: string
 }
 
- const ChallengeContentLinkComponent = ({
-  contentType,
-  isActive,
-  isBlocked = false,
-  title,
-  ...props
-}: TabButtonProps, ref: ForwardedRef<HTMLAnchorElement>) => {
+const ChallengeContentLinkComponent = (
+  { contentType, isActive, isBlocked = false, title, ...props }: TabButtonProps,
+  ref: ForwardedRef<HTMLAnchorElement>,
+) => {
   const { getChallengeSlice } = useChallengeStore()
   const { challenge } = getChallengeSlice()
 

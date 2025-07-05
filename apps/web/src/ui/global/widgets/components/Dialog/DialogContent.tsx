@@ -1,6 +1,6 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import * as Container from '@radix-ui/react-dialog'
-import { ClassNameValue, twMerge } from 'tailwind-merge'
+import { type ClassNameValue, twMerge } from 'tailwind-merge'
 
 import { DialogAnimation } from './DialogAnimation'
 

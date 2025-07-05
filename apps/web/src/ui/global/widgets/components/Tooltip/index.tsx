@@ -1,13 +1,7 @@
 'use client'
-import { ReactNode } from 'react'
-import {
-  Content,
-  Portal,
-  Root,
-  TooltipArrow,
-  Trigger,
-} from '@radix-ui/react-tooltip'
-import { AnimatePresence, motion, Variants } from 'framer-motion'
+import type { ReactNode } from 'react'
+import { Content, Portal, Root, TooltipArrow, Trigger } from '@radix-ui/react-tooltip'
+import { AnimatePresence, motion, type Variants } from 'framer-motion'
 
 import { useTooltip } from './useTooltip'
 
@@ -28,11 +22,7 @@ type TooltipProps = {
   content: string
 }
 
-export function Tooltip({
-  children: trigger,
-  content,
-  direction,
-}: TooltipProps) {
+export function Tooltip({ children: trigger, content, direction }: TooltipProps) {
   const { hide, show, isVisible } = useTooltip()
 
   return (
@@ -40,31 +30,21 @@ export function Tooltip({
       <Portal>
         <AnimatePresence>
           {isVisible && content && (
-            <Content
-              className="z-50 max-w-sm"
-              sideOffset={1}
-              side={direction}
-              forceMount
-            >
+            <Content className='z-50 max-w-sm' sideOffset={1} side={direction} forceMount>
               <motion.p
                 variants={contentAnimations}
-                initial="hidden"
-                animate="visible"
-                className="rounded-md border border-gray-400 bg-green-900 p-2 text-center text-sm text-gray-100 shadow-md"
+                initial='hidden'
+                animate='visible'
+                className='rounded-md border border-gray-400 bg-green-900 p-2 text-center text-sm text-gray-100 shadow-md'
               >
                 {content}
-                <TooltipArrow className="fill-gray-400" />
+                <TooltipArrow className='fill-gray-400' />
               </motion.p>
             </Content>
           )}
         </AnimatePresence>
       </Portal>
-      <Trigger
-        className="cursor-pointer"
-        onMouseOver={show}
-        onMouseLeave={hide}
-        asChild
-      >
+      <Trigger className='cursor-pointer' onMouseOver={show} onMouseLeave={hide} asChild>
         {trigger}
       </Trigger>
     </Root>

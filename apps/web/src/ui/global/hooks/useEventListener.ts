@@ -11,14 +11,14 @@ function useEventListener<EventName extends keyof MediaQueryListEventMap>(
   eventName: EventName,
   handler: (event: MediaQueryListEventMap[EventName]) => void,
   element: RefObject<MediaQueryList>,
-  options?: boolean | AddEventListenerOptions
+  options?: boolean | AddEventListenerOptions,
 ): void
 
 function useEventListener<EventName extends keyof WindowEventMap>(
   eventName: EventName,
   handler: (event: WindowEventMap[EventName]) => void,
   element?: undefined,
-  options?: boolean | AddEventListenerOptions
+  options?: boolean | AddEventListenerOptions,
 ): void
 
 function useEventListener<
@@ -28,14 +28,14 @@ function useEventListener<
   eventName: EventName,
   handler: (event: HTMLElementEventMap[EventName]) => void,
   element: RefObject<Element>,
-  options?: boolean | AddEventListenerOptions
+  options?: boolean | AddEventListenerOptions,
 ): void
 
 function useEventListener<EventName extends keyof DocumentEventMap>(
   eventName: EventName,
   handler: (event: DocumentEventMap[EventName]) => void,
   element: RefObject<Document>,
-  options?: boolean | AddEventListenerOptions
+  options?: boolean | AddEventListenerOptions,
 ): void
 
 function useEventListener<
@@ -50,10 +50,10 @@ function useEventListener<
       | WindowEventMap[WindowEventName]
       | HTMLElementEventMap[HTMLEventName]
       | MediaQueryListEventMap[MediaQueryEventName]
-      | Event
+      | Event,
   ) => void,
   element?: RefObject<Element>,
-  options?: boolean | AddEventListenerOptions
+  options?: boolean | AddEventListenerOptions,
 ) {
   const savedHandler = useRef(handler)
 
