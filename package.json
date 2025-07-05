@@ -1,7 +1,21 @@
 {
   "name": "stardust",
-  "description": "Aplicação para a aprendizagem de lógica de programação",
   "version": "0.1.0",
+  "description": "Educational platform for logic programming learning.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stardust/stardust"
+  },
+  "author": "João Pedro Carvalho dos Santos",
+  "email": "joaopedrocarvalho@gmail.com",
+  "homepage": "https://ardust-app.com.br",
+  "contributors": [
+    {
+      "name": "Leonel Sanches da Silva",
+      "url": "https://www.linkedin.com/in/leonelsanchesdasilva/"
+    }
+  ],
+  "license": "MIT",
   "private": true,
   "engines": {
     "node": ">=20"
