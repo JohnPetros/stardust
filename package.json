@@ -33,13 +33,38 @@
     "lint": "turbo lint",
     "test": "turbo test",
     "typecheck": "turbo typecheck",
-    "prepare": "husky"
+    "prepare": "husky",
+    "release": "release-it"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "🔖 release: v${version}"
+    },
+    "github": {
+      "release": true
+    },
+    "npm": {
+      "publish": false
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "infile": "CHANGELOG.md"
+      }
+    },
+    "devDependencies": {
+      "@biomejs/biome": "1.8.3",
+      "@release-it/conventional-changelog": "^10.0.1",
+      "husky": "^9.1.7",
+      "release-it": "^19.0.3",
+      "supabase": "^2.22.12",
+      "ts-jest-mocker": "^1.3.0",
+      "turbo": "^2.4.0"
+    }
   },
   "devDependencies": {
-    "@biomejs/biome": "1.8.3",
-    "husky": "^9.1.7",
-    "supabase": "^2.22.12",
-    "ts-jest-mocker": "^1.3.0",
-    "turbo": "^2.4.0"
+    "@biomejs/biome": "2.0.6",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "commitlint-config-git-commit-emoji": "^1.0.0"
   }
 }
