@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react'
 import { TooltipProvider } from '@radix-ui/react-tooltip'
 import { EditorProvider } from '@/ui/global/contexts/EditorContext'
-import { AudioProvider } from '@/ui/global/contexts/AudioContext'
+import { AudioContextProvider } from '@/ui/global/contexts/AudioContext'
 
 type ClientProps = {
   children: ReactNode
@@ -11,10 +11,10 @@ type ClientProps = {
 
 export function ClientProvider({ children }: ClientProps) {
   return (
-    <AudioProvider>
+    <AudioContextProvider>
       <TooltipProvider>
         <EditorProvider>{children}</EditorProvider>
       </TooltipProvider>
-    </AudioProvider>
+    </AudioContextProvider>
   )
 }

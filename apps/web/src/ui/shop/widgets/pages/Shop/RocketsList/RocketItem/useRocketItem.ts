@@ -3,7 +3,7 @@ import type { ProfileService } from '@stardust/core/profile/interfaces'
 import type { Integer } from '@stardust/core/global/structures'
 
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { useAudioContext } from '@/ui/global/contexts/AudioContext'
+import { useAudioContext } from '@/ui/global/hooks/useAudioContext'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
 export function useRocketItem(

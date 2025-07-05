@@ -1,10 +1,8 @@
-'use client'
-
 import { useEffect, useRef, useState } from 'react'
 
 import type { AlertDialogType } from './types/AlertDialogType'
 import { ALERT_DIALOG_EFFECTS } from './alert-dialog-effects'
-import { useAudioContext } from '@/ui/global/contexts/AudioContext'
+import { useAudioContext } from '@/ui/global/hooks/useAudioContext'
 
 export function useAlertDialog(
   type: AlertDialogType,

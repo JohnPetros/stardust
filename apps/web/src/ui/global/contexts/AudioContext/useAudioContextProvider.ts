@@ -1,10 +1,9 @@
-'use client'
-
 import { useCallback } from 'react'
-import type { AudioFile } from '../types'
+
+import type { AudioFile } from './types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
-export function useAudioProvider() {
+export function useAudioContextProvider() {
   const { user } = useAuthContext()
 
   const playAudio = useCallback(

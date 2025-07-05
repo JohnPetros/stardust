@@ -1,4 +1,4 @@
-import type { AudioFile } from '@/ui/global/contexts/AudioContext/types'
+import type { AudioFile } from '@/ui/global/hooks/useAudioContext/types'
 import type { AnimationName } from '../Animation/types'
 import type { AlertDialogType } from './types/AlertDialogType'
 
