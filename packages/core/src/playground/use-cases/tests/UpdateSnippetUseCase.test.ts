@@ -68,7 +68,7 @@ describe('Update Snippet Use Case', () => {
     snippet.title = newTitle
     snippet.code = newCode
 
-    expect(response.title).toBe(newTitle)
-    expect(response.code).toBe(newCode)
+    expect(response.title).toBe(newTitle.value)
+    expect(response.code).toBe(newCode.value)
   })
 })

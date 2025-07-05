@@ -6,30 +6,30 @@ import type { UsersRepository, AchievementsRepository } from '#profile/interface
 import { UserNotFoundError } from '#profile/errors/UserNotFoundError'
 import { IdFaker } from '#global/domain/structures/fakers/IdFaker'
 import { Achievement } from '#profile/domain/entities/Achievement'
-import { _ObserveNewUnlockedAchievementsUseCase } from '../_ObserveNewUnlockedAchievementsUseCase'
-
-let usersRepositoryMock: Mock<UsersRepository>
-let achievementsRepositoryMock: Mock<AchievementsRepository>
-let useCase: _ObserveNewUnlockedAchievementsUseCase
+import { ObserveNewUnlockedAchievementsUseCase } from '../ObserveNewUnlockedAchievementsUseCase'
 
 describe('Observe New Unlocked Achievements Use Case', () => {
-  beforeAll(() => {
-    usersRepositoryMock = mock<UsersRepository>()
-    achievementsRepositoryMock = mock<AchievementsRepository>()
-    usersRepositoryMock.findById.mockImplementation()
-    usersRepositoryMock.replace.mockImplementation()
-    achievementsRepositoryMock.findAll.mockImplementation()
-    achievementsRepositoryMock.addUnlocked.mockImplementation()
-    achievementsRepositoryMock.addRescuable.mockImplementation()
+  let usersRepository: Mock<UsersRepository>
+  let achievementsRepository: Mock<AchievementsRepository>
+  let useCase: ObserveNewUnlockedAchievementsUseCase
 
-    useCase = new _ObserveNewUnlockedAchievementsUseCase(
-      usersRepositoryMock,
-      achievementsRepositoryMock,
+  beforeEach(() => {
+    usersRepository = mock<UsersRepository>()
+    achievementsRepository = mock<AchievementsRepository>()
+    usersRepository.findById.mockImplementation()
+    usersRepository.replace.mockImplementation()
+    achievementsRepository.findAll.mockImplementation()
+    usersRepository.addUnlockedAchievement.mockImplementation()
+    usersRepository.addRescuableAchievement.mockImplementation()
+
+    useCase = new ObserveNewUnlockedAchievementsUseCase(
+      usersRepository,
+      achievementsRepository,
     )
   })
 
   it('should throw error if user is not found', async () => {
-    usersRepositoryMock.findById.mockResolvedValue(null)
+    usersRepository.findById.mockResolvedValue(null)
 
     await expect(useCase.execute({ userId: IdFaker.fake().value })).rejects.toThrow(
       UserNotFoundError,
@@ -37,10 +37,10 @@ describe('Observe New Unlocked Achievements Use Case', () => {
   })
 
   it('should not return any new unlocked achievements if user has no unlocked achivement', async () => {
-    const user = UsersFaker.fake()
-    usersRepositoryMock.findById.mockResolvedValueOnce(user)
-    achievementsRepositoryMock.findAll.mockResolvedValueOnce(
-      AchievementsFaker.fakeMany(10, { requiredCount: 1000 }),
+    const user = UsersFaker.fake({ xp: 0 })
+    usersRepository.findById.mockResolvedValueOnce(user)
+    achievementsRepository.findAll.mockResolvedValueOnce(
+      AchievementsFaker.fakeMany(10, { requiredCount: 1000, metric: 'xp' }),
     )
 
     const newUnlockedAchievements = await useCase.execute({ userId: user.id.value })
@@ -62,7 +62,8 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       metric: 'streak',
       requiredCount: 99,
     })
-    achievementsRepositoryMock.findAll.mockResolvedValue([
+    usersRepository.findById.mockResolvedValueOnce(user)
+    achievementsRepository.findAll.mockResolvedValue([
       unlockedAchievement,
       lockedAchievement,
     ])
@@ -91,7 +92,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       acquiredRocketsIds: [IdFaker.fake().value],
       unlockedStarsIds: [IdFaker.fake().value],
     })
-    usersRepositoryMock.findById.mockResolvedValue(user)
+    usersRepository.findById.mockResolvedValue(user)
     const unlockedAchievements = [
       AchievementsFaker.fakeDto({ metric: 'xp', requiredCount: 100 }),
       AchievementsFaker.fakeDto({ metric: 'streak', requiredCount: 9 }),
@@ -102,7 +103,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       AchievementsFaker.fakeDto({ metric: 'acquiredRocketsCount', requiredCount: 1 }),
       AchievementsFaker.fakeDto({ metric: 'unlockedStarsCount', requiredCount: 1 }),
     ]
-    achievementsRepositoryMock.findAll.mockResolvedValue([
+    achievementsRepository.findAll.mockResolvedValue([
       ...unlockedAchievements.map(Achievement.create),
       ...lockedAchievements.map(Achievement.create),
     ])
@@ -118,7 +119,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       xp: 100,
       streak: 0,
     })
-    usersRepositoryMock.findById.mockResolvedValue(user)
+    usersRepository.findById.mockResolvedValue(user)
     const unlockedAchievement = AchievementsFaker.fake({
       metric: 'xp',
       requiredCount: 99,
@@ -127,56 +128,30 @@ describe('Observe New Unlocked Achievements Use Case', () => {
       metric: 'streak',
       requiredCount: 99,
     })
-    achievementsRepositoryMock.findAll.mockResolvedValue([
+    achievementsRepository.findAll.mockResolvedValue([
       unlockedAchievement,
       lockedAchievement,
     ])
 
     await useCase.execute({ userId: user.id.value })
 
-    expect(achievementsRepositoryMock.addUnlocked).toHaveBeenCalledTimes(1)
-    expect(achievementsRepositoryMock.addRescuable).toHaveBeenCalledTimes(1)
-    expect(achievementsRepositoryMock.addUnlocked).toHaveBeenCalledWith(
-      unlockedAchievement,
+    expect(usersRepository.addUnlockedAchievement).toHaveBeenCalledTimes(1)
+    expect(usersRepository.addRescuableAchievement).toHaveBeenCalledTimes(1)
+    expect(usersRepository.addUnlockedAchievement).toHaveBeenCalledWith(
+      unlockedAchievement.id,
       user.id,
     )
-    expect(achievementsRepositoryMock.addRescuable).toHaveBeenCalledWith(
-      unlockedAchievement,
+    expect(usersRepository.addRescuableAchievement).toHaveBeenCalledWith(
+      unlockedAchievement.id,
       user.id,
     )
-    expect(achievementsRepositoryMock.addRescuable).not.toHaveBeenCalledWith(
-      lockedAchievement,
+    expect(usersRepository.addRescuableAchievement).not.toHaveBeenCalledWith(
+      lockedAchievement.id,
       user.id,
     )
-    expect(achievementsRepositoryMock.addRescuable).not.toHaveBeenCalledWith(
-      lockedAchievement,
+    expect(usersRepository.addRescuableAchievement).not.toHaveBeenCalledWith(
+      lockedAchievement.id,
       user.id,
     )
-  })
-
-  it('should replace the user in the repos with the updated user', async () => {
-    const user = UsersFaker.fake({
-      xp: 100,
-      streak: 0,
-    })
-    usersRepositoryMock.findById.mockResolvedValue(user)
-    const unlockedAchievement = AchievementsFaker.fake({
-      metric: 'xp',
-      requiredCount: 99,
-    })
-    const lockedAchievement = AchievementsFaker.fake({
-      metric: 'streak',
-      requiredCount: 99,
-    })
-    achievementsRepositoryMock.findAll.mockResolvedValue([
-      unlockedAchievement,
-      lockedAchievement,
-    ])
-    user.unlockAchievement(unlockedAchievement.id)
-
-    await useCase.execute({ userId: user.id.value })
-
-    expect(usersRepositoryMock.replace).toHaveBeenCalledTimes(1)
-    expect(usersRepositoryMock.replace).toHaveBeenCalledWith(user)
   })
 })

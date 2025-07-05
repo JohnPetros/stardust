@@ -1,10 +1,10 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { SolutionsRepository } from '#challenging/interfaces/index'
-import { EditSolutionUseCase } from '../EditSolutionUseCase'
 import { SolutionNotFoundError } from '#challenging/domain/errors/SolutionNotFoundError'
 import { SolutionsFaker } from '#challenging/domain/entities/fakers/SolutionsFaker'
 import { SolutionTitleAlreadyInUseError } from '#challenging/domain/errors/SolutionTitleAlreadyInUseError'
+import { EditSolutionUseCase } from '../EditSolutionUseCase'
 
 describe('Edit Solution Use Case', () => {
   let repository: Mock<SolutionsRepository>
@@ -13,6 +13,7 @@ describe('Edit Solution Use Case', () => {
   beforeEach(() => {
     repository = mock<SolutionsRepository>()
     repository.findById.mockImplementation()
+    repository.findBySlug.mockImplementation()
     repository.replace.mockImplementation()
 
     useCase = new EditSolutionUseCase(repository)
@@ -32,11 +33,12 @@ describe('Edit Solution Use Case', () => {
     const solution = SolutionsFaker.fake()
     repository.findById.mockResolvedValue(solution)
     repository.findBySlug.mockResolvedValue(solution)
+    const newSolutionTitle = 'new-solution-title'
 
     expect(
       useCase.execute({
         solutionId: solution.id.value,
-        solutionTitle: solution.title.value,
+        solutionTitle: newSolutionTitle,
         solutionContent: solution.content.value,
       }),
     ).rejects.toThrow(SolutionTitleAlreadyInUseError)

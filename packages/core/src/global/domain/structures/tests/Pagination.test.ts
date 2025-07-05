@@ -7,7 +7,7 @@ describe('Pagination structure', () => {
     const itemsPerPage = 5
     const pagination = Pagination.create(currentPage, totalItems, itemsPerPage)
     expect(pagination.currentPage.value).toBe(currentPage)
-    expect(pagination.itemsPerPage.value).toBe(totalItems)
+    expect(pagination.totalItems.value).toBe(totalItems)
     expect(pagination.itemsPerPage.value).toBe(itemsPerPage)
   })
 

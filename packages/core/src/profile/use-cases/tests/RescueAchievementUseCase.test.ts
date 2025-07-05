@@ -7,23 +7,22 @@ import type { AchievementsRepository, UsersRepository } from '#profile/interface
 import { RescueAchievementUseCase } from '../RescueAchievementUseCase'
 import { IdFaker } from '#global/domain/structures/fakers/IdFaker'
 
-let achievementsRepositoryMock: Mock<AchievementsRepository>
-let usersRepositoryMock: Mock<UsersRepository>
-let useCase: RescueAchievementUseCase
-
 describe('Rescue Achievement Use Case', () => {
+  let achievementsRepository: Mock<AchievementsRepository>
+  let usersRepository: Mock<UsersRepository>
+  let useCase: RescueAchievementUseCase
   beforeEach(() => {
-    achievementsRepositoryMock = mock<AchievementsRepository>()
-    usersRepositoryMock = mock<UsersRepository>()
+    achievementsRepository = mock<AchievementsRepository>()
+    usersRepository = mock<UsersRepository>()
+    usersRepository.findById.mockImplementation()
+    usersRepository.replace.mockImplementation()
+    usersRepository.removeRescuableAchievement.mockImplementation()
 
-    useCase = new RescueAchievementUseCase(
-      achievementsRepositoryMock,
-      usersRepositoryMock,
-    )
+    useCase = new RescueAchievementUseCase(achievementsRepository, usersRepository)
   })
 
   it('should throw error if the achievement is not found', async () => {
-    achievementsRepositoryMock.findById.mockResolvedValue(null)
+    achievementsRepository.findById.mockResolvedValue(null)
 
     await expect(
       useCase.execute({
@@ -35,8 +34,8 @@ describe('Rescue Achievement Use Case', () => {
 
   it('should throw error if the user is not found', async () => {
     const achievement = AchievementsFaker.fake()
-    achievementsRepositoryMock.findById.mockResolvedValue(achievement)
-    usersRepositoryMock.findById.mockResolvedValue(null)
+    achievementsRepository.findById.mockResolvedValue(achievement)
+    usersRepository.findById.mockResolvedValue(null)
 
     await expect(
       useCase.execute({
@@ -48,32 +47,34 @@ describe('Rescue Achievement Use Case', () => {
 
   it('should remove the rescued achievement from the repository', async () => {
     const achievement = AchievementsFaker.fake()
-    const user = UsersFaker.fake()
-    achievementsRepositoryMock.findById.mockResolvedValue(achievement)
-    achievementsRepositoryMock.removeRescuable.mockResolvedValue()
-    usersRepositoryMock.findById.mockResolvedValue(user)
-    usersRepositoryMock.replace.mockResolvedValue()
+    const user = UsersFaker.fake({
+      rescuableAchievementsIds: [achievement.id.value],
+    })
+    achievementsRepository.findById.mockResolvedValue(achievement)
+    usersRepository.findById.mockResolvedValue(user)
+    usersRepository.replace.mockResolvedValue()
 
     await useCase.execute({
       achievementId: achievement.id.value,
       userId: user.id.value,
     })
 
-    expect(achievementsRepositoryMock.removeRescuable).toHaveBeenCalledWith(
+    expect(usersRepository.removeRescuableAchievement).toHaveBeenCalledWith(
       achievement.id,
       user.id,
     )
-    // expect(usersRepositoryMock.replace).toHaveBeenCalledWith(user)
   })
 
   it('should make the user rescue the achievement', async () => {
     const achievement = AchievementsFaker.fake()
-    const user = UsersFaker.fake()
+    const user = UsersFaker.fake({
+      rescuableAchievementsIds: [achievement.id.value],
+    })
     user.rescueAchievement = jest.fn()
-    achievementsRepositoryMock.findById.mockResolvedValue(achievement)
-    achievementsRepositoryMock.removeRescuable.mockResolvedValue()
-    usersRepositoryMock.findById.mockResolvedValue(user)
-    usersRepositoryMock.replace.mockResolvedValue()
+    achievementsRepository.findById.mockResolvedValue(achievement)
+    usersRepository.removeRescuableAchievement.mockResolvedValue()
+    usersRepository.findById.mockResolvedValue(user)
+    usersRepository.replace.mockResolvedValue()
 
     await useCase.execute({
       achievementId: achievement.id.value,
@@ -86,29 +87,12 @@ describe('Rescue Achievement Use Case', () => {
     )
   })
 
-  it('should replace the user in the repository', async () => {
-    const achievement = AchievementsFaker.fake()
-    const user = UsersFaker.fake()
-    achievementsRepositoryMock.findById.mockResolvedValue(achievement)
-    achievementsRepositoryMock.removeRescuable.mockResolvedValue()
-    usersRepositoryMock.findById.mockResolvedValue(user)
-    usersRepositoryMock.replace.mockResolvedValue()
-
-    await useCase.execute({
-      achievementId: achievement.id.value,
-      userId: user.id.value,
-    })
-
-    expect(usersRepositoryMock.replace).toHaveBeenCalledWith(user)
-  })
-
   it('should return the user dto', async () => {
     const achievement = AchievementsFaker.fake()
     const user = UsersFaker.fake()
-    achievementsRepositoryMock.findById.mockResolvedValue(achievement)
-    achievementsRepositoryMock.removeRescuable.mockResolvedValue()
-    usersRepositoryMock.findById.mockResolvedValue(user)
-    usersRepositoryMock.replace.mockResolvedValue()
+    achievementsRepository.findById.mockResolvedValue(achievement)
+    usersRepository.findById.mockResolvedValue(user)
+    usersRepository.replace.mockResolvedValue()
     user.rescueAchievement(achievement.id, achievement.reward)
 
     const userDto = await useCase.execute({

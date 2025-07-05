@@ -1,19 +1,19 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 import type { UsersRepository } from '#profile/interfaces/UsersRepository'
-import { _ObserveStreakBreakUseCase } from '../_ObserveStreakBreakUseCase'
+import { ObserveStreakBreakUseCase } from '../ObserveStreakBreakUseCase'
 import { UsersFaker } from '#profile/domain/entities/fakers/UsersFaker'
 
 describe('Observe Streak Break Use Case', () => {
   jest.useFakeTimers().setSystemTime(new Date('2025-03-15')) // saturday
 
   let usersRepositoryMock: Mock<UsersRepository>
-  let useCase: _ObserveStreakBreakUseCase
+  let useCase: ObserveStreakBreakUseCase
 
   beforeAll(() => {
     usersRepositoryMock = mock<UsersRepository>()
     usersRepositoryMock.findAll.mockImplementation()
     usersRepositoryMock.replaceMany.mockImplementation()
-    useCase = new _ObserveStreakBreakUseCase(usersRepositoryMock)
+    useCase = new ObserveStreakBreakUseCase(usersRepositoryMock)
   })
 
   it('should break streak only the users that did not complete the task yesterday', async () => {
