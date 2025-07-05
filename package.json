@@ -48,7 +48,32 @@
     },
     "plugins": {
       "@release-it/conventional-changelog": {
-        "infile": "CHANGELOG.md"
+        "infile": "CHANGELOG.md",
+        "preset": {
+          "name": "conventionalcommits",
+          "types": [
+            {
+              "type": "✨ use case",
+              "section": "Use Cases"
+            },
+            {
+              "type": "🐛 fix",
+              "section": "Bug Fixes"
+            },
+            {
+              "type": "⚙️ config",
+              "section": "Chores"
+            },
+            {
+              "type": "📚 docs",
+              "section": "Documentation"
+            },
+            {
+              "type": "♻️ refactor",
+              "section": "Refactorings"
+            }
+          ]
+        }
       }
     },
     "devDependencies": {
