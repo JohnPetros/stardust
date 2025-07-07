@@ -9,3 +9,6 @@ export class FetchAllDocsController implements Controller {
     return http.send(docs.map((doc) => doc.dto))
   }
 }
+
+
+

@@ -22,7 +22,7 @@ export function useVerificationButton({
   const pathname = usePathname()
   const { playAudio } = useAudioContext()
 
-  const buttonTitle = useMemo(() => {
+const buttonTitle = useMemo(() => {
     if (isAnswerVerified && !isAnswerCorrect) {
       return 'Tentar novamente'
     }
