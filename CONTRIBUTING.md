@@ -53,7 +53,7 @@ Exemplos:
 | Tipo de commit                   | Prefixo   | Emoji |
 | :------------------------------- | :-------- | :---- |
 | Camada de domínio                | domain    | 🌐    |
-| Camada de API REST               | api       | 📶    |
+| Camada de API REST               | rest      | 📶    |
 | Camada de UI                     | ui        | 🖥️    |
 | Camada de banco de dados         | db        | 💾    |
 | Camada de fila/mensageria        | queue     | 🎞️    |

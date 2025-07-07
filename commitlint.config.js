@@ -8,7 +8,7 @@ module.exports = {
       'always',
       [
         '🌐 domain',
-        '📶 api',
+        '📶 rest',
         '🖥️ ui',
         '💾 db',
         '🎞️ queue',
