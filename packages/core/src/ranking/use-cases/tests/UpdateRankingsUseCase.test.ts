@@ -1,5 +1,5 @@
 import { mock, type Mock } from 'ts-jest-mocker'
-import { _UpdateRankingsUseCase } from '../_UpdateRankingsUseCase'
+import { UpdateRankingsUseCase } from '../UpdateRankingsUseCase'
 import type { TiersRepository } from '#ranking/interfaces/TiersRepository'
 import type { RankersRepository } from '#ranking/interfaces/RankersRepository'
 import type { EventBroker } from '#global/interfaces/EventBroker'
@@ -14,7 +14,7 @@ describe('Update Rankings Use Case', () => {
   let tiersRepository: Mock<TiersRepository>
   let rankersRepository: Mock<RankersRepository>
   let eventBroker: Mock<EventBroker>
-  let useCase: _UpdateRankingsUseCase
+  let useCase: UpdateRankingsUseCase
 
   beforeEach(() => {
     tiersRepository = mock<TiersRepository>()
@@ -27,7 +27,7 @@ describe('Update Rankings Use Case', () => {
     rankersRepository.addWinners.mockImplementation()
     eventBroker.publish.mockImplementation()
 
-    useCase = new _UpdateRankingsUseCase(tiersRepository, rankersRepository, eventBroker)
+    useCase = new UpdateRankingsUseCase(tiersRepository, rankersRepository, eventBroker)
   })
 
   it('should remove all current rankers', async () => {
