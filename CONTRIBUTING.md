@@ -55,7 +55,7 @@ Exemplos:
 | Camada de domínio                | domain    | 🌐    |
 | Camada de API REST               | api       | 📶    |
 | Camada de UI                     | ui        | 🖥️    |
-| Camada de banco de dados         | database  | 💾    |
+| Camada de banco de dados         | db        | 💾    |
 | Camada de fila/mensageria        | queue     | 🎞️    |
 | Camada de provisão               | provision | 🧰    |
 | Camada de BFF                    | server    | 📟    |

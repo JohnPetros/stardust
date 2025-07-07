@@ -10,7 +10,7 @@ module.exports = {
         '🌐 domain',
         '📶 api',
         '🖥️ ui',
-        '💾 database',
+        '💾 db',
         '🎞️ queue',
         '🧰 provision',
         '📟 server',
@@ -44,8 +44,5 @@ module.exports = {
     'subject-empty': [2, 'never'],
 
     'subject-full-stop': [2, 'never', '.'],
-
-    'subject-case': [2, 'always', 'lower-case'],
-
   },
 };
