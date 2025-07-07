@@ -14,7 +14,7 @@ export const texts: TextBlockDto[] = [
   {
     type: 'default',
     content:
-      'E agora com o radar do próprio foguete não precimos mais daquele que compramos.',
+      'E agora, com o radar do próprio foguete, não precisamos mais daquele que compramos.',
     picture: 'panda-comemorando.jpg',
   },
   {
@@ -24,17 +24,17 @@ export const texts: TextBlockDto[] = [
   },
   {
     type: 'default',
-    content: 'Para visualizar a mensagem é necessário fazer alguns passos.',
+    content: 'Para visualizar a mensagem, é necessário seguir alguns passos.',
     picture: 'panda-amando-bambu.jpg',
   },
   {
     type: 'quote',
-    content: '1 -> ligar todos sensores do radar;',
+    content: '1 -> Ligar todos os sensores do radar;',
     picture: 'panda.jpg',
   },
   {
     type: 'quote',
-    content: '2 -> Verificar se a mensagem contém script malicioso;',
+    content: '2 -> Verificar se a mensagem contém algum script malicioso;',
     picture: 'panda.jpg',
   },
   {
@@ -49,12 +49,12 @@ export const texts: TextBlockDto[] = [
   },
   {
     type: 'quote',
-    content: '5 -> Escrever a mensagem.',
+    content: '5 -> Escrever a mensagem na tela.',
     picture: 'panda.jpg',
   },
   {
     type: 'code',
-    content: `var mensagem = 'Por favor, me ajundem!'
+    content: `var mensagem = 'Por favor, me ajudem!'
     
 var sensores = [falso, falso, falso]
 var resolucao = 10
@@ -70,25 +70,25 @@ se (!mensagem.inclui('script') e telaAcesa) {
   escreva(mensagem)
 }
 
-// Resultado: Por favor, me ajundem!`,
+// Resultado: Por favor, me ajudem!`,
     isRunnable: true,
   },
   {
     type: 'default',
     content:
-      'Ok, já entendemos que essa pessoa precisa da nossa ajuda, mas porque ela não fala onde ela está?',
+      'Ok, já entendemos que essa pessoa precisa da nossa ajuda, mas por que ela não fala onde está?',
     picture: 'panda-confuso.jpg',
   },
   {
     type: 'default',
     content:
-      'Só resta perguntar isso, mande uma mensagem escrito: "Quais são suas coordenadas?"',
+      'Só nos resta perguntar. Mande uma mensagem escrita: "Quais são suas coordenadas?"',
     picture: 'panda-de-oculos.jpg',
   },
   {
     type: 'default',
     content:
-      'Só que para mandar uma mensagem com o radar é preciso seguir os mesmos passos de receber uma mensagem, por motivos de segurança, é claro.',
+      'Só que, para mandar uma mensagem com o radar, é preciso seguir os mesmos passos de receber uma, por motivos de segurança, é claro.',
     picture: 'panda-sorrindo.jpg',
   },
   {
@@ -99,7 +99,7 @@ var sensores = [falso, falso, falso]
 var resolucao = 10
 var telaAcesa = verdadeiro
 
-para (var i = 0 i < sensores.tamanho() i++) {
+para (var i = 0; i < sensores.tamanho(); i++) {
   sensores[i] = verdadeiro
 }
 
@@ -114,7 +114,7 @@ se (!mensagem.inclui('script') e telaAcesa) {
   },
   {
     type: 'default',
-    content: 'Isso, acabamos de receber uma resposta.',
+    content: 'Isso! Acabamos de receber uma resposta.',
     picture: 'panda-deslumbrado.jpg',
   },
   {
@@ -139,7 +139,7 @@ se (!mensagem.inclui('script') e telaAcesa) {
   },
   {
     type: 'default',
-    content: 'Tá, responda que é para saber onde ela está.',
+    content: 'Ok, responda que é para sabermos onde ela está.',
     picture: 'panda-deslumbrado.jpg',
   },
   {
@@ -150,7 +150,7 @@ var sensores = [falso, falso, falso]
 var resolucao = 10
 var telaAcesa = verdadeiro
 
-para (var i = 0i < sensores.tamanho() i++) {
+para (var i = 0; i < sensores.tamanho(); i++) {
   sensores[i] = verdadeiro
 }
 
@@ -184,7 +184,7 @@ se (!mensagem.inclui('script') e telaAcesa) {
   {
     type: 'default',
     content:
-      'Ok, isso já está ficando chato. E o código nem está mais cabendo na sua tela de tão grande.',
+      'Ok, isso já está ficando chato. E o código nem cabe mais na sua tela de tão grande.',
     picture: 'panda-triste.jpg',
   },
   {
@@ -200,7 +200,7 @@ se (!mensagem.inclui('script') e telaAcesa) {
   {
     type: 'default',
     content:
-      'Então, essa é uma boa ocasição para explicar um conceito importantíssemo na programação.',
+      'Então, esta é uma boa ocasião para explicar um conceito importantíssimo na programação.',
     picture: 'panda-de-oculos.jpg',
   },
   {
@@ -209,12 +209,12 @@ se (!mensagem.inclui('script') e telaAcesa) {
   },
   {
     type: 'default',
-    content: 'Isso... É, o nome desse módulo já entregou tudo.',
+    content: 'Isso... É, o nome deste módulo já entregou tudo.',
     picture: 'panda-triste.jpg',
   },
   {
     type: 'default',
-    content: 'Mas como prometido vou explicar o que são funções 🎉.',
+    content: 'Mas, como prometido, vou explicar o que são funções 🎉.',
     picture: 'panda-sorrindo.jpg',
   },
   {
@@ -226,7 +226,7 @@ se (!mensagem.inclui('script') e telaAcesa) {
   },
   {
     type: 'quote',
-    content: 'As funções são escrita utilizando a palavra-chave *funcao* (sem ~)',
+    content: 'As funções são escritas utilizando a palavra-chave *funcao* (sem o ~).',
     picture: 'panda-piscando.jpg',
   },
   {
@@ -236,7 +236,7 @@ se (!mensagem.inclui('script') e telaAcesa) {
   },
   {
     type: 'quote',
-    content: 'seguida pelo nome da função e um conjunto de parênteses.',
+    content: 'Seguida pelo nome da função e um conjunto de parênteses.',
     picture: 'panda-piscando.jpg',
   },
   {
@@ -247,30 +247,30 @@ se (!mensagem.inclui('script') e telaAcesa) {
   {
     type: 'alert',
     content:
-      'O nome da função pode ser qualquer coisa, mas é ideal que seja algo relacionado ao o que ela faz, né?',
+      'O nome da função pode ser qualquer coisa, mas o ideal é que seja algo relacionado ao que ela faz, né?',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'alert',
-    content: 'Uma boa prática é começar o nome da função com um verbo no imperativo 😁.',
+    content: 'Uma boa prática é começar o nome da função com um verbo no infinitivo 😁.',
     picture: 'panda-pulando-de-alegria.jpg',
   },
   {
     type: 'quote',
     content:
-      'Por fim, é só colocar todo o bloco de código que a funcão executará entre suas chaves.',
+      'Por fim, é só colocar todo o bloco de código que a função executará entre chaves.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'code',
-    content: `funcao useRadar() {
+    content: `funcao usarRadar() {
   var mensagem = 'Mande suas coordenadas, por favor'
 
   var sensores = [falso, falso, falso]
   var resolucao = 10
   var telaAcesa = verdadeiro
 
-  para (var i = 0i < sensores.tamanho() i++) {
+  para (var i = 0; i < sensores.tamanho(); i++) {
       sensores[i] = verdadeiro
   }
 
@@ -289,18 +289,18 @@ se (!mensagem.inclui('script') e telaAcesa) {
   {
     type: 'default',
     content:
-      'Isso porque não falamos para a função `useRadar()` executar o seu bloco de código.',
+      'Isso é porque não dissemos para a função `usarRadar()` executar o seu bloco de código.',
     picture: 'panda-rindo-deitado.jpg',
   },
   {
     type: 'default',
     content:
-      'Para fazer isso, devemos fazer o que chamamos de "chamar uma função", que é escrever o nome dela depois que a criamos.',
+      'Para fazer isso, devemos "chamar a função", o que consiste em escrever o nome dela depois de criá-la.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'code',
-    content: `funcao useRadar() {
+    content: `funcao usarRadar() {
   var mensagem = 'Mande suas coordenadas, por favor'
 
   var sensores = [falso, falso, falso]
@@ -318,7 +318,7 @@ se (!mensagem.inclui('script') e telaAcesa) {
   }
 }
 
-useRadar()
+usarRadar()
 // Resultado: Mande suas coordenadas, por favor`,
     isRunnable: true,
   },
@@ -330,7 +330,7 @@ useRadar()
   {
     type: 'alert',
     content:
-      'Cuidado: funções também tem o seu próprio escopo, o que quer dizer que variáveis criadas dentro de uma função não podem ser acessadas de fora dela.',
+      'Cuidado: funções também têm seu próprio escopo, o que quer dizer que variáveis criadas dentro de uma função não podem ser acessadas de fora dela.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
@@ -371,26 +371,26 @@ escreva(minhaVariavel[0])
   },
   {
     type: 'code',
-    content: `funcao mostreMensagem() {
+    content: `funcao mostrarMensagem() {
 
 }
 
-mostreMensagem("Olá, mundo!")`,
+mostrarMensagem("Olá, mundo!")`,
     isRunnable: false,
   },
   {
     type: 'default',
     content:
-      'Para usar esse "Olá, mundo!" dentro da função "mostreMensagem()", devemos criar uma variável no bloco da função.',
+      'Para usar o "Olá, mundo!" dentro da função `mostrarMensagem()`, devemos declarar uma variável em seus parâmetros.',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'code',
-    content: `funcao mostreMensagem(mensagem) {
+    content: `funcao mostrarMensagem(mensagem) {
   escreva(mensagem)
 }
 
-mostreMensagem("Olá, mundo!")
+mostrarMensagem("Olá, mundo!")
 
 // Resultado: Olá, mundo!
 `,
@@ -399,17 +399,17 @@ mostreMensagem("Olá, mundo!")
   {
     type: 'default',
     content:
-      'Essa variável entre parênteses se chama *parâmetro de função* e elas pode ter qualquer nome de variável válida, e caso você queira passar mais valores para a função, você terá que criar mais parâmetros.',
+      'Essa variável entre parênteses é chamada de *parâmetro de função*. Ela pode ter qualquer nome de variável válido e, caso queira passar mais valores, você terá que criar mais parâmetros.',
     picture: 'panda-piscando.jpg',
   },
   {
     type: 'code',
-    content: `funcao some(numero1, numero2, numero3) {
+    content: `funcao somar(numero1, numero2, numero3) {
   var soma = numero1 + numero2 + numero3
   escreva(soma)
 }
 
-some(1, 2, 3)
+somar(1, 2, 3)
 // Resultado: 6
 `,
     isRunnable: true,
@@ -417,24 +417,24 @@ some(1, 2, 3)
   {
     type: 'default',
     content:
-      'É por meio dos parâmetros é que podemos criar resultados dinâmicos com uma mesma função.',
+      'É por meio dos parâmetros que podemos criar resultados dinâmicos com uma mesma função.',
     picture: 'panda-piscando.jpg',
   },
   {
     type: 'default',
     content:
-      'No nosso caso, podemos passar a mensagem que queremos como parâmetro da função *useRadar()*',
+      'No nosso caso, podemos passar a mensagem que queremos como parâmetro da função `usarRadar()`',
     picture: 'panda-segurando-bambu-de-pe.jpg',
   },
   {
     type: 'default',
     content:
-      'Assim, a função irá fazer todo o trabalho de configurar o radar usando qualquer tipo de mensagem, seja de resposta ou de envio, veja:',
+      'Assim, a função fará todo o trabalho de configurar o radar, usando qualquer tipo de mensagem, seja de resposta ou de envio. Veja:',
     picture: 'panda-sorrindo.jpg',
   },
   {
     type: 'code',
-    content: `funcao useRadar(mensagem) {
+    content: `funcao usarRadar(mensagem) {
   var sensores = [falso, falso, falso]
   var resolucao = 10
   var telaAcesa = verdadeiro
@@ -450,14 +450,14 @@ some(1, 2, 3)
   }
 }
 
-useRadar("Ok, vou procurar")
-useRadar("Tudo bem, vou estar te esperando")
-useRadar("Minhas coordenadas são: x:42y:84")
-useRadar("Muito obrigado")
+usarRadar("Ok, vou procurar")
+usarRadar("Tudo bem, estarei te esperando")
+usarRadar("Minhas coordenadas são: x:42y:84")
+usarRadar("Muito obrigado")
 
 // Resultado:
 // Ok, vou procurar
-// Tudo bem, vou estar te esperando
+// Tudo bem, estarei te esperando
 // Minhas coordenadas são: x:42y:84
 // Muito obrigado`,
     isRunnable: true,
@@ -465,7 +465,7 @@ useRadar("Muito obrigado")
   {
     type: 'default',
     content:
-      'Viu só, enviamos e recebemos várias mensagens diferentes, e precisamos escrever o código de configuração do radar apenas uma vez 😆.',
+      'Viu só? Enviamos e recebemos várias mensagens diferentes e precisamos escrever o código de configuração do radar apenas uma vez 😆.',
     picture: 'panda-deslumbrado.jpg',
   },
   {
@@ -475,7 +475,8 @@ useRadar("Muito obrigado")
   },
   {
     type: 'default',
-    content: 'Mas voltando... Agora vamos em direção a essa pessoa desconhecida.',
+    content:
+      'Mas, voltando ao que interessa... Vamos em direção a essa pessoa desconhecida.',
     picture: 'panda-sorrindo-sentado.jpg',
   },
 ]
