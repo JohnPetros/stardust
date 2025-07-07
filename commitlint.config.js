@@ -20,6 +20,7 @@ module.exports = {
         '📚 docs',
         '🐛 fix',
         '♻️ refactor',
+        '🧪 test',
         '⚙️ config',
         '📦 deps',
         '🎴 assets',
@@ -35,8 +36,6 @@ module.exports = {
         '🐳 docker',
       ],
     ],
-
-    'type-case': [2, 'always', 'lower-case'],
 
     'type-empty': [2, 'never'],
 

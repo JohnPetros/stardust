@@ -65,6 +65,7 @@ Exemplos:
 | Documentação                     | docs      | 📚    |
 | Correção de bug                  | fix       | 🐛    |
 | Refatoração de código            | refactor  | ♻️    |
+| Teste automatizado               | test      | 🧪    |
 | Configuração/infraestrutura      | config    | ⚙️    |
 | Dependências                     | deps      | 📦    |
 | Arquivos estáticos               | assets    | 🎴    |
