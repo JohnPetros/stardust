@@ -45,6 +45,35 @@ export class SupabaseRankersRepository
     return rankers
   }
 
+  async findAllByTierOrderedByXp(tierId: Id): Promise<RankingUser[]> {
+    const { data, error } = await this.supabase
+      .from('users')
+      .select('id, name, slug, tier_id, xp:weekly_xp, avatar:avatars(name, image)')
+      .eq('tier_id', tierId.value)
+      .order('weekly_xp', { ascending: false })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+
+    const rankers = data.map((ranker, index) =>
+      RankingUser.create({
+        id: ranker.id,
+        name: ranker.name ?? '',
+        slug: ranker.slug ?? '',
+        avatar: {
+          image: ranker.avatar?.image ?? '',
+          name: ranker.avatar?.name ?? '',
+        },
+        tierId: ranker.tier_id ?? '',
+        xp: ranker.xp,
+        position: index + 1,
+      }),
+    )
+
+    return rankers
+  }
+
   async addWinners(rankers: RankingUser[], tierId: Id): Promise<void> {
     const { error } = await this.supabase.from('ranking_users').insert(
       // @ts-ignore

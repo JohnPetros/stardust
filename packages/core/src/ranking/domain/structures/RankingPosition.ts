@@ -1,4 +1,4 @@
-import { Integer, OrdinalNumber } from '../../../global/domain/structures'
+import { Integer, Logical, OrdinalNumber } from '../../../global/domain/structures'
 import { RANKING } from '../constants'
 
 export class RankingPosition {
@@ -19,24 +19,28 @@ export class RankingPosition {
     return this.rewardMultiplicator.multiply(baseReward).plus(rankingReward)
   }
 
-  isInDangerArea(lastPositionsOffset: number): boolean {
-    return this.position.value > lastPositionsOffset
+  isInDangerArea(lastPositionsOffset: number): Logical {
+    return Logical.create(this.position.value > lastPositionsOffset)
   }
 
-  isLosersPositionOffset(losersPositionsOffset: number): boolean {
-    return this.position.value === losersPositionsOffset
+  isLosersPositionOffset(losersPositionsOffset: number): Logical {
+    return Logical.create(this.position.value === losersPositionsOffset)
   }
 
-  get isInPodiumArea(): boolean {
-    return this.position.value <= 3
+  get isInPodiumArea(): Logical {
+    return Logical.create(this.position.value <= 3)
   }
 
-  get isInWinningArea(): boolean {
-    return this.position.value <= 5
+  get isInWinningArea(): Logical {
+    return Logical.create(this.position.value <= 5)
   }
 
   get isWinnersPositionOffset() {
-    return this.position.value === 5
+    return Logical.create(this.position.value === 5)
+  }
+
+  get value(): number {
+    return this.position.value
   }
 
   private get rewardMultiplicator() {
