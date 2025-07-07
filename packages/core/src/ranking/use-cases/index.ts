@@ -1,5 +1,4 @@
-export { GetFirstTierIdUseCase } from './GetFirstTierIdUseCase'
 export { GetLastWeekRankingWinnersUseCase } from './GetLastWeekRankingWinnersUseCase'
-export { UpdateRankingsUseCase } from './UpdateRankingsUseCase'
+export { GetRankingUseCase } from './GetRankingUseCase'
 export { ReachFirstTierUseCase } from './ReachFirstTierUseCase'
-export { _UpdateRankingsUseCase } from './_UpdateRankingsUseCase'
+export { UpdateRankingsUseCase } from './UpdateRankingsUseCase'
