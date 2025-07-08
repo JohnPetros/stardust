@@ -3,7 +3,7 @@ import type {
   RankersRepository,
   TiersRepository,
 } from '@stardust/core/ranking/interfaces'
-import { _UpdateRankingsUseCase } from '@stardust/core/ranking/use-cases'
+import { UpdateRankingsUseCase } from '@stardust/core/ranking/use-cases'
 
 export class UpdateRankingsJob implements Job {
   static readonly KEY = 'ranking/update.rankings.job'
@@ -16,11 +16,11 @@ export class UpdateRankingsJob implements Job {
   ) {}
 
   async handle(amqp: Amqp) {
-    const useCase = new _UpdateRankingsUseCase(
+    const useCase = new UpdateRankingsUseCase(
       this.tiersRepository,
       this.rankersRepository,
       this.eventBroker,
     )
-    await amqp.run(async () => useCase.execute(), _UpdateRankingsUseCase.name)
+    await amqp.run(async () => useCase.execute(), UpdateRankingsUseCase.name)
   }
 }

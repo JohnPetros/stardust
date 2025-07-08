@@ -6,7 +6,6 @@ import { Tier } from '@stardust/core/ranking/entities'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useAudioContext } from '@/ui/global/hooks/useAudioContext'
-import { useGetLastWeekRankingWinnersAction } from './useGetLastWeekRankingWinnersAction'
 import { useRankingContext } from '@/ui/ranking/contexts/RankingContext'
 
 type UseRankingResultProps = {
@@ -27,7 +26,6 @@ export function useRankingResult({
   const { user, updateUser } = useAuthContext()
   const { playAudio } = useAudioContext()
   const { userTier } = useRankingContext()
-  const { getLastWeekRankingWinners } = useGetLastWeekRankingWinnersAction()
 
   async function handleWRankingResultButtonClick() {
     if (!user || !lastWeekTier || !userTier) return
@@ -78,18 +76,18 @@ export function useRankingResult({
     async function setRankingResult() {
       if (!user || !isLoading) return
 
-      const { isUserLoser, lastWeekTier, lastWeekRankingWinners } =
-        await getLastWeekRankingWinners()
+      // const { isUserLoser, lastWeekTier, lastWeekRankingWinners } =
+      //   await getLastWeekRankingWinners()
 
-      setLastWeekRankingPodium(Podium.create(lastWeekRankingWinners))
-      setLastWeekTier(Tier.create(lastWeekTier))
-      setIsUserLoser(isUserLoser)
-      playAudio('earning.wav')
-      setIsloading(false)
+      // setLastWeekRankingPodium(Podium.create(lastWeekRankingWinners))
+      // setLastWeekTier(Tier.create(lastWeekTier))
+      // setIsUserLoser(isUserLoser)
+      // playAudio('earning.wav')
+      // setIsloading(false)
     }
 
     setRankingResult()
-  }, [user, isLoading, getLastWeekRankingWinners, playAudio])
+  }, [user, isLoading, playAudio])
 
   return {
     lastWeekRankingPodium,

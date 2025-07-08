@@ -5,15 +5,12 @@ import type { ZodSchema } from 'zod'
 
 import type { Http, HttpMethod, HttpSchema } from '@stardust/core/global/interfaces'
 import { type PaginationResponse, RestResponse } from '@stardust/core/global/responses'
-import { Id } from '@stardust/core/global/structures'
 import { AppError } from '@stardust/core/global/errors'
 import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 import { CLIENT_ENV } from '@/constants'
 import type { NextParams } from '@/rpc/next/types'
 import { cookieActions } from '@/rpc/next-safe-action'
-import { NextServerRestClient } from './NextServerRestClient'
-import { AuthService, ProfileService } from '../services'
 
 type Cookie = {
   key: string

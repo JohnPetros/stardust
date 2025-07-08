@@ -1,1 +1,0 @@
-export { GetLastWeekRankingWinnersAction } from './GetLastWeekRankingWinnersAction'
