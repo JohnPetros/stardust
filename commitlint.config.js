@@ -8,9 +8,9 @@ module.exports = {
       'always',
       [
         '🌐 domain',
-        '📶 api',
+        '📶 rest',
         '🖥️ ui',
-        '💾 database',
+        '💾 db',
         '🎞️ queue',
         '🧰 provision',
         '📟 server',
@@ -20,6 +20,7 @@ module.exports = {
         '📚 docs',
         '🐛 fix',
         '♻️ refactor',
+        '🧪 test',
         '⚙️ config',
         '📦 deps',
         '🎴 assets',
@@ -36,8 +37,6 @@ module.exports = {
       ],
     ],
 
-    'type-case': [2, 'always', 'lower-case'],
-
     'type-empty': [2, 'never'],
 
     'header-max-length': [2, 'always', 100],
@@ -45,8 +44,5 @@ module.exports = {
     'subject-empty': [2, 'never'],
 
     'subject-full-stop': [2, 'never', '.'],
-
-    'subject-case': [2, 'always', 'lower-case'],
-
   },
 };

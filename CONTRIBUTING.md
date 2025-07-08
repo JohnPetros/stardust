@@ -53,9 +53,9 @@ Exemplos:
 | Tipo de commit                   | Prefixo   | Emoji |
 | :------------------------------- | :-------- | :---- |
 | Camada de domínio                | domain    | 🌐    |
-| Camada de API REST               | api       | 📶    |
+| Camada de API REST               | rest      | 📶    |
 | Camada de UI                     | ui        | 🖥️    |
-| Camada de banco de dados         | database  | 💾    |
+| Camada de banco de dados         | db        | 💾    |
 | Camada de fila/mensageria        | queue     | 🎞️    |
 | Camada de provisão               | provision | 🧰    |
 | Camada de BFF                    | server    | 📟    |
@@ -65,6 +65,7 @@ Exemplos:
 | Documentação                     | docs      | 📚    |
 | Correção de bug                  | fix       | 🐛    |
 | Refatoração de código            | refactor  | ♻️    |
+| Teste automatizado               | test      | 🧪    |
 | Configuração/infraestrutura      | config    | ⚙️    |
 | Dependências                     | deps      | 📦    |
 | Arquivos estáticos               | assets    | 🎴    |

@@ -283,22 +283,21 @@ export class User extends Entity<UserProps> {
   }
 
   get isRankingWinner(): Logical {
-    if (!this.props.lastWeekRankingPosition) return Logical.create(false)
+    if (!this.props.lastWeekRankingPosition) return Logical.createAsFalse()
 
-    return Logical.create(this.props.lastWeekRankingPosition.isInWinningArea)
+    return this.props.lastWeekRankingPosition.isInWinningArea
   }
 
-  get isTopRankingWinner(): boolean {
-    if (!this.props.lastWeekRankingPosition) return false
+  get isTopRankingWinner(): Logical {
+    if (!this.props.lastWeekRankingPosition) return Logical.createAsFalse()
 
     return this.props.lastWeekRankingPosition.isInPodiumArea
   }
 
-  get hasNextTier(): boolean {
-    if (!this.props.lastWeekRankingPosition) return false
-    return (
-      this.tier.position.number.value !==
-      this.props.lastWeekRankingPosition.position.number.value
+  get hasNextTier(): Logical {
+    if (!this.props.lastWeekRankingPosition) return Logical.createAsFalse()
+    return this.tier.position.number.isDifferentFrom(
+      this.props.lastWeekRankingPosition.position.number,
     )
   }
 

@@ -49,4 +49,8 @@ export class Integer {
   isLessOrEqualTo(integer: Integer) {
     return Logical.create(this.value <= integer.value)
   }
+
+  isDifferentFrom(integer: Integer) {
+    return Logical.create(this.value !== integer.value)
+  }
 }

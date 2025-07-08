@@ -1,5 +1,5 @@
 import type { TiersRepository } from '@stardust/core/ranking/interfaces'
-import type { OrdinalNumber } from '@stardust/core/global/structures'
+import type { Id, OrdinalNumber } from '@stardust/core/global/structures'
 import type { Tier } from '@stardust/core/ranking/entities'
 
 import { SupabaseRepository } from '../SupabaseRepository'
@@ -10,6 +10,19 @@ export class SupabaseTiersRepository
   extends SupabaseRepository
   implements TiersRepository
 {
+  async findById(id: Id): Promise<Tier | null> {
+    const { data, error } = await this.supabase
+      .from('tiers')
+      .select('*')
+      .eq('id', id.value)
+      .single()
+
+    if (error) {
+      return this.handleQueryPostgresError(error)
+    }
+
+    return SupabaseTierMapper.toEntity(data)
+  }
   async findAll(): Promise<Tier[]> {
     const { data, error } = await this.supabase
       .from('tiers')
