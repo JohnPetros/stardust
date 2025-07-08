@@ -65,6 +65,14 @@ Content-Type: application/json
   "refreshToken": "refreshToken"
 }
 
+### Refresh session
+POST {{URL}}/refresh-session
+Content-Type: application/json
+
+{
+  "refreshToken": "xugtmelpndgf"
+}
+
 ### Fetch account
 GET {{URL}}/account
 Authorization: Bearer {{JWT}}

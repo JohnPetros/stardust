@@ -18,16 +18,18 @@ import {
   FetchSessionController,
   ConfirmEmailController,
   ResendSignUpEmailController,
+  RefreshSessionController,
 } from '@/rest/controllers/auth'
 import { SupabaseAuthService } from '@/rest/services'
 import { InngestEventBroker } from '@/queue/inngest/InngestEventBroker'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
+import { stringSchema } from '@stardust/validation'
 
 export class AuthRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/auth')
 
-  private signInRoute(): void {
+  private registerSignInRoute(): void {
     this.router.post(
       '/sign-in',
       zValidator(
@@ -47,7 +49,7 @@ export class AuthRouter extends HonoRouter {
     )
   }
 
-  private signUpRoute(): void {
+  private registerSignUpRoute(): void {
     this.router.post(
       '/sign-up',
       zValidator(
@@ -69,7 +71,7 @@ export class AuthRouter extends HonoRouter {
     )
   }
 
-  private signOutRoute(): void {
+  private registerSignOutRoute(): void {
     this.router.delete('/sign-out', async (context) => {
       const http = new HonoHttp(context)
       const supabase = http.getSupabase()
@@ -80,7 +82,7 @@ export class AuthRouter extends HonoRouter {
     })
   }
 
-  private resendSignUpEmailRoute(): void {
+  private registerResendSignUpEmailRoute(): void {
     this.router.post(
       '/resend-email/sign-up',
       zValidator(
@@ -100,7 +102,27 @@ export class AuthRouter extends HonoRouter {
     )
   }
 
-  private requestPasswordResetRoute(): void {
+  private registerRefreshSessionRoute(): void {
+    this.router.post(
+      '/refresh-session',
+      zValidator(
+        'json',
+        z.object({
+          refreshToken: stringSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const supabase = http.getSupabase()
+        const service = new SupabaseAuthService(supabase)
+        const controller = new RefreshSessionController(service)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private registerRequestPasswordResetRoute(): void {
     this.router.post(
       '/request-password-reset',
       zValidator(
@@ -120,7 +142,7 @@ export class AuthRouter extends HonoRouter {
     )
   }
 
-  private confirmEmailRoute(): void {
+  private registerConfirmEmailRoute(): void {
     this.router.post(
       '/confirm-email',
       zValidator(
@@ -140,7 +162,7 @@ export class AuthRouter extends HonoRouter {
     )
   }
 
-  private confirmPasswordResetRoute(): void {
+  private registerConfirmPasswordResetRoute(): void {
     this.router.post(
       '/confirm-password-reset',
       zValidator(
@@ -160,7 +182,7 @@ export class AuthRouter extends HonoRouter {
     )
   }
 
-  private resetPasswordRoute(): void {
+  private registerResetPasswordRoute(): void {
     this.router.patch(
       '/reset-password',
       zValidator(
@@ -182,7 +204,7 @@ export class AuthRouter extends HonoRouter {
     )
   }
 
-  private fetchAccountRoute(): void {
+  private registerFetchAccountRoute(): void {
     this.router.get('/account', async (context) => {
       const http = new HonoHttp(context)
       const supabase = http.getSupabase()
@@ -194,15 +216,16 @@ export class AuthRouter extends HonoRouter {
   }
 
   registerRoutes(): Hono {
-    this.signInRoute()
-    this.signUpRoute()
-    this.signOutRoute()
-    this.resendSignUpEmailRoute()
-    this.requestPasswordResetRoute()
-    this.confirmEmailRoute()
-    this.confirmPasswordResetRoute()
-    this.resetPasswordRoute()
-    this.fetchAccountRoute()
+    this.registerSignInRoute()
+    this.registerSignUpRoute()
+    this.registerSignOutRoute()
+    this.registerResendSignUpEmailRoute()
+    this.registerRefreshSessionRoute()
+    this.registerRequestPasswordResetRoute()
+    this.registerConfirmEmailRoute()
+    this.registerConfirmPasswordResetRoute()
+    this.registerResetPasswordRoute()
+    this.registerFetchAccountRoute()
     return this.router
   }
 }
