@@ -8,3 +8,4 @@ export { ConfirmPasswordResetController } from './ConfirmPasswordResetController
 export { FetchSessionController } from './FetchSessionController'
 export { VerifyAuthenticationController } from './VerifyAuthenticationController'
 export { ResendSignUpEmailController } from './ResendSignUpEmailController'
+export { RefreshSessionController } from './RefreshSessionController'
