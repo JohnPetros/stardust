@@ -19,7 +19,7 @@ export class RankersFaker {
         name: faker.person.firstName(),
       },
       tierId: faker.string.uuid(),
-      position: faker.number.int({ min: 1, max: 20 }),
+      position: baseDto?.position ?? position,
       ...baseDto,
     }
   }
