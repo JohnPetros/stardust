@@ -19,4 +19,5 @@ export interface AuthService {
   ): Promise<RestResponse>
   confirmEmail(token: Text): Promise<RestResponse<SessionDto>>
   confirmPasswordReset(token: Text): Promise<RestResponse<SessionDto>>
+  refreshSession(refreshToken: Text): Promise<RestResponse<SessionDto>>
 }

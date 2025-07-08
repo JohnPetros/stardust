@@ -53,6 +53,12 @@ export const AuthService = (restClient: RestClient): IAuthService => {
       })
     },
 
+    async refreshSession(refreshToken: Text) {
+      return await restClient.post('/auth/refresh-session', {
+        refreshToken: refreshToken.value,
+      })
+    },
+
     async confirmEmail(token: Text) {
       return await restClient.post('/auth/confirm-email', { token: token.value })
     },

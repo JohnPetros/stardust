@@ -50,7 +50,7 @@ export class SupabaseAuthService implements AuthService {
       durationInSeconds: data.session.expires_in,
     }
 
-    return new RestResponse({ body: session })
+    return new RestResponse({ body: session, statusCode: HTTP_STATUS_CODE.created })
   }
 
   async signUp(email: Email, password: Password): Promise<RestResponse<AccountDto>> {
@@ -229,7 +229,33 @@ export class SupabaseAuthService implements AuthService {
 
     return new RestResponse({
       body: session,
+      statusCode: HTTP_STATUS_CODE.created,
     })
+  }
+
+  async refreshSession(refreshToken: Text): Promise<RestResponse<SessionDto>> {
+    const { data, error } = await this.supabase.auth.refreshSession({
+      refresh_token: refreshToken.value,
+    })
+
+    if (error)
+      return this.supabaseAuthError<SessionDto>(
+        error,
+        'Erro inesperado ao atualizar token de acesso',
+      )
+
+    const session: SessionDto = {
+      account: {
+        id: data?.user?.id ?? '',
+        email: data?.user?.email ?? '',
+        isAuthenticated: true,
+      },
+      accessToken: data?.session?.access_token ?? '',
+      refreshToken: data?.session?.refresh_token ?? '',
+      durationInSeconds: data?.session?.expires_in ?? 0,
+    }
+
+    return new RestResponse({ body: session, statusCode: HTTP_STATUS_CODE.created })
   }
 
   async fetchAccount(): Promise<RestResponse<AccountDto>> {
