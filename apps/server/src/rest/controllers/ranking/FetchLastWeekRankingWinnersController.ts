@@ -18,13 +18,13 @@ export class FetchLastWeekRankingWinnersController implements Controller<Schema>
   ) {}
 
   async handle(http: Http<Schema>) {
+    const { tierId } = http.getRouteParams()
     const useCase = new GetLastWeekRankingWinnersUseCase(
       this.tiersRepository,
       this.rankersRepository,
     )
     const response = await useCase.execute({
-      lastWeekTierPosition: 1,
-      currentWeekTierPosition: 2,
+      currentWeekTierId: tierId,
     })
     return http.send(response.lastWeekRankingWinners)
   }

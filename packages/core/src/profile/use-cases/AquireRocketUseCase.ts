@@ -23,7 +23,7 @@ export class AquireRocketUseCase implements UseCase<Request, Response> {
     const user = await this.repository.findById(Id.create(userId))
     if (!user) throw new UserNotFoundError()
 
-    let entity = undefined
+    let entity: { name: string; image: string } | undefined
     if (rocketName && rocketImage) {
       entity = { name: rocketName, image: rocketImage }
     }

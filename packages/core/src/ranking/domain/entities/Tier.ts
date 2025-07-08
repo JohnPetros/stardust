@@ -29,31 +29,31 @@ export class Tier extends Entity<TierProps> {
     )
   }
 
-  get isFirstTier() {
+  get isFirstTier(): Logical {
     return Logical.create(this.position.value === 0)
   }
 
-  get isLastTier() {
+  get isLastTier(): Logical {
     return Logical.create(this.position.value === TIERS_COUNT)
   }
 
-  get hasNextTier() {
+  get hasNextTier(): Logical {
     return Logical.create(this.position.value <= TIERS_COUNT)
   }
 
-  get position() {
+  get position(): OrdinalNumber {
     return this.props.position
   }
 
-  get name() {
+  get name(): Name {
     return this.props.name
   }
 
-  get image() {
+  get image(): Image {
     return this.props.image
   }
 
-  get reward() {
+  get reward(): Integer {
     return this.props.reward
   }
 

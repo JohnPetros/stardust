@@ -29,6 +29,8 @@ export class OrdinalNumber {
   }
 
   decrement(): OrdinalNumber {
+    if (this.number.value === 1) return this
+
     return new OrdinalNumber({
       key: this.key,
       number: this.number.decrement(),

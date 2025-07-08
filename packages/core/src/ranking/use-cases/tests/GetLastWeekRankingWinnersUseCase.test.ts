@@ -5,7 +5,7 @@ import { GetLastWeekRankingWinnersUseCase } from '../GetLastWeekRankingWinnersUs
 import { TierNotFoundError } from '#ranking/domain/errors/TierNotFoundError'
 import { TiersFaker } from '#ranking/domain/entities/fakers/TiersFaker'
 import { RankersFaker } from '#ranking/domain/entities/fakers/RankersFaker'
-import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
+import { Id } from '#global/domain/structures/Id'
 
 describe('Get Last Week Ranking Winners Use Case', () => {
   let tiersRepository: Mock<TiersRepository>
@@ -15,80 +15,79 @@ describe('Get Last Week Ranking Winners Use Case', () => {
   beforeEach(() => {
     tiersRepository = mock<TiersRepository>()
     rankersRepository = mock<RankersRepository>()
+    tiersRepository.findById.mockImplementation()
     tiersRepository.findByPosition.mockImplementation()
     rankersRepository.findAllByTier.mockImplementation()
     useCase = new GetLastWeekRankingWinnersUseCase(tiersRepository, rankersRepository)
   })
 
   it('should throw an error if tier is not found', () => {
-    const lastWeekTierPosition = 1
-    const currentWeekTierPosition = 2
     tiersRepository.findById.mockResolvedValue(null)
 
     expect(
       useCase.execute({
-        lastWeekTierPosition,
-        currentWeekTierPosition,
+        currentWeekTierId: Id.create().value,
       }),
     ).rejects.toThrow(TierNotFoundError)
   })
 
   it('should return the last week ranking winners', async () => {
-    const lastWeekTier = TiersFaker.fake()
+    const currentWeekTier = TiersFaker.fake({ position: 2 })
+    const lastWeekTier = TiersFaker.fake({ position: 1 })
     const rankers = RankersFaker.fakeMany()
-    const currentWeekTierPosition = 2
+    tiersRepository.findById.mockResolvedValue(currentWeekTier)
     tiersRepository.findByPosition.mockResolvedValue(lastWeekTier)
     rankersRepository.findAllByTier.mockResolvedValue(rankers)
 
     const response = await useCase.execute({
-      lastWeekTierPosition: lastWeekTier.position.value,
-      currentWeekTierPosition,
+      currentWeekTierId: currentWeekTier.id.value,
     })
 
-    expect(tiersRepository.findByPosition).toHaveBeenCalledWith(
-      OrdinalNumber.create(lastWeekTier.position.value),
-    )
+    expect(tiersRepository.findByPosition).toHaveBeenCalledWith(lastWeekTier.position)
     expect(rankersRepository.findAllByTier).toHaveBeenCalledWith(lastWeekTier.id)
     expect(response.lastWeekTier).toEqual(lastWeekTier.dto)
     expect(response.lastWeekRankingWinners).toEqual(rankers.map((ranker) => ranker.dto))
   })
 
-  it('should return the user as non loser if the current week tier position is less than the last week tier position', async () => {
+  it('should return the ranker as non loser if the current week tier position is less than the last week tier position', async () => {
+    const currentWeekTier = TiersFaker.fake({ position: 2 })
     const lastWeekTier = TiersFaker.fake({ position: 1 })
+    tiersRepository.findById.mockResolvedValue(currentWeekTier)
     tiersRepository.findByPosition.mockResolvedValue(lastWeekTier)
     rankersRepository.findAllByTier.mockResolvedValue(RankersFaker.fakeMany())
 
     const response = await useCase.execute({
-      lastWeekTierPosition: lastWeekTier.position.value,
-      currentWeekTierPosition: 2,
+      currentWeekTierId: currentWeekTier.id.value,
     })
 
-    expect(response.isUserLoser).toBeFalsy()
+    expect(response.isRankerLoser).toBeFalsy()
   })
 
-  it('should return the user as non loser if the current week tier position is equal to the last week tier position', async () => {
+  it('should return the ranker as non loser if the current week tier position is equal to the last week tier position', async () => {
+    const currentWeekTier = TiersFaker.fake({ position: 1 })
     const lastWeekTier = TiersFaker.fake({ position: 1 })
+    tiersRepository.findById.mockResolvedValue(currentWeekTier)
     tiersRepository.findByPosition.mockResolvedValue(lastWeekTier)
     rankersRepository.findAllByTier.mockResolvedValue(RankersFaker.fakeMany())
 
     const response = await useCase.execute({
-      lastWeekTierPosition: lastWeekTier.position.value,
-      currentWeekTierPosition: 1,
+      currentWeekTierId: currentWeekTier.id.value,
     })
 
-    expect(response.isUserLoser).toBeFalsy()
+    expect(response.isRankerLoser).toBeFalsy()
   })
 
-  it('should return the user as loser if the current week tier position is greater than the last week tier position', async () => {
+  it('should return the ranker as loser if the current week tier position is less than the last week tier position', async () => {
+    const currentWeekTier = TiersFaker.fake({ position: 1 })
     const lastWeekTier = TiersFaker.fake({ position: 2 })
+    tiersRepository.findById.mockResolvedValue(currentWeekTier)
     tiersRepository.findByPosition.mockResolvedValue(lastWeekTier)
     rankersRepository.findAllByTier.mockResolvedValue(RankersFaker.fakeMany())
 
     const response = await useCase.execute({
-      lastWeekTierPosition: lastWeekTier.position.value,
-      currentWeekTierPosition: 1,
+      currentWeekTierId: currentWeekTier.id.value,
     })
 
-    expect(response.isUserLoser).toBeTruthy()
+    expect(response.isRankerLoser).toBeTruthy()
   })
 })

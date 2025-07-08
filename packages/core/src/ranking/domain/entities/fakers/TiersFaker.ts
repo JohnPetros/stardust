@@ -13,8 +13,8 @@ export class TiersFaker {
       id: faker.string.uuid(),
       name: faker.person.firstName(),
       image: `${faker.image.avatar()}.jpg`,
-      position: faker.number.int({ min: 1, max: 100 }),
-      reward: faker.number.int({ max: 100 }),
+      position: faker.number.int({ min: 1, max: 6 }),
+      reward: faker.number.int({ min: 1, max: 100 }),
       ...baseDto,
     }
   }

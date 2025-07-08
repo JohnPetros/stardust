@@ -7,7 +7,7 @@ type Schema = {
   }
 }
 
-export class FetchTiersController implements Controller<Schema> {
+export class FetchAllTiersController implements Controller<Schema> {
   constructor(private readonly repository: TiersRepository) {}
 
   async handle(http: Http<Schema>) {
