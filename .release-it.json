@@ -1,0 +1,45 @@
+{
+  "git": {
+    "commitMessage": "🔖 release: v${version}"
+  },
+  "github": {
+    "release": true
+  },
+  "npm": {
+    "publish": false
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "infile": "CHANGELOG.md",
+      "preset": {
+        "name": "conventionalcommits",
+        "types": [
+          {
+            "type": "✨ use case",
+            "section": "Use Cases"
+          },
+          {
+            "type": "🖥️ ui",
+            "section": "UI Layer"
+          },
+          {
+            "type": "🐛 fix",
+            "section": "Bug Fixes"
+          },
+          {
+            "type": "⚙️ config",
+            "section": "Infra and Config"
+          },
+          {
+            "type": "📚 docs",
+            "section": "Documentation"
+          },
+          {
+            "type": "♻️ refactor",
+            "section": "Refactorings"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -36,47 +36,6 @@
     "prepare": "husky",
     "release": "release-it"
   },
-  "release-it": {
-    "git": {
-      "commitMessage": "🔖 release: v${version}"
-    },
-    "github": {
-      "release": true
-    },
-    "npm": {
-      "publish": false
-    },
-    "plugins": {
-      "@release-it/conventional-changelog": {
-        "infile": "CHANGELOG.md",
-        "preset": {
-          "name": "conventionalcommits",
-          "types": [
-            {
-              "type": "✨ use case",
-              "section": "Use Cases"
-            },
-            {
-              "type": "🐛 fix",
-              "section": "Bug Fixes"
-            },
-            {
-              "type": "⚙️ config",
-              "section": "Chores"
-            },
-            {
-              "type": "📚 docs",
-              "section": "Documentation"
-            },
-            {
-              "type": "♻️ refactor",
-              "section": "Refactorings"
-            }
-          ]
-        }
-      }
-    }
-  },
   "devDependencies": {
     "@biomejs/biome": "2.0.6",
     "@commitlint/cli": "^19.8.1",
