@@ -12,7 +12,7 @@
     "@release-it/conventional-changelog": {
       "infile": "CHANGELOG.md",
       "preset": {
-        "name": "conventionalcommits"
+        "name": "angular"
       }
     }
   }
