@@ -45,5 +45,8 @@
     "husky": "^9.1.7",
     "release-it": "^19.0.3",
     "turbo": "^2.4.0"
+  },
+  "overrides": {
+    "conventional-changelog-conventionalcommits": "8.0.0"
   }
 }
