@@ -14,7 +14,7 @@ export function trateErro(erro: DeleguaErro) {
 
   if (erro instanceof Error) {
     return new CodeRunnerResponse({
-      error: new CodeRunnerError(erro.message, linhaDoErro), // TODO: erro.linha is not defined
+      error: new CodeRunnerError(erro.message, linhaDoErro),
     })
   }
 
