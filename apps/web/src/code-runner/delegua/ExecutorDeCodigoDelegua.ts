@@ -34,20 +34,22 @@ export const ExecutorDeCodigoDelegua = (): CodeRunnerProvider => {
         funcaoDeSaida,
       )
       const resultadoLexador = lexador.mapear(code.split('\n'), -1)
+      if (resultadoLexador.erros.length) {
+        return trateErro(resultadoLexador.erros[0])
+      }
       const resultadoAvaliacaoSintatica = avaliadorSintatico.analisar(resultadoLexador, 0)
-      const { resultado, erros } = await interpretador.interpretar(
+      if (resultadoAvaliacaoSintatica.erros.length) {
+        return trateErro(resultadoAvaliacaoSintatica.erros[0])
+      }
+      const resultadoInterpretador = await interpretador.interpretar(
         resultadoAvaliacaoSintatica.declaracoes,
         false,
       )
-
-      console.log('resultado', resultado)
-      console.log('erros', erros)
-
-      if (erros.length && erros[0]) {
-        const erro = erros[0]
-        const linhaDoErro = erro.linha ?? 0
-        return trateErro(erro, linhaDoErro)
+      if (resultadoInterpretador.erros.length) {
+        return trateErro(resultadoInterpretador.erros[0])
       }
+
+      const resultado = resultadoInterpretador.resultado
 
       let result = ''
       if (resultado.length) {
