@@ -10,10 +10,7 @@
   },
   "plugins": {
     "@release-it/conventional-changelog": {
-      "infile": "CHANGELOG.md",
-      "gitRawCommitsOpts": {
-        "merges": null
-      }
+      "infile": "CHANGELOG.md"
     }
   }
 }
