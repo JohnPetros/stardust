@@ -1,7 +1,5 @@
 # Changelog
 
-## [0.1.5](https://github.com/stardust/stardust/compare/0.1.4...0.1.5) (2025-07-09)
-
 ## 0.1.3 (2025-07-09)
 
 * ⚙️ config: remove plugins (0db766f9)
