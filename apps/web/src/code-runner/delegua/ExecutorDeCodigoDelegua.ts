@@ -14,6 +14,7 @@ import type { CodeRunnerProvider } from '@stardust/core/global/interfaces'
 import { DELEGUA_REGEX } from './constants'
 import { obtenhaTipo, trateErro } from './utils'
 import { DeleguaInterpretador } from './DeleguaInterpretador'
+import type { DeleguaErro } from './types'
 
 export const ExecutorDeCodigoDelegua = (): CodeRunnerProvider => {
   const lexador = new Lexador()
@@ -35,18 +36,24 @@ export const ExecutorDeCodigoDelegua = (): CodeRunnerProvider => {
       )
       const resultadoLexador = lexador.mapear(code.split('\n'), -1)
       const resultadoAvaliacaoSintatica = avaliadorSintatico.analisar(resultadoLexador, 0)
-      const { resultado, erros } = await interpretador.interpretar(
+      const resultadoInterpretador = await interpretador.interpretar(
         resultadoAvaliacaoSintatica.declaracoes,
         false,
       )
 
-      console.log('resultado', resultado)
+      const erros: DeleguaErro[] = [
+        ...resultadoAvaliacaoSintatica.erros,
+        ...resultadoInterpretador.erros,
+        ...resultadoLexador.erros,
+      ]
+      const resultado = resultadoInterpretador.resultado
+
+      console.log('resultado', resultadoInterpretador)
       console.log('erros', erros)
 
       if (erros.length && erros[0]) {
         const erro = erros[0]
-        const linhaDoErro = erro.linha ?? 0
-        return trateErro(erro, linhaDoErro)
+        return trateErro(erro)
       }
 
       let result = ''

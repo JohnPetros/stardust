@@ -1,14 +1,24 @@
-import type { ErroInterpretador } from '@designliquido/delegua/interfaces/erros/erro-interpretador'
+import type { DeleguaErro } from '../types'
 
 import { CodeRunnerError } from '@stardust/core/global/errors'
 import { CodeRunnerResponse } from '@stardust/core/global/responses'
 
-export function trateErro(erro: ErroInterpretador, linhaDoErro: number) {
-  let mensagemDeErro = String(erro.mensagem)
+export function trateErro(erro: DeleguaErro) {
+  const linhaDoErro = erro.linha ?? 0 // TODO: erro.linha pode ser undefined
 
-  if (erro.erroInterno instanceof Error) {
-    mensagemDeErro = erro.erroInterno.message
+  if ('erroInterno' in erro && erro.erroInterno instanceof Error) {
+    return new CodeRunnerResponse({
+      error: new CodeRunnerError(erro.erroInterno.message, linhaDoErro),
+    })
   }
+
+  if (erro instanceof Error) {
+    return new CodeRunnerResponse({
+      error: new CodeRunnerError(erro.message, linhaDoErro), // TODO: erro.linha is not defined
+    })
+  }
+
+  let mensagemDeErro = String(erro.mensagem)
 
   mensagemDeErro = mensagemDeErro.includes('null') ? 'Código inválido' : mensagemDeErro
 
