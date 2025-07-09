@@ -35,7 +35,13 @@ export const ExecutorDeCodigoDelegua = (): CodeRunnerProvider => {
         funcaoDeSaida,
       )
       const resultadoLexador = lexador.mapear(code.split('\n'), -1)
+      if (resultadoLexador.erros.length) {
+        return trateErro(resultadoLexador.erros[0])
+      }
       const resultadoAvaliacaoSintatica = avaliadorSintatico.analisar(resultadoLexador, 0)
+      if (resultadoAvaliacaoSintatica.erros.length) {
+        return trateErro(resultadoAvaliacaoSintatica.erros[0])
+      }
       const resultadoInterpretador = await interpretador.interpretar(
         resultadoAvaliacaoSintatica.declaracoes,
         false,
