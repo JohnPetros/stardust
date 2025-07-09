@@ -34,19 +34,16 @@
     "test": "turbo test",
     "typecheck": "turbo typecheck",
     "prepare": "husky",
-    "release": "release-it"
+    "release": "release-it && ./scripts/update-changelog.sh",
+    "changelog": "./scripts/update-changelog.sh"
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.6",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
-    "@release-it/conventional-changelog": "^10.0.1",
     "commitlint-config-git-commit-emoji": "^1.0.0",
     "husky": "^9.1.7",
     "release-it": "^19.0.3",
     "turbo": "^2.4.0"
-  },
-  "overrides": {
-    "conventional-changelog-conventionalcommits": "8.0.0"
   }
 }
