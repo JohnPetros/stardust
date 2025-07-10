@@ -80,6 +80,56 @@ Exemplos:
 | Nova release                     | release   | 🔖    |
 | Containers Docker                | docker    | 🐳    |
 
+## Issues
+
+No GitHub, uma Issue (ou "questão", em tradução livre) é uma forma padronizada e eficiente de rastrear tarefas, bugs, melhorias e discussões relacionadas a um projeto de software. Uma issue serve como um item em uma lista de afazeres colaborativa para o repositório.
+
+Nesse sentido, uma issue pode ser criada para:
+- Identificar um bug: O código não está funcionando como esperado em determinada situação.
+- Sugerir uma nova funcionalidade: Você tem uma ideia para adicionar algo útil ao projeto.
+- Pedir uma melhoria: Algo já existe, mas poderia ser mais eficiente ou fácil de usar.
+- Fazer uma pergunta: Você tem uma dúvida sobre o funcionamento de uma parte do código.
+- Discutir um tópico: É preciso conversar com a equipe sobre uma decisão de design ou arquitetura.
+
+### Issue de task
+
+Geralmente, são itens de trabalho que contribuem para o progresso do projeto, podendo ser uma nova funcionalidade ou melhoria/refatoração.
+
+A descrição de uma issue de task deve conter as seções:
+
+#### 📍 Motivação
+Este é o ponto de partida da sua Issue, o "porquê" dela existir. Aqui você deve descrever claramente o problema que está sendo resolvido ou a oportunidade que está sendo aproveitada. Explique o cenário atual, os impactos negativos que ele causa (se for um bug ou uma falha) ou os benefícios que serão gerados com a implementação (se for uma nova funcionalidade ou melhoria). O objetivo é garantir que todos que leiam a Issue compreendam sua relevância e o valor do trabalho a ser realizado, estabelecendo o propósito antes de mergulhar nos detalhes técnicos.
+
+#### 🔍 Detalhes (opcional)
+Este título serve para adicionar qualquer informação extra e contextual que seja relevante e ajude a esclarecer a Issue. Pense em tudo que complementa a motivação e a sugestão de implementação, mas que não se encaixa perfeitamente nas seções anteriores. Isso pode incluir links para documentações, logs de erro, capturas de tela, exemplos específicos, dados de testes, ou qualquer outro recurso que forneça clareza adicional. O objetivo é munir a pessoa que for trabalhar na Issue com todas as informações necessárias para iniciar o trabalho sem dúvidas, evitando idas e vindas desnecessárias.
+
+#### 💡 Sugestão de Implementação
+Nesta seção, o foco é o "como". Trata-se de uma proposta de solução para a motivação apresentada. Aqui, você pode detalhar os passos técnicos ou lógicos sugeridos para resolver o problema ou implementar a funcionalidade. Mencione os componentes do sistema que serão afetados, descreva um fluxo de trabalho esperado ou sugira abordagens. A ideia não é engessar a solução, mas sim oferecer um ponto de partida claro para o desenvolvimento e para as discussões da equipe, reduzindo a ambiguidade e agilizando o processo.
+
+### Issue de bug
+
+Uma Issue de Bug é usada para reportar e rastrear um problema ou defeito no software, onde o sistema se comporta de uma maneira diferente da esperada. O objetivo é descrever o erro de forma clara para que ele possa ser diagnosticado, reproduzido e corrigido pela equipe de desenvolvimento.
+
+#### ✖️ Comportamento atual
+
+Nesta seção, você descreve exatamente o que está acontecendo de errado. Seja o mais preciso possível, detalhando o comportamento inesperado que o sistema apresenta. Inclua mensagens de erro, resultados incorretos ou qualquer anomalia observada. O foco é documentar o estado do sistema quando o bug ocorre.
+
+#### ☑️ Comportamento esperado
+
+Aqui, você explica como o sistema deveria se comportar. Descreva a funcionalidade correta e o resultado que você esperava ver. Isso ajuda a contrastar o que está acontecendo com o que deveria acontecer, deixando claro o objetivo da correção.
+
+#### 📃 Como reproduzir (opcional)
+
+Esta é uma seção crucial para o desenvolvedor. Descreva um passo a passo detalhado de como a equipe pode replicar o bug. Inclua cada clique, cada dado inserido e a ordem exata das ações. Quanto mais fácil for reproduzir o bug, mais rápido ele poderá ser investigado e corrigido. Se for difícil de reproduzir consistentemente, mencione isso.
+
+#### 🎋 Ambiente (opcional)
+
+Forneça informações sobre o ambiente onde o bug foi encontrado. Isso pode incluir o sistema operacional (Windows, macOS, Linux), o navegador (Chrome, Firefox, Safari) e sua versão, a versão do aplicativo, dispositivos específicos, ou qualquer configuração relevante. Dados do ambiente ajudam a identificar se o bug é isolado ou generalizado.
+
+#### 👀 Observação (opcional)
+
+Use esta seção para adicionar qualquer informação extra ou contexto que possa ser útil, mas que não se encaixou nas categorias anteriores. Isso pode incluir screenshots, vídeos do problema, links para logs de erro, informações sobre tentativas de solução, ou notas adicionais que podem ajudar na compreensão do bug.
+
 ## Pull requests
 
 Um pull request é uma proposta para integrar (ou "puxar") mudanças de uma branch para outra, geralmente da sua ramificação de funcionalidade (onde você trabalhou nas suas alterações) para a ramificação principal do projeto (main).
