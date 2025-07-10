@@ -17,7 +17,17 @@ const nextConfig = {
     ],
   },
   swcMinify: true,
-  output: 'standalone'
+  output: 'standalone',
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.optimization.minimizer.forEach((minimizer) => {
+        if (minimizer.options && minimizer.options.terserOptions) {
+          minimizer.options.terserOptions.keep_classnames = true;
+        }
+      });
+    }
+    return config;
+  },
 }
 
 module.exports = nextConfig
