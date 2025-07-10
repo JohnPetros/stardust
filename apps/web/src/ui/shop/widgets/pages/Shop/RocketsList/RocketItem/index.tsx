@@ -41,7 +41,7 @@ export const RocketItem = ({ id, name, image, price }: Props) => {
         price={price}
         isAcquired={user?.hasAcquiredRocket(Id.create(id)).isTrue}
         isBuyable={user?.canAcquire(Integer.create(price)).isTrue}
-        isSelected={user?.isSelectRocket(Id.create(id)).isTrue}
+        isSelected={user?.isRocketSelected(Id.create(id)).isTrue}
         onAcquire={handleRocketAcquire}
       />
     )

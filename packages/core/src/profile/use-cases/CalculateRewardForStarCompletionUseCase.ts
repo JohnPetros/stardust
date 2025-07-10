@@ -47,6 +47,11 @@ export class CalculateRewardForStarCompletionUseCase
       incorrectAnswersCount,
     )
 
+    if (isLastSpaceStar && user.hasCompletedSpace.isFalse) {
+      user.completeSpace()
+      await this.repository.replace(user)
+    }
+
     return {
       newCoins,
       newXp,

@@ -68,6 +68,7 @@ export class SupabaseUserMapper {
         [],
       didBreakStreak: supabaseUser.did_break_streak,
       canSeeRankingResult: supabaseUser.can_see_ranking ?? false,
+      hasCompletedSpace: supabaseUser.has_completed_space,
       lastWeekRankingPosition: supabaseUser.last_week_ranking_position,
       weekStatus: supabaseUser.week_status ?? [],
       createdAt: supabaseUser.created_at ? new Date(supabaseUser.created_at) : new Date(),

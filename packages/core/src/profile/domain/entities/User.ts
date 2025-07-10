@@ -12,6 +12,7 @@ import { TierAggregate } from '../aggregates'
 import { RankingPosition } from '#ranking/domain/structures/index'
 import { Entity } from '#global/domain/abstracts/index'
 import { UserFactory } from '#profile/factories/index'
+import { ShopItemNotAcquiredError } from '#profile/errors/index'
 import type { AchievementMetricValue } from '../types'
 import { type Level, WeekStatus } from '../structures'
 import type { UserDto } from './dtos'
@@ -41,6 +42,7 @@ type UserProps = {
   upvotedSolutionsIds: IdsList
   canSeeRankingResult: Logical
   didBreakStreak: Logical
+  hasCompletedSpace: Logical
   lastWeekRankingPosition: RankingPosition | null
   createdAt: Date
 }
@@ -52,14 +54,16 @@ export class User extends Entity<UserProps> {
 
   unlockAchievement(achievementId: Id): void {
     if (this.props.unlockedAchievementsIds.includes(achievementId).isFalse) {
-      this.props.unlockedAchievementsIds.add(achievementId)
-      this.props.rescuableAchievementsIds.add(achievementId)
+      this.props.unlockedAchievementsIds =
+        this.props.unlockedAchievementsIds.add(achievementId)
+      this.props.rescuableAchievementsIds =
+        this.props.rescuableAchievementsIds.add(achievementId)
     }
   }
 
   unlockStar(starId: Id): void {
     if (this.props.unlockedStarsIds.includes(starId).isFalse) {
-      this.props.unlockedStarsIds.add(starId)
+      this.props.unlockedStarsIds = this.props.unlockedStarsIds.add(starId)
     }
   }
 
@@ -102,9 +106,9 @@ export class User extends Entity<UserProps> {
     }
 
     if (this.canAcquire(rocketPrice).isTrue) {
+      this.props.acquiredRocketsIds = this.props.acquiredRocketsIds.add(rocket.id)
       this.loseCoins(rocketPrice)
       this.selectRocket(rocket)
-      this.props.acquiredRocketsIds = this.props.acquiredRocketsIds.add(rocket.id)
     }
   }
 
@@ -115,9 +119,9 @@ export class User extends Entity<UserProps> {
     }
 
     if (this.canAcquire(avatarPrice).isTrue) {
+      this.props.acquiredAvatarsIds = this.props.acquiredAvatarsIds.add(avatar.id)
       this.loseCoins(avatarPrice)
       this.selectAvatar(avatar)
-      this.props.acquiredAvatarsIds = this.props.acquiredAvatarsIds.add(avatar.id)
     }
   }
 
@@ -157,10 +161,16 @@ export class User extends Entity<UserProps> {
   }
 
   selectRocket(rocket: RocketAggregate): void {
+    if (this.hasAcquiredRocket(rocket.id).isFalse) {
+      throw new ShopItemNotAcquiredError()
+    }
     this.props.rocket = rocket
   }
 
   selectAvatar(avatar: AvatarAggregate): void {
+    if (this.hasAcquiredAvatar(avatar.id).isFalse) {
+      throw new ShopItemNotAcquiredError()
+    }
     this.props.avatar = avatar
   }
 
@@ -204,11 +214,11 @@ export class User extends Entity<UserProps> {
     return this.props.acquiredAvatarsIds.includes(rocketId)
   }
 
-  isSelectRocket(rocketId: Id): Logical {
+  isRocketSelected(rocketId: Id): Logical {
     return Logical.create(rocketId.value === this.rocket.id.value)
   }
 
-  isSelectAvatar(avatarId: Id): Logical {
+  isAvatarSelected(avatarId: Id): Logical {
     return Logical.create(avatarId.value === this.avatar.id.value)
   }
 
@@ -230,7 +240,8 @@ export class User extends Entity<UserProps> {
 
   completeChallenge(challengeId: Id): void {
     if (this.props.completedChallengesIds.includes(challengeId).isFalse) {
-      this.props.completedChallengesIds.add(challengeId)
+      this.props.completedChallengesIds =
+        this.props.completedChallengesIds.add(challengeId)
     }
   }
 
@@ -246,12 +257,16 @@ export class User extends Entity<UserProps> {
     })
   }
 
+  completeSpace(): void {
+    this.props.hasCompletedSpace = this.props.hasCompletedSpace.becomeTrue()
+  }
+
   get canMakeTodayStatusDone(): Logical {
     return Logical.create(this.weekStatus.todayStatus === 'todo')
   }
 
   get hasCompletedSpace(): Logical {
-    return this.props.completedPlanetsIds.count.isEqualTo(Integer.create(8))
+    return this.props.hasCompletedSpace
   }
 
   get unlockedStarsCount(): Integer {

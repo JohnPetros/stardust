@@ -36,7 +36,7 @@ export function AvatarItem({ id, name, image, price }: Props) {
         price={price}
         isAcquired={user.hasAcquiredAvatar(Id.create(id)).isTrue}
         isBuyable={user.canAcquire(Integer.create(price)).isTrue}
-        isSelected={user.isSelectAvatar(Id.create(id)).isTrue}
+        isSelected={user.isAvatarSelected(Id.create(id)).isTrue}
         onAcquire={handleAvatarAcquire}
       />
     )

@@ -1,8 +1,8 @@
 import { Integer } from '#global/domain/structures/Integer'
 import { Level } from '../Level'
 
-describe('Level struct', () => {
-  it('should up number only when the new xp is greater than or equal to the minimum required', () => {
+describe('Level Structure', () => {
+  it('should up number only when the new xp is greater than or equal to the minimum xp required', () => {
     const level = Level.create(1)
 
     let newLevel = level.up(Integer.create(0), Integer.create(10))
@@ -18,11 +18,13 @@ describe('Level struct', () => {
     expect(newLevel.value.number.value).toBe(3)
   })
 
-  it('should indicate that its value was up', () => {
+  it('should indicate its value was up when up', () => {
     const level = Level.create(1)
 
     expect(level.didUp.isFalse).toBeTruthy()
+
     const newLevel = level.up(Integer.create(0), Integer.create(50))
+
     expect(newLevel.didUp.isTrue).toBeTruthy()
   })
 })
