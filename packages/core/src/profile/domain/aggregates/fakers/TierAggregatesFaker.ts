@@ -1,7 +1,12 @@
 import { TiersFaker } from '#ranking/domain/entities/fakers/TiersFaker'
 import type { TierAggregateDto } from '../dtos'
+import { TierAggregate } from '../TierAggregate'
 
 export class TierAggregatesFaker {
+  static fake(): TierAggregate {
+    return TierAggregate.create(TierAggregatesFaker.fakeDto())
+  }
+
   static fakeDto(baseDto?: Partial<TierAggregateDto>): TierAggregateDto {
     const fakeTier = TiersFaker.fakeDto()
 
