@@ -34,7 +34,7 @@
     "test": "turbo test",
     "typecheck": "turbo typecheck",
     "prepare": "husky",
-    "release": "release-it && ./scripts/update-changelog.sh",
+    "release": "./scripts/release.sh",
     "changelog": "./scripts/update-changelog.sh"
   },
   "devDependencies": {
