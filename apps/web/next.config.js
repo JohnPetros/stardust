@@ -16,7 +16,7 @@ const nextConfig = {
       },
     ],
   },
-  swcMinify: true,
+  // swcMinify: true,
   output: 'standalone',
   webpack: (config, { isServer }) => {
     config.optimization.minimize = false;
