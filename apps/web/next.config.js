@@ -19,6 +19,8 @@ const nextConfig = {
   swcMinify: true,
   output: 'standalone',
   webpack: (config, { isServer }) => {
+    config.optimization.minimize = false;
+
     if (!isServer) {
       config.optimization.minimizer.forEach((minimizer) => {
         if (minimizer.options && minimizer.options.terserOptions) {
