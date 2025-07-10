@@ -23,7 +23,6 @@ const nextConfig = {
   output: 'standalone',
   webpack: (config, { isServer }) => {
     // Opção 1 para desabilitar minificação.
-    // Desabilita tudo, e o Zod deixa de funcionar corretamente.
     // config.optimization.minimizer = [];
 
     // Opção 2: Achar o terser e desligar algumas coisas.
