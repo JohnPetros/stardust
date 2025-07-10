@@ -32,6 +32,7 @@ export class UsersFaker {
       rocket: RocketAggregatesFaker.fakeDto(),
       tier: TierAggregatesFaker.fakeDto(),
       weekStatus: WeekStatus.DEFAULT_WEEK_STATUS,
+      hasCompletedSpace: false,
       completedChallengesIds: [],
       completedPlanetsIds: [],
       rescuableAchievementsIds: [],
