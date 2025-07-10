@@ -58,11 +58,16 @@ export class User extends Entity<UserProps> {
         this.props.unlockedAchievementsIds.add(achievementId)
       this.props.rescuableAchievementsIds =
         this.props.rescuableAchievementsIds.add(achievementId)
+      this.props.unlockedAchievementsIds =
+        this.props.unlockedAchievementsIds.add(achievementId)
+      this.props.rescuableAchievementsIds =
+        this.props.rescuableAchievementsIds.add(achievementId)
     }
   }
 
   unlockStar(starId: Id): void {
     if (this.props.unlockedStarsIds.includes(starId).isFalse) {
+      this.props.unlockedStarsIds = this.props.unlockedStarsIds.add(starId)
       this.props.unlockedStarsIds = this.props.unlockedStarsIds.add(starId)
     }
   }
@@ -107,6 +112,7 @@ export class User extends Entity<UserProps> {
 
     if (this.canAcquire(rocketPrice).isTrue) {
       this.props.acquiredRocketsIds = this.props.acquiredRocketsIds.add(rocket.id)
+      this.props.acquiredRocketsIds = this.props.acquiredRocketsIds.add(rocket.id)
       this.loseCoins(rocketPrice)
       this.selectRocket(rocket)
     }
@@ -119,6 +125,7 @@ export class User extends Entity<UserProps> {
     }
 
     if (this.canAcquire(avatarPrice).isTrue) {
+      this.props.acquiredAvatarsIds = this.props.acquiredAvatarsIds.add(avatar.id)
       this.props.acquiredAvatarsIds = this.props.acquiredAvatarsIds.add(avatar.id)
       this.loseCoins(avatarPrice)
       this.selectAvatar(avatar)
@@ -259,6 +266,10 @@ export class User extends Entity<UserProps> {
 
   completeSpace(): void {
     this.props.hasCompletedSpace = this.props.hasCompletedSpace.becomeTrue()
+  }
+
+  get canMakeTodayStatusDone(): Logical {
+    return Logical.create(this.weekStatus.todayStatus === 'todo')
   }
 
   get hasCompletedSpace(): Logical {
