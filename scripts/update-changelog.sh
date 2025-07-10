@@ -16,22 +16,44 @@ else
 fi
 
 # --- Função para obter commits ---
-# Esta função pega os commits desde a última tag, ou um número fixo de commits.
-# Prioriza commits entre a última tag e HEAD. Se não houver tags, pega os últimos 20 commits.
+# Esta função pega os commits desde o último commit do tipo "🔖 release".
+# Se não houver commit de release, usa o comportamento de fallback com tags ou últimos commits.
 get_commits_for_changelog() {
-    # Verifica se há tags no repositório
-    if git rev-parse --verify --quiet HEAD~1 >/dev/null; then
-        LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null)
-        if [ -n "$LAST_TAG" ]; then
-            # Pega os commits desde a última tag até HEAD
-            git log "$LAST_TAG"..HEAD --pretty=format:"* %s (%h)" --no-merges
-        else
-            # Se não houver tags, pega os últimos 20 commits
-            git log -20 --pretty=format:"* %s (%h)" --no-merges
+    # Procura pelo último commit do tipo "🔖 release"
+    LAST_RELEASE_COMMIT=$(git log --grep="🔖 release" -n 1 --pretty=format:"%H" 2>/dev/null)
+    
+    if [ -n "$LAST_RELEASE_COMMIT" ]; then
+        # Pega todos os commits desde o último commit de release (excluindo o próprio commit de release)
+        # Primeiro tentamos com o range padrão, depois com --all se necessário
+        COMMITS=$(git log "$LAST_RELEASE_COMMIT"..HEAD --pretty=format:"* %s (%h)" --no-merges 2>/dev/null)
+        
+        # Se não encontrou commits com HEAD, tenta com a branch atual
+        if [ -z "$COMMITS" ]; then
+            CURRENT_BRANCH=$(git branch --show-current)
+            COMMITS=$(git log "$LAST_RELEASE_COMMIT".."$CURRENT_BRANCH" --pretty=format:"* %s (%h)" --no-merges 2>/dev/null)
         fi
+        
+        # Se ainda não encontrou, tenta buscar todos os commits após o release
+        if [ -z "$COMMITS" ]; then
+            COMMITS=$(git log --all --since="$(git log -1 --pretty=format:%ci "$LAST_RELEASE_COMMIT")" --pretty=format:"* %s (%h)" --no-merges | grep -v "🔖 release")
+        fi
+        
+        echo "$COMMITS"
     else
-        # Se não houver commits suficientes para uma tag, ou se for um repo novo, pegue todos
-        git log --pretty=format:"* %s (%h)" --no-merges
+        # Fallback: comportamento anterior baseado em tags ou número fixo de commits
+        if git rev-parse --verify --quiet HEAD~1 >/dev/null; then
+            LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null)
+            if [ -n "$LAST_TAG" ]; then
+                # Pega os commits desde a última tag até HEAD
+                git log "$LAST_TAG"..HEAD --pretty=format:"* %s (%h)" --no-merges
+            else
+                # Se não houver tags, pega os últimos 20 commits
+                git log -20 --pretty=format:"* %s (%h)" --no-merges
+            fi
+        else
+            # Se não houver commits suficientes para uma tag, ou se for um repo novo, pegue todos
+            git log --pretty=format:"* %s (%h)" --no-merges
+        fi
     fi
 }
 
@@ -40,7 +62,7 @@ COMMITS_LIST=$(get_commits_for_changelog)
 
 # Verifica se a lista de commits está vazia
 if [ -z "$COMMITS_LIST" ]; then
-    echo "Nenhum novo commit encontrado para a versão $VERSION. CHANGELOG não atualizado."
+    echo "Nenhum novo commit encontrado desde o último release para a versão $VERSION. CHANGELOG não atualizado."
     exit 0
 fi
 
@@ -71,5 +93,5 @@ tail -n +2 "$CHANGELOG_FILE" >> "$TEMP_CHANGELOG"
 # Substitui o arquivo original pelo temporário
 mv "$TEMP_CHANGELOG" "$CHANGELOG_FILE"
 
-echo "CHANGELOG.md atualizado com a versão $VERSION e commits."
+echo "CHANGELOG.md atualizado com a versão $VERSION e commits desde o último release."
 echo -e "$NEW_CHANGELOG_ENTRY"
