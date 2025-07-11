@@ -1,3 +1,6 @@
+// See: https://kentcdodds.com/blog/profile-a-react-app-for-performance#build-and-measure-the-production-app
+// See: https://nextjs.org/docs/api-reference/next.config.js/custom-webpack-config
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   productionBrowserSourceMaps: false,
@@ -19,14 +22,19 @@ const nextConfig = {
   // swcMinify: true,
   output: 'standalone',
   webpack: (config, { isServer }) => {
-    config.optimization.minimize = false;
+    // Opção 1 para desabilitar minificação.
+    // config.optimization.minimizer = [];
 
-    if (!isServer) {
-      config.optimization.minimizer.forEach((minimizer) => {
-        if (minimizer.options && minimizer.options.terserOptions) {
-          minimizer.options.terserOptions.keep_classnames = true;
-        }
-      });
+    // Opção 2: Achar o terser e desligar algumas coisas.
+    const terser = config.optimization.minimizer.find((plugin) => plugin?.options?.terserOptions);
+
+    if (terser) {
+      console.log('Terser localizado', terser);
+      terser.options.terserOptions = {
+        ...terser.options.terserOptions,
+        keep_classnames: true,
+        keep_fnames: true,
+      };
     }
     return config;
   },
