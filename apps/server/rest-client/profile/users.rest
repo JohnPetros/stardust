@@ -1,5 +1,5 @@
 @URL = {{BASE_URL}}/profile/users
-@USER_ID = 4498fac6-ffc0-422f-b9a3-5639948195dc
+@USER_ID = 2ac3e189-e5ed-4003-a87a-d2358411584e
 @USER_SLUG = ctrl
 
 ### Fetch user by id
@@ -33,7 +33,7 @@ Authorization: Bearer {{JWT}}
 Content-Type: application/json
 
 {
-  "starId": "82279f67-c250-4015-9242-04eed9a1670a",
+  "starId": "506f5514-6b54-40ae-8833-392ecbe5e422",
   "questionsCount": 10,
   "incorrectAnswersCount": 5
 }

@@ -19,9 +19,9 @@ export class UnlockStarUseCase implements UseCase<Request, Response> {
     if (!user) throw new UserNotFoundError()
 
     const unlockedStarId = Id.create(starId)
-    user.unlockStar(unlockedStarId)
     if (user.hasUnlockedStar(unlockedStarId).isFalse) {
       await this.repository.addUnlockedStar(unlockedStarId, user.id)
+      user.unlockStar(unlockedStarId)
     }
     return user.dto
   }
