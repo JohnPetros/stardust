@@ -6,7 +6,6 @@ import {
   UserNameAlreadyInUseError,
   UserEmailAlreadyInUseError,
 } from '#profile/errors/index'
-import type { UserDto } from '#profile/domain/entities/dtos/UserDto'
 
 type Request = {
   userId: string

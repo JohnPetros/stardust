@@ -26,5 +26,3 @@ export abstract class Aggregate<AggregateEntity> extends Entity<Props<AggregateE
     return Logical.create(this.props.entity !== undefined)
   }
 }
-
-Aggregate.name
