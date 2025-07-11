@@ -19,23 +19,72 @@ const nextConfig = {
       },
     ],
   },
-  // swcMinify: true,
+  swcMinify: true,
   output: 'standalone',
   webpack: (config, { isServer }) => {
-    // Opção 1 para desabilitar minificação.
-    // config.optimization.minimizer = [];
-
-    // Opção 2: Achar o terser e desligar algumas coisas.
+    // Handle Terser minification (webpack's default)
     const terser = config.optimization.minimizer.find((plugin) => plugin?.options?.terserOptions);
-
     if (terser) {
-      console.log('Terser localizado', terser);
       terser.options.terserOptions = {
         ...terser.options.terserOptions,
         keep_classnames: true,
         keep_fnames: true,
       };
     }
+
+    // Handle all minification plugins
+    config.optimization.minimizer = config.optimization.minimizer.map((plugin) => {
+      // Handle TerserPlugin
+      if (plugin.constructor.name === 'TerserPlugin') {
+        return {
+          ...plugin,
+          options: {
+            ...plugin.options,
+            terserOptions: {
+              ...plugin.options.terserOptions,
+              keep_classnames: true,
+              keep_fnames: true,
+            },
+          },
+        };
+      }
+      
+      // Handle SWC minification if it's being used
+      if (plugin.constructor.name === 'SwcMinifyPlugin') {
+        return {
+          ...plugin,
+          options: {
+            ...plugin.options,
+            compress: {
+              ...plugin.options.compress,
+              keep_classnames: true,
+              keep_fnames: true,
+            },
+            mangle: {
+              ...plugin.options.mangle,
+              keep_classnames: true,
+              keep_fnames: true,
+            },
+          },
+        };
+      }
+      
+      return plugin;
+    });
+
+    // Exclude delegua package from minification
+    config.optimization.minimizer = config.optimization.minimizer.map((plugin) => {
+      if (plugin.constructor.name === 'TerserPlugin' && plugin.options.exclude) {
+        plugin.options.exclude = [
+          ...plugin.options.exclude,
+          /node_modules[/\\]delegua[/\\]/,
+        ];
+      } else if (plugin.constructor.name === 'TerserPlugin') {
+        plugin.options.exclude = [/node_modules[/\\]delegua[/\\]/];
+      }
+      return plugin;
+    });
+
     return config;
   },
 }

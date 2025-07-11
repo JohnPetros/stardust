@@ -4,11 +4,11 @@
   "description": "Educational platform for logic programming learning.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/stardust/stardust"
+    "url": "https://github.com/JohnPetros/stardust"
   },
   "author": "João Pedro Carvalho dos Santos",
   "email": "joaopedrocarvalho@gmail.com",
-  "homepage": "https://ardust-app.com.br",
+  "homepage": "https://stardust-app.com.br",
   "contributors": [
     {
       "name": "Leonel Sanches da Silva",
