@@ -1,5 +1,0 @@
-## 📍 Problema encontrado
-
-## 🔍 Detalhes
-
-## 🎋 Ambiente
