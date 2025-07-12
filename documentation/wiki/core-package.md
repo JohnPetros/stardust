@@ -30,7 +30,7 @@ Uma entidade deve seguir o padrão:
 
 ---
 
-### Estrutura (Structure ou struct)
+### Estrutura (Structure)
 
 É o value object descrito no DDD, um classe que representa algo imutável e identificado pelo conjunto de seus atributos (e não por um `id`).
 

@@ -4,7 +4,7 @@ Em poucas palavras, convenções de código são um conjunto de diretrizes e boa
 
 A seguir serão listadas as principais conveções na hora de escrever código
 
-# Nomeação de variáveis, tipos e objetos
+# Nomeação de variáveis, tipos, objetos e funções
 
 ## Idioma
 
@@ -65,6 +65,18 @@ São escritas em caixa alta e em [snake_case](https://www.theserverside.com/defi
 
 Exemplos: `SUPABASE_URL`, `HEADER_HEIGHT`, `EVENT_KEY`. 
 
+## Interfaces
+
+Caso a interface tenha o mesmo nome que a classe ou função fábrica, importe-a via alias com I maiuscula como prefixo.
+
+Exemplo: `import { ProfileService as IProfileService }`
+
+## Funções
+
+Funções sempre devem começar com um verbo no imperativo, exceto factory functions, que devem ser substantivos.
+
+Exemplos: `unlockStar`, `earnCoins`, `acquireAvatar`.
+
 ## Nomeação de arquivos
 
 Um arquivo serve para exportar um classe, factory function, widget, função, objeto de validação, tipo, interface e constante. Quase sempre a regras de nomeação de objetos se aplicam também ao nome dos arquivos, excetos as contantes que deve ser escritos em [kebab-case](https://developer.mozilla.org/en-US/docs/Glossary/Kebab_case).
@@ -105,15 +117,12 @@ const controller1 = new Controller1()
 const controller2 = new Controller2()
 ```
 
-## Exceções
-
-Pastas dedicadas a exportar hooks e widgets não possuem um arquivo index.ts para evitar problemas execução indevida de código e para deixar mais explícito qual hook ou widget está sendo criado um mock em testes automatizados.
+> [!Caution]  
+> Pastas dedicadas a exportar hooks e widgets não possuem um arquivo index.ts para evitar problemas execução indevida de código e para deixar mais explícito para qual hook ou widget está sendo criado um mock em testes automatizados.
 
 # Factory functions
 
 Em projetos React, o paradigma funcional é priorizado. Para manter a consistência em toda a aplicação, as Factory Functions (Funções Fábrica) são adotadas como padrão para a criação de "classes" e módulos que precisam gerenciar estado ou dependências.
-
-## O que são factory functions?
 
 Uma Factory Function é uma função que retorna um novo objeto. Pode-se considerá-las um "construtor" flexível que não exige a palavra-chave new. Elas oferecem uma alternativa poderosa e mais idiomática ao uso de class ou funções construtoras tradicionais em JavaScript moderno, especialmente em um contexto funcional.
 
@@ -135,7 +144,6 @@ interface ISpaceService {
   fetchStarById(starId: Id): Promise<any>
 }
 
-// A Factory Function para o SpaceService
 const SpaceService = (restClient: RestClient): ISpaceService => {
   // A função retorna um objeto que implementa ISpaceService
   return {
@@ -415,6 +423,133 @@ class MethodNotImplementedError extends AppError {
 }
 ```
 
+## Widgets
+
+Um widget é como um pequeno bloco de construção independente e reutilizável que forma a interface de usuário de uma aplicação React. Em projetos React, pense nele como uma função JavaScript que retorna elementos React, descrevendo o que deve aparecer na tela.
+
+No projeto, componentes React sempre deverão ser criados como [functional components](https://www.robinwieruch.de/react-function-component), sendo declaradas por meio de uma arrow function.
+
+```tsx
+export const Checkbox = () => {
+  return (
+    // ..
+  )
+}
+```
+
+Caso o widget receba propriedades, um type deve ser declarado em cima da arrow function e sempre nomeado como `Props`.
 
 
+```tsx
+type Props = {
+  isChecked: boolean
+  onChange: (isChecked: boolean) => void
+}
 
+export const Checkbox = ({ isChecked, onChange }: Props) => { // Procure desestruturar o objeto props
+  return (
+    // ..
+  )
+}
+```
+
+Um widget é geralmente composto por três arquivos: view, hook e index
+
+### View
+
+View: É a interface do usuário. É a parte que renderiza o HTML (ou JSX, que é transformado em HTML utilizando React) e reage às interações do usuário. A View deve ser o mais "burra" possível, ou seja, ela apenas exibe dados e dispara eventos.
+
+```tsx
+const CheckboxView = ({ isChecked, onChange }: Props) => { // O nome da view sempre vai terminar com sufixo View
+  return (
+    <Input
+      isChecked={isChecked}
+      onChange={onChange}
+    >
+      <AnimatedIndicator>
+        <Icon name='check' size={14} className='text-green-900' weight='bold' />
+      </AnimatedIndicator>
+    </Input>
+  )
+}
+```
+
+### Hook
+
+É uma função que expõe dados de uma forma que a View possa consumir facilmente, e também expõe comandos (funções) que a View pode chamar para atualizar o Model. O hook abstrai a lógica da View e a prepara para ser exibida. No React, o hook sempre começa com prefixo `use`.
+
+```tsx
+function useCheckbox() {
+  const [isChecked, setIsChecked] = useState(false) // Um hook pode chamar e usar outros hooks (seja do próprio React ou customizados)
+  
+  function handleChange() {
+    setIsChecked((isChecked) => !isChecked)
+  }
+
+  return { // O hook exões seus dados retornado um objeto
+    isDisable,
+    handleChange,
+  }
+}
+```
+
+Sendo uma função, naturalmente, o hook pode receber parâmentros para usá-los internamente ou aplicar inversão de independência no caso de receber interfaces.
+
+```tsx
+function useCheckbox(profileService: ProfileService) {
+  const [isChecked, setIsChecked] = useState(false) 
+
+  const updateUser = useCallback(async (dto: UserDto) => {
+    await profileService.updateUser(dto)
+  }, [])
+  
+  async function handleChange() {
+    setIsChecked((isChecked) => !isChecked)
+  }
+
+  return {
+    isDisable,
+    handleChange,
+  }
+}
+```
+
+No exemplo de código acima, é possível perceber outro padrão utilizado: um hook pode expor dois tipos de função.
+
+#### Funções manipuladoras de evento de interface
+
+Funções executadas em resposta a uma interação do usuário ou a um evento específico que ocorre na interface. São sempre declaradas com a palavra `function` e seu nome é prefixado com `handle`, como `handleClick`, `handleSubmit`, `handleChange`, `handleKeyDown`, `handleKeyUp` etc.
+
+> [!NOTE]  
+> Caso uma proprieade de um componente react seja uma função manipuladora de evento de interface, a propriedade em questão terá `on` como prefixo.
+
+#### Funções executoras de ações
+
+Executadas de forma imperativa por outra parte do código. Por serem geralmente dependências de outros hooks, eles são delcarados com [useCallback](https://react.dev/reference/react/useCallback) para fins de otimização.
+
+
+### Index
+
+O arquivo index do widget é um componente React, assim como a view, porém atua como um agregador, unindo o hook à view. Ou seja, ele é o ponto onde o useEditableTitle (ViewModel) é consumido e seus valores e funções retornados são passados como props para a view.
+
+```tsx
+type Props = {
+  initialTitle: string
+  onEditTitle: (title: string) => Promise<void>
+}
+
+const EditableTitle = ({ initialTitle, onEditTitle }: Props) => {
+  const { title, handleTitleChange, handleButtonClick } =
+    useEditableTitle(initialTitle, onEditTitle)
+
+  return (
+    <EditableTitleView
+      title={title}
+      canEditTitle={canEditTitle}
+      inputRef={inputRef}
+      onTitleChange={handleTitleChange}
+      onButtonClick={handleButtonClick}
+    />
+  )
+}
+```
