@@ -1,31 +1,21 @@
-import { twMerge } from 'tailwind-merge'
+'use client'
 
-import { Button } from '../Button'
-import { Icon } from '../Icon'
 import { useActionButton } from './useActionButton'
 import type { ActionButtonProps } from './types/ActionButtonProps'
+import { ActionButtonView } from './ActionButtonView'
 
-export function ActionButton(props: ActionButtonProps) {
+export const ActionButton = (props: ActionButtonProps) => {
   const { variant, title, handleClick } = useActionButton(props)
 
   return (
-    <Button
+    <ActionButtonView
       type={props.type}
-      disabled={props.isDisabled || props.isExecuting}
-      className={twMerge(
-        'flex h-10 items-center gap-1 border border-transparent capitalize',
-        variant,
-        props.className,
-      )}
+      icon={props.icon}
+      isExecuting={props.isExecuting}
+      isDisabled={props.isDisabled}
+      title={title}
+      variant={variant}
       onClick={handleClick}
-    >
-      <Icon
-        name={props.icon}
-        size={16}
-        className={twMerge('text-lg', variant)}
-        weight='bold'
-      />
-      {title}
-    </Button>
+    />
   )
 }

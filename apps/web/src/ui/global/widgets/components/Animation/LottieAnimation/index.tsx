@@ -1,58 +1,38 @@
 'use client'
 
-import { type ForwardedRef, forwardRef, useImperativeHandle } from 'react'
+import { type ForwardedRef, forwardRef, useImperativeHandle, useRef } from 'react'
+
+import type { LottieRef } from 'lottie-react'
 import type { AnimationRef, AnimationProps } from '../types'
 import { LOTTIES } from './lotties'
 import { useLottieAnimation } from './useLottieAnimation'
-import dynamic from 'next/dynamic'
+import { LottieAnimationView } from './LottieAnimationView'
 
-const Lottie = dynamic(() => import('lottie-react'), {
-  ssr: false,
-})
-
-function LottieAnimationComponent(
+const Widget = (
   { name, size, hasLoop = true }: AnimationProps,
   ref: ForwardedRef<AnimationRef>,
-) {
-  const { lottieRef, windowWidth, stopAt, setSpeed, restart } = useLottieAnimation()
+) => {
+  const lottieRef = useRef(null) as LottieRef
+  const { windowWidth, stopAt, setSpeed, restart } = useLottieAnimation(lottieRef)
   const lottieData = LOTTIES[name]
 
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        stopAt,
-        setSpeed,
-        restart,
-      }
-    },
-    [stopAt, setSpeed, restart],
-  )
-
-  if (size === 'full')
-    return (
-      <Lottie
-        lottieRef={lottieRef}
-        animationData={lottieData}
-        style={{
-          width: windowWidth,
-          top: 0,
-          right: 0,
-          left: 0,
-          bottom: 0,
-        }}
-        loop={hasLoop}
-      />
-    )
+  useImperativeHandle(ref, () => {
+    return {
+      stopAt,
+      setSpeed,
+      restart,
+    }
+  }, [stopAt, setSpeed, restart])
 
   return (
-    <Lottie
+    <LottieAnimationView
       lottieRef={lottieRef}
-      animationData={lottieData}
-      style={{ width: size, height: size }}
-      loop={hasLoop}
+      data={lottieData}
+      size={size}
+      windowWidth={windowWidth}
+      hasLoop={hasLoop}
     />
   )
 }
 
-export const LottieAnimation = forwardRef(LottieAnimationComponent)
+export const LottieAnimation = forwardRef(Widget)
