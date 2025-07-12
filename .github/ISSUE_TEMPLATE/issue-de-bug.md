@@ -1,5 +1,5 @@
 ---
-name: Bug report
+name: Issue de bug
 about: Descreva o problema que você encontrou na aplicação
 title: ''
 labels: ''
