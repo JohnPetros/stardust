@@ -7,7 +7,7 @@ Content-Type: application/json
 
 {
   "email": "{{EMAIL}}",
-  "password": "123456"
+  "password": "654321"
 }
 
 ### Sign up
@@ -52,7 +52,7 @@ POST {{URL}}/confirm-password-reset
 Content-Type: application/json
 
 {
-  "token": "6eaa5b310fefda81e5ea6c88f104c47384b55245797b19a93dd7cbeb"
+  "token": "d21cc7646963630e34b8ab1d5a261fa8a3c6408f03a3e38b27a4173b"
 }
 
 ### Reset password
@@ -61,8 +61,8 @@ Content-Type: application/json
 
 {
   "newPassword": "654321",
-  "accessToken": "accessToken",
-  "refreshToken": "refreshToken"
+  "accessToken": "eyJhbGciOiJIUzI1NiIsImtpZCI6ImF5WTVaRFRGK1hUVEtRK1EiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3J2ZXVicXp2ZmJxYmNwbXVldm5tLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiIyYWMzZTE4OS1lNWVkLTQwMDMtYTg3YS1kMjM1ODQxMTU4NGUiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzUyMzUyNjM5LCJpYXQiOjE3NTIzNDkwMzksImVtYWlsIjoiY3RybGFsdGRlbC5jdXJzb3JAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbCI6ImN0cmxhbHRkZWwuY3Vyc29yQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaG9uZV92ZXJpZmllZCI6ZmFsc2UsInN1YiI6IjJhYzNlMTg5LWU1ZWQtNDAwMy1hODdhLWQyMzU4NDExNTg0ZSJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6Im90cCIsInRpbWVzdGFtcCI6MTc1MjM0OTAzOX1dLCJzZXNzaW9uX2lkIjoiNzZiODMzYjItZTMxYy00NjcwLWJmMWEtNmE0OWYzODYyNzJiIiwiaXNfYW5vbnltb3VzIjpmYWxzZX0.HphWOk3FQxk6cJ1rpRMS0DJeFRvd9-ucdSUhqHaDpFk",
+  "refreshToken": "wppmf4qcfcx6"
 }
 
 ### Refresh session

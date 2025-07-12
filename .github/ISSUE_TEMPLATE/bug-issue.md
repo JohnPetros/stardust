@@ -1,4 +1,3 @@
 ## 📍 Problema encontrado
 
-## 🔍 Detalhes
-
+## 🎋 Ambiente
