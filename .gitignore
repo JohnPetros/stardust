@@ -25,10 +25,7 @@ node_modules/
 **/html/**
 
 # environment
-.env.local
-.env.production
-.env.development
-.env.staging
+.env.*
 
 # logs
 logs/
