@@ -2,7 +2,7 @@ import Img from 'next/image'
 
 import { Animation } from './Animation'
 import { Content } from './Content'
-import { useApi } from '@/ui/global/hooks/useApi'
+import { useRest } from '@/ui/global/hooks/useRest'
 import { REGEX } from '@/constants'
 
 type ImageProps = {
@@ -12,8 +12,8 @@ type ImageProps = {
 }
 
 export function Image({ picture, hasAnimation = true, children }: ImageProps) {
-  const api = useApi()
-  const image = api.fetchImage('theory', picture)
+  const { storageService } = useRest()
+  const image = storageService.fetchImage('theory', picture)
   const formattedImage = image.replace(REGEX.quotes, '')
 
   return (

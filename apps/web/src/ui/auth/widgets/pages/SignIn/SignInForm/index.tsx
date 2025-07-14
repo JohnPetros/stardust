@@ -12,7 +12,13 @@ export function SignInForm({ id, onSubmit }: SignInFormProps) {
   const { errors, isLoading, register, handleSubmit } = useSignInForm(onSubmit)
 
   return (
-    <form id={id} aria-label={id} onSubmit={handleSubmit} className='mt-4'>
+    <form
+      id={id}
+      aria-label={id}
+      suppressHydrationWarning={true}
+      onSubmit={handleSubmit}
+      className='mt-4'
+    >
       <div className='space-y-4'>
         <Input
           label='E-mail'

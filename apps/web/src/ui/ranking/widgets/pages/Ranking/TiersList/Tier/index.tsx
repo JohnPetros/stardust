@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useRef } from 'react'
 import { twMerge } from 'tailwind-merge'
 
-import { useApi } from '@/ui/global/hooks/useApi'
+import { useRest } from '@/ui/global/hooks/useRest'
 import { useTier } from './useTier'
 import { AnimatedImage } from './AnimatedImage'
 
@@ -18,8 +18,8 @@ type TierProps = {
 export function Tier({ index, rankingId, rankingName, rankingImage }: TierProps) {
   const tierRef = useRef<HTMLDivElement | null>(null)
   const { isLocked, isFromCurrentTier } = useTier(tierRef, rankingId, index)
-  const api = useApi()
-  const imageSrc = api.fetchImage('rankings', rankingImage)
+  const { storageService } = useRest()
+  const imageSrc = storageService.fetchImage('rankings', rankingImage)
 
   return (
     <div

@@ -5,7 +5,7 @@ import type { Planet } from '@stardust/core/space/entities'
 export type SpaceContextValue = {
   planets: Planet[]
   lastUnlockedStarId: string | null
-  lastUnlockedStarRef: RefObject<HTMLLIElement>
+  lastUnlockedStarRef: RefObject<HTMLDivElement>
   lastUnlockedStarPosition: LastUnlockedStarViewPortPosition
   scrollIntoLastUnlockedStar: () => void
   setLastUnlockedStarPosition: (

@@ -1,4 +1,4 @@
-import { type PanInfo, useAnimation } from 'framer-motion'
+import { type PanInfo, useAnimation } from 'motion/react'
 import { useEffect } from 'react'
 
 export function useAnimatedPanel(isOpen: boolean, onDragDown: VoidFunction) {

@@ -9,7 +9,7 @@ import type { LastUnlockedStarViewPortPosition } from '../types'
 export function useSpaceProvider(planets: Planet[], user: User | null) {
   const [lastUnlockedStarPosition, setLastUnlockedStarPosition] =
     useState<LastUnlockedStarViewPortPosition>('above')
-  const lastUnlockedStarRef = useRef<HTMLLIElement>(null)
+  const lastUnlockedStarRef = useRef<HTMLDivElement>(null)
 
   function handleScroll() {
     const starRect = lastUnlockedStarRef.current?.getBoundingClientRect()

@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 import type { Star as StarEntity } from '@stardust/core/space/entities'
 
-import { useApi } from '@/ui/global/hooks/useApi'
+import { useRest } from '@/ui/global/hooks/useRest'
 import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { AnimatedSign } from './AnimatedSign'
@@ -21,12 +21,12 @@ type PlanetProps = {
 function PlanetComponent({ name, image, icon, stars }: PlanetProps) {
   const { lastUnlockedStarId } = useSpaceContext()
   const { user } = useAuthContext()
-  const api = useApi()
-  const planetImage = api.fetchImage('planets', image)
-  const planetIconImage = api.fetchImage('planets', icon)
+  const { storageService } = useRest()
+  const planetImage = storageService.fetchImage('planets', image)
+  const planetIconImage = storageService.fetchImage('planets', icon)
 
   return (
-    <li>
+    <div>
       <div className='flex items-center gap-3'>
         <Image src={planetImage} width={100} height={100} alt={name} />
 
@@ -52,7 +52,7 @@ function PlanetComponent({ name, image, icon, stars }: PlanetProps) {
           ))}
         </ul>
       )}
-    </li>
+    </div>
   )
 }
 

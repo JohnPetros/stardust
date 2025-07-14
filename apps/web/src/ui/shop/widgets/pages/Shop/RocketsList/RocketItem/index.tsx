@@ -1,6 +1,5 @@
 'use client'
 
-import { useApi } from '@/ui/global/hooks/useApi'
 import { useRocketItem } from './useRocketItem'
 import { RocketAggregate } from '@stardust/core/profile/aggregates'
 import { useRest } from '@/ui/global/hooks/useRest'
@@ -17,7 +16,7 @@ type Props = {
 
 export const RocketItem = ({ id, name, image, price }: Props) => {
   const { user } = useAuthContext()
-  const { profileService } = useRest()
+  const { profileService, storageService } = useRest()
   const { handleRocketAcquire } = useRocketItem(
     RocketAggregate.create({
       id,
@@ -29,8 +28,7 @@ export const RocketItem = ({ id, name, image, price }: Props) => {
     Integer.create(price),
     profileService,
   )
-  const api = useApi()
-  const rocketImage = api.fetchImage('rockets', image)
+  const rocketImage = storageService.fetchImage('rockets', image)
 
   if (user)
     return (
