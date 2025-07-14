@@ -52,4 +52,16 @@ export class CheckboxQuestion extends Question<CheckboxQuestionProps> {
   get code() {
     return this.props.code ?? null
   }
+
+  get dto(): CheckboxQuestionDto {
+    return {
+      id: this.id.value,
+      type: 'checkbox',
+      picture: this.picture.value,
+      stem: this.stem.value,
+      options: this.options,
+      correctOptions: this.props.correctOptions.items,
+      code: this.code ?? undefined,
+    }
+  }
 }

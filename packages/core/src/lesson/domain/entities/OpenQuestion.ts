@@ -51,4 +51,19 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
   get code(): string | null {
     return this.props.code ?? null
   }
+
+  get dto(): OpenQuestionDto {
+    return {
+      id: this.id.value,
+      type: 'open',
+      picture: this.picture.value,
+      stem: this.stem.value,
+      answers: this.answers.items,
+      lines: this.codeLines.map((line) => ({
+        number: line.number.value,
+        texts: line.texts,
+        indentation: line.indentation.value,
+      })),
+    }
+  }
 }

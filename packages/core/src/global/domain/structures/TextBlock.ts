@@ -29,7 +29,7 @@ export class TextBlock {
     if (props.picture) this.picture = props.picture
   }
 
-  static create(type: string, content: string) {
+  static create(type: string, content: string, isRunnable: boolean = false) {
     if (!TextBlock.isType(type)) {
       throw new Error()
     }
@@ -37,7 +37,7 @@ export class TextBlock {
     return new TextBlock({
       type,
       content,
-      isRunnable: Logical.create(false),
+      isRunnable: Logical.create(isRunnable),
     })
   }
 
