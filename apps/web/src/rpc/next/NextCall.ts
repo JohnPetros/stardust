@@ -29,7 +29,9 @@ export const NextCall = <Request = unknown>({
     },
 
     async setCookie(key: string, value: string, durationInSeconds?: number) {
-      cookies().set({
+      const cookieStore = await cookies()
+
+      cookieStore.set({
         name: key,
         value,
         httpOnly: true,
@@ -39,15 +41,18 @@ export const NextCall = <Request = unknown>({
     },
 
     async getCookie(key) {
-      return cookies().get(key)?.value ?? null
+      const cookieStore = await cookies()
+      return cookieStore.get(key)?.value ?? null
     },
 
     async hasCookie(key) {
-      return cookies().has(key)
+      const cookieStore = await cookies()
+      return cookieStore.has(key)
     },
 
     async deleteCookie(key: string) {
-      cookies().delete(key)
+      const cookieStore = await cookies()
+      cookieStore.delete(key)
     },
 
     async getUser() {

@@ -3,8 +3,9 @@ import { ProfilePage } from '@/ui/profile/widgets/pages/Profile'
 import { profileActions } from '@/rpc/next-safe-action'
 
 const Profile = async ({ params }: NextParams<'userSlug'>) => {
+  const { userSlug } = await params
   const response = await profileActions.accessProfilePage({
-    userSlug: params.userSlug,
+    userSlug,
   })
   if (!response?.data) return
   const userDto = response.data

@@ -3,8 +3,9 @@ import { LessonPage } from '@/ui/lesson/widgets/pages/Lesson'
 import { lessonActions, spaceActions } from '@/rpc/next-safe-action'
 
 const Page = async ({ params }: NextParams<'starSlug'>) => {
+  const { starSlug } = await params
   const spaceResponse = await spaceActions.accessStarPage({
-    starSlug: params.starSlug,
+    starSlug,
   })
   const starDto = spaceResponse?.data
   if (!starDto?.id) return

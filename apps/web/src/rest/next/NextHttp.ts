@@ -31,8 +31,6 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
 }: NextHttpParams = {}): Promise<Http<NextSchema, NextResponse<unknown>>> => {
   let httpSchema: NextSchema
   const cookies: Cookie[] = []
-  let statusCode: (typeof HTTP_STATUS_CODE)[keyof typeof HTTP_STATUS_CODE] =
-    HTTP_STATUS_CODE.ok
   let extendedBody = {}
 
   if (request && schema) {

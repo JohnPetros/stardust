@@ -3,8 +3,8 @@ import { cookies } from 'next/headers'
 
 import { CLIENT_ENV } from '@/constants'
 
-export const SupabaseServerClient = () => {
-  const cookieStore = cookies()
+export const SupabaseServerClient = async () => {
+  const cookieStore = await cookies()
 
   return createServerClient(CLIENT_ENV.supabaseUrl, CLIENT_ENV.supabaseKey, {
     cookies: {

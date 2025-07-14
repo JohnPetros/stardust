@@ -22,7 +22,7 @@ export const fetchLessonStoryAndQuestions = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const supabase = SupabaseServerClient()
+    const supabase = await SupabaseServerClient()
     const service = SupabaseLessonService(supabase)
     const action = FetchLessonStoryAndQuestionsAction(service)
     return await action.handle(call)
