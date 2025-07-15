@@ -1,4 +1,4 @@
-import { type AnimationDefinition, useAnimation } from 'framer-motion'
+import { type AnimationDefinition, useAnimation } from 'motion/react'
 import { useCallback, useEffect } from 'react'
 
 export function useAnimatedProgressBar(value: number, onAnimationEnd?: VoidFunction) {

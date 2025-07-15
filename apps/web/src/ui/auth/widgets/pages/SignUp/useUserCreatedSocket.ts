@@ -1,38 +1,38 @@
-import { useEffect } from 'react'
+// import { useEffect } from 'react'
 
-import { UserCreatedEvent } from '@stardust/core/profile/events'
+// import { UserCreatedEvent } from '@stardust/core/profile/events'
 
-import { useSupabaseContext } from '@/ui/global/contexts/SupabaseContext/hooks'
+// import { useSupabaseContext } from '@/ui/global/contexts/SupabaseContext/hooks'
 
-type SupabaseUser = {
-  id: string
-  name: string
-  email: string
-}
+// type SupabaseUser = {
+//   id: string
+//   name: string
+//   email: string
+// }
 
-export function useUserCreatedSocket(onCreateUser: (event: UserCreatedEvent) => void) {
-  const { supabase } = useSupabaseContext()
+// export function useUserCreatedSocket(onCreateUser: (event: UserCreatedEvent) => void) {
+//   const { supabase } = useSupabaseContext()
 
-  useEffect(() => {
-    const channel = supabase
-      .channel('user.created.channel')
-      .on(
-        // @ts-ignore
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'users' },
-        (payload: { new: SupabaseUser }) => {
-          const event = new UserCreatedEvent({
-            userId: payload.new.id,
-            userName: payload.new.name,
-            userEmail: payload.new.email,
-          })
-          onCreateUser(event)
-        },
-      )
-      .subscribe()
+//   useEffect(() => {
+//     const channel = supabase
+//       .channel('user.created.channel')
+//       .on(
+//         // @ts-ignore
+//         'postgres_changes',
+//         { event: 'INSERT', schema: 'public', table: 'users' },
+//         (payload: { new: SupabaseUser }) => {
+//           const event = new UserCreatedEvent({
+//             userId: payload.new.id,
+//             userName: payload.new.name,
+//             userEmail: payload.new.email,
+//           })
+//           onCreateUser(event)
+//         },
+//       )
+//       .subscribe()
 
-    return () => {
-      channel.unsubscribe()
-    }
-  }, [supabase, onCreateUser])
-}
+//     return () => {
+//       channel.unsubscribe()
+//     }
+//   }, [supabase, onCreateUser])
+// }

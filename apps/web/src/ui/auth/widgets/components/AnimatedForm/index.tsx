@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { AnimatePresence, type Variants, motion } from 'framer-motion'
+import { AnimatePresence, type Variants, motion } from 'motion/react'
 
 const formVariants: Variants = {
   initial: {

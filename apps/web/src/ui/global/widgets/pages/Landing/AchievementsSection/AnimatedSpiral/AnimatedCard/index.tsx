@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, type Variants } from 'framer-motion'
+import { motion, type Variants } from 'motion/react'
 import type { PropsWithChildren, RefObject } from 'react'
 
 import { useAnimatedCard } from './useAnimatedCard'

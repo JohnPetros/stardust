@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { motion, type Variants } from 'framer-motion'
+import { motion, type Variants } from 'motion/react'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useRest } from '@/ui/global/hooks/useRest'

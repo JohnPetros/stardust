@@ -1,4 +1,4 @@
-import { useMotionValueEvent, useScroll } from 'framer-motion'
+import { useMotionValueEvent, useScroll } from 'motion/react'
 
 export function useScrollEvent(onScroll: VoidFunction) {
   const { scrollY } = useScroll()

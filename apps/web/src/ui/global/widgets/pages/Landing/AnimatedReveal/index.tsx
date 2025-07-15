@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useAnimationControls, useInView } from 'framer-motion'
+import { motion, useAnimationControls, useInView } from 'motion/react'
 import { type PropsWithChildren, useEffect, useRef } from 'react'
 import { twMerge } from 'tailwind-merge'
 

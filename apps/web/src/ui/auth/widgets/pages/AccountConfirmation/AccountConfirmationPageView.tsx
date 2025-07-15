@@ -1,5 +1,5 @@
 import type { RefObject } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence } from 'motion/react'
 
 import { AppMessage } from '@/ui/auth/widgets/components/AppMessage'
 import { Loading } from '@/ui/global/widgets/components/Loading'

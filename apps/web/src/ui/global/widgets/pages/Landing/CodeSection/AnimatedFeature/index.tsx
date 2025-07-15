@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, type PropsWithChildren } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'motion/react'
 
 import { Animation } from '@/ui/global/widgets/components/Animation'
 import { Paragraph } from '../../Paragraph'

@@ -1,4 +1,4 @@
-import { useTransform, useScroll, useSpring } from 'framer-motion'
+import { useTransform, useScroll, useSpring } from 'motion/react'
 import type { RefObject } from 'react'
 
 export function useAnimatedCard(containerRef: RefObject<HTMLDivElement>) {

@@ -1,7 +1,7 @@
 'use client'
 
 import { Slot } from '@radix-ui/react-slot'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { type ForwardedRef, forwardRef } from 'react'
 import { twMerge } from 'tailwind-merge'
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, type PropsWithChildren } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView } from 'motion/react'
 
 import { Animation } from '@/ui/global/widgets/components/Animation'
 import { AnimatedCounter } from '@/ui/global/widgets/components/AnimatedCounter'

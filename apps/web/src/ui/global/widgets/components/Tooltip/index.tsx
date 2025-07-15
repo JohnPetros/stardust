@@ -1,7 +1,7 @@
 'use client'
 import type { ReactNode } from 'react'
 import { Content, Portal, Root, TooltipArrow, Trigger } from '@radix-ui/react-tooltip'
-import { AnimatePresence, motion, type Variants } from 'framer-motion'
+import { AnimatePresence, motion, type Variants } from 'motion/react'
 
 import { useTooltip } from './useTooltip'
 

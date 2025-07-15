@@ -1,4 +1,4 @@
-import type { MotionProps } from 'framer-motion'
+import type { MotionProps } from 'motion/react'
 import type { ReactNode, ComponentProps } from 'react'
 
 export type ButtonProps = {

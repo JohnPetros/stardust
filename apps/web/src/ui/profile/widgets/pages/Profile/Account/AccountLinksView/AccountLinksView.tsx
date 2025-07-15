@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 
 import { ROUTES } from '@/constants'
 import { Link } from '@/ui/auth/widgets/components/Link'

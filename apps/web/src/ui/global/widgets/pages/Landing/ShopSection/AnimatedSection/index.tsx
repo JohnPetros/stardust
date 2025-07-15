@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { type PropsWithChildren, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 
 import { AnimatedOpacity } from '@/ui/global/widgets/components/AnimatedOpacity'
 import { Animation } from '@/ui/global/widgets/components/Animation'

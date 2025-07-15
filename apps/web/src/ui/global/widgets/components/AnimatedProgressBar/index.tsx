@@ -2,7 +2,7 @@
 
 import * as Progress from '@radix-ui/react-progress'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 
 import { useAnimatedProgressBar } from './useAnimatedProgressBar'
 import { forwardRef, useImperativeHandle, type ForwardedRef } from 'react'
@@ -26,15 +26,11 @@ const AnimatedProgressBarComponent = (
     onAnimationEnd,
   )
 
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        fill,
-      }
-    },
-    [fill],
-  )
+  useImperativeHandle(ref, () => {
+    return {
+      fill,
+    }
+  }, [fill])
 
   return (
     <Progress.Root

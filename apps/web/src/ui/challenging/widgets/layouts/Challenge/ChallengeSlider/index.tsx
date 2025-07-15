@@ -1,7 +1,7 @@
 'use client'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import type { PropsWithChildren } from 'react'
 
 import { useChallengeSlider } from './useChallengeSlider'

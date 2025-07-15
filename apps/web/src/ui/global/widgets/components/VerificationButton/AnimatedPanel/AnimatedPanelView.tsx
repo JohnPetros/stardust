@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, type Variants } from 'framer-motion'
+import { AnimatePresence, motion, type Variants } from 'motion/react'
 
 import type { ReactNode } from 'react'
 

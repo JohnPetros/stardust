@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react'
 import { type ClassNameValue, twMerge } from 'tailwind-merge'
-import { AnimatePresence, type Variants, motion } from 'framer-motion'
+import { AnimatePresence, type Variants, motion } from 'motion/react'
 
 const variants: Variants = {
   up: {

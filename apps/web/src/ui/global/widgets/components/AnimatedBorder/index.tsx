@@ -1,7 +1,7 @@
 'use client'
 
 import { type ComponentProps, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 
 import { useAnimatedBorder } from './useAnimatedBorder'
 import { twMerge } from 'tailwind-merge'

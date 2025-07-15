@@ -1,6 +1,6 @@
 'use client'
 
-import { useApi } from '@/ui/global/hooks/useApi'
+import { useRest } from '@/ui/global/hooks/useRest'
 import { Adornment } from './Adornment'
 
 type ItemsProps = {
@@ -15,10 +15,9 @@ type ItemsProps = {
 }
 
 export function AdornmentGroup({ tier, rocket }: ItemsProps) {
-  const { fetchImage } = useApi()
-
-  const tierImage = fetchImage('rankings', tier.image)
-  const rocketImage = fetchImage('rockets', rocket.image)
+  const { storageService } = useRest()
+  const tierImage = storageService.fetchImage('rankings', tier.image)
+  const rocketImage = storageService.fetchImage('rockets', rocket.image)
 
   return (
     <>

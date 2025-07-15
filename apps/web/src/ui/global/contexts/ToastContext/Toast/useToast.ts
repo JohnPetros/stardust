@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useAnimate } from 'framer-motion'
+import { useAnimate } from 'motion/react'
 
 import type { OpenToastParams, ToastType } from '../types'
 

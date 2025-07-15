@@ -6,7 +6,7 @@ import {
   useMotionTemplate,
   useMotionValue,
   type ValueAnimationTransition,
-} from 'framer-motion'
+} from 'motion/react'
 
 export function useAnimatedBorder(containerRef: RefObject<HTMLDivElement>) {
   const xPercentage = useMotionValue(0)

@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react'
 import * as Popover from '@radix-ui/react-popover'
-import { AnimatePresence, motion, type Variants } from 'framer-motion'
+import { AnimatePresence, motion, type Variants } from 'motion/react'
 
 const variants: Variants = {
   up: {

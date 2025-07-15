@@ -1,4 +1,4 @@
-import { useScroll, useMotionValueEvent } from 'framer-motion'
+import { useScroll, useMotionValueEvent } from 'motion/react'
 import { useState } from 'react'
 
 export function useAnimatedHeader() {

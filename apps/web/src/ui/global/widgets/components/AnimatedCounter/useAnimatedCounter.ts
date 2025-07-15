@@ -1,5 +1,5 @@
 import { type RefObject, useEffect } from 'react'
-import { animate, useInView } from 'framer-motion'
+import { animate, useInView } from 'motion/react'
 
 type AnimatedCounterProps = {
   from: number

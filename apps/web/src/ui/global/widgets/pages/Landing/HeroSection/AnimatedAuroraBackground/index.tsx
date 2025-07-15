@@ -1,7 +1,7 @@
 'use client'
 
 import { type PropsWithChildren, useEffect } from 'react'
-import { useMotionTemplate, useMotionValue, motion, animate } from 'framer-motion'
+import { useMotionTemplate, useMotionValue, motion, animate } from 'motion/react'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { Particles } from '../../Particles'
 import { Animation } from '@/ui/global/widgets/components/Animation'

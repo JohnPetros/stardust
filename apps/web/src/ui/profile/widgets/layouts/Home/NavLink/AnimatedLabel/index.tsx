@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, type Variants } from 'framer-motion'
+import { motion, type Variants } from 'motion/react'
 import { twMerge } from 'tailwind-merge'
 
 const variants: Variants = {
@@ -30,7 +30,7 @@ export function AnimatedLabel({ children, isExpanded, isActive }: AnimatedLabelP
       animate={isExpanded ? 'expand' : ''}
       className={twMerge(
         '-ml-2 mt-2 block overflow-hidden text-[12px] font-semibold md:-m-0 md:text-sm',
-        isActive ? 'text-gray-100' : 'text-gray-400'
+        isActive ? 'text-gray-100' : 'text-gray-400',
       )}
     >
       {children}

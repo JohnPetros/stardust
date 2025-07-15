@@ -3,7 +3,7 @@
 import { type ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 import * as Container from '@radix-ui/react-toast'
 import { twMerge } from 'tailwind-merge'
-import { AnimatePresence, motion, type Variants } from 'framer-motion'
+import { AnimatePresence, motion, type Variants } from 'motion/react'
 
 import type { ToastRef } from '../types'
 

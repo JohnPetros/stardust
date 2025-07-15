@@ -1,7 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { motion, type Variants, type HTMLMotionProps } from 'framer-motion'
+import { motion, type Variants, type HTMLMotionProps } from 'motion/react'
 import { twMerge } from 'tailwind-merge'
 
 import type { CheckboxStyle } from '../CheckboxStyle'

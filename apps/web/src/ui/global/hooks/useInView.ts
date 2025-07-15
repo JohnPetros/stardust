@@ -1,4 +1,4 @@
-import { useInView as useFramerMotionInView } from 'framer-motion'
+import { useInView as useFramerMotionInView } from 'motion/react'
 import type { RefObject } from 'react'
 
 type Options = {

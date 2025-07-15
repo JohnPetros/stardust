@@ -2,14 +2,12 @@ import { useFormContext } from 'react-hook-form'
 
 import type { ChallengeSchema } from '@stardust/validation/challenging/types'
 import { useEffect, useState } from 'react'
-import { useApi } from '@/ui/global/hooks/useApi'
 import { Slug } from '@stardust/core/global/structures'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 
 export function useChallengeTitleField(challengingService: ChallengingService) {
   const [errorMessage, setErrorMessage] = useState('')
   const { formState, register, watch } = useFormContext<ChallengeSchema>()
-  const api = useApi()
   const challengeTitle = watch('title')
 
   useEffect(() => {

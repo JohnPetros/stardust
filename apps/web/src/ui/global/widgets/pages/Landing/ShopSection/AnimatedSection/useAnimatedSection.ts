@@ -1,5 +1,5 @@
 import { type RefObject, useEffect } from 'react'
-import { useScroll, useTransform, useInView } from 'framer-motion'
+import { useScroll, useTransform, useInView } from 'motion/react'
 
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 

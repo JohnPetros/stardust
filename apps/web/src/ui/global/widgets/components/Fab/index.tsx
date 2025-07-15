@@ -1,6 +1,6 @@
 'use client'
 
-import { AnimatePresence, motion, type Variants } from 'framer-motion'
+import { AnimatePresence, motion, type Variants } from 'motion/react'
 import { Icon } from '../Icon'
 import type { IconName } from '../Icon/types'
 

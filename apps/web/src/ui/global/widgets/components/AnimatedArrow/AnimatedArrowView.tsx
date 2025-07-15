@@ -1,5 +1,5 @@
 import { ArrowDown } from '@phosphor-icons/react'
-import { motion, type Variants } from 'framer-motion'
+import { motion, type Variants } from 'motion/react'
 
 const arrowAnimations: Variants = {
   down: {
