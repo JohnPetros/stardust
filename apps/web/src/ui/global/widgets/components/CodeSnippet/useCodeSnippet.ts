@@ -6,7 +6,7 @@ import { useClipboard } from '@/ui/global/hooks/useClipboard'
 type UseCodeSnippetProps = {
   code: string
   isRunnable?: boolean
-  codeEditorRef: RefObject<PlaygroundCodeEditorRef>
+  codeEditorRef: RefObject<PlaygroundCodeEditorRef | null>
 }
 
 export function useCodeSnippet({ codeEditorRef, code, isRunnable }: UseCodeSnippetProps) {

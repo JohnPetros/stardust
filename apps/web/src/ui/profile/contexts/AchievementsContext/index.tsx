@@ -23,7 +23,7 @@ export function AchivementsProvider({
   achievementsDto,
 }: AchivementsContextProps) {
   const { profileService } = useRest()
-  const newUnlockedAchievementsAlertDialogRef = useRef<AlertDialogRef>(null)
+  const newUnlockedAchievementsAlertDialogRef = useRef<AlertDialogRef | null>(null)
   const {
     newUnlockedAchievements,
     rescueAchivement,

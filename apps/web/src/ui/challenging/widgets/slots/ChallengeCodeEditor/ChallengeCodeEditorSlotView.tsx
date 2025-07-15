@@ -3,8 +3,8 @@ import { CodeEditor } from '@/ui/global/widgets/components/CodeEditor'
 import { CodeEditorToolbar } from '@/ui/global/widgets/components/CodeEditorToolbar'
 
 type Props = {
-  editorContainerRef: React.RefObject<HTMLDivElement>
-  codeEditorRef: React.RefObject<CodeEditorRef>
+  editorContainerRef: React.RefObject<HTMLDivElement | null>
+  codeEditorRef: React.RefObject<CodeEditorRef | null>
   codeEditorHeight: number
   originalCode: string
   initialCode: string

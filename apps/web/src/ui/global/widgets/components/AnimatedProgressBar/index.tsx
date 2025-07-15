@@ -8,7 +8,7 @@ import { useAnimatedProgressBar } from './useAnimatedProgressBar'
 import { forwardRef, useImperativeHandle, type ForwardedRef } from 'react'
 import type { AnimatedProgressBarRef } from './types'
 
-const AnimatedIndicator = motion(Progress.Indicator)
+const AnimatedIndicator = motion.create(Progress.Indicator)
 
 type ProgessBarProps = {
   value: number
@@ -42,7 +42,7 @@ const AnimatedProgressBarComponent = (
     >
       <AnimatedIndicator
         animate={animation}
-        onAnimationComplete={handleAnimationComplete}
+        onAnimationComplete={(animation) => handleAnimationComplete(animation as object)}
         className='h-full rounded-lg bg-green-400'
       />
 

@@ -8,7 +8,7 @@ import {
   type ValueAnimationTransition,
 } from 'motion/react'
 
-export function useAnimatedBorder(containerRef: RefObject<HTMLDivElement>) {
+export function useAnimatedBorder(containerRef: RefObject<HTMLDivElement | null>) {
   const xPercentage = useMotionValue(0)
   const yPercentage = useMotionValue(0)
   const maskImage = useMotionTemplate`radial-gradient(80px 80px at ${xPercentage}% ${yPercentage}%, black, transparent)`

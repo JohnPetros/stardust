@@ -7,7 +7,8 @@ export const dynamic = 'force-dynamic'
 type PageProps = NextParams<'challengeSlug' | 'solutionSlug'> & NextSearchParams<'isNew'>
 
 const Slot = async ({ params, searchParams }: PageProps) => {
-  const { solutionSlug } = await params
+  const { challengeSlug, solutionSlug } = await params
+  const { isNew } = await searchParams
   const response = await challengingActions.viewSolution({
     solutionSlug,
   })
@@ -16,8 +17,8 @@ const Slot = async ({ params, searchParams }: PageProps) => {
   return (
     <ChallengeSolutionSlot
       solutionDto={response.data.solution}
-      isSolutionNew={Boolean(searchParams.isNew)}
-      challengeSlug={params.challengeSlug}
+      isSolutionNew={Boolean(isNew)}
+      challengeSlug={challengeSlug}
     />
   )
 }

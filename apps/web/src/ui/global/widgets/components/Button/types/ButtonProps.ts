@@ -1,4 +1,4 @@
-import type { MotionProps } from 'motion/react'
+import type { HTMLMotionProps } from 'motion/react'
 import type { ReactNode, ComponentProps } from 'react'
 
 export type ButtonProps = {
@@ -7,4 +7,4 @@ export type ButtonProps = {
   isLoading?: boolean
   asChild?: boolean
 } & ComponentProps<'button'> &
-  MotionProps
+  HTMLMotionProps<'button'>

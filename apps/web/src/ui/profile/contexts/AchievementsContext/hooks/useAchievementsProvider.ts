@@ -12,7 +12,7 @@ import { useEventListener } from '@/ui/global/hooks/useEventListener'
 
 export function useAchivementsProvider(
   profileService: ProfileService,
-  newUnlockedAchievementsAlertDialogRef: RefObject<AlertDialogRef>,
+  newUnlockedAchievementsAlertDialogRef: RefObject<AlertDialogRef | null>,
 ) {
   const toast = useToastContext()
   const { user, refetchUser } = useAuthContext()

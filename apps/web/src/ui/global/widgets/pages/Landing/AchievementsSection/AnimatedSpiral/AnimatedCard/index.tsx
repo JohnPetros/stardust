@@ -17,7 +17,7 @@ const variants: Variants = {
 }
 
 type AnimatedCardProps = {
-  containerRef: RefObject<HTMLDivElement>
+  containerRef: RefObject<HTMLDivElement | null>
   className: string
 }
 

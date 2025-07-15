@@ -6,7 +6,9 @@ import { useSleep } from '@/ui/global/hooks/useSleep'
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 
-export function useAccountConfirmationPage(rocketAnimationRef: RefObject<AnimationRef>) {
+export function useAccountConfirmationPage(
+  rocketAnimationRef: RefObject<AnimationRef | null>,
+) {
   const { sleep } = useSleep()
   const [isRocketVisible, setIsRocketVisible] = useState(false)
   const router = useRouter()

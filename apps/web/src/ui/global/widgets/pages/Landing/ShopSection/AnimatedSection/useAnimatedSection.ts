@@ -4,8 +4,8 @@ import { useScroll, useTransform, useInView } from 'motion/react'
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 
 export function useAnimatedSection(
-  sectionRef: RefObject<HTMLDivElement>,
-  animationRef: RefObject<AnimationRef>,
+  sectionRef: RefObject<HTMLDivElement | null>,
+  animationRef: RefObject<AnimationRef | null>,
 ) {
   const { scrollYProgress } = useScroll({
     target: sectionRef,

@@ -6,12 +6,12 @@ import { useRest } from '@/ui/global/hooks/useRest'
 import { REGEX } from '@/constants'
 
 type PictureProps = {
-  picture: string
+  url: string
 }
 
-export function Picture({ picture }: PictureProps) {
+export function Picture({ url }: PictureProps) {
   const { storageService } = useRest()
-  const image = storageService.fetchImage('theory', picture)
+  const image = storageService.fetchImage('theory', url)
   const formattedImage = image.replace(REGEX.quotes, '')
 
   return (

@@ -7,7 +7,7 @@ import type {
 
 export function useContentEditor(
   content: string,
-  textEditorRef: RefObject<TextEditorRef>,
+  textEditorRef: RefObject<TextEditorRef | null>,
   onChange: (value: string) => void,
 ) {
   const [previewContent, setPreviewContent] = useState(content.replaceAll('\n', '\n\n'))

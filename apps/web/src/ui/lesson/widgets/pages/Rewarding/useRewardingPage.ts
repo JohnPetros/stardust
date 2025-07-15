@@ -14,7 +14,7 @@ type UseRewardingPageProps = {
   newLevel: number | null
   newStreak: number | null
   nextRoute: string
-  newLevelAlertDialogRef: RefObject<AlertDialogRef>
+  newLevelAlertDialogRef: RefObject<AlertDialogRef | null>
 }
 
 export function useRewardingPage({

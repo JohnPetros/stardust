@@ -3,8 +3,6 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 
 import { type ImperativePanelHandle, Panel, PanelGroup } from 'react-resizable-panels'
-import { useChallengeLayout } from './useChallengeLayout'
-import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { PageTransitionAnimation } from '@/ui/global/widgets/components/PageTransitionAnimation'
 import { ChallengeSlider } from './ChallengeSlider'
 import { ChallengeTabs } from './ChallengeTabs'
@@ -21,8 +19,8 @@ type Props = {
   header: ReactNode
   tabContent: ReactNode
   codeEditor: ReactNode
-  tabsPanelRef: RefObject<ImperativePanelHandle>
-  codeEditorPanelRef: RefObject<ImperativePanelHandle>
+  tabsPanelRef: RefObject<ImperativePanelHandle | null>
+  codeEditorPanelRef: RefObject<ImperativePanelHandle | null>
   panelsOffset: PanelsOffset
   panelsLayout: PanelsLayout
   handlePanelDragging: (isDragging: boolean) => void
@@ -76,7 +74,7 @@ export const ChallengeLayoutView = ({
                   minSize={1}
                   order={2}
                 >
-                  {codeEditor}
+                  {codeEditor as null}
                 </Panel>
               </PanelGroup>
             )}
@@ -89,7 +87,7 @@ export const ChallengeLayoutView = ({
                   minSize={1}
                   order={1}
                 >
-                  {codeEditor}
+                  {codeEditor as null}
                 </Panel>
 
                 <PanelHandle direction={DIRECTION} onDragging={handlePanelDragging} />

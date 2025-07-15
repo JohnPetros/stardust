@@ -2,7 +2,7 @@ import { type RefObject, useEffect } from 'react'
 
 import { useRouter } from '@/ui/global/hooks/useRouter'
 
-export function useChallengeTabContent(contentRef: RefObject<HTMLDivElement>) {
+export function useChallengeTabContent(contentRef: RefObject<HTMLDivElement | null>) {
   const { currentRoute } = useRouter()
 
   useEffect(() => {

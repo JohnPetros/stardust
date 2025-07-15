@@ -7,7 +7,7 @@ import type { CheckboxStyle } from './CheckboxStyle'
 
 export function useCheckbox(
   isChecked: boolean,
-  checkboxRef: RefObject<HTMLButtonElement>,
+  checkboxRef: RefObject<HTMLButtonElement | null>,
 ) {
   const { getQuizSlice } = useLessonStore()
   const { quiz } = getQuizSlice()

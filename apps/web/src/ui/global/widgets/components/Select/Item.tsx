@@ -16,10 +16,10 @@ export function Item({ children, className, value }: SelectItemProps) {
       value={value}
       className={twMerge(
         'flex cursor-pointer items-center gap-2 px-4 py-2 text-sm font-medium text-gray-300 outline-gray-400 hover:text-gray-100 focus:text-gray-100',
-        className
+        className,
       )}
     >
-      {children}
+      {children as JSX.Element}
     </S.SelectItem>
   )
 }

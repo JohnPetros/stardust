@@ -9,9 +9,9 @@ import { useAudioContext } from '@/ui/global/hooks/useAudioContext'
 import { useRankingContext } from '@/ui/ranking/contexts/RankingContext'
 
 type UseRankingResultProps = {
-  rewardAlertDialog: RefObject<AlertDialogRef>
-  successAlertDialog: RefObject<AlertDialogRef>
-  failAlertDialog: RefObject<AlertDialogRef>
+  rewardAlertDialog: RefObject<AlertDialogRef | null>
+  successAlertDialog: RefObject<AlertDialogRef | null>
+  failAlertDialog: RefObject<AlertDialogRef | null>
 }
 
 export function useRankingResult({

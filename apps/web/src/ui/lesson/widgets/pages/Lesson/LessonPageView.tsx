@@ -9,7 +9,7 @@ type Props = {
   starName: string
   starNumber: number
   isTransitionVisible: boolean
-  scrollRef: React.RefObject<HTMLDivElement>
+  scrollRef: React.RefObject<HTMLDivElement | null>
   stage: string
   onLeavePage: () => void
 }

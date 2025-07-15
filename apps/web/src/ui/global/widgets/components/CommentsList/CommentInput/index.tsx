@@ -22,7 +22,7 @@ export const CommentInput = ({
   defaultContent = '',
   onSend,
 }: CommentInputProps) => {
-  const textEditorRef = useRef<TextEditorRef>(null)
+  const textEditorRef = useRef<TextEditorRef | null>(null)
   const {
     content,
     errorMessage,

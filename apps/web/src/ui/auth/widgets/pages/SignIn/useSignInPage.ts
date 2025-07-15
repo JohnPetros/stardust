@@ -15,7 +15,10 @@ import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useSleep } from '@/ui/global/hooks/useSleep'
 import type { SignInFormFields } from './SignInForm/types'
 
-export function useSignInPage(url: string, rocketAnimationRef: RefObject<AnimationRef>) {
+export function useSignInPage(
+  url: string,
+  rocketAnimationRef: RefObject<AnimationRef | null>,
+) {
   const [isRocketVisible, setIsRocketVisible] = useState(false)
   const [nextRoute] = useQueryStringParam('nextRoute')
   const { sleep } = useSleep()

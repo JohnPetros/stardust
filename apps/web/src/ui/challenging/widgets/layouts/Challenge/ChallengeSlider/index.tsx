@@ -74,7 +74,7 @@ export function ChallengeSlider({ children }: PropsWithChildren) {
         allowTouchMove={false}
       >
         <SwiperSlide className='h-full overflow-y-auto'>
-          {activeContent === 'result' ? <ChallengeDescriptionSlot /> : children}
+          {activeContent === 'result' ? <ChallengeDescriptionSlot /> : (children as null)}
         </SwiperSlide>
 
         <SwiperSlide>

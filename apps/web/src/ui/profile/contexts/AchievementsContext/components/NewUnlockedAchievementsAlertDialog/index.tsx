@@ -9,7 +9,7 @@ import { Button } from '@/ui/global/widgets/components/Button'
 import { AchievementCard } from '@/ui/profile/widgets/components/AchievementCard'
 
 type NewUnlockedAchievementsAlertDialogProps = {
-  alertDialogRef: RefObject<AlertDialogRef>
+  alertDialogRef: RefObject<AlertDialogRef | null>
   achievements: Achievement[]
   onClose: VoidFunction
 }

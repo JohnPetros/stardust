@@ -11,6 +11,7 @@ type PageProps = NextParams<'challengeSlug' | 'solutionSlug'> & NextSearchParams
 
 const DefaultSlot = async ({ params, searchParams }: PageProps) => {
   const { solutionSlug, challengeSlug } = await params
+  const { isNew } = await searchParams
   const restClient = await NextServerRestClient()
   const service = ChallengingService(restClient)
   const response = await service.viewSolution(Slug.create(solutionSlug))
@@ -20,7 +21,7 @@ const DefaultSlot = async ({ params, searchParams }: PageProps) => {
   return (
     <ChallengeSolutionSlot
       solutionDto={solutionDto}
-      isSolutionNew={Boolean(searchParams.isNew)}
+      isSolutionNew={Boolean(isNew)}
       challengeSlug={challengeSlug}
     />
   )

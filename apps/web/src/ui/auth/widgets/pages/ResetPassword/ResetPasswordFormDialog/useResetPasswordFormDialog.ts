@@ -29,7 +29,7 @@ type ResetPasswordFormFields = z.infer<typeof resetPasswordFormSchema>
 
 export function useResetPasswordFormDialog(
   authService: AuthService,
-  alertDialogRef: RefObject<AlertDialogRef>,
+  alertDialogRef: RefObject<AlertDialogRef | null>,
   onNewPasswordSubmit: () => Promise<{
     accessToken: string | null
     refreshToken: string | null

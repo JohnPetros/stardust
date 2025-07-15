@@ -5,7 +5,7 @@ type AnimatedCounterProps = {
   from: number
   to: number
   speed: number
-  elementRef: RefObject<HTMLElement>
+  elementRef: RefObject<HTMLElement | null>
 }
 
 export function useAnimatedCounter({

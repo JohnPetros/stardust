@@ -7,7 +7,7 @@ import type { ToastRef } from '../types/ToastRef'
 
 const DEFAULT_DURATION_IN_SECONDS = 2.5
 
-export function useToastProvider(toastRef: RefObject<ToastRef>) {
+export function useToastProvider(toastRef: RefObject<ToastRef | null>) {
   const showToast = useCallback(
     (message: string, options?: Partial<Omit<OpenToastParams, 'message'>>) => {
       toastRef.current?.open({

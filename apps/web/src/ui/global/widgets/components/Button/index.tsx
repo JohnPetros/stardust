@@ -18,7 +18,7 @@ export function ButtonComponent(
     ...rest
   }: ButtonProps,
   ref: ForwardedRef<HTMLButtonElement>,
-) {
+): JSX.Element {
   const mergedClassName = twMerge(
     'duration-400 custom-outline relative flex h-10 w-full cursor-pointer items-center justify-center overflow-hidden rounded bg-green-400 text-sm font-semibold tracking-wide transition-all hover:brightness-75 disabled:pointer-events-none disabled:opacity-70',
     className,
@@ -27,13 +27,14 @@ export function ButtonComponent(
   if (asChild) {
     return (
       <Slot className={mergedClassName} {...rest}>
-        {children}
+        {children as JSX.Element}
       </Slot>
     )
   }
 
   return (
     <motion.button
+      type='button'
       ref={ref}
       whileTap={{ scale: 0.99 }}
       className={mergedClassName}

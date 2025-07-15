@@ -1,5 +1,5 @@
 export type NextSearchParams<Keys extends string> = {
-  searchParams: {
+  searchParams: Promise<{
     [key in Keys]: string
-  }
+  }>
 }

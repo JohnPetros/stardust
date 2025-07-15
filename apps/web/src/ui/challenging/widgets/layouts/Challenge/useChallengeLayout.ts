@@ -8,8 +8,8 @@ import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 import type { PanelsOffset } from './types/PanelsOffset'
 
 export function useChallengeLayout(
-  tabsPanelRef: RefObject<ImperativePanelHandle>,
-  codeEditorPanelRef: RefObject<ImperativePanelHandle>,
+  tabsPanelRef: RefObject<ImperativePanelHandle | null>,
+  codeEditorPanelRef: RefObject<ImperativePanelHandle | null>,
 ) {
   const { getChallengeSlice } = useChallengeStore()
   const { challenge } = getChallengeSlice()

@@ -14,7 +14,7 @@ import { AnimatedContainer } from './AnimatedContainer'
 import { useHomeHeader } from './useHomeHeader'
 
 export function HomeHeader() {
-  const streakAnimationRef = useRef<AnimationRef>(null)
+  const streakAnimationRef = useRef<AnimationRef | null>(null)
   const { isOpen, toggle } = useSiderbarContext()
   const { user } = useHomeHeader(streakAnimationRef)
 

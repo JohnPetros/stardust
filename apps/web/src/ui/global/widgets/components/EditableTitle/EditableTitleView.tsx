@@ -2,7 +2,7 @@ import { Pencil } from '@phosphor-icons/react'
 import type { RefObject } from 'react'
 
 type Props = {
-  inputRef: RefObject<HTMLInputElement>
+  inputRef: RefObject<HTMLInputElement | null>
   title: string
   canEditTitle: boolean
   onTitleChange: (title: string) => void

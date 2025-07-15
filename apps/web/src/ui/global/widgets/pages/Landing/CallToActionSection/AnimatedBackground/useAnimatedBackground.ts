@@ -6,8 +6,8 @@ import type { AnimationRef } from '@/ui/global/widgets/components/Animation/type
 const ANIMATION_DURATION = 3.068 // seconds
 
 export function useAnimatedBackground(
-  containerRef: RefObject<HTMLDivElement>,
-  animationRef: RefObject<AnimationRef>,
+  containerRef: RefObject<HTMLDivElement | null>,
+  animationRef: RefObject<AnimationRef | null>,
 ) {
   const isInView = useInView(containerRef, { shouldExecuteOnce: true })
 

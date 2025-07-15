@@ -1,5 +1,5 @@
 export type NextParams<Params extends string = ''> = {
-  params: {
+  params: Promise<{
     [key in Params]: string
-  }
+  }>
 }

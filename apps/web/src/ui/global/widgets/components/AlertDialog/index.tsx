@@ -38,16 +38,12 @@ const AlertDialogComponent = (
   const { animation, isRendered, isOpen, containerRef, handleOpenChange, open, close } =
     useAlertDialog(type, shouldPlayAudio, onOpenChange)
 
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        open,
-        close,
-      }
-    },
-    [open, close],
-  )
+  useImperativeHandle(ref, () => {
+    return {
+      open,
+      close,
+    }
+  }, [open, close])
 
   return (
     <Hydration>
@@ -72,16 +68,16 @@ const AlertDialogComponent = (
               {body}
               <div className='mt-4 flex justify-center gap-2'>
                 <AlertDialog.AlertDialogAction asChild>
-                  {action}
+                  {action as null}
                 </AlertDialog.AlertDialogAction>
                 <AlertDialog.AlertDialogCancel asChild>
-                  {cancel}
+                  {cancel as null}
                 </AlertDialog.AlertDialogCancel>
               </div>
             </DialogAnimation>
           </AlertDialog.Content>
         </AlertDialog.Portal>
-        <AlertDialog.Trigger asChild>{trigger}</AlertDialog.Trigger>
+        <AlertDialog.Trigger asChild>{trigger as null}</AlertDialog.Trigger>
       </AlertDialog.Root>
     </Hydration>
   )

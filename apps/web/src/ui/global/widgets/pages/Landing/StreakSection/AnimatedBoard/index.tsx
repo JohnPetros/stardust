@@ -30,7 +30,7 @@ export function AnimatedBoard({ children }: PropsWithChildren) {
       variants={variants}
       initial='hidden'
       animate={isInView ? 'visible' : 'hidden'}
-      transition={{ durantion: 1, delay: 0.2 }}
+      transition={{ duration: 1, delay: 0.2 }}
       className='grid place-content-center w-full'
     >
       <AnimatedReveal>{children}</AnimatedReveal>

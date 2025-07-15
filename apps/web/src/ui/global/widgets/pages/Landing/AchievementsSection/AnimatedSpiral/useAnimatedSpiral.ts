@@ -4,8 +4,8 @@ import { useInView } from 'motion/react'
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 
 export function useAnimatedSpiral(
-  containerRef: RefObject<HTMLDivElement>,
-  animationRef: RefObject<AnimationRef>,
+  containerRef: RefObject<HTMLDivElement | null>,
+  animationRef: RefObject<AnimationRef | null>,
 ) {
   const isInView = useInView(containerRef, { once: true })
 

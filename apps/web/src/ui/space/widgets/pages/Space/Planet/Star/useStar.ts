@@ -14,7 +14,7 @@ type Params = {
   starId: Id
   starSlug: Slug
   isLastUnlockedStar: boolean
-  starAnimationRef: RefObject<AnimationRef>
+  starAnimationRef: RefObject<AnimationRef | null>
   challengingService: ChallengingService
 }
 

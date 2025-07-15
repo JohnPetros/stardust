@@ -21,21 +21,17 @@ export const DialogComponent = (
     onOpenChange,
   )
 
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        open,
-        close,
-      }
-    },
-    [open, close],
-  )
+  useImperativeHandle(ref, () => {
+    return {
+      open,
+      close,
+    }
+  }, [open, close])
 
   return (
     <Root open={isOpen} onOpenChange={handleOpenChange}>
       <Overlay className='fixed inset-0 z-[500] overflow-y-auto bg-gray-900 bg-opacity-50' />
-      {children}
+      {children as JSX.Element}
     </Root>
   )
 }

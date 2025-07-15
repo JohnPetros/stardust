@@ -6,7 +6,7 @@ type Options = {
 }
 
 export function useInView(
-  ref: RefObject<Element>,
+  ref: RefObject<Element | null>,
   { shouldExecuteOnce = false }: Options = {},
 ) {
   return useFramerMotionInView(ref, { once: shouldExecuteOnce })

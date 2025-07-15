@@ -3,9 +3,9 @@ import type { CodeEditorRef } from '../CodeEditor/types'
 
 type UseCodeEditorToolbarParams = {
   originalCode?: string
-  codeEditorRef: RefObject<CodeEditorRef>
-  runCodeButtonRef: RefObject<HTMLButtonElement>
-  docsDialogButtonRef: RefObject<HTMLButtonElement>
+  codeEditorRef: RefObject<CodeEditorRef | null>
+  runCodeButtonRef: RefObject<HTMLButtonElement | null>
+  docsDialogButtonRef: RefObject<HTMLButtonElement | null>
 }
 
 export function useCodeEditorToolbar({

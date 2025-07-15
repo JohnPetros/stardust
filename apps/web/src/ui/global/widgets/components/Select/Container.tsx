@@ -1,10 +1,9 @@
-import type { ReactNode } from 'react'
 import * as S from '@radix-ui/react-select'
+import type { PropsWithChildren } from 'react'
 
 import { ErrorMessage } from '../ErrorMessage'
 
-type SelectProps<Value> = {
-  children: ReactNode
+type Props<Value> = {
   value?: Value
   defaultValue?: Value
   errorMessage?: string
@@ -17,14 +16,14 @@ export function Container<Value>({
   defaultValue,
   errorMessage,
   onValueChange,
-}: SelectProps<Value>) {
+}: PropsWithChildren<Props<Value>>) {
   return (
     <S.Root
       defaultValue={String(defaultValue)}
       value={String(value)}
       onValueChange={(value) => (onValueChange ? onValueChange(value as Value) : null)}
     >
-      {children}
+      {children as JSX.Element}
       {errorMessage && <ErrorMessage className='mt-1'>{errorMessage}</ErrorMessage>}
     </S.Root>
   )

@@ -10,7 +10,7 @@ import type { UserDto } from '@stardust/core/profile/entities/dtos'
 import { RocketAnimation } from '../../components/RocketAnimation'
 
 type Props = {
-  rocketAnimationRef: RefObject<AnimationRef>
+  rocketAnimationRef: RefObject<AnimationRef | null>
   isRocketVisible: boolean
   user: UserDto | null
   onLinkClick: () => void

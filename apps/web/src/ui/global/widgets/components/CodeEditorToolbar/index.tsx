@@ -14,7 +14,7 @@ import type { CodeEditorRef } from '../CodeEditor/types'
 type CodeEditorToolbarProps = {
   children: ReactNode
   originalCode?: string
-  codeEditorRef: RefObject<CodeEditorRef>
+  codeEditorRef: RefObject<CodeEditorRef | null>
   onRunCode: () => void
 }
 

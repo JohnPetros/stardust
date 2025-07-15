@@ -16,8 +16,8 @@ type Props = {
   number: number
   isUnlocked: boolean
   isLastUnlockedStar: boolean
-  lastUnlockedStarRef: RefObject<HTMLDivElement>
-  starAnimationRef: RefObject<AnimationRef>
+  lastUnlockedStarRef: RefObject<HTMLDivElement | null>
+  starAnimationRef: RefObject<AnimationRef | null>
   onClick: () => void
 }
 

@@ -3,7 +3,7 @@ import { type RefObject, useEffect } from 'react'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
 export function useTier(
-  tierRef: RefObject<HTMLDivElement>,
+  tierRef: RefObject<HTMLDivElement | null>,
   tierId: string,
   index: number,
 ) {

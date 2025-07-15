@@ -3,7 +3,7 @@ import { type FormEvent, type RefObject, useEffect, useState } from 'react'
 import type { TextEditorRef, TextEditorSnippet } from '../../TextEditor/types'
 
 type UseCommentInput = {
-  textEditorRef: RefObject<TextEditorRef>
+  textEditorRef: RefObject<TextEditorRef | null>
   onSend: (content: string) => void
   defaultContent: string
 }

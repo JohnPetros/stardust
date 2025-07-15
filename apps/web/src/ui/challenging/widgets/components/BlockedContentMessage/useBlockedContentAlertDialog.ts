@@ -7,7 +7,7 @@ import { useRouter } from '@/ui/global/hooks/useRouter'
 import { ROUTES } from '@/constants'
 
 export function useBlockedContentAlertDialog(
-  ref: RefObject<AlertDialogRef>,
+  ref: RefObject<AlertDialogRef | null>,
   content: 'comments' | 'solutions' | 'solution',
 ) {
   const [isVerifyingVisibility, setIsVerifyingVisibility] = useState(true)
