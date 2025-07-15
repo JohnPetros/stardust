@@ -8,7 +8,7 @@ import { AnimatedSpan } from './AnimatedSpan'
 import { RewardAlertDialog } from './RewardAlertDialog'
 
 import { Button } from '@/ui/global/widgets/components/Button'
-import { useApi } from '@/ui/global/hooks/useApi'
+import { useRest } from '@/ui/global/hooks/useRest'
 
 import { useAchievementCard } from './useAchievementCard'
 
@@ -34,8 +34,8 @@ export function AchievementCard({
   children: progress,
 }: AchievementCardProps) {
   const { handleRescueButtonClick } = useAchievementCard(id, reward)
-  const api = useApi()
-  const iconImage = api.fetchImage('achievements', icon)
+  const { storageService } = useRest()
+  const iconImage = storageService.fetchImage('achievements', icon)
 
   return (
     <AnimatedContainer>

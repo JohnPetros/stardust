@@ -2,6 +2,7 @@ import type { Action, Call } from '@stardust/core/global/interfaces'
 import type { LessonService } from '@stardust/core/lesson/interfaces'
 import type { TextBlockDto } from '@stardust/core/global/entities/dtos'
 import type { QuestionDto } from '@stardust/core/lesson/entities/dtos'
+import { Id } from '@stardust/core/global/structures'
 
 type Request = {
   starId: string
@@ -18,13 +19,14 @@ export const FetchLessonStoryAndQuestionsAction = (
 ): Action<Request, Response> => {
   return {
     async handle(call: Call<Request>) {
-      const { starId } = call.getRequest()
+      const { starId: starIdValue } = call.getRequest()
+      const starId = Id.create(starIdValue)
 
-      const questionsResponse = await service.fetchQuestionsByStar(starId)
+      const questionsResponse = await service.fetchQuestions(starId)
       if (questionsResponse.isFailure) questionsResponse.throwError()
       const questions = questionsResponse.body
 
-      const textsBlocksResponse = await service.fetchTextsBlocksByStar(starId)
+      const textsBlocksResponse = await service.fetchTextsBlocks(starId)
       if (textsBlocksResponse.isFailure) textsBlocksResponse.throwError()
       const textsBlocks = textsBlocksResponse.body
 

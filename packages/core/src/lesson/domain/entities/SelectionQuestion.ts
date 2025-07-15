@@ -50,4 +50,16 @@ export class SelectionQuestion extends Question<SelectionQuestionProps> {
   get code() {
     return this.props.code ?? null
   }
+
+  get dto(): SelectionQuestionDto {
+    return {
+      id: this.id.value,
+      type: 'selection',
+      stem: this.stem.value,
+      picture: this.picture.value,
+      options: this.options,
+      answer: this.answer,
+      code: this.code ?? undefined,
+    }
+  }
 }

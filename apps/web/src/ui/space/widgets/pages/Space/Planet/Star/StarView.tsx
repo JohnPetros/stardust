@@ -16,7 +16,7 @@ type Props = {
   number: number
   isUnlocked: boolean
   isLastUnlockedStar: boolean
-  lastUnlockedStarRef: RefObject<HTMLLIElement>
+  lastUnlockedStarRef: RefObject<HTMLDivElement>
   starAnimationRef: RefObject<AnimationRef>
   onClick: () => void
 }
@@ -31,7 +31,7 @@ export const StarView = ({
   onClick,
 }: Props) => {
   return (
-    <li ref={isLastUnlockedStar ? lastUnlockedStarRef : null}>
+    <div ref={isLastUnlockedStar ? lastUnlockedStarRef : null}>
       <div>
         <Image
           src={`/images/${isUnlocked ? 'unlocked-stardust.svg' : 'locked-stardust.svg'}`}
@@ -93,6 +93,6 @@ export const StarView = ({
 
         <AnimatedRocket shouldAnimate={isLastUnlockedStar} />
       </button>
-    </li>
+    </div>
   )
 }

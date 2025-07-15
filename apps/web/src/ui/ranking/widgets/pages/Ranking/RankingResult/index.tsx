@@ -3,17 +3,16 @@
 import Image from 'next/image'
 import { useRef } from 'react'
 
-import { useApi } from '@/ui/global/hooks/useApi'
-
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { useRest } from '@/ui/global/hooks/useRest'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
-import { Button } from '@/ui/global/widgets/components/Button'
 import { Animation } from '@/ui/global/widgets/components/Animation'
+import { Button } from '@/ui/global/widgets/components/Button'
+import { Loading } from '@/ui/global/widgets/components/Loading'
 import { RankingUser } from '../RankingUsersList/RankingUser'
 import { RankingWinner } from './RankingWinner'
 import { useRankingResult } from './useRankingResult'
-import { Loading } from '@/ui/global/widgets/components/Loading'
 
 export function RankingResult() {
   const rewardAlertDialog = useRef<AlertDialogRef>(null)
@@ -31,8 +30,10 @@ export function RankingResult() {
     failAlertDialog,
   })
   const { user } = useAuthContext()
-  const api = useApi()
-  const tierImage = user ? api.fetchImage('rankings', user.tier.image.value) : ''
+  const { storageService } = useRest()
+  const tierImage = user
+    ? storageService.fetchImage('rankings', user.tier.image.value)
+    : ''
 
   if (isLoading) return <Loading isSmall={false} />
 

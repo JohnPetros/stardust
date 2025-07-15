@@ -2,8 +2,8 @@ import type {
   ChallengeCompletionStatusValue,
   ChallengeDifficultyLevel,
 } from '@stardust/core/challenging/types'
-import { ChallengeCategory } from '@stardust/core/challenging/entities'
-import type { ChallengeCategoryDto } from '@stardust/core/challenging/entities/dtos'
+import type { List } from '@stardust/core/global/structures'
+import type { ChallengeCategory } from '@stardust/core/challenging/entities'
 
 import * as Select from '@/ui/global/widgets/components/Select'
 import * as AnimatedTagging from '@/ui/global/widgets/components/AnimatedTagging'
@@ -11,23 +11,25 @@ import { Search } from '@/ui/global/widgets/components/Search'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { CategoriesFilter } from './CategoriesFilter'
 import { FILTER_SELECTS_ITEMS } from '../filter-select-items'
-import { useChallengesFilter } from './useChallengesFilters'
 import { Tag } from './Tag'
 
 type Props = {
-  categoriesDto: ChallengeCategoryDto[]
+  tags: List<string>
+  categories: ChallengeCategory[]
+  handleTitleChange: (title: string) => void
+  handleCompletionStatusChange: (status: string) => void
+  handleDifficultyLevelChange: (difficulty: string) => void
+  handleTagClick: (tag: string, value: string) => void
 }
 
-export const ChallengesFiltersView = ({ categoriesDto }: Props) => {
-  const categories = categoriesDto.map(ChallengeCategory.create)
-  const {
-    tags,
-    handleTitleChange,
-    handleCompletionStatusChange,
-    handleDifficultyLevelChange,
-    handleTagClick,
-  } = useChallengesFilter(categories)
-
+export const ChallengesFiltersView = ({
+  categories,
+  tags,
+  handleTitleChange,
+  handleCompletionStatusChange,
+  handleDifficultyLevelChange,
+  handleTagClick,
+}: Props) => {
   return (
     <div className='flex flex-col'>
       <Search

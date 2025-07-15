@@ -1,5 +1,0 @@
-export { SupabaseBrowserClient } from './SupabaseBrowserClient'
-export { SupabaseServerClient } from './SupabaseServerClient'
-export { SupabaseMiddlewareClient } from './SupabaseMiddlewareClient'
-export { SupabaseRouteHandlerClient } from './SupabaseRouteHandlerClient'
-export { SupabaseServerActionClient } from './SupabaseServerActionClient'

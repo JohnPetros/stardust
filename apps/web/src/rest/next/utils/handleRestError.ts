@@ -5,11 +5,11 @@ import { parseResponseJson } from './parseResponseJson'
 export async function handleRestError<Body>(response: globalThis.Response) {
   const data = await parseResponseJson(response)
 
-  console.log('handleRestError', data)
+  console.log('handleRestError', response)
 
   if (data && 'title' in data && 'message' in data) {
-    console.error('Rest Api error title:', data.title)
-    console.error('Rest Api error message:', data.message)
+    console.warn('Rest Api error title:', data.title)
+    console.warn('Rest Api error message:', data.message)
 
     return new RestResponse<Body>({
       errorMessage: String(data.message),

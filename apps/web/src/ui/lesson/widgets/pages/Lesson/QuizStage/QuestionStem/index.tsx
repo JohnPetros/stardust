@@ -1,6 +1,6 @@
 'use client'
 
-import { useApi } from '@/ui/global/hooks/useApi'
+import { useRest } from '@/ui/global/hooks/useRest'
 import { useMdx } from '@/ui/global/widgets/components/Mdx/hooks/useMdx'
 import Image from 'next/image'
 
@@ -11,8 +11,8 @@ type TitleProps = {
 
 export function QuestionStem({ children, picture }: TitleProps) {
   const { parseMdxToText } = useMdx()
-  const api = useApi()
-  const image = picture ? api.fetchImage('theory', picture) : ''
+  const { storageService } = useRest()
+  const image = picture ? storageService.fetchImage('theory', picture) : ''
 
   return (
     <div className='flex w-full flex-col items-center justify-center gap-3 rounded-md md:flex-row'>

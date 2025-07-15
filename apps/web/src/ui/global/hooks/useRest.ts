@@ -13,6 +13,7 @@ import {
   DocumentationService,
 } from '@/rest/services'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { StorageService } from '@/rest/services/StorageService'
 
 const restClient = NextRestClient({ isCacheEnabled: false })
 restClient.setBaseUrl(CLIENT_ENV.serverAppUrl)
@@ -33,5 +34,6 @@ export function useRest() {
     forumService: ForumService(restClient),
     playgroundService: PlaygroundService(restClient),
     documentationService: DocumentationService(restClient),
+    storageService: StorageService(restClient),
   }
 }

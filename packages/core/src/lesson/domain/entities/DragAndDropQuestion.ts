@@ -94,4 +94,23 @@ export class DragAndDropQuestion extends Question<DragAndDropQuestionProps> {
   get correctItems(): List<string> {
     return this.props.correctItems
   }
+
+  get dto(): DragAndDropQuestionDto {
+    return {
+      id: this.id.value,
+      type: 'drag-and-drop',
+      picture: this.picture.value,
+      stem: this.stem.value,
+      lines: this.codeLines.map((line) => ({
+        number: line.number.value,
+        texts: line.texts,
+        indentation: line.indentation.value,
+      })),
+      items: this.dragAndDrop.items.map((item) => ({
+        index: item.index.value,
+        label: item.label.value,
+      })),
+      correctItems: this.correctItems.items,
+    }
+  }
 }

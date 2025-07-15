@@ -2,16 +2,16 @@
 
 import Image from 'next/image'
 
-import { useApi } from '@/ui/global/hooks/useApi'
+import { useRest } from '@/ui/global/hooks/useRest'
 import { REGEX } from '@/constants'
 
 type PictureProps = {
-  url: string
+  picture: string
 }
 
-export function Picture({ url }: PictureProps) {
-  const api = useApi()
-  const image = api.fetchImage('theory', url)
+export function Picture({ picture }: PictureProps) {
+  const { storageService } = useRest()
+  const image = storageService.fetchImage('theory', picture)
   const formattedImage = image.replace(REGEX.quotes, '')
 
   return (

@@ -56,4 +56,17 @@ export class DragAndDropListQuestion extends Question<DragAndDropListQuestionPro
   get sortableList(): SortableList {
     return this.props.sortableList
   }
+
+  get dto(): DragAndDropListQuestionDto {
+    return {
+      id: this.id.value,
+      type: 'drag-and-drop-list',
+      stem: this.stem.value,
+      picture: this.picture.value,
+      items: this.sortableList.items.map((item) => ({
+        position: item.originalPosition.value,
+        label: item.label.value,
+      })),
+    }
+  }
 }

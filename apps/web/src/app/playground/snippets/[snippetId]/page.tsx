@@ -6,8 +6,9 @@ import { NotPublicSnippetPage } from '@/ui/playground/widgets/pages/NotPublicPla
 export const dynamic = 'force-dynamic'
 
 const Page = async ({ params }: NextParams<'snippetId'>) => {
+  const { snippetId } = await params
   const response = await playgroundActions.accessSnippetPage({
-    snippetId: params.snippetId,
+    snippetId,
   })
   if (!response?.data) return
   const { snippet, isPageNotPublic } = response.data

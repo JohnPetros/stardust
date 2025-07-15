@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { motion, type Variants } from 'framer-motion'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useApi } from '@/ui/global/hooks/useApi'
+import { useRest } from '@/ui/global/hooks/useRest'
 
 const rocketVariants: Variants = {
   hidden: {
@@ -25,8 +25,10 @@ type AnimatedImageProps = {
 
 export function AnimatedRocket({ shouldAnimate }: AnimatedImageProps) {
   const { user } = useAuthContext()
-  const api = useApi()
-  const rocketImage = user ? api.fetchImage('rockets', user.rocket.image.value) : ''
+  const { storageService } = useRest()
+  const rocketImage = user
+    ? storageService.fetchImage('rockets', user.rocket.image.value)
+    : ''
 
   return (
     <motion.div

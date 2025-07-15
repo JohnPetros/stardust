@@ -3,16 +3,17 @@ import { SolutionPage } from '@/ui/challenging/widgets/pages/Solution'
 import { challengingActions } from '@/rpc/next-safe-action'
 
 const Page = async ({ params }: NextParams<'challengeSlug' | 'solutionSlug'>) => {
+  const { challengeSlug, solutionSlug } = await params
   const response = await challengingActions.accessSolutionPage({
-    challengeSlug: params.challengeSlug,
-    solutionSlug: params.solutionSlug,
+    challengeSlug,
+    solutionSlug,
   })
   if (!response?.data) return
 
   return (
     <SolutionPage
       challengeId={response.data.challengeId}
-      challengeSlug={params.challengeSlug}
+      challengeSlug={challengeSlug}
       savedSolutionDto={response.data.solution}
     />
   )
