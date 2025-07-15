@@ -3,7 +3,7 @@ import { type RefObject, useEffect } from 'react'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 
-export function useQuizStage(alertDialogRef: RefObject<AlertDialogRef>) {
+export function useQuizStage(alertDialogRef: RefObject<AlertDialogRef | null>) {
   const { getQuizSlice, getStageSlice } = useLessonStore()
   const { quiz, setQuiz } = getQuizSlice()
   const { setStage } = getStageSlice()

@@ -1,0 +1,95 @@
+@URL = {{BASE_URL}}/profile/users
+@USER_ID = 2ac3e189-e5ed-4003-a87a-d2358411584e
+@USER_SLUG = ctrl
+
+### Fetch user by id
+GET {{URL}}/id/{{USER_ID}}
+Authorization: Bearer {{JWT}}
+
+### Fetch user by slug
+GET {{URL}}/slug/{{USER_SLUG}} 
+Authorization: Bearer {{JWT}}
+
+### Update user
+PUT {{URL}}/{{USER_ID}}
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "slug": "ctrl-alt-del",
+  "email": "ctrlaltdel.cursor@gmail.com",
+  "name": "Ctrl Alt Del",
+  "level": 1,
+  "coins": 0,
+  "xp": 0,
+  "weeklyXp": 0,
+  "streak": 0,
+  "weekStatus": ["todo", "done", "todo", "todo", "todo", "todo", "todo"]
+}
+
+### Reward user for star completion
+PUT {{URL}}/{{USER_ID}}/reward/star
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "starId": "506f5514-6b54-40ae-8833-392ecbe5e422",
+  "questionsCount": 10,
+  "incorrectAnswersCount": 5
+}
+
+### Reward user for star challenge completion
+PUT {{URL}}/{{USER_ID}}/reward/star-challenge
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "challengeId": "56373af2-ac24-4bcd-a312-7d01bd7b5f53",
+  "maximumIncorrectAnswersCount": 10,
+  "incorrectAnswersCount": 2
+}
+
+### Reward user for challenge completion
+PUT {{URL}}/{{USER_ID}}/reward/challenge
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "challengeId": "56373af2-ac24-4bcd-a312-7d01bd7b5f53",
+  "maximumIncorrectAnswersCount": 10,
+  "incorrectAnswersCount": 2
+}
+
+### Upvote comment
+POST {{URL}}/comments/da7989c8-1123-4e65-ad19-79073a58bee6/upvote
+Authorization: Bearer {{JWT}}
+
+### Verify user name in use
+GET {{URL}}/verify-name-in-use?name=ctrl
+
+### Verify user email in use
+GET {{URL}}/verify-email-in-use?email=johndoe@example.com
+
+### Acquire rocket
+POST {{URL}}/rockets/acquire
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "rocketId": "db9b36bd-0b94-4587-88aa-9ad9ecd4fd7b",
+  "rocketName": "Solaris Sprinter",
+  "rocketImage": "https://example.com/rocket.png",
+  "rocketPrice": 1000
+}
+
+### Acquire avatar
+POST {{URL}}/avatars/acquire
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "avatarId": "a785d743-52f5-4b78-90ff-18b408bb0566",
+  "avatarName": "Apollo testador",
+  "avatarImage": "https://example.com/avatar.png",
+  "avatarPrice": 1000
+}

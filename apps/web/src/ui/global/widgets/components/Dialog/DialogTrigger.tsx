@@ -8,7 +8,7 @@ type DialogTriggerProps = {
 export function DialogTrigger({ children }: DialogTriggerProps) {
   return (
     <Trigger asChild className='w-full'>
-      {children as JSX.Element}
+      {children}
     </Trigger>
   )
 }

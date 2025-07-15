@@ -6,5 +6,5 @@ type CustomButtonProps = {
 }
 
 export function CustomButton({ children }: CustomButtonProps) {
-  return <Toolbar.Button asChild>{children as JSX.Element}</Toolbar.Button>
+  return <Toolbar.Button asChild>{children}</Toolbar.Button>
 }

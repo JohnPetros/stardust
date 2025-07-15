@@ -31,7 +31,7 @@ export const DialogComponent = (
   return (
     <Root open={isOpen} onOpenChange={handleOpenChange}>
       <Overlay className='fixed inset-0 z-[500] overflow-y-auto bg-gray-900 bg-opacity-50' />
-      {children as JSX.Element}
+      {children}
     </Root>
   )
 }

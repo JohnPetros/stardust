@@ -8,8 +8,8 @@ import type { AnimationRef } from '@/ui/global/widgets/components/Animation/type
 const ANIMATION_DURATION = 2.15 // seconds
 
 export function usePodiumAnimation(
-  containerRef: RefObject<HTMLDivElement>,
-  animationRef: RefObject<AnimationRef>,
+  containerRef: RefObject<HTMLDivElement | null>,
+  animationRef: RefObject<AnimationRef | null>,
 ) {
   const isInView = useInView(containerRef)
 

@@ -1,0 +1,4 @@
+@URL = {{BASE_URL}}/shop/avatars
+
+### Fetch avatars list
+GET {{URL}}?order=ascending&page=1&itemsPerPage=15

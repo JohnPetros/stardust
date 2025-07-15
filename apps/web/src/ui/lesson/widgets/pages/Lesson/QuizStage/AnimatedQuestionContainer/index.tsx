@@ -1,7 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { motion, type Variants } from 'motion/react'
+import { motion, type Transition, type Variants } from 'motion/react'
 
 export const questionContainerAnimations: Variants = {
   right: {
@@ -21,7 +21,7 @@ export const questionContainerAnimations: Variants = {
   },
 }
 
-export const questionContainerTransition = {
+export const questionContainerTransition: Transition = {
   duration: 0.4,
   ease: 'easeInOut',
 }

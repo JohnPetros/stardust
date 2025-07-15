@@ -1,0 +1,1 @@
+export { SupabaseCommentsRepository } from './SupabaseCommentsRepository'

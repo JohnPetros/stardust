@@ -8,6 +8,7 @@ export function useAnimatedHeader() {
   function handleScrollYChange(currentScrollYValue: number) {
     const previosScrollYValue = scrollY.getPrevious()
     if (
+      previosScrollYValue &&
       currentScrollYValue > previosScrollYValue &&
       currentScrollYValue > window.innerHeight
     ) {

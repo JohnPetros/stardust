@@ -40,7 +40,7 @@ export function useSnippetCard({
 
     const newSnippetTitle = Text.create(newSnippetTitleValue)
     setSnippetTitle(newSnippetTitle)
-    promptRef.current.setValue('')
+    promptRef.current?.setValue('')
 
     const response = await playgroundService.editSnippetTitle(snippetId, newSnippetTitle)
 
