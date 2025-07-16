@@ -15,6 +15,9 @@ type Schema = {
     userId?: string
     userCompletedChallengesIds?: string[]
   }
+  body: {
+    userCompletedChallengesIds?: string[]
+  }
 }
 
 export class FetchChallengesListController implements Controller<Schema> {
@@ -29,10 +32,10 @@ export class FetchChallengesListController implements Controller<Schema> {
       upvotesCountOrder,
       postingOrder,
       userId,
-      userCompletedChallengesIds = [],
       title,
       completionStatus,
     } = http.getQueryParams()
+    const { userCompletedChallengesIds = [] } = await http.getBody()
     const useCase = new ListChallengesUseCase(this.challengesRepository)
     const response = await useCase.execute({
       page,
@@ -46,7 +49,6 @@ export class FetchChallengesListController implements Controller<Schema> {
       title,
       completionStatus,
     })
-    // Removed debugging statement to avoid exposing internal state in production
     return http.sendPagination(response)
   }
 }

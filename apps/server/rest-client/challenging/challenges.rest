@@ -17,7 +17,7 @@ GET {{URL}}
 &itemsPerPage=2
 &title=
 &difficulty=any
-&completionStatus=any
+&completionStatus=completed
 &upvotesCountOrder=any
 &postingOrder=any
 Authorization: Bearer {{JWT}}
