@@ -43,17 +43,13 @@ cd ./stardust/apps/studio
 npm install
 ```
 
-```bash
-npm install
-```
-
 **Execute a aplicação em modo de desenvolvimento**
 
 ```bash
 npm run dev
 ```
 
-> Será aberto o painel de desenvolvimento do Inngest em http://localhost:8000
+> Será aberto o painel de desenvolvimento da aplicação studio em http://localhost:8000
 
 ## Executando os testes
 
@@ -122,6 +118,7 @@ npm run tests
 
 ### Estrutura de pastas de ui/
 
+```
 └─ ui/
    ├── styles/
    ├── <nome do módulo>/
@@ -132,3 +129,4 @@ npm run tests
    └── shadcn/
       ├── components/
       └── utils/
+```
