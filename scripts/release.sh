@@ -18,5 +18,5 @@ if [ -z "$GITHUB_TOKEN" ]; then
 fi
 
 # Executa o processo de release
-./scripts/update-changelog.sh && npx release-it
+npx release-it
 
