@@ -3,9 +3,9 @@ import { useState } from 'react'
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import { Email, Name } from '@stardust/core/global/structures'
 import { Password } from '@stardust/core/auth/structures'
+import type { UserCreatedEvent } from '@stardust/core/profile/events'
 
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-// import { useUserCreatedSocket } from './useUserCreatedSocket'
 
 export function useSignUpPage(authService: AuthService, isUserCreated: boolean) {
   const [isSignUpSuccessfull, setIsSignUpSuccessfull] = useState(false)
@@ -13,12 +13,13 @@ export function useSignUpPage(authService: AuthService, isUserCreated: boolean) 
   const [userEmail, setUserEmail] = useState<Email | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const toast = useToastContext()
-  // useUserCreatedSocket((event) => {
-  //   if (event.payload.userEmail === userEmail?.value) {
-  //     toast.showSuccess('Enviamos para você um e-mail de confirmação', 10)
-  //     setIsSignUpSuccessfull(true)
-  //   }
-  // })
+
+  function handleUserCreated(event: UserCreatedEvent) {
+    if (event.payload.userEmail === userEmail?.value) {
+      toast.showSuccess('Enviamos para você um e-mail de confirmação', 10)
+      setIsSignUpSuccessfull(true)
+    }
+  }
 
   async function handleFormSubmit(email: string, password: string, name: string) {
     setIsSubmitting(true)
@@ -65,5 +66,6 @@ export function useSignUpPage(authService: AuthService, isUserCreated: boolean) 
     isResendingEmail,
     handleFormSubmit,
     handleResendEmail,
+    handleUserCreated,
   }
 }

@@ -23,7 +23,7 @@ export function Container<Value>({
       value={String(value)}
       onValueChange={(value) => (onValueChange ? onValueChange(value as Value) : null)}
     >
-      {children as JSX.Element}
+      {children}
       {errorMessage && <ErrorMessage className='mt-1'>{errorMessage}</ErrorMessage>}
     </S.Root>
   )

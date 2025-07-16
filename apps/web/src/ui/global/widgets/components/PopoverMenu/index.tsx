@@ -5,7 +5,6 @@ import * as Popover from '@radix-ui/react-popover'
 import { twMerge } from 'tailwind-merge'
 
 import type { PopoverMenuButton } from './types'
-import { Hydration } from '../Hydration'
 import { usePopoverMenu } from './usePopoverMenu'
 import { AnimatedPanel } from './AnimatedPanel'
 import { Checkbox } from '../Checkbox'
@@ -13,7 +12,7 @@ import { Checkbox } from '../Checkbox'
 type PopoverMenuProps = {
   label: string
   buttons: PopoverMenuButton[]
-  children: JSX.Element | ((isOpen: boolean) => JSX.Element)
+  children: ReactNode | ((isOpen: boolean) => ReactNode)
   onOpenChange?: (isOpen: boolean) => void
 }
 

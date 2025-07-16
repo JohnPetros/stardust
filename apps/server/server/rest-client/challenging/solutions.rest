@@ -1,0 +1,51 @@
+@URL = {{BASE_URL}}/challenging/solutions
+@CHALLENGE_ID = 0a088952-b63e-4053-9f41-e748e51fd156
+@SOLUTION_ID = 9afabbad-0460-4b57-97c8-5cf0a3f8f0b3
+@SOLUTION_SLUG = test-solution-after-edit
+
+### Fetch solutions list
+GET {{URL}}
+?page=1
+&itemsPerPage=25
+&title=
+&sorter=date
+Authorization: Bearer {{JWT}}
+
+### Fetch solution
+GET {{URL}}/{{SOLUTION_SLUG}}
+Authorization: Bearer {{JWT}}
+
+### Post solution
+POST {{URL}}
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "challengeId": "{{CHALLENGE_ID}}",
+  "solutionTitle": "Test Solution",
+  "solutionContent": "This is a test solution"
+}
+
+### Edit solution
+PUT {{URL}}/{{SOLUTION_ID}}
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "solutionTitle": "Test Solution after edit",
+  "solutionContent": "This is a test solution after edit"
+}
+
+### View solution
+PATCH {{URL}}/{{SOLUTION_SLUG}}/view
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+### Upvote solution
+POST {{URL}}/{{SOLUTION_ID}}/upvote
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+### Delete solution
+DELETE {{URL}}/{{SOLUTION_ID}}
+Authorization: Bearer {{JWT}}

@@ -8,7 +8,7 @@ export function Content({ children }: PropsWithChildren) {
     <S.Portal>
       <S.Content className='rounded-md bg-gray-700' position='popper' sideOffset={8}>
         <S.Viewport className='z-40' />
-        {children as JSX.Element}
+        {children}
       </S.Content>
     </S.Portal>
   )

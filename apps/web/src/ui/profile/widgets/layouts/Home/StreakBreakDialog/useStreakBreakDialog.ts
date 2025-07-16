@@ -3,7 +3,7 @@ import { type RefObject, useEffect } from 'react'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 
-export function useStreakBreakDialog(alertDialogRef: RefObject<AlertDialogRef>) {
+export function useStreakBreakDialog(alertDialogRef: RefObject<AlertDialogRef | null>) {
   const { user, updateUser } = useAuthContext()
 
   async function handleAlertDialogOpenChange(isOpen: boolean) {
@@ -14,7 +14,8 @@ export function useStreakBreakDialog(alertDialogRef: RefObject<AlertDialogRef>) 
   }
 
   useEffect(() => {
-    if (user?.didBreakStreak.isTrue && alertDialogRef.current) alertDialogRef.current.open()
+    if (user?.didBreakStreak.isTrue && alertDialogRef.current)
+      alertDialogRef.current.open()
   }, [user?.didBreakStreak.isTrue, alertDialogRef.current])
 
   return {

@@ -6,7 +6,7 @@ import { StyledButton } from './StyledButton'
 import { Icon } from '../Icon'
 
 export type Props = {
-  buttonRef: RefObject<HTMLButtonElement>
+  buttonRef: RefObject<HTMLButtonElement | null>
   isAnswered: boolean
   isAnswerVerified: boolean
   isAnswerCorrect: boolean

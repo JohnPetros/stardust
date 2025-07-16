@@ -1,0 +1,5 @@
+@URL = {{BASE_URL}}/documentation/docs
+
+### Fetch all docs
+GET {{URL}}
+Authorization: Bearer {{JWT}}

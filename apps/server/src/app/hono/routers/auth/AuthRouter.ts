@@ -6,6 +6,7 @@ import {
   emailSchema,
   nameSchema,
   passwordSchema,
+  stringSchema,
 } from '@stardust/validation/global/schemas'
 
 import {
@@ -24,7 +25,6 @@ import { SupabaseAuthService } from '@/rest/services'
 import { InngestEventBroker } from '@/queue/inngest/InngestEventBroker'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
-import { stringSchema } from '@stardust/validation'
 
 export class AuthRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/auth')

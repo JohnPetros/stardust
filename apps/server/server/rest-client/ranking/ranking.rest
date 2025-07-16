@@ -1,0 +1,10 @@
+@URL = {{BASE_URL}}/ranking
+@TIER_ID = f542f61a-4e42-4914-88f6-9aa7c2358473
+
+### Fetch ranking rankers
+GET {{URL}}/rankers/{{TIER_ID}}
+Authorization: Bearer {{JWT}}
+
+### Fetch last week ranking winners
+GET {{URL}}/winners/{{TIER_ID}}
+Authorization: Bearer {{JWT}}

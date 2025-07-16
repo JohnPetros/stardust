@@ -1,12 +1,11 @@
 import { memo, type RefObject } from 'react'
 
-import { useTextBlockMdx } from './useTextBlockMdx'
 import { Mdx } from '@/ui/global/widgets/components/Mdx'
 
 type Props = {
   content: string
   shouldMemoized: boolean
-  textBlockMdxRef: RefObject<HTMLDivElement>
+  textBlockMdxRef: RefObject<HTMLDivElement | null>
   mdxTemplate: string
 }
 

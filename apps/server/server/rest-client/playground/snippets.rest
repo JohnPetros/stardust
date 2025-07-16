@@ -1,0 +1,47 @@
+@URL = {{BASE_URL}}/playground/snippets
+@SNIPPET_ID = b13ed568-281b-4adb-8d88-f3d11ef4a3bf
+
+### Create snippet
+POST {{URL}}
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "title": "",
+  "code": "escreva('Olá, mundo!');",
+  "isPublic": true
+}
+
+### Fetch snippet
+GET {{URL}}/{{SNIPPET_ID}}
+Authorization: Bearer {{JWT}}
+
+### Fetch snippets list
+GET {{URL}}
+?page=1
+&itemsPerPage=10
+Authorization: Bearer {{JWT}}
+
+### Update snippet
+PUT {{URL}}/{{SNIPPET_ID}}
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "title": "",
+  "code": "escreva('Código atualizado!')",
+  "isPublic": false
+}
+
+### Edit snippet title
+PATCH {{URL}}/{{SNIPPET_ID}}
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "title": "Snippet de teste editado"
+}
+
+### Delete snippet
+DELETE {{URL}}/{{SNIPPET_ID}}
+Authorization: Bearer {{JWT}}

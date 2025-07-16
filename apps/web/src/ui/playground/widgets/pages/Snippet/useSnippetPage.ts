@@ -35,8 +35,8 @@ type SnippetSchema = z.infer<typeof snippetSchema>
 type UseSnippetPageParams = {
   playgroundService: PlaygroundService
   userId?: Id
-  playgroudCodeEditorRef: RefObject<PlaygroundCodeEditorRef>
-  authAlertDialogRef: RefObject<AlertDialogRef>
+  playgroudCodeEditorRef: RefObject<PlaygroundCodeEditorRef | null>
+  authAlertDialogRef: RefObject<AlertDialogRef | null>
   snippetDto?: SnippetDto
 }
 

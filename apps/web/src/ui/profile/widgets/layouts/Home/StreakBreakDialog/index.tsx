@@ -1,11 +1,12 @@
 import { useRef } from 'react'
 
+import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { useStreakBreakDialog } from './useStreakBreakDialog'
 
 export function StreakBreakDialog() {
-  const alertDialogRef = useRef(null)
+  const alertDialogRef = useRef<AlertDialogRef | null>(null)
   const { handleAlertDialogOpenChange } = useStreakBreakDialog(alertDialogRef)
 
   return (

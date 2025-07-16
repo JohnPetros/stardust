@@ -19,7 +19,7 @@ export function Item({ children, className, value }: SelectItemProps) {
         className,
       )}
     >
-      {children as JSX.Element}
+      {children}
     </S.SelectItem>
   )
 }
