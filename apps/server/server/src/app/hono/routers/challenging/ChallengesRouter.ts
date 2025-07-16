@@ -1,5 +1,4 @@
 import { Hono } from 'hono'
-import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
 
 import {
@@ -22,19 +21,20 @@ import {
 } from '@/rest/controllers/challenging/challenges'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
-import { AuthMiddleware } from '../../middlewares'
+import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
 import { ProfileMiddleware } from '../../middlewares/ProfileMiddleware'
 
 export class ChallengesRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/challenges')
   private readonly authMiddleware = new AuthMiddleware()
   private readonly profileMiddleware = new ProfileMiddleware()
+  private readonly validationMiddleware = new ValidationMiddleware()
 
   private registerFetchChallengeRoute(): void {
     this.router.get(
       '/slug/:challengeSlug',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           challengeSlug: stringSchema,
@@ -54,7 +54,7 @@ export class ChallengesRouter extends HonoRouter {
     this.router.get(
       '/star/:starId',
       this.authMiddleware.verifyAuthentication,
-      zValidator('param', z.object({ starId: idSchema })),
+      this.validationMiddleware.validate('param', z.object({ starId: idSchema })),
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseChallengesRepository(http.getSupabase())
@@ -69,8 +69,7 @@ export class ChallengesRouter extends HonoRouter {
     this.router.get(
       '/',
       this.authMiddleware.verifyAuthentication,
-      this.profileMiddleware.appendUserCompletedChallengesIdsToBody,
-      zValidator(
+      this.validationMiddleware.validate(
         'query',
         z.object({
           page: pageSchema,
@@ -84,6 +83,7 @@ export class ChallengesRouter extends HonoRouter {
           completionStatus: stringSchema,
         }),
       ),
+      this.profileMiddleware.appendUserCompletedChallengesIdsToBody,
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseChallengesRepository(http.getSupabase())
@@ -115,7 +115,7 @@ export class ChallengesRouter extends HonoRouter {
     this.router.get(
       '/:challengeId/vote',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           challengeId: stringSchema,
@@ -135,13 +135,13 @@ export class ChallengesRouter extends HonoRouter {
     this.router.post(
       '/:challengeId/vote',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           challengeId: idSchema,
         }),
       ),
-      zValidator(
+      this.validationMiddleware.validate(
         'json',
         z.object({
           challengeVote: challengeVoteSchema,
