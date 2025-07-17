@@ -57,3 +57,9 @@ dist
 
 # Certificates
 google-key-file.json
+
+# VSCode
+.vscode/
+
+# Cursor
+.cursor/
