@@ -10,7 +10,6 @@ import type { QuestionDto } from '@stardust/core/lesson/entities/dtos'
 
 export class SupabaseQuestionMapper {
   static toEntity(supabaseQuestion: QuestionDto): Question {
-    console.log(supabaseQuestion)
     switch (supabaseQuestion.type) {
       case 'selection':
         return SelectionQuestion.create(supabaseQuestion)

@@ -14,21 +14,20 @@ O Workflow de CD para realizar o deploy automaticamente se encontra [aqui](https
 
 ## Tecnologias e bibliotecas
 
-- [Next.js](https://nextjs.org/) - framework full-stack para React para dar suporte à renderização do lado do servidor (SSR), geração de páginas estáticas (SSG), rotas automáticas baseadas na estrutura de arquivos e API Routes (endpoints utilizando padrão REST).
-- [Inngest](https://www.inngest.com/) - plataforma de background jobs e workflows assíncronos para a execução de tarefas que rodam em segundo plano e jobs agendados e baseados em eventos
-- [Next Safe Action](https://next-safe-action.dev/) - biblioteca para criar actions seguras do lado do servidor com suporte à Validação de input e tratamento automático de erros
-- [Zustand](https://zustand-demo.pmnd.rs/) - biblioteca para gerenciar estados de interface complexos.
-- [Zod](https://zod.dev/) -  biblioteca para validação de dados.
-- [TailwindCSS](https://tailwindcss.com/) - framework utilitário de CSS, que usa classes pré-definidas para estilização de HTML/JSX.
-- [Radix UI](https://www.radix-ui.com/) - biblioteca de componentes acessíveis e headless para React.
-- [Framer Motion](https://motion.dev/) - biblioteca de animações para React.
-- [Delégua](https://github.com/DesignLiquido/delegua) - linguagem de programação em português com interpretador de código já integrado.
-- [Supabase](https://supabase.com/) - plataforma que oferece serviços backend prontas.
-- [SWR](https://swr.vercel.app/) - biblioteca que facilita a recuperação e o cache de dados em aplicações React.
-- [Dndkit](https://dndkit.com/) - biblioteca que fornece funcionalidade de arrastar e soltar (drag-and-drop) para React.
-- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) - biblioteca de testes focada em facilitar o teste de componentes React de forma que simula a interação real do usuário com a interface.
+- **Framework:** [Next.js](https://nextjs.org/) com TypeScript — framework full-stack para React, oferecendo renderização do lado do servidor (SSR), geração de páginas estáticas (SSG), rotas automáticas baseadas na estrutura de arquivos e API Routes (endpoints REST).
+- **Plataforma de background jobs:** [Inngest](https://www.inngest.com/) — execução de tarefas assíncronas, jobs agendados e workflows baseados em eventos.
+- **Validação e actions seguras:** [Next Safe Action](https://next-safe-action.dev/) — criação de actions seguras do lado do servidor, com validação de input e tratamento automático de erros.
+- **Gerenciamento de estado:** [Zustand](https://zustand-demo.pmnd.rs/) — gerenciamento de estados de interface complexos.
+- **Validação de dados:** [Zod](https://zod.dev/) — validação de schemas e dados.
+- **Estilização:** [TailwindCSS](https://tailwindcss.com/) — framework utilitário de CSS para estilização de HTML/JSX.
+- **Componentes de UI:** [Radix UI](https://www.radix-ui.com/) — componentes acessíveis e headless para React.
+- **Animações:** [Motion](https://motion.dev/) — biblioteca de animações para React.
+- **Linguagem integrada:** [Delégua](https://github.com/DesignLiquido/delegua) — linguagem de programação em português com interpretador integrado.
+- **Cache e fetch de dados:** [SWR](https://swr.vercel.app/) — recuperação e cache de dados em aplicações React.
+- **Drag-and-drop:** [Dndkit](https://dndkit.com/) — funcionalidade de arrastar e soltar para React.
+- **Testes automatizados:** [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) — testes de componentes React simulando a interação real do usuário.
 
-> Para mais detalhes acerca das dependências do projeto, como versões específicas, veja o arquivo [package.json](https://github.com/JohnPetros/stardust/blob/main/apps/web/package.json)
+> Para mais detalhes sobre as dependências e versões, consulte o arquivo [package.json](https://github.com/JohnPetros/stardust/blob/main/apps/web/package.json).
 
 ## Executando a aplicação
 
@@ -50,20 +49,13 @@ cd ./stardust/apps/web
 npm install
 ```
 
-**Execute a fila em modo de desenvolvimento** (Opcional)
-
-```bash
-npm run queue
-```
-
-> Será aberto o painel de desenvolvimento do Inngest em http://localhost:8288
-
-**Execute a aplicação web em modo de desenvolvimento**
+**Execute a aplicação em modo de desenvolvimento**
 
 ```bash
 npm run dev
 ```
- > Muito provavelmente a aplicação estará rodando em http://localhost:3333
+
+> Será aberto o painel de desenvolvimento do Inngest em http://localhost:3000
 
 ## Executando os testes
 
@@ -88,12 +80,9 @@ npm run tests
    ├─ 🛜 rest
    │  ├─ controllers
    │  ├─ ⚙️ next
-   │  └─ ⚙️ supabase
    ├─ 📟 rpc
    │  ├─ actions
    │  └─ ⚙️ next-safe-action
-   ├─ 🧰 provision
-   │  └─ <nome do tipo de provider>
    └─ 🖥️ ui
       └─ <nome do módulo>
          ├─ styles

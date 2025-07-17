@@ -40,15 +40,7 @@ export function useLessonPage(
   useEffect(() => {
     const timeout = setTimeout(() => setIsTransitionVisible(false), 1000)
 
-    const textBlocks = textsBlocksDto.map((dto) => {
-      let textBlock = TextBlock.create(dto.type, dto.content)
-
-      if (dto.picture) textBlock = textBlock.setPicture(dto.picture)
-      if (dto.title) textBlock = textBlock.setTitle(dto.title)
-      if (dto.isRunnable) textBlock = textBlock.setIsRunnable(dto.isRunnable)
-
-      return textBlock
-    })
+    const textBlocks = textsBlocksDto.map(TextBlock.create)
     setStory(
       Story.create(
         storyContent ? storyContent.split('---') : parseTextBlocksToMdx(textBlocks),
