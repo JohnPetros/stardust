@@ -3,10 +3,6 @@ import { TextBlock } from '@stardust/core/global/structures'
 
 export class SupabaseTextBlockMapper {
   static toEntity(supabaseTextBlock: TextBlockDto): TextBlock {
-    return TextBlock.create(
-      supabaseTextBlock.type,
-      supabaseTextBlock.content,
-      supabaseTextBlock.isRunnable,
-    )
+    return TextBlock.create(supabaseTextBlock)
   }
 }
