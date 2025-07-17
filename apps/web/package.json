@@ -1,6 +1,5 @@
 {
   "name": "@stardust/web",
-  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",

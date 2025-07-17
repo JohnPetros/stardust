@@ -44,5 +44,16 @@ module.exports = {
     'subject-empty': [2, 'never'],
 
     'subject-full-stop': [2, 'never', '.'],
+
+    'scope-enum': [
+      2,
+      'always',
+      [
+        'web',
+        'server',
+        'core',
+        'studio',
+      ],
+    ],
   },
 };
