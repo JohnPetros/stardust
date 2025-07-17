@@ -1,6 +1,3 @@
-import { useEffect, useState } from 'react'
-
-import { useMdx } from '@/ui/global/widgets/components/Mdx/hooks/useMdx'
 import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 
 export function useStoryStage() {
