@@ -17,6 +17,9 @@ node_modules/
 .next
 /out/
 
+# React router
+.react-router
+
 # production
 **/build/*
 **/public/sw*
