@@ -27,7 +27,7 @@ export const questions: Questions = [
   },
   {
     code: `funcao mostrePeso(massa, gravidade)
-  peso = massa * gravidade
+  var peso = massa * gravidade
   escreva("Seu peso é \${peso}.")
 }
 
