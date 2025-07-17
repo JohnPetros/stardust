@@ -2,7 +2,7 @@ import { Image } from './Image'
 import { Logical } from './Logical'
 import { Name } from './Name'
 import { StringValidation } from '../../libs'
-import type { TextBlockDto } from '../entities/dtos'
+import type { TextBlockDto } from './dtos'
 
 type TextBlockType = 'default' | 'quote' | 'alert' | 'list' | 'image' | 'code' | 'user'
 
@@ -29,15 +29,19 @@ export class TextBlock {
     if (props.picture) this.picture = props.picture
   }
 
-  static create(type: string, content: string, isRunnable: boolean = false) {
-    if (!TextBlock.isType(type)) {
+  static create(dto: TextBlockDto) {
+    if (!TextBlock.isType(dto.type)) {
       throw new Error()
     }
 
     return new TextBlock({
-      type,
-      content,
-      isRunnable: Logical.create(isRunnable),
+      type: dto.type,
+      content: dto.content,
+      title: dto.title ? Name.create(dto.title) : undefined,
+      picture: dto.picture ? Image.create(dto.picture) : undefined,
+      isRunnable: dto.isRunnable
+        ? Logical.create(dto.isRunnable)
+        : Logical.createAsFalse(),
     })
   }
 
