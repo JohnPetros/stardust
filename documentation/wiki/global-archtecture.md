@@ -1,3 +1,4 @@
+
 # Introdução 
 
 O StarDust é estruturado como um projeto monorepo, uma estratégia em que múltiplos projetos ou pacotes coexistem em um único repositório de código-fonte. Essa abordagem permite maior integração, organização e reutilização de código. Dentro do monorepo, o StarDust é dividido em duas grandes categorias: aplicações (apps) e pacotes (packages).
@@ -8,8 +9,7 @@ As aplicações são os projetos finais e executáveis, como um site em Next.js,
 
 - `core`, pacote destinado a concentrar toda a regra negócio do StarDust
 - `validation`, pacote responsável em conter os objetos de schema de validação e transformação de dados utilizando a biblioteca [Zod](https://zod.dev/).
-- `typescript-config`, pacote responsável em manter a configuração TypeScript que pode ser compartilhada entre as aplicações e pacotes.
-- `ui-kit`, pacote que armazena componentes React web reutilizáveis entre as aplicações web do StarDust.
+- `email`, pacote responsável em construir e testar templates de e-mail.
 
 ## Aplicações
 

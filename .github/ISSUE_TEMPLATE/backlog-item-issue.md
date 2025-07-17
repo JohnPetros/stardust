@@ -6,10 +6,11 @@ labels: ''
 assignees: ''
 ---
 
-## 👀 Observação
-
 ## 📍 Motivação
 
 ## 🔍 Detalhes
 
 ## 💡 Sugestão de implementação
+
+### Título: Criar Componente de Layout Padrão para a Aplicação
+

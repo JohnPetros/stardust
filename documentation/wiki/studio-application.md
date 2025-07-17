@@ -80,53 +80,53 @@ npm run tests
 ### Estrutura de pastas na raiz do projeto
 
 ```
-├─ public/
-├─ documentation/
-└─ src/
-└─ components.json
-└─ react-router.config.ts
-└─ tsconfig.json
-└─ vite.config.ts
+├─ public/
+├─ documentation/
+├─ src/
+├─ components.json
+├─ react-router.config.ts
+├─ tsconfig.json
+└─ vite.config.ts
 ```
 
 ### Estrutura de pastas de src/
 
 ```
-└─ src/
-   ├─app/
-   ├─constants/
-   ├─ rest/
-   └─ ui/
+src/
+├─ app/
+├─ constants/
+├─ rest/
+└─ ui/
 ```
 
 ### Estrutura de pastas de app/
 
 ```
-└─ app/
-   ├─ routes/
-   ├─ root.tsx
-   └─ routes.ts
+app/
+├─ routes/
+├─ root.tsx
+└─ routes.ts
 ```
 
 ### Estrutura de pastas de rest/
 
 ```
-└─ rest/
-   ├── services/
-   └── axios/
+rest/
+├─ services/
+└─ axios/
 ```
 
 ### Estrutura de pastas de ui/
 
 ```
-└─ ui/
-   ├── styles/
-   ├── <nome do módulo>/
-   │   ├── widgets/
-   │   │   ├── components/
-   │   │   ├── layouts/
-   │   │   └── pages/
-   └── shadcn/
-      ├── components/
-      └── utils/
+ui/
+├─ styles/
+├─ <nome do módulo>/
+│  └─ widgets/
+│     ├─ components/
+│     ├─ layouts/
+│     └─ pages/
+└─ shadcn/
+   ├─ components/
+   └─ utils/
 ```

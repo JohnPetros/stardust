@@ -4,7 +4,7 @@ Arquitetura modular é um estilo de design de software no qual o sistema é divi
 
 No caso do StarDust, o sistema é dividido em **nove módulos de domínio**, além de um módulo especial chamado `global`.
 
-## Módulo Global
+## Módulo Global (`global`)
 
 Todos os módulos são independentes entre si, com exceção do módulo `global`, que centraliza **interfaces, componentes e recursos compartilhados** pelos demais. Em outros projetos, esse tipo de módulo costuma ser chamado de `shared`. No entanto, para manter o padrão de nomeação por substantivos, optou-se por nomeá-lo como `global`.
 
@@ -73,4 +73,59 @@ Playground em inglês significa área livre destinada para divertimento de crian
 ## Módulo de Fórum (`forum`)
 
 Responsável por **fornecer um espaço de interação e discussão entre os usuários**, permitindo comentários relacionados a desafios, perguntas de quiz ou tópicos gerais através de postagens e respostas.
+
+
+# Layout para Painel Administrativo de Plataforma de Lógica de Programação 🚀
+
+## Contexto da Aplicação
+
+Estou desenvolvendo o **painel administrativo** para uma aplicação web focada no ensino de programação lógica para o público brasileiro. A plataforma é inspirada no modelo do Duolingo, onde a jornada de aprendizado utiliza uma metáfora espacial:
+
+* **Tópicos** = `Planetas` 🪐
+
+* **Subtópicos** = `Estrelas` ⭐
+
+## Tarefa Inicial
+
+O primeiro passo é criar o **layout principal (template)** da aplicação. Este layout servirá de base para todas as telas do painel administrativo, como a futura página de "Gerenciamento de Planetas".
+
+## Componentes do Layout
+
+### 1. Cabeçalho (Header)
+
+* Deve ser simples e minimalista.
+
+### 2. Barra Lateral de Navegação (Sidebar)
+
+* Deve ser o menu principal da aplicação.
+
+* Os links de navegação devem ser organizados em três grupos, representando os módulos principais da plataforma.
+
+## Estrutura da Barra Lateral
+
+A barra lateral deve conter os seguintes grupos e links:
+
+* **Grupo: Perfis**
+
+    * Link: `Usuários`
+
+    * Link: `Conquistas`
+
+* **Grupo: Espaço**
+
+    * Link: `Planetas`
+
+* **Grupo: Desafios de Código**
+
+    * Link: `Desafios`
+
+> **Observação para a IA:** O objetivo agora é apenas o layout geral (cabeçalho e sidebar com os menus). A página de conteúdo principal, que futuramente mostrará a lista de planetas em formato de acordeão, pode ser representada por um placeholder por enquanto.
+
+
+
+## Design base
+
+Make the UI based on the image on atachment, like color pallete, typography and spacing.
+
+
 
