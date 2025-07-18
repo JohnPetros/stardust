@@ -1,6 +1,0 @@
-@URL = {{BASE_URL}}/space/planets
-
-### Fetch planets
-GET {{URL}}
-Authorization: Bearer {{JWT}}
-

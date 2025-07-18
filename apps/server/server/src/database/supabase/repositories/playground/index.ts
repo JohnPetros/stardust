@@ -1,1 +1,0 @@
-export { SupabaseSnippetsRepository } from './SupabaseSnippetsRepository'

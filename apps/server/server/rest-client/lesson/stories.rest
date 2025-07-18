@@ -1,6 +1,0 @@
-@URL = {{BASE_URL}}/lesson/stories
-@STAR_ID = b34a4a76-0615-4910-89a9-05d34925dc70
-
-### Fetch story
-GET {{URL}}/star/{{STAR_ID}}
-Authorization: Bearer {{JWT}}

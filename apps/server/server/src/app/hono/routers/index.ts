@@ -1,8 +1,0 @@
-export { ProfileRouter } from './profile'
-export { AuthRouter } from './auth'
-export { SpaceRouter } from './space'
-export { ShopRouter } from './shop'
-export { ChallengingRouter } from './challenging'
-export { DocumentationRouter } from './documentation'
-export { RankingRouter } from './ranking'
-export { LessonRouter } from './lesson'

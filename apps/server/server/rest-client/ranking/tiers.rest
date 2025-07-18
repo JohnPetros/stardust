@@ -1,5 +1,0 @@
-@URL = {{BASE_URL}}/ranking/tiers
-
-### Fetch all tiers
-GET {{URL}} 
-Authorization: Bearer {{JWT}}

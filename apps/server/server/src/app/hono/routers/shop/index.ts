@@ -1,1 +1,0 @@
-export { ShopRouter } from './ShopRouter'

@@ -1,1 +1,0 @@
-export { SupabaseSnippetMapper } from './SupabaseSnippetMapper'

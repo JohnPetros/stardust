@@ -1,1 +1,0 @@
-export { FetchAllPlanetsController } from './FetchAllPlanetsController'
