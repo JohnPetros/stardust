@@ -11,7 +11,7 @@
         "packages/**/build/**"
       ]
     },
-    "typecheck": {
+    "check-types": {
       "persistent": false,
       "cache": false
     },

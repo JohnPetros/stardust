@@ -32,7 +32,7 @@
     "build:web": "turbo build --filter=@stardust/web",
     "lint": "turbo lint",
     "test": "turbo test",
-    "typecheck": "turbo typecheck",
+    "check-types": "turbo check-types",
     "prepare": "husky",
     "release": "./scripts/release.sh",
     "changelog": "./scripts/update-changelog.sh"

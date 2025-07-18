@@ -6,7 +6,7 @@
     "build": "react-router build",
     "dev": "react-router dev --port 8000",
     "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
+    "check-types": "react-router typegen && tsc"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",

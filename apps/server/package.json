@@ -13,7 +13,9 @@
     "db:push": "supabase db push --workdir src/database",
     "db:revert": "supabase migration repair --status reverted $npm_config_migration_id --workdir src/database",
     "db:types": "supabase gen types typescript --project-id rveubqzvfbqbcpmuevnm --schema auth,public,storage,cron,extensions,realtime > src/database/supabase/types/Database.ts",
-    "typecheck": "tsc --noEmit",
+    "update": "ncu -u -f $npm_config_dep_name",
+    "check-updates": "ncu",
+    "check-types": "tsc --noEmit",
     "lint": "biome lint src --diagnostic-level=error"
   },
   "dependencies": {
@@ -23,7 +25,7 @@
     "@stardust/validation": "*",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",
-    "googleapis": "^149.0.0",
+    "googleapis": "^153.0.0",
     "hono": "^4.7.9",
     "inngest": "^3.36.0",
     "jwt-decode": "^4.0.0",
