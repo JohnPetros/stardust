@@ -26,7 +26,7 @@ export class ProfileFunctions extends InngestFunctions {
         const repository = new SupabaseUsersRepository(supabase)
         const amqp = new InngestAmqp<typeof context.event.data>(context)
         const job = new CreateUserJob(repository)
-        return job.handle(amqp)
+        return await job.handle(amqp)
       },
     )
   }
@@ -39,7 +39,7 @@ export class ProfileFunctions extends InngestFunctions {
         const repository = new SupabaseUsersRepository(supabase)
         const amqp = new InngestAmqp<typeof context.event.data>(context)
         const job = new UpdateTierForRankingWinnersJob(repository)
-        return job.handle(amqp)
+        return await job.handle(amqp)
       },
     )
   }
@@ -52,7 +52,7 @@ export class ProfileFunctions extends InngestFunctions {
         const repository = new SupabaseUsersRepository(supabase)
         const amqp = new InngestAmqp<typeof context.event.data>(context)
         const job = new UpdateTierForRankingLosersJob(repository)
-        return job.handle(amqp)
+        return await job.handle(amqp)
       },
     )
   }
@@ -61,11 +61,11 @@ export class ProfileFunctions extends InngestFunctions {
     return this.inngest.createFunction(
       { id: ObserveStreakBreakJob.KEY },
       { cron: ObserveStreakBreakJob.CRON_EXPRESSION },
-      async () => {
+      async (context) => {
         const repository = new SupabaseUsersRepository(supabase)
-        const amqp = new InngestAmqp()
+        const amqp = new InngestAmqp(context)
         const job = new ObserveStreakBreakJob(repository)
-        return job.handle(amqp)
+        return await job.handle(amqp)
       },
     )
   }
@@ -74,11 +74,11 @@ export class ProfileFunctions extends InngestFunctions {
     return this.inngest.createFunction(
       { id: ResetWeekStatusForAllUsersJob.KEY },
       { cron: ResetWeekStatusForAllUsersJob.CRON_EXPRESSION },
-      async () => {
+      async (context) => {
         const repository = new SupabaseUsersRepository(supabase)
-        const amqp = new InngestAmqp()
+        const amqp = new InngestAmqp(context)
         const job = new ResetWeekStatusForAllUsersJob(repository)
-        return job.handle(amqp)
+        return await job.handle(amqp)
       },
     )
   }

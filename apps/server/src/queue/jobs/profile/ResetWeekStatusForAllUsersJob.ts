@@ -10,6 +10,9 @@ export class ResetWeekStatusForAllUsersJob {
 
   async handle(amqp: Amqp) {
     const useCase = new ResetWeekStatusForAllUsersUseCase(this.usersRepository)
-    await amqp.run(async () => useCase.execute(), ResetWeekStatusForAllUsersUseCase.name)
+    await amqp.run(
+      async () => await useCase.execute(),
+      ResetWeekStatusForAllUsersUseCase.name,
+    )
   }
 }

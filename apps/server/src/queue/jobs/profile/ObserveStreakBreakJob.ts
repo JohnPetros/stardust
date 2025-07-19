@@ -4,12 +4,12 @@ import { ObserveStreakBreakUseCase } from '@stardust/core/profile/use-cases'
 
 export class ObserveStreakBreakJob {
   static readonly KEY = 'profile/observe.streak.break.job'
-  static readonly CRON_EXPRESSION = 'TZ=America/Sao_Paulo 1 0 * * *'
+  static readonly CRON_EXPRESSION = 'TZ=America/Sao_Paulo 0 0 * * *'
 
   constructor(private readonly usersRepository: UsersRepository) {}
 
   async handle(amqp: Amqp) {
     const useCase = new ObserveStreakBreakUseCase(this.usersRepository)
-    await amqp.run(async () => useCase.execute(), ObserveStreakBreakUseCase.name)
+    return await amqp.run(async () => useCase.execute(), ObserveStreakBreakUseCase.name)
   }
 }

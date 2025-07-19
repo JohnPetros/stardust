@@ -8,7 +8,7 @@
     "start": "node .next/standalone/apps/web/server.js -p $PORT",
     "lint": "biome lint src --diagnostic-level=error",
     "db:types": "supabase gen types typescript --project-id aukqejqsiqsqowafpppb > src/api/supabase/types/Database.ts",
-    "typecheck": "tsc --noEmit"
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "@designliquido/delegua": "^0.45.5",

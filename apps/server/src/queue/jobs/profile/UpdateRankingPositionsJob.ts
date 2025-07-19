@@ -14,6 +14,6 @@ export class UpdateRankingPositionsJob implements Job<Payload> {
   async handle(amqp: Amqp<Payload>) {
     const { tierId } = amqp.getPayload()
     const useCase = new UpdateRankingPositionsUseCase(this.usersRepository)
-    await useCase.execute(tierId)
+    useCase.execute(tierId)
   }
 }

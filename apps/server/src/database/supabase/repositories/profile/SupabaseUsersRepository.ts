@@ -153,7 +153,24 @@ export class SupabaseUsersRepository
   }
 
   async findAll(): Promise<User[]> {
-    throw new Error('Method not implemented.')
+    const { data, error } = await this.supabase.from('users').select(
+      `*,
+        avatar:avatars(*), 
+        rocket:rockets(*), 
+        tier:tiers(*),
+        users_unlocked_stars(star_id),
+        users_unlocked_achievements(achievement_id),
+        users_rescuable_achievements(achievement_id),
+        users_acquired_rockets(rocket_id),
+        users_acquired_avatars(avatar_id),
+        users_completed_challenges(challenge_id),
+        users_upvoted_solutions(solution_id),
+        users_upvoted_comments(comment_id)`,
+    )
+
+    if (error) throw new SupabasePostgreError(error)
+
+    return data.map(SupabaseUserMapper.toEntity)
   }
 
   async containsWithEmail(email: Email): Promise<Logical> {

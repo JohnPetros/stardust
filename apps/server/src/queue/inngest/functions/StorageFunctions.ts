@@ -13,7 +13,7 @@ export class StorageFunctions extends InngestFunctions {
         const databaseProvider = new SupabaseDatabaseProvider()
         const storageProvider = new GoogleDriveStorageProvider()
         const job = new BackupDatabaseJob(databaseProvider, storageProvider)
-        return job.handle()
+        return await job.handle()
       },
     )
   }

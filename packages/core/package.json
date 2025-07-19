@@ -18,7 +18,7 @@
   "scripts": {
     "build": "tsup",
     "lint": "biome lint src --diagnostic-level=error",
-    "typecheck": "tsc --noEmit",
+    "check-types": "tsc --noEmit",
     "test": "jest"
   },
   "exports": {
