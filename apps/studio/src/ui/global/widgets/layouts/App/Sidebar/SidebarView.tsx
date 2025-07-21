@@ -1,4 +1,4 @@
-import { ROUTES } from 'constants/routes'
+import { ROUTES } from '@/constants/routes'
 import { Icon } from '../../../components/Icon'
 import { NavigationLink } from '../NavigationLink'
 import { NavigationTitle } from './NavigationTitle'
