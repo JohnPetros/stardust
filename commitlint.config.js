@@ -22,6 +22,7 @@ module.exports = {
         '♻️ refactor',
         '🧪 test',
         '⚙️ config',
+        '🪨 constants',
         '📦 deps',
         '🎴 assets',
         '🔀 merge',
