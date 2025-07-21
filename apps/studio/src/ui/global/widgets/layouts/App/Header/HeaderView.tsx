@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
 
+import { cn } from '@/ui/shadcn/utils'
+
 type Props = {
   left?: ReactNode
   right?: ReactNode
@@ -9,7 +11,10 @@ type Props = {
 export const HeaderView = ({ left, right, className = '' }: Props) => {
   return (
     <header
-      className={cn('flex items-center h-12 px-4 bg-zinc-900 border-b border-zinc-800 justify-between', className)}
+      className={cn(
+        'flex items-center h-12 px-4 bg-zinc-900 border-b border-zinc-800 justify-between',
+        className,
+      )}
     >
       <div className='flex items-center gap-4'>
         {left ?? (
