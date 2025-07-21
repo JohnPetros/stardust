@@ -22,18 +22,23 @@ export const links: Route.LinksFunction = () => [
     rel: 'stylesheet',
     href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
   },
+  {
+    rel: 'icon',
+    type: 'image/png',
+    href: 'https://aukqejqsiqsqowafpppb.supabase.co/storage/v1/object/public/images/marketing/favicon.png',
+  },
 ]
 
 export const Root = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html lang='pt-BR'>
+    <html lang='pt-BR' className='dark'>
       <head>
         <meta charSet='utf-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className='bg-zinc-950 w-full h-screen'>
         {children}
         <ScrollRestoration />
         <Scripts />
