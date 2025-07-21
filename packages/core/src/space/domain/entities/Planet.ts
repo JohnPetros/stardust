@@ -1,5 +1,5 @@
-import { Entity } from '../../../global/domain/abstracts'
-import { Image, Name, OrdinalNumber } from '../../../global/domain/structures'
+import { Entity } from '#global/domain/abstracts/index'
+import { Name, Image, OrdinalNumber, Integer } from '#global/domain/structures/index'
 import type { PlanetDto } from './dtos'
 import { EmptyPlanetError } from '../errors'
 import { Star } from './Star'
@@ -9,17 +9,22 @@ type PlanetProps = {
   icon: Image
   image: Image
   position: OrdinalNumber
+  completionsCount: Integer
   stars: Star[]
 }
 
 export class Planet extends Entity<PlanetProps> {
-  static create(dto: PlanetDto) {
+  static create(dto: PlanetDto): Planet {
     return new Planet(
       {
         name: Name.create(dto.name),
         icon: Image.create(dto.icon),
         image: Image.create(dto.image),
         position: OrdinalNumber.create(dto.position, 'Posição do planeta'),
+        completionsCount: Integer.create(
+          dto.completionsCount,
+          'Quantidade de usuários que completaram esse planeta',
+        ),
         stars: dto.stars.map(Star.create),
       },
       dto.id,
@@ -33,30 +38,38 @@ export class Planet extends Entity<PlanetProps> {
     return nextStar ?? null
   }
 
-  get firstStar() {
+  get firstStar(): Star {
     const firstStar = this.stars[0]
     if (!firstStar) throw new EmptyPlanetError(this.name.value)
     return firstStar
   }
 
-  get name() {
+  get name(): Name {
     return this.props.name
   }
 
-  get image() {
+  get image(): Image {
     return this.props.image
   }
 
-  get icon() {
+  get icon(): Image {
     return this.props.icon
   }
 
-  get position() {
+  get position(): OrdinalNumber {
     return this.props.position
   }
 
-  get stars() {
+  get stars(): Star[] {
     return this.props.stars
+  }
+
+  get starsCount(): Integer {
+    return Integer.create(this.stars.length)
+  }
+
+  get completionsCount(): Integer {
+    return this.props.completionsCount
   }
 
   get dto(): PlanetDto {
@@ -66,6 +79,7 @@ export class Planet extends Entity<PlanetProps> {
       image: this.image.value,
       icon: this.icon.value,
       position: this.position.value,
+      completionsCount: this.completionsCount.value,
       stars: this.stars.map((star) => star.dto),
     }
   }

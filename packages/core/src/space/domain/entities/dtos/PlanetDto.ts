@@ -6,5 +6,6 @@ export type PlanetDto = {
   icon: string
   image: string
   position: number
+  completionsCount: number
   stars: StarDto[]
 }

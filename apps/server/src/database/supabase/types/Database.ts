@@ -1732,6 +1732,13 @@ export type Database = {
             foreignKeyName: "stars_planet_id_fkey"
             columns: ["planet_id"]
             isOneToOne: false
+            referencedRelation: "planets_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stars_planet_id_fkey"
+            columns: ["planet_id"]
+            isOneToOne: false
             referencedRelation: "users_completed_planets_view"
             referencedColumns: ["planet_id"]
           },
@@ -2499,6 +2506,17 @@ export type Database = {
         }
         Relationships: []
       }
+      planets_view: {
+        Row: {
+          completions_count: number | null
+          icon: string | null
+          id: string | null
+          image: string | null
+          name: string | null
+          position: number | null
+        }
+        Relationships: []
+      }
       snippets_view: {
         Row: {
           author_avatar_image: string | null
@@ -2795,7 +2813,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_06_25: {
+      messages_2025_07_13: {
         Row: {
           event: string | null
           extension: string
@@ -2828,7 +2846,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_06_26: {
+      messages_2025_07_14: {
         Row: {
           event: string | null
           extension: string
@@ -2861,7 +2879,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_06_27: {
+      messages_2025_07_15: {
         Row: {
           event: string | null
           extension: string
@@ -2894,7 +2912,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_06_28: {
+      messages_2025_07_16: {
         Row: {
           event: string | null
           extension: string
@@ -2927,7 +2945,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_06_29: {
+      messages_2025_07_17: {
         Row: {
           event: string | null
           extension: string
@@ -2960,7 +2978,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_06_30: {
+      messages_2025_07_18: {
         Row: {
           event: string | null
           extension: string

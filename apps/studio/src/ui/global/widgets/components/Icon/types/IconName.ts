@@ -1,1 +1,11 @@
-export type IconName = 'achievement' | 'challenge' | 'dashboard' | 'planet' | 'user' | 'x'
+export type IconName =
+  | 'arrow-down'
+  | 'achievement'
+  | 'challenge'
+  | 'dashboard'
+  | 'planet'
+  | 'edition'
+  | 'user'
+  | 'star'
+  | 'draggable'
+  | 'x'
