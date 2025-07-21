@@ -16,6 +16,7 @@ export class SupabasePlanetMapper {
       image: supabasePlanet.image ?? '',
       icon: supabasePlanet.icon ?? '',
       position: supabasePlanet.position ?? 1,
+      completionsCount: supabasePlanet.completions_count ?? 0,
       stars: supabasePlanet.stars.map(SupabaseStarMapper.toDto),
     }
 
@@ -31,6 +32,7 @@ export class SupabasePlanetMapper {
       icon: planetDto.icon,
       image: planetDto.image,
       position: planetDto.position,
+      completions_count: 0,
       stars: [],
     }
 
