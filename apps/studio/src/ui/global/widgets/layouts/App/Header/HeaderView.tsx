@@ -9,7 +9,7 @@ type Props = {
 export const HeaderView = ({ left, right, className = '' }: Props) => {
   return (
     <header
-      className={`flex items-center h-12 px-4 bg-zinc-900 border-b border-zinc-800 justify-between ${className}`}
+      className={cn('flex items-center h-12 px-4 bg-zinc-900 border-b border-zinc-800 justify-between', className)}
     >
       <div className='flex items-center gap-4'>
         {left ?? (
