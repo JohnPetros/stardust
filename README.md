@@ -44,7 +44,12 @@ melhor.
 
 ## ⚙️ Arquitetura
 
-StarDust é um [monorepo](https://monorepo.tools/), ou seja, um único repositório que agrupa diversas aplicações e pacotes independentes. Por ser um projeto modular, o StarDust adota os princípios da [arquitetura limpa](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html), promovendo o isolamento das regras de negócio em relação a ferramentas e dependências externas.
+StarDust é um [monorepo](https://monorepo.tools/), ou seja, um único repositório
+que agrupa diversas aplicações e pacotes independentes. Por ser um projeto
+modular, o StarDust adota os princípios da
+[arquitetura limpa](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html),
+promovendo o isolamento das regras de negócio em relação a ferramentas e
+dependências externas.
 
 ## Como rodar a aplicação?
 
@@ -53,7 +58,6 @@ StarDust é um [monorepo](https://monorepo.tools/), ou seja, um único repositó
 - [Rodando a aplicação mobile](https://github.com/JohnPetros/stardust/wiki/Aplica%C3%A7%C3%A3o-mobile)
 
 - [Rodando a aplicação admin](https://github.com/JohnPetros/stardust/wiki/Aplica%C3%A7%C3%A3o-admin)
-
 
 ## 📝 Licença
 
