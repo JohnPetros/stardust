@@ -1,5 +1,6 @@
 import { type RouteConfig, index, layout, route } from '@react-router/dev/routes'
-import { ROUTES } from 'constants/routes'
+
+import { ROUTES } from '../constants/routes'
 
 export default [
   layout('layouts/AppLayout.tsx', [
