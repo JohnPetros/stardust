@@ -12,6 +12,7 @@ type MudateConfig = {
 type CacheConfig<CacheData> = {
   key: string
   fetcher: () => Promise<RestResponse<CacheData>>
+  onError?: (errorMessage: string) => void
   dependencies?: unknown[]
   isEnabled?: boolean
   initialData?: CacheData
@@ -32,6 +33,7 @@ type Cache<CacheData> = {
 export function useCache<CacheData>({
   key,
   fetcher,
+  onError,
   dependencies,
   isEnabled = true,
   shouldRefetchOnFocus = true,
@@ -55,6 +57,7 @@ export function useCache<CacheData>({
 
       if (response.isFailure && canShowErrorMessage) {
         toast.showError(response.errorMessage)
+        if (onError) onError(response.errorMessage)
         return
       }
 
