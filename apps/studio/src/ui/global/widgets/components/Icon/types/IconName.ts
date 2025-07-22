@@ -5,6 +5,8 @@ export type IconName =
   | 'dashboard'
   | 'planet'
   | 'edition'
+  | 'rocket'
+  | 'loading'
   | 'user'
   | 'star'
   | 'draggable'
