@@ -1,7 +1,13 @@
 export const ROUTES = {
-  dashboard: '/dashboard',
-  planets: '/planets',
-  users: '/users',
-  achievements: '/achievements',
-  challenges: '/challenges',
+  index: '/',
+  profile: {
+    users: '/users',
+    achievements: '/achievements',
+  },
+  space: {
+    planets: '/planets',
+  },
+  challenging: {
+    challenges: '/challenges',
+  },
 }
