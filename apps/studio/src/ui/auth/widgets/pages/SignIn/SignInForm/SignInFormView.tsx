@@ -60,7 +60,7 @@ export const SignInFormView = ({ className, ...props }: ComponentProps<'div'>) =
                     name='password'
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Password</FormLabel>
+                        <FormLabel>Senha</FormLabel>
                         <FormControl>
                           <Input type='password' required {...field} />
                         </FormControl>
