@@ -5,7 +5,7 @@ import type { RestResponse } from '@stardust/core/global/responses'
 
 import { useToast } from './useToast'
 
-type MudateConfig = {
+type MutateConfig = {
   shouldRevalidate: boolean
 }
 
