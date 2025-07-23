@@ -70,7 +70,7 @@ export function useCache<CacheData>({
   })
 
   const updateCache = useCallback(
-    (newCacheData: CacheData | null, mutateConfig?: MudateConfig) => {
+    (newCacheData: CacheData | null, mutateConfig?: MutateConfig) => {
       queryClient.setQueryData(queryKey, newCacheData)
       if (mutateConfig?.shouldRevalidate) {
         queryClient.invalidateQueries({ queryKey })
