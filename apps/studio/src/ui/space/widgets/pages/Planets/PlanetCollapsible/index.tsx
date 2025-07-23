@@ -1,3 +1,3 @@
-import { PlanetCollapsibleView } from './PlanetAccordionView'
+import { PlanetCollapsibleView } from './PlanetCollapsibleView'
 
 export const PlanetCollapsible = PlanetCollapsibleView

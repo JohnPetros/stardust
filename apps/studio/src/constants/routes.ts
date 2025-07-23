@@ -1,3 +1,5 @@
+import type { Slug } from '@stardust/core/global/structures'
+
 export const ROUTES = {
   index: '/',
   profile: {
@@ -9,5 +11,10 @@ export const ROUTES = {
   },
   challenging: {
     challenges: '/challenging/challenges',
+    challenge: (challengeSlug: Slug) => `/challenging/challenge/${challengeSlug.value}`,
+  },
+  lesson: {
+    story: (starSlug: Slug) => `/lesson/story/${starSlug.value}`,
+    questions: (starSlug: Slug) => `/lesson/questions/${starSlug.value}`,
   },
 }
