@@ -5,9 +5,11 @@ import {
   X as Close,
   Terminal,
   Star,
+  Rocket,
   LayoutDashboard,
   SquarePen,
   GripVertical,
+  Loader2,
   ChevronDown,
   type LucideIcon,
 } from 'lucide-react'
@@ -25,4 +27,6 @@ export const ICONS: Record<IconName, LucideIcon> = {
   edition: SquarePen,
   star: Star,
   draggable: GripVertical,
+  rocket: Rocket,
+  loading: Loader2,
 }

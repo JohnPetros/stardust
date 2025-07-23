@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 const env = {
-  serverAppUrl: process.env.VITE_SERVER_APP_URL,
+  serverAppUrl: import.meta.env.VITE_SERVER_APP_URL,
 }
 
 const envSchema = z.object({

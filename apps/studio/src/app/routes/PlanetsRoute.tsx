@@ -1,7 +1,12 @@
-import { spaceService } from '@/rest'
-import { PlanetsPage } from '@/ui/space/widgets/pages/Planets'
+import type { Route } from '../+types/root'
+import { AuthMiddleware } from '../middlewares/AuthMiddleware'
+import { restContext } from '../contexts/restContext'
+import { RestMiddleware } from '../middlewares/RestMiddleware'
 
-export const clientLoader = async () => {
+export const unstable_clientMiddleware = [AuthMiddleware, RestMiddleware]
+
+export const clientLoader = async ({ context }: Route.ActionArgs) => {
+  const { spaceService } = context.get(restContext)
   const response = await spaceService.fetchPlanets()
 
   return {
@@ -10,7 +15,7 @@ export const clientLoader = async () => {
 }
 
 const PlanetsRoute = () => {
-  return <PlanetsPage />
+  return <h1>Planets</h1>
 }
 
 export default PlanetsRoute

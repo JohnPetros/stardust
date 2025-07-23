@@ -6,10 +6,13 @@ import {
   Scripts,
   ScrollRestoration,
 } from 'react-router'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import type { Route } from './+types/root'
 
 import '@/ui/global/styles/global.css'
+import { Toaster } from 'sonner'
+import { AuthContextProvider } from '@/ui/auth/contexts/AuthContext'
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -29,19 +32,21 @@ export const links: Route.LinksFunction = () => [
   },
 ]
 
+const queryClient = new QueryClient()
+
 export const Root = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html lang='pt-BR' className='dark'>
+    <html lang='pt-BR'>
       <head>
         <meta charSet='utf-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <Meta />
         <Links />
       </head>
-      <body className='bg-zinc-950 w-full h-screen'>
+      <body>
         {children}
-        <ScrollRestoration />
         <Scripts />
+        <ScrollRestoration />
       </body>
     </html>
   )
@@ -77,7 +82,16 @@ export const ErrorBoundary = ({ error }: Route.ErrorBoundaryProps) => {
 }
 
 export const App = () => {
-  return <Outlet />
+  return (
+    <div className='w-full h-screen dark'>
+      <QueryClientProvider client={queryClient}>
+        <Toaster position='top-right' richColors />
+        <AuthContextProvider>
+          <Outlet />
+        </AuthContextProvider>
+      </QueryClientProvider>
+    </div>
+  )
 }
 
 export default App
