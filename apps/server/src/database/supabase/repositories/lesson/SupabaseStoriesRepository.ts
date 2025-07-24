@@ -1,4 +1,4 @@
-import type { Id } from '@stardust/core/global/structures'
+import { Text, type Id } from '@stardust/core/global/structures'
 import type { StoriesRepository } from '@stardust/core/lesson/interfaces'
 
 import { SupabaseRepository } from '../SupabaseRepository'
@@ -8,7 +8,7 @@ export class SupabaseStoriesRepository
   extends SupabaseRepository
   implements StoriesRepository
 {
-  async findByStar(starId: Id): Promise<string | null> {
+  async findByStar(starId: Id): Promise<Text | null> {
     const { data, error } = await this.supabase
       .from('stars')
       .select('story')
@@ -19,6 +19,17 @@ export class SupabaseStoriesRepository
       throw new SupabasePostgreError(error)
     }
 
-    return data.story ?? null
+    return data.story ? Text.create(data.story) : null
+  }
+
+  async update(story: Text, starId: Id): Promise<void> {
+    const { error } = await this.supabase
+      .from('stars')
+      .update({ story: story.value })
+      .eq('id', starId.value)
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
   }
 }
