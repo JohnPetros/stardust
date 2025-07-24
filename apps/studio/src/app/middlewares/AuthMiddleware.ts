@@ -17,10 +17,6 @@ export const AuthMiddleware = async ({
     throw redirect(ROUTES.index)
   }
 
-  if (accessToken && isSignInRoute) {
-    throw redirect(ROUTES.space.planets)
-  }
-
   context.set(authContext, {
     accessToken,
   })
