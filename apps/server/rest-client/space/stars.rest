@@ -10,3 +10,5 @@ Authorization: Bearer {{JWT}}
 GET {{URL}}/id/{{STAR_ID}}
 Authorization: Bearer {{JWT}}
 
+
+
