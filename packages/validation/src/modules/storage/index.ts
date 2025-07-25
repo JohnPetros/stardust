@@ -1,0 +1,1 @@
+export { storageFolderSchema } from './storageFolderSchema'
