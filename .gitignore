@@ -12,6 +12,7 @@ node_modules/
 
 # testing
 /coverage
+issue.md
 
 # next.js
 .next
