@@ -1,4 +1,3 @@
-import { createReadStream } from 'node:fs'
 import { createClient } from '@supabase/supabase-js'
 
 import { AppError } from '@stardust/core/global/errors'
@@ -54,9 +53,7 @@ export class SupabaseStorageProvider implements StorageProvider {
       this.handleError(error)
     }
 
-    if (!data) {
-      return []
-    }
+    console.log({ folder })
 
     const files: File[] = []
 
@@ -64,7 +61,7 @@ export class SupabaseStorageProvider implements StorageProvider {
       if (item.name) {
         const { data: urlData } = this.supabase.storage
           .from(SupabaseStorageProvider.BUCKET_NAME)
-          .getPublicUrl(item.name)
+          .getPublicUrl(`${folder}/${item.name}`)
 
         if (urlData?.publicUrl) {
           const response = await fetch(urlData.publicUrl)

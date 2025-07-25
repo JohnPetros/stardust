@@ -58,6 +58,6 @@ export class GoogleDriveStorageProvider implements StorageProvider {
   }
 
   async removeFile(): Promise<void> {
-    throw new MethodNotImplementedError('deleteFile')
+    throw new MethodNotImplementedError('removeFile')
   }
 }

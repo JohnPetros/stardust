@@ -48,9 +48,12 @@ export class StorageRouter extends HonoRouter {
       '/:folder/images',
       this.authMiddleware.verifyAuthentication,
       this.validationMiddleware.validate(
+        'param',
+        z.object({ folder: storageFolderSchema }),
+      ),
+      this.validationMiddleware.validate(
         'query',
         z.object({
-          folder: storageFolderSchema,
           page: pageSchema,
           itemsPerPage: itemsPerPageSchema,
           search: searchSchema,
