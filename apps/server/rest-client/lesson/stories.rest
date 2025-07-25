@@ -4,3 +4,12 @@
 ### Fetch story
 GET {{URL}}/star/{{STAR_ID}}
 Authorization: Bearer {{JWT}}
+
+### Update story
+PUT {{URL}}/star/{{STAR_ID}}
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "story": "Era uma vez uma estrela brilhante..."
+}

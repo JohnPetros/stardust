@@ -2,7 +2,7 @@ import { Hono } from 'hono'
 
 import { HonoRouter } from '../../HonoRouter'
 import { QuestionsRouter } from './QuestionsRouter'
-import { StoriesRouter } from './Storiesrouter'
+import { StoriesRouter } from './StoriesRouter'
 import { TextBlocksRouter } from './TextBlocksRouter'
 
 export class LessonRouter extends HonoRouter {

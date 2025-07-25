@@ -1,5 +1,4 @@
 import { Hono } from 'hono'
-import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
 
 import { idSchema, stringSchema } from '@stardust/validation/global/schemas'
@@ -8,17 +7,18 @@ import { FetchStarController } from '@/rest/controllers/space/stars'
 import { SupabaseStarsRepository } from '@/database'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
-import { AuthMiddleware } from '../../middlewares'
+import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
 
 export class StarsRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/stars')
   private readonly authMiddleware = new AuthMiddleware()
+  private readonly validationMiddleware = new ValidationMiddleware()
 
   private registerFetchStarBySlugRoute(): void {
     this.router.get(
       '/slug/:starSlug',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           starSlug: stringSchema,
@@ -38,7 +38,7 @@ export class StarsRouter extends HonoRouter {
     this.router.get(
       '/id/:starId',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           starId: idSchema,

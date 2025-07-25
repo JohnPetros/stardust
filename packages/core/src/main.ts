@@ -29,6 +29,7 @@ export * from './lesson/domain/structures/index'
 export * from './lesson/domain/types/index'
 export * from './lesson/domain/errors/index'
 export * from './lesson/interfaces/index'
+export * from './lesson/use-cases/index'
 
 // Space
 export * from './space/domain/entities/index'

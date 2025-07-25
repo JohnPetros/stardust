@@ -28,6 +28,7 @@ export function useAuthContextProvider({ authService }: Params) {
   } = useCache({
     key: CACHE.account.key,
     canShowErrorMessage: false,
+    shouldRefetchOnFocus: false,
     fetcher: authService.fetchAccount,
     onError: () => router.goTo(ROUTES.index),
   })
