@@ -35,6 +35,7 @@ import {
   DocumentationRouter,
   RankingRouter,
   LessonRouter,
+  StorageRouter,
 } from './routers'
 import { ForumRouter } from './routers/forum'
 import { PlaygroundRouter } from './routers/playground/PlaygroundRouter'
@@ -130,6 +131,7 @@ export class HonoApp {
     const forumRouter = new ForumRouter(this)
     const playgroundRouter = new PlaygroundRouter(this)
     const documentationRouter = new DocumentationRouter(this)
+    const storageRouter = new StorageRouter(this)
 
     this.hono.get('/', (context) => {
       return context.json({ message: 'Everything is working!' })
@@ -145,6 +147,7 @@ export class HonoApp {
     this.hono.route('/', forumRouter.registerRoutes())
     this.hono.route('/', playgroundRouter.registerRoutes())
     this.hono.route('/', documentationRouter.registerRoutes())
+    this.hono.route('/', storageRouter.registerRoutes())
   }
 
   private registerMiddlewares() {
