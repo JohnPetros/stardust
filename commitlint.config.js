@@ -30,6 +30,7 @@ module.exports = {
         '🗃️ ftree',
         '📜 cert',
         '🚧 wip',
+        '📮 validation',
         '🚑 hotfix',
         '🚚 cd',
         '🏎️ ci',
