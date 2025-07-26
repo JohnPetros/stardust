@@ -4,8 +4,10 @@ import type { StorageProvider } from '@stardust/core/storage/interfaces'
 import type { StorageFolder } from '@stardust/core/storage/types'
 
 type Schema = {
-  queryParams: {
+  routeParams: {
     folder: string
+  }
+  queryParams: {
     page: number
     itemsPerPage: number
     search: string
@@ -16,7 +18,8 @@ export class FetchImagesListController implements Controller {
   constructor(private readonly storageProvider: StorageProvider) {}
 
   async handle(http: Http<Schema>) {
-    const { folder, page, itemsPerPage, search } = http.getQueryParams()
+    const { folder } = http.getRouteParams()
+    const { page, itemsPerPage, search } = http.getQueryParams()
     const files = await this.storageProvider.listFiles({
       folder: folder as StorageFolder,
       page: OrdinalNumber.create(page),

@@ -56,4 +56,8 @@ export class GoogleDriveStorageProvider implements StorageProvider {
   async listFiles(): Promise<File[]> {
     throw new MethodNotImplementedError('listFiles')
   }
+
+  async removeFile(): Promise<void> {
+    throw new MethodNotImplementedError('removeFile')
+  }
 }
