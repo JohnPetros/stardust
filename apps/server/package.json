@@ -25,6 +25,7 @@
     "@stardust/validation": "*",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",
+    "dropbox": "^10.34.0",
     "googleapis": "^153.0.0",
     "hono": "^4.7.9",
     "inngest": "^3.36.0",

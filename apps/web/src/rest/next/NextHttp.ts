@@ -5,7 +5,7 @@ import type { ZodSchema } from 'zod'
 
 import type { Http, HttpMethod, HttpSchema } from '@stardust/core/global/interfaces'
 import { type PaginationResponse, RestResponse } from '@stardust/core/global/responses'
-import { AppError } from '@stardust/core/global/errors'
+import { AppError, MethodNotImplementedError } from '@stardust/core/global/errors'
 import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 import { CLIENT_ENV } from '@/constants'
@@ -84,6 +84,10 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     async getBody() {
       if (!httpSchema?.body) throw new AppError('Body is not defined')
       return httpSchema?.body
+    },
+
+    async getFile() {
+      throw new MethodNotImplementedError('getFile')
     },
 
     getRouteParams() {

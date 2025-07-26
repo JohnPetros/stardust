@@ -3,7 +3,7 @@ import type { StorageProvider } from '@stardust/core/storage/interfaces'
 import { BackupDatabaseUseCase } from '@stardust/core/storage/use-cases'
 
 export class BackupDatabaseJob implements Job {
-  static readonly KEY = 'storage/backup-database'
+  static readonly KEY = 'storage/backup.database'
   static readonly CRON_EXPRESSION = 'TZ=America/Sao_Paulo 0 0 * * 0'
 
   constructor(

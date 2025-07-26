@@ -10,6 +10,7 @@ const env = {
   inngestEventKey: process.env.INNGEST_EVENT_KEY,
   inngestSigningKey: process.env.INNGEST_SIGNING_KEY,
   webAppUrl: process.env.WEB_APP_URL,
+  dropboxAccessToken: process.env.DROPBOX_ACCESS_TOKEN,
 }
 
 const envSchema = z.object({
@@ -22,6 +23,7 @@ const envSchema = z.object({
   inngestEventKey: z.string().optional(),
   inngestSigningKey: z.string().optional(),
   webAppUrl: z.string().url(),
+  dropboxAccessToken: z.string().optional(),
 })
 
 export const ENV = envSchema.parse(env)

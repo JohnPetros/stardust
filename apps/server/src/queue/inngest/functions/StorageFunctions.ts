@@ -2,7 +2,7 @@ import { InngestFunctions } from './InngestFunctions'
 
 import { BackupDatabaseJob } from '@/queue/jobs/storage'
 import { SupabaseDatabaseProvider } from '@/provision/database'
-import { GoogleDriveStorageProvider } from '@/provision/storage'
+import { DropboxStorageProvider } from '@/provision/storage'
 
 export class StorageFunctions extends InngestFunctions {
   private backupDatabaseJob() {
@@ -11,7 +11,7 @@ export class StorageFunctions extends InngestFunctions {
       { cron: BackupDatabaseJob.CRON_EXPRESSION },
       async () => {
         const databaseProvider = new SupabaseDatabaseProvider()
-        const storageProvider = new GoogleDriveStorageProvider()
+        const storageProvider = new DropboxStorageProvider()
         const job = new BackupDatabaseJob(databaseProvider, storageProvider)
         return await job.handle()
       },
