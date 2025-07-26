@@ -33,7 +33,7 @@ export class DropboxStorageProvider implements StorageProvider {
         mode: { '.tag': 'overwrite' },
       })
 
-      if (!response.result) {
+      if (!response || !response.id || !response.name) {
         this.handleError('Failed to upload file to Dropbox')
       }
 
@@ -67,6 +67,7 @@ export class DropboxStorageProvider implements StorageProvider {
 
   private handleError(error: unknown): never {
     console.error(error)
-    throw new AppError('Unknown error', 'Dropbox Storage Provider Error')
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    throw new AppError(errorMessage, 'Dropbox Storage Provider Error')
   }
 }
