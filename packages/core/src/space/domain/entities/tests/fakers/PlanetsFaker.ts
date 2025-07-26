@@ -16,6 +16,7 @@ export class PlanetsFaker {
       icon: `${faker.image.avatar()}.jpg`,
       image: `${faker.image.avatar()}.jpg`,
       stars: StarsFaker.fakeManyDto(faker.number.int({ min: 3, max: 10 })),
+      completionsCount: faker.number.int({ min: 0, max: 100 }),
       ...baseDto,
     }
   }
