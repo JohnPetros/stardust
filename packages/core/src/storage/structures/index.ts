@@ -1,1 +1,1 @@
-export { StorageFolder as _StorageFolder } from './StorageFolder'
+export { StorageFolder } from './StorageFolder'

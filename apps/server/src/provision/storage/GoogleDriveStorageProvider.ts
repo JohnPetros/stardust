@@ -25,7 +25,7 @@ export class GoogleDriveStorageProvider implements StorageProvider {
     this.drive = google.drive({ version: GoogleDriveStorageProvider.DRIVE_VERSION, auth })
   }
 
-  async upload(folder: StorageFolder, file: File): Promise<File> {
+  async upload(folder: StorageFolder, file: File): Promise<{ fileKey: string }> {
     const parentFolderId = GoogleDriveStorageProvider.PARENT_FOLDER_IDS[folder]
     const fileMetadata = {
       name: file.name,
@@ -50,14 +50,10 @@ export class GoogleDriveStorageProvider implements StorageProvider {
       unlinkSync(file.name)
     }
 
-    return file
+    return { fileKey: response.data.id }
   }
 
   async listFiles(): Promise<File[]> {
     throw new MethodNotImplementedError('listFiles')
-  }
-
-  async removeFile(): Promise<void> {
-    throw new MethodNotImplementedError('deleteFile')
   }
 }

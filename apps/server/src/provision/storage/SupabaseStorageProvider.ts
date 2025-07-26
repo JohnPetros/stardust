@@ -4,7 +4,6 @@ import { createClient } from '@supabase/supabase-js'
 import { AppError } from '@stardust/core/global/errors'
 import type { StorageProvider } from '@stardust/core/storage/interfaces'
 import type { FilesListingParams, StorageFolder } from '@stardust/core/storage/types'
-import type { Text } from '@stardust/core/global/structures'
 
 import { ENV } from '@/constants'
 
@@ -16,11 +15,10 @@ export class SupabaseStorageProvider implements StorageProvider {
     this.supabase = createClient(ENV.supabaseUrl, ENV.supabaseKey)
   }
 
-  async upload(folder: StorageFolder, file: File): Promise<File> {
+  async upload(folder: StorageFolder, file: File): Promise<{ fileKey: string }> {
     const { data, error } = await this.supabase.storage
       .from(SupabaseStorageProvider.BUCKET_NAME)
-      .upload(`${folder}/${file.name}`, file, {
-        cacheControl: '3600',
+      .upload(file.name, createReadStream(file.name), {
         contentType: file.type,
         upsert: false,
       })
@@ -33,7 +31,7 @@ export class SupabaseStorageProvider implements StorageProvider {
       throw new AppError('Failed to upload file: No file path returned')
     }
 
-    return file
+    return { fileKey: data.path }
   }
 
   async listFiles({
@@ -78,16 +76,6 @@ export class SupabaseStorageProvider implements StorageProvider {
     }
 
     return files
-  }
-
-  async removeFile(folder: StorageFolder, fileName: Text): Promise<void> {
-    const { error } = await this.supabase.storage
-      .from(SupabaseStorageProvider.BUCKET_NAME)
-      .remove([`${folder}/${fileName.value}`])
-
-    if (error) {
-      this.handleError(error)
-    }
   }
 
   private handleError(error: Error): never {

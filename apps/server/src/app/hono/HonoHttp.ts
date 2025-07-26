@@ -70,11 +70,6 @@ export class HonoHttp<HonoContext extends Context>
     } as HonoHttpSchema<HonoContext>['body']
   }
 
-  async getFile(): Promise<File> {
-    const body = await this.context.req.parseBody()
-    return body.file as File
-  }
-
   getRouteParams(): HonoHttpSchema<HonoContext>['routeParams'] {
     // @ts-ignore
     return this.context.req.valid('param')
