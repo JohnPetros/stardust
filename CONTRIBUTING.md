@@ -85,6 +85,7 @@ Exemplos:
 | Reset de histórico de commits   | revert    | ⏪    |
 | Estruturação de pastas/arquivos | ftree     | 🗃️    |
 | Certificados e licenças         | cert      | 📜    |
+| Schema para validação           | validation| 📮    |
 | Trabalho em andamento           | wip       | 🚧    |
 | Conserto de erro de emergencia  | hotfix    | 🚑    |
 | Entrega contínua                | cd        | 🚚    |

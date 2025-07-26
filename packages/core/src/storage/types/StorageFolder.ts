@@ -1,1 +1,1 @@
-export type StorageFolder = 'database-backups'
+export type StorageFolder = 'database-backups' | 'story'
