@@ -43,17 +43,14 @@ export class StorageRouter extends HonoRouter {
     )
   }
 
-  private registerGetImagesRoute(): void {
+  private registerListImagesRoute(): void {
     this.router.get(
       '/:folder/images',
       this.authMiddleware.verifyAuthentication,
       this.validationMiddleware.validate(
-        'param',
-        z.object({ folder: storageFolderSchema }),
-      ),
-      this.validationMiddleware.validate(
         'query',
         z.object({
+          folder: storageFolderSchema,
           page: pageSchema,
           itemsPerPage: itemsPerPageSchema,
           search: searchSchema,
@@ -93,7 +90,7 @@ export class StorageRouter extends HonoRouter {
   registerRoutes(): Hono {
     this.registerUploadFileRoute()
     this.registerRemoveFileRoute()
-    this.registerGetImagesRoute()
+    this.registerListImagesRoute()
     return this.router
   }
 }

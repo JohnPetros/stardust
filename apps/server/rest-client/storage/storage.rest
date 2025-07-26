@@ -1,0 +1,14 @@
+@URL = {{BASE_URL}}/storage
+@FILE_NAME = abacaxi.jpg
+@FOLDER = story
+
+### Get images
+GET {{URL}}/{{FOLDER}}/images
+?page=1
+&itemsPerPage=15
+&search=panda
+Authorization: Bearer {{JWT}}
+
+### Remove file
+DELETE {{URL}}/{{FOLDER}}/{{FILE_NAME}}
+Authorization: Bearer {{JWT}}

@@ -80,6 +80,11 @@ export class HonoHttp<HonoContext extends Context>
     return this.context.req.valid('query')
   }
 
+  async getFile(): Promise<File> {
+    const body = await this.context.req.parseBody()
+    return body.file as File
+  }
+
   async getAccount(): Promise<AccountDto> {
     return this.context.get('account')
   }
