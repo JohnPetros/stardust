@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios'
+import axios, { type AxiosError } from 'axios'
 import { RestResponse } from '@stardust/core/global/responses'
 import { normalizeHeaders } from './normalizeHeaders'
 
@@ -7,7 +7,9 @@ export async function handleError<Body>(error: unknown): Promise<RestResponse<Bo
     const axiosError = error as AxiosError
     const status = axiosError.response?.status
     const data = axiosError.response?.data
-    const headers = normalizeHeaders(axiosError.response?.headers)
+    const headers = normalizeHeaders(
+      axiosError.response?.headers as Record<string, unknown>,
+    )
     let errorMessage: string | undefined = axiosError.message
 
     if (typeof data === 'string') {
