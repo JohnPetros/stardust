@@ -1,14 +1,12 @@
-import { NavLink } from 'react-router'
+import type { Star as StarEntity } from '@stardust/core/space/entities'
 
-import type { Star } from '@stardust/core/space/entities'
-
-import { Icon } from '@/ui/global/widgets/components/Icon'
-import { Animation } from '@/ui/global/widgets/components/Animation'
 import { ROUTES } from '@/constants'
+import { Icon } from '@/ui/global/widgets/components/Icon'
 import { Link } from '@/ui/global/widgets/components/Link'
+import { Star } from '@/ui/global/widgets/components/Star'
 
 type Props = {
-  star: Star
+  star: StarEntity
   isChallenge: boolean
 }
 
@@ -16,11 +14,8 @@ export const StarItemView = ({ star, isChallenge }: Props) => {
   return (
     <div className='flex items-center gap-4 bg-zinc-800 rounded-lg py-1 px-4'>
       <Icon name='draggable' className='text-zinc-500' size={32} />
-      <div className='relative -translate-x-3'>
-        <Animation name='star' size={80} hasLoop={false} />
-        <span className='absolute left-1/2 top-1/2 -translate-x-[calc(50%-2px)] -translate-y-[calc(50%-2px)] text-base font-bold text-yellow-900'>
-          {star.number.value}
-        </span>
+      <div className='-translate-x-3'>
+        <Star number={star.number.value} size={80} />
       </div>
       <span className='text-base font-medium text-zinc-100 flex-1 -translate-x-6'>
         {star.name.value}
