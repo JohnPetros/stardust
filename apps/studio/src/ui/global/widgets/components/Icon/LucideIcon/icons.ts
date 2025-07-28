@@ -10,6 +10,7 @@ import {
   SquarePen,
   GripVertical,
   Loader2,
+  Copy,
   ChevronDown,
   ChevronUp,
   BookOpen,
@@ -35,4 +36,5 @@ export const ICONS: Record<IconName, LucideIcon> = {
   loading: Loader2,
   history: BookOpen,
   questions: HelpCircle,
+  copy: Copy,
 }
