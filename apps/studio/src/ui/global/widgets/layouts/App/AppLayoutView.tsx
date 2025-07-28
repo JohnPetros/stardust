@@ -9,9 +9,7 @@ export const AppLayoutView = ({ children }: PropsWithChildren) => {
       <Header />
       <div className='flex flex-1 min-h-0'>
         <Sidebar />
-        <main className='flex-1 rounded-tl-2xl p-8 min-h-0 overflow-auto'>
-          {children}
-        </main>
+        <main className='flex-1 rounded-tl-2xl min-h-0 overflow-auto'>{children}</main>
       </div>
     </div>
   )
