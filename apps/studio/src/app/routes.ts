@@ -9,5 +9,6 @@ export default [
     route(ROUTES.profile.users, 'routes/UsersRoute.tsx'),
     route(ROUTES.challenging.challenges, 'routes/ChallengesRoute.tsx'),
     route(ROUTES.profile.achievements, 'routes/AchievementsRoute.tsx'),
+    route(ROUTES.lesson.story(), 'routes/LessonStoryRoute.tsx'),
   ]),
 ] satisfies RouteConfig
