@@ -2,6 +2,7 @@ import { OrdinalNumber, Text } from '@stardust/core/global/structures'
 import type { Controller, Http } from '@stardust/core/global/interfaces'
 import type { StorageProvider } from '@stardust/core/storage/interfaces'
 import type { StorageFolder } from '@stardust/core/storage/types'
+import { PaginationResponse } from '@stardust/core/global/responses'
 
 type Schema = {
   routeParams: {
@@ -20,13 +21,18 @@ export class FetchImagesListController implements Controller {
   async handle(http: Http<Schema>) {
     const { folder } = http.getRouteParams()
     const { page, itemsPerPage, search } = http.getQueryParams()
-    const files = await this.storageProvider.listFiles({
+    const { files, totalFilesCount } = await this.storageProvider.listFiles({
       folder: folder as StorageFolder,
       page: OrdinalNumber.create(page),
       itemsPerPage: OrdinalNumber.create(itemsPerPage),
       search: Text.create(search),
     })
-    const images = files.map((file) => file.name)
-    return http.statusOk().send(images)
+    return http.statusOk().sendPagination(
+      new PaginationResponse(
+        files.map((file) => file.name),
+        totalFilesCount,
+        itemsPerPage,
+      ),
+    )
   }
 }
