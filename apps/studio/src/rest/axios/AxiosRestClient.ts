@@ -48,6 +48,24 @@ export const AxiosRestClient = (): RestClient => {
         return new RestResponse({
           body: response.data,
           statusCode: response.status,
+          headers: [],
+        })
+      } catch (error) {
+        return await handleError<Body>(error)
+      }
+    },
+
+    async postFormData<Body>(route: string, body: FormData): Promise<RestResponse<Body>> {
+      try {
+        const response = await axios.post(buildUrl(route, baseUrl, queryParams), body, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        const headers = normalizeHeaders(response.headers)
+        return new RestResponse({
+          body: response.data,
+          statusCode: response.status,
           headers,
         })
       } catch (error) {
@@ -59,6 +77,7 @@ export const AxiosRestClient = (): RestClient => {
       try {
         const response = await axios.put(buildUrl(route, baseUrl, queryParams), body)
         const headers = normalizeHeaders(response.headers)
+
         return new RestResponse({
           body: response.data,
           statusCode: response.status,

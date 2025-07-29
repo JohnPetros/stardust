@@ -21,7 +21,6 @@ export const RestMiddleware = async ({ context }: Route.ActionArgs) => {
   const authService = AuthService(restClient)
   const response = await authService.fetchAccount()
   const hasSession = response.isSuccessful
-  console.log('hasSession', hasSession)
 
   if (!hasSession) {
     throw redirect(ROUTES.index)

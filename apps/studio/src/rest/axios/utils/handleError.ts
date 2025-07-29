@@ -29,6 +29,8 @@ export async function handleError<Body>(error: unknown): Promise<RestResponse<Bo
     })
   }
 
+  console.log('Axios error', error)
+
   return new RestResponse<Body>({
     statusCode: 500,
     errorMessage: error instanceof Error ? error.message : String(error),
