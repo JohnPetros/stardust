@@ -15,7 +15,7 @@ export const ImageCardView = ({
   onClick,
 }: PropsWithChildren<Props>) => {
   return (
-    <div className='flex items-center flex-col p-2 h-auto radius border border-zinc-700 rounded'>
+    <div className='flex items-center flex-col p-2 h-auto border border-zinc-700 rounded'>
       <button
         type='button'
         className='p-2 hover:bg-zinc-800 rounded cursor-pointer'
