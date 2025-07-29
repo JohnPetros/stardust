@@ -12,9 +12,13 @@ import {
   Loader2,
   Copy,
   ChevronDown,
+  HardDriveUpload,
   ChevronUp,
   BookOpen,
   HelpCircle,
+  Upload,
+  Image,
+  Trash,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -23,6 +27,7 @@ import type { IconName } from '../types/IconName'
 export const ICONS: Record<IconName, LucideIcon> = {
   'arrow-down': ChevronDown,
   'arrow-up': ChevronUp,
+  image: Image,
   user: User,
   achievement: Flag,
   planet: Globe,
@@ -31,10 +36,13 @@ export const ICONS: Record<IconName, LucideIcon> = {
   x: Close,
   edition: SquarePen,
   star: Star,
+  trash: Trash,
   draggable: GripVertical,
+  submit: HardDriveUpload,
   rocket: Rocket,
   loading: Loader2,
   history: BookOpen,
   questions: HelpCircle,
   copy: Copy,
+  upload: Upload,
 }
