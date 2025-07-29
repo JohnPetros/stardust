@@ -1,21 +1,25 @@
+import type { PropsWithChildren } from 'react'
+
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { StoryImage } from '@/ui/global/widgets/components/StoryImage'
 import { Tooltip } from '@/ui/global/widgets/components/Tooltip'
-import type { PropsWithChildren } from 'react'
+import { AlertMessageComponent } from '@/ui/shadcn/components/alert-message-dialog'
 
 type Props = {
   imageName: string
   onClick: (imageName: string) => void
   onCopyButtonClick: (imageName: string) => void
+  onRemoveButtonClick: (imageName: string) => void
 }
 
 export const ImageCardView = ({
   imageName,
   onCopyButtonClick,
   onClick,
+  onRemoveButtonClick,
 }: PropsWithChildren<Props>) => {
   return (
-    <div className='flex items-center flex-col p-2 h-auto border border-zinc-700 rounded'>
+    <div className='relative flex items-center flex-col p-2 h-auto border border-zinc-700 rounded'>
       <button
         type='button'
         className='p-2 hover:bg-zinc-800 rounded cursor-pointer'
@@ -33,6 +37,17 @@ export const ImageCardView = ({
           <p className='truncate max-w-[150px]'>{imageName}</p>
         </button>
       </Tooltip>
+      <AlertMessageComponent
+        message='Você tem certeza que deseja remover esta imagem?'
+        onConfirm={() => onRemoveButtonClick(imageName)}
+      >
+        <button
+          type='button'
+          className='absolute top-4 right-3 text-zinc-400 flex items-center gap-2 hover:opacity-80 rounded cursor-pointer'
+        >
+          <Icon name='trash' className='w-4 h-4' />
+        </button>
+      </AlertMessageComponent>
     </div>
   )
 }

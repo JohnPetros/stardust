@@ -67,7 +67,6 @@ export function usePaginatedCache<CacheItem>({
       const response = await fetcher(pageParam)
       if (response.isFailure) response.throwError()
       setTotalItemsCount(response.body.totalItemsCount)
-      console.log(response.body.items)
       return response.body
     },
     initialPageParam: 1,
@@ -124,8 +123,6 @@ export function usePaginatedCache<CacheItem>({
   function nextPage() {
     fetchNextPage()
   }
-
-  console.log({ items })
 
   return {
     data: items,

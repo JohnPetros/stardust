@@ -72,7 +72,6 @@ export function DataTypeInput({ value, errorMessage, onChange }: FunctionInputPr
           <ul className='space-y-3 pl-6'>
             {dataType.value.map((value, index) => {
               const itemDataType = DataType.create(value)
-              // console.log('itemDataType', itemDataType)
               return (
                 <li key={String(index)}>
                   <button
