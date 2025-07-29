@@ -14,3 +14,4 @@ export type IconName =
   | 'x'
   | 'history'
   | 'questions'
+  | 'copy'

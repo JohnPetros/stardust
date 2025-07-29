@@ -1,13 +1,14 @@
 import type { StorageService as IStorageService } from '@stardust/core/storage/interfaces'
 import type { RestClient } from '@stardust/core/global/interfaces'
-import type { ImagesBucket } from '@stardust/core/storage/types'
+import type { FilesListingParams } from '@stardust/core/storage/types'
 
-import { ENV } from '@/constants'
-
-export const StorageService = (_: RestClient): IStorageService => {
+export const StorageService = (restClient: RestClient): IStorageService => {
   return {
-    fetchImage(bucket: ImagesBucket, resource: string) {
-      return `${ENV.supabaseCdnUrl}/${bucket}/${resource}`
+    async listFiles(params: FilesListingParams) {
+      if (params.page) restClient.setQueryParam('page', String(params.page.value))
+      restClient.setQueryParam('itemsPerPage', String(params.itemsPerPage.value))
+      restClient.setQueryParam('search', params.search.value)
+      return await restClient.get(`/storage/${params.folder}`)
     },
   }
 }

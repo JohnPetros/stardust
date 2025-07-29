@@ -40,7 +40,7 @@ export class SupabaseStorageProvider implements StorageProvider {
     page,
     itemsPerPage,
     search,
-  }: FilesListingParams): Promise<File[]> {
+  }: FilesListingParams): Promise<{ files: File[]; totalFilesCount: number }> {
     const { data, error } = await this.supabase.storage
       .from(SupabaseStorageProvider.BUCKET_NAME)
       .list(folder, {
@@ -53,7 +53,12 @@ export class SupabaseStorageProvider implements StorageProvider {
       this.handleError(error)
     }
 
-    console.log({ folder })
+    const response = await this.supabase.storage
+      .from(SupabaseStorageProvider.BUCKET_NAME)
+      .list(folder, {
+        offset: 0,
+        search: search.value,
+      })
 
     const files: File[] = []
 
@@ -74,7 +79,7 @@ export class SupabaseStorageProvider implements StorageProvider {
       }
     }
 
-    return files
+    return { files, totalFilesCount: response.data?.length ?? 0 }
   }
 
   async removeFile(folder: StorageFolder, fileName: Text): Promise<void> {

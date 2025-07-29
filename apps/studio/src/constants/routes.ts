@@ -14,7 +14,8 @@ export const ROUTES = {
     challenge: (challengeSlug: Slug) => `/challenging/challenge/${challengeSlug.value}`,
   },
   lesson: {
-    story: (starSlug: Slug) => `/lesson/story/${starSlug.value}`,
+    story: (starSlug?: Slug) =>
+      `/lesson/story/${starSlug ? starSlug.value : ':starSlug'}`,
     questions: (starSlug: Slug) => `/lesson/questions/${starSlug.value}`,
   },
 }

@@ -1,5 +1,6 @@
-import type { ImagesBucket } from '../types'
+import type { PaginationResponse, RestResponse } from '#global/responses'
+import type { FilesListingParams } from '../types'
 
 export interface StorageService {
-  fetchImage(bucket: ImagesBucket, resource: string): string
+  listFiles(params: FilesListingParams): Promise<RestResponse<PaginationResponse<string>>>
 }

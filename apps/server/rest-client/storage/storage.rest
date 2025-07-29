@@ -2,11 +2,11 @@
 @FILE_NAME = abacaxi.jpg
 @FOLDER = story
 
-### Get images
-GET {{URL}}/{{FOLDER}}/images
+### Get files
+GET {{URL}}/{{FOLDER}}
 ?page=1
-&itemsPerPage=15
-&search=panda
+&itemsPerPage=25
+&search=
 Authorization: Bearer {{JWT}}
 
 ### Remove file

@@ -1,10 +1,9 @@
-'use client'
-
 import useSWRInfinite from 'swr/infinite'
 import { useMemo, useState } from 'react'
 
-import { useToastContext } from '../contexts/ToastContext'
 import type { PaginationResponse } from '@stardust/core/global/responses'
+
+import { useToastContext } from '../contexts/ToastContext'
 
 type PaginatedCacheConfig<CacheItem> = {
   key: string
@@ -83,7 +82,7 @@ export function usePaginatedCache<CacheItem>({
   }
 
   const items = useMemo(() => {
-    if (data) return isInfinity ? data.flat() : data.at(-1) ?? []
+    if (data) return isInfinity ? data.flat() : (data.at(-1) ?? [])
     return []
   }, [data, isInfinity])
 
