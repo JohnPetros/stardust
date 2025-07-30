@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useImage } from '@/ui/global/hooks/useImage'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
@@ -17,10 +17,7 @@ type LessonHeaderProps = {
 export function LessonHeader({ onLeavePage }: LessonHeaderProps) {
   const { user } = useAuthContext()
   const { lessonProgress, livesCount } = useLessonHeader()
-  const { storageService } = useRest()
-  const rocketImage = user
-    ? storageService.fetchImage('rockets', user.rocket.image.value)
-    : ''
+  const rocketImage = user ? useImage('rockets', user.rocket.image.value) : ''
 
   if (lessonProgress)
     return (

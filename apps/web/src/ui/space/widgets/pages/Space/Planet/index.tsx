@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 import type { Star as StarEntity } from '@stardust/core/space/entities'
 
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useImage } from '@/ui/global/hooks/useImage'
 import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { AnimatedSign } from './AnimatedSign'
@@ -21,9 +21,8 @@ type PlanetProps = {
 function PlanetComponent({ name, image, icon, stars }: PlanetProps) {
   const { lastUnlockedStarId } = useSpaceContext()
   const { user } = useAuthContext()
-  const { storageService } = useRest()
-  const planetImage = storageService.fetchImage('planets', image)
-  const planetIconImage = storageService.fetchImage('planets', icon)
+  const planetImage = useImage('planets', image)
+  const planetIconImage = useImage('planets', icon)
 
   return (
     <div>

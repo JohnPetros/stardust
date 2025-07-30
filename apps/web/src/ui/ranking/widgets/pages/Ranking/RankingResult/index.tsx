@@ -5,7 +5,7 @@ import { useRef } from 'react'
 
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useImage } from '@/ui/global/hooks/useImage'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { Animation } from '@/ui/global/widgets/components/Animation'
 import { Button } from '@/ui/global/widgets/components/Button'
@@ -30,10 +30,7 @@ export function RankingResult() {
     failAlertDialog,
   })
   const { user } = useAuthContext()
-  const { storageService } = useRest()
-  const tierImage = user
-    ? storageService.fetchImage('rankings', user.tier.image.value)
-    : ''
+  const tierImage = user ? useImage('rankings', user.tier.image.value) : ''
 
   if (isLoading) return <Loading isSmall={false} />
 

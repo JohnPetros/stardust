@@ -8,7 +8,7 @@ import { AnimatedSpan } from './AnimatedSpan'
 import { RewardAlertDialog } from './RewardAlertDialog'
 
 import { Button } from '@/ui/global/widgets/components/Button'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useImage } from '@/ui/global/hooks/useImage'
 
 import { useAchievementCard } from './useAchievementCard'
 
@@ -34,8 +34,7 @@ export function AchievementCard({
   children: progress,
 }: AchievementCardProps) {
   const { handleRescueButtonClick } = useAchievementCard(id, reward)
-  const { storageService } = useRest()
-  const iconImage = storageService.fetchImage('achievements', icon)
+  const iconImage = useImage('achievements', icon)
 
   return (
     <AnimatedContainer>
@@ -44,7 +43,7 @@ export function AchievementCard({
           <Image
             src={iconImage}
             className='skeleton'
-            onLoadingComplete={(image) => image.classList.remove('skeleton')}
+            onLoadingComplete={(imgElement) => imgElement.classList.remove('skeleton')}
             fill
             alt='Conquista desbloqueada'
           />

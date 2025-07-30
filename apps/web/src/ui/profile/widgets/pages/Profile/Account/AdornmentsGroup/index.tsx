@@ -1,6 +1,6 @@
 'use client'
 
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useImage } from '@/ui/global/hooks/useImage'
 import { Adornment } from './Adornment'
 
 type ItemsProps = {
@@ -15,9 +15,8 @@ type ItemsProps = {
 }
 
 export function AdornmentGroup({ tier, rocket }: ItemsProps) {
-  const { storageService } = useRest()
-  const tierImage = storageService.fetchImage('rankings', tier.image)
-  const rocketImage = storageService.fetchImage('rockets', rocket.image)
+  const tierImage = useImage('rankings', tier.image)
+  const rocketImage = useImage('rockets', rocket.image)
 
   return (
     <>

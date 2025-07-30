@@ -1,6 +1,6 @@
 'use client'
 
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useImage } from '@/ui/global/hooks/useImage'
 import { useMdx } from '@/ui/global/widgets/components/Mdx/hooks/useMdx'
 import Image from 'next/image'
 
@@ -11,8 +11,7 @@ type TitleProps = {
 
 export function QuestionStem({ children, picture }: TitleProps) {
   const { parseMdxToText } = useMdx()
-  const { storageService } = useRest()
-  const image = picture ? storageService.fetchImage('theory', picture) : ''
+  const image = picture ? useImage('story', picture) : ''
 
   return (
     <div className='flex w-full flex-col items-center justify-center gap-3 rounded-md md:flex-row'>
@@ -24,7 +23,7 @@ export function QuestionStem({ children, picture }: TitleProps) {
             sizes='(min-width: 375px) 4rem'
             alt='Panda'
             className='skeleton rounded-md'
-            onLoadingComplete={(image) => image.classList.remove('skeleton')}
+            onLoadingComplete={(imgElement) => imgElement.classList.remove('skeleton')}
             priority
           />
         </div>

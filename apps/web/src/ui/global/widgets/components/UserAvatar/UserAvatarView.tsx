@@ -1,6 +1,6 @@
 import * as Avatar from '@radix-ui/react-avatar'
 
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useImage } from '@/ui/global/hooks/useImage'
 
 type Props = {
   avatarImage: string
@@ -9,8 +9,7 @@ type Props = {
 }
 
 export const UserAvatarView = ({ avatarImage, avatarName, size }: Props) => {
-  const { storageService } = useRest()
-  const avatarImageSrc = storageService.fetchImage('avatars', avatarImage)
+  const avatarImageSrc = useImage('avatars', avatarImage)
 
   return (
     <Avatar.Root>
