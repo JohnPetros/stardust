@@ -48,8 +48,8 @@ export const StoryImageInputView = ({
               placeholder='Pesquise por uma imagem'
               onChange={(event) => onSearchInputChange(event.target.value)}
             />
-            <div className='flex items-center justify-between gap-2 px-3 py-1 w-56 border border-zinc-700 rounded text-sm text-zinc-300'>
-              Selecionado
+            <div className='flex items-center justify-between gap-2 px-3 py-1 w-64 border border-zinc-700 rounded text-sm text-zinc-300'>
+              Selecionado:
               <StoryImage src={selectedImage} alt='Imagem' className='w-10 h-8' />
             </div>
             <ImageInput folder='story'>

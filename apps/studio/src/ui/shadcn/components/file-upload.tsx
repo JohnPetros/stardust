@@ -70,7 +70,7 @@ export default function FileUpload({
               >
                 <ImageIcon name='image' className='size-4 opacity-60 bg-transparent' />
               </div>
-              <p className='mb-1.5 text-sm font-medium'>Drop your image here</p>
+              <p className='mb-1.5 text-sm font-medium'>Arraste e solte a imagem aqui</p>
               <p className='text-zinc-300 text-xs'>
                 SVG, PNG, JPG ou (max. {formatBytes(maxSize)})
               </p>
