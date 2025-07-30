@@ -312,7 +312,6 @@ export class SupabaseUsersRepository
 
   async replace(user: User): Promise<void> {
     const supabaseUser = SupabaseUserMapper.toSupabase(user)
-    console.log(supabaseUser)
     const { error } = await this.supabase
       .from('users')
       .update(supabaseUser)

@@ -11,7 +11,7 @@ type TitleProps = {
 
 export function QuestionStem({ children, picture }: TitleProps) {
   const { parseMdxToText } = useMdx()
-  const image = picture ? useImage('story', picture) : ''
+  const image = useImage('story', picture ?? '')
 
   return (
     <div className='flex w-full flex-col items-center justify-center gap-3 rounded-md md:flex-row'>

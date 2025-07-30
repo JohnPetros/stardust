@@ -79,7 +79,7 @@ export const NextRestClient = ({
           'Content-Type': 'multipart/form-data',
         },
         method: 'POST',
-        body: JSON.stringify(body),
+        body,
       })
 
       if (!response.ok) {
