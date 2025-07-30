@@ -4,9 +4,70 @@ import { XIcon } from 'lucide-react'
 
 import { cn } from '@/ui/shadcn/utils/index'
 
-function Dialog({ ...props }: React.ComponentProps<typeof DialogPrimitive.Root>) {
-  return <DialogPrimitive.Root data-slot='dialog' {...props} />
+// Hook para gerenciar o estado do dialog
+function useDialog(initialOpen = false) {
+  const [open, setOpen] = React.useState(initialOpen)
+
+  const openDialog = React.useCallback(() => {
+    setOpen(true)
+  }, [])
+
+  const closeDialog = React.useCallback(() => {
+    setOpen(false)
+  }, [])
+
+  const toggleDialog = React.useCallback(() => {
+    setOpen((prev) => !prev)
+  }, [])
+
+  return {
+    open,
+    setOpen,
+    openDialog,
+    closeDialog,
+    toggleDialog,
+  }
 }
+
+// Interface para a ref do dialog
+export interface DialogRef {
+  open: () => void
+  close: () => void
+  toggle: () => void
+}
+
+// Componente Dialog com suporte a ref
+const DialogComponent = React.forwardRef<
+  DialogRef,
+  React.ComponentProps<typeof DialogPrimitive.Root> & {
+    defaultOpen?: boolean
+  }
+>(({ defaultOpen = false, children, ...props }, ref) => {
+  const { open, setOpen, openDialog, closeDialog, toggleDialog } = useDialog(defaultOpen)
+
+  React.useImperativeHandle(
+    ref,
+    () => ({
+      open: openDialog,
+      close: closeDialog,
+      toggle: toggleDialog,
+    }),
+    [openDialog, closeDialog, toggleDialog],
+  )
+
+  return (
+    <DialogPrimitive.Root
+      data-slot='dialog'
+      open={open}
+      onOpenChange={setOpen}
+      {...props}
+    >
+      {children}
+    </DialogPrimitive.Root>
+  )
+})
+
+DialogComponent.displayName = 'Dialog'
 
 function DialogTrigger({
   ...props
@@ -52,7 +113,7 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot='dialog-content'
         className={cn(
-          'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg p-6 shadow-lg duration-200 sm:max-w-lg',
+          'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg p-6 shadow-lg duration-200 sm:max-w-lg bg-zinc-900',
           className,
         )}
         {...props}
@@ -119,7 +180,7 @@ function DialogDescription({
 }
 
 export {
-  Dialog,
+  DialogComponent as Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
@@ -130,3 +191,45 @@ export {
   DialogTitle,
   DialogTrigger,
 }
+
+/*
+Exemplo de uso com ref:
+
+import { useRef } from 'react'
+import { Dialog, DialogContent, DialogTrigger, type DialogRef } from './dialog'
+import { Button } from './button'
+
+function MyComponent() {
+  const dialogRef = useRef<DialogRef>(null)
+
+  const handleOpenDialog = () => {
+    dialogRef.current?.open()
+  }
+
+  const handleCloseDialog = () => {
+    dialogRef.current?.close()
+  }
+
+  const handleToggleDialog = () => {
+    dialogRef.current?.toggle()
+  }
+
+  return (
+    <div>
+      <Button onClick={handleOpenDialog}>Abrir Dialog</Button>
+      <Button onClick={handleCloseDialog}>Fechar Dialog</Button>
+      <Button onClick={handleToggleDialog}>Alternar Dialog</Button>
+
+      <Dialog ref={dialogRef}>
+        <DialogTrigger asChild>
+          <Button>Trigger Normal</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <h2>Conteúdo do Dialog</h2>
+          <p>Este dialog pode ser controlado via ref!</p>
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}
+*/

@@ -15,6 +15,6 @@ export class UploadFileController implements Controller {
     const { folder } = http.getRouteParams()
     const file = await http.getFile()
     const uploadedFile = await this.storageProvider.upload(folder as StorageFolder, file)
-    return http.statusCreated().send({ fileName: uploadedFile.name })
+    return http.statusCreated().send({ filename: uploadedFile.name })
   }
 }

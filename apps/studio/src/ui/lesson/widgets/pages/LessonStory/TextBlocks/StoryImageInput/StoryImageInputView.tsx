@@ -12,6 +12,9 @@ import {
 import { Input } from '@/ui/shadcn/components/input'
 import { ImageCard } from './ImageCard'
 import { StoryImage } from '@/ui/global/widgets/components/StoryImage'
+import { Button } from '@/ui/shadcn/components/button'
+import { Icon } from '@/ui/global/widgets/components/Icon'
+import { ImageInput } from '@/ui/global/widgets/components/ImageInput'
 
 type Props = {
   selectedImage: string
@@ -34,7 +37,7 @@ export const StoryImageInputView = ({
         </DialogTrigger>
         <DialogContent
           showCloseButton
-          className='block space-y-4 min-h-[80vh] max-h-[80vh] overflow-y-auto bg-zinc-900 min-w-3xl'
+          className='block space-y-4 min-h-[80vh] max-h-[80vh] overflow-y-auto min-w-3xl'
         >
           <DialogHeader>
             <DialogTitle>Selecione uma imagem</DialogTitle>
@@ -49,6 +52,12 @@ export const StoryImageInputView = ({
               Selecionado
               <StoryImage src={selectedImage} alt='Imagem' className='w-10 h-8' />
             </div>
+            <ImageInput folder='story'>
+              <Button variant='outline' className='flex items-center gap-2'>
+                <Icon name='upload' className='w-4 h-4' />
+                Adicionar
+              </Button>
+            </ImageInput>
           </div>
 
           <div>

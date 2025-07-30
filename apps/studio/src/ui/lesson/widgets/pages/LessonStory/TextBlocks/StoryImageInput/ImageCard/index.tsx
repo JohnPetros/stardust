@@ -1,3 +1,4 @@
+import { useRest } from '@/ui/global/hooks/useRest'
 import { ImageCardView } from './ImageCardView'
 import { useImageCard } from './useImageCard'
 
@@ -7,13 +8,15 @@ type Props = {
 }
 
 export const ImageCard = ({ imageName, onClick }: Props) => {
-  const { handleCopyButtonClick } = useImageCard()
+  const { storageService } = useRest()
+  const { handleCopyButtonClick, handleRemoveButtonClick } = useImageCard(storageService)
 
   return (
     <ImageCardView
       imageName={imageName}
       onClick={onClick}
       onCopyButtonClick={handleCopyButtonClick}
+      onRemoveButtonClick={handleRemoveButtonClick}
     />
   )
 }
