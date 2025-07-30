@@ -8,9 +8,10 @@ import type { StorageFolder } from '@stardust/core/storage/types'
 
 type Props = {
   folder: StorageFolder
+  onSubmit: () => void
 }
 
-export const ImageInput = ({ children, folder }: PropsWithChildren<Props>) => {
+export const ImageInput = ({ children, folder, onSubmit }: PropsWithChildren<Props>) => {
   const dialogRef = useRef<DialogRef>(null)
   const { storageService } = useRest()
   const {
@@ -21,7 +22,7 @@ export const ImageInput = ({ children, folder }: PropsWithChildren<Props>) => {
     handleImageFileChange,
     handleImageNameChange,
     handleSubmit,
-  } = useImageInput(storageService, folder, dialogRef)
+  } = useImageInput({ storageService, folder, dialogRef, onSubmit })
 
   return (
     <ImageInputView

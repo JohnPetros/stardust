@@ -15,21 +15,25 @@ export const TextBlocksView = () => {
           </TextBlockButton>
         </li>
         <li>
-          <TextBlockButton endContent={null}>Bloco de alerta</TextBlockButton>
+          <TextBlockButton endContent={<StoryImageInput />}>
+            Bloco de alerta
+          </TextBlockButton>
         </li>
         <li>
-          <TextBlockButton endContent={null}>Bloco de código executável</TextBlockButton>
+          <TextBlockButton endContent={<StoryImageInput />}>
+            Bloco de código executável
+          </TextBlockButton>
         </li>
         <li>
-          <TextBlockButton endContent={null}>
+          <TextBlockButton endContent={<StoryImageInput />}>
             Bloco de código não executável
           </TextBlockButton>
         </li>
         <li>
-          <TextBlockButton endContent={null}>Imagem</TextBlockButton>
+          <TextBlockButton endContent={<StoryImageInput />}>Imagem</TextBlockButton>
         </li>
         <li>
-          <TextBlockButton endContent={null}>Usuário</TextBlockButton>
+          <TextBlockButton endContent={<StoryImageInput />}>Usuário</TextBlockButton>
         </li>
       </ul>
     </div>
