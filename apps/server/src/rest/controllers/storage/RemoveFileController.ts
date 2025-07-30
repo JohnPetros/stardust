@@ -1,7 +1,7 @@
 import { Text } from '@stardust/core/global/structures'
 import type { Controller, Http } from '@stardust/core/global/interfaces'
 import type { StorageProvider } from '@stardust/core/storage/interfaces'
-import type { StorageFolder } from '@stardust/core/storage/types'
+import { StorageFolder } from '@stardust/core/storage/structures'
 
 type Schema = {
   routeParams: {
@@ -15,7 +15,10 @@ export class RemoveFileController implements Controller {
 
   async handle(http: Http<Schema>) {
     const { fileName, folder } = http.getRouteParams()
-    await this.storageProvider.removeFile(folder as StorageFolder, Text.create(fileName))
+    await this.storageProvider.removeFile(
+      StorageFolder.create(folder),
+      Text.create(fileName),
+    )
     return http.statusNoContent().send()
   }
 }

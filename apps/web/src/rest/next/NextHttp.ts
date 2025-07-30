@@ -1,5 +1,3 @@
-'use server'
-
 import { type NextRequest, NextResponse } from 'next/server'
 import type { ZodSchema } from 'zod'
 

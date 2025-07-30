@@ -2,7 +2,8 @@ import { createClient } from '@supabase/supabase-js'
 
 import { AppError } from '@stardust/core/global/errors'
 import type { StorageProvider } from '@stardust/core/storage/interfaces'
-import type { FilesListingParams, StorageFolder } from '@stardust/core/storage/types'
+import type { FilesListingParams } from '@stardust/core/storage/types'
+import type { StorageFolder } from '@stardust/core/storage/structures'
 import type { Text } from '@stardust/core/global/structures'
 
 import { ENV } from '@/constants'
@@ -18,7 +19,7 @@ export class SupabaseStorageProvider implements StorageProvider {
   async upload(folder: StorageFolder, file: File): Promise<File> {
     const { data, error } = await this.supabase.storage
       .from(SupabaseStorageProvider.BUCKET_NAME)
-      .upload(`${folder}/${file.name}`, file, {
+      .upload(`${folder.value}/${file.name}`, file, {
         cacheControl: '3600',
         contentType: file.type,
         upsert: false,
@@ -66,7 +67,7 @@ export class SupabaseStorageProvider implements StorageProvider {
       if (item.name) {
         const { data: urlData } = this.supabase.storage
           .from(SupabaseStorageProvider.BUCKET_NAME)
-          .getPublicUrl(`${folder}/${item.name}`)
+          .getPublicUrl(`${folder.value}/${item.name}`)
 
         if (urlData?.publicUrl) {
           const response = await fetch(urlData.publicUrl)
@@ -85,7 +86,7 @@ export class SupabaseStorageProvider implements StorageProvider {
   async removeFile(folder: StorageFolder, fileName: Text): Promise<void> {
     const { error } = await this.supabase.storage
       .from(SupabaseStorageProvider.BUCKET_NAME)
-      .remove([`${folder}/${fileName.value}`])
+      .remove([`${folder.value}/${fileName.value}`])
 
     if (error) {
       this.handleError(error)

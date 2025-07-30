@@ -1,10 +1,12 @@
 import { useRef, useState, type RefObject } from 'react'
 
+import type { StorageService } from '@stardust/core/storage/interfaces'
+import type { DialogRef } from '@/ui/shadcn/components/dialog'
+import { StorageFolder } from '@stardust/core/storage/structures'
+
 import { CACHE } from '@/constants'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 import { Image, OrdinalNumber, Text } from '@stardust/core/global/structures'
-import type { StorageService } from '@stardust/core/storage/interfaces'
-import type { DialogRef } from '@/ui/shadcn/components/dialog'
 
 const ITEMS_PER_PAGE = OrdinalNumber.create(30)
 
@@ -20,8 +22,8 @@ export function useStoryImageInput(
       key: CACHE.storyImages.key,
       fetcher: async (page: number) =>
         await storageService.listFiles({
-          folder: 'story',
           search: search,
+          folder: StorageFolder.createAsStory(),
           page: OrdinalNumber.create(page),
           itemsPerPage: ITEMS_PER_PAGE,
         }),

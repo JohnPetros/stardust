@@ -71,6 +71,25 @@ export const NextRestClient = ({
       return new RestResponse({ body: data, statusCode: response.status })
     },
 
+    async postFormData<Body>(route: string, body: FormData): Promise<RestResponse<Body>> {
+      const response = await fetch(`${baseUrl}${addQueryParams(route, queryParams)}`, {
+        ...requestInit,
+        headers: {
+          ...requestInit.headers,
+          'Content-Type': 'multipart/form-data',
+        },
+        method: 'POST',
+        body: JSON.stringify(body),
+      })
+
+      if (!response.ok) {
+        return await handleRestError<Body>(response)
+      }
+
+      const data = await parseResponseJson(response)
+      return new RestResponse({ body: data, statusCode: response.status })
+    },
+
     async put<Body>(route: string, body: unknown): Promise<RestResponse<Body>> {
       const response = await fetch(`${baseUrl}${addQueryParams(route, queryParams)}`, {
         ...requestInit,

@@ -1,7 +1,7 @@
 import { useState, type RefObject } from 'react'
 
 import type { StorageService } from '@stardust/core/storage/interfaces'
-import type { StorageFolder } from '@stardust/core/storage/types'
+import type { StorageFolder } from '@stardust/core/storage/structures'
 import { Image } from '@stardust/core/global/structures'
 
 import type { DialogRef } from '@/ui/shadcn/components/dialog'

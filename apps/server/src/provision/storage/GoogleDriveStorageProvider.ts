@@ -26,7 +26,7 @@ export class GoogleDriveStorageProvider implements StorageProvider {
   }
 
   async upload(folder: StorageFolder, file: File): Promise<File> {
-    const parentFolderId = GoogleDriveStorageProvider.PARENT_FOLDER_IDS[folder]
+    const parentFolderId = GoogleDriveStorageProvider.PARENT_FOLDER_IDS[folder.value]
     const fileMetadata = {
       name: file.name,
       parents: [parentFolderId],
