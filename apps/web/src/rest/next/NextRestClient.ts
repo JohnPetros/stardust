@@ -1,6 +1,7 @@
 import type { RestClient } from '@stardust/core/global/interfaces'
 import { PaginationResponse, RestResponse } from '@stardust/core/global/responses'
 import { HTTP_HEADERS } from '@stardust/core/global/constants'
+import { MethodNotImplementedError } from '@stardust/core/global/errors'
 
 import { addQueryParams, handleRestError, parseResponseJson } from './utils'
 import type { NextRestClientConfig } from './types'
@@ -71,23 +72,8 @@ export const NextRestClient = ({
       return new RestResponse({ body: data, statusCode: response.status })
     },
 
-    async postFormData<Body>(route: string, body: FormData): Promise<RestResponse<Body>> {
-      const response = await fetch(`${baseUrl}${addQueryParams(route, queryParams)}`, {
-        ...requestInit,
-        headers: {
-          ...requestInit.headers,
-          'Content-Type': 'multipart/form-data',
-        },
-        method: 'POST',
-        body,
-      })
-
-      if (!response.ok) {
-        return await handleRestError<Body>(response)
-      }
-
-      const data = await parseResponseJson(response)
-      return new RestResponse({ body: data, statusCode: response.status })
+    async postFormData<Body>(): Promise<RestResponse<Body>> {
+      throw new MethodNotImplementedError()
     },
 
     async put<Body>(route: string, body: unknown): Promise<RestResponse<Body>> {
