@@ -6,16 +6,23 @@ import type { UsersRepository } from '@stardust/core/profile/interfaces'
 import { UpdateUserUseCase } from '@stardust/core/profile/use-cases'
 
 type Schema = {
+  routeParams: {
+    userId: string
+  }
   body: UserDto
 }
 
 export class UpdateUserController implements Controller<Schema> {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(private readonly repository: UsersRepository) {}
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
-    const userDto = await http.getBody()
-    const useCase = new UpdateUserUseCase(this.usersRepository)
-    const user = await useCase.execute(userDto)
-    return http.send(user)
+    const { userId } = http.getRouteParams()
+    const user = await http.getBody()
+    const useCase = new UpdateUserUseCase(this.repository)
+    const response = await useCase.execute({
+      ...user,
+      id: userId,
+    })
+    return http.send(response)
   }
 }
