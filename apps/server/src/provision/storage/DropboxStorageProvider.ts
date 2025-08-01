@@ -1,17 +1,13 @@
 import { Dropbox } from 'dropbox'
 
 import { AppError } from '@stardust/core/global/errors'
-import type { StorageProvider } from '@stardust/core/storage/interfaces'
-import type { StorageFolder } from '@stardust/core/storage/types'
 import { MethodNotImplementedError } from '@stardust/core/global/errors'
+import type { StorageFolder } from '@stardust/core/storage/structures'
+import type { StorageProvider } from '@stardust/core/storage/interfaces'
 
 import { ENV } from '@/constants'
 
 export class DropboxStorageProvider implements StorageProvider {
-  private static readonly DROPBOX_FOLDER_PATHS: Record<StorageFolder, string> = {
-    'database-backups': '/database-backups',
-    story: '/story',
-  }
   private readonly dropbox: Dropbox
 
   constructor() {
@@ -22,8 +18,7 @@ export class DropboxStorageProvider implements StorageProvider {
 
   async upload(folder: StorageFolder, file: File): Promise<File> {
     try {
-      const dropboxPath = DropboxStorageProvider.DROPBOX_FOLDER_PATHS[folder.value]
-      const fullPath = `${dropboxPath}/${file.name}`
+      const fullPath = `/${folder.name}/${file.name}`
 
       const fileBuffer = await this.fileToBuffer(file)
 
@@ -33,7 +28,7 @@ export class DropboxStorageProvider implements StorageProvider {
         mode: { '.tag': 'overwrite' },
       })
 
-      if (!response || !response.id || !response.name) {
+      if (!response || !response.result.id || !response.result.name) {
         this.handleError('Failed to upload file to Dropbox')
       }
 
@@ -43,7 +38,7 @@ export class DropboxStorageProvider implements StorageProvider {
     }
   }
 
-  async listFiles(): Promise<File[]> {
+  async listFiles(): Promise<{ files: File[]; totalFilesCount: number }> {
     throw new MethodNotImplementedError('listFiles')
   }
 

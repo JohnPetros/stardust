@@ -1,5 +1,6 @@
 import type { DatabaseProvider, UseCase } from '../../global/interfaces'
 import type { StorageProvider } from '../interfaces'
+import { StorageFolder } from '../structures'
 
 export class BackupDatabaseUseCase implements UseCase {
   constructor(

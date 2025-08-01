@@ -1,5 +1,6 @@
 import type { Text } from '#global/domain/structures/Text'
-import type { FilesListingParams, StorageFolder } from '../types'
+import type { StorageFolder } from '../structures'
+import type { FilesListingParams } from '../types'
 
 export interface StorageProvider {
   upload(folder: StorageFolder, file: File): Promise<File>

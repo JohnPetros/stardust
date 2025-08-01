@@ -19,7 +19,7 @@ export class SupabaseStorageProvider implements StorageProvider {
   async upload(folder: StorageFolder, file: File): Promise<File> {
     const { data, error } = await this.supabase.storage
       .from(SupabaseStorageProvider.BUCKET_NAME)
-      .upload(`${folder.value}/${file.name}`, file, {
+      .upload(`${folder.name}/${file.name}`, file, {
         cacheControl: '3600',
         contentType: file.type,
         upsert: false,
@@ -44,7 +44,7 @@ export class SupabaseStorageProvider implements StorageProvider {
   }: FilesListingParams): Promise<{ files: File[]; totalFilesCount: number }> {
     const { data, error } = await this.supabase.storage
       .from(SupabaseStorageProvider.BUCKET_NAME)
-      .list(folder, {
+      .list(folder.name, {
         limit: itemsPerPage.value,
         offset: (page.value - 1) * itemsPerPage.value,
         search: search.value,
@@ -56,7 +56,7 @@ export class SupabaseStorageProvider implements StorageProvider {
 
     const response = await this.supabase.storage
       .from(SupabaseStorageProvider.BUCKET_NAME)
-      .list(folder, {
+      .list(folder.name, {
         offset: 0,
         search: search.value,
       })
@@ -67,7 +67,7 @@ export class SupabaseStorageProvider implements StorageProvider {
       if (item.name) {
         const { data: urlData } = this.supabase.storage
           .from(SupabaseStorageProvider.BUCKET_NAME)
-          .getPublicUrl(`${folder.value}/${item.name}`)
+          .getPublicUrl(`${folder.name}/${item.name}`)
 
         if (urlData?.publicUrl) {
           const response = await fetch(urlData.publicUrl)
@@ -86,7 +86,7 @@ export class SupabaseStorageProvider implements StorageProvider {
   async removeFile(folder: StorageFolder, fileName: Text): Promise<void> {
     const { error } = await this.supabase.storage
       .from(SupabaseStorageProvider.BUCKET_NAME)
-      .remove([`${folder.value}/${fileName.value}`])
+      .remove([`${folder.name}/${fileName.value}`])
 
     if (error) {
       this.handleError(error)

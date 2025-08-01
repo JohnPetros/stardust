@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 
+import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useStreakBreakDialog } from './useStreakBreakDialog'
 import { StreakBreakDialogView } from './StreakBreakDialogView'
 

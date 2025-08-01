@@ -73,7 +73,7 @@ export const NextRestClient = ({
     },
 
     async postFormData<Body>(): Promise<RestResponse<Body>> {
-      throw new MethodNotImplementedError()
+      throw new MethodNotImplementedError('postFormData')
     },
 
     async put<Body>(route: string, body: unknown): Promise<RestResponse<Body>> {

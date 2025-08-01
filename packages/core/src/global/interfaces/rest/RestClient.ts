@@ -2,7 +2,7 @@ import type { RestResponse } from '../../responses'
 
 export interface RestClient {
   get<ResponseBody>(url: string): Promise<RestResponse<ResponseBody>>
-  post<ResponseBody>(url: string, body: unknown): Promise<RestResponse<ResponseBody>>
+  post<ResponseBody>(url: string, body?: unknown): Promise<RestResponse<ResponseBody>>
   postFormData<ResponseBody>(
     url: string,
     body: FormData,

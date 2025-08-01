@@ -1,24 +1,16 @@
 import { StringValidation } from '#global/libs/index'
 import { Logical } from '#global/domain/structures/Logical'
-
-type StorageFolderValue =
-  | 'database-backups'
-  | 'story'
-  | 'avatars'
-  | 'rockets'
-  | 'rankings'
-  | 'planets'
-  | 'achievements'
+import type { StorageFolderName } from '../types'
 
 export class StorageFolder {
-  private constructor(readonly value: StorageFolderValue) {}
+  private constructor(readonly name: StorageFolderName) {}
 
-  static create(value?: string) {
-    if (!value) return new StorageFolder('story')
+  static create(name?: string) {
+    if (!name) return new StorageFolder('story')
 
-    if (!StorageFolder.isStorageFolderValue(value)) throw new Error()
+    if (!StorageFolder.isStorageFolderName(name)) throw new Error()
 
-    return new StorageFolder(value)
+    return new StorageFolder(name)
   }
 
   static createAsStory() {
@@ -49,16 +41,16 @@ export class StorageFolder {
     return StorageFolder.create('database-backups')
   }
 
-  private static isStorageFolderValue(value: string): value is StorageFolderValue {
-    new StringValidation(value).oneOf(['story', 'database-backups'])
+  private static isStorageFolderName(name: string): name is StorageFolderName {
+    new StringValidation(name).oneOf(['story', 'database-backups'])
     return true
   }
 
   get isStory(): Logical {
-    return Logical.create(this.value === 'story')
+    return Logical.create(this.name === 'story')
   }
 
   get isDatabaseBackups(): Logical {
-    return Logical.create(this.value === 'database-backups')
+    return Logical.create(this.name === 'database-backups')
   }
 }

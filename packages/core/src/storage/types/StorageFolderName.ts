@@ -1,4 +1,4 @@
-export type StorageFolder =
+export type StorageFolderName =
   | 'database-backups'
   | 'story'
   | 'avatars'
