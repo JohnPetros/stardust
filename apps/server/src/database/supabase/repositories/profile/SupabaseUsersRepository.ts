@@ -38,12 +38,8 @@ export class SupabaseUsersRepository
       .eq('id', userId.value)
       .single()
 
-    if (error && error.code === this.POSTGRES_ERROR_CODES.PGRST116) {
-      return null
-    }
-
     if (error) {
-      throw new SupabasePostgreError(error)
+      return this.handleQueryPostgresError(error)
     }
 
     const supabaseUser: SupabaseUser = {

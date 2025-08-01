@@ -9,6 +9,6 @@ export class BackupDatabaseUseCase implements UseCase {
 
   async execute() {
     const backupFile = await this.databaseProvider.backup()
-    await this.storageProvider.upload('database-backups', backupFile)
+    await this.storageProvider.upload(StorageFolder.createAsDatabaseBackups(), backupFile)
   }
 }

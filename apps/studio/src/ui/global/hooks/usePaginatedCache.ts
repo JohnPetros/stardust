@@ -19,9 +19,10 @@ type PaginatedCacheConfig<CacheItem> = {
 
 type PaginatedCache<CacheItem> = {
   data: CacheItem[]
-  isLoading: boolean
+  isFetching: boolean
   isRefetching: boolean
   isRecheadedEnd: boolean
+  isFetchingNextPage: boolean
   totalItemsCount: number
   hasNextPage: boolean
   page: number
@@ -127,7 +128,8 @@ export function usePaginatedCache<CacheItem>({
   return {
     data: items,
     isRecheadedEnd,
-    isLoading: isLoading || isFetchingNextPage,
+    isFetching: isLoading,
+    isFetchingNextPage,
     isRefetching,
     totalItemsCount,
     page: data?.pages.length ?? 0,

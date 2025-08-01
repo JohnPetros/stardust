@@ -50,7 +50,10 @@ function Button({
   return (
     <Comp
       data-slot='button'
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(
+        buttonVariants({ variant, size, className }),
+        isLoading && 'opacity-75',
+      )}
       {...props}
     >
       {isLoading ? (

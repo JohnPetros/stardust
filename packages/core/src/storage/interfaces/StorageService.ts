@@ -1,6 +1,7 @@
 import type { PaginationResponse, RestResponse } from '@stardust/core/global/responses'
-import type { FilesListingParams, StorageFolder } from '../types'
 import type { Text } from '#global/domain/structures/Text'
+import type { FilesListingParams } from '../types'
+import type { StorageFolder } from '../structures'
 
 export interface StorageService {
   listFiles(params: FilesListingParams): Promise<RestResponse<PaginationResponse<string>>>

@@ -10,6 +10,7 @@ export type IconName =
   | 'loading'
   | 'user'
   | 'image'
+  | 'spinner'
   | 'star'
   | 'draggable'
   | 'x'

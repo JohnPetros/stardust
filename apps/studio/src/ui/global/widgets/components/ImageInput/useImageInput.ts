@@ -1,17 +1,20 @@
 import { useState, type RefObject } from 'react'
 
 import type { StorageService } from '@stardust/core/storage/interfaces'
-import type { StorageFolder } from '@stardust/core/storage/types'
+import type { StorageFolder } from '@stardust/core/storage/structures'
 import { Image } from '@stardust/core/global/structures'
 
 import type { DialogRef } from '@/ui/shadcn/components/dialog'
 import { useToast } from '@/ui/global/hooks/useToast'
 
-export function useImageInput(
-  storageService: StorageService,
-  folder: StorageFolder,
-  dialogRef: RefObject<DialogRef | null>,
-) {
+type Params = {
+  storageService: StorageService
+  folder: StorageFolder
+  dialogRef: RefObject<DialogRef | null>
+  onSubmit: () => void
+}
+
+export function useImageInput({ storageService, folder, dialogRef, onSubmit }: Params) {
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imageName, setImageName] = useState<string>('')
   const [imageNameError, setImageNameError] = useState<string | null>(null)
@@ -38,7 +41,7 @@ export function useImageInput(
     try {
       Image.create(imageName)
     } catch (error) {
-      setImageNameError(error.message)
+      setImageNameError(error instanceof Error ? error.message : 'Nome inválido')
       return
     }
 
@@ -47,6 +50,7 @@ export function useImageInput(
 
     if (response.isSuccessful) {
       dialogRef.current?.close()
+      onSubmit()
     }
     if (response.isFailure) {
       toast.showError(response.errorMessage)

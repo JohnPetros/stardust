@@ -4,22 +4,29 @@ import { Icon } from '@/ui/global/widgets/components/Icon'
 import { StoryImage } from '@/ui/global/widgets/components/StoryImage'
 import { Tooltip } from '@/ui/global/widgets/components/Tooltip'
 import { AlertMessageComponent } from '@/ui/shadcn/components/alert-message-dialog'
+import { ClipboardButton } from '@/ui/global/widgets/components/ClipboardButton'
+import { cn } from '@/ui/shadcn/utils'
 
 type Props = {
   imageName: string
+  isSelected: boolean
   onClick: (imageName: string) => void
-  onCopyButtonClick: (imageName: string) => void
   onRemoveButtonClick: (imageName: string) => void
 }
 
 export const ImageCardView = ({
   imageName,
-  onCopyButtonClick,
+  isSelected,
   onClick,
   onRemoveButtonClick,
 }: PropsWithChildren<Props>) => {
   return (
-    <div className='relative flex items-center flex-col p-2 h-auto border border-zinc-700 rounded'>
+    <div
+      className={cn(
+        'relative flex items-center flex-col p-2 h-auto border rounded',
+        isSelected ? 'border-zinc-400' : 'border-zinc-700',
+      )}
+    >
       <button
         type='button'
         className='p-2 hover:bg-zinc-800 rounded cursor-pointer'
@@ -28,14 +35,9 @@ export const ImageCardView = ({
         <StoryImage src={imageName} alt='Imagem' className='w-32 h-32' />
       </button>
       <Tooltip content={imageName}>
-        <button
-          type='button'
-          className='text-zinc-400 flex items-center gap-2 hover:opacity-80 rounded cursor-pointer'
-          onClick={() => onCopyButtonClick(imageName)}
-        >
-          <Icon name='copy' className='w-4 h-4' />
-          <p className='truncate max-w-[150px]'>{imageName}</p>
-        </button>
+        <ClipboardButton text={imageName} className='bg-transparent border-none'>
+          <span className='truncate max-w-[150px]'>{imageName}</span>
+        </ClipboardButton>
       </Tooltip>
       <AlertMessageComponent
         message='Você tem certeza que deseja remover esta imagem?'

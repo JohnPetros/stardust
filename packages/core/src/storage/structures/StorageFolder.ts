@@ -1,7 +1,14 @@
 import { StringValidation } from '#global/libs/index'
 import { Logical } from '#global/domain/structures/Logical'
 
-type StorageFolderValue = 'story' | 'database-backups'
+type StorageFolderValue =
+  | 'database-backups'
+  | 'story'
+  | 'avatars'
+  | 'rockets'
+  | 'rankings'
+  | 'planets'
+  | 'achievements'
 
 export class StorageFolder {
   private constructor(readonly value: StorageFolderValue) {}
@@ -16,6 +23,26 @@ export class StorageFolder {
 
   static createAsStory() {
     return StorageFolder.create('story')
+  }
+
+  static createAsPlanets() {
+    return StorageFolder.create('planets')
+  }
+
+  static createAsRockets() {
+    return StorageFolder.create('rockets')
+  }
+
+  static createAsAvatars() {
+    return StorageFolder.create('avatars')
+  }
+
+  static createAsAchievements() {
+    return StorageFolder.create('achievements')
+  }
+
+  static createAsRankings() {
+    return StorageFolder.create('rankings')
   }
 
   static createAsDatabaseBackups() {

@@ -6,7 +6,6 @@ export const avatarAggregateSchema = z.object({
   entity: z
     .object({
       name: stringSchema,
-      description: stringSchema,
       image: stringSchema,
     })
     .optional(),

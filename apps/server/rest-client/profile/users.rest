@@ -16,16 +16,96 @@ Authorization: Bearer {{JWT}}
 Content-Type: application/json
 
 {
+  "id": "2ac3e189-e5ed-4003-a87a-d2538411584e",
   "slug": "ctrl-alt-del",
   "email": "ctrlaltdel.cursor@gmail.com",
   "name": "Ctrl Alt Del",
-  "level": 1,
-  "coins": 0,
-  "xp": 0,
-  "weeklyXp": 0,
+  "acquiredAvatarsIds": [
+    "a78d5743-52f5-48fb-b305-c008e3a2-d79b-43f3-a1e2-77acdefeb909",
+    "557a38e8-ce8a-4ac2-992c-7eab630d186d",
+    "54eb3e10-b1b2-44aa-a496-ba7f042e09a2"
+  ],
+  "acquiredRocketsIds": [
+    "03f3f359-a0ee-42c1-bd5f-b2ad018104d7"
+  ],
+  "avatar": {
+    "entity": {
+      "name": "Apollo Flamejante",
+      "image": "apollo-fire.jpg"
+    },
+    "id": "17ba01ec-7aa6-4971-9706-537172e0b4d1"
+  },
+  "canSeeRankingResult": false,
+  "coins": 101,
+  "completedChallengesIds": [
+    "17ba01ec-7aa6-4971-9706-537172e0b4d1",
+    "62fef857-42fa-4602-8483-4dc4a446927d"
+  ],
+  "completedPlanetsIds": [
+    "2ee862da-4b73-4fb3-98a4-d6ed741302eb"
+  ],
   "streak": 0,
-  "weekStatus": ["todo", "done", "todo", "todo", "todo", "todo", "todo"]
+  "createdAt": "2025-06-27T19:57:53.330Z",
+  "didBreakStreak": false,
+  "hasCompletedSpace": false,
+  "lastViewedRankingPosition": null,
+  "level": 10,
+  "xp": 1000,
+  "name": "Ctrl Alt Del",
+  "rescuableAchievementsIds": [
+    "aca683fa-9e5e-4051-9d88-8a539393a2f9",
+    "e7180b4e-cc9c-435b-b9a6-44fcc3228cd8",
+    "2e435369-9f92-4d69-bb4c-64119b5d5a59",
+    "b40f7413-5c18-4ff3-a0a9-175be8c00388",
+    "cad1c7de-b475-49fe-92c1-5f3222222393",
+    "00dae69b-772c-48cf-a7b1-82632804eb9c"
+  ],
+  "rocket": {
+    "entity": {
+      "name": "Nova Explorer",
+      "image": "rocket-1.svg"
+    },
+    "id": "03f3f359-a0ee-42c1-bd5f-b2ad018104d7"
+  },
+  "tier": {
+    "entity": {
+      "name": "Estrela comum",
+      "image": "ranking-1.svg",
+      "position": 1,
+      "reward": 10
+    },
+    "id": "542f61a-4e42-4914-88f6-9aa7c258347b"
+  },
+  "unlockedAchievementsIds": [
+    "00dae69b-772c-48cf-a7b1-82632804eb9c",
+    "2e435369-9f92-4d69-bb4c-64119b5d5a59",
+    "aca683fa-9e5e-4051-9d88-8a539393a2f9",
+    "b40f7413-5c18-4ff3-a0a9-175be8c00388",
+    "cad1c7de-b475-49fe-92c1-5f3222222393",
+    "e7180b4e-cc9c-435b-b9a6-44fcc3228cd8"
+  ],
+  "unlockedDocsIds": [],
+  "unlockedStarsIds": [
+    "b34a4a76-0615-4910-89a0-3506985cda2a-44de-b560-31798581f9e5",
+    "05a206ae-69f0-4263-87a5-1dd0018d15d8",
+    "e35bba41-f5cd-4a37-9b67-533171a086cc",
+    "56f5514-6b54-40ae-8833-392ecbe5e422",
+    "42e685cc-3224-4a0a-9f77-33602dc5a292",
+    "306590d5-5e93"
+  ],
+  "upvotedCommentsIds": [],
+  "weekStatus": [
+    "todo",
+    "todo",
+    "todo",
+    "todo",
+    "todo",
+    "todo",
+    "todo"
+  ],
+  "weeklyXp": 1000
 }
+
 
 ### Reward user for star completion
 PUT {{URL}}/{{USER_ID}}/reward/star

@@ -22,7 +22,7 @@ export class DropboxStorageProvider implements StorageProvider {
 
   async upload(folder: StorageFolder, file: File): Promise<File> {
     try {
-      const dropboxPath = DropboxStorageProvider.DROPBOX_FOLDER_PATHS[folder]
+      const dropboxPath = DropboxStorageProvider.DROPBOX_FOLDER_PATHS[folder.value]
       const fullPath = `${dropboxPath}/${file.name}`
 
       const fileBuffer = await this.fileToBuffer(file)

@@ -1,6 +1,6 @@
 import { ENV } from '@/constants'
-import type { StorageFolder } from '@stardust/core/storage/types'
+import type { StorageFolder } from '@stardust/core/storage/structures'
 
 export function useImage(storageFolder: StorageFolder, imageName: string) {
-  return `${ENV.supabaseCdnUrl}/${storageFolder}/${imageName}`
+  return `${ENV.supabaseCdnUrl}/${storageFolder.value}/${imageName}`
 }

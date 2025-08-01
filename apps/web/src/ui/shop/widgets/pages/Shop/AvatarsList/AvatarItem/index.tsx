@@ -5,6 +5,7 @@ import { Id } from '@stardust/core/global/structures'
 import { AvatarAggregate } from '@stardust/core/profile/aggregates'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext/hooks/useAuthContext'
+import { useImage } from '@/ui/global/hooks/useImage'
 import { useRest } from '@/ui/global/hooks/useRest'
 import { useAvatarItem } from './useAvatarItem'
 import { AvatarItemView } from './AvatarItemView'
@@ -24,8 +25,7 @@ export function AvatarItem({ id, name, image, price }: Props) {
     Integer.create(price),
     profileService,
   )
-  const { storageService } = useRest()
-  const avatarImage = storageService.fetchImage('avatars', image)
+  const avatarImage = useImage('avatars', image)
 
   if (user)
     return (

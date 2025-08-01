@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useImage } from '@/ui/global/hooks/useImage'
 import { REGEX } from '@/constants'
 
 type PictureProps = {
@@ -10,8 +10,7 @@ type PictureProps = {
 }
 
 export function Picture({ url }: PictureProps) {
-  const { storageService } = useRest()
-  const image = storageService.fetchImage('theory', url)
+  const image = useImage('story', url)
   const formattedImage = image.replace(REGEX.quotes, '')
 
   return (
@@ -25,7 +24,7 @@ export function Picture({ url }: PictureProps) {
         fill
         loading='eager'
         style={{ objectFit: 'cover' }}
-        onLoadingComplete={(image) => image.classList.remove('skeleton')}
+        onLoadingComplete={(imgElement) => imgElement.classList.remove('skeleton')}
       />
     </div>
   )

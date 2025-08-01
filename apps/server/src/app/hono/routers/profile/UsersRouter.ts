@@ -26,13 +26,19 @@ import {
 } from '@/rest/controllers/profile'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
-import { AuthMiddleware, SpaceMiddleware, ChallengingMiddleware } from '../../middlewares'
+import {
+  AuthMiddleware,
+  SpaceMiddleware,
+  ChallengingMiddleware,
+  ValidationMiddleware,
+} from '../../middlewares'
 
 export class UsersRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/users')
   private readonly authMiddleware = new AuthMiddleware()
   private readonly spaceMiddleware = new SpaceMiddleware()
   private readonly challengingMiddleware = new ChallengingMiddleware()
+  private readonly validationMiddleware = new ValidationMiddleware()
 
   private registerFetchUserByIdRoute() {
     this.router.get(
@@ -78,8 +84,8 @@ export class UsersRouter extends HonoRouter {
     this.router.put(
       '/:userId',
       this.authMiddleware.verifyAuthentication,
-      zValidator('param', z.object({ userId: idSchema })),
-      zValidator('json', userSchema),
+      this.validationMiddleware.validate('param', z.object({ userId: idSchema })),
+      this.validationMiddleware.validate('json', userSchema),
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseUsersRepository(http.getSupabase())
@@ -95,13 +101,13 @@ export class UsersRouter extends HonoRouter {
       '/:userId/reward/star',
       this.authMiddleware.verifyAuthentication,
       this.spaceMiddleware.appendNextStarToBody,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           userId: idSchema,
         }),
       ),
-      zValidator(
+      this.validationMiddleware.validate(
         'json',
         z.object({
           starId: idSchema,
@@ -125,13 +131,13 @@ export class UsersRouter extends HonoRouter {
       this.authMiddleware.verifyAuthentication,
       this.spaceMiddleware.appendNextStarToBody,
       this.challengingMiddleware.appendChallengeRewardToBody,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           userId: idSchema,
         }),
       ),
-      zValidator(
+      this.validationMiddleware.validate(
         'json',
         z.object({
           challengeId: idSchema,
@@ -154,13 +160,13 @@ export class UsersRouter extends HonoRouter {
       '/:userId/reward/challenge',
       this.authMiddleware.verifyAuthentication,
       this.challengingMiddleware.appendChallengeRewardToBody,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           userId: idSchema,
         }),
       ),
-      zValidator(
+      this.validationMiddleware.validate(
         'json',
         z.object({
           challengeId: idSchema,
@@ -182,7 +188,7 @@ export class UsersRouter extends HonoRouter {
     this.router.post(
       '/rockets/acquire',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'json',
         z.object({
           rocketId: idSchema,
@@ -205,7 +211,7 @@ export class UsersRouter extends HonoRouter {
     this.router.post(
       '/avatars/acquire',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'json',
         z.object({
           avatarId: idSchema,
@@ -228,7 +234,7 @@ export class UsersRouter extends HonoRouter {
     this.router.post(
       '/comments/:commentId/upvote',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           commentId: idSchema,
@@ -247,7 +253,7 @@ export class UsersRouter extends HonoRouter {
   private registerVerifyUserNameInUseRoute() {
     this.router.get(
       '/verify-name-in-use',
-      zValidator(
+      this.validationMiddleware.validate(
         'query',
         z.object({
           name: nameSchema,
@@ -266,7 +272,7 @@ export class UsersRouter extends HonoRouter {
   private registerVerifyUserEmailInUseRoute() {
     this.router.get(
       '/verify-email-in-use',
-      zValidator(
+      this.validationMiddleware.validate(
         'query',
         z.object({
           email: emailSchema,
