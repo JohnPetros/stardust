@@ -5,8 +5,10 @@ import { Image } from '@stardust/core/global/structures'
 
 import { useTextEditorContext } from '@/ui/global/hooks/useTextEditorContext'
 
+const DEFAULT_PICTURE_NAME = 'panda.jpg'
+
 export function useTextBlockButton(type: TextBlockType, extraProps: string[][] = []) {
-  const [picture, setPicture] = useState<Image>(Image.create('panda.jpg'))
+  const [picture, setPicture] = useState<Image>(Image.create(DEFAULT_PICTURE_NAME))
   const { insertWidget } = useTextEditorContext()
 
   function handleTextBlockButtonClick() {
