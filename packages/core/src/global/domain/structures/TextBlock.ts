@@ -3,8 +3,7 @@ import { Logical } from './Logical'
 import { Name } from './Name'
 import { StringValidation } from '../../libs'
 import type { TextBlockDto } from './dtos'
-
-type TextBlockType = 'default' | 'quote' | 'alert' | 'list' | 'image' | 'code' | 'user'
+import type { TextBlockType } from '../types'
 
 type TextBlockProps = {
   type: TextBlockType

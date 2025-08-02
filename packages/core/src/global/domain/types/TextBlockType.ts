@@ -5,4 +5,5 @@ export type TextBlockType =
   | 'list'
   | 'image'
   | 'code'
+  | 'code-line'
   | 'user'
