@@ -9,7 +9,7 @@ import type { TextEditorSnippet } from './types'
 export function useTextEditor(onChange: (value: string) => void) {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  function geComponentContent(component: string) {
+  function getComponentContent(component: string) {
     const nameMatch = REGEX.componentName.exec(component)
     const componentName = nameMatch ? nameMatch[1] : 'Text'
 
@@ -121,7 +121,7 @@ export function useTextEditor(onChange: (value: string) => void) {
   function insertSnippetLinkComponent() {
     if (!textareaRef.current) return
 
-    const linkContent = geComponentContent(SNIPPETS.link)
+    const linkContent = getComponentContent(SNIPPETS.link)
     const cursorPosition = getCursorPosition()
     const { valueAfterCursorPosition, valueBeforeCursorPosition } =
       getValueAfterAndBeforeLinePosition(cursorPosition)
@@ -143,7 +143,7 @@ export function useTextEditor(onChange: (value: string) => void) {
   function insertCodeBlockSnippetComponent() {
     if (!textareaRef.current) return
 
-    const snippetComponentContent = geComponentContent(SNIPPETS.codeBlock)
+    const snippetComponentContent = getComponentContent(SNIPPETS.codeBlock)
     const cursorPosition = getCursorPosition()
     const { valueAfterCursorPosition, valueBeforeCursorPosition } =
       getValueAfterAndBeforeLinePosition(cursorPosition)
@@ -166,7 +166,7 @@ export function useTextEditor(onChange: (value: string) => void) {
   function insertSnippetComponent(closeTag: string, snippetComponent: string) {
     if (!textareaRef.current) return
 
-    const snippetComponentContent = geComponentContent(snippetComponent)
+    const snippetComponentContent = getComponentContent(snippetComponent)
     const cursorPosition = getCursorPosition()
     const { valueAfterCursorPosition, valueBeforeCursorPosition } =
       getValueAfterAndBeforeLinePosition(cursorPosition)
