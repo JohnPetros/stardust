@@ -7,7 +7,7 @@ import type { ActionButtonTitles } from '@/ui/global/widgets/components/ActionBu
 import { Button } from '@/ui/global/widgets/components/Button'
 import { TitleInput } from '@/ui/global/widgets/components/TitleInput'
 import { ActionButton } from '@/ui/global/widgets/components/ActionButton'
-import { ContentEditor } from '../../components/ContentEditor'
+import { TextEditor } from '../../components/TextEditor'
 
 type Props = {
   savedSolutionDto: SolutionDto | null
@@ -81,7 +81,7 @@ export const SolutionPageView = ({
       </header>
 
       <main className='h-full mt-3 bg-gray-800 border-t border-gray-600'>
-        <ContentEditor content={solutionContent} onChange={onContentChange} />
+        <TextEditor content={solutionContent} onChange={onContentChange} />
       </main>
     </div>
   )

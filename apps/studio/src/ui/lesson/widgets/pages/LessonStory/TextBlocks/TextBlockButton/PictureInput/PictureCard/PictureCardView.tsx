@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
 
 import { Icon } from '@/ui/global/widgets/components/Icon'
-import { StoryImage } from '@/ui/global/widgets/components/StoryImage'
+import { StorageImage } from '@/ui/global/widgets/components/StorageImage'
 import { Tooltip } from '@/ui/global/widgets/components/Tooltip'
 import { AlertMessageComponent } from '@/ui/shadcn/components/alert-message-dialog'
 import { ClipboardButton } from '@/ui/global/widgets/components/ClipboardButton'
@@ -14,7 +14,7 @@ type Props = {
   onRemoveButtonClick: (imageName: string) => void
 }
 
-export const ImageCardView = ({
+export const PictureCardView = ({
   imageName,
   isSelected,
   onClick,
@@ -32,7 +32,7 @@ export const ImageCardView = ({
         className='p-2 hover:bg-zinc-800 rounded cursor-pointer'
         onClick={() => onClick(imageName)}
       >
-        <StoryImage src={imageName} alt='Imagem' className='w-32 h-32' />
+        <StorageImage src={imageName} alt='Imagem' className='w-32 h-32' />
       </button>
       <Tooltip content={imageName}>
         <ClipboardButton text={imageName} className='bg-transparent border-none'>

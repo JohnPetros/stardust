@@ -1,10 +1,17 @@
-import { StoryImageInputView } from './StoryImageInputView'
-import { useRest } from '@/ui/global/hooks/useRest'
-import { useStoryImageInput } from './useStoryImageInput'
 import { useRef } from 'react'
-import type { DialogRef } from '@/ui/shadcn/components/dialog'
 
-export const StoryImageInput = () => {
+import type { Image } from '@stardust/core/global/structures'
+
+import { useRest } from '@/ui/global/hooks/useRest'
+import type { DialogRef } from '@/ui/shadcn/components/dialog'
+import { PictureInputView } from './PictureInputView'
+import { usePictureInput } from './usePictureInput'
+
+type Props = {
+  onChange: (picture: Image) => void
+}
+
+export const PictureInput = ({ onChange }: Props) => {
   const { storageService } = useRest()
   const dialogRef = useRef<DialogRef>(null)
   const {
@@ -15,23 +22,23 @@ export const StoryImageInput = () => {
     hasNextPage,
     handleSearchInputChange,
     handleImageSubmit,
-    handleImageCardClick,
+    handlePictureCardClick,
     handleLoadMoreButtonClick,
-    handleImageCardRemove,
-  } = useStoryImageInput(storageService, dialogRef)
+    handlePictureCardRemove,
+  } = usePictureInput(storageService, dialogRef, onChange)
 
   return (
-    <StoryImageInputView
+    <PictureInputView
       dialogRef={dialogRef}
       selectedImage={selectedImage.value}
       images={images}
       isFetching={isFetching}
       isFetchingNextPage={isFetchingNextPage}
       hasNextPage={hasNextPage}
-      onImageCardClick={handleImageCardClick}
+      onPictureCardClick={handlePictureCardClick}
       onSearchInputChange={handleSearchInputChange}
       onLoadMoreButtonClick={handleLoadMoreButtonClick}
-      onImageCardRemove={handleImageCardRemove}
+      onPictureCardRemove={handlePictureCardRemove}
       onSubmitImage={handleImageSubmit}
     />
   )

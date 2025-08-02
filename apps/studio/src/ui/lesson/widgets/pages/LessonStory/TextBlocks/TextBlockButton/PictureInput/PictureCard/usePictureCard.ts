@@ -4,7 +4,7 @@ import { StorageFolder } from '@stardust/core/storage/structures'
 import { useToast } from '@/ui/global/hooks/useToast'
 import { Text } from '@stardust/core/global/structures'
 
-export function useImageCard(storageService: StorageService, onRemove: () => void) {
+export function usePictureCard(storageService: StorageService, onRemove: () => void) {
   const toast = useToast()
 
   async function handleRemoveButtonClick(imageName: string) {

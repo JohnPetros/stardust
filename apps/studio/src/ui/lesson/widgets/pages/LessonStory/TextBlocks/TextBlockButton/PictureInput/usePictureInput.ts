@@ -10,16 +10,17 @@ import { Image, OrdinalNumber, Text } from '@stardust/core/global/structures'
 
 const ITEMS_PER_PAGE = OrdinalNumber.create(30)
 
-export function useStoryImageInput(
+export function usePictureInput(
   storageService: StorageService,
   dialogRef: RefObject<DialogRef | null>,
+  onChange: (picture: Image) => void,
 ) {
   const [selectedImage, setSelectedImage] = useState<Image>(Image.create('panda.jpg'))
   const [search, setSearch] = useState<Text>(Text.create(''))
   const containerRef = useRef<HTMLDivElement>(null)
   const { data, isFetching, isFetchingNextPage, hasNextPage, nextPage, refetch } =
     usePaginatedCache<string>({
-      key: CACHE.storyImages.key,
+      key: CACHE.storyPictures.key,
       fetcher: async (page: number) =>
         await storageService.listFiles({
           search: search,
@@ -27,7 +28,7 @@ export function useStoryImageInput(
           page: OrdinalNumber.create(page),
           itemsPerPage: ITEMS_PER_PAGE,
         }),
-      dependencies: [search.value, selectedImage.value],
+      dependencies: [search.value],
       itemsPerPage: ITEMS_PER_PAGE.value,
       shouldRefetchOnFocus: false,
       isInfinity: true,
@@ -37,9 +38,11 @@ export function useStoryImageInput(
     setSearch(Text.create(search))
   }
 
-  function handleImageCardClick(imageName: string) {
-    setSelectedImage(Image.create(imageName))
+  function handlePictureCardClick(imageName: string) {
     dialogRef.current?.close()
+    const image = Image.create(imageName)
+    setSelectedImage(image)
+    onChange(image)
   }
 
   function handleLoadMoreButtonClick() {
@@ -48,10 +51,12 @@ export function useStoryImageInput(
 
   function handleImageSubmit() {
     refetch()
+    dialogRef.current?.close()
   }
 
-  function handleImageCardRemove() {
+  function handlePictureCardRemove() {
     refetch()
+    dialogRef.current?.close()
   }
 
   return {
@@ -62,8 +67,8 @@ export function useStoryImageInput(
     hasNextPage,
     containerRef,
     handleSearchInputChange,
-    handleImageCardClick,
-    handleImageCardRemove,
+    handlePictureCardClick,
+    handlePictureCardRemove,
     handleImageSubmit,
     handleLoadMoreButtonClick,
   }
