@@ -14,6 +14,6 @@ export class FetchStoryController implements Controller<Schema> {
   async handle(http: Http<Schema>) {
     const { starId } = http.getRouteParams()
     const response = await this.repository.findByStar(Id.create(starId))
-    return http.send({ story: response })
+    return http.send({ story: response?.value })
   }
 }

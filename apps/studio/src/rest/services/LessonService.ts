@@ -17,7 +17,9 @@ export const LessonService = (restClient: RestClient): ILessonService => {
     },
 
     async updateStory(starId: Id, story: Text) {
-      return await restClient.put(`/lesson/stories/star/${starId.value}`, { story })
+      return await restClient.put(`/lesson/stories/star/${starId.value}`, {
+        story: story.value,
+      })
     },
   }
 }
