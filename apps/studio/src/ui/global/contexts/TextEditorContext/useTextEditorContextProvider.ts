@@ -97,7 +97,7 @@ export function useTextEditorContextProvider(
         cursorPosition.columnNumber + 1 + content.length,
       )
     },
-    [textEditorRef.current],
+    [textEditorRef],
   )
 
   const insertTitlelement = useCallback(() => {
@@ -118,7 +118,7 @@ export function useTextEditorContextProvider(
       cursorPosition.lineNumber,
       titleElement.length,
     )
-  }, [textEditorRef.current])
+  }, [textEditorRef])
 
   const insertWidget = useCallback(
     (widget: TextEditorWidget, props: string[][] = []) => {

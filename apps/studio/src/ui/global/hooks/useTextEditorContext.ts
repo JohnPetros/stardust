@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-import { TextEditorContext } from '@/ui/auth/contexts/TextEditorContext'
+import { TextEditorContext } from '@/ui/global/contexts/TextEditorContext'
 
 export function useTextEditorContext() {
   const context = useContext(TextEditorContext)

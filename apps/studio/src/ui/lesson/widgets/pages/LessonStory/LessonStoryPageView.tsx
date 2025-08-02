@@ -1,5 +1,5 @@
 import { TextEditor } from '@/ui/global/widgets/components/textEditor'
-import { TextEditorContextProvider } from '@/ui/auth/contexts/TextEditorContext'
+import { TextEditorContextProvider } from '@/ui/global/contexts/TextEditorContext'
 import { Mdx } from '@/ui/global/widgets/components/Mdx'
 import { Header } from './Header'
 import { TextBlocks } from './TextBlocks'
