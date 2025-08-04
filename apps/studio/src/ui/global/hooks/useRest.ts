@@ -3,7 +3,7 @@ import { useSessionStorage } from 'usehooks-ts'
 import { HTTP_HEADERS } from '@stardust/core/global/constants'
 
 import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
-import { AuthService, SpaceService, StorageService } from '@/rest/services'
+import { AuthService, SpaceService, StorageService, LessonService } from '@/rest/services'
 import { ENV, SESSION_STORAGE_KEYS } from '@/constants'
 
 const restClient = AxiosRestClient()
@@ -19,5 +19,6 @@ export function useRest() {
     spaceService: SpaceService(restClient),
     authService: AuthService(restClient),
     storageService: StorageService(restClient),
+    lessonService: LessonService(restClient),
   }
 }

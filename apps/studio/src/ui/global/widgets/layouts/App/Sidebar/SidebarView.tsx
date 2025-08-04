@@ -5,7 +5,7 @@ import { NavigationTitle } from './NavigationTitle'
 
 export const SidebarView = () => {
   return (
-    <aside className='w-56 bg-zinc-950 border-r border-zinc-800 flex flex-col py-6 px-4 gap-6 text-zinc-200'>
+    <aside className='w-48 bg-zinc-950 border-r border-zinc-800 flex flex-col py-6 px-4 gap-6 text-zinc-200'>
       <nav className='flex flex-col gap-2'>
         <NavigationTitle>Dashboard</NavigationTitle>
         <NavigationLink href={ROUTES.index} icon={<Icon name='dashboard' size={16} />}>

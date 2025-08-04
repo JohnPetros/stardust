@@ -1,7 +1,7 @@
 import { redirect } from 'react-router'
 
 import { ROUTES, SESSION_STORAGE_KEYS } from '@/constants'
-import { authContext } from '../contexts/authContext'
+import { authContext } from '../contexts/AuthContext'
 
 export const AuthMiddleware = async ({
   context,
