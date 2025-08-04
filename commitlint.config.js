@@ -55,6 +55,7 @@ module.exports = {
         'server',
         'core',
         'studio',
+        'code-runner',
       ],
     ],
   },
