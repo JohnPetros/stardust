@@ -19,11 +19,11 @@ export function useChallengeCodeEditorSlot() {
   const { setResults } = getResultsSlice()
   const { challenge } = getChallengeSlice()
   const { panelsLayout } = getPanelsLayoutSlice()
-  const { provider } = useCodeRunner()
   const { playAudio } = useAudioContext()
+  const codeRunner = useCodeRunner()
   const toast = useToastContext()
   const router = useRouter()
-  const userCode = useRef<Code>(Code.create(provider))
+  const userCode = useRef<Code>(Code.create(codeRunner))
   const editorContainerRef = useRef<HTMLDivElement>(null)
   const codeEditorRef = useRef<CodeEditorRef>(null)
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
@@ -33,7 +33,7 @@ export function useChallengeCodeEditorSlot() {
     STORAGE.keys.challengeCode(challenge?.id.value ?? ''),
   )
   const initialCode =
-    typeof window !== 'undefined' ? localStorage.get() ?? challenge?.code ?? '' : ''
+    typeof window !== 'undefined' ? (localStorage.get() ?? challenge?.code ?? '') : ''
 
   const handleCodeRunnerError = useCallback(
     (message: string, line: number) => {
@@ -82,9 +82,9 @@ export function useChallengeCodeEditorSlot() {
 
   useEffect(() => {
     if (!userCode?.current.value && challenge) {
-      userCode.current = Code.create(provider, initialCode)
+      userCode.current = Code.create(codeRunner, initialCode)
     }
-  }, [challenge, provider, initialCode])
+  }, [challenge, codeRunner, initialCode])
 
   useEffect(() => {
     if (panelsLayout) {

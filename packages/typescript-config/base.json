@@ -9,6 +9,7 @@
     },
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "target": "ESNext",
     "noEmit": true,
     "declaration": false,
     "declarationMap": false

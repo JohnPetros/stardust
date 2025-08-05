@@ -1,3 +1,5 @@
+import { CodeSnippet } from '../../CodeSnippet'
+
 type Props = {
   code: string
   isRunnable: boolean
@@ -20,10 +22,5 @@ export const CodeView = ({ children, isRunnable = false, exec = false }: Props) 
     } else code = children[0].props.children
   }
 
-  if (code)
-    return (
-      <pre className='bg-gray-800 p-4 rounded-lg overflow-x-auto'>
-        <code className='text-green-400 font-mono text-sm'>{code as string}</code>
-      </pre>
-    )
+  if (code) return <CodeSnippet code={code as string} isRunnable={isRunnable || exec} />
 }

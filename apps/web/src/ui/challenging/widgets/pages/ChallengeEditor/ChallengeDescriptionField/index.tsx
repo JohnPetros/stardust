@@ -1,9 +1,9 @@
 import { Controller } from 'react-hook-form'
 
-import { TextEditor } from '../../../components/TextEditor'
+import { ErrorMessage } from '@/ui/global/widgets/components/ErrorMessage'
 import { ChallengeField } from '../ChallengeField'
 import { useChallengeDescriptionField } from './useChallengeDescriptionField'
-import { ErrorMessage } from '@/ui/global/widgets/components/ErrorMessage'
+import { ContentEditor } from '../../../components/ContentEditor'
 
 export function ChallengeDescriptionField() {
   const { formControl, errorMessage } = useChallengeDescriptionField()
@@ -20,7 +20,7 @@ export function ChallengeDescriptionField() {
         name='description'
         render={({ field: { value, onChange } }) => (
           <div>
-            <TextEditor content={value} onChange={onChange} />
+            <ContentEditor content={value} onChange={onChange} />
             {errorMessage && <ErrorMessage className='mt-1'>{errorMessage}</ErrorMessage>}
           </div>
         )}

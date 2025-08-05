@@ -10,6 +10,7 @@ import {
   SquarePen,
   GripVertical,
   Loader2,
+  RotateCcw,
   Copy,
   ChevronDown,
   HardDriveUpload,
@@ -47,4 +48,5 @@ export const ICONS: Record<IconName, LucideIcon> = {
   questions: HelpCircle,
   copy: Copy,
   upload: Upload,
+  reload: RotateCcw,
 }

@@ -32,7 +32,6 @@ export const ChallengeCodeEditorSlotView = ({
           value={initialCode ?? ''}
           width='100%'
           height={codeEditorHeight - 40}
-          hasMinimap
           onChange={onCodeChange}
         />
       </CodeEditorToolbar>

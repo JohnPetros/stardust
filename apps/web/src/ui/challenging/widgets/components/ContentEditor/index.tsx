@@ -4,9 +4,9 @@ import { useRef } from 'react'
 import * as Toolbar from '@/ui/global/widgets/components/Toolbar'
 
 import type { TextEditorRef } from '@/ui/global/widgets/components/TextEditor/types'
-import { useTextEditor } from './useTextEditor'
 import { TextEditor } from '@/ui/global/widgets/components/TextEditor'
 import { Mdx } from '@/ui/global/widgets/components/Mdx'
+import { useContentEditor } from './useContentEditor'
 
 type Props = {
   content: string
@@ -16,7 +16,7 @@ type Props = {
 
 export function ContentEditor({ content, errorMessage, onChange }: Props) {
   const textEditorRef = useRef<TextEditorRef>(null)
-  const { previewContent, handleSnippetInsert, textEditorChange } = useTextEditor(
+  const { previewContent, handleSnippetInsert, textEditorChange } = useContentEditor(
     content,
     textEditorRef,
     onChange,

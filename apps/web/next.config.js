@@ -1,6 +1,3 @@
-// See: https://kentcdodds.com/blog/profile-a-react-app-for-performance#build-and-measure-the-production-app
-// See: https://nextjs.org/docs/api-reference/next.config.js/custom-webpack-config
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   productionBrowserSourceMaps: false,
@@ -19,9 +16,8 @@ const nextConfig = {
       },
     ],
   },
-  swcMinify: true,
   output: 'standalone',
-  webpack: (config, { isServer }) => {
+  webpack: (config) => {
     // Código para verificar as configurações de otimização.
     // Ao executar, o webpack atualmente usa duas funções anônimas, que com
     // certeza não são funções do Terser.
@@ -31,10 +27,10 @@ const nextConfig = {
     // }
 
     config.optimization.minimizer = [];
-    
+
     // TODO: Configurar o Terser para fazer minificação seletiva de fontes e bibliotecas,
     // conforme solução abaixo em comentário.
-    
+
     // // Handle Terser minification (webpack's default)
     // const terser = config.optimization.minimizer.find((plugin) => plugin?.options?.terserOptions);
     // if (terser) {
@@ -61,7 +57,7 @@ const nextConfig = {
     //       },
     //     };
     //   }
-      
+
     //   // Handle SWC minification if it's being used
     //   if (plugin.constructor.name === 'SwcMinifyPlugin') {
     //     return {
@@ -81,7 +77,7 @@ const nextConfig = {
     //       },
     //     };
     //   }
-      
+
     //   return plugin;
     // });
 

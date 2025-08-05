@@ -27,6 +27,7 @@ module.exports = {
         '🎴 assets',
         '🔀 merge',
         '⏪ revert',
+        '▶️ cr',
         '🗃️ ftree',
         '📜 cert',
         '🚧 wip',

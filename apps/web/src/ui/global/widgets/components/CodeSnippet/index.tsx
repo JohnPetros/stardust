@@ -1,17 +1,10 @@
 'use client'
 
-import * as ToolBar from '@radix-ui/react-toolbar'
-import { twMerge } from 'tailwind-merge'
 import { useRef } from 'react'
 
-import { Icon } from '../Icon'
-import { Tooltip } from '../Tooltip'
 import { useCodeSnippet } from './useCodeSnippet'
-import { PlaygroundCodeEditor } from '../PlaygroundCodeEditor'
 import type { PlaygroundCodeEditorRef } from '../PlaygroundCodeEditor/types'
-
-const TOOLBAR_BUTTON_CLASS_NAME =
-  'h-6 w-max items-center rounded bg-green-400 px-4 text-xs font-medium text-gray-900 transition-[scale] duration-200 active:scale-95'
+import { CodeSnippetView } from './CodeSnippetView'
 
 export type CodeSnippetProps = {
   code: string
@@ -19,7 +12,7 @@ export type CodeSnippetProps = {
   onChange?: (code: string) => void
 }
 
-export function CodeSnippet({ code, isRunnable = false, onChange }: CodeSnippetProps) {
+export const CodeSnippet = ({ code, isRunnable = false, onChange }: CodeSnippetProps) => {
   const codeEditorRef = useRef<PlaygroundCodeEditorRef>(null)
   const {
     editorHeight,
@@ -34,56 +27,15 @@ export function CodeSnippet({ code, isRunnable = false, onChange }: CodeSnippetP
 
   if (editorHeight)
     return (
-      <div
-        className={twMerge(
-          'not-prose relative w-full overflow-hidden rounded-md bg-gray-800',
-          isRunnable ? `h-[${editorHeight}px]` : 'h-auto',
-        )}
-      >
-        <ToolBar.Root className='not-prose flex items-center justify-end gap-2 border-b border-gray-700 p-2'>
-          {isRunnable && (
-            <>
-              <Tooltip content='Voltar para o código inicial' direction='bottom'>
-                <ToolBar.Button
-                  type='button'
-                  className={TOOLBAR_BUTTON_CLASS_NAME}
-                  onClick={handleReloadCodeButtonClick}
-                >
-                  <Icon
-                    name='reload'
-                    size={16}
-                    className='text-green-900'
-                    weight='bold'
-                  />
-                </ToolBar.Button>
-              </Tooltip>
-              <Tooltip content='Copiar código' direction='bottom'>
-                <ToolBar.Button
-                  type='button'
-                  className={TOOLBAR_BUTTON_CLASS_NAME}
-                  onClick={handleCopyCodeButtonClick}
-                >
-                  <Icon name='copy' size={16} className='text-green-900' weight='bold' />
-                </ToolBar.Button>
-              </Tooltip>
-              <ToolBar.Button
-                type='button'
-                className={TOOLBAR_BUTTON_CLASS_NAME}
-                onClick={handleRunCode}
-              >
-                Executar
-              </ToolBar.Button>
-            </>
-          )}
-        </ToolBar.Root>
-
-        <PlaygroundCodeEditor
-          ref={codeEditorRef}
-          code={code}
-          isRunnable={isRunnable}
-          height={editorHeight}
-          onCodeChange={onChange}
-        />
-      </div>
+      <CodeSnippetView
+        code={code}
+        isRunnable={isRunnable}
+        editorHeight={editorHeight}
+        codeEditorRef={codeEditorRef}
+        onReloadCodeButtonClick={handleReloadCodeButtonClick}
+        onCopyCodeButtonClick={handleCopyCodeButtonClick}
+        onRunCode={handleRunCode}
+        onChange={onChange}
+      />
     )
 }

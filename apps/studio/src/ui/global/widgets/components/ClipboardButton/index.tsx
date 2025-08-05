@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
 
 import { ClipboardButtonView } from './ClipboardButtonView'
-import { useClipboard } from './useClipboard'
+import { useClipboard } from '../../../hooks/useClipboard'
 
 type Props = {
   text: string
@@ -13,10 +13,10 @@ export const ClipboardButton = ({
   className,
   children,
 }: PropsWithChildren<Props>) => {
-  const { copy } = useClipboard(text)
+  const { copy } = useClipboard()
 
   return (
-    <ClipboardButtonView onClick={copy} className={className}>
+    <ClipboardButtonView onClick={() => copy(text)} className={className}>
       {children}
     </ClipboardButtonView>
   )
