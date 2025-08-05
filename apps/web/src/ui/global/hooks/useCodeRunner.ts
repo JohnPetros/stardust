@@ -1,14 +1,7 @@
-import { ExecutorDeCodigoDelegua } from '@/code-runner/delegua/ExecutorDeCodigoDelegua'
-import {
-  obtenhaConfiguracaoDeLinguagemDeleguaParaEditorMonaco,
-  obtenhaTokenizadorDeleguaParaEditorMonaco,
-} from '@/code-runner/delegua/utils'
+import { useMemo } from 'react'
+
+import { ExecutorDeCodigoDelegua } from '@stardust/code-runner'
 
 export function useCodeRunner() {
-  return {
-    language: 'delegua',
-    getMonacoTokensProvider: obtenhaTokenizadorDeleguaParaEditorMonaco,
-    getMonacoLanguageConfiguration: obtenhaConfiguracaoDeLinguagemDeleguaParaEditorMonaco,
-    provider: ExecutorDeCodigoDelegua(),
-  }
+  return useMemo(() => new ExecutorDeCodigoDelegua(), [])
 }

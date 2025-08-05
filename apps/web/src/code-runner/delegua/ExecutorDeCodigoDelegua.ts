@@ -13,7 +13,7 @@ import type { CodeRunnerProvider } from '@stardust/core/global/interfaces'
 
 import { DELEGUA_REGEX } from './constants'
 import { obtenhaTipo, trateErro } from './utils'
-import { DeleguaInterpretador } from './DeleguaInterpretador'
+import { InterpretadorDelegua } from './InterpretadorDelegua'
 
 export const ExecutorDeCodigoDelegua = (): CodeRunnerProvider => {
   const lexador = new Lexador()
@@ -27,7 +27,7 @@ export const ExecutorDeCodigoDelegua = (): CodeRunnerProvider => {
         outputs.push(saida)
       }
 
-      const interpretador = new DeleguaInterpretador(
+      const interpretador = new InterpretadorDelegua(
         '',
         false,
         funcaoDeSaida,
@@ -164,7 +164,7 @@ export const ExecutorDeCodigoDelegua = (): CodeRunnerProvider => {
         const tradutor = new TradutorReversoJavaScript()
         const traducao = tradutor.traduzir(resultadoSintatico.declaracoes)
         return traducao.trim().replace(' \n', '').replaceAll('\\"', '')
-      } catch (error) {
+      } catch {
         return codigo
       }
     },

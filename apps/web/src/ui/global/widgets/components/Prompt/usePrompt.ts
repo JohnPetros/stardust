@@ -4,7 +4,7 @@ import type { AlertDialogRef } from '../AlertDialog/types'
 export function usePrompt(initialTitle: string) {
   const [title, setTitle] = useState(initialTitle)
   const [value, setValue] = useState('')
-  const alertDialogRef = useRef<AlertDialogRef | null>(null)
+  const alertDialogRef = useRef<AlertDialogRef>(null)
 
   function open() {
     alertDialogRef.current?.open()
@@ -22,5 +22,6 @@ export function usePrompt(initialTitle: string) {
     setValue,
     open,
     close,
+    focus,
   }
 }

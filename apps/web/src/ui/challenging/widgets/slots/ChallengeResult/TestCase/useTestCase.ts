@@ -18,7 +18,7 @@ export function useTestCase({
   expectedOutput,
 }: Params) {
   const [isOpen, setIsOpen] = useState(false)
-  const { provider } = useCodeRunner()
+  const codeRunner = useCodeRunner()
 
   function handleButtonClick() {
     setIsOpen(!isOpen)
@@ -34,16 +34,16 @@ export function useTestCase({
     if (inputs.length > 0) {
       return inputs
         .map((input) => {
-          return provider.translateToCodeRunner(input).replaceAll('\n', '')
+          return codeRunner.translateToCodeRunner(input).replaceAll('\n', '')
         })
         .join(',')
     }
     return 'sem entrada'
-  }, [inputs, provider.translateToCodeRunner])
+  }, [inputs, codeRunner.translateToCodeRunner])
 
   const translatedExpectedOutput = useMemo(() => {
-    return provider.translateToCodeRunner(expectedOutput).replaceAll('\n', '')
-  }, [expectedOutput, provider.translateToCodeRunner])
+    return codeRunner.translateToCodeRunner(expectedOutput).replaceAll('\n', '')
+  }, [expectedOutput, codeRunner.translateToCodeRunner])
 
   return {
     isOpen,

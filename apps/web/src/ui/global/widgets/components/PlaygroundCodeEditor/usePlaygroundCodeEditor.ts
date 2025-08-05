@@ -1,5 +1,3 @@
-'use client'
-
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { Code } from '@stardust/core/global/structures'
@@ -18,10 +16,10 @@ export function usePlaygroundCodeEditor(
 ) {
   const [outputs, setOutputs] = useState<string[]>([])
   const [shouldOpenPrompt, setShouldOpenPrompt] = useState(false)
-  const { provider } = useCodeRunner()
   const { playAudio } = useAudioContext()
+  const codeRunner = useCodeRunner()
   const toast = useToastContext()
-  const codeRef = useRef<Code>(Code.create(provider, preCodeValue))
+  const codeRef = useRef<Code>(Code.create(codeRunner, preCodeValue))
   const codeEditorRef = useRef<CodeEditorRef>(null)
   const consoleRef = useRef<ConsoleRef>(null)
   const promptRef = useRef<PromptRef>(null)

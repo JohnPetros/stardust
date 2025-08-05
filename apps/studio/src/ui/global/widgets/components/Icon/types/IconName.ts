@@ -14,6 +14,7 @@ export type IconName =
   | 'star'
   | 'draggable'
   | 'x'
+  | 'reload'
   | 'submit'
   | 'upload'
   | 'trash'
