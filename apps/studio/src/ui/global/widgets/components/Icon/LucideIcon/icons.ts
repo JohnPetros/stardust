@@ -29,6 +29,7 @@ import type { IconName } from '../types/IconName'
 export const ICONS: Record<IconName, LucideIcon> = {
   'arrow-down': ChevronDown,
   'arrow-up': ChevronUp,
+  'simple-arrow-down': ChevronDown,
   image: Image,
   user: User,
   achievement: Flag,

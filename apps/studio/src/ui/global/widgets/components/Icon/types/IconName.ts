@@ -1,6 +1,7 @@
 export type IconName =
   | 'arrow-down'
   | 'arrow-up'
+  | 'simple-arrow-down'
   | 'achievement'
   | 'challenge'
   | 'dashboard'
