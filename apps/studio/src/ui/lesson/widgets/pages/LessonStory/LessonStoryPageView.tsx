@@ -37,8 +37,6 @@ export const LessonStoryPageView = ({
     failure: 'erro',
   }
 
-  console.log(story)
-
   return (
     <TextEditorContextProvider>
       <div className='max-h-screen overflow-y-auto  '>
