@@ -27,7 +27,7 @@ export function useTextEditorContextProvider(
         cursorPosition.lineNumber,
       )
 
-      while (currentLineContent) {
+      while (currentLineContent || currentLineContent === '----') {
         lineNumber++
         const lineCount = textEditorRef.current.getLineCount()
 

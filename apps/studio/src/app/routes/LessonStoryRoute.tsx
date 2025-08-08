@@ -23,7 +23,7 @@ export const clientLoader = async ({ context, params }: Route.LoaderArgs) => {
     starId: star.id.value,
     starName: star.name.value,
     starNumber: star.number.value,
-    defaultStory: lessonResponse.body.story.replaceAll('---', '----'),
+    defaultStory: lessonResponse.body.story,
   }
 }
 
