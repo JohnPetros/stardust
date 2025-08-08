@@ -40,7 +40,7 @@ export const Widget = (
 
   return (
     <>
-      <div className='relative h-full w-full border-2 border-gray-700 pt-2'>
+      <div className='relative h-full w-full border-2 border-zinc-700 pt-2'>
         <CodeEditor
           ref={codeEditorRef}
           width='100%'
