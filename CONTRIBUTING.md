@@ -83,6 +83,7 @@ Exemplos:
 | Arquivos estáticos              | assets    | 🎴    |
 | Merge de branches               | merge     | 🔀    |
 | Reset de histórico de commits   | revert    | ⏪    |
+| Executor/Interpretador de código| cr        | ⏪    |
 | Estruturação de pastas/arquivos | ftree     | 🗃️    |
 | Certificados e licenças         | cert      | 📜    |
 | Schema para validação           | validation| 📮    |
