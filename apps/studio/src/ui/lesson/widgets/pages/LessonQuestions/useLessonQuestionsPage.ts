@@ -9,10 +9,6 @@ export function useLessonQuestionsPage(lessonService: LessonService, starId: Id)
   const [isSaveFailure, setIsSaveFailure] = useState(false)
   const [canSave, setCanSave] = useState(false)
 
-  function handleQuestionButtonClick(questionType: string) {
-    console.log(questionType)
-  }
-
   async function handleSaveButtonClick() {
     // TODO: Implement save questions
   }

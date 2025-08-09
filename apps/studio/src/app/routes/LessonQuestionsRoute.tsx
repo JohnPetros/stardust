@@ -1,5 +1,5 @@
 import { useLoaderData } from 'react-router'
-import type { Route } from './+types/LessonStoryRoute'
+import type { Route } from './+types/LessonQuestionsRoute'
 
 import { Slug } from '@stardust/core/global/structures'
 import { Star } from '@stardust/core/space/entities'

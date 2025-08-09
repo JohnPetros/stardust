@@ -1,4 +1,3 @@
-import { TextEditor } from '@/ui/global/widgets/components/textEditor'
 import { TextEditorContextProvider } from '@/ui/global/contexts/TextEditorContext'
 import { ActionButton } from '@/ui/global/widgets/components/ActionButton'
 import type { ActionButtonTitles } from '@/ui/global/widgets/components/ActionButton/types'
@@ -33,7 +32,7 @@ export const LessonQuestionsPageView = ({
 
   return (
     <TextEditorContextProvider>
-      <div className='max-h-screen overflow-y-auto  '>
+      <div className='max-h-screen overflow-y-auto'>
         <PageHeader>
           <ActionButton
             type='button'
