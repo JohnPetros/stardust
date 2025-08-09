@@ -1,26 +1,31 @@
-import type { QuestionDto } from '@stardust/core/lesson/entities/dtos'
 import type { QuestionType } from '@stardust/core/lesson/types'
+import type { Question } from '@stardust/core/lesson/abstracts'
 
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { Sortable } from '@/ui/global/widgets/components/Sortable'
 import { Button } from '@/ui/shadcn/components/button'
 import { cn } from '@/ui/shadcn/utils'
 import { ConfirmDialog } from '@/ui/global/widgets/components/ConfirmDialog'
+import type { SortableItem } from '@/ui/global/widgets/components/Sortable/types'
 
 const QUESTION_TYPE_LABELS: Record<QuestionType, string> = {
   selection: 'Seleção',
   open: 'Aberta',
   checkbox: 'Checkbox',
-  'drag-and-drop-list': 'Arrastar e soltar',
+  'drag-and-drop-list': 'Ordenação',
   'drag-and-drop': 'Arrastar e soltar',
 }
 
 type Props = {
-  questions: QuestionDto[]
+  questions: SortableItem<Question>[]
   selectedQuestionIndex: number
   onSelectQuestion: (questionIndex: number) => void
   onRemoveQuestion: (questionIndex: number) => void
-  onDragEnd: (originItemIndex: number, targetItemIndex: number) => void
+  onDragEnd: (
+    questions: SortableItem<Question>[],
+    originQuestionIndex: number,
+    targetQuestionIndex: number,
+  ) => void
 }
 
 export const QuizArrangerView = ({
@@ -37,17 +42,14 @@ export const QuizArrangerView = ({
         aparecem.
       </p>
 
-      <Sortable.Container
-        key={questions.length}
-        itemCount={questions.length}
-        onDragEnd={onDragEnd}
-      >
+      <Sortable.Container items={questions} onDragEnd={onDragEnd}>
         {(items) =>
-          items.map((item, index) => {
-            const questionIndex = item
+          items.map((item, position) => {
+            const questionIndex = item.index
             const isSelected = selectedQuestionIndex === questionIndex
+            const questionType = item.value.type
             return (
-              <Sortable.Item key={item} id={item.toString()}>
+              <Sortable.Item key={item.index} id={item.index.toString()}>
                 <button
                   type='button'
                   onClick={() => onSelectQuestion(questionIndex)}
@@ -57,9 +59,7 @@ export const QuizArrangerView = ({
                     isSelected && 'border-primary',
                   )}
                 >
-                  <span className='w-full'>
-                    {QUESTION_TYPE_LABELS[questions[questionIndex].type as QuestionType]}
-                  </span>
+                  <span className='w-full'>{QUESTION_TYPE_LABELS[questionType]}</span>
                   <div className='flex items-center'>
                     <ConfirmDialog
                       title='Remover questão'
@@ -77,7 +77,7 @@ export const QuizArrangerView = ({
                         <Icon name='trash' />
                       </Button>
                     </ConfirmDialog>
-                    <span>{index + 1}</span>
+                    <span>{position + 1}</span>
                   </div>
                 </button>
               </Sortable.Item>
