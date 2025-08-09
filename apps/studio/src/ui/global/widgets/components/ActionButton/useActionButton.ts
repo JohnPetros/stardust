@@ -29,12 +29,6 @@ export function useActionButton({
   isDisabled,
   onExecute,
 }: Props) {
-  console.log({
-    isExecuting,
-    isFailure,
-    isSuccessful,
-    canExecute,
-  })
   const [variant, title] = useMemo(() => {
     if (isExecuting) {
       return [variants.executing, titles.executing]
