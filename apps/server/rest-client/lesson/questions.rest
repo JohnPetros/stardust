@@ -4,3 +4,9 @@
 ### Fetch questions
 GET {{URL}}/star/{{STAR_ID}}
 Authorization: Bearer {{JWT}}
+
+### Update questions
+PUT {{URL}}/star/{{STAR_ID}}
+Authorization: Bearer {{JWT}}
+
+{}
