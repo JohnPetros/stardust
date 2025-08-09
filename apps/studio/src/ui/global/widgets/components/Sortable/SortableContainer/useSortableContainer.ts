@@ -14,9 +14,6 @@ export function useSortableContainer<ItemValue>(
     const { active, over } = event
     if (!over) return
 
-    console.log(active, over)
-    console.log(items)
-
     if (active.id !== over?.id) {
       const originItemIndex = Number(active.id)
       const targetItemIndex = Number(over.id)
