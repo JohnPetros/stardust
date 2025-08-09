@@ -1,5 +1,4 @@
 import { Hono } from 'hono'
-import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
 
 import {
@@ -25,14 +24,16 @@ import { SupabaseAuthService } from '@/rest/services'
 import { InngestEventBroker } from '@/queue/inngest/InngestEventBroker'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
+import { ValidationMiddleware } from '../../middlewares'
 
 export class AuthRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/auth')
+  private readonly validationMiddleware = new ValidationMiddleware()
 
   private registerSignInRoute(): void {
     this.router.post(
       '/sign-in',
-      zValidator(
+      this.validationMiddleware.validate(
         'json',
         z.object({
           email: emailSchema,
@@ -52,7 +53,7 @@ export class AuthRouter extends HonoRouter {
   private registerSignUpRoute(): void {
     this.router.post(
       '/sign-up',
-      zValidator(
+      this.validationMiddleware.validate(
         'json',
         z.object({
           email: emailSchema,
@@ -85,7 +86,7 @@ export class AuthRouter extends HonoRouter {
   private registerResendSignUpEmailRoute(): void {
     this.router.post(
       '/resend-email/sign-up',
-      zValidator(
+      this.validationMiddleware.validate(
         'json',
         z.object({
           email: emailSchema,
@@ -105,7 +106,7 @@ export class AuthRouter extends HonoRouter {
   private registerRefreshSessionRoute(): void {
     this.router.post(
       '/refresh-session',
-      zValidator(
+      this.validationMiddleware.validate(
         'json',
         z.object({
           refreshToken: stringSchema,
@@ -125,7 +126,7 @@ export class AuthRouter extends HonoRouter {
   private registerRequestPasswordResetRoute(): void {
     this.router.post(
       '/request-password-reset',
-      zValidator(
+      this.validationMiddleware.validate(
         'json',
         z.object({
           email: emailSchema,
@@ -145,7 +146,7 @@ export class AuthRouter extends HonoRouter {
   private registerConfirmEmailRoute(): void {
     this.router.post(
       '/confirm-email',
-      zValidator(
+      this.validationMiddleware.validate(
         'json',
         z.object({
           token: z.string(),
@@ -165,7 +166,7 @@ export class AuthRouter extends HonoRouter {
   private registerConfirmPasswordResetRoute(): void {
     this.router.post(
       '/confirm-password-reset',
-      zValidator(
+      this.validationMiddleware.validate(
         'json',
         z.object({
           token: z.string(),
@@ -185,7 +186,7 @@ export class AuthRouter extends HonoRouter {
   private registerResetPasswordRoute(): void {
     this.router.patch(
       '/reset-password',
-      zValidator(
+      this.validationMiddleware.validate(
         'json',
         z.object({
           newPassword: passwordSchema,

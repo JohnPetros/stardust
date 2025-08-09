@@ -2,7 +2,7 @@
 
 import { type RefObject, useEffect, useState } from 'react'
 import z from 'zod'
-import { useForm } from 'react-hook-form'
+import { useForm, type Resolver } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import type { SnippetDto } from '@stardust/core/playground/entities/dtos'
@@ -27,10 +27,11 @@ const snippetSchema = z.object({
   snippetId: idSchema,
   snippetTitle: titleSchema,
   snippetCode: stringSchema,
-  isSnippetPublic: booleanSchema.default(true),
+  isSnippetPublic: booleanSchema,
 })
 
-type SnippetSchema = z.infer<typeof snippetSchema>
+type SnippetFormInput = z.input<typeof snippetSchema>
+type SnippetForm = z.output<typeof snippetSchema>
 
 type UseSnippetPageParams = {
   playgroundService: PlaygroundService
@@ -55,8 +56,12 @@ export function useSnippetPage({
   const [snippetFieldErrors, setSnippetFieldErrors] = useState<Record<string, string[]>>(
     {},
   )
-  const { control, formState, getValues, reset, watch } = useForm<SnippetSchema>({
-    resolver: zodResolver(snippetSchema),
+  const { control, formState, getValues, reset, watch } = useForm<SnippetForm>({
+    resolver: zodResolver(snippetSchema) as unknown as Resolver<
+      SnippetForm,
+      any,
+      SnippetFormInput
+    >,
     defaultValues: {
       snippetId: snippet?.id.value,
       snippetTitle: snippet?.title.value ?? Snippet.DEFEAULT_TITLE,
@@ -87,6 +92,7 @@ export function useSnippetPage({
     setIsLoading(true)
 
     const { snippetId, snippetTitle, snippetCode, isSnippetPublic } = getValues()
+    const isPublic = isSnippetPublic ?? true
 
     const hasSnippet = !snippetId
     if (hasSnippet) {
@@ -94,7 +100,7 @@ export function useSnippetPage({
         Snippet.create({
           title: snippetTitle,
           code: snippetCode,
-          isPublic: isSnippetPublic,
+          isPublic: isPublic,
           author: {
             id: userId.value,
           },
@@ -124,7 +130,7 @@ export function useSnippetPage({
 
     try {
       title = Name.create(snippetTitle)
-    } catch (error) {
+    } catch {
       setSnippetFieldErrors({
         snippetTitle: ['Título deve conter no mínimo 3 caracteres'],
       })
@@ -138,7 +144,7 @@ export function useSnippetPage({
         id: snippetId,
         title: title.value,
         code: snippetCode,
-        isPublic: isSnippetPublic,
+        isPublic: isPublic,
         author: {
           id: userId.value,
         },
