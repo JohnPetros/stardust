@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import type { ActionButtonProps } from './types/ActionButtonProps'
+import type { ActionButtonTitles } from './types/ActionButtonTitles'
 
 const variants = {
   default: 'bg-green-400 text-green-950',
@@ -9,20 +10,30 @@ const variants = {
   failure: 'border-red-700 bg-transparent text-red-700',
 }
 
+type Props = {
+  isExecuting: boolean
+  isFailure: boolean
+  isSuccessful: boolean
+  canExecute: boolean
+  titles: ActionButtonTitles
+  isDisabled: boolean
+  onExecute?: () => Promise<void>
+}
+
 export function useActionButton({
   isExecuting,
-  isSuccess,
+  isFailure,
+  isSuccessful,
   canExecute,
   titles,
-  isFailure,
   isDisabled,
   onExecute,
-}: Omit<ActionButtonProps, 'type' | 'icon' | 'className'>) {
+}: Props) {
   const [variant, title] = useMemo(() => {
     if (isExecuting) {
       return [variants.executing, titles.executing]
     }
-    if (isSuccess) {
+    if (isSuccessful) {
       return [variants.success, titles.success]
     }
     if (isFailure) {
@@ -32,7 +43,7 @@ export function useActionButton({
       return [variants.canExecute, titles.canExecute]
     }
     return [variants.default, titles.default]
-  }, [titles, canExecute, isSuccess, isDisabled, isExecuting, isFailure])
+  }, [titles, canExecute, isSuccessful, isDisabled, isExecuting, isFailure])
 
   async function handleClick() {
     if (onExecute) await onExecute()

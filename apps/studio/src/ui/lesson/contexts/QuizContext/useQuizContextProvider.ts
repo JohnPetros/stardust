@@ -1,14 +1,33 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
+import type { Question } from '@stardust/core/lesson/abstracts'
 import type { QuestionDto } from '@stardust/core/lesson/entities/dtos'
 import type { QuestionType } from '@stardust/core/lesson/types'
 import { Image } from '@stardust/core/global/structures'
+import { QuestionFactory } from '@stardust/core/lesson/factories'
 
+import { useActionButtonStore } from '@/ui/global/stores/ActionButtonStore'
 import type { QuizContextValue } from './QuizContextValue'
+import type { SortableItem } from '@/ui/global/widgets/components/Sortable/types'
 
-export function useQuizContextProvider(lessonQuestions: QuestionDto[]) {
-  const [questions, setQuestions] = useState<QuestionDto[]>(lessonQuestions)
+export function useQuizContextProvider(questionsDtos: QuestionDto[]) {
+  const [questions, setQuestions] = useState<SortableItem<Question>[]>(
+    questionsDtos.map((dto, index) => ({
+      index,
+      value: QuestionFactory.produce(dto),
+    })),
+  )
   const [selectedQuestionIndex, setSelectedQuestionIndex] = useState(questions.length)
+  const { useCanExecute, useIsFailure, useIsSuccessful } = useActionButtonStore()
+  const { setCanExecute } = useCanExecute()
+  const { setIsFailure } = useIsFailure()
+  const { setIsSuccessful } = useIsSuccessful()
+
+  const enableActionButton = useCallback(() => {
+    setIsSuccessful(false)
+    setIsFailure(false)
+    setCanExecute(true)
+  }, [setCanExecute, setIsSuccessful, setIsFailure])
 
   const value: QuizContextValue = useMemo(() => {
     function addQuestion(questionType: QuestionType) {
@@ -63,21 +82,27 @@ export function useQuizContextProvider(lessonQuestions: QuestionDto[]) {
           }
           break
       }
-      setQuestions((questions) => [...questions, question])
+      const newQuestionIndex = questions.length
+      setQuestions((questions) => [
+        ...questions,
+        { index: newQuestionIndex, value: QuestionFactory.produce(question) },
+      ])
+      selectQuestion(newQuestionIndex)
+      enableActionButton()
     }
 
     function removeQuestion(questionIndex: number) {
       setQuestions((questions) => questions.filter((_, index) => index !== questionIndex))
+      enableActionButton()
     }
 
     function selectQuestion(questionIndex: number) {
       setSelectedQuestionIndex(questionIndex)
     }
 
-    function reorderQuestions(originQuestionIndex: number, targetQuestionIndex: number) {
-      const newQuestions = [...questions]
-      const [movedQuestion] = newQuestions.splice(originQuestionIndex, 1)
-      newQuestions.splice(targetQuestionIndex, 0, movedQuestion)
+    function reorderQuestions(questions: SortableItem<Question>[]) {
+      setQuestions(questions)
+      enableActionButton()
     }
 
     return {
@@ -88,7 +113,7 @@ export function useQuizContextProvider(lessonQuestions: QuestionDto[]) {
       removeQuestion,
       reorderQuestions,
     }
-  }, [questions, selectedQuestionIndex])
+  }, [questions, selectedQuestionIndex, enableActionButton])
 
   return value
 }

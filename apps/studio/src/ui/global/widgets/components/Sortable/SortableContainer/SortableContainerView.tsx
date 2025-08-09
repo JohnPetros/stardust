@@ -14,15 +14,24 @@ import {
 } from '@dnd-kit/sortable'
 
 import { useSortableContainer } from './useSortableContainer'
+import type { SortableItem } from '../types'
 
-type Props = {
-  itemCount: number
-  children: (items: number[]) => ReactNode
-  onDragEnd: (originItemIndex: number, targetItemIndex: number) => void
+type Props<ItemValue> = {
+  items: SortableItem<ItemValue>[]
+  children: (items: SortableItem<ItemValue>[]) => ReactNode
+  onDragEnd: (
+    newItems: SortableItem<ItemValue>[],
+    originItemPosition: number,
+    targetItemPosition: number,
+  ) => void
 }
 
-export const SortableContainerView = ({ itemCount, children, onDragEnd }: Props) => {
-  const { items, handleDragEnd } = useSortableContainer(itemCount, onDragEnd)
+export const SortableContainerView = <ItemValue,>({
+  items: initialItems,
+  children,
+  onDragEnd,
+}: Props<ItemValue>) => {
+  const { items, handleDragEnd } = useSortableContainer(initialItems, onDragEnd)
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -37,7 +46,7 @@ export const SortableContainerView = ({ itemCount, children, onDragEnd }: Props)
       onDragEnd={handleDragEnd}
     >
       <SortableContext
-        items={items.map((item) => item.toString())}
+        items={items.map((item) => item.index.toString())}
         strategy={verticalListSortingStrategy}
       >
         {children(items)}

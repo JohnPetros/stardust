@@ -5,11 +5,7 @@ import type { IconName } from '../../Icon/types'
 export type ActionButtonProps = {
   type: 'button' | 'submit'
   icon: IconName
-  isExecuting: boolean
   isDisabled: boolean
-  isSuccess: boolean
-  isFailure: boolean
-  canExecute: boolean
   className?: ClassNameValue
   titles: {
     default: string

@@ -5,7 +5,7 @@ import { Slug } from '@stardust/core/global/structures'
 import { Star } from '@stardust/core/space/entities'
 
 import { QuizContextProvider } from '@/ui/lesson/contexts/QuizContext'
-import { LessonQuestionsPage } from '@/ui/lesson/widgets/pages/LessonQuestions'
+import { LessonQuizPage } from '@/ui/lesson/widgets/pages/LessonQuizPage'
 import { AuthMiddleware } from '../middlewares/AuthMiddleware'
 import { RestMiddleware } from '../middlewares/RestMiddleware'
 import { restContext } from '../contexts/RestContext'
@@ -33,7 +33,7 @@ const LessonQuestionsRoute = () => {
   const { questions } = useLoaderData<typeof clientLoader>()
   return (
     <QuizContextProvider questions={questions}>
-      <LessonQuestionsPage />
+      <LessonQuizPage />
     </QuizContextProvider>
   )
 }
