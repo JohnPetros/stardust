@@ -27,10 +27,10 @@ const snippetSchema = z.object({
   snippetId: idSchema,
   snippetTitle: titleSchema,
   snippetCode: stringSchema,
-  isSnippetPublic: booleanSchema.default(true),
+  isSnippetPublic: booleanSchema,
 })
 
-type SnippetSchema = z.infer<typeof snippetSchema>
+type SnippetSchema = z.input<typeof snippetSchema>
 
 type UseSnippetPageParams = {
   playgroundService: PlaygroundService
@@ -87,6 +87,7 @@ export function useSnippetPage({
     setIsLoading(true)
 
     const { snippetId, snippetTitle, snippetCode, isSnippetPublic } = getValues()
+    const isPublic = isSnippetPublic ?? true
 
     const hasSnippet = !snippetId
     if (hasSnippet) {
@@ -94,7 +95,7 @@ export function useSnippetPage({
         Snippet.create({
           title: snippetTitle,
           code: snippetCode,
-          isPublic: isSnippetPublic,
+          isPublic: isPublic,
           author: {
             id: userId.value,
           },
@@ -124,7 +125,7 @@ export function useSnippetPage({
 
     try {
       title = Name.create(snippetTitle)
-    } catch (error) {
+    } catch {
       setSnippetFieldErrors({
         snippetTitle: ['Título deve conter no mínimo 3 caracteres'],
       })
@@ -138,7 +139,7 @@ export function useSnippetPage({
         id: snippetId,
         title: title.value,
         code: snippetCode,
-        isPublic: isSnippetPublic,
+        isPublic: isPublic,
         author: {
           id: userId.value,
         },
