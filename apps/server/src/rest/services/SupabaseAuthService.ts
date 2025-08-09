@@ -62,6 +62,9 @@ export class SupabaseAuthService implements AuthService {
       },
     })
 
+    console.log('sign up service data', data)
+    console.log('sign up service error', error)
+
     if (error)
       switch (error?.code) {
         case this.AUTH_ERROR_CODES.weekPassword:
