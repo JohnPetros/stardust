@@ -2,7 +2,7 @@
 
 import { type RefObject, useEffect, useState } from 'react'
 import z from 'zod'
-import { useForm } from 'react-hook-form'
+import { useForm, type Resolver } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import type { SnippetDto } from '@stardust/core/playground/entities/dtos'
@@ -30,7 +30,8 @@ const snippetSchema = z.object({
   isSnippetPublic: booleanSchema,
 })
 
-type SnippetSchema = z.input<typeof snippetSchema>
+type SnippetFormInput = z.input<typeof snippetSchema>
+type SnippetForm = z.output<typeof snippetSchema>
 
 type UseSnippetPageParams = {
   playgroundService: PlaygroundService
@@ -55,8 +56,12 @@ export function useSnippetPage({
   const [snippetFieldErrors, setSnippetFieldErrors] = useState<Record<string, string[]>>(
     {},
   )
-  const { control, formState, getValues, reset, watch } = useForm<SnippetSchema>({
-    resolver: zodResolver(snippetSchema),
+  const { control, formState, getValues, reset, watch } = useForm<SnippetForm>({
+    resolver: zodResolver(snippetSchema) as unknown as Resolver<
+      SnippetForm,
+      any,
+      SnippetFormInput
+    >,
     defaultValues: {
       snippetId: snippet?.id.value,
       snippetTitle: snippet?.title.value ?? Snippet.DEFEAULT_TITLE,
