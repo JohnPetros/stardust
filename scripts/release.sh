@@ -18,5 +18,4 @@ if [ -z "$GITHUB_TOKEN" ]; then
 fi
 
 # Executa o processo de release
-npx release-it
-
+GITHUB_TOKEN=$GITHUB_TOKEN npx release-it
