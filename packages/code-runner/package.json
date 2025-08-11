@@ -5,7 +5,6 @@
   "private": false,
   "main": "build/main.js",
   "module": "build/main.mjs",
-  "types": "build/main.d.ts",
   "author": {
     "name": "João Pedro Carvalho dos Santos"
   },

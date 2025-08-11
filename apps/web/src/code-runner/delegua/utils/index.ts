@@ -1,5 +1,0 @@
-export { obtenhaTokenizadorDeleguaParaEditorMonaco } from './obtenhaTokenizadorDeleguaParaEditorMonaco'
-export { obtenhaConfiguracaoDeLinguagemDeleguaParaEditorMonaco } from './obtenhaConfiguracaoDeLinguagemDeleguaParaEditorMonaco'
-export { obtenhaTipo } from './obtenhaTipo'
-export { formateValor } from './formateValor'
-export { trateErro } from './trateErro'
