@@ -51,7 +51,7 @@ export function useSignUpForm(
       if (response.isFailure) {
         setError('name', { message: 'Nome já utilizado por outro usuário' })
       }
-    } catch (error) {}
+    } catch {}
   }, [nameFieldWatch, profileService.verifyUserNameInUse, setError])
 
   const checkUserAlreadyExistsByEmail = useCallback(async () => {
@@ -64,7 +64,7 @@ export function useSignUpForm(
         setError('email', { message: 'E-mail já utilizado por outro usuário' })
         return false
       }
-    } catch (error) {}
+    } catch {}
   }, [emailFieldWatch, profileService.verifyUserEmailInUse, setError])
 
   function checkFieldIsValid(fieldName: keyof SignUpFormFields) {

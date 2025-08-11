@@ -83,7 +83,7 @@ export const SignUpFormView = ({ id, profileService, isSubmitting, onSubmit }: P
       </div>
       {isPasswordValid && (
         <AnimatedContainer>
-          <Button className='mt-6' isLoading={isSubmitting}>
+          <Button type='submit' className='mt-6' isLoading={isSubmitting}>
             Criar conta
           </Button>
         </AnimatedContainer>
