@@ -1,11 +1,11 @@
 import {
   AvaliadorSintatico,
   Lexador,
-  LexadorJavaScript,
-  AvaliadorSintaticoJavaScript,
   TradutorJavaScript,
   TradutorReversoJavaScript,
-} from '@designliquido/delegua/umd/delegua.js'
+} from '@designliquido/delegua'
+import { AvaliadorSintaticoJavaScript } from '@designliquido/delegua/avaliador-sintatico/traducao/avaliador-sintatico-javascript'
+import { LexadorJavaScript } from '@designliquido/delegua/lexador/traducao/lexador-javascript'
 
 import { CodeRunnerResponse } from '@stardust/core/global/responses'
 import { CodeRunnerError } from '@stardust/core/global/errors'
