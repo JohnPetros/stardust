@@ -10,8 +10,8 @@ import { ProfileService } from '@/rest/services'
 import { NextRestClient } from '@/rest/next/NextRestClient'
 import type { AuthContextValue } from './types'
 import {
-  useAuthProvider,
   useAuthContext,
+  useAuthProvider,
   useSignInAction,
   useSignOutAction,
 } from './hooks'

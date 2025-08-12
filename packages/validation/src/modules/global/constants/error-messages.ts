@@ -1,4 +1,4 @@
-export const ERROR_MESSAGES = {
+export const GLOBAL_ERROR_MESSAGES = {
   nonempty: 'Campo obrigatório',
   name: {
     min: 'Seu nome deve conter pelo menos 3 letras',
@@ -7,8 +7,7 @@ export const ERROR_MESSAGES = {
     regex: 'Informe um e-mail válido!',
   },
   password: {
-    regex:
-      'Sua senha deve conter pelo menos uma letra minúscula, uma maiúscula, um dígito e um caractere especial.',
+    min: 'Sua senha deve conter pelo menos 6 caracteres',
   },
   password_confirmation: {
     equal: 'As senhas precisam de iguais',

@@ -6,5 +6,6 @@ export type ButtonProps = {
   className?: string
   isLoading?: boolean
   asChild?: boolean
+  testId?: string
 } & ComponentProps<'button'> &
   HTMLMotionProps<'button'>

@@ -3,18 +3,20 @@ import { useToastContext } from '@/ui/global/contexts/ToastContext'
 export function useToastContextMock(
   returnMock?: Partial<ReturnType<typeof useToastContext>>,
 ) {
-  const showMock = jest.fn()
-  const showSuccessMock = jest.fn()
-  const showErrorMock = jest.fn()
+  const show = jest.fn()
+  const showSuccess = jest.fn()
+  const showError = jest.fn()
 
   jest.mocked(useToastContext).mockReturnValue({
-    show: showMock,
-    showSuccess: showSuccessMock,
-    showError: showErrorMock,
+    show,
+    showSuccess,
+    showError,
     ...returnMock,
   })
 
   return {
-    showMock,
+    show,
+    showSuccess,
+    showError,
   }
 }
