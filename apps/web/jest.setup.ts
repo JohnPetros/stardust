@@ -1,9 +1,8 @@
-require('dotenv').config({ path: '.env.local' })
-
 import 'jest-canvas-mock'
 import '@testing-library/jest-dom'
 
 import { TextEncoder } from 'node:util'
+
 global.TextEncoder = TextEncoder
 
 global.ResizeObserver = jest.fn().mockImplementation(() => ({

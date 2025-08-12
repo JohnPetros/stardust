@@ -10,9 +10,9 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: process.env.NEXT_PUBLIC_SUPABASE_CDN_HOST,
+        hostname: process.env.NEXT_PUBLIC_SUPABASE_CDN_HOST || 'localhost',
         port: '',
-        pathname: process.env.NEXT_PUBLIC_SUPABASE_CDN_PATH,
+        pathname: process.env.NEXT_PUBLIC_SUPABASE_CDN_PATH || '/',
       },
     ],
   },
