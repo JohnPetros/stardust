@@ -64,6 +64,7 @@ export function useSignUpPage(authService: AuthService, isUserCreated: boolean) 
     isSubmitting,
     isSignUpSuccessfull,
     isResendingEmail,
+    userEmail,
     handleFormSubmit,
     handleResendEmail,
     handleUserCreated,
