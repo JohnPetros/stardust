@@ -49,6 +49,7 @@ export function useSignUpForm(
         Name.create(nameFieldWatch),
       )
       if (response.isFailure) {
+        console.log('isFailure', response.isFailure)
         setError('name', { message: 'Nome já utilizado por outro usuário' })
       }
     } catch {}
