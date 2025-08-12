@@ -24,4 +24,15 @@ export class SupabaseQuestionsRepository
 
     return (data.questions as QuestionDto[]).map(SupabaseQuestionMapper.toEntity)
   }
+
+  async updateMany(questions: Question[], starId: Id): Promise<void> {
+    const { error } = await this.supabase
+      .from('stars')
+      .update({ questions: questions.map((question) => question.dto) })
+      .eq('id', starId.value)
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
 }

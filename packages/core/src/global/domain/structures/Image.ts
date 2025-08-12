@@ -1,6 +1,7 @@
 import { StringValidation } from '../../libs'
 
 export class Image {
+  static readonly DEFAULT_IMAGE_NAME = 'panda.png'
   readonly value: string
 
   constructor(value: string) {

@@ -50,6 +50,7 @@
     "./lesson/entities/dtos": "./src/lesson/domain/entities/dtos/index.ts",
     "./lesson/structures/dtos": "./src/lesson/domain/structures/dtos/index.ts",
     "./lesson/structures": "./src/lesson/domain/structures/index.ts",
+    "./lesson/factories": "./src/lesson/domain/factories/index.ts",
     "./lesson/types": "./src/lesson/domain/types/index.ts",
     "./lesson/errors": "./src/lesson/domain/errors/index.ts",
     "./lesson/use-cases": "./src/lesson/use-cases/index.ts",
