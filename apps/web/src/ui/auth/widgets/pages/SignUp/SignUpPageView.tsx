@@ -36,7 +36,10 @@ export const SignUpPageView = ({
       <main className='flex justify-center w-full h-full'>
         {isSignUpSuccessfull ? (
           <AnimatedOpacity delay={2}>
-            <div className='flex-1 flex flex-col justify-center h-full'>
+            <div
+              data-testid='sign-up-success-message'
+              className='flex-1 flex flex-col justify-center h-full'
+            >
               <p className='text-green-400 font-medium text-lg text-center'>
                 Verique o seu e-mail para confirmar o seu cadastro 😉.
               </p>
@@ -54,12 +57,11 @@ export const SignUpPageView = ({
           </AnimatedOpacity>
         ) : (
           <AnimatedOpacity delay={2}>
-            <div className='w-[24rem] pt-12'>
+            <div data-testid='sign-up-form' className='w-[24rem] pt-12'>
               <div className='text-center'>
                 <Title title='Bem-vindo(a) ao StarDust' icon='rocket' text='' />
               </div>
               <SignUpForm
-                id='sign-up-form'
                 profileService={profileService}
                 isSubmitting={isSubmitting}
                 onSubmit={onFormSubmit}
@@ -67,7 +69,9 @@ export const SignUpPageView = ({
             </div>
 
             <div className='mt-6 flex w-full items-center justify-center'>
-              <Link href={ROUTES.auth.signIn}>Eu já tenho uma conta 😁.</Link>
+              <Link testId='sign-in-link' href={ROUTES.auth.signIn}>
+                Eu já tenho uma conta 😁.
+              </Link>
             </div>
           </AnimatedOpacity>
         )}

@@ -3,7 +3,9 @@ import { PaginationResponse, RestResponse } from '@stardust/core/global/response
 import { HTTP_HEADERS } from '@stardust/core/global/constants'
 import { MethodNotImplementedError } from '@stardust/core/global/errors'
 
-import { addQueryParams, handleRestError, parseResponseJson } from './utils'
+import { addQueryParams } from './utils/addQueryParams'
+import { handleRestError } from './utils/handleRestError'
+import { parseResponseJson } from './utils/parseResponseJson'
 import type { NextRestClientConfig } from './types'
 
 export const NextRestClient = ({

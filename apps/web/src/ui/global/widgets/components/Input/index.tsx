@@ -9,6 +9,7 @@ import { twMerge } from 'tailwind-merge'
 import { ErrorMessage } from '../ErrorMessage'
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
+  testId?: string
   type: string
   icon?: IconName
   label?: string
@@ -17,7 +18,15 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
 }
 
 const InputComponent = (
-  { label, type, icon, errorMessage, isActive = false, ...inputAttributes }: InputProps,
+  {
+    label,
+    type,
+    icon,
+    errorMessage,
+    isActive = false,
+    testId,
+    ...inputAttributes
+  }: InputProps,
   ref: ForwardedRef<HTMLInputElement>,
 ) => {
   const { handleEyeClick, innerType } = useInput(type)
@@ -54,6 +63,7 @@ const InputComponent = (
           {icon && <Icon name={icon} className={iconClassName} size={24} />}
 
           <input
+            data-testid={testId}
             id={id}
             type={innerType}
             aria-label={label}

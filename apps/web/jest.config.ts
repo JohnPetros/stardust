@@ -1,7 +1,10 @@
 import nextJest from 'next/jest.js'
+import { config } from 'dotenv'
+
+config({ path: '.env.test' })
 
 /** @type {import('jest').Config} */
-const config = {
+const jestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   preset: 'ts-jest',
   testEnvironment: 'jest-environment-jsdom',
@@ -17,23 +20,24 @@ const config = {
       tsConfigFile: 'tsconfig.json',
     },
     TextEncoder: require('node:util').TextEncoder,
+
     TextDecoder: require('node:util').TextDecoder,
   },
 }
 
 const createJestConfig = nextJest({
-  dir: './',
-})(config)
+  dir: './src',
+})(jestConfig)
 
 module.exports = async () => {
   // Create Next.js jest configuration presets
-  const jestConfig = await createJestConfig()
+  const finalJestConfig = await createJestConfig()
 
   const moduleNameMapper = {
-    ...jestConfig.moduleNameMapper,
+    ...finalJestConfig.moduleNameMapper,
     uuid: require.resolve('uuid'),
     '^@/(.*)$': '<rootDir>/src/$1',
   }
 
-  return { ...jestConfig, moduleNameMapper }
+  return { ...finalJestConfig, moduleNameMapper }
 }

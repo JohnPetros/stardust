@@ -4,23 +4,17 @@ import { useSignInForm } from './useSignInForm'
 import type { SignInFormFields } from './types/SignInFormFields'
 
 type SignInFormProps = {
-  id: string
   onSubmit: (fields: SignInFormFields) => Promise<void>
 }
 
-export function SignInForm({ id, onSubmit }: SignInFormProps) {
+export function SignInForm({ onSubmit }: SignInFormProps) {
   const { errors, isLoading, register, handleSubmit } = useSignInForm(onSubmit)
 
   return (
-    <form
-      id={id}
-      aria-label={id}
-      suppressHydrationWarning={true}
-      onSubmit={handleSubmit}
-      className='mt-4'
-    >
+    <form onSubmit={handleSubmit} className='mt-4'>
       <div className='space-y-4'>
         <Input
+          testId='email-input'
           label='E-mail'
           type='email'
           icon='mail'
@@ -30,6 +24,7 @@ export function SignInForm({ id, onSubmit }: SignInFormProps) {
           errorMessage={errors.email?.message}
         />
         <Input
+          testId='password-input'
           label='Senha'
           type='password'
           icon='lock'
@@ -38,7 +33,13 @@ export function SignInForm({ id, onSubmit }: SignInFormProps) {
           errorMessage={errors.password?.message}
         />
       </div>
-      <Button type='submit' name='submit' isLoading={isLoading} className='mt-6'>
+      <Button
+        type='submit'
+        name='submit'
+        isLoading={isLoading}
+        className='mt-6'
+        testId='submit-button'
+      >
         Entrar
       </Button>
     </form>

@@ -15,6 +15,7 @@ export function ButtonComponent(
     asChild = false,
     isLoading = false,
     disabled,
+    testId,
     ...rest
   }: ButtonProps,
   ref: ForwardedRef<HTMLButtonElement>,
@@ -39,6 +40,7 @@ export function ButtonComponent(
       whileTap={{ scale: 0.99 }}
       className={mergedClassName}
       disabled={disabled || isLoading}
+      data-testid={testId}
       {...rest}
     >
       {isLoading ? <Loading /> : children}
