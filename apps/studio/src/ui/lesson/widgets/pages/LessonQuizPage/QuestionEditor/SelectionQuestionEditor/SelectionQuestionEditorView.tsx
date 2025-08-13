@@ -30,7 +30,6 @@ export const SelectionQuestionEditorView = ({
   onOptionAdd,
   onOptionInputChange,
 }: Props) => {
-  console.log(answer)
   return (
     <div>
       <QuestionHeaderInput
