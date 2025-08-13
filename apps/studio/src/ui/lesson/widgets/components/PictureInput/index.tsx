@@ -8,10 +8,11 @@ import { PictureInputView } from './PictureInputView'
 import { usePictureInput } from './usePictureInput'
 
 type Props = {
+  defaultPicture?: Image
   onChange: (picture: Image) => void
 }
 
-export const PictureInput = ({ onChange }: Props) => {
+export const PictureInput = ({ defaultPicture, onChange }: Props) => {
   const { storageService } = useRest()
   const dialogRef = useRef<DialogRef>(null)
   const {
@@ -25,7 +26,12 @@ export const PictureInput = ({ onChange }: Props) => {
     handlePictureCardClick,
     handleLoadMoreButtonClick,
     handlePictureCardRemove,
-  } = usePictureInput(storageService, dialogRef, onChange)
+  } = usePictureInput({
+    defaultPicture,
+    storageService,
+    dialogRef,
+    onChange,
+  })
 
   return (
     <PictureInputView

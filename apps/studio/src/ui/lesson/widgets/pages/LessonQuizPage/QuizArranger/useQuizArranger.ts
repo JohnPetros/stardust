@@ -1,7 +1,7 @@
 import { useQuizContext } from '@/ui/global/hooks/useQuizContext'
 
 export function useQuizArranger() {
-  const { questions, selectedQuestionIndex, selectQuestion } = useQuizContext()
+  const { questions, selectedQuestion, selectQuestion } = useQuizContext()
 
-  return { questions, selectedQuestionIndex, selectQuestion }
+  return { questions, selectedQuestion, selectQuestion }
 }

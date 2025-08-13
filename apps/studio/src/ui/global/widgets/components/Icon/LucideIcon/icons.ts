@@ -7,6 +7,7 @@ import {
   Star,
   Rocket,
   LayoutDashboard,
+  Plus,
   SquarePen,
   GripVertical,
   Loader2,
@@ -49,4 +50,5 @@ export const ICONS: Record<IconName, LucideIcon> = {
   copy: Copy,
   upload: Upload,
   reload: RotateCcw,
+  plus: Plus,
 }

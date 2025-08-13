@@ -46,10 +46,26 @@ export const QuizArrangerView = ({
         {(items) =>
           items.map((item, position) => {
             const questionIndex = item.index
-            const isSelected = selectedQuestionIndex === questionIndex
+            const isSelected = questionIndex === selectedQuestionIndex
             const questionType = item.value.type
             return (
               <Sortable.Item key={item.index} id={item.index.toString()}>
+                <ConfirmDialog
+                  title='Remover questão'
+                  description='Tem certeza que deseja remover a questão?'
+                  onConfirm={() => onRemoveQuestion(questionIndex)}
+                >
+                  <Button
+                    variant='ghost'
+                    size='icon'
+                    className={cn(
+                      'opacity-0 pointer-events-none absolute right-6',
+                      isSelected && 'opacity-100 pointer-events-auto',
+                    )}
+                  >
+                    <Icon name='trash' />
+                  </Button>
+                </ConfirmDialog>
                 <button
                   type='button'
                   onClick={() => onSelectQuestion(questionIndex)}
@@ -61,22 +77,6 @@ export const QuizArrangerView = ({
                 >
                   <span className='w-full'>{QUESTION_TYPE_LABELS[questionType]}</span>
                   <div className='flex items-center'>
-                    <ConfirmDialog
-                      title='Remover questão'
-                      description='Tem certeza que deseja remover a questão?'
-                      onConfirm={() => onRemoveQuestion(questionIndex)}
-                    >
-                      <Button
-                        variant='ghost'
-                        size='icon'
-                        className={cn(
-                          'opacity-0 pointer-events-none',
-                          isSelected && 'opacity-100 pointer-events-auto',
-                        )}
-                      >
-                        <Icon name='trash' />
-                      </Button>
-                    </ConfirmDialog>
                     <span>{position + 1}</span>
                   </div>
                 </button>

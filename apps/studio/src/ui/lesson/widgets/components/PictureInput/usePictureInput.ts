@@ -10,12 +10,22 @@ import { Image, OrdinalNumber, Text } from '@stardust/core/global/structures'
 
 const ITEMS_PER_PAGE = OrdinalNumber.create(30)
 
-export function usePictureInput(
-  storageService: StorageService,
-  dialogRef: RefObject<DialogRef | null>,
-  onChange: (picture: Image) => void,
-) {
-  const [selectedImage, setSelectedImage] = useState<Image>(Image.create('panda.jpg'))
+type Props = {
+  defaultPicture?: Image
+  storageService: StorageService
+  dialogRef: RefObject<DialogRef | null>
+  onChange: (picture: Image) => void
+}
+
+export function usePictureInput({
+  defaultPicture,
+  storageService,
+  dialogRef,
+  onChange,
+}: Props) {
+  const [selectedImage, setSelectedImage] = useState<Image>(
+    defaultPicture ?? Image.create('panda.jpg'),
+  )
   const [search, setSearch] = useState<Text>(Text.create(''))
   const containerRef = useRef<HTMLDivElement>(null)
   const { data, isFetching, isFetchingNextPage, hasNextPage, nextPage, refetch } =
