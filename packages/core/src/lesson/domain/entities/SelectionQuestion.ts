@@ -39,16 +39,44 @@ export class SelectionQuestion extends Question<SelectionQuestionProps> {
     )
   }
 
-  get options() {
-    return this.props.options.items
+  addOption(option: string) {
+    this.props.options = this.props.options.add(option)
   }
 
-  get answer() {
+  removeOption(optionIndex: number) {
+    const option = this.props.options.items[optionIndex]
+    if (option === this.answer) {
+      this.props.answer = this.props.options.items[0]
+    }
+    this.props.options = this.props.options.remove(optionIndex)
+  }
+
+  changeOption(optionIndex: number, option: string) {
+    this.props.options = this.props.options.change(optionIndex, option)
+  }
+
+  get options(): ShuffledList<string> {
+    return this.props.options
+  }
+
+  set options(options: string[]) {
+    this.props.options = ShuffledList.create(options, false)
+  }
+
+  get answer(): string {
     return this.props.answer
   }
 
-  get code() {
-    return this.props.code ?? null
+  set answer(answer: string) {
+    this.props.answer = answer
+  }
+
+  get code(): string | undefined {
+    return this.props.code
+  }
+
+  set code(code: string) {
+    this.props.code = code
   }
 
   get dto(): SelectionQuestionDto {
@@ -57,7 +85,7 @@ export class SelectionQuestion extends Question<SelectionQuestionProps> {
       type: 'selection',
       stem: this.stem.value,
       picture: this.picture.value,
-      options: this.options,
+      options: this.options.items,
       answer: this.answer,
       code: this.code ?? undefined,
     }
