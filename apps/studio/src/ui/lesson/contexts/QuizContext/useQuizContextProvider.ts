@@ -52,7 +52,6 @@ export function useQuizContextProvider(questionsDtos: QuestionDto[]) {
             stem: '',
             answers: [],
             lines: [],
-            code: '',
           }
           break
         case 'checkbox':
@@ -62,7 +61,6 @@ export function useQuizContextProvider(questionsDtos: QuestionDto[]) {
             stem: '',
             options: [],
             correctOptions: [],
-            code: '',
           }
           break
         case 'drag-and-drop-list':
@@ -95,9 +93,12 @@ export function useQuizContextProvider(questionsDtos: QuestionDto[]) {
     }
 
     function removeQuestion(questionIndex: number) {
-      const filteredQuestions = questions.filter(
-        (question) => question.index !== questionIndex,
-      )
+      const filteredQuestions = questions
+        .filter((question) => question.index !== questionIndex)
+        .map((question, index) => ({
+          index,
+          value: question.value,
+        }))
       setQuestions(filteredQuestions)
       setSelectedQuestion(filteredQuestions[0])
       enableActionButton()
