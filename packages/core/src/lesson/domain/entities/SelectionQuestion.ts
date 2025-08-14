@@ -55,6 +55,10 @@ export class SelectionQuestion extends Question<SelectionQuestionProps> {
     this.props.options = this.props.options.change(optionIndex, option)
   }
 
+  removeCode(): void {
+    this.props.code = undefined
+  }
+
   get options(): ShuffledList<string> {
     return this.props.options
   }
