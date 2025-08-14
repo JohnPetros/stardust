@@ -17,7 +17,9 @@ export function useQuizContextProvider(questionsDtos: QuestionDto[]) {
       value: QuestionFactory.produce(dto),
     })),
   )
-  const [selectedQuestionIndex, setSelectedQuestionIndex] = useState(questions.length)
+  const [selectedQuestion, setSelectedQuestion] = useState<SortableItem<Question>>(
+    questions[0],
+  )
   const { useCanExecute, useIsFailure, useIsSuccessful } = useActionButtonStore()
   const { setCanExecute } = useCanExecute()
   const { setIsFailure } = useIsFailure()
@@ -83,21 +85,39 @@ export function useQuizContextProvider(questionsDtos: QuestionDto[]) {
           break
       }
       const newQuestionIndex = questions.length
-      setQuestions((questions) => [
-        ...questions,
-        { index: newQuestionIndex, value: QuestionFactory.produce(question) },
-      ])
-      selectQuestion(newQuestionIndex)
+      const newQuestion = {
+        index: newQuestionIndex,
+        value: QuestionFactory.produce(question),
+      }
+      setQuestions((questions) => [...questions, newQuestion])
+      setSelectedQuestion(newQuestion)
       enableActionButton()
     }
 
     function removeQuestion(questionIndex: number) {
-      setQuestions((questions) => questions.filter((_, index) => index !== questionIndex))
+      const filteredQuestions = questions.filter(
+        (question) => question.index !== questionIndex,
+      )
+      setQuestions(filteredQuestions)
+      setSelectedQuestion(filteredQuestions[0])
       enableActionButton()
     }
 
     function selectQuestion(questionIndex: number) {
-      setSelectedQuestionIndex(questionIndex)
+      const question = questions.find((question) => question.index === questionIndex)
+      if (!question) return
+      setSelectedQuestion(question)
+    }
+
+    function replaceSelectedQuestion(question: Question) {
+      setQuestions((questions) =>
+        questions.map((currentQuestion) =>
+          currentQuestion.index === selectedQuestion.index
+            ? { ...currentQuestion, value: question }
+            : currentQuestion,
+        ),
+      )
+      enableActionButton()
     }
 
     function reorderQuestions(questions: SortableItem<Question>[]) {
@@ -107,13 +127,14 @@ export function useQuizContextProvider(questionsDtos: QuestionDto[]) {
 
     return {
       questions,
-      selectedQuestionIndex,
+      selectedQuestion,
       selectQuestion,
       addQuestion,
+      replaceSelectedQuestion,
       removeQuestion,
       reorderQuestions,
     }
-  }, [questions, selectedQuestionIndex, enableActionButton])
+  }, [questions, selectedQuestion, enableActionButton])
 
   return value
 }

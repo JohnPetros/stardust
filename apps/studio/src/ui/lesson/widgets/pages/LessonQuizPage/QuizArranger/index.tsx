@@ -4,7 +4,7 @@ import { QuizArrangerView } from './QuizArrangerView'
 export const QuizArranger = () => {
   const {
     questions,
-    selectedQuestionIndex,
+    selectedQuestion,
     selectQuestion,
     removeQuestion,
     reorderQuestions,
@@ -13,7 +13,7 @@ export const QuizArranger = () => {
   return (
     <QuizArrangerView
       questions={questions}
-      selectedQuestionIndex={selectedQuestionIndex}
+      selectedQuestionIndex={selectedQuestion.index}
       onSelectQuestion={selectQuestion}
       onRemoveQuestion={removeQuestion}
       onDragEnd={reorderQuestions}

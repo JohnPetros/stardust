@@ -64,6 +64,7 @@ body {
   --shadow-2xl: 0px 1px 3px 0px hsl(0 0% 0% / 0.43);
   --tracking-normal: 0.025em;
   --spacing: 0.25rem;
+  --color-purple-700: #514869;
 }
 
 .dark {

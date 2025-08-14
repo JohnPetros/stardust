@@ -3,6 +3,7 @@ import { PageHeader } from '../../components/PageHeader'
 import { QuizBank } from './QuizBank'
 import { QuizArranger } from './QuizArranger'
 import { QuizActionButton } from './QuizActionButton'
+import { QuestionEditor } from './QuestionEditor'
 
 export const LessonQuizPageView = () => {
   return (
@@ -21,6 +22,7 @@ export const LessonQuizPageView = () => {
           </div>
           <div className='space-y-2'>
             <h2 className='text-green-400 font-semibold'>Editor de questão</h2>
+            <QuestionEditor />
           </div>
         </div>
       </div>
