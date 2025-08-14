@@ -4,18 +4,24 @@ import { RadioGroup, RadioGroupItem } from '@/ui/shadcn/components/radio-group'
 import { Button } from '@/ui/shadcn/components/button'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { QuestionHeaderInput } from '../QuestionHeaderInput'
+import { CodeInput } from '../CodeInput'
+import { AddItemButton } from '@/ui/lesson/widgets/components/AddItemButton'
 
 type Props = {
   stem: string
   picture: Image
   answer: string
   options: string[]
+  code?: string
   onStemChange: (stem: Text) => void
   onPictureChange: (picture: Image) => void
   onOptionRemove: (optionIndex: number) => void
   onAnswerChange: (answer: string) => void
   onOptionAdd: () => void
   onOptionInputChange: (optionIndex: number, option: string) => void
+  onCodeChange: (code: string) => void
+  onCodeInputDisabled: () => void
+  onCodeInputEnable: (defaultCode: string) => void
 }
 
 export const SelectionQuestionEditorView = ({
@@ -23,20 +29,31 @@ export const SelectionQuestionEditorView = ({
   picture,
   answer,
   options,
+  code,
   onStemChange,
   onPictureChange,
   onOptionRemove,
   onAnswerChange,
   onOptionAdd,
   onOptionInputChange,
+  onCodeChange,
+  onCodeInputDisabled,
+  onCodeInputEnable,
 }: Props) => {
   return (
-    <div>
+    <div className='space-y-8'>
       <QuestionHeaderInput
         stem={stem}
         picture={picture}
         onPictureChange={onPictureChange}
         onStemChange={onStemChange}
+      />
+
+      <CodeInput
+        value={code}
+        onChange={onCodeChange}
+        onDisable={onCodeInputDisabled}
+        onEnable={onCodeInputEnable}
       />
 
       <div className='mt-6 space-y-3 w-full'>
@@ -71,13 +88,7 @@ export const SelectionQuestionEditorView = ({
         </RadioGroup>
 
         <div className='w-max mx-auto'>
-          <Button variant='ghost' onClick={onOptionAdd}>
-            <Icon
-              name='plus'
-              className='w-4 h-4 rounded-md bg-green-400 text-green-900'
-            />
-            Adicionar opção
-          </Button>
+          <AddItemButton onClick={onOptionAdd}>Adicionar opção</AddItemButton>
         </div>
       </div>
     </div>

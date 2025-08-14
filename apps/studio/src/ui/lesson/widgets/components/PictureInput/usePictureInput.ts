@@ -1,4 +1,4 @@
-import { useRef, useState, type RefObject } from 'react'
+import { useEffect, useRef, useState, type RefObject } from 'react'
 
 import type { StorageService } from '@stardust/core/storage/interfaces'
 import type { DialogRef } from '@/ui/shadcn/components/dialog'
@@ -68,6 +68,12 @@ export function usePictureInput({
     refetch()
     dialogRef.current?.close()
   }
+
+  useEffect(() => {
+    if (defaultPicture) {
+      setSelectedImage(defaultPicture)
+    }
+  }, [defaultPicture])
 
   return {
     images: data ? data.map((image) => Image.create(image)) : [],
