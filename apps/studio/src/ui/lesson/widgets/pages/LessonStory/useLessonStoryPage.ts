@@ -1,8 +1,10 @@
 import { useState } from 'react'
 
-import { Text, type Id } from '@stardust/core/global/structures'
 import type { LessonService } from '@stardust/core/lesson/interfaces'
+import { Text, type Id } from '@stardust/core/global/structures'
+
 import { useToast } from '@/ui/global/hooks/useToast'
+import { useActionButtonStore } from '@/ui/global/stores/ActionButtonStore'
 
 export function useLessonStoryPage(
   lessonService: LessonService,
@@ -10,48 +12,45 @@ export function useLessonStoryPage(
   defaultStory: string,
 ) {
   const [story, setStory] = useState(defaultStory)
-  const [isStorySaving, setIsStorySaving] = useState(false)
-  const [isStorySaved, setIsStorySaved] = useState(false)
-  const [canSaveStory, setCanSaveStory] = useState(false)
-  const [isStorySaveFailure, setIsStorySaveFailure] = useState(false)
+  const { useIsExecuting, useIsSuccessful, useIsFailure, useCanExecute } =
+    useActionButtonStore()
+  const { setIsExecuting } = useIsExecuting()
+  const { setIsSuccessful } = useIsSuccessful()
+  const { setIsFailure } = useIsFailure()
+  const { setCanExecute } = useCanExecute()
   const toast = useToast()
 
   function handleStoryChange(value: string) {
     setStory(value)
     if (value) {
-      setCanSaveStory(true)
+      setCanExecute(true)
     } else {
-      setCanSaveStory(false)
+      setCanExecute(false)
     }
 
-    setIsStorySaveFailure(false)
-    setIsStorySaved(false)
+    setIsFailure(false)
+    setIsSuccessful(false)
   }
 
   async function handleSaveButtonClick() {
-    setIsStorySaving(true)
+    setIsExecuting(true)
     const response = await lessonService.updateStory(starId, Text.create(story))
 
     if (response.isFailure) {
       toast.showError(response.errorMessage)
-      setIsStorySaveFailure(true)
+      setIsFailure(true)
     }
 
     if (response.isSuccessful) {
-      toast.showSuccess('História salva com sucesso')
-      setIsStorySaved(true)
+      setIsSuccessful(true)
     }
 
-    setCanSaveStory(false)
-    setIsStorySaving(false)
+    setCanExecute(false)
+    setIsExecuting(false)
   }
 
   return {
     story,
-    isStorySaving,
-    isStorySaved,
-    isStorySaveFailure,
-    canSaveStory,
     handleSaveButtonClick,
     handleStoryChange,
   }

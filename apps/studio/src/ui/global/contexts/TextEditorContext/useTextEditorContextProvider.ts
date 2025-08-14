@@ -27,7 +27,7 @@ export function useTextEditorContextProvider(
         cursorPosition.lineNumber,
       )
 
-      while (currentLineContent || currentLineContent === '----') {
+      while (currentLineContent) {
         lineNumber++
         const lineCount = textEditorRef.current.getLineCount()
 
@@ -37,6 +37,7 @@ export function useTextEditorContextProvider(
         }
 
         currentLineContent = textEditorRef.current.getLineContent(lineNumber)
+        if (currentLineContent === '----') break
       }
 
       textEditorRef.current.insertLineContent(lineNumber, newValue)

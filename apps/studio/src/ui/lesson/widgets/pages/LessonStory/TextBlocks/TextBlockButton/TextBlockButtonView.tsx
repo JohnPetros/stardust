@@ -1,7 +1,7 @@
 import type { PropsWithChildren, ReactNode } from 'react'
 
 import { Button } from '@/ui/shadcn/components/button'
-import { PictureInput } from './PictureInput'
+import { PictureInput } from '../../../../components/PictureInput'
 import type { Image } from '@stardust/core/global/structures'
 
 type Props = {
