@@ -44,8 +44,10 @@ export class SortableList {
 
   changeItemLabel(itemOriginalPosition: Integer, itemLabel: Text): SortableList {
     const itemIndex = this.getItemIndex(itemOriginalPosition)
-    this.items[itemIndex].label = itemLabel
-    return new SortableList(this.items)
+    const newItems = this.items.map((item, idx) =>
+      idx === itemIndex ? { ...item, label: itemLabel } : item,
+    )
+    return new SortableList(newItems)
   }
 
   getItemByPosition(position: Integer): Item {
