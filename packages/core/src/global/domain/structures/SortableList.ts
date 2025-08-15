@@ -1,9 +1,9 @@
 import type { Logical } from './Logical'
+import type { Integer } from './Integer'
+import type { Text } from './Text'
 import { List } from './List'
 import { ShuffledList } from './ShuffledList'
 import { AppError } from '../errors'
-import type { Integer } from './Integer'
-import type { Text } from './Text'
 
 type Item = {
   originalPosition: Integer
@@ -13,8 +13,8 @@ type Item = {
 export class SortableList {
   private constructor(readonly items: Item[]) {}
 
-  static create(items: Item[]): SortableList {
-    return new SortableList(ShuffledList.create(items).items)
+  static create(items: Item[], shuffle: boolean = true): SortableList {
+    return new SortableList(shuffle ? ShuffledList.create(items).items : items)
   }
 
   static isSoratableList(list: unknown): list is SortableList {
@@ -29,6 +29,23 @@ export class SortableList {
     if (!item) throw new Error()
     currentItems.splice(toIndex, 0, item)
     return new SortableList(currentItems)
+  }
+
+  addItem(item: Item): SortableList {
+    return new SortableList([...this.items, item])
+  }
+
+  removeItem(itemOriginalPosition: Integer): SortableList {
+    const currentItems = [...this.items]
+    const itemIndex = this.getItemIndex(itemOriginalPosition)
+    currentItems.splice(itemIndex, 1)
+    return new SortableList(currentItems)
+  }
+
+  changeItemLabel(itemOriginalPosition: Integer, itemLabel: Text): SortableList {
+    const itemIndex = this.getItemIndex(itemOriginalPosition)
+    this.items[itemIndex].label = itemLabel
+    return new SortableList(this.items)
   }
 
   getItemByPosition(position: Integer): Item {
