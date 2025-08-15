@@ -27,7 +27,7 @@ export const SortableItemView = ({ id, children, className, iconSize = 24 }: Pro
         {...attributes}
         {...listeners}
         className={cn(
-          'cursor-grab active:cursor-grabbing absolute top-1/2 -translate-y-1/2 z-10',
+          'cursor-grab active:cursor-grabbing absolute top-1/2 left-2 -translate-y-1/2 z-10',
           className,
         )}
       >

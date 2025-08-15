@@ -53,8 +53,30 @@ export class DragAndDropListQuestion extends Question<DragAndDropListQuestionPro
     return this.sortableList.isEqualTo(userAnswer.value)
   }
 
+  addItem(itemLabel: string): void {
+    this.sortableList = this.sortableList.addItem({
+      originalPosition: Integer.create(this.sortableList.items.length + 1),
+      label: Text.create(itemLabel),
+    })
+  }
+
+  removeItem(itemOriginalPosition: number): void {
+    this.sortableList = this.sortableList.removeItem(Integer.create(itemOriginalPosition))
+  }
+
+  changeItemLabel(itemOriginalPosition: number, itemLabel: string): void {
+    this.props.sortableList = this.sortableList.changeItemLabel(
+      Integer.create(itemOriginalPosition),
+      Text.create(itemLabel),
+    )
+  }
+
   get sortableList(): SortableList {
     return this.props.sortableList
+  }
+
+  set sortableList(sortableList: SortableList) {
+    this.props.sortableList = sortableList
   }
 
   get dto(): DragAndDropListQuestionDto {

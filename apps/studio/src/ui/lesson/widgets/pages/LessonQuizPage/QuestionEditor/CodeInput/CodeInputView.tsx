@@ -25,7 +25,7 @@ export const CodeInputView = ({
       <div className='flex items-center gap-3'>
         {isEnabled && (
           <div className='flex items-center'>
-            <h3>trecho de código</h3>
+            <h3>Trecho de código</h3>
             <Button onClick={onDisableButtonClick} size='icon' variant='ghost'>
               <Icon name='trash' className='w-4 h-4' />
             </Button>
