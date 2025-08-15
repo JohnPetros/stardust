@@ -41,16 +41,47 @@ export class CheckboxQuestion extends Question<CheckboxQuestionProps> {
 
   verifyUserAnswer(userAnswer: UserAnswer): Logical {
     const usersOptions = List.create(userAnswer.value as string[])
-    const l = usersOptions.isEqualTo(this.props.correctOptions)
-    return l
+    return usersOptions.isEqualTo(this.props.correctOptions)
+  }
+
+  addOption(option: string): void {
+    this.props.options = this.props.options.add(option)
+  }
+
+  removeOption(optionIndex: number): void {
+    this.props.options = this.props.options.remove(optionIndex)
+  }
+
+  changeOption(optionIndex: number, option: string) {
+    this.props.options = this.props.options.change(optionIndex, option)
+  }
+
+  changeCorrectOption(option: string): void {
+    if (this.props.correctOptions.items.includes(option)) {
+      this.props.correctOptions = this.props.correctOptions.remove(option)
+    } else {
+      this.props.correctOptions = this.props.correctOptions.add(option)
+    }
+  }
+
+  removeCode(): void {
+    this.props.code = undefined
   }
 
   get options() {
     return this.props.options.items
   }
 
-  get code() {
-    return this.props.code ?? null
+  get correctOptions() {
+    return this.props.correctOptions.items
+  }
+
+  get code(): string | undefined {
+    return this.props.code
+  }
+
+  set code(code: string) {
+    this.props.code = code
   }
 
   get dto(): CheckboxQuestionDto {

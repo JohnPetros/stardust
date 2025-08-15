@@ -1,30 +1,22 @@
 import { TextEditor } from '@/ui/global/widgets/components/textEditor'
 import { TextEditorContextProvider } from '@/ui/global/contexts/TextEditorContext'
 import { Mdx } from '@/ui/global/widgets/components/Mdx'
-import { Header } from './Header'
-import { TextBlocks } from './TextBlocks'
 import { ActionButton } from '@/ui/global/widgets/components/ActionButton'
 import type { ActionButtonTitles } from '@/ui/global/widgets/components/ActionButton/types'
+import { Header } from './Header'
+import { TextBlocks } from './TextBlocks'
 
 type Props = {
   story: string
   editorHeight: number
+  isStorySaveDisabled: boolean
   onStoryChange: (story: string) => void
   onStorySave: () => Promise<void>
-  isStorySaving: boolean
-  canSaveStory: boolean
-  isStorySaved: boolean
-  isStorySaveFailure: boolean
-  isStorySaveDisabled: boolean
 }
 
 export const LessonStoryPageView = ({
   story,
   editorHeight,
-  isStorySaving,
-  canSaveStory,
-  isStorySaved,
-  isStorySaveFailure,
   isStorySaveDisabled,
   onStoryChange,
   onStorySave,
@@ -44,10 +36,6 @@ export const LessonStoryPageView = ({
           <ActionButton
             type='button'
             titles={ACTION_BUTTON_TITLES}
-            isExecuting={isStorySaving}
-            canExecute={canSaveStory}
-            isSuccess={isStorySaved}
-            isFailure={isStorySaveFailure}
             isDisabled={isStorySaveDisabled}
             onExecute={onStorySave}
             icon='edition'

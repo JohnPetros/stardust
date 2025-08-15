@@ -20,10 +20,11 @@ export const QuestionHeaderInputView = ({
 }: Props) => {
   return (
     <div className='flex flex-col gap-4'>
-      <Label>Comando da questão</Label>
+      <Label htmlFor='question-stem-input'>Comando da questão</Label>
       <div className='flex items-center gap-4'>
         <PictureInput onChange={onPictureChange} defaultPicture={picture} />
         <Input
+          id='question-stem-input'
           placeholder='Enunciado da questão'
           value={stem}
           onChange={(event) => onStemChange(Text.create(event.target.value))}
