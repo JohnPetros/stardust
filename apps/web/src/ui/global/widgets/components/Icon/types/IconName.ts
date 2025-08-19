@@ -49,6 +49,7 @@ export type IconName =
   | 'divider'
   | 'terminal'
   | 'link'
+  | 'edit'
   | 'target'
   | 'rate'
   | 'checked'

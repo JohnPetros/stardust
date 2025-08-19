@@ -26,14 +26,15 @@ export const CraftsTableView = ({
 }: Props) => {
   return (
     <div className='flex flex-col gap-6'>
-      {isAccountUser && activeTabContent === 'challengesListTab' && (
+      {/* Temporariamente desativado */}
+      {/* {isAccountUser && activeTabContent === 'challengesListTab' && (
         <Link href={ROUTES.challenging.challenge()}>
           <Button className='w-64 gap-2'>
             <Icon name='plus-circle' size={16} className='text-gray-900' weight='bold' />
             Postar um desafio
           </Button>
         </Link>
-      )}
+      )} */}
 
       <TabsGroup
         userId={userId}
