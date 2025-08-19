@@ -70,7 +70,7 @@ import {
   TerminalWindow,
   Article,
 } from '@phosphor-icons/react/dist/ssr'
-import type { Icon } from '@phosphor-icons/react'
+import { NotePencil, type Icon } from '@phosphor-icons/react'
 
 import type { IconName } from '../types/IconName'
 
@@ -119,6 +119,7 @@ export const ICONS: Record<IconName, Icon> = {
   planet: Planet,
   check: Check,
   smile: Smiley,
+  edit: NotePencil,
   checked: CheckCircle,
   code: Code,
   tag: Tag,

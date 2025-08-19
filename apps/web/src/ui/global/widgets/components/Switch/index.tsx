@@ -6,11 +6,12 @@ import { twMerge } from 'tailwind-merge'
 import { useSwitch } from './useSwitch'
 
 type SwitchProps = {
-  label: string
+  label?: string
   name?: string
   value?: string
   defaultCheck?: boolean
   isDisabled?: boolean
+  className?: string
   onCheck: (isChecked: boolean) => void
 }
 
@@ -21,6 +22,7 @@ export function Switch({
   value,
   defaultCheck = false,
   isDisabled = false,
+  className,
 }: SwitchProps) {
   const { isChecked, handleCheckChange } = useSwitch(defaultCheck, onCheck)
   const id = useId()
@@ -30,17 +32,20 @@ export function Switch({
       className={twMerge(
         'flex items-center justify-center gap-1 px-3 py-2 border border-gray-500 rounded-full',
         isDisabled ? 'pointer-events-none' : '',
+        className,
       )}
     >
-      <label
-        htmlFor={id}
-        className={twMerge(
-          'cursor-pointer text-sm text-gray-100',
-          isChecked ? 'opacity-1' : 'opacity-50',
-        )}
-      >
-        {label}
-      </label>
+      {label && (
+        <label
+          htmlFor={id}
+          className={twMerge(
+            'cursor-pointer text-sm text-gray-100',
+            isChecked ? 'opacity-1' : 'opacity-50',
+          )}
+        >
+          {label}
+        </label>
+      )}
 
       <Root
         id={id}
@@ -53,7 +58,7 @@ export function Switch({
         <Thumb
           className={twMerge(
             'block size-4 rounded-full transition-transform',
-            isChecked ? 'translate-x-4 bg-green-400' : 'bg-green-700',
+            isChecked ? 'translate-x-4 bg-green-400' : 'bg-green-800',
           )}
         />
       </Root>
