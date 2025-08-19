@@ -2,7 +2,7 @@ import type { UserDto } from '@stardust/core/profile/entities/dtos'
 
 import { AvatarSelect } from './AvatarSelect'
 import { NameInput } from './NameInput'
-import { EmailImput } from './EmailImput'
+import { EmailInput } from './EmailInput'
 import { PasswordInput } from './PasswordInput'
 import { Setting } from './Setting'
 
@@ -22,7 +22,7 @@ export const SettingsPageView = ({ userDto }: Props) => {
       </div>
 
       <div className='mt-6'>
-        <EmailImput value={userDto.email} />
+        <EmailInput value={userDto.email} />
       </div>
 
       <div className='mt-6'>
@@ -33,7 +33,7 @@ export const SettingsPageView = ({ userDto }: Props) => {
 
       <div className='mt-6'>
         <Setting label='Efeitos sonoros' onCheck={() => {}} className='rounded-b-none' />
-        <Setting label='Efeitos sonoros' onCheck={() => {}} className='rounded-t-none' />
+        <Setting label='Notificações' onCheck={() => {}} className='rounded-t-none' />
       </div>
     </main>
   )

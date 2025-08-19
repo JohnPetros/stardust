@@ -4,7 +4,7 @@ type Props = {
   value: string
 }
 
-export const EmailImputView = ({ value }: Props) => {
+export const EmailInputView = ({ value }: Props) => {
   return (
     <div className='grid grid-cols-3 border-b border-gray-700 py-4'>
       <label htmlFor='name' className='text-sm text-gray-100'>

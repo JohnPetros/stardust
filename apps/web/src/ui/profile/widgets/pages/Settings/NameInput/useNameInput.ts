@@ -19,11 +19,8 @@ export function useNameInput(profileService: ProfileService, defaultValue: strin
   }
 
   function handleChange(value: string) {
-    // setValue(value)
+    setValue(value)
   }
-
-  console.log(defaultValue)
-  console.log(value)
 
   return {
     isEditing,

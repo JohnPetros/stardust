@@ -1,9 +1,9 @@
-import { EmailImputView } from './EmailImputView'
+import { EmailInputView } from './EmailInputView'
 
 type Props = {
   value: string
 }
 
-export const EmailImput = ({ value }: Props) => {
-  return <EmailImputView value={value} />
+export const EmailInput = ({ value }: Props) => {
+  return <EmailInputView value={value} />
 }
