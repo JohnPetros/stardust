@@ -5,6 +5,7 @@ import { NameInput } from './NameInput'
 import { EmailInput } from './EmailInput'
 import { PasswordInput } from './PasswordInput'
 import { Preferences } from './Preferences'
+import { GoToProfilePageLink } from './GoToProfilePageLink'
 
 type Props = {
   userDto: UserDto
@@ -13,6 +14,8 @@ type Props = {
 export const SettingsPageView = ({ userDto }: Props) => {
   return (
     <main className='mx-auto max-w-sm px-6 pb-32 pt-8 md:max-w-5xl md:pb-12'>
+      <GoToProfilePageLink />
+
       <div className='w-max mx-auto -translate-x-6'>
         <AvatarSelect defaultValue={userDto.avatar} />
       </div>
