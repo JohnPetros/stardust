@@ -12,6 +12,9 @@ export const COOKIES = {
     key: `${APP_PREFIX}:refresh-token`,
     durationInSeconds: 60 * 60 * 24, // 1 day
   },
+  isAudioDisabled: {
+    key: `${APP_PREFIX}:is-audio-disabled`,
+  },
   keys: {
     rewardingPayload: `${APP_PREFIX}:rewarding-payload`,
     challengePanelsOffset: `${APP_PREFIX}:challenge-panels-offset`,
