@@ -346,6 +346,10 @@ export class User extends Entity<UserProps> {
     return this.props.name
   }
 
+  set name(name: Name) {
+    this.props.name = name
+  }
+
   get coins() {
     return this.props.coins
   }

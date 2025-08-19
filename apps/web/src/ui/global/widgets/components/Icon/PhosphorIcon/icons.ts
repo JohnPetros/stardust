@@ -66,11 +66,12 @@ import {
   Code,
   Minus,
   Flag,
+  NotePencil,
   Cloud,
   TerminalWindow,
   Article,
 } from '@phosphor-icons/react/dist/ssr'
-import { NotePencil, type Icon } from '@phosphor-icons/react'
+import type { Icon } from '@phosphor-icons/react'
 
 import type { IconName } from '../types/IconName'
 

@@ -1,5 +1,6 @@
 type Props = {
   value: string
+  errorMessage: string
   isEditing: boolean
   onChange: (value: string) => void
   onEditButtonClick: () => void
@@ -9,6 +10,7 @@ type Props = {
 
 export const NameInputView = ({
   value,
+  errorMessage,
   isEditing,
   onChange,
   onEditButtonClick,
@@ -21,32 +23,37 @@ export const NameInputView = ({
         Nome
       </label>
 
-      {!isEditing && (
-        <input
-          type='text'
-          className='text-gray-400 bg-transparent border-none outline-none'
-          value={value}
-          readOnly
-        />
-      )}
+      <div>
+        {!isEditing && (
+          <input
+            type='text'
+            className='text-gray-400 bg-transparent border-none outline-none'
+            value={value}
+            readOnly
+          />
+        )}
 
-      {isEditing && (
-        <input
-          type='text'
-          className='text-gray-400 bg-transparent border-none outline-none'
-          value={value}
-          autoFocus
-          onChange={(event) => onChange(event.target.value)}
-        />
-      )}
+        {isEditing && (
+          <input
+            type='text'
+            className='text-gray-400 bg-transparent border-none outline-none'
+            value={value}
+            autoFocus
+            onChange={(event) => onChange(event.target.value)}
+          />
+        )}
+
+        {errorMessage && <p className='absolute text-sm text-red-400'>{errorMessage}</p>}
+      </div>
 
       <div className='flex justify-end gap-2'>
         {isEditing && (
           <div className='flex flex-col items-center'>
             <button
               type='button'
+              disabled={Boolean(errorMessage)}
               onClick={onSaveButtonClick}
-              className='text-sm text-green-400'
+              className='text-sm text-green-400 disabled:opacity-50 disabled:cursor-not-allowed'
             >
               Salvar
             </button>
