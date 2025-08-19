@@ -25,8 +25,6 @@ export const SwitchView = ({
 }: Props) => {
   const id = useId()
 
-  console.log('defaultChecked', { defaultChecked })
-
   return (
     <div
       className={twMerge(

@@ -10,8 +10,6 @@ export function useSwitch(defaultCheck: boolean, onCheck: (isChecked: boolean) =
     onCheck(isChecked)
   }
 
-  console.log('isChecked', { isChecked })
-
   return {
     isChecked,
     handleCheckChange,

@@ -46,7 +46,7 @@ export function QuizStage({ leaveLesson }: QuizProps) {
               <QuestionContainer id={question.id.value}>
                 <SelectionQuestion
                   stem={question.stem.value}
-                  options={question.options.items}
+                  options={question.options}
                   code={question.code ?? null}
                   picture={question.picture.value}
                 />
