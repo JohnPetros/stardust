@@ -5,7 +5,7 @@ export class ShuffledList<Item> {
 
   static create<Item>(items: Item[], shouldShuffle: boolean = true) {
     if (items.length === 0) {
-      return new ShuffledList([])
+      return new ShuffledList([] as Item[])
     }
 
     if (!shouldShuffle) {
