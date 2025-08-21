@@ -5,10 +5,11 @@ import { Switch } from '@/ui/global/widgets/components/Switch'
 type Props = {
   label: string
   className?: string
+  defaultChecked: boolean
   onCheck: (isChecked: boolean) => void
 }
 
-export const SettingView = ({ label, className, onCheck }: Props) => {
+export const PreferenceView = ({ label, className, defaultChecked, onCheck }: Props) => {
   return (
     <div
       className={twMerge(
@@ -20,7 +21,11 @@ export const SettingView = ({ label, className, onCheck }: Props) => {
         {label}
       </label>
 
-      <Switch onCheck={onCheck} className='w-max border-gray-700' />
+      <Switch
+        defaultCheck={defaultChecked}
+        onCheck={onCheck}
+        className='w-max border-gray-700'
+      />
     </div>
   )
 }

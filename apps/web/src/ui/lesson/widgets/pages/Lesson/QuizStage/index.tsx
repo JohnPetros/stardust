@@ -47,7 +47,7 @@ export function QuizStage({ leaveLesson }: QuizProps) {
                 <SelectionQuestion
                   stem={question.stem.value}
                   options={question.options}
-                  code={question.code}
+                  code={question.code ?? null}
                   picture={question.picture.value}
                 />
               </QuestionContainer>
@@ -58,7 +58,7 @@ export function QuizStage({ leaveLesson }: QuizProps) {
                 <CheckboxQuestion
                   stem={question.stem.value}
                   options={question.options}
-                  code={question.code}
+                  code={question.code ?? null}
                   picture={question.picture.value}
                 />
               </QuestionContainer>

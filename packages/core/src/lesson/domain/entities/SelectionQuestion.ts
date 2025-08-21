@@ -59,8 +59,8 @@ export class SelectionQuestion extends Question<SelectionQuestionProps> {
     this.props.code = undefined
   }
 
-  get options(): ShuffledList<string> {
-    return this.props.options
+  get options(): string[] {
+    return this.props.options.items
   }
 
   set options(options: string[]) {
@@ -89,7 +89,7 @@ export class SelectionQuestion extends Question<SelectionQuestionProps> {
       type: 'selection',
       stem: this.stem.value,
       picture: this.picture.value,
-      options: this.options.items,
+      options: this.options,
       answer: this.answer,
       code: this.code ?? undefined,
     }

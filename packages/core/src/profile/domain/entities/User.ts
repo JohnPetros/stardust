@@ -348,6 +348,7 @@ export class User extends Entity<UserProps> {
 
   set name(name: Name) {
     this.props.name = name
+    this.props.slug = name.slug
   }
 
   get coins() {

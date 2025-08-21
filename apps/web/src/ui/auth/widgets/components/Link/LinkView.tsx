@@ -2,7 +2,7 @@ import NextLink from 'next/link'
 import type { ReactNode } from 'react'
 
 type Props = {
-  testId: string
+  testId?: string
   children: ReactNode
   href: string
 }

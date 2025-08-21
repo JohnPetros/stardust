@@ -1,11 +1,9 @@
 'use client'
-import { useId } from 'react'
-import { Root, Thumb } from '@radix-ui/react-switch'
-import { twMerge } from 'tailwind-merge'
 
 import { useSwitch } from './useSwitch'
+import { SwitchView } from './SwitchView'
 
-type SwitchProps = {
+type Props = {
   label?: string
   name?: string
   value?: string
@@ -15,7 +13,7 @@ type SwitchProps = {
   onCheck: (isChecked: boolean) => void
 }
 
-export function Switch({
+export const Switch = ({
   onCheck,
   label,
   name,
@@ -23,45 +21,19 @@ export function Switch({
   defaultCheck = false,
   isDisabled = false,
   className,
-}: SwitchProps) {
+}: Props) => {
   const { isChecked, handleCheckChange } = useSwitch(defaultCheck, onCheck)
-  const id = useId()
 
   return (
-    <div
-      className={twMerge(
-        'flex items-center justify-center gap-1 px-3 py-2 border border-gray-500 rounded-full',
-        isDisabled ? 'pointer-events-none' : '',
-        className,
-      )}
-    >
-      {label && (
-        <label
-          htmlFor={id}
-          className={twMerge(
-            'cursor-pointer text-sm text-gray-100',
-            isChecked ? 'opacity-1' : 'opacity-50',
-          )}
-        >
-          {label}
-        </label>
-      )}
-
-      <Root
-        id={id}
-        name={name}
-        value={value}
-        checked={isChecked}
-        onCheckedChange={handleCheckChange}
-        className='h-4 w-8 rounded-lg bg-gray-600'
-      >
-        <Thumb
-          className={twMerge(
-            'block size-4 rounded-full transition-transform',
-            isChecked ? 'translate-x-4 bg-green-400' : 'bg-green-800',
-          )}
-        />
-      </Root>
-    </div>
+    <SwitchView
+      label={label}
+      name={name}
+      value={value}
+      isDisabled={isDisabled}
+      className={className}
+      isChecked={isChecked}
+      defaultChecked={defaultCheck}
+      onCheck={handleCheckChange}
+    />
   )
 }

@@ -1,20 +1,35 @@
-import { useCallback } from 'react'
+import { useMemo, useState } from 'react'
 
-import type { AudioFile } from './types'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { COOKIES } from '@/constants'
+import type { AudioContextValue, AudioFile } from './types'
+import { useCookieActions } from '../../hooks/useCookieActions'
 
-export function useAudioContextProvider() {
-  const { user } = useAuthContext()
+export function useAudioContextProvider(isDefaultAudioDisabled: boolean) {
+  const { setCookie, deleteCookie } = useCookieActions()
+  const [isAudioDisabled, setIsAudioDisabled] = useState(isDefaultAudioDisabled)
 
-  const playAudio = useCallback(
-    (audioFile: AudioFile) => {
-      if (!user) return
+  const contextValue: AudioContextValue = useMemo(() => {
+    function playAudio(audioFile: AudioFile) {
+      if (isAudioDisabled) return
       new Audio(`/audios/${audioFile}`).play()
-    },
-    [user],
-  )
+    }
 
-  return {
-    playAudio,
-  }
+    async function toggleAudioDisability() {
+      if (isAudioDisabled) {
+        await deleteCookie(COOKIES.isAudioDisabled.key)
+        setIsAudioDisabled(true)
+      } else {
+        await setCookie({ key: COOKIES.isAudioDisabled.key, value: 'true' })
+        setIsAudioDisabled(false)
+      }
+    }
+
+    return {
+      isAudioDisabled,
+      playAudio,
+      toggleAudioDisability,
+    }
+  }, [isAudioDisabled, setCookie, deleteCookie])
+
+  return contextValue
 }
