@@ -1,6 +1,7 @@
 import type { Id, Text } from '@stardust/core/global/structures'
 import type { LessonService as ILessonService } from '@stardust/core/lesson/interfaces'
 import type { RestClient } from '@stardust/core/global/interfaces'
+import type { Question } from '@stardust/core/lesson/abstracts'
 
 export const LessonService = (restClient: RestClient): ILessonService => {
   return {
@@ -18,6 +19,12 @@ export const LessonService = (restClient: RestClient): ILessonService => {
 
     async updateStory(starId: Id, story: Text) {
       return await restClient.put(`/lesson/stories/star/${starId.value}`, { story })
+    },
+
+    async updateQuestions(starId: Id, questions: Question[]) {
+      return await restClient.put(`/lesson/questions/star/${starId.value}`, {
+        questions: questions.map((question) => question.dto),
+      })
     },
   }
 }

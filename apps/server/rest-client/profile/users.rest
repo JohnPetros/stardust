@@ -145,7 +145,7 @@ POST {{URL}}/comments/da7989c8-1123-4e65-ad19-79073a58bee6/upvote
 Authorization: Bearer {{JWT}}
 
 ### Verify user name in use
-GET {{URL}}/verify-name-in-use?name=ctrl
+GET {{URL}}/verify-name-in-use?name=neila
 
 ### Verify user email in use
 GET {{URL}}/verify-email-in-use?email=johndoe@example.com

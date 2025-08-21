@@ -32,6 +32,6 @@ export class Name {
 
   get slug() {
     const nameWithoutAccentuation = this.removeAccentuation()
-    return Slug.create(nameWithoutAccentuation.value).value
+    return Slug.create(nameWithoutAccentuation.value)
   }
 }
