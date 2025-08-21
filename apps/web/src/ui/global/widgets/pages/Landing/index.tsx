@@ -7,6 +7,7 @@ import { AchievementsSection } from './AchievementsSection'
 import { HeroSection } from './HeroSection'
 import { ShopSection } from './ShopSection'
 import { RankingSection } from './RankingSection'
+import { SponsorsSection } from './SponsorsSection'
 
 export function LandingPage() {
   return (
@@ -20,6 +21,7 @@ export function LandingPage() {
         <RankingSection />
         <ShopSection />
         <AchievementsSection />
+        <SponsorsSection />
         <CallToActionSection />
       </div>
     </div>
