@@ -10,7 +10,7 @@ export const SponsorsSectionView = () => {
         <a
           href='https://designliquido.com.br'
           target='_blank'
-          rel='noopener noreferrer'
+          rel='noopener'
           className='block relative md:w-[500px] md:h-[105px] w-[300px] h-[65px]'
         >
           <Image src='/images/design-liquido-logo.png' alt='Design Líquido' fill />
