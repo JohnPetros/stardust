@@ -1,13 +1,14 @@
-import type { ReactNode } from 'react'
+import type { PropsWithChildren } from 'react'
+import { twMerge } from 'tailwind-merge'
 import { DialogTrigger as Trigger } from '@radix-ui/react-dialog'
 
-type DialogTriggerProps = {
-  children: ReactNode
+type Props = {
+  className?: string
 }
 
-export function DialogTrigger({ children }: DialogTriggerProps) {
+export function DialogTrigger({ children, className }: PropsWithChildren<Props>) {
   return (
-    <Trigger asChild className='w-full'>
+    <Trigger asChild className={twMerge('w-full', className)}>
       {children}
     </Trigger>
   )

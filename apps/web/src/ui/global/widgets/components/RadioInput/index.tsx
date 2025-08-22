@@ -5,6 +5,7 @@ import { useRangeInput } from './useRangeInput'
 
 type RangeInputProps = {
   value: number
+  id?: string
   min?: number
   max?: number
   step: number
@@ -13,6 +14,7 @@ type RangeInputProps = {
 
 export function RangeInput({
   value,
+  id,
   min = 10,
   max = 20,
   step,
@@ -25,8 +27,9 @@ export function RangeInput({
 
   return (
     <div className='z-50 flex h-2 w-36 items-center gap-3'>
-      <strong className='text-gray-100'>{currentValue}</strong>
+      <strong className='text-gray-100 w-10'>{currentValue}</strong>
       <Slider.Root
+        id={id}
         defaultValue={[currentValue]}
         min={min}
         max={max}
