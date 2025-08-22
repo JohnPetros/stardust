@@ -18,16 +18,12 @@ const contentStyles = tv({
   },
 })
 
-type ContentProps = {
+type Props = {
   hasAnimation: boolean
   children: string | ReactNode
-}
+} & VariantProps<typeof contentStyles>
 
-export function Content({
-  type,
-  children,
-  hasAnimation = false,
-}: ContentProps & VariantProps<typeof contentStyles>) {
+export const ContentView = ({ type, children, hasAnimation = false }: Props) => {
   const content = Array.isArray(children)
     ? children
         .map((child) =>
