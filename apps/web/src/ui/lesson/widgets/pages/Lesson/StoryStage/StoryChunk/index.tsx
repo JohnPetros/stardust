@@ -1,27 +1,23 @@
 'use client'
 
-import React, { memo } from 'react'
+import { memo } from 'react'
 
-import { Mdx } from '@/ui/global/widgets/components/Mdx'
 import { useStoryChunk } from './useStoryChunk'
+import { StoryChunkView } from './StoryChunkView'
 
-type StoryChunkProps = {
+type Props = {
   value: string
   hasAnimation: boolean
   shouldMemoized: boolean
 }
 
-function MemoizedStoryChunk({ value, hasAnimation }: StoryChunkProps) {
+const Widget = ({ value, hasAnimation }: Props) => {
   const { storyChunkRef, animatedChunk } = useStoryChunk(value, hasAnimation)
 
-  return (
-    <div ref={storyChunkRef} className='w-full'>
-      <Mdx>{animatedChunk}</Mdx>
-    </div>
-  )
+  return <StoryChunkView ref={storyChunkRef} chunk={animatedChunk} />
 }
 
-export const StoryChunk = memo(MemoizedStoryChunk, (_, currentProps) => {
-  const isCodeComponent = currentProps.value.slice(0, 5) === '<Code'
-  return currentProps.shouldMemoized || isCodeComponent
+export const StoryChunk = memo(Widget, (_, currentProps) => {
+  const isCodeWidget = currentProps.value.slice(0, 5) === '<Code'
+  return currentProps.shouldMemoized || isCodeWidget
 })

@@ -1,5 +1,3 @@
-'use client'
-
 import { useEffect, useRef } from 'react'
 
 export function useStoryChunk(chunk: string, hasAnimation: boolean) {

@@ -43,7 +43,7 @@ export function useLessonPage(
     const textBlocks = textsBlocksDto.map(TextBlock.create)
     setStory(
       Story.create(
-        storyContent ? storyContent.split('---') : parseTextBlocksToMdx(textBlocks),
+        storyContent ? storyContent.split('----') : parseTextBlocksToMdx(textBlocks),
       ),
     )
     setQuiz(Quiz.create(questionsDto))
