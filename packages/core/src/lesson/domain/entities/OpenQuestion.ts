@@ -40,6 +40,57 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
     return this.answers.isStrictlyEqualTo(usersAnswers)
   }
 
+  addCodeLine() {
+    const lineNumber = this.codeLines.length
+
+    this.props.codeLines = [
+      ...this.codeLines,
+      QuestionCodeLine.create({
+        number: lineNumber,
+        indentation: 0,
+        texts: [`linha ${lineNumber}`],
+      }),
+    ]
+  }
+
+  removeCodeLine(lineNumber: number) {
+    this.props.codeLines = this.codeLines.filter(
+      (line) => line.number.value !== lineNumber,
+    )
+  }
+
+  changeCodeLineText(lineNumber: number, text: string, textIndex: number): void {
+    this.props.codeLines = this.codeLines.map((line) =>
+      line.number.value === lineNumber ? line.changeText(text, textIndex) : line,
+    )
+  }
+
+  changeCodeLineIndentation(lineNumber: number, indentation: number) {
+    this.props.codeLines = this.codeLines.map((line) =>
+      line.number.value === lineNumber ? line.changeIndentation(indentation) : line,
+    )
+  }
+
+  changeAnswer(answer: string, index: number) {
+    this.props.answers = this.answers.changeItem(answer, index)
+  }
+
+  addCodeLineText(lineNumber: number, index: number) {
+    this.props.codeLines = this.codeLines.map((line) =>
+      line.number.value === lineNumber ? line.addText('texto', index) : line,
+    )
+  }
+
+  addCodeLineInput(lineNumber: number, index: number) {
+    this.props.codeLines = this.codeLines.map((line) =>
+      line.number.value === lineNumber ? line.addText('input', index) : line,
+    )
+  }
+
+  removeCode(): void {
+    this.props.code = undefined
+  }
+
   get answers(): List<string> {
     return this.props.answers
   }
@@ -48,8 +99,16 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
     return this.props.codeLines
   }
 
-  get code(): string | null {
-    return this.props.code ?? null
+  set codeLines(codeLines: QuestionCodeLine[]) {
+    this.props.codeLines = codeLines
+  }
+
+  get code(): string | undefined {
+    return this.props.code
+  }
+
+  set code(code: string) {
+    this.props.code = code
   }
 
   get dto(): OpenQuestionDto {
