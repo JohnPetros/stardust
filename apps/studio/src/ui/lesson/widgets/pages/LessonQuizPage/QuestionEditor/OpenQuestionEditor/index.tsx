@@ -18,11 +18,20 @@ export const OpenQuestionEditor = () => {
     handleCodeInputDisabled,
     handleCodeLineTextChange,
     handleCodeLineInputChange,
-    handleDeleteCodeLine,
+    handleRemoveCodeLine,
     handleCodeLineIndentationChange,
     handleDragEnd,
     handleAddCodeLine,
+    handleRemoveCodeLineBlock,
+    handleReplaceCodeLineBlockWithText,
+    handleReplaceCodeLineBlockWithInput,
   } = useOpenQuestionEditor(question, replaceSelectedQuestion)
+
+  console.log(
+    'codeLines',
+    codeLines.map((line) => line.value.texts),
+  )
+  console.log('answers', question.answers.items)
 
   return (
     <OpenQuestionEditorView
@@ -40,9 +49,12 @@ export const OpenQuestionEditor = () => {
       onCodeInputDisabled={handleCodeInputDisabled}
       onCodeLineTextChange={handleCodeLineTextChange}
       onCodeLineInputChange={handleCodeLineInputChange}
-      onDeleteCodeLine={handleDeleteCodeLine}
+      onRemoveCodeLine={handleRemoveCodeLine}
       onCodeLineIndentationChange={handleCodeLineIndentationChange}
+      onRemoveCodeLineBlock={handleRemoveCodeLineBlock}
       onAddCodeLine={handleAddCodeLine}
+      onReplaceCodeLineBlockWithText={handleReplaceCodeLineBlockWithText}
+      onReplaceCodeLineBlockWithInput={handleReplaceCodeLineBlockWithInput}
       onDragEnd={handleDragEnd}
     />
   )

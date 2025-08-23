@@ -38,13 +38,13 @@ export const useOpenQuestionEditor = (
     replaceSelectedQuestion(question)
   }
 
-  function handleAddCodeLineText(lineNumber: number, textIndex: number) {
-    question.addCodeLineText(lineNumber, textIndex)
+  function handleAddCodeLineText(lineNumber: number, codeLineTextIndex: number) {
+    question.addCodeLineText(lineNumber, codeLineTextIndex)
     replaceSelectedQuestion(question)
   }
 
-  function handleAddCodeLineInput(lineNumber: number, textIndex: number) {
-    question.addCodeLineInput(lineNumber, textIndex)
+  function handleAddCodeLineInput(lineNumber: number, codeLineInputIndex: number) {
+    question.addCodeLineInput(lineNumber, codeLineInputIndex)
     replaceSelectedQuestion(question)
   }
 
@@ -63,13 +63,28 @@ export const useOpenQuestionEditor = (
     replaceSelectedQuestion(question)
   }
 
-  function handleDeleteCodeLine(lineNumber: number) {
+  function handleRemoveCodeLine(lineNumber: number) {
     question.removeCodeLine(lineNumber)
+    replaceSelectedQuestion(question)
+  }
+
+  function handleRemoveCodeLineBlock(lineNumber: number, blockIndex: number) {
+    question.removeCodeLineBlock(lineNumber, blockIndex)
     replaceSelectedQuestion(question)
   }
 
   function handleCodeLineIndentationChange(lineNumber: number, indentation: number) {
     question.changeCodeLineIndentation(lineNumber, indentation)
+    replaceSelectedQuestion(question)
+  }
+
+  function handleReplaceCodeLineBlockWithText(lineNumber: number, blockIndex: number) {
+    question.replaceCodeLineBlockWithText(lineNumber, blockIndex)
+    replaceSelectedQuestion(question)
+  }
+
+  function handleReplaceCodeLineBlockWithInput(lineNumber: number, blockIndex: number) {
+    question.replaceCodeLineBlockWithInput(lineNumber, blockIndex)
     replaceSelectedQuestion(question)
   }
 
@@ -93,9 +108,12 @@ export const useOpenQuestionEditor = (
     handleCodeInputDisabled,
     handleCodeLineTextChange,
     handleCodeLineInputChange,
-    handleDeleteCodeLine,
+    handleRemoveCodeLine,
     handleCodeLineIndentationChange,
     handleAddCodeLine,
+    handleRemoveCodeLineBlock,
+    handleReplaceCodeLineBlockWithText,
+    handleReplaceCodeLineBlockWithInput,
     handleDragEnd,
   }
 }
