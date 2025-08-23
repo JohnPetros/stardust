@@ -23,7 +23,7 @@ export const SelectionQuestionEditor = () => {
     <SelectionQuestionEditorView
       stem={question.stem.value}
       picture={question.picture}
-      options={question.options.items}
+      options={question.options}
       answer={question.answer}
       code={question.code}
       onCodeChange={handleCodeInputChange}

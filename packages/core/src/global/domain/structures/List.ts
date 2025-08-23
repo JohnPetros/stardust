@@ -23,26 +23,39 @@ export class List<Item> {
     return new List(this.items)
   }
 
+  addAt(item: Item, index: number) {
+    this.items.splice(index, 0, item)
+    return new List(this.items)
+  }
+
   remove(item: Item) {
     const items = this.items.filter((currentItem) => currentItem !== item)
     return new List(items)
   }
 
   swap(item1: Item, item2: Item) {
-    const item1Index = this.items.indexOf(item1);
-    const item2Index = this.items.indexOf(item2);
-  
-    const items = [...this.items];
-  
+    const item1Index = this.items.indexOf(item1)
+    const item2Index = this.items.indexOf(item2)
+
+    const items = [...this.items]
+
     if (item1Index === -1 || item2Index === -1) {
-      return new List(items);
+      return new List(items)
     }
-  
-    const temp = items[item1Index];
-    items[item1Index] = items[item2Index];
-    items[item2Index] = temp;
-  
-    return new List(items);
+
+    const temp = items[item1Index]
+    items[item1Index] = items[item2Index]
+    items[item2Index] = temp
+
+    return new List(items)
+  }
+
+  changeItem(item: Item, index: number) {
+    if (!item) return new List(this.items)
+
+    const items = [...this.items]
+    items[index] = item
+    return new List(items)
   }
 
   becomeEmpty() {

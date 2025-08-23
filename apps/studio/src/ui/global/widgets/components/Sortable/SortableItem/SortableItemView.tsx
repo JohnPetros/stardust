@@ -21,8 +21,8 @@ export const SortableItemView = ({ id, children, className, iconSize = 24 }: Pro
   }
 
   return (
-    <div ref={setNodeRef} style={style} className='relative'>
-      <div>{children}</div>
+    <div ref={setNodeRef} style={style} className='flex relative items-center'>
+      {children}
       <button
         {...attributes}
         {...listeners}

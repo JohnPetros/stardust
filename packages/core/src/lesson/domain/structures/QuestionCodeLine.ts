@@ -25,4 +25,64 @@ export class QuestionCodeLine {
       texts: dto.texts,
     })
   }
+
+  changeIndentation(indentation: number): QuestionCodeLine {
+    return new QuestionCodeLine({
+      indentation: Integer.create(indentation),
+      number: this.number,
+      texts: this.texts,
+    })
+  }
+
+  addText(text: string, index: number): QuestionCodeLine {
+    this.texts.splice(index, 0, text)
+    return new QuestionCodeLine({
+      number: this.number,
+      indentation: this.indentation,
+      texts: this.texts,
+    })
+  }
+
+  replaceText(text: string, index: number): QuestionCodeLine {
+    this.texts[index] = text
+    return new QuestionCodeLine({
+      number: this.number,
+      indentation: this.indentation,
+      texts: this.texts,
+    })
+  }
+
+  changeText(text: string, textIndex: number): QuestionCodeLine {
+    this.texts[textIndex] = text
+    return new QuestionCodeLine({
+      number: this.number,
+      indentation: this.indentation,
+      texts: this.texts,
+    })
+  }
+
+  setTexts(texts: string[]): QuestionCodeLine {
+    return new QuestionCodeLine({
+      number: this.number,
+      indentation: this.indentation,
+      texts,
+    })
+  }
+
+  changeNumber(number: number): QuestionCodeLine {
+    return new QuestionCodeLine({
+      number: Integer.create(number),
+      indentation: this.indentation,
+      texts: this.texts,
+    })
+  }
+
+  removeBlock(blockIndex: number): QuestionCodeLine {
+    this.texts.splice(blockIndex, 1)
+    return new QuestionCodeLine({
+      number: this.number,
+      indentation: this.indentation,
+      texts: this.texts,
+    })
+  }
 }

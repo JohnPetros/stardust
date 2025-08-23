@@ -7,6 +7,7 @@ import {
   Star,
   Rocket,
   LayoutDashboard,
+  Settings,
   Plus,
   SquarePen,
   GripVertical,
@@ -22,6 +23,7 @@ import {
   Upload,
   Image,
   Trash,
+  Check,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -39,6 +41,7 @@ export const ICONS: Record<IconName, LucideIcon> = {
   x: Close,
   edition: SquarePen,
   star: Star,
+  check: Check,
   trash: Trash,
   draggable: GripVertical,
   submit: HardDriveUpload,
@@ -51,4 +54,5 @@ export const ICONS: Record<IconName, LucideIcon> = {
   upload: Upload,
   reload: RotateCcw,
   plus: Plus,
+  configuration: Settings,
 }
