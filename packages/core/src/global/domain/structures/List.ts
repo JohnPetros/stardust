@@ -55,7 +55,6 @@ export class List<Item> {
 
     const items = [...this.items]
     items[index] = item
-    console.log(items, index)
     return new List(items)
   }
 

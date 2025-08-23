@@ -36,17 +36,29 @@ export class QuestionCodeLine {
 
   addText(text: string, index: number): QuestionCodeLine {
     this.texts.splice(index, 0, text)
-    return this
+    return new QuestionCodeLine({
+      number: this.number,
+      indentation: this.indentation,
+      texts: this.texts,
+    })
   }
 
   replaceText(text: string, index: number): QuestionCodeLine {
     this.texts[index] = text
-    return this
+    return new QuestionCodeLine({
+      number: this.number,
+      indentation: this.indentation,
+      texts: this.texts,
+    })
   }
 
   changeText(text: string, textIndex: number): QuestionCodeLine {
     this.texts[textIndex] = text
-    return this
+    return new QuestionCodeLine({
+      number: this.number,
+      indentation: this.indentation,
+      texts: this.texts,
+    })
   }
 
   setTexts(texts: string[]): QuestionCodeLine {
@@ -67,6 +79,10 @@ export class QuestionCodeLine {
 
   removeBlock(blockIndex: number): QuestionCodeLine {
     this.texts.splice(blockIndex, 1)
-    return this
+    return new QuestionCodeLine({
+      number: this.number,
+      indentation: this.indentation,
+      texts: this.texts,
+    })
   }
 }

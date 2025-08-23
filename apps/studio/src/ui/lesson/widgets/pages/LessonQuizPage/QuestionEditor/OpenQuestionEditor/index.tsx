@@ -27,12 +27,6 @@ export const OpenQuestionEditor = () => {
     handleReplaceCodeLineBlockWithInput,
   } = useOpenQuestionEditor(question, replaceSelectedQuestion)
 
-  console.log(
-    'codeLines',
-    codeLines.map((line) => line.value.texts),
-  )
-  console.log('answers', question.answers.items)
-
   return (
     <OpenQuestionEditorView
       codeLines={codeLines}
