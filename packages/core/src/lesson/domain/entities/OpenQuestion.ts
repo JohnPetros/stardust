@@ -6,8 +6,8 @@ import {
   type UserAnswer,
 } from '#global/domain/structures/index'
 import { Question } from '../abstracts'
-import type { OpenQuestionDto, QuestionDto } from './dtos'
 import { QuestionCodeLine } from '../structures'
+import type { OpenQuestionDto, QuestionDto } from './dtos'
 
 type OpenQuestionProps = {
   answers: List<string>
@@ -19,9 +19,9 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
   static create(dto: OpenQuestionDto): OpenQuestion {
     return new OpenQuestion(
       {
+        type: 'open',
         picture: Image.create(dto.picture),
         stem: Text.create(dto.stem),
-        type: 'open',
         answers: List.create(dto.answers),
         codeLines: dto.lines.map(QuestionCodeLine.create),
         code: dto.code,
@@ -41,49 +41,104 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
   }
 
   addCodeLine() {
-    const lineNumber = this.codeLines.length
+    const codelineNumber = this.codeLines.length
 
     this.props.codeLines = [
       ...this.codeLines,
       QuestionCodeLine.create({
-        number: lineNumber,
+        number: codelineNumber,
         indentation: 0,
-        texts: [`linha ${lineNumber}`],
+        texts: [`linha ${codelineNumber}`],
       }),
     ]
   }
 
-  removeCodeLine(lineNumber: number) {
+  removeCodeLine(codelineNumber: number) {
     this.props.codeLines = this.codeLines.filter(
-      (line) => line.number.value !== lineNumber,
+      (line) => line.number.value !== codelineNumber,
     )
   }
 
-  changeCodeLineText(lineNumber: number, text: string, textIndex: number): void {
+  changeCodeLineText(codelineNumber: number, text: string, textIndex: number): void {
     this.props.codeLines = this.codeLines.map((line) =>
-      line.number.value === lineNumber ? line.changeText(text, textIndex) : line,
+      line.number.value === codelineNumber ? line.changeText(text, textIndex) : line,
     )
   }
 
-  changeCodeLineIndentation(lineNumber: number, indentation: number) {
+  changeCodeLineIndentation(codelineNumber: number, indentation: number) {
     this.props.codeLines = this.codeLines.map((line) =>
-      line.number.value === lineNumber ? line.changeIndentation(indentation) : line,
+      line.number.value === codelineNumber ? line.changeIndentation(indentation) : line,
     )
   }
 
   changeAnswer(answer: string, index: number) {
+    console.log('index', index)
     this.props.answers = this.answers.changeItem(answer, index)
   }
 
-  addCodeLineText(lineNumber: number, index: number) {
+  addCodeLineText(codelineNumber: number, codeLineTextIndex: number) {
     this.props.codeLines = this.codeLines.map((line) =>
-      line.number.value === lineNumber ? line.addText('texto', index) : line,
+      line.number.value === codelineNumber
+        ? line.addText('texto', codeLineTextIndex)
+        : line,
     )
   }
 
-  addCodeLineInput(lineNumber: number, index: number) {
+  addCodeLineInput(codelineNumber: number, codeLineInputIndex: number) {
+    const answerIndex = this.getAnswerIndex(codelineNumber, codeLineInputIndex)
     this.props.codeLines = this.codeLines.map((line) =>
-      line.number.value === lineNumber ? line.addText('input', index) : line,
+      line.number.value === codelineNumber
+        ? line.addText('input', codeLineInputIndex)
+        : line,
+    )
+    console.log('answerIndex', answerIndex)
+    this.props.answers = this.answers.addAt('', answerIndex)
+  }
+
+  replaceCodeLineBlockWithText(codelineNumber: number, codeLineTextIndex: number) {
+    this.props.codeLines = this.codeLines.map((line) =>
+      line.number.value === codelineNumber
+        ? line.replaceText('texto', codeLineTextIndex)
+        : line,
+    )
+  }
+
+  replaceCodeLineBlockWithInput(codelineNumber: number, codeLineInputIndex: number) {
+    const answerIndex = this.getAnswerIndex(codelineNumber, codeLineInputIndex)
+    this.props.codeLines = this.codeLines.map((line) =>
+      line.number.value === codelineNumber
+        ? line.replaceText('input', codeLineInputIndex)
+        : line,
+    )
+    this.props.answers = this.answers.addAt('', answerIndex)
+  }
+
+  private getAnswerIndex(codelineNumber: number, codeLineInputIndex: number): number {
+    let answerIndex = 0
+    const codeLines = this.codeLines.slice(0, codelineNumber + 1)
+
+    for (let codeLineIndex = 0; codeLineIndex < codeLines.length; codeLineIndex++) {
+      const line = this.codeLines[codeLineIndex]
+      const texts =
+        codeLineIndex === codelineNumber
+          ? line.texts.slice(0, codeLineInputIndex)
+          : line.texts
+
+      console.log('texts', texts)
+
+      for (const text of texts) {
+        if (text.startsWith('input')) {
+          answerIndex++
+        }
+      }
+    }
+
+    return answerIndex
+  }
+
+  removeCodeLineBlock(codelineNumber: number, blockIndex: number) {
+    this.props.codeLines = this.codeLines.map((line) =>
+      line.number.value === codelineNumber ? line.removeBlock(blockIndex) : line,
     )
   }
 
@@ -96,7 +151,20 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
   }
 
   get codeLines(): QuestionCodeLine[] {
-    return this.props.codeLines
+    let inputIndex = 0
+    const codeLines = this.props.codeLines.map((line) => {
+      const texts = line.texts.map((text) => {
+        if (text.startsWith('input')) {
+          const inputValue = `input-${inputIndex}`
+          inputIndex++
+          return inputValue
+        }
+        return text
+      })
+      return line.setTexts(texts)
+    })
+    // console.log(codeLines.map((line) => line.texts))
+    return codeLines
   }
 
   set codeLines(codeLines: QuestionCodeLine[]) {

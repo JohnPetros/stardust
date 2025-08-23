@@ -23,6 +23,11 @@ export class List<Item> {
     return new List(this.items)
   }
 
+  addAt(item: Item, index: number) {
+    this.items.splice(index, 0, item)
+    return new List(this.items)
+  }
+
   remove(item: Item) {
     const items = this.items.filter((currentItem) => currentItem !== item)
     return new List(items)
@@ -46,8 +51,11 @@ export class List<Item> {
   }
 
   changeItem(item: Item, index: number) {
+    if (!item) return new List(this.items)
+
     const items = [...this.items]
     items[index] = item
+    console.log(items, index)
     return new List(items)
   }
 
