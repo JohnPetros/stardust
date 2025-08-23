@@ -124,8 +124,6 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
           ? line.texts.slice(0, codeLineInputIndex)
           : line.texts
 
-      console.log('texts', texts)
-
       for (const text of texts) {
         if (text.startsWith('input')) {
           answerIndex++
@@ -163,7 +161,6 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
       })
       return line.setTexts(texts)
     })
-    // console.log(codeLines.map((line) => line.texts))
     return codeLines
   }
 
