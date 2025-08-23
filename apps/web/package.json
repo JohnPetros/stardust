@@ -67,6 +67,7 @@
     "react-resizable-panels": "^3.0.3",
     "react-responsive": "^10.0.1",
     "react-simple-typewriter": "^5.0.1",
+    "react-text-to-speech": "^2.1.2",
     "swiper": "^10.3.1",
     "swr": "^2.3.4",
     "tailwind-merge": "^1.14.0",
