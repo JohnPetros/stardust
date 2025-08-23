@@ -13,6 +13,7 @@ export type IconName =
   | 'spinner'
   | 'star'
   | 'draggable'
+  | 'check'
   | 'x'
   | 'reload'
   | 'submit'
@@ -22,3 +23,4 @@ export type IconName =
   | 'questions'
   | 'copy'
   | 'plus'
+  | 'configuration'
