@@ -20,23 +20,28 @@ export const TestCase = ({
   isCorrect,
   userOutput,
 }: Props) => {
-  const { isOpen, translatedInputs, translatedExpectedOutput, handleButtonClick } =
-    useTestCase({
-      inputs,
-      isLocked,
-      isCorrect,
-      userOutput,
-      expectedOutput,
-    })
+  const {
+    isOpen,
+    translatedInputs,
+    translatedExpectedOutput,
+    translatedUserOutput,
+    handleButtonClick,
+  } = useTestCase({
+    inputs,
+    isLocked,
+    isCorrect,
+    userOutput,
+    expectedOutput,
+  })
 
   return (
     <TestCaseView
       position={position}
       isLocked={isLocked}
       isCorrect={isCorrect}
-      userOutput={userOutput}
       isOpen={isOpen}
       translatedInputs={translatedInputs}
+      userOutput={translatedUserOutput}
       translatedExpectedOutput={translatedExpectedOutput}
       handleButtonClick={handleButtonClick}
     />
