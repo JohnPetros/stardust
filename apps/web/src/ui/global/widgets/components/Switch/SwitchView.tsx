@@ -28,7 +28,7 @@ export const SwitchView = ({
   return (
     <div
       className={twMerge(
-        'flex items-center justify-center gap-1 px-3 py-2 border border-gray-500 rounded-full',
+        'flex items-center justify-center gap-2 px-3 py-2 border border-gray-500 rounded-full',
         isDisabled ? 'pointer-events-none' : '',
         className,
       )}
