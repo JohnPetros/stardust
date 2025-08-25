@@ -35,59 +35,25 @@ export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
     )
     const resultadoLexador = this.lexador.mapear(code.split('\n'), -1)
     if (resultadoLexador.erros.length) {
-      return this.obtenhaTipoDeleguatrateErro(resultadoLexador.erros[0])
+      return this.trateErro(resultadoLexador.erros[0])
     }
     const resultadoAvaliacaoSintatica = this.avaliadorSintatico.analisar(
       resultadoLexador,
       0,
     )
     if (resultadoAvaliacaoSintatica.erros.length) {
-      return this.obtenhaTipoDeleguatrateErro(resultadoAvaliacaoSintatica.erros[0])
+      return this.trateErro(resultadoAvaliacaoSintatica.erros[0])
     }
     const resultadoInterpretador = await interpretador.interpretar(
       resultadoAvaliacaoSintatica.declaracoes,
       false,
     )
     if (resultadoInterpretador.erros.length) {
-      return this.obtenhaTipoDeleguatrateErro(resultadoInterpretador.erros[0])
+      return this.trateErro(resultadoInterpretador.erros[0])
     }
 
     const resultado = resultadoInterpretador.resultado
-
-    let result = ''
-    if (resultado.length) {
-      if (resultado[0] === '{"valor":null}') {
-        result = 'nulo'
-      }
-
-      if (resultado[0] === '{"valor":{}}') {
-        result = '{}'
-      }
-
-      const resultadoComValor = resultado
-        .reverse()
-        .find((resultado) => resultado.startsWith('{"valor":'))
-
-      let valor: unknown
-      if (resultadoComValor && !result) {
-        const resultadoParseado = JSON.parse(resultadoComValor)
-
-        if ('valor' in resultadoParseado) {
-          const temValorInterno =
-            typeof resultadoParseado.valor === 'object' &&
-            'valor' in resultadoParseado.valor
-
-          if (temValorInterno) {
-            valor = resultadoParseado.valor.valor
-          } else {
-            valor = resultadoParseado.valor
-          }
-          result = this.translateToCodeRunner(valor)
-        }
-      } else if (!result) {
-        result = String(resultado[0])
-      }
-    }
+    const result = resultado[1]
 
     return new CodeRunnerResponse({ result, outputs })
   }
@@ -199,7 +165,7 @@ export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
     return 'texto'
   }
 
-  private obtenhaTipoDeleguatrateErro(erro: DeleguaErro) {
+  private trateErro(erro: DeleguaErro) {
     const linhaDoErro = erro.linha ?? 0 // TODO: erro.linha pode ser undefined
 
     if ('erroInterno' in erro && erro.erroInterno instanceof Error) {
