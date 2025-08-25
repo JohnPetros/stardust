@@ -57,7 +57,6 @@ export type IconName =
   | 'target'
   | 'rate'
   | 'checked'
-  | 'configuration'
   | 'unchecked'
   | 'plus'
   | 'plus-circle'

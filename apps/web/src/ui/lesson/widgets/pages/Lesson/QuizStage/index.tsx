@@ -70,7 +70,7 @@ export function QuizStage({ leaveLesson }: QuizProps) {
                   stem={question.stem.value}
                   answers={question.answers.items}
                   codeLines={question.codeLines}
-                  code={question.code}
+                  code={question.code ?? null}
                   picture={question.picture.value}
                 />
               </QuestionContainer>
