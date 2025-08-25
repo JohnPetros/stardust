@@ -1,10 +1,9 @@
 import Img from 'next/image'
 
-import { Speaker } from '../../Speaker'
-import { Animation } from '../templates/Animation'
-import { Content } from '../templates/Content'
 import { useImage } from '@/ui/global/hooks/useImage'
 import { REGEX } from '@/constants'
+import { Animation } from '../Animation'
+import { Content } from '../Content'
 
 type ImageProps = {
   picture: string

@@ -1,6 +1,5 @@
 import Image from 'next/image'
 
-import { Speaker } from '../../Speaker'
 import { Animation } from '../Animation'
 import { Content } from '../Content'
 import { Picture } from '../Picture'
@@ -28,7 +27,6 @@ export const AlertView = ({
           </div>
         )}
         <div>
-          <Speaker text={Array.isArray(children) ? children.join('') : children} />
           <div className='flex w-full items-center'>
             {picture && <Picture url={picture} />}
             <span className='mr-3 block'>

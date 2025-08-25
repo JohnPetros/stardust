@@ -1,9 +1,8 @@
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'
 
-import { Speaker } from '../../Speaker'
-import { Animation } from '../templates/Animation'
-import { Content } from '../templates/Content'
+import { Animation } from '../Animation'
+import { Content } from '../Content'
 
 type UserProps = {
   title: string
