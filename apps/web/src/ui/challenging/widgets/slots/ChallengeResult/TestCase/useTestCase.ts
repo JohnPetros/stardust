@@ -41,6 +41,10 @@ export function useTestCase({
     return 'sem entrada'
   }, [inputs, codeRunner.translateToCodeRunner])
 
+  const translatedUserOutput = useMemo(() => {
+    return codeRunner.translateToCodeRunner(userOutput)
+  }, [userOutput, codeRunner.translateToCodeRunner])
+
   const translatedExpectedOutput = useMemo(() => {
     return codeRunner.translateToCodeRunner(expectedOutput).replaceAll('\n', '')
   }, [expectedOutput, codeRunner.translateToCodeRunner])
@@ -48,6 +52,7 @@ export function useTestCase({
   return {
     isOpen,
     translatedInputs,
+    translatedUserOutput,
     translatedExpectedOutput,
     handleButtonClick,
   }

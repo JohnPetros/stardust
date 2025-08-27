@@ -16,7 +16,7 @@ export const challenge: Omit<ChallengeDto, 'author'> = {
         [0, 1, 0],
         [0, 0, 0],
       ],
-      expectedOutput: [[0, 'princesa', 0]],
+      expectedOutput: [0, 'princesa', 0],
       isLocked: false,
     },
     {
@@ -26,7 +26,7 @@ export const challenge: Omit<ChallengeDto, 'author'> = {
         [0, 0, 0],
         [1, 0, 0],
       ],
-      expectedOutput: [['princesa', 0, 0]],
+      expectedOutput: ['princesa', 0, 0],
       isLocked: false,
     },
     {
@@ -36,13 +36,13 @@ export const challenge: Omit<ChallengeDto, 'author'> = {
         [0, 0, 0],
         [1, 0, 0, 0],
       ],
-      expectedOutput: [['princesa', 0, 0, 0]],
+      expectedOutput: ['princesa', 0, 0, 0],
       isLocked: false,
     },
     {
       position: 4,
       inputs: [[0, 1], [0, 0], [0, 0], [0]],
-      expectedOutput: [[0, 'princesa']],
+      expectedOutput: [0, 'princesa'],
       isLocked: false,
     },
   ],

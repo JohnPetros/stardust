@@ -16,7 +16,9 @@ export const Speaker = ({ text }: Props) => {
     pitch: speakerContext?.pitch,
   })
 
-  if (speakerContext)
+  const isContextValid = Object.keys(speakerContext).length > 0
+
+  if (isContextValid)
     return (
       <SpeakerView
         isEnabled={speakerContext.isEnabled}
