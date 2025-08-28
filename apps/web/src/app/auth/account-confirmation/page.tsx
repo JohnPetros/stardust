@@ -1,5 +1,7 @@
 import { AccountConfirmationPage } from '@/ui/auth/widgets/pages/AccountConfirmation'
 
-export default function AccountConfirmation() {
+export const Page = () => {
   return <AccountConfirmationPage />
 }
+
+export default Page
