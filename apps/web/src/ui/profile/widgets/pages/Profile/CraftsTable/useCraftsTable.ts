@@ -1,6 +1,5 @@
 import { useState } from 'react'
 
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import type { TabContent } from './TabContent'
 import type { TabListSorter } from './TabListSorter'
 

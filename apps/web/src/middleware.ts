@@ -33,7 +33,7 @@ export const middleware = async (request: NextRequest) => {
       const response = await controller.handle(http)
       if (response.isRedirecting) return response.body
     }
-  } catch (error) {
+  } catch {
     return NextResponse.next()
   }
 
