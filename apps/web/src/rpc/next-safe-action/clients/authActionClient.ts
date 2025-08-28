@@ -1,9 +1,10 @@
 import { notFound } from 'next/navigation'
 
-import { Id } from '@stardust/core/global/structures'
+import { Account } from '@stardust/core/auth/entities'
 
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
-import { AuthService, ProfileService } from '@/rest/services'
+import { AuthService } from '@/rest/services/AuthService'
+import { ProfileService } from '@/rest/services/ProfileService'
 import { actionClient } from './actionClient'
 
 export const authActionClient = actionClient.use(async ({ next }) => {
@@ -12,9 +13,10 @@ export const authActionClient = actionClient.use(async ({ next }) => {
   const authResponse = await authService.fetchAccount()
   if (authResponse.isFailure) notFound()
 
-  const accountId = Id.create(authResponse.body.id)
+  const account = Account.create(authResponse.body)
+
   const profileService = ProfileService(restClient)
-  const profileResponse = await profileService.fetchUserById(accountId)
+  const profileResponse = await profileService.fetchUserById(account.id, account.provider)
   if (profileResponse.isFailure) profileResponse.throwError()
 
   return next({ ctx: { user: profileResponse.body } })

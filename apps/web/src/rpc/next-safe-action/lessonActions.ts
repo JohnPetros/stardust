@@ -1,15 +1,17 @@
 'use server'
 
-import { authActionClient } from './clients/authActionClient'
+import { z } from 'zod'
+
+import { idSchema } from '@stardust/validation/global/schemas'
+import { LessonService } from '@/rest/services/LessonService'
+
+import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
+import { authActionClient } from './clients'
 import { NextCall } from '../next/NextCall'
 import {
   AccessEndingPageAction,
   FetchLessonStoryAndQuestionsAction,
 } from '../actions/lesson'
-import { idSchema } from '@stardust/validation/global/schemas'
-import { z } from 'zod'
-import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
-import { LessonService } from '@/rest/services/LessonService'
 
 export const fetchLessonStoryAndQuestions = authActionClient
   .schema(
