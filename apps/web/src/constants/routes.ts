@@ -1,3 +1,5 @@
+import { CLIENT_ENV } from './client-env'
+
 export const ROUTES = {
   ranking: '/ranking',
   space: '/space',
@@ -52,12 +54,14 @@ export const ROUTES = {
     signUp: '/auth/sign-up',
     resetPassword: '/auth/reset-password',
     accountConfirmation: '/auth/account-confirmation',
+    socialAccountConfirmation: '/auth/social-account-confirmation',
   },
   landing: '/',
   api: {
     auth: {
       confirmEmail: '/api/auth/confirm-email',
       confirmPasswordReset: '/api/auth/confirm-password-reset',
+      confirmSocialSignIn: '/api/auth/confirm-social-sign-in',
     },
     space: {
       planets: '/api/space/planets',
@@ -84,5 +88,11 @@ export const ROUTES = {
       snippet: (snippetId: string) => `/api/playground/snippets/${snippetId}`,
     },
     serverless: '/api/serverless',
+  },
+  server: {
+    auth: {
+      signInWithGoogle: `${CLIENT_ENV.serverAppUrl}/auth/sign-in/google`,
+      signInWithGithub: `${CLIENT_ENV.serverAppUrl}/auth/sign-in/github`,
+    },
   },
 } as const
