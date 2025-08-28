@@ -42,7 +42,7 @@ module.exports = {
 
     'type-empty': [2, 'never'],
 
-    'header-max-length': [2, 'always', 120],
+    'header-max-length': [2, 'always', 150],
 
     'subject-empty': [2, 'never'],
 
