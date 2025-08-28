@@ -19,7 +19,7 @@ export class SignUpWithSocialAccountController implements Controller<Schema> {
       userName: accountDto.name,
     })
 
-    // await this.eventBroker.publish(event)
+    await this.eventBroker.publish(event)
 
     return http.send({ isNewAccount: true })
   }

@@ -15,7 +15,6 @@ export const AccessProfilePageAction = (
   return {
     async handle(call: Call<Request>) {
       const { userSlug } = call.getRequest()
-      console.log('userSlug', userSlug)
       const reponse = await service.fetchUserBySlug(Slug.create(userSlug))
       if (reponse.isFailure) call.notFound()
       return reponse.body
