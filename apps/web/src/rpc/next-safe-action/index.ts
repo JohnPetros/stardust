@@ -16,9 +16,9 @@ import {
   accessRewardForStarChallengeCompletionPage,
   accessRewardForChallengeCompletionPage,
 } from './rewardingActions'
-import { signIn, signOut } from './authActions'
+import { signIn, signOut, signUpWithSocialAccount } from './authActions'
 
-export const authActions = { signIn, signOut }
+export const authActions = { signIn, signOut, signUpWithSocialAccount }
 
 export const cookieActions = { setCookie, getCookie, deleteCookie, hasCookie }
 
