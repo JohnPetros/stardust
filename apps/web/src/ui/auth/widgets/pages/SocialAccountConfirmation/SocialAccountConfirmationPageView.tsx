@@ -31,7 +31,7 @@ export const SocialAccountConfirmationPageView = ({
       <AnimatePresence>
         {!isRocketVisible && (
           <main className='flex h-full w-full items-center justify-center'>
-            {user && !isNewAccount ? (
+            {user && isNewAccount ? (
               <AppMessage
                 title='Bem-vindo(a) 👋'
                 subtitle='Seu perfil foi criado com sucesso!'

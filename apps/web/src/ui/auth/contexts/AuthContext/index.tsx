@@ -14,6 +14,7 @@ import {
   useAuthProvider,
   useSignInAction,
   useSignOutAction,
+  useSignUpWithSocialAccountAction,
 } from './hooks'
 
 type Props = {
@@ -34,6 +35,7 @@ export const AuthProvider = ({
   if (accessToken)
     restClient.setHeader(HTTP_HEADERS.authorization, `Bearer ${accessToken}`)
   const profileService = ProfileService(restClient)
+  const { signUpWithSocialAccount } = useSignUpWithSocialAccountAction()
   const { signIn } = useSignInAction()
   const { signOut } = useSignOutAction()
   const authContextValue = useAuthProvider({
@@ -41,6 +43,7 @@ export const AuthProvider = ({
     accountDto,
     signIn,
     signOut,
+    signUpWithSocialAccount,
   })
 
   return (
