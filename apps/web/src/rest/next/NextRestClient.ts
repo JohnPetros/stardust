@@ -125,6 +125,13 @@ export const NextRestClient = ({
       baseUrl = url
     },
 
+    setAuthorization(token: string): void {
+      requestInit.headers = {
+        ...requestInit.headers,
+        [HTTP_HEADERS.authorization]: `Bearer ${token}`,
+      }
+    },
+
     setHeader(key: string, value: string): void {
       if (requestInit.headers) {
         requestInit.headers = {
