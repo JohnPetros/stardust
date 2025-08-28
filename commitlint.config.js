@@ -13,7 +13,7 @@ module.exports = {
         '💾 db',
         '🎞️ queue',
         '🧰 provision',
-        '📟 server',
+        '📟 rpc',
         '✨ use case',
         '📑 interface',
         '🏷️ type',

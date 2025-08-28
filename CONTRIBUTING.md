@@ -61,38 +61,38 @@ Exemplos:
 
 ### Tabela de commits
 
-| Tipo de commit                  | Prefixo   | Emoji |
-| :------------------------------ | :-------- | :---- |
-| Camada de domínio               | domain    | 🌐    |
-| Camada de API REST              | rest      | 📶    |
-| Camada de UI                    | ui        | 🖥️    |
-| Camada de banco de dados        | db        | 💾    |
-| Camada de fila/mensageria       | queue     | 🎞️    |
-| Camada de provisão              | provision | 🧰    |
-| Camada de BFF                   | server    | 📟    |
-| Use cases                       | use case  | ✨    |
-| Interfaces                      | interface | 📑    |
-| Tipagem                         | type      | 🏷️    |
-| Documentação                    | docs      | 📚    |
-| Correção de bug                 | fix       | 🐛    |
-| Refatoração de código           | refactor  | ♻️    |
-| Teste automatizado              | test      | 🧪    |
-| Configuração/infraestrutura     | config    | ⚙️    |
-| Constantes                      | constants | 🪨    |
-| Dependências                    | deps      | 📦    |
-| Arquivos estáticos              | assets    | 🎴    |
-| Merge de branches               | merge     | 🔀    |
-| Reset de histórico de commits   | revert    | ⏪    |
-| Executor/Interpretador de código| cr        | ⏪    |
-| Estruturação de pastas/arquivos | ftree     | 🗃️    |
-| Certificados e licenças         | cert      | 📜    |
-| Schema para validação           | validation| 📮    |
-| Trabalho em andamento           | wip       | 🚧    |
-| Conserto de erro de emergencia  | hotfix    | 🚑    |
-| Entrega contínua                | cd        | 🚚    |
-| Integração contínua             | ci        | 🏎️    |
-| Nova release                    | release   | 🔖    |
-| Containers Docker               | docker    | 🐳    |
+| Tipo de commit                   | Prefixo    | Emoji |
+| :------------------------------- | :--------- | :---- |
+| Camada de domínio                | domain     | 🌐    |
+| Camada de API REST               | rest       | 📶    |
+| Camada de UI                     | ui         | 🖥️    |
+| Camada de banco de dados         | db         | 💾    |
+| Camada de fila/mensager          | queue      | 🎞️    |
+| Camada de provisão               | provision  | 🧰    |
+| Camada de API RPC                | rpc        | 📟    |
+| Use cases                        | use case   | ✨    |
+| Interfaces                       | interface  | 📑    |
+| Tipagem                          | type       | 🏷️    |
+| Documentação                     | docs       | 📚    |
+| Correção de bug                  | fix        | 🐛    |
+| Refatoração de código            | refactor   | ♻️    |
+| Teste automatizado               | test       | 🧪    |
+| Configuração/infraestrutura      | config     | ⚙️    |
+| Constantes                       | constants  | 🪨    |
+| Dependências                     | deps       | 📦    |
+| Arquivos estáticos               | assets     | 🎴    |
+| Merge de branches                | merge      | 🔀    |
+| Reset de histórico de commits    | revert     | ⏪    |
+| Executor/Interpretador de código | cr         | ⏪    |
+| Estruturação de pastas/arquivos  | ftree      | 🗃️    |
+| Certificados e licenças          | cert       | 📜    |
+| Schema para validação            | validation | 📮    |
+| Trabalho em andamento            | wip        | 🚧    |
+| Conserto de erro de emergencia   | hotfix     | 🚑    |
+| Entrega contínua                 | cd         | 🚚    |
+| Integração contínua              | ci         | 🏎️    |
+| Nova release                     | release    | 🔖    |
+| Containers Docker                | docker     | 🐳    |
 
 ## Issues
 
