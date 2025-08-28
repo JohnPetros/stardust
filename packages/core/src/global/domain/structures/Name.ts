@@ -5,6 +5,7 @@ import type { Text } from './Text'
 
 export class Name {
   readonly value: string
+  private readonly DUPLICATION_REGEX = /\((\d+)\)/
 
   private constructor(value: string) {
     this.value = value
@@ -28,6 +29,21 @@ export class Name {
     }
     const currentValue = this.removeAccentuation().value.trim().toLowerCase()
     return Logical.create(currentValue.includes(text.value.trim().toLowerCase()))
+  }
+
+  deduplicate() {
+    if (this.isDuplicated.isTrue) {
+      const newValue = this.value.replace(this.DUPLICATION_REGEX, (_, numero) => {
+        return `(${parseInt(numero) + 1})`
+      })
+      return Name.create(newValue)
+    }
+
+    return Name.create(this.value.concat('(1)'))
+  }
+
+  get isDuplicated() {
+    return Logical.create(this.DUPLICATION_REGEX.test(this.value))
   }
 
   get slug() {
