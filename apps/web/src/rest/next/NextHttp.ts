@@ -79,6 +79,10 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       extendedBody = { ...extendedBody, ...body }
     },
 
+    setBody(body: object) {
+      extendedBody = { ...extendedBody, ...body }
+    },
+
     async getBody() {
       if (!httpSchema?.body) throw new AppError('Body is not defined')
       return httpSchema?.body
