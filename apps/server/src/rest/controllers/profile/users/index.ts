@@ -10,3 +10,4 @@ export { RewardUserForChallengeCompletionController } from './RewardUserForChall
 export { AppendUserCompletedChallengesIdsToBodyController } from './AppendUserCompletedChallengesIdsToBodyController'
 export { UpvoteCommentController } from './UpvoteCommentController'
 export { AppendIsSolutionUpvotedToBodyController } from './AppendIsSolutionUpvotedToBodyController'
+export { VerifyUserSocialAccountController } from './VerifyUserSocialAccountController'
