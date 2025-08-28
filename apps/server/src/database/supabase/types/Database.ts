@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
@@ -545,18 +545,21 @@ export type Database = {
       sso_providers: {
         Row: {
           created_at: string | null
+          disabled: boolean | null
           id: string
           resource_id: string | null
           updated_at: string | null
         }
         Insert: {
           created_at?: string | null
+          disabled?: boolean | null
           id: string
           resource_id?: string | null
           updated_at?: string | null
         }
         Update: {
           created_at?: string | null
+          disabled?: boolean | null
           id?: string
           resource_id?: string | null
           updated_at?: string | null
@@ -800,29 +803,29 @@ export type Database = {
     Functions: {
       alter_job: {
         Args: {
-          job_id: number
-          schedule?: string
+          active?: boolean
           command?: string
           database?: string
+          job_id: number
+          schedule?: string
           username?: string
-          active?: boolean
         }
         Returns: undefined
       }
       schedule: {
         Args:
-          | { job_name: string; schedule: string; command: string }
-          | { schedule: string; command: string }
+          | { command: string; job_name: string; schedule: string }
+          | { command: string; schedule: string }
         Returns: number
       }
       schedule_in_database: {
         Args: {
-          job_name: string
-          schedule: string
+          active?: boolean
           command: string
           database: string
+          job_name: string
+          schedule: string
           username?: string
-          active?: boolean
         }
         Returns: number
       }
@@ -901,7 +904,7 @@ export type Database = {
     }
     Functions: {
       algorithm_sign: {
-        Args: { signables: string; secret: string; algorithm: string }
+        Args: { algorithm: string; secret: string; signables: string }
         Returns: string
       }
       armor: {
@@ -933,7 +936,7 @@ export type Database = {
         Returns: Record<string, unknown>
       }
       pg_stat_statements_reset: {
-        Args: { userid?: unknown; dbid?: unknown; queryid?: number }
+        Args: { dbid?: unknown; queryid?: number; userid?: unknown }
         Returns: undefined
       }
       pgp_armor_headers: {
@@ -945,7 +948,7 @@ export type Database = {
         Returns: string
       }
       sign: {
-        Args: { payload: Json; secret: string; algorithm?: string }
+        Args: { algorithm?: string; payload: Json; secret: string }
         Returns: string
       }
       try_cast_double: {
@@ -969,7 +972,7 @@ export type Database = {
         Returns: string
       }
       uuid_generate_v3: {
-        Args: { namespace: string; name: string }
+        Args: { name: string; namespace: string }
         Returns: string
       }
       uuid_generate_v4: {
@@ -977,7 +980,7 @@ export type Database = {
         Returns: string
       }
       uuid_generate_v5: {
-        Args: { namespace: string; name: string }
+        Args: { name: string; namespace: string }
         Returns: string
       }
       uuid_nil: {
@@ -1001,7 +1004,7 @@ export type Database = {
         Returns: string
       }
       verify: {
-        Args: { token: string; secret: string; algorithm?: string }
+        Args: { algorithm?: string; secret: string; token: string }
         Returns: {
           header: Json
           payload: Json
@@ -1777,6 +1780,8 @@ export type Database = {
           did_break_streak: boolean
           did_complete_saturday: boolean
           email: string
+          github_account_id: string | null
+          google_account_id: string | null
           has_completed_space: boolean
           id: string
           is_loser: boolean | null
@@ -1800,6 +1805,8 @@ export type Database = {
           did_break_streak?: boolean
           did_complete_saturday?: boolean
           email: string
+          github_account_id?: string | null
+          google_account_id?: string | null
           has_completed_space?: boolean
           id: string
           is_loser?: boolean | null
@@ -1823,6 +1830,8 @@ export type Database = {
           did_break_streak?: boolean
           did_complete_saturday?: boolean
           email?: string
+          github_account_id?: string | null
+          google_account_id?: string | null
           has_completed_space?: boolean
           id?: string
           is_loser?: boolean | null
@@ -2706,8 +2715,8 @@ export type Database = {
       }
       filter_challenges: {
         Args:
-          | { userid: string; status: string; difficulty: string }
-          | { userid: string; status: string; difficulty: string }
+          | { difficulty: string; status: string; userid: string }
+          | { difficulty: string; status: string; userid: string }
         Returns: undefined
       }
       get_next_star_from_next_planet: {
@@ -2813,7 +2822,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_07_13: {
+      messages_2025_08_08: {
         Row: {
           event: string | null
           extension: string
@@ -2846,7 +2855,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_07_14: {
+      messages_2025_08_09: {
         Row: {
           event: string | null
           extension: string
@@ -2879,7 +2888,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_07_15: {
+      messages_2025_08_10: {
         Row: {
           event: string | null
           extension: string
@@ -2912,7 +2921,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_07_16: {
+      messages_2025_08_11: {
         Row: {
           event: string | null
           extension: string
@@ -2945,40 +2954,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_07_17: {
-        Row: {
-          event: string | null
-          extension: string
-          id: string
-          inserted_at: string
-          payload: Json | null
-          private: boolean | null
-          topic: string
-          updated_at: string
-        }
-        Insert: {
-          event?: string | null
-          extension: string
-          id?: string
-          inserted_at?: string
-          payload?: Json | null
-          private?: boolean | null
-          topic: string
-          updated_at?: string
-        }
-        Update: {
-          event?: string | null
-          extension?: string
-          id?: string
-          inserted_at?: string
-          payload?: Json | null
-          private?: boolean | null
-          topic?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      messages_2025_07_18: {
+      messages_2025_08_12: {
         Row: {
           event: string | null
           extension: string
@@ -3062,32 +3038,32 @@ export type Database = {
     }
     Functions: {
       apply_rls: {
-        Args: { wal: Json; max_record_bytes?: number }
+        Args: { max_record_bytes?: number; wal: Json }
         Returns: Database["realtime"]["CompositeTypes"]["wal_rls"][]
       }
       broadcast_changes: {
         Args: {
-          topic_name: string
           event_name: string
+          level?: string
+          new: Record<string, unknown>
+          old: Record<string, unknown>
           operation: string
           table_name: string
           table_schema: string
-          new: Record<string, unknown>
-          old: Record<string, unknown>
-          level?: string
+          topic_name: string
         }
         Returns: undefined
       }
       build_prepared_statement_sql: {
         Args: {
-          prepared_statement_name: string
-          entity: unknown
           columns: Database["realtime"]["CompositeTypes"]["wal_column"][]
+          entity: unknown
+          prepared_statement_name: string
         }
         Returns: string
       }
       cast: {
-        Args: { val: string; type_: unknown }
+        Args: { type_: unknown; val: string }
         Returns: Json
       }
       check_equality_op: {
@@ -3108,10 +3084,10 @@ export type Database = {
       }
       list_changes: {
         Args: {
-          publication: unknown
-          slot_name: unknown
           max_changes: number
           max_record_bytes: number
+          publication: unknown
+          slot_name: unknown
         }
         Returns: Database["realtime"]["CompositeTypes"]["wal_rls"][]
       }
@@ -3120,7 +3096,7 @@ export type Database = {
         Returns: string
       }
       send: {
-        Args: { payload: Json; event: string; topic: string; private?: boolean }
+        Args: { event: string; payload: Json; private?: boolean; topic: string }
         Returns: undefined
       }
       to_regrole: {
@@ -3171,6 +3147,7 @@ export type Database = {
           owner: string | null
           owner_id: string | null
           public: boolean | null
+          type: Database["storage"]["Enums"]["buckettype"]
           updated_at: string | null
         }
         Insert: {
@@ -3183,6 +3160,7 @@ export type Database = {
           owner?: string | null
           owner_id?: string | null
           public?: boolean | null
+          type?: Database["storage"]["Enums"]["buckettype"]
           updated_at?: string | null
         }
         Update: {
@@ -3195,7 +3173,32 @@ export type Database = {
           owner?: string | null
           owner_id?: string | null
           public?: boolean | null
+          type?: Database["storage"]["Enums"]["buckettype"]
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      buckets_analytics: {
+        Row: {
+          created_at: string
+          format: string
+          id: string
+          type: Database["storage"]["Enums"]["buckettype"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          format?: string
+          id: string
+          type?: Database["storage"]["Enums"]["buckettype"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          format?: string
+          id?: string
+          type?: Database["storage"]["Enums"]["buckettype"]
+          updated_at?: string
         }
         Relationships: []
       }
@@ -3226,6 +3229,7 @@ export type Database = {
           created_at: string | null
           id: string
           last_accessed_at: string | null
+          level: number | null
           metadata: Json | null
           name: string | null
           owner: string | null
@@ -3240,6 +3244,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           last_accessed_at?: string | null
+          level?: number | null
           metadata?: Json | null
           name?: string | null
           owner?: string | null
@@ -3254,6 +3259,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           last_accessed_at?: string | null
+          level?: number | null
           metadata?: Json | null
           name?: string | null
           owner?: string | null
@@ -3266,6 +3272,38 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "objects_bucketId_fkey"
+            columns: ["bucket_id"]
+            isOneToOne: false
+            referencedRelation: "buckets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prefixes: {
+        Row: {
+          bucket_id: string
+          created_at: string | null
+          level: number
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          bucket_id: string
+          created_at?: string | null
+          level?: number
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          bucket_id?: string
+          created_at?: string | null
+          level?: number
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prefixes_bucketId_fkey"
             columns: ["bucket_id"]
             isOneToOne: false
             referencedRelation: "buckets"
@@ -3376,9 +3414,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      can_insert_object: {
-        Args: { bucketid: string; name: string; owner: string; metadata: Json }
+      add_prefixes: {
+        Args: { _bucket_id: string; _name: string }
         Returns: undefined
+      }
+      can_insert_object: {
+        Args: { bucketid: string; metadata: Json; name: string; owner: string }
+        Returns: undefined
+      }
+      delete_prefix: {
+        Args: { _bucket_id: string; _name: string }
+        Returns: boolean
       }
       extension: {
         Args: { name: string }
@@ -3392,41 +3438,53 @@ export type Database = {
         Args: { name: string }
         Returns: string[]
       }
+      get_level: {
+        Args: { name: string }
+        Returns: number
+      }
+      get_prefix: {
+        Args: { name: string }
+        Returns: string
+      }
+      get_prefixes: {
+        Args: { name: string }
+        Returns: string[]
+      }
       get_size_by_bucket: {
         Args: Record<PropertyKey, never>
         Returns: {
-          size: number
           bucket_id: string
+          size: number
         }[]
       }
       list_multipart_uploads_with_delimiter: {
         Args: {
           bucket_id: string
-          prefix_param: string
           delimiter_param: string
           max_keys?: number
           next_key_token?: string
           next_upload_token?: string
+          prefix_param: string
         }
         Returns: {
-          key: string
-          id: string
           created_at: string
+          id: string
+          key: string
         }[]
       }
       list_objects_with_delimiter: {
         Args: {
           bucket_id: string
-          prefix_param: string
           delimiter_param: string
           max_keys?: number
-          start_after?: string
           next_token?: string
+          prefix_param: string
+          start_after?: string
         }
         Returns: {
-          name: string
           id: string
           metadata: Json
+          name: string
           updated_at: string
         }[]
       }
@@ -3436,27 +3494,84 @@ export type Database = {
       }
       search: {
         Args: {
-          prefix: string
           bucketname: string
-          limits?: number
           levels?: number
+          limits?: number
           offsets?: number
+          prefix: string
           search?: string
           sortcolumn?: string
           sortorder?: string
         }
         Returns: {
-          name: string
-          id: string
-          updated_at: string
           created_at: string
+          id: string
           last_accessed_at: string
           metadata: Json
+          name: string
+          updated_at: string
+        }[]
+      }
+      search_legacy_v1: {
+        Args: {
+          bucketname: string
+          levels?: number
+          limits?: number
+          offsets?: number
+          prefix: string
+          search?: string
+          sortcolumn?: string
+          sortorder?: string
+        }
+        Returns: {
+          created_at: string
+          id: string
+          last_accessed_at: string
+          metadata: Json
+          name: string
+          updated_at: string
+        }[]
+      }
+      search_v1_optimised: {
+        Args: {
+          bucketname: string
+          levels?: number
+          limits?: number
+          offsets?: number
+          prefix: string
+          search?: string
+          sortcolumn?: string
+          sortorder?: string
+        }
+        Returns: {
+          created_at: string
+          id: string
+          last_accessed_at: string
+          metadata: Json
+          name: string
+          updated_at: string
+        }[]
+      }
+      search_v2: {
+        Args: {
+          bucket_name: string
+          levels?: number
+          limits?: number
+          prefix: string
+          start_after?: string
+        }
+        Returns: {
+          created_at: string
+          id: string
+          key: string
+          metadata: Json
+          name: string
+          updated_at: string
         }[]
       }
     }
     Enums: {
-      [_ in never]: never
+      buckettype: "STANDARD" | "ANALYTICS"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -3618,6 +3733,8 @@ export const Constants = {
     },
   },
   storage: {
-    Enums: {},
+    Enums: {
+      buckettype: ["STANDARD", "ANALYTICS"],
+    },
   },
 } as const

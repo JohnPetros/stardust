@@ -41,6 +41,8 @@ export class SupabaseUserMapper {
           name: supabaseUser.rocket?.name ?? '',
         },
       },
+      githubAccountId: supabaseUser.github_account_id ?? undefined,
+      googleAccountId: supabaseUser.google_account_id ?? undefined,
       unlockedAchievementsIds:
         supabaseUser.users_unlocked_achievements?.map(
           ({ achievement_id }) => achievement_id,
@@ -94,6 +96,8 @@ export class SupabaseUserMapper {
       streak: user.streak.value,
       can_see_ranking: user.canSeeRankingResult.value,
       did_break_streak: user.didBreakStreak.value,
+      github_account_id: user.githubAccountId?.value ?? null,
+      google_account_id: user.googleAccountId?.value ?? null,
     }
 
     return supabaseUser as unknown as SupabaseUser
