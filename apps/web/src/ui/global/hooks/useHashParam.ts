@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-export function useHashParams(key: string) {
+export function useHashParam(key: string) {
   const [value, setValue] = useState<string | null>(null)
 
   useEffect(() => {
