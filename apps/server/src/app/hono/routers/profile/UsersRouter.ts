@@ -1,8 +1,8 @@
 import { Hono } from 'hono'
-import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
 
 import {
+  accountProviderSchema,
   emailSchema,
   idSchema,
   integerSchema,
@@ -31,6 +31,7 @@ import {
   SpaceMiddleware,
   ChallengingMiddleware,
   ValidationMiddleware,
+  ProfileMiddleware,
 } from '../../middlewares'
 
 export class UsersRouter extends HonoRouter {
@@ -44,10 +45,16 @@ export class UsersRouter extends HonoRouter {
     this.router.get(
       '/id/:userId',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           userId: stringSchema,
+        }),
+      ),
+      this.validationMiddleware.validate(
+        'query',
+        z.object({
+          accountProvider: accountProviderSchema,
         }),
       ),
       async (context) => {
@@ -64,7 +71,7 @@ export class UsersRouter extends HonoRouter {
     this.router.get(
       '/slug/:userSlug',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           userSlug: stringSchema,
