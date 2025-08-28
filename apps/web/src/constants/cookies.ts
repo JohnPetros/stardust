@@ -7,6 +7,7 @@ export const COOKIES = {
   },
   accessToken: {
     key: `${APP_PREFIX}:access-token`,
+    durationInSeconds: 60 * 60, // 1 hour
   },
   refreshToken: {
     key: `${APP_PREFIX}:refresh-token`,
