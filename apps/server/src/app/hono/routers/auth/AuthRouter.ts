@@ -23,6 +23,7 @@ import {
   RefreshSessionController,
   FetchSocialAccountController,
   SignUpWithSocialAccountController,
+  SignInWithGithubAccountController,
 } from '@/rest/controllers/auth'
 import { SupabaseAuthService } from '@/rest/services'
 import { InngestEventBroker } from '@/queue/inngest/InngestEventBroker'
@@ -102,6 +103,26 @@ export class AuthRouter extends HonoRouter {
         const supabase = http.getSupabase()
         const service = new SupabaseAuthService(supabase)
         const controller = new SignInWithGoogleAccountController(service)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private registerSignInWithGithubRoute(): void {
+    this.router.get(
+      '/sign-in/github',
+      this.validationMiddleware.validate(
+        'query',
+        z.object({
+          returnUrl: stringSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const supabase = http.getSupabase()
+        const service = new SupabaseAuthService(supabase)
+        const controller = new SignInWithGithubAccountController(service)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -272,6 +293,7 @@ export class AuthRouter extends HonoRouter {
     this.registerSignUpRoute()
     this.registerSignOutRoute()
     this.registerSignInWithGoogleRoute()
+    this.registerSignInWithGithubRoute()
     this.registerResendSignUpEmailRoute()
     this.registerRefreshSessionRoute()
     this.registerRequestPasswordResetRoute()
