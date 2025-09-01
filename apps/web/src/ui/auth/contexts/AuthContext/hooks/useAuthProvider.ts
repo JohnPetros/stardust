@@ -10,6 +10,7 @@ import type { ActionResponse } from '@stardust/core/global/responses'
 import { CACHE, DOM_EVENTS } from '@/constants'
 import { useCache } from '@/ui/global/hooks/useCache'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
+import { useSleep } from '@/ui/global/hooks/useSleep'
 
 type Params = {
   profileService: ProfileService
@@ -33,6 +34,7 @@ export function useAuthProvider({
     accountDto ? Account.create(accountDto) : null,
   )
   const toast = useToastContext()
+  const { sleep } = useSleep()
 
   async function fetchUser() {
     if (!account) return
@@ -74,12 +76,12 @@ export function useAuthProvider({
     refreshToken: string,
   ) {
     const response = await signUpWithSocialAccount(accessToken, refreshToken)
+
     if (response.isSuccessful) {
       setAccount(Account.create(response.data.account))
       return { isNewAccount: response.data.isNewAccount }
     }
 
-    toast.showError(response.errorMessage, 10)
     return { isNewAccount: false }
   }
 
@@ -127,6 +129,7 @@ export function useAuthProvider({
 
   return {
     user: userDto ? User.create(userDto) : null,
+    account,
     isLoading,
     handleSignIn,
     handleSignOut,
