@@ -18,13 +18,13 @@ const Layout = async ({ children }: HomeProps) => {
   if (response.isFailure) response.throwError()
 
   return (
-    <>
+    <UserCreationPendingLayout>
       <AchivementsProvider achievementsDto={response.body}>
         <SidebarProvider>
           <HomeLayout>{children}</HomeLayout>
         </SidebarProvider>
       </AchivementsProvider>
-    </>
+    </UserCreationPendingLayout>
   )
 }
 
