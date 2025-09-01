@@ -1,5 +1,5 @@
 import type { UseCase } from '#global/interfaces/index'
-import { Name, Email } from '#global/domain/structures/index'
+import { Name, Email, AccountProvider } from '#global/domain/structures/index'
 import { User } from '#global/domain/entities/index'
 import type { UsersRepository } from '#profile/interfaces/index'
 import {
@@ -11,6 +11,7 @@ type Request = {
   userId: string
   userEmail: string
   userName: string
+  userAccountProvider: string
   firstTierId: string
   selectedAvatarByDefaultId: string
   selectedRocketByDefaultId: string
@@ -25,6 +26,7 @@ export class CreateUserUseCase implements UseCase<Request, Response> {
     userId,
     userEmail,
     userName,
+    userAccountProvider,
     firstTierId,
     selectedRocketByDefaultId,
     selectedAvatarByDefaultId,
@@ -49,6 +51,9 @@ export class CreateUserUseCase implements UseCase<Request, Response> {
       },
       createdAt: new Date(),
     })
+
+    const accountProvider = AccountProvider.create(userAccountProvider)
+    user.setSocialAccountId(user.id, accountProvider)
 
     await this.repository.add(user)
   }

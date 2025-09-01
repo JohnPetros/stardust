@@ -9,6 +9,7 @@ type Request = {
   userId: string
   userName: string
   userEmail: string
+  userAccountProvider: string
 }
 
 type Response = Promise<void>
@@ -30,6 +31,7 @@ export class UnlockFirstStarUseCase implements UseCase<Request, Response> {
         id: request.userId,
         name: request.userName,
         email: request.userEmail,
+        accountProvider: request.userAccountProvider,
       },
       firstStarId: firstPlanet.firstStar.id.value,
     })
