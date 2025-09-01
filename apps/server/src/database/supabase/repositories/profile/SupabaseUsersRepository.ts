@@ -135,6 +135,114 @@ export class SupabaseUsersRepository
     return data.map(SupabaseUserMapper.toEntity)
   }
 
+  async findByName(name: Name): Promise<User | null> {
+    const { data, error } = await this.supabase
+      .from('users')
+      .select(
+        `*,
+        avatar:avatars(*), 
+        rocket:rockets(*), 
+        tier:tiers(*),
+        users_unlocked_stars(star_id),
+        users_unlocked_achievements(achievement_id),
+        users_rescuable_achievements(achievement_id),
+        users_acquired_rockets(rocket_id),
+        users_acquired_avatars(avatar_id),
+        users_completed_challenges(challenge_id),
+        users_upvoted_solutions(solution_id),
+        users_upvoted_comments(comment_id)`,
+      )
+      .eq('name', name.value)
+      .single()
+
+    if (error) {
+      return this.handleQueryPostgresError(error)
+    }
+
+    return SupabaseUserMapper.toEntity(data)
+  }
+
+  async findByEmail(email: Email): Promise<User | null> {
+    const { data, error } = await this.supabase
+      .from('users')
+      .select(
+        `*,
+        avatar:avatars(*), 
+        rocket:rockets(*), 
+        tier:tiers(*),
+        users_unlocked_stars(star_id),
+        users_unlocked_achievements(achievement_id),
+        users_rescuable_achievements(achievement_id),
+        users_acquired_rockets(rocket_id),
+        users_acquired_avatars(avatar_id),
+        users_completed_challenges(challenge_id),
+        users_upvoted_solutions(solution_id),
+        users_upvoted_comments(comment_id)`,
+      )
+      .eq('email', email.value)
+      .single()
+
+    if (error) {
+      return this.handleQueryPostgresError(error)
+    }
+
+    return SupabaseUserMapper.toEntity(data)
+  }
+
+  async findByGoogleAccountId(googleAccountId: Id): Promise<User | null> {
+    const { data, error } = await this.supabase
+      .from('users')
+      .select(
+        `*,
+        avatar:avatars(*), 
+        rocket:rockets(*), 
+        tier:tiers(*),
+        users_unlocked_stars(star_id),
+        users_unlocked_achievements(achievement_id),
+        users_rescuable_achievements(achievement_id),
+        users_acquired_rockets(rocket_id),
+        users_acquired_avatars(avatar_id),
+        users_completed_challenges(challenge_id),
+        users_upvoted_solutions(solution_id),
+        users_upvoted_comments(comment_id)`,
+      )
+      .eq('google_account_id', googleAccountId.value)
+      .single()
+
+    if (error) {
+      return this.handleQueryPostgresError(error)
+    }
+
+    return SupabaseUserMapper.toEntity(data)
+  }
+
+  async findByGithubAccountId(githubAccountId: Id): Promise<User | null> {
+    const { data, error } = await this.supabase
+      .from('users')
+      .select(
+        `*,
+        avatar:avatars(*), 
+        rocket:rockets(*), 
+        tier:tiers(*),
+        users_unlocked_stars(star_id),
+        users_unlocked_achievements(achievement_id),
+        users_rescuable_achievements(achievement_id),
+        users_acquired_rockets(rocket_id),
+        users_acquired_avatars(avatar_id),
+        users_completed_challenges(challenge_id),
+        users_upvoted_solutions(solution_id),
+        users_upvoted_comments(comment_id)`,
+      )
+      .eq('github_account_id', githubAccountId.value)
+      .single()
+
+    if (error) {
+      return this.handleQueryPostgresError(error)
+    }
+
+    return SupabaseUserMapper.toEntity(data)
+  }
+
   private async findUserCompletedPlanets(
     userId: string,
   ): Promise<{ planet_id: string | null }[]> {

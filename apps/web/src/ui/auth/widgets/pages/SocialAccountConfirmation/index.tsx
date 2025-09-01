@@ -4,19 +4,17 @@ import { useRef } from 'react'
 
 import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
 import { SocialAccountConfirmationPageView } from './SocialAccountConfirmationPageView'
-import { useSignUpWithSocialAccountPage } from './useSignUpWithSocialAccountPage'
+import { useSocialAccountConfirmationPage } from './useSocialAccountConfirmationPage'
 import { useSignUpWithSocialAccountAction } from './useSignUpWithSocialAccountAction'
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 
 export const SocialAccountConfirmationPage = () => {
   const rocketAnimationRef = useRef<AnimationRef | null>(null)
-  const { user, refetchUser } = useAuthContext()
-  const { signUpWithSocialAccount } = useSignUpWithSocialAccountAction()
+  const { user, handleSignUpWithSocialAccount } = useAuthContext()
   const { isNewAccount, isRocketVisible, handleLinkClick } =
-    useSignUpWithSocialAccountPage({
+    useSocialAccountConfirmationPage({
       rocketAnimationRef,
-      signUpWithSocialAccount,
-      refetchUser,
+      handleSignUpWithSocialAccount,
     })
 
   return (

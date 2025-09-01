@@ -1,5 +1,6 @@
 import {
   Email,
+  Id,
   IdsList,
   Integer,
   Logical,
@@ -53,6 +54,8 @@ export class UserFactory {
       upvotedCommentsIds: IdsList.create(dto?.upvotedCommentsIds),
       upvotedSolutionsIds: IdsList.create(dto?.upvotedSolutionsIds),
       createdAt: dto?.createdAt ?? new Datetime().date(),
+      githubAccountId: dto?.githubAccountId ? Id.create(dto.githubAccountId) : null,
+      googleAccountId: dto?.googleAccountId ? Id.create(dto.googleAccountId) : null,
       id: dto?.id,
     }
   }

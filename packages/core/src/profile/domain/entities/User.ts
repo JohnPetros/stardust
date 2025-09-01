@@ -6,6 +6,7 @@ import {
   type IdsList,
   Integer,
   Logical,
+  type AccountProvider,
 } from '#global/domain/structures/index'
 import type { AvatarAggregate, RocketAggregate } from '../aggregates'
 import { TierAggregate } from '../aggregates'
@@ -30,6 +31,8 @@ type UserProps = {
   weeklyXp: Integer
   streak: Integer
   weekStatus: WeekStatus
+  githubAccountId: Id | null
+  googleAccountId: Id | null
   unlockedStarsIds: IdsList
   acquiredRocketsIds: IdsList
   acquiredAvatarsIds: IdsList
@@ -375,6 +378,14 @@ export class User extends Entity<UserProps> {
     return this.props.level
   }
 
+  get githubAccountId() {
+    return this.props.githubAccountId
+  }
+
+  get googleAccountId() {
+    return this.props.googleAccountId
+  }
+
   get completedChallengesIds() {
     return this.props.completedChallengesIds
   }
@@ -403,6 +414,14 @@ export class User extends Entity<UserProps> {
     return this.props.createdAt
   }
 
+  setSocialAccountId(socialAccountId: Id, socialAccountProvider: AccountProvider) {
+    if (socialAccountProvider.isGithubProvider.isTrue) {
+      this.props.githubAccountId = socialAccountId
+    } else if (socialAccountProvider.isGoogleProvider.isTrue) {
+      this.props.googleAccountId = socialAccountId
+    }
+  }
+
   get dto(): UserDto {
     return {
       id: this.id.value,
@@ -423,6 +442,8 @@ export class User extends Entity<UserProps> {
       acquiredAvatarsIds: this.props.acquiredAvatarsIds.dto,
       unlockedAchievementsIds: this.props.unlockedAchievementsIds.dto,
       rescuableAchievementsIds: this.props.rescuableAchievementsIds.dto,
+      githubAccountId: this.props.githubAccountId?.value ?? undefined,
+      googleAccountId: this.props.googleAccountId?.value ?? undefined,
       unlockedDocsIds: this.props.unlockedDocsIds.dto,
       upvotedCommentsIds: this.props.upvotedCommentsIds.dto,
       completedChallengesIds: this.props.completedChallengesIds.dto,

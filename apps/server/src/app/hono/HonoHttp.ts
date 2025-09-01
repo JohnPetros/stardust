@@ -124,6 +124,10 @@ export class HonoHttp<HonoContext extends Context>
     })
   }
 
+  setBody(body: unknown): void {
+    this.context.set('extra-body', body)
+  }
+
   async pass(): Promise<RestResponse<Response>> {
     if (!this.next) throw new AppError('HonoHttp next is not defined')
 
@@ -186,6 +190,11 @@ export class HonoHttp<HonoContext extends Context>
         message: response.errorMessage,
       })
     }
+
+    if (response.statusCode === HTTP_STATUS_CODE.noContent) {
+      return this.context.json(undefined)
+    }
+
     return this.context.json(response.body ?? {})
   }
 

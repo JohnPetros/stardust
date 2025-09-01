@@ -10,9 +10,11 @@ export interface AuthService {
   fetchSocialAccount(): Promise<RestResponse<AccountDto>>
   signIn(email: Email, password: Password): Promise<RestResponse<SessionDto>>
   signUp(email: Email, password: Password): Promise<RestResponse<AccountDto>>
-  signUpWithSocialAccount(socialAccount: Account): Promise<RestResponse<AccountDto>>
+  signInWithGoogleAccount(returnUrl: Text): Promise<RestResponse<{ signInUrl: string }>>
+  signUpWithSocialAccount(
+    socialAccount: Account,
+  ): Promise<RestResponse<{ isNewAccount: boolean }>>
   signOut(): Promise<RestResponse>
-  signInWithGoogle(): Promise<RestResponse<{ url: string }>>
   resendSignUpEmail(email: Email): Promise<RestResponse>
   requestSignUp(email: Email, password: Password, name: Name): Promise<RestResponse>
   requestPasswordReset(email: Email): Promise<RestResponse>

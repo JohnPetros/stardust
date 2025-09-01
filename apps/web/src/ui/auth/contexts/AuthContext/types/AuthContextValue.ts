@@ -7,6 +7,10 @@ export type AuthContextValue = {
   isLoading: boolean
   handleSignIn(email: string, password: string): Promise<boolean>
   handleSignOut(): Promise<void>
+  handleSignUpWithSocialAccount(
+    accessToken: string,
+    refreshToken: string,
+  ): Promise<{ isNewAccount: boolean }>
   updateUser(newUser: User): Promise<void>
   updateUserCache(userData: UserDto | null, shouldRevalidate?: boolean): void
   refetchUser(): void

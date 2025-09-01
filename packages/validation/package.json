@@ -17,6 +17,7 @@
     "./forum/schemas": "./src/modules/forum/index.ts",
     "./playground/schemas": "./src/modules/playground/schema/index.ts",
     "./storage/schemas": "./src/modules/storage/index.ts",
+    "./auth/schemas": "./src/modules/auth/schemas/index.ts",
     "./factories": "./src/factories/index.ts"
   },
   "imports": {

@@ -6,9 +6,12 @@ export class AppendUserCompletedChallengesIdsToBodyController implements Control
   constructor(private readonly usersRepository: UsersRepository) {}
 
   async handle(http: Http) {
-    const userId = await http.getAccountId()
+    const account = await http.getAccount()
     const useCase = new GetUserUseCase(this.usersRepository)
-    const user = await useCase.execute({ userId })
+    const user = await useCase.execute({
+      userId: account.id,
+      userAccountProvider: account.provider,
+    })
     http.extendBody({ userCompletedChallengesIds: user.completedChallengesIds })
     return http.pass()
   }

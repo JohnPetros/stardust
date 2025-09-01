@@ -1,13 +1,13 @@
 @URL = {{BASE_URL}}/profile/users
-@USER_ID = 2ac3e189-e5ed-4003-a87a-d2358411584e
+@USER_ID = faea4574-ac75-43af-9ea6-eba8a5593088
 @USER_SLUG = ctrl
 
 ### Fetch user by id
-GET {{URL}}/id/{{USER_ID}}
+GET {{URL}}/id/{{USER_ID}}?accountProvider=google
 Authorization: Bearer {{JWT}}
 
 ### Fetch user by slug
-GET {{URL}}/slug/{{USER_SLUG}} 
+GET {{URL}}/slug/{{USER_SLUG}}?accountProvider=google
 Authorization: Bearer {{JWT}}
 
 ### Update user

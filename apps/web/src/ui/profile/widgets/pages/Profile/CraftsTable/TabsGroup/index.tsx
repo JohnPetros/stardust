@@ -92,7 +92,6 @@ export function TabsGroup({
       <Tabs.Content value='challengesListTab' className='mt-6'>
         <ChallengesListTab userId={userId} tabListSorter={activeTabListSorter} />
       </Tabs.Content>
-
       <Tabs.Content value='solutionsListTab' className='mt-6'>
         <SolutionsListTab userId={userId} tabListSorter={activeTabListSorter} />
       </Tabs.Content>

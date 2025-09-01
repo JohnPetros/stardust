@@ -16,9 +16,19 @@ type Params = {
   accountDto: AccountDto | null
   signIn: (email: string, password: string) => Promise<ActionResponse<AccountDto>>
   signOut: () => Promise<ActionResponse<void>>
+  signUpWithSocialAccount: (
+    accessToken: string,
+    refreshToken: string,
+  ) => Promise<ActionResponse<{ isNewAccount: boolean; account: AccountDto }>>
 }
 
-export function useAuthProvider({ profileService, accountDto, signIn, signOut }: Params) {
+export function useAuthProvider({
+  profileService,
+  accountDto,
+  signIn,
+  signOut,
+  signUpWithSocialAccount,
+}: Params) {
   const [account, setAccount] = useState<Account | null>(
     accountDto ? Account.create(accountDto) : null,
   )
@@ -26,7 +36,7 @@ export function useAuthProvider({ profileService, accountDto, signIn, signOut }:
 
   async function fetchUser() {
     if (!account) return
-    const response = await profileService.fetchUserById(account.id)
+    const response = await profileService.fetchUserById(account.id, account.provider)
     return response.body
   }
 
@@ -57,6 +67,20 @@ export function useAuthProvider({ profileService, accountDto, signIn, signOut }:
 
     toast.showError(response.errorMessage, 10)
     return false
+  }
+
+  async function handleSignUpWithSocialAccount(
+    accessToken: string,
+    refreshToken: string,
+  ) {
+    const response = await signUpWithSocialAccount(accessToken, refreshToken)
+    if (response.isSuccessful) {
+      setAccount(Account.create(response.data.account))
+      return { isNewAccount: response.data.isNewAccount }
+    }
+
+    toast.showError(response.errorMessage, 10)
+    return { isNewAccount: false }
   }
 
   async function handleSignOut() {
@@ -106,6 +130,7 @@ export function useAuthProvider({ profileService, accountDto, signIn, signOut }:
     isLoading,
     handleSignIn,
     handleSignOut,
+    handleSignUpWithSocialAccount,
     updateUser,
     refetchUser: refetch,
     updateUserCache,

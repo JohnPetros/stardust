@@ -11,17 +11,16 @@ import { ROUTES } from '@/constants'
 
 type Params = {
   rocketAnimationRef: RefObject<AnimationRef | null>
-  signUpWithSocialAccount: (
+  handleSignUpWithSocialAccount: (
     accessToken: string,
     refreshToken: string,
-  ) => Promise<ActionResponse<{ isNewAccount: boolean }>>
+  ) => Promise<{ isNewAccount: boolean }>
   refetchUser: () => void
 }
 
-export function useSignUpWithSocialAccountPage({
+export function useSocialAccountConfirmationPage({
   rocketAnimationRef,
-  signUpWithSocialAccount,
-  refetchUser,
+  handleSignUpWithSocialAccount,
 }: Params) {
   const accessToken = useHashParam('access_token')
   const refreshToken = useHashParam('refresh_token')
@@ -39,26 +38,19 @@ export function useSignUpWithSocialAccountPage({
   }, [sleep, rocketAnimationRef, router])
 
   useEffect(() => {
-    async function handleSignUpWithSocialAccount() {
+    async function signUpWithSocialAccount() {
       if (!accessToken || !refreshToken) return
-      const response = await signUpWithSocialAccount(accessToken, refreshToken)
 
-      if (response.isSuccessful) {
-        const isNewAccount = response.data.isNewAccount
-        refetchUser()
-        setIsNewAccount(isNewAccount)
-        if (!isNewAccount) showRocketAnimation()
-      }
+      const { isNewAccount } = await handleSignUpWithSocialAccount(
+        accessToken,
+        refreshToken,
+      )
+      setIsNewAccount(isNewAccount)
+      if (!isNewAccount) showRocketAnimation()
     }
 
-    handleSignUpWithSocialAccount()
-  }, [
-    signUpWithSocialAccount,
-    showRocketAnimation,
-    accessToken,
-    refreshToken,
-    refetchUser,
-  ])
+    signUpWithSocialAccount()
+  }, [accessToken, refreshToken])
 
   return {
     isNewAccount,

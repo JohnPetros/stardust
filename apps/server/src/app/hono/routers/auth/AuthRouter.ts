@@ -7,28 +7,33 @@ import {
   passwordSchema,
   stringSchema,
 } from '@stardust/validation/global/schemas'
+import { accountSchema } from '@stardust/validation/auth/schemas'
 
 import {
   ConfirmPasswordResetController,
   RequestPasswordResetController,
   ResetPasswordController,
   SignInController,
+  SignInWithGoogleAccountController,
   SignOutController,
   SignUpController,
   FetchSessionController,
   ConfirmEmailController,
   ResendSignUpEmailController,
   RefreshSessionController,
+  FetchSocialAccountController,
+  SignUpWithSocialAccountController,
 } from '@/rest/controllers/auth'
 import { SupabaseAuthService } from '@/rest/services'
 import { InngestEventBroker } from '@/queue/inngest/InngestEventBroker'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
-import { ValidationMiddleware } from '../../middlewares'
+import { ProfileMiddleware, ValidationMiddleware } from '../../middlewares'
 
 export class AuthRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/auth')
   private readonly validationMiddleware = new ValidationMiddleware()
+  private readonly profileMiddleware = new ProfileMiddleware()
 
   private registerSignInRoute(): void {
     this.router.post(
@@ -81,6 +86,41 @@ export class AuthRouter extends HonoRouter {
       const response = await controller.handle(http)
       return http.sendResponse(response)
     })
+  }
+
+  private registerSignInWithGoogleRoute(): void {
+    this.router.get(
+      '/sign-in/google',
+      this.validationMiddleware.validate(
+        'query',
+        z.object({
+          returnUrl: stringSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const supabase = http.getSupabase()
+        const service = new SupabaseAuthService(supabase)
+        const controller = new SignInWithGoogleAccountController(service)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private registerSignUpWithSocialAccountRoute(): void {
+    this.router.post(
+      '/sign-up/social-account',
+      this.validationMiddleware.validate('json', accountSchema),
+      this.profileMiddleware.verifyUserSocialAccount,
+      async (context) => {
+        const http = new HonoHttp(context)
+        const eventBroker = new InngestEventBroker()
+        const controller = new SignUpWithSocialAccountController(eventBroker)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
   }
 
   private registerResendSignUpEmailRoute(): void {
@@ -216,17 +256,31 @@ export class AuthRouter extends HonoRouter {
     })
   }
 
+  private registerFetchSocialAccountRoute(): void {
+    this.router.get('/social-account', async (context) => {
+      const http = new HonoHttp(context)
+      const supabase = http.getSupabase()
+      const service = new SupabaseAuthService(supabase)
+      const controller = new FetchSocialAccountController(service)
+      const response = await controller.handle(http)
+      return http.sendResponse(response)
+    })
+  }
+
   registerRoutes(): Hono {
     this.registerSignInRoute()
     this.registerSignUpRoute()
     this.registerSignOutRoute()
+    this.registerSignInWithGoogleRoute()
     this.registerResendSignUpEmailRoute()
     this.registerRefreshSessionRoute()
     this.registerRequestPasswordResetRoute()
+    this.registerSignUpWithSocialAccountRoute()
     this.registerConfirmEmailRoute()
     this.registerConfirmPasswordResetRoute()
     this.registerResetPasswordRoute()
     this.registerFetchAccountRoute()
+    this.registerFetchSocialAccountRoute()
     return this.router
   }
 }

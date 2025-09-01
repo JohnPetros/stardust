@@ -10,6 +10,10 @@ export interface UsersRepository {
   findById(id: Id): Promise<User | null>
   findByIdsList(idsList: IdsList): Promise<User[]>
   findBySlug(slug: Slug): Promise<User | null>
+  findByName(name: Name): Promise<User | null>
+  findByEmail(email: Email): Promise<User | null>
+  findByGoogleAccountId(googleAccountId: Id): Promise<User | null>
+  findByGithubAccountId(githubAccountId: Id): Promise<User | null>
   findByTierOrderedByXp(tierId: Id): Promise<User[]>
   containsWithEmail(email: Email): Promise<Logical>
   containsWithName(name: Name): Promise<Logical>

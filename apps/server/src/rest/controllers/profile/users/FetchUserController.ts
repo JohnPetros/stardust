@@ -9,6 +9,9 @@ type Schema = {
     userId?: string
     userSlug?: string
   }
+  queryParams: {
+    accountProvider?: string
+  }
 }
 
 export class FetchUserController implements Controller<Schema> {
@@ -16,8 +19,13 @@ export class FetchUserController implements Controller<Schema> {
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const { userId, userSlug } = http.getRouteParams()
+    const queryParams = http.getQueryParams()
     const useCase = new GetUserUseCase(this.usersRepository)
-    const user = await useCase.execute({ userId, userSlug })
+    const user = await useCase.execute({
+      userId,
+      userSlug,
+      userAccountProvider: queryParams?.accountProvider,
+    })
     return http.send(user)
   }
 }

@@ -1,5 +1,12 @@
 import type { RestResponse } from '#global/responses/index'
-import type { Email, Id, Integer, Name, Slug } from '#global/domain/structures/index'
+import type {
+  AccountProvider,
+  Email,
+  Id,
+  Integer,
+  Name,
+  Slug,
+} from '#global/domain/structures/index'
 import type { AchievementDto, UserDto } from '../domain/entities/dtos'
 import type { User } from '../domain/entities'
 import type {
@@ -20,7 +27,10 @@ type RewardingResponse = {
 }
 
 export interface ProfileService {
-  fetchUserById(userId: Id): Promise<RestResponse<UserDto>>
+  fetchUserById(
+    userId: Id,
+    accountProvider: AccountProvider,
+  ): Promise<RestResponse<UserDto>>
   fetchUserBySlug(userSlug: Slug): Promise<RestResponse<UserDto>>
   fetchAchievements(): Promise<RestResponse<AchievementDto[]>>
   fetchUnlockedAchievements(userId: Id): Promise<RestResponse<AchievementDto[]>>

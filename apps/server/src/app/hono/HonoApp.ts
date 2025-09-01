@@ -180,9 +180,11 @@ export class HonoApp {
   private setAccount(accessToken: string, context: Context) {
     const session = jwtDecode<User>(accessToken)
     const accountDto: AccountDto = {
-      id: session.user_metadata.sub,
+      id: session.sub,
       email: session.user_metadata.email,
+      name: session.user_metadata.name,
       isAuthenticated: session.user_metadata.email_verified,
+      provider: session.app_metadata.provider,
     }
     context.set('account', accountDto)
   }

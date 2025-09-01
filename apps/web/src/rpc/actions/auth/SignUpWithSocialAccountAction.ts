@@ -1,5 +1,6 @@
 import type { Action, Call } from '@stardust/core/global/interfaces'
 import type { AuthService } from '@stardust/core/auth/interfaces'
+import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 import { Account } from '@stardust/core/auth/entities'
 
 import { COOKIES } from '@/constants'
@@ -10,6 +11,7 @@ type Request = {
 }
 
 type Response = {
+  account: AccountDto
   isNewAccount: boolean
 }
 
@@ -39,7 +41,17 @@ export const SignUpWithSocialAccountAction = (
         ),
       ])
 
-      return signUpResponse.body
+      if (signUpResponse.isFailure) {
+        return {
+          account: account.dto,
+          isNewAccount: false,
+        }
+      }
+
+      return {
+        account: account.dto,
+        isNewAccount: signUpResponse.body.isNewAccount,
+      }
     },
   }
 }

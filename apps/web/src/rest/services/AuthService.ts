@@ -3,11 +3,16 @@ import { MethodNotImplementedError } from '@stardust/core/global/errors'
 import type { RestClient } from '@stardust/core/global/interfaces'
 import type { Email, Name, Text } from '@stardust/core/global/structures'
 import type { Password } from '@stardust/core/auth/structures'
+import type { Account } from '@stardust/core/auth/entities'
 
 export const AuthService = (restClient: RestClient): IAuthService => {
   return {
     async fetchAccount() {
       return await restClient.get('/auth/account')
+    },
+
+    async fetchSocialAccount() {
+      return await restClient.get('/auth/social-account')
     },
 
     async signIn(email: Email, password: Password) {
@@ -17,8 +22,16 @@ export const AuthService = (restClient: RestClient): IAuthService => {
       })
     },
 
+    async signInWithGoogleAccount() {
+      return await restClient.post('/auth/sign-in/google')
+    },
+
     async signUp() {
       throw new MethodNotImplementedError('signUp')
+    },
+
+    async signUpWithSocialAccount(account: Account) {
+      return await restClient.post('/auth/sign-up/social-account', account.dto)
     },
 
     async signOut() {
