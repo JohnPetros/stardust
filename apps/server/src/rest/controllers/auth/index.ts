@@ -10,5 +10,6 @@ export { VerifyAuthenticationController } from './VerifyAuthenticationController
 export { ResendSignUpEmailController } from './ResendSignUpEmailController'
 export { RefreshSessionController } from './RefreshSessionController'
 export { SignInWithGoogleAccountController } from './SignInWithGoogleAccountController'
+export { SignInWithGithubAccountController } from './SignInWithGithubAccountController'
 export { FetchSocialAccountController } from './FetchSocialAccountController'
 export { SignUpWithSocialAccountController } from './SignUpWithSocialAccountController'
