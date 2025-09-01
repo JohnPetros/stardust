@@ -6,4 +6,5 @@ export const accountSchema = z.object({
   email: emailSchema,
   name: nameSchema,
   isAuthenticated: booleanSchema,
+  provider: z.enum(['google', 'github', 'email']),
 })
