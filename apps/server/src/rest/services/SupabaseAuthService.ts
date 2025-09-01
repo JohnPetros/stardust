@@ -127,6 +127,22 @@ export class SupabaseAuthService implements AuthService {
     return new RestResponse({ body: { signInUrl: data.url } })
   }
 
+  async signInWithGithubAccount(
+    returnUrl: Text,
+  ): Promise<RestResponse<{ signInUrl: string }>> {
+    const { data, error } = await this.supabase.auth.signInWithOAuth({
+      provider: 'github',
+      options: {
+        redirectTo: returnUrl.value,
+      },
+    })
+
+    if (error)
+      return this.supabaseAuthError(error, 'Erro inesperado ao fazer login com Github')
+
+    return new RestResponse({ body: { signInUrl: data.url } })
+  }
+
   async signUpWithSocialAccount(): Promise<RestResponse<{ isNewAccount: boolean }>> {
     throw new MethodNotImplementedError('signUpWithSocialAccount')
   }

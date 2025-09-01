@@ -11,6 +11,7 @@ export interface AuthService {
   signIn(email: Email, password: Password): Promise<RestResponse<SessionDto>>
   signUp(email: Email, password: Password): Promise<RestResponse<AccountDto>>
   signInWithGoogleAccount(returnUrl: Text): Promise<RestResponse<{ signInUrl: string }>>
+  signInWithGithubAccount(returnUrl: Text): Promise<RestResponse<{ signInUrl: string }>>
   signUpWithSocialAccount(
     socialAccount: Account,
   ): Promise<RestResponse<{ isNewAccount: boolean }>>
