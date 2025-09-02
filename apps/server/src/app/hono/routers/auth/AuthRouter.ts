@@ -24,15 +24,21 @@ import {
   FetchSocialAccountController,
   SignUpWithSocialAccountController,
   SignInWithGithubAccountController,
+  ConnectGoogleAccountController,
 } from '@/rest/controllers/auth'
 import { SupabaseAuthService } from '@/rest/services'
 import { InngestEventBroker } from '@/queue/inngest/InngestEventBroker'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
-import { ProfileMiddleware, ValidationMiddleware } from '../../middlewares'
+import {
+  AuthMiddleware,
+  ProfileMiddleware,
+  ValidationMiddleware,
+} from '../../middlewares'
 
 export class AuthRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/auth')
+  private readonly authMiddleware = new AuthMiddleware()
   private readonly validationMiddleware = new ValidationMiddleware()
   private readonly profileMiddleware = new ProfileMiddleware()
 
@@ -123,6 +129,27 @@ export class AuthRouter extends HonoRouter {
         const supabase = http.getSupabase()
         const service = new SupabaseAuthService(supabase)
         const controller = new SignInWithGithubAccountController(service)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private registerConnectGoogleAccountRoute(): void {
+    this.router.get(
+      '/connect/google',
+      this.authMiddleware.verifyAuthentication,
+      this.validationMiddleware.validate(
+        'query',
+        z.object({
+          returnUrl: stringSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const supabase = http.getSupabase()
+        const service = new SupabaseAuthService(supabase)
+        const controller = new ConnectGoogleAccountController(service)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -294,6 +321,7 @@ export class AuthRouter extends HonoRouter {
     this.registerSignOutRoute()
     this.registerSignInWithGoogleRoute()
     this.registerSignInWithGithubRoute()
+    this.registerConnectGoogleAccountRoute()
     this.registerResendSignUpEmailRoute()
     this.registerRefreshSessionRoute()
     this.registerRequestPasswordResetRoute()
