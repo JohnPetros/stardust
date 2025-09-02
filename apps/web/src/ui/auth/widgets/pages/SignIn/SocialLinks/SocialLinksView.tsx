@@ -2,9 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { CLIENT_ENV, ROUTES } from '@/constants'
 
-const returnUrl = encodeURIComponent(
-  `${CLIENT_ENV.webAppUrl}${ROUTES.auth.socialAccountConfirmation}`,
-)
+const returnUrl = `${CLIENT_ENV.webAppUrl}${ROUTES.auth.socialAccountConfirmation}`
 
 export const SocialLinksView = () => {
   return (

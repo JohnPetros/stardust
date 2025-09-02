@@ -21,7 +21,7 @@ Content-Type: application/json
 }
 
 ### Sign in with Google
-GET {{URL}}/sign-in/google?returnUrl=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fsocial-account-confirmation
+GET {{URL}}/sign-in/google?returnUrl=http://localhost:3000/auth/social-account-confirmation
 
 ### Sign in with Github
 GET {{URL}}/sign-in/github?returnUrl=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fsocial-account-confirmation
