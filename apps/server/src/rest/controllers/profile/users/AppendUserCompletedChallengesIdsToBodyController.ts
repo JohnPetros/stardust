@@ -10,7 +10,6 @@ export class AppendUserCompletedChallengesIdsToBodyController implements Control
     const useCase = new GetUserUseCase(this.usersRepository)
     const user = await useCase.execute({
       userId: account.id,
-      userAccountProvider: account.provider,
     })
     http.extendBody({ userCompletedChallengesIds: user.completedChallengesIds })
     return http.pass()

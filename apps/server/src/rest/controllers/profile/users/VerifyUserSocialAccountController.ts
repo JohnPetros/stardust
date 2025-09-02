@@ -22,8 +22,6 @@ export class VerifyUserSocialAccountController implements Controller<Schema> {
     const { deduplicatedUserName } = await useCase.execute({
       socialAccountId: userSocialAccount.id,
       socialAccountName: userSocialAccount.name,
-      socialAccountEmail: userSocialAccount.email,
-      socialAccountProvider: userSocialAccount.provider,
     })
 
     http.setBody({

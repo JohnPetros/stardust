@@ -7,8 +7,6 @@ import { AppError } from '#global/domain/errors/AppError'
 type Request = {
   socialAccountId: string
   socialAccountName: string
-  socialAccountEmail: string
-  socialAccountProvider: string
 }
 
 type Response = Promise<{ deduplicatedUserName: string }>
@@ -16,18 +14,10 @@ type Response = Promise<{ deduplicatedUserName: string }>
 export class VerifyUserSocialAccountUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: UsersRepository) {}
 
-  async execute({
-    socialAccountId,
-    socialAccountName,
-    socialAccountEmail,
-    socialAccountProvider,
-  }: Request) {
+  async execute({ socialAccountId, socialAccountName }: Request) {
     const accountId = Id.create(socialAccountId)
-    const accountProvider = AccountProvider.create(socialAccountProvider)
-    const accountEmail = Email.create(socialAccountEmail)
 
-    await this.findUserBySocialAccount(accountId, accountProvider)
-    await this.findUserByEmail(accountEmail, accountId, accountProvider)
+    await this.findUserById(accountId)
 
     let name = Name.create(socialAccountName)
     let user = await this.repository.findByName(name)
@@ -60,15 +50,9 @@ export class VerifyUserSocialAccountUseCase implements UseCase<Request, Response
     }
   }
 
-  private async findUserByEmail(
-    email: Email,
-    socialAccountId: Id,
-    socialAccountProvider: AccountProvider,
-  ) {
-    const user = await this.repository.findByEmail(email)
+  private async findUserById(userId: Id) {
+    const user = await this.repository.findById(userId)
     if (user) {
-      user.setSocialAccountId(socialAccountId, socialAccountProvider)
-      await this.repository.replace(user)
       throw new UserSocialAccountAlreadyInUseError()
     }
   }

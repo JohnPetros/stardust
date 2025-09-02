@@ -51,7 +51,7 @@ describe('Verify User Social Account Use Case', () => {
   it('should throw an error and set the social account id if the email is already in use and for any social account provider', async () => {
     const user = UsersFaker.fake()
     const account = AccountsFaker.fake({ provider: 'google', email: user.email.value })
-    const setSocialAccountIdSpy = jest.spyOn(user, 'setSocialAccountId')
+    const connectSocialAccountSpy = jest.spyOn(user, 'connectSocialAccount')
     repository.findByGoogleAccountId.mockResolvedValue(null)
     repository.findByGithubAccountId.mockResolvedValue(null)
     repository.findByEmail.mockResolvedValue(user)
@@ -64,7 +64,7 @@ describe('Verify User Social Account Use Case', () => {
         socialAccountProvider: account.provider.value,
       }),
     ).rejects.toThrow(UserSocialAccountAlreadyInUseError)
-    expect(setSocialAccountIdSpy).toHaveBeenCalledWith(account.id, account.provider)
+    expect(connectSocialAccountSpy).toHaveBeenCalledWith(account.id, account.provider)
     expect(repository.replace).toHaveBeenCalledWith(user)
   })
 })
