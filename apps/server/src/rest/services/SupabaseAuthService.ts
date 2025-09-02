@@ -2,7 +2,7 @@ import type { AuthError } from '@supabase/supabase-js'
 
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import type { SessionDto } from '@stardust/core/auth/structures/dtos'
-import type { Email, Text } from '@stardust/core/global/structures'
+import type { Email, Id, Text } from '@stardust/core/global/structures'
 import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 import type { Password } from '@stardust/core/auth/structures'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
@@ -44,7 +44,6 @@ export class SupabaseAuthService implements AuthService {
         id: data.user.id,
         email: data.user.email ?? '',
         name: data.user.user_metadata.full_name ?? '',
-        provider: 'email',
         isAuthenticated: true,
       },
       accessToken: data.session.access_token,
@@ -92,7 +91,6 @@ export class SupabaseAuthService implements AuthService {
       id: data?.user?.id ?? '',
       email: email.value,
       name: '',
-      provider: 'email',
       isAuthenticated: false,
     }
 
@@ -145,6 +143,38 @@ export class SupabaseAuthService implements AuthService {
 
   async signUpWithSocialAccount(): Promise<RestResponse<{ isNewAccount: boolean }>> {
     throw new MethodNotImplementedError('signUpWithSocialAccount')
+  }
+
+  async connectGithubAccount(
+    returnUrl: Text,
+  ): Promise<RestResponse<{ signInUrl: string }>> {
+    const { data, error } = await this.supabase.auth.linkIdentity({
+      provider: 'github',
+      options: {
+        redirectTo: returnUrl.value,
+      },
+    })
+
+    if (error)
+      return this.supabaseAuthError(error, 'Erro inesperado ao conectar conta com Github')
+
+    return new RestResponse({ body: { signInUrl: data.url } })
+  }
+
+  async connectGoogleAccount(
+    returnUrl: Text,
+  ): Promise<RestResponse<{ signInUrl: string }>> {
+    const { data, error } = await this.supabase.auth.linkIdentity({
+      provider: 'google',
+      options: {
+        redirectTo: returnUrl.value,
+      },
+    })
+
+    if (error)
+      return this.supabaseAuthError(error, 'Erro inesperado ao conectar conta com Google')
+
+    return new RestResponse({ body: { signInUrl: data.url } })
   }
 
   async resendSignUpEmail(email: Email): Promise<RestResponse> {
@@ -226,7 +256,6 @@ export class SupabaseAuthService implements AuthService {
         id: data?.user?.id ?? '',
         email: data?.user?.email ?? '',
         name: data?.user?.user_metadata.full_name ?? '',
-        provider: data?.user?.app_metadata.provider ?? 'email',
         isAuthenticated: true,
       },
       accessToken: data?.session?.access_token ?? '',
@@ -263,7 +292,6 @@ export class SupabaseAuthService implements AuthService {
         id: data?.user?.id ?? '',
         email: data?.user?.email ?? '',
         name: data?.user?.user_metadata.full_name ?? '',
-        provider: data?.user?.app_metadata.provider ?? 'email',
         isAuthenticated: true,
       },
       accessToken: data?.session?.access_token ?? '',
@@ -293,7 +321,6 @@ export class SupabaseAuthService implements AuthService {
         id: data?.user?.id ?? '',
         email: data?.user?.email ?? '',
         name: data?.user?.user_metadata.full_name ?? '',
-        provider: data?.user?.app_metadata.provider ?? 'email',
         isAuthenticated: true,
       },
       accessToken: data?.session?.access_token ?? '',
@@ -339,7 +366,6 @@ export class SupabaseAuthService implements AuthService {
       id: user?.id ?? '',
       email: user?.email ?? '',
       name: user?.user_metadata.full_name ?? '',
-      provider: user?.app_metadata.provider ?? 'email',
       isAuthenticated: true,
     }
 
@@ -362,11 +388,16 @@ export class SupabaseAuthService implements AuthService {
       id: user?.id ?? '',
       email: user?.email ?? '',
       name: user?.user_metadata.full_name ?? '',
-      provider: user?.app_metadata.provider ?? 'email',
       isAuthenticated: true,
     }
 
     return new RestResponse({ body: account })
+  }
+
+  async deleteAccount(accountId: Id): Promise<RestResponse> {
+    const { error } = await this.supabase.auth.admin.deleteUser(accountId.value)
+    if (error) return this.supabaseAuthError(error, 'Error inesperado ao deletar conta')
+    return new RestResponse()
   }
 
   private supabaseAuthError<Data>(
