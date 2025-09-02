@@ -2,14 +2,12 @@ import { Entity } from '#global/domain/abstracts/Entity'
 import { Email } from '#global/domain/structures/Email'
 import { Logical } from '#global/domain/structures/Logical'
 import { Name } from '#global/domain/structures/Name'
-import { AccountProvider } from '#global/domain/structures/AccountProvider'
 import type { AccountDto } from './dtos'
 
 type Props = {
   name: Name
   email: Email
   isAuthenticated: Logical
-  provider: AccountProvider
 }
 
 export class Account extends Entity<Props> {
@@ -19,7 +17,6 @@ export class Account extends Entity<Props> {
         email: Email.create(dto.email),
         name: Name.create(dto.name),
         isAuthenticated: Logical.create(dto.isAuthenticated),
-        provider: AccountProvider.create(dto.provider),
       },
       dto.id,
     )
@@ -37,17 +34,12 @@ export class Account extends Entity<Props> {
     return this.props.name
   }
 
-  get provider(): AccountProvider {
-    return this.props.provider
-  }
-
   get dto(): AccountDto {
     return {
       id: this.id.value,
       name: this.name.value,
       email: this.email.value,
       isAuthenticated: this.isAuthenticated.value,
-      provider: this.provider.value,
     }
   }
 }

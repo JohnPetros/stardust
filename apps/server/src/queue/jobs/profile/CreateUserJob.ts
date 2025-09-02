@@ -37,7 +37,6 @@ export class CreateUserJob implements Job<Payload> {
           userId: user.id,
           userName: user.name,
           userEmail: user.email,
-          userAccountProvider: user.accountProvider,
           firstTierId,
           selectedAvatarByDefaultId,
           selectedRocketByDefaultId,

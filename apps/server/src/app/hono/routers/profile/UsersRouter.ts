@@ -2,7 +2,6 @@ import { Hono } from 'hono'
 import { z } from 'zod'
 
 import {
-  accountProviderSchema,
   emailSchema,
   idSchema,
   integerSchema,
@@ -31,7 +30,6 @@ import {
   SpaceMiddleware,
   ChallengingMiddleware,
   ValidationMiddleware,
-  ProfileMiddleware,
 } from '../../middlewares'
 
 export class UsersRouter extends HonoRouter {
@@ -49,12 +47,6 @@ export class UsersRouter extends HonoRouter {
         'param',
         z.object({
           userId: stringSchema,
-        }),
-      ),
-      this.validationMiddleware.validate(
-        'query',
-        z.object({
-          accountProvider: accountProviderSchema,
         }),
       ),
       async (context) => {

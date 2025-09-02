@@ -13,3 +13,4 @@ export { SignInWithGoogleAccountController } from './SignInWithGoogleAccountCont
 export { SignInWithGithubAccountController } from './SignInWithGithubAccountController'
 export { FetchSocialAccountController } from './FetchSocialAccountController'
 export { SignUpWithSocialAccountController } from './SignUpWithSocialAccountController'
+export { ConnectGoogleAccountController } from './ConnectGoogleAccountController'

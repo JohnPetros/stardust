@@ -27,10 +27,7 @@ type RewardingResponse = {
 }
 
 export interface ProfileService {
-  fetchUserById(
-    userId: Id,
-    accountProvider: AccountProvider,
-  ): Promise<RestResponse<UserDto>>
+  fetchUserById(userId: Id): Promise<RestResponse<UserDto>>
   fetchUserBySlug(userSlug: Slug): Promise<RestResponse<UserDto>>
   fetchAchievements(): Promise<RestResponse<AchievementDto[]>>
   fetchUnlockedAchievements(userId: Id): Promise<RestResponse<AchievementDto[]>>

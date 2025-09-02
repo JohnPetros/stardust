@@ -3,5 +3,4 @@ export type AccountDto = {
   email: string
   name: string
   isAuthenticated: boolean
-  provider: string
 }
