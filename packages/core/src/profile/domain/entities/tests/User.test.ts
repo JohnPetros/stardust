@@ -506,23 +506,4 @@ describe('User Entity', () => {
 
     expect(user.acquiredRocketsCount).toEqual(Integer.create(2))
   })
-
-  it('should set the social account id and provider', () => {
-    const user = UsersFaker.fake()
-    const googleAccountId = Id.create()
-    const githubAccountId = Id.create()
-
-    expect(user.googleAccountId).toBeNull()
-    expect(user.githubAccountId).toBeNull()
-
-    user.setSocialAccountId(googleAccountId, AccountProvider.create('google'))
-
-    expect(user.googleAccountId).toEqual(googleAccountId)
-    expect(user.githubAccountId).toBeNull()
-
-    user.setSocialAccountId(githubAccountId, AccountProvider.create('github'))
-
-    expect(user.googleAccountId).toEqual(googleAccountId)
-    expect(user.githubAccountId).toEqual(githubAccountId)
-  })
 })

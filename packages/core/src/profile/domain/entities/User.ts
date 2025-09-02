@@ -414,14 +414,6 @@ export class User extends Entity<UserProps> {
     return this.props.createdAt
   }
 
-  setSocialAccountId(socialAccountId: Id, socialAccountProvider: AccountProvider) {
-    if (socialAccountProvider.isGithubProvider.isTrue) {
-      this.props.githubAccountId = socialAccountId
-    } else if (socialAccountProvider.isGoogleProvider.isTrue) {
-      this.props.googleAccountId = socialAccountId
-    }
-  }
-
   get dto(): UserDto {
     return {
       id: this.id.value,
