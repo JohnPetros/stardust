@@ -1,13 +1,6 @@
 import type { ProfileService as IProfileService } from '@stardust/core/profile/interfaces'
 import type { RestClient } from '@stardust/core/global/interfaces'
-import type {
-  AccountProvider,
-  Email,
-  Id,
-  Integer,
-  Name,
-  Slug,
-} from '@stardust/core/global/structures'
+import type { Email, Id, Integer, Name, Slug } from '@stardust/core/global/structures'
 import type { User } from '@stardust/core/profile/entities'
 import type {
   StarRewardingPayload,
@@ -22,10 +15,8 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
       return await restClient.get('/profile/achievements')
     },
 
-    async fetchUserById(userId: Id, accountProvider: AccountProvider) {
-      return await restClient.get(
-        `/profile/users/id/${userId.value}?accountProvider=${accountProvider.value}`,
-      )
+    async fetchUserById(userId: Id) {
+      return await restClient.get(`/profile/users/id/${userId.value}`)
     },
 
     async fetchUserBySlug(userSlug: Slug) {
