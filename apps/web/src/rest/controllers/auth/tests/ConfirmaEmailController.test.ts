@@ -7,6 +7,7 @@ import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 import { COOKIES, ROUTES } from '@/constants'
 import { ConfirmEmailController } from '../ConfirmEmailController'
+import { SessionDto } from '@stardust/core/auth/structures/dtos'
 
 describe('Confirm Email Controller', () => {
   let http: Mock<Http>
@@ -36,6 +37,8 @@ describe('Confirm Email Controller', () => {
       account: {
         id: 'fake-id',
         email: 'fake-email',
+        provider: 'fake-provider',
+        name: 'fake-name',
         isAuthenticated: true,
       },
       accessToken: 'fake-access-token',
@@ -63,6 +66,8 @@ describe('Confirm Email Controller', () => {
       account: {
         id: 'fake-id',
         email: 'fake-email',
+        provider: 'fake-provider',
+        name: 'fake-name',
         isAuthenticated: true,
       },
       accessToken: 'fake-access-token',
@@ -93,10 +98,12 @@ describe('Confirm Email Controller', () => {
   })
 
   it('should redirect to the account confirmation page if the email was successfully confirmed', async () => {
-    const sessionDto = {
+    const sessionDto: SessionDto = {
       account: {
         id: 'fake-id',
         email: 'fake-email',
+        name: 'fake-name',
+        provider: 'fake-provider',
         isAuthenticated: true,
       },
       accessToken: 'fake-access-token',

@@ -26,6 +26,10 @@ export const AuthService = (restClient: RestClient): IAuthService => {
       return await restClient.post('/auth/sign-in/google')
     },
 
+    async signInWithGithubAccount() {
+      return await restClient.post('/auth/sign-in/github')
+    },
+
     async signUp() {
       throw new MethodNotImplementedError('signUp')
     },

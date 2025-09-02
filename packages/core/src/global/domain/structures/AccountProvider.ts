@@ -21,6 +21,10 @@ export class AccountProvider {
     return new AccountProvider(value)
   }
 
+  static createAsEmail(): AccountProvider {
+    return new AccountProvider('email')
+  }
+
   get isGoogleProvider(): Logical {
     return Logical.create(this.value === 'google')
   }
