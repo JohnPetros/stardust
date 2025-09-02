@@ -2,7 +2,7 @@ import { ValidationError } from '../../errors'
 import { Name } from '../Name'
 import { Text } from '../Text'
 
-describe('Name Struct', () => {
+describe('Name Structure', () => {
   it('should not be created if its value is lower than 2 characters', () => {
     expect(() => Name.create('J')).toThrow(ValidationError)
   })
@@ -42,5 +42,13 @@ describe('Name Struct', () => {
     const name = Name.create('Leonel Sanches')
 
     expect(name.isLike(Text.create('Sanches')).isTrue).toBeTruthy()
+  })
+
+  it('should deduplicate the name if it is duplicated', () => {
+    const name = Name.create('Leonel Sanches')
+    const duplicatedName = name.deduplicate()
+
+    expect(duplicatedName.value).toBe('Leonel Sanches(1)')
+    expect(duplicatedName.deduplicate().value).toBe('Leonel Sanches(2)')
   })
 })

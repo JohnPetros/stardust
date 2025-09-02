@@ -5,6 +5,7 @@ type Payload = {
     id: string
     name: string
     email: string
+    accountProvider: string
   }
   firstStarId: string
 }

@@ -5,6 +5,7 @@ import { HomeLayout } from '@/ui/profile/widgets/layouts/Home'
 import { AchivementsProvider } from '@/ui/profile/contexts/AchievementsContext'
 import { ProfileService } from '@/rest/services/ProfileService'
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
+import { UserCreationPendingLayout } from '@/ui/global/widgets/layouts/UserCreationPendingLayout'
 
 type HomeProps = {
   children: ReactNode
@@ -17,11 +18,13 @@ const Layout = async ({ children }: HomeProps) => {
   if (response.isFailure) response.throwError()
 
   return (
-    <AchivementsProvider achievementsDto={response.body}>
-      <SidebarProvider>
-        <HomeLayout>{children}</HomeLayout>
-      </SidebarProvider>
-    </AchivementsProvider>
+    <UserCreationPendingLayout>
+      <AchivementsProvider achievementsDto={response.body}>
+        <SidebarProvider>
+          <HomeLayout>{children}</HomeLayout>
+        </SidebarProvider>
+      </AchivementsProvider>
+    </UserCreationPendingLayout>
   )
 }
 

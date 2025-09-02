@@ -17,6 +17,7 @@ export class SignUpWithSocialAccountController implements Controller<Schema> {
       userId: String(accountDto.id),
       userEmail: accountDto.email,
       userName: accountDto.name,
+      userAccountProvider: accountDto.provider,
     })
 
     await this.eventBroker.publish(event)

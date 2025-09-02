@@ -31,13 +31,13 @@ export class CreateUserJob implements Job<Payload> {
     const acquireRocketUseCase = new AcquireRocketUseCase(this.usersRepository)
     const acquireAvatarUseCase = new AcquireAvatarUseCase(this.usersRepository)
 
-
     await amqp.run(
       async () =>
         await createUserUseCase.execute({
           userId: user.id,
           userName: user.name,
           userEmail: user.email,
+          userAccountProvider: user.accountProvider,
           firstTierId,
           selectedAvatarByDefaultId,
           selectedRocketByDefaultId,

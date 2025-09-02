@@ -1,7 +1,9 @@
+import type { Account } from '@stardust/core/auth/entities'
 import type { User } from '@stardust/core/global/entities'
 import type { UserDto } from '@stardust/core/profile/entities/dtos'
 
 export type AuthContextValue = {
+  account: Account | null
   user: User | null
   accessToken: string | null
   isLoading: boolean

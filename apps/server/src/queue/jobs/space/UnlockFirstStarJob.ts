@@ -25,6 +25,7 @@ export class UnlockFirstStarJob implements Job<Payload> {
           userId: payload.userId,
           userName: payload.userName,
           userEmail: payload.userEmail,
+          userAccountProvider: payload.userAccountProvider,
         }),
       UnlockFirstStarUseCase.name,
     )

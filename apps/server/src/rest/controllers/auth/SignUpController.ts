@@ -33,6 +33,7 @@ export class SignUpController implements Controller<Schema> {
         userId: accountId,
         userEmail: email,
         userName: name,
+        userAccountProvider: response.body.provider,
       })
       await this.eventBroker.publish(event)
     }
