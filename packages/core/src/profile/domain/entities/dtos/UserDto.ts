@@ -18,8 +18,6 @@ export type UserDto = {
   rocket: RocketAggregateDto
   avatar: AvatarAggregateDto
   tier: TierAggregateDto
-  githubAccountId?: string
-  googleAccountId?: string
   unlockedStarsIds?: string[]
   acquiredRocketsIds?: string[]
   unlockedDocsIds?: string[]
