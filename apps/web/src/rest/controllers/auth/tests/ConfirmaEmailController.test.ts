@@ -103,7 +103,6 @@ describe('Confirm Email Controller', () => {
         id: 'fake-id',
         email: 'fake-email',
         name: 'fake-name',
-        provider: 'fake-provider',
         isAuthenticated: true,
       },
       accessToken: 'fake-access-token',

@@ -14,7 +14,6 @@ export class AccountsFaker {
       name: faker.person.firstName(),
       email: faker.internet.email(),
       isAuthenticated: faker.datatype.boolean(),
-      provider: faker.helpers.arrayElement(['google', 'github', 'email']),
       ...baseDto,
     }
   }

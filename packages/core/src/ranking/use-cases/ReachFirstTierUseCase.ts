@@ -10,7 +10,6 @@ type Request = {
     id: string
     name: string
     email: string
-    accountProvider: string
   }
   firstStarId: string
 }

@@ -16,7 +16,7 @@ export const authActionClient = actionClient.use(async ({ next }) => {
   const account = Account.create(authResponse.body)
 
   const profileService = ProfileService(restClient)
-  const profileResponse = await profileService.fetchUserById(account.id, account.provider)
+  const profileResponse = await profileService.fetchUserById(account.id)
   if (profileResponse.isFailure) profileResponse.throwError()
 
   return next({ ctx: { user: profileResponse.body } })

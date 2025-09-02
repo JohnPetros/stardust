@@ -19,7 +19,7 @@ describe('Verify User Social Account Use Case', () => {
   })
 
   it('should throw an error if the google account is already in use', async () => {
-    const account = AccountsFaker.fake({ provider: 'google' })
+    const account = AccountsFaker.fake()
     const user = UsersFaker.fake()
     repository.findByGoogleAccountId.mockResolvedValue(user)
 
@@ -27,14 +27,12 @@ describe('Verify User Social Account Use Case', () => {
       useCase.execute({
         socialAccountId: account.id.value,
         socialAccountName: account.name.value,
-        socialAccountEmail: account.email.value,
-        socialAccountProvider: account.provider.value,
       }),
     ).rejects.toThrow(UserSocialAccountAlreadyInUseError)
   })
 
   it('should throw an error if the github account is already in use', async () => {
-    const account = AccountsFaker.fake({ provider: 'github' })
+    const account = AccountsFaker.fake()
     const user = UsersFaker.fake()
     repository.findByGithubAccountId.mockResolvedValue(user)
 
@@ -42,29 +40,7 @@ describe('Verify User Social Account Use Case', () => {
       useCase.execute({
         socialAccountId: account.id.value,
         socialAccountName: account.name.value,
-        socialAccountEmail: account.email.value,
-        socialAccountProvider: account.provider.value,
       }),
     ).rejects.toThrow(UserSocialAccountAlreadyInUseError)
-  })
-
-  it('should throw an error and set the social account id if the email is already in use and for any social account provider', async () => {
-    const user = UsersFaker.fake()
-    const account = AccountsFaker.fake({ provider: 'google', email: user.email.value })
-    const connectSocialAccountSpy = jest.spyOn(user, 'connectSocialAccount')
-    repository.findByGoogleAccountId.mockResolvedValue(null)
-    repository.findByGithubAccountId.mockResolvedValue(null)
-    repository.findByEmail.mockResolvedValue(user)
-
-    await expect(
-      useCase.execute({
-        socialAccountId: account.id.value,
-        socialAccountName: account.name.value,
-        socialAccountEmail: account.email.value,
-        socialAccountProvider: account.provider.value,
-      }),
-    ).rejects.toThrow(UserSocialAccountAlreadyInUseError)
-    expect(connectSocialAccountSpy).toHaveBeenCalledWith(account.id, account.provider)
-    expect(repository.replace).toHaveBeenCalledWith(user)
   })
 })

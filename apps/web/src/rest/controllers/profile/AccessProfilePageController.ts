@@ -16,10 +16,7 @@ export const AccessProfilePageController = (
   return {
     async handle(http: Http<Schema>) {
       const { userId } = http.getRouteParams()
-      const response = await service.fetchUserById(
-        Id.create(userId),
-        AccountProvider.createAsEmail(),
-      )
+      const response = await service.fetchUserById(Id.create(userId))
       if (response.isFailure) response.throwError()
       const user = User.create(response.body)
       return http.redirect(ROUTES.profile.user(user.slug.value))

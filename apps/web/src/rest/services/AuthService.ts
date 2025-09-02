@@ -83,5 +83,13 @@ export const AuthService = (restClient: RestClient): IAuthService => {
     async confirmPasswordReset(token: Text) {
       return await restClient.post('/auth/confirm-password-reset', { token: token.value })
     },
+
+    async connectGithubAccount(returnUrl: Text) {
+      return await restClient.get(`/auth/connect/github?returnUrl=${returnUrl.value}`)
+    },
+
+    async connectGoogleAccount(returnUrl: Text) {
+      return await restClient.get(`/auth/connect/google?returnUrl=${returnUrl.value}`)
+    },
   }
 }

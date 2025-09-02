@@ -27,7 +27,6 @@ export interface AuthService {
   confirmEmail(token: Text): Promise<RestResponse<SessionDto>>
   confirmPasswordReset(token: Text): Promise<RestResponse<SessionDto>>
   refreshSession(refreshToken: Text): Promise<RestResponse<SessionDto>>
-  deleteAccount(accountId: Id): Promise<RestResponse>
   connectGithubAccount(returnUrl: Text): Promise<RestResponse<{ signInUrl: string }>>
   connectGoogleAccount(returnUrl: Text): Promise<RestResponse<{ signInUrl: string }>>
 }
