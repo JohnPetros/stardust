@@ -274,6 +274,51 @@ export type Database = {
           },
         ]
       }
+      oauth_clients: {
+        Row: {
+          client_id: string
+          client_name: string | null
+          client_secret_hash: string
+          client_uri: string | null
+          created_at: string
+          deleted_at: string | null
+          grant_types: string
+          id: string
+          logo_uri: string | null
+          redirect_uris: string
+          registration_type: Database["auth"]["Enums"]["oauth_registration_type"]
+          updated_at: string
+        }
+        Insert: {
+          client_id: string
+          client_name?: string | null
+          client_secret_hash: string
+          client_uri?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          grant_types: string
+          id: string
+          logo_uri?: string | null
+          redirect_uris: string
+          registration_type: Database["auth"]["Enums"]["oauth_registration_type"]
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string
+          client_name?: string | null
+          client_secret_hash?: string
+          client_uri?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          grant_types?: string
+          id?: string
+          logo_uri?: string | null
+          redirect_uris?: string
+          registration_type?: Database["auth"]["Enums"]["oauth_registration_type"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       one_time_tokens: {
         Row: {
           created_at: string
@@ -707,6 +752,7 @@ export type Database = {
       code_challenge_method: "s256" | "plain"
       factor_status: "unverified" | "verified"
       factor_type: "totp" | "webauthn" | "phone"
+      oauth_registration_type: "dynamic" | "manual"
       one_time_token_type:
         | "confirmation_token"
         | "reauthentication_token"
@@ -1780,8 +1826,6 @@ export type Database = {
           did_break_streak: boolean
           did_complete_saturday: boolean
           email: string
-          github_account_id: string | null
-          google_account_id: string | null
           has_completed_space: boolean
           id: string
           is_loser: boolean | null
@@ -1805,8 +1849,6 @@ export type Database = {
           did_break_streak?: boolean
           did_complete_saturday?: boolean
           email: string
-          github_account_id?: string | null
-          google_account_id?: string | null
           has_completed_space?: boolean
           id: string
           is_loser?: boolean | null
@@ -1830,8 +1872,6 @@ export type Database = {
           did_break_streak?: boolean
           did_complete_saturday?: boolean
           email?: string
-          github_account_id?: string | null
-          google_account_id?: string | null
           has_completed_space?: boolean
           id?: string
           is_loser?: boolean | null
@@ -2822,7 +2862,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_08_08: {
+      messages_2025_08_31: {
         Row: {
           event: string | null
           extension: string
@@ -2855,7 +2895,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_08_09: {
+      messages_2025_09_01: {
         Row: {
           event: string | null
           extension: string
@@ -2888,7 +2928,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_08_10: {
+      messages_2025_09_02: {
         Row: {
           event: string | null
           extension: string
@@ -2921,7 +2961,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_08_11: {
+      messages_2025_09_03: {
         Row: {
           event: string | null
           extension: string
@@ -2954,7 +2994,40 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_08_12: {
+      messages_2025_09_04: {
+        Row: {
+          event: string | null
+          extension: string
+          id: string
+          inserted_at: string
+          payload: Json | null
+          private: boolean | null
+          topic: string
+          updated_at: string
+        }
+        Insert: {
+          event?: string | null
+          extension: string
+          id?: string
+          inserted_at?: string
+          payload?: Json | null
+          private?: boolean | null
+          topic: string
+          updated_at?: string
+        }
+        Update: {
+          event?: string | null
+          extension?: string
+          id?: string
+          inserted_at?: string
+          payload?: Json | null
+          private?: boolean | null
+          topic?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      messages_2025_09_05: {
         Row: {
           event: string | null
           extension: string
@@ -3703,6 +3776,7 @@ export const Constants = {
       code_challenge_method: ["s256", "plain"],
       factor_status: ["unverified", "verified"],
       factor_type: ["totp", "webauthn", "phone"],
+      oauth_registration_type: ["dynamic", "manual"],
       one_time_token_type: [
         "confirmation_token",
         "reauthentication_token",

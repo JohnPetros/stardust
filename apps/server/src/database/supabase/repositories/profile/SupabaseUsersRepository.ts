@@ -330,8 +330,6 @@ export class SupabaseUsersRepository
       streak: supabaseUser.streak,
       level: supabaseUser.level,
       week_status: supabaseUser.week_status,
-      github_account_id: supabaseUser.github_account_id,
-      google_account_id: supabaseUser.google_account_id,
     })
 
     if (error) throw new SupabasePostgreError(error)
