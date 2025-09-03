@@ -190,7 +190,6 @@ export class HonoHttp<HonoContext extends Context>
         message: response.errorMessage,
       })
     }
-
     if (response.statusCode === HTTP_STATUS_CODE.noContent) {
       return this.context.json(undefined)
     }
