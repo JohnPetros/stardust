@@ -24,9 +24,9 @@ export const SignUpWithSocialAccountAction = (
       const response = await service.fetchAccount()
       if (response.isFailure) response.throwError()
 
-      const account = Account.create(response.body)
+      console.log('response', response)
 
-      console.log('account', account)
+      const account = Account.create(response.body)
 
       const signUpResponse = await service.signUpWithSocialAccount(account)
 
