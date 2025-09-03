@@ -36,8 +36,9 @@ export function useAuthProvider({
 
   async function fetchUser() {
     if (!account) return
+    console.log('account ->', account)
     const response = await profileService.fetchUserById(account.id)
-    console.log('response', response)
+    console.log('response ->', response)
     return response.body
   }
 
