@@ -53,6 +53,7 @@ export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
     }
 
     const resultado = resultadoInterpretador.resultado
+    console.log('resultado ->', resultado)
     const result = resultado[1]
 
     return new CodeRunnerResponse({ result, outputs })
@@ -167,6 +168,8 @@ export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
 
   private trateErro(erro: DeleguaErro) {
     const linhaDoErro = erro.linha ?? 0 // TODO: erro.linha pode ser undefined
+
+    console.log('erro ->', erro)
 
     if ('erroInterno' in erro && erro.erroInterno instanceof Error) {
       return new CodeRunnerResponse({
