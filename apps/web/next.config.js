@@ -18,10 +18,10 @@ const nextConfig = {
     ],
   },
   output: 'standalone',
-  // webpack: (config) => {
-  //   config.optimization.minimizer = [];
-  //   return config;
-  // },
+  webpack: (config) => {
+    config.optimization.minimizer = [];
+    return config;
+  },
 }
 
 module.exports = nextConfig

@@ -21,7 +21,7 @@ export const SignUpWithSocialAccountAction = (
   return {
     async handle(call: Call<Request>) {
       const { accessToken, refreshToken } = call.getRequest()
-      const response = await service.fetchSocialAccount()
+      const response = await service.fetchAccount()
       if (response.isFailure) response.throwError()
 
       const account = Account.create(response.body)
