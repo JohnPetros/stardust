@@ -15,7 +15,7 @@ export class Account extends Entity<Props> {
     return new Account(
       {
         email: Email.create(dto.email),
-        name: Name.create('não definido'),
+        name: Name.create(dto.name ? dto.name : 'não definido'),
         isAuthenticated: Logical.create(dto.isAuthenticated),
       },
       dto.id,
