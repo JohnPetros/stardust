@@ -1,8 +1,7 @@
 import type { UseCase } from '#global/interfaces/index'
 import type { UsersRepository } from '#profile/interfaces/index'
-import { AccountProvider, Email, Id, Name } from '#global/domain/structures/index'
+import { Id, Name } from '#global/domain/structures/index'
 import { UserSocialAccountAlreadyInUseError } from '../errors'
-import { AppError } from '#global/domain/errors/AppError'
 
 type Request = {
   socialAccountId: string
@@ -27,27 +26,9 @@ export class VerifyUserSocialAccountUseCase implements UseCase<Request, Response
       user = await this.repository.findByName(name)
     }
 
-    return { deduplicatedUserName: name.value }
-  }
+    console.log('name ->', name)
 
-  private async findUserBySocialAccount(
-    socialAccountId: Id,
-    socialAccountProvider: AccountProvider,
-  ) {
-    switch (socialAccountProvider.value) {
-      case 'google': {
-        const user = await this.repository.findByGoogleAccountId(socialAccountId)
-        if (user) throw new UserSocialAccountAlreadyInUseError()
-        break
-      }
-      case 'github': {
-        const user = await this.repository.findByGithubAccountId(socialAccountId)
-        if (user) throw new UserSocialAccountAlreadyInUseError()
-        break
-      }
-      default:
-        throw new AppError('Provedor de conta social não suportado')
-    }
+    return { deduplicatedUserName: name.value }
   }
 
   private async findUserById(userId: Id) {
