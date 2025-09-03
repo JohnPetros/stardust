@@ -38,10 +38,9 @@ POST {{URL}}/sign-up/social-account
 Content-Type: application/json
 
 {
-  "id": "faea4574-ac75-43af-9ea6-eba8a5593088",
-  "email": "joaopcarvalho.cds@gmail.com",
-  "name": "Ctrl Alt Del",
-  "provider": "google",
+  "id": "f26ee48b-c0c0-41b1-a3e8-1761bec71eb5",
+  "email": "neilarms2013@gmail.com",
+  "name": "Neylton Almeida",
   "isAuthenticated": true
 }
 
