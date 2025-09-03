@@ -271,14 +271,17 @@ export class User extends Entity<UserProps> {
   }
 
   get unlockedStarsCount(): Integer {
+    if (this.props.acquiredRocketsIds.count.isZero.isTrue) return Integer.create(0)
     return this.props.unlockedStarsIds.count.minus(Integer.create(1))
   }
 
   get acquiredRocketsCount() {
+    if (this.props.acquiredRocketsIds.count.isZero.isTrue) return Integer.create(0)
     return this.props.acquiredRocketsIds.count.minus(Integer.create(1))
   }
 
   get acquiredAvatarsCount() {
+    if (this.props.acquiredRocketsIds.count.isZero.isTrue) return Integer.create(0)
     return this.props.acquiredAvatarsIds.count
   }
 

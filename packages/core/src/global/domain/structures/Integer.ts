@@ -53,4 +53,8 @@ export class Integer {
   isDifferentFrom(integer: Integer) {
     return Logical.create(this.value !== integer.value)
   }
+
+  get isZero() {
+    return Logical.create(this.value === 0)
+  }
 }
