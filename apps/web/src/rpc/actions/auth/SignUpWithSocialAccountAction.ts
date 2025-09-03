@@ -26,7 +26,11 @@ export const SignUpWithSocialAccountAction = (
 
       const account = Account.create(response.body)
 
+      console.log('account', account)
+
       const signUpResponse = await service.signUpWithSocialAccount(account)
+
+      console.log('signUpResponse', signUpResponse)
 
       await Promise.all([
         call.setCookie(
