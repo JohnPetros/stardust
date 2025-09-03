@@ -49,7 +49,6 @@ export const SignUpWithSocialAccountAction = (
         return {
           account: account.dto,
           isNewAccount: false,
-          signUpResponse,
         }
       }
 
