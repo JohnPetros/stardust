@@ -49,7 +49,7 @@ export function useAuthProvider({
     key: CACHE.keys.authUser,
     fetcher: fetchUser,
     isEnabled: Boolean(accountDto),
-    dependencies: [],
+    dependencies: [account?.id],
   })
 
   const notifyUserChanges = useCallback(() => {
