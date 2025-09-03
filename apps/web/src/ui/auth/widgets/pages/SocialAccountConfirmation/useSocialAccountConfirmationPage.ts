@@ -55,6 +55,7 @@ export function useSocialAccountConfirmationPage({
         accessToken,
         refreshToken,
       )
+      console.log('isNewAccount', isNewAccount)
       setIsNewAccount(isNewAccount)
       if (!isNewAccount) showRocketAnimation()
     }
