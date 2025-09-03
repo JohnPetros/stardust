@@ -49,12 +49,14 @@ export const SignUpWithSocialAccountAction = (
         return {
           account: account.dto,
           isNewAccount: false,
+          signUpResponse: signUpResponse.errorMessage,
         }
       }
 
       return {
         account: account.dto,
         isNewAccount: signUpResponse.body.isNewAccount,
+        signUpResponse: null,
       }
     },
   }
