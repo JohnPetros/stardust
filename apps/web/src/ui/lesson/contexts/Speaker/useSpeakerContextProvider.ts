@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { STORAGE } from '@/constants/storage'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 import type { SpeakerContextValue } from './SpeakerContextValue'
 
 export function useSpeakerContextProvider() {
-  const [isEnabled, setIsEnabled] = useState(true)
   const {
     get: getIsEnabledStorage,
     set: setIsEnabledStorage,
@@ -20,9 +19,10 @@ export function useSpeakerContextProvider() {
   const { get: getPitchStorage, set: setPitchStorage } = useLocalStorage<number>(
     STORAGE.keys.speakerPitch,
   )
-  const [volume, setVolume] = useState(1)
-  const [rate, setRate] = useState(1)
-  const [pitch, setPitch] = useState(1)
+  const [isEnabled, setIsEnabled] = useState(Boolean(getIsEnabledStorage()))
+  const [volume, setVolume] = useState(getVolumeStorage() ?? 1)
+  const [rate, setRate] = useState(getRateStorage() ?? 1)
+  const [pitch, setPitch] = useState(getPitchStorage() ?? 1)
 
   const contextValue: SpeakerContextValue = useMemo(() => {
     async function handleEnableToggle() {
@@ -70,13 +70,6 @@ export function useSpeakerContextProvider() {
     setIsEnabledStorage,
     removeIsEnabledStorage,
   ])
-
-  useEffect(() => {
-    setIsEnabled(Boolean(getIsEnabledStorage()))
-    setVolume(getVolumeStorage() ?? 1)
-    setRate(getRateStorage() ?? 1)
-    setPitch(getPitchStorage() ?? 1)
-  }, [getIsEnabledStorage, getVolumeStorage, getRateStorage, getPitchStorage])
 
   return contextValue
 }
