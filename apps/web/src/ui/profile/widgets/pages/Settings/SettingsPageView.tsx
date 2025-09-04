@@ -6,6 +6,7 @@ import { EmailInput } from './EmailInput'
 import { PasswordInput } from './PasswordInput'
 import { Preferences } from './Preferences'
 import { GoToProfilePageLink } from './GoToProfilePageLink'
+import { SocialAccounts } from './SocialAccounts'
 
 type Props = {
   userDto: UserDto
@@ -32,7 +33,13 @@ export const SettingsPageView = ({ userDto }: Props) => {
         <PasswordInput />
       </div>
 
-      <Preferences />
+      <div className='mt-12'>
+        <Preferences />
+      </div>
+
+      <div className='mt-12'>
+        <SocialAccounts />
+      </div>
     </main>
   )
 }
