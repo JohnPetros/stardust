@@ -14,7 +14,7 @@ export const PictureView = ({ url }: Props) => {
   const formattedImage = image.replace(REGEX.quotes, '')
 
   return (
-    <div className='relative mr-3 overflow-hidden rounded-md h-16 md:w-24 '>
+    <div className='relative mr-3 overflow-hidden rounded-md w-24 h-20 md:h-16'>
       <Image
         src={formattedImage}
         alt='Panda'
