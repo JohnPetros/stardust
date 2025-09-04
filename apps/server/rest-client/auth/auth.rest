@@ -1,5 +1,5 @@
 @URL = {{BASE_URL}}/auth
-@EMAIL = leonel@designliquido.com
+@EMAIL = ctrlaltdel.cursor@gmail.com
 
 ### Sign in
 POST {{URL}}/sign-in
@@ -7,7 +7,7 @@ Content-Type: application/json
 
 {
   "email": "{{EMAIL}}",
-  "password": "Narwal123#"
+  "password": "123456"
 }
 
 ### Sign up
@@ -27,11 +27,20 @@ GET {{URL}}/sign-in/google?returnUrl=http://localhost:3000/auth/social-account-c
 GET {{URL}}/sign-in/github?returnUrl=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fsocial-account-confirmation
 
 ### Connect Google account
-GET {{URL}}/connect/google?returnUrl=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fsocial-account-confirmation
+GET {{URL}}/social-account/google?returnUrl=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fsocial-account-confirmation
 Authorization: Bearer {{JWT}}
 
 ### Connect Github account
-GET {{URL}}/connect/github?returnUrl=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fsocial-account-confirmation
+GET {{URL}}/social-account/github?returnUrl=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fsocial-account-confirmation
+Authorization: Bearer {{JWT}}
+
+### Disconnect Google account
+DELETE {{URL}}/social-account/google
+Authorization: Bearer {{JWT}}
+
+### Disconnect Github account
+DELETE {{URL}}/social-account/github
+Authorization: Bearer {{JWT}}
 
 ### Sign up with social account
 POST {{URL}}/sign-up/social-account
@@ -103,4 +112,12 @@ Authorization: Bearer {{JWT}}
 
 ### Fetch social account
 GET {{URL}}/social-account
+Authorization: Bearer {{JWT}}
+
+### Fetch github account connection
+GET {{URL}}/social-account/github/connection
+Authorization: Bearer {{JWT}}
+
+### Fetch google account connection
+GET {{URL}}/social-account/google/connection
 Authorization: Bearer {{JWT}}

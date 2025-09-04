@@ -25,6 +25,11 @@ import {
   SignUpWithSocialAccountController,
   SignInWithGithubAccountController,
   ConnectGoogleAccountController,
+  ConnectGithubAccountController,
+  DisconnectGithubAccountController,
+  DisconnectGoogleAccountController,
+  FetchGithubAccountConnectionController,
+  FetchGoogleAccountConnectionController,
 } from '@/rest/controllers/auth'
 import { SupabaseAuthService } from '@/rest/services'
 import { InngestEventBroker } from '@/queue/inngest/InngestEventBroker'
@@ -169,6 +174,61 @@ export class AuthRouter extends HonoRouter {
         return http.sendResponse(response)
       },
     )
+  }
+
+  private registerConnectGithubAccountRoute(): void {
+    this.router.get('/social-account/github', async (context) => {
+      const http = new HonoHttp(context)
+      const supabase = http.getSupabase()
+      const service = new SupabaseAuthService(supabase)
+      const controller = new ConnectGithubAccountController(service)
+      const response = await controller.handle(http)
+      return http.sendResponse(response)
+    })
+  }
+
+  private registerDisconnectGithubAccountRoute(): void {
+    this.router.delete('/social-account/github', async (context) => {
+      const http = new HonoHttp(context)
+      const supabase = http.getSupabase()
+      const service = new SupabaseAuthService(supabase)
+      const controller = new DisconnectGithubAccountController(service)
+      const response = await controller.handle(http)
+      return http.sendResponse(response)
+    })
+  }
+
+  private registerDisconnectGoogleAccountRoute(): void {
+    this.router.delete('/social-account/google', async (context) => {
+      const http = new HonoHttp(context)
+      const supabase = http.getSupabase()
+      const service = new SupabaseAuthService(supabase)
+      const controller = new DisconnectGoogleAccountController(service)
+      const response = await controller.handle(http)
+      return http.sendResponse(response)
+    })
+  }
+
+  private registerFetchGithubAccountConnectionRoute(): void {
+    this.router.get('/social-account/github/connection', async (context) => {
+      const http = new HonoHttp(context)
+      const supabase = http.getSupabase()
+      const service = new SupabaseAuthService(supabase)
+      const controller = new FetchGithubAccountConnectionController(service)
+      const response = await controller.handle(http)
+      return http.sendResponse(response)
+    })
+  }
+
+  private registerFetchGoogleAccountConnectionRoute(): void {
+    this.router.get('/social-account/google/connection', async (context) => {
+      const http = new HonoHttp(context)
+      const supabase = http.getSupabase()
+      const service = new SupabaseAuthService(supabase)
+      const controller = new FetchGoogleAccountConnectionController(service)
+      const response = await controller.handle(http)
+      return http.sendResponse(response)
+    })
   }
 
   private registerResendSignUpEmailRoute(): void {
@@ -321,11 +381,16 @@ export class AuthRouter extends HonoRouter {
     this.registerSignOutRoute()
     this.registerSignInWithGoogleRoute()
     this.registerSignInWithGithubRoute()
-    this.registerConnectGoogleAccountRoute()
     this.registerResendSignUpEmailRoute()
     this.registerRefreshSessionRoute()
     this.registerRequestPasswordResetRoute()
     this.registerSignUpWithSocialAccountRoute()
+    this.registerConnectGoogleAccountRoute()
+    this.registerConnectGithubAccountRoute()
+    this.registerDisconnectGithubAccountRoute()
+    this.registerDisconnectGoogleAccountRoute()
+    this.registerFetchGithubAccountConnectionRoute()
+    this.registerFetchGoogleAccountConnectionRoute()
     this.registerConfirmEmailRoute()
     this.registerConfirmPasswordResetRoute()
     this.registerResetPasswordRoute()
