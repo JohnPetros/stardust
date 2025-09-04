@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "apps/web/**"
+      - "packages/core/**"
+      - "packages/validation/**"
+      - "packages/code-runner/**"
   
 
 jobs:
