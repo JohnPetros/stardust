@@ -1,11 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-export function useUserCreationPendingLayout(isUserCreated: boolean) {
-  const [isUserCreationPending, setIsUserCreationPending] = useState(isUserCreated)
+import type { User } from '@stardust/core/profile/entities'
+
+export function useUserCreationPendingLayout(user: User | null) {
+  const [isUserCreationPending, setIsUserCreationPending] = useState(user !== null)
 
   function handleUserCreated() {
     setIsUserCreationPending(false)
   }
+
+  useEffect(() => {
+    if (user) setIsUserCreationPending(false)
+  }, [user])
 
   return {
     isUserCreationPending,

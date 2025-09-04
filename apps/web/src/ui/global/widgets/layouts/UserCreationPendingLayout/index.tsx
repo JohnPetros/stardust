@@ -9,9 +9,7 @@ import { useUserCreationPendingLayout } from './useUserCreationPendingLayout'
 
 export const UserCreationPendingLayout = ({ children }: PropsWithChildren) => {
   const { user } = useAuthContext()
-  const { isUserCreationPending, handleUserCreated } = useUserCreationPendingLayout(
-    user !== null,
-  )
+  const { isUserCreationPending, handleUserCreated } = useUserCreationPendingLayout(user)
   useProfileSocket(handleUserCreated)
 
   return (
