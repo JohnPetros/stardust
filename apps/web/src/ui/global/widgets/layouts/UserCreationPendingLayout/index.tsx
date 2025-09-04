@@ -12,6 +12,8 @@ export const UserCreationPendingLayout = ({ children }: PropsWithChildren) => {
   const { isUserCreationPending, handleUserCreated } = useUserCreationPendingLayout(user)
   useProfileSocket(handleUserCreated)
 
+  if (user) return children
+
   return (
     <UserCreationPendingLayoutView isUserCreationPending={isUserCreationPending}>
       {children}
