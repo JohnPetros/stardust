@@ -24,7 +24,7 @@ export const TextView = ({
             <Title>{title}</Title>
           </div>
         )}
-        <div className='flex w-full flex-col items-center justify-center md:flex-row'>
+        <div className='flex w-full flex-col gap-4 md:gap-2 md:items-center md:justify-center md:flex-row'>
           {picture && <Picture url={picture} />}
           <Content type='default' hasAnimation={hasAnimation}>
             {children}
