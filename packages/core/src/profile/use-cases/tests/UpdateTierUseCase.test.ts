@@ -45,7 +45,9 @@ describe('Update Tier Use Case', () => {
     })
 
     expect(updateTier).toHaveBeenCalledTimes(users.length)
-    users.forEach(() => expect(updateTier).toHaveBeenCalledWith(tierId))
+    users.forEach(() => {
+      expect(updateTier).toHaveBeenCalledWith(tierId)
+    })
   })
 
   it('should replace the users with the updated ones in the repository', async () => {

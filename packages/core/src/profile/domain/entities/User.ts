@@ -49,7 +49,6 @@ type UserProps = {
 
 export class User extends Entity<UserProps> {
   static create(dto: UserDto): User {
-    console.log('dto', dto)
     return new User(UserFactory.produce(dto), dto.id)
   }
 

@@ -44,11 +44,11 @@ describe('Update Rankings Use Case', () => {
     rankersRepository.findAllByTier.mockResolvedValue(RankersFaker.fakeMany(6))
     await useCase.execute()
 
-    tiers.forEach((tier) =>
+    tiers.forEach((tier) => {
       expect(eventBroker.publish).toHaveBeenCalledWith(
         new RankingUpdatedEvent({ tierId: tier.id.value }),
-      ),
-    )
+      )
+    })
   })
 
   it('should add losers to the repository for each tier', async () => {
@@ -59,9 +59,9 @@ describe('Update Rankings Use Case', () => {
     await useCase.execute()
 
     expect(rankersRepository.addLosers).toHaveBeenCalledTimes(tiers.length)
-    tiers.forEach((tier) =>
-      expect(rankersRepository.addLosers).toHaveBeenCalledWith(ranking.losers, tier.id),
-    )
+    tiers.forEach((tier) => {
+      expect(rankersRepository.addLosers).toHaveBeenCalledWith(ranking.losers, tier.id)
+    })
   })
 
   it('should publish a ranking losers defined event for each tier except the last one', async () => {
@@ -72,14 +72,14 @@ describe('Update Rankings Use Case', () => {
 
     await useCase.execute()
 
-    tiers.slice(0, tiers.length - 1).forEach((tier) =>
+    tiers.slice(0, tiers.length - 1).forEach((tier) => {
       expect(eventBroker.publish).toHaveBeenCalledWith(
         new RankingLosersDefinedEvent({
           tierId: tier.id.value,
           losersIds: ranking.losers.map((loser) => loser.id.value),
         }),
-      ),
-    )
+      )
+    })
   })
 
   it('should publish a ranking winners defined event for each tier except the first one', async () => {
@@ -90,14 +90,14 @@ describe('Update Rankings Use Case', () => {
 
     await useCase.execute()
 
-    tiers.slice(1, tiers.length).forEach((tier) =>
+    tiers.slice(1, tiers.length).forEach((tier) => {
       expect(eventBroker.publish).toHaveBeenCalledWith(
         new RankingWinnersDefinedEvent({
           tierId: tier.id.value,
           winnersIds: ranking.winners.map((winner) => winner.id.value),
         }),
-      ),
-    )
+      )
+    })
   })
 
   it('should add losers to the repository for each tier', async () => {
@@ -108,8 +108,8 @@ describe('Update Rankings Use Case', () => {
     await useCase.execute()
 
     expect(rankersRepository.addLosers).toHaveBeenCalledTimes(tiers.length)
-    tiers.forEach((tier) =>
-      expect(rankersRepository.addLosers).toHaveBeenCalledWith(ranking.losers, tier.id),
-    )
+    tiers.forEach((tier) => {
+      expect(rankersRepository.addLosers).toHaveBeenCalledWith(ranking.losers, tier.id)
+    })
   })
 })
