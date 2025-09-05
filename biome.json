@@ -7,7 +7,8 @@
         "useExhaustiveDependencies": "warn",
         "noInnerDeclarations": "warn",
         "noConstructorReturn": "warn",
-        "useHookAtTopLevel": "warn"
+        "useHookAtTopLevel": "warn",
+        "useUniqueElementIds": "off"
       },
       "suspicious": {
         "noImplicitAnyLet": "warn",
@@ -18,7 +19,9 @@
         "noArrayIndexKey": "warn",
         "noDoubleEquals": "warn",
         "noAssignInExpressions": "off",
-        "noRedeclare": "warn"
+        "noRedeclare": "warn",
+        "useIterableCallbackReturn": "off",
+        "noUnknownAtRules": "off"
       },
       "style": {
         "noParameterAssign": "warn",
