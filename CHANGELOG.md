@@ -1,5 +1,315 @@
 # Changelog
 
+## 0.3.0 (2025-09-05)
+
+- 🖥️ ui(web): fix input index calculation in OpenQuestion component to prevent
+  negative values (ae6ac601)
+- 🖥️ ui(web): streamline useSpeakerContextProvider by initializing state from
+  local storage and removing redundant useEffect (0fec65e8)
+- 🖥️ ui(web): update TextView component layout with improved gap properties for
+  better responsiveness (5a5d7be9)
+- 🖥️ ui(web): adjust PictureView component dimensions for improved layout
+  consistency (66ecdbd6)
+- 🖥️ ui(web): improve AlertView layout by restructuring flex properties and
+  enhancing child component alignment (5cbca42e)
+- ♻️ refactor(core): remove console log from User entity creation for cleaner
+  code (d89adb51)
+- 🚚 cd: update CI/CD paths to include core, validation, and code-runner
+  packages for better deployment coverage (5a870bd4)
+- ♻️ refactor(web): enhance UserCreationPendingLayout to immediately render
+  children if user is present (7b8d5209)
+- ♻️ refactor(web): update useUserCreationPendingLayout to accept user object
+  and enhance state management with useEffect (4d1ad4ba)
+- ♻️ refactor(web): update user creation pending layout to accept boolean for
+  user status and simplify state management (023d74c9)
+- ♻️ refactor(server): remove unnecessary blank line in HonoHttp class for
+  cleaner code (c617684d)
+- 🌐 domain: add isZero method to Integer class and update User entity to
+  utilize it for count checks (9be57560)
+- ⚙️ config(server): change USER_ID in users.rest to reflect new user identifier
+  (ef2c0340)
+- ♻️ refactor(core): add console log for UserDto in User entity creation to
+  assist debugging (436a1f80)
+- ⚙️ config(server): modify sample sign-up response with new user details for
+  consistency (3fb68858)
+- ♻️ refactor(web): add console log in handleRestError for improved error
+  tracking (df1e4bda)
+- ♻️ refactor(web): remove unused sign-up response from
+  SignUpWithSocialAccountAction to streamline code (5ce26e45)
+- ♻️ refactor(web): include sign-up response in SignUpWithSocialAccountAction
+  for better state management (2fdadd2b)
+- ♻️ refactor(web): add console log for response in
+  SignUpWithSocialAccountAction to aid debugging (c008c52d)
+- ♻️ refactor(web): add console log for new account status in
+  useSocialAccountConfirmationPage (80791a57)
+- ♻️ refactor(web): add console logs for account creation and sign-up response
+  in SignUpWithSocialAccountAction (8ee38211)
+- 🐛 fix(web): add User type import to useUserCreationPendingLayout for improved
+  type safety (8b805148)
+- ♻️ refactor(code-runner): add console logs for result and error handling in
+  ExecutorDeCodigoDelegua (6a01cc64)
+- ♻️ refactor(core): update Account entity to conditionally set name value based
+  on input (807238fc)
+- ♻️ refactor(core): simplify VerifyUserSocialAccountUseCase by removing unused
+  imports and redundant user lookup logic (370e3b58)
+- ♻️ refactor(web): enhance useUserCreationPendingLayout to manage user state
+  with useEffect for improved responsiveness (79f735d2)
+- 🐛 fix(web): update dependencies in useAuthProvider to include account ID for
+  improved user data fetching (0455b984)
+- 📮 validation: remove provider field from accountSchema to simplify user
+  authentication structure (243992c6)
+- ♻️ refactor(server): replace hardcoded JWT in auth.rest with placeholder and
+  clean up console logs in useAuthProvider (46b2e99a)
+- 🐛 fix(core): set default name value in Account entity to 'não definido'
+  (8fb555fe)
+- ♻️ refactor(core): update Account entity to set default name value when not
+  provided (09ce2305)
+- ♻️ refactor(server): replace hardcoded JWT in auth.rest with placeholder
+  (ac462560)
+- 🖥️ ui(web): modify authentication and user profile configurations for improved
+  clarity and security (d5484017)
+- ♻️ refactor(web): update returnUrl handling in authentication endpoints and
+  SocialLinksView for consistency (43383a86)
+- ♻️ refactor(web): update tsconfig.tsbuildinfo to reflect changes in TypeScript
+  library references (cbfd7b73)
+- ♻️ refactor(core): remove accountProvider field from various entities and use
+  cases to streamline user data management (fb8a8d36)
+- ♻️ refactor(core): remove GitHub and Google account fields from User entity
+  and DTOs to streamline user data management (d860eba2)
+- 📶 rest(server): add endpoints to connect Google and GitHub accounts for user
+  authentication (9fd05a23)
+- ♻️ refactor(web): remove unused useSleep hook and simplify fetchUserById call
+  in useAuthProvider (133da202)
+- ♻️ refactor(core): eliminate userAccountProvider from UnlockFirstStarUseCase
+  to streamline user data handling (befd3e28)
+- ♻️ refactor(web): simplify fetchUserById method by removing accountProvider
+  parameter to streamline user data retrieval (b19e6494)
+- 📶 rest(server): add methods to connect GitHub and Google accounts, and
+  implement account deletion functionality (2126cf04)
+- ♻️ refactor(core): further remove account provider and email references from
+  user-related controllers and use cases to enhance user management (0b95e72a)
+- ♻️ refactor(core): remove account provider references from user-related
+  entities and use cases to simplify user management (1df081bb)
+- ♻️ refactor(core): remove social account ID handling from User entity and
+  tests to streamline user management (8893cf19)
+- ♻️ refactor(server): remove GitHub and Google account fields from user mappers
+  and repository; add OAuth client types to database schema (7e55ee02)
+- 📶 rest(server): add ConnectGoogleAccountController and route for Google
+  account connection (ed8aff05)
+- 🐛 fix(web): remove typing errors across the entire app (4293900d)
+- 📦 deps(code-runner): update @designliquido/delegua to version 0.50.2 for
+  improved functionality (08618634)
+- 🖥️ ui(web): wrap layout in UserCreationPendingLayout to enhance user
+  experience during profile creation (65b11e22)
+- 🖥️ ui(web): update SocialAccountConfirmation to handle user creation state and
+  improve loading experience (333df18c)
+- 🖥️ ui(web): implement UserCreationPendingLayout and related components for
+  improved user experience during profile creation (5c1ee386)
+- ♻️ refactor(web): enhance useAuthProvider to include account state and
+  integrate useSleep for improved user experience (aed483e2)
+- ♻️ refactor: integrate userAccountProvider into CreateUserUseCase and
+  UnlockFirstStarUseCase for comprehensive user data management (b53e22c6)
+- 📮 validation: add provider field to accountSchema for enhanced account type
+  support (6f90101d)
+- 🖥️ ui(web): introduce BlurText component with animation capabilities for
+  enhanced text effects (21a25ca6)
+- 📶 rest(server): include userAccountProvider in CreateUserJob and
+  UnlockFirstStarJob for improved user data handling (c4d02e1c)
+- 📶 rest(server): add userAccountProvider field to SignUpController and
+  SignUpWithSocialAccountController for enhanced user data tracking (792ab220)
+- 🧪 test: add AccountsFaker for generating fake account data and enhance user
+  tests for social account verification (7a4aa716)
+- 💾 db(server): add GitHub and Google account IDs to user profile retrieval
+  (286b6250)
+- 📶 rest(server): implement GitHub sign-in route and update AuthRouter
+  (519e4b02)
+- 📶 rest(server): add SignInWithGithubAccountController for GitHub
+  authentication (9af83924)
+- 📶 rest(server): add signInWithGithubAccount method to SupabaseAuthService and
+  update AuthService interface (7edf5144)
+- 🌐 domain: add accountProvider field to UserSignedUpEvent,
+  FirstTierReachedEvent, and FirstStarUnlockedEvent payloads (31ac9282)
+- 🐛 fix(server): ensure event publishing in SignUpWithSocialAccountController
+  is correctly awaited (92efbcab)
+- ♻️ refactor(web): simplify error handling in middleware and remove unnecessary
+  console logs (15bbb48b)
+- 📶 rest(server): enhance FetchUserController to include accountProvider in
+  user retrieval (44539c8b)
+- ⚙️ config: increase header max length in commitlint configuration from 120 to
+  150 (35330185)
+- ♻️ refactor(server): update AppendUserCompletedChallengesIdsToBodyController
+  to use account details (e484ee6a)
+- 📶 rest(web): add setBody method to NextHttp for extended body management
+  (20e01d3e)
+- 🐛 fix(server): update account DTO to include user name and provider
+  information (0480f6de)
+- 📟 rpc(web): enhance SignUpWithSocialAccountAction to return account details
+  and new account status (21d7c332)
+- 📑 interface: add setBody method to Http interface and implement in HonoHttp
+  class (613ea5fc)
+- ⚙️ config(server): modify user retrieval endpoints to include accountProvider
+  query parameter (667b3f65)
+- ⚙️ config(server): implement Google sign-in and social account sign-up
+  endpoints (45d37c43)
+- 📶 rest(server): add VerifyUserSocialAccountController for social account
+  verification (8b2ad7b5)
+- 📑 interface: implement VerifyUserSocialAccount use case and middleware for
+  social account verification (7ee7c482)
+- 📑 interface: update fetchUserById method to include accountProvider parameter
+  (4ec795a7)
+- ♻️ refactor(web): implement social account sign-up functionality and enhance
+  context management (8420db46)
+- 💾 db(server): enhance SupabaseUsersRepository to support retrieval by GitHub
+  and Google account IDs (e049331f)
+- 📑 interface: add setAuthorization method to NextRestClient (a67aaf22)
+- 📑 interface: extend UsersRepository and GetUserUseCase to support user
+  retrieval by name and email (82b20981)
+- 🌐 domain: enhance Name class with deduplication logic and duplication check
+  (25ab6bbd)
+- 🌐 domain: introduce AccountProvider class for managing authentication
+  providers (09bc31a0)
+- 📮 validation: add authentication schemas for account validation and global
+  account provider schema (7fe7ff97)
+- 🌐 domain: add UserSocialAccountAlreadyInUseError for handling conflicts with
+  social account registration (5855e0a9)
+- 📶 rest(server): add SignUpWithSocialAccountController for social account
+  registration (9b27bbdb)
+- 📶 rest(server): add FetchSocialAccountController to retrieve social account
+  information (22ec6b03)
+- 📶 rest(server): add SignInWithGoogleAccountController to handle Google
+  account sign-in (24e4d2b4)
+- 📶 rest: enhance SupabaseAuthService and AuthService with social account
+  methods and account details (6a76b6b1)
+- 🪨 constants(web): add durationInSeconds for accessToken in cookies
+  configuration (3a2885d2)
+- 🖥️ ui(web): implement SocialAccountConfirmation components and hooks for
+  social account sign-up flow (d46c2d1e)
+- 📟 rpc(web): add SignUpWithSocialAccountAction and integrate into authActions
+  (3ad0d3a7)
+- ⚙️ config: update commit types table to reflect 'rpc' as the new prefix for
+  API RPC layer (339e7d47)
+- 🪨 constants(web): update ROUTES to include social account confirmation and
+  server authentication endpoints (6ae67aa5)
+- 🖥️ ui(web): implement useHashParam hook for retrieving hash parameters from
+  URL (0fd4a0e0)
+- 🖥️ ui(web): enhance SignInPageView with social login options (a8a440cb)
+- 📑 interface: enhance AuthService interface with social account methods for
+  improved authentication options (6796d32e)
+- 🖥️ ui(web): add useHashParams hook (fe38d1a3)
+- 🎴 assets: add logo files for github and google (8d962280)
+- ⚙️ config: add 'code-runner' to the list of valid scopes for commit messages
+  (35df3752)
+- ♻️ refactor(core): improve result verification by translating outputs for
+  accurate comparison (73e0b984)
+- ♻️ refactor(code-runner): streamline error handling and simplify result
+  extraction in ExecutorDeCodigoDelegua (bd8a247c)
+- 🖥️ ui(web): validate speakerContext before rendering SpeakerView to ensure
+  proper context handling (3b5f29aa)
+- 🖥️ ui(web): add translatedUserOutput to TestCase component for improved output
+  handling (59061ea6)
+- 🖥️ ui(web): fix expectedOutput format in o-castelo challenge mock data
+  (9aefefc8)
+- 🖥️ ui(web): update Speaker component to format content by removing strong tags
+  (3f1e38a0)
+- 🗃️ ftree(web): delete all templates within Mdx component (c37c19bf)
+- ⚙️ config(web): enable minimizer for build optimization (7c1f87c2)
+- 🌐 domain: remove unnecessary console logs from OpenQuestion class (aa0f95ec)
+- ⚙️ config: increase header max length in commitlint configuration from 100 to
+  120 (ba2f7c63)
+- ♻️ refactor(studio): refactor QuestionCodeLine methods to return new instances
+  instead of modifying in place (0a1d97c8)
+- 🖥️ ui(studio): enhance OpenQuestionEditor with new input handling and add
+  ExpandableInput component (ec1d6a90)
+- 🖥️ ui(studio): remove LineConfigurationDropdown and TextInput components
+  (66c48131)
+- 🖥️ ui(studio): refactor CodeLineEditor to use new
+  CodeLineConfigurationDropdownMenu (1b11d8c1)
+- 🌐 domain: enhance List and OpenQuestion with new methods for item
+  manipulation (00f19b8b)
+- 🖥️ ui(studio): add ExpandableInput (7a0a5b23)
+- 🖥️ ui(studio): add OpenQuestionEditor widget (ed84854d)
+- 🌐 domain: add methods to handle crud of code lines (193451f4)
+- 📦 deps(studio): install @radix-ui/react-dropdown-menu (f5f889ec)
+- 🖥️ ui(web): add Speaker component to Lesson page (10e6d5b5)
+- 🖥️ ui(web): add Speaker component (e08c7a3b)
+- 🖥️ ui(web): add Speaker Context (1b52a88b)
+- ⚙️ config(web): disable React strict mode in Next.js configuration (97ac4bee)
+- ♻️ refactor(web): apply mvvm to each mdx widget (cdf9b6fd)
+- 📦 deps(web): install react-text-to-speech (1b0b9861)
+- Seção de patrocinadores (#129) (b1779870)
+- ♻️ refactor(web): allow referrer for Design Liquido external link (416a7282)
+- 🖥️ ui(web): add SponsorsSection widget to LandingPage (81a5d332)
+- 🎴 assets: add design loiquido logo (25b22ec0)
+- ♻️ refactor(web): remove console logs and update options prop in
+  SelectionQuestion component (ba27dc06)
+- 🖥️ ui(web): add GoToProfilePageLink widget to Settings page (07e77230)
+- 🌐 domain: update slug when set User entity name (0d608085)
+- 🐛 fix: cast suffledlist always to its generic type (7aded606)
+- 🖥️ ui(web): add Preferences widget to SettingsPage (49427077)
+- ♻️ refactor(web): add isDefaultAudioDisabled prop and toggleAudioDisability
+  method to AudioContext (3fe5c164)
+- 🪨 constants(web): add isAudioDisabled cookie key for audio settings
+  (222ec355)
+- 📶 rest(web): add updateQuestions method to LessonService for managing lesson
+  questions (c659e51c)
+- 🪨 constants(web): add back supabaseUrl and supabaseKey to CLIENT_ENV
+  (a4edb782)
+- 🌐 domain: add setter for User entity name (d24d6671)
+- ♻️ refactor(web): remove logs and trash code from SettingsPageView (f1b5eaf1)
+- 🖥️ ui(web): temporarily disable challenge posting button (db80d2a5)
+- 🖥️ ui(web): add Settings page (b3842a6d)
+- 🖥️ ui(web): add Badge component (0e997d9d)
+- 🖥️ ui(web): add NameInput (4478a9a1)
+- 📦 deps(core): export dtos of aggregates from profile module (1e7a3aa0)
+- ♻️ refactor: update changeItemLabel method to create a new array instead of
+  mutating (d414656a)
+- 📦 deps: update @designliquido/delegua to version 0.49.2 (a9e00261)
+- 🖥️ ui(studio): add DragAndDropListQuestionEditor widget (90ac510e)
+- 🖥️ ui(studio): add CheckboxQuestionEditor (64eb3d43)
+- 🖥️ ui(studio): refactor LessonStory components to simplify state management
+  (3610ce2d)
+- 🌐 domain: add methods to CheckboxQuestion (e9514b52)
+- 🖥️ ui(studio): add AddItemButton (c736f2a2)
+- 🖥️ ui(studio): add CodeInput (76acbb2f)
+- 🖥️ ui(studio): add UndoQuestionChangeButton (27395d0b)
+- 📦 deps(studio): install @radix-ui/react-checkbox (447a90b3)
+- 🗃️ ftree(studio): remove OptionInput (89d22edb)
+- ♻️ refactor(studio): remove logs from SelectionQuestionEditorView (ff78535e)
+- 🖥️ ui(studio): add SelectionQuestionEditor (2225bee7)
+- ♻️ refactor(studio): update QuizContext to use selectedQuestion instead of
+  selectedQuestionIndex (6d36d235)
+- 🌐 domain: add setters to Question and SelectionQuestion (f06042c7)
+- 📦 deps(studio): install react-radio-group (43271676)
+- 🗃️ ftree(studio): move PictureInput to global components folder (04662b56)
+- ♻️ refactor(web): remove logs from auth ui module (45fc456a)
+- 🧪 test(web): signUpPageView (6c7c49c3)
+- 🧪 test(web): useSignUpPage (6e833fa5)
+- 🧪 test(web): signUpForm (258b82cd)
+- 🧪 test(web): animatedHeroView (e42a9a6c)
+- 🧪 test(web): signInPageView (aa8fa9b3)
+- 🧪 test(web): rocketAnimationView (462354ec)
+- 🧪 test(web): useSignInPage (7d915aa1)
+- 🧪 test: signInForm (3cf4ff6f)
+- 📦 deps(web): add scripts to run tests (c54b500c)
+- ⚙️ config(web): load env variables for testing (845d9eba)
+- 📦 deps(web): install ts-jest-mocker (8f1c4f4f)
+- 🗃️ ftree(web): remove all texts and questions mocks from **tests** folder
+  (c5916a7b)
+- ♻️ refactor(studio): remove logs from useActionButton (59b23910)
+- ♻️ refactor(studio): remove logs from useActionButton (26429746)
+- ♻️ refactor(studio): replace LessonQuestionsPage with LessonQuizPage and
+  enhance sortable feature (ffe63a70)
+- 📶 rest(studio): implement LessonService's updateQuestions (9eaf97f3)
+- 🖥️ ui(studio): add action button store (813cf7f5)
+- ⚙️ config(server): register update questions route (b7693255)
+- 💾 db: implement QuestionsRepository's updateMany method using Supabase
+  (e41e43fe)
+- 📶 rest: add UpdateQuestionsController (8bbbf2b0)
+- ✨ use case: update questions (db423f56)
+- 🌐 domain: add QuestionFactory (17e2265f)
+- 🌐 domain: add InvalidQuestionTypeError (72165063)
+- 📦 deps: install zustand (7d3ac745)
+
 ## 0.2.1 (2025-08-11)
 
 - ⚙️ config: set GITHUB_TOKEN before run release-it script (ad97b12d)
