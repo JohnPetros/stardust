@@ -1,9 +1,10 @@
 import { notFound, redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
+import { revalidateTag } from 'next/cache'
 
 import type { Call } from '@stardust/core/global/interfaces'
-import { AppError } from '@stardust/core/global/errors'
 import type { UserDto } from '@stardust/core/profile/entities/dtos'
+import { AppError } from '@stardust/core/global/errors'
 
 type NextCallParams<Request> = {
   request?: Request
@@ -53,6 +54,10 @@ export const NextCall = <Request = unknown>({
     async deleteCookie(key: string) {
       const cookieStore = await cookies()
       cookieStore.delete(key)
+    },
+
+    resetCache(cacheKey) {
+      revalidateTag(cacheKey)
     },
 
     async getUser() {
