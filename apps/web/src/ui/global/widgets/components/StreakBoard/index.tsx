@@ -32,6 +32,7 @@ export function StreakBoard({ weekStatus, streakCount }: StreakProps) {
                 />
               </AnimatedWeekday>
             )
+          return null
         })}
       </div>
 

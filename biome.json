@@ -7,11 +7,13 @@
         "useExhaustiveDependencies": "warn",
         "noInnerDeclarations": "warn",
         "noConstructorReturn": "warn",
-        "useHookAtTopLevel": "warn"
+        "useHookAtTopLevel": "warn",
+        "useUniqueElementIds": "off"
       },
       "suspicious": {
         "noImplicitAnyLet": "warn",
         "noConfusingVoidType": "warn",
+        "noUnknownAtRules": "off",
         "noMisleadingCharacterClass": "off",
         "noEmptyInterface": "warn",
         "noExplicitAny": "off",

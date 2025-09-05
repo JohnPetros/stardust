@@ -48,6 +48,7 @@ export function ChallengeCategoriesField({ categories }: ChallengeCategoriesFiel
                   </CategoryTag>
                 </AnimatedTagging.Tag>
               )
+            return null
           })}
         </AnimatedTagging.Container>
         {errorMessage && <ErrorMessage className='mt-1'>{errorMessage}</ErrorMessage>}
@@ -69,6 +70,7 @@ export function ChallengeCategoriesField({ categories }: ChallengeCategoriesFiel
                 </CategoryTag>
               </AnimatedTagging.Tag>
             )
+          return null
         })}
       </div>
     </ChallengeField>

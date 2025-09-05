@@ -71,6 +71,7 @@ export function OpenQuestion({
                       )}
                     </div>
                   )
+                return null
               })}
             </li>
           )

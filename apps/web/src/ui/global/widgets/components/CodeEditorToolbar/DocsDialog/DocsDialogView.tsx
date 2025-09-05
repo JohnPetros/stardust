@@ -51,7 +51,7 @@ export const DocsDialogView = ({
               </div>
             </div>
           ) : (
-            <>
+            <div>
               {isLoading ? (
                 <div className='grid h-full w-full place-content-center'>
                   <Loading />
@@ -75,10 +75,11 @@ export const DocsDialogView = ({
                           </Button>
                         </div>
                       )
+                    return null
                   })}
                 </div>
               )}
-            </>
+            </div>
           )}
         </div>
       </DialogContent>

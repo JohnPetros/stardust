@@ -83,6 +83,8 @@ export function TabsGroup({
                       onClick={() => onTabListSorterChange('viewsCount')}
                     />
                   )
+                default:
+                  return null
               }
             },
           )}

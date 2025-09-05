@@ -59,7 +59,9 @@ export function TypeWriter({
         typewriter
           .callFunction(() => {
             const cursors = document.querySelectorAll('.Typewriter__cursor')
-            cursors.forEach((cursor) => cursor.remove())
+            cursors.forEach((cursor) => {
+              cursor.remove()
+            })
           })
           .typeString(formattedContent)
           .start()

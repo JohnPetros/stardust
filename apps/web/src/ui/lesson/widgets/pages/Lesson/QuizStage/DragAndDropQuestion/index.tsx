@@ -65,7 +65,7 @@ export function DragAndDropQuestion({
                   return <span className='font-code w-max text-gray-100'>{text}</span>
 
                 const index = dropZoneSlotsIndexes[key]
-                if (!index) return
+                if (!index) return null
                 const item = dragAndDrop.getItemByDropZone(index)
                 return (
                   <div key={key}>
