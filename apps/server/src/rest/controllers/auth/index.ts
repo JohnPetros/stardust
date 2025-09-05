@@ -14,3 +14,8 @@ export { SignInWithGithubAccountController } from './SignInWithGithubAccountCont
 export { FetchSocialAccountController } from './FetchSocialAccountController'
 export { SignUpWithSocialAccountController } from './SignUpWithSocialAccountController'
 export { ConnectGoogleAccountController } from './ConnectGoogleAccountController'
+export { ConnectGithubAccountController } from './ConnectGithubAccountController'
+export { DisconnectGoogleAccountController } from './DisconnectGoogleAccountController'
+export { DisconnectGithubAccountController } from './DisconnectGithubAccountController'
+export { FetchGithubAccountConnectionController } from './FetchGithubAccountConnectionController'
+export { FetchGoogleAccountConnectionController } from './FetchGoogleAccountConnectionController'

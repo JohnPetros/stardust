@@ -8,5 +8,6 @@ export interface Call<Request = void> {
   getCookie(key: string): Promise<string | null>
   deleteCookie(key: string): Promise<void>
   hasCookie(key: string): Promise<boolean>
+  resetCache(cacheKey: string): void
   getUser(): Promise<UserDto>
 }

@@ -1,4 +1,4 @@
-import type { Email, Id, Name, Text } from '#global/domain/structures/index'
+import type { Email, Name, Text } from '#global/domain/structures/index'
 import type { RestResponse } from '#global/responses/RestResponse'
 import type { Password } from '../domain/structures'
 import type { AccountDto } from '../domain/entities/dtos'
@@ -25,8 +25,12 @@ export interface AuthService {
     refreshToken: Text,
   ): Promise<RestResponse>
   confirmEmail(token: Text): Promise<RestResponse<SessionDto>>
+  disconnectGithubAccount(): Promise<RestResponse>
   confirmPasswordReset(token: Text): Promise<RestResponse<SessionDto>>
   refreshSession(refreshToken: Text): Promise<RestResponse<SessionDto>>
   connectGithubAccount(returnUrl: Text): Promise<RestResponse<{ signInUrl: string }>>
   connectGoogleAccount(returnUrl: Text): Promise<RestResponse<{ signInUrl: string }>>
+  disconnectGoogleAccount(): Promise<RestResponse>
+  fetchGithubAccountConnection(): Promise<RestResponse<{ isConnected: boolean }>>
+  fetchGoogleAccountConnection(): Promise<RestResponse<{ isConnected: boolean }>>
 }

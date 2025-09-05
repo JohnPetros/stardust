@@ -8,7 +8,7 @@ type Props = {
 export const PreferencesView = ({ isAudioDisabled, handleCanPlayAudioChange }: Props) => {
   return (
     <div>
-      <h2 className='mt-12 text-lg font-medium text-gray-100'>Preferências</h2>
+      <h2 className='text-lg font-medium text-gray-100'>Preferências</h2>
 
       <div className='mt-6'>
         <Preference
