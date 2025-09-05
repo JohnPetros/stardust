@@ -85,11 +85,15 @@ export const AuthService = (restClient: RestClient): IAuthService => {
     },
 
     async connectGithubAccount(returnUrl: Text) {
-      return await restClient.get(`/auth/connect/github?returnUrl=${returnUrl.value}`)
+      return await restClient.post(
+        `/auth/social-account/github?returnUrl=${returnUrl.value}`,
+      )
     },
 
     async connectGoogleAccount(returnUrl: Text) {
-      return await restClient.get(`/auth/connect/google?returnUrl=${returnUrl.value}`)
+      return await restClient.post(
+        `/auth/social-account/google?returnUrl=${returnUrl.value}`,
+      )
     },
 
     async disconnectGithubAccount() {

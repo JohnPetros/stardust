@@ -140,9 +140,24 @@ export class AuthRouter extends HonoRouter {
     )
   }
 
+  private registerSignUpWithSocialAccountRoute(): void {
+    this.router.post(
+      '/sign-up/social-account',
+      this.validationMiddleware.validate('json', accountSchema),
+      this.profileMiddleware.verifyUserSocialAccount,
+      async (context) => {
+        const http = new HonoHttp(context)
+        const eventBroker = new InngestEventBroker()
+        const controller = new SignUpWithSocialAccountController(eventBroker)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   private registerConnectGoogleAccountRoute(): void {
-    this.router.get(
-      '/connect/google',
+    this.router.post(
+      '/social-account/google',
       this.authMiddleware.verifyAuthentication,
       this.validationMiddleware.validate(
         'query',
@@ -161,30 +176,25 @@ export class AuthRouter extends HonoRouter {
     )
   }
 
-  private registerSignUpWithSocialAccountRoute(): void {
+  private registerConnectGithubAccountRoute(): void {
     this.router.post(
-      '/sign-up/social-account',
-      this.validationMiddleware.validate('json', accountSchema),
-      this.profileMiddleware.verifyUserSocialAccount,
+      '/social-account/github',
+      this.authMiddleware.verifyAuthentication,
+      this.validationMiddleware.validate(
+        'query',
+        z.object({
+          returnUrl: stringSchema,
+        }),
+      ),
       async (context) => {
         const http = new HonoHttp(context)
-        const eventBroker = new InngestEventBroker()
-        const controller = new SignUpWithSocialAccountController(eventBroker)
+        const supabase = http.getSupabase()
+        const service = new SupabaseAuthService(supabase)
+        const controller = new ConnectGithubAccountController(service)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
     )
-  }
-
-  private registerConnectGithubAccountRoute(): void {
-    this.router.get('/social-account/github', async (context) => {
-      const http = new HonoHttp(context)
-      const supabase = http.getSupabase()
-      const service = new SupabaseAuthService(supabase)
-      const controller = new ConnectGithubAccountController(service)
-      const response = await controller.handle(http)
-      return http.sendResponse(response)
-    })
   }
 
   private registerDisconnectGithubAccountRoute(): void {
