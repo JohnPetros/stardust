@@ -13,12 +13,6 @@ export class ConnectGithubAccountController implements Controller<Schema> {
 
   async handle(http: Http<Schema>) {
     const { returnUrl } = http.getQueryParams()
-    const response = await this.service.connectGithubAccount(Text.create(returnUrl))
-
-    if (response.isFailure) {
-      return response
-    }
-
-    return http.send(response.body.signInUrl)
+    return await this.service.connectGithubAccount(Text.create(returnUrl))
   }
 }
