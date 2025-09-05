@@ -1,3 +1,5 @@
 export { SignInAction } from './SignInAction'
 export { SignOutAction } from './SignOutAction'
 export { SignUpWithSocialAccountAction } from './SignUpWithSocialAccountAction'
+export { ConnectSocialAccountAction } from './ConnectSocialAccountAction'
+export { DisconnectSocialAccountAction } from './DisconnectSocialAccountAction'
