@@ -3,8 +3,12 @@
     "commitMessage": "🔖 release: ${version}"
   },
   "github": {
-    "release": true
+    "release": true,
+    "skipChecks": true
   },
+  "assets": [
+    "_build/*.nupkg"
+  ],
   "npm": {
     "publish": false
   }
