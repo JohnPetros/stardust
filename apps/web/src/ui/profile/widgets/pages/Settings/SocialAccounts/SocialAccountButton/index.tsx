@@ -1,8 +1,8 @@
 'use client'
 
-import { useRest } from '@/ui/global/hooks/useRest'
 import { useSocialAccountButton } from './useSocialAccountButton'
 import { SocialAccountButtonView } from './SocialAccountButtonView'
+import { useSocialAccountActions } from './useSocialAccountActions'
 
 type Props = {
   name: string
@@ -12,9 +12,13 @@ type Props = {
 }
 
 export const SocialAccountButton = ({ name, logoUrl, isConnected, provider }: Props) => {
-  const { authService } = useRest()
+  const { connectSocialAccount, disconnectSocialAccount } =
+    useSocialAccountActions(provider)
   const { handleSocialAccountConnect, handleSocialAccountDisconnect } =
-    useSocialAccountButton({ authService, socialAccountProvider: provider })
+    useSocialAccountButton({
+      onConnectSocialAccount: connectSocialAccount,
+      onDisconnectSocialAccount: disconnectSocialAccount,
+    })
 
   return (
     <SocialAccountButtonView
