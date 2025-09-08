@@ -1,12 +1,5 @@
 import type { RestResponse } from '#global/responses/index'
-import type {
-  AccountProvider,
-  Email,
-  Id,
-  Integer,
-  Name,
-  Slug,
-} from '#global/domain/structures/index'
+import type { Email, Id, Integer, Name, Slug } from '#global/domain/structures/index'
 import type { AchievementDto, UserDto } from '../domain/entities/dtos'
 import type { User } from '../domain/entities'
 import type {
