@@ -2,6 +2,7 @@ import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { DatabaseProvider } from '#global/interfaces/provision/DatabaseProvider'
 import type { StorageProvider } from '#storage/interfaces/StorageProvider'
+import { StorageFolder } from '#storage/structures/StorageFolder'
 import { BackupDatabaseUseCase } from '../BackupDatabaseUseCase'
 
 describe('Backup Database Use Case', () => {
@@ -12,10 +13,8 @@ describe('Backup Database Use Case', () => {
   beforeEach(() => {
     databaseProvider = mock<DatabaseProvider>()
     storageProvider = mock<StorageProvider>()
-
     databaseProvider.backup.mockImplementation()
     storageProvider.upload.mockImplementation()
-
     useCase = new BackupDatabaseUseCase(databaseProvider, storageProvider)
   })
 
@@ -35,7 +34,10 @@ describe('Backup Database Use Case', () => {
 
     await useCase.execute()
 
-    expect(storageProvider.upload).toHaveBeenCalledWith('database-backups', backupFile)
+    expect(storageProvider.upload).toHaveBeenCalledWith(
+      StorageFolder.createAsDatabaseBackups(),
+      backupFile,
+    )
   })
 
   it('should execute the complete backup process successfully', async () => {
@@ -47,7 +49,10 @@ describe('Backup Database Use Case', () => {
 
     expect(databaseProvider.backup).toHaveBeenCalledTimes(1)
     expect(storageProvider.upload).toHaveBeenCalledTimes(1)
-    expect(storageProvider.upload).toHaveBeenCalledWith('database-backups', backupFile)
+    expect(storageProvider.upload).toHaveBeenCalledWith(
+      StorageFolder.createAsDatabaseBackups(),
+      backupFile,
+    )
   })
 
   it('should propagate errors from the database provider', async () => {
