@@ -3,7 +3,7 @@
 import { z } from 'zod'
 
 import { emailSchema, passwordSchema } from '@stardust/validation/global/schemas'
-import { accountProviderSchema } from '@stardust/validation/global/schemas'
+import { accountProviderSchema } from '@stardust/validation/auth/schemas'
 
 import { CLIENT_ENV } from '@/constants'
 import { AuthService } from '@/rest/services'
