@@ -1,3 +1,12 @@
 {
-  "extends": "@stardust/typescript-config/base.json"
+  "extends": "@stardust/typescript-config/base.json",
+  "compilerOptions": {
+    "skipLibCheck": true
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "../../node_modules/tsup/dist/index.d.ts"
+  ]
 }
