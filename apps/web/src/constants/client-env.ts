@@ -9,6 +9,8 @@ const CLIENT_ENV = {
   serverAppUrl: process.env.NEXT_PUBLIC_SERVER_APP_URL ?? '',
 }
 
+console.log(CLIENT_ENV)
+
 new StringValidation(CLIENT_ENV.mode, 'App Mode').validate()
 new StringValidation(CLIENT_ENV.supabaseCdnUrl, 'Supabase CDN Url').url().validate()
 new StringValidation(CLIENT_ENV.supabaseUrl, 'Supabase Url').url().validate()
