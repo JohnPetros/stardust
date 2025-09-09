@@ -5,7 +5,7 @@ import { CACHE } from '@/constants'
 
 export const GithubAccountButton = async () => {
   const restClient = await NextServerRestClient({
-    cacheKey: CACHE.keys.googleAccountConnection,
+    cacheKey: CACHE.keys.githubAccountConnection,
   })
   const authService = AuthService(restClient)
   const response = await authService.fetchGithubAccountConnection()
