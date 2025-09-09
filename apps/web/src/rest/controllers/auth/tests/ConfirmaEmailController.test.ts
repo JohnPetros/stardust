@@ -77,7 +77,7 @@ describe('Confirm Email Controller', () => {
     )
   })
 
-  it.only('should redirect to the account confirmation page if the email was successfully confirmed', async () => {
+  it('should redirect to the account confirmation page if the email was successfully confirmed', async () => {
     const response = new RestResponse({
       statusCode: HTTP_STATUS_CODE.ok,
       body: session,
