@@ -1,5 +1,6 @@
 import nextJest from 'next/jest.js'
 import { config } from 'dotenv'
+import { TextEncoder, TextDecoder } from 'node:util'
 
 config({ path: '.env.test' })
 
@@ -19,9 +20,8 @@ const jestConfig = {
     'ts-jest': {
       tsConfigFile: 'tsconfig.json',
     },
-    TextEncoder: require('node:util').TextEncoder,
-
-    TextDecoder: require('node:util').TextDecoder,
+    TextEncoder,
+    TextDecoder,
   },
 }
 
