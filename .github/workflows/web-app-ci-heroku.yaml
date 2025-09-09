@@ -34,7 +34,9 @@ jobs:
         run: npm install -g turbo
 
       - name: Create .env file
-        run: echo "${{ secrets.WEB_STAGING_ENV }}" >> apps/web/.env && echo "${{ secrets.WEB_STAGING_ENV }}" >> apps/web/.env.test
+        run: |
+          echo "${{ secrets.WEB_STAGING_ENV }}" >> apps/web/.env
+          echo "${{ secrets.WEB_STAGING_ENV }}" >> apps/web/.env.test
 
       - name: Build project
         run: npm run build:web
