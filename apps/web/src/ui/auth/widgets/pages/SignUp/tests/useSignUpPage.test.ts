@@ -18,7 +18,7 @@ describe('useSignUpPage', () => {
   let isUserCreated = false
   const email = 'fake@email.com'
   const password = '123456'
-  const name = 'fake name'
+  const name = 'fake '
 
   const Hook = () => useSignUpPage(authService, isUserCreated)
 

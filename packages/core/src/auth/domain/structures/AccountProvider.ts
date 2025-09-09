@@ -1,5 +1,5 @@
 import { ValidationError } from '#global/domain/errors/ValidationError'
-import { Logical } from './Logical'
+import { Logical } from '#global/domain/structures/Logical'
 
 type AccountProviderValue = 'google' | 'github' | 'email'
 

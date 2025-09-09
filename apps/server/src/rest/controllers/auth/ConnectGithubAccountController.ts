@@ -8,11 +8,11 @@ type Schema = {
   }
 }
 
-export class ConnectGoogleAccountController implements Controller<Schema> {
+export class ConnectGithubAccountController implements Controller<Schema> {
   constructor(private readonly service: AuthService) {}
 
   async handle(http: Http<Schema>) {
     const { returnUrl } = http.getQueryParams()
-    return await this.service.connectGoogleAccount(Text.create(returnUrl))
+    return await this.service.connectGithubAccount(Text.create(returnUrl))
   }
 }

@@ -1,1 +1,1 @@
-export { accountSchema } from './accountSchema'
+export { accountProviderSchema } from './accountProviderSchema'

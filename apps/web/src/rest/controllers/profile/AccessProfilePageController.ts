@@ -1,8 +1,9 @@
-import { ROUTES } from '@/constants'
-import { User } from '@stardust/core/global/entities'
 import type { Controller, Http } from '@stardust/core/global/interfaces'
-import { AccountProvider, Id } from '@stardust/core/global/structures'
 import type { ProfileService } from '@stardust/core/profile/interfaces'
+import { User } from '@stardust/core/global/entities'
+import { Id } from '@stardust/core/global/structures'
+
+import { ROUTES } from '@/constants'
 
 type Schema = {
   routeParams: {
