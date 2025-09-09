@@ -29,13 +29,12 @@ const createJestConfig = nextJest({
   dir: './src',
 })(jestConfig)
 
-module.exports = async () => {
+export default async () => {
   // Create Next.js jest configuration presets
   const finalJestConfig = await createJestConfig()
 
   const moduleNameMapper = {
     ...finalJestConfig.moduleNameMapper,
-    uuid: require.resolve('uuid'),
     '^@/(.*)$': '<rootDir>/src/$1',
   }
 
