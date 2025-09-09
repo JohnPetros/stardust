@@ -53,4 +53,4 @@ jobs:
         uses: appleboy/discord-action@v1.2.0
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          message: The ${{ github.event_name }} event triggered first step.
+          message: Uma nova versão de staging do Stardust Web foi deployada com sucesso.
