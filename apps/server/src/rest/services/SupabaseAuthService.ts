@@ -1,4 +1,4 @@
-import type { AuthError } from '@supabase/supabase-js'
+import type { AuthError, UserIdentity } from '@supabase/supabase-js'
 
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import type { SessionDto } from '@stardust/core/auth/structures/dtos'
@@ -7,7 +7,8 @@ import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 import type { Password } from '@stardust/core/auth/structures'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { RestResponse } from '@stardust/core/global/responses'
-import { MethodNotImplementedError } from '@stardust/core/global/errors'
+import { ConflictError, MethodNotImplementedError } from '@stardust/core/global/errors'
+import { NotFoundError } from '@stardust/core/global/errors'
 
 import type { Supabase } from '@/database/supabase/types'
 import { ENV } from '@/constants'
@@ -175,6 +176,83 @@ export class SupabaseAuthService implements AuthService {
       return this.supabaseAuthError(error, 'Erro inesperado ao conectar conta com Google')
 
     return new RestResponse({ body: { signInUrl: data.url } })
+  }
+
+  private async getIdentities(
+    provider: 'google' | 'github',
+  ): Promise<RestResponse<{ identity: UserIdentity; count: number }>> {
+    const { data, error } = await this.supabase.auth.getUserIdentities()
+
+    if (error)
+      return this.supabaseAuthError(error, 'Erro inesperado ao buscar identidades')
+
+    const identity = data.identities.find((identity) => identity.provider === provider)
+
+    if (!identity)
+      return new RestResponse({
+        errorMessage: 'Conta social não encontrada',
+        statusCode: HTTP_STATUS_CODE.notFound,
+      })
+
+    return new RestResponse({ body: { identity, count: data.identities.length } })
+  }
+
+  async disconnectGoogleAccount(): Promise<RestResponse> {
+    const response = await this.getIdentities('google')
+    if (response.isFailure) response.throwError()
+
+    const { identity, count } = response.body
+
+    if (count === 1)
+      throw new ConflictError(
+        'Não é possível desconectar a única conta que você possui para acessar a plataforma',
+      )
+
+    const { error } = await this.supabase.auth.unlinkIdentity(identity)
+
+    if (error)
+      return this.supabaseAuthError(
+        error,
+        'Erro inesperado ao desconectar conta com Google',
+      )
+
+    return new RestResponse()
+  }
+
+  async disconnectGithubAccount(): Promise<RestResponse> {
+    const response = await this.getIdentities('github')
+    if (response.isFailure) response.throwError()
+
+    const { identity, count } = response.body
+
+    if (count === 1)
+      throw new ConflictError(
+        'Não é possível desconectar a única conta que você possui para acessar a plataforma',
+      )
+
+    const { error } = await this.supabase.auth.unlinkIdentity(identity)
+
+    if (error)
+      return this.supabaseAuthError(
+        error,
+        'Erro inesperado ao desconectar conta com Github',
+      )
+
+    return new RestResponse()
+  }
+
+  async fetchGithubAccountConnection(): Promise<RestResponse<{ isConnected: boolean }>> {
+    const response = await this.getIdentities('github')
+    if (response.isFailure) return new RestResponse({ body: { isConnected: false } })
+
+    return new RestResponse({ body: { isConnected: response.body.count > 0 } })
+  }
+
+  async fetchGoogleAccountConnection(): Promise<RestResponse<{ isConnected: boolean }>> {
+    const response = await this.getIdentities('google')
+    if (response.isFailure) return new RestResponse({ body: { isConnected: false } })
+
+    return new RestResponse({ body: { isConnected: response.body.count > 0 } })
   }
 
   async resendSignUpEmail(email: Email): Promise<RestResponse> {

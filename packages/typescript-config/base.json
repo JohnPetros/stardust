@@ -13,5 +13,9 @@
     "noEmit": true,
     "declaration": false,
     "declarationMap": false
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

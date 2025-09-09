@@ -20,5 +20,7 @@ export const CACHE = {
     playgroundCards: '/playground-cards',
     rankingsList: '/rankings-list',
     docs: '/docs',
+    googleAccountConnection: '/google-account-connection',
+    githubAccountConnection: '/github-account-connection',
   },
 }

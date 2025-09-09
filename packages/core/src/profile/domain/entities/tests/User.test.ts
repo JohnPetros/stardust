@@ -1,4 +1,4 @@
-import { AccountProvider, Id, Integer } from '#global/domain/structures/index'
+import { Id, Integer } from '#global/domain/structures/index'
 import { ShopItemNotAcquiredError } from '#profile/errors/index'
 import {
   AvatarAggregatesFaker,

@@ -26,8 +26,6 @@ export class VerifyUserSocialAccountUseCase implements UseCase<Request, Response
       user = await this.repository.findByName(name)
     }
 
-    console.log('name ->', name)
-
     return { deduplicatedUserName: name.value }
   }
 

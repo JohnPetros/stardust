@@ -270,7 +270,7 @@ export class User extends Entity<UserProps> {
   }
 
   get unlockedStarsCount(): Integer {
-    if (this.props.acquiredRocketsIds.count.isZero.isTrue) return Integer.create(0)
+    if (this.props.unlockedStarsIds.count.isZero.isTrue) return Integer.create(0)
     return this.props.unlockedStarsIds.count.minus(Integer.create(1))
   }
 

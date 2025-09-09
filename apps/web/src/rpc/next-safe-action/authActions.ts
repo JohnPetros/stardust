@@ -3,6 +3,7 @@
 import { z } from 'zod'
 
 import { emailSchema, passwordSchema } from '@stardust/validation/global/schemas'
+import { accountProviderSchema } from '@stardust/validation/auth/schemas'
 
 import { CLIENT_ENV } from '@/constants'
 import { AuthService } from '@/rest/services'
@@ -12,9 +13,12 @@ import {
   SignInAction,
   SignOutAction,
   SignUpWithSocialAccountAction,
+  ConnectSocialAccountAction,
+  DisconnectSocialAccountAction,
 } from '../actions/auth'
 import { actionClient } from './clients/actionClient'
 import { NextCall } from '../next/NextCall'
+import { authActionClient } from './clients'
 
 export const signIn = actionClient
   .schema(
@@ -56,5 +60,33 @@ export const signUpWithSocialAccount = actionClient
     restClient.setAuthorization(clientInput.accessToken)
     const service = AuthService(restClient)
     const action = SignUpWithSocialAccountAction(service)
+    return await action.handle(call)
+  })
+
+export const connectSocialAccount = authActionClient
+  .schema(
+    z.object({
+      socialAccountProvider: accountProviderSchema,
+    }),
+  )
+  .action(async ({ clientInput, ctx }) => {
+    const call = NextCall({ request: clientInput, user: ctx.user })
+    const restClient = await NextServerRestClient()
+    const service = AuthService(restClient)
+    const action = ConnectSocialAccountAction(service)
+    return await action.handle(call)
+  })
+
+export const disconnectSocialAccount = authActionClient
+  .schema(
+    z.object({
+      socialAccountProvider: accountProviderSchema,
+    }),
+  )
+  .action(async ({ clientInput, ctx }) => {
+    const call = NextCall({ request: clientInput, user: ctx.user })
+    const restClient = await NextServerRestClient()
+    const service = AuthService(restClient)
+    const action = DisconnectSocialAccountAction(service)
     return await action.handle(call)
   })
