@@ -1,21 +1,26 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { UsersRepository } from '#profile/interfaces/UsersRepository'
+import type { EventBroker } from '#global/interfaces/EventBroker'
 import { Id } from '#global/domain/structures/Id'
 import { UserNotFoundError } from '#profile/errors/UserNotFoundError'
 import { CalculateRewardForStarCompletionUseCase } from '../CalculateRewardForStarCompletionUseCase'
 import { UsersFaker } from '#profile/domain/entities/fakers/UsersFaker'
 import { PlanetsFaker } from '#space/domain/entities/tests/fakers/PlanetsFaker'
+import { SpaceCompletedEvent } from '#space/domain/events/SpaceCompletedEvent'
 
 describe('Calculate Reward For Star Completion Use Case', () => {
   let repository: Mock<UsersRepository>
+  let eventBroker: Mock<EventBroker>
   let useCase: CalculateRewardForStarCompletionUseCase
 
   beforeEach(() => {
     repository = mock<UsersRepository>()
+    eventBroker = mock<EventBroker>()
+    eventBroker.publish.mockImplementation()
     repository.findById.mockImplementation()
     repository.replace.mockImplementation()
-    useCase = new CalculateRewardForStarCompletionUseCase(repository)
+    useCase = new CalculateRewardForStarCompletionUseCase(repository, eventBroker)
   })
 
   it('should throw an error if the user is not found', () => {
@@ -253,11 +258,18 @@ describe('Calculate Reward For Star Completion Use Case', () => {
 
     expect(user.completeSpace).toHaveBeenCalled()
     expect(repository.replace).toHaveBeenCalledWith(user)
+    expect(eventBroker.publish).toHaveBeenCalledWith(
+      new SpaceCompletedEvent({
+        userSlug: user.slug.value,
+        userName: user.name.value,
+      }),
+    )
 
     user = UsersFaker.fake({
       hasCompletedSpace: true,
     })
     user.completeSpace = jest.fn()
+    eventBroker.publish = jest.fn()
     repository.findById.mockResolvedValue(user)
     await useCase.execute({
       incorrectAnswersCount: 0,
@@ -265,9 +277,9 @@ describe('Calculate Reward For Star Completion Use Case', () => {
       nextStarId: null,
       questionsCount: 10,
     })
-    repository.findById.mockResolvedValue(user)
 
     expect(user.completeSpace).not.toHaveBeenCalled()
     expect(repository.replace).toHaveBeenCalledTimes(1)
+    expect(eventBroker.publish).not.toHaveBeenCalled()
   })
 })
