@@ -114,3 +114,6 @@ export * from './documentation/interfaces/index'
 export * from './storage/interfaces/index'
 export * from './storage/use-cases/index'
 export * from './storage/structures/index'
+
+// Notification
+export * from './notification/interfaces/index'
