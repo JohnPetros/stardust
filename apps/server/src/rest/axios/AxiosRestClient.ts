@@ -121,7 +121,6 @@ export class AxiosRestClient implements RestClient {
   async post<Body>(route: string, body?: unknown): Promise<RestResponse<Body>> {
     try {
       console.log('this.baseUrl', this.baseUrl)
-      console.log('url', this.buildUrl(route))
       const response = await this.axios.post(this.buildUrl(route), body)
       const headers = this.normalizeHeaders(response.headers)
 

@@ -25,8 +25,8 @@ export class AppendNextStarToBodyController implements Controller<Schema> {
       this.eventBroker,
     )
     const star = await useCase.execute({
-      userName: userName,
-      userSlug: userSlug,
+      userName,
+      userSlug,
       currentStarId: starId,
     })
     http.extendBody({ nextStarId: star?.id ?? null })

@@ -4,8 +4,6 @@ import type { EventPayload } from '@stardust/core/global/types'
 import type { NotificationService } from '@stardust/core/notification/interfaces'
 import type { SpaceCompletedEvent } from '@stardust/core/space/events'
 
-import { SendPlanetCompletedNotificationJob } from './SendPlanetCompletedNotificationJob'
-
 type Payload = EventPayload<typeof SpaceCompletedEvent>
 
 export class SendSpaceCompletedNotificationJob {
@@ -19,7 +17,7 @@ export class SendSpaceCompletedNotificationJob {
 
     const response = await amqp.run<RestResponse>(
       async () => await this.service.sendSpaceCompletedNotification(userSlug, userName),
-      SendPlanetCompletedNotificationJob.SERVICE_NAME,
+      SendSpaceCompletedNotificationJob.SERVICE_NAME,
     )
 
     if (response.isFailure) response.throwError()

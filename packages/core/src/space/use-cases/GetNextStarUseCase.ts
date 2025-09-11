@@ -34,8 +34,8 @@ export class GetNextStarUseCase implements UseCase<Request, Response> {
       if (nextPlanet) {
         nextStar = nextPlanet.firstStar
         const event = new PlanetCompletedEvent({
-          userSlug: userSlug,
-          userName: userName,
+          userSlug,
+          userName,
           planetName: currentPlanet.name.value,
         })
         await this.eventBroker.publish(event)
