@@ -30,7 +30,9 @@ import {
   SpaceMiddleware,
   ChallengingMiddleware,
   ValidationMiddleware,
+  ProfileMiddleware,
 } from '../../middlewares'
+import { InngestEventBroker } from '@/queue/inngest/InngestEventBroker'
 
 export class UsersRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/users')
@@ -38,6 +40,7 @@ export class UsersRouter extends HonoRouter {
   private readonly spaceMiddleware = new SpaceMiddleware()
   private readonly challengingMiddleware = new ChallengingMiddleware()
   private readonly validationMiddleware = new ValidationMiddleware()
+  private readonly profileMiddleware = new ProfileMiddleware()
 
   private registerFetchUserByIdRoute() {
     this.router.get(
@@ -99,6 +102,7 @@ export class UsersRouter extends HonoRouter {
     this.router.put(
       '/:userId/reward/star',
       this.authMiddleware.verifyAuthentication,
+      this.profileMiddleware.appendUserInfoToBody,
       this.spaceMiddleware.appendNextStarToBody,
       this.validationMiddleware.validate(
         'param',
@@ -117,7 +121,11 @@ export class UsersRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseUsersRepository(http.getSupabase())
-        const controller = new RewardUserForStarCompletionController(repository)
+        const eventBroker = new InngestEventBroker()
+        const controller = new RewardUserForStarCompletionController(
+          repository,
+          eventBroker,
+        )
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -128,6 +136,7 @@ export class UsersRouter extends HonoRouter {
     this.router.put(
       '/:userId/reward/star-challenge',
       this.authMiddleware.verifyAuthentication,
+      this.profileMiddleware.appendUserInfoToBody,
       this.spaceMiddleware.appendNextStarToBody,
       this.challengingMiddleware.appendChallengeRewardToBody,
       this.validationMiddleware.validate(

@@ -1,4 +1,4 @@
-import type { Controller } from '@stardust/core/global/interfaces'
+import type { Controller, EventBroker } from '@stardust/core/global/interfaces'
 import type { Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
@@ -20,7 +20,10 @@ type Schema = {
 }
 
 export class RewardUserForStarCompletionController implements Controller<Schema> {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private readonly eventBroker: EventBroker,
+  ) {}
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const { userId } = http.getRouteParams()
@@ -59,7 +62,10 @@ export class RewardUserForStarCompletionController implements Controller<Schema>
     questionsCount: number,
     incorrectAnswersCount: number,
   ) {
-    const useCase = new CalculateRewardForStarCompletionUseCase(this.usersRepository)
+    const useCase = new CalculateRewardForStarCompletionUseCase(
+      this.usersRepository,
+      this.eventBroker,
+    )
     return await useCase.execute({
       userId,
       nextStarId,

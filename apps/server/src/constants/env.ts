@@ -11,6 +11,7 @@ const env = {
   inngestSigningKey: process.env.INNGEST_SIGNING_KEY,
   webAppUrl: process.env.WEB_APP_URL,
   dropboxAccessToken: process.env.DROPBOX_ACCESS_TOKEN,
+  discordWebhookUrl: process.env.DISCORD_WEBHOOK_URL,
 }
 
 const envSchema = z.object({
@@ -24,6 +25,7 @@ const envSchema = z.object({
   inngestSigningKey: z.string().optional(),
   webAppUrl: z.string().url(),
   dropboxAccessToken: z.string().optional(),
+  discordWebhookUrl: z.string().url(),
 })
 
 export const ENV = envSchema.parse(env)

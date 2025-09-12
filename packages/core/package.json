@@ -137,7 +137,7 @@
     "./storage/types": "./src/storage/types/index.ts",
     "./storage/interfaces": "./src/storage/interfaces/index.ts",
     "./storage/use-cases": "./src/storage/use-cases/index.ts",
-    "./mocks/services": "./src/__tests__/mocks/services/index.ts"
+    "./notification/interfaces": "./src/notification/interfaces/index.ts"
   },
   "imports": {
     "#global/*": "./src/global/*.ts",

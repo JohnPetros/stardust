@@ -1,5 +1,5 @@
 @URL = {{BASE_URL}}/profile/users
-@USER_ID = f26ee48b-c0c0-41b1-a3e8-1761bec71eb5
+@USER_ID = 2ac3e189-e5ed-4003-a87a-d2358411584e
 @USER_SLUG = ctrl
 
 ### Fetch user by id
@@ -115,6 +115,7 @@ Content-Type: application/json
 {
   "starId": "506f5514-6b54-40ae-8833-392ecbe5e422",
   "questionsCount": 10,
+  "secondsCount": 100,
   "incorrectAnswersCount": 5
 }
 
@@ -124,9 +125,11 @@ Authorization: Bearer {{JWT}}
 Content-Type: application/json
 
 {
+  "starId": "506f5514-6b54-40ae-8833-392ecbe5e422",
   "challengeId": "56373af2-ac24-4bcd-a312-7d01bd7b5f53",
   "maximumIncorrectAnswersCount": 10,
-  "incorrectAnswersCount": 2
+  "incorrectAnswersCount": 2,
+  "secondsCount": 100
 }
 
 ### Reward user for challenge completion

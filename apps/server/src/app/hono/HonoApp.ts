@@ -23,6 +23,7 @@ import {
   SpaceFunctions,
   ShopFunctions,
   RankingFunctions,
+  NotificationFunctions,
   StorageFunctions,
 } from '@/queue/inngest/functions'
 import { InngestAmqp } from '@/queue/inngest/InngestAmqp'
@@ -39,6 +40,8 @@ import {
 } from './routers'
 import { ForumRouter } from './routers/forum'
 import { PlaygroundRouter } from './routers/playground/PlaygroundRouter'
+
+type SupabaseSession = User & { sub: string }
 
 declare module 'hono' {
   interface ContextVariableMap {
@@ -163,6 +166,7 @@ export class HonoApp {
       const shopFunctions = new ShopFunctions(inngest)
       const rankingFunctions = new RankingFunctions(inngest)
       const storageFunctions = new StorageFunctions(inngest)
+      const notificationFunctions = new NotificationFunctions(inngest)
 
       return serveInngest({
         client: inngest,
@@ -172,19 +176,19 @@ export class HonoApp {
           ...shopFunctions.getFunctions(supabase),
           ...rankingFunctions.getFunctions(supabase),
           ...storageFunctions.getFunctions(),
+          ...notificationFunctions.getFunctions(),
         ],
       })(context)
     })
   }
 
   private setAccount(accessToken: string, context: Context) {
-    const session = jwtDecode<User>(accessToken)
+    const session = jwtDecode<SupabaseSession>(accessToken)
     const accountDto: AccountDto = {
       id: session.sub,
       email: session.user_metadata.email,
       name: session.user_metadata.name,
       isAuthenticated: session.user_metadata.email_verified,
-      provider: session.app_metadata.provider,
     }
     context.set('account', accountDto)
   }
