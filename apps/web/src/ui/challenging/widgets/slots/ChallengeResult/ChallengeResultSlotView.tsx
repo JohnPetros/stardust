@@ -28,7 +28,7 @@ export const ChallengeResultSlotView = ({
             isLocked={testCase.isLocked.isTrue}
             isCorrect={results[index] ?? false}
             inputs={testCase.inputs}
-            userOutput={challenge.userOutputs.getByIndex(index, undefined)}
+            userOutput={challenge.userOutputs.getByIndex(index, null)}
             expectedOutput={testCase.expectedOutput}
           />
         ))}
