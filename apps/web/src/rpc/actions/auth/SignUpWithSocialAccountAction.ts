@@ -24,13 +24,9 @@ export const SignUpWithSocialAccountAction = (
       const response = await service.fetchAccount()
       if (response.isFailure) response.throwError()
 
-      console.log('response', response)
-
       const account = Account.create(response.body)
 
       const signUpResponse = await service.signUpWithSocialAccount(account)
-
-      console.log('signUpResponse', signUpResponse)
 
       await Promise.all([
         call.setCookie(
