@@ -52,7 +52,7 @@ export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
       return this.trateErro(resultadoInterpretador.erros[0])
     }
 
-    let resultado = resultadoInterpretador.resultado.at(-1).valorRetornado.valor
+    let resultado = resultadoInterpretador.resultado.at(-1)?.valorRetornado?.valor
     if (typeof resultado === 'object' && resultado !== null && 'valor' in resultado) {
       resultado = resultado.valor
     }
