@@ -25,7 +25,7 @@ export function useTestCase({
   }
 
   useEffect(() => {
-    if (userOutput && (!isLocked || isCorrect)) {
+    if (userOutput !== undefined && (!isLocked || isCorrect)) {
       setIsOpen(true)
     }
   }, [userOutput, isLocked, isCorrect])
