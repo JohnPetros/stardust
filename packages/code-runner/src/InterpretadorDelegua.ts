@@ -1,4 +1,7 @@
-import type { Declaracao } from '@designliquido/delegua'
+import type {
+  Declaracao,
+  ResultadoParcialInterpretadorInterface,
+} from '@designliquido/delegua'
 import { Interpretador } from '@designliquido/delegua/interpretador'
 
 export class InterpretadorDelegua extends Interpretador {
@@ -6,7 +9,9 @@ export class InterpretadorDelegua extends Interpretador {
     const resultado = await super.executar(declaracao)
 
     if (resultado) {
-      this.resultadoInterpretador.push(this.paraTexto(resultado))
+      this.resultadoInterpretador.push(
+        this.paraTexto(resultado) as unknown as ResultadoParcialInterpretadorInterface,
+      )
     }
 
     return resultado

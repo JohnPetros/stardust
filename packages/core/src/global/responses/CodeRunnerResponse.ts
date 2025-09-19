@@ -12,7 +12,7 @@ export class CodeRunnerResponse {
   private readonly _error: CodeRunnerError | null = null
 
   constructor({ result, outputs, error }: CodeRunnerResponseProps) {
-    if (result) this.result = result
+    if (typeof result !== 'undefined') this.result = result
     if (outputs?.length) this.outputs = outputs
     if (error) this._error = error
   }

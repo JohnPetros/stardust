@@ -72,7 +72,6 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
   }
 
   changeAnswer(answer: string, index: number) {
-    console.log('index', index)
     this.props.answers = this.answers.changeItem(answer, index)
   }
 
@@ -91,7 +90,6 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
         ? line.addText('input', codeLineInputIndex)
         : line,
     )
-    console.log('answerIndex', answerIndex)
     this.props.answers = this.answers.addAt('', answerIndex)
   }
 

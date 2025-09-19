@@ -52,11 +52,21 @@ export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
       return this.trateErro(resultadoInterpretador.erros[0])
     }
 
-    const resultado = resultadoInterpretador.resultado
-    console.log('resultado ->', resultado)
-    const result = resultado[1]
+    console.log(resultadoInterpretador.resultado)
 
-    return new CodeRunnerResponse({ result, outputs })
+    let resultado = null
+
+    if (resultadoInterpretador?.resultado?.at(-1)) {
+      resultado = resultadoInterpretador?.resultado.at(-1)?.valorRetornado.valor
+
+      if (typeof resultado === 'object' && resultado !== null && 'valor' in resultado) {
+        resultado = resultado.valor
+      }
+    }
+
+    console.log(resultado)
+
+    return new CodeRunnerResponse({ result: resultado, outputs })
   }
 
   getInput(code: string) {
@@ -122,6 +132,11 @@ export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
 
   translateToCodeRunner(jsCode: unknown) {
     const tipo = this.obtenhaTipo(jsCode)
+
+    if (tipo === 'nulo') {
+      return 'nulo'
+    }
+
     const codigo = ['texto', 'lista'].includes(tipo)
       ? JSON.stringify(jsCode)
       : String(jsCode)
@@ -152,6 +167,10 @@ export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
   private obtenhaTipo(valor: unknown) {
     if (Array.isArray(valor)) {
       return 'lista'
+    }
+
+    if (valor === null) {
+      return 'nulo'
     }
 
     switch (typeof valor) {
