@@ -16,8 +16,6 @@ const env = {
   discordWebhookUrl: process.env.DISCORD_WEBHOOK_URL,
 }
 
-console.log(env)
-
 const envSchema = z.object({
   mode: z.enum(['development', 'production', 'test']),
   port: z.coerce.number().default(3333),
