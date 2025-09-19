@@ -56,9 +56,8 @@ export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
 
     let resultado = null
 
-    if (resultadoInterpretador.resultado.at(-1)) {
-      resultado = resultadoInterpretador.resultado.at(-1).valorRetornado.valor
-      console.log(resultadoInterpretador.resultado.at(-1))
+    if (resultadoInterpretador?.resultado?.at(-1)) {
+      resultado = resultadoInterpretador?.resultado.at(-1)?.valorRetornado.valor
 
       if (typeof resultado === 'object' && resultado !== null && 'valor' in resultado) {
         resultado = resultado.valor
@@ -142,7 +141,6 @@ export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
       ? JSON.stringify(jsCode)
       : String(jsCode)
 
-      
     try {
       const lexador = new LexadorJavaScript()
       const avaliadorSintatico = new AvaliadorSintaticoJavaScript()
