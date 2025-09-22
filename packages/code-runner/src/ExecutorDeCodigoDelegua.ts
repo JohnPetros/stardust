@@ -4,6 +4,7 @@ import {
   TradutorJavaScript,
   TradutorReversoJavaScript,
 } from '@designliquido/delegua'
+import { AnalisadorSemantico } from '@designliquido/delegua/analisador-semantico'
 import { AvaliadorSintaticoJavaScript } from '@designliquido/delegua/avaliador-sintatico/traducao/avaliador-sintatico-javascript'
 import { LexadorJavaScript } from '@designliquido/delegua/lexador/traducao/lexador-javascript'
 
@@ -19,6 +20,7 @@ import { InterpretadorDelegua } from './InterpretadorDelegua'
 export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
   private readonly lexador: Lexador = new Lexador()
   private readonly avaliadorSintatico: AvaliadorSintatico = new AvaliadorSintatico()
+  private readonly analisadorSemantico: AnalisadorSemantico = new AnalisadorSemantico()
 
   async run(code: string) {
     const outputs: string[] = []
@@ -209,5 +211,33 @@ export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
     const error = new CodeRunnerError(mensagemDeErro, linhaDoErro)
 
     return new CodeRunnerResponse({ error })
+  }
+
+  performSyntaxAnalysis(code: string): CodeRunnerResponse {
+    const retornoLexador = this.lexador.mapear(code.split('\n'), -1)
+    const retornoAvaliadorSintatico = this.avaliadorSintatico.analisar(retornoLexador, -1)
+    if (retornoAvaliadorSintatico.erros.length > 0) {
+      const errors = retornoAvaliadorSintatico.erros.map(
+        (erro) => new CodeRunnerError(erro.message, erro.linha ?? 0),
+      )
+      return new CodeRunnerResponse({ errors })
+    }
+
+    return new CodeRunnerResponse({})
+  }
+
+  performSemanticAnalysis(code: string): CodeRunnerResponse {
+    const retornoLexador = this.lexador.mapear(code.split('\n'), -1)
+    const retornoAvaliadorSintatico = this.avaliadorSintatico.analisar(retornoLexador, -1)
+    const analisadorSemantico = this.analisadorSemantico.analisar(
+      retornoAvaliadorSintatico.declaracoes,
+    )
+    const errosAnaliseSemantica = analisadorSemantico.diagnosticos
+    if (errosAnaliseSemantica.length > 0) {
+      const errors = errosAnaliseSemantica.map(
+        (erro) => new CodeRunnerError(erro.mensagem, erro.linha ?? 0),
+      )
+      return new CodeRunnerResponse({ errors })
+    }
   }
 }

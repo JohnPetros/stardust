@@ -4,17 +4,20 @@ type CodeRunnerResponseProps = {
   result?: string
   outputs?: string[]
   error?: CodeRunnerError | null
+  errors?: CodeRunnerError[]
 }
 
 export class CodeRunnerResponse {
   readonly result: string = ''
   readonly outputs: string[] = []
   private readonly _error: CodeRunnerError | null = null
+  private readonly _errors: CodeRunnerError[] = []
 
-  constructor({ result, outputs, error }: CodeRunnerResponseProps) {
+  constructor({ result, outputs, error, errors = [] }: CodeRunnerResponseProps) {
     if (typeof result !== 'undefined') this.result = result
     if (outputs?.length) this.outputs = outputs
     if (error) this._error = error
+    this._errors = errors
   }
 
   throwError() {
