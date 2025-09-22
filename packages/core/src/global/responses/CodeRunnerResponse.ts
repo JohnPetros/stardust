@@ -29,12 +29,16 @@ export class CodeRunnerResponse {
   }
 
   get isFailure(): boolean {
-    return this._error instanceof CodeRunnerError
+    return this._error instanceof CodeRunnerError || this._errors.length > 0
   }
 
   get errorMessage(): string {
     if (!this._error) throw new AppError('Não há erro no exceutor de código')
     return this._error.message
+  }
+
+  get errors(): CodeRunnerError[] {
+    return this._errors
   }
 
   get errorLine(): number {
