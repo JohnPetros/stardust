@@ -5,6 +5,9 @@ import { type ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 import type { CodeEditorRef, CodeEditorTheme } from './types'
 import { useCodeEditor } from './useCodeEditor'
 import { CodeEditorView } from './CodeEditorView'
+import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
+import { useEditorContext } from '@/ui/global/hooks/useEditorContext'
+import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 
 type CodeEditorProps = {
   value: string
@@ -27,6 +30,11 @@ export const Widget = (
   ref: ForwardedRef<CodeEditorRef>,
 ) => {
   const {
+    state: { fontSize, tabSize, isCodeCheckerEnabled },
+  } = useEditorContext()
+  const { md: isMobile } = useBreakpoint()
+  const { codeRunnerProvider, documentations } = useCodeRunner()
+  const {
     getValue,
     setValue,
     undoValue,
@@ -36,7 +44,14 @@ export const Widget = (
     getSelectedLinesRange,
     handleChange,
     handleEditorDidMount,
-  } = useCodeEditor(value, theme, onChange)
+  } = useCodeEditor({
+    initialValue: value,
+    theme,
+    isCodeCheckerEnabled,
+    codeRunnerProvider,
+    lspDocumentations: documentations,
+    onChange,
+  })
 
   useImperativeHandle(ref, () => {
     return {
@@ -65,6 +80,9 @@ export const Widget = (
       height={height}
       theme={theme}
       isReadOnly={isReadOnly}
+      isMobile={isMobile}
+      tabSize={tabSize}
+      fontSize={fontSize}
       onChange={handleChange}
       onMount={handleEditorDidMount}
     />
