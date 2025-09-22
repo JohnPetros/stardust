@@ -1,7 +1,12 @@
 import { useMemo } from 'react'
 
-import { ExecutorDeCodigoDelegua } from '@stardust/code-runner'
+import { DELEGUA_DOCUMENTACOES, ExecutorDeCodigoDelegua } from '@stardust/code-runner'
 
 export function useCodeRunner() {
-  return useMemo(() => new ExecutorDeCodigoDelegua(), [])
+  return useMemo(() => {
+    return {
+      codeRunnerProvider: new ExecutorDeCodigoDelegua(),
+      documentations: DELEGUA_DOCUMENTACOES,
+    }
+  }, [])
 }

@@ -21,7 +21,7 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
     if (challenge.difficulty.isAny.isFalse) return challenge.difficulty.level
     return 'easy'
   }, [challenge])
-  const codeRunner = useCodeRunner()
+  const { codeRunnerProvider } = useCodeRunner()
   const form = useForm<ChallengeSchema>({
     resolver: zodResolver(challengeSchema),
     defaultValues: {
@@ -30,9 +30,11 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
       code: challenge?.code ?? '',
       difficultyLevel,
       function: {
-        name: challenge?.code ? (codeRunner.getFunctionName(challenge.code) ?? '') : '',
+        name: challenge?.code
+          ? (codeRunnerProvider.getFunctionName(challenge.code) ?? '')
+          : '',
         params: challenge
-          ? codeRunner
+          ? codeRunnerProvider
               .getFunctionParamsNames(challenge.code)
               .map((paramName: string, paramIndex: number) => ({
                 name: paramName,
