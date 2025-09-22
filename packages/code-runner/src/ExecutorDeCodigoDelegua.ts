@@ -239,5 +239,6 @@ export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
       )
       return new CodeRunnerResponse({ errors })
     }
+    return new CodeRunnerResponse({})
   }
 }
