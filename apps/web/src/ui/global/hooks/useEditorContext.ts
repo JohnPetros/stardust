@@ -4,7 +4,7 @@ import { useContext } from 'react'
 
 import { AppError } from '@stardust/core/global/errors'
 
-import { EditorContext } from '..'
+import { EditorContext } from '../contexts/EditorContext'
 
 export function useEditorContext() {
   const context = useContext(EditorContext)

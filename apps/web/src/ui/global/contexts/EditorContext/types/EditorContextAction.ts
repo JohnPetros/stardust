@@ -4,3 +4,4 @@ export type EditorContextAction =
   | { type: 'setFontSize'; payload: number }
   | { type: 'setTabSize'; payload: number }
   | { type: 'setTheme'; payload: EditorThemeName }
+  | { type: 'setIsCodeCheckerEnabled'; payload: boolean }

@@ -4,14 +4,15 @@ import { useReducer } from 'react'
 
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 import { STORAGE } from '@/constants'
-import { DEFAULT_EDITOR_STATE } from '../constants'
-import type { EditorContextAction, EditorContextState } from '../types'
+import { DEFAULT_EDITOR_STATE } from './constants'
+import type { EditorContextAction, EditorContextState } from './types'
 
-export function useEditorProvider() {
+export function useEditorContextProvider() {
   const editorStorage = useLocalStorage<EditorContextState>(STORAGE.keys.editorState)
-
   const storedEditorState = editorStorage.get()
   const initalEditorState = storedEditorState ? storedEditorState : DEFAULT_EDITOR_STATE
+
+  initalEditorState
 
   function getEditorConfig(): EditorContextState {
     const storedState = localStorage.getItem(STORAGE.keys.editorState)
@@ -41,6 +42,8 @@ export function useEditorProvider() {
         return storeEditorState(state, { tabSize: action.payload })
       case 'setTheme':
         return storeEditorState(state, { themeName: action.payload })
+      case 'setIsCodeCheckerEnabled':
+        return storeEditorState(state, { isCodeCheckerEnabled: action.payload })
       default:
         return state
     }

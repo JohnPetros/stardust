@@ -3,7 +3,7 @@
 import { createContext, type ReactNode } from 'react'
 
 import type { EditorContextValue } from './types'
-import { useEditorProvider } from './hooks'
+import { useEditorContextProvider } from './useEditorContextProvider'
 
 type EditorProviderProps = {
   children: ReactNode
@@ -12,7 +12,7 @@ type EditorProviderProps = {
 export const EditorContext = createContext({} as EditorContextValue)
 
 export function EditorProvider({ children }: EditorProviderProps) {
-  const { state, dispatch } = useEditorProvider()
+  const { state, dispatch } = useEditorContextProvider()
 
   return (
     <EditorContext.Provider value={{ state, dispatch }}>
