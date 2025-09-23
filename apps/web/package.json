@@ -37,7 +37,7 @@
     "@radix-ui/react-tooltip": "^1.2.7",
     "@react-three/drei": "^10.5.1",
     "@react-three/fiber": "^9.2.0",
-    "@stardust/code-runner": "*",
+    "@stardust/lsp": "*",
     "@stardust/core": "*",
     "@stardust/validation": "*",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
