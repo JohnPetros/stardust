@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
+import { useLsp } from '@/ui/global/hooks/useLsp'
 
 type Params = {
   isLocked: boolean
@@ -18,7 +18,7 @@ export function useTestCase({
   expectedOutput,
 }: Params) {
   const [isOpen, setIsOpen] = useState(false)
-  const codeRunner = useCodeRunner()
+  const { lspProvider } = useLsp()
 
   function handleButtonClick() {
     setIsOpen(!isOpen)
@@ -34,20 +34,20 @@ export function useTestCase({
     if (inputs.length > 0) {
       return inputs
         .map((input) => {
-          return codeRunner.translateToCodeRunner(input).replaceAll('\n', '')
+          return lspProvider.translateToLsp(input).replaceAll('\n', '')
         })
         .join(',')
     }
     return 'sem entrada'
-  }, [inputs, codeRunner.translateToCodeRunner])
+  }, [inputs, lspProvider.translateToLsp])
 
   const translatedUserOutput = useMemo(() => {
-    return codeRunner.translateToCodeRunner(userOutput)
-  }, [userOutput, codeRunner.translateToCodeRunner])
+    return lspProvider.translateToLsp(userOutput)
+  }, [userOutput, lspProvider.translateToLsp])
 
   const translatedExpectedOutput = useMemo(() => {
-    return codeRunner.translateToCodeRunner(expectedOutput).replaceAll('\n', '')
-  }, [expectedOutput, codeRunner.translateToCodeRunner])
+    return lspProvider.translateToLsp(expectedOutput).replaceAll('\n', '')
+  }, [expectedOutput, lspProvider.translateToLsp])
 
   return {
     isOpen,

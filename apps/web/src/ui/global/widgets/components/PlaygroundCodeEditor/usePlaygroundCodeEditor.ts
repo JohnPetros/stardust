@@ -4,7 +4,7 @@ import { Code } from '@stardust/core/global/structures'
 
 import { REGEX } from '@/constants'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
+import { useLsp } from '@/ui/global/hooks/useLsp'
 import { useAudioContext } from '@/ui/global/hooks/useAudioContext'
 import type { ConsoleRef } from '../Console/types'
 import type { PromptRef } from '../Prompt/types'
@@ -17,9 +17,9 @@ export function usePlaygroundCodeEditor(
   const [outputs, setOutputs] = useState<string[]>([])
   const [shouldOpenPrompt, setShouldOpenPrompt] = useState(false)
   const { playAudio } = useAudioContext()
-  const codeRunner = useCodeRunner()
+  const { lspProvider } = useLsp()
   const toast = useToastContext()
-  const codeRef = useRef<Code>(Code.create(codeRunner, preCodeValue))
+  const codeRef = useRef<Code>(Code.create(lspProvider, preCodeValue))
   const codeEditorRef = useRef<CodeEditorRef>(null)
   const consoleRef = useRef<ConsoleRef>(null)
   const promptRef = useRef<PromptRef>(null)

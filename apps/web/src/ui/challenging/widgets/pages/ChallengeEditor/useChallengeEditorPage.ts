@@ -11,7 +11,7 @@ import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 import { ROUTES } from '@/constants'
 import { useRouter } from '@/ui/global/hooks/useRouter'
 import { usePostChallengeAction } from './usePostChallengeAction'
-import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
+import { useLsp } from '@/ui/global/hooks/useLsp'
 
 export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
   const challenge = challengeDto ? Challenge.create(challengeDto) : null
@@ -21,7 +21,7 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
     if (challenge.difficulty.isAny.isFalse) return challenge.difficulty.level
     return 'easy'
   }, [challenge])
-  const codeRunner = useCodeRunner()
+  const { lspProvider } = useLsp()
   const form = useForm<ChallengeSchema>({
     resolver: zodResolver(challengeSchema),
     defaultValues: {
@@ -30,9 +30,9 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
       code: challenge?.code ?? '',
       difficultyLevel,
       function: {
-        name: challenge?.code ? (codeRunner.getFunctionName(challenge.code) ?? '') : '',
+        name: challenge?.code ? (lspProvider.getFunctionName(challenge.code) ?? '') : '',
         params: challenge
-          ? codeRunner
+          ? lspProvider
               .getFunctionParamsNames(challenge.code)
               .map((paramName: string, paramIndex: number) => ({
                 name: paramName,

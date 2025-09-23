@@ -4,21 +4,23 @@ import {
   TradutorJavaScript,
   TradutorReversoJavaScript,
 } from '@designliquido/delegua'
+import { AnalisadorSemantico } from '@designliquido/delegua/analisador-semantico'
 import { AvaliadorSintaticoJavaScript } from '@designliquido/delegua/avaliador-sintatico/traducao/avaliador-sintatico-javascript'
 import { LexadorJavaScript } from '@designliquido/delegua/lexador/traducao/lexador-javascript'
 
-import { CodeRunnerResponse } from '@stardust/core/global/responses'
-import { CodeRunnerError } from '@stardust/core/global/errors'
+import { LspResponse } from '@stardust/core/global/responses'
+import { LspError } from '@stardust/core/global/errors'
 import type { CodeInput } from '@stardust/core/global/types'
-import type { CodeRunnerProvider } from '@stardust/core/global/interfaces'
+import type { LspProvider } from '@stardust/core/global/interfaces'
 
 import { DELEGUA_REGEX } from './constants'
 import type { DeleguaErro } from '../types/DeleguaErro'
-import { InterpretadorDelegua } from './InterpretadorDelegua'
+import { DeleguaInterpretador } from './DeleguaInterpretador'
 
-export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
+export class DeleguaLsp implements LspProvider {
   private readonly lexador: Lexador = new Lexador()
   private readonly avaliadorSintatico: AvaliadorSintatico = new AvaliadorSintatico()
+  private readonly analisadorSemantico: AnalisadorSemantico = new AnalisadorSemantico()
 
   async run(code: string) {
     const outputs: string[] = []
@@ -27,7 +29,7 @@ export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
       outputs.push(saida)
     }
 
-    const interpretador = new InterpretadorDelegua(
+    const interpretador = new DeleguaInterpretador(
       '',
       false,
       funcaoDeSaida,
@@ -66,7 +68,7 @@ export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
 
     console.log(resultado)
 
-    return new CodeRunnerResponse({ result: resultado, outputs })
+    return new LspResponse({ result: resultado, outputs })
   }
 
   getInput(code: string) {
@@ -80,7 +82,7 @@ export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
     let codigo = codeValue
 
     for (const input of codeInputs) {
-      const entrada = this.translateToCodeRunner(input)
+      const entrada = this.translateToLsp(input)
       codigo = codigo.replace(DELEGUA_REGEX.conteudoDeFuncaoLeia, entrada)
     }
 
@@ -90,8 +92,8 @@ export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
   addFunctionCall(functionParams: unknown[], code: string) {
     const paramsValues = functionParams.map((param) => {
       return Array.isArray(param)
-        ? `[${param.map((value) => this.translateToCodeRunner(value)).join(',')}]`
-        : this.translateToCodeRunner(param)
+        ? `[${param.map((value) => this.translateToLsp(value)).join(',')}]`
+        : this.translateToLsp(param)
     })
     const params = `(${paramsValues.join(',')})`
     const functionName = this.getFunctionName(code)
@@ -130,7 +132,7 @@ export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
     return comandosLeia?.length ?? 0
   }
 
-  translateToCodeRunner(jsCode: unknown) {
+  translateToLsp(jsCode: unknown) {
     const tipo = this.obtenhaTipo(jsCode)
 
     if (tipo === 'nulo') {
@@ -191,14 +193,14 @@ export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
     console.log('erro ->', erro)
 
     if ('erroInterno' in erro && erro.erroInterno instanceof Error) {
-      return new CodeRunnerResponse({
-        error: new CodeRunnerError(erro.erroInterno.message, linhaDoErro),
+      return new LspResponse({
+        error: new LspError(erro.erroInterno.message, linhaDoErro),
       })
     }
 
     if (erro instanceof Error) {
-      return new CodeRunnerResponse({
-        error: new CodeRunnerError(erro.message, linhaDoErro),
+      return new LspResponse({
+        error: new LspError(erro.message, linhaDoErro),
       })
     }
 
@@ -206,8 +208,37 @@ export class ExecutorDeCodigoDelegua implements CodeRunnerProvider {
 
     mensagemDeErro = mensagemDeErro.includes('null') ? 'Código inválido' : mensagemDeErro
 
-    const error = new CodeRunnerError(mensagemDeErro, linhaDoErro)
+    const error = new LspError(mensagemDeErro, linhaDoErro)
 
-    return new CodeRunnerResponse({ error })
+    return new LspResponse({ error })
+  }
+
+  performSyntaxAnalysis(code: string): LspResponse {
+    const retornoLexador = this.lexador.mapear(code.split('\n'), -1)
+    const retornoAvaliadorSintatico = this.avaliadorSintatico.analisar(retornoLexador, -1)
+    if (retornoAvaliadorSintatico.erros.length > 0) {
+      const errors = retornoAvaliadorSintatico.erros.map(
+        (erro) => new LspError(erro.message, erro.linha ?? 0),
+      )
+      return new LspResponse({ errors })
+    }
+
+    return new LspResponse({})
+  }
+
+  performSemanticAnalysis(code: string): LspResponse {
+    const retornoLexador = this.lexador.mapear(code.split('\n'), -1)
+    const retornoAvaliadorSintatico = this.avaliadorSintatico.analisar(retornoLexador, -1)
+    const analisadorSemantico = this.analisadorSemantico.analisar(
+      retornoAvaliadorSintatico.declaracoes,
+    )
+    const errosAnaliseSemantica = analisadorSemantico.diagnosticos
+    if (errosAnaliseSemantica.length > 0) {
+      const errors = errosAnaliseSemantica.map(
+        (erro) => new LspError(String(erro.mensagem), erro.linha ?? 0),
+      )
+      return new LspResponse({ errors })
+    }
+    return new LspResponse({})
   }
 }

@@ -1,6 +1,6 @@
 import type monaco from 'monaco-editor'
 
-export class ConfiguracaoDeleguaParaEditorMonaco {
+export class DeleguaConfiguracaoParaEditorMonaco {
   obterDefinicaoDeLinguagem(): monaco.languages.IMonarchLanguage {
     return {
       defaultToken: 'invalid',

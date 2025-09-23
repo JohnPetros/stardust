@@ -1,6 +1,6 @@
 import { AppError } from './AppError'
 
-export class CodeRunnerError extends AppError {
+export class LspError extends AppError {
   readonly line: number
 
   constructor(message: string, line: number) {

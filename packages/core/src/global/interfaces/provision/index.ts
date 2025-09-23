@@ -1,2 +1,2 @@
-export type { CodeRunnerProvider } from './CodeRunnerProvider'
+export type { LspProvider } from './LspProvider'
 export type { DatabaseProvider } from './DatabaseProvider'

@@ -1,8 +1,8 @@
 import { mock } from 'ts-jest-mocker'
 
 import { Code } from '../Code'
-import type { CodeRunnerProvider } from '#global/interfaces/index'
-import { CodeRunnerResponse } from '#global/responses/CodeRunnerResponse'
+import type { LspProvider } from '#global/interfaces/index'
+import { LspResponse } from '#global/responses/LspResponse'
 
 describe('Code strucutre', () => {
   it('should be created with pre code value if it is provided', () => {
@@ -12,21 +12,21 @@ describe('Code strucutre', () => {
   })
 
   it('should return a Code Runner Response running the value', async () => {
-    const codeRunnerProviderMock = mock<CodeRunnerProvider>()
-    const codeRunnerResponse = new CodeRunnerResponse({
+    const lspProviderMock = mock<LspProvider>()
+    const codeRunnerResponse = new LspResponse({
       result: 'fake result',
       outputs: [],
     })
-    codeRunnerProviderMock.run.mockResolvedValue(codeRunnerResponse)
+    lspProviderMock.run.mockResolvedValue(codeRunnerResponse)
 
-    const code = Code.create(codeRunnerProviderMock, 'escreva("Olá, mundo 2")')
+    const code = Code.create(lspProviderMock, 'escreva("Olá, mundo 2")')
     const codeResponse = await code.run()
 
-    expect(codeResponse).toBeInstanceOf(CodeRunnerResponse)
+    expect(codeResponse).toBeInstanceOf(LspResponse)
     expect(codeResponse.result).toBe(codeRunnerResponse.result)
     expect(codeResponse.outputs).toBe(codeRunnerResponse.outputs)
-    expect(codeRunnerProviderMock.run).toHaveBeenCalledTimes(1)
-    expect(codeRunnerProviderMock.run).toHaveBeenCalledWith(code.value)
+    expect(lspProviderMock.run).toHaveBeenCalledTimes(1)
+    expect(lspProviderMock.run).toHaveBeenCalledWith(code.value)
   })
 
   it('should change the value', () => {
@@ -40,49 +40,47 @@ describe('Code strucutre', () => {
   })
 
   it('should add inputs to value', () => {
-    const codeRunnerProviderMock = mock<CodeRunnerProvider>()
+    const lspProviderMock = mock<LspProvider>()
     const codeWithInputs = 'fake code with inputs'
-    codeRunnerProviderMock.addInputs.mockReturnValue(codeWithInputs)
+    lspProviderMock.addInputs.mockReturnValue(codeWithInputs)
     const codeValue = 'fake code value'
     const inputs: any[] = []
 
-    let code = Code.create(codeRunnerProviderMock, codeValue)
+    let code = Code.create(lspProviderMock, codeValue)
     code = code.addInputs(inputs)
 
-    expect(codeRunnerProviderMock.addInputs).toHaveBeenCalledTimes(1)
-    expect(codeRunnerProviderMock.addInputs).toHaveBeenCalledWith(inputs, codeValue)
+    expect(lspProviderMock.addInputs).toHaveBeenCalledTimes(1)
+    expect(lspProviderMock.addInputs).toHaveBeenCalledWith(inputs, codeValue)
     expect(code.value).toBe(codeWithInputs)
   })
 
   it('should format value translating it for the code runner', () => {
-    const codeRunnerProviderMock = mock<CodeRunnerProvider>()
+    const lspProviderMock = mock<LspProvider>()
     const translatedCode = 'fake translated code'
-    codeRunnerProviderMock.translateToCodeRunner.mockReturnValue(translatedCode)
+    lspProviderMock.translateToLsp.mockReturnValue(translatedCode)
     const codeValue = 'fake code value'
     const codeToFormat = 'fake code to format'
 
-    let code = Code.create(codeRunnerProviderMock, codeValue)
+    let code = Code.create(lspProviderMock, codeValue)
     code = code.format(codeToFormat)
 
-    expect(codeRunnerProviderMock.translateToCodeRunner).toHaveBeenCalledTimes(1)
-    expect(codeRunnerProviderMock.translateToCodeRunner).toHaveBeenCalledWith(
-      codeToFormat,
-    )
+    expect(lspProviderMock.translateToLsp).toHaveBeenCalledTimes(1)
+    expect(lspProviderMock.translateToLsp).toHaveBeenCalledWith(codeToFormat)
     expect(code.value).toBe(translatedCode)
   })
 
   it('should add a function call to the value', () => {
-    const codeRunnerProviderMock = mock<CodeRunnerProvider>()
+    const lspProviderMock = mock<LspProvider>()
     const codeWithFunctionCall = 'fake code with function call'
-    codeRunnerProviderMock.addFunctionCall.mockReturnValue(codeWithFunctionCall)
+    lspProviderMock.addFunctionCall.mockReturnValue(codeWithFunctionCall)
     const codeValue = 'fake code value'
     const functionParams: unknown[] = []
 
-    let code = Code.create(codeRunnerProviderMock, codeValue)
+    let code = Code.create(lspProviderMock, codeValue)
     code = code.addFunctionCall(functionParams)
 
-    expect(codeRunnerProviderMock.addFunctionCall).toHaveBeenCalledTimes(1)
-    expect(codeRunnerProviderMock.addFunctionCall).toHaveBeenCalledWith(
+    expect(lspProviderMock.addFunctionCall).toHaveBeenCalledTimes(1)
+    expect(lspProviderMock.addFunctionCall).toHaveBeenCalledWith(
       functionParams,
       codeValue,
     )
@@ -90,70 +88,70 @@ describe('Code strucutre', () => {
   })
 
   it('should count the inputs in the value', () => {
-    const codeRunnerProviderMock = mock<CodeRunnerProvider>()
+    const lspProviderMock = mock<LspProvider>()
     const inputsCount = 1
-    codeRunnerProviderMock.getInputsCount.mockReturnValue(inputsCount)
+    lspProviderMock.getInputsCount.mockReturnValue(inputsCount)
     const codeValue = 'fake code value'
 
-    const code = Code.create(codeRunnerProviderMock, codeValue)
+    const code = Code.create(lspProviderMock, codeValue)
 
     expect(code.inputsCount).toBe(inputsCount)
-    expect(codeRunnerProviderMock.getInputsCount).toHaveBeenCalledTimes(1)
-    expect(codeRunnerProviderMock.getInputsCount).toHaveBeenCalledWith(codeValue)
+    expect(lspProviderMock.getInputsCount).toHaveBeenCalledTimes(1)
+    expect(lspProviderMock.getInputsCount).toHaveBeenCalledWith(codeValue)
   })
 
   it('should true if the value has any input, false otherwise', () => {
     const codeValue = 'fake code value'
-    let codeRunnerProviderMock = mock<CodeRunnerProvider>()
-    codeRunnerProviderMock.getInput.mockReturnValue('fake input')
+    let lspProviderMock = mock<LspProvider>()
+    lspProviderMock.getInput.mockReturnValue('fake input')
 
-    let code = Code.create(codeRunnerProviderMock, codeValue)
+    let code = Code.create(lspProviderMock, codeValue)
 
     expect(code.hasInput.isTrue).toBeTruthy()
-    expect(codeRunnerProviderMock.getInput).toHaveBeenCalledTimes(1)
-    expect(codeRunnerProviderMock.getInput).toHaveBeenCalledWith(codeValue)
+    expect(lspProviderMock.getInput).toHaveBeenCalledTimes(1)
+    expect(lspProviderMock.getInput).toHaveBeenCalledWith(codeValue)
 
-    codeRunnerProviderMock = mock<CodeRunnerProvider>()
-    codeRunnerProviderMock.getInput.mockReturnValue(null)
+    lspProviderMock = mock<LspProvider>()
+    lspProviderMock.getInput.mockReturnValue(null)
 
-    code = Code.create(codeRunnerProviderMock, codeValue)
+    code = Code.create(lspProviderMock, codeValue)
 
     expect(code.hasInput.isFalse).toBeTruthy()
-    expect(codeRunnerProviderMock.getInput).toHaveBeenCalledTimes(1)
-    expect(codeRunnerProviderMock.getInput).toHaveBeenCalledWith(codeValue)
+    expect(lspProviderMock.getInput).toHaveBeenCalledTimes(1)
+    expect(lspProviderMock.getInput).toHaveBeenCalledWith(codeValue)
   })
 
   it('should true if the value has any function, false otherwise', () => {
     const codeValue = 'fake code value'
-    let codeRunnerProviderMock = mock<CodeRunnerProvider>()
-    codeRunnerProviderMock.getFunctionName.mockReturnValue('fake input')
+    let lspProviderMock = mock<LspProvider>()
+    lspProviderMock.getFunctionName.mockReturnValue('fake input')
 
-    let code = Code.create(codeRunnerProviderMock, codeValue)
+    let code = Code.create(lspProviderMock, codeValue)
 
     expect(code.hasFunction.isTrue).toBeTruthy()
-    expect(codeRunnerProviderMock.getFunctionName).toHaveBeenCalledTimes(1)
-    expect(codeRunnerProviderMock.getFunctionName).toHaveBeenCalledWith(codeValue)
+    expect(lspProviderMock.getFunctionName).toHaveBeenCalledTimes(1)
+    expect(lspProviderMock.getFunctionName).toHaveBeenCalledWith(codeValue)
 
-    codeRunnerProviderMock = mock<CodeRunnerProvider>()
-    codeRunnerProviderMock.getFunctionName.mockReturnValue(null)
+    lspProviderMock = mock<LspProvider>()
+    lspProviderMock.getFunctionName.mockReturnValue(null)
 
-    code = Code.create(codeRunnerProviderMock, codeValue)
+    code = Code.create(lspProviderMock, codeValue)
 
     expect(code.hasFunction.isFalse).toBeTruthy()
-    expect(codeRunnerProviderMock.getFunctionName).toHaveBeenCalledTimes(1)
-    expect(codeRunnerProviderMock.getFunctionName).toHaveBeenCalledWith(codeValue)
+    expect(lspProviderMock.getFunctionName).toHaveBeenCalledTimes(1)
+    expect(lspProviderMock.getFunctionName).toHaveBeenCalledWith(codeValue)
   })
 
   it('should return the first input found in the value', () => {
     const codeValue = 'fake code value'
-    const codeRunnerProviderMock = mock<CodeRunnerProvider>()
+    const lspProviderMock = mock<LspProvider>()
     const input = 'fake input'
-    codeRunnerProviderMock.getInput.mockReturnValue(input)
+    lspProviderMock.getInput.mockReturnValue(input)
 
-    const code = Code.create(codeRunnerProviderMock, codeValue)
+    const code = Code.create(lspProviderMock, codeValue)
 
     expect(code.firstInput).toBe(input)
-    expect(codeRunnerProviderMock.getInput).toHaveBeenCalledTimes(1)
-    expect(codeRunnerProviderMock.getInput).toHaveBeenCalledWith(codeValue)
+    expect(lspProviderMock.getInput).toHaveBeenCalledTimes(1)
+    expect(lspProviderMock.getInput).toHaveBeenCalledWith(codeValue)
   })
 })

@@ -4,7 +4,7 @@ import type {
 } from '@designliquido/delegua'
 import { Interpretador } from '@designliquido/delegua/interpretador'
 
-export class InterpretadorDelegua extends Interpretador {
+export class DeleguaInterpretador extends Interpretador {
   override async executar(declaracao: Declaracao): Promise<any> {
     const resultado = await super.executar(declaracao)
 

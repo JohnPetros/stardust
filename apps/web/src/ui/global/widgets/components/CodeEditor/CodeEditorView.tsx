@@ -2,7 +2,7 @@ import MonacoEditor, { type Monaco } from '@monaco-editor/react'
 import type monaco from 'monaco-editor'
 
 import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
-import { useEditorContext } from '@/ui/global/contexts/EditorContext/hooks'
+import { useEditorContext } from '@/ui/global/hooks/useEditorContext'
 import { LANGUAGE } from './language'
 import type { CodeEditorTheme } from './types'
 import { Loading } from '../Loading'
@@ -13,6 +13,9 @@ type CodeEditorProps = {
   width: number | string
   height: number | string
   isReadOnly?: boolean
+  isMobile: boolean
+  tabSize: number
+  fontSize: number
   onMount: (editor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco) => void
   onChange?: (value: string | undefined) => void
 }
@@ -23,12 +26,12 @@ export const CodeEditorView = ({
   height,
   theme = 'dark-space',
   isReadOnly = false,
+  isMobile,
+  tabSize,
+  fontSize,
   onMount = () => {},
   onChange = () => {},
 }: CodeEditorProps) => {
-  const { state } = useEditorContext()
-  const { md: isMobile } = useBreakpoint()
-
   return (
     <MonacoEditor
       width={width}
@@ -41,8 +44,8 @@ export const CodeEditorView = ({
         },
         autoClosingBrackets: 'always',
         autoClosingQuotes: 'always',
-        tabSize: state.tabSize,
-        fontSize: state.fontSize - (isMobile ? 2 : 0),
+        tabSize: tabSize,
+        fontSize: fontSize - (isMobile ? 2 : 0),
         fontFamily: 'Menlo',
         cursorStyle: 'line',
         wordWrap: 'off',

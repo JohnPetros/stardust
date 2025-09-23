@@ -1,21 +1,38 @@
 import { useCallback, useRef } from 'react'
 import type { Monaco } from '@monaco-editor/react'
 import type monaco from 'monaco-editor'
+import { MarkerSeverity } from 'monaco-editor'
 
 import { Backup } from '@stardust/core/global/structures'
-import { ConfiguracaoDeleguaParaEditorMonaco } from '@stardust/code-runner'
+import { DeleguaConfiguracaoParaEditorMonaco } from '@stardust/lsp'
+import type { LspProvider } from '@stardust/core/global/interfaces'
+import type { LspResponse } from '@stardust/core/global/responses'
+import type { LspDocumentation } from '@stardust/core/global/types'
 
 import { COLORS } from '@/constants'
 import { CODE_EDITOR_THEMES } from './code-editor-themes'
 import type { CodeEditorTheme, CursorPosition } from './types'
 import { LANGUAGE } from './language'
 
-export function useCodeEditor(
-  initialValue: string,
-  theme: CodeEditorTheme,
-  onChange?: (value: string) => void,
-) {
+type Params = {
+  initialValue: string
+  theme: CodeEditorTheme
+  isCodeCheckerEnabled: boolean
+  lspProvider: LspProvider
+  lspDocumentations: LspDocumentation[]
+  onChange?: (value: string) => void
+}
+
+export function useCodeEditor({
+  initialValue,
+  theme,
+  isCodeCheckerEnabled,
+  lspProvider,
+  lspDocumentations,
+  onChange,
+}: Params) {
   const monacoEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+  const monacoRef = useRef<Monaco | null>(null)
   const codeBackup = useRef<Backup<string>>(Backup.create([initialValue]))
 
   const getEditorRules = useCallback(() => {
@@ -81,11 +98,57 @@ export function useCodeEditor(
     monacoEditorRef.current?.setValue(codeBackup.current.lastState)
   }, [])
 
+  function handleSyntaxAnalysisErrors(response: LspResponse) {
+    const editorModel = monacoEditorRef.current?.getModel()
+    if (!editorModel) return
+
+    monacoRef.current?.editor.setModelMarkers(editorModel, 'delegua', [])
+
+    if (!response.isFailure) return
+
+    const monacoErrors = response.errors.map((error) => ({
+      startLineNumber: error.line,
+      endLineNumber: 2,
+      startColumn: 1,
+      endColumn: 1000,
+      message: error.message,
+      severity: MarkerSeverity.Error,
+    }))
+
+    monacoRef.current?.editor.setModelMarkers(editorModel, LANGUAGE, monacoErrors)
+  }
+
   function handleChange(value: string | undefined) {
-    if (onChange && value) {
+    if (!value) return
+
+    if (onChange) {
       onChange(value)
       codeBackup.current = codeBackup.current?.save(value)
     }
+
+    if (!isCodeCheckerEnabled) return
+
+    setTimeout(() => {
+      const syntaxAnalysisResponse = lspProvider.performSyntaxAnalysis(value)
+      handleSyntaxAnalysisErrors(syntaxAnalysisResponse)
+    }, 100)
+  }
+
+  function provideHover(model: monaco.editor.ITextModel, position: monaco.Position) {
+    const wordAtPosition = model.getWordAtPosition(position)
+    const documentation = lspDocumentations.find(
+      (documentation) => documentation.word === wordAtPosition?.word,
+    )
+    if (documentation) {
+      return {
+        contents: [
+          { value: `**${documentation.word}**` },
+          { value: documentation.content },
+          { value: `    ${documentation.example}    ` },
+        ],
+      }
+    }
+    return { contents: [] }
   }
 
   function handleEditorDidMount(
@@ -94,7 +157,7 @@ export function useCodeEditor(
   ) {
     monacoEditorRef.current = editor
 
-    const monacoEditorConfiguration = new ConfiguracaoDeleguaParaEditorMonaco()
+    const monacoEditorConfiguration = new DeleguaConfiguracaoParaEditorMonaco()
     const monacoTokensProvider = monacoEditorConfiguration.obterDefinicaoDeLinguagem()
     const monacoLanguageConfiguration =
       monacoEditorConfiguration.obterConfiguracaoDeLinguagem()
@@ -102,6 +165,7 @@ export function useCodeEditor(
     monaco.languages.register({ id: LANGUAGE })
     monaco.languages.setMonarchTokensProvider(LANGUAGE, monacoTokensProvider)
     monaco.languages.setLanguageConfiguration(LANGUAGE, monacoLanguageConfiguration)
+    monaco.languages.registerHoverProvider(LANGUAGE, { provideHover })
 
     const rules = getEditorRules()
     monaco.editor.defineTheme('dark-space', {
@@ -112,8 +176,8 @@ export function useCodeEditor(
         'editor.background': COLORS.gray[800],
       },
     })
-
     monaco.editor.setTheme(theme)
+    monacoRef.current = monaco
   }
 
   return {
