@@ -4,9 +4,9 @@ import type monaco from 'monaco-editor'
 import { MarkerSeverity } from 'monaco-editor'
 
 import { Backup } from '@stardust/core/global/structures'
-import { ConfiguracaoDeleguaParaEditorMonaco } from '@stardust/code-runner'
-import type { CodeRunnerProvider } from '@stardust/core/global/interfaces'
-import type { CodeRunnerResponse } from '@stardust/core/global/responses'
+import { DeleguaConfiguracaoParaEditorMonaco } from '@stardust/lsp'
+import type { LspProvider } from '@stardust/core/global/interfaces'
+import type { LspResponse } from '@stardust/core/global/responses'
 import type { LspDocumentation } from '@stardust/core/global/types'
 
 import { COLORS } from '@/constants'
@@ -18,7 +18,7 @@ type Params = {
   initialValue: string
   theme: CodeEditorTheme
   isCodeCheckerEnabled: boolean
-  codeRunnerProvider: CodeRunnerProvider
+  lspProvider: LspProvider
   lspDocumentations: LspDocumentation[]
   onChange?: (value: string) => void
 }
@@ -27,7 +27,7 @@ export function useCodeEditor({
   initialValue,
   theme,
   isCodeCheckerEnabled,
-  codeRunnerProvider,
+  lspProvider,
   lspDocumentations,
   onChange,
 }: Params) {
@@ -98,7 +98,7 @@ export function useCodeEditor({
     monacoEditorRef.current?.setValue(codeBackup.current.lastState)
   }, [])
 
-  function handleSyntaxAnalysisErrors(response: CodeRunnerResponse) {
+  function handleSyntaxAnalysisErrors(response: LspResponse) {
     const editorModel = monacoEditorRef.current?.getModel()
     if (!editorModel) return
 
@@ -129,7 +129,7 @@ export function useCodeEditor({
     if (!isCodeCheckerEnabled) return
 
     setTimeout(() => {
-      const syntaxAnalysisResponse = codeRunnerProvider.performSyntaxAnalysis(value)
+      const syntaxAnalysisResponse = lspProvider.performSyntaxAnalysis(value)
       handleSyntaxAnalysisErrors(syntaxAnalysisResponse)
     }, 100)
   }
@@ -157,7 +157,7 @@ export function useCodeEditor({
   ) {
     monacoEditorRef.current = editor
 
-    const monacoEditorConfiguration = new ConfiguracaoDeleguaParaEditorMonaco()
+    const monacoEditorConfiguration = new DeleguaConfiguracaoParaEditorMonaco()
     const monacoTokensProvider = monacoEditorConfiguration.obterDefinicaoDeLinguagem()
     const monacoLanguageConfiguration =
       monacoEditorConfiguration.obterConfiguracaoDeLinguagem()
