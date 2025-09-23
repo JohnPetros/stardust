@@ -2,12 +2,12 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { Code } from '@stardust/core/global/structures'
 import { InsufficientInputsError } from '@stardust/core/challenging/errors'
-import { CodeRunnerError } from '@stardust/core/global/errors'
+import { LspError } from '@stardust/core/global/errors'
 
 import { ROUTES, STORAGE } from '@/constants'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
+import { useLsp } from '@/ui/global/hooks/useLsp'
 import type { ConsoleRef } from '@/ui/global/widgets/components/Console/types'
 import type { CodeEditorRef } from '@/ui/global/widgets/components/CodeEditor/types'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
@@ -20,10 +20,10 @@ export function useChallengeCodeEditorSlot() {
   const { challenge } = getChallengeSlice()
   const { panelsLayout } = getPanelsLayoutSlice()
   const { playAudio } = useAudioContext()
-  const { codeRunnerProvider } = useCodeRunner()
+  const { lspProvider } = useLsp()
   const toast = useToastContext()
   const router = useRouter()
-  const userCode = useRef<Code>(Code.create(codeRunnerProvider))
+  const userCode = useRef<Code>(Code.create(lspProvider))
   const editorContainerRef = useRef<HTMLDivElement>(null)
   const codeEditorRef = useRef<CodeEditorRef>(null)
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
@@ -35,7 +35,7 @@ export function useChallengeCodeEditorSlot() {
   const initialCode =
     typeof window !== 'undefined' ? (localStorage.get() ?? challenge?.code ?? '') : ''
 
-  const handleCodeRunnerError = useCallback(
+  const handleLspError = useCallback(
     (message: string, line: number) => {
       function formatErrorLine(errorLine: number) {
         return errorLine > 0 ? `</br>Linha: ${errorLine}` : ''
@@ -59,8 +59,8 @@ export function useChallengeCodeEditorSlot() {
     } catch (error) {
       playAudio('fail-code-result.wav')
 
-      if (error instanceof CodeRunnerError) {
-        handleCodeRunnerError(error.message, error.line)
+      if (error instanceof LspError) {
+        handleLspError(error.message, error.line)
         return
       }
 
@@ -82,9 +82,9 @@ export function useChallengeCodeEditorSlot() {
 
   useEffect(() => {
     if (!userCode?.current.value && challenge) {
-      userCode.current = Code.create(codeRunnerProvider, initialCode)
+      userCode.current = Code.create(lspProvider, initialCode)
     }
-  }, [challenge, codeRunnerProvider, initialCode])
+  }, [challenge, lspProvider, initialCode])
 
   useEffect(() => {
     if (panelsLayout) {

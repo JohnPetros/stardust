@@ -62,8 +62,8 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   private verifyResult(result: unknown, testCase: TestCase, code: Code) {
-    const translatedResult = code.translateToCodeRunner(result)
-    const translatedExpectedOutput = code.translateToCodeRunner(testCase.expectedOutput)
+    const translatedResult = code.translateToLsp(result)
+    const translatedExpectedOutput = code.translateToLsp(testCase.expectedOutput)
     const isCorrect = translatedResult === translatedExpectedOutput
 
     if (!isCorrect)

@@ -5,7 +5,7 @@ import { type ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 import type { CodeEditorRef, CodeEditorTheme } from './types'
 import { useCodeEditor } from './useCodeEditor'
 import { CodeEditorView } from './CodeEditorView'
-import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
+import { useLsp } from '@/ui/global/hooks/useLsp'
 import { useEditorContext } from '@/ui/global/hooks/useEditorContext'
 import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 
@@ -33,7 +33,7 @@ export const Widget = (
     state: { fontSize, tabSize, isCodeCheckerEnabled },
   } = useEditorContext()
   const { md: isMobile } = useBreakpoint()
-  const { codeRunnerProvider, documentations } = useCodeRunner()
+  const { lspProvider, documentations } = useLsp()
   const {
     getValue,
     setValue,
@@ -48,7 +48,7 @@ export const Widget = (
     initialValue: value,
     theme,
     isCodeCheckerEnabled,
-    codeRunnerProvider,
+    lspProvider,
     lspDocumentations: documentations,
     onChange,
   })

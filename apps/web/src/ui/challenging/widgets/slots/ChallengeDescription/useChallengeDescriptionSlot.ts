@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import { useCodeRunner } from '@/ui/global/hooks/useCodeRunner'
+import { useLsp } from '@/ui/global/hooks/useLsp'
 import type { User } from '@stardust/core/profile/entities'
 
 export function useChallengeDescriptionSlot(user: User | null) {
@@ -9,7 +9,7 @@ export function useChallengeDescriptionSlot(user: User | null) {
   const { getChallengeSlice, getMdxSlice } = useChallengeStore()
   const { mdx, setMdx } = getMdxSlice()
   const { challenge } = getChallengeSlice()
-  const { codeRunnerProvider } = useCodeRunner()
+  const { lspProvider } = useLsp()
 
   useEffect(() => {
     if (mdx) {
@@ -24,14 +24,14 @@ export function useChallengeDescriptionSlot(user: User | null) {
 
     if (!challenge) return
 
-    const hasFunction = codeRunnerProvider.getFunctionName(challenge.code)
+    const hasFunction = lspProvider.getFunctionName(challenge.code)
 
     const alertText = hasFunction
       ? '<Alert>Você deve `retornar` a resposta utilizando a função que já existe no código ao lado. Então por favor não altere o nome da função nem os seus parâmetros, senão não será possível validar seu desafio!</Alert>'
       : '<Alert>Por favor, não remova nenhum comando *leia()*, pois será a partir deles que virão os dados para o seu programa.</Alert>'
 
     setMdx(challenge.description.value.concat(alertText))
-  }, [isLoading, challenge, mdx, setMdx, codeRunnerProvider.getFunctionName])
+  }, [isLoading, challenge, mdx, setMdx, lspProvider.getFunctionName])
 
   return {
     isLoading,

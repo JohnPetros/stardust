@@ -1,4 +1,4 @@
 export { RestResponse } from './RestResponse'
 export { ActionResponse } from './ActionResponse'
 export { PaginationResponse } from './PaginationResponse'
-export { CodeRunnerResponse } from './CodeRunnerResponse'
+export { LspResponse } from './LspResponse'

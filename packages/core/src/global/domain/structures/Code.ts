@@ -1,70 +1,70 @@
-import type { CodeRunnerProvider } from '#global/interfaces/index'
+import type { LspProvider } from '#global/interfaces/index'
 import type { CodeInput } from '../types'
 import { Logical } from './Logical'
 
 type CodeProps = {
-  codeRunner: CodeRunnerProvider
+  lsp: LspProvider
   value: string
 }
 
 export class Code {
-  readonly codeRunner: CodeRunnerProvider
+  readonly lsp: LspProvider
   readonly value: string
 
   private constructor(props: CodeProps) {
-    this.codeRunner = props.codeRunner
+    this.lsp = props.lsp
     this.value = props.value
   }
 
-  static create(codeRunner: CodeRunnerProvider, preCodeValue = ''): Code {
-    return new Code({ codeRunner, value: preCodeValue })
+  static create(lsp: LspProvider, preCodeValue = ''): Code {
+    return new Code({ lsp, value: preCodeValue })
   }
 
   async run() {
-    return await this.codeRunner.run(this.value)
+    return await this.lsp.run(this.value)
   }
 
   format(codeValue: string) {
-    return this.changeValue(this.codeRunner.translateToCodeRunner(codeValue))
+    return this.changeValue(this.lsp.translateToLsp(codeValue))
   }
 
   addInputs(inputs: CodeInput[]) {
-    return this.changeValue(this.codeRunner.addInputs(inputs, this.value))
+    return this.changeValue(this.lsp.addInputs(inputs, this.value))
   }
 
   addFunctionCall(functionParams: unknown[]) {
-    return this.changeValue(this.codeRunner.addFunctionCall(functionParams, this.value))
+    return this.changeValue(this.lsp.addFunctionCall(functionParams, this.value))
   }
 
   changeValue(value: string) {
     return this.clone({ value: value })
   }
 
-  translateToCodeRunner(jsCodeValue: unknown) {
-    return this.codeRunner.translateToCodeRunner(jsCodeValue)
+  translateToLsp(jsCodeValue: unknown) {
+    return this.lsp.translateToLsp(jsCodeValue)
   }
 
   get inputsCount() {
-    return this.codeRunner.getInputsCount(this.value)
+    return this.lsp.getInputsCount(this.value)
   }
 
   get hasInput(): Logical {
-    const input = this.codeRunner.getInput(this.value)
+    const input = this.lsp.getInput(this.value)
     return Logical.create(Boolean(input))
   }
 
   get hasFunction(): Logical {
-    const functionName = this.codeRunner.getFunctionName(this.value)
+    const functionName = this.lsp.getFunctionName(this.value)
     return Logical.create(Boolean(functionName))
   }
 
   get firstInput(): string {
-    return String(this.codeRunner.getInput(this.value))
+    return String(this.lsp.getInput(this.value))
   }
 
   private clone(props: Partial<CodeProps>) {
     return new Code({
-      codeRunner: this.codeRunner,
+      lsp: this.lsp,
       value: this.value,
       ...props,
     })

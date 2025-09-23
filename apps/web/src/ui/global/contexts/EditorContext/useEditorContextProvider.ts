@@ -12,8 +12,6 @@ export function useEditorContextProvider() {
   const storedEditorState = editorStorage.get()
   const initalEditorState = storedEditorState ? storedEditorState : DEFAULT_EDITOR_STATE
 
-  initalEditorState
-
   function getEditorConfig(): EditorContextState {
     const storedState = localStorage.getItem(STORAGE.keys.editorState)
     const editorState = storedState ? JSON.parse(storedState) : DEFAULT_EDITOR_STATE
