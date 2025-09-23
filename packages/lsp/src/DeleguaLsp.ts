@@ -235,7 +235,7 @@ export class DeleguaLsp implements LspProvider {
     const errosAnaliseSemantica = analisadorSemantico.diagnosticos
     if (errosAnaliseSemantica.length > 0) {
       const errors = errosAnaliseSemantica.map(
-        (erro) => new LspError(erro.mensagem, erro.linha ?? 0),
+        (erro) => new LspError(String(erro.mensagem), erro.linha ?? 0),
       )
       return new LspResponse({ errors })
     }
