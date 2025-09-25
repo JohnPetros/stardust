@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0 (2025-09-25)
+## 0.4.0 (2025-09-25)
 
 * 🐛 fix(core): correct input index initialization and update question line creation messages for clarity (1807f54f)
 * 🐛 fix(web): update input index calculation to correctly parse numeric suffix from text (00a7a0cb)
