@@ -49,7 +49,7 @@ export function OpenQuestion({
                 let inputIndex = 0
 
                 if (text.includes('input')) {
-                  inputIndex = Math.max(0, Number(text.slice(-1)) - 1)
+                  inputIndex = Math.max(0, Number(text.match(/(\d+)$/)?.[1]) - 1)
                 }
                 const answer = answers[inputIndex]
 

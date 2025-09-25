@@ -147,7 +147,7 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
   }
 
   get codeLines(): QuestionCodeLine[] {
-    let inputIndex = 0
+    let inputIndex = 1
     const codeLines = this.props.codeLines.map((line) => {
       const texts = line.texts.map((text) => {
         if (text.startsWith('input')) {
