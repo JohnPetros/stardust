@@ -14,8 +14,8 @@ describe('Create User Use Case', () => {
 
   beforeAll(() => {
     repositoryMock = mock<UsersRepository>()
-    repositoryMock.containsWithName.mockImplementation()
-    repositoryMock.containsWithEmail.mockImplementation()
+    repositoryMock.findByName.mockImplementation()
+    repositoryMock.findByEmail.mockImplementation()
     repositoryMock.add.mockImplementation()
 
     useCase = new CreateUserUseCase(repositoryMock)
@@ -23,7 +23,7 @@ describe('Create User Use Case', () => {
 
   it('should throw an error if the given user email is already in use', () => {
     const dto = UsersFaker.fakeDto()
-    repositoryMock.containsWithEmail.mockResolvedValue(Logical.createAsTrue())
+    repositoryMock.findByEmail.mockResolvedValue(UsersFaker.fake())
 
     expect(
       useCase.execute({
@@ -39,8 +39,8 @@ describe('Create User Use Case', () => {
 
   it('should throw an error if the given user name is already in use', () => {
     const dto = UsersFaker.fakeDto()
-    repositoryMock.containsWithEmail.mockResolvedValue(Logical.createAsFalse())
-    repositoryMock.containsWithName.mockResolvedValue(Logical.createAsTrue())
+    repositoryMock.findByEmail.mockResolvedValue(null)
+    repositoryMock.findByName.mockResolvedValue(UsersFaker.fake())
 
     expect(
       useCase.execute({
@@ -57,8 +57,8 @@ describe('Create User Use Case', () => {
   it('should create a user with the given request data', async () => {
     const dto = UsersFaker.fakeDto()
     let addedUser: User | undefined
-    repositoryMock.containsWithEmail.mockResolvedValue(Logical.createAsFalse())
-    repositoryMock.containsWithName.mockResolvedValue(Logical.createAsFalse())
+    repositoryMock.findByEmail.mockResolvedValue(null)
+    repositoryMock.findByName.mockResolvedValue(null)
     repositoryMock.add.mockImplementation(async (user) => {
       addedUser = user
     })
