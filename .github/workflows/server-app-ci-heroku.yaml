@@ -4,6 +4,10 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - "apps/server/**"
+      - "packages/core/**"
+      - "packages/validation/**"
 
 jobs:
   build:

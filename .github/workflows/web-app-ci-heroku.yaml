@@ -1,9 +1,14 @@
-name: Web app CI 
+name: Web app CI
 
-on: 
+on:
   pull_request:
     branches:
       - main
+    paths:
+      - "apps/web/**"
+      - "packages/core/**"
+      - "packages/validation/**"
+      - "packages/lsp/**"
 
 jobs:
   build:
@@ -16,7 +21,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '22'
+          node-version: "22"
 
       - name: Install dependencies
         run: npm install

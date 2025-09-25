@@ -1,9 +1,11 @@
-name: Core package CI 
+name: Core package CI
 
-on: 
+on:
   pull_request:
     branches:
       - main
+    paths:
+      - "packages/core/**"
 
 jobs:
   build:
@@ -16,7 +18,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '22'
+          node-version: "22"
 
       - name: Install dependencies
         run: npm install
@@ -25,4 +27,3 @@ jobs:
       - name: Run tests
         run: npm run test
         working-directory: packages/core
-     
