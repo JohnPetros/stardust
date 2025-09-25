@@ -30,5 +30,8 @@ jobs:
         run: npm run check-types
         working-directory: apps/server
 
+      - name: Install turbo
+        run: npm install -g turbo
+
       - name: Build project
         run: npm run build:server
