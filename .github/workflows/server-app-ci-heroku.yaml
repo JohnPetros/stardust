@@ -1,0 +1,30 @@
+name: Server app CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: apps/server
+
+      - name: Check types
+        run: npm run check-types
+        working-directory: apps/server
+
+      - name: Build project
+        run: npm run build:server
