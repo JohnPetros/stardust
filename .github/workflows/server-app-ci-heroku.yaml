@@ -1,11 +1,13 @@
-name: Core package CI
+name: Server app CI
 
 on:
   pull_request:
     branches:
       - main
     paths:
+      - "apps/server/**"
       - "packages/core/**"
+      - "packages/validation/**"
 
 jobs:
   build:
@@ -22,8 +24,14 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: packages/core
+        working-directory: apps/server
 
-      - name: Run tests
-        run: npm run test
-        working-directory: packages/core
+      - name: Check types
+        run: npm run check-types
+        working-directory: apps/server
+
+      - name: Install turbo
+        run: npm install -g turbo
+
+      - name: Build project
+        run: npm run build:server

@@ -8,8 +8,7 @@ on:
       - "apps/web/**"
       - "packages/core/**"
       - "packages/validation/**"
-      - "packages/code-runner/**"
-  
+      - "packages/lsp/**"
 
 jobs:
   build-and-deploy:
