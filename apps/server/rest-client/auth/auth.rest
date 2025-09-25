@@ -48,9 +48,8 @@ Content-Type: application/json
 
 {
   "id": "f26ee48b-c0c0-41b1-a3e8-1761bec71eb5",
-  "email": "neilarms2013@gmail.com",
-  "name": "Neylton Almeida",
-  "isAuthenticated": true
+  "email": "neila@gmail.com",
+  "name": "Neylton Almeida"
 }
 
 ### Sign out

@@ -54,12 +54,12 @@ export class CreateUserUseCase implements UseCase<Request, Response> {
   }
 
   async verifyUserNameInUse(name: Name) {
-    const contains = await this.repository.containsWithName(name)
-    if (contains.isTrue) throw new UserNameAlreadyInUseError()
+    const user = await this.repository.findByName(name)
+    if (user) throw new UserNameAlreadyInUseError()
   }
 
   async verifyUserEmailInUse(email: Email) {
-    const contains = await this.repository.containsWithEmail(email)
-    if (contains.isTrue) throw new UserEmailAlreadyInUseError()
+    const user = await this.repository.findByEmail(email)
+    if (user) throw new UserEmailAlreadyInUseError()
   }
 }
