@@ -19,8 +19,8 @@ export class CompleteChallengeUseCase implements UseCase<Request, Response> {
     if (!user) throw new UserNotFoundError()
 
     const completedChallengeId = Id.create(challengeId)
-    user.completeChallenge(completedChallengeId)
     if (user.hasCompletedChallenge(completedChallengeId).isFalse) {
+      user.completeChallenge(completedChallengeId)
       await this.repository.addCompletedChallenge(completedChallengeId, user.id)
     }
 
