@@ -3,8 +3,6 @@ import type { UsersRepository } from '#profile/interfaces/UsersRepository'
 import { Percentage } from '#global/domain/structures/Percentage'
 import { Id } from '#global/domain/structures/Id'
 import { UserNotFoundError } from '#profile/errors/UserNotFoundError'
-import { EventBroker } from '#global/interfaces/EventBroker'
-import { SpaceCompletedEvent } from '#space/domain/events/SpaceCompletedEvent'
 
 type Request = {
   userId: string
@@ -25,10 +23,7 @@ export class CalculateRewardForStarCompletionUseCase
   static readonly COINS_INCREASE_BASE = 4
   static readonly XP_INCREASE_BASE = 6
 
-  constructor(
-    private readonly repository: UsersRepository,
-    private readonly broker: EventBroker,
-  ) {}
+  constructor(private readonly repository: UsersRepository) {}
 
   async execute({ userId, nextStarId, incorrectAnswersCount, questionsCount }: Request) {
     const user = await this.findUser(Id.create(userId))
@@ -51,17 +46,6 @@ export class CalculateRewardForStarCompletionUseCase
       questionsCount,
       incorrectAnswersCount,
     )
-
-    if (isLastSpaceStar && user.hasCompletedSpace.isFalse) {
-      user.completeSpace()
-      await this.repository.replace(user)
-
-      const event = new SpaceCompletedEvent({
-        userSlug: user.slug.value,
-        userName: user.name.value,
-      })
-      await this.broker.publish(event)
-    }
 
     return {
       newCoins,
