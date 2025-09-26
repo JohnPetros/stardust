@@ -33,7 +33,7 @@ export class SupabasePlanetsRepository
       .single()
 
     if (error) {
-      throw new SupabasePostgreError(error)
+      return this.handleQueryPostgresError(error)
     }
 
     return SupabasePlanetMapper.toEntity(data)
@@ -47,7 +47,7 @@ export class SupabasePlanetsRepository
       .single()
 
     if (error) {
-      return null
+      return this.handleQueryPostgresError(error)
     }
 
     const { data: stars, error: starsError } = await this.supabase
@@ -56,7 +56,7 @@ export class SupabasePlanetsRepository
       .eq('planet_id', data?.id ?? '')
 
     if (starsError) {
-      throw new SupabasePostgreError(starsError)
+      return this.handleQueryPostgresError(starsError)
     }
 
     data.stars = stars

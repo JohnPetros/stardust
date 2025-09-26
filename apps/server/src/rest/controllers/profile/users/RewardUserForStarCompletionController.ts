@@ -20,10 +20,7 @@ type Schema = {
 }
 
 export class RewardUserForStarCompletionController implements Controller<Schema> {
-  constructor(
-    private readonly usersRepository: UsersRepository,
-    private readonly eventBroker: EventBroker,
-  ) {}
+  constructor(private readonly usersRepository: UsersRepository) {}
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const { userId } = http.getRouteParams()
@@ -62,10 +59,7 @@ export class RewardUserForStarCompletionController implements Controller<Schema>
     questionsCount: number,
     incorrectAnswersCount: number,
   ) {
-    const useCase = new CalculateRewardForStarCompletionUseCase(
-      this.usersRepository,
-      this.eventBroker,
-    )
+    const useCase = new CalculateRewardForStarCompletionUseCase(this.usersRepository)
     return await useCase.execute({
       userId,
       nextStarId,
