@@ -12,3 +12,4 @@ export { AppendUserInfoToBodyController } from './AppendUserInfoToBodyController
 export { UpvoteCommentController } from './UpvoteCommentController'
 export { AppendIsSolutionUpvotedToBodyController } from './AppendIsSolutionUpvotedToBodyController'
 export { VerifyUserSocialAccountController } from './VerifyUserSocialAccountController'
+export { CompleteSpaceController } from './CompleteSpaceController'
