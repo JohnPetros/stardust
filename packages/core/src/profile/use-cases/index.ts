@@ -17,3 +17,4 @@ export { ResetWeekStatusForAllUsersUseCase } from './ResetWeekStatusForAllUsersU
 export { UpdateRankingPositionsUseCase } from './UpdateRankingPositionsUseCase'
 export { UpdateTierUseCase } from './UpdateTierUseCase'
 export { VerifyUserSocialAccountUseCase } from './VerifyUserSocialAccountUseCase'
+export { CompleteSpaceUseCase } from './CompleteSpaceUseCase'
