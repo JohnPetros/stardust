@@ -153,6 +153,7 @@ export class UsersRouter extends HonoRouter {
           incorrectAnswersCount: integerSchema,
         }),
       ),
+      this.profileMiddleware.completeSpace,
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseUsersRepository(http.getSupabase())

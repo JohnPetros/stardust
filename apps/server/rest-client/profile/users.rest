@@ -125,8 +125,8 @@ Authorization: Bearer {{JWT}}
 Content-Type: application/json
 
 {
-  "starId": "506f5514-6b54-40ae-8833-392ecbe5e422",
-  "challengeId": "56373af2-ac24-4bcd-a312-7d01bd7b5f53",
+  "starId": "bda4c82c-9466-4619-bdd6-89f719c54c27",
+  "challengeId": "342d2f23-ab04-48fe-989d-a0f46ad17390",
   "maximumIncorrectAnswersCount": 10,
   "incorrectAnswersCount": 2,
   "secondsCount": 100
