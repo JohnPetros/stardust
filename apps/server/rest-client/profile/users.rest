@@ -138,7 +138,7 @@ Authorization: Bearer {{JWT}}
 Content-Type: application/json
 
 {
-  "challengeId": "56373af2-ac24-4bcd-a312-7d01bd7b5f53",
+  "challengeId": "3b8894e7-2616-4652-9165-45f9a3dad2f0",
   "maximumIncorrectAnswersCount": 10,
   "incorrectAnswersCount": 2
 }
