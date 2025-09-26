@@ -94,6 +94,7 @@ export class SupabaseUserMapper {
       streak: user.streak.value,
       can_see_ranking: user.canSeeRankingResult.value,
       did_break_streak: user.didBreakStreak.value,
+      has_completed_space: user.hasCompletedSpace.value,
     }
 
     return supabaseUser as unknown as SupabaseUser

@@ -32,7 +32,6 @@ import {
   ValidationMiddleware,
   ProfileMiddleware,
 } from '../../middlewares'
-import { InngestEventBroker } from '@/queue/inngest/InngestEventBroker'
 
 export class UsersRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/users')
@@ -121,11 +120,7 @@ export class UsersRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseUsersRepository(http.getSupabase())
-        const eventBroker = new InngestEventBroker()
-        const controller = new RewardUserForStarCompletionController(
-          repository,
-          eventBroker,
-        )
+        const controller = new RewardUserForStarCompletionController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
