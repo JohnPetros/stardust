@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.4.1 (2025-09-29)
+
+* ⚙️ config(server): change challengeId in user profile request to new value (ddf37ec2)
+* 🧪 test(core): add unit tests for CompleteChallengeUseCase to validate challenge completion logic (1c16c968)
+* 🐛 fix(core): ensure challenge completion is recorded only if not already completed (1e888107)
+* ♻️ refactor(server): simplify RewardUserForStarCompletionController by removing EventBroker dependency (d20bb48c)
+* ⚙️ config(server): update user challenge data and implement completeSpace middleware for handling space completion requests (988b8252)
+* 🧪 test(core): add unit tests for CompleteSpaceUseCase to validate user space completion logic (221e815a)
+* 📶 rest(server): add CompleteSpaceController to handle space completion requests (2c9ad8ec)
+* ♻️ refactor(core): remove EventBroker and SpaceCompletedEvent from CalculateRewardForStarCompletionUseCase (fa5c48a9)
+* ✨ use case: complete use case (1d3712b8)
+* 🐛 fix(server): handle PostgreSQL query errors in SupabasePlanetsRepository (61b33e12)
+* 🏎️ ci: add turbo installation step in Heroku CI workflow (ebc9f47b)
+* 📦 deps(server): upgrade axios to version 1.12.2 (2576a5aa)
+* 🏎️ ci: update GitHub Actions workflows to include path filters for core and validation packages (85118fba)
+* 🏎️ ci: add GitHub Actions workflow for server app CI (76668a0f)
+* 🐛 fix(core): update CreateUserUseCase tests to use findByName and findByEmail methods (0de3e80e)
+* 🐛 fix(core): refine user existence checks in VerifyUserEmailInUseUseCase and VerifyUserNameInUseUseCase (df60c2dd)
+* ⚙️ config(server): change user email in authentication response (efd09d66)
+* 🐛 fix(core): update user existence checks to use findByName and findByEmail methods (677bdd65)
+* 📮 validation: add accountSchema for user authentication validation (04fa71b3)
+* 🐛 fix(web): add security headers to Next.js configuration for enhanced protection (b24d6df7)
+
 ## 0.4.0 (2025-09-25)
 
 * 🐛 fix(core): correct input index initialization and update question line creation messages for clarity (1807f54f)
