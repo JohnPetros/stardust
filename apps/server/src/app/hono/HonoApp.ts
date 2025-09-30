@@ -40,6 +40,8 @@ import {
 } from './routers'
 import { ForumRouter } from './routers/forum'
 import { PlaygroundRouter } from './routers/playground/PlaygroundRouter'
+import { TelemetryProvider } from '@stardust/core/global/interfaces'
+import { SentryTelemetryProvider } from '@/provision/monitor'
 
 type SupabaseSession = User & { sub: string }
 
@@ -52,12 +54,14 @@ declare module 'hono' {
 
 export class HonoApp {
   private readonly hono = new Hono()
+  private readonly telemetryProvider = new SentryTelemetryProvider()
 
   startServer() {
     this.setUpCors()
     this.registerMiddlewares()
     this.registerRoutes()
     this.setUpErrorHandler()
+
     serve(
       {
         fetch: this.hono.fetch,
@@ -103,9 +107,11 @@ export class HonoApp {
           HTTP_STATUS_CODE.badRequest,
         )
 
+      this.telemetryProvider.trackError(error)
+
       return context.json(
         {
-          title: 'Server Error',
+          title: 'Unexpected Server Error',
           message: error.message,
         },
         HTTP_STATUS_CODE.serverError,
