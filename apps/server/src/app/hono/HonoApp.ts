@@ -40,8 +40,9 @@ import {
 } from './routers'
 import { ForumRouter } from './routers/forum'
 import { PlaygroundRouter } from './routers/playground/PlaygroundRouter'
-import { TelemetryProvider } from '@stardust/core/global/interfaces'
 import { SentryTelemetryProvider } from '@/provision/monitor'
+import { DiscordNotificationService } from '@/rest/services'
+import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
 
 type SupabaseSession = User & { sub: string }
 
@@ -55,6 +56,7 @@ declare module 'hono' {
 export class HonoApp {
   private readonly hono = new Hono()
   private readonly telemetryProvider = new SentryTelemetryProvider()
+  private readonly notificationService = new DiscordNotificationService(new AxiosRestClient(ENV.discordWebhookUrl))
 
   startServer() {
     this.setUpCors()
@@ -74,7 +76,7 @@ export class HonoApp {
   }
 
   private setUpErrorHandler() {
-    this.hono.onError((error, context) => {
+    this.hono.onError(async (error, context) => {
       console.error('Error:', error.message)
 
       if (error instanceof AppError) {
@@ -108,6 +110,7 @@ export class HonoApp {
         )
 
       this.telemetryProvider.trackError(error)
+      await this.notificationService.sendErrorNotification(error.message)
 
       return context.json(
         {
