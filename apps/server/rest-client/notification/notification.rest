@@ -1,0 +1,9 @@
+@URL = {{BASE_URL}}/notification
+
+### Send error notification
+POST {{URL}}/error
+Content-Type: application/json
+
+{
+  "message": "teste de mensagem do Rest Client"
+}
