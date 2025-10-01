@@ -7,7 +7,7 @@ import { AuthService, SpaceService, StorageService, LessonService } from '@/rest
 import { ENV, SESSION_STORAGE_KEYS } from '@/constants'
 
 const restClient = AxiosRestClient()
-restClient.setBaseUrl(ENV.serverAppUrl)
+restClient.setBaseUrl(ENV.stardustServerUrl)
 
 export function useRest() {
   const [accessToken] = useSessionStorage(SESSION_STORAGE_KEYS.accessToken, '')
