@@ -11,7 +11,7 @@ type Props = {
 }
 
 export const ShareSnippetDialog = ({ children, snippetId }: PropsWithChildren<Props>) => {
-  const playgroundUrl = `${CLIENT_ENV.webAppUrl}${ROUTES.playground.snippet(snippetId)}`
+  const playgroundUrl = `${CLIENT_ENV.stardustWebUrl}${ROUTES.playground.snippet(snippetId)}`
   const { handleShareSnippet } = useShareSnippetDialog(playgroundUrl)
 
   return (

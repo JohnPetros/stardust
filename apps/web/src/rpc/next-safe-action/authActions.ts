@@ -32,7 +32,7 @@ export const signIn = actionClient
       request: clientInput,
     })
     const restClient = NextRestClient()
-    restClient.setBaseUrl(CLIENT_ENV.serverAppUrl)
+    restClient.setBaseUrl(CLIENT_ENV.stardustServerUrl)
     const service = AuthService(restClient)
     const action = SignInAction(service)
     return await action.handle(call)
@@ -56,7 +56,7 @@ export const signUpWithSocialAccount = actionClient
   .action(async ({ clientInput }) => {
     const call = NextCall({ request: clientInput })
     const restClient = NextRestClient()
-    restClient.setBaseUrl(CLIENT_ENV.serverAppUrl)
+    restClient.setBaseUrl(CLIENT_ENV.stardustServerUrl)
     restClient.setAuthorization(clientInput.accessToken)
     const service = AuthService(restClient)
     const action = SignUpWithSocialAccountAction(service)
