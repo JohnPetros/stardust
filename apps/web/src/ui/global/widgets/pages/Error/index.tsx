@@ -1,6 +1,6 @@
 'use client'
 
-import { useTelemetryProvider } from '../../../hooks/use-telemetry'
+import { useTelemetryProvider } from '../../../hooks/useTelemetryProvider'
 import { useRest } from '../../../hooks/useRest'
 import { ErrorPageView } from './ErrorPageView'
 import { useErrorPage } from './useErrorPage'
