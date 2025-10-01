@@ -14,6 +14,7 @@ const env = {
   dropboxAppKey: process.env.DROPBOX_APP_KEY,
   dropboxAppSecret: process.env.DROPBOX_APP_SECRET,
   discordWebhookUrl: process.env.DISCORD_WEBHOOK_URL,
+  sentryDsn: process.env.SENTRY_DNS,
 }
 
 const envSchema = z.object({
@@ -25,11 +26,12 @@ const envSchema = z.object({
   databaseUrl: z.string().url(),
   inngestEventKey: z.string().optional(),
   inngestSigningKey: z.string().optional(),
-  webAppUrl: z.string().url(),
   dropboxRefreshToken: z.string(),
   dropboxAppKey: z.string(),
   dropboxAppSecret: z.string(),
   discordWebhookUrl: z.string().url(),
+  sentryDsn: z.string().url(),
+  webAppUrl: z.string().url(),
 })
 
 export const ENV = envSchema.parse(env)

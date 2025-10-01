@@ -40,6 +40,9 @@ import {
 } from './routers'
 import { ForumRouter } from './routers/forum'
 import { PlaygroundRouter } from './routers/playground/PlaygroundRouter'
+import { SentryTelemetryProvider } from '@/provision/monitor'
+import { DiscordNotificationService } from '@/rest/services'
+import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
 
 type SupabaseSession = User & { sub: string }
 
@@ -52,12 +55,15 @@ declare module 'hono' {
 
 export class HonoApp {
   private readonly hono = new Hono()
+  private readonly telemetryProvider = new SentryTelemetryProvider()
+  private readonly notificationService = new DiscordNotificationService(new AxiosRestClient(ENV.discordWebhookUrl))
 
   startServer() {
     this.setUpCors()
     this.registerMiddlewares()
     this.registerRoutes()
     this.setUpErrorHandler()
+
     serve(
       {
         fetch: this.hono.fetch,
@@ -70,7 +76,7 @@ export class HonoApp {
   }
 
   private setUpErrorHandler() {
-    this.hono.onError((error, context) => {
+    this.hono.onError(async (error, context) => {
       console.error('Error:', error.message)
 
       if (error instanceof AppError) {
@@ -103,9 +109,12 @@ export class HonoApp {
           HTTP_STATUS_CODE.badRequest,
         )
 
+      this.telemetryProvider.trackError(error)
+      await this.notificationService.sendErrorNotification(error.message)
+
       return context.json(
         {
-          title: 'Server Error',
+          title: 'Unexpected Server Error',
           message: error.message,
         },
         HTTP_STATUS_CODE.serverError,

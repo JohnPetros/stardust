@@ -23,4 +23,10 @@ export class DiscordNotificationService implements NotificationService {
       content: `🎉 Um usuário concluiu todo o espaço de exploração 🌌, seu nome é ${userName}. Link do perfil: https://stardust-app.com.br/profile/${userSlug}`,
     })
   }
+
+  async sendErrorNotification(errorMessage: string): Promise<RestResponse> {
+    return await this.restClient.post('/', {
+      content: `🚨 Erro interno da aplicação server: ${errorMessage}`,
+    })
+  }
 }

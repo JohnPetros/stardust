@@ -10,4 +10,5 @@ export interface NotificationService {
     userSlug: string,
     userName: string,
   ): Promise<RestResponse>
+  sendErrorNotification(errorMessage: string): Promise<RestResponse>
 }
