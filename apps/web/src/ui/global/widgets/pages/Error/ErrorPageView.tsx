@@ -6,10 +6,10 @@ import { Button } from '../../components/Button'
 
 type Props = {
   errorMessage: string
-  onReaload: () => void
+  onReload: () => void
 }
 
-export const ErrorPageView = ({ errorMessage, onReaload }: Props) => {
+export const ErrorPageView = ({ errorMessage, onReload }: Props) => {
   return (
     <div className='flex flex-col items-center justify-center gap-6 h-full w-full'>
       <header className='flex flex-col items-center justify-center gap-4'>
@@ -33,7 +33,7 @@ export const ErrorPageView = ({ errorMessage, onReaload }: Props) => {
         className='rounded-md'
       />
 
-      <Button className='w-48' onClick={onReaload}>
+      <Button className='w-48' onClick={onReload}>
         Voltar
       </Button>
     </div>
