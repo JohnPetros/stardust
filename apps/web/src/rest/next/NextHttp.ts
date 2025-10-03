@@ -148,7 +148,9 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     },
 
     redirect(route: string) {
-      const nextResponse = NextResponse.redirect(new URL(route, CLIENT_ENV.webAppUrl))
+      const nextResponse = NextResponse.redirect(
+        new URL(route, CLIENT_ENV.stardustWebUrl),
+      )
 
       if (cookies.length)
         for (const cookie of cookies) {
@@ -169,7 +171,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     send(data: unknown) {
       if (cookies.length) {
         const nextResponse = NextResponse.redirect(
-          new URL(request ? request.nextUrl.pathname : '', CLIENT_ENV.webAppUrl),
+          new URL(request ? request.nextUrl.pathname : '', CLIENT_ENV.stardustWebUrl),
         )
 
         for (const cookie of cookies) {

@@ -24,3 +24,4 @@ export type AnimationName =
   | 'spinner'
   | 'shinning'
   | '404'
+  | 'internal-error'

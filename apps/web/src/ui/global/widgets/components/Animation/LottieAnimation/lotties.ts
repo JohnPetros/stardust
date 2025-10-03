@@ -23,6 +23,7 @@ import Spiral from '../../../../../../../public/lotties/spiral.json'
 import Space from '../../../../../../../public/lotties/space.json'
 import Spinner from '../../../../../../../public/lotties/spinner.json'
 import Shinning from '../../../../../../../public/lotties/reward-shinning.json'
+import InternalError from '../../../../../../../public/lotties/internal-error.json'
 
 import type { AnimationName } from '../types'
 
@@ -43,6 +44,7 @@ export const LOTTIES: Record<AnimationName, unknown> = {
   'unlocked-star': UnlockedStar,
   'planets-exploration': PlanetsExploration,
   'fast-rocket': FastRocket,
+  'internal-error': InternalError,
   galaxy: Galaxy,
   coins: Coins,
   spiral: Spiral,

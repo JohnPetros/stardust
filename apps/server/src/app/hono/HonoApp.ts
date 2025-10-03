@@ -37,6 +37,7 @@ import {
   RankingRouter,
   LessonRouter,
   StorageRouter,
+  NotificationRouter,
 } from './routers'
 import { ForumRouter } from './routers/forum'
 import { PlaygroundRouter } from './routers/playground/PlaygroundRouter'
@@ -56,7 +57,9 @@ declare module 'hono' {
 export class HonoApp {
   private readonly hono = new Hono()
   private readonly telemetryProvider = new SentryTelemetryProvider()
-  private readonly notificationService = new DiscordNotificationService(new AxiosRestClient(ENV.discordWebhookUrl))
+  private readonly notificationService = new DiscordNotificationService(
+    new AxiosRestClient(ENV.discordWebhookUrl),
+  )
 
   startServer() {
     this.setUpCors()
@@ -110,7 +113,7 @@ export class HonoApp {
         )
 
       this.telemetryProvider.trackError(error)
-      await this.notificationService.sendErrorNotification(error.message)
+      await this.notificationService.sendErrorNotification('server', error.message)
 
       return context.json(
         {
@@ -144,6 +147,7 @@ export class HonoApp {
     const playgroundRouter = new PlaygroundRouter(this)
     const documentationRouter = new DocumentationRouter(this)
     const storageRouter = new StorageRouter(this)
+    const notificationRouter = new NotificationRouter(this)
 
     this.hono.get('/', (context) => {
       return context.json({ message: 'Everything is working!' })
@@ -160,6 +164,7 @@ export class HonoApp {
     this.hono.route('/', playgroundRouter.registerRoutes())
     this.hono.route('/', documentationRouter.registerRoutes())
     this.hono.route('/', storageRouter.registerRoutes())
+    this.hono.route('/', notificationRouter.registerRoutes())
   }
 
   private registerMiddlewares() {

@@ -1,6 +1,7 @@
 import { CLIENT_ENV } from './client-env'
 
 export const ROUTES = {
+  landing: '/',
   ranking: '/ranking',
   space: '/space',
   shop: '/shop',
@@ -56,7 +57,6 @@ export const ROUTES = {
     accountConfirmation: '/auth/account-confirmation',
     socialAccountConfirmation: '/auth/social-account-confirmation',
   },
-  landing: '/',
   api: {
     auth: {
       confirmEmail: '/api/auth/confirm-email',
@@ -91,8 +91,8 @@ export const ROUTES = {
   },
   server: {
     auth: {
-      signInWithGoogle: `${CLIENT_ENV.serverAppUrl}/auth/sign-in/google`,
-      signInWithGithub: `${CLIENT_ENV.serverAppUrl}/auth/sign-in/github`,
+      signInWithGoogle: `${CLIENT_ENV.stardustServerUrl}/auth/sign-in/google`,
+      signInWithGithub: `${CLIENT_ENV.stardustServerUrl}/auth/sign-in/github`,
     },
   },
 } as const

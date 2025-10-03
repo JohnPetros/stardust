@@ -18,7 +18,7 @@ export const ConnectSocialAccountAction = (service: AuthService): Action<Request
       const user = User.create(await call.getUser())
 
       const returnUrl = Text.create(
-        `${CLIENT_ENV.webAppUrl}/profile/${user.slug.value}/settings`,
+        `${CLIENT_ENV.stardustWebUrl}/profile/${user.slug.value}/settings`,
       )
 
       const accountProvider = AccountProvider.create(socialAccountProvider)

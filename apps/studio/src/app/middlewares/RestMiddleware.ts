@@ -11,7 +11,7 @@ import { redirect } from 'react-router'
 export const RestMiddleware = async ({ context }: Route.ActionArgs) => {
   const { accessToken } = context.get(authContext)
   const restClient = AxiosRestClient()
-  restClient.setBaseUrl(ENV.serverAppUrl)
+  restClient.setBaseUrl(ENV.stardustServerUrl)
 
   restClient.setHeader(
     HTTP_HEADERS.authorization,

@@ -16,7 +16,7 @@ export const NextServerRestClient = async (
   const accessToken = cookiesStore.get(COOKIES.accessToken.key)
 
   const restClient = NextRestClient(config)
-  restClient.setBaseUrl(CLIENT_ENV.serverAppUrl)
+  restClient.setBaseUrl(CLIENT_ENV.stardustServerUrl)
 
   if (accessToken?.value)
     restClient.setHeader(HTTP_HEADERS.authorization, `Bearer ${accessToken?.value}`)

@@ -23,7 +23,7 @@ type Props = {
 }
 
 const restClient = NextRestClient({ isCacheEnabled: false })
-restClient.setBaseUrl(CLIENT_ENV.serverAppUrl)
+restClient.setBaseUrl(CLIENT_ENV.stardustServerUrl)
 
 export const AuthContext = createContext({} as AuthContextValue)
 

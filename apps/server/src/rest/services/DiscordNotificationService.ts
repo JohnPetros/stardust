@@ -24,9 +24,12 @@ export class DiscordNotificationService implements NotificationService {
     })
   }
 
-  async sendErrorNotification(errorMessage: string): Promise<RestResponse> {
+  async sendErrorNotification(
+    app: 'server' | 'web',
+    errorMessage: string,
+  ): Promise<RestResponse> {
     return await this.restClient.post('/', {
-      content: `🚨 Erro interno da aplicação server: ${errorMessage}`,
+      content: `🚨 Erro interno da aplicação ${app}: ${errorMessage}`,
     })
   }
 }
