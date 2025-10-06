@@ -20,7 +20,7 @@ export function useSnippetCard({
   initialSnippetTitle,
   onDeleteSnippet,
 }: Params) {
-  const snippetUrl = `${CLIENT_ENV.webAppUrl}${ROUTES.playground.snippet(snippetId.value)}`
+  const snippetUrl = `${CLIENT_ENV.stardustWebUrl}${ROUTES.playground.snippet(snippetId.value)}`
   const [snippetTitle, setSnippetTitle] = useState<Text>(initialSnippetTitle)
   const toast = useToastContext()
   const promptRef = useRef<PromptRef>(null)

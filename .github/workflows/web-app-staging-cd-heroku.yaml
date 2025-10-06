@@ -10,6 +10,10 @@ on:
       - "packages/validation/**"
       - "packages/lsp/**"
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build-and-deploy:
     name: Build and Deploy
@@ -22,8 +26,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Create .env file
-        run: echo "${{ secrets.WEB_STAGING_ENV }}" >> apps/web/.env
+      - uses: Infisical/secrets-action@v1.0.9
+        with:
+          method: "oidc"
+          identity-id: ${{ secrets.INFISICAL_IDENTITY_ID }}
+          domain: ${{ secrets.INFISICAL_DOMAIN}}
+          env-slug: "staging"
+          project-slug: "stardust-web-app"
+          export-type: "file"
+          file-output-path: "/apps/web/.env"
 
       - name: Install Heroku CLI
         run: curl https://cli-assets.heroku.com/install.sh | sh

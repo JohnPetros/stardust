@@ -16,7 +16,7 @@ import {
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
 const restClient = NextRestClient({ isCacheEnabled: false })
-restClient.setBaseUrl(CLIENT_ENV.serverAppUrl)
+restClient.setBaseUrl(CLIENT_ENV.stardustServerUrl)
 
 export function useRest() {
   const { accessToken } = useAuthContext()

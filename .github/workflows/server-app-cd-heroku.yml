@@ -9,6 +9,10 @@ on:
       - "packages/core/**"
       - "packages/validation/**"
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build-and-deploy:
     name: Build and Deploy
@@ -21,8 +25,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Create .env file
-        run: echo "${{ secrets.SERVER_ENV }}" > apps/server/.env
+      - uses: Infisical/secrets-action@v1.0.9
+        with:
+          method: "oidc"
+          identity-id: ${{ secrets.INFISICAL_IDENTITY_ID }}
+          domain: ${{ secrets.INFISICAL_DOMAIN }}
+          env-slug: "prod"
+          project-slug: "stardust-server-app"
+          export-type: "file"
+          file-output-path: "/apps/server/.env"
 
       - name: Ensure Heroku find the correct Dockerfile for server app
         run: rm Dockerfile.web && mv Dockerfile.server Dockerfile.web
@@ -39,7 +50,7 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: heroku stack:set container --app ${{ env.HEROKU_APP_NAME }}
- 
+
       - name: Build and push Docker image to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
