@@ -60,7 +60,7 @@ export class SupabaseAuthService implements AuthService {
       email: email.value,
       password: password.value,
       options: {
-        emailRedirectTo: ENV.webAppUrl,
+        emailRedirectTo: ENV.stardustWebUrl,
       },
     })
 
@@ -260,7 +260,7 @@ export class SupabaseAuthService implements AuthService {
       email: email.value,
       type: 'signup',
       options: {
-        emailRedirectTo: ENV.webAppUrl,
+        emailRedirectTo: ENV.stardustWebUrl,
       },
     })
 
@@ -279,7 +279,7 @@ export class SupabaseAuthService implements AuthService {
 
   async requestPasswordReset(email: Email) {
     const { error } = await this.supabase.auth.resetPasswordForEmail(email.value, {
-      redirectTo: ENV.webAppUrl,
+      redirectTo: ENV.stardustWebUrl,
     })
 
     if (error)
