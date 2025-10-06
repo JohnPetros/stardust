@@ -31,10 +31,15 @@ jobs:
         run: npm run check-types
         working-directory: apps/web
 
-      - name: Create .env file
-        run: |
-          echo "${{ secrets.WEB_STAGING_ENV }}" >> apps/web/.env
-          echo "${{ secrets.WEB_STAGING_ENV }}" >> apps/web/.env.test
+      - uses: Infisical/secrets-action@v1.0.9
+        with:
+          method: "oidc"
+          identity-id: "09ac5e1e-7b4d-45a7-b873-eb961c045872"
+          domain: "https://app.infisical.com"
+          env-slug: "staging"
+          project-slug: "stardust-web-app"
+          export-type: "file"
+          file-output-path: "/apps/web/.env.test"
 
       - name: Run tests
         run: npm run test

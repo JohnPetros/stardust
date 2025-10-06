@@ -35,6 +35,7 @@ jobs:
           project-slug: "stardust-web-app"
           export-type: "file"
           file-output-path: "/apps/web/.env"
+
       - name: Install Heroku CLI
         run: curl https://cli-assets.heroku.com/install.sh | sh
 
