@@ -91,8 +91,8 @@ export const ROUTES = {
   },
   server: {
     auth: {
-      signInWithGoogle: `${CLIENT_ENV.serverAppUrl}/auth/sign-in/google`,
-      signInWithGithub: `${CLIENT_ENV.serverAppUrl}/auth/sign-in/github`,
+      signInWithGoogle: `${CLIENT_ENV.stardustServerUrl}/auth/sign-in/google`,
+      signInWithGithub: `${CLIENT_ENV.stardustServerUrl}/auth/sign-in/github`,
     },
   },
 } as const
