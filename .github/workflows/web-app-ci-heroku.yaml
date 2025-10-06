@@ -10,6 +10,10 @@ on:
       - "packages/validation/**"
       - "packages/lsp/**"
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
