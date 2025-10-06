@@ -16,8 +16,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Create .env file
-        run: echo "${{ secrets.WEB_ENV }}" >> apps/web/.env
+      - uses: Infisical/secrets-action@v1.0.9
+        with:
+          method: "oidc"
+          identity-id: ${{ secrets.INFISICAL_IDENTITY_ID }}
+          domain: "https://app.infisical.com"
+          env-slug: "prod"
+          project-slug: "stardust-web-app"
+          export-type: "file"
+          file-output-path: "/apps/web/.env"
 
       - name: Install Heroku CLI
         run: curl https://cli-assets.heroku.com/install.sh | sh
@@ -32,7 +39,6 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: heroku stack:set container --app ${{ env.HEROKU_APP_NAME }}
 
- 
       - name: Build and push Docker image to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
