@@ -16,8 +16,6 @@ export const ConfirmEmailController = (authService: AuthService): Controller<Sch
       const { token } = http.getQueryParams()
       const response = await authService.confirmEmail(Text.create(token))
 
-      console.log(response)
-
       if (response.isSuccessful) {
         http.setCookie(
           COOKIES.accessToken.key,
