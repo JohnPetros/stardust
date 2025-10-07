@@ -12,7 +12,6 @@ import {
 } from '@stardust/core/challenging/entities/fakers'
 import type { SolutionDto, ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 
-import { ROUTES } from '@/constants'
 import { AccessSolutionPageController } from '../AccessSolutionPageController'
 
 describe('Access Solution Page Controller', () => {
