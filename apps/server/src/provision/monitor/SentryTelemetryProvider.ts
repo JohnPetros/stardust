@@ -19,10 +19,6 @@ export class SentryTelemetryProvider implements TelemetryProvider {
   }
 
   trackError(error: Error): void {
-    this.sentry.captureException(error, {
-      data: {
-        accountId: '123',
-      },
-    })
+    this.sentry.captureException(error)
   }
 }

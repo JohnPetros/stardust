@@ -9,8 +9,6 @@ const CLIENT_ENV = {
   stardustServerUrl: process.env.NEXT_PUBLIC_STARDUST_SERVER_URL ?? '',
 }
 
-console.log('CLIENT_ENV', CLIENT_ENV)
-
 new StringValidation(CLIENT_ENV.mode, 'App Mode').validate()
 new StringValidation(CLIENT_ENV.supabaseCdnUrl, 'Supabase CDN Url').url().validate()
 new StringValidation(CLIENT_ENV.supabaseUrl, 'Supabase Url').url().validate()

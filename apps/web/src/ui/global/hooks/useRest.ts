@@ -12,6 +12,7 @@ import {
   PlaygroundService,
   DocumentationService,
   LessonService,
+  NotificationService,
 } from '@/rest/services'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
@@ -35,5 +36,6 @@ export function useRest() {
     playgroundService: PlaygroundService(restClient),
     documentationService: DocumentationService(restClient),
     lessonService: LessonService(restClient),
+    notificationService: NotificationService(restClient),
   }
 }
