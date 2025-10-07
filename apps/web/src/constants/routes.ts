@@ -63,21 +63,11 @@ export const ROUTES = {
       confirmPasswordReset: '/api/auth/confirm-password-reset',
       confirmSocialSignIn: '/api/auth/confirm-social-sign-in',
     },
-    space: {
-      planets: '/api/space/planets',
-    },
-    shop: {
-      items: '/api/shop/items',
-    },
     profile: {
-      achievements: '/api/profile/achievements',
-      reward: '/api/profile/reward',
       user: (userId: string) => `/api/profile/${userId}`,
     },
     ranking: {
       current: '/api/ranking/current',
-      uptade: '/api/ranking/update',
-      tiers: '/api/ranking/tiers',
     },
     challenging: {
       list: '/api/challenging/list',
@@ -87,7 +77,6 @@ export const ROUTES = {
     playground: {
       snippet: (snippetId: string) => `/api/playground/snippets/${snippetId}`,
     },
-    serverless: '/api/serverless',
   },
   server: {
     auth: {
