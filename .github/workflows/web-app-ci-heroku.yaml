@@ -10,6 +10,10 @@ on:
       - "packages/validation/**"
       - "packages/lsp/**"
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,6 +21,26 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
+
+      - uses: Infisical/secrets-action@v1.0.9
+        with:
+          method: "oidc"
+          identity-id: ${{ secrets.INFISICAL_IDENTITY_ID }}
+          domain: ${{ secrets.INFISICAL_DOMAIN }}
+          env-slug: "staging"
+          project-slug: "stardust-web-app"
+          export-type: "file"
+          file-output-path: "/apps/web/.env"
+
+      - uses: Infisical/secrets-action@v1.0.9
+        with:
+          method: "oidc"
+          identity-id: ${{ secrets.INFISICAL_IDENTITY_ID }}
+          domain: ${{ secrets.INFISICAL_DOMAIN }}
+          env-slug: "staging"
+          project-slug: "stardust-web-app"
+          export-type: "file"
+          file-output-path: "/apps/web/.env.test"
 
       - name: Setup Node.js
         uses: actions/setup-node@v5
@@ -30,11 +54,6 @@ jobs:
       - name: Check types
         run: npm run check-types
         working-directory: apps/web
-
-      - name: Create .env file
-        run: |
-          echo "${{ secrets.WEB_STAGING_ENV }}" >> apps/web/.env
-          echo "${{ secrets.WEB_STAGING_ENV }}" >> apps/web/.env.test
 
       - name: Run tests
         run: npm run test

@@ -9,7 +9,7 @@ const env = {
   databaseUrl: process.env.SUPABASE_DATABASE_URL,
   inngestEventKey: process.env.INNGEST_EVENT_KEY,
   inngestSigningKey: process.env.INNGEST_SIGNING_KEY,
-  stardustWebUrl: process.env.WEB_APP_URL,
+  stardustWebUrl: process.env.STARDUST_WEB_URL,
   dropboxRefreshToken: process.env.DROPBOX_REFRESH_TOKEN,
   dropboxAppKey: process.env.DROPBOX_APP_KEY,
   dropboxAppSecret: process.env.DROPBOX_APP_SECRET,
