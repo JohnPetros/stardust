@@ -1,6 +1,7 @@
 // Auth
 export * from './auth/domain/entities/index'
 export * from './auth/domain/entities/dtos/index'
+export * from './auth/domain/entities/fakers/index'
 export * from './auth/domain/structures/index'
 export * from './auth/domain/structures/dtos/index'
 export * from './auth/domain/structures/fakers/index'
