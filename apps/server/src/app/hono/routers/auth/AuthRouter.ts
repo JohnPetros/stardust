@@ -41,15 +41,38 @@ import {
   ValidationMiddleware,
 } from '../../middlewares'
 
+const ROUTE_PREFIX = '/auth'
+
 export class AuthRouter extends HonoRouter {
-  private readonly router = new Hono().basePath('/auth')
+  private readonly router = new Hono().basePath(ROUTE_PREFIX)
   private readonly authMiddleware = new AuthMiddleware()
   private readonly validationMiddleware = new ValidationMiddleware()
   private readonly profileMiddleware = new ProfileMiddleware()
+  static readonly ROUTE_PREFIX = ROUTE_PREFIX
+  static readonly ROUTES = {
+    signIn: '/sign-in',
+    signUp: '/sign-up',
+    signOut: '/sign-out',
+    signInWithGoogle: '/sign-in/google',
+    signInWithGithub: '/sign-in/github',
+    signUpWithSocialAccount: '/sign-up/social-account',
+    account: '/account',
+    socialAccount: '/social-account',
+    socialAccountGoogle: '/social-account/google',
+    socialAccountGithub: '/social-account/github',
+    socialAccountGithubConnection: '/social-account/github/connection',
+    socialAccountGoogleConnection: '/social-account/google/connection',
+    refreshSession: '/refresh-session',
+    resendSignUpEmail: '/resend-email/sign-up',
+    requestPasswordReset: '/request-password-reset',
+    confirmEmail: '/confirm-email',
+    confirmPasswordReset: '/confirm-password-reset',
+    resetPassword: '/reset-password',
+  } as const
 
   private registerSignInRoute(): void {
     this.router.post(
-      '/sign-in',
+      AuthRouter.ROUTES.signIn,
       this.validationMiddleware.validate(
         'json',
         z.object({
@@ -69,7 +92,7 @@ export class AuthRouter extends HonoRouter {
 
   private registerSignUpRoute(): void {
     this.router.post(
-      '/sign-up',
+      AuthRouter.ROUTES.signUp,
       this.validationMiddleware.validate(
         'json',
         z.object({
@@ -90,7 +113,7 @@ export class AuthRouter extends HonoRouter {
   }
 
   private registerSignOutRoute(): void {
-    this.router.delete('/sign-out', async (context) => {
+    this.router.delete(AuthRouter.ROUTES.signOut, async (context) => {
       const http = new HonoHttp(context)
       const supabase = http.getSupabase()
       const service = new SupabaseAuthService(supabase)
@@ -102,7 +125,7 @@ export class AuthRouter extends HonoRouter {
 
   private registerSignInWithGoogleRoute(): void {
     this.router.get(
-      '/sign-in/google',
+      AuthRouter.ROUTES.signInWithGoogle,
       this.validationMiddleware.validate(
         'query',
         z.object({
@@ -122,7 +145,7 @@ export class AuthRouter extends HonoRouter {
 
   private registerSignInWithGithubRoute(): void {
     this.router.get(
-      '/sign-in/github',
+      AuthRouter.ROUTES.signInWithGithub,
       this.validationMiddleware.validate(
         'query',
         z.object({
@@ -142,7 +165,7 @@ export class AuthRouter extends HonoRouter {
 
   private registerSignUpWithSocialAccountRoute(): void {
     this.router.post(
-      '/sign-up/social-account',
+      AuthRouter.ROUTES.signUpWithSocialAccount,
       this.validationMiddleware.validate('json', accountSchema),
       this.profileMiddleware.verifyUserSocialAccount,
       async (context) => {
@@ -157,7 +180,7 @@ export class AuthRouter extends HonoRouter {
 
   private registerConnectGoogleAccountRoute(): void {
     this.router.post(
-      '/social-account/google',
+      AuthRouter.ROUTES.socialAccountGoogle,
       this.authMiddleware.verifyAuthentication,
       this.validationMiddleware.validate(
         'query',
@@ -178,7 +201,7 @@ export class AuthRouter extends HonoRouter {
 
   private registerConnectGithubAccountRoute(): void {
     this.router.post(
-      '/social-account/github',
+      AuthRouter.ROUTES.socialAccountGithub,
       this.authMiddleware.verifyAuthentication,
       this.validationMiddleware.validate(
         'query',
@@ -198,7 +221,7 @@ export class AuthRouter extends HonoRouter {
   }
 
   private registerDisconnectGithubAccountRoute(): void {
-    this.router.delete('/social-account/github', async (context) => {
+    this.router.delete(AuthRouter.ROUTES.socialAccountGithub, async (context) => {
       const http = new HonoHttp(context)
       const supabase = http.getSupabase()
       const service = new SupabaseAuthService(supabase)
@@ -209,7 +232,7 @@ export class AuthRouter extends HonoRouter {
   }
 
   private registerDisconnectGoogleAccountRoute(): void {
-    this.router.delete('/social-account/google', async (context) => {
+    this.router.delete(AuthRouter.ROUTES.socialAccountGoogle, async (context) => {
       const http = new HonoHttp(context)
       const supabase = http.getSupabase()
       const service = new SupabaseAuthService(supabase)
@@ -220,7 +243,7 @@ export class AuthRouter extends HonoRouter {
   }
 
   private registerFetchGithubAccountConnectionRoute(): void {
-    this.router.get('/social-account/github/connection', async (context) => {
+    this.router.get(AuthRouter.ROUTES.socialAccountGithubConnection, async (context) => {
       const http = new HonoHttp(context)
       const supabase = http.getSupabase()
       const service = new SupabaseAuthService(supabase)
@@ -231,7 +254,7 @@ export class AuthRouter extends HonoRouter {
   }
 
   private registerFetchGoogleAccountConnectionRoute(): void {
-    this.router.get('/social-account/google/connection', async (context) => {
+    this.router.get(AuthRouter.ROUTES.socialAccountGoogleConnection, async (context) => {
       const http = new HonoHttp(context)
       const supabase = http.getSupabase()
       const service = new SupabaseAuthService(supabase)
@@ -243,7 +266,7 @@ export class AuthRouter extends HonoRouter {
 
   private registerResendSignUpEmailRoute(): void {
     this.router.post(
-      '/resend-email/sign-up',
+      AuthRouter.ROUTES.resendSignUpEmail,
       this.validationMiddleware.validate(
         'json',
         z.object({
@@ -263,7 +286,7 @@ export class AuthRouter extends HonoRouter {
 
   private registerRefreshSessionRoute(): void {
     this.router.post(
-      '/refresh-session',
+      AuthRouter.ROUTES.refreshSession,
       this.validationMiddleware.validate(
         'json',
         z.object({
@@ -283,7 +306,7 @@ export class AuthRouter extends HonoRouter {
 
   private registerRequestPasswordResetRoute(): void {
     this.router.post(
-      '/request-password-reset',
+      AuthRouter.ROUTES.requestPasswordReset,
       this.validationMiddleware.validate(
         'json',
         z.object({
@@ -303,7 +326,7 @@ export class AuthRouter extends HonoRouter {
 
   private registerConfirmEmailRoute(): void {
     this.router.post(
-      '/confirm-email',
+      AuthRouter.ROUTES.confirmEmail,
       this.validationMiddleware.validate(
         'json',
         z.object({
@@ -323,7 +346,7 @@ export class AuthRouter extends HonoRouter {
 
   private registerConfirmPasswordResetRoute(): void {
     this.router.post(
-      '/confirm-password-reset',
+      AuthRouter.ROUTES.confirmPasswordReset,
       this.validationMiddleware.validate(
         'json',
         z.object({
@@ -343,7 +366,7 @@ export class AuthRouter extends HonoRouter {
 
   private registerResetPasswordRoute(): void {
     this.router.patch(
-      '/reset-password',
+      AuthRouter.ROUTES.resetPassword,
       this.validationMiddleware.validate(
         'json',
         z.object({
@@ -364,7 +387,7 @@ export class AuthRouter extends HonoRouter {
   }
 
   private registerFetchAccountRoute(): void {
-    this.router.get('/account', async (context) => {
+    this.router.get(AuthRouter.ROUTES.account, async (context) => {
       const http = new HonoHttp(context)
       const supabase = http.getSupabase()
       const service = new SupabaseAuthService(supabase)
@@ -375,7 +398,7 @@ export class AuthRouter extends HonoRouter {
   }
 
   private registerFetchSocialAccountRoute(): void {
-    this.router.get('/social-account', async (context) => {
+    this.router.get(AuthRouter.ROUTES.socialAccount, async (context) => {
       const http = new HonoHttp(context)
       const supabase = http.getSupabase()
       const service = new SupabaseAuthService(supabase)
