@@ -25,6 +25,7 @@
     ".": "./build/main.js",
     "./auth/entities": "./src/auth/domain/entities/index.ts",
     "./auth/entities/dtos": "./src/auth/domain/entities/dtos/index.ts",
+    "./auth/entities/fakers": "./src/auth/domain/entities/fakers/index.ts",
     "./auth/structures": "./src/auth/domain/structures/index.ts",
     "./auth/structures/fakers": "./src/auth/domain/structures/fakers/index.ts",
     "./auth/structures/dtos": "./src/auth/domain/structures/dtos/index.ts",

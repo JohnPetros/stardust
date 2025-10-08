@@ -9,16 +9,16 @@ const Ranking = async () => {
   const apiClientWithCache = NextRestClient({ isCacheEnabled: true })
   const apiClientWithoutCache = NextRestClient({ isCacheEnabled: false })
 
-  const [tiersResponse, rankingUsersResponse] = await Promise.all([
-    apiClientWithCache.get<TierDto[]>(ROUTES.api.ranking.tiers),
-    apiClientWithoutCache.get<RankingUserDto[]>(ROUTES.api.ranking.current),
-  ])
+  // const [tiersResponse, rankingUsersResponse] = await Promise.all([
+  //   apiClientWithCache.get<TierDto[]>(ROUTES.api.ranking.tiers),
+  //   apiClientWithoutCache.get<RankingUserDto[]>(ROUTES.api.ranking.current),
+  // ])
 
-  return (
-    <RankingProvider tiers={tiersResponse.body} rankingUsers={rankingUsersResponse.body}>
-      <RankingPage />
-    </RankingProvider>
-  )
+  // return (
+  //   <RankingProvider tiers={tiersResponse.body} rankingUsers={rankingUsersResponse.body}>
+  //     <RankingPage />
+  //   </RankingProvider>
+  // )
 }
 
 export default Ranking

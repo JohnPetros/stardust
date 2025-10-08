@@ -10,7 +10,6 @@ import { Text } from '@stardust/core/global/structures'
 
 const PUBLIC_ROUTES = [
   ROUTES.landing,
-  ROUTES.api.serverless,
   ...Object.values(ROUTES.auth),
   ...Object.values(ROUTES.api.auth),
 ]

@@ -12,21 +12,19 @@ type Schema = {
 }
 
 export const AccessSolutionPageController = (
-  challengingService: ChallengingService,
+  service: ChallengingService,
 ): Controller<Schema> => {
   return {
     async handle(http: Http<Schema>) {
       const { solutionSlug } = http.getRouteParams()
 
-      const solutionResponse = await challengingService.fetchSolutionBySlug(
+      const solutionResponse = await service.fetchSolutionBySlug(
         Slug.create(solutionSlug),
       )
       if (solutionResponse.isFailure) solutionResponse.throwError()
       const solution = Solution.create(solutionResponse.body)
 
-      const challengeResponse = await challengingService.fetchChallengeBySolutionId(
-        solution.id,
-      )
+      const challengeResponse = await service.fetchChallengeBySolutionId(solution.id)
       if (challengeResponse.isFailure) challengeResponse.throwError()
       const challenge = Challenge.create(challengeResponse.body)
 
