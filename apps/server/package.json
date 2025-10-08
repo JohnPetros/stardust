@@ -7,6 +7,9 @@
     "dev": "npm-run-all --parallel dev:server dev:queue",
     "build": "tsup",
     "prod": "node --env-file .env build/main.js",
+    "db:local": "supabase start",
+    "db:migrate": "supabase db diff -f $npm_schema_file",
+    "db:sync": "supabase migration up",
     "db:prod": "supabase link --project-ref aukqejqsiqsqowafpppb --workdir src/database",
     "db:dev": "supabase link --project-ref rveubqzvfbqbcpmuevnm --workdir src/database/",
     "db:pull": "supabase db pull --schema auth,public,storage,cron,extensions,realtime --workdir src/database",
@@ -16,7 +19,8 @@
     "update": "ncu -u -f $npm_config_dep_name",
     "check-updates": "ncu",
     "check-types": "tsc --noEmit",
-    "lint": "biome lint src --diagnostic-level=error"
+    "lint": "biome lint src --diagnostic-level=error",
+    "test": "jest"
   },
   "dependencies": {
     "@hono/node-server": "^1.14.1",
@@ -35,9 +39,12 @@
     "zod": "^3.24.4"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^20.11.17",
+    "jest": "^30.2.0",
     "npm-run-all": "^4.1.5",
     "supabase": "^2.30.4",
+    "ts-jest": "^29.4.4",
     "ts-jest-mocker": "^1.3.0",
     "tsup": "^8.5.0",
     "tsx": "^4.7.1",
