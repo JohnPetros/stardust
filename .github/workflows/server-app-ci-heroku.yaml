@@ -35,3 +35,7 @@ jobs:
 
       - name: Build project
         run: npm run build:server
+
+      - name: Run tests
+        run: npm run test
+        working-directory: apps/server
