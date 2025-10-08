@@ -44,6 +44,7 @@ import { PlaygroundRouter } from './routers/playground/PlaygroundRouter'
 import { SentryTelemetryProvider } from '@/provision/monitor'
 import { DiscordNotificationService } from '@/rest/services'
 import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
+import { HonoServer } from './HonoServer'
 
 type SupabaseSession = User & { sub: string }
 
@@ -67,7 +68,7 @@ export class HonoApp {
     this.registerRoutes()
     this.setUpErrorHandler()
 
-    serve(
+    const server = serve(
       {
         fetch: this.hono.fetch,
         port: ENV.port,
@@ -76,6 +77,8 @@ export class HonoApp {
         console.log(`🏢 Server is running on ${ENV.baseUrl}:${info.port}`)
       },
     )
+
+    return new HonoServer(this.hono, server)
   }
 
   private setUpErrorHandler() {
