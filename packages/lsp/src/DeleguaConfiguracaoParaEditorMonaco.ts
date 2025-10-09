@@ -289,6 +289,10 @@ export class DeleguaConfiguracaoParaEditorMonaco {
 
   obterConfiguracaoDeLinguagem(): monaco.languages.LanguageConfiguration {
     return {
+      brackets: [
+        ['{', '}'],
+        ['[', ']'],
+      ],
       surroundingPairs: [
         { open: '{', close: '}' },
         { open: '[', close: ']' },
@@ -301,6 +305,16 @@ export class DeleguaConfiguracaoParaEditorMonaco {
         { open: "'", close: "'", notIn: ['string', 'comment'] },
         { open: '"', close: '"', notIn: ['string', 'comment'] },
       ],
+      onEnterRules: [
+        {
+          beforeText: /\{\s*$/,
+          action: { indentAction: monaco.languages.IndentAction.Indent },
+        },
+      ],
+      indentationRules: {
+        increaseIndentPattern: /.*\{[^}"']*$/,
+        decreaseIndentPattern: /^\s*[\}\]]/,
+      },
     }
   }
 }
