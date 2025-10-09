@@ -9,6 +9,10 @@ on:
       - "packages/core/**"
       - "packages/validation/**"
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -35,3 +39,28 @@ jobs:
 
       - name: Build project
         run: npm run build:server
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Setup Supabase
+        run: supabase start
+
+      - name: Run migrations
+        run: supabase migration up
+
+      - uses: Infisical/secrets-action@v1.0.9
+        with:
+          method: "oidc"
+          identity-id: ${{ secrets.INFISICAL_IDENTITY_ID }}
+          domain: ${{ secrets.INFISICAL_DOMAIN }}
+          env-slug: "test"
+          project-slug: "stardust-server-app"
+          export-type: "file"
+          file-output-path: "/apps/server/.env.testing"
+
+      - name: Run tests
+        run: npm run test
+        working-directory: apps/server
