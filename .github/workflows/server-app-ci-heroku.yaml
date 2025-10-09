@@ -36,6 +36,17 @@ jobs:
       - name: Build project
         run: npm run build:server
 
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Setup Supabase
+        run: supabase start
+
+      - name: Run migrations
+        run: supabase migration up
+
       - name: Run tests
         run: npm run test
         working-directory: apps/server
