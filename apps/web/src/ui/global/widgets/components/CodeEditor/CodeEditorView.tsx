@@ -49,7 +49,7 @@ export const CodeEditorView = ({
         fontFamily: 'Menlo',
         cursorStyle: 'line',
         wordWrap: 'off',
-        autoIndent: 'advanced',
+        autoIndent: 'brackets',
         formatOnPaste: true,
         formatOnType: true,
         readOnly: isReadOnly,
