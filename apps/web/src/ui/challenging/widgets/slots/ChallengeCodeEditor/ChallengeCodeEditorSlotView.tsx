@@ -8,6 +8,7 @@ type Props = {
   codeEditorHeight: number
   originalCode: string
   initialCode: string
+  isCodeCheckerDisabled: boolean
   onCodeChange: (value: string) => void
   onRunCode: () => void
 }
@@ -17,6 +18,7 @@ export const ChallengeCodeEditorSlotView = ({
   codeEditorHeight,
   originalCode,
   initialCode,
+  isCodeCheckerDisabled,
   onCodeChange,
   onRunCode,
 }: Props) => {
@@ -33,6 +35,7 @@ export const ChallengeCodeEditorSlotView = ({
           width='100%'
           height={codeEditorHeight - 40}
           onChange={onCodeChange}
+          isCodeCheckerDisabled={isCodeCheckerDisabled}
         />
       </CodeEditorToolbar>
     </div>
