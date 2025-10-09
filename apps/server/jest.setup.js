@@ -1,7 +1,7 @@
 const path = require('node:path')
 const fs = require('node:fs')
 
-const envTestPath = path.resolve(__dirname, '.env.test')
+const envTestPath = path.resolve(__dirname, '.env.testing')
 
 if (fs.existsSync(envTestPath)) {
   const envConfig = fs.readFileSync(envTestPath, 'utf8')
