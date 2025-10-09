@@ -21,17 +21,19 @@ export const ChallengeResultSlotView = ({
   return (
     <div className='relative h-full w-full scale-[1] bg-gray-800 blur-[1]'>
       <div className='h-auto space-y-6 p-6'>
-        {challenge.testCases.map((testCase, index) => (
-          <TestCase
-            key={testCase.position.value}
-            position={testCase.position.value}
-            isLocked={testCase.isLocked.isTrue}
-            isCorrect={results[index] ?? false}
-            inputs={testCase.inputs}
-            userOutput={challenge.userOutputs.getByIndex(index, null)}
-            expectedOutput={testCase.expectedOutput}
-          />
-        ))}
+        {challenge.testCases.map((testCase, index) => {
+          return (
+            <TestCase
+              key={`${testCase.position.value}-${index}`}
+              position={testCase.position.value}
+              isLocked={testCase.isLocked.isTrue}
+              isCorrect={results[index] ?? false}
+              inputs={testCase.inputs}
+              userOutput={challenge.userOutputs.getByIndex(index, null)}
+              expectedOutput={testCase.expectedOutput}
+            />
+          )
+        })}
       </div>
       <span className='block h-full w-full bg-gray-800' />
       <VerificationButton
