@@ -144,7 +144,7 @@ export class DeleguaConfiguracaoParaEditorMonaco {
         /\\(?:[bBdDfnrstvwWn0\\/]|@regexpctl|c[A-Z]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4})/,
 
       tokenizer: {
-        root: [[/[{}]/, 'delimiter.bracket'], { include: 'common' }],
+        root: [[/[\{\}\(\)]/, 'delimiter.bracket'], { include: 'common' }],
 
         common: [
           [
@@ -292,6 +292,7 @@ export class DeleguaConfiguracaoParaEditorMonaco {
       brackets: [
         ['{', '}'],
         ['[', ']'],
+        ['(', ')'],
       ],
       surroundingPairs: [
         { open: '{', close: '}' },
@@ -307,13 +308,14 @@ export class DeleguaConfiguracaoParaEditorMonaco {
       ],
       onEnterRules: [
         {
-          beforeText: /\{\s*$/,
-          action: { indentAction: monaco.languages.IndentAction.Indent },
+          // Se a linha anterior termina com um abre-chaves '{'
+          beforeText: /[\{\(]\s*$/,
+          action: { indentAction: 1 },
         },
       ],
       indentationRules: {
-        increaseIndentPattern: /.*\{[^}"']*$/,
-        decreaseIndentPattern: /^\s*[\}\]]/,
+        increaseIndentPattern: /^\s*.*[\{\(]\s*$/,
+        decreaseIndentPattern: /^\s*[\}\)]/,
       },
     }
   }
