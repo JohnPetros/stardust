@@ -44,7 +44,7 @@ Verifica se algum dos elementos do vetor satisfaz à condição passada por par�
     word: 'encontrar',
     content: `### Descrição 
 
-Encontra o primeiro elemento de um vetor cuja função de pesquisa retorne verdadeiro.
+Encontra o primeiro elemento de uma lista cuja função de pesquisa retorne verdadeiro.
 
 ### Exemplo de Código 
     var numeros = [1, 2, 3, 4, 5]    
@@ -58,7 +58,7 @@ Encontra o primeiro elemento de um vetor cuja função de pesquisa retorne verda
     word: 'encontrarIndice',
     content: `### Descrição 
 
-Encontra o índice do primeiro elemento de um vetor cuja função de pesquisa retorne verdadeiro.
+Encontra o índice do primeiro elemento de uma lista cuja função de pesquisa retorne verdadeiro.
 
 ### Exemplo de Código 
     var numeros = [1, 2, 3, 4, 5]    
@@ -72,7 +72,7 @@ Encontra o índice do primeiro elemento de um vetor cuja função de pesquisa re
     word: 'encontrarUltimo',
     content: `### Descrição 
 
-Encontra o último elemento de um vetor cuja função de pesquisa retorne verdadeiro.
+Encontra o último elemento de uma lista cuja função de pesquisa retorne verdadeiro.
 
 ### Exemplo de Código 
     var numeros = [1, 2, 3, 4, 5]    
@@ -86,7 +86,7 @@ Encontra o último elemento de um vetor cuja função de pesquisa retorne verdad
     word: 'encontrarUltimoIndice',
     content: `### Descrição 
 
-Encontra o índice do último elemento de um vetor cuja função de pesquisa retorne verdadeiro.
+Encontra o índice do último elemento de uma lista cuja função de pesquisa retorne verdadeiro.
 
 ### Exemplo de Código 
     var numeros = [1, 2, 3, 4, 5]    
@@ -119,7 +119,7 @@ Delégua suporta interpolação de variáveis:
     word: 'filtrarPor',
     content: `### Descrição 
 
-Retorna uma lista de elementos filtrados de um vetor.
+Retorna uma lista de elementos filtrados de uma lista.
 
 ### Exemplo de Código 
     var listaDeIdades = [91, 32, 15, 44, 12, 18, 101];     
@@ -133,7 +133,7 @@ Retorna uma lista de elementos filtrados de um vetor.
     word: 'incluido',
     content: `### Descrição 
 
-Verifica se um valor está incluído em um vetor.
+Verifica se um valor está incluído em uma lista.
 
 ### Exemplo de Código 
     var numeros = [1, 2, 3, 4, 5]    
@@ -161,7 +161,7 @@ Converte um número flutuante ou texto, que não apresente letras, em um número
     word: 'mapear',
     content: `### Descrição 
 
-Dado um vetor e uma função de mapeamento, executa a função de mapeamento passando como argumento cada elemento do vetor.
+Dado uma lista e uma função de mapeamento, executa a função de mapeamento passando como argumento cada elemento do vetor.
 
 ### Exemplo de Código 
     var numeros = [1, 2, 3, 4, 5]    
@@ -201,7 +201,7 @@ Converte um número inteiro, ou texto, que não apresente letras, em um número 
     word: 'ordenar',
     content: `### Descrição 
 
-Ordena os elementos de um vetor em ordem crescente.
+Ordena os elementos de uma lista em ordem crescente.
 
 ### Exemplo de Código 
     var numeros = [3, 1, 4, 1, 5]    
@@ -214,7 +214,7 @@ Ordena os elementos de um vetor em ordem crescente.
     word: 'paraCada',
     content: `### Descrição 
 
-Executa uma função para cada elemento de um vetor.
+Executa uma função para cada elemento de uma lista.
 
 ### Exemplo de Código 
     var numeros = [1, 2, 3]    
@@ -228,7 +228,7 @@ Executa uma função para cada elemento de um vetor.
     word: 'primeiroEmCondicao',
     content: `### Descrição 
 
-Retorna o primeiro elemento de um vetor que satisfaz uma condição.
+Retorna o primeiro elemento de uma lista que satisfaz uma condição.
 
 ### Exemplo de Código 
     var numeros = [1, 2, 3, 4, 5]    
@@ -256,7 +256,7 @@ Converte um número inteiro ou texto, que não apresente letras, em um número f
     word: 'reduzir',
     content: `### Descrição 
 
-Reduz um vetor a um único valor usando uma função de redução.
+Reduz uma lista a um único valor usando uma função de redução.
 
 ### Exemplo de Código 
     var numeros = [1, 2, 3, 4, 5]    
@@ -270,7 +270,7 @@ Reduz um vetor a um único valor usando uma função de redução.
     word: 'tamanho',
     content: `### Descrição 
 
-Retorna o tamanho de um vetor, texto ou função.
+Retorna o tamanho de uma lista, texto ou função.
 
 ### Exemplo de Código 
     var vetor = [1, 2, 3, 4, 5]    
@@ -297,7 +297,7 @@ Transforma qualquer valor em texto.
     word: 'todosEmCondicao',
     content: `### Descrição 
 
-Verifica se todos os elementos de um vetor satisfazem uma condição.
+Verifica se todos os elementos de uma lista satisfazem uma condição.
 
 ### Exemplo de Código 
     var numeros = [2, 4, 6, 8]    
@@ -311,7 +311,7 @@ Verifica se todos os elementos de um vetor satisfazem uma condição.
     word: 'tupla',
     content: `### Descrição 
 
-Transforma um vetor de elementos em uma tupla de N elementos (2 a 10 elementos).
+Transforma uma lista de elementos em uma tupla de N elementos (2 a 10 elementos).
 
 ### Exemplo de Código 
     var vetor = [1, 2, 3]    
