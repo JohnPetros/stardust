@@ -49,7 +49,9 @@ export const CodeEditorView = ({
         fontFamily: 'Menlo',
         cursorStyle: 'line',
         wordWrap: 'off',
-        autoIndent: 'full',
+        autoIndent: 'advanced',
+        formatOnPaste: true,
+        formatOnType: true,
         readOnly: isReadOnly,
         domReadOnly: true,
       }}

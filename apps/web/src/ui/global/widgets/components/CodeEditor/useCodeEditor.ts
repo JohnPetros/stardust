@@ -1,13 +1,12 @@
 import { useCallback, useRef } from 'react'
 import type { Monaco } from '@monaco-editor/react'
 import type monaco from 'monaco-editor'
-import { MarkerSeverity } from 'monaco-editor'
 
 import { Backup } from '@stardust/core/global/structures'
 import { DeleguaConfiguracaoParaEditorMonaco } from '@stardust/lsp'
 import type { LspProvider } from '@stardust/core/global/interfaces'
 import type { LspResponse } from '@stardust/core/global/responses'
-import type { LspDocumentation } from '@stardust/core/global/types'
+import type { LspDocumentation, LspSnippet } from '@stardust/core/global/types'
 
 import { COLORS } from '@/constants'
 import { CODE_EDITOR_THEMES } from './code-editor-themes'
@@ -20,6 +19,7 @@ type Params = {
   isCodeCheckerEnabled: boolean
   lspProvider: LspProvider
   lspDocumentations: LspDocumentation[]
+  lspSnippets: LspSnippet[]
   onChange?: (value: string) => void
 }
 
@@ -29,6 +29,7 @@ export function useCodeEditor({
   isCodeCheckerEnabled,
   lspProvider,
   lspDocumentations,
+  lspSnippets,
   onChange,
 }: Params) {
   const monacoEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
@@ -112,7 +113,7 @@ export function useCodeEditor({
       startColumn: 1,
       endColumn: 1000,
       message: error.message,
-      severity: MarkerSeverity.Error,
+      severity: 8, // 8 is the severity for errors
     }))
 
     monacoRef.current?.editor.setModelMarkers(editorModel, LANGUAGE, monacoErrors)
@@ -132,6 +133,19 @@ export function useCodeEditor({
       const syntaxAnalysisResponse = lspProvider.performSyntaxAnalysis(value)
       handleSyntaxAnalysisErrors(syntaxAnalysisResponse)
     }, 100)
+  }
+
+  function provideCompletionItems() {
+    console.log('lspSnippets', lspSnippets)
+    const suggestions = lspSnippets.map((snippet) => ({
+      label: snippet.label,
+      kind: 17, // Monado keyword,
+      insertText: snippet.code,
+      insertTextRules: 4,
+    }))
+    return {
+      suggestions,
+    }
   }
 
   function provideHover(model: monaco.editor.ITextModel, position: monaco.Position) {
@@ -166,6 +180,7 @@ export function useCodeEditor({
     monaco.languages.setMonarchTokensProvider(LANGUAGE, monacoTokensProvider)
     monaco.languages.setLanguageConfiguration(LANGUAGE, monacoLanguageConfiguration)
     monaco.languages.registerHoverProvider(LANGUAGE, { provideHover })
+    monaco.languages.registerCompletionItemProvider(LANGUAGE, { provideCompletionItems })
 
     const rules = getEditorRules()
     monaco.editor.defineTheme('dark-space', {
