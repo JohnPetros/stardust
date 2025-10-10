@@ -6,7 +6,7 @@ import { VerifyAuthenticationController } from '../VerifyAuthenticationControlle
 import { AccountsFaker } from '@stardust/core/auth/entities/fakers'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
-describe('Sign Up Controller', () => {
+describe('Verify Authentication Controller', () => {
   let http: Mock<Http>
   let service: Mock<AuthService>
   let controller: Controller
@@ -19,7 +19,7 @@ describe('Sign Up Controller', () => {
     controller = new VerifyAuthenticationController(service)
   })
 
-  it('should call the auth service to sign up', async () => {
+  it('should call the auth service to fetch account', async () => {
     const restResponse = new RestResponse({ body: AccountsFaker.fakeDto() })
     service.fetchAccount.mockResolvedValue(restResponse)
 
