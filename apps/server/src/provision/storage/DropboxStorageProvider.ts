@@ -14,6 +14,8 @@ export class DropboxStorageProvider implements StorageProvider {
   private dropbox: Dropbox
   private readonly restClient: RestClient
   private static readonly BASE_URL = 'https://api.dropbox.com'
+  private static readonly INTERNAL_FOLDER_NAME =
+    ENV.mode === 'development' ? 'dev' : 'prod'
 
   constructor(restClient: RestClient) {
     this.dropbox = new Dropbox()
@@ -26,7 +28,7 @@ export class DropboxStorageProvider implements StorageProvider {
       const accessToken = await this.fetchAccessToken()
       this.dropbox = new Dropbox({ accessToken })
 
-      const fullPath = `/${folder.name}/${ENV.mode === 'development' ? 'dev' : 'prod'}/${file.name}`
+      const fullPath = `/${folder.name}/${DropboxStorageProvider.INTERNAL_FOLDER_NAME}/${file.name}`
 
       const fileBuffer = await this.fileToBuffer(file)
 
