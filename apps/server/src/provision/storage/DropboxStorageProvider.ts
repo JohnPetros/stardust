@@ -6,9 +6,9 @@ import { AppError } from '@stardust/core/global/errors'
 import { MethodNotImplementedError } from '@stardust/core/global/errors'
 import type { StorageFolder } from '@stardust/core/storage/structures'
 import type { StorageProvider } from '@stardust/core/storage/interfaces'
+import type { RestClient } from '@stardust/core/global/interfaces'
 
 import { ENV } from '@/constants'
-import { RestClient } from '@stardust/core/global/interfaces'
 
 export class DropboxStorageProvider implements StorageProvider {
   private dropbox: Dropbox
@@ -26,7 +26,7 @@ export class DropboxStorageProvider implements StorageProvider {
       const accessToken = await this.fetchAccessToken()
       this.dropbox = new Dropbox({ accessToken })
 
-      const fullPath = `/${folder.name}/${file.name}`
+      const fullPath = `/${folder.name}/${ENV.mode === 'development' ? 'dev' : 'prod'}/${file.name}`
 
       const fileBuffer = await this.fileToBuffer(file)
 
@@ -40,7 +40,7 @@ export class DropboxStorageProvider implements StorageProvider {
         this.handleError('Failed to upload file to Dropbox')
       }
 
-      await fs.unlink(file.name);
+      await fs.unlink(file.name)
 
       return file
     } catch (error) {
