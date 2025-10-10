@@ -19,8 +19,9 @@ export const ChallengeCodeEditorSlot = () => {
       editorContainerRef={editorContainerRef}
       codeEditorRef={codeEditorRef}
       codeEditorHeight={codeEditorHeight}
-      originalCode={originalCode}
+      originalCode={originalCode.value}
       initialCode={initialCode}
+      isCodeCheckerDisabled={originalCode.hasFunction.isFalse}
       onCodeChange={handleCodeChange}
       onRunCode={handleRunCode}
     />

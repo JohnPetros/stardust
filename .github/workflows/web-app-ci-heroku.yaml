@@ -27,7 +27,7 @@ jobs:
           method: "oidc"
           identity-id: ${{ secrets.INFISICAL_IDENTITY_ID }}
           domain: ${{ secrets.INFISICAL_DOMAIN }}
-          env-slug: "staging"
+          env-slug: "dev"
           project-slug: "stardust-web-app"
           export-type: "file"
           file-output-path: "/apps/web/.env"
@@ -37,7 +37,7 @@ jobs:
           method: "oidc"
           identity-id: ${{ secrets.INFISICAL_IDENTITY_ID }}
           domain: ${{ secrets.INFISICAL_DOMAIN }}
-          env-slug: "staging"
+          env-slug: "dev"
           project-slug: "stardust-web-app"
           export-type: "file"
           file-output-path: "/apps/web/.env.test"

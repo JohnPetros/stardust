@@ -107,7 +107,7 @@ export function useChallengeCodeEditorSlot() {
     consoleRef,
     codeEditorRef,
     codeEditorHeight,
-    originalCode: String(challenge?.code),
+    originalCode: Code.create(lspProvider, challenge?.code),
     initialCode,
     handleRunCode,
     handleCodeChange,

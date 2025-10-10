@@ -3,7 +3,7 @@ export const DELEGUA_DOCUMENTACOES_METODOS_DICIONARIOS = [
     word: 'chaves',
     content: `### Descrição 
 
-Retorna um vetor de texto com todas as chaves de um dicionário.
+Retorna uma lista de texto com todas as chaves de um dicionário.
 
 ### Exemplo de Código 
     var d = {"a": 1, "b": 2, "c": 3}    
@@ -58,7 +58,7 @@ Remove uma chave e seu valor do dicionário.
     word: 'valores',
     content: `### Descrição 
 
-Retorna um vetor com todos os valores de um dicionário.
+Retorna uma lista com todos os valores de um dicionário.
 
 ### Exemplo de Código 
     var d = {"a": 1, "b": 2, "c": 3}    

@@ -15,6 +15,7 @@ type CodeEditorProps = {
   width: number | string
   height: number | string
   isReadOnly?: boolean
+  isCodeCheckerDisabled?: boolean
   onChange?: (value: string) => void
 }
 
@@ -25,6 +26,7 @@ export const Widget = (
     height,
     theme = 'dark-space',
     isReadOnly = false,
+    isCodeCheckerDisabled = true,
     onChange = () => {},
   }: CodeEditorProps,
   ref: ForwardedRef<CodeEditorRef>,
@@ -33,7 +35,7 @@ export const Widget = (
     state: { fontSize, tabSize, isCodeCheckerEnabled },
   } = useEditorContext()
   const { md: isMobile } = useBreakpoint()
-  const { lspProvider, documentations } = useLsp()
+  const { lspProvider, documentations, snippets } = useLsp()
   const {
     getValue,
     setValue,
@@ -47,9 +49,10 @@ export const Widget = (
   } = useCodeEditor({
     initialValue: value,
     theme,
-    isCodeCheckerEnabled,
+    isCodeCheckerEnabled: isCodeCheckerDisabled ? false : isCodeCheckerEnabled,
     lspProvider,
     lspDocumentations: documentations,
+    lspSnippets: snippets,
     onChange,
   })
 

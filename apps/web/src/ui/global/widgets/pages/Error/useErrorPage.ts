@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 
 import type { TelemetryProvider } from '@stardust/core/global/interfaces'
 import type { NotificationService } from '@stardust/core/notification/interfaces'
+import { CLIENT_ENV } from '@/constants'
 
 type Params = {
   telemetryProvider: TelemetryProvider
@@ -15,6 +16,8 @@ export function useErrorPage({ telemetryProvider, notificationService, error }: 
   }
 
   useEffect(() => {
+    if (CLIENT_ENV.mode === 'development') return
+
     async function sendErrorNotification() {
       await notificationService.sendErrorNotification('web', error.message)
     }
