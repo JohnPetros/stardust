@@ -18,7 +18,7 @@ describe('Confirm Email Controller', () => {
     controller = new ConfirmEmailController(service)
   })
 
-  it('should call the auth service with the correct email and password', async () => {
+  it('should call the auth service with the correct token', async () => {
     const token = Text.create('test-token')
     const restResponse = new RestResponse({ body: SessionFaker.fakeDto() })
     http.getBody.mockResolvedValue({ token: token.value })
