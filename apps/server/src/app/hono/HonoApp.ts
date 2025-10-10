@@ -115,8 +115,10 @@ export class HonoApp {
           HTTP_STATUS_CODE.badRequest,
         )
 
-      this.telemetryProvider.trackError(error)
-      await this.notificationService.sendErrorNotification('server', error.message)
+      if (ENV.mode !== 'development') {
+        this.telemetryProvider.trackError(error)
+        await this.notificationService.sendErrorNotification('server', error.message)
+      }
 
       return context.json(
         {
