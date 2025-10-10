@@ -11,7 +11,7 @@ Adiciona um ou mais elementos em uma lista.
     lista.adicionar(7)    
     lista.adicionar(5)    
     lista.adicionar(3)    
-    escreva(v) // [7, 5, 3]    
+    escreva(lista) // [7, 5, 3]    
 
 ### Formas de uso  `,
     example: 'lista.adicionar(elemento)',
@@ -40,7 +40,7 @@ Adiciona um elemento ao final do lista, como se o lista fosse uma pilha na verti
     lista.empilhar(7)    
     lista.empilhar(5)    
     lista.empilhar(3)    
-    escreva(v) // [7, 5, 3]     
+    escreva(lista) // [7, 5, 3]     
 
 ### Formas de uso  `,
     example: 'lista.empilhar(elemento)',
@@ -54,7 +54,7 @@ Remove elementos do lista e opcionalmente adiciona novos elementos no lugar.
 ### Exemplo de Código 
     var lista = [1, 2, 3, 4, 5]    
     lista.encaixar(1, 2, 'a', 'b')    
-    escreva(v) // [1, 'a', 'b', 4, 5]    
+    escreva(lista) // [1, 'a', 'b', 4, 5]    
 
 ### Formas de uso  `,
     example: 'lista.encaixar(inicio, excluirQuantidade, ...itens)',

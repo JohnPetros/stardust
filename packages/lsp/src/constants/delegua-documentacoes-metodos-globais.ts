@@ -161,7 +161,7 @@ Converte um número flutuante ou texto, que não apresente letras, em um número
     word: 'mapear',
     content: `### Descrição 
 
-Dado uma lista e uma função de mapeamento, executa a função de mapeamento passando como argumento cada elemento do vetor.
+Dado uma lista e uma função de mapeamento, executa a função de mapeamento passando como argumento cada elemento da lista.
 
 ### Exemplo de Código 
     var numeros = [1, 2, 3, 4, 5]    

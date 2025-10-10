@@ -136,10 +136,9 @@ export function useCodeEditor({
   }
 
   function provideCompletionItems() {
-    console.log('lspSnippets', lspSnippets)
     const suggestions = lspSnippets.map((snippet) => ({
       label: snippet.label,
-      kind: 17, // Monado keyword,
+      kind: 17, // Monaco keyword,
       insertText: snippet.code,
       insertTextRules: 4,
     }))
