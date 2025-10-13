@@ -5,6 +5,7 @@ import type { AuthService } from '@stardust/core/auth/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
 import { Text } from '@stardust/core/global/structures'
 import { SessionFaker } from '@stardust/core/auth/structures/fakers'
+
 import { ConfirmEmailController } from '../ConfirmEmailController'
 
 describe('Confirm Email Controller', () => {

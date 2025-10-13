@@ -1,10 +1,12 @@
 import { mock, type Mock } from 'ts-jest-mocker'
+
 import type { Controller, Http } from '@stardust/core/global/interfaces'
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
-import { VerifyAuthenticationController } from '../VerifyAuthenticationController'
 import { AccountsFaker } from '@stardust/core/auth/entities/fakers'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
+
+import { VerifyAuthenticationController } from '../VerifyAuthenticationController'
 
 describe('Verify Authentication Controller', () => {
   let http: Mock<Http>

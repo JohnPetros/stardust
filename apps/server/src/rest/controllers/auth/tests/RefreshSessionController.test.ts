@@ -4,7 +4,6 @@ import type { Controller, Http } from '@stardust/core/global/interfaces'
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
 import { RefreshSessionController } from '../RefreshSessionController'
-import { AccountsFaker } from '@stardust/core/auth/entities/fakers'
 import { SessionFaker } from '@stardust/core/auth/structures/fakers'
 import { Text } from '@stardust/core/global/structures'
 

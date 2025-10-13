@@ -1,12 +1,14 @@
 import { mock, type Mock } from 'ts-jest-mocker'
+
 import type { Controller, EventBroker, Http } from '@stardust/core/global/interfaces'
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
-import { SignUpController } from '../SignUpController'
 import { AccountsFaker } from '@stardust/core/auth/entities/fakers'
 import { UserSignedUpEvent } from '@stardust/core/auth/events'
 import { Password } from '@stardust/core/auth/structures'
 import { Email } from '@stardust/core/global/structures'
+
+import { SignUpController } from '../SignUpController'
 
 describe('Sign Up Controller', () => {
   let http: Mock<Http>

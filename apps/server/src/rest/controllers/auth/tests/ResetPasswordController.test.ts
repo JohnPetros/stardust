@@ -3,9 +3,10 @@ import { type Mock, mock } from 'ts-jest-mocker'
 import type { Controller, Http } from '@stardust/core/global/interfaces'
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
-import { ResetPasswordController } from '../ResetPasswordController'
 import { Text } from '@stardust/core/global/structures'
 import { Password } from '@stardust/core/auth/structures'
+
+import { ResetPasswordController } from '../ResetPasswordController'
 
 describe('Reset Password Controller', () => {
   let http: Mock<Http>

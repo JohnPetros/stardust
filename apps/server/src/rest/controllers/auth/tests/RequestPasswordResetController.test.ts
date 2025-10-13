@@ -3,8 +3,9 @@ import { type Mock, mock } from 'ts-jest-mocker'
 import type { Controller, Http } from '@stardust/core/global/interfaces'
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
-import { RequestPasswordResetController } from '../RequestPasswordResetController'
 import { Email } from '@stardust/core/global/structures'
+
+import { RequestPasswordResetController } from '../RequestPasswordResetController'
 
 describe('Request Password Reset Controller', () => {
   let http: Mock<Http>

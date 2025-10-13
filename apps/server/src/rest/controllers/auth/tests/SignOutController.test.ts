@@ -1,7 +1,9 @@
 import { mock, type Mock } from 'ts-jest-mocker'
+
 import type { Controller, Http } from '@stardust/core/global/interfaces'
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
+
 import { SignOutController } from '../SignOutController'
 
 describe('Sign Out Controller', () => {

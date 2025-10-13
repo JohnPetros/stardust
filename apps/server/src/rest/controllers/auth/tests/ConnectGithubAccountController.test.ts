@@ -4,6 +4,7 @@ import type { Controller, Http } from '@stardust/core/global/interfaces'
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
 import { Text } from '@stardust/core/global/structures'
+
 import { ConnectGithubAccountController } from '../ConnectGithubAccountController'
 
 describe('Connect Github Account Controller', () => {
