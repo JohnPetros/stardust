@@ -19,9 +19,23 @@ import {
   FormMessage,
 } from '@/ui/shadcn/components/form'
 import { useSignInForm } from './useSignInForm'
+import type { AuthService } from '@stardust/core/auth/interfaces'
+import type { NavigationProvider, ToastProvider } from '@stardust/core/global/interfaces'
 
-export const SignInFormView = ({ className, ...props }: ComponentProps<'div'>) => {
-  const { form, isLoading, handleSubmit } = useSignInForm()
+type Props = {
+  toastProvider: ToastProvider
+  navigationProvider: NavigationProvider
+  authService: AuthService
+} & ComponentProps<'div'>
+
+export const SignInFormView = ({
+  toastProvider,
+  navigationProvider,
+  authService,
+  className,
+  ...props
+}: Props) => {
+  const { form, handleSubmit } = useSignInForm({ toastProvider, authService, navigationProvider })
 
   return (
     <div className={cn('flex flex-col gap-6 text-zinc-100', className)} {...props}>
@@ -71,8 +85,8 @@ export const SignInFormView = ({ className, ...props }: ComponentProps<'div'>) =
                   <Button
                     type='submit'
                     className='w-full'
-                    disabled={isLoading}
-                    isLoading={isLoading}
+                    disabled={form.formState.isSubmitting}
+                    isLoading={form.formState.isSubmitting}
                   >
                     Login
                   </Button>

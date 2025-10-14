@@ -8,7 +8,7 @@ import { AuthMiddleware } from '../middlewares/AuthMiddleware'
 import { RestMiddleware } from '../middlewares/RestMiddleware'
 import { restContext } from '../contexts/RestContext'
 
-export const unstable_clientMiddleware = [AuthMiddleware, RestMiddleware]
+export const clientMiddleware = [AuthMiddleware, RestMiddleware]
 
 export const clientLoader = async ({ context, params }: Route.LoaderArgs) => {
   const { spaceService, lessonService } = context.get(restContext)

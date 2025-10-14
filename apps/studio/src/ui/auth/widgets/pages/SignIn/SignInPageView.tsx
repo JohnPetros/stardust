@@ -1,5 +1,5 @@
 import { Icon } from '@/ui/global/widgets/components/Icon'
-import { SignInFormView } from './SignInForm/SignInFormView'
+import { SignInForm } from './SignInForm'
 
 export const SignInPageView = () => {
   return (
@@ -12,7 +12,7 @@ export const SignInPageView = () => {
           <img src='/images/logo.svg' alt='logo' className='w-32 h-auto' />
           <span className='text-zinc-300 font-medium'>Studio</span>
         </div>
-        <SignInFormView />
+        <SignInForm />
       </div>
     </div>
   )

@@ -1,7 +1,7 @@
-import { unstable_createContext } from 'react-router'
+import { createContext } from 'react-router'
 
 type AuthContext = {
   accessToken: string
 }
 
-export const authContext = unstable_createContext<AuthContext>()
+export const authContext = createContext<AuthContext>()
