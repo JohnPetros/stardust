@@ -13,10 +13,10 @@ type Schema = {
 }
 
 export class SignInController implements Controller<Schema> {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly service: AuthService) {}
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const { email, password } = await http.getBody()
-    return await this.authService.signIn(Email.create(email), Password.create(password))
+    return await this.service.signIn(Email.create(email), Password.create(password))
   }
 }
