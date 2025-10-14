@@ -112,9 +112,9 @@ export * from './documentation/domain/entities/index'
 export * from './documentation/interfaces/index'
 
 // Storage
+export * from './storage/structures/index'
 export * from './storage/interfaces/index'
 export * from './storage/use-cases/index'
-export * from './storage/structures/index'
 
 // Notification
 export * from './notification/interfaces/index'
