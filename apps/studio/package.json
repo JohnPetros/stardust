@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
-    "@hookform/resolvers": "^5.1.1",
+    "@hookform/resolvers": "^5.2.2",
     "@monaco-editor/react": "^4.7.0-rc.0",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-avatar": "^1.1.10",
@@ -39,8 +39,8 @@
     "radix-ui": "^1.4.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-hook-form": "^7.60.0",
-    "react-router": "^7.5.3",
+    "react-hook-form": "^7.65.0",
+    "react-router": "^7.7.1",
     "sonner": "^2.0.6",
     "tailwind-merge": "^3.3.1",
     "tailwind-variants": "^0.3.1",
@@ -49,7 +49,7 @@
     "zustand": "^4.5.7"
   },
   "devDependencies": {
-    "@react-router/dev": "^7.5.3",
+    "@react-router/dev": "^7.7.1",
     "@tailwindcss/vite": "^4.1.11",
     "@types/node": "^20",
     "@types/react": "^19.1.2",
