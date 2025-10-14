@@ -5,7 +5,7 @@ import type { StorageFolder } from '@stardust/core/storage/structures'
 import { Image } from '@stardust/core/global/structures'
 
 import type { DialogRef } from '@/ui/shadcn/components/dialog'
-import { useToast } from '@/ui/global/hooks/useToast'
+import { useToast } from '@/ui/global/hooks/useToastProvider'
 
 type Params = {
   storageService: StorageService

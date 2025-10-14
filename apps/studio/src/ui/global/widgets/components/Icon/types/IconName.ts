@@ -8,6 +8,7 @@ export type IconName =
   | 'edition'
   | 'rocket'
   | 'loading'
+  | 'sign-out'
   | 'user'
   | 'image'
   | 'spinner'

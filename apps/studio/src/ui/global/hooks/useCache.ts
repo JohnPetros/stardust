@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import type { RestResponse } from '@stardust/core/global/responses'
 
-import { useToast } from './useToast'
+import { useToast } from './useToastProvider'
 
 type MutateConfig = {
   shouldRevalidate: boolean

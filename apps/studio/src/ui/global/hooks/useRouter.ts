@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router'
 import { useCallback } from 'react'
 
-export function useRouter() {
+export function useNavigationProvider() {
   const navigate = useNavigate()
 
   const goTo = useCallback(
