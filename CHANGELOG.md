@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.1 (2025-10-14)
+
+* 📦 deps(lsp): update @designliquido/delegua to version 0.54.7 (fef07fa1)
+* 🏎️ ci: add permissions for id-token and contents in Heroku deployment workflow (fba7af4d)
+* 🏎️ ci: change Heroku deployment environment from "dev" to "prod" in CI workflow (0761d0c6)
+* ♻️ refactor(web): remove duplicate export of storage structures in main.ts (4b543770)
+* 🏎️ ci: update Heroku deployment environment from "prod" to "dev" in CI workflow (11658fd9)
+
 ## 0.5.0 (2025-10-14)
 
 * 📦 deps(studio): remove @designliquido/delegua dependency from package.json and package-lock.json (86a44235)
