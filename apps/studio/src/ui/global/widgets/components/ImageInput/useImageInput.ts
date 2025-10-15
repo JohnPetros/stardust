@@ -5,7 +5,7 @@ import type { StorageFolder } from '@stardust/core/storage/structures'
 import { Image } from '@stardust/core/global/structures'
 
 import type { DialogRef } from '@/ui/shadcn/components/dialog'
-import { useToast } from '@/ui/global/hooks/useToastProvider'
+import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
 
 type Params = {
   storageService: StorageService
@@ -19,7 +19,7 @@ export function useImageInput({ storageService, folder, dialogRef, onSubmit }: P
   const [imageName, setImageName] = useState<string>('')
   const [imageNameError, setImageNameError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const toast = useToast()
+  const toast = useToastProvider()
 
   function handleImageFileChange(file: File | null) {
     setImageFile(file)

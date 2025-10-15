@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react'
 
 import type { PaginationResponse, RestResponse } from '@stardust/core/global/responses'
 
-import { useToast } from './useToastProvider'
+import { useToastProvider } from './useToastProvider'
 
 type PaginatedCacheConfig<CacheItem> = {
   key: string
@@ -43,7 +43,7 @@ export function usePaginatedCache<CacheItem>({
   dependencies,
 }: PaginatedCacheConfig<CacheItem>): PaginatedCache<CacheItem> {
   const [totalItemsCount, setTotalItemsCount] = useState(0)
-  const toast = useToast()
+  const toast = useToastProvider()
 
   const queryKey = useMemo(() => {
     const baseKey = [key]
