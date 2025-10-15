@@ -8,9 +8,9 @@ import { AuthMiddleware } from '../middlewares/AuthMiddleware'
 import { restContext } from '../contexts/RestContext'
 import { useStorageImage } from '@/ui/global/hooks/useStorageImage'
 
-export const unstable_clientMiddleware = [AuthMiddleware, RestMiddleware]
+export const clientMiddleware = [AuthMiddleware, RestMiddleware]
 
-export const clientLoader = async ({ context }: Route.ActionArgs) => {
+export const clientLoader = async ({ context }: Route.LoaderArgs) => {
   const { spaceService } = context.get(restContext)
   const response = await spaceService.fetchPlanets()
 

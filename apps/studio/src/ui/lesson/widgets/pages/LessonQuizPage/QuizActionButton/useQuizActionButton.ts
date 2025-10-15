@@ -2,7 +2,7 @@ import type { Id } from '@stardust/core/global/structures'
 import type { Question } from '@stardust/core/lesson/abstracts'
 import type { LessonService } from '@stardust/core/lesson/interfaces'
 
-import { useToast } from '@/ui/global/hooks/useToast'
+import { useToast } from '@/ui/global/hooks/useToastProvider'
 import { useActionButtonStore } from '@/ui/global/stores/ActionButtonStore'
 
 export function useQuizActionButton(

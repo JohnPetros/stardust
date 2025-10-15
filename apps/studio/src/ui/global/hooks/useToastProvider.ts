@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { toast } from 'sonner'
 
-export function useToast() {
+export function useToastProvider() {
   const showSuccess = useCallback((message: string) => {
     toast.success(message)
   }, [])

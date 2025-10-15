@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react'
 
 import type { PaginationResponse, RestResponse } from '@stardust/core/global/responses'
 
-import { useToast } from './useToast'
+import { useToast } from './useToastProvider'
 
 type PaginatedCacheConfig<CacheItem> = {
   key: string

@@ -1,7 +1,7 @@
 import type { StorageService } from '@stardust/core/storage/interfaces'
 import { StorageFolder } from '@stardust/core/storage/structures'
 
-import { useToast } from '@/ui/global/hooks/useToast'
+import { useToast } from '@/ui/global/hooks/useToastProvider'
 import { Text } from '@stardust/core/global/structures'
 
 export function usePictureCard(storageService: StorageService, onRemove: () => void) {

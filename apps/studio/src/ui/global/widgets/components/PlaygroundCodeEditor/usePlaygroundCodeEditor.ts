@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Code } from '@stardust/core/global/structures'
 
 import { REGEX } from '@/constants'
-import { useToast } from '@/ui/global/hooks/useToast'
+import { useToast } from '@/ui/global/hooks/useToastProvider'
 import type { CodeEditorRef } from '../CodeEditor/types'
 import type { ConsoleRef } from '../Console/types'
 import type { PromptRef } from '../Prompt/types'

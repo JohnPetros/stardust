@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useCopyToClipboard } from 'usehooks-ts'
 
-import { useToast } from './useToast'
+import { useToast } from './useToastProvider'
 
 export function useClipboard() {
   const [_, copyToClipboard] = useCopyToClipboard()

@@ -1,4 +1,3 @@
-import { useLoaderData } from 'react-router'
 import type { Route } from './+types/LessonQuestionsRoute'
 
 import { Slug } from '@stardust/core/global/structures'
@@ -9,8 +8,9 @@ import { LessonQuizPage } from '@/ui/lesson/widgets/pages/LessonQuizPage'
 import { AuthMiddleware } from '../middlewares/AuthMiddleware'
 import { RestMiddleware } from '../middlewares/RestMiddleware'
 import { restContext } from '../contexts/RestContext'
+import { useLoaderData } from 'react-router'
 
-export const unstable_clientMiddleware = [AuthMiddleware, RestMiddleware]
+export const clientMiddleware = [AuthMiddleware, RestMiddleware]
 
 export const clientLoader = async ({ context, params }: Route.LoaderArgs) => {
   const { spaceService, lessonService } = context.get(restContext)
