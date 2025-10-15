@@ -1,8 +1,11 @@
+'use client'
+
 import { type ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 
 import type { CodeEditorRef, CodeEditorTheme } from './types'
 import { useCodeEditor } from './useCodeEditor'
 import { CodeEditorView } from './CodeEditorView'
+import { useLsp } from '@/ui/global/hooks/useLsp'
 
 type CodeEditorProps = {
   value: string
@@ -24,6 +27,7 @@ export const Widget = (
   }: CodeEditorProps,
   ref: ForwardedRef<CodeEditorRef>,
 ) => {
+  const { lspProvider, documentations, snippets } = useLsp()
   const {
     getValue,
     setValue,
@@ -34,7 +38,15 @@ export const Widget = (
     getSelectedLinesRange,
     handleChange,
     handleEditorDidMount,
-  } = useCodeEditor(value, theme, onChange)
+  } = useCodeEditor({
+    initialValue: value,
+    theme,
+    isCodeCheckerEnabled: true,
+    lspProvider,
+    lspDocumentations: documentations,
+    lspSnippets: snippets,
+    onChange,
+  })
 
   useImperativeHandle(ref, () => {
     return {
@@ -63,6 +75,9 @@ export const Widget = (
       height={height}
       theme={theme}
       isReadOnly={isReadOnly}
+      isMobile={true}
+      tabSize={2}
+      fontSize={18}
       onChange={handleChange}
       onMount={handleEditorDidMount}
     />
