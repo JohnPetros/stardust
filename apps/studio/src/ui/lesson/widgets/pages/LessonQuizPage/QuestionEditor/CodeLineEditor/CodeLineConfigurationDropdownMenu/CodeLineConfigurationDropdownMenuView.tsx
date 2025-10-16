@@ -22,6 +22,7 @@ type Props = {
   isInput: boolean
   indentation: number
   isRemoveBlockDisabled: boolean
+  isAddInputDisabled: boolean
   onAddText: (blockIndex: number) => void
   onAddInput: (blockIndex: number) => void
   onIndentationChange: (indentation: number) => void
@@ -34,6 +35,7 @@ export const CodeLineConfigurationDropdownMenuView = ({
   index,
   isInput,
   indentation,
+  isAddInputDisabled,
   isRemoveBlockDisabled,
   onAddText,
   onAddInput,
@@ -64,7 +66,10 @@ export const CodeLineConfigurationDropdownMenuView = ({
                     </DropdownMenuShortcut>
                   )}
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => onReplaceWithInput(index)}>
+                <DropdownMenuItem
+                  onClick={() => onReplaceWithInput(index)}
+                  disabled={isAddInputDisabled}
+                >
                   Entrada de dados
                   {isInput && (
                     <DropdownMenuShortcut>
@@ -101,7 +106,10 @@ export const CodeLineConfigurationDropdownMenuView = ({
           <DropdownMenuItem onClick={() => onAddText(index + 1)}>
             Adicionar texto a direita
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => onAddInput(index + 1)}>
+          <DropdownMenuItem
+            onClick={() => onAddInput(index + 1)}
+            disabled={isAddInputDisabled}
+          >
             Adicionar entrada de dados a direita
           </DropdownMenuItem>
           <DropdownMenuSeparator />

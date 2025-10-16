@@ -1,8 +1,6 @@
 import MonacoEditor, { type Monaco } from '@monaco-editor/react'
 import type monaco from 'monaco-editor'
 
-import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
-import { useEditorContext } from '@/ui/global/hooks/useEditorContext'
 import { LANGUAGE } from './language'
 import type { CodeEditorTheme } from './types'
 import { Loading } from '../Loading'
