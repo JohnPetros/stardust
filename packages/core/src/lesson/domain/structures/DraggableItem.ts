@@ -37,6 +37,10 @@ export class DraggableItem {
     return this.clone({ dropZoneIndex: Integer.create(dropZoneIndex, 'Drop zone index') })
   }
 
+  setLabel(label: string): DraggableItem {
+    return this.clone({ label: Text.create(label) })
+  }
+
   get isDropped(): Logical {
     return Logical.create(this.dropZoneIndex.value !== this.originalDropZoneIndex.value)
   }
