@@ -1,1 +1,1 @@
-export type IconColor = 'gray' | 'red' | 'green' | 'blue'
+export type IconColor = 'blue' | 'green' | 'gray' | 'red'
