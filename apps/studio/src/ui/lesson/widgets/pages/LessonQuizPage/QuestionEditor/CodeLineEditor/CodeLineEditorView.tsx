@@ -4,6 +4,7 @@ import { Button } from '@/ui/shadcn/components/button'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { ExpandableInput } from '@/ui/lesson/widgets/components/ExpandableInput'
 import { CodeLineConfigurationDropdownMenu } from './CodeLineConfigurationDropdownMenu'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/ui/shadcn/components/tooltip'
 
 type Props = {
   blocks: ReactNode[]
@@ -79,7 +80,12 @@ export const CodeLineEditorView = ({
           )
         })}
       </div>
-      <span>{indentation}</span>
+      <Tooltip>
+        <TooltipTrigger>{indentation}</TooltipTrigger>
+        <TooltipContent>
+          <p>Nível de identação ({indentation})</p>
+        </TooltipContent>
+      </Tooltip>
     </div>
   )
 }

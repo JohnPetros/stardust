@@ -66,10 +66,7 @@ export const DragAndDropQuestionEditorView = ({
       />
 
       <div className='space-y-6 translate-x-10'>
-        <Sortable.Container
-          items={codeLines}
-          onDragEnd={onDragEnd}
-        >
+        <Sortable.Container items={codeLines} onDragEnd={onDragEnd}>
           {(items) => {
             let textIndex = -1
             return items.map((item) => {
@@ -85,7 +82,6 @@ export const DragAndDropQuestionEditorView = ({
                       correctItems={correctItems}
                       selectedItem={correctItems[textIndex]}
                       onChange={onCodeLineInputChange}
-                      
                     />
                   )
                   return widget
@@ -130,7 +126,7 @@ export const DragAndDropQuestionEditorView = ({
                 </Sortable.Item>
               )
             })
-          } }
+          }}
         </Sortable.Container>
       </div>
 
@@ -140,7 +136,12 @@ export const DragAndDropQuestionEditorView = ({
 
       <div className='mt-12'>
         <DragAndDropItemsControl
-         items={dragAndDropItems} onAddItem={onAddItem} onRemoveItem={onRemoveItem} onItemChange={onItemChange} />
+          items={dragAndDropItems}
+          correctItems={correctItems}
+          onAddItem={onAddItem}
+          onRemoveItem={onRemoveItem}
+          onItemChange={onItemChange}
+        />
       </div>
     </div>
   )

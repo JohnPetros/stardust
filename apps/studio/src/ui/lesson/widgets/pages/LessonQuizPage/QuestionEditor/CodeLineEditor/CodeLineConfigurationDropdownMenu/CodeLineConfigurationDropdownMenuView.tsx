@@ -106,11 +106,20 @@ export const CodeLineConfigurationDropdownMenuView = ({
           <DropdownMenuItem onClick={() => onAddText(index + 1)}>
             Adicionar texto a direita
           </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => onAddText(index)}>
+            Adicionar texto a esquerda
+          </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => onAddInput(index + 1)}
             disabled={isAddInputDisabled}
           >
             Adicionar entrada de dados a direita
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => onAddInput(index)}
+            disabled={isAddInputDisabled}
+          >
+            Adicionar entrada de dados a esquerda
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
