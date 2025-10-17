@@ -21,7 +21,7 @@ export const ExpandableInputView = ({
 }: Props) => {
   return (
     <div className='flex items-center'>
-      <span ref={spanRef} className='absolute invisible whitespace-pre px-2'>
+      <span ref={spanRef} className='absolute invisible whitespace-pre px-2 pl-3'>
         {inputValue || placeholder || 'Digite...'}
       </span>
 

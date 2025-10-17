@@ -85,4 +85,8 @@ export class QuestionCodeLine {
       texts: this.texts,
     })
   }
+
+  getBlock(blockIndex: number): string {
+    return this.texts[blockIndex]
+  }
 }

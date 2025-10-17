@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import type { RestResponse } from '@stardust/core/global/responses'
 
-import { useToast } from './useToastProvider'
+import { useToastProvider } from './useToastProvider'
 
 type MutateConfig = {
   shouldRevalidate: boolean
@@ -43,7 +43,7 @@ export function useCache<CacheData>({
 }: CacheConfig<CacheData>): Cache<CacheData> {
   const queryClient = useQueryClient()
   const queryKey = dependencies ? [key, ...dependencies] : [key]
-  const toast = useToast()
+  const toast = useToastProvider()
   const {
     data,
     error,

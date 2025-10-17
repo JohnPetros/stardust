@@ -4,22 +4,19 @@ import type { QuestionCodeLine } from '@stardust/core/lesson/structures'
 import { Sortable } from '@/ui/global/widgets/components/Sortable'
 import { AddItemButton } from '@/ui/lesson/widgets/components/AddItemButton'
 import type { SortableItem } from '@/ui/global/widgets/components/Sortable/types'
-import { ExpandableInput } from '@/ui/lesson/widgets/components/ExpandableInput'
 import { QuestionHeaderInput } from '../QuestionHeaderInput'
-import { CodeInput } from '../CodeInput'
 import { CodeLineEditor } from '../CodeLineEditor'
+import { DropZoneSelectView } from './DropZoneSelect/DropZoneSelectView'
+import { DragAndDropItemsControl } from './DragAndDropItemsControl'
 
 type Props = {
   stem: string
   picture: Image
-  code?: string
+  dragAndDropItems: string[]
   codeLines: SortableItem<QuestionCodeLine>[]
-  answers: string[]
+  correctItems: string[]
   onStemChange: (stem: Text) => void
   onPictureChange: (picture: Image) => void
-  onCodeChange: (code: string) => void
-  onCodeInputDisabled: () => void
-  onCodeInputEnable: (defaultCode: string) => void
   onAddCodeLineText: (lineNumber: number, textIndex: number) => void
   onAddCodeLine: () => void
   onAddCodeLineInput: (lineNumber: number, textIndex: number) => void
@@ -31,19 +28,19 @@ type Props = {
   onReplaceCodeLineBlockWithText: (lineNumber: number, textIndex: number) => void
   onReplaceCodeLineBlockWithInput: (lineNumber: number, textIndex: number) => void
   onDragEnd: (newItems: SortableItem<QuestionCodeLine>[]) => void
+  onAddItem: () => void
+  onRemoveItem: (itemIndex: number) => void
+  onItemChange: (itemIndex: number, value: string) => void
 }
 
-export const OpenQuestionEditorView = ({
+export const DragAndDropQuestionEditorView = ({
   stem,
   picture,
-  code,
+  dragAndDropItems,
   codeLines,
-  answers,
+  correctItems,
   onStemChange,
   onPictureChange,
-  onCodeChange,
-  onCodeInputDisabled,
-  onCodeInputEnable,
   onAddCodeLineText,
   onAddCodeLine,
   onAddCodeLineInput,
@@ -55,6 +52,9 @@ export const OpenQuestionEditorView = ({
   onReplaceCodeLineBlockWithText,
   onReplaceCodeLineBlockWithInput,
   onDragEnd,
+  onAddItem,
+  onRemoveItem,
+  onItemChange,
 }: Props) => {
   return (
     <div className='space-y-6'>
@@ -65,31 +65,23 @@ export const OpenQuestionEditorView = ({
         onStemChange={onStemChange}
       />
 
-      <CodeInput
-        value={code}
-        onDisable={onCodeInputDisabled}
-        onEnable={onCodeInputEnable}
-        onChange={onCodeChange}
-      />
-
       <div className='space-y-6 translate-x-10'>
-        <Sortable.Container
-          key={codeLines.map((item) => item.index).join()}
-          items={codeLines}
-          onDragEnd={onDragEnd}
-        >
-          {(items) =>
-            items.map((item) => {
-              const line = item.value as QuestionCodeLine
+        <Sortable.Container items={codeLines} onDragEnd={onDragEnd}>
+          {(items) => {
+            let textIndex = -1
+            return items.map((item) => {
+              const line = item.value
               const blocks = line.texts.map((text) => {
-                if (text.startsWith('input')) {
-                  const inputIndex = Number(text.split('-')[1])
+                if (text === 'dropZone') {
+                  textIndex++
                   const widget = (
-                    <ExpandableInput
+                    <DropZoneSelectView
                       key={`${line.number.value}-${text}`}
-                      defaultValue={answers[inputIndex] ?? ''}
-                      onBlur={(value) => onCodeLineInputChange(value, inputIndex)}
-                      className='bg-zinc-800 outline-none border border-zinc-700 rounded-md px-2 py-1 w-max'
+                      items={dragAndDropItems}
+                      index={textIndex}
+                      correctItems={correctItems}
+                      selectedItem={correctItems[textIndex]}
+                      onChange={onCodeLineInputChange}
                     />
                   )
                   return widget
@@ -107,7 +99,7 @@ export const OpenQuestionEditorView = ({
                     key={line.number.toString()}
                     blocks={blocks}
                     indentation={line.indentation.value}
-                    isAddInputDisabled={false}
+                    isAddInputDisabled={correctItems.length >= dragAndDropItems.length}
                     onDelete={() => onRemoveCodeLine(line.number.value)}
                     onAddCodeLineInput={(blockIndex) =>
                       onAddCodeLineInput(line.number.value, blockIndex)
@@ -134,12 +126,22 @@ export const OpenQuestionEditorView = ({
                 </Sortable.Item>
               )
             })
-          }
+          }}
         </Sortable.Container>
       </div>
 
       <div className='w-max mx-auto'>
         <AddItemButton onClick={onAddCodeLine}>Adicionar linha de código</AddItemButton>
+      </div>
+
+      <div className='mt-12'>
+        <DragAndDropItemsControl
+          items={dragAndDropItems}
+          correctItems={correctItems}
+          onAddItem={onAddItem}
+          onRemoveItem={onRemoveItem}
+          onItemChange={onItemChange}
+        />
       </div>
     </div>
   )

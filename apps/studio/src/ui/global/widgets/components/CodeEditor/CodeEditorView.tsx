@@ -11,6 +11,9 @@ type CodeEditorProps = {
   width: number | string
   height: number | string
   isReadOnly?: boolean
+  isMobile: boolean
+  tabSize: number
+  fontSize: number
   onMount: (editor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco) => void
   onChange?: (value: string | undefined) => void
 }
@@ -21,6 +24,9 @@ export const CodeEditorView = ({
   height,
   theme = 'dark-space',
   isReadOnly = false,
+  isMobile,
+  tabSize,
+  fontSize,
   onMount = () => {},
   onChange = () => {},
 }: CodeEditorProps) => {
@@ -36,12 +42,14 @@ export const CodeEditorView = ({
         },
         autoClosingBrackets: 'always',
         autoClosingQuotes: 'always',
-        tabSize: 2,
-        fontSize: 14,
+        tabSize: tabSize,
+        fontSize: fontSize - (isMobile ? 2 : 0),
         fontFamily: 'Menlo',
         cursorStyle: 'line',
         wordWrap: 'off',
-        autoIndent: 'full',
+        autoIndent: 'brackets',
+        formatOnPaste: true,
+        formatOnType: true,
         readOnly: isReadOnly,
         domReadOnly: true,
       }}

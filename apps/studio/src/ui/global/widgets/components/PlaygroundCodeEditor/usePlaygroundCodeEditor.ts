@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Code } from '@stardust/core/global/structures'
 
 import { REGEX } from '@/constants'
-import { useToast } from '@/ui/global/hooks/useToastProvider'
+import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
 import type { CodeEditorRef } from '../CodeEditor/types'
 import type { ConsoleRef } from '../Console/types'
 import type { PromptRef } from '../Prompt/types'
@@ -15,8 +15,8 @@ export function usePlaygroundCodeEditor(
 ) {
   const [outputs, setOutputs] = useState<string[]>([])
   const [shouldOpenPrompt, setShouldOpenPrompt] = useState(false)
-  const lspProvider = useLsp()
-  const toast = useToast()
+  const { lspProvider } = useLsp()
+  const toast = useToastProvider()
   const codeRef = useRef<Code>(Code.create(lspProvider, preCodeValue))
   const codeEditorRef = useRef<CodeEditorRef>(null)
   const consoleRef = useRef<ConsoleRef>(null)

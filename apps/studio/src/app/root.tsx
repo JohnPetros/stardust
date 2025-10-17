@@ -12,7 +12,6 @@ import type { Route } from './+types/root'
 
 import '@/ui/global/styles/global.css'
 import { Toaster } from 'sonner'
-import { AuthContextProvider } from '@/ui/auth/contexts/AuthContext'
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -86,9 +85,7 @@ export const App = () => {
     <div className='w-full h-screen dark'>
       <QueryClientProvider client={queryClient}>
         <Toaster position='top-right' richColors />
-        <AuthContextProvider>
-          <Outlet />
-        </AuthContextProvider>
+        <Outlet />
       </QueryClientProvider>
     </div>
   )

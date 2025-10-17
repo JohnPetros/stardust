@@ -2,7 +2,7 @@ import type { Id } from '@stardust/core/global/structures'
 import type { Question } from '@stardust/core/lesson/abstracts'
 import type { LessonService } from '@stardust/core/lesson/interfaces'
 
-import { useToast } from '@/ui/global/hooks/useToastProvider'
+import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
 import { useActionButtonStore } from '@/ui/global/stores/ActionButtonStore'
 
 export function useQuizActionButton(
@@ -14,7 +14,7 @@ export function useQuizActionButton(
   const { setIsExecuting } = useIsExecuting()
   const { setIsSuccessful } = useIsSuccessful()
   const { setIsFailure } = useIsFailure()
-  const { showError } = useToast()
+  const { showError } = useToastProvider()
 
   async function handleClick() {
     setIsExecuting(true)
