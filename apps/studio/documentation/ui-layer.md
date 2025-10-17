@@ -8,8 +8,7 @@ architecture.
 ## 🏗️ Module Structure
 
 The UI layer is divided into modules that correspond to the application's
-domains. Each module is located in the `/home/petros/stardust/apps/web/src/ui`
-directory.
+domains. Each module is located in the `./apps/web/src/ui` directory.
 
 ```
 src/ui/
@@ -227,7 +226,7 @@ keyword, and their names are prefixed with `handle`, such as `handleClick`,
 ### Example: `LessonPage`
 
 Let's look at the `LessonPage` component, located in
-`/home/petros/stardust/apps/web/src/ui/lesson/widgets/pages/Lesson`.
+`./apps/web/src/ui/lesson/widgets/pages/Lesson`.
 
 ```
 Lesson/
