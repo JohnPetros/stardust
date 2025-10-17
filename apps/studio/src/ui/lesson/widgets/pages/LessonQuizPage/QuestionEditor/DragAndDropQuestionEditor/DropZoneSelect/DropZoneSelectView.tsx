@@ -22,7 +22,6 @@ export const DropZoneSelectView = ({
   onChange,
 }: Props) => {
   const isItemEmpty = selectedItem === ''
-  const firstItem = items[0]
   return (
     <Select value={isItemEmpty ? 'não selecionado' : selectedItem} onValueChange={(value) => onChange(value, index)}>
       <SelectTrigger className='outline-none border border-zinc-300 rounded-md px-2 py-1 w-max'>
