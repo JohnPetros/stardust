@@ -111,13 +111,13 @@ export class DragAndDropQuestion extends Question<DragAndDropQuestionProps> {
   }
 
   addCodeLineInput(codelineNumber: number, codeLineInputIndex: number) {
-    const answerIndex = this.getAnswerIndex(codelineNumber, codeLineInputIndex)
+    const correctItemIndex = this.getCorrectItemIndex(codelineNumber, codeLineInputIndex)
     this.props.codeLines = this.codeLines.map((line) =>
       line.number.value === codelineNumber
         ? line.addText('dropZone', codeLineInputIndex)
         : line,
     )
-    this.props.correctItems = this.correctItems.addAt('', answerIndex)
+    this.props.correctItems = this.correctItems.addAt('', correctItemIndex)
   }
 
   replaceCodeLineBlockWithText(codelineNumber: number, codeLineTextIndex: number) {
@@ -129,17 +129,20 @@ export class DragAndDropQuestion extends Question<DragAndDropQuestionProps> {
   }
 
   replaceCodeLineBlockWithInput(codelineNumber: number, codeLineInputIndex: number) {
-    const answerIndex = this.getAnswerIndex(codelineNumber, codeLineInputIndex)
+    const correctItemIndex = this.getCorrectItemIndex(codelineNumber, codeLineInputIndex)
     this.props.codeLines = this.codeLines.map((line) =>
       line.number.value === codelineNumber
         ? line.replaceText('dropZone', codeLineInputIndex)
         : line,
     )
-    this.props.correctItems = this.correctItems.addAt('', answerIndex)
+    this.props.correctItems = this.correctItems.addAt('', correctItemIndex)
   }
 
-  private getAnswerIndex(codelineNumber: number, codeLineInputIndex: number): number {
-    let answerIndex = 0
+  private getCorrectItemIndex(
+    codelineNumber: number,
+    codeLineInputIndex: number,
+  ): number {
+    let correctItemIndex = 0
     const codeLines = this.codeLines.slice(0, codelineNumber + 1)
 
     for (let codeLineIndex = 0; codeLineIndex < codeLines.length; codeLineIndex++) {
@@ -151,18 +154,26 @@ export class DragAndDropQuestion extends Question<DragAndDropQuestionProps> {
 
       for (const text of texts) {
         if (text === 'dropZone') {
-          answerIndex++
+          correctItemIndex++
         }
       }
     }
 
-    return answerIndex
+    return correctItemIndex
   }
 
   removeCodeLineBlock(codelineNumber: number, blockIndex: number) {
-    this.props.codeLines = this.codeLines.map((line) =>
-      line.number.value === codelineNumber ? line.removeBlock(blockIndex) : line,
-    )
+    this.props.codeLines = this.codeLines.map((line) => {
+      if (line.number.value === codelineNumber) {
+        const block = line.getBlock(blockIndex)
+        if (block === 'dropZone') {
+          const correctItemIndex = this.getCorrectItemIndex(codelineNumber, blockIndex)
+          this.props.correctItems = this.correctItems.removeAt(correctItemIndex)
+        }
+        return line.removeBlock(blockIndex)
+      }
+      return line
+    })
   }
 
   addDragDropItem() {
