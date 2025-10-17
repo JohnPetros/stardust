@@ -83,7 +83,7 @@ export const CodeLineEditorView = ({
       <Tooltip>
         <TooltipTrigger>{indentation}</TooltipTrigger>
         <TooltipContent>
-          <p>Nível de identação ({indentation})</p>
+          <p>Nível de indentação ({indentation})</p>
         </TooltipContent>
       </Tooltip>
     </div>
