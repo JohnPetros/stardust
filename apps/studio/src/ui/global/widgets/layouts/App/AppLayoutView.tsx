@@ -5,7 +5,7 @@ import { Sidebar } from './Sidebar'
 
 export const AppLayoutView = ({ children }: PropsWithChildren) => {
   return (
-    <div className='flex h-screen w-screen flex-col bg-zinc-900'>
+    <div className='flex h-screen w-screen flex-col bg-zinc-950'>
       <Header />
       <div className='flex flex-1 min-h-0'>
         <Sidebar />
