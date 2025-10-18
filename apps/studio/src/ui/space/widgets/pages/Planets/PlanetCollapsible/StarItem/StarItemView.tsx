@@ -4,6 +4,10 @@ import { ROUTES } from '@/constants'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { Link } from '@/ui/global/widgets/components/Link'
 import { Star } from '@/ui/global/widgets/components/Star'
+import { Toggle } from '@/ui/global/widgets/components/Toggle'
+import { Button } from '@/ui/shadcn/components/button'
+import { ConfirmDialog } from '@/ui/global/widgets/components/ConfirmDialog'
+import { ExpandableInput } from '@/ui/lesson/widgets/components/ExpandableInput'
 
 type Props = {
   star: StarEntity
@@ -12,22 +16,22 @@ type Props = {
 
 export const StarItemView = ({ star, isChallenge }: Props) => {
   return (
-    <div className='flex items-center gap-4 bg-zinc-800 rounded-lg py-1 px-4'>
+    <div className='flex items-center gap-4 bg-transparent rounded-lg py-1 px-4'>
       <Icon name='draggable' className='text-zinc-500' size={32} />
       <div className='-translate-x-3'>
         <Star number={star.number.value} size={80} />
       </div>
-      <span className='text-base font-medium text-zinc-100 flex-1 -translate-x-6'>
-        {star.name.value}
-      </span>
-      <div className='flex items-center gap-2 bg-zinc-900 rounded-lg p-2'>
+      <div className='flex-1'>
+        <ExpandableInput defaultValue={star.name.value} onBlur={() => {}} />
+      </div>
+      <div className='flex items-center gap-2 bg-zinc-900 rounded-lg px-4 py-2'>
         {isChallenge ? (
           <Link href={ROUTES.challenging.challenges} className='flex items-center gap-1'>
             <Icon name='challenge' className='text-zinc-400' size={16} />
             <span className='text-zinc-400 text-sm'>Desafio</span>
           </Link>
         ) : (
-          <div className='flex items-center gap-6 '>
+          <div className='flex items-center gap-6'>
             <Link
               href={ROUTES.lesson.story(star.slug)}
               className='flex items-center gap-1'
@@ -47,6 +51,20 @@ export const StarItemView = ({ star, isChallenge }: Props) => {
           </div>
         )}
       </div>
+      <Toggle 
+        label='Disponível para os usuários?'
+        defaultChecked={true}
+        onCheck={() => {}}
+      />
+     <ConfirmDialog 
+        title='Tem certeza que deseja excluir esta deste planeta?' 
+        description='Esta ação não pode ser desfeita.' 
+        onConfirm={() => {}}
+     >
+      <Button variant='ghost' size='icon'>
+          <Icon name='trash' className='text-zinc-400' size={16} />
+        </Button>
+      </ConfirmDialog>
     </div>
   )
 }
