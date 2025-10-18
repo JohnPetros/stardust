@@ -4,6 +4,7 @@ import { SelectionQuestionEditor } from './SelectionQuestionEditor'
 import { CheckboxQuestionEditor } from '../CheckboxEditor'
 import { DragAndDropListQuestionEditor } from './DragAndDropListQuestionEditor'
 import { OpenQuestionEditor } from './OpenQuestionEditor'
+import { DragAndDropQuestionEditor } from './DragAndDropQuestionEditor'
 
 type Props = {
   selectedQuestionType: QuestionType
@@ -16,6 +17,7 @@ export const QuestionEditorView = ({ selectedQuestionType }: Props) => {
       {selectedQuestionType === 'checkbox' && <CheckboxQuestionEditor />}
       {selectedQuestionType === 'open' && <OpenQuestionEditor />}
       {selectedQuestionType === 'drag-and-drop-list' && <DragAndDropListQuestionEditor />}
+      {selectedQuestionType === 'drag-and-drop' && <DragAndDropQuestionEditor />}
     </div>
   )
 }

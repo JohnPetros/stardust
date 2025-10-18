@@ -93,6 +93,30 @@ export class DragAndDrop {
     })
   }
 
+  addItem(): DragAndDrop {
+    this.items.push(
+      DraggableItem.create({
+        index: this.items.length,
+        label: '',
+        dropZoneIndex: DragAndDrop.FIRST_ORIGINAL_DROP_ZONE_INDEX + this.items.length,
+        originalDropZoneIndex:
+          DragAndDrop.FIRST_ORIGINAL_DROP_ZONE_INDEX + this.items.length,
+      }),
+    )
+
+    return this.clone({ items: this.items })
+  }
+
+  removeItem(itemIndex: number): DragAndDrop {
+    this.items.splice(itemIndex, 1)
+    return this.clone({ items: this.items })
+  }
+
+  changeItem(itemIndex: number, itemLabel: string): DragAndDrop {
+    const updatedItem = this.items[itemIndex].setLabel(itemLabel)
+    return this.updateItem(updatedItem)
+  }
+
   private clone(props?: Partial<DragAndDropProps>): DragAndDrop {
     return new DragAndDrop({
       items: this.items,

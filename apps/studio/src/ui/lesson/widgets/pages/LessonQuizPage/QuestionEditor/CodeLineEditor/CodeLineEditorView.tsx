@@ -4,10 +4,12 @@ import { Button } from '@/ui/shadcn/components/button'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { ExpandableInput } from '@/ui/lesson/widgets/components/ExpandableInput'
 import { CodeLineConfigurationDropdownMenu } from './CodeLineConfigurationDropdownMenu'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/ui/shadcn/components/tooltip'
 
 type Props = {
   blocks: ReactNode[]
   indentation: number
+  isAddInputDisabled: boolean
   onDelete: () => void
   onAddCodeLineText: (index: number) => void
   onAddCodeLineInput: (index: number) => void
@@ -21,6 +23,7 @@ type Props = {
 export const CodeLineEditorView = ({
   blocks,
   indentation,
+  isAddInputDisabled,
   onDelete,
   onAddCodeLineText,
   onAddCodeLineInput,
@@ -48,10 +51,7 @@ export const CodeLineEditorView = ({
       <div className='flex items-center gap-2'>
         {blocks.map((block, index) => {
           return (
-            <div
-              key={`${block}-${index.toString()}`}
-              className='group flex items-center gap-2'
-            >
+            <div key={`${block}-${index.toString()}`} className='group flex items-center'>
               {typeof block === 'string' ? (
                 <ExpandableInput
                   defaultValue={block}
@@ -67,6 +67,7 @@ export const CodeLineEditorView = ({
                   indentation={indentation}
                   index={index}
                   isRemoveBlockDisabled={blocks.length === 1}
+                  isAddInputDisabled={isAddInputDisabled}
                   onAddText={onAddCodeLineText}
                   onAddInput={onAddCodeLineInput}
                   onRemoveBlock={onRemoveCodeLineBlock}
@@ -79,7 +80,12 @@ export const CodeLineEditorView = ({
           )
         })}
       </div>
-      <span>{indentation}</span>
+      <Tooltip>
+        <TooltipTrigger>{indentation}</TooltipTrigger>
+        <TooltipContent>
+          <p>Nível de indentação ({indentation})</p>
+        </TooltipContent>
+      </Tooltip>
     </div>
   )
 }

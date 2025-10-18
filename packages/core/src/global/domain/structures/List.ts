@@ -125,6 +125,12 @@ export class List<Item> {
     return Logical.create(this.items.every((item) => item === value))
   }
 
+  removeAt(index: number) {
+    const items = [...this.items]
+    items.splice(index, 1)
+    return List.create(items)
+  }
+
   get random() {
     const randomItem = this.items[Math.floor(Math.random() * this.items.length)]
     if (!randomItem)
