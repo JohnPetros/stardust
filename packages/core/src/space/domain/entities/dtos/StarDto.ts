@@ -4,4 +4,5 @@ export type StarDto = {
   name: string
   number: number
   isAvailable: boolean
+  isChallenge: boolean
 }
