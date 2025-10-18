@@ -1,12 +1,10 @@
-# Realtime Layer - Realtime Communication
+# Camada Realtime - Comunicação em Tempo Real
 
-The realtime layer is responsible for handling all realtime communication in the
-web application. It uses **Supabase** to provide realtime features like live
-updates and presence.
+A camada de tempo real é responsável por lidar com toda a comunicação em tempo real na aplicação web. Ela usa o **Supabase** para fornecer recursos em tempo real, como atualizações ao vivo e presença.
 
-## Structure
+## Estrutura
 
-The realtime layer is located in the `./apps/web/src/realtime` directory.
+A camada de tempo real está localizada no diretório `./apps/web/src/realtime`.
 
 ```
 src/realtime/
@@ -15,16 +13,14 @@ src/realtime/
 └── types/
 ```
 
-- **`supabase`**: Contains the Supabase client for realtime communication.
-- **`types`**: Contains types related to the realtime layer.
+- **`supabase`**: Contém o cliente Supabase para comunicação em tempo real.
+- **`types`**: Contém tipos relacionados à camada de tempo real.
 
-## Supabase Client
+## Cliente Supabase
 
-The `client.ts` file exports a factory function that creates a Supabase browser
-client. This client is used to subscribe to realtime channels and receive live
-updates from the database.
+O arquivo `client.ts` exporta uma factory function que cria um cliente Supabase para o navegador. Este cliente é usado para se inscrever em canais em tempo real e receber atualizações ao vivo do banco de dados.
 
-**Example: `client.ts`**
+**Exemplo: `client.ts`**
 
 ```typescript
 import { createBrowserClient } from "@supabase/ssr";
@@ -36,11 +32,9 @@ export const SupabaseClient = () => {
 };
 ```
 
-## Usage
+## Uso
 
-The `SupabaseClient` is used throughout the application to interact with
-Supabase's realtime features. For example, it can be used in a React hook to
-subscribe to a channel and update the UI in realtime when new data is available.
+O `SupabaseClient` é usado em toda a aplicação para interagir com os recursos em tempo real do Supabase. Por exemplo, ele pode ser usado em um hook React para se inscrever em um canal e atualizar a UI em tempo real quando novos dados estiverem disponíveis.
 
 ```typescript
 import { useEffect, useState } from "react";

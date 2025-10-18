@@ -1,31 +1,28 @@
-# RPC (Remote Procedure Call) Layer
+# Camada RPC (Remote Procedure Call)
 
-The RPC layer is responsible for abstracting the communication between API
-routes and domain services by implementing the **Factory Functions** pattern to
-create reusable and testable actions.
+A camada RPC é responsável por abstrair a comunicação entre as rotas da API e os serviços de domínio, implementando o padrão **Factory Functions** para criar ações reutilizáveis e testáveis.
 
-## Structure
+## Estrutura
 
 ```
 src/rpc/
-├── actions/              # Actions organized by domain
-│   └── rewarding/        # Actions related to rewarding
+├── actions/              # Ações organizadas por domínio
+│   └── rewarding/        # Ações relacionadas a recompensas
 │       ├── AccessStarChallengeRewardingPageAction.ts
 │       └── ...
-├── next/                 # Next.js-specific implementations
-│   └── NextCall.ts       # Adapter for Next.js
-└── next-safe-action/     # next-safe-action clients
+├── next/                 # Implementações específicas do Next.js
+│   └── NextCall.ts       # Adaptador para Next.js
+└── next-safe-action/     # Clientes next-safe-action
     ├── clients/
     ├── rewardingActions.ts
     └── ...
 ```
 
-## Core Concepts
+## Conceitos Principais
 
-### 1. The Call Interface
+### 1. A Interface Call
 
-The `Call<Request>` interface defines the contract for communication between
-actions and routes:
+A interface `Call<Request>` define o contrato para a comunicação entre ações e rotas:
 
 ```typescript
 interface Call<Request = void> {
@@ -37,10 +34,9 @@ interface Call<Request = void> {
 }
 ```
 
-### 2. Actions (Factory Functions)
+### 2. Ações (Factory Functions)
 
-Actions are implemented as **Factory Functions** that receive dependencies and
-return objects with executable methods:
+As ações são implementadas como **Factory Functions** que recebem dependências e retornam objetos com métodos executáveis:
 
 ```typescript
 export const AccessStarChallengeRewardingPageAction = (
@@ -57,46 +53,46 @@ export const AccessStarChallengeRewardingPageAction = (
 };
 ```
 
-### 3. Execution Pattern
+### 3. Padrão de Execução
 
-All actions follow the same pattern:
+Todas as ações seguem o mesmo padrão:
 
-1. **Receive dependencies** via factory function parameters.
-2. **Return an object** with a `handle` method.
-3. **Process data** via `call.get...()` methods.
-4. **Execute the operation** in the domain service.
-5. **Handle errors** by checking `response.isFailure`.
-6. **Return a response** or redirect.
+1.  **Receber dependências** através dos parâmetros da factory function.
+2.  **Retornar um objeto** com um método `handle`.
+3.  **Processar dados** através dos métodos `call.get...()`.
+4.  **Executar a operação** no serviço de domínio.
+5.  **Lidar com erros** verificando `response.isFailure`.
+6.  **Retornar uma resposta** ou redirecionar.
 
-## Architectural Advantages
+## Vantagens Arquiteturais
 
-### 1. **Dependency Inversion**
+### 1. **Inversão de Dependência**
 
-- Actions receive dependencies as parameters.
-- Facilitates unit testing with mocks.
-- Decouples actions from specific implementations.
+-   Ações recebem dependências como parâmetros.
+-   Facilita testes unitários com mocks.
+-   Desacopla ações de implementações específicas.
 
-### 2. **Reusability**
+### 2. **Reutilização**
 
-- Actions can be used in different contexts.
-- The same action works in different frameworks (Next.js, Express, etc.).
-- Centralized business logic.
+-   Ações podem ser usadas em diferentes contextos.
+-   A mesma ação funciona em diferentes frameworks (Next.js, Express, etc.).
+-   Lógica de negócios centralizada.
 
-### 3. **Testability**
+### 3. **Testabilidade**
 
-- Easy to create mocks for dependencies.
-- Isolated tests without external dependencies.
-- Framework-independent validation.
+-   Fácil de criar mocks para dependências.
+-   Testes isolados sem dependências externas.
+-   Validação independente do framework.
 
-### 4. **Consistency**
+### 4. **Consistência**
 
-- A uniform pattern for all actions.
-- Standardized error handling.
-- Predictable and maintainable structure.
+-   Um padrão uniforme para todas as ações.
+-   Tratamento de erros padronizado.
+-   Estrutura previsível e de fácil manutenção.
 
-## Usage in Routes
+## Uso em Rotas
 
-The project uses `next-safe-action` to expose the actions to the UI layer. The actions are wrapped in a client that handles the server-side execution and data validation.
+O projeto usa `next-safe-action` para expor as ações para a camada de UI. As ações são envolvidas em um cliente que lida com a execução do lado do servidor e a validação de dados.
 
 ```typescript
 // src/rpc/next-safe-action/rewardingActions.ts
@@ -112,7 +108,7 @@ import { ProfileService } from '@/rest/services'
 export const accessRewardForStarChallengeCompletionPage = authActionClient
   .schema(
     z.object({
-      // ... zod schema for validation
+      // ... esquema zod para validação
     }),
   )
   .action(async ({ clientInput, ctx }) => {
@@ -127,28 +123,28 @@ export const accessRewardForStarChallengeCompletionPage = authActionClient
   })
 ```
 
-## Call Implementations
+## Implementações de Call
 
 ### NextCall
 
-- Adapts the `Call` interface for Next.js.
-- Integrates with `zod` for validation.
-- Supports Next.js redirects and not found pages.
+-   Adapta a interface `Call` para o Next.js.
+-   Integra com `zod` para validação.
+-   Suporta redirecionamentos e páginas não encontradas do Next.js.
 
-## Organization by Domain
+## Organização por Domínio
 
-Actions are organized into folders by domain (e.g., `rewarding/`) with:
+As ações são organizadas em pastas por domínio (e.g., `rewarding/`) com:
 
-- **Individual files** for each action.
-- **A barrel file** (`index.ts`) for centralized exports.
-- **Consistent naming** following project standards.
+-   **Arquivos individuais** para cada ação.
+-   **Um arquivo barril** (`index.ts`) para exportações centralizadas.
+-   **Nomenclatura consistente** seguindo os padrões do projeto.
 
-## Best Practices
+## Melhores Práticas
 
-1. **Always use Factory Functions** for actions.
-2. **Inject dependencies** via parameters.
-3. **Keep actions focused** on a single responsibility.
-4. **Use barrel files** for organized exports.
-5. **Follow project naming conventions**.
-6. **Handle errors** consistently.
-7. **Document Request types** properly.
+1.  **Sempre use Factory Functions** para ações.
+2.  **Injete dependências** via parâmetros.
+3.  **Mantenha as ações focadas** em uma única responsabilidade.
+4.  **Use arquivos barril** para exportações organizadas.
+5.  **Siga as convenções de nomenclatura** do projeto.
+6.  **Lide com erros** de forma consistente.
+7.  **Documente os tipos de Request** adequadamente.

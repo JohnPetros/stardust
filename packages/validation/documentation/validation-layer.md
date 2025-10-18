@@ -1,12 +1,10 @@
-# Validation Layer - Data Validation with Zod
+# Camada de Validação - Validação de Dados com Zod
 
-The validation layer is responsible for validating data throughout the
-application. It uses the **Zod** library to create and manage validation
-schemas.
+A camada de validação é responsável por validar dados em toda a aplicação. Ela usa a biblioteca **Zod** para criar e gerenciar esquemas de validação.
 
-## Structure
+## Estrutura
 
-The validation layer is located in the `./packages/validation` directory.
+A camada de validação está localizada no diretório `./packages/validation`.
 
 ```
 packages/validation/
@@ -20,21 +18,17 @@ packages/validation/
     └── main.ts
 ```
 
-- **`modules`**: Contains the validation schemas, organized by domain.
-- **`factories`**: Contains factories for creating validation-related objects,
-  such as validation errors.
-- **`main.ts`**: The entry point of the package.
+- **`modules`**: Contém os esquemas de validação, organizados por domínio.
+- **`factories`**: Contém fábricas para criar objetos relacionados à validação, como erros de validação.
+- **`main.ts`**: O ponto de entrada do pacote.
 
-## Schemas
+## Esquemas
 
-Validation schemas are defined using **Zod** and are organized by domain in the
-`modules` directory. This ensures that the validation logic is co-located with
-the domain it belongs to.
+Os esquemas de validação são definidos usando **Zod** e são organizados por domínio no diretório `modules`. Isso garante que a lógica de validação esteja localizada junto com o domínio ao qual pertence.
 
-**Example: `emailSchema.ts`**
+**Exemplo: `emailSchema.ts`**
 
-This file defines a Zod schema for validating email addresses. It extends a base
-`stringSchema` and adds an email-specific validation rule.
+Este arquivo define um esquema Zod para validar endereços de e-mail. Ele estende um `stringSchema` base e adiciona uma regra de validação específica para e-mail.
 
 ```typescript
 import { GLOBAL_ERROR_MESSAGES } from "../constants";
@@ -45,9 +39,6 @@ export const emailSchema = stringSchema.email(
 );
 ```
 
-## Error Handling
+## Tratamento de Erros
 
-The `ZodValidationErrorFactory.ts` file is responsible for creating consistent
-validation error objects. This factory takes a Zod error and transforms it into
-a custom error object that can be used throughout the application. This ensures
-that validation errors are handled in a uniform way.
+O arquivo `ZodValidationErrorFactory.ts` é responsável por criar objetos de erro de validação consistentes. Esta fábrica pega um erro Zod e o transforma em um objeto de erro personalizado que pode ser usado em toda a aplicação. Isso garante que os erros de validação sejam tratados de maneira uniforme.

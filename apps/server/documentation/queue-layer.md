@@ -1,12 +1,10 @@
-# Queue Layer - Background Jobs and Event-Driven Architecture
+# Camada de Fila - Trabalhos em Segundo Plano e Arquitetura Orientada a Eventos
 
-The queue layer is responsible for handling background jobs and enabling an
-event-driven architecture. It uses **Inngest** to manage queues and execute jobs
-asynchronously.
+A camada de fila é responsável por lidar com trabalhos em segundo plano e habilitar uma arquitetura orientada a eventos. Ela usa o **Inngest** para gerenciar filas e executar trabalhos de forma assíncrona.
 
-## Structure
+## Estrutura
 
-The queue layer is located in the `./apps/server/src/queue` directory.
+A camada de fila está localizada no diretório `./apps/server/src/queue`.
 
 ```
 src/queue/
@@ -21,35 +19,31 @@ src/queue/
         └── SendPlanetCompletedNotificationJob.ts
 ```
 
-- **`inngest`**: Contains the Inngest configuration, client, and functions.
-- **`jobs`**: Contains the job definitions, organized by domain.
+- **`inngest`**: Contém a configuração, o cliente e as funções do Inngest.
+- **`jobs`**: Contém as definições de trabalho, organizadas por domínio.
 
 ## Inngest
 
-Inngest is a powerful tool for building reliable and observable background jobs.
-In this project, it is used to:
+O Inngest é uma ferramenta poderosa para construir trabalhos em segundo plano confiáveis e observáveis. Neste projeto, ele é usado para:
 
-- **Create functions** that are triggered by events.
-- **Manage queues** and ensure that jobs are executed reliably.
-- **Provide observability** into the execution of jobs.
+- **Criar funções** que são acionadas por eventos.
+- **Gerenciar filas** e garantir que os trabalhos sejam executados de forma confiável.
+- **Fornecer observabilidade** na execução dos trabalhos.
 
-The `inngest` directory contains:
+O diretório `inngest` contém:
 
-- **`client.ts`**: The Inngest client instance.
-- **`InngestAmqp.ts`**: An adapter to use AMQP (like RabbitMQ) with Inngest.
-- **`InngestEventBroker.ts`**: A custom event broker for Inngest.
-- **`functions/`**: The Inngest functions that are triggered by events.
+- **`client.ts`**: A instância do cliente Inngest.
+- **`InngestAmqp.ts`**: Um adaptador para usar AMQP (como RabbitMQ) com o Inngest.
+- **`InngestEventBroker.ts`**: Um broker de eventos personalizado para o Inngest.
+- **`functions/`**: As funções do Inngest que são acionadas por eventos.
 
-### Inngest Functions
+### Funções do Inngest
 
-Inngest functions are the core of the queue layer. They are responsible for
-listening to events and executing the corresponding jobs.
+As funções do Inngest são o núcleo da camada de fila. Elas são responsáveis por ouvir eventos e executar os trabalhos correspondentes.
 
-**Example: `NotificationFunctions.ts`**
+**Exemplo: `NotificationFunctions.ts`**
 
-This file defines the Inngest functions related to notifications. It creates
-functions that are triggered by events like `PlanetCompletedEvent` and
-`SpaceCompletedEvent`.
+Este arquivo define as funções do Inngest relacionadas a notificações. Ele cria funções que são acionadas por eventos como `PlanetCompletedEvent` e `SpaceCompletedEvent`.
 
 ```typescript
 export class NotificationFunctions extends InngestFunctions {
@@ -67,32 +61,24 @@ export class NotificationFunctions extends InngestFunctions {
     );
   }
 
-  // ... other functions
+  // ... outras funções
 }
 ```
 
-## Jobs
+## Trabalhos
 
-Jobs are the actual business logic that is executed in the background. They are
-organized by domain in the `jobs` directory.
+Os trabalhos são a lógica de negócios real que é executada em segundo plano. Eles são organizados por domínio no diretório `jobs`.
 
-Each job is a class that has a `handle` method. This method is called by the
-Inngest function when the job is executed.
+Cada trabalho é uma classe que possui um método `handle`. Este método é chamado pela função do Inngest quando o trabalho é executado.
 
-## Event-Driven Architecture
+## Arquitetura Orientada a Eventos
 
-The queue layer enables an event-driven architecture, where different parts of
-the application can communicate with each other through events.
+A camada de fila habilita uma arquitetura orientada a eventos, onde diferentes partes da aplicação podem se comunicar umas com as outras através de eventos.
 
-1. An action in the `core` layer dispatches an event (e.g.,
-   `PlanetCompletedEvent`).
-2. The event is sent to the message broker (e.g., RabbitMQ).
-3. Inngest receives the event and triggers the corresponding function (e.g.,
-   `createCreateUserFunction` in `NotificationFunctions`).
-4. The Inngest function executes the job (e.g.,
-   `SendPlanetCompletedNotificationJob`).
-5. The job performs the necessary actions (e.g., sends a notification to
-   Discord).
+1. Uma ação na camada `core` despacha um evento (e.g., `PlanetCompletedEvent`).
+2. O evento é enviado para o broker de mensagens (e.g., RabbitMQ).
+3. O Inngest recebe o evento e aciona a função correspondente (e.g., `createCreateUserFunction` em `NotificationFunctions`).
+4. A função do Inngest executa o trabalho (e.g., `SendPlanetCompletedNotificationJob`).
+5. O trabalho executa as ações necessárias (e.g., envia uma notificação para o Discord).
 
-This architecture decouples the different parts of the application and makes it
-more scalable and resilient.
+Essa arquitetura desacopla as diferentes partes da aplicação e a torna mais escalável e resiliente.

@@ -1,11 +1,8 @@
-# REST Layer - API Communication (Studio App)
+# Camada REST - Comunicação com a API (Aplicação Studio)
 
-The REST layer in the Studio application is responsible for communicating with
-the backend server's REST API. It follows the **Dependency Inversion
-Principle**, where the `core` package defines the service interfaces, and this
-layer provides the concrete implementations.
+A camada REST na aplicação Studio é responsável pela comunicação com a API REST do servidor backend. Ela segue o **Princípio da Inversão de Dependência**, onde o pacote `core` define as interfaces de serviço, e esta camada fornece as implementações concretas.
 
-## Structure
+## Estrutura
 
 ```
 src/rest/
@@ -16,16 +13,14 @@ src/rest/
     └── ...
 ```
 
-- **`services`**: Implementations of the `core` service interfaces. They use a
-  `RestClient` to make requests to the backend server.
-- **`axios`**: Contains the `axios` specific implementation of the `RestClient`.
+- **`services`**: Implementações das interfaces de serviço do `core`. Eles usam um `RestClient` para fazer requisições ao servidor backend.
+- **`axios`**: Contém a implementação específica do `axios` do `RestClient`.
 
-## Services
+## Serviços
 
-Services are factory functions that take a `RestClient` as a dependency and
-return an implementation of a `core` service interface.
+Os serviços são factory functions que recebem um `RestClient` como dependência e retornam uma implementação de uma interface de serviço do `core`.
 
-**Example: `AuthService.ts`**
+**Exemplo: `AuthService.ts`**
 
 ```typescript
 export const AuthService = (restClient: RestClient): IAuthService => {
@@ -36,23 +31,18 @@ export const AuthService = (restClient: RestClient): IAuthService => {
         password: password.value,
       });
     },
-    // ... other methods
+    // ... outros métodos
   };
 };
 ```
 
 ## RestClient
 
-The `RestClient` is an interface from the `core` package that defines the
-contract for making HTTP requests. The `studio` app provides a concrete
-implementation of this interface called `AxiosRestClient`, which is based on the
-`axios` library.
+O `RestClient` é uma interface do pacote `core` que define o contrato para fazer requisições HTTP. A aplicação `studio` fornece uma implementação concreta desta interface chamada `AxiosRestClient`, que é baseada na biblioteca `axios`.
 
-## Communication Flow
+## Fluxo de Comunicação
 
-1. The **UI layer** calls a method on a service from the `rest` layer (e.g.,
-   `AuthService.signIn()`).
-2. The **service** uses the `RestClient` (`AxiosRestClient`) to make an HTTP
-   request to the backend server.
-3. The backend server processes the request and returns a response.
-4. The response is returned back through the same chain to the UI layer.
+1. A **camada de UI** chama um método em um serviço da camada `rest` (e.g., `AuthService.signIn()`).
+2. O **serviço** usa o `RestClient` (`AxiosRestClient`) para fazer uma requisição HTTP para o servidor backend.
+3. O servidor backend processa a requisição e retorna uma resposta.
+4. A resposta é retornada pela mesma cadeia para a camada de UI.

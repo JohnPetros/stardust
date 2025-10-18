@@ -1,13 +1,10 @@
-# Database Layer - Data Persistence
+# Camada de Banco de Dados - Persistência de Dados
 
-The database layer is responsible for all communication with the database. It
-uses **Supabase** as the database provider and follows the **Repository
-Pattern** to decouple the application from the database implementation. This is
-another example of the **Dependency Inversion Principle** in action.
+A camada de banco de dados é responsável por toda a comunicação com o banco de dados. Ela usa o **Supabase** como provedor de banco de dados e segue o **Padrão de Repositório** para desacoplar a aplicação da implementação do banco de dados. Este é outro exemplo do **Princípio da Inversão de Dependência** em ação.
 
-## Structure
+## Estrutura
 
-The database layer is located in the `./apps/server/src/database` directory.
+A camada de banco de dados está localizada no diretório `./apps/server/src/database`.
 
 ```
 src/database/
@@ -23,30 +20,22 @@ src/database/
 └── index.ts
 ```
 
-- **`repositories`**: Contains the concrete implementations of the repository
-  interfaces defined in the `core` package.
-- **`mappers`**: Responsible for mapping the data from the database (Supabase)
-  to the domain entities defined in the `core` package, and vice-versa.
-- **`migrations`**: Contains the database migration scripts.
-- **`errors`**: Contains custom error classes related to database operations.
-- **`types`**: Contains Supabase-specific types.
-- **`config.toml`**: The configuration file for Supabase.
+- **`repositories`**: Contém as implementações concretas das interfaces de repositório definidas no pacote `core`.
+- **`mappers`**: Responsável por mapear os dados do banco de dados (Supabase) para as entidades de domínio definidas no pacote `core`, e vice-versa.
+- **`migrations`**: Contém os scripts de migração do banco de dados.
+- **`errors`**: Contém classes de erro customizadas relacionadas a operações de banco de dados.
+- **`types`**: Contém tipos específicos do Supabase.
+- **`config.toml`**: O arquivo de configuração para o Supabase.
 
-## Repositories
+## Repositórios
 
-Repositories are the core of the database layer. They are responsible for all
-the queries and mutations to the database. They implement the repository
-interfaces defined in the `core` package, which allows the rest of the
-application to be completely unaware of the database implementation.
+Os repositórios são o núcleo da camada de banco de dados. Eles são responsáveis por todas as consultas e mutações no banco de dados. Eles implementam as interfaces de repositório definidas no pacote `core`, o que permite que o resto da aplicação seja completamente ignorante sobre a implementação do banco de dados.
 
-Repositories are organized by domain, just like the other layers of the
-application.
+Os repositórios são organizados por domínio, assim como as outras camadas da aplicação.
 
-**Example: `SupabaseStarsRepository.ts`**
+**Exemplo: `SupabaseStarsRepository.ts`**
 
-This repository implements the `StarsRepository` interface from the `core`
-package and uses the Supabase client to interact with the `stars` table in the
-database.
+Este repositório implementa a interface `StarsRepository` do pacote `core` e usa o cliente Supabase para interagir com a tabela `stars` no banco de dados.
 
 ```typescript
 import type { StarsRepository } from "@stardust/core/space/interfaces";
@@ -72,21 +61,16 @@ export class SupabaseStarsRepository extends SupabaseRepository
     return SupabaseStarMapper.toEntity(data);
   }
 
-  // ... other methods
+  // ... outros métodos
 }
 ```
 
 ## Mappers
 
-Mappers are responsible for converting the data between the database format and
-the domain entities. This is a crucial part of the database layer, as it ensures
-that the domain layer is not polluted with database-specific details.
+Mappers são responsáveis por converter os dados entre o formato do banco de dados e as entidades de domínio. Esta é uma parte crucial da camada de banco de dados, pois garante que a camada de domínio não seja poluída com detalhes específicos do banco de dados.
 
-In the example above, `SupabaseStarMapper.toEntity(data)` is used to convert the
-data from the Supabase client to a `Star` entity.
+No exemplo acima, `SupabaseStarMapper.toEntity(data)` é usado para converter os dados do cliente Supabase para uma entidade `Star`.
 
-## Migrations
+## Migrações
 
-The `migrations` directory contains the SQL scripts that are used to manage the
-database schema. These scripts are executed by the Supabase CLI to apply changes
-to the database.
+O diretório `migrations` contém os scripts SQL que são usados para gerenciar o esquema do banco de dados. Esses scripts são executados pela CLI do Supabase para aplicar alterações ao banco de dados.

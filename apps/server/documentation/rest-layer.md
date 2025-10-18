@@ -1,12 +1,12 @@
-# REST Layer - API Communication
+# Camada REST - Comunicação com a API
 
-The REST layer is responsible for handling all API communication, both on the server-side and the client-side. It follows the **Dependency Inversion Principle**, where the `core` package defines the service interfaces, and the `rest` layer provides the concrete implementations.
+A camada REST é responsável por lidar com toda a comunicação da API, tanto no lado do servidor quanto no lado do cliente. Ela segue o **Princípio da Inversão de Dependência**, onde o pacote `core` define as interfaces de serviço, e a camada `rest` fornece as implementações concretas.
 
-## Structure
+## Estrutura
 
-The `rest` layer is present in both the `server` and `web` applications, with a clear separation of concerns.
+A camada `rest` está presente tanto nas aplicações `server` quanto `web`, com uma clara separação de responsabilidades.
 
-### Server-side (`apps/server/src/rest`)
+### Lado do Servidor (`apps/server/src/rest`)
 
 ```
 src/rest/
@@ -19,10 +19,10 @@ src/rest/
     └── SupabaseAuthService.ts
 ```
 
-- **`controllers`**: Handle incoming HTTP requests, call the appropriate services, and return the response. They are organized by domain.
-- **`services`**: Concrete implementations of services that interact with external APIs (e.g., Discord, Supabase). They use `axios` to make HTTP requests.
+- **`controllers`**: Lidam com as requisições HTTP de entrada, chamam os serviços apropriados e retornam a resposta. Eles são organizados por domínio.
+- **`services`**: Implementações concretas de serviços que interagem com APIs externas (e.g., Discord, Supabase). Eles usam `axios` para fazer requisições HTTP.
 
-### Client-side (`apps/web/src/rest`)
+### Lado do Cliente (`apps/web/src/rest`)
 
 ```
 src/rest/
@@ -34,24 +34,24 @@ src/rest/
     └── ...
 ```
 
-- **`services`**: Implementations of the `core` service interfaces. They use a `RestClient` (in this case, `NextServerRestClient`) to make requests to the backend server.
-- **`controllers`**: Handle client-side requests from the UI layer and call the services.
-- **`next`**: Contains the `Next.js` specific implementation of the `RestClient`.
+- **`services`**: Implementações das interfaces de serviço do `core`. Eles usam um `RestClient` (neste caso, `NextServerRestClient`) para fazer requisições ao servidor backend.
+- **`controllers`**: Lidam com as requisições do lado do cliente da camada de UI e chamam os serviços.
+- **`next`**: Contém a implementação específica do `Next.js` do `RestClient`.
 
-## Server-side REST Layer
+## Camada REST do Lado do Servidor
 
-The server-side REST layer is responsible for exposing the application's functionality to the outside world through a REST API.
+A camada REST do lado do servidor é responsável por expor a funcionalidade da aplicação para o mundo exterior através de uma API REST.
 
-### Controllers
+### Controladores
 
-Controllers are the entry point for all incoming requests. They are responsible for:
-1.  Parsing the request.
-2.  Calling the appropriate service.
-3.  Returning a response.
+Os controladores são o ponto de entrada para todas as requisições de entrada. Eles são responsáveis por:
+1.  Analisar a requisição.
+2.  Chamar o serviço apropriado.
+3.  Retornar uma resposta.
 
-Controllers are implemented as classes that implement the `Controller` interface from the `core` package.
+Os controladores são implementados como classes que implementam a interface `Controller` do pacote `core`.
 
-**Example: `SignInController.ts`**
+**Exemplo: `SignInController.ts`**
 ```typescript
 export class SignInController implements Controller<Schema> {
   constructor(private readonly service: AuthService) {}
@@ -63,22 +63,22 @@ export class SignInController implements Controller<Schema> {
 }
 ```
 
-### Services
+### Serviços
 
-Services contain the business logic that is specific to the server-side. They interact with external services and databases.
+Os serviços contêm a lógica de negócios que é específica do lado do servidor. Eles interagem com serviços externos e bancos de dados.
 
-**Example: `SupabaseAuthService.ts`**
-This service would implement the `AuthService` interface from the `core` package and use the Supabase client to interact with the Supabase authentication service.
+**Exemplo: `SupabaseAuthService.ts`**
+Este serviço implementaria a interface `AuthService` do pacote `core` e usaria o cliente Supabase para interagir com o serviço de autenticação do Supabase.
 
-## Client-side REST Layer (Web App)
+## Camada REST do Lado do Cliente (Aplicação Web)
 
-The client-side REST layer is responsible for communicating with the backend server's REST API.
+A camada REST do lado do cliente é responsável pela comunicação com a API REST do servidor backend.
 
-### Services
+### Serviços
 
-Services on the client-side are factory functions that take a `RestClient` as a dependency and return an implementation of a `core` service interface.
+Os serviços no lado do cliente são factory functions que recebem um `RestClient` como dependência e retornam uma implementação de uma interface de serviço do `core`.
 
-**Example: `AuthService.ts`**
+**Exemplo: `AuthService.ts`**
 ```typescript
 export const AuthService = (restClient: RestClient): IAuthService => {
   return {
@@ -88,20 +88,20 @@ export const AuthService = (restClient: RestClient): IAuthService => {
         password: password.value,
       })
     },
-    // ... other methods
+    // ... outros métodos
   }
 }
 ```
 
 ### RestClient
 
-The `RestClient` is an interface from the `core` package that defines the contract for making HTTP requests. The `web` app provides a concrete implementation of this interface called `NextServerRestClient`, which is adapted for Next.js.
+O `RestClient` é uma interface do pacote `core` que define o contrato para fazer requisições HTTP. A aplicação `web` fornece uma implementação concreta desta interface chamada `NextServerRestClient`, que é adaptada para o Next.js.
 
-## Communication Flow
+## Fluxo de Comunicação
 
-1.  The **UI layer** calls a method on a service from the `rest` layer (e.g., `AuthService.signIn()`).
-2.  The client-side **service** uses the `RestClient` (`NextServerRestClient`) to make an HTTP request to the backend server.
-3.  The backend server's **controller** receives the request.
-4.  The controller calls the appropriate server-side **service**.
-5.  The server-side service interacts with databases or external APIs.
-6.  The response is returned back through the same chain to the UI layer.
+1.  A **camada de UI** chama um método em um serviço da camada `rest` (e.g., `AuthService.signIn()`).
+2.  O **serviço** do lado do cliente usa o `RestClient` (`NextServerRestClient`) para fazer uma requisição HTTP para o servidor backend.
+3.  O **controlador** do servidor backend recebe a requisição.
+4.  O controlador chama o **serviço** apropriado do lado do servidor.
+5.  O serviço do lado do servidor interage com bancos de dados ou APIs externas.
+6.  A resposta é retornada pela mesma cadeia para a camada de UI.

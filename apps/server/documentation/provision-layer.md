@@ -1,13 +1,10 @@
-# Provision Layer - Infrastructure and Service Provisioning
+# Camada de Provisionamento - Provisionamento de Infraestrutura e Serviços
 
-The provision layer is responsible for provisioning the application's
-infrastructure and services. It follows the **Strategy Pattern**, allowing
-different providers to be used for various services like database, monitoring,
-and storage. This makes the application flexible and easy to extend.
+A camada de provisionamento é responsável por provisionar a infraestrutura e os serviços da aplicação. Ela segue o **Padrão de Estratégia**, permitindo que diferentes provedores sejam usados para vários serviços como banco de dados, monitoramento e armazenamento. Isso torna a aplicação flexível e fácil de estender.
 
-## Structure
+## Estrutura
 
-The provision layer is located in the `./apps/server/src/provision` directory.
+A camada de provisionamento está localizada no diretório `./apps/server/src/provision`.
 
 ```
 src/provision/
@@ -21,26 +18,21 @@ src/provision/
     └── SupabaseStorageProvider.ts
 ```
 
-- **`database`**: Contains the database provider (e.g., Supabase).
-- **`monitor`**: Contains the monitoring and telemetry provider (e.g., Sentry).
-- **`storage`**: Contains the storage providers (e.g., Dropbox, Google Drive,
-  Supabase).
+- **`database`**: Contém o provedor de banco de dados (e.g., Supabase).
+- **`monitor`**: Contém o provedor de monitoramento e telemetria (e.g., Sentry).
+- **`storage`**: Contém os provedores de armazenamento (e.g., Dropbox, Google Drive, Supabase).
 
-## Providers
+## Provedores
 
-Providers are classes that implement a specific interface from the `core`
-package and provide the logic for provisioning a service.
+Os provedores são classes que implementam uma interface específica do pacote `core` e fornecem a lógica para provisionar um serviço.
 
-### Database Provider
+### Provedor de Banco de Dados
 
-The database provider is responsible for managing the database, including tasks
-like backups.
+O provedor de banco de dados é responsável por gerenciar o banco de dados, incluindo tarefas como backups.
 
-**Example: `SupabaseDatabaseProvider.ts`**
+**Exemplo: `SupabaseDatabaseProvider.ts`**
 
-This provider implements the `DatabaseProvider` interface from the `core`
-package and provides a `backup` method that uses `pg_dump` to create a backup of
-the Supabase database.
+Este provedor implementa a interface `DatabaseProvider` do pacote `core` e fornece um método `backup` que usa `pg_dump` para criar um backup do banco de dados Supabase.
 
 ```typescript
 import { exec } from "node:child_process";
@@ -78,34 +70,24 @@ export class SupabaseDatabaseProvider implements DatabaseProvider {
 }
 ```
 
-### Monitoring Provider
+### Provedor de Monitoramento
 
-The monitoring provider is responsible for setting up and configuring the
-monitoring and telemetry service.
+O provedor de monitoramento é responsável por configurar o serviço de monitoramento e telemetria.
 
-**`SentryTelemetryProvider.ts`**: This provider would implement the
-`TelemetryProvider` interface and configure Sentry for error tracking and
-performance monitoring.
+**`SentryTelemetryProvider.ts`**: Este provedor implementaria a interface `TelemetryProvider` e configuraria o Sentry para rastreamento de erros and monitoramento de desempenho.
 
-### Storage Providers
+### Provedores de Armazenamento
 
-The storage providers are responsible for managing file storage. The application
-supports multiple storage providers, and the provision layer allows to easily
-switch between them.
+Os provedores de armazenamento são responsáveis por gerenciar o armazenamento de arquivos. A aplicação suporta múltiplos provedores de armazenamento, e a camada de provisionamento permite alternar facilmente entre eles.
 
-- **`DropboxStorageProvider.ts`**: Implements the `StorageProvider` interface
-  using the Dropbox API.
-- **`GoogleDriveStorageProvider.ts`**: Implements the `StorageProvider`
-  interface using the Google Drive API.
-- **`SupabaseStorageProvider.ts`**: Implements the `StorageProvider` interface
-  using the Supabase Storage API.
+- **`DropboxStorageProvider.ts`**: Implementa a interface `StorageProvider` usando a API do Dropbox.
+- **`GoogleDriveStorageProvider.ts`**: Implementa a interface `StorageProvider` usando a API do Google Drive.
+- **`SupabaseStorageProvider.ts`**: Implementa a interface `StorageProvider` usando a API de Armazenamento do Supabase.
 
-## Extensibility
+## Extensibilidade
 
-The provision layer is designed to be easily extensible. To add a new provider,
-you need to:
+A camada de provisionamento é projetada para ser facilmente extensível. Para adicionar um novo provedor, você precisa:
 
-1. Create a new class that implements the corresponding interface from the
-   `core` package.
-2. Add the new provider to the appropriate directory in the `provision` layer.
-3. Update the application's configuration to use the new provider.
+1. Criar uma nova classe que implementa a interface correspondente do pacote `core`.
+2. Adicionar o novo provedor ao diretório apropriado na camada de `provisionamento`.
+3. Atualizar a configuração da aplicação para usar o novo provedor.
