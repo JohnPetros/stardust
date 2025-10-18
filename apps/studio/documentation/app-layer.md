@@ -1,13 +1,13 @@
-# App Layer - React Router and Application Entry Point
+# Camada de Aplicação - React Router e Ponto de Entrada da Aplicação
 
-The app layer is the entry point of the Studio application. It is built with
-**React** and uses **React Router** for navigation. It is responsible for
-setting up the application's root structure, routing, and global context
-providers.
+A camada de aplicação é o ponto de entrada da aplicação Studio. Ela é construída com
+**React** e usa o **React Router** para navegação. É responsável por
+configurar a estrutura raiz da aplicação, o roteamento e os provedores de contexto
+globais.
 
-## Structure
+## Estrutura
 
-The app layer is located in the `./apps/studio/src/app` directory.
+A camada de aplicação está localizada no diretório `./apps/studio/src/app`.
 
 ```
 src/app/
@@ -20,23 +20,24 @@ src/app/
 └── routes.ts
 ```
 
-- **`routes.ts`**: Defines the application's routes using
+- **`routes.ts`**: Define as rotas da aplicação usando
   `@react-router/dev/routes`.
-- **`routes/`**: Contains the components for each route (e.g.,
+- **`routes/`**: Contém os componentes para cada rota (por exemplo,
   `SignInRoute.tsx`).
-- **`layouts/`**: Contains the layout components for the application (e.g.,
+- **`layouts/`**: Contém os componentes de layout para a aplicação (por exemplo,
   `AppLayout.tsx`).
-- **`root.tsx`**: The main entry point of the application, where the router is
-  configured and the root layout is rendered.
-- **`contexts/`**: Contains global context providers for the application.
-- **`middlewares/`**: Contains middlewares for the application.
+- **`root.tsx`**: O ponto de entrada principal da aplicação, onde o roteador é
+  configurado e o layout raiz é renderizado.
+- **`contexts/`**: Contém provedores de contexto globais para a aplicação.
+- **`middlewares/`**: Contém middlewares para a aplicação.
 
-## Routing
+## Roteamento
 
-Routing is handled by **React Router**. The `routes.ts` file defines the route
-configuration for the application, mapping paths to specific route components.
+O roteamento é tratado pelo **React Router**. O arquivo `routes.ts` define a
+configuração de rotas para a aplicação, mapeando caminhos para componentes de rota
+específicos.
 
-**Example: `routes.ts`**
+**Exemplo: `routes.ts`**
 
 ```typescript
 import {
@@ -52,31 +53,31 @@ export default [
   index("routes/SignInRoute.tsx"),
   layout("layouts/AppLayout.tsx", [
     route(ROUTES.space.planets, "routes/PlanetsRoute.tsx"),
-    // ... other routes
+    // ... outras rotas
   ]),
 ] satisfies RouteConfig;
 ```
 
 ## Layouts
 
-The `layouts` directory contains the layout components for the application.
-These components are used to create a consistent layout across multiple pages.
-For example, `AppLayout.tsx` could define the main application layout with a
-sidebar and a header.
+O diretório `layouts` contém os componentes de layout para a aplicação.
+Esses componentes são usados para criar um layout consistente em várias páginas.
+Por exemplo, `AppLayout.tsx` poderia definir o layout principal da aplicação com uma
+barra lateral e um cabeçalho.
 
-## Root Component
+## Componente Raiz
 
-The `root.tsx` file is the main entry point of the application. It is
-responsible for:
+O arquivo `root.tsx` é o ponto de entrada principal da aplicação. Ele é
+responsável por:
 
-- Setting up the root HTML structure.
-- Rendering the `Outlet` component from React Router, which renders the matched
-  route component.
-- Wrapping the application with global context providers, such as
-  `QueryClientProvider` for data fetching and `AuthContextProvider` for
-  authentication.
+- Configurar a estrutura HTML raiz.
+- Renderizar o componente `Outlet` do React Router, que renderiza o componente
+  de rota correspondente.
+- Envolver a aplicação com provedores de contexto globais, como
+  `QueryClientProvider` para busca de dados e `AuthContextProvider` para
+  autenticação.
 
-**Example: `root.tsx`**
+**Exemplo: `root.tsx`**
 
 ```typescript
 export const App = () => {
