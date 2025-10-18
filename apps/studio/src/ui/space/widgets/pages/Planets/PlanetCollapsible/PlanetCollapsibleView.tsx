@@ -18,7 +18,7 @@ export const PlanetCollapsibleView = ({ planet }: Props) => {
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen} className='flex flex-col gap-2'>
-      <div className='flex items-center justify-between gap-6 rounded-xl border border-zinc-700 bg-zinc-800 p-4 py-6 shadow-md'>
+      <div className='flex items-center justify-between gap-6 rounded-xl border border-zinc-900 bg-transparent p-4 py-6 shadow-md'>
         <div className='flex items-center gap-3 min-w-0'>
           <Icon name='draggable' className='text-zinc-500 mr-2' size={32} />
           <img
