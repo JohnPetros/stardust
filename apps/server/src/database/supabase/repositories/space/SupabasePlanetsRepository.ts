@@ -13,7 +13,7 @@ export class SupabasePlanetsRepository
   async findAll(): Promise<Planet[]> {
     const { data, error } = await this.supabase
       .from('planets_view')
-      .select('*, stars(id, name, number, slug)')
+      .select('*, stars(id, name, number, slug, is_available, is_challenge)')
       .order('position', { ascending: true })
       .order('number', { foreignTable: 'stars', ascending: true })
 
@@ -27,7 +27,7 @@ export class SupabasePlanetsRepository
   async findByPosition(position: OrdinalNumber): Promise<Planet | null> {
     const { data, error } = await this.supabase
       .from('planets_view')
-      .select('*, stars(id, name, number, slug)')
+      .select('*, stars(id, name, number, slug, is_available, is_challenge)')
       .eq('position', position.value)
       .order('number', { foreignTable: 'stars', ascending: true })
       .single()
@@ -42,7 +42,7 @@ export class SupabasePlanetsRepository
   async findByStar(starId: Id): Promise<Planet | null> {
     const { data, error } = await this.supabase
       .from('planets_view')
-      .select('*, stars!inner(id, name, number, slug)')
+      .select('*, stars!inner(id, name, number, slug, is_available, is_challenge)')
       .eq('stars.id', starId.value)
       .single()
 
@@ -60,6 +60,20 @@ export class SupabasePlanetsRepository
     }
 
     data.stars = stars
+
+    return SupabasePlanetMapper.toEntity(data)
+  }
+
+  async findById(id: Id): Promise<Planet | null> {
+    const { data, error } = await this.supabase
+      .from('planets_view')
+      .select('*, stars(id, name, number, slug, is_available, is_challenge)')
+      .eq('id', id.value)
+      .single()
+
+    if (error) {
+      return this.handleQueryPostgresError(error)
+    }
 
     return SupabasePlanetMapper.toEntity(data)
   }
