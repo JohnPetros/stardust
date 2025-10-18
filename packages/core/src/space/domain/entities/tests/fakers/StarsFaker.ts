@@ -13,6 +13,8 @@ export class StarsFaker {
       name: faker.person.firstName(),
       number: faker.number.int({ min: 1, max: 20 }),
       slug: faker.lorem.slug(),
+      isAvailable: faker.datatype.boolean(),
+      isChallenge: faker.datatype.boolean(),
       ...baseDto,
     }
   }

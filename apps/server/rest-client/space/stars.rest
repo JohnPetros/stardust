@@ -1,6 +1,6 @@
 @URL = {{BASE_URL}}/space/stars
 @STAR_SLUG = logica-de-programacao
-@STAR_ID = 82279f67-c250-4015-9242-04eed9a1670a
+@STAR_ID = b5698598-cd2a-44de-b560-31798581f9e5
 
 ### Fetch star by slug
 GET {{URL}}/slug/{{STAR_SLUG}}
@@ -10,5 +10,29 @@ Authorization: Bearer {{JWT}}
 GET {{URL}}/id/{{STAR_ID}}
 Authorization: Bearer {{JWT}}
 
+### Edit star name
+PATCH {{URL}}/{{STAR_ID}}/name
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
 
+{
+  "name": "Lógica de Programação"
+}
 
+### Edit star availability
+PATCH {{URL}}/{{STAR_ID}}/availability
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "isAvailable": false
+}
+
+### Edit star type
+PATCH {{URL}}/{{STAR_ID}}/type
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "isChallenge": false
+}

@@ -9,14 +9,16 @@ export class SupabaseStarMapper {
   }
 
   static toDto(supabaseStar: SupabaseStar): StarDto {
-    const StarDto: StarDto = {
+    const starDto: StarDto = {
       id: supabaseStar.id ?? '',
       name: supabaseStar.name ?? '',
       number: supabaseStar.number ?? 1,
       slug: supabaseStar.slug,
+      isAvailable: supabaseStar.is_available ?? true,
+      isChallenge: supabaseStar.is_challenge,
     }
 
-    return StarDto
+    return starDto
   }
 
   static toSupabase(star: Star): SupabaseStar {
@@ -27,6 +29,8 @@ export class SupabaseStarMapper {
       name: StarDto.name,
       number: StarDto.number,
       slug: StarDto.slug,
+      is_available: StarDto.isAvailable,
+      is_challenge: StarDto.isChallenge,
     }
 
     return supabaseStar

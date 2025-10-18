@@ -3,4 +3,6 @@ export type StarDto = {
   slug: string
   name: string
   number: number
+  isAvailable: boolean
+  isChallenge: boolean
 }

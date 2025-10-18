@@ -9,7 +9,7 @@ type Props = {
 
 export const PlanetsPageView = ({ planets }: Props) => {
   return (
-    <div>
+    <div className='max-w-7xl mx-auto py-12'>
       <Button>Novo planeta</Button>
       <div className='flex flex-col gap-4 mt-6'>
         {planets.map((planet) => (

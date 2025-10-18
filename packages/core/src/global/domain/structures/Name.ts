@@ -31,6 +31,10 @@ export class Name {
     return Logical.create(currentValue.includes(text.value.trim().toLowerCase()))
   }
 
+  isEqualTo(name: Name) {
+    return Logical.create(this.value === name.value)
+  }
+
   deduplicate() {
     if (this.isDuplicated.isTrue) {
       const newValue = this.value.replace(this.DUPLICATION_REGEX, (_, numero) => {

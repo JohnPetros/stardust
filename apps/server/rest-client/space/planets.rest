@@ -1,6 +1,24 @@
 @URL = {{BASE_URL}}/space/planets
+@PLANET_ID = 2ee862da-4b73-4fb3-984a-d6ed1743102b
+@STAR_ID = fac02b8f-0286-4772-838e-5e2f1a071bc4
 
 ### Fetch planets
 GET {{URL}}
 Authorization: Bearer {{JWT}}
 
+### Create planet star
+POST {{URL}}/{{PLANET_ID}}/stars
+Authorization: Bearer {{JWT}}
+
+### Reorder planet stars
+PUT {{URL}}/{{PLANET_ID}}/stars
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "starIds": []
+}
+
+### Delete planet star
+DELETE {{URL}}/{{PLANET_ID}}/stars/{{STAR_ID}}
+Authorization: Bearer {{JWT}}

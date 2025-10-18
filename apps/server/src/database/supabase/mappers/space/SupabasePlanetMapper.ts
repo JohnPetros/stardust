@@ -18,6 +18,7 @@ export class SupabasePlanetMapper {
       position: supabasePlanet.position ?? 1,
       completionsCount: supabasePlanet.completions_count ?? 0,
       stars: supabasePlanet.stars.map(SupabaseStarMapper.toDto),
+      isAvailable: supabasePlanet.is_available ?? false,
     }
 
     return planetDto
@@ -34,6 +35,7 @@ export class SupabasePlanetMapper {
       position: planetDto.position,
       completions_count: 0,
       stars: [],
+      is_available: planetDto.isAvailable,
     }
 
     return supabasePlanet
