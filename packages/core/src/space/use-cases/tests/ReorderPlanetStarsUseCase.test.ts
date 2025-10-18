@@ -6,7 +6,7 @@ import { PlanetNotFoundError } from '../../domain/errors'
 import { faker } from '@faker-js/faker'
 import { Id } from '#global/domain/structures/Id'
 
-describe('ReorderPlanetStarsUseCase', () => {
+describe('Reorder Planet Stars Use Case', () => {
   let useCase: ReorderPlanetStarsUseCase
   let planetsRepository: jest.Mocked<PlanetsRepository>
   let starsRepository: jest.Mocked<StarsRepository>

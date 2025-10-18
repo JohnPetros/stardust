@@ -5,7 +5,7 @@ import { StarsFaker } from '../../domain/entities/tests/fakers'
 import { StarNotFoundError } from '../../domain/errors'
 import { faker } from '@faker-js/faker'
 
-describe('EditStarTypeUseCase', () => {
+describe('Edit Star Type Use Case', () => {
   let useCase: EditStarTypeUseCase
   let repository: jest.Mocked<StarsRepository>
 
@@ -22,15 +22,19 @@ describe('EditStarTypeUseCase', () => {
     const result = await useCase.execute({ starId: star.id.value, isChallenge: true })
 
     expect(repository.findById).toHaveBeenCalledWith(star.id)
-    expect(repository.replace).toHaveBeenCalledWith(expect.objectContaining({
-      isChallenge: expect.objectContaining({ value: true })
-    }))
+    expect(repository.replace).toHaveBeenCalledWith(
+      expect.objectContaining({
+        isChallenge: expect.objectContaining({ value: true }),
+      }),
+    )
     expect(result).toEqual(expect.objectContaining({ isChallenge: true }))
   })
 
   it('should throw an error if the star is not found', async () => {
     repository.findById.mockResolvedValue(null)
 
-    await expect(useCase.execute({ starId: faker.string.uuid(), isChallenge: true })).rejects.toThrow(StarNotFoundError)
+    await expect(
+      useCase.execute({ starId: faker.string.uuid(), isChallenge: true }),
+    ).rejects.toThrow(StarNotFoundError)
   })
 })

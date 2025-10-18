@@ -5,7 +5,7 @@ import { PlanetsFaker } from '../../domain/entities/tests/fakers'
 import { PlanetNotFoundError } from '../../domain/errors'
 import { faker } from '@faker-js/faker'
 
-describe('CreatePlanetStarUseCase', () => {
+describe('Create Planet Star Use Case', () => {
   let useCase: CreatePlanetStarUseCase
   let planetsRepository: jest.Mocked<PlanetsRepository>
   let starsRepository: jest.Mocked<StarsRepository>
