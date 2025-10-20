@@ -35,7 +35,11 @@ export const SignInFormView = ({
   className,
   ...props
 }: Props) => {
-  const { form, handleSubmit } = useSignInForm({ toastProvider, authService, navigationProvider })
+  const { form, handleSubmit } = useSignInForm({
+    toastProvider,
+    authService,
+    navigationProvider,
+  })
 
   return (
     <div className={cn('flex flex-col gap-6 text-zinc-100', className)} {...props}>
