@@ -65,4 +65,8 @@ google-key-file.json
 # Cursor
 .cursor/
 
+# Gemini
 GEMINI.md
+
+# GPT Codex
+AGENTS.md
