@@ -4,7 +4,6 @@ import type { Planet } from '../domain/entities'
 
 export interface PlanetsRepository {
   add(planet: Planet): Promise<void>
-  findById(id: Id): Promise<Planet | null>
   findAll(): Promise<Planet[]>
   findByPosition(position: OrdinalNumber): Promise<Planet | null>
   findByStar(starId: Id): Promise<Planet | null>
