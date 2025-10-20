@@ -51,17 +51,17 @@ export const StarItemView = ({ star, isChallenge }: Props) => {
           </div>
         )}
       </div>
-      <Toggle 
+      <Toggle
         label='Disponível para os usuários?'
         defaultChecked={true}
         onCheck={() => {}}
       />
-     <ConfirmDialog 
-        title='Tem certeza que deseja excluir esta deste planeta?' 
-        description='Esta ação não pode ser desfeita.' 
+      <ConfirmDialog
+        title='Tem certeza que deseja excluir esta estrela deste planeta?'
+        description='Esta ação não pode ser desfeita.'
         onConfirm={() => {}}
-     >
-      <Button variant='ghost' size='icon'>
+      >
+        <Button variant='ghost' size='icon'>
           <Icon name='trash' className='text-zinc-400' size={16} />
         </Button>
       </ConfirmDialog>

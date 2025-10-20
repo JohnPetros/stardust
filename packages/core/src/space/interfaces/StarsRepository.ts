@@ -6,5 +6,8 @@ export interface StarsRepository {
   findById(starId: Id): Promise<Star | null>
   findBySlug(starSlug: Slug): Promise<Star | null>
   findByNumber(position: OrdinalNumber): Promise<Star | null>
+  add(star: Star, planetId: Id): Promise<void>
   replace(star: Star): Promise<void>
+  replaceMany(stars: Star[]): Promise<void>
+  remove(starId: Id): Promise<void>
 }

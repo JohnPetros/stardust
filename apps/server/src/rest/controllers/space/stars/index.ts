@@ -1,3 +1,6 @@
 export { AppendNextStarToBodyController } from './AppendNextStarToBodyController'
 export { VerifyStarExistsController } from './VerifyStarExistsController'
 export { FetchStarController } from './FetchStarController'
+export { EditStarNameController } from './EditStarNameController'
+export { EditStarAvailabilityController } from './EditStarAvailabilityController'
+export { EditStarTypeController } from './EditStarTypeController'
