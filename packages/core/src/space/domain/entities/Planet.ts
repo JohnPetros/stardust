@@ -5,7 +5,7 @@ import {
   OrdinalNumber,
   Integer,
   Logical,
-  Id,
+  type Id,
 } from '#global/domain/structures/index'
 import type { PlanetDto } from './dtos'
 import { EmptyPlanetError, StarNotFoundError } from '../errors'
@@ -125,16 +125,32 @@ export class Planet extends Entity<PlanetProps> {
     return this.props.name
   }
 
+  set name(name: Name) {
+    this.props.name = name
+  }
+
   get image(): Image {
     return this.props.image
+  }
+
+  set image(image: Image) {
+    this.props.image = image
   }
 
   get icon(): Image {
     return this.props.icon
   }
 
+  set icon(icon: Image) {
+    this.props.icon = icon
+  }
+
   get position(): OrdinalNumber {
     return this.props.position
+  }
+
+  set position(position: OrdinalNumber) {
+    this.props.position = position
   }
 
   get stars(): Star[] {
