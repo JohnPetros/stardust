@@ -4,6 +4,7 @@ import type { FilesListingParams } from '../types'
 
 export interface StorageProvider {
   upload(folder: StorageFolder, file: File): Promise<File>
+  findFile(folder: StorageFolder, fileName: Text): Promise<File | null>
   listFiles(
     params: FilesListingParams,
   ): Promise<{ files: File[]; totalFilesCount: number }>

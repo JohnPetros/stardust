@@ -4,7 +4,7 @@ import { AppError } from '@stardust/core/global/errors'
 import type { StorageProvider } from '@stardust/core/storage/interfaces'
 import type { FilesListingParams } from '@stardust/core/storage/types'
 import type { StorageFolder } from '@stardust/core/storage/structures'
-import type { Text } from '@stardust/core/global/structures'
+import { Text } from '@stardust/core/global/structures'
 
 import { ENV } from '@/constants'
 
@@ -65,22 +65,44 @@ export class SupabaseStorageProvider implements StorageProvider {
 
     for (const item of data) {
       if (item.name) {
-        const { data: urlData } = this.supabase.storage
-          .from(SupabaseStorageProvider.BUCKET_NAME)
-          .getPublicUrl(`${folder.name}/${item.name}`)
-
-        if (urlData?.publicUrl) {
-          const response = await fetch(urlData.publicUrl)
-          const blob = await response.blob()
-          const file = new File([blob], item.name, {
-            type: item.metadata?.mimetype || 'application/octet-stream',
-          })
-          files.push(file)
-        }
+        const file = await this.getFile(folder, Text.create(item.name))
+        if (file) files.push(file)
       }
     }
 
     return { files, totalFilesCount: response.data?.length ?? 0 }
+  }
+
+  async findFile(folder: StorageFolder, fileName: Text): Promise<File | null> {
+    const { data, error } = await this.supabase.storage
+      .from(SupabaseStorageProvider.BUCKET_NAME)
+      .list(folder.name, {
+        offset: 0,
+        search: fileName.value,
+      })
+
+    if (error) {
+      this.handleError(error)
+    }
+
+    if (!data?.length) {
+      return null
+    }
+
+    return this.getFile(folder, fileName)
+  }
+
+  private async getFile(folder: StorageFolder, fileName: Text): Promise<File | null> {
+    const { data: urlData } = this.supabase.storage
+      .from(SupabaseStorageProvider.BUCKET_NAME)
+      .getPublicUrl(`${folder.name}/${fileName.value}`)
+
+    const response = await fetch(urlData.publicUrl)
+    const blob = await response.blob()
+    const file = new File([blob], fileName.value, {
+      type: 'application/octet-stream',
+    })
+    return file
   }
 
   async removeFile(folder: StorageFolder, fileName: Text): Promise<void> {
