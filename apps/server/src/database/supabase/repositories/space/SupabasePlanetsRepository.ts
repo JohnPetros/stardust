@@ -63,4 +63,44 @@ export class SupabasePlanetsRepository
 
     return SupabasePlanetMapper.toEntity(data)
   }
+
+  async add(planet: Planet): Promise<void> {
+    const { error } = await this.supabase.from('planets').insert({
+      name: planet.name.value,
+      icon: planet.icon.value,
+      image: planet.image.value,
+      position: planet.position.value,
+    })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
+  async replace(planet: Planet): Promise<void> {
+    const { error } = await this.supabase
+      .from('planets')
+      .update({
+        name: planet.name.value,
+        icon: planet.icon.value,
+        image: planet.image.value,
+        position: planet.position.value,
+      })
+      .eq('id', planet.id.value)
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
+  async remove(planet: Planet): Promise<void> {
+    const { error } = await this.supabase
+      .from('planets')
+      .delete()
+      .eq('id', planet.id.value)
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
 }
