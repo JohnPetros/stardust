@@ -1,9 +1,10 @@
 import { mock } from 'ts-jest-mocker'
+import { faker } from '@faker-js/faker'
+
 import { ReorderPlanetStarsUseCase } from '../ReorderPlanetStarsUseCase'
 import type { PlanetsRepository, StarsRepository } from '../../interfaces'
 import { PlanetsFaker } from '../../domain/entities/tests/fakers'
 import { PlanetNotFoundError } from '../../domain/errors'
-import { faker } from '@faker-js/faker'
 import { Id } from '#global/domain/structures/Id'
 
 describe('Reorder Planet Stars Use Case', () => {

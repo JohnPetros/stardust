@@ -1,9 +1,10 @@
 import { mock } from 'ts-jest-mocker'
+import { faker } from '@faker-js/faker'
+
 import { CreatePlanetStarUseCase } from '../CreatePlanetStarUseCase'
 import type { PlanetsRepository, StarsRepository } from '../../interfaces'
 import { PlanetsFaker } from '../../domain/entities/tests/fakers'
 import { PlanetNotFoundError } from '../../domain/errors'
-import { faker } from '@faker-js/faker'
 
 describe('Create Planet Star Use Case', () => {
   let useCase: CreatePlanetStarUseCase
