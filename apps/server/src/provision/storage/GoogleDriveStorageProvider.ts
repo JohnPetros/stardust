@@ -5,6 +5,7 @@ import { AppError } from '@stardust/core/global/errors'
 import type { StorageProvider } from '@stardust/core/storage/interfaces'
 import type { StorageFolder } from '@stardust/core/storage/structures'
 import type { StorageFolderName } from '@stardust/core/storage/types'
+import type { Text } from '@stardust/core/global/structures'
 import { MethodNotImplementedError } from '@stardust/core/global/errors'
 
 export class GoogleDriveStorageProvider implements StorageProvider {
@@ -61,6 +62,10 @@ export class GoogleDriveStorageProvider implements StorageProvider {
 
   async listFiles(): Promise<{ files: File[]; totalFilesCount: number }> {
     throw new MethodNotImplementedError('listFiles')
+  }
+
+  async findFile(folder: StorageFolder, fileName: Text): Promise<File | null> {
+    throw new Error('Method not implemented.')
   }
 
   async removeFile(): Promise<void> {
