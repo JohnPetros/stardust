@@ -33,6 +33,7 @@ import type { IconName } from '../types/IconName'
 export const ICONS: Record<IconName, LucideIcon> = {
   'arrow-down': ChevronDown,
   'arrow-up': ChevronUp,
+  'sign-out': LogOut,
   image: Image,
   user: User,
   achievement: Flag,
@@ -48,7 +49,6 @@ export const ICONS: Record<IconName, LucideIcon> = {
   submit: HardDriveUpload,
   rocket: Rocket,
   loading: Loader2,
-  'sign-out': LogOut,
   spinner: Loader,
   history: BookOpen,
   questions: HelpCircle,
