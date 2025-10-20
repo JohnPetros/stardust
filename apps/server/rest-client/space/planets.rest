@@ -1,10 +1,41 @@
 @URL = {{BASE_URL}}/space/planets
-@PLANET_ID = 2ee862da-4b73-4fb3-984a-d6ed1743102b
+@PLANET_ID = d5dc752f-31d6-4231-ae72-d05050fc69ee
 @STAR_ID = fac02b8f-0286-4772-838e-5e2f1a071bc4
 
 ### Fetch planets
 GET {{URL}}
 Authorization: Bearer {{JWT}}
+
+### Create planet
+POST {{URL}}
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "name": "Planeta novo",
+  "icon": "icon.png",
+  "image": "image.png"
+}
+
+### Update planet
+PUT {{URL}}/{{PLANET_ID}}
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "name": "Planeta editado de novo",
+  "icon": "eita.png",
+  "image": "imagem2.png"
+}
+
+### Reorder planets
+PUT {{URL}}/order
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "planetIds": []
+}
 
 ### Create planet star
 POST {{URL}}/{{PLANET_ID}}/stars
@@ -18,6 +49,10 @@ Content-Type: application/json
 {
   "starIds": []
 }
+
+### Delete planet
+DELETE {{URL}}/{{PLANET_ID}}
+Authorization: Bearer {{JWT}}
 
 ### Delete planet star
 DELETE {{URL}}/{{PLANET_ID}}/stars/{{STAR_ID}}

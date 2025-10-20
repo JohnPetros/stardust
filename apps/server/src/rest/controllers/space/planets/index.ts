@@ -1,4 +1,8 @@
 export { FetchAllPlanetsController } from './FetchAllPlanetsController'
+export { CreatePlanetController } from './CreatePlanetController'
 export { CreatePlanetStarController } from './CreatePlanetStarController'
+export { ReorderPlanetsController } from './ReorderPlanetsController'
 export { ReorderPlanetStarsController } from './ReorderPlanetStarsController'
 export { DeletePlanetStarController } from './DeletePlanetStarController'
+export { DeletePlanetController } from './DeletePlanetController'
+export { UpdatePlanetController } from './UpdatePlanetController'
