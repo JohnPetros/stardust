@@ -27,7 +27,7 @@ export const StarItemView = ({
   onDelete,
 }: Props) => {
   return (
-    <div className='flex items-center gap-4 bg-transparent rounded-lg py-1 px-4 pl-12'>
+    <div className='flex items-center gap-4 bg-transparent w-full rounded-lg py-1 px-4 pl-12'>
       <div className=''>
         <Star number={star.number.value} size={80} />
       </div>
