@@ -1,7 +1,7 @@
 import type { StarDto } from './StarDto'
 
 export type PlanetDto = {
-  id: string
+  id?: string
   name: string
   icon: string
   image: string

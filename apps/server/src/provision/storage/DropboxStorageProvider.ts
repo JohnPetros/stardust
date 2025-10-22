@@ -55,6 +55,10 @@ export class DropboxStorageProvider implements StorageProvider {
     throw new MethodNotImplementedError('listFiles')
   }
 
+  async findFile(): Promise<File | null> {
+    throw new MethodNotImplementedError('findFile')
+  }
+
   async removeFile(): Promise<void> {
     throw new MethodNotImplementedError('removeFile')
   }
