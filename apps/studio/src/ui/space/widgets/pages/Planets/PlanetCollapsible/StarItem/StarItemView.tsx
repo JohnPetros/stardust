@@ -12,17 +12,27 @@ import { ExpandableInput } from '@/ui/lesson/widgets/components/ExpandableInput'
 type Props = {
   star: StarEntity
   isChallenge: boolean
+  onNameChange: (name: string) => void
+  onAvailabilityChange: (isAvailable: boolean) => void
+  onTypeChange: (isChallenge: boolean) => void
+  onDelete: (starId: string) => void
 }
 
-export const StarItemView = ({ star, isChallenge }: Props) => {
+export const StarItemView = ({
+  star,
+  isChallenge,
+  onNameChange,
+  onAvailabilityChange,
+  onTypeChange,
+  onDelete,
+}: Props) => {
   return (
-    <div className='flex items-center gap-4 bg-transparent rounded-lg py-1 px-4'>
-      <Icon name='draggable' className='text-zinc-500' size={32} />
-      <div className='-translate-x-3'>
+    <div className='flex items-center gap-4 bg-transparent rounded-lg py-1 px-4 pl-12'>
+      <div className=''>
         <Star number={star.number.value} size={80} />
       </div>
       <div className='flex-1'>
-        <ExpandableInput defaultValue={star.name.value} onBlur={() => {}} />
+        <ExpandableInput defaultValue={star.name.value} onBlur={onNameChange} />
       </div>
       <div className='flex items-center gap-2 bg-zinc-900 rounded-lg px-4 py-2'>
         {isChallenge ? (
@@ -51,15 +61,21 @@ export const StarItemView = ({ star, isChallenge }: Props) => {
           </div>
         )}
       </div>
+
       <Toggle
         label='Disponível para os usuários?'
-        defaultChecked={true}
-        onCheck={() => {}}
+        defaultChecked={star.isAvailable.value}
+        onCheck={onAvailabilityChange}
+      />
+      <Toggle
+        label='É um desafio?'
+        defaultChecked={star.isChallenge.value}
+        onCheck={onTypeChange}
       />
       <ConfirmDialog
         title='Tem certeza que deseja excluir esta estrela deste planeta?'
         description='Esta ação não pode ser desfeita.'
-        onConfirm={() => {}}
+        onConfirm={() => onDelete(star.id.value)}
       >
         <Button variant='ghost' size='icon'>
           <Icon name='trash' className='text-zinc-400' size={16} />

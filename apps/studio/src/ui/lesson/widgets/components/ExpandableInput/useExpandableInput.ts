@@ -1,4 +1,5 @@
 import { type RefObject, useEffect, useState } from 'react'
+import { useEventListener } from 'usehooks-ts'
 
 export function useExpandableInput(
   defaultValue: string,
@@ -11,6 +12,14 @@ export function useExpandableInput(
     setValue(value)
   }
 
+  function handleKeyUp(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      if (inputRef.current) {
+        inputRef.current.blur()
+      }
+    }
+  }
+
   useEffect(() => {
     if ((value || value === '') && spanRef.current && inputRef.current) {
       inputRef.current.style.width = `${spanRef.current.offsetWidth + 8}px`
@@ -20,6 +29,8 @@ export function useExpandableInput(
   useEffect(() => {
     setValue(defaultValue)
   }, [defaultValue])
+
+  useEventListener('keyup', handleKeyUp, inputRef)
 
   return {
     value,

@@ -1,23 +1,45 @@
-import React from 'react'
 import { CollapsibleContent } from '@radix-ui/react-collapsible'
 
-import type { Planet } from '@stardust/core/space/entities'
+import type { Planet, Star } from '@stardust/core/space/entities'
 
 import { Button } from '@/ui/shadcn/components/button'
 import { Collapsible, CollapsibleTrigger } from '@/ui/shadcn/components/collapsible'
 import { Icon } from '../../../../../global/widgets/components/Icon'
 import { Metric } from '../Metric'
 import { StarItem } from './StarItem'
+import { AddItemButton } from '@/ui/lesson/widgets/components/AddItemButton'
+import type { SortableItem } from '@/ui/global/widgets/components/Sortable/types'
+import { Sortable } from '@/ui/global/widgets/components/Sortable'
 
 type Props = {
+  isOpen: boolean
   planet: Planet
+  stars: SortableItem<Star>[]
+  onOpenChange: (isOpen: boolean) => void
+  onCreate: () => void
+  onDelete: (starId: string) => void
+  onDragEnd: (
+    newItems: SortableItem<Star>[],
+    originItemPosition: number,
+    targetItemPosition: number,
+  ) => void
 }
 
-export const PlanetCollapsibleView = ({ planet }: Props) => {
-  const [isOpen, setIsOpen] = React.useState(false)
-
+export const PlanetCollapsibleView = ({
+  isOpen,
+  planet,
+  stars,
+  onOpenChange,
+  onCreate,
+  onDelete,
+  onDragEnd,
+}: Props) => {
   return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen} className='flex flex-col gap-2'>
+    <Collapsible
+      open={isOpen}
+      onOpenChange={onOpenChange}
+      className='flex flex-col gap-2'
+    >
       <div className='flex items-center justify-between gap-6 rounded-xl border border-zinc-900 bg-transparent p-4 py-6 shadow-md'>
         <div className='flex items-center gap-3 min-w-0'>
           <Icon name='draggable' className='text-zinc-500 mr-2' size={32} />
@@ -73,13 +95,25 @@ export const PlanetCollapsibleView = ({ planet }: Props) => {
       </div>
       <CollapsibleContent className='flex flex-col gap-2 px-8 pb-2'>
         <div className='flex flex-col gap-2'>
-          {planet.stars.map((star, index) => (
-            <StarItem
-              key={star.id.value}
-              star={star}
-              isChallenge={index === planet.starsCount.value - 1}
-            />
-          ))}
+          <Sortable.Container items={stars} onDragEnd={onDragEnd}>
+            {(items) => {
+              return items.map((item) => {
+                const star = item.value
+                return (
+                  <Sortable.Item
+                    key={item.index}
+                    id={item.index.toString()}
+                    iconSize={36}
+                  >
+                    <StarItem star={star} onDelete={onDelete} />
+                  </Sortable.Item>
+                )
+              })
+            }}
+          </Sortable.Container>
+          <AddItemButton className='w-40 mx-auto' onClick={onCreate}>
+            Adicionar estrela
+          </AddItemButton>
         </div>
       </CollapsibleContent>
     </Collapsible>
