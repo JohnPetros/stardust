@@ -23,6 +23,8 @@ type PlanetProps = {
 
 export class Planet extends Entity<PlanetProps> {
   static create(dto: PlanetDto): Planet {
+    const stars = dto.stars.map(Star.create)
+    stars.sort((a, b) => a.number.value - b.number.value)
     return new Planet(
       {
         name: Name.create(dto.name),
@@ -33,11 +35,11 @@ export class Planet extends Entity<PlanetProps> {
           dto.completionsCount,
           'Quantidade de usuários que completaram esse planeta',
         ),
-        stars: dto.stars.map(Star.create),
         isAvailable: Logical.create(
           dto.isAvailable,
           'O planeta está disponível para os usuários?',
         ),
+        stars,
       },
       dto.id,
     )
