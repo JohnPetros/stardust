@@ -5,9 +5,9 @@ type Props = {
   spanRef: RefObject<HTMLSpanElement | null>
   inputRef: RefObject<HTMLInputElement | null>
   placeholder?: string
+  className?: string
   onValueChange?: (value: string) => void
   onBlur?: (value: string) => void
-  className?: string
 }
 
 export const ExpandableInputView = ({
