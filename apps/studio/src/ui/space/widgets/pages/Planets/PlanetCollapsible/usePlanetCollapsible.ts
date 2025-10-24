@@ -5,6 +5,7 @@ import { Planet, Star } from '@stardust/core/space/entities'
 import type { SpaceService } from '@stardust/core/space/interfaces'
 import { Id } from '@stardust/core/global/structures'
 import type { SortableItem } from '@/ui/global/widgets/components/Sortable/types'
+import type { PlanetDto } from '@stardust/core/space/entities/dtos'
 
 type Params = {
   service: SpaceService
@@ -15,6 +16,18 @@ type Params = {
 export function usePlanetCollapsible({ service, toastProvider, defaultPlanet }: Params) {
   const [isOpen, setIsOpen] = useState(false)
   const [planet, setPlanet] = useState<Planet>(defaultPlanet)
+
+  async function handlePlanetChange(planetDto: PlanetDto) {
+    const planet = Planet.create(planetDto)
+    const response = await service.updatePlanet(planet)
+
+    if (response.isFailure) {
+      toastProvider.showError(response.errorMessage)
+      return
+    }
+
+    setPlanet(planet)
+  }
 
   async function handleStarCreate() {
     const response = await service.createPlanetStar(planet.id, planet.lastStar)
@@ -68,6 +81,7 @@ export function usePlanetCollapsible({ service, toastProvider, defaultPlanet }: 
       index: star.number.value,
       value: star,
     })),
+    handlePlanetChange,
     handleStarCreate,
     handleStarDelete,
     handleOpenChange,

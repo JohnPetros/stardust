@@ -10,14 +10,17 @@ import { StarItem } from './StarItem'
 import { AddItemButton } from '@/ui/lesson/widgets/components/AddItemButton'
 import type { SortableItem } from '@/ui/global/widgets/components/Sortable/types'
 import { Sortable } from '@/ui/global/widgets/components/Sortable'
+import { ExpandableInput } from '@/ui/lesson/widgets/components/ExpandableInput'
+import type { PlanetDto } from '@stardust/core/space/entities/dtos'
 
 type Props = {
   isOpen: boolean
   planet: Planet
   stars: SortableItem<Star>[]
+  onPlanetChange: (planetDto: PlanetDto) => void
   onOpenChange: (isOpen: boolean) => void
-  onCreate: () => void
-  onDelete: (starId: string) => void
+  onStarCreate: () => void
+  onStarDelete: (starId: string) => void
   onDragEnd: (
     newItems: SortableItem<Star>[],
     originItemPosition: number,
@@ -30,8 +33,9 @@ export const PlanetCollapsibleView = ({
   planet,
   stars,
   onOpenChange,
-  onCreate,
-  onDelete,
+  onStarCreate,
+  onPlanetChange,
+  onStarDelete,
   onDragEnd,
 }: Props) => {
   return (
@@ -50,13 +54,15 @@ export const PlanetCollapsibleView = ({
           />
           <div className='flex flex-col min-w-0'>
             <div className='flex items-center gap-2'>
-              <h3 className='font-bold text-zinc-100 truncate max-w-[160px]'>
+              <h3 className='text-base font-semibold text-zinc-300'>
                 {planet.name.value}
               </h3>
-              <Icon
-                name='edition'
-                className='text-zinc-400 size-4 cursor-pointer hover:text-primary transition-colors'
-              />
+              <Button variant='ghost' size='icon'>
+                <Icon
+                  name='edition'
+                  className='text-zinc-400 size-4 cursor-pointer hover:text-primary transition-colors'
+                />
+              </Button>
             </div>
             <div className='grid place-items-center bg-green-700 rounded-lg p-1'>
               <img
@@ -105,13 +111,13 @@ export const PlanetCollapsibleView = ({
                     id={item.index.toString()}
                     iconSize={36}
                   >
-                    <StarItem star={star} onDelete={onDelete} />
+                    <StarItem star={star} onDelete={onStarDelete} />
                   </Sortable.Item>
                 )
               })
             }}
           </Sortable.Container>
-          <AddItemButton className='w-40 mx-auto' onClick={onCreate}>
+          <AddItemButton className='w-40 mx-auto' onClick={onStarCreate}>
             Adicionar estrela
           </AddItemButton>
         </div>

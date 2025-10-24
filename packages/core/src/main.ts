@@ -118,3 +118,6 @@ export * from './storage/use-cases/index'
 
 // Notification
 export * from './notification/interfaces/index'
+
+// UI
+export * from './ui/interfaces/index'

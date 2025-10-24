@@ -1,6 +1,6 @@
 import { useSignOutButton } from './useSignOutButton'
 import { useRest } from '@/ui/global/hooks/useRest'
-import { useNavigationProvider } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { SignOutButtonView } from './SignOutButtonView'
 import { SESSION_STORAGE_KEYS } from '@/constants'
 import { useSessionStorage } from 'usehooks-ts'

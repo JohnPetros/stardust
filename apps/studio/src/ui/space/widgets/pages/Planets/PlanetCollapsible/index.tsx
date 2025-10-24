@@ -16,6 +16,7 @@ export const PlanetCollapsible = ({ planet: defaultPlanet }: Props) => {
     planet,
     stars,
     handleOpenChange,
+    handlePlanetChange,
     handleStarCreate,
     handleStarDelete,
     handleDragEnd,
@@ -30,9 +31,10 @@ export const PlanetCollapsible = ({ planet: defaultPlanet }: Props) => {
       planet={planet}
       stars={stars}
       isOpen={isOpen}
+      onPlanetChange={handlePlanetChange}
       onOpenChange={handleOpenChange}
-      onCreate={handleStarCreate}
-      onDelete={handleStarDelete}
+      onStarCreate={handleStarCreate}
+      onStarDelete={handleStarDelete}
       onDragEnd={handleDragEnd}
     />
   )

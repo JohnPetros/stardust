@@ -40,11 +40,12 @@ export const ImageInputView = ({
         <div className='flex flex-col gap-6'>
           <FileUpload onFilesChange={(files) => onFileChange(files[0] ?? null)} />
           <InputWithError
-            errorMessage={imageNameError}
+            errorMessage={imageNameError ?? ''}
             value={imageName}
             label='Nome da imagem'
             placeholder='pandinha.png'
             onChange={(event) => onNameChange(event.target.value)}
+            onBlur={(event) => onNameChange(event.target.value)}
           />
           <Button
             disabled={!isFilled || isSubmitting}

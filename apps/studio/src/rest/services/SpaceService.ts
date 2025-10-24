@@ -1,12 +1,27 @@
 import type { SpaceService as ISpaceService } from '@stardust/core/space/interfaces'
 import type { RestClient } from '@stardust/core/global/interfaces'
-import type { Id, Slug, Text, Logical } from '@stardust/core/global/structures'
+import type {
+  Id,
+  Slug,
+  Text,
+  Logical,
+  Name,
+  Image,
+} from '@stardust/core/global/structures'
 import type { Star } from '@stardust/core/space/entities'
 
 export const SpaceService = (restClient: RestClient): ISpaceService => {
   return {
     async fetchPlanets() {
       return await restClient.get('/space/planets')
+    },
+
+    async createPlanet(planetName: Name, planetIcon: Image, planetImage: Image) {
+      return await restClient.post('/space/planets', {
+        name: planetName.value,
+        icon: planetIcon.value,
+        image: planetImage.value,
+      })
     },
 
     async createPlanetStar(planetId: Id, star: Star) {
