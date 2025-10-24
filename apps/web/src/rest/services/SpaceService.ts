@@ -9,6 +9,14 @@ export const SpaceService = (restClient: RestClient): ISpaceService => {
       return await restClient.get('/space/planets')
     },
 
+    async createPlanet(planetName: Name, planetIcon: Image, planetImage: Image) {
+      return await restClient.post('/space/planets', {
+        name: planetName.value,
+        icon: planetIcon.value,
+        image: planetImage.value,
+      })
+    },
+
     async createPlanetStar(planetId: Id, star: Star) {
       return await restClient.post(`/space/planets/${planetId.value}/stars`, star.dto)
     },

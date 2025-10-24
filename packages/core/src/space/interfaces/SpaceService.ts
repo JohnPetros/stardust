@@ -1,13 +1,26 @@
 import type { RestResponse } from '#global/responses/RestResponse'
-import type { Id, Logical, Slug, Text } from '#global/domain/structures/index'
+import type {
+  Id,
+  Image,
+  Logical,
+  Name,
+  Slug,
+  Text,
+} from '#global/domain/structures/index'
 import type { PlanetDto, StarDto } from '../domain/entities/dtos'
-import type { Star } from '../domain/entities'
+import type { Planet, Star } from '../domain/entities'
 
 export interface SpaceService {
   fetchStarBySlug(starSlug: Slug): Promise<RestResponse<StarDto>>
   fetchStarById(starId: Id): Promise<RestResponse<StarDto>>
   fetchPlanets(): Promise<RestResponse<PlanetDto[]>>
+  createPlanet(
+    planetName: Name,
+    planetIcon: Image,
+    planetImage: Image,
+  ): Promise<RestResponse<PlanetDto[]>>
   createPlanetStar(planetId: Id, star: Star): Promise<RestResponse<StarDto>>
+  updatePlanet(planet: Planet): Promise<RestResponse<PlanetDto>>
   reorderPlanetStars(planetId: Id, starIds: Id[]): Promise<RestResponse>
   deletePlanetStar(planetId: Id, starId: Id): Promise<RestResponse>
   editStarName(starId: Id, name: Text): Promise<RestResponse<StarDto>>
