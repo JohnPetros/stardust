@@ -72,7 +72,6 @@ export const OpenQuestionEditorView = ({
   onReplaceCodeLineBlockWithInput,
   onDragEnd,
 }: Props) => {
-  console.log(answers)
   return (
     <div className='space-y-6'>
       <QuestionHeaderInput

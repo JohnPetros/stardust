@@ -51,7 +51,6 @@ export class List<Item> {
   }
 
   changeItem(item: Item, index: number) {
-    console.log(item, index)
     if (!item) return new List(this.items)
 
     const items = [...this.items]

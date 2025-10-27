@@ -110,7 +110,6 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
         ? line.addText('input', codeLineInputIndex)
         : line,
     )
-    console.log({answerIndex})
     this.props.answers = this.answers.addAt('', answerIndex)
   }
 
@@ -135,7 +134,6 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
   private getAnswerIndex(codelineNumber: number, codeLineInputIndex: number): number {
     let answerIndex = 0
     let targetCodeLineInputIndex = 0
-    console.log({codelineNumber, codeLineInputIndex})
 
     for (const line of this.codeLines) {
       for (const text of line.texts) {
