@@ -8,7 +8,7 @@ import type {
   Name,
   Image,
 } from '@stardust/core/global/structures'
-import type { Star } from '@stardust/core/space/entities'
+import type { Planet } from '@stardust/core/space/entities'
 
 export const SpaceService = (restClient: RestClient): ISpaceService => {
   return {
@@ -24,8 +24,18 @@ export const SpaceService = (restClient: RestClient): ISpaceService => {
       })
     },
 
-    async createPlanetStar(planetId: Id, star: Star) {
-      return await restClient.post(`/space/planets/${planetId.value}/stars`, star.dto)
+    async createPlanetStar(planetId: Id) {
+      return await restClient.post(`/space/planets/${planetId.value}/stars`)
+    },
+
+    async updatePlanet(planet: Planet) {
+      return await restClient.put(`/space/planets/${planet.id.value}`, planet.dto)
+    },
+
+    async reorderPlanets(planetIds: Id[]) {
+      return await restClient.put('/space/planets/list/order', {
+        planetIds: planetIds.map((planetId) => planetId.value),
+      })
     },
 
     async reorderPlanetStars(planetId: Id, starIds: Id[]) {
@@ -38,6 +48,10 @@ export const SpaceService = (restClient: RestClient): ISpaceService => {
       return await restClient.delete(
         `/space/planets/${planetId.value}/stars/${starId.value}`,
       )
+    },
+
+    async deletePlanet(planetId: Id) {
+      return await restClient.delete(`/space/planets/${planetId.value}`)
     },
 
     async fetchStarBySlug(starSlug: Slug) {

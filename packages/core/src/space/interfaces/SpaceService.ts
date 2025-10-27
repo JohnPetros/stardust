@@ -8,7 +8,7 @@ import type {
   Text,
 } from '#global/domain/structures/index'
 import type { PlanetDto, StarDto } from '../domain/entities/dtos'
-import type { Planet, Star } from '../domain/entities'
+import type { Planet } from '../domain/entities'
 
 export interface SpaceService {
   fetchStarBySlug(starSlug: Slug): Promise<RestResponse<StarDto>>
@@ -19,9 +19,11 @@ export interface SpaceService {
     planetIcon: Image,
     planetImage: Image,
   ): Promise<RestResponse<PlanetDto[]>>
-  createPlanetStar(planetId: Id, star: Star): Promise<RestResponse<StarDto>>
+  createPlanetStar(planetId: Id): Promise<RestResponse<StarDto>>
   updatePlanet(planet: Planet): Promise<RestResponse<PlanetDto>>
+  reorderPlanets(planetsIds: Id[]): Promise<RestResponse<PlanetDto[]>>
   reorderPlanetStars(planetId: Id, starIds: Id[]): Promise<RestResponse>
+  deletePlanet(planetId: Id): Promise<RestResponse>
   deletePlanetStar(planetId: Id, starId: Id): Promise<RestResponse>
   editStarName(starId: Id, name: Text): Promise<RestResponse<StarDto>>
   editStarAvailability(starId: Id, isAvailable: Logical): Promise<RestResponse<StarDto>>
