@@ -48,7 +48,12 @@ export const PictureInputView = ({
   return (
     <Dialog ref={dialogRef}>
       <DialogTrigger className='cursor-pointer'>
-        <StorageImage src={selectedImage} alt='Imagem' className='w-12 h-10' />
+        <StorageImage
+          folder='story'
+          src={selectedImage}
+          alt='Imagem'
+          className='w-12 h-10'
+        />
       </DialogTrigger>
       <DialogContent
         showCloseButton
@@ -65,7 +70,12 @@ export const PictureInputView = ({
           />
           <div className='flex items-center justify-between gap-2 px-3 py-1 w-64 border border-zinc-700 rounded text-sm text-zinc-300'>
             Selecionado:
-            <StorageImage src={selectedImage} alt='Imagem' className='w-10 h-8' />
+            <StorageImage
+              folder='story'
+              src={selectedImage}
+              alt='Imagem'
+              className='w-10 h-8'
+            />
           </div>
           <ImageInput folder='story' onSubmit={onSubmitImage}>
             <Button variant='outline' className='flex items-center gap-2'>

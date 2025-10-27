@@ -7,14 +7,14 @@ import { Image } from '@stardust/core/global/structures'
 import { QuestionFactory } from '@stardust/core/lesson/factories'
 
 import { useActionButtonStore } from '@/ui/global/stores/ActionButtonStore'
-import type { QuizContextValue } from './QuizContextValue'
 import type { SortableItem } from '@/ui/global/widgets/components/Sortable/types'
+import type { QuizContextValue } from './QuizContextValue'
 
 export function useQuizContextProvider(questionsDtos: QuestionDto[]) {
   const [questions, setQuestions] = useState<SortableItem<Question>[]>(
-    questionsDtos.map((dto, index) => ({
-      index,
-      value: QuestionFactory.produce(dto),
+    questionsDtos.map((dto) => ({
+      id: dto.id as string,
+      data: QuestionFactory.produce(dto),
     })),
   )
   const [selectedQuestion, setSelectedQuestion] = useState<SortableItem<Question>>(
@@ -31,7 +31,7 @@ export function useQuizContextProvider(questionsDtos: QuestionDto[]) {
     setCanExecute(true)
   }, [setCanExecute, setIsSuccessful, setIsFailure])
 
-  const value: QuizContextValue = useMemo(() => {
+  const data: QuizContextValue = useMemo(() => {
     function addQuestion(questionType: QuestionType) {
       let question: QuestionDto
 
@@ -82,30 +82,30 @@ export function useQuizContextProvider(questionsDtos: QuestionDto[]) {
           }
           break
       }
-      const newQuestionIndex = questions.length
+      const newQuestionData = QuestionFactory.produce(question)
       const newQuestion = {
-        index: newQuestionIndex,
-        value: QuestionFactory.produce(question),
+        id: newQuestionData.id.value,
+        data: newQuestionData,
       }
       setQuestions((questions) => [...questions, newQuestion])
       setSelectedQuestion(newQuestion)
       enableActionButton()
     }
 
-    function removeQuestion(questionIndex: number) {
+    function removeQuestion(questionId: string) {
       const filteredQuestions = questions
-        .filter((question) => question.index !== questionIndex)
-        .map((question, index) => ({
-          index,
-          value: question.value,
+        .filter((question) => question.id !== questionId)
+        .map((question) => ({
+          id: question.id,
+          data: question.data,
         }))
       setQuestions(filteredQuestions)
       setSelectedQuestion(filteredQuestions[0])
       enableActionButton()
     }
 
-    function selectQuestion(questionIndex: number) {
-      const question = questions.find((question) => question.index === questionIndex)
+    function selectQuestion(questionId: string) {
+      const question = questions.find((question) => question.id === questionId)
       if (!question) return
       setSelectedQuestion(question)
     }
@@ -113,8 +113,8 @@ export function useQuizContextProvider(questionsDtos: QuestionDto[]) {
     function replaceSelectedQuestion(question: Question) {
       setQuestions((questions) =>
         questions.map((currentQuestion) =>
-          currentQuestion.index === selectedQuestion.index
-            ? { ...currentQuestion, value: question }
+          currentQuestion.id === selectedQuestion.id
+            ? { ...currentQuestion, data: question }
             : currentQuestion,
         ),
       )
@@ -137,5 +137,5 @@ export function useQuizContextProvider(questionsDtos: QuestionDto[]) {
     }
   }, [questions, selectedQuestion, enableActionButton])
 
-  return value
+  return data
 }

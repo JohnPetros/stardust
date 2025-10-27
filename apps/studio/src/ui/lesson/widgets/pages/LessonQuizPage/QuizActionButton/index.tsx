@@ -15,7 +15,7 @@ export const QuizActionButton = () => {
   const { isDisabled, handleClick } = useQuizActionButton(
     lessonService,
     Id.create(starId),
-    questions.map((question) => question.value),
+    questions.map((question) => question.data),
   )
 
   return <QuizActionButtonView isDisabled={isDisabled} onClick={handleClick} />

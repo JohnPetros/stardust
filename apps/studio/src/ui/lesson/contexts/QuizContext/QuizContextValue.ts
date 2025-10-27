@@ -5,13 +5,13 @@ import type { Question } from '@stardust/core/lesson/abstracts'
 export type QuizContextValue = {
   questions: SortableItem<Question>[]
   selectedQuestion: SortableItem<Question>
-  selectQuestion: (questionIndex: number) => void
+  selectQuestion: (questionId: string) => void
   addQuestion: (questionType: QuestionType) => void
   replaceSelectedQuestion: (question: Question) => void
-  removeQuestion: (questionIndex: number) => void
+  removeQuestion: (questionId: string) => void
   reorderQuestions: (
     questions: SortableItem<Question>[],
-    originQuestionIndex: number,
-    targetQuestionIndex: number,
+    originQuestionId: string,
+    targetQuestionId: string,
   ) => void
 }

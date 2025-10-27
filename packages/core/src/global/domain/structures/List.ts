@@ -51,11 +51,16 @@ export class List<Item> {
   }
 
   changeItem(item: Item, index: number) {
+    console.log(item, index)
     if (!item) return new List(this.items)
 
     const items = [...this.items]
     items[index] = item
     return new List(items)
+  }
+
+  filter(predicate: (item: Item, index: number) => boolean) {
+    return new List(this.items.filter(predicate))
   }
 
   becomeEmpty() {

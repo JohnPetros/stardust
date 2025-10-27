@@ -1,4 +1,4 @@
-export type SortableItem<Value = unknown> = {
-  index: number
-  value: Value
+export type SortableItem<Data = unknown> = {
+  id: string
+  data: Data
 }
