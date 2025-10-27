@@ -1,6 +1,14 @@
 import type { SpaceService as ISpaceService } from '@stardust/core/space/interfaces'
 import type { RestClient } from '@stardust/core/global/interfaces'
-import type { Id, Slug, Text, Logical } from '@stardust/core/global/structures'
+import type {
+  Id,
+  Slug,
+  Name,
+  Text,
+  Logical,
+  Image,
+} from '@stardust/core/global/structures'
+import type { Planet } from '@stardust/core/space/entities'
 
 export const SpaceService = (restClient: RestClient): ISpaceService => {
   return {
