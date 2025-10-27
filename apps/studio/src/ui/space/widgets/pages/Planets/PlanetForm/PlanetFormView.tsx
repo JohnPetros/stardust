@@ -29,7 +29,7 @@ const PLANETS_FOLDER = StorageFolder.createAsPlanets()
 
 type Props = {
   planetDto?: PlanetDto
-  storageService: StorageService 
+  storageService: StorageService
   onSubmit: (planetDto: Pick<PlanetDto, 'name' | 'icon' | 'image'>) => void
 }
 
@@ -39,12 +39,17 @@ export const PlanetFormView = ({
   storageService,
   onSubmit,
 }: PropsWithChildren<Props>) => {
-  const { form, planetImage, planetIcon, isSubmitting, isDialogOpen, handleSubmit, handleDialogChange } = usePlanetForm({ planetDto, storageService, onSubmit })
+  const {
+    form,
+    planetImage,
+    planetIcon,
+    isSubmitting,
+    isDialogOpen,
+    handleSubmit,
+    handleDialogChange,
+  } = usePlanetForm({ planetDto, storageService, onSubmit })
   const imageUrl = useStorageImage(PLANETS_FOLDER, planetImage)
   const iconUrl = useStorageImage(PLANETS_FOLDER, planetIcon)
-
-  console.log(planetImage)
-  console.log(imageUrl)
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
@@ -75,10 +80,7 @@ export const PlanetFormView = ({
                   <FormItem>
                     <FormLabel>Imagem do planeta</FormLabel>
                     <FormControl>
-                      <ImageInput
-                        folder={PLANETS_FOLDER.name}
-                        onSubmit={field.onChange}
-                      >
+                      <ImageInput folder={PLANETS_FOLDER.name} onSubmit={field.onChange}>
                         <Button
                           variant='ghost'
                           className='rounded-full border border-dashed mt-2 w-20 h-20'
@@ -106,22 +108,19 @@ export const PlanetFormView = ({
                   <FormItem>
                     <FormLabel>Ícone do planeta</FormLabel>
                     <FormControl>
-                      <ImageInput
-                        folder={PLANETS_FOLDER.name}
-                        onSubmit={field.onChange}
-                      >
+                      <ImageInput folder={PLANETS_FOLDER.name} onSubmit={field.onChange}>
                         <Button
                           variant='ghost'
                           className='border border-dashed mt-2 w-48 h-12'
                         >
-                         {planetIcon ? (
-                          <div className='w-full h-full bg-primary'>
-                            <img
-                              src={iconUrl}
-                              className='h-full w-full object-contain'
-                              alt='Icon'
-                            />
-                          </div>
+                          {planetIcon ? (
+                            <div className='w-full h-full bg-primary'>
+                              <img
+                                src={iconUrl}
+                                className='h-full w-full object-contain'
+                                alt='Icon'
+                              />
+                            </div>
                           ) : (
                             <Icon name='upload' />
                           )}
@@ -138,7 +137,14 @@ export const PlanetFormView = ({
           <DialogClose asChild>
             <Button variant='outline'>Cancelar</Button>
           </DialogClose>
-          <Button form='planet-form' type='submit' isLoading={isSubmitting} disabled={isSubmitting}>Criar</Button>
+          <Button
+            form='planet-form'
+            type='submit'
+            isLoading={isSubmitting}
+            disabled={isSubmitting}
+          >
+            {planetDto ? 'Atualizar' : 'Criar'}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

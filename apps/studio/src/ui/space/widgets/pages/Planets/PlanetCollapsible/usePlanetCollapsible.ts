@@ -1,19 +1,26 @@
 import { useState } from 'react'
 
-import type { ToastProvider } from '@stardust/core/global/interfaces'
-import { Planet, Star } from '@stardust/core/space/entities'
-import type { SpaceService } from '@stardust/core/space/interfaces'
 import { Id } from '@stardust/core/global/structures'
+import { Planet, Star } from '@stardust/core/space/entities'
+import type { ToastProvider } from '@stardust/core/global/interfaces'
+import type { SpaceService } from '@stardust/core/space/interfaces'
 import type { SortableItem } from '@/ui/global/widgets/components/Sortable/types'
 import type { PlanetDto } from '@stardust/core/space/entities/dtos'
+import type { UiProvider } from '@stardust/core/ui/interfaces'
 
 type Params = {
   service: SpaceService
   toastProvider: ToastProvider
+  uiProvider: UiProvider
   defaultPlanet: Planet
 }
 
-export function usePlanetCollapsible({ service, toastProvider, defaultPlanet }: Params) {
+export function usePlanetCollapsible({
+  service,
+  toastProvider,
+  uiProvider,
+  defaultPlanet,
+}: Params) {
   const [isOpen, setIsOpen] = useState(false)
   const [planet, setPlanet] = useState<Planet>(defaultPlanet)
 
@@ -30,7 +37,7 @@ export function usePlanetCollapsible({ service, toastProvider, defaultPlanet }: 
   }
 
   async function handleStarCreate() {
-    const response = await service.createPlanetStar(planet.id, planet.lastStar)
+    const response = await service.createPlanetStar(planet.id)
 
     if (response.isFailure) {
       toastProvider.showError(response.errorMessage)
@@ -60,7 +67,7 @@ export function usePlanetCollapsible({ service, toastProvider, defaultPlanet }: 
   }
 
   async function handleDragEnd(stars: SortableItem<Star>[]) {
-    const starsIds = stars.map((star) => star.value.id)
+    const starsIds = stars.map((star) => star.data.id)
     const response = await service.reorderPlanetStars(planet.id, starsIds)
 
     if (response.isFailure) {
@@ -74,16 +81,32 @@ export function usePlanetCollapsible({ service, toastProvider, defaultPlanet }: 
     })
   }
 
+  async function handlePlanetDelete() {
+    const response = await service.deletePlanet(planet.id)
+
+    if (response.isFailure) {
+      toastProvider.showError(response.errorMessage)
+      return
+    }
+
+    if (response.isSuccessful) {
+      await uiProvider.reload()
+    }
+
+    setIsOpen(false)
+  }
+
   return {
     isOpen,
     planet,
     stars: planet.stars.map((star) => ({
-      index: star.number.value,
-      value: star,
+      id: star.id.value,
+      data: star,
     })),
     handlePlanetChange,
     handleStarCreate,
     handleStarDelete,
+    handlePlanetDelete,
     handleOpenChange,
     handleDragEnd,
   }
