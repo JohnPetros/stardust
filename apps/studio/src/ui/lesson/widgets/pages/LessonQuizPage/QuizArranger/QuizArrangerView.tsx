@@ -18,19 +18,19 @@ const QUESTION_TYPE_LABELS: Record<QuestionType, string> = {
 
 type Props = {
   questions: SortableItem<Question>[]
-  selectedQuestionIndex: number
-  onSelectQuestion: (questionIndex: number) => void
-  onRemoveQuestion: (questionIndex: number) => void
+  selectedQuestionId: string
+  onSelectQuestion: (questionId: string) => void
+  onRemoveQuestion: (questionId: string) => void
   onDragEnd: (
     questions: SortableItem<Question>[],
-    originQuestionIndex: number,
-    targetQuestionIndex: number,
+    originQuestionId: string,
+    targetQuestionId: string,
   ) => void
 }
 
 export const QuizArrangerView = ({
   questions,
-  selectedQuestionIndex,
+  selectedQuestionId,
   onSelectQuestion,
   onRemoveQuestion,
   onDragEnd,
@@ -45,15 +45,15 @@ export const QuizArrangerView = ({
       <Sortable.Container items={questions} onDragEnd={onDragEnd}>
         {(items) =>
           items.map((item, position) => {
-            const questionIndex = item.index
-            const isSelected = questionIndex === selectedQuestionIndex
-            const questionType = item.value.type
+            const questionId = item.id
+            const isSelected = questionId === selectedQuestionId
+            const questionType = item.data.type
             return (
-              <Sortable.Item key={item.index} id={item.index.toString()}>
+              <Sortable.Item key={item.id} id={item.id}>
                 <ConfirmDialog
                   title='Remover questão'
                   description='Tem certeza que deseja remover a questão?'
-                  onConfirm={() => onRemoveQuestion(questionIndex)}
+                  onConfirm={() => onRemoveQuestion(questionId)}
                 >
                   <Button
                     variant='ghost'
@@ -68,7 +68,7 @@ export const QuizArrangerView = ({
                 </ConfirmDialog>
                 <button
                   type='button'
-                  onClick={() => onSelectQuestion(questionIndex)}
+                  onClick={() => onSelectQuestion(questionId)}
                   className={cn(
                     'flex h-10 w-full items-center rounded-md px-3 border border-zinc-700 bg-zinc-800',
                     'text-zinc-100',

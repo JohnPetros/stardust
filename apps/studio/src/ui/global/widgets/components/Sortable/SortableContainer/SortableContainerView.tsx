@@ -21,8 +21,8 @@ type Props<ItemValue> = {
   children: (items: SortableItem<ItemValue>[]) => ReactNode
   onDragEnd: (
     newItems: SortableItem<ItemValue>[],
-    originItemPosition: number,
-    targetItemPosition: number,
+    originItemId: string,
+    targetItemId: string,
   ) => void
 }
 
@@ -46,7 +46,7 @@ export const SortableContainerView = <ItemValue,>({
       onDragEnd={handleDragEnd}
     >
       <SortableContext
-        items={items.map((item) => item.index.toString())}
+        items={items.map((item) => item.id)}
         strategy={verticalListSortingStrategy}
       >
         {children(items)}

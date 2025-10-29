@@ -6,7 +6,7 @@ import { useOpenQuestionEditor } from './useOpenQuestionEditor'
 
 export const OpenQuestionEditor = () => {
   const { selectedQuestion, replaceSelectedQuestion } = useQuizContext()
-  const question = selectedQuestion.value as OpenQuestion
+  const question = selectedQuestion.data as OpenQuestion
   const {
     codeLines,
     handleStemInputChange,

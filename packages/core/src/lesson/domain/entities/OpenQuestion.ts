@@ -41,7 +41,7 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
   }
 
   addCodeLine() {
-    const codelineNumber = this.codeLines.length
+    const codelineNumber = this.codeLines.length + 1
 
     this.props.codeLines = [
       ...this.codeLines,
@@ -54,6 +54,25 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
   }
 
   removeCodeLine(codelineNumber: number) {
+    const answerIndexesToRemove: number[] = []
+
+    let answerIndex = 0
+
+    for (const line of this.codeLines) {
+      for (const text of line.texts) {
+        if (text.startsWith('input')) {
+          if (line.number.value === codelineNumber) {
+            answerIndexesToRemove.push(answerIndex)
+          }
+          answerIndex++
+        }
+      }
+    }
+
+    this.props.answers = this.props.answers.filter(
+      (_, index) => !answerIndexesToRemove.includes(index),
+    )
+
     this.props.codeLines = this.codeLines.filter(
       (line) => line.number.value !== codelineNumber,
     )
@@ -76,11 +95,12 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
   }
 
   addCodeLineText(codelineNumber: number, codeLineTextIndex: number) {
-    this.props.codeLines = this.codeLines.map((line) =>
-      line.number.value === codelineNumber
-        ? line.addText('texto', codeLineTextIndex)
-        : line,
-    )
+    this.props.codeLines = this.codeLines.map((line) => {
+      if (line.number.value === codelineNumber) {
+        return line.addText('texto', codeLineTextIndex)
+      }
+      return line
+    })
   }
 
   addCodeLineInput(codelineNumber: number, codeLineInputIndex: number) {
@@ -113,19 +133,23 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
 
   private getAnswerIndex(codelineNumber: number, codeLineInputIndex: number): number {
     let answerIndex = 0
-    const codeLines = this.codeLines.slice(0, codelineNumber + 1)
+    let targetCodeLineInputIndex = 0
 
-    for (let codeLineIndex = 0; codeLineIndex < codeLines.length; codeLineIndex++) {
-      const line = this.codeLines[codeLineIndex]
-      const texts =
-        codeLineIndex === codelineNumber
-          ? line.texts.slice(0, codeLineInputIndex)
-          : line.texts
-
-      for (const text of texts) {
-        if (text.startsWith('input')) {
-          answerIndex++
+    for (const line of this.codeLines) {
+      for (const text of line.texts) {
+        if (line.number.value === codelineNumber) {
+          if (targetCodeLineInputIndex === codeLineInputIndex) {
+            return answerIndex
+          }
+          targetCodeLineInputIndex++
+      
         }
+        if (text.startsWith('input')) {
+            answerIndex++
+        }
+            if (targetCodeLineInputIndex >= line.texts.length) {
+            return answerIndex
+          }
       }
     }
 

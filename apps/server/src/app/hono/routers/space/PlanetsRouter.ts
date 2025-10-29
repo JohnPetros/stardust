@@ -142,12 +142,12 @@ export class PlanetsRouter extends HonoRouter {
 
   private registerReorderPlanetsRoute(): void {
     this.router.put(
-      '/order',
+      '/list/order',
       this.authMiddleware.verifyAuthentication,
       this.validationMiddleware.validate(
         'json',
         z.object({
-          planetIds: z.array(idSchema),
+          planetIds: z.array(stringSchema),
         }),
       ),
       async (context) => {

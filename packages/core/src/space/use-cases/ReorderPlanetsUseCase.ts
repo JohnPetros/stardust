@@ -1,15 +1,15 @@
-import type { UseCase } from '#global/interfaces/UseCase'
-import { Id } from '#global/domain/structures/Id'
-import type { PlanetsRepository } from '../interfaces'
-import { Planet } from '../domain/entities'
-import { PlanetNotFoundError } from '../domain/errors'
 import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
+import type { UseCase } from '#global/interfaces/UseCase'
+import type { PlanetsRepository } from '../interfaces/PlanetsRepository'
+import type { Planet } from '../domain/entities/Planet'
+import type { PlanetDto } from '../domain/entities/dtos/PlanetDto'
+import { PlanetNotFoundError } from '../domain/errors'
 
 type Request = {
   planetIds: string[]
 }
 
-type Response = Promise<void>
+type Response = Promise<PlanetDto[]>
 
 export class ReorderPlanetsUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: PlanetsRepository) {}
@@ -28,5 +28,6 @@ export class ReorderPlanetsUseCase implements UseCase<Request, Response> {
     }
 
     await this.repository.replaceMany(reorderedPlanets)
+    return reorderedPlanets.map((planet) => planet.dto)
   }
 }

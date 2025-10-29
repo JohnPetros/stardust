@@ -6,7 +6,7 @@ import { useQuizContext } from '@/ui/global/hooks/useQuizContext'
 
 export const DragAndDropListQuestionEditor = () => {
   const { selectedQuestion, replaceSelectedQuestion } = useQuizContext()
-  const question = selectedQuestion.value as DragAndDropListQuestion
+  const question = selectedQuestion.data as DragAndDropListQuestion
   const {
     sortableItems,
     handleItemAdd,

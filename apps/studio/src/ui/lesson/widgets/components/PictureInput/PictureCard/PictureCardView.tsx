@@ -32,7 +32,7 @@ export const PictureCardView = ({
         className='p-2 hover:bg-zinc-800 rounded cursor-pointer'
         onClick={() => onClick(imageName)}
       >
-        <StorageImage src={imageName} alt='Imagem' className='w-32 h-32' />
+        <StorageImage folder='story' src={imageName} alt='Imagem' className='w-32 h-32' />
       </button>
       <Tooltip content={imageName}>
         <ClipboardButton text={imageName} className='bg-transparent border-none'>

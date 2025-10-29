@@ -8,7 +8,7 @@ export const QuestionEditor = () => {
     return null
   }
 
-  const question = selectedQuestion.value
+  const question = selectedQuestion.data
 
   return <QuestionEditorView selectedQuestionType={question.type} />
 }
