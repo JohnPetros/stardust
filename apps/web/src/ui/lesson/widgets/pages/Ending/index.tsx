@@ -1,9 +1,9 @@
 import { useRef } from 'react'
 
 import type { AnimatedProgressBarRef } from '@/ui/global/widgets/components/AnimatedProgressBar/types'
-import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { EndingPageView } from './EndingPageView'
 import { useEndingPage } from './useEndingPage'
+import type { NavigationProvider } from '@stardust/core/global/interfaces'
 
 export const EndingPage = () => {
   const progressBarRef = useRef<AnimatedProgressBarRef | null>(null)
@@ -13,14 +13,13 @@ export const EndingPage = () => {
     handleProgressBarAnimationEnd,
     handleSkipTextButtonClick,
   } = useEndingPage(progressBarRef)
-  const navigationProvider = useNavigationProvider()
 
   return (
     <EndingPageView
       progressBarRef={progressBarRef}
       activeThankIndex={activeThankIndex}
       lastThankIndex={lastThankIndex}
-      navigationProvider={navigationProvider}
+      navigationProvider={{} as NavigationProvider}
       onProgressBarAnimationEnd={handleProgressBarAnimationEnd}
       onSkipTextButtonClick={handleSkipTextButtonClick}
     />
