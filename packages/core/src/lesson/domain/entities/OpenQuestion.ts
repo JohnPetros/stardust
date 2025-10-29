@@ -142,14 +142,13 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
             return answerIndex
           }
           targetCodeLineInputIndex++
-      
         }
         if (text.startsWith('input')) {
-            answerIndex++
+          answerIndex++
         }
-            if (targetCodeLineInputIndex >= line.texts.length) {
-            return answerIndex
-          }
+        if (targetCodeLineInputIndex >= line.texts.length) {
+          return answerIndex
+        }
       }
     }
 
