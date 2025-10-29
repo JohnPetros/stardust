@@ -22,7 +22,9 @@ export class SupabaseQuestionsRepository
       throw new SupabasePostgreError(error)
     }
 
-    return (data.questions as QuestionDto[]).map(SupabaseQuestionMapper.toEntity)
+    const questions = data.questions ? (data.questions as QuestionDto[]) : []
+
+    return questions.map(SupabaseQuestionMapper.toEntity)
   }
 
   async updateMany(questions: Question[], starId: Id): Promise<void> {
