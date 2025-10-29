@@ -6,6 +6,14 @@ import type { ActionButtonTitles } from '@/ui/global/widgets/components/ActionBu
 import { Header } from './Header'
 import { TextBlocks } from './TextBlocks'
 
+const ACTION_BUTTON_TITLES: ActionButtonTitles = {
+  canExecute: 'salvar?',
+  executing: 'salvando...',
+  default: 'salvar',
+  success: 'salvo',
+  failure: 'erro',
+}
+
 type Props = {
   story: string
   editorHeight: number
@@ -21,13 +29,7 @@ export const LessonStoryPageView = ({
   onStoryChange,
   onStorySave,
 }: Props) => {
-  const ACTION_BUTTON_TITLES: ActionButtonTitles = {
-    canExecute: 'salvar?',
-    executing: 'salvando...',
-    default: 'salvar',
-    success: 'salvo',
-    failure: 'erro',
-  }
+  console.log({ story })
 
   return (
     <TextEditorContextProvider>
@@ -58,7 +60,9 @@ export const LessonStoryPageView = ({
           </div>
           <div style={{ height: editorHeight }} className='overflow-y-auto space-y-2'>
             <h2 className='text-green-400 font-semibold'>Pré-visualização</h2>
-            <Mdx className='w-full space-y-24'>{story.replaceAll('----', '')}</Mdx>
+            {story && (
+              <Mdx className='w-full space-y-24'>{story.replaceAll('----', '')}</Mdx>
+            )}
           </div>
         </div>
       </div>
