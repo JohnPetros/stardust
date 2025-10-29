@@ -9,7 +9,7 @@ import type {
 import { COOKIES, ROUTES, STORAGE } from '@/constants'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
@@ -31,7 +31,7 @@ export function useChallengeResultSlot() {
   const secondsCounterStorage = useLocalStorage(STORAGE.keys.secondsCounter)
   const { md: isMobile } = useBreakpoint()
   const { user } = useAuthContext()
-  const { goTo, currentRoute } = useRouter()
+  const { goTo, currentRoute } = useNavigationProvider()
 
   function leavePage(route: string) {
     secondsCounterStorage.remove()

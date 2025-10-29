@@ -7,7 +7,7 @@ import { ROUTES } from '@/constants'
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
 import { useInView } from '@/ui/global/hooks/useInView'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { useAudioContext } from '@/ui/global/hooks/useAudioContext'
 
 type Params = {
@@ -29,20 +29,20 @@ export function useStar({
     useSpaceContext()
   const { playAudio } = useAudioContext()
   const isFirstScroll = useRef(true)
-  const router = useRouter()
+  const navigationProvider = useNavigationProvider()
   const isInView = useInView(lastUnlockedStarRef)
 
   async function handleStarNavigation() {
     const reponse = await challengingService.fetchChallengeByStarId(starId)
 
     if (reponse.isFailure) {
-      router.goTo(ROUTES.lesson.star(starSlug.value))
+      navigationProvider.goTo(ROUTES.lesson.star(starSlug.value))
       return
     }
 
     const challenge = reponse.body
     if (challenge.slug)
-      router.goTo(ROUTES.challenging.challenges.challenge(challenge.slug))
+      navigationProvider.goTo(ROUTES.challenging.challenges.challenge(challenge.slug))
   }
 
   function handleStarClick() {

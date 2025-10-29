@@ -7,7 +7,7 @@ import { Text, type Id } from '@stardust/core/global/structures'
 
 import { ROUTES, STORAGE } from '@/constants'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
@@ -41,7 +41,7 @@ export function useSolutionPage({
     solutionTitle: '',
     solutionContent: '',
   })
-  const { goTo } = useRouter()
+  const { goTo } = useNavigationProvider()
   const toast = useToastContext()
   const localStorage = useLocalStorage(STORAGE.keys.challengeCode(challengeId.value))
 

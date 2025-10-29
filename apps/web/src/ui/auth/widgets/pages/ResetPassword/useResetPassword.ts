@@ -9,7 +9,7 @@ import type { ProfileService } from '@stardust/core/profile/interfaces'
 import type { ActionResponse } from '@stardust/core/global/responses'
 
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { COOKIES, ROUTES } from '@/constants'
 
 export function useResetPassword(
@@ -22,7 +22,7 @@ export function useResetPassword(
   const [errorMessage, setErrorMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const toast = useToastContext()
-  const router = useRouter()
+  const router = useNavigationProvider()
 
   async function handlePasswordReset() {
     await Promise.all([

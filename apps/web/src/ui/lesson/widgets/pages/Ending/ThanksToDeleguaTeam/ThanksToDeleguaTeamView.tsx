@@ -21,7 +21,7 @@ export const ThanksToDeleguaTeamView = () => {
       <ul>
         <li>
           <a
-            href=' https://linkedin.com/in/leonelsanchesdasilva'
+            href='https://linkedin.com/in/leonelsanchesdasilva'
             target='_blank'
             rel='noreferrer'
             className='underline'

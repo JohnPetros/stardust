@@ -11,7 +11,7 @@ import { useLsp } from '@/ui/global/hooks/useLsp'
 import type { ConsoleRef } from '@/ui/global/widgets/components/Console/types'
 import type { CodeEditorRef } from '@/ui/global/widgets/components/CodeEditor/types'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { useAudioContext } from '@/ui/global/hooks/useAudioContext'
 
 export function useChallengeCodeEditorSlot() {
@@ -22,7 +22,7 @@ export function useChallengeCodeEditorSlot() {
   const { playAudio } = useAudioContext()
   const { lspProvider } = useLsp()
   const toast = useToastContext()
-  const router = useRouter()
+  const router = useNavigationProvider()
   const userCode = useRef<Code>(Code.create(lspProvider))
   const editorContainerRef = useRef<HTMLDivElement>(null)
   const codeEditorRef = useRef<CodeEditorRef>(null)

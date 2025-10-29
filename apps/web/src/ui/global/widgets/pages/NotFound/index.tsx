@@ -1,13 +1,13 @@
 'use client'
 
 import { ROUTES } from '@/constants'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { Animation } from '../../components/Animation'
 import { Button } from '../../components/Button'
 import { Animated404 } from './Animated404'
 
 export function NotFoundPage() {
-  const router = useRouter()
+  const router = useNavigationProvider()
 
   return (
     <main className='grid h-screen w-screen place-content-center bg-gray-900'>

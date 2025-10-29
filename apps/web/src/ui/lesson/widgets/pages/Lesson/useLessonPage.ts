@@ -10,7 +10,7 @@ import { COOKIES, ROUTES, STORAGE } from '@/constants'
 import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 import { useSecondsCounter } from '@/ui/global/hooks/useSecondsCounter'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 import { useMdx } from '@/ui/global/widgets/components/Mdx/hooks/useMdx'
 
@@ -27,7 +27,7 @@ export function useLessonPage(
   const { setStory } = getStorySlice()
   const { setCookie } = useCookieActions()
   const { parseTextBlocksToMdx } = useMdx()
-  const router = useRouter()
+  const router = useNavigationProvider()
   const secondsCounter = useLocalStorage(STORAGE.keys.secondsCounter)
   useSecondsCounter(stage === 'quiz')
 

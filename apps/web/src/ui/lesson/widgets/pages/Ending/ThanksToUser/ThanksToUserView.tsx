@@ -1,7 +1,7 @@
 export function ThanksToUserView() {
   return (
     <>
-      <p>Parabéns por te chegado aqui! 🥳</p>
+      <p>Parabéns por ter chegado aqui! 🥳</p>
       <p>
         Você acaba de explorar todos os planetas 🪐 e agora está completamente apto(a) a
         fazer os desafios de código para consolidar seu conhecimento em lógica de

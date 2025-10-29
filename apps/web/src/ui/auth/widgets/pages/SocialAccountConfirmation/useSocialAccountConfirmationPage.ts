@@ -5,7 +5,7 @@ import type { UserCreatedEvent } from '@stardust/core/profile/events'
 
 import { ROUTES } from '@/constants'
 import { useHashParam } from '@/ui/global/hooks/useHashParam'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { useSleep } from '@/ui/global/hooks/useSleep'
 import { ROCKET_ANIMATION_DELAY } from '@/ui/auth/constants'
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
@@ -30,7 +30,7 @@ export function useSocialAccountConfirmationPage({
   const [isUserCreated, setIsUserCreated] = useState(false)
   const [isRocketVisible, setIsRocketVisible] = useState(false)
   const { sleep } = useSleep()
-  const router = useRouter()
+  const router = useNavigationProvider()
 
   function handleUserCreated(event: UserCreatedEvent) {
     if (event.payload.userEmail === account?.email?.value) {

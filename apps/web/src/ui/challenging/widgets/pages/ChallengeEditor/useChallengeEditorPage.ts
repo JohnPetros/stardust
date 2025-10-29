@@ -9,13 +9,13 @@ import { Challenge } from '@stardust/core/challenging/entities'
 import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 
 import { ROUTES } from '@/constants'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { usePostChallengeAction } from './usePostChallengeAction'
 import { useLsp } from '@/ui/global/hooks/useLsp'
 
 export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
   const challenge = challengeDto ? Challenge.create(challengeDto) : null
-  const router = useRouter()
+  const router = useNavigationProvider()
   const difficultyLevel = useMemo(() => {
     if (!challenge) return 'easy'
     if (challenge.difficulty.isAny.isFalse) return challenge.difficulty.level

@@ -3,7 +3,7 @@ import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 
 import { ROUTES } from '@/constants'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 
 type Params = {
   solutionId: Id
@@ -16,7 +16,7 @@ export function useUserSolutionButtons({
   challengeSlug,
   challengingService,
 }: Params) {
-  const router = useRouter()
+  const router = useNavigationProvider()
   const toast = useToastContext()
 
   async function handleDeleteSolutionButtonClick() {

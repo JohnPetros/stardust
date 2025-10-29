@@ -8,7 +8,7 @@ import {
 } from '@stardust/core/challenging/structures'
 
 import { ROUTES, STORAGE } from '@/constants'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import type {
   ChallengeContent,
@@ -31,7 +31,7 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: string) {
   const { panelsLayout, setPanelsLayout } = getPanelsLayoutSlice()
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
   const { user } = useAuthContext()
-  const { currentRoute, goTo } = useRouter()
+  const { currentRoute, goTo } = useNavigationProvider()
   const [isNew] = useQueryStringParam('isNew')
   const secondCounterLocalstorage = useLocalStorage(STORAGE.keys.secondsCounter)
 

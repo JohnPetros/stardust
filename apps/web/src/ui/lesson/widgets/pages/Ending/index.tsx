@@ -1,3 +1,5 @@
+'use client'
+
 import { useRef } from 'react'
 
 import type { AnimatedProgressBarRef } from '@/ui/global/widgets/components/AnimatedProgressBar/types'

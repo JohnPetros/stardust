@@ -19,7 +19,7 @@ import { Name, type Id } from '@stardust/core/global/structures'
 import type { PlaygroundCodeEditorRef } from '@/ui/global/widgets/components/PlaygroundCodeEditor/types'
 import { useWindowSize } from '@/ui/global/hooks/useWindowSize'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { ROUTES } from '@/constants'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
@@ -71,7 +71,7 @@ export function useSnippetPage({
   })
   const toast = useToastContext()
   const windowSize = useWindowSize()
-  const router = useRouter()
+  const router = useNavigationProvider()
   const formValues = getValues()
 
   async function handleSnippetCreated(snippet: Snippet) {

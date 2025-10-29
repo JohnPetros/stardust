@@ -8,7 +8,7 @@ import { useRouterMock } from '@/ui/global/hooks/tests/mocks/useRouterMock'
 
 jest.mock('@/ui/global/hooks/useAuthContext')
 jest.mock('@/ui/global/contexts/ToastContext')
-jest.mock('@/ui/global/hooks/useRouter')
+jest.mock('@/ui/global/hooks/useNavigationProvider')
 
 describe('useSignInPage hook', () => {
   const email = 'fake email'
