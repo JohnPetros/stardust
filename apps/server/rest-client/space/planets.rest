@@ -29,12 +29,12 @@ Content-Type: application/json
 }
 
 ### Reorder planets
-PUT {{URL}}/order
+PUT {{URL}}/list/order
 Authorization: Bearer {{JWT}}
 Content-Type: application/json
 
 {
-  "planetIds": []
+  "planetIds": ["8c3b6cab-d3c6-4d64-8701-c580d4a6d31a"]
 }
 
 ### Create planet star

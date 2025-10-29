@@ -33,6 +33,22 @@ type Props = {
   onDragEnd: (newItems: SortableItem<QuestionCodeLine>[]) => void
 }
 
+type WidgetProps = {
+  value: string
+  index: number
+  onChange: (value: string, index: number) => void
+}
+
+const Widget = ({ value, index, onChange }: WidgetProps) => {
+  return (
+    <ExpandableInput
+      defaultValue={value}
+      onBlur={(value) => onChange(value, index)}
+      className='bg-zinc-800 outline-none border border-zinc-700 rounded-md px-2 py-1 w-max'
+    />
+  )
+}
+
 export const OpenQuestionEditorView = ({
   stem,
   picture,
@@ -74,22 +90,24 @@ export const OpenQuestionEditorView = ({
 
       <div className='space-y-6 translate-x-10'>
         <Sortable.Container
-          key={codeLines.map((item) => item.index).join()}
+          key={codeLines.map((item) => item.data.texts.join()).join()}
           items={codeLines}
           onDragEnd={onDragEnd}
         >
-          {(items) =>
-            items.map((item) => {
-              const line = item.value as QuestionCodeLine
+          {(items) => {
+            let inputIndex = -1
+            return items.map((item) => {
+              const line = item.data
               const blocks = line.texts.map((text) => {
                 if (text.startsWith('input')) {
-                  const inputIndex = Number(text.split('-')[1])
+                  inputIndex++
+                  // const inputIndex = Number(text.split('-')[1]) - 1
                   const widget = (
-                    <ExpandableInput
+                    <Widget
                       key={`${line.number.value}-${text}`}
-                      defaultValue={answers[inputIndex] ?? ''}
-                      onBlur={(value) => onCodeLineInputChange(value, inputIndex)}
-                      className='bg-zinc-800 outline-none border border-zinc-700 rounded-md px-2 py-1 w-max'
+                      value={answers[inputIndex] ?? ''}
+                      index={inputIndex}
+                      onChange={onCodeLineInputChange}
                     />
                   )
                   return widget
@@ -98,11 +116,7 @@ export const OpenQuestionEditorView = ({
               })
 
               return (
-                <Sortable.Item
-                  key={item.index}
-                  id={item.index.toString()}
-                  className='-translate-x-10'
-                >
+                <Sortable.Item key={item.id} id={item.id} className='-translate-x-10'>
                   <CodeLineEditor
                     key={line.number.toString()}
                     blocks={blocks}
@@ -134,7 +148,7 @@ export const OpenQuestionEditorView = ({
                 </Sortable.Item>
               )
             })
-          }
+          }}
         </Sortable.Container>
       </div>
 

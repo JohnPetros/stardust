@@ -11,7 +11,7 @@ type Params = {
   storageService: StorageService
   folder: StorageFolder
   dialogRef: RefObject<DialogRef | null>
-  onSubmit: () => void
+  onSubmit: (imageName: string) => void
 }
 
 export function useImageInput({ storageService, folder, dialogRef, onSubmit }: Params) {
@@ -50,7 +50,7 @@ export function useImageInput({ storageService, folder, dialogRef, onSubmit }: P
 
     if (response.isSuccessful) {
       dialogRef.current?.close()
-      onSubmit()
+      onSubmit(imageName)
     }
     if (response.isFailure) {
       toast.showError(response.errorMessage)

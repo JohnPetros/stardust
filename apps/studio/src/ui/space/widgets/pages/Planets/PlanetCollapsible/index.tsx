@@ -1,8 +1,9 @@
 import type { Planet } from '@stardust/core/space/entities'
-import { PlanetCollapsibleView } from './PlanetCollapsibleView'
-import { usePlanetCollapsible } from './usePlanetCollapsible'
 import { useRest } from '@/ui/global/hooks/useRest'
 import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
+import { useUiProvider } from '@/ui/global/hooks/useUiProvider'
+import { PlanetCollapsibleView } from './PlanetCollapsibleView'
+import { usePlanetCollapsible } from './usePlanetCollapsible'
 
 type Props = {
   planet: Planet
@@ -11,17 +12,21 @@ type Props = {
 export const PlanetCollapsible = ({ planet: defaultPlanet }: Props) => {
   const { spaceService } = useRest()
   const toastProvider = useToastProvider()
+  const uiProvider = useUiProvider()
   const {
     isOpen,
     planet,
     stars,
     handleOpenChange,
+    handlePlanetChange,
+    handlePlanetDelete,
     handleStarCreate,
     handleStarDelete,
     handleDragEnd,
   } = usePlanetCollapsible({
     service: spaceService,
     toastProvider,
+    uiProvider,
     defaultPlanet,
   })
 
@@ -30,10 +35,12 @@ export const PlanetCollapsible = ({ planet: defaultPlanet }: Props) => {
       planet={planet}
       stars={stars}
       isOpen={isOpen}
+      onPlanetChange={handlePlanetChange}
       onOpenChange={handleOpenChange}
-      onCreate={handleStarCreate}
-      onDelete={handleStarDelete}
+      onStarCreate={handleStarCreate}
+      onStarDelete={handleStarDelete}
       onDragEnd={handleDragEnd}
+      onPlanetDelete={handlePlanetDelete}
     />
   )
 }

@@ -6,7 +6,7 @@ import { useDragAndDropQuestionEditor } from './useDragAndDropQuestionEditor'
 
 export const DragAndDropQuestionEditor = () => {
   const { selectedQuestion, replaceSelectedQuestion } = useQuizContext()
-  const question = selectedQuestion.value as DragAndDropQuestion
+  const question = selectedQuestion.data as DragAndDropQuestion
   const {
     codeLines,
     handleStemInputChange,

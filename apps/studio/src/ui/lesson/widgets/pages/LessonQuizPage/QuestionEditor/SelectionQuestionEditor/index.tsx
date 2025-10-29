@@ -1,12 +1,12 @@
 import type { SelectionQuestion } from '@stardust/core/lesson/entities'
 
+import { useQuizContext } from '@/ui/global/hooks/useQuizContext'
 import { SelectionQuestionEditorView } from './SelectionQuestionEditorView'
 import { useSelectionQuestionEditor } from './useSelectionQuestionEditor'
-import { useQuizContext } from '@/ui/global/hooks/useQuizContext'
 
 export const SelectionQuestionEditor = () => {
   const { selectedQuestion, replaceSelectedQuestion } = useQuizContext()
-  const question = selectedQuestion.value as SelectionQuestion
+  const question = selectedQuestion.data as SelectionQuestion
   const {
     handleAnswerInputChange,
     handleOptionAdd,

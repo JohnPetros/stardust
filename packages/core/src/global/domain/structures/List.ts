@@ -58,6 +58,10 @@ export class List<Item> {
     return new List(items)
   }
 
+  filter(predicate: (item: Item, index: number) => boolean) {
+    return new List(this.items.filter(predicate))
+  }
+
   becomeEmpty() {
     return new List([])
   }

@@ -6,7 +6,7 @@ import { CheckboxQuestionEditorView } from './CheckboxEditorView'
 
 export const CheckboxQuestionEditor = () => {
   const { selectedQuestion, replaceSelectedQuestion } = useQuizContext()
-  const question = selectedQuestion.value as CheckboxQuestion
+  const question = selectedQuestion.data as CheckboxQuestion
   const {
     handleOptionAdd,
     handleOptionRemove,

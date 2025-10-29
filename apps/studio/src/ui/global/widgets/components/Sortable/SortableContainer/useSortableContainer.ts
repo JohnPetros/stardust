@@ -1,27 +1,31 @@
 import type { DragEndEvent } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import type { SortableItem } from '../types'
+import { useState } from 'react'
 
 export function useSortableContainer<ItemValue>(
-  items: SortableItem<ItemValue>[],
+  initialItems: SortableItem<ItemValue>[],
   onDragEnd: (
     newItems: SortableItem<ItemValue>[],
-    originItemIndex: number,
-    targetItemIndex: number,
+    originItemId: string,
+    targetItemId: string,
   ) => void,
 ) {
+  const [items, setItems] = useState(initialItems)
+
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event
     if (!over) return
 
     if (active.id !== over?.id) {
-      const originItemIndex = Number(active.id)
-      const targetItemIndex = Number(over.id)
+      const originItemId = active.id.toString()
+      const targetItemId = over.id.toString()
 
-      const oldIndex = items.findIndex((item) => item.index === originItemIndex)
-      const newIndex = items.findIndex((item) => item.index === targetItemIndex)
+      const oldIndex = items.findIndex((item) => item.id === originItemId)
+      const newIndex = items.findIndex((item) => item.id === targetItemId)
       const newItems = arrayMove(items, oldIndex, newIndex)
-      onDragEnd(newItems, originItemIndex, targetItemIndex)
+      setItems(newItems)
+      onDragEnd(newItems, originItemId, targetItemId)
     }
   }
 

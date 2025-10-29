@@ -58,7 +58,7 @@ export default function FileUpload({
             <div className='absolute inset-0 flex items-center justify-center p-4'>
               <img
                 src={previewUrl}
-                alt={files[0]?.file?.name || 'Uploaded image'}
+                alt={fileName || 'Uploaded image'}
                 className='mx-auto max-h-full rounded object-contain'
               />
             </div>

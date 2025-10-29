@@ -13,7 +13,7 @@ export const QuizArranger = () => {
   return (
     <QuizArrangerView
       questions={questions}
-      selectedQuestionIndex={selectedQuestion.index}
+      selectedQuestionId={selectedQuestion.id}
       onSelectQuestion={selectQuestion}
       onRemoveQuestion={removeQuestion}
       onDragEnd={reorderQuestions}

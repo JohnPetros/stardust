@@ -138,7 +138,8 @@
     "./storage/types": "./src/storage/types/index.ts",
     "./storage/interfaces": "./src/storage/interfaces/index.ts",
     "./storage/use-cases": "./src/storage/use-cases/index.ts",
-    "./notification/interfaces": "./src/notification/interfaces/index.ts"
+    "./notification/interfaces": "./src/notification/interfaces/index.ts",
+    "./ui/interfaces": "./src/ui/interfaces/index.ts"
   },
   "imports": {
     "#global/*": "./src/global/*.ts",
@@ -151,7 +152,8 @@
     "#lesson/*": "./src/lesson/*.ts",
     "#forum/*": "./src/profile/*.ts",
     "#auth/*": "./src/auth/*.ts",
-    "#storage/*": "./src/storage/*.ts"
+    "#storage/*": "./src/storage/*.ts",
+    "#ui/*": "./src/ui/*.ts"
   },
   "dependencies": {
     "@stardust-org/core": "^0.1.17",
