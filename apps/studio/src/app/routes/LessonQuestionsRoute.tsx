@@ -31,6 +31,7 @@ export const clientLoader = async ({ context, params }: Route.LoaderArgs) => {
 
 const LessonQuestionsRoute = () => {
   const { questions } = useLoaderData<typeof clientLoader>()
+
   return (
     <QuizContextProvider questions={questions}>
       <LessonQuizPage />

@@ -69,7 +69,7 @@ export const useDragAndDropQuestionEditor = (
   }
 
   function handleDragEnd(newItems: SortableItem<QuestionCodeLine>[]) {
-    question.codeLines = newItems.map((item, index) => item.value.changeNumber(index))
+    question.codeLines = newItems.map((item, index) => item.data.changeNumber(index))
     replaceSelectedQuestion(question)
   }
 
@@ -90,8 +90,8 @@ export const useDragAndDropQuestionEditor = (
 
   return {
     codeLines: question.codeLines.map((line) => ({
-      index: line.number.value,
-      value: line,
+      id: line.number.value.toString(),
+      data: line,
     })),
     handleStemInputChange,
     handlePictureInputChange,

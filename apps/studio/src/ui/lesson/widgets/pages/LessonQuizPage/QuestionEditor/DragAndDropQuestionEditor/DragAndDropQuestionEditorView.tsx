@@ -70,7 +70,7 @@ export const DragAndDropQuestionEditorView = ({
           {(items) => {
             let textIndex = -1
             return items.map((item) => {
-              const line = item.value
+              const line = item.data
               const blocks = line.texts.map((text) => {
                 if (text === 'dropZone') {
                   textIndex++
@@ -90,11 +90,7 @@ export const DragAndDropQuestionEditorView = ({
               })
 
               return (
-                <Sortable.Item
-                  key={item.index}
-                  id={item.index.toString()}
-                  className='-translate-x-10'
-                >
+                <Sortable.Item key={item.id} id={item.id} className='-translate-x-10'>
                   <CodeLineEditor
                     key={line.number.toString()}
                     blocks={blocks}
