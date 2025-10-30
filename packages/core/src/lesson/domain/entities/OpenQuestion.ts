@@ -204,6 +204,7 @@ export class OpenQuestion extends Question<OpenQuestionProps> {
       picture: this.picture.value,
       stem: this.stem.value,
       answers: this.answers.items,
+      code: this.code,
       lines: this.codeLines.map((line) => ({
         number: line.number.value,
         texts: line.texts,
