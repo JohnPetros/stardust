@@ -1,0 +1,5 @@
+export { CheckboxQuestionsFaker } from './CheckboxQuestionsFaker'
+export { DragAndDropListQuestionsFaker } from './DragAndDropListQuestionsFaker'
+export { DragAndDropQuestionsFaker } from './DragAndDropQuestionsFaker'
+export { OpenQuestionsFaker } from './OpenQuestionsFaker'
+export { SelectionQuestionsFaker } from './SelectionQuestionsFaker'
