@@ -1,11 +1,13 @@
-import { StringValidation } from '@stardust/core/global/libs'
+import z from 'zod'
 
-const SERVER_ENV = {
-  inngestSigningKey: process.env.INNGEST_SIGNING_KEY,
-  inngestEventKey: process.env.INNGEST_EVENT_KEY,
+import { appModeSchema } from '@stardust/validation/global/schemas'
+
+const serverEnv = {
+  mode: process.env.MODE,
 }
 
-new StringValidation(SERVER_ENV.inngestSigningKey, 'Inngest Signing Key').validate()
-new StringValidation(SERVER_ENV.inngestEventKey, 'Inngest Event Key').validate()
+const schema = z.object({
+  mode: appModeSchema,
+})
 
-export { SERVER_ENV }
+export const SERVER_ENV = schema.parse(serverEnv)

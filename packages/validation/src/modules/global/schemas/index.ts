@@ -1,3 +1,4 @@
+export { appModeSchema } from './appModeSchema'
 export { nameSchema } from './nameSchema'
 export { emailSchema } from './emailSchema'
 export { stringSchema } from './stringSchema'
