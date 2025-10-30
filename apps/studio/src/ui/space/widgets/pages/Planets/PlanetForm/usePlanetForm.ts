@@ -48,8 +48,11 @@ export function usePlanetForm({ planetDto, storageService, onSubmit }: Params) {
   async function handleDialogChange(isOpen: boolean) {
     if (!isOpen) {
       const { image, icon } = form.getValues()
-      if (image) await storageService.removeFile(PLANETS_FOLDER, Text.create(image))
-      if (icon) await storageService.removeFile(PLANETS_FOLDER, Text.create(icon))
+      if (image && planetDto?.image !== image)
+        await storageService.removeFile(PLANETS_FOLDER, Text.create(image))
+      if (icon && planetDto?.icon !== icon)
+        await storageService.removeFile(PLANETS_FOLDER, Text.create(icon))
+      form.reset()
     }
     setIsDialogOpen(isOpen)
   }

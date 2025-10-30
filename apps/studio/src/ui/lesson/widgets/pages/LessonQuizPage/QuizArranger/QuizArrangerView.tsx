@@ -42,7 +42,11 @@ export const QuizArrangerView = ({
         aparecem.
       </p>
 
-      <Sortable.Container items={questions} onDragEnd={onDragEnd}>
+      <Sortable.Container
+        key={questions.map((question) => question.id).join()}
+        items={questions}
+        onDragEnd={onDragEnd}
+      >
         {(items) =>
           items.map((item, position) => {
             const questionId = item.id

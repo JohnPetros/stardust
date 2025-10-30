@@ -7,15 +7,18 @@ import type { clientLoader } from '@/app/routes/LessonStoryRoute'
 import { useRest } from '@/ui/global/hooks/useRest'
 import { LessonStoryPageView } from './LessonStoryPageView'
 import { useLessonStoryPage } from './useLessonStoryPage'
+import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
 
 export const LessonStoryPage = () => {
   const { starId, defaultStory } = useLoaderData<typeof clientLoader>()
   const { lessonService } = useRest()
-  const { story, handleSaveButtonClick, handleStoryChange } = useLessonStoryPage(
+  const toastProvider = useToastProvider()
+  const { story, handleSaveButtonClick, handleStoryChange } = useLessonStoryPage({
     lessonService,
-    Id.create(starId),
+    toastProvider,
+    starId: Id.create(starId),
     defaultStory,
-  )
+  })
   const screen = useScreen()
 
   return (

@@ -49,7 +49,7 @@ export const SortableContainerView = <ItemValue,>({
         items={items.map((item) => item.id)}
         strategy={verticalListSortingStrategy}
       >
-        {children(items)}
+        {items.length > 0 ? children(items) : null}
       </SortableContext>
     </DndContext>
   )

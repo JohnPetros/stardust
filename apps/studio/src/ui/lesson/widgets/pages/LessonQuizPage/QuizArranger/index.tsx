@@ -10,13 +10,14 @@ export const QuizArranger = () => {
     reorderQuestions,
   } = useQuizContext()
 
-  return (
-    <QuizArrangerView
-      questions={questions}
-      selectedQuestionId={selectedQuestion.id}
-      onSelectQuestion={selectQuestion}
-      onRemoveQuestion={removeQuestion}
-      onDragEnd={reorderQuestions}
-    />
-  )
+  if (selectedQuestion)
+    return (
+      <QuizArrangerView
+        questions={questions}
+        selectedQuestionId={selectedQuestion.id}
+        onSelectQuestion={selectQuestion}
+        onRemoveQuestion={removeQuestion}
+        onDragEnd={reorderQuestions}
+      />
+    )
 }

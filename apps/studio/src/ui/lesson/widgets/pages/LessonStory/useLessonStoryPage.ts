@@ -3,14 +3,22 @@ import { useState } from 'react'
 import type { LessonService } from '@stardust/core/lesson/interfaces'
 import { Text, type Id } from '@stardust/core/global/structures'
 
-import { useToast } from '@/ui/global/hooks/useToastProvider'
 import { useActionButtonStore } from '@/ui/global/stores/ActionButtonStore'
+import type { ToastProvider } from '@stardust/core/global/interfaces'
 
-export function useLessonStoryPage(
-  lessonService: LessonService,
-  starId: Id,
-  defaultStory: string,
-) {
+type Params = {
+  lessonService: LessonService
+  toastProvider: ToastProvider
+  starId: Id
+  defaultStory: string
+}
+
+export function useLessonStoryPage({
+  lessonService,
+  toastProvider,
+  starId,
+  defaultStory,
+}: Params) {
   const [story, setStory] = useState(defaultStory)
   const { useIsExecuting, useIsSuccessful, useIsFailure, useCanExecute } =
     useActionButtonStore()
@@ -18,7 +26,6 @@ export function useLessonStoryPage(
   const { setIsSuccessful } = useIsSuccessful()
   const { setIsFailure } = useIsFailure()
   const { setCanExecute } = useCanExecute()
-  const toast = useToast()
 
   function handleStoryChange(value: string) {
     setStory(value)
@@ -37,7 +44,7 @@ export function useLessonStoryPage(
     const response = await lessonService.updateStory(starId, Text.create(story))
 
     if (response.isFailure) {
-      toast.showError(response.errorMessage)
+      toastProvider.showError(response.errorMessage)
       setIsFailure(true)
     }
 

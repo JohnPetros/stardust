@@ -143,18 +143,21 @@ export class DragAndDropQuestion extends Question<DragAndDropQuestionProps> {
     codeLineInputIndex: number,
   ): number {
     let correctItemIndex = 0
-    const codeLines = this.codeLines.slice(0, codelineNumber + 1)
+    let targetCodeLineInputIndex = 0
 
-    for (let codeLineIndex = 0; codeLineIndex < codeLines.length; codeLineIndex++) {
-      const line = this.codeLines[codeLineIndex]
-      const texts =
-        codeLineIndex === codelineNumber
-          ? line.texts.slice(0, codeLineInputIndex)
-          : line.texts
-
-      for (const text of texts) {
+    for (const line of this.codeLines) {
+      for (const text of line.texts) {
+        if (line.number.value === codelineNumber) {
+          if (targetCodeLineInputIndex === codeLineInputIndex) {
+            return correctItemIndex
+          }
+          targetCodeLineInputIndex++
+        }
         if (text === 'dropZone') {
           correctItemIndex++
+        }
+        if (targetCodeLineInputIndex >= line.texts.length) {
+          return correctItemIndex
         }
       }
     }

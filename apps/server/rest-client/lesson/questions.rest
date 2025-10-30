@@ -1,5 +1,5 @@
 @URL = {{BASE_URL}}/lesson/questions
-@STAR_ID = b34a4a76-0615-4910-89a9-05d34925dc70
+@STAR_ID = efdde01e-242e-4a15-bf09-10cbb4bd74ca 
 
 ### Fetch questions
 GET {{URL}}/star/{{STAR_ID}}
