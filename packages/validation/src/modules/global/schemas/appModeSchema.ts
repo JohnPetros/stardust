@@ -1,3 +1,5 @@
 import z from 'zod'
 
-export const appModeSchema = z.enum(['dev', 'prod', 'test', 'staging']).default('dev')
+export const appModeSchema = z
+  .enum(['development', 'production', 'testing', 'staging'])
+  .default('development')
