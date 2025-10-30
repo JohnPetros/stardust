@@ -1,5 +1,3 @@
-'use client'
-
 import { useState } from 'react'
 
 import { useLessonStore } from '@/ui/lesson/stores/LessonStore'
