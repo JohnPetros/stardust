@@ -3,14 +3,14 @@ import { useState } from 'react'
 import { ROUTES } from '@/constants'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 
 export function useChallengeControl(
   challengingService: ChallengingService,
   isChallengePublic: boolean,
 ) {
-  const router = useRouter()
+  const router = useNavigationProvider()
   const toast = useToastContext()
   const { getChallengeSlice } = useChallengeStore()
   const { challenge, setChallenge } = getChallengeSlice()

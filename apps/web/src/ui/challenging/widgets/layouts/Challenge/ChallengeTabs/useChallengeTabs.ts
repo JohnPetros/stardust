@@ -4,7 +4,7 @@ import { Integer } from '@stardust/core/global/structures'
 import { ROUTES } from '@/constants'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
 export function useChallengeTabs() {
@@ -14,7 +14,7 @@ export function useChallengeTabs() {
   const { activeContent } = getActiveContentSlice()
   const { challenge } = getChallengeSlice()
   const { user, updateUser } = useAuthContext()
-  const router = useRouter()
+  const navigationProvider = useNavigationProvider()
   const toast = useToastContext()
 
   async function handleShowSolutions() {
@@ -31,7 +31,7 @@ export function useChallengeTabs() {
     user.loseCoins(Integer.create(ChallengeCraftsVisibility.solutionsVisibilityPrice))
     await updateUser(user)
     setCraftsVislibility(craftsVislibility.showSolutions())
-    router.goTo(
+    navigationProvider.goTo(
       ROUTES.challenging.challenges.challengeSolutions.list(challenge.slug.value),
     )
   }

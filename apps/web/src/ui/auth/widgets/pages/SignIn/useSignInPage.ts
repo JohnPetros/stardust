@@ -8,7 +8,7 @@ import { ROUTES } from '@/constants'
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { ROCKET_ANIMATION_DELAY } from '@/ui/auth/constants'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { useSleep } from '@/ui/global/hooks/useSleep'
 import type { SignInFormFields } from './SignInForm/types'
 
@@ -28,7 +28,7 @@ export function useSignInPage({
   const [isRocketVisible, setIsRocketVisible] = useState(false)
   const { sleep } = useSleep()
   const toast = useToastContext()
-  const router = useRouter()
+  const router = useNavigationProvider()
 
   async function handleFormSubmit({ email, password }: SignInFormFields) {
     const isSuccess = await handleSignIn(email, password)

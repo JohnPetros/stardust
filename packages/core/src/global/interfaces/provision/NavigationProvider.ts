@@ -1,3 +1,6 @@
 export interface NavigationProvider {
-  goTo(path: string): void
+  goTo(route: string): void
+  goBack(): void
+  refresh(): void
+  currentRoute: string
 }

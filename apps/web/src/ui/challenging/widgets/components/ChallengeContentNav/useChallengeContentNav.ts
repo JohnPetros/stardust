@@ -1,14 +1,14 @@
 import { ROUTES } from '@/constants'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 
 export function useChallengeContentNav() {
   const { getChallengeSlice, getCraftsVisibilitySlice } = useChallengeStore()
   const { challenge } = getChallengeSlice()
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
   const { user, updateUser } = useAuthContext()
-  const { goTo } = useRouter()
+  const { goTo } = useNavigationProvider()
 
   async function handleShowSolutions() {
     if (!user || !challenge || !craftsVislibility) return

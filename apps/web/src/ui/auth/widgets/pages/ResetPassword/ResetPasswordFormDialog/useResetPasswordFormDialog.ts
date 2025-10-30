@@ -12,7 +12,7 @@ import type { AuthService } from '@stardust/core/auth/interfaces'
 
 import { ROUTES } from '@/constants'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 
 const resetPasswordFormSchema = z
@@ -44,7 +44,7 @@ export function useResetPasswordFormDialog(
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const toast = useToastContext()
-  const router = useRouter()
+  const router = useNavigationProvider()
 
   function handleOpenChange(isOpen: boolean) {
     if (!isOpen) router.goTo(ROUTES.auth.signIn)

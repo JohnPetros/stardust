@@ -1,9 +1,9 @@
 import { type RefObject, useEffect } from 'react'
 
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 
 export function useChallengeTabContent(contentRef: RefObject<HTMLDivElement | null>) {
-  const { currentRoute } = useRouter()
+  const { currentRoute } = useNavigationProvider()
 
   useEffect(() => {
     if (currentRoute && contentRef.current)

@@ -3,7 +3,7 @@ import { useEffect, useState, type RefObject } from 'react'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { ROUTES } from '@/constants'
 
 export function useBlockedContentAlertDialog(
@@ -15,7 +15,7 @@ export function useBlockedContentAlertDialog(
   const { craftsVislibility } = getCraftsVisibilitySlice()
   const { challenge } = getChallengeSlice()
   const { user } = useAuthContext()
-  const { goTo } = useRouter()
+  const { goTo } = useNavigationProvider()
 
   function handleOpenChange(isOpen: boolean) {
     if (challenge && !isOpen)

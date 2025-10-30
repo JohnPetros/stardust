@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { CraftsTableView } from './CraftsTableView'
 import { useCraftsTable } from './useCraftsTable'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext/hooks/useAuthContext'
@@ -10,7 +10,7 @@ type Props = {
 }
 
 export function CraftsTable({ userId }: Props) {
-  const { currentRoute } = useRouter()
+  const { currentRoute } = useNavigationProvider()
   const { user } = useAuthContext()
   const {
     activeTabListSorter,

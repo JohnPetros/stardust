@@ -3,7 +3,7 @@
 import { type RefObject, useCallback, useEffect, useState } from 'react'
 
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { useRefreshPage } from '@/ui/global/hooks/useRefreshPage'
 import { useAudioContext } from '@/ui/global/hooks/useAudioContext'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
@@ -30,7 +30,7 @@ export function useRewardingPage({
   const { playAudio } = useAudioContext()
   const { refetchUser } = useAuthContext()
   const { deleteCookie } = useCookieActions()
-  const router = useRouter()
+  const router = useNavigationProvider()
 
   function handleFirstButtonClick() {
     if (!newStreak && !newLevel) {

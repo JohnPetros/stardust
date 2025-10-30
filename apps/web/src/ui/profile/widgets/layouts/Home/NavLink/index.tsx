@@ -7,7 +7,7 @@ import { twMerge } from 'tailwind-merge'
 
 import { Tooltip } from '@/ui/global/widgets/components/Tooltip'
 import { AnimatedLabel } from './AnimatedLabel'
-import { useRouter } from '@/ui/global/hooks/useRouter'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 
 type NavButtonProps = {
   route: string
@@ -24,7 +24,7 @@ export function NavLink({
   isColumn = true,
   isExpanded = true,
 }: NavButtonProps) {
-  const router = useRouter()
+  const router = useNavigationProvider()
   const isActive = router.currentRoute === route
 
   return (
