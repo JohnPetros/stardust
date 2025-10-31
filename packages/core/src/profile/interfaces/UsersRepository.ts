@@ -15,6 +15,7 @@ export interface UsersRepository {
   findByGoogleAccountId(googleAccountId: Id): Promise<User | null>
   findByGithubAccountId(githubAccountId: Id): Promise<User | null>
   findByTierOrderedByXp(tierId: Id): Promise<User[]>
+  findUnlockedStars(userId: Id): Promise<IdsList>
   containsWithEmail(email: Email): Promise<Logical>
   containsWithName(name: Name): Promise<Logical>
   findAll(): Promise<User[]>

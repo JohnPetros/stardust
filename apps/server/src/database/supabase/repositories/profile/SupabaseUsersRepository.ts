@@ -1,9 +1,9 @@
 import {
   type Email,
   type Id,
+  IdsList,
   type Name,
   type Slug,
-  type IdsList,
   Logical,
 } from '@stardust/core/global/structures'
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
@@ -275,6 +275,17 @@ export class SupabaseUsersRepository
     if (error) throw new SupabasePostgreError(error)
 
     return data.map(SupabaseUserMapper.toEntity)
+  }
+
+  async findUnlockedStars(userId: Id): Promise<IdsList> {
+    const { data, error } = await this.supabase
+      .from('users_unlocked_stars')
+      .select('star_id')
+      .eq('user_id', userId.value)
+
+    if (error) throw new SupabasePostgreError(error)
+
+    return IdsList.create(data.map(({ star_id }) => star_id))
   }
 
   async containsWithEmail(email: Email): Promise<Logical> {
