@@ -1,252 +1,695 @@
 # Changelog
 
+## 0.5.2 (2025-10-31)
+
+- 🧪 test: add comprehensive tests for Quiz structure (b4045daf)
+- 🖥️ ui(web): remove unused 'use client' directive from useOpenQuestion hook
+  (8af60d51)
+- 🌐 domain: add code property to OpenQuestion entity for enhanced data
+  representation (c893d34c)
+- 🌐 domain: add classes for generating fake data for various question types
+  (43ea9ef3)
+- 🪨 constants(web): remove unused environment variables from serverEnv and
+  schema (cda532e7)
+- 🖥️ ui(web): conditionally render Google Analytics in RootLayoutView based on
+  server environment (22f5562e)
+- 📮 validation: update appModeSchema to use more descriptive environment names
+  (13a13f24)
+- 🪨 constants(web): replace StringValidation with zod for environment variable
+  validation (5054f88f)
+- 📮 validation: add appModeSchema for application mode validation (0ce7248d)
+- 📦 deps(lsp): update @designliquido/delegua to version 0.57.1 (403a4858)
+- 🖥️ ui(web): integrate Google Analytics into RootLayoutView for enhanced
+  tracking (7c24cb66)
+- 📦 deps(web): add @next/third-parties and third-party-capital packages
+  (14552d4c)
+- 🐛 fix(studio): refactor LessonStoryPageView and useLessonStoryPage to handle
+  story updates and toast notifications correctly (b4469ae7)
+- 🐛 fix(studio): handle potential null values in QuizContext and improve
+  DragAndDropQuestionEditor logic (ce41f3d0)
+- 🐛 fix(server): handle potential null questions and add debug logs (85fe0b7c)
+- 🐛 fix(studio): optimize DragAndDropQuestion and OpenQuestion logic for
+  handling code lines and text inputs (9e6d9649)
+- 🐛 fix(web): replace useRouter with useNavigationProvider across various
+  components for improved navigation handling (a0fd2981)
+- 🐛 fix(web): update navigationProvider to use type assertion for compatibility
+  (9efbc1a8)
+- 📑 interface: rename 'path' to 'route' and add methods for navigation control
+  (fba4ff97)
+- ♻️ refactor(web): refactor Ending page components and implement EndingPageView
+  for better structure (04dc6e3d)
+- 🐛 fix(web): type erros in SpaceService (f07206e5)
+- ♻️ refactor(studio): remove logs (ba44bd4b)
+- ♻️ refactor(studio): add the new Sortable widget to open question editor and
+  quiz arrenger (7140bd71)
+- 🖥️ ui(studio): add stortable feature to planets list (2efd8e4c)
+- 📶 rest: implement reorderPlanets method in SpaceService (2756e193)
+- ⚙️ config(server): correct route path for ReorderPlanetsController (a24556fe)
+- 🖥️ ui(studio): add widgets for planets crud (893c1f48)
+- 📑 interface: add UiProvider (b5513748)
+- 📮 validation: add fileSchema (6913f82f)
+- 📦 deps(studio): update radix-ui to version 1.4.3 (eaaaeb8b)
+- ♻️ refactor(studio): push star returned by service after executing the
+  createPlanetStar method (68a404e9)
+- 📶 rest(web): implement all methods of SpaceService (9abe4f07)
+- 🖥️ ui(studio): integrate the PlanetCollapsible widget with SpaceService to
+  manipulate stars (d490642d)
+- 🌐 domain: sort starts before planet creation in Planet entity (e13cd319)
+- 📶 rest(studio): add methods to manipulate planet stars (ca05cdaf)
+- 🧰 provision(server): implement findFile method in DropboxStorageProvider and
+  GoogleDriveStorageProvider (9a8fa5b1)
+- ⚙️ config(server): add CreatePlanet, UpdatePlanet, and DeletePlanet
+  controllers; update routes and documentation (b3c6afd0)
+- 📶 rest(server): add StorageMiddleware for file existence verification
+  (36ddf264)
+- 📶 rest(server): add VerifyFileExistsController for verifying file existence
+  (72f3eec5)
+- 📶 rest(server): add DeletePlanetController for handling planet deletion
+  (61d80f55)
+- 📶 rest(server): add ReorderPlanetsController for handling planet reordering
+  (600e781c)
+- 📶 rest(server): add CreatePlanetController for handling planet creation
+  (1bba5b2a)
+- 📶 rest(server): add UpdatePlanetController for handling planet updates
+  (ad882504)
+- 💾 db(server): add findById and findLastPlanet methods to
+  SupabasePlanetsRepository; update PlanetsRepository interface (66a0a031)
+- 🌐 domain: update Planet and PlanetDto to use optional id and add setters for
+  properties (e399daf7)
+- ✨ use case: implement VerifyFileExistsUseCase for checking file existence
+  (0c2d109e)
+- 🧪 test: add unit tests for UpdatePlanetUseCase (f881a780)
+- 🧪 test: add unit tests for ReorderPlanetsUseCase (735ee4be)
+- 🧪 test: add unit tests for DeletePlanetUseCase (f56edf6c)
+- 🧪 test: add unit tests for CreatePlanetUseCase (52341c85)
+- ✨ use case: implement CreatePlanetUseCase for creating new planets (c77e1cfe)
+- ✨ use case: implement UpdatePlanetUseCase for updating planet details
+  (ac6a0f10)
+- ✨ use case: implement DeletePlanetUseCase for deleting planets (0d00435a)
+- ✨ use case: implement ReorderPlanetsUseCase for reordering planets (90db14a5)
+- 🌐 domain: add FileNotFoundError class for handling file not found errors
+  (086645ec)
+- 🧰 provision(server): add findFile method to StorageProvider interface and
+  implement in SupabaseStorageProvider (4de56d7b)
+- ⚙️ config: ignore AGENTS.md (f14d8f7b)
+- ♻️ refactor: remove findById method from PlanetsRepository interface
+  (355fbd0e)
+- 💾 db(server): implement add, replace, and remove methods in
+  SupabasePlanetsRepository (6fed8e2a)
+- ♻️ refactor: format useSignInForm parameters for improved readability
+  (264f9e33)
+- 🧪 test: remove duplicate faker import in CreatePlanetStar and
+  ReorderPlanetStars use case tests (9f250f36)
+- 🧪 test: update test descriptions for clarity and improve formatting in space
+  use cases (64196ded)
+- 🖥️ ui(web): improve confirmation dialog text and format Toggle component for
+  better readability (ecbd8088)
+- 📶 rest(server): add routes for editing star name, availability, and type in
+  StarsRouter (7f03c26f)
+- 📶 rest(server): implement routes for managing planet stars including
+  creation, reordering, and deletion (ee2733d4)
+- 💾 db(server): update SupabaseStar type to include is_available and
+  is_challenge properties for enhanced star management (67ac3161)
+- 📶 rest(server): add EditStarTypeController and update use case exports for
+  star management (4aa2212b)
+- 📶 rest(server): add CreatePlanetStarController to handle star creation for
+  planets (95ccaa9f)
+- 📶 rest(server): add EditStarNameController to handle star name updates
+  (b402becf)
+- 📶 rest(server): add EditStarAvailabilityController to manage star
+  availability updates (5cb7c163)
+- 📶 rest(server): add DeletePlanetStarController to handle star deletion from
+  planets (af7dad49)
+- 📶 rest(server): implement ReorderPlanetStarsController to handle star
+  reordering for planets (8622b06b)
+- 💾 db(server): add isAvailable and isChallenge properties to Star and Planet
+  entities; add findById method for planets (c563c6fc)
+- 🧪 test: add unit tests for Star entity to validate creation, property
+  updates, and DTO conversion (a4c43bba)
+- 🧪 test: add unit tests for Planet entity star management methods including
+  addition, removal, reordering, and error handling (fd91baab)
+- 🌐 domain: add isChallenge property to Star entity and update StarDto to
+  include challenge status (c9432369)
+- 🌐 domain: enhance Planet entity with star management methods and isAvailable
+  property (774c2488)
+- 🧪 test: add unit tests for ReorderPlanetStarsUseCase to validate star
+  reordering and error handling (b863d053)
+- 🧪 test: add unit tests for EditStarTypeUseCase to validate star type editing
+  and error handling (550f946f)
+- 🧪 test: add unit tests for EditStarAvailabilityUseCase to validate star
+  availability editing and error handling (c62157d8)
+- 🧪 test: add unit tests for DeletePlanetStarUseCase to validate star deletion
+  and error handling (572d929d)
+- 🧪 test: add unit tests for CreatePlanetStarUseCase to validate star creation
+  and error handling (358f39b4)
+- 📮 validation: add ordinalNumberSchema for positive integer validation
+  (f770b431)
+- ✨ use case: implement EditStarTypeUseCase to modify star challenge status
+  (b27a05d1)
+- ✨ use case: implement EditStarAvailabilityUseCase to manage star availability
+  status (5f268724)
+- ✨ use case: implement CreatePlanetStarUseCase to facilitate star creation for
+  planets (1f6d40c0)
+- ✨ use case: implement DeletePlanetStarUseCase to handle star removal from
+  planets (2affafaf)
+- ✨ use case: implement ReorderPlanetStarsUseCase to manage star ordering for
+  planets (5fae2e6b)
+- 📚 docs: translate and update documentation for app and UI layers (71b1c56a)
+- 🌐 domain: enhance Star entity and DTO with isAvailable property, (c7d0ae52)
+- 🖥️ ui(studio): update styling for PlanetsPageView and PlanetCollapsibleView
+  components (b1c0e122)
+- 🖥️ ui(studio): update AppLayoutView background color from bg-zinc-900 to
+  bg-zinc-950 (e26ba141)
+- 🖥️ ui(studio): add Switch component for enhanced toggle functionality
+  (3a87d982)
+- 🖥️ ui(studio): enhance StarItemView with ExpandableInput, Toggle, and
+  ConfirmDialog components (e958c803)
+- 🖥️ ui(studio): add Toggle and ToggleView components for enhanced toggle
+  functionality (2c3735cb)
+- 📦 deps(studio): add @radix-ui/react-switch version 1.2.6 to package.json and
+  package-lock.json (64029c59)
+- ✨ use case: add EditStarNameUseCase for updating star names in the repository
+  (aa0490e8)
+- 📚 docs: update documentation for app, database, provision, queue, REST, and
+  UI layers (eb16eba9)
+- 📚 docs: update documentation across multiple layers, enhancing clarity and
+  consistency in app, database, provision, queue, and LSP layers (f42149ed)
+- Editor de Questão de Arrastar e Soltar (#180) (e0b7f817)
+- 📚 docs: add documentation for LSP layer, detailing structure, core
+  components, and integration with Monaco Editor for the Delegua language
+  (5a5f0e05)
+- 📚 docs: add documentation for validation layer, detailing schema structure,
+  error handling, and usage of Zod for data validation (27f1bb3a)
+- 📚 docs: add comprehensive documentation for core package, detailing domain
+  concepts, implementation patterns, and development guidelines (f6609006)
+- 📚 docs: add testing conventions documentation, outlining file organization,
+  test structure, coverage principles (0048cf9d)
+- 📚 docs: add code conventions documentation, outlining variable naming,
+  function structure, and best practices for consistent coding in the project
+  (3f9c7391)
+- 📚 docs: add comprehensive documentation for UI layer, detailing module
+  structure, widget design, and best practices for React components (c79f852a)
+- 📚 docs: add documentation for RPC layer, outlining structure, core concepts,
+  and best practices for action implementation in the web application (7f30262e)
+- 📚 docs: add documentation for REST layer, detailing API communication
+  structure, service implementations, and RestClient usage in the web
+  application (c1f03934)
+- 📚 docs: add documentation for realtime layer, detailing structure, Supabase
+  client usage, and example implementation for realtime communication (854e2ad3)
+- 📚 docs: add comprehensive documentation for UI layer, covering module
+  structure, widget design, and best practices for React components (1d12cb0e)
+- 📚 docs: add detailed documentation for REST layer, including service
+  structure, RestClient implementation, and communication flow in the Studio app
+  (827c4f53)
+- 📚 docs: add documentation for app layer, detailing structure, routing,
+  layouts, and root component in React application (7c5de591)
+- 📚 docs: add documentation for REST layer, detailing server-side and
+  client-side structure, controllers, services, and communication flow
+  (f984b77c)
+- 📚 docs: add documentation for queue layer, detailing structure, Inngest
+  integration, and event-driven architecture (af3b055f)
+- 📚 docs: add documentation for provision layer, outlining structure,
+  providers, and extensibility (a0bf0585)
+- 📚 docs: add documentation for database layer, detailing structure,
+  repositories, mappers, and migrations (b22bc09a)
+- 📚 docs: add app layer documentation for Hono web framework, detailing
+  structure, routers, and middlewares (6b129133)
+- ♻️ refactor(studio): rename useToast to useToastProvider (17db1940)
+- ♻️ refactor: use lsp package in studio app (ba9a3c7e)
+- 📦 deps(studio): install shadcn select (084e267d)
+- ⚙️ config: update tsconfig.tsbuildinfo with comprehensive type definitions for
+  improved TypeScript support (8d42215f)
+- ♻️ refactor(studio): refactor SignInForm to use AuthService and ToastProvider
+  for improved login handling (a7fcad8e)
+- ⚙️ config(studio): implement client middleware and loader for user account
+  fetching (0cc31bd4)
+- 🖥️ ui(studio): enhance Header component with user account dropdown and
+  sign-out functionality (b5541e2b)
+- ♻️ refactor(studio): replace unstable_createContext with createContext
+  (8ad40589)
+- 📦 deps(studio): update @hookform/resolvers, react-hook-form, react-router,
+  and @react-router/dev to latest versions (88d9efa6)
+- 🧰 provision(studio): add NavigationProvider interface and update exports in
+  index.ts (78989aac)
+- 🖥️ ui(studio): add ToastProvider interface and useToastProvider hook for
+  success and error notifications (bbe7f39e)
+- ♻️ refactor(studio): remove AuthContext and related files for simplification
+  (1015e24b)
+
 ## 0.5.1 (2025-10-14)
 
-* 📦 deps(lsp): update @designliquido/delegua to version 0.54.7 (fef07fa1)
-* 🏎️ ci: add permissions for id-token and contents in Heroku deployment workflow (fba7af4d)
-* 🏎️ ci: change Heroku deployment environment from "dev" to "prod" in CI workflow (0761d0c6)
-* ♻️ refactor(web): remove duplicate export of storage structures in main.ts (4b543770)
-* 🏎️ ci: update Heroku deployment environment from "prod" to "dev" in CI workflow (11658fd9)
+- 📦 deps(lsp): update @designliquido/delegua to version 0.54.7 (fef07fa1)
+- 🏎️ ci: add permissions for id-token and contents in Heroku deployment workflow
+  (fba7af4d)
+- 🏎️ ci: change Heroku deployment environment from "dev" to "prod" in CI
+  workflow (0761d0c6)
+- ♻️ refactor(web): remove duplicate export of storage structures in main.ts
+  (4b543770)
+- 🏎️ ci: update Heroku deployment environment from "prod" to "dev" in CI
+  workflow (11658fd9)
 
 ## 0.5.0 (2025-10-14)
 
-* 📦 deps(studio): remove @designliquido/delegua dependency from package.json and package-lock.json (86a44235)
-* 🧪 test(server): add unit tests for various authentication controllers to enhance test coverage and validate functionality (75f243ef)
-* 🧪 test(server): update unit test for ConfirmEmailController to validate token usage in authentication (e2690e5e)
-* 🧪 test(server): update unit tests for VerifyAuthenticationController to validate authentication verification functionality (15985cec)
-* 🧪 test(server): add unit tests for RefreshSessionController to validate session refresh functionality (5585628d)
-* 🧪 test(server): add unit tests for RequestPasswordResetController to validate password reset request functionality (4b2b769d)
-* 🧪 test(server): add unit tests for SignInWithGithubAccountController to validate GitHub account sign-in functionality (b58b63cf)
-* 🧪 test(server): add unit tests for SignInController to validate user sign-in functionality (bd6c8b4c)
-* 🧪 test(server): add unit tests for SignInWithGoogleAccountController to validate Google account sign-in functionality (aecd5c3c)
-* 🧪 test(server): add unit tests for ResendSignUpEmailController to validate email resending functionality (0f33fd7e)
-* 🧪 test(server): add unit tests for ResetPasswordController to validate password reset functionality (63cadf04)
-* 🧪 test(server): add unit tests for SignOutController to validate user sign-out functionality (93cf5d2e)
-* 🧪 test(server): add unit tests for SignUpController to validate user sign-up and event publishing functionality (c843e2df)
-* 🧪 test(server): add unit tests for SignUpWithSocialAccountController to validate user sign-up event publishing (b800aeeb)
-* 🧪 test(server): add unit tests for FetchSessionController to validate session fetching functionality (08b1660b)
-* 🧪 test(server): add unit tests for FetchGoogleAccountConnectionController to validate Google account connection retrieval functionality (21da3ce7)
-* 🧪 test(server): add unit tests for VerifyAuthenticationController to validate authentication handling and error scenarios (a6f8634d)
-* 🧪 test(server): add unit tests for FetchGithubAccountConnectionController to validate GitHub account connection retrieval functionality (666eec7b)
-* 🧪 test(server): add unit tests for DisconnectGoogleAccountController to validate Google account disconnection functionality (4100c14d)
-* 🧪 test(server): add unit tests for DisconnectGithubAccountController to validate GitHub account disconnection functionality (f4c8e63c)
-* 🧪 test(server): add unit tests for ConnectGoogleAccountController to validate Google account connection functionality (28b82ae5)
-* 🧪 test(server): add unit tests for ConnectGithubAccountController to validate GitHub account connection functionality (d4c92097)
-* 🧪 test(server): add unit tests for ConfirmPasswordResetController to validate password reset functionality (af3bbb93)
-* 🧪 test(server): add unit tests for ConfirmEmailController to validate email confirmation logic (04185a5f)
-* ♻️ refactor(server): rename authService to service in SignInController for consistency (d228964a)
-* 🧰 provision(server): refactor DropboxStorageProvider to use a static internal folder name based on environment mode (7d072357)
-* ⚙️ config(server): conditionally track errors and send notifications based on environment mode (9f94a5ff)
-* 🧰 provision(server): update DropboxStorageProvider to include environment in file path and clean up imports (c7469d30)
-* 🖥️ ui(web): add TypeScript ignore comment for completion item provider in CodeEditor (4c3f8b50)
-* 🏎️ ci: change environment slug from "staging" to "dev" in Heroku CI workflow (b325cc95)
-* 🖥️ ui(web): update CodeEditor snippet mapping to correct keyword reference and improve documentation examples in Delegua constants (0e6cf282)
-* ⚙️ config(lsp): update Delegua language configuration to support additional bracket types and refine indentation rules (affbd387)
-* 🖥️ ui(web): change CodeEditor auto-indent setting from 'advanced' to 'brackets' (3bad2f08)
-* 📦 deps(lsp): update @designliquido/delegua dependency to version 0.54.6 (3a6a3c74)
-* 🖥️ ui(web): enhance CodeEditor with advanced auto-indent, formatting options, and snippet support (d6fadbc9)
-* 🖥️ ui(web): refactor ChallengeResultSlotView to improve key assignment in test case mapping (4944ad64)
-* ⚙️ config(lsp): enhance Delegua language configuration for Monaco editor with bracket pairs and indentation rules (08e3b3df)
-* 🖥️ ui(web): update useLsp hook to include DELEGUA_SNIPPETS for enhanced functionality (32b2ef0f)
-* 🖥️ ui(web): enhance ChallengeCodeEditor with code checker toggle and refactor originalCode handling (9ea22a89)
-* 🖥️ ui(web): prevent error notification in development mode (5fd1a695)
-* 🪨 constants(lsp): add delegua snippets (61b76f22)
-* 🌐 domain: add LspSnippet type definition for code snippets (f31569f3)
-* 🏎️ ci: update GitHub Actions workflow to include permissions for id-token and contents (e6ed6878)
-* 🏎️ ci: integrate Infisical secrets management into CI workflows for server and web applications (e5624dac)
-* ⚙️ config(server): rename test environment file from .env.test to .env.testing for clarity (ac818faa)
-* 🏎️ ci: integrate Supabase CLI setup and migration steps into CI workflow for server application (51098c9e)
-* 🏎️ ci: add test execution step to CI workflow for server application (1c6395ed)
-* 🧪 test(server): refactor AuthRouter to use centralized route definitions and add initial tests for AuthRouter functionality (c64265d7)
-* ⚙️ config(server): introduce HonoServer class for enhanced request handling and integrate it into HonoApp (52d83255)
-* 💾 db(server): create initial database schema and migration scripts for user challenges, achievements, and related entities (e59a7aa5)
-* ⚙️ config(server): add Jest configuration and setup for testing environment (55c7ab6d)
-* 📦 deps(server): update dependencies and add database scripts in package.json (edeb30e4)
-* 🧪 test(web): add unit tests for HandleRewardingPayloadController to validate cookie handling and redirection logic (0e4ef26a)
-* 🧪 test(web): add unit tests for HandleRedirectController to validate redirection logic based on query parameters (8a35db59)
-* 🧪 test(web): refactor AccessProfilePageController tests to improve user ID handling and response validation (01ca8194)
-* 🧪 test(web): remove unused import from AccessSolutionPageController test file (53e9a0ca)
-* ⚙️ config(web): enable security headers in Next.js configuration (8dc81171)
-* ♻️ refactor(web): remove unused ranking API calls and delete FetchAchievementsController (194d0ebf)
-* 🌐 domain(core): add fakers export for auth entities and update challenging fakers (070f33cb)
-* 🧪 test(web): add unit tests for AccessProfilePageController to validate user fetching and redirection logic (f76bf8c4)
-* 🧪 test(web): refactor AccessSolutionPageController to use a service parameter and add comprehensive tests for its functionality (def875a3)
-* 🧪 test(web): implement VerifyAuthRoutesController with tests for public and private route access (4f86c139)
-* ♻️ refactor(web): remove console log from ConfirmEmailController and add ConfirmPasswordResetController tests (ae5811cb)
-* 📦 deps(lsp): update @designliquido/delegua dependency version to 0.54.5 in package.json (a72078bd)
-* 🚚 cd: change trigger from pull_request to push in server and web app Heroku CD workflows for streamlined deployment (233d4f38)
-* 🚚 cd: update Infisical secrets-action configuration in web app CI and CD workflows for improved environment variable management (58ad682c)
-* ♻️ refactor(web): add console log for CLIENT_ENV to aid in environment configuration troubleshooting (7e773310)
-* 🚚 cd: update domain configuration to use secrets in Heroku workflows for server and web apps (d3d9b54d)
-* 🏎️ ci: add permissions for id-token and contents in web app CI workflow (352fb646)
-* 🚚 cd: replace hardcoded identity-id with secrets in Infisical secrets-action for server and web app workflows (7cc1536b)
-* 🚚 cd: integrate Infisical secrets-action for .env file generation in web app CI and staging workflows (981a016e)
-* ♻️ refactor(web): replace many env variables across various components for consistent environment configuration (4d810baf)
-* ♻️ refactor: rename WEB_APP_URL to STARDUST_WEB_URL and add SENTRY_DSN in server and web environment configurations (dc65b809)
-* 🚚 cd: change trigger from pull_request to push in server app Heroku CD workflow and add permissions in web app staging CD workflow (ef8df72e)
-* ♻️ refactor(web): rename webAppUrl and serverAppUrl to stardustWebUrl and stardustServerUrl in CLIENT_ENV configuration (d9e14652)
-* 🚚 cd: change trigger from push to pull_request in Heroku CD workflow (a9224db0)
-* 🚚 cd: replace .env file creation with Infisical secrets-action for improved environment variable management (225950a0)
-* 🐛 fix(server): correct SENTRY_DNS to SENTRY_DSN in environment configuration (819a103f)
-* 🚚 cd: restore Infisical secrets-action in Heroku CD workflow for environment variable management (6818082b)
-* 🚚 cd: comment out Infisical secrets-action in Heroku CD workflow for environment variable management (45241ebb)
-* 🚚 cd: update Heroku CD workflow permissions to enable id-token writing and content reading (b99e4d68)
-* 🚚 cd: update Heroku CD workflow to use Infisical for environment variable management and change trigger to pull_request (d3eab1d4)
-* ♻️ refactor(server): rename webAppUrl to stardustWebUrl and update references in SupabaseAuthService and RestMiddleware (8cf0594d)
-* 📦 deps(lsp): update @designliquido/delegua to version 0.54.4 in package.json and package-lock.json (26f4e007)
-* 🖥️ ui(web): fix typo in ErrorPageView props from 'onReaload' to 'onReload' (a2159a69)
-* ⚙️ config(web): update Sentry DSN to use environment variable for improved security and flexibility (47f34c89)
-* ⚙️ config(server): add REST client configuration for sending error notifications (7b8bd3ba)
-* 🖥️ ui(web): add GlobalError component and ErrorPage for improved error handling and user experience (b3af23f4)
-* 🖥️ ui(web): implement useTelemetryProvider hook for error tracking with Sentry (feb5ac46)
-* ♻️ refactor(web): update landing route and adjust authentication URLs to use stardustServerUrl for consistency (6b517c34)
-* ⚙️ config(web): include app directory in Tailwind CSS content paths for improved styling coverage (03275a8f)
-* ♻️ refactor(web): update all instances of webAppUrl and serverAppUrl to stardustWebUrl and stardustServerUrl for consistency across the application (62ae7a6a)
-* 📶 rest(web): add NotificationService for handling notifications and integrate it into the service index (e76a1ef3)
-* ♻️ refactor(web): update environment variable names from webAppUrl and serverAppUrl to stardustWebUrl and stardustServerUrl for improved clarity (585d7502)
-* ⚙️ config(web): add Sentry client initialization and request error handling for enhanced error tracking (946bfab3)
-* 🖥️ ui(web): introduce DecryptedText component for animated text reveal effects (2aa42dcf)
-* 🎴 assets(web): add new Apollo Mendigo image to the public assets (8660678d)
-* 🖥️ ui: add internal error animation to Lottie animations and update type definitions (ab0a55e8)
-* ♻️ refactor: rename webAppUrl to stardustWebUrl in environment configuration for consistency across services (d5546950)
-* 📶 rest(server): add NotificationRouter for handling error notifications and integrate it into HonoApp (a6957af5)
-* 📶 rest(server): introduce SendErrorNotificationController for handling error notifications (1f2737f7)
-* 📶 rest(server): enhance error notification handling by adding app context and implementing NotificationService for web (e2be85b8)
-* ⚙️ config(web): integrate Sentry for error tracking and monitoring in Next.js application (35b0d10c)
-* 🪨 constants(server): correct SENTRY_DNS variable name to SENTRY_DSN in environment configuration (867ce9f4)
-* ⚙️ config(server): integrate DiscordNotificationService for error notifications in HonoApp (b951af40)
-* 📶 rest(server): add sendErrorNotification method to DiscordNotificationService for error reporting (d7cdb495)
-* ⚙️ config(server): integrate Sentry telemetry provider for error tracking in HonoApp (e67c61a1)
-* 🧰 provision(server): add Sentry telemetry provider and integrate Sentry DSN in environment configuration (b546413f)
-* 📑 interface: add TelemetryProvider interface and export it in provision index (c31d31f0)
-* 📦 deps(server): add @sentry/node version 10.17.0 to package.json (36b32295)
+- 📦 deps(studio): remove @designliquido/delegua dependency from package.json
+  and package-lock.json (86a44235)
+- 🧪 test(server): add unit tests for various authentication controllers to
+  enhance test coverage and validate functionality (75f243ef)
+- 🧪 test(server): update unit test for ConfirmEmailController to validate token
+  usage in authentication (e2690e5e)
+- 🧪 test(server): update unit tests for VerifyAuthenticationController to
+  validate authentication verification functionality (15985cec)
+- 🧪 test(server): add unit tests for RefreshSessionController to validate
+  session refresh functionality (5585628d)
+- 🧪 test(server): add unit tests for RequestPasswordResetController to validate
+  password reset request functionality (4b2b769d)
+- 🧪 test(server): add unit tests for SignInWithGithubAccountController to
+  validate GitHub account sign-in functionality (b58b63cf)
+- 🧪 test(server): add unit tests for SignInController to validate user sign-in
+  functionality (bd6c8b4c)
+- 🧪 test(server): add unit tests for SignInWithGoogleAccountController to
+  validate Google account sign-in functionality (aecd5c3c)
+- 🧪 test(server): add unit tests for ResendSignUpEmailController to validate
+  email resending functionality (0f33fd7e)
+- 🧪 test(server): add unit tests for ResetPasswordController to validate
+  password reset functionality (63cadf04)
+- 🧪 test(server): add unit tests for SignOutController to validate user
+  sign-out functionality (93cf5d2e)
+- 🧪 test(server): add unit tests for SignUpController to validate user sign-up
+  and event publishing functionality (c843e2df)
+- 🧪 test(server): add unit tests for SignUpWithSocialAccountController to
+  validate user sign-up event publishing (b800aeeb)
+- 🧪 test(server): add unit tests for FetchSessionController to validate session
+  fetching functionality (08b1660b)
+- 🧪 test(server): add unit tests for FetchGoogleAccountConnectionController to
+  validate Google account connection retrieval functionality (21da3ce7)
+- 🧪 test(server): add unit tests for VerifyAuthenticationController to validate
+  authentication handling and error scenarios (a6f8634d)
+- 🧪 test(server): add unit tests for FetchGithubAccountConnectionController to
+  validate GitHub account connection retrieval functionality (666eec7b)
+- 🧪 test(server): add unit tests for DisconnectGoogleAccountController to
+  validate Google account disconnection functionality (4100c14d)
+- 🧪 test(server): add unit tests for DisconnectGithubAccountController to
+  validate GitHub account disconnection functionality (f4c8e63c)
+- 🧪 test(server): add unit tests for ConnectGoogleAccountController to validate
+  Google account connection functionality (28b82ae5)
+- 🧪 test(server): add unit tests for ConnectGithubAccountController to validate
+  GitHub account connection functionality (d4c92097)
+- 🧪 test(server): add unit tests for ConfirmPasswordResetController to validate
+  password reset functionality (af3bbb93)
+- 🧪 test(server): add unit tests for ConfirmEmailController to validate email
+  confirmation logic (04185a5f)
+- ♻️ refactor(server): rename authService to service in SignInController for
+  consistency (d228964a)
+- 🧰 provision(server): refactor DropboxStorageProvider to use a static internal
+  folder name based on environment mode (7d072357)
+- ⚙️ config(server): conditionally track errors and send notifications based on
+  environment mode (9f94a5ff)
+- 🧰 provision(server): update DropboxStorageProvider to include environment in
+  file path and clean up imports (c7469d30)
+- 🖥️ ui(web): add TypeScript ignore comment for completion item provider in
+  CodeEditor (4c3f8b50)
+- 🏎️ ci: change environment slug from "staging" to "dev" in Heroku CI workflow
+  (b325cc95)
+- 🖥️ ui(web): update CodeEditor snippet mapping to correct keyword reference and
+  improve documentation examples in Delegua constants (0e6cf282)
+- ⚙️ config(lsp): update Delegua language configuration to support additional
+  bracket types and refine indentation rules (affbd387)
+- 🖥️ ui(web): change CodeEditor auto-indent setting from 'advanced' to
+  'brackets' (3bad2f08)
+- 📦 deps(lsp): update @designliquido/delegua dependency to version 0.54.6
+  (3a6a3c74)
+- 🖥️ ui(web): enhance CodeEditor with advanced auto-indent, formatting options,
+  and snippet support (d6fadbc9)
+- 🖥️ ui(web): refactor ChallengeResultSlotView to improve key assignment in test
+  case mapping (4944ad64)
+- ⚙️ config(lsp): enhance Delegua language configuration for Monaco editor with
+  bracket pairs and indentation rules (08e3b3df)
+- 🖥️ ui(web): update useLsp hook to include DELEGUA_SNIPPETS for enhanced
+  functionality (32b2ef0f)
+- 🖥️ ui(web): enhance ChallengeCodeEditor with code checker toggle and refactor
+  originalCode handling (9ea22a89)
+- 🖥️ ui(web): prevent error notification in development mode (5fd1a695)
+- 🪨 constants(lsp): add delegua snippets (61b76f22)
+- 🌐 domain: add LspSnippet type definition for code snippets (f31569f3)
+- 🏎️ ci: update GitHub Actions workflow to include permissions for id-token and
+  contents (e6ed6878)
+- 🏎️ ci: integrate Infisical secrets management into CI workflows for server and
+  web applications (e5624dac)
+- ⚙️ config(server): rename test environment file from .env.test to .env.testing
+  for clarity (ac818faa)
+- 🏎️ ci: integrate Supabase CLI setup and migration steps into CI workflow for
+  server application (51098c9e)
+- 🏎️ ci: add test execution step to CI workflow for server application
+  (1c6395ed)
+- 🧪 test(server): refactor AuthRouter to use centralized route definitions and
+  add initial tests for AuthRouter functionality (c64265d7)
+- ⚙️ config(server): introduce HonoServer class for enhanced request handling
+  and integrate it into HonoApp (52d83255)
+- 💾 db(server): create initial database schema and migration scripts for user
+  challenges, achievements, and related entities (e59a7aa5)
+- ⚙️ config(server): add Jest configuration and setup for testing environment
+  (55c7ab6d)
+- 📦 deps(server): update dependencies and add database scripts in package.json
+  (edeb30e4)
+- 🧪 test(web): add unit tests for HandleRewardingPayloadController to validate
+  cookie handling and redirection logic (0e4ef26a)
+- 🧪 test(web): add unit tests for HandleRedirectController to validate
+  redirection logic based on query parameters (8a35db59)
+- 🧪 test(web): refactor AccessProfilePageController tests to improve user ID
+  handling and response validation (01ca8194)
+- 🧪 test(web): remove unused import from AccessSolutionPageController test file
+  (53e9a0ca)
+- ⚙️ config(web): enable security headers in Next.js configuration (8dc81171)
+- ♻️ refactor(web): remove unused ranking API calls and delete
+  FetchAchievementsController (194d0ebf)
+- 🌐 domain(core): add fakers export for auth entities and update challenging
+  fakers (070f33cb)
+- 🧪 test(web): add unit tests for AccessProfilePageController to validate user
+  fetching and redirection logic (f76bf8c4)
+- 🧪 test(web): refactor AccessSolutionPageController to use a service parameter
+  and add comprehensive tests for its functionality (def875a3)
+- 🧪 test(web): implement VerifyAuthRoutesController with tests for public and
+  private route access (4f86c139)
+- ♻️ refactor(web): remove console log from ConfirmEmailController and add
+  ConfirmPasswordResetController tests (ae5811cb)
+- 📦 deps(lsp): update @designliquido/delegua dependency version to 0.54.5 in
+  package.json (a72078bd)
+- 🚚 cd: change trigger from pull_request to push in server and web app Heroku
+  CD workflows for streamlined deployment (233d4f38)
+- 🚚 cd: update Infisical secrets-action configuration in web app CI and CD
+  workflows for improved environment variable management (58ad682c)
+- ♻️ refactor(web): add console log for CLIENT_ENV to aid in environment
+  configuration troubleshooting (7e773310)
+- 🚚 cd: update domain configuration to use secrets in Heroku workflows for
+  server and web apps (d3d9b54d)
+- 🏎️ ci: add permissions for id-token and contents in web app CI workflow
+  (352fb646)
+- 🚚 cd: replace hardcoded identity-id with secrets in Infisical secrets-action
+  for server and web app workflows (7cc1536b)
+- 🚚 cd: integrate Infisical secrets-action for .env file generation in web app
+  CI and staging workflows (981a016e)
+- ♻️ refactor(web): replace many env variables across various components for
+  consistent environment configuration (4d810baf)
+- ♻️ refactor: rename WEB_APP_URL to STARDUST_WEB_URL and add SENTRY_DSN in
+  server and web environment configurations (dc65b809)
+- 🚚 cd: change trigger from pull_request to push in server app Heroku CD
+  workflow and add permissions in web app staging CD workflow (ef8df72e)
+- ♻️ refactor(web): rename webAppUrl and serverAppUrl to stardustWebUrl and
+  stardustServerUrl in CLIENT_ENV configuration (d9e14652)
+- 🚚 cd: change trigger from push to pull_request in Heroku CD workflow
+  (a9224db0)
+- 🚚 cd: replace .env file creation with Infisical secrets-action for improved
+  environment variable management (225950a0)
+- 🐛 fix(server): correct SENTRY_DNS to SENTRY_DSN in environment configuration
+  (819a103f)
+- 🚚 cd: restore Infisical secrets-action in Heroku CD workflow for environment
+  variable management (6818082b)
+- 🚚 cd: comment out Infisical secrets-action in Heroku CD workflow for
+  environment variable management (45241ebb)
+- 🚚 cd: update Heroku CD workflow permissions to enable id-token writing and
+  content reading (b99e4d68)
+- 🚚 cd: update Heroku CD workflow to use Infisical for environment variable
+  management and change trigger to pull_request (d3eab1d4)
+- ♻️ refactor(server): rename webAppUrl to stardustWebUrl and update references
+  in SupabaseAuthService and RestMiddleware (8cf0594d)
+- 📦 deps(lsp): update @designliquido/delegua to version 0.54.4 in package.json
+  and package-lock.json (26f4e007)
+- 🖥️ ui(web): fix typo in ErrorPageView props from 'onReaload' to 'onReload'
+  (a2159a69)
+- ⚙️ config(web): update Sentry DSN to use environment variable for improved
+  security and flexibility (47f34c89)
+- ⚙️ config(server): add REST client configuration for sending error
+  notifications (7b8bd3ba)
+- 🖥️ ui(web): add GlobalError component and ErrorPage for improved error
+  handling and user experience (b3af23f4)
+- 🖥️ ui(web): implement useTelemetryProvider hook for error tracking with Sentry
+  (feb5ac46)
+- ♻️ refactor(web): update landing route and adjust authentication URLs to use
+  stardustServerUrl for consistency (6b517c34)
+- ⚙️ config(web): include app directory in Tailwind CSS content paths for
+  improved styling coverage (03275a8f)
+- ♻️ refactor(web): update all instances of webAppUrl and serverAppUrl to
+  stardustWebUrl and stardustServerUrl for consistency across the application
+  (62ae7a6a)
+- 📶 rest(web): add NotificationService for handling notifications and integrate
+  it into the service index (e76a1ef3)
+- ♻️ refactor(web): update environment variable names from webAppUrl and
+  serverAppUrl to stardustWebUrl and stardustServerUrl for improved clarity
+  (585d7502)
+- ⚙️ config(web): add Sentry client initialization and request error handling
+  for enhanced error tracking (946bfab3)
+- 🖥️ ui(web): introduce DecryptedText component for animated text reveal effects
+  (2aa42dcf)
+- 🎴 assets(web): add new Apollo Mendigo image to the public assets (8660678d)
+- 🖥️ ui: add internal error animation to Lottie animations and update type
+  definitions (ab0a55e8)
+- ♻️ refactor: rename webAppUrl to stardustWebUrl in environment configuration
+  for consistency across services (d5546950)
+- 📶 rest(server): add NotificationRouter for handling error notifications and
+  integrate it into HonoApp (a6957af5)
+- 📶 rest(server): introduce SendErrorNotificationController for handling error
+  notifications (1f2737f7)
+- 📶 rest(server): enhance error notification handling by adding app context and
+  implementing NotificationService for web (e2be85b8)
+- ⚙️ config(web): integrate Sentry for error tracking and monitoring in Next.js
+  application (35b0d10c)
+- 🪨 constants(server): correct SENTRY_DNS variable name to SENTRY_DSN in
+  environment configuration (867ce9f4)
+- ⚙️ config(server): integrate DiscordNotificationService for error
+  notifications in HonoApp (b951af40)
+- 📶 rest(server): add sendErrorNotification method to
+  DiscordNotificationService for error reporting (d7cdb495)
+- ⚙️ config(server): integrate Sentry telemetry provider for error tracking in
+  HonoApp (e67c61a1)
+- 🧰 provision(server): add Sentry telemetry provider and integrate Sentry DSN
+  in environment configuration (b546413f)
+- 📑 interface: add TelemetryProvider interface and export it in provision index
+  (c31d31f0)
+- 📦 deps(server): add @sentry/node version 10.17.0 to package.json (36b32295)
 
 ## 0.4.1 (2025-09-29)
 
-* ⚙️ config(server): change challengeId in user profile request to new value (ddf37ec2)
-* 🧪 test(core): add unit tests for CompleteChallengeUseCase to validate challenge completion logic (1c16c968)
-* 🐛 fix(core): ensure challenge completion is recorded only if not already completed (1e888107)
-* ♻️ refactor(server): simplify RewardUserForStarCompletionController by removing EventBroker dependency (d20bb48c)
-* ⚙️ config(server): update user challenge data and implement completeSpace middleware for handling space completion requests (988b8252)
-* 🧪 test(core): add unit tests for CompleteSpaceUseCase to validate user space completion logic (221e815a)
-* 📶 rest(server): add CompleteSpaceController to handle space completion requests (2c9ad8ec)
-* ♻️ refactor(core): remove EventBroker and SpaceCompletedEvent from CalculateRewardForStarCompletionUseCase (fa5c48a9)
-* ✨ use case: complete use case (1d3712b8)
-* 🐛 fix(server): handle PostgreSQL query errors in SupabasePlanetsRepository (61b33e12)
-* 🏎️ ci: add turbo installation step in Heroku CI workflow (ebc9f47b)
-* 📦 deps(server): upgrade axios to version 1.12.2 (2576a5aa)
-* 🏎️ ci: update GitHub Actions workflows to include path filters for core and validation packages (85118fba)
-* 🏎️ ci: add GitHub Actions workflow for server app CI (76668a0f)
-* 🐛 fix(core): update CreateUserUseCase tests to use findByName and findByEmail methods (0de3e80e)
-* 🐛 fix(core): refine user existence checks in VerifyUserEmailInUseUseCase and VerifyUserNameInUseUseCase (df60c2dd)
-* ⚙️ config(server): change user email in authentication response (efd09d66)
-* 🐛 fix(core): update user existence checks to use findByName and findByEmail methods (677bdd65)
-* 📮 validation: add accountSchema for user authentication validation (04fa71b3)
-* 🐛 fix(web): add security headers to Next.js configuration for enhanced protection (b24d6df7)
+- ⚙️ config(server): change challengeId in user profile request to new value
+  (ddf37ec2)
+- 🧪 test(core): add unit tests for CompleteChallengeUseCase to validate
+  challenge completion logic (1c16c968)
+- 🐛 fix(core): ensure challenge completion is recorded only if not already
+  completed (1e888107)
+- ♻️ refactor(server): simplify RewardUserForStarCompletionController by
+  removing EventBroker dependency (d20bb48c)
+- ⚙️ config(server): update user challenge data and implement completeSpace
+  middleware for handling space completion requests (988b8252)
+- 🧪 test(core): add unit tests for CompleteSpaceUseCase to validate user space
+  completion logic (221e815a)
+- 📶 rest(server): add CompleteSpaceController to handle space completion
+  requests (2c9ad8ec)
+- ♻️ refactor(core): remove EventBroker and SpaceCompletedEvent from
+  CalculateRewardForStarCompletionUseCase (fa5c48a9)
+- ✨ use case: complete use case (1d3712b8)
+- 🐛 fix(server): handle PostgreSQL query errors in SupabasePlanetsRepository
+  (61b33e12)
+- 🏎️ ci: add turbo installation step in Heroku CI workflow (ebc9f47b)
+- 📦 deps(server): upgrade axios to version 1.12.2 (2576a5aa)
+- 🏎️ ci: update GitHub Actions workflows to include path filters for core and
+  validation packages (85118fba)
+- 🏎️ ci: add GitHub Actions workflow for server app CI (76668a0f)
+- 🐛 fix(core): update CreateUserUseCase tests to use findByName and findByEmail
+  methods (0de3e80e)
+- 🐛 fix(core): refine user existence checks in VerifyUserEmailInUseUseCase and
+  VerifyUserNameInUseUseCase (df60c2dd)
+- ⚙️ config(server): change user email in authentication response (efd09d66)
+- 🐛 fix(core): update user existence checks to use findByName and findByEmail
+  methods (677bdd65)
+- 📮 validation: add accountSchema for user authentication validation (04fa71b3)
+- 🐛 fix(web): add security headers to Next.js configuration for enhanced
+  protection (b24d6df7)
 
 ## 0.4.0 (2025-09-25)
 
-* 🐛 fix(core): correct input index initialization and update question line creation messages for clarity (1807f54f)
-* 🐛 fix(web): update input index calculation to correctly parse numeric suffix from text (00a7a0cb)
-* 🐛 fix(lsp): ensure error messages are converted to strings in DeleguaLsp for consistent error handling (ebcda302)
-* ♻️ refactor(lsp): add initial implementation of Delegua language support with configuration, documentation, and regex definitions (8a378b34)
-* 📦 deps: update package references from @stardust/code-runner to @stardust/lsp and add package.json for LSP module (c08a1831)
-* ♻️ refactor(lsp): replace useCodeRunner with useLsp across components for improved code execution and error handling (57c446ba)
-* ♻️ refactor(lsp): remove useCodeRunner hook and introduce useLsp for LSP-based code execution (bb55412d)
-* ♻️ refactor(lsp): remove deprecated code-runner package and migrate to LSP-based implementation (a4422da1)
-* 🖥️ ui(web): update CodeEditor to utilize new hooks for context and breakpoint management, enhancing mobile responsiveness and editor configuration (19c15702)
-* 🖥️ ui(web): enhance CodeEditorSettingsDialog with error detector toggle and improve accessibility with labels (3913dff6)
-* ♻️ refactor(web): streamline code execution by replacing codeRunner with codeRunnerProvider across components (09e05c0e)
-* 🖥️ ui(web): implement useEditorContextProvider for state management and enhance editor context with new features (f922859d)
-* ♻️ refactor(web): separate RangeInput into RangeInputView for improved modularity and readability (c2f6b7dc)
-* 🐛 fix(lsp): ensure CodeRunnerResponse returns an empty response when no errors are present (49541f92)
-* 🐛 fix(core): update isFailure logic and add errors getter for improved error handling (a5679780)
-* ⚙️ config: replace 'code-runner' with 'lsp' in the allowed scopes for commit messages (ccb9241e)
-* 🪨 constants(lsp): modularize DELEGUA_DOCUMENTACOES into method-specific constants for better organization (902868dc)
-* 🌐 domain: add LspDocumentation type for enhanced documentation structure (e9aed386)
-* 🧰 provision(code-runner): implement syntax and semantic analysis methods in ExecutorDeCodigoDelegua (82c74d37)
-* 🧰 provision(code-runner): add DELEGUA_DOCUMENTACOES constant with function descriptions and examples (da8d5f7f)
-* ♻️ refactor(server): remove console.log from environment constants (a8b258ad)
-* ⚙️ config(server): add new environment variables for Dropbox and Discord integration (7381da18)
-* ⚙️ config(server): integrate AxiosRestClient into DropboxStorageProvider (41c1558d)
-* 🧰 provision(server): implement access token fetching and update constructor to accept RestClient (b3998292)
-* 🪨 constants(server): update Dropbox environment variables (5991e34f)
-* 🐛 fix(code-runner): improve null safety and type handling (36069842)
-* 📦 deps: upgrade @designliquido/delegua to version 0.54.1 (e6e0d84f)
-* 🐛 fix(code-runner): enhance result processing in ExecutorDeCodigoDelegua to ensure proper handling of returned values and add debugging logs (4b1fd35a)
-* 📦 deps: upgrade @designliquido/delegua to version 0.54.0 (c8ca4c92)
-* Update ExecutorDeCodigoDelegua.ts (0fc2d44c)
-* 🐛 fix(code-runner): update result handling in ExecutorDeCodigoDelegua to correctly process returned values (84c2190c)
-* 🐛 fix(web): update userOutput check to handle undefined values in useTestCase hook (a66f9c64)
-* 🐛 fix(web): update userOutput assignment to handle null values in ChallengeResultSlotView (0ed521ed)
-* 🐛 fix(core): update result assignment in CodeRunnerResponse constructor to check for undefined (5042f569)
-* ♻️ refactor(web): remove console.log statements (3c62d72b)
-* 📦 deps: upgrade @designliquido/delegua to version 0.53.2 (635da7e9)
-* ♻️ refactor(server): streamline user parameter handling in notification and use case classes for improved readability (074ff120)
-* 📶 rest(server): update user ID in users.rest and add secondsCount field to user challenge responses (f768782c)
-* 📶 rest(server): add appendUserInfoToBody method to ProfileMiddleware and integrate it into UsersRouter for enhanced user data handling (b7432f33)
-* ⚙️ config(server): add NotificationFunctions to handle completion notifications and integrate with HonoApp (046d199b)
-* 🎞️ queue: add SendPlanetCompletedNotificationJob and SendSpaceCompletedNotificationJob for handling completion notifications (9f543342)
-* 📶 rest(server): introduce AxiosRestClient for streamlined REST API interactions with error handling and pagination support (4240210a)
-* 📶 rest(server): add AppendUserInfoToBodyController and enhance existing controllers to integrate EventBroker for user-related operations (bd51d6fe)
-* 🪨 constants: add discordWebhookUrl to environment constants and schema (d6035d79)
-* ✨ use case: integrate EventBroker to publish SpaceCompletedEvent upon space completion (1e4ea9b5)
-* ✨ use case: enhance GetNextStarUseCase to include user information and publish PlanetCompletedEvent (f53b0deb)
-* 🌐 domain: add PlanetCompletedEvent and SpaceCompletedEvent classes to handle space completion events (8d86a511)
-* 📶 rest(server): implement DiscordNotificationService for sending user notifications (d7d18c66)
-* 📑 interface: add NotificationService interface and export it (dce13e73)
-* 🏎️ ci: update Discord notification message in Heroku workflow to use 'implantada' instead of 'deployada' (eaa16116)
-* 🐛 fix(web): remove CLIENT_ENV console log to clean up output (d7bee5c3)
-* 🏎️ ci: update Discord notification message in Heroku workflow for staging deployment (2d81f701)
-* 🏎️ ci: update Heroku workflow to use the latest Ubuntu runner (f7af7ed4)
-* 🐛 fix: correct typo in Heroku workflow runner specification (7fe7cf6d)
-* 🏎️ ci: streamline .env file creation by removing redundant step in Heroku workflow (01f2b4df)
-* 🏎️ ci: improve .env file creation and enhance CLIENT_ENV logging for better debugging (a36f73af)
-* 🏎️ ci: update .env file creation step to include test environment variables (22c78c45)
-* 🐛 fix(web): add console log for CLIENT_ENV to aid in debugging (e14d0693)
-* 🚚 cd: add Discord notification step to Heroku deployment workflow (01a5e44f)
-* 🏎️ ci: add step to create .env file for staging environment in Heroku workflow (ffec5521)
-* ⚙️ config: change module export to default export in jest.config.ts and remove uuid mapping (828a4bad)
-* 🧪 test: remove exclusive focus from email confirmation test to ensure all tests run (aa557a2c)
-* ⚙️ config: simplify import of TextEncoder and TextDecoder in jest.config.ts (de4c1106)
-* 🔀 merge:  social-account-settings branch into  feat/web-app-and-core-package-ci branch (ec95ce65)
-* 🐛 fix(web): update cache key for GitHub account connection and reintroduce CLIENT_ENV import in ConnectSocialAccountAction (a9f9fa83)
-* 🖥️ ui: refactor global CSS to use Tailwind imports and define custom color variables for light and dark themes (9ab08730)
-* 📦 deps: remove husky prepare script from package.json (eb08f44c)
-* Apply suggestion from @Copilot (64ab4ffa)
-* Apply suggestion from @Copilot (5a95e7d9)
-* 🏎️ ci: add GitHub Actions workflow for core package CI on pull requests (fe1e59a2)
-* 🏎️ ci: add GitHub Actions workflow for web app CI on pull requests (c12ec846)
-* 🐛 fix: correct unlockedStarsCount logic in User entity and update BackupDatabaseUseCase tests to use StorageFolder for uploads (70f4d4ac)
-* ♻️ refactor: remove console log from VerifyUserSocialAccountUseCase and update tests to reflect changes in user retrieval logic (66c877d0)
-* ⚙️ config(web): remove empty line from .env.example file for cleaner configuration (18606413)
-* ⚙️ config: update TypeScript configuration to exclude additional directories and add skipLibCheck option (8cce27df)
-* ♻️ refactor: remove unused import of AccountProvider in User tests (a2ff465e)
-* ♻️ refactor: simplify ProfileService imports by removing unused AccountProvider type (239b7348)
-* 📮 validation: update build scripts and add type checking (432c30ad)
-* 🌐 domain: add SessionFaker for generating fake session data and update main export to include fakers (f4e02eff)
-* 📶 rest: enhance ConfirmEmailController to log response and update tests for token handling and session management (ac30d1ca)
-* 🖥️ ui(web): remove AvatarSelect component and related files; update SettingsPageView to reflect changes (03dab30d)
-* 📶 rest(server): streamline handle method in ConnectGithubAccountController and ConnectGoogleAccountController by removing unnecessary response (26f9afc8)
-* 🖥️ ui(web): implement useSocialAccountActions hook for managing social account connections and disconnections (90559a53)
-* 📶 rest: implement social account sign-up and update routes for connecting Google and GitHub accounts (303c24e6)
-* ♻️ refactor: move AccountProvider export to core structure and remove obsolete global structure (71365ca2)
-* ♻️ refactor: remove console log from User entity creation and improve test readability by using block syntax for expect statements (649a0b80)
-* 📟 rpc: implement Connect and Disconnect actions for social accounts (Google and GitHub) with cache management (af798636)
-* 📟 rpc: add resetCache method to Call interface and implement in NextCall for cache management (c924355a)
-* ⚙️ config: update biome.json to add new linting rules for unique element IDs and iterable callback returns (2b81fb34)
-* 📮 validation: introduce accountProviderSchema for account validation and remove deprecated accountSchema (81cb9dff)
-* ⚙️ config: update release-it configuration to skip checks and include build assets (2f246393)
-* 🖥️ ui(web): update GitHub logo SVG and adjust button styles in SocialLinksView for improved aesthetics (e8faab2b)
-* 🖥️ ui(web): add Social Accounts section to Settings page with Google and GitHub integration (27c0838b)
-* 📶 rest(web): add methods to disconnect and fetch connections for GitHub and Google accounts in AuthService (504e3bbf)
-* ⚙️ config(server): update auth REST client and router to support disconnecting and fetching connections for Google and GitHub accounts (f211f64d)
-* 📶 rest(server): enhance SupabaseAuthService with methods for disconnecting accounts and fetching connection status for Google and GitHub (e6bd008f)
-* 📶 rest(server): add FetchGithubAccountConnectionController to handle fetching GitHub account connections (e425bcd9)
-* 📶 rest(server): add FetchGoogleAccountConnectionController to handle fetching Google account connections (977a82ba)
-* 📶 rest(server): add DisconnectGoogleAccountController to manage Google account disconnections (d53a810a)
-* 📶 rest(server): add DisconnectGithubAccountController to manage GitHub account disconnections (2cc3f158)
-* 📶 rest(server): implement ConnectGithubAccountController to handle GitHub account connections (38fcc454)
+- 🐛 fix(core): correct input index initialization and update question line
+  creation messages for clarity (1807f54f)
+- 🐛 fix(web): update input index calculation to correctly parse numeric suffix
+  from text (00a7a0cb)
+- 🐛 fix(lsp): ensure error messages are converted to strings in DeleguaLsp for
+  consistent error handling (ebcda302)
+- ♻️ refactor(lsp): add initial implementation of Delegua language support with
+  configuration, documentation, and regex definitions (8a378b34)
+- 📦 deps: update package references from @stardust/code-runner to @stardust/lsp
+  and add package.json for LSP module (c08a1831)
+- ♻️ refactor(lsp): replace useCodeRunner with useLsp across components for
+  improved code execution and error handling (57c446ba)
+- ♻️ refactor(lsp): remove useCodeRunner hook and introduce useLsp for LSP-based
+  code execution (bb55412d)
+- ♻️ refactor(lsp): remove deprecated code-runner package and migrate to
+  LSP-based implementation (a4422da1)
+- 🖥️ ui(web): update CodeEditor to utilize new hooks for context and breakpoint
+  management, enhancing mobile responsiveness and editor configuration
+  (19c15702)
+- 🖥️ ui(web): enhance CodeEditorSettingsDialog with error detector toggle and
+  improve accessibility with labels (3913dff6)
+- ♻️ refactor(web): streamline code execution by replacing codeRunner with
+  codeRunnerProvider across components (09e05c0e)
+- 🖥️ ui(web): implement useEditorContextProvider for state management and
+  enhance editor context with new features (f922859d)
+- ♻️ refactor(web): separate RangeInput into RangeInputView for improved
+  modularity and readability (c2f6b7dc)
+- 🐛 fix(lsp): ensure CodeRunnerResponse returns an empty response when no
+  errors are present (49541f92)
+- 🐛 fix(core): update isFailure logic and add errors getter for improved error
+  handling (a5679780)
+- ⚙️ config: replace 'code-runner' with 'lsp' in the allowed scopes for commit
+  messages (ccb9241e)
+- 🪨 constants(lsp): modularize DELEGUA_DOCUMENTACOES into method-specific
+  constants for better organization (902868dc)
+- 🌐 domain: add LspDocumentation type for enhanced documentation structure
+  (e9aed386)
+- 🧰 provision(code-runner): implement syntax and semantic analysis methods in
+  ExecutorDeCodigoDelegua (82c74d37)
+- 🧰 provision(code-runner): add DELEGUA_DOCUMENTACOES constant with function
+  descriptions and examples (da8d5f7f)
+- ♻️ refactor(server): remove console.log from environment constants (a8b258ad)
+- ⚙️ config(server): add new environment variables for Dropbox and Discord
+  integration (7381da18)
+- ⚙️ config(server): integrate AxiosRestClient into DropboxStorageProvider
+  (41c1558d)
+- 🧰 provision(server): implement access token fetching and update constructor
+  to accept RestClient (b3998292)
+- 🪨 constants(server): update Dropbox environment variables (5991e34f)
+- 🐛 fix(code-runner): improve null safety and type handling (36069842)
+- 📦 deps: upgrade @designliquido/delegua to version 0.54.1 (e6e0d84f)
+- 🐛 fix(code-runner): enhance result processing in ExecutorDeCodigoDelegua to
+  ensure proper handling of returned values and add debugging logs (4b1fd35a)
+- 📦 deps: upgrade @designliquido/delegua to version 0.54.0 (c8ca4c92)
+- Update ExecutorDeCodigoDelegua.ts (0fc2d44c)
+- 🐛 fix(code-runner): update result handling in ExecutorDeCodigoDelegua to
+  correctly process returned values (84c2190c)
+- 🐛 fix(web): update userOutput check to handle undefined values in useTestCase
+  hook (a66f9c64)
+- 🐛 fix(web): update userOutput assignment to handle null values in
+  ChallengeResultSlotView (0ed521ed)
+- 🐛 fix(core): update result assignment in CodeRunnerResponse constructor to
+  check for undefined (5042f569)
+- ♻️ refactor(web): remove console.log statements (3c62d72b)
+- 📦 deps: upgrade @designliquido/delegua to version 0.53.2 (635da7e9)
+- ♻️ refactor(server): streamline user parameter handling in notification and
+  use case classes for improved readability (074ff120)
+- 📶 rest(server): update user ID in users.rest and add secondsCount field to
+  user challenge responses (f768782c)
+- 📶 rest(server): add appendUserInfoToBody method to ProfileMiddleware and
+  integrate it into UsersRouter for enhanced user data handling (b7432f33)
+- ⚙️ config(server): add NotificationFunctions to handle completion
+  notifications and integrate with HonoApp (046d199b)
+- 🎞️ queue: add SendPlanetCompletedNotificationJob and
+  SendSpaceCompletedNotificationJob for handling completion notifications
+  (9f543342)
+- 📶 rest(server): introduce AxiosRestClient for streamlined REST API
+  interactions with error handling and pagination support (4240210a)
+- 📶 rest(server): add AppendUserInfoToBodyController and enhance existing
+  controllers to integrate EventBroker for user-related operations (bd51d6fe)
+- 🪨 constants: add discordWebhookUrl to environment constants and schema
+  (d6035d79)
+- ✨ use case: integrate EventBroker to publish SpaceCompletedEvent upon space
+  completion (1e4ea9b5)
+- ✨ use case: enhance GetNextStarUseCase to include user information and
+  publish PlanetCompletedEvent (f53b0deb)
+- 🌐 domain: add PlanetCompletedEvent and SpaceCompletedEvent classes to handle
+  space completion events (8d86a511)
+- 📶 rest(server): implement DiscordNotificationService for sending user
+  notifications (d7d18c66)
+- 📑 interface: add NotificationService interface and export it (dce13e73)
+- 🏎️ ci: update Discord notification message in Heroku workflow to use
+  'implantada' instead of 'deployada' (eaa16116)
+- 🐛 fix(web): remove CLIENT_ENV console log to clean up output (d7bee5c3)
+- 🏎️ ci: update Discord notification message in Heroku workflow for staging
+  deployment (2d81f701)
+- 🏎️ ci: update Heroku workflow to use the latest Ubuntu runner (f7af7ed4)
+- 🐛 fix: correct typo in Heroku workflow runner specification (7fe7cf6d)
+- 🏎️ ci: streamline .env file creation by removing redundant step in Heroku
+  workflow (01f2b4df)
+- 🏎️ ci: improve .env file creation and enhance CLIENT_ENV logging for better
+  debugging (a36f73af)
+- 🏎️ ci: update .env file creation step to include test environment variables
+  (22c78c45)
+- 🐛 fix(web): add console log for CLIENT_ENV to aid in debugging (e14d0693)
+- 🚚 cd: add Discord notification step to Heroku deployment workflow (01a5e44f)
+- 🏎️ ci: add step to create .env file for staging environment in Heroku workflow
+  (ffec5521)
+- ⚙️ config: change module export to default export in jest.config.ts and remove
+  uuid mapping (828a4bad)
+- 🧪 test: remove exclusive focus from email confirmation test to ensure all
+  tests run (aa557a2c)
+- ⚙️ config: simplify import of TextEncoder and TextDecoder in jest.config.ts
+  (de4c1106)
+- 🔀 merge: social-account-settings branch into feat/web-app-and-core-package-ci
+  branch (ec95ce65)
+- 🐛 fix(web): update cache key for GitHub account connection and reintroduce
+  CLIENT_ENV import in ConnectSocialAccountAction (a9f9fa83)
+- 🖥️ ui: refactor global CSS to use Tailwind imports and define custom color
+  variables for light and dark themes (9ab08730)
+- 📦 deps: remove husky prepare script from package.json (eb08f44c)
+- Apply suggestion from @Copilot (64ab4ffa)
+- Apply suggestion from @Copilot (5a95e7d9)
+- 🏎️ ci: add GitHub Actions workflow for core package CI on pull requests
+  (fe1e59a2)
+- 🏎️ ci: add GitHub Actions workflow for web app CI on pull requests (c12ec846)
+- 🐛 fix: correct unlockedStarsCount logic in User entity and update
+  BackupDatabaseUseCase tests to use StorageFolder for uploads (70f4d4ac)
+- ♻️ refactor: remove console log from VerifyUserSocialAccountUseCase and update
+  tests to reflect changes in user retrieval logic (66c877d0)
+- ⚙️ config(web): remove empty line from .env.example file for cleaner
+  configuration (18606413)
+- ⚙️ config: update TypeScript configuration to exclude additional directories
+  and add skipLibCheck option (8cce27df)
+- ♻️ refactor: remove unused import of AccountProvider in User tests (a2ff465e)
+- ♻️ refactor: simplify ProfileService imports by removing unused
+  AccountProvider type (239b7348)
+- 📮 validation: update build scripts and add type checking (432c30ad)
+- 🌐 domain: add SessionFaker for generating fake session data and update main
+  export to include fakers (f4e02eff)
+- 📶 rest: enhance ConfirmEmailController to log response and update tests for
+  token handling and session management (ac30d1ca)
+- 🖥️ ui(web): remove AvatarSelect component and related files; update
+  SettingsPageView to reflect changes (03dab30d)
+- 📶 rest(server): streamline handle method in ConnectGithubAccountController
+  and ConnectGoogleAccountController by removing unnecessary response (26f9afc8)
+- 🖥️ ui(web): implement useSocialAccountActions hook for managing social account
+  connections and disconnections (90559a53)
+- 📶 rest: implement social account sign-up and update routes for connecting
+  Google and GitHub accounts (303c24e6)
+- ♻️ refactor: move AccountProvider export to core structure and remove obsolete
+  global structure (71365ca2)
+- ♻️ refactor: remove console log from User entity creation and improve test
+  readability by using block syntax for expect statements (649a0b80)
+- 📟 rpc: implement Connect and Disconnect actions for social accounts (Google
+  and GitHub) with cache management (af798636)
+- 📟 rpc: add resetCache method to Call interface and implement in NextCall for
+  cache management (c924355a)
+- ⚙️ config: update biome.json to add new linting rules for unique element IDs
+  and iterable callback returns (2b81fb34)
+- 📮 validation: introduce accountProviderSchema for account validation and
+  remove deprecated accountSchema (81cb9dff)
+- ⚙️ config: update release-it configuration to skip checks and include build
+  assets (2f246393)
+- 🖥️ ui(web): update GitHub logo SVG and adjust button styles in SocialLinksView
+  for improved aesthetics (e8faab2b)
+- 🖥️ ui(web): add Social Accounts section to Settings page with Google and
+  GitHub integration (27c0838b)
+- 📶 rest(web): add methods to disconnect and fetch connections for GitHub and
+  Google accounts in AuthService (504e3bbf)
+- ⚙️ config(server): update auth REST client and router to support disconnecting
+  and fetching connections for Google and GitHub accounts (f211f64d)
+- 📶 rest(server): enhance SupabaseAuthService with methods for disconnecting
+  accounts and fetching connection status for Google and GitHub (e6bd008f)
+- 📶 rest(server): add FetchGithubAccountConnectionController to handle fetching
+  GitHub account connections (e425bcd9)
+- 📶 rest(server): add FetchGoogleAccountConnectionController to handle fetching
+  Google account connections (977a82ba)
+- 📶 rest(server): add DisconnectGoogleAccountController to manage Google
+  account disconnections (d53a810a)
+- 📶 rest(server): add DisconnectGithubAccountController to manage GitHub
+  account disconnections (2cc3f158)
+- 📶 rest(server): implement ConnectGithubAccountController to handle GitHub
+  account connections (38fcc454)
 
 ## 0.3.0 (2025-09-05)
 
