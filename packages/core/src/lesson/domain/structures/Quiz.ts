@@ -1,4 +1,3 @@
-import { NotFoundError } from '../../../global/domain/errors'
 import { Integer, Logical, UserAnswer } from '../../../global/domain/structures'
 import type { Question } from '../abstracts'
 import type { QuestionDto } from '../entities/dtos'
