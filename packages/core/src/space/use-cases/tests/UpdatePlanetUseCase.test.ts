@@ -62,10 +62,4 @@ describe('Update Planet Use Case', () => {
       useCase.execute({ planetId: faker.string.uuid(), name: faker.person.firstName() }),
     ).rejects.toThrow(PlanetNotFoundError)
   })
-
-  it('should publish the StarsOrderChangedEvent', async () => {
-    await expect(
-      useCase.execute({ planetId: 'invalid-id', name: faker.person.firstName() }),
-    ).rejects.toThrow(PlanetNotFoundError)
-  })
 })

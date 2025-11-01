@@ -3,7 +3,7 @@ import type { PlanetsRepository, StarsRepository } from '../interfaces'
 import type { EventBroker } from '#global/interfaces/EventBroker'
 import { Id } from '#global/domain/structures/Id'
 import { PlanetNotFoundError } from '../domain/errors'
-import { PlanetsOrderChangedEvent } from '../domain/events'
+import { StarsOrderChangedEvent } from '../domain/events'
 
 type Request = {
   planetId: string
@@ -21,7 +21,7 @@ export class ReorderPlanetStarsUseCase implements UseCase<Request> {
     const planet = await this.findPlanet(Id.create(planetId))
     planet.reorderStars(starIds.map((starId) => Id.create(starId)))
     await this.starsRepository.replaceMany(planet.stars)
-    await this.broker.publish(new PlanetsOrderChangedEvent())
+    await this.broker.publish(new StarsOrderChangedEvent())
   }
 
   private async findPlanet(planetId: Id) {

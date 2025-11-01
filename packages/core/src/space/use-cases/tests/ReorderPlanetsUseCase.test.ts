@@ -16,6 +16,8 @@ describe('Reorder Planets Use Case', () => {
   beforeEach(() => {
     repository = mock<PlanetsRepository>()
     broker = mock<EventBroker>()
+    repository.replaceMany.mockImplementation()
+    broker.publish.mockImplementation()
     useCase = new ReorderPlanetsUseCase(repository, broker)
   })
 
