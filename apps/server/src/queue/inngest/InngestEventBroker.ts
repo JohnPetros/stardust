@@ -1,6 +1,6 @@
 import type { EventBroker } from '@stardust/core/global/interfaces'
 import type { Event } from '@stardust/core/global/abstracts'
-import { inngest } from './client'
+import { inngest } from './inngest'
 
 export class InngestEventBroker implements EventBroker {
   async publish(event: Event): Promise<void> {

@@ -22,7 +22,7 @@ export class InngestAmqp<Payload> implements Amqp<Payload> {
     callbackName: string,
   ): Promise<Response> {
     return (await this.step?.run(
-      `run ${callbackName}`,
+      `Run ${callbackName}`,
       async () => await callBack(),
     )) as Response
   }

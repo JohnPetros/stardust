@@ -3,7 +3,12 @@ import { z } from 'zod'
 
 import { UserCreatedEvent } from '@stardust/core/profile/events'
 import { emailSchema, idSchema, nameSchema } from '@stardust/validation/global/schemas'
-import { FirstStarUnlockedEvent } from '@stardust/core/space/events'
+import {
+  FirstStarUnlockedEvent,
+  PlanetsOrderChangedEvent,
+  SpaceOrderChangedEvent,
+  StarsOrderChangedEvent,
+} from '@stardust/core/space/events'
 import { ShopItemsAcquiredByDefaultEvent } from '@stardust/core/shop/events'
 import {
   FirstTierReachedEvent,
@@ -39,6 +44,13 @@ const eventsSchema = {
       }),
       selectedAvatarByDefaultId: idSchema,
       selectedRocketByDefaultId: idSchema,
+    }),
+  },
+  [PlanetsOrderChangedEvent._NAME]: {},
+  [StarsOrderChangedEvent._NAME]: {},
+  [SpaceOrderChangedEvent._NAME]: {
+    data: z.object({
+      reorderedStarIds: z.array(idSchema),
     }),
   },
   [ShopItemsAcquiredByDefaultEvent._NAME]: {
