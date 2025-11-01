@@ -17,7 +17,7 @@ import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 
 import { ENV } from '@/constants'
-import { inngest } from '@/queue/inngest/client'
+import { inngest } from '@/queue/inngest/inngest'
 import {
   ProfileFunctions,
   SpaceFunctions,

@@ -1,3 +1,6 @@
 export { FirstStarUnlockedEvent } from './FirstStarUnlockedEvent'
 export { PlanetCompletedEvent } from './PlanetCompletedEvent'
 export { SpaceCompletedEvent } from './SpaceCompletedEvent'
+export { SpaceOrderChangedEvent } from './SpaceOrderChangedEvent'
+export { StarsOrderChangedEvent } from './StarsOrderChangedEvent'
+export { PlanetsOrderChangedEvent } from './PlanetsOrderChangedEvent'

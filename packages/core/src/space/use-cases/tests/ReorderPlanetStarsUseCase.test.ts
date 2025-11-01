@@ -1,21 +1,28 @@
 import { mock } from 'ts-jest-mocker'
 import { faker } from '@faker-js/faker'
 
+import type { EventBroker } from '#global/interfaces/EventBroker'
 import { ReorderPlanetStarsUseCase } from '../ReorderPlanetStarsUseCase'
 import type { PlanetsRepository, StarsRepository } from '../../interfaces'
 import { PlanetsFaker } from '../../domain/entities/tests/fakers'
 import { PlanetNotFoundError } from '../../domain/errors'
 import { Id } from '#global/domain/structures/Id'
+import { StarsOrderChangedEvent } from '#space/domain/events/StarsOrderChangedEvent'
 
 describe('Reorder Planet Stars Use Case', () => {
   let useCase: ReorderPlanetStarsUseCase
+  let broker: jest.Mocked<EventBroker>
   let planetsRepository: jest.Mocked<PlanetsRepository>
   let starsRepository: jest.Mocked<StarsRepository>
 
   beforeEach(() => {
     planetsRepository = mock<PlanetsRepository>()
     starsRepository = mock<StarsRepository>()
-    useCase = new ReorderPlanetStarsUseCase(planetsRepository, starsRepository)
+    broker = mock<EventBroker>()
+    planetsRepository.findById.mockImplementation()
+    starsRepository.replaceMany.mockImplementation()
+    broker.publish.mockImplementation()
+    useCase = new ReorderPlanetStarsUseCase(planetsRepository, starsRepository, broker)
   })
 
   it('should reorder the stars of a planet', async () => {
@@ -42,5 +49,16 @@ describe('Reorder Planet Stars Use Case', () => {
     await expect(
       useCase.execute({ planetId: faker.string.uuid(), starIds: [] }),
     ).rejects.toThrow(PlanetNotFoundError)
+  })
+
+  it('should publish the StarsOrderChangedEvent', async () => {
+    const planet = PlanetsFaker.fake()
+    planetsRepository.findById.mockResolvedValue(PlanetsFaker.fake())
+    starsRepository.replaceMany.mockResolvedValue()
+
+    await useCase.execute({ planetId: planet.id.value, starIds: [] })
+
+    expect(broker.publish).toHaveBeenCalledTimes(1)
+    expect(broker.publish).toHaveBeenCalledWith(new StarsOrderChangedEvent())
   })
 })

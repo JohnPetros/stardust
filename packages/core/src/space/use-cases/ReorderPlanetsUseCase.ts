@@ -3,7 +3,9 @@ import type { UseCase } from '#global/interfaces/UseCase'
 import type { PlanetsRepository } from '../interfaces/PlanetsRepository'
 import type { Planet } from '../domain/entities/Planet'
 import type { PlanetDto } from '../domain/entities/dtos/PlanetDto'
+import type { EventBroker } from '#global/interfaces/EventBroker'
 import { PlanetNotFoundError } from '../domain/errors'
+import { PlanetsOrderChangedEvent } from '../domain/events'
 
 type Request = {
   planetIds: string[]
@@ -12,7 +14,10 @@ type Request = {
 type Response = Promise<PlanetDto[]>
 
 export class ReorderPlanetsUseCase implements UseCase<Request, Response> {
-  constructor(private readonly repository: PlanetsRepository) {}
+  constructor(
+    private readonly repository: PlanetsRepository,
+    private readonly broker: EventBroker,
+  ) {}
 
   async execute({ planetIds }: Request): Response {
     const planets = await this.repository.findAll()
@@ -28,6 +33,7 @@ export class ReorderPlanetsUseCase implements UseCase<Request, Response> {
     }
 
     await this.repository.replaceMany(reorderedPlanets)
+    await this.broker.publish(new PlanetsOrderChangedEvent())
     return reorderedPlanets.map((planet) => planet.dto)
   }
 }

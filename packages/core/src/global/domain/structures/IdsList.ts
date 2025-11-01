@@ -17,6 +17,10 @@ export class IdsList {
     return new IdsList([...this.ids, id])
   }
 
+  addAt(id: Id, index: number): IdsList {
+    return new IdsList([...this.ids.slice(0, index), id, ...this.ids.slice(index)])
+  }
+
   remove(id: Id): IdsList {
     const ids = this.ids.filter((currentId) => currentId.value !== id.value)
     return new IdsList(ids)
