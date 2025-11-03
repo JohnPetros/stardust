@@ -9,7 +9,7 @@ import { WeekStatus } from '../../structures'
 import { AchievementsFaker, UsersFaker } from '../fakers'
 
 describe('User Entity', () => {
-  it('should have the unlocked star id if unlocks the star', () => {
+  it('should have the unlocked star id if User unlocks the star', () => {
     const user = UsersFaker.fake({ unlockedStarsIds: [] })
     const starId = Id.create()
 
@@ -20,7 +20,25 @@ describe('User Entity', () => {
     expect(user.hasUnlockedStar(starId).value).toBeTruthy()
   })
 
-  it('should have the unlocked and rescuable achievement id if unlocks the achievement', () => {
+  it('should have the recently unlocked star id if User recectly unlocks the star', () => {
+    const recentlyUnlockedStarsIds = [Id.create(), Id.create()]
+    const user = UsersFaker.fake({
+      recentlyUnlockedStarsIds: [
+        recentlyUnlockedStarsIds[0].value,
+        recentlyUnlockedStarsIds[1].value,
+      ],
+    })
+
+    recentlyUnlockedStarsIds.push(Id.create())
+
+    expect(user.hasRecentlyUnlockedStar(recentlyUnlockedStarsIds[0]).value).toBeTruthy()
+    expect(user.hasRecentlyUnlockedStar(recentlyUnlockedStarsIds[1]).value).toBeTruthy()
+    expect(
+      user.hasRecentlyUnlockedStar(recentlyUnlockedStarsIds[2]).value,
+    ).not.toBeTruthy()
+  })
+
+  it('should have the unlocked and rescuable achievement id if User unlocks the achievement', () => {
     const user = UsersFaker.fake({
       unlockedAchievementsIds: [],
       rescuableAchievementsIds: [],
@@ -36,7 +54,7 @@ describe('User Entity', () => {
     expect(user.hasRescuableAchievement(achievementId).value).toBeTruthy()
   })
 
-  it('should no longer have the rescuable achievement id if rescues the achievement', () => {
+  it('should no longer have the rescuable achievement id if User rescues the achievement', () => {
     const achievement = AchievementsFaker.fake()
     const user = UsersFaker.fake({
       rescuableAchievementsIds: [achievement.id.value],
@@ -49,7 +67,7 @@ describe('User Entity', () => {
     expect(user.hasRescuableAchievement(achievement.id).value).toBeFalsy()
   })
 
-  it('should increase the coins count from the achievement reward if rescues the achievement', () => {
+  it('should increase the coins count from the achievement reward if User rescues the achievement', () => {
     const achievement = AchievementsFaker.fake({ reward: 100 })
     const user = UsersFaker.fake({ coins: 0 })
 
@@ -60,7 +78,7 @@ describe('User Entity', () => {
     expect(user.coins).toEqual(Integer.create(100))
   })
 
-  it('should increase the coins count if earns coins', () => {
+  it('should increase the coins count if User earns coins', () => {
     const user = UsersFaker.fake({ coins: 0 })
 
     expect(user.coins).toEqual(Integer.create(0))
@@ -74,7 +92,7 @@ describe('User Entity', () => {
     expect(user.coins).toEqual(Integer.create(150))
   })
 
-  it('should decrease the coins count if loses coins', () => {
+  it('should decrease the coins count if User loses coins', () => {
     const user = UsersFaker.fake({ coins: 100 })
 
     expect(user.coins).toEqual(Integer.create(100))
@@ -88,7 +106,7 @@ describe('User Entity', () => {
     expect(user.coins).toEqual(Integer.create(50))
   })
 
-  it('should increase the count of the xp and weekly xp if earns xp', () => {
+  it('should increase the count of the xp and weekly xp if User earns xp', () => {
     const user = UsersFaker.fake({ xp: 0, weeklyXp: 0 })
 
     expect(user.xp).toEqual(Integer.create(0))
@@ -105,7 +123,7 @@ describe('User Entity', () => {
     expect(user.weeklyXp).toEqual(Integer.create(150))
   })
 
-  it('should try to up level if earns xp', () => {
+  it('should try to up level if User earns xp', () => {
     const user = UsersFaker.fake()
     const currentXp = user.xp
     const newXp = Integer.create(100)
@@ -116,7 +134,7 @@ describe('User Entity', () => {
     expect(levelUpSpy).toHaveBeenCalledWith(currentXp, newXp)
   })
 
-  it('should indicate if can acquire a shop item or not by the coins count', () => {
+  it('should indicate if User can acquire a shop item or not by the coins count', () => {
     const user = UsersFaker.fake({ coins: 100 })
     let itemPrice = Integer.create(100)
 
@@ -127,7 +145,7 @@ describe('User Entity', () => {
     expect(user.canAcquire(itemPrice).value).toBeFalsy()
   })
 
-  it('should throw an error if try to select a rocket or avatar that is not acquired', () => {
+  it('should throw an error if User try to select a rocket or avatar that is not acquired', () => {
     const user = UsersFaker.fake({
       acquiredRocketsIds: [],
       acquiredAvatarsIds: [],
