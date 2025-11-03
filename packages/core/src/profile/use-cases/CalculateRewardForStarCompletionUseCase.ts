@@ -1,11 +1,13 @@
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { UsersRepository } from '#profile/interfaces/UsersRepository'
-import { Percentage } from '#global/domain/structures/Percentage'
+import type { User } from '../domain/entities'
 import { Id } from '#global/domain/structures/Id'
+import { Percentage } from '#global/domain/structures/Percentage'
 import { UserNotFoundError } from '#profile/errors/UserNotFoundError'
 
 type Request = {
   userId: string
+  starId: string
   nextStarId: string | null
   questionsCount: number
   incorrectAnswersCount: number
@@ -25,20 +27,27 @@ export class CalculateRewardForStarCompletionUseCase
 
   constructor(private readonly repository: UsersRepository) {}
 
-  async execute({ userId, nextStarId, incorrectAnswersCount, questionsCount }: Request) {
+  async execute({
+    userId,
+    starId,
+    nextStarId,
+    incorrectAnswersCount,
+    questionsCount,
+  }: Request) {
     const user = await this.findUser(Id.create(userId))
-    const isLastSpaceStar = nextStarId === null
-    const isNextStarUnlocked = isLastSpaceStar
-      ? user.hasCompletedSpace.isTrue
-      : user.hasUnlockedStar(Id.create(nextStarId)).isTrue
+    const isNextStarUnlocked = this.checkNextStarIsUnlocked(
+      user,
+      Id.create(starId),
+      nextStarId ? Id.create(nextStarId) : null,
+    )
 
     const newXp = this.calculateXp(
-      isNextStarUnlocked,
+      isNextStarUnlocked.isTrue,
       questionsCount,
       incorrectAnswersCount,
     )
     const newCoins = this.calculateCoins(
-      isNextStarUnlocked,
+      isNextStarUnlocked.isTrue,
       questionsCount,
       incorrectAnswersCount,
     )
@@ -52,6 +61,12 @@ export class CalculateRewardForStarCompletionUseCase
       newXp,
       accuracyPercentage,
     }
+  }
+
+  private checkNextStarIsUnlocked(user: User, starId: Id, nextStarId: Id | null) {
+    const isLastSpaceStar = nextStarId === null
+    if (isLastSpaceStar) return user.hasCompletedSpace
+    return user.hasUnlockedStar(nextStarId).and(user.hasRecentlyUnlockedStar(starId))
   }
 
   private calculateAccuracyPercentage(
