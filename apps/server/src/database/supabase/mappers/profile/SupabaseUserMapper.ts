@@ -51,6 +51,8 @@ export class SupabaseUserMapper {
         ) ?? [],
       unlockedStarsIds:
         supabaseUser.users_unlocked_stars?.map(({ star_id }) => star_id) ?? [],
+      recentlyUnlockedStarsIds:
+        supabaseUser.users_recently_unlocked_stars?.map(({ star_id }) => star_id) ?? [],
       acquiredRocketsIds:
         supabaseUser.users_acquired_rockets?.map(({ rocket_id }) => rocket_id) ?? [],
       acquiredAvatarsIds:

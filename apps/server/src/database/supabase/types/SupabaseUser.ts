@@ -8,6 +8,7 @@ export type SupabaseUser = Database['public']['Tables']['users']['Row'] & {
   rocket?: SupabaseRocket | null
   tier?: SupabaseTier | null
   users_unlocked_stars?: { star_id: string }[]
+  users_recently_unlocked_stars?: { star_id: string }[]
   users_unlocked_achievements?: { achievement_id: string }[]
   users_rescuable_achievements?: { achievement_id: string }[]
   users_acquired_rockets?: { rocket_id: string }[]
