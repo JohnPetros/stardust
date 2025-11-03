@@ -14,6 +14,7 @@ export { CalculateRewardForStarCompletionUseCase } from './CalculateRewardForSta
 export { CalculateRewardForChallengeCompletionUseCase } from './CalculateRewardForChallengeCompletionUseCase'
 export { CompleteChallengeUseCase } from './CompleteChallengeUseCase'
 export { ResetWeekStatusForAllUsersUseCase } from './ResetWeekStatusForAllUsersUseCase'
+export { RemoveRecentlyUnlockedStarUseCase } from './RemoveRecentlyUnlockedStarUseCase'
 export { UpdateRankingPositionsUseCase } from './UpdateRankingPositionsUseCase'
 export { UpdateTierUseCase } from './UpdateTierUseCase'
 export { VerifyUserSocialAccountUseCase } from './VerifyUserSocialAccountUseCase'
