@@ -24,7 +24,10 @@ export class UpdateSpaceForAllUsersUseCase implements UseCase<Request, void> {
       const reorderedStarId = reorderedStarIds[index]
 
       if (unlockedStarId.value !== reorderedStarId.value) {
-        await this.repository.addUnlockedStar(reorderedStarId, userId)
+        await Promise.all([
+          this.repository.addUnlockedStar(reorderedStarId, userId),
+          this.repository.addRecentlyUnlockedStar(reorderedStarId, userId),
+        ])
         unlockedStars = unlockedStars.addAt(reorderedStarId, index)
       }
     }

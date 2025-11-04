@@ -19,6 +19,7 @@ export type UserDto = {
   avatar: AvatarAggregateDto
   tier: TierAggregateDto
   unlockedStarsIds?: string[]
+  recentlyUnlockedStarsIds?: string[]
   acquiredRocketsIds?: string[]
   unlockedDocsIds?: string[]
   acquiredAvatarsIds?: string[]

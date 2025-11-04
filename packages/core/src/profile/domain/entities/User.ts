@@ -31,6 +31,7 @@ type UserProps = {
   streak: Integer
   weekStatus: WeekStatus
   unlockedStarsIds: IdsList
+  recentlyUnlockedStarsIds: IdsList
   acquiredRocketsIds: IdsList
   acquiredAvatarsIds: IdsList
   unlockedAchievementsIds: IdsList
@@ -192,6 +193,10 @@ export class User extends Entity<UserProps> {
 
   hasUnlockedStar(starId: Id): Logical {
     return this.props.unlockedStarsIds.includes(starId)
+  }
+
+  hasRecentlyUnlockedStar(starId: Id): Logical {
+    return this.props.recentlyUnlockedStarsIds.includes(starId)
   }
 
   hasCompletedChallenge(challengeId: Id): Logical {
@@ -422,6 +427,7 @@ export class User extends Entity<UserProps> {
       streak: this.streak.value,
       weekStatus: this.props.weekStatus.value,
       unlockedStarsIds: this.props.unlockedStarsIds.dto,
+      recentlyUnlockedStarsIds: this.props.recentlyUnlockedStarsIds.dto,
       acquiredRocketsIds: this.props.acquiredRocketsIds.dto,
       acquiredAvatarsIds: this.props.acquiredAvatarsIds.dto,
       unlockedAchievementsIds: this.props.unlockedAchievementsIds.dto,

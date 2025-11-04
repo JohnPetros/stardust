@@ -27,6 +27,7 @@ export class SupabaseUsersRepository
           rocket:rockets(*), 
           tier:tiers(*),
           users_unlocked_stars(star_id),
+          users_recently_unlocked_stars(star_id),
           users_unlocked_achievements(achievement_id),
           users_rescuable_achievements(achievement_id),
           users_acquired_rockets(rocket_id),
@@ -59,6 +60,7 @@ export class SupabaseUsersRepository
           rocket:rockets(*), 
           tier:tiers(*),
           users_unlocked_stars(star_id),
+          users_recently_unlocked_stars(star_id),
           users_unlocked_achievements(achievement_id),
           users_rescuable_achievements(achievement_id),
           users_acquired_rockets(rocket_id),
@@ -83,6 +85,7 @@ export class SupabaseUsersRepository
           rocket:rockets(*), 
           tier:tiers(*),
           users_unlocked_stars(star_id),
+          users_recently_unlocked_stars(star_id),
           users_unlocked_achievements(achievement_id),
           users_rescuable_achievements(achievement_id),
           users_acquired_rockets(rocket_id),
@@ -119,6 +122,7 @@ export class SupabaseUsersRepository
           rocket:rockets(*), 
           tier:tiers(*),
           users_unlocked_stars(star_id),
+          users_recently_unlocked_stars(star_id),
           users_unlocked_achievements(achievement_id),
           users_rescuable_achievements(achievement_id),
           users_acquired_rockets(rocket_id),
@@ -144,6 +148,7 @@ export class SupabaseUsersRepository
         rocket:rockets(*), 
         tier:tiers(*),
         users_unlocked_stars(star_id),
+        users_recently_unlocked_stars(star_id),
         users_unlocked_achievements(achievement_id),
         users_rescuable_achievements(achievement_id),
         users_acquired_rockets(rocket_id),
@@ -171,6 +176,7 @@ export class SupabaseUsersRepository
         rocket:rockets(*), 
         tier:tiers(*),
         users_unlocked_stars(star_id),
+        users_recently_unlocked_stars(star_id),
         users_unlocked_achievements(achievement_id),
         users_rescuable_achievements(achievement_id),
         users_acquired_rockets(rocket_id),
@@ -198,6 +204,7 @@ export class SupabaseUsersRepository
         rocket:rockets(*), 
         tier:tiers(*),
         users_unlocked_stars(star_id),
+        users_recently_unlocked_stars(star_id),
         users_unlocked_achievements(achievement_id),
         users_rescuable_achievements(achievement_id),
         users_acquired_rockets(rocket_id),
@@ -225,6 +232,7 @@ export class SupabaseUsersRepository
         rocket:rockets(*), 
         tier:tiers(*),
         users_unlocked_stars(star_id),
+        users_recently_unlocked_stars(star_id),
         users_unlocked_achievements(achievement_id),
         users_rescuable_achievements(achievement_id),
         users_acquired_rockets(rocket_id),
@@ -263,6 +271,7 @@ export class SupabaseUsersRepository
         rocket:rockets(*), 
         tier:tiers(*),
         users_unlocked_stars(star_id),
+        users_recently_unlocked_stars(star_id),
         users_unlocked_achievements(achievement_id),
         users_rescuable_achievements(achievement_id),
         users_acquired_rockets(rocket_id),
@@ -394,6 +403,23 @@ export class SupabaseUsersRepository
     const { error } = await this.supabase
       .from('users_upvoted_comments')
       .insert({ comment_id: commentId.value, user_id: userId.value })
+
+    if (error) throw new SupabasePostgreError(error)
+  }
+
+  async addRecentlyUnlockedStar(starId: Id, userId: Id): Promise<void> {
+    const { error } = await this.supabase
+      .from('users_recently_unlocked_stars')
+      .insert({ star_id: starId.value, user_id: userId.value })
+
+    if (error) throw new SupabasePostgreError(error)
+  }
+
+  async removeRecentlyUnlockedStar(starId: Id, userId: Id): Promise<void> {
+    const { error } = await this.supabase
+      .from('users_recently_unlocked_stars')
+      .delete()
+      .match({ star_id: starId.value, user_id: userId.value })
 
     if (error) throw new SupabasePostgreError(error)
   }

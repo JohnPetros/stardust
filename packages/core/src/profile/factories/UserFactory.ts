@@ -48,6 +48,7 @@ export class UserFactory {
       acquiredRocketsIds: IdsList.create(dto?.acquiredRocketsIds),
       acquiredAvatarsIds: IdsList.create(dto?.acquiredAvatarsIds),
       unlockedStarsIds: IdsList.create(dto?.unlockedStarsIds),
+      recentlyUnlockedStarsIds: IdsList.create(dto?.recentlyUnlockedStarsIds),
       unlockedDocsIds: IdsList.create(dto?.unlockedDocsIds),
       completedChallengesIds: IdsList.create(dto?.completedChallengesIds),
       completedPlanetsIds: IdsList.create(dto?.completedPlanetsIds),

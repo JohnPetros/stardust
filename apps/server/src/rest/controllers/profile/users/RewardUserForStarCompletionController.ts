@@ -1,4 +1,4 @@
-import type { Controller, EventBroker } from '@stardust/core/global/interfaces'
+import type { Controller } from '@stardust/core/global/interfaces'
 import type { Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
@@ -15,6 +15,7 @@ type Schema = {
   body: {
     questionsCount: number
     incorrectAnswersCount: number
+    starId: string
     nextStarId?: string
   }
 }
@@ -24,10 +25,12 @@ export class RewardUserForStarCompletionController implements Controller<Schema>
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const { userId } = http.getRouteParams()
-    const { nextStarId, questionsCount, incorrectAnswersCount } = await http.getBody()
+    const { starId, nextStarId, questionsCount, incorrectAnswersCount } =
+      await http.getBody()
 
     const { newCoins, newXp, accuracyPercentage } = await this.calculateReward(
       userId,
+      starId,
       nextStarId ?? null,
       questionsCount,
       incorrectAnswersCount,
@@ -55,6 +58,7 @@ export class RewardUserForStarCompletionController implements Controller<Schema>
 
   private async calculateReward(
     userId: string,
+    starId: string,
     nextStarId: string | null,
     questionsCount: number,
     incorrectAnswersCount: number,
@@ -62,6 +66,7 @@ export class RewardUserForStarCompletionController implements Controller<Schema>
     const useCase = new CalculateRewardForStarCompletionUseCase(this.usersRepository)
     return await useCase.execute({
       userId,
+      starId,
       nextStarId,
       questionsCount,
       incorrectAnswersCount,

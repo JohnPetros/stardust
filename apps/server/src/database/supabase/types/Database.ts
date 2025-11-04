@@ -629,7 +629,7 @@ export type Database = {
           created_at: string | null
           factor_id: string | null
           id: string
-          ip: unknown | null
+          ip: unknown
           not_after: string | null
           oauth_client_id: string | null
           refreshed_at: string | null
@@ -643,7 +643,7 @@ export type Database = {
           created_at?: string | null
           factor_id?: string | null
           id: string
-          ip?: unknown | null
+          ip?: unknown
           not_after?: string | null
           oauth_client_id?: string | null
           refreshed_at?: string | null
@@ -657,7 +657,7 @@ export type Database = {
           created_at?: string | null
           factor_id?: string | null
           id?: string
-          ip?: unknown | null
+          ip?: unknown
           not_after?: string | null
           oauth_client_id?: string | null
           refreshed_at?: string | null
@@ -858,22 +858,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      email: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      jwt: {
-        Args: Record<PropertyKey, never>
-        Returns: Json
-      }
-      role: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      uid: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      email: { Args: never; Returns: string }
+      jwt: { Args: never; Returns: Json }
+      role: { Args: never; Returns: string }
+      uid: { Args: never; Returns: string }
     }
     Enums: {
       aal_level: 'aal1' | 'aal2' | 'aal3'
@@ -989,12 +977,12 @@ export type Database = {
         }
         Returns: undefined
       }
-      schedule: {
-        Args:
-          | { command: string; job_name: string; schedule: string }
-          | { command: string; schedule: string }
-        Returns: number
-      }
+      schedule:
+        | {
+            Args: { command: string; job_name: string; schedule: string }
+            Returns: number
+          }
+        | { Args: { command: string; schedule: string }; Returns: number }
       schedule_in_database: {
         Args: {
           active?: boolean
@@ -1006,10 +994,9 @@ export type Database = {
         }
         Returns: number
       }
-      unschedule: {
-        Args: { job_id: number } | { job_name: string }
-        Returns: boolean
-      }
+      unschedule:
+        | { Args: { job_name: string }; Returns: boolean }
+        | { Args: { job_id: number }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
@@ -1028,7 +1015,7 @@ export type Database = {
           blk_read_time: number | null
           blk_write_time: number | null
           calls: number | null
-          dbid: unknown | null
+          dbid: unknown
           jit_emission_count: number | null
           jit_emission_time: number | null
           jit_functions: number | null
@@ -1064,7 +1051,7 @@ export type Database = {
           toplevel: boolean | null
           total_exec_time: number | null
           total_plan_time: number | null
-          userid: unknown | null
+          userid: unknown
           wal_bytes: number | null
           wal_fpi: number | null
           wal_records: number | null
@@ -1084,34 +1071,14 @@ export type Database = {
         Args: { algorithm: string; secret: string; signables: string }
         Returns: string
       }
-      armor: {
-        Args: { '': string }
-        Returns: string
-      }
-      dearmor: {
-        Args: { '': string }
-        Returns: string
-      }
-      gen_random_bytes: {
-        Args: { '': number }
-        Returns: string
-      }
-      gen_random_uuid: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      gen_salt: {
-        Args: { '': string }
-        Returns: string
-      }
+      dearmor: { Args: { '': string }; Returns: string }
+      gen_random_uuid: { Args: never; Returns: string }
+      gen_salt: { Args: { '': string }; Returns: string }
       pg_stat_statements: {
         Args: { showtext: boolean }
         Returns: Record<string, unknown>[]
       }
-      pg_stat_statements_info: {
-        Args: Record<PropertyKey, never>
-        Returns: Record<string, unknown>
-      }
+      pg_stat_statements_info: { Args: never; Returns: Record<string, unknown> }
       pg_stat_statements_reset: {
         Args: { dbid?: unknown; queryid?: number; userid?: unknown }
         Returns: undefined
@@ -1120,66 +1087,29 @@ export type Database = {
         Args: { '': string }
         Returns: Record<string, unknown>[]
       }
-      pgp_key_id: {
-        Args: { '': string }
-        Returns: string
-      }
       sign: {
         Args: { algorithm?: string; payload: Json; secret: string }
         Returns: string
       }
-      try_cast_double: {
-        Args: { inp: string }
-        Returns: number
-      }
-      url_decode: {
-        Args: { data: string }
-        Returns: string
-      }
-      url_encode: {
-        Args: { data: string }
-        Returns: string
-      }
-      uuid_generate_v1: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      uuid_generate_v1mc: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      try_cast_double: { Args: { inp: string }; Returns: number }
+      url_decode: { Args: { data: string }; Returns: string }
+      url_encode: { Args: { data: string }; Returns: string }
+      uuid_generate_v1: { Args: never; Returns: string }
+      uuid_generate_v1mc: { Args: never; Returns: string }
       uuid_generate_v3: {
         Args: { name: string; namespace: string }
         Returns: string
       }
-      uuid_generate_v4: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      uuid_generate_v4: { Args: never; Returns: string }
       uuid_generate_v5: {
         Args: { name: string; namespace: string }
         Returns: string
       }
-      uuid_nil: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      uuid_ns_dns: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      uuid_ns_oid: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      uuid_ns_url: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      uuid_ns_x500: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      uuid_nil: { Args: never; Returns: string }
+      uuid_ns_dns: { Args: never; Returns: string }
+      uuid_ns_oid: { Args: never; Returns: string }
+      uuid_ns_url: { Args: never; Returns: string }
+      uuid_ns_x500: { Args: never; Returns: string }
       verify: {
         Args: { algorithm?: string; secret: string; token: string }
         Returns: {
@@ -2275,6 +2205,64 @@ export type Database = {
           },
         ]
       }
+      users_recently_unlocked_stars: {
+        Row: {
+          star_id: string
+          user_id: string
+        }
+        Insert: {
+          star_id: string
+          user_id: string
+        }
+        Update: {
+          star_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'users_recently_unlocked_stars_star_id_fkey'
+            columns: ['star_id']
+            isOneToOne: false
+            referencedRelation: 'next_star_from_next_planet'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_recently_unlocked_stars_star_id_fkey'
+            columns: ['star_id']
+            isOneToOne: false
+            referencedRelation: 'stars'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_recently_unlocked_stars_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'challenges_view'
+            referencedColumns: ['author_id']
+          },
+          {
+            foreignKeyName: 'users_recently_unlocked_stars_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_recently_unlocked_stars_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users_completed_planets_view'
+            referencedColumns: ['user_id']
+          },
+          {
+            foreignKeyName: 'users_recently_unlocked_stars_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users_view'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       users_rescuable_achievements: {
         Row: {
           achievement_id: string
@@ -2695,12 +2683,12 @@ export type Database = {
       planets_view: {
         Row: {
           completions_count: number | null
-          is_available: boolean | null
           icon: string | null
           id: string | null
           image: string | null
           name: string | null
           position: number | null
+          is_available: boolean | null
         }
         Relationships: []
       }
@@ -2877,65 +2865,42 @@ export type Database = {
     Functions: {
       count_comments_upvotes: {
         Args: { '': Database['public']['Tables']['comments']['Row'] }
-        Returns: number
+        Returns: {
+          error: true
+        } & 'the function public.count_comments_upvotes with parameter or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache'
       }
-      delete_public_user: {
-        Args: { userid: string }
-        Returns: undefined
-      }
-      delete_user: {
-        Args: { userid: string }
-        Returns: undefined
-      }
-      deleteuser: {
-        Args: { userid: string }
-        Returns: undefined
-      }
-      filter_challenges: {
-        Args:
-          | { difficulty: string; status: string; userid: string }
-          | { difficulty: string; status: string; userid: string }
-        Returns: Record<string, unknown>
-      }
+      delete_public_user: { Args: { userid: string }; Returns: undefined }
+      delete_user: { Args: { userid: string }; Returns: undefined }
+      deleteuser: { Args: { userid: string }; Returns: undefined }
+      filter_challenges:
+        | {
+            Args: { difficulty: string; status: string; userid: string }
+            Returns: Record<string, unknown>
+          }
+        | {
+            Args: { difficulty: string; status: string; userid: string }
+            Returns: undefined
+          }
       get_next_star_from_next_planet: {
         Args: { _current_planet_id: string; _user_id: string }
         Returns: {
           id: string | null
           is_unlocked: boolean | null
         }[]
+        SetofOptions: {
+          from: '*'
+          to: 'next_star_from_next_planet'
+          isOneToOne: false
+          isSetofReturn: true
+        }
       }
-      install_available_extensions_and_test: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
-      olamundo: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      resetstreak: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      slugify: {
-        Args: { name: string }
-        Returns: string
-      }
-      teste: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      unaccent: {
-        Args: { '': string }
-        Returns: string
-      }
-      unaccent_init: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      update_last_week_ranking_positions: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      install_available_extensions_and_test: { Args: never; Returns: boolean }
+      olamundo: { Args: never; Returns: string }
+      resetstreak: { Args: never; Returns: undefined }
+      slugify: { Args: { name: string }; Returns: string }
+      teste: { Args: never; Returns: string }
+      unaccent: { Args: { '': string }; Returns: string }
+      update_last_week_ranking_positions: { Args: never; Returns: undefined }
       update_user_email: {
         Args: { new_email: string; user_id: string }
         Returns: undefined
@@ -3000,7 +2965,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_10_07: {
+      messages_2025_10_31: {
         Row: {
           event: string | null
           extension: string
@@ -3033,7 +2998,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_10_08: {
+      messages_2025_11_01: {
         Row: {
           event: string | null
           extension: string
@@ -3066,7 +3031,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_10_09: {
+      messages_2025_11_02: {
         Row: {
           event: string | null
           extension: string
@@ -3099,7 +3064,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_10_10: {
+      messages_2025_11_03: {
         Row: {
           event: string | null
           extension: string
@@ -3132,7 +3097,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_10_11: {
+      messages_2025_11_04: {
         Row: {
           event: string | null
           extension: string
@@ -3165,7 +3130,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_10_12: {
+      messages_2025_11_05: {
         Row: {
           event: string | null
           extension: string
@@ -3198,7 +3163,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_10_13: {
+      messages_2025_11_06: {
         Row: {
           event: string | null
           extension: string
@@ -3284,6 +3249,12 @@ export type Database = {
       apply_rls: {
         Args: { max_record_bytes?: number; wal: Json }
         Returns: Database['realtime']['CompositeTypes']['wal_rls'][]
+        SetofOptions: {
+          from: '*'
+          to: 'wal_rls'
+          isOneToOne: false
+          isSetofReturn: true
+        }
       }
       broadcast_changes: {
         Args: {
@@ -3306,10 +3277,7 @@ export type Database = {
         }
         Returns: string
       }
-      cast: {
-        Args: { type_: unknown; val: string }
-        Returns: Json
-      }
+      cast: { Args: { type_: unknown; val: string }; Returns: Json }
       check_equality_op: {
         Args: {
           op: Database['realtime']['Enums']['equality_op']
@@ -3334,23 +3302,20 @@ export type Database = {
           slot_name: unknown
         }
         Returns: Database['realtime']['CompositeTypes']['wal_rls'][]
+        SetofOptions: {
+          from: '*'
+          to: 'wal_rls'
+          isOneToOne: false
+          isSetofReturn: true
+        }
       }
-      quote_wal2json: {
-        Args: { entity: unknown }
-        Returns: string
-      }
+      quote_wal2json: { Args: { entity: unknown }; Returns: string }
       send: {
         Args: { event: string; payload: Json; private?: boolean; topic: string }
         Returns: undefined
       }
-      to_regrole: {
-        Args: { role_name: string }
-        Returns: unknown
-      }
-      topic: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      to_regrole: { Args: { role_name: string }; Returns: unknown }
+      topic: { Args: never; Returns: string }
     }
     Enums: {
       action: 'INSERT' | 'UPDATE' | 'DELETE' | 'TRUNCATE' | 'ERROR'
@@ -3365,7 +3330,7 @@ export type Database = {
       wal_column: {
         name: string | null
         type_name: string | null
-        type_oid: unknown | null
+        type_oid: unknown
         value: Json | null
         is_pkey: boolean | null
         is_selectable: boolean | null
@@ -3674,32 +3639,14 @@ export type Database = {
         Args: { _bucket_id: string; _name: string }
         Returns: boolean
       }
-      extension: {
-        Args: { name: string }
-        Returns: string
-      }
-      filename: {
-        Args: { name: string }
-        Returns: string
-      }
-      foldername: {
-        Args: { name: string }
-        Returns: string[]
-      }
-      get_level: {
-        Args: { name: string }
-        Returns: number
-      }
-      get_prefix: {
-        Args: { name: string }
-        Returns: string
-      }
-      get_prefixes: {
-        Args: { name: string }
-        Returns: string[]
-      }
+      extension: { Args: { name: string }; Returns: string }
+      filename: { Args: { name: string }; Returns: string }
+      foldername: { Args: { name: string }; Returns: string[] }
+      get_level: { Args: { name: string }; Returns: number }
+      get_prefix: { Args: { name: string }; Returns: string }
+      get_prefixes: { Args: { name: string }; Returns: string[] }
       get_size_by_bucket: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           bucket_id: string
           size: number
@@ -3740,10 +3687,7 @@ export type Database = {
         Args: { bucket_ids: string[]; names: string[] }
         Returns: undefined
       }
-      operation: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      operation: { Args: never; Returns: string }
       search: {
         Args: {
           bucketname: string

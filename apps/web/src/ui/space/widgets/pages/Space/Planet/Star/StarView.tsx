@@ -8,6 +8,7 @@ import { AnimatedImage } from './AnimatedImage'
 import { AnimatedRocket } from './AnimatedRocket'
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 import { Animation } from '@/ui/global/widgets/components/Animation'
+import { ShinyText } from '@/ui/global/widgets/components/ShinyText'
 
 const STAR_LIGHT = '0 0 12px #ffcf31a1'
 
@@ -15,6 +16,7 @@ type Props = {
   name: string
   number: number
   isUnlocked: boolean
+  isRecentlyUnlocked: boolean
   isLastUnlockedStar: boolean
   lastUnlockedStarRef: RefObject<HTMLDivElement | null>
   starAnimationRef: RefObject<AnimationRef | null>
@@ -25,6 +27,7 @@ export const StarView = ({
   name,
   number,
   isUnlocked,
+  isRecentlyUnlocked,
   isLastUnlockedStar,
   lastUnlockedStarRef,
   starAnimationRef,
@@ -74,6 +77,7 @@ export const StarView = ({
             {number}
           </span>
         </div>
+
         <div
           style={{ boxShadow: STAR_LIGHT }}
           className={twMerge(
@@ -89,6 +93,9 @@ export const StarView = ({
           >
             {name}
           </strong>
+          {isRecentlyUnlocked && (
+            <ShinyText text='Conteúdo novo' isDisabled={!isUnlocked} />
+          )}
         </div>
 
         <AnimatedRocket shouldAnimate={isLastUnlockedStar} />

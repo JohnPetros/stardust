@@ -12,6 +12,7 @@ describe('Update Space For All Users Use Case', () => {
     repository.findAll.mockImplementation()
     repository.findUnlockedStars.mockImplementation()
     repository.addUnlockedStar.mockImplementation()
+    repository.addRecentlyUnlockedStar.mockImplementation()
     useCase = new UpdateSpaceForAllUsersUseCase(repository)
   })
 
@@ -38,6 +39,16 @@ describe('Update Space For All Users Use Case', () => {
       users[0].id,
     )
     expect(repository.addUnlockedStar).toHaveBeenNthCalledWith(
+      2,
+      Id.create(reorderedStarIds[2]),
+      users[0].id,
+    )
+    expect(repository.addRecentlyUnlockedStar).toHaveBeenNthCalledWith(
+      1,
+      Id.create(reorderedStarIds[1]),
+      users[0].id,
+    )
+    expect(repository.addRecentlyUnlockedStar).toHaveBeenNthCalledWith(
       2,
       Id.create(reorderedStarIds[2]),
       users[0].id,
