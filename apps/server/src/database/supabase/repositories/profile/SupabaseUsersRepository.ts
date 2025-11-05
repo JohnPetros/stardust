@@ -289,8 +289,30 @@ export class SupabaseUsersRepository
   async findUnlockedStars(userId: Id): Promise<IdsList> {
     const { data, error } = await this.supabase
       .from('users_unlocked_stars')
-      .select('star_id')
+      .select('star_id, stars(name, number, planets(position))')
       .eq('user_id', userId.value)
+      .order('stars(number)', { ascending: true })
+
+    if (error) throw new SupabasePostgreError(error)
+
+    data.sort((a, b) => a.stars.planets.position - b.stars.planets.position)
+
+    return IdsList.create(data.map(({ star_id }) => star_id))
+  }
+
+  async findRecentlyUnlockedStars(userId: Id): Promise<IdsList> {
+    const { data, error } = await this.supabase
+      .from('users_recently_unlocked_stars')
+      .select('star_id, stars(number, planets(position))')
+      .eq('user_id', userId.value)
+      .order('position', {
+        referencedTable: 'stars.planets',
+        ascending: true,
+      })
+      .order('number', {
+        referencedTable: 'stars',
+        ascending: true,
+      })
 
     if (error) throw new SupabasePostgreError(error)
 
