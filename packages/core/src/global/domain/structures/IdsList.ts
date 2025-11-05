@@ -6,7 +6,8 @@ export class IdsList {
   private constructor(readonly ids: Id[]) {}
 
   static create(ids?: string[]): IdsList {
-    return new IdsList(ids ? ids.map(Id.create) : [])
+    const list = ids ? Array.from(new Set(ids)).map(Id.create) : []
+    return new IdsList(list)
   }
 
   includes(id: Id): Logical {
