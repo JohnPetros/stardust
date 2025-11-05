@@ -144,6 +144,7 @@ export class UsersRouter extends HonoRouter {
         'json',
         z.object({
           challengeId: idSchema,
+          starId: idSchema,
           maximumIncorrectAnswersCount: integerSchema,
           incorrectAnswersCount: integerSchema,
         }),
