@@ -274,6 +274,10 @@ export class User extends Entity<UserProps> {
     return this.props.hasCompletedSpace
   }
 
+  get unlockedStarsIds(): IdsList {
+    return this.props.unlockedStarsIds
+  }
+
   get unlockedStarsCount(): Integer {
     if (this.props.unlockedStarsIds.count.isZero.isTrue) return Integer.create(0)
     return this.props.unlockedStarsIds.count.minus(Integer.create(1))
