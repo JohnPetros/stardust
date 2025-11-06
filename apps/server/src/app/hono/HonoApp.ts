@@ -120,8 +120,6 @@ export class HonoApp {
         await this.notificationService.sendErrorNotification('server', error.message)
       }
 
-      console.error('Error:', error)
-
       return context.json(
         {
           title: 'Unexpected Server Error',
