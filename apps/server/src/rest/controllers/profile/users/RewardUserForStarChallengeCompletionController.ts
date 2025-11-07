@@ -5,6 +5,7 @@ import type { UsersRepository } from '@stardust/core/profile/interfaces'
 import {
   CalculateRewardForChallengeCompletionUseCase,
   CompleteChallengeUseCase,
+  RemoveRecentlyUnlockedStarUseCase,
   RewardUserUseCase,
   UnlockStarUseCase,
 } from '@stardust/core/profile/use-cases'
@@ -22,6 +23,7 @@ type Schema = {
     maximumIncorrectAnswersCount: number
     incorrectAnswersCount: number
     nextStarId?: string
+    starId: string
   }
 }
 
@@ -33,6 +35,7 @@ export class RewardUserForStarChallengeCompletionController
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const { userId } = http.getRouteParams()
     const {
+      starId,
       nextStarId,
       challengeId,
       challengeReward,
@@ -52,6 +55,8 @@ export class RewardUserForStarChallengeCompletionController
     if (nextStarId) {
       await this.unlockStar(userId, nextStarId)
     }
+
+    await this.removeRecentlyUnlockedStar(userId, starId)
 
     await this.completeChallenge(userId, challengeId)
 
@@ -98,6 +103,11 @@ export class RewardUserForStarChallengeCompletionController
   private async unlockStar(userId: string, starId: string) {
     const useCase = new UnlockStarUseCase(this.usersRepository)
     await useCase.execute({ userId, starId })
+  }
+
+  private async removeRecentlyUnlockedStar(userId: string, starId: string) {
+    const useCase = new RemoveRecentlyUnlockedStarUseCase(this.usersRepository)
+    return await useCase.execute({ userId, starId })
   }
 
   private async rewardUser(userId: string, newCoins: number, newXp: number) {

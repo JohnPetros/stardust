@@ -17,13 +17,24 @@ export class UpdateSpaceForAllUsersUseCase implements UseCase<Request, void> {
   }
 
   private async update(userId: Id, reorderedStarIds: Id[]): Promise<void> {
-    let unlockedStars = await this.repository.findUnlockedStars(userId)
+    let [unlockedStars, recentlyUnlockedStars] = await Promise.all([
+      this.repository.findUnlockedStars(userId),
+      this.repository.findRecentlyUnlockedStars(userId),
+    ])
+
+    if (unlockedStars.count.value === reorderedStarIds.length) {
+      return
+    }
 
     for (let index = 0; index < unlockedStars.count.value; index++) {
       const unlockedStarId = unlockedStars.ids[index]
       const reorderedStarId = reorderedStarIds[index]
 
-      if (unlockedStarId.value !== reorderedStarId.value) {
+      if (
+        unlockedStarId.value !== reorderedStarId.value &&
+        recentlyUnlockedStars.includes(reorderedStarId).isFalse &&
+        unlockedStars.includes(reorderedStarId).isFalse
+      ) {
         await Promise.all([
           this.repository.addUnlockedStar(reorderedStarId, userId),
           this.repository.addRecentlyUnlockedStar(reorderedStarId, userId),

@@ -6,6 +6,7 @@ import {
   CalculateRewardForStarCompletionUseCase,
   RewardUserUseCase,
   UnlockStarUseCase,
+  RemoveRecentlyUnlockedStarUseCase,
 } from '@stardust/core/profile/use-cases'
 
 type Schema = {
@@ -39,6 +40,8 @@ export class RewardUserForStarCompletionController implements Controller<Schema>
     if (nextStarId) {
       await this.unlockStar(userId, nextStarId)
     }
+
+    await this.removeRecentlyUnlockedStar(userId, starId)
 
     const { newLevel, newStreak, newWeekStatus } = await this.rewardUser(
       userId,
@@ -76,6 +79,11 @@ export class RewardUserForStarCompletionController implements Controller<Schema>
   private async unlockStar(userId: string, starId: string) {
     const useCase = new UnlockStarUseCase(this.usersRepository)
     await useCase.execute({ userId, starId })
+  }
+
+  private async removeRecentlyUnlockedStar(userId: string, starId: string) {
+    const useCase = new RemoveRecentlyUnlockedStarUseCase(this.usersRepository)
+    return await useCase.execute({ userId, starId })
   }
 
   private async rewardUser(userId: string, newCoins: number, newXp: number) {

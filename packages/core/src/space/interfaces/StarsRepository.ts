@@ -3,6 +3,7 @@ import type { Slug } from '#global/domain/structures/Slug'
 import type { Star } from '../domain/entities'
 
 export interface StarsRepository {
+  findAllOrdered(): Promise<Star[]>
   findById(starId: Id): Promise<Star | null>
   findBySlug(starSlug: Slug): Promise<Star | null>
   findByNumber(position: OrdinalNumber): Promise<Star | null>

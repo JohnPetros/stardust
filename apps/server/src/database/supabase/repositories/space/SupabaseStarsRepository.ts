@@ -10,6 +10,19 @@ export class SupabaseStarsRepository
   extends SupabaseRepository
   implements StarsRepository
 {
+  async findAllOrdered(): Promise<Star[]> {
+    const { data, error } = await this.supabase
+      .from('stars')
+      .select('id, name, number, slug, is_available, is_challenge')
+      .order('id', { ascending: true })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+
+    return data.map(SupabaseStarMapper.toEntity)
+  }
+
   async findById(starId: Id): Promise<Star | null> {
     const { data, error } = await this.supabase
       .from('stars')
