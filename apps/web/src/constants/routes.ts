@@ -2,6 +2,11 @@ import { CLIENT_ENV } from './client-env'
 
 export const ROUTES = {
   landing: '/',
+  seo: {
+    llmsTxt: '/llms.txt',
+    robotsTxt: '/robots.txt',
+    sitemap: '/sitemap.xml',
+  },
   ranking: '/ranking',
   space: '/space',
   shop: '/shop',
