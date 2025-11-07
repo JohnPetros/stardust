@@ -1,23 +1,23 @@
+import type { PropsWithChildren } from 'react'
 import type { Metadata } from 'next'
 
-import { SignUpPage } from '@/ui/auth/widgets/pages/SignUp'
 import { STARDUST_METADATA } from '@/constants/stardust-metadata'
 
 export const metadata: Metadata = {
   ...STARDUST_METADATA,
   robots: {
-    index: true,
+    index: false,
     follow: false,
     nocache: false,
     googleBot: {
-      index: true,
+      index: false,
       follow: false,
     },
   },
 }
 
-const Page = () => {
-  return <SignUpPage />
+const Layout = async ({ children }: PropsWithChildren) => {
+  return children
 }
 
-export default Page
+export default Layout
