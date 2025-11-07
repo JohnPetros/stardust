@@ -5,19 +5,19 @@ import { CLIENT_ENV } from '@/constants'
 const sitemap = (): MetadataRoute.Sitemap => {
   return [
     {
-      url: `${CLIENT_ENV}/`,
+      url: `${CLIENT_ENV.stardustWebUrl}/`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 1.0,
     },
     {
-      url: `${CLIENT_ENV}/sign-in`,
+      url: `${CLIENT_ENV.stardustWebUrl}/sign-in`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.5,
     },
     {
-      url: `${CLIENT_ENV}/sign-up`,
+      url: `${CLIENT_ENV.stardustWebUrl}/sign-up`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.5,
