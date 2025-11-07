@@ -63,7 +63,10 @@ export function DragAndDropQuestion({
                 const key = DragAndDropQuestionEntity.getDropZoneSlotKey(line, textIndex)
                 if (!key)
                   return (
-                    <span key={key} className='font-code w-max text-gray-100'>
+                    <span
+                      key={`${line.number.value}-${textIndex}`}
+                      className='font-code w-max text-gray-100'
+                    >
                       {text}
                     </span>
                   )

@@ -3938,7 +3938,7 @@ export const Constants = {
   },
   storage: {
     Enums: {
-      buckettype: ['STANDARD', 'ANALYTICS'],
+    buckettype: ['STANDARD', 'ANALYTICS'],
     },
   },
 } as const

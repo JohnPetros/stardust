@@ -38,6 +38,7 @@ export class UsersFaker {
       rescuableAchievementsIds: [],
       unlockedAchievementsIds: [],
       unlockedStarsIds: [],
+      recentlyUnlockedStarsIds: [],
       acquiredRocketsIds: [],
       acquiredAvatarsIds: [],
       unlockedDocsIds: [],

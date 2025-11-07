@@ -42,6 +42,5 @@ export class UpdateSpaceForAllUsersUseCase implements UseCase<Request, void> {
         unlockedStars = unlockedStars.addAt(reorderedStarId, index)
       }
     }
-    console.log(unlockedStars)
   }
 }
