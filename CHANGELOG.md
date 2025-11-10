@@ -1,5 +1,104 @@
 # Changelog
 
+## 0.6.0 (2025-11-10)
+
+- ⚙️ config(web): update layout components to utilize Stardust metadata
+  (e8809a0b)
+- ⚙️ config(web): create llms.txt route to define AI crawler access policies
+  (b1f6e7c0)
+- ⚙️ config(web): update URLs to use stardustWebUrl for improved routing
+  consistency (da781d1d)
+- 📶 rest(web): include SEO routes in VerifyAuthRoutesController for enhanced
+  public access (8da141b3)
+- 🪨 constants(web): add SEO-related routes for llms.txt, robots.txt, and
+  sitemap.xml (7f59f649)
+- ⚙️ config(web): add sitemap generation for main routes with metadata for SEO
+  optimization (b2536b3c)
+- ⚙️ config(web): create robots.ts file to define metadata route for web
+  crawlers (627016c8)
+- 🪨 constants(web): add Stardust metadata (2ffb52a9)
+- 🖥️ ui(web): update key assignment in DragAndDropQuestion component (4df38897)
+- 🧪 test: enhance UpdateSpaceForAllUsersUseCase tests to validate behavior with
+  recently unlocked stars (c3b8544e)
+- 🌐 domain: add recentlyUnlockedStarsIds to UsersFaker for enhanced user
+  profile data (bf57f2df)
+- 🖥️ ui(web): fix key assignment in DragAndDropQuestion component for proper
+  rendering of text elements (5f123f25)
+- 📶 rest(server): add starId to user challenge schema and implement logic to
+  remove recently unlocked stars in reward controllers (03c6cfa0)
+- ⚙️ config(server): log error details in HonoApp for improved debugging
+  (5b1f60b8)
+- ✨ use case: enhance UpdateSpaceForAllUsersUseCase to include recently
+  unlocked stars in update logic and improve star reordering validation
+  (8be8fab2)
+- 💾 db(server): implement findAllOrdered method in SupabaseStarsRepository to
+  retrieve stars in ascending order (57d05878)
+- 💾 db(server): add findRecentlyUnlockedStars method to SupabaseUsersRepository
+  for retrieving recently unlocked stars (51837a2f)
+- 🌐 domain: update IdsList creation to ensure unique IDs by using Set for
+  improved integrity (07d39e26)
+- 🌐 domain: add unlockedStarsIds getter to User class for improved access to
+  unlocked star IDs (cd80fe78)
+- 💾 db(server): standardize string quotes in Database.ts to single quotes for
+  consistency (b951f6f9)
+- 🖥️ ui(web): add ShinyText component to StarView for indicating recently
+  unlocked content (6fe266fe)
+- ✨ use case: enhance CalculateRewardForStarCompletionUseCase to include starId
+  and improve next star unlock logic (cb3003c6)
+- ✨ use case: refactor UpdateSpaceForAllUsersUseCase to retrieve all users and
+  streamline star updates (d982dc18)
+- 🧪 test: add unit tests for RemoveRecentlyUnlockedStarUseCase to validate user
+  star removal logic (6bffc98d)
+- ✨ use case: add RemoveRecentlyUnlockedStarUseCase to manage recently unlocked
+  stars in user profiles (35ba90f4)
+- 📶 rest(server): add starId to RewardUserForStarCompletionController for
+  reward calculation (8ea03bee)
+- 🌐 domain: add recentlyUnlockedStarsIds to UserFactory for enhanced user
+  profile management (74cac3ba)
+- ⚙️ config(server): add recentlyUnlockedStarsIds to SupabaseUserMapper and
+  update SupabaseUser type to include recently unlocked stars (c56e0fe2)
+- ✨ use case: modify UpdateSpaceForAllUsersUseCase to update recently unlocked
+  stars and add unit tests for functionality (b4fd8679)
+- 🌐 domain: add recentlyUnlockedStarsIds property and related methods to User
+  entity (0ac3e9f8)
+- 📑 interface: add methods for managing recently unlocked stars in
+  SupabaseUsersRepository (b4785648)
+- 🖥️ ui(web): introduce ShinyText component with customizable animation and
+  styling (853603eb)
+- 🖥️ ui: add shiny text effect with animation to global CSS (b00441a5)
+- ♻️ refactor(server): integrate InngestEventBroker into
+  ReorderPlanetsController and ReorderPlanetStarsController (a3602bea)
+- ✨ use case: update ReorderPlanetStarsUseCase to publish
+  StarsOrderChangedEvent and enhance tests for event verification (77daee7e)
+- ⚙️ config(server): refactor Inngest integration and add event schemas for user
+  and space events (d70c2967)
+- 🎞️ queue(server): implement ProfileFunctions to include
+  UpdateSpaceForAllUsersJob (bc4bae6b)
+- 🎞️ queue(server): add UpdateSpaceForAllUsersJob to handle space updates for
+  all users (11d3cb29)
+- 🎞️ queue(server): add HandleStarsNewOrderJob to process new star orders and
+  integrate with the event broker (0880bd42)
+- 🧪 test: add unit test to verify StarsOrderChangedEvent publishing in
+  UpdatePlanetUseCase (9f92061c)
+- ✨ use case: add UpdateSpaceForAllUsersUseCase and HandleStarsNewOrderUseCase
+  (23e0b974)
+- ✨ use case: enhance ReorderPlanetStarsUseCase to publish
+  PlanetsOrderChangedEvent and update tests for event verification (666a9505)
+- 🧪 test: add unit tests for HandleStarsNewOrderUseCase to verify event
+  publishing with star IDs (837bdea3)
+- 🧪 test: add unit tests for UpdateSpaceForAllUsersUseCase to verify star
+  unlocking logic (0aafa2a1)
+- ✨ use case: add HandleStarsNewOrderUseCase to manage star reordering and
+  publish events (cb04ce67)
+- ✨ use case: implement UpdateSpaceForAllUsersUseCase to reorder unlocked stars
+  for all users (12e0c891)
+- 🌐 domain: implement findUnlockedStars method in SupabaseUsersRepository and
+  update UsersRepository interface (8a07d3fc)
+- 🌐 domain: add new event classes for space and planets order changes
+  (4e56f995)
+- 🌐 domain: add addAt method to IdsList for inserting IDs at specific indices
+  (59e51742)
+
 ## 0.5.2 (2025-10-31)
 
 - 🧪 test: add comprehensive tests for Quiz structure (b4045daf)
