@@ -2,13 +2,14 @@ import { tv } from 'tailwind-variants'
 
 import { Tooltip } from '../Tooltip'
 
-type DifficultyLevel = 'easy' | 'medium' | 'hard' | 'any'
+type DifficultyLevel = 'easy' | 'medium' | 'hard' | 'any' | 'all'
 
 const DIFFICULTIES = {
   easy: 'Fácil',
   medium: 'Médio',
   hard: 'Difícil',
   any: 'Qualquer',
+  all: 'Todos',
 }
 
 const styles = tv({
@@ -19,6 +20,7 @@ const styles = tv({
       medium: 'border-yellow-400 text-yellow-400',
       hard: 'border-red-700 text-red-700',
       any: 'border-gray-400 text-gray-400',
+      all: 'border-gray-400 text-gray-400',
     },
   },
 })

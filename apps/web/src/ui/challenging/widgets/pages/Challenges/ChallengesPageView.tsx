@@ -19,13 +19,13 @@ export const ChallengesPageView = ({ categoriesDto }: Props) => {
         <Icon name='arrow-left' />
       </Link>
       <WarningMessage />
-      {/* <Link
+      <Link
         href={ROUTES.challenging.challenge()}
         className='flex items-center w-max text-green-400 px-3 ml-auto mt-3 text-sm'
       >
         Criar seu próprio desafio para outros usuários
         <Icon name='simple-arrow-right' size={16} />
-      </Link> */}
+      </Link>
       <div className='mt-6'>
         <ChallengesFilters categoriesDto={categoriesDto} />
         <ChallengesList />
