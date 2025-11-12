@@ -7,6 +7,7 @@ const variants = {
   executing: 'border-yellow-400 bg-transparent text-yellow-400',
   success: 'border-green-400 bg-transparent text-green-400',
   failure: 'border-red-700 bg-transparent text-red-700',
+  disabled: 'bg-green-800 cursor-not-allowed',
 }
 
 export function useActionButton({
@@ -28,7 +29,10 @@ export function useActionButton({
     if (isFailure) {
       return [variants.failure, titles.failure]
     }
-    if (canExecute && !isDisabled) {
+    if (isDisabled) {
+      return [variants.disabled, titles.default]
+    }
+    if (canExecute) {
       return [variants.canExecute, titles.canExecute]
     }
     return [variants.default, titles.default]

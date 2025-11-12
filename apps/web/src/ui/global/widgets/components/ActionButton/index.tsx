@@ -13,6 +13,7 @@ export const ActionButton = (props: ActionButtonProps) => {
       icon={props.icon}
       isExecuting={props.isExecuting}
       isDisabled={props.isDisabled}
+      className={props.className}
       title={title}
       variant={variant}
       onClick={handleClick}

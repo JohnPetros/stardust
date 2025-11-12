@@ -19,6 +19,8 @@ export function ChallengeFunctionField() {
     handleRemoveParamButtonClick,
   } = useChallengeFunctionField()
 
+  
+
   return (
     <ChallengeField
       title='Função'
