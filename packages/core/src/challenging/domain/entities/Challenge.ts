@@ -150,6 +150,10 @@ export class Challenge extends Entity<ChallengeProps> {
     return Logical.create(this.props.author.id.value === userId.value)
   }
 
+  hasSameTitle(challenge: Challenge): Logical {
+    return Logical.create(this.title.value === challenge.title.value)
+  }
+
   get isStarChallenge(): Logical {
     return Logical.create(this.props.starId !== null)
   }

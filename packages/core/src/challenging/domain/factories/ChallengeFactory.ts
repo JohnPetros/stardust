@@ -17,6 +17,7 @@ export class ChallengeFactory {
   static produce(dto: ChallengeDto) {
     const categories: ChallengeCategory[] = []
     const includedCategoriesIds: string[] = []
+    console.log(dto.categories)
     for (const category of dto.categories) {
       const challengeCategory = ChallengeCategory.create(category)
       if (!includedCategoriesIds.includes(challengeCategory.id.value)) {
