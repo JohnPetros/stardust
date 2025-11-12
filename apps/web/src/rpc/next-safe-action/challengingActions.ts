@@ -1,15 +1,11 @@
 'use server'
 
-import { flattenValidationErrors } from 'next-safe-action'
 import { z } from 'zod'
-
-import { challengeSchema } from '@stardust/validation/challenging/schemas'
 
 import { authActionClient } from './clients/authActionClient'
 import { NextCall } from '../next/NextCall'
 import {
   AccessChallengePageAction,
-  PostChallengeAction,
   AccessChallengeCommentsSlotAction,
   AccessChallengeEditorPageAction,
   AccessSolutionPageAction,
@@ -88,21 +84,5 @@ export const viewSolution = authActionClient
     const restClient = await NextServerRestClient({ isCacheEnabled: false })
     const challengingService = ChallengingService(restClient)
     const action = ViewSolutionAction(challengingService)
-    return action.handle(call)
-  })
-
-export const postChallenge = authActionClient
-  .schema(challengeSchema, {
-    handleValidationErrorsShape: async (errors) =>
-      flattenValidationErrors(errors).fieldErrors,
-  })
-  .action(async ({ clientInput, ctx }) => {
-    const call = NextCall({
-      request: clientInput,
-      user: ctx.user,
-    })
-    const restClient = await NextServerRestClient({ isCacheEnabled: false })
-    const challengingService = ChallengingService(restClient)
-    const action = PostChallengeAction(challengingService)
     return action.handle(call)
   })

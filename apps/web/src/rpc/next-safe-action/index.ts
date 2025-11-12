@@ -2,7 +2,6 @@ import {
   accessChallengePage,
   accessChallengeCommentsSlot,
   accessSolutionPage,
-  postChallenge,
   accessChallengeEditorPage,
   viewSolution,
 } from './challengingActions'
@@ -39,7 +38,6 @@ export const challengingActions = {
   accessChallengeCommentsSlot,
   accessChallengeEditorPage,
   accessSolutionPage,
-  postChallenge,
   viewSolution,
 }
 
