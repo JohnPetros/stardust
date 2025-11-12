@@ -41,7 +41,7 @@ export class SupabaseChallengesRepository
   }
 
   async findBySlug(challengeSlug: Slug): Promise<Challenge | null> {
-    const { data, error } = await this.supabase
+    const { error } = await this.supabase
       .from('challenges_view')
       .select('*')
       .eq('slug', challengeSlug.value)
@@ -50,8 +50,6 @@ export class SupabaseChallengesRepository
     if (error) {
       return null
     }
-
-    console.log('id', data)
 
     const { data: challenge, error: challengeError } = await this.supabase
       .from('challenges_view')
@@ -62,8 +60,6 @@ export class SupabaseChallengesRepository
     if (challengeError) {
       return null
     }
-
-    console.log('categories', challenge.categories)
 
     return SupabaseChallengeMapper.toEntity(challenge)
   }
@@ -235,7 +231,7 @@ export class SupabaseChallengesRepository
     const { error: deleteCategoriesError } = await this.supabase
       .from('challenges_categories')
       .delete()
-      .eq('id', challenge.id.value)
+      .eq('challenge_id', challenge.id.value)
 
     if (deleteCategoriesError) {
       throw new SupabasePostgreError(deleteCategoriesError)
@@ -251,7 +247,6 @@ export class SupabaseChallengesRepository
       )
 
     if (insertCategoriesError) {
-      await this.supabase.from('challenges').delete().match({ id: challenge.id.value })
       throw new SupabasePostgreError(insertCategoriesError)
     }
   }

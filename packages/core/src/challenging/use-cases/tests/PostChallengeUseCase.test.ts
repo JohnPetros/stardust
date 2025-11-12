@@ -2,10 +2,8 @@ import { mock, type Mock } from 'ts-jest-mocker'
 
 import { ChallengesFaker } from '#challenging/domain/entities/fakers/ChallengesFaker'
 import { PostChallengeUseCase } from '../PostChallengeUseCase'
-import { ChallengeNotFoundError } from '#challenging/domain/errors/ChallengeNotFoundError'
-import { Challenge } from '#challenging/domain/entities/Challenge'
-import { ChallengesRepository } from '#challenging/interfaces/ChallengesRepository'
 import { ChallengeAlreadyExistsError } from '#challenging/domain/errors/ChallengeAlreadyExistsError'
+import type { ChallengesRepository } from '#challenging/interfaces/ChallengesRepository'
 
 describe('Post Challenge Use Case', () => {
   let repository: Mock<ChallengesRepository>

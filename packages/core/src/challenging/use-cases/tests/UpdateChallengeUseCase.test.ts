@@ -18,7 +18,7 @@ describe('Update Challenge Use Case', () => {
     useCase = new UpdateChallengeUseCase(repository)
   })
 
-  it('should throw an error the challenge does not exist', async () => {
+  it('should throw an error if the challenge does not exist', async () => {
     const challenge = ChallengesFaker.fake()
     repository.findById.mockResolvedValue(null)
 

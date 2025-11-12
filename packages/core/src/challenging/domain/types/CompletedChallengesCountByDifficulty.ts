@@ -1,6 +1,6 @@
 import type { ChallengeDifficultyLevel } from './ChallengeDifficultyLevel'
 
-type DifficultyLevel = Exclude<ChallengeDifficultyLevel, 'any'>
+type DifficultyLevel = Exclude<ChallengeDifficultyLevel, 'any' | 'all'>
 
 export type CompletedChallengesCountByDifficultyLevel = {
   percentage: Record<DifficultyLevel, number>
