@@ -8,7 +8,7 @@ import { DataType } from '@stardust/core/challenging/structures'
 import { Challenge } from '@stardust/core/challenging/entities'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import type { Id } from '@stardust/core/global/structures'
-import type { NavigationProvider } from '@stardust/core/global/interfaces'
+import type { NavigationProvider, ToastProvider } from '@stardust/core/global/interfaces'
 
 import { ROUTES } from '@/constants'
 import { useLsp } from '@/ui/global/hooks/useLsp'
@@ -18,12 +18,14 @@ type Params = {
   userId: Id
   service: ChallengingService
   navigationProvider: NavigationProvider
+  toastProvider: ToastProvider
 }
 
 export function useChallengeEditorPage({
   currentChallenge,
   service,
   navigationProvider,
+  toastProvider,
   userId,
 }: Params) {
   const difficultyLevel = useMemo(() => {
@@ -95,8 +97,6 @@ export function useChallengeEditorPage({
     allFields.categories.length,
   ].every(Boolean)
 
-  console.log(allFields)
-
   async function handleSubmit(formData: ChallengeSchema) {
     const challenge = Challenge.create({
       title: formData.title,
@@ -115,11 +115,13 @@ export function useChallengeEditorPage({
       categories: formData.categories,
     })
 
-    console.log(challenge.dto)
 
     if (currentChallenge) {
-      const response = await service.updateChallenge(challenge)
-      console.log(response)
+      const updatedChallenge = Challenge.create({ 
+        ...challenge.dto,
+        id: currentChallenge.id.value
+      })
+      const response = await service.updateChallenge(updatedChallenge)
       if (response.isFailure) {
         setIsActionFailure(true)
         return
@@ -129,7 +131,6 @@ export function useChallengeEditorPage({
     }
 
     const response = await service.postChallenge(challenge)
-    console.log(response)
 
     if (response.isFailure) {
       setIsActionFailure(true)
@@ -146,6 +147,17 @@ export function useChallengeEditorPage({
       .challenge(challengeSlug)
       .concat(isNew ? '?isNew=true' : '')
     navigationProvider.goTo(route)
+  }
+
+ async function handleDeleteChallengeButtonClick() {
+    if (!currentChallenge) return
+    const response = await service.deleteChallenge(currentChallenge)
+
+    if (response.isFailure) {
+      toastProvider.showError(response.errorMessage)
+      return
+    }
+    navigationProvider.goTo(ROUTES.challenging.challenges.list)
   }
 
   function handleBackButtonClick() {
@@ -184,14 +196,38 @@ export function useChallengeEditorPage({
     (!currentChallenge && areAllFieldsFilled) ||
     (Boolean(currentChallenge) && areAllFieldsFilled && form.formState.isDirty)
 
+    const errorMessages = useMemo(() => {
+      const messages: string[] = []
+
+      if (form.formState.errors.description?.message) {
+        messages.push(form.formState.errors.description?.message)
+      }
+      if (form.formState.errors.testCases?.message) {
+        messages.push(form.formState.errors.testCases?.message)
+      }
+      if (form.formState.errors.title?.message) {
+        messages.push(form.formState.errors.title?.message)
+      }
+      if (form.formState.errors.function?.message) {
+        messages.push(form.formState.errors.function?.message)
+      }
+      if (form.formState.errors.categories?.message) {
+        messages.push(form.formState.errors.categories?.message)
+      }
+
+      return messages
+    }, [currentChallenge, allFields, form.formState.errors])
+
   return {
     form,
     canSubmitForm,
     shouldEditChallenge: currentChallenge,
     isFormSubmitting: form.formState.isSubmitting,
-    isActionFailure,
+    isActionFailure: isActionFailure || errorMessages.length > 0,
     isActionSuccess,
+    errorMessages,
     handleFormSubmit: form.handleSubmit(handleSubmit),
     handleBackButtonClick,
+    handleDeleteChallengeButtonClick,
   }
 }

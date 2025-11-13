@@ -20,10 +20,14 @@ type Response = {
 export const AccessChallengeEditorPageAction = (
   service: ChallengingService,
 ): Action<Request, Response> => {
-  async function fetchChallenge(challengeSlug: string) {
-    const response = await service.fetchChallengeBySlug(Slug.create(challengeSlug))
-    if (response.isFailure) response.throwError()
-    return response.body
+  async function fetchChallenge(challengeSlug: string, call: Call<Request>) {
+    try {
+      const response = await service.fetchChallengeBySlug(Slug.create(challengeSlug))
+      if (response.isFailure) call.notFound()
+      return response.body
+    } catch {
+      call.notFound()
+    }
   }
 
   async function fetchAllChallengeCategories() {
@@ -36,7 +40,7 @@ export const AccessChallengeEditorPageAction = (
     async handle(call: Call<Request>) {
       const { challengeSlug } = call.getRequest()
       const user = User.create(await call.getUser())
-      const challenge = Challenge.create(await fetchChallenge(challengeSlug))
+      const challenge = Challenge.create(await fetchChallenge(challengeSlug, call))
       const categories = await fetchAllChallengeCategories()
 
       if (challenge.isChallengeAuthor(user.id).isFalse) call.notFound()
