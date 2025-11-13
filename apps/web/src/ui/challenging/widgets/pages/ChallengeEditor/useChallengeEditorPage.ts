@@ -223,8 +223,6 @@ export function useChallengeEditorPage({
     return messages
   }, [allFields, form.formState.errors])
 
-  console.log({ isActionSuccess })
-
   return {
     form,
     canSubmitForm,

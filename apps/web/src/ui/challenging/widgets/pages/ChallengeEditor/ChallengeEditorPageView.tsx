@@ -92,10 +92,10 @@ export const ChallengeEditorPageView = ({
                 body={
                   <div className='mt-3'>
                     <p className='text-gray-50'>
-                      Tem certeza que deseja deletar essa desafio?
+                      Tem certeza que deseja deletar esse desafio?
                     </p>
                     <p className='text-gray-50'>
-                      Todos os dados do seus desafio serão perdidos.
+                      Todos os dados do seu desafio serão perdidos.
                     </p>
                   </div>
                 }
@@ -117,7 +117,6 @@ export const ChallengeEditorPageView = ({
                 <Button
                   type='button'
                   className='w-32 bg-red-500 text-white'
-                  onClick={handleDeleteChallengeButtonClick}
                 >
                   Deletar
                 </Button>
