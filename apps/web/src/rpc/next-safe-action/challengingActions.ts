@@ -30,9 +30,10 @@ export const accessChallengePage = authActionClient
 
 export const accessChallengeEditorPage = authActionClient
   .schema(z.object({ challengeSlug: z.string() }))
-  .action(async ({ clientInput }) => {
+  .action(async ({ clientInput, ctx }) => {
     const call = NextCall({
       request: clientInput,
+      user: ctx.user,
     })
     const restClient = await NextServerRestClient({ isCacheEnabled: false })
     const challengingService = ChallengingService(restClient)
