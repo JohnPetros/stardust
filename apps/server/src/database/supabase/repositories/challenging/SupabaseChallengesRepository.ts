@@ -4,6 +4,7 @@ import { type Challenge, ChallengeCategory } from '@stardust/core/challenging/en
 import type { ChallengesListParams } from '@stardust/core/challenging/types'
 import { ChallengeVote } from '@stardust/core/challenging/structures'
 
+import type { Json } from '../../types/Database'
 import { SupabaseRepository } from '../SupabaseRepository'
 import { SupabaseChallengeMapper } from '../../mappers/challenging'
 import { SupabasePostgreError } from '../../errors'
@@ -40,7 +41,7 @@ export class SupabaseChallengesRepository
   }
 
   async findBySlug(challengeSlug: Slug): Promise<Challenge | null> {
-    const { data, error } = await this.supabase
+    const { error } = await this.supabase
       .from('challenges_view')
       .select('*')
       .eq('slug', challengeSlug.value)
@@ -50,7 +51,17 @@ export class SupabaseChallengesRepository
       return null
     }
 
-    return SupabaseChallengeMapper.toEntity(data)
+    const { data: challenge, error: challengeError } = await this.supabase
+      .from('challenges_view')
+      .select('*')
+      .eq('slug', challengeSlug.value)
+      .single()
+
+    if (challengeError) {
+      return null
+    }
+
+    return SupabaseChallengeMapper.toEntity(challenge)
   }
 
   async findByStar(starId: Id): Promise<Challenge | null> {
@@ -162,6 +173,84 @@ export class SupabaseChallengesRepository
     return categories
   }
 
+  async add(challenge: Challenge): Promise<void> {
+    const { error } = await this.supabase.from('challenges').insert({
+      id: challenge.id.value,
+      title: challenge.title.value,
+      code: challenge.code,
+      description: challenge.description.value,
+      difficulty_level: challenge.difficulty.level,
+      user_id: challenge.author.id.value,
+      star_id: challenge.starId?.value,
+      is_public: challenge.isPublic.value,
+      slug: challenge.slug.value,
+      test_cases: challenge.testCases.map((testCase) => testCase.dto) as Json,
+    })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+
+    const { error: categoriesError } = await this.supabase
+      .from('challenges_categories')
+      .insert(
+        challenge.categories.map((category) => {
+          return {
+            challenge_id: challenge.id.value,
+            category_id: category.id.value,
+          }
+        }),
+      )
+
+    if (categoriesError) {
+      await this.supabase.from('challenges').delete().match({ id: challenge.id.value })
+      throw new SupabasePostgreError(categoriesError)
+    }
+  }
+
+  async replace(challenge: Challenge): Promise<void> {
+    const { error } = await this.supabase
+      .from('challenges')
+      .update({
+        title: challenge.title.value,
+        code: challenge.code,
+        description: challenge.description.value,
+        difficulty_level: challenge.difficulty.level,
+        user_id: challenge.author.id.value,
+        star_id: challenge.starId?.value,
+        is_public: challenge.isPublic.value,
+        slug: challenge.slug.value,
+        test_cases: challenge.testCases.map((testCase) => testCase.dto) as Json,
+      })
+      .eq('id', challenge.id.value)
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+
+    const { error: deleteCategoriesError } = await this.supabase
+      .from('challenges_categories')
+      .delete()
+      .eq('challenge_id', challenge.id.value)
+
+    if (deleteCategoriesError) {
+      throw new SupabasePostgreError(deleteCategoriesError)
+    }
+
+    const { error: insertCategoriesError } = await this.supabase
+      .from('challenges_categories')
+      .insert(
+        challenge.categories.map((category) => ({
+          challenge_id: challenge.id.value,
+          category_id: category.id.value,
+        })),
+      )
+
+    if (insertCategoriesError) {
+      throw new SupabasePostgreError(insertCategoriesError)
+    }
+  }
+
   async addVote(
     challengeId: Id,
     userId: Id,
@@ -189,6 +278,17 @@ export class SupabaseChallengesRepository
         vote: challengeVote.value === 'upvote' ? 'upvote' : 'downvote',
       })
       .match({ challenge_id: challengeId.value, user_id: userId.value })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
+  async remove(challenge: Challenge): Promise<void> {
+    const { error } = await this.supabase
+      .from('challenges')
+      .delete()
+      .eq('id', challenge.id.value)
 
     if (error) {
       throw new SupabasePostgreError(error)

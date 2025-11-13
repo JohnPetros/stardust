@@ -21,6 +21,10 @@ export class ChallengeDifficulty {
       coins: 0,
       xp: 0,
     },
+    all: {
+      coins: 0,
+      xp: 0,
+    },
   }
 
   private constructor(readonly level: ChallengeDifficultyLevel) {}
@@ -44,6 +48,7 @@ export class ChallengeDifficulty {
       'medium',
       'hard',
       'any',
+      'all',
     ])
 
     return true

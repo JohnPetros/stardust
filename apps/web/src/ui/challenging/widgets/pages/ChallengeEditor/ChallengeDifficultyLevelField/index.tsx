@@ -12,6 +12,7 @@ const CHALLENGE_DIFFICULTY_LEVEL_LABELS: Record<ChallengeDifficultyLevel, string
   medium: 'Médio',
   hard: 'Difícil',
   any: 'Qualquer',
+  all: 'Todos',
 }
 
 export function ChallengeDifficultyLevelField() {

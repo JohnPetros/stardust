@@ -29,6 +29,7 @@ export function useChallengeTestCasesField() {
     const dataType = DataType.create('')
     append({
       inputs: [],
+      position: fields.length + 1,
       expectedOutput: {
         value: dataType.value,
         dataTypeName: dataType.name,

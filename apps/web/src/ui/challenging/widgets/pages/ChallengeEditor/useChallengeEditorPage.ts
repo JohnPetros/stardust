@@ -3,45 +3,62 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
 import type { ChallengeSchema } from '@stardust/validation/challenging/types'
-import { challengeSchema } from '@stardust/validation/challenging/schemas'
+import { challengeFormSchema } from '@stardust/validation/challenging/schemas'
 import { DataType } from '@stardust/core/challenging/structures'
 import { Challenge } from '@stardust/core/challenging/entities'
-import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
+import type { Id } from '@stardust/core/global/structures'
+import type { NavigationProvider } from '@stardust/core/global/interfaces'
 
 import { ROUTES } from '@/constants'
-import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
-import { usePostChallengeAction } from './usePostChallengeAction'
 import { useLsp } from '@/ui/global/hooks/useLsp'
 
-export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
-  const challenge = challengeDto ? Challenge.create(challengeDto) : null
-  const router = useNavigationProvider()
+type Params = {
+  currentChallenge: Challenge | null
+  userId: Id
+  service: ChallengingService
+  navigationProvider: NavigationProvider
+}
+
+export function useChallengeEditorPage({
+  currentChallenge,
+  service,
+  navigationProvider,
+  userId,
+}: Params) {
   const difficultyLevel = useMemo(() => {
-    if (!challenge) return 'easy'
-    if (challenge.difficulty.isAny.isFalse) return challenge.difficulty.level
+    if (!currentChallenge) return 'easy'
+    if (currentChallenge.difficulty.isAny.isFalse)
+      return currentChallenge.difficulty.level
     return 'easy'
-  }, [challenge])
+  }, [currentChallenge])
   const { lspProvider } = useLsp()
   const form = useForm<ChallengeSchema>({
-    resolver: zodResolver(challengeSchema),
+    resolver: zodResolver(challengeFormSchema),
     defaultValues: {
-      title: challenge?.title.value,
-      description: challenge?.description.value ?? '',
-      code: challenge?.code ?? '',
+      title: currentChallenge?.title.value,
+      description: currentChallenge?.description.value ?? '',
+      code: currentChallenge?.code ?? '',
       difficultyLevel,
+      author: {
+        id: userId.value,
+      },
       function: {
-        name: challenge?.code ? (lspProvider.getFunctionName(challenge.code) ?? '') : '',
-        params: challenge
+        name: currentChallenge?.code
+          ? (lspProvider.getFunctionName(currentChallenge.code) ?? '')
+          : '',
+        params: currentChallenge
           ? lspProvider
-              .getFunctionParamsNames(challenge.code)
+              .getFunctionParamsNames(currentChallenge.code)
               .map((paramName: string, paramIndex: number) => ({
                 name: paramName,
-                dataTypeName: DataType.create(challenge.testCases[0]?.inputs[paramIndex])
-                  .name,
+                dataTypeName: DataType.create(
+                  currentChallenge.testCases[0]?.inputs[paramIndex],
+                ).name,
               }))
           : [],
       },
-      testCases: challenge?.testCases.map((testCase) => {
+      testCases: currentChallenge?.testCases.map((testCase) => {
         const expectedOutputDataType = DataType.create(testCase.expectedOutput)
         return {
           inputs: testCase.inputs.map((inputValue) => ({
@@ -55,19 +72,18 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
         }
       }),
       categories:
-        challenge?.categories.map((category) => ({
+        currentChallenge?.categories.map((category) => ({
           id: category.id.value,
           name: category.name.value,
         })) ?? [],
       isPublic:
-        typeof challenge?.isPublic === 'undefined' ? false : challenge?.isPublic.value,
+        typeof currentChallenge?.isPublic === 'undefined'
+          ? false
+          : currentChallenge?.isPublic.value,
     },
   })
   const [isActionSuccess, setisActionSuccess] = useState(false)
   const [isActionFailure, setIsActionFailure] = useState(false)
-  const { isPosting, isPostFailure, postChallenge } = usePostChallengeAction({
-    onSuccess: (challenge) => handleActionSuccess(challenge, true),
-  })
 
   const allFields = form.watch()
   const areAllFieldsFilled = [
@@ -79,12 +95,49 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
     allFields.categories.length,
   ].every(Boolean)
 
+  console.log(allFields)
+
   async function handleSubmit(formData: ChallengeSchema) {
-    if (challenge) {
-      // await editChallenge({ challengeId: challenge.id.value, challenge: formData })
+    const challenge = Challenge.create({
+      title: formData.title,
+      code: formData.code,
+      description: formData.description,
+      difficultyLevel: formData.difficultyLevel,
+      author: {
+        id: userId.value,
+      },
+      testCases: formData.testCases.map((testCase, index) => ({
+        position: index + 1,
+        inputs: testCase.inputs.map((input) => input.value),
+        isLocked: testCase.isLocked,
+        expectedOutput: testCase.expectedOutput.value,
+      })),
+      categories: formData.categories,
+    })
+
+    console.log(challenge.dto)
+
+    if (currentChallenge) {
+      const response = await service.updateChallenge(challenge)
+      console.log(response)
+      if (response.isFailure) {
+        setIsActionFailure(true)
+        return
+      }
+      if (response.isSuccessful) handleActionSuccess(challenge.slug.value, false)
       return
     }
-    await postChallenge(formData)
+
+    const response = await service.postChallenge(challenge)
+    console.log(response)
+
+    if (response.isFailure) {
+      setIsActionFailure(true)
+      return
+    }
+
+    if (response.isSuccessful && response.body.slug)
+      handleActionSuccess(response.body.slug, true)
   }
 
   function handleActionSuccess(challengeSlug: string, isNew: boolean) {
@@ -92,11 +145,11 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
     const route = ROUTES.challenging.challenges
       .challenge(challengeSlug)
       .concat(isNew ? '?isNew=true' : '')
-    router.goTo(route)
+    navigationProvider.goTo(route)
   }
 
   function handleBackButtonClick() {
-    router.goBack()
+    navigationProvider.goBack()
   }
 
   useEffect(() => {
@@ -109,8 +162,8 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
       return
     }
 
-    setIsActionFailure(isPostFailure || Object.keys(form.formState.errors).length > 0)
-  }, [allFields, isPostFailure, form.formState.errors])
+    setIsActionFailure(Object.keys(form.formState.errors).length > 0)
+  }, [allFields, form.formState.errors])
 
   useEffect(() => {
     const subscription = form.watch((value, { name }) => {
@@ -128,14 +181,14 @@ export function useChallengeEditorPage(challengeDto?: ChallengeDto) {
   }, [form.watch, form.setValue])
 
   const canSubmitForm =
-    (!challenge && areAllFieldsFilled) ||
-    (Boolean(challenge) && areAllFieldsFilled && form.formState.isDirty)
+    (!currentChallenge && areAllFieldsFilled) ||
+    (Boolean(currentChallenge) && areAllFieldsFilled && form.formState.isDirty)
 
   return {
     form,
     canSubmitForm,
-    shouldEditChallenge: challenge,
-    isFormSubmitting: form.formState.isSubmitting || isPosting,
+    shouldEditChallenge: currentChallenge,
+    isFormSubmitting: form.formState.isSubmitting,
     isActionFailure,
     isActionSuccess,
     handleFormSubmit: form.handleSubmit(handleSubmit),

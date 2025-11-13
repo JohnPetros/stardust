@@ -1,5 +1,5 @@
 @URL = {{BASE_URL}}/challenging/challenges
-@CHALLENGE_ID = 17ba01ec-7aa6-4971-9760-537127e03b4d
+@CHALLENGE_ID = be477773-1294-4278-b339-58f71ee264bd
 @SLUG = inversao-de-lista
 @STAR_ID = bda4c82c-9466-4619-bdd6-89f719c54c27
 
@@ -14,7 +14,7 @@ Authorization: Bearer {{JWT}}
 ### Fetch challenges list
 GET {{URL}}
 ?page=1
-&itemsPerPage=2
+&itemsPerPage=20
 &title=
 &difficulty=any
 &completionStatus=completed
@@ -38,6 +38,127 @@ Authorization: Bearer {{JWT}}
 GET {{URL}}/{{CHALLENGE_ID}}/vote
 Authorization: Bearer {{JWT}}
 
+### Post challenge
+POST {{URL}}
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "title": "O problema dos 3 corpos",
+  "code": "funcao encontreCorpos(parametro1) {\n\n}",
+  "slug": "o-problema-dos-3-corpos",
+  "difficultyLevel": "easy",
+  "author": {
+    "id": "2ac3e189-e5ed-4003-a87a-d2358411584e"
+  },
+  "categories": [
+    {
+      "id": "818af4aa-ee10-4dd8-9adb-ff9f2ad1eb97",
+      "name": "condicionais"
+    },
+    {
+      "id": "28a2f573-717d-47e0-91b3-aabf7ff817dc",
+      "name": "dicionarios"
+    }
+  ],
+  "languages": [],
+  "completionsCount": 0,
+  "description": "minha descrição",
+  "downvotesCount": 0,
+  "isPublic": false,
+  "postedAt": "Tue Nov 11 2025 11:52:29 GMT-0300 (Horário Padrão de Brasília)",
+  "results": [],
+  "starId": null,
+  "testCases": [
+    {
+      "expectedOutput": "minha resposta",
+      "inputs": [
+        "valorDoParametro"
+      ],
+      "isLocked": false,
+      "position": 1
+    },
+    {
+      "expectedOutput": "minha resposta 2",
+      "inputs": [
+        "parametro2"
+      ],
+      "isLocked": false,
+      "position": 2
+    },
+    {
+      "expectedOutput": "minha resposta 3",
+      "inputs": [
+        "parametro3"
+      ],
+      "isLocked": false,
+      "position": 3
+    }
+  ],
+  "upvotesCount": 0,
+  "userOutputs": []
+}
+
+### Update challenge
+PUT {{URL}}/{{CHALLENGE_ID}}
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "title": "O problema dos 8 corpos",
+  "code": "funcao encontreCorpos(parametro2) {\n\n}",
+  "difficultyLevel": "medium",
+  "author": {
+    "id": "2ac3e189-e5ed-4003-a87a-d2358411584e"
+  },
+  "categories": [
+    {
+      "id": "818af4aa-ee10-4dd8-9adb-ff9f2ad1eb97",
+      "name": "condicionais"
+    },
+    {
+      "id": "28a2f573-717d-47e0-91b3-aabf7ff817dc",
+      "name": "dicionarios"
+    }
+  ],
+  "languages": [],
+  "completionsCount": 0,
+  "description": "minha descrição",
+  "downvotesCount": 0,
+  "isPublic": false,
+  "postedAt": "Tue Nov 11 2025 11:52:29 GMT-0300 (Horário Padrão de Brasília)",
+  "results": [],
+  "starId": null,
+  "testCases": [
+    {
+      "expectedOutput": "minha resposta",
+      "inputs": [
+        "valorDoParametro"
+      ],
+      "isLocked": false,
+      "position": 1
+    },
+    {
+      "expectedOutput": "minha resposta 2",
+      "inputs": [
+        "parametro2"
+      ],
+      "isLocked": false,
+      "position": 2
+    },
+    {
+      "expectedOutput": "minha resposta 3",
+      "inputs": [
+        "parametro3"
+      ],
+      "isLocked": false,
+      "position": 3
+    }
+  ],
+  "upvotesCount": 0,
+  "userOutputs": []
+}
+
 ### Vote challenge
 POST {{URL}}/{{CHALLENGE_ID}}/vote
 Authorization: Bearer {{JWT}}
@@ -46,3 +167,8 @@ Content-Type: application/json
 {
   "challengeVote": "downvote"
 }
+
+### Delete challenge
+DELETE {{URL}}/{{CHALLENGE_ID}}
+Authorization: Bearer {{JWT}}
+

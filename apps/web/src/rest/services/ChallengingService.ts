@@ -6,6 +6,7 @@ import type {
   SolutionsListingParams,
 } from '@stardust/core/challenging/types'
 import type { ChallengeVote } from '@stardust/core/challenging/structures'
+import type { Challenge } from '@stardust/core/challenging/entities'
 
 export const ChallengingService = (restClient: RestClient): IChallengingService => {
   return {
@@ -79,6 +80,10 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
 
     async fetchChallengeBySolutionId(solutionId: Id) {
       return await restClient.get(`/challenging/challenges/solution/${solutionId.value}`)
+    },
+
+    async postChallenge(challenge: Challenge) {
+      return await restClient.post('/challenging/challenges', challenge.dto)
     },
 
     async voteChallenge(challengeId: Id, challengeVote: ChallengeVote) {

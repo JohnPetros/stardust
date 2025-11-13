@@ -2,4 +2,5 @@ export { challengeCompletionStatusSchema } from './challengeCompletionStatusSche
 export { challengeDifficultyLevelSchema } from './challengeDifficultyLevelSchema'
 export { challengeSchema } from './challengeSchema'
 export { challengeVoteSchema } from './challengeVoteSchema'
+export { challengeFormSchema } from './challengeFormSchema'
 export { dataTypeNameSchema } from './dataTypeNameSchema'

@@ -7,7 +7,7 @@ import type {
   ChallengesListParams,
   CompletedChallengesCountByDifficultyLevel,
 } from '../domain/types'
-import type { Challenge, ChallengeCategory } from '../domain/entities'
+import type { Challenge } from '../domain/entities'
 import type { SolutionsListingParams } from '../domain/types'
 import type { PaginationResponse, RestResponse } from '#global/responses/index'
 import type { Id, Slug, Text } from '#global/domain/structures/index'
@@ -34,11 +34,7 @@ export interface ChallengingService {
     challengeId: Id,
     challengeVote: ChallengeVote,
   ): Promise<RestResponse<{ userChallengeVote: string }>>
-  saveChallenge(challenge: Challenge): Promise<RestResponse>
-  saveChallengeCategories(
-    challengeId: Id,
-    challengeCategories: ChallengeCategory[],
-  ): Promise<RestResponse>
+  postChallenge(challenge: Challenge): Promise<RestResponse<ChallengeDto>>
   postSolution(
     solutionTitle: Text,
     solutionContent: Text,
