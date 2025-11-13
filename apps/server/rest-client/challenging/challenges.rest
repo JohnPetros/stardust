@@ -1,11 +1,10 @@
 @URL = {{BASE_URL}}/challenging/challenges
 @CHALLENGE_ID = be477773-1294-4278-b339-58f71ee264bd
-@SLUG = inversao-de-lista
+@SLUG = area-do-escudo-protetor
 @STAR_ID = bda4c82c-9466-4619-bdd6-89f719c54c27
 
 ### Fetch challenge by slug
 GET {{URL}}/slug/{{SLUG}}
-Authorization: Bearer {{JWT}}
 
 ### Fetch challenge by star
 GET {{URL}}/star/{{STAR_ID}}
