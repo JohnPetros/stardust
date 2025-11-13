@@ -35,7 +35,9 @@ export const AccessChallengeEditorPageAction = (
   return {
     async handle(call: Call<Request>) {
       const { challengeSlug } = call.getRequest()
-      const user = User.create(await call.getUser())
+      const authUser = await call.getUser()
+      if (!authUser) call.notFound()
+      const user = User.create(authUser)
       const challenge = Challenge.create(await fetchChallenge(challengeSlug))
       const categories = await fetchAllChallengeCategories()
 
