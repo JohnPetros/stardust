@@ -38,7 +38,7 @@ export function useChallengeControl(
   async function handleDeleteChallengeButtonClick() {
     if (!challenge) return
 
-    const response = await challengingService.deleteChallenge(challenge.id)
+    const response = await challengingService.deleteChallenge(challenge)
     if (response.isFailure) {
       toast.show(response.errorMessage)
       return

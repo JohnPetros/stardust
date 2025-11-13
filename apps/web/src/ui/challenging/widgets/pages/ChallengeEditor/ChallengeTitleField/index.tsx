@@ -1,7 +1,7 @@
 import { Input } from '@/ui/global/widgets/components/Input'
+import { useRest } from '@/ui/global/hooks/useRest'
 import { ChallengeField } from '../ChallengeField'
 import { useChallengeTitleField } from './useChallengeTitleField'
-import { useRest } from '@/ui/global/hooks/useRest'
 
 export function ChallengeTitleField() {
   const { challengingService } = useRest()
