@@ -7,7 +7,6 @@ import { Controller } from 'react-hook-form'
 import type { SnippetDto } from '@stardust/core/playground/entities/dtos'
 
 import { useRest } from '@/ui/global/hooks/useRest'
-import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { TitleInput } from '@/ui/global/widgets/components/TitleInput'
 import { ActionButton } from '@/ui/global/widgets/components/ActionButton'
 import type { PlaygroundCodeEditorRef } from '@/ui/global/widgets/components/PlaygroundCodeEditor/types'

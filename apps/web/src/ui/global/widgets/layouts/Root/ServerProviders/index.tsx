@@ -2,11 +2,11 @@ import type { ReactNode } from 'react'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 import { COOKIES } from '@/constants'
+import { cookieActions } from '@/rpc/next-safe-action'
 import { AuthService } from '@/rest/services'
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
-import { cookieActions } from '@/rpc/next-safe-action'
-import { ToastProvider } from '@/ui/global/contexts/ToastContext'
-import { AuthProvider } from '@/ui/auth/contexts/AuthContext'
+import { ToastContextProvider } from '@/ui/global/contexts/ToastContext'
+import { AuthContextProvider } from '@/ui/auth/contexts/AuthContext'
 import { AudioContextProvider } from '@/ui/global/contexts/AudioContext'
 
 type Props = {
@@ -23,13 +23,16 @@ export const ServerProviders = async ({ children }: Props) => {
 
   return (
     <NuqsAdapter>
-      <ToastProvider>
+      <ToastContextProvider>
         <AudioContextProvider isDefaultAudioDisabled={Boolean(isAudioDisabled?.data)}>
-          <AuthProvider accountDto={accountDto} accessToken={accessToken?.data ?? null}>
+          <AuthContextProvider
+            accountDto={accountDto}
+            accessToken={accessToken?.data ?? null}
+          >
             {children}
-          </AuthProvider>
+          </AuthContextProvider>
         </AudioContextProvider>
-      </ToastProvider>
+      </ToastContextProvider>
     </NuqsAdapter>
   )
 }
