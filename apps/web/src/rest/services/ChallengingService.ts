@@ -86,6 +86,17 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       return await restClient.post('/challenging/challenges', challenge.dto)
     },
 
+    async updateChallenge(challenge: Challenge) {
+      return await restClient.put(
+        `/challenging/challenges/${challenge.id.value}`,
+        challenge.dto,
+      )
+    },
+
+    async deleteChallenge(challenge: Challenge) {
+      return await restClient.delete(`/challenging/challenges/${challenge.id.value}`)
+    },
+
     async voteChallenge(challengeId: Id, challengeVote: ChallengeVote) {
       return await restClient.post(`/challenging/challenges/${challengeId.value}/vote`, {
         challengeVote: challengeVote.value,
