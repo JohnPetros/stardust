@@ -62,7 +62,7 @@ export function ChallengeTestCasesField() {
                     <Controller
                       control={formControl}
                       name={`testCases.${index}.expectedOutput.value`}
-                      render={({ formState, field: { value, onChange } }) => {
+                      render={({ field: { value, onChange } }) => {
                         const dataType = DataType.create(value)
                         return <DataTypeInput value={dataType} onChange={onChange} />
                       }}
@@ -77,7 +77,11 @@ export function ChallengeTestCasesField() {
                     const id = `testCase.${index}.isLocked`
                     return (
                       <div className='flex items-center gap-3'>
-                        <Checkbox id={id} isChecked={!value} onChange={onChange} />
+                        <Checkbox
+                          id={id}
+                          isChecked={!value}
+                          onChange={(value) => onChange(!value)}
+                        />
                         <Label htmlFor={id} title='É visível para os usuários?' />
                       </div>
                     )

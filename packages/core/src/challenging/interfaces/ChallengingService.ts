@@ -35,6 +35,8 @@ export interface ChallengingService {
     challengeVote: ChallengeVote,
   ): Promise<RestResponse<{ userChallengeVote: string }>>
   postChallenge(challenge: Challenge): Promise<RestResponse<ChallengeDto>>
+  updateChallenge(challenge: Challenge): Promise<RestResponse<ChallengeDto>>
+  deleteChallenge(challenge: Challenge): Promise<RestResponse<ChallengeDto>>
   postSolution(
     solutionTitle: Text,
     solutionContent: Text,
@@ -50,5 +52,4 @@ export interface ChallengingService {
   upvoteSolution(solutionId: Id): Promise<RestResponse<{ upvotesCount: number }>>
   deleteSolution(solutionId: Id): Promise<RestResponse>
   deleteChallengeCategories(challengeId: Id): Promise<RestResponse>
-  deleteChallenge(challengeId: Id): Promise<RestResponse>
 }
