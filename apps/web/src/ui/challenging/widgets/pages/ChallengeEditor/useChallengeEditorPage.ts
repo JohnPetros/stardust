@@ -84,7 +84,7 @@ export function useChallengeEditorPage({
           : currentChallenge?.isPublic.value,
     },
   })
-  const [isActionSuccess, setisActionSuccess] = useState(false)
+  const [isActionSuccess, setIsActionSuccess] = useState(false)
   const [isActionFailure, setIsActionFailure] = useState(false)
 
   const allFields = form.watch()
@@ -115,11 +115,10 @@ export function useChallengeEditorPage({
       categories: formData.categories,
     })
 
-
     if (currentChallenge) {
-      const updatedChallenge = Challenge.create({ 
+      const updatedChallenge = Challenge.create({
         ...challenge.dto,
-        id: currentChallenge.id.value
+        id: currentChallenge.id.value,
       })
       const response = await service.updateChallenge(updatedChallenge)
       if (response.isFailure) {
@@ -142,14 +141,14 @@ export function useChallengeEditorPage({
   }
 
   function handleActionSuccess(challengeSlug: string, isNew: boolean) {
-    setisActionSuccess(true)
+    setIsActionSuccess(true)
     const route = ROUTES.challenging.challenges
       .challenge(challengeSlug)
       .concat(isNew ? '?isNew=true' : '')
-    navigationProvider.goTo(route)
+    setTimeout(() => navigationProvider.goTo(route), 1000)
   }
 
- async function handleDeleteChallengeButtonClick() {
+  async function handleDeleteChallengeButtonClick() {
     if (!currentChallenge) return
     const response = await service.deleteChallenge(currentChallenge)
 
@@ -165,7 +164,7 @@ export function useChallengeEditorPage({
   }
 
   useEffect(() => {
-    if (allFields && !form.formState.isSubmitSuccessful) setisActionSuccess(false)
+    if (allFields && !form.formState.isSubmitSuccessful) setIsActionSuccess(false)
   }, [allFields, form.formState.isSubmitSuccessful])
 
   useEffect(() => {
@@ -196,27 +195,35 @@ export function useChallengeEditorPage({
     (!currentChallenge && areAllFieldsFilled) ||
     (Boolean(currentChallenge) && areAllFieldsFilled && form.formState.isDirty)
 
-    const errorMessages = useMemo(() => {
-      const messages: string[] = []
+  const errorMessages = useMemo(() => {
+    const messages: string[] = []
 
-      if (form.formState.errors.description?.message) {
-        messages.push(form.formState.errors.description?.message)
-      }
-      if (form.formState.errors.testCases?.message) {
-        messages.push(form.formState.errors.testCases?.message)
-      }
-      if (form.formState.errors.title?.message) {
-        messages.push(form.formState.errors.title?.message)
-      }
-      if (form.formState.errors.function?.message) {
-        messages.push(form.formState.errors.function?.message)
-      }
-      if (form.formState.errors.categories?.message) {
-        messages.push(form.formState.errors.categories?.message)
-      }
+    if (form.formState.errors.description?.message) {
+      messages.push(form.formState.errors.description?.message)
+    }
+    if (form.formState.errors.testCases?.message) {
+      messages.push(form.formState.errors.testCases?.message)
+    }
+    if (form.formState.errors.testCases?.root?.message) {
+      messages.push(form.formState.errors.testCases?.root?.message)
+    }
+    if (form.formState.errors.title?.message) {
+      messages.push(form.formState.errors.title?.message)
+    }
+    if (form.formState.errors.function?.message) {
+      messages.push(form.formState.errors.function?.message)
+    }
+    if (form.formState.errors.categories?.message) {
+      messages.push(form.formState.errors.categories?.message)
+    }
+    if (form.formState.errors.categories?.root?.message) {
+      messages.push(form.formState.errors.categories?.root?.message)
+    }
 
-      return messages
-    }, [currentChallenge, allFields, form.formState.errors])
+    return messages
+  }, [allFields, form.formState.errors])
+
+  console.log({ isActionSuccess })
 
   return {
     form,

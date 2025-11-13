@@ -63,8 +63,6 @@ export const ChallengeEditorPageView = ({
     failure: 'erro',
   }
 
-  console.log(form.formState.errors)
-
   return (
     <FormProvider {...form}>
       <form
