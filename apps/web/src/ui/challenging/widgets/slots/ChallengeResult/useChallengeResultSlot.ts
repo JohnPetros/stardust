@@ -7,6 +7,7 @@ import type {
 } from '@stardust/core/profile/types'
 
 import { COOKIES, ROUTES, STORAGE } from '@/constants'
+import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
@@ -14,7 +15,15 @@ import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 
-export function useChallengeResultSlot() {
+type Params = {
+  alertDialogRef: React.RefObject<AlertDialogRef | null>
+  isAccountAuthenticated: boolean
+}
+
+export function useChallengeResultSlot({
+  alertDialogRef,
+  isAccountAuthenticated,
+}: Params) {
   const {
     getChallengeSlice,
     getCraftsVisibilitySlice,
@@ -75,11 +84,10 @@ export function useChallengeResultSlot() {
   }
 
   function handleUserAnswer() {
-    if (!challenge || !user) return
+    if (!challenge) return
 
     if (challenge.isCompleted.and(challenge.isStarChallenge).isTrue) {
-      showRewards()
-      if (user.hasCompletedChallenge(challenge.id).isTrue) {
+      if (user?.hasCompletedChallenge(challenge.id).isTrue) {
         leavePage(ROUTES.space)
       } else {
         showRewards()
@@ -88,8 +96,13 @@ export function useChallengeResultSlot() {
     }
 
     if (challenge.isCompleted.andNot(challenge.isStarChallenge).isTrue) {
+      if (!isAccountAuthenticated) {
+        alertDialogRef.current?.open()
+        return
+      }
+
       if (
-        user.hasCompletedChallenge(challenge.id).or(challenge.author.isEqualTo(user))
+        user?.hasCompletedChallenge(challenge.id).or(challenge.author.isEqualTo(user))
           .isTrue
       ) {
         leavePage(ROUTES.challenging.challenges.list)

@@ -1,5 +1,4 @@
 import { Hono } from 'hono'
-import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
 
 import {
@@ -20,25 +19,25 @@ import {
   PostSolutionCommentController,
   ReplyCommentController,
 } from '@/rest/controllers/forum/comments'
-import { AuthMiddleware } from '../../middlewares'
+import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
 
 export class CommentsRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/comments')
   private readonly authMiddleware = new AuthMiddleware()
+  private readonly validationMiddleware = new ValidationMiddleware()
 
   private registerFetchSolutionCommentsListRoute(): void {
     this.router.get(
       '/solution/:solutionId',
-      this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           solutionId: idSchema,
         }),
       ),
-      zValidator(
+      this.validationMiddleware.validate(
         'query',
         z.object({
           sorter: stringSchema,
@@ -60,14 +59,13 @@ export class CommentsRouter extends HonoRouter {
   private registerFetchChallengeCommentsListRoute(): void {
     this.router.get(
       '/challenge/:challengeId',
-      this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           challengeId: idSchema,
         }),
       ),
-      zValidator(
+      this.validationMiddleware.validate(
         'query',
         z.object({
           sorter: stringSchema,
@@ -89,8 +87,7 @@ export class CommentsRouter extends HonoRouter {
   private registerFetchCommentRepliesRoute(): void {
     this.router.get(
       '/:commentId/replies',
-      this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           commentId: idSchema,
@@ -110,13 +107,13 @@ export class CommentsRouter extends HonoRouter {
     this.router.post(
       '/challenge/:challengeId',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           challengeId: idSchema,
         }),
       ),
-      zValidator('json', z.object({ content: stringSchema })),
+      this.validationMiddleware.validate('json', z.object({ content: stringSchema })),
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseCommentsRepository(http.getSupabase())
@@ -131,13 +128,13 @@ export class CommentsRouter extends HonoRouter {
     this.router.post(
       '/solution/:solutionId',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           solutionId: idSchema,
         }),
       ),
-      zValidator('json', z.object({ content: stringSchema })),
+      this.validationMiddleware.validate('json', z.object({ content: stringSchema })),
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseCommentsRepository(http.getSupabase())
@@ -152,13 +149,13 @@ export class CommentsRouter extends HonoRouter {
     this.router.post(
       '/:commentId/replies',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           commentId: idSchema,
         }),
       ),
-      zValidator('json', z.object({ content: stringSchema })),
+      this.validationMiddleware.validate('json', z.object({ content: stringSchema })),
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseCommentsRepository(http.getSupabase())
@@ -173,13 +170,13 @@ export class CommentsRouter extends HonoRouter {
     this.router.patch(
       '/:commentId',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           commentId: idSchema,
         }),
       ),
-      zValidator('json', z.object({ content: stringSchema })),
+      this.validationMiddleware.validate('json', z.object({ content: stringSchema })),
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseCommentsRepository(http.getSupabase())
@@ -194,7 +191,7 @@ export class CommentsRouter extends HonoRouter {
     this.router.delete(
       '/:commentId',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           commentId: idSchema,

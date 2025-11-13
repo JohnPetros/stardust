@@ -39,7 +39,6 @@ export class ChallengesRouter extends HonoRouter {
   private registerFetchChallengeRoute(): void {
     this.router.get(
       '/slug/:challengeSlug',
-      this.authMiddleware.verifyAuthentication,
       this.validationMiddleware.validate(
         'param',
         z.object({
@@ -74,7 +73,6 @@ export class ChallengesRouter extends HonoRouter {
   private registerFetchChallengesListRoute(): void {
     this.router.get(
       '/',
-      this.authMiddleware.verifyAuthentication,
       this.profileMiddleware.appendUserCompletedChallengesIdsToBody,
       this.validationMiddleware.validate(
         'query',

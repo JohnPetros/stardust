@@ -17,8 +17,14 @@ import type {
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
+import { Logical } from '@stardust/core/global/structures'
 
-export function useChallengePage(challengeDto: ChallengeDto, userVote: string) {
+type Params = {
+  challengeDto: ChallengeDto,
+  userChallengeVote: string
+}
+
+export function useChallengePage({challengeDto, userChallengeVote}: Params) {
   const {
     getChallengeSlice,
     getCraftsVisibilitySlice,
@@ -50,17 +56,16 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: string) {
   useEffect(() => {
     if (!challenge) {
       const challenge = Challenge.create(challengeDto)
-      challenge.userVote = ChallengeVote.create(userVote)
+      challenge.userVote = ChallengeVote.create(userChallengeVote)
       setChallenge(challenge)
+      
     }
-    if (challenge && user && !craftsVislibility) {
-      const isUserChallengeAuthor = challenge.author.isEqualTo(user)
-      const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
+    if (challenge && !craftsVislibility) {
+      const isUserChallengeAuthor = user ? challenge.author.isEqualTo(user) : Logical.createAsFalse()
+      const isChallengeCompleted = user ? user.hasCompletedChallenge(challenge.id) : Logical.createAsFalse()
       setCraftsVislibility(
         ChallengeCraftsVisibility.create({
-          canShowComments: isUserChallengeAuthor
-            .or(isChallengeCompleted)
-            .or(challenge.isCompleted).isTrue,
+          canShowComments: challenge.isFromStar.isTrue ? isChallengeCompleted.isTrue : true,
           canShowSolutions: isUserChallengeAuthor
             .or(isChallengeCompleted)
             .or(challenge.isCompleted).isTrue,
@@ -72,7 +77,7 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: string) {
     user,
     craftsVislibility,
     challengeDto,
-    userVote,
+    userChallengeVote,
     setChallenge,
     setCraftsVislibility,
   ])

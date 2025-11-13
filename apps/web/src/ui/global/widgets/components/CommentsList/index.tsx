@@ -5,6 +5,7 @@ import { useRest } from '@/ui/global/hooks/useRest'
 import { useCommentsList } from './useCommentsList'
 import { CommentsListView } from './CommentsListView'
 import type { CommentsListProps } from './CommentsListProps'
+import { IdsList } from '@stardust/core/global/structures'
 
 type Props = {
   inputPlaceholder: string
@@ -38,26 +39,25 @@ export const CommentsList = ({
     onFetchComments,
   })
 
-  if (user)
-    return (
-      <CommentsListView
-        inputPlaceholder={inputPlaceholder}
-        emptyListMessage={emptyListMessage}
-        userUpvotedCommentIds={user.upvotedCommentsIds}
-        userSlug={user.slug.value}
-        comments={comments}
-        sorter={sorter}
-        order={order}
-        isLoading={isLoading}
-        isRecheadedEnd={isRecheadedEnd}
-        isPopoverMenuOpen={isPopoverMenuOpen}
-        popoverMenuButtons={popoverMenuButtons}
-        onPopoverMenuOpenChange={handlePopoverMenuOpenChange}
-        onShowMore={nextPage}
-        onSendComment={handleSendComment}
-        onDeleteComment={handleDeleteComment}
-        onFetchComments={onFetchComments}
-        onPostComment={onPostComment}
-      />
-    )
+  return (
+    <CommentsListView
+      inputPlaceholder={inputPlaceholder}
+      emptyListMessage={emptyListMessage}
+      userUpvotedCommentIds={user ? user.upvotedCommentsIds : IdsList.create()}
+      userSlug={user ? user.slug.value : ''}
+      comments={comments}
+      sorter={sorter}
+      order={order}
+      isLoading={isLoading}
+      isRecheadedEnd={isRecheadedEnd}
+      isPopoverMenuOpen={isPopoverMenuOpen}
+      popoverMenuButtons={popoverMenuButtons}
+      onPopoverMenuOpenChange={handlePopoverMenuOpenChange}
+      onShowMore={nextPage}
+      onSendComment={handleSendComment}
+      onDeleteComment={handleDeleteComment}
+      onFetchComments={onFetchComments}
+      onPostComment={onPostComment}
+    />
+  )
 }

@@ -1,14 +1,14 @@
 import type { ReactNode, RefObject } from 'react'
 import 'swiper/css'
 import 'swiper/css/navigation'
-
 import { type ImperativePanelHandle, Panel, PanelGroup } from 'react-resizable-panels'
+
 import { PageTransitionAnimation } from '@/ui/global/widgets/components/PageTransitionAnimation'
-import { ChallengeSlider } from './ChallengeSlider'
-import { ChallengeTabs } from './ChallengeTabs'
-import { PanelHandle } from './PandleHandle'
-import type { PanelsOffset } from './types'
 import type { PanelsLayout } from '@/ui/challenging/stores/ChallengeStore/types'
+import { ChallengeSlider } from './ChallengeSlider'
+import { PanelHandle } from './PandleHandle'
+import { ChallengeTabs } from './ChallengeTabs'
+import type { PanelsOffset } from './types'
 
 const DIRECTION = 'horizontal'
 const HORIZONTAL_PADDNG = 24

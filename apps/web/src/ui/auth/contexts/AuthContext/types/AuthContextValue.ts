@@ -7,6 +7,7 @@ export type AuthContextValue = {
   user: User | null
   accessToken: string | null
   isLoading: boolean
+  isAccountAuthenticated: boolean
   handleSignIn(email: string, password: string): Promise<boolean>
   handleSignOut(): Promise<void>
   handleSignUpWithSocialAccount(

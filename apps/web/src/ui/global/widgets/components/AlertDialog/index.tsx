@@ -68,10 +68,10 @@ const AlertDialogComponent = (
               {body}
               <div className='mt-4 flex justify-center gap-2'>
                 <AlertDialog.AlertDialogAction asChild>
-                  {action as null}
+                  {action}
                 </AlertDialog.AlertDialogAction>
                 <AlertDialog.AlertDialogCancel asChild>
-                  {cancel as null}
+                  {cancel}
                 </AlertDialog.AlertDialogCancel>
               </div>
             </DialogAnimation>

@@ -22,7 +22,7 @@ type Params = {
   ) => Promise<ActionResponse<{ isNewAccount: boolean; account: AccountDto }>>
 }
 
-export function useAuthProvider({
+export function useAuthContextProvider({
   profileService,
   accountDto,
   signIn,
@@ -130,6 +130,7 @@ export function useAuthProvider({
   return {
     user: userDto ? User.create(userDto) : null,
     account,
+    isAccountAuthenticated: account?.isAuthenticated.isTrue ?? false,
     isLoading,
     handleSignIn,
     handleSignOut,

@@ -16,11 +16,11 @@ import {
 import type { PlaygroundService } from '@stardust/core/playground/interfaces'
 import { Name, type Id } from '@stardust/core/global/structures'
 
+import { ROUTES } from '@/constants'
 import type { PlaygroundCodeEditorRef } from '@/ui/global/widgets/components/PlaygroundCodeEditor/types'
 import { useWindowSize } from '@/ui/global/hooks/useWindowSize'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
-import { ROUTES } from '@/constants'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
 const snippetSchema = z.object({

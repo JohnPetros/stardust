@@ -17,7 +17,7 @@ export const ChallengePage = ({ challengeDto, userChallengeVote }: Props) => {
     shouldHaveConfettiAnimation,
     handleBackButtonClick,
     handlePanelsLayoutButtonClick,
-  } = useChallengePage(challengeDto, userChallengeVote)
+  } = useChallengePage({ challengeDto, userChallengeVote })
 
   return (
     <ChallengePageView

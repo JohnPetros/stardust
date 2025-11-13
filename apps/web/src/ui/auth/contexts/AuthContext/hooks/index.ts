@@ -1,5 +1,5 @@
 export { useAuthContext } from './useAuthContext'
-export { useAuthProvider } from './useAuthProvider'
+export { useAuthContextProvider } from './useAuthContextProvider'
 export { useSignInAction } from './useSignInAction'
 export { useSignOutAction } from './useSignOutAction'
 export { useSignUpWithSocialAccountAction } from './useSignUpWithSocialAccountAction'

@@ -1,7 +1,6 @@
 import { useEffect, useState, type RefObject } from 'react'
 
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { ROUTES } from '@/constants'
@@ -14,7 +13,6 @@ export function useBlockedContentAlertDialog(
   const { getChallengeSlice, getCraftsVisibilitySlice } = useChallengeStore()
   const { craftsVislibility } = getCraftsVisibilitySlice()
   const { challenge } = getChallengeSlice()
-  const { user } = useAuthContext()
   const { goTo } = useNavigationProvider()
 
   function handleOpenChange(isOpen: boolean) {
@@ -23,8 +21,11 @@ export function useBlockedContentAlertDialog(
   }
 
   useEffect(() => {
-    if (!challenge || !user || !craftsVislibility) return
+    console.log('craftsVislibility', craftsVislibility)
+    if (!challenge || !craftsVislibility) return
     let canShowContent = false
+
+    console.log('craftsVislibility', craftsVislibility)
 
     switch (content) {
       case 'comments':
@@ -41,7 +42,7 @@ export function useBlockedContentAlertDialog(
       return
     }
     setIsVerifyingVisibility(false)
-  }, [content, user, challenge, craftsVislibility, ref.current?.open])
+  }, [content, challenge, craftsVislibility, ref.current?.open])
 
   return {
     challengeSlug: challenge?.slug.value ?? '',
