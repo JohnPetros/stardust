@@ -52,7 +52,6 @@ export const challengeFormSchema = challengeSchema.extend({
           value: z.unknown(),
         }),
         isLocked: booleanSchema,
-        position: ordinalNumberSchema,
       }),
     )
     .min(3, 'Deve haver pelo menos 3 testes casos'),
