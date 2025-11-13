@@ -10,6 +10,7 @@ import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
 import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { useRest } from '@/ui/global/hooks/useRest'
 import { ChallengeEditorPageView } from './ChallengeEditorPageView'
+import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
 type Props = {
   challengeDto?: ChallengeDto
@@ -20,6 +21,7 @@ export const ChallengeEditorPage = ({ challengeDto, challengeCategoriesDto }: Pr
   const { user } = useAuthContext()
   const { challengingService } = useRest()
   const navigationProvider = useNavigationProvider()
+  const toastProvider = useToastContext()
   const categories = challengeCategoriesDto.map((categoryDto) =>
     ChallengeCategory.create(categoryDto),
   )
@@ -30,6 +32,7 @@ export const ChallengeEditorPage = ({ challengeDto, challengeCategoriesDto }: Pr
         currentChallenge={challengeDto ? Challenge.create(challengeDto) : null}
         userId={user.id}
         navigationProvider={navigationProvider}
+        toastProvider={toastProvider}
         challengeCategories={categories}
         service={challengingService}
       />
