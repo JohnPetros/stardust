@@ -23,7 +23,7 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@designliquido/delegua": "^0.57.1",
+    "@designliquido/delegua": "^0.59.0",
     "@stardust/core": "*"
   },
   "devDependencies": {
