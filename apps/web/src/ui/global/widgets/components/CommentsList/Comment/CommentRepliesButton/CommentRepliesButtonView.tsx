@@ -6,6 +6,7 @@ type Props = {
   repliesCount: number
   hasReplies: boolean
   isRepliesVisible: boolean
+  isAccountAuthenticated: boolean
   onToggleRepliesVisible: VoidFunction
 }
 
