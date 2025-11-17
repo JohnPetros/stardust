@@ -14,17 +14,24 @@ import type {
   ChallengeContent,
   PanelsLayout,
 } from '@/ui/challenging/stores/ChallengeStore/types'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 import { Logical } from '@stardust/core/global/structures'
+import type { User } from '@stardust/core/profile/entities'
 
 type Params = {
-  challengeDto: ChallengeDto,
+  challengeDto: ChallengeDto
   userChallengeVote: string
+  user: User | null
+  isAccountAuthenticated: boolean
 }
 
-export function useChallengePage({challengeDto, userChallengeVote}: Params) {
+export function useChallengePage({
+  challengeDto,
+  userChallengeVote,
+  user,
+  isAccountAuthenticated,
+}: Params) {
   const {
     getChallengeSlice,
     getCraftsVisibilitySlice,
@@ -36,7 +43,6 @@ export function useChallengePage({challengeDto, userChallengeVote}: Params) {
   const { challenge, setChallenge } = getChallengeSlice()
   const { panelsLayout, setPanelsLayout } = getPanelsLayoutSlice()
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
-  const { user } = useAuthContext()
   const { currentRoute, goTo } = useNavigationProvider()
   const [isNew] = useQueryStringParam('isNew')
   const secondCounterLocalstorage = useLocalStorage(STORAGE.keys.secondsCounter)
@@ -58,26 +64,39 @@ export function useChallengePage({challengeDto, userChallengeVote}: Params) {
       const challenge = Challenge.create(challengeDto)
       challenge.userVote = ChallengeVote.create(userChallengeVote)
       setChallenge(challenge)
-      
     }
-    if (challenge && !craftsVislibility) {
-      const isUserChallengeAuthor = user ? challenge.author.isEqualTo(user) : Logical.createAsFalse()
-      const isChallengeCompleted = user ? user.hasCompletedChallenge(challenge.id) : Logical.createAsFalse()
+
+    if (challenge && !craftsVislibility && isAccountAuthenticated && user) {
+      const isUserChallengeAuthor = challenge.author.isEqualTo(user)
+      const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
+
       setCraftsVislibility(
         ChallengeCraftsVisibility.create({
-          canShowComments: challenge.isFromStar.isTrue ? isChallengeCompleted.isTrue : true,
+          canShowComments: challenge.isFromStar.isTrue
+            ? isChallengeCompleted.isTrue
+            : true,
           canShowSolutions: isUserChallengeAuthor
             .or(isChallengeCompleted)
             .or(challenge.isCompleted).isTrue,
         }),
       )
     }
+
+    if (challenge && !craftsVislibility && !isAccountAuthenticated) {
+      setCraftsVislibility(
+        ChallengeCraftsVisibility.create({
+          canShowComments: true,
+          canShowSolutions: false,
+        }),
+      )
+    }
   }, [
     challenge,
-    user,
     craftsVislibility,
+    user,
     challengeDto,
     userChallengeVote,
+    isAccountAuthenticated,
     setChallenge,
     setCraftsVislibility,
   ])
