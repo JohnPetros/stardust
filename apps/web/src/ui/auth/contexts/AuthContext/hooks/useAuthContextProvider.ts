@@ -75,8 +75,6 @@ export function useAuthContextProvider({
   ) {
     const response = await signUpWithSocialAccount(accessToken, refreshToken)
 
-    console.log('auth provider response', response)
-
     if (response.isSuccessful) {
       setAccount(Account.create(response.data.account))
       return { isNewAccount: response.data.isNewAccount }
