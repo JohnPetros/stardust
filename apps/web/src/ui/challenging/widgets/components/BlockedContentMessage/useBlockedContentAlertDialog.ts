@@ -21,11 +21,8 @@ export function useBlockedContentAlertDialog(
   }
 
   useEffect(() => {
-    console.log('craftsVislibility', craftsVislibility)
     if (!challenge || !craftsVislibility) return
     let canShowContent = false
-
-    console.log('craftsVislibility', craftsVislibility)
 
     switch (content) {
       case 'comments':

@@ -7,12 +7,12 @@ import { Trigger as TabButton } from '@radix-ui/react-tabs'
 import type { ChallengeCraftsVisibility } from '@stardust/core/challenging/structures'
 
 import type { ChallengeContent } from '@/ui/challenging/stores/ChallengeStore/types'
+import { AccountRequirementAlertDialog } from '@/ui/global/widgets/components/AccountRequirementAlertDialog'
+import { Icon } from '@/ui/global/widgets/components/Icon'
 import { ChallengeTabContent } from './ChallengeTabContent'
 import { BlockedCommentsAlertDialog } from '../../../components/BlockedCommentsAlertDialog'
 import { BlockedSolutionsAlertDialog } from '../../../components/BlockedSolutionsAlertDialog'
 import { ChallengeContentLink } from '../../../components/ChallengeContentLink'
-import { AccountRequirementAlertDialog } from '@/ui/global/widgets/components/AccountRequirementAlertDialog'
-import { Icon } from '@/ui/global/widgets/components/Icon'
 
 type TabsProps = {
   activeContent: ChallengeContent
@@ -73,7 +73,7 @@ export const ChallengeTabsView = ({
           )}
           <span className='text-gray-600'>|</span>
           {!isAccountAuthenticated && (
-            <AccountRequirementAlertDialog description='Acesse a sua conta para as soluções de outros usuários para este desafio'>
+            <AccountRequirementAlertDialog description='Acesse a sua conta para ver as soluções de outros usuários para este desafio'>
               <button
                 type='button'
                 className='flex items-center gap-2 rounded-md bg-gray-700 p-2 text-gray-500 text-sm'

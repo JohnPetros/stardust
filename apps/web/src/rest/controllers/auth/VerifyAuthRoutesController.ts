@@ -16,7 +16,7 @@ const PUBLIC_ROUTES = [
   ...Object.values(ROUTES.api.auth),
 ]
 
-const PUBLIC_ROUTE_GROUPS = ['/challenging/challenges', '/playgorund/snippets/']
+const PUBLIC_ROUTE_GROUPS = ['/challenging/challenges', '/playground/snippets/']
 
 export const VerifyAuthRoutesController = (authService: AuthService): Controller => {
   async function refreshAuthSession(http: Http) {

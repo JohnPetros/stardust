@@ -12,7 +12,7 @@ const Page = async ({ params }: NextParams<'challengeSlug'>) => {
   let userChallengeVote: string | null = null
 
   if (accessTokenCookie?.data) {
-    const response = await challengingActions.accessChallengePage({
+    const response = await challengingActions.accessAuthenticatedChallengePage({
       challengeSlug,
     })
 

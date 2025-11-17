@@ -65,7 +65,7 @@ export const ChallengeVoteControlView = ({
           </button>
         </AccountRequirementAlertDialog>
       )}
-      {isUserChallengeAuthor && (
+      {!isUserChallengeAuthor && (
         <button
           type='button'
           onClick={() => handleVoteButtonClick('downvote')}

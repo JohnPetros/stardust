@@ -29,8 +29,6 @@ export const LessonStoryPageView = ({
   onStoryChange,
   onStorySave,
 }: Props) => {
-  console.log({ story })
-
   return (
     <TextEditorContextProvider>
       <div className='max-h-screen overflow-y-auto  '>
