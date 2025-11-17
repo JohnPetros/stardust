@@ -18,7 +18,7 @@ export const CommentsList = ({
   onPostComment,
   onFetchComments,
 }: Props) => {
-  const { user } = useAuthContext()
+  const { user, isAccountAuthenticated } = useAuthContext()
   const { forumService } = useRest()
   const {
     isLoading,
@@ -43,6 +43,7 @@ export const CommentsList = ({
     <CommentsListView
       inputPlaceholder={inputPlaceholder}
       emptyListMessage={emptyListMessage}
+      isAccountAuthenticated={isAccountAuthenticated}
       userUpvotedCommentIds={user ? user.upvotedCommentsIds : IdsList.create()}
       userSlug={user ? user.slug.value : ''}
       comments={comments}
