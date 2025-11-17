@@ -9,7 +9,6 @@ GET {{URL}}/challenge/{{CHALLENGE_ID}}
 &order=desc
 &page=1
 &itemsPerPage=10
-Authorization: Bearer {{JWT}}
 
 ### Fetch solution comments list
 GET {{URL}}/solution/{{SOLUTION_ID}}
