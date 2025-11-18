@@ -4,6 +4,7 @@ import { z } from 'zod'
 import {
   emailSchema,
   idSchema,
+  insigniaRoleSchema,
   integerSchema,
   nameSchema,
   stringSchema,
@@ -22,6 +23,7 @@ import {
   RewardUserForStarChallengeCompletionController,
   RewardUserForChallengeCompletionController,
   UpvoteCommentController,
+  AcquireInsigniaController,
 } from '@/rest/controllers/profile'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
@@ -235,6 +237,27 @@ export class UsersRouter extends HonoRouter {
     )
   }
 
+  private registerAcquireInsigniaRoute() {
+    this.router.post(
+      '/insignias/acquire',
+      this.authMiddleware.verifyAuthentication,
+      this.validationMiddleware.validate(
+        'json',
+        z.object({
+          insigniaRole: insigniaRoleSchema,
+          insigniaPrice: integerSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const controller = new AcquireInsigniaController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   private registerUpvoteCommentRoute() {
     this.router.post(
       '/comments/:commentId/upvote',
@@ -302,6 +325,7 @@ export class UsersRouter extends HonoRouter {
     this.registerRewardUserForChallengeCompletionRoute()
     this.registerAcquireAvatarRoute()
     this.registerAcquireRocketRoute()
+    this.registerAcquireInsigniaRoute()
     this.registerUpvoteCommentRoute()
     this.registerVerifyUserNameInUseRoute()
     this.registerVerifyUserEmailInUseRoute()
