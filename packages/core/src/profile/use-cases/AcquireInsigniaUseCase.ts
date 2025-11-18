@@ -19,8 +19,10 @@ export class AcquireInsigniaUseCase implements UseCase<Request, Response> {
 
   async execute({ userId, insigniaRole, insigniaPrice }: Request) {
     const user = await this.findUser(Id.create(userId))
-    user.acquireInsignia(InsigniaRole.create(insigniaRole), Integer.create(insigniaPrice))
+    const role = InsigniaRole.create(insigniaRole)
+    user.acquireInsignia(role, Integer.create(insigniaPrice))
     await this.repository.replace(user)
+    await this.repository.addAcquiredInsignia(role, user.id)
     return user.dto
   }
 
