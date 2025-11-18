@@ -1,5 +1,8 @@
-import { Id, Integer } from '#global/domain/structures/index'
-import { ShopItemNotAcquiredError } from '#profile/errors/index'
+import { Id, InsigniaRole, Integer } from '#global/domain/structures/index'
+import {
+  InsigniaAlreadyAcquiredError,
+  ShopItemNotAcquiredError,
+} from '#profile/errors/index'
 import {
   AvatarAggregatesFaker,
   RocketAggregatesFaker,
@@ -181,6 +184,46 @@ describe('User Entity', () => {
     user.selectAvatar(avatar)
 
     expect(user.avatar).toEqual(avatar)
+  })
+
+  it('should throw an error if the user try to acquire an already acquired insignia', () => {
+    const insigniaRole = InsigniaRole.createAsEngineer()
+    const insigniaPrice = Integer.create(100)
+    const user = UsersFaker.fake({
+      coins: 100,
+      insigniaRoles: [insigniaRole.value],
+    })
+
+    expect(() => user.acquireInsignia(insigniaRole, insigniaPrice)).toThrow(
+      InsigniaAlreadyAcquiredError,
+    )
+  })
+
+  it('should acquire a insignia role if the user has enough coins', () => {
+    let user = UsersFaker.fake({
+      coins: 1000,
+      insigniaRoles: [],
+    })
+    const insigniaRole = InsigniaRole.createAsEngineer()
+    const insigniaPrice = Integer.create(100)
+
+    expect(user.insigniaRoles).toHaveLength(0)
+
+    user.acquireInsignia(insigniaRole, insigniaPrice)
+
+    expect(user.insigniaRoles).toHaveLength(1)
+    expect(user.insigniaRoles[0]).toEqual(insigniaRole)
+
+    user = UsersFaker.fake({
+      coins: 0,
+      insigniaRoles: [],
+    })
+
+    expect(user.insigniaRoles).toHaveLength(0)
+
+    user.acquireInsignia(insigniaRole, insigniaPrice)
+
+    expect(user.insigniaRoles).toHaveLength(0)
   })
 
   it('should have the completed challenge id if completes a challenge', () => {
