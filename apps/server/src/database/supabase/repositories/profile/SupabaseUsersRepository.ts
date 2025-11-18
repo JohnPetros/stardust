@@ -5,6 +5,7 @@ import {
   type Name,
   type Slug,
   Logical,
+  InsigniaRole,
 } from '@stardust/core/global/structures'
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
 import type { User } from '@stardust/core/profile/entities'
@@ -389,6 +390,22 @@ export class SupabaseUsersRepository
     const { error } = await this.supabase
       .from('users_acquired_avatars')
       .insert({ avatar_id: avatarId.value, user_id: userId.value })
+
+    if (error) throw new SupabasePostgreError(error)
+  }
+
+  async addAcquiredInsignia(insigniaRole: InsigniaRole, userId: Id): Promise<void> {
+    const { error: insiginiaError, data } = await this.supabase
+      .from('insignias')
+      .select('id')
+      .eq('role', insigniaRole.value)
+      .single()
+
+    if (insiginiaError) throw new SupabasePostgreError(insiginiaError)
+
+    const { error } = await this.supabase
+      .from('users_acquired_insignias')
+      .insert({ insignia_id: data.id, user_id: userId.value })
 
     if (error) throw new SupabasePostgreError(error)
   }

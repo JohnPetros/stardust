@@ -2067,6 +2067,57 @@ export type Database = {
           },
         ]
       }
+      users_acquired_insignias: {
+        Row: {
+          insignia_id: string
+          user_id: string
+        }
+        Insert: {
+          insignia_id: string
+          user_id: string
+        }
+        Update: {
+          insignia_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_acquired_insignias_insignia_id_fkey"
+            columns: ["insignia_id"]
+            isOneToOne: false
+            referencedRelation: "insignias"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_acquired_insignias_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
+          },
+          {
+            foreignKeyName: "users_acquired_insignias_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_acquired_insignias_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "users_acquired_insignias_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users_acquired_rockets: {
         Row: {
           id: string
