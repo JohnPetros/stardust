@@ -37,9 +37,9 @@ export const ChallengeControlView = ({
           type='crying'
           body={
             <div className='mt-3'>
-              <p className='text-gray-50'>Tem certeza que deseja deletar essa desafio?</p>
+              <p className='text-gray-50'>Tem certeza que deseja deletar esse desafio?</p>
               <p className='text-gray-50'>
-                Todos os dados do seus desafio serão perdidos.
+                Todos os dados do seu desafio serão perdidos.
               </p>
             </div>
           }

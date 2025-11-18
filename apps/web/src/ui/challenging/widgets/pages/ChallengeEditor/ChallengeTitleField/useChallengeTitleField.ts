@@ -11,33 +11,41 @@ export function useChallengeTitleField(challengingService: ChallengingService) {
   const challengeTitle = watch('title')
 
   useEffect(() => {
-    setErrorMessage('')
-    if (
-      !challengeTitle ||
-      challengeTitle?.length <= 2 ||
-      formState.defaultValues?.title?.trim().toLowerCase() ===
-        challengeTitle.trim().toLowerCase()
-    )
-      return
+    const normalizedTitle = challengeTitle?.trim().toLowerCase()
+    const normalizedDefaultTitle = formState.defaultValues?.title?.trim().toLowerCase()
+    const shouldSkipValidation =
+      !normalizedTitle ||
+      normalizedTitle.length <= 2 ||
+      normalizedTitle === normalizedDefaultTitle ||
+      formState.isSubmitSuccessful
+
+    if (shouldSkipValidation) return
+
+    let isCancelled = false
 
     async function fetchChallenge() {
       const existingChallengeWithSameSlug = await challengingService.fetchChallengeBySlug(
         Slug.create(challengeTitle),
       )
-      if (existingChallengeWithSameSlug.isSuccessful)
+
+      if (existingChallengeWithSameSlug.isSuccessful && !isCancelled)
         setErrorMessage('Título já utilizado em outro desafio')
     }
 
     fetchChallenge()
-  }, [
-    challengeTitle,
-    formState.defaultValues?.title,
-    challengingService.fetchChallengeBySlug,
-  ])
+
+    return () => {
+      isCancelled = true
+    }
+  }, [challengeTitle, formState.defaultValues?.title, formState.isSubmitSuccessful])
 
   useEffect(() => {
     if (formState.errors.title?.message) setErrorMessage(formState.errors.title?.message)
   }, [formState.errors.title?.message])
+
+  useEffect(() => {
+    if (challengeTitle) setErrorMessage('')
+  }, [challengeTitle])
 
   return {
     registerInput: register,
