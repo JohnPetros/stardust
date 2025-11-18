@@ -325,6 +325,10 @@ export class User extends Entity<UserProps> {
     return this.props.completedPlanetsIds.count
   }
 
+  get insigniaRoles() {
+    return this.props.insigniaRoles
+  }
+
   get isRankingWinner(): Logical {
     if (!this.props.lastWeekRankingPosition) return Logical.createAsFalse()
 
