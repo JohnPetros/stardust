@@ -1,5 +1,6 @@
 import {
   accessChallengePage,
+  accessAuthenticatedChallengePage,
   accessChallengeCommentsSlot,
   accessSolutionPage,
   accessChallengeEditorPage,
@@ -35,6 +36,7 @@ export const cookieActions = { setCookie, getCookie, deleteCookie, hasCookie }
 
 export const challengingActions = {
   accessChallengePage,
+  accessAuthenticatedChallengePage,
   accessChallengeCommentsSlot,
   accessChallengeEditorPage,
   accessSolutionPage,

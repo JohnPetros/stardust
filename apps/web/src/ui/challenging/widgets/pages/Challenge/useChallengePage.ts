@@ -14,11 +14,24 @@ import type {
   ChallengeContent,
   PanelsLayout,
 } from '@/ui/challenging/stores/ChallengeStore/types'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
+import { Logical } from '@stardust/core/global/structures'
+import type { User } from '@stardust/core/profile/entities'
 
-export function useChallengePage(challengeDto: ChallengeDto, userVote: string) {
+type Params = {
+  challengeDto: ChallengeDto
+  userChallengeVote: string
+  user: User | null
+  isAccountAuthenticated: boolean
+}
+
+export function useChallengePage({
+  challengeDto,
+  userChallengeVote,
+  user,
+  isAccountAuthenticated,
+}: Params) {
   const {
     getChallengeSlice,
     getCraftsVisibilitySlice,
@@ -30,7 +43,6 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: string) {
   const { challenge, setChallenge } = getChallengeSlice()
   const { panelsLayout, setPanelsLayout } = getPanelsLayoutSlice()
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
-  const { user } = useAuthContext()
   const { currentRoute, goTo } = useNavigationProvider()
   const [isNew] = useQueryStringParam('isNew')
   const secondCounterLocalstorage = useLocalStorage(STORAGE.keys.secondsCounter)
@@ -50,29 +62,41 @@ export function useChallengePage(challengeDto: ChallengeDto, userVote: string) {
   useEffect(() => {
     if (!challenge) {
       const challenge = Challenge.create(challengeDto)
-      challenge.userVote = ChallengeVote.create(userVote)
+      challenge.userVote = ChallengeVote.create(userChallengeVote)
       setChallenge(challenge)
     }
-    if (challenge && user && !craftsVislibility) {
+
+    if (challenge && !craftsVislibility && isAccountAuthenticated && user) {
       const isUserChallengeAuthor = challenge.author.isEqualTo(user)
       const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
+
       setCraftsVislibility(
         ChallengeCraftsVisibility.create({
-          canShowComments: isUserChallengeAuthor
-            .or(isChallengeCompleted)
-            .or(challenge.isCompleted).isTrue,
+          canShowComments: challenge.isFromStar.isTrue
+            ? isChallengeCompleted.isTrue
+            : true,
           canShowSolutions: isUserChallengeAuthor
             .or(isChallengeCompleted)
             .or(challenge.isCompleted).isTrue,
         }),
       )
     }
+
+    if (challenge && !craftsVislibility && !isAccountAuthenticated) {
+      setCraftsVislibility(
+        ChallengeCraftsVisibility.create({
+          canShowComments: true,
+          canShowSolutions: false,
+        }),
+      )
+    }
   }, [
     challenge,
-    user,
     craftsVislibility,
+    user,
     challengeDto,
-    userVote,
+    userChallengeVote,
+    isAccountAuthenticated,
     setChallenge,
     setCraftsVislibility,
   ])

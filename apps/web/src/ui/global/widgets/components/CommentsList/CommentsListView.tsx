@@ -13,9 +13,12 @@ import type { CommentsListProps } from './CommentsListProps'
 import { CommentSkeleton } from './CommentSkeleton'
 import { ShowMoreButton } from '../ShowMoreButton'
 import type { PopoverMenuButton } from '../PopoverMenu/types'
+import { Button } from '../Button'
+import { AccountRequirementAlertDialog } from '../AccountRequirementAlertDialog'
 
 type Props = {
   isLoading: boolean
+  isAccountAuthenticated: boolean
   inputPlaceholder: string
   emptyListMessage: string
   userUpvotedCommentIds: IdsList
@@ -34,6 +37,7 @@ type Props = {
 
 export const CommentsListView = ({
   isLoading,
+  isAccountAuthenticated,
   inputPlaceholder,
   emptyListMessage,
   userUpvotedCommentIds,
@@ -87,12 +91,18 @@ export const CommentsListView = ({
         />
       </div>
 
+      {!isAccountAuthenticated && (
+        <AccountRequirementAlertDialog description='Acesse a sua conta para ver deixar seu comentário para este desafio'>
+          <Button className='w-96 mx-auto mt-12'>Comentar</Button>
+        </AccountRequirementAlertDialog>
+      )}
+
       {!isLoading && comments.length === 0 ? (
         <p className='mt-12 text-center text-sm font-medium text-gray-100'>
           {emptyListMessage}
         </p>
       ) : (
-        <div className='px-6'>
+        <div className='px-6 mt-16'>
           <ul className='mt-6 space-y-6'>
             {isLoading && (
               <>
@@ -110,27 +120,26 @@ export const CommentsListView = ({
               comments &&
               comments.map((comment, index, commentsList) => {
                 return (
-                  <>
-                    <li key={comment.id.value}>
-                      <Comment
-                        id={comment.id.value}
-                        content={comment.content.value}
-                        upvotesCount={comment.upvotesCount.value}
-                        repliesCount={comment.repliesCount.value}
-                        isUpvoted={userUpvotedCommentIds.includes(comment.id).isTrue}
-                        authorSlug={comment.author.slug.value}
-                        authorName={comment.author.name.value}
-                        authorAvatar={{
-                          name: comment.author.avatar.name.value,
-                          image: comment.author.avatar.image.value,
-                        }}
-                        postedAt={comment.postedAt}
-                        isAuthorUser={comment.author.slug.value === userSlug}
-                        onDelete={onDeleteComment}
-                      />
-                    </li>
+                  <li key={comment.id.value}>
+                    <Comment
+                      id={comment.id.value}
+                      content={comment.content.value}
+                      upvotesCount={comment.upvotesCount.value}
+                      repliesCount={comment.repliesCount.value}
+                      isUpvoted={userUpvotedCommentIds.includes(comment.id).isTrue}
+                      authorSlug={comment.author.slug.value}
+                      authorName={comment.author.name.value}
+                      authorAvatar={{
+                        name: comment.author.avatar.name.value,
+                        image: comment.author.avatar.image.value,
+                      }}
+                      postedAt={comment.postedAt}
+                      isAuthorUser={comment.author.slug.value === userSlug}
+                      isAccountAuthenticated={isAccountAuthenticated}
+                      onDelete={onDeleteComment}
+                    />
                     {index < commentsList.length - 1 && <Separator isColumn={false} />}
-                  </>
+                  </li>
                 )
               })}
           </ul>

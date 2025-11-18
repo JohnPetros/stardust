@@ -22,7 +22,7 @@ type Params = {
   ) => Promise<ActionResponse<{ isNewAccount: boolean; account: AccountDto }>>
 }
 
-export function useAuthProvider({
+export function useAuthContextProvider({
   profileService,
   accountDto,
   signIn,
@@ -74,8 +74,6 @@ export function useAuthProvider({
     refreshToken: string,
   ) {
     const response = await signUpWithSocialAccount(accessToken, refreshToken)
-
-    console.log('auth provider response', response)
 
     if (response.isSuccessful) {
       setAccount(Account.create(response.data.account))
@@ -130,6 +128,7 @@ export function useAuthProvider({
   return {
     user: userDto ? User.create(userDto) : null,
     account,
+    isAccountAuthenticated: account?.isAuthenticated.isTrue ?? false,
     isLoading,
     handleSignIn,
     handleSignOut,

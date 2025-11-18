@@ -11,7 +11,7 @@ import { NextRestClient } from '@/rest/next/NextRestClient'
 import type { AuthContextValue } from './types'
 import {
   useAuthContext,
-  useAuthProvider,
+  useAuthContextProvider,
   useSignInAction,
   useSignOutAction,
   useSignUpWithSocialAccountAction,
@@ -27,7 +27,7 @@ restClient.setBaseUrl(CLIENT_ENV.stardustServerUrl)
 
 export const AuthContext = createContext({} as AuthContextValue)
 
-export const AuthProvider = ({
+export const AuthContextProvider = ({
   accountDto,
   accessToken,
   children,
@@ -38,7 +38,7 @@ export const AuthProvider = ({
   const { signUpWithSocialAccount } = useSignUpWithSocialAccountAction()
   const { signIn } = useSignInAction()
   const { signOut } = useSignOutAction()
-  const authContextValue = useAuthProvider({
+  const authContextValue = useAuthContextProvider({
     profileService,
     accountDto,
     signIn,

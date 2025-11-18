@@ -1,13 +1,17 @@
-import { VerificationButton } from '@/ui/global/widgets/components/VerificationButton'
-import { TestCase } from './TestCase'
 import type { UserAnswer } from '@stardust/core/global/structures'
 import type { Challenge } from '@stardust/core/challenging/entities'
+
+import { VerificationButton } from '@/ui/global/widgets/components/VerificationButton'
+import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
+import { AccountRequirementAlertDialog } from '@/ui/global/widgets/components/AccountRequirementAlertDialog'
+import { TestCase } from './TestCase'
 
 type Props = {
   challenge: Challenge
   results: boolean[]
   userAnswer: UserAnswer
   isLeavingPage: boolean
+  alertDialogRef: React.RefObject<AlertDialogRef | null>
   handleUserAnswer: () => void
 }
 
@@ -16,10 +20,15 @@ export const ChallengeResultSlotView = ({
   results,
   userAnswer,
   isLeavingPage,
+  alertDialogRef,
   handleUserAnswer,
 }: Props) => {
   return (
     <div className='relative h-full w-full scale-[1] bg-gray-800 blur-[1]'>
+      <AccountRequirementAlertDialog
+        ref={alertDialogRef}
+        description='Antes de completar este belíssimo desafio, acesse primeiro a sua conta 😀'
+      />
       <div className='h-auto space-y-6 p-6'>
         {challenge.testCases.map((testCase, index) => {
           return (

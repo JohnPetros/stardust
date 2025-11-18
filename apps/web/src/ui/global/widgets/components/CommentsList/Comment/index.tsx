@@ -33,6 +33,7 @@ type Props = {
     image: string
   }
   isAuthorUser: boolean
+  isAccountAuthenticated: boolean
   onDelete: (commentId: string) => void
 }
 
@@ -47,6 +48,7 @@ export const Comment = ({
   authorName,
   authorSlug,
   isAuthorUser,
+  isAccountAuthenticated,
   onDelete,
 }: Props) => {
   const { forumService } = useRest()
@@ -130,14 +132,16 @@ export const Comment = ({
                     repliesCount={replies?.length > 0 ? replies?.length : repliesCount}
                     onToggleRepliesVisible={handleToggleIsRepliesVisible}
                   />
-                  <Separator />
-                  <button
-                    type='button'
-                    onClick={handleToggleIsUserReplyInputVisible}
-                    className='flex items-center gap-2 text-sm text-gray-300'
-                  >
-                    Responder
-                  </button>
+                  {isAccountAuthenticated && <Separator />}
+                  {isAccountAuthenticated && (
+                    <button
+                      type='button'
+                      onClick={handleToggleIsUserReplyInputVisible}
+                      className='flex items-center gap-2 text-sm text-gray-300'
+                    >
+                      Responder
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -151,7 +155,7 @@ export const Comment = ({
               )}
             </div>
             {isRepliesVisible && user && (
-              <>
+              <div>
                 {isLoadingReplies ? (
                   <div className='grid w-full place-content-center'>
                     <Loading />
@@ -174,13 +178,14 @@ export const Comment = ({
                           postedAt={reply.postedAt}
                           isAuthorUser={reply.author.slug.value === user?.slug.value}
                           isUpvoted={user.hasUpvotedComment(reply.id).isTrue}
+                          isAccountAuthenticated={isAccountAuthenticated}
                           onDelete={handleDeleteUserReply}
                         />
                       </li>
                     ))}
                   </ul>
                 )}
-              </>
+              </div>
             )}
           </div>
         </div>
