@@ -16,6 +16,11 @@ type Request = {
 
 type Response = Promise<UserDto>
 
+type RocketAggregateEntity = {
+  name: string
+  image: string
+}
+
 export class AcquireRocketUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: UsersRepository) {}
 
@@ -23,7 +28,7 @@ export class AcquireRocketUseCase implements UseCase<Request, Response> {
     const user = await this.repository.findById(Id.create(userId))
     if (!user) throw new UserNotFoundError()
 
-    let entity = undefined
+    let entity: RocketAggregateEntity | undefined
     if (rocketName && rocketImage) {
       entity = { name: rocketName, image: rocketImage }
     }
