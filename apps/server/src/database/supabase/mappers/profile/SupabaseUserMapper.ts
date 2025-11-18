@@ -68,7 +68,7 @@ export class SupabaseUserMapper {
       completedPlanetsIds:
         supabaseUser.users_completed_planets?.map(({ planet_id }) => String(planet_id)) ??
         [],
-      insigniaRoles: [],
+      insigniaRoles: supabaseUser.insignias?.map(({ role }) => role) ?? [],
       didBreakStreak: supabaseUser.did_break_streak,
       canSeeRankingResult: supabaseUser.can_see_ranking ?? false,
       hasCompletedSpace: supabaseUser.has_completed_space,

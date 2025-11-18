@@ -7,6 +7,7 @@ export type SupabaseUser = Database['public']['Tables']['users']['Row'] & {
   avatar?: SupabaseAvatar | null
   rocket?: SupabaseRocket | null
   tier?: SupabaseTier | null
+  insignias?: { role: string }[]
   users_unlocked_stars?: { star_id: string }[]
   users_recently_unlocked_stars?: { star_id: string }[]
   users_unlocked_achievements?: { achievement_id: string }[]

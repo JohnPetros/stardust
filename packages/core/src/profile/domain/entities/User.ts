@@ -4,9 +4,9 @@ import {
   type Name,
   type Slug,
   type IdsList,
+  type InsigniaRole,
   Integer,
   Logical,
-  InsigniaRole,
 } from '#global/domain/structures/index'
 import type { AvatarAggregate, RocketAggregate } from '../aggregates'
 import { TierAggregate } from '../aggregates'
@@ -456,6 +456,7 @@ export class User extends Entity<UserProps> {
       weeklyXp: this.weeklyXp.value,
       streak: this.streak.value,
       weekStatus: this.props.weekStatus.value,
+      insigniaRoles: this.props.insigniaRoles.map((role) => role.value),
       unlockedStarsIds: this.props.unlockedStarsIds.dto,
       recentlyUnlockedStarsIds: this.props.recentlyUnlockedStarsIds.dto,
       acquiredRocketsIds: this.props.acquiredRocketsIds.dto,
