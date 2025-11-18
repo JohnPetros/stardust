@@ -16,6 +16,10 @@ export class InsigniaRole {
     return new InsigniaRole(value)
   }
 
+  static createAsEngineer(): InsigniaRole {
+    return InsigniaRole.create('engineer')
+  }
+
   static isInsigniaRole(value: string): value is InsigniaRoleValue {
     return ['engineer'].includes(value)
   }
