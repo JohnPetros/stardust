@@ -18,11 +18,14 @@ export type UserDto = {
   rocket: RocketAggregateDto
   avatar: AvatarAggregateDto
   tier: TierAggregateDto
+  hasCompletedSpace?: boolean
+  hasEngineerInsignia?: boolean
   unlockedStarsIds?: string[]
   recentlyUnlockedStarsIds?: string[]
   acquiredRocketsIds?: string[]
   unlockedDocsIds?: string[]
   acquiredAvatarsIds?: string[]
+  insigniaRoles?: string[]
   unlockedAchievementsIds?: string[]
   rescuableAchievementsIds?: string[]
   completedChallengesIds?: string[]
@@ -30,7 +33,6 @@ export type UserDto = {
   upvotedCommentsIds?: string[]
   upvotedSolutionsIds?: string[]
   canSeeRankingResult?: boolean
-  hasCompletedSpace?: boolean
   lastWeekRankingPosition?: number | null
   createdAt?: Date
   didBreakStreak?: boolean
