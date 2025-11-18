@@ -10,10 +10,13 @@ import { Text } from '@stardust/core/global/structures'
 
 const PUBLIC_ROUTES = [
   ROUTES.landing,
+  ROUTES.playground.snippets,
   ...Object.values(ROUTES.seo),
   ...Object.values(ROUTES.auth),
   ...Object.values(ROUTES.api.auth),
 ]
+
+const PUBLIC_ROUTE_GROUPS = ['/challenging/challenges', '/playground/snippets/']
 
 export const VerifyAuthRoutesController = (authService: AuthService): Controller => {
   async function refreshAuthSession(http: Http) {
@@ -41,13 +44,12 @@ export const VerifyAuthRoutesController = (authService: AuthService): Controller
 
     return response
   }
-
   return {
     async handle(http: Http) {
       const currentRoute = http.getCurrentRoute()
-      const isSnippetPageRoute = currentRoute.includes(`${ROUTES.playground.snippets}/`)
       const isPublicRoute =
-        PUBLIC_ROUTES.map(String).includes(currentRoute) || isSnippetPageRoute
+        PUBLIC_ROUTES.map(String).includes(currentRoute) ||
+        PUBLIC_ROUTE_GROUPS.some((group) => currentRoute.startsWith(group))
       const response = await authService.fetchAccount()
       const hasSession = response.isSuccessful
       const isRootRoute = currentRoute === ROUTES.landing

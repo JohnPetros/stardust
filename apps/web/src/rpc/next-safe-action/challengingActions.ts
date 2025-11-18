@@ -13,8 +13,9 @@ import {
 } from '../actions/challenging'
 import { ChallengingService, SpaceService } from '@/rest/services'
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
+import { actionClient } from './clients'
 
-export const accessChallengePage = authActionClient
+export const accessAuthenticatedChallengePage = authActionClient
   .schema(z.object({ challengeSlug: z.string() }))
   .action(async ({ clientInput, ctx }) => {
     const call = NextCall({
@@ -24,7 +25,28 @@ export const accessChallengePage = authActionClient
     const restClient = await NextServerRestClient({ isCacheEnabled: false })
     const challengingService = ChallengingService(restClient)
     const spaceService = SpaceService(restClient)
-    const action = AccessChallengePageAction(challengingService, spaceService)
+    const action = AccessChallengePageAction({
+      isAuthenticated: true,
+      challengingService,
+      spaceService,
+    })
+    return action.handle(call)
+  })
+
+export const accessChallengePage = actionClient
+  .schema(z.object({ challengeSlug: z.string() }))
+  .action(async ({ clientInput }) => {
+    const call = NextCall({
+      request: clientInput,
+    })
+    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const challengingService = ChallengingService(restClient)
+    const spaceService = SpaceService(restClient)
+    const action = AccessChallengePageAction({
+      isAuthenticated: false,
+      challengingService,
+      spaceService,
+    })
     return action.handle(call)
   })
 
@@ -40,16 +62,15 @@ export const accessChallengeEditorPage = authActionClient
     return action.handle(call)
   })
 
-export const accessChallengeCommentsSlot = authActionClient
+export const accessChallengeCommentsSlot = actionClient
   .schema(
     z.object({
       challengeSlug: z.string(),
     }),
   )
-  .action(async ({ clientInput, ctx }) => {
+  .action(async ({ clientInput }) => {
     const call = NextCall({
       request: clientInput,
-      user: ctx.user,
     })
     const restClient = await NextServerRestClient({ isCacheEnabled: false })
     const challengingService = ChallengingService(restClient)

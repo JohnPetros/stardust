@@ -9,7 +9,7 @@ import type { ToastContextValue, ToastRef } from './types'
 
 export const ToastContext = createContext({} as ToastContextValue)
 
-export function ToastProvider({ children }: PropsWithChildren) {
+export const ToastContextProvider = ({ children }: PropsWithChildren) => {
   const toastRef = useRef<ToastRef | null>(null)
   const { showToast, showSuccess, showError } = useToastProvider(toastRef)
 
