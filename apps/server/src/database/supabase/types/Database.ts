@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: '12.2.3 (519615d)'
+    PostgrestVersion: "12.2.3 (519615d)"
   }
   auth: {
     Tables: {
@@ -44,7 +44,7 @@ export type Database = {
           auth_code_issued_at: string | null
           authentication_method: string
           code_challenge: string
-          code_challenge_method: Database['auth']['Enums']['code_challenge_method']
+          code_challenge_method: Database["auth"]["Enums"]["code_challenge_method"]
           created_at: string | null
           id: string
           provider_access_token: string | null
@@ -58,7 +58,7 @@ export type Database = {
           auth_code_issued_at?: string | null
           authentication_method: string
           code_challenge: string
-          code_challenge_method: Database['auth']['Enums']['code_challenge_method']
+          code_challenge_method: Database["auth"]["Enums"]["code_challenge_method"]
           created_at?: string | null
           id: string
           provider_access_token?: string | null
@@ -72,7 +72,7 @@ export type Database = {
           auth_code_issued_at?: string | null
           authentication_method?: string
           code_challenge?: string
-          code_challenge_method?: Database['auth']['Enums']['code_challenge_method']
+          code_challenge_method?: Database["auth"]["Enums"]["code_challenge_method"]
           created_at?: string | null
           id?: string
           provider_access_token?: string | null
@@ -119,11 +119,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'identities_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "identities_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -175,11 +175,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'mfa_amr_claims_session_id_fkey'
-            columns: ['session_id']
+            foreignKeyName: "mfa_amr_claims_session_id_fkey"
+            columns: ["session_id"]
             isOneToOne: false
-            referencedRelation: 'sessions'
-            referencedColumns: ['id']
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -213,24 +213,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'mfa_challenges_auth_factor_id_fkey'
-            columns: ['factor_id']
+            foreignKeyName: "mfa_challenges_auth_factor_id_fkey"
+            columns: ["factor_id"]
             isOneToOne: false
-            referencedRelation: 'mfa_factors'
-            referencedColumns: ['id']
+            referencedRelation: "mfa_factors"
+            referencedColumns: ["id"]
           },
         ]
       }
       mfa_factors: {
         Row: {
           created_at: string
-          factor_type: Database['auth']['Enums']['factor_type']
+          factor_type: Database["auth"]["Enums"]["factor_type"]
           friendly_name: string | null
           id: string
           last_challenged_at: string | null
+          last_webauthn_challenge_data: Json | null
           phone: string | null
           secret: string | null
-          status: Database['auth']['Enums']['factor_status']
+          status: Database["auth"]["Enums"]["factor_status"]
           updated_at: string
           user_id: string
           web_authn_aaguid: string | null
@@ -238,13 +239,14 @@ export type Database = {
         }
         Insert: {
           created_at: string
-          factor_type: Database['auth']['Enums']['factor_type']
+          factor_type: Database["auth"]["Enums"]["factor_type"]
           friendly_name?: string | null
           id: string
           last_challenged_at?: string | null
+          last_webauthn_challenge_data?: Json | null
           phone?: string | null
           secret?: string | null
-          status: Database['auth']['Enums']['factor_status']
+          status: Database["auth"]["Enums"]["factor_status"]
           updated_at: string
           user_id: string
           web_authn_aaguid?: string | null
@@ -252,13 +254,14 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          factor_type?: Database['auth']['Enums']['factor_type']
+          factor_type?: Database["auth"]["Enums"]["factor_type"]
           friendly_name?: string | null
           id?: string
           last_challenged_at?: string | null
+          last_webauthn_challenge_data?: Json | null
           phone?: string | null
           secret?: string | null
-          status?: Database['auth']['Enums']['factor_status']
+          status?: Database["auth"]["Enums"]["factor_status"]
           updated_at?: string
           user_id?: string
           web_authn_aaguid?: string | null
@@ -266,11 +269,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'mfa_factors_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "mfa_factors_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -281,16 +284,18 @@ export type Database = {
           authorization_id: string
           client_id: string
           code_challenge: string | null
-          code_challenge_method: Database['auth']['Enums']['code_challenge_method'] | null
+          code_challenge_method:
+            | Database["auth"]["Enums"]["code_challenge_method"]
+            | null
           created_at: string
           expires_at: string
           id: string
           redirect_uri: string
           resource: string | null
-          response_type: Database['auth']['Enums']['oauth_response_type']
+          response_type: Database["auth"]["Enums"]["oauth_response_type"]
           scope: string
           state: string | null
-          status: Database['auth']['Enums']['oauth_authorization_status']
+          status: Database["auth"]["Enums"]["oauth_authorization_status"]
           user_id: string | null
         }
         Insert: {
@@ -300,17 +305,17 @@ export type Database = {
           client_id: string
           code_challenge?: string | null
           code_challenge_method?:
-            | Database['auth']['Enums']['code_challenge_method']
+            | Database["auth"]["Enums"]["code_challenge_method"]
             | null
           created_at?: string
           expires_at?: string
           id: string
           redirect_uri: string
           resource?: string | null
-          response_type?: Database['auth']['Enums']['oauth_response_type']
+          response_type?: Database["auth"]["Enums"]["oauth_response_type"]
           scope: string
           state?: string | null
-          status?: Database['auth']['Enums']['oauth_authorization_status']
+          status?: Database["auth"]["Enums"]["oauth_authorization_status"]
           user_id?: string | null
         }
         Update: {
@@ -320,33 +325,33 @@ export type Database = {
           client_id?: string
           code_challenge?: string | null
           code_challenge_method?:
-            | Database['auth']['Enums']['code_challenge_method']
+            | Database["auth"]["Enums"]["code_challenge_method"]
             | null
           created_at?: string
           expires_at?: string
           id?: string
           redirect_uri?: string
           resource?: string | null
-          response_type?: Database['auth']['Enums']['oauth_response_type']
+          response_type?: Database["auth"]["Enums"]["oauth_response_type"]
           scope?: string
           state?: string | null
-          status?: Database['auth']['Enums']['oauth_authorization_status']
+          status?: Database["auth"]["Enums"]["oauth_authorization_status"]
           user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: 'oauth_authorizations_client_id_fkey'
-            columns: ['client_id']
+            foreignKeyName: "oauth_authorizations_client_id_fkey"
+            columns: ["client_id"]
             isOneToOne: false
-            referencedRelation: 'oauth_clients'
-            referencedColumns: ['id']
+            referencedRelation: "oauth_clients"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'oauth_authorizations_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "oauth_authorizations_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -354,7 +359,7 @@ export type Database = {
         Row: {
           client_name: string | null
           client_secret_hash: string | null
-          client_type: Database['auth']['Enums']['oauth_client_type']
+          client_type: Database["auth"]["Enums"]["oauth_client_type"]
           client_uri: string | null
           created_at: string
           deleted_at: string | null
@@ -362,13 +367,13 @@ export type Database = {
           id: string
           logo_uri: string | null
           redirect_uris: string
-          registration_type: Database['auth']['Enums']['oauth_registration_type']
+          registration_type: Database["auth"]["Enums"]["oauth_registration_type"]
           updated_at: string
         }
         Insert: {
           client_name?: string | null
           client_secret_hash?: string | null
-          client_type?: Database['auth']['Enums']['oauth_client_type']
+          client_type?: Database["auth"]["Enums"]["oauth_client_type"]
           client_uri?: string | null
           created_at?: string
           deleted_at?: string | null
@@ -376,13 +381,13 @@ export type Database = {
           id: string
           logo_uri?: string | null
           redirect_uris: string
-          registration_type: Database['auth']['Enums']['oauth_registration_type']
+          registration_type: Database["auth"]["Enums"]["oauth_registration_type"]
           updated_at?: string
         }
         Update: {
           client_name?: string | null
           client_secret_hash?: string | null
-          client_type?: Database['auth']['Enums']['oauth_client_type']
+          client_type?: Database["auth"]["Enums"]["oauth_client_type"]
           client_uri?: string | null
           created_at?: string
           deleted_at?: string | null
@@ -390,7 +395,7 @@ export type Database = {
           id?: string
           logo_uri?: string | null
           redirect_uris?: string
-          registration_type?: Database['auth']['Enums']['oauth_registration_type']
+          registration_type?: Database["auth"]["Enums"]["oauth_registration_type"]
           updated_at?: string
         }
         Relationships: []
@@ -422,18 +427,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'oauth_consents_client_id_fkey'
-            columns: ['client_id']
+            foreignKeyName: "oauth_consents_client_id_fkey"
+            columns: ["client_id"]
             isOneToOne: false
-            referencedRelation: 'oauth_clients'
-            referencedColumns: ['id']
+            referencedRelation: "oauth_clients"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'oauth_consents_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "oauth_consents_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -443,7 +448,7 @@ export type Database = {
           id: string
           relates_to: string
           token_hash: string
-          token_type: Database['auth']['Enums']['one_time_token_type']
+          token_type: Database["auth"]["Enums"]["one_time_token_type"]
           updated_at: string
           user_id: string
         }
@@ -452,7 +457,7 @@ export type Database = {
           id: string
           relates_to: string
           token_hash: string
-          token_type: Database['auth']['Enums']['one_time_token_type']
+          token_type: Database["auth"]["Enums"]["one_time_token_type"]
           updated_at?: string
           user_id: string
         }
@@ -461,17 +466,17 @@ export type Database = {
           id?: string
           relates_to?: string
           token_hash?: string
-          token_type?: Database['auth']['Enums']['one_time_token_type']
+          token_type?: Database["auth"]["Enums"]["one_time_token_type"]
           updated_at?: string
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'one_time_tokens_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "one_time_tokens_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -511,11 +516,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'refresh_tokens_session_id_fkey'
-            columns: ['session_id']
+            foreignKeyName: "refresh_tokens_session_id_fkey"
+            columns: ["session_id"]
             isOneToOne: false
-            referencedRelation: 'sessions'
-            referencedColumns: ['id']
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -555,11 +560,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'saml_providers_sso_provider_id_fkey'
-            columns: ['sso_provider_id']
+            foreignKeyName: "saml_providers_sso_provider_id_fkey"
+            columns: ["sso_provider_id"]
             isOneToOne: false
-            referencedRelation: 'sso_providers'
-            referencedColumns: ['id']
+            referencedRelation: "sso_providers"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -596,18 +601,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'saml_relay_states_flow_state_id_fkey'
-            columns: ['flow_state_id']
+            foreignKeyName: "saml_relay_states_flow_state_id_fkey"
+            columns: ["flow_state_id"]
             isOneToOne: false
-            referencedRelation: 'flow_state'
-            referencedColumns: ['id']
+            referencedRelation: "flow_state"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'saml_relay_states_sso_provider_id_fkey'
-            columns: ['sso_provider_id']
+            foreignKeyName: "saml_relay_states_sso_provider_id_fkey"
+            columns: ["sso_provider_id"]
             isOneToOne: false
-            referencedRelation: 'sso_providers'
-            referencedColumns: ['id']
+            referencedRelation: "sso_providers"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -625,13 +630,15 @@ export type Database = {
       }
       sessions: {
         Row: {
-          aal: Database['auth']['Enums']['aal_level'] | null
+          aal: Database["auth"]["Enums"]["aal_level"] | null
           created_at: string | null
           factor_id: string | null
           id: string
           ip: unknown
           not_after: string | null
           oauth_client_id: string | null
+          refresh_token_counter: number | null
+          refresh_token_hmac_key: string | null
           refreshed_at: string | null
           tag: string | null
           updated_at: string | null
@@ -639,13 +646,15 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          aal?: Database['auth']['Enums']['aal_level'] | null
+          aal?: Database["auth"]["Enums"]["aal_level"] | null
           created_at?: string | null
           factor_id?: string | null
           id: string
           ip?: unknown
           not_after?: string | null
           oauth_client_id?: string | null
+          refresh_token_counter?: number | null
+          refresh_token_hmac_key?: string | null
           refreshed_at?: string | null
           tag?: string | null
           updated_at?: string | null
@@ -653,13 +662,15 @@ export type Database = {
           user_id: string
         }
         Update: {
-          aal?: Database['auth']['Enums']['aal_level'] | null
+          aal?: Database["auth"]["Enums"]["aal_level"] | null
           created_at?: string | null
           factor_id?: string | null
           id?: string
           ip?: unknown
           not_after?: string | null
           oauth_client_id?: string | null
+          refresh_token_counter?: number | null
+          refresh_token_hmac_key?: string | null
           refreshed_at?: string | null
           tag?: string | null
           updated_at?: string | null
@@ -668,18 +679,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'sessions_oauth_client_id_fkey'
-            columns: ['oauth_client_id']
+            foreignKeyName: "sessions_oauth_client_id_fkey"
+            columns: ["oauth_client_id"]
             isOneToOne: false
-            referencedRelation: 'oauth_clients'
-            referencedColumns: ['id']
+            referencedRelation: "oauth_clients"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'sessions_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "sessions_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -707,11 +718,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'sso_domains_sso_provider_id_fkey'
-            columns: ['sso_provider_id']
+            foreignKeyName: "sso_domains_sso_provider_id_fkey"
+            columns: ["sso_provider_id"]
             isOneToOne: false
-            referencedRelation: 'sso_providers'
-            referencedColumns: ['id']
+            referencedRelation: "sso_providers"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -864,21 +875,21 @@ export type Database = {
       uid: { Args: never; Returns: string }
     }
     Enums: {
-      aal_level: 'aal1' | 'aal2' | 'aal3'
-      code_challenge_method: 's256' | 'plain'
-      factor_status: 'unverified' | 'verified'
-      factor_type: 'totp' | 'webauthn' | 'phone'
-      oauth_authorization_status: 'pending' | 'approved' | 'denied' | 'expired'
-      oauth_client_type: 'public' | 'confidential'
-      oauth_registration_type: 'dynamic' | 'manual'
-      oauth_response_type: 'code'
+      aal_level: "aal1" | "aal2" | "aal3"
+      code_challenge_method: "s256" | "plain"
+      factor_status: "unverified" | "verified"
+      factor_type: "totp" | "webauthn" | "phone"
+      oauth_authorization_status: "pending" | "approved" | "denied" | "expired"
+      oauth_client_type: "public" | "confidential"
+      oauth_registration_type: "dynamic" | "manual"
+      oauth_response_type: "code"
       one_time_token_type:
-        | 'confirmation_token'
-        | 'reauthentication_token'
-        | 'recovery_token'
-        | 'email_change_token_new'
-        | 'email_change_token_current'
-        | 'phone_change_token'
+        | "confirmation_token"
+        | "reauthentication_token"
+        | "recovery_token"
+        | "email_change_token_new"
+        | "email_change_token_current"
+        | "phone_change_token"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1071,9 +1082,9 @@ export type Database = {
         Args: { algorithm: string; secret: string; signables: string }
         Returns: string
       }
-      dearmor: { Args: { '': string }; Returns: string }
+      dearmor: { Args: { "": string }; Returns: string }
       gen_random_uuid: { Args: never; Returns: string }
-      gen_salt: { Args: { '': string }; Returns: string }
+      gen_salt: { Args: { "": string }; Returns: string }
       pg_stat_statements: {
         Args: { showtext: boolean }
         Returns: Record<string, unknown>[]
@@ -1084,7 +1095,7 @@ export type Database = {
         Returns: undefined
       }
       pgp_armor_headers: {
-        Args: { '': string }
+        Args: { "": string }
         Returns: Record<string, unknown>[]
       }
       sign: {
@@ -1251,46 +1262,46 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'challenges_star_id_fkey'
-            columns: ['star_id']
+            foreignKeyName: "challenges_star_id_fkey"
+            columns: ["star_id"]
             isOneToOne: false
-            referencedRelation: 'next_star_from_next_planet'
-            referencedColumns: ['id']
+            referencedRelation: "next_star_from_next_planet"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'challenges_star_id_fkey'
-            columns: ['star_id']
+            foreignKeyName: "challenges_star_id_fkey"
+            columns: ["star_id"]
             isOneToOne: false
-            referencedRelation: 'stars'
-            referencedColumns: ['id']
+            referencedRelation: "stars"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['author_id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
-            foreignKeyName: 'challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: 'challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1312,25 +1323,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'challenges_categories_category_id_fkey'
-            columns: ['category_id']
+            foreignKeyName: "challenges_categories_category_id_fkey"
+            columns: ["category_id"]
             isOneToOne: false
-            referencedRelation: 'categories'
-            referencedColumns: ['id']
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'challenges_categories_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "challenges_categories_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges'
-            referencedColumns: ['id']
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'challenges_categories_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "challenges_categories_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1352,32 +1363,32 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'challenge_comments_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "challenge_comments_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges'
-            referencedColumns: ['id']
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'challenge_comments_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "challenge_comments_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'challenge_comments_comment_id_fkey'
-            columns: ['comment_id']
+            foreignKeyName: "challenge_comments_comment_id_fkey"
+            columns: ["comment_id"]
             isOneToOne: false
-            referencedRelation: 'comments'
-            referencedColumns: ['id']
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'challenge_comments_comment_id_fkey'
-            columns: ['comment_id']
+            foreignKeyName: "challenge_comments_comment_id_fkey"
+            columns: ["comment_id"]
             isOneToOne: false
-            referencedRelation: 'comments_view'
-            referencedColumns: ['id']
+            referencedRelation: "comments_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1406,46 +1417,46 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'comments_parent_comment_id_fkey'
-            columns: ['parent_comment_id']
+            foreignKeyName: "comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
             isOneToOne: false
-            referencedRelation: 'comments'
-            referencedColumns: ['id']
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'comments_parent_comment_id_fkey'
-            columns: ['parent_comment_id']
+            foreignKeyName: "comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
             isOneToOne: false
-            referencedRelation: 'comments_view'
-            referencedColumns: ['id']
+            referencedRelation: "comments_view"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'comments_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['author_id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
-            foreignKeyName: 'comments_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'comments_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: 'comments_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1467,6 +1478,30 @@ export type Database = {
           id?: string
           position?: number
           title?: string
+        }
+        Relationships: []
+      }
+      insignias: {
+        Row: {
+          id: string
+          image: string
+          name: string
+          price: number
+          role: Database["public"]["Enums"]["insignia_role"]
+        }
+        Insert: {
+          id?: string
+          image: string
+          name: string
+          price: number
+          role: Database["public"]["Enums"]["insignia_role"]
+        }
+        Update: {
+          id?: string
+          image?: string
+          name?: string
+          price?: number
+          role?: Database["public"]["Enums"]["insignia_role"]
         }
         Relationships: []
       }
@@ -1518,18 +1553,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'questions_star_id_fkey'
-            columns: ['star_id']
+            foreignKeyName: "questions_star_id_fkey"
+            columns: ["star_id"]
             isOneToOne: false
-            referencedRelation: 'next_star_from_next_planet'
-            referencedColumns: ['id']
+            referencedRelation: "next_star_from_next_planet"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'questions_star_id_fkey'
-            columns: ['star_id']
+            foreignKeyName: "questions_star_id_fkey"
+            columns: ["star_id"]
             isOneToOne: false
-            referencedRelation: 'stars'
-            referencedColumns: ['id']
+            referencedRelation: "stars"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1537,59 +1572,59 @@ export type Database = {
         Row: {
           id: string
           position: number
-          status: Database['public']['Enums']['ranking_status']
+          status: Database["public"]["Enums"]["ranking_status"]
           tier_id: string
           xp: number
         }
         Insert: {
           id: string
           position: number
-          status?: Database['public']['Enums']['ranking_status']
+          status?: Database["public"]["Enums"]["ranking_status"]
           tier_id: string
           xp?: number
         }
         Update: {
           id?: string
           position?: number
-          status?: Database['public']['Enums']['ranking_status']
+          status?: Database["public"]["Enums"]["ranking_status"]
           tier_id?: string
           xp?: number
         }
         Relationships: [
           {
-            foreignKeyName: 'winners_id_fkey'
-            columns: ['id']
+            foreignKeyName: "winners_id_fkey"
+            columns: ["id"]
             isOneToOne: true
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['author_id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
-            foreignKeyName: 'winners_id_fkey'
-            columns: ['id']
+            foreignKeyName: "winners_id_fkey"
+            columns: ["id"]
             isOneToOne: true
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'winners_id_fkey'
-            columns: ['id']
+            foreignKeyName: "winners_id_fkey"
+            columns: ["id"]
             isOneToOne: true
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: 'winners_id_fkey'
-            columns: ['id']
+            foreignKeyName: "winners_id_fkey"
+            columns: ["id"]
             isOneToOne: true
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'winners_tier_id_fkey'
-            columns: ['tier_id']
+            foreignKeyName: "winners_tier_id_fkey"
+            columns: ["tier_id"]
             isOneToOne: false
-            referencedRelation: 'tiers'
-            referencedColumns: ['id']
+            referencedRelation: "tiers"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1650,32 +1685,32 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'snippets_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "snippets_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['author_id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
-            foreignKeyName: 'snippets_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "snippets_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'snippets_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "snippets_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: 'snippets_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "snippets_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1712,46 +1747,46 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'public_solution_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "public_solution_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges'
-            referencedColumns: ['id']
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'public_solution_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "public_solution_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'solutions_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "solutions_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['author_id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
-            foreignKeyName: 'solutions_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "solutions_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'solutions_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "solutions_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: 'solutions_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "solutions_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1770,32 +1805,32 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'solutions_comments_comment_id_fkey'
-            columns: ['comment_id']
+            foreignKeyName: "solutions_comments_comment_id_fkey"
+            columns: ["comment_id"]
             isOneToOne: false
-            referencedRelation: 'comments'
-            referencedColumns: ['id']
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'solutions_comments_comment_id_fkey'
-            columns: ['comment_id']
+            foreignKeyName: "solutions_comments_comment_id_fkey"
+            columns: ["comment_id"]
             isOneToOne: false
-            referencedRelation: 'comments_view'
-            referencedColumns: ['id']
+            referencedRelation: "comments_view"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'solutions_comments_solution_id_fkey'
-            columns: ['solution_id']
+            foreignKeyName: "solutions_comments_solution_id_fkey"
+            columns: ["solution_id"]
             isOneToOne: false
-            referencedRelation: 'solutions'
-            referencedColumns: ['id']
+            referencedRelation: "solutions"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'solutions_comments_solution_id_fkey'
-            columns: ['solution_id']
+            foreignKeyName: "solutions_comments_solution_id_fkey"
+            columns: ["solution_id"]
             isOneToOne: false
-            referencedRelation: 'solutions_view'
-            referencedColumns: ['id']
+            referencedRelation: "solutions_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1838,25 +1873,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'stars_planet_id_fkey'
-            columns: ['planet_id']
+            foreignKeyName: "stars_planet_id_fkey"
+            columns: ["planet_id"]
             isOneToOne: false
-            referencedRelation: 'planets'
-            referencedColumns: ['id']
+            referencedRelation: "planets"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'stars_planet_id_fkey'
-            columns: ['planet_id']
+            foreignKeyName: "stars_planet_id_fkey"
+            columns: ["planet_id"]
             isOneToOne: false
-            referencedRelation: 'planets_view'
-            referencedColumns: ['id']
+            referencedRelation: "planets_view"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'stars_planet_id_fkey'
-            columns: ['planet_id']
+            foreignKeyName: "stars_planet_id_fkey"
+            columns: ["planet_id"]
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['planet_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["planet_id"]
           },
         ]
       }
@@ -1956,25 +1991,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_avatar_id_fkey'
-            columns: ['avatar_id']
+            foreignKeyName: "users_avatar_id_fkey"
+            columns: ["avatar_id"]
             isOneToOne: false
-            referencedRelation: 'avatars'
-            referencedColumns: ['id']
+            referencedRelation: "avatars"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_ranking_id_fkey'
-            columns: ['tier_id']
+            foreignKeyName: "users_ranking_id_fkey"
+            columns: ["tier_id"]
             isOneToOne: false
-            referencedRelation: 'tiers'
-            referencedColumns: ['id']
+            referencedRelation: "tiers"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_rocket_id_fkey'
-            columns: ['rocket_id']
+            foreignKeyName: "users_rocket_id_fkey"
+            columns: ["rocket_id"]
             isOneToOne: false
-            referencedRelation: 'rockets'
-            referencedColumns: ['id']
+            referencedRelation: "rockets"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1996,39 +2031,39 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_acquired_avatars_avatar_id_fkey'
-            columns: ['avatar_id']
+            foreignKeyName: "users_acquired_avatars_avatar_id_fkey"
+            columns: ["avatar_id"]
             isOneToOne: false
-            referencedRelation: 'avatars'
-            referencedColumns: ['id']
+            referencedRelation: "avatars"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_acquired_avatars_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_acquired_avatars_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['author_id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
-            foreignKeyName: 'users_acquired_avatars_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_acquired_avatars_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_acquired_avatars_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_acquired_avatars_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: 'users_acquired_avatars_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_acquired_avatars_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -2050,39 +2085,39 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_acquired_rockets_rocket_id_fkey'
-            columns: ['rocket_id']
+            foreignKeyName: "users_acquired_rockets_rocket_id_fkey"
+            columns: ["rocket_id"]
             isOneToOne: false
-            referencedRelation: 'rockets'
-            referencedColumns: ['id']
+            referencedRelation: "rockets"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_acquired_rockets_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_acquired_rockets_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['author_id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
-            foreignKeyName: 'users_acquired_rockets_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_acquired_rockets_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_acquired_rockets_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_acquired_rockets_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: 'users_acquired_rockets_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_acquired_rockets_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -2090,60 +2125,60 @@ export type Database = {
         Row: {
           challenge_id: string
           user_id: string
-          vote: Database['public']['Enums']['challenge_vote']
+          vote: Database["public"]["Enums"]["challenge_vote"]
         }
         Insert: {
           challenge_id: string
           user_id: string
-          vote: Database['public']['Enums']['challenge_vote']
+          vote: Database["public"]["Enums"]["challenge_vote"]
         }
         Update: {
           challenge_id?: string
           user_id?: string
-          vote?: Database['public']['Enums']['challenge_vote']
+          vote?: Database["public"]["Enums"]["challenge_vote"]
         }
         Relationships: [
           {
-            foreignKeyName: 'users_voted_challenges_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "users_voted_challenges_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges'
-            referencedColumns: ['id']
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_voted_challenges_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "users_voted_challenges_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_voted_challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_voted_challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['author_id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
-            foreignKeyName: 'users_voted_challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_voted_challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_voted_challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_voted_challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: 'users_voted_challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_voted_challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -2162,46 +2197,46 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_completed_challenges_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "users_completed_challenges_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges'
-            referencedColumns: ['id']
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_completed_challenges_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "users_completed_challenges_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_completed_challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_completed_challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['author_id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
-            foreignKeyName: 'users_completed_challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_completed_challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_completed_challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_completed_challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: 'users_completed_challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_completed_challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -2220,46 +2255,46 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_recently_unlocked_stars_star_id_fkey'
-            columns: ['star_id']
+            foreignKeyName: "users_recently_unlocked_stars_star_id_fkey"
+            columns: ["star_id"]
             isOneToOne: false
-            referencedRelation: 'next_star_from_next_planet'
-            referencedColumns: ['id']
+            referencedRelation: "next_star_from_next_planet"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_recently_unlocked_stars_star_id_fkey'
-            columns: ['star_id']
+            foreignKeyName: "users_recently_unlocked_stars_star_id_fkey"
+            columns: ["star_id"]
             isOneToOne: false
-            referencedRelation: 'stars'
-            referencedColumns: ['id']
+            referencedRelation: "stars"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_recently_unlocked_stars_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_recently_unlocked_stars_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['author_id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
-            foreignKeyName: 'users_recently_unlocked_stars_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_recently_unlocked_stars_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_recently_unlocked_stars_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_recently_unlocked_stars_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: 'users_recently_unlocked_stars_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_recently_unlocked_stars_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -2278,39 +2313,39 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_rescuable_achievements_achievement_id_fkey'
-            columns: ['achievement_id']
+            foreignKeyName: "users_rescuable_achievements_achievement_id_fkey"
+            columns: ["achievement_id"]
             isOneToOne: false
-            referencedRelation: 'achievements'
-            referencedColumns: ['id']
+            referencedRelation: "achievements"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_rescuable_achievements_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_rescuable_achievements_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['author_id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
-            foreignKeyName: 'users_rescuable_achievements_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_rescuable_achievements_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_rescuable_achievements_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_rescuable_achievements_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: 'users_rescuable_achievements_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_rescuable_achievements_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -2329,39 +2364,39 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_unlocked_achievements_achievement_id_fkey'
-            columns: ['achievement_id']
+            foreignKeyName: "users_unlocked_achievements_achievement_id_fkey"
+            columns: ["achievement_id"]
             isOneToOne: false
-            referencedRelation: 'achievements'
-            referencedColumns: ['id']
+            referencedRelation: "achievements"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_unlocked_achievements_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_unlocked_achievements_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['author_id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
-            foreignKeyName: 'users_unlocked_achievements_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_unlocked_achievements_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_unlocked_achievements_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_unlocked_achievements_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: 'users_unlocked_achievements_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_unlocked_achievements_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -2383,46 +2418,46 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_unlocked_stars_star_id_fkey'
-            columns: ['star_id']
+            foreignKeyName: "users_unlocked_stars_star_id_fkey"
+            columns: ["star_id"]
             isOneToOne: false
-            referencedRelation: 'next_star_from_next_planet'
-            referencedColumns: ['id']
+            referencedRelation: "next_star_from_next_planet"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_unlocked_stars_star_id_fkey'
-            columns: ['star_id']
+            foreignKeyName: "users_unlocked_stars_star_id_fkey"
+            columns: ["star_id"]
             isOneToOne: false
-            referencedRelation: 'stars'
-            referencedColumns: ['id']
+            referencedRelation: "stars"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_unlocked_stars_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_unlocked_stars_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['author_id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
-            foreignKeyName: 'users_unlocked_stars_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_unlocked_stars_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_unlocked_stars_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_unlocked_stars_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: 'users_unlocked_stars_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_unlocked_stars_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -2441,46 +2476,46 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_upvoted_comments_comment_id_fkey'
-            columns: ['comment_id']
+            foreignKeyName: "users_upvoted_comments_comment_id_fkey"
+            columns: ["comment_id"]
             isOneToOne: false
-            referencedRelation: 'comments'
-            referencedColumns: ['id']
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_upvoted_comments_comment_id_fkey'
-            columns: ['comment_id']
+            foreignKeyName: "users_upvoted_comments_comment_id_fkey"
+            columns: ["comment_id"]
             isOneToOne: false
-            referencedRelation: 'comments_view'
-            referencedColumns: ['id']
+            referencedRelation: "comments_view"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_upvoted_comments_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_upvoted_comments_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['author_id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
-            foreignKeyName: 'users_upvoted_comments_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_upvoted_comments_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_upvoted_comments_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_upvoted_comments_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: 'users_upvoted_comments_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "users_upvoted_comments_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -2499,46 +2534,46 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'user_upvoted_solutions_solution_id_fkey'
-            columns: ['solution_id']
+            foreignKeyName: "user_upvoted_solutions_solution_id_fkey"
+            columns: ["solution_id"]
             isOneToOne: false
-            referencedRelation: 'solutions'
-            referencedColumns: ['id']
+            referencedRelation: "solutions"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'user_upvoted_solutions_solution_id_fkey'
-            columns: ['solution_id']
+            foreignKeyName: "user_upvoted_solutions_solution_id_fkey"
+            columns: ["solution_id"]
             isOneToOne: false
-            referencedRelation: 'solutions_view'
-            referencedColumns: ['id']
+            referencedRelation: "solutions_view"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'user_upvoted_solutions_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "user_upvoted_solutions_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['author_id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
-            foreignKeyName: 'user_upvoted_solutions_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "user_upvoted_solutions_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'user_upvoted_solutions_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "user_upvoted_solutions_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: 'user_upvoted_solutions_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "user_upvoted_solutions_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -2571,46 +2606,46 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'challenges_star_id_fkey'
-            columns: ['star_id']
+            foreignKeyName: "challenges_star_id_fkey"
+            columns: ["star_id"]
             isOneToOne: false
-            referencedRelation: 'next_star_from_next_planet'
-            referencedColumns: ['id']
+            referencedRelation: "next_star_from_next_planet"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'challenges_star_id_fkey'
-            columns: ['star_id']
+            foreignKeyName: "challenges_star_id_fkey"
+            columns: ["star_id"]
             isOneToOne: false
-            referencedRelation: 'stars'
-            referencedColumns: ['id']
+            referencedRelation: "stars"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['author_id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
-            foreignKeyName: 'challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: 'challenges_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "challenges_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -2630,46 +2665,46 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'comments_parent_comment_id_fkey'
-            columns: ['parent_comment_id']
+            foreignKeyName: "comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
             isOneToOne: false
-            referencedRelation: 'comments'
-            referencedColumns: ['id']
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'comments_parent_comment_id_fkey'
-            columns: ['parent_comment_id']
+            foreignKeyName: "comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
             isOneToOne: false
-            referencedRelation: 'comments_view'
-            referencedColumns: ['id']
+            referencedRelation: "comments_view"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'comments_user_id_fkey'
-            columns: ['author_id']
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["author_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['author_id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
-            foreignKeyName: 'comments_user_id_fkey'
-            columns: ['author_id']
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["author_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'comments_user_id_fkey'
-            columns: ['author_id']
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["author_id"]
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: 'comments_user_id_fkey'
-            columns: ['author_id']
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["author_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -2688,7 +2723,6 @@ export type Database = {
           image: string | null
           name: string | null
           position: number | null
-          is_available: boolean | null
         }
         Relationships: []
       }
@@ -2707,32 +2741,32 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'snippets_user_id_fkey'
-            columns: ['author_id']
+            foreignKeyName: "snippets_user_id_fkey"
+            columns: ["author_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['author_id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
-            foreignKeyName: 'snippets_user_id_fkey'
-            columns: ['author_id']
+            foreignKeyName: "snippets_user_id_fkey"
+            columns: ["author_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'snippets_user_id_fkey'
-            columns: ['author_id']
+            foreignKeyName: "snippets_user_id_fkey"
+            columns: ["author_id"]
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: 'snippets_user_id_fkey'
-            columns: ['author_id']
+            foreignKeyName: "snippets_user_id_fkey"
+            columns: ["author_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -2755,46 +2789,46 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'public_solution_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "public_solution_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges'
-            referencedColumns: ['id']
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'public_solution_challenge_id_fkey'
-            columns: ['challenge_id']
+            foreignKeyName: "public_solution_challenge_id_fkey"
+            columns: ["challenge_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'solutions_user_id_fkey'
-            columns: ['author_id']
+            foreignKeyName: "solutions_user_id_fkey"
+            columns: ["author_id"]
             isOneToOne: false
-            referencedRelation: 'challenges_view'
-            referencedColumns: ['author_id']
+            referencedRelation: "challenges_view"
+            referencedColumns: ["author_id"]
           },
           {
-            foreignKeyName: 'solutions_user_id_fkey'
-            columns: ['author_id']
+            foreignKeyName: "solutions_user_id_fkey"
+            columns: ["author_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'solutions_user_id_fkey'
-            columns: ['author_id']
+            foreignKeyName: "solutions_user_id_fkey"
+            columns: ["author_id"]
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: 'solutions_user_id_fkey'
-            columns: ['author_id']
+            foreignKeyName: "solutions_user_id_fkey"
+            columns: ["author_id"]
             isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -2839,35 +2873,35 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_avatar_id_fkey'
-            columns: ['avatar_id']
+            foreignKeyName: "users_avatar_id_fkey"
+            columns: ["avatar_id"]
             isOneToOne: false
-            referencedRelation: 'avatars'
-            referencedColumns: ['id']
+            referencedRelation: "avatars"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_ranking_id_fkey'
-            columns: ['tier_id']
+            foreignKeyName: "users_ranking_id_fkey"
+            columns: ["tier_id"]
             isOneToOne: false
-            referencedRelation: 'tiers'
-            referencedColumns: ['id']
+            referencedRelation: "tiers"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'users_rocket_id_fkey'
-            columns: ['rocket_id']
+            foreignKeyName: "users_rocket_id_fkey"
+            columns: ["rocket_id"]
             isOneToOne: false
-            referencedRelation: 'rockets'
-            referencedColumns: ['id']
+            referencedRelation: "rockets"
+            referencedColumns: ["id"]
           },
         ]
       }
     }
     Functions: {
       count_comments_upvotes: {
-        Args: { '': Database['public']['Tables']['comments']['Row'] }
+        Args: { "": Database["public"]["Tables"]["comments"]["Row"] }
         Returns: {
           error: true
-        } & 'the function public.count_comments_upvotes with parameter or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache'
+        } & "the function public.count_comments_upvotes with parameter or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache"
       }
       delete_public_user: { Args: { userid: string }; Returns: undefined }
       delete_user: { Args: { userid: string }; Returns: undefined }
@@ -2888,8 +2922,8 @@ export type Database = {
           is_unlocked: boolean | null
         }[]
         SetofOptions: {
-          from: '*'
-          to: 'next_star_from_next_planet'
+          from: "*"
+          to: "next_star_from_next_planet"
           isOneToOne: false
           isSetofReturn: true
         }
@@ -2899,7 +2933,7 @@ export type Database = {
       resetstreak: { Args: never; Returns: undefined }
       slugify: { Args: { name: string }; Returns: string }
       teste: { Args: never; Returns: string }
-      unaccent: { Args: { '': string }; Returns: string }
+      unaccent: { Args: { "": string }; Returns: string }
       update_last_week_ranking_positions: { Args: never; Returns: undefined }
       update_user_email: {
         Args: { new_email: string; user_id: string }
@@ -2907,9 +2941,10 @@ export type Database = {
       }
     }
     Enums: {
-      challenge_difficulty_level: 'easy' | 'medium' | 'hard'
-      challenge_vote: 'upvote' | 'downvote'
-      ranking_status: 'winner' | 'loser'
+      challenge_difficulty_level: "easy" | "medium" | "hard"
+      challenge_vote: "upvote" | "downvote"
+      insignia_role: "engineer"
+      ranking_status: "winner" | "loser"
     }
     CompositeTypes: {
       challenges_record: {
@@ -2965,7 +3000,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_10_31: {
+      messages_2025_11_14: {
         Row: {
           event: string | null
           extension: string
@@ -2998,7 +3033,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_11_01: {
+      messages_2025_11_15: {
         Row: {
           event: string | null
           extension: string
@@ -3031,7 +3066,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_11_02: {
+      messages_2025_11_16: {
         Row: {
           event: string | null
           extension: string
@@ -3064,7 +3099,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_11_03: {
+      messages_2025_11_17: {
         Row: {
           event: string | null
           extension: string
@@ -3097,7 +3132,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_11_04: {
+      messages_2025_11_18: {
         Row: {
           event: string | null
           extension: string
@@ -3130,7 +3165,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_11_05: {
+      messages_2025_11_19: {
         Row: {
           event: string | null
           extension: string
@@ -3163,7 +3198,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_11_06: {
+      messages_2025_11_20: {
         Row: {
           event: string | null
           extension: string
@@ -3217,7 +3252,7 @@ export type Database = {
           claims_role: unknown
           created_at: string
           entity: unknown
-          filters: Database['realtime']['CompositeTypes']['user_defined_filter'][]
+          filters: Database["realtime"]["CompositeTypes"]["user_defined_filter"][]
           id: number
           subscription_id: string
         }
@@ -3226,7 +3261,7 @@ export type Database = {
           claims_role?: unknown
           created_at?: string
           entity: unknown
-          filters?: Database['realtime']['CompositeTypes']['user_defined_filter'][]
+          filters?: Database["realtime"]["CompositeTypes"]["user_defined_filter"][]
           id?: never
           subscription_id: string
         }
@@ -3235,7 +3270,7 @@ export type Database = {
           claims_role?: unknown
           created_at?: string
           entity?: unknown
-          filters?: Database['realtime']['CompositeTypes']['user_defined_filter'][]
+          filters?: Database["realtime"]["CompositeTypes"]["user_defined_filter"][]
           id?: never
           subscription_id?: string
         }
@@ -3248,10 +3283,10 @@ export type Database = {
     Functions: {
       apply_rls: {
         Args: { max_record_bytes?: number; wal: Json }
-        Returns: Database['realtime']['CompositeTypes']['wal_rls'][]
+        Returns: Database["realtime"]["CompositeTypes"]["wal_rls"][]
         SetofOptions: {
-          from: '*'
-          to: 'wal_rls'
+          from: "*"
+          to: "wal_rls"
           isOneToOne: false
           isSetofReturn: true
         }
@@ -3271,7 +3306,7 @@ export type Database = {
       }
       build_prepared_statement_sql: {
         Args: {
-          columns: Database['realtime']['CompositeTypes']['wal_column'][]
+          columns: Database["realtime"]["CompositeTypes"]["wal_column"][]
           entity: unknown
           prepared_statement_name: string
         }
@@ -3280,7 +3315,7 @@ export type Database = {
       cast: { Args: { type_: unknown; val: string }; Returns: Json }
       check_equality_op: {
         Args: {
-          op: Database['realtime']['Enums']['equality_op']
+          op: Database["realtime"]["Enums"]["equality_op"]
           type_: unknown
           val_1: string
           val_2: string
@@ -3289,8 +3324,8 @@ export type Database = {
       }
       is_visible_through_filters: {
         Args: {
-          columns: Database['realtime']['CompositeTypes']['wal_column'][]
-          filters: Database['realtime']['CompositeTypes']['user_defined_filter'][]
+          columns: Database["realtime"]["CompositeTypes"]["wal_column"][]
+          filters: Database["realtime"]["CompositeTypes"]["user_defined_filter"][]
         }
         Returns: boolean
       }
@@ -3301,10 +3336,10 @@ export type Database = {
           publication: unknown
           slot_name: unknown
         }
-        Returns: Database['realtime']['CompositeTypes']['wal_rls'][]
+        Returns: Database["realtime"]["CompositeTypes"]["wal_rls"][]
         SetofOptions: {
-          from: '*'
-          to: 'wal_rls'
+          from: "*"
+          to: "wal_rls"
           isOneToOne: false
           isSetofReturn: true
         }
@@ -3318,13 +3353,13 @@ export type Database = {
       topic: { Args: never; Returns: string }
     }
     Enums: {
-      action: 'INSERT' | 'UPDATE' | 'DELETE' | 'TRUNCATE' | 'ERROR'
-      equality_op: 'eq' | 'neq' | 'lt' | 'lte' | 'gt' | 'gte' | 'in'
+      action: "INSERT" | "UPDATE" | "DELETE" | "TRUNCATE" | "ERROR"
+      equality_op: "eq" | "neq" | "lt" | "lte" | "gt" | "gte" | "in"
     }
     CompositeTypes: {
       user_defined_filter: {
         column_name: string | null
-        op: Database['realtime']['Enums']['equality_op'] | null
+        op: Database["realtime"]["Enums"]["equality_op"] | null
         value: string | null
       }
       wal_column: {
@@ -3356,7 +3391,7 @@ export type Database = {
           owner: string | null
           owner_id: string | null
           public: boolean | null
-          type: Database['storage']['Enums']['buckettype']
+          type: Database["storage"]["Enums"]["buckettype"]
           updated_at: string | null
         }
         Insert: {
@@ -3369,7 +3404,7 @@ export type Database = {
           owner?: string | null
           owner_id?: string | null
           public?: boolean | null
-          type?: Database['storage']['Enums']['buckettype']
+          type?: Database["storage"]["Enums"]["buckettype"]
           updated_at?: string | null
         }
         Update: {
@@ -3382,7 +3417,7 @@ export type Database = {
           owner?: string | null
           owner_id?: string | null
           public?: boolean | null
-          type?: Database['storage']['Enums']['buckettype']
+          type?: Database["storage"]["Enums"]["buckettype"]
           updated_at?: string | null
         }
         Relationships: []
@@ -3390,23 +3425,50 @@ export type Database = {
       buckets_analytics: {
         Row: {
           created_at: string
+          deleted_at: string | null
           format: string
           id: string
-          type: Database['storage']['Enums']['buckettype']
+          name: string
+          type: Database["storage"]["Enums"]["buckettype"]
           updated_at: string
         }
         Insert: {
           created_at?: string
+          deleted_at?: string | null
           format?: string
-          id: string
-          type?: Database['storage']['Enums']['buckettype']
+          id?: string
+          name: string
+          type?: Database["storage"]["Enums"]["buckettype"]
           updated_at?: string
         }
         Update: {
           created_at?: string
+          deleted_at?: string | null
           format?: string
           id?: string
-          type?: Database['storage']['Enums']['buckettype']
+          name?: string
+          type?: Database["storage"]["Enums"]["buckettype"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      buckets_vectors: {
+        Row: {
+          created_at: string
+          id: string
+          type: Database["storage"]["Enums"]["buckettype"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          type?: Database["storage"]["Enums"]["buckettype"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          type?: Database["storage"]["Enums"]["buckettype"]
           updated_at?: string
         }
         Relationships: []
@@ -3480,11 +3542,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'objects_bucketId_fkey'
-            columns: ['bucket_id']
+            foreignKeyName: "objects_bucketId_fkey"
+            columns: ["bucket_id"]
             isOneToOne: false
-            referencedRelation: 'buckets'
-            referencedColumns: ['id']
+            referencedRelation: "buckets"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -3512,11 +3574,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'prefixes_bucketId_fkey'
-            columns: ['bucket_id']
+            foreignKeyName: "prefixes_bucketId_fkey"
+            columns: ["bucket_id"]
             isOneToOne: false
-            referencedRelation: 'buckets'
-            referencedColumns: ['id']
+            referencedRelation: "buckets"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -3556,11 +3618,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 's3_multipart_uploads_bucket_id_fkey'
-            columns: ['bucket_id']
+            foreignKeyName: "s3_multipart_uploads_bucket_id_fkey"
+            columns: ["bucket_id"]
             isOneToOne: false
-            referencedRelation: 'buckets'
-            referencedColumns: ['id']
+            referencedRelation: "buckets"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -3603,18 +3665,62 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 's3_multipart_uploads_parts_bucket_id_fkey'
-            columns: ['bucket_id']
+            foreignKeyName: "s3_multipart_uploads_parts_bucket_id_fkey"
+            columns: ["bucket_id"]
             isOneToOne: false
-            referencedRelation: 'buckets'
-            referencedColumns: ['id']
+            referencedRelation: "buckets"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 's3_multipart_uploads_parts_upload_id_fkey'
-            columns: ['upload_id']
+            foreignKeyName: "s3_multipart_uploads_parts_upload_id_fkey"
+            columns: ["upload_id"]
             isOneToOne: false
-            referencedRelation: 's3_multipart_uploads'
-            referencedColumns: ['id']
+            referencedRelation: "s3_multipart_uploads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vector_indexes: {
+        Row: {
+          bucket_id: string
+          created_at: string
+          data_type: string
+          dimension: number
+          distance_metric: string
+          id: string
+          metadata_configuration: Json | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          bucket_id: string
+          created_at?: string
+          data_type: string
+          dimension: number
+          distance_metric: string
+          id?: string
+          metadata_configuration?: Json | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          bucket_id?: string
+          created_at?: string
+          data_type?: string
+          dimension?: number
+          distance_metric?: string
+          id?: string
+          metadata_configuration?: Json | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vector_indexes_bucket_id_fkey"
+            columns: ["bucket_id"]
+            isOneToOne: false
+            referencedRelation: "buckets_vectors"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -3771,7 +3877,7 @@ export type Database = {
       }
     }
     Enums: {
-      buckettype: 'STANDARD' | 'ANALYTICS'
+      buckettype: "STANDARD" | "ANALYTICS" | "VECTOR"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -3779,33 +3885,33 @@ export type Database = {
   }
 }
 
-type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, 'public'>]
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] &
-        DefaultSchema['Views'])
-    ? (DefaultSchema['Tables'] &
-        DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -3814,23 +3920,23 @@ export type Tables<
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Insert: infer I
       }
       ? I
@@ -3839,23 +3945,23 @@ export type TablesInsert<
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Update: infer U
       }
       ? U
@@ -3864,56 +3970,56 @@ export type TablesUpdate<
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema['Enums']
+    | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
-    ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema['CompositeTypes']
+    | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
-    ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
 
 export const Constants = {
   auth: {
     Enums: {
-      aal_level: ['aal1', 'aal2', 'aal3'],
-      code_challenge_method: ['s256', 'plain'],
-      factor_status: ['unverified', 'verified'],
-      factor_type: ['totp', 'webauthn', 'phone'],
-      oauth_authorization_status: ['pending', 'approved', 'denied', 'expired'],
-      oauth_client_type: ['public', 'confidential'],
-      oauth_registration_type: ['dynamic', 'manual'],
-      oauth_response_type: ['code'],
+      aal_level: ["aal1", "aal2", "aal3"],
+      code_challenge_method: ["s256", "plain"],
+      factor_status: ["unverified", "verified"],
+      factor_type: ["totp", "webauthn", "phone"],
+      oauth_authorization_status: ["pending", "approved", "denied", "expired"],
+      oauth_client_type: ["public", "confidential"],
+      oauth_registration_type: ["dynamic", "manual"],
+      oauth_response_type: ["code"],
       one_time_token_type: [
-        'confirmation_token',
-        'reauthentication_token',
-        'recovery_token',
-        'email_change_token_new',
-        'email_change_token_current',
-        'phone_change_token',
+        "confirmation_token",
+        "reauthentication_token",
+        "recovery_token",
+        "email_change_token_new",
+        "email_change_token_current",
+        "phone_change_token",
       ],
     },
   },
@@ -3925,20 +4031,21 @@ export const Constants = {
   },
   public: {
     Enums: {
-      challenge_difficulty_level: ['easy', 'medium', 'hard'],
-      challenge_vote: ['upvote', 'downvote'],
-      ranking_status: ['winner', 'loser'],
+      challenge_difficulty_level: ["easy", "medium", "hard"],
+      challenge_vote: ["upvote", "downvote"],
+      insignia_role: ["engineer"],
+      ranking_status: ["winner", "loser"],
     },
   },
   realtime: {
     Enums: {
-      action: ['INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'ERROR'],
-      equality_op: ['eq', 'neq', 'lt', 'lte', 'gt', 'gte', 'in'],
+      action: ["INSERT", "UPDATE", "DELETE", "TRUNCATE", "ERROR"],
+      equality_op: ["eq", "neq", "lt", "lte", "gt", "gte", "in"],
     },
   },
   storage: {
     Enums: {
-    buckettype: ['STANDARD', 'ANALYTICS'],
+      buckettype: ["STANDARD", "ANALYTICS", "VECTOR"],
     },
   },
 } as const
