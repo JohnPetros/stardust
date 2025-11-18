@@ -1,6 +1,4 @@
 import { Hono } from 'hono'
-
-import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
 
 import { HonoRouter } from '../../HonoRouter'
@@ -12,14 +10,16 @@ import {
   pageSchema,
   stringSchema,
 } from '@stardust/validation/global/schemas'
+import { ValidationMiddleware } from '../../middlewares'
 
 export class RocketsRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/rockets')
+  private readonly validationMiddleware = new ValidationMiddleware()
 
   private fetchRocketsListRoute(): void {
     this.router.get(
       '/',
-      zValidator(
+      this.validationMiddleware.validate(
         'query',
         z.object({
           search: stringSchema.default(''),

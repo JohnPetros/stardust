@@ -1,0 +1,4 @@
+@URL = {{BASE_URL}}/shop/insignias
+
+### Fetch insignias list
+GET {{URL}}
