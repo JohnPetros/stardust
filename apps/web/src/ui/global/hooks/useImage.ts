@@ -5,6 +5,7 @@ type StorageFolder =
   | 'story'
   | 'avatars'
   | 'rockets'
+  | 'insignias'
   | 'rankings'
   | 'planets'
   | 'achievements'

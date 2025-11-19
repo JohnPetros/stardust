@@ -139,6 +139,7 @@ export class ChallengesRouter extends HonoRouter {
     this.router.post(
       '/',
       this.authMiddleware.verifyAuthentication,
+      this.profileMiddleware.verifyUserEngineerInsignia,
       this.validationMiddleware.validate('json', challengeSchema),
       async (context) => {
         const http = new HonoHttp(context)
@@ -154,6 +155,7 @@ export class ChallengesRouter extends HonoRouter {
     this.router.put(
       '/:challengeId',
       this.authMiddleware.verifyAuthentication,
+      this.profileMiddleware.verifyUserEngineerInsignia,
       this.validationMiddleware.validate(
         'param',
         z.object({
@@ -201,6 +203,7 @@ export class ChallengesRouter extends HonoRouter {
     this.router.delete(
       '/:challengeId',
       this.authMiddleware.verifyAuthentication,
+      this.profileMiddleware.verifyUserEngineerInsignia,
       this.validationMiddleware.validate(
         'param',
         z.object({

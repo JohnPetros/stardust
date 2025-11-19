@@ -1,5 +1,12 @@
 import type { RestResponse } from '#global/responses/index'
-import type { Email, Id, Integer, Name, Slug } from '#global/domain/structures/index'
+import type {
+  Email,
+  Id,
+  InsigniaRole,
+  Integer,
+  Name,
+  Slug,
+} from '#global/domain/structures/index'
 import type { AchievementDto, UserDto } from '../domain/entities/dtos'
 import type { User } from '../domain/entities'
 import type {
@@ -51,5 +58,9 @@ export interface ProfileService {
   acquireAvatar(
     avatar: AvatarAggregate,
     avatarPrice: Integer,
+  ): Promise<RestResponse<UserDto>>
+  acquireInsignia(
+    insigniaRole: InsigniaRole,
+    insigniaPrice: Integer,
   ): Promise<RestResponse<UserDto>>
 }

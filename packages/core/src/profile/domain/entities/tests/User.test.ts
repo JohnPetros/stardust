@@ -213,7 +213,7 @@ describe('User Entity', () => {
     )
   })
 
-   it('should acquire a insignia role if the user has enough coins', () => {
+  it('should acquire a insignia role if the user has enough coins', () => {
     const user = UsersFaker.fake({
       coins: 1000,
       insigniaRoles: [],
@@ -306,6 +306,16 @@ describe('User Entity', () => {
     expect(user.hasAcquiredRocket(rocket.id).value).toBeTruthy()
     expect(user.isRocketSelected(rocket.id).value).toBeTruthy()
     expect(user.coins).toEqual(Integer.create(90))
+  })
+
+  it('should verify if has the insignia', () => {
+    const insigniaRole = InsigniaRole.createAsEngineer()
+    let user = UsersFaker.fake({ insigniaRoles: [] })
+
+    expect(user.hasInsignia(insigniaRole).value).toBeFalsy()
+
+    user = UsersFaker.fake({ insigniaRoles: [insigniaRole.value] })
+    expect(user.hasInsignia(insigniaRole).value).toBeTruthy()
   })
 
   it('should do nothing if the user does not have enough coins to acquire the rocket', () => {

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 
 import { COOKIES } from '@/constants'
-import type { AudioContextValue, AudioFile } from './types'
+import type { AudioContextValue } from './types'
 import { useCookieActions } from '../../hooks/useCookieActions'
 
 export function useAudioContextProvider(isDefaultAudioDisabled: boolean) {
@@ -9,7 +9,7 @@ export function useAudioContextProvider(isDefaultAudioDisabled: boolean) {
   const [isAudioDisabled, setIsAudioDisabled] = useState(isDefaultAudioDisabled)
 
   const contextValue: AudioContextValue = useMemo(() => {
-    function playAudio(audioFile: AudioFile) {
+    function playAudio(audioFile: string) {
       if (isAudioDisabled) return
       new Audio(`/audios/${audioFile}`).play()
     }

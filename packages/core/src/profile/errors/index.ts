@@ -8,4 +8,4 @@ export { ShopItemNotAcquiredError } from './ShopItemNotAcquiredError'
 export { UserSocialAccountAlreadyInUseError } from './UserSocialAccountAlreadyInUseError'
 export { InsigniaAlreadyAcquiredError } from './InsigniaAlreadyAcquiredError'
 export { NotEnoughCoinsError } from './NotEnoughCoinsError'
-
+export { InsigniaNotIncludedError } from './InsigniaNotIncludedError'

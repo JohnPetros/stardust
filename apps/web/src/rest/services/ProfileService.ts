@@ -1,6 +1,13 @@
 import type { ProfileService as IProfileService } from '@stardust/core/profile/interfaces'
 import type { RestClient } from '@stardust/core/global/interfaces'
-import type { Email, Id, Integer, Name, Slug } from '@stardust/core/global/structures'
+import type {
+  Email,
+  Id,
+  Integer,
+  Name,
+  Slug,
+  InsigniaRole,
+} from '@stardust/core/global/structures'
 import type { User } from '@stardust/core/profile/entities'
 import type {
   StarRewardingPayload,
@@ -102,6 +109,13 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
         avatarName: avatar.name.value,
         avatarImage: avatar.image.value,
         avatarPrice: avatarPrice.value,
+      })
+    },
+
+    async acquireInsignia(insigniaRole: InsigniaRole, insigniaPrice: Integer) {
+      return await restClient.post('/profile/users/insignias/acquire', {
+        insigniaRole: insigniaRole.value,
+        insigniaPrice: insigniaPrice.value,
       })
     },
   }
