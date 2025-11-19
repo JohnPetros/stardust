@@ -1,11 +1,4 @@
 import { Hono } from 'hono'
-import { z } from 'zod'
-
-import {
-  itemsPerPageSchema,
-  pageSchema,
-  stringSchema,
-} from '@stardust/validation/global/schemas'
 
 import { FetchInsigniasListController } from '@/rest/controllers/shop'
 import { SupabaseInsigniasRepository } from '@/database'
