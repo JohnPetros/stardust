@@ -17,6 +17,7 @@ export const CACHE = {
     acquiredAvatarsIds: '/acquired-avatars-ids',
     shopAvatars: '/shop/avatar',
     shopRockets: '/shop/rocket',
+    shopInsignias: '/shop/insignia',
     playgroundCards: '/playground-cards',
     rankingsList: '/rankings-list',
     docs: '/docs',

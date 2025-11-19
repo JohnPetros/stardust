@@ -11,4 +11,7 @@ export interface ShopService {
   fetchAvatarsList(
     params: ShopItemsListingParams,
   ): Promise<RestResponse<PaginationResponse<AvatarDto>>>
+  fetchInsigniasList(
+    params: ShopItemsListingParams,
+  ): Promise<RestResponse<PaginationResponse<InsigniaDto>>>
 }
