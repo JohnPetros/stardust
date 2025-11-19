@@ -15,6 +15,7 @@ import { Entity } from '#global/domain/abstracts/index'
 import { UserFactory } from '#profile/factories/index'
 import {
   InsigniaAlreadyAcquiredError,
+  NotEnoughCoinsError,
   ShopItemNotAcquiredError,
 } from '#profile/errors/index'
 import type { AchievementMetricValue } from '../types'
@@ -110,10 +111,12 @@ export class User extends Entity<UserProps> {
       throw new InsigniaAlreadyAcquiredError()
     }
 
-    if (this.canAcquire(insigniaPrice).isTrue) {
-      this.props.insigniaRoles.push(insigniaRole)
-      this.loseCoins(insigniaPrice)
+    if (this.canAcquire(insigniaPrice).isFalse) {
+      throw new NotEnoughCoinsError()
     }
+
+    this.props.insigniaRoles.push(insigniaRole)
+    this.loseCoins(insigniaPrice)
   }
 
   acquireRocket(rocket: RocketAggregate, rocketPrice: Integer): void {

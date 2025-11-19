@@ -9,7 +9,7 @@ export class InsigniaRole {
   static create(value: string): InsigniaRole {
     if (!InsigniaRole.isInsigniaRole(value)) {
       throw new ValidationError([
-        { name: 'value', messages: ['Não é um tipo de insignia válido'] },
+        { name: 'value', messages: ['Não é um tipo de insígnia válido'] },
       ])
     }
 

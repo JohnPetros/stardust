@@ -35,7 +35,7 @@ export class UserFactory {
       ),
       hasEngineerInsignia: Logical.create(
         dto?.hasEngineerInsignia ?? false,
-        'Esse usuário possui a insignia de engenheiro espacial?',	
+        'Esse usuário possui a insígnia de engenheiro espacial?',	
       ),
       lastWeekRankingPosition: dto.lastWeekRankingPosition
         ? RankingPosition.create(dto.lastWeekRankingPosition)

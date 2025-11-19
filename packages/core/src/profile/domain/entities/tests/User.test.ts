@@ -1,6 +1,7 @@
 import { Id, InsigniaRole, Integer } from '#global/domain/structures/index'
 import {
   InsigniaAlreadyAcquiredError,
+  NotEnoughCoinsError,
   ShopItemNotAcquiredError,
 } from '#profile/errors/index'
 import {
@@ -199,8 +200,21 @@ describe('User Entity', () => {
     )
   })
 
-  it('should acquire a insignia role if the user has enough coins', () => {
-    let user = UsersFaker.fake({
+  it('should throw an error if the user try to acquire an insignia role if the user has not enough coins', () => {
+    const user = UsersFaker.fake({
+      coins: 0,
+      insigniaRoles: [],
+    })
+    const insigniaRole = InsigniaRole.createAsEngineer()
+    const insigniaPrice = Integer.create(1000)
+
+    expect(() => user.acquireInsignia(insigniaRole, insigniaPrice)).toThrow(
+      NotEnoughCoinsError,
+    )
+  })
+
+   it('should acquire a insignia role if the user has enough coins', () => {
+    const user = UsersFaker.fake({
       coins: 1000,
       insigniaRoles: [],
     })
@@ -213,17 +227,6 @@ describe('User Entity', () => {
 
     expect(user.insigniaRoles).toHaveLength(1)
     expect(user.insigniaRoles[0]).toEqual(insigniaRole)
-
-    user = UsersFaker.fake({
-      coins: 0,
-      insigniaRoles: [],
-    })
-
-    expect(user.insigniaRoles).toHaveLength(0)
-
-    user.acquireInsignia(insigniaRole, insigniaPrice)
-
-    expect(user.insigniaRoles).toHaveLength(0)
   })
 
   it('should have the completed challenge id if completes a challenge', () => {

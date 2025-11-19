@@ -404,13 +404,13 @@ export class SupabaseUsersRepository
   }
 
   async addAcquiredInsignia(insigniaRole: InsigniaRole, userId: Id): Promise<void> {
-    const { error: insiginiaError, data } = await this.supabase
+    const { error: insigniaError, data } = await this.supabase
       .from('insignias')
       .select('id')
       .eq('role', insigniaRole.value)
       .single()
 
-    if (insiginiaError) throw new SupabasePostgreError(insiginiaError)
+    if (insigniaError) throw new SupabasePostgreError(insigniaError)
 
     const { error } = await this.supabase
       .from('users_acquired_insignias')
