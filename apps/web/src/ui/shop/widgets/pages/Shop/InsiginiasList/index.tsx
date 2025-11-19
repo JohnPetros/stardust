@@ -6,16 +6,7 @@ import { useInsiginiasList } from './useInsiginiasList'
 
 export const InsigniasList = () => {
   const { shopService } = useRest()
-  const { totalInsigniasCount, insigniasPerPage, insignias, page, handlePageChange } =
-    useInsiginiasList(shopService)
+  const { insignias } = useInsiginiasList(shopService)
 
-  return (
-    <InsiginiasListView
-      onPageChange={handlePageChange}
-      totalInsigniasCount={totalInsigniasCount}
-      insigniasPerPage={insigniasPerPage}
-      page={page}
-      insignias={insignias}
-    />
-  )
+  return <InsiginiasListView insignias={insignias} />
 }
