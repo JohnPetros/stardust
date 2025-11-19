@@ -6,3 +6,6 @@ export { StarAlreadyUnlockedError } from './StarAlreadyUnlockedError'
 export { AchievementAlreadyUnlockedError } from './AchievementAlreadyUnlocked'
 export { ShopItemNotAcquiredError } from './ShopItemNotAcquiredError'
 export { UserSocialAccountAlreadyInUseError } from './UserSocialAccountAlreadyInUseError'
+export { InsigniaAlreadyAcquiredError } from './InsigniaAlreadyAcquiredError'
+export { NotEnoughCoinsError } from './NotEnoughCoinsError'
+

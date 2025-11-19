@@ -176,3 +176,13 @@ Content-Type: application/json
   "avatarImage": "https://example.com/avatar.png",
   "avatarPrice": 1000
 }
+
+### Acquire insignia
+POST {{URL}}/insignias/acquire
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "insigniaRole": "engineer",
+  "insigniaPrice": 1000
+}

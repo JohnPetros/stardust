@@ -1,5 +1,4 @@
 import { Hono } from 'hono'
-import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
 
 import {
@@ -12,14 +11,16 @@ import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
 import { FetchAvatarsListController } from '@/rest/controllers/shop'
 import { SupabaseAvatarsRepository } from '@/database/supabase/repositories/shop'
+import { ValidationMiddleware } from '../../middlewares'
 
 export class AvatarsRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/avatars')
+  private readonly validationMiddleware = new ValidationMiddleware()
 
   private fetchAvatarsListRoute(): void {
     this.router.get(
       '/',
-      zValidator(
+      this.validationMiddleware.validate(
         'query',
         z.object({
           search: stringSchema.default(''),

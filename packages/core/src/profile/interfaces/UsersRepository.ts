@@ -1,5 +1,6 @@
 import type { Email } from '#global/domain/structures/Email'
 import type { Id } from '#global/domain/structures/Id'
+import type { InsigniaRole } from '#global/domain/structures/InsigniaRole'
 import type { IdsList } from '#global/domain/structures/IdsList'
 import type { Logical } from '#global/domain/structures/Logical'
 import type { Name } from '#global/domain/structures/Name'
@@ -23,6 +24,7 @@ export interface UsersRepository {
   add(user: User): Promise<void>
   addAcquiredAvatar(avatarId: Id, userId: Id): Promise<void>
   addAcquiredRocket(rocketId: Id, userId: Id): Promise<void>
+  addAcquiredInsignia(insigniaRole: InsigniaRole, userId: Id): Promise<void>
   addUnlockedStar(starId: Id, userId: Id): Promise<void>
   addRecentlyUnlockedStar(starId: Id, userId: Id): Promise<void>
   addUpvotedComment(commentId: Id, userId: Id): Promise<void>

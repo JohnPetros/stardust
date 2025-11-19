@@ -4,6 +4,7 @@ import {
   type Name,
   type Slug,
   type IdsList,
+  type InsigniaRole,
   Integer,
   Logical,
 } from '#global/domain/structures/index'
@@ -12,7 +13,11 @@ import { TierAggregate } from '../aggregates'
 import { RankingPosition } from '#ranking/domain/structures/index'
 import { Entity } from '#global/domain/abstracts/index'
 import { UserFactory } from '#profile/factories/index'
-import { ShopItemNotAcquiredError } from '#profile/errors/index'
+import {
+  InsigniaAlreadyAcquiredError,
+  NotEnoughCoinsError,
+  ShopItemNotAcquiredError,
+} from '#profile/errors/index'
 import type { AchievementMetricValue } from '../types'
 import { type Level, WeekStatus } from '../structures'
 import type { UserDto } from './dtos'
@@ -30,6 +35,8 @@ type UserProps = {
   weeklyXp: Integer
   streak: Integer
   weekStatus: WeekStatus
+  hasCompletedSpace: Logical
+  insigniaRoles: InsigniaRole[]
   unlockedStarsIds: IdsList
   recentlyUnlockedStarsIds: IdsList
   acquiredRocketsIds: IdsList
@@ -43,7 +50,6 @@ type UserProps = {
   upvotedSolutionsIds: IdsList
   canSeeRankingResult: Logical
   didBreakStreak: Logical
-  hasCompletedSpace: Logical
   lastWeekRankingPosition: RankingPosition | null
   createdAt: Date
 }
@@ -98,6 +104,19 @@ export class User extends Entity<UserProps> {
 
   canAcquire(coins: Integer): Logical {
     return this.props.coins.isGreaterThanOrEqualTo(coins)
+  }
+
+  acquireInsignia(insigniaRole: InsigniaRole, insigniaPrice: Integer): void {
+    if (insigniaRole.isEngineer.and(this.hasEngineerInsignia).isTrue) {
+      throw new InsigniaAlreadyAcquiredError()
+    }
+
+    if (this.canAcquire(insigniaPrice).isFalse) {
+      throw new NotEnoughCoinsError()
+    }
+
+    this.props.insigniaRoles.push(insigniaRole)
+    this.loseCoins(insigniaPrice)
   }
 
   acquireRocket(rocket: RocketAggregate, rocketPrice: Integer): void {
@@ -309,6 +328,10 @@ export class User extends Entity<UserProps> {
     return this.props.completedPlanetsIds.count
   }
 
+  get insigniaRoles() {
+    return this.props.insigniaRoles
+  }
+
   get isRankingWinner(): Logical {
     if (!this.props.lastWeekRankingPosition) return Logical.createAsFalse()
 
@@ -325,6 +348,12 @@ export class User extends Entity<UserProps> {
     if (!this.props.lastWeekRankingPosition) return Logical.createAsFalse()
     return this.tier.position.number.isDifferentFrom(
       this.props.lastWeekRankingPosition.position.number,
+    )
+  }
+
+  get hasEngineerInsignia(): Logical {
+    return Logical.create(
+      this.props.insigniaRoles.some((role) => role.value === 'engineer'),
     )
   }
 
@@ -430,6 +459,7 @@ export class User extends Entity<UserProps> {
       weeklyXp: this.weeklyXp.value,
       streak: this.streak.value,
       weekStatus: this.props.weekStatus.value,
+      insigniaRoles: this.props.insigniaRoles.map((role) => role.value),
       unlockedStarsIds: this.props.unlockedStarsIds.dto,
       recentlyUnlockedStarsIds: this.props.recentlyUnlockedStarsIds.dto,
       acquiredRocketsIds: this.props.acquiredRocketsIds.dto,

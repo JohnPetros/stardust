@@ -16,6 +16,11 @@ type Request = {
 
 type Response = Promise<UserDto>
 
+type AvatarAggregateEntity = {
+  name: string
+  image: string
+}
+
 export class AcquireAvatarUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: UsersRepository) {}
 
@@ -23,7 +28,7 @@ export class AcquireAvatarUseCase implements UseCase<Request, Response> {
     const user = await this.repository.findById(Id.create(userId))
     if (!user) throw new UserNotFoundError()
 
-    let entity = undefined
+    let entity: AvatarAggregateEntity | undefined
     if (avatarName && avatarImage) {
       entity = { name: avatarName, image: avatarImage }
     }

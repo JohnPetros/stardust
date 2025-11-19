@@ -228,6 +228,7 @@ export type Database = {
           friendly_name: string | null
           id: string
           last_challenged_at: string | null
+          last_webauthn_challenge_data: Json | null
           phone: string | null
           secret: string | null
           status: Database['auth']['Enums']['factor_status']
@@ -242,6 +243,7 @@ export type Database = {
           friendly_name?: string | null
           id: string
           last_challenged_at?: string | null
+          last_webauthn_challenge_data?: Json | null
           phone?: string | null
           secret?: string | null
           status: Database['auth']['Enums']['factor_status']
@@ -256,6 +258,7 @@ export type Database = {
           friendly_name?: string | null
           id?: string
           last_challenged_at?: string | null
+          last_webauthn_challenge_data?: Json | null
           phone?: string | null
           secret?: string | null
           status?: Database['auth']['Enums']['factor_status']
@@ -632,6 +635,8 @@ export type Database = {
           ip: unknown
           not_after: string | null
           oauth_client_id: string | null
+          refresh_token_counter: number | null
+          refresh_token_hmac_key: string | null
           refreshed_at: string | null
           tag: string | null
           updated_at: string | null
@@ -646,6 +651,8 @@ export type Database = {
           ip?: unknown
           not_after?: string | null
           oauth_client_id?: string | null
+          refresh_token_counter?: number | null
+          refresh_token_hmac_key?: string | null
           refreshed_at?: string | null
           tag?: string | null
           updated_at?: string | null
@@ -660,6 +667,8 @@ export type Database = {
           ip?: unknown
           not_after?: string | null
           oauth_client_id?: string | null
+          refresh_token_counter?: number | null
+          refresh_token_hmac_key?: string | null
           refreshed_at?: string | null
           tag?: string | null
           updated_at?: string | null
@@ -1470,6 +1479,30 @@ export type Database = {
         }
         Relationships: []
       }
+      insignias: {
+        Row: {
+          id: string
+          image: string
+          name: string
+          price: number
+          role: Database['public']['Enums']['insignia_role']
+        }
+        Insert: {
+          id?: string
+          image: string
+          name: string
+          price: number
+          role: Database['public']['Enums']['insignia_role']
+        }
+        Update: {
+          id?: string
+          image?: string
+          name?: string
+          price?: number
+          role?: Database['public']['Enums']['insignia_role']
+        }
+        Relationships: []
+      }
       planets: {
         Row: {
           icon: string
@@ -2025,6 +2058,57 @@ export type Database = {
           },
           {
             foreignKeyName: 'users_acquired_avatars_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users_view'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      users_acquired_insignias: {
+        Row: {
+          insignia_id: string
+          user_id: string
+        }
+        Insert: {
+          insignia_id: string
+          user_id: string
+        }
+        Update: {
+          insignia_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'users_acquired_insignias_insignia_id_fkey'
+            columns: ['insignia_id']
+            isOneToOne: false
+            referencedRelation: 'insignias'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_acquired_insignias_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'challenges_view'
+            referencedColumns: ['author_id']
+          },
+          {
+            foreignKeyName: 'users_acquired_insignias_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_acquired_insignias_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users_completed_planets_view'
+            referencedColumns: ['user_id']
+          },
+          {
+            foreignKeyName: 'users_acquired_insignias_user_id_fkey'
             columns: ['user_id']
             isOneToOne: false
             referencedRelation: 'users_view'
@@ -2909,6 +2993,7 @@ export type Database = {
     Enums: {
       challenge_difficulty_level: 'easy' | 'medium' | 'hard'
       challenge_vote: 'upvote' | 'downvote'
+      insignia_role: 'engineer'
       ranking_status: 'winner' | 'loser'
     }
     CompositeTypes: {
@@ -2965,7 +3050,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_10_31: {
+      messages_2025_11_14: {
         Row: {
           event: string | null
           extension: string
@@ -2998,7 +3083,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_11_01: {
+      messages_2025_11_15: {
         Row: {
           event: string | null
           extension: string
@@ -3031,7 +3116,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_11_02: {
+      messages_2025_11_16: {
         Row: {
           event: string | null
           extension: string
@@ -3064,7 +3149,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_11_03: {
+      messages_2025_11_17: {
         Row: {
           event: string | null
           extension: string
@@ -3097,7 +3182,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_11_04: {
+      messages_2025_11_18: {
         Row: {
           event: string | null
           extension: string
@@ -3130,7 +3215,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_11_05: {
+      messages_2025_11_19: {
         Row: {
           event: string | null
           extension: string
@@ -3163,7 +3248,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_11_06: {
+      messages_2025_11_20: {
         Row: {
           event: string | null
           extension: string
@@ -3390,21 +3475,48 @@ export type Database = {
       buckets_analytics: {
         Row: {
           created_at: string
+          deleted_at: string | null
           format: string
+          id: string
+          name: string
+          type: Database['storage']['Enums']['buckettype']
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          format?: string
+          id?: string
+          name: string
+          type?: Database['storage']['Enums']['buckettype']
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          format?: string
+          id?: string
+          name?: string
+          type?: Database['storage']['Enums']['buckettype']
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      buckets_vectors: {
+        Row: {
+          created_at: string
           id: string
           type: Database['storage']['Enums']['buckettype']
           updated_at: string
         }
         Insert: {
           created_at?: string
-          format?: string
           id: string
           type?: Database['storage']['Enums']['buckettype']
           updated_at?: string
         }
         Update: {
           created_at?: string
-          format?: string
           id?: string
           type?: Database['storage']['Enums']['buckettype']
           updated_at?: string
@@ -3618,6 +3730,50 @@ export type Database = {
           },
         ]
       }
+      vector_indexes: {
+        Row: {
+          bucket_id: string
+          created_at: string
+          data_type: string
+          dimension: number
+          distance_metric: string
+          id: string
+          metadata_configuration: Json | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          bucket_id: string
+          created_at?: string
+          data_type: string
+          dimension: number
+          distance_metric: string
+          id?: string
+          metadata_configuration?: Json | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          bucket_id?: string
+          created_at?: string
+          data_type?: string
+          dimension?: number
+          distance_metric?: string
+          id?: string
+          metadata_configuration?: Json | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'vector_indexes_bucket_id_fkey'
+            columns: ['bucket_id']
+            isOneToOne: false
+            referencedRelation: 'buckets_vectors'
+            referencedColumns: ['id']
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -3771,7 +3927,7 @@ export type Database = {
       }
     }
     Enums: {
-      buckettype: 'STANDARD' | 'ANALYTICS'
+      buckettype: 'STANDARD' | 'ANALYTICS' | 'VECTOR'
     }
     CompositeTypes: {
       [_ in never]: never
@@ -3927,6 +4083,7 @@ export const Constants = {
     Enums: {
       challenge_difficulty_level: ['easy', 'medium', 'hard'],
       challenge_vote: ['upvote', 'downvote'],
+      insignia_role: ['engineer'],
       ranking_status: ['winner', 'loser'],
     },
   },
@@ -3938,7 +4095,7 @@ export const Constants = {
   },
   storage: {
     Enums: {
-    buckettype: ['STANDARD', 'ANALYTICS'],
+      buckettype: ['STANDARD', 'ANALYTICS', 'VECTOR'],
     },
   },
 } as const

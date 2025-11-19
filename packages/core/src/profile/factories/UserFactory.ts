@@ -1,7 +1,7 @@
 import {
   Email,
-  Id,
   IdsList,
+  InsigniaRole,
   Integer,
   Logical,
   Name,
@@ -28,6 +28,15 @@ export class UserFactory {
       weeklyXp: Integer.create(dto.weeklyXp ?? 0, 'Xp semanal do usuário'),
       weekStatus: WeekStatus.create(dto?.weekStatus),
       streak: Integer.create(dto?.streak ?? 0, 'Streak do usuário'),
+      insigniaRoles: dto?.insigniaRoles ? dto.insigniaRoles.map(InsigniaRole.create) : [],
+      hasCompletedSpace: Logical.create(
+        dto?.hasCompletedSpace ?? false,
+        'Esse usuário já completou todos os planetas?',
+      ),
+      hasEngineerInsignia: Logical.create(
+        dto?.hasEngineerInsignia ?? false,
+        'Esse usuário possui a insígnia de engenheiro espacial?',	
+      ),
       lastWeekRankingPosition: dto.lastWeekRankingPosition
         ? RankingPosition.create(dto.lastWeekRankingPosition)
         : null,
@@ -38,10 +47,6 @@ export class UserFactory {
       canSeeRankingResult: Logical.create(
         dto?.canSeeRankingResult ?? false,
         'Esse usuário pode ver o resultado do ranking?',
-      ),
-      hasCompletedSpace: Logical.create(
-        dto?.hasCompletedSpace ?? false,
-        'Esse usuário já completou todos os planetas?',
       ),
       unlockedAchievementsIds: IdsList.create(dto?.unlockedAchievementsIds),
       rescuableAchievementsIds: IdsList.create(dto?.rescuableAchievementsIds),

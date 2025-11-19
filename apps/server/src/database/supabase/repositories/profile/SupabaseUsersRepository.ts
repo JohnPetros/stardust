@@ -1,9 +1,10 @@
 import {
   type Email,
   type Id,
-  IdsList,
   type Name,
   type Slug,
+  type InsigniaRole,
+  IdsList,
   Logical,
 } from '@stardust/core/global/structures'
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
@@ -26,6 +27,7 @@ export class SupabaseUsersRepository
           avatar:avatars(*), 
           rocket:rockets(*), 
           tier:tiers(*),
+          insignias(role),
           users_unlocked_stars(star_id),
           users_recently_unlocked_stars(star_id),
           users_unlocked_achievements(achievement_id),
@@ -59,6 +61,7 @@ export class SupabaseUsersRepository
           avatar:avatars(*), 
           rocket:rockets(*), 
           tier:tiers(*),
+          insignias(role),
           users_unlocked_stars(star_id),
           users_recently_unlocked_stars(star_id),
           users_unlocked_achievements(achievement_id),
@@ -84,6 +87,7 @@ export class SupabaseUsersRepository
           avatar:avatars(*), 
           rocket:rockets(*), 
           tier:tiers(*),
+          insignias(role),
           users_unlocked_stars(star_id),
           users_recently_unlocked_stars(star_id),
           users_unlocked_achievements(achievement_id),
@@ -121,6 +125,7 @@ export class SupabaseUsersRepository
           avatar:avatars(*), 
           rocket:rockets(*), 
           tier:tiers(*),
+          insignias(role),
           users_unlocked_stars(star_id),
           users_recently_unlocked_stars(star_id),
           users_unlocked_achievements(achievement_id),
@@ -147,6 +152,7 @@ export class SupabaseUsersRepository
         avatar:avatars(*), 
         rocket:rockets(*), 
         tier:tiers(*),
+        insignias(role),
         users_unlocked_stars(star_id),
         users_recently_unlocked_stars(star_id),
         users_unlocked_achievements(achievement_id),
@@ -175,6 +181,7 @@ export class SupabaseUsersRepository
         avatar:avatars(*), 
         rocket:rockets(*), 
         tier:tiers(*),
+        insignias(role),
         users_unlocked_stars(star_id),
         users_recently_unlocked_stars(star_id),
         users_unlocked_achievements(achievement_id),
@@ -203,6 +210,7 @@ export class SupabaseUsersRepository
         avatar:avatars(*), 
         rocket:rockets(*), 
         tier:tiers(*),
+        insignias(role),
         users_unlocked_stars(star_id),
         users_recently_unlocked_stars(star_id),
         users_unlocked_achievements(achievement_id),
@@ -231,6 +239,7 @@ export class SupabaseUsersRepository
         avatar:avatars(*), 
         rocket:rockets(*), 
         tier:tiers(*),
+        insignias(role),
         users_unlocked_stars(star_id),
         users_recently_unlocked_stars(star_id),
         users_unlocked_achievements(achievement_id),
@@ -270,6 +279,7 @@ export class SupabaseUsersRepository
         avatar:avatars(*), 
         rocket:rockets(*), 
         tier:tiers(*),
+        insignias(role),
         users_unlocked_stars(star_id),
         users_recently_unlocked_stars(star_id),
         users_unlocked_achievements(achievement_id),
@@ -389,6 +399,22 @@ export class SupabaseUsersRepository
     const { error } = await this.supabase
       .from('users_acquired_avatars')
       .insert({ avatar_id: avatarId.value, user_id: userId.value })
+
+    if (error) throw new SupabasePostgreError(error)
+  }
+
+  async addAcquiredInsignia(insigniaRole: InsigniaRole, userId: Id): Promise<void> {
+    const { error: insigniaError, data } = await this.supabase
+      .from('insignias')
+      .select('id')
+      .eq('role', insigniaRole.value)
+      .single()
+
+    if (insigniaError) throw new SupabasePostgreError(insigniaError)
+
+    const { error } = await this.supabase
+      .from('users_acquired_insignias')
+      .insert({ insignia_id: data.id, user_id: userId.value })
 
     if (error) throw new SupabasePostgreError(error)
   }
