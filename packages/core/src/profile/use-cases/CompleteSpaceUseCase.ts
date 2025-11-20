@@ -3,7 +3,7 @@ import type { UsersRepository } from '#profile/interfaces/UsersRepository'
 import type { EventBroker } from '#global/interfaces/EventBroker'
 import { Id } from '#global/domain/structures/Id'
 import { SpaceCompletedEvent } from '#space/domain/events/SpaceCompletedEvent'
-import { UserNotFoundError } from '../errors'
+import { UserNotFoundError } from '../domain/errors'
 
 type Request = {
   userId: string

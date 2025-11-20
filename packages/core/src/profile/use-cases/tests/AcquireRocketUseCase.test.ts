@@ -3,7 +3,7 @@ import { mock, type Mock } from 'ts-jest-mocker'
 import { Integer } from '#global/domain/structures/Integer'
 import { UsersFaker } from '#profile/domain/entities/fakers/UsersFaker'
 import { RocketAggregatesFaker } from '#profile/domain/aggregates/fakers/RocketAggregatesFaker'
-import { UserNotFoundError } from '#profile/errors/UserNotFoundError'
+import { UserNotFoundError } from '#profile/domain/errors/UserNotFoundError'
 import { AcquireRocketUseCase } from '../AcquireRocketUseCase'
 import type { UsersRepository } from '../../interfaces'
 

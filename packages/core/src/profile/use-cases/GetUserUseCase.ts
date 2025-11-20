@@ -1,7 +1,7 @@
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { UserDto } from '../domain/entities/dtos'
 import { Id, Slug } from '#global/domain/structures/index'
-import { UserNotFoundError } from '../errors'
+import { UserNotFoundError } from '../domain/errors'
 import type { UsersRepository } from '../interfaces'
 
 type Request = {

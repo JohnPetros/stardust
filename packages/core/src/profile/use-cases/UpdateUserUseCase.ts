@@ -2,7 +2,7 @@ import type { Id } from '#global/domain/structures/Id'
 import type { UseCase } from '#global/interfaces/UseCase'
 import { User } from '../domain/entities'
 import type { UserDto } from '../domain/entities/dtos'
-import { UserNotFoundError } from '../errors'
+import { UserNotFoundError } from '../domain/errors'
 import type { UsersRepository } from '../interfaces'
 
 export class UpdateUserUseCase implements UseCase<UserDto, Promise<UserDto>> {

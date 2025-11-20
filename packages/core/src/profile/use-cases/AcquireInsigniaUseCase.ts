@@ -4,7 +4,7 @@ import { Id } from '#global/domain/structures/Id'
 import { InsigniaRole } from '#global/domain/structures/InsigniaRole'
 import type { UserDto } from '../domain/entities/dtos'
 import type { UsersRepository } from '../interfaces'
-import { UserNotFoundError } from '../errors'
+import { UserNotFoundError } from '../domain/errors'
 
 type Request = {
   userId: string

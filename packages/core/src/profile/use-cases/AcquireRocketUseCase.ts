@@ -2,7 +2,7 @@ import type { UseCase } from '#global/interfaces/UseCase'
 import { Integer } from '#global/domain/structures/Integer'
 import { Id } from '#global/domain/structures/Id'
 import type { UsersRepository } from '../interfaces'
-import { UserNotFoundError } from '../errors'
+import { UserNotFoundError } from '../domain/errors'
 import { RocketAggregate } from '../domain/aggregates'
 import type { UserDto } from '../domain/entities/dtos'
 

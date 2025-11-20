@@ -1,7 +1,7 @@
 import type { UseCase } from '#global/interfaces/index'
 import type { UsersRepository } from '#profile/interfaces/index'
 import { Id, Name } from '#global/domain/structures/index'
-import { UserSocialAccountAlreadyInUseError } from '../errors'
+import { UserSocialAccountAlreadyInUseError } from '../domain/errors'
 
 type Request = {
   socialAccountId: string

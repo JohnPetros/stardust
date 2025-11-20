@@ -3,7 +3,7 @@ import { Logical } from '#global/domain/structures/Logical'
 import type { UseCase } from '#global/interfaces/index'
 import type { AchievementDto } from '../domain/entities/dtos'
 import type { User, Achievement } from '../domain/entities/index'
-import { UserNotFoundError } from '../errors'
+import { UserNotFoundError } from '../domain/errors'
 import type { AchievementsRepository, UsersRepository } from '../interfaces'
 
 type Response = Promise<AchievementDto[]>

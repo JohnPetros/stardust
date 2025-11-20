@@ -1,9 +1,9 @@
 import type { UseCase } from '#global/interfaces/index'
 import { Id } from '#global/domain/structures/Id'
-import { UserNotFoundError } from '#profile/errors/UserNotFoundError'
+import { UserNotFoundError } from '#profile/domain/errors/UserNotFoundError'
 import type { AchievementsRepository, UsersRepository } from '../interfaces'
 import type { UserDto } from '../domain/entities/dtos'
-import { AchievementNotFoundError } from '../errors'
+import { AchievementNotFoundError } from '../domain/errors'
 
 type Request = {
   achievementId: string

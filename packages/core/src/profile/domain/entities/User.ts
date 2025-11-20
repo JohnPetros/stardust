@@ -17,7 +17,7 @@ import {
   InsigniaAlreadyAcquiredError,
   NotEnoughCoinsError,
   ShopItemNotAcquiredError,
-} from '#profile/errors/index'
+} from '#profile/domain/errors/index'
 import type { AchievementMetricValue } from '../types'
 import { type Level, WeekStatus } from '../structures'
 import type { UserDto } from './dtos'

@@ -3,7 +3,7 @@ import type { User } from '../domain/entities'
 import type { UsersRepository } from '../interfaces'
 import { InsigniaRole } from '#global/domain/structures/InsigniaRole'
 import { Id } from '#global/domain/structures/Id'
-import { InsigniaNotIncludedError, UserNotFoundError } from '../errors'
+import { InsigniaNotIncludedError, UserNotFoundError } from '../domain/errors'
 
 type Request = {
   userId: string

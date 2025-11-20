@@ -3,7 +3,7 @@ import {
   InsigniaAlreadyAcquiredError,
   NotEnoughCoinsError,
   ShopItemNotAcquiredError,
-} from '#profile/errors/index'
+} from '#profile/domain/errors/index'
 import {
   AvatarAggregatesFaker,
   RocketAggregatesFaker,

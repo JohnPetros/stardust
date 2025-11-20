@@ -1,6 +1,6 @@
 import { Id } from '#global/domain/structures/Id'
 import type { UseCase } from '#global/interfaces/UseCase'
-import { UserNotFoundError } from '#profile/errors/UserNotFoundError'
+import { UserNotFoundError } from '#profile/domain/errors/UserNotFoundError'
 import type { UsersRepository } from '#profile/interfaces/UsersRepository'
 
 type Request = {
