@@ -9,7 +9,7 @@ type Props = {
   challenges: Challenge[]
   isLoading: boolean
   isRecheadedEnd: boolean
-  completedChallengesIds: IdsList
+  completedChallengesIds: string[]
   onShowMore: () => void
 }
 
@@ -38,6 +38,7 @@ export const ChallengesListView = ({
             {challenges.map((challenge) => (
               <ChallengeCard
                 key={challenge.id.value}
+                id={challenge.id}
                 title={challenge.title.value}
                 slug={challenge.slug.value}
                 authorSlug={challenge.author.slug.value}
@@ -47,7 +48,6 @@ export const ChallengesListView = ({
                 downvotesCount={challenge.downvotesCount.value}
                 completionsCount={challenge.completionsCount.value}
                 upvotesCount={challenge.upvotesCount.value}
-                isCompleted={completedChallengesIds.includes(challenge.id).isTrue}
               />
             ))}
           </>
