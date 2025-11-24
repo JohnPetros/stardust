@@ -1,9 +1,11 @@
+import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 import { ChallengingService } from '@/rest/services/ChallengingService'
 import { ChallengesPage } from '@/ui/challenging/widgets/pages/Challenges'
-import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 
-export default async function Page() {
-  const restClient = await NextServerRestClient()
+const Page = async () => {
+  const restClient = await NextServerRestClient({
+    isAuthenticated: false,
+  })
   const challengingService = ChallengingService(restClient)
   const response = await challengingService.fetchAllChallengeCategories()
   if (response.isFailure) response.throwError()
@@ -11,3 +13,5 @@ export default async function Page() {
 
   return <ChallengesPage categoriesDto={categoriesDto} />
 }
+
+export default Page
