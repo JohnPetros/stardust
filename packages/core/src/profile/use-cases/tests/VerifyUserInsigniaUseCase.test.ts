@@ -19,7 +19,7 @@ describe('Verify User Insignia Use Case', () => {
     useCase = new VerifyUserInsigniaUseCase(repository)
   })
 
-  it('should throw an error if the user does not have the insignia', () => {
+  it('should throw an error if the user is not found', () => {
     repository.findById.mockResolvedValue(null)
 
     expect(
