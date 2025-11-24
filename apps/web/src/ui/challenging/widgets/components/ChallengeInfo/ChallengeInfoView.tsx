@@ -35,7 +35,7 @@ export const ChallengeInfoView = ({
             iconStyle={isCompleted ? 'text-green-500' : 'text-red-700'}
             label={isCompleted ? 'Resolvido' : 'Não resolvido'}
             tooltipText={
-              isCompleted
+              !isCompleted
                 ? 'O que você está esperando? resolva esse desafio.'
                 : 'Você ainda pode resolver esse desafio quantas vezes quiser.'
             }
