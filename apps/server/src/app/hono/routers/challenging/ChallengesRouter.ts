@@ -223,7 +223,6 @@ export class ChallengesRouter extends HonoRouter {
   private registerFetchAllChallengeCategoriesRoute(): void {
     this.router.get(
       '/categories',
-      this.authMiddleware.verifyAuthentication,
       this.profileMiddleware.appendUserCompletedChallengesIdsToBody,
       async (context) => {
         const http = new HonoHttp(context)

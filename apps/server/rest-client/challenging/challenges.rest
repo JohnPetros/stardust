@@ -13,13 +13,12 @@ Authorization: Bearer {{JWT}}
 ### Fetch challenges list
 GET {{URL}}
 ?page=1
-&itemsPerPage=20
+&itemsPerPage=10
 &title=
 &difficulty=any
 &completionStatus=completed
 &upvotesCountOrder=any
 &postingOrder=any
-Authorization: Bearer {{JWT}}
 
 ### Fetch completed challenges count by difficulty level
 GET {{URL}}/completed-by-difficulty-level
@@ -31,7 +30,6 @@ Authorization: Bearer {{JWT}}
 
 ### Fetch all categories
 GET {{URL}}/categories
-Authorization: Bearer {{JWT}}
 
 ### Fetch challenge vote
 GET {{URL}}/{{CHALLENGE_ID}}/vote
