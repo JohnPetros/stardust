@@ -156,6 +156,7 @@
     "#ui/*": "./src/ui/*.ts"
   },
   "dependencies": {
+    "@designliquido/delegua": "^0.61.0",
     "@stardust-org/core": "^0.1.17",
     "dayjs": "^1.11.11",
     "uuid": "^11.1.0",
