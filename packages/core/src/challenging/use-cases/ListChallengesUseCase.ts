@@ -75,6 +75,8 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
     completedChallengesIds: IdsList,
     userId: Id | null,
   ): Challenge[] {
+    if (userId === null) return challenges
+
     switch (challengeCompletionStatus.value) {
       case 'completed':
         return challenges.filter((challenge) => {
