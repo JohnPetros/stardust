@@ -19,10 +19,14 @@ import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 const restClient = NextRestClient({ isCacheEnabled: false })
 restClient.setBaseUrl(CLIENT_ENV.stardustServerUrl)
 
-export function useRest() {
+type Params = {
+  isAuthenticated?: boolean
+}
+
+export function useRest({ isAuthenticated = true }: Params = {}) {
   const { accessToken } = useAuthContext()
 
-  if (accessToken) {
+  if (accessToken && isAuthenticated) {
     restClient.setHeader(HTTP_HEADERS.authorization, `Bearer ${accessToken}`)
   }
 
