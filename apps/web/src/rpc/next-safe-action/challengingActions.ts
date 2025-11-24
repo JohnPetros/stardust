@@ -4,6 +4,9 @@ import { z } from 'zod'
 
 import { authActionClient } from './clients/authActionClient'
 import { NextCall } from '../next/NextCall'
+
+import { ChallengingService, SpaceService } from '@/rest/services'
+import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 import {
   AccessChallengePageAction,
   AccessChallengeCommentsSlotAction,
@@ -11,8 +14,6 @@ import {
   AccessSolutionPageAction,
   ViewSolutionAction,
 } from '../actions/challenging'
-import { ChallengingService, SpaceService } from '@/rest/services'
-import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 import { actionClient } from './clients'
 
 export const accessAuthenticatedChallengePage = authActionClient
