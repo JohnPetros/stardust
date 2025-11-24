@@ -41,7 +41,7 @@ export const ShopButtonView = ({
   if (isSelected === null && isAcquired) {
     return (
       <Button className='h-8 w-max bg-yellow-300 px-3 py-1 pointer-events-none'>
-        Aquirido
+        Adquirido
       </Button>
     )
   }
