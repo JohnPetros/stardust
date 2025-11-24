@@ -16,6 +16,7 @@ import { Tag } from './Tag'
 type Props = {
   tags: List<string>
   categories: ChallengeCategory[]
+  isAccountAuthenticated: boolean
   handleTitleChange: (title: string) => void
   handleCompletionStatusChange: (status: string) => void
   handleDifficultyLevelChange: (difficulty: string) => void
@@ -25,6 +26,7 @@ type Props = {
 export const ChallengesFiltersView = ({
   categories,
   tags,
+  isAccountAuthenticated,
   handleTitleChange,
   handleCompletionStatusChange,
   handleDifficultyLevelChange,
@@ -39,31 +41,33 @@ export const ChallengesFiltersView = ({
       />
 
       <div className='mt-6 flex items-center gap-6'>
-        <Select.Container
-          defaultValue='all'
-          onValueChange={(newStatus: string) =>
-            handleCompletionStatusChange(newStatus as ChallengeCompletionStatusValue)
-          }
-        >
-          <Select.Trigger value='Status' className='h-10' />
-          <Select.Content>
-            {FILTER_SELECTS_ITEMS.completionStatus.map((item, index, allItems) => {
-              const isLastItem = index === allItems.length - 1
-              return (
-                <div key={String(index + 1)}>
-                  <Select.Item value={item.value} className={item.labelStyles}>
-                    {item.icon && (
-                      <Icon name={item.icon} size={16} className={item.iconStyles} />
-                    )}
+        {isAccountAuthenticated && (
+          <Select.Container
+            defaultValue='all'
+            onValueChange={(newStatus: string) =>
+              handleCompletionStatusChange(newStatus as ChallengeCompletionStatusValue)
+            }
+          >
+            <Select.Trigger value='Status' className='h-10' />
+            <Select.Content>
+              {FILTER_SELECTS_ITEMS.completionStatus.map((item, index, allItems) => {
+                const isLastItem = index === allItems.length - 1
+                return (
+                  <div key={String(index + 1)}>
+                    <Select.Item value={item.value} className={item.labelStyles}>
+                      {item.icon && (
+                        <Icon name={item.icon} size={16} className={item.iconStyles} />
+                      )}
 
-                    <Select.Text>{item.label}</Select.Text>
-                  </Select.Item>
-                  {!isLastItem && <Select.Separator />}
-                </div>
-              )
-            })}
-          </Select.Content>
-        </Select.Container>
+                      <Select.Text>{item.label}</Select.Text>
+                    </Select.Item>
+                    {!isLastItem && <Select.Separator />}
+                  </div>
+                )
+              })}
+            </Select.Content>
+          </Select.Container>
+        )}
 
         <Select.Container
           defaultValue='all'
