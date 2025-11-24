@@ -1,6 +1,6 @@
 import { Name } from '#global/domain/structures/Name'
 import type { UseCase } from '#global/interfaces/UseCase'
-import { UserNameAlreadyInUseError } from '../errors'
+import { UserNameAlreadyInUseError } from '../domain/errors'
 import type { UsersRepository } from '../interfaces'
 
 export class VerifyUserNameInUseUseCase implements UseCase<string, Promise<void>> {

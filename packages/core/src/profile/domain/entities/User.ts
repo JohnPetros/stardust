@@ -1,10 +1,10 @@
 import {
   type Email,
   type Id,
+  InsigniaRole,
   type Name,
   type Slug,
   type IdsList,
-  type InsigniaRole,
   Integer,
   Logical,
 } from '#global/domain/structures/index'
@@ -17,7 +17,7 @@ import {
   InsigniaAlreadyAcquiredError,
   NotEnoughCoinsError,
   ShopItemNotAcquiredError,
-} from '#profile/errors/index'
+} from '#profile/domain/errors/index'
 import type { AchievementMetricValue } from '../types'
 import { type Level, WeekStatus } from '../structures'
 import type { UserDto } from './dtos'
@@ -106,8 +106,14 @@ export class User extends Entity<UserProps> {
     return this.props.coins.isGreaterThanOrEqualTo(coins)
   }
 
+  hasInsignia(insigniaRole: InsigniaRole): Logical {
+    return Logical.create(
+      this.props.insigniaRoles.some((role) => role.value === insigniaRole.value),
+    )
+  }
+
   acquireInsignia(insigniaRole: InsigniaRole, insigniaPrice: Integer): void {
-    if (insigniaRole.isEngineer.and(this.hasEngineerInsignia).isTrue) {
+    if (this.hasInsignia(insigniaRole).isTrue) {
       throw new InsigniaAlreadyAcquiredError()
     }
 
@@ -332,6 +338,10 @@ export class User extends Entity<UserProps> {
     return this.props.insigniaRoles
   }
 
+  get insigniaRolesCount(): Integer {
+    return Integer.create(this.props.insigniaRoles.length)
+  }
+
   get isRankingWinner(): Logical {
     if (!this.props.lastWeekRankingPosition) return Logical.createAsFalse()
 
@@ -351,7 +361,7 @@ export class User extends Entity<UserProps> {
     )
   }
 
-  get hasEngineerInsignia(): Logical {
+  get hasEngineerRole(): Logical {
     return Logical.create(
       this.props.insigniaRoles.some((role) => role.value === 'engineer'),
     )

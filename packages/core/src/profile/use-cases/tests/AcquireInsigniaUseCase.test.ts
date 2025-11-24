@@ -1,7 +1,7 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import { UsersFaker } from '#profile/domain/entities/fakers/UsersFaker'
-import { UserNotFoundError } from '#profile/errors/UserNotFoundError'
+import { UserNotFoundError } from '#profile/domain/errors/UserNotFoundError'
 import { Integer } from '#global/domain/structures/Integer'
 import { InsigniaRole } from '#global/domain/structures/InsigniaRole'
 import { AcquireInsigniaUseCase } from '../AcquireInsigniaUseCase'

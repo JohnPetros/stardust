@@ -1,7 +1,7 @@
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { UsersRepository } from '../interfaces'
 import { Id } from '#global/domain/structures/Id'
-import { UserNotFoundError } from '../errors'
+import { UserNotFoundError } from '../domain/errors'
 
 type Request = {
   userId: string

@@ -2,7 +2,7 @@ import type { UseCase } from '#global/interfaces/index'
 import { Id, Integer } from '#global/domain/structures/index'
 import type { UsersRepository } from '../interfaces'
 import type { WeekStatusValue } from '../domain/types'
-import { UserNotFoundError } from '../errors'
+import { UserNotFoundError } from '../domain/errors'
 
 type Request = {
   userId: string

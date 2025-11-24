@@ -1,7 +1,7 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { UsersRepository } from '#profile/interfaces/UsersRepository'
-import { UserNotFoundError } from '#profile/errors/UserNotFoundError'
+import { UserNotFoundError } from '#profile/domain/errors/UserNotFoundError'
 import { Id } from '#global/domain/structures/Id'
 import { UsersFaker } from '#profile/domain/entities/fakers/UsersFaker'
 import { CompleteChallengeUseCase } from '../CompleteChallengeUseCase'

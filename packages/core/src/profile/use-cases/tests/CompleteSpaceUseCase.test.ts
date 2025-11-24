@@ -3,7 +3,7 @@ import { type Mock, mock } from 'ts-jest-mocker'
 import type { UsersRepository } from '#profile/interfaces/UsersRepository'
 import type { EventBroker } from '#global/interfaces/EventBroker'
 import { SpaceCompletedEvent } from '#space/domain/events/SpaceCompletedEvent'
-import { UserNotFoundError } from '#profile/errors/UserNotFoundError'
+import { UserNotFoundError } from '#profile/domain/errors/UserNotFoundError'
 import { UsersFaker } from '#profile/domain/entities/fakers/UsersFaker'
 import { CompleteSpaceUseCase } from '../CompleteSpaceUseCase'
 

@@ -9,7 +9,7 @@ type Product = {
 }
 
 type Props = {
-  isSelected: boolean
+  isSelected: boolean | null
   isAcquired: boolean
   isBuyable: boolean
   product: Product
@@ -34,7 +34,6 @@ export const ShopButton = ({
       isBuyable={isBuyable}
       product={product}
       onClick={handleShopButtonClick}
-      onItemAcquire={onItemAcquire}
       onAlertOpenChange={handleAlertOpenChange}
     />
   )

@@ -13,12 +13,11 @@ type Product = {
 
 type Props = {
   isLoading: boolean
-  isSelected: boolean
+  isSelected: boolean | null
   isAcquired: boolean
   isBuyable: boolean
   product: Product
   onClick: () => void
-  onItemAcquire: () => Promise<boolean>
   onAlertOpenChange: (isOpen: boolean) => void
 }
 
@@ -29,13 +28,20 @@ export const ShopButtonView = ({
   isBuyable,
   product,
   onClick,
-  onItemAcquire,
   onAlertOpenChange,
 }: Props) => {
   if (isSelected && isAcquired) {
     return (
       <Button className='h-8 w-max bg-yellow-300 px-3 py-1 pointer-events-none'>
         Selecionado
+      </Button>
+    )
+  }
+
+  if (isSelected === null && isAcquired) {
+    return (
+      <Button className='h-8 w-max bg-yellow-300 px-3 py-1 pointer-events-none'>
+        Adquirido
       </Button>
     )
   }

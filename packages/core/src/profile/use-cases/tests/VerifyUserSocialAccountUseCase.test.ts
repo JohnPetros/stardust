@@ -2,7 +2,7 @@ import { type Mock, mock } from 'ts-jest-mocker'
 import type { UsersRepository } from '#profile/interfaces/UsersRepository'
 import { AccountsFaker } from '#auth/domain/entities/fakers/AccountsFaker'
 import { VerifyUserSocialAccountUseCase } from '../VerifyUserSocialAccountUseCase'
-import { UserSocialAccountAlreadyInUseError } from '#profile/errors/UserSocialAccountAlreadyInUseError'
+import { UserSocialAccountAlreadyInUseError } from '#profile/domain/errors/UserSocialAccountAlreadyInUseError'
 import { UsersFaker } from '#profile/domain/entities/fakers/UsersFaker'
 import { Name } from '#global/domain/structures/Name'
 

@@ -3,7 +3,7 @@ import type { UsersRepository } from '#profile/interfaces/UsersRepository'
 import type { User } from '../domain/entities'
 import { Id } from '#global/domain/structures/Id'
 import { Percentage } from '#global/domain/structures/Percentage'
-import { UserNotFoundError } from '#profile/errors/UserNotFoundError'
+import { UserNotFoundError } from '#profile/domain/errors/UserNotFoundError'
 
 type Request = {
   userId: string

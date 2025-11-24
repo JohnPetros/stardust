@@ -1,8 +1,8 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import { AchievementsFaker, UsersFaker } from '#profile/domain/entities/fakers/index'
-import { AchievementNotFoundError } from '#profile/errors/AchievementNotFoundError'
-import { UserNotFoundError } from '#profile/errors/UserNotFoundError'
+import { AchievementNotFoundError } from '#profile/domain/errors/AchievementNotFoundError'
+import { UserNotFoundError } from '#profile/domain/errors/UserNotFoundError'
 import type { AchievementsRepository, UsersRepository } from '#profile/interfaces/index'
 import { RescueAchievementUseCase } from '../RescueAchievementUseCase'
 import { IdFaker } from '#global/domain/structures/fakers/IdFaker'

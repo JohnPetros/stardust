@@ -29,5 +29,9 @@ export const ShopService = (restClient: RestClient): IShopService => {
       restClient.setQueryParam('page', page.value.toString())
       return await restClient.get('/shop/avatars')
     },
+
+    async fetchInsigniasList() {
+      return await restClient.get('/shop/insignias')
+    },
   }
 }

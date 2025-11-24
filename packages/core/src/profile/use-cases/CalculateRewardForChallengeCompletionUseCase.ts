@@ -1,6 +1,6 @@
 import type { UseCase } from '#global/interfaces/index'
 import { Id, Percentage, type Logical } from '#global/domain/structures/index'
-import { UserNotFoundError } from '../errors'
+import { UserNotFoundError } from '../domain/errors'
 import type { UsersRepository } from '../interfaces'
 
 type Request = {

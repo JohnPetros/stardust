@@ -5,7 +5,7 @@ import type { UsersRepository } from '#profile/interfaces/index'
 import {
   UserNameAlreadyInUseError,
   UserEmailAlreadyInUseError,
-} from '#profile/errors/index'
+} from '#profile/domain/errors/index'
 
 type Request = {
   userId: string

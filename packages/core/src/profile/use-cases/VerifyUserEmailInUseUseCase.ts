@@ -1,6 +1,6 @@
 import { Email } from '#global/domain/structures/Email'
 import type { UseCase } from '#global/interfaces/UseCase'
-import { UserEmailAlreadyInUseError } from '../errors'
+import { UserEmailAlreadyInUseError } from '../domain/errors'
 import type { UsersRepository } from '../interfaces'
 
 export class VerifyUserEmailInUseUseCase implements UseCase<string, Promise<void>> {
