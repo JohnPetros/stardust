@@ -11,15 +11,14 @@ import { NextRestClient } from './NextRestClient'
 export const NextServerRestClient = async (
   config?: NextRestClientConfig,
 ): Promise<RestClient> => {
-  const cookiesStore = await cookies()
-
-  const accessToken = cookiesStore.get(COOKIES.accessToken.key)
-
   const restClient = NextRestClient(config)
   restClient.setBaseUrl(CLIENT_ENV.stardustServerUrl)
 
-  if (accessToken?.value)
+  const cookiesStore = await cookies()
+  const accessToken = cookiesStore.get(COOKIES.accessToken.key)
+  if (config?.isAuthenticated && accessToken?.value) {
     restClient.setHeader(HTTP_HEADERS.authorization, `Bearer ${accessToken?.value}`)
+  }
 
   return restClient
 }
