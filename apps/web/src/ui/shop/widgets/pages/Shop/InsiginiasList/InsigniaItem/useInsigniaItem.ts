@@ -24,7 +24,7 @@ export function useInsigniaItem({
   acquiredInsigniaRoleCount,
   onAcquireInsignia,
 }: Params) {
-  async function handleAvatarAcquire() {
+  async function handleInsigniaAcquire() {
     if (!acquiredInsigniaRoleCount) return false
 
     const response = await service.acquireInsignia(insigniaRole, insigniaPrice)
@@ -34,11 +34,11 @@ export function useInsigniaItem({
       return false
     }
 
-    const hasAcquiredAvatar = response.body.insigniaRoles
+    const hasAcquiredInsignia = response.body.insigniaRoles
       ? response.body.insigniaRoles.length > acquiredInsigniaRoleCount.value
       : false
 
-    if (response.isSuccessful && !hasAcquiredAvatar) {
+    if (response.isSuccessful && !hasAcquiredInsignia) {
       audioProvider.playAudio(AUDIO_FILES.switch)
       onAcquireInsignia(response.body)
       return false
@@ -48,6 +48,6 @@ export function useInsigniaItem({
   }
 
   return {
-    handleAvatarAcquire,
+    handleInsigniaAcquire,
   }
 }

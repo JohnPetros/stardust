@@ -17,7 +17,7 @@ export const InsigniaItem = ({ insignia }: Props) => {
   const { profileService } = useRest()
   const toastProvider = useToastContext()
   const audioProvider = useAudioContext()
-  const { handleAvatarAcquire } = useInsigniaItem({
+  const { handleInsigniaAcquire } = useInsigniaItem({
     service: profileService,
     toastProvider,
     audioProvider,
@@ -37,7 +37,7 @@ export const InsigniaItem = ({ insignia }: Props) => {
         price={insignia.price.value}
         isAcquired={user.hasInsignia(insignia.role).isTrue}
         isBuyable={user.canAcquire(Integer.create(insignia.price.value)).isTrue}
-        onAcquire={handleAvatarAcquire}
+        onAcquire={handleInsigniaAcquire}
       />
     )
 }

@@ -9,7 +9,7 @@ type Props = {
 export const InsiginiasListView = ({ insignias }: Props) => {
   return (
     <section id='insignias'>
-      <h2 className='text-lg font-semibold text-white'>Insíginias</h2>
+      <h2 className='text-lg font-semibold text-white'>Insígnias</h2>
       <ul className='grid grid-cols-1 items-start justify-center mt-6 sm:grid-cols-2 lg:grid-cols-3'>
         {insignias.map((insignia) => (
           <li key={insignia.id.value}>

@@ -1,12 +1,12 @@
 'use client'
 
 import { useRest } from '@/ui/global/hooks/useRest'
-import { InsiginiasListView } from './InsiginiasListView'
-import { useInsiginiasList } from './useInsiginiasList'
+import { InsiginiasListView } from './InsigniasListView'
+import { useInsigniasList } from './useInsigniasList'
 
 export const InsigniasList = () => {
   const { shopService } = useRest()
-  const { insignias } = useInsiginiasList(shopService)
+  const { insignias } = useInsigniasList(shopService)
 
   return <InsiginiasListView insignias={insignias} />
 }

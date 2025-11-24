@@ -47,7 +47,7 @@ export const InsigniaItemView = ({
           )}
         </header>
 
-        <div className='flex-1 w-full bg-gray-400 rounded-xl bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10'>
+        <div className='relative flex-1 w-full bg-gray-400 rounded-xl bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10'>
           <Image src={image} fill sizes='(min-width: 375px) 100vw' alt={name} />
         </div>
 
