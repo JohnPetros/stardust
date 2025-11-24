@@ -46,7 +46,7 @@ export const ChallengeInfoView = ({
         <Info
           icon='rate'
           label={`${acceptanceRate.value}%`}
-          tooltipText={`Taxa de aceitação de usuários que que deram upvote para esse desafio de um total de ${totalVotes} votos.`}
+          tooltipText={`Taxa de aceitação de usuários que deram upvote para esse desafio de um total de ${totalVotes} votos.`}
         />
       </li>
       <li>
