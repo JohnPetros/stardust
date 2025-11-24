@@ -7,6 +7,7 @@ export class AppendUserCompletedChallengesIdsToBodyController implements Control
 
   async handle(http: Http) {
     const account = await http.getAccount()
+    if (!account) return http.pass()
     const useCase = new GetUserUseCase(this.usersRepository)
     const user = await useCase.execute({
       userId: account.id,
