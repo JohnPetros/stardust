@@ -1,5 +1,5 @@
+import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
 import { ChallengeInfoView } from './ChallengeInfoView'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
 type ChallengeInfo = {
   isCompleted: boolean
@@ -20,4 +20,11 @@ export const ChallengeInfo = (props: ChallengeInfo) => {
         isAccountAuthenticated={account.isAuthenticated.isTrue}
       />
     )
+
+  return (
+    <ChallengeInfoView
+      {...props}
+      isAccountAuthenticated={false}
+    />
+  )
 }

@@ -35,7 +35,7 @@ export const ChallengeInfoView = ({
             iconStyle={isCompleted ? 'text-green-500' : 'text-red-700'}
             label={isCompleted ? 'Resolvido' : 'Não resolvido'}
             tooltipText={
-              isCompleted
+              !isCompleted
                 ? 'O que você está esperando? resolva esse desafio.'
                 : 'Você ainda pode resolver esse desafio quantas vezes quiser.'
             }
@@ -46,7 +46,7 @@ export const ChallengeInfoView = ({
         <Info
           icon='rate'
           label={`${acceptanceRate.value}%`}
-          tooltipText={`Taxa de aceitação de usuários que que deram upvote para esse desafio de um total de ${totalVotes} votos.`}
+          tooltipText={`Taxa de aceitação de usuários que deram upvote para esse desafio de um total de ${totalVotes} votos.`}
         />
       </li>
       <li>
