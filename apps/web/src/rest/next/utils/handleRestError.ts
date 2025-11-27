@@ -27,7 +27,7 @@ async function refreshAuthSession() {
       durationInSeconds: response.body.durationInSeconds,
     }),
     cookieActions.setCookie({
-      key: COOKIES.accessToken.key,
+      key: COOKIES.refreshToken.key,
       value: response.body.refreshToken,
       durationInSeconds: response.body.durationInSeconds,
     }),
@@ -41,9 +41,9 @@ export async function handleRestError<Body = unknown>(
   failedRequest: () => Promise<RestResponse<Body>>,
 ) {
   const isClientSide = typeof window !== 'undefined'
-  if (isClientSide && response.status !== HTTP_STATUS_CODE.unauthorized) {
-    const response = await refreshAuthSession()
-    if (response.isSuccessful) return await failedRequest()
+  if (isClientSide && response.status === HTTP_STATUS_CODE.unauthorized) {
+    const refresResponse = await refreshAuthSession()
+    if (refresResponse.isSuccessful) return await failedRequest()
   }
 
   const data = await parseResponseJson(response)
