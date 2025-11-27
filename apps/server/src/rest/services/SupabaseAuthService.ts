@@ -414,8 +414,6 @@ export class SupabaseAuthService implements AuthService {
       error,
     } = await this.supabase.auth.getUser()
 
-    console.log(error)
-
     if (error) {
       switch (error.code) {
         case this.AUTH_ERROR_CODES.no_authorization:
