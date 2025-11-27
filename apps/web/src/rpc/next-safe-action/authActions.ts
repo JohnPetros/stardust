@@ -18,7 +18,7 @@ import {
 } from '../actions/auth'
 import { actionClient } from './clients/actionClient'
 import { NextCall } from '../next/NextCall'
-import { authActionClient } from './clients'
+import { authActionClient } from './clients/authActionClient'
 
 export const signIn = actionClient
   .schema(
