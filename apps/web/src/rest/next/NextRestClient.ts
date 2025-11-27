@@ -40,7 +40,10 @@ export const NextRestClient = ({
       })
 
       if (!response.ok) {
-        return await handleRestError<Body>(response)
+        return await handleRestError<Body>(
+          response,
+          async () => await this.get<Body>(route),
+        )
       }
 
       const data = await parseResponseJson(response)
@@ -67,7 +70,11 @@ export const NextRestClient = ({
       })
 
       if (!response.ok) {
-        return await handleRestError<Body>(response)
+        console.log({ status: response.status, route })
+        return await handleRestError<Body>(
+          response,
+          async () => await this.post<Body>(route, body),
+        )
       }
 
       const data = await parseResponseJson(response)
@@ -86,7 +93,7 @@ export const NextRestClient = ({
       })
 
       if (!response.ok) {
-        return await handleRestError<Body>(response)
+        return await handleRestError<Body>(response, async () => await this.put(route))
       }
 
       const data = await parseResponseJson(response)
@@ -101,7 +108,10 @@ export const NextRestClient = ({
       })
 
       if (!response.ok) {
-        return await handleRestError<Body>(response)
+        return await handleRestError<Body>(
+          response,
+          async () => await this.patch<Body>(route),
+        )
       }
 
       const data = await parseResponseJson(response)
@@ -115,7 +125,7 @@ export const NextRestClient = ({
       })
 
       if (!response.ok) {
-        return await handleRestError<void>(response)
+        return await handleRestError(response, async () => await this.delete(route))
       }
 
       return new RestResponse({ statusCode: response.status })
