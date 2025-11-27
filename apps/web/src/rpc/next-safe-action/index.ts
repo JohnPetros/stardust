@@ -22,6 +22,7 @@ import {
   signIn,
   signOut,
   signUpWithSocialAccount,
+  accessAuthenticatedPage,
 } from './authActions'
 
 export const authActions = {
@@ -30,6 +31,7 @@ export const authActions = {
   signUpWithSocialAccount,
   connectSocialAccount,
   disconnectSocialAccount,
+  accessAuthenticatedPage,
 }
 
 export const cookieActions = { setCookie, getCookie, deleteCookie, hasCookie }
