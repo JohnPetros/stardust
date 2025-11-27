@@ -1,3 +1,5 @@
+'use client'
+
 import { HTTP_HEADERS } from '@stardust/core/global/constants'
 
 import { CLIENT_ENV } from '@/constants'
