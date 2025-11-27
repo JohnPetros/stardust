@@ -70,7 +70,6 @@ export const NextRestClient = ({
       })
 
       if (!response.ok) {
-        console.log({ status: response.status, route })
         return await handleRestError<Body>(
           response,
           async () => await this.post<Body>(route, body),
@@ -93,7 +92,10 @@ export const NextRestClient = ({
       })
 
       if (!response.ok) {
-        return await handleRestError<Body>(response, async () => await this.put(route))
+        return await handleRestError<Body>(
+          response,
+          async () => await this.put(route, body),
+        )
       }
 
       const data = await parseResponseJson(response)
@@ -110,7 +112,7 @@ export const NextRestClient = ({
       if (!response.ok) {
         return await handleRestError<Body>(
           response,
-          async () => await this.patch<Body>(route),
+          async () => await this.patch<Body>(route, body),
         )
       }
 

@@ -187,8 +187,6 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
         })
       }
 
-      console.log({ statusCode })
-
       return new RestResponse({
         body: NextResponse.json(data, { status: statusCode }),
         statusCode,
