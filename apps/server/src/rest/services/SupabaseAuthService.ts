@@ -8,7 +8,6 @@ import type { Password } from '@stardust/core/auth/structures'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { RestResponse } from '@stardust/core/global/responses'
 import { ConflictError, MethodNotImplementedError } from '@stardust/core/global/errors'
-import { NotFoundError } from '@stardust/core/global/errors'
 
 import type { Supabase } from '@/database/supabase/types'
 import { ENV } from '@/constants'
@@ -414,6 +413,8 @@ export class SupabaseAuthService implements AuthService {
       data: { user },
       error,
     } = await this.supabase.auth.getUser()
+
+    console.log(error)
 
     if (error) {
       switch (error.code) {
