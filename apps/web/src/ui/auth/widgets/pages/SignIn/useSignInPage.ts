@@ -31,8 +31,8 @@ export function useSignInPage({
   const router = useNavigationProvider()
 
   async function handleFormSubmit({ email, password }: SignInFormFields) {
-    const isSuccess = await handleSignIn(email, password)
-    if (!isSuccess) return
+    const isSuccessful = await handleSignIn(email, password)
+    if (!isSuccessful) return
 
     setIsRocketVisible(true)
 

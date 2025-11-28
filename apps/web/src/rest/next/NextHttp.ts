@@ -51,7 +51,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
 
     if (keys.includes('routeParams')) {
       if (!params) throw new AppError('Next params not provided')
-      routeParams = params.params
+      routeParams = await params.params
     }
 
     httpSchema = schema.parse({ body, queryParams, routeParams })
@@ -117,7 +117,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     },
 
     async deleteCookie(key: string) {
-      await cookieActions.deleteCookie(key)
+      cookies.push({ key, value: '', duration: 0 })
     },
 
     async pass() {
@@ -168,7 +168,7 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       })
     },
 
-    send(data: unknown) {
+    send(data: unknown = null) {
       if (cookies.length) {
         const nextResponse = NextResponse.redirect(
           new URL(request ? request.nextUrl.pathname : '', CLIENT_ENV.stardustWebUrl),

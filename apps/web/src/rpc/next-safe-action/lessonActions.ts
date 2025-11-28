@@ -6,12 +6,12 @@ import { idSchema } from '@stardust/validation/global/schemas'
 import { LessonService } from '@/rest/services/LessonService'
 
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
-import { authActionClient } from './clients'
 import { NextCall } from '../next/NextCall'
 import {
   AccessEndingPageAction,
   FetchLessonStoryAndQuestionsAction,
 } from '../actions/lesson'
+import { authActionClient } from './clients/authActionClient'
 
 export const fetchLessonStoryAndQuestions = authActionClient
   .schema(
