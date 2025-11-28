@@ -48,8 +48,6 @@ export async function handleRestError<Body = unknown>(
 
   const data = await parseResponseJson(response)
 
-  console.log('handleRestError', data)
-
   if (data && 'title' in data && 'message' in data) {
     console.warn('Rest Api error title:', data.title)
     console.warn('Rest Api error message:', data.message)
@@ -59,6 +57,8 @@ export async function handleRestError<Body = unknown>(
       statusCode: response.status,
     })
   }
+
+  console.warn('Unhandled Rest Api error:', response.status)
 
   return new RestResponse<Body>({ statusCode: response.status })
 }
