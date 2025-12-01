@@ -16,7 +16,7 @@ export const NextServerRestClient = async (
 
   const cookiesStore = await cookies()
   const accessToken = cookiesStore.get(COOKIES.accessToken.key)
-  if (config?.isAuthenticated && accessToken?.value) {
+  if (accessToken?.value) {
     restClient.setHeader(HTTP_HEADERS.authorization, `Bearer ${accessToken?.value}`)
   }
 

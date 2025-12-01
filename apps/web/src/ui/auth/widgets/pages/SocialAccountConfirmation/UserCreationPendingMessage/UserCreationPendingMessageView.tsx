@@ -1,4 +1,4 @@
-import { BlurText } from '@/ui/global/BlurText'
+import { BlurText } from '@/ui/global/widgets/components/BlurText'
 
 type Props = {
   quote: string

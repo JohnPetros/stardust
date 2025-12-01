@@ -14,7 +14,7 @@ import {
   AccessSolutionPageAction,
   ViewSolutionAction,
 } from '../actions/challenging'
-import { actionClient } from './clients'
+import { actionClient } from './clients/actionClient'
 
 export const accessAuthenticatedChallengePage = authActionClient
   .schema(z.object({ challengeSlug: z.string() }))

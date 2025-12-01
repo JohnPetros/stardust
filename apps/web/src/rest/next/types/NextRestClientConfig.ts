@@ -4,5 +4,4 @@ export type NextRestClientConfig = {
   cacheKey?: string
   headers?: Headers
   cookies?: string
-  isAuthenticated?: boolean
 }

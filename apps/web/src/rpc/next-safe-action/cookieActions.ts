@@ -24,7 +24,7 @@ const setCookie = actionClient
 
 const getCookie = actionClient.schema(z.string()).action(async ({ clientInput }) => {
   const call = NextCall()
-  return call.getCookie(clientInput)
+  return await call.getCookie(clientInput)
 })
 
 const deleteCookie = actionClient.schema(z.string()).action(async ({ clientInput }) => {

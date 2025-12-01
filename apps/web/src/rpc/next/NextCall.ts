@@ -31,7 +31,6 @@ export const NextCall = <Request = unknown>({
 
     async setCookie(key: string, value: string, durationInSeconds?: number) {
       const cookieStore = await cookies()
-
       cookieStore.set({
         name: key,
         value,
