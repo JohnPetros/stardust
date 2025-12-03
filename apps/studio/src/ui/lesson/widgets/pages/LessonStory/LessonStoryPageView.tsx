@@ -1,4 +1,4 @@
-import { TextEditor } from '@/ui/global/widgets/components/textEditor'
+import { TextEditor } from '@/ui/global/widgets/components/TextEditor'
 import { TextEditorContextProvider } from '@/ui/global/contexts/TextEditorContext'
 import { Mdx } from '@/ui/global/widgets/components/Mdx'
 import { ActionButton } from '@/ui/global/widgets/components/ActionButton'
