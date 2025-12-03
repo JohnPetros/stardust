@@ -1,7 +1,7 @@
 import { useCallback, useMemo, type RefObject } from 'react'
 
 import type { TextEditorContextValue } from './TextEditorContextValue'
-import type { TextEditorWidget } from './TextEditorWdiget'
+import type { TextEditorWidget } from './TextEditorWidgetWidget'
 import type { TextEditorRef } from '@/ui/global/widgets/components/TextEditor/types'
 
 export function useTextEditorContextProvider(
@@ -98,10 +98,10 @@ export function useTextEditorContextProvider(
         cursorPosition.columnNumber + 1 + content.length,
       )
     },
-    [textEditorRef],
+    [textEditorRef.current],
   )
 
-  const insertTitlelement = useCallback(() => {
+  const insertTitleElement = useCallback(() => {
     if (!textEditorRef.current) return
 
     const cursorPosition = textEditorRef.current.getCursorPosition()
@@ -149,14 +149,14 @@ export function useTextEditorContextProvider(
           insertTagElement('User', 'Insira a fala do usuário aqui')
           break
         case 'title':
-          insertTitlelement()
+          insertTitleElement()
           break
         case 'codeLine':
           insertCodeLineElement('Insira sua linha de código aqui')
           break
       }
     },
-    [insertTagElement, insertTitlelement, insertCodeLineElement],
+    [insertTagElement, insertTitleElement, insertCodeLineElement],
   )
 
   const value = useMemo(() => {

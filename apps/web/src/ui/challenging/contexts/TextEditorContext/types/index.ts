@@ -1,5 +1,5 @@
 export type { TextEditorRef } from './TextEditorRef'
-export type { TextEditorWidget } from './TextEditorWdiget'
+export type { TextEditorWidget } from './TextEditorWidget'
 export type { CursorPosition } from './CursorPosition'
 export type { SelectedLinesRange } from './SelectedLinesRange'
 export type { TextEditorContextValue } from './TextEditorContextValue'
