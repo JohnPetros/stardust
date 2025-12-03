@@ -20,7 +20,7 @@ export const AnimatedBorderView = ({
         style={{ maskImage }}
         className='absolute rounded-md inset-0 -m-px border border-green-600 z-0'
       />
-      <div className={twMerge('rounded-md border border-gray-700 p-6 z-10', className)}>
+      <div className={twMerge('rounded-md border border-gray-700 p-6', className)}>
         {children}
       </div>
     </div>
