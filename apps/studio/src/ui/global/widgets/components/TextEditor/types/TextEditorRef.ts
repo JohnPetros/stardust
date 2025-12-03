@@ -24,6 +24,7 @@ export type TextEditorRef = {
     endColumn: number,
   ) => void
   getLineContent: (lineNumber: number) => string | null
+  getLineLength: (lineNumber: number) => number
   getLineCount: () => number
   getCursorPosition: () => CursorPosition | null
   setCursorPosition: (cursorPositon: CursorPosition) => void
