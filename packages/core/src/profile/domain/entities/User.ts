@@ -1,7 +1,7 @@
 import {
   type Email,
   type Id,
-  InsigniaRole,
+  type InsigniaRole,
   type Name,
   type Slug,
   type IdsList,
