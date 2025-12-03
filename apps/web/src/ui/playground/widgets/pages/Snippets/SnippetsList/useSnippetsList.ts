@@ -21,7 +21,7 @@ export function useSnippetsList(playgroundService: PlaygroundService) {
     return response.body
   }
 
-  const { data, page, totalItemsCount, isLoading, isRecheadedEnd, setPage, refetch } =
+  const { data, page, totalItemsCount, isLoading, isReachedEnd, setPage, refetch } =
     usePaginatedCache({
       key: CACHE.keys.shopRockets,
       fetcher: fetchSnippets,
@@ -43,7 +43,7 @@ export function useSnippetsList(playgroundService: PlaygroundService) {
     itemsPerPage: SNIPPETS_PER_PAGE.value,
     totalItemsCount,
     isLoading,
-    isRecheadedEnd,
+    isReachedEnd,
     handleDeleteSnippet,
     handlePaginationPageChange,
   }
