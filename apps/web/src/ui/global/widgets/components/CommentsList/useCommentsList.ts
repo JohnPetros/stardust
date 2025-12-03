@@ -44,7 +44,7 @@ export function useCommentsList({
     return response.body
   }
 
-  const { data, isLoading, isRecheadedEnd, refetch, nextPage } = usePaginatedCache({
+  const { data, isLoading, isReachedEnd, refetch, nextPage } = usePaginatedCache({
     key: CACHE.keys.comments,
     itemsPerPage: COMMENTS_PER_PAGE.value,
     fetcher: fetchComments,
@@ -125,7 +125,7 @@ export function useCommentsList({
     sorter,
     order,
     comments: data.map(Comment.create),
-    isRecheadedEnd,
+    isReachedEnd,
     popoverMenuButtons,
     nextPage,
     handlePopoverMenuOpenChange,
