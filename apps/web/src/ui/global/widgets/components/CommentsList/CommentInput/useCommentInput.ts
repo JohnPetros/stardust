@@ -1,6 +1,6 @@
 import { type FormEvent, type RefObject, useEffect, useState } from 'react'
 
-import type { TextEditorRef, TextEditorSnippet } from '../../TextEditor/types'
+import type { TextEditorRef, TextEditorSnippet } from '../../old_TextEditor/types'
 
 type UseCommentInput = {
   textEditorRef: RefObject<TextEditorRef | null>

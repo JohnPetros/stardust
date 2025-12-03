@@ -1,8 +1,9 @@
-import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
-import { ChallengeCardView } from './ChallengeCardView'
 import type { ChallengeCategory } from '@stardust/core/challenging/entities'
 import type { ChallengeDifficultyLevel } from '@stardust/core/challenging/types'
 import type { Id } from '@stardust/core/global/structures'
+
+import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
+import { ChallengeCardView } from './ChallengeCardView'
 
 type Props = {
   id: Id

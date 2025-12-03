@@ -1,5 +1,4 @@
 import type { Challenge } from '@stardust/core/challenging/entities'
-import type { IdsList } from '@stardust/core/global/structures'
 
 import { ShowMoreButton } from '@/ui/global/widgets/components/ShowMoreButton'
 import { ChallengeCardSkeleton } from '../ChallengesList/ChallengeCardSkelleton'
@@ -9,7 +8,6 @@ type Props = {
   challenges: Challenge[]
   isLoading: boolean
   isRecheadedEnd: boolean
-  completedChallengesIds: string[]
   onShowMore: () => void
 }
 
@@ -17,7 +15,6 @@ export const ChallengesListView = ({
   challenges,
   isLoading,
   isRecheadedEnd,
-  completedChallengesIds,
   onShowMore,
 }: Props) => {
   return (

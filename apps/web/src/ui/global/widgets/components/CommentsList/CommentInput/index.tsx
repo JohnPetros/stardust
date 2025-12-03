@@ -3,7 +3,7 @@
 import { useRef } from 'react'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import type { TextEditorRef } from '../../TextEditor/types'
+import type { TextEditorRef } from '../../old_TextEditor/types'
 import { useCommentInput } from './useCommentInput'
 import { CommentInputView } from './CommentInputView'
 

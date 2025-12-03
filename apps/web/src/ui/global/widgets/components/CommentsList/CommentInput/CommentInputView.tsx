@@ -8,8 +8,8 @@ import { Mdx } from '../../Mdx'
 import { UserAvatar } from '../../UserAvatar'
 import { Button } from '../../Button'
 import { Icon } from '../../Icon'
-import { TextEditor } from '../../TextEditor'
-import type { TextEditorRef, TextEditorSnippet } from '../../TextEditor/types'
+import { TextEditor } from '../../old_TextEditor'
+import type { TextEditorRef, TextEditorSnippet } from '../../old_TextEditor/types'
 
 type Props = {
   id: string

@@ -1,8 +1,8 @@
 import { createContext, useRef, type PropsWithChildren } from 'react'
 
-import type { TextEditorContextValue } from './TextEditorContextValue'
+import type { TextEditorContextValue } from './types/TextEditorContextValue'
 import { useTextEditorContextProvider } from './useTextEditorContextProvider'
-import type { TextEditorRef } from '@/ui/global/widgets/components/TextEditor/types'
+import type { TextEditorRef } from './types'
 
 export const TextEditorContext = createContext({} as TextEditorContextValue)
 
