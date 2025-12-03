@@ -27,7 +27,7 @@ export function useSolutionsListTab(
     return response.body
   }
 
-  const { data, isLoading, isRecheadedEnd, nextPage } = usePaginatedCache({
+  const { data, isLoading, isReachedEnd, nextPage } = usePaginatedCache({
     key: CACHE.keys.solutionsList,
     fetcher: fetchSolutionsList,
     itemsPerPage: SOLUTIONS_PER_PAGE.value,
@@ -38,7 +38,7 @@ export function useSolutionsListTab(
 
   return {
     solutions: data.map(Solution.create),
-    isRecheadedEnd,
+    isReachedEnd,
     isLoading,
     nextPage,
   }
