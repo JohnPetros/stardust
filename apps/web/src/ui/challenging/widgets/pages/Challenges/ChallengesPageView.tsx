@@ -12,10 +12,12 @@ type Props = {
 
 export const ChallengesPageView = ({ categoriesDto }: Props) => {
   return (
-    <div className='relative mx-auto mt-10 max-w-2xl px-6 pb-40 md:px-0'>
-      <BackPageLink />
-      <WarningMessage />
-      <PostChallengeLink />
+    <div className='relative mx-auto pt-6 max-w-2xl px-6 pb-40 md:px-0'>
+      <div className='space-y-6'>
+        <BackPageLink />
+        <WarningMessage />
+        <PostChallengeLink />
+      </div>
       <div className='mt-6'>
         <ChallengesFilters categoriesDto={categoriesDto} />
         <ChallengesList />
