@@ -21,9 +21,9 @@ export function useTextEditorContextProvider(
       const openTag = `<${tagName}${propsString ? ` ${propsString}` : ''}>`
       const closeTag = `</${tagName}>`
 
-      const newValue = `${openTag}\n\t${tagContent}\n${closeTag}\n`
+      const newValue = `${openTag}\n\t${tagContent}\n${closeTag}`
 
-      const currentLineContent = textEditorRef.current.getLineContent(
+      let currentLineContent = textEditorRef.current.getLineContent(
         cursorPosition.lineNumber,
       )
 
@@ -35,6 +35,8 @@ export function useTextEditorContextProvider(
           textEditorRef.current.insertLineContent(lineCount, '')
           lineNumber = lineCount
         }
+
+        currentLineContent = textEditorRef.current.getLineContent(lineNumber)
       }
 
       textEditorRef.current.insertLineContent(lineNumber, newValue)
@@ -131,10 +133,10 @@ export function useTextEditorContextProvider(
           insertTagElement('Quote', 'Insira seu texto de reflexão aqui', props)
           break
         case 'runnableCodeBlock':
-          insertTagElement('Code', 'Insira seu código aqui', props)
+          insertTagElement('Code', 'Insira seu codigo aqui', props)
           break
         case 'codeBlock':
-          insertTagElement('Code', 'Insira seu código aqui', props)
+          insertTagElement('Code', 'Insira seu codigo aqui', props)
           break
         case 'link':
           insertTagElement('Link', 'Insira seu link aqui', props)
