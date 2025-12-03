@@ -6,14 +6,14 @@ import { ChallengesListView } from './ChallengesListView'
 
 export const ChallengesList = () => {
   const { challengingService } = useRest({ isAuthenticated: false })
-  const { challenges, isLoading, isRecheadedEnd, handleShowMore } =
+  const { challenges, isLoading, isReachedEnd, handleShowMore } =
     useChallengesList(challengingService)
 
   return (
     <ChallengesListView
       challenges={challenges}
       isLoading={isLoading}
-      isRecheadedEnd={isRecheadedEnd}
+      isReachedEnd={isReachedEnd}
       onShowMore={handleShowMore}
     />
   )

@@ -7,14 +7,14 @@ import { ChallengeCard } from './ChallengeCard'
 type Props = {
   challenges: Challenge[]
   isLoading: boolean
-  isRecheadedEnd: boolean
+  isReachedEnd: boolean
   onShowMore: () => void
 }
 
 export const ChallengesListView = ({
   challenges,
   isLoading,
-  isRecheadedEnd,
+  isReachedEnd,
   onShowMore,
 }: Props) => {
   return (
@@ -50,7 +50,7 @@ export const ChallengesListView = ({
           </>
         )}
 
-        {!isRecheadedEnd && <ShowMoreButton isLoading={isLoading} onClick={onShowMore} />}
+        {!isReachedEnd && <ShowMoreButton isLoading={isLoading} onClick={onShowMore} />}
       </div>
     </div>
   )
