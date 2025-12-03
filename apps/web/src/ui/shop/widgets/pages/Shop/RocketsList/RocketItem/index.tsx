@@ -1,12 +1,13 @@
 'use client'
 
+import { Id, Integer } from '@stardust/core/global/structures'
+
 import { useRocketItem } from './useRocketItem'
 import { RocketAggregate } from '@stardust/core/profile/aggregates'
 import { useImage } from '@/ui/global/hooks/useImage'
 import { useRest } from '@/ui/global/hooks/useRest'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { RocketItemView } from './RocketItemView'
-import { Id, Integer } from '@stardust/core/global/structures'
 
 type Props = {
   id: string

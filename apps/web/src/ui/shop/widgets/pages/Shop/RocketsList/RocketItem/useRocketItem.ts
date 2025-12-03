@@ -26,7 +26,8 @@ export function useRocketItem(
     }
 
     const hasAcquiredRocket =
-      Number(response.body.acquiredRocketsIds?.length) > user.acquiredRocketsCount.value
+      Number(response.body.acquiredRocketsIds?.length) - 1 >
+      user.acquiredRocketsCount.value
 
     if (response.isSuccessful && !hasAcquiredRocket) {
       playAudio('switch.wav')
