@@ -29,17 +29,12 @@ export const ContentEditorView = ({
           label='Título principal'
         />
         <Toolbar.Button
-          onClick={() => onTextEditorWidgetInsert('strong')}
-          icon='strong'
-          label='Inserir trecho em destaque'
-        />
-        <Toolbar.Button
           onClick={() => onTextEditorWidgetInsert('textBlock')}
           icon='text-block'
           label='Bloco de texto'
         />
         <Toolbar.Button
-          onClick={() => onTextEditorWidgetInsert('strong')}
+          onClick={() => onTextEditorWidgetInsert('quoteTextBlock')}
           icon='strong-text-block'
           label='Bloco de texto destacado'
         />
