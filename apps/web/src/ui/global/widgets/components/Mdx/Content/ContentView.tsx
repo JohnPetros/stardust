@@ -6,7 +6,7 @@ import { formatSpecialCharacters } from '../formatSpecialCharacters'
 import { Speaker } from '../../Speaker'
 
 const contentStyles = tv({
-  base: 'font-medium tracking-wider text-gray-100 text-sm w-full p-3 rounded-md not-prose leading-6 mx-auto',
+  base: 'font-medium tracking-wider text-gray-100 text-sm w-full px-3 rounded-md not-prose leading-6 mx-auto',
   variants: {
     type: {
       default: 'bg-purple-700',
@@ -36,6 +36,8 @@ export const ContentView = ({ type, children, hasAnimation = false }: Props) => 
 
   const formattedContent = formatSpecialCharacters(String(content), 'decode')
 
+  console.log({ children })
+
   return (
     <div className={contentStyles({ type })}>
       {typeof content === 'string' ? (
@@ -45,7 +47,7 @@ export const ContentView = ({ type, children, hasAnimation = false }: Props) => 
               .replaceAll('<strong class="strong">', '')
               .replaceAll('</strong>', '')}
           />
-          <div className='mt-3'>
+          <div className='py-3'>
             {hasAnimation ? (
               <TypeWriter content={content} isEnable={hasAnimation} />
             ) : (

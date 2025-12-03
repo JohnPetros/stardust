@@ -1,23 +1,14 @@
-import { type RefObject, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
-import type {
-  TextEditorRef,
-  TextEditorSnippet,
-} from '@/ui/global/widgets/components/TextEditor/types'
+type Params = {
+  content: string
+  onChange: (value: string) => void
+}
 
-export function useContentEditor(
-  content: string,
-  textEditorRef: RefObject<TextEditorRef | null>,
-  onChange: (value: string) => void,
-) {
+export function useContentEditor({ content, onChange }: Params) {
   const [previewContent, setPreviewContent] = useState(content.replaceAll('\n', '\n\n'))
 
-  function handleSnippetInsert(snippet: TextEditorSnippet) {
-    if (!textEditorRef.current) return
-    textEditorRef.current.insertSnippet(snippet)
-  }
-
-  function textEditorChange(value: string) {
+  function handleTextEditorChange(value: string) {
     onChange(value)
   }
 
@@ -27,7 +18,6 @@ export function useContentEditor(
 
   return {
     previewContent,
-    handleSnippetInsert,
-    textEditorChange,
+    handleTextEditorChange,
   }
 }
