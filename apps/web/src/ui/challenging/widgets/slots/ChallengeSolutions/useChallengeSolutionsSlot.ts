@@ -36,7 +36,7 @@ export function useChallengeSolutionsSlot(challengingService: ChallengingService
     return response.body
   }
 
-  const { data, isLoading, isRecheadedEnd, nextPage } = usePaginatedCache({
+  const { data, isLoading, isReachedEnd, nextPage } = usePaginatedCache({
     key: CACHE.keys.solutionsList,
     fetcher: fetchSolutionsList,
     itemsPerPage: SOLUTIONS_PER_PAGE.value,
@@ -85,7 +85,7 @@ export function useChallengeSolutionsSlot(challengingService: ChallengingService
     solutionTitle,
     isFromUser,
     isLoading,
-    isRecheadedEnd,
+    isReachedEnd,
     popoverMenuButtons,
     challengeSlug: challenge?.slug.value ?? '',
     isChallengeCompleted:
