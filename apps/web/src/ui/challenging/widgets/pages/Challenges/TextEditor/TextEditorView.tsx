@@ -31,6 +31,13 @@ export const TextEditorView = ({
         lineNumbers: 'off',
         autoClosingBrackets: 'always',
         autoClosingQuotes: 'always',
+        quickSuggestions: false,
+        wordBasedSuggestions: 'off',
+        suggestOnTriggerCharacters: false,
+        snippetSuggestions: 'none',
+        suggest: {
+          showWords: false,
+        },
         tabSize: 2,
         fontSize: 14,
         fontFamily: 'Menlo',

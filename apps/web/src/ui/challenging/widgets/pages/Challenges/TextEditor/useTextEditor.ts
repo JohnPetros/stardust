@@ -327,6 +327,15 @@ export function useTextEditor(initialValue: string, onChange?: (value: string) =
     return model.getLineContent(lineNumber)
   }, [])
 
+  const getLineLength = useCallback((lineNumber: number) => {
+    if (!monacoEditorRef.current) return 0
+
+    const model = monacoEditorRef.current.getModel()
+    if (!model) return 0
+
+    return model.getLineLength(lineNumber)
+  }, [])
+
   const getLineCount = useCallback(() => {
     if (!monacoEditorRef.current) return 0
 
@@ -377,6 +386,7 @@ export function useTextEditor(initialValue: string, onChange?: (value: string) =
     getSelectedLinesRange,
     getSelectedContent,
     getLineContent,
+    getLineLength,
     getLineCount,
     insertLineContent,
     replaceContent,
