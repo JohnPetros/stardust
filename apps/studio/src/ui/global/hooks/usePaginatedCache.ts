@@ -21,7 +21,7 @@ type PaginatedCache<CacheItem> = {
   data: CacheItem[]
   isFetching: boolean
   isRefetching: boolean
-  isRecheadedEnd: boolean
+  isReachedEnd: boolean
   isFetchingNextPage: boolean
   totalItemsCount: number
   hasNextPage: boolean
@@ -105,7 +105,7 @@ export function usePaginatedCache<CacheItem>({
     }
   }, [data?.pages, isInfinity])
 
-  const isRecheadedEnd = useMemo(() => {
+  const isReachedEnd = useMemo(() => {
     if (!data?.pages) return false
     const lastPage = data.pages[data.pages.length - 1]
     if (!lastPage.items) return false
@@ -127,7 +127,7 @@ export function usePaginatedCache<CacheItem>({
 
   return {
     data: items,
-    isRecheadedEnd,
+    isReachedEnd,
     isFetching: isLoading,
     isFetchingNextPage,
     isRefetching,

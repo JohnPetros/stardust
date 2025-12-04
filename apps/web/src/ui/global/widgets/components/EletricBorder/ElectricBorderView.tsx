@@ -18,7 +18,7 @@ type Props = PropsWithChildren<{
   style?: CSSProperties
 }>
 
-export const EletricBorderView: React.FC<Props> = ({
+export const ElectricBorderView: React.FC<Props> = ({
   children,
   color = '#5227FF',
   speed = 1,

@@ -10,7 +10,7 @@ type Props = {
 
 export function SolutionsListTab({ tabListSorter, userId }: Props) {
   const { challengingService } = useRest()
-  const { solutions, isRecheadedEnd, isLoading, nextPage } = useSolutionsListTab(
+  const { solutions, isReachedEnd, isLoading, nextPage } = useSolutionsListTab(
     challengingService,
     tabListSorter,
     userId,
@@ -19,7 +19,7 @@ export function SolutionsListTab({ tabListSorter, userId }: Props) {
     <SolutionsListTabView
       isLoading={isLoading}
       solutions={solutions}
-      isRecheadedEnd={isRecheadedEnd}
+      isReachedEnd={isReachedEnd}
       onShowMore={nextPage}
     />
   )

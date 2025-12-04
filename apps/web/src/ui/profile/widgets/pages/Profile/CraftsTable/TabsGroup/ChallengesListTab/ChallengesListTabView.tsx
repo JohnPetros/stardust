@@ -9,7 +9,7 @@ import * as Row from '../Row'
 import * as CraftMetrics from '../CraftMetrics'
 
 type Props = {
-  isRecheadedEnd: boolean
+  isReachedEnd: boolean
   challenges: Challenge[]
   isLoading: boolean
   onShowMore: () => void
@@ -17,7 +17,7 @@ type Props = {
 
 export const ChallengesListTabView = ({
   challenges,
-  isRecheadedEnd,
+  isReachedEnd,
   isLoading,
   onShowMore,
 }: Props) => {
@@ -47,7 +47,7 @@ export const ChallengesListTabView = ({
           </CraftMetrics.Container>
         </Row.Container>
       ))}
-      {!isRecheadedEnd && (
+      {!isReachedEnd && (
         <ShowMoreButton isLoading={isLoading} onClick={onShowMore} className='mt-6' />
       )}
     </ul>

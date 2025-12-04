@@ -47,7 +47,7 @@ export function useChallengesList(challengingService: ChallengingService) {
     return response.body
   }
 
-  const { data, isLoading, isRecheadedEnd, nextPage } = usePaginatedCache({
+  const { data, isLoading, isReachedEnd, nextPage } = usePaginatedCache({
     key: CACHE.keys.challengesList,
     fetcher: fetchChallengesList,
     itemsPerPage: CHALLENGES_PER_PAGE,
@@ -63,7 +63,7 @@ export function useChallengesList(challengingService: ChallengingService) {
   return {
     challenges: data.map(Challenge.create),
     isLoading,
-    isRecheadedEnd,
+    isReachedEnd,
     handleShowMore,
   }
 }
