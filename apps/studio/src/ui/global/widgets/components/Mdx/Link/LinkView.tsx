@@ -12,8 +12,19 @@ export const LinkView = ({ children, href, url }: Props) => {
   if (typeof linkDestino === 'string') {
     linkDestino = linkDestino.replace(/['"]/g, '').trim()
 
-    if (linkDestino.length > 0 && !linkDestino.startsWith('http')) {
-      linkDestino = `https://${linkDestino}`
+    // Validate URL to prevent javascript: and other malicious schemes
+    try {
+      // Use a base URL to allow parsing of relative URLs
+      const urlObj = new URL(linkDestino, 'https://example.com')
+      if (!['http:', 'https:'].includes(urlObj.protocol)) {
+        linkDestino = 'about:blank'
+      } else {
+        // Use the full href as provided (absolute or relative)
+        linkDestino = urlObj.href
+      }
+    } catch {
+      // If not a valid URL, set to about:blank
+      linkDestino = 'about:blank'
     }
   }
 
