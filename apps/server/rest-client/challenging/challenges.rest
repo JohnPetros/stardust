@@ -169,3 +169,6 @@ Content-Type: application/json
 DELETE {{URL}}/{{CHALLENGE_ID}}
 Authorization: Bearer {{JWT}}
 
+### Get posted challenges kpi
+GET {{URL}}/posted-challenges-kpi
+Authorization: Bearer {{JWT}}
