@@ -7,19 +7,19 @@ type Props = {
 }
 
 export const LinkView = ({ children, href, url }: Props) => {
-  let linkDestino = href || url || ''
+  let linkUrl = href || url || ''
 
-  if (typeof linkDestino === 'string') {
-    linkDestino = linkDestino.replace(/['"]/g, '').trim()
+  if (typeof linkUrl === 'string') {
+    linkUrl = linkUrl.replace(/['"]/g, '').trim()
 
-    if (linkDestino.length > 0 && !linkDestino.startsWith('http')) {
-      linkDestino = `https://${linkDestino}`
+    if (linkUrl.length > 0 && !linkUrl.startsWith('http')) {
+      linkUrl = `https://${linkUrl}`
     }
   }
 
   return (
     <a
-      href={linkDestino}
+      href={linkUrl}
       target='_blank'
       rel='noopener noreferrer'
       className='text-sm font-medium text-green-600'

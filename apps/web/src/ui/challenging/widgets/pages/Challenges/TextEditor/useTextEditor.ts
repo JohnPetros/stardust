@@ -370,9 +370,9 @@ export function useTextEditor(initialValue: string, onChange?: (value: string) =
   }
 
   function handleChange(value: string | undefined) {
-    if (onChange && value) {
-      onChange(value)
-      backup.current = backup.current?.save(value)
+    if (onChange) {
+      onChange(value ?? '')
+      backup.current = backup.current?.save(value ?? '')
     }
   }
 
