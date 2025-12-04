@@ -11,6 +11,7 @@ import type { ActionButtonTitles } from '@/ui/global/widgets/components/ActionBu
 import { ActionButton } from '@/ui/global/widgets/components/ActionButton'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { Button } from '@/ui/global/widgets/components/Button'
+import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { ChallengeTitleField } from './ChallengeTitleField'
 import { useChallengeEditorPage } from './useChallengeEditorPage'
 import { ChallengeFunctionField } from './ChallengeFunctionField'
@@ -18,7 +19,6 @@ import { ChallengeTestCasesField } from './ChallengeTestCasesField'
 import { ChallengeDescriptionField } from './ChallengeDescriptionField'
 import { ChallengeDifficultyLevelField } from './ChallengeDifficultyLevelField'
 import { ChallengeCategoriesField } from './ChallengeCategoriesField'
-import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 
 type Props = {
   currentChallenge: Challenge | null
@@ -67,7 +67,7 @@ export const ChallengeEditorPageView = ({
     <FormProvider {...form}>
       <form
         onSubmit={handleFormSubmit}
-        className='mx-auto max-w-5xl px-6 md:px-0 py-6 space-y-12'
+        className='mx-auto max-w-6xl px-6 md:px-0 py-6 space-y-12'
       >
         <div className='flex items-center justify-between w-full'>
           <button type='button' aria-label='Voltar' onClick={handleBackButtonClick}>
@@ -114,10 +114,7 @@ export const ChallengeEditorPageView = ({
                 }
                 shouldPlayAudio={false}
               >
-                <Button
-                  type='button'
-                  className='w-32 bg-red-500 text-white'
-                >
+                <Button type='button' className='w-32 bg-red-500 text-white'>
                   Deletar
                 </Button>
               </AlertDialog>

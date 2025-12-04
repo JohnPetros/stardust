@@ -70,11 +70,11 @@ export const ContentEditorView = ({
         />
       </Toolbar.Container>
       <div className='grid grid-cols-2 gap-3 mt-3 h-full bg-gray-800'>
-        <div className='max-h-screen overflow-auto'>
+        <div className='min-h-screen max-h-screen overflow-auto'>
           {errorMessage && (
             <p className='text-red-600 font-bold text-sm mt-3 pl-6'>{errorMessage}</p>
           )}
-          <TextEditor value={content} onChange={onChange} width='100%' height={500} />
+          <TextEditor value={content} onChange={onChange} width='100%' height='100%' />
         </div>
         <Mdx>{previewContent}</Mdx>
       </div>
