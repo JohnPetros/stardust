@@ -101,7 +101,7 @@ export function useTextEditorContextProvider(
     [textEditorRef],
   )
 
-  const insertTitlelement = useCallback(() => {
+  const insertTitleElement = useCallback(() => {
     if (!textEditorRef.current) return
 
     const cursorPosition = textEditorRef.current.getCursorPosition()
@@ -149,14 +149,14 @@ export function useTextEditorContextProvider(
           insertTagElement('User', 'Insira a fala do usuário aqui')
           break
         case 'title':
-          insertTitlelement()
+          insertTitleElement()
           break
         case 'codeLine':
           insertCodeLineElement('Insira sua linha de código aqui')
           break
       }
     },
-    [insertTagElement, insertTitlelement, insertCodeLineElement],
+    [insertTagElement, insertTitleElement, insertCodeLineElement],
   )
 
   const value = useMemo(() => {

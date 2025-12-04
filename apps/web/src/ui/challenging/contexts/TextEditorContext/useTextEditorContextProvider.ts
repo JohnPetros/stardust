@@ -7,6 +7,31 @@ import type { TextEditorRef } from './types'
 export function useTextEditorContextProvider(
   textEditorRef: RefObject<TextEditorRef | null>,
 ): TextEditorContextValue {
+  const replaceLineContentAndSelect = useCallback(
+    (
+      lineNumber: number,
+      currentLineContent: string,
+      newContent: string,
+      selectStartColumn?: number,
+      selectEndColumn?: number,
+    ) => {
+      if (!textEditorRef.current) return
+
+      textEditorRef.current.replaceContent(
+        lineNumber,
+        1,
+        currentLineContent.length + 1,
+        newContent,
+      )
+
+      const startColumn = selectStartColumn ?? 1
+      const endColumn = selectEndColumn ?? newContent.length + 1
+
+      textEditorRef.current.selectContent(lineNumber, startColumn, lineNumber, endColumn)
+    },
+    [textEditorRef],
+  )
+
   const insertTagElement = useCallback(
     (tagName: string, tagContent: string, props: string[][] = []) => {
       if (!textEditorRef.current) return
@@ -134,20 +159,10 @@ export function useTextEditorContextProvider(
       if (orderedListMatch) {
         const listContent = orderedListMatch[2]
 
-        const lineLength = textEditorRef.current.getLineLength(cursorPosition.lineNumber)
-
-        textEditorRef.current.replaceContent(
+        replaceLineContentAndSelect(
           cursorPosition.lineNumber,
-          1,
-          lineLength + 1,
+          currentLineContent,
           listContent,
-        )
-
-        textEditorRef.current?.selectContent(
-          cursorPosition.lineNumber,
-          1,
-          cursorPosition.lineNumber,
-          listContent.length + 1,
         )
         return
       }
@@ -155,20 +170,10 @@ export function useTextEditorContextProvider(
       if (unorderedListMatch) {
         const listContent = unorderedListMatch[2]
 
-        const lineLength = textEditorRef.current.getLineLength(cursorPosition.lineNumber)
-
-        textEditorRef.current.replaceContent(
+        replaceLineContentAndSelect(
           cursorPosition.lineNumber,
-          1,
-          lineLength + 1,
+          currentLineContent,
           listContent,
-        )
-
-        textEditorRef.current?.selectContent(
-          cursorPosition.lineNumber,
-          1,
-          cursorPosition.lineNumber,
-          listContent.length + 1,
         )
         return
       }
@@ -177,26 +182,19 @@ export function useTextEditorContextProvider(
       const bulletWithSpace = `${bullet} `
       const trimmedContent = currentLineContent.trim()
       const listItem = `${bulletWithSpace}${trimmedContent}`
-      const lineLength = textEditorRef.current.getLineLength(cursorPosition.lineNumber)
 
-      textEditorRef.current.replaceContent(
+      replaceLineContentAndSelect(
         cursorPosition.lineNumber,
-        1,
-        lineLength + 1,
+        currentLineContent,
         listItem,
-      )
-
-      textEditorRef.current?.selectContent(
-        cursorPosition.lineNumber,
         bulletWithSpace.length + 1,
-        cursorPosition.lineNumber,
         bulletWithSpace.length + trimmedContent.length + 1,
       )
     },
-    [textEditorRef],
+    [textEditorRef, replaceLineContentAndSelect],
   )
 
-  const insertTitlelement = useCallback(() => {
+  const insertTitleElement = useCallback(() => {
     if (!textEditorRef.current) return
 
     const cursorPosition = textEditorRef.current.getCursorPosition()
@@ -231,37 +229,21 @@ export function useTextEditorContextProvider(
 
       if (currentLevel === 6) {
         const newContent = titleContent
-        const lineLength = textEditorRef.current.getLineLength(cursorPosition.lineNumber)
 
-        textEditorRef.current.replaceContent(
+        replaceLineContentAndSelect(
           cursorPosition.lineNumber,
-          1,
-          lineLength + 1,
+          currentLineContent,
           newContent,
-        )
-
-        textEditorRef.current?.selectContent(
-          cursorPosition.lineNumber,
-          1,
-          cursorPosition.lineNumber,
-          newContent.length + 1,
         )
       } else {
         const newTitleLevel = `${currentTitleLevel}#`
         const newTitleElement = `${newTitleLevel} ${titleContent}`
-        const lineLength = textEditorRef.current.getLineLength(cursorPosition.lineNumber)
 
-        textEditorRef.current.replaceContent(
+        replaceLineContentAndSelect(
           cursorPosition.lineNumber,
-          1,
-          lineLength + 1,
+          currentLineContent,
           newTitleElement,
-        )
-
-        textEditorRef.current?.selectContent(
-          cursorPosition.lineNumber,
           newTitleLevel.length + 2,
-          cursorPosition.lineNumber,
           newTitleElement.length + 1,
         )
       }
@@ -269,23 +251,16 @@ export function useTextEditorContextProvider(
       const trimmedContent = currentLineContent.trim()
       const titleLevel = '#'
       const titleElement = `${titleLevel} ${trimmedContent}`
-      const lineLength = textEditorRef.current.getLineLength(cursorPosition.lineNumber)
 
-      textEditorRef.current.replaceContent(
+      replaceLineContentAndSelect(
         cursorPosition.lineNumber,
-        1,
-        lineLength + 1,
+        currentLineContent,
         titleElement,
-      )
-
-      textEditorRef.current?.selectContent(
-        cursorPosition.lineNumber,
         titleLevel.length + 2,
-        cursorPosition.lineNumber,
         titleLevel.length + 2 + trimmedContent.length,
       )
     }
-  }, [textEditorRef])
+  }, [textEditorRef, replaceLineContentAndSelect])
 
   const insertWidget = useCallback(
     (widget: TextEditorWidget, props: string[][] = []) => {
@@ -318,7 +293,7 @@ export function useTextEditorContextProvider(
           insertTagElement('User', 'Insira a fala do usuário aqui')
           break
         case 'title':
-          insertTitlelement()
+          insertTitleElement()
           break
         case 'codeLine':
           insertCodeLineElement('Insira sua linha de código aqui')
@@ -331,7 +306,7 @@ export function useTextEditorContextProvider(
           break
       }
     },
-    [insertTagElement, insertTitlelement, insertCodeLineElement, insertListElement],
+    [insertTagElement, insertTitleElement, insertCodeLineElement, insertListElement],
   )
 
   const value = useMemo(() => {
