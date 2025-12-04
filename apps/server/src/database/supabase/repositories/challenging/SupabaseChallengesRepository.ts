@@ -1,7 +1,7 @@
-import type { Id, Slug } from '@stardust/core/global/structures'
 import type { ChallengesRepository } from '@stardust/core/challenging/interfaces'
 import { type Challenge, ChallengeCategory } from '@stardust/core/challenging/entities'
 import type { ChallengesListParams } from '@stardust/core/challenging/types'
+import { Integer, type Id, type Month, type Slug } from '@stardust/core/global/structures'
 import { ChallengeVote } from '@stardust/core/challenging/structures'
 
 import type { Json } from '../../types/Database'
@@ -304,5 +304,19 @@ export class SupabaseChallengesRepository
     if (error) {
       throw new SupabasePostgreError(error)
     }
+  }
+
+  async countChallengesByMonth(month: Month): Promise<Integer> {
+    const { count, error } = await this.supabase
+      .from('challenges')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', month.firstDay.toISOString())
+      .lte('created_at', month.lastDay.toISOString())
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+
+    return Integer.create(count ?? 0)
   }
 }

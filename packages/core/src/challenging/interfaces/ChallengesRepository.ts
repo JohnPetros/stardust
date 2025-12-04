@@ -1,4 +1,4 @@
-import type { Id, Slug } from '#global/domain/structures/index'
+import type { Id, Integer, Month, Slug } from '#global/domain/structures/index'
 import type { Challenge, ChallengeCategory } from '../domain/entities'
 import type { ChallengeVote } from '../domain/structures'
 import type { ChallengesListParams } from '../domain/types'
@@ -19,4 +19,5 @@ export interface ChallengesRepository {
   remove(challenge: Challenge): Promise<void>
   removeVote(challengeId: Id, userId: Id): Promise<void>
   replaceVote(challengeId: Id, userId: Id, challengeVote: ChallengeVote): Promise<void>
+  countChallengesByMonth(month: Month): Promise<Integer>
 }
