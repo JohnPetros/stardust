@@ -1,6 +1,6 @@
 import type { RefObject } from 'react'
 
-import type { TextEditorWidget } from './TextEditorWdiget'
+import type { TextEditorWidget } from './TextEditorWidgetWidget'
 import type { TextEditorRef } from '@/ui/global/widgets/components/TextEditor/types'
 
 export type TextEditorContextValue = {

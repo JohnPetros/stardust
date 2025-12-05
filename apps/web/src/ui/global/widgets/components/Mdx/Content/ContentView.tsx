@@ -27,16 +27,14 @@ export const ContentView = ({ type, children, hasAnimation = false }: Props) => 
   const content = Array.isArray(children)
     ? children
         .map((child) =>
-          typeof child !== 'string'
+          typeof child !== 'string' && typeof child.props.children === 'string'
             ? `<strong class="strong">${child.props.children}</strong>`
-            : child,
+            : typeof child !== 'string' ? child.props.children : child,
         )
         .join(' ')
     : children
 
   const formattedContent = formatSpecialCharacters(String(content), 'decode')
-
-  console.log({ children })
 
   return (
     <div className={contentStyles({ type })}>

@@ -11,14 +11,14 @@ import * as CraftMetrics from '../CraftMetrics'
 type Props = {
   isLoading: boolean
   solutions: Solution[]
-  isRecheadedEnd: boolean
+  isReachedEnd: boolean
   onShowMore: () => void
 }
 
 export const SolutionsListTabView = ({
   isLoading,
   solutions,
-  isRecheadedEnd,
+  isReachedEnd,
   onShowMore,
 }: Props) => {
   if (isLoading) {
@@ -50,7 +50,7 @@ export const SolutionsListTabView = ({
           </CraftMetrics.Container>
         </Row.Container>
       ))}
-      {!isRecheadedEnd && (
+      {!isReachedEnd && (
         <ShowMoreButton isLoading={isLoading} onClick={onShowMore} className='mt-3' />
       )}
     </ul>

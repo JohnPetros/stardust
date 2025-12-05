@@ -14,3 +14,6 @@ export { AppendIsSolutionUpvotedToBodyController } from './AppendIsSolutionUpvot
 export { VerifyUserSocialAccountController } from './VerifyUserSocialAccountController'
 export { CompleteSpaceController } from './CompleteSpaceController'
 export { AcquireInsigniaController } from './AcquireInsigniaController'
+export { GetCreatedUsersKpiController } from './GetCreatedUsersKpiController'
+export { GetCompletedChallengesKpiController } from './GetCompletedChallengesKpiController'
+export { GetUnlockedStarsKpiController } from './GetUnlockedStarsKpiController'

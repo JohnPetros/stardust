@@ -29,7 +29,7 @@ export function AvatarItemView({
         className={twMerge(
           'grid grid-cols-[1fr_1.4fr] overflow-hidden rounded-md border-2',
           isSelected ? 'border-yellow-300' : 'border-transparent',
-          isAcquired || isBuyable ? 'brightness-90' : 'brightness-75',
+          isAcquired ? 'brightness-100' : 'brightness-50',
         )}
       >
         <div className='flex flex-col justify-between bg-gray-800 p-6'>

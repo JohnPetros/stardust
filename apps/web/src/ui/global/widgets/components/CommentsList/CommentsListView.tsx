@@ -26,7 +26,7 @@ type Props = {
   comments: CommentEntity[]
   sorter: CommentsListSorter
   order: ListingOrder
-  isRecheadedEnd: boolean
+  isReachedEnd: boolean
   isPopoverMenuOpen: boolean
   popoverMenuButtons: PopoverMenuButton[]
   onPopoverMenuOpenChange: (isOpen: boolean) => void
@@ -45,7 +45,7 @@ export const CommentsListView = ({
   comments,
   sorter,
   order,
-  isRecheadedEnd,
+  isReachedEnd,
   isPopoverMenuOpen,
   popoverMenuButtons,
   onPopoverMenuOpenChange,
@@ -143,7 +143,7 @@ export const CommentsListView = ({
                 )
               })}
           </ul>
-          {!isRecheadedEnd && (
+          {!isReachedEnd && (
             <ShowMoreButton
               isLoading={isLoading}
               onClick={onShowMore}

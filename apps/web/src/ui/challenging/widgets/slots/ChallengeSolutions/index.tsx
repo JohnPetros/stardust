@@ -29,7 +29,7 @@ export function ChallengeSolutionsSlot() {
   const {
     solutions,
     sorter,
-    isRecheadedEnd,
+    isReachedEnd,
     isLoading,
     isFromUser,
     solutionTitle,
@@ -143,7 +143,7 @@ export function ChallengeSolutionsSlot() {
             ))}
         </ul>
 
-        {!isRecheadedEnd && <ShowMoreButton isLoading={isLoading} onClick={nextPage} />}
+        {!isReachedEnd && <ShowMoreButton isLoading={isLoading} onClick={nextPage} />}
       </div>
     </BlockedContentAlertDialog>
   )

@@ -1,3 +1,3 @@
-import { EletricBorderView } from './EletricBorderView'
+import { ElectricBorderView } from './ElectricBorderView'
 
-export const EletricBorder = EletricBorderView
+export const ElectricBorder = ElectricBorderView

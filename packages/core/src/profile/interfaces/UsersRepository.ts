@@ -6,6 +6,8 @@ import type { Logical } from '#global/domain/structures/Logical'
 import type { Name } from '#global/domain/structures/Name'
 import type { Slug } from '#global/domain/structures/Slug'
 import type { User } from '../domain/entities'
+import type { Month } from '#global/domain/structures/Month'
+import type { Integer } from '#global/domain/structures/Integer'
 
 export interface UsersRepository {
   findById(id: Id): Promise<User | null>
@@ -34,6 +36,12 @@ export interface UsersRepository {
   addRescuableAchievement(achievementId: Id, userId: Id): Promise<void>
   removeRescuableAchievement(achievementId: Id, userId: Id): Promise<void>
   addCompletedChallenge(challengeId: Id, userId: Id): Promise<void>
+  countCompletedChallengesByMonth(month: Month): Promise<Integer>
+  countAllCompletedChallenges(): Promise<Integer>
+  countAllUnlockedStars(): Promise<Integer>
+  countUnlockedStarsByMonth(month: Month): Promise<Integer>
   replace(user: User): Promise<void>
   replaceMany(users: User[]): Promise<void>
+  countByMonth(month: Month): Promise<Integer>
+  countAll(): Promise<Integer>
 }

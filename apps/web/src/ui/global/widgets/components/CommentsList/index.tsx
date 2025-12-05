@@ -25,7 +25,7 @@ export const CommentsList = ({
     comments,
     sorter,
     order,
-    isRecheadedEnd,
+    isReachedEnd,
     isPopoverMenuOpen,
     popoverMenuButtons,
     nextPage,
@@ -50,7 +50,7 @@ export const CommentsList = ({
       sorter={sorter}
       order={order}
       isLoading={isLoading}
-      isRecheadedEnd={isRecheadedEnd}
+      isReachedEnd={isReachedEnd}
       isPopoverMenuOpen={isPopoverMenuOpen}
       popoverMenuButtons={popoverMenuButtons}
       onPopoverMenuOpenChange={handlePopoverMenuOpenChange}

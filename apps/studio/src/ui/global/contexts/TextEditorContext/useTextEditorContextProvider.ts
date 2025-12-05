@@ -1,7 +1,7 @@
 import { useCallback, useMemo, type RefObject } from 'react'
 
 import type { TextEditorContextValue } from './TextEditorContextValue'
-import type { TextEditorWidget } from './TextEditorWdiget'
+import type { TextEditorWidget } from './TextEditorWidgetWidget'
 import type { TextEditorRef } from '@/ui/global/widgets/components/TextEditor/types'
 
 export function useTextEditorContextProvider(
@@ -98,7 +98,7 @@ export function useTextEditorContextProvider(
         cursorPosition.columnNumber + 1 + content.length,
       )
     },
-    [textEditorRef],
+    [textEditorRef.current],
   )
 
   const insertTitleElement = useCallback(() => {

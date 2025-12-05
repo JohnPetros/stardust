@@ -46,7 +46,7 @@ export const ContentEditorView = ({
         <Toolbar.Button
           onClick={() => onTextEditorWidgetInsert('orderedList')}
           icon='ordered-list'
-          label='Lista numéria'
+          label='Lista numérica'
         />
         <Toolbar.Button
           onClick={() => onTextEditorWidgetInsert('unorderedList')}

@@ -1,5 +1,326 @@
 # Changelog
 
+## 0.7.0 (2025-12-04)
+
+- 🖥️ ui(web): remove unused user context in ChallengesList component for cleaner
+  code (b735d30d)
+- 🖥️ ui(web): fix formatting in TextEditorContextProvider and update placeholder
+  text for code blocks (f044cd3d)
+- 📦 deps(lsp): upgrade @designliquido/delegua to version 0.61.2 (dd3af24c)
+- 🐛 fix(web): adjust logic for acquired rocket count in useRocketItem to ensure
+  accurate comparison (a2e6dea4)
+- 🖥️ ui(web): adjust brightness levels in AvatarItemView based on acquisition
+  status for improved visual feedback (7f45439a)
+- 🖥️ ui(web): refactor ContentEditor to separate view logic into
+  ContentEditorView for improved maintainability and structure (07a6e453)
+- 🖥️ ui(web): update User entity imports to use type for InsigniaRole for
+  consistency (176a8f67)
+- 🖥️ ui(web): update imports to use old_TextEditor for compatibility in
+  CommentInput components (d6a772b9)
+- 🖥️ ui(web): add EletricBorder component with view for improved structure
+  (f7755a6b)
+- 🖥️ ui(web): refactor AnimatedBorder component to utilize AnimatedBorderView
+  for improved structure (75c49a3a)
+- 🖥️ ui(web): fix import path for TextEditor component to ensure correct
+  referencing (7817ad87)
+- 🖥️ ui(web): add ConfettiAnimation component with separate view for improved
+  structure and maintainability (e2a0f685)
+- 📶 rest(server): refactor VerifyUserInsigniaController to utilize User entity
+  for insignia validation (addfb533)
+- 🖥️ ui(web): enhance ChallengeEditor and Challenges components with improved
+  layout and context integration (df729377)
+- 🖥️ ui(web): add TextEditor component with hooks and view for enhanced text
+  editing experience (7cf58d65)
+- 🖥️ ui(web): add StarBorder component with customizable styles and animations
+  (d6c63331)
+- 🖥️ ui(web): implement TextEditorContext and related hooks for improved text
+  editor functionality (a70460a9)
+- 🖥️ ui(web): refactor TextEditor component and introduce new TextEditor hooks
+  for enhanced functionality (6e5162a1)
+- 🖥️ ui(web): introduce TextEditorView component with Monaco Editor integration
+  (5da06f0b)
+- 🖥️ ui(web): add ElectricBorder component with customizable styles and
+  animations (bf23d1aa)
+- 📶 rest(web): remove console log from handleRestError for cleaner error
+  handling (357974b3)
+- 📶 rest(web): remove console logs in NextHttp and NextRestClient for cleaner
+  output (0c194f79)
+- 📶 rest(server): remove console log for error in SupabaseAuthService to clean
+  up debugging output (4714e9ee)
+- 📶 rest(web): fix refreshAuthSession logic in handleRestError to correctly
+  handle unauthorized responses (6631a262)
+- 🖥️ ui(web): refactor to use NextRestClient and set base URL from CLIENT_ENV
+  for improved configuration (7b0c3ec1)
+- 🐛 fix(web): update import path for authActionClient and remove unused
+  accessAuthenticatedPage action (34d7966b)
+- 📶 rest(web): log error in SupabaseAuthService for improved debugging of
+  authentication issues (de3bac61)
+- 📶 rest(web): implement session refresh logic in handleRestError for improved
+  authentication handling (7cd4186c)
+- 🖥️ ui(web): update import statements for SpaceService and remove redundant
+  import (c975a04c)
+- 🖥️ ui(web): add 'use client' directive to useRest hook for client-side
+  rendering (e11471de)
+- 🖥️ ui(web): rename variable for clarity in handleFormSubmit function
+  (eb5ce182)
+- 📶 rest(web): enhance error handling in NextRestClient and remove
+  isAuthenticated from config (60e0060a)
+- 📶 rest(web): update NextHttp to await params and modify cookie deletion logic
+  (eaa14f60)
+- 📟 rpc(web): update import for authActionClient in lessonActions (623493ad)
+- 📟 rpc(web): remove unused action client exports from next-safe-action
+  (54c1f375)
+- 📟 rpc(web): refactor cookieActions to await getCookie call (367a5d86)
+- 🖥️ ui(web): update import path for BlurText component in
+  UserCreationPendingMessageView (d5516829)
+- 🖥️ ui(web): add BlurText component with animation capabilities for text
+  blurring effects (58383391)
+- 🖥️ ui(web): update tooltip logic in ChallengeInfoView (89c64b94)
+- 🖥️ ui(web): update tooltip text in ChallengeInfoView for clarity on acceptance
+  rate description (a528756b)
+- ⚙️ config(lsp): upgrade @designliquido/delegua dependency to version 0.61.0
+  (b18836f9)
+- 🖥️ ui(web): refactor Page component to include isAuthenticated parameter in
+  NextServerRestClient initialization (92531117)
+- 🖥️ ui(web): refactor ChallengesPageView to remove isChallengePostingEnabled
+  prop (0eeb50e3)
+- 🖥️ ui(web): enhance ChallengeCard component to include user authentication
+  handling and completion status (aae20db4)
+- 🖥️ ui(web): update useRest hook to conditionally set Authorization header
+  based on isAuthenticated parameter (5d323920)
+- 🖥️ ui(web): add BackPageLink and BackPageLinkView components to provide
+  navigation back to the space page for authenticated users (0b6099dd)
+- 🖥️ ui(web): update ChallengesListView to handle completedChallengesIds as an
+  array and improve user authentication handling (71d2b932)
+- 🖥️ ui(web): add isAccountAuthenticated prop to ChallengesFiltersView and
+  conditionally render completion status filter based on authentication status
+  (16aeb810)
+- 🖥️ ui(web): add PostChallengeLink and PostChallengeLinkView components to
+  enable users with engineer role to create challenges (7ebd84c9)
+- 🖥️ ui(web): introduce ChallengeInfoView component to enhance challenge
+  information display and refactor ChallengeInfo for improved structure
+  (aed8732e)
+- ♻️ refactor(web): remove duplicate imports of ChallengingService and
+  SpaceService in challengingActions.ts (4db8b787)
+- 📶 rest(web): add isAuthenticated flag to NextRestClientConfig and
+  conditionally set Authorization header (c4fc0619)
+- ⚙️ config(server): modify challenges API to change items per page from 20 to
+  10 and remove redundant Authorization headers (5dfa6d0e)
+- 📶 rest(server): add null check for account in
+  AppendUserCompletedChallengesIdsToBodyController to prevent processing without
+  a valid account (a49f8036)
+- 🧪 test: add unit tests for ListChallengesUseCase to validate challenge
+  listing and filtering logic (05c4a511)
+- ✨ use case: add null check for userId in ListChallengesUseCase to return
+  challenges without filtering (48ef6830)
+- ⚙️ config: modify challenges REST API to change itemsPerPage from 20 to 10 and
+  remove redundant Authorization headers (a2dcce7e)
+- ⚙️ config(web): refactor Page component to include isAuthenticated parameter
+  in NextServerRestClient and update export syntax (2b6417ff)
+- 🧪 test: add unit tests for ListChallengesUseCase to validate challenge
+  listing and filtering logic (0c91de80)
+- ✨ use case: handle null userId in ListChallengesUseCase to return challenges
+  without filtering (5a72ba7c)
+- 🖥️ ui(web): enhance ChallengeCard component to include user authentication
+  context and manage challenge completion status (a121dbd3)
+- 🖥️ ui(web): refactor ChallengesPageView to remove isChallengePostingEnabled
+  prop and integrate BackPageLink and PostChallengeLink components (51a1fe8b)
+- 🖥️ ui(web): implement ChallengeInfoView component for improved challenge
+  information display and refactor ChallengeInfo to utilize it (a11d9422)
+- 🖥️ ui(web): update ChallengesListView to handle completedChallengesIds as an
+  array and improve user challenge completion status handling (5c53bb0f)
+- 🖥️ ui(web): add isAccountAuthenticated prop to ChallengesFiltersView for
+  conditional rendering of completion status filter (74010a91)
+- 🖥️ ui(web): clean up imports in challengingActions.ts by removing duplicates
+  and organizing service imports (a4a4b570)
+- 🖥️ ui(web): update useRest hook to include isAuthenticated parameter for
+  conditional authorization header (8800ec12)
+- 🖥️ ui(web): add PostChallengeLink and PostChallengeLinkView components for
+  user challenge creation (801d2a2c)
+- 🖥️ ui(web): add BackPageLink component with navigation to the space route
+  (e5e9d4fb)
+- ⚙️ config(web): add isAuthenticated flag to NextRestClientConfig and update
+  authorization header logic (2f4bf14f)
+- ♻️ refactor(server): remove authentication middleware from fetch all challenge
+  categories route (e8e039c2)
+- 🖥️ ui(web): correct typo in ShopButtonView from 'Aquirido' to 'Adquirido' and
+  remove unused fetchInsigniasList method from ShopService interface (07e61530)
+- 🖥️ ui(web): refactor InsigniasList components and introduce InsigniasListView
+  for improved structure and naming consistency (67ea659e)
+- 🧪 test: update test case to reflect error thrown when user is not found in
+  VerifyUserInsigniaUseCase (c76a7093)
+- ♻️ refactor: replace `VerifyUserInsigniaUseCase` with `GetUserUseCase` and
+  throw `InsigniaNotIncludedError` if the user has the specified insignia
+  (72bfadfb)
+- 🖥️ ui(web): refactor ShopPage component into ShopPageView for improved
+  structure and readability (47d64d15)
+- 🖥️ ui(web): refactor InsigniasList and InsigniaItem components to simplify
+  props and enhance functionality (40a9432a)
+- 🖥️ ui(web): update ShopButton and ShopButtonView to allow isSelected prop to
+  be nullable (cb686892)
+- 🖥️ ui(web): add 'insignias' storage folder type to useImage hook (71766531)
+- 🖥️ ui(web): add challenge posting capability to ChallengesPageView based on
+  user role (e63a8b56)
+- 📶 rest(web): implement VerifyUserInsigniaController and add insignia
+  acquisition method to ProfileService (427a418c)
+- 🧪 test: add unit test for verifying user insignia presence in User entity
+  (cb4e8ce8)
+- 🌐 domain: enhance User entity with insignia role management methods
+  (5d0f6325)
+- 🌐 domain: add InsigniaNotIncludedError for better error handling in insignia
+  operations (c18af869)
+- 📑 interface: add AudioProvider interface for audio playback functionality
+  (b805aaf1)
+- 🪨 constants: add AUDIO_FILES constant for audio assets (e8ea0530)
+- 🧪 test: add unit tests for VerifyUserInsigniaUseCase to validate user
+  insignia roles (ec83987f)
+- ✨ use case: add VerifyUserInsigniaUseCase to validate user insignia roles
+  (988ada95)
+- 🖥️ ui(web): add shop insignias route to cache and update ShopPage to use
+  ShopPageView (e1c874a5)
+- 🖥️ ui(web): introduce paginated insignias list to shop UI with search and
+  price ordering (3c867355)
+- 🌐 domain: make AppError properties public again (c1e3f6b7)
+- ♻️ refactor(server): remove useless schemas from InsigniasRouter (9bf10848)
+- 🌐 domain: throw NotEnoughCoinsError if the user do not have enough coins for
+  insignia acquisition (838e7b34)
+- 🌐 domain: add NotEnoughCoinsError (73e8c5c0)
+- 💾 db(server): standardize string quotes in Database.ts to single quotes for
+  consistency (0d9a06fd)
+- ⚙️ config(server): add route for acquiring insignias in UsersRouter,
+  integrating validation and controller handling (07151ea7)
+- 💾 db(server): update SupabaseUserMapper and SupabaseUsersRepository to
+  include insignia roles (9ffd1733)
+- 💾 db(server): implement addAcquiredInsignia method in SupabaseUsersRepository
+  to handle insignia acquisition for users (2dd63599)
+- 🌐 domain: add static method createAsEngineer to InsigniaRole for easier role
+  instantiation (28df1a47)
+- ⚙️ config(server): add InsigniasRouter to handle insignia-related requests,
+  including fetching insignia lists (3a0bd756)
+- 🧪 test: add unit tests for AcquireInsigniaUseCase, covering user not found
+  error, insignia acquisition, and repository updates (9fc5ad73)
+- 🧪 test: add unit tests for insignia acquisition logic in User entity,
+  including error handling for already acquired insignias (cd7f7e2c)
+- 🌐 domain: add insigniaRoles getter to User entity for improved insignia role
+  access (812e7a35)
+- ✨ use case: refactor AcquireAvatarUseCase and AcquireRocketUseCase to
+  introduce AvatarAggregateEntity types (178547f8)
+- 📶 rest(server): add AcquireInsigniaController to handle insignia acquisition
+  requests and integrate with the AcquireInsigniaUseCase (3dfcf127)
+- ✨ use case: implement AcquireInsigniaUseCase for managing insignia
+  acquisition, including user validation and repository interaction (cf42fbbe)
+- 🌐 domain: introduce InsigniaRole class and integrate into User entity,
+  updating related DTO and factory for insignia management (a4e099e5)
+- 🌐 domain: add InsigniaAlreadyAcquiredError class and update exports in index
+  file (40ce660c)
+- 💾 db(server): implement Insignia mapping and repository, update database
+  types and exports (65bb78cc)
+- 📮 validation: add insigniaRoleSchema for role validation and update exports
+  in index file (b0e2e6a2)
+- 🌐 domain: add Insignia class and DTO, update exports in index files
+  (0b4dd604)
+- 📶 rest(server): add FetchInsigniasListController to retrieve insignias and
+  update index export (8408615a)
+- ⚙️ config(server): remove Authorization header from comments REST API for
+  improved security and compliance (d8cfb3ef)
+- 🖥️ ui(web): integrate user authentication state into ChallengePage and
+  useChallengePage for enhanced user experience (bf9684e4)
+- 🖥️ ui(web): remove console log from useAuthContextProvider for cleaner code
+  (8c120adf)
+- 🖥️ ui(web): enhance CommentsList components with account authentication
+  handling and UI updates (f7d23bdd)
+- 🖥️ ui(web): integrate useAuthContext in CommentRepliesButton to manage
+  authenticated user state (84d72d13)
+- 🖥️ ui(web): integrate isAccountAuthenticated state into UpvoteCommentButton
+  for enhanced user interaction (70b88644)
+- 🖥️ ui(web): add isAccountAuthenticated prop to CommentRepliesButtonView for
+  handling authenticated user state (fa6dfa40)
+- 🖥️ ui(web): clean up console logs and fix minor typos in Challenge components
+  for improved readability (cb3bfae6)
+- 🖥️ ui(web): refactor Challenge components to improve structure and add account
+  requirement handling in voting and result slots (dda8f658)
+- 🖥️ ui(web): rename AuthProvider to AuthContextProvider and update related hook
+  usage for improved clarity (c9bccf3e)
+- 🖥️ ui(web): remove unused useNavigationProvider import and reorganize ROUTES
+  import in Snippet components (3a573cad)
+- 🖥️ ui(web): add AccountRequirementAlertDialog component for handling account
+  requirement alerts with navigation support (4c437c0d)
+- 🖥️ ui(web): add useAuthContextProvider hook for managing authentication state
+  and user interactions (c8902e57)
+- 📶 rest(web): update public route handling in VerifyAuthRoutesController to
+  include new playground snippets and route groups (8ea7aa45)
+- 📟 rpc(web): enhance user authentication handling in AccessChallenge actions
+  and improve challenge vote fetching logic (0405d118)
+- ♻️ refactor(server): replace zValidator with ValidationMiddleware in
+  CommentsRouter and update context parameter in ValidationMiddleware (c05f21d5)
+- 🗃️ ftree(web): move challenging filtes in the app folder out of the (home)
+  folder (8ad13e4a)
+- 🐛 fix(web): correct typo in delete confirmation messages and remove console
+  log in useChallengeEditorPage (5acf709a)
+- 📦 deps(lsp): upgrade @designliquido/delegua dependency from 0.57.1 to 0.59.0
+  in package.json and package-lock.json (d9ac6df9)
+- 🐛 fix(web): update ChallengeTitleField to use challengingService directly and
+  improve deleteChallenge logic in useChallengeControl (30d54b0a)
+- 🐛 fix(web): update Checkbox onChange handler and remove unused position
+  variable in ChallengeTestCasesField (19e879d2)
+- 🐛 fix(web): correct state variable naming and enhance error message handling
+  in ChallengeEditorPage (451ac950)
+- ♻️ refactor(web): rename Checkbox component import and update onChange handler
+  for improved readability (ec92d347)
+- 🐛 fix(web): improve challenge title validation logic and error handling in
+  useChallengeTitleField hook (c2ea1c3e)
+- 🐛 fix: enhance fetchChallenge function to handle errors and improve request
+  handling in AccessChallengeEditorPage (1d2f04ff)
+- 🐛 fix: update accessChallengeEditorPage action to include user context for
+  improved request handling (99f8300a)
+- 🖥️ ui(web): integrate toast notifications and enhance delete confirmation
+  dialog in ChallengeEditorPageView (967a173c)
+- 🖥️ ui(web): enhance ChallengeEditorPage with error handling, delete
+  confirmation dialog, and toast notifications (14b493c9)
+- 🖥️ ui(web): implement ChallengeEditorPage and ChallengeEditorPageView
+  components for challenge creation and editing (b9c81197)
+- ⚙️ config: update tsconfig.tsbuildinfo to reflect changes in TypeScript
+  library references (a8de0875)
+- ♻️ refactor: remove EditChallengeAction and PostChallengeAction along with
+  related hooks and imports (95d1fd15)
+- 📶 rest(server): implement postChallenge method in ChallengingService for
+  challenge creation (e6cdf593)
+- 📮 validation: create challengeFormSchema to define structure for challenge
+  form submissions (424840e6)
+- 📮 validation: add challengeCategoriesSchema to define structure for challenge
+  categories (9332c514)
+- ♻️ refactor: remove unnecessary console logs and fix challenge category
+  deletion query in SupabaseChallengesRepository (65d5462f)
+- 🌐 domain: add 'all' difficulty level to ChallengeDifficulty and update type
+  definition (6b1e7330)
+- 📮 validation: update challengeSchema to include author, position, and new
+  categories/difficulty level schemas (12dc9c4e)
+- ⚙️ config(server): enhance ChallengesRouter with new routes for challenge
+  creation, update, and deletion (1cdb0771)
+- 📶 rest(server): add PostChallengeController to handle challenge creation
+  requests (239d839c)
+- 📶 rest(server): add UpdateChallengeController to handle challenge update
+  requests (c4771755)
+- 📶 rest(server): add DeleteChallengeController to handle challenge deletion
+  requests (33e8e51a)
+- 🧪 test: add unit tests for PostChallengeUseCase to validate challenge
+  creation and error handling (368a4faf)
+- 🧪 test: add unit tests for UpdateChallengeUseCase to validate error handling
+  and challenge replacement (95243704)
+- 🧪 test: add unit tests for DeleteChallengeUseCase to verify error handling
+  and challenge removal (3b735762)
+- ✨ use case: implement DeleteChallengeUseCase for removing challenges with
+  error handling for non-existent challenges (52b67cd4)
+- ✨ use case: implement UpdateChallengeUseCase for updating challenges with
+  validation for existing titles and slugs (a01882f4)
+- ♻️ refactor: replace ChallengingService with ChallengesRepository in
+  PostChallengeUseCase for improved challenge management (e5002e6e)
+- 💾 db(server): implement add, replace, and remove methods for Challenge
+  management in SupabaseChallengesRepository (54c07866)
+- 🌐 domain: add hasSameTitle method to Challenge entity and log categories in
+  ChallengeFactory (9af75471)
+- 🌐 domain: add ChallengeAlreadyExistsError for conflict handling (365c59de)
+
 ## 0.6.0 (2025-11-10)
 
 - ⚙️ config(web): update layout components to utilize Stardust metadata
