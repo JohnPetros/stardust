@@ -40,6 +40,10 @@ export class Kpi {
     return this.currentMonthValue.isLessThan(this.previousMonthValue)
   }
 
+  get hasNoTrend(): Logical {
+    return this.isTrendingDown.notAndNot(this.isTrendingUp)
+  }
+
   get dto(): KpiDto {
     return {
       value: this.value.value,

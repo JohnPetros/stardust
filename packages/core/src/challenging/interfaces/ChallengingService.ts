@@ -12,6 +12,7 @@ import type { SolutionsListingParams } from '../domain/types'
 import type { PaginationResponse, RestResponse } from '#global/responses/index'
 import type { Id, Slug, Text } from '#global/domain/structures/index'
 import type { ChallengeVote } from '../domain/structures'
+import type { KpiDto } from '#global/domain/structures/dtos/KpiDto'
 
 export interface ChallengingService {
   fetchChallengeById(challengeId: Id): Promise<RestResponse<ChallengeDto>>
@@ -30,6 +31,7 @@ export interface ChallengingService {
   ): Promise<RestResponse<PaginationResponse<SolutionDto>>>
   fetchAllChallengeCategories(): Promise<RestResponse<ChallengeCategoryDto[]>>
   fetchChallengeVote(challengeId: Id): Promise<RestResponse<{ challengeVote: string }>>
+  fetchPostedChallengesKpi(): Promise<RestResponse<KpiDto>>
   voteChallenge(
     challengeId: Id,
     challengeVote: ChallengeVote,
@@ -48,7 +50,6 @@ export interface ChallengingService {
     solutionTitle: Text,
     solutionContent: Text,
   ): Promise<RestResponse<SolutionDto>>
-  updateChallenge(challenge: Challenge): Promise<RestResponse>
   upvoteSolution(solutionId: Id): Promise<RestResponse<{ upvotesCount: number }>>
   deleteSolution(solutionId: Id): Promise<RestResponse>
   deleteChallengeCategories(challengeId: Id): Promise<RestResponse>

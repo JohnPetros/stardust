@@ -4,12 +4,16 @@ import type { AuthService } from '@stardust/core/auth/interfaces'
 import type { SpaceService } from '@stardust/core/space/interfaces'
 import type { StorageService } from '@stardust/core/storage/interfaces'
 import type { LessonService } from '@stardust/core/lesson/interfaces'
+import type { ProfileService } from '@stardust/core/profile/interfaces'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 
 type RestContext = {
   authService: AuthService
   spaceService: SpaceService
   storageService: StorageService
   lessonService: LessonService
+  profileService: ProfileService
+  challengingService: ChallengingService
 }
 
 export const restContext = createContext<RestContext>()

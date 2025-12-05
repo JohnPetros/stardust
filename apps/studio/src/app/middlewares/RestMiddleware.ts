@@ -3,7 +3,14 @@ import { HTTP_HEADERS } from '@stardust/core/global/constants'
 
 import { ENV, ROUTES } from '@/constants'
 import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
-import { AuthService, SpaceService, StorageService, LessonService } from '@/rest/services'
+import {
+  AuthService,
+  SpaceService,
+  StorageService,
+  LessonService,
+  ProfileService,
+  ChallengingService,
+} from '@/rest/services'
 import { authContext } from '../contexts/AuthContext'
 import { restContext } from '../contexts/RestContext'
 import { redirect } from 'react-router'
@@ -29,11 +36,15 @@ export const RestMiddleware = async ({ context }: Route.ActionArgs) => {
   const spaceService = SpaceService(restClient)
   const storageService = StorageService(restClient)
   const lessonService = LessonService(restClient)
+  const profileService = ProfileService(restClient)
+  const challengingService = ChallengingService(restClient)
 
   context.set(restContext, {
     authService,
     spaceService,
     storageService,
     lessonService,
+    profileService,
+    challengingService,
   })
 }

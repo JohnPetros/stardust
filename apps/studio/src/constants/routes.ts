@@ -2,6 +2,7 @@ import type { Slug } from '@stardust/core/global/structures'
 
 export const ROUTES = {
   index: '/',
+  dashboard: '/dashboard',
   profile: {
     users: '/profile/users',
     achievements: '/profile/achievements',

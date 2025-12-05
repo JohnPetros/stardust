@@ -24,9 +24,9 @@ import {
   RewardUserForChallengeCompletionController,
   UpvoteCommentController,
   AcquireInsigniaController,
-  GetCreatedUsersKpiController,
-  GetCompletedChallengesKpiController,
-  GetUnlockedStarsKpiController,
+  FetchCreatedUsersKpiController,
+  FetchCompletedChallengesKpiController,
+  FetchUnlockedStarsKpiController,
 } from '@/rest/controllers/profile'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
@@ -319,42 +319,42 @@ export class UsersRouter extends HonoRouter {
     )
   }
 
-  private registerGetCreatedUsersKpiRoute() {
+  private registerFetchCreatedUsersKpiRoute() {
     this.router.get(
       '/created-users-kpi',
       this.authMiddleware.verifyAuthentication,
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseUsersRepository(http.getSupabase())
-        const controller = new GetCreatedUsersKpiController(repository)
+        const controller = new FetchCreatedUsersKpiController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
     )
   }
 
-  private registerGetCompletedChallengesKpiRoute() {
+  private registerFetchCompletedChallengesKpiRoute() {
     this.router.get(
       '/completed-challenges-kpi',
       this.authMiddleware.verifyAuthentication,
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseUsersRepository(http.getSupabase())
-        const controller = new GetCompletedChallengesKpiController(repository)
+        const controller = new FetchCompletedChallengesKpiController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
     )
   }
 
-  private registerGetUnlockedStarsKpiRoute() {
+  private registerFetchUnlockedStarsKpiRoute() {
     this.router.get(
       '/unlocked-stars-kpi',
       this.authMiddleware.verifyAuthentication,
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseUsersRepository(http.getSupabase())
-        const controller = new GetUnlockedStarsKpiController(repository)
+        const controller = new FetchUnlockedStarsKpiController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -374,9 +374,9 @@ export class UsersRouter extends HonoRouter {
     this.registerUpvoteCommentRoute()
     this.registerVerifyUserNameInUseRoute()
     this.registerVerifyUserEmailInUseRoute()
-    this.registerGetCreatedUsersKpiRoute()
-    this.registerGetCompletedChallengesKpiRoute()
-    this.registerGetUnlockedStarsKpiRoute()
+    this.registerFetchCreatedUsersKpiRoute()
+    this.registerFetchCompletedChallengesKpiRoute()
+    this.registerFetchUnlockedStarsKpiRoute()
     return this.router
   }
 }

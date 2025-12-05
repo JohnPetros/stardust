@@ -73,4 +73,12 @@ describe('Kpi Structure', () => {
     kpi = Kpi.create({ value: 90, currentMonthValue: 90, previousMonthValue: 100 })
     expect(kpi.isTrendingDown.isTrue).toBeTruthy()
   })
+
+  it('should determine if it has no trend', () => {
+    let kpi = Kpi.create({ value: 100, currentMonthValue: 100, previousMonthValue: 90 })
+    expect(kpi.hasNoTrend.isFalse).toBeTruthy()
+
+    kpi = Kpi.create({ value: 90, currentMonthValue: 90, previousMonthValue: 90 })
+    expect(kpi.hasNoTrend.isTrue).toBeTruthy()
+  })
 })
