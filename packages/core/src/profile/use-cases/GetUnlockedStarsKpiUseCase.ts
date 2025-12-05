@@ -10,14 +10,17 @@ export class GetUnlockedStarsKpiUseCase implements UseCase<void, Promise<KpiDto>
   async execute() {
     const currentMonth = Month.create()
     const previousMonth = currentMonth.previousMonth
-    const [currentMonthUnlockedStars, previousMonthUnlockedStars] = await Promise.all([
-      this.repository.countUnlockedStarsByMonth(currentMonth),
-      this.repository.countUnlockedStarsByMonth(previousMonth),
-    ])
-    const kpi = Kpi.create(
-      currentMonthUnlockedStars.value,
-      previousMonthUnlockedStars.value,
-    )
+    const [allUnlockedStars, currentMonthUnlockedStars, previousMonthUnlockedStars] =
+      await Promise.all([
+        this.repository.countAllUnlockedStars(),
+        this.repository.countUnlockedStarsByMonth(currentMonth),
+        this.repository.countUnlockedStarsByMonth(previousMonth),
+      ])
+    const kpi = Kpi.create({
+      value: allUnlockedStars.value,
+      currentMonthValue: currentMonthUnlockedStars.value,
+      previousMonthValue: previousMonthUnlockedStars.value,
+    })
     return kpi.dto
   }
 }
