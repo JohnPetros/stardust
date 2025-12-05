@@ -15,7 +15,7 @@ export const KpiCardView = ({ title, kpi }: Props) => {
         <h2 className='text-sm text-zinc-400'>{title}</h2>
        <Tooltip content='Porcentagem de variação do mês atual em relação ao mês anterior'>
           <Badge variant="outline" className='border-zinc-700'>
-            <Icon name={kpi.isTrendingUp.isTrue ? 'trending-up' : 'trending-down'} />
+            <Icon name={kpi.isTrendingUp.isTrue ? 'trending-up' : kpi.isTrendingDown.isTrue ? 'trending-down' : 'minus'} />
             {kpi.trendPercentage.value}%
           </Badge>
        </Tooltip>
@@ -42,7 +42,7 @@ export const KpiCardView = ({ title, kpi }: Props) => {
           {kpi.hasNoTrend.isTrue && (
           <span className='flex items-center gap-2 text-md font-bold text-zinc-50'>
             Nenhuma alteração desde o mês anterior
-            <Icon name='trending-down' size={16} />
+            <Icon name='minus' size={16} />
           </span>
         )}
       </div>
