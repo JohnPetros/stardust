@@ -12,6 +12,7 @@ export type IconName =
   | 'user'
   | 'trending-up'
   | 'trending-down'
+  | 'minus'
   | 'image'
   | 'spinner'
   | 'star'

@@ -26,6 +26,7 @@ import {
   Upload,
   Image,
   Trash,
+  Minus,
   Check,
   type LucideIcon,
 } from 'lucide-react'
@@ -38,6 +39,7 @@ export const ICONS: Record<IconName, LucideIcon> = {
   'sign-out': LogOut,
   'trending-up': TrendingUp,
   'trending-down': TrendingDown,
+  minus: Minus,
   image: Image,
   user: User,
   achievement: Flag,
