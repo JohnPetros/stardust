@@ -5,37 +5,46 @@ import type { KpiDto } from './dtos'
 
 export class Kpi {
   private constructor(
-    readonly currentValue: Integer,
-    readonly previousValue: Integer,
+    readonly value: Integer,
+    readonly currentMonthValue: Integer,
+    readonly previousMonthValue: Integer,
   ) {}
 
-  static create(currentValue: number, previousValue: number) {
-    return new Kpi(Integer.create(currentValue), Integer.create(previousValue))
+  static create(dto: KpiDto) {
+    return new Kpi(
+      Integer.create(dto.value),
+      Integer.create(dto.currentMonthValue),
+      Integer.create(dto.previousMonthValue),
+    )
   }
 
   get trendPercentage(): Percentage {
-    if (this.currentValue.isEqualTo(this.previousValue).isTrue) {
+    if (this.currentMonthValue.isEqualTo(this.previousMonthValue).isTrue) {
       return Percentage.create(0, 0)
     }
 
-    if (this.currentValue.isGreaterThan(this.previousValue).isTrue) {
-      return Percentage.create(this.previousValue.value, this.currentValue.value)
+    if (this.currentMonthValue.isGreaterThan(this.previousMonthValue).isTrue) {
+      return Percentage.create(
+        this.previousMonthValue.value,
+        this.currentMonthValue.value,
+      )
     }
-    return Percentage.create(this.currentValue.value, this.previousValue.value)
+    return Percentage.create(this.currentMonthValue.value, this.previousMonthValue.value)
   }
 
   get isTrendingUp(): Logical {
-    return this.currentValue.isGreaterThan(this.previousValue)
+    return this.currentMonthValue.isGreaterThan(this.previousMonthValue)
   }
 
   get isTrendingDown(): Logical {
-    return this.currentValue.isLessThan(this.previousValue)
+    return this.currentMonthValue.isLessThan(this.previousMonthValue)
   }
 
   get dto(): KpiDto {
     return {
-      currentValue: this.currentValue.value,
-      previousValue: this.previousValue.value,
+      value: this.value.value,
+      currentMonthValue: this.currentMonthValue.value,
+      previousMonthValue: this.previousMonthValue.value,
     }
   }
 }

@@ -1,4 +1,5 @@
 export type KpiDto = {
-  currentValue: number
-  previousValue: number
+  value: number
+  currentMonthValue: number
+  previousMonthValue: number
 }
