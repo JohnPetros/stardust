@@ -19,5 +19,6 @@ export interface ChallengesRepository {
   remove(challenge: Challenge): Promise<void>
   removeVote(challengeId: Id, userId: Id): Promise<void>
   replaceVote(challengeId: Id, userId: Id, challengeVote: ChallengeVote): Promise<void>
-  countChallengesByMonth(month: Month): Promise<Integer>
+  countAll(): Promise<Integer>
+  countByMonth(month: Month): Promise<Integer>
 }

@@ -306,7 +306,17 @@ export class SupabaseChallengesRepository
     }
   }
 
-  async countChallengesByMonth(month: Month): Promise<Integer> {
+  async countAll(): Promise<Integer> {
+    const { count, error } = await this.supabase
+      .from('challenges')
+      .select('*', { count: 'exact', head: true })
+
+    if (error) throw new SupabasePostgreError(error)
+
+    return Integer.create(count ?? 0)
+  }
+
+  async countByMonth(month: Month): Promise<Integer> {
     const { count, error } = await this.supabase
       .from('challenges')
       .select('*', { count: 'exact', head: true })
