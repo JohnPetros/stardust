@@ -42,6 +42,18 @@ export class DayJsDatetime implements Datetime {
     return this.dayjs.fromNow()
   }
 
+  minusMonths(months: number): Date {
+    return this.dayjs.subtract(months, 'month').toDate()
+  }
+
+  firstDayOfMonth(): Date {
+    return this.dayjs.startOf('month').toDate()
+  }
+
+  lastDayOfMonth(): Date {
+    return this.dayjs.endOf('month').toDate()
+  }
+
   date(): Date {
     return this.dayjs.toDate()
   }

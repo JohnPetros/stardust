@@ -288,6 +288,7 @@ export type Database = {
           created_at: string
           expires_at: string
           id: string
+          nonce: string | null
           redirect_uri: string
           resource: string | null
           response_type: Database['auth']['Enums']['oauth_response_type']
@@ -308,6 +309,7 @@ export type Database = {
           created_at?: string
           expires_at?: string
           id: string
+          nonce?: string | null
           redirect_uri: string
           resource?: string | null
           response_type?: Database['auth']['Enums']['oauth_response_type']
@@ -328,6 +330,7 @@ export type Database = {
           created_at?: string
           expires_at?: string
           id?: string
+          nonce?: string | null
           redirect_uri?: string
           resource?: string | null
           response_type?: Database['auth']['Enums']['oauth_response_type']
@@ -638,6 +641,7 @@ export type Database = {
           refresh_token_counter: number | null
           refresh_token_hmac_key: string | null
           refreshed_at: string | null
+          scopes: string | null
           tag: string | null
           updated_at: string | null
           user_agent: string | null
@@ -654,6 +658,7 @@ export type Database = {
           refresh_token_counter?: number | null
           refresh_token_hmac_key?: string | null
           refreshed_at?: string | null
+          scopes?: string | null
           tag?: string | null
           updated_at?: string | null
           user_agent?: string | null
@@ -670,6 +675,7 @@ export type Database = {
           refresh_token_counter?: number | null
           refresh_token_hmac_key?: string | null
           refreshed_at?: string | null
+          scopes?: string | null
           tag?: string | null
           updated_at?: string | null
           user_agent?: string | null
@@ -2234,14 +2240,17 @@ export type Database = {
       users_completed_challenges: {
         Row: {
           challenge_id: string
+          created_at: string | null
           user_id: string
         }
         Insert: {
           challenge_id: string
+          created_at?: string | null
           user_id: string
         }
         Update: {
           challenge_id?: string
+          created_at?: string | null
           user_id?: string
         }
         Relationships: [
@@ -2451,16 +2460,19 @@ export type Database = {
       }
       users_unlocked_stars: {
         Row: {
+          created_at: string | null
           id: string
           star_id: string
           user_id: string
         }
         Insert: {
+          created_at?: string | null
           id?: string
           star_id: string
           user_id: string
         }
         Update: {
+          created_at?: string | null
           id?: string
           star_id?: string
           user_id?: string
@@ -3050,7 +3062,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_11_14: {
+      messages_2025_12_01: {
         Row: {
           event: string | null
           extension: string
@@ -3083,7 +3095,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_11_15: {
+      messages_2025_12_02: {
         Row: {
           event: string | null
           extension: string
@@ -3116,7 +3128,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_11_16: {
+      messages_2025_12_03: {
         Row: {
           event: string | null
           extension: string
@@ -3149,7 +3161,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_11_17: {
+      messages_2025_12_04: {
         Row: {
           event: string | null
           extension: string
@@ -3182,7 +3194,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_11_18: {
+      messages_2025_12_05: {
         Row: {
           event: string | null
           extension: string
@@ -3215,7 +3227,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_11_19: {
+      messages_2025_12_06: {
         Row: {
           event: string | null
           extension: string
@@ -3248,7 +3260,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_11_20: {
+      messages_2025_12_07: {
         Row: {
           event: string | null
           extension: string

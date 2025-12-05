@@ -4,8 +4,10 @@ import {
   type Name,
   type Slug,
   type InsigniaRole,
+  type Month,
   IdsList,
   Logical,
+  Integer,
 } from '@stardust/core/global/structures'
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
 import type { User } from '@stardust/core/profile/entities'
@@ -521,5 +523,71 @@ export class SupabaseUsersRepository
     }
 
     await Promise.all(promises)
+  }
+
+  async countAll(): Promise<Integer> {
+    const { count, error } = await this.supabase
+      .from('users')
+      .select('*', { count: 'exact', head: true })
+
+    if (error) throw new SupabasePostgreError(error)
+
+    return Integer.create(count ?? 0)
+  }
+
+  async countByMonth(month: Month): Promise<Integer> {
+    const { count, error } = await this.supabase
+      .from('users')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', month.firstDay.toISOString())
+      .lte('created_at', month.lastDay.toISOString())
+
+    if (error) throw new SupabasePostgreError(error)
+
+    return Integer.create(count ?? 0)
+  }
+
+  async countAllCompletedChallenges(): Promise<Integer> {
+    const { count, error } = await this.supabase
+      .from('users_completed_challenges')
+      .select('*', { count: 'exact', head: true })
+
+    if (error) throw new SupabasePostgreError(error)
+
+    return Integer.create(count ?? 0)
+  }
+
+  async countCompletedChallengesByMonth(month: Month): Promise<Integer> {
+    const { count, error } = await this.supabase
+      .from('users_completed_challenges')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', month.firstDay.toISOString())
+      .lte('created_at', month.lastDay.toISOString())
+
+    if (error) throw new SupabasePostgreError(error)
+
+    return Integer.create(count ?? 0)
+  }
+
+  async countAllUnlockedStars(): Promise<Integer> {
+    const { count, error } = await this.supabase
+      .from('users_unlocked_stars')
+      .select('*', { count: 'exact', head: true })
+
+    if (error) throw new SupabasePostgreError(error)
+
+    return Integer.create(count ?? 0)
+  }
+
+  async countUnlockedStarsByMonth(month: Month): Promise<Integer> {
+    const { count, error } = await this.supabase
+      .from('users_unlocked_stars')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', month.firstDay.toISOString())
+      .lte('created_at', month.lastDay.toISOString())
+
+    if (error) throw new SupabasePostgreError(error)
+
+    return Integer.create(count ?? 0)
   }
 }

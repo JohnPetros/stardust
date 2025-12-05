@@ -24,6 +24,9 @@ import {
   RewardUserForChallengeCompletionController,
   UpvoteCommentController,
   AcquireInsigniaController,
+  GetCreatedUsersKpiController,
+  GetCompletedChallengesKpiController,
+  GetUnlockedStarsKpiController,
 } from '@/rest/controllers/profile'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
@@ -316,6 +319,48 @@ export class UsersRouter extends HonoRouter {
     )
   }
 
+  private registerGetCreatedUsersKpiRoute() {
+    this.router.get(
+      '/created-users-kpi',
+      this.authMiddleware.verifyAuthentication,
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const controller = new GetCreatedUsersKpiController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private registerGetCompletedChallengesKpiRoute() {
+    this.router.get(
+      '/completed-challenges-kpi',
+      this.authMiddleware.verifyAuthentication,
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const controller = new GetCompletedChallengesKpiController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private registerGetUnlockedStarsKpiRoute() {
+    this.router.get(
+      '/unlocked-stars-kpi',
+      this.authMiddleware.verifyAuthentication,
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const controller = new GetUnlockedStarsKpiController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   registerRoutes(): Hono {
     this.registerFetchUserByIdRoute()
     this.registerFetchUserBySlugRoute()
@@ -329,6 +374,9 @@ export class UsersRouter extends HonoRouter {
     this.registerUpvoteCommentRoute()
     this.registerVerifyUserNameInUseRoute()
     this.registerVerifyUserEmailInUseRoute()
+    this.registerGetCreatedUsersKpiRoute()
+    this.registerGetCompletedChallengesKpiRoute()
+    this.registerGetUnlockedStarsKpiRoute()
     return this.router
   }
 }

@@ -186,3 +186,15 @@ Content-Type: application/json
   "insigniaRole": "engineer",
   "insigniaPrice": 1000
 }
+
+### Get created users kpi
+GET {{URL}}/created-users-kpi
+Authorization: Bearer {{JWT}}
+
+### Get completed challenges kpi
+GET {{URL}}/completed-challenges-kpi
+Authorization: Bearer {{JWT}}
+
+### Get unlocked stars kpi
+GET {{URL}}/unlocked-stars-kpi
+Authorization: Bearer {{JWT}}

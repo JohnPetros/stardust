@@ -14,4 +14,5 @@ export interface Datetime {
   getYesterdayWeekdayIndex(): number
   getRelativeTime(): string
   date(): Date
+  minusMonths(months: number): Date
 }

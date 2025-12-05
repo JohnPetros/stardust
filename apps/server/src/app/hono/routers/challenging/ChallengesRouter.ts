@@ -24,6 +24,7 @@ import {
   PostChallengeController,
   UpdateChallengeController,
   DeleteChallengeController,
+  GetPostedChallengesKpiController,
 } from '@/rest/controllers/challenging/challenges'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
@@ -234,6 +235,20 @@ export class ChallengesRouter extends HonoRouter {
     )
   }
 
+  private registerGetPostedChallengesKpiRoute(): void {
+    this.router.get(
+      '/posted-challenges-kpi',
+      this.authMiddleware.verifyAuthentication,
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const controller = new GetPostedChallengesKpiController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   registerRoutes(): Hono {
     this.registerFetchChallengeRoute()
     this.registerFetchChallengeByStarRoute()
@@ -245,6 +260,7 @@ export class ChallengesRouter extends HonoRouter {
     this.registerPostChallengeRoute()
     this.registerUpdateChallengeRoute()
     this.registerDeleteChallengeRoute()
+    this.registerGetPostedChallengesKpiRoute()
     return this.router
   }
 }
