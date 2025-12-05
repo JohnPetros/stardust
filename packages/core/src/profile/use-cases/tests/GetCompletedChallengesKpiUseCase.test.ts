@@ -10,22 +10,29 @@ describe('Get Completed Challenges Kpi Use Case', () => {
 
   beforeEach(() => {
     repository = mock<UsersRepository>()
+    repository.countAllCompletedChallenges.mockImplementation()
     repository.countCompletedChallengesByMonth.mockImplementation()
     useCase = new GetCompletedChallengesKpiUseCase(repository)
   })
 
   it('should return the kpi of the completed challenges', async () => {
-    const countCompletedChallengesByMonth = Integer.create(10)
-    repository.countCompletedChallengesByMonth.mockResolvedValue(
-      countCompletedChallengesByMonth,
+    const allCompletedChallenges = Integer.create(200)
+    const currentMonthCompletedChallenges = Integer.create(15)
+    const previousMonthCompletedChallenges = Integer.create(12)
+
+    repository.countAllCompletedChallenges.mockResolvedValue(allCompletedChallenges)
+    repository.countCompletedChallengesByMonth.mockResolvedValueOnce(
+      currentMonthCompletedChallenges,
     )
-    repository.countCompletedChallengesByMonth.mockResolvedValue(
-      countCompletedChallengesByMonth,
+    repository.countCompletedChallengesByMonth.mockResolvedValueOnce(
+      previousMonthCompletedChallenges,
     )
-    const kpi = Kpi.create(
-      countCompletedChallengesByMonth.value,
-      countCompletedChallengesByMonth.value,
-    )
+
+    const kpi = Kpi.create({
+      value: allCompletedChallenges.value,
+      currentMonthValue: currentMonthCompletedChallenges.value,
+      previousMonthValue: previousMonthCompletedChallenges.value,
+    })
 
     const response = await useCase.execute()
 

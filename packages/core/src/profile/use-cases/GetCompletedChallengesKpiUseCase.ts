@@ -10,15 +10,20 @@ export class GetCompletedChallengesKpiUseCase implements UseCase<void, Promise<K
   async execute() {
     const currentMonth = Month.create()
     const previousMonth = currentMonth.previousMonth
-    const [currentMonthCompletedChallenges, previousMonthCompletedChallenges] =
-      await Promise.all([
-        this.repository.countCompletedChallengesByMonth(currentMonth),
-        this.repository.countCompletedChallengesByMonth(previousMonth),
-      ])
-    const kpi = Kpi.create(
-      currentMonthCompletedChallenges.value,
-      previousMonthCompletedChallenges.value,
-    )
+    const [
+      allCompletedChallenges,
+      currentMonthCompletedChallenges,
+      previousMonthCompletedChallenges,
+    ] = await Promise.all([
+      this.repository.countAllCompletedChallenges(),
+      this.repository.countCompletedChallengesByMonth(currentMonth),
+      this.repository.countCompletedChallengesByMonth(previousMonth),
+    ])
+    const kpi = Kpi.create({
+      value: allCompletedChallenges.value,
+      currentMonthValue: currentMonthCompletedChallenges.value,
+      previousMonthValue: previousMonthCompletedChallenges.value,
+    })
     return kpi.dto
   }
 }
