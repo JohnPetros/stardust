@@ -10,6 +10,8 @@ export type IconName =
   | 'loading'
   | 'sign-out'
   | 'user'
+  | 'trending-up'
+  | 'trending-down'
   | 'image'
   | 'spinner'
   | 'star'
