@@ -10,15 +10,25 @@ describe('Get Created Users Kpi Use Case', () => {
 
   beforeEach(() => {
     repository = mock<UsersRepository>()
-    repository.countUsersByMonth.mockImplementation()
+    repository.countAll.mockImplementation()
+    repository.countByMonth.mockImplementation()
     useCase = new GetCreatedUsersKpiUseCase(repository)
   })
 
   it('should return the kpi of the created users', async () => {
-    const countUsersByMonth = Integer.create(10)
-    repository.countUsersByMonth.mockResolvedValue(countUsersByMonth)
-    repository.countUsersByMonth.mockResolvedValue(countUsersByMonth)
-    const kpi = Kpi.create(countUsersByMonth.value, countUsersByMonth.value)
+    const allUsers = Integer.create(100)
+    const currentMonthUsers = Integer.create(10)
+    const previousMonthUsers = Integer.create(8)
+
+    repository.countAll.mockResolvedValue(allUsers)
+    repository.countByMonth.mockResolvedValueOnce(currentMonthUsers)
+    repository.countByMonth.mockResolvedValueOnce(previousMonthUsers)
+
+    const kpi = Kpi.create({
+      value: allUsers.value,
+      currentMonthValue: currentMonthUsers.value,
+      previousMonthValue: previousMonthUsers.value,
+    })
 
     const response = await useCase.execute()
 

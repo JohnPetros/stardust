@@ -10,11 +10,16 @@ export class GetCreatedUsersKpiUseCase implements UseCase<void, Promise<KpiDto>>
   async execute() {
     const currentMonth = Month.create()
     const previousMonth = currentMonth.previousMonth
-    const [currentMonthUsers, previousMonthUsers] = await Promise.all([
-      this.repository.countUsersByMonth(currentMonth),
-      this.repository.countUsersByMonth(previousMonth),
+    const [allUsers, currentMonthUsers, previousMonthUsers] = await Promise.all([
+      this.repository.countAll(),
+      this.repository.countByMonth(currentMonth),
+      this.repository.countByMonth(previousMonth),
     ])
-    const kpi = Kpi.create(currentMonthUsers.value, previousMonthUsers.value)
+    const kpi = Kpi.create({
+      value: allUsers.value,
+      currentMonthValue: currentMonthUsers.value,
+      previousMonthValue: previousMonthUsers.value,
+    })
     return kpi.dto
   }
 }
