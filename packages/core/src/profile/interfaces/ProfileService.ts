@@ -16,6 +16,7 @@ import type {
 } from '../domain/types'
 import type { WeekStatusValue } from '../domain/types'
 import type { AvatarAggregate, RocketAggregate } from '../domain/aggregates'
+import type { KpiDto } from '#global/domain/structures/dtos/KpiDto'
 
 type RewardingResponse = {
   newLevel: number | null
@@ -39,6 +40,9 @@ export interface ProfileService {
   ): Promise<RestResponse<{ userUpvotedCommentsIds: string[] }>>
   verifyUserNameInUse(userName: Name): Promise<RestResponse>
   verifyUserEmailInUse(userEmail: Email): Promise<RestResponse>
+  fetchCreatedUsersKpi(): Promise<RestResponse<KpiDto>>
+  fetchUnlockedStarsKpi(): Promise<RestResponse<KpiDto>>
+  fetchCompletedChallengesKpi(): Promise<RestResponse<KpiDto>>
   rewardUserForStarCompletion(
     userId: Id,
     rewardsPayload: StarRewardingPayload,
