@@ -10,7 +10,7 @@ export const TooltipView = ({ children, content }: PropsWithChildren<Props>) => 
   return (
     <Tooltip>
       <TooltipTrigger asChild>{children}</TooltipTrigger>
-      <TooltipContent>
+      <TooltipContent className='bg-zinc-900 border border-zinc-700 rounded-md p-2 text-sm text-zinc-50'>
         <p>{content}</p>
       </TooltipContent>
     </Tooltip>
