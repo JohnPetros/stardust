@@ -1,7 +1,7 @@
 import { useCallback, useMemo, type RefObject } from 'react'
 
 import type { TextEditorContextValue } from './types/TextEditorContextValue'
-import type { TextEditorWidget } from './types/TextEditorWdiget'
+import type { TextEditorWidget } from './types/TextEditorWidget'
 import type { TextEditorRef } from './types'
 
 export function useTextEditorContextProvider(
