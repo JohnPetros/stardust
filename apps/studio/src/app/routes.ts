@@ -5,6 +5,7 @@ import { ROUTES } from '../constants/routes'
 export default [
   index('routes/SignInRoute.tsx'),
   layout('layouts/AppLayout.tsx', [
+    route(ROUTES.dashboard, 'routes/DashboardRoute.tsx'),
     route(ROUTES.space.planets, 'routes/PlanetsRoute.tsx'),
     route(ROUTES.profile.users, 'routes/UsersRoute.tsx'),
     route(ROUTES.challenging.challenges, 'routes/ChallengesRoute.tsx'),
