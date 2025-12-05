@@ -525,13 +525,32 @@ export class SupabaseUsersRepository
     await Promise.all(promises)
   }
 
-  async countUsersByMonth(month: Month): Promise<Integer> {
+  async countAll(): Promise<Integer> {
+    const { count, error } = await this.supabase
+      .from('users')
+      .select('*', { count: 'exact', head: true })
+
+    if (error) throw new SupabasePostgreError(error)
+
+    return Integer.create(count ?? 0)
+  }
+
+  async countByMonth(month: Month): Promise<Integer> {
     const { count, error } = await this.supabase
       .from('users')
       .select('*', { count: 'exact', head: true })
       .gte('created_at', month.firstDay.toISOString())
       .lte('created_at', month.lastDay.toISOString())
-      .single()
+
+    if (error) throw new SupabasePostgreError(error)
+
+    return Integer.create(count ?? 0)
+  }
+
+  async countAllCompletedChallenges(): Promise<Integer> {
+    const { count, error } = await this.supabase
+      .from('users_completed_challenges')
+      .select('*', { count: 'exact', head: true })
 
     if (error) throw new SupabasePostgreError(error)
 
@@ -544,6 +563,16 @@ export class SupabaseUsersRepository
       .select('*', { count: 'exact', head: true })
       .gte('created_at', month.firstDay.toISOString())
       .lte('created_at', month.lastDay.toISOString())
+
+    if (error) throw new SupabasePostgreError(error)
+
+    return Integer.create(count ?? 0)
+  }
+
+  async countAllUnlockedStars(): Promise<Integer> {
+    const { count, error } = await this.supabase
+      .from('users_unlocked_stars')
+      .select('*', { count: 'exact', head: true })
 
     if (error) throw new SupabasePostgreError(error)
 

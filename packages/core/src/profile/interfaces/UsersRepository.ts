@@ -37,8 +37,11 @@ export interface UsersRepository {
   removeRescuableAchievement(achievementId: Id, userId: Id): Promise<void>
   addCompletedChallenge(challengeId: Id, userId: Id): Promise<void>
   countCompletedChallengesByMonth(month: Month): Promise<Integer>
+  countAllCompletedChallenges(): Promise<Integer>
+  countAllUnlockedStars(): Promise<Integer>
   countUnlockedStarsByMonth(month: Month): Promise<Integer>
   replace(user: User): Promise<void>
   replaceMany(users: User[]): Promise<void>
-  countUsersByMonth(month: Month): Promise<Integer>
+  countByMonth(month: Month): Promise<Integer>
+  countAll(): Promise<Integer>
 }
