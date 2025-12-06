@@ -13,7 +13,7 @@ export class Platform {
   static create(name: string): Platform {
     if (!Platform.isPlatformName(name)) {
       throw new ValidationError([
-        { name: 'platform', messages: ['Platform is not valid'] },
+        { name: 'platform', messages: ['Platform name must be "web" or "mobile"'] },
       ])
     }
 
@@ -22,7 +22,6 @@ export class Platform {
 
   static isPlatformName(name: string): name is PlatformName {
     new StringValidation(name, 'Platform Name').oneOf(['web', 'mobile']).validate()
-
     return true
   }
 }
