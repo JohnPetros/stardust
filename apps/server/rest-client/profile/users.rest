@@ -198,3 +198,7 @@ Authorization: Bearer {{JWT}}
 ### Get unlocked stars kpi
 GET {{URL}}/unlocked-stars-kpi
 Authorization: Bearer {{JWT}}
+
+### Get daily active users report
+GET {{URL}}/daily-active-users-report?days=30
+Authorization: Bearer {{JWT}}

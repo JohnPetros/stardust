@@ -1,3 +1,3 @@
 import z from 'zod'
 
-export const integerSchema = z.number().min(0)
+export const integerSchema = z.coerce.number().min(0)

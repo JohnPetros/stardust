@@ -27,6 +27,7 @@ import {
   FetchCreatedUsersKpiController,
   FetchCompletedChallengesKpiController,
   FetchUnlockedStarsKpiController,
+  FetchDailyActiveUsersReportController,
 } from '@/rest/controllers/profile'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
@@ -361,6 +362,21 @@ export class UsersRouter extends HonoRouter {
     )
   }
 
+  private registerFetchDailyActiveUsersReportRoute() {
+    this.router.get(
+      '/daily-active-users-report',
+      this.authMiddleware.verifyAuthentication,
+      this.validationMiddleware.validate('query', z.object({ days: integerSchema })),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const controller = new FetchDailyActiveUsersReportController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   registerRoutes(): Hono {
     this.registerFetchUserByIdRoute()
     this.registerFetchUserBySlugRoute()
@@ -377,6 +393,7 @@ export class UsersRouter extends HonoRouter {
     this.registerFetchCreatedUsersKpiRoute()
     this.registerFetchCompletedChallengesKpiRoute()
     this.registerFetchUnlockedStarsKpiRoute()
+    this.registerFetchDailyActiveUsersReportRoute()
     return this.router
   }
 }
