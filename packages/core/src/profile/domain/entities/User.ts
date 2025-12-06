@@ -19,7 +19,7 @@ import {
   ShopItemNotAcquiredError,
 } from '#profile/domain/errors/index'
 import type { AchievementMetricValue } from '../types'
-import { type Level, WeekStatus } from '../structures'
+import { type Level, type Platform, Visit, WeekStatus } from '../structures'
 import type { UserDto } from './dtos'
 
 type UserProps = {
@@ -284,6 +284,14 @@ export class User extends Entity<UserProps> {
   updateTier(tierId: Id): void {
     this.props.tier = TierAggregate.create({
       id: tierId.value,
+    })
+  }
+
+  registerVisit(platform: Platform): Visit {
+    return Visit.create({
+      userId: this.id.value,
+      platform: platform.name,
+      createdAt: new Date(),
     })
   }
 
