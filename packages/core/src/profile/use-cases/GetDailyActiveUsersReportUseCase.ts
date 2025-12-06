@@ -52,6 +52,7 @@ export class GetDailyActiveUsersReportUseCase
     return Array.from({ length: days }, (_, i) => {
       const date = new Date()
       date.setDate(date.getDate() - i)
+      date.setHours(0, 0, 0, 0)
       return date
     }).reverse()
   }
