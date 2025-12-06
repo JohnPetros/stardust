@@ -603,18 +603,24 @@ export class SupabaseUsersRepository
   }
 
   async hasVisit(visit: Visit): Promise<Logical> {
+    const createdAt = visit.createdAt
+    const startOfDay = new Date(createdAt)
+    startOfDay.setUTCHours(0, 0, 0, 0)
+    const endOfDay = new Date(createdAt)
+    endOfDay.setUTCHours(23, 59, 59, 999)
+
     const { data, error } = await this.supabase
       .from('users_visits')
       .select('*')
       .eq('user_id', visit.userId.value)
       .eq('platform', visit.platform.name)
-      .eq('created_at', visit.createdAt.toISOString())
-      .single()
+      .gte('created_at', startOfDay.toISOString())
+      .lte('created_at', endOfDay.toISOString())
 
     if (error) {
-      return Logical.createAsFalse()
+      throw new SupabasePostgreError(error)
     }
 
-    return Logical.create(data !== null)
+    return Logical.create(data.length > 0)
   }
 }
