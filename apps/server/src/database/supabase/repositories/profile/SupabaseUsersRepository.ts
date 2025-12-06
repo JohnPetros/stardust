@@ -16,6 +16,7 @@ import type { SupabaseUser } from '../../types'
 import { SupabaseUserMapper } from '../../mappers/profile'
 import { SupabasePostgreError } from '../../errors'
 import { SupabaseRepository } from '../SupabaseRepository'
+import type { Visit } from '@stardust/core/profile/structures'
 
 export class SupabaseUsersRepository
   extends SupabaseRepository
@@ -589,5 +590,29 @@ export class SupabaseUsersRepository
     if (error) throw new SupabasePostgreError(error)
 
     return Integer.create(count ?? 0)
+  }
+
+  async addVisit(visit: Visit): Promise<void> {
+    const { error } = await this.supabase.from('users_visits').insert({
+      user_id: visit.userId.value,
+      platform: visit.platform.name,
+      created_at: visit.createdAt.toISOString(),
+    })
+
+    if (error) throw new SupabasePostgreError(error)
+  }
+
+  async hasVisit(visit: Visit): Promise<Logical> {
+    const { data, error } = await this.supabase
+      .from('users_visits')
+      .select('*')
+      .eq('user_id', visit.userId.value)
+      .eq('platform', visit.platform.name)
+      .eq('created_at', visit.createdAt.toISOString())
+      .single()
+
+    if (error) throw new SupabasePostgreError(error)
+
+    return Logical.create(data !== null)
   }
 }
