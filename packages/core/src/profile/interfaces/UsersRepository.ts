@@ -8,7 +8,7 @@ import type { Slug } from '#global/domain/structures/Slug'
 import type { User } from '../domain/entities'
 import type { Month } from '#global/domain/structures/Month'
 import type { Integer } from '#global/domain/structures/Integer'
-import type { Visit } from '../domain/structures'
+import type { Platform, Visit } from '../domain/structures'
 
 export interface UsersRepository {
   findById(id: Id): Promise<User | null>
@@ -21,6 +21,7 @@ export interface UsersRepository {
   findByTierOrderedByXp(tierId: Id): Promise<User[]>
   findUnlockedStars(userId: Id): Promise<IdsList>
   findRecentlyUnlockedStars(userId: Id): Promise<IdsList>
+  countVisitsByDateAndPlatform(date: Date, platform: Platform): Promise<Integer>
   containsWithEmail(email: Email): Promise<Logical>
   containsWithName(name: Name): Promise<Logical>
   findAll(): Promise<User[]>
