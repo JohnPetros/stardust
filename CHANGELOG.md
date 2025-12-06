@@ -1,5 +1,114 @@
 # Changelog
 
+## 0.8.0 (2025-12-06)
+
+- UI de KPIs na página de dashboard (#230) (e3cca71e)
+- 🐛 fix(web): correct import path for TextEditorWidget in
+  useTextEditorContextProvider (512be5da)
+- 📶 rest(server): update GetPostedChallengesKpiController to use
+  GetPostedChallengesKpiUseCase for KPI retrieval (9636836d)
+- 💾 db(server): add countAll method to retrieve total challenges and update
+  interface to include new counting methods (38af7b23)
+- 💾 db(server): add methods to count all users, completed challenges, and
+  unlocked stars; update interface accordingly (fec04fec)
+- ✨ use case: enhance GetUnlockedStarsKpiUseCase to include total unlocked
+  stars count and adjust KPI structure; add corresponding tests (492c266a)
+- ✨ use case: update GetCreatedUsersKpiUseCase to include total user count and
+  adjust KPI structure; enhance related tests (29abda7d)
+- ✨ use case: enhance GetCompletedChallengesKpiUseCase to include total
+  completed challenges and adjust tests accordingly (a38810a9)
+- 🌐 domain: update Kpi structure to include current and previous month values,
+  and adjust related tests (0575ec17)
+- ♻️ refactor: introduce GetPostedChallengesKpiUseCase to calculate KPIs for
+  posted challenges (9c23bbda)
+- 📶 rest(server): register routes for KPI retrieval of created users, completed
+  challenges, and unlocked stars (5a2981c2)
+- ⚙️ config(server): register route for GetPostedChallengesKpiController to
+  handle KPI retrieval for posted challenges (3d3f222c)
+- 📶 rest(server): add GetCompletedChallengesKpiController to handle KPI
+  retrieval for completed challenges (9996c23a)
+- 📶 rest(server): add GetCreatedUsersKpiController to handle KPI retrieval for
+  created users (425badd2)
+- 📶 rest(server): add GetUnlockedStarsKpiController to handle KPI retrieval for
+  unlocked stars (6638ab0d)
+- 📶 rest(server): add GetPostedChallengesKpiController to handle KPI retrieval
+  for posted challenges (b6e892c0)
+- 🧪 test: add unit tests for GetCompletedChallengesKpiUseCase to validate KPI
+  calculation for completed challenges (8edd780e)
+- 🧪 test: add unit tests for GetCreatedUsersKpiUseCase to validate KPI
+  calculation for created users (fd7fd1c4)
+- 🧪 test: add unit tests for GetPostedChallengesUseCase to validate KPI
+  calculation for posted challenges (f4017b7e)
+- 💾 db(server): implement countChallengesByMonth method in
+  SupabaseChallengesRepository to count challenges created within a specified
+  month (bde768be)
+- 💾 db(server): add methods to count users, completed challenges, and unlocked
+  stars by month in SupabaseUsersRepository (b8b772be)
+- 💾 db(server): add nonce and scopes fields to various database types
+  (377c6fd6)
+- ✨ use case: add GetUnlockedStarsKpiUseCase to calculate KPIs for unlocked
+  stars in the current and previous months (f245e673)
+- ✨ use case: add GetCreatedUsersKpiUseCase to calculate KPIs for created users
+  in the current and previous months (60c90fab)
+- ✨ use case: add GetCompletedChallengesKpiUseCase to calculate KPIs for
+  completed challenges (0084e2a9)
+- ✨ use case: add GetPostedChallengesUseCase to retrieve and calculate KPIs for
+  current and previous month challenges (fe9e7094)
+- 🧪 test: add unit tests for Month structure to validate date creation,
+  first/last days, and previous month retrieval (814eaf83)
+- 🧪 test: add unit tests for Kpi class to validate value creation, trend
+  calculation, and trending status (3c8e23d4)
+- 🌐 domain: introduce Kpi class and KpiDto for KPI management, and export Month
+  structure (f1077959)
+- 🌐 domain: implement Month class with methods to retrieve first/last days and
+  previous month (db94ca96)
+- 🌐 domain: add minusMonths method and first/last day of month functions to
+  DayJsDatetime class (70bd35ab)
+- 🖥️ ui(web): improve TextEditor value handling and refactor LinkView variable
+  for clarity (650f67ba)
+- 🖥️ ui(web): update ContentEditorView layout for better responsiveness and
+  adjust TextEditor height for improved usability (0ea49124)
+- 🖥️ ui(web): fix typo in insertTitleElement function and refactor content
+  replacement logic for improved readability (4cab81d4)
+- 🖥️ ui: enhance URL validation approach in Link mdx widget (a9e1583f)
+- 🖥️ ui(web): update SolutionPageView to import old_ContentEditor for
+  compatibility (3911d4c0)
+- 🖥️ ui(web): implement getLineLength method in useTextEditor and update
+  TextEditor components for enhanced line length functionality (81d4aa25)
+- 🖥️ ui(web): update ContentEditorView to replace 'strong' button with
+  'quoteTextBlock' for enhanced text formatting options (b72c184d)
+- 🖥️ ui(web): add getLineLength method to TextEditorRef for enhanced line length
+  retrieval (e318c31d)
+- 🖥️ ui(web): enhance LinkView component to sanitize and format URLs for
+  improved link handling (04cb8e6c)
+- 🖥️ ui(web): standardize naming by correcting 'isRecheadedEnd' to
+  'isReachedEnd' in SnippetsList for consistency and clarity (c727ceea)
+- 🖥️ ui(web): refine child content rendering logic in ContentView to ensure
+  proper handling of string and non-string children (beb9534f)
+- 🖥️ ui(web): standardize naming by correcting 'isRecheadedEnd' to
+  'isReachedEnd' in ChallengeSolutions components for consistency and clarity
+  (1ebe23fd)
+- 🖥️ ui(web): remove unnecessary z-index from AnimatedBorderView for cleaner
+  layout (8f9055b3)
+- 🖥️ ui(web): standardize naming by correcting 'isRecheadedEnd' to
+  'isReachedEnd' in usePaginatedCache for consistency and clarity (3ccf0b28)
+- 🖥️ ui(web): correct spelling of 'insertTitlelement' to 'insertTitleElement' in
+  TextEditorContext for improved clarity and consistency (7f43ad56)
+- 🖥️ ui(web): correct spelling of 'Lista numérica' in ContentEditorView for
+  improved clarity (d12a489a)
+- 🖥️ ui(web): standardize naming by updating 'isRecheadedEnd' to 'isReachedEnd'
+  across ChallengesListTab components for consistency and clarity (89917f32)
+- 🖥️ ui(web): standardize naming by updating 'isRecheadedEnd' to 'isReachedEnd'
+  across SolutionsListTab components for consistency and clarity (e224b497)
+- 🖥️ ui(web): standardize naming by updating 'isRecheadedEnd' to 'isReachedEnd'
+  across ChallengesList components for consistency and clarity (d35321f1)
+- 🖥️ ui(web): fix naming inconsistency by correcting 'isRecheadedEnd' to
+  'isReachedEnd' in CommentsList components for improved clarity (a27203fb)
+- 🖥️ ui(web): correct import paths for TextEditorWidget and fix naming
+  inconsistencies in TextEditorContext for improved clarity (29ef6473)
+- 🖥️ ui(web): add ElectricBorderView component for animated border effects and
+  update index export for consistency (d114d7c2)
+
 ## 0.7.0 (2025-12-04)
 
 - 🖥️ ui(web): remove unused user context in ChallengesList component for cleaner
