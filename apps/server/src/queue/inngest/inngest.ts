@@ -106,6 +106,6 @@ export const inngest = new Inngest({
   id: 'StarDust Queue',
   eventKey: ENV.mode === 'production' ? ENV.inngestEventKey : undefined,
   signingKey: ENV.mode === 'production' ? ENV.inngestSigningKey : undefined,
-  schemas: new EventSchemas().fromZod(eventsSchema),
   isDev: ENV.mode === 'development',
+  schemas: new EventSchemas().fromZod(eventsSchema),
 })

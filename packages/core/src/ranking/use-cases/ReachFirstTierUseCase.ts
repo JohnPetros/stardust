@@ -1,5 +1,5 @@
 import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
-import type { EventBroker } from '#global/interfaces/EventBroker'
+import type { Broker } from '#global/interfaces/Broker'
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { TiersRepository } from '../interfaces'
 import { FirstTierReachedEvent } from '../domain/events'
@@ -17,7 +17,7 @@ type Request = {
 export class ReachFirstTierUseCase implements UseCase<Request, void> {
   constructor(
     private readonly repository: TiersRepository,
-    private readonly eventBroker: EventBroker,
+    private readonly broker: Broker,
   ) {}
 
   async execute({ user, firstStarId }: Request) {
@@ -31,6 +31,6 @@ export class ReachFirstTierUseCase implements UseCase<Request, void> {
       firstTierId: tier.id.value,
       firstStarId: firstStarId,
     })
-    await this.eventBroker.publish(event)
+    await this.broker.publish(event)
   }
 }

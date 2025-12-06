@@ -4,18 +4,18 @@ import { faker } from '@faker-js/faker'
 import { ReorderPlanetsUseCase } from '../ReorderPlanetsUseCase'
 import { PlanetsFaker } from '../../domain/entities/tests/fakers'
 import { PlanetNotFoundError } from '../../domain/errors'
-import type { EventBroker } from '#global/interfaces/EventBroker'
+import type { Broker } from '#global/interfaces/Broker'
 import type { PlanetsRepository } from '../../interfaces'
 import { PlanetsOrderChangedEvent } from '#space/domain/events/PlanetsOrderChangedEvent'
 
 describe('Reorder Planets Use Case', () => {
   let useCase: ReorderPlanetsUseCase
   let repository: jest.Mocked<PlanetsRepository>
-  let broker: Mock<EventBroker>
+  let broker: Mock<Broker>
 
   beforeEach(() => {
     repository = mock<PlanetsRepository>()
-    broker = mock<EventBroker>()
+    broker = mock<Broker>()
     repository.replaceMany.mockImplementation()
     broker.publish.mockImplementation()
     useCase = new ReorderPlanetsUseCase(repository, broker)

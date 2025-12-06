@@ -8,7 +8,7 @@ import {
 
 import { AcquireDefaultShopItemsJob } from '@/queue/jobs/shop'
 import { InngestAmqp } from '../InngestAmqp'
-import { InngestEventBroker } from '../InngestEventBroker'
+import { InngestBroker } from '../InngestBroker'
 import { InngestFunctions } from './InngestFunctions'
 
 export class ShopFunctions extends InngestFunctions {
@@ -20,11 +20,11 @@ export class ShopFunctions extends InngestFunctions {
         const rocketsRepository = new SupabaseRocketsRepository(supabase)
         const avatarsRepository = new SupabaseAvatarsRepository(supabase)
         const amqp = new InngestAmqp<typeof context.event.data>(context)
-        const eventBroker = new InngestEventBroker()
+        const Broker = new InngestBroker()
         const job = new AcquireDefaultShopItemsJob(
           rocketsRepository,
           avatarsRepository,
-          eventBroker,
+          Broker,
         )
         return job.handle(amqp)
       },

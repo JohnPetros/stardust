@@ -1,6 +1,6 @@
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { UsersRepository } from '#profile/interfaces/UsersRepository'
-import type { EventBroker } from '#global/interfaces/EventBroker'
+import type { Broker } from '#global/interfaces/Broker'
 import { Id } from '#global/domain/structures/Id'
 import { SpaceCompletedEvent } from '#space/domain/events/SpaceCompletedEvent'
 import { UserNotFoundError } from '../domain/errors'
@@ -13,7 +13,7 @@ type Request = {
 export class CompleteSpaceUseCase implements UseCase<Request, void> {
   constructor(
     private readonly repository: UsersRepository,
-    private readonly broker: EventBroker,
+    private readonly broker: Broker,
   ) {}
 
   async execute(request: Request): Promise<void> {
