@@ -611,7 +611,9 @@ export class SupabaseUsersRepository
       .eq('created_at', visit.createdAt.toISOString())
       .single()
 
-    if (error) throw new SupabasePostgreError(error)
+    if (error) {
+      return Logical.createAsFalse()
+    }
 
     return Logical.create(data !== null)
   }
