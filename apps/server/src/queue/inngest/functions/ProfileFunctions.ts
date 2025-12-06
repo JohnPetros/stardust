@@ -13,11 +13,13 @@ import {
   UpdateTierForRankingLosersJob,
   CreateUserJob,
   UpdateSpaceForAllUsersJob,
+  RegisterUserVisitJob,
 } from '@/queue/jobs/profile'
 import { SupabaseUsersRepository } from '@/database'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestFunctions } from './InngestFunctions'
 import { SpaceOrderChangedEvent } from '@stardust/core/space/events'
+import { UserSignedInEvent } from '@stardust/core/auth/events'
 
 export class ProfileFunctions extends InngestFunctions {
   private createCreateUserFunction(supabase: SupabaseClient) {
@@ -98,6 +100,19 @@ export class ProfileFunctions extends InngestFunctions {
     )
   }
 
+  private createRegisterUserVisitFunction(supabase: SupabaseClient) {
+    return this.inngest.createFunction(
+      { id: RegisterUserVisitJob.KEY },
+      { event: UserSignedInEvent._NAME },
+      async (context) => {
+        const repository = new SupabaseUsersRepository(supabase)
+        const amqp = new InngestAmqp<typeof context.event.data>(context)
+        const job = new RegisterUserVisitJob(repository)
+        return await job.handle(amqp)
+      },
+    )
+  }
+
   getFunctions(supabase: SupabaseClient) {
     return [
       this.createCreateUserFunction(supabase),
@@ -106,6 +121,7 @@ export class ProfileFunctions extends InngestFunctions {
       this.createUpdateTierForRankingWinnersFunction(supabase),
       this.createUpdateTierForRankingLosersFunction(supabase),
       this.createUpdateSpaceForAllUsersFunction(supabase),
+      this.createRegisterUserVisitFunction(supabase),
     ]
   }
 }

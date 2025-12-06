@@ -2638,6 +2638,56 @@ export type Database = {
           },
         ]
       }
+      users_visits: {
+        Row: {
+          created_at: string
+          id: string
+          platform: Database['public']['Enums']['platform']
+          user_id: string
+        }
+        Insert: {
+          created_at: string
+          id?: string
+          platform: Database['public']['Enums']['platform']
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          platform?: Database['public']['Enums']['platform']
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'users_visits_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'challenges_view'
+            referencedColumns: ['author_id']
+          },
+          {
+            foreignKeyName: 'users_visits_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_visits_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users_completed_planets_view'
+            referencedColumns: ['user_id']
+          },
+          {
+            foreignKeyName: 'users_visits_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users_view'
+            referencedColumns: ['id']
+          },
+        ]
+      }
     }
     Views: {
       challenges_view: {
@@ -3006,6 +3056,7 @@ export type Database = {
       challenge_difficulty_level: 'easy' | 'medium' | 'hard'
       challenge_vote: 'upvote' | 'downvote'
       insignia_role: 'engineer'
+      platform: 'web' | 'mobile'
       ranking_status: 'winner' | 'loser'
     }
     CompositeTypes: {
@@ -3030,39 +3081,6 @@ export type Database = {
   realtime: {
     Tables: {
       messages: {
-        Row: {
-          event: string | null
-          extension: string
-          id: string
-          inserted_at: string
-          payload: Json | null
-          private: boolean | null
-          topic: string
-          updated_at: string
-        }
-        Insert: {
-          event?: string | null
-          extension: string
-          id?: string
-          inserted_at?: string
-          payload?: Json | null
-          private?: boolean | null
-          topic: string
-          updated_at?: string
-        }
-        Update: {
-          event?: string | null
-          extension?: string
-          id?: string
-          inserted_at?: string
-          payload?: Json | null
-          private?: boolean | null
-          topic?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      messages_2025_12_01: {
         Row: {
           event: string | null
           extension: string
@@ -3261,6 +3279,39 @@ export type Database = {
         Relationships: []
       }
       messages_2025_12_07: {
+        Row: {
+          event: string | null
+          extension: string
+          id: string
+          inserted_at: string
+          payload: Json | null
+          private: boolean | null
+          topic: string
+          updated_at: string
+        }
+        Insert: {
+          event?: string | null
+          extension: string
+          id?: string
+          inserted_at?: string
+          payload?: Json | null
+          private?: boolean | null
+          topic: string
+          updated_at?: string
+        }
+        Update: {
+          event?: string | null
+          extension?: string
+          id?: string
+          inserted_at?: string
+          payload?: Json | null
+          private?: boolean | null
+          topic?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      messages_2025_12_08: {
         Row: {
           event: string | null
           extension: string
@@ -4096,6 +4147,7 @@ export const Constants = {
       challenge_difficulty_level: ['easy', 'medium', 'hard'],
       challenge_vote: ['upvote', 'downvote'],
       insignia_role: ['engineer'],
+      platform: ['web', 'mobile'],
       ranking_status: ['winner', 'loser'],
     },
   },

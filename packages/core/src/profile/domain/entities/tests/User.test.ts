@@ -9,7 +9,7 @@ import {
   RocketAggregatesFaker,
   TierAggregatesFaker,
 } from '../../aggregates/fakers'
-import { WeekStatus } from '../../structures'
+import { Platform, WeekStatus } from '../../structures'
 import { AchievementsFaker, UsersFaker } from '../fakers'
 
 describe('User Entity', () => {
@@ -550,6 +550,17 @@ describe('User Entity', () => {
     user.resetStreak()
 
     expect(user.didBreakStreak.value).toBeFalsy()
+  })
+
+  it('should register a visit', () => {
+    const user = UsersFaker.fake()
+    const platform = Platform.create('web')
+
+    const visit = user.registerVisit(platform)
+
+    expect(visit.userId).toEqual(user.id)
+    expect(visit.platform).toEqual(platform)
+    expect(visit.createdAt).toBeInstanceOf(Date)
   })
 
   it('should update the tier', () => {

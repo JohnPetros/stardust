@@ -16,9 +16,10 @@ import {
   RankingUpdatedEvent,
   RankingWinnersDefinedEvent,
 } from '@stardust/core/ranking/events'
-import { UserSignedUpEvent } from '@stardust/core/auth/events'
+import { UserSignedInEvent, UserSignedUpEvent } from '@stardust/core/auth/events'
 
 import { ENV } from '../../constants'
+import { platformSchema } from '@stardust/validation/profile/schemas'
 
 const eventsSchema = {
   [UserCreatedEvent._NAME]: {
@@ -91,6 +92,12 @@ const eventsSchema = {
   [RankingUpdatedEvent._NAME]: {
     data: z.object({
       tierId: idSchema,
+    }),
+  },
+  [UserSignedInEvent._NAME]: {
+    data: z.object({
+      userId: idSchema,
+      platform: platformSchema,
     }),
   },
 }
