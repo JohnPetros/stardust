@@ -16,7 +16,7 @@ import {
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
 import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
-import { InngestEventBroker } from '@/queue/inngest/InngestEventBroker'
+import { InngestBroker } from '@/queue/inngest/InngestBroker'
 
 export class PlanetsRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/planets')
@@ -155,7 +155,7 @@ export class PlanetsRouter extends HonoRouter {
         const http = new HonoHttp(context)
         const supabase = http.getSupabase()
         const repository = new SupabasePlanetsRepository(supabase)
-        const broker = new InngestEventBroker()
+        const broker = new InngestBroker()
         const controller = new ReorderPlanetsController(repository, broker)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -183,7 +183,7 @@ export class PlanetsRouter extends HonoRouter {
         const http = new HonoHttp(context)
         const supabase = http.getSupabase()
         const repository = new SupabasePlanetsRepository(supabase)
-        const broker = new InngestEventBroker()
+        const broker = new InngestBroker()
         const starsRepository = new SupabaseStarsRepository(supabase)
         const controller = new ReorderPlanetStarsController(
           repository,

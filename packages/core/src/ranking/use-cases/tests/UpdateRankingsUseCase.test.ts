@@ -2,7 +2,7 @@ import { mock, type Mock } from 'ts-jest-mocker'
 import { UpdateRankingsUseCase } from '../UpdateRankingsUseCase'
 import type { TiersRepository } from '#ranking/interfaces/TiersRepository'
 import type { RankersRepository } from '#ranking/interfaces/RankersRepository'
-import type { EventBroker } from '#global/interfaces/EventBroker'
+import type { Broker } from '#global/interfaces/Broker'
 import { TiersFaker } from '#ranking/domain/entities/fakers/TiersFaker'
 import { RankersFaker } from '#ranking/domain/entities/fakers/RankersFaker'
 import { RankingUpdatedEvent } from '#ranking/domain/events/RankingUpdatedEvent'
@@ -13,21 +13,21 @@ import { RankingWinnersDefinedEvent } from '#ranking/domain/events/RankingWinner
 describe('Update Rankings Use Case', () => {
   let tiersRepository: Mock<TiersRepository>
   let rankersRepository: Mock<RankersRepository>
-  let eventBroker: Mock<EventBroker>
+  let Broker: Mock<Broker>
   let useCase: UpdateRankingsUseCase
 
   beforeEach(() => {
     tiersRepository = mock<TiersRepository>()
     rankersRepository = mock<RankersRepository>()
-    eventBroker = mock<EventBroker>()
+    Broker = mock<Broker>()
     tiersRepository.findAll.mockImplementation()
     rankersRepository.removeAll.mockImplementation()
     rankersRepository.findAllByTier.mockImplementation()
     rankersRepository.addLosers.mockImplementation()
     rankersRepository.addWinners.mockImplementation()
-    eventBroker.publish.mockImplementation()
+    Broker.publish.mockImplementation()
 
-    useCase = new UpdateRankingsUseCase(tiersRepository, rankersRepository, eventBroker)
+    useCase = new UpdateRankingsUseCase(tiersRepository, rankersRepository, Broker)
   })
 
   it('should remove all current rankers', async () => {
@@ -45,7 +45,7 @@ describe('Update Rankings Use Case', () => {
     await useCase.execute()
 
     tiers.forEach((tier) => {
-      expect(eventBroker.publish).toHaveBeenCalledWith(
+      expect(Broker.publish).toHaveBeenCalledWith(
         new RankingUpdatedEvent({ tierId: tier.id.value }),
       )
     })
@@ -73,7 +73,7 @@ describe('Update Rankings Use Case', () => {
     await useCase.execute()
 
     tiers.slice(0, tiers.length - 1).forEach((tier) => {
-      expect(eventBroker.publish).toHaveBeenCalledWith(
+      expect(Broker.publish).toHaveBeenCalledWith(
         new RankingLosersDefinedEvent({
           tierId: tier.id.value,
           losersIds: ranking.losers.map((loser) => loser.id.value),
@@ -91,7 +91,7 @@ describe('Update Rankings Use Case', () => {
     await useCase.execute()
 
     tiers.slice(1, tiers.length).forEach((tier) => {
-      expect(eventBroker.publish).toHaveBeenCalledWith(
+      expect(Broker.publish).toHaveBeenCalledWith(
         new RankingWinnersDefinedEvent({
           tierId: tier.id.value,
           winnersIds: ranking.winners.map((winner) => winner.id.value),

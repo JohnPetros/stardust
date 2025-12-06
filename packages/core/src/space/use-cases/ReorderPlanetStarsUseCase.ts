@@ -1,6 +1,6 @@
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { PlanetsRepository, StarsRepository } from '../interfaces'
-import type { EventBroker } from '#global/interfaces/EventBroker'
+import type { Broker } from '#global/interfaces/Broker'
 import { Id } from '#global/domain/structures/Id'
 import { PlanetNotFoundError } from '../domain/errors'
 import { StarsOrderChangedEvent } from '../domain/events'
@@ -14,7 +14,7 @@ export class ReorderPlanetStarsUseCase implements UseCase<Request> {
   constructor(
     private readonly planetsRepository: PlanetsRepository,
     private readonly starsRepository: StarsRepository,
-    private readonly broker: EventBroker,
+    private readonly broker: Broker,
   ) {}
 
   async execute({ planetId, starIds }: Request) {

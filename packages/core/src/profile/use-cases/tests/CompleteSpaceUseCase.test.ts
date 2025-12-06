@@ -1,7 +1,7 @@
 import { type Mock, mock } from 'ts-jest-mocker'
 
 import type { UsersRepository } from '#profile/interfaces/UsersRepository'
-import type { EventBroker } from '#global/interfaces/EventBroker'
+import type { Broker } from '#global/interfaces/Broker'
 import { SpaceCompletedEvent } from '#space/domain/events/SpaceCompletedEvent'
 import { UserNotFoundError } from '#profile/domain/errors/UserNotFoundError'
 import { UsersFaker } from '#profile/domain/entities/fakers/UsersFaker'
@@ -9,16 +9,16 @@ import { CompleteSpaceUseCase } from '../CompleteSpaceUseCase'
 
 describe('CompleteSpaceUseCase', () => {
   let repository: Mock<UsersRepository>
-  let eventBroker: Mock<EventBroker>
+  let Broker: Mock<Broker>
   let useCase: CompleteSpaceUseCase
 
   beforeEach(() => {
     repository = mock<UsersRepository>()
-    eventBroker = mock<EventBroker>()
+    Broker = mock<Broker>()
     repository.findById.mockImplementation()
     repository.replace.mockImplementation()
-    eventBroker.publish.mockImplementation()
-    useCase = new CompleteSpaceUseCase(repository, eventBroker)
+    Broker.publish.mockImplementation()
+    useCase = new CompleteSpaceUseCase(repository, Broker)
   })
 
   it('should throw an error if the user is not found', async () => {
@@ -46,7 +46,7 @@ describe('CompleteSpaceUseCase', () => {
 
     expect(user.completeSpace).toHaveBeenCalled()
     expect(repository.replace).toHaveBeenCalledWith(user)
-    expect(eventBroker.publish).toHaveBeenCalledWith(
+    expect(Broker.publish).toHaveBeenCalledWith(
       new SpaceCompletedEvent({
         userSlug: user.slug.value,
         userName: user.name.value,
@@ -66,7 +66,7 @@ describe('CompleteSpaceUseCase', () => {
 
     expect(user.completeSpace).not.toHaveBeenCalled()
     expect(repository.replace).not.toHaveBeenCalled()
-    expect(eventBroker.publish).not.toHaveBeenCalled()
+    expect(Broker.publish).not.toHaveBeenCalled()
   })
 
   it('should not complete the space and publish the space completed event if the user has already completed the space', async () => {
@@ -83,6 +83,6 @@ describe('CompleteSpaceUseCase', () => {
 
     expect(user.completeSpace).not.toHaveBeenCalled()
     expect(repository.replace).not.toHaveBeenCalled()
-    expect(eventBroker.publish).not.toHaveBeenCalled()
+    expect(Broker.publish).not.toHaveBeenCalled()
   })
 })

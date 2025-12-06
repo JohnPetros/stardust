@@ -1,7 +1,9 @@
 import type { Action, Call } from '@stardust/core/global/interfaces'
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import type { AccountDto } from '@stardust/core/auth/entities/dtos'
+import type { Broker } from '@stardust/core/global/interfaces'
 import { Account } from '@stardust/core/auth/entities'
+import { UserSignedInEvent } from '@stardust/core/auth/events'
 
 import { COOKIES } from '@/constants'
 
@@ -17,6 +19,7 @@ type Response = {
 
 export const SignUpWithSocialAccountAction = (
   service: AuthService,
+  broker: Broker,
 ): Action<Request, Response> => {
   return {
     async handle(call: Call<Request>) {
@@ -28,7 +31,13 @@ export const SignUpWithSocialAccountAction = (
 
       const signUpResponse = await service.signUpWithSocialAccount(account)
 
+      const event = new UserSignedInEvent({
+        userId: account.id.value,
+        platform: 'web',
+      })
+
       await Promise.all([
+        broker.publish(event),
         call.setCookie(
           COOKIES.accessToken.key,
           accessToken,

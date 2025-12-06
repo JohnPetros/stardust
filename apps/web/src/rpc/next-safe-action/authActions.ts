@@ -19,6 +19,7 @@ import {
 import { actionClient } from './clients/actionClient'
 import { NextCall } from '../next/NextCall'
 import { authActionClient } from './clients/authActionClient'
+import { InngestBroker } from '@/queue/inngest/InngestBroker'
 
 export const signIn = actionClient
   .schema(
@@ -34,7 +35,8 @@ export const signIn = actionClient
     const restClient = NextRestClient()
     restClient.setBaseUrl(CLIENT_ENV.stardustServerUrl)
     const service = AuthService(restClient)
-    const action = SignInAction(service)
+    const broker = InngestBroker()
+    const action = SignInAction(service, broker)
     return await action.handle(call)
   })
 
@@ -59,7 +61,8 @@ export const signUpWithSocialAccount = actionClient
     restClient.setBaseUrl(CLIENT_ENV.stardustServerUrl)
     restClient.setAuthorization(clientInput.accessToken)
     const service = AuthService(restClient)
-    const action = SignUpWithSocialAccountAction(service)
+    const broker = InngestBroker()
+    const action = SignUpWithSocialAccountAction(service, broker)
     return await action.handle(call)
   })
 

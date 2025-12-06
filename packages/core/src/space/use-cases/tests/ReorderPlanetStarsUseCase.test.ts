@@ -1,7 +1,7 @@
 import { mock } from 'ts-jest-mocker'
 import { faker } from '@faker-js/faker'
 
-import type { EventBroker } from '#global/interfaces/EventBroker'
+import type { Broker } from '#global/interfaces/Broker'
 import { ReorderPlanetStarsUseCase } from '../ReorderPlanetStarsUseCase'
 import type { PlanetsRepository, StarsRepository } from '../../interfaces'
 import { PlanetsFaker } from '../../domain/entities/tests/fakers'
@@ -11,14 +11,14 @@ import { StarsOrderChangedEvent } from '#space/domain/events/StarsOrderChangedEv
 
 describe('Reorder Planet Stars Use Case', () => {
   let useCase: ReorderPlanetStarsUseCase
-  let broker: jest.Mocked<EventBroker>
+  let broker: jest.Mocked<Broker>
   let planetsRepository: jest.Mocked<PlanetsRepository>
   let starsRepository: jest.Mocked<StarsRepository>
 
   beforeEach(() => {
     planetsRepository = mock<PlanetsRepository>()
     starsRepository = mock<StarsRepository>()
-    broker = mock<EventBroker>()
+    broker = mock<Broker>()
     planetsRepository.findById.mockImplementation()
     starsRepository.replaceMany.mockImplementation()
     broker.publish.mockImplementation()

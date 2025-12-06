@@ -18,8 +18,8 @@ import {
 } from '@stardust/core/ranking/events'
 import { UserSignedInEvent, UserSignedUpEvent } from '@stardust/core/auth/events'
 
-import { ENV } from '../../constants'
 import { platformSchema } from '@stardust/validation/profile/schemas'
+import { SERVER_ENV } from '@/constants/server-env'
 
 const eventsSchema = {
   [UserCreatedEvent._NAME]: {
@@ -103,9 +103,9 @@ const eventsSchema = {
 }
 
 export const inngest = new Inngest({
-  id: 'StarDust Queue',
-  eventKey: ENV.mode === 'production' ? ENV.inngestEventKey : undefined,
-  signingKey: ENV.mode === 'production' ? ENV.inngestSigningKey : undefined,
-  isDev: ENV.mode === 'development',
+  id: 'StarDust Web Queue',
+  eventKey: SERVER_ENV.mode === 'production' ? SERVER_ENV.inngestEventKey : undefined,
+  signingKey: SERVER_ENV.mode === 'production' ? SERVER_ENV.inngestSigningKey : undefined,
   schemas: new EventSchemas().fromZod(eventsSchema),
+  isDev: SERVER_ENV.mode === 'development',
 })

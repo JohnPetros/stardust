@@ -9,7 +9,6 @@ export function useContentEditor({ content, onChange }: Params) {
   const [previewContent, setPreviewContent] = useState(content)
 
   function handleTextEditorChange(value: string) {
-    console.log('value', value)
     onChange(value)
   }
 

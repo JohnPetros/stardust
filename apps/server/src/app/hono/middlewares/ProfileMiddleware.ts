@@ -9,7 +9,7 @@ import {
   CompleteSpaceController,
 } from '@/rest/controllers/profile/users'
 import { HonoHttp } from '../HonoHttp'
-import { InngestEventBroker } from '@/queue/inngest/InngestEventBroker'
+import { InngestBroker } from '@/queue/inngest/InngestBroker'
 import { VerifyUserInsigniaController } from '@/rest/controllers/profile/users/VerifyUserInsigniaController'
 import { InsigniaRole } from '@stardust/core/global/structures'
 
@@ -57,8 +57,8 @@ export class ProfileMiddleware {
   async completeSpace(context: Context, next: Next) {
     const http = new HonoHttp(context, next)
     const repository = new SupabaseUsersRepository(http.getSupabase())
-    const eventBroker = new InngestEventBroker()
-    const controller = new CompleteSpaceController(repository, eventBroker)
+    const Broker = new InngestBroker()
+    const controller = new CompleteSpaceController(repository, Broker)
     await controller.handle(http)
   }
 }

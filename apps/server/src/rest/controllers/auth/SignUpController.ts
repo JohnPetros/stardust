@@ -1,4 +1,4 @@
-import type { Controller, EventBroker } from '@stardust/core/global/interfaces'
+import type { Controller, Broker } from '@stardust/core/global/interfaces'
 import type { Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
 import type { AuthService } from '@stardust/core/auth/interfaces'
@@ -17,7 +17,7 @@ type Schema = {
 export class SignUpController implements Controller<Schema> {
   constructor(
     private readonly authService: AuthService,
-    private readonly eventBroker: EventBroker,
+    private readonly broker: Broker,
   ) {}
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
@@ -34,7 +34,7 @@ export class SignUpController implements Controller<Schema> {
         userEmail: email,
         userName: name,
       })
-      await this.eventBroker.publish(event)
+      await this.broker.publish(event)
     }
 
     return response

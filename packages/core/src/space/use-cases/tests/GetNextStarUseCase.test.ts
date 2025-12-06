@@ -1,7 +1,7 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { StarsRepository, PlanetsRepository } from '#space/interfaces/index'
-import type { EventBroker } from '#global/interfaces/EventBroker'
+import type { Broker } from '#global/interfaces/Broker'
 import { GetNextStarUseCase } from '../GetNextStarUseCase'
 import { StarNotFoundError } from '#space/domain/errors/StarNotFoundError'
 import { Id } from '#global/domain/structures/Id'
@@ -13,7 +13,7 @@ import { PlanetCompletedEvent } from '#space/domain/events/PlanetCompletedEvent'
 describe('Get Next Star Use Case', () => {
   let starsRepository: Mock<StarsRepository>
   let planetsRepository: Mock<PlanetsRepository>
-  let eventBroker: Mock<EventBroker>
+  let Broker: Mock<Broker>
   let useCase: GetNextStarUseCase
   const userName = 'John Doe'
   const userSlug = 'john-doe'
@@ -21,12 +21,12 @@ describe('Get Next Star Use Case', () => {
   beforeEach(() => {
     starsRepository = mock<StarsRepository>()
     planetsRepository = mock<PlanetsRepository>()
-    eventBroker = mock<EventBroker>()
-    eventBroker.publish.mockImplementation()
+    Broker = mock<Broker>()
+    Broker.publish.mockImplementation()
     starsRepository.findById.mockImplementation()
     planetsRepository.findByStar.mockImplementation()
     planetsRepository.findByPosition.mockImplementation()
-    useCase = new GetNextStarUseCase(starsRepository, planetsRepository, eventBroker)
+    useCase = new GetNextStarUseCase(starsRepository, planetsRepository, Broker)
   })
 
   it('should throw an error if the current star is not found', () => {
@@ -112,7 +112,7 @@ describe('Get Next Star Use Case', () => {
       userSlug,
     })
 
-    expect(eventBroker.publish).toHaveBeenCalledWith(
+    expect(Broker.publish).toHaveBeenCalledWith(
       new PlanetCompletedEvent({
         userSlug,
         userName,

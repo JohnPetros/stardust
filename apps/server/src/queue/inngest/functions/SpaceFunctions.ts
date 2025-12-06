@@ -10,7 +10,7 @@ import { SupabasePlanetsRepository } from '@/database'
 import { HandleStarsNewOrderJob, UnlockFirstStarJob } from '@/queue/jobs/space'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestFunctions } from './InngestFunctions'
-import { InngestEventBroker } from '../InngestEventBroker'
+import { InngestBroker } from '../InngestBroker'
 
 export class SpaceFunctions extends InngestFunctions {
   private createUnlockFirstStarFunction(supabase: SupabaseClient) {
@@ -20,7 +20,7 @@ export class SpaceFunctions extends InngestFunctions {
       async (context) => {
         const repository = new SupabasePlanetsRepository(supabase)
         const amqp = new InngestAmqp<typeof context.event.data>(context)
-        const broker = new InngestEventBroker()
+        const broker = new InngestBroker()
         const job = new UnlockFirstStarJob(repository, broker)
         return job.handle(amqp)
       },
@@ -37,7 +37,7 @@ export class SpaceFunctions extends InngestFunctions {
       async (context) => {
         const repository = new SupabasePlanetsRepository(supabase)
         const amqp = new InngestAmqp<typeof context.event.data>(context)
-        const broker = new InngestEventBroker()
+        const broker = new InngestBroker()
         const job = new HandleStarsNewOrderJob(repository, broker)
         return job.handle(amqp)
       },

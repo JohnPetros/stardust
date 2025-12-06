@@ -1,4 +1,4 @@
-import type { EventBroker } from '#global/interfaces/EventBroker'
+import type { Broker } from '#global/interfaces/Broker'
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { PlanetsRepository } from '../interfaces'
 import { SpaceOrderChangedEvent } from '../domain/events'
@@ -6,7 +6,7 @@ import { SpaceOrderChangedEvent } from '../domain/events'
 export class HandleStarsNewOrderUseCase implements UseCase {
   constructor(
     private readonly repository: PlanetsRepository,
-    private readonly broker: EventBroker,
+    private readonly broker: Broker,
   ) {}
 
   async execute(): Promise<void> {

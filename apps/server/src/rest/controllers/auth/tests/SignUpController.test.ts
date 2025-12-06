@@ -1,6 +1,6 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
-import type { Controller, EventBroker, Http } from '@stardust/core/global/interfaces'
+import type { Controller, Broker, Http } from '@stardust/core/global/interfaces'
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
 import { AccountsFaker } from '@stardust/core/auth/entities/fakers'
@@ -13,15 +13,15 @@ import { SignUpController } from '../SignUpController'
 describe('Sign Up Controller', () => {
   let http: Mock<Http>
   let service: Mock<AuthService>
-  let eventBroker: Mock<EventBroker>
+  let Broker: Mock<Broker>
   let controller: Controller
 
   beforeEach(() => {
     http = mock()
     service = mock<AuthService>()
-    eventBroker = mock<EventBroker>()
-    eventBroker.publish.mockImplementation()
-    controller = new SignUpController(service, eventBroker)
+    Broker = mock<Broker>()
+    Broker.publish.mockImplementation()
+    controller = new SignUpController(service, Broker)
   })
 
   it('should call the auth service to sign up', async () => {
@@ -57,7 +57,7 @@ describe('Sign Up Controller', () => {
     })
     await controller.handle(http)
 
-    expect(eventBroker.publish).toHaveBeenCalledWith(
+    expect(Broker.publish).toHaveBeenCalledWith(
       new UserSignedUpEvent({
         userId: String(restResponse.body.id),
         userEmail: email,

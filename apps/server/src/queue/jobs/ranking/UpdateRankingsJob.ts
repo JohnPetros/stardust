@@ -1,4 +1,4 @@
-import type { Job, Amqp, EventBroker } from '@stardust/core/global/interfaces'
+import type { Job, Amqp, Broker } from '@stardust/core/global/interfaces'
 import type {
   RankersRepository,
   TiersRepository,
@@ -12,14 +12,14 @@ export class UpdateRankingsJob implements Job {
   constructor(
     private readonly tiersRepository: TiersRepository,
     private readonly rankersRepository: RankersRepository,
-    private readonly eventBroker: EventBroker,
+    private readonly broker: Broker,
   ) {}
 
   async handle(amqp: Amqp) {
     const useCase = new UpdateRankingsUseCase(
       this.tiersRepository,
       this.rankersRepository,
-      this.eventBroker,
+      this.broker,
     )
     await amqp.run(async () => useCase.execute(), UpdateRankingsUseCase.name)
   }
