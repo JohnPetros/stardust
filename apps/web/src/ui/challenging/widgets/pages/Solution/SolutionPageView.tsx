@@ -7,7 +7,7 @@ import type { ActionButtonTitles } from '@/ui/global/widgets/components/ActionBu
 import { Button } from '@/ui/global/widgets/components/Button'
 import { TitleInput } from '@/ui/global/widgets/components/TitleInput'
 import { ActionButton } from '@/ui/global/widgets/components/ActionButton'
-import { ContentEditor } from '../../components/ContentEditor'
+import { ContentEditor } from '../../components/old_ContentEditor'
 
 type Props = {
   savedSolutionDto: SolutionDto | null

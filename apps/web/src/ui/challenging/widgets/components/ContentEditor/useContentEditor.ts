@@ -6,14 +6,15 @@ type Params = {
 }
 
 export function useContentEditor({ content, onChange }: Params) {
-  const [previewContent, setPreviewContent] = useState(content.replaceAll('\n', '\n\n'))
+  const [previewContent, setPreviewContent] = useState(content)
 
   function handleTextEditorChange(value: string) {
+    console.log('value', value)
     onChange(value)
   }
 
   useEffect(() => {
-    setPreviewContent(content.replaceAll('\n', '\n\n'))
+    setPreviewContent(content)
   }, [content])
 
   return {
