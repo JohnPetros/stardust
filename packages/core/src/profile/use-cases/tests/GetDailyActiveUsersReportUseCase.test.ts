@@ -92,14 +92,14 @@ describe('Get Daily Active Users Report Use Case', () => {
         )
 
         const webValues: Record<number, number> = {
-          0: 30, // hoje
-          1: 20, // ontem
-          2: 10, // 2 dias atrás
+          0: 30, // today
+          1: 20, // yesterday
+          2: 10, // 2 days ago
         }
         const mobileValues: Record<number, number> = {
-          0: 35, // hoje
-          1: 25, // ontem
-          2: 15, // 2 dias atrás
+          0: 35, // today
+          1: 25, // yesterday
+          2: 15, // 2 days ago
         }
 
         if (platform.name === 'web') {
