@@ -16,9 +16,10 @@ import {
   RankingUpdatedEvent,
   RankingWinnersDefinedEvent,
 } from '@stardust/core/ranking/events'
-import { UserSignedUpEvent } from '@stardust/core/auth/events'
+import { UserSignedInEvent, UserSignedUpEvent } from '@stardust/core/auth/events'
 
 import { ENV } from '../../constants'
+import { platformSchema } from '@stardust/validation/profile/schemas'
 
 const eventsSchema = {
   [UserCreatedEvent._NAME]: {
@@ -93,10 +94,16 @@ const eventsSchema = {
       tierId: idSchema,
     }),
   },
+  [UserSignedInEvent._NAME]: {
+    data: z.object({
+      userId: idSchema,
+      platform: platformSchema,
+    }),
+  },
 }
 
 export const inngest = new Inngest({
-  id: 'StarDust Queue',
+  id: 'StarDust ServerQueue',
   eventKey: ENV.mode === 'production' ? ENV.inngestEventKey : undefined,
   signingKey: ENV.mode === 'production' ? ENV.inngestSigningKey : undefined,
   schemas: new EventSchemas().fromZod(eventsSchema),
