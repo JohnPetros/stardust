@@ -24,4 +24,12 @@ export class Platform {
     new StringValidation(name, 'Platform Name').oneOf(['web', 'mobile']).validate()
     return true
   }
+
+  static createAsWeb(): Platform {
+    return new Platform('web')
+  }
+
+  static createAsMobile(): Platform {
+    return new Platform('mobile')
+  }
 }

@@ -16,7 +16,7 @@ import type { SupabaseUser } from '../../types'
 import { SupabaseUserMapper } from '../../mappers/profile'
 import { SupabasePostgreError } from '../../errors'
 import { SupabaseRepository } from '../SupabaseRepository'
-import type { Visit } from '@stardust/core/profile/structures'
+import type { Platform, Visit } from '@stardust/core/profile/structures'
 
 export class SupabaseUsersRepository
   extends SupabaseRepository
@@ -586,6 +586,24 @@ export class SupabaseUsersRepository
       .select('*', { count: 'exact', head: true })
       .gte('created_at', month.firstDay.toISOString())
       .lte('created_at', month.lastDay.toISOString())
+
+    if (error) throw new SupabasePostgreError(error)
+
+    return Integer.create(count ?? 0)
+  }
+
+  async countVisitsByDateAndPlatform(date: Date, platform: Platform): Promise<Integer> {
+    const startOfDay = new Date(date)
+    startOfDay.setUTCHours(0, 0, 0, 0)
+    const endOfDay = new Date(date)
+    endOfDay.setUTCHours(23, 59, 59, 999)
+
+    const { count, error } = await this.supabase
+      .from('users_visits')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', startOfDay.toISOString())
+      .lte('created_at', endOfDay.toISOString())
+      .eq('platform', platform.name)
 
     if (error) throw new SupabasePostgreError(error)
 
