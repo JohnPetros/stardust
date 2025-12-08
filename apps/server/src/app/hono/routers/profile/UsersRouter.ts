@@ -6,7 +6,9 @@ import {
   idSchema,
   insigniaRoleSchema,
   integerSchema,
+  itemsPerPageSchema,
   nameSchema,
+  pageSchema,
   stringSchema,
 } from '@stardust/validation/global/schemas'
 import { userSchema } from '@stardust/validation/profile/schemas'
@@ -28,6 +30,7 @@ import {
   FetchCompletedChallengesKpiController,
   FetchUnlockedStarsKpiController,
   FetchDailyActiveUsersReportController,
+  FetchUsersListController,
 } from '@/rest/controllers/profile'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
@@ -382,6 +385,28 @@ export class UsersRouter extends HonoRouter {
     )
   }
 
+  private registerFetchUsersListRoute() {
+    this.router.get(
+      '/',
+      this.authMiddleware.verifyAuthentication,
+      this.validationMiddleware.validate(
+        'query',
+        z.object({
+          search: stringSchema.default(''),
+          page: pageSchema,
+          itemsPerPage: itemsPerPageSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const controller = new FetchUsersListController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   registerRoutes(): Hono {
     this.registerFetchUserByIdRoute()
     this.registerFetchUserBySlugRoute()
@@ -399,6 +424,7 @@ export class UsersRouter extends HonoRouter {
     this.registerFetchCompletedChallengesKpiRoute()
     this.registerFetchUnlockedStarsKpiRoute()
     this.registerFetchDailyActiveUsersRoute()
+    this.registerFetchUsersListRoute()
     return this.router
   }
 }
