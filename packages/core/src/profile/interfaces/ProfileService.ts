@@ -7,7 +7,11 @@ import type {
   Name,
   Slug,
 } from '#global/domain/structures/index'
-import type { AchievementDto, UserDto } from '../domain/entities/dtos'
+import type {
+  AchievementDto,
+  DailyActiveUsersDto,
+  UserDto,
+} from '../domain/entities/dtos'
 import type { User } from '../domain/entities'
 import type {
   StarChallengeRewardingPayload,
@@ -43,6 +47,7 @@ export interface ProfileService {
   fetchCreatedUsersKpi(): Promise<RestResponse<KpiDto>>
   fetchUnlockedStarsKpi(): Promise<RestResponse<KpiDto>>
   fetchCompletedChallengesKpi(): Promise<RestResponse<KpiDto>>
+  fetchDailyActiveUsersReport(days: Integer): Promise<RestResponse<DailyActiveUsersDto>>
   rewardUserForStarCompletion(
     userId: Id,
     rewardsPayload: StarRewardingPayload,

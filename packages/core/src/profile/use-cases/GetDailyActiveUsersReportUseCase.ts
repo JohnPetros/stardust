@@ -18,7 +18,7 @@ export class GetDailyActiveUsersReportUseCase
   async execute({ days }: Request): Promise<DailyActiveUsersDto> {
     const dates = this.getDates(days)
 
-    const visitCounts = await Promise.all(
+    const dau = await Promise.all(
       dates.map(async (date) => {
         const [webVisits, mobileVisits] = await Promise.all([
           this.repository.countVisitsByDateAndPlatform(
@@ -33,19 +33,12 @@ export class GetDailyActiveUsersReportUseCase
 
         return {
           date,
-          webCount: webVisits.value,
-          mobileCount: mobileVisits.value,
+          web: webVisits.value,
+          mobile: mobileVisits.value,
         }
       }),
     )
-
-    return {
-      web: visitCounts.map(({ date, webCount }) => ({ date, count: webCount })),
-      mobile: visitCounts.map(({ date, mobileCount }) => ({
-        date,
-        count: mobileCount,
-      })),
-    }
+    return dau
   }
 
   private getDates(days: number): Date[] {

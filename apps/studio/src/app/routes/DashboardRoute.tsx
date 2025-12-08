@@ -7,7 +7,12 @@ export const clientMiddleware = [AuthMiddleware, RestMiddleware]
 
 export const clientLoader = async ({ context }: Route.LoaderArgs) => {
   const { profileService, challengingService } = context.get(restContext)
-  const [completedChallengesKpiResponse, createdUsersKpiResponse, unlockedStarsKpiResponse, postedChallengesKpiResponse] = await Promise.all([
+  const [
+    completedChallengesKpiResponse,
+    createdUsersKpiResponse,
+    unlockedStarsKpiResponse,
+    postedChallengesKpiResponse,
+  ] = await Promise.all([
     profileService.fetchCompletedChallengesKpi(),
     profileService.fetchCreatedUsersKpi(),
     profileService.fetchUnlockedStarsKpi(),

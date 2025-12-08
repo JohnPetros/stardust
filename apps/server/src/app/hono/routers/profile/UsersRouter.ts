@@ -362,11 +362,16 @@ export class UsersRouter extends HonoRouter {
     )
   }
 
-  private registerFetchDailyActiveUsersReportRoute() {
+  private registerFetchDailyActiveUsersRoute() {
     this.router.get(
       '/daily-active-users-report',
       this.authMiddleware.verifyAuthentication,
-      this.validationMiddleware.validate('query', z.object({ days: integerSchema })),
+      this.validationMiddleware.validate(
+        'query',
+        z.object({
+          days: integerSchema,
+        }),
+      ),
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseUsersRepository(http.getSupabase())
@@ -393,7 +398,7 @@ export class UsersRouter extends HonoRouter {
     this.registerFetchCreatedUsersKpiRoute()
     this.registerFetchCompletedChallengesKpiRoute()
     this.registerFetchUnlockedStarsKpiRoute()
-    this.registerFetchDailyActiveUsersReportRoute()
+    this.registerFetchDailyActiveUsersRoute()
     return this.router
   }
 }
