@@ -1,9 +1,5 @@
-type VisitCount = {
+export type DailyActiveUsersDto = Array<{
   date: Date
-  count: number
-}
-
-export type DailyActiveUsersDto = {
-  web: VisitCount[]
-  mobile: VisitCount[]
-}
+  mobile: number
+  web: number
+}>
