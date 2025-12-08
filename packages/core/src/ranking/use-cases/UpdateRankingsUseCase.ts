@@ -1,5 +1,5 @@
 import type { Id } from '#global/domain/structures/Id'
-import type { EventBroker } from '#global/interfaces/EventBroker'
+import type { Broker } from '#global/interfaces/Broker'
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { Tier } from '../domain/entities'
 import {
@@ -14,7 +14,7 @@ export class UpdateRankingsUseCase implements UseCase<void, void> {
   constructor(
     private readonly tiersRepository: TiersRepository,
     private readonly rankersRepository: RankersRepository,
-    private readonly eventBroker: EventBroker,
+    private readonly broker: Broker,
   ) {}
 
   async execute() {
@@ -26,7 +26,7 @@ export class UpdateRankingsUseCase implements UseCase<void, void> {
     await this.addWinners(tiers)
 
     for (const tier of tiers)
-      await this.eventBroker.publish(new RankingUpdatedEvent({ tierId: tier.id.value }))
+      await this.broker.publish(new RankingUpdatedEvent({ tierId: tier.id.value }))
   }
 
   private async addLosers(tiers: Tier[]) {
@@ -46,7 +46,7 @@ export class UpdateRankingsUseCase implements UseCase<void, void> {
           tierId: previousTier.id.value,
           losersIds: losers.map((loser) => loser.id.value),
         })
-        await this.eventBroker.publish(event)
+        await this.broker.publish(event)
       }
     }
   }
@@ -68,7 +68,7 @@ export class UpdateRankingsUseCase implements UseCase<void, void> {
           tierId: nextTier.id.value,
           winnersIds: winners.map((winner) => winner.id.value),
         })
-        await this.eventBroker.publish(event)
+        await this.broker.publish(event)
       }
     }
   }

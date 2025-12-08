@@ -1,5 +1,5 @@
 import { Integer } from '#global/domain/structures/Integer'
-import type { EventBroker } from '#global/interfaces/EventBroker'
+import type { Broker } from '#global/interfaces/Broker'
 import type { UseCase } from '#global/interfaces/UseCase'
 import { SelectedRocketByDefaultNotFoundError } from '../domain/errors'
 import { SelectedAvatarByDefaultNotFoundError } from '../domain/errors'
@@ -20,7 +20,7 @@ export class AquireDefaultShopItemsUseCase implements UseCase<Request, void> {
   constructor(
     private readonly rocketsRepository: RocketsRepository,
     private readonly avatarsRepository: AvatarsRepository,
-    private readonly eventBroker: EventBroker,
+    private readonly broker: Broker,
   ) {}
 
   async execute({ user, firstStarId, firstTierId }: Request) {
@@ -47,6 +47,6 @@ export class AquireDefaultShopItemsUseCase implements UseCase<Request, void> {
       firstStarId,
       user,
     })
-    await this.eventBroker.publish(event)
+    await this.broker.publish(event)
   }
 }

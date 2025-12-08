@@ -1,7 +1,7 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import { UnlockFirstStarUseCase } from '../UnlockFirstStarUseCase'
-import type { EventBroker } from '#global/interfaces/EventBroker'
+import type { Broker } from '#global/interfaces/Broker'
 import type { PlanetsRepository } from '../../interfaces'
 import { FirstStarUnlockedEvent } from '#space/domain/events/FirstStarUnlockedEvent'
 import { PlanetNotFoundError } from '#space/domain/errors/PlanetNotFoundError'
@@ -12,15 +12,15 @@ import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
 
 describe('Unlock First Star Use Case', () => {
   let repository: Mock<PlanetsRepository>
-  let eventBroker: Mock<EventBroker>
+  let Broker: Mock<Broker>
   let useCase: UnlockFirstStarUseCase
 
   beforeEach(() => {
     repository = mock<PlanetsRepository>()
-    eventBroker = mock<EventBroker>()
+    Broker = mock<Broker>()
     repository.findByPosition.mockImplementation()
-    eventBroker.publish.mockImplementation()
-    useCase = new UnlockFirstStarUseCase(repository, eventBroker)
+    Broker.publish.mockImplementation()
+    useCase = new UnlockFirstStarUseCase(repository, Broker)
   })
 
   it('should throw an error if the first planet is not found', async () => {
@@ -56,7 +56,7 @@ describe('Unlock First Star Use Case', () => {
     })
 
     expect(repository.findByPosition).toHaveBeenCalledWith(OrdinalNumber.create(1))
-    expect(eventBroker.publish).toHaveBeenCalledWith(
+    expect(Broker.publish).toHaveBeenCalledWith(
       new FirstStarUnlockedEvent({
         user: {
           id: user.id.value,

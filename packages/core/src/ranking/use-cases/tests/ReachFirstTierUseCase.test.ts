@@ -1,4 +1,4 @@
-import type { EventBroker } from '#global/interfaces/EventBroker'
+import type { Broker } from '#global/interfaces/Broker'
 import type { TiersRepository } from '#ranking/interfaces/TiersRepository'
 import { type Mock, mock } from 'ts-jest-mocker'
 import { ReachFirstTierUseCase } from '../ReachFirstTierUseCase'
@@ -11,15 +11,15 @@ import { Id } from '#global/domain/structures/Id'
 
 describe('Reach First Tier Use Case', () => {
   let tiersRepository: Mock<TiersRepository>
-  let eventBroker: Mock<EventBroker>
+  let Broker: Mock<Broker>
   let useCase: ReachFirstTierUseCase
 
   beforeEach(() => {
     tiersRepository = mock<TiersRepository>()
-    eventBroker = mock<EventBroker>()
+    Broker = mock<Broker>()
     tiersRepository.findByPosition.mockImplementation()
-    eventBroker.publish.mockImplementation()
-    useCase = new ReachFirstTierUseCase(tiersRepository, eventBroker)
+    Broker.publish.mockImplementation()
+    useCase = new ReachFirstTierUseCase(tiersRepository, Broker)
   })
 
   it('should throw if tier is not found', () => {
@@ -58,7 +58,7 @@ describe('Reach First Tier Use Case', () => {
       firstStarId: firstStarId.value,
     })
 
-    expect(eventBroker.publish).toHaveBeenCalledWith(
+    expect(Broker.publish).toHaveBeenCalledWith(
       new FirstTierReachedEvent({
         user: { id: user.id.value, name: user.name.value, email: user.email.value },
         firstStarId: firstStarId.value,

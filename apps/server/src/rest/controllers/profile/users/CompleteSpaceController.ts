@@ -1,4 +1,4 @@
-import type { Controller, EventBroker } from '@stardust/core/global/interfaces'
+import type { Controller, Broker } from '@stardust/core/global/interfaces'
 import type { Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
@@ -11,12 +11,15 @@ type Schema = {
 }
 
 export class CompleteSpaceController implements Controller<Schema> {
-  constructor(private readonly repository: UsersRepository, private readonly eventBroker: EventBroker) {}
+  constructor(
+    private readonly repository: UsersRepository,
+    private readonly broker: Broker,
+  ) {}
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const userId = await http.getAccountId()
     const { nextStarId } = await http.getBody()
-    const useCase = new CompleteSpaceUseCase(this.repository, this.eventBroker)
+    const useCase = new CompleteSpaceUseCase(this.repository, this.broker)
     await useCase.execute({ userId, nextStarId })
     return await http.pass()
   }

@@ -1,5 +1,5 @@
 import type { AccountDto } from '@stardust/core/auth/entities/dtos'
-import type { Controller, EventBroker, Http } from '@stardust/core/global/interfaces'
+import type { Controller, Broker, Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
 import { UserSignedUpEvent } from '@stardust/core/auth/events'
 
@@ -8,7 +8,7 @@ type Schema = {
 }
 
 export class SignUpWithSocialAccountController implements Controller<Schema> {
-  constructor(private readonly eventBroker: EventBroker) {}
+  constructor(private readonly broker: Broker) {}
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const accountDto = await http.getBody()
@@ -19,7 +19,7 @@ export class SignUpWithSocialAccountController implements Controller<Schema> {
       userName: accountDto.name,
     })
 
-    await this.eventBroker.publish(event)
+    await this.broker.publish(event)
 
     return http.send({ isNewAccount: true })
   }
