@@ -2,7 +2,7 @@ import type { UseCase } from '#global/interfaces/UseCase'
 import type { PlanetsRepository, StarsRepository } from '../interfaces'
 import type { StarDto } from '../domain/entities/dtos/index'
 import type { Star } from '../domain/entities'
-import type { EventBroker } from '#global/interfaces/EventBroker'
+import type { Broker } from '#global/interfaces/Broker'
 import { Id } from '#global/domain/structures/Id'
 import { PlanetNotFoundError, StarNotFoundError } from '../domain/errors'
 import { PlanetCompletedEvent } from '../domain/events'
@@ -19,7 +19,7 @@ export class GetNextStarUseCase implements UseCase<Request, Response> {
   constructor(
     private readonly starsRepository: StarsRepository,
     private readonly planetsRepository: PlanetsRepository,
-    private readonly eventBroker: EventBroker,
+    private readonly broker: Broker,
   ) {}
 
   async execute({ userName, userSlug, currentStarId }: Request) {
@@ -38,7 +38,7 @@ export class GetNextStarUseCase implements UseCase<Request, Response> {
           userName,
           planetName: currentPlanet.name.value,
         })
-        await this.eventBroker.publish(event)
+        await this.broker.publish(event)
       }
     }
 

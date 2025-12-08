@@ -1,5 +1,5 @@
 import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
-import type { EventBroker } from '#global/interfaces/EventBroker'
+import type { Broker } from '#global/interfaces/Broker'
 import type { UseCase } from '#global/interfaces/UseCase'
 import { PlanetNotFoundError } from '../domain/errors'
 import { FirstStarUnlockedEvent } from '../domain/events'
@@ -16,7 +16,7 @@ type Response = Promise<void>
 export class UnlockFirstStarUseCase implements UseCase<Request, Response> {
   constructor(
     private readonly repository: PlanetsRepository,
-    private readonly eventBroker: EventBroker,
+    private readonly broker: Broker,
   ) {}
 
   async execute(request: Request) {
@@ -33,6 +33,6 @@ export class UnlockFirstStarUseCase implements UseCase<Request, Response> {
       },
       firstStarId: firstPlanet.firstStar.id.value,
     })
-    await this.eventBroker.publish(event)
+    await this.broker.publish(event)
   }
 }

@@ -1,7 +1,7 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { PlanetsRepository } from '#space/interfaces/PlanetsRepository'
-import type { EventBroker } from '#global/interfaces/EventBroker'
+import type { Broker } from '#global/interfaces/Broker'
 import { SpaceOrderChangedEvent } from '#space/domain/events/SpaceOrderChangedEvent'
 import { PlanetsFaker } from '#space/domain/entities/tests/fakers/PlanetsFaker'
 import { HandleStarsNewOrderUseCase } from '../HandleStarsNewOrderUseCase'
@@ -9,11 +9,11 @@ import { HandleStarsNewOrderUseCase } from '../HandleStarsNewOrderUseCase'
 describe('Handle Stars New Order Use Case', () => {
   let useCase: HandleStarsNewOrderUseCase
   let repository: Mock<PlanetsRepository>
-  let broker: Mock<EventBroker>
+  let broker: Mock<Broker>
 
   beforeEach(() => {
     repository = mock<PlanetsRepository>()
-    broker = mock<EventBroker>()
+    broker = mock<Broker>()
     repository.findAll.mockImplementation()
     broker.publish.mockImplementation()
     useCase = new HandleStarsNewOrderUseCase(repository, broker)

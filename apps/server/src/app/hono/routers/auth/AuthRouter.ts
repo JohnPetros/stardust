@@ -32,7 +32,7 @@ import {
   FetchGoogleAccountConnectionController,
 } from '@/rest/controllers/auth'
 import { SupabaseAuthService } from '@/rest/services'
-import { InngestEventBroker } from '@/queue/inngest/InngestEventBroker'
+import { InngestBroker } from '@/queue/inngest/InngestBroker'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
 import {
@@ -104,8 +104,8 @@ export class AuthRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         const service = new SupabaseAuthService(http.getSupabase())
-        const eventBroker = new InngestEventBroker()
-        const controller = new SignUpController(service, eventBroker)
+        const Broker = new InngestBroker()
+        const controller = new SignUpController(service, Broker)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -170,8 +170,8 @@ export class AuthRouter extends HonoRouter {
       this.profileMiddleware.verifyUserSocialAccount,
       async (context) => {
         const http = new HonoHttp(context)
-        const eventBroker = new InngestEventBroker()
-        const controller = new SignUpWithSocialAccountController(eventBroker)
+        const Broker = new InngestBroker()
+        const controller = new SignUpWithSocialAccountController(Broker)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -337,7 +337,8 @@ export class AuthRouter extends HonoRouter {
         const http = new HonoHttp(context)
         const supabase = http.getSupabase()
         const service = new SupabaseAuthService(supabase)
-        const controller = new ConfirmEmailController(service)
+        const broker = new InngestBroker()
+        const controller = new ConfirmEmailController(service, broker)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },

@@ -7,7 +7,7 @@ import {
   SupabaseTiersRepository,
   SupabaseRankersRepository,
 } from '@/database/supabase/repositories/ranking'
-import { InngestEventBroker } from '../InngestEventBroker'
+import { InngestBroker } from '../InngestBroker'
 
 export class RankingFunctions extends InngestFunctions {
   private reachFirstTierJob(supabase: SupabaseClient) {
@@ -17,8 +17,8 @@ export class RankingFunctions extends InngestFunctions {
       async (context) => {
         const repository = new SupabaseTiersRepository(supabase)
         const amqp = new InngestAmqp<typeof context.event.data>(context)
-        const eventBroker = new InngestEventBroker()
-        const job = new ReachFirstTierJob(repository, eventBroker)
+        const Broker = new InngestBroker()
+        const job = new ReachFirstTierJob(repository, Broker)
         return job.handle(amqp)
       },
     )
@@ -32,8 +32,8 @@ export class RankingFunctions extends InngestFunctions {
         const tiersRepository = new SupabaseTiersRepository(supabase)
         const rankersRepository = new SupabaseRankersRepository(supabase)
         const amqp = new InngestAmqp<typeof context.event.data>(context)
-        const eventBroker = new InngestEventBroker()
-        const job = new UpdateRankingsJob(tiersRepository, rankersRepository, eventBroker)
+        const Broker = new InngestBroker()
+        const job = new UpdateRankingsJob(tiersRepository, rankersRepository, Broker)
         return job.handle(amqp)
       },
     )
