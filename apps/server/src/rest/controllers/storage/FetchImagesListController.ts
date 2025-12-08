@@ -21,7 +21,7 @@ export class FetchImagesListController implements Controller {
   async handle(http: Http<Schema>) {
     const { folder } = http.getRouteParams()
     const { page, itemsPerPage, search } = http.getQueryParams()
-    const { files, totalFilesCount } = await this.storageProvider.listFiles({
+    const { items, count } = await this.storageProvider.listFiles({
       folder: StorageFolder.create(folder),
       page: OrdinalNumber.create(page),
       itemsPerPage: OrdinalNumber.create(itemsPerPage),
@@ -29,8 +29,8 @@ export class FetchImagesListController implements Controller {
     })
     return http.statusOk().sendPagination(
       new PaginationResponse(
-        files.map((file) => file.name),
-        totalFilesCount,
+        items.map((file) => file.name),
+        count,
         itemsPerPage,
       ),
     )
