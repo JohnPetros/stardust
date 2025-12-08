@@ -17,14 +17,14 @@ export class ListSnippetsUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: SnippetsRepository) {}
 
   async execute({ page, itemsPerPage, authorId }: Request) {
-    const snippets = await this.repository.findManySnippets({
+    const { items, count } = await this.repository.findManySnippets({
       page: OrdinalNumber.create(page),
       itemsPerPage: OrdinalNumber.create(itemsPerPage),
       authorId: Id.create(authorId),
     })
     return new PaginationResponse(
-      snippets.snippets.map((snippet) => snippet.dto),
-      snippets.totalSnippetsCount,
+      items.map((snippet) => snippet.dto),
+      count,
       itemsPerPage,
     )
   }

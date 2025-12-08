@@ -20,8 +20,8 @@ describe('List Avatars Use Case', () => {
 
   it('should try to find many avatars', async () => {
     repository.findMany.mockResolvedValue({
-      avatars: [],
-      totalAvatarsCount: 0,
+      items: [],
+      count: 0,
     })
     const request = {
       search: Text.create(''),
@@ -43,8 +43,8 @@ describe('List Avatars Use Case', () => {
   it('should return a pagination response with the found avatars', async () => {
     const avatars = AvatarsFaker.fakeMany(10)
     repository.findMany.mockResolvedValue({
-      avatars,
-      totalAvatarsCount: avatars.length,
+      items: avatars,
+      count: avatars.length,
     })
     const request = {
       search: Text.create(''),

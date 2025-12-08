@@ -19,7 +19,7 @@ export class ListRocketsUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: RocketsRepository) {}
 
   async execute({ search, order, page, itemsPerPage }: Request) {
-    const { rockets, totalRocketsCount } = await this.repository.findMany({
+    const { items, count } = await this.repository.findMany({
       search: Text.create(search),
       page: OrdinalNumber.create(page),
       itemsPerPage: OrdinalNumber.create(itemsPerPage),
@@ -27,8 +27,8 @@ export class ListRocketsUseCase implements UseCase<Request, Response> {
     })
 
     return new PaginationResponse(
-      rockets.map((rocket) => rocket.dto),
-      totalRocketsCount,
+      items.map((rocket) => rocket.dto),
+      count,
       itemsPerPage,
     )
   }

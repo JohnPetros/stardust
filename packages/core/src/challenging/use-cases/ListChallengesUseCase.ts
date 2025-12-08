@@ -28,7 +28,7 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
   async execute(request: Request) {
     const completedChallengesIds = IdsList.create(request.userCompletedChallengesIds)
 
-    const response = await this.repository.findMany({
+    const { items, count } = await this.repository.findMany({
       categoriesIds: IdsList.create(request.categoriesIds),
       difficulty: ChallengeDifficulty.create(request.difficulty),
       title: Text.create(request.title),
@@ -39,7 +39,7 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
       itemsPerPage: OrdinalNumber.create(request.itemsPerPage),
       completionStatus: ChallengeCompletionStatus.create(request.completionStatus),
     })
-    let challenges = response.challenges
+    let challenges = items
 
     challenges = this.filterChallenges(
       ChallengeCompletionStatus.create(request.completionStatus),
@@ -51,7 +51,7 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
 
     return new PaginationResponse(
       challenges.map((challenge) => challenge.dto),
-      response.totalChallengesCount,
+      count,
     )
   }
 

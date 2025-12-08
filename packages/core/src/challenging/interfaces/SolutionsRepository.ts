@@ -1,13 +1,12 @@
 import type { Id, Slug } from '#global/domain/structures/index'
+import type { ManyItems } from '../../global/domain/types'
 import type { Solution } from '../domain/entities'
 import type { SolutionsListingParams } from '../domain/types'
 
 export interface SolutionsRepository {
   findById(solutionId: Id): Promise<Solution | null>
   findBySlug(solutionSlug: Slug): Promise<Solution | null>
-  findMany(
-    params: SolutionsListingParams,
-  ): Promise<{ solutions: Solution[]; totalSolutionsCount: number }>
+  findMany(params: SolutionsListingParams): Promise<ManyItems<Solution>>
   add(solution: Solution, challengeId: Id): Promise<void>
   replace(solution: Solution): Promise<void>
   remove(solutionId: Id): Promise<void>

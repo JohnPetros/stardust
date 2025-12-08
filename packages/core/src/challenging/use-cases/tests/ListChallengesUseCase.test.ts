@@ -61,8 +61,8 @@ describe('List Challenges Use Case', () => {
       title: 'Recursion patterns',
     })
     repository.findMany.mockResolvedValue({
-      challenges: [challenge],
-      totalChallengesCount: 12,
+      items: [challenge],
+      count: 12,
     })
 
     const response = await useCase.execute(request)
@@ -107,13 +107,13 @@ describe('List Challenges Use Case', () => {
     })
 
     repository.findMany.mockResolvedValue({
-      challenges: [
+      items: [
         publicCompletedChallenge,
         ownChallenge,
         privateCompletedChallenge,
         notCompletedChallenge,
       ],
-      totalChallengesCount: 4,
+      count: 4,
     })
 
     const response = await useCase.execute(
@@ -137,8 +137,8 @@ describe('List Challenges Use Case', () => {
     const hardChallenge = ChallengesFaker.fake({ difficultyLevel: 'hard' })
 
     repository.findMany.mockResolvedValue({
-      challenges: [hardChallenge, easyChallenge, mediumChallenge],
-      totalChallengesCount: 3,
+      items: [hardChallenge, easyChallenge, mediumChallenge],
+      count: 3,
     })
 
     const response = await useCase.execute(createRequest())

@@ -1,4 +1,5 @@
 import type { Id, Integer, Month, Slug } from '#global/domain/structures/index'
+import type { ManyItems } from '../../global/domain/types'
 import type { Challenge, ChallengeCategory } from '../domain/entities'
 import type { ChallengeVote } from '../domain/structures'
 import type { ChallengesListParams } from '../domain/types'
@@ -8,9 +9,7 @@ export interface ChallengesRepository {
   findBySlug(challengeSlug: Slug): Promise<Challenge | null>
   findByStar(starId: Id): Promise<Challenge | null>
   findAllByNotAuthor(authorId: Id): Promise<Challenge[]>
-  findMany(
-    params: ChallengesListParams,
-  ): Promise<{ challenges: Challenge[]; totalChallengesCount: number }>
+  findMany(params: ChallengesListParams): Promise<ManyItems<Challenge>>
   findAllCategories(): Promise<ChallengeCategory[]>
   findVoteByChallengeAndUser(challengeId: Id, userId: Id): Promise<ChallengeVote>
   add(challenge: Challenge): Promise<void>

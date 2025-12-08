@@ -20,7 +20,7 @@ export class ListSolutionsUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: SolutionsRepository) {}
 
   async execute(request: Request) {
-    const { solutions, totalSolutionsCount } = await this.repository.findMany({
+    const { items, count } = await this.repository.findMany({
       challengeId: request.challengeId ? Id.create(request.challengeId) : null,
       userId: request.userId ? Id.create(request.userId) : null,
       title: Text.create(request.title),
@@ -30,8 +30,8 @@ export class ListSolutionsUseCase implements UseCase<Request, Response> {
     })
 
     return new PaginationResponse(
-      solutions.map((solution) => solution.dto),
-      totalSolutionsCount,
+      items.map((solution) => solution.dto),
+      count,
     )
   }
 }
