@@ -46,6 +46,12 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
       return await restClient.get('/profile/users/completed-challenges-kpi')
     },
 
+    async fetchDailyActiveUsersReport(days: Integer) {
+      return await restClient.get(
+        `/profile/users/daily-active-users-report?days=${days.value}`,
+      )
+    },
+
     async updateUser(user: User) {
       return await restClient.put(`/profile/users/${user.id.value}`, user.dto)
     },
