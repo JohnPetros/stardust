@@ -1,6 +1,6 @@
 import type { Controller, Http } from '@stardust/core/global/interfaces'
-import { GetUserUseCase } from '@stardust/core/profile/use-cases'
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
+import { Id } from '@stardust/core/global/structures'
 
 export class AppendUserCompletedChallengesIdsToBodyController implements Controller {
   constructor(private readonly usersRepository: UsersRepository) {}
@@ -8,10 +8,8 @@ export class AppendUserCompletedChallengesIdsToBodyController implements Control
   async handle(http: Http) {
     const account = await http.getAccount()
     if (!account) return http.pass()
-    const useCase = new GetUserUseCase(this.usersRepository)
-    const user = await useCase.execute({
-      userId: account.id,
-    })
+    const user = await this.usersRepository.findById(Id.create(account.id))
+    if (!user) return http.pass()
     http.extendBody({ userCompletedChallengesIds: user.completedChallengesIds })
     return http.pass()
   }
