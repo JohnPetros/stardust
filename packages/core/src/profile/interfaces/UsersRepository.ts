@@ -9,6 +9,7 @@ import type { User } from '../domain/entities'
 import type { Month } from '#global/domain/structures/Month'
 import type { Integer } from '#global/domain/structures/Integer'
 import type { Platform, Visit } from '../domain/structures'
+import type { FilteringParams, ManyItems } from '../../global/domain/types'
 
 export interface UsersRepository {
   findById(id: Id): Promise<User | null>
@@ -19,6 +20,7 @@ export interface UsersRepository {
   findByGoogleAccountId(googleAccountId: Id): Promise<User | null>
   findByGithubAccountId(githubAccountId: Id): Promise<User | null>
   findByTierOrderedByXp(tierId: Id): Promise<User[]>
+  findMany(params: FilteringParams): Promise<ManyItems<User>>
   findUnlockedStars(userId: Id): Promise<IdsList>
   findRecentlyUnlockedStars(userId: Id): Promise<IdsList>
   countVisitsByDateAndPlatform(date: Date, platform: Platform): Promise<Integer>
