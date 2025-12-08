@@ -42,7 +42,9 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       restClient.setQueryParam('postingOrder', postingOrder.value)
       restClient.setQueryParam('categoriesIds', categoriesIds.dto)
       if (userId) restClient.setQueryParam('userId', userId.value)
-      return await restClient.get('/challenging/challenges')
+      const response = await restClient.get('/challenging/challenges')
+      restClient.clearQueryParams()
+      return response
     },
 
     async fetchChallengeVote(challengeId: Id) {
