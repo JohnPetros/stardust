@@ -20,7 +20,13 @@ describe('Get Daily Active Users Report Use Case', () => {
 
     repository.countVisitsByDateAndPlatform.mockImplementation(
       async (date: Date, platform: Platform) => {
-        const dayIndex = Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24))
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+        const dateToCompare = new Date(date)
+        dateToCompare.setHours(0, 0, 0, 0)
+        const dayIndex = Math.floor(
+          (today.getTime() - dateToCompare.getTime()) / (1000 * 60 * 60 * 24),
+        )
         const baseValue = (dayIndex + 1) * 10
 
         if (platform.name === 'web') {
@@ -32,10 +38,11 @@ describe('Get Daily Active Users Report Use Case', () => {
 
     const response = await useCase.execute({ days })
 
-    expect(response).toHaveProperty('web')
-    expect(response).toHaveProperty('mobile')
-    expect(response.web).toHaveLength(days)
-    expect(response.mobile).toHaveLength(days)
+    expect(Array.isArray(response)).toBe(true)
+    expect(response).toHaveLength(days)
+    expect(response[0]).toHaveProperty('date')
+    expect(response[0]).toHaveProperty('web')
+    expect(response[0]).toHaveProperty('mobile')
   })
 
   it('should return visit counts for web and mobile platforms', async () => {
@@ -52,10 +59,10 @@ describe('Get Daily Active Users Report Use Case', () => {
 
     const response = await useCase.execute({ days })
 
-    expect(response.web[0].count).toBe(100)
-    expect(response.mobile[0].count).toBe(50)
-    expect(response.web[1].count).toBe(100)
-    expect(response.mobile[1].count).toBe(50)
+    expect(response[0].web).toBe(100)
+    expect(response[0].mobile).toBe(50)
+    expect(response[1].web).toBe(100)
+    expect(response[1].mobile).toBe(50)
   })
 
   it('should return dates in chronological order from oldest to newest', async () => {
@@ -65,15 +72,9 @@ describe('Get Daily Active Users Report Use Case', () => {
 
     const response = await useCase.execute({ days })
 
-    for (let i = 1; i < response.web.length; i++) {
-      const previousDate = response.web[i - 1].date.getTime()
-      const currentDate = response.web[i].date.getTime()
-      expect(currentDate).toBeGreaterThan(previousDate)
-    }
-
-    for (let i = 1; i < response.mobile.length; i++) {
-      const previousDate = response.mobile[i - 1].date.getTime()
-      const currentDate = response.mobile[i].date.getTime()
+    for (let i = 1; i < response.length; i++) {
+      const previousDate = response[i - 1].date.getTime()
+      const currentDate = response[i].date.getTime()
       expect(currentDate).toBeGreaterThan(previousDate)
     }
   })
@@ -111,12 +112,12 @@ describe('Get Daily Active Users Report Use Case', () => {
 
     const response = await useCase.execute({ days })
 
-    expect(response.web[0].count).toBe(10)
-    expect(response.web[1].count).toBe(20)
-    expect(response.web[2].count).toBe(30)
-    expect(response.mobile[0].count).toBe(15)
-    expect(response.mobile[1].count).toBe(25)
-    expect(response.mobile[2].count).toBe(35)
+    expect(response[0].web).toBe(10)
+    expect(response[1].web).toBe(20)
+    expect(response[2].web).toBe(30)
+    expect(response[0].mobile).toBe(15)
+    expect(response[1].mobile).toBe(25)
+    expect(response[2].mobile).toBe(35)
   })
 
   it('should return empty arrays when days is 0', async () => {
@@ -124,8 +125,7 @@ describe('Get Daily Active Users Report Use Case', () => {
 
     const response = await useCase.execute({ days: 0 })
 
-    expect(response.web).toHaveLength(0)
-    expect(response.mobile).toHaveLength(0)
+    expect(response).toHaveLength(0)
   })
 
   it('should call repository with correct platform for each date', async () => {
