@@ -7,15 +7,15 @@ export const RecentActivityView = () => {
     <div>
       <h2 className="text-2xl font-medium">Atividade recente</h2>
       <div className="mt-6">
-      <Tabs defaultValue="account">
+      <Tabs defaultValue="user">
         <TabsList>
-          <TabsTrigger value="account">Usuários</TabsTrigger>
-          <TabsTrigger value="password">Desafios</TabsTrigger>
+          <TabsTrigger value="user">Usuários</TabsTrigger>
+          <TabsTrigger value="challenge">Desafios</TabsTrigger>
         </TabsList>
-        <TabsContent value="account">
+        <TabsContent value="user">
           <RecentUsersTable />
         </TabsContent>
-        <TabsContent value="password">
+        <TabsContent value="challenge">
           <RecentChallengesTable />
         </TabsContent>
       </Tabs>

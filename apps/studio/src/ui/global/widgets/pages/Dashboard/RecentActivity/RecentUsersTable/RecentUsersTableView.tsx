@@ -45,7 +45,7 @@ export const RecentUsersTableView = ({ users, isLoading }: Props) => {
       <TableBody>
         {users.length === 0 ? (
           <TableRow>
-            <TableCell colSpan={10} className='text-center text-muted-foreground'>
+            <TableCell colSpan={9} className='text-center text-muted-foreground'>
               Nenhum usuário encontrado
             </TableCell>
           </TableRow>

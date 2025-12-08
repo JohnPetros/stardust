@@ -10,7 +10,6 @@ import {
 } from '@/ui/shadcn/components/table'
 import { Badge } from '@/ui/shadcn/components/badge'
 import { Loading } from '@/ui/global/widgets/components/Loading'
-import { Avatar, AvatarImage } from '@/ui/shadcn/components/avatar'
 import { Datetime } from '@stardust/core/global/libs'
 import { StorageImage } from '@/ui/global/widgets/components/StorageImage'
 

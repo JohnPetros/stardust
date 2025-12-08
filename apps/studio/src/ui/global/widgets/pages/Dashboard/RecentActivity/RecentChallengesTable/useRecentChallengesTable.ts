@@ -30,8 +30,6 @@ export function useRecentChallengesTable(challengingService: ChallengingService)
       }),
   })
 
-  console.log(data)
-
   return {
     challenges: data?.items ?? [],
     isLoading,
