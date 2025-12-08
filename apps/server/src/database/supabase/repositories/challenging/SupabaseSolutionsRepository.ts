@@ -2,6 +2,7 @@ import type { Id, Slug } from '@stardust/core/global/structures'
 import type { SolutionsRepository } from '@stardust/core/challenging/interfaces'
 import type { Solution } from '@stardust/core/challenging/entities'
 import type { SolutionsListingParams } from '@stardust/core/challenging/types'
+import type { ManyItems } from '@stardust/core/global/types'
 
 import { SupabaseRepository } from '../SupabaseRepository'
 import { SupabaseSolutionMapper } from '../../mappers/challenging'
@@ -77,10 +78,7 @@ export class SupabaseSolutionsRepository
     sorter,
     userId,
     challengeId,
-  }: SolutionsListingParams): Promise<{
-    solutions: Solution[]
-    totalSolutionsCount: number
-  }> {
+  }: SolutionsListingParams): Promise<ManyItems<Solution>> {
     let query = this.supabase.from('solutions_view').select('*', { count: 'exact' })
 
     if (challengeId) {
@@ -127,7 +125,7 @@ export class SupabaseSolutionsRepository
     }
 
     const solutions = data.map(SupabaseSolutionMapper.toEntity)
-    return { solutions, totalSolutionsCount: Number(count) }
+    return { items: solutions, count: Number(count) }
   }
 
   async addSolutionUpvote(solutionId: Id, userId: Id): Promise<void> {

@@ -2,6 +2,7 @@ import type { CommentsRepository } from '@stardust/core/forum/interfaces'
 import type { Comment } from '@stardust/core/forum/entities'
 import type { CommentsListParams } from '@stardust/core/forum/types'
 import type { Id } from '@stardust/core/global/structures'
+import type { ManyItems } from '@stardust/core/global/types'
 
 import { SupabaseRepository } from '../SupabaseRepository'
 import { SupabasePostgreError } from '../../errors'
@@ -28,7 +29,7 @@ export class SupabaseCommentsRepository
   async findManyByChallenge(
     challengeId: Id,
     params: CommentsListParams,
-  ): Promise<{ comments: Comment[]; totalCommentsCount: number }> {
+  ): Promise<ManyItems<Comment>> {
     let query = this.supabase
       .from('comments_view')
       .select('*, challenges_comments!inner(challenge_id)', { count: 'exact' })
@@ -53,15 +54,15 @@ export class SupabaseCommentsRepository
     const comments = data.map(SupabaseCommentMapper.toEntity)
 
     return {
-      comments,
-      totalCommentsCount: Number(count),
+      items: comments,
+      count: Number(count),
     }
   }
 
   async findManyBySolution(
     solutionId: Id,
     params: CommentsListParams,
-  ): Promise<{ comments: Comment[]; totalCommentsCount: number }> {
+  ): Promise<ManyItems<Comment>> {
     let query = this.supabase
       .from('comments_view')
       .select('*, solutions_comments!inner(solution_id)', { count: 'exact' })
@@ -86,8 +87,8 @@ export class SupabaseCommentsRepository
     const comments = data.map(SupabaseCommentMapper.toEntity)
 
     return {
-      comments,
-      totalCommentsCount: Number(count),
+      items: comments,
+      count: Number(count),
     }
   }
 
