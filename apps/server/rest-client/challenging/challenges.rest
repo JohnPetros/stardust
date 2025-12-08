@@ -16,7 +16,7 @@ GET {{URL}}
 &itemsPerPage=10
 &title=
 &difficulty=any
-&completionStatus=completed
+&completionStatus=any
 &upvotesCountOrder=any
 &postingOrder=any
 
