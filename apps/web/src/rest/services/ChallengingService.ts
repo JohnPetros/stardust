@@ -7,6 +7,8 @@ import type {
 } from '@stardust/core/challenging/types'
 import type { ChallengeVote } from '@stardust/core/challenging/structures'
 import type { Challenge } from '@stardust/core/challenging/entities'
+import type { PaginationResponse } from '@stardust/core/global/responses'
+import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 
 export const ChallengingService = (restClient: RestClient): IChallengingService => {
   return {
@@ -42,7 +44,11 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       restClient.setQueryParam('postingOrder', postingOrder.value)
       restClient.setQueryParam('categoriesIds', categoriesIds.dto)
       if (userId) restClient.setQueryParam('userId', userId.value)
-      return await restClient.get('/challenging/challenges')
+      const response = await restClient.get<PaginationResponse<ChallengeDto>>(
+        '/challenging/challenges',
+      )
+      restClient.clearQueryParams()
+      return response
     },
 
     async fetchChallengeVote(challengeId: Id) {
@@ -126,8 +132,18 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       })
     },
 
+    async upvoteSolution(solutionId: Id) {
+      return await restClient.post(`/challenging/solutions/${solutionId.value}/upvote`)
+    },
+
+    async deleteChallengeCategories(challengeId: Id) {
+      return await restClient.delete(
+        `/challenging/challenges/${challengeId.value}/categories`,
+      )
+    },
+
     async deleteSolution(solutionId: Id) {
       return await restClient.delete(`/challenging/solutions/${solutionId.value}`)
     },
-  } as unknown as IChallengingService
+  }
 }
