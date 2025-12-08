@@ -5,6 +5,7 @@ import type { StorageProvider } from '@stardust/core/storage/interfaces'
 import type { FilesListingParams } from '@stardust/core/storage/types'
 import type { StorageFolder } from '@stardust/core/storage/structures'
 import { Text } from '@stardust/core/global/structures'
+import type { ManyItems } from '@stardust/core/global/types'
 
 import { ENV } from '@/constants'
 
@@ -41,7 +42,7 @@ export class SupabaseStorageProvider implements StorageProvider {
     page,
     itemsPerPage,
     search,
-  }: FilesListingParams): Promise<{ files: File[]; totalFilesCount: number }> {
+  }: FilesListingParams): Promise<ManyItems<File>> {
     const { data, error } = await this.supabase.storage
       .from(SupabaseStorageProvider.BUCKET_NAME)
       .list(folder.name, {
@@ -70,7 +71,7 @@ export class SupabaseStorageProvider implements StorageProvider {
       }
     }
 
-    return { files, totalFilesCount: response.data?.length ?? 0 }
+    return { items: files, count: response.data?.length ?? 0 }
   }
 
   async findFile(folder: StorageFolder, fileName: Text): Promise<File | null> {
