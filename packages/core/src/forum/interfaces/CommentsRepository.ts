@@ -1,4 +1,5 @@
 import type { Id } from '#global/domain/structures/Id'
+import type { ManyItems } from '../../global/domain/types'
 import type { Comment } from '../domain/entities/Comment'
 import type { CommentsListParams } from '../domain/types'
 
@@ -10,11 +11,11 @@ export interface CommentsRepository {
   findManyByChallenge(
     challengeId: Id,
     params: CommentsListParams,
-  ): Promise<{ comments: Comment[]; totalCommentsCount: number }>
+  ): Promise<ManyItems<Comment>>
   findManyBySolution(
     solutionId: Id,
     params: CommentsListParams,
-  ): Promise<{ comments: Comment[]; totalCommentsCount: number }>
+  ): Promise<ManyItems<Comment>>
   findAllRepliesByComment(commentId: Id): Promise<Comment[]>
   replace(comment: Comment): Promise<void>
   remove(commentId: Id): Promise<void>

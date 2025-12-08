@@ -1,31 +1,29 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
-import type { AvatarsRepository } from '#shop/interfaces/AvatarsRepository'
-import { ListAvatarsUseCase } from '../ListAvatarsUseCase'
+import type { UsersRepository } from '#profile/interfaces/UsersRepository'
+import { ListUsersUseCase } from '../ListUsersUseCase'
 import { Text } from '#global/domain/structures/Text'
-import { ListingOrder } from '#global/domain/structures/ListingOrder'
 import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
 import { PaginationResponse } from '#global/responses/PaginationResponse'
-import { AvatarsFaker } from '#shop/domain/entities/fakers/AvatarsFaker'
+import { UsersFaker } from '#profile/domain/entities/fakers/UsersFaker'
 
-describe('List Avatars Use Case', () => {
-  let repository: Mock<AvatarsRepository>
-  let useCase: ListAvatarsUseCase
+describe('List Users Use Case', () => {
+  let repository: Mock<UsersRepository>
+  let useCase: ListUsersUseCase
 
   beforeEach(() => {
-    repository = mock<AvatarsRepository>()
+    repository = mock<UsersRepository>()
     repository.findMany.mockImplementation()
-    useCase = new ListAvatarsUseCase(repository)
+    useCase = new ListUsersUseCase(repository)
   })
 
-  it('should try to find many avatars', async () => {
+  it('should try to find many users', async () => {
     repository.findMany.mockResolvedValue({
       items: [],
       count: 0,
     })
     const request = {
       search: Text.create(''),
-      order: ListingOrder.create('ascending'),
       page: OrdinalNumber.create(1),
       itemsPerPage: OrdinalNumber.create(10),
     }
@@ -33,22 +31,20 @@ describe('List Avatars Use Case', () => {
     await useCase.execute({
       search: request.search.value,
       page: request.page.value,
-      order: request.order.value,
       itemsPerPage: request.itemsPerPage.value,
     })
 
     expect(repository.findMany).toHaveBeenCalledWith(request)
   })
 
-  it('should return a pagination response with the found avatars', async () => {
-    const avatars = AvatarsFaker.fakeMany(10)
+  it('should return a pagination response with the found users', async () => {
+    const users = UsersFaker.fakeMany(10)
     repository.findMany.mockResolvedValue({
-      items: avatars,
-      count: avatars.length,
+      items: users,
+      count: users.length,
     })
     const request = {
       search: Text.create(''),
-      order: ListingOrder.create('ascending'),
       page: OrdinalNumber.create(1),
       itemsPerPage: OrdinalNumber.create(10),
     }
@@ -56,15 +52,14 @@ describe('List Avatars Use Case', () => {
     const response = await useCase.execute({
       search: request.search.value,
       page: request.page.value,
-      order: request.order.value,
       itemsPerPage: request.itemsPerPage.value,
     })
 
     expect(response).toBeInstanceOf(PaginationResponse)
     expect(response).toEqual(
       new PaginationResponse(
-        avatars.map((avatar) => avatar.dto),
-        avatars.length,
+        users.map((user) => user.dto),
+        users.length,
         request.itemsPerPage.value,
       ),
     )

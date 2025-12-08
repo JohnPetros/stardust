@@ -11,12 +11,13 @@ import {
 } from '@stardust/core/global/structures'
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
 import type { User } from '@stardust/core/profile/entities'
+import type { Platform, Visit } from '@stardust/core/profile/structures'
+import type { FilteringParams, ManyItems } from '@stardust/core/global/types'
 
 import type { SupabaseUser } from '../../types'
 import { SupabaseUserMapper } from '../../mappers/profile'
 import { SupabasePostgreError } from '../../errors'
 import { SupabaseRepository } from '../SupabaseRepository'
-import type { Platform, Visit } from '@stardust/core/profile/structures'
 
 export class SupabaseUsersRepository
   extends SupabaseRepository
@@ -297,6 +298,50 @@ export class SupabaseUsersRepository
     if (error) throw new SupabasePostgreError(error)
 
     return data.map(SupabaseUserMapper.toEntity)
+  }
+
+  async findMany(params: FilteringParams): Promise<ManyItems<User>> {
+    let query = this.supabase.from('users').select(
+      `*,
+      avatar:avatars(*), 
+      rocket:rockets(*), 
+      tier:tiers(*),
+      insignias(role),
+      users_unlocked_stars(star_id),
+      users_recently_unlocked_stars(star_id),
+      users_unlocked_achievements(achievement_id),
+      users_rescuable_achievements(achievement_id),
+      users_acquired_rockets(rocket_id),
+      users_acquired_avatars(avatar_id),
+      users_completed_challenges(challenge_id),
+      users_upvoted_solutions(solution_id),
+      users_upvoted_comments(comment_id)`,
+      {
+        count: 'exact',
+        head: false,
+      },
+    )
+
+    if (params.search && params.search.value.length > 1) {
+      query = query.ilike('name', `%${params.search.value}%`)
+    }
+
+    const range = this.calculateQueryRange(params.page.value, params.itemsPerPage.value)
+
+    query = query.order('created_at', { ascending: false }).range(range.from, range.to)
+
+    const { data, count, error } = await query
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+
+    const users = data.map(SupabaseUserMapper.toEntity)
+
+    return {
+      items: users,
+      count: count ?? users.length,
+    }
   }
 
   async findUnlockedStars(userId: Id): Promise<IdsList> {

@@ -4,9 +4,10 @@ import { type drive_v3, google } from 'googleapis'
 import { AppError } from '@stardust/core/global/errors'
 import type { StorageProvider } from '@stardust/core/storage/interfaces'
 import type { StorageFolder } from '@stardust/core/storage/structures'
-import type { StorageFolderName } from '@stardust/core/storage/types'
+import type { StorageFolderName, FilesListingParams } from '@stardust/core/storage/types'
 import type { Text } from '@stardust/core/global/structures'
 import { MethodNotImplementedError } from '@stardust/core/global/errors'
+import type { ManyItems } from '@stardust/core/global/types'
 
 export class GoogleDriveStorageProvider implements StorageProvider {
   private static readonly KEY_FILE_PATH = './certificates/google-key-file.json'
@@ -60,11 +61,11 @@ export class GoogleDriveStorageProvider implements StorageProvider {
     return file
   }
 
-  async listFiles(): Promise<{ files: File[]; totalFilesCount: number }> {
+  async listFiles(_params: FilesListingParams): Promise<ManyItems<File>> {
     throw new MethodNotImplementedError('listFiles')
   }
 
-  async findFile(folder: StorageFolder, fileName: Text): Promise<File | null> {
+  async findFile(_folder: StorageFolder, _fileName: Text): Promise<File | null> {
     throw new Error('Method not implemented.')
   }
 

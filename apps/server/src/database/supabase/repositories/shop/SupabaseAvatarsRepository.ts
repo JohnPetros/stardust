@@ -1,6 +1,7 @@
 import type { AvatarsRepository } from '@stardust/core/shop/interfaces'
 import type { Avatar, Rocket } from '@stardust/core/shop/entities'
 import type { Id, Integer } from '@stardust/core/global/structures'
+import type { ManyItems } from '@stardust/core/global/types'
 
 import { SupabaseRepository } from '../SupabaseRepository'
 import { SupabasePostgreError } from '../../errors'
@@ -38,7 +39,12 @@ export class SupabaseAvatarsRepository
     return data.map(SupabaseAvatarMapper.toEntity)
   }
 
-  async findMany({ search, page, itemsPerPage, order }: ShopItemsListingParams) {
+  async findMany({
+    search,
+    page,
+    itemsPerPage,
+    order,
+  }: ShopItemsListingParams): Promise<ManyItems<Avatar>> {
     let query = this.supabase.from('avatars').select('*', {
       count: 'exact',
       head: false,
@@ -63,8 +69,8 @@ export class SupabaseAvatarsRepository
     const avatars = data.map(SupabaseAvatarMapper.toEntity)
 
     return {
-      avatars,
-      totalAvatarsCount: count ?? avatars.length,
+      items: avatars,
+      count: count ?? avatars.length,
     }
   }
 }

@@ -1,6 +1,7 @@
 import type { RocketsRepository } from '@stardust/core/shop/interfaces'
 import type { Rocket } from '@stardust/core/shop/entities'
 import type { Id, Integer } from '@stardust/core/global/structures'
+import type { ManyItems } from '@stardust/core/global/types'
 
 import { SupabaseRepository } from '../SupabaseRepository'
 import { SupabasePostgreError } from '../../errors'
@@ -25,7 +26,12 @@ export class SupabaseRocketsRepository
     return SupabaseRocketMapper.toEntity(data)
   }
 
-  async findMany({ search, page, itemsPerPage, order }: ShopItemsListingParams) {
+  async findMany({
+    search,
+    page,
+    itemsPerPage,
+    order,
+  }: ShopItemsListingParams): Promise<ManyItems<Rocket>> {
     let query = this.supabase.from('rockets').select('*', {
       count: 'exact',
       head: false,
@@ -50,8 +56,8 @@ export class SupabaseRocketsRepository
     const rockets = data.map(SupabaseRocketMapper.toEntity)
 
     return {
-      rockets,
-      totalRocketsCount: count ?? rockets.length,
+      items: rockets,
+      count: count ?? rockets.length,
     }
   }
 

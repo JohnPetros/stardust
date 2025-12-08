@@ -20,7 +20,7 @@ export class ListChallengeCommentsUseCase implements UseCase<Request, Response> 
   constructor(private readonly repository: CommentsRepository) {}
 
   async execute({ challengeId, sorter, order, page, itemsPerPage }: Request) {
-    const { comments, totalCommentsCount } = await this.repository.findManyByChallenge(
+    const { items, count } = await this.repository.findManyByChallenge(
       Id.create(challengeId),
       {
         sorter: CommentsListSorter.create(sorter),
@@ -31,8 +31,8 @@ export class ListChallengeCommentsUseCase implements UseCase<Request, Response> 
     )
 
     return new PaginationResponse(
-      comments.map((comment) => comment.dto),
-      totalCommentsCount,
+      items.map((comment) => comment.dto),
+      count,
       itemsPerPage,
     )
   }

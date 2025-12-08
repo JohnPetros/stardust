@@ -1,33 +1,30 @@
 import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
 import { Text } from '#global/domain/structures/Text'
-import { ListingOrder } from '#global/domain/structures/ListingOrder'
 import type { UseCase } from '#global/interfaces/UseCase'
-import type { AvatarsRepository } from '../interfaces'
 import { PaginationResponse } from '#global/responses/PaginationResponse'
-import type { AvatarDto } from '../domain/entities/dtos'
+import type { UserDto } from '../domain/entities/dtos'
+import type { UsersRepository } from '../interfaces'
 
 type Request = {
   search: string
-  order: string
   page: number
   itemsPerPage: number
 }
 
-type Response = Promise<PaginationResponse<AvatarDto>>
+type Response = Promise<PaginationResponse<UserDto>>
 
-export class ListAvatarsUseCase implements UseCase<Request, Response> {
-  constructor(private readonly repository: AvatarsRepository) {}
+export class ListUsersUseCase implements UseCase<Request, Response> {
+  constructor(private readonly repository: UsersRepository) {}
 
-  async execute({ search, order, page, itemsPerPage }: Request) {
+  async execute({ search, page, itemsPerPage }: Request) {
     const { items, count } = await this.repository.findMany({
       search: Text.create(search),
       page: OrdinalNumber.create(page),
       itemsPerPage: OrdinalNumber.create(itemsPerPage),
-      order: ListingOrder.create(order),
     })
 
     return new PaginationResponse(
-      items.map((avatar) => avatar.dto),
+      items.map((user) => user.dto),
       count,
       itemsPerPage,
     )

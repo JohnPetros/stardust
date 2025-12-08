@@ -2,6 +2,7 @@ import type { SnippetsRepository } from '@stardust/core/playground/interfaces'
 import type { Id } from '@stardust/core/global/structures'
 import type { Snippet } from '@stardust/core/playground/entities'
 import type { SnippetsListParams } from '@stardust/core/playground/types'
+import type { ManyItems } from '@stardust/core/global/types'
 
 import { SupabaseRepository } from '../SupabaseRepository'
 import { SupabaseSnippetMapper } from '../../mappers/playground'
@@ -25,7 +26,11 @@ export class SupabaseSnippetsRepository
     return SupabaseSnippetMapper.toEntity(data)
   }
 
-  async findManySnippets({ page, itemsPerPage, authorId }: SnippetsListParams) {
+  async findManySnippets({
+    page,
+    itemsPerPage,
+    authorId,
+  }: SnippetsListParams): Promise<ManyItems<Snippet>> {
     const range = this.calculateQueryRange(page.value, itemsPerPage.value)
 
     const { data, error, count } = await this.supabase
@@ -41,8 +46,8 @@ export class SupabaseSnippetsRepository
     const snippets = data.map(SupabaseSnippetMapper.toEntity)
 
     return {
-      snippets,
-      totalSnippetsCount: Number(count),
+      items: snippets,
+      count: Number(count),
     }
   }
 

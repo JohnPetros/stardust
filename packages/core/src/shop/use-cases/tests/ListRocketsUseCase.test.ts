@@ -20,8 +20,8 @@ describe('List Rockets Use Case', () => {
 
   it('should try to find many rockets', async () => {
     repository.findMany.mockResolvedValue({
-      rockets: [],
-      totalRocketsCount: 0,
+      items: [],
+      count: 0,
     })
     const request = {
       search: Text.create(''),
@@ -43,8 +43,8 @@ describe('List Rockets Use Case', () => {
   it('should return a pagination response with the found rockets', async () => {
     const rockets = RocketsFaker.fakeMany(10)
     repository.findMany.mockResolvedValue({
-      rockets,
-      totalRocketsCount: rockets.length,
+      items: rockets,
+      count: rockets.length,
     })
     const request = {
       search: Text.create(''),

@@ -27,3 +27,4 @@ export { GetCompletedChallengesKpiUseCase } from './GetCompletedChallengesKpiUse
 export { GetUnlockedStarsKpiUseCase } from './GetUnlockedStarsKpiUseCase'
 export { RegisterUserVisitUseCase } from './RegisterUserVisitUseCase'
 export { GetDailyActiveUsersReportUseCase } from './GetDailyActiveUsersReportUseCase'
+export { ListUsersUseCase } from './ListUsersUseCase'

@@ -3,6 +3,7 @@ import { type Challenge, ChallengeCategory } from '@stardust/core/challenging/en
 import type { ChallengesListParams } from '@stardust/core/challenging/types'
 import { Integer, type Id, type Month, type Slug } from '@stardust/core/global/structures'
 import { ChallengeVote } from '@stardust/core/challenging/structures'
+import type { ManyItems } from '@stardust/core/global/types'
 
 import type { Json } from '../../types/Database'
 import { SupabaseRepository } from '../SupabaseRepository'
@@ -100,10 +101,7 @@ export class SupabaseChallengesRepository
     postingOrder,
     userId,
     categoriesIds,
-  }: ChallengesListParams): Promise<{
-    challenges: Challenge[]
-    totalChallengesCount: number
-  }> {
+  }: ChallengesListParams): Promise<ManyItems<Challenge>> {
     let query = this.supabase
       .from('challenges_view')
       .select('*, challenges_categories!inner(category_id)', { count: 'exact' })
@@ -150,7 +148,7 @@ export class SupabaseChallengesRepository
     }
 
     const challenges = data.map(SupabaseChallengeMapper.toEntity)
-    return { challenges, totalChallengesCount: Number(count) }
+    return { items: challenges, count: Number(count) }
   }
 
   async findAllCategories(): Promise<ChallengeCategory[]> {

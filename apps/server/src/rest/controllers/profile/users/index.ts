@@ -18,3 +18,4 @@ export { FetchCreatedUsersKpiController } from './FetchCreatedUsersKpiController
 export { FetchCompletedChallengesKpiController } from './FetchCompletedChallengesKpiController'
 export { FetchUnlockedStarsKpiController } from './FetchUnlockedStarsKpiController'
 export { FetchDailyActiveUsersReportController } from './FetchDailyActiveUsersReportController'
+export { FetchUsersListController } from './FetchUsersListController'

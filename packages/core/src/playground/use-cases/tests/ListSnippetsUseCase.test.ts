@@ -19,8 +19,8 @@ describe('List Snippets Use Case', () => {
 
   it('should return a pagination response with the snippets', async () => {
     repository.findManySnippets.mockResolvedValue({
-      snippets: [SnippetsFaker.fake()],
-      totalSnippetsCount: 1,
+      items: [SnippetsFaker.fake()],
+      count: 1,
     })
     const page = 1
     const authorId = Id.create()
@@ -42,8 +42,8 @@ describe('List Snippets Use Case', () => {
   it('should return a pagination response with the snippets', async () => {
     const snippets = SnippetsFaker.fakeMany(10)
     repository.findManySnippets.mockResolvedValue({
-      snippets,
-      totalSnippetsCount: snippets.length,
+      items: snippets,
+      count: snippets.length,
     })
     const page = 1
     const authorId = Id.create()

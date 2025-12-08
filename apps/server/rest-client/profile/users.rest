@@ -2,6 +2,10 @@
 @USER_ID = 2ac3e189-e5ed-4003-a87a-d2358411584e
 @USER_SLUG = ctrl
 
+### Fetch users list
+GET {{URL}}?page=1&itemsPerPage=10
+Authorization: Bearer {{JWT}}
+
 ### Fetch user by id
 GET {{URL}}/id/{{USER_ID}}
 Authorization: Bearer {{JWT}}
