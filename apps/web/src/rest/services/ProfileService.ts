@@ -15,6 +15,7 @@ import type {
   ChallengeRewardingPayload,
 } from '@stardust/core/profile/types'
 import type { AvatarAggregate, RocketAggregate } from '@stardust/core/profile/aggregates'
+import { MethodNotImplementedError } from '@stardust/core/global/errors'
 
 export const ProfileService = (restClient: RestClient): IProfileService => {
   return {
@@ -28,6 +29,10 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
 
     async fetchUserBySlug(userSlug: Slug) {
       return await restClient.get(`/profile/users/slug/${userSlug.value}`)
+    },
+
+    async fetchUsersList(params) {
+      throw new MethodNotImplementedError('fetchUsersList')
     },
 
     async fetchUnlockedAchievements(userId: Id) {
