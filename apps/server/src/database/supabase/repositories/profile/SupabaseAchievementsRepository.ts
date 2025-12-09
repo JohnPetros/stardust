@@ -18,7 +18,7 @@ export class SupabaseAchievementsRepository
       .single()
 
     if (error) {
-      throw new SupabasePostgreError(error)
+      return this.handleQueryPostgresError(error)
     }
     return SupabaseAchievementMapper.toEntity(data)
   }
@@ -46,5 +46,54 @@ export class SupabaseAchievementsRepository
       throw new SupabasePostgreError(error)
     }
     return data.map(SupabaseAchievementMapper.toEntity)
+  }
+
+  async add(achievement: Achievement): Promise<void> {
+    const supabaseAchievement = SupabaseAchievementMapper.toSupabase(achievement)
+    const { error } = await this.supabase.from('achievements').insert({
+      id: achievement.id.value,
+      name: supabaseAchievement.name,
+      icon: supabaseAchievement.icon,
+      reward: supabaseAchievement.reward,
+      description: supabaseAchievement.description,
+      metric: supabaseAchievement.metric,
+      position: supabaseAchievement.position,
+      required_count: supabaseAchievement.required_count,
+    })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
+  async replace(achievement: Achievement): Promise<void> {
+    const supabaseAchievement = SupabaseAchievementMapper.toSupabase(achievement)
+    const { error } = await this.supabase
+      .from('achievements')
+      .update({
+        name: supabaseAchievement.name,
+        icon: supabaseAchievement.icon,
+        reward: supabaseAchievement.reward,
+        description: supabaseAchievement.description,
+        metric: supabaseAchievement.metric,
+        position: supabaseAchievement.position,
+        required_count: supabaseAchievement.required_count,
+      })
+      .eq('id', achievement.id.value)
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
+  async remove(achievement: Achievement): Promise<void> {
+    const { error } = await this.supabase
+      .from('achievements')
+      .delete()
+      .eq('id', achievement.id.value)
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
   }
 }
