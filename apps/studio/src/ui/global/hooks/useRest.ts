@@ -9,6 +9,7 @@ import {
   StorageService,
   LessonService,
   ProfileService,
+  ChallengingService,
 } from '@/rest/services'
 import { ENV, SESSION_STORAGE_KEYS } from '@/constants'
 
@@ -27,5 +28,6 @@ export function useRest() {
     storageService: StorageService(restClient),
     lessonService: LessonService(restClient),
     profileService: ProfileService(restClient),
+    challengingService: ChallengingService(restClient),
   }
 }

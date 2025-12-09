@@ -47,7 +47,9 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
     },
 
     async fetchDailyActiveUsersReport(days: Integer) {
-      return await restClient.get(`/profile/users/daily-active-users-report?days=${days.value}`)
+      return await restClient.get(
+        `/profile/users/daily-active-users-report?days=${days.value}`,
+      )
     },
 
     async updateUser(user: User) {
@@ -133,6 +135,12 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
         insigniaRole: insigniaRole.value,
         insigniaPrice: insigniaPrice.value,
       })
+    },
+
+    async fetchUsersList(params: { search: string; page: number; itemsPerPage: number }) {
+      return await restClient.get(
+        `/profile/users?search=${params.search}&page=${params.page}&itemsPerPage=${params.itemsPerPage}`,
+      )
     },
   }
 }

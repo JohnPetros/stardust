@@ -8,4 +8,10 @@ export const CACHE = {
   storyPictures: {
     key: 'story-pictures',
   },
+  recentUsersTable: {
+    key: 'recent-users-table',
+  },
+  recentChallengesTable: {
+    key: 'recent-challenges-table',
+  },
 }

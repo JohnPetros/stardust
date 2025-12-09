@@ -21,6 +21,7 @@ import type {
 import type { WeekStatusValue } from '../domain/types'
 import type { AvatarAggregate, RocketAggregate } from '../domain/aggregates'
 import type { KpiDto } from '#global/domain/structures/dtos/KpiDto'
+import type { PaginationResponse } from '#global/responses/PaginationResponse'
 
 type RewardingResponse = {
   newLevel: number | null
@@ -48,6 +49,11 @@ export interface ProfileService {
   fetchUnlockedStarsKpi(): Promise<RestResponse<KpiDto>>
   fetchCompletedChallengesKpi(): Promise<RestResponse<KpiDto>>
   fetchDailyActiveUsersReport(days: Integer): Promise<RestResponse<DailyActiveUsersDto>>
+  fetchUsersList(params: {
+    search: string
+    page: number
+    itemsPerPage: number
+  }): Promise<RestResponse<PaginationResponse<UserDto>>>
   rewardUserForStarCompletion(
     userId: Id,
     rewardsPayload: StarRewardingPayload,
