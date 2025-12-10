@@ -14,6 +14,6 @@ export class CreateAchievementController implements Controller<Schema> {
     const achievementDto = await http.getBody()
     const useCase = new CreateAchievementUseCase(this.repository)
     const response = await useCase.execute({ achievementDto })
-    return http.send(response)
+    return http.statusCreated().send(response)
   }
 }
