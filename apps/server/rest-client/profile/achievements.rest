@@ -51,3 +51,30 @@ Content-Type: application/json
 ### Delete achievement
 DELETE {{URL}}/{{ACHIEVEMENT_ID}}
 Authorization: Bearer {{JWT}}
+
+### Reorder achievements
+PATCH {{URL}}/order
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "achievementIds": [
+    "b40f7413-5c18-4f33-a0a9-175be8c00388",
+    "aca683fa-9e5e-4051-9d98-8a539339a2f9",
+    "becc8ac9-b407-4aca-b27f-216af9aba018",
+    "75e91f6c-f25d-49da-b483-93863cd25f8a",
+    "e7180b4e-cc9c-435b-b9a6-44fcc3228cd8",
+    "7fe73174-807f-47af-a182-a413669bcc42",
+    "a9254d17-bce9-4aa7-9e5e-a54bd711794b",
+    "2e435369-9f92-4d69-bb4c-64119b5d5a59",
+    "cad1c7de-b475-49fe-92c1-5f3222222393",
+    "00dae69b-772c-48cf-a7b1-82632804eb9c",
+    "a649f6fa-79e8-4381-a65f-c7d47dc4a800",
+    "f3985b9a-dd33-4583-987b-2d1e8a423e10",
+    "31f8688a-712d-422d-8db3-fb38d908f4fb",
+    "5dc05d68-9862-42a3-9310-46613ad0fdf9",
+    "d7921ce2-7af2-4932-a19e-c98740a20971",
+    "3805fefb-bfa1-45bd-90b7-71a1e3b76ef6",
+    "b1c6d18e-1c5d-4d06-b58c-6d2fef99901d"
+  ]
+}
