@@ -1,6 +1,5 @@
 import type { ProfileService as IProfileService } from '@stardust/core/profile/interfaces'
 import type { RestClient } from '@stardust/core/global/interfaces'
-import type { RestResponse } from '@stardust/core/global/responses'
 import type {
   Email,
   Id,
