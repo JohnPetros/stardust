@@ -63,12 +63,7 @@ export const AchievementsCardView = ({ achievement, onUpdate, onDelete }: Props)
           </AlertDialogContent>
         </AlertDialog>
       </div>
-      <div className='flex items-center gap-3'>
-        <Icon
-          name='draggable'
-          className='text-zinc-500 cursor-grab hover:text-zinc-400 transition-colors'
-          size={40}
-        />
+      <div className='flex items-center gap-3 translate-x-8'>
         <StorageImage
           folder='achievements'
           src={achievement.icon}

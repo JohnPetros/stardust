@@ -4,6 +4,7 @@ import type { ProfileService } from '@stardust/core/profile/interfaces'
 import type { UiProvider } from '@stardust/core/ui/interfaces'
 import { Id } from '@stardust/core/global/structures'
 import { Achievement } from '@stardust/core/profile/entities'
+import type { SortableItem } from '@/ui/global/widgets/components/SortableGrid/types'
 
 type Params = {
   achievementsDto: AchievementDto[]
@@ -90,9 +91,37 @@ export function useAchievementsPage({
     }
   }
 
+  async function handleDragEnd(achievements: SortableItem<AchievementDto>[]) {
+    const achievementIds = achievements
+      .map((achievement) => {
+        if (!achievement.data.id) return null
+        return Id.create(achievement.data.id)
+      })
+      .filter((id): id is Id => id !== null)
+    const response = await profileService.reorderAchievements(achievementIds)
+
+    if (response.isFailure) {
+      toastProvider.showError(response.errorMessage)
+      return
+    }
+
+    if (response.isSuccessful) {
+      uiProvider.reload()
+    }
+  }
+
+  const achievements = achievementsDto
+    .filter((achievement) => achievement.id !== undefined)
+    .map((achievement) => ({
+      id: achievement.id as string,
+      data: achievement,
+    }))
+
   return {
+    achievements,
     handleCreateAchievement,
     handleUpdate,
     handleDelete,
+    handleDragEnd,
   }
 }
