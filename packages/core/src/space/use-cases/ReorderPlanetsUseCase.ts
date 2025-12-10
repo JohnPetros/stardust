@@ -6,6 +6,7 @@ import type { PlanetDto } from '../domain/entities/dtos/PlanetDto'
 import type { Broker } from '#global/interfaces/Broker'
 import { PlanetNotFoundError } from '../domain/errors'
 import { PlanetsOrderChangedEvent } from '../domain/events'
+import { ConflictError } from '../../main'
 
 type Request = {
   planetIds: string[]
@@ -22,6 +23,10 @@ export class ReorderPlanetsUseCase implements UseCase<Request, Response> {
   async execute({ planetIds }: Request): Response {
     const planets = await this.repository.findAll()
     const reorderedPlanets: Planet[] = []
+
+    if (new Set(planetIds).size !== planetIds.length) {
+      throw new ConflictError('Todos os IDs dos planetas devem ser fornecidos e únicos')
+    }
 
     for (let number = 1; number <= planetIds.length; number++) {
       const planetId = planetIds[number - 1]

@@ -5,6 +5,7 @@ import { ReorderAchievementsUseCase } from '../ReorderAchievementsUseCase'
 import { AchievementsFaker } from '#profile/domain/entities/fakers/AchievementsFaker'
 import { AchievementNotFoundError } from '#profile/domain/errors/AchievementNotFoundError'
 import type { AchievementsRepository } from '#profile/interfaces/AchievementsRepository'
+import { ConflictError } from '#global/domain/errors/ConflictError'
 
 describe('Reorder Achievements Use Case', () => {
   let useCase: ReorderAchievementsUseCase
@@ -58,6 +59,17 @@ describe('Reorder Achievements Use Case', () => {
         achievementIds: [achievements[0].id.value, missingAchievementId],
       }),
     ).rejects.toThrow(AchievementNotFoundError)
+  })
+
+  it('should throw ConflictError when duplicate achievement ids are provided', async () => {
+    const achievements = AchievementsFaker.fakeMany(2)
+    const duplicateId = achievements[0].id.value
+
+    repository.findAll.mockResolvedValue(achievements)
+
+    await expect(
+      useCase.execute({ achievementIds: [duplicateId, duplicateId] }),
+    ).rejects.toThrow(ConflictError)
   })
 
   it('should handle empty achievement ids list', async () => {

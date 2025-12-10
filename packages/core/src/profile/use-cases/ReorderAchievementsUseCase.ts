@@ -4,6 +4,7 @@ import type { AchievementsRepository } from '../interfaces/AchievementsRepositor
 import type { Achievement } from '../domain/entities/Achievement'
 import type { AchievementDto } from '../domain/entities/dtos/AchievementDto'
 import { AchievementNotFoundError } from '../domain/errors'
+import { ConflictError } from '#global/domain/errors/ConflictError'
 
 type Request = {
   achievementIds: string[]
@@ -17,6 +18,10 @@ export class ReorderAchievementsUseCase implements UseCase<Request, Response> {
   async execute({ achievementIds }: Request): Response {
     const achievements = await this.repository.findAll()
     const reorderedAchievements: Achievement[] = []
+
+    if (new Set(achievementIds).size !== achievementIds.length) {
+      throw new ConflictError('Todos os IDs das conquistas devem ser fornecidos e únicos')
+    }
 
     for (let number = 1; number <= achievementIds.length; number++) {
       const achievementId = achievementIds[number - 1]

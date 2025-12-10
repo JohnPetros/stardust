@@ -8,6 +8,7 @@ import { PlanetsFaker } from '../../domain/entities/tests/fakers'
 import { PlanetNotFoundError } from '../../domain/errors'
 import { Id } from '#global/domain/structures/Id'
 import { StarsOrderChangedEvent } from '#space/domain/events/StarsOrderChangedEvent'
+import { ConflictError } from '#global/domain/errors/ConflictError'
 
 describe('Reorder Planet Stars Use Case', () => {
   let useCase: ReorderPlanetStarsUseCase
@@ -49,6 +50,20 @@ describe('Reorder Planet Stars Use Case', () => {
     await expect(
       useCase.execute({ planetId: faker.string.uuid(), starIds: [] }),
     ).rejects.toThrow(PlanetNotFoundError)
+  })
+
+  it('should throw ConflictError when duplicate star ids are provided', async () => {
+    const planet = PlanetsFaker.fake()
+    const duplicateId = planet.stars[0].id.value
+
+    planetsRepository.findById.mockResolvedValue(planet)
+
+    await expect(
+      useCase.execute({
+        planetId: planet.id.value,
+        starIds: [duplicateId, duplicateId],
+      }),
+    ).rejects.toThrow(ConflictError)
   })
 
   it('should publish the StarsOrderChangedEvent', async () => {
