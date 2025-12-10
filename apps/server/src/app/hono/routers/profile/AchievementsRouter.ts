@@ -1,14 +1,17 @@
 import { Hono } from 'hono'
-import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
 
 import { idSchema } from '@stardust/validation/global/schemas'
+import { achievementSchema } from '@stardust/validation/profile/schemas'
 
 import {
   FetchAllAchievementsController,
   FetchAllUnlockedAchievementsController,
   ObserveNewUnlockedAchievementsController,
   RescueAchievementController,
+  CreateAchievementController,
+  UpdateAchievementController,
+  DeleteAchievementController,
 } from '@/rest/controllers/profile/achievements'
 import {
   SupabaseAchievementsRepository,
@@ -16,11 +19,12 @@ import {
 } from '@/database/supabase/repositories/profile'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
-import { AuthMiddleware } from '../../middlewares'
+import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
 
 export class AchievementsRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/achievements')
   private readonly authMiddleware = new AuthMiddleware()
+  private readonly validationMiddleware = new ValidationMiddleware()
 
   private fetchAchievementsRoute(): void {
     this.router.get('/', this.authMiddleware.verifyAuthentication, async (context) => {
@@ -36,7 +40,7 @@ export class AchievementsRouter extends HonoRouter {
     this.router.get(
       '/:userId',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           userId: idSchema,
@@ -56,7 +60,7 @@ export class AchievementsRouter extends HonoRouter {
     this.router.post(
       '/:userId/observe',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           userId: idSchema,
@@ -81,7 +85,7 @@ export class AchievementsRouter extends HonoRouter {
     this.router.put(
       '/:userId/:achievementId/rescue',
       this.authMiddleware.verifyAuthentication,
-      zValidator(
+      this.validationMiddleware.validate(
         'param',
         z.object({
           userId: idSchema,
@@ -103,11 +107,70 @@ export class AchievementsRouter extends HonoRouter {
     )
   }
 
+  private createAchievementRoute(): void {
+    this.router.post(
+      '/',
+      this.authMiddleware.verifyAuthentication,
+      this.validationMiddleware.validate('json', achievementSchema),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseAchievementsRepository(http.getSupabase())
+        const controller = new CreateAchievementController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private updateAchievementRoute(): void {
+    this.router.put(
+      '/:achievementId',
+      this.authMiddleware.verifyAuthentication,
+      this.validationMiddleware.validate(
+        'param',
+        z.object({
+          achievementId: idSchema,
+        }),
+      ),
+      this.validationMiddleware.validate('json', achievementSchema),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseAchievementsRepository(http.getSupabase())
+        const controller = new UpdateAchievementController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private deleteAchievementRoute(): void {
+    this.router.delete(
+      '/:achievementId',
+      this.authMiddleware.verifyAuthentication,
+      this.validationMiddleware.validate(
+        'param',
+        z.object({
+          achievementId: idSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseAchievementsRepository(http.getSupabase())
+        const controller = new DeleteAchievementController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   registerRoutes(): Hono {
     this.fetchAchievementsRoute()
     this.fetchUnlockedAchievementsRoute()
     this.observeNewUnlockedAchievementsRoute()
     this.rescueAchievementRoute()
+    this.createAchievementRoute()
+    this.updateAchievementRoute()
+    this.deleteAchievementRoute()
     return this.router
   }
 }

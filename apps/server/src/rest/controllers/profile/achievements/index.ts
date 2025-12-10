@@ -2,3 +2,6 @@ export { FetchAllAchievementsController } from './FetchAllAchievementsController
 export { FetchAllUnlockedAchievementsController } from './FetchAllUnlockedAchievementsController'
 export { ObserveNewUnlockedAchievementsController } from './ObserveNewUnlockedAchievementsController'
 export { RescueAchievementController } from './RescueAchievementController'
+export { CreateAchievementController } from './CreateAchievementController'
+export { UpdateAchievementController } from './UpdateAchievementController'
+export { DeleteAchievementController } from './DeleteAchievementController'

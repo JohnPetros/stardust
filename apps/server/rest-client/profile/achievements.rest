@@ -1,5 +1,5 @@
 @URL = {{BASE_URL}}/profile/achievements
-@ACHIEVEMENT_ID = 56ab2a6d-39f7-4fba-a001-f33ccbe39dfe
+@ACHIEVEMENT_ID = 8b1194f3-83a8-4dcc-ba25-0db2b633454d
 @USER_ID = 76dc903b-eeae-45a3-9ed1-43240249e457
 
 ### Fetch achievements
@@ -16,4 +16,38 @@ Authorization: Bearer {{JWT}}
 
 ### Rescue achievement
 PUT {{URL}}/{{USER_ID}}/{{ACHIEVEMENT_ID}}/rescue
+Authorization: Bearer {{JWT}}
+
+### Create achievement
+POST {{URL}}
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "name": "Primeira Conquista",
+  "icon": "star-icon.png",
+  "description": "Complete sua primeira conquista no StarDust",
+  "reward": 100,
+  "requiredCount": 1,
+  "position": 1,
+  "metric": "unlockedStarsCount"
+}
+
+### Update achievement
+PUT {{URL}}/{{ACHIEVEMENT_ID}}
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "name": "Conquista Atualizada",
+  "icon": "updated-icon.png",
+  "description": "Descrição atualizada da conquista",
+  "reward": 150,
+  "requiredCount": 2,
+  "position": 1,
+  "metric": "completedChallengesCount"
+}
+
+### Delete achievement
+DELETE {{URL}}/{{ACHIEVEMENT_ID}}
 Authorization: Bearer {{JWT}}
