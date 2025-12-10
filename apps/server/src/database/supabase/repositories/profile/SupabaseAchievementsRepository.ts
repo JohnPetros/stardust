@@ -100,6 +100,10 @@ export class SupabaseAchievementsRepository
     }
   }
 
+  async replaceMany(achievements: Achievement[]): Promise<void> {
+    await Promise.all(achievements.map((achievement) => this.replace(achievement)))
+  }
+
   async remove(achievement: Achievement): Promise<void> {
     const { error } = await this.supabase
       .from('achievements')
