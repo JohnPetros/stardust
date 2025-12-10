@@ -10,7 +10,7 @@ export class AppendUserCompletedChallengesIdsToBodyController implements Control
     if (!account) return http.pass()
     const user = await this.usersRepository.findById(Id.create(account.id))
     if (!user) return http.pass()
-    http.extendBody({ userCompletedChallengesIds: user.completedChallengesIds })
+    http.extendBody({ userCompletedChallengesIds: user.completedChallengesIds.dto })
     return http.pass()
   }
 }
