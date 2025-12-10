@@ -5,5 +5,7 @@ export const storageFolderSchema = z.enum([
   'rockets',
   'avatars',
   'planets',
+  'achievements',
+  'rankings',
   'database-backups',
 ])
