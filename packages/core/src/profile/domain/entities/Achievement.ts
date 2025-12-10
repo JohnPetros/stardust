@@ -60,6 +60,10 @@ export class Achievement extends Entity<AchievementProps> {
     return this.props.position
   }
 
+  set position(position: OrdinalNumber) {
+    this.props.position = position
+  }
+
   get dto(): AchievementDto {
     return {
       id: this.id.value,
