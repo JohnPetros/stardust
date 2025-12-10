@@ -23,6 +23,20 @@ export class SupabaseAchievementsRepository
     return SupabaseAchievementMapper.toEntity(data)
   }
 
+  async findLastByPosition(): Promise<Achievement | null> {
+    const { data, error } = await this.supabase
+      .from('achievements')
+      .select('*')
+      .order('position', { ascending: false })
+      .limit(1)
+      .single()
+
+    if (error) {
+      return this.handleQueryPostgresError(error)
+    }
+    return SupabaseAchievementMapper.toEntity(data)
+  }
+
   async findAll(): Promise<Achievement[]> {
     const { data, error } = await this.supabase
       .from('achievements')
