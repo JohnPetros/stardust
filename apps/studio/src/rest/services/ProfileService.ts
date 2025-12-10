@@ -1,5 +1,6 @@
 import type { ProfileService as IProfileService } from '@stardust/core/profile/interfaces'
 import type { RestClient } from '@stardust/core/global/interfaces'
+import type { RestResponse } from '@stardust/core/global/responses'
 import type {
   Email,
   Id,
@@ -8,7 +9,7 @@ import type {
   Slug,
   InsigniaRole,
 } from '@stardust/core/global/structures'
-import type { User } from '@stardust/core/profile/entities'
+import type { User, Achievement } from '@stardust/core/profile/entities'
 import type {
   StarRewardingPayload,
   StarChallengeRewardingPayload,
@@ -141,6 +142,25 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
       return await restClient.get(
         `/profile/users?search=${params.search}&page=${params.page}&itemsPerPage=${params.itemsPerPage}`,
       )
+    },
+
+    async fetchAllAchievements() {
+      return await restClient.get('/profile/achievements')
+    },
+
+    async createAchievement(achievement: Achievement) {
+      return await restClient.post('/profile/achievements', achievement.dto)
+    },
+
+    async updateAchievement(achievement: Achievement) {
+      return await restClient.put(
+        `/profile/achievements/${achievement.id.value}`,
+        achievement.dto,
+      )
+    },
+
+    async deleteAchievement(achievementId: Id) {
+      return await restClient.delete(`/profile/achievements/${achievementId.value}`)
     },
   }
 }
