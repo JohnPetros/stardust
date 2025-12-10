@@ -33,13 +33,13 @@ export const SpaceService = (restClient: RestClient): ISpaceService => {
     },
 
     async reorderPlanets(planetIds: Id[]) {
-      return await restClient.put('/space/planets/list/order', {
+      return await restClient.patch('/space/planets/order', {
         planetIds: planetIds.map((planetId) => planetId.value),
       })
     },
 
     async reorderPlanetStars(planetId: Id, starIds: Id[]) {
-      return await restClient.put(`/space/planets/${planetId.value}/stars`, {
+      return await restClient.patch(`/space/planets/${planetId.value}/stars`, {
         starIds: starIds.map((starId) => starId.value),
       })
     },
