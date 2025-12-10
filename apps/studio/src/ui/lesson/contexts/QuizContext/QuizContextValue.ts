@@ -1,7 +1,7 @@
 import type { QuestionType } from '@stardust/core/lesson/types'
 import type { Question } from '@stardust/core/lesson/abstracts'
 
-import type { SortableItem } from '@/ui/global/widgets/components/Sortable/types'
+import type { SortableItem } from '@/ui/global/widgets/components/SortableList/types'
 
 export type QuizContextValue = {
   questions: SortableItem<Question>[]

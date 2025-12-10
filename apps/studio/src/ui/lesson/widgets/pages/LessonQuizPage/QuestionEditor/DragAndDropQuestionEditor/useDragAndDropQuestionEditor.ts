@@ -1,7 +1,7 @@
 import type { Image, Text } from '@stardust/core/global/structures'
 import type { QuestionCodeLine } from '@stardust/core/lesson/structures'
 
-import type { SortableItem } from '@/ui/global/widgets/components/Sortable/types'
+import type { SortableItem } from '@/ui/global/widgets/components/SortableList/types'
 import type { DragAndDropQuestion } from '@stardust/core/lesson/entities'
 
 export const useDragAndDropQuestionEditor = (

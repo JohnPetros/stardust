@@ -1,9 +1,9 @@
 import type { Image, Text } from '@stardust/core/global/structures'
 import type { QuestionCodeLine } from '@stardust/core/lesson/structures'
 
-import { Sortable } from '@/ui/global/widgets/components/Sortable'
+import { SortableList } from '@/ui/global/widgets/components/SortableList'
 import { AddItemButton } from '@/ui/lesson/widgets/components/AddItemButton'
-import type { SortableItem } from '@/ui/global/widgets/components/Sortable/types'
+import type { SortableItem } from '@/ui/global/widgets/components/SortableList/types'
 import { QuestionHeaderInput } from '../QuestionHeaderInput'
 import { CodeLineEditor } from '../CodeLineEditor'
 import { DropZoneSelectView } from './DropZoneSelect/DropZoneSelectView'
@@ -66,7 +66,7 @@ export const DragAndDropQuestionEditorView = ({
       />
 
       <div className='space-y-6 translate-x-10'>
-        <Sortable.Container items={codeLines} onDragEnd={onDragEnd}>
+        <SortableList.Container items={codeLines} onDragEnd={onDragEnd}>
           {(items) => {
             let textIndex = -1
             return items.map((item) => {
@@ -90,7 +90,7 @@ export const DragAndDropQuestionEditorView = ({
               })
 
               return (
-                <Sortable.Item key={item.id} id={item.id} className='-translate-x-10'>
+                <SortableList.Item key={item.id} id={item.id} className='-translate-x-10'>
                   <CodeLineEditor
                     key={line.number.toString()}
                     blocks={blocks}
@@ -119,11 +119,11 @@ export const DragAndDropQuestionEditorView = ({
                       onReplaceCodeLineBlockWithInput(line.number.value, blockIndex)
                     }
                   />
-                </Sortable.Item>
+                </SortableList.Item>
               )
             })
           }}
-        </Sortable.Container>
+        </SortableList.Container>
       </div>
 
       <div className='w-max mx-auto'>

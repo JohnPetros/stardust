@@ -7,7 +7,7 @@ import { Image } from '@stardust/core/global/structures'
 import { QuestionFactory } from '@stardust/core/lesson/factories'
 
 import { useActionButtonStore } from '@/ui/global/stores/ActionButtonStore'
-import type { SortableItem } from '@/ui/global/widgets/components/Sortable/types'
+import type { SortableItem } from '@/ui/global/widgets/components/SortableList/types'
 import type { QuizContextValue } from './QuizContextValue'
 
 export function useQuizContextProvider(questionsDtos: QuestionDto[]) {

@@ -3,8 +3,8 @@ import { PlanetForm } from './PlanetForm'
 import { PlanetCollapsible } from './PlanetCollapsible'
 import { Button } from '@/ui/shadcn/components/button'
 import type { PlanetDto } from '@stardust/core/space/entities/dtos'
-import { Sortable } from '@/ui/global/widgets/components/Sortable'
-import type { SortableItem } from '@/ui/global/widgets/components/Sortable/types'
+import { SortableList } from '@/ui/global/widgets/components/SortableList'
+import type { SortableItem } from '@/ui/global/widgets/components/SortableList/types'
 
 type Props = {
   planets: SortableItem<Planet>[]
@@ -19,22 +19,22 @@ export const PlanetsPageView = ({ planets, onPlanetFormSubmit, onDragEnd }: Prop
         <Button variant='outline'>Adicionar planeta</Button>
       </PlanetForm>
       <div className='flex flex-col gap-4 mt-6'>
-        <Sortable.Container items={planets} onDragEnd={onDragEnd}>
+        <SortableList.Container items={planets} onDragEnd={onDragEnd}>
           {(items) =>
             items.map((item) => {
               return (
-                <Sortable.Item
+                <SortableList.Item
                   key={item.id}
                   id={item.id}
                   iconSize={36}
                   className='top-16'
                 >
                   <PlanetCollapsible planet={item.data} />
-                </Sortable.Item>
+                </SortableList.Item>
               )
             })
           }
-        </Sortable.Container>
+        </SortableList.Container>
       </div>
     </div>
   )

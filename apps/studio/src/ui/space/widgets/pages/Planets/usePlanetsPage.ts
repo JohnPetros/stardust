@@ -5,7 +5,7 @@ import type { UiProvider } from '@stardust/core/ui/interfaces'
 import { Name, Image } from '@stardust/core/global/structures'
 import { Planet } from '@stardust/core/space/entities'
 
-import type { SortableItem } from '@/ui/global/widgets/components/Sortable/types'
+import type { SortableItem } from '@/ui/global/widgets/components/SortableList/types'
 
 type Params = {
   planetsDto: PlanetDto[]
