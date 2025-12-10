@@ -8,14 +8,13 @@ import type {
   Slug,
   InsigniaRole,
 } from '@stardust/core/global/structures'
-import type { User } from '@stardust/core/profile/entities'
+import type { User, Achievement } from '@stardust/core/profile/entities'
 import type {
   StarRewardingPayload,
   StarChallengeRewardingPayload,
   ChallengeRewardingPayload,
 } from '@stardust/core/profile/types'
 import type { AvatarAggregate, RocketAggregate } from '@stardust/core/profile/aggregates'
-import { MethodNotImplementedError } from '@stardust/core/global/errors'
 
 export const ProfileService = (restClient: RestClient): IProfileService => {
   return {
@@ -29,10 +28,6 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
 
     async fetchUserBySlug(userSlug: Slug) {
       return await restClient.get(`/profile/users/slug/${userSlug.value}`)
-    },
-
-    async fetchUsersList(params) {
-      throw new MethodNotImplementedError('fetchUsersList')
     },
 
     async fetchUnlockedAchievements(userId: Id) {
@@ -140,6 +135,31 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
         insigniaRole: insigniaRole.value,
         insigniaPrice: insigniaPrice.value,
       })
+    },
+
+    async fetchUsersList(params: { search: string; page: number; itemsPerPage: number }) {
+      return await restClient.get(
+        `/profile/users?search=${params.search}&page=${params.page}&itemsPerPage=${params.itemsPerPage}`,
+      )
+    },
+
+    async fetchAllAchievements() {
+      return await restClient.get('/profile/achievements')
+    },
+
+    async createAchievement(achievement: Achievement) {
+      return await restClient.post('/profile/achievements', achievement.dto)
+    },
+
+    async updateAchievement(achievement: Achievement) {
+      return await restClient.put(
+        `/profile/achievements/${achievement.id.value}`,
+        achievement.dto,
+      )
+    },
+
+    async deleteAchievement(achievementId: Id) {
+      return await restClient.delete(`/profile/achievements/${achievementId.value}`)
     },
   }
 }

@@ -12,7 +12,7 @@ import type {
   DailyActiveUsersDto,
   UserDto,
 } from '../domain/entities/dtos'
-import type { User } from '../domain/entities'
+import type { Achievement, User } from '../domain/entities'
 import type {
   StarChallengeRewardingPayload,
   StarRewardingPayload,
@@ -54,6 +54,10 @@ export interface ProfileService {
     page: number
     itemsPerPage: number
   }): Promise<RestResponse<PaginationResponse<UserDto>>>
+  fetchAllAchievements(): Promise<RestResponse<AchievementDto[]>>
+  createAchievement(achievement: Achievement): Promise<RestResponse<AchievementDto>>
+  updateAchievement(achievement: Achievement): Promise<RestResponse<AchievementDto>>
+  deleteAchievement(achievementId: Id): Promise<RestResponse>
   rewardUserForStarCompletion(
     userId: Id,
     rewardsPayload: StarRewardingPayload,
