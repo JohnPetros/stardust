@@ -161,5 +161,11 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
     async deleteAchievement(achievementId: Id) {
       return await restClient.delete(`/profile/achievements/${achievementId.value}`)
     },
+
+    async reorderAchievements(achievementIds: Id[]) {
+      return await restClient.patch('/profile/achievements/order', {
+        achievementIds: achievementIds.map((id) => id.value),
+      })
+    },
   }
 }

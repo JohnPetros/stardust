@@ -58,6 +58,7 @@ export interface ProfileService {
   createAchievement(achievement: Achievement): Promise<RestResponse<AchievementDto>>
   updateAchievement(achievement: Achievement): Promise<RestResponse<AchievementDto>>
   deleteAchievement(achievementId: Id): Promise<RestResponse>
+  reorderAchievements(achievementIds: Id[]): Promise<RestResponse<AchievementDto[]>>
   rewardUserForStarCompletion(
     userId: Id,
     rewardsPayload: StarRewardingPayload,
