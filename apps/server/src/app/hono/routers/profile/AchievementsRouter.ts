@@ -12,6 +12,7 @@ import {
   CreateAchievementController,
   UpdateAchievementController,
   DeleteAchievementController,
+  ReorderAchievementsController,
 } from '@/rest/controllers/profile/achievements'
 import {
   SupabaseAchievementsRepository,
@@ -163,6 +164,26 @@ export class AchievementsRouter extends HonoRouter {
     )
   }
 
+  private reorderAchievementsRoute(): void {
+    this.router.patch(
+      '/order',
+      this.authMiddleware.verifyAuthentication,
+      this.validationMiddleware.validate(
+        'json',
+        z.object({
+          achievementIds: z.array(idSchema),
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseAchievementsRepository(http.getSupabase())
+        const controller = new ReorderAchievementsController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   registerRoutes(): Hono {
     this.fetchAchievementsRoute()
     this.fetchUnlockedAchievementsRoute()
@@ -171,6 +192,7 @@ export class AchievementsRouter extends HonoRouter {
     this.createAchievementRoute()
     this.updateAchievementRoute()
     this.deleteAchievementRoute()
+    this.reorderAchievementsRoute()
     return this.router
   }
 }

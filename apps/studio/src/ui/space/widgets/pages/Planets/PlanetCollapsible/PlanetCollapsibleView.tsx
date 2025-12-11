@@ -17,8 +17,8 @@ import {
 import { Collapsible, CollapsibleTrigger } from '@/ui/shadcn/components/collapsible'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { AddItemButton } from '@/ui/lesson/widgets/components/AddItemButton'
-import type { SortableItem } from '@/ui/global/widgets/components/Sortable/types'
-import { Sortable } from '@/ui/global/widgets/components/Sortable'
+import type { SortableItem } from '@/ui/global/widgets/components/SortableList/types'
+import { SortableList } from '@/ui/global/widgets/components/SortableList'
 import type { PlanetDto } from '@stardust/core/space/entities/dtos'
 import { StorageImage } from '@/ui/global/widgets/components/StorageImage'
 import { PlanetForm } from '../PlanetForm'
@@ -153,7 +153,7 @@ export const PlanetCollapsibleView = ({
           {stars.length === 0 && (
             <p className='text-center text-zinc-400'>Este planeta não possui estrela.</p>
           )}
-          <Sortable.Container
+          <SortableList.Container
             key={stars.map((star) => star.id).join()}
             items={stars}
             onDragEnd={onDragEnd}
@@ -162,13 +162,13 @@ export const PlanetCollapsibleView = ({
               return items.map((item) => {
                 const star = item.data
                 return (
-                  <Sortable.Item key={item.id} id={item.id} iconSize={36}>
+                  <SortableList.Item key={item.id} id={item.id} iconSize={36}>
                     <StarItem star={star} onDelete={onStarDelete} />
-                  </Sortable.Item>
+                  </SortableList.Item>
                 )
               })
             }}
-          </Sortable.Container>
+          </SortableList.Container>
           <AddItemButton className='w-40 mx-auto' onClick={onStarCreate}>
             Adicionar estrela
           </AddItemButton>

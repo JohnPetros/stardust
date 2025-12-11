@@ -2,11 +2,11 @@ import type { QuestionType } from '@stardust/core/lesson/types'
 import type { Question } from '@stardust/core/lesson/abstracts'
 
 import { Icon } from '@/ui/global/widgets/components/Icon'
-import { Sortable } from '@/ui/global/widgets/components/Sortable'
+import { SortableList } from '@/ui/global/widgets/components/SortableList'
 import { Button } from '@/ui/shadcn/components/button'
 import { cn } from '@/ui/shadcn/utils'
 import { ConfirmDialog } from '@/ui/global/widgets/components/ConfirmDialog'
-import type { SortableItem } from '@/ui/global/widgets/components/Sortable/types'
+import type { SortableItem } from '@/ui/global/widgets/components/SortableList/types'
 
 const QUESTION_TYPE_LABELS: Record<QuestionType, string> = {
   selection: 'Seleção',
@@ -42,7 +42,7 @@ export const QuizArrangerView = ({
         aparecem.
       </p>
 
-      <Sortable.Container
+      <SortableList.Container
         key={questions.map((question) => question.id).join()}
         items={questions}
         onDragEnd={onDragEnd}
@@ -53,7 +53,7 @@ export const QuizArrangerView = ({
             const isSelected = questionId === selectedQuestionId
             const questionType = item.data.type
             return (
-              <Sortable.Item key={item.id} id={item.id}>
+              <SortableList.Item key={item.id} id={item.id}>
                 <ConfirmDialog
                   title='Remover questão'
                   description='Tem certeza que deseja remover a questão?'
@@ -84,11 +84,11 @@ export const QuizArrangerView = ({
                     <span>{position + 1}</span>
                   </div>
                 </button>
-              </Sortable.Item>
+              </SortableList.Item>
             )
           })
         }
-      </Sortable.Container>
+      </SortableList.Container>
     </div>
   )
 }

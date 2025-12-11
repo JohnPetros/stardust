@@ -142,8 +142,8 @@ export class PlanetsRouter extends HonoRouter {
   }
 
   private registerReorderPlanetsRoute(): void {
-    this.router.put(
-      '/list/order',
+    this.router.patch(
+      '/order',
       this.authMiddleware.verifyAuthentication,
       this.validationMiddleware.validate(
         'json',
@@ -164,7 +164,7 @@ export class PlanetsRouter extends HonoRouter {
   }
 
   private registerReorderPlanetStarsRoute(): void {
-    this.router.put(
+    this.router.patch(
       '/:planetId/stars',
       this.authMiddleware.verifyAuthentication,
       this.validationMiddleware.validate(

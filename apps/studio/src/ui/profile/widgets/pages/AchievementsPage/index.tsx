@@ -11,7 +11,13 @@ export const AchievementsPage = () => {
   const { profileService } = useRest()
   const toastProvider = useToastProvider()
   const uiProvider = useUiProvider()
-  const { handleCreateAchievement, handleUpdate, handleDelete } = useAchievementsPage({
+  const {
+    achievements,
+    handleCreateAchievement,
+    handleUpdate,
+    handleDelete,
+    handleDragEnd,
+  } = useAchievementsPage({
     achievementsDto,
     profileService,
     toastProvider,
@@ -20,10 +26,11 @@ export const AchievementsPage = () => {
 
   return (
     <AchievementsPageView
-      achievements={achievementsDto}
+      achievements={achievements}
       onCreateAchievement={handleCreateAchievement}
       onUpdate={handleUpdate}
       onDelete={handleDelete}
+      onDragEnd={handleDragEnd}
     />
   )
 }

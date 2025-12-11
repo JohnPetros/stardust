@@ -7,6 +7,7 @@ import { PlanetNotFoundError } from '../../domain/errors'
 import type { Broker } from '#global/interfaces/Broker'
 import type { PlanetsRepository } from '../../interfaces'
 import { PlanetsOrderChangedEvent } from '#space/domain/events/PlanetsOrderChangedEvent'
+import { ConflictError } from '#global/domain/errors/ConflictError'
 
 describe('Reorder Planets Use Case', () => {
   let useCase: ReorderPlanetsUseCase
@@ -52,6 +53,17 @@ describe('Reorder Planets Use Case', () => {
     await expect(
       useCase.execute({ planetIds: [planets[0].id.value, missingPlanetId] }),
     ).rejects.toThrow(PlanetNotFoundError)
+  })
+
+  it('should throw ConflictError when duplicate planet ids are provided', async () => {
+    const planets = PlanetsFaker.fakeMany(2)
+    const duplicateId = planets[0].id.value
+
+    repository.findAll.mockResolvedValue(planets)
+
+    await expect(
+      useCase.execute({ planetIds: [duplicateId, duplicateId] }),
+    ).rejects.toThrow(ConflictError)
   })
 
   it('should publish the PlanetsOrderChangedEvent', async () => {

@@ -4,7 +4,7 @@ import { Id } from '@stardust/core/global/structures'
 import { Planet, Star } from '@stardust/core/space/entities'
 import type { ToastProvider } from '@stardust/core/global/interfaces'
 import type { SpaceService } from '@stardust/core/space/interfaces'
-import type { SortableItem } from '@/ui/global/widgets/components/Sortable/types'
+import type { SortableItem } from '@/ui/global/widgets/components/SortableList/types'
 import type { PlanetDto } from '@stardust/core/space/entities/dtos'
 import type { UiProvider } from '@stardust/core/ui/interfaces'
 

@@ -1,7 +1,7 @@
 import { SortableItem } from './SortableItem'
 import { SortableContainer } from './SortableContainer'
 
-export const Sortable = {
+export const SortableList = {
   Container: SortableContainer,
   Item: SortableItem,
 }

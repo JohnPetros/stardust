@@ -1,9 +1,9 @@
 import type { Image, Text } from '@stardust/core/global/structures'
 import type { QuestionCodeLine } from '@stardust/core/lesson/structures'
 
-import { Sortable } from '@/ui/global/widgets/components/Sortable'
+import { SortableList } from '@/ui/global/widgets/components/SortableList'
 import { AddItemButton } from '@/ui/lesson/widgets/components/AddItemButton'
-import type { SortableItem } from '@/ui/global/widgets/components/Sortable/types'
+import type { SortableItem } from '@/ui/global/widgets/components/SortableList/types'
 import { ExpandableInput } from '@/ui/lesson/widgets/components/ExpandableInput'
 import { QuestionHeaderInput } from '../QuestionHeaderInput'
 import { CodeInput } from '../CodeInput'
@@ -89,7 +89,7 @@ export const OpenQuestionEditorView = ({
       />
 
       <div className='space-y-6 translate-x-10'>
-        <Sortable.Container
+        <SortableList.Container
           key={codeLines.map((item) => item.data.texts.join()).join()}
           items={codeLines}
           onDragEnd={onDragEnd}
@@ -116,7 +116,7 @@ export const OpenQuestionEditorView = ({
               })
 
               return (
-                <Sortable.Item key={item.id} id={item.id} className='-translate-x-10'>
+                <SortableList.Item key={item.id} id={item.id} className='-translate-x-10'>
                   <CodeLineEditor
                     key={line.number.toString()}
                     blocks={blocks}
@@ -145,11 +145,11 @@ export const OpenQuestionEditorView = ({
                       onReplaceCodeLineBlockWithInput(line.number.value, blockIndex)
                     }
                   />
-                </Sortable.Item>
+                </SortableList.Item>
               )
             })
           }}
-        </Sortable.Container>
+        </SortableList.Container>
       </div>
 
       <div className='w-max mx-auto'>

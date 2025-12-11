@@ -2,7 +2,7 @@ import type { OpenQuestion } from '@stardust/core/lesson/entities'
 import type { Image, Text } from '@stardust/core/global/structures'
 import type { QuestionCodeLine } from '@stardust/core/lesson/structures'
 
-import type { SortableItem } from '@/ui/global/widgets/components/Sortable/types'
+import type { SortableItem } from '@/ui/global/widgets/components/SortableList/types'
 
 export const useOpenQuestionEditor = (
   question: OpenQuestion,

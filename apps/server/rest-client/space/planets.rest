@@ -29,7 +29,7 @@ Content-Type: application/json
 }
 
 ### Reorder planets
-PUT {{URL}}/list/order
+PATCH {{URL}}/order
 Authorization: Bearer {{JWT}}
 Content-Type: application/json
 
@@ -42,7 +42,7 @@ POST {{URL}}/{{PLANET_ID}}/stars
 Authorization: Bearer {{JWT}}
 
 ### Reorder planet stars
-PUT {{URL}}/{{PLANET_ID}}/stars
+PATCH {{URL}}/{{PLANET_ID}}/stars
 Authorization: Bearer {{JWT}}
 Content-Type: application/json
 
