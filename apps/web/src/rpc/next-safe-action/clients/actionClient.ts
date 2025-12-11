@@ -1,6 +1,7 @@
-import { AppError } from '@stardust/core/global/errors'
-import { createSafeActionClient, DEFAULT_SERVER_ERROR_MESSAGE } from 'next-safe-action'
+import { createSafeActionClient } from 'next-safe-action'
 import { notFound } from 'next/navigation'
+
+import { AppError } from '@stardust/core/global/errors'
 
 export const actionClient = createSafeActionClient({
   handleServerError(error) {
@@ -15,6 +16,6 @@ export const actionClient = createSafeActionClient({
       notFound()
     }
 
-    return DEFAULT_SERVER_ERROR_MESSAGE
+    return `Erro interno do servidor: ${error.message}`
   },
 })
