@@ -1,3 +1,6 @@
 export { FetchAvatarsListController } from './FetchAvatarsListController'
 export { FetchRocketsListController } from './FetchRocketsListController'
 export { FetchInsigniasListController } from './FetchInsigniasListController'
+export { CreateInsigniaController } from './CreateInsigniaController'
+export { UpdateInsigniaController } from './UpdateInsigniaController'
+export { DeleteInsigniaController } from './DeleteInsigniaController'
