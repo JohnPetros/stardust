@@ -7,6 +7,7 @@ import {
   idsListSchema,
   itemsPerPageSchema,
   pageSchema,
+  queryParamBooleanSchema,
   stringSchema,
 } from '@stardust/validation/global/schemas'
 import {
@@ -103,7 +104,7 @@ export class ChallengesRouter extends HonoRouter {
           postingOrder: stringSchema,
           userId: stringSchema.optional(),
           completionStatus: stringSchema,
-          shouldIncludeOnlyAuthorChallenges: booleanSchema.default(false),
+          shouldIncludeOnlyAuthorChallenges: queryParamBooleanSchema.default('false'),
         }),
       ),
       async (context) => {
