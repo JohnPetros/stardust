@@ -6,6 +6,7 @@ import { ChallengeNotFoundError } from '../domain/errors'
 import type { ChallengesRepository } from '../interfaces'
 
 type Request = {
+  challengeId?: string
   challengeSlug?: string
   starId?: string
 }
@@ -15,7 +16,13 @@ type Response = Promise<ChallengeDto>
 export class GetChallengeUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: ChallengesRepository) {}
 
-  async execute({ challengeSlug, starId }: Request) {
+  async execute({ challengeId, challengeSlug, starId }: Request) {
+    if (challengeId) {
+      const challenge = await this.repository.findById(Id.create(challengeId))
+      if (!challenge) throw new ChallengeNotFoundError()
+      return challenge.dto
+    }
+
     if (challengeSlug) {
       const challenge = await this.repository.findBySlug(Slug.create(challengeSlug))
       if (!challenge) throw new ChallengeNotFoundError()
