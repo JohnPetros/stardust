@@ -113,6 +113,7 @@ export function useChallengeEditorPage({
         expectedOutput: testCase.expectedOutput.value,
       })),
       categories: formData.categories,
+      isPublic: formData.isPublic,
     })
 
     if (currentChallenge) {

@@ -8,6 +8,7 @@ import {
   ListingOrder,
   OrdinalNumber,
   Id,
+  Logical,
 } from '@stardust/core/global/structures'
 import {
   ChallengeCompletionStatus,
@@ -36,6 +37,8 @@ export function useChallengesListTab(
       postingOrder: ListingOrder.create(
         tabListSorter === 'upvotesCount' ? 'descending' : 'any',
       ),
+      shouldIncludeStarChallenges: Logical.createAsFalse(),
+      shouldIncludeOnlyAuthorChallenges: Logical.createAsTrue(),
       userId: Id.create(userId),
     })
     if (response.isFailure) response.throwError()
