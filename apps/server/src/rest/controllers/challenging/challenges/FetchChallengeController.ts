@@ -5,6 +5,7 @@ import type { ChallengesRepository } from '@stardust/core/challenging/interfaces
 type Schema = {
   routeParams: {
     challengeSlug?: string
+    challengeId?: string
     starId?: string
   }
 }
@@ -13,9 +14,10 @@ export class FetchChallengeController implements Controller<Schema> {
   constructor(private readonly challengesRepository: ChallengesRepository) {}
 
   async handle(http: Http<Schema>) {
-    const { challengeSlug, starId } = http.getRouteParams()
+    const { challengeId, challengeSlug, starId } = http.getRouteParams()
     const useCase = new GetChallengeUseCase(this.challengesRepository)
     const response = await useCase.execute({
+      challengeId,
       challengeSlug,
       starId,
     })
