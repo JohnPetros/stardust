@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.10.1 (2025-12-13)
+
+* ♻️ refactor: remove challengeId parameter from solutionsRepository.add and update related tests for consistency (5b002c31)
+* ♻️ refactor(server): update SolutionsRepository to remove challengeId parameter and enhance SupabaseSolutionMapper with additional fields (4b5154da)
+* 🌐 domain: add challengeId field to SolutionsFaker for enhanced solution generation (24af7ac7)
+* 📶 rest(server): refactor FetchChallengesListController and FetchAllChallengesController to streamline accountId handling (e95dcaf0)
+* ✨ use case: update ListChallengesUseCase to make accountId optional and improve challenge filtering logic (7b482cb5)
+* 🖥️ ui(web): enable refetching on focus in useChallengesList for improved data freshness (ddddb104)
+* 🧪 test: update AccessSolutionPageController tests to use fetchChallengeById for improved clarity and accuracy (fc439624)
+* 📮 validation: replace booleanSchema with queryParamBooleanSchema in ChallengesRouter and update validation logic (74cd112e)
+* 🖥️ ui(web): enhance ChallengesList and ChallengeEditor to support user-specific challenges and public visibility options (53f84864)
+* ⚙️ config(server): implement routes for fetching challenges by ID and slug, and add support for fetching all challenges with pagination and filtering (1976ec7c)
+* 📶 rest(server): update FetchChallengeController to include challengeId in request parameters for enhanced challenge retrieval (1f127127)
+* 📶 rest(server): enhance FetchChallengesListController to include author-specific challenges (2983f2ac)
+* 📶 rest(web): update AccessSolutionPageController to fetch challenge by challengeId for improved data retrieval (c8740b11)
+* 📶 rest(server): add FetchAllChallengesController for improved challenge retrieval with pagination and filtering options (dc052c21)
+* 💾 db(server): enhance SupabaseChallengesRepository with additional filtering options for challenges based on star status and author (9ae5cfd3)
+* ✨ use case: enhance ListChallengesUseCase with additional request parameters for improved challenge filtering (b2524f04)
+* ✨ use case: add optional challengeId to GetChallengeUseCase for enhanced challenge retrieval (f6923069)
+* 📶 rest(web): enhance ChallengingService with new fetchChallengesList method and update ChallengesListParams for improved challenge filtering (ed9e5778)
+* 📮 validation: update booleanSchema to use z.coerce.boolean() for improved type coercion (e3570175)
+* 💾 db(server): include challengeId in SupabaseSolution type and mapper for improved data handling (8f48f5bd)
+* 🌐 domain: add challengeId to Solution entity and DTO for enhanced solution tracking (319bf813)
+
 ## 0.10.0 (2025-12-12)
 
 * 📦 deps(lsp): upgrade @designliquido/delegua to version 0.65.0 (38191594)
