@@ -3,8 +3,9 @@ import { mock, type Mock } from 'ts-jest-mocker'
 import { InsigniasFaker } from '#shop/domain/entities/fakers/InsigniasFaker'
 import { UpdateInsigniaUseCase } from '../UpdateInsigniaUseCase'
 import { InsigniaNotFoundError } from '#shop/domain/errors/InsigniaNotFoundError'
-import { InsigniaAlreadyExistsError } from '#shop/domain/errors/InsigniaAlreadyExistsError'
 import type { InsigniasRepository } from '#shop/interfaces/InsigniasRepository'
+import { InsigniaAlreadyExistsError } from '#shop/domain/errors/InsigniaAlreadyExistsError'
+import { InsigniaRole } from '#global/domain/structures/InsigniaRole'
 
 describe('Update Insignia Use Case', () => {
   let repository: Mock<InsigniasRepository>
@@ -47,5 +48,22 @@ describe('Update Insignia Use Case', () => {
     expect(repository.replace).toHaveBeenCalledTimes(1)
     expect(repository.replace.mock.calls[0][0].dto).toEqual(updatedInsignia.dto)
     expect(result).toEqual(updatedInsignia.dto)
+  })
+
+  it('should throw an error if the insignia already exists with the same role', async () => {
+    const existingInsignia = InsigniasFaker.fake({
+      role: InsigniaRole.createAsGod().value,
+    })
+    const updatedInsignia = InsigniasFaker.fake({
+      role: InsigniaRole.createAsEngineer().value,
+    })
+    repository.findById.mockResolvedValue(existingInsignia)
+    repository.findByRole.mockResolvedValue(existingInsignia)
+
+    await expect(
+      useCase.execute({
+        insigniaDto: updatedInsignia.dto,
+      }),
+    ).rejects.toThrow(InsigniaAlreadyExistsError)
   })
 })
