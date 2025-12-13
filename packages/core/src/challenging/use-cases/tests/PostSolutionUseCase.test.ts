@@ -71,10 +71,7 @@ describe('Post Solution Use Case', () => {
       challengeId: challenge.id.value,
     })
 
-    expect(solutionsRepository.add).toHaveBeenCalledWith(
-      expect.any(Solution),
-      challenge.id,
-    )
+    expect(solutionsRepository.add).toHaveBeenCalledWith(expect.any(Solution))
   })
 
   it('should return the posted solution dto', async () => {
