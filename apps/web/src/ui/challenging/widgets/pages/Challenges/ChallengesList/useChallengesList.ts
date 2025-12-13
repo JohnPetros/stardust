@@ -60,7 +60,7 @@ export function useChallengesList({ challengingService, userId }: Params) {
     key: CACHE.keys.challengesList,
     fetcher: fetchChallengesList,
     itemsPerPage: CHALLENGES_PER_PAGE,
-    shouldRefetchOnFocus: false,
+    shouldRefetchOnFocus: true,
     isInfinity: true,
     dependencies: [completionStatus, difficultyLevel, categoriesIds, title, userId],
   })
