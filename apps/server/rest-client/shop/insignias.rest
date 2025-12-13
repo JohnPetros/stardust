@@ -3,7 +3,6 @@
 
 ### Fetch insignias list
 GET {{URL}}
-Authorization: Bearer {{JWT}}
 
 ### Create insignia
 POST {{URL}}

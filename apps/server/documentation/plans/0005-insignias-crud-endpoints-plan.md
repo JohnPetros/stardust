@@ -1,4 +1,4 @@
-# Enpoints de CRUD de Insignias
+# Endpoints de CRUD de Insignias
 
 ## Objetivo
 
