@@ -14,6 +14,7 @@ export class SupabaseSolutionMapper {
       title: supabaseSolution.title ?? '',
       content: supabaseSolution.content ?? '',
       slug: supabaseSolution.slug ?? '',
+      challengeId: supabaseSolution.challenge_id ?? '',
       upvotesCount: supabaseSolution.upvotes_count ?? 0,
       viewsCount: supabaseSolution.views_count ?? 0,
       commentsCount: supabaseSolution.comments_count ?? 0,
