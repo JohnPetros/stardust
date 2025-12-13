@@ -38,10 +38,10 @@ export class FetchChallengesListController implements Controller<Schema> {
       shouldIncludeOnlyAuthorChallenges,
     } = http.getQueryParams()
     const { userCompletedChallengesIds = [] } = await http.getBody()
-    const accountId = await http.getAccountId()
+    const account = await http.getAccount()
     const useCase = new ListChallengesUseCase(this.challengesRepository)
     const response = await useCase.execute({
-      accountId: String(accountId),
+      accountId: account ? String(account.id) : undefined,
       page,
       itemsPerPage,
       categoriesIds,

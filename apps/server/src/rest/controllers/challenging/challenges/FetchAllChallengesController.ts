@@ -39,7 +39,7 @@ export class FetchAllChallengesController implements Controller<Schema> {
     const accountId = await http.getAccountId()
     const useCase = new ListChallengesUseCase(this.challengesRepository)
     const response = await useCase.execute({
-      accountId: String(accountId),
+      accountId,
       page,
       itemsPerPage,
       categoriesIds,
