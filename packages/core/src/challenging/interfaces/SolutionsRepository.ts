@@ -7,7 +7,7 @@ export interface SolutionsRepository {
   findById(solutionId: Id): Promise<Solution | null>
   findBySlug(solutionSlug: Slug): Promise<Solution | null>
   findMany(params: SolutionsListingParams): Promise<ManyItems<Solution>>
-  add(solution: Solution, challengeId: Id): Promise<void>
+  add(solution: Solution): Promise<void>
   replace(solution: Solution): Promise<void>
   remove(solutionId: Id): Promise<void>
   addSolutionUpvote(solutionId: Id, userId: Id): Promise<void>

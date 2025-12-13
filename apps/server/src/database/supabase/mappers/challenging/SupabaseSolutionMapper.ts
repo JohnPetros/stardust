@@ -43,7 +43,14 @@ export class SupabaseSolutionMapper {
       author_id: solution.author.id.value,
       comments_count: solution.commentsCount.value,
       slug: solution.slug.value,
-    } as SupabaseSolution
+      challenge_id: solution.challengeId.value,
+      author_avatar_image: solution.author.avatar.image.value,
+      author_avatar_name: solution.author.avatar.name.value,
+      author_name: solution.author.name.value,
+      author_slug: solution.author.slug.value,
+      upvotes_count: solution.upvotesCount.value,
+      created_at: solution.postedAt.toISOString(),
+    }
     return supabaseSolution
   }
 }
