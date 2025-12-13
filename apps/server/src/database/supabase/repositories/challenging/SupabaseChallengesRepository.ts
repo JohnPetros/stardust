@@ -99,13 +99,22 @@ export class SupabaseChallengesRepository
     difficulty,
     upvotesCountOrder,
     postingOrder,
-    userId,
     categoriesIds,
+    shouldIncludeStarChallenges,
+    shouldIncludeOnlyAuthorChallenges,
+    userId,
   }: ChallengesListParams): Promise<ManyItems<Challenge>> {
     let query = this.supabase
       .from('challenges_view')
       .select('*, challenges_categories!inner(category_id)', { count: 'exact' })
-      .is('star_id', null)
+
+    if (shouldIncludeStarChallenges.isFalse) {
+      query = query.is('star_id', null)
+    }
+
+    if (shouldIncludeOnlyAuthorChallenges.isTrue && userId) {
+      query = query.eq('user_id', userId.value)
+    }
 
     if (title.isEmpty.isFalse) {
       query = query.ilike('title', `%${title.value}%`)
@@ -129,10 +138,6 @@ export class SupabaseChallengesRepository
       query = query.order('upvotes_count', {
         ascending: upvotesCountOrder.isAscending.isTrue,
       })
-    }
-
-    if (userId) {
-      query = query.eq('user_id', userId.value)
     }
 
     if (categoriesIds.isEmpty.isFalse) {
