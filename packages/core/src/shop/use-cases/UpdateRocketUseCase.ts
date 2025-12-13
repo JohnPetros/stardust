@@ -18,7 +18,7 @@ export class UpdateRocketUseCase implements UseCase<Request, Response> {
     const rocket = Rocket.create(rocketDto)
     await this.findRocket(rocket.id)
     if (rocket.isSelectedByDefault.isTrue) {
-      await this.updatedCurrentSelectedRocketByDefault()
+      await this.updateCurrentSelectedRocketByDefault()
     }
     await this.repository.replace(rocket)
     return rocket.dto
@@ -29,7 +29,7 @@ export class UpdateRocketUseCase implements UseCase<Request, Response> {
     if (!rocket) throw new RocketNotFoundError()
   }
 
-  async updatedCurrentSelectedRocketByDefault(): Promise<void> {
+  async updateCurrentSelectedRocketByDefault(): Promise<void> {
     const rocket = await this.repository.findSelectedByDefault()
     if (rocket) {
       rocket.isSelectedByDefault = Logical.createAsFalse()

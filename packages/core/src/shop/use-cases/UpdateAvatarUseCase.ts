@@ -18,13 +18,13 @@ export class UpdateAvatarUseCase implements UseCase<Request, Response> {
     const avatar = Avatar.create(avatarDto)
     await this.findAvatar(avatar.id)
     if (avatar.isSelectedByDefault.isTrue) {
-      await this.updatedCurrentSelectedAvatarByDefault()
+      await this.updateCurrentSelectedAvatarByDefault()
     }
     await this.repository.replace(avatar)
     return avatar.dto
   }
 
-  async updatedCurrentSelectedAvatarByDefault(): Promise<void> {
+  async updateCurrentSelectedAvatarByDefault(): Promise<void> {
     const avatar = await this.repository.findSelectedByDefault()
     if (avatar) {
       avatar.isSelectedByDefault = Logical.createAsFalse()
