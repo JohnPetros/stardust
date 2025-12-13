@@ -48,7 +48,6 @@ export class SupabaseInsigniasRepository
 
   async add(insignia: Insignia): Promise<void> {
     const supabaseInsignia = SupabaseInsigniaMapper.toSupabase(insignia)
-    console.log('insignia.id.value', insignia.id.value)
     const { error } = await this.supabase.from('insignias').insert({
       id: insignia.id.value,
       name: supabaseInsignia.name,
