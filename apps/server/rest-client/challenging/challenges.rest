@@ -1,10 +1,13 @@
 @URL = {{BASE_URL}}/challenging/challenges
-@CHALLENGE_ID = be477773-1294-4278-b339-58f71ee264bd
-@SLUG = area-do-escudo-protetor
+@CHALLENGE_ID = 17ba01ec-7aa6-4971-9760-537127e03b4d
+@CHALLENGE_SLUG = area-do-escudo-protetor
 @STAR_ID = bda4c82c-9466-4619-bdd6-89f719c54c27
 
+### Fetch challenge by id
+GET {{URL}}/id/{{CHALLENGE_ID}}
+
 ### Fetch challenge by slug
-GET {{URL}}/slug/{{SLUG}}
+GET {{URL}}/slug/{{CHALLENGE_SLUG}}
 
 ### Fetch challenge by star
 GET {{URL}}/star/{{STAR_ID}}
