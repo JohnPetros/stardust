@@ -1,4 +1,33 @@
 @URL = {{BASE_URL}}/shop/insignias
+@INSIGNIA_ID = f7485838-0b97-4d86-a282-2f762601103c
 
 ### Fetch insignias list
 GET {{URL}}
+
+### Create insignia
+POST {{URL}}
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "name": "Engenheiro Espacial",
+  "price": 10000,
+  "image": "engineer-insignia.svg",
+  "role": "engineer"
+}
+
+### Update insignia
+PUT {{URL}}/{{INSIGNIA_ID}}
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "name": "Engenheiro de Sistemas",
+  "price": 100,
+  "image": "engineer-insignia.svg",
+  "role": "engineer"
+}
+
+### Delete insignia
+DELETE {{URL}}/{{INSIGNIA_ID}}
+Authorization: Bearer {{JWT}}
