@@ -57,7 +57,7 @@ export class InsigniasRouter extends HonoRouter {
       ),
       this.validationMiddleware.validate('json', insigniaSchema),
       async (context) => {
-        const http = new HonoHttp(context) as any
+        const http = new HonoHttp(context)
         const repository = new SupabaseInsigniasRepository(http.getSupabase())
         const controller = new UpdateInsigniaController(repository)
         const response = await controller.handle(http)
