@@ -1,3 +1,6 @@
 export { AcquireDefaultShopItemsUseCase } from './AcquireDefaultShopItemsUseCase'
 export { ListRocketsUseCase } from './ListRocketsUseCase'
 export { ListAvatarsUseCase } from './ListAvatarsUseCase'
+export { CreateInsigniaUseCase } from './CreateInsigniaUseCase'
+export { UpdateInsigniaUseCase } from './UpdateInsigniaUseCase'
+export { DeleteInsigniaUseCase } from './DeleteInsigniaUseCase'
