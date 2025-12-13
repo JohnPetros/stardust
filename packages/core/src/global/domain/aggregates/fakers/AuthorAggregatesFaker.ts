@@ -10,15 +10,15 @@ export class AuthorAggregatesFaker {
   }
 
   static fakeDto(baseDto?: Partial<AuthorAggregateDto>): AuthorAggregateDto {
-    const fakeAvatar = AuthorsFakers.fake()
+    const fakeAuthor = AuthorsFakers.fake()
     return {
       id: faker.string.uuid(),
       entity: {
-        name: fakeAvatar.name.value,
-        slug: fakeAvatar.slug.value,
+        name: fakeAuthor.name.value,
+        slug: fakeAuthor.slug.value,
         avatar: {
-          name: fakeAvatar.name.value,
-          image: fakeAvatar.avatar.image.value,
+          name: fakeAuthor.name.value,
+          image: fakeAuthor.avatar.image.value,
         },
       },
       ...baseDto,
