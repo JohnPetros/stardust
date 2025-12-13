@@ -1,5 +1,36 @@
 @URL = {{BASE_URL}}/shop/rockets
+@ROCKET_ID = 283b8020-36ca-49b9-ac7c-ebfc40f66c85
 
 ### Fetch rockets list
 GET {{URL}}?order=ascending&page=1&itemsPerPage=10&search=
+
+### Create rocket
+POST {{URL}}
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "image": "https://example.com/rocket-1.jpg",
+  "name": "New Rocket",
+  "price": 100,
+  "isAcquiredByDefault": false,
+  "isSelectedByDefault": false
+}
+
+### Update rocket
+PUT {{URL}}/{{ROCKET_ID}}
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "image": "https://example.com/rocket-1.jpg",
+  "name": "Rocket 5",
+  "price": 200,
+  "isAcquiredByDefault": true,
+  "isSelectedByDefault": true
+}
+
+### Delete rocket
+DELETE {{URL}}/{{ROCKET_ID}}
+Authorization: Bearer {{JWT}}
 

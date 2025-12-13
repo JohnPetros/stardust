@@ -14,7 +14,7 @@ export class Avatar extends ShopItem {
           'O avatar é adquirido por padrão?',
         ),
         isSelectedByDefault: Logical.create(
-          dto?.isAcquiredByDefault ?? false,
+          dto?.isSelectedByDefault ?? false,
           'O avatar é selecionado por padrão?',
         ),
       },

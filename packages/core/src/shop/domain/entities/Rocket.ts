@@ -14,8 +14,8 @@ export class Rocket extends ShopItem {
           'O foguete é adquirido por padrão?',
         ),
         isSelectedByDefault: Logical.create(
-          dto?.isAcquiredByDefault ?? false,
-          'O avatar é selecionado por padrão?',
+          dto?.isSelectedByDefault ?? false,
+          'O foguete é selecionado por padrão?',
         ),
       },
       dto.id,

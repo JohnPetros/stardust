@@ -1,5 +1,5 @@
 import type { AvatarsRepository } from '@stardust/core/shop/interfaces'
-import type { Avatar, Rocket } from '@stardust/core/shop/entities'
+import type { Avatar } from '@stardust/core/shop/entities'
 import type { Id, Integer } from '@stardust/core/global/structures'
 import type { ManyItems } from '@stardust/core/global/types'
 
@@ -20,13 +20,13 @@ export class SupabaseAvatarsRepository
       .single()
 
     if (error) {
-      throw new SupabasePostgreError(error)
+      return this.handleQueryPostgresError(error)
     }
 
     return SupabaseAvatarMapper.toEntity(data)
   }
 
-  async findAllByPrice(price: Integer): Promise<Rocket[]> {
+  async findAllByPrice(price: Integer): Promise<Avatar[]> {
     const { data, error } = await this.supabase
       .from('avatars')
       .select('*')
@@ -37,6 +37,20 @@ export class SupabaseAvatarsRepository
     }
 
     return data.map(SupabaseAvatarMapper.toEntity)
+  }
+
+  async findSelectedByDefault(): Promise<Avatar | null> {
+    const { data, error } = await this.supabase
+      .from('avatars')
+      .select('*')
+      .eq('is_selected_by_default', true)
+      .single()
+
+    if (error) {
+      return this.handleQueryPostgresError(error)
+    }
+
+    return SupabaseAvatarMapper.toEntity(data)
   }
 
   async findMany({
@@ -71,6 +85,35 @@ export class SupabaseAvatarsRepository
     return {
       items: avatars,
       count: count ?? avatars.length,
+    }
+  }
+
+  async add(avatar: Avatar): Promise<void> {
+    const supabaseAvatar = SupabaseAvatarMapper.toSupabase(avatar)
+    const { error } = await this.supabase.from('avatars').insert(supabaseAvatar)
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
+  async replace(avatar: Avatar): Promise<void> {
+    const supabaseAvatar = SupabaseAvatarMapper.toSupabase(avatar)
+    const { error } = await this.supabase
+      .from('avatars')
+      .update(supabaseAvatar)
+      .eq('id', avatar.id.value)
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
+  async remove(id: Id): Promise<void> {
+    const { error } = await this.supabase.from('avatars').delete().eq('id', id.value)
+
+    if (error) {
+      throw new SupabasePostgreError(error)
     }
   }
 }
