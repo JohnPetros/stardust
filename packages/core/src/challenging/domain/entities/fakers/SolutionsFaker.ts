@@ -17,6 +17,7 @@ export class SolutionsFaker {
       slug: faker.lorem.slug(),
       author: fakeAuthor,
       content: '',
+      challengeId: faker.string.uuid(),
       postedAt: new Date(),
       upvotesCount: 0,
       viewsCount: 0,

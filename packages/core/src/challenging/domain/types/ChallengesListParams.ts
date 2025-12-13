@@ -1,4 +1,4 @@
-import type { Id, IdsList } from '#global/domain/structures/index'
+import type { Id, IdsList, Logical } from '#global/domain/structures/index'
 import type { ListingOrder } from '#global/domain/structures/ListingOrder'
 import type { Text } from '#global/domain/structures/Text'
 import type { ChallengeDifficulty, ChallengeCompletionStatus } from '../structures'
@@ -12,4 +12,6 @@ export type ChallengesListParams = {
   postingOrder: ListingOrder
   upvotesCountOrder: ListingOrder
   completionStatus: ChallengeCompletionStatus
+  shouldIncludeStarChallenges: Logical
+  shouldIncludeOnlyAuthorChallenges: Logical
 } & PaginationParams

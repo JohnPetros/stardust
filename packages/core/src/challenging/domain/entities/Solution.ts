@@ -1,5 +1,5 @@
 import { AuthorAggregate } from '#global/domain/aggregates/index'
-import { Integer, Logical, Name, Slug, Text } from '#global/domain/structures/index'
+import { Id, Integer, Logical, Name, Slug, Text } from '#global/domain/structures/index'
 import { Entity } from '#global/domain/abstracts/index'
 import { Datetime } from '#global/libs/index'
 import type { SolutionDto } from './dtos'
@@ -10,6 +10,7 @@ type SolutionProps = {
   upvotesCount: Integer
   viewsCount: Integer
   commentsCount: Integer
+  challengeId: Id
   slug: Slug
   isViewed: Logical
   postedAt: Date
@@ -22,6 +23,7 @@ export class Solution extends Entity<SolutionProps> {
       {
         title: Name.create(dto.title, 'Título da solução'),
         content: Text.create(dto.content, 'Conteúdo da solução'),
+        challengeId: Id.create(dto.challengeId),
         slug: Slug.create(dto.title, 'Slug da solução'),
         upvotesCount: Integer.create(
           dto.upvotesCount ?? 0,
@@ -78,6 +80,10 @@ export class Solution extends Entity<SolutionProps> {
     return this.props.slug
   }
 
+  get challengeId() {
+    return this.props.challengeId
+  }
+
   get upvotesCount() {
     return this.props.upvotesCount
   }
@@ -104,6 +110,7 @@ export class Solution extends Entity<SolutionProps> {
       title: this.title.value,
       content: this.content.value,
       slug: this.slug.value,
+      challengeId: this.challengeId.value,
       upvotesCount: this.upvotesCount.value,
       viewsCount: this.viewsCount.value,
       commentsCount: this.commentsCount.value,

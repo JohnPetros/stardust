@@ -2,10 +2,12 @@ import { Hono } from 'hono'
 import { z } from 'zod'
 
 import {
+  booleanSchema,
   idSchema,
   idsListSchema,
   itemsPerPageSchema,
   pageSchema,
+  queryParamBooleanSchema,
   stringSchema,
 } from '@stardust/validation/global/schemas'
 import {
@@ -25,6 +27,7 @@ import {
   UpdateChallengeController,
   DeleteChallengeController,
   FetchPostedChallengesKpiController,
+  FetchAllChallengesController,
 } from '@/rest/controllers/challenging/challenges'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
@@ -37,7 +40,21 @@ export class ChallengesRouter extends HonoRouter {
   private readonly profileMiddleware = new ProfileMiddleware()
   private readonly validationMiddleware = new ValidationMiddleware()
 
-  private registerFetchChallengeRoute(): void {
+  private registerFetchChallengeByIdRoute(): void {
+    this.router.get(
+      '/id/:challengeId',
+      this.validationMiddleware.validate('param', z.object({ challengeId: idSchema })),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const controller = new FetchChallengeController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private registerFetchChallengeBySlugRoute(): void {
     this.router.get(
       '/slug/:challengeSlug',
       this.validationMiddleware.validate(
@@ -73,8 +90,36 @@ export class ChallengesRouter extends HonoRouter {
 
   private registerFetchChallengesListRoute(): void {
     this.router.get(
-      '/',
+      '/list',
       this.profileMiddleware.appendUserCompletedChallengesIdsToBody,
+      this.validationMiddleware.validate(
+        'query',
+        z.object({
+          page: pageSchema,
+          itemsPerPage: itemsPerPageSchema,
+          title: stringSchema,
+          categoriesIds: idsListSchema,
+          difficulty: stringSchema,
+          upvotesCountOrder: stringSchema,
+          postingOrder: stringSchema,
+          userId: stringSchema.optional(),
+          completionStatus: stringSchema,
+          shouldIncludeOnlyAuthorChallenges: queryParamBooleanSchema.default('false'),
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const controller = new FetchChallengesListController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private registerFetchAllChallengesRoute(): void {
+    this.router.get(
+      '/',
       this.validationMiddleware.validate(
         'query',
         z.object({
@@ -92,7 +137,7 @@ export class ChallengesRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseChallengesRepository(http.getSupabase())
-        const controller = new FetchChallengesListController(repository)
+        const controller = new FetchAllChallengesController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -250,9 +295,11 @@ export class ChallengesRouter extends HonoRouter {
   }
 
   registerRoutes(): Hono {
-    this.registerFetchChallengeRoute()
+    this.registerFetchChallengeByIdRoute()
+    this.registerFetchChallengeBySlugRoute()
     this.registerFetchChallengeByStarRoute()
     this.registerFetchChallengesListRoute()
+    this.registerFetchAllChallengesRoute()
     this.registerFetchCompletedChallengesByDifficultyLevelRoute()
     this.registerFetchAllChallengeCategoriesRoute()
     this.registerFetchChallengeVoteRoute()
