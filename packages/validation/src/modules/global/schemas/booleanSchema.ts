@@ -1,3 +1,3 @@
 import z from 'zod'
 
-export const booleanSchema = z.boolean()
+export const booleanSchema = z.coerce.boolean()
