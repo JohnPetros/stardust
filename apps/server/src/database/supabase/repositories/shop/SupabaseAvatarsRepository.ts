@@ -1,6 +1,6 @@
 import type { AvatarsRepository } from '@stardust/core/shop/interfaces'
 import type { Avatar } from '@stardust/core/shop/entities'
-import type { Id, Integer, Slug } from '@stardust/core/global/structures'
+import type { Id, Integer } from '@stardust/core/global/structures'
 import type { ManyItems } from '@stardust/core/global/types'
 
 import { SupabaseRepository } from '../SupabaseRepository'
@@ -17,20 +17,6 @@ export class SupabaseAvatarsRepository
       .from('avatars')
       .select('*')
       .eq('id', avatarId.value)
-      .single()
-
-    if (error) {
-      return this.handleQueryPostgresError(error)
-    }
-
-    return SupabaseAvatarMapper.toEntity(data)
-  }
-
-  async findBySlug(slug: Slug): Promise<Avatar | null> {
-    const { data, error } = await this.supabase
-      .from('avatars')
-      .select('*')
-      .eq('slug', slug.value)
       .single()
 
     if (error) {
@@ -113,7 +99,6 @@ export class SupabaseAvatarsRepository
 
   async replace(avatar: Avatar): Promise<void> {
     const supabaseAvatar = SupabaseAvatarMapper.toSupabase(avatar)
-    console.log(supabaseAvatar)
     const { error } = await this.supabase
       .from('avatars')
       .update(supabaseAvatar)
