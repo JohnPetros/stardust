@@ -39,6 +39,7 @@ export const ChallengeCardView = ({
         <DifficultyBadge difficultyLevel={difficultyLevel} />
         <Link
           href={`${ROUTES.challenging.challenges.challenge(slug)}`}
+          prefetch={false}
           className='font-medium text-green-500 transition-colors duration-200 hover:text-green-700'
         >
           {title}
