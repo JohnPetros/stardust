@@ -8,6 +8,7 @@ import {
   Rocket,
   LayoutDashboard,
   Settings,
+  ShoppingCart,
   Plus,
   SquarePen,
   GripVertical,
@@ -63,4 +64,5 @@ export const ICONS: Record<IconName, LucideIcon> = {
   reload: RotateCcw,
   plus: Plus,
   configuration: Settings,
+  shop: ShoppingCart,
 }
