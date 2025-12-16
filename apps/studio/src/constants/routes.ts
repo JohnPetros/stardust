@@ -20,4 +20,5 @@ export const ROUTES = {
     questions: (starSlug?: Slug) =>
       `/lesson/questions/${starSlug ? starSlug.value : ':starSlug'}`,
   },
+  shop: '/shop',
 }
