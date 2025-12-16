@@ -45,5 +45,9 @@ export const ShopService = (restClient: RestClient): IShopService => {
     async createRocket(rocket: RocketDto) {
       return await restClient.post<RocketDto>('/shop/rockets', rocket)
     },
+
+    async createAvatar(avatar: AvatarDto) {
+      return await restClient.post<AvatarDto>('/shop/avatars', avatar)
+    },
   }
 }
