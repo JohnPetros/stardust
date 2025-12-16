@@ -1,12 +1,15 @@
 import { AvatarsTableView } from './AvatarsTableView'
 import { useAvatarsTable } from './useAvatarsTable'
 import type { ShopService } from '@stardust/core/shop/interfaces'
+import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
 
 type Props = {
   shopService: ShopService
 }
 
 export const AvatarsTable = ({ shopService }: Props) => {
+  const toastProvider = useToastProvider()
+
   const {
     avatars,
     isLoading,
@@ -20,7 +23,8 @@ export const AvatarsTable = ({ shopService }: Props) => {
     handleOrderChange,
     handlePrevPage,
     handleNextPage,
-  } = useAvatarsTable({ shopService })
+    handleCreateAvatar,
+  } = useAvatarsTable({ shopService, toastProvider })
 
   return (
     <AvatarsTableView
@@ -36,6 +40,7 @@ export const AvatarsTable = ({ shopService }: Props) => {
       onOrderChange={handleOrderChange}
       onPrevPage={handlePrevPage}
       onNextPage={handleNextPage}
+      onCreateAvatar={handleCreateAvatar}
     />
   )
 }

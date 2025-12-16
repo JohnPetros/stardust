@@ -2,7 +2,9 @@ import { useState, useMemo } from 'react'
 import { useDebounceValue } from 'usehooks-ts'
 
 import type { ShopService } from '@stardust/core/shop/interfaces'
+import type { ToastProvider } from '@stardust/core/global/interfaces'
 import { ListingOrder, OrdinalNumber, Text } from '@stardust/core/global/structures'
+import type { AvatarDto } from '@stardust/core/shop/entities/dtos'
 
 import { CACHE } from '@/constants'
 import { useCache } from '@/ui/global/hooks/useCache'
@@ -11,13 +13,15 @@ const ITEMS_PER_PAGE = OrdinalNumber.create(10)
 
 type Params = {
   shopService: ShopService
+  toastProvider: ToastProvider
 }
 
-export function useAvatarsTable({ shopService }: Params) {
+export function useAvatarsTable({ shopService, toastProvider }: Params) {
   const [searchInput, setSearchInput] = useState('')
   const [debouncedSearch] = useDebounceValue(searchInput, 500)
   const [order, setOrder] = useState<ListingOrder>(ListingOrder.createAsAscending())
   const [page, setPage] = useState(1)
+  const [isCreating, setIsCreating] = useState(false)
 
   const search = useMemo(() => {
     return debouncedSearch ? Text.create(debouncedSearch) : undefined
@@ -61,9 +65,40 @@ export function useAvatarsTable({ shopService }: Params) {
     }
   }
 
+  async function handleCreateAvatar(data: {
+    name: string
+    image: string
+    price: number
+    isAcquiredByDefault?: boolean
+    isSelectedByDefault?: boolean
+  }) {
+    setIsCreating(true)
+    const avatarDto: AvatarDto = {
+      name: data.name,
+      image: data.image,
+      price: data.price,
+      isAcquiredByDefault: data.isAcquiredByDefault,
+      isSelectedByDefault: data.isSelectedByDefault,
+    }
+
+    const response = await shopService.createAvatar(avatarDto)
+
+    if (response.isFailure) {
+      toastProvider.showError(response.errorMessage)
+      setIsCreating(false)
+      return
+    }
+
+    if (response.isSuccessful) {
+      toastProvider.showSuccess('Avatar criado com sucesso')
+    }
+
+    setIsCreating(false)
+  }
+
   return {
     avatars,
-    isLoading,
+    isLoading: isLoading || isCreating,
     searchInput,
     order,
     page,
@@ -74,5 +109,6 @@ export function useAvatarsTable({ shopService }: Params) {
     handleOrderChange,
     handlePrevPage,
     handleNextPage,
+    handleCreateAvatar,
   }
 }

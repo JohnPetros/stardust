@@ -21,6 +21,8 @@ import { Button } from '@/ui/shadcn/components/button'
 import { Loading } from '@/ui/global/widgets/components/Loading'
 import { StorageImage } from '@/ui/global/widgets/components/StorageImage'
 import { Pagination } from '@/ui/global/widgets/components/Pagination'
+import { Badge } from '@/ui/shadcn/components/badge'
+import { AvatarForm } from './AvatarForm'
 
 type Props = {
   avatars: AvatarDto[]
@@ -35,6 +37,13 @@ type Props = {
   onOrderChange: (order: ListingOrder) => void
   onPrevPage: () => void
   onNextPage: () => void
+  onCreateAvatar: (data: {
+    name: string
+    image: string
+    price: number
+    isAcquiredByDefault?: boolean
+    isSelectedByDefault?: boolean
+  }) => void
 }
 
 export const AvatarsTableView = ({
@@ -50,28 +59,34 @@ export const AvatarsTableView = ({
   onOrderChange,
   onPrevPage,
   onNextPage,
+  onCreateAvatar,
 }: Props) => {
   return (
     <div className='flex flex-col gap-4'>
-      <div className='flex items-center gap-4'>
-        <Input
-          placeholder='Buscar avatares...'
-          value={searchInput}
-          onChange={(e) => onSearchChange(e.target.value)}
-          className='max-w-sm'
-        />
-        <Select
-          value={order.value}
-          onValueChange={(value) => onOrderChange(ListingOrder.create(value))}
-        >
-          <SelectTrigger className='w-[180px]'>
-            <SelectValue placeholder='Ordenar por' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='ascending'>Preço: Menor para Maior</SelectItem>
-            <SelectItem value='descending'>Preço: Maior para Menor</SelectItem>
-          </SelectContent>
-        </Select>
+      <div className='flex items-center justify-between gap-4'>
+        <div className='flex items-center gap-4 flex-1'>
+          <Input
+            placeholder='Buscar avatares...'
+            value={searchInput}
+            onChange={(e) => onSearchChange(e.target.value)}
+            className='max-w-sm'
+          />
+          <Select
+            value={order.value}
+            onValueChange={(value) => onOrderChange(ListingOrder.create(value))}
+          >
+            <SelectTrigger className='w-[180px]'>
+              <SelectValue placeholder='Ordenar por' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='ascending'>Preço: Menor para Maior</SelectItem>
+              <SelectItem value='descending'>Preço: Maior para Menor</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <AvatarForm onSubmit={onCreateAvatar}>
+          <Button>Criar avatar</Button>
+        </AvatarForm>
       </div>
 
       {isLoading ? (
@@ -86,13 +101,15 @@ export const AvatarsTableView = ({
                 <TableHead>Nome</TableHead>
                 <TableHead>Imagem</TableHead>
                 <TableHead>Preço</TableHead>
+                <TableHead>Adquirido por padrão</TableHead>
+                <TableHead>Selecionado por padrão</TableHead>
                 <TableHead>Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {avatars.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={4} className='text-center text-muted-foreground'>
+                  <TableCell colSpan={6} className='text-center text-muted-foreground'>
                     Nenhum avatar encontrado
                   </TableCell>
                 </TableRow>
@@ -109,6 +126,20 @@ export const AvatarsTableView = ({
                       />
                     </TableCell>
                     <TableCell>{avatar.price}</TableCell>
+                    <TableCell>
+                      {avatar.isAcquiredByDefault ? (
+                        <Badge variant='default'>Sim</Badge>
+                      ) : (
+                        <Badge variant='outline'>Não</Badge>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {avatar.isSelectedByDefault ? (
+                        <Badge variant='default'>Sim</Badge>
+                      ) : (
+                        <Badge variant='outline'>Não</Badge>
+                      )}
+                    </TableCell>
                     <TableCell>
                       <div className='flex items-center gap-2'>
                         <Button variant='outline' size='sm'>
