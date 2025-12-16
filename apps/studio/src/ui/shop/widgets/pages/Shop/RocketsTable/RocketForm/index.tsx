@@ -1,15 +1,10 @@
 import { useRest } from '@/ui/global/hooks/useRest'
 import { RocketFormView } from './RocketFormView'
 import type { PropsWithChildren } from 'react'
+import type { RocketDto } from '@stardust/core/shop/entities/dtos'
 
 type Props = {
-  onSubmit: (data: {
-    name: string
-    image: string
-    price: number
-    isAcquiredByDefault?: boolean
-    isSelectedByDefault?: boolean
-  }) => Promise<void>
+  onSubmit: (dto: RocketDto) => Promise<void>
 }
 
 export const RocketForm = ({ children, onSubmit }: PropsWithChildren<Props>) => {

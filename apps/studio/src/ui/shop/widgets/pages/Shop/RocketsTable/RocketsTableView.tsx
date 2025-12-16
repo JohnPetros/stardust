@@ -22,7 +22,7 @@ import { Loading } from '@/ui/global/widgets/components/Loading'
 import { StorageImage } from '@/ui/global/widgets/components/StorageImage'
 import { Pagination } from '@/ui/global/widgets/components/Pagination'
 import { Badge } from '@/ui/shadcn/components/badge'
-import { RocketForm } from '../RocketForm'
+import { RocketForm } from './RocketForm'
 
 type Props = {
   rockets: RocketDto[]
@@ -37,13 +37,7 @@ type Props = {
   onOrderChange: (order: ListingOrder) => void
   onPrevPage: () => void
   onNextPage: () => void
-  onCreateRocket: (data: {
-    name: string
-    image: string
-    price: number
-    isAcquiredByDefault?: boolean
-    isSelectedByDefault?: boolean
-  }) => void
+  onCreateRocket: (dto: RocketDto) => Promise<void>
 }
 
 export const RocketsTableView = ({
@@ -64,27 +58,30 @@ export const RocketsTableView = ({
   return (
     <div className='flex flex-col gap-4'>
       <div className='flex items-center gap-4'>
+        <div className='flex items-center gap-4 flex-1'>
+          <Input
+            placeholder='Buscar foguetes...'
+            value={searchInput}
+            onChange={(e) => onSearchChange(e.target.value)}
+            className='max-w-sm'
+          />
+          <Select
+            value={order.value}
+            onValueChange={(value) => onOrderChange(ListingOrder.create(value))}
+          >
+            <SelectTrigger className='w-[180px]'>
+              <SelectValue placeholder='Ordenar por' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='ascending'>Preço: Menor para Maior</SelectItem>
+              <SelectItem value='descending'>Preço: Maior para Menor</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
         <RocketForm onSubmit={onCreateRocket}>
           <Button>Criar foguete</Button>
         </RocketForm>
-        <Input
-          placeholder='Buscar foguetes...'
-          value={searchInput}
-          onChange={(e) => onSearchChange(e.target.value)}
-          className='max-w-sm'
-        />
-        <Select
-          value={order.value}
-          onValueChange={(value) => onOrderChange(ListingOrder.create(value))}
-        >
-          <SelectTrigger className='w-[180px]'>
-            <SelectValue placeholder='Ordenar por' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='ascending'>Preço: Menor para Maior</SelectItem>
-            <SelectItem value='descending'>Preço: Maior para Menor</SelectItem>
-          </SelectContent>
-        </Select>
       </div>
 
       {isLoading ? (
