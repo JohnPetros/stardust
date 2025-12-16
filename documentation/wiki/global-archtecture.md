@@ -1,4 +1,3 @@
-
 # Introdução 
 
 O StarDust é estruturado como um projeto monorepo, uma estratégia em que múltiplos projetos ou pacotes coexistem em um único repositório de código-fonte. Essa abordagem permite maior integração, organização e reutilização de código. Dentro do monorepo, o StarDust é dividido em duas grandes categorias: aplicações (apps) e pacotes (packages).
