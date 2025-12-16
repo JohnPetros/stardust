@@ -3,6 +3,7 @@ import type { RestClient } from '@stardust/core/global/interfaces'
 import type { ShopItemsListingParams } from '@stardust/core/shop/types'
 import type { PaginationResponse } from '@stardust/core/global/responses'
 import type { AvatarDto, RocketDto } from '@stardust/core/shop/entities/dtos'
+import type { Id } from '@stardust/core/global/structures'
 
 export const ShopService = (restClient: RestClient): IShopService => {
   return {
@@ -46,8 +47,24 @@ export const ShopService = (restClient: RestClient): IShopService => {
       return await restClient.post<RocketDto>('/shop/rockets', rocket)
     },
 
+    async updateRocket(rocket: RocketDto) {
+      return await restClient.put<RocketDto>('/shop/rockets', rocket)
+    },
+
+    async deleteRocket(rocketId: Id) {
+      return await restClient.delete(`/shop/rockets/${rocketId.value}`)
+    },
+
     async createAvatar(avatar: AvatarDto) {
       return await restClient.post<AvatarDto>('/shop/avatars', avatar)
+    },
+
+    async updateAvatar(avatar: AvatarDto) {
+      return await restClient.put<AvatarDto>('/shop/avatars', avatar)
+    },
+
+    async deleteAvatar(avatarId: Id) {
+      return await restClient.delete(`/shop/avatars/${avatarId.value}`)
     },
   }
 }

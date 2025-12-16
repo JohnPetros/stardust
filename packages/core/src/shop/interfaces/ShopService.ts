@@ -3,6 +3,7 @@ import type { RestResponse } from '#global/responses/RestResponse'
 import type { Id } from '#global/domain/structures/Id'
 import type { ShopItemsListingParams } from '../domain/types'
 import type { AvatarDto, InsigniaDto, RocketDto } from '../domain/entities/dtos'
+import type { Avatar, Rocket } from '../domain/entities'
 
 export interface ShopService {
   fetchInsigniasList(): Promise<RestResponse<InsigniaDto[]>>
@@ -12,10 +13,10 @@ export interface ShopService {
   fetchAvatarsList(
     params: ShopItemsListingParams,
   ): Promise<RestResponse<PaginationResponse<AvatarDto>>>
-  createRocket(rocket: RocketDto): Promise<RestResponse<RocketDto>>
-  updateRocket(rocket: RocketDto): Promise<RestResponse<RocketDto>>
+  createRocket(rocket: Rocket): Promise<RestResponse<RocketDto>>
+  updateRocket(rocket: Rocket): Promise<RestResponse<RocketDto>>
   deleteRocket(rocketId: Id): Promise<RestResponse>
-  createAvatar(avatar: AvatarDto): Promise<RestResponse<AvatarDto>>
-  updateAvatar(avatar: AvatarDto): Promise<RestResponse<AvatarDto>>
+  createAvatar(avatar: Avatar): Promise<RestResponse<AvatarDto>>
+  updateAvatar(avatar: Avatar): Promise<RestResponse<AvatarDto>>
   deleteAvatar(avatarId: Id): Promise<RestResponse>
 }
