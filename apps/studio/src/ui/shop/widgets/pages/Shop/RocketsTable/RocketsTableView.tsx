@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { RocketDto } from '@stardust/core/shop/entities/dtos'
 import { ListingOrder } from '@stardust/core/global/structures'
 
@@ -23,6 +24,7 @@ import { StorageImage } from '@/ui/global/widgets/components/StorageImage'
 import { Pagination } from '@/ui/global/widgets/components/Pagination'
 import { Badge } from '@/ui/shadcn/components/badge'
 import { RocketForm } from './RocketForm'
+import { DeleteDialog } from '@/ui/global/widgets/components/DeleteDialog'
 
 type Props = {
   rockets: RocketDto[]
@@ -38,6 +40,8 @@ type Props = {
   onPrevPage: () => void
   onNextPage: () => void
   onCreateRocket: (dto: RocketDto) => Promise<void>
+  onUpdateRocket: (dto: RocketDto, id: string) => Promise<void>
+  onDeleteRocket: (id: string) => Promise<void>
 }
 
 export const RocketsTableView = ({
@@ -54,9 +58,24 @@ export const RocketsTableView = ({
   onPrevPage,
   onNextPage,
   onCreateRocket,
+  onUpdateRocket,
+  onDeleteRocket,
 }: Props) => {
+  const [rocketToDelete, setRocketToDelete] = useState<string | null>(null)
+
   return (
     <div className='flex flex-col gap-4'>
+      <DeleteDialog
+        open={!!rocketToDelete}
+        onOpenChange={(open) => !open && setRocketToDelete(null)}
+        onConfirm={() => {
+          if (rocketToDelete) {
+            onDeleteRocket(rocketToDelete)
+            setRocketToDelete(null)
+          }
+        }}
+        description='Essa ação não pode ser desfeita. Isso excluirá permanentemente o foguete.'
+      />
       <div className='flex items-center gap-4'>
         <div className='flex items-center gap-4 flex-1'>
           <Input
@@ -137,10 +156,21 @@ export const RocketsTableView = ({
                     </TableCell>
                     <TableCell>
                       <div className='flex items-center gap-2'>
-                        <Button variant='outline' size='sm'>
-                          Editar
-                        </Button>
-                        <Button variant='destructive' size='sm'>
+                        <RocketForm
+                          onSubmit={(dto) =>
+                            onUpdateRocket(dto, rocket.id ? rocket.id : '')
+                          }
+                          initialValues={rocket}
+                        >
+                          <Button variant='outline' size='sm'>
+                            Editar
+                          </Button>
+                        </RocketForm>
+                        <Button
+                          variant='destructive'
+                          size='sm'
+                          onClick={() => setRocketToDelete(rocket.id ?? '')}
+                        >
                           Excluir
                         </Button>
                       </div>

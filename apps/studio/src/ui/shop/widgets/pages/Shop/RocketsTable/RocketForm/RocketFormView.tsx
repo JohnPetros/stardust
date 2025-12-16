@@ -1,3 +1,4 @@
+import type { RocketDto } from '@stardust/core/shop/entities/dtos'
 import {
   Form,
   FormField,
@@ -37,12 +38,14 @@ type Props = {
     isAcquiredByDefault?: boolean
     isSelectedByDefault?: boolean
   }) => Promise<void>
+  initialValues?: RocketDto
 }
 
 export const RocketFormView = ({
   children,
   storageService,
   onSubmit,
+  initialValues,
 }: PropsWithChildren<Props>) => {
   const {
     form,
@@ -51,7 +54,7 @@ export const RocketFormView = ({
     isDialogOpen,
     handleSubmit,
     handleDialogChange,
-  } = useRocketForm({ storageService, onSubmit })
+  } = useRocketForm({ storageService, onSubmit, initialValues })
   const imageUrl = useStorageImage(ROCKETS_FOLDER, rocketImage)
 
   return (
@@ -59,7 +62,7 @@ export const RocketFormView = ({
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Criar foguete</DialogTitle>
+          <DialogTitle>{initialValues ? 'Editar foguete' : 'Criar foguete'}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form id='rocket-form' onSubmit={handleSubmit} className='space-y-6'>
@@ -172,7 +175,7 @@ export const RocketFormView = ({
             isLoading={isSubmitting}
             disabled={isSubmitting}
           >
-            Criar
+            {initialValues ? 'Salvar' : 'Criar'}
           </Button>
         </DialogFooter>
       </DialogContent>

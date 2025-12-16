@@ -4,7 +4,7 @@ import { useDebounceValue } from 'usehooks-ts'
 import type { ShopService } from '@stardust/core/shop/interfaces'
 import type { ToastProvider } from '@stardust/core/global/interfaces'
 import type { UiProvider } from '@stardust/core/ui/interfaces'
-import { ListingOrder, OrdinalNumber, Text } from '@stardust/core/global/structures'
+import { ListingOrder, OrdinalNumber, Text, Id } from '@stardust/core/global/structures'
 import type { RocketDto } from '@stardust/core/shop/entities/dtos'
 
 import { CACHE } from '@/constants'
@@ -15,21 +15,21 @@ const ITEMS_PER_PAGE = OrdinalNumber.create(10)
 type Params = {
   shopService: ShopService
   toastProvider: ToastProvider
-  uiProvider: UiProvider
 }
 
-export function useRocketsTable({ shopService, toastProvider, uiProvider }: Params) {
+export function useRocketsTable({ shopService, toastProvider }: Params) {
   const [searchInput, setSearchInput] = useState('')
   const [debouncedSearch] = useDebounceValue(searchInput, 500)
   const [order, setOrder] = useState<ListingOrder>(ListingOrder.createAsAscending())
   const [page, setPage] = useState(1)
   const [isCreating, setIsCreating] = useState(false)
+  const [isUpdating, setIsUpdating] = useState(false)
 
   const search = useMemo(() => {
     return debouncedSearch ? Text.create(debouncedSearch) : undefined
   }, [debouncedSearch])
 
-  const { data, isLoading } = useCache({
+  const { data, isLoading, refetch } = useCache({
     key: CACHE.rocketsTable.key,
     fetcher: async () =>
       await shopService.fetchRocketsList({
@@ -93,15 +93,65 @@ export function useRocketsTable({ shopService, toastProvider, uiProvider }: Para
 
     if (response.isSuccessful) {
       toastProvider.showSuccess('Foguete criado com sucesso')
-      await uiProvider.reload()
+      refetch()
     }
 
     setIsCreating(false)
   }
 
+  async function handleDeleteRocket(id: string) {
+    const response = await shopService.deleteRocket(Id.create(id))
+
+    if (response.isFailure) {
+      toastProvider.showError(response.errorMessage)
+      return
+    }
+
+    if (response.isSuccessful) {
+      toastProvider.showSuccess('Foguete deletado com sucesso')
+      refetch()
+    }
+  }
+
+  async function handleUpdateRocket(
+    data: {
+      name: string
+      image: string
+      price: number
+      isAcquiredByDefault?: boolean
+      isSelectedByDefault?: boolean
+    },
+    id: string,
+  ): Promise<void> {
+    setIsUpdating(true)
+    const rocketDto: RocketDto = {
+      id,
+      name: data.name,
+      image: data.image,
+      price: data.price,
+      isAcquiredByDefault: data.isAcquiredByDefault,
+      isSelectedByDefault: data.isSelectedByDefault,
+    }
+
+    const response = await shopService.updateRocket(rocketDto)
+
+    if (response.isFailure) {
+      toastProvider.showError(response.errorMessage)
+      setIsUpdating(false)
+      return
+    }
+
+    if (response.isSuccessful) {
+      toastProvider.showSuccess('Foguete atualizado com sucesso')
+      refetch()
+    }
+
+    setIsUpdating(false)
+  }
+
   return {
     rockets,
-    isLoading: isLoading || isCreating,
+    isLoading: isLoading || isCreating || isUpdating,
     searchInput,
     order,
     page,
@@ -113,5 +163,7 @@ export function useRocketsTable({ shopService, toastProvider, uiProvider }: Para
     handlePrevPage,
     handleNextPage,
     handleCreateRocket,
+    handleUpdateRocket,
+    handleDeleteRocket,
   }
 }

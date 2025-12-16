@@ -14,24 +14,27 @@ const formSchema = rocketSchema
 
 type FormData = z.infer<typeof formSchema>
 
+import type { RocketDto } from '@stardust/core/shop/entities/dtos'
+
 type Params = {
   storageService: StorageService
   onSubmit: (data: FormData) => void
+  initialValues?: RocketDto
 }
 
-export function useRocketForm({ storageService, onSubmit }: Params) {
+export function useRocketForm({ storageService, onSubmit, initialValues }: Params) {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
-      image: '',
-      price: 0,
-      isAcquiredByDefault: false,
-      isSelectedByDefault: false,
+      name: initialValues?.name ?? '',
+      image: initialValues?.image ?? '',
+      price: initialValues?.price ?? 0,
+      isAcquiredByDefault: initialValues?.isAcquiredByDefault ?? false,
+      isSelectedByDefault: initialValues?.isSelectedByDefault ?? false,
     },
   })
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const initialImage = ''
+  const initialImage = initialValues?.image ?? ''
 
   async function handleSubmit(data: FormData) {
     await onSubmit(data)

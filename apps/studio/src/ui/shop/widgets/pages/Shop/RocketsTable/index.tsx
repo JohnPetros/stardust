@@ -25,6 +25,8 @@ export const RocketsTable = ({ shopService }: Props) => {
     handlePrevPage,
     handleNextPage,
     handleCreateRocket,
+    handleUpdateRocket,
+    handleDeleteRocket,
   } = useRocketsTable({ shopService, toastProvider, uiProvider })
 
   return (
@@ -42,6 +44,8 @@ export const RocketsTable = ({ shopService }: Props) => {
       onPrevPage={handlePrevPage}
       onNextPage={handleNextPage}
       onCreateRocket={handleCreateRocket}
+      onUpdateRocket={handleUpdateRocket}
+      onDeleteRocket={handleDeleteRocket}
     />
   )
 }
