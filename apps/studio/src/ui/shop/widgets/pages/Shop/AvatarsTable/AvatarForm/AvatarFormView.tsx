@@ -25,20 +25,20 @@ import { useStorageImage } from '@/ui/global/hooks/useStorageImage'
 import { useAvatarForm } from './useAvatarForm'
 
 import type { PropsWithChildren } from 'react'
+import type { AvatarDto } from '@stardust/core/shop/entities/dtos'
 
 const AVATARS_FOLDER = StorageFolder.createAsAvatars()
 
 type Props = {
-  onSubmit: (data: {
-    name: string
-    image: string
-    price: number
-    isAcquiredByDefault?: boolean
-    isSelectedByDefault?: boolean
-  }) => void
+  initialValues?: AvatarDto
+  onSubmit: (dto: AvatarDto) => void
 }
 
-export const AvatarFormView = ({ children, onSubmit }: PropsWithChildren<Props>) => {
+export const AvatarFormView = ({
+  children,
+  onSubmit,
+  initialValues,
+}: PropsWithChildren<Props>) => {
   const {
     form,
     formImage,
@@ -46,7 +46,7 @@ export const AvatarFormView = ({ children, onSubmit }: PropsWithChildren<Props>)
     isDialogOpen,
     handleSubmit,
     handleDialogChange,
-  } = useAvatarForm({ onSubmit })
+  } = useAvatarForm({ onSubmit, initialValues })
 
   const imageUrl = useStorageImage(AVATARS_FOLDER, formImage)
 
@@ -55,7 +55,7 @@ export const AvatarFormView = ({ children, onSubmit }: PropsWithChildren<Props>)
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Criar avatar</DialogTitle>
+          <DialogTitle>{initialValues ? 'Editar avatar' : 'Criar avatar'}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form id='avatar-form' onSubmit={handleSubmit} className='space-y-6'>
@@ -158,7 +158,13 @@ export const AvatarFormView = ({ children, onSubmit }: PropsWithChildren<Props>)
             <Button variant='outline'>Cancelar</Button>
           </DialogClose>
           <Button form='avatar-form' type='submit' disabled={isSubmitting}>
-            {isSubmitting ? 'Criando...' : 'Criar avatar'}
+            {isSubmitting
+              ? initialValues
+                ? 'Salvando...'
+                : 'Criando...'
+              : initialValues
+                ? 'Salvar'
+                : 'Criar avatar'}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -3,11 +3,17 @@ import { useDebounceValue } from 'usehooks-ts'
 
 import type { ShopService } from '@stardust/core/shop/interfaces'
 import type { ToastProvider } from '@stardust/core/global/interfaces'
-import { ListingOrder, OrdinalNumber, Text } from '@stardust/core/global/structures'
+import {
+  ListingOrder,
+  OrdinalNumber,
+  Text,
+  type Id,
+} from '@stardust/core/global/structures'
 import type { AvatarDto } from '@stardust/core/shop/entities/dtos'
 
 import { CACHE } from '@/constants'
 import { useCache } from '@/ui/global/hooks/useCache'
+import { Avatar } from '@stardust/core/shop/entities'
 
 const ITEMS_PER_PAGE = OrdinalNumber.create(10)
 
@@ -22,12 +28,13 @@ export function useAvatarsTable({ shopService, toastProvider }: Params) {
   const [order, setOrder] = useState<ListingOrder>(ListingOrder.createAsAscending())
   const [page, setPage] = useState(1)
   const [isCreating, setIsCreating] = useState(false)
+  const [isUpdating, setIsUpdating] = useState(false)
 
   const search = useMemo(() => {
     return debouncedSearch ? Text.create(debouncedSearch) : undefined
   }, [debouncedSearch])
 
-  const { data, isLoading } = useCache({
+  const { data, isLoading, refetch } = useCache({
     key: CACHE.avatarsTable.key,
     fetcher: async () =>
       await shopService.fetchAvatarsList({
@@ -65,23 +72,10 @@ export function useAvatarsTable({ shopService, toastProvider }: Params) {
     }
   }
 
-  async function handleCreateAvatar(data: {
-    name: string
-    image: string
-    price: number
-    isAcquiredByDefault?: boolean
-    isSelectedByDefault?: boolean
-  }) {
+  async function handleCreateAvatar(dto: AvatarDto) {
     setIsCreating(true)
-    const avatarDto: AvatarDto = {
-      name: data.name,
-      image: data.image,
-      price: data.price,
-      isAcquiredByDefault: data.isAcquiredByDefault,
-      isSelectedByDefault: data.isSelectedByDefault,
-    }
-
-    const response = await shopService.createAvatar(avatarDto)
+    const avatar = Avatar.create(dto)
+    const response = await shopService.createAvatar(avatar)
 
     if (response.isFailure) {
       toastProvider.showError(response.errorMessage)
@@ -91,14 +85,50 @@ export function useAvatarsTable({ shopService, toastProvider }: Params) {
 
     if (response.isSuccessful) {
       toastProvider.showSuccess('Avatar criado com sucesso')
+      refetch()
     }
 
     setIsCreating(false)
   }
 
+  async function handleUpdateAvatar(avatarDto: AvatarDto) {
+    if (!avatarDto.id) return
+
+    setIsUpdating(true)
+    const avatar = Avatar.create(avatarDto)
+    const response = await shopService.updateAvatar(avatar)
+
+    if (response.isFailure) {
+      toastProvider.showError(response.errorMessage)
+      setIsUpdating(false)
+      return
+    }
+
+    if (response.isSuccessful) {
+      toastProvider.showSuccess('Avatar atualizado com sucesso')
+      refetch()
+    }
+
+    setIsUpdating(false)
+  }
+
+  async function handleDeleteAvatar(avatarId: Id) {
+    const response = await shopService.deleteAvatar(avatarId)
+
+    if (response.isFailure) {
+      toastProvider.showError(response.errorMessage)
+      return
+    }
+
+    if (response.isSuccessful) {
+      toastProvider.showSuccess('Avatar excluído com sucesso')
+      refetch()
+    }
+  }
+
   return {
     avatars,
-    isLoading: isLoading || isCreating,
+    isLoading: isLoading || isCreating || isUpdating,
     searchInput,
     order,
     page,
@@ -110,5 +140,7 @@ export function useAvatarsTable({ shopService, toastProvider }: Params) {
     handlePrevPage,
     handleNextPage,
     handleCreateAvatar,
+    handleUpdateAvatar,
+    handleDeleteAvatar,
   }
 }

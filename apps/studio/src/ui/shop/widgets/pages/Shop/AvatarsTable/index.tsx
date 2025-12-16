@@ -9,7 +9,6 @@ type Props = {
 
 export const AvatarsTable = ({ shopService }: Props) => {
   const toastProvider = useToastProvider()
-
   const {
     avatars,
     isLoading,
@@ -24,6 +23,8 @@ export const AvatarsTable = ({ shopService }: Props) => {
     handlePrevPage,
     handleNextPage,
     handleCreateAvatar,
+    handleUpdateAvatar,
+    handleDeleteAvatar,
   } = useAvatarsTable({ shopService, toastProvider })
 
   return (
@@ -41,6 +42,8 @@ export const AvatarsTable = ({ shopService }: Props) => {
       onPrevPage={handlePrevPage}
       onNextPage={handleNextPage}
       onCreateAvatar={handleCreateAvatar}
+      onUpdateAvatar={handleUpdateAvatar}
+      onDeleteAvatar={handleDeleteAvatar}
     />
   )
 }

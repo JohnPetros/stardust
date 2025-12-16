@@ -1,5 +1,7 @@
+import { useState } from 'react'
+
 import type { AvatarDto } from '@stardust/core/shop/entities/dtos'
-import { ListingOrder } from '@stardust/core/global/structures'
+import { ListingOrder, Id } from '@stardust/core/global/structures'
 
 import {
   Table,
@@ -23,6 +25,7 @@ import { StorageImage } from '@/ui/global/widgets/components/StorageImage'
 import { Pagination } from '@/ui/global/widgets/components/Pagination'
 import { Badge } from '@/ui/shadcn/components/badge'
 import { AvatarForm } from './AvatarForm'
+import { DeleteAvatarDialog } from './DeleteAvatarDialog'
 
 type Props = {
   avatars: AvatarDto[]
@@ -37,13 +40,9 @@ type Props = {
   onOrderChange: (order: ListingOrder) => void
   onPrevPage: () => void
   onNextPage: () => void
-  onCreateAvatar: (data: {
-    name: string
-    image: string
-    price: number
-    isAcquiredByDefault?: boolean
-    isSelectedByDefault?: boolean
-  }) => void
+  onCreateAvatar: (dto: AvatarDto) => void
+  onUpdateAvatar: (dto: AvatarDto) => void
+  onDeleteAvatar: (avatarId: Id) => void
 }
 
 export const AvatarsTableView = ({
@@ -60,7 +59,11 @@ export const AvatarsTableView = ({
   onPrevPage,
   onNextPage,
   onCreateAvatar,
+  onUpdateAvatar,
+  onDeleteAvatar,
 }: Props) => {
+  const [avatarToDelete, setAvatarToDelete] = useState<AvatarDto | null>(null)
+
   return (
     <div className='flex flex-col gap-4'>
       <div className='flex items-center justify-between gap-4'>
@@ -142,10 +145,30 @@ export const AvatarsTableView = ({
                     </TableCell>
                     <TableCell>
                       <div className='flex items-center gap-2'>
-                        <Button variant='outline' size='sm'>
-                          Editar
-                        </Button>
-                        <Button variant='destructive' size='sm'>
+                        <AvatarForm
+                          initialValues={{
+                            name: avatar.name,
+                            image: avatar.image,
+                            price: avatar.price,
+                            isAcquiredByDefault: avatar.isAcquiredByDefault,
+                            isSelectedByDefault: avatar.isSelectedByDefault,
+                          }}
+                          onSubmit={(data) =>
+                            onUpdateAvatar({
+                              id: avatar.id,
+                              ...data,
+                            })
+                          }
+                        >
+                          <Button variant='outline' size='sm'>
+                            Editar
+                          </Button>
+                        </AvatarForm>
+                        <Button
+                          variant='destructive'
+                          size='sm'
+                          onClick={() => setAvatarToDelete(avatar)}
+                        >
                           Excluir
                         </Button>
                       </div>
@@ -168,6 +191,16 @@ export const AvatarsTableView = ({
           )}
         </>
       )}
+      <DeleteAvatarDialog
+        open={!!avatarToDelete}
+        onOpenChange={(open) => !open && setAvatarToDelete(null)}
+        onConfirm={() => {
+          if (avatarToDelete?.id) {
+            onDeleteAvatar(Id.create(avatarToDelete.id))
+            setAvatarToDelete(null)
+          }
+        }}
+      />
     </div>
   )
 }

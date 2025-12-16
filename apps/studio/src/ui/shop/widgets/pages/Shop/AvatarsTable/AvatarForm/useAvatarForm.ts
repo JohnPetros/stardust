@@ -15,14 +15,15 @@ type FormValues = z.infer<typeof schema>
 
 type Params = {
   onSubmit: (data: FormValues) => void
+  initialValues?: FormValues
 }
 
-export function useAvatarForm({ onSubmit }: Params) {
+export function useAvatarForm({ onSubmit, initialValues }: Params) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: {
+    defaultValues: initialValues || {
       name: '',
       image: '',
       price: 0,
@@ -37,13 +38,29 @@ export function useAvatarForm({ onSubmit }: Params) {
   async function handleSubmit(data: FormValues) {
     await onSubmit(data)
     setIsDialogOpen(false)
-    form.reset()
+    form.reset(
+      initialValues || {
+        name: '',
+        image: '',
+        price: 0,
+        isAcquiredByDefault: false,
+        isSelectedByDefault: false,
+      },
+    )
   }
 
   function handleDialogChange(open: boolean) {
     setIsDialogOpen(open)
     if (!open) {
-      form.reset()
+      form.reset(
+        initialValues || {
+          name: '',
+          image: '',
+          price: 0,
+          isAcquiredByDefault: false,
+          isSelectedByDefault: false,
+        },
+      )
     }
   }
 
