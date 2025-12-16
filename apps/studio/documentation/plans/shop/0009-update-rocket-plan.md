@@ -14,7 +14,6 @@ módulo: `shop`
 - Interface `ShopService` possui o método `updateRocket` para atualizar um
   foguete.
 - `RocketDto` é usado para representar um foguete.
-- `UiProvider` é usado para fazer alterações globais a UI da aplicação.
 - `ToastProvider` é usado para exibir mensagens de sucesso ou erro.
 
 ## Camada REST
@@ -28,3 +27,4 @@ módulo: `shop`
 - Use o `UiProvider` para atualizar a ui da página ao atualizar o foguete no hook do `RocketsTable`.
 - Use o `ToastProvider` para exibir mensagens de sucesso ou erro ao atualizar o foguete no hook do `RocketsTable`.
 - Exiba loading na tabela enquanto o foguete é atualizado.
+- Faça o refetch dos dados da tabela ao atualizar o foguete.

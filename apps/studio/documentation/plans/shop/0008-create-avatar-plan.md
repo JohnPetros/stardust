@@ -7,7 +7,7 @@ de loja.
 
 módulo: `shop`
 
-## Status: Em andamento
+## Status: Concluído
 
 ### Camada Core
 
@@ -39,6 +39,7 @@ módulo: `shop`
 - Use o `ToastProvider` para exibir mensagens de sucesso ou erro ao criar o
   avatar no hook do `AvatarsTable`.
 - Exiba loading na tabela enquanto o avatar é criado.
-- Obs. adicione as colunas na tabela `RocketsTable` para exibir se o foguete é
+- Obs. adicione as colunas na tabela `AvatarsTable` para exibir se o avatar é
   adquirido por padrão e se é o primeiro selecionado por padrão. (Exiba como
   Badge)
+- Faça o refetch dos dados da tabela ao criar o avatar.

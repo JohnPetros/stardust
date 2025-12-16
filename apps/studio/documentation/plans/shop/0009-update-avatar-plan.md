@@ -31,3 +31,18 @@ módulo: `shop`
 - Use o `ToastProvider` para exibir mensagens de sucesso ou erro ao atualizar o
   avatar no hook do `AvatarsTable`.
 - Exiba loading na tabela enquanto o avatar é atualizado.
+- Faça o refetch dos dados da tabela ao atualizar o avatar.
+
+## Detalhes de Implementação
+
+1.  **ShopService**: Adicionar método `updateAvatar(avatar: AvatarDto)` que faz um POST ou PUT para `/shop/avatars` (ou endpoint específico de update).
+2.  **AvatarFormView**: Adicionar prop `initialValues` e passá-la para `useAvatarForm`.
+3.  **useAvatarForm**: Atualizar `useForm` para usar `initialValues` como `defaultValues` quando fornecido.
+4.  **AvatarsTableView**:
+    - Substituir o botão "Editar" estático por uma instância de `AvatarForm` configurada para edição.
+    - Passar o `avatar` da linha atual como `initialValues`.
+    - Passar uma nova função `handleUpdateAvatar` como `onSubmit`.
+5.  **useAvatarsTable**:
+    - Criar `handleUpdateAvatar` que chama `shopService.updateAvatar`.
+    - Gerenciar estado de loading (`isCreating`/`isUpdating`).
+    - Exibir toast de sucesso/erro.

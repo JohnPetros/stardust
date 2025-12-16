@@ -7,27 +7,46 @@ gestão de loja.
 
 módulo: `shop`
 
-## Status: Em andamento
+## Status: Concluído
 
 ### Camada Core
 
-- Interface `ShopService` possui o método `deleteRocket` para deletar um
-  foguete.
-- `Rocket` é a entidade usada para representar um foguete.
-- `RocketDto` é o DTO usado para criar uma entidade foguete.
-- `UiProvider` é usado para fazer alterações globais a UI da aplicação.
-- `ToastProvider` é usado para exibir mensagens de sucesso ou erro.
+- [x] Interface `ShopService` possui o método `deleteRocket` para deletar um foguete.
+- [x] `Rocket` é a entidade usada para representar um foguete.
+- [x] `RocketDto` é o DTO usado para criar uma entidade foguete.
+- [x] `ToastProvider` é usado para exibir mensagens de sucesso ou erro.
 
 ## Camada REST
 
-- Implemente o método `deleteRocket` no service `ShopService`.
+### [ShopService](/home/petros/stardust/apps/studio/src/rest/services/ShopService.ts)
 
-### Camada UI
+- [x] Implementar o método `deleteRocket` no service `ShopService`.
+  - Deve realizar uma chamada `DELETE` para o endpoint `/shop/rockets/:id`.
 
-- Use widget de botão `DeleteButton` para deletar um foguete.
-- Use o service `ShopService` para deletar o foguete no hook do `RocketsTable`.
-- Deve haver um dialog de confirmação para deletar o foguete.
-- Ao clicar no botão "Cancelar", o dialog é fechado automaticamente pelo `AlertDialog`.
-- Ao clicar no botão "Deletar", o método `onDelete` é executado, que por sua vez chama `handleDelete` do hook.
-- Use o `UiProvider` para atualizar a ui da página ao deletar o foguete no hook do `RocketsTable`.
-- Use o `ToastProvider` para exibir mensagens de sucesso ou erro ao deletar o foguete no hook do `RocketsTable`.
+## Camada UI
+
+### [RocketsTableView](/home/petros/stardust/apps/studio/src/ui/shop/widgets/pages/Shop/RocketsTable/RocketsTableView.tsx)
+
+- [x] Importar e adicionar `AlertDialog` (deve ser criado/importado de components) para confirmação de deleção.
+- [x] Passar prop `onDeleteRocket` do tipo `(id: string) => Promise<void>`.
+- [x] O botão de excluir deve abrir o `AlertDialog`.
+- [x] Ao confirmar, chamar `onDeleteRocket`.
+
+### [useRocketsTable](/home/petros/stardust/apps/studio/src/ui/shop/widgets/pages/Shop/RocketsTable/useRocketsTable.ts)
+
+- [x] Implementar `handleDeleteRocket`.
+- [x] Chamar `shopService.deleteRocket`.
+- [x] Tratar sucesso/erro com `toastProvider`.
+- [x] Recarregar a lista após sucesso.
+
+## Plano de Verificação
+
+### Verificação Manual
+
+1. Acessar a página de listagem de foguetes.
+2. Clicar no botão "Excluir" de um foguete existente.
+3. Verificar se o dialog de confirmação é exibido.
+4. Clicar em "Cancelar" e verificar se nada acontece e o dialog fecha.
+5. Clicar em "Excluir" novamente e confirmar.
+6. Verificar se o toast de sucesso aparece.
+7. Verificar se o foguete foi removido da lista (lista atualizada).
