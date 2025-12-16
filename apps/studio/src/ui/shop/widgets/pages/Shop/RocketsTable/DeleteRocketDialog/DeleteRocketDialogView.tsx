@@ -15,7 +15,7 @@ type Props = {
   onConfirm: () => void
 }
 
-export const DeleteRocketDialog = ({ open, onOpenChange, onConfirm }: Props) => {
+export const DeleteRocketDialogView = ({ open, onOpenChange, onConfirm }: Props) => {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>

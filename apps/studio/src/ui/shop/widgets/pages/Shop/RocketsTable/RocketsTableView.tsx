@@ -24,7 +24,7 @@ import { StorageImage } from '@/ui/global/widgets/components/StorageImage'
 import { Pagination } from '@/ui/global/widgets/components/Pagination'
 import { Badge } from '@/ui/shadcn/components/badge'
 import { RocketForm } from './RocketForm'
-import { DeleteDialog } from '@/ui/global/widgets/components/DeleteDialog'
+import { DeleteRocketDialog } from './DeleteRocketDialog'
 
 type Props = {
   rockets: RocketDto[]
@@ -65,7 +65,7 @@ export const RocketsTableView = ({
 
   return (
     <div className='flex flex-col gap-4'>
-      <DeleteDialog
+      <DeleteRocketDialog
         open={!!rocketToDelete}
         onOpenChange={(open) => !open && setRocketToDelete(null)}
         onConfirm={() => {
@@ -74,7 +74,6 @@ export const RocketsTableView = ({
             setRocketToDelete(null)
           }
         }}
-        description='Essa ação não pode ser desfeita. Isso excluirá permanentemente o foguete.'
       />
       <div className='flex items-center gap-4'>
         <div className='flex items-center gap-4 flex-1'>
