@@ -32,7 +32,6 @@ export class SupabaseRocketMapper {
     > = {
       id: rocket.id.value,
       name: rocketDto.name,
-      slug: '',
       price: rocketDto.price,
       image: rocketDto.image,
     }

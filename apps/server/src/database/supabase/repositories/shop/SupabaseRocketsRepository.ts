@@ -2,11 +2,11 @@ import type { RocketsRepository } from '@stardust/core/shop/interfaces'
 import type { Rocket } from '@stardust/core/shop/entities'
 import type { Id, Integer } from '@stardust/core/global/structures'
 import type { ManyItems } from '@stardust/core/global/types'
+import type { ShopItemsListingParams } from '@stardust/core/shop/types'
 
 import { SupabaseRepository } from '../SupabaseRepository'
 import { SupabasePostgreError } from '../../errors'
 import { SupabaseRocketMapper } from '../../mappers/shop'
-import type { ShopItemsListingParams } from '@stardust/core/shop/types'
 
 export class SupabaseRocketsRepository
   extends SupabaseRepository
@@ -21,6 +21,20 @@ export class SupabaseRocketsRepository
 
     if (error) {
       throw new SupabasePostgreError(error)
+    }
+
+    return SupabaseRocketMapper.toEntity(data)
+  }
+
+  async findSelectedByDefault(): Promise<Rocket | null> {
+    const { data, error } = await this.supabase
+      .from('rockets')
+      .select('*')
+      .eq('is_selected_by_default', true)
+      .single()
+
+    if (error) {
+      return this.handleQueryPostgresError(error)
     }
 
     return SupabaseRocketMapper.toEntity(data)
@@ -72,5 +86,44 @@ export class SupabaseRocketsRepository
     }
 
     return data.map(SupabaseRocketMapper.toEntity)
+  }
+
+  async add(rocket: Rocket): Promise<void> {
+    const supabaseRocket = SupabaseRocketMapper.toSupabase(rocket)
+    const rocketDto = rocket.dto
+    const { error } = await this.supabase.from('rockets').insert({
+      ...supabaseRocket,
+      is_acquired_by_default: rocketDto.isAcquiredByDefault ?? false,
+      is_selected_by_default: rocketDto.isSelectedByDefault ?? false,
+    })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
+  async replace(rocket: Rocket): Promise<void> {
+    const supabaseRocket = SupabaseRocketMapper.toSupabase(rocket)
+    const rocketDto = rocket.dto
+    const { error } = await this.supabase
+      .from('rockets')
+      .update({
+        ...supabaseRocket,
+        is_acquired_by_default: rocketDto.isAcquiredByDefault ?? false,
+        is_selected_by_default: rocketDto.isSelectedByDefault ?? false,
+      })
+      .eq('id', rocket.id.value)
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
+  async remove(id: Id): Promise<void> {
+    const { error } = await this.supabase.from('rockets').delete().eq('id', id.value)
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
   }
 }

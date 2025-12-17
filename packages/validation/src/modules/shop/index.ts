@@ -1,1 +1,1 @@
-export { rocketSchema } from './rocketSchema'
+export * from './schemas'
