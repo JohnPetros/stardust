@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.10.2 (2025-12-17)
+
+* ⚙️ config(web): add Layout component for challenge pages with custom metadata configuration (21e9308f)
+* 🖥️ ui(web): disable prefetching for challenge links in ChallengeCardView to improve performance (54b4a7b8)
+
 ## 0.10.1 (2025-12-13)
 
 * ♻️ refactor: remove challengeId parameter from solutionsRepository.add and update related tests for consistency (5b002c31)
