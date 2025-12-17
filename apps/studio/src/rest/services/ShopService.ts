@@ -4,6 +4,7 @@ import type { ShopItemsListingParams } from '@stardust/core/shop/types'
 import type { PaginationResponse } from '@stardust/core/global/responses'
 import type { AvatarDto, RocketDto } from '@stardust/core/shop/entities/dtos'
 import type { Id } from '@stardust/core/global/structures'
+import type { Avatar, Rocket } from '@stardust/core/shop/entities'
 
 export const ShopService = (restClient: RestClient): IShopService => {
   return {
@@ -43,24 +44,30 @@ export const ShopService = (restClient: RestClient): IShopService => {
       return response
     },
 
-    async createRocket(rocket: RocketDto) {
-      return await restClient.post<RocketDto>('/shop/rockets', rocket)
+    async createRocket(rocket: Rocket) {
+      return await restClient.post<RocketDto>('/shop/rockets', rocket.dto)
     },
 
-    async updateRocket(rocket: RocketDto) {
-      return await restClient.put<RocketDto>('/shop/rockets', rocket)
+    async updateRocket(rocket: Rocket) {
+      return await restClient.put<RocketDto>(
+        `/shop/rockets/${rocket.id.value}`,
+        rocket.dto,
+      )
     },
 
     async deleteRocket(rocketId: Id) {
       return await restClient.delete(`/shop/rockets/${rocketId.value}`)
     },
 
-    async createAvatar(avatar: AvatarDto) {
-      return await restClient.post<AvatarDto>('/shop/avatars', avatar)
+    async createAvatar(avatar: Avatar) {
+      return await restClient.post<AvatarDto>('/shop/avatars', avatar.dto)
     },
 
-    async updateAvatar(avatar: AvatarDto) {
-      return await restClient.put<AvatarDto>('/shop/avatars', avatar)
+    async updateAvatar(avatar: Avatar) {
+      return await restClient.put<AvatarDto>(
+        `/shop/avatars/${avatar.id.value}`,
+        avatar.dto,
+      )
     },
 
     async deleteAvatar(avatarId: Id) {
