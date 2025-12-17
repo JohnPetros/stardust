@@ -1,0 +1,1 @@
+export { InsigniaFormView } from './InsigniaFormView'
