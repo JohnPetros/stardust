@@ -41,8 +41,21 @@ export class StorageFolder {
     return StorageFolder.create('database-backups')
   }
 
+  static createAsInsignias() {
+    return StorageFolder.create('insignias')
+  }
+
   private static isStorageFolderName(name: string): name is StorageFolderName {
-    new StringValidation(name).oneOf(['story', 'database-backups'])
+    new StringValidation(name).oneOf([
+      'story',
+      'database-backups',
+      'avatars',
+      'rockets',
+      'rankings',
+      'planets',
+      'achievements',
+      'insignias',
+    ])
     return true
   }
 
