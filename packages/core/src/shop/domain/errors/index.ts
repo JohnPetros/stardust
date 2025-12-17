@@ -2,3 +2,5 @@ export { SelectedAvatarByDefaultNotFoundError } from './SelectedAvatarByDefaultN
 export { SelectedRocketByDefaultNotFoundError } from './SelectedRocketByDefaultNotFoundError'
 export { AvatarNotFoundError } from './AvatarNotFoundError'
 export { RocketNotFoundError } from './RocketNotFoundError'
+export { InsigniaNotFoundError } from './InsigniaNotFoundError'
+export { InsigniaAlreadyExistsError } from './InsigniaAlreadyExistsError'

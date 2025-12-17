@@ -2947,7 +2947,7 @@ export type Database = {
     Enums: {
       challenge_difficulty_level: 'easy' | 'medium' | 'hard'
       challenge_vote: 'upvote' | 'downvote'
-      insignia_role: 'engineer'
+      insignia_role: 'engineer' | 'god'
       platform: 'web' | 'mobile'
       ranking_status: 'winner' | 'loser'
     }
@@ -4038,7 +4038,7 @@ export const Constants = {
     Enums: {
       challenge_difficulty_level: ['easy', 'medium', 'hard'],
       challenge_vote: ['upvote', 'downvote'],
-      insignia_role: ['engineer'],
+      insignia_role: ['engineer', 'god'],
       platform: ['web', 'mobile'],
       ranking_status: ['winner', 'loser'],
     },

@@ -1,5 +1,5 @@
 export type InsigniaDto = {
-  id: string
+  id?: string
   name: string
   price: number
   image: string
