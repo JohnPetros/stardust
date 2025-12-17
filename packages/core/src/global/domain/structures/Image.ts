@@ -1,4 +1,5 @@
 import { StringValidation } from '../../libs'
+import { Text } from './Text'
 
 export class Image {
   static readonly DEFAULT_IMAGE_NAME = 'panda.jpg'
@@ -16,5 +17,9 @@ export class Image {
 
   get extension() {
     return this.value.slice(-2)
+  }
+
+  get text(): Text {
+    return Text.create(this.value)
   }
 }

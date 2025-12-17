@@ -14,4 +14,10 @@ export const CACHE = {
   recentChallengesTable: {
     key: 'recent-challenges-table',
   },
+  rocketsTable: {
+    key: 'rockets-table',
+  },
+  avatarsTable: {
+    key: 'avatars-table',
+  },
 }

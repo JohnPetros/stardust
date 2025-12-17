@@ -15,11 +15,11 @@
     "./challenging/schemas": "./src/modules/challenging/schemas/index.ts",
     "./challenging/types": "./src/modules/challenging/types/index.ts",
     "./profile/schemas": "./src/modules/profile/index.ts",
+    "./shop/schemas": "./src/modules/shop/index.ts",
     "./forum/schemas": "./src/modules/forum/index.ts",
     "./playground/schemas": "./src/modules/playground/schema/index.ts",
     "./storage/schemas": "./src/modules/storage/index.ts",
     "./auth/schemas": "./src/modules/auth/schemas/index.ts",
-    "./shop/schemas": "./src/modules/shop/schemas/index.ts",
     "./factories": "./src/factories/index.ts"
   },
   "imports": {

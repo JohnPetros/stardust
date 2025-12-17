@@ -10,6 +10,7 @@ import {
   LessonService,
   ProfileService,
   ChallengingService,
+  ShopService,
 } from '@/rest/services'
 import { authContext } from '../contexts/AuthContext'
 import { restContext } from '../contexts/RestContext'
@@ -38,6 +39,7 @@ export const RestMiddleware = async ({ context }: Route.ActionArgs) => {
   const lessonService = LessonService(restClient)
   const profileService = ProfileService(restClient)
   const challengingService = ChallengingService(restClient)
+  const shopService = ShopService(restClient)
 
   context.set(restContext, {
     authService,
@@ -46,5 +48,6 @@ export const RestMiddleware = async ({ context }: Route.ActionArgs) => {
     lessonService,
     profileService,
     challengingService,
+    shopService,
   })
 }

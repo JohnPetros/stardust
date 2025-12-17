@@ -45,6 +45,12 @@ export const SidebarView = () => {
           Desafios
         </NavigationLink>
       </div>
+      <div>
+        <NavigationTitle>Loja</NavigationTitle>
+        <NavigationLink href={ROUTES.shop} icon={<Icon name='shop' size={16} />}>
+          Loja
+        </NavigationLink>
+      </div>
     </aside>
   )
 }

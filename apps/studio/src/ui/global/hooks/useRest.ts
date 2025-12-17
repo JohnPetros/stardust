@@ -10,6 +10,7 @@ import {
   LessonService,
   ProfileService,
   ChallengingService,
+  ShopService,
 } from '@/rest/services'
 import { ENV, SESSION_STORAGE_KEYS } from '@/constants'
 
@@ -29,5 +30,6 @@ export function useRest() {
     lessonService: LessonService(restClient),
     profileService: ProfileService(restClient),
     challengingService: ChallengingService(restClient),
+    shopService: ShopService(restClient),
   }
 }

@@ -486,7 +486,7 @@ function useCheckbox() {
     setIsChecked((isChecked) => !isChecked)
   }
 
-  return { // O hook exões seus dados retornado um objeto
+  return { // O hook expõeseus dados retornado um objeto
     isDisable,
     handleChange,
   }
