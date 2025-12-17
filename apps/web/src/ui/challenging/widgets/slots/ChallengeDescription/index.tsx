@@ -8,7 +8,6 @@ export const ChallengeDescriptionSlot = () => {
   const { user } = useAuthContext()
   const { mdx, isUserChallengeAuthor, isCompleted, challenge, isLoading } =
     useChallengeDescriptionSlot(user)
-
   return (
     <ChallengeDescriptionSlotView
       isLoading={isLoading}

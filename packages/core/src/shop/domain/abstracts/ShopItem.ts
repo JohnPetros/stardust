@@ -33,6 +33,10 @@ export abstract class ShopItem<ItemProps = ShopItemProps> extends Entity<
     return this.props.isSelectedByDefault
   }
 
+  set isSelectedByDefault(value: Logical) {
+    this.props.isSelectedByDefault = value
+  }
+
   get dto(): ShopItemDto {
     return {
       id: this.id.value,

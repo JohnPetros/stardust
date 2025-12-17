@@ -21,9 +21,11 @@ export interface ChallengingService {
     RestResponse<CompletedChallengesCountByDifficultyLevel>
   >
   fetchChallengeByStarId(starId: Id): Promise<RestResponse<ChallengeDto>>
-  fetchChallengeBySolutionId(solutionId: Id): Promise<RestResponse<ChallengeDto>>
   fetchSolutionBySlug(solutionSlug: Slug): Promise<RestResponse<SolutionDto>>
   fetchChallengesList(
+    params: ChallengesListParams,
+  ): Promise<RestResponse<PaginationResponse<ChallengeDto>>>
+  fetchAllChallenges(
     params: ChallengesListParams,
   ): Promise<RestResponse<PaginationResponse<ChallengeDto>>>
   fetchSolutionsList(

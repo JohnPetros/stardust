@@ -5,6 +5,10 @@ import type { ShopItemsListingParams } from '../domain/types'
 
 export interface RocketsRepository {
   findById(id: Id): Promise<Rocket | null>
+  findSelectedByDefault(): Promise<Rocket | null>
   findMany(params: ShopItemsListingParams): Promise<ManyItems<Rocket>>
   findAllByPrice(price: Integer): Promise<Rocket[]>
+  add(rocket: Rocket): Promise<void>
+  replace(rocket: Rocket): Promise<void>
+  remove(id: Id): Promise<void>
 }

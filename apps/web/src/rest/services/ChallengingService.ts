@@ -33,6 +33,36 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       upvotesCountOrder,
       postingOrder,
       categoriesIds,
+      shouldIncludeOnlyAuthorChallenges,
+      userId,
+    }: ChallengesListParams) {
+      restClient.setQueryParam('page', page.value.toString())
+      restClient.setQueryParam('itemsPerPage', itemsPerPage.value.toString())
+      restClient.setQueryParam('title', title.value)
+      restClient.setQueryParam('difficulty', difficulty.level)
+      restClient.setQueryParam('completionStatus', completionStatus.value)
+      restClient.setQueryParam('upvotesCountOrder', upvotesCountOrder.value)
+      restClient.setQueryParam('postingOrder', postingOrder.value)
+      restClient.setQueryParam('categoriesIds', categoriesIds.dto)
+      if (shouldIncludeOnlyAuthorChallenges.isTrue)
+        restClient.setQueryParam('shouldIncludeOnlyAuthorChallenges', 'true')
+      if (userId) restClient.setQueryParam('userId', userId.value)
+      const response = await restClient.get<PaginationResponse<ChallengeDto>>(
+        '/challenging/challenges/list',
+      )
+      restClient.clearQueryParams()
+      return response
+    },
+
+    async fetchAllChallenges({
+      page,
+      itemsPerPage,
+      title,
+      difficulty,
+      completionStatus,
+      upvotesCountOrder,
+      postingOrder,
+      categoriesIds,
       userId,
     }: ChallengesListParams) {
       restClient.setQueryParam('page', page.value.toString())
@@ -86,10 +116,6 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
 
     async fetchChallengeByStarId(starId: Id) {
       return await restClient.get(`/challenging/challenges/star/${starId.value}`)
-    },
-
-    async fetchChallengeBySolutionId(solutionId: Id) {
-      return await restClient.get(`/challenging/challenges/solution/${solutionId.value}`)
     },
 
     async postChallenge(challenge: Challenge) {

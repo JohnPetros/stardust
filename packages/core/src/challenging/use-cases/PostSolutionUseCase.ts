@@ -25,12 +25,13 @@ export class PostSolutionUseCase implements UseCase<Request, Response> {
     await this.checkIfChallengeExists(Id.create(challengeId))
 
     const solution = Solution.create({
+      challengeId,
       title: solutionTitle,
       content: solutionContent,
       author: { id: authorId },
     })
 
-    await this.solutionsRepository.add(solution, Id.create(challengeId))
+    await this.solutionsRepository.add(solution)
     return solution.dto
   }
 

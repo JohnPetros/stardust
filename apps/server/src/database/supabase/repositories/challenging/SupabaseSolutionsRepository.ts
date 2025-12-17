@@ -12,7 +12,7 @@ export class SupabaseSolutionsRepository
   extends SupabaseRepository
   implements SolutionsRepository
 {
-  async add(solution: Solution, challengeId: Id): Promise<void> {
+  async add(solution: Solution): Promise<void> {
     const supabaseSolution = SupabaseSolutionMapper.toSupabase(solution)
     const { error } = await this.supabase.from('solutions').insert({
       // @ts-expect-error
@@ -22,7 +22,7 @@ export class SupabaseSolutionsRepository
       slug: supabaseSolution.slug,
       title: supabaseSolution.title,
       user_id: supabaseSolution.author_id,
-      challenge_id: challengeId.value,
+      challenge_id: supabaseSolution.challenge_id,
     })
 
     if (error) {

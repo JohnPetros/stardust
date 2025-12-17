@@ -1,4 +1,33 @@
 @URL = {{BASE_URL}}/shop/avatars
+@AVATAR_ID = 5019edbf-627f-4a3b-a6a5-ad3ecae6bc31
 
 ### Fetch avatars list
 GET {{URL}}?order=ascending&page=1&itemsPerPage=15
+
+### Create avatar
+POST {{URL}}
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "name": "New Avatar",
+  "image": "https://example.com/avatar-1.jpg",
+  "price": 100
+}
+
+### Update avatar
+PUT {{URL}}/{{AVATAR_ID}}
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "name": "Updated Avatar",
+  "image": "https://example.com/avatar-2.jpg",
+  "price": 200,
+  "isAcquiredByDefault": true,
+  "isSelectedByDefault": true
+}
+
+### Delete avatar
+DELETE {{URL}}/{{AVATAR_ID}}
+Authorization: Bearer {{JWT}}

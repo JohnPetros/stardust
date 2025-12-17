@@ -2,6 +2,7 @@ import type { AuthorAggregateDto } from '#global/domain/aggregates/dtos/AuthorAg
 
 export type SolutionDto = {
   id?: string
+  challengeId: string
   title: string
   content: string
   slug?: string

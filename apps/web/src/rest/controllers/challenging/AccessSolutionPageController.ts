@@ -24,7 +24,7 @@ export const AccessSolutionPageController = (
       if (solutionResponse.isFailure) solutionResponse.throwError()
       const solution = Solution.create(solutionResponse.body)
 
-      const challengeResponse = await service.fetchChallengeBySolutionId(solution.id)
+      const challengeResponse = await service.fetchChallengeById(solution.challengeId)
       if (challengeResponse.isFailure) challengeResponse.throwError()
       const challenge = Challenge.create(challengeResponse.body)
 

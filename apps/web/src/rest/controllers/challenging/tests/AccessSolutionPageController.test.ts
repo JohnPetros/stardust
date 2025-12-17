@@ -21,8 +21,9 @@ describe('Access Solution Page Controller', () => {
 
   const solutionSlug = 'test-solution-slug'
   const challengeSlug = 'test-challenge-slug'
+  const challengeId = '00000000-0000-0000-0000-000000000000'
 
-  const mockSolutionData = SolutionsFaker.fakeDto({ slug: solutionSlug })
+  const mockSolutionData = SolutionsFaker.fakeDto({ slug: solutionSlug, challengeId })
   const mockChallengeData = ChallengesFaker.fakeDto({ slug: challengeSlug })
 
   beforeEach(() => {
@@ -32,7 +33,7 @@ describe('Access Solution Page Controller', () => {
     http.getRouteParams.mockImplementation()
     http.redirect.mockImplementation()
     service.fetchSolutionBySlug.mockImplementation()
-    service.fetchChallengeBySolutionId.mockImplementation()
+    service.fetchChallengeById.mockImplementation()
 
     controller = AccessSolutionPageController(service)
   })
@@ -42,7 +43,7 @@ describe('Access Solution Page Controller', () => {
     service.fetchSolutionBySlug.mockResolvedValue(
       new RestResponse({ statusCode: HTTP_STATUS_CODE.ok, body: mockSolutionData }),
     )
-    service.fetchChallengeBySolutionId.mockResolvedValue(
+    service.fetchChallengeById.mockResolvedValue(
       new RestResponse({ statusCode: HTTP_STATUS_CODE.ok, body: mockChallengeData }),
     )
 
@@ -57,7 +58,7 @@ describe('Access Solution Page Controller', () => {
     service.fetchSolutionBySlug.mockResolvedValue(
       new RestResponse({ statusCode: HTTP_STATUS_CODE.ok, body: mockSolutionData }),
     )
-    service.fetchChallengeBySolutionId.mockResolvedValue(
+    service.fetchChallengeById.mockResolvedValue(
       new RestResponse({ statusCode: HTTP_STATUS_CODE.ok, body: mockChallengeData }),
     )
 
@@ -71,14 +72,14 @@ describe('Access Solution Page Controller', () => {
     service.fetchSolutionBySlug.mockResolvedValue(
       new RestResponse({ statusCode: HTTP_STATUS_CODE.ok, body: mockSolutionData }),
     )
-    service.fetchChallengeBySolutionId.mockResolvedValue(
+    service.fetchChallengeById.mockResolvedValue(
       new RestResponse({ statusCode: HTTP_STATUS_CODE.ok, body: mockChallengeData }),
     )
 
     await controller.handle(http)
 
     const expectedSolution = Solution.create(mockSolutionData)
-    expect(service.fetchChallengeBySolutionId).toHaveBeenCalledWith(expectedSolution.id)
+    expect(service.fetchChallengeById).toHaveBeenCalledWith(expectedSolution.challengeId)
   })
 
   it('should throw error when solution is not found', async () => {
@@ -90,7 +91,7 @@ describe('Access Solution Page Controller', () => {
     service.fetchSolutionBySlug.mockResolvedValue(errorResponse)
 
     await expect(controller.handle(http)).rejects.toThrow()
-    expect(service.fetchChallengeBySolutionId).not.toHaveBeenCalled()
+    expect(service.fetchChallengeById).not.toHaveBeenCalled()
     expect(http.redirect).not.toHaveBeenCalled()
   })
 
@@ -103,7 +104,7 @@ describe('Access Solution Page Controller', () => {
       statusCode: HTTP_STATUS_CODE.notFound,
       errorMessage: 'Challenge not found',
     })
-    service.fetchChallengeBySolutionId.mockResolvedValue(errorResponse)
+    service.fetchChallengeById.mockResolvedValue(errorResponse)
 
     await expect(controller.handle(http)).rejects.toThrow()
     expect(http.redirect).not.toHaveBeenCalled()
@@ -118,7 +119,7 @@ describe('Access Solution Page Controller', () => {
     service.fetchSolutionBySlug.mockResolvedValue(errorResponse)
 
     await expect(controller.handle(http)).rejects.toThrow()
-    expect(service.fetchChallengeBySolutionId).not.toHaveBeenCalled()
+    expect(service.fetchChallengeById).not.toHaveBeenCalled()
   })
 
   it('should handle server errors when fetching challenge', async () => {
@@ -130,7 +131,7 @@ describe('Access Solution Page Controller', () => {
       statusCode: HTTP_STATUS_CODE.serverError,
       errorMessage: 'Internal server error',
     })
-    service.fetchChallengeBySolutionId.mockResolvedValue(errorResponse)
+    service.fetchChallengeById.mockResolvedValue(errorResponse)
 
     await expect(controller.handle(http)).rejects.toThrow()
     expect(http.redirect).not.toHaveBeenCalled()

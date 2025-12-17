@@ -1,7 +1,7 @@
 import type { UseCase } from '#global/interfaces/UseCase'
 import { IdsList } from '#global/domain/structures/IdsList'
 import { ListingOrder } from '#global/domain/structures/ListingOrder'
-import { Id, Text, OrdinalNumber } from '#global/domain/structures/index'
+import { Id, Text, OrdinalNumber, Logical } from '#global/domain/structures/index'
 import type { ChallengeDto } from '../domain/entities/dtos'
 import type { Challenge } from '../domain/entities'
 import { ChallengeCompletionStatus, ChallengeDifficulty } from '../domain/structures'
@@ -19,6 +19,10 @@ type Request = {
   postingOrder: string
   completionStatus: string
   userId?: string
+  accountId?: string
+  shouldIncludePrivateChallenges: boolean
+  shouldIncludeStarChallenges: boolean
+  shouldIncludeOnlyAuthorChallenges: boolean
 }
 type Response = Promise<PaginationResponse<ChallengeDto>>
 
@@ -38,6 +42,10 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
       page: OrdinalNumber.create(request.page),
       itemsPerPage: OrdinalNumber.create(request.itemsPerPage),
       completionStatus: ChallengeCompletionStatus.create(request.completionStatus),
+      shouldIncludeStarChallenges: Logical.create(request.shouldIncludeStarChallenges),
+      shouldIncludeOnlyAuthorChallenges: Logical.create(
+        request.shouldIncludeOnlyAuthorChallenges,
+      ),
     })
     let challenges = items
 
@@ -45,7 +53,8 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
       ChallengeCompletionStatus.create(request.completionStatus),
       challenges,
       completedChallengesIds,
-      request.userId ? Id.create(request.userId) : null,
+      request.accountId ? Id.create(request.accountId) : null,
+      Logical.create(request.shouldIncludePrivateChallenges),
     )
     challenges = this.orderChallengesByDifficultyLevel(challenges)
 
@@ -73,15 +82,15 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
     challengeCompletionStatus: ChallengeCompletionStatus,
     challenges: Challenge[],
     completedChallengesIds: IdsList,
-    userId: Id | null,
+    accountId: Id | null,
+    shouldIncludePrivateChallenges: Logical,
   ): Challenge[] {
-    if (userId === null) return challenges
-
     switch (challengeCompletionStatus.value) {
       case 'completed':
         return challenges.filter((challenge) => {
           const isCompleted = completedChallengesIds.includes(challenge.id)
-          if (challenge.author.id.value === userId?.value) {
+          const isAccountAuthor = accountId ? challenge.isChallengeAuthor(accountId) : Logical.createAsFalse()
+          if (shouldIncludePrivateChallenges.or(isAccountAuthor).isTrue) {
             return isCompleted.isTrue
           }
           return challenge.isPublic.and(isCompleted).isTrue
@@ -89,13 +98,20 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
       case 'not-completed':
         return challenges.filter((challenge) => {
           const isCompleted = completedChallengesIds.includes(challenge.id)
-          if (challenge.author.id.value === userId?.value) {
+          const isAccountAuthor = accountId ? challenge.isChallengeAuthor(accountId) : Logical.createAsFalse()
+          if (shouldIncludePrivateChallenges.or(isAccountAuthor).isTrue) {
             return isCompleted.isFalse
           }
           return challenge.isPublic.andNot(isCompleted).isTrue
         })
       default:
-        return challenges
+        return challenges.filter((challenge) => {
+          const isAccountAuthor = accountId ? challenge.isChallengeAuthor(accountId) : Logical.createAsFalse()
+          if (shouldIncludePrivateChallenges.or(isAccountAuthor).isTrue) {
+            return true
+          }
+          return challenge.isPublic.isTrue
+        })
     }
   }
 }

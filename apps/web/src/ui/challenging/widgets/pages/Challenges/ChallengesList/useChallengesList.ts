@@ -8,8 +8,10 @@ import {
 } from '@stardust/core/challenging/structures'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import {
+  Id,
   IdsList,
   ListingOrder,
+  Logical,
   OrdinalNumber,
   Text,
 } from '@stardust/core/global/structures'
@@ -21,7 +23,12 @@ import { useSleep } from '@/ui/global/hooks/useSleep'
 
 const CHALLENGES_PER_PAGE = 20
 
-export function useChallengesList(challengingService: ChallengingService) {
+type Params = {
+  challengingService: ChallengingService
+  userId: Id | null
+}
+
+export function useChallengesList({ challengingService, userId }: Params) {
   const [difficultyLevel] = useQueryStringParam(QUERY_PARAMS.difficultyLevel, 'any')
   const [completionStatus] = useQueryStringParam(QUERY_PARAMS.completionStatus, 'any')
   const [title] = useQueryStringParam(QUERY_PARAMS.title, '')
@@ -39,8 +46,10 @@ export function useChallengesList(challengingService: ChallengingService) {
       itemsPerPage: OrdinalNumber.create(CHALLENGES_PER_PAGE),
       postingOrder: ListingOrder.create('any'),
       upvotesCountOrder: ListingOrder.create('any'),
+      shouldIncludeStarChallenges: Logical.createAsFalse(),
+      shouldIncludeOnlyAuthorChallenges: Logical.createAsFalse(),
       title: Text.create(title),
-      userId: null,
+      userId,
     })
     if (response.isFailure) response.throwError()
 
@@ -51,9 +60,9 @@ export function useChallengesList(challengingService: ChallengingService) {
     key: CACHE.keys.challengesList,
     fetcher: fetchChallengesList,
     itemsPerPage: CHALLENGES_PER_PAGE,
-    shouldRefetchOnFocus: false,
+    shouldRefetchOnFocus: true,
     isInfinity: true,
-    dependencies: [completionStatus, difficultyLevel, categoriesIds, title],
+    dependencies: [completionStatus, difficultyLevel, categoriesIds, title, userId],
   })
 
   function handleShowMore() {

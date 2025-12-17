@@ -21,6 +21,9 @@ const createRequest = (
   upvotesCountOrder: 'ascending',
   postingOrder: 'descending',
   completionStatus: 'any',
+  shouldIncludePrivateChallenges: false,
+  shouldIncludeStarChallenges: false,
+  shouldIncludeOnlyAuthorChallenges: false,
   ...override,
 })
 
@@ -79,6 +82,12 @@ describe('List Challenges Use Case', () => {
     expect(params.userId?.value).toBe(request.userId)
     expect(params.page.value).toBe(request.page)
     expect(params.itemsPerPage.value).toBe(request.itemsPerPage)
+    expect(params.shouldIncludeStarChallenges.value).toBe(
+      request.shouldIncludeStarChallenges,
+    )
+    expect(params.shouldIncludeOnlyAuthorChallenges.value).toBe(
+      request.shouldIncludeOnlyAuthorChallenges,
+    )
 
     expect(response.items).toEqual([challenge.dto])
     expect(response.totalItemsCount).toBe(12)
@@ -120,6 +129,7 @@ describe('List Challenges Use Case', () => {
       createRequest({
         completionStatus: 'completed',
         userId: userId.value,
+        accountId: userId.value,
         userCompletedChallengesIds: [
           ownChallenge.id.value,
           publicCompletedChallenge.id.value,
@@ -132,9 +142,18 @@ describe('List Challenges Use Case', () => {
   })
 
   it('should order the retrieved challenges by difficulty level', async () => {
-    const easyChallenge = ChallengesFaker.fake({ difficultyLevel: 'easy' })
-    const mediumChallenge = ChallengesFaker.fake({ difficultyLevel: 'medium' })
-    const hardChallenge = ChallengesFaker.fake({ difficultyLevel: 'hard' })
+    const easyChallenge = ChallengesFaker.fake({
+      difficultyLevel: 'easy',
+      isPublic: true,
+    })
+    const mediumChallenge = ChallengesFaker.fake({
+      difficultyLevel: 'medium',
+      isPublic: true,
+    })
+    const hardChallenge = ChallengesFaker.fake({
+      difficultyLevel: 'hard',
+      isPublic: true,
+    })
 
     repository.findMany.mockResolvedValue({
       items: [hardChallenge, easyChallenge, mediumChallenge],
