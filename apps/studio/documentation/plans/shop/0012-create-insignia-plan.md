@@ -41,7 +41,7 @@ módulo: `shop`
 
 - Acessar página de loja
 - Apertar botão de criar insígnia
-- Prencher o formulário corretamente
+- Preencher o formulário corretamente
 - Clicar em confirmar
 - Tabela atualiza
 - É exibido o toast de sucesso ou de erro
