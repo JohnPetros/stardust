@@ -7,42 +7,45 @@ gestão de loja.
 
 módulo: `shop`
 
-## Status: Em andamento
+## Status: Concluído
 
 ### Camada Core
 
-- Interface `ShopService` possui o método `updateAvatar` para atualizar um
-  avatar.
-- `AvatarDto` é usado para representar um avatar.
-- `UiProvider` é usado para fazer alterações globais a UI da aplicação.
-- `ToastProvider` é usado para exibir mensagens de sucesso ou erro.
+- [x] Interface `ShopService` possui o método `updateAvatar` para atualizar um avatar.
+- [x] `AvatarDto` é usado para representar um avatar.
+- [x] `ToastProvider` é usado para exibir mensagens de sucesso ou erro.
 
 ## Camada REST
 
-- Implemente o método `updateAvatar` no service `ShopService`.
+### [ShopService](/home/petros/stardust/apps/studio/src/rest/services/ShopService.ts)
 
-### Camada UI
+- [x] Implementar o método `updateAvatar` no service `ShopService`.
+  - Deve realizar uma chamada `PUT` para o endpoint `/shop/avatars/:id`.
 
-- Use widget de formulário `AvatarForm` para atualizar um avatar, que deve ser
-  preenchido com os dados do avatar existente.
-- Use o service `ShopService` para atualizar o avatar no hook do `AvatarsTable`.
-- Use o `UiProvider` para atualizar a ui da página ao atualizar o avatar no hook
-  do `AvatarsTable`.
-- Use o `ToastProvider` para exibir mensagens de sucesso ou erro ao atualizar o
-  avatar no hook do `AvatarsTable`.
-- Exiba loading na tabela enquanto o avatar é atualizado.
-- Faça o refetch dos dados da tabela ao atualizar o avatar.
+## Camada UI
 
-## Detalhes de Implementação
+### [AvatarsTableView](/home/petros/stardust/apps/studio/src/ui/shop/widgets/pages/Shop/AvatarsTable/AvatarsTableView.tsx)
 
-1.  **ShopService**: Adicionar método `updateAvatar(avatar: AvatarDto)` que faz um POST ou PUT para `/shop/avatars` (ou endpoint específico de update).
-2.  **AvatarFormView**: Adicionar prop `initialValues` e passá-la para `useAvatarForm`.
-3.  **useAvatarForm**: Atualizar `useForm` para usar `initialValues` como `defaultValues` quando fornecido.
-4.  **AvatarsTableView**:
-    - Substituir o botão "Editar" estático por uma instância de `AvatarForm` configurada para edição.
-    - Passar o `avatar` da linha atual como `initialValues`.
-    - Passar uma nova função `handleUpdateAvatar` como `onSubmit`.
-5.  **useAvatarsTable**:
-    - Criar `handleUpdateAvatar` que chama `shopService.updateAvatar`.
-    - Gerenciar estado de loading (`isCreating`/`isUpdating`).
-    - Exibir toast de sucesso/erro.
+- [x] Usar widget de formulário `AvatarForm` para atualizar um avatar.
+- [x] O formulário deve ser preenchido com os dados do avatar existente usando `initialValues`.
+- [x] Passar `handleUpdateAvatar` como `onSubmit`.
+
+### [useAvatarsTable](/home/petros/stardust/apps/studio/src/ui/shop/widgets/pages/Shop/AvatarsTable/useAvatarsTable.ts)
+
+- [x] Implementar `handleUpdateAvatar`.
+- [x] Chamar `shopService.updateAvatar`.
+- [x] Tratar sucesso/erro com `toastProvider`.
+- [x] **Em caso de erro, remover a imagem antiga do storage usando `removeImageFile`**.
+- [x] **Em caso de sucesso, remover a imagem antiga do storage usando `removeImageFile`**.
+- [x] Exibir loading na tabela enquanto o avatar é atualizado.
+- [x] Fazer refetch dos dados da tabela ao atualizar o avatar.
+
+### Fluxo de usuário
+
+1. Acessar a página de listagem de avatares.
+2. Clicar no botão "Editar" de um avatar existente.
+3. O formulário abrirá com os dados atuais preenchidos.
+4. Modificar os campos desejados (nome, preço, imagem, etc.).
+5. Clicar em "Salvar".
+6. Verificar se o toast de sucesso aparece.
+7. Verificar se a tabela atualiza com os novos dados.
