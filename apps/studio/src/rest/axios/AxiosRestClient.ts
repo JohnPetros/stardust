@@ -24,8 +24,8 @@ export const AxiosRestClient = (): RestClient => {
         const data = response.data
 
         if (headers[HTTP_HEADERS.xPaginationResponse.toLowerCase()]) {
-          const totalItems = Number(headers[HTTP_HEADERS.xTotalItemsCount])
-          const itemsPerPage = Number(headers[HTTP_HEADERS.xItemsPerPage])
+          const totalItems = Number(headers[HTTP_HEADERS.xTotalItemsCount.toLowerCase()])
+          const itemsPerPage = Number(headers[HTTP_HEADERS.xItemsPerPage.toLowerCase()])
           return new RestResponse<Body>({
             body: new PaginationResponse(data, totalItems, itemsPerPage) as Body,
             statusCode: response.status,
@@ -124,6 +124,10 @@ export const AxiosRestClient = (): RestClient => {
 
     setQueryParam(key: string, value: string | string[]): void {
       queryParams[key] = value
+    },
+
+    setAuthorization(token: string): void {
+      headers[HTTP_HEADERS.authorization] = token
     },
 
     clearQueryParams(): void {
