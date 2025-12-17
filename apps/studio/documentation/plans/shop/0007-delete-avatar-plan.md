@@ -7,35 +7,35 @@ gestão de loja.
 
 módulo: `shop`
 
-## Status: Concluído
+## Status: Em andamento
 
 ### Camada Core
 
-- Interface `ShopService` possui o método `deleteAvatar` para deletar um avatar.
+- [ ] Interface `ShopService` possui o método `deleteAvatar` para deletar um avatar.
 - `Avatar` é a entidade usada para representar um avatar.
 - `AvatarDto` é o DTO usado para criar uma entidade avatar.
 - `ToastProvider` é usado para exibir mensagens de sucesso ou erro.
 
 ## Camada REST
 
-- Implemente o método `deleteAvatar` no service `ShopService`.
+- [ ] Implemente o método `deleteAvatar` no service `ShopService`.
   - O método deve chamar `restClient.delete('/shop/avatars/${id}')` (verificar convenção de URL).
 
 ### Camada UI
 
-- `AvatarsTableView.tsx`:
+- [ ] `AvatarsTableView.tsx`:
   - Adicionar prop `onDeleteAvatar`.
   - Utilizar `AlertDialog` (do shadcn) para confirmação de exclusão.
   - Conectar o botão "Excluir" para abrir o dialog.
   - O dialog deve ter "Cancelar" e "Deletar".
 
-- `useAvatarsTable.ts`:
+- [ ] `useAvatarsTable.ts`:
   - Implementar `handleDeleteAvatar`.
   - Chamar `shopService.deleteAvatar`.
   - Gerenciar sucesso/erro com `toastProvider`.
   - Chamar `refetch()` após sucesso para atualizar a lista.
 
-- `index.tsx` (Wrapper):
+- [ ] `index.tsx` (Wrapper):
   - Passar `handleDeleteAvatar` do hook para a view.
 
 ## Verificação
