@@ -24,14 +24,14 @@ módulo: `shop`
 
 ## Camada UI
 
-### [InsigniasTableView](/home/petros/stardust/apps/studio/src/ui/shop/widgets/pages/Shop/InsigniasTable/InsigniasTableView.tsx)
+### [InsigniasTableView](/home/petros/stardust/apps/studio/src/ui/shop/widgets/pages/InsigniasPage/InsigniasTable/InsigniasTableView.tsx)
 
 - [x] Importar e adicionar `AlertDialog` (deve ser criado/importado de components) para confirmação de deleção.
 - [x] Passar prop `onDeleteInsignia` do tipo `(id: string, imageName: string) => Promise<void>`.
 - [x] O botão de excluir deve abrir o `AlertDialog`.
 - [x] Ao confirmar, chamar `onDeleteInsignia` passando o `id` e o `imageName` da insígnia.
 
-### [useInsigniasTable](/home/petros/stardust/apps/studio/src/ui/shop/widgets/pages/Shop/InsigniasTable/useInsigniasTable.ts)
+### [useInsigniasTable](/home/petros/stardust/apps/studio/src/ui/shop/widgets/pages/InsigniasPage/InsigniasTable/useInsigniasTable.ts)
 
 - [x] Implementar `handleDeleteInsignia`.
 - [x] Chamar `shopService.deleteInsignia`.
