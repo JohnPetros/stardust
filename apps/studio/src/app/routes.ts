@@ -12,6 +12,8 @@ export default [
     route(ROUTES.profile.achievements, 'routes/AchievementsRoute.tsx'),
     route(ROUTES.lesson.questions(), 'routes/LessonQuestionsRoute.tsx'),
     route(ROUTES.lesson.story(), 'routes/LessonStoryRoute.tsx'),
-    route(ROUTES.shop, 'routes/ShopRoute.tsx'),
+    route(ROUTES.shop.insignias, 'routes/InsigniasRoute.tsx'),
+    route(ROUTES.shop.rockets, 'routes/RocketsRoute.tsx'),
+    route(ROUTES.shop.avatars, 'routes/AvatarsRoute.tsx'),
   ]),
 ] satisfies RouteConfig
