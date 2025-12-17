@@ -67,6 +67,7 @@ export function usePaginatedCache<CacheItem>({
     queryFn: async ({ pageParam = 1 }) => {
       const response = await fetcher(pageParam)
       if (response.isFailure) response.throwError()
+      console.log('totalItemsCount', response.body)
       setTotalItemsCount(response.body.totalItemsCount)
       return response.body
     },
