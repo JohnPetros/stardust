@@ -9,7 +9,7 @@ import { ListingOrder, OrdinalNumber, Text, Id } from '@stardust/core/global/str
 import { Rocket } from '@stardust/core/shop/entities'
 
 import { CACHE } from '@/constants'
-import { useCache } from '@/ui/global/hooks/useCache'
+import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 import { StorageFolder } from '@stardust/core/storage/structures'
 
 const ITEMS_PER_PAGE = OrdinalNumber.create(10)
@@ -32,7 +32,12 @@ export function useRocketsTable({ shopService, toastProvider, storageService }: 
     return debouncedSearch ? Text.create(debouncedSearch) : undefined
   }, [debouncedSearch])
 
-  const { data, isLoading, refetch } = useCache({
+  const {
+    data: rocketsData,
+    isLoading,
+    refetch,
+    totalItemsCount,
+  } = usePaginatedCache({
     key: CACHE.rocketsTable.key,
     fetcher: async () =>
       await shopService.fetchRocketsList({
@@ -42,10 +47,10 @@ export function useRocketsTable({ shopService, toastProvider, storageService }: 
         order,
       }),
     dependencies: [debouncedSearch, order.value, page],
+    itemsPerPage: ITEMS_PER_PAGE.value,
   })
 
-  const rockets = data?.items ?? []
-  const totalItemsCount = data?.totalItemsCount ?? 0
+  const rockets = rocketsData ?? []
   const totalPages = Math.ceil(totalItemsCount / ITEMS_PER_PAGE.value)
 
   async function removeImageFile(imageName: string) {
@@ -101,15 +106,15 @@ export function useRocketsTable({ shopService, toastProvider, storageService }: 
   }
 
   async function handleDeleteRocket(id: string, imageName: string) {
-    await removeImageFile(imageName)
     const response = await shopService.deleteRocket(Id.create(id))
-
+    
     if (response.isFailure) {
       toastProvider.showError(response.errorMessage)
       return
     }
-
+    
     if (response.isSuccessful) {
+      await removeImageFile(imageName)
       toastProvider.showSuccess('Foguete deletado com sucesso')
       refetch()
     }
@@ -118,16 +123,16 @@ export function useRocketsTable({ shopService, toastProvider, storageService }: 
   async function handleUpdateRocket(dto: RocketDto): Promise<void> {
     setIsUpdating(true)
     const rocket = Rocket.create(dto)
-    await removeImageFile(dto.image)
     const response = await shopService.updateRocket(rocket)
-
+    
     if (response.isFailure) {
       toastProvider.showError(response.errorMessage)
       setIsUpdating(false)
       return
     }
-
+    
     if (response.isSuccessful) {
+      await removeImageFile(dto.image)
       toastProvider.showSuccess('Foguete atualizado com sucesso')
       refetch()
     }

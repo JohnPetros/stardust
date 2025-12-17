@@ -8,7 +8,7 @@ import { ListingOrder, OrdinalNumber, Text, Id } from '@stardust/core/global/str
 import type { AvatarDto } from '@stardust/core/shop/entities/dtos'
 
 import { CACHE } from '@/constants'
-import { useCache } from '@/ui/global/hooks/useCache'
+import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 import { Avatar } from '@stardust/core/shop/entities'
 import { StorageFolder } from '@stardust/core/storage/structures'
 
@@ -32,7 +32,12 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
     return debouncedSearch ? Text.create(debouncedSearch) : undefined
   }, [debouncedSearch])
 
-  const { data, isLoading, refetch } = useCache({
+  const {
+    data: avatarsData,
+    isLoading,
+    refetch,
+    totalItemsCount,
+  } = usePaginatedCache({
     key: CACHE.avatarsTable.key,
     fetcher: async () =>
       await shopService.fetchAvatarsList({
@@ -42,11 +47,22 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
         order,
       }),
     dependencies: [debouncedSearch, order.value, page],
+    itemsPerPage: ITEMS_PER_PAGE.value,
   })
 
-  const avatars = data?.items ?? []
-  const totalItemsCount = data?.totalItemsCount ?? 0
+  const avatars = avatarsData ?? []
   const totalPages = Math.ceil(totalItemsCount / ITEMS_PER_PAGE.value)
+
+  async function removeImageFile(imageName: string) {
+    const response = await storageService.removeFile(
+      StorageFolder.createAsRockets(),
+      Text.create(imageName),
+    )
+    if (response.isFailure) {
+      toastProvider.showError(response.errorMessage)
+      return
+    }
+  }
 
   function handleSearchChange(value: string) {
     setSearchInput(value)
@@ -104,6 +120,7 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
 
     if (response.isSuccessful) {
       toastProvider.showSuccess('Avatar atualizado com sucesso')
+      await removeImageFile(avatarDto.image)
       refetch()
     }
 
@@ -128,6 +145,7 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
 
     if (response.isSuccessful) {
       toastProvider.showSuccess('Avatar excluído com sucesso')
+      await removeImageFile(imageName)
       refetch()
     }
   }

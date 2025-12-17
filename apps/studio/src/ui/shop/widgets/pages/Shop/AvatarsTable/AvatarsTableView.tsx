@@ -141,21 +141,7 @@ export const AvatarsTableView = ({
                     </TableCell>
                     <TableCell>
                       <div className='flex items-center gap-2'>
-                        <AvatarForm
-                          initialValues={{
-                            name: avatar.name,
-                            image: avatar.image,
-                            price: avatar.price,
-                            isAcquiredByDefault: avatar.isAcquiredByDefault,
-                            isSelectedByDefault: avatar.isSelectedByDefault,
-                          }}
-                          onSubmit={(data) =>
-                            onUpdateAvatar({
-                              id: avatar.id,
-                              ...data,
-                            })
-                          }
-                        >
+                        <AvatarForm initialValues={avatar} onSubmit={onUpdateAvatar}>
                           <Button variant='outline' size='sm'>
                             Editar
                           </Button>

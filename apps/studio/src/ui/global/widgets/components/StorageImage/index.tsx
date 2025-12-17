@@ -12,6 +12,5 @@ type Props = {
 
 export const StorageImage = ({ folder, src, ...props }: Props) => {
   const image = useStorageImage(StorageFolder.create(folder), src)
-  console.log(image)
   return <StorageImageView src={image} {...props} />
 }

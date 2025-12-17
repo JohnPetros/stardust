@@ -26,27 +26,21 @@ import type { StorageService } from '@stardust/core/storage/interfaces'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useStorageImage } from '@/ui/global/hooks/useStorageImage'
 import { Checkbox } from '@/ui/shadcn/components/checkbox'
+import { useRest } from '@/ui/global/hooks/useRest'
 
 const AVATARS_FOLDER = StorageFolder.createAsAvatars()
 
 type Props = {
-  storageService: StorageService
-  onSubmit: (data: {
-    name: string
-    image: string
-    price: number
-    isAcquiredByDefault?: boolean
-    isSelectedByDefault?: boolean
-  }) => Promise<void>
   initialValues?: AvatarDto
+  onSubmit: (dto: AvatarDto) => void
 }
 
 export const AvatarFormView = ({
   children,
-  storageService,
-  onSubmit,
   initialValues,
+  onSubmit,
 }: PropsWithChildren<Props>) => {
+  const {storageService} = useRest()
   const {
     form,
     avatarImage,
@@ -54,7 +48,7 @@ export const AvatarFormView = ({
     isDialogOpen,
     handleSubmit,
     handleDialogChange,
-  } = useAvatarForm({ storageService, onSubmit, initialValues })
+  } = useAvatarForm({ storageService, initialValues, onSubmit })
   const imageUrl = useStorageImage(AVATARS_FOLDER, avatarImage)
 
   return (
@@ -85,7 +79,7 @@ export const AvatarFormView = ({
               name='image'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Imagem do foguete</FormLabel>
+                  <FormLabel>Imagem do avatar</FormLabel>
                   <FormControl>
                     <ImageInput folder={AVATARS_FOLDER.name} onSubmit={field.onChange}>
                       <Button
