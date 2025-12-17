@@ -11,17 +11,17 @@ módulo: `shop`
 
 ### Camada Core
 
-- Interface `ShopService` possui o método `createRocket` para criar um insígnia.
-- `RocketDto` é usado para representar um insígnia.
+- Interface `ShopService` possui o método `createInsignia` para criar um insígnia.
+- `InsigniaDto` é usado para representar um insígnia.
 - `ToastProvider` é usado para exibir mensagens de sucesso ou erro.
 
 ## Camada REST
 
-- Implemente o método `createRocket` no service `ShopService`.
+- Implemente o método `createInsignia` no service `ShopService`.
 
 ### Camada UI
 
-- Crie widget de formulário `RocketForm` para criar um insígnia.
+- Crie widget de formulário `InsigniaForm` para criar um insígnia.
 - O formulário deve ser exibido em um dialog ao apertar o botão de `Criar insígnia`, que deve ficar acima da tabela de insígnias. 
 - O botão de abrir o dialog deve ficar acima da tabela de insígnias.
 - O formulário deve conter os campos:
@@ -35,7 +35,7 @@ módulo: `shop`
 - Use o `ToastProvider` para exibir mensagens de sucesso ou erro ao criar a insígnia no hook do `InsigniasTable`.
 - Exiba loading na tabela enquanto a insígnia é criada.
 - Obs. adicione as colunas na tabela `InsigniasTable` para exibir se o insígnia é adquirido por padrão e se é o primeiro selecionado por padrão. (Exiba como Badge)
-- Use o `RocketsTable` como inspiração
+- Use o `InsigniasTable` como inspiração
 
 ## Fluxo de alto nível
 
