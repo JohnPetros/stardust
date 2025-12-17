@@ -10,16 +10,14 @@ import { Badge } from '@/ui/shadcn/components/badge'
 import { Button } from '@/ui/shadcn/components/button'
 import { StorageImage } from '@/ui/global/widgets/components/StorageImage'
 import { Loading } from '@/ui/global/widgets/components/Loading'
-import { InsigniaFormView } from './InsigniaForm'
+import { InsigniaForm } from './InsigniaForm'
 import { DeleteInsigniaDialog } from './DeleteInsigniaDialog'
 
 import type { InsigniaDto } from '@stardust/core/shop/entities/dtos'
-import type { StorageService } from '@stardust/core/storage/interfaces'
 
 type Props = {
   insignias: InsigniaDto[]
   isLoading: boolean
-  storageService: StorageService
   handleCreateInsignia: (dto: InsigniaDto) => Promise<void>
   handleUpdateInsignia: (dto: InsigniaDto) => Promise<void>
   handleDeleteInsignia: (id: string, imageName: string) => Promise<void>
@@ -28,7 +26,6 @@ type Props = {
 export const InsigniasTableView = ({
   insignias,
   isLoading,
-  storageService,
   handleCreateInsignia,
   handleUpdateInsignia,
   handleDeleteInsignia,
@@ -36,9 +33,9 @@ export const InsigniasTableView = ({
   return (
     <div className='flex flex-col gap-4'>
       <div className='flex items-center justify-end'>
-        <InsigniaFormView storageService={storageService} onSubmit={handleCreateInsignia}>
+        <InsigniaForm onSubmit={handleCreateInsignia}>
           <Button>Criar insígnia</Button>
-        </InsigniaFormView>
+        </InsigniaForm>
       </div>
 
       {isLoading ? (
@@ -80,17 +77,18 @@ export const InsigniasTableView = ({
                 </TableCell>
                 <TableCell>
                   <div className='flex items-center gap-2'>
-                    <InsigniaFormView
-                      storageService={storageService}
+                    <InsigniaForm
                       onSubmit={handleUpdateInsignia}
                       initialValues={insignia}
                     >
                       <Button variant='outline' size='sm'>
                         Editar
                       </Button>
-                    </InsigniaFormView>
+                    </InsigniaForm>
                     <DeleteInsigniaDialog
-                      onConfirm={() => insignia.id && handleDeleteInsignia(insignia.id, insignia.image)}
+                      onConfirm={() =>
+                        insignia.id && handleDeleteInsignia(insignia.id, insignia.image)
+                      }
                     >
                       <Button variant='destructive' size='sm'>
                         Excluir

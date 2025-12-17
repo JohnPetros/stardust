@@ -29,29 +29,23 @@ import { useInsigniaForm } from './useInsigniaForm'
 import type { PropsWithChildren } from 'react'
 import { ImageInput } from '@/ui/global/widgets/components/ImageInput'
 import { StorageFolder } from '@stardust/core/storage/structures'
-import type { StorageService } from '@stardust/core/storage/interfaces'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useStorageImage } from '@/ui/global/hooks/useStorageImage'
+import { useRest } from '@/ui/global/hooks/useRest'
 
 const INSIGNIAS_FOLDER = StorageFolder.createAsInsignias()
 
 type Props = {
-  storageService: StorageService
-  onSubmit: (data: {
-    name: string
-    image: string
-    price: number
-    role: string
-  }) => Promise<void>
+  onSubmit: (dto: InsigniaDto) => Promise<void>
   initialValues?: InsigniaDto
 }
 
 export const InsigniaFormView = ({
   children,
-  storageService,
-  onSubmit,
   initialValues,
+  onSubmit,
 }: PropsWithChildren<Props>) => {
+  const { storageService } = useRest()
   const {
     form,
     insigniaImage,

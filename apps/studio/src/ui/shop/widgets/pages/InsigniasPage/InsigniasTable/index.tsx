@@ -1,7 +1,7 @@
-import { InsigniasTableView } from './InsigniasTableView'
-import { useInsigniasTable } from './useInsigniasTable'
 import { useRest } from '@/ui/global/hooks/useRest'
 import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
+import { InsigniasTableView } from './InsigniasTableView'
+import { useInsigniasTable } from './useInsigniasTable'
 
 export const InsigniasTable = () => {
   const { shopService, storageService } = useRest()
@@ -22,7 +22,6 @@ export const InsigniasTable = () => {
     <InsigniasTableView
       insignias={insignias}
       isLoading={isLoading}
-      storageService={storageService}
       handleCreateInsignia={handleCreateInsignia}
       handleUpdateInsignia={handleUpdateInsignia}
       handleDeleteInsignia={handleDeleteInsignia}

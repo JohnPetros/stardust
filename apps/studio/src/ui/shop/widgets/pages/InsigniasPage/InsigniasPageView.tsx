@@ -1,4 +1,4 @@
-import { InsigniasTable } from '../Shop/InsigniasTable'
+import { InsigniasTable } from './InsigniasTable'
 
 export const InsigniasPageView = () => {
   return (
