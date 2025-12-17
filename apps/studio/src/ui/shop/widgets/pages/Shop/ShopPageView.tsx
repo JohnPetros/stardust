@@ -1,13 +1,8 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/ui/shadcn/components/tabs'
 import { RocketsTable } from './RocketsTable'
 import { AvatarsTable } from './AvatarsTable'
-import type { ShopService } from '@stardust/core/shop/interfaces'
 
-type Props = {
-  shopService: ShopService
-}
-
-export const ShopPageView = ({ shopService }: Props) => {
+export const ShopPageView = () => {
   return (
     <div className='flex flex-col gap-6 p-6'>
       <div className='flex flex-col gap-2'>
@@ -22,10 +17,10 @@ export const ShopPageView = ({ shopService }: Props) => {
           <TabsTrigger value='avatars'>Avatares</TabsTrigger>
         </TabsList>
         <TabsContent value='rockets'>
-          <RocketsTable shopService={shopService} />
+          <RocketsTable />
         </TabsContent>
         <TabsContent value='avatars'>
-          <AvatarsTable shopService={shopService} />
+          <AvatarsTable />
         </TabsContent>
       </Tabs>
     </div>

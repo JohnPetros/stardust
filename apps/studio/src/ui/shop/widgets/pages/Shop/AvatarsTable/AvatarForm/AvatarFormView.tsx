@@ -1,3 +1,4 @@
+import type { AvatarDto } from '@stardust/core/shop/entities/dtos'
 import {
   Form,
   FormField,
@@ -16,39 +17,45 @@ import {
   DialogClose,
   DialogTrigger,
 } from '@/ui/shadcn/components/dialog'
-import { Checkbox } from '@/ui/shadcn/components/checkbox'
 import { Button } from '@/ui/shadcn/components/button'
+import { useAvatarForm } from './useAvatarForm'
+import type { PropsWithChildren } from 'react'
 import { ImageInput } from '@/ui/global/widgets/components/ImageInput'
 import { StorageFolder } from '@stardust/core/storage/structures'
+import type { StorageService } from '@stardust/core/storage/interfaces'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useStorageImage } from '@/ui/global/hooks/useStorageImage'
-import { useAvatarForm } from './useAvatarForm'
-
-import type { PropsWithChildren } from 'react'
-import type { AvatarDto } from '@stardust/core/shop/entities/dtos'
+import { Checkbox } from '@/ui/shadcn/components/checkbox'
 
 const AVATARS_FOLDER = StorageFolder.createAsAvatars()
 
 type Props = {
+  storageService: StorageService
+  onSubmit: (data: {
+    name: string
+    image: string
+    price: number
+    isAcquiredByDefault?: boolean
+    isSelectedByDefault?: boolean
+  }) => Promise<void>
   initialValues?: AvatarDto
-  onSubmit: (dto: AvatarDto) => void
 }
 
 export const AvatarFormView = ({
   children,
+  storageService,
   onSubmit,
   initialValues,
 }: PropsWithChildren<Props>) => {
   const {
     form,
-    formImage,
+    avatarImage,
     isSubmitting,
     isDialogOpen,
     handleSubmit,
     handleDialogChange,
-  } = useAvatarForm({ onSubmit, initialValues })
-
-  const imageUrl = useStorageImage(AVATARS_FOLDER, formImage)
+  } = useAvatarForm({ storageService, onSubmit, initialValues })
+  const imageUrl = useStorageImage(AVATARS_FOLDER, avatarImage)
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
@@ -66,7 +73,7 @@ export const AvatarFormView = ({
                 <FormItem>
                   <FormLabel>Nome do avatar</FormLabel>
                   <FormControl>
-                    <Input placeholder='Astronauta' {...field} />
+                    <Input placeholder='Apollo espacial' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -78,19 +85,18 @@ export const AvatarFormView = ({
               name='image'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Imagem do avatar</FormLabel>
+                  <FormLabel>Imagem do foguete</FormLabel>
                   <FormControl>
                     <ImageInput folder={AVATARS_FOLDER.name} onSubmit={field.onChange}>
                       <Button
                         variant='ghost'
-                        className='rounded-full border border-dashed mt-2 w-24 h-24 overflow-hidden p-0'
-                        type='button'
+                        className='rounded-full border border-dashed mt-2 w-20 h-20'
                       >
-                        {formImage ? (
+                        {avatarImage ? (
                           <img
                             src={imageUrl}
-                            className='h-full w-full object-cover'
-                            alt='Preview'
+                            className='h-full w-full object-contain'
+                            alt='Avatar'
                           />
                         ) : (
                           <Icon name='upload' />
@@ -122,49 +128,54 @@ export const AvatarFormView = ({
               )}
             />
 
-            <FormField
-              control={form.control}
-              name='isAcquiredByDefault'
-              render={({ field }) => (
-                <FormItem className='flex flex-row items-start space-x-3 space-y-0 rounded-md border border-zinc-800 p-4'>
-                  <FormControl>
-                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                  </FormControl>
-                  <div className='space-y-1 leading-none'>
-                    <FormLabel>Adquirido por padrão</FormLabel>
-                  </div>
-                </FormItem>
-              )}
-            />
+            <div className='flex flex-col gap-4'>
+              <FormField
+                control={form.control}
+                name='isAcquiredByDefault'
+                render={({ field }) => (
+                  <FormItem className='flex flex-row items-start space-x-3 space-y-0'>
+                    <FormControl>
+                      <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                    <div className='space-y-1 leading-none'>
+                      <FormLabel>
+                        Adquirido por padrão quando o usuário cria conta
+                      </FormLabel>
+                    </div>
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name='isSelectedByDefault'
-              render={({ field }) => (
-                <FormItem className='flex flex-row items-start space-x-3 space-y-0 rounded-md border border-zinc-800 p-4'>
-                  <FormControl>
-                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                  </FormControl>
-                  <div className='space-y-1 leading-none'>
-                    <FormLabel>Selecionado por padrão</FormLabel>
-                  </div>
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name='isSelectedByDefault'
+                render={({ field }) => (
+                  <FormItem className='flex flex-row items-start space-x-3 space-y-0'>
+                    <FormControl>
+                      <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                    <div className='space-y-1 leading-none'>
+                      <FormLabel>
+                        Selecionado por padrão quando o usuário cria conta
+                      </FormLabel>
+                    </div>
+                  </FormItem>
+                )}
+              />
+            </div>
           </form>
         </Form>
         <DialogFooter>
           <DialogClose asChild>
             <Button variant='outline'>Cancelar</Button>
           </DialogClose>
-          <Button form='avatar-form' type='submit' disabled={isSubmitting}>
-            {isSubmitting
-              ? initialValues
-                ? 'Salvando...'
-                : 'Criando...'
-              : initialValues
-                ? 'Salvar'
-                : 'Criar avatar'}
+          <Button
+            form='avatar-form'
+            type='submit'
+            isLoading={isSubmitting}
+            disabled={isSubmitting}
+          >
+            {initialValues ? 'Salvar' : 'Criar'}
           </Button>
         </DialogFooter>
       </DialogContent>

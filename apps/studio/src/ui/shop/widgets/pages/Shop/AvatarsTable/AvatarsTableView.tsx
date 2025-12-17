@@ -1,7 +1,5 @@
-import { useState } from 'react'
-
 import type { AvatarDto } from '@stardust/core/shop/entities/dtos'
-import { ListingOrder, Id } from '@stardust/core/global/structures'
+import { ListingOrder } from '@stardust/core/global/structures'
 
 import {
   Table,
@@ -42,7 +40,7 @@ type Props = {
   onNextPage: () => void
   onCreateAvatar: (dto: AvatarDto) => void
   onUpdateAvatar: (dto: AvatarDto) => void
-  onDeleteAvatar: (avatarId: Id) => void
+  onDeleteAvatar: (id: string, imageName: string) => void
 }
 
 export const AvatarsTableView = ({
@@ -62,8 +60,6 @@ export const AvatarsTableView = ({
   onUpdateAvatar,
   onDeleteAvatar,
 }: Props) => {
-  const [avatarToDelete, setAvatarToDelete] = useState<AvatarDto | null>(null)
-
   return (
     <div className='flex flex-col gap-4'>
       <div className='flex items-center justify-between gap-4'>
@@ -164,13 +160,17 @@ export const AvatarsTableView = ({
                             Editar
                           </Button>
                         </AvatarForm>
-                        <Button
-                          variant='destructive'
-                          size='sm'
-                          onClick={() => setAvatarToDelete(avatar)}
+                        <DeleteAvatarDialog
+                          onConfirm={() => {
+                            if (avatar.id) {
+                              onDeleteAvatar(avatar.id, avatar.image)
+                            }
+                          }}
                         >
-                          Excluir
-                        </Button>
+                          <Button variant='destructive' size='sm'>
+                            Excluir
+                          </Button>
+                        </DeleteAvatarDialog>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -191,16 +191,6 @@ export const AvatarsTableView = ({
           )}
         </>
       )}
-      <DeleteAvatarDialog
-        open={!!avatarToDelete}
-        onOpenChange={(open) => !open && setAvatarToDelete(null)}
-        onConfirm={() => {
-          if (avatarToDelete?.id) {
-            onDeleteAvatar(Id.create(avatarToDelete.id))
-            setAvatarToDelete(null)
-          }
-        }}
-      />
     </div>
   )
 }

@@ -3,26 +3,24 @@ import { useDebounceValue } from 'usehooks-ts'
 
 import type { ShopService } from '@stardust/core/shop/interfaces'
 import type { ToastProvider } from '@stardust/core/global/interfaces'
-import {
-  ListingOrder,
-  OrdinalNumber,
-  Text,
-  type Id,
-} from '@stardust/core/global/structures'
+import type { StorageService } from '@stardust/core/storage/interfaces'
+import { ListingOrder, OrdinalNumber, Text, Id } from '@stardust/core/global/structures'
 import type { AvatarDto } from '@stardust/core/shop/entities/dtos'
 
 import { CACHE } from '@/constants'
 import { useCache } from '@/ui/global/hooks/useCache'
 import { Avatar } from '@stardust/core/shop/entities'
+import { StorageFolder } from '@stardust/core/storage/structures'
 
 const ITEMS_PER_PAGE = OrdinalNumber.create(10)
 
 type Params = {
   shopService: ShopService
   toastProvider: ToastProvider
+  storageService: StorageService
 }
 
-export function useAvatarsTable({ shopService, toastProvider }: Params) {
+export function useAvatarsTable({ shopService, toastProvider, storageService }: Params) {
   const [searchInput, setSearchInput] = useState('')
   const [debouncedSearch] = useDebounceValue(searchInput, 500)
   const [order, setOrder] = useState<ListingOrder>(ListingOrder.createAsAscending())
@@ -112,8 +110,16 @@ export function useAvatarsTable({ shopService, toastProvider }: Params) {
     setIsUpdating(false)
   }
 
-  async function handleDeleteAvatar(avatarId: Id) {
-    const response = await shopService.deleteAvatar(avatarId)
+  async function handleDeleteAvatar(id: string, imageName: string) {
+    const storageResponse = await storageService.removeFile(
+      StorageFolder.createAsAvatars(),
+      Text.create(imageName),
+    )
+    if (storageResponse.isFailure) {
+      toastProvider.showError(storageResponse.errorMessage)
+      return
+    }
+    const response = await shopService.deleteAvatar(Id.create(id))
 
     if (response.isFailure) {
       toastProvider.showError(response.errorMessage)

@@ -1,14 +1,11 @@
 import { AvatarsTableView } from './AvatarsTableView'
 import { useAvatarsTable } from './useAvatarsTable'
-import type { ShopService } from '@stardust/core/shop/interfaces'
 import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
+import { useRest } from '@/ui/global/hooks/useRest'
 
-type Props = {
-  shopService: ShopService
-}
-
-export const AvatarsTable = ({ shopService }: Props) => {
+export const AvatarsTable = () => {
   const toastProvider = useToastProvider()
+  const { shopService, storageService } = useRest()
   const {
     avatars,
     isLoading,
@@ -25,7 +22,7 @@ export const AvatarsTable = ({ shopService }: Props) => {
     handleCreateAvatar,
     handleUpdateAvatar,
     handleDeleteAvatar,
-  } = useAvatarsTable({ shopService, toastProvider })
+  } = useAvatarsTable({ shopService, toastProvider, storageService })
 
   return (
     <AvatarsTableView

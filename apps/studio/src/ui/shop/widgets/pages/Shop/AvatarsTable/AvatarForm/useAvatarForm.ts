@@ -1,75 +1,64 @@
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
-import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect, useState } from 'react'
+import type { z } from 'zod'
 
-const schema = z.object({
-  name: z.string().min(1, 'Nome é obrigatório'),
-  image: z.string().min(1, 'Imagem é obrigatória'),
-  price: z.coerce.number().int().min(0, 'Preço deve ser maior ou igual a 0'),
-  isAcquiredByDefault: z.boolean().optional(),
-  isSelectedByDefault: z.boolean().optional(),
-})
+import { avatarSchema } from '@stardust/validation/shop/schemas'
+import { StorageFolder } from '@stardust/core/storage/structures'
+import { Text } from '@stardust/core/global/structures'
+import type { StorageService } from '@stardust/core/storage/interfaces'
+import type { AvatarDto } from '@stardust/core/shop/entities/dtos'
 
-type FormValues = z.infer<typeof schema>
+const AVATAR_FOLDER = StorageFolder.createAsAvatars()
+
+type FormData = z.infer<typeof avatarSchema>
 
 type Params = {
-  onSubmit: (data: FormValues) => void
-  initialValues?: FormValues
+  storageService: StorageService
+  onSubmit: (data: FormData) => void
+  initialValues?: AvatarDto
 }
 
-export function useAvatarForm({ onSubmit, initialValues }: Params) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-
-  const form = useForm<FormValues>({
-    resolver: zodResolver(schema),
-    defaultValues: initialValues || {
-      name: '',
-      image: '',
-      price: 0,
-      isAcquiredByDefault: false,
-      isSelectedByDefault: false,
-    },
+export function useAvatarForm({ storageService, onSubmit, initialValues }: Params) {
+  const form = useForm<FormData>({
+    resolver: zodResolver(avatarSchema),
   })
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const initialImage = initialValues?.image ?? ''
 
-  const formImage = form.watch('image')
-  const { isSubmitting } = form.formState
-
-  async function handleSubmit(data: FormValues) {
-    await onSubmit(data)
-    setIsDialogOpen(false)
-    form.reset(
-      initialValues || {
-        name: '',
-        image: '',
-        price: 0,
-        isAcquiredByDefault: false,
-        isSelectedByDefault: false,
-      },
-    )
-  }
-
-  function handleDialogChange(open: boolean) {
-    setIsDialogOpen(open)
-    if (!open) {
-      form.reset(
-        initialValues || {
-          name: '',
-          image: '',
-          price: 0,
-          isAcquiredByDefault: false,
-          isSelectedByDefault: false,
-        },
-      )
+  async function handleSubmit(data: FormData) {
+    if (initialValues?.id) {
+      data.id = initialValues.id
     }
+    onSubmit(data)
+    setIsDialogOpen(false)
   }
+
+  async function handleDialogChange(isOpen: boolean) {
+    if (!isOpen) {
+      const { image } = form.getValues()
+      if (image && image !== initialImage) {
+        await storageService.removeFile(AVATAR_FOLDER, Text.create(image))
+      }
+    }
+    setIsDialogOpen(isOpen)
+  }
+
+  useEffect(() => {
+    if (initialValues && isDialogOpen) {
+      form.setValue('image', initialValues.image)
+      form.setValue('name', initialValues.name)
+      form.setValue('price', initialValues.price)
+      form.setValue('isAcquiredByDefault', initialValues.isAcquiredByDefault)
+      form.setValue('isSelectedByDefault', initialValues.isSelectedByDefault)
+    }
+  }, [initialValues, form, isDialogOpen])
 
   return {
     form,
-    formImage,
-    isSubmitting,
     isDialogOpen,
-    setIsDialogOpen,
+    isSubmitting: form.formState.isSubmitting,
+    avatarImage: form.watch('image'),
     handleSubmit: form.handleSubmit(handleSubmit),
     handleDialogChange,
   }
