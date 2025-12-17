@@ -7,10 +7,10 @@ import type { StorageService } from '@stardust/core/storage/interfaces'
 import type { RocketDto } from '@stardust/core/shop/entities/dtos'
 import { ListingOrder, OrdinalNumber, Text, Id } from '@stardust/core/global/structures'
 import { Rocket } from '@stardust/core/shop/entities'
+import { StorageFolder } from '@stardust/core/storage/structures'
 
 import { CACHE } from '@/constants'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
-import { StorageFolder } from '@stardust/core/storage/structures'
 
 const ITEMS_PER_PAGE = OrdinalNumber.create(10)
 
@@ -34,7 +34,7 @@ export function useRocketsTable({ shopService, toastProvider, storageService }: 
 
   const {
     data: rocketsData,
-    isLoading,
+    isFetching,
     refetch,
     totalItemsCount,
   } = usePaginatedCache({
@@ -93,6 +93,7 @@ export function useRocketsTable({ shopService, toastProvider, storageService }: 
 
     if (response.isFailure) {
       toastProvider.showError(response.errorMessage)
+      await removeImageFile(dto.image)
       setIsCreating(false)
       return
     }
@@ -107,12 +108,12 @@ export function useRocketsTable({ shopService, toastProvider, storageService }: 
 
   async function handleDeleteRocket(id: string, imageName: string) {
     const response = await shopService.deleteRocket(Id.create(id))
-    
+
     if (response.isFailure) {
       toastProvider.showError(response.errorMessage)
       return
     }
-    
+
     if (response.isSuccessful) {
       await removeImageFile(imageName)
       toastProvider.showSuccess('Foguete deletado com sucesso')
@@ -124,13 +125,14 @@ export function useRocketsTable({ shopService, toastProvider, storageService }: 
     setIsUpdating(true)
     const rocket = Rocket.create(dto)
     const response = await shopService.updateRocket(rocket)
-    
+
     if (response.isFailure) {
       toastProvider.showError(response.errorMessage)
+      await removeImageFile(dto.image)
       setIsUpdating(false)
       return
     }
-    
+
     if (response.isSuccessful) {
       await removeImageFile(dto.image)
       toastProvider.showSuccess('Foguete atualizado com sucesso')
@@ -142,7 +144,7 @@ export function useRocketsTable({ shopService, toastProvider, storageService }: 
 
   return {
     rockets,
-    isLoading: isLoading || isCreating || isUpdating,
+    isLoading: isFetching || isCreating || isUpdating,
     searchInput,
     order,
     page,

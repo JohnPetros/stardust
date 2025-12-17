@@ -34,7 +34,7 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
 
   const {
     data: avatarsData,
-    isLoading,
+    isFetching,
     refetch,
     totalItemsCount,
   } = usePaginatedCache({
@@ -93,6 +93,7 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
 
     if (response.isFailure) {
       toastProvider.showError(response.errorMessage)
+      await removeImageFile(dto.image)
       setIsCreating(false)
       return
     }
@@ -114,6 +115,7 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
 
     if (response.isFailure) {
       toastProvider.showError(response.errorMessage)
+      await removeImageFile(avatarDto.image)
       setIsUpdating(false)
       return
     }
@@ -134,6 +136,7 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
     )
     if (storageResponse.isFailure) {
       toastProvider.showError(storageResponse.errorMessage)
+      await removeImageFile(imageName)
       return
     }
     const response = await shopService.deleteAvatar(Id.create(id))
@@ -152,7 +155,7 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
 
   return {
     avatars,
-    isLoading: isLoading || isCreating || isUpdating,
+    isLoading: isFetching || isCreating || isUpdating,
     searchInput,
     order,
     page,

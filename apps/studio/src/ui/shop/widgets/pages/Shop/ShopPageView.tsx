@@ -1,6 +1,7 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/ui/shadcn/components/tabs'
 import { RocketsTable } from './RocketsTable'
 import { AvatarsTable } from './AvatarsTable'
+import { InsigniasTable } from './InsigniasTable'
 
 export const ShopPageView = () => {
   return (
@@ -15,12 +16,16 @@ export const ShopPageView = () => {
         <TabsList>
           <TabsTrigger value='rockets'>Foguetes</TabsTrigger>
           <TabsTrigger value='avatars'>Avatares</TabsTrigger>
+          <TabsTrigger value='insignias'>Insígnias</TabsTrigger>
         </TabsList>
         <TabsContent value='rockets'>
           <RocketsTable />
         </TabsContent>
         <TabsContent value='avatars'>
           <AvatarsTable />
+        </TabsContent>
+        <TabsContent value='insignias'>
+          <InsigniasTable />
         </TabsContent>
       </Tabs>
     </div>
