@@ -44,4 +44,4 @@ módulo: `shop`
 - Prencher o formulário corretamente
 - Clicar em confirmar
 - Tabela atualiza
-- É exibido o toast de successo ou de erro
+- É exibido o toast de sucesso ou de erro
