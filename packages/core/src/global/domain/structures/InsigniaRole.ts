@@ -1,7 +1,7 @@
 import { ValidationError } from '../errors'
 import { Logical } from './Logical'
 
-type InsigniaRoleValue = 'engineer' | 'god'
+export type InsigniaRoleValue = 'engineer' | 'god'
 
 export class InsigniaRole {
   private constructor(readonly value: InsigniaRoleValue) {}
