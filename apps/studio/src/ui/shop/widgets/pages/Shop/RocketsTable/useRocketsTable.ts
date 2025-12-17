@@ -3,21 +3,24 @@ import { useDebounceValue } from 'usehooks-ts'
 
 import type { ShopService } from '@stardust/core/shop/interfaces'
 import type { ToastProvider } from '@stardust/core/global/interfaces'
-import type { UiProvider } from '@stardust/core/ui/interfaces'
-import { ListingOrder, OrdinalNumber, Text, Id } from '@stardust/core/global/structures'
+import type { StorageService } from '@stardust/core/storage/interfaces'
 import type { RocketDto } from '@stardust/core/shop/entities/dtos'
+import { ListingOrder, OrdinalNumber, Text, Id } from '@stardust/core/global/structures'
+import { Rocket } from '@stardust/core/shop/entities'
 
 import { CACHE } from '@/constants'
 import { useCache } from '@/ui/global/hooks/useCache'
+import { StorageFolder } from '@stardust/core/storage/structures'
 
 const ITEMS_PER_PAGE = OrdinalNumber.create(10)
 
 type Params = {
   shopService: ShopService
   toastProvider: ToastProvider
+  storageService: StorageService
 }
 
-export function useRocketsTable({ shopService, toastProvider }: Params) {
+export function useRocketsTable({ shopService, toastProvider, storageService }: Params) {
   const [searchInput, setSearchInput] = useState('')
   const [debouncedSearch] = useDebounceValue(searchInput, 500)
   const [order, setOrder] = useState<ListingOrder>(ListingOrder.createAsAscending())
@@ -45,6 +48,17 @@ export function useRocketsTable({ shopService, toastProvider }: Params) {
   const totalItemsCount = data?.totalItemsCount ?? 0
   const totalPages = Math.ceil(totalItemsCount / ITEMS_PER_PAGE.value)
 
+  async function removeImageFile(imageName: string) {
+    const response = await storageService.removeFile(
+      StorageFolder.createAsRockets(),
+      Text.create(imageName),
+    )
+    if (response.isFailure) {
+      toastProvider.showError(response.errorMessage)
+      return
+    }
+  }
+
   function handleSearchChange(value: string) {
     setSearchInput(value)
     setPage(1)
@@ -67,23 +81,10 @@ export function useRocketsTable({ shopService, toastProvider }: Params) {
     }
   }
 
-  async function handleCreateRocket(data: {
-    name: string
-    image: string
-    price: number
-    isAcquiredByDefault?: boolean
-    isSelectedByDefault?: boolean
-  }): Promise<void> {
+  async function handleCreateRocket(dto: RocketDto): Promise<void> {
     setIsCreating(true)
-    const rocketDto: RocketDto = {
-      name: data.name,
-      image: data.image,
-      price: data.price,
-      isAcquiredByDefault: data.isAcquiredByDefault,
-      isSelectedByDefault: data.isSelectedByDefault,
-    }
-
-    const response = await shopService.createRocket(rocketDto)
+    const rocket = Rocket.create(dto)
+    const response = await shopService.createRocket(rocket)
 
     if (response.isFailure) {
       toastProvider.showError(response.errorMessage)
@@ -99,7 +100,8 @@ export function useRocketsTable({ shopService, toastProvider }: Params) {
     setIsCreating(false)
   }
 
-  async function handleDeleteRocket(id: string) {
+  async function handleDeleteRocket(id: string, imageName: string) {
+    await removeImageFile(imageName)
     const response = await shopService.deleteRocket(Id.create(id))
 
     if (response.isFailure) {
@@ -113,27 +115,11 @@ export function useRocketsTable({ shopService, toastProvider }: Params) {
     }
   }
 
-  async function handleUpdateRocket(
-    data: {
-      name: string
-      image: string
-      price: number
-      isAcquiredByDefault?: boolean
-      isSelectedByDefault?: boolean
-    },
-    id: string,
-  ): Promise<void> {
+  async function handleUpdateRocket(dto: RocketDto): Promise<void> {
     setIsUpdating(true)
-    const rocketDto: RocketDto = {
-      id,
-      name: data.name,
-      image: data.image,
-      price: data.price,
-      isAcquiredByDefault: data.isAcquiredByDefault,
-      isSelectedByDefault: data.isSelectedByDefault,
-    }
-
-    const response = await shopService.updateRocket(rocketDto)
+    const rocket = Rocket.create(dto)
+    await removeImageFile(dto.image)
+    const response = await shopService.updateRocket(rocket)
 
     if (response.isFailure) {
       toastProvider.showError(response.errorMessage)

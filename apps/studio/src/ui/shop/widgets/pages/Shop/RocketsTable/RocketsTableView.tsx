@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import type { RocketDto } from '@stardust/core/shop/entities/dtos'
 import { ListingOrder } from '@stardust/core/global/structures'
 
@@ -40,8 +39,8 @@ type Props = {
   onPrevPage: () => void
   onNextPage: () => void
   onCreateRocket: (dto: RocketDto) => Promise<void>
-  onUpdateRocket: (dto: RocketDto, id: string) => Promise<void>
-  onDeleteRocket: (id: string) => Promise<void>
+  onUpdateRocket: (dto: RocketDto) => Promise<void>
+  onDeleteRocket: (id: string, imageName: string) => Promise<void>
 }
 
 export const RocketsTableView = ({
@@ -61,20 +60,8 @@ export const RocketsTableView = ({
   onUpdateRocket,
   onDeleteRocket,
 }: Props) => {
-  const [rocketToDelete, setRocketToDelete] = useState<string | null>(null)
-
   return (
     <div className='flex flex-col gap-4'>
-      <DeleteRocketDialog
-        open={!!rocketToDelete}
-        onOpenChange={(open) => !open && setRocketToDelete(null)}
-        onConfirm={() => {
-          if (rocketToDelete) {
-            onDeleteRocket(rocketToDelete)
-            setRocketToDelete(null)
-          }
-        }}
-      />
       <div className='flex items-center gap-4'>
         <div className='flex items-center gap-4 flex-1'>
           <Input
@@ -155,23 +142,22 @@ export const RocketsTableView = ({
                     </TableCell>
                     <TableCell>
                       <div className='flex items-center gap-2'>
-                        <RocketForm
-                          onSubmit={(dto) =>
-                            onUpdateRocket(dto, rocket.id ? rocket.id : '')
-                          }
-                          initialValues={rocket}
-                        >
+                        <RocketForm onSubmit={onUpdateRocket} initialValues={rocket}>
                           <Button variant='outline' size='sm'>
                             Editar
                           </Button>
                         </RocketForm>
-                        <Button
-                          variant='destructive'
-                          size='sm'
-                          onClick={() => setRocketToDelete(rocket.id ?? '')}
+                        <DeleteRocketDialog
+                          onConfirm={() => {
+                            if (rocket.id) {
+                              onDeleteRocket(rocket.id, rocket.image)
+                            }
+                          }}
                         >
-                          Excluir
-                        </Button>
+                          <Button variant='destructive' size='sm'>
+                            Excluir
+                          </Button>
+                        </DeleteRocketDialog>
                       </div>
                     </TableCell>
                   </TableRow>

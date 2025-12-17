@@ -7,17 +7,19 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from '@/ui/shadcn/components/alert-dialog'
+import type { ReactNode } from 'react'
 
 type Props = {
-  open: boolean
-  onOpenChange: (open: boolean) => void
   onConfirm: () => void
+  children: ReactNode
 }
 
-export const DeleteRocketDialogView = ({ open, onOpenChange, onConfirm }: Props) => {
+export const DeleteRocketDialogView = ({ onConfirm, children }: Props) => {
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Você tem certeza absoluta?</AlertDialogTitle>

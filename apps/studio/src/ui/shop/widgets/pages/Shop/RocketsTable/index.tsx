@@ -1,16 +1,11 @@
 import { RocketsTableView } from './RocketsTableView'
 import { useRocketsTable } from './useRocketsTable'
-import type { ShopService } from '@stardust/core/shop/interfaces'
 import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
-import { useUiProvider } from '@/ui/global/hooks/useUiProvider'
+import { useRest } from '@/ui/global/hooks/useRest'
 
-type Props = {
-  shopService: ShopService
-}
-
-export const RocketsTable = ({ shopService }: Props) => {
+export const RocketsTable = () => {
   const toastProvider = useToastProvider()
-  const uiProvider = useUiProvider()
+  const { shopService, storageService } = useRest()
   const {
     rockets,
     isLoading,
@@ -27,7 +22,7 @@ export const RocketsTable = ({ shopService }: Props) => {
     handleCreateRocket,
     handleUpdateRocket,
     handleDeleteRocket,
-  } = useRocketsTable({ shopService, toastProvider, uiProvider })
+  } = useRocketsTable({ shopService, storageService, toastProvider })
 
   return (
     <RocketsTableView
