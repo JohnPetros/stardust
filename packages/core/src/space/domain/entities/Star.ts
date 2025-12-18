@@ -21,10 +21,7 @@ export class Star extends Entity<StarsProps> {
           dto.isAvailable,
           'A estrela está disponível para os usuários?',
         ),
-        isChallenge: Logical.create(
-          dto.isChallenge,
-          'A estrela é um desafio?',
-        ),
+        isChallenge: Logical.create(dto.isChallenge, 'A estrela é um desafio?'),
       },
       dto?.id,
     )
