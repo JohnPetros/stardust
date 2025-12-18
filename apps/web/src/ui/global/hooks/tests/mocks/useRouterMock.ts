@@ -8,11 +8,13 @@ export function useRouterMock(
   const goToMock = jest.fn()
   const goBackMock = jest.fn()
   const refreshMock = jest.fn()
+  const openExternalMock = jest.fn()
 
   jest.mocked(useNavigationProvider).mockReturnValue({
     goTo: goToMock,
     goBack: goBackMock,
     refresh: refreshMock,
+    openExternal: openExternalMock,
     currentRoute: '',
     ...returnMock,
   })
