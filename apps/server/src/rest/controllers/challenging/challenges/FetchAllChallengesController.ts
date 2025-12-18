@@ -12,6 +12,7 @@ type Schema = {
     upvotesCountOrder: string
     postingOrder: string
     completionStatus: string
+    shouldIncludeOnlyAuthorChallenges: boolean
     userId?: string
     userCompletedChallengesIds?: string[]
   }
@@ -34,12 +35,13 @@ export class FetchAllChallengesController implements Controller<Schema> {
       userId,
       title,
       completionStatus,
+      shouldIncludeOnlyAuthorChallenges,
     } = http.getQueryParams()
     const { userCompletedChallengesIds = [] } = await http.getBody()
-    const accountId = await http.getAccountId()
+    const account = await http.getAccount()
     const useCase = new ListChallengesUseCase(this.challengesRepository)
     const response = await useCase.execute({
-      accountId,
+      accountId: account ? String(account.id) : undefined,
       page,
       itemsPerPage,
       categoriesIds,
@@ -50,9 +52,9 @@ export class FetchAllChallengesController implements Controller<Schema> {
       userCompletedChallengesIds,
       title,
       completionStatus,
+      shouldIncludeOnlyAuthorChallenges,
       shouldIncludePrivateChallenges: true,
       shouldIncludeStarChallenges: true,
-      shouldIncludeOnlyAuthorChallenges: false,
     })
     return http.sendPagination(response)
   }

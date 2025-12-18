@@ -2,7 +2,6 @@ import { Hono } from 'hono'
 import { z } from 'zod'
 
 import {
-  booleanSchema,
   idSchema,
   idsListSchema,
   itemsPerPageSchema,
@@ -132,6 +131,7 @@ export class ChallengesRouter extends HonoRouter {
           postingOrder: stringSchema,
           userId: stringSchema.optional(),
           completionStatus: stringSchema,
+          shouldIncludeOnlyAuthorChallenges: queryParamBooleanSchema.default('false'),
         }),
       ),
       async (context) => {
