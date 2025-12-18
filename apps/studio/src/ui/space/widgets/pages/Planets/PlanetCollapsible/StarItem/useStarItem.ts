@@ -1,15 +1,17 @@
+import { useState } from 'react'
+
 import { type Id, Logical, Text } from '@stardust/core/global/structures'
 import type { SpaceService } from '@stardust/core/space/interfaces'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
-import type { ToastProvider } from '@stardust/core/global/interfaces'
-import { useState } from 'react'
+import type { ToastProvider, NavigationProvider } from '@stardust/core/global/interfaces'
+
 import { ENV } from '@/constants'
 
 type Params = {
   service: SpaceService
   challengingService: ChallengingService
   toastProvider: ToastProvider
-  navigationProvider: { openExternal: (url: string) => void }
+  navigationProvider: NavigationProvider
   starId: Id
   isStarChallenge: Logical
 }
