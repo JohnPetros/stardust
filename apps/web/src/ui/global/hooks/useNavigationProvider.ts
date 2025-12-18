@@ -21,10 +21,15 @@ export function useNavigationProvider(): NavigationProvider {
     window.location.reload()
   }, [])
 
+  const openExternal = useCallback((url: string) => {
+    window.open(url, '_blank', 'noreferrer')
+  }, [])
+
   return {
     goTo,
     goBack,
     refresh,
+    openExternal,
     currentRoute: pathname,
   }
 }
