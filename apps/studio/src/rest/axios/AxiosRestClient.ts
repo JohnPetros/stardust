@@ -48,7 +48,7 @@ export const AxiosRestClient = (): RestClient => {
         return new RestResponse({
           body: response.data,
           statusCode: response.status,
-          headers: [],
+          headers,
         })
       } catch (error) {
         return await handleError<Body>(error)
@@ -126,8 +126,8 @@ export const AxiosRestClient = (): RestClient => {
       queryParams[key] = value
     },
 
-    setAuthorization(token: string): void {
-      headers[HTTP_HEADERS.authorization] = token
+    setAuthorization(token) {
+        headers
     },
 
     clearQueryParams(): void {
