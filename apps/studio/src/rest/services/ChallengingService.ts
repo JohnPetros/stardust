@@ -33,6 +33,7 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       upvotesCountOrder,
       postingOrder,
       categoriesIds,
+      shouldIncludeOnlyAuthorChallenges,
       userId,
     }: ChallengesListParams) {
       restClient.setQueryParam('page', page.value.toString())
@@ -43,9 +44,11 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       restClient.setQueryParam('upvotesCountOrder', upvotesCountOrder.value)
       restClient.setQueryParam('postingOrder', postingOrder.value)
       restClient.setQueryParam('categoriesIds', categoriesIds.dto)
+      if (shouldIncludeOnlyAuthorChallenges.isTrue)
+        restClient.setQueryParam('shouldIncludeOnlyAuthorChallenges', 'true')
       if (userId) restClient.setQueryParam('userId', userId.value)
       const response = await restClient.get<PaginationResponse<ChallengeDto>>(
-        '/challenging/challenges',
+        '/challenging/challenges/list',
       )
       restClient.clearQueryParams()
       return response
@@ -88,8 +91,19 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       return await restClient.get(`/challenging/challenges/star/${starId.value}`)
     },
 
-    async fetchChallengeBySolutionId(solutionId: Id) {
-      return await restClient.get(`/challenging/challenges/solution/${solutionId.value}`)
+    async fetchAllChallenges(params) {
+      restClient.setQueryParam('page', params.page.value.toString())
+      restClient.setQueryParam('itemsPerPage', params.itemsPerPage.value.toString())
+      restClient.setQueryParam('title', params.title.value)
+      restClient.setQueryParam('difficulty', params.difficulty.level)
+      restClient.setQueryParam('completionStatus', params.completionStatus.value)
+      restClient.setQueryParam('upvotesCountOrder', params.upvotesCountOrder.value)
+      restClient.setQueryParam('postingOrder', params.postingOrder.value)
+      restClient.setQueryParam('categoriesIds', params.categoriesIds.dto)
+      if (params.shouldIncludeOnlyAuthorChallenges.isTrue)
+        restClient.setQueryParam('shouldIncludeOnlyAuthorChallenges', 'true')
+      if (params.userId) restClient.setQueryParam('userId', params.userId.value)
+      return await restClient.get('/challenging/challenges')
     },
 
     async postChallenge(challenge: Challenge) {
