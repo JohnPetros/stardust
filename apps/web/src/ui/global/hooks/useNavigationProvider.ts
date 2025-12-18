@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import { useRouter as useNextRouter, usePathname } from 'next/navigation'
+
 import type { NavigationProvider } from '@stardust/core/global/interfaces'
 
 export function useNavigationProvider(): NavigationProvider {
@@ -21,10 +22,15 @@ export function useNavigationProvider(): NavigationProvider {
     window.location.reload()
   }, [])
 
+  const openExternal = useCallback((url: string) => {
+    window.open(url, '_blank')
+  }, [])
+
   return {
     goTo,
     goBack,
     refresh,
+    openExternal,
     currentRoute: pathname,
   }
 }
