@@ -12,13 +12,19 @@ import { Badge } from '@/ui/shadcn/components/badge'
 import { Loading } from '@/ui/global/widgets/components/Loading'
 import { Datetime } from '@stardust/core/global/libs'
 import { StorageImage } from '@/ui/global/widgets/components/StorageImage'
+import { Button } from '@/ui/shadcn/components/button'
+import { ExternalLinkIcon } from 'lucide-react'
+import { ENV } from '@/constants'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 
 type Props = {
   users: UserDto[]
   isLoading: boolean
 }
 
-export const RecentUsersTableView = ({ users, isLoading }: Props) => {
+export const UsersTableView = ({ users, isLoading }: Props) => {
+  const { openExternal } = useNavigationProvider()
+
   if (isLoading) {
     return (
       <div className='flex items-center justify-center h-[400px]'>
@@ -40,12 +46,13 @@ export const RecentUsersTableView = ({ users, isLoading }: Props) => {
           <TableHead>Status do Espaço</TableHead>
           <TableHead>Insígnias</TableHead>
           <TableHead>Data de Criação</TableHead>
+          <TableHead className='text-right'>Ações</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {users.length === 0 ? (
           <TableRow>
-            <TableCell colSpan={9} className='text-center text-muted-foreground'>
+            <TableCell colSpan={10} className='text-center text-muted-foreground'>
               Nenhum usuário encontrado
             </TableCell>
           </TableRow>
@@ -90,6 +97,18 @@ export const RecentUsersTableView = ({ users, isLoading }: Props) => {
               </TableCell>
               <TableCell>
                 {new Datetime(user.createdAt ?? new Date()).format('DD/MM/YYYY HH:mm:ss')}
+              </TableCell>
+              <TableCell className='text-right'>
+                {user.slug && (
+                  <Button
+                    variant='ghost'
+                    size='icon'
+                    onClick={() => openExternal(`${ENV.webAppUrl}/profile/${user.slug}`)}
+                    title='Ver perfil no app'
+                  >
+                    <ExternalLinkIcon className='w-4 h-4' />
+                  </Button>
+                )}
               </TableCell>
             </TableRow>
           ))
