@@ -31,6 +31,6 @@ export function useNavigationProvider(): NavigationProvider {
     goBack,
     refresh,
     openExternal,
-    currentRoute: location.pathname
+    currentRoute: location.pathname,
   }
 }
