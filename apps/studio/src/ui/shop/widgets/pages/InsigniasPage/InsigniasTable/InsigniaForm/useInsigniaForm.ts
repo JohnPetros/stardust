@@ -3,26 +3,25 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import type { z } from 'zod'
 
-import { rocketSchema } from '@stardust/validation/shop/schemas'
 import type { StorageService } from '@stardust/core/storage/interfaces'
+import type { InsigniaDto } from '@stardust/core/shop/entities/dtos'
+import { insigniaSchema } from '@stardust/validation/shop/schemas'
 import { StorageFolder } from '@stardust/core/storage/structures'
 import { Text } from '@stardust/core/global/structures'
 
-const ROCKETS_FOLDER = StorageFolder.createAsRockets()
+const INSIGNIAS_FOLDER = StorageFolder.createAsInsignias()
 
-type FormData = z.infer<typeof rocketSchema>
-
-import type { RocketDto } from '@stardust/core/shop/entities/dtos'
+type FormData = z.infer<typeof insigniaSchema>
 
 type Params = {
   storageService: StorageService
   onSubmit: (data: FormData) => void
-  initialValues?: RocketDto
+  initialValues?: InsigniaDto
 }
 
-export function useRocketForm({ storageService, onSubmit, initialValues }: Params) {
+export function useInsigniaForm({ storageService, initialValues, onSubmit }: Params) {
   const form = useForm<FormData>({
-    resolver: zodResolver(rocketSchema),
+    resolver: zodResolver(insigniaSchema),
   })
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const initialImage = initialValues?.image ?? ''
@@ -40,7 +39,7 @@ export function useRocketForm({ storageService, onSubmit, initialValues }: Param
     if (!isOpen) {
       const { image } = form.getValues()
       if (image && image !== initialImage) {
-        await storageService.removeFile(ROCKETS_FOLDER, Text.create(image))
+        await storageService.removeFile(INSIGNIAS_FOLDER, Text.create(image))
       }
     }
     setIsDialogOpen(isOpen)
@@ -51,8 +50,7 @@ export function useRocketForm({ storageService, onSubmit, initialValues }: Param
       form.setValue('image', initialValues.image)
       form.setValue('name', initialValues.name)
       form.setValue('price', initialValues.price)
-      form.setValue('isAcquiredByDefault', initialValues.isAcquiredByDefault)
-      form.setValue('isSelectedByDefault', initialValues.isSelectedByDefault)
+      form.setValue('role', initialValues.role as 'god' | 'engineer')
     }
   }, [initialValues, form, isDialogOpen])
 
@@ -60,7 +58,7 @@ export function useRocketForm({ storageService, onSubmit, initialValues }: Param
     form,
     isDialogOpen,
     isSubmitting: form.formState.isSubmitting,
-    rocketImage: form.watch('image'),
+    insigniaImage: form.watch('image'),
     handleSubmit: form.handleSubmit(handleSubmit),
     handleDialogChange,
   }

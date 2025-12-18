@@ -9,6 +9,8 @@ export type IconName =
   | 'rocket'
   | 'loading'
   | 'sign-out'
+  | 'avatar'
+  | 'insignia'
   | 'user'
   | 'shop'
   | 'trending-up'

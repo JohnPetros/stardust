@@ -28,20 +28,19 @@ módulo: `shop`
 ### [RocketsTableView](/home/petros/stardust/apps/studio/src/ui/shop/widgets/pages/Shop/RocketsTable/RocketsTableView.tsx)
 
 - [x] Importar e adicionar `AlertDialog` (deve ser criado/importado de components) para confirmação de deleção.
-- [x] Passar prop `onDeleteRocket` do tipo `(id: string) => Promise<void>`.
+- [x] Passar prop `onDeleteRocket` do tipo `(id: string, imageName: string) => Promise<void>`.
 - [x] O botão de excluir deve abrir o `AlertDialog`.
-- [x] Ao confirmar, chamar `onDeleteRocket`.
+- [x] Ao confirmar, chamar `onDeleteRocket` passando o `id` e o `imageName` do foguete.
 
 ### [useRocketsTable](/home/petros/stardust/apps/studio/src/ui/shop/widgets/pages/Shop/RocketsTable/useRocketsTable.ts)
 
 - [x] Implementar `handleDeleteRocket`.
 - [x] Chamar `shopService.deleteRocket`.
 - [x] Tratar sucesso/erro com `toastProvider`.
+- [x] Em caso de sucesso, remover a imagem do foguete do storage usando `removeImageFile`.
 - [x] Recarregar a lista após sucesso.
 
-## Plano de Verificação
-
-### Verificação Manual
+### Fluxo de usuário
 
 1. Acessar a página de listagem de foguetes.
 2. Clicar no botão "Excluir" de um foguete existente.
