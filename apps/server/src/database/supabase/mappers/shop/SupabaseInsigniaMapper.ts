@@ -1,7 +1,7 @@
 import { Insignia } from '@stardust/core/shop/entities'
 import type { InsigniaDto } from '@stardust/core/shop/entities/dtos'
 
-import type { SupabaseInsignia } from '../../types'
+import type { SupabaseInsignia, SupabaseInsigniaRole } from '../../types'
 
 export class SupabaseInsigniaMapper {
   static toEntity(supabaseInsignia: SupabaseInsignia): Insignia {
@@ -28,7 +28,7 @@ export class SupabaseInsigniaMapper {
       name: insigniaDto.name,
       image: insigniaDto.image,
       price: insigniaDto.price,
-      role: 'engineer',
+      role: insigniaDto.role as SupabaseInsigniaRole,
     }
 
     return supabaseInsignia
