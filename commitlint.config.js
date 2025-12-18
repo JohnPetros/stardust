@@ -12,7 +12,7 @@ module.exports = {
         '🖥️ ui',
         '💾 db',
         '🎞️ queue',
-        '🧰 provision',
+        '🧰 prov',
         '📟 rpc',
         '✨ use case',
         '📑 interface',

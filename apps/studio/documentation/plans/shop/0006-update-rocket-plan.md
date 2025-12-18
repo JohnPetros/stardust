@@ -7,24 +7,45 @@ gestão de loja.
 
 módulo: `shop`
 
-## Status: Em andamento
+## Status: Concluído
 
 ### Camada Core
 
-- Interface `ShopService` possui o método `updateRocket` para atualizar um
-  foguete.
-- `RocketDto` é usado para representar um foguete.
-- `ToastProvider` é usado para exibir mensagens de sucesso ou erro.
+- [x] Interface `ShopService` possui o método `updateRocket` para atualizar um foguete.
+- [x] `RocketDto` é usado para representar um foguete.
+- [x] `ToastProvider` é usado para exibir mensagens de sucesso ou erro.
 
 ## Camada REST
 
-- Implemente o método `updateRocket` no service `ShopService`.
+### [ShopService](/home/petros/stardust/apps/studio/src/rest/services/ShopService.ts)
 
-### Camada UI
+- [x] Implementar o método `updateRocket` no service `ShopService`.
+  - Deve realizar uma chamada `PUT` para o endpoint `/shop/rockets/:id`.
 
-- Use widget de formulário `RocketForm` para atualizar um foguete, que deve ser preenchido com os dados do foguete existente.
-- Use o service `ShopService` para atualizar o foguete no hook do `RocketsTable`.
-- Use o `UiProvider` para atualizar a ui da página ao atualizar o foguete no hook do `RocketsTable`.
-- Use o `ToastProvider` para exibir mensagens de sucesso ou erro ao atualizar o foguete no hook do `RocketsTable`.
-- Exiba loading na tabela enquanto o foguete é atualizado.
-- Faça o refetch dos dados da tabela ao atualizar o foguete.
+## Camada UI
+
+### [RocketsTableView](/home/petros/stardust/apps/studio/src/ui/shop/widgets/pages/Shop/RocketsTable/RocketsTableView.tsx)
+
+- [x] Usar widget de formulário `RocketForm` para atualizar um foguete.
+- [x] O formulário deve ser preenchido com os dados do foguete existente usando `initialValues`.
+- [x] Passar `handleUpdateRocket` como `onSubmit`.
+
+### [useRocketsTable](/home/petros/stardust/apps/studio/src/ui/shop/widgets/pages/Shop/RocketsTable/useRocketsTable.ts)
+
+- [x] Implementar `handleUpdateRocket`.
+- [x] Chamar `shopService.updateRocket`.
+- [x] Tratar sucesso/erro com `toastProvider`.
+- [x] **Em caso de erro, remover a imagem antiga do storage usando `removeImageFile`**.
+- [x] **Em caso de sucesso, remover a imagem antiga do storage usando `removeImageFile`**.
+- [x] Exibir loading na tabela enquanto o foguete é atualizado.
+- [x] Fazer refetch dos dados da tabela ao atualizar o foguete.
+
+### Fluxo de usuário
+
+1. Acessar a página de listagem de foguetes.
+2. Clicar no botão "Editar" de um foguete existente.
+3. O formulário abrirá com os dados atuais preenchidos.
+4. Modificar os campos desejados (nome, preço, imagem, etc.).
+5. Clicar em "Salvar".
+6. Verificar se o toast de sucesso aparece.
+7. Verificar se a tabela atualiza com os novos dados.

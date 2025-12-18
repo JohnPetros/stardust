@@ -2,14 +2,29 @@ import type { ShopService as IShopService } from '@stardust/core/shop/interfaces
 import type { RestClient } from '@stardust/core/global/interfaces'
 import type { ShopItemsListingParams } from '@stardust/core/shop/types'
 import type { PaginationResponse } from '@stardust/core/global/responses'
-import type { AvatarDto, RocketDto } from '@stardust/core/shop/entities/dtos'
+import type { AvatarDto, InsigniaDto, RocketDto } from '@stardust/core/shop/entities/dtos'
 import type { Id } from '@stardust/core/global/structures'
-import type { Avatar, Rocket } from '@stardust/core/shop/entities'
+import type { Avatar, Insignia, Rocket } from '@stardust/core/shop/entities'
 
 export const ShopService = (restClient: RestClient): IShopService => {
   return {
     async fetchInsigniasList() {
       return await restClient.get('/shop/insignias')
+    },
+
+    async createInsignia(insignia: Insignia) {
+      return await restClient.post<InsigniaDto>('/shop/insignias', insignia.dto)
+    },
+
+    async updateInsignia(insignia: Insignia) {
+      return await restClient.put<InsigniaDto>(
+        `/shop/insignias/${insignia.id.value}`,
+        insignia.dto,
+      )
+    },
+
+    async deleteInsignia(insigniaId: Id) {
+      return await restClient.delete(`/shop/insignias/${insigniaId.value}`)
     },
 
     async fetchRocketsList({

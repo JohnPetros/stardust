@@ -20,7 +20,12 @@ export const CACHE = {
   avatarsTable: {
     key: 'avatars-table',
   },
+<<<<<<< HEAD
   usersTable: {
     key: 'users-table',
+=======
+  insigniasTable: {
+    key: 'insignias-table',
+>>>>>>> b2dc335a05bc04c712143bac15a77eb468d2ee4f
   },
 }
