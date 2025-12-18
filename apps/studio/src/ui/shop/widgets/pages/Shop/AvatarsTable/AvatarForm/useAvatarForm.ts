@@ -31,6 +31,7 @@ export function useAvatarForm({ storageService, onSubmit, initialValues }: Param
       data.id = initialValues.id
     }
     onSubmit(data)
+    form.reset()
     setIsDialogOpen(false)
   }
 

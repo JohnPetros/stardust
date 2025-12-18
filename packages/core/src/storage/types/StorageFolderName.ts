@@ -6,3 +6,4 @@ export type StorageFolderName =
   | 'rankings'
   | 'planets'
   | 'achievements'
+  | 'insignias'
