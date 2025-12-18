@@ -6,6 +6,7 @@ import {
 import {
   IdsList,
   ListingOrder,
+  Logical,
   OrdinalNumber,
   Text,
 } from '@stardust/core/global/structures'
@@ -27,6 +28,8 @@ export function useRecentChallengesTable(challengingService: ChallengingService)
         postingOrder: ListingOrder.create('desc'),
         title: Text.create(''),
         userId: null,
+        shouldIncludeStarChallenges: Logical.create(true),
+        shouldIncludeOnlyAuthorChallenges: Logical.create(false),
       }),
   })
 
