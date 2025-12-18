@@ -13,7 +13,7 @@ status: `Concluído`
 - `User`, entidade que representa um usuário.
 - `UserDto`, dto que serve para cria um usuário.
 - `ProfileService`, service que serve para interagir com as rotas backend relacionadas ao módulo `profile`.
-- `NavigationProvider`, interface resposável em fazer a navegação de ui
+- `NavigationProvider`, interface responsável em fazer a navegação de ui
 - `RestResponse`, objeto que serve para representar a resposta de uma requisição rest.
 - `PaginationResponse`, objeto que serve para representar a resposta de uma requisição rest paginada.
 
@@ -22,7 +22,7 @@ status: `Concluído`
 ### `UsersRoute`
 
 - [x] Crie a rota  para renderizar a página de usuários chamada `UsersRoute`.
-- [x] Não preciasa de loader ou action.
+- [x] Não precisa de loader ou action.
 - [x] Deve renderizar o widget `UsersPage`.
 - [x] Adicione o path para rote (`/profile/users`) na constant `ROUTES`.
 
