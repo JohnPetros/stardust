@@ -1,16 +1,29 @@
+import { useState } from 'react'
+
 import { type Id, Logical, Text } from '@stardust/core/global/structures'
 import type { SpaceService } from '@stardust/core/space/interfaces'
-import type { ToastProvider } from '@stardust/core/global/interfaces'
-import { useState } from 'react'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
+import type { ToastProvider, NavigationProvider } from '@stardust/core/global/interfaces'
+
+import { ENV } from '@/constants'
 
 type Params = {
   service: SpaceService
+  challengingService: ChallengingService
   toastProvider: ToastProvider
+  navigationProvider: NavigationProvider
   starId: Id
   isStarChallenge: Logical
 }
 
-export function useStarItem({ service, starId, toastProvider, isStarChallenge }: Params) {
+export function useStarItem({
+  service,
+  challengingService,
+  toastProvider,
+  navigationProvider,
+  starId,
+  isStarChallenge,
+}: Params) {
   const [isChallenge, setIsChallenge] = useState<Logical>(isStarChallenge)
 
   async function handleStarNameChange(starName: string) {
@@ -46,11 +59,25 @@ export function useStarItem({ service, starId, toastProvider, isStarChallenge }:
     setIsChallenge((isChallenge) => isChallenge.invertValue())
   }
 
+  async function handleChallengeClick() {
+    const response = await challengingService.fetchChallengeByStarId(starId)
+
+    if (response.isSuccessful) {
+      navigationProvider.openExternal(
+        `${ENV.webAppUrl}/challenging/challenge/${response.body.slug}`,
+      )
+      return
+    }
+
+    navigationProvider.openExternal(`${ENV.webAppUrl}/challenging/challenge`)
+  }
+
   return {
     isChallenge,
     handleStarNameChange,
     handleStarAvailabilityChange,
     handleStarTypeChange,
     setIsChallenge,
+    handleChallengeClick,
   }
 }

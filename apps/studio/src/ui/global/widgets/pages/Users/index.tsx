@@ -1,3 +1,3 @@
-export const UsersPage = () => {
-  return <div>Users Page</div>
-}
+import { UsersPageView } from './UsersPageView'
+
+export const UsersPage = UsersPageView
