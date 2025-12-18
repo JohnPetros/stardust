@@ -22,7 +22,7 @@ export function useNavigationProvider(): NavigationProvider {
   }, [])
 
   const openExternal = useCallback((url: string) => {
-    window.open(url, '_blank', 'noreferrer')
+    window.open(url, '_blank', 'noopener,noreferrer')
   }, [])
 
   return {

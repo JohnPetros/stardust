@@ -1,8 +1,11 @@
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 import { useCallback } from 'react'
 
-export function useNavigationProvider() {
+import type { NavigationProvider } from '@stardust/core/global/interfaces'
+
+export function useNavigationProvider(): NavigationProvider {
   const navigate = useNavigate()
+  const location = useLocation()
 
   const goTo = useCallback(
     (route: string) => {
@@ -28,5 +31,6 @@ export function useNavigationProvider() {
     goBack,
     refresh,
     openExternal,
+    currentRoute: location.pathname,
   }
 }
