@@ -1,5 +1,5 @@
-import { useLocation, useNavigate } from 'react-router'
 import { useCallback } from 'react'
+import { useNavigate, useLocation } from 'react-router'
 
 import type { NavigationProvider } from '@stardust/core/global/interfaces'
 
