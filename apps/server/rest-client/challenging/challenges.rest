@@ -13,7 +13,7 @@ GET {{URL}}/slug/{{CHALLENGE_SLUG}}
 GET {{URL}}/star/{{STAR_ID}}
 Authorization: Bearer {{JWT}}
 
-### Fetch challenges list
+### Fetch all challenges
 GET {{URL}}
 ?page=1
 &itemsPerPage=10
@@ -22,6 +22,11 @@ GET {{URL}}
 &completionStatus=any
 &upvotesCountOrder=any
 &postingOrder=any
+&categoriesIds[]=17ba01ec-7aa6-4971-9760-537127e03b4d
+Authorization: Bearer {{JWT}}
+
+### Fetch challenges list
+GET http://localhost:3333/challenging/challenges/list?page=1&itemsPerPage=20&title=&difficulty=any&completionStatus=any&upvotesCountOrder=any&postingOrder=any&categoriesIds=28a2f573-717d-47e0-91b3-aabf7ff817dc&categoriesIds=28a2f573-717d-47e0-91b3-aabf7ff817dc
 
 ### Fetch completed challenges count by difficulty level
 GET {{URL}}/completed-by-difficulty-level
