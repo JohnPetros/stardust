@@ -1,0 +1,1 @@
+export { ChallengesTableView } from './ChallengesTableView'
