@@ -107,9 +107,9 @@ export * from './forum/domain/errors/index'
 export * from './forum/interfaces/index'
 export * from './forum/use-cases/index'
 
-// Documentation
-export * from './documentation/domain/entities/index'
-export * from './documentation/interfaces/index'
+// Manual
+export * from './manual/domain/entities/index'
+export * from './manual/interfaces/index'
 
 // Storage
 export * from './storage/structures/index'

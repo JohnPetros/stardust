@@ -1,20 +1,23 @@
 import { Entity } from '#global/domain/abstracts/index'
 import { Name, OrdinalNumber, Text } from '#global/domain/structures/index'
-import type { DocDto } from './dtos/DocDto'
+import type { GuideDto } from './dtos/GuideDto'
+import { GuideCategory } from '../structures'
 
-type DocProps = {
+type GuideProps = {
   title: Name
   content: Text
   position: OrdinalNumber
+  category: GuideCategory
 }
 
-export class Doc extends Entity<DocProps> {
-  static create(dto: DocDto): Doc {
-    return new Doc(
+export class Guide extends Entity<GuideProps> {
+  static create(dto: GuideDto): Guide {
+    return new Guide(
       {
         title: Name.create(dto.title),
         content: Text.create(dto.content),
-        position: OrdinalNumber.create(dto.position, 'Posição da doc'),
+        position: OrdinalNumber.create(dto.position, 'Posição da guide'),
+        category: GuideCategory.create(dto.category),
       },
       dto.id,
     )
@@ -28,12 +31,13 @@ export class Doc extends Entity<DocProps> {
     return this.props.content
   }
 
-  get dto(): DocDto {
+  get dto(): GuideDto {
     return {
       id: this.id.value,
       title: this.title.value,
       content: this.content.value,
       position: this.props.position.value,
+      category: this.props.category.value,
     }
   }
 }
