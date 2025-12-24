@@ -2,8 +2,9 @@ import type { GuideDto } from '../domain/entities/dtos'
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { GuidesRepository } from '../interfaces'
 import { Id } from '#global/domain/structures/Id'
+import { Guide } from '../domain/entities'
 import { GuideNotFoundError } from '../domain/errors'
-import { Name } from '#global/domain/structures/Name'
+import { Name } from '../../main'
 
 type Request = {
   guideId: string
