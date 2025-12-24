@@ -5,9 +5,10 @@ import { guideCategorySchema, guideSchema } from '@stardust/validation/manual/sc
 import {
   FetchAllGuidesController,
   CreateGuideController,
-  UpdateGuideController,
   DeleteGuideController,
   ReorderGuidesController,
+  EditGuideTitleController,
+  EditGuideContentController,
 } from '@/rest/controllers/manual'
 import { SupabaseGuidesRepository } from '@/database'
 import { HonoHttp } from '../../HonoHttp'
@@ -47,27 +48,6 @@ export class GuidesRouter extends HonoRouter {
         const http = new HonoHttp(context)
         const repository = new SupabaseGuidesRepository(http.getSupabase())
         const controller = new CreateGuideController(repository)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
-    )
-  }
-
-  private registerUpdateGuideRoute(): void {
-    this.router.put(
-      '/:guideId',
-      this.authMiddleware.verifyAuthentication,
-      this.validationMiddleware.validate(
-        'param',
-        z.object({
-          guideId: idSchema,
-        }),
-      ),
-      this.validationMiddleware.validate('json', guideSchema),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const repository = new SupabaseGuidesRepository(http.getSupabase())
-        const controller = new UpdateGuideController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -114,12 +94,65 @@ export class GuidesRouter extends HonoRouter {
     )
   }
 
+  private registerEditGuideTitleRoute(): void {
+    this.router.patch(
+      '/:guideId/title',
+      this.authMiddleware.verifyAuthentication,
+      this.validationMiddleware.validate(
+        'param',
+        z.object({
+          guideId: idSchema,
+        }),
+      ),
+      this.validationMiddleware.validate(
+        'json',
+        z.object({
+          guideTitle: z.string().min(1),
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseGuidesRepository(http.getSupabase())
+        const controller = new EditGuideTitleController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private registerEditGuideContentRoute(): void {
+    this.router.patch(
+      '/:guideId/content',
+      this.authMiddleware.verifyAuthentication,
+      this.validationMiddleware.validate(
+        'param',
+        z.object({
+          guideId: idSchema,
+        }),
+      ),
+      this.validationMiddleware.validate(
+        'json',
+        z.object({
+          guideContent: z.string(),
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseGuidesRepository(http.getSupabase())
+        const controller = new EditGuideContentController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   registerRoutes(): Hono {
     this.registerFetchAllGuidesRoute()
     this.registerCreateGuideRoute()
-    this.registerUpdateGuideRoute()
     this.registerDeleteGuideRoute()
     this.registerReorderGuidesRoute()
+    this.registerEditGuideTitleRoute()
+    this.registerEditGuideContentRoute()
     return this.router
   }
 }
