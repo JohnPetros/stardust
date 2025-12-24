@@ -2,7 +2,6 @@ import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { AchievementsRepository } from '#profile/interfaces/AchievementsRepository'
 import { AchievementsFaker } from '#profile/domain/entities/fakers/AchievementsFaker'
-import { AchievementNotFoundError } from '#profile/domain/errors/AchievementNotFoundError'
 import { CreateAchievementUseCase } from '../CreateAchievementUseCase'
 
 describe('Create Achievement Use Case', () => {
@@ -17,15 +16,20 @@ describe('Create Achievement Use Case', () => {
     useCase = new CreateAchievementUseCase(repository)
   })
 
-  it('should throw an error if there is no achievement to get the last position', () => {
+  it('should create the first achievement with position 1 if no previous achievement exists', async () => {
     const achievementDto = AchievementsFaker.fakeDto()
     repository.findLastByPosition.mockResolvedValue(null)
 
-    expect(
-      useCase.execute({
-        achievementDto,
-      }),
-    ).rejects.toThrow(AchievementNotFoundError)
+    const response = await useCase.execute({
+      achievementDto,
+    })
+
+    expect(repository.findLastByPosition).toHaveBeenCalledTimes(1)
+    expect(repository.add).toHaveBeenCalledTimes(1)
+
+    const addedAchievement = repository.add.mock.calls[0][0]
+    expect(addedAchievement.position.value).toBe(1)
+    expect(response).toEqual(addedAchievement.dto)
   })
 
   it('should create an achievement with incremented position', async () => {
@@ -41,7 +45,7 @@ describe('Create Achievement Use Case', () => {
     expect(repository.add).toHaveBeenCalledTimes(1)
 
     const addedAchievement = repository.add.mock.calls[0][0]
-    expect(addedAchievement.position.number.value).toBe(6)
+    expect(addedAchievement.position.value).toBe(6)
     expect(response).toEqual(addedAchievement.dto)
   })
 })

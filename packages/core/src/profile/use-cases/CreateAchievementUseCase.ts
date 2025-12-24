@@ -2,7 +2,7 @@ import type { UseCase } from '#global/interfaces/UseCase'
 import type { AchievementDto } from '../domain/entities/dtos'
 import type { AchievementsRepository } from '../interfaces'
 import { Achievement } from '../domain/entities'
-import { AchievementNotFoundError } from '../domain/errors'
+import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
 
 type Request = {
   achievementDto: AchievementDto
@@ -14,18 +14,18 @@ export class CreateAchievementUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: AchievementsRepository) {}
 
   async execute({ achievementDto }: Request): Response {
-    const lastAchievement = await this.findLastAchievement()
+    const lastAchievementPosition = await this.findLastAchievementPosition()
     const achievement = Achievement.create({
-      ...achievementDto, 
-      position: lastAchievement.position.increment().value,
+      ...achievementDto,
+      position: lastAchievementPosition.value,
     })
     await this.repository.add(achievement)
     return achievement.dto
   }
 
-  private async findLastAchievement() {
+  private async findLastAchievementPosition() {
     const achievement = await this.repository.findLastByPosition()
-    if (!achievement) throw new AchievementNotFoundError()
-    return achievement
+    if (!achievement) return OrdinalNumber.create(1)
+    return achievement.position.increment()
   }
 }
