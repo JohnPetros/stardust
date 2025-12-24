@@ -1,1 +1,3 @@
-export { SortableGridContainerView as SortableGridContainer } from './SortableGridContainerView'
+import { SortableGridContainerView } from './SortableGridContainerView'
+
+export const SortableGridContainer = SortableGridContainerView

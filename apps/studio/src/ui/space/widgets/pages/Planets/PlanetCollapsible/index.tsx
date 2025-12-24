@@ -10,7 +10,7 @@ type Props = {
 }
 
 export const PlanetCollapsible = ({ planet: defaultPlanet }: Props) => {
-  const { spaceService } = useRest()
+  const { spaceService, storageService } = useRest()
   const toastProvider = useToastProvider()
   const uiProvider = useUiProvider()
   const {
@@ -28,6 +28,7 @@ export const PlanetCollapsible = ({ planet: defaultPlanet }: Props) => {
     toastProvider,
     uiProvider,
     defaultPlanet,
+    storageService,
   })
 
   return (
