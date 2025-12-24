@@ -4,7 +4,7 @@ import type { ManualService as IManualService } from '@stardust/core/manual/inte
 export const ManualService = (restClient: RestClient): IManualService => {
   return {
     async fetchAllGuides() {
-      return await restClient.get('/manual/docs')
+      return await restClient.get('/manual/guides')
     },
   }
 }

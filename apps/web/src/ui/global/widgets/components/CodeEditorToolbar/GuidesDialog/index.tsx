@@ -11,7 +11,7 @@ type Props = {
 }
 
 export const GuidesDialog = ({ children }: Props) => {
-  const { ManualService } = useRest()
+  const { manualService } = useRest()
   const {
     isLoading,
     content,
@@ -19,7 +19,7 @@ export const GuidesDialog = ({ children }: Props) => {
     handleDialogOpen,
     handleGuideButtonClick,
     handleBackButtonClick,
-  } = useGuidesDialog(ManualService)
+  } = useGuidesDialog(manualService)
 
   return (
     <GuidesDialogView
