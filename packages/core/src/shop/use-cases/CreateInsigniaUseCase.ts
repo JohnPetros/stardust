@@ -1,8 +1,8 @@
 import type { InsigniaDto } from '../domain/entities/dtos'
 import type { InsigniasRepository } from '../interfaces'
-import { Insignia } from '../domain/entities'
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { InsigniaRole } from '#global/domain/structures/InsigniaRole'
+import { Insignia } from '../domain/entities'
 import { InsigniaAlreadyExistsError } from '#shop/domain/errors/InsigniaAlreadyExistsError'
 
 type Request = {
