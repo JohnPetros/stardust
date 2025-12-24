@@ -47,8 +47,23 @@ export const SidebarView = () => {
       </div>
       <div>
         <NavigationTitle>Loja</NavigationTitle>
-        <NavigationLink href={ROUTES.shop} icon={<Icon name='shop' size={16} />}>
-          Loja
+        <NavigationLink
+          href={ROUTES.shop.insignias}
+          icon={<Icon name='insignia' size={16} />}
+        >
+          Insígnias
+        </NavigationLink>
+        <NavigationLink
+          href={ROUTES.shop.rockets}
+          icon={<Icon name='rocket' size={16} />}
+        >
+          Foguetes
+        </NavigationLink>
+        <NavigationLink
+          href={ROUTES.shop.avatars}
+          icon={<Icon name='avatar' size={16} />}
+        >
+          Avatares
         </NavigationLink>
       </div>
     </aside>

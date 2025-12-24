@@ -8,4 +8,5 @@ export const storageFolderSchema = z.enum([
   'achievements',
   'rankings',
   'database-backups',
+  'insignias',
 ])
