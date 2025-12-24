@@ -109,6 +109,7 @@ export * from './forum/use-cases/index'
 
 // Manual
 export * from './manual/domain/entities/index'
+export * from './manual/domain/structures/index'
 export * from './manual/interfaces/index'
 
 // Storage

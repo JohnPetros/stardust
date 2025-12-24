@@ -31,6 +31,18 @@ export class Guide extends Entity<GuideProps> {
     return this.props.content
   }
 
+  get position(): OrdinalNumber {
+    return this.props.position
+  }
+
+  set position(position: OrdinalNumber) {
+    this.props.position = position
+  }
+
+  get category(): GuideCategory {
+    return this.props.category
+  }
+
   get dto(): GuideDto {
     return {
       id: this.id.value,
