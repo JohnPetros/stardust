@@ -33,7 +33,7 @@ import {
   SpaceRouter,
   ShopRouter,
   ChallengingRouter,
-  DocumentationRouter,
+  ManualRouter,
   RankingRouter,
   LessonRouter,
   StorageRouter,
@@ -150,7 +150,7 @@ export class HonoApp {
     const rankingRouter = new RankingRouter(this)
     const forumRouter = new ForumRouter(this)
     const playgroundRouter = new PlaygroundRouter(this)
-    const documentationRouter = new DocumentationRouter(this)
+    const manualRouter = new ManualRouter(this)
     const storageRouter = new StorageRouter(this)
     const notificationRouter = new NotificationRouter(this)
 
@@ -167,7 +167,7 @@ export class HonoApp {
     this.hono.route('/', rankingRouter.registerRoutes())
     this.hono.route('/', forumRouter.registerRoutes())
     this.hono.route('/', playgroundRouter.registerRoutes())
-    this.hono.route('/', documentationRouter.registerRoutes())
+    this.hono.route('/', manualRouter.registerRoutes())
     this.hono.route('/', storageRouter.registerRoutes())
     this.hono.route('/', notificationRouter.registerRoutes())
   }

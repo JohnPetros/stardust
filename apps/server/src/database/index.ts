@@ -1,5 +1,5 @@
 export * from './supabase/repositories/challenging'
-export * from './supabase/repositories/documentation'
+export * from './supabase/repositories/manual'
 export * from './supabase/repositories/forum'
 export * from './supabase/repositories/profile'
 export * from './supabase/repositories/ranking'

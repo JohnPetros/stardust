@@ -1,0 +1,4 @@
+@URL = {{BASE_URL}}/manual/guides
+
+### Fetch all guides
+GET {{URL}}
