@@ -3,34 +3,34 @@
 import type { ReactNode } from 'react'
 
 import { useRest } from '@/ui/global/hooks/useRest'
-import { useDocsDialog } from './useDocsDialog'
-import { DocsDialogView } from './DocsDialogView'
+import { useGuidesDialog } from './useGuidesDialog'
+import { GuidesDialogView } from './GuidesDialogView'
 
 type Props = {
   children: ReactNode
 }
 
-export const DocsDialog = ({ children }: Props) => {
-  const { documentationService } = useRest()
+export const GuidesDialog = ({ children }: Props) => {
+  const { ManualService } = useRest()
   const {
     isLoading,
     content,
-    docs,
+    guides,
     handleDialogOpen,
-    handleDocButtonClick,
+    handleGuideButtonClick,
     handleBackButtonClick,
-  } = useDocsDialog(documentationService)
+  } = useGuidesDialog(ManualService)
 
   return (
-    <DocsDialogView
+    <GuidesDialogView
       isLoading={isLoading}
       content={content}
-      docs={docs}
+      guides={guides}
       onDialogOpen={handleDialogOpen}
-      onDocButtonClick={handleDocButtonClick}
+      onGuideButtonClick={handleGuideButtonClick}
       onBackButtonClick={handleBackButtonClick}
     >
       {children}
-    </DocsDialogView>
+    </GuidesDialogView>
   )
 }

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-import type { Doc } from '@stardust/core/documentation/entities'
+import type { Guide } from '@stardust/core/manual/entities'
 
 import { Button } from '../../Button'
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../../Dialog'
@@ -12,25 +12,25 @@ type Props = {
   children: ReactNode
   isLoading: boolean
   content: string
-  docs: Doc[]
+  guides: Guide[]
   onDialogOpen: (isOpen: boolean) => void
-  onDocButtonClick: (docId: string) => void
+  onGuideButtonClick: (guideId: string) => void
   onBackButtonClick: () => void
 }
 
-export const DocsDialogView = ({
+export const GuidesDialogView = ({
   children,
   isLoading,
   content,
-  docs,
+  guides,
   onDialogOpen,
-  onDocButtonClick,
+  onGuideButtonClick,
   onBackButtonClick,
 }: Props) => {
   return (
     <Dialog onOpenChange={onDialogOpen}>
       <DialogContent className='max-w-3xl'>
-        <DialogHeader>Documentação</DialogHeader>
+        <DialogHeader>Guias</DialogHeader>
         <div className='mt-6 max-h-[32rem] overflow-auto'>
           {content ? (
             <div>
@@ -58,19 +58,19 @@ export const DocsDialogView = ({
                 </div>
               ) : (
                 <div className='grid grid-cols-2 justify-items-center gap-3 sm:grid-cols-3'>
-                  {docs?.map((doc) => {
-                    if (doc)
+                  {guides?.map((guide) => {
+                    if (guide)
                       return (
                         <div
-                          key={doc.id.value}
+                          key={guide.id.value}
                           className='w-full max-w-[12rem] cursor-not-allowed'
                         >
                           <Button
-                            onClick={() => onDocButtonClick(doc.id.value)}
+                            onClick={() => onGuideButtonClick(guide.id.value)}
                             className='text-sm text-gray-100 bg-gray-600'
                           >
                             <div className='flex w-full items-center px-4'>
-                              <p className='flex-1'>{doc.title.value}</p>
+                              <p className='flex-1'>{guide.title.value}</p>
                             </div>
                           </Button>
                         </div>

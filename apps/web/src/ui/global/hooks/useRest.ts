@@ -12,7 +12,7 @@ import {
   ChallengingService,
   ForumService,
   PlaygroundService,
-  DocumentationService,
+  ManualService,
   LessonService,
   NotificationService,
 } from '@/rest/services'
@@ -40,7 +40,7 @@ export function useRest({ isAuthenticated = true }: Params = {}) {
     challengingService: ChallengingService(restClient),
     forumService: ForumService(restClient),
     playgroundService: PlaygroundService(restClient),
-    documentationService: DocumentationService(restClient),
+    ManualService: ManualService(restClient),
     lessonService: LessonService(restClient),
     notificationService: NotificationService(restClient),
   }
