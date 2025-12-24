@@ -32,10 +32,12 @@ describe('Update Achievement Use Case', () => {
     expect(repositoryMock.replace).not.toHaveBeenCalled()
   })
 
-  it('should update an achievement with the given request data', async () => {
-    const existingAchievement = AchievementsFaker.fake()
+  it('should update an achievement and preserve its position', async () => {
+    const existingAchievement = AchievementsFaker.fake({ position: 1 })
     const updatedDto = AchievementsFaker.fakeDto({
       id: existingAchievement.id.value,
+      // Pass a different position which should be ignored
+      position: 999,
     })
     let replacedAchievement: Achievement | undefined
 
@@ -48,17 +50,26 @@ describe('Update Achievement Use Case', () => {
       achievementDto: updatedDto,
     })
 
-    const achievement = Achievement.create(updatedDto)
+    const expectedAchievement = Achievement.create(updatedDto)
+    // Manually correct the expected position
+    expectedAchievement.position = existingAchievement.position
+
     expect(repositoryMock.findById).toHaveBeenCalledWith(existingAchievement.id)
-    expect(repositoryMock.replace).toHaveBeenCalledWith(achievement)
-    expect(replacedAchievement?.id).toEqual(achievement.id)
-    expect(replacedAchievement?.name).toEqual(achievement.name)
-    expect(replacedAchievement?.icon).toEqual(achievement.icon)
-    expect(replacedAchievement?.description).toEqual(achievement.description)
-    expect(replacedAchievement?.reward).toEqual(achievement.reward)
-    expect(replacedAchievement?.requiredCount).toEqual(achievement.requiredCount)
-    expect(replacedAchievement?.position).toEqual(achievement.position)
-    expect(replacedAchievement?.metric).toEqual(achievement.metric)
-    expect(response).toEqual(achievement.dto)
+    expect(repositoryMock.replace).toHaveBeenCalledWith(expectedAchievement)
+
+    expect(replacedAchievement?.id.value).toEqual(expectedAchievement.id.value)
+    expect(replacedAchievement?.name).toEqual(expectedAchievement.name)
+    expect(replacedAchievement?.icon).toEqual(expectedAchievement.icon)
+    expect(replacedAchievement?.description).toEqual(expectedAchievement.description)
+    expect(replacedAchievement?.reward).toEqual(expectedAchievement.reward)
+    expect(replacedAchievement?.requiredCount).toEqual(expectedAchievement.requiredCount)
+    // Check key part:
+    expect(replacedAchievement?.position.value).toEqual(
+      existingAchievement.position.value,
+    )
+    expect(replacedAchievement?.position.value).not.toEqual(updatedDto.position)
+
+    expect(replacedAchievement?.metric).toEqual(expectedAchievement.metric)
+    expect(response).toEqual(expectedAchievement.dto)
   })
 })
