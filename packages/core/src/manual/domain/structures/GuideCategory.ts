@@ -20,4 +20,12 @@ export class GuideCategory {
   static isValid(value: string): value is GuideCategoryValue {
     return value === 'lsp' || value === 'mdx'
   }
+
+  static createAsLsp(): GuideCategory {
+    return new GuideCategory('lsp')
+  }
+
+  static createAsMdx(): GuideCategory {
+    return new GuideCategory('mdx')
+  }
 }
