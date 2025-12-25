@@ -3,8 +3,8 @@ import type { UseCase } from '#global/interfaces/UseCase'
 import type { GuidesRepository } from '../interfaces'
 import type { Guide } from '../domain/entities'
 import { Id } from '#global/domain/structures/Id'
-import { GuideNotFoundError } from '../domain/errors'
 import { Name } from '#global/domain/structures/Name'
+import { GuideNotFoundError } from '../domain/errors'
 
 type Request = {
   guideId: string
