@@ -40,7 +40,7 @@ export function useRest({ isAuthenticated = true }: Params = {}) {
     challengingService: ChallengingService(restClient),
     forumService: ForumService(restClient),
     playgroundService: PlaygroundService(restClient),
-    ManualService: ManualService(restClient),
+    manualService: ManualService(restClient),
     lessonService: LessonService(restClient),
     notificationService: NotificationService(restClient),
   }
