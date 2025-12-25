@@ -1,10 +1,10 @@
 import type { GuideDto } from '../domain/entities/dtos'
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { GuidesRepository } from '../interfaces'
+import type { Guide } from '../domain/entities'
 import { Id } from '#global/domain/structures/Id'
-import { Guide } from '../domain/entities'
 import { GuideNotFoundError } from '../domain/errors'
-import { Name } from '../../main'
+import { Name } from '#global/domain/structures/Name'
 
 type Request = {
   guideId: string
@@ -23,7 +23,7 @@ export class EditGuideTitleUseCase implements UseCase<Request, Response> {
     return guide.dto
   }
 
-  private async findGuideById(guideId: Id) {
+  private async findGuideById(guideId: Id): Promise<Guide> {
     const guide = await this.repository.findById(guideId)
     if (!guide) throw new GuideNotFoundError()
     return guide
