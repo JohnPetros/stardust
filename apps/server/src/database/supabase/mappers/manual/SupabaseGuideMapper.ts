@@ -1,5 +1,6 @@
 import type { GuideDto } from '@stardust/core/manual/entities/dtos'
 import { Guide } from '@stardust/core/manual/entities'
+import { GuideCategory } from '@stardust/core/manual/structures'
 
 import type { SupabaseGuide } from '../../types'
 
@@ -27,7 +28,7 @@ export class SupabaseGuideMapper {
       title: guideDto.title,
       content: guideDto.content,
       position: guideDto.position,
-      category: guideDto.category === 'lsp' ? 'lsp' : 'mdx',
+      category: GuideCategory.isValid(guideDto.category) ? guideDto.category : 'lsp',
     }
     return supabaseGuide
   }
