@@ -1,1 +1,0 @@
-export { DocumentationRouter } from './DocumentationRouter'

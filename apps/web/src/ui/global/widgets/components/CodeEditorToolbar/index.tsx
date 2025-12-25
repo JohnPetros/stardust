@@ -5,7 +5,7 @@ import { type ReactNode, type RefObject, useRef } from 'react'
 import * as Toolbar from '@/ui/global/widgets/components/Toolbar'
 import { Button } from '../Button'
 import { AlertDialog } from '../AlertDialog'
-import { DocsDialog } from './DocsDialog'
+import { GuidesDialog } from './GuidesDialog'
 import { HotkeysDialog } from './HotkeysDialog'
 import { CodeEditorSettingsDialog } from './CodeEditorSettingsDialog'
 import { useCodeEditorToolbar } from './useCodeEditorToolbar'
@@ -25,12 +25,12 @@ export function CodeEditorToolbar({
   onRunCode,
 }: CodeEditorToolbarProps) {
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
-  const docsDialogButtonRef = useRef<HTMLButtonElement>(null)
+  const guidesDialogButtonRef = useRef<HTMLButtonElement>(null)
   const { handleKeyDown, resetCode } = useCodeEditorToolbar({
     originalCode,
     codeEditorRef,
     runCodeButtonRef,
-    docsDialogButtonRef,
+    guidesDialogButtonRef,
   })
 
   return (
@@ -67,9 +67,9 @@ export function CodeEditorToolbar({
             <Toolbar.Button label='Voltar para o código inicial' icon='reload' />
           </AlertDialog>
 
-          <DocsDialog>
-            <Toolbar.Button ref={docsDialogButtonRef} label='Documentação' icon='code' />
-          </DocsDialog>
+          <GuidesDialog>
+            <Toolbar.Button ref={guidesDialogButtonRef} label='Guias' icon='code' />
+          </GuidesDialog>
 
           <HotkeysDialog>
             <Toolbar.Button label='Comandos' icon='command' />

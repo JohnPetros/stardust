@@ -20,7 +20,7 @@ export const CACHE = {
     shopInsignias: '/shop/insignia',
     playgroundCards: '/playground-cards',
     rankingsList: '/rankings-list',
-    docs: '/docs',
+    guides: '/guides',
     googleAccountConnection: '/google-account-connection',
     githubAccountConnection: '/github-account-connection',
   },

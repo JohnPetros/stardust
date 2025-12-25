@@ -5,14 +5,14 @@ type UseCodeEditorToolbarParams = {
   originalCode?: string
   codeEditorRef: RefObject<CodeEditorRef | null>
   runCodeButtonRef: RefObject<HTMLButtonElement | null>
-  docsDialogButtonRef: RefObject<HTMLButtonElement | null>
+  guidesDialogButtonRef: RefObject<HTMLButtonElement | null>
 }
 
 export function useCodeEditorToolbar({
   originalCode,
   codeEditorRef,
   runCodeButtonRef,
-  docsDialogButtonRef,
+  guidesDialogButtonRef,
 }: UseCodeEditorToolbarParams) {
   const hasCodedEditorReset = useRef(false)
 
@@ -68,7 +68,7 @@ export function useCodeEditorToolbar({
   }
 
   function handleCtrlK() {
-    docsDialogButtonRef.current?.click()
+    guidesDialogButtonRef.current?.click()
   }
 
   function handleCtrlZ() {
