@@ -1,19 +1,19 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import { GuidesFaker } from '#manual/domain/entities/fakers/GuidesFaker'
-import { UpdateGuideUseCase } from '../UpdateGuideUseCase'
+import { EditGuideContentUseCase } from '../EditGuideContentUseCase'
 import { GuideNotFoundError } from '#manual/domain/errors/GuideNotFoundError'
 import type { GuidesRepository } from '#manual/interfaces/GuidesRepository'
 
-describe('Update Guide Use Case', () => {
+describe('Edit Guide Content Use Case', () => {
   let repository: Mock<GuidesRepository>
-  let useCase: UpdateGuideUseCase
+  let useCase: EditGuideContentUseCase
 
   beforeEach(() => {
     repository = mock<GuidesRepository>()
     repository.findById.mockImplementation()
     repository.replace.mockImplementation()
-    useCase = new UpdateGuideUseCase(repository)
+    useCase = new EditGuideContentUseCase(repository)
   })
 
   it('should throw an error if the guide does not exist', async () => {
@@ -22,21 +22,20 @@ describe('Update Guide Use Case', () => {
 
     await expect(
       useCase.execute({
-        guideDto: guide.dto,
+        guideId: guide.id.value,
+        guideContent: 'New Content',
       }),
     ).rejects.toThrow(GuideNotFoundError)
   })
 
-  it('should update a guide and preserve its position', async () => {
-    const existingGuide = GuidesFaker.fake({ position: 1 })
-    const updatedGuideDto = GuidesFaker.fakeDto({
-      id: existingGuide.id.value,
-      position: 999,
-    })
+  it('should update the guide content', async () => {
+    const existingGuide = GuidesFaker.fake()
+    const newContent = 'New Guide Content'
     repository.findById.mockResolvedValue(existingGuide)
 
     const result = await useCase.execute({
-      guideDto: updatedGuideDto,
+      guideId: existingGuide.id.value,
+      guideContent: newContent,
     })
 
     expect(repository.findById).toHaveBeenCalledTimes(1)
@@ -45,9 +44,8 @@ describe('Update Guide Use Case', () => {
 
     const replacedGuide = repository.replace.mock.calls[0][0]
     expect(replacedGuide.id.value).toBe(existingGuide.id.value)
-    expect(replacedGuide.position.value).toBe(existingGuide.position.value)
-    expect(replacedGuide.position.value).not.toBe(updatedGuideDto.position)
+    expect(replacedGuide.content.value).toBe(newContent)
 
-    expect(result.position).toBe(existingGuide.position.value)
+    expect(result.content).toBe(newContent)
   })
 })

@@ -1,4 +1,5 @@
 export { CreateGuideUseCase } from './CreateGuideUseCase'
-export { UpdateGuideUseCase } from './UpdateGuideUseCase'
+export { EditGuideTitleUseCase } from './EditGuideTitleUseCase'
+export { EditGuideContentUseCase } from './EditGuideContentUseCase'
 export { DeleteGuideUseCase } from './DeleteGuideUseCase'
 export { ReorderGuidesUseCase } from './ReorderGuidesUseCase'

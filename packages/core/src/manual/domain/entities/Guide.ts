@@ -27,8 +27,16 @@ export class Guide extends Entity<GuideProps> {
     return this.props.title
   }
 
+  set title(title: Name) {
+    this.props.title = title
+  }
+
   get content(): Text {
     return this.props.content
+  }
+
+  set content(content: Text) {
+    this.props.content = content
   }
 
   get position(): OrdinalNumber {
