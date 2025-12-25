@@ -134,6 +134,7 @@
     "./manual/entities": "./src/manual/domain/entities/index.ts",
     "./manual/entities/dtos": "./src/manual/domain/entities/dtos/index.ts",
     "./manual/interfaces": "./src/manual/interfaces/index.ts",
+    "./manual/structures": "./src/manual/domain/structures/index.ts",
     "./storage/structures": "./src/storage/structures/index.ts",
     "./storage/types": "./src/storage/types/index.ts",
     "./storage/interfaces": "./src/storage/interfaces/index.ts",
