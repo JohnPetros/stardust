@@ -55,7 +55,7 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
 
   async function removeImageFile(imageName: string) {
     const response = await storageService.removeFile(
-      StorageFolder.createAsRockets(),
+      StorageFolder.createAsAvatars(),
       Text.create(imageName),
     )
     if (response.isFailure) {
