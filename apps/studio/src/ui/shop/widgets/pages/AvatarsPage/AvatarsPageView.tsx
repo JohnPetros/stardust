@@ -1,4 +1,4 @@
-import { AvatarsTable } from '../Shop/AvatarsTable'
+import { AvatarsTable } from './AvatarsTable'
 
 export const AvatarsPageView = () => {
   return (
