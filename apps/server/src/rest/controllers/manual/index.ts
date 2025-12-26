@@ -1,6 +1,6 @@
 export { FetchAllGuidesController } from './FetchAllGuidesController'
 export { CreateGuideController } from './CreateGuideController'
-
+export { FetchGuideController } from './FetchGuideController'
 export { DeleteGuideController } from './DeleteGuideController'
 export { ReorderGuidesController } from './ReorderGuidesController'
 export { EditGuideTitleController } from './EditGuideTitleController'
